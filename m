@@ -1,41 +1,30 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 17 Oct 2017 11:06:11 +0200
-Subject: [Buildroot] [git commit] libressl: fix musl build with older
-	kernel headers
-In-Reply-To: <20171006184939.E64E881150@busybox.osuosl.org> (Arnout
- Vandecappelle's message of "Fri, 6 Oct 2017 20:39:15 +0200")
-References: <20171006184939.E64E881150@busybox.osuosl.org>
-Message-ID: <8760bejg8s.fsf@dell.be.48ers.dk>
+Date: Tue, 17 Oct 2017 11:06:28 +0200
+Subject: [Buildroot] [PATCH] package/x11r7/xserver_xorg-server: rename
+	patch directory after the last version bump
+In-Reply-To: <20171007130156.17309-1-romain.naour@gmail.com> (Romain Naour's
+ message of "Sat, 7 Oct 2017 15:01:56 +0200")
+References: <20171007130156.17309-1-romain.naour@gmail.com>
+Message-ID: <871sm2jg8b.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
+>>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=7adc268b58a1eea9967ed5c7a3b7b4471575d73a
- > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ > The last bump [1] forgot to rename the patch directory and remove
+ > upstream patches.
 
- > musl provides its own SYS_getrandom definition, but not GRND_NONBLOCK.
- > This breaks the build with kernel headers older than v3.17. Add a patch
- > adding a local definition of GRND_NONBLOCK to fix the build.
+ > We still need to fix the monotonic clock check which doesn't work
+ > when cross-compiling.
 
- > The following defconfig reproduces the build failure:
+ > [1] 436659c55f8d3c6155546cfc666a13c793d992f9
 
- > BR2_x86_pentium_mmx=y
- > BR2_TOOLCHAIN_BUILDROOT_MUSL=y
- > BR2_KERNEL_HEADERS_3_12=y
- > BR2_PACKAGE_LIBRESSL=y
-
- > The getentropy_linux.c file is in upstream tarball, but not in its git
- > repository. It originates from OpenBSD. For this reason the patch is
- > against the tarball, but not git formatted.
-
- > Cc: Adam Duskett <aduskett@gmail.com>
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
- > [Arnout: change filename to correspond to how git creates it]
- > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ > Signed-off-by: Romain Naour <romain.naour@gmail.com>
+ > Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > Cc: Peter Korsgaard <peter@korsgaard.com>
 
 Committed to 2017.08.x, thanks.
 
