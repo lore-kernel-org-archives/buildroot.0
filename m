@@ -1,50 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 17 Oct 2017 10:41:30 +0200
-Subject: [Buildroot] [git commit branch/2017.08.x] package/tor: fix openssl
-	detection for static builds
-Message-ID: <20171017090326.4B55881190@busybox.osuosl.org>
+Date: Tue, 17 Oct 2017 10:53:06 +0200
+Subject: [Buildroot] [git commit branch/2017.08.x] docs/manual: fix
+	BR2_EXTERNAL path typo
+Message-ID: <20171017090327.0766D7FDC1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e574e742902832affe15951108dccc4bb8ed31ec
+commit: https://git.buildroot.net/buildroot/commit/?id=a729e4d99d7155b44a8f15caa5b491fb60906e2c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.08.x
 
-Fixes
-http://autobuild.buildroot.net/results/8e6/8e639ab8912e7d884fd8e6dbb1ca8b49451dd766/
-
-/home/test/autobuild/run/instance-1/output/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libcrypto.a(c_zlib.o):
-In function `zlib_stateful_expand_block':
-c_zlib.c:(.text+0x54): undefined reference to `inflate'
-/home/test/autobuild/run/instance-1/output/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libcrypto.a(c_zlib.o):
-In function `zlib_stateful_compress_block':
-c_zlib.c:(.text+0xd4): undefined reference to `deflate'
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit d2268adf5b9e19fba6094f53e397168c8a4b8abb)
+Signed-off-by: Cam Hutchison <camh@xdna.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+(cherry picked from commit 0c76d89e54705a477cedad5dc39b668af771be7d)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/tor/0001-openssl-libz.patch | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ docs/manual/customize-outside-br.txt | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/tor/0001-openssl-libz.patch b/package/tor/0001-openssl-libz.patch
-index c70894e..9d3cf6e 100644
---- a/package/tor/0001-openssl-libz.patch
-+++ b/package/tor/0001-openssl-libz.patch
-@@ -11,7 +11,12 @@ Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
- diff -uNr tor-0.3.1.7.org/configure.ac tor-0.3.1.7/configure.ac
- --- tor-0.3.1.7.org/configure.ac	2017-09-15 15:34:06.000000000 +0200
- +++ tor-0.3.1.7/configure.ac	2017-09-19 19:40:17.090538467 +0200
--@@ -713,7 +713,7 @@
-+@@ -709,11 +709,11 @@
-+       fi
-+   ])
-+ 
-+-TOR_SEARCH_LIBRARY(openssl, $tryssldir, [-lssl -lcrypto $TOR_LIB_GDI],
-++TOR_SEARCH_LIBRARY(openssl, $tryssldir, [-lssl -lcrypto -lz $TOR_LIB_GDI],
-      [#include <openssl/rand.h>],
-      [void RAND_add(const void *buf, int num, double entropy);],
-      [RAND_add((void*)0,0,0);], [],
+diff --git a/docs/manual/customize-outside-br.txt b/docs/manual/customize-outside-br.txt
+index ea0e120..b1eed32 100644
+--- a/docs/manual/customize-outside-br.txt
++++ b/docs/manual/customize-outside-br.txt
+@@ -199,7 +199,7 @@ and to the kernel configuration file as follows (e.g. by running
+ ----
+ BR2_GLOBAL_PATCH_DIR=$(BR2_EXTERNAL_BAR_42_PATH)/patches/
+ BR2_ROOTFS_OVERLAY=$(BR2_EXTERNAL_BAR_42_PATH)/board/<boardname>/overlay/
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE=$(BR2_EXTERNAL_BAR_42_FOO)/board/<boardname>/kernel.config
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE=$(BR2_EXTERNAL_BAR_42_PATH)/board/<boardname>/kernel.config
+ ----
+ 
+ ===== Example layout
+@@ -263,7 +263,7 @@ illustration, of course):
+   |     |BR2_GLOBAL_PATCH_DIR="$(BR2_EXTERNAL_BAR_42_PATH)/patches/"
+   |     |BR2_ROOTFS_OVERLAY="$(BR2_EXTERNAL_BAR_42_PATH)/board/my-board/overlay/"
+   |     |BR2_ROOTFS_POST_IMAGE_SCRIPT="$(BR2_EXTERNAL_BAR_42_PATH)/board/my-board/post-image.sh"
+-  |     |BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="$(BR2_EXTERNAL_BAR_42_FOO)/board/my-board/kernel.config"
++  |     |BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="$(BR2_EXTERNAL_BAR_42_PATH)/board/my-board/kernel.config"
+   |     `----
+   |
+   |- patches/linux/0001-some-change.patch
