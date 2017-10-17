@@ -1,68 +1,45 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Tue, 17 Oct 2017 14:54:41 -0400
-Subject: [Buildroot] [PATCH v9 2/5] libsemanage: bump to 2.7
-In-Reply-To: <20171017185444.13989-1-Adamduskett@outlook.com>
-References: <20171017185444.13989-1-Adamduskett@outlook.com>
-Message-ID: <20171017185444.13989-2-Adamduskett@outlook.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 17 Oct 2017 20:54:37 +0200
+Subject: [Buildroot] [PATCH] uboot-tools: bugfix libfdt python build
+In-Reply-To: <CANQCQpZFwWLqMZ1Y6mCWQieVFgka+uZs_vJeS6+BPOLUhyPF0A@mail.gmail.com>
+References: <20171013023556.25825-1-matthew.weber@rockwellcollins.com>
+ <20171013161128.37827061@windsurf.lan>
+ <CANQCQpZhRskjjpSbOiUEEM0qEimpkC+R7NA1B1iV-G+HO1+=iQ@mail.gmail.com>
+ <CANQCQpbf+LPbfEnw91CkD7H5kxRSywZGbPD9vcU074e3sA2puA@mail.gmail.com>
+ <CAOMZO5BT1YLM2p3GVe7W4SwDYW18fGXCiMKd3D59hYJf9hE7wQ@mail.gmail.com>
+ <CANQCQpZFwWLqMZ1Y6mCWQieVFgka+uZs_vJeS6+BPOLUhyPF0A@mail.gmail.com>
+Message-ID: <20171017205437.4689e5f0@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
----
-Changes v1 -> v2:
-  - None
+Hello,
 
-Changes v2 -> v3:
-  - None
+On Tue, 17 Oct 2017 13:16:01 -0500, Matthew Weber wrote:
 
-Changes v3 -> v4:
-  - None
+> Looking at the current development on uboot upstream, the 2017.11
+> release will be the bump we should take.  With that they cleaned up
+> the tools having some default python/swig dependencies by having
+> libfdt enabled in uboot kconfig.  We'll still have to update the
+> BR2_TARGET_UBOOT_NEEDS_PYLIBFDT option in the uboot package so that it
+> includes providing the PYTHON path variable to the build.  The
+> upstream changes also removed the need for this patchset against
+> uboot-tools fixing python and swig patch issues.
 
-Changes v4 -> v5:
-  - None
+Thanks for looking into this!
 
-Changes v5 -> v6:
-  - None
+> I'll send a proposed patchset for a 2017.11 bump later this month
+> after testing with a -rc
 
-Changes v6 -> v7:
-  - None
+Do we have a workaround in the mean time, to avoid trashing the
+autobuilder results?
 
-Changes v7 -> v8:
-  - None
-  
-Changes v8 -> v9:
-  - None
+Thanks!
 
- package/libsemanage/libsemanage.hash | 4 ++--
- package/libsemanage/libsemanage.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/package/libsemanage/libsemanage.hash b/package/libsemanage/libsemanage.hash
-index 62f4d833a5..c386571591 100644
---- a/package/libsemanage/libsemanage.hash
-+++ b/package/libsemanage/libsemanage.hash
-@@ -1,2 +1,2 @@
--# Locally computed
--sha256 4f81541047290b751f2ffb926fcd381c186f22db18d9fe671b0b4a6a54e8cfce libsemanage-2.6.tar.gz
-+# From: https://github.com/SELinuxProject/selinux/wiki/Releases
-+sha256 07e9477714ce6a4557a1fe924ea4cb06501b62d0fa0e3c0dc32a2cf47cb8d476 libsemanage-2.7.tar.gz
-diff --git a/package/libsemanage/libsemanage.mk b/package/libsemanage/libsemanage.mk
-index 2964c56f96..829409f527 100644
---- a/package/libsemanage/libsemanage.mk
-+++ b/package/libsemanage/libsemanage.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--LIBSEMANAGE_VERSION = 2.6
--LIBSEMANAGE_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20161014
-+LIBSEMANAGE_VERSION = 2.7
-+LIBSEMANAGE_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20170804
- LIBSEMANAGE_LICENSE = LGPL-2.1+
- LIBSEMANAGE_LICENSE_FILES = COPYING
- LIBSEMANAGE_DEPENDENCIES = host-bison host-flex audit libselinux ustr bzip2
+Thomas
 -- 
-2.13.6
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
