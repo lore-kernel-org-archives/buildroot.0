@@ -1,49 +1,65 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 17 Oct 2017 10:33:25 +0200
-Subject: [Buildroot] [git commit branch/2017.08.x] package/openvpn: security
-	bump to version 2.4.4
-Message-ID: <20171017090325.D790C7FCDA@busybox.osuosl.org>
+Date: Tue, 17 Oct 2017 10:33:08 +0200
+Subject: [Buildroot] [git commit branch/2017.08.x] package/librsync: fix
+	build without C++ support
+Message-ID: <20171017090325.CA8D37FCDA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0d942150612bb1b24daeb34460dd99c310bba880
+commit: https://git.buildroot.net/buildroot/commit/?id=9a4217d0b6d794fe5a2d86538ddac94a4abb2fcb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.08.x
 
-Fixes CVE-2017-12166:
-https://community.openvpn.net/openvpn/wiki/CVE-2017-12166
+Fixes:
 
-Changelog:
-https://community.openvpn.net/openvpn/wiki/ChangesInOpenvpn24
+  http://autobuild.buildroot.net/results/3cacb87e39a0ebb9d227fff4be71bea8132bf0ed/
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit aa070c802ef2556a732ff33e55f17fc0d3444436)
+(cherry picked from commit c392c3d029beb2967d6d5b225efe5a9d3ad2287c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/openvpn/openvpn.hash | 2 +-
- package/openvpn/openvpn.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...CMakeLists.txt-Don-t-require-a-C-compiler.patch | 33 ++++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
 
-diff --git a/package/openvpn/openvpn.hash b/package/openvpn/openvpn.hash
-index 1db3a31..318f9ed 100644
---- a/package/openvpn/openvpn.hash
-+++ b/package/openvpn/openvpn.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking signature
--sha256 15e15fc97f189b52aee7c90ec8355aa77469c773125110b4c2f089abecde36fb  openvpn-2.4.3.tar.xz
-+sha256 96cd1b8fe1e8cb2920f07c3fd3985faea756e16fdeebd11d3e146d5bd2b04a80  openvpn-2.4.4.tar.xz
-diff --git a/package/openvpn/openvpn.mk b/package/openvpn/openvpn.mk
-index 7cc572e..086f99b 100644
---- a/package/openvpn/openvpn.mk
-+++ b/package/openvpn/openvpn.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--OPENVPN_VERSION = 2.4.3
-+OPENVPN_VERSION = 2.4.4
- OPENVPN_SOURCE = openvpn-$(OPENVPN_VERSION).tar.xz
- OPENVPN_SITE = http://swupdate.openvpn.net/community/releases
- OPENVPN_DEPENDENCIES = host-pkgconf openssl
+diff --git a/package/librsync/0001-CMakeLists.txt-Don-t-require-a-C-compiler.patch b/package/librsync/0001-CMakeLists.txt-Don-t-require-a-C-compiler.patch
+new file mode 100644
+index 0000000..af5d28c
+--- /dev/null
++++ b/package/librsync/0001-CMakeLists.txt-Don-t-require-a-C-compiler.patch
+@@ -0,0 +1,33 @@
++From c1af3e1b926fa04dbddc2d30586ff26026083134 Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd.kuhls@t-online.de>
++Date: Tue, 26 Sep 2017 19:06:43 +0200
++Subject: [PATCH] CMakeLists.txt: Don't require a C++ compiler
++
++By default, CMake assumes that the project is using both C and C++.  By
++explicitly passing 'C' as argument of the project() macro, we tell CMake
++that only C is used, which prevents CMake from erroring out if a C++
++compiler doesn't exist.
++
++Patch sent upstream: https://github.com/librsync/librsync/pull/116
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ CMakeLists.txt | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index 85536e3..7fe1eda 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -16,7 +16,7 @@
++ # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
++ 
++ 
++-project(librsync)
+++project(librsync C)
++ cmake_minimum_required(VERSION 2.6)
++ 
++ INCLUDE(CMakeDependentOption)
++-- 
++2.11.0
++
