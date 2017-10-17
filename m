@@ -1,42 +1,58 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 17 Oct 2017 11:11:29 +0200
-Subject: [Buildroot] [git commit branch/2017.08.x] Update github hashes
-Message-ID: <20171017090516.5A3678118C@busybox.osuosl.org>
+From: Maksim Salau <msalau@iotecha.com>
+Date: Tue, 17 Oct 2017 12:54:14 +0300
+Subject: [Buildroot] [PATCH] pppd: Add an option to not to overwrite
+	/etc/resolv.conf
+Message-ID: <1508234054-22360-1-git-send-email-msalau@iotecha.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6bfe2e9e2fe9733907706c36a68982bfb08f9faa
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.08.x
+By default pppd built by buildroot writes the list of nameservers to
+/etc/resolv.conf instead of /etc/ppp/resolv.conf
+This is not the default behavior of pppd and breaks name resolution
+if several network interfaces are used. The change makes this optional
+and enabled by default, to be backward compatible and to add a possibility
+to turn this behavior off, if required.
 
-Based on Bernd patch (commit 4fbc0c9b) which is available on master
-branch.
-
-The kernel-module-imx-gpu-viv and rpi-userland packages are actually
-broken on 2017.08 so this is a partial backport Bernd patch.
-
-Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Maksim Salau <msalau@iotecha.com>
 ---
- .../kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash            | 2 +-
- package/rpi-userland/rpi-userland.hash                                  | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/pppd/Config.in | 7 +++++++
+ package/pppd/pppd.mk   | 2 ++
+ 2 files changed, 9 insertions(+)
 
-diff --git a/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash b/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash
-index f9d4004..f2e787c 100644
---- a/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash
-+++ b/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash
-@@ -1,2 +1,2 @@
- # locally computed
--sha256	0d45472a967d747bc1948b0332f77c8cd9f6ec1620b0922e82ca5ddd053b40ea  kernel-module-imx-gpu-viv-a05d9b23b9902f6ce87d23772de2fdb2ecfb37a7.tar.gz
-+sha256	f18b826fd25328adf6b4405f48fdf0eaaddc77bb79c0dee76cd8c28aa8ffc078  kernel-module-imx-gpu-viv-a05d9b23b9902f6ce87d23772de2fdb2ecfb37a7.tar.gz
-diff --git a/package/rpi-userland/rpi-userland.hash b/package/rpi-userland/rpi-userland.hash
-index 1728ae8..e8a78b9 100644
---- a/package/rpi-userland/rpi-userland.hash
-+++ b/package/rpi-userland/rpi-userland.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 476cde13d0d4bbf44ffc4d1d545847464d5c270bb72e4d940e43e5972c4de9da rpi-userland-29835184aa70c13d77a11d721e934a7298bdf46a.tar.gz
-+sha256 46a37eaf0de598ce5804e48a5efc2120e07d753a57ed83463ebfa551562eefe6 rpi-userland-29835184aa70c13d77a11d721e934a7298bdf46a.tar.gz
+diff --git a/package/pppd/Config.in b/package/pppd/Config.in
+index 8c56421..9f77429 100644
+--- a/package/pppd/Config.in
++++ b/package/pppd/Config.in
+@@ -23,6 +23,13 @@ config BR2_PACKAGE_PPPD_RADIUS
+ 	help
+ 	  Install RADIUS support for pppd
+ 
++config BR2_PACKAGE_PPPD_OVERWRITE_RESOLV_CONF
++	bool "overwrite /etc/resolv.conf"
++	default y
++	help
++	  Overwrite /etc/resolv.conf instead of maintaining the separate list
++	  of nameservers in /etc/ppp/resolv.conf
++
+ endif
+ 
+ comment "pppd needs a uClibc or glibc toolchain w/ dynamic library"
+diff --git a/package/pppd/pppd.mk b/package/pppd/pppd.mk
+index 6139c5b..6b86a4d 100644
+--- a/package/pppd/pppd.mk
++++ b/package/pppd/pppd.mk
+@@ -41,7 +41,9 @@ PPPD_POST_EXTRACT_HOOKS += PPPD_DROP_INTERNAL_IF_PPOL2TP_H
+ define PPPD_SET_RESOLV_CONF
+ 	$(SED) 's,ppp/resolv.conf,resolv.conf,' $(@D)/pppd/pathnames.h
+ endef
++ifeq ($(BR2_PACKAGE_PPPD_OVERWRITE_RESOLV_CONF),y)
+ PPPD_POST_EXTRACT_HOOKS += PPPD_SET_RESOLV_CONF
++endif
+ 
+ define PPPD_CONFIGURE_CMDS
+ 	$(SED) 's/FILTER=y/#FILTER=y/' $(PPPD_DIR)/pppd/Makefile.linux
+-- 
+2.7.4
