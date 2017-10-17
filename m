@@ -1,964 +1,731 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue, 17 Oct 2017 21:16:55 +0200
-Subject: [Buildroot] [PATCH v2 2/2] qt5: bump latest version to 5.9.2
-In-Reply-To: <20171017191655.17723-1-ps.report@gmx.net>
-References: <20171017191655.17723-1-ps.report@gmx.net>
-Message-ID: <20171017191655.17723-2-ps.report@gmx.net>
+Date: Tue, 17 Oct 2017 21:16:54 +0200
+Subject: [Buildroot] [PATCH v2 1/2] qt5: add license file hashes for all
+	submodules
+Message-ID: <20171017191655.17723-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-qt5base:
-  - removed 0001-Fix-error-attribute-target-crc-is-unknown.patch
-    (upstream committed, see [1])
-  - removed 0002-examples-fix-compile-without-opengl-support.patch
-    (upstream committed, see [2])
+From: Joshua Henderson <joshua.henderson@microchip.com>
 
-qt5declarative:
-  - removed 0001-Fix-alignment-issue-on-ARMv7.patch
-    (upstream committed, see [3])
-  - moved 0001-examples-photoviewer-needs-widgets-support.patch to 5.6.2
-    only (upstream 5.9.2 committed, see [4])
-  - moved 0002-examples-qquickviewcomparison-and-quickwidget-needs-.patch
-    to 5.6.2 only (similare patch upstream committed, see [5])
-
-qt5location:
-  - removed 0001-Fix-plugins-build-dependency.patch
-    (upstream committed, see [6])
-
-qt5webchannel:
- - fix webchannel.js installation to target (the locatinon of the
-   file webchannel.js changed from src/webchannel/qwebchannel.js
-   to examples/webchannel/shared/qwebchannel.js, see commit [7])
-
-qt5webengine:
-  - removed 0001-Always-compile-QWebEnginePage-print.patch
-    (upstream committed, see [8])
-  - keep 0002-Load-libEGL-and-libGLES2-symbols-implicitly.patch
-    (upstream committed, see [9], but reverted afterwards, see [10])
-
-qt5webkit:
- - fall back to 5.9.1 (no 5.9.2 package provided, see [11] and [12]).
-
-[1] http://code.qt.io/cgit/qt/qtbase.git/commit/?id=b7722c251c3a0938c7c71fc3da47fdbe920060b7
-[2] http://code.qt.io/cgit/qt/qtbase.git/commit/?id=6ce4b680cdde7827a6ed4d00dbeb7e7e91569433
-[3] http://code.qt.io/cgit/qt/qtdeclarative.git/commit/?id=03c2661b1243cc529fc3d8cfa65073f1da420307
-[4] http://code.qt.io/cgit/qt/qtdeclarative.git/commit/?id=452a78d0ac4a1579733a8ab641be24c9b7c0dd96
-[5] http://code.qt.io/cgit/qt/qtdeclarative.git/commit/?id=fa52bb665d6beb77a951c14c8edcba3541850afc
-[6] http://code.qt.io/cgit/qt/qtlocation.git/commit/?id=3ac051c4549575634cecc706175b019f4ed4c3bf
-[7] https://code.qt.io/cgit/qt/qtwebchannel.git/commit/?id=e7f150abaa8e81d3e404e9631a49341a7f7623d1
-[8] http://code.qt.io/cgit/qt/qtwebengine.git/commit/?id=085c2c529473bbe9dd7c8c5698a45053520cc423
-[9] http://code.qt.io/cgit/qt/qtwebengine.git/commit/?id=d4c621f6a6b87f2a86069fa393b9f7c4f9e7b9ad
-[10] http://code.qt.io/cgit/qt/qtwebengine.git/commit/?id=c11c2c8981e647c1eb2c6753ce77d436b92fff87
-[11] https://blog.qt.io/blog/2017/10/06/qt-5-9-2-released/#comment-1200724
-[12] https://blog.qt.io/blog/2017/10/06/qt-5-9-2-released/#comment-1200746
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Tested-by: Joshua Henderson <joshua.henderson@microchip.com>
+Signed-off-by: Joshua Henderson <joshua.henderson@microchip.com>
+Reviewed-by: Peter Seiderer <ps.report@gmx.net>
+----
+Changes:
+  - add reviewed-by and minor commit title change (removed package prefix)
 ---
-Changes v1 --> v2:
-  - minor commit message changes (add 'removed')
-  - fix qt5declarative patch move (spotted by Joshua Henderson)
-    and add tested-by
-  - fix qt5webchannel webchannel.js installation to target
----
- package/qt5/qt5.mk                                 |   2 +-
- package/qt5/qt53d/qt53d.hash                       |   5 +-
- ...Fix-error-attribute-target-crc-is-unknown.patch |  47 ----
- ...amples-fix-compile-without-opengl-support.patch |  33 ---
- package/qt5/qt5base/qt5base.hash                   |   4 +-
- package/qt5/qt5canvas3d/qt5canvas3d.hash           |   4 +-
- package/qt5/qt5connectivity/qt5connectivity.hash   |   4 +-
- ...xamples-photoviewer-needs-widgets-support.patch |   0
- ...uickviewcomparison-and-quickwidget-needs-.patch |   0
- .../5.9.1/0001-Fix-alignment-issue-on-ARMv7.patch  |  37 ----
- package/qt5/qt5declarative/qt5declarative.hash     |   4 +-
- .../qt5graphicaleffects/qt5graphicaleffects.hash   |   4 +-
- package/qt5/qt5imageformats/qt5imageformats.hash   |   4 +-
- .../5.9.1/0001-Fix-plugins-build-dependency.patch  |  42 ----
- package/qt5/qt5location/qt5location.hash           |   4 +-
- package/qt5/qt5multimedia/qt5multimedia.hash       |   4 +-
- package/qt5/qt5quickcontrols/qt5quickcontrols.hash |   4 +-
- .../qt5/qt5quickcontrols2/qt5quickcontrols2.hash   |   4 +-
- package/qt5/qt5script/qt5script.hash               |   4 +-
- package/qt5/qt5sensors/qt5sensors.hash             |   4 +-
- package/qt5/qt5serialbus/qt5serialbus.hash         |   4 +-
- package/qt5/qt5serialport/qt5serialport.hash       |   4 +-
- package/qt5/qt5svg/qt5svg.hash                     |   4 +-
- package/qt5/qt5tools/qt5tools.hash                 |   4 +-
- .../qt5/qt5virtualkeyboard/qt5virtualkeyboard.hash |   4 +-
- package/qt5/qt5wayland/qt5wayland.hash             |   4 +-
- package/qt5/qt5webchannel/qt5webchannel.hash       |   4 +-
- package/qt5/qt5webchannel/qt5webchannel.mk         |   7 +
- .../0001-Always-compile-QWebEnginePage-print.patch | 246 ---------------------
- ...ad-libEGL-and-libGLES2-symbols-implicitly.patch |   0
- package/qt5/qt5webengine/qt5webengine.hash         |   4 +-
- package/qt5/qt5webkit/qt5webkit.mk                 |   7 +
- package/qt5/qt5websockets/qt5websockets.hash       |   4 +-
- package/qt5/qt5x11extras/qt5x11extras.hash         |   4 +-
- package/qt5/qt5xmlpatterns/qt5xmlpatterns.hash     |   4 +-
- 35 files changed, 64 insertions(+), 454 deletions(-)
- delete mode 100644 package/qt5/qt5base/5.9.1/0001-Fix-error-attribute-target-crc-is-unknown.patch
- delete mode 100644 package/qt5/qt5base/5.9.1/0002-examples-fix-compile-without-opengl-support.patch
- rename package/qt5/qt5declarative/{ => 5.6.2}/0001-examples-photoviewer-needs-widgets-support.patch (100%)
- rename package/qt5/qt5declarative/{ => 5.6.2}/0002-examples-qquickviewcomparison-and-quickwidget-needs-.patch (100%)
- delete mode 100644 package/qt5/qt5declarative/5.9.1/0001-Fix-alignment-issue-on-ARMv7.patch
- delete mode 100644 package/qt5/qt5location/5.9.1/0001-Fix-plugins-build-dependency.patch
- delete mode 100644 package/qt5/qt5webengine/5.9.1/0001-Always-compile-QWebEnginePage-print.patch
- rename package/qt5/qt5webengine/{5.9.1 => 5.9.2}/0002-Load-libEGL-and-libGLES2-symbols-implicitly.patch (100%)
+ package/qt5/qt53d/qt53d.hash                       |  9 +++++++
+ package/qt5/qt5base/5.6.2/qt5base.hash             | 17 ++++++++++++
+ package/qt5/qt5base/qt5base.hash                   | 18 +++++++++++++
+ package/qt5/qt5canvas3d/qt5canvas3d.hash           |  9 +++++++
+ package/qt5/qt5declarative/qt5declarative.hash     | 27 +++++++++++++++++++
+ package/qt5/qt5enginio/qt5enginio.hash             | 15 +++++++++++
+ .../qt5graphicaleffects/qt5graphicaleffects.hash   | 30 ++++++++++++++++++++++
+ package/qt5/qt5imageformats/qt5imageformats.hash   | 21 +++++++++++++++
+ package/qt5/qt5location/qt5location.hash           | 21 +++++++++++++++
+ package/qt5/qt5multimedia/qt5multimedia.hash       | 27 +++++++++++++++++++
+ package/qt5/qt5quickcontrols/qt5quickcontrols.hash | 12 +++++++++
+ .../qt5quickcontrols2/5.6.2/qt5quickcontrols2.hash |  8 ++++++
+ .../qt5/qt5quickcontrols2/qt5quickcontrols2.hash   |  9 +++++++
+ package/qt5/qt5script/qt5script.hash               | 15 +++++++++++
+ package/qt5/qt5sensors/qt5sensors.hash             | 30 ++++++++++++++++++++++
+ package/qt5/qt5serialbus/qt5serialbus.hash         | 12 +++++++++
+ package/qt5/qt5serialport/qt5serialport.hash       | 21 +++++++++++++++
+ package/qt5/qt5svg/qt5svg.hash                     | 18 +++++++++++++
+ package/qt5/qt5tools/qt5tools.hash                 | 27 +++++++++++++++++++
+ .../qt5/qt5virtualkeyboard/qt5virtualkeyboard.hash |  6 +++++
+ package/qt5/qt5wayland/qt5wayland.hash             | 27 +++++++++++++++++++
+ package/qt5/qt5webchannel/qt5webchannel.hash       | 30 ++++++++++++++++++++++
+ package/qt5/qt5webkit/qt5webkit.hash               |  9 +++++++
+ package/qt5/qt5websockets/qt5websockets.hash       | 24 +++++++++++++++++
+ package/qt5/qt5x11extras/qt5x11extras.hash         | 15 +++++++++++
+ package/qt5/qt5xmlpatterns/qt5xmlpatterns.hash     | 21 +++++++++++++++
+ 26 files changed, 478 insertions(+)
+ create mode 100644 package/qt5/qt5base/5.6.2/qt5base.hash
+ create mode 100644 package/qt5/qt5quickcontrols2/5.6.2/qt5quickcontrols2.hash
 
-diff --git a/package/qt5/qt5.mk b/package/qt5/qt5.mk
-index 55b16e0dac..a0cfef9b7e 100644
---- a/package/qt5/qt5.mk
-+++ b/package/qt5/qt5.mk
-@@ -6,7 +6,7 @@
- 
- ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
- QT5_VERSION_MAJOR = 5.9
--QT5_VERSION = $(QT5_VERSION_MAJOR).1
-+QT5_VERSION = $(QT5_VERSION_MAJOR).2
- QT5_SITE = http://download.qt.io/official_releases/qt/$(QT5_VERSION_MAJOR)/$(QT5_VERSION)/submodules
- else
- QT5_VERSION_MAJOR = 5.6
 diff --git a/package/qt5/qt53d/qt53d.hash b/package/qt5/qt53d/qt53d.hash
-index 8d1324a08a..451d0edcbb 100644
+index 5616dcba73..8d1324a08a 100644
 --- a/package/qt5/qt53d/qt53d.hash
 +++ b/package/qt5/qt53d/qt53d.hash
-@@ -1,8 +1,9 @@
- # Hash from: http://download.qt.io/official_releases/qt/5.6/5.6.2/submodules/qt3d-opensource-src-5.6.2.tar.xz.mirrorlist
- sha256 a21786db6e0f5c6c70213fe1a3530ed3d7f28f28401a0f793970e9bc860ce941 qt3d-opensource-src-5.6.2.tar.xz
+@@ -3,3 +3,12 @@ sha256 a21786db6e0f5c6c70213fe1a3530ed3d7f28f28401a0f793970e9bc860ce941 qt3d-ope
  
--# Hash from: http://download.qt.io/official_releases/qt/5.9/5.9.1/submodules/qt3d-opensource-src-5.9.1.tar.xz.mirrorlist
--sha256 4f1fe5b812d78987341b854e7f2907f0375dc188cfa6cf9db101b26e9dfd4996 qt3d-opensource-src-5.9.1.tar.xz
-+<<<<<<< HEAD
-+# Hash from: https://download.qt.io/official_releases/qt/5.9/5.9.2/submodules/qt3d-opensource-src-5.9.2.tar.xz.mirrorlist
-+sha256 c955a92fe2f3f2f03493ae0e9d973ebe1c4b1e037b58f18092fa2040f5b50783 qt3d-opensource-src-5.9.2.tar.xz
- 
- # Hash for license file:
- sha256 edfe70e99be2a7c109d860b19204609e582720b211c50caedac729da372a1253  LICENSE.GPL
-diff --git a/package/qt5/qt5base/5.9.1/0001-Fix-error-attribute-target-crc-is-unknown.patch b/package/qt5/qt5base/5.9.1/0001-Fix-error-attribute-target-crc-is-unknown.patch
-deleted file mode 100644
-index 69b1bd40f5..0000000000
---- a/package/qt5/qt5base/5.9.1/0001-Fix-error-attribute-target-crc-is-unknown.patch
-+++ /dev/null
-@@ -1,47 +0,0 @@
--From f0c02fb22bc277e2015a18e562b551ec7b3eed9e Mon Sep 17 00:00:00 2001
--From: Peter Seiderer <ps.report@gmx.net>
--Date: Sun, 16 Jul 2017 00:05:44 +0200
--Subject: [PATCH] Fix error attribute(target("+crc")) is unknown
--
--Task-number: QTBUG-61975
--Change-Id: I0b1b55c0737dad485b5ace8e6eb7cb842589453d
--
--Upstream: https://codereview.qt-project.org/200171
--Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-----
-- src/corelib/tools/qhash.cpp | 2 ++
-- src/corelib/tools/qsimd_p.h | 3 +++
-- 2 files changed, 5 insertions(+)
--
--diff --git a/src/corelib/tools/qhash.cpp b/src/corelib/tools/qhash.cpp
--index 1f9c05c..bbf6efb 100644
----- a/src/corelib/tools/qhash.cpp
--+++ b/src/corelib/tools/qhash.cpp
--@@ -144,7 +144,9 @@ static inline bool hasFastCrc32()
-- }
-- 
-- template <typename Char>
--+#if defined(__aarch64__)
-- QT_FUNCTION_TARGET(CRC32)
--+#endif
-- static uint crc32(const Char *ptr, size_t len, uint h)
-- {
--     // The crc32[whbd] instructions on Aarch64/Aarch32 calculate a 32-bit CRC32 checksum
--diff --git a/src/corelib/tools/qsimd_p.h b/src/corelib/tools/qsimd_p.h
--index 023a4b0..a85d572 100644
----- a/src/corelib/tools/qsimd_p.h
--+++ b/src/corelib/tools/qsimd_p.h
--@@ -326,7 +326,10 @@
-- #endif
-- // AArch64/ARM64
-- #if defined(Q_PROCESSOR_ARM_V8) && defined(__ARM_FEATURE_CRC32)
--+#if defined(__aarch64__)
--+// only available on aarch64
-- #define QT_FUNCTION_TARGET_STRING_CRC32      "+crc"
--+#endif
-- #  include <arm_acle.h>
-- #endif
-- 
---- 
--2.7.4
--
-diff --git a/package/qt5/qt5base/5.9.1/0002-examples-fix-compile-without-opengl-support.patch b/package/qt5/qt5base/5.9.1/0002-examples-fix-compile-without-opengl-support.patch
-deleted file mode 100644
-index 6735ab63e0..0000000000
---- a/package/qt5/qt5base/5.9.1/0002-examples-fix-compile-without-opengl-support.patch
-+++ /dev/null
-@@ -1,33 +0,0 @@
--From adacb2d6701b12511c5a0e58072236da91ebf810 Mon Sep 17 00:00:00 2001
--From: Peter Seiderer <ps.report@gmx.net>
--Date: Mon, 7 Aug 2017 22:54:11 +0200
--Subject: [PATCH] examples: fix compile without opengl support
--
--Compile examples/opengl only in case opengl support is available.
--
--Task-number: QTBUG-62372
--Change-Id: I742a1eb7b7639a5a722c4d5e9b4ee070b629b02e
--
--Upstream: https://codereview.qt-project.org/201947
--Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-----
-- examples/examples.pro | 3 ++-
-- 1 file changed, 2 insertions(+), 1 deletion(-)
--
--diff --git a/examples/examples.pro b/examples/examples.pro
--index a3851c6d81..d87fa2da88 100644
----- a/examples/examples.pro
--+++ b/examples/examples.pro
--@@ -14,7 +14,8 @@ qtHaveModule(concurrent): SUBDIRS += qtconcurrent
-- qtHaveModule(sql): SUBDIRS += sql
-- qtHaveModule(widgets): SUBDIRS += widgets
-- qtHaveModule(xml): SUBDIRS += xml
---qtHaveModule(gui): SUBDIRS += gui opengl
--+qtHaveModule(gui): SUBDIRS += gui
--+qtHaveModule(gui):qtConfig(opengl): SUBDIRS += opengl
-- 
-- aggregate.files = aggregate/examples.pro
-- aggregate.path = $$[QT_INSTALL_EXAMPLES]
---- 
--2.11.0
--
+ # Hash from: http://download.qt.io/official_releases/qt/5.9/5.9.1/submodules/qt3d-opensource-src-5.9.1.tar.xz.mirrorlist
+ sha256 4f1fe5b812d78987341b854e7f2907f0375dc188cfa6cf9db101b26e9dfd4996 qt3d-opensource-src-5.9.1.tar.xz
++
++# Hash for license file:
++sha256 edfe70e99be2a7c109d860b19204609e582720b211c50caedac729da372a1253  LICENSE.GPL
++
++# Hash for license file:
++sha256 245248009fd0af1725d183248380e476c1283383909358a13686606352bf2a17  LICENSE.GPLv3
++
++# Hash for license file:
++sha256 9ae1959e86bd49b9680f78e0b49d4e52ae88a3f234d497e175e42a7e8ed59216  LICENSE.LGPLv3
+diff --git a/package/qt5/qt5base/5.6.2/qt5base.hash b/package/qt5/qt5base/5.6.2/qt5base.hash
+new file mode 100644
+index 0000000000..3f6cd80a8a
+--- /dev/null
++++ b/package/qt5/qt5base/5.6.2/qt5base.hash
+@@ -0,0 +1,17 @@
++# Hash for license file:
++sha256 245248009fd0af1725d183248380e476c1283383909358a13686606352bf2a17  LICENSE.GPLv3
++
++# Hash for license file:
++sha256 66f6bb53f6d985a4d651bf1ecfe8bbcbe32b0f744708d588f047580ee85d8ec8  LICENSE.LGPLv21
++
++# Hash for license file:
++sha256 438c1f9a2b256e47dac33249f2ad6d4a9df643f1ec5312216d528a2f7ad82084  LGPL_EXCEPTION.txt
++
++# Hash for license file:
++sha256 68afaf3392f8c04218fbf29db43cc0b18bf651c1db086556aa584046de9f3e35  LICENSE.LGPLv3
++
++# Hash for license file:
++sha256 ed8742a95cb9db653a09b050e27ccff5e67ba69c14aa2c3137f2a4e1892f6c0d  LICENSE.FDL
++
++# Hash for license file:
++sha256 1d05f2662f0be7544c4cc238d0957d1ed5d0edc45210e9108f905df354241a0e  header.BSD
 diff --git a/package/qt5/qt5base/qt5base.hash b/package/qt5/qt5base/qt5base.hash
-index 68f53e4da2..2f3c31d78b 100644
+index 5d8670159a..68f53e4da2 100644
 --- a/package/qt5/qt5base/qt5base.hash
 +++ b/package/qt5/qt5base/qt5base.hash
-@@ -1,8 +1,8 @@
- # Hash from: http://download.qt.io/official_releases/qt/5.6/5.6.2/submodules/qtbase-opensource-src-5.6.2.tar.xz.mirrorlist
- sha256 2f6eae93c5d982fe0a387a01aeb3435571433e23e9d9d9246741faf51f1ee787 qtbase-opensource-src-5.6.2.tar.xz
+@@ -3,3 +3,21 @@ sha256 2f6eae93c5d982fe0a387a01aeb3435571433e23e9d9d9246741faf51f1ee787 qtbase-o
  
--# Hash from: http://download.qt.io/official_releases/qt/5.9/5.9.1/submodules/qtbase-opensource-src-5.9.1.tar.xz.mirrorlist
--sha256 bc9a21e9f6fff9629019fdf9f989f064751d5073c3a28dc596def92f4d4275c6 qtbase-opensource-src-5.9.1.tar.xz
-+# Hash from: https://download.qt.io/official_releases/qt/5.9/5.9.2/submodules/qtbase-opensource-src-5.9.2.tar.xz.mirrorlist
-+sha256 7fe2bb468955f633c71b3ddd3c269e68a2c4137a4e5b8dd12dcdb34cbc6d609b qtbase-opensource-src-5.9.2.tar.xz
- 
- # Hash for license file:
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE.GPL2
+ # Hash from: http://download.qt.io/official_releases/qt/5.9/5.9.1/submodules/qtbase-opensource-src-5.9.1.tar.xz.mirrorlist
+ sha256 bc9a21e9f6fff9629019fdf9f989f064751d5073c3a28dc596def92f4d4275c6 qtbase-opensource-src-5.9.1.tar.xz
++
++# Hash for license file:
++sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE.GPL2
++
++# Hash for license file:
++sha256 245248009fd0af1725d183248380e476c1283383909358a13686606352bf2a17  LICENSE.GPLv3
++
++# Hash for license file:
++sha256 0dbe024961f6ab5c52689cbd036c977975d0d0f6a67ff97762d96cb819dd5652  LICENSE.GPL3-EXCEPT
++
++# Hash for license file:
++sha256 68afaf3392f8c04218fbf29db43cc0b18bf651c1db086556aa584046de9f3e35  LICENSE.LGPLv3
++
++# Hash for license file:
++sha256 ed8742a95cb9db653a09b050e27ccff5e67ba69c14aa2c3137f2a4e1892f6c0d  LICENSE.FDL
++
++# Hash for license file:
++sha256 8fdefa0b45d9f791f687da6c2c4c83c1b701aaee2c08008f55d522af214b88f0  header.BSD
 diff --git a/package/qt5/qt5canvas3d/qt5canvas3d.hash b/package/qt5/qt5canvas3d/qt5canvas3d.hash
-index 08e25c1cfb..574a51d773 100644
+index 81386e0fdd..08e25c1cfb 100644
 --- a/package/qt5/qt5canvas3d/qt5canvas3d.hash
 +++ b/package/qt5/qt5canvas3d/qt5canvas3d.hash
-@@ -1,8 +1,8 @@
- # Hash from: http://download.qt.io/official_releases/qt/5.6/5.6.2/submodules/qtcanvas3d-opensource-src-5.6.2.tar.xz.mirrorlist
- sha256 d7584d006b03f99692ccabce922e755a6f12bb1ed1fbc99c2b84842b9e0aa0ad qtcanvas3d-opensource-src-5.6.2.tar.xz
+@@ -3,3 +3,12 @@ sha256 d7584d006b03f99692ccabce922e755a6f12bb1ed1fbc99c2b84842b9e0aa0ad qtcanvas
  
--# Hash from: http://download.qt.io/official_releases/qt/5.9/5.9.1/submodules/qtcanvas3d-opensource-src-5.9.1.tar.xz.mirrorlist
--sha256 4b8bf09330f03d2b3998f5447991546704715478c54f4f8d82d00bee3047de81 qtcanvas3d-opensource-src-5.9.1.tar.xz
-+# Hash from: https://download.qt.io/official_releases/qt/5.9/5.9.2/submodules/qtcanvas3d-opensource-src-5.9.2.tar.xz.mirrorlist
-+sha256 84a8d66c2c35b67af84376037cac71fe77a105df09ffef7906a9cb1aeafb3eea qtcanvas3d-opensource-src-5.9.2.tar.xz
- 
- # Hash for license file:
- sha256 edfe70e99be2a7c109d860b19204609e582720b211c50caedac729da372a1253  LICENSE.GPLv2
-diff --git a/package/qt5/qt5connectivity/qt5connectivity.hash b/package/qt5/qt5connectivity/qt5connectivity.hash
-index b6762f4272..4d5f3d64ef 100644
---- a/package/qt5/qt5connectivity/qt5connectivity.hash
-+++ b/package/qt5/qt5connectivity/qt5connectivity.hash
-@@ -1,5 +1,5 @@
- # Hash from: http://download.qt.io/official_releases/qt/5.6/5.6.2/submodules/qtconnectivity-opensource-src-5.6.2.tar.xz.mirrorlist
- sha256 1b672923e0703d62f605ccec97b454b1a04c1f0db47f54b687d009e84eabedf9 qtconnectivity-opensource-src-5.6.2.tar.xz
- 
--# Hash from: http://download.qt.io/official_releases/qt/5.9/5.9.1/submodules/qtconnectivity-opensource-src-5.9.1.tar.xz.mirrorlist
--sha256 40638b715517bff8509fe9fe1e6a4e45e0f66e68920605048e080dd023ae7fd5 qtconnectivity-opensource-src-5.9.1.tar.xz
-+# Hash from: https://download.qt.io/official_releases/qt/5.9/5.9.2/submodules/qtconnectivity-opensource-src-5.9.2.tar.xz.mirrorlist
-+sha256 2c759597ec959d54f29a3f628896d9208cf1f4e2269d8e01a9d3036f6995f3cc qtconnectivity-opensource-src-5.9.2.tar.xz
-diff --git a/package/qt5/qt5declarative/0001-examples-photoviewer-needs-widgets-support.patch b/package/qt5/qt5declarative/5.6.2/0001-examples-photoviewer-needs-widgets-support.patch
-similarity index 100%
-rename from package/qt5/qt5declarative/0001-examples-photoviewer-needs-widgets-support.patch
-rename to package/qt5/qt5declarative/5.6.2/0001-examples-photoviewer-needs-widgets-support.patch
-diff --git a/package/qt5/qt5declarative/0002-examples-qquickviewcomparison-and-quickwidget-needs-.patch b/package/qt5/qt5declarative/5.6.2/0002-examples-qquickviewcomparison-and-quickwidget-needs-.patch
-similarity index 100%
-rename from package/qt5/qt5declarative/0002-examples-qquickviewcomparison-and-quickwidget-needs-.patch
-rename to package/qt5/qt5declarative/5.6.2/0002-examples-qquickviewcomparison-and-quickwidget-needs-.patch
-diff --git a/package/qt5/qt5declarative/5.9.1/0001-Fix-alignment-issue-on-ARMv7.patch b/package/qt5/qt5declarative/5.9.1/0001-Fix-alignment-issue-on-ARMv7.patch
-deleted file mode 100644
-index 1d36b805f2..0000000000
---- a/package/qt5/qt5declarative/5.9.1/0001-Fix-alignment-issue-on-ARMv7.patch
-+++ /dev/null
-@@ -1,37 +0,0 @@
--From 03c2661b1243cc529fc3d8cfa65073f1da420307 Mon Sep 17 00:00:00 2001
--From: Simon Hausmann <simon.hausmann@qt.io>
--Date: Thu, 22 Jun 2017 13:34:09 +0200
--Subject: [PATCH 1/1] Fix alignment issue on ARMv7
--
--As analyzed in the bug report, it appears that we may get
--QV4::CompiledData::Function pointers for writing that are not aligned
--for the 64-bit fields at the beginning.
--
--[ChangeLog][QtQml] Fix crash due to misaligned data structures on ARMv7
--
--Task-number: QTBUG-61552
--Change-Id: I6b2c166b725496150c8850475577628ccd811d65
--Reviewed-by: Erik Verbruggen <erik.verbruggen@qt.io>
--commit: https://codereview.qt-project.org/#/c/198278/
--
--Signed-off-by: Petar Koretic <petar.koretic@qaap.io>
-----
-- src/qml/compiler/qv4compiler.cpp | 2 ++
-- 1 file changed, 2 insertions(+)
--
--diff --git a/src/qml/compiler/qv4compiler.cpp b/src/qml/compiler/qv4compiler.cpp
--index e32749bbf7..c32e1685a0 100644
----- a/src/qml/compiler/qv4compiler.cpp
--+++ b/src/qml/compiler/qv4compiler.cpp
--@@ -406,6 +406,8 @@ QV4::CompiledData::Unit QV4::Compiler::JSUnitGenerator::generateHeader(QV4::Comp
--     *jsClassDataOffset = nextOffset;
--     nextOffset += jsClassData.size();
-- 
--+    nextOffset = (nextOffset + 7) & ~quint32(0x7);
--+
--     for (int i = 0; i < irModule->functions.size(); ++i) {
--         QV4::IR::Function *f = irModule->functions.at(i);
--         functionOffsets[i] = nextOffset;
---- 
--2.13.3
--
+ # Hash from: http://download.qt.io/official_releases/qt/5.9/5.9.1/submodules/qtcanvas3d-opensource-src-5.9.1.tar.xz.mirrorlist
+ sha256 4b8bf09330f03d2b3998f5447991546704715478c54f4f8d82d00bee3047de81 qtcanvas3d-opensource-src-5.9.1.tar.xz
++
++# Hash for license file:
++sha256 edfe70e99be2a7c109d860b19204609e582720b211c50caedac729da372a1253  LICENSE.GPLv2
++
++# Hash for license file:
++sha256 245248009fd0af1725d183248380e476c1283383909358a13686606352bf2a17  LICENSE.GPLv3
++
++# Hash for license file:
++sha256 5ceb37d1c7c1d92878b82af3c0fd5558087f3d5a08a3a4d43850bad4ad265a52  LICENSE.LGPLv3
 diff --git a/package/qt5/qt5declarative/qt5declarative.hash b/package/qt5/qt5declarative/qt5declarative.hash
-index 21c90cd552..84522bbb69 100644
+index 76f3f0227c..21c90cd552 100644
 --- a/package/qt5/qt5declarative/qt5declarative.hash
 +++ b/package/qt5/qt5declarative/qt5declarative.hash
-@@ -1,8 +1,8 @@
- # Hash from: http://download.qt.io/official_releases/qt/5.6/5.6.2/submodules/qtdeclarative-opensource-src-5.6.2.tar.xz.mirrorlist
- sha256 0086a986bc36b398ba518c404d08cdff0a0d7978c30aa3fa2ab73d71654209da qtdeclarative-opensource-src-5.6.2.tar.xz
+@@ -3,3 +3,30 @@ sha256 0086a986bc36b398ba518c404d08cdff0a0d7978c30aa3fa2ab73d71654209da qtdeclar
  
--# Hash from: http://download.qt.io/official_releases/qt/5.9/5.9.1/submodules/qtdeclarative-opensource-src-5.9.1.tar.xz.mirrorlist
--sha256 d2fe6c9c1a9f19af6e96553c6d75366ab8f397bc232acd67d31476955fee94ff qtdeclarative-opensource-src-5.9.1.tar.xz
-+# Hash from: https://download.qt.io/official_releases/qt/5.9/5.9.2/submodules/qtdeclarative-opensource-src-5.9.2.tar.xz.mirrorlist
-+sha256 0d40fd4de9c73b9173d8308c0dc37952bf5c747d87ff221962dd2f848d820b08 qtdeclarative-opensource-src-5.9.2.tar.xz
- 
- # Hash for license file:
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE.GPL2
+ # Hash from: http://download.qt.io/official_releases/qt/5.9/5.9.1/submodules/qtdeclarative-opensource-src-5.9.1.tar.xz.mirrorlist
+ sha256 d2fe6c9c1a9f19af6e96553c6d75366ab8f397bc232acd67d31476955fee94ff qtdeclarative-opensource-src-5.9.1.tar.xz
++
++# Hash for license file:
++sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE.GPL2
++
++# Hash for license file:
++sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE.GPL3
++
++# Hash for license file:
++sha256 0dbe024961f6ab5c52689cbd036c977975d0d0f6a67ff97762d96cb819dd5652  LICENSE.GPL3-EXCEPT
++
++# Hash for license file:
++sha256 da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  LICENSE.LGPL3
++
++# Hash for license file:
++sha256 ed8742a95cb9db653a09b050e27ccff5e67ba69c14aa2c3137f2a4e1892f6c0d  LICENSE.FDL
++
++# Hash for license file:
++sha256 245248009fd0af1725d183248380e476c1283383909358a13686606352bf2a17  LICENSE.GPLv3
++
++# Hash for license file:
++sha256 1996a36160b2158c2be264d2ddfa6148ebe0f1ececff55aca8d754a1ddcc7bb8  LICENSE.LGPLv21
++
++# Hash for license file:
++sha256 438c1f9a2b256e47dac33249f2ad6d4a9df643f1ec5312216d528a2f7ad82084  LGPL_EXCEPTION.txt
++
++# Hash for license file:
++sha256 5ceb37d1c7c1d92878b82af3c0fd5558087f3d5a08a3a4d43850bad4ad265a52  LICENSE.LGPLv3
+diff --git a/package/qt5/qt5enginio/qt5enginio.hash b/package/qt5/qt5enginio/qt5enginio.hash
+index 995183484c..571cce5694 100644
+--- a/package/qt5/qt5enginio/qt5enginio.hash
++++ b/package/qt5/qt5enginio/qt5enginio.hash
+@@ -1,2 +1,17 @@
+ # Hash from: http://download.qt.io/official_releases/qt/5.6/5.6.2/submodules/qtenginio-opensource-src-1.6.2.tar.xz.mirrorlist
+ sha256 90ffc38d214a75ab0ef90a4760843f12bc073ae49c17de24c677d1d403bddcc3 qtenginio-opensource-src-1.6.2.tar.xz
++
++# Hash for license file:
++sha256 245248009fd0af1725d183248380e476c1283383909358a13686606352bf2a17  LICENSE.GPLv3
++
++# Hash for license file:
++sha256 1996a36160b2158c2be264d2ddfa6148ebe0f1ececff55aca8d754a1ddcc7bb8  LICENSE.LGPLv21
++
++# Hash for license file:
++sha256 438c1f9a2b256e47dac33249f2ad6d4a9df643f1ec5312216d528a2f7ad82084  LGPL_EXCEPTION.txt
++
++# Hash for license file:
++sha256 5ceb37d1c7c1d92878b82af3c0fd5558087f3d5a08a3a4d43850bad4ad265a52  LICENSE.LGPLv3
++
++# Hash for license file:
++sha256 f827ad079686ba92cc94811e35492d0e8966f704008b6da9eeda0b659fb58a8d  LICENSE.FDL
 diff --git a/package/qt5/qt5graphicaleffects/qt5graphicaleffects.hash b/package/qt5/qt5graphicaleffects/qt5graphicaleffects.hash
-index 85a0f3c23a..50155e0c3c 100644
+index 816186ba5b..85a0f3c23a 100644
 --- a/package/qt5/qt5graphicaleffects/qt5graphicaleffects.hash
 +++ b/package/qt5/qt5graphicaleffects/qt5graphicaleffects.hash
-@@ -1,8 +1,8 @@
- # Hash from: http://download.qt.io/official_releases/qt/5.6/5.6.2/submodules/qtgraphicaleffects-opensource-src-5.6.2.tar.xz.mirrorlist
- sha256 1e9f0fac2c72a812d396db74b2d9d12f513d2ec9135d5982ca85aee7f00be75e qtgraphicaleffects-opensource-src-5.6.2.tar.xz
+@@ -3,3 +3,33 @@ sha256 1e9f0fac2c72a812d396db74b2d9d12f513d2ec9135d5982ca85aee7f00be75e qtgraphi
  
--# Hash from: http://download.qt.io/official_releases/qt/5.9/5.9.1/submodules/qtgraphicaleffects-opensource-src-5.9.1.tar.xz.mirrorlist
--sha256 5f86c38e36d9553049cfbe56d4869e73cf8ab920905402cbcafb56dd8a1a59ff qtgraphicaleffects-opensource-src-5.9.1.tar.xz
-+# Hash from: https://download.qt.io/official_releases/qt/5.9/5.9.2/submodules/qtgraphicaleffects-opensource-src-5.9.2.tar.xz.mirrorlist
-+sha256 14594e7eb4b704dd69bf336828306fe8e6537c321d49ee0b701b3b1cdd8bfb76 qtgraphicaleffects-opensource-src-5.9.2.tar.xz
- 
- # Hash for license file:
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE.GPL2
+ # Hash from: http://download.qt.io/official_releases/qt/5.9/5.9.1/submodules/qtgraphicaleffects-opensource-src-5.9.1.tar.xz.mirrorlist
+ sha256 5f86c38e36d9553049cfbe56d4869e73cf8ab920905402cbcafb56dd8a1a59ff qtgraphicaleffects-opensource-src-5.9.1.tar.xz
++
++# Hash for license file:
++sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE.GPL2
++
++# Hash for license file:
++sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE.GPL3
++
++# Hash for license file:
++sha256 0dbe024961f6ab5c52689cbd036c977975d0d0f6a67ff97762d96cb819dd5652  LICENSE.GPL3-EXCEPT
++
++# Hash for license file:
++sha256 da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  LICENSE.LGPL3
++
++# Hash for license file:
++sha256 ed8742a95cb9db653a09b050e27ccff5e67ba69c14aa2c3137f2a4e1892f6c0d  LICENSE.FDL
++
++# Hash for license file:
++sha256 edfe70e99be2a7c109d860b19204609e582720b211c50caedac729da372a1253  LICENSE.GPLv2
++
++# Hash for license file:
++sha256 245248009fd0af1725d183248380e476c1283383909358a13686606352bf2a17  LICENSE.GPLv3
++
++# Hash for license file:
++sha256 1996a36160b2158c2be264d2ddfa6148ebe0f1ececff55aca8d754a1ddcc7bb8  LICENSE.LGPLv21
++
++# Hash for license file:
++sha256 438c1f9a2b256e47dac33249f2ad6d4a9df643f1ec5312216d528a2f7ad82084  LGPL_EXCEPTION.txt
++
++# Hash for license file:
++sha256 5ceb37d1c7c1d92878b82af3c0fd5558087f3d5a08a3a4d43850bad4ad265a52  LICENSE.LGPLv3
 diff --git a/package/qt5/qt5imageformats/qt5imageformats.hash b/package/qt5/qt5imageformats/qt5imageformats.hash
-index 71f358b004..3a6c98e8a0 100644
+index 6e0448a425..71f358b004 100644
 --- a/package/qt5/qt5imageformats/qt5imageformats.hash
 +++ b/package/qt5/qt5imageformats/qt5imageformats.hash
-@@ -1,8 +1,8 @@
- # Hash from: http://download.qt.io/official_releases/qt/5.6/5.6.2/submodules/qtimageformats-opensource-src-5.6.2.tar.xz.mirrorlist
- sha256 4fb153be62dac393cbcebab65040b3b9d6edecd1ebbe5e543401b0e45bd147e4 qtimageformats-opensource-src-5.6.2.tar.xz
+@@ -3,3 +3,24 @@ sha256 4fb153be62dac393cbcebab65040b3b9d6edecd1ebbe5e543401b0e45bd147e4 qtimagef
  
--# Hash from: http://download.qt.io/official_releases/qt/5.9/5.9.1/submodules/qtimageformats-opensource-src-5.9.1.tar.xz.mirrorlist
--sha256 79fee307310a66100bd3d907ea69bd039dcd727c15f27e990167e7a27d1b8a47 qtimageformats-opensource-src-5.9.1.tar.xz
-+# Hash from: https://download.qt.io/official_releases/qt/5.9/5.9.2/submodules/qtimageformats-opensource-src-5.9.2.tar.xz.mirrorlist
-+sha256 3a626ca0ac7ffc56b59c4b3f66aac6bc76954054cedb6938b961562228eb9df3 qtimageformats-opensource-src-5.9.2.tar.xz
- 
- # Hash for license file:
- sha256 edfe70e99be2a7c109d860b19204609e582720b211c50caedac729da372a1253  LICENSE.GPLv2
-diff --git a/package/qt5/qt5location/5.9.1/0001-Fix-plugins-build-dependency.patch b/package/qt5/qt5location/5.9.1/0001-Fix-plugins-build-dependency.patch
-deleted file mode 100644
-index 7db2027600..0000000000
---- a/package/qt5/qt5location/5.9.1/0001-Fix-plugins-build-dependency.patch
-+++ /dev/null
-@@ -1,42 +0,0 @@
--From 3ac051c4549575634cecc706175b019f4ed4c3bf Mon Sep 17 00:00:00 2001
--From: Peter Seiderer <ps.report@gmx.net>
--Date: Sat, 22 Jul 2017 22:47:05 +0200
--Subject: Fix plugins build dependency
--
--Do not build the plugins before the dependency on module positioning for
--the plugin subdir position is available.
--
--Task-number: QTBUG-62098
--Change-Id: Ic7473db937359f3dad47aef0ffa3671be8cbd349
--Reviewed-by: Alex Blasche <alexander.blasche@qt.io>
--
--Upstream: https://code.qt.io/cgit/qt/qtlocation.git/patch/?id=3ac051c4549575634cecc706175b019f4ed4c3bf
--Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-----
-- src/src.pro | 3 +--
-- 1 file changed, 1 insertion(+), 2 deletions(-)
--
--diff --git a/src/src.pro b/src/src.pro
--index d0a1ee4e7..0c0bf50b1 100644
----- a/src/src.pro
--+++ b/src/src.pro
--@@ -7,8 +7,6 @@ SUBDIRS += positioning
-- positioning.depends = 3rdparty/clip2tri
-- 
-- qtHaveModule(quick) {
---    plugins.depends += positioning
---
--     SUBDIRS += location
--     location.depends += positioning 3rdparty/clip2tri
-- 
--@@ -18,6 +16,7 @@ qtHaveModule(quick) {
--     imports.depends += positioning location
-- }
-- 
--+plugins.depends += positioning
-- SUBDIRS += plugins
-- 
-- !android:contains(QT_CONFIG, private_tests) {
---- 
--cgit v1.1-6-g87c4
--
+ # Hash from: http://download.qt.io/official_releases/qt/5.9/5.9.1/submodules/qtimageformats-opensource-src-5.9.1.tar.xz.mirrorlist
+ sha256 79fee307310a66100bd3d907ea69bd039dcd727c15f27e990167e7a27d1b8a47 qtimageformats-opensource-src-5.9.1.tar.xz
++
++# Hash for license file:
++sha256 edfe70e99be2a7c109d860b19204609e582720b211c50caedac729da372a1253  LICENSE.GPLv2
++
++# Hash for license file:
++sha256 245248009fd0af1725d183248380e476c1283383909358a13686606352bf2a17  LICENSE.GPLv3
++
++# Hash for license file:
++sha256 0dbe024961f6ab5c52689cbd036c977975d0d0f6a67ff97762d96cb819dd5652  LICENSE.GPL3-EXCEPT
++
++# Hash for license file:
++sha256 5ceb37d1c7c1d92878b82af3c0fd5558087f3d5a08a3a4d43850bad4ad265a52  LICENSE.LGPLv3
++
++# Hash for license file:
++sha256 ed8742a95cb9db653a09b050e27ccff5e67ba69c14aa2c3137f2a4e1892f6c0d  LICENSE.FDL
++
++# Hash for license file:
++sha256 1996a36160b2158c2be264d2ddfa6148ebe0f1ececff55aca8d754a1ddcc7bb8  LICENSE.LGPLv21
++
++# Hash for license file:
++sha256 438c1f9a2b256e47dac33249f2ad6d4a9df643f1ec5312216d528a2f7ad82084  LGPL_EXCEPTION.txt
 diff --git a/package/qt5/qt5location/qt5location.hash b/package/qt5/qt5location/qt5location.hash
-index fb3bed39b0..0cf375c9d8 100644
+index 40460600b7..fb3bed39b0 100644
 --- a/package/qt5/qt5location/qt5location.hash
 +++ b/package/qt5/qt5location/qt5location.hash
-@@ -1,8 +1,8 @@
- # Hash from: http://download.qt.io/official_releases/qt/5.6/5.6.2/submodules/qtlocation-opensource-src-5.6.2.tar.xz.mirrorlist
- sha256 7a8995206ed0220f943a33c037527a1a8243d5386f5ca77bf88152675c28d23a qtlocation-opensource-src-5.6.2.tar.xz
+@@ -3,3 +3,24 @@ sha256 7a8995206ed0220f943a33c037527a1a8243d5386f5ca77bf88152675c28d23a qtlocati
  
--# Hash from: http://download.qt.io/official_releases/qt/5.9/5.9.1/submodules/qtlocation-opensource-src-5.9.1.tar.xz.mirrorlist
--sha256 4bc43c1df69c5322f982588711d4a65f8408b71a36e43ba19b39d1aae87e1515 qtlocation-opensource-src-5.9.1.tar.xz
-+# Hash from: https://download.qt.io/official_releases/qt/5.9/5.9.2/submodules/qtlocation-opensource-src-5.9.2.tar.xz.mirrorlist
-+sha256 c81a42e44ebd4e9c33f7195e86af3deab9fde72ef0ad8dcb04acee250d356b0c qtlocation-opensource-src-5.9.2.tar.xz
- 
- # Hash for license file:
- sha256 edfe70e99be2a7c109d860b19204609e582720b211c50caedac729da372a1253  LICENSE.GPLv2
+ # Hash from: http://download.qt.io/official_releases/qt/5.9/5.9.1/submodules/qtlocation-opensource-src-5.9.1.tar.xz.mirrorlist
+ sha256 4bc43c1df69c5322f982588711d4a65f8408b71a36e43ba19b39d1aae87e1515 qtlocation-opensource-src-5.9.1.tar.xz
++
++# Hash for license file:
++sha256 edfe70e99be2a7c109d860b19204609e582720b211c50caedac729da372a1253  LICENSE.GPLv2
++
++# Hash for license file:
++sha256 245248009fd0af1725d183248380e476c1283383909358a13686606352bf2a17  LICENSE.GPLv3
++
++# Hash for license file:
++sha256 0dbe024961f6ab5c52689cbd036c977975d0d0f6a67ff97762d96cb819dd5652  LICENSE.GPL3-EXCEPT
++
++# Hash for license file:
++sha256 5ceb37d1c7c1d92878b82af3c0fd5558087f3d5a08a3a4d43850bad4ad265a52  LICENSE.LGPLv3
++
++# Hash for license file:
++sha256 ed8742a95cb9db653a09b050e27ccff5e67ba69c14aa2c3137f2a4e1892f6c0d  LICENSE.FDL
++
++# Hash for license file:
++sha256 1996a36160b2158c2be264d2ddfa6148ebe0f1ececff55aca8d754a1ddcc7bb8  LICENSE.LGPLv21
++
++# Hash for license file:
++sha256 438c1f9a2b256e47dac33249f2ad6d4a9df643f1ec5312216d528a2f7ad82084  LGPL_EXCEPTION.txt
 diff --git a/package/qt5/qt5multimedia/qt5multimedia.hash b/package/qt5/qt5multimedia/qt5multimedia.hash
-index 3207a4c9da..955f5b5fa3 100644
+index 3e852726ab..3207a4c9da 100644
 --- a/package/qt5/qt5multimedia/qt5multimedia.hash
 +++ b/package/qt5/qt5multimedia/qt5multimedia.hash
-@@ -1,8 +1,8 @@
- # Hash from: http://download.qt.io/official_releases/qt/5.6/5.6.2/submodules/qtmultimedia-opensource-src-5.6.2.tar.xz.mirrorlist
- sha256 cb9a70a7c6c0eb5be4a3fcaf9590863479e95a255308bbf07d5b7aa303bb8caf qtmultimedia-opensource-src-5.6.2.tar.xz
+@@ -3,3 +3,30 @@ sha256 cb9a70a7c6c0eb5be4a3fcaf9590863479e95a255308bbf07d5b7aa303bb8caf qtmultim
  
--# Hash from: http://download.qt.io/official_releases/qt/5.9/5.9.1/submodules/qtmultimedia-opensource-src-5.9.1.tar.xz.mirrorlist
--sha256 e48fbe71b4418eb7caba5ef5aa422483fb28d0e894cbc41f3d8b73b3d7fee6e4 qtmultimedia-opensource-src-5.9.1.tar.xz
-+# Hash from: https://download.qt.io/official_releases/qt/5.9/5.9.2/submodules/qtmultimedia-opensource-src-5.9.2.tar.xz.mirrorlist
-+sha256 c9a62700024871f204e5f107894c3a339bd645bf6dbac2bcf1bff8ce46842520 qtmultimedia-opensource-src-5.9.2.tar.xz
- 
- # Hash for license file:
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE.GPL2
+ # Hash from: http://download.qt.io/official_releases/qt/5.9/5.9.1/submodules/qtmultimedia-opensource-src-5.9.1.tar.xz.mirrorlist
+ sha256 e48fbe71b4418eb7caba5ef5aa422483fb28d0e894cbc41f3d8b73b3d7fee6e4 qtmultimedia-opensource-src-5.9.1.tar.xz
++
++# Hash for license file:
++sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE.GPL2
++
++# Hash for license file:
++sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE.GPL3
++
++# Hash for license file:
++sha256 0dbe024961f6ab5c52689cbd036c977975d0d0f6a67ff97762d96cb819dd5652  LICENSE.GPL3-EXCEPT
++
++# Hash for license file:
++sha256 da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  LICENSE.LGPL3
++
++# Hash for license file:
++sha256 ed8742a95cb9db653a09b050e27ccff5e67ba69c14aa2c3137f2a4e1892f6c0d  LICENSE.FDL
++
++# Hash for license file:
++sha256 245248009fd0af1725d183248380e476c1283383909358a13686606352bf2a17  LICENSE.GPLv3
++
++# Hash for license file:
++sha256 1996a36160b2158c2be264d2ddfa6148ebe0f1ececff55aca8d754a1ddcc7bb8  LICENSE.LGPLv21
++
++# Hash for license file:
++sha256 438c1f9a2b256e47dac33249f2ad6d4a9df643f1ec5312216d528a2f7ad82084  LGPL_EXCEPTION.txt
++
++# Hash for license file:
++sha256 5ceb37d1c7c1d92878b82af3c0fd5558087f3d5a08a3a4d43850bad4ad265a52  LICENSE.LGPLv3
 diff --git a/package/qt5/qt5quickcontrols/qt5quickcontrols.hash b/package/qt5/qt5quickcontrols/qt5quickcontrols.hash
-index 09dfc6f738..ff0bd0134f 100644
+index aecc142a99..09dfc6f738 100644
 --- a/package/qt5/qt5quickcontrols/qt5quickcontrols.hash
 +++ b/package/qt5/qt5quickcontrols/qt5quickcontrols.hash
-@@ -1,8 +1,8 @@
- # Hash from: http://download.qt.io/official_releases/qt/5.6/5.6.2/submodules/qtquickcontrols-opensource-src-5.6.2.tar.xz.mirrorlist
- sha256 5ed0f2292be10222dfb1b57a05472798fd759279f65455d91c02ef4fb746102c qtquickcontrols-opensource-src-5.6.2.tar.xz
+@@ -3,3 +3,15 @@ sha256 5ed0f2292be10222dfb1b57a05472798fd759279f65455d91c02ef4fb746102c qtquickc
  
--# Hash from: http://download.qt.io/official_releases/qt/5.9/5.9.1/submodules/qtquickcontrols-opensource-src-5.9.1.tar.xz.mirrorlist
--sha256 520ed0e110f9d0977eb873ea0e05a3d205c9c1b1ad2dd606875708848b21ec2e qtquickcontrols-opensource-src-5.9.1.tar.xz
-+# Hash from: https://download.qt.io/official_releases/qt/5.9/5.9.2/submodules/qtquickcontrols-opensource-src-5.9.2.tar.xz.mirrorlist
-+sha256 5f09ecf8648acd8abed20d727b8517e0c53cf945e83a992ee58d4baadd84bd1f qtquickcontrols-opensource-src-5.9.2.tar.xz
- 
- # Hash for license file:
- sha256 edfe70e99be2a7c109d860b19204609e582720b211c50caedac729da372a1253  LICENSE.GPLv2
+ # Hash from: http://download.qt.io/official_releases/qt/5.9/5.9.1/submodules/qtquickcontrols-opensource-src-5.9.1.tar.xz.mirrorlist
+ sha256 520ed0e110f9d0977eb873ea0e05a3d205c9c1b1ad2dd606875708848b21ec2e qtquickcontrols-opensource-src-5.9.1.tar.xz
++
++# Hash for license file:
++sha256 edfe70e99be2a7c109d860b19204609e582720b211c50caedac729da372a1253  LICENSE.GPLv2
++
++# Hash for license file:
++sha256 245248009fd0af1725d183248380e476c1283383909358a13686606352bf2a17  LICENSE.GPLv3
++
++# Hash for license file:
++sha256 5ceb37d1c7c1d92878b82af3c0fd5558087f3d5a08a3a4d43850bad4ad265a52  LICENSE.LGPLv3
++
++# Hash for license file:
++sha256 ed8742a95cb9db653a09b050e27ccff5e67ba69c14aa2c3137f2a4e1892f6c0d  LICENSE.FDL
+diff --git a/package/qt5/qt5quickcontrols2/5.6.2/qt5quickcontrols2.hash b/package/qt5/qt5quickcontrols2/5.6.2/qt5quickcontrols2.hash
+new file mode 100644
+index 0000000000..499efcc9f6
+--- /dev/null
++++ b/package/qt5/qt5quickcontrols2/5.6.2/qt5quickcontrols2.hash
+@@ -0,0 +1,8 @@
++# Hash for license file:
++sha256 ed8742a95cb9db653a09b050e27ccff5e67ba69c14aa2c3137f2a4e1892f6c0d  LICENSE.FDL
++
++# Hash for license file:
++sha256 245248009fd0af1725d183248380e476c1283383909358a13686606352bf2a17  LICENSE.GPLv3
++
++# Hash for license file:
++sha256 0ec5b37a28dd638c5c05c8cc940276e55c808353fe8d942c7f993c2c8b4cbe62  LICENSE.LGPLv3
 diff --git a/package/qt5/qt5quickcontrols2/qt5quickcontrols2.hash b/package/qt5/qt5quickcontrols2/qt5quickcontrols2.hash
-index 0446be9cf4..88e39db12e 100644
+index fefaba807e..0446be9cf4 100644
 --- a/package/qt5/qt5quickcontrols2/qt5quickcontrols2.hash
 +++ b/package/qt5/qt5quickcontrols2/qt5quickcontrols2.hash
-@@ -1,8 +1,8 @@
- # Hash from: http://download.qt.io/official_releases/qt/5.6/5.6.2/submodules/qtquickcontrols2-opensource-src-5.6.2.tar.xz.mirrorlist
- sha256 09dc1710aa4701aebe145829eb99bab94d0870cf578f7dddcec0af92286dfec1 qtquickcontrols2-opensource-src-5.6.2.tar.xz
+@@ -3,3 +3,12 @@ sha256 09dc1710aa4701aebe145829eb99bab94d0870cf578f7dddcec0af92286dfec1 qtquickc
  
--# Hash from: http://download.qt.io/official_releases/qt/5.9/5.9.1/submodules/qtquickcontrols2-opensource-src-5.9.1.tar.xz.mirrorlist
--sha256 203be0321112d1513b722fce463f9e30d7d00befb33349901d9517f4f13408ff qtquickcontrols2-opensource-src-5.9.1.tar.xz
-+# Hash from: https://download.qt.io/official_releases/qt/5.9/5.9.2/submodules/qtquickcontrols2-opensource-src-5.9.2.tar.xz.mirrorlist
-+sha256 2b55dd3dd53b4a6abb0ceb74b7fb98a5e52e9056c71a6cdbaead5cdf9d1ac8d2 qtquickcontrols2-opensource-src-5.9.2.tar.xz
- 
- # Hash for license file:
- sha256 d2cfc059acb4abd8e513cd0a73cd8489f34cbafa7bc34d5d31fb3210821cf8ca  LICENSE.GPLv3
+ # Hash from: http://download.qt.io/official_releases/qt/5.9/5.9.1/submodules/qtquickcontrols2-opensource-src-5.9.1.tar.xz.mirrorlist
+ sha256 203be0321112d1513b722fce463f9e30d7d00befb33349901d9517f4f13408ff qtquickcontrols2-opensource-src-5.9.1.tar.xz
++
++# Hash for license file:
++sha256 d2cfc059acb4abd8e513cd0a73cd8489f34cbafa7bc34d5d31fb3210821cf8ca  LICENSE.GPLv3
++
++# Hash for license file:
++sha256 9e63a04ce021b8bf811b30881fa51c8c3db88afeead942cd59322f2fb69c75bc  LICENSE.LGPLv3
++
++# Hash for license file:
++sha256 ed8742a95cb9db653a09b050e27ccff5e67ba69c14aa2c3137f2a4e1892f6c0d  LICENSE.FDL
 diff --git a/package/qt5/qt5script/qt5script.hash b/package/qt5/qt5script/qt5script.hash
-index d95ae6f1ea..6aaba4c607 100644
+index 5177d68625..d95ae6f1ea 100644
 --- a/package/qt5/qt5script/qt5script.hash
 +++ b/package/qt5/qt5script/qt5script.hash
-@@ -1,8 +1,8 @@
- # Hash from: http://download.qt.io/official_releases/qt/5.6/5.6.2/submodules/qtscript-opensource-src-5.6.2.tar.xz.mirrorlist
- sha256 e06ef6b271cae2187b57cd4ffdd6759428fd47f94a060e2ed2af024a8c14110e qtscript-opensource-src-5.6.2.tar.xz
+@@ -3,3 +3,18 @@ sha256 e06ef6b271cae2187b57cd4ffdd6759428fd47f94a060e2ed2af024a8c14110e qtscript
  
--# Hash from: http://download.qt.io/official_releases/qt/5.9/5.9.1/submodules/qtscript-opensource-src-5.9.1.tar.xz.mirrorlist
--sha256 176a08865d5f66437b0f279fc5d7f381f359f20bafbffcebdcac61e86415188f qtscript-opensource-src-5.9.1.tar.xz
-+# Hash from: https://download.qt.io/official_releases/qt/5.9/5.9.2/submodules/qtscript-opensource-src-5.9.2.tar.xz.mirrorlist
-+sha256 47807db5c2684609a0252601fda0a153530a2c97abb8c96df30f4e7897cd40f1 qtscript-opensource-src-5.9.2.tar.xz
- 
- # Hash for license file:
- sha256 245248009fd0af1725d183248380e476c1283383909358a13686606352bf2a17  LICENSE.GPLv3
+ # Hash from: http://download.qt.io/official_releases/qt/5.9/5.9.1/submodules/qtscript-opensource-src-5.9.1.tar.xz.mirrorlist
+ sha256 176a08865d5f66437b0f279fc5d7f381f359f20bafbffcebdcac61e86415188f qtscript-opensource-src-5.9.1.tar.xz
++
++# Hash for license file:
++sha256 245248009fd0af1725d183248380e476c1283383909358a13686606352bf2a17  LICENSE.GPLv3
++
++# Hash for license file:
++sha256 1996a36160b2158c2be264d2ddfa6148ebe0f1ececff55aca8d754a1ddcc7bb8  LICENSE.LGPLv21
++
++# Hash for license file:
++sha256 438c1f9a2b256e47dac33249f2ad6d4a9df643f1ec5312216d528a2f7ad82084  LGPL_EXCEPTION.txt
++
++# Hash for license file:
++sha256 5ceb37d1c7c1d92878b82af3c0fd5558087f3d5a08a3a4d43850bad4ad265a52  LICENSE.LGPLv3
++
++# Hash for license file:
++sha256 ed8742a95cb9db653a09b050e27ccff5e67ba69c14aa2c3137f2a4e1892f6c0d  LICENSE.FDL
 diff --git a/package/qt5/qt5sensors/qt5sensors.hash b/package/qt5/qt5sensors/qt5sensors.hash
-index 32fdf4a296..e1d8cdf03c 100644
+index 4abf6310c8..32fdf4a296 100644
 --- a/package/qt5/qt5sensors/qt5sensors.hash
 +++ b/package/qt5/qt5sensors/qt5sensors.hash
-@@ -1,8 +1,8 @@
- # Hash from: http://download.qt.io/official_releases/qt/5.6/5.6.2/submodules/qtsensors-opensource-src-5.6.2.tar.xz.mirrorlist
- sha256 a7809081aab4f2f0d7a4f40c3abb02e1690bb390d1dd410d7c6c5019a5053427 qtsensors-opensource-src-5.6.2.tar.xz
+@@ -3,3 +3,33 @@ sha256 a7809081aab4f2f0d7a4f40c3abb02e1690bb390d1dd410d7c6c5019a5053427 qtsensor
  
--# Hash from: http://download.qt.io/official_releases/qt/5.9/5.9.1/submodules/qtsensors-opensource-src-5.9.1.tar.xz.mirrorlist
--sha256 5af19397aa8ccd88c1fbb7cda4ee2a583f05bdf8ae090eb616bb276ff2e9e29c qtsensors-opensource-src-5.9.1.tar.xz
-+# Hash from: https://download.qt.io/official_releases/qt/5.9/5.9.2/submodules/qtsensors-opensource-src-5.9.2.tar.xz.mirrorlist
-+sha256 79441588c9c8bd1b34b91481441614077ea335a0005e79a1dc68ad964284b5d3 qtsensors-opensource-src-5.9.2.tar.xz
- 
- # Hash for license file:
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE.GPL2
+ # Hash from: http://download.qt.io/official_releases/qt/5.9/5.9.1/submodules/qtsensors-opensource-src-5.9.1.tar.xz.mirrorlist
+ sha256 5af19397aa8ccd88c1fbb7cda4ee2a583f05bdf8ae090eb616bb276ff2e9e29c qtsensors-opensource-src-5.9.1.tar.xz
++
++# Hash for license file:
++sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE.GPL2
++
++# Hash for license file:
++sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE.GPL3
++
++# Hash for license file:
++sha256 0dbe024961f6ab5c52689cbd036c977975d0d0f6a67ff97762d96cb819dd5652  LICENSE.GPL3-EXCEPT
++
++# Hash for license file:
++sha256 da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  LICENSE.LGPL3
++
++# Hash for license file:
++sha256 ed8742a95cb9db653a09b050e27ccff5e67ba69c14aa2c3137f2a4e1892f6c0d  LICENSE.FDL
++
++# Hash for license file:
++sha256 edfe70e99be2a7c109d860b19204609e582720b211c50caedac729da372a1253  LICENSE.GPLv2
++
++# Hash for license file:
++sha256 245248009fd0af1725d183248380e476c1283383909358a13686606352bf2a17  LICENSE.GPLv3
++
++# Hash for license file:
++sha256 1996a36160b2158c2be264d2ddfa6148ebe0f1ececff55aca8d754a1ddcc7bb8  LICENSE.LGPLv21
++
++# Hash for license file:
++sha256 438c1f9a2b256e47dac33249f2ad6d4a9df643f1ec5312216d528a2f7ad82084  LGPL_EXCEPTION.txt
++
++# Hash for license file:
++sha256 5ceb37d1c7c1d92878b82af3c0fd5558087f3d5a08a3a4d43850bad4ad265a52  LICENSE.LGPLv3
 diff --git a/package/qt5/qt5serialbus/qt5serialbus.hash b/package/qt5/qt5serialbus/qt5serialbus.hash
-index adab88e903..6c192088cf 100644
+index c56cfb51d5..adab88e903 100644
 --- a/package/qt5/qt5serialbus/qt5serialbus.hash
 +++ b/package/qt5/qt5serialbus/qt5serialbus.hash
-@@ -1,8 +1,8 @@
- # Hash from: http://download.qt.io/official_releases/qt/5.6/5.6.2/submodules/qtserialbus-opensource-src-5.6.2.tar.xz.mirrorlist
- sha256 b39260091691532382935ed51de9ead8e66cfb5f7a6e5410c17cd0695ccaf826 qtserialbus-opensource-src-5.6.2.tar.xz
+@@ -3,3 +3,15 @@ sha256 b39260091691532382935ed51de9ead8e66cfb5f7a6e5410c17cd0695ccaf826 qtserial
  
--# Hash from: http://download.qt.io/official_releases/qt/5.9/5.9.1/submodules/qtserialbus-opensource-src-5.9.1.tar.xz.mirrorlist
--sha256 caa9feefbf1d51b38d6bc923428009d524c0c5eb77f30e4b6d84fec1ce19f3c3 qtserialbus-opensource-src-5.9.1.tar.xz
-+# Hash from: https://download.qt.io/official_releases/qt/5.9/5.9.2/submodules/qtserialbus-opensource-src-5.9.2.tar.xz.mirrorlist
-+sha256 bbc24bdafd0191fc808e08b19f378e74bedbb79faf4e396b66ba7ca9fed9be08 qtserialbus-opensource-src-5.9.2.tar.xz
- 
- # Hash for license file:
- sha256 edfe70e99be2a7c109d860b19204609e582720b211c50caedac729da372a1253  LICENSE.GPLv2
+ # Hash from: http://download.qt.io/official_releases/qt/5.9/5.9.1/submodules/qtserialbus-opensource-src-5.9.1.tar.xz.mirrorlist
+ sha256 caa9feefbf1d51b38d6bc923428009d524c0c5eb77f30e4b6d84fec1ce19f3c3 qtserialbus-opensource-src-5.9.1.tar.xz
++
++# Hash for license file:
++sha256 edfe70e99be2a7c109d860b19204609e582720b211c50caedac729da372a1253  LICENSE.GPLv2
++
++# Hash for license file:
++sha256 245248009fd0af1725d183248380e476c1283383909358a13686606352bf2a17  LICENSE.GPLv3
++
++# Hash for license file:
++sha256 5ceb37d1c7c1d92878b82af3c0fd5558087f3d5a08a3a4d43850bad4ad265a52  LICENSE.LGPLv3
++
++# Hash for license file:
++sha256 f827ad079686ba92cc94811e35492d0e8966f704008b6da9eeda0b659fb58a8d  LICENSE.FDL
 diff --git a/package/qt5/qt5serialport/qt5serialport.hash b/package/qt5/qt5serialport/qt5serialport.hash
-index b262ee1f70..e5de4d7c36 100644
+index 7851cd1a2e..b262ee1f70 100644
 --- a/package/qt5/qt5serialport/qt5serialport.hash
 +++ b/package/qt5/qt5serialport/qt5serialport.hash
-@@ -1,8 +1,8 @@
- # Hash from: http://download.qt.io/official_releases/qt/5.6/5.6.2/submodules/qtserialport-opensource-src-5.6.2.tar.xz.mirrorlist
- sha256 af76281bad2c2bd283189635316b46091f6712134b845ae1b9e3016eec94f376 qtserialport-opensource-src-5.6.2.tar.xz
+@@ -3,3 +3,24 @@ sha256 af76281bad2c2bd283189635316b46091f6712134b845ae1b9e3016eec94f376 qtserial
  
--# Hash from: http://download.qt.io/official_releases/qt/5.9/5.9.1/submodules/qtserialport-opensource-src-5.9.1.tar.xz.mirrorlist
--sha256 e1fe85bf292929c3a62cb4d21efaaa4e89f70f48ea10914da07d0670ec617a69 qtserialport-opensource-src-5.9.1.tar.xz
-+# Hash from: https://download.qt.io/official_releases/qt/5.9/5.9.2/submodules/qtserialport-opensource-src-5.9.2.tar.xz.mirrorlist
-+sha256 50ed9cc22db1615bc00267d24b0819813b854af3651ab6e5ffaa7f7c7e62cd42 qtserialport-opensource-src-5.9.2.tar.xz
- 
- # Hash for license file:
- sha256 edfe70e99be2a7c109d860b19204609e582720b211c50caedac729da372a1253  LICENSE.GPLv2
+ # Hash from: http://download.qt.io/official_releases/qt/5.9/5.9.1/submodules/qtserialport-opensource-src-5.9.1.tar.xz.mirrorlist
+ sha256 e1fe85bf292929c3a62cb4d21efaaa4e89f70f48ea10914da07d0670ec617a69 qtserialport-opensource-src-5.9.1.tar.xz
++
++# Hash for license file:
++sha256 edfe70e99be2a7c109d860b19204609e582720b211c50caedac729da372a1253  LICENSE.GPLv2
++
++# Hash for license file:
++sha256 245248009fd0af1725d183248380e476c1283383909358a13686606352bf2a17  LICENSE.GPLv3
++
++# Hash for license file:
++sha256 0dbe024961f6ab5c52689cbd036c977975d0d0f6a67ff97762d96cb819dd5652  LICENSE.GPL3-EXCEPT
++
++# Hash for license file:
++sha256 5ceb37d1c7c1d92878b82af3c0fd5558087f3d5a08a3a4d43850bad4ad265a52  LICENSE.LGPLv3
++
++# Hash for license file:
++sha256 e1251235ce9853eecfecfa905da9ee29e9b76e4db2a1c9c4a20699f460419b08  LICENSE.FDL
++
++# Hash for license file:
++sha256 1996a36160b2158c2be264d2ddfa6148ebe0f1ececff55aca8d754a1ddcc7bb8  LICENSE.LGPLv21
++
++# Hash for license file:
++sha256 79949ee74297883df6e4e7c4bfe1e75a6e7695376b4a87ffc013e27bda509cb2  LGPL_EXCEPTION.txt
 diff --git a/package/qt5/qt5svg/qt5svg.hash b/package/qt5/qt5svg/qt5svg.hash
-index 6cc690444c..0510e99948 100644
+index c954efde6c..6cc690444c 100644
 --- a/package/qt5/qt5svg/qt5svg.hash
 +++ b/package/qt5/qt5svg/qt5svg.hash
-@@ -1,8 +1,8 @@
- # Hash from: http://download.qt.io/official_releases/qt/5.6/5.6.2/submodules/qtsvg-opensource-src-5.6.2.tar.xz.mirrorlist
- sha256 f7a361bf661b31ae7779513559dd0b774171911bc57f5cfb6bed6878ddc8bc4e qtsvg-opensource-src-5.6.2.tar.xz
+@@ -3,3 +3,21 @@ sha256 f7a361bf661b31ae7779513559dd0b774171911bc57f5cfb6bed6878ddc8bc4e qtsvg-op
  
--# Hash from: http://download.qt.io/official_releases/qt/5.9/5.9.1/submodules/qtsvg-opensource-src-5.9.1.tar.xz.mirrorlist
--sha256 99f294f874b13553e4ed49cd9465580ad0c9b92e29cdfa47b2e4096835c1e2e5 qtsvg-opensource-src-5.9.1.tar.xz
-+# Hash from: https://download.qt.io/official_releases/qt/5.9/5.9.2/submodules/qtsvg-opensource-src-5.9.2.tar.xz.mirrorlist
-+sha256 ba96ebfbb60d2793547295b7122a127d21ba44cf586bfd3c8212c59d68661108 qtsvg-opensource-src-5.9.2.tar.xz
- 
- # Hash for license file:
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE.GPL2
+ # Hash from: http://download.qt.io/official_releases/qt/5.9/5.9.1/submodules/qtsvg-opensource-src-5.9.1.tar.xz.mirrorlist
+ sha256 99f294f874b13553e4ed49cd9465580ad0c9b92e29cdfa47b2e4096835c1e2e5 qtsvg-opensource-src-5.9.1.tar.xz
++
++# Hash for license file:
++sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE.GPL2
++
++# Hash for license file:
++sha256 245248009fd0af1725d183248380e476c1283383909358a13686606352bf2a17  LICENSE.GPLv3
++
++# Hash for license file:
++sha256 5ceb37d1c7c1d92878b82af3c0fd5558087f3d5a08a3a4d43850bad4ad265a52  LICENSE.LGPLv3
++
++# Hash for license file:
++sha256 ed8742a95cb9db653a09b050e27ccff5e67ba69c14aa2c3137f2a4e1892f6c0d  LICENSE.FDL
++
++# Hash for license file:
++sha256 1996a36160b2158c2be264d2ddfa6148ebe0f1ececff55aca8d754a1ddcc7bb8  LICENSE.LGPLv21
++
++# Hash for license file:
++sha256 438c1f9a2b256e47dac33249f2ad6d4a9df643f1ec5312216d528a2f7ad82084  LGPL_EXCEPTION.txt
 diff --git a/package/qt5/qt5tools/qt5tools.hash b/package/qt5/qt5tools/qt5tools.hash
-index c91e7446b6..bbdb82a076 100644
+index ae8513f065..c91e7446b6 100644
 --- a/package/qt5/qt5tools/qt5tools.hash
 +++ b/package/qt5/qt5tools/qt5tools.hash
-@@ -1,8 +1,8 @@
- # Hash from: http://download.qt.io/official_releases/qt/5.6/5.6.2/submodules/qttools-opensource-src-5.6.2.tar.xz.mirrorlist
- sha256 db2bb4318786257a47172c377d9c456d5d5ec760d5d69240a4693dc87989e1b7 qttools-opensource-src-5.6.2.tar.xz
+@@ -3,3 +3,30 @@ sha256 db2bb4318786257a47172c377d9c456d5d5ec760d5d69240a4693dc87989e1b7 qttools-
  
--# Hash from: http://download.qt.io/official_releases/qt/5.9/5.9.1/submodules/qttools-opensource-src-5.9.1.tar.xz.mirrorlist
--sha256 c4eb56cf24a75661b8317b566be37396c90357b4f6730ef12b8c97a7079ca0e8 qttools-opensource-src-5.9.1.tar.xz
-+# Hash from: https://download.qt.io/official_releases/qt/5.9/5.9.2/submodules/qttools-opensource-src-5.9.2.tar.xz.mirrorlist
-+sha256 2bb996118b68e9939c185a593837e5a41bb3667bf5d4d5134fac02598bd2d81a qttools-opensource-src-5.9.2.tar.xz
- 
- # Hash for license file:
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE.GPL2
+ # Hash from: http://download.qt.io/official_releases/qt/5.9/5.9.1/submodules/qttools-opensource-src-5.9.1.tar.xz.mirrorlist
+ sha256 c4eb56cf24a75661b8317b566be37396c90357b4f6730ef12b8c97a7079ca0e8 qttools-opensource-src-5.9.1.tar.xz
++
++# Hash for license file:
++sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE.GPL2
++
++# Hash for license file:
++sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE.GPL3
++
++# Hash for license file:
++sha256 0dbe024961f6ab5c52689cbd036c977975d0d0f6a67ff97762d96cb819dd5652  LICENSE.GPL3-EXCEPT
++
++# Hash for license file:
++sha256 da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  LICENSE.LGPL3
++
++# Hash for license file:
++sha256 ed8742a95cb9db653a09b050e27ccff5e67ba69c14aa2c3137f2a4e1892f6c0d  LICENSE.FDL
++
++# Hash for license file:
++sha256 8ab0b8fe7c8e580e8c571b8fa455baf307e9394d4b3ac53ce50d8e960a8934c5  LICENSE.GPLv3
++
++# Hash for license file:
++sha256 66f6bb53f6d985a4d651bf1ecfe8bbcbe32b0f744708d588f047580ee85d8ec8  LICENSE.LGPLv21
++
++# Hash for license file:
++sha256 438c1f9a2b256e47dac33249f2ad6d4a9df643f1ec5312216d528a2f7ad82084  LGPL_EXCEPTION.txt
++
++# Hash for license file:
++sha256 68afaf3392f8c04218fbf29db43cc0b18bf651c1db086556aa584046de9f3e35  LICENSE.LGPLv3
 diff --git a/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.hash b/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.hash
-index fdfcef46ab..ec092e597c 100644
+index 4e66dc708f..fdfcef46ab 100644
 --- a/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.hash
 +++ b/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.hash
-@@ -1,5 +1,5 @@
--# Hash from: http://download.qt.io/official_releases/qt/5.9/5.9.1/submodules/qtvirtualkeyboard-opensource-src-5.9.1.tar.xz.mirrorlist
--sha256 6b746a6dc3ab54edf3007d0f6a2f8f31281aed03629830f59acfbc8514d6e94c  qtvirtualkeyboard-opensource-src-5.9.1.tar.xz
-+# Hash from: https://download.qt.io/official_releases/qt/5.9/5.9.2/submodules/qtvirtualkeyboard-opensource-src-5.9.2.tar.xz.mirrorlist
-+sha256 e836ca0348b21df28635e541713726444abed7b53a0acf3358cc90532e64c6fc qtvirtualkeyboard-opensource-src-5.9.2.tar.xz
- 
- # Hash for license file:
- sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE.GPL3
+@@ -1,2 +1,8 @@
+ # Hash from: http://download.qt.io/official_releases/qt/5.9/5.9.1/submodules/qtvirtualkeyboard-opensource-src-5.9.1.tar.xz.mirrorlist
+ sha256 6b746a6dc3ab54edf3007d0f6a2f8f31281aed03629830f59acfbc8514d6e94c  qtvirtualkeyboard-opensource-src-5.9.1.tar.xz
++
++# Hash for license file:
++sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE.GPL3
++
++# Hash for license file:
++sha256 7a45a9769d19545480a241230e6ea520b5156fac00930dcd69b6886749743d10  src/virtualkeyboard/3rdparty/lipi-toolkit/MIT_LICENSE.txt
 diff --git a/package/qt5/qt5wayland/qt5wayland.hash b/package/qt5/qt5wayland/qt5wayland.hash
-index 41d4da279c..6b3d80d972 100644
+index 95b88241b3..41d4da279c 100644
 --- a/package/qt5/qt5wayland/qt5wayland.hash
 +++ b/package/qt5/qt5wayland/qt5wayland.hash
-@@ -1,8 +1,8 @@
- # hash from: http://download.qt.io/official_releases/qt/5.6/5.6.2/submodules/qtwayland-opensource-src-5.6.2.tar.xz.mirrorlist
- sha256 035c3199f4719627b64b7020f0f4574da2b4cb78c6981aba75f27b872d8e6c86	qtwayland-opensource-src-5.6.2.tar.xz
+@@ -3,3 +3,30 @@ sha256 035c3199f4719627b64b7020f0f4574da2b4cb78c6981aba75f27b872d8e6c86	qtwaylan
  
--# Hash from: http://download.qt.io/official_releases/qt/5.9/5.9.1/submodules/qtwayland-opensource-src-5.9.1.tar.xz.mirrorlist
--sha256 cf0cb1982a7b748bfec8c7834691f13072f104884c61809d0bbd1a01ebda3ffa	qtwayland-opensource-src-5.9.1.tar.xz
-+# Hash from: https://download.qt.io/official_releases/qt/5.9/5.9.2/submodules/qtwayland-opensource-src-5.9.2.tar.xz.mirrorlist
-+sha256 f6434d03f933867dfb219abec2cf19e2c1d1ef23d46d12cb9333c8066027f6c6 qtwayland-opensource-src-5.9.2.tar.xz
- 
- # Hash for license file:
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE.GPL2
+ # Hash from: http://download.qt.io/official_releases/qt/5.9/5.9.1/submodules/qtwayland-opensource-src-5.9.1.tar.xz.mirrorlist
+ sha256 cf0cb1982a7b748bfec8c7834691f13072f104884c61809d0bbd1a01ebda3ffa	qtwayland-opensource-src-5.9.1.tar.xz
++
++# Hash for license file:
++sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE.GPL2
++
++# Hash for license file:
++sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE.GPL3
++
++# Hash for license file:
++sha256 0dbe024961f6ab5c52689cbd036c977975d0d0f6a67ff97762d96cb819dd5652  LICENSE.GPL3-EXCEPT
++
++# Hash for license file:
++sha256 da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  LICENSE.LGPL3
++
++# Hash for license file:
++sha256 ed8742a95cb9db653a09b050e27ccff5e67ba69c14aa2c3137f2a4e1892f6c0d  LICENSE.FDL
++
++# Hash for license file:
++sha256 245248009fd0af1725d183248380e476c1283383909358a13686606352bf2a17  LICENSE.GPLv3
++
++# Hash for license file:
++sha256 1996a36160b2158c2be264d2ddfa6148ebe0f1ececff55aca8d754a1ddcc7bb8  LICENSE.LGPLv21
++
++# Hash for license file:
++sha256 438c1f9a2b256e47dac33249f2ad6d4a9df643f1ec5312216d528a2f7ad82084  LGPL_EXCEPTION.txt
++
++# Hash for license file:
++sha256 5ceb37d1c7c1d92878b82af3c0fd5558087f3d5a08a3a4d43850bad4ad265a52  LICENSE.LGPLv3
 diff --git a/package/qt5/qt5webchannel/qt5webchannel.hash b/package/qt5/qt5webchannel/qt5webchannel.hash
-index 8c8a5b5ae9..4e9a3cf93d 100644
+index 27c3b0a60a..8c8a5b5ae9 100644
 --- a/package/qt5/qt5webchannel/qt5webchannel.hash
 +++ b/package/qt5/qt5webchannel/qt5webchannel.hash
-@@ -1,8 +1,8 @@
- # Hash from: http://download.qt.io/official_releases/qt/5.6/5.6.2/submodules/qtwebchannel-opensource-src-5.6.2.tar.xz.mirrorlist
- sha256 700efdef5f51bdb77093f4db212afe275ad35a710ea08ba0e9e9cbc8f09f1a52 qtwebchannel-opensource-src-5.6.2.tar.xz
+@@ -3,3 +3,33 @@ sha256 700efdef5f51bdb77093f4db212afe275ad35a710ea08ba0e9e9cbc8f09f1a52 qtwebcha
  
--# Hash from: http://download.qt.io/official_releases/qt/5.9/5.9.1/submodules/qtwebchannel-opensource-src-5.9.1.tar.xz.mirrorlist
--sha256 80425f5a6df8784f5221809ffd664486ed38427f514ab4ec174e20456b027000 qtwebchannel-opensource-src-5.9.1.tar.xz
-+# Hash from: https://download.qt.io/official_releases/qt/5.9/5.9.2/submodules/qtwebchannel-opensource-src-5.9.2.tar.xz.mirrorlist
-+sha256 9c1b4defecadd7f9ee15d5815d464abef0961fc565cc7831720fc7c0c0d13a26 qtwebchannel-opensource-src-5.9.2.tar.xz
- 
- # Hash for license file:
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE.GPL2
-diff --git a/package/qt5/qt5webchannel/qt5webchannel.mk b/package/qt5/qt5webchannel/qt5webchannel.mk
-index 274d25f770..d46e053a53 100644
---- a/package/qt5/qt5webchannel/qt5webchannel.mk
-+++ b/package/qt5/qt5webchannel/qt5webchannel.mk
-@@ -38,10 +38,17 @@ define QT5WEBCHANNEL_INSTALL_STAGING_CMDS
- 	$(QT5_LA_PRL_FILES_FIXUP)
- endef
- 
-+ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
-+define QT5WEBCHANNEL_INSTALL_TARGET_JAVASCRIPT
-+	$(INSTALL) -m 0644 -D $(@D)/examples/webchannel/shared/qwebchannel.js \
-+		$(TARGET_DIR)/var/www/qwebchannel.js
-+endef
-+else
- define QT5WEBCHANNEL_INSTALL_TARGET_JAVASCRIPT
- 	$(INSTALL) -m 0644 -D $(@D)/src/webchannel/qwebchannel.js \
- 		$(TARGET_DIR)/var/www/qwebchannel.js
- endef
-+endif
- 
- ifeq ($(BR2_PACKAGE_QT5DECLARATIVE_QUICK),y)
- define QT5WEBCHANNEL_INSTALL_TARGET_QMLS
-diff --git a/package/qt5/qt5webengine/5.9.1/0001-Always-compile-QWebEnginePage-print.patch b/package/qt5/qt5webengine/5.9.1/0001-Always-compile-QWebEnginePage-print.patch
-deleted file mode 100644
-index 5e863231ac..0000000000
---- a/package/qt5/qt5webengine/5.9.1/0001-Always-compile-QWebEnginePage-print.patch
-+++ /dev/null
-@@ -1,246 +0,0 @@
--From 085c2c529473bbe9dd7c8c5698a45053520cc423 Mon Sep 17 00:00:00 2001
--From: =?utf-8?q?J=C3=BCri=20Valdmann?= <juri.valdmann@qt.io>
--Date: Tue, 20 Jun 2017 15:36:43 +0200
--Subject: [PATCH 1/1] Always compile QWebEnginePage::print
--
--- Remove two out of five layers of ifdefs around and inside this method.
--- Now always compiled but will yield an error if printing is disabled.
--- Remove printing-related ifdefs from demobrowser.
--
--Task-number: QTBUG-61510
--Change-Id: I79781189d3d3fb62db0a2216b2b989e3fa1d1f86
--Reviewed-by: Allan Sandfeld Jensen <allan.jensen@qt.io>
--Reviewed-by: Rolf Eike Beer <eb@emlix.com>
--Upstream-Status: Merged
--Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
-----
-- examples/webenginewidgets/demobrowser/browsermainwindow.cpp | 12 ------------
-- examples/webenginewidgets/demobrowser/browsermainwindow.h   |  6 ------
-- examples/webenginewidgets/demobrowser/printtopdfdialog.cpp  |  7 -------
-- src/webenginewidgets/api/qwebenginepage.cpp                 | 10 ++--------
-- src/webenginewidgets/api/qwebenginepage.h                   |  8 --------
-- 5 files changed, 2 insertions(+), 41 deletions(-)
--
--diff --git a/examples/webenginewidgets/demobrowser/browsermainwindow.cpp b/examples/webenginewidgets/demobrowser/browsermainwindow.cpp
--index 327d7a9d..14d49f7f 100644
----- a/examples/webenginewidgets/demobrowser/browsermainwindow.cpp
--+++ b/examples/webenginewidgets/demobrowser/browsermainwindow.cpp
--@@ -109,9 +109,7 @@ BrowserMainWindow::BrowserMainWindow(QWidget *parent, Qt::WindowFlags flags)
--     , m_historyForward(0)
--     , m_stop(0)
--     , m_reload(0)
---#ifndef QT_NO_PRINTER
--     , m_currentPrinter(nullptr)
---#endif
-- {
--     setToolButtonStyle(Qt::ToolButtonFollowStyle);
--     setAttribute(Qt::WA_DeleteOnClose, true);
--@@ -312,9 +310,7 @@ void BrowserMainWindow::setupMenu()
-- #if defined(QWEBENGINEPAGE_PRINT)
--     fileMenu->addAction(tr("P&rint Preview..."), this, SLOT(slotFilePrintPreview()));
-- #endif
---#ifndef QT_NO_PRINTER
--     fileMenu->addAction(tr("&Print..."), this, SLOT(slotFilePrint()), QKeySequence::Print);
---#endif
--     fileMenu->addAction(tr("&Print to PDF..."), this, SLOT(slotFilePrintToPDF()));
--     fileMenu->addSeparator();
-- 
--@@ -702,23 +698,19 @@ void BrowserMainWindow::slotFileOpen()
-- 
-- void BrowserMainWindow::slotFilePrintPreview()
-- {
---#ifndef QT_NO_PRINTPREVIEWDIALOG
--     if (!currentTab())
--         return;
--     QPrintPreviewDialog *dialog = new QPrintPreviewDialog(this);
--     connect(dialog, SIGNAL(paintRequested(QPrinter*)),
--             currentTab(), SLOT(print(QPrinter*)));
--     dialog->exec();
---#endif
-- }
-- 
-- void BrowserMainWindow::slotFilePrint()
-- {
---#ifndef QT_NO_PRINTER
--     if (!currentTab())
--         return;
--     printRequested(currentTab()->page());
---#endif
-- }
-- 
-- void BrowserMainWindow::slotHandlePdfPrinted(const QByteArray& result)
--@@ -751,7 +743,6 @@ void BrowserMainWindow::slotFilePrintToPDF()
--     currentTab()->page()->printToPdf(invoke(this, &BrowserMainWindow::slotHandlePdfPrinted), dialog->pageLayout());
-- }
-- 
---#ifndef QT_NO_PRINTER
-- void BrowserMainWindow::slotHandlePagePrinted(bool result)
-- {
--     Q_UNUSED(result);
--@@ -763,7 +754,6 @@ void BrowserMainWindow::slotHandlePagePrinted(bool result)
-- 
-- void BrowserMainWindow::printRequested(QWebEnginePage *page)
-- {
---#ifndef QT_NO_PRINTDIALOG
--     if (m_currentPrinter)
--         return;
--     m_currentPrinter = new QPrinter();
--@@ -774,9 +764,7 @@ void BrowserMainWindow::printRequested(QWebEnginePage *page)
--         return;
--     }
--     page->print(m_currentPrinter, invoke(this, &BrowserMainWindow::slotHandlePagePrinted));
---#endif
-- }
---#endif
-- 
-- void BrowserMainWindow::slotPrivateBrowsing()
-- {
--diff --git a/examples/webenginewidgets/demobrowser/browsermainwindow.h b/examples/webenginewidgets/demobrowser/browsermainwindow.h
--index 91e1c1d2..5bbbb292 100644
----- a/examples/webenginewidgets/demobrowser/browsermainwindow.h
--+++ b/examples/webenginewidgets/demobrowser/browsermainwindow.h
--@@ -56,9 +56,7 @@
-- #include <QtCore/QUrl>
-- 
-- QT_BEGIN_NAMESPACE
---#ifndef QT_NO_PRINTER
-- class QPrinter;
---#endif
-- class QWebEnginePage;
-- QT_END_NAMESPACE
-- 
--@@ -142,10 +140,8 @@ private slots:
--     void slotSwapFocus();
--     void slotHandlePdfPrinted(const QByteArray&);
-- 
---#ifndef QT_NO_PRINTER
--     void slotHandlePagePrinted(bool result);
--     void printRequested(QWebEnginePage *page);
---#endif
--     void geometryChangeRequested(const QRect &geometry);
--     void updateToolbarActionText(bool visible);
--     void updateBookmarksToolbarActionText(bool visible);
--@@ -180,9 +176,7 @@ private:
--     QAction *m_restoreLastSession;
--     QAction *m_addBookmark;
-- 
---#ifndef QT_NO_PRINTER
--     QPrinter *m_currentPrinter;
---#endif
-- 
--     QIcon m_reloadIcon;
--     QIcon m_stopIcon;
--diff --git a/examples/webenginewidgets/demobrowser/printtopdfdialog.cpp b/examples/webenginewidgets/demobrowser/printtopdfdialog.cpp
--index 0f3b1765..50a8bb91 100644
----- a/examples/webenginewidgets/demobrowser/printtopdfdialog.cpp
--+++ b/examples/webenginewidgets/demobrowser/printtopdfdialog.cpp
--@@ -52,10 +52,8 @@
-- #include "ui_printtopdfdialog.h"
-- 
-- #include <QtCore/QDir>
---#ifndef QT_NO_PRINTER
-- #include <QtPrintSupport/QPageSetupDialog>
-- #include <QtPrintSupport/QPrinter>
---#endif // QT_NO_PRINTER
-- #include <QtWidgets/QFileDialog>
-- 
-- PrintToPdfDialog::PrintToPdfDialog(const QString &filePath, QWidget *parent) :
--@@ -66,11 +64,8 @@ PrintToPdfDialog::PrintToPdfDialog(const QString &filePath, QWidget *parent) :
--     ui->setupUi(this);
--     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
--     connect(ui->chooseFilePathButton, &QToolButton::clicked, this, &PrintToPdfDialog::onChooseFilePathButtonClicked);
---#ifndef QT_NO_PRINTER
--     connect(ui->choosePageLayoutButton, &QToolButton::clicked, this, &PrintToPdfDialog::onChoosePageLayoutButtonClicked);
---#else
--     ui->choosePageLayoutButton->hide();
---#endif // QT_NO_PRINTER
--     updatePageLayoutLabel();
--     setFilePath(filePath);
-- }
--@@ -82,7 +77,6 @@ PrintToPdfDialog::~PrintToPdfDialog()
-- 
-- void PrintToPdfDialog::onChoosePageLayoutButtonClicked()
-- {
---#ifndef QT_NO_PRINTER
--     QPrinter printer;
--     printer.setPageLayout(currentPageLayout);
-- 
--@@ -92,7 +86,6 @@ void PrintToPdfDialog::onChoosePageLayoutButtonClicked()
--     currentPageLayout.setPageSize(printer.pageLayout().pageSize());
--     currentPageLayout.setOrientation(printer.pageLayout().orientation());
--     updatePageLayoutLabel();
---#endif // QT_NO_PRINTER
-- }
-- 
-- void PrintToPdfDialog::onChooseFilePathButtonClicked()
--diff --git a/src/webenginewidgets/api/qwebenginepage.cpp b/src/webenginewidgets/api/qwebenginepage.cpp
--index 2cdb0116..6042b9fd 100644
----- a/src/webenginewidgets/api/qwebenginepage.cpp
--+++ b/src/webenginewidgets/api/qwebenginepage.cpp
--@@ -80,11 +80,9 @@
-- #include <QMenu>
-- #include <QMessageBox>
-- #include <QMimeData>
---#if defined(QT_PRINTSUPPORT_LIB)
---#ifndef QT_NO_PRINTER
--+#ifdef ENABLE_PRINTING
-- #include <QPrinter>
---#endif //QT_NO_PRINTER
---#endif //QT_PRINTSUPPORT_LIB
--+#endif
-- #include <QStandardPaths>
-- #include <QStyle>
-- #include <QTimer>
--@@ -2051,8 +2049,6 @@ void QWebEnginePage::printToPdf(const QWebEngineCallback<const QByteArray&> &res
-- #endif // if defined(ENABLE_PDF)
-- }
-- 
---#if defined(QT_PRINTSUPPORT_LIB)
---#ifndef QT_NO_PRINTER
-- /*!
--     \fn void QWebEnginePage::print(QPrinter *printer, FunctorOrLambda resultCallback)
--     Renders the current content of the page into a temporary PDF document, then prints it using \a printer.
--@@ -2089,8 +2085,6 @@ void QWebEnginePage::print(QPrinter *printer, const QWebEngineCallback<bool> &re
--     d->m_callbacks.invokeDirectly(resultCallback, false);
-- #endif // if defined(ENABLE_PDF)
-- }
---#endif // if defined(QT_NO_PRINTER)
---#endif // if defined(QT_PRINTSUPPORT_LIB)
-- 
-- /*!
--     \since 5.7
--diff --git a/src/webenginewidgets/api/qwebenginepage.h b/src/webenginewidgets/api/qwebenginepage.h
--index c7d5a19e..5619639c 100644
----- a/src/webenginewidgets/api/qwebenginepage.h
--+++ b/src/webenginewidgets/api/qwebenginepage.h
--@@ -55,11 +55,7 @@
-- 
-- QT_BEGIN_NAMESPACE
-- class QMenu;
---#if defined(QT_PRINTSUPPORT_LIB)
---#ifndef QT_NO_PRINTER
-- class QPrinter;
---#endif // QT_NO_PRINTER
---#endif // QT_PRINTSUPPORT_LIB
-- 
-- class QWebChannel;
-- class QWebEngineContextMenuData;
--@@ -294,15 +290,11 @@ public:
--     void printToPdf(const QWebEngineCallback<const QByteArray&> &resultCallback, const QPageLayout &layout = QPageLayout(QPageSize(QPageSize::A4), QPageLayout::Portrait, QMarginsF()));
-- #endif
-- 
---#if defined(QT_PRINTSUPPORT_LIB)
---#ifndef QT_NO_PRINTER
-- #ifdef Q_QDOC
--     void print(QPrinter *printer, FunctorOrLambda resultCallback);
-- #else
--     void print(QPrinter *printer, const QWebEngineCallback<bool> &resultCallback);
-- #endif // QDOC
---#endif // QT_NO_PRINTER
---#endif // QT_PRINTSUPPORT_LIB
-- 
--     const QWebEngineContextMenuData &contextMenuData() const;
-- 
---- 
--2.13.2
--
-diff --git a/package/qt5/qt5webengine/5.9.1/0002-Load-libEGL-and-libGLES2-symbols-implicitly.patch b/package/qt5/qt5webengine/5.9.2/0002-Load-libEGL-and-libGLES2-symbols-implicitly.patch
-similarity index 100%
-rename from package/qt5/qt5webengine/5.9.1/0002-Load-libEGL-and-libGLES2-symbols-implicitly.patch
-rename to package/qt5/qt5webengine/5.9.2/0002-Load-libEGL-and-libGLES2-symbols-implicitly.patch
-diff --git a/package/qt5/qt5webengine/qt5webengine.hash b/package/qt5/qt5webengine/qt5webengine.hash
-index d45500c441..918f7edb3a 100644
---- a/package/qt5/qt5webengine/qt5webengine.hash
-+++ b/package/qt5/qt5webengine/qt5webengine.hash
-@@ -1,2 +1,2 @@
--# Hash from: http://download.qt.io/official_releases/qt/5.9/5.9.1/submodules/qtwebengine-opensource-src-5.9.1.tar.xz.mirrorlist
--sha256 f6a37eeb9188474a16d29ede498fce959396ab80329a0a83eaeb925251686401  qtwebengine-opensource-src-5.9.1.tar.xz
-+# Hash from: https://download.qt.io/official_releases/qt/5.9/5.9.2/submodules/qtwebengine-opensource-src-5.9.2.tar.xz.mirrorlist
-+sha256 cab069e4589f806640bebe4077c70e5cd5ffeb146c6e8caca6c4454fc0c4a108 qtwebengine-opensource-src-5.9.2.tar.xz
-diff --git a/package/qt5/qt5webkit/qt5webkit.mk b/package/qt5/qt5webkit/qt5webkit.mk
-index 7e9db767f8..6e982e6bc7 100644
---- a/package/qt5/qt5webkit/qt5webkit.mk
-+++ b/package/qt5/qt5webkit/qt5webkit.mk
-@@ -4,8 +4,15 @@
- #
- ################################################################################
- 
-+# no 5.9.2 package available, fall back to 5.9.1 version
-+ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
-+QT5WEBKIT_VERSION = 5.9.1
-+QT5WEBKIT_SITE = http://download.qt.io/official_releases/qt/5.9/5.9.1/submodules
-+else
- QT5WEBKIT_VERSION = $(QT5_VERSION)
- QT5WEBKIT_SITE = $(QT5_SITE)
-+endif
+ # Hash from: http://download.qt.io/official_releases/qt/5.9/5.9.1/submodules/qtwebchannel-opensource-src-5.9.1.tar.xz.mirrorlist
+ sha256 80425f5a6df8784f5221809ffd664486ed38427f514ab4ec174e20456b027000 qtwebchannel-opensource-src-5.9.1.tar.xz
 +
- QT5WEBKIT_SOURCE = qtwebkit-opensource-src-$(QT5WEBKIT_VERSION).tar.xz
- QT5WEBKIT_DEPENDENCIES = \
- 	host-bison host-flex host-gperf host-python host-ruby \
++# Hash for license file:
++sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE.GPL2
++
++# Hash for license file:
++sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE.GPL3
++
++# Hash for license file:
++sha256 0dbe024961f6ab5c52689cbd036c977975d0d0f6a67ff97762d96cb819dd5652  LICENSE.GPL3-EXCEPT
++
++# Hash for license file:
++sha256 da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  LICENSE.LGPL3
++
++# Hash for license file:
++sha256 ed8742a95cb9db653a09b050e27ccff5e67ba69c14aa2c3137f2a4e1892f6c0d  LICENSE.FDL
++
++# Hash for license file:
++sha256 edfe70e99be2a7c109d860b19204609e582720b211c50caedac729da372a1253  LICENSE.GPLv2
++
++# Hash for license file:
++sha256 245248009fd0af1725d183248380e476c1283383909358a13686606352bf2a17  LICENSE.GPLv3
++
++# Hash for license file:
++sha256 1996a36160b2158c2be264d2ddfa6148ebe0f1ececff55aca8d754a1ddcc7bb8  LICENSE.LGPLv21
++
++# Hash for license file:
++sha256 438c1f9a2b256e47dac33249f2ad6d4a9df643f1ec5312216d528a2f7ad82084  LGPL_EXCEPTION.txt
++
++# Hash for license file:
++sha256 5ceb37d1c7c1d92878b82af3c0fd5558087f3d5a08a3a4d43850bad4ad265a52  LICENSE.LGPLv3
+diff --git a/package/qt5/qt5webkit/qt5webkit.hash b/package/qt5/qt5webkit/qt5webkit.hash
+index 93f0594f6c..872a9615ef 100644
+--- a/package/qt5/qt5webkit/qt5webkit.hash
++++ b/package/qt5/qt5webkit/qt5webkit.hash
+@@ -3,3 +3,12 @@ sha256 528a6b8b1c5095367b26e8ce4f3a46bb739e2e9913ff4dfc6ef58a04fcd73966 qtwebkit
+ 
+ # hash from: http://download.qt.io/official_releases/qt/5.9/5.9.1/submodules/qtwebkit-opensource-src-5.9.1.tar.xz.mirrorlist
+ sha256  28a560becd800a4229bfac317c2e5407cd3cc95308bc4c3ca90dba2577b052cf  qtwebkit-opensource-src-5.9.1.tar.xz
++
++# Hash for license file:
++sha256 7555fa34bc131a75ca56d65c40cc1ea8f9515d23e353d4c15d58573a042f7805  Source/WebCore/LICENSE-LGPL-2
++
++# Hash for license file:
++sha256 f2b3bd09663381deb99721109d22b47af1213bb43007a8b56a06c6375c8050ce  Source/WebCore/LICENSE-LGPL-2.1
++
++# Hash for license file:
++sha256 a3db6c7f3027aa27489c25a2fa259185cdee945780c32e01c60cbfabf4743b6c  LICENSE.LGPLv21
 diff --git a/package/qt5/qt5websockets/qt5websockets.hash b/package/qt5/qt5websockets/qt5websockets.hash
-index 08a1b79292..408dbc1284 100644
+index c95027b509..08a1b79292 100644
 --- a/package/qt5/qt5websockets/qt5websockets.hash
 +++ b/package/qt5/qt5websockets/qt5websockets.hash
-@@ -1,8 +1,8 @@
- # Hash from: http://download.qt.io/official_releases/qt/5.6/5.6.2/submodules/qtwebsockets-opensource-src-5.6.2.tar.xz.mirrorlist
- sha256 3cd9d4bbff8e6be5e252f00fc9ecb9ac2d8a193020288c7d1e82583daeb5ba35 qtwebsockets-opensource-src-5.6.2.tar.xz
+@@ -3,3 +3,27 @@ sha256 3cd9d4bbff8e6be5e252f00fc9ecb9ac2d8a193020288c7d1e82583daeb5ba35 qtwebsoc
  
--# Hash from: http://download.qt.io/official_releases/qt/5.9/5.9.1/submodules/qtwebsockets-opensource-src-5.9.1.tar.xz.mirrorlist
--sha256 01277362430b5a75c19a16ded8cf4c53a3bccddcc0ba2f50648e0f2985f23464 qtwebsockets-opensource-src-5.9.1.tar.xz
-+# Hash from: https://download.qt.io/official_releases/qt/5.9/5.9.2/submodules/qtwebsockets-opensource-src-5.9.2.tar.xz.mirrorlist
-+sha256 afddc1bd915ea47ccbec968a7af02e2a5405c717830e4671924fe35b55e81674 qtwebsockets-opensource-src-5.9.2.tar.xz
- 
- # Hash for license file:
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE.GPL2
+ # Hash from: http://download.qt.io/official_releases/qt/5.9/5.9.1/submodules/qtwebsockets-opensource-src-5.9.1.tar.xz.mirrorlist
+ sha256 01277362430b5a75c19a16ded8cf4c53a3bccddcc0ba2f50648e0f2985f23464 qtwebsockets-opensource-src-5.9.1.tar.xz
++
++# Hash for license file:
++sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE.GPL2
++
++# Hash for license file:
++sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE.GPL3
++
++# Hash for license file:
++sha256 0dbe024961f6ab5c52689cbd036c977975d0d0f6a67ff97762d96cb819dd5652  LICENSE.GPL3-EXCEPT
++
++# Hash for license file:
++sha256 da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  LICENSE.LGPL3
++
++# Hash for license file:
++sha256 245248009fd0af1725d183248380e476c1283383909358a13686606352bf2a17  LICENSE.GPLv3
++
++# Hash for license file:
++sha256 1996a36160b2158c2be264d2ddfa6148ebe0f1ececff55aca8d754a1ddcc7bb8  LICENSE.LGPLv21
++
++# Hash for license file:
++sha256 79949ee74297883df6e4e7c4bfe1e75a6e7695376b4a87ffc013e27bda509cb2  LGPL_EXCEPTION.txt
++
++# Hash for license file:
++sha256 5ceb37d1c7c1d92878b82af3c0fd5558087f3d5a08a3a4d43850bad4ad265a52  LICENSE.LGPLv3
 diff --git a/package/qt5/qt5x11extras/qt5x11extras.hash b/package/qt5/qt5x11extras/qt5x11extras.hash
-index 429c20aec3..eacb89f063 100644
+index a1ac2b74b9..429c20aec3 100644
 --- a/package/qt5/qt5x11extras/qt5x11extras.hash
 +++ b/package/qt5/qt5x11extras/qt5x11extras.hash
-@@ -1,8 +1,8 @@
- # Hash from: http://download.qt.io/official_releases/qt/5.6/5.6.2/submodules/qtx11extras-opensource-src-5.6.2.tar.xz.mirrorlist
- sha256 71ffde1cfaeec310677b69ecd16cb5992e8885cf3e73b4cec7d6e7a115b40ced qtx11extras-opensource-src-5.6.2.tar.xz
+@@ -3,3 +3,18 @@ sha256 71ffde1cfaeec310677b69ecd16cb5992e8885cf3e73b4cec7d6e7a115b40ced qtx11ext
  
--# Hash from: http://download.qt.io/official_releases/qt/5.9/5.9.1/submodules/qtx11extras-opensource-src-5.9.1.tar.xz.mirrorlist
--sha256 a63d0e28958331d672dbd0f8c554bdaddbc974a27be37601f7f221a2ef1ad601 qtx11extras-opensource-src-5.9.1.tar.xz
-+# Hash from: https://download.qt.io/official_releases/qt/5.9/5.9.2/submodules/qtx11extras-opensource-src-5.9.2.tar.xz.mirrorlist
-+sha256 db85450ad4851816a4fade1ffc10d078d28f2cca174cffa6cbd6d1220b395ac5 qtx11extras-opensource-src-5.9.2.tar.xz
- 
- # Hash for license file:
- sha256 edfe70e99be2a7c109d860b19204609e582720b211c50caedac729da372a1253  LICENSE.GPLv2
+ # Hash from: http://download.qt.io/official_releases/qt/5.9/5.9.1/submodules/qtx11extras-opensource-src-5.9.1.tar.xz.mirrorlist
+ sha256 a63d0e28958331d672dbd0f8c554bdaddbc974a27be37601f7f221a2ef1ad601 qtx11extras-opensource-src-5.9.1.tar.xz
++
++# Hash for license file:
++sha256 edfe70e99be2a7c109d860b19204609e582720b211c50caedac729da372a1253  LICENSE.GPLv2
++
++# Hash for license file:
++sha256 245248009fd0af1725d183248380e476c1283383909358a13686606352bf2a17  LICENSE.GPLv3
++
++# Hash for license file:
++sha256 0dbe024961f6ab5c52689cbd036c977975d0d0f6a67ff97762d96cb819dd5652  LICENSE.GPL3-EXCEPT
++
++# Hash for license file:
++sha256 5ceb37d1c7c1d92878b82af3c0fd5558087f3d5a08a3a4d43850bad4ad265a52  LICENSE.LGPLv3
++
++# Hash for license file:
++sha256 ed8742a95cb9db653a09b050e27ccff5e67ba69c14aa2c3137f2a4e1892f6c0d  LICENSE.FDL
 diff --git a/package/qt5/qt5xmlpatterns/qt5xmlpatterns.hash b/package/qt5/qt5xmlpatterns/qt5xmlpatterns.hash
-index 4cfa497596..61e6f92caa 100644
+index bf8c04af52..4cfa497596 100644
 --- a/package/qt5/qt5xmlpatterns/qt5xmlpatterns.hash
 +++ b/package/qt5/qt5xmlpatterns/qt5xmlpatterns.hash
-@@ -1,8 +1,8 @@
- # Hash from: http://download.qt.io/official_releases/qt/5.6/5.6.2/submodules/qtxmlpatterns-opensource-src-5.6.2.tar.xz.mirrorlist
- sha256 7c6df3eebf188d8ce6822a22cebbc63da5ac27047cf1bd7236d5b988244782cc qtxmlpatterns-opensource-src-5.6.2.tar.xz
+@@ -3,3 +3,24 @@ sha256 7c6df3eebf188d8ce6822a22cebbc63da5ac27047cf1bd7236d5b988244782cc qtxmlpat
  
--# Hash from: http://download.qt.io/official_releases/qt/5.9/5.9.1/submodules/qtxmlpatterns-opensource-src-5.9.1.tar.xz.mirrorlist
--sha256 b584686496ad1b1b3426d642bd705cab3fc02313b067a33d1b826a27aee29c24 qtxmlpatterns-opensource-src-5.9.1.tar.xz
-+# Hash from: https://download.qt.io/official_releases/qt/5.9/5.9.2/submodules/qtxmlpatterns-opensource-src-5.9.2.tar.xz.mirrorlist
-+sha256 0aa6aa83087d5754cfefaa3d119454009fc2dd5f266c1eb2ea7a434cef22d34e qtxmlpatterns-opensource-src-5.9.2.tar.xz
- 
- # Hash for license file:
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE.GPL2
+ # Hash from: http://download.qt.io/official_releases/qt/5.9/5.9.1/submodules/qtxmlpatterns-opensource-src-5.9.1.tar.xz.mirrorlist
+ sha256 b584686496ad1b1b3426d642bd705cab3fc02313b067a33d1b826a27aee29c24 qtxmlpatterns-opensource-src-5.9.1.tar.xz
++
++# Hash for license file:
++sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE.GPL2
++
++# Hash for license file:
++sha256 245248009fd0af1725d183248380e476c1283383909358a13686606352bf2a17  LICENSE.GPLv3
++
++# Hash for license file:
++sha256 0dbe024961f6ab5c52689cbd036c977975d0d0f6a67ff97762d96cb819dd5652  LICENSE.GPL3-EXCEPT
++
++# Hash for license file:
++sha256 5ceb37d1c7c1d92878b82af3c0fd5558087f3d5a08a3a4d43850bad4ad265a52  LICENSE.LGPLv3
++
++# Hash for license file:
++sha256 ed8742a95cb9db653a09b050e27ccff5e67ba69c14aa2c3137f2a4e1892f6c0d  LICENSE.FDL
++
++# Hash for license file:
++sha256 1996a36160b2158c2be264d2ddfa6148ebe0f1ececff55aca8d754a1ddcc7bb8  LICENSE.LGPLv21
++
++# Hash for license file:
++sha256 438c1f9a2b256e47dac33249f2ad6d4a9df643f1ec5312216d528a2f7ad82084  LGPL_EXCEPTION.txt
 -- 
 2.14.2
