@@ -1,44 +1,31 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 17 Oct 2017 11:01:31 +0200
-Subject: [Buildroot] [PATCH v2 1/2] dnsmasq: security bump to version
-	2.78
-In-Reply-To: <9b9ffd72d158a792696b98b6612e4e66ee11892a.1506965906.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Mon, 2 Oct 2017 20:38:25 +0300")
-References: <9b9ffd72d158a792696b98b6612e4e66ee11892a.1506965906.git.baruch@tkos.co.il>
-Message-ID: <87h8uykv10.fsf@dell.be.48ers.dk>
+Date: Tue, 17 Oct 2017 11:02:06 +0200
+Subject: [Buildroot] [PATCH] qt: Allow enabling of QtWebKit with GCC 6+
+In-Reply-To: <20170922125003.32618-1-didin@synopsys.com> (Evgeniy Didin's
+ message of "Fri, 22 Sep 2017 15:50:03 +0300")
+References: <20170922125003.32618-1-didin@synopsys.com>
+Message-ID: <87d15mkv01.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+>>>>> "Evgeniy" == Evgeniy Didin <Evgeniy.Didin@synopsys.com> writes:
 
- > Supported Lua version is now 5.2.
- > Add licenses hash.
+ > Building Qt with QtWebKit on configuration step there is
+ > a check which disables QtWebKit build with GCC 6+.
+ > Back in the day nobody thought about building Qt with GCC
+ > version greater than 5.x. And now with modern GCCs like
+ > 6.x and 7.x this assumption gets in the way.
 
- > Fixes a number of security issues:
+ > Given in Buildroot today we don't have GCC older than 4.9
+ > it should be safe to remove now meaningless check completely
+ > by adding patch to qt.
 
- > CVE-2017-13704 - Crash when DNS query exceeded 512 bytes (a regression
- > in 2.77, so technically not fixed by this bump)
-
- > CVE-2017-14491 - Heap overflow in DNS code
-
- > CVE-2017-14492 - Heap overflow in IPv6 router advertisement code
-
- > CVE-2017-14493 - Stack overflow in DHCPv6 code
-
- > CVE-2017-14494 - Information leak in DHCPv6
-
- > CVE-2017-14496 - Invalid boundary checks allows a malicious DNS queries
- > to trigger DoS
-
- > CVE-2017-14495 - Out-of-memory Dos vulnerability
-
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
- > ---
- > v2: Bump to 2.78
- >     Note security fixes in the commit log
+ > Signed-off-by: Evgeniy Didin <didin@synopsys.com>
+ > Cc: Alexey Brodkin <abrodkin@synopsys.com>
+ > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
 Committed to 2017.08.x, thanks.
 
