@@ -1,35 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 17 Oct 2017 23:36:08 +0200
-Subject: [Buildroot] [git commit] manual: clarify license file hash check
-	during legal-info target
-Message-ID: <20171017212848.05BAB80FDC@busybox.osuosl.org>
+Date: Tue, 17 Oct 2017 23:07:22 +0200
+Subject: [Buildroot] [git commit] libsemanage: bump to 2.7
+Message-ID: <20171017212847.EF729810D1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6b9c4cd5815774977bd3eaae0277bca9933882d9
+commit: https://git.buildroot.net/buildroot/commit/?id=6ff50428e84002763a3e4294499000c4310e1362
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- docs/manual/adding-packages-directory.txt | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/libsemanage/libsemanage.hash | 4 ++--
+ package/libsemanage/libsemanage.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
-index 809cc97..c9857a8 100644
---- a/docs/manual/adding-packages-directory.txt
-+++ b/docs/manual/adding-packages-directory.txt
-@@ -482,7 +482,8 @@ this in a comment line above the hashes.
+diff --git a/package/libsemanage/libsemanage.hash b/package/libsemanage/libsemanage.hash
+index 62f4d83..c386571 100644
+--- a/package/libsemanage/libsemanage.hash
++++ b/package/libsemanage/libsemanage.hash
+@@ -1,2 +1,2 @@
+-# Locally computed
+-sha256 4f81541047290b751f2ffb926fcd381c186f22db18d9fe671b0b4a6a54e8cfce libsemanage-2.6.tar.gz
++# From: https://github.com/SELinuxProject/selinux/wiki/Releases
++sha256 07e9477714ce6a4557a1fe924ea4cb06501b62d0fa0e3c0dc32a2cf47cb8d476 libsemanage-2.7.tar.gz
+diff --git a/package/libsemanage/libsemanage.mk b/package/libsemanage/libsemanage.mk
+index 2964c56..829409f 100644
+--- a/package/libsemanage/libsemanage.mk
++++ b/package/libsemanage/libsemanage.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
  
- .Note
- The hashes for license files are used to detect a license change when a
--package version is bumped. For a package with multiple versions (like Qt5),
-+package version is bumped. The hashes are checked during the make legal-info
-+target run. For a package with multiple versions (like Qt5),
- create the hash file in a subdirectory +<packageversion>+ of that package
- (see also xref:patch-apply-order[]).
- 
+-LIBSEMANAGE_VERSION = 2.6
+-LIBSEMANAGE_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20161014
++LIBSEMANAGE_VERSION = 2.7
++LIBSEMANAGE_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20170804
+ LIBSEMANAGE_LICENSE = LGPL-2.1+
+ LIBSEMANAGE_LICENSE_FILES = COPYING
+ LIBSEMANAGE_DEPENDENCIES = host-bison host-flex audit libselinux ustr bzip2
