@@ -1,44 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 17 Oct 2017 10:54:40 +0200
-Subject: [Buildroot] [git commit branch/2017.08.x] linux-headers: bump 3.2.x
-	and 4.{4, 9, 13}.x series
-Message-ID: <20171017090327.31222811B4@busybox.osuosl.org>
+Date: Tue, 17 Oct 2017 11:12:23 +0200
+Subject: [Buildroot] [PATCH][2017.08.x] Update github hashes
+In-Reply-To: <20171010091240.7611-1-gary.bisson@boundarydevices.com> (Gary
+ Bisson's message of "Tue, 10 Oct 2017 11:12:40 +0200")
+References: <20171010091240.7611-1-gary.bisson@boundarydevices.com>
+Message-ID: <87h8uygmtk.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c4fb43121bbe0b46d71f042a9e2d30a3bbbe1979
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.08.x
+>>>>> "Gary" == Gary Bisson <gary.bisson@boundarydevices.com> writes:
 
-[Peter: drop 4.13.x bump]
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 2cd4c845865ca86ee3d7b015670063b347cb49f8)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/linux-headers/Config.in.host | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ > Based on Bernd patch (commit 4fbc0c9b) which is available on master
+ > branch.
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index c440a64..7001bd2 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -231,13 +231,13 @@ endchoice
- 
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
--	default "3.2.93"	if BR2_KERNEL_HEADERS_3_2
-+	default "3.2.94"	if BR2_KERNEL_HEADERS_3_2
- 	default "3.4.113"	if BR2_KERNEL_HEADERS_3_4
- 	default "3.10.107"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.12.74"	if BR2_KERNEL_HEADERS_3_12
- 	default "4.1.43"	if BR2_KERNEL_HEADERS_4_1
--	default "4.4.90"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.53"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.4.92"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.9.56"	if BR2_KERNEL_HEADERS_4_9
- 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
- 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
- 	default "4.12.14"	if BR2_KERNEL_HEADERS_4_12
+ > The kernel-module-imx-gpu-viv and rpi-userland packages are actually
+ > broken on 2017.08 so this is a partial backport Bernd patch.
+
+ > Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+ > ---
+ > Hi all,
+
+ > Sorry to come back again about this issue but would it be possible to
+ > create a 2017.08.x branch with this patch? I don't necessarily need a
+ > 2017.08.1 tag but at least a branch that builds.
+
+ > The reason is that I made a blog post about the latest features of
+ > Buildroot[1]. Since then, the Github hashes changed and many customers
+ > complain that my build instructions don't work.
+
+ > Hope that creating such branch would be possible.
+
+Committed to 2017.08.x, thanks and sorry for the delay. I'll release
+2017.08.1 later this week.
+
+-- 
+Bye, Peter Korsgaard
