@@ -1,28 +1,31 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 17 Oct 2017 11:00:48 +0200
-Subject: [Buildroot] [PATCH 1/2] zsh: disable NIS support
-In-Reply-To: <33b2c8f26ae3bc1de8e83512a9074beddc9cc764.1506631433.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Thu, 28 Sep 2017 23:43:52 +0300")
-References: <33b2c8f26ae3bc1de8e83512a9074beddc9cc764.1506631433.git.baruch@tkos.co.il>
-Message-ID: <87tvyykv27.fsf@dell.be.48ers.dk>
+Date: Tue, 17 Oct 2017 11:01:07 +0200
+Subject: [Buildroot] [PATCH 1/1] package/supertuxkart: needs freetype
+In-Reply-To: <20170929190140.32645-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Fri, 29 Sep 2017 21:01:40 +0200")
+References: <20170929190140.32645-1-bernd.kuhls@t-online.de>
+Message-ID: <87po9mkv1o.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
- > The configure test for NIS and NIS+ looks for the ypcat and nisls host
- > utilities, respectively. This is not compatible with cross compile.
- > Disable both unconditionally.
+ > https://github.com/supertuxkart/stk-code/blob/master/CMakeLists.txt#L231
+ > Build would fail without this patch using this defconfig:
 
- > Fixes:
- > http://autobuild.buildroot.net/results/54c/54c9c5dff3df0a43573b03896cb0629fcae08478/
- > http://autobuild.buildroot.net/results/c8e/c8e30a1eb6e77ae76292b6a01bede5abb2b1b7b7/
+ > BR2_x86_64=y
+ > BR2_TOOLCHAIN_BUILDROOT_LOCALE=y
+ > BR2_TOOLCHAIN_BUILDROOT_CXX=y
+ > BR2_PACKAGE_SUPERTUXKART=y
+ > BR2_PACKAGE_MESA3D=y
+ > BR2_PACKAGE_MESA3D_DRI_DRIVER_I965=y
+ > BR2_PACKAGE_MESA3D_OPENGL_EGL=y
+ > BR2_PACKAGE_XORG7=y
 
- > Cc: Phil Eichinger <phil.eichinger@gmail.com>
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
 Committed to 2017.08.x, thanks.
 
