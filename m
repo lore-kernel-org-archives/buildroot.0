@@ -1,62 +1,90 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 17 Oct 2017 10:44:08 +0200
-Subject: [Buildroot] [git commit branch/2017.08.x] qemu: security bump to
-	version 2.8.1.1
-Message-ID: <20171017090326.6ACA27FDC1@busybox.osuosl.org>
+Date: Tue, 17 Oct 2017 10:53:29 +0200
+Subject: [Buildroot] [git commit branch/2017.08.x]
+	package/x11r7/xserver_xorg-server: security bump version to 1.19.5
+Message-ID: <20171017090327.133F47FA3D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5201a8a01458c3de5b96828648efc9bccaa358a8
+commit: https://git.buildroot.net/buildroot/commit/?id=1cc7e0e54a95015fdae1b3bb7a5684362b7a9dab
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.08.x
 
-Fixes the following security issues and adds a number of other bigfixes:
+Fixes
 
-2.8.1: Changelog:
-https://lists.gnu.org/archive/html/qemu-devel/2017-03/msg06332.html
+xfixes: unvalidated lengths (CVE-2017-12183)
 
-CVE-2017-2615 - display: cirrus: oob access while doing bitblt copy backward
-mode
+Xi: fix wrong extra length check in ProcXIChangeHierarchy
+ (CVE-2017-12178)
 
-CVE-2017-2620 - display: cirrus: out-of-bounds access issue while in
-cirrus_bitblt_cputovideo
+dbe: Unvalidated variable-length request in ProcDbeGetVisualInfo
+ (CVE-2017-12177)
 
-CVE-2017-2630 - nbd: oob stack write in client routine drop_sync
+Unvalidated extra length in ProcEstablishConnection (CVE-2017-12176)
 
-2.8.1.1 Changelog:
-https://lists.gnu.org/archive/html/qemu-devel/2017-04/msg03460.html
-
-CVE-2017-7471 - 9p: virtfs allows guest to change filesystem attributes on
-host
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit af0f2d2bbcaca9000e62b5388f4c3cd8e700c6ff)
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+(cherry picked from commit e7713abf89f3fa3ab773813a10b61080471f5bcb)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/qemu/qemu.hash | 2 +-
- package/qemu/qemu.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .../{1.19.4 => 1.19.5}/0001-modesettings-needs-dri2.patch      |  0
+ .../0002-configure.ac-Fix-check-for-CLOCK_MONOTONIC.patch      |  0
+ .../0003-Remove-check-for-useSIGIO-option.patch                |  0
+ package/x11r7/xserver_xorg-server/Config.in                    |  4 ++--
+ package/x11r7/xserver_xorg-server/xserver_xorg-server.hash     | 10 +++++-----
+ 5 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/package/qemu/qemu.hash b/package/qemu/qemu.hash
-index 19cb306..5164303 100644
---- a/package/qemu/qemu.hash
-+++ b/package/qemu/qemu.hash
-@@ -1,2 +1,2 @@
- # Locally computed, tarball verified with GPG signature
--sha256 dafd5d7f649907b6b617b822692f4c82e60cf29bc0fc58bc2036219b591e5e62  qemu-2.8.0.tar.bz2
-+sha256 f62ab18a1fb9ff5b4c81ed44becc945b11581eff777618141bdb787da55d3638  qemu-2.8.1.1.tar.bz2
-diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index f42d649..155cb28 100644
---- a/package/qemu/qemu.mk
-+++ b/package/qemu/qemu.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/x11r7/xserver_xorg-server/1.19.4/0001-modesettings-needs-dri2.patch b/package/x11r7/xserver_xorg-server/1.19.5/0001-modesettings-needs-dri2.patch
+similarity index 100%
+rename from package/x11r7/xserver_xorg-server/1.19.4/0001-modesettings-needs-dri2.patch
+rename to package/x11r7/xserver_xorg-server/1.19.5/0001-modesettings-needs-dri2.patch
+diff --git a/package/x11r7/xserver_xorg-server/1.19.4/0002-configure.ac-Fix-check-for-CLOCK_MONOTONIC.patch b/package/x11r7/xserver_xorg-server/1.19.5/0002-configure.ac-Fix-check-for-CLOCK_MONOTONIC.patch
+similarity index 100%
+rename from package/x11r7/xserver_xorg-server/1.19.4/0002-configure.ac-Fix-check-for-CLOCK_MONOTONIC.patch
+rename to package/x11r7/xserver_xorg-server/1.19.5/0002-configure.ac-Fix-check-for-CLOCK_MONOTONIC.patch
+diff --git a/package/x11r7/xserver_xorg-server/1.19.4/0003-Remove-check-for-useSIGIO-option.patch b/package/x11r7/xserver_xorg-server/1.19.5/0003-Remove-check-for-useSIGIO-option.patch
+similarity index 100%
+rename from package/x11r7/xserver_xorg-server/1.19.4/0003-Remove-check-for-useSIGIO-option.patch
+rename to package/x11r7/xserver_xorg-server/1.19.5/0003-Remove-check-for-useSIGIO-option.patch
+diff --git a/package/x11r7/xserver_xorg-server/Config.in b/package/x11r7/xserver_xorg-server/Config.in
+index 71164b3..08dea0a 100644
+--- a/package/x11r7/xserver_xorg-server/Config.in
++++ b/package/x11r7/xserver_xorg-server/Config.in
+@@ -79,7 +79,7 @@ choice
+ 	bool "X Window System server version"
  
--QEMU_VERSION = 2.8.0
-+QEMU_VERSION = 2.8.1.1
- QEMU_SOURCE = qemu-$(QEMU_VERSION).tar.bz2
- QEMU_SITE = http://wiki.qemu.org/download
- QEMU_LICENSE = GPL-2.0, LGPL-2.1, MIT, BSD-3-Clause, BSD-2-Clause, Others/BSD-1c
+ config BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_19
+-	bool "1.19.3"
++	bool "1.19.5"
+ 	select BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_23
+ 	select BR2_PACKAGE_XLIB_LIBXFONT2
+ 	select BR2_PACKAGE_XPROTO_PRESENTPROTO
+@@ -99,7 +99,7 @@ endchoice
+ 
+ config BR2_PACKAGE_XSERVER_XORG_SERVER_VERSION
+ 	string
+-	default "1.19.4" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_19
++	default "1.19.5" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_19
+ 	default "1.17.4" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_17
+ 	default "1.14.7" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_14
+ 
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
+index d0acc24..c0feb98 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
+@@ -3,8 +3,8 @@ sha1   7a95765e56b124758fcd7b609589e65b8870880b                                x
+ sha256 fcf66fa6ad86227613d2d3e8ae13ded297e2a1e947e9060a083eaf80d323451f        xorg-server-1.14.7.tar.bz2
+ # From https://lists.x.org/archives/xorg-announce/2015-October/002650.html
+ sha256 0c4b45c116a812a996eb432d8508cf26c2ec8c3916ff2a50781796882f8d6457        xorg-server-1.17.4.tar.bz2
+-# From https://lists.x.org/archives/xorg-announce/2017-October/002808.html
+-md5 28cb6d773bfcdfd43500dd64527d2ab0 xorg-server-1.19.4.tar.bz2
+-sha1 7a47d5f927ea69681e279c6e5f5e8ff3a21c7152 xorg-server-1.19.4.tar.bz2
+-sha256 aa758acea91deaf1f95069ddc5ea3818e13675fb14fef40ad1b3d0b2bf03c9a8 xorg-server-1.19.4.tar.bz2
+-sha512 ff80934e42a7dd2d437e947fe02c74c3b25bdbb3002b7005191d52272d5eae8cb3a83377fa32f40000011be88405830e796f6bd3b914bd7fc163ea8ece76226b xorg-server-1.19.4.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2017-October/002814.html
++md5 4ac6feeae6790436ce9de879ca9a3bf8  xorg-server-1.19.5.tar.bz2
++sha1 307d3405f709f7e41966c850b37deefe7f83eb9b  xorg-server-1.19.5.tar.bz2
++sha256 18fffa8eb93d06d2800d06321fc0df4d357684d8d714315a66d8dfa7df251447  xorg-server-1.19.5.tar.bz2
++sha512 928dea5850b98cd815004cfa133eca23cfa9521920c934c68a92787f2cae13cca1534eee772a4fb74b8ae8cb92662b5d68b95b834c8aa8ec57cd57cb4e5dd45c  xorg-server-1.19.5.tar.bz2
