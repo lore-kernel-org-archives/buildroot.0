@@ -1,148 +1,123 @@
-From: Jagan Teki <jagan@amarulasolutions.com>
-Date: Tue, 17 Oct 2017 23:59:07 +0530
-Subject: [Buildroot] [git commit] Added support for Sinovoip BananaPi M2
- Plus board.
-In-Reply-To: <20170922210443.49832810B8@busybox.osuosl.org>
-References: <20170922210443.49832810B8@busybox.osuosl.org>
-Message-ID: <CAMty3ZBWyhdE_8T3dsdyg+tUK9yXOHPgDHwNzKtHiCUH+0WviA@mail.gmail.com>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Tue, 17 Oct 2017 14:54:40 -0400
+Subject: [Buildroot] [PATCH v9 1/5] libselinux: bump to 2.7
+Message-ID: <20171017185444.13989-1-Adamduskett@outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I've a patch with this in ML, under bananapi. All bananapi boards are
-now part of BPI
+remove patch as it's in this release.
 
-On Sat, Sep 23, 2017 at 2:41 AM, Peter Korsgaard <peter@korsgaard.com> wrote:
-> commit: https://git.buildroot.net/buildroot/commit/?id=cef57c964284f9b545a2347dd6eb1654e03dfd6e
-> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
->
-> [Peter: board is from Sinovoip, not Lemaker, move board files,
->         Use kernel headers from kernel, explicitly use 4.13.3,
->         drop eth0 dhcp config, cleanup post-build args,
->         disable tar output format, use u-boot custom format,
->         add host-dosfstools/mtools for genimage, drop unused
->         host-uboot-tools/genext2fs]
-> Signed-off-by: Mike Harmony <mike.harmony@snapav.com>
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  DEVELOPERS                          |  4 ++++
->  board/sinovoip/m2-plus/boot.cmd     |  7 +++++++
->  board/sinovoip/m2-plus/genimage.cfg | 33 +++++++++++++++++++++++++++++++++
->  configs/bananapi_m2_plus_defconfig  | 28 ++++++++++++++++++++++++++++
->  4 files changed, 72 insertions(+)
->
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index ed5fa3d..536ec56 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -1262,6 +1262,10 @@ N:       Murat Demirten <mdemirten@yh.com.tr>
->  F:     package/jpeg-turbo/
->  F:     package/libgeotiff/
->
-> +N:     Mike Harmony <mike.harmony@snapav.com>
-> +F:     board/sinovoip/m2-plus/
-> +F:     configs/bananapi_m2_plus_defconfig
-> +
->  N:     Nathan Lynch <ntl@pobox.com>
->  F:     package/chrony/
->
-> diff --git a/board/sinovoip/m2-plus/boot.cmd b/board/sinovoip/m2-plus/boot.cmd
-> new file mode 100644
-> index 0000000..d22464a
-> --- /dev/null
-> +++ b/board/sinovoip/m2-plus/boot.cmd
-> @@ -0,0 +1,7 @@
-> +setenv bootargs console=ttyS0,115200 earlyprintk root=/dev/mmcblk0p2 rootwait
-> +
-> +mmc dev 0
-> +fatload mmc 0 $kernel_addr_r zImage
-> +fatload mmc 0 $fdt_addr_r sun8i-h3-bananapi-m2-plus.dtb
-> +
-> +bootz $kernel_addr_r - $fdt_addr_r
-> diff --git a/board/sinovoip/m2-plus/genimage.cfg b/board/sinovoip/m2-plus/genimage.cfg
-> new file mode 100644
-> index 0000000..cde0669
-> --- /dev/null
-> +++ b/board/sinovoip/m2-plus/genimage.cfg
-> @@ -0,0 +1,33 @@
-> +image boot.vfat {
-> +       vfat {
-> +               files = {
-> +                       "zImage",
-> +                       "sun8i-h3-bananapi-m2-plus.dtb",
-> +                       "boot.scr"
-> +               }
-> +       }
-> +       size = 64M
-> +}
-> +
-> +image sdcard.img {
-> +       hdimage {
-> +       }
-> +
-> +       partition u-boot {
-> +               in-partition-table = "no"
-> +               image = "u-boot-sunxi-with-spl.bin"
-> +               offset = 8192
-> +               size = 1040384 # 1MB - 8192
-> +       }
-> +
-> +       partition boot {
-> +               partition-type = 0xC
-> +               bootable = "true"
-> +               image = "boot.vfat"
-> +       }
-> +
-> +       partition rootfs {
-> +               partition-type = 0x83
-> +               image = "rootfs.ext4"
-> +       }
-> +}
-> diff --git a/configs/bananapi_m2_plus_defconfig b/configs/bananapi_m2_plus_defconfig
-> new file mode 100644
-> index 0000000..ebaea2d
-> --- /dev/null
-> +++ b/configs/bananapi_m2_plus_defconfig
-> @@ -0,0 +1,28 @@
-> +BR2_arm=y
-> +BR2_cortex_a7=y
-> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_13=y
-> +BR2_TARGET_GENERIC_ISSUE="Welcome to Bananapi M2 Plus"
-> +BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-> +BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/sinovoip/m2-plus/genimage.cfg"
-> +BR2_LINUX_KERNEL=y
-> +BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-> +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.13.3"
-> +BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
-> +BR2_LINUX_KERNEL_DTS_SUPPORT=y
-> +BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-h3-bananapi-m2-plus"
-> +BR2_TARGET_ROOTFS_EXT2=y
-> +BR2_TARGET_ROOTFS_EXT2_4=y
-> +# BR2_TARGET_ROOTFS_TAR is not set
-> +BR2_TARGET_UBOOT=y
-> +BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-> +BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-> +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.07"
-> +BR2_TARGET_UBOOT_BOARD_DEFCONFIG="Sinovoip_BPI_M2_Plus"
-> +BR2_TARGET_UBOOT_NEEDS_DTC=y
-> +BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
-> +BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-sunxi-with-spl.bin"
-> +BR2_TARGET_UBOOT_BOOT_SCRIPT=y
-> +BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE="board/sinovoip/m2-plus/boot.cmd"
-> +BR2_PACKAGE_HOST_DOSFSTOOLS=y
-> +BR2_PACKAGE_HOST_GENIMAGE=y
-> +BR2_PACKAGE_HOST_MTOOLS=y
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
+---
+Changes v1 -> v2:
+  - None
 
+Changes v2 -> v3:
+  - None
 
+Changes v3 -> v4:
+  - None
 
+Changes v4 -> v5:
+  - None
+
+Changes v5 -> v6:
+  - None
+
+Changes v6 -> v7:
+  - None
+
+Changes v7 -> v8:
+  - None
+  
+Changes v8 -> v9:
+  - None
+
+ ...src-regex.c-support-old-compilers-for-the.patch | 47 ----------------------
+ package/libselinux/libselinux.hash                 |  4 +-
+ package/libselinux/libselinux.mk                   |  4 +-
+ 3 files changed, 4 insertions(+), 51 deletions(-)
+ delete mode 100644 package/libselinux/0001-libselinux-src-regex.c-support-old-compilers-for-the.patch
+
+diff --git a/package/libselinux/0001-libselinux-src-regex.c-support-old-compilers-for-the.patch b/package/libselinux/0001-libselinux-src-regex.c-support-old-compilers-for-the.patch
+deleted file mode 100644
+index 3bda607512..0000000000
+--- a/package/libselinux/0001-libselinux-src-regex.c-support-old-compilers-for-the.patch
++++ /dev/null
+@@ -1,47 +0,0 @@
+-From e0803c0bdbb1abf06b6b5bb1b52fdb733505b8f7 Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Date: Wed, 25 Jan 2017 22:41:02 +1300
+-Subject: [PATCH] src/regex.c: support old compilers for the endian
+- check
+-
+-libselinux 2.6 has added some code in regex.c that uses __BYTE_ORDER__
+-to determine the system endianness. Unfortunately, this definition
+-provided directly by the compiler doesn't exist in older gcc versions
+-such as gcc 4.4.
+-
+-In order to address this, this commit extends the logic to use
+-<endian.h> definitions if __BYTE_ORDER__ is not provided by the
+-compiler. This allows libselinux to build properly with gcc 4.4.
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+----
+- src/regex.c | 13 ++++++++++++-
+- 1 file changed, 12 insertions(+), 1 deletion(-)
+-
+-diff --git a/src/regex.c b/src/regex.c
+-index a3b427b..0c5ad27 100644
+---- a/src/regex.c
+-+++ b/src/regex.c
+-@@ -13,7 +13,18 @@
+- #endif
+- 
+- #ifndef __BYTE_ORDER__
+--#error __BYTE_ORDER__ not defined. Unable to determine endianness.
+-+
+-+/* If the compiler doesn't define __BYTE_ORDER__, try to use the C
+-+ * library <endian.h> header definitions. */
+-+#include <endian.h>
+-+#ifndef __BYTE_ORDER
+-+#error Neither __BYTE_ORDER__ nor __BYTE_ORDER defined. Unable to determine endianness.
+-+#endif
+-+
+-+#define __ORDER_LITTLE_ENDIAN __LITTLE_ENDIAN
+-+#define __ORDER_BIG_ENDIAN __BIG_ENDIAN
+-+#define __BYTE_ORDER__ __BYTE_ORDER
+-+
+- #endif
+- 
+- #ifdef USE_PCRE2
+--- 
+-2.7.4
+-
+diff --git a/package/libselinux/libselinux.hash b/package/libselinux/libselinux.hash
+index 76130b2dc0..3c60d5111d 100644
+--- a/package/libselinux/libselinux.hash
++++ b/package/libselinux/libselinux.hash
+@@ -1,2 +1,2 @@
+-# Locally computed
+-sha256 4ea2dde50665c202253ba5caac7738370ea0337c47b251ba981c60d24e1a118a libselinux-2.6.tar.gz
++# From: https://github.com/SELinuxProject/selinux/wiki/Releases
++sha256 d0fec0769b3ad60aa7baf9b9a4b7a056827769dc2dadda0dc0eb59b3d1c18c57 libselinux-2.7.tar.gz
+diff --git a/package/libselinux/libselinux.mk b/package/libselinux/libselinux.mk
+index f23eea4962..8ac8000de5 100644
+--- a/package/libselinux/libselinux.mk
++++ b/package/libselinux/libselinux.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-LIBSELINUX_VERSION = 2.6
+-LIBSELINUX_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20161014
++LIBSELINUX_VERSION = 2.7
++LIBSELINUX_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20170804
+ LIBSELINUX_LICENSE = Public Domain
+ LIBSELINUX_LICENSE_FILES = LICENSE
+ 
 -- 
-Jagan Teki
-Senior Linux Kernel Engineer | Amarula Solutions
-U-Boot, Linux | Upstream Maintainer
-Hyderabad, India.
+2.13.6
