@@ -1,42 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 17 Oct 2017 10:36:57 +0200
-Subject: [Buildroot] [git commit branch/2017.08.x] zsh: disable NIS support
-Message-ID: <20171017090326.0049981190@busybox.osuosl.org>
+Date: Tue, 17 Oct 2017 10:33:39 +0200
+Subject: [Buildroot] [git commit branch/2017.08.x] package/git: security
+	bump to version 2.13.6
+Message-ID: <20171017090325.E130F81190@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=00f9c8df7bf58d312b0dcfcdbf5b2622d86f9038
+commit: https://git.buildroot.net/buildroot/commit/?id=81898124e65a69edc482c8968c1f1525804fc885
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.08.x
 
-The configure test for NIS and NIS+ looks for the ypcat and nisls host
-utilities, respectively. This is not compatible with cross compilation.
-Disable both unconditionally.
+Release notes:
+https://public-inbox.org/git/xmqqy3p29ekj.fsf at gitster.mtv.corp.google.com/
 
-Fixes:
-http://autobuild.buildroot.net/results/54c/54c9c5dff3df0a43573b03896cb0629fcae08478/
-http://autobuild.buildroot.net/results/c8e/c8e30a1eb6e77ae76292b6a01bede5abb2b1b7b7/
-
-Cc: Phil Eichinger <phil.eichinger@gmail.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 4a4f99a428f3c49aa80440325db33485777e8f69)
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+(cherry picked from commit 8e0c7ce50b97518fd3aa088867213af2a4917917)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/zsh/zsh.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/git/git.hash | 2 +-
+ package/git/git.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/zsh/zsh.mk b/package/zsh/zsh.mk
-index 779114e..72de2c6 100644
---- a/package/zsh/zsh.mk
-+++ b/package/zsh/zsh.mk
-@@ -9,6 +9,7 @@ ZSH_SITE = http://www.zsh.org/pub
- ZSH_SOURCE = zsh-$(ZSH_VERSION).tar.xz
- ZSH_DEPENDENCIES = ncurses
- ZSH_CONF_OPTS = --bindir=/bin
-+ZSH_CONF_ENV = zsh_cv_sys_nis=no zsh_cv_sys_nis_plus=no
- ZSH_LICENSE = MIT-like
- ZSH_LICENSE_FILES = LICENCE
+diff --git a/package/git/git.hash b/package/git/git.hash
+index 8aa0503..d65296f 100644
+--- a/package/git/git.hash
++++ b/package/git/git.hash
+@@ -1,4 +1,4 @@
+ # From: https://www.kernel.org/pub/software/scm/git/sha256sums.asc
+-sha256 21c9e29caac86d244ac7af78bc3422746dabb903cb3952a1ceefd801020ad1a1  git-2.13.5.tar.xz
++sha256 bce97e403bea34f50378e90ade10c12666b2382cc247551b63dc5604e03b2523  git-2.13.6.tar.xz
+ sha256 5b2198d1645f767585e8a88ac0499b04472164c0d2da22e75ecf97ef443ab32e  COPYING
+ sha256 1922f45d2c49e390032c9c0ba6d7cac904087f7cec51af30c2b2ad022ce0e76a  LGPL-2.1
+diff --git a/package/git/git.mk b/package/git/git.mk
+index fe4d553..9f13f0f 100644
+--- a/package/git/git.mk
++++ b/package/git/git.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
+-GIT_VERSION = 2.13.5
++GIT_VERSION = 2.13.6
+ GIT_SOURCE = git-$(GIT_VERSION).tar.xz
+ GIT_SITE = $(BR2_KERNEL_MIRROR)/software/scm/git
+ GIT_LICENSE = GPL-2.0, LGPL-2.1+
