@@ -1,39 +1,24 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 17 Oct 2017 11:04:39 +0200
-Subject: [Buildroot] [PATCH] qemu: security bump to version 2.8.1.1
-In-Reply-To: <20171004071357.15093-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Wed, 4 Oct 2017 09:13:57 +0200")
-References: <20171004071357.15093-1-peter@korsgaard.com>
-Message-ID: <87r2u2jgbc.fsf@dell.be.48ers.dk>
+Date: Tue, 17 Oct 2017 11:04:57 +0200
+Subject: [Buildroot] [PATCH] qemu: drop "--disable-uuid" configuration
+	parameter
+In-Reply-To: <1506621304-21108-1-git-send-email-casantos@datacom.ind.br>
+ (Carlos Santos's message of "Thu, 28 Sep 2017 14:55:04 -0300")
+References: <1506621304-21108-1-git-send-email-casantos@datacom.ind.br>
+Message-ID: <87mv4qjgau.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Carlos" == Carlos Santos <casantos@datacom.ind.br> writes:
 
- > Fixes the following security issues and adds a number of other bigfixes:
- > 2.8.1: Changelog:
- > https://lists.gnu.org/archive/html/qemu-devel/2017-03/msg06332.html
+ > ./configure: --disable-uuid is obsolete, UUID support is always built
+ > Change-Id: I9e278418d19e15bbbd3ea233658cd62f75e3385c
+ > Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
 
- > CVE-2017-2615 - display: cirrus: oob access while doing bitblt copy backward
- > mode
-
- > CVE-2017-2620 - display: cirrus: out-of-bounds access issue while in
- > cirrus_bitblt_cputovideo
-
- > CVE-2017-2630 - nbd: oob stack write in client routine drop_sync
-
- > 2.8.1.1 Changelog:
- > https://lists.gnu.org/archive/html/qemu-devel/2017-04/msg03460.html
-
- > CVE-2017-7471 - 9p: virtfs allows guest to change filesystem attributes on
- > host
-
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-Committed to 2017.08.x, thanks.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
