@@ -1,61 +1,84 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Tue, 17 Oct 2017 08:47:22 +0200
-Subject: [Buildroot] [git commit] ipset: fix musl build
-Message-ID: <20171017064003.B72E07FA88@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/automake: bump version to 1.15.1
+Message-ID: <20171017064003.A5D80802DA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d7f3d4381761d18eebbf7dd461b06d9140b097e1
+commit: https://git.buildroot.net/buildroot/commit/?id=5186f1e5cbe01807f40737b8a27fc51d78358a9b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add upstream patch removing use of non-standard u_int8_t type.
+Removed patch applied upstream.
 
-Fixes:
-http://autobuild.buildroot.net/results/126/126c97db87cd3bdc6d222982a53d871387cc9b50/
-http://autobuild.buildroot.net/results/22d/22dcb72e75d1844828ba344f5ed126de06d2ab82/
-http://autobuild.buildroot.net/results/b56/b56a6e3b5036c10f2f2b74e36c130d751b2c1312/
-
-Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...e-last-reference-to-u_int8_t-with-uint8_t.patch | 28 ++++++++++++++++++++++
- 1 file changed, 28 insertions(+)
+ .../0002-port-to-perl-5.22-and-later.patch         | 34 ----------------------
+ package/automake/automake.hash                     |  2 +-
+ package/automake/automake.mk                       |  2 +-
+ 3 files changed, 2 insertions(+), 36 deletions(-)
 
-diff --git a/package/ipset/0001-Replace-the-last-reference-to-u_int8_t-with-uint8_t.patch b/package/ipset/0001-Replace-the-last-reference-to-u_int8_t-with-uint8_t.patch
-new file mode 100644
-index 0000000..84863e6
---- /dev/null
-+++ b/package/ipset/0001-Replace-the-last-reference-to-u_int8_t-with-uint8_t.patch
-@@ -0,0 +1,28 @@
-+From a4212bf911026740afc7fce98d9100e2ef5dcea0 Mon Sep 17 00:00:00 2001
-+From: Jozsef Kadlecsik <kadlec@blackhole.kfki.hu>
-+Date: Tue, 26 Sep 2017 07:00:13 +0200
-+Subject: [PATCH] Replace the last reference to u_int8_t with uint8_t.
-+
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Upstream status: commit a4212bf911026740
-+
-+ src/ipset.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/ipset.c b/src/ipset.c
-+index 79f56b869ea7..df0778a92d8b 100644
-+--- a/src/ipset.c
-++++ b/src/ipset.c
-+@@ -282,7 +282,7 @@ call_parser(int *argc, char *argv[], const struct ipset_type *type,
-+ 	const struct ipset_arg *arg;
-+ 	const char *optstr;
-+ 	const struct ipset_type *t = type;
-+-	u_int8_t revision = type->revision;
-++	uint8_t revision = type->revision;
-+ 	int ret = 0, i = 1;
-+ 
-+ 	/* Currently CREATE and ADT may have got additional arguments */
-+-- 
-+2.14.2
-+
+diff --git a/package/automake/0002-port-to-perl-5.22-and-later.patch b/package/automake/0002-port-to-perl-5.22-and-later.patch
+deleted file mode 100644
+index 207039b..0000000
+--- a/package/automake/0002-port-to-perl-5.22-and-later.patch
++++ /dev/null
+@@ -1,34 +0,0 @@
+-From 13f00eb4493c217269b76614759e452d8302955e Mon Sep 17 00:00:00 2001
+-From: Paul Eggert <eggert@cs.ucla.edu>
+-Date: Thu, 31 Mar 2016 16:35:29 -0700
+-Subject: [PATCH] automake: port to Perl 5.22 and later
+-
+-Without this change, Perl 5.22 complains "Unescaped left brace in
+-regex is deprecated" and this is planned to become a hard error in
+-Perl 5.26.  See:
+-http://search.cpan.org/dist/perl-5.22.0/pod/perldelta.pod#A_literal_%22{%22_should_now_be_escaped_in_a_pattern
+-* bin/automake.in (substitute_ac_subst_variables): Escape left brace.
+-
+-[Backported from:
+- http://git.savannah.gnu.org/cgit/automake.git/commit/?id=13f00eb4493c217269b76614759e452d8302955e]
+-Signed-off-by: Adam Duskett <aduskett@gmail.com>
+----
+- bin/automake.in | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/bin/automake.in b/bin/automake.in
+-index a3a0aa3..2c8f31e 100644
+---- a/bin/automake.in
+-+++ b/bin/automake.in
+-@@ -3878,7 +3878,7 @@ sub substitute_ac_subst_variables_worker
+- sub substitute_ac_subst_variables
+- {
+-   my ($text) = @_;
+--  $text =~ s/\${([^ \t=:+{}]+)}/substitute_ac_subst_variables_worker ($1)/ge;
+-+  $text =~ s/\$[{]([^ \t=:+{}]+)}/substitute_ac_subst_variables_worker ($1)/ge;
+-   return $text;
+- }
+- 
+--- 
+-2.7.4
+-
+diff --git a/package/automake/automake.hash b/package/automake/automake.hash
+index 83aca90..38c9564 100644
+--- a/package/automake/automake.hash
++++ b/package/automake/automake.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  9908c75aabd49d13661d6dcb1bc382252d22cc77bf733a2d55e87f2aa2db8636  automake-1.15.tar.xz
++sha256 af6ba39142220687c500f79b4aa2f181d9b24e4f8d8ec497cea4ba26c64bedaf  automake-1.15.1.tar.xz
+diff --git a/package/automake/automake.mk b/package/automake/automake.mk
+index 88c4fb3..2703377 100644
+--- a/package/automake/automake.mk
++++ b/package/automake/automake.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-AUTOMAKE_VERSION = 1.15
++AUTOMAKE_VERSION = 1.15.1
+ AUTOMAKE_SOURCE = automake-$(AUTOMAKE_VERSION).tar.xz
+ AUTOMAKE_SITE = $(BR2_GNU_MIRROR)/automake
+ AUTOMAKE_LICENSE = GPL-2.0+
