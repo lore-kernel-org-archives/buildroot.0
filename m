@@ -1,64 +1,79 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 17 Oct 2017 10:43:27 +0200
-Subject: [Buildroot] [git commit branch/2017.08.x] vboot-utils: disable
-	static futility
-Message-ID: <20171017090326.552F07FDC1@busybox.osuosl.org>
+Date: Tue, 17 Oct 2017 10:38:34 +0200
+Subject: [Buildroot] [git commit branch/2017.08.x] dnsmasq: security bump to
+	version 2.78
+Message-ID: <20171017090326.2224881190@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3066e68a772f05b5b11425b1e5db9a5dbe8e08b4
+commit: https://git.buildroot.net/buildroot/commit/?id=090f8c24dc2c5f3a788bddb06eb8c67cc2443b46
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.08.x
 
-Possibly fixes
-http://autobuild.buildroot.net/results/fbe/fbe7892539cc1bf18f89d18c6609a5aa747647d0/
-http://autobuild.buildroot.net/results/4bc/4bc388618ff02dde26ae09db021434a936c8cc1b/
-and similar errors.
+Supported Lua version is now 5.2.
 
-Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
-Tested-by: Matt Weber <matthew.weber@rockwellcollins.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 3c10ba4b1eba589096447cce9b77191dc2d8388d)
+Add licenses hash.
+
+Fixes a number of security issues:
+
+CVE-2017-13704 - Crash when DNS query exceeded 512 bytes (a regression
+in 2.77, so technically not fixed by this bump)
+
+CVE-2017-14491 - Heap overflow in DNS code
+
+CVE-2017-14492 - Heap overflow in IPv6 router advertisement code
+
+CVE-2017-14493 - Stack overflow in DHCPv6 code
+
+CVE-2017-14494 - Information leak in DHCPv6
+
+CVE-2017-14496 - Invalid boundary checks allows a malicious DNS queries
+to trigger DoS
+
+CVE-2017-14495 - Out-of-memory Dos vulnerability
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+(cherry picked from commit e77fdc90e320ff38d56d8e5c97fc783e8fbb76bb)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../vboot-utils/0004-Disable-static-futility.patch | 30 ++++++++++++++++++++++
- 1 file changed, 30 insertions(+)
+ package/dnsmasq/dnsmasq.hash | 6 +++++-
+ package/dnsmasq/dnsmasq.mk   | 4 ++--
+ 2 files changed, 7 insertions(+), 3 deletions(-)
 
-diff --git a/package/vboot-utils/0004-Disable-static-futility.patch b/package/vboot-utils/0004-Disable-static-futility.patch
-new file mode 100644
-index 0000000..649d316
---- /dev/null
-+++ b/package/vboot-utils/0004-Disable-static-futility.patch
-@@ -0,0 +1,30 @@
-+The package attempts to build a statically-linked host binary, futility_s,
-+which is not used anywhere in buildroot but may be causing build failures
-+if the build host lacks static libc.
-+
-+Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
-+
-+--- a/Makefile
-++++ b/Makefile
-+@@ -1079,7 +1079,7 @@
-+ # new Firmware Utility
-+ 
-+ .PHONY: futil
-+-futil: ${FUTIL_STATIC_BIN} ${FUTIL_BIN}
-++futil: ${FUTIL_BIN}
-+ 
-+ ${FUTIL_STATIC_BIN}: ${FUTIL_STATIC_OBJS} ${UTILLIB}
-+ 	@${PRINTF} "    LD            $(subst ${BUILD}/,,$@)\n"
-+@@ -1091,10 +1091,10 @@
-+ 	${Q}${LD} -o $@ ${CFLAGS} ${LDFLAGS} $^ ${LDLIBS}
-+ 
-+ .PHONY: futil_install
-+-futil_install: ${FUTIL_BIN} ${FUTIL_STATIC_BIN}
-++futil_install: ${FUTIL_BIN}
-+ 	@${PRINTF} "    INSTALL       futility\n"
-+ 	${Q}mkdir -p ${UB_DIR}
-+-	${Q}${INSTALL} -t ${UB_DIR} ${FUTIL_BIN} ${FUTIL_STATIC_BIN}
-++	${Q}${INSTALL} -t ${UB_DIR} ${FUTIL_BIN}
-+ 	${Q}for prog in ${FUTIL_SYMLINKS}; do \
-+ 		ln -sf futility "${UB_DIR}/$$prog"; done
-+ 
+diff --git a/package/dnsmasq/dnsmasq.hash b/package/dnsmasq/dnsmasq.hash
+index a73e911..28e2e65 100644
+--- a/package/dnsmasq/dnsmasq.hash
++++ b/package/dnsmasq/dnsmasq.hash
+@@ -1,2 +1,6 @@
+ # Locally calculated after checking pgp signature
+-sha256	4b92698dee19ca0cb2a8f2e48f1d2dffd01a21eb15d1fbed4cf085630c8c9f96	dnsmasq-2.76.tar.xz
++# http://www.thekelleys.org.uk/dnsmasq/dnsmasq-2.78.tar.xz.asc
++sha256	89949f438c74b0c7543f06689c319484bd126cc4b1f8c745c742ab397681252b	dnsmasq-2.78.tar.xz
++# Locally calculated
++sha256	dcc100d4161cc0b7177545ab6e47216f84857cda3843847c792a25289852dcaa	COPYING
++sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	COPYING-v3
+diff --git a/package/dnsmasq/dnsmasq.mk b/package/dnsmasq/dnsmasq.mk
+index 63295ce..7322170 100644
+--- a/package/dnsmasq/dnsmasq.mk
++++ b/package/dnsmasq/dnsmasq.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DNSMASQ_VERSION = 2.76
++DNSMASQ_VERSION = 2.78
+ DNSMASQ_SOURCE = dnsmasq-$(DNSMASQ_VERSION).tar.xz
+ DNSMASQ_SITE = http://thekelleys.org.uk/dnsmasq
+ DNSMASQ_MAKE_ENV = $(TARGET_MAKE_ENV) CC="$(TARGET_CC)"
+@@ -58,7 +58,7 @@ DNSMASQ_MAKE_OPTS += LIBS+="-ldl"
+ endif
+ 
+ define DNSMASQ_ENABLE_LUA
+-	$(SED) 's/lua5.1/lua/g' $(DNSMASQ_DIR)/Makefile
++	$(SED) 's/lua5.2/lua/g' $(DNSMASQ_DIR)/Makefile
+ 	$(SED) 's^.*#define HAVE_LUASCRIPT.*^#define HAVE_LUASCRIPT^' \
+ 		$(DNSMASQ_DIR)/src/config.h
+ endef
