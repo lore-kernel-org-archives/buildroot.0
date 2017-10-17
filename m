@@ -1,227 +1,84 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 17 Oct 2017 10:51:13 +0200
-Subject: [Buildroot] [git commit branch/2017.08.x] xlib_libXfont{,
-	2}: add upstream security fixes
-Message-ID: <20171017090326.CCFCC81190@busybox.osuosl.org>
+Date: Tue, 17 Oct 2017 10:46:43 +0200
+Subject: [Buildroot] [git commit branch/2017.08.x] libressl: fix musl build
+	with older kernel headers
+Message-ID: <20171017090326.980B07FDC1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2b864b39ef2f6b65cf97474022fa8086092ccee9
+commit: https://git.buildroot.net/buildroot/commit/?id=a2294d6eb06dc8bc367262dc06dbb6b67c89f714
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.08.x
 
-Fixes the following security issues:
+musl provides its own SYS_getrandom definition, but not GRND_NONBLOCK.
+This breaks the build with kernel headers older than v3.17. Add a patch
+adding a local definition of GRND_NONBLOCK to fix the build.
 
-CVE-2017-13720 - Check for end of string in PatternMatch
+The following defconfig reproduces the build failure:
 
-CVE-2017-13722 - pcfGetProperties: Check string boundaries
+BR2_x86_pentium_mmx=y
+BR2_TOOLCHAIN_BUILDROOT_MUSL=y
+BR2_KERNEL_HEADERS_3_12=y
+BR2_PACKAGE_LIBRESSL=y
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 46a54b6464d09edc36ae0d1d041f89ffd77b3ea1)
+The getentropy_linux.c file is in upstream tarball, but not in its git
+repository. It originates from OpenBSD. For this reason the patch is
+against the tarball, but not git formatted.
+
+Cc: Adam Duskett <aduskett@gmail.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+[Arnout: change filename to correspond to how git creates it]
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+(cherry picked from commit 7adc268b58a1eea9967ed5c7a3b7b4471575d73a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...nd-of-string-in-PatternMatch-CVE-2017-137.patch | 34 ++++++++++++++
- ...rties-Check-string-boundaries-CVE-2017-13.patch | 52 ++++++++++++++++++++++
- ...nd-of-string-in-PatternMatch-CVE-2017-137.patch | 34 ++++++++++++++
- ...rties-Check-string-boundaries-CVE-2017-13.patch | 52 ++++++++++++++++++++++
- 4 files changed, 172 insertions(+)
+ ...ix-build-with-musl-and-older-Linux-kernel.patch | 38 ++++++++++++++++++++++
+ 1 file changed, 38 insertions(+)
 
-diff --git a/package/x11r7/xlib_libXfont/0001-Check-for-end-of-string-in-PatternMatch-CVE-2017-137.patch b/package/x11r7/xlib_libXfont/0001-Check-for-end-of-string-in-PatternMatch-CVE-2017-137.patch
+diff --git a/package/libressl/0002-Fix-build-with-musl-and-older-Linux-kernel.patch b/package/libressl/0002-Fix-build-with-musl-and-older-Linux-kernel.patch
 new file mode 100644
-index 0000000..3795179
+index 0000000..ddb9534
 --- /dev/null
-+++ b/package/x11r7/xlib_libXfont/0001-Check-for-end-of-string-in-PatternMatch-CVE-2017-137.patch
-@@ -0,0 +1,34 @@
-+From d1e670a4a8704b8708e493ab6155589bcd570608 Mon Sep 17 00:00:00 2001
-+From: Michal Srb <msrb@suse.com>
-+Date: Thu, 20 Jul 2017 13:38:53 +0200
-+Subject: [PATCH] Check for end of string in PatternMatch (CVE-2017-13720)
++++ b/package/libressl/0002-Fix-build-with-musl-and-older-Linux-kernel.patch
+@@ -0,0 +1,38 @@
++From: Baruch Siach <baruch@tkos.co.il>
++Date: Fri, 29 Sep 2017 10:06:52 +0300
++Subject: [PATCH] Fix build with musl and older Linux kernel
 +
-+If a pattern contains '?' character, any character in the string is skipped,
-+even if it is '\0'. The rest of the matching then reads invalid memory.
++The musl libc carries its own copy of Linux system calls. When building
++with Linux headers older than v3.17, musl provides SYS_getrandom
++definition, but not GRND_NONBLOCK. This causes build failure for
++libressl and openntpd:
 +
-+Reviewed-by: Peter Hutterer <peter.hutterer@who-t.net>
-+Signed-off-by: Julien Cristau <jcristau@debian.org>
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++getentropy_linux.c: In function 'getentropy_getrandom':
++getentropy_linux.c:205:42: error: 'GRND_NONBLOCK' undeclared (first use in this function)
++   ret = syscall(SYS_getrandom, buf, len, GRND_NONBLOCK);
++                                          ^~~~~~~~~~~~~
++
++Define GRND_NONBLOCK locally when its definition is missing to fix the
++build. There should be no run-time effect. Older kernels return ENOSYS
++for unsupported syscall().
++
++[ from upstream pull request with file location changed ]
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 +---
-+ src/fontfile/fontdir.c | 4 +++-
-+ 1 file changed, 3 insertions(+), 1 deletion(-)
++Upstream status: https://github.com/libressl-portable/openbsd/pull/82
 +
-+diff --git a/src/fontfile/fontdir.c b/src/fontfile/fontdir.c
-+index 4ce2473..996b7d1 100644
-+--- a/src/fontfile/fontdir.c
-++++ b/src/fontfile/fontdir.c
-+@@ -400,8 +400,10 @@ PatternMatch(char *pat, int patdashes, char *string, int stringdashes)
-+ 		}
-+ 	    }
-+ 	case '?':
-+-	    if (*string++ == XK_minus)
-++	    if ((t = *string++) == XK_minus)
-+ 		stringdashes--;
-++	    if (!t)
-++		return 0;
-+ 	    break;
-+ 	case '\0':
-+ 	    return (*string == '\0');
-+-- 
-+2.11.0
-+
-diff --git a/package/x11r7/xlib_libXfont/0002-pcfGetProperties-Check-string-boundaries-CVE-2017-13.patch b/package/x11r7/xlib_libXfont/0002-pcfGetProperties-Check-string-boundaries-CVE-2017-13.patch
-new file mode 100644
-index 0000000..709e446
---- /dev/null
-+++ b/package/x11r7/xlib_libXfont/0002-pcfGetProperties-Check-string-boundaries-CVE-2017-13.patch
-@@ -0,0 +1,52 @@
-+From 672bb944311392e2415b39c0d63b1e1902905bcd Mon Sep 17 00:00:00 2001
-+From: Michal Srb <msrb@suse.com>
-+Date: Thu, 20 Jul 2017 17:05:23 +0200
-+Subject: [PATCH] pcfGetProperties: Check string boundaries (CVE-2017-13722)
-+
-+Without the checks a malformed PCF file can cause the library to make
-+atom from random heap memory that was behind the `strings` buffer.
-+This may crash the process or leak information.
-+
-+Signed-off-by: Julien Cristau <jcristau@debian.org>
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ src/bitmap/pcfread.c | 13 +++++++++++--
-+ 1 file changed, 11 insertions(+), 2 deletions(-)
-+
-+diff --git a/src/bitmap/pcfread.c b/src/bitmap/pcfread.c
-+index dab1c44..ae34c28 100644
-+--- a/src/bitmap/pcfread.c
-++++ b/src/bitmap/pcfread.c
-+@@ -45,6 +45,7 @@ from The Open Group.
++diff -Nuar libressl-2.5.5-orig/crypto/compat/getentropy_linux.c libressl-2.5.5/crypto/compat/getentropy_linux.c
++--- libressl-2.5.5-orig/crypto/compat/getentropy_linux.c	2017-07-09 13:59:48.000000000 +0300
+++++ libressl-2.5.5/crypto/compat/getentropy_linux.c	2017-09-29 10:03:32.447958829 +0300
++@@ -194,6 +194,11 @@
++ }
 + 
-+ #include <stdarg.h>
-+ #include <stdint.h>
-++#include <string.h>
-+ 
-+ void
-+ pcfError(const char* message, ...)
-+@@ -311,11 +312,19 @@ pcfGetProperties(FontInfoPtr pFontInfo, FontFilePtr file,
-+     if (IS_EOF(file)) goto Bail;
-+     position += string_size;
-+     for (i = 0; i < nprops; i++) {
-++	if (props[i].name >= string_size) {
-++	    pcfError("pcfGetProperties(): String starts out of bounds (%ld/%d)\n", props[i].name, string_size);
-++	    goto Bail;
-++	}
-+ 	props[i].name = MakeAtom(strings + props[i].name,
-+-				 strlen(strings + props[i].name), TRUE);
-++				 strnlen(strings + props[i].name, string_size - props[i].name), TRUE);
-+ 	if (isStringProp[i]) {
-++	    if (props[i].value >= string_size) {
-++		pcfError("pcfGetProperties(): String starts out of bounds (%ld/%d)\n", props[i].value, string_size);
-++		goto Bail;
-++	    }
-+ 	    props[i].value = MakeAtom(strings + props[i].value,
-+-				      strlen(strings + props[i].value), TRUE);
-++				      strnlen(strings + props[i].value, string_size - props[i].value), TRUE);
-+ 	}
-+     }
-+     free(strings);
-+-- 
-+2.11.0
-+
-diff --git a/package/x11r7/xlib_libXfont2/0001-Check-for-end-of-string-in-PatternMatch-CVE-2017-137.patch b/package/x11r7/xlib_libXfont2/0001-Check-for-end-of-string-in-PatternMatch-CVE-2017-137.patch
-new file mode 100644
-index 0000000..3795179
---- /dev/null
-+++ b/package/x11r7/xlib_libXfont2/0001-Check-for-end-of-string-in-PatternMatch-CVE-2017-137.patch
-@@ -0,0 +1,34 @@
-+From d1e670a4a8704b8708e493ab6155589bcd570608 Mon Sep 17 00:00:00 2001
-+From: Michal Srb <msrb@suse.com>
-+Date: Thu, 20 Jul 2017 13:38:53 +0200
-+Subject: [PATCH] Check for end of string in PatternMatch (CVE-2017-13720)
-+
-+If a pattern contains '?' character, any character in the string is skipped,
-+even if it is '\0'. The rest of the matching then reads invalid memory.
-+
-+Reviewed-by: Peter Hutterer <peter.hutterer@who-t.net>
-+Signed-off-by: Julien Cristau <jcristau@debian.org>
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ src/fontfile/fontdir.c | 4 +++-
-+ 1 file changed, 3 insertions(+), 1 deletion(-)
-+
-+diff --git a/src/fontfile/fontdir.c b/src/fontfile/fontdir.c
-+index 4ce2473..996b7d1 100644
-+--- a/src/fontfile/fontdir.c
-++++ b/src/fontfile/fontdir.c
-+@@ -400,8 +400,10 @@ PatternMatch(char *pat, int patdashes, char *string, int stringdashes)
-+ 		}
-+ 	    }
-+ 	case '?':
-+-	    if (*string++ == XK_minus)
-++	    if ((t = *string++) == XK_minus)
-+ 		stringdashes--;
-++	    if (!t)
-++		return 0;
-+ 	    break;
-+ 	case '\0':
-+ 	    return (*string == '\0');
-+-- 
-+2.11.0
-+
-diff --git a/package/x11r7/xlib_libXfont2/0002-pcfGetProperties-Check-string-boundaries-CVE-2017-13.patch b/package/x11r7/xlib_libXfont2/0002-pcfGetProperties-Check-string-boundaries-CVE-2017-13.patch
-new file mode 100644
-index 0000000..709e446
---- /dev/null
-+++ b/package/x11r7/xlib_libXfont2/0002-pcfGetProperties-Check-string-boundaries-CVE-2017-13.patch
-@@ -0,0 +1,52 @@
-+From 672bb944311392e2415b39c0d63b1e1902905bcd Mon Sep 17 00:00:00 2001
-+From: Michal Srb <msrb@suse.com>
-+Date: Thu, 20 Jul 2017 17:05:23 +0200
-+Subject: [PATCH] pcfGetProperties: Check string boundaries (CVE-2017-13722)
-+
-+Without the checks a malformed PCF file can cause the library to make
-+atom from random heap memory that was behind the `strings` buffer.
-+This may crash the process or leak information.
-+
-+Signed-off-by: Julien Cristau <jcristau@debian.org>
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ src/bitmap/pcfread.c | 13 +++++++++++--
-+ 1 file changed, 11 insertions(+), 2 deletions(-)
-+
-+diff --git a/src/bitmap/pcfread.c b/src/bitmap/pcfread.c
-+index dab1c44..ae34c28 100644
-+--- a/src/bitmap/pcfread.c
-++++ b/src/bitmap/pcfread.c
-+@@ -45,6 +45,7 @@ from The Open Group.
-+ 
-+ #include <stdarg.h>
-+ #include <stdint.h>
-++#include <string.h>
-+ 
-+ void
-+ pcfError(const char* message, ...)
-+@@ -311,11 +312,19 @@ pcfGetProperties(FontInfoPtr pFontInfo, FontFilePtr file,
-+     if (IS_EOF(file)) goto Bail;
-+     position += string_size;
-+     for (i = 0; i < nprops; i++) {
-++	if (props[i].name >= string_size) {
-++	    pcfError("pcfGetProperties(): String starts out of bounds (%ld/%d)\n", props[i].name, string_size);
-++	    goto Bail;
-++	}
-+ 	props[i].name = MakeAtom(strings + props[i].name,
-+-				 strlen(strings + props[i].name), TRUE);
-++				 strnlen(strings + props[i].name, string_size - props[i].name), TRUE);
-+ 	if (isStringProp[i]) {
-++	    if (props[i].value >= string_size) {
-++		pcfError("pcfGetProperties(): String starts out of bounds (%ld/%d)\n", props[i].value, string_size);
-++		goto Bail;
-++	    }
-+ 	    props[i].value = MakeAtom(strings + props[i].value,
-+-				      strlen(strings + props[i].value), TRUE);
-++				      strnlen(strings + props[i].value, string_size - props[i].value), TRUE);
-+ 	}
-+     }
-+     free(strings);
-+-- 
-+2.11.0
-+
++ #ifdef SYS_getrandom
+++
+++#ifndef GRND_NONBLOCK
+++#define GRND_NONBLOCK   0x0001
+++#endif
+++
++ static int
++ getentropy_getrandom(void *buf, size_t len)
++ {
