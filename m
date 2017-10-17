@@ -1,38 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 17 Oct 2017 10:31:47 +0200
-Subject: [Buildroot] [git commit branch/2017.08.x] linux-headers: bump 4.{4,
-	9, 13}.x series
-Message-ID: <20171017090325.BCC1B81190@busybox.osuosl.org>
+Date: Tue, 17 Oct 2017 10:33:25 +0200
+Subject: [Buildroot] [git commit branch/2017.08.x] package/openvpn: security
+	bump to version 2.4.4
+Message-ID: <20171017090325.D790C7FCDA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=90680bcb7ba259cd7a9e6eda3980865056dab3d0
+commit: https://git.buildroot.net/buildroot/commit/?id=0d942150612bb1b24daeb34460dd99c310bba880
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.08.x
 
-[Peter: drop 4.13.x bump]
+Fixes CVE-2017-12166:
+https://community.openvpn.net/openvpn/wiki/CVE-2017-12166
+
+Changelog:
+https://community.openvpn.net/openvpn/wiki/ChangesInOpenvpn24
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit dd4dd796351b6da0d637d0f1fa1a7b5ba169f30c)
+(cherry picked from commit aa070c802ef2556a732ff33e55f17fc0d3444436)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-headers/Config.in.host | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/openvpn/openvpn.hash | 2 +-
+ package/openvpn/openvpn.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 30beb37..fb61efa 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -236,8 +236,8 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.10.107"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.12.74"	if BR2_KERNEL_HEADERS_3_12
- 	default "4.1.43"	if BR2_KERNEL_HEADERS_4_1
--	default "4.4.88"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.51"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.4.89"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.9.52"	if BR2_KERNEL_HEADERS_4_9
- 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
- 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
- 	default "4.12.14"	if BR2_KERNEL_HEADERS_4_12
+diff --git a/package/openvpn/openvpn.hash b/package/openvpn/openvpn.hash
+index 1db3a31..318f9ed 100644
+--- a/package/openvpn/openvpn.hash
++++ b/package/openvpn/openvpn.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking signature
+-sha256 15e15fc97f189b52aee7c90ec8355aa77469c773125110b4c2f089abecde36fb  openvpn-2.4.3.tar.xz
++sha256 96cd1b8fe1e8cb2920f07c3fd3985faea756e16fdeebd11d3e146d5bd2b04a80  openvpn-2.4.4.tar.xz
+diff --git a/package/openvpn/openvpn.mk b/package/openvpn/openvpn.mk
+index 7cc572e..086f99b 100644
+--- a/package/openvpn/openvpn.mk
++++ b/package/openvpn/openvpn.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-OPENVPN_VERSION = 2.4.3
++OPENVPN_VERSION = 2.4.4
+ OPENVPN_SOURCE = openvpn-$(OPENVPN_VERSION).tar.xz
+ OPENVPN_SITE = http://swupdate.openvpn.net/community/releases
+ OPENVPN_DEPENDENCIES = host-pkgconf openssl
