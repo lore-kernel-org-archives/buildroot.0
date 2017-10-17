@@ -1,79 +1,76 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 17 Oct 2017 10:38:34 +0200
-Subject: [Buildroot] [git commit branch/2017.08.x] dnsmasq: security bump to
-	version 2.78
-Message-ID: <20171017090326.2224881190@busybox.osuosl.org>
+Date: Tue, 17 Oct 2017 10:50:16 +0200
+Subject: [Buildroot] [git commit branch/2017.08.x] musl: add patch to fix
+	build on ARMv4 with new binutils
+Message-ID: <20171017090326.B8ACC7FD24@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=090f8c24dc2c5f3a788bddb06eb8c67cc2443b46
+commit: https://git.buildroot.net/buildroot/commit/?id=990bf068b7d4ca86247ce7e257925d387ae6b3f7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.08.x
 
-Supported Lua version is now 5.2.
+New binutils (since 2.27.51) cannot build musl-1.1.16 due to breakage in ARMv4
+atomics asm.  This patch from upstream musl repository is needed until
+musl-1.1.17 is released:
+https://git.musl-libc.org/cgit/musl/commit/?id=b261a24256792177a5f0531dbb25cc6267220ca5
 
-Add licenses hash.
-
-Fixes a number of security issues:
-
-CVE-2017-13704 - Crash when DNS query exceeded 512 bytes (a regression
-in 2.77, so technically not fixed by this bump)
-
-CVE-2017-14491 - Heap overflow in DNS code
-
-CVE-2017-14492 - Heap overflow in IPv6 router advertisement code
-
-CVE-2017-14493 - Stack overflow in DHCPv6 code
-
-CVE-2017-14494 - Information leak in DHCPv6
-
-CVE-2017-14496 - Invalid boundary checks allows a malicious DNS queries
-to trigger DoS
-
-CVE-2017-14495 - Out-of-memory Dos vulnerability
-
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Timothy Lee <timothy.ty.lee@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit e77fdc90e320ff38d56d8e5c97fc783e8fbb76bb)
+(cherry picked from commit 27cf2d3baf879f7314f12787982d8f4a5b4218cf)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/dnsmasq/dnsmasq.hash | 6 +++++-
- package/dnsmasq/dnsmasq.mk   | 4 ++--
- 2 files changed, 7 insertions(+), 3 deletions(-)
+ .../0002-arm-atomics-asm-with-new-binutils.patch   | 43 ++++++++++++++++++++++
+ 1 file changed, 43 insertions(+)
 
-diff --git a/package/dnsmasq/dnsmasq.hash b/package/dnsmasq/dnsmasq.hash
-index a73e911..28e2e65 100644
---- a/package/dnsmasq/dnsmasq.hash
-+++ b/package/dnsmasq/dnsmasq.hash
-@@ -1,2 +1,6 @@
- # Locally calculated after checking pgp signature
--sha256	4b92698dee19ca0cb2a8f2e48f1d2dffd01a21eb15d1fbed4cf085630c8c9f96	dnsmasq-2.76.tar.xz
-+# http://www.thekelleys.org.uk/dnsmasq/dnsmasq-2.78.tar.xz.asc
-+sha256	89949f438c74b0c7543f06689c319484bd126cc4b1f8c745c742ab397681252b	dnsmasq-2.78.tar.xz
-+# Locally calculated
-+sha256	dcc100d4161cc0b7177545ab6e47216f84857cda3843847c792a25289852dcaa	COPYING
-+sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	COPYING-v3
-diff --git a/package/dnsmasq/dnsmasq.mk b/package/dnsmasq/dnsmasq.mk
-index 63295ce..7322170 100644
---- a/package/dnsmasq/dnsmasq.mk
-+++ b/package/dnsmasq/dnsmasq.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DNSMASQ_VERSION = 2.76
-+DNSMASQ_VERSION = 2.78
- DNSMASQ_SOURCE = dnsmasq-$(DNSMASQ_VERSION).tar.xz
- DNSMASQ_SITE = http://thekelleys.org.uk/dnsmasq
- DNSMASQ_MAKE_ENV = $(TARGET_MAKE_ENV) CC="$(TARGET_CC)"
-@@ -58,7 +58,7 @@ DNSMASQ_MAKE_OPTS += LIBS+="-ldl"
- endif
- 
- define DNSMASQ_ENABLE_LUA
--	$(SED) 's/lua5.1/lua/g' $(DNSMASQ_DIR)/Makefile
-+	$(SED) 's/lua5.2/lua/g' $(DNSMASQ_DIR)/Makefile
- 	$(SED) 's^.*#define HAVE_LUASCRIPT.*^#define HAVE_LUASCRIPT^' \
- 		$(DNSMASQ_DIR)/src/config.h
- endef
+diff --git a/package/musl/0002-arm-atomics-asm-with-new-binutils.patch b/package/musl/0002-arm-atomics-asm-with-new-binutils.patch
+new file mode 100644
+index 0000000..3790889
+--- /dev/null
++++ b/package/musl/0002-arm-atomics-asm-with-new-binutils.patch
+@@ -0,0 +1,43 @@
++From b261a24256792177a5f0531dbb25cc6267220ca5 Mon Sep 17 00:00:00 2001
++From: Rich Felker <dalias@aerifal.cx>
++Date: Wed, 15 Feb 2017 17:05:50 -0500
++Subject: fix build regression in arm atomics asm with new binutils
++
++binutils commit bada43421274615d0d5f629a61a60b7daa71bc15 tightened
++immediate fixup handling in gas in such a way that the final .arch of
++an object file must be compatible with the fixups used when the
++instruction was assembled; this in turn broke assembling of atomics.s,
++at least in thumb mode.
++
++it's not clear whether this should be considered a bug in gas, but
++.object_arch is preferable anyway for our purpose here of controlling
++the ISA level tag on the object file being produced, and it's the
++intended directive for use in object files with runtime code
++selection. research by Szabolcs Nagy confirmed that .object_arch is
++supported in all relevant versions of binutils and clang's integrated
++assembler.
++
++patch by Reiner Herrmann.
++
++Signed-off-by: Timothy Lee <timothy.ty.lee@gmail.com>
++[Backport from upstream https://git.musl-libc.org/cgit/musl/commit/?id=b261a24256792177a5f0531dbb25cc6267220ca5.]
++---
++ src/thread/arm/atomics.s | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/thread/arm/atomics.s b/src/thread/arm/atomics.s
++index 202faa4..101ad39 100644
++--- a/src/thread/arm/atomics.s
+++++ b/src/thread/arm/atomics.s
++@@ -84,7 +84,7 @@ __a_gettp_cp15:
++ 	bx lr
++ 
++ /* Tag this file with minimum ISA level so as not to affect linking. */
++-.arch armv4t
+++.object_arch armv4t
++ .eabi_attribute 6,2
++ 
++ .data
++-- 
++cgit v0.11.2
++
