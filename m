@@ -1,84 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 17 Oct 2017 08:47:22 +0200
-Subject: [Buildroot] [git commit] package/automake: bump version to 1.15.1
-Message-ID: <20171017064003.A5D80802DA@busybox.osuosl.org>
+Date: Tue, 17 Oct 2017 08:51:39 +0200
+Subject: [Buildroot] [buildroot] No hash found for gcc-5.4.0.tar.bz2.
+In-Reply-To: <52863a95f7d742d4a1a754e66954e9d3@draper.com>
+References: <e953736f09ba4dd6a73358abf69f44aa@draper.com>
+ <20171016212545.78715dff@windsurf.lan>
+ <52863a95f7d742d4a1a754e66954e9d3@draper.com>
+Message-ID: <20171017085139.2f48ba78@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5186f1e5cbe01807f40737b8a27fc51d78358a9b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Removed patch applied upstream.
+On Mon, 16 Oct 2017 20:02:26 +0000, Lim, Sungyung wrote:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- .../0002-port-to-perl-5.22-and-later.patch         | 34 ----------------------
- package/automake/automake.hash                     |  2 +-
- package/automake/automake.mk                       |  2 +-
- 3 files changed, 2 insertions(+), 36 deletions(-)
+> I downloaded the buildroot from the mathworks git website
+> [https://github.com/mathworks/buildroot] because of familiarity with mathworks tools such as matlab.
 
-diff --git a/package/automake/0002-port-to-perl-5.22-and-later.patch b/package/automake/0002-port-to-perl-5.22-and-later.patch
-deleted file mode 100644
-index 207039b..0000000
---- a/package/automake/0002-port-to-perl-5.22-and-later.patch
-+++ /dev/null
-@@ -1,34 +0,0 @@
--From 13f00eb4493c217269b76614759e452d8302955e Mon Sep 17 00:00:00 2001
--From: Paul Eggert <eggert@cs.ucla.edu>
--Date: Thu, 31 Mar 2016 16:35:29 -0700
--Subject: [PATCH] automake: port to Perl 5.22 and later
--
--Without this change, Perl 5.22 complains "Unescaped left brace in
--regex is deprecated" and this is planned to become a hard error in
--Perl 5.26.  See:
--http://search.cpan.org/dist/perl-5.22.0/pod/perldelta.pod#A_literal_%22{%22_should_now_be_escaped_in_a_pattern
--* bin/automake.in (substitute_ac_subst_variables): Escape left brace.
--
--[Backported from:
-- http://git.savannah.gnu.org/cgit/automake.git/commit/?id=13f00eb4493c217269b76614759e452d8302955e]
--Signed-off-by: Adam Duskett <aduskett@gmail.com>
-----
-- bin/automake.in | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/bin/automake.in b/bin/automake.in
--index a3a0aa3..2c8f31e 100644
----- a/bin/automake.in
--+++ b/bin/automake.in
--@@ -3878,7 +3878,7 @@ sub substitute_ac_subst_variables_worker
-- sub substitute_ac_subst_variables
-- {
--   my ($text) = @_;
---  $text =~ s/\${([^ \t=:+{}]+)}/substitute_ac_subst_variables_worker ($1)/ge;
--+  $text =~ s/\$[{]([^ \t=:+{}]+)}/substitute_ac_subst_variables_worker ($1)/ge;
--   return $text;
-- }
-- 
---- 
--2.7.4
--
-diff --git a/package/automake/automake.hash b/package/automake/automake.hash
-index 83aca90..38c9564 100644
---- a/package/automake/automake.hash
-+++ b/package/automake/automake.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  9908c75aabd49d13661d6dcb1bc382252d22cc77bf733a2d55e87f2aa2db8636  automake-1.15.tar.xz
-+sha256 af6ba39142220687c500f79b4aa2f181d9b24e4f8d8ec497cea4ba26c64bedaf  automake-1.15.1.tar.xz
-diff --git a/package/automake/automake.mk b/package/automake/automake.mk
-index 88c4fb3..2703377 100644
---- a/package/automake/automake.mk
-+++ b/package/automake/automake.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--AUTOMAKE_VERSION = 1.15
-+AUTOMAKE_VERSION = 1.15.1
- AUTOMAKE_SOURCE = automake-$(AUTOMAKE_VERSION).tar.xz
- AUTOMAKE_SITE = $(BR2_GNU_MIRROR)/automake
- AUTOMAKE_LICENSE = GPL-2.0+
+This not the official Buildroot, so it's a bit difficult to provide
+support for something we are not the author of. You should ask the
+authors of this Buildroot fork, and encourage them to contribute
+upstream instead.
+
+> The .config file says
+> 
+> 1. buildroot 2017.02 configuration
+> 2. buildroot .config was generated for zynq_zed_defconfig
+
+From a quick look at this Buildroot, I don't see why you would get this
+failure. package/gcc/gcc-initial/gcc-initial.hash is properly a symlink
+to ../gcc.hash, and package/gcc/gcc.hash does contain the hash for
+gcc-5.4.0.tar.bz2. So everything looks correct to me here.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
