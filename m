@@ -1,84 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 17 Oct 2017 10:46:43 +0200
-Subject: [Buildroot] [git commit branch/2017.08.x] libressl: fix musl build
-	with older kernel headers
-Message-ID: <20171017090326.980B07FDC1@busybox.osuosl.org>
+Date: Tue, 17 Oct 2017 10:41:30 +0200
+Subject: [Buildroot] [git commit branch/2017.08.x] package/tor: fix openssl
+	detection for static builds
+Message-ID: <20171017090326.4B55881190@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a2294d6eb06dc8bc367262dc06dbb6b67c89f714
+commit: https://git.buildroot.net/buildroot/commit/?id=e574e742902832affe15951108dccc4bb8ed31ec
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.08.x
 
-musl provides its own SYS_getrandom definition, but not GRND_NONBLOCK.
-This breaks the build with kernel headers older than v3.17. Add a patch
-adding a local definition of GRND_NONBLOCK to fix the build.
+Fixes
+http://autobuild.buildroot.net/results/8e6/8e639ab8912e7d884fd8e6dbb1ca8b49451dd766/
 
-The following defconfig reproduces the build failure:
+/home/test/autobuild/run/instance-1/output/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libcrypto.a(c_zlib.o):
+In function `zlib_stateful_expand_block':
+c_zlib.c:(.text+0x54): undefined reference to `inflate'
+/home/test/autobuild/run/instance-1/output/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libcrypto.a(c_zlib.o):
+In function `zlib_stateful_compress_block':
+c_zlib.c:(.text+0xd4): undefined reference to `deflate'
 
-BR2_x86_pentium_mmx=y
-BR2_TOOLCHAIN_BUILDROOT_MUSL=y
-BR2_KERNEL_HEADERS_3_12=y
-BR2_PACKAGE_LIBRESSL=y
-
-The getentropy_linux.c file is in upstream tarball, but not in its git
-repository. It originates from OpenBSD. For this reason the patch is
-against the tarball, but not git formatted.
-
-Cc: Adam Duskett <aduskett@gmail.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-[Arnout: change filename to correspond to how git creates it]
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
-(cherry picked from commit 7adc268b58a1eea9967ed5c7a3b7b4471575d73a)
+(cherry picked from commit d2268adf5b9e19fba6094f53e397168c8a4b8abb)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...ix-build-with-musl-and-older-Linux-kernel.patch | 38 ++++++++++++++++++++++
- 1 file changed, 38 insertions(+)
+ package/tor/0001-openssl-libz.patch | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/package/libressl/0002-Fix-build-with-musl-and-older-Linux-kernel.patch b/package/libressl/0002-Fix-build-with-musl-and-older-Linux-kernel.patch
-new file mode 100644
-index 0000000..ddb9534
---- /dev/null
-+++ b/package/libressl/0002-Fix-build-with-musl-and-older-Linux-kernel.patch
-@@ -0,0 +1,38 @@
-+From: Baruch Siach <baruch@tkos.co.il>
-+Date: Fri, 29 Sep 2017 10:06:52 +0300
-+Subject: [PATCH] Fix build with musl and older Linux kernel
-+
-+The musl libc carries its own copy of Linux system calls. When building
-+with Linux headers older than v3.17, musl provides SYS_getrandom
-+definition, but not GRND_NONBLOCK. This causes build failure for
-+libressl and openntpd:
-+
-+getentropy_linux.c: In function 'getentropy_getrandom':
-+getentropy_linux.c:205:42: error: 'GRND_NONBLOCK' undeclared (first use in this function)
-+   ret = syscall(SYS_getrandom, buf, len, GRND_NONBLOCK);
-+                                          ^~~~~~~~~~~~~
-+
-+Define GRND_NONBLOCK locally when its definition is missing to fix the
-+build. There should be no run-time effect. Older kernels return ENOSYS
-+for unsupported syscall().
-+
-+[ from upstream pull request with file location changed ]
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Upstream status: https://github.com/libressl-portable/openbsd/pull/82
-+
-+diff -Nuar libressl-2.5.5-orig/crypto/compat/getentropy_linux.c libressl-2.5.5/crypto/compat/getentropy_linux.c
-+--- libressl-2.5.5-orig/crypto/compat/getentropy_linux.c	2017-07-09 13:59:48.000000000 +0300
-++++ libressl-2.5.5/crypto/compat/getentropy_linux.c	2017-09-29 10:03:32.447958829 +0300
-+@@ -194,6 +194,11 @@
-+ }
+diff --git a/package/tor/0001-openssl-libz.patch b/package/tor/0001-openssl-libz.patch
+index c70894e..9d3cf6e 100644
+--- a/package/tor/0001-openssl-libz.patch
++++ b/package/tor/0001-openssl-libz.patch
+@@ -11,7 +11,12 @@ Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+ diff -uNr tor-0.3.1.7.org/configure.ac tor-0.3.1.7/configure.ac
+ --- tor-0.3.1.7.org/configure.ac	2017-09-15 15:34:06.000000000 +0200
+ +++ tor-0.3.1.7/configure.ac	2017-09-19 19:40:17.090538467 +0200
+-@@ -713,7 +713,7 @@
++@@ -709,11 +709,11 @@
++       fi
++   ])
 + 
-+ #ifdef SYS_getrandom
-++
-++#ifndef GRND_NONBLOCK
-++#define GRND_NONBLOCK   0x0001
-++#endif
-++
-+ static int
-+ getentropy_getrandom(void *buf, size_t len)
-+ {
++-TOR_SEARCH_LIBRARY(openssl, $tryssldir, [-lssl -lcrypto $TOR_LIB_GDI],
+++TOR_SEARCH_LIBRARY(openssl, $tryssldir, [-lssl -lcrypto -lz $TOR_LIB_GDI],
+      [#include <openssl/rand.h>],
+      [void RAND_add(const void *buf, int num, double entropy);],
+      [RAND_add((void*)0,0,0);], [],
