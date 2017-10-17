@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 17 Oct 2017 11:05:14 +0200
-Subject: [Buildroot] [git commit] qemu: change to .tar.xz format
-In-Reply-To: <20171005203341.9DD9B80504@busybox.osuosl.org> (Peter Korsgaard's
- message of "Thu, 5 Oct 2017 22:36:46 +0200")
-References: <20171005203341.9DD9B80504@busybox.osuosl.org>
-Message-ID: <87infejgad.fsf@dell.be.48ers.dk>
+Date: Tue, 17 Oct 2017 11:05:26 +0200
+Subject: [Buildroot] [PATCH] libcurl: security bump to version 7.56.0
+In-Reply-To: <20171004073517.7164-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Wed, 4 Oct 2017 09:35:17 +0200")
+References: <20171004073517.7164-1-peter@korsgaard.com>
+Message-ID: <87efq2jga1.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,12 +13,11 @@ To: buildroot@busybox.net
 
 >>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=b79547014d0cdbf34aa4112a464a63f9e865b9ce
- > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ > Drop upstreamed patch.
+ > Fixes CVE-2017-1000254 - FTP PWD response parser out of bounds read:
 
- > And use the official download location.
+ > https://curl.haxx.se/docs/adv_20171004.html
 
- > Suggested-by: Baruch Siach <baruch@tkos.co.il>
  > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
 Committed to 2017.08.x, thanks.
