@@ -1,44 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 17 Oct 2017 23:07:22 +0200
-Subject: [Buildroot] [git commit] libsemanage: bump to 2.7
-Message-ID: <20171017212847.EF729810D1@busybox.osuosl.org>
+Date: Tue, 17 Oct 2017 23:37:05 +0200
+Subject: [Buildroot] [PATCH v1] manual: clarify license file hash check
+ during legal-info target
+In-Reply-To: <20171017193015.18265-1-ps.report@gmx.net>
+References: <20171017193015.18265-1-ps.report@gmx.net>
+Message-ID: <20171017233705.3015e2e5@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6ff50428e84002763a3e4294499000c4310e1362
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/libsemanage/libsemanage.hash | 4 ++--
- package/libsemanage/libsemanage.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+On Tue, 17 Oct 2017 21:30:15 +0200, Peter Seiderer wrote:
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> ---
+>  docs/manual/adding-packages-directory.txt | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/libsemanage/libsemanage.hash b/package/libsemanage/libsemanage.hash
-index 62f4d83..c386571 100644
---- a/package/libsemanage/libsemanage.hash
-+++ b/package/libsemanage/libsemanage.hash
-@@ -1,2 +1,2 @@
--# Locally computed
--sha256 4f81541047290b751f2ffb926fcd381c186f22db18d9fe671b0b4a6a54e8cfce libsemanage-2.6.tar.gz
-+# From: https://github.com/SELinuxProject/selinux/wiki/Releases
-+sha256 07e9477714ce6a4557a1fe924ea4cb06501b62d0fa0e3c0dc32a2cf47cb8d476 libsemanage-2.7.tar.gz
-diff --git a/package/libsemanage/libsemanage.mk b/package/libsemanage/libsemanage.mk
-index 2964c56..829409f 100644
---- a/package/libsemanage/libsemanage.mk
-+++ b/package/libsemanage/libsemanage.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--LIBSEMANAGE_VERSION = 2.6
--LIBSEMANAGE_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20161014
-+LIBSEMANAGE_VERSION = 2.7
-+LIBSEMANAGE_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20170804
- LIBSEMANAGE_LICENSE = LGPL-2.1+
- LIBSEMANAGE_LICENSE_FILES = COPYING
- LIBSEMANAGE_DEPENDENCIES = host-bison host-flex audit libselinux ustr bzip2
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
