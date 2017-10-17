@@ -1,99 +1,181 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Tue, 17 Oct 2017 16:48:21 +0200
-Subject: [Buildroot] Package infrastructure for Go programs
-In-Reply-To: <3628be9d-8cd1-e394-577b-6ecf2fc818a3@mind.be>
-References: <CA+TH9VmgHZ5xxYXeO7dzqKObsz+X=v38XhcK34tY3Fp=DjDyig@mail.gmail.com>
- <7041482c-85c6-1a99-95dd-1ba1d592701d@mind.be>
- <CA+TH9VnwN5m5BhdfRU1tLQQAwS+XsQe3xkqgQHScXeHjHyDtFw@mail.gmail.com>
- <3628be9d-8cd1-e394-577b-6ecf2fc818a3@mind.be>
-Message-ID: <CA+TH9VnE2hr2ma87vrjAFR_pDymC2swPzXOcigMyKNKqQ6GpbQ@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 17 Oct 2017 11:33:22 -0300
+Subject: [Buildroot] [PATCH] DEVELOPERS: remove myself
+Message-ID: <20171017143322.9990-1-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout Vandecappelle ,
+I'm no longer actively participating.
 
-2017-10-05 20:05 GMT+02:00 Arnout Vandecappelle <arnout@mind.be>:
->
->
-> On 05-10-17 11:20, Angelo Compagnucci wrote:
->> Dear Arnout Vandecappelle,
->>
->> 2017-10-04 22:00 GMT+02:00 Arnout Vandecappelle <arnout@mind.be>:
-> [snip]
->>> 1. The build is reproducible. If I build the same .config a year from now, I
->>> should use exactly the same source (and normally end up with exactly the same
->>> result, barring some timestamps etc.).
->>>
->>> 2. "make source" downloads everything so after that you can do an offline build.
->>>
->>> 3. Everything appears only once in the target, only a single version is used for
->>> each package, unless the versions are incompatible (e.g. a gstreamer-0.10 and
->>> gstreamer-1 side by side is acceptable).
->>>
->>> 4. BR2_PRIMARY_SITE works, it should be possible to do an offline build with an
->>> empty download dir as long as you can access BR2_PRIMARY_SITE.
->>>
->>> 5. Something like our hashes is implemented, i.e. if the upstream archive is
->>> changed, the build breaks.
->>>
->>> 6. legal-info works, the licenses end up in our manifest and preferably also a
->>> license file.
->>>
->>> 7. BR2_SECONDARY_SITE works, so if the original archive disappears we can still
->>> do a build.
-> [snip]
->> I have a proof of concept golang package infrastructure and I will
->> send asap. I used it to test some of the thing we discussed.
->>
->> In pratice, for go packages there's not much of a trouble cause all of
->> the packages I tried bundles all of their dependencies, so anything
->> will be downloaded outside the release tarball.
->
->  If I understand correctly, the go packaging is not like the other language
-> packaging utilities (npm, pip, rebar, cargo, ...) in that it really only builds
-> the package, the download and extraction is still managed by us, and the
-> dependencies are managed directly by upstream. So the only limitation is that it
-> links statically with libraries bundled in the upstream tarball. I have
-> absolutely no problem with that.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ DEVELOPERS | 151 -------------------------------------------------------------
+ 1 file changed, 151 deletions(-)
 
-Not quite. Go offers it's own packaging infrastructure and uses the
-"go get" command to retrieve dependencies [1].
-The only difference to me is that most go developers choose to bundle
-all the dependencies inside the release tarball instead to relay on a
-dependencies description file and the user doing a go get.
-
->
->
->> In practice only point 6 seems the most troublesome to me. It's not a
->> problem to find the license of the downloaded tarball obviously, but
->> finding each one of the licenses of the bundled dependencies could be
->> a problem!
->
->  Well, not more so than for any other package. A great many packages bundle some
-> code that comes from different projects or that has been contributed under a
-> different license. The simple approach is to just run Debian's licensecheck tool
-> on the source. It's not conclusive but generally good enough.
-
-Nice!
-
->
->  Regards,
->  Arnout
->
->
-> [snip]
-> --
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
-
-
-
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 942abcf836..dd19a0a4d0 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -698,157 +698,6 @@ F:	arch/Config.in.csky
+ F:	board/csky/
+ F:	configs/csky_*
+ 
+-N:	Gustavo Zacarias <gustavo@zacarias.com.ar>
+-F:	arch/Config.in.powerpc
+-F:	board/qemu/
+-F:	configs/qemu_*
+-F:	package/argp-standalone/
+-F:	package/arptables/
+-F:	package/audiofile/
+-F:	package/autossh/
+-F:	package/bitstream-vera/
+-F:	package/blktrace/
+-F:	package/bmon/
+-F:	package/btrfs-progs/
+-F:	package/c-ares/
+-F:	package/cantarell/
+-F:	package/check/
+-F:	package/collectd/
+-F:	package/comix-cursors/
+-F:	package/connman-gtk/
+-F:	package/conntrack-tools/
+-F:	package/cppdb/
+-F:	package/crda/
+-F:	package/cryptodev-linux/
+-F:	package/dbus-cpp/
+-F:	package/debianutils/
+-F:	package/dt/
+-F:	package/exfat/
+-F:	package/exfat-utils/
+-F:	package/f2fs-tools/
+-F:	package/faad2/
+-F:	package/fping/
+-F:	package/ftop/
+-F:	package/gcr/
+-F:	package/geoip/
+-F:	package/gpsd/
+-F:	package/granite/
+-F:	package/graphite2/
+-F:	package/gsettings-desktop-schemas/
+-F:	package/gstreamer1/
+-F:	package/hans/
+-F:	package/haveged/
+-F:	package/heimdal/
+-F:	package/hostapd/
+-F:	package/ifupdown/
+-F:	package/inconsolata/
+-F:	package/iodine/
+-F:	package/iperf3/
+-F:	package/ipset/
+-F:	package/iw/
+-F:	package/jhead/
+-F:	package/jquery-keyboard/
+-F:	package/kompexsqlite/
+-F:	package/kvmtool/
+-F:	package/lame/
+-F:	package/lft/
+-F:	package/libao/
+-F:	package/libcroco/
+-F:	package/libcue/
+-F:	package/libcuefile/
+-F:	package/libepoxy/
+-F:	package/libgee/
+-F:	package/libglib2/
+-F:	package/libgtk2/
+-F:	package/libgtk3/
+-F:	package/libmcrypt/
+-F:	package/libmemcached/
+-F:	package/libmhash/
+-F:	package/libmnl/
+-F:	package/libmng/
+-F:	package/libmpdclient/
+-F:	package/libnetfilter_acct/
+-F:	package/libnetfilter_conntrack/
+-F:	package/libnetfilter_cthelper/
+-F:	package/libnetfilter_cttimeout/
+-F:	package/libnetfilter_log/
+-F:	package/libnetfilter_queue/
+-F:	package/libnfnetlink/
+-F:	package/libnl/
+-F:	package/liboping/
+-F:	package/libreplaygain/
+-F:	package/libsamplerate/
+-F:	package/libtorrent/
+-F:	package/libuv/
+-F:	package/lksctp-tools/
+-F:	package/lshw/
+-F:	package/lz4/
+-F:	package/lzip/
+-F:	package/mbedtls/
+-F:	package/mcrypt/
+-F:	package/memcached/
+-F:	package/minizip/
+-F:	package/mpd/
+-F:	package/mpv/
+-F:	package/mtr/
+-F:	package/musepack/
+-F:	package/ncmpc/
+-F:	package/net-tools/
+-F:	package/netstat-nat/
+-F:	package/nettle/
+-F:	package/nfacct/
+-F:	package/nftables/
+-F:	package/nload/
+-F:	package/nmap/
+-F:	package/noip/
+-F:	package/norm/
+-F:	package/obsidian-cursors/
+-F:	package/ocf-linux/
+-F:	package/opencore-amr/
+-F:	package/openswan/
+-F:	package/openvpn/
+-F:	package/opusfile/
+-F:	package/p11-kit/
+-F:	package/p910nd/
+-F:	package/pax-utils/
+-F:	package/procrank_linux/
+-F:	package/php-*
+-F:	package/pkgconf/
+-F:	package/privoxy/
+-F:	package/protobuf-c/
+-F:	package/ptpd/
+-F:	package/ptpd2/
+-F:	package/pwgen/
+-F:	package/ramspeed/
+-F:	package/rng-tools/
+-F:	package/rtorrent/
+-F:	package/samba4/
+-F:	package/sbc/
+-F:	package/snmppp/
+-F:	package/sox/
+-F:	package/spidev_test/
+-F:	package/squid/
+-F:	package/start-stop-daemon/
+-F:	package/swig/
+-F:	package/thrift/
+-F:	package/twolame/
+-F:	package/ulogd/
+-F:	package/unionfs/
+-F:	package/unrar/
+-F:	package/ushare/
+-F:	package/vala/
+-F:	package/vorbis-tools/
+-F:	package/wavpack/
+-F:	package/wayland-protocols/
+-F:	package/webkitgtk/
+-F:	package/whois/
+-F:	package/wireshark/
+-F:	package/wpa_supplicant/
+-F:	package/wpan-tools/
+-F:	package/x11r7/xdriver_xf86-video-qxl/
+-F:	package/xtables-addons/
+-F:	package/zd1211-firmware/
+-
+ N:	Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+ F:	package/gnuradio/
+ F:	package/gqrx/
 -- 
-Profile: http://it.linkedin.com/in/compagnucciangelo
+2.13.6
