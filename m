@@ -1,69 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 17 Oct 2017 22:46:11 +0200
-Subject: [Buildroot] [git commit] cups: bump version to 2.2.5
-Message-ID: <20171017203944.0175E7FB8C@busybox.osuosl.org>
+Date: Tue, 17 Oct 2017 22:47:10 +0200
+Subject: [Buildroot] [PATCH v2] qpdf: bump version to 7.0.0
+In-Reply-To: <20171017132413.1900-1-olivier.schonken@gmail.com>
+References: <20171017132413.1900-1-olivier.schonken@gmail.com>
+Message-ID: <20171017224710.1ee8903c@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=885313f831062f2a47d4e4cc455afca86412d897
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Olivier Schonken <olivier.schonken@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/cups/0003-Sanitize-the-installation-process.patch | 8 ++++----
- package/cups/cups.hash                                    | 2 +-
- package/cups/cups.mk                                      | 2 +-
- 3 files changed, 6 insertions(+), 6 deletions(-)
+On Tue, 17 Oct 2017 15:24:13 +0200, Olivier Schonken wrote:
+> Signed-off-by: Olivier Schonken <olivier.schonken@gmail.com>
+> ---
+> v1 -> v2  Commented out the new hashes by mistake
+>  package/qpdf/qpdf.hash | 6 +++---
+>  package/qpdf/qpdf.mk   | 2 +-
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/cups/0003-Sanitize-the-installation-process.patch b/package/cups/0003-Sanitize-the-installation-process.patch
-index f1128da..75a6848 100644
---- a/package/cups/0003-Sanitize-the-installation-process.patch
-+++ b/package/cups/0003-Sanitize-the-installation-process.patch
-@@ -37,18 +37,18 @@ index 3afef0a..3e4f1bd 100644
-  # Installation programs...
-  #
-  
---INSTALL_BIN	=	$(LIBTOOL) $(INSTALL) -c -m @CUPS_EXE_FILE_PERM@ @INSTALL_STRIP@
-+-INSTALL_BIN	=	@LIBTOOL_INSTALL@ $(INSTALL) -c -m @CUPS_EXE_FILE_PERM@ @INSTALL_STRIP@
- -INSTALL_COMPDATA =	$(INSTALL) -c -m 444 @INSTALL_GZIP@
--+INSTALL_BIN	=	$(LIBTOOL) $(INSTALL) -c -m 755
-++INSTALL_BIN	=	@LIBTOOL_INSTALL@ $(INSTALL) -c -m 755
- +INSTALL_COMPDATA =	$(INSTALL) -c -m 644 @INSTALL_GZIP@
-  INSTALL_CONFIG	=	$(INSTALL) -c -m @CUPS_CONFIG_FILE_PERM@
- -INSTALL_DATA	=	$(INSTALL) -c -m 444
- +INSTALL_DATA	=	$(INSTALL) -c -m 644
-  INSTALL_DIR	=	$(INSTALL) -d
---INSTALL_LIB	=	$(LIBTOOL) $(INSTALL) -c -m @CUPS_EXE_FILE_PERM@ @INSTALL_STRIP@
-+-INSTALL_LIB	=	@LIBTOOL_INSTALL@ $(INSTALL) -c -m @CUPS_EXE_FILE_PERM@ @INSTALL_STRIP@
- -INSTALL_MAN	=	$(INSTALL) -c -m 444
- -INSTALL_SCRIPT	=	$(INSTALL) -c -m @CUPS_EXE_FILE_PERM@
--+INSTALL_LIB	=	$(LIBTOOL) $(INSTALL) -c -m 755
-++INSTALL_LIB	=	@LIBTOOL_INSTALL@ $(INSTALL) -c -m 755
- +INSTALL_MAN	=	$(INSTALL) -c -m 644
- +INSTALL_SCRIPT	=	$(INSTALL) -c -m 755
-  
-diff --git a/package/cups/cups.hash b/package/cups/cups.hash
-index f9eed42..d4f20b6 100644
---- a/package/cups/cups.hash
-+++ b/package/cups/cups.hash
-@@ -1,2 +1,2 @@
- # Locally calculated:
--sha256 596d4db72651c335469ae5f37b0da72ac9f97d73e30838d787065f559dea98cc  cups-2.2.4-source.tar.gz
-+sha256 a8795e2aa54dcfbdc9ff254a770f0d7154e35c981bca5b3369050c5193ab5a21  cups-2.2.5-source.tar.gz
-diff --git a/package/cups/cups.mk b/package/cups/cups.mk
-index f5e2a3f..0726d8a 100644
---- a/package/cups/cups.mk
-+++ b/package/cups/cups.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--CUPS_VERSION = 2.2.4
-+CUPS_VERSION = 2.2.5
- CUPS_SOURCE = cups-$(CUPS_VERSION)-source.tar.gz
- CUPS_SITE = https://github.com/apple/cups/releases/download/v$(CUPS_VERSION)
- CUPS_LICENSE = GPL-2.0, LGPL-2.0
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
