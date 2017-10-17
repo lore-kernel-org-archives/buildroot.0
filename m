@@ -1,41 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 17 Oct 2017 22:36:28 +0200
-Subject: [Buildroot] [PATCH v4] ghostscript: bump version to 9.22
-In-Reply-To: <20171017134828.32476-1-olivier.schonken@gmail.com>
-References: <20171017134828.32476-1-olivier.schonken@gmail.com>
-Message-ID: <20171017223628.0db89900@windsurf.home>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 17 Oct 2017 22:41:41 +0200
+Subject: [Buildroot] [PATCH] package/gcc: bump to 5.5.0
+In-Reply-To: <20171015215736.3573-1-romain.naour@gmail.com> (Romain Naour's
+ message of "Sun, 15 Oct 2017 23:57:35 +0200")
+References: <20171015215736.3573-1-romain.naour@gmail.com>
+Message-ID: <87zi8pfqwq.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
 
-On Tue, 17 Oct 2017 15:48:28 +0200, Olivier Schonken wrote:
-> Remove patches that has been merged/updated upstream
-> 
-> 0002-Host-tool-mkromfs_1-needs-libz.patch
-> -> http://git.ghostscript.com/?p=ghostpdl.git;a=commit;h=284f5fe121d8eb0a0f50a6f2465ee2f99a061018  
-> 0003-Bug-697799-have-.eqproc-check-its-parameters.patch
-> -> http://git.ghostscript.com/?p=ghostpdl.git;a=commitdiff;h=4f83478c88c2e05d6e8d79ca4557eb039354d2f3  
->    http://git.ghostscript.com/?p=ghostpdl.git;a=commitdiff;h=57f20719e1cfaea77b67cb26e26de7fe4d7f9b2e
->    http://git.ghostscript.com/?p=ghostpdl.git;a=commitdiff;h=ccfd2c75ac9be4cbd369e4cbdd40ba11a0c7bdad
-> 0004-Bug-697799-have-.rsdparams-check-its-parameters
-> -> http://git.ghostscript.com/?p=ghostpdl.git;a=commitdiff;h=04b37bbce174eed24edec7ad5b920eb93db4d47d  
->    http://git.ghostscript.com/?p=ghostpdl.git;a=commitdiff;h=ccfd2c75ac9be4cbd369e4cbdd40ba11a0c7bdad
-> 
-> Signed-off-by: Olivier Schonken <olivier.schonken@gmail.com>
-> ---
-> v1 -> v2 : The sha1 hash for ghostpdl was mistakenly put in the
->            hash file.  v2 fixes this issue.
-> v2 -> v3 : Replace md5 and sha1 hashes with sha256 and sha512
-> v3 -> v4 : Add links to upstream commits that supersedes buildroot commits
+ > Remove xtensa patches included in this release:
+ > 872-xtensa-use-unwind-dw2-fde-dip-instead-of-unwind-dw2-.patch
+ > 873-xtensa-fix-_Unwind_GetCFA.patch
+ > 876-xtensa-Fix-PR-target-78603.patch
+ > 877-xtensa-fix-PR-target-82181.patch
 
-Applied to master, thanks.
+ > Remove upstream patch:
+ > 942-asan-fix-missing-include-signal-h.patch
 
-Thomas
+ > Remove backported patches for glibc >= 2.26
+ > 943-Use-ucontext_t-not-struct-ucontext-in-linux-unwind.h.patch
+ > 944-sanitizer-linux.patch
+
+ > Signed-off-by: Romain Naour <romain.naour@gmail.com>
+
+Committed, thanks.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
