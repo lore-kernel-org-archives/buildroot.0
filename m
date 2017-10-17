@@ -1,14 +1,16 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 18 Oct 2017 00:58:20 +0200
+Date: Wed, 18 Oct 2017 01:11:54 +0200
 Subject: [Buildroot] [PATCH RFC] core: enable per-package log files
-In-Reply-To: <20171017154526.GA6368@bifrost>
+In-Reply-To: <20171017210354.38d89b3c@windsurf.lan>
 References: <20171011105809.2bf05267@windsurf.lan>
  <1508170801-31062-1-git-send-email-anisse@astier.eu>
  <20171016185248.0463ac82@windsurf.lan> <20171016211842.GA32198@bifrost>
  <20171017091152.67d7ad28@windsurf.lan>
  <4234cedb-0646-496e-9ee1-0bc60c847810@mind.be>
- <20171017154526.GA6368@bifrost>
-Message-ID: <07c2fee3-d73c-bb09-444d-2fcdf67415bf@mind.be>
+ <20171017141133.4d57ee87@windsurf.lan>
+ <9955dbb8-0447-5a3d-9e78-a0f6f42e7e6c@mind.be>
+ <20171017210354.38d89b3c@windsurf.lan>
+Message-ID: <ff04b0db-d3d5-2314-9d9c-3ead377eb981@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,86 +19,47 @@ To: buildroot@busybox.net
 
 
 
-On 17-10-17 17:45, Anisse Astier wrote:
-> On Tue, Oct 17, 2017 at 02:01:41PM +0200, Arnout Vandecappelle wrote:
->>
->>
->> On 17-10-17 09:11, Thomas Petazzoni wrote:
+On 17-10-17 21:03, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Tue, 17 Oct 2017 16:44:04 +0200, Arnout Vandecappelle wrote:
 [snip]
->>  I don't see any way that it could break things, actually. But obviously it
->> *does* need to be tested more extensively.
+>> Isn't it enough to observe the -j in MAKEFLAGS?
 > 
-> Indeed it does. I found another issue in the parsing, it turns out there
-> might be many tabs at the beginning of a recipe, so they must be
-> consumed greedily as well:
+> Interestingly:
 > 
-> @@ -46,6 +46,9 @@ for arg in args:
->              elif line[0] == '+':  # ignore
->                  dprint("jobserver MAKEFLAGS mode")
->                  line = line[1:]
-> +            elif line[0] == '\t':  # eat additionnal tabs
-> +                dprint("more tabs")
-> +                line = line[1:]
-
- That's not entirely correct either, because any other make character followed
-by tab means the tab is part of the command. Better do line.lstrip('\t').
-
->              else:  # no more matching initial recipe character
->                  break
->          if print_command:
+> all:
+> 	@echo $(MAKEFLAGS)
+> ifneq ($(filter -j%,$(MAKEFLAGS)),)
+> 	@echo "BINGO"
+> endif
 > 
->>
->>>>
->>>> Not many. I have only tested the qemu_aarch64_virt_defconfig which does
->>>> not contain much(~28 packages), but I was already able to fix a few
->>>> parsing issues.
->>>
->>> A bigger test is indeed needed to validate things. But let's see what
->>> others have to say first.
->>
->>  Indeed, because I'm not in favour...
->>
->> - IMO 'make --output-sync=recurse' is sufficient to begin with.
-
- Anisse, what's your POV about this? Do you see reasons why output-sync is
-insufficient?
-
->>
->> - This script requires python3 for *any* build, but python3 is not currently a
->> dependency.
->>
->> - If the script is changed so it supports both 2 and 3, it still requires a
->> python invocation for every build step, which is slowing things down.
->>
->> - Even if it is converted to a shell script or sped up in a different way, it
->> will make things more complicated for IMO limited gain.
+> Never shows BINGO when called with "make -j2" even if the echo
+> $(MAKEFLAGS) does show that -j2 has been passed. Also a:
 > 
-> I'm not sure it can be converted to pure shell because of the lexing issues
-> (nested double quotes, etc.).
+> $(warning $(MAKEFLAGS))
+> 
+> shows an empty value.
 
- Something like this?
+ Right! MAKEFLAGS is only initialized when calling a subprocess, and it anyway
+doesn't contain the literal flags passed to make.
 
-IFS="$(echo)"
-for line in $2; do
-	sh -c "$line" 2>&1 | $1
-done
+ It looks like there is no way to observe the flags passed to make :-(
 
- Hm, stripping the first characters of $line is still to do...
+> 
+>>  I'm not convinced we want to add this option automatically, however, because it
+>> makes it more difficult for people who don't want it. Why not add it to
+>> utils/brmake, for example, and point people there in the documentation of
+>> top-level parallel build?
+> 
+> Sorry I lost you here :/
 
-
-> But this can still be optimized as well. Either by using a native program, by
-> having a long running process that would receive commands through a pipe, or
-> even by using a GNU make loadable module.
-
- A GNU make loadable module, I never heard of that. Is that really an option?
-That could really be useful, also for other things.
-
+ I mean that maybe the user doesn't want to gather the output with -Orecurse or
+-Otarget but really wants -Onone. If you hardcode -Orecurse in the Makefile,
+it's impossible for a user who does want to see output immediately.
 
  Regards,
  Arnout
-
-
-[snip]
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
