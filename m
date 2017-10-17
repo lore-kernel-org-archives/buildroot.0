@@ -1,76 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 17 Oct 2017 10:50:16 +0200
-Subject: [Buildroot] [git commit branch/2017.08.x] musl: add patch to fix
-	build on ARMv4 with new binutils
-Message-ID: <20171017090326.B8ACC7FD24@busybox.osuosl.org>
+Date: Tue, 17 Oct 2017 10:53:50 +0200
+Subject: [Buildroot] [git commit branch/2017.08.x] libnspr: bump version to
+	4.17
+Message-ID: <20171017090327.1BDDC81190@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=990bf068b7d4ca86247ce7e257925d387ae6b3f7
+commit: https://git.buildroot.net/buildroot/commit/?id=beaf17edc34d5d311c718530913cce0100da457c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.08.x
 
-New binutils (since 2.27.51) cannot build musl-1.1.16 due to breakage in ARMv4
-atomics asm.  This patch from upstream musl repository is needed until
-musl-1.1.17 is released:
-https://git.musl-libc.org/cgit/musl/commit/?id=b261a24256792177a5f0531dbb25cc6267220ca5
+libnss 3.33 needs libnspr >= 4.17.
 
-Signed-off-by: Timothy Lee <timothy.ty.lee@gmail.com>
+Also add a hash for the license file while we're at it.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 27cf2d3baf879f7314f12787982d8f4a5b4218cf)
+(cherry picked from commit b1363093248b6198eab285124b2c87411155a0a1)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0002-arm-atomics-asm-with-new-binutils.patch   | 43 ++++++++++++++++++++++
- 1 file changed, 43 insertions(+)
+ package/libnspr/libnspr.hash | 6 ++++--
+ package/libnspr/libnspr.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/package/musl/0002-arm-atomics-asm-with-new-binutils.patch b/package/musl/0002-arm-atomics-asm-with-new-binutils.patch
-new file mode 100644
-index 0000000..3790889
---- /dev/null
-+++ b/package/musl/0002-arm-atomics-asm-with-new-binutils.patch
-@@ -0,0 +1,43 @@
-+From b261a24256792177a5f0531dbb25cc6267220ca5 Mon Sep 17 00:00:00 2001
-+From: Rich Felker <dalias@aerifal.cx>
-+Date: Wed, 15 Feb 2017 17:05:50 -0500
-+Subject: fix build regression in arm atomics asm with new binutils
-+
-+binutils commit bada43421274615d0d5f629a61a60b7daa71bc15 tightened
-+immediate fixup handling in gas in such a way that the final .arch of
-+an object file must be compatible with the fixups used when the
-+instruction was assembled; this in turn broke assembling of atomics.s,
-+at least in thumb mode.
-+
-+it's not clear whether this should be considered a bug in gas, but
-+.object_arch is preferable anyway for our purpose here of controlling
-+the ISA level tag on the object file being produced, and it's the
-+intended directive for use in object files with runtime code
-+selection. research by Szabolcs Nagy confirmed that .object_arch is
-+supported in all relevant versions of binutils and clang's integrated
-+assembler.
-+
-+patch by Reiner Herrmann.
-+
-+Signed-off-by: Timothy Lee <timothy.ty.lee@gmail.com>
-+[Backport from upstream https://git.musl-libc.org/cgit/musl/commit/?id=b261a24256792177a5f0531dbb25cc6267220ca5.]
-+---
-+ src/thread/arm/atomics.s | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/thread/arm/atomics.s b/src/thread/arm/atomics.s
-+index 202faa4..101ad39 100644
-+--- a/src/thread/arm/atomics.s
-++++ b/src/thread/arm/atomics.s
-+@@ -84,7 +84,7 @@ __a_gettp_cp15:
-+ 	bx lr
-+ 
-+ /* Tag this file with minimum ISA level so as not to affect linking. */
-+-.arch armv4t
-++.object_arch armv4t
-+ .eabi_attribute 6,2
-+ 
-+ .data
-+-- 
-+cgit v0.11.2
-+
+diff --git a/package/libnspr/libnspr.hash b/package/libnspr/libnspr.hash
+index 13cee6e..46c091e 100644
+--- a/package/libnspr/libnspr.hash
++++ b/package/libnspr/libnspr.hash
+@@ -1,2 +1,4 @@
+-# From https://ftp.mozilla.org/pub/nspr/releases/v4.15/src/SHA256SUMS
+-sha256	27dde06bc3d0c88903a20d6ad807361a912cfb624ca0ab4efb10fc50b19e2d80	nspr-4.15.tar.gz
++# From https://ftp.mozilla.org/pub/nspr/releases/v4.17/src/SHA256SUMS
++sha256	590a0aea29412ae22d7728038c21ef2ab42646e48172a47d2e4bb782846d1095  nspr-4.17.tar.gz
++# Locally calculated
++sha256	fab3dd6bdab226f1c08630b1dd917e11fcb4ec5e1e020e2c16f83a0a13863e85  nspr/LICENSE
+diff --git a/package/libnspr/libnspr.mk b/package/libnspr/libnspr.mk
+index 7659baf..0c782ae 100644
+--- a/package/libnspr/libnspr.mk
++++ b/package/libnspr/libnspr.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBNSPR_VERSION = 4.15
++LIBNSPR_VERSION = 4.17
+ LIBNSPR_SOURCE = nspr-$(LIBNSPR_VERSION).tar.gz
+ LIBNSPR_SITE = https://ftp.mozilla.org/pub/mozilla.org/nspr/releases/v$(LIBNSPR_VERSION)/src
+ LIBNSPR_SUBDIR = nspr
