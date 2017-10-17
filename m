@@ -1,25 +1,28 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 17 Oct 2017 11:00:35 +0200
-Subject: [Buildroot] [PATCH 1/1] ejabberd: Replace $(HOST_DIR) to /usr
-	in ERL path
-In-Reply-To: <20170925163431.24409-1-johan.oudinet@gmail.com> (Johan Oudinet's
- message of "Mon, 25 Sep 2017 18:34:31 +0200")
-References: <20170925163431.24409-1-johan.oudinet@gmail.com>
-Message-ID: <87y3oakv2k.fsf@dell.be.48ers.dk>
+Date: Tue, 17 Oct 2017 11:00:48 +0200
+Subject: [Buildroot] [PATCH 1/2] zsh: disable NIS support
+In-Reply-To: <33b2c8f26ae3bc1de8e83512a9074beddc9cc764.1506631433.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Thu, 28 Sep 2017 23:43:52 +0300")
+References: <33b2c8f26ae3bc1de8e83512a9074beddc9cc764.1506631433.git.baruch@tkos.co.il>
+Message-ID: <87tvyykv27.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Johan" == Johan Oudinet <johan.oudinet@gmail.com> writes:
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > Previously, it was working by luck. Buildroot has fixed its definition
- > of HOST_DIR and pkg-autotools.mk uses the classical /usr prefix. So,
- > fix this sed expression to correctly replace $(HOST_DIR) by /usr in ERL
- > path.
+ > The configure test for NIS and NIS+ looks for the ypcat and nisls host
+ > utilities, respectively. This is not compatible with cross compile.
+ > Disable both unconditionally.
 
- > Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
+ > Fixes:
+ > http://autobuild.buildroot.net/results/54c/54c9c5dff3df0a43573b03896cb0629fcae08478/
+ > http://autobuild.buildroot.net/results/c8e/c8e30a1eb6e77ae76292b6a01bede5abb2b1b7b7/
+
+ > Cc: Phil Eichinger <phil.eichinger@gmail.com>
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
 Committed to 2017.08.x, thanks.
 
