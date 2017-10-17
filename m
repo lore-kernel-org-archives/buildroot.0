@@ -1,44 +1,230 @@
 From: Olivier Schonken <olivier.schonken@gmail.com>
-Date: Tue, 17 Oct 2017 15:24:13 +0200
-Subject: [Buildroot] [PATCH v2] qpdf: bump version to 7.0.0
-Message-ID: <20171017132413.1900-1-olivier.schonken@gmail.com>
+Date: Tue, 17 Oct 2017 15:48:28 +0200
+Subject: [Buildroot] [PATCH v4] ghostscript: bump version to 9.22
+Message-ID: <20171017134828.32476-1-olivier.schonken@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Remove patches that has been merged/updated upstream
+
+0002-Host-tool-mkromfs_1-needs-libz.patch
+-> http://git.ghostscript.com/?p=ghostpdl.git;a=commit;h=284f5fe121d8eb0a0f50a6f2465ee2f99a061018
+0003-Bug-697799-have-.eqproc-check-its-parameters.patch
+-> http://git.ghostscript.com/?p=ghostpdl.git;a=commitdiff;h=4f83478c88c2e05d6e8d79ca4557eb039354d2f3
+   http://git.ghostscript.com/?p=ghostpdl.git;a=commitdiff;h=57f20719e1cfaea77b67cb26e26de7fe4d7f9b2e
+   http://git.ghostscript.com/?p=ghostpdl.git;a=commitdiff;h=ccfd2c75ac9be4cbd369e4cbdd40ba11a0c7bdad
+0004-Bug-697799-have-.rsdparams-check-its-parameters
+-> http://git.ghostscript.com/?p=ghostpdl.git;a=commitdiff;h=04b37bbce174eed24edec7ad5b920eb93db4d47d
+   http://git.ghostscript.com/?p=ghostpdl.git;a=commitdiff;h=ccfd2c75ac9be4cbd369e4cbdd40ba11a0c7bdad
+
 Signed-off-by: Olivier Schonken <olivier.schonken@gmail.com>
 ---
-v1 -> v2  Commented out the new hashes by mistake
- package/qpdf/qpdf.hash | 6 +++---
- package/qpdf/qpdf.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+v1 -> v2 : The sha1 hash for ghostpdl was mistakenly put in the
+           hash file.  v2 fixes this issue.
+v2 -> v3 : Replace md5 and sha1 hashes with sha256 and sha512
+v3 -> v4 : Add links to upstream commits that supersedes buildroot commits
 
-diff --git a/package/qpdf/qpdf.hash b/package/qpdf/qpdf.hash
-index c882708b52..1fbef66e6f 100644
---- a/package/qpdf/qpdf.hash
-+++ b/package/qpdf/qpdf.hash
+ .../0002-Host-tool-mkromfs_1-needs-libz.patch      | 48 -----------------
+ ...-697799-have-.eqproc-check-its-parameters.patch | 33 ------------
+ ...7799-have-.rsdparams-check-its-parameters.patch | 62 ----------------------
+ package/ghostscript/ghostscript.hash               |  8 +--
+ package/ghostscript/ghostscript.mk                 |  4 +-
+ 5 files changed, 6 insertions(+), 149 deletions(-)
+ delete mode 100644 package/ghostscript/0002-Host-tool-mkromfs_1-needs-libz.patch
+ delete mode 100644 package/ghostscript/0003-Bug-697799-have-.eqproc-check-its-parameters.patch
+ delete mode 100644 package/ghostscript/0004-Bug-697799-have-.rsdparams-check-its-parameters.patch
+
+diff --git a/package/ghostscript/0002-Host-tool-mkromfs_1-needs-libz.patch b/package/ghostscript/0002-Host-tool-mkromfs_1-needs-libz.patch
+deleted file mode 100644
+index 341a8368d3..0000000000
+--- a/package/ghostscript/0002-Host-tool-mkromfs_1-needs-libz.patch
++++ /dev/null
+@@ -1,48 +0,0 @@
+-From c9e370d7cdf1bb5fbbd5c1e7e9c5431f6112b074 Mon Sep 17 00:00:00 2001
+-From: Bernd Kuhls <bernd.kuhls@t-online.de>
+-Date: Mon, 20 Mar 2017 23:43:29 +0100
+-Subject: [PATCH] Host tool mkromfs_1 needs libz
+-
+-Fixes build error
+-
+-/tmp/ccckTW0s.o: In function `process_path':
+-mkromfs.c:(.text+0x2390): undefined reference to `compress'
+-/tmp/ccckTW0s.o: In function `process_initfile':
+-mkromfs.c:(.text+0x3616): undefined reference to `compress'
+-collect2: error: ld returned 1 exit status
+-base/unix-aux.mak:103: recipe for target 'obj/aux/mkromfs_1' failed
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+----
+- Makefile.in       | 1 +
+- base/unix-aux.mak | 2 +-
+- 2 files changed, 2 insertions(+), 1 deletion(-)
+-
+-diff --git a/Makefile.in b/Makefile.in
+-index 3a3cae5..600ce3e 100644
+---- a/Makefile.in
+-+++ b/Makefile.in
+-@@ -461,6 +461,7 @@ XPS_LDFLAGS_SO=@XPS_DYNAMIC_LDFLAGS@
+- 
+- EXTRALIBS=$(XTRALIBS) @LIBS@ @DYNAMIC_LIBS@ @FONTCONFIG_LIBS@ @FT_LIBS@ @JPX_AUTOCONF_LIBS@ @EXPAT_LIBS@
+- AUXEXTRALIBS=@AUXEXTRALIBS@
+-+AUX_SHARED_ZLIB=@AUX_SHARED_ZLIB@
+- 
+- # Define the standard libraries to search at the end of linking.
+- # Most platforms require -lpthread for the POSIX threads library;
+-diff --git a/base/unix-aux.mak b/base/unix-aux.mak
+-index c5fa2a4..4ed8369 100644
+---- a/base/unix-aux.mak
+-+++ b/base/unix-aux.mak
+-@@ -100,7 +100,7 @@ MKROMFS_OBJS_1=$(AUX)gscdefs.$(OBJ) \
+-  $(AUX)gp_stdia.$(OBJ) $(AUX)gsutil.$(OBJ)
+- 
+- $(MKROMFS_XE)_1: $(GLSRC)mkromfs.c $(MKROMFS_COMMON_DEPS) $(MKROMFS_OBJS_1) $(UNIX_AUX_MAK) $(MAKEDIRS)
+--	$(CCAUX_) $(GENOPTAUX) $(I_)$(GLSRCDIR)$(_I) $(I_)$(GLOBJ)$(_I) $(I_)$(ZSRCDIR)$(_I) $(GLSRC)mkromfs.c $(O_)$(MKROMFS_XE)_1 $(MKROMFS_OBJS_1) $(AUXEXTRALIBS)
+-+	$(CCAUX_) $(GENOPTAUX) $(I_)$(GLSRCDIR)$(_I) $(I_)$(GLOBJ)$(_I) $(I_)$(ZSRCDIR)$(_I) $(GLSRC)mkromfs.c $(O_)$(MKROMFS_XE)_1 $(MKROMFS_OBJS_1) $(AUXEXTRALIBS) $(AUX_SHARED_ZLIB)
+- 
+- $(MKROMFS_XE): $(MKROMFS_XE)_$(SHARE_ZLIB) $(UNIX_AUX_MAK) $(MAKEDIRS)
+- 	$(CP_) $(MKROMFS_XE)_$(SHARE_ZLIB) $(MKROMFS_XE)
+--- 
+-2.7.4
+-
+diff --git a/package/ghostscript/0003-Bug-697799-have-.eqproc-check-its-parameters.patch b/package/ghostscript/0003-Bug-697799-have-.eqproc-check-its-parameters.patch
+deleted file mode 100644
+index becdc66054..0000000000
+--- a/package/ghostscript/0003-Bug-697799-have-.eqproc-check-its-parameters.patch
++++ /dev/null
+@@ -1,33 +0,0 @@
+-From 4f83478c88c2e05d6e8d79ca4557eb039354d2f3 Mon Sep 17 00:00:00 2001
+-From: Chris Liddell <chris.liddell@artifex.com>
+-Date: Thu, 27 Apr 2017 13:03:33 +0100
+-Subject: [PATCH] Bug 697799: have .eqproc check its parameters
+-
+-The Ghostscript custom operator .eqproc was not check the number or type of
+-the parameters it was given.
+-
+-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+----
+- psi/zmisc3.c | 6 ++++++
+- 1 file changed, 6 insertions(+)
+-
+-diff --git a/psi/zmisc3.c b/psi/zmisc3.c
+-index 54b304246..37293ff4b 100644
+---- a/psi/zmisc3.c
+-+++ b/psi/zmisc3.c
+-@@ -56,6 +56,12 @@ zeqproc(i_ctx_t *i_ctx_p)
+-     ref2_t stack[MAX_DEPTH + 1];
+-     ref2_t *top = stack;
+- 
+-+    if (ref_stack_count(&o_stack) < 2)
+-+        return_error(gs_error_stackunderflow);
+-+    if (!r_is_array(op - 1) || !r_is_array(op)) {
+-+        return_error(gs_error_typecheck);
+-+    }
+-+
+-     make_array(&stack[0].proc1, 0, 1, op - 1);
+-     make_array(&stack[0].proc2, 0, 1, op);
+-     for (;;) {
+--- 
+-2.11.0
+-
+diff --git a/package/ghostscript/0004-Bug-697799-have-.rsdparams-check-its-parameters.patch b/package/ghostscript/0004-Bug-697799-have-.rsdparams-check-its-parameters.patch
+deleted file mode 100644
+index 9ba170b316..0000000000
+--- a/package/ghostscript/0004-Bug-697799-have-.rsdparams-check-its-parameters.patch
++++ /dev/null
+@@ -1,62 +0,0 @@
+-From 04b37bbce174eed24edec7ad5b920eb93db4d47d Mon Sep 17 00:00:00 2001
+-From: Chris Liddell <chris.liddell@artifex.com>
+-Date: Thu, 27 Apr 2017 13:21:31 +0100
+-Subject: [PATCH] Bug 697799: have .rsdparams check its parameters
+-
+-The Ghostscript internal operator .rsdparams wasn't checking the number or
+-type of the operands it was being passed. Do so.
+-
+-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+----
+- psi/zfrsd.c | 22 +++++++++++++++-------
+- 1 file changed, 15 insertions(+), 7 deletions(-)
+-
+-diff --git a/psi/zfrsd.c b/psi/zfrsd.c
+-index 191107d8a..950588d69 100644
+---- a/psi/zfrsd.c
+-+++ b/psi/zfrsd.c
+-@@ -49,13 +49,20 @@ zrsdparams(i_ctx_t *i_ctx_p)
+-     ref *pFilter;
+-     ref *pDecodeParms;
+-     int Intent = 0;
+--    bool AsyncRead;
+-+    bool AsyncRead = false;
+-     ref empty_array, filter1_array, parms1_array;
+-     uint i;
+--    int code;
+-+    int code = 0;
+-+
+-+    if (ref_stack_count(&o_stack) < 1)
+-+        return_error(gs_error_stackunderflow);
+-+    if (!r_has_type(op, t_dictionary) && !r_has_type(op, t_null)) {
+-+        return_error(gs_error_typecheck);
+-+    }
+- 
+-     make_empty_array(&empty_array, a_readonly);
+--    if (dict_find_string(op, "Filter", &pFilter) > 0) {
+-+    if (r_has_type(op, t_dictionary)
+-+        && dict_find_string(op, "Filter", &pFilter) > 0) {
+-         if (!r_is_array(pFilter)) {
+-             if (!r_has_type(pFilter, t_name))
+-                 return_error(gs_error_typecheck);
+-@@ -94,12 +101,13 @@ zrsdparams(i_ctx_t *i_ctx_p)
+-                 return_error(gs_error_typecheck);
+-         }
+-     }
+--    code = dict_int_param(op, "Intent", 0, 3, 0, &Intent);
+-+    if (r_has_type(op, t_dictionary))
+-+        code = dict_int_param(op, "Intent", 0, 3, 0, &Intent);
+-     if (code < 0 && code != gs_error_rangecheck) /* out-of-range int is ok, use 0 */
+-         return code;
+--    if ((code = dict_bool_param(op, "AsyncRead", false, &AsyncRead)) < 0
+--        )
+--        return code;
+-+    if (r_has_type(op, t_dictionary))
+-+        if ((code = dict_bool_param(op, "AsyncRead", false, &AsyncRead)) < 0)
+-+            return code;
+-     push(1);
+-     op[-1] = *pFilter;
+-     if (pDecodeParms)
+--- 
+-2.11.0
+-
+diff --git a/package/ghostscript/ghostscript.hash b/package/ghostscript/ghostscript.hash
+index ade17f9de8..2b36e34831 100644
+--- a/package/ghostscript/ghostscript.hash
++++ b/package/ghostscript/ghostscript.hash
 @@ -1,4 +1,4 @@
--# From http://sourceforge.net/projects/qpdf/files/qpdf/6.0.0/qpdf-6.0.0.sha1/download
--sha1	15ebe09d9b9ddd2309a67e4295693fcf82494e33	qpdf-6.0.0.tar.gz
-+# From https://sourceforge.net/projects/qpdf/files/qpdf/7.0.0/qpdf-7.0.0.sha512/download
-+sha512	7b52d67b4d2c428a7b0c1cd03b03a23f05d38d7e3c81041079a137919019ea5158f12bf95fdcfcff6b43ffdefe93a85127ced2a363a6b4b380cbaa02a3840256  qpdf-7.0.0.tar.gz
- # Locally computed
--sha256	a9fdc7e94d38fcd3831f37b6e0fe36492bf79aa6d54f8f66062cf7f9c4155233	qpdf-6.0.0.tar.gz
-+sha256	fed08de14caad0fe5efd148d9eca886d812588b2cbb35d13e61993ee8eb8c65f  qpdf-7.0.0.tar.gz
-diff --git a/package/qpdf/qpdf.mk b/package/qpdf/qpdf.mk
-index 9601f98542..5b775401a6 100644
---- a/package/qpdf/qpdf.mk
-+++ b/package/qpdf/qpdf.mk
-@@ -4,7 +4,7 @@
+-# From https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs921/MD5SUMS
+-md5 631beea7aa1f70f2cdca14e0308b8801  ghostscript-9.21.tar.xz
+-# From https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs921/SHA1SUMS
+-sha1 a93b456a0e18d5c925d26b0b13e961c8e8140f62  ghostscript-9.21.tar.xz
++# From https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs922/SHA256SUMS
++sha256 c1f862e6f40f997dbe3feba89355e8cb05d55818994e10f4932b0dd9b627d1bb  ghostscript-9.22.tar.xz
++# From https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs922/SHA512SUMS
++sha512 67739ace64090ab1951cba4cb011a5a6829ee60b32ba4157d0f17e744e345ea268335304db6722677ae33565ea5b696c2ff7b889d42a463acf2933c8230523d4  ghostscript-9.22.tar.xz
+diff --git a/package/ghostscript/ghostscript.mk b/package/ghostscript/ghostscript.mk
+index c28cd06723..aa3f63b26e 100644
+--- a/package/ghostscript/ghostscript.mk
++++ b/package/ghostscript/ghostscript.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--QPDF_VERSION = 6.0.0
-+QPDF_VERSION = 7.0.0
- QPDF_SITE = http://downloads.sourceforge.net/project/qpdf/qpdf/$(QPDF_VERSION)
- QPDF_INSTALL_STAGING = YES
- QPDF_LICENSE = Artistic-2.0
+-GHOSTSCRIPT_VERSION = 9.21
+-GHOSTSCRIPT_SITE = https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs921
++GHOSTSCRIPT_VERSION = 9.22
++GHOSTSCRIPT_SITE = https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs922
+ GHOSTSCRIPT_SOURCE = ghostscript-$(GHOSTSCRIPT_VERSION).tar.xz
+ GHOSTSCRIPT_LICENSE = AGPL-3.0
+ GHOSTSCRIPT_LICENSE_FILES = LICENSE
 -- 
 2.11.0
