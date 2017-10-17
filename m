@@ -1,57 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 17 Oct 2017 21:57:23 +0200
-Subject: [Buildroot] [PATCH 1/1] libcpprestsdk: new package
-In-Reply-To: <20171017192257.9215-1-Adamduskett@outlook.com>
-References: <20171017192257.9215-1-Adamduskett@outlook.com>
-Message-ID: <20171017215723.4d3417d6@windsurf.home>
+Date: Tue, 17 Oct 2017 21:58:35 +0200
+Subject: [Buildroot] [git commit] msgpack: fix build without threads support
+Message-ID: <20171017195123.56C8880F7F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=1856eb9047d6707c31fd76c3767da590e200893e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 17 Oct 2017 15:22:57 -0400, Adam Duskett wrote:
-> diff --git a/package/libcpprestsdk/Config.in b/package/libcpprestsdk/Config.in
-> new file mode 100644
-> index 0000000000..d6acabea8a
-> --- /dev/null
-> +++ b/package/libcpprestsdk/Config.in
-> @@ -0,0 +1,22 @@
-> +config BR2_PACKAGE_LIBCPPRESTSDK
-> +	bool "libcpprestsdk"
-> +	depends on BR2_INSTALL_LIBSTDCPP # boost
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS
-> +	select BR2_PACKAGE_BOOST
+Some example code depends on pthreads, and we generally don't build
+examples in Buildroot, so disable their build.
 
-Boost depends on BR2_USE_WCHAR, you forgot to propagate this
-dependency.
+Fixes:
+http://autobuild.buildroot.net/results/f5d/f5d493dbe65cbe58d0924176efbd12e4a078f3ee/
+http://autobuild.buildroot.net/results/813/81387649d9dbdfe4ccba9c7d0885aa8bd5239938/
+http://autobuild.buildroot.net/results/9d4/9d486fca93136bb9dbf22c9101186d9d1fc0eb66/
 
-> +	select BR2_PACKAGE_BOOST_RANDOM
-> +	select BR2_PACKAGE_BOOST_CHRONO
-> +	select BR2_PACKAGE_BOOST_THREAD
-> +	select BR2_PACKAGE_BOOST_REGEX
-> +	select BR2_PACKAGE_BOOST_FILESYSTEM
-> +	select BR2_PACKAGE_OPENSSL if !BR2_PACKAGE_LIBRESSL
-> +	help
-> +	  The C++ REST SDK is a Microsoft project for cloud-based
-> +	  client-server communication in native code using a modern
-> +	  asynchronous C++ API design. This project aims to help C++
-> +	  developers connect to and interact with services.
-> +
-> +	  https://github.com/Microsoft/cpprestsdk
-> +
-> +comment "cpprestsdk needs a toolchain w/ C++, threads"
-> +	depends on BR2_USE_MMU
+Cc: Simon Dawson <spdawson@gmail.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+[Thomas: completely disable examples.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/msgpack/msgpack.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-Why do you have this BR2_USE_MMU dependency here, when it's not on the
-main BR2_PACKAGE_LIBCPPRESTSDK option ?
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/msgpack/msgpack.mk b/package/msgpack/msgpack.mk
+index f6f3ab0..7b92f3f 100644
+--- a/package/msgpack/msgpack.mk
++++ b/package/msgpack/msgpack.mk
+@@ -9,5 +9,6 @@ MSGPACK_SITE = $(call github,msgpack,msgpack-c,cpp-$(MSGPACK_VERSION))
+ MSGPACK_LICENSE = BSL-1.0
+ MSGPACK_LICENSE_FILES = COPYING LICENSE_1_0.txt
+ MSGPACK_INSTALL_STAGING = YES
++MSGPACK_CONF_OPTS = -DMSGPACK_BUILD_EXAMPLES=OFF
+ 
+ $(eval $(cmake-package))
