@@ -1,72 +1,99 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 17 Oct 2017 16:44:04 +0200
-Subject: [Buildroot] [PATCH RFC] core: enable per-package log files
-In-Reply-To: <20171017141133.4d57ee87@windsurf.lan>
-References: <20171011105809.2bf05267@windsurf.lan>
- <1508170801-31062-1-git-send-email-anisse@astier.eu>
- <20171016185248.0463ac82@windsurf.lan> <20171016211842.GA32198@bifrost>
- <20171017091152.67d7ad28@windsurf.lan>
- <4234cedb-0646-496e-9ee1-0bc60c847810@mind.be>
- <20171017141133.4d57ee87@windsurf.lan>
-Message-ID: <9955dbb8-0447-5a3d-9e78-a0f6f42e7e6c@mind.be>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Tue, 17 Oct 2017 16:48:21 +0200
+Subject: [Buildroot] Package infrastructure for Go programs
+In-Reply-To: <3628be9d-8cd1-e394-577b-6ecf2fc818a3@mind.be>
+References: <CA+TH9VmgHZ5xxYXeO7dzqKObsz+X=v38XhcK34tY3Fp=DjDyig@mail.gmail.com>
+ <7041482c-85c6-1a99-95dd-1ba1d592701d@mind.be>
+ <CA+TH9VnwN5m5BhdfRU1tLQQAwS+XsQe3xkqgQHScXeHjHyDtFw@mail.gmail.com>
+ <3628be9d-8cd1-e394-577b-6ecf2fc818a3@mind.be>
+Message-ID: <CA+TH9VnE2hr2ma87vrjAFR_pDymC2swPzXOcigMyKNKqQ6GpbQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Dear Arnout Vandecappelle ,
 
+2017-10-05 20:05 GMT+02:00 Arnout Vandecappelle <arnout@mind.be>:
+>
+>
+> On 05-10-17 11:20, Angelo Compagnucci wrote:
+>> Dear Arnout Vandecappelle,
+>>
+>> 2017-10-04 22:00 GMT+02:00 Arnout Vandecappelle <arnout@mind.be>:
+> [snip]
+>>> 1. The build is reproducible. If I build the same .config a year from now, I
+>>> should use exactly the same source (and normally end up with exactly the same
+>>> result, barring some timestamps etc.).
+>>>
+>>> 2. "make source" downloads everything so after that you can do an offline build.
+>>>
+>>> 3. Everything appears only once in the target, only a single version is used for
+>>> each package, unless the versions are incompatible (e.g. a gstreamer-0.10 and
+>>> gstreamer-1 side by side is acceptable).
+>>>
+>>> 4. BR2_PRIMARY_SITE works, it should be possible to do an offline build with an
+>>> empty download dir as long as you can access BR2_PRIMARY_SITE.
+>>>
+>>> 5. Something like our hashes is implemented, i.e. if the upstream archive is
+>>> changed, the build breaks.
+>>>
+>>> 6. legal-info works, the licenses end up in our manifest and preferably also a
+>>> license file.
+>>>
+>>> 7. BR2_SECONDARY_SITE works, so if the original archive disappears we can still
+>>> do a build.
+> [snip]
+>> I have a proof of concept golang package infrastructure and I will
+>> send asap. I used it to test some of the thing we discussed.
+>>
+>> In pratice, for go packages there's not much of a trouble cause all of
+>> the packages I tried bundles all of their dependencies, so anything
+>> will be downloaded outside the release tarball.
+>
+>  If I understand correctly, the go packaging is not like the other language
+> packaging utilities (npm, pip, rebar, cargo, ...) in that it really only builds
+> the package, the download and extraction is still managed by us, and the
+> dependencies are managed directly by upstream. So the only limitation is that it
+> links statically with libraries bundled in the upstream tarball. I have
+> absolutely no problem with that.
 
-On 17-10-17 14:11, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Tue, 17 Oct 2017 14:01:41 +0200, Arnout Vandecappelle wrote:
-> 
->>  So first of all I would like to see an explanation why --output-sync=recurse is
->> not sufficient.
-> 
-> I did some quick testing with -Orecurse, and it looks pretty good to
-> me. The only downside that I've seen so far is that the entire log of a
-> given make target is shown when the target is finished, which in the
-> current organization of things means even the ">>> foo 1.0 building"
-> message is shown once the build of "foo" is completed.
-> 
-> Therefore, you end up in a situation where a lot of things have been
-> displayed, and then nothing happens (because foo is being built). So
-> you're wondering "what the heck is going on in here". And once "foo"
-> has finished building, everything is displayed, and you understand what
-> was going on. Perhaps this can be solved by having the message
-> displayed as part of a separate target. Or perhaps we don't need to
-> solve this problem at all?
+Not quite. Go offers it's own packaging infrastructure and uses the
+"go get" command to retrieve dependencies [1].
+The only difference to me is that most go developers choose to bundle
+all the dependencies inside the release tarball instead to relay on a
+dependencies description file and the user doing a go get.
 
- I think we do need to do something about it, but it could be as simple as
-letting MESSAGE print to /dev/tty instead of stdout.
+>
+>
+>> In practice only point 6 seems the most troublesome to me. It's not a
+>> problem to find the license of the downloaded tarball obviously, but
+>> finding each one of the licenses of the bundled dependencies could be
+>> a problem!
+>
+>  Well, not more so than for any other package. A great many packages bundle some
+> code that comes from different projects or that has been contributed under a
+> different license. The simple approach is to just run Debian's licensecheck tool
+> on the source. It's not conclusive but generally good enough.
 
+Nice!
 
-> Another thing is that I'd ideally want this to be done automatically by
-> Buildroot, which is something we can do as part of the
-> "make-calls-itself" in the main Makefile. Except that at this point, we
-> don't have the Buildroot configuration available, and I wanted to make
-> this conditional on some BR2_PARALLEL_BUILD=y option. Or we make
-> -Orecurse the default, but that is going to significantly change the
-> visible behavior even for people not using top-level parallel build.
+>
+>  Regards,
+>  Arnout
+>
+>
+> [snip]
+> --
+> Arnout Vandecappelle                          arnout at mind be
+> Senior Embedded Software Architect            +32-16-286500
+> Essensium/Mind                                http://www.mind.be
+> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
 
- Ah, you would make top-level parallel build a config option? Isn't it enough to
-observe the -j in MAKEFLAGS?
-
- I'm not convinced we want to add this option automatically, however, because it
-makes it more difficult for people who don't want it. Why not add it to
-utils/brmake, for example, and point people there in the documentation of
-top-level parallel build?
-
- Regards,
- Arnout
 
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Profile: http://it.linkedin.com/in/compagnucciangelo
