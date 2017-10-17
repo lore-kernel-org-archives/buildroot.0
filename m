@@ -1,30 +1,29 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 17 Oct 2017 11:06:28 +0200
-Subject: [Buildroot] [PATCH] package/x11r7/xserver_xorg-server: rename
-	patch directory after the last version bump
-In-Reply-To: <20171007130156.17309-1-romain.naour@gmail.com> (Romain Naour's
- message of "Sat, 7 Oct 2017 15:01:56 +0200")
-References: <20171007130156.17309-1-romain.naour@gmail.com>
-Message-ID: <871sm2jg8b.fsf@dell.be.48ers.dk>
+Date: Tue, 17 Oct 2017 11:06:42 +0200
+Subject: [Buildroot] [PATCH 1/2] package/iucode-tool: security bump to
+	version 2.2
+In-Reply-To: <20171007110209.26248-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Sat, 7 Oct 2017 13:02:08 +0200")
+References: <20171007110209.26248-1-bernd.kuhls@t-online.de>
+Message-ID: <87wp3ui1nh.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
- > The last bump [1] forgot to rename the patch directory and remove
- > upstream patches.
+ > Version 2.1.1 fixed CVE-2017-0357:
+ > https://gitlab.com/iucode-tool/iucode-tool/commit/657ce44ac462bcec35a3e12f9e7f53ca92ae62b7
 
- > We still need to fix the monotonic clock check which doesn't work
- > when cross-compiling.
+ > Dropped IUCODE_TOOL_CONF_ENV after version 2.2 added a configure check
+ > for libargp:
+ > https://gitlab.com/iucode-tool/iucode-tool/commit/b14bed6771e7ab48371b272a0c68dd017767142a
 
- > [1] 436659c55f8d3c6155546cfc666a13c793d992f9
+ > Added hash for license file.
 
- > Signed-off-by: Romain Naour <romain.naour@gmail.com>
- > Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
- > Cc: Peter Korsgaard <peter@korsgaard.com>
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
 Committed to 2017.08.x, thanks.
 
