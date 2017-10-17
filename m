@@ -1,43 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 17 Oct 2017 10:52:57 +0200
-Subject: [Buildroot] [git commit branch/2017.08.x] ifupdown-scripts: do not
-	install .empty files
-Message-ID: <20171017090326.E47C37FE0F@busybox.osuosl.org>
+Date: Tue, 17 Oct 2017 10:51:28 +0200
+Subject: [Buildroot] [git commit branch/2017.08.x] support/kconfig: fix
+	usage typo and align verb tenses
+Message-ID: <20171017090326.D815E81190@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ada103ef0c52b8c91235a8116577590bbf407b90
+commit: https://git.buildroot.net/buildroot/commit/?id=4f161db2013b0f930ff3f4c6b790798fffcf7740
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.08.x
 
-ifupdown-scripts has some .empty files to maintain empty directories
-in git. Previously this package used to be part of the skeleton which
-used SYSTEM_RSYNC to copy the directories to the target. When it was
-split into a separate package, cp -a was used to do the copy instead,
-which copies the .empty files.
+Fix typo 'selectes' -> 'selects'.
+Additionally, change 'will exclude' to 'excludes' to align with 'selects'.
 
-Change to SYSTEM_RSYNC which excludes .empty files.
-
-Signed-off-by: Cam Hutchison <camh@xdna.net>
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 58b74e0dbf9b22d7dbc11127c29e23e234a9e8cf)
+(cherry picked from commit 787f4fee7184e4b86343a1d6d60c303622d458b9)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ifupdown-scripts/ifupdown-scripts.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ support/kconfig/mconf.c                                      | 2 +-
+ support/kconfig/patches/01-kconfig-kernel-to-buildroot.patch | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/ifupdown-scripts/ifupdown-scripts.mk b/package/ifupdown-scripts/ifupdown-scripts.mk
-index 317c8f4..ebc89b3 100644
---- a/package/ifupdown-scripts/ifupdown-scripts.mk
-+++ b/package/ifupdown-scripts/ifupdown-scripts.mk
-@@ -31,7 +31,7 @@ endif
- 
- define IFUPDOWN_SCRIPTS_INSTALL_TARGET_CMDS
- 	mkdir -p $(TARGET_DIR)/etc/network
--	cp -a $(IFUPDOWN_SCRIPTS_PKGDIR)/network/* $(TARGET_DIR)/etc/network
-+	$(call SYSTEM_RSYNC,$(IFUPDOWN_SCRIPTS_PKGDIR)/network,$(TARGET_DIR)/etc/network)
- 	$(IFUPDOWN_SCRIPTS_LOCALHOST)
- 	$(IFUPDOWN_SCRIPTS_DHCP)
- endef
+diff --git a/support/kconfig/mconf.c b/support/kconfig/mconf.c
+index 7d6cf80..91c4df7 100644
+--- a/support/kconfig/mconf.c
++++ b/support/kconfig/mconf.c
+@@ -176,7 +176,7 @@ menu_instructions[] = N_(
+ 	"Arrow keys navigate the menu.  "
+ 	"<Enter> selects submenus ---> (or empty submenus ----).  "
+ 	"Highlighted letters are hotkeys.  "
+-	"Pressing <Y> selectes a feature, while <N> will exclude a feature.  "
++	"Pressing <Y> selects a feature, while <N> excludes a feature.  "
+ 	"Press <Esc><Esc> to exit, <?> for Help, </> for Search.  "
+ 	"Legend: [*] feature is selected  [ ] feature is excluded"),
+ radiolist_instructions[] = N_(
+diff --git a/support/kconfig/patches/01-kconfig-kernel-to-buildroot.patch b/support/kconfig/patches/01-kconfig-kernel-to-buildroot.patch
+index ecfe76b..e76198a 100644
+--- a/support/kconfig/patches/01-kconfig-kernel-to-buildroot.patch
++++ b/support/kconfig/patches/01-kconfig-kernel-to-buildroot.patch
+@@ -28,7 +28,7 @@ Index: kconfig/mconf.c
+  	"<Enter> selects submenus ---> (or empty submenus ----).  "
+  	"Highlighted letters are hotkeys.  "
+ -	"Pressing <Y> includes, <N> excludes, <M> modularizes features.  "
+-+	"Pressing <Y> selectes a feature, while <N> will exclude a feature.  "
+++	"Pressing <Y> selects a feature, while <N> excludes a feature.  "
+  	"Press <Esc><Esc> to exit, <?> for Help, </> for Search.  "
+ -	"Legend: [*] built-in  [ ] excluded  <M> module  < > module capable"),
+ +	"Legend: [*] feature is selected  [ ] feature is excluded"),
