@@ -1,51 +1,62 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 17 Oct 2017 10:53:50 +0200
-Subject: [Buildroot] [git commit branch/2017.08.x] libnspr: bump version to
-	4.17
-Message-ID: <20171017090327.1BDDC81190@busybox.osuosl.org>
+Date: Tue, 17 Oct 2017 10:44:08 +0200
+Subject: [Buildroot] [git commit branch/2017.08.x] qemu: security bump to
+	version 2.8.1.1
+Message-ID: <20171017090326.6ACA27FDC1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=beaf17edc34d5d311c718530913cce0100da457c
+commit: https://git.buildroot.net/buildroot/commit/?id=5201a8a01458c3de5b96828648efc9bccaa358a8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.08.x
 
-libnss 3.33 needs libnspr >= 4.17.
+Fixes the following security issues and adds a number of other bigfixes:
 
-Also add a hash for the license file while we're at it.
+2.8.1: Changelog:
+https://lists.gnu.org/archive/html/qemu-devel/2017-03/msg06332.html
+
+CVE-2017-2615 - display: cirrus: oob access while doing bitblt copy backward
+mode
+
+CVE-2017-2620 - display: cirrus: out-of-bounds access issue while in
+cirrus_bitblt_cputovideo
+
+CVE-2017-2630 - nbd: oob stack write in client routine drop_sync
+
+2.8.1.1 Changelog:
+https://lists.gnu.org/archive/html/qemu-devel/2017-04/msg03460.html
+
+CVE-2017-7471 - 9p: virtfs allows guest to change filesystem attributes on
+host
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit b1363093248b6198eab285124b2c87411155a0a1)
+(cherry picked from commit af0f2d2bbcaca9000e62b5388f4c3cd8e700c6ff)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libnspr/libnspr.hash | 6 ++++--
- package/libnspr/libnspr.mk   | 2 +-
- 2 files changed, 5 insertions(+), 3 deletions(-)
+ package/qemu/qemu.hash | 2 +-
+ package/qemu/qemu.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libnspr/libnspr.hash b/package/libnspr/libnspr.hash
-index 13cee6e..46c091e 100644
---- a/package/libnspr/libnspr.hash
-+++ b/package/libnspr/libnspr.hash
-@@ -1,2 +1,4 @@
--# From https://ftp.mozilla.org/pub/nspr/releases/v4.15/src/SHA256SUMS
--sha256	27dde06bc3d0c88903a20d6ad807361a912cfb624ca0ab4efb10fc50b19e2d80	nspr-4.15.tar.gz
-+# From https://ftp.mozilla.org/pub/nspr/releases/v4.17/src/SHA256SUMS
-+sha256	590a0aea29412ae22d7728038c21ef2ab42646e48172a47d2e4bb782846d1095  nspr-4.17.tar.gz
-+# Locally calculated
-+sha256	fab3dd6bdab226f1c08630b1dd917e11fcb4ec5e1e020e2c16f83a0a13863e85  nspr/LICENSE
-diff --git a/package/libnspr/libnspr.mk b/package/libnspr/libnspr.mk
-index 7659baf..0c782ae 100644
---- a/package/libnspr/libnspr.mk
-+++ b/package/libnspr/libnspr.mk
+diff --git a/package/qemu/qemu.hash b/package/qemu/qemu.hash
+index 19cb306..5164303 100644
+--- a/package/qemu/qemu.hash
++++ b/package/qemu/qemu.hash
+@@ -1,2 +1,2 @@
+ # Locally computed, tarball verified with GPG signature
+-sha256 dafd5d7f649907b6b617b822692f4c82e60cf29bc0fc58bc2036219b591e5e62  qemu-2.8.0.tar.bz2
++sha256 f62ab18a1fb9ff5b4c81ed44becc945b11581eff777618141bdb787da55d3638  qemu-2.8.1.1.tar.bz2
+diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+index f42d649..155cb28 100644
+--- a/package/qemu/qemu.mk
++++ b/package/qemu/qemu.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBNSPR_VERSION = 4.15
-+LIBNSPR_VERSION = 4.17
- LIBNSPR_SOURCE = nspr-$(LIBNSPR_VERSION).tar.gz
- LIBNSPR_SITE = https://ftp.mozilla.org/pub/mozilla.org/nspr/releases/v$(LIBNSPR_VERSION)/src
- LIBNSPR_SUBDIR = nspr
+-QEMU_VERSION = 2.8.0
++QEMU_VERSION = 2.8.1.1
+ QEMU_SOURCE = qemu-$(QEMU_VERSION).tar.bz2
+ QEMU_SITE = http://wiki.qemu.org/download
+ QEMU_LICENSE = GPL-2.0, LGPL-2.1, MIT, BSD-3-Clause, BSD-2-Clause, Others/BSD-1c
