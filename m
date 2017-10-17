@@ -1,29 +1,29 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 17 Oct 2017 11:06:42 +0200
-Subject: [Buildroot] [PATCH 1/2] package/iucode-tool: security bump to
-	version 2.2
-In-Reply-To: <20171007110209.26248-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Sat, 7 Oct 2017 13:02:08 +0200")
-References: <20171007110209.26248-1-bernd.kuhls@t-online.de>
-Message-ID: <87wp3ui1nh.fsf@dell.be.48ers.dk>
+Date: Tue, 17 Oct 2017 11:07:02 +0200
+Subject: [Buildroot] [git commit] musl: add patch to fix build on ARMv4
+	with new binutils
+In-Reply-To: <20171008135235.27D658114E@busybox.osuosl.org> (Thomas
+ Petazzoni's message of "Sun, 8 Oct 2017 15:59:34 +0200")
+References: <20171008135235.27D658114E@busybox.osuosl.org>
+Message-ID: <87sheii1mx.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- > Version 2.1.1 fixed CVE-2017-0357:
- > https://gitlab.com/iucode-tool/iucode-tool/commit/657ce44ac462bcec35a3e12f9e7f53ca92ae62b7
+ > commit: https://git.buildroot.net/buildroot/commit/?id=27cf2d3baf879f7314f12787982d8f4a5b4218cf
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Dropped IUCODE_TOOL_CONF_ENV after version 2.2 added a configure check
- > for libargp:
- > https://gitlab.com/iucode-tool/iucode-tool/commit/b14bed6771e7ab48371b272a0c68dd017767142a
+ > New binutils (since 2.27.51) cannot build musl-1.1.16 due to breakage in ARMv4
+ > atomics asm.  This patch from upstream musl repository is needed until
+ > musl-1.1.17 is released:
+ > https://git.musl-libc.org/cgit/musl/commit/?id=b261a24256792177a5f0531dbb25cc6267220ca5
 
- > Added hash for license file.
-
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > Signed-off-by: Timothy Lee <timothy.ty.lee@gmail.com>
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
 Committed to 2017.08.x, thanks.
 
