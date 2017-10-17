@@ -1,45 +1,183 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 17 Oct 2017 21:47:47 +0200
-Subject: [Buildroot] [git commit] libglib2: needs autoreconf
-Message-ID: <20171017194108.2114F80415@busybox.osuosl.org>
+Date: Tue, 17 Oct 2017 21:49:30 +0200
+Subject: [Buildroot] [git commit] DEVELOPERS: remove myself
+Message-ID: <20171017194212.3914A810D5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=45fbec12e79dfd8416b20afa4c2590aecd3ddc5d
+commit: https://git.buildroot.net/buildroot/commit/?id=827895c2310bbc73f9568b84b89a7ec1ced71c23
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Patch 0002-disable-tests.patch modifies Makefile.am, so we have to
-autoreconf. It hasn't been seen until now, but becomes very clear
-since the bump of automake to 1.15.1, as we're seeing build failures
-such as:
+I'm no longer actively participating.
 
-configure.ac:66: error: version mismatch.  This is Automake 1.15.1,
-configure.ac:66: but the definition used by this AM_INIT_AUTOMAKE
-configure.ac:66: comes from Automake 1.15.  You should recreate
-configure.ac:66: aclocal.m4 with aclocal and run automake again.
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/3402357d8e90f1866dfeaee7bb61119d80dc8bcb/
-
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libglib2/libglib2.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ DEVELOPERS | 151 -------------------------------------------------------------
+ 1 file changed, 151 deletions(-)
 
-diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
-index 6ccff44..d93a1de 100644
---- a/package/libglib2/libglib2.mk
-+++ b/package/libglib2/libglib2.mk
-@@ -10,6 +10,8 @@ LIBGLIB2_SOURCE = glib-$(LIBGLIB2_VERSION).tar.xz
- LIBGLIB2_SITE = http://ftp.gnome.org/pub/gnome/sources/glib/$(LIBGLIB2_VERSION_MAJOR)
- LIBGLIB2_LICENSE = LGPL-2.0+
- LIBGLIB2_LICENSE_FILES = COPYING
-+# 0002-disable-tests.patch
-+LIBGLIB2_AUTORECONF = YES
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 942abcf..dd19a0a 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -698,157 +698,6 @@ F:	arch/Config.in.csky
+ F:	board/csky/
+ F:	configs/csky_*
  
- LIBGLIB2_INSTALL_STAGING = YES
- LIBGLIB2_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) LDFLAGS=-L$(STAGING_DIR)/usr/lib install
+-N:	Gustavo Zacarias <gustavo@zacarias.com.ar>
+-F:	arch/Config.in.powerpc
+-F:	board/qemu/
+-F:	configs/qemu_*
+-F:	package/argp-standalone/
+-F:	package/arptables/
+-F:	package/audiofile/
+-F:	package/autossh/
+-F:	package/bitstream-vera/
+-F:	package/blktrace/
+-F:	package/bmon/
+-F:	package/btrfs-progs/
+-F:	package/c-ares/
+-F:	package/cantarell/
+-F:	package/check/
+-F:	package/collectd/
+-F:	package/comix-cursors/
+-F:	package/connman-gtk/
+-F:	package/conntrack-tools/
+-F:	package/cppdb/
+-F:	package/crda/
+-F:	package/cryptodev-linux/
+-F:	package/dbus-cpp/
+-F:	package/debianutils/
+-F:	package/dt/
+-F:	package/exfat/
+-F:	package/exfat-utils/
+-F:	package/f2fs-tools/
+-F:	package/faad2/
+-F:	package/fping/
+-F:	package/ftop/
+-F:	package/gcr/
+-F:	package/geoip/
+-F:	package/gpsd/
+-F:	package/granite/
+-F:	package/graphite2/
+-F:	package/gsettings-desktop-schemas/
+-F:	package/gstreamer1/
+-F:	package/hans/
+-F:	package/haveged/
+-F:	package/heimdal/
+-F:	package/hostapd/
+-F:	package/ifupdown/
+-F:	package/inconsolata/
+-F:	package/iodine/
+-F:	package/iperf3/
+-F:	package/ipset/
+-F:	package/iw/
+-F:	package/jhead/
+-F:	package/jquery-keyboard/
+-F:	package/kompexsqlite/
+-F:	package/kvmtool/
+-F:	package/lame/
+-F:	package/lft/
+-F:	package/libao/
+-F:	package/libcroco/
+-F:	package/libcue/
+-F:	package/libcuefile/
+-F:	package/libepoxy/
+-F:	package/libgee/
+-F:	package/libglib2/
+-F:	package/libgtk2/
+-F:	package/libgtk3/
+-F:	package/libmcrypt/
+-F:	package/libmemcached/
+-F:	package/libmhash/
+-F:	package/libmnl/
+-F:	package/libmng/
+-F:	package/libmpdclient/
+-F:	package/libnetfilter_acct/
+-F:	package/libnetfilter_conntrack/
+-F:	package/libnetfilter_cthelper/
+-F:	package/libnetfilter_cttimeout/
+-F:	package/libnetfilter_log/
+-F:	package/libnetfilter_queue/
+-F:	package/libnfnetlink/
+-F:	package/libnl/
+-F:	package/liboping/
+-F:	package/libreplaygain/
+-F:	package/libsamplerate/
+-F:	package/libtorrent/
+-F:	package/libuv/
+-F:	package/lksctp-tools/
+-F:	package/lshw/
+-F:	package/lz4/
+-F:	package/lzip/
+-F:	package/mbedtls/
+-F:	package/mcrypt/
+-F:	package/memcached/
+-F:	package/minizip/
+-F:	package/mpd/
+-F:	package/mpv/
+-F:	package/mtr/
+-F:	package/musepack/
+-F:	package/ncmpc/
+-F:	package/net-tools/
+-F:	package/netstat-nat/
+-F:	package/nettle/
+-F:	package/nfacct/
+-F:	package/nftables/
+-F:	package/nload/
+-F:	package/nmap/
+-F:	package/noip/
+-F:	package/norm/
+-F:	package/obsidian-cursors/
+-F:	package/ocf-linux/
+-F:	package/opencore-amr/
+-F:	package/openswan/
+-F:	package/openvpn/
+-F:	package/opusfile/
+-F:	package/p11-kit/
+-F:	package/p910nd/
+-F:	package/pax-utils/
+-F:	package/procrank_linux/
+-F:	package/php-*
+-F:	package/pkgconf/
+-F:	package/privoxy/
+-F:	package/protobuf-c/
+-F:	package/ptpd/
+-F:	package/ptpd2/
+-F:	package/pwgen/
+-F:	package/ramspeed/
+-F:	package/rng-tools/
+-F:	package/rtorrent/
+-F:	package/samba4/
+-F:	package/sbc/
+-F:	package/snmppp/
+-F:	package/sox/
+-F:	package/spidev_test/
+-F:	package/squid/
+-F:	package/start-stop-daemon/
+-F:	package/swig/
+-F:	package/thrift/
+-F:	package/twolame/
+-F:	package/ulogd/
+-F:	package/unionfs/
+-F:	package/unrar/
+-F:	package/ushare/
+-F:	package/vala/
+-F:	package/vorbis-tools/
+-F:	package/wavpack/
+-F:	package/wayland-protocols/
+-F:	package/webkitgtk/
+-F:	package/whois/
+-F:	package/wireshark/
+-F:	package/wpa_supplicant/
+-F:	package/wpan-tools/
+-F:	package/x11r7/xdriver_xf86-video-qxl/
+-F:	package/xtables-addons/
+-F:	package/zd1211-firmware/
+-
+ N:	Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+ F:	package/gnuradio/
+ F:	package/gqrx/
