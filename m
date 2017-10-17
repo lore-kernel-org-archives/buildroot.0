@@ -1,44 +1,33 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue, 17 Oct 2017 22:04:12 +0200
-Subject: [Buildroot] [PATCH v2 1/2] qt5: add license file hashes for all
- submodules
-In-Reply-To: <20171017215316.592370d2@windsurf.home>
-References: <20171017191655.17723-1-ps.report@gmx.net>
- <20171017215316.592370d2@windsurf.home>
-Message-ID: <20171017220412.3d6dd3f9@gmx.net>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 17 Oct 2017 22:05:38 +0200
+Subject: [Buildroot] [PATCH] DEVELOPERS: remove myself
+In-Reply-To: <20171017215111.35610113@windsurf.home> (Thomas Petazzoni's
+ message of "Tue, 17 Oct 2017 21:51:11 +0200")
+References: <20171017143322.9990-1-gustavo@zacarias.com.ar>
+ <20171017215111.35610113@windsurf.home>
+Message-ID: <874lqxh759.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-On Tue, 17 Oct 2017 21:53:16 +0200, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
+ > Hello Gustavo,
+ > On Tue, 17 Oct 2017 11:33:22 -0300, Gustavo Zacarias wrote:
+ >> I'm no longer actively participating.
+ >> 
+ >> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ >> ---
+ >> DEVELOPERS | 151 -------------------------------------------------------------
+ >> 1 file changed, 151 deletions(-)
 
-> Hello,
-> 
-> On Tue, 17 Oct 2017 21:16:54 +0200, Peter Seiderer wrote:
-> 
-> > +# Hash for license file:
-> > +sha256 edfe70e99be2a7c109d860b19204609e582720b211c50caedac729da372a1253  LICENSE.GPL
-> > +
-> > +# Hash for license file:
-> > +sha256 245248009fd0af1725d183248380e476c1283383909358a13686606352bf2a17  LICENSE.GPLv3
-> > +
-> > +# Hash for license file:
-> > +sha256 9ae1959e86bd49b9680f78e0b49d4e52ae88a3f234d497e175e42a7e8ed59216  LICENSE.LGPLv3  
-> 
-> It is a little bit extreme to repeat "Hash for license file" for each
-> line. What about "Hashes for license files:" instead, just one time per
-> file ?
+ > Thanks a lot for all your work on Buildroot during those many years, it
+ > has been very, very appreciated. Sad to see your participation stopping
+ > now :/
 
-O.k, will rework the patch...
+Same here! Can you say something about why you stopped participating?
 
-Regards,
-Peter
-
-> 
-> Thanks!
-> 
-> Thomas
+-- 
+Bye, Peter Korsgaard
