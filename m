@@ -1,21 +1,23 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 17 Oct 2017 11:10:27 +0200
-Subject: [Buildroot] [PATCH 2/2] linux-headers: bump 3.2.x and 4.{4, 9,
-	13}.x series
-In-Reply-To: <1507911283-18681-2-git-send-email-festevam@gmail.com> (Fabio
- Estevam's message of "Fri, 13 Oct 2017 13:14:43 -0300")
-References: <1507911283-18681-1-git-send-email-festevam@gmail.com>
- <1507911283-18681-2-git-send-email-festevam@gmail.com>
-Message-ID: <87po9mgmws.fsf@dell.be.48ers.dk>
+Date: Tue, 17 Oct 2017 11:10:40 +0200
+Subject: [Buildroot] [PATCH] bzip2: fix passing of TARGET_MAKE_ENV to
+	make
+In-Reply-To: <1507891404-1225-1-git-send-email-luca@lucaceresoli.net> (Luca
+ Ceresoli's message of "Fri, 13 Oct 2017 12:43:24 +0200")
+References: <1507891404-1225-1-git-send-email-luca@lucaceresoli.net>
+Message-ID: <87lgkagmwf.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabio" == Fabio Estevam <festevam@gmail.com> writes:
+>>>>> "Luca" == Luca Ceresoli <luca@lucaceresoli.net> writes:
 
- > Signed-off-by: Fabio Estevam <festevam@gmail.com>
+ > TARGET_MAKE_ENV is not passed to make because it is on a different
+ > line without a backslash.
+
+ > Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 
 Committed to 2017.08.x, thanks.
 
