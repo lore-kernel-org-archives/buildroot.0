@@ -1,45 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 17 Oct 2017 22:46:03 +0200
-Subject: [Buildroot] [git commit] qpdf: bump version to 7.0.0
-Message-ID: <20171017203943.EAB847FD50@busybox.osuosl.org>
+Date: Tue, 17 Oct 2017 22:47:03 +0200
+Subject: [Buildroot] [git commit] hplip: bump version to 3.17.10
+Message-ID: <20171017203944.0C733811B6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b44050cf73ef3f6ce4836e23cb095f4d5e503990
+commit: https://git.buildroot.net/buildroot/commit/?id=bc8c46931f724701dd6ff6bbf357eb6cafff18ff
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Olivier Schonken <olivier.schonken@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/qpdf/qpdf.hash | 6 +++---
- package/qpdf/qpdf.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/hplip/0002-configure.in-fix-AM_INIT_AUTOMAKE-call.patch | 2 +-
+ package/hplip/hplip.hash                                        | 2 +-
+ package/hplip/hplip.mk                                          | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/qpdf/qpdf.hash b/package/qpdf/qpdf.hash
-index c882708..1fbef66 100644
---- a/package/qpdf/qpdf.hash
-+++ b/package/qpdf/qpdf.hash
-@@ -1,4 +1,4 @@
--# From http://sourceforge.net/projects/qpdf/files/qpdf/6.0.0/qpdf-6.0.0.sha1/download
--sha1	15ebe09d9b9ddd2309a67e4295693fcf82494e33	qpdf-6.0.0.tar.gz
-+# From https://sourceforge.net/projects/qpdf/files/qpdf/7.0.0/qpdf-7.0.0.sha512/download
-+sha512	7b52d67b4d2c428a7b0c1cd03b03a23f05d38d7e3c81041079a137919019ea5158f12bf95fdcfcff6b43ffdefe93a85127ced2a363a6b4b380cbaa02a3840256  qpdf-7.0.0.tar.gz
- # Locally computed
--sha256	a9fdc7e94d38fcd3831f37b6e0fe36492bf79aa6d54f8f66062cf7f9c4155233	qpdf-6.0.0.tar.gz
-+sha256	fed08de14caad0fe5efd148d9eca886d812588b2cbb35d13e61993ee8eb8c65f  qpdf-7.0.0.tar.gz
-diff --git a/package/qpdf/qpdf.mk b/package/qpdf/qpdf.mk
-index 9601f98..5b77540 100644
---- a/package/qpdf/qpdf.mk
-+++ b/package/qpdf/qpdf.mk
+diff --git a/package/hplip/0002-configure.in-fix-AM_INIT_AUTOMAKE-call.patch b/package/hplip/0002-configure.in-fix-AM_INIT_AUTOMAKE-call.patch
+index 8147490..db2f0a4 100644
+--- a/package/hplip/0002-configure.in-fix-AM_INIT_AUTOMAKE-call.patch
++++ b/package/hplip/0002-configure.in-fix-AM_INIT_AUTOMAKE-call.patch
+@@ -23,7 +23,7 @@ index 8b06428..680cad5 100755
+ @@ -27,8 +27,7 @@
+  
+  #AC_PREREQ(2.59)
+- AC_INIT([HP Linux Imaging and Printing], [3.16.11], [3.16.11], [hplip])
++ AC_INIT([HP Linux Imaging and Printing], [3.17.10], [3.17.10], [hplip])
+ -#AM_INIT_AUTOMAKE([1.9 foreign])
+ -AM_INIT_AUTOMAKE
+ +AM_INIT_AUTOMAKE([1.9 foreign subdir-objects])
+diff --git a/package/hplip/hplip.hash b/package/hplip/hplip.hash
+index 9dfb7a2..2260850 100644
+--- a/package/hplip/hplip.hash
++++ b/package/hplip/hplip.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256  f6e20cacb4891e4e60fc5de2213a10f8d0c68840f9b511aa38cfca0cb29f9b24  hplip-3.16.11.tar.gz
++sha256  0f7344174672f63a98a22f3c109005b6eb89fe738b7d466316bf2c53d083476c  hplip-3.17.10.tar.gz
+diff --git a/package/hplip/hplip.mk b/package/hplip/hplip.mk
+index b1c167c..9eac83d 100644
+--- a/package/hplip/hplip.mk
++++ b/package/hplip/hplip.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--QPDF_VERSION = 6.0.0
-+QPDF_VERSION = 7.0.0
- QPDF_SITE = http://downloads.sourceforge.net/project/qpdf/qpdf/$(QPDF_VERSION)
- QPDF_INSTALL_STAGING = YES
- QPDF_LICENSE = Artistic-2.0
+-HPLIP_VERSION = 3.16.11
++HPLIP_VERSION = 3.17.10
+ HPLIP_SITE = http://downloads.sourceforge.net/hplip/hplip
+ HPLIP_AUTORECONF = YES
+ HPLIP_DEPENDENCIES = cups libusb jpeg host-pkgconf
