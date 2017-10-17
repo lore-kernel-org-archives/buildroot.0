@@ -1,105 +1,45 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Tue, 17 Oct 2017 16:44:07 -0400
-Subject: [Buildroot] [PATCH 1/1] boost: bump to 1.65.1
-Message-ID: <20171017204407.27704-1-Adamduskett@outlook.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 17 Oct 2017 22:46:03 +0200
+Subject: [Buildroot] [git commit] qpdf: bump version to 7.0.0
+Message-ID: <20171017203943.EAB847FD50@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Other changes:
-- The coroutine2 library has been removed.  As such it has been removed
-  from the boost.mk file, the boost Config.in file, and a new entry has
-  been added to Config.in.legacy explaining that it has been removed.
+commit: https://git.buildroot.net/buildroot/commit/?id=b44050cf73ef3f6ce4836e23cb095f4d5e503990
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Add LICENSE_1_0.txt sha256sum to boost.hash
-
-Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
+Signed-off-by: Olivier Schonken <olivier.schonken@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- Config.in.legacy         | 6 ++++++
- package/boost/Config.in  | 4 ----
- package/boost/boost.hash | 7 +++++--
- package/boost/boost.mk   | 9 ++++-----
- 4 files changed, 15 insertions(+), 11 deletions(-)
+ package/qpdf/qpdf.hash | 6 +++---
+ package/qpdf/qpdf.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 748876880c..9c2fe84def 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -145,6 +145,12 @@ endif
- ###############################################################################
- comment "Legacy options removed in 2017.11"
- 
-+config BR2_PACKAGE_BOOST_COROUTINE2
-+	bool "boost coroutine2 option removed"
-+	select BR2_LEGACY
-+	help
-+	  Boost 1.65.1 no longer offers the coroutine2 library.
-+
- config BR2_PACKAGE_OPENOBEX_BLUEZ
- 	bool "openobex bluez option removed"
- 	select BR2_LEGACY
-diff --git a/package/boost/Config.in b/package/boost/Config.in
-index 50d0ff8e01..3b3c89b8c1 100644
---- a/package/boost/Config.in
-+++ b/package/boost/Config.in
-@@ -73,10 +73,6 @@ config BR2_PACKAGE_BOOST_COROUTINE
- 	bool "boost-coroutine"
- 	depends on BR2_PACKAGE_BOOST_CONTEXT
- 
--config BR2_PACKAGE_BOOST_COROUTINE2
--	bool "boost-coroutine2"
--	depends on BR2_PACKAGE_BOOST_CONTEXT
--
- config BR2_PACKAGE_BOOST_DATE_TIME
- 	bool "boost-date_time"
- 
-diff --git a/package/boost/boost.hash b/package/boost/boost.hash
-index 7494c0cb26..6e40c0d3b4 100644
---- a/package/boost/boost.hash
-+++ b/package/boost/boost.hash
-@@ -1,2 +1,5 @@
--# From http://www.boost.org/users/history/version_1_64_0.html
--sha256 7bcc5caace97baa948931d712ea5f37038dbb1c5d89b43ad4def4ed7cb683332  boost_1_64_0.tar.bz2
-+# From http://www.boost.org/users/history/version_1_65_1.html
-+sha256 9807a5d16566c57fd74fb522764e0b134a8bbe6b6e8967b83afefd30dcd3be81  boost_1_65_1.tar.bz2
-+
-+# Locally computed
-+sha256 c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566  LICENSE_1_0.txt
-diff --git a/package/boost/boost.mk b/package/boost/boost.mk
-index e515faf1f9..8ba88a7b7c 100644
---- a/package/boost/boost.mk
-+++ b/package/boost/boost.mk
+diff --git a/package/qpdf/qpdf.hash b/package/qpdf/qpdf.hash
+index c882708..1fbef66 100644
+--- a/package/qpdf/qpdf.hash
++++ b/package/qpdf/qpdf.hash
+@@ -1,4 +1,4 @@
+-# From http://sourceforge.net/projects/qpdf/files/qpdf/6.0.0/qpdf-6.0.0.sha1/download
+-sha1	15ebe09d9b9ddd2309a67e4295693fcf82494e33	qpdf-6.0.0.tar.gz
++# From https://sourceforge.net/projects/qpdf/files/qpdf/7.0.0/qpdf-7.0.0.sha512/download
++sha512	7b52d67b4d2c428a7b0c1cd03b03a23f05d38d7e3c81041079a137919019ea5158f12bf95fdcfcff6b43ffdefe93a85127ced2a363a6b4b380cbaa02a3840256  qpdf-7.0.0.tar.gz
+ # Locally computed
+-sha256	a9fdc7e94d38fcd3831f37b6e0fe36492bf79aa6d54f8f66062cf7f9c4155233	qpdf-6.0.0.tar.gz
++sha256	fed08de14caad0fe5efd148d9eca886d812588b2cbb35d13e61993ee8eb8c65f  qpdf-7.0.0.tar.gz
+diff --git a/package/qpdf/qpdf.mk b/package/qpdf/qpdf.mk
+index 9601f98..5b77540 100644
+--- a/package/qpdf/qpdf.mk
++++ b/package/qpdf/qpdf.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--BOOST_VERSION = 1.64.0
-+BOOST_VERSION = 1.65.1
- BOOST_SOURCE = boost_$(subst .,_,$(BOOST_VERSION)).tar.bz2
- BOOST_SITE = http://downloads.sourceforge.net/project/boost/boost/$(BOOST_VERSION)
- BOOST_INSTALL_STAGING = YES
-@@ -14,9 +14,9 @@ BOOST_LICENSE_FILES = LICENSE_1_0.txt
- # keep host variant as minimal as possible
- HOST_BOOST_FLAGS = --without-icu \
- 	--without-libraries=$(subst $(space),$(comma),atomic chrono context \
--	coroutine coroutine2 date_time exception filesystem graph \
--	graph_parallel iostreams locale log math mpi program_options python \
--	random regex serialization signals system test thread timer type_erasure \
-+	coroutine date_time exception filesystem graph graph_parallel iostreams \
-+	locale log math mpi program_options python random regex serialization \
-+	signals system test thread timer type_erasure \
- 	wave)
- 
- BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_ATOMIC),,atomic)
-@@ -24,7 +24,6 @@ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_CHRONO),,chrono)
- BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_CONTAINER),,container)
- BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_CONTEXT),,context)
- BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_COROUTINE),,coroutine)
--BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_COROUTINE2),,coroutine2)
- BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_DATE_TIME),,date_time)
- BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_EXCEPTION),,exception)
- BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_FILESYSTEM),,filesystem)
--- 
-2.13.6
+-QPDF_VERSION = 6.0.0
++QPDF_VERSION = 7.0.0
+ QPDF_SITE = http://downloads.sourceforge.net/project/qpdf/qpdf/$(QPDF_VERSION)
+ QPDF_INSTALL_STAGING = YES
+ QPDF_LICENSE = Artistic-2.0
