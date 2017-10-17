@@ -1,7 +1,7 @@
 From: Olivier Schonken <olivier.schonken@gmail.com>
-Date: Tue, 17 Oct 2017 13:09:54 +0200
-Subject: [Buildroot] [PATCH 1/1] hplip: bump version to 3.17.10
-Message-ID: <20171017110954.31853-1-olivier.schonken@gmail.com>
+Date: Tue, 17 Oct 2017 13:11:33 +0200
+Subject: [Buildroot] [PATCH 1/1] cups: bump version to 2.2.5
+Message-ID: <20171017111133.31950-1-olivier.schonken@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,44 +10,58 @@ To: buildroot@busybox.net
 
 Signed-off-by: Olivier Schonken <olivier.schonken@gmail.com>
 ---
- package/hplip/0002-configure.in-fix-AM_INIT_AUTOMAKE-call.patch | 2 +-
- package/hplip/hplip.hash                                        | 2 +-
- package/hplip/hplip.mk                                          | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ package/cups/0003-Sanitize-the-installation-process.patch | 8 ++++----
+ package/cups/cups.hash                                    | 2 +-
+ package/cups/cups.mk                                      | 2 +-
+ 3 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/hplip/0002-configure.in-fix-AM_INIT_AUTOMAKE-call.patch b/package/hplip/0002-configure.in-fix-AM_INIT_AUTOMAKE-call.patch
-index 8147490174..db2f0a4332 100644
---- a/package/hplip/0002-configure.in-fix-AM_INIT_AUTOMAKE-call.patch
-+++ b/package/hplip/0002-configure.in-fix-AM_INIT_AUTOMAKE-call.patch
-@@ -23,7 +23,7 @@ index 8b06428..680cad5 100755
- @@ -27,8 +27,7 @@
+diff --git a/package/cups/0003-Sanitize-the-installation-process.patch b/package/cups/0003-Sanitize-the-installation-process.patch
+index f1128daa2d..75a68487c6 100644
+--- a/package/cups/0003-Sanitize-the-installation-process.patch
++++ b/package/cups/0003-Sanitize-the-installation-process.patch
+@@ -37,18 +37,18 @@ index 3afef0a..3e4f1bd 100644
+  # Installation programs...
+  #
   
-  #AC_PREREQ(2.59)
-- AC_INIT([HP Linux Imaging and Printing], [3.16.11], [3.16.11], [hplip])
-+ AC_INIT([HP Linux Imaging and Printing], [3.17.10], [3.17.10], [hplip])
- -#AM_INIT_AUTOMAKE([1.9 foreign])
- -AM_INIT_AUTOMAKE
- +AM_INIT_AUTOMAKE([1.9 foreign subdir-objects])
-diff --git a/package/hplip/hplip.hash b/package/hplip/hplip.hash
-index 9dfb7a2ad0..2260850e33 100644
---- a/package/hplip/hplip.hash
-+++ b/package/hplip/hplip.hash
+--INSTALL_BIN	=	$(LIBTOOL) $(INSTALL) -c -m @CUPS_EXE_FILE_PERM@ @INSTALL_STRIP@
++-INSTALL_BIN	=	@LIBTOOL_INSTALL@ $(INSTALL) -c -m @CUPS_EXE_FILE_PERM@ @INSTALL_STRIP@
+ -INSTALL_COMPDATA =	$(INSTALL) -c -m 444 @INSTALL_GZIP@
+-+INSTALL_BIN	=	$(LIBTOOL) $(INSTALL) -c -m 755
+++INSTALL_BIN	=	@LIBTOOL_INSTALL@ $(INSTALL) -c -m 755
+ +INSTALL_COMPDATA =	$(INSTALL) -c -m 644 @INSTALL_GZIP@
+  INSTALL_CONFIG	=	$(INSTALL) -c -m @CUPS_CONFIG_FILE_PERM@
+ -INSTALL_DATA	=	$(INSTALL) -c -m 444
+ +INSTALL_DATA	=	$(INSTALL) -c -m 644
+  INSTALL_DIR	=	$(INSTALL) -d
+--INSTALL_LIB	=	$(LIBTOOL) $(INSTALL) -c -m @CUPS_EXE_FILE_PERM@ @INSTALL_STRIP@
++-INSTALL_LIB	=	@LIBTOOL_INSTALL@ $(INSTALL) -c -m @CUPS_EXE_FILE_PERM@ @INSTALL_STRIP@
+ -INSTALL_MAN	=	$(INSTALL) -c -m 444
+ -INSTALL_SCRIPT	=	$(INSTALL) -c -m @CUPS_EXE_FILE_PERM@
+-+INSTALL_LIB	=	$(LIBTOOL) $(INSTALL) -c -m 755
+++INSTALL_LIB	=	@LIBTOOL_INSTALL@ $(INSTALL) -c -m 755
+ +INSTALL_MAN	=	$(INSTALL) -c -m 644
+ +INSTALL_SCRIPT	=	$(INSTALL) -c -m 755
+  
+diff --git a/package/cups/cups.hash b/package/cups/cups.hash
+index f9eed42df1..d4f20b60db 100644
+--- a/package/cups/cups.hash
++++ b/package/cups/cups.hash
 @@ -1,2 +1,2 @@
- # Locally computed:
--sha256  f6e20cacb4891e4e60fc5de2213a10f8d0c68840f9b511aa38cfca0cb29f9b24  hplip-3.16.11.tar.gz
-+sha256  0f7344174672f63a98a22f3c109005b6eb89fe738b7d466316bf2c53d083476c  hplip-3.17.10.tar.gz
-diff --git a/package/hplip/hplip.mk b/package/hplip/hplip.mk
-index b1c167ca30..9eac83d567 100644
---- a/package/hplip/hplip.mk
-+++ b/package/hplip/hplip.mk
+ # Locally calculated:
+-sha256 596d4db72651c335469ae5f37b0da72ac9f97d73e30838d787065f559dea98cc  cups-2.2.4-source.tar.gz
++sha256 a8795e2aa54dcfbdc9ff254a770f0d7154e35c981bca5b3369050c5193ab5a21  cups-2.2.5-source.tar.gz
+diff --git a/package/cups/cups.mk b/package/cups/cups.mk
+index f5e2a3f217..0726d8a37f 100644
+--- a/package/cups/cups.mk
++++ b/package/cups/cups.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--HPLIP_VERSION = 3.16.11
-+HPLIP_VERSION = 3.17.10
- HPLIP_SITE = http://downloads.sourceforge.net/hplip/hplip
- HPLIP_AUTORECONF = YES
- HPLIP_DEPENDENCIES = cups libusb jpeg host-pkgconf
+-CUPS_VERSION = 2.2.4
++CUPS_VERSION = 2.2.5
+ CUPS_SOURCE = cups-$(CUPS_VERSION)-source.tar.gz
+ CUPS_SITE = https://github.com/apple/cups/releases/download/v$(CUPS_VERSION)
+ CUPS_LICENSE = GPL-2.0, LGPL-2.0
 -- 
 2.11.0
