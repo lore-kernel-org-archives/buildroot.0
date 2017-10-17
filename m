@@ -1,56 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 17 Oct 2017 10:53:57 +0200
-Subject: [Buildroot] [git commit branch/2017.08.x] libnss: security bump to
-	version 3.33
-Message-ID: <20171017090327.271957FA3D@busybox.osuosl.org>
+Date: Tue, 17 Oct 2017 10:52:57 +0200
+Subject: [Buildroot] [git commit branch/2017.08.x] ifupdown-scripts: do not
+	install .empty files
+Message-ID: <20171017090326.E47C37FE0F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=23320bdd269820f56c1a47a2fe673f35d26aa10a
+commit: https://git.buildroot.net/buildroot/commit/?id=ada103ef0c52b8c91235a8116577590bbf407b90
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.08.x
 
-Fixes CVE-2017-7805 - Martin Thomson discovered that nss, the Mozilla
-Network Security Service library, is prone to a use-after-free vulnerability
-in the TLS 1.2 implementation when handshake hashes are generated.  A remote
-attacker can take advantage of this flaw to cause an application using the
-nss library to crash, resulting in a denial of service, or potentially to
-execute arbitrary code.
+ifupdown-scripts has some .empty files to maintain empty directories
+in git. Previously this package used to be part of the skeleton which
+used SYSTEM_RSYNC to copy the directories to the target. When it was
+split into a separate package, cp -a was used to do the copy instead,
+which copies the .empty files.
 
-Also add a hash for the license file while we're at it.
+Change to SYSTEM_RSYNC which excludes .empty files.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Cam Hutchison <camh@xdna.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 746502418fbf603464efe0dfc77c6bc10b10603e)
+(cherry picked from commit 58b74e0dbf9b22d7dbc11127c29e23e234a9e8cf)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libnss/libnss.hash | 6 ++++--
- package/libnss/libnss.mk   | 2 +-
- 2 files changed, 5 insertions(+), 3 deletions(-)
+ package/ifupdown-scripts/ifupdown-scripts.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
-index e4e2428..6c8ce83 100644
---- a/package/libnss/libnss.hash
-+++ b/package/libnss/libnss.hash
-@@ -1,2 +1,4 @@
--# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_31_RTM/src/SHA256SUMS
--sha256	e90561256a3271486162c1fbe8d614d118c333d36a4455be2af8688bd420a65d	nss-3.31.tar.gz
-+# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_33_RTM/src/SHA256SUMS
-+sha256	98f0dabd36408e83dd3a11727336cc3cdfee4cbdd9aede2b2831eb2389c284e4  nss-3.33.tar.gz
-+# Locally calculated
-+sha256	a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
-diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
-index 5155929..27d305c 100644
---- a/package/libnss/libnss.mk
-+++ b/package/libnss/libnss.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/ifupdown-scripts/ifupdown-scripts.mk b/package/ifupdown-scripts/ifupdown-scripts.mk
+index 317c8f4..ebc89b3 100644
+--- a/package/ifupdown-scripts/ifupdown-scripts.mk
++++ b/package/ifupdown-scripts/ifupdown-scripts.mk
+@@ -31,7 +31,7 @@ endif
  
--LIBNSS_VERSION = 3.31
-+LIBNSS_VERSION = 3.33
- LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
- LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
- LIBNSS_DISTDIR = dist
+ define IFUPDOWN_SCRIPTS_INSTALL_TARGET_CMDS
+ 	mkdir -p $(TARGET_DIR)/etc/network
+-	cp -a $(IFUPDOWN_SCRIPTS_PKGDIR)/network/* $(TARGET_DIR)/etc/network
++	$(call SYSTEM_RSYNC,$(IFUPDOWN_SCRIPTS_PKGDIR)/network,$(TARGET_DIR)/etc/network)
+ 	$(IFUPDOWN_SCRIPTS_LOCALHOST)
+ 	$(IFUPDOWN_SCRIPTS_DHCP)
+ endef
