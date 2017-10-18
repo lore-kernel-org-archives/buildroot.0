@@ -1,7 +1,7 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Tue, 17 Oct 2017 22:36:57 -0400
-Subject: [Buildroot] [PATCH v2 1/1] softether: depend on libopenssl
-Message-ID: <20171018023657.23274-1-Adamduskett@outlook.com>
+Date: Tue, 17 Oct 2017 22:38:27 -0400
+Subject: [Buildroot] [PATCH v2 2/13] softether: depend on libopenssl
+Message-ID: <20171018023827.23456-1-Adamduskett@outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
