@@ -1,62 +1,63 @@
-From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Wed, 18 Oct 2017 16:59:26 +0200
-Subject: [Buildroot] [PATCH] libtomcrypt: fix build without wchar
-In-Reply-To: <217c4b97cdb72c68b7d6d669b1c3cbb9b47bf4ad.1508242375.git.baruch@tkos.co.il>
-References: <217c4b97cdb72c68b7d6d669b1c3cbb9b47bf4ad.1508242375.git.baruch@tkos.co.il>
-Message-ID: <CAB0FRssgYUznukjTLt22PgU-5uKQ5VFVm_6dQsLhS6wiG9XuBg@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 18 Oct 2017 17:37:32 +0200
+Subject: [Buildroot] [PATCH 1/1] samba4: Make python2 dependency for waf
+ explicit
+In-Reply-To: <20171018140304.19737-2-christian.kellermann@solectrix.de>
+References: <20171018140304.19737-1-christian.kellermann@solectrix.de>
+ <20171018140304.19737-2-christian.kellermann@solectrix.de>
+Message-ID: <20171018173732.368ed195@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I also opened an upstream ticket (without fix),
-see https://github.com/libtom/libtomcrypt/issues/313
+Hello,
 
-Fran?ois
+On Wed, 18 Oct 2017 16:03:04 +0200, Christian Kellermann wrote:
+> Without this patch the build environment will pick up python3 if it is a
+> dependency for other packages. Currently waf does not support
+> python3.
 
-2017-10-17 14:12 GMT+02:00 Baruch Siach <baruch@tkos.co.il>:
+Are we talking about host python or target python here ?
 
-> GCC defines wchar_t even when wchar support is disabled in uClibc. The
-> LTC_NO_WCHAR macro triggers a local definition of wchar_t that conflicts
-> with the GCC defined one. Remove LTC_NO_WCHAR to avoid that.
->
-> Fixes:
-> http://autobuild.buildroot.net/results/895/895452ac973cab0e0bc22636d39cbe
-> c7fbf598d3/
-> http://autobuild.buildroot.net/results/c82/c82d0173878e58f7192d3cec271b45
-> 763e6ea269/
-> http://autobuild.buildroot.net/results/83f/83f433bcb608b341fca2180afa57fc
-> 81495bc3b4/
->
-> Cc: Francois Perrad <francois.perrad@gadz.org>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  package/libtomcrypt/libtomcrypt.mk | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
->
-> diff --git a/package/libtomcrypt/libtomcrypt.mk b/package/libtomcrypt/
-> libtomcrypt.mk
-> index 02610f16d669..020ce796fede 100644
-> --- a/package/libtomcrypt/libtomcrypt.mk
-> +++ b/package/libtomcrypt/libtomcrypt.mk
-> @@ -13,8 +13,7 @@ LIBTOMCRYPT_INSTALL_STAGING = YES
->  LIBTOMCRYPT_INSTALL_TARGET = NO # only static library
->  LIBTOMCRYPT_DEPENDENCIES = libtommath
->
-> -LIBTOMCRYPT_CFLAGS = -I./src/headers $(TARGET_CFLAGS) -DLTC_SOURCE
-> -DLTM_DESC \
-> -       $(if $(BR2_USE_WCHAR),,-DLTC_NO_WCHAR)
-> +LIBTOMCRYPT_CFLAGS = -I./src/headers $(TARGET_CFLAGS) -DLTC_SOURCE
-> -DLTM_DESC
->
->  define LIBTOMCRYPT_BUILD_CMDS
->         $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS)
-> CFLAGS="$(LIBTOMCRYPT_CFLAGS)"
-> --
-> 2.14.2
->
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20171018/a7d1ea24/attachment.html>
+> +diff --git a/buildtools/bin/waf b/buildtools/bin/waf
+> +index 1b0f4662a56..f66b992e78c 100755
+> +--- a/buildtools/bin/waf
+> ++++ b/buildtools/bin/waf
+> +@@ -1,4 +1,4 @@
+> +-#!/usr/bin/env python
+> ++#!/usr/bin/env python2
+
+This runs on the host, so this is about host python, and matches your
+description of "waf needs python2".
+
+> -		PYTHON_CONFIG="$(STAGING_DIR)/usr/bin/python-config" \
+> +		PYTHON_CONFIG="$(STAGING_DIR)/usr/bin/python2-config" \
+
+This is related to the *target* python, so how is this related to the
+waf problem ?
+
+>  		python_LDFLAGS="" \
+>  		python_LIBDIR="" \
+>  		$(TARGET_CONFIGURE_OPTS) \
+>  		$(SAMBA4_CONF_ENV) \
+> +		PYTHON=python2 \
+>  		./buildtools/bin/waf configure \
+>  			--prefix=/usr \
+>  			--sysconfdir=/etc \
+> @@ -115,6 +116,8 @@ define SAMBA4_CONFIGURE_CMDS
+>  	)
+>  endef
+>  
+> +TARGET_MAKE_ENV += PYTHON=python2 \
+
+Are all of these PYTHON=python2 necessary?
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
