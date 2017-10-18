@@ -1,17 +1,18 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 18 Oct 2017 12:54:44 +0200
+Date: Wed, 18 Oct 2017 12:57:30 +0200
 Subject: [Buildroot] [PATCH RFC] core: enable per-package log files
-In-Reply-To: <20171018111041.649509e3@windsurf.home>
-References: <4234cedb-0646-496e-9ee1-0bc60c847810@mind.be>
+In-Reply-To: <20171018085748.20a3a9f5@windsurf.home>
+References: <20171011105809.2bf05267@windsurf.lan>
+ <1508170801-31062-1-git-send-email-anisse@astier.eu>
+ <20171016185248.0463ac82@windsurf.lan> <20171016211842.GA32198@bifrost>
+ <20171017091152.67d7ad28@windsurf.lan>
+ <4234cedb-0646-496e-9ee1-0bc60c847810@mind.be>
  <20171017141133.4d57ee87@windsurf.lan>
  <9955dbb8-0447-5a3d-9e78-a0f6f42e7e6c@mind.be>
  <20171017210354.38d89b3c@windsurf.lan>
  <ff04b0db-d3d5-2314-9d9c-3ead377eb981@mind.be>
- <20171018085748.20a3a9f5@windsurf.home> <20171018074436.GB11912@bifrost>
- <20171018095826.26c40072@windsurf.home> <20171018080911.GA12664@bifrost>
- <20171018101106.1364b003@windsurf.home> <20171018090510.GA13015@bifrost>
- <20171018111041.649509e3@windsurf.home>
-Message-ID: <8b07f0fe-4f00-c47b-c81d-accb418cef21@mind.be>
+ <20171018085748.20a3a9f5@windsurf.home>
+Message-ID: <8dc16ff6-7184-262a-8564-7ab7e43412a1@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -20,42 +21,42 @@ To: buildroot@busybox.net
 
 
 
-On 18-10-17 11:10, Thomas Petazzoni wrote:
+On 18-10-17 08:57, Thomas Petazzoni wrote:
 > Hello,
 > 
-> On Wed, 18 Oct 2017 11:05:10 +0200, Anisse Astier wrote:
+> On Wed, 18 Oct 2017 01:11:54 +0200, Arnout Vandecappelle wrote:
 > 
->> But as I said, there should be a top logfile by default, removing the
->> need for tee.
+>>  I mean that maybe the user doesn't want to gather the output with -Orecurse or
+>> -Otarget but really wants -Onone. If you hardcode -Orecurse in the Makefile,
+>> it's impossible for a user who does want to see output immediately.
 > 
-> I'm not sure how this solves the problem. Indeed, even if we have a
-> logfile by default, it will be done using "| tee" so that stdout has
-> all the messages, and the logfile as well.
+> Yes, hence my idea of BR2_PARALLEL_BUILD to preserve the existing
+> behavior when it is disabled. However, the .config is not included in
+> the top-level make invocation, only in the sub-make.
 > 
-> But I am not sure we want to log everything by default. I find it
-> somewhat neat that Buildroot doesn't enforce a logging strategy. Some
-> users prefer to redirect everything, some users prefer a "| tee" thing.
-> Some users prefer the log to be appended after the existing log, some
-> users prefer to truncate and replace the existing log.
+> So, here is my plan:
 > 
-> So, if we're going the -Orecurse route, I'd prefer to not change our
-> logging strategy, i.e not log anything by default, and leave it up to
-> the user.
+>  * Introduce BR2_PARALLEL_BUILD
+> 
+>  * Make the sub-make invocation mandatory. Right now it's only if the
+>    umask is not correct or if O is not a canonical path. Let's just
+>    always recurse into a sub-make, it costs essentially nothing.
+> 
+>  * Do a grep ^BR2_PARALLEL_BUILD=y in the config file in the top-level
+>    make to decide whether we pass -Orecurse to the sub-make invocation.
+>    If .config doesn't exist, then we don't pass -Orecurse because it
+>    means we're about to configure Buildroot and we anyway don't care
+>    about -Orecurse.
+> 
+> Thoughts?
 
- I agree here. Leave as much as possible to the user. It is for this very reason
-that I'd prefer the -Orecurse to be specified by the user and not enforced in
-our Makefile. Users who always want this behaviour can make an alias, or export
-MAKEFLAGS="-Orecurse -j5", or use brmake.
+ As I said a couple of times already, I don't think we should enforce -Orecurse.
 
- It is nice if the more interesting use cases can be supported in utils/brmake,
-so users don't have to reinvent their logging strategy all the time.
-
- Regardless, I consider the logging one of the least priority things in the
-whole top-level parallel build thing.
+ About the BR2_PARALLEL_BUILD option, it may be useful, but for the time being I
+would continue asking the user to remove the .NOTPARALLEL line.
 
  Regards,
  Arnout
-
 -- 
 Arnout Vandecappelle                          arnout at mind be
 Senior Embedded Software Architect            +32-16-286500
