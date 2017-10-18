@@ -1,99 +1,102 @@
-From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Wed, 18 Oct 2017 11:55:23 -0500
-Subject: [Buildroot] [PATCH] python-config.sh: don't reassign ${prefix}
-Message-ID: <20171018165523.13145-1-matthew.weber@rockwellcollins.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 18 Oct 2017 19:42:15 +0200
+Subject: [Buildroot] [PATCH RFC] core: enable per-package log files
+In-Reply-To: <20171018133651.0a8ea508@windsurf.home>
+References: <20171016211842.GA32198@bifrost>
+ <20171017091152.67d7ad28@windsurf.lan>
+ <4234cedb-0646-496e-9ee1-0bc60c847810@mind.be>
+ <20171017141133.4d57ee87@windsurf.lan>
+ <9955dbb8-0447-5a3d-9e78-a0f6f42e7e6c@mind.be>
+ <20171017210354.38d89b3c@windsurf.lan>
+ <ff04b0db-d3d5-2314-9d9c-3ead377eb981@mind.be>
+ <20171018085748.20a3a9f5@windsurf.home>
+ <8dc16ff6-7184-262a-8564-7ab7e43412a1@mind.be>
+ <20171018133651.0a8ea508@windsurf.home>
+Message-ID: <20171018174215.GB2833@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When prefix is set to a path like /usr during crossbuild
-the sed operations end up executing twice, once for the prefix
-reassignment and another for includedir if it is set as a string
-including the ${prefix} variable.  This results in an issue
-when building on a machine that mounts local storage under /usr.
+Thomas, Arnout, Anisse, All,
 
-This patch updates the remaining location which uses the prefix
-variable to also sed and update to use the real path.
+On 2017-10-18 13:36 +0200, Thomas Petazzoni spake thusly:
+> On Wed, 18 Oct 2017 12:57:30 +0200, Arnout Vandecappelle wrote:
+> >  As I said a couple of times already, I don't think we should enforce -Orecurse.
+> 
+> As I replied in another e-mail, I disagree :)
+> 
+> >  About the BR2_PARALLEL_BUILD option, it may be useful, but for the time being I
+> > would continue asking the user to remove the .NOTPARALLEL line.
 
-Upstream bug report:
-https://bugs.python.org/issue31713
+Eventually, when everything is fully parallel-safe, I believe we will
+want to remove BR2_JLEVEL altogether, and let users directly call
+"make -jN".
 
-Buildroot bug:
-https://bugs.busybox.net/show_bug.cgi?id=10361
+As for the -O option, it all depends on the oldest make we are supposed
+to support. It appeared only in make 4.0, released in October 2013.
 
-Fixes failures like the following:
-python-gobject-2.28.6 | NOK |
-http://autobuild.buildroot.net/results/ac6cf59125ba57402f926e6c65ffe19e065001b5
-dbus-python-1.2.4 | NOK |
-http://autobuild.buildroot.net/results/0d1459155ab6ad2e126e0845ecf6ba2f9381ec8b
+So I think we'll have to come up with an alternative solution (and I am
+sad that we do, I would have prefered we require 4.0, but it is not old
+enough :-/ ).
 
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
----
- ...29-python-config.sh-don-t-reassign-prefix.patch | 54 ++++++++++++++++++++++
- 1 file changed, 54 insertions(+)
- create mode 100644 package/python3/0029-python-config.sh-don-t-reassign-prefix.patch
+However, I'll repeat my position: having top-level parallel build (TLP)
+is important. If we can't find a viable, simple and maintainable
+solution, then we should just ignore the problem and still implement
+TLP.
 
-diff --git a/package/python3/0029-python-config.sh-don-t-reassign-prefix.patch b/package/python3/0029-python-config.sh-don-t-reassign-prefix.patch
-new file mode 100644
-index 0000000..6a9df14
---- /dev/null
-+++ b/package/python3/0029-python-config.sh-don-t-reassign-prefix.patch
-@@ -0,0 +1,54 @@
-+From 21f787cb9bf0c1440981262f03bc881c5b77c0d8 Mon Sep 17 00:00:00 2001
-+From: Matt Weber <matthew.weber@rockwellcollins.com>
-+Date: Fri, 6 Oct 2017 09:54:15 -0500
-+Subject: [PATCH] python-config.sh: don't reassign ${prefix}
-+
-+When prefix is set to a path like /usr during crossbuild
-+the sed operations end up executing twice, once for the prefix
-+reassignment and another for includedir if it is set as a string
-+including the ${prefix} variable.  This results in an issue
-+when building on a machine that mounts local storage under /usr.
-+
-+This patch updates the remaining location which uses the prefix
-+variable to also sed and update to use the real path.
-+
-+Upstream bug report:
-+https://bugs.python.org/issue31713
-+
-+Buildroot bug:
-+https://bugs.busybox.net/show_bug.cgi?id=10361
-+
-+Fixes failures like the following:
-+python-gobject-2.28.6 | NOK | http://autobuild.buildroot.net/results/ac6cf59125ba57402f926e6c65ffe19e065001b5
-+dbus-python-1.2.4 | NOK | http://autobuild.buildroot.net/results/0d1459155ab6ad2e126e0845ecf6ba2f9381ec8b
-+
-+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-+---
-+ Misc/python-config.sh.in | 3 +--
-+ 1 file changed, 1 insertion(+), 2 deletions(-)
-+
-+diff --git a/Misc/python-config.sh.in b/Misc/python-config.sh.in
-+index f905a71..e06be0f 100644
-+--- a/Misc/python-config.sh.in
-++++ b/Misc/python-config.sh.in
-+@@ -29,7 +29,7 @@ prefix_real=$(installed_prefix "$0")
-+ 
-+ # Use sed to fix paths from their built-to locations to their installed-to
-+ # locations.
-+-prefix=$(echo "$prefix_build" | sed "s#^$prefix_build#$prefix_real#")
-++prefix=$prefix_build
-+ exec_prefix_build="@exec_prefix@"
-+ exec_prefix=$(echo "$exec_prefix_build" | sed "s#^$exec_prefix_build#$prefix_real#")
-+ includedir=$(echo "@includedir@" | sed "s#^$prefix_build#$prefix_real#")
-+@@ -47,7 +46,7 @@ LINKFORSHARED="@LINKFORSHARED@"
-+ OPT="@OPT@"
-+ PY_ENABLE_SHARED="@PY_ENABLE_SHARED@"
-+ LDVERSION="@LDVERSION@"
-+-LIBDEST=${prefix}/lib/python${VERSION}
-++LIBDEST=$( echo "${prefix}/lib/python${VERSION}" | sed "s#^$prefix_build#$prefix_real#")
-+ LIBPL=$(echo "@LIBPL@" | sed "s#^$prefix_build#$prefix_real#")
-+ SO="@EXT_SUFFIX@"
-+ PYTHONFRAMEWORK="@PYTHONFRAMEWORK@"
-+-- 
-+1.8.3.1
-+
+I am not much happy with any of the external wrapper, because it is
+relatively fragile, and we have to use it everywhere we need to write a
+make rule (which is not a package, fs, or bootloader CMDS).
+
+For example, we also need to use it for:
+
+  - the step_start and step_end hooks
+  - the intermediate commands [0] [1]
+  - ech commands in the finalise-target, legal-info and all similar ones
+  - and I suspect countless other locations...
+
+
+[0] for example, it is needed for the for-loop there:
+   package/pkg-generic.mk:
+   145 $(BUILD_DIR)/%/.stamp_downloaded:
+   146 ?   $(foreach hook,$($(PKG)_PRE_DOWNLOAD_HOOKS),$(call $(hook))$(sep))
+   147 # Only show the download message if it isn't already downloaded
+   148 ?   $(Q)for p in $($(PKG)_ALL_DOWNLOADS); do \
+   149 ?   ?   if test ! -e $(DL_DIR)/`basename $$p` ; then \
+   150 ?   ?   ?   $(call MESSAGE,"Downloading") ; \
+   151 ?   ?   ?   break ; \
+   152 ?   ?   fi ; \
+   153 ?   done
+   154 ?   $(foreach p,$($(PKG)_ALL_DOWNLOADS),$(call DOWNLOAD,$(p))$(sep))
+   155 ?   $(foreach hook,$($(PKG)_POST_DOWNLOAD_HOOKS),$(call $(hook))$(sep))
+   156 ?   $(Q)mkdir -p $(@D)
+   157 ?   $(Q)touch $@
+
+
+[1] for example, it is needed for each of mkdir, chmod and touch there:
+   package/pkg-generic.mk:
+   166 $(BUILD_DIR)/%/.stamp_extracted:
+   167 ?   @$(call step_start,extract)
+   168 ?   @$(call MESSAGE,"Extracting")
+   169 ?   $(foreach hook,$($(PKG)_PRE_EXTRACT_HOOKS),$(call $(hook))$(sep))
+   170 ?   $(Q)mkdir -p $(@D)
+   171 ?   $($(PKG)_EXTRACT_CMDS)
+   172 # some packages have messed up permissions inside
+   173 ?   $(Q)chmod -R +rw $(@D)
+   174 ?   $(foreach hook,$($(PKG)_POST_EXTRACT_HOOKS),$(call $(hook))$(sep))
+   175 ?   @$(call step_end,extract)
+   176 ?   $(Q)touch $@
+
+
+Regards,
+Yann E. MORIN.
+
 -- 
-1.8.3.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
