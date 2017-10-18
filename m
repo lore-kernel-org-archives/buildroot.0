@@ -1,76 +1,46 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Tue, 17 Oct 2017 22:38:27 -0400
-Subject: [Buildroot] [PATCH v2 2/13] softether: depend on libopenssl
-Message-ID: <20171018023827.23456-1-Adamduskett@outlook.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 18 Oct 2017 07:23:55 +0300
+Subject: [Buildroot] [PATCH v2] board: Add Bananapi M1 support
+In-Reply-To: <1508274727-3807-1-git-send-email-jagan@amarulasolutions.com>
+References: <1508274727-3807-1-git-send-email-jagan@amarulasolutions.com>
+Message-ID: <20171018042355.d7yuof5i5llb2lcw@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-softether tries to use SSLv3 functionality as a fallback.  LibreSSL doesn't
-support SSLv3 anymore. Two main issues prevent a patch:
+Hi Jagan,
 
-- Trying to wrap the sslv3 functionality from the source with a guard clause
-results in linking errors after compiling is done.
-- There are multiple security vulnerabilities with using sslv3.
-- There are multiple security issues in github pertaining to using sslv3.
-- This project seems to not be updated very often, and the security issues
-  are being ignored it seems.
+On Tue, Oct 17, 2017 at 11:12:07PM +0200, Jagan Teki wrote:
+> Add initial support for bananapi M1 board with below features:
+> - U-Boot 2017.09
+> - Linux 4.13
+> - Default packages from buildroot
+> 
+> Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
+> ---
 
-For people who still want to use softether, they will have to use libopenssl.
+[...]
 
-Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
----
-Changes v1 -> v2:
-  - Cleaned up formatting
-  - Removed version bump
+> diff --git a/configs/bananapi_m1_defconfig b/configs/bananapi_m1_defconfig
+> new file mode 100644
+> index 0000000..b571a73
+> --- /dev/null
+> +++ b/configs/bananapi_m1_defconfig
+> @@ -0,0 +1,37 @@
+> +BR2_arm=y
+> +BR2_cortex_a7=y
+> +BR2_ARM_EABIHF=y
+> +
+> +# Linux headers same as kernel, a 4.11 series
+> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_13=y
 
- package/softether/Config.in    | 3 ++-
- package/softether/softether.mk | 4 ++--
- 2 files changed, 4 insertions(+), 3 deletions(-)
+The comment doesn't match the code.
 
-diff --git a/package/softether/Config.in b/package/softether/Config.in
-index 55e5426775..28e117bcf9 100644
---- a/package/softether/Config.in
-+++ b/package/softether/Config.in
-@@ -3,8 +3,8 @@ config BR2_PACKAGE_SOFTETHER
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_MMU # fork()
- 	depends on BR2_USE_WCHAR
-+	depends on BR2_PACKAGE_LIBOPENSSL
- 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
--	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_READLINE
- 	help
- 	  The SoftEther Server is a fully integrated implementation of the SSTP,
-@@ -24,4 +24,5 @@ config BR2_PACKAGE_SOFTETHER
- 
- comment "softether needs a toolchain w/ wchar, threads"
- 	depends on BR2_USE_MMU
-+	depends on BR2_PACKAGE_LIBOPENSSL
- 	depends on !(BR2_USE_WCHAR && BR2_TOOLCHAIN_HAS_THREADS)
-diff --git a/package/softether/softether.mk b/package/softether/softether.mk
-index 5868438db0..0a09af4dad 100644
---- a/package/softether/softether.mk
-+++ b/package/softether/softether.mk
-@@ -8,7 +8,7 @@ SOFTETHER_VERSION = e9006faf0c8739147ab97e27fe11c5cdd20ed9e6
- SOFTETHER_SITE = $(call github,SoftEtherVPN,SoftEtherVPN,$(SOFTETHER_VERSION))
- SOFTETHER_LICENSE = GPL-2.0
- SOFTETHER_LICENSE_FILES = LICENSE
--SOFTETHER_DEPENDENCIES = host-softether openssl readline
-+SOFTETHER_DEPENDENCIES = host-softether libopenssl readline
- SOFTETHER_AUTORECONF = YES
- 
- ifeq ($(BR2_ENABLE_LOCALE),)
-@@ -26,7 +26,7 @@ SOFTETHER_CONF_OPTS = \
- 	--with-zlib="$(STAGING_DIR)/usr"
- 
- # host-libiconv does not exist, therefore we need this extra line
--HOST_SOFTETHER_DEPENDENCIES = host-pkgconf host-openssl host-readline
-+HOST_SOFTETHER_DEPENDENCIES = host-pkgconf host-libopenssl host-readline
- 
- # target build creates the file hamcore.se2 which needs the host variant of
- # hamcorebuilder, for details see http://www.vpnusers.com/viewtopic.php?p=5426
+baruch
+
 -- 
-2.13.6
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
