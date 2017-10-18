@@ -1,70 +1,42 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 18 Oct 2017 01:11:54 +0200
-Subject: [Buildroot] [PATCH RFC] core: enable per-package log files
-In-Reply-To: <20171017210354.38d89b3c@windsurf.lan>
-References: <20171011105809.2bf05267@windsurf.lan>
- <1508170801-31062-1-git-send-email-anisse@astier.eu>
- <20171016185248.0463ac82@windsurf.lan> <20171016211842.GA32198@bifrost>
- <20171017091152.67d7ad28@windsurf.lan>
- <4234cedb-0646-496e-9ee1-0bc60c847810@mind.be>
- <20171017141133.4d57ee87@windsurf.lan>
- <9955dbb8-0447-5a3d-9e78-a0f6f42e7e6c@mind.be>
- <20171017210354.38d89b3c@windsurf.lan>
-Message-ID: <ff04b0db-d3d5-2314-9d9c-3ead377eb981@mind.be>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Tue, 17 Oct 2017 20:07:03 -0400
+Subject: [Buildroot] [PATCH 1/1] softether: bump to v4.22-9634-beta
+Message-ID: <20171018000703.29939-1-Adamduskett@outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Also add a sha256sum for the license file.
 
+Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
+---
+ package/softether/softether.hash | 3 ++-
+ package/softether/softether.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-On 17-10-17 21:03, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Tue, 17 Oct 2017 16:44:04 +0200, Arnout Vandecappelle wrote:
-[snip]
->> Isn't it enough to observe the -j in MAKEFLAGS?
-> 
-> Interestingly:
-> 
-> all:
-> 	@echo $(MAKEFLAGS)
-> ifneq ($(filter -j%,$(MAKEFLAGS)),)
-> 	@echo "BINGO"
-> endif
-> 
-> Never shows BINGO when called with "make -j2" even if the echo
-> $(MAKEFLAGS) does show that -j2 has been passed. Also a:
-> 
-> $(warning $(MAKEFLAGS))
-> 
-> shows an empty value.
-
- Right! MAKEFLAGS is only initialized when calling a subprocess, and it anyway
-doesn't contain the literal flags passed to make.
-
- It looks like there is no way to observe the flags passed to make :-(
-
-> 
->>  I'm not convinced we want to add this option automatically, however, because it
->> makes it more difficult for people who don't want it. Why not add it to
->> utils/brmake, for example, and point people there in the documentation of
->> top-level parallel build?
-> 
-> Sorry I lost you here :/
-
- I mean that maybe the user doesn't want to gather the output with -Orecurse or
--Otarget but really wants -Onone. If you hardcode -Orecurse in the Makefile,
-it's impossible for a user who does want to see output immediately.
-
- Regards,
- Arnout
-
+diff --git a/package/softether/softether.hash b/package/softether/softether.hash
+index 01de10714b..ec6e0603d7 100644
+--- a/package/softether/softether.hash
++++ b/package/softether/softether.hash
+@@ -1,2 +1,3 @@
+ # Locally computed
+-sha256 a34dca9bdb940f9384ae50096f6485448ca539c557e36b3a7f6f810831ee5946 softether-e9006faf0c8739147ab97e27fe11c5cdd20ed9e6.tar.gz
++sha256 8e6310d36e579ea07171ce5fcb9ebe31235d218444c4e4836ca6c32aa49c1f93 softether-v4.22-9634-beta.tar.gz
++sha256 7aeb873293fa0e44425dabf68a8e46e26c848fe58efcfd3ac7c90a3386f3edd1 LICENSE
+diff --git a/package/softether/softether.mk b/package/softether/softether.mk
+index 5868438db0..77ce408462 100644
+--- a/package/softether/softether.mk
++++ b/package/softether/softether.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SOFTETHER_VERSION = e9006faf0c8739147ab97e27fe11c5cdd20ed9e6
++SOFTETHER_VERSION = v4.22-9634-beta
+ SOFTETHER_SITE = $(call github,SoftEtherVPN,SoftEtherVPN,$(SOFTETHER_VERSION))
+ SOFTETHER_LICENSE = GPL-2.0
+ SOFTETHER_LICENSE_FILES = LICENSE
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.13.6
