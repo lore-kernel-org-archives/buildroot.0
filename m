@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 18 Oct 2017 22:29:06 +0200
-Subject: [Buildroot] [PATCH] powertop: needs autoreconf
-In-Reply-To: <dac9c0cd9a627b5c5500de6779f4aeca43fd0989.1508349837.git.baruch@tkos.co.il>
-References: <dac9c0cd9a627b5c5500de6779f4aeca43fd0989.1508349837.git.baruch@tkos.co.il>
-Message-ID: <20171018222906.458550aa@windsurf.home>
+Date: Wed, 18 Oct 2017 22:30:10 +0200
+Subject: [Buildroot] [V2 1/3] prosody: refactor with PROSODY_CONF_OPTS
+ variable
+In-Reply-To: <20171018164650.514-1-francois.perrad@gadz.org>
+References: <20171018164650.514-1-francois.perrad@gadz.org>
+Message-ID: <20171018223010.7e2142be@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,30 +13,49 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 18 Oct 2017 21:03:57 +0300, Baruch Siach wrote:
-> Commit 01048deab60 (package/powertop: bump to version 2.9) removed
-> autoreconf even though the remaining patch touches Makefile.am. Fix
-> this.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/3bf/3bf8daee559e2978f8602c56397afda771299032/
-> http://autobuild.buildroot.net/results/f9b/f9b4f113a333107a972fa51bd0347eeb0d52496f/
-> http://autobuild.buildroot.net/results/067/0675826888b6f89e76291c7835839344300ca9f5/
-> 
-> Cc: Romain Naour <romain.naour@gmail.com>
-> Cc: Steven Noonan <steven@uplinklabs.net>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+On Wed, 18 Oct 2017 18:46:48 +0200, Francois Perrad wrote:
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 > ---
->  package/powertop/powertop.mk | 2 ++
->  1 file changed, 2 insertions(+)
+>  package/prosody/prosody.mk | 19 ++++++++++---------
+>  1 file changed, 10 insertions(+), 9 deletions(-)
+> 
+> diff --git a/package/prosody/prosody.mk b/package/prosody/prosody.mk
+> index f7a325b46..5669f7707 100644
+> --- a/package/prosody/prosody.mk
+> +++ b/package/prosody/prosody.mk
+> @@ -18,16 +18,17 @@ ifeq ($(BR2_PACKAGE_LUAJIT),y)
+>  PROSODY_DEPENDENCIES += luajit
+>  endif
+>  
+> +PROSODY_CONF_OPTS = \
+> +	--with-lua=$(STAGING_DIR)/usr \
+> +	--c-compiler=$(TARGET_CC) \
+> +	--cflags="$(TARGET_CFLAGS)" \
+> +	--linker=$(TARGET_CC) \
+> +	--ldflags="$(TARGET_LDFLAGS) -shared" \
+> +	--sysconfdir=/etc/prosody \
+> +	--prefix=/usr
+> +
+>  define PROSODY_CONFIGURE_CMDS
+> -	cd $(@D) && \
+> -		$(TARGET_CONFIGURE_OPTS) \
+> -		./configure --prefix=/usr \
+> -		--c-compiler=$(TARGET_CC) \
+> -		--cflags="$(TARGET_CFLAGS)" \
+> -		--linker=$(TARGET_CC) \
+> -		--ldflags="$(TARGET_LDFLAGS) -shared" \
+> -		--sysconfdir=/etc/prosody \
+> -		--with-lua=$(STAGING_DIR)/usr
+> +	cd $(@D) && ./configure $(PROSODY_CONF_OPTS)
 
-Applied to master after tweaking the comment to mention exactly which
-patch requires autoreconf, as suggested by Romain.
+This has a pretty strong side-effect: $(TARGET_CONFIGURE_OPTS) is no
+longer passed in the environment. It is unrelated to the refactoring,
+and not explained anywhere in the commit log.
 
-Thanks!
+Best regards,
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
