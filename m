@@ -1,44 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 18 Oct 2017 22:31:36 +0200
-Subject: [Buildroot] [V2 3/3] prosody: remove tweaked configuration
-In-Reply-To: <20171018164650.514-3-francois.perrad@gadz.org>
-References: <20171018164650.514-1-francois.perrad@gadz.org>
- <20171018164650.514-3-francois.perrad@gadz.org>
-Message-ID: <20171018223136.49cbc0de@windsurf.home>
+Date: Wed, 18 Oct 2017 22:32:10 +0200
+Subject: [Buildroot] [git commit] libglib2: bump to 2.54.1
+Message-ID: <20171018202455.8EE418109D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=57c15820dbab992fcd383f37f2f1eea85252a4cd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 18 Oct 2017 18:46:50 +0200, Francois Perrad wrote:
-> Upgrading a tweaked configuration is painful,
-> so stay with the upstream configuration which is already installed.
-> 
-> Everybody could make its own configuration in its rootfs_overlay.
-> 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  package/prosody/prosody.cfg.lua | 184 ----------------------------------------
->  package/prosody/prosody.mk      |  11 ---
->  2 files changed, 195 deletions(-)
->  delete mode 100644 package/prosody/prosody.cfg.lua
+Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libglib2/libglib2.hash | 4 ++--
+ package/libglib2/libglib2.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-I'd like to have the opinion of the package submitter, Dushara
-Jayasinghe, on this patch. Dushara, can you comment on why you added a
-custom prosody.cfg, as opposed to using the one provided in the
-upstream package?
-
-Note: if there is no feedback from Dushara, I'll apply Fran?ois patch.
-My preference obviously goes to using an example configuration file
-provided by the upstream package.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/libglib2/libglib2.hash b/package/libglib2/libglib2.hash
+index 083b95d..4316378 100644
+--- a/package/libglib2/libglib2.hash
++++ b/package/libglib2/libglib2.hash
+@@ -1,2 +1,2 @@
+-# https://download.gnome.org/sources/glib/2.50/glib-2.52.2.sha256sum
+-sha256  f00e5d9e2a2948b1da25fcba734a6b7a40f556de8bc9f528a53f6569969ac5d0  glib-2.52.2.tar.xz
++# https://download.gnome.org/sources/glib/2.54/glib-2.54.1.sha256sum
++sha256  50c01b1419324f10fbf9b9709ec2164b18586968bdce7540583bf32302cf47a3  glib-2.54.1.tar.xz
+diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
+index d93a1de..2defcf0 100644
+--- a/package/libglib2/libglib2.mk
++++ b/package/libglib2/libglib2.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-LIBGLIB2_VERSION_MAJOR = 2.52
+-LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).2
++LIBGLIB2_VERSION_MAJOR = 2.54
++LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).1
+ LIBGLIB2_SOURCE = glib-$(LIBGLIB2_VERSION).tar.xz
+ LIBGLIB2_SITE = http://ftp.gnome.org/pub/gnome/sources/glib/$(LIBGLIB2_VERSION_MAJOR)
+ LIBGLIB2_LICENSE = LGPL-2.0+
