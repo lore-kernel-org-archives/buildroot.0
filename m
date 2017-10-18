@@ -1,85 +1,60 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Tue, 17 Oct 2017 22:32:35 -0400
-Subject: [Buildroot] [PATCH 08/13] heirloom-mailx: add libressl support patch
+Date: Tue, 17 Oct 2017 22:32:36 -0400
+Subject: [Buildroot] [PATCH 09/13] libevent: add libressl support patch
 In-Reply-To: <20171018023240.22724-1-Adamduskett@outlook.com>
 References: <20171018023240.22724-1-Adamduskett@outlook.com>
-Message-ID: <20171018023240.22724-9-Adamduskett@outlook.com>
+Message-ID: <20171018023240.22724-10-Adamduskett@outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-heirloom-mailx has two small issues when compiling against LibreSSL:
-  - RAND_egd is used (LibreSSL does not support RAND_egd)
-    Solution: "Guard" the code calling RAND_egd
+When a program checks for openssl 1.1 or higher, it will pass that
+check because libressl sets it's version number to 2.x.
 
-  - SSLv3_client_method function is used (LibreSSL does not support SSLv3)
-    Solution: "Guard" the code with #ifndef OPENSSL_NO_SSL3
+Add simple checks to see if LIBRESSL_VERSION_NUMBER is defined.
 
 Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
 ---
- .../heirloom-mailx/0002-fix-libressl-support.patch | 54 ++++++++++++++++++++++
- 1 file changed, 54 insertions(+)
- create mode 100644 package/heirloom-mailx/0002-fix-libressl-support.patch
+ package/libevent/0002-fix-libressl-support.patch | 31 ++++++++++++++++++++++++
+ 1 file changed, 31 insertions(+)
+ create mode 100644 package/libevent/0002-fix-libressl-support.patch
 
-diff --git a/package/heirloom-mailx/0002-fix-libressl-support.patch b/package/heirloom-mailx/0002-fix-libressl-support.patch
+diff --git a/package/libevent/0002-fix-libressl-support.patch b/package/libevent/0002-fix-libressl-support.patch
 new file mode 100644
-index 0000000000..0fafa4ae0b
+index 0000000000..ff4ecc3e8a
 --- /dev/null
-+++ b/package/heirloom-mailx/0002-fix-libressl-support.patch
-@@ -0,0 +1,54 @@
-+From aad28d30af6c3a74c522dd61943788e908860c84 Mon Sep 17 00:00:00 2001
-+From: Adam Duskett <Adamduskett@outlook.com>
-+Date: Fri, 4 Aug 2017 07:22:47 -0400
-+Subject: [PATCH] fix libressl support
++++ b/package/libevent/0002-fix-libressl-support.patch
+@@ -0,0 +1,31 @@
++From 10ca825cf8f52b14b6230db7de5e5df307212499 Mon Sep 17 00:00:00 2001
++From: Adam Duskett <aduskett@gmail.com>
++Date: Wed, 2 Aug 2017 11:38:11 -0400
++Subject: [PATCH 1/1] add libressl support
 +
-+heirloom-mailx has two small issues when compiling against LibreSSL:
-+  - RAND_egd is used (LibreSSL does not support RAND_egd)
-+    Solution: "Guard" the code calling RAND_egd
++When a program checks for openssl 1.1 or higher, it will pass that
++check because libressl sets it's version number to 2.x.
 +
-+  - SSLv3_client_method function is used (LibreSSL does not support SSLv3)
-+    Solution: "Guard" the code with #ifndef OPENSSL_NO_SSL3
++Add simple checks to see if libressl_version_number is defined.
 +
-+Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
++Signed-off-by: Adam Duskett <aduskett@gmail.com>
 +---
-+ openssl.c | 7 +++++++
-+ 1 file changed, 7 insertions(+)
++ openssl-compat.h                     | 2 +-
++ 1 files changed, 2 insertions(+), 2 deletions(-)
 +
-+diff --git a/openssl.c b/openssl.c
-+index 44fe4e5..c4a1bb7 100644
-+--- a/openssl.c
-++++ b/openssl.c
-+@@ -137,11 +137,13 @@ ssl_rand_init(void)
++diff --git a/openssl-compat.h b/openssl-compat.h
++index 69afc71..937fa4d 100644
++--- a/openssl-compat.h
+++++ b/openssl-compat.h
++@@ -1,7 +1,7 @@
++ #ifndef OPENSSL_COMPAT_H
++ #define OPENSSL_COMPAT_H
 + 
-+ 	if ((cp = value("ssl-rand-egd")) != NULL) {
-+ 		cp = expand(cp);
-++#ifndef OPENSSL_NO_EGD
-+ 		if (RAND_egd(cp) == -1) {
-+ 			fprintf(stderr, catgets(catd, CATSET, 245,
-+ 				"entropy daemon at \"%s\" not available\n"),
-+ 					cp);
-+ 		} else
-++#endif
-+ 			state = 1;
-+ 	} else if ((cp = value("ssl-rand-file")) != NULL) {
-+ 		cp = expand(cp);
-+@@ -216,10 +218,15 @@ ssl_select_method(const char *uhp)
++-#if OPENSSL_VERSION_NUMBER < 0x10100000L
+++#if OPENSSL_VERSION_NUMBER < 0x10100000L || defined (LIBRESSL_VERSION_NUMBER)
 + 
-+ 	cp = ssl_method_string(uhp);
-+ 	if (cp != NULL) {
-++		#ifndef OPENSSL_NO_SSL3
-+ 		if (equal(cp, "ssl3"))
-+ 			method = SSLv3_client_method();
-+ 		else if (equal(cp, "tls1"))
-+ 			method = TLSv1_client_method();
-++		#else
-++		if (equal(cp, "tls1"))
-++			method = TLSv1_client_method();
-++		#endif
-+ 		else {
-+ 			fprintf(stderr, catgets(catd, CATSET, 244,
-+ 					"Invalid SSL method \"%s\"\n"), cp);
++ static inline BIO_METHOD *BIO_meth_new(int type, const char *name)
++ {
 +-- 
 +2.13.3
 +
