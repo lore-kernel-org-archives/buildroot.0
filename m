@@ -1,236 +1,99 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Wed, 18 Oct 2017 18:46:50 +0200
-Subject: [Buildroot] [V2 3/3] prosody: remove tweaked configuration
-In-Reply-To: <20171018164650.514-1-francois.perrad@gadz.org>
-References: <20171018164650.514-1-francois.perrad@gadz.org>
-Message-ID: <20171018164650.514-3-francois.perrad@gadz.org>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Wed, 18 Oct 2017 11:55:23 -0500
+Subject: [Buildroot] [PATCH] python-config.sh: don't reassign ${prefix}
+Message-ID: <20171018165523.13145-1-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Upgrading a tweaked configuration is painful,
-so stay with the upstream configuration which is already installed.
+When prefix is set to a path like /usr during crossbuild
+the sed operations end up executing twice, once for the prefix
+reassignment and another for includedir if it is set as a string
+including the ${prefix} variable.  This results in an issue
+when building on a machine that mounts local storage under /usr.
 
-Everybody could make its own configuration in its rootfs_overlay.
+This patch updates the remaining location which uses the prefix
+variable to also sed and update to use the real path.
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/prosody/prosody.cfg.lua | 184 ----------------------------------------
- package/prosody/prosody.mk      |  11 ---
- 2 files changed, 195 deletions(-)
- delete mode 100644 package/prosody/prosody.cfg.lua
+Upstream bug report:
+https://bugs.python.org/issue31713
 
-diff --git a/package/prosody/prosody.cfg.lua b/package/prosody/prosody.cfg.lua
-deleted file mode 100644
-index 8329c0ad4..000000000
---- a/package/prosody/prosody.cfg.lua
-+++ /dev/null
-@@ -1,184 +0,0 @@
---- Prosody Example Configuration File
+Buildroot bug:
+https://bugs.busybox.net/show_bug.cgi?id=10361
+
+Fixes failures like the following:
+python-gobject-2.28.6 | NOK |
+http://autobuild.buildroot.net/results/ac6cf59125ba57402f926e6c65ffe19e065001b5
+dbus-python-1.2.4 | NOK |
+http://autobuild.buildroot.net/results/0d1459155ab6ad2e126e0845ecf6ba2f9381ec8b
+
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 ---
---- Information on configuring Prosody can be found on our
---- website at http://prosody.im/doc/configure
----
---- Tip: You can check that the syntax of this file is correct
---- when you have finished by running: luac -p prosody.cfg.lua
---- If there are any errors, it will let you know what and where
---- they are, otherwise it will keep quiet.
----
---- The only thing left to do is rename this file to remove the .dist ending, and fill in the
---- blanks. Good luck, and happy Jabbering!
--
--
------------ Server-wide settings ----------
---- Settings in this section apply to the whole server and are the default settings
---- for any virtual hosts
--
---- This is a (by default, empty) list of accounts that are admins
---- for the server. Note that you must create the accounts separately
---- (see http://prosody.im/doc/creating_accounts for info)
---- Example: admins = { "user1 at example.com", "user2 at example.net" }
--admins = { }
--
---- Enable use of libevent for better performance under high load
---- For more information see: http://prosody.im/doc/libevent
----use_libevent = true;
--
---- This is the list of modules Prosody will load on startup.
---- It looks for mod_modulename.lua in the plugins folder, so make sure that exists too.
---- Documentation on modules can be found at: http://prosody.im/doc/modules
--modules_enabled = {
--
--	-- Generally required
--		"roster"; -- Allow users to have a roster. Recommended ;)
--		"saslauth"; -- Authentication for clients and servers. Recommended if you want to log in.
--		"tls"; -- Add support for secure TLS on c2s/s2s connections
--		"dialback"; -- s2s dialback support
--		"disco"; -- Service discovery
--
--	-- Not essential, but recommended
--		"private"; -- Private XML storage (for room bookmarks, etc.)
--		"vcard"; -- Allow users to set vCards
--	
--	-- These are commented by default as they have a performance impact
--		--"privacy"; -- Support privacy lists
--		--"compression"; -- Stream compression
--
--	-- Nice to have
--		"version"; -- Replies to server version requests
--		"uptime"; -- Report how long server has been running
--		"time"; -- Let others know the time here on this server
--		"ping"; -- Replies to XMPP pings with pongs
--		"pep"; -- Enables users to publish their mood, activity, playing music and more
--		"register"; -- Allow users to register on this server using a client and change passwords
--
--	-- Admin interfaces
--		"admin_adhoc"; -- Allows administration via an XMPP client that supports ad-hoc commands
--		--"admin_telnet"; -- Opens telnet console interface on localhost port 5582
--	
--	-- HTTP modules
--		--"bosh"; -- Enable BOSH clients, aka "Jabber over HTTP"
--		--"http_files"; -- Serve static files from a directory over HTTP
--
--	-- Other specific functionality
--		"posix"; -- POSIX functionality, sends server to background, enables syslog, etc.
--		--"groups"; -- Shared roster support
--		--"announce"; -- Send announcement to all online users
--		--"welcome"; -- Welcome users who register accounts
--		--"watchregistrations"; -- Alert admins of registrations
--		--"motd"; -- Send a message to users when they log in
--		--"legacyauth"; -- Legacy authentication. Only used by some old clients and bots.
--};
--
---- These modules are auto-loaded, but should you want
---- to disable them then uncomment them here:
--modules_disabled = {
--	-- "offline"; -- Store offline messages
--	-- "c2s"; -- Handle client connections
--	-- "s2s"; -- Handle server-to-server connections
--};
--
---- Disable account creation by default, for security
---- For more information see http://prosody.im/doc/creating_accounts
--allow_registration = false;
--
---- These are the SSL/TLS-related settings. If you don't want
---- to use SSL/TLS, you may comment or remove this
--ssl = {
--	key = "certs/localhost.key";
--	certificate = "certs/localhost.crt";
--}
--
---- Force clients to use encrypted connections? This option will
---- prevent clients from authenticating unless they are using encryption.
--
--c2s_require_encryption = false
--
---- Force certificate authentication for server-to-server connections?
---- This provides ideal security, but requires servers you communicate
---- with to support encryption AND present valid, trusted certificates.
---- NOTE: Your version of LuaSec must support certificate verification!
---- For more information see http://prosody.im/doc/s2s#security
--
--s2s_secure_auth = false
--
---- Many servers don't support encryption or have invalid or self-signed
---- certificates. You can list domains here that will not be required to
---- authenticate using certificates. They will be authenticated using DNS.
--
----s2s_insecure_domains = { "gmail.com" }
--
---- Even if you leave s2s_secure_auth disabled, you can still require valid
---- certificates for some domains by specifying a list here.
--
----s2s_secure_domains = { "jabber.org" }
--
---- Select the authentication backend to use. The 'internal' providers
---- use Prosody's configured data storage to store the authentication data.
---- To allow Prosody to offer secure authentication mechanisms to clients, the
---- default provider stores passwords in plaintext. If you do not trust your
---- server please see http://prosody.im/doc/modules/mod_auth_internal_hashed
---- for information about using the hashed backend.
--
--authentication = "internal_plain"
--
---- Select the storage backend to use. By default Prosody uses flat files
---- in its configured data directory, but it also supports more backends
---- through modules. An "sql" backend is included by default, but requires
---- additional dependencies. See http://prosody.im/doc/storage for more info.
--
----storage = "sql" -- Default is "internal"
--
---- For the "sql" backend, you can uncomment *one* of the below to configure:
----sql = { driver = "SQLite3", database = "prosody.sqlite" } -- Default. 'database' is the filename.
----sql = { driver = "MySQL", database = "prosody", username = "prosody", password = "secret", host = "localhost" }
----sql = { driver = "PostgreSQL", database = "prosody", username = "prosody", password = "secret", host = "localhost" }
--
---- Logging configuration
---- For advanced logging see http://prosody.im/doc/logging
--log = {
--	-- info = "prosody.log"; -- Change 'info' to 'debug' for verbose logging
--	-- error = "prosody.err";
--	"*syslog"; -- Logging to syslog
--	-- "*console"; -- Log to the console, useful for debugging with daemonize=false
--}
--
--pidfile = "/var/run/prosody/prosody.pid"
--
------------- Virtual hosts -----------
---- You need to add a VirtualHost entry for each domain you wish Prosody to serve.
---- Settings under each VirtualHost entry apply *only* to that host.
--
--VirtualHost "localhost"
--
--VirtualHost "example.com"
--	-- Assign this host a certificate for TLS, otherwise it would use the one
--	-- set in the global section (if any).
--	-- Note that old-style SSL on port 5223 only supports one certificate, and will always
--	-- use the global one.
--	ssl = {
--		key = "certs/example.com.key";
--		certificate = "certs/example.com.crt";
--	}
--
-------- Components ------
---- You can specify components to add hosts that provide special services,
---- like multi-user conferences, and transports.
---- For more information on components, see http://prosody.im/doc/components
--
-----Set up a MUC (multi-user chat) room server on conference.example.com:
----Component "conference.example.com" "muc"
--
---- Set up a SOCKS5 bytestream proxy for server-proxied file transfers:
----Component "proxy.example.com" "proxy65"
--
-----Set up an external component (default component port is 5347)
----
---- External components allow adding various services, such as gateways/
---- transports to other networks like ICQ, MSN and Yahoo. For more info
---- see: http://prosody.im/doc/components#adding_an_external_component
----
----Component "gateway.example.com"
----	component_secret = "password"
-diff --git a/package/prosody/prosody.mk b/package/prosody/prosody.mk
-index d0adcc862..8d90fe071 100644
---- a/package/prosody/prosody.mk
-+++ b/package/prosody/prosody.mk
-@@ -54,15 +54,4 @@ endef
- 
- PROSODY_POST_INSTALL_TARGET_HOOKS += PROSODY_REMOVE_CERT_GENERATOR
- 
--# 1. Enable posix functionality
--# 2. Log to syslog
--# 3. Specify pid file write location
--# 4. Enable virtual host example.com
--define PROSODY_TWEAK_DEFAULT_CONF
--	$(INSTALL) -D package/prosody/prosody.cfg.lua \
--		$(TARGET_DIR)/etc/prosody/prosody.cfg.lua
--endef
--
--PROSODY_POST_INSTALL_TARGET_HOOKS += PROSODY_TWEAK_DEFAULT_CONF
--
- $(eval $(generic-package))
+ ...29-python-config.sh-don-t-reassign-prefix.patch | 54 ++++++++++++++++++++++
+ 1 file changed, 54 insertions(+)
+ create mode 100644 package/python3/0029-python-config.sh-don-t-reassign-prefix.patch
+
+diff --git a/package/python3/0029-python-config.sh-don-t-reassign-prefix.patch b/package/python3/0029-python-config.sh-don-t-reassign-prefix.patch
+new file mode 100644
+index 0000000..6a9df14
+--- /dev/null
++++ b/package/python3/0029-python-config.sh-don-t-reassign-prefix.patch
+@@ -0,0 +1,54 @@
++From 21f787cb9bf0c1440981262f03bc881c5b77c0d8 Mon Sep 17 00:00:00 2001
++From: Matt Weber <matthew.weber@rockwellcollins.com>
++Date: Fri, 6 Oct 2017 09:54:15 -0500
++Subject: [PATCH] python-config.sh: don't reassign ${prefix}
++
++When prefix is set to a path like /usr during crossbuild
++the sed operations end up executing twice, once for the prefix
++reassignment and another for includedir if it is set as a string
++including the ${prefix} variable.  This results in an issue
++when building on a machine that mounts local storage under /usr.
++
++This patch updates the remaining location which uses the prefix
++variable to also sed and update to use the real path.
++
++Upstream bug report:
++https://bugs.python.org/issue31713
++
++Buildroot bug:
++https://bugs.busybox.net/show_bug.cgi?id=10361
++
++Fixes failures like the following:
++python-gobject-2.28.6 | NOK | http://autobuild.buildroot.net/results/ac6cf59125ba57402f926e6c65ffe19e065001b5
++dbus-python-1.2.4 | NOK | http://autobuild.buildroot.net/results/0d1459155ab6ad2e126e0845ecf6ba2f9381ec8b
++
++Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
++---
++ Misc/python-config.sh.in | 3 +--
++ 1 file changed, 1 insertion(+), 2 deletions(-)
++
++diff --git a/Misc/python-config.sh.in b/Misc/python-config.sh.in
++index f905a71..e06be0f 100644
++--- a/Misc/python-config.sh.in
+++++ b/Misc/python-config.sh.in
++@@ -29,7 +29,7 @@ prefix_real=$(installed_prefix "$0")
++ 
++ # Use sed to fix paths from their built-to locations to their installed-to
++ # locations.
++-prefix=$(echo "$prefix_build" | sed "s#^$prefix_build#$prefix_real#")
+++prefix=$prefix_build
++ exec_prefix_build="@exec_prefix@"
++ exec_prefix=$(echo "$exec_prefix_build" | sed "s#^$exec_prefix_build#$prefix_real#")
++ includedir=$(echo "@includedir@" | sed "s#^$prefix_build#$prefix_real#")
++@@ -47,7 +46,7 @@ LINKFORSHARED="@LINKFORSHARED@"
++ OPT="@OPT@"
++ PY_ENABLE_SHARED="@PY_ENABLE_SHARED@"
++ LDVERSION="@LDVERSION@"
++-LIBDEST=${prefix}/lib/python${VERSION}
+++LIBDEST=$( echo "${prefix}/lib/python${VERSION}" | sed "s#^$prefix_build#$prefix_real#")
++ LIBPL=$(echo "@LIBPL@" | sed "s#^$prefix_build#$prefix_real#")
++ SO="@EXT_SUFFIX@"
++ PYTHONFRAMEWORK="@PYTHONFRAMEWORK@"
++-- 
++1.8.3.1
++
 -- 
-2.11.0
+1.8.3.1
