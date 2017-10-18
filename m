@@ -1,99 +1,97 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Tue, 17 Oct 2017 22:32:31 -0400
-Subject: [Buildroot] [PATCH 04/13] ffmpeg: add libressl suport patch
+Date: Tue, 17 Oct 2017 22:32:32 -0400
+Subject: [Buildroot] [PATCH 05/13] mosquitto: add libressl support patch
 In-Reply-To: <20171018023240.22724-1-Adamduskett@outlook.com>
 References: <20171018023240.22724-1-Adamduskett@outlook.com>
-Message-ID: <20171018023240.22724-5-Adamduskett@outlook.com>
+Message-ID: <20171018023240.22724-6-Adamduskett@outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: https://github.com/gentoo/libressl/blob/master/media-video/ffmpeg/files/ffmpeg-3.3-libressl.patch
+When a program checks for openssl 1.1 or higher, it will pass that
+check because libressl sets it's version number to 2.x.
+
+Add simple checks to see if LIBRESSL_VERSION_NUMBER is defined.
+
 Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
 ---
- package/ffmpeg/0002-fix-libressl-support.patch | 74 ++++++++++++++++++++++++++
- 1 file changed, 74 insertions(+)
- create mode 100644 package/ffmpeg/0002-fix-libressl-support.patch
+ package/mosquitto/0001-fix-libressl-support.patch | 68 +++++++++++++++++++++++
+ 1 file changed, 68 insertions(+)
+ create mode 100644 package/mosquitto/0001-fix-libressl-support.patch
 
-diff --git a/package/ffmpeg/0002-fix-libressl-support.patch b/package/ffmpeg/0002-fix-libressl-support.patch
+diff --git a/package/mosquitto/0001-fix-libressl-support.patch b/package/mosquitto/0001-fix-libressl-support.patch
 new file mode 100644
-index 0000000000..5dc2595acf
+index 0000000000..8db1e58370
 --- /dev/null
-+++ b/package/ffmpeg/0002-fix-libressl-support.patch
-@@ -0,0 +1,74 @@
-+From b02b11af7f0697a43f6c92011eaca7f914bd3bf1 Mon Sep 17 00:00:00 2001
-+From: Aric Belsito <lluixhi@gmail.com>
-+Date: Fri, 4 Aug 2017 13:06:15 -0400
++++ b/package/mosquitto/0001-fix-libressl-support.patch
+@@ -0,0 +1,68 @@
++From c2c5e05dc606a2f6299245004e222671cc41c625 Mon Sep 17 00:00:00 2001
++From: Adam Duskett <Adamduskett@outlook.com>
++Date: Thu, 3 Aug 2017 14:21:14 -0400
 +Subject: [PATCH] fix libressl support
 +
-+From: https://github.com/gentoo/libressl/blob/master/media-video/ffmpeg/files/ffmpeg-3.3-libressl.patch
++When a program checks for openssl 1.1 or higher, it will pass that
++check because libressl sets it's version number to 2.x.
 +
-+Original author: Aric Belsito <lluixhi@gmail.com>
++Add simple checks to see if libressl_version_number is defined.
++
 +Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
 +---
-+ libavformat/tls_openssl.c | 12 ++++++------
-+ 1 file changed, 6 insertions(+), 6 deletions(-)
++ lib/net_mosq.c         | 2 +-
++ src/mosquitto_passwd.c | 4 ++--
++ src/security_default.c | 2 +-
++ 3 files changed, 4 insertions(+), 4 deletions(-)
 +
-+diff --git a/libavformat/tls_openssl.c b/libavformat/tls_openssl.c
-+index 38af8a2..0599544 100644
-+--- a/libavformat/tls_openssl.c
-++++ b/libavformat/tls_openssl.c
-+@@ -43,7 +43,7 @@ typedef struct TLSContext {
-+     TLSShared tls_shared;
-+     SSL_CTX *ctx;
-+     SSL *ssl;
-+-#if OPENSSL_VERSION_NUMBER >= 0x1010000fL
-++#if OPENSSL_VERSION_NUMBER >= 0x1010000fL && !defined(LIBRESSL_VERSION_NUMBER)
-+     BIO_METHOD* url_bio_method;
-+ #endif
-+ } TLSContext;
-+@@ -68,7 +68,7 @@ static unsigned long openssl_thread_id(void)
-+ 
-+ static int url_bio_create(BIO *b)
++diff --git a/lib/net_mosq.c b/lib/net_mosq.c
++index 063c4a2..cdbc83f 100644
++--- a/lib/net_mosq.c
+++++ b/lib/net_mosq.c
++@@ -114,7 +114,7 @@ void _mosquitto_net_init(void)
++ void _mosquitto_net_cleanup(void)
 + {
-+-#if OPENSSL_VERSION_NUMBER >= 0x1010000fL
-++#if OPENSSL_VERSION_NUMBER >= 0x1010000fL && !defined(LIBRESSL_VERSION_NUMBER)
-+     BIO_set_init(b, 1);
-+     BIO_set_data(b, NULL);
-+     BIO_set_flags(b, 0);
-+@@ -85,7 +85,7 @@ static int url_bio_destroy(BIO *b)
-+     return 1;
-+ }
-+ 
-+-#if OPENSSL_VERSION_NUMBER >= 0x1010000fL
-++#if OPENSSL_VERSION_NUMBER >= 0x1010000fL && !defined(LIBRESSL_VERSION_NUMBER)
-+ #define GET_BIO_DATA(x) BIO_get_data(x)
++ #ifdef WITH_TLS
++-	#if OPENSSL_VERSION_NUMBER < 0x10100000L
+++	#if OPENSSL_VERSION_NUMBER < 0x10100000L || defined(LIBRESSL_VERSION_NUMBER)
++ 		ERR_remove_state(0);
++ 	#endif
++ 	ENGINE_cleanup();
++diff --git a/src/mosquitto_passwd.c b/src/mosquitto_passwd.c
++index c3dd05a..6305ee0 100644
++--- a/src/mosquitto_passwd.c
+++++ b/src/mosquitto_passwd.c
++@@ -90,7 +90,7 @@ int output_new_password(FILE *fptr, const char *username, const char *password)
++ 	unsigned char hash[EVP_MAX_MD_SIZE];
++ 	unsigned int hash_len;
++ 	const EVP_MD *digest;
++-#if OPENSSL_VERSION_NUMBER < 0x10100000L
+++#if OPENSSL_VERSION_NUMBER < 0x10100000L || defined(LIBRESSL_VERSION_NUMBER)
++ 	EVP_MD_CTX context;
 + #else
-+ #define GET_BIO_DATA(x) (x)->ptr
-+@@ -129,7 +129,7 @@ static int url_bio_bputs(BIO *b, const char *str)
-+     return url_bio_bwrite(b, str, strlen(str));
-+ }
++ 	EVP_MD_CTX *context;
++@@ -117,7 +117,7 @@ int output_new_password(FILE *fptr, const char *username, const char *password)
++ 		return 1;
++ 	}
 + 
-+-#if OPENSSL_VERSION_NUMBER < 0x1010000fL
-++#if OPENSSL_VERSION_NUMBER < 0x1010000fL || defined(LIBRESSL_VERSION_NUMBER)
-+ static BIO_METHOD url_bio_method = {
-+     .type = BIO_TYPE_SOURCE_SINK,
-+     .name = "urlprotocol bio",
-+@@ -208,7 +208,7 @@ static int tls_close(URLContext *h)
-+         SSL_CTX_free(c->ctx);
-+     if (c->tls_shared.tcp)
-+         ffurl_close(c->tls_shared.tcp);
-+-#if OPENSSL_VERSION_NUMBER >= 0x1010000fL
-++#if OPENSSL_VERSION_NUMBER >= 0x1010000fL && !defined(LIBRESSL_VERSION_NUMBER)
-+     if (c->url_bio_method)
-+         BIO_meth_free(c->url_bio_method);
-+ #endif
-+@@ -266,7 +266,7 @@ static int tls_open(URLContext *h, const char *uri, int flags, AVDictionary **op
-+         ret = AVERROR(EIO);
-+         goto fail;
-+     }
-+-#if OPENSSL_VERSION_NUMBER >= 0x1010000fL
-++#if OPENSSL_VERSION_NUMBER >= 0x1010000fL && !defined(LIBRESSL_VERSION_NUMBER)
-+     p->url_bio_method = BIO_meth_new(BIO_TYPE_SOURCE_SINK, "urlprotocol bio");
-+     BIO_meth_set_write(p->url_bio_method, url_bio_bwrite);
-+     BIO_meth_set_read(p->url_bio_method, url_bio_bread);
++-#if OPENSSL_VERSION_NUMBER < 0x10100000L
+++#if OPENSSL_VERSION_NUMBER < 0x10100000L || defined(LIBRESSL_VERSION_NUMBER)
++ 	EVP_MD_CTX_init(&context);
++ 	EVP_DigestInit_ex(&context, digest, NULL);
++ 	EVP_DigestUpdate(&context, password, strlen(password));
++diff --git a/src/security_default.c b/src/security_default.c
++index 43cd3f0..e307b7a 100644
++--- a/src/security_default.c
+++++ b/src/security_default.c
++@@ -790,7 +790,7 @@ int mosquitto_psk_key_get_default(struct mosquitto_db *db, const char *hint, con
++ int _pw_digest(const char *password, const unsigned char *salt, unsigned int salt_len, unsigned char *hash, unsigned int *hash_len)
++ {
++ 	const EVP_MD *digest;
++-#if OPENSSL_VERSION_NUMBER < 0x10100000L
+++#if OPENSSL_VERSION_NUMBER < 0x10100000L || defined(LIBRESSL_VERSION_NUMBER)
++ 	EVP_MD_CTX context;
++ 
++ 	digest = EVP_get_digestbyname("sha512");
 +-- 
 +2.13.3
 +
