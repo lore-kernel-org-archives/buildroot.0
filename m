@@ -1,7 +1,7 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Wed, 18 Oct 2017 09:55:50 -0400
-Subject: [Buildroot] [PATCH 1/1] libglib2: bump to 2.54.1
-Message-ID: <20171018135550.11756-1-Adamduskett@outlook.com>
+Date: Wed, 18 Oct 2017 10:06:49 -0400
+Subject: [Buildroot] [PATCH 1/1] glibmm: bump to 2.54.1
+Message-ID: <20171018140649.3076-1-Adamduskett@outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,33 +10,33 @@ To: buildroot@busybox.net
 
 Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
 ---
- package/libglib2/libglib2.hash | 4 ++--
- package/libglib2/libglib2.mk   | 4 ++--
+ package/glibmm/glibmm.hash | 4 ++--
+ package/glibmm/glibmm.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libglib2/libglib2.hash b/package/libglib2/libglib2.hash
-index 083b95db94..4316378098 100644
---- a/package/libglib2/libglib2.hash
-+++ b/package/libglib2/libglib2.hash
+diff --git a/package/glibmm/glibmm.hash b/package/glibmm/glibmm.hash
+index e1b379fa06..570192e2f8 100644
+--- a/package/glibmm/glibmm.hash
++++ b/package/glibmm/glibmm.hash
 @@ -1,2 +1,2 @@
--# https://download.gnome.org/sources/glib/2.50/glib-2.52.2.sha256sum
--sha256  f00e5d9e2a2948b1da25fcba734a6b7a40f556de8bc9f528a53f6569969ac5d0  glib-2.52.2.tar.xz
-+# https://download.gnome.org/sources/glib/2.54/glib-2.54.1.sha256sum
-+sha256  50c01b1419324f10fbf9b9709ec2164b18586968bdce7540583bf32302cf47a3  glib-2.54.1.tar.xz
-diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
-index d93a1def12..2defcf05ec 100644
---- a/package/libglib2/libglib2.mk
-+++ b/package/libglib2/libglib2.mk
+-# From http://ftp.gnome.org/pub/GNOME/sources/glibmm/2.52/glibmm-2.52.0.sha256sum
+-sha256	81b8abf21c645868c06779abc5f34efc1a51d5e61589dab2a2ed67faa8d4811e glibmm-2.52.0.tar.xz
++# From http://ftp.gnome.org/pub/GNOME/sources/glibmm/2.54/glibmm-2.54.1.sha256sum
++sha256	7cc28c732b04d70ed34f0c923543129083cfb90580ea4a2b4be5b38802bf6a4a glibmm-2.54.1.tar.xz
+diff --git a/package/glibmm/glibmm.mk b/package/glibmm/glibmm.mk
+index 303eac6506..7fa13f21a2 100644
+--- a/package/glibmm/glibmm.mk
++++ b/package/glibmm/glibmm.mk
 @@ -4,8 +4,8 @@
  #
  ################################################################################
  
--LIBGLIB2_VERSION_MAJOR = 2.52
--LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).2
-+LIBGLIB2_VERSION_MAJOR = 2.54
-+LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).1
- LIBGLIB2_SOURCE = glib-$(LIBGLIB2_VERSION).tar.xz
- LIBGLIB2_SITE = http://ftp.gnome.org/pub/gnome/sources/glib/$(LIBGLIB2_VERSION_MAJOR)
- LIBGLIB2_LICENSE = LGPL-2.0+
+-GLIBMM_VERSION_MAJOR = 2.52
+-GLIBMM_VERSION = $(GLIBMM_VERSION_MAJOR).0
++GLIBMM_VERSION_MAJOR = 2.54
++GLIBMM_VERSION = $(GLIBMM_VERSION_MAJOR).1
+ GLIBMM_LICENSE = LGPL-2.1+ (library), GPL-2.0+ (tools)
+ GLIBMM_LICENSE_FILES = COPYING COPYING.tools
+ GLIBMM_SOURCE = glibmm-$(GLIBMM_VERSION).tar.xz
 -- 
 2.13.6
