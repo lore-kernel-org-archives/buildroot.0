@@ -1,21 +1,20 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 18 Oct 2017 13:36:09 +0200
+Date: Wed, 18 Oct 2017 13:36:51 +0200
 Subject: [Buildroot] [PATCH RFC] core: enable per-package log files
-In-Reply-To: <8b07f0fe-4f00-c47b-c81d-accb418cef21@mind.be>
-References: <4234cedb-0646-496e-9ee1-0bc60c847810@mind.be>
+In-Reply-To: <8dc16ff6-7184-262a-8564-7ab7e43412a1@mind.be>
+References: <20171011105809.2bf05267@windsurf.lan>
+ <1508170801-31062-1-git-send-email-anisse@astier.eu>
+ <20171016185248.0463ac82@windsurf.lan>
+ <20171016211842.GA32198@bifrost>
+ <20171017091152.67d7ad28@windsurf.lan>
+ <4234cedb-0646-496e-9ee1-0bc60c847810@mind.be>
  <20171017141133.4d57ee87@windsurf.lan>
  <9955dbb8-0447-5a3d-9e78-a0f6f42e7e6c@mind.be>
  <20171017210354.38d89b3c@windsurf.lan>
  <ff04b0db-d3d5-2314-9d9c-3ead377eb981@mind.be>
  <20171018085748.20a3a9f5@windsurf.home>
- <20171018074436.GB11912@bifrost>
- <20171018095826.26c40072@windsurf.home>
- <20171018080911.GA12664@bifrost>
- <20171018101106.1364b003@windsurf.home>
- <20171018090510.GA13015@bifrost>
- <20171018111041.649509e3@windsurf.home>
- <8b07f0fe-4f00-c47b-c81d-accb418cef21@mind.be>
-Message-ID: <20171018133609.334b64da@windsurf.home>
+ <8dc16ff6-7184-262a-8564-7ab7e43412a1@mind.be>
+Message-ID: <20171018133651.0a8ea508@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -24,25 +23,18 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 18 Oct 2017 12:54:44 +0200, Arnout Vandecappelle wrote:
+On Wed, 18 Oct 2017 12:57:30 +0200, Arnout Vandecappelle wrote:
 
->  I agree here. Leave as much as possible to the user. It is for this very reason
-> that I'd prefer the -Orecurse to be specified by the user and not enforced in
-> our Makefile. Users who always want this behaviour can make an alias, or export
-> MAKEFLAGS="-Orecurse -j5", or use brmake.
+>  As I said a couple of times already, I don't think we should enforce -Orecurse.
 
-I don't entirely agree here. While -j5 is well known, -Orecurse
-certainly isn't, and I'd like to have something that has a reasonable
-behavior out of the box.
+As I replied in another e-mail, I disagree :)
 
->  Regardless, I consider the logging one of the least priority things in the
-> whole top-level parallel build thing.
+>  About the BR2_PARALLEL_BUILD option, it may be useful, but for the time being I
+> would continue asking the user to remove the .NOTPARALLEL line.
 
-Same here: if you don't solve the logging problem, top-level parallel
-build is horrible. You can't debug anything, it's a total mess.
+The patch I have removes .NOTPARALLEL if BR2_PARALLEL_BUILD=y.
 
-Yes, it's just one small aspect of the problem, but it's one aspect
-that needs to be solved.
+Best regards,
 
 Thomas
 -- 
