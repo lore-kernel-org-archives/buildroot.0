@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 18 Oct 2017 22:30:10 +0200
-Subject: [Buildroot] [V2 1/3] prosody: refactor with PROSODY_CONF_OPTS
- variable
-In-Reply-To: <20171018164650.514-1-francois.perrad@gadz.org>
+Date: Wed, 18 Oct 2017 22:31:36 +0200
+Subject: [Buildroot] [V2 3/3] prosody: remove tweaked configuration
+In-Reply-To: <20171018164650.514-3-francois.perrad@gadz.org>
 References: <20171018164650.514-1-francois.perrad@gadz.org>
-Message-ID: <20171018223010.7e2142be@windsurf.home>
+ <20171018164650.514-3-francois.perrad@gadz.org>
+Message-ID: <20171018223136.49cbc0de@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,44 +13,27 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 18 Oct 2017 18:46:48 +0200, Francois Perrad wrote:
+On Wed, 18 Oct 2017 18:46:50 +0200, Francois Perrad wrote:
+> Upgrading a tweaked configuration is painful,
+> so stay with the upstream configuration which is already installed.
+> 
+> Everybody could make its own configuration in its rootfs_overlay.
+> 
 > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 > ---
->  package/prosody/prosody.mk | 19 ++++++++++---------
->  1 file changed, 10 insertions(+), 9 deletions(-)
-> 
-> diff --git a/package/prosody/prosody.mk b/package/prosody/prosody.mk
-> index f7a325b46..5669f7707 100644
-> --- a/package/prosody/prosody.mk
-> +++ b/package/prosody/prosody.mk
-> @@ -18,16 +18,17 @@ ifeq ($(BR2_PACKAGE_LUAJIT),y)
->  PROSODY_DEPENDENCIES += luajit
->  endif
->  
-> +PROSODY_CONF_OPTS = \
-> +	--with-lua=$(STAGING_DIR)/usr \
-> +	--c-compiler=$(TARGET_CC) \
-> +	--cflags="$(TARGET_CFLAGS)" \
-> +	--linker=$(TARGET_CC) \
-> +	--ldflags="$(TARGET_LDFLAGS) -shared" \
-> +	--sysconfdir=/etc/prosody \
-> +	--prefix=/usr
-> +
->  define PROSODY_CONFIGURE_CMDS
-> -	cd $(@D) && \
-> -		$(TARGET_CONFIGURE_OPTS) \
-> -		./configure --prefix=/usr \
-> -		--c-compiler=$(TARGET_CC) \
-> -		--cflags="$(TARGET_CFLAGS)" \
-> -		--linker=$(TARGET_CC) \
-> -		--ldflags="$(TARGET_LDFLAGS) -shared" \
-> -		--sysconfdir=/etc/prosody \
-> -		--with-lua=$(STAGING_DIR)/usr
-> +	cd $(@D) && ./configure $(PROSODY_CONF_OPTS)
+>  package/prosody/prosody.cfg.lua | 184 ----------------------------------------
+>  package/prosody/prosody.mk      |  11 ---
+>  2 files changed, 195 deletions(-)
+>  delete mode 100644 package/prosody/prosody.cfg.lua
 
-This has a pretty strong side-effect: $(TARGET_CONFIGURE_OPTS) is no
-longer passed in the environment. It is unrelated to the refactoring,
-and not explained anywhere in the commit log.
+I'd like to have the opinion of the package submitter, Dushara
+Jayasinghe, on this patch. Dushara, can you comment on why you added a
+custom prosody.cfg, as opposed to using the one provided in the
+upstream package?
+
+Note: if there is no feedback from Dushara, I'll apply Fran?ois patch.
+My preference obviously goes to using an example configuration file
+provided by the upstream package.
 
 Best regards,
 
