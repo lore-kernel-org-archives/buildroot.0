@@ -1,66 +1,113 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 18 Oct 2017 22:33:39 +0300
-Subject: [Buildroot] [PATCH] powertop: needs autoreconf
-In-Reply-To: <3d9c7e58-2980-e6f6-b23c-d85cff470769@gmail.com>
-References: <dac9c0cd9a627b5c5500de6779f4aeca43fd0989.1508349837.git.baruch@tkos.co.il>
- <3d9c7e58-2980-e6f6-b23c-d85cff470769@gmail.com>
-Message-ID: <20171018193339.2t2asjcmkdjdzzsw@tarshish>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 18 Oct 2017 22:09:21 +0200
+Subject: [Buildroot] [git commit] package/openjpeg: bump version to 2.3.0
+Message-ID: <20171018200544.D969A7F997@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Romain,
+commit: https://git.buildroot.net/buildroot/commit/?id=df3d502d131f1b4c38ab8f43532d511c80460a7b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, Oct 18, 2017 at 08:58:55PM +0200, Romain Naour wrote:
-> Le 18/10/2017 ? 20:03, Baruch Siach a ?crit?:
-> > Commit 01048deab60 (package/powertop: bump to version 2.9) removed
-> > autoreconf even though the remaining patch touches Makefile.am. Fix
-> > this.
-> 
-> Indeed...
-> I don't recall what happened, probably I had the intend to remove all patches
-> with the version bump but I finally re-added
-> 0001-dont-force-stack-smashing-protection.patch.
-> 
-> The issue appear now following the automake bump 1.15.1.
-> 
-> > Fixes:
-> > http://autobuild.buildroot.net/results/3bf/3bf8daee559e2978f8602c56397afda771299032/
-> > http://autobuild.buildroot.net/results/f9b/f9b4f113a333107a972fa51bd0347eeb0d52496f/
-> > http://autobuild.buildroot.net/results/067/0675826888b6f89e76291c7835839344300ca9f5/
-> > 
-> > Cc: Romain Naour <romain.naour@gmail.com>
-> > Cc: Steven Noonan <steven@uplinklabs.net>
-> > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> > ---
-> >  package/powertop/powertop.mk | 2 ++
-> >  1 file changed, 2 insertions(+)
-> > 
-> > diff --git a/package/powertop/powertop.mk b/package/powertop/powertop.mk
-> > index ce7a11875894..7c9c7ccc3f41 100644
-> > --- a/package/powertop/powertop.mk
-> > +++ b/package/powertop/powertop.mk
-> > @@ -12,6 +12,8 @@ POWERTOP_DEPENDENCIES = pciutils ncurses libnl host-pkgconf \
-> >  POWERTOP_LICENSE = GPL-2.0
-> >  POWERTOP_LICENSE_FILES = COPYING
-> >  POWERTOP_CONF_ENV = LIBS=$(TARGET_NLS_LIBS)
-> > +# Patching Makefile.am
-> 
-> Maybe you can name the patch here
-> # 0001-dont-force-stack-smashing-protection.patch
-> 
-> > +POWERTOP_AUTORECONF = YES
-> 
-> Gettextize was needed with powertop 2.27, can you check if it's still needed ?
+Removed patch 0003, applied upstream:
+https://github.com/uclouvain/openjpeg/commit/51a1dcaa6ed5713520dca36fc58cd9240c08b7ca
 
-The build succeeds here without gettextize. The same config fails without the 
-patch with the same error as the autobuilder.
+Renamed patch 0004.
 
-baruch
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Acked-by: Olivier Schonken <olivier.schonken@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...MakeLists.txt-Don-t-require-a-C-compiler.patch} |  0
+ .../0003-avoid-malloc-poisoning-issue.patch        | 54 ----------------------
+ package/openjpeg/openjpeg.hash                     |  2 +-
+ package/openjpeg/openjpeg.mk                       |  2 +-
+ 4 files changed, 2 insertions(+), 56 deletions(-)
 
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+diff --git a/package/openjpeg/0004-CMakeLists.txt-Don-t-require-a-C-compiler.patch b/package/openjpeg/0003-CMakeLists.txt-Don-t-require-a-C-compiler.patch
+similarity index 100%
+rename from package/openjpeg/0004-CMakeLists.txt-Don-t-require-a-C-compiler.patch
+rename to package/openjpeg/0003-CMakeLists.txt-Don-t-require-a-C-compiler.patch
+diff --git a/package/openjpeg/0003-avoid-malloc-poisoning-issue.patch b/package/openjpeg/0003-avoid-malloc-poisoning-issue.patch
+deleted file mode 100644
+index 8463e20..0000000
+--- a/package/openjpeg/0003-avoid-malloc-poisoning-issue.patch
++++ /dev/null
+@@ -1,54 +0,0 @@
+-From 51a1dcaa6ed5713520dca36fc58cd9240c08b7ca Mon Sep 17 00:00:00 2001
+-From: Even Rouault <even.rouault@spatialys.com>
+-Date: Thu, 7 Sep 2017 17:52:59 +0200
+-Subject: [PATCH] Avoid malloc poisoning issue when including <pthread.h> of
+- uclibc (#1013)
+-
+-Signed-off-by: Olivier Schonken <olivier.schonken@gmail.com>
+----
+- src/lib/openjp2/thread.c | 11 ++++++++---
+- 1 file changed, 8 insertions(+), 3 deletions(-)
+-
+-diff --git a/src/lib/openjp2/thread.c b/src/lib/openjp2/thread.c
+-index 8b56aa4d5..af33c2c80 100644
+---- a/src/lib/openjp2/thread.c
+-+++ b/src/lib/openjp2/thread.c
+-@@ -29,9 +29,6 @@
+-  * POSSIBILITY OF SUCH DAMAGE.
+-  */
+- 
+--#include "opj_includes.h"
+--
+--#include "thread.h"
+- #include <assert.h>
+- 
+- #ifdef MUTEX_win32
+-@@ -46,6 +43,8 @@
+- #include <windows.h>
+- #include <process.h>
+- 
+-+#include "opj_includes.h"
+-+
+- OPJ_BOOL OPJ_CALLCONV opj_has_thread_support(void)
+- {
+-     return OPJ_TRUE;
+-@@ -289,6 +288,10 @@ void opj_thread_join(opj_thread_t* thread)
+- #include <stdlib.h>
+- #include <unistd.h>
+- 
+-+/* Moved after all system includes, and in particular pthread.h, so as to */
+-+/* avoid poisoning issuing with malloc() use in pthread.h with ulibc (#1013) */
+-+#include "opj_includes.h"
+-+
+- OPJ_BOOL OPJ_CALLCONV opj_has_thread_support(void)
+- {
+-     return OPJ_TRUE;
+-@@ -425,6 +428,8 @@ void opj_thread_join(opj_thread_t* thread)
+- #else
+- /* Stub implementation */
+- 
+-+#include "opj_includes.h"
+-+
+- OPJ_BOOL OPJ_CALLCONV opj_has_thread_support(void)
+- {
+-     return OPJ_FALSE;
+diff --git a/package/openjpeg/openjpeg.hash b/package/openjpeg/openjpeg.hash
+index 0e51aae..dd3cf26 100644
+--- a/package/openjpeg/openjpeg.hash
++++ b/package/openjpeg/openjpeg.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256	6fddbce5a618e910e03ad00d66e7fcd09cc6ee307ce69932666d54c73b7c6e7b  openjpeg-2.2.0.tar.gz
++sha256 3dc787c1bb6023ba846c2a0d9b1f6e179f1cd255172bde9eb75b01f1e6c7d71a  openjpeg-2.3.0.tar.gz
+diff --git a/package/openjpeg/openjpeg.mk b/package/openjpeg/openjpeg.mk
+index eff012f..df85168 100644
+--- a/package/openjpeg/openjpeg.mk
++++ b/package/openjpeg/openjpeg.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-OPENJPEG_VERSION = 2.2.0
++OPENJPEG_VERSION = 2.3.0
+ OPENJPEG_SITE = $(call github,uclouvain,openjpeg,v$(OPENJPEG_VERSION))
+ OPENJPEG_LICENSE = BSD-2-Clause
+ OPENJPEG_LICENSE_FILES = LICENSE
