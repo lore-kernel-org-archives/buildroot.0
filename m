@@ -1,7 +1,7 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Tue, 17 Oct 2017 22:32:00 -0400
+Date: Tue, 17 Oct 2017 22:32:27 -0400
 Subject: [Buildroot] [PATCH 00/13] Turn OpenSSL into a virtual package
-Message-ID: <20171018023213.22644-1-Adamduskett@outlook.com>
+Message-ID: <20171018023240.22724-1-Adamduskett@outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
