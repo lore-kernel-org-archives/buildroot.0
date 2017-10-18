@@ -1,63 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 18 Oct 2017 17:37:32 +0200
-Subject: [Buildroot] [PATCH 1/1] samba4: Make python2 dependency for waf
- explicit
-In-Reply-To: <20171018140304.19737-2-christian.kellermann@solectrix.de>
-References: <20171018140304.19737-1-christian.kellermann@solectrix.de>
- <20171018140304.19737-2-christian.kellermann@solectrix.de>
-Message-ID: <20171018173732.368ed195@windsurf.home>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Wed, 18 Oct 2017 18:46:48 +0200
+Subject: [Buildroot] [V2 1/3] prosody: refactor with PROSODY_CONF_OPTS
+	variable
+Message-ID: <20171018164650.514-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ package/prosody/prosody.mk | 19 ++++++++++---------
+ 1 file changed, 10 insertions(+), 9 deletions(-)
 
-On Wed, 18 Oct 2017 16:03:04 +0200, Christian Kellermann wrote:
-> Without this patch the build environment will pick up python3 if it is a
-> dependency for other packages. Currently waf does not support
-> python3.
-
-Are we talking about host python or target python here ?
-
-> +diff --git a/buildtools/bin/waf b/buildtools/bin/waf
-> +index 1b0f4662a56..f66b992e78c 100755
-> +--- a/buildtools/bin/waf
-> ++++ b/buildtools/bin/waf
-> +@@ -1,4 +1,4 @@
-> +-#!/usr/bin/env python
-> ++#!/usr/bin/env python2
-
-This runs on the host, so this is about host python, and matches your
-description of "waf needs python2".
-
-> -		PYTHON_CONFIG="$(STAGING_DIR)/usr/bin/python-config" \
-> +		PYTHON_CONFIG="$(STAGING_DIR)/usr/bin/python2-config" \
-
-This is related to the *target* python, so how is this related to the
-waf problem ?
-
->  		python_LDFLAGS="" \
->  		python_LIBDIR="" \
->  		$(TARGET_CONFIGURE_OPTS) \
->  		$(SAMBA4_CONF_ENV) \
-> +		PYTHON=python2 \
->  		./buildtools/bin/waf configure \
->  			--prefix=/usr \
->  			--sysconfdir=/etc \
-> @@ -115,6 +116,8 @@ define SAMBA4_CONFIGURE_CMDS
->  	)
->  endef
->  
-> +TARGET_MAKE_ENV += PYTHON=python2 \
-
-Are all of these PYTHON=python2 necessary?
-
-Thanks!
-
-Thomas
+diff --git a/package/prosody/prosody.mk b/package/prosody/prosody.mk
+index f7a325b46..5669f7707 100644
+--- a/package/prosody/prosody.mk
++++ b/package/prosody/prosody.mk
+@@ -18,16 +18,17 @@ ifeq ($(BR2_PACKAGE_LUAJIT),y)
+ PROSODY_DEPENDENCIES += luajit
+ endif
+ 
++PROSODY_CONF_OPTS = \
++	--with-lua=$(STAGING_DIR)/usr \
++	--c-compiler=$(TARGET_CC) \
++	--cflags="$(TARGET_CFLAGS)" \
++	--linker=$(TARGET_CC) \
++	--ldflags="$(TARGET_LDFLAGS) -shared" \
++	--sysconfdir=/etc/prosody \
++	--prefix=/usr
++
+ define PROSODY_CONFIGURE_CMDS
+-	cd $(@D) && \
+-		$(TARGET_CONFIGURE_OPTS) \
+-		./configure --prefix=/usr \
+-		--c-compiler=$(TARGET_CC) \
+-		--cflags="$(TARGET_CFLAGS)" \
+-		--linker=$(TARGET_CC) \
+-		--ldflags="$(TARGET_LDFLAGS) -shared" \
+-		--sysconfdir=/etc/prosody \
+-		--with-lua=$(STAGING_DIR)/usr
++	cd $(@D) && ./configure $(PROSODY_CONF_OPTS)
+ endef
+ 
+ define PROSODY_BUILD_CMDS
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.11.0
