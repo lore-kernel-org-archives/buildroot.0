@@ -1,9 +1,9 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Tue, 17 Oct 2017 22:32:33 -0400
-Subject: [Buildroot] [PATCH 06/13] opusfile: add libressl support patch
+Date: Tue, 17 Oct 2017 22:32:34 -0400
+Subject: [Buildroot] [PATCH 07/13] openldap: add libressl support patch
 In-Reply-To: <20171018023240.22724-1-Adamduskett@outlook.com>
 References: <20171018023240.22724-1-Adamduskett@outlook.com>
-Message-ID: <20171018023240.22724-7-Adamduskett@outlook.com>
+Message-ID: <20171018023240.22724-8-Adamduskett@outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,20 +17,20 @@ Add simple checks to see if LIBRESSL_VERSION_NUMBER is defined.
 
 Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
 ---
- package/opusfile/0001-fix-libressl-support.patch | 119 +++++++++++++++++++++++
- 1 file changed, 119 insertions(+)
- create mode 100644 package/opusfile/0001-fix-libressl-support.patch
+ package/openldap/0004-fix-libressl-support.patch | 104 +++++++++++++++++++++++
+ 1 file changed, 104 insertions(+)
+ create mode 100644 package/openldap/0004-fix-libressl-support.patch
 
-diff --git a/package/opusfile/0001-fix-libressl-support.patch b/package/opusfile/0001-fix-libressl-support.patch
+diff --git a/package/openldap/0004-fix-libressl-support.patch b/package/openldap/0004-fix-libressl-support.patch
 new file mode 100644
-index 0000000000..7965d78bfe
+index 0000000000..8f3bf5423c
 --- /dev/null
-+++ b/package/opusfile/0001-fix-libressl-support.patch
-@@ -0,0 +1,119 @@
-+From 349ddeff80bc2188b75ef3a3a9bf65203bcb9d7e Mon Sep 17 00:00:00 2001
++++ b/package/openldap/0004-fix-libressl-support.patch
+@@ -0,0 +1,104 @@
++From 8093c506228e28c5cc8db9fd90b687004712168b Mon Sep 17 00:00:00 2001
 +From: Adam Duskett <Adamduskett@outlook.com>
-+Date: Tue, 17 Oct 2017 21:14:59 -0400
-+Subject: [PATCH] fix-libressl-support
++Date: Thu, 3 Aug 2017 17:09:39 -0400
++Subject: [PATCH] fix libressl support
 +
 +When a program checks for openssl 1.1 or higher, it will pass that
 +check because libressl sets it's version number to 2.x.
@@ -39,112 +39,97 @@ index 0000000000..7965d78bfe
 +
 +Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
 +---
-+ src/http.c | 22 +++++++++++-----------
-+ 1 file changed, 11 insertions(+), 11 deletions(-)
++ libraries/libldap/tls_o.c | 23 +++++++++++++++--------
++ 1 file changed, 15 insertions(+), 8 deletions(-)
 +
-+diff --git a/src/http.c b/src/http.c
-+index acd0e8c..f6896c2 100644
-+--- a/src/http.c
-++++ b/src/http.c
-+@@ -1530,7 +1530,7 @@ static long op_bio_retry_ctrl(BIO *_b,int _cmd,long _num,void *_ptr){
-+   return ret;
++diff --git a/libraries/libldap/tls_o.c b/libraries/libldap/tls_o.c
++index 2025c9f..41faf0d 100644
++--- a/libraries/libldap/tls_o.c
+++++ b/libraries/libldap/tls_o.c
++@@ -47,7 +47,7 @@
++ #include <ssl.h>
++ #endif
++ 
++-#if OPENSSL_VERSION_NUMBER >= 0x10100000
+++#if OPENSSL_VERSION_NUMBER >= 0x10100000 && !defined(LIBRESSL_VERSION_NUMBER)
++ #define ASN1_STRING_data(x)	ASN1_STRING_get0_data(x)
++ #endif
++ 
++@@ -157,7 +157,7 @@ tlso_init( void )
++ 	(void) tlso_seed_PRNG( lo->ldo_tls_randfile );
++ #endif
++ 
++-#if OPENSSL_VERSION_NUMBER < 0x10100000
+++#if OPENSSL_VERSION_NUMBER < 0x10100000 || defined(LIBRESSL_VERSION_NUMBER)
++ 	SSL_load_error_strings();
++ 	SSL_library_init();
++ 	OpenSSL_add_all_digests();
++@@ -205,7 +205,7 @@ static void
++ tlso_ctx_ref( tls_ctx *ctx )
++ {
++ 	tlso_ctx *c = (tlso_ctx *)ctx;
++-#if OPENSSL_VERSION_NUMBER < 0x10100000
+++#if OPENSSL_VERSION_NUMBER < 0x10100000 || defined(LIBRESSL_VERSION_NUMBER)
++ #define	SSL_CTX_up_ref(ctx)	CRYPTO_add( &(ctx->references), 1, CRYPTO_LOCK_SSL_CTX )
++ #endif
++ 	SSL_CTX_up_ref( c );
++@@ -464,7 +464,7 @@ tlso_session_my_dn( tls_session *sess, struct berval *der_dn )
++ 	if (!x) return LDAP_INVALID_CREDENTIALS;
++ 	
++ 	xn = X509_get_subject_name(x);
++-#if OPENSSL_VERSION_NUMBER < 0x10100000
+++#if OPENSSL_VERSION_NUMBER < 0x10100000 || defined(LIBRESSL_VERSION_NUMBER)
++ 	der_dn->bv_len = i2d_X509_NAME( xn, NULL );
++ 	der_dn->bv_val = xn->bytes->data;
++ #else
++@@ -500,7 +500,7 @@ tlso_session_peer_dn( tls_session *sess, struct berval *der_dn )
++ 		return LDAP_INVALID_CREDENTIALS;
++ 
++ 	xn = X509_get_subject_name(x);
++-#if OPENSSL_VERSION_NUMBER < 0x10100000
+++#if OPENSSL_VERSION_NUMBER < 0x10100000 || defined(LIBRESSL_VERSION_NUMBER)
++ 	der_dn->bv_len = i2d_X509_NAME( xn, NULL );
++ 	der_dn->bv_val = xn->bytes->data;
++ #else
++@@ -721,7 +721,7 @@ struct tls_data {
++ 	Sockbuf_IO_Desc		*sbiod;
++ };
++ 
++-#if OPENSSL_VERSION_NUMBER < 0x10100000
+++#if OPENSSL_VERSION_NUMBER < 0x10100000 || defined(LIBRESSL_VERSION_NUMBER)
++ #define BIO_set_init(b, x)	b->init = x
++ #define BIO_set_data(b, x)	b->ptr = x
++ #define BIO_clear_flags(b, x)	b->flags &= ~(x)
++@@ -822,7 +822,7 @@ tlso_bio_puts( BIO *b, const char *str )
++ 	return tlso_bio_write( b, str, strlen( str ) );
 + }
 + 
-+-# if OPENSSL_VERSION_NUMBER<0x10100000L
-++# if OPENSSL_VERSION_NUMBER<0x10100000L || defined(LIBRESSL_VERSION_NUMBER)
-+ #  define BIO_set_data(_b,_ptr) ((_b)->ptr=(_ptr))
-+ #  define BIO_set_init(_b,_init) ((_b)->init=(_init))
-+ #  define ASN1_STRING_get0_data ASN1_STRING_data
-+@@ -1538,7 +1538,7 @@ static long op_bio_retry_ctrl(BIO *_b,int _cmd,long _num,void *_ptr){
++-#if OPENSSL_VERSION_NUMBER >= 0x10100000
+++#if OPENSSL_VERSION_NUMBER >= 0x10100000 && !defined(LIBRESSL_VERSION_NUMBER)
++ struct bio_method_st {
++     int type;
++     const char *name;
++@@ -1187,10 +1187,17 @@ tlso_seed_PRNG( const char *randfile )
++ 		 */
++ 		randfile = RAND_file_name( buffer, sizeof( buffer ) );
 + 
-+ static int op_bio_retry_new(BIO *_b){
-+   BIO_set_init(_b,1);
-+-# if OPENSSL_VERSION_NUMBER<0x10100000L
-++# if OPENSSL_VERSION_NUMBER<0x10100000L || defined(LIBRESSL_VERSION_NUMBER)
-+   _b->num=0;
-+ # endif
-+   BIO_set_data(_b,NULL);
-+@@ -1549,7 +1549,7 @@ static int op_bio_retry_free(BIO *_b){
-+   return _b!=NULL;
-+ }
++-	} else if (RAND_egd(randfile) > 0) {
+++	} 
+++	#ifndef OPENSSL_NO_EGD
+++	else if (RAND_egd(randfile) > 0) {
++ 		/* EGD socket */
++ 		return 0;
++ 	}
+++	#else
+++	else {
+++		return 0;
+++	}
+++	#endif
 + 
-+-# if OPENSSL_VERSION_NUMBER<0x10100000L
-++# if OPENSSL_VERSION_NUMBER<0x10100000L || defined(LIBRESSL_VERSION_NUMBER)
-+ /*This is not const because OpenSSL doesn't allow it, even though it won't
-+    write to it.*/
-+ static BIO_METHOD op_bio_retry_method={
-+@@ -1570,7 +1570,7 @@ static BIO_METHOD op_bio_retry_method={
-+    proxying https URL requests.*/
-+ static int op_http_conn_establish_tunnel(OpusHTTPStream *_stream,
-+  OpusHTTPConn *_conn,op_sock _fd,SSL *_ssl_conn,BIO *_ssl_bio){
-+-# if OPENSSL_VERSION_NUMBER>=0x10100000L
-++# if OPENSSL_VERSION_NUMBER>=0x10100000L && !defined(LIBRESSL_VERSION_NUMBER)
-+   BIO_METHOD *bio_retry_method;
-+ # endif
-+   BIO  *retry_bio;
-+@@ -1583,7 +1583,7 @@ static int op_http_conn_establish_tunnel(OpusHTTPStream *_stream,
-+   ret=op_http_conn_write_fully(_conn,
-+    _stream->proxy_connect.buf,_stream->proxy_connect.nbuf);
-+   if(OP_UNLIKELY(ret<0))return ret;
-+-# if OPENSSL_VERSION_NUMBER>=0x10100000L
-++# if OPENSSL_VERSION_NUMBER>=0x10100000L && !defined(LIBRESSL_VERSION_NUMBER)
-+   bio_retry_method=BIO_meth_new(BIO_TYPE_NULL,"retry");
-+   if(bio_retry_method==NULL)return OP_EFAULT;
-+   BIO_meth_set_write(bio_retry_method,op_bio_retry_write);
-+@@ -1606,7 +1606,7 @@ static int op_http_conn_establish_tunnel(OpusHTTPStream *_stream,
-+   /*This shouldn't succeed, since we can't read yet.*/
-+   OP_ALWAYS_TRUE(SSL_connect(_ssl_conn)<0);
-+   SSL_set_bio(_ssl_conn,_ssl_bio,_ssl_bio);
-+-# if OPENSSL_VERSION_NUMBER>=0x10100000L
-++# if OPENSSL_VERSION_NUMBER>=0x10100000L && !defined(LIBRESSL_VERSION_NUMBER)
-+   BIO_meth_free(bio_retry_method);
-+ # endif
-+   /*Only now do we disable write coalescing, to allow the CONNECT
-+@@ -1635,7 +1635,7 @@ static struct addrinfo *op_inet_pton(const char *_host){
-+   return NULL;
-+ }
-+ 
-+-# if OPENSSL_VERSION_NUMBER<0x10002000L
-++# if OPENSSL_VERSION_NUMBER<0x10002000L || defined(LIBRESSL_VERSION_NUMBER)
-+ /*Match a host name against a host with a possible wildcard pattern according
-+    to the rules of RFC 6125 Section 6.4.3.
-+   Return: 0 if the pattern doesn't match, and a non-zero value if it does.*/
-+@@ -1893,7 +1893,7 @@ static int op_http_conn_start_tls(OpusHTTPStream *_stream,OpusHTTPConn *_conn,
-+   SSL_set_tlsext_host_name(_ssl_conn,_stream->url.host);
-+ # endif
-+   skip_certificate_check=_stream->skip_certificate_check;
-+-# if OPENSSL_VERSION_NUMBER>=0x10002000L
-++# if OPENSSL_VERSION_NUMBER>=0x10002000L && !defined(LIBRESSL_VERSION_NUMBER)
-+   /*As of version 1.0.2, OpenSSL can finally do hostname checks automatically.
-+     Of course, they make it much more complicated than it needs to be.*/
-+   if(!skip_certificate_check){
-+@@ -1956,13 +1956,13 @@ static int op_http_conn_start_tls(OpusHTTPStream *_stream,OpusHTTPConn *_conn,
-+   if(OP_UNLIKELY(ret<=0))return OP_FALSE;
-+   ssl_session=_stream->ssl_session;
-+   if(ssl_session==NULL
-+-# if OPENSSL_VERSION_NUMBER<0x10002000L
-++# if OPENSSL_VERSION_NUMBER<0x10002000L || defined(LIBRESSL_VERSION_NUMBER)
-+    ||!skip_certificate_check
-+ # endif
-+    ){
-+     ret=op_do_ssl_step(_ssl_conn,_fd,SSL_do_handshake);
-+     if(OP_UNLIKELY(ret<=0))return OP_FALSE;
-+-# if OPENSSL_VERSION_NUMBER<0x10002000L
-++# if OPENSSL_VERSION_NUMBER<0x10002000L || defined(LIBRESSL_VERSION_NUMBER)
-+     /*OpenSSL before version 1.0.2 does not do automatic hostname verification,
-+        despite the fact that we just passed it the hostname above in the call
-+        to SSL_set_tlsext_host_name().
-+@@ -2314,7 +2314,7 @@ static int op_http_stream_open(OpusHTTPStream *_stream,const char *_url,
-+     /*Initialize the SSL library if necessary.*/
-+     if(OP_URL_IS_SSL(&_stream->url)&&_stream->ssl_ctx==NULL){
-+       SSL_CTX *ssl_ctx;
-+-# if OPENSSL_VERSION_NUMBER<0x10100000L
-++# if OPENSSL_VERSION_NUMBER<0x10100000L || defined(LIBRESSL_VERSION_NUMBER)
-+ #  if !defined(OPENSSL_NO_LOCKING)
-+       /*The documentation says SSL_library_init() is not reentrant.
-+         We don't want to add our own depenencies on a threading library, and it
++ 	if (randfile == NULL) {
++ 		Debug( LDAP_DEBUG_ANY,
 +-- 
-+2.13.6
++2.13.3
 +
 -- 
 2.13.6
