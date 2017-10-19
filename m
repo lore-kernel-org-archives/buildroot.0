@@ -1,142 +1,199 @@
 From: Jagan Teki <jagannadh.teki@gmail.com>
-Date: Thu, 19 Oct 2017 11:45:22 +0200
-Subject: [Buildroot] [PATCH v3 00/11] board: Add Allwinner A64/H5 boards
-Message-ID: <1508406333-27138-1-git-send-email-jagan@amarulasolutions.com>
+Date: Thu, 19 Oct 2017 11:45:23 +0200
+Subject: [Buildroot] [PATCH v3 01/11] board: Add Bananapi M1 support
+In-Reply-To: <1508406333-27138-1-git-send-email-jagan@amarulasolutions.com>
+References: <1508406333-27138-1-git-send-email-jagan@amarulasolutions.com>
+Message-ID: <1508406333-27138-2-git-send-email-jagan@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patchset add 'sunxi64-post-build.sh' for building U-Boot proper,
-becuase ATF binary should be build prior and have in env.
+Add initial support for bananapi M1 board with below features:
+- U-Boot 2017.09
+- Linux 4.17
+- Default packages from buildroot
 
-All boards now use Mainline U-Boot, Linux and Nanaopi A64, A64-olinuxino
-used linux-next patches since 4.13.7 have not been merged.
-
-Tested on rea hardware.
-
-Changes for v3:
-- Fixed Bananapi M1 comment on config file
-- Add sunxi64-post-build.sh
-- Add all sunxi64 boards
-Changes for v2:
-- Rebase on master
-
-Jagan Teki (11):
-  board: Add Bananapi M1 support
-  support/scripts: Add sunxi64-post-build.sh
-  board: Add Bananapi M64 support
-  board: Add Pine64 support
-  board: Add SoPine support
-  board: Add FriendlyARM Nanopi A64 support
-  board: Add FriendlyARM Nanopi NEO2 support
-  board: Add Olimex A64-OLinuXino support
-  board: Add Orangepi Win/Win Plus support
-  board: Add Orangepi Prime support
-  board: Add Orangepi Zero Plus2 support
-
- .gitlab-ci.yml                                     |  10 +
- DEVELOPERS                                         |  18 ++
- board/bananapi/bananapi-m1/boot.cmd                |   7 +
- board/bananapi/bananapi-m1/genimage.cfg            |  33 +++
- board/bananapi/bananapi-m1/readme.txt              |  37 +++
- board/bananapi/bananapi-m64/boot.cmd               |   6 +
- board/bananapi/bananapi-m64/genimage.cfg           |  38 +++
- board/bananapi/bananapi-m64/readme.txt             |  37 +++
- board/friendlyarm/nanopi-a64/boot.cmd              |   6 +
- board/friendlyarm/nanopi-a64/genimage.cfg          |  38 +++
- board/friendlyarm/nanopi-a64/linux_axp.fragment    |   3 +
- ...nner-a64-add-NMI-R_INTC-controller-on-A64.patch |  41 ++++
- ...lwinner-a64-add-DTSI-file-for-AXP803-PMIC.patch | 176 ++++++++++++++
- ...winner-a64-Add-initial-NanoPi-A64-support.patch | 254 +++++++++++++++++++++
- board/friendlyarm/nanopi-a64/readme.txt            |  37 +++
- board/friendlyarm/nanopi-neo2/boot.cmd             |   6 +
- board/friendlyarm/nanopi-neo2/genimage.cfg         |  38 +++
- board/friendlyarm/nanopi-neo2/readme.txt           |  37 +++
- board/olimex/a64-olinuxino/boot.cmd                |   6 +
- board/olimex/a64-olinuxino/genimage.cfg            |  38 +++
- board/olimex/a64-olinuxino/linux_axp.fragment      |   3 +
- ...nner-a64-add-NMI-R_INTC-controller-on-A64.patch |  41 ++++
- ...lwinner-a64-add-DTSI-file-for-AXP803-PMIC.patch | 176 ++++++++++++++
- ...nner-a64-Add-A64-OLinuXino-initial-suppor.patch | 244 ++++++++++++++++++++
- board/olimex/a64-olinuxino/readme.txt              |  37 +++
- board/orangepi/orangepi-prime/boot.cmd             |   6 +
- board/orangepi/orangepi-prime/genimage.cfg         |  38 +++
- board/orangepi/orangepi-prime/readme.txt           |  37 +++
- board/orangepi/orangepi-win/boot.cmd               |   6 +
- board/orangepi/orangepi-win/genimage.cfg           |  38 +++
- board/orangepi/orangepi-win/readme.txt             |  37 +++
- board/orangepi/orangepi-zero-plus2/boot.cmd        |   6 +
- board/orangepi/orangepi-zero-plus2/genimage.cfg    |  38 +++
- board/orangepi/orangepi-zero-plus2/readme.txt      |  37 +++
- board/pine64/pine64/boot.cmd                       |   6 +
- board/pine64/pine64/genimage.cfg                   |  38 +++
- board/pine64/pine64/readme.txt                     |  38 +++
- board/pine64/sopine/boot.cmd                       |   6 +
- board/pine64/sopine/genimage.cfg                   |  38 +++
- board/pine64/sopine/readme.txt                     |  38 +++
- configs/bananapi_m1_defconfig                      |  37 +++
- configs/bananapi_m64_defconfig                     |  47 ++++
- configs/friendlyarm_nanopi_a64_defconfig           |  51 +++++
- configs/friendlyarm_nanopi_neo2_defconfig          |  47 ++++
- configs/olimex_a64_olinuxino_defconfig             |  51 +++++
- configs/orangepi_prime_defconfig                   |  47 ++++
- configs/orangepi_win_defconfig                     |  47 ++++
- configs/orangepi_zero_plus2_defconfig              |  47 ++++
- configs/pine64_defconfig                           |  47 ++++
- configs/pine64_sopine_defconfig                    |  47 ++++
- support/scripts/sunxi64-post-build.sh              |  32 +++
- 51 files changed, 2274 insertions(+)
+Cc: Jason <manager@sinovoip.com.cn>
+Cc: hailymei at banana-pi.com <hailymei@banana-pi.com>
+Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
+---
+ .gitlab-ci.yml                          |  1 +
+ DEVELOPERS                              |  2 ++
+ board/bananapi/bananapi-m1/boot.cmd     |  7 +++++++
+ board/bananapi/bananapi-m1/genimage.cfg | 33 +++++++++++++++++++++++++++++
+ board/bananapi/bananapi-m1/readme.txt   | 37 +++++++++++++++++++++++++++++++++
+ configs/bananapi_m1_defconfig           | 37 +++++++++++++++++++++++++++++++++
+ 6 files changed, 117 insertions(+)
  create mode 100644 board/bananapi/bananapi-m1/boot.cmd
  create mode 100644 board/bananapi/bananapi-m1/genimage.cfg
  create mode 100644 board/bananapi/bananapi-m1/readme.txt
- create mode 100644 board/bananapi/bananapi-m64/boot.cmd
- create mode 100644 board/bananapi/bananapi-m64/genimage.cfg
- create mode 100644 board/bananapi/bananapi-m64/readme.txt
- create mode 100644 board/friendlyarm/nanopi-a64/boot.cmd
- create mode 100644 board/friendlyarm/nanopi-a64/genimage.cfg
- create mode 100644 board/friendlyarm/nanopi-a64/linux_axp.fragment
- create mode 100644 board/friendlyarm/nanopi-a64/patches/linux/linux-0001-arm64-allwinner-a64-add-NMI-R_INTC-controller-on-A64.patch
- create mode 100644 board/friendlyarm/nanopi-a64/patches/linux/linux-0002-arm64-allwinner-a64-add-DTSI-file-for-AXP803-PMIC.patch
- create mode 100644 board/friendlyarm/nanopi-a64/patches/linux/linux-0003-arm64-allwinner-a64-Add-initial-NanoPi-A64-support.patch
- create mode 100644 board/friendlyarm/nanopi-a64/readme.txt
- create mode 100644 board/friendlyarm/nanopi-neo2/boot.cmd
- create mode 100644 board/friendlyarm/nanopi-neo2/genimage.cfg
- create mode 100644 board/friendlyarm/nanopi-neo2/readme.txt
- create mode 100644 board/olimex/a64-olinuxino/boot.cmd
- create mode 100644 board/olimex/a64-olinuxino/genimage.cfg
- create mode 100644 board/olimex/a64-olinuxino/linux_axp.fragment
- create mode 100644 board/olimex/a64-olinuxino/patches/linux/linux-0001-arm64-allwinner-a64-add-NMI-R_INTC-controller-on-A64.patch
- create mode 100644 board/olimex/a64-olinuxino/patches/linux/linux-0002-arm64-allwinner-a64-add-DTSI-file-for-AXP803-PMIC.patch
- create mode 100644 board/olimex/a64-olinuxino/patches/linux/linux-0003-arm64-allwinner-a64-Add-A64-OLinuXino-initial-suppor.patch
- create mode 100644 board/olimex/a64-olinuxino/readme.txt
- create mode 100644 board/orangepi/orangepi-prime/boot.cmd
- create mode 100644 board/orangepi/orangepi-prime/genimage.cfg
- create mode 100644 board/orangepi/orangepi-prime/readme.txt
- create mode 100644 board/orangepi/orangepi-win/boot.cmd
- create mode 100644 board/orangepi/orangepi-win/genimage.cfg
- create mode 100644 board/orangepi/orangepi-win/readme.txt
- create mode 100644 board/orangepi/orangepi-zero-plus2/boot.cmd
- create mode 100644 board/orangepi/orangepi-zero-plus2/genimage.cfg
- create mode 100644 board/orangepi/orangepi-zero-plus2/readme.txt
- create mode 100644 board/pine64/pine64/boot.cmd
- create mode 100644 board/pine64/pine64/genimage.cfg
- create mode 100644 board/pine64/pine64/readme.txt
- create mode 100644 board/pine64/sopine/boot.cmd
- create mode 100644 board/pine64/sopine/genimage.cfg
- create mode 100644 board/pine64/sopine/readme.txt
  create mode 100644 configs/bananapi_m1_defconfig
- create mode 100644 configs/bananapi_m64_defconfig
- create mode 100644 configs/friendlyarm_nanopi_a64_defconfig
- create mode 100644 configs/friendlyarm_nanopi_neo2_defconfig
- create mode 100644 configs/olimex_a64_olinuxino_defconfig
- create mode 100644 configs/orangepi_prime_defconfig
- create mode 100644 configs/orangepi_win_defconfig
- create mode 100644 configs/orangepi_zero_plus2_defconfig
- create mode 100644 configs/pine64_defconfig
- create mode 100644 configs/pine64_sopine_defconfig
- create mode 100755 support/scripts/sunxi64-post-build.sh
 
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index 0e69288..ebaac7a 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -88,6 +88,7 @@ atmel_sama5d4_xplained_defconfig: *defconfig
+ atmel_sama5d4_xplained_dev_defconfig: *defconfig
+ atmel_sama5d4_xplained_mmc_defconfig: *defconfig
+ atmel_sama5d4_xplained_mmc_dev_defconfig: *defconfig
++bananapi_m1_defconfig: *defconfig
+ bananapi_m2_plus_defconfig: *defconfig
+ bananapro_defconfig: *defconfig
+ beagleboardx15_defconfig: *defconfig
+diff --git a/DEVELOPERS b/DEVELOPERS
+index dd19a0a..51283f1 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -726,7 +726,9 @@ N:	Ilias Apalodimas <apalos@gmail.com>
+ F:	package/keepalived/
+ 
+ N:	Jagan Teki <jagan@amarulasolutions.com>
++F:	board/bananapi/
+ F:	board/engicam/
++F:	configs/bananapi_m1_defconfig
+ F:	configs/engicam_imx6qdl_icore_defconfig
+ F:	configs/engicam_imx6qdl_icore_qt5_defconfig
+ F:	configs/engicam_imx6qdl_icore_rqs_defconfig
+diff --git a/board/bananapi/bananapi-m1/boot.cmd b/board/bananapi/bananapi-m1/boot.cmd
+new file mode 100644
+index 0000000..fb7de1d
+--- /dev/null
++++ b/board/bananapi/bananapi-m1/boot.cmd
+@@ -0,0 +1,7 @@
++setenv bootargs console=ttyS0,115200 earlyprintk root=/dev/mmcblk0p2 rootwait
++
++mmc dev 0
++fatload mmc 0 $kernel_addr_r zImage
++fatload mmc 0 $fdt_addr_r sun7i-a20-bananapi.dts
++
++bootz $kernel_addr_r - $fdt_addr_r
+diff --git a/board/bananapi/bananapi-m1/genimage.cfg b/board/bananapi/bananapi-m1/genimage.cfg
+new file mode 100644
+index 0000000..e2e1311
+--- /dev/null
++++ b/board/bananapi/bananapi-m1/genimage.cfg
+@@ -0,0 +1,33 @@
++image boot.vfat {
++	vfat {
++		files = {
++			"zImage",
++			"sun7i-a20-bananapi.dtb",
++			"boot.scr"
++		}
++	}
++	size = 64M
++}
++
++image sdcard.img {
++	hdimage {
++	}
++
++	partition u-boot {
++		in-partition-table = "no"
++		image = "u-boot-sunxi-with-spl.bin"
++		offset = 8192
++		size = 1040384 # 1MB - 8192
++	}
++
++	partition boot {
++		partition-type = 0xC
++		bootable = "true"
++		image = "boot.vfat"
++	}
++
++	partition rootfs {
++		partition-type = 0x83
++		image = "rootfs.ext4"
++	}
++}
+diff --git a/board/bananapi/bananapi-m1/readme.txt b/board/bananapi/bananapi-m1/readme.txt
+new file mode 100644
+index 0000000..382ba63
+--- /dev/null
++++ b/board/bananapi/bananapi-m1/readme.txt
+@@ -0,0 +1,37 @@
++Intro
++=====
++
++This default configuration will allow you to start experimenting with the
++buildroot environment for the Bananapi M1. With the current configuration
++it will bring-up the board, and allow access through the serial console.
++
++Bananapi M1 link:
++http://www.banana-pi.org/m1.html
++
++Wiki link:
++https://openedev.amarulasolutions.com/display/ODWIKI/Bananapi+M1
++
++This configuration uses U-Boot mainline and kernel mainline.
++
++How to build
++============
++
++    $ make bananapi_m1_defconfig
++    $ make
++
++Note: you will need access to the internet to download the required
++sources.
++
++How to write the SD card
++========================
++
++Once the build process is finished you will have an image called "sdcard.img"
++in the output/images/ directory.
++
++Copy the bootable "sdcard.img" onto an SD card with "dd":
++
++  $ sudo dd if=output/images/sdcard.img of=/dev/sdX
++  $ sudo sync
++
++Insert the micro SDcard in your Bananapi M1 and power it up. The console
++is on the serial line, 115200 8N1.
+diff --git a/configs/bananapi_m1_defconfig b/configs/bananapi_m1_defconfig
+new file mode 100644
+index 0000000..b084309
+--- /dev/null
++++ b/configs/bananapi_m1_defconfig
+@@ -0,0 +1,37 @@
++BR2_arm=y
++BR2_cortex_a7=y
++BR2_ARM_EABIHF=y
++
++# Linux headers same as kernel, a 4.13 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_13=y
++
++# Bootloader
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.09"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="Bananapi"
++BR2_TARGET_UBOOT_NEEDS_DTC=y
++BR2_TARGET_UBOOT_FORMAT_BIN=y
++BR2_TARGET_UBOOT_SPL=y
++BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
++BR2_TARGET_UBOOT_BOOT_SCRIPT=y
++BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE="board/bananapi/bananapi-m1/boot.cmd"
++
++# Kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.13.7"
++BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun7i-a20-bananapi"
++
++# Filesystem
++BR2_TARGET_GENERIC_ISSUE="Welcome to Bananapi M1"
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++BR2_PACKAGE_HOST_DOSFSTOOLS=y
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_MTOOLS=y
++BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/bananapi/bananapi-m1/genimage.cfg"
 -- 
 1.9.1
