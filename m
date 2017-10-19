@@ -1,92 +1,45 @@
 From: Christian Stewart <christian@paral.in>
-Date: Wed, 18 Oct 2017 20:22:57 -0400
-Subject: [Buildroot] [PATCH 12/12] docker-engine: don't link against
-	libsystemd without systemd
+Date: Wed, 18 Oct 2017 20:22:49 -0400
+Subject: [Buildroot] [PATCH 04/12] docker-engine: select static for tini and
+	dumb-init
 In-Reply-To: <20171019002257.27646-1-christian@paral.in>
 References: <20171019002257.27646-1-christian@paral.in>
-Message-ID: <20171019002257.27646-12-christian@paral.in>
+Message-ID: <20171019002257.27646-4-christian@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Docker links against libsystemd unconditionally in the latest release. This is
-entirely unnecessary, and the included patch disables this behavior in the
-absence of the systemd build tag, which is now set when systemd is enabled in
-buildroot.
-
-This fixes linking errors when building against sysv, and avoids adding a
-hard dependency on systemd in Docker.
-
-Docker-Engine should also use the target pkgconfig, not the host pkgconfig. This
-is fixed in this patch.
+In many cases docker-init backing processes like Tini and dumb-init must
+be static, as they are executed inside a container in an unknown
+environment. This patch selects the static compilation options on both
+packages when used as docker-init backing processes.
 
 Signed-off-by: Christian Stewart <christian@paral.in>
 ---
- ...king-against-libsystemd-with-absence-of-s.patch | 54 ++++++++++++++++++++++
- 1 file changed, 54 insertions(+)
- create mode 100644 package/docker-engine/0001-disable-linking-against-libsystemd-with-absence-of-s.patch
+ package/docker-engine/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/docker-engine/0001-disable-linking-against-libsystemd-with-absence-of-s.patch b/package/docker-engine/0001-disable-linking-against-libsystemd-with-absence-of-s.patch
-new file mode 100644
-index 0000000000..9a8b126d5f
---- /dev/null
-+++ b/package/docker-engine/0001-disable-linking-against-libsystemd-with-absence-of-s.patch
-@@ -0,0 +1,54 @@
-+From 56ab23f03df71d6cd084a9f4fd9c382e47b0e26e Mon Sep 17 00:00:00 2001
-+From: Christian Stewart <christian@paral.in>
-+Date: Wed, 20 Sep 2017 18:09:26 +0100
-+Subject: [PATCH] disable linking against libsystemd with absence of systemd
-+ build tag
-+
-+For some reason, as of this release, Docker now MUST link against libsystemd.
-+
-+This is not for a good reason. It's because of two lines in the daemon startup,
-+which notify the systemd daemon that the daemon is done starting.
-+
-+Requiring the presence of an entire systemd library to build Docker is not
-+suitable for Buildroot. This patch adds a build tag called "systemd," which
-+when not set, will disable linking against libsystemd.
-+
-+Signed-off-by: Christian Stewart <christian@paral.in>
-+---
-+ components/engine/cmd/dockerd/daemon_linux.go           |  2 +-
-+ components/engine/cmd/dockerd/daemon_linux_nosystemd.go | 13 +++++++++++++
-+ 2 files changed, 14 insertions(+), 1 deletion(-)
-+ create mode 100644 components/engine/cmd/dockerd/daemon_linux_nosystemd.go
-+
-+diff --git a/components/engine/cmd/dockerd/daemon_linux.go b/components/engine/cmd/dockerd/daemon_linux.go
-+index a909ee4fbd..89c16bac2f 100644
-+--- a/components/engine/cmd/dockerd/daemon_linux.go
-++++ b/components/engine/cmd/dockerd/daemon_linux.go
-+@@ -1,4 +1,4 @@
-+-// +build linux
-++// +build linux,systemd
-+ 
-+ package main
-+ 
-+diff --git a/components/engine/cmd/dockerd/daemon_linux_nosystemd.go b/components/engine/cmd/dockerd/daemon_linux_nosystemd.go
-+new file mode 100644
-+index 0000000000..4f7e92af0f
-+--- /dev/null
-++++ b/components/engine/cmd/dockerd/daemon_linux_nosystemd.go
-+@@ -0,0 +1,13 @@
-++// +build linux,!systemd
-++
-++package main
-++
-++// preNotifySystem sends a message to the host when the API is active, but before the daemon is
-++func preNotifySystem() {
-++	// noop without systemd
-++}
-++
-++// notifySystem sends a message to the host when the server is ready to be used
-++func notifySystem() {
-++	// noop without systemd
-++}
-+-- 
-+2.13.5
-+
+diff --git a/package/docker-engine/Config.in b/package/docker-engine/Config.in
+index 7d9a87f7bb..47ac7f57a3 100644
+--- a/package/docker-engine/Config.in
++++ b/package/docker-engine/Config.in
+@@ -44,6 +44,7 @@ choice
+ config BR2_PACKAGE_DOCKER_ENGINE_INIT_TINI
+ 	bool "tini"
+ 	select BR2_PACKAGE_TINI
++	select BR2_PACKAGE_TINI_STATIC
+ 	help
+ 	  Use Tini as the container init process.
+ 
+@@ -52,6 +53,7 @@ config BR2_PACKAGE_DOCKER_ENGINE_INIT_TINI
+ config BR2_PACKAGE_DOCKER_ENGINE_INIT_DUMB_INIT
+ 	bool "dumb-init"
+ 	select BR2_PACKAGE_DUMB_INIT
++	select BR2_PACKAGE_DUMB_INIT_STATIC
+ 	help
+ 	  Use dumb-init as the container init process.
+ 
 -- 
 2.13.6
