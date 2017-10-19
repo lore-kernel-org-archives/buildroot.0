@@ -1,132 +1,50 @@
 From: Christian Stewart <christian@paral.in>
-Date: Wed, 18 Oct 2017 20:22:50 -0400
-Subject: [Buildroot] [PATCH 05/12] docker-proxy: new package
+Date: Wed, 18 Oct 2017 20:22:52 -0400
+Subject: [Buildroot] [PATCH 07/12] go: bump version to 1.9
 In-Reply-To: <20171019002257.27646-1-christian@paral.in>
 References: <20171019002257.27646-1-christian@paral.in>
-Message-ID: <20171019002257.27646-5-christian@paral.in>
+Message-ID: <20171019002257.27646-7-christian@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add docker-proxy package to Buildroot. Needed by docker-engine at
-runtime, and previously not included. This leads to the following error
-when attempting to port-map ports to a container:
+Bumping Go to 1.9 from 1.7.
 
-  $ docker run -p 8080:8080 nginx
-  docker: Error response from daemon: driver failed programming external
-  connectivity on endpoint:
-  exec: "docker-proxy": executable file not found in $PATH.
+Go 1.8 comes with significant performance improvements, particularly
+around ARM: "CPU time required by our benchmark programs was reduced by
+20-30% on 32-bit ARM systems."
 
-Docker expects the docker-proxy binary to exist in the PATH.
+Go 1.9 is required for docker-engine and other Go packages in Buildroot.
 
 Signed-off-by: Christian Stewart <christian@paral.in>
 ---
- package/Config.in                      |  1 +
- package/docker-proxy/Config.in         | 18 +++++++++++++
- package/docker-proxy/docker-proxy.hash |  2 ++
- package/docker-proxy/docker-proxy.mk   | 46 ++++++++++++++++++++++++++++++++++
- 4 files changed, 67 insertions(+)
- create mode 100644 package/docker-proxy/Config.in
- create mode 100644 package/docker-proxy/docker-proxy.hash
- create mode 100644 package/docker-proxy/docker-proxy.mk
+ package/go/go.hash | 4 ++--
+ package/go/go.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index f8f9f39167..909a8c5d1a 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1903,6 +1903,7 @@ menu "System tools"
- 	source "package/debianutils/Config.in"
- 	source "package/docker-containerd/Config.in"
- 	source "package/docker-engine/Config.in"
-+	source "package/docker-proxy/Config.in"
- 	source "package/dsp-tools/Config.in"
- 	source "package/efibootmgr/Config.in"
- 	source "package/efivar/Config.in"
-diff --git a/package/docker-proxy/Config.in b/package/docker-proxy/Config.in
-new file mode 100644
-index 0000000000..4f414b24b1
---- /dev/null
-+++ b/package/docker-proxy/Config.in
-@@ -0,0 +1,18 @@
-+config BR2_PACKAGE_DOCKER_PROXY
-+	bool "docker-proxy"
-+	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	help
-+	  Libnetwork is a Container Network Model that provides a
-+	  consistent programming interface and the required network
-+	  abstractions for applications.
-+
-+	  This package provides docker-proxy, a run-time dependency of Docker.
-+
-+	  https://github.com/docker/libnetwork
-+
-+comment "docker-proxy needs a toolchain w/ threads"
-+	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/docker-proxy/docker-proxy.hash b/package/docker-proxy/docker-proxy.hash
-new file mode 100644
-index 0000000000..3ec184f54f
---- /dev/null
-+++ b/package/docker-proxy/docker-proxy.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256	2eee331b6ded567a36e7db708405b34032b93938682cf049025f48b96d755bf6	docker-proxy-7b2b1feb1de4817d522cc372af149ff48d25028e.tar.gz
-diff --git a/package/docker-proxy/docker-proxy.mk b/package/docker-proxy/docker-proxy.mk
-new file mode 100644
-index 0000000000..3bf6546d26
---- /dev/null
-+++ b/package/docker-proxy/docker-proxy.mk
-@@ -0,0 +1,46 @@
-+################################################################################
-+#
-+# docker-proxy
-+#
-+################################################################################
-+
-+DOCKER_PROXY_VERSION = 7b2b1feb1de4817d522cc372af149ff48d25028e
-+DOCKER_PROXY_SITE = $(call github,docker,libnetwork,$(DOCKER_PROXY_VERSION))
-+
-+DOCKER_PROXY_LICENSE = Apache-2.0
-+DOCKER_PROXY_LICENSE_FILES = LICENSE
-+
-+DOCKER_PROXY_DEPENDENCIES = host-go host-pkgconf
-+
-+DOCKER_PROXY_GOPATH = "$(@D)/gopath"
-+DOCKER_PROXY_MAKE_ENV = $(HOST_GO_TARGET_ENV) \
-+	CGO_ENABLED=1 \
-+	CGO_NO_EMULATION=1 \
-+	GOBIN="$(@D)/bin" \
-+	GOPATH="$(DOCKER_PROXY_GOPATH)" \
-+	PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
-+	$(TARGET_MAKE_ENV)
-+
-+ifeq ($(BR2_STATIC_LIBS),y)
-+DOCKER_PROXY_GLDFLAGS += -extldflags '-static'
-+endif
-+
-+define DOCKER_PROXY_CONFIGURE_CMDS
-+	mkdir -p $(DOCKER_PROXY_GOPATH)/src/github.com/docker
-+	ln -fs $(@D) $(DOCKER_PROXY_GOPATH)/src/github.com/docker/libnetwork
-+endef
-+
-+define DOCKER_PROXY_BUILD_CMDS
-+	cd $(@D)/gopath/src/github.com/docker/libnetwork; \
-+	$(DOCKER_PROXY_MAKE_ENV) \
-+	$(HOST_DIR)/usr/bin/go build -v \
-+		-o $(@D)/bin/docker-proxy \
-+		-ldflags "$(DOCKER_PROXY_GLDFLAGS)" \
-+		github.com/docker/libnetwork/cmd/proxy
-+endef
-+
-+define DOCKER_PROXY_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/bin/docker-proxy $(TARGET_DIR)/usr/bin/docker-proxy
-+endef
-+
-+$(eval $(generic-package))
+diff --git a/package/go/go.hash b/package/go/go.hash
+index 1836af2482..445a0b7c20 100644
+--- a/package/go/go.hash
++++ b/package/go/go.hash
+@@ -1,2 +1,2 @@
+-# Locally computed:
+-sha256	5f5dea2447e7dcfdc50fa6b94c512e58bfba5673c039259fd843f68829d99fa6	go1.8.3.src.tar.gz
++# From https://golang.org/dl/
++sha256	a4ab229028ed167ba1986825751463605264e44868362ca8e7accc8be057e993	go1.9.src.tar.gz
+diff --git a/package/go/go.mk b/package/go/go.mk
+index 0781dff035..93e1189c23 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GO_VERSION = 1.8.3
++GO_VERSION = 1.9
+ GO_SITE = https://storage.googleapis.com/golang
+ GO_SOURCE = go$(GO_VERSION).src.tar.gz
+ 
 -- 
 2.13.6
