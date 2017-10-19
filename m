@@ -1,61 +1,43 @@
-From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Thu, 19 Oct 2017 02:07:06 +0300
-Subject: [Buildroot] [PATCH 1/1] webkitgtk: update to version 2.18.1
-Message-ID: <20171018230706.1133-1-aperez@igalia.com>
+From: Christian Stewart <christian@paral.in>
+Date: Wed, 18 Oct 2017 20:22:51 -0400
+Subject: [Buildroot] [PATCH 06/12] docker-engine: add dependency on
+	docker-proxy
+In-Reply-To: <20171019002257.27646-1-christian@paral.in>
+References: <20171019002257.27646-1-christian@paral.in>
+Message-ID: <20171019002257.27646-6-christian@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This is a maintenance release of the current stable WebKitGTK+ version,
-which contains bugfixes (many of them related to rendering, plus one
-important fix for touch input) and many security fixes.
+docker-proxy is needed by docker-engine at runtime, and was
+previously not included. This leads to the following error
+when attempting to port-map ports to a container:
 
-Release notes:
+  $ docker run -p 8080:8080 nginx
+  docker: Error response from daemon: driver failed programming external
+  connectivity on endpoint:
+  exec: "docker-proxy": executable file not found in $PATH.
 
-    https://webkitgtk.org/2017/10/18/webkitgtk2.18.1-released.html
+Docker expects the docker-proxy binary to exist in the PATH.
 
-Fixes CVE-2017-7081, CVE-2017-7087, CVE-2017-7089, CVE-2017-7090,
-CVE-2017-7091, CVE-2017-7092, CVE-2017-7093, CVE-2017-7094,
-CVE-2017-7095, CVE-2017-7096, CVE-2017-7098, CVE-2017-7099,
-CVE-2017-7100, CVE-2017-7102, CVE-2017-7104, CVE-2017-7107,
-CVE-2017-7109, CVE-2017-7111, CVE-2017-7117, CVE-2017-7120,
-CVE-2017-7142:
-
-    https://webkitgtk.org/security/WSA-2017-0008.html
-
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Christian Stewart <christian@paral.in>
 ---
- package/webkitgtk/webkitgtk.hash | 8 ++++----
- package/webkitgtk/webkitgtk.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/docker-engine/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
-index c7a87f83de..f83bd0878a 100644
---- a/package/webkitgtk/webkitgtk.hash
-+++ b/package/webkitgtk/webkitgtk.hash
-@@ -1,4 +1,4 @@
--# From https://webkitgtk.org/releases/webkitgtk-2.18.0.tar.xz.sums
--md5 10d86dd5a5b68875654cc38af139f382 webkitgtk-2.18.0.tar.xz
--sha1 e4d6cc7cff8729aa5ae6c17e10ed5ddf31048983 webkitgtk-2.18.0.tar.xz
--sha256 b583e46a3de36a3e80ba33b084ead60512a2046aca01ff61e50e519436e5038d webkitgtk-2.18.0.tar.xz
-+# From https://webkitgtk.org/releases/webkitgtk-2.18.1.tar.xz.sums
-+md5 951a6082ada2f7d0292d3251a3f9532b webkitgtk-2.18.1.tar.xz
-+sha1 5054dd6b8afdc6e98b947e361011d6dca6da74e2 webkitgtk-2.18.1.tar.xz
-+sha256 9cdb7b302fbc8a2a7e1e783b80391e64f8b12d70d6ebad4eb756dd59bf3ed795 webkitgtk-2.18.1.tar.xz
-diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-index 7cdf28cd6f..55c2dd8cc4 100644
---- a/package/webkitgtk/webkitgtk.mk
-+++ b/package/webkitgtk/webkitgtk.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WEBKITGTK_VERSION = 2.18.0
-+WEBKITGTK_VERSION = 2.18.1
- WEBKITGTK_SITE = http://www.webkitgtk.org/releases
- WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
- WEBKITGTK_INSTALL_STAGING = YES
+diff --git a/package/docker-engine/Config.in b/package/docker-engine/Config.in
+index 47ac7f57a3..05e7aca7ab 100644
+--- a/package/docker-engine/Config.in
++++ b/package/docker-engine/Config.in
+@@ -16,6 +16,7 @@ config BR2_PACKAGE_DOCKER_ENGINE_DAEMON
+ 	default y
+ 	depends on BR2_USE_MMU # docker-containerd
+ 	select BR2_PACKAGE_DOCKER_CONTAINERD # runtime dependency
++	select BR2_PACKAGE_DOCKER_PROXY # runtime dependency
+ 	select BR2_PACKAGE_IPTABLES # runtime dependency
+ 	select BR2_PACKAGE_SQLITE # runtime dependency
+ 	help
 -- 
-2.14.2
+2.13.6
