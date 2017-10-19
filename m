@@ -1,45 +1,142 @@
-From: Olivier Schonken <olivier.schonken@gmail.com>
-Date: Thu, 19 Oct 2017 10:56:35 +0200
-Subject: [Buildroot] [PATCH 1/1] qpdf: Fix dependency on JPEG
-Message-ID: <20171019085635.8726-1-olivier.schonken@gmail.com>
+From: Jagan Teki <jagannadh.teki@gmail.com>
+Date: Thu, 19 Oct 2017 11:45:22 +0200
+Subject: [Buildroot] [PATCH v3 00/11] board: Add Allwinner A64/H5 boards
+Message-ID: <1508406333-27138-1-git-send-email-jagan@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Solves http://autobuild.buildroot.net/results/1abd0814de200abd6bad42675405a686cac4eb58
+This patchset add 'sunxi64-post-build.sh' for building U-Boot proper,
+becuase ATF binary should be build prior and have in env.
 
-Signed-off-by: Olivier Schonken <olivier.schonken@gmail.com>
----
- package/qpdf/Config.in | 1 +
- package/qpdf/qpdf.mk   | 2 +-
- 2 files changed, 2 insertions(+), 1 deletion(-)
+All boards now use Mainline U-Boot, Linux and Nanaopi A64, A64-olinuxino
+used linux-next patches since 4.13.7 have not been merged.
 
-diff --git a/package/qpdf/Config.in b/package/qpdf/Config.in
-index e8ab9ba969..0b29b6f827 100644
---- a/package/qpdf/Config.in
-+++ b/package/qpdf/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_QPDF
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	select BR2_PACKAGE_PCRE
- 	select BR2_PACKAGE_ZLIB
-+	select BR2_PACKAGE_JPEG
- 	help
- 	  QPDF is a command-line program that does structural, content-
- 	  preserving transformations on PDF files. It could have been called
-diff --git a/package/qpdf/qpdf.mk b/package/qpdf/qpdf.mk
-index 5b775401a6..27e4d09978 100644
---- a/package/qpdf/qpdf.mk
-+++ b/package/qpdf/qpdf.mk
-@@ -9,7 +9,7 @@ QPDF_SITE = http://downloads.sourceforge.net/project/qpdf/qpdf/$(QPDF_VERSION)
- QPDF_INSTALL_STAGING = YES
- QPDF_LICENSE = Artistic-2.0
- QPDF_LICENSE_FILES = Artistic-2.0
--QPDF_DEPENDENCIES = pcre zlib
-+QPDF_DEPENDENCIES = pcre zlib jpeg
- 
- QPDF_CONF_OPTS = --without-random
- 
+Tested on rea hardware.
+
+Changes for v3:
+- Fixed Bananapi M1 comment on config file
+- Add sunxi64-post-build.sh
+- Add all sunxi64 boards
+Changes for v2:
+- Rebase on master
+
+Jagan Teki (11):
+  board: Add Bananapi M1 support
+  support/scripts: Add sunxi64-post-build.sh
+  board: Add Bananapi M64 support
+  board: Add Pine64 support
+  board: Add SoPine support
+  board: Add FriendlyARM Nanopi A64 support
+  board: Add FriendlyARM Nanopi NEO2 support
+  board: Add Olimex A64-OLinuXino support
+  board: Add Orangepi Win/Win Plus support
+  board: Add Orangepi Prime support
+  board: Add Orangepi Zero Plus2 support
+
+ .gitlab-ci.yml                                     |  10 +
+ DEVELOPERS                                         |  18 ++
+ board/bananapi/bananapi-m1/boot.cmd                |   7 +
+ board/bananapi/bananapi-m1/genimage.cfg            |  33 +++
+ board/bananapi/bananapi-m1/readme.txt              |  37 +++
+ board/bananapi/bananapi-m64/boot.cmd               |   6 +
+ board/bananapi/bananapi-m64/genimage.cfg           |  38 +++
+ board/bananapi/bananapi-m64/readme.txt             |  37 +++
+ board/friendlyarm/nanopi-a64/boot.cmd              |   6 +
+ board/friendlyarm/nanopi-a64/genimage.cfg          |  38 +++
+ board/friendlyarm/nanopi-a64/linux_axp.fragment    |   3 +
+ ...nner-a64-add-NMI-R_INTC-controller-on-A64.patch |  41 ++++
+ ...lwinner-a64-add-DTSI-file-for-AXP803-PMIC.patch | 176 ++++++++++++++
+ ...winner-a64-Add-initial-NanoPi-A64-support.patch | 254 +++++++++++++++++++++
+ board/friendlyarm/nanopi-a64/readme.txt            |  37 +++
+ board/friendlyarm/nanopi-neo2/boot.cmd             |   6 +
+ board/friendlyarm/nanopi-neo2/genimage.cfg         |  38 +++
+ board/friendlyarm/nanopi-neo2/readme.txt           |  37 +++
+ board/olimex/a64-olinuxino/boot.cmd                |   6 +
+ board/olimex/a64-olinuxino/genimage.cfg            |  38 +++
+ board/olimex/a64-olinuxino/linux_axp.fragment      |   3 +
+ ...nner-a64-add-NMI-R_INTC-controller-on-A64.patch |  41 ++++
+ ...lwinner-a64-add-DTSI-file-for-AXP803-PMIC.patch | 176 ++++++++++++++
+ ...nner-a64-Add-A64-OLinuXino-initial-suppor.patch | 244 ++++++++++++++++++++
+ board/olimex/a64-olinuxino/readme.txt              |  37 +++
+ board/orangepi/orangepi-prime/boot.cmd             |   6 +
+ board/orangepi/orangepi-prime/genimage.cfg         |  38 +++
+ board/orangepi/orangepi-prime/readme.txt           |  37 +++
+ board/orangepi/orangepi-win/boot.cmd               |   6 +
+ board/orangepi/orangepi-win/genimage.cfg           |  38 +++
+ board/orangepi/orangepi-win/readme.txt             |  37 +++
+ board/orangepi/orangepi-zero-plus2/boot.cmd        |   6 +
+ board/orangepi/orangepi-zero-plus2/genimage.cfg    |  38 +++
+ board/orangepi/orangepi-zero-plus2/readme.txt      |  37 +++
+ board/pine64/pine64/boot.cmd                       |   6 +
+ board/pine64/pine64/genimage.cfg                   |  38 +++
+ board/pine64/pine64/readme.txt                     |  38 +++
+ board/pine64/sopine/boot.cmd                       |   6 +
+ board/pine64/sopine/genimage.cfg                   |  38 +++
+ board/pine64/sopine/readme.txt                     |  38 +++
+ configs/bananapi_m1_defconfig                      |  37 +++
+ configs/bananapi_m64_defconfig                     |  47 ++++
+ configs/friendlyarm_nanopi_a64_defconfig           |  51 +++++
+ configs/friendlyarm_nanopi_neo2_defconfig          |  47 ++++
+ configs/olimex_a64_olinuxino_defconfig             |  51 +++++
+ configs/orangepi_prime_defconfig                   |  47 ++++
+ configs/orangepi_win_defconfig                     |  47 ++++
+ configs/orangepi_zero_plus2_defconfig              |  47 ++++
+ configs/pine64_defconfig                           |  47 ++++
+ configs/pine64_sopine_defconfig                    |  47 ++++
+ support/scripts/sunxi64-post-build.sh              |  32 +++
+ 51 files changed, 2274 insertions(+)
+ create mode 100644 board/bananapi/bananapi-m1/boot.cmd
+ create mode 100644 board/bananapi/bananapi-m1/genimage.cfg
+ create mode 100644 board/bananapi/bananapi-m1/readme.txt
+ create mode 100644 board/bananapi/bananapi-m64/boot.cmd
+ create mode 100644 board/bananapi/bananapi-m64/genimage.cfg
+ create mode 100644 board/bananapi/bananapi-m64/readme.txt
+ create mode 100644 board/friendlyarm/nanopi-a64/boot.cmd
+ create mode 100644 board/friendlyarm/nanopi-a64/genimage.cfg
+ create mode 100644 board/friendlyarm/nanopi-a64/linux_axp.fragment
+ create mode 100644 board/friendlyarm/nanopi-a64/patches/linux/linux-0001-arm64-allwinner-a64-add-NMI-R_INTC-controller-on-A64.patch
+ create mode 100644 board/friendlyarm/nanopi-a64/patches/linux/linux-0002-arm64-allwinner-a64-add-DTSI-file-for-AXP803-PMIC.patch
+ create mode 100644 board/friendlyarm/nanopi-a64/patches/linux/linux-0003-arm64-allwinner-a64-Add-initial-NanoPi-A64-support.patch
+ create mode 100644 board/friendlyarm/nanopi-a64/readme.txt
+ create mode 100644 board/friendlyarm/nanopi-neo2/boot.cmd
+ create mode 100644 board/friendlyarm/nanopi-neo2/genimage.cfg
+ create mode 100644 board/friendlyarm/nanopi-neo2/readme.txt
+ create mode 100644 board/olimex/a64-olinuxino/boot.cmd
+ create mode 100644 board/olimex/a64-olinuxino/genimage.cfg
+ create mode 100644 board/olimex/a64-olinuxino/linux_axp.fragment
+ create mode 100644 board/olimex/a64-olinuxino/patches/linux/linux-0001-arm64-allwinner-a64-add-NMI-R_INTC-controller-on-A64.patch
+ create mode 100644 board/olimex/a64-olinuxino/patches/linux/linux-0002-arm64-allwinner-a64-add-DTSI-file-for-AXP803-PMIC.patch
+ create mode 100644 board/olimex/a64-olinuxino/patches/linux/linux-0003-arm64-allwinner-a64-Add-A64-OLinuXino-initial-suppor.patch
+ create mode 100644 board/olimex/a64-olinuxino/readme.txt
+ create mode 100644 board/orangepi/orangepi-prime/boot.cmd
+ create mode 100644 board/orangepi/orangepi-prime/genimage.cfg
+ create mode 100644 board/orangepi/orangepi-prime/readme.txt
+ create mode 100644 board/orangepi/orangepi-win/boot.cmd
+ create mode 100644 board/orangepi/orangepi-win/genimage.cfg
+ create mode 100644 board/orangepi/orangepi-win/readme.txt
+ create mode 100644 board/orangepi/orangepi-zero-plus2/boot.cmd
+ create mode 100644 board/orangepi/orangepi-zero-plus2/genimage.cfg
+ create mode 100644 board/orangepi/orangepi-zero-plus2/readme.txt
+ create mode 100644 board/pine64/pine64/boot.cmd
+ create mode 100644 board/pine64/pine64/genimage.cfg
+ create mode 100644 board/pine64/pine64/readme.txt
+ create mode 100644 board/pine64/sopine/boot.cmd
+ create mode 100644 board/pine64/sopine/genimage.cfg
+ create mode 100644 board/pine64/sopine/readme.txt
+ create mode 100644 configs/bananapi_m1_defconfig
+ create mode 100644 configs/bananapi_m64_defconfig
+ create mode 100644 configs/friendlyarm_nanopi_a64_defconfig
+ create mode 100644 configs/friendlyarm_nanopi_neo2_defconfig
+ create mode 100644 configs/olimex_a64_olinuxino_defconfig
+ create mode 100644 configs/orangepi_prime_defconfig
+ create mode 100644 configs/orangepi_win_defconfig
+ create mode 100644 configs/orangepi_zero_plus2_defconfig
+ create mode 100644 configs/pine64_defconfig
+ create mode 100644 configs/pine64_sopine_defconfig
+ create mode 100755 support/scripts/sunxi64-post-build.sh
+
 -- 
-2.11.0
+1.9.1
