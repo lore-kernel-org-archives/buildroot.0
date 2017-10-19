@@ -1,109 +1,92 @@
 From: Christian Stewart <christian@paral.in>
-Date: Wed, 18 Oct 2017 20:22:46 -0400
-Subject: [Buildroot] [PATCH 01/12] dumb-init: new package
-Message-ID: <20171019002257.27646-1-christian@paral.in>
+Date: Wed, 18 Oct 2017 20:22:57 -0400
+Subject: [Buildroot] [PATCH 12/12] docker-engine: don't link against
+	libsystemd without systemd
+In-Reply-To: <20171019002257.27646-1-christian@paral.in>
+References: <20171019002257.27646-1-christian@paral.in>
+Message-ID: <20171019002257.27646-12-christian@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-dumb-init is a minimal init process to act as PID 1 for containers.
+Docker links against libsystemd unconditionally in the latest release. This is
+entirely unnecessary, and the included patch disables this behavior in the
+absence of the systemd build tag, which is now set when systemd is enabled in
+buildroot.
 
-dumb-init can be used to satisfy docker-engine's docker-init binary
-requirement.
+This fixes linking errors when building against sysv, and avoids adding a
+hard dependency on systemd in Docker.
 
-In many cases docker-init backing processes like dumb-init must be static, as
-they are executed inside a container in an unknown environment. This
-patch includes an option to specifically compile dumb-init statically, even if
-the system is compiled dynamically.
+Docker-Engine should also use the target pkgconfig, not the host pkgconfig. This
+is fixed in this patch.
 
 Signed-off-by: Christian Stewart <christian@paral.in>
 ---
- package/Config.in                |  1 +
- package/dumb-init/Config.in      | 16 ++++++++++++++++
- package/dumb-init/dumb-init.hash |  2 ++
- package/dumb-init/dumb-init.mk   | 28 ++++++++++++++++++++++++++++
- 4 files changed, 47 insertions(+)
- create mode 100644 package/dumb-init/Config.in
- create mode 100644 package/dumb-init/dumb-init.hash
- create mode 100644 package/dumb-init/dumb-init.mk
+ ...king-against-libsystemd-with-absence-of-s.patch | 54 ++++++++++++++++++++++
+ 1 file changed, 54 insertions(+)
+ create mode 100644 package/docker-engine/0001-disable-linking-against-libsystemd-with-absence-of-s.patch
 
-diff --git a/package/Config.in b/package/Config.in
-index a27f55aec1..c161634daf 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1862,6 +1862,7 @@ comment "Utilities"
- 	source "package/crudini/Config.in"
- 	source "package/dialog/Config.in"
- 	source "package/dtach/Config.in"
-+	source "package/dumb-init/Config.in"
- 	source "package/file/Config.in"
- 	source "package/easy-rsa/Config.in"
- 	source "package/gnupg/Config.in"
-diff --git a/package/dumb-init/Config.in b/package/dumb-init/Config.in
+diff --git a/package/docker-engine/0001-disable-linking-against-libsystemd-with-absence-of-s.patch b/package/docker-engine/0001-disable-linking-against-libsystemd-with-absence-of-s.patch
 new file mode 100644
-index 0000000000..56ca6dc7b1
+index 0000000000..9a8b126d5f
 --- /dev/null
-+++ b/package/dumb-init/Config.in
-@@ -0,0 +1,16 @@
-+config BR2_PACKAGE_DUMB_INIT
-+	bool "dumb-init"
-+	help
-+	  dumb-init is a simple but valid init binary to act as PID 1 for
-+	  containers.
++++ b/package/docker-engine/0001-disable-linking-against-libsystemd-with-absence-of-s.patch
+@@ -0,0 +1,54 @@
++From 56ab23f03df71d6cd084a9f4fd9c382e47b0e26e Mon Sep 17 00:00:00 2001
++From: Christian Stewart <christian@paral.in>
++Date: Wed, 20 Sep 2017 18:09:26 +0100
++Subject: [PATCH] disable linking against libsystemd with absence of systemd
++ build tag
 +
-+	  https://github.com/Yelp/dumb-init
++For some reason, as of this release, Docker now MUST link against libsystemd.
 +
-+if BR2_PACKAGE_DUMB_INIT
++This is not for a good reason. It's because of two lines in the daemon startup,
++which notify the systemd daemon that the daemon is done starting.
 +
-+config BR2_PACKAGE_DUMB_INIT_STATIC
-+	bool "build static"
-+	help
-+	  Enables static compilation for dumb-init.
++Requiring the presence of an entire systemd library to build Docker is not
++suitable for Buildroot. This patch adds a build tag called "systemd," which
++when not set, will disable linking against libsystemd.
 +
-+endif
-diff --git a/package/dumb-init/dumb-init.hash b/package/dumb-init/dumb-init.hash
-new file mode 100644
-index 0000000000..e7987b36e2
---- /dev/null
-+++ b/package/dumb-init/dumb-init.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha256	74486997321bd939cad2ee6af030f481d39751bc9aa0ece84ed55f864e309a3f	dumb-init-v1.2.0.tar.gz
-diff --git a/package/dumb-init/dumb-init.mk b/package/dumb-init/dumb-init.mk
-new file mode 100644
-index 0000000000..f2855122fb
---- /dev/null
-+++ b/package/dumb-init/dumb-init.mk
-@@ -0,0 +1,28 @@
-+################################################################################
-+#
-+# dumb-init
-+#
-+################################################################################
++Signed-off-by: Christian Stewart <christian@paral.in>
++---
++ components/engine/cmd/dockerd/daemon_linux.go           |  2 +-
++ components/engine/cmd/dockerd/daemon_linux_nosystemd.go | 13 +++++++++++++
++ 2 files changed, 14 insertions(+), 1 deletion(-)
++ create mode 100644 components/engine/cmd/dockerd/daemon_linux_nosystemd.go
 +
-+DUMB_INIT_VERSION = v1.2.0
-+DUMB_INIT_SITE = $(call github,Yelp,dumb-init,$(DUMB_INIT_VERSION))
++diff --git a/components/engine/cmd/dockerd/daemon_linux.go b/components/engine/cmd/dockerd/daemon_linux.go
++index a909ee4fbd..89c16bac2f 100644
++--- a/components/engine/cmd/dockerd/daemon_linux.go
+++++ b/components/engine/cmd/dockerd/daemon_linux.go
++@@ -1,4 +1,4 @@
++-// +build linux
+++// +build linux,systemd
++ 
++ package main
++ 
++diff --git a/components/engine/cmd/dockerd/daemon_linux_nosystemd.go b/components/engine/cmd/dockerd/daemon_linux_nosystemd.go
++new file mode 100644
++index 0000000000..4f7e92af0f
++--- /dev/null
+++++ b/components/engine/cmd/dockerd/daemon_linux_nosystemd.go
++@@ -0,0 +1,13 @@
+++// +build linux,!systemd
+++
+++package main
+++
+++// preNotifySystem sends a message to the host when the API is active, but before the daemon is
+++func preNotifySystem() {
+++	// noop without systemd
+++}
+++
+++// notifySystem sends a message to the host when the server is ready to be used
+++func notifySystem() {
+++	// noop without systemd
+++}
++-- 
++2.13.5
 +
-+DUMB_INIT_LICENSE = MIT
-+DUMB_INIT_LICENSE_FILES = LICENSE
-+DUMB_INIT_CFLAGS=$(TARGET_CFLAGS) $(TARGET_LDFLAGS)
-+
-+ifeq ($(BR2_PACKAGE_DUMB_INIT_STATIC),y)
-+DUMB_INIT_CFLAGS += -static
-+endif
-+
-+define DUMB_INIT_BUILD_CMDS
-+	$(TARGET_CC) \
-+		$(DUMB_INIT_CFLAGS) \
-+		-o $(@D)/dumb-init $(@D)/dumb-init.c
-+endef
-+
-+define DUMB_INIT_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/dumb-init $(TARGET_DIR)/usr/bin/dumb-init
-+endef
-+
-+$(eval $(generic-package))
 -- 
 2.13.6
