@@ -1,83 +1,88 @@
 From: Jagan Teki <jagannadh.teki@gmail.com>
-Date: Thu, 19 Oct 2017 11:45:27 +0200
-Subject: [Buildroot] [PATCH v3 05/11] board: Add SoPine support
+Date: Thu, 19 Oct 2017 11:45:29 +0200
+Subject: [Buildroot] [PATCH v3 07/11] board: Add FriendlyARM Nanopi NEO2
+	support
 In-Reply-To: <1508406333-27138-1-git-send-email-jagan@amarulasolutions.com>
 References: <1508406333-27138-1-git-send-email-jagan@amarulasolutions.com>
-Message-ID: <1508406333-27138-6-git-send-email-jagan@amarulasolutions.com>
+Message-ID: <1508406333-27138-8-git-send-email-jagan@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add initial support for SoPine board with below features:
+Add initial support for FriendlyARM Nanopi NEO2 board with below features:
 - U-Boot 2017.09
 - Linux 4.13.7
 - Default packages from buildroot
 
-Cc: TL Lim <tllim@pine64.org>
-Cc: Andre Przywara <andre.przywara@arm.com>
+Cc: Yuefei <yftan@friendlyarm.com>
 Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
 ---
- .gitlab-ci.yml                   |  1 +
- DEVELOPERS                       |  1 +
- board/pine64/sopine/boot.cmd     |  6 +++++
- board/pine64/sopine/genimage.cfg | 38 ++++++++++++++++++++++++++++++++
- board/pine64/sopine/readme.txt   | 38 ++++++++++++++++++++++++++++++++
- configs/pine64_sopine_defconfig  | 47 ++++++++++++++++++++++++++++++++++++++++
+ .gitlab-ci.yml                             |  1 +
+ DEVELOPERS                                 |  2 ++
+ board/friendlyarm/nanopi-neo2/boot.cmd     |  6 ++++
+ board/friendlyarm/nanopi-neo2/genimage.cfg | 38 ++++++++++++++++++++++++
+ board/friendlyarm/nanopi-neo2/readme.txt   | 37 +++++++++++++++++++++++
+ configs/friendlyarm_nanopi_neo2_defconfig  | 47 ++++++++++++++++++++++++++++++
  6 files changed, 131 insertions(+)
- create mode 100644 board/pine64/sopine/boot.cmd
- create mode 100644 board/pine64/sopine/genimage.cfg
- create mode 100644 board/pine64/sopine/readme.txt
- create mode 100644 configs/pine64_sopine_defconfig
+ create mode 100644 board/friendlyarm/nanopi-neo2/boot.cmd
+ create mode 100644 board/friendlyarm/nanopi-neo2/genimage.cfg
+ create mode 100644 board/friendlyarm/nanopi-neo2/readme.txt
+ create mode 100644 configs/friendlyarm_nanopi_neo2_defconfig
 
 diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index 44edc61..a690b17 100644
+index 9e566de..f09c8da 100644
 --- a/.gitlab-ci.yml
 +++ b/.gitlab-ci.yml
-@@ -162,6 +162,7 @@ pandaboard_defconfig: *defconfig
- pc_x86_64_bios_defconfig: *defconfig
- pc_x86_64_efi_defconfig: *defconfig
- pine64_defconfig: *defconfig
-+pine64_sopine_defconfig: *defconfig
- qemu_aarch64_virt_defconfig: *defconfig
- qemu_arm_versatile_defconfig: *defconfig
- qemu_arm_versatile_nommu_defconfig: *defconfig
+@@ -120,6 +120,7 @@ freescale_imx7dsabresd_defconfig: *defconfig
+ freescale_mpc8315erdb_defconfig: *defconfig
+ freescale_p1010rdb_pa_defconfig: *defconfig
+ friendlyarm_nanopi_a64_defconfig: *defconfig
++friendlyarm_nanopi_neo2_defconfig: *defconfig
+ galileo_defconfig: *defconfig
+ gdb_bfin_bf512_defconfig: *defconfig
+ grinn_chiliboard_defconfig: *defconfig
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 780c674..106d793 100644
+index cae3730..1832310 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -732,6 +732,7 @@ F:	board/pine64/
+@@ -729,10 +729,12 @@ N:	Jagan Teki <jagan@amarulasolutions.com>
+ F:	board/bananapi/
+ F:	board/engicam/
+ F:	board/friendlyarm/nanopi-a64/
++F:	board/friendlyarm/nanopi-neo2/
+ F:	board/pine64/
  F:	configs/bananapi_m1_defconfig
  F:	configs/bananapi_m64_defconfig
+ F:	configs/friendlyarm_nanopi_a64_defconfig
++F:	configs/friendlyarm_nanopi_neo2_defconfig
  F:	configs/pine64_defconfig
-+F:	configs/pine64_sopine_defconfig
+ F:	configs/pine64_sopine_defconfig
  F:	configs/engicam_imx6qdl_icore_defconfig
- F:	configs/engicam_imx6qdl_icore_qt5_defconfig
- F:	configs/engicam_imx6qdl_icore_rqs_defconfig
-diff --git a/board/pine64/sopine/boot.cmd b/board/pine64/sopine/boot.cmd
+diff --git a/board/friendlyarm/nanopi-neo2/boot.cmd b/board/friendlyarm/nanopi-neo2/boot.cmd
 new file mode 100644
-index 0000000..79ac4d0
+index 0000000..9a39f4a
 --- /dev/null
-+++ b/board/pine64/sopine/boot.cmd
++++ b/board/friendlyarm/nanopi-neo2/boot.cmd
 @@ -0,0 +1,6 @@
 +setenv bootargs console=ttyS0,115200 earlyprintk root=/dev/mmcblk0p2 rootwait
 +
 +fatload mmc 0 $kernel_addr_r Image
-+fatload mmc 0 $fdt_addr_r sun50i-a64-pine64-plus.dtb
++fatload mmc 0 $fdt_addr_r sun50i-h5-nanopi-neo2.dtb
 +
 +booti $kernel_addr_r - $fdt_addr_r
-diff --git a/board/pine64/sopine/genimage.cfg b/board/pine64/sopine/genimage.cfg
+diff --git a/board/friendlyarm/nanopi-neo2/genimage.cfg b/board/friendlyarm/nanopi-neo2/genimage.cfg
 new file mode 100644
-index 0000000..c1d77c7
+index 0000000..a1156a4
 --- /dev/null
-+++ b/board/pine64/sopine/genimage.cfg
++++ b/board/friendlyarm/nanopi-neo2/genimage.cfg
 @@ -0,0 +1,38 @@
 +image boot.vfat {
 +	vfat {
 +		files = {
 +			"Image",
-+			"sun50i-a64-pine64-plus.dtb",
++			"sun50i-h5-nanopi-neo2.dtb",
 +			"boot.scr"
 +		}
 +	}
@@ -111,32 +116,31 @@ index 0000000..c1d77c7
 +		image = "rootfs.ext4"
 +	}
 +}
-diff --git a/board/pine64/sopine/readme.txt b/board/pine64/sopine/readme.txt
+diff --git a/board/friendlyarm/nanopi-neo2/readme.txt b/board/friendlyarm/nanopi-neo2/readme.txt
 new file mode 100644
-index 0000000..05d26ee
+index 0000000..0f445e2
 --- /dev/null
-+++ b/board/pine64/sopine/readme.txt
-@@ -0,0 +1,38 @@
++++ b/board/friendlyarm/nanopi-neo2/readme.txt
+@@ -0,0 +1,37 @@
 +Intro
 +=====
 +
 +This default configuration will allow you to start experimenting with the
-+buildroot environment for the SoPine. With the current configuration
++buildroot environment for the Nanopi NEO2. With the current configuration
 +it will bring-up the board, and allow access through the serial console.
 +
-+SoPINE link:
-+https://www.pine64.org/?page_id=1491
++Nanopi NEO2 link:
++http://nanopi.io/nanopi-neo2.html
 +
 +Wiki link:
-+https://confluence.amarulasolutions.com/display/ODWIKI/Pine64+SoPine
++https://openedev.amarulasolutions.com/display/ODWIKI/FriendlyARM+NanoPi+NEO2
 +
 +This configuration uses U-Boot mainline and kernel mainline.
 +
 +How to build
 +============
 +
-+    $ make pine64_sopine_defconfig
-+
++    $ make friendlyarm_nanopi_neo2_defconfig
 +    $ make
 +
 +Note: you will need access to the internet to download the required
@@ -153,13 +157,13 @@ index 0000000..05d26ee
 +  $ sudo dd if=output/images/sdcard.img of=/dev/sdX
 +  $ sudo sync
 +
-+Insert the micro SDcard in your SoPine and power it up. The console
++Insert the micro SDcard in your Nanopi NEO2 and power it up. The console
 +is on the serial line, 115200 8N1.
-diff --git a/configs/pine64_sopine_defconfig b/configs/pine64_sopine_defconfig
+diff --git a/configs/friendlyarm_nanopi_neo2_defconfig b/configs/friendlyarm_nanopi_neo2_defconfig
 new file mode 100644
-index 0000000..caa9aa4
+index 0000000..7cb6279
 --- /dev/null
-+++ b/configs/pine64_sopine_defconfig
++++ b/configs/friendlyarm_nanopi_neo2_defconfig
 @@ -0,0 +1,47 @@
 +BR2_aarch64=y
 +BR2_cortex_a53=y
@@ -181,14 +185,14 @@ index 0000000..caa9aa4
 +BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
 +BR2_TARGET_UBOOT_CUSTOM_VERSION=y
 +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.09"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sopine_baseboard"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nanopi_neo2"
 +BR2_TARGET_UBOOT_NEEDS_DTC=y
 +BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
 +BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.itb"
 +BR2_TARGET_UBOOT_SPL=y
 +BR2_TARGET_UBOOT_SPL_NAME="spl/sunxi-spl.bin"
 +BR2_TARGET_UBOOT_BOOT_SCRIPT=y
-+BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE="board/pine64/sopine/boot.cmd"
++BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE="board/friendlyarm/nanopi-neo2/boot.cmd"
 +
 +# Kernel
 +BR2_LINUX_KERNEL=y
@@ -196,17 +200,17 @@ index 0000000..caa9aa4
 +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.13.7"
 +BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
 +BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun50i-a64-pine64-plus"
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun50i-h5-nanopi-neo2"
 +
 +# Filesystem
-+BR2_TARGET_GENERIC_ISSUE="Welcome to PINE64 SOPINE"
++BR2_TARGET_GENERIC_ISSUE="Welcome to FriendlyARM Nanopi NEO2"
 +BR2_TARGET_ROOTFS_EXT2=y
 +BR2_TARGET_ROOTFS_EXT2_4=y
 +BR2_PACKAGE_HOST_DOSFSTOOLS=y
 +BR2_PACKAGE_HOST_GENIMAGE=y
 +BR2_PACKAGE_HOST_MTOOLS=y
 +BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/pine64/sopine/genimage.cfg"
++BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/friendlyarm/nanopi-neo2/genimage.cfg"
 +BR2_ROOTFS_POST_BUILD_SCRIPT="support/scripts/sunxi64-post-build.sh"
 -- 
 1.9.1
