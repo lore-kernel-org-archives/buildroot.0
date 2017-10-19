@@ -1,10 +1,12 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 19 Oct 2017 15:39:54 +0200
-Subject: [Buildroot] [PATCH v2 1/1] libcpprestsdk: new package
-In-Reply-To: <20171017230652.0f8b95f4@windsurf.home>
-References: <20171017205308.28529-1-Adamduskett@outlook.com>
- <20171017230652.0f8b95f4@windsurf.home>
-Message-ID: <d2fba7a3-6d14-a6b2-1498-0ccef1d5c3a4@mind.be>
+Date: Thu, 19 Oct 2017 15:51:43 +0200
+Subject: [Buildroot] [PATCH v9 5/5] policycoreutils: split packages and
+ bump to 2.7
+In-Reply-To: <20171017233454.096a9c41@windsurf.home>
+References: <20171017185444.13989-1-Adamduskett@outlook.com>
+ <20171017185444.13989-5-Adamduskett@outlook.com>
+ <20171017233454.096a9c41@windsurf.home>
+Message-ID: <ccc3bb03-752e-7afb-7fe9-c51fbf9b0b35@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,31 +15,22 @@ To: buildroot@busybox.net
 
 
 
-On 17-10-17 23:06, Thomas Petazzoni wrote:
-> Hello,
+On 17-10-17 23:34, Thomas Petazzoni wrote:
+> Please don't make this change immediately, but I'm wondering if we
+> should use selinux-python or python-selinux. All packages that package
+> Python modules are called python-<foo> in Buildroot.
 > 
-> On Tue, 17 Oct 2017 16:53:08 -0400, Adam Duskett wrote:
-> 
->> +	select BR2_PACKAGE_OPENSSL if !BR2_PACKAGE_LIBRESSL
-> 
-> Meh:
-> 
-> package/openssl/Config.in:1:	symbol BR2_PACKAGE_OPENSSL is selected by BR2_PACKAGE_LIBRESSL
-> package/libressl/Config.in:1:	symbol BR2_PACKAGE_LIBRESSL depends on BR2_PACKAGE_OPENSSL
-> package/openssl/Config.in:1:error: recursive dependency detected!
-> package/openssl/Config.in:1:	symbol BR2_PACKAGE_OPENSSL is selected by BR2_PACKAGE_LIBRESSL
-> package/libressl/Config.in:1:	symbol BR2_PACKAGE_LIBRESSL depends on BR2_PACKAGE_OPENSSL
+> Is selinux-python somewhat suggested by upstream? Or perhaps it's not
+> really a set of Python modules, but rather some SELinux programs that
+> happen to be in Python ?
 
- Solved by inverting the select:
+ The upstream tarball if selinux-python-2.7.tar.gz, which is why
+SELINUX_PYTHON_SOURCE is not defined. So indeed, it's the upstream choice. For
+reference, the Debian source package is called selinux-python while the binary
+packages are called python3-sepolgen, policycoreutils-python-utils, ...
 
-	select BR2_PACKAGE_LIBRESSL if !BR2_PACKAGE_OPENSSL
-
- But since we probably want to use openssl by default, not libressl, we should
-perhaps instead invert the condition in the openssl/libressl packages. I.e.,
-remove the depends from libressl, and add 'depends on !libressl' to openssl.
-
- Or, of course, introduce the virtual package. So I've added that as a topic for
-the developer meeting.
+ Also, yes, it's just a bunch of programs that happen to be written in python.
+Python bindings are part of libselinux itself.
 
  Regards,
  Arnout
