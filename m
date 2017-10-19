@@ -1,33 +1,30 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Thu, 19 Oct 2017 12:10:54 -0400
-Subject: [Buildroot] [PATCH 1/1] host-qemu: disable QEMU usermode usage with
-	n32 ABI
-Message-ID: <20171019161054.25476-1-Adamduskett@outlook.com>
+From: Christian Stewart <christian@paral.in>
+Date: Thu, 19 Oct 2017 12:15:54 -0400
+Subject: [Buildroot] [PATCH 07/12] go: bump version to 1.9
+In-Reply-To: <20171019101954.185b29f2@windsurf.home>
+References: <20171019002257.27646-1-christian@paral.in>
+ <20171019002257.27646-7-christian@paral.in>
+ <20171019101954.185b29f2@windsurf.home>
+Message-ID: <CA+h8R2qt=v4W49raiHkgVCBh+GXWDR8nRy6+tfVw-apsg=mw7w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-user mode qemu doesn't support mips64 n32:
-"Invalid ELF image for this architecture"
+Hi Thomas,
 
-Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
----
- package/qemu/Config.in.host | 1 +
- 1 file changed, 1 insertion(+)
+On Thu, Oct 19, 2017 at 4:19 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+>   https://patchwork.ozlabs.org/patch/826431/
 
-diff --git a/package/qemu/Config.in.host b/package/qemu/Config.in.host
-index 71f38ef41f..41b138cf22 100644
---- a/package/qemu/Config.in.host
-+++ b/package/qemu/Config.in.host
-@@ -27,6 +27,7 @@ config BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE
- 
- config BR2_PACKAGE_HOST_QEMU_LINUX_USER_MODE
- 	bool "Enable Linux user-land emulation"
-+	depends on !BR2_MIPS_NABI32
- 	help
- 	  Enables the build of the user-land emulator, which allows to
- 	  run user-space applications.
--- 
-2.13.6
+> And specifically the first one.
+
+Tested, works fine. Sending my signed-off in a separate email. I would
+recommend applying the first patch but not the rest of the series at
+this point.
+
+Not a dependency for my series to work properly, though.
+
+Best,
+Christian
