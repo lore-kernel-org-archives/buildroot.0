@@ -1,49 +1,48 @@
-From: Dushara Jayasinghe <nidujay@gmail.com>
-Date: Thu, 19 Oct 2017 21:20:45 +1100
-Subject: [Buildroot] [V2 3/3] prosody: remove tweaked configuration
-In-Reply-To: <20171018223136.49cbc0de@windsurf.home>
-References: <20171018164650.514-1-francois.perrad@gadz.org>
- <20171018164650.514-3-francois.perrad@gadz.org>
- <20171018223136.49cbc0de@windsurf.home>
-Message-ID: <20171019102045.GA4544@localhost>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 19 Oct 2017 13:38:50 +0300
+Subject: [Buildroot] [PATCH v3 01/11] board: Add Bananapi M1 support
+In-Reply-To: <1508406333-27138-2-git-send-email-jagan@amarulasolutions.com>
+References: <1508406333-27138-1-git-send-email-jagan@amarulasolutions.com>
+ <1508406333-27138-2-git-send-email-jagan@amarulasolutions.com>
+Message-ID: <20171019103850.5ygewsfw6pukbwnv@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hi Jagan,
 
-On Wed, Oct 18, 2017 at 10:31:36PM +0200, Thomas Petazzoni wrote:
-> Hello,
+On Thu, Oct 19, 2017 at 11:45:23AM +0200, Jagan Teki wrote:
+> Add initial support for bananapi M1 board with below features:
+> - U-Boot 2017.09
+> - Linux 4.17
+
+This kernel version has not been released yet.
+
+> - Default packages from buildroot
 > 
-> On Wed, 18 Oct 2017 18:46:50 +0200, Francois Perrad wrote:
-> > Upgrading a tweaked configuration is painful,
-> > so stay with the upstream configuration which is already installed.
-> > 
-> > Everybody could make its own configuration in its rootfs_overlay.
-> > 
-> > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> > ---
-> >  package/prosody/prosody.cfg.lua | 184 ----------------------------------------
-> >  package/prosody/prosody.mk      |  11 ---
-> >  2 files changed, 195 deletions(-)
-> >  delete mode 100644 package/prosody/prosody.cfg.lua
-> 
-> I'd like to have the opinion of the package submitter, Dushara
-> Jayasinghe, on this patch. Dushara, can you comment on why you added a
-> custom prosody.cfg, as opposed to using the one provided in the
-> upstream package?
+> Cc: Jason <manager@sinovoip.com.cn>
+> Cc: hailymei at banana-pi.com <hailymei@banana-pi.com>
+> Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
+> ---
 
-My primary motive was for the package to 'just work'. 
+[...]
 
-1. Prosody requires the posix module to be enabled for proper deamonization
-2. Logging by default is to files and not syslog (for this too, the
-   posix module is required)
-3. I added a service startup script. However, in order to terminate the
-   service cleanly, a pidfile is required (due to lua being the process
-   name). Prosody has a config option to create the pidfile.
+> +# Kernel
+> +BR2_LINUX_KERNEL=y
+> +BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+> +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.13.7"
 
-Hope that helps.
+Seems like you missed a couple of characters in the commit log.
 
-Dushara
+> +BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+> +BR2_LINUX_KERNEL_DTS_SUPPORT=y
+> +BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun7i-a20-bananapi"
+
+baruch
+
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
