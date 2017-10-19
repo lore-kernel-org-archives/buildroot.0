@@ -1,178 +1,75 @@
-From: Olivier Schonken <olivier.schonken@gmail.com>
-Date: Thu, 19 Oct 2017 13:15:02 +0200
-Subject: [Buildroot] [PATCH 1/1] cups-filters: add new package cups-filters
-	1.17.9
-Message-ID: <20171019111502.23419-1-olivier.schonken@gmail.com>
+From: Alejandro Ariel Fachini <alefachinic@gmail.com>
+Date: Thu, 19 Oct 2017 09:45:21 -0300
+Subject: [Buildroot] [BuildRoot] at91sam9x5ek_defconfig not booting
+In-Reply-To: <20171018230147.42af15dd@windsurf.home>
+References: <CAHnuF31sDH93MRN8nU6kdvfymwD7LOAz56YckWrk-OLSdMx3Qg@mail.gmail.com>
+ <20171012220111.301bb3af@windsurf.home>
+ <CAHnuF30iK6AQeoZBn3f35q1B5Ff+SG9uGUywzKH--wPp-THVVg@mail.gmail.com>
+ <CAHnuF33Z3qQeVr5o1q=K1+OgMDCEhheOQm9qCGO1TpPZrjbeVw@mail.gmail.com>
+ <20171013155028.77a75504@windsurf.lan>
+ <CAHnuF32_L137ZEr4vGjxRW_MJAR1M_fwO=ER+VJFq_bZakAiow@mail.gmail.com>
+ <20171018230147.42af15dd@windsurf.home>
+Message-ID: <CAHnuF31RD=Hm8dxxD+UiHhg3Q_GZ4ch6yfaHYG4U9xv1ze2BFQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Olivier Schonken <olivier.schonken@gmail.com>
----
- Config.in.legacy                       |  1 +
- package/Config.in                      |  1 +
- package/cups-filters/Config.in         | 31 ++++++++++++++
- package/cups-filters/cups-filters.hash |  2 +
- package/cups-filters/cups-filters.mk   | 78 ++++++++++++++++++++++++++++++++++
- 5 files changed, 113 insertions(+)
- create mode 100644 package/cups-filters/Config.in
- create mode 100644 package/cups-filters/cups-filters.hash
- create mode 100644 package/cups-filters/cups-filters.mk
+Well ill keep rying with at91 site support, because i did not changed
+anything in the defconfig, is the defaultt configuration for nandflash.
+I know for another search i did, that sam-ba 2.16 has an issue flashing
+sam9x35 thats because i use 2.12.
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index ea69f5a924..94ae490133 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -1303,6 +1303,7 @@ config BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 
- config BR2_PACKAGE_CUPS_PDFTOPS
- 	bool "Pdftops support has been removed from Cups"
-+	select BR2_PACKAGE_CUPS_FILTERS
- 	select BR2_LEGACY
- 	help
- 	  Pdftops support has been removed from the cups package
-diff --git a/package/Config.in b/package/Config.in
-index a27f55aec1..fb6ebeb442 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1621,6 +1621,7 @@ menu "Networking applications"
- 	source "package/crda/Config.in"
- 	source "package/ctorrent/Config.in"
- 	source "package/cups/Config.in"
-+	source "package/cups-filters/Config.in"
- 	source "package/dante/Config.in"
- 	source "package/darkhttpd/Config.in"
- 	source "package/dhcp/Config.in"
-diff --git a/package/cups-filters/Config.in b/package/cups-filters/Config.in
-new file mode 100644
-index 0000000000..2fd859a6b1
---- /dev/null
-+++ b/package/cups-filters/Config.in
-@@ -0,0 +1,31 @@
-+config BR2_PACKAGE_CUPS_FILTERS
-+       bool "cups-filters"
-+       # needs fork()
-+       depends on BR2_USE_MMU
-+       depends on BR2_INSTALL_LIBSTDCPP #qpdf
-+       depends on !BR2_STATIC_LIBS
-+       depends on BR2_USE_WCHAR # libglib2
-+       depends on BR2_TOOLCHAIN_HAS_THREADS #libglib2
-+       depends on BR2_PACKAGE_CUPS
-+       select BR2_PACKAGE_LIBGLIB2
-+       select BR2_PACKAGE_LCMS2
-+       select BR2_PACKAGE_QPDF
-+       help
-+         This project provides backends, filters, and other software that was
-+         once part of the core CUPS distribution but is no longer maintained
-+         by Apple Inc. In addition it contains additional filters and software
-+         developed independently of Apple, especially filters for the PDF-
-+         centric printing workflow introduced by OpenPrinting and a daemon
-+         to browse Bonjour broadcasts of remote CUPS printers to make these
-+         printers available locally and to provide backward compatibility to
-+         the old CUPS broadcasting and browsing of CUPS 1.5.x and older.
-+         From CUPS 1.6.0 on, this package is required for using printer drivers
-+         with CUPS under Linux. With CUPS 1.5.x and earlier this package can be
-+         used optionally to switch over to PDF-based printing.
-+
-+         http://www.linuxfoundation.org/collaborate/workgroups/openprinting/cups-filters
-+
-+comment "cups-filters needs a toolchain w/ wchar, C++, threads and dynamic library  support"
-+       depends on BR2_USE_MMU
-+       depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR || !BR2_STATIC_LIBS
-+
-diff --git a/package/cups-filters/cups-filters.hash b/package/cups-filters/cups-filters.hash
-new file mode 100644
-index 0000000000..da9d31c998
---- /dev/null
-+++ b/package/cups-filters/cups-filters.hash
-@@ -0,0 +1,2 @@
-+# Locally computed:
-+sha256 95254d7950df4c74d293ed7dfa0b714f51cff329a82da74a4ac976d342bb35ab  cups-filters-1.17.9.tar.gz
-diff --git a/package/cups-filters/cups-filters.mk b/package/cups-filters/cups-filters.mk
-new file mode 100644
-index 0000000000..52b61e2431
---- /dev/null
-+++ b/package/cups-filters/cups-filters.mk
-@@ -0,0 +1,78 @@
-+################################################################################
-+#
-+# cups-filters
-+#
-+################################################################################
-+
-+CUPS_FILTERS_VERSION = 1.17.9
-+CUPS_FILTERS_SITE = http://openprinting.org/download/cups-filters
-+CUPS_FILTERS_LICENSE = GPL-2.0, GPL-2.0+, GPL-3.0, GPL-3.0+, LGPL-2, LGPL-2.1+, MIT, BSD-4-Clause
-+CUPS_FILTERS_LICENSE_FILES = COPYING
-+
-+CUPS_FILTERS_DEPENDENCIES = cups libglib2 lcms2 qpdf
-+
-+CUPS_FILTERS_CONF_OPTS = --disable-imagefilters \
-+       --disable-mutool \
-+       --disable-foomatic \
-+       --with-cups-config=$(STAGING_DIR)/usr/bin/cups-config \
-+       --with-sysroot=$(STAGING_DIR) \
-+       --with-pdftops=pdftops
-+
-+
-+ifeq ($(BR2_PACKAGE_JPEG_TURBO),y)
-+CUPS_FILTERS_CONF_OPTS += --with-jpeg
-+CUPS_FILTERS_DEPENDENCIES += libjpeg
-+else
-+CUPS_FILTERS_CONF_OPTS += --without-jpeg
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBPNG),y)
-+CUPS_FILTERS_CONF_OPTS += --with-png
-+CUPS_FILTERS_DEPENDENCIES += libpng
-+else
-+CUPS_FILTERS_CONF_OPTS += --without-png
-+endif
-+
-+ifeq ($(BR2_PACKAGE_TIFF),y)
-+CUPS_FILTERS_CONF_OPTS += --with-tiff
-+CUPS_FILTERS_DEPENDENCIES += tiff
-+else
-+CUPS_FILTERS_CONF_OPTS += --without-tiff
-+endif
-+
-+ifeq ($(BR2_PACKAGE_DBUS),y)
-+CUPS_FILTERS_CONF_OPTS += --enable-dbus
-+CUPS_FILTERS_DEPENDENCIES += dbus
-+else
-+CUPS_FILTERS_CONF_OPTS += --disable-dbus
-+endif
-+
-+ifeq ($(BR2_PACKAGE_AVAHI),y)
-+CUPS_FILTERS_DEPENDENCIES += avahi
-+CUPS_FILTERS_CONF_OPTS += --enable-avahi
-+else
-+CUPS_FILTERS_CONF_OPTS += --disable-avahi
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GHOSTSCRIPT),y)
-+CUPS_FILTERS_DEPENDENCIES += ghostscript
-+CUPS_FILTERS_CONF_OPTS += --enable-ghostscript
-+else
-+CUPS_FILTERS_CONF_OPTS += --disable-ghostscript
-+endif
-+
-+ifeq ($(BR2_PACKAGE_IJS),y)
-+CUPS_FILTERS_DEPENDENCIES += ijs
-+CUPS_FILTERS_CONF_OPTS += --enable-ijs
-+else
-+CUPS_FILTERS_CONF_OPTS += --disable-ijs
-+endif
-+
-+ifeq ($(BR2_PACKAGE_POPPLER),y)
-+CUPS_FILTERS_DEPENDENCIES += poppler
-+CUPS_FILTERS_CONF_OPTS += --enable-poppler
-+else
-+CUPS_FILTERS_CONF_OPTS += --disable-poppler
-+endif
-+
-+$(eval $(autotools-package))
--- 
-2.11.0
+Worth mentioning: The BootStrap Version is not changing even though it
+should be 3.8.9, may be my kit is broken.
+
+2017-10-18 18:01 GMT-03:00 Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com>:
+
+> Hello,
+>
+> On Fri, 13 Oct 2017 15:36:24 -0300, Alejandro Ariel Fachini wrote:
+>
+> > > AT91Bootstrap 3.8.7 (lun oct  9 13:46:05 ART 2017)
+> > >
+> > > 1-Wire: Loading 1-Wire information ...
+> > > 1-Wire: ROM Searching ... Done, 3 1-Wire chips found
+> > >
+> > > 1-Wire: BoardName | [Revid] | VendorName
+> > >   #0  SAM9x5-EK [B0]      FLEX
+> > >   #1  SAM9X35-CM [B2]      RONETIX
+> > >   #2  SAM9x5-DM [B0]      FLEX
+> > >
+> > > 1-Wire: Board sn: 0x4010466 revision: 0x10421
+> > >
+> > > NAND: ONFI flash detected
+> > > NAND: ONFI para CRC error!
+> > > NAND: Manufacturer ID: 0xad Chip ID: 0xda
+> > > WARNING: Fail to disable On-Die ECC
+> > > Nand flash is not ONFI compliant, use 2-bit/512-byte ecc.
+> > > NAND: Initialize PMECC params, cap: 2, sector: 512
+> > > NAND: Image: Copy 0x80000 bytes from 0x40000 to 0x26f00000
+> > > NAND: Done to load image
+> > > <debug_uart> No serial driver found
+>
+> This last message looks really weird, and smells like a bogus U-Boot
+> configuration.
+>
+> However, you posted in the at91.com forums at
+> https://www.at91.com/viewtopic.php?f=9&p=49635 and here your boot logs
+> show U-Boot starting.
+>
+> I don't have a at91sam9x5ek board at hand to test this.
+>
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux and Kernel engineering
+> http://free-electrons.com
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20171019/051ff442/attachment.html>
