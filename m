@@ -1,16 +1,17 @@
 From: Jagan Teki <jagannadh.teki@gmail.com>
-Date: Thu, 19 Oct 2017 11:45:33 +0200
-Subject: [Buildroot] [PATCH v3 11/11] board: Add Orangepi Zero Plus2 support
+Date: Thu, 19 Oct 2017 11:45:31 +0200
+Subject: [Buildroot] [PATCH v3 09/11] board: Add Orangepi Win/Win Plus
+	support
 In-Reply-To: <1508406333-27138-1-git-send-email-jagan@amarulasolutions.com>
 References: <1508406333-27138-1-git-send-email-jagan@amarulasolutions.com>
-Message-ID: <1508406333-27138-12-git-send-email-jagan@amarulasolutions.com>
+Message-ID: <1508406333-27138-10-git-send-email-jagan@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add initial support for Orangepi Zero Plus2 board with below features:
+Add initial support for Orangepi Win/Win Plus board with below features:
 - U-Boot 2017.09
 - Linux 4.13.7
 - Default packages from buildroot
@@ -18,73 +19,72 @@ Add initial support for Orangepi Zero Plus2 board with below features:
 Cc: zhaoyifan <zhao_steven@263.net>
 Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
 ---
- .gitlab-ci.yml                                  |  1 +
- DEVELOPERS                                      |  2 ++
- board/orangepi/orangepi-zero-plus2/boot.cmd     |  6 ++++
- board/orangepi/orangepi-zero-plus2/genimage.cfg | 38 ++++++++++++++++++++
- board/orangepi/orangepi-zero-plus2/readme.txt   | 37 +++++++++++++++++++
- configs/orangepi_zero_plus2_defconfig           | 47 +++++++++++++++++++++++++
+ .gitlab-ci.yml                           |  1 +
+ DEVELOPERS                               |  2 ++
+ board/orangepi/orangepi-win/boot.cmd     |  6 ++++
+ board/orangepi/orangepi-win/genimage.cfg | 38 ++++++++++++++++++++++++++
+ board/orangepi/orangepi-win/readme.txt   | 37 +++++++++++++++++++++++++
+ configs/orangepi_win_defconfig           | 47 ++++++++++++++++++++++++++++++++
  6 files changed, 131 insertions(+)
- create mode 100644 board/orangepi/orangepi-zero-plus2/boot.cmd
- create mode 100644 board/orangepi/orangepi-zero-plus2/genimage.cfg
- create mode 100644 board/orangepi/orangepi-zero-plus2/readme.txt
- create mode 100644 configs/orangepi_zero_plus2_defconfig
+ create mode 100644 board/orangepi/orangepi-win/boot.cmd
+ create mode 100644 board/orangepi/orangepi-win/genimage.cfg
+ create mode 100644 board/orangepi/orangepi-win/readme.txt
+ create mode 100644 configs/orangepi_win_defconfig
 
 diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index ef4fa10..630cab1 100644
+index 8c6d2b3..8cf4ae2 100644
 --- a/.gitlab-ci.yml
 +++ b/.gitlab-ci.yml
-@@ -163,6 +163,7 @@ orangepi_plus_defconfig: *defconfig
- orangepi_prime_defconfig: *defconfig
- orangepi_win_defconfig: *defconfig
+@@ -160,6 +160,7 @@ openblocks_a6_defconfig: *defconfig
+ orangepi_one_defconfig: *defconfig
+ orangepi_pc_defconfig: *defconfig
+ orangepi_plus_defconfig: *defconfig
++orangepi_win_defconfig: *defconfig
  orangepi_zero_defconfig: *defconfig
-+orangepi_zero_plus2_defconfig: *defconfig
  pandaboard_defconfig: *defconfig
  pc_x86_64_bios_defconfig: *defconfig
- pc_x86_64_efi_defconfig: *defconfig
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 40b9fd7..f683c25 100644
+index 1ae83f2..123e444 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -733,6 +733,7 @@ F:	board/friendlyarm/nanopi-neo2/
+@@ -731,12 +731,14 @@ F:	board/engicam/
+ F:	board/friendlyarm/nanopi-a64/
+ F:	board/friendlyarm/nanopi-neo2/
  F:	board/olimex/a64-olinuxino/
- F:	board/orangepi/orangepi-prime/
- F:	board/orangepi/orangepi-win/
-+F:	board/orangepi/orangepi-zero-plus2/
++F:	board/orangepi/orangepi-win/
  F:	board/pine64/
  F:	configs/bananapi_m1_defconfig
  F:	configs/bananapi_m64_defconfig
-@@ -741,6 +742,7 @@ F:	configs/friendlyarm_nanopi_neo2_defconfig
+ F:	configs/friendlyarm_nanopi_a64_defconfig
+ F:	configs/friendlyarm_nanopi_neo2_defconfig
  F:	configs/olimex_a64_olinuxino_defconfig
- F:	configs/orangepi_prime_defconfig
- F:	configs/orangepi_win_defconfig
-+F:	configs/orangepi_zero_plus2_defconfig
++F:	configs/orangepi_win_defconfig
  F:	configs/pine64_defconfig
  F:	configs/pine64_sopine_defconfig
  F:	configs/engicam_imx6qdl_icore_defconfig
-diff --git a/board/orangepi/orangepi-zero-plus2/boot.cmd b/board/orangepi/orangepi-zero-plus2/boot.cmd
+diff --git a/board/orangepi/orangepi-win/boot.cmd b/board/orangepi/orangepi-win/boot.cmd
 new file mode 100644
-index 0000000..4772a9b
+index 0000000..2ddb769
 --- /dev/null
-+++ b/board/orangepi/orangepi-zero-plus2/boot.cmd
++++ b/board/orangepi/orangepi-win/boot.cmd
 @@ -0,0 +1,6 @@
 +setenv bootargs console=ttyS0,115200 earlyprintk root=/dev/mmcblk0p2 rootwait
 +
 +fatload mmc 0 $kernel_addr_r Image
-+fatload mmc 0 $fdt_addr_r sun50i-h5-orangepi-zero-plus2.dtb
++fatload mmc 0 $fdt_addr_r sun50i-a64-orangepi-win.dtb
 +
 +booti $kernel_addr_r - $fdt_addr_r
-diff --git a/board/orangepi/orangepi-zero-plus2/genimage.cfg b/board/orangepi/orangepi-zero-plus2/genimage.cfg
+diff --git a/board/orangepi/orangepi-win/genimage.cfg b/board/orangepi/orangepi-win/genimage.cfg
 new file mode 100644
-index 0000000..0fe219e
+index 0000000..36955d3
 --- /dev/null
-+++ b/board/orangepi/orangepi-zero-plus2/genimage.cfg
++++ b/board/orangepi/orangepi-win/genimage.cfg
 @@ -0,0 +1,38 @@
 +image boot.vfat {
 +	vfat {
 +		files = {
 +			"Image",
-+			"sun50i-h5-orangepi-zero-plus2.dtb",
++			"sun50i-a64-orangepi-win.dtb",
 +			"boot.scr"
 +		}
 +	}
@@ -118,31 +118,31 @@ index 0000000..0fe219e
 +		image = "rootfs.ext4"
 +	}
 +}
-diff --git a/board/orangepi/orangepi-zero-plus2/readme.txt b/board/orangepi/orangepi-zero-plus2/readme.txt
+diff --git a/board/orangepi/orangepi-win/readme.txt b/board/orangepi/orangepi-win/readme.txt
 new file mode 100644
-index 0000000..322ba0e
+index 0000000..93adddd
 --- /dev/null
-+++ b/board/orangepi/orangepi-zero-plus2/readme.txt
++++ b/board/orangepi/orangepi-win/readme.txt
 @@ -0,0 +1,37 @@
 +Intro
 +=====
 +
 +This default configuration will allow you to start experimenting with the
-+buildroot environment for the Orangepi Zero Plus2. With the current configuration
++buildroot environment for the Orangepi Win/Win Plus. With the current configuration
 +it will bring-up the board, and allow access through the serial console.
 +
-+Orangepi Zero Plus2 link:
-+http://www.orangepi.org/OrangePiZeroPlus2/
++Orangepi Win/Win Plus link:
++http://www.orangepi.org/OrangePiWin_WinPlus/
 +
 +Wiki link:
-+https://openedev.amarulasolutions.com/display/ODWIKI/Orangepi+Zero+Plus2
++https://openedev.amarulasolutions.com/display/ODWIKI/Orangepi+Win
 +
 +This configuration uses U-Boot mainline and kernel mainline.
 +
 +How to build
 +============
 +
-+    $ make orangepi_zero_plus2_defconfig
++    $ make orangepi_win_defconfig
 +    $ make
 +
 +Note: you will need access to the internet to download the required
@@ -159,13 +159,13 @@ index 0000000..322ba0e
 +  $ sudo dd if=output/images/sdcard.img of=/dev/sdX
 +  $ sudo sync
 +
-+Insert the micro SDcard in your Orangepi Zero Plus2 and power it up. The console
++Insert the micro SDcard in your Orangepi Win/Win Plus and power it up. The console
 +is on the serial line, 115200 8N1.
-diff --git a/configs/orangepi_zero_plus2_defconfig b/configs/orangepi_zero_plus2_defconfig
+diff --git a/configs/orangepi_win_defconfig b/configs/orangepi_win_defconfig
 new file mode 100644
-index 0000000..cb57c98
+index 0000000..9ae3772
 --- /dev/null
-+++ b/configs/orangepi_zero_plus2_defconfig
++++ b/configs/orangepi_win_defconfig
 @@ -0,0 +1,47 @@
 +BR2_aarch64=y
 +BR2_cortex_a53=y
@@ -187,14 +187,14 @@ index 0000000..cb57c98
 +BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
 +BR2_TARGET_UBOOT_CUSTOM_VERSION=y
 +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.09"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="orangepi_zero_plus2"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="orangepi_win"
 +BR2_TARGET_UBOOT_NEEDS_DTC=y
 +BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
 +BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.itb"
 +BR2_TARGET_UBOOT_SPL=y
 +BR2_TARGET_UBOOT_SPL_NAME="spl/sunxi-spl.bin"
 +BR2_TARGET_UBOOT_BOOT_SCRIPT=y
-+BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE="board/orangepi/orangepi-zero-plus2/boot.cmd"
++BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE="board/orangepi/orangepi-win/boot.cmd"
 +
 +# Kernel
 +BR2_LINUX_KERNEL=y
@@ -202,17 +202,17 @@ index 0000000..cb57c98
 +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.13.7"
 +BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
 +BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun50i-h5-orangepi-zero-plus2"
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun50i-a64-orangepi-win"
 +
 +# Filesystem
-+BR2_TARGET_GENERIC_ISSUE="Welcome to Orangepi Zero Plus2"
++BR2_TARGET_GENERIC_ISSUE="Welcome to Orangepi Win/Win Plus"
 +BR2_TARGET_ROOTFS_EXT2=y
 +BR2_TARGET_ROOTFS_EXT2_4=y
 +BR2_PACKAGE_HOST_DOSFSTOOLS=y
 +BR2_PACKAGE_HOST_GENIMAGE=y
 +BR2_PACKAGE_HOST_MTOOLS=y
 +BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/orangepi/orangepi-zero-plus2/genimage.cfg"
++BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/orangepi/orangepi-win/genimage.cfg"
 +BR2_ROOTFS_POST_BUILD_SCRIPT="support/scripts/sunxi64-post-build.sh"
 -- 
 1.9.1
