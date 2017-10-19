@@ -1,130 +1,132 @@
 From: Christian Stewart <christian@paral.in>
-Date: Wed, 18 Oct 2017 20:22:47 -0400
-Subject: [Buildroot] [PATCH 02/12] tini: new package
+Date: Wed, 18 Oct 2017 20:22:50 -0400
+Subject: [Buildroot] [PATCH 05/12] docker-proxy: new package
 In-Reply-To: <20171019002257.27646-1-christian@paral.in>
 References: <20171019002257.27646-1-christian@paral.in>
-Message-ID: <20171019002257.27646-2-christian@paral.in>
+Message-ID: <20171019002257.27646-5-christian@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Tini is a minimal init process to act as PID 1 for containers.
+Add docker-proxy package to Buildroot. Needed by docker-engine at
+runtime, and previously not included. This leads to the following error
+when attempting to port-map ports to a container:
 
-Tini can be used to satisfy docker-engine's docker-init binary
-requirement.
+  $ docker run -p 8080:8080 nginx
+  docker: Error response from daemon: driver failed programming external
+  connectivity on endpoint:
+  exec: "docker-proxy": executable file not found in $PATH.
 
-In many cases docker-init backing processes like Tini must be static, as
-they are executed inside a container in an unknown environment. This
-patch adds an option to specifically compile Tini statically, even if
-the system is compiled dynamically.
+Docker expects the docker-proxy binary to exist in the PATH.
 
 Signed-off-by: Christian Stewart <christian@paral.in>
 ---
- package/Config.in      |  1 +
- package/tini/Config.in | 21 +++++++++++++++++++++
- package/tini/tini.hash |  2 ++
- package/tini/tini.mk   | 42 ++++++++++++++++++++++++++++++++++++++++++
- 4 files changed, 66 insertions(+)
- create mode 100644 package/tini/Config.in
- create mode 100644 package/tini/tini.hash
- create mode 100644 package/tini/tini.mk
+ package/Config.in                      |  1 +
+ package/docker-proxy/Config.in         | 18 +++++++++++++
+ package/docker-proxy/docker-proxy.hash |  2 ++
+ package/docker-proxy/docker-proxy.mk   | 46 ++++++++++++++++++++++++++++++++++
+ 4 files changed, 67 insertions(+)
+ create mode 100644 package/docker-proxy/Config.in
+ create mode 100644 package/docker-proxy/docker-proxy.hash
+ create mode 100644 package/docker-proxy/docker-proxy.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index c161634daf..f8f9f39167 100644
+index f8f9f39167..909a8c5d1a 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1878,6 +1878,7 @@ comment "Utilities"
- 	source "package/sudo/Config.in"
- 	source "package/terminology/Config.in"
- 	source "package/time/Config.in"
-+	source "package/tini/Config.in"
- 	source "package/tmux/Config.in"
- 	source "package/which/Config.in"
- 	source "package/xmlstarlet/Config.in"
-diff --git a/package/tini/Config.in b/package/tini/Config.in
+@@ -1903,6 +1903,7 @@ menu "System tools"
+ 	source "package/debianutils/Config.in"
+ 	source "package/docker-containerd/Config.in"
+ 	source "package/docker-engine/Config.in"
++	source "package/docker-proxy/Config.in"
+ 	source "package/dsp-tools/Config.in"
+ 	source "package/efibootmgr/Config.in"
+ 	source "package/efivar/Config.in"
+diff --git a/package/docker-proxy/Config.in b/package/docker-proxy/Config.in
 new file mode 100644
-index 0000000000..323b9d17a1
+index 0000000000..4f414b24b1
 --- /dev/null
-+++ b/package/tini/Config.in
-@@ -0,0 +1,21 @@
-+config BR2_PACKAGE_TINI
-+	bool "tini"
++++ b/package/docker-proxy/Config.in
+@@ -0,0 +1,18 @@
++config BR2_PACKAGE_DOCKER_PROXY
++	bool "docker-proxy"
++	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
++	depends on BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS
++	depends on BR2_TOOLCHAIN_HAS_THREADS
 +	help
-+	  tini is a simple but valid init binary to
-+	  act as PID 1 for containers.
++	  Libnetwork is a Container Network Model that provides a
++	  consistent programming interface and the required network
++	  abstractions for applications.
 +
-+	  https://github.com/krallin/tini
++	  This package provides docker-proxy, a run-time dependency of Docker.
 +
-+if BR2_PACKAGE_TINI
++	  https://github.com/docker/libnetwork
 +
-+config BR2_PACKAGE_TINI_MINIMAL
-+	bool "build minimal variant"
-+	help
-+	  Disables argument parsing and verbose output.
-+
-+config BR2_PACKAGE_TINI_STATIC
-+	bool "build static"
-+	help
-+	  Enables static compilation for tini.
-+
-+endif
-diff --git a/package/tini/tini.hash b/package/tini/tini.hash
++comment "docker-proxy needs a toolchain w/ threads"
++	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
++	depends on BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/docker-proxy/docker-proxy.hash b/package/docker-proxy/docker-proxy.hash
 new file mode 100644
-index 0000000000..f8c8c2a3aa
+index 0000000000..3ec184f54f
 --- /dev/null
-+++ b/package/tini/tini.hash
++++ b/package/docker-proxy/docker-proxy.hash
 @@ -0,0 +1,2 @@
-+# Locally computed
-+sha256	c2b7fe2fb92e71911d06b7571b53d4e7e8985b34efe2a599670b070b000c8dbe	tini-v0.16.1.tar.gz
-diff --git a/package/tini/tini.mk b/package/tini/tini.mk
++# Locally calculated
++sha256	2eee331b6ded567a36e7db708405b34032b93938682cf049025f48b96d755bf6	docker-proxy-7b2b1feb1de4817d522cc372af149ff48d25028e.tar.gz
+diff --git a/package/docker-proxy/docker-proxy.mk b/package/docker-proxy/docker-proxy.mk
 new file mode 100644
-index 0000000000..a43f3f0162
+index 0000000000..3bf6546d26
 --- /dev/null
-+++ b/package/tini/tini.mk
-@@ -0,0 +1,42 @@
++++ b/package/docker-proxy/docker-proxy.mk
+@@ -0,0 +1,46 @@
 +################################################################################
 +#
-+# tini
++# docker-proxy
 +#
 +################################################################################
 +
-+TINI_VERSION = v0.16.1
-+TINI_SITE = $(call github,krallin,tini,$(TINI_VERSION))
++DOCKER_PROXY_VERSION = 7b2b1feb1de4817d522cc372af149ff48d25028e
++DOCKER_PROXY_SITE = $(call github,docker,libnetwork,$(DOCKER_PROXY_VERSION))
 +
-+TINI_LICENSE = MIT
-+TINI_LICENSE_FILES = LICENSE
++DOCKER_PROXY_LICENSE = Apache-2.0
++DOCKER_PROXY_LICENSE_FILES = LICENSE
 +
-+TINI_CFLAGS = $(TARGET_CFLAGS) -DTINI_VERSION=\"$(TINI_VERSION)\" -DTINI_GIT=\"\"
++DOCKER_PROXY_DEPENDENCIES = host-go host-pkgconf
 +
-+ifeq ($(BR2_PACKAGE_TINI_MINIMAL),y)
-+TINI_CFLAGS += -DTINI_MINIMAL
++DOCKER_PROXY_GOPATH = "$(@D)/gopath"
++DOCKER_PROXY_MAKE_ENV = $(HOST_GO_TARGET_ENV) \
++	CGO_ENABLED=1 \
++	CGO_NO_EMULATION=1 \
++	GOBIN="$(@D)/bin" \
++	GOPATH="$(DOCKER_PROXY_GOPATH)" \
++	PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
++	$(TARGET_MAKE_ENV)
++
++ifeq ($(BR2_STATIC_LIBS),y)
++DOCKER_PROXY_GLDFLAGS += -extldflags '-static'
 +endif
 +
-+ifeq ($(BR2_PACKAGE_TINI_STATIC),y)
-+TINI_CFLAGS += -static
-+endif
-+
-+ifeq ($(BR2_TOOLCHAIN_HAS_SSP),y)
-+TINI_CFLAGS += -fstack-protector --param=ssp-buffer-size=4
-+endif
-+
-+define TINI_CONFIGURE_CMDS
-+	printf "#pragma once\n" > $(@D)/src/tiniConfig.h
++define DOCKER_PROXY_CONFIGURE_CMDS
++	mkdir -p $(DOCKER_PROXY_GOPATH)/src/github.com/docker
++	ln -fs $(@D) $(DOCKER_PROXY_GOPATH)/src/github.com/docker/libnetwork
 +endef
 +
-+define TINI_BUILD_CMDS
-+	$(TARGET_CC) \
-+		$(TINI_CFLAGS) \
-+		-o $(@D)/tini $(@D)/src/tini.c
++define DOCKER_PROXY_BUILD_CMDS
++	cd $(@D)/gopath/src/github.com/docker/libnetwork; \
++	$(DOCKER_PROXY_MAKE_ENV) \
++	$(HOST_DIR)/usr/bin/go build -v \
++		-o $(@D)/bin/docker-proxy \
++		-ldflags "$(DOCKER_PROXY_GLDFLAGS)" \
++		github.com/docker/libnetwork/cmd/proxy
 +endef
 +
-+define TINI_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/tini $(TARGET_DIR)/usr/bin/tini
++define DOCKER_PROXY_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/bin/docker-proxy $(TARGET_DIR)/usr/bin/docker-proxy
 +endef
 +
-+# Tini's CMakeLists.txt is not suitable for Buildroot.
 +$(eval $(generic-package))
 -- 
 2.13.6
