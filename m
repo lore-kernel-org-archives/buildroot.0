@@ -1,62 +1,49 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 19 Oct 2017 16:04:24 +0200
-Subject: [Buildroot] [PATCH 01/12] dumb-init: new package
-In-Reply-To: <20171019002257.27646-1-christian@paral.in>
-References: <20171019002257.27646-1-christian@paral.in>
-Message-ID: <3b5d387e-8cd6-361e-f9d3-1dd36721bd94@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 19 Oct 2017 16:56:50 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] hostapd: add upstream
+	security fixes
+Message-ID: <20171019145209.3589C81130@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Christian,
+commit: https://git.buildroot.net/buildroot/commit/?id=35400f56615fcf2cf622c3cfc58a95263344a39f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
- This is already v3 of the series. Could you explain the changes w.r.t. to the
-previous versions? You should do that in the commit message...
+Fixes CVE-2017-13082
 
-On 19-10-17 02:22, Christian Stewart wrote:
-> dumb-init is a minimal init process to act as PID 1 for containers.
-> 
-> dumb-init can be used to satisfy docker-engine's docker-init binary
-> requirement.
-> 
-> In many cases docker-init backing processes like dumb-init must be static, as
-> they are executed inside a container in an unknown environment. This
-> patch includes an option to specifically compile dumb-init statically, even if
-> the system is compiled dynamically.
-> 
-> Signed-off-by: Christian Stewart <christian@paral.in>
+http://lists.infradead.org/pipermail/hostap/2017-October/037989.html
 
- ... here, separated with a --- line:
-
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 5259c5c8058aa2c9608fd202c35477015a41c326)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
-v3:
- - Use foo instead of bar
- - Update commit message to explain baz better [Thomas]
+ package/hostapd/hostapd.hash | 2 ++
+ package/hostapd/hostapd.mk   | 3 +++
+ 2 files changed, 5 insertions(+)
 
- The [Thomas] means that this change was based on review feedback from Thomas.
-
- For entirely new patches, you just write:
-
-v3: New patch
-
- Also, you should send the series with "v3" in the subject. With modern git, you
-can do that with the -v3 parameter to git send-email or git format-patch.
-
- Of course, no need to resend the series for this, but please do explain in a
-mail what the changes are. Makes reviewing a lot simpler.
-
-
- Regards,
- Arnout
-
-[snip]
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+diff --git a/package/hostapd/hostapd.hash b/package/hostapd/hostapd.hash
+index fb89147..b20c89b 100644
+--- a/package/hostapd/hostapd.hash
++++ b/package/hostapd/hostapd.hash
+@@ -1,2 +1,4 @@
+ # Locally calculated
+ sha256  01526b90c1d23bec4b0f052039cc4456c2fd19347b4d830d1d58a0a6aea7117d  hostapd-2.6.tar.gz
++sha256  529113cc81256c6178f3c1cf25dd8d3f33e6d770e4a180bd31c6ab7e4917f40b  rebased-v2.6-0001-hostapd-Avoid-key-reinstallation-in-FT-handshake.patch
++sha256  147c8abe07606905d16404fb2d2c8849796ca7c85ed8673c09bb50038bcdeb9e  rebased-v2.6-0005-Fix-PTK-rekeying-to-generate-a-new-ANonce.patch
+diff --git a/package/hostapd/hostapd.mk b/package/hostapd/hostapd.mk
+index 39c8788..3ac1979 100644
+--- a/package/hostapd/hostapd.mk
++++ b/package/hostapd/hostapd.mk
+@@ -6,6 +6,9 @@
+ 
+ HOSTAPD_VERSION = 2.6
+ HOSTAPD_SITE = http://w1.fi/releases
++HOSTAPD_PATCH = \
++	http://w1.fi/security/2017-1/rebased-v2.6-0001-hostapd-Avoid-key-reinstallation-in-FT-handshake.patch \
++	http://w1.fi/security/2017-1/rebased-v2.6-0005-Fix-PTK-rekeying-to-generate-a-new-ANonce.patch
+ HOSTAPD_SUBDIR = hostapd
+ HOSTAPD_CONFIG = $(HOSTAPD_DIR)/$(HOSTAPD_SUBDIR)/.config
+ HOSTAPD_DEPENDENCIES = host-pkgconf libnl
