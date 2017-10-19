@@ -1,77 +1,53 @@
 From: Christian Stewart <christian@paral.in>
-Date: Wed, 18 Oct 2017 20:22:54 -0400
-Subject: [Buildroot] [PATCH 09/12] docker-containerd: bump to 3addd84
+Date: Wed, 18 Oct 2017 20:22:53 -0400
+Subject: [Buildroot] [PATCH 08/12] runc: bump to v1.0.0-rc4
 In-Reply-To: <20171019002257.27646-1-christian@paral.in>
 References: <20171019002257.27646-1-christian@paral.in>
-Message-ID: <20171019002257.27646-9-christian@paral.in>
+Message-ID: <20171019002257.27646-8-christian@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit bumps docker-containerd to:
-
-  3addd840653146c90a254301d6c3a663c7fd6429
-
 This is a dependency of docker-engine v2017.07.0-ce.
 
 Signed-off-by: Christian Stewart <christian@paral.in>
 ---
- package/docker-containerd/docker-containerd.hash |  2 +-
- package/docker-containerd/docker-containerd.mk   | 13 +++++++------
- 2 files changed, 8 insertions(+), 7 deletions(-)
+ package/runc/runc.hash | 2 +-
+ package/runc/runc.mk   | 5 +++--
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/docker-containerd/docker-containerd.hash b/package/docker-containerd/docker-containerd.hash
-index 992eb5b01a..cdc3a0b4fb 100644
---- a/package/docker-containerd/docker-containerd.hash
-+++ b/package/docker-containerd/docker-containerd.hash
+diff --git a/package/runc/runc.hash b/package/runc/runc.hash
+index 3e188c5c79..08e306d0dc 100644
+--- a/package/runc/runc.hash
++++ b/package/runc/runc.hash
 @@ -1,2 +1,2 @@
- # Computed locally
--sha256	da89086a7c643702a2ddecec67a45d3d8e4b0d610dd19036be63e6bd54cc1a85	docker-containerd-9048e5e50717ea4497b757314bad98ea3763c145.tar.gz
-+sha256	3549e9c4ff1f71c6c9c5932b36b209f9b7ecae3662d251a88ce349853f0249fc	docker-containerd-3addd840653146c90a254301d6c3a663c7fd6429.tar.gz
-diff --git a/package/docker-containerd/docker-containerd.mk b/package/docker-containerd/docker-containerd.mk
-index ffbadb0c3f..fe30f19817 100644
---- a/package/docker-containerd/docker-containerd.mk
-+++ b/package/docker-containerd/docker-containerd.mk
-@@ -4,8 +4,8 @@
+ # Locally computed
+-sha256	b5c50d7d9a5f610d5424f96196efa306ec708fd9299302dd919545099c16b7c1	runc-9c2d8d184e5da67c95d601382adf14862e4f2228.tar.gz
++sha256	3ffefd293932d2ad509701878dd7dd6ef498c3667198a33e8e5d5a3cbce0eeaa	runc-v1.0.0-rc4.tar.gz
+diff --git a/package/runc/runc.mk b/package/runc/runc.mk
+index fb3fec20f5..0b51e11896 100644
+--- a/package/runc/runc.mk
++++ b/package/runc/runc.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DOCKER_CONTAINERD_VERSION = 9048e5e50717ea4497b757314bad98ea3763c145
--DOCKER_CONTAINERD_SITE = $(call github,docker,containerd,$(DOCKER_CONTAINERD_VERSION))
-+DOCKER_CONTAINERD_VERSION = 3addd840653146c90a254301d6c3a663c7fd6429
-+DOCKER_CONTAINERD_SITE = $(call github,containerd,containerd,$(DOCKER_CONTAINERD_VERSION))
- DOCKER_CONTAINERD_LICENSE = Apache-2.0
- DOCKER_CONTAINERD_LICENSE_FILES = LICENSE.code
- 
-@@ -18,22 +18,23 @@ DOCKER_CONTAINERD_MAKE_ENV = $(HOST_GO_TARGET_ENV) \
- 	GOPATH="$(DOCKER_CONTAINERD_GOPATH)"
- 
- DOCKER_CONTAINERD_GLDFLAGS = \
--	-X github.com/docker/containerd.GitCommit=$(DOCKER_CONTAINERD_VERSION)
-+	-X github.com/containerd/containerd.GitCommit=$(DOCKER_CONTAINERD_VERSION)
- 
- ifeq ($(BR2_STATIC_LIBS),y)
- DOCKER_CONTAINERD_GLDFLAGS += -extldflags '-static'
- endif
- 
- define DOCKER_CONTAINERD_CONFIGURE_CMDS
--	mkdir -p $(DOCKER_CONTAINERD_GOPATH)/src/github.com/docker
--	ln -s $(@D) $(DOCKER_CONTAINERD_GOPATH)/src/github.com/docker/containerd
-+	mkdir -p $(DOCKER_CONTAINERD_GOPATH)/src/github.com/containerd
-+	ln -s $(@D) $(DOCKER_CONTAINERD_GOPATH)/src/github.com/containerd/containerd
- 	mkdir -p $(DOCKER_CONTAINERD_GOPATH)/src/github.com/opencontainers
- 	ln -s $(RUNC_SRCDIR) $(DOCKER_CONTAINERD_GOPATH)/src/github.com/opencontainers/runc
+-RUNC_VERSION = 9c2d8d184e5da67c95d601382adf14862e4f2228
++RUNC_VERSION = v1.0.0-rc4
+ RUNC_SITE = $(call github,opencontainers,runc,$(RUNC_VERSION))
+ RUNC_LICENSE = Apache-2.0
+ RUNC_LICENSE_FILES = LICENSE
+@@ -38,7 +38,8 @@ define RUNC_CONFIGURE_CMDS
  endef
  
- define DOCKER_CONTAINERD_BUILD_CMDS
- 	$(foreach d,ctr containerd containerd-shim,\
--		cd $(@D); $(DOCKER_CONTAINERD_MAKE_ENV) $(HOST_DIR)/bin/go build \
-+		cd $(DOCKER_CONTAINERD_GOPATH)/src/github.com/containerd/containerd; \
-+			$(DOCKER_CONTAINERD_MAKE_ENV) $(HOST_DIR)/usr/go build \
- 			-v -o $(@D)/bin/$(d) -ldflags "$(DOCKER_CONTAINERD_GLDFLAGS)" ./$(d)$(sep))
+ define RUNC_BUILD_CMDS
+-	cd $(@D) && $(RUNC_MAKE_ENV) $(HOST_DIR)/bin/go \
++	cd $(RUNC_GOPATH)/src/github.com/opencontainers/runc && \
++		$(RUNC_MAKE_ENV) $(HOST_DIR)/bin/go \
+ 		build -v -o $(@D)/bin/runc \
+ 		-tags "$(RUNC_GOTAGS)" -ldflags "$(RUNC_GLDFLAGS)" .
  endef
- 
 -- 
 2.13.6
