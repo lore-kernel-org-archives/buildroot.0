@@ -1,99 +1,77 @@
 From: Christian Stewart <christian@paral.in>
-Date: Wed, 18 Oct 2017 20:22:48 -0400
-Subject: [Buildroot] [PATCH 03/12] docker-engine: add support for init
-	processes
+Date: Wed, 18 Oct 2017 20:22:54 -0400
+Subject: [Buildroot] [PATCH 09/12] docker-containerd: bump to 3addd84
 In-Reply-To: <20171019002257.27646-1-christian@paral.in>
 References: <20171019002257.27646-1-christian@paral.in>
-Message-ID: <20171019002257.27646-3-christian@paral.in>
+Message-ID: <20171019002257.27646-9-christian@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When a docker container is run with the --init flag, the Docker engine
-uses the docker-init binary as PID 1 inside the container. This is
-necessary in may cases to avoid issues with signal handling, zombie
-processes, and other quirks when running as PID 1.
+This commit bumps docker-containerd to:
 
-The docker-init binary is backed by tini on default, but optionally can
-be changed to docker-init by user preference.
+  3addd840653146c90a254301d6c3a663c7fd6429
 
-Furthermore, this patch fixes the following Docker error:
-
-  dockerd: level=warning msg="failed to retrieve docker-init version"
+This is a dependency of docker-engine v2017.07.0-ce.
 
 Signed-off-by: Christian Stewart <christian@paral.in>
 ---
- package/docker-engine/Config.in        | 26 ++++++++++++++++++++++++++
- package/docker-engine/docker-engine.mk | 11 +++++++++++
- 2 files changed, 37 insertions(+)
+ package/docker-containerd/docker-containerd.hash |  2 +-
+ package/docker-containerd/docker-containerd.mk   | 13 +++++++------
+ 2 files changed, 8 insertions(+), 7 deletions(-)
 
-diff --git a/package/docker-engine/Config.in b/package/docker-engine/Config.in
-index 05670a716e..7d9a87f7bb 100644
---- a/package/docker-engine/Config.in
-+++ b/package/docker-engine/Config.in
-@@ -33,6 +33,32 @@ config BR2_PACKAGE_DOCKER_ENGINE_STATIC_CLIENT
+diff --git a/package/docker-containerd/docker-containerd.hash b/package/docker-containerd/docker-containerd.hash
+index 992eb5b01a..cdc3a0b4fb 100644
+--- a/package/docker-containerd/docker-containerd.hash
++++ b/package/docker-containerd/docker-containerd.hash
+@@ -1,2 +1,2 @@
+ # Computed locally
+-sha256	da89086a7c643702a2ddecec67a45d3d8e4b0d610dd19036be63e6bd54cc1a85	docker-containerd-9048e5e50717ea4497b757314bad98ea3763c145.tar.gz
++sha256	3549e9c4ff1f71c6c9c5932b36b209f9b7ecae3662d251a88ce349853f0249fc	docker-containerd-3addd840653146c90a254301d6c3a663c7fd6429.tar.gz
+diff --git a/package/docker-containerd/docker-containerd.mk b/package/docker-containerd/docker-containerd.mk
+index ffbadb0c3f..fe30f19817 100644
+--- a/package/docker-containerd/docker-containerd.mk
++++ b/package/docker-containerd/docker-containerd.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
  
- if BR2_PACKAGE_DOCKER_ENGINE_DAEMON
+-DOCKER_CONTAINERD_VERSION = 9048e5e50717ea4497b757314bad98ea3763c145
+-DOCKER_CONTAINERD_SITE = $(call github,docker,containerd,$(DOCKER_CONTAINERD_VERSION))
++DOCKER_CONTAINERD_VERSION = 3addd840653146c90a254301d6c3a663c7fd6429
++DOCKER_CONTAINERD_SITE = $(call github,containerd,containerd,$(DOCKER_CONTAINERD_VERSION))
+ DOCKER_CONTAINERD_LICENSE = Apache-2.0
+ DOCKER_CONTAINERD_LICENSE_FILES = LICENSE.code
  
-+choice
-+	bool "docker-init to use"
-+	default BR2_PACKAGE_DOCKER_ENGINE_INIT_TINI
-+	help
-+	  The docker engine uses a minimal init process as PID 1
-+	  inside containers. There are several implementations
-+	  of this init process.
-+
-+config BR2_PACKAGE_DOCKER_ENGINE_INIT_TINI
-+	bool "tini"
-+	select BR2_PACKAGE_TINI
-+	help
-+	  Use Tini as the container init process.
-+
-+	  https://github.com/krallin/tini
-+
-+config BR2_PACKAGE_DOCKER_ENGINE_INIT_DUMB_INIT
-+	bool "dumb-init"
-+	select BR2_PACKAGE_DUMB_INIT
-+	help
-+	  Use dumb-init as the container init process.
-+
-+	  https://github.com/Yelp/dumb-init
-+
-+endchoice
-+
- config BR2_PACKAGE_DOCKER_ENGINE_DRIVER_BTRFS
- 	bool "btrfs filesystem driver"
- 	depends on BR2_USE_MMU # btrfs-progs
-diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
-index 8928f072e7..a2776ed78c 100644
---- a/package/docker-engine/docker-engine.mk
-+++ b/package/docker-engine/docker-engine.mk
-@@ -50,6 +50,13 @@ endif
- ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_DAEMON),y)
- DOCKER_ENGINE_BUILD_TAGS += daemon
- DOCKER_ENGINE_BUILD_TARGETS += dockerd
-+
-+ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_INIT_DUMB_INIT),y)
-+DOCKER_ENGINE_INIT = dumb-init
-+else
-+DOCKER_ENGINE_INIT = tini
-+endif
-+
+@@ -18,22 +18,23 @@ DOCKER_CONTAINERD_MAKE_ENV = $(HOST_GO_TARGET_ENV) \
+ 	GOPATH="$(DOCKER_CONTAINERD_GOPATH)"
+ 
+ DOCKER_CONTAINERD_GLDFLAGS = \
+-	-X github.com/docker/containerd.GitCommit=$(DOCKER_CONTAINERD_VERSION)
++	-X github.com/containerd/containerd.GitCommit=$(DOCKER_CONTAINERD_VERSION)
+ 
+ ifeq ($(BR2_STATIC_LIBS),y)
+ DOCKER_CONTAINERD_GLDFLAGS += -extldflags '-static'
  endif
  
- ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_EXPERIMENTAL),y)
-@@ -119,6 +126,10 @@ define DOCKER_ENGINE_INSTALL_TARGET_CMDS
- 	$(foreach target,$(DOCKER_ENGINE_BUILD_TARGETS), \
- 		$(INSTALL) -D -m 0755 $(@D)/bin/$(target) $(TARGET_DIR)/usr/bin/$(target)
- 	)
-+
-+	$(if $(filter $(BR2_PACKAGE_DOCKER_ENGINE_DAEMON),y), \
-+		ln -fs $(DOCKER_ENGINE_INIT) $(TARGET_DIR)/usr/bin/docker-init
-+	)
+ define DOCKER_CONTAINERD_CONFIGURE_CMDS
+-	mkdir -p $(DOCKER_CONTAINERD_GOPATH)/src/github.com/docker
+-	ln -s $(@D) $(DOCKER_CONTAINERD_GOPATH)/src/github.com/docker/containerd
++	mkdir -p $(DOCKER_CONTAINERD_GOPATH)/src/github.com/containerd
++	ln -s $(@D) $(DOCKER_CONTAINERD_GOPATH)/src/github.com/containerd/containerd
+ 	mkdir -p $(DOCKER_CONTAINERD_GOPATH)/src/github.com/opencontainers
+ 	ln -s $(RUNC_SRCDIR) $(DOCKER_CONTAINERD_GOPATH)/src/github.com/opencontainers/runc
  endef
  
- $(eval $(generic-package))
+ define DOCKER_CONTAINERD_BUILD_CMDS
+ 	$(foreach d,ctr containerd containerd-shim,\
+-		cd $(@D); $(DOCKER_CONTAINERD_MAKE_ENV) $(HOST_DIR)/bin/go build \
++		cd $(DOCKER_CONTAINERD_GOPATH)/src/github.com/containerd/containerd; \
++			$(DOCKER_CONTAINERD_MAKE_ENV) $(HOST_DIR)/usr/go build \
+ 			-v -o $(@D)/bin/$(d) -ldflags "$(DOCKER_CONTAINERD_GLDFLAGS)" ./$(d)$(sep))
+ endef
+ 
 -- 
 2.13.6
