@@ -1,44 +1,39 @@
 From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Fri, 20 Oct 2017 08:26:56 +0200
-Subject: [Buildroot] [PATCH] luvi: fetch uploaded release tarball
-Message-ID: <20171020062656.20059-1-joerg.krause@embedded.rocks>
+Date: Fri, 20 Oct 2017 08:31:16 +0200
+Subject: [Buildroot] [PATCH] libuv: bump to version 1.15.0
+Message-ID: <20171020063116.25507-1-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Upstream has finally released an uploaded tarball, which is prefered
-over cloning the repository from github.
-
 Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 ---
- package/luvi/luvi.hash | 2 +-
- package/luvi/luvi.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libuv/libuv.hash | 2 +-
+ package/libuv/libuv.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/luvi/luvi.hash b/package/luvi/luvi.hash
-index ce3785eb8d..e2239b6171 100644
---- a/package/luvi/luvi.hash
-+++ b/package/luvi/luvi.hash
+diff --git a/package/libuv/libuv.hash b/package/libuv/libuv.hash
+index ff10f70f4f..5b29640d2c 100644
+--- a/package/libuv/libuv.hash
++++ b/package/libuv/libuv.hash
 @@ -1,2 +1,2 @@
  # Locally calculated
--sha256 6d2297751b4d4023c1fa8b723b6f04e09584c67694958edbfa0d284f384759d5  luvi-v2.7.6.tar.gz
-+sha256  ce9a1fb762e61267618ddea9ea129170fd543bb918c382b71cb35985d0024c42  luvi-src-v2.7.6.tar.gz
-diff --git a/package/luvi/luvi.mk b/package/luvi/luvi.mk
-index fc89d4d654..a2bc218e77 100644
---- a/package/luvi/luvi.mk
-+++ b/package/luvi/luvi.mk
-@@ -5,8 +5,8 @@
+-sha256 82fbbb0eaab4adcf8ed513d3b777c8e02ed2e77aae265baf6bd2d68cb84bc9e3  libuv-v1.14.1.tar.gz
++sha256  17afc94ec307be28fe8d4316679171219770df4f993905a79643c7583e106489  libuv-v1.15.0.tar.gz
+diff --git a/package/libuv/libuv.mk b/package/libuv/libuv.mk
+index 563d010799..504f621c85 100644
+--- a/package/libuv/libuv.mk
++++ b/package/libuv/libuv.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- LUVI_VERSION = v2.7.6
--LUVI_SITE = git://github.com/luvit/luvi.git
--LUVI_GIT_SUBMODULES = YES
-+LUVI_SOURCE = luvi-src-$(LUVI_VERSION).tar.gz
-+LUVI_SITE = https://github.com/luvit/luvi/releases/download/$(LUVI_VERSION)
- LUVI_LICENSE = Apache-2.0
- LUVI_LICENSE_FILES = LICENSE.txt
- LUVI_DEPENDENCIES = libuv luajit luv host-luajit
+-LIBUV_VERSION = v1.14.1
++LIBUV_VERSION = v1.15.0
+ LIBUV_SITE = $(call github,libuv,libuv,$(LIBUV_VERSION))
+ LIBUV_DEPENDENCIES = host-pkgconf
+ LIBUV_INSTALL_STAGING = YES
 -- 
 2.14.2
