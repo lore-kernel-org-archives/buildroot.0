@@ -1,83 +1,51 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Fri, 20 Oct 2017 22:03:37 +0200
-Subject: [Buildroot] make: user generic package seems ignored
-In-Reply-To: <rcbVjJCgYbsBNkxxQd9Vtizduo4vtAhE62zCPxVqpCm_GP5RQp7pcUF7fktBNLflGP_T5jNYFXIoubRXPDaBQvGiyFkzUxDfC9JP7sYABIk=@protonmail.ch>
-References: <HPj5HjTWoMDOljvL-xyEUyjAnSw4xmReOOp2xBO7hhQIfDaLMaZJXkR1fAHVdioBak50xdOoLNmz6VcgwMsMdVn9vuv897eCms7xgoTy3NM=@protonmail.ch>
- <rcbVjJCgYbsBNkxxQd9Vtizduo4vtAhE62zCPxVqpCm_GP5RQp7pcUF7fktBNLflGP_T5jNYFXIoubRXPDaBQvGiyFkzUxDfC9JP7sYABIk=@protonmail.ch>
-Message-ID: <20171020220337.57aa2a8c@gmx.net>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Fri, 20 Oct 2017 16:08:55 -0400
+Subject: [Buildroot] [PATCH WIP] qemu: add
+	BR2_PACKAGE_HOST_QEMU_ARCH_SUPPORTS
+In-Reply-To: <20171020200856.19406-1-Adamduskett@outlook.com>
+References: <20171020200856.19406-1-Adamduskett@outlook.com>
+Message-ID: <20171020200856.19406-2-Adamduskett@outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Romain,
+Match the style used with other packages such as valgrind.
 
-On Fri, 20 Oct 2017 14:57:50 -0400, Romain GIMENEZ <romain.gimenez@protonmail.ch> wrote:
+Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
+---
+ package/qemu/Config.in.host | 13 +++++++++----
+ 1 file changed, 9 insertions(+), 4 deletions(-)
 
-> Hello all,
-> 
-> I'm trying to add a custom package to my buildroot setup (master branch from the git repo). I have created two files (content at the end of this message) in a new folder buildroot/package/test:
->     - test.mk
->     - Config.in
-> 
-> I've added a link to this Config.in file in the file package/Config.in so I can un/select the package from the menu.
-> 
-> The issue is that when use the "make" command my custom package is just ignored. Is there something I'm missing please? Do I need to add a reference to the .mk file somewhere ? Thanks in advance.
-> 
-> Regards,
-> Romain GIMENEZ
-> 
-> Sent with [ProtonMail](https://protonmail.com) Secure Email.
-> ----------------------------------------
-> test.mk:
-> TEST_VERSION = 3.0.15
-> TEST_SOURCE = resource.language.fr_fr-$(TEST_VERSION).zip
-> TEST_SITE = http://mirrors.kodi.tv/addons/krypton/resource.language.fr_fr
-> TEST_DEPENDENCIES = kodi
-> 
-> KODI_PLUGIN_TARGET_DIR=$(TARGET_DIR)/usr/share/kodi/addons
-> 
-> define TEST_EXTRACT_CMDS
->         $(info extract_test)
->         unzip -q -o $(DL_DIR)/$(TEST_SOURCE) -d $(@D)
-> endef
-> 
-> define TEST_INSTALL_TARGET_CMDS
->         $(info install_test)
->         mkdir -p $(KODI_PLUGIN_TARGET_DIR)
->         cp -r $(@D)/TEST $(KODI_PLUGIN_TARGET_DIR)
-> endef
-> 
-> $(eval $(generic-package))
-> -----------------------------------------
-> Config.in:
-> 
-> config BR2_TEST
->     depends on BR2_PACKAGE_KODI
->     bool "test"
->     help
->       test
-
-Try to chaange to:
---- begin---
-config BR2_PACKAGE_TEST
-	bool "test"
-	depends on BR2_PACKAGE_KODI
-	help
-	  test
-
-comment "test needs kodi"
-	depends on !BR2_PACKAGE_KODI
---- end ---
-
-And check for the following entry in your .config file (after enabling your new test package):
-
-BR2_PACKAGE_TEST=y
-
-And for multiple runs remove the already build test package:
-
-	rm -rf build/test-3.0.15
-
-Regards,
-Peter
+diff --git a/package/qemu/Config.in.host b/package/qemu/Config.in.host
+index 71f38ef41f..78fe54a85c 100644
+--- a/package/qemu/Config.in.host
++++ b/package/qemu/Config.in.host
+@@ -1,15 +1,20 @@
+-config BR2_PACKAGE_HOST_QEMU
+-	bool "host qemu"
+-	depends on BR2_arm       || BR2_armeb       || BR2_aarch64      || \
++config BR2_PACKAGE_HOST_QEMU_ARCH_SUPPORTS
++	bool
++	default y if BR2_arm || BR2_armeb       || BR2_aarch64      || \
+ 		BR2_i386         || BR2_m68k        || BR2_microblazeel || \
+ 		BR2_microblazebe || BR2_mips        || BR2_mipsel       || \
+ 		BR2_mips64       || BR2_mips64el    || BR2_powerpc      || \
+ 		BR2_powerpc64    || BR2_powerpc64le || BR2_sh           || \
+ 		BR2_sparc        || BR2_x86_64
++
++config BR2_PACKAGE_HOST_QEMU
++	bool "host qemu"
++	depends on BR2_PACKAGE_HOST_QEMU_ARCH_SUPPORTS
+ 	select BR2_PACKAGE_HOST_QEMU_LINUX_USER_MODE \
+ 		if !BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE
+ 	help
+-	  QEMU is a generic and open source machine emulator and virtualizer.
++	  QEMU is a generic and open source machine emulator and
++	  virtualizer.
+ 
+ 	  This option builds an emulator for your selected architecture.
+ 
+-- 
+2.13.6
