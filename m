@@ -1,67 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 21 Oct 2017 23:06:37 +0200
-Subject: [Buildroot] [PATCH v3 02/11] support/scripts: Add
- sunxi64-post-build.sh
-In-Reply-To: <1508406333-27138-3-git-send-email-jagan@amarulasolutions.com>
-References: <1508406333-27138-1-git-send-email-jagan@amarulasolutions.com>
- <1508406333-27138-3-git-send-email-jagan@amarulasolutions.com>
-Message-ID: <20171021230637.60959eed@windsurf>
+From: Kees van Unen <Keesvanunen@hotmail.com>
+Date: Sat, 21 Oct 2017 14:07:42 -0700 (MST)
+Subject: [Buildroot] Implicit declaration of mblen
+In-Reply-To: <0836e4ea-a773-fbe0-4c52-4414ad82389c@mind.be>
+References: <1508584234482-0.post@n4.nabble.com>
+ <87bml0cvqq.fsf@dell.be.48ers.dk> <1508618665952-0.post@n4.nabble.com>
+ <0836e4ea-a773-fbe0-4c52-4414ad82389c@mind.be>
+Message-ID: <1508620062609-0.post@n4.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+> This line looks pretty suspicious: 
 
-On Thu, 19 Oct 2017 11:45:24 +0200, Jagan Teki wrote:
+>BR2_EXTRA_GCC_CONFIG_OPTIONS="-I/home/pi/Downloads/buildroot-2017.08/output/host/bassie" 
 
-> +# sunxi64-post-build script
-> +#
-> +# Allwinner A64/H5 firmware consists of three parts:
-> +# 1) U-Boot's SPL
-> +# 2) ARM Trusted Firmware (ATF)
-> +# 3) U-Boot proper.
-> +#
-> +# The SPL will load both ATF and U-Boot proper along with the right device
-> +# tree blob (.dtb) and will pass execution to ATF (in EL3), which in turn will
-> +# drop into the U-Boot proper (in EL2).
-> +#
-> +# As the ATF binary will become part of the U-Boot image file, you will need
-> +# to build it first and export ATF variable to built U-Boot proper. Since
-> +# buildroot not take of building ATF first and export the binary, this post-build
-> +# script build the u-boot.itb
+> Maybe that causes a wrong stlib.h somewhere? 
 
-Thanks for this explanation. However, I am not too happy with the
-solution you propose. Indeed, the U-Boot build system already has all
-the logic to produce the u-boot.itb, provided the BL31 environment
-variable is defined.
+Quoted line was leftover from test. Uploaded new defconfig with same issue.
 
-I think the problem is that the ATF package currently only supports
-the case where ATF embeds U-Boot (that is for example how it works on
-the ARM Juno platform if I remember correctly
-(configs/arm_juno_defconfig) or on Marvell platforms. This explains why
-the arm-trusted-firmware package depends on uboot.
+Kees
 
-The sunxi scenario is different because it wants ATF to be built
-*before* U-Boot, so basically the opposite.
+mblen_error.mblen_error
+<http://buildroot-busybox.2317881.n4.nabble.com/file/t2263/mblen_error.mblen_error>  
+raspberrypi0_defconfig.raspberrypi0_defconfig
+<http://buildroot-busybox.2317881.n4.nabble.com/file/t2263/raspberrypi0_defconfig.raspberrypi0_defconfig>  
 
-So I would propose:
 
- * An option in ATF to decide if it needs U-Boot to be built before or
-   not.
 
- * An option in U-Boot to decide if it needs ATF to be built before or
-   not.
 
- * An option in U-Boot to pass custom variable on the build command
-   line so that we can pass the path to BL31. Or directly an option
-   that will make uboot.mk pass BL31.
-
-What do you think ?
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+--
+Sent from: http://buildroot-busybox.2317881.n4.nabble.com/
