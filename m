@@ -1,51 +1,42 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 21 Oct 2017 19:20:33 +0200
-Subject: [Buildroot] [PATCH] busybox: add upstream post-1.27.2 httpd fix
-Message-ID: <20171021172033.974-1-peter@korsgaard.com>
+From: =?UTF-8?B?0JDQu9C10LrRgdC10Lkg0JHRgNC+0LTQutC40L0=?= <alexey.brodkin@gmail.com>
+Date: Sat, 21 Oct 2017 20:33:19 +0300
+Subject: [Buildroot] [PATCH] uboot: Make Kconfig a default build system
+In-Reply-To: <20171021191856.31ad31fd@windsurf>
+References: <1508602460-4807-1-git-send-email-abrodkin@synopsys.com>
+ <20171021183346.19bf1e91@windsurf>
+ <CAML3pwWEC4u5_B9JFgUUTj1XJ2h0YOQe-EweyDYbSacpBPVNwA@mail.gmail.com>
+ <20171021185641.300de9b6@windsurf>
+ <CAML3pwWY3=JBX4ZQVuUH=dvYMtuBPaXik64bRjPAm_0MMkdWeQ@mail.gmail.com>
+ <20171021191856.31ad31fd@windsurf>
+Message-ID: <CAML3pwWnEPVuTa=DDjV1mee05Yqm-XftBKGX6BwwtYajY95JcA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...0005-httpd-fix-handling-of-range-requests.patch | 27 ++++++++++++++++++++++
- 1 file changed, 27 insertions(+)
- create mode 100644 package/busybox/0005-httpd-fix-handling-of-range-requests.patch
+Hi Thomas,
 
-diff --git a/package/busybox/0005-httpd-fix-handling-of-range-requests.patch b/package/busybox/0005-httpd-fix-handling-of-range-requests.patch
-new file mode 100644
-index 0000000000..b3ca32d75c
---- /dev/null
-+++ b/package/busybox/0005-httpd-fix-handling-of-range-requests.patch
-@@ -0,0 +1,27 @@
-+From 2b400d9b2b7309d6e479102fc3ce646e893058a5 Mon Sep 17 00:00:00 2001
-+From: Denys Vlasenko <vda.linux@googlemail.com>
-+Date: Mon, 18 Sep 2017 13:09:11 +0200
-+Subject: [PATCH] httpd: fix handling of range requests
-+
-+Signed-off-by: Denys Vlasenko <vda.linux@googlemail.com>
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ networking/httpd.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/networking/httpd.c b/networking/httpd.c
-+index e072f23c7..5e32fc936 100644
-+--- a/networking/httpd.c
-++++ b/networking/httpd.c
-+@@ -2337,7 +2337,7 @@ static void handle_incoming_and_exit(const len_and_sockaddr *fromAddr)
-+ 			if (STRNCASECMP(iobuf, "Range:") == 0) {
-+ 				/* We know only bytes=NNN-[MMM] */
-+ 				char *s = skip_whitespace(iobuf + sizeof("Range:")-1);
-+-				if (is_prefixed_with(s, "bytes=") == 0) {
-++				if (is_prefixed_with(s, "bytes=")) {
-+ 					s += sizeof("bytes=")-1;
-+ 					range_start = BB_STRTOOFF(s, &s, 10);
-+ 					if (s[0] != '-' || range_start < 0) {
-+-- 
-+2.11.0
-+
--- 
-2.11.0
+2017-10-21 20:18 GMT+03:00 Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com>:
+
+> Hello,
+>
+> On Sat, 21 Oct 2017 20:12:49 +0300, ??????? ??????? wrote:
+>
+> > That's exactly the reason to upstream your stuff.
+> > What's not in upstream it doesn't exist so why bother?
+>
+> Come on, people making real products are never going to upstream their
+> defconfigs to Buildroot. They are highly specific, potentially
+> confidential. We wouldn't even accept them in Buildroot.
+>
+
+That's all understood but I'm pretty sure they don't follow upstream master
+branch and it takes a second to fix that problem if it arises once people
+jump onto newer BR release, right?
+
+-Alexey
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20171021/595a6a12/attachment.html>
