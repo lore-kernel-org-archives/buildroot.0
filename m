@@ -1,42 +1,86 @@
-From: =?UTF-8?B?0JDQu9C10LrRgdC10Lkg0JHRgNC+0LTQutC40L0=?= <alexey.brodkin@gmail.com>
-Date: Sat, 21 Oct 2017 20:33:19 +0300
-Subject: [Buildroot] [PATCH] uboot: Make Kconfig a default build system
-In-Reply-To: <20171021191856.31ad31fd@windsurf>
-References: <1508602460-4807-1-git-send-email-abrodkin@synopsys.com>
- <20171021183346.19bf1e91@windsurf>
- <CAML3pwWEC4u5_B9JFgUUTj1XJ2h0YOQe-EweyDYbSacpBPVNwA@mail.gmail.com>
- <20171021185641.300de9b6@windsurf>
- <CAML3pwWY3=JBX4ZQVuUH=dvYMtuBPaXik64bRjPAm_0MMkdWeQ@mail.gmail.com>
- <20171021191856.31ad31fd@windsurf>
-Message-ID: <CAML3pwWnEPVuTa=DDjV1mee05Yqm-XftBKGX6BwwtYajY95JcA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 21 Oct 2017 19:48:30 +0200
+Subject: [Buildroot] [git commit] support/testing: use more recent toolchains
+Message-ID: <20171021174133.AAA7980E58@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+commit: https://git.buildroot.net/buildroot/commit/?id=193dfffa834a4cd76bc7b41089bd93d4c37dfc65
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-2017-10-21 20:18 GMT+03:00 Thomas Petazzoni <
-thomas.petazzoni@free-electrons.com>:
+With the hard disk crash of autobuild.b.o, we lost old toolchains, so
+use the latest toolchains, which have been restored.
 
-> Hello,
->
-> On Sat, 21 Oct 2017 20:12:49 +0300, ??????? ??????? wrote:
->
-> > That's exactly the reason to upstream your stuff.
-> > What's not in upstream it doesn't exist so why bother?
->
-> Come on, people making real products are never going to upstream their
-> defconfigs to Buildroot. They are highly specific, potentially
-> confidential. We wouldn't even accept them in Buildroot.
->
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ support/testing/infra/basetest.py                | 5 ++---
+ support/testing/tests/fs/test_iso9660.py         | 5 ++---
+ support/testing/tests/toolchain/test_external.py | 6 +++---
+ 3 files changed, 7 insertions(+), 9 deletions(-)
 
-That's all understood but I'm pretty sure they don't follow upstream master
-branch and it takes a second to fix that problem if it arises once people
-jump onto newer BR release, right?
-
--Alexey
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20171021/595a6a12/attachment.html>
+diff --git a/support/testing/infra/basetest.py b/support/testing/infra/basetest.py
+index 5210f0a..7549226 100644
+--- a/support/testing/infra/basetest.py
++++ b/support/testing/infra/basetest.py
+@@ -11,12 +11,11 @@ BASIC_TOOLCHAIN_CONFIG = \
+     BR2_TOOLCHAIN_EXTERNAL=y
+     BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+     BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+-    BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2015.05-1190-g4a48479.tar.bz2"
+-    BR2_TOOLCHAIN_EXTERNAL_GCC_4_7=y
++    BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2017.05-1078-g95b1dae.tar.bz2"
++    BR2_TOOLCHAIN_EXTERNAL_GCC_4_9=y
+     BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_10=y
+     BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
+     # BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
+-    BR2_TOOLCHAIN_EXTERNAL_INET_RPC=y
+     BR2_TOOLCHAIN_EXTERNAL_CXX=y
+     """
+ 
+diff --git a/support/testing/tests/fs/test_iso9660.py b/support/testing/tests/fs/test_iso9660.py
+index 41430eb..0cb15ad 100644
+--- a/support/testing/tests/fs/test_iso9660.py
++++ b/support/testing/tests/fs/test_iso9660.py
+@@ -8,12 +8,11 @@ BASIC_CONFIG = \
+     BR2_TOOLCHAIN_EXTERNAL=y
+     BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+     BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+-    BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-i386-pentium4-full-2015.05-496-g85945aa.tar.bz2"
+-    BR2_TOOLCHAIN_EXTERNAL_GCC_4_9=y
++    BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-i386-pentium4-full-2017.05-1078-g95b1dae.tar.bz2"
++    BR2_TOOLCHAIN_EXTERNAL_GCC_6=y
+     BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_2=y
+     BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
+     # BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
+-    BR2_TOOLCHAIN_EXTERNAL_INET_RPC=y
+     BR2_TOOLCHAIN_EXTERNAL_CXX=y
+     BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
+     BR2_TARGET_GENERIC_GETTY_BAUDRATE_115200=y
+diff --git a/support/testing/tests/toolchain/test_external.py b/support/testing/tests/toolchain/test_external.py
+index 072cf00..881d2b0 100644
+--- a/support/testing/tests/toolchain/test_external.py
++++ b/support/testing/tests/toolchain/test_external.py
+@@ -171,9 +171,9 @@ class TestExternalToolchainBuildrootMusl(TestExternalToolchain):
+         BR2_TOOLCHAIN_EXTERNAL=y
+         BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+         BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+-        BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-cortex-a9-musl-2017.05-444-g6c704ba.tar.bz2"
++        BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-cortex-a9-musl-2017.05-1078-g95b1dae.tar.bz2"
+         BR2_TOOLCHAIN_EXTERNAL_GCC_6=y
+-        BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_11=y
++        BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_12=y
+         BR2_TOOLCHAIN_EXTERNAL_CUSTOM_MUSL=y
+         BR2_TOOLCHAIN_EXTERNAL_CXX=y
+         """
+@@ -222,7 +222,7 @@ class TestExternalToolchainBuildrootuClibc(TestExternalToolchain):
+         BR2_TOOLCHAIN_EXTERNAL=y
+         BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+         BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+-        BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2017.05-444-g6c704ba.tar.bz2"
++        BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2017.05-1078-g95b1dae.tar.bz2"
+         BR2_TOOLCHAIN_EXTERNAL_GCC_4_9=y
+         BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_10=y
+         BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
