@@ -1,34 +1,34 @@
-From: Kees van Unen <Keesvanunen@hotmail.com>
-Date: Sat, 21 Oct 2017 14:07:42 -0700 (MST)
-Subject: [Buildroot] Implicit declaration of mblen
-In-Reply-To: <0836e4ea-a773-fbe0-4c52-4414ad82389c@mind.be>
-References: <1508584234482-0.post@n4.nabble.com>
- <87bml0cvqq.fsf@dell.be.48ers.dk> <1508618665952-0.post@n4.nabble.com>
- <0836e4ea-a773-fbe0-4c52-4414ad82389c@mind.be>
-Message-ID: <1508620062609-0.post@n4.nabble.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 21 Oct 2017 23:09:05 +0200
+Subject: [Buildroot] [git commit] mesa3d: make Etnaviv arch-independent
+Message-ID: <20171021210224.3D58980577@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> This line looks pretty suspicious: 
+commit: https://git.buildroot.net/buildroot/commit/?id=d4e234e2d396becfd9ba29ab541d19737ebe7c2d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
->BR2_EXTRA_GCC_CONFIG_OPTIONS="-I/home/pi/Downloads/buildroot-2017.08/output/host/bassie" 
+Vivante GPU could be a part of SoC along with any CPU architecture
+thus get rid of nonsense dependency.
 
-> Maybe that causes a wrong stlib.h somewhere? 
+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/mesa3d/Config.in | 1 -
+ 1 file changed, 1 deletion(-)
 
-Quoted line was leftover from test. Uploaded new defconfig with same issue.
-
-Kees
-
-mblen_error.mblen_error
-<http://buildroot-busybox.2317881.n4.nabble.com/file/t2263/mblen_error.mblen_error>  
-raspberrypi0_defconfig.raspberrypi0_defconfig
-<http://buildroot-busybox.2317881.n4.nabble.com/file/t2263/raspberrypi0_defconfig.raspberrypi0_defconfig>  
-
-
-
-
---
-Sent from: http://buildroot-busybox.2317881.n4.nabble.com/
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index dd5d0d4..9249b1d 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -56,7 +56,6 @@ comment "Gallium drivers"
+ 
+ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV
+ 	bool "Gallium Etnaviv driver"
+-	depends on BR2_arm
+ 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
+ 	select BR2_PACKAGE_LIBDRM_ETNAVIV
+ 	select BR2_PACKAGE_MESA3D_OPENGL_EGL
