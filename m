@@ -1,31 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 21 Oct 2017 18:26:53 +0200
-Subject: [Buildroot] Implicit declaration of mblen
-In-Reply-To: <1508584234482-0.post@n4.nabble.com> (Kees van Unen's message of
- "Sat, 21 Oct 2017 04:10:34 -0700 (MST)")
-References: <1508584234482-0.post@n4.nabble.com>
-Message-ID: <87bml0cvqq.fsf@dell.be.48ers.dk>
+Date: Sat, 21 Oct 2017 18:29:37 +0200
+Subject: [Buildroot] [PATCH 2017.02.x] musl: add upstream security fix
+	for CVE-2017-15650
+In-Reply-To: <20171021092515.5812-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Sat, 21 Oct 2017 11:25:15 +0200")
+References: <20171021092515.5812-1-peter@korsgaard.com>
+Message-ID: <877evocvm6.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Kees" == Kees van Unen <Keesvanunen@hotmail.com> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > Hi,
- > I am using buildroot-2017.08 and I want to use X.org. When compiling
- > xlib_libX11-1.6.5 there is an error in imCallbk.c: implicit declaration of
- > function mblen. By adding a -I reference to CFLAGS in the relevant Makefile
- > to stdlib.h this source compiles. This happens for a number of X11 sources.
- > Does anybody knows how this can be solved with Buildroot?
+ > From the upstream announcement:
+ > http://www.openwall.com/lists/oss-security/2017/10/19/5
 
- > The mblen bug also appears later on in the process when it tries to use
- > xlib_libx.so.
+ > Felix Wilhelm has discovered a flaw in the dns response parsing for
+ > musl libc 1.1.16 that leads to overflow of a stack-based buffer.
+ > Earlier versions are also affected.
 
-The cross compiler should find stdlib.h without any special -I
-flags. Can you post your defconfig file (run make savedefconfig to
-generate it) and the exact error message you are seeing?
+ > When an application makes a request via getaddrinfo for both IPv4 and
+ > IPv6 results (AF_UNSPEC), an attacker who controls or can spoof the
+ > nameservers configured in resolv.conf can reply to both the A and AAAA
+ > queries with A results. Since A records are smaller than AAAA records,
+ > it's possible to fit more addresses than the precomputed bound, and a
+ > buffer overflow occurs.
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+Committed to 2017.02.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
