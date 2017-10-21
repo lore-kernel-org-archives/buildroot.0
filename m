@@ -1,45 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 21 Oct 2017 11:36:10 +0200
-Subject: [Buildroot] [git commit] qemu: bump to 2.10.1
-Message-ID: <20171021093917.BACC581148@busybox.osuosl.org>
+Date: Sat, 21 Oct 2017 11:46:26 +0200
+Subject: [Buildroot] [git commit] prosody: refactor with PROSODY_CONF_OPTS
+	variable
+Message-ID: <20171021093917.C9B737FE4F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=13b02de4649fd9899719d2cdf03530b3d2eb67f6
+commit: https://git.buildroot.net/buildroot/commit/?id=918e5a45c0edc3f8279720903ee767dcf5148951
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Also add sha256sums for license files.
-
-Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+[Thomas: keep TARGET_CONFIGURE_OPTS in the environment.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/qemu/qemu.hash | 4 +++-
- package/qemu/qemu.mk   | 2 +-
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ package/prosody/prosody.mk | 17 ++++++++++-------
+ 1 file changed, 10 insertions(+), 7 deletions(-)
 
-diff --git a/package/qemu/qemu.hash b/package/qemu/qemu.hash
-index 405d192..db43c9a 100644
---- a/package/qemu/qemu.hash
-+++ b/package/qemu/qemu.hash
-@@ -1,2 +1,4 @@
- # Locally computed, tarball verified with GPG signature
--sha256 7b50634d729dcabe4a96d74062832274fa2f4c883e82904f5e6955f801edab54  qemu-2.8.1.1.tar.xz
-+sha256 1dd51a908fc68c7d935b0b31fb184c5669bc23b5a1b081816e824714f2a11caa  qemu-2.10.1.tar.xz
-+sha256 6f04ae8364d0079a192b14635f4b1da294ce18724c034c39a6a41d1b09df6100  COPYING
-+sha256 48ffe9fc7f1d5462dbd19340bc4dd1d8a9e37c61ed535813e614cbe4a5f0d4df  COPYING.LIB
-diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index 0bf13cd..402ad68 100644
---- a/package/qemu/qemu.mk
-+++ b/package/qemu/qemu.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/prosody/prosody.mk b/package/prosody/prosody.mk
+index f7a325b..b98748e 100644
+--- a/package/prosody/prosody.mk
++++ b/package/prosody/prosody.mk
+@@ -18,16 +18,19 @@ ifeq ($(BR2_PACKAGE_LUAJIT),y)
+ PROSODY_DEPENDENCIES += luajit
+ endif
  
--QEMU_VERSION = 2.8.1.1
-+QEMU_VERSION = 2.10.1
- QEMU_SOURCE = qemu-$(QEMU_VERSION).tar.xz
- QEMU_SITE = http://download.qemu.org
- QEMU_LICENSE = GPL-2.0, LGPL-2.1, MIT, BSD-3-Clause, BSD-2-Clause, Others/BSD-1c
++PROSODY_CONF_OPTS = \
++	--with-lua=$(STAGING_DIR)/usr \
++	--c-compiler=$(TARGET_CC) \
++	--cflags="$(TARGET_CFLAGS)" \
++	--linker=$(TARGET_CC) \
++	--ldflags="$(TARGET_LDFLAGS) -shared" \
++	--sysconfdir=/etc/prosody \
++	--prefix=/usr
++
+ define PROSODY_CONFIGURE_CMDS
+ 	cd $(@D) && \
+ 		$(TARGET_CONFIGURE_OPTS) \
+-		./configure --prefix=/usr \
+-		--c-compiler=$(TARGET_CC) \
+-		--cflags="$(TARGET_CFLAGS)" \
+-		--linker=$(TARGET_CC) \
+-		--ldflags="$(TARGET_LDFLAGS) -shared" \
+-		--sysconfdir=/etc/prosody \
+-		--with-lua=$(STAGING_DIR)/usr
++		./configure $(PROSODY_CONF_OPTS)
+ endef
+ 
+ define PROSODY_BUILD_CMDS
