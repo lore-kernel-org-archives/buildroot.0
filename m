@@ -1,55 +1,61 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 21 Oct 2017 17:28:58 +0200
-Subject: [Buildroot] [PATCH v3 01/10] package/minetest: new package
-In-Reply-To: <20170713124052.13708-1-romain.naour@gmail.com>
-References: <20170713124052.13708-1-romain.naour@gmail.com>
-Message-ID: <20171021172858.1d7d8b86@windsurf>
+Date: Sat, 21 Oct 2017 17:54:59 +0200
+Subject: [Buildroot] [git commit] boost: add workaround patch for musl issue
+Message-ID: <20171021155029.47BFC81078@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=8f1d35569d39cb26cd1feba62aa410db16999f67
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 13 Jul 2017 14:40:43 +0200, Romain Naour wrote:
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> ---
-> v3: Simplify Config.in entry (ThomasP)
->     fix Alphabetic ordering (ThomasP)
->     Improve license informations (ThomasP)
->     jpeg removed from mendatory dependencies (minetest client only)
->     Drop Intl patch that was required before BR2_SYSTEM_ENABLE_NLS.
->     Add license hash.
-> v2: add package dependencies comments
->     add hash file (Bernd)
->     bump to 0.4.16 (Bernd)
->     version 0.4.15 Tested-by Bernd
->     Add a new patch fixing linking with libintl when necessary
-> ---
->  DEVELOPERS                     |  1 +
->  package/Config.in              |  1 +
->  package/minetest/Config.in     | 53 ++++++++++++++++++++++++++++++++++++++++++
->  package/minetest/minetest.hash |  4 ++++
->  package/minetest/minetest.mk   | 44 +++++++++++++++++++++++++++++++++++
->  5 files changed, 103 insertions(+)
->  create mode 100644 package/minetest/Config.in
->  create mode 100644 package/minetest/minetest.hash
->  create mode 100644 package/minetest/minetest.mk
+musl has a bug in that <sched.h> defines CPU_ZERO(), which uses
+memset(), but it doesn't have the prototype for it. This has been
+fixed by upstream musl but until we rebuild our toolchains, let's have
+a patch for Boost that works around this problem. We will of course
+remove this patch once musl is updated to 1.1.17 and our toolchains
+have been rebuilt.
 
-To be honest, we hesitated a bit with this patch series. Indeed
-packaging games is really not the priority in Buildroot, and it takes
-review time to look at those patches. On the other hand, the patches
-were clean, and having a few games for demos is interesting.
+Fixes:
 
-The only change I did to the series is to rename minetest_game to
-minetest-game, just because - is a nicer separator than _ in package
-names.
+  http://autobuild.buildroot.net/results/6884cff634367cb640940051a60e5e13f30f70a2/
 
-All applied. Thanks!
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/boost/0004-workaround-musl-bug.patch | 26 ++++++++++++++++++++++++++
+ 1 file changed, 26 insertions(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/boost/0004-workaround-musl-bug.patch b/package/boost/0004-workaround-musl-bug.patch
+new file mode 100644
+index 0000000..8613f2f
+--- /dev/null
++++ b/package/boost/0004-workaround-musl-bug.patch
+@@ -0,0 +1,26 @@
++From 0506e46640989e1f919388ad36890bd6063cd43a Mon Sep 17 00:00:00 2001
++From: Zach van Rijn <me@zv.io>
++Date: Sat, 26 Aug 2017 01:32:56 -0400
++Subject: [PATCH] explicitly include <string.h> for memset()
++
++[Thomas: taken from
++https://github.com/boostorg/fiber/pull/142/commits/0506e46640989e1f919388ad36890bd6063cd43a. It
++is not going to be applied upstream because the actual bug is in musl,
++but it's a good enough workaround for now.]
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ libs/fiber/src/numa/linux/pin_thread.cpp | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/libs/fiber/src/numa/linux/pin_thread.cpp b/libs/fiber/src/numa/linux/pin_thread.cpp
++index ae696be3..e9b3c423 100644
++--- a/libs/fiber/src/numa/linux/pin_thread.cpp
+++++ b/libs/fiber/src/numa/linux/pin_thread.cpp
++@@ -9,6 +9,7 @@
++ extern "C" {
++ #include <pthread.h>
++ #include <sched.h>
+++#include <string.h>
++ }
++ 
++ #include <system_error>
