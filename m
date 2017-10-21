@@ -1,57 +1,36 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 21 Oct 2017 22:56:04 +0200
-Subject: [Buildroot] Implicit declaration of mblen
-In-Reply-To: <1508618665952-0.post@n4.nabble.com>
-References: <1508584234482-0.post@n4.nabble.com>
- <87bml0cvqq.fsf@dell.be.48ers.dk> <1508618665952-0.post@n4.nabble.com>
-Message-ID: <0836e4ea-a773-fbe0-4c52-4414ad82389c@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 21 Oct 2017 23:01:01 +0200
+Subject: [Buildroot] [PATCH] musl: add upstream security fix for
+	CVE-2017-15650
+In-Reply-To: <20171021191259.20733-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Sat, 21 Oct 2017 21:12:59 +0200")
+References: <20171021191259.20733-1-peter@korsgaard.com>
+Message-ID: <87po9gb4he.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
+ > From the upstream announcement:
+ > http://www.openwall.com/lists/oss-security/2017/10/19/5
 
-On 21-10-17 22:44, Kees van Unen wrote:
-> raspberrypi0_defconfig.raspberrypi0_defconfig
-> <http://buildroot-busybox.2317881.n4.nabble.com/file/t2263/raspberrypi0_defconfig.raspberrypi0_defconfig>  
+ > Felix Wilhelm has discovered a flaw in the dns response parsing for
+ > musl libc 1.1.16 that leads to overflow of a stack-based buffer.
+ > Earlier versions are also affected.
 
- This line looks pretty suspicious:
+ > When an application makes a request via getaddrinfo for both IPv4 and
+ > IPv6 results (AF_UNSPEC), an attacker who controls or can spoof the
+ > nameservers configured in resolv.conf can reply to both the A and AAAA
+ > queries with A results. Since A records are smaller than AAAA records,
+ > it's possible to fit more addresses than the precomputed bound, and a
+ > buffer overflow occurs.
 
-BR2_EXTRA_GCC_CONFIG_OPTIONS="-I/home/pi/Downloads/buildroot-2017.08/output/host/bassie"
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
- Maybe that causes a wrong stlib.h somewhere?
-
- Regards,
- Arnout
-
-> 
-> mblen_error.mblen_error
-> <http://buildroot-busybox.2317881.n4.nabble.com/file/t2263/mblen_error.mblen_error>  
-> 
-> Hi Peter,
-> 
-> Thanks for your response. Uploaded defconfig en file with the error message.
-> Thanks.
-> 
-> Bye,
-> Kees
-> 
-> 
-> 
-> --
-> Sent from: http://buildroot-busybox.2317881.n4.nabble.com/
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+Committed, thanks.
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Bye, Peter Korsgaard
