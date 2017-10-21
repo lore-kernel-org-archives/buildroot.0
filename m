@@ -1,114 +1,97 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 21 Oct 2017 21:35:13 +0200
-Subject: [Buildroot] [git commit] python-numpy: Add support of ARC
-	architecture
-Message-ID: <20171021192756.C52817F8A2@busybox.osuosl.org>
+Date: Sat, 21 Oct 2017 21:34:51 +0200
+Subject: [Buildroot] [git commit] python-numpy: Bump version to 1.13.3
+Message-ID: <20171021192756.B95D27F8AA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=19bf0087ec811571fa1a2d73439d52018a4ae19a
+commit: https://git.buildroot.net/buildroot/commit/?id=acc3a2c725a3420f5587a20c8887ce1d067d9855
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This enables support for ARC cores in numpy.
-Cherry-picked from
-https://github.com/numpy/numpy/commit/8edd610ffa3499eea3580f98f296ec80578fba73
+This is just a bug-fix release.
 
-Hopefully becomes a part of the next major release (like 1.14).
+Removing 0003-BUG-Ensure-_npy_scaled_cexp-f-l-is-defined-when-need.patch
+as it is a part of the release.
 
 Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python-numpy/0002-Add-support-of-ARC.patch | 68 ++++++++++++++++++++++
- package/python-numpy/Config.in                     |  2 +-
- 2 files changed, 69 insertions(+), 1 deletion(-)
+ ..._npy_scaled_cexp-f-l-is-defined-when-need.patch | 43 ----------------------
+ package/python-numpy/python-numpy.hash             |  4 +-
+ package/python-numpy/python-numpy.mk               |  2 +-
+ 3 files changed, 3 insertions(+), 46 deletions(-)
 
-diff --git a/package/python-numpy/0002-Add-support-of-ARC.patch b/package/python-numpy/0002-Add-support-of-ARC.patch
-new file mode 100644
-index 0000000..c022487
---- /dev/null
-+++ b/package/python-numpy/0002-Add-support-of-ARC.patch
-@@ -0,0 +1,68 @@
-+From 9a225e7d4fb1de5c99c6b5b17cae2fc4c2d1c59a Mon Sep 17 00:00:00 2001
-+From: Alexey Brodkin <abrodkin@synopsys.com>
-+Date: Fri, 15 Sep 2017 11:59:14 +0300
-+Subject: [PATCH] Add support of ARC
-+
-+Synopsys DesignWare ARC Processors are a family of 32-bit CPUs
-+which in some configurations may run Linux kernel and full stack
-+of applications on top of it. Among other things is Python.
-+
-+With that change we allow building and usage of Numpy on ARC.
-+
-+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-+---
-+ numpy/core/include/numpy/npy_cpu.h    | 6 ++++++
-+ numpy/core/include/numpy/npy_endian.h | 6 ++++--
-+ 2 files changed, 10 insertions(+), 2 deletions(-)
-+
-+diff --git a/numpy/core/include/numpy/npy_cpu.h b/numpy/core/include/numpy/npy_cpu.h
-+index 60abae4e0b0e..84653ea183ce 100644
-+--- a/numpy/core/include/numpy/npy_cpu.h
-++++ b/numpy/core/include/numpy/npy_cpu.h
-+@@ -15,6 +15,8 @@
-+  *              NPY_CPU_ARMEB
-+  *              NPY_CPU_SH_LE
-+  *              NPY_CPU_SH_BE
-++ *              NPY_CPU_ARCEL
-++ *              NPY_CPU_ARCEB
-+  */
-+ #ifndef _NPY_CPUARCH_H_
-+ #define _NPY_CPUARCH_H_
-+@@ -76,6 +78,10 @@
-+     #define NPY_CPU_AARCH64
-+ #elif defined(__mc68000__)
-+     #define NPY_CPU_M68K
-++#elif defined(__arc__) && defined(__LITTLE_ENDIAN__)
-++    #define NPY_CPU_ARCEL
-++#elif defined(__arc__) && defined(__BIG_ENDIAN__)
-++    #define NPY_CPU_ARCEB
-+ #else
-+     #error Unknown CPU, please report this to numpy maintainers with \
-+     information about your platform (OS, CPU and compiler)
-+diff --git a/numpy/core/include/numpy/npy_endian.h b/numpy/core/include/numpy/npy_endian.h
-+index e34b1d97e655..1a42121db92e 100644
-+--- a/numpy/core/include/numpy/npy_endian.h
-++++ b/numpy/core/include/numpy/npy_endian.h
-+@@ -45,7 +45,8 @@
-+             || defined(NPY_CPU_AARCH64) \
-+             || defined(NPY_CPU_SH_LE)   \
-+             || defined(NPY_CPU_MIPSEL)  \
-+-            || defined(NPY_CPU_PPC64LE)
-++            || defined(NPY_CPU_PPC64LE) \
-++            || defined(NPY_CPU_ARCEL)
-+         #define NPY_BYTE_ORDER NPY_LITTLE_ENDIAN
-+     #elif defined(NPY_CPU_PPC)          \
-+             || defined(NPY_CPU_SPARC)   \
-+@@ -56,7 +57,8 @@
-+             || defined(NPY_CPU_SH_BE)   \
-+             || defined(NPY_CPU_MIPSEB)  \
-+             || defined(NPY_CPU_OR1K)    \
-+-            || defined(NPY_CPU_M68K)
-++            || defined(NPY_CPU_M68K)    \
-++            || defined(NPY_CPU_ARCEB)
-+         #define NPY_BYTE_ORDER NPY_BIG_ENDIAN
-+     #else
-+         #error Unknown CPU: can not set endianness
-+-- 
-+2.7.5
-+
-diff --git a/package/python-numpy/Config.in b/package/python-numpy/Config.in
-index f7822ef..859542f 100644
---- a/package/python-numpy/Config.in
-+++ b/package/python-numpy/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
- 	bool
- 	# Numpy has some CPU specific code
--	default y if BR2_aarch64 || BR2_arm || BR2_armeb || BR2_i386 \
-+	default y if BR2_arc || BR2_aarch64 || BR2_arm || BR2_armeb || BR2_i386 \
- 		|| BR2_mips || BR2_mipsel || BR2_powerpc || BR2_powerpc64 \
- 		|| BR2_sh || BR2_x86_64
+diff --git a/package/python-numpy/0003-BUG-Ensure-_npy_scaled_cexp-f-l-is-defined-when-need.patch b/package/python-numpy/0003-BUG-Ensure-_npy_scaled_cexp-f-l-is-defined-when-need.patch
+deleted file mode 100644
+index a243df5..0000000
+--- a/package/python-numpy/0003-BUG-Ensure-_npy_scaled_cexp-f-l-is-defined-when-need.patch
++++ /dev/null
+@@ -1,43 +0,0 @@
+-From 9aa5d577c58f04f9606674dd6f326aee1bf1e6e8 Mon Sep 17 00:00:00 2001
+-From: Charles Harris <charlesr.harris@gmail.com>
+-Date: Thu, 21 Sep 2017 10:10:05 -0600
+-Subject: [PATCH] BUG: Ensure `_npy_scaled_cexp{,f,l}` is defined when needed.
+-
+-The `_npy_scaled_cexp{,f,l}` functions were previously only defined when
+-the npy_cexp fallback functions were needed, but they are also called by
+-the npy_csinh and npy_ccosh functions.
+-
+-Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+----
+- numpy/core/src/npymath/npy_math_complex.c.src | 8 +++++++-
+- 1 file changed, 7 insertions(+), 1 deletion(-)
+-
+-diff --git a/numpy/core/src/npymath/npy_math_complex.c.src b/numpy/core/src/npymath/npy_math_complex.c.src
+-index a82a6737c..fb31e8e6a 100644
+---- a/numpy/core/src/npymath/npy_math_complex.c.src
+-+++ b/numpy/core/src/npymath/npy_math_complex.c.src
+-@@ -184,7 +184,9 @@ npy_carg at c@(@ctype@ z)
+- #define SCALED_CEXP_LOWERL 11357.216553474703895L
+- #define SCALED_CEXP_UPPERL 22756.021937783004509L
+- 
+--#ifndef HAVE_CEXP at C@
+-+#if !defined(HAVE_CSINH at C@) || \
+-+    !defined(HAVE_CCOSH at C@) || \
+-+    !defined(HAVE_CEXP at C@)
+- 
+- static
+- @ctype@
+-@@ -212,6 +214,10 @@ _npy_scaled_cexp at c@(@type@ x, @type@ y, npy_int expt)
+-                          npy_ldexp at c@(mant * mantsin, expt + exsin));
+- }
+- 
+-+#endif
+-+
+-+#ifndef HAVE_CEXP at C@
+-+
+- @ctype@
+- npy_cexp at c@(@ctype@ z)
+- {
+--- 
+-2.11.0
+-
+diff --git a/package/python-numpy/python-numpy.hash b/package/python-numpy/python-numpy.hash
+index 7dcdb44..6e76c62 100644
+--- a/package/python-numpy/python-numpy.hash
++++ b/package/python-numpy/python-numpy.hash
+@@ -1,2 +1,2 @@
+-# Copied from https://github.com/numpy/numpy/releases/tag/v1.13.1
+-sha256	de020ec06f1e9ce1115a50161a38bf8d4c2525379900f9cb478cc613a1e7cd93	numpy-1.13.1.tar.gz
++# Copied from https://github.com/numpy/numpy/releases/tag/v1.13.3
++sha256	4c6b4eef790528bebb7ec9590d74cc193868940fe68e4109a91c196df72d8094	numpy-1.13.3.tar.gz
+diff --git a/package/python-numpy/python-numpy.mk b/package/python-numpy/python-numpy.mk
+index d0c279f..d0d3837 100644
+--- a/package/python-numpy/python-numpy.mk
++++ b/package/python-numpy/python-numpy.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
+-PYTHON_NUMPY_VERSION = 1.13.1
++PYTHON_NUMPY_VERSION = 1.13.3
+ PYTHON_NUMPY_SOURCE = numpy-$(PYTHON_NUMPY_VERSION).tar.gz
+ PYTHON_NUMPY_SITE = https://github.com/numpy/numpy/releases/download/v$(PYTHON_NUMPY_VERSION)
+ PYTHON_NUMPY_LICENSE = BSD-3-Clause
