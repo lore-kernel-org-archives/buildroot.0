@@ -1,39 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 21 Oct 2017 19:01:20 +0200
-Subject: [Buildroot] [PATCH 1/1] package/openjpeg: bump version to 2.3.0
-In-Reply-To: <CALdGskJxEYJ-kpm_Seprhk11fQKVoCxv3TLT8_2DTd7K6j99tQ@mail.gmail.com>
-References: <20171015202717.22211-1-bernd.kuhls@t-online.de>
- <20171021175958.56a34929@windsurf>
- <CALdGskJxEYJ-kpm_Seprhk11fQKVoCxv3TLT8_2DTd7K6j99tQ@mail.gmail.com>
-Message-ID: <20171021190120.2652d095@windsurf>
+From: =?UTF-8?B?0JDQu9C10LrRgdC10Lkg0JHRgNC+0LTQutC40L0=?= <alexey.brodkin@gmail.com>
+Date: Sat, 21 Oct 2017 20:12:49 +0300
+Subject: [Buildroot] [PATCH] uboot: Make Kconfig a default build system
+In-Reply-To: <20171021185641.300de9b6@windsurf>
+References: <1508602460-4807-1-git-send-email-abrodkin@synopsys.com>
+ <20171021183346.19bf1e91@windsurf>
+ <CAML3pwWEC4u5_B9JFgUUTj1XJ2h0YOQe-EweyDYbSacpBPVNwA@mail.gmail.com>
+ <20171021185641.300de9b6@windsurf>
+Message-ID: <CAML3pwWY3=JBX4ZQVuUH=dvYMtuBPaXik64bRjPAm_0MMkdWeQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Thomas,
 
-On Sat, 21 Oct 2017 18:58:33 +0200, Olivier Schonken wrote:
+2017-10-21 19:56 GMT+03:00 Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com>:
 
-> Looks like it is looking for openjpeg2.2 headers, should be changed to
-> openjpeg-2.3
-> 
-> make[5]: Entering directory
-> `/usr/lfs/v0/rc-buildroot-test/scripts/instance-1/output/build/gst1-plugins-bad-1.12.3/ext/srtp'
->   CC       libgstsrtp_la-gstsrtp.lo
-> In file included from gstopenjpegdec.h:29:0,
->                  from gstopenjpegdec.c:27:
-> gstopenjpeg.h:42:37: fatal error: openjpeg-2.2/openjpeg.h: No such
-> file or directory
->  #  include <openjpeg-2.2/openjpeg.h>
+> Hello,
+>
+> On Sat, 21 Oct 2017 19:44:35 +0300, ??????? ??????? wrote:
+>
+> > Ok that makes sense.
+> > Only 62 of defconfigs mention BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG and
+> > one mention BR2_TARGET_UBOOT_BUILD_SYSTEM_LEGACY of totally 96.
+> >
+> > So chances are indeed some of 33 other boards might fail.
+>
+> Well the defconfigs that are in Buildroot we could easily fix, so it's
+> not really the issue. The issue is more with all the defconfigs that
+> people/companies have locally for their own projects.
+>
+> That being said, it's true at some point, it would make sense to switch
+> over to Kconfig as the default. The question is when to do that without
+> breaking things for too many users.
 
-Will you send a patch? :-)
 
-Thanks!
+That's exactly the reason to upstream your stuff.
+What's not in upstream it doesn't exist so why bother?
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+-Alexey
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20171021/fc0a57d5/attachment.html>
