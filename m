@@ -1,110 +1,94 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 21 Oct 2017 15:12:21 +0200
-Subject: [Buildroot] [PATCH RFC] package/glibc: switch to using the
- maintenance branch
-In-Reply-To: <20171021122223.GB7022@scaer>
-References: <20171021102206.29477-1-yann.morin.1998@free.fr>
- <38b149b1-8f27-d747-3b16-be54b43cdbd4@gmail.com>
- <20171021122223.GB7022@scaer>
-Message-ID: <5b08873b-fd57-5852-7920-3afc25368c0d@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 21 Oct 2017 15:18:24 +0200
+Subject: [Buildroot] [git commit] boost: bump to 1.65.1,
+	coroutine2 is now a header only library
+Message-ID: <20171021132048.02AEE81071@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=4ef4a3405f43a284689b6451b1cfad4718339439
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Le 21/10/2017 ? 14:22, Yann E. MORIN a ?crit?:
-> Romain, All,
-> 
-> On 2017-10-21 13:31 +0200, Romain Naour spake thusly:
->> Le 21/10/2017 ? 12:22, Yann E. MORIN a ?crit?:
->>> glibc upstream has srued against doing regular point-releases, but they
->> sued
->>> do have a lot of interesting and important fixes for regressions and
->>> security.
->>>
->>> Backporting each patch, or cherry-picking individual patches is offf
->> off
->>> limits for us, so we just switch to using the currently-latest HEAD of
->>> the maintenance branch instead.
->>
->> Since it's not a simple switch but also a version bump. It would be great if we
->> can list interesting fixed issues.
-> 
-> Well, I wouldn't bother with that, beause we do not ususally do such
-> listing for other packages.
-> 
-> It would be indeed nice to list the "big" changes, but really I'm not
-> willing to do that.
+The coroutine2 functionality is now provided only through headers, the
+compiled library has disappeared. Due to that passing "coroutine2" as
+argument to --without-libraries. Hence, the
+BR2_PACKAGE_BOOST_COROUTINE2 option is removed by this commit.
 
-Ok, I'm saying that since another patche fixing C++ issues related to float128
-has landed after the last patch I backported.
+We don't need Config.in.legacy handling, because coroutine2 support is
+now unconditionally available in boost.
 
-For example:
-https://sourceware.org/git/?p=glibc.git;a=commit;h=3b10c5d2abb0392d5ecfd865e2eb911ac109e36f
+While at it, add LICENSE_1_0.txt sha256sum to boost.hash.
 
-Or you can just copy the NEWS file entry ?
+Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
+[Thomas: drop Config.in.legacy handling, reword commit log.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/boost/Config.in  | 4 ----
+ package/boost/boost.hash | 7 +++++--
+ package/boost/boost.mk   | 9 ++++-----
+ 3 files changed, 9 insertions(+), 11 deletions(-)
 
-> 
->>> The version number is obtained with:
->>>     $ git describe --match 'glibc-*' --abbrev=40 origin/release/2.26/master
->>>
->>> The alternative options were:
->>>   - download the tarball from the git tree
->>>     --> does nto work; not an option
->>>   - download the 2.26 tarball, and bundle the individual patches in
->>>     Buildroot
->>>     --> maintenance of patches is a burden; not an option
->>>   - download the 2.26 tarball, maintain the list of patches to download from
->>>     the git tree
->>>     --> not an option for the same reason
->>>
->>> So we end up just doing a git clone. The git tree is today about ten
->>> times the size of the tarball, so a rough estimate makes it at about ten
->>> times the download time.
->>
->> I can't clone this repo from here using https:
->>
->> error: Unable to get pack index
->> https://sourceware.org/git/glibc.git/objects/pack/pack-f7640727c0f4d6c3389f46d7d6540bbd74f2c136.idx
->> error: Failed to connect to sourceware.org port 443: Connection timed out
->> (curl_result = 7, http_code = 0, sha1 = eb4488dc33fedcd7cdb5907a82f18f1d300d533b)
->> error: Unable to find a1fd1e8a3e17d0f846df142d93aa2af0bc16ced0 under
->> https://sourceware.org/git/glibc.git
-> 
-> As seen on IRC, you've solved your issue, right?
-
-Right, the build succeed here.
-
-> 
-> Regards,
-> Yann E. MORIN.
-> 
->> I guess it's a gitconfig issue. Maybe I should increase a buffer somewhere.
->>
->> Otherwise, it looks good.
->>
->> Note: My patch fixing gcc5.5 x86_64 toolchains whith glibc 2.26 is not yet
->> backported to the stable branch.
->> Maintainers are waiting some days before backporting a patch.
->>
->> https://sourceware.org/git/?p=glibc.git;a=commit;h=386e1c26ac473d6863133ab9cbe3bbda16c15816
->>
->> Maybe you can include it in this patch.
-> 
-> No, I won't. This commit is about just switching (and bumping as you
-> noticed). We can wait a bit more until your commit is applied and when
-> we're ready to tag 2017.11-rc1, and then bump to the latest HEAD of the
-> branch.
-
-Ok, I'll ask upstream if the patch can be backported in the next days.
-
-Best regards,
-Romain
-
-> 
-> Regards,
-> Yann E. MORIN.
-> 
+diff --git a/package/boost/Config.in b/package/boost/Config.in
+index 50d0ff8..3b3c89b 100644
+--- a/package/boost/Config.in
++++ b/package/boost/Config.in
+@@ -73,10 +73,6 @@ config BR2_PACKAGE_BOOST_COROUTINE
+ 	bool "boost-coroutine"
+ 	depends on BR2_PACKAGE_BOOST_CONTEXT
+ 
+-config BR2_PACKAGE_BOOST_COROUTINE2
+-	bool "boost-coroutine2"
+-	depends on BR2_PACKAGE_BOOST_CONTEXT
+-
+ config BR2_PACKAGE_BOOST_DATE_TIME
+ 	bool "boost-date_time"
+ 
+diff --git a/package/boost/boost.hash b/package/boost/boost.hash
+index 7494c0c..6e40c0d 100644
+--- a/package/boost/boost.hash
++++ b/package/boost/boost.hash
+@@ -1,2 +1,5 @@
+-# From http://www.boost.org/users/history/version_1_64_0.html
+-sha256 7bcc5caace97baa948931d712ea5f37038dbb1c5d89b43ad4def4ed7cb683332  boost_1_64_0.tar.bz2
++# From http://www.boost.org/users/history/version_1_65_1.html
++sha256 9807a5d16566c57fd74fb522764e0b134a8bbe6b6e8967b83afefd30dcd3be81  boost_1_65_1.tar.bz2
++
++# Locally computed
++sha256 c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566  LICENSE_1_0.txt
+diff --git a/package/boost/boost.mk b/package/boost/boost.mk
+index e515faf..8ba88a7 100644
+--- a/package/boost/boost.mk
++++ b/package/boost/boost.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-BOOST_VERSION = 1.64.0
++BOOST_VERSION = 1.65.1
+ BOOST_SOURCE = boost_$(subst .,_,$(BOOST_VERSION)).tar.bz2
+ BOOST_SITE = http://downloads.sourceforge.net/project/boost/boost/$(BOOST_VERSION)
+ BOOST_INSTALL_STAGING = YES
+@@ -14,9 +14,9 @@ BOOST_LICENSE_FILES = LICENSE_1_0.txt
+ # keep host variant as minimal as possible
+ HOST_BOOST_FLAGS = --without-icu \
+ 	--without-libraries=$(subst $(space),$(comma),atomic chrono context \
+-	coroutine coroutine2 date_time exception filesystem graph \
+-	graph_parallel iostreams locale log math mpi program_options python \
+-	random regex serialization signals system test thread timer type_erasure \
++	coroutine date_time exception filesystem graph graph_parallel iostreams \
++	locale log math mpi program_options python random regex serialization \
++	signals system test thread timer type_erasure \
+ 	wave)
+ 
+ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_ATOMIC),,atomic)
+@@ -24,7 +24,6 @@ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_CHRONO),,chrono)
+ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_CONTAINER),,container)
+ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_CONTEXT),,context)
+ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_COROUTINE),,coroutine)
+-BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_COROUTINE2),,coroutine2)
+ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_DATE_TIME),,date_time)
+ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_EXCEPTION),,exception)
+ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_FILESYSTEM),,filesystem)
