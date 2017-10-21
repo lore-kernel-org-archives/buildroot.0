@@ -1,107 +1,113 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 21 Oct 2017 22:19:07 +0200
-Subject: [Buildroot] [PATCH v2 1/1] libcpprestsdk: new package
-In-Reply-To: <20171017205308.28529-1-Adamduskett@outlook.com>
-References: <20171017205308.28529-1-Adamduskett@outlook.com>
-Message-ID: <20171021221907.4f29e5da@windsurf>
+Date: Sat, 21 Oct 2017 22:20:08 +0200
+Subject: [Buildroot] [git commit] gst1-plugins-bad: fix patch
+	0001-openjpeg-Support-building-with-openjpeg-2.3-simpler.patch
+Message-ID: <20171021202125.11B5581100@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=bf533178e98ab680529a7a5da51855774ecccf0c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 17 Oct 2017 16:53:08 -0400, Adam Duskett wrote:
-> The C++ REST SDK is a Microsoft project for cloud-based client-server
-> communication in native code using a modern asynchronous C++ API design.
-> This project aims to help C++ developers connect to and interact with
-> services.
-> 
-> This package is licensed under the MIT package and depends on BOOST
-> and OpenSSL (although it is compatible with LibreSSL.)
-> 
-> Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
+The previous version was by mistake mixed up with the patch 'gst-plugins-bad:
+openjpeg: Remove compatibility with openjpeg 2.0'
 
-It fails to build here, with:
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...upport-building-with-openjpeg-2.3-simpler.patch | 59 +++-------------------
+ 1 file changed, 7 insertions(+), 52 deletions(-)
 
-/home/thomas/projets/buildroot/output/build/libcpprestsdk-v2.9.0/Release/include/cpprest/astreambuf.h: In member function ?pplx::task<_InternalReturnType> Concurrency::streams::details::streambuf_state_manager<_CharType>::create_exception_checked_value_task(const _CharType1&) const [with _CharType1 = int; _CharType = unsigned char]?:
-/home/thomas/projets/buildroot/output/build/libcpprestsdk-v2.9.0/Release/include/cpprest/astreambuf.h:748:9: error: control reaches end of non-void function [-Werror=return-type]
-         }
-         ^
-/home/thomas/projets/buildroot/output/build/libcpprestsdk-v2.9.0/Release/include/cpprest/astreambuf.h: In member function ?pplx::task<_InternalReturnType> Concurrency::streams::details::streambuf_state_manager<_CharType>::create_exception_checked_value_task(const _CharType1&) const [with _CharType1 = unsigned int; _CharType = char]?:
-/home/thomas/projets/buildroot/output/build/libcpprestsdk-v2.9.0/Release/include/cpprest/astreambuf.h:748:9: error: control reaches end of non-void function [-Werror=return-type]
-         }
-         ^
-
-[... many more instances of that ...]
-
-Using this defconfig:
-
-BR2_arm=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2017.05-1078-g95b1dae.tar.bz2"
-BR2_TOOLCHAIN_EXTERNAL_GCC_4_9=y
-BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_10=y
-BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
-# BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
-BR2_TOOLCHAIN_EXTERNAL_CXX=y
-BR2_INIT_NONE=y
-BR2_SYSTEM_BIN_SH_NONE=y
-# BR2_PACKAGE_BUSYBOX is not set
-BR2_PACKAGE_LIBRESSL=y
-BR2_PACKAGE_LIBCPPRESTSDK=y
-# BR2_TARGET_ROOTFS_TAR is not set
-
-You can catch such issues by using ./utils/test-pkg.
-
-Note that I slightly adjusted your patch to accommodate the recent
-openssl changes. Here is the diff that I have:
-
-diff --git a/package/libcpprestsdk/Config.in b/package/libcpprestsdk/Config.in
-index 91ef1648c8..e4cafe4063 100644
---- a/package/libcpprestsdk/Config.in
-+++ b/package/libcpprestsdk/Config.in
-@@ -9,7 +9,7 @@ config BR2_PACKAGE_LIBCPPRESTSDK
-        select BR2_PACKAGE_BOOST_THREAD
-        select BR2_PACKAGE_BOOST_REGEX
-        select BR2_PACKAGE_BOOST_FILESYSTEM
--       select BR2_PACKAGE_OPENSSL if !BR2_PACKAGE_LIBRESSL
-+       select BR2_PACKAGE_OPENSSL
-        help
-          The C++ REST SDK is a Microsoft project for cloud-based
-          client-server communication in native code using a modern
-@@ -19,5 +19,5 @@ config BR2_PACKAGE_LIBCPPRESTSDK
-          https://github.com/Microsoft/cpprestsdk
+diff --git a/package/gstreamer1/gst1-plugins-bad/0001-openjpeg-Support-building-with-openjpeg-2.3-simpler.patch b/package/gstreamer1/gst1-plugins-bad/0001-openjpeg-Support-building-with-openjpeg-2.3-simpler.patch
+index 647cf5a..2356942 100644
+--- a/package/gstreamer1/gst1-plugins-bad/0001-openjpeg-Support-building-with-openjpeg-2.3-simpler.patch
++++ b/package/gstreamer1/gst1-plugins-bad/0001-openjpeg-Support-building-with-openjpeg-2.3-simpler.patch
+@@ -1,4 +1,4 @@
+-From 47923096270ca79f362d3809f387463f6bdc1213 Mon Sep 17 00:00:00 2001
++From b08b3ad2c4ca27519b34229b7430af5cb73cc7ef Mon Sep 17 00:00:00 2001
+ From: "Jan Alexander Steffens (heftig)" <jan.steffens@gmail.com>
+ Date: Thu, 19 Oct 2017 16:36:17 +0200
+ Subject: [PATCH] openjpeg: Support building with openjpeg 2.3, simpler
+@@ -13,12 +13,10 @@ https://bugzilla.gnome.org/show_bug.cgi?id=788703
+ Upstream: https://cgit.freedesktop.org/gstreamer/gst-plugins-bad/commit/?id=bff2d834a4a38f64e555cee3d0144fde6c515acd
+ Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+ ---
+- configure.ac                  |  5 -----
+- ext/openjpeg/gstopenjpeg.h    |  9 ++++-----
+- ext/openjpeg/gstopenjpegdec.c |  4 ----
+- ext/openjpeg/gstopenjpegenc.c |  4 ----
+- ext/openjpeg/meson.build      | 20 +++++++-------------
+- 5 files changed, 11 insertions(+), 31 deletions(-)
++ configure.ac               |  5 -----
++ ext/openjpeg/gstopenjpeg.h |  6 ++----
++ ext/openjpeg/meson.build   | 20 +++++++-------------
++ 3 files changed, 9 insertions(+), 22 deletions(-)
  
- comment "libcpprestsdk needs a toolchain w/ C++, wchar, threads"
--       depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS \
--       || !BR2_USE_WCHAR
-+       depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
-+               !BR2_USE_WCHAR
-diff --git a/package/libcpprestsdk/libcpprestsdk.mk b/package/libcpprestsdk/libcpprestsdk.mk
-index 9b9b594016..d8b79710d4 100644
---- a/package/libcpprestsdk/libcpprestsdk.mk
-+++ b/package/libcpprestsdk/libcpprestsdk.mk
-@@ -11,9 +11,7 @@ LIBCPPRESTSDK_LICENSE = MIT
- LIBCPPRESTSDK_LICENSE_FILES = license.txt
- LIBCPPRESTSDK_SUBDIR = Release
- 
--ifeq ($(BR2_PACKAGE_LIBRESSL),y)
--LIBCPPRESTSDK_DEPENDENCIES += libressl
--else
-+ifeq ($(BR2_PACKAGE_OPENSSL),y)
- LIBCPPRESTSDK_DEPENDENCIES += openssl
- endif
-
-Could you include it in your next submission ?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+ diff --git a/configure.ac b/configure.ac
+ index 7a8d752..f9727ac 100644
+@@ -37,21 +35,10 @@ index 7a8d752..f9727ac 100644
+    else
+      # Fallback to v1.5
+ diff --git a/ext/openjpeg/gstopenjpeg.h b/ext/openjpeg/gstopenjpeg.h
+-index 52410a4..14e46d4 100644
++index 52410a4..f9ca74a 100644
+ --- a/ext/openjpeg/gstopenjpeg.h
+ +++ b/ext/openjpeg/gstopenjpeg.h
+-@@ -21,8 +21,9 @@
+- #ifndef __GST_OPENJPEG_H__
+- #define __GST_OPENJPEG_H__
+- 
+--#ifdef HAVE_OPENJPEG_1
+- #include <openjpeg.h>
+-+
+-+#ifdef HAVE_OPENJPEG_1
+- #define OPJ_CLRSPC_UNKNOWN CLRSPC_UNKNOWN
+- #define OPJ_CLRSPC_SRGB CLRSPC_SRGB
+- #define OPJ_CLRSPC_GRAY CLRSPC_GRAY
+-@@ -38,10 +39,8 @@
++@@ -38,10 +38,8 @@
+  #define OPJ_CPRL CPRL
+  #else
+  #include <stdio.h>
+@@ -64,38 +51,6 @@ index 52410a4..14e46d4 100644
+  # else
+  #  include <openjpeg-2.0/openjpeg.h>
+  # endif
+-diff --git a/ext/openjpeg/gstopenjpegdec.c b/ext/openjpeg/gstopenjpegdec.c
+-index 881769b..e387f19 100644
+---- a/ext/openjpeg/gstopenjpegdec.c
+-+++ b/ext/openjpeg/gstopenjpegdec.c
+-@@ -1036,11 +1036,7 @@ gst_openjpeg_dec_handle_frame (GstVideoDecoder * decoder,
+-   opj_stream_set_write_function (stream, write_fn);
+-   opj_stream_set_skip_function (stream, skip_fn);
+-   opj_stream_set_seek_function (stream, seek_fn);
+--#ifdef HAVE_OPENJPEG_2_1
+-   opj_stream_set_user_data (stream, &mstream, NULL);
+--#else
+--  opj_stream_set_user_data (stream, &mstream);
+--#endif
+-   opj_stream_set_user_data_length (stream, mstream.size);
+- 
+-   image = NULL;
+-diff --git a/ext/openjpeg/gstopenjpegenc.c b/ext/openjpeg/gstopenjpegenc.c
+-index 7514a35..1b0bdf8 100644
+---- a/ext/openjpeg/gstopenjpegenc.c
+-+++ b/ext/openjpeg/gstopenjpegenc.c
+-@@ -958,11 +958,7 @@ gst_openjpeg_enc_handle_frame (GstVideoEncoder * encoder,
+-   opj_stream_set_write_function (stream, write_fn);
+-   opj_stream_set_skip_function (stream, skip_fn);
+-   opj_stream_set_seek_function (stream, seek_fn);
+--#ifdef HAVE_OPENJPEG_2_1
+-   opj_stream_set_user_data (stream, &mstream, NULL);
+--#else
+--  opj_stream_set_user_data (stream, &mstream);
+--#endif
+-   opj_stream_set_user_data_length (stream, mstream.size);
+- 
+-   if (!opj_start_compress (enc, image, stream))
+ diff --git a/ext/openjpeg/meson.build b/ext/openjpeg/meson.build
+ index 0d97ebb..14b8583 100644
+ --- a/ext/openjpeg/meson.build
