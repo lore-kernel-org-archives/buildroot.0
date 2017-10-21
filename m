@@ -1,59 +1,73 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 21 Oct 2017 21:55:01 +0200
-Subject: [Buildroot] [RFC v2 2/4] package/pkg-golang: new package
- infrastructure
-In-Reply-To: <1508173728-29181-2-git-send-email-angelo.compagnucci@gmail.com>
-References: <1508173728-29181-1-git-send-email-angelo.compagnucci@gmail.com>
- <1508173728-29181-2-git-send-email-angelo.compagnucci@gmail.com>
-Message-ID: <20171021215501.3b3e269f@windsurf>
+Date: Sat, 21 Oct 2017 21:58:12 +0200
+Subject: [Buildroot] [git commit] package/go: fix cross-compilation settings
+Message-ID: <20171021195533.932048103A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=80ea21bc3c2147adf810731b0b242e94a3ad294e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 16 Oct 2017 19:08:46 +0200, Angelo Compagnucci wrote:
-> This patch adds a new infrastructure for golang based packages.
-> 
-> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+This patch fixes a bug with the BR2_TOOLCHAIN_HAS_THREADS variable
+handling which causes CGO_ENABLED to be always 0.
 
-As Christian said, it seems that this infrastructure isn't "general"
-enough to really be useful. We would to see it applied to several
-packages and see that there is a real benefit to several packages to
-apply it.
+Furthermore, it fixes the cross compilation options for the go
+compiler: setting CGO_ENABLED should be done only for the target
+compiler not the host one.
 
-So I'd be happy to take a go package infrastructure, but it needs to be
-usable by more than one package in a useful way.
+Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Acked-by: Christian Stewart <christian@paral.in>
+---
+ package/go/go.mk | 14 ++++++++------
+ 1 file changed, 8 insertions(+), 6 deletions(-)
 
-> +# Target packages need the Go compiler on the host.
-> +$(2)_DEPENDENCIES += host-go
-> +
-> +#
-> +# go install command doesn't work well when cross compilation is enabled,
-> +# we set the executable output of the compilation to a specific location.
-> +# We set this variable here to be used by packages if needed.
-> +#
-> +$(2)_EXECUTABLE = $$(@D)/gopath/bin/$(1)
-
-This seems to make the assumption that a given package can only install
-a single executable, and that this executable is named after the
-package. It is true for flannel, but what about other Go packages ?
-
-> +# Source files in Go should be uncompressed in a precise folder in the
-> +# hiearchy of GOPATH. It usually resolves around domain/vendor/software.
-> +#
-> +$(1)_src_path ?= $$(call domain,$($(2)_SITE))/$$(firstword $$(subst /, ,$$(call notdomain,$($(2)_SITE))))
-> +$(2)_SRC_PATH  = $$(@D)/gopath/src/$$($(1)_src_path)/$(1)
-
-We don't use lower-case variables in Buildroot, especially if there is
-a variable with the same name upper-case.
-
-Best regards,
-
-Thomas Petazzoni
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/go/go.mk b/package/go/go.mk
+index 0781dff..6035164 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
+@@ -52,7 +52,7 @@ HOST_GO_TARGET_ENV = \
+ # set, build in cgo support for any go programs that may need it.  Note that
+ # any target package needing cgo support must include
+ # 'depends on BR2_TOOLCHAIN_HAS_THREADS' in its config file.
+-ifeq (BR2_TOOLCHAIN_HAS_THREADS,y)
++ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+ HOST_GO_CGO_ENABLED = 1
+ else
+ HOST_GO_CGO_ENABLED = 0
+@@ -74,8 +74,8 @@ HOST_GO_MAKE_ENV = \
+ 	GOARCH=$(GO_GOARCH) \
+ 	$(if $(GO_GOARM),GOARM=$(GO_GOARM)) \
+ 	GOOS=linux \
+-	CGO_ENABLED=$(HOST_GO_CGO_ENABLED) \
+-	CC=$(HOSTCC_NOCCACHE)
++	CC=$(HOSTCC_NOCCACHE) \
++	CXX=$(HOSTCXX_NOCCACHE)
+ 
+ HOST_GO_TARGET_CC = \
+ 	CC_FOR_TARGET="$(TARGET_CC)" \
+@@ -83,16 +83,18 @@ HOST_GO_TARGET_CC = \
+ 
+ HOST_GO_HOST_CC = \
+ 	CC_FOR_TARGET=$(HOSTCC_NOCCACHE) \
+-	CXX_FOR_TARGET=$(HOSTCC_NOCCACHE)
++	CXX_FOR_TARGET=$(HOSTCXX_NOCCACHE)
+ 
+ HOST_GO_TMP = $(@D)/host-go-tmp
+ 
+ define HOST_GO_BUILD_CMDS
+-	cd $(@D)/src && $(HOST_GO_MAKE_ENV) $(HOST_GO_HOST_CC) ./make.bash
++	cd $(@D)/src && \
++		$(HOST_GO_MAKE_ENV) $(HOST_GO_HOST_CC) CGO_ENABLED=0 ./make.bash
+ 	mkdir -p $(HOST_GO_TMP)
+ 	mv $(@D)/pkg/tool $(HOST_GO_TMP)/
+ 	mv $(@D)/bin/ $(HOST_GO_TMP)/
+-	cd $(@D)/src && $(HOST_GO_MAKE_ENV) $(HOST_GO_TARGET_CC) ./make.bash
++	cd $(@D)/src && \
++		$(HOST_GO_MAKE_ENV) $(HOST_GO_TARGET_CC) CGO_ENABLED=$(HOST_GO_CGO_ENABLED) ./make.bash
+ endef
+ 
+ define HOST_GO_INSTALL_CMDS
