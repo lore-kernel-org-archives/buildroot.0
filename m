@@ -1,28 +1,32 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 21 Oct 2017 19:15:12 +0200
-Subject: [Buildroot] busybox patches to the branch 2017.02.x
-In-Reply-To: <CAFkzVZYuLxU=20mn98Xy8q_YvSyfVkh3rM6JNGdSq7Q5uGy+5A@mail.gmail.com>
- (Scott Fan's message of "Sat, 21 Oct 2017 22:36:34 +0800")
-References: <CAFkzVZYuLxU=20mn98Xy8q_YvSyfVkh3rM6JNGdSq7Q5uGy+5A@mail.gmail.com>
-Message-ID: <87376ccti7.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 21 Oct 2017 19:18:56 +0200
+Subject: [Buildroot] [PATCH] uboot: Make Kconfig a default build system
+In-Reply-To: <CAML3pwWY3=JBX4ZQVuUH=dvYMtuBPaXik64bRjPAm_0MMkdWeQ@mail.gmail.com>
+References: <1508602460-4807-1-git-send-email-abrodkin@synopsys.com>
+ <20171021183346.19bf1e91@windsurf>
+ <CAML3pwWEC4u5_B9JFgUUTj1XJ2h0YOQe-EweyDYbSacpBPVNwA@mail.gmail.com>
+ <20171021185641.300de9b6@windsurf>
+ <CAML3pwWY3=JBX4ZQVuUH=dvYMtuBPaXik64bRjPAm_0MMkdWeQ@mail.gmail.com>
+Message-ID: <20171021191856.31ad31fd@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Scott" == Scott Fan <fancp2007@gmail.com> writes:
+Hello,
 
- > Please add patches from the busybox's 1_26_stable branch:
- > https://git.busybox.net/busybox/commit/?h=1_26_stable&id=dac762a702d01c8c2d42135795cc9bf23ff324a2
+On Sat, 21 Oct 2017 20:12:49 +0300, ??????? ??????? wrote:
 
- > https://git.busybox.net/busybox/commit/?h=1_26_stable&id=4316dff48aacb29307e1b52cb761fef603759b9d
+> That's exactly the reason to upstream your stuff.
+> What's not in upstream it doesn't exist so why bother?
 
-Thanks. I see the branch has 5 patches post-1.26.2, so it probably makes
-sense to add them all.
+Come on, people making real products are never going to upstream their
+defconfigs to Buildroot. They are highly specific, potentially
+confidential. We wouldn't even accept them in Buildroot.
 
-I've sent a patch to do so. It would be great it you could give it a
-try.
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
