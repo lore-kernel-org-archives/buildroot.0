@@ -1,43 +1,46 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sat, 21 Oct 2017 22:13:59 +0200
-Subject: [Buildroot] [PATCH v1] gst1-plugins-bad: fix openjpeg-2.3
- compile failure
-In-Reply-To: <20171021213428.303e0e96@windsurf>
-References: <20171021191617.17358-1-ps.report@gmx.net>
- <20171021212422.55322cb1@windsurf>
- <20171021213328.474317e5@gmx.net>
- <20171021213428.303e0e96@windsurf>
-Message-ID: <20171021221359.25d78638@gmx.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 21 Oct 2017 22:16:53 +0200
+Subject: [Buildroot] [PATCH] mpd: enable package for external ARC
+ toolchain
+In-Reply-To: <20171011121617.15179-1-didin@synopsys.com>
+References: <20171011121617.15179-1-didin@synopsys.com>
+Message-ID: <20171021221653.64e595e1@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+Hello,
 
-On Sat, 21 Oct 2017 21:34:28 +0200, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
+On Wed, 11 Oct 2017 15:16:17 +0300, Evgeniy Didin wrote:
+> Now using prebuilt arc-2017.09-rc1 toolchain it is possible to
+> build mpd package. The GCC patch solving the problem with pthread
+> support check now is the part of ARC toolchain.
+> 
+> Note this patch has a prerequisite that updates ARC prebuilt toolchain,
+> http://patchwork.ozlabs.org/patch/824311/
+> 
+> Signed-off-by: Evgeniy Didin <didin@synopsys.com>
+> CC: Alexey Brodkin <abrodkin@synopsys.com>
+> CC: arc-buildroot at synopsys.com
+> CC: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> 
+> ---
+>  package/mpd/Config.in | 3 ---
+>  1 file changed, 3 deletions(-)
 
-> Hello,
-> 
-> On Sat, 21 Oct 2017 21:33:28 +0200, Peter Seiderer wrote:
-> 
-> > > >  ...upport-building-with-openjpeg-2.3-simpler.patch | 134 +++++++++++++++++++++
-> > > >  1 file changed, 134 insertions(+)
-> > > >  create mode 100644 package/gstreamer1/gst1-plugins-bad/0001-openjpeg-Support-building-with-openjpeg-2.3-simpler.patch      
-> > > 
-> > > Applied to master, thanks.    
-> > 
-> > Ups, to fast, I messed up the patch and have just sent a v2 one...  
-> 
-> Could you please send a follow-up patch instead?
+As was pointed out in the comments, this is only applicable once the
+ARC external toolchain has been updated. So could you please send both
+patches as a patch series, once the final version of the 2017.09 ARC
+external toolchain is available?
 
-O.k, done (sorry for the additional noise)...
+In the mean time I'll mark the patch as Changes Requested in patchwork.
 
-Regards,
-Peter
+Thanks!
 
-> 
-> Thanks,
-> 
-> Thomas
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
