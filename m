@@ -1,20 +1,20 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 21 Oct 2017 15:51:39 +0200
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 21 Oct 2017 15:51:47 +0200
 Subject: [Buildroot] [PATCH 03/12] docker-engine: add support for init
  processes
 In-Reply-To: <20171019002257.27646-3-christian@paral.in>
 References: <20171019002257.27646-1-christian@paral.in>
  <20171019002257.27646-3-christian@paral.in>
-Message-ID: <20171021135139.GC7022@scaer>
+Message-ID: <20171021155147.12c12362@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Christian, All,
+Hello,
 
-On 2017-10-18 20:22 -0400, Christian Stewart spake thusly:
+On Wed, 18 Oct 2017 20:22:48 -0400, Christian Stewart wrote:
 > When a docker container is run with the --init flag, the Docker engine
 > uses the docker-init binary as PID 1 inside the container. This is
 > necessary in may cases to avoid issues with signal handling, zombie
@@ -22,105 +22,11 @@ On 2017-10-18 20:22 -0400, Christian Stewart spake thusly:
 > 
 > The docker-init binary is backed by tini on default, but optionally can
 > be changed to docker-init by user preference.
-> 
-> Furthermore, this patch fixes the following Docker error:
-> 
->   dockerd: level=warning msg="failed to retrieve docker-init version"
-> 
-> Signed-off-by: Christian Stewart <christian@paral.in>
-> ---
->  package/docker-engine/Config.in        | 26 ++++++++++++++++++++++++++
->  package/docker-engine/docker-engine.mk | 11 +++++++++++
->  2 files changed, 37 insertions(+)
-> 
-> diff --git a/package/docker-engine/Config.in b/package/docker-engine/Config.in
-> index 05670a716e..7d9a87f7bb 100644
-> --- a/package/docker-engine/Config.in
-> +++ b/package/docker-engine/Config.in
-> @@ -33,6 +33,32 @@ config BR2_PACKAGE_DOCKER_ENGINE_STATIC_CLIENT
->  
->  if BR2_PACKAGE_DOCKER_ENGINE_DAEMON
->  
-> +choice
-> +	bool "docker-init to use"
-> +	default BR2_PACKAGE_DOCKER_ENGINE_INIT_TINI
-> +	help
-> +	  The docker engine uses a minimal init process as PID 1
-> +	  inside containers. There are several implementations
-> +	  of this init process.
-> +
-> +config BR2_PACKAGE_DOCKER_ENGINE_INIT_TINI
-> +	bool "tini"
-> +	select BR2_PACKAGE_TINI
-> +	help
-> +	  Use Tini as the container init process.
-> +
-> +	  https://github.com/krallin/tini
-> +
-> +config BR2_PACKAGE_DOCKER_ENGINE_INIT_DUMB_INIT
-> +	bool "dumb-init"
-> +	select BR2_PACKAGE_DUMB_INIT
-> +	help
-> +	  Use dumb-init as the container init process.
-> +
-> +	  https://github.com/Yelp/dumb-init
-> +
-> +endchoice
-> +
->  config BR2_PACKAGE_DOCKER_ENGINE_DRIVER_BTRFS
->  	bool "btrfs filesystem driver"
->  	depends on BR2_USE_MMU # btrfs-progs
-> diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
-> index 8928f072e7..a2776ed78c 100644
-> --- a/package/docker-engine/docker-engine.mk
-> +++ b/package/docker-engine/docker-engine.mk
-> @@ -50,6 +50,13 @@ endif
->  ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_DAEMON),y)
->  DOCKER_ENGINE_BUILD_TAGS += daemon
->  DOCKER_ENGINE_BUILD_TARGETS += dockerd
-> +
-> +ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_INIT_DUMB_INIT),y)
-> +DOCKER_ENGINE_INIT = dumb-init
-> +else
-> +DOCKER_ENGINE_INIT = tini
-> +endif
-> +
->  endif
->  
->  ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_EXPERIMENTAL),y)
-> @@ -119,6 +126,10 @@ define DOCKER_ENGINE_INSTALL_TARGET_CMDS
->  	$(foreach target,$(DOCKER_ENGINE_BUILD_TARGETS), \
->  		$(INSTALL) -D -m 0755 $(@D)/bin/$(target) $(TARGET_DIR)/usr/bin/$(target)
->  	)
-> +
-> +	$(if $(filter $(BR2_PACKAGE_DOCKER_ENGINE_DAEMON),y), \
 
-Why not:
+Did you meant "dump-init" here instead of "docker-init" ?
 
-    $(if $(BR2_PACKAGE_DOCKER_ENGINE_DAEMON),\
-        ln -fs $(DOCKER_ENGINE_INIT) $(TARGET_DIR)/usr/bin/docker-init
-    )
-
-Regards,
-Yann E. MORIN.
-
-> +		ln -fs $(DOCKER_ENGINE_INIT) $(TARGET_DIR)/usr/bin/docker-init
-> +	)
->  endef
->  
->  $(eval $(generic-package))
-> -- 
-> 2.13.6
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
