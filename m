@@ -1,46 +1,554 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 21 Oct 2017 16:04:04 +0200
-Subject: [Buildroot] [PATCH] .gitignore: ignore output*
-In-Reply-To: <20171021140108.24066-1-gael.portay@savoirfairelinux.com>
-References: <20171021140108.24066-1-gael.portay@savoirfairelinux.com>
-Message-ID: <20171021160404.579c29af@windsurf>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 21 Oct 2017 16:22:21 +0200
+Subject: [Buildroot] [PATCH 3/3] squashfs: add support for zstd
+In-Reply-To: <20171016215904.3380-4-judge.packham@gmail.com>
+References: <20171016215904.3380-1-judge.packham@gmail.com>
+ <20171016215904.3380-4-judge.packham@gmail.com>
+Message-ID: <20171021142221.GD7022@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Chris, All,
 
-On Sat, 21 Oct 2017 10:01:08 -0400, Ga?l PORTAY wrote:
-> During development, it is often practical to have many output
-> directories.  The output directory is easily specified with O=<output>
-> though is it useful to have a convention of 'output...' e.g.
-> "output-rpi", "output-rpi2", and "output-rpi3-64".
-> 
-> Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
+On 2017-10-17 10:59 +1300, Chris Packham spake thusly:
+> Import the upstream patch to add support for using zstd to compress
+> squashfs images.
+
+Support for zstd has not yet been accepted upstream, and the olicy in
+Buildroot is to not have feature patches.
+
+So, please work with upstream to get zstd support added there first.
+Then, we can bump to using  newer squashfs veresion (sha1?).
+
+Regards,
+Yann E. MORIN.
+
+> Signed-off-by: Chris Packham <judge.packham@gmail.com>
 > ---
->  .gitignore | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  fs/squashfs/Config.in                              |   3 +
+>  fs/squashfs/squashfs.mk                            |   2 +
+>  .../0006-squashfs-tools-Add-zstd-support.patch     | 420 +++++++++++++++++++++
+>  package/squashfs/Config.in                         |   5 +
+>  package/squashfs/squashfs.mk                       |  12 +-
+>  5 files changed, 440 insertions(+), 2 deletions(-)
+>  create mode 100644 package/squashfs/0006-squashfs-tools-Add-zstd-support.patch
 > 
-> diff --git a/.gitignore b/.gitignore
-> index bb02d9f572..ec5768d053 100644
-> --- a/.gitignore
-> +++ b/.gitignore
-> @@ -1,4 +1,4 @@
-> -/output
-> +/output*
+> diff --git a/fs/squashfs/Config.in b/fs/squashfs/Config.in
+> index ca9ddb2218..dde2097cb7 100644
+> --- a/fs/squashfs/Config.in
+> +++ b/fs/squashfs/Config.in
+> @@ -27,5 +27,8 @@ config BR2_TARGET_ROOTFS_SQUASHFS4_LZO
+>  config BR2_TARGET_ROOTFS_SQUASHFS4_XZ
+>  	bool "xz"
+>  
+> +config BR2_TARGET_ROOTFS_SQUASHFS4_ZSTD
+> +	bool "zstd"
+> +
+>  endchoice
+>  endif
+> diff --git a/fs/squashfs/squashfs.mk b/fs/squashfs/squashfs.mk
+> index 7de7f51af1..5733fbef1e 100644
+> --- a/fs/squashfs/squashfs.mk
+> +++ b/fs/squashfs/squashfs.mk
+> @@ -16,6 +16,8 @@ else ifeq ($(BR2_TARGET_ROOTFS_SQUASHFS4_LZMA),y)
+>  ROOTFS_SQUASHFS_ARGS += -comp lzma
+>  else ifeq ($(BR2_TARGET_ROOTFS_SQUASHFS4_XZ),y)
+>  ROOTFS_SQUASHFS_ARGS += -comp xz
+> +else ifeq ($(BR2_TARGET_ROOTFS_SQUASHFS4_ZSTD),y)
+> +ROOTFS_SQUASHFS_ARGS += -comp zstd
+>  else
+>  ROOTFS_SQUASHFS_ARGS += -comp gzip
+>  endif
+> diff --git a/package/squashfs/0006-squashfs-tools-Add-zstd-support.patch b/package/squashfs/0006-squashfs-tools-Add-zstd-support.patch
+> new file mode 100644
+> index 0000000000..ca638f2644
+> --- /dev/null
+> +++ b/package/squashfs/0006-squashfs-tools-Add-zstd-support.patch
+> @@ -0,0 +1,420 @@
+> +From 57a3cf95b276946559f9e044c7352c11303bb9c1 Mon Sep 17 00:00:00 2001
+> +From: Sean Purcell <me@seanp.xyz>
+> +Date: Thu, 3 Aug 2017 17:47:03 -0700
+> +Subject: [PATCH v6] squashfs-tools: Add zstd support
+> +
+> +This patch adds zstd support to squashfs-tools. It works with zstd
+> +versions >= 1.0.0. It was originally written by Sean Purcell.
+> +
+> +Signed-off-by: Sean Purcell <me@seanp.xyz>
+> +Signed-off-by: Nick Terrell <terrelln@fb.com>
+> +---
+> +v4 -> v5:
+> +- Fix patch documentation to reflect that Sean Purcell is the author
+> +- Don't strip trailing whitespace of unreleated code
+> +- Make zstd_display_options() static
+> +
+> +v5 -> v6:
+> +- Fix build instructions in Makefile
+> +
+> + squashfs-tools/Makefile       |  20 ++++
+> + squashfs-tools/compressor.c   |   8 ++
+> + squashfs-tools/squashfs_fs.h  |   1 +
+> + squashfs-tools/zstd_wrapper.c | 254 ++++++++++++++++++++++++++++++++++++++++++
+> + squashfs-tools/zstd_wrapper.h |  48 ++++++++
+> + 5 files changed, 331 insertions(+)
+> + create mode 100644 squashfs-tools/zstd_wrapper.c
+> + create mode 100644 squashfs-tools/zstd_wrapper.h
+> +
+> +diff --git a/squashfs-tools/Makefile b/squashfs-tools/Makefile
+> +index 52d2582..22fc559 100644
+> +--- a/squashfs-tools/Makefile
+> ++++ b/squashfs-tools/Makefile
+> +@@ -75,6 +75,18 @@ GZIP_SUPPORT = 1
+> + #LZMA_SUPPORT = 1
+> + #LZMA_DIR = ../../../../LZMA/lzma465
+> +
+> ++
+> ++########### Building ZSTD support ############
+> ++#
+> ++# The ZSTD library is supported
+> ++# ZSTD homepage: http://zstd.net
+> ++# ZSTD source repository: https://github.com/facebook/zstd
+> ++#
+> ++# To build using the ZSTD library - install the library and uncomment the
+> ++# ZSTD_SUPPORT line below.
+> ++#
+> ++#ZSTD_SUPPORT = 1
+> ++
+> + ######## Specifying default compression ########
+> + #
+> + # The next line specifies which compression algorithm is used by default
+> +@@ -177,6 +189,14 @@ LIBS += -llz4
+> + COMPRESSORS += lz4
+> + endif
+> +
+> ++ifeq ($(ZSTD_SUPPORT),1)
+> ++CFLAGS += -DZSTD_SUPPORT
+> ++MKSQUASHFS_OBJS += zstd_wrapper.o
+> ++UNSQUASHFS_OBJS += zstd_wrapper.o
+> ++LIBS += -lzstd
+> ++COMPRESSORS += zstd
+> ++endif
+> ++
+> + ifeq ($(XATTR_SUPPORT),1)
+> + ifeq ($(XATTR_DEFAULT),1)
+> + CFLAGS += -DXATTR_SUPPORT -DXATTR_DEFAULT
+> +diff --git a/squashfs-tools/compressor.c b/squashfs-tools/compressor.c
+> +index 525e316..02b5e90 100644
+> +--- a/squashfs-tools/compressor.c
+> ++++ b/squashfs-tools/compressor.c
+> +@@ -65,6 +65,13 @@ static struct compressor xz_comp_ops = {
+> + extern struct compressor xz_comp_ops;
+> + #endif
+> +
+> ++#ifndef ZSTD_SUPPORT
+> ++static struct compressor zstd_comp_ops = {
+> ++	ZSTD_COMPRESSION, "zstd"
+> ++};
+> ++#else
+> ++extern struct compressor zstd_comp_ops;
+> ++#endif
+> +
+> + static struct compressor unknown_comp_ops = {
+> + 	0, "unknown"
+> +@@ -77,6 +84,7 @@ struct compressor *compressor[] = {
+> + 	&lzo_comp_ops,
+> + 	&lz4_comp_ops,
+> + 	&xz_comp_ops,
+> ++	&zstd_comp_ops,
+> + 	&unknown_comp_ops
+> + };
+> +
+> +diff --git a/squashfs-tools/squashfs_fs.h b/squashfs-tools/squashfs_fs.h
+> +index 791fe12..afca918 100644
+> +--- a/squashfs-tools/squashfs_fs.h
+> ++++ b/squashfs-tools/squashfs_fs.h
+> +@@ -277,6 +277,7 @@ typedef long long		squashfs_inode;
+> + #define LZO_COMPRESSION		3
+> + #define XZ_COMPRESSION		4
+> + #define LZ4_COMPRESSION		5
+> ++#define ZSTD_COMPRESSION	6
+> +
+> + struct squashfs_super_block {
+> + 	unsigned int		s_magic;
+> +diff --git a/squashfs-tools/zstd_wrapper.c b/squashfs-tools/zstd_wrapper.c
+> +new file mode 100644
+> +index 0000000..dcab75a
+> +--- /dev/null
+> ++++ b/squashfs-tools/zstd_wrapper.c
+> +@@ -0,0 +1,254 @@
+> ++/*
+> ++ * Copyright (c) 2017
+> ++ * Phillip Lougher <phillip@squashfs.org.uk>
+> ++ *
+> ++ * This program is free software; you can redistribute it and/or
+> ++ * modify it under the terms of the GNU General Public License
+> ++ * as published by the Free Software Foundation; either version 2,
+> ++ * or (at your option) any later version.
+> ++ *
+> ++ * This program is distributed in the hope that it will be useful,
+> ++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+> ++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+> ++ * GNU General Public License for more details.
+> ++ *
+> ++ * zstd_wrapper.c
+> ++ *
+> ++ * Support for ZSTD compression http://zstd.net
+> ++ */
+> ++
+> ++#include <stdio.h>
+> ++#include <string.h>
+> ++#include <stdlib.h>
+> ++#include <zstd.h>
+> ++#include <zstd_errors.h>
+> ++
+> ++#include "squashfs_fs.h"
+> ++#include "zstd_wrapper.h"
+> ++#include "compressor.h"
+> ++
+> ++static int compression_level = ZSTD_DEFAULT_COMPRESSION_LEVEL;
+> ++
+> ++/*
+> ++ * This function is called by the options parsing code in mksquashfs.c
+> ++ * to parse any -X compressor option.
+> ++ *
+> ++ * This function returns:
+> ++ *	>=0 (number of additional args parsed) on success
+> ++ *	-1 if the option was unrecognised, or
+> ++ *	-2 if the option was recognised, but otherwise bad in
+> ++ *	   some way (e.g. invalid parameter)
+> ++ *
+> ++ * Note: this function sets internal compressor state, but does not
+> ++ * pass back the results of the parsing other than success/failure.
+> ++ * The zstd_dump_options() function is called later to get the options in
+> ++ * a format suitable for writing to the filesystem.
+> ++ */
+> ++static int zstd_options(char *argv[], int argc)
+> ++{
+> ++	if (strcmp(argv[0], "-Xcompression-level") == 0) {
+> ++		if (argc < 2) {
+> ++			fprintf(stderr, "zstd: -Xcompression-level missing "
+> ++				"compression level\n");
+> ++			fprintf(stderr, "zstd: -Xcompression-level it should "
+> ++				"be 1 <= n <= %d\n", ZSTD_maxCLevel());
+> ++			goto failed;
+> ++		}
+> ++
+> ++		compression_level = atoi(argv[1]);
+> ++		if (compression_level < 1 ||
+> ++		    compression_level > ZSTD_maxCLevel()) {
+> ++			fprintf(stderr, "zstd: -Xcompression-level invalid, it "
+> ++				"should be 1 <= n <= %d\n", ZSTD_maxCLevel());
+> ++			goto failed;
+> ++		}
+> ++
+> ++		return 1;
+> ++	}
+> ++
+> ++	return -1;
+> ++failed:
+> ++	return -2;
+> ++}
+> ++
+> ++/*
+> ++ * This function is called by mksquashfs to dump the parsed
+> ++ * compressor options in a format suitable for writing to the
+> ++ * compressor options field in the filesystem (stored immediately
+> ++ * after the superblock).
+> ++ *
+> ++ * This function returns a pointer to the compression options structure
+> ++ * to be stored (and the size), or NULL if there are no compression
+> ++ * options.
+> ++ */
+> ++static void *zstd_dump_options(int block_size, int *size)
+> ++{
+> ++	static struct zstd_comp_opts comp_opts;
+> ++
+> ++	/* don't return anything if the options are all default */
+> ++	if (compression_level == ZSTD_DEFAULT_COMPRESSION_LEVEL)
+> ++		return NULL;
+> ++
+> ++	comp_opts.compression_level = compression_level;
+> ++
+> ++	SQUASHFS_INSWAP_COMP_OPTS(&comp_opts);
+> ++
+> ++	*size = sizeof(comp_opts);
+> ++	return &comp_opts;
+> ++}
+> ++
+> ++/*
+> ++ * This function is a helper specifically for the append mode of
+> ++ * mksquashfs.  Its purpose is to set the internal compressor state
+> ++ * to the stored compressor options in the passed compressor options
+> ++ * structure.
+> ++ *
+> ++ * In effect this function sets up the compressor options
+> ++ * to the same state they were when the filesystem was originally
+> ++ * generated, this is to ensure on appending, the compressor uses
+> ++ * the same compression options that were used to generate the
+> ++ * original filesystem.
+> ++ *
+> ++ * Note, even if there are no compressor options, this function is still
+> ++ * called with an empty compressor structure (size == 0), to explicitly
+> ++ * set the default options, this is to ensure any user supplied
+> ++ * -X options on the appending mksquashfs command line are over-ridden.
+> ++ *
+> ++ * This function returns 0 on sucessful extraction of options, and -1 on error.
+> ++ */
+> ++static int zstd_extract_options(int block_size, void *buffer, int size)
+> ++{
+> ++	struct zstd_comp_opts *comp_opts = buffer;
+> ++
+> ++	if (size == 0) {
+> ++		/* Set default values */
+> ++		compression_level = ZSTD_DEFAULT_COMPRESSION_LEVEL;
+> ++		return 0;
+> ++	}
+> ++
+> ++	/* we expect a comp_opts structure of sufficient size to be present */
+> ++	if (size < sizeof(*comp_opts))
+> ++		goto failed;
+> ++
+> ++	SQUASHFS_INSWAP_COMP_OPTS(comp_opts);
+> ++
+> ++	if (comp_opts->compression_level < 1 ||
+> ++	    comp_opts->compression_level > ZSTD_maxCLevel()) {
+> ++		fprintf(stderr, "zstd: bad compression level in compression "
+> ++			"options structure\n");
+> ++		goto failed;
+> ++	}
+> ++
+> ++	compression_level = comp_opts->compression_level;
+> ++
+> ++	return 0;
+> ++
+> ++failed:
+> ++	fprintf(stderr, "zstd: error reading stored compressor options from "
+> ++		"filesystem!\n");
+> ++
+> ++	return -1;
+> ++}
+> ++
+> ++static void zstd_display_options(void *buffer, int size)
+> ++{
+> ++	struct zstd_comp_opts *comp_opts = buffer;
+> ++
+> ++	/* we expect a comp_opts structure of sufficient size to be present */
+> ++	if (size < sizeof(*comp_opts))
+> ++		goto failed;
+> ++
+> ++	SQUASHFS_INSWAP_COMP_OPTS(comp_opts);
+> ++
+> ++	if (comp_opts->compression_level < 1 ||
+> ++	    comp_opts->compression_level > ZSTD_maxCLevel()) {
+> ++		fprintf(stderr, "zstd: bad compression level in compression "
+> ++			"options structure\n");
+> ++		goto failed;
+> ++	}
+> ++
+> ++	printf("\tcompression-level %d\n", comp_opts->compression_level);
+> ++
+> ++	return;
+> ++
+> ++failed:
+> ++	fprintf(stderr, "zstd: error reading stored compressor options from "
+> ++		"filesystem!\n");
+> ++}
+> ++
+> ++/*
+> ++ * This function is called by mksquashfs to initialise the
+> ++ * compressor, before compress() is called.
+> ++ *
+> ++ * This function returns 0 on success, and -1 on error.
+> ++ */
+> ++static int zstd_init(void **strm, int block_size, int datablock)
+> ++{
+> ++	ZSTD_CCtx *cctx = ZSTD_createCCtx();
+> ++
+> ++	if (!cctx) {
+> ++		fprintf(stderr, "zstd: failed to allocate compression "
+> ++			"context!\n");
+> ++		return -1;
+> ++	}
+> ++
+> ++	*strm = cctx;
+> ++	return 0;
+> ++}
+> ++
+> ++static int zstd_compress(void *strm, void *dest, void *src, int size,
+> ++			 int block_size, int *error)
+> ++{
+> ++	const size_t res = ZSTD_compressCCtx((ZSTD_CCtx*)strm, dest, block_size,
+> ++					     src, size, compression_level);
+> ++
+> ++	if (ZSTD_isError(res)) {
+> ++		/* FIXME:
+> ++		 * zstd does not expose stable error codes. The error enum may
+> ++		 * change between versions. Until upstream zstd stablizes the
+> ++		 * error codes, we have no way of knowing why the error occurs.
+> ++		 * zstd shouldn't fail to compress any input unless there isn't
+> ++		 * enough output space. We assume that is the cause and return
+> ++		 * the special error code for not enough output space.
+> ++		 */
+> ++		return 0;
+> ++	}
+> ++
+> ++	return (int)res;
+> ++}
+> ++
+> ++static int zstd_uncompress(void *dest, void *src, int size, int outsize,
+> ++			   int *error)
+> ++{
+> ++	const size_t res = ZSTD_decompress(dest, outsize, src, size);
+> ++
+> ++	if (ZSTD_isError(res)) {
+> ++		fprintf(stderr, "\t%d %d\n", outsize, size);
+> ++
+> ++		*error = (int)ZSTD_getErrorCode(res);
+> ++		return -1;
+> ++	}
+> ++
+> ++	return (int)res;
+> ++}
+> ++
+> ++static void zstd_usage(void)
+> ++{
+> ++	fprintf(stderr, "\t  -Xcompression-level <compression-level>\n");
+> ++	fprintf(stderr, "\t\t<compression-level> should be 1 .. %d (default "
+> ++		"%d)\n", ZSTD_maxCLevel(), ZSTD_DEFAULT_COMPRESSION_LEVEL);
+> ++}
+> ++
+> ++struct compressor zstd_comp_ops = {
+> ++	.init = zstd_init,
+> ++	.compress = zstd_compress,
+> ++	.uncompress = zstd_uncompress,
+> ++	.options = zstd_options,
+> ++	.dump_options = zstd_dump_options,
+> ++	.extract_options = zstd_extract_options,
+> ++	.display_options = zstd_display_options,
+> ++	.usage = zstd_usage,
+> ++	.id = ZSTD_COMPRESSION,
+> ++	.name = "zstd",
+> ++	.supported = 1
+> ++};
+> +diff --git a/squashfs-tools/zstd_wrapper.h b/squashfs-tools/zstd_wrapper.h
+> +new file mode 100644
+> +index 0000000..4fbef0a
+> +--- /dev/null
+> ++++ b/squashfs-tools/zstd_wrapper.h
+> +@@ -0,0 +1,48 @@
+> ++#ifndef ZSTD_WRAPPER_H
+> ++#define ZSTD_WRAPPER_H
+> ++/*
+> ++ * Squashfs
+> ++ *
+> ++ * Copyright (c) 2017
+> ++ * Phillip Lougher <phillip@squashfs.org.uk>
+> ++ *
+> ++ * This program is free software; you can redistribute it and/or
+> ++ * modify it under the terms of the GNU General Public License
+> ++ * as published by the Free Software Foundation; either version 2,
+> ++ * or (at your option) any later version.
+> ++ *
+> ++ * This program is distributed in the hope that it will be useful,
+> ++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+> ++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+> ++ * GNU General Public License for more details.
+> ++ *
+> ++ * zstd_wrapper.h
+> ++ *
+> ++ */
+> ++
+> ++#ifndef linux
+> ++#define __BYTE_ORDER BYTE_ORDER
+> ++#define __BIG_ENDIAN BIG_ENDIAN
+> ++#define __LITTLE_ENDIAN LITTLE_ENDIAN
+> ++#else
+> ++#include <endian.h>
+> ++#endif
+> ++
+> ++#if __BYTE_ORDER == __BIG_ENDIAN
+> ++extern unsigned int inswap_le16(unsigned short);
+> ++extern unsigned int inswap_le32(unsigned int);
+> ++
+> ++#define SQUASHFS_INSWAP_COMP_OPTS(s) { \
+> ++	(s)->compression_level = inswap_le32((s)->compression_level); \
+> ++}
+> ++#else
+> ++#define SQUASHFS_INSWAP_COMP_OPTS(s)
+> ++#endif
+> ++
+> ++/* Default compression */
+> ++#define ZSTD_DEFAULT_COMPRESSION_LEVEL 15
+> ++
+> ++struct zstd_comp_opts {
+> ++	int compression_level;
+> ++};
+> ++#endif
+> +--
+> +2.9.5
+> diff --git a/package/squashfs/Config.in b/package/squashfs/Config.in
+> index 70c0fc9808..e793e8c977 100644
+> --- a/package/squashfs/Config.in
+> +++ b/package/squashfs/Config.in
+> @@ -41,6 +41,11 @@ config BR2_PACKAGE_SQUASHFS_XZ
+>  	help
+>  	  Support XZ compression algorithm
+>  
+> +config BR2_PACKAGE_SQUASHFS_ZSTD
+> +	bool "zstd support"
+> +	select BR2_PACKAGE_ZSTD
+> +	help
+> +	  Support ZSTD compression algorithm
+>  endif
+>  
+>  comment "squashfs needs a toolchain w/ threads"
+> diff --git a/package/squashfs/squashfs.mk b/package/squashfs/squashfs.mk
+> index 9599d892b2..4ec15508e4 100644
+> --- a/package/squashfs/squashfs.mk
+> +++ b/package/squashfs/squashfs.mk
+> @@ -32,6 +32,13 @@ else
+>  SQUASHFS_MAKE_ARGS += XZ_SUPPORT=0
+>  endif
+>  
+> +ifeq ($(BR2_PACKAGE_SQUASHFS_ZSTD),y)
+> +SQUASHFS_DEPENDENCIES += zstd
+> +SQUASHFS_MAKE_ARGS += ZSTD_SUPPORT=1 COMP_DEFAULT=zstd
+> +else
+> +SQUASHFS_MAKE_ARGS += ZSTD_SUPPORT=0
+> +endif
+> +
+>  ifeq ($(BR2_PACKAGE_SQUASHFS_LZO),y)
+>  SQUASHFS_DEPENDENCIES += lzo
+>  SQUASHFS_MAKE_ARGS += LZO_SUPPORT=1 COMP_DEFAULT=lzo
+> @@ -46,7 +53,7 @@ else
+>  SQUASHFS_MAKE_ARGS += GZIP_SUPPORT=0
+>  endif
+>  
+> -HOST_SQUASHFS_DEPENDENCIES = host-zlib host-lz4 host-lzo host-xz
+> +HOST_SQUASHFS_DEPENDENCIES = host-zlib host-lz4 host-lzo host-xz host-zstd
+>  
+>  HOST_SQUASHFS_MAKE_ARGS = \
+>  	XATTR_SUPPORT=1 \
+> @@ -54,7 +61,8 @@ HOST_SQUASHFS_MAKE_ARGS = \
+>  	GZIP_SUPPORT=1 \
+>  	LZ4_SUPPORT=1 \
+>  	LZO_SUPPORT=1 \
+> -	LZMA_XZ_SUPPORT=1
+> +	LZMA_XZ_SUPPORT=1 \
+> +	ZSTD_SUPPORT=1
+>  
+>  define SQUASHFS_BUILD_CMDS
+>  	$(TARGET_MAKE_ENV) $(MAKE) \
+> -- 
+> 2.14.2
+> 
 
-Not sure this is a good idea, it kind of makes an assumption on how
-people would name their output directories.
-
-If you're annoyed by your output directories, use make O=../output-rpi2
-instead of make O=output-rpi2, and that's it :-)
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
