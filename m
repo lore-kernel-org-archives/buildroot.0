@@ -1,205 +1,56 @@
-From: Carlos Santos <casantos@datacom.ind.br>
-Date: Sat, 21 Oct 2017 20:30:17 -0200
-Subject: [Buildroot] [PATCH 1/2] util-linux: security bump to version 2.31
-Message-ID: <20171021223018.8858-1-casantos@datacom.ind.br>
+From: =?iso-8859-1?Q?Ga=EBl?= PORTAY <gael.portay@savoirfairelinux.com>
+Date: Sat, 21 Oct 2017 18:40:12 -0400
+Subject: [Buildroot] [PATCH] .gitignore: ignore output*
+In-Reply-To: <20171021160404.579c29af@windsurf>
+References: <20171021140108.24066-1-gael.portay@savoirfairelinux.com>
+ <20171021160404.579c29af@windsurf>
+Message-ID: <20171021224012.wohkvesqielavotp@archlinux>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fix CVE-2016-2779: runuser in util-linux allows local users to escape to
-the parent session via a crafted TIOCSTI ioctl call, which pushes
-characters to the terminal's input buffer.
+Hi Thomas,
 
-The new experimental "su --pty" feature has been implemented to fix this
-issue. The feature is not enabled by default and the new command line
-option --pty is necessary.
+On Sat, Oct 21, 2017 at 04:04:04PM +0200, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Sat, 21 Oct 2017 10:01:08 -0400, Ga?l PORTAY wrote:
+> > During development, it is often practical to have many output
+> > directories.  The output directory is easily specified with O=<output>
+> > though is it useful to have a convention of 'output...' e.g.
+> > "output-rpi", "output-rpi2", and "output-rpi3-64".
+> > 
+> > Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
+> > ---
+> >  .gitignore | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/.gitignore b/.gitignore
+> > index bb02d9f572..ec5768d053 100644
+> > --- a/.gitignore
+> > +++ b/.gitignore
+> > @@ -1,4 +1,4 @@
+> > -/output
+> > +/output*
+> 
+> Not sure this is a good idea, it kind of makes an assumption on how
+> people would name their output directories.
+> 
 
-Add rfkill, a command for enabling and disabling wireless devices. This
-implementation is based upon, and backward compatible with, the original
-rfkill from Johannes Berg and Marcel Holtmann, currently provided by the
-standalone "rfkill" package.
-
-Add uuidparse, a command to analyze and print information about UUID's.
-
-The "reset" script is not part of utill-linux anymore. Add a legacy
-config telling the user to use either BusyBox or the ncurses program.
-
-Drop the ncursesw patch, allready applied upstream. AUTORECONF is not
-required anymore.
-
-Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
----
- Config.in.legacy                                   |  8 +++
- ...upport-ncursesw-without-headers-in-ncurse.patch | 58 ----------------------
- package/util-linux/Config.in                       | 13 +++--
- package/util-linux/util-linux.hash                 |  4 +-
- package/util-linux/util-linux.mk                   | 16 +++---
- 5 files changed, 25 insertions(+), 74 deletions(-)
- delete mode 100644 package/util-linux/0001-build-sys-support-ncursesw-without-headers-in-ncurse.patch
-
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 748876880c..a9c8ec8318 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -145,6 +145,14 @@ endif
- ###############################################################################
- comment "Legacy options removed in 2017.11"
+Yes, that is why I mentionned that it should be "useful to have a convention of
+'output...'"; and I think that 'output*' is not too intrusive.
  
-+config BR2_PACKAGE_UTIL_LINUX_RESET
-+	bool "util-linux reset removed"
-+	select BR2_LEGACY
-+	help
-+	  The util-linux package no longer offers a "reset" command. Use
-+	  either the reset command provided by BusyBox or select ncurses
-+	  programs, which will install a symlink from "tset" to reset.
-+
- config BR2_PACKAGE_OPENOBEX_BLUEZ
- 	bool "openobex bluez option removed"
- 	select BR2_LEGACY
-diff --git a/package/util-linux/0001-build-sys-support-ncursesw-without-headers-in-ncurse.patch b/package/util-linux/0001-build-sys-support-ncursesw-without-headers-in-ncurse.patch
-deleted file mode 100644
-index 062ac6725b..0000000000
---- a/package/util-linux/0001-build-sys-support-ncursesw-without-headers-in-ncurse.patch
-+++ /dev/null
-@@ -1,58 +0,0 @@
--From 87c26ce5b689abe1b52181f98ef3c9eb1b1a5165 Mon Sep 17 00:00:00 2001
--From: Karel Zak <kzak@redhat.com>
--Date: Tue, 1 Aug 2017 14:36:25 +0200
--Subject: [PATCH] build-sys: support ncursesw without headers in ncursesw/
-- directory
--
--Let's check always for alone ncurses.h and term.h if the preferred
--variant with ncursesw/ subdirectory is not available.
--
--The patch also minimize number of HAVE_...NCURSES_H macros in
--config.h. We don't need to check for ncurses.h if ncurses/ncurses.h is
--available.
--
--Reported-by: Carlos Santos <casantos@datacom.ind.br>
--Signed-off-by: Karel Zak <kzak@redhat.com>
-----
-- configure.ac | 18 ++++++++++++++++--
-- 1 file changed, 16 insertions(+), 2 deletions(-)
--
--diff --git a/configure.ac b/configure.ac
--index b204ec11e..592bd587e 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -810,6 +810,13 @@ AS_IF([test "x$with_ncursesw" != xno], [
--   AS_IF([test "x$have_ncursesw" = xyes], [
--     AC_CHECK_HEADERS([ncursesw/ncurses.h], [have_ncursesw_header=yes])
--     AC_CHECK_HEADERS([ncursesw/term.h])
--+
--+    # Define HAVE_NCURSES_H only if check for HAVE_NCURSESW_NCURSES_H is
--+    # unsuccessful to avoid too many *_H permitations in config.h
--+    AS_IF([test "x$have_ncursesw_header" = xno], [
--+	   AC_CHECK_HEADERS([ncurses.h], [have_ncursesw_header=yes])
--+	   AC_CHECK_HEADERS([term.h])
--+    ])
--     AS_IF([test "x$have_ncursesw_header" = xno], [have_ncursesw=no])
--   ])
--   AS_IF([test "x$have_ncursesw" = xyes], [
--@@ -834,8 +841,15 @@ AS_CASE([$with_ncurses:$build_widechar],
-- AS_IF([test "x$have_ncursesw" = xno -a "x$with_ncurses" != xno ], [
--   UL_NCURSES_CHECK([ncurses])
--   AS_IF([test "x$have_ncurses" = xyes], [
---    AC_CHECK_HEADERS([ncurses/ncurses.h ncurses.h], [have_ncurses_header=yes])
---    AC_CHECK_HEADERS([ncurses/term.h term.h])
--+    AC_CHECK_HEADERS([ncurses/ncurses.h], [have_ncurses_header=yes])
--+    AC_CHECK_HEADERS([ncurses/term.h])
--+
--+    # Define HAVE_NCURSES_H only if check for HAVE_NCURSES_NCURSES_H is
--+    # unsuccessful to avoid too many *_H permitations in config.h
--+    AS_IF([test "x$have_ncurses_header" = xno], [
--+	   AC_CHECK_HEADERS([ncurses.h], [have_ncurses_header=yes])
--+	   AC_CHECK_HEADERS([term.h])
--+    ])
--     AS_IF([test "x$have_ncurses_header" = xno], [have_ncurses=no])
--   ])
--   AS_IF([test "x$have_ncurses" = xyes], [
---- 
--2.13.5
--
-diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
-index 5a600c333d..5f0a35cdbb 100644
---- a/package/util-linux/Config.in
-+++ b/package/util-linux/Config.in
-@@ -59,7 +59,8 @@ config BR2_PACKAGE_UTIL_LINUX_BINARIES
- 	  ldattach, look, lsblk, lscpu, lsipc, lslocks, lsns, mcookie,
- 	  mkfs, mkswap, namei, prlimit, readprofile, renice, rev,
- 	  rtcwake, script, scriptreplay, setarch, setsid, sfdisk,
--	  swaplabel, swapoff, swapon, uuidgen, whereis, wipefs
-+	  swaplabel, swapoff, swapon, uuidgen, uuidparse, whereis,
-+	  wipefs
- 
- 	  The setarch utility also installs architecture-specific
- 	  symlinks like linux32, linux64, uname26, i386 and x86_64.
-@@ -291,10 +292,14 @@ config BR2_PACKAGE_UTIL_LINUX_RENAME
- 	help
- 	  Rename files
- 
--config BR2_PACKAGE_UTIL_LINUX_RESET
--	bool "reset"
-+config BR2_PACKAGE_UTIL_LINUX_RFKILL
-+	bool "rfkill"
-+	depends on BR2_USE_MMU # libsmartcols
-+	select BR2_PACKAGE_UTIL_LINUX_LIBSMARTCOLS
- 	help
--	  Reset the terminal
-+	  Tool for enabling and disabling wireless devices. This new
-+	  implementation is based upon, and backward compatible with,
-+	  the original rfkill from Johannes Berg and Marcel Holtmann.
- 
- config BR2_PACKAGE_UTIL_LINUX_RUNUSER
- 	bool "runuser"
-diff --git a/package/util-linux/util-linux.hash b/package/util-linux/util-linux.hash
-index 2711f51be2..2c010797b5 100644
---- a/package/util-linux/util-linux.hash
-+++ b/package/util-linux/util-linux.hash
-@@ -1,2 +1,2 @@
--# From https://www.kernel.org/pub/linux/utils/util-linux/v2.30/sha256sums.asc
--sha256 7b5be5489e9b5b7177832836467aba1c87bf0e9bcbcb5a6f35d76cd4782589dc  util-linux-2.30.2.tar.xz
-+# From https://www.kernel.org/pub/linux/utils/util-linux/v2.31/sha256sums.asc
-+sha256 f9be7cdcf4fc5c5064a226599acdda6bdf3d86c640152ba01ea642d91108dc8a  util-linux-2.31.tar.xz
-diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
-index 83bb217af9..8464288600 100644
---- a/package/util-linux/util-linux.mk
-+++ b/package/util-linux/util-linux.mk
-@@ -4,19 +4,15 @@
- #
- ################################################################################
- 
--UTIL_LINUX_VERSION_MAJOR = 2.30
--UTIL_LINUX_VERSION_MINOR = 2
--UTIL_LINUX_VERSION = $(UTIL_LINUX_VERSION_MAJOR).$(UTIL_LINUX_VERSION_MINOR)
-+UTIL_LINUX_VERSION_MAJOR = 2.31
-+UTIL_LINUX_VERSION = $(UTIL_LINUX_VERSION_MAJOR)
- UTIL_LINUX_SOURCE = util-linux-$(UTIL_LINUX_VERSION).tar.xz
- UTIL_LINUX_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/util-linux/v$(UTIL_LINUX_VERSION_MAJOR)
- 
--# 0001-Revert-build-sys-ncurses-headers-cleanup.patch
--UTIL_LINUX_AUTORECONF = YES
--
- # README.licensing claims that some files are GPL-2.0 only, but this is not true.
--# Some files are GPL-3.0+ but only in tests.
--UTIL_LINUX_LICENSE = GPL-2.0+, BSD-4-Clause, LGPL-2.1+ (libblkid, libfdisk, libmount), BSD-3-Clause (libuuid)
--UTIL_LINUX_LICENSE_FILES = README.licensing Documentation/licenses/COPYING.GPLv2 Documentation/licenses/COPYING.UCB Documentation/licenses/COPYING.LGPLv2.1 Documentation/licenses/COPYING.BSD-3
-+# Some files are GPL-3.0+ but only in tests. rfkill uses an ISC-style license.
-+UTIL_LINUX_LICENSE = GPL-2.0+, BSD-4-Clause, LGPL-2.1+ (libblkid, libfdisk, libmount), BSD-3-Clause (libuuid) ISC (rfkill)
-+UTIL_LINUX_LICENSE_FILES = README.licensing Documentation/licenses/COPYING.GPLv2 Documentation/licenses/COPYING.UCB Documentation/licenses/COPYING.LGPLv2.1 Documentation/licenses/COPYING.BSD-3 sys-utils/rfkill.c
- UTIL_LINUX_INSTALL_STAGING = YES
- UTIL_LINUX_DEPENDENCIES = host-pkgconf $(TARGET_NLS_DEPENDENCIES)
- # uClibc needs NTP_LEGACY for sys/timex.h -> ntp_gettime() support
-@@ -135,7 +131,7 @@ UTIL_LINUX_CONF_OPTS += \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_PIVOT_ROOT),--enable-pivot_root,--disable-pivot_root) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_RAW),--enable-raw,--disable-raw) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_RENAME),--enable-rename,--disable-rename) \
--	$(if $(BR2_PACKAGE_UTIL_LINUX_RESET),--enable-reset,--disable-reset) \
-+	$(if $(BR2_PACKAGE_UTIL_LINUX_RFKILL),--enable-rfkill,--disable-rfkill) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_RUNUSER),--enable-runuser,--disable-runuser) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_SCHEDUTILS),--enable-schedutils,--disable-schedutils) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_SETPRIV),--enable-setpriv,--disable-setpriv) \
--- 
-2.13.6
+> If you're annoyed by your output directories, use make O=../output-rpi2
+> instead of make O=output-rpi2, and that's it :-)
+> 
+
+It is a good suggestion by the way; but I have many buildroot working copies in
+the same directory, and to avoid collision I prefer having the output directory
+directly under the working copy.
+
+I will look to the suggestion of Arnout.
+
+King regards,
+Gael
