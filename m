@@ -1,52 +1,37 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 21 Oct 2017 15:49:54 +0200
-Subject: [Buildroot] [PATCH 1/1] freerdp: bump to 2.0.0-rc0
-In-Reply-To: <20171018000711.29998-1-Adamduskett@outlook.com>
-References: <20171018000711.29998-1-Adamduskett@outlook.com>
-Message-ID: <20171021154954.4746d0ba@windsurf>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 21 Oct 2017 15:50:51 +0200
+Subject: [Buildroot] [PATCH 01/12] dumb-init: new package
+In-Reply-To: <20171019002257.27646-1-christian@paral.in>
+References: <20171019002257.27646-1-christian@paral.in>
+Message-ID: <ff021239-a980-ef2c-1c62-393b324d87a6@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+ Hi Christian,
 
-On Tue, 17 Oct 2017 20:07:11 -0400, Adam Duskett wrote:
-> Remove patches that has been merged/updated upstream
-> 
-> 0001-fix-building-shared-libs.patch:
-> CmakeLists packages are rewritten.
-> 
-> 0002-add-support-for-tz-package:
-> https://github.com/FreeRDP/FreeRDP/commit/dd93fd2b3de7bef3f4faebfe04448344a0a5ab88
-> 
-> 0003-add-missing-define.patch:
-> https://github.com/FreeRDP/FreeRDP/commit/656b3be02d22a52957903e3c89660ffb0247307b
-> 
-> 0004-ffmpeg30.patch:
-> https://github.com/FreeRDP/FreeRDP/commit/b7b66968f93f6ce75dd06d12638e14029bf3717b
-> 
-> Also add sha256sum for license file.
-> 
-> Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
-> ---
->  .../freerdp/0001-fix-building-shared-libs.patch    | 26 --------
->  .../freerdp/0002-add-support-for-tz-package.patch  | 30 ---------
->  package/freerdp/0003-add-missing-define.patch      | 44 -------------
->  package/freerdp/0004-ffmpeg30.patch                | 74 ----------------------
->  package/freerdp/freerdp.hash                       |  3 +-
->  package/freerdp/freerdp.mk                         |  2 +-
->  6 files changed, 3 insertions(+), 176 deletions(-)
->  delete mode 100644 package/freerdp/0001-fix-building-shared-libs.patch
->  delete mode 100644 package/freerdp/0002-add-support-for-tz-package.patch
->  delete mode 100644 package/freerdp/0003-add-missing-define.patch
->  delete mode 100644 package/freerdp/0004-ffmpeg30.patch
+ We were about to apply but then we thought:
 
-Applied to master, thanks.
+On 19-10-17 02:22, Christian Stewart wrote:
+> +config BR2_PACKAGE_DUMB_INIT_STATIC
+> +	bool "build static"
+> +	help
+> +	  Enables static compilation for dumb-init.
 
-Thomas
+ Is it really useful to have this as an option? In practice you'll always want
+to link statically, no?
+
+ If you're OK with this I can remove the option while applying, no need to
+respin just for this.
+
+ Regards,
+ Arnout
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
