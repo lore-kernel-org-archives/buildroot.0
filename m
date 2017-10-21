@@ -1,39 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 21 Oct 2017 21:28:13 +0200
-Subject: [Buildroot] [git commit] openssl: introduce
-	BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL
-Message-ID: <20171021192125.55BBF804F1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] wpa_supplicant: supports only the real
+	OpenSSL, not LibreSSL
+Message-ID: <20171021192125.C4A5D81112@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=123e0c9fefcf53641b8e80254929d485a1783f36
+commit: https://git.buildroot.net/buildroot/commit/?id=346483306d896828fd05cd45b280027e8736b779
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Some packages that use openssl are not compatible with libressl, only
-with the real openssl (known as libopenssl in Buildroot). So before we
-add libressl as a provider for the openssl virtual package, we
-introduce a BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL hidden option that
-packages incompatible with LibreSSL will be able to select.
-
-This will allow packages that need OpenSSL to continue using "select",
-without having to change to using "depends on" dependencies.
+wpa_supplicant will not build with LibreSSL without patches, so let's
+support only OpenSSL.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/openssl/Config.in | 3 +++
- 1 file changed, 3 insertions(+)
+ package/wpa_supplicant/wpa_supplicant.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/openssl/Config.in b/package/openssl/Config.in
-index 6cb469a..b8d106f 100644
---- a/package/openssl/Config.in
-+++ b/package/openssl/Config.in
-@@ -1,3 +1,6 @@
-+config BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL
-+	bool
-+
- config BR2_PACKAGE_OPENSSL
- 	bool "openssl support"
- 	select BR2_PACKAGE_HAS_OPENSSL
+diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
+index da757aa..75ecbaa 100644
+--- a/package/wpa_supplicant/wpa_supplicant.mk
++++ b/package/wpa_supplicant/wpa_supplicant.mk
+@@ -97,8 +97,8 @@ WPA_SUPPLICANT_CONFIG_ENABLE += CONFIG_WPS
+ endif
+ 
+ # Try to use openssl if it's already available
+-ifeq ($(BR2_PACKAGE_OPENSSL),y)
+-WPA_SUPPLICANT_DEPENDENCIES += openssl
++ifeq ($(BR2_PACKAGE_LIBOPENSSL),y)
++WPA_SUPPLICANT_DEPENDENCIES += libopenssl
+ WPA_SUPPLICANT_LIBS += $(if $(BR2_STATIC_LIBS),-lcrypto -lz)
+ WPA_SUPPLICANT_CONFIG_EDITS += 's/\#\(CONFIG_TLS=openssl\)/\1/'
+ else
