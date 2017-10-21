@@ -1,41 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 21 Oct 2017 10:01:59 +0200
-Subject: [Buildroot] [git commit] libuv: bump to version 1.15.0
-Message-ID: <20171021080214.6FC5180286@busybox.osuosl.org>
+Date: Sat, 21 Oct 2017 10:00:52 +0200
+Subject: [Buildroot] [git commit] setools: change sepol library directory
+Message-ID: <20171021080214.560B880407@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dadc24c0ac8b34ffff9d0840e9c4e40278db1e5a
+commit: https://git.buildroot.net/buildroot/commit/?id=b91d77892b3b226c02a2af691766407e5fe109a3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+setools currently points the libsepol library directory to
+$(STAGING_DIR)/lib/ when it should be $(STAGING_DIR)/usr/lib
+
+Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
+Tested-by: Matt Weber <matthew.weber@rockwellcollins.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libuv/libuv.hash | 2 +-
- package/libuv/libuv.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/setools/setools.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/libuv/libuv.hash b/package/libuv/libuv.hash
-index ff10f70..5b29640 100644
---- a/package/libuv/libuv.hash
-+++ b/package/libuv/libuv.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 82fbbb0eaab4adcf8ed513d3b777c8e02ed2e77aae265baf6bd2d68cb84bc9e3  libuv-v1.14.1.tar.gz
-+sha256  17afc94ec307be28fe8d4316679171219770df4f993905a79643c7583e106489  libuv-v1.15.0.tar.gz
-diff --git a/package/libuv/libuv.mk b/package/libuv/libuv.mk
-index 563d010..504f621 100644
---- a/package/libuv/libuv.mk
-+++ b/package/libuv/libuv.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBUV_VERSION = v1.14.1
-+LIBUV_VERSION = v1.15.0
- LIBUV_SITE = $(call github,libuv,libuv,$(LIBUV_VERSION))
- LIBUV_DEPENDENCIES = host-pkgconf
- LIBUV_INSTALL_STAGING = YES
+diff --git a/package/setools/setools.mk b/package/setools/setools.mk
+index 80d5823..8b93ccf 100644
+--- a/package/setools/setools.mk
++++ b/package/setools/setools.mk
+@@ -24,7 +24,7 @@ endif
+ define SETOOLS_FIX_SETUP
+ 	# By default, setup.py will look for libsepol.a in the host machines
+ 	# /usr/lib directory. This needs to be changed to the staging directory.
+-	$(SED) "s at base_lib_dirs =.*@base_lib_dirs = ['$(STAGING_DIR)/lib']@g" \
++	$(SED) "s at base_lib_dirs =.*@base_lib_dirs = ['$(STAGING_DIR)/usr/lib']@g" \
+ 		$(@D)/setup.py
+ endef
+ SETOOLS_POST_PATCH_HOOKS += SETOOLS_FIX_SETUP
