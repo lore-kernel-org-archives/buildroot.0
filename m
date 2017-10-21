@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 21 Oct 2017 14:24:34 +0200
-Subject: [Buildroot] [PATCH v2 1/1] glibmm: bump required gcc version to
- 4.9
-In-Reply-To: <20171019214326.5125-1-Adamduskett@outlook.com>
-References: <20171019214326.5125-1-Adamduskett@outlook.com>
-Message-ID: <20171021142434.4bd5a377@windsurf>
+Date: Sat, 21 Oct 2017 14:24:53 +0200
+Subject: [Buildroot] [PATCH 1/1] softether: bump to v4.22-9634-beta
+In-Reply-To: <20171018000703.29939-1-Adamduskett@outlook.com>
+References: <20171018000703.29939-1-Adamduskett@outlook.com>
+Message-ID: <20171021142453.1329b807@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,15 +12,16 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 19 Oct 2017 17:43:26 -0400, Adam Duskett wrote:
+On Tue, 17 Oct 2017 20:07:03 -0400, Adam Duskett wrote:
+> Also add a sha256sum for the license file.
+> 
 > Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
 > ---
-> Changes v1 -> v2:
->   - Fixed comment in Config.in (Thomas)
->   - Updated dependencies on packages that depend on glibmm. (Thomas)
+>  package/softether/softether.hash | 3 ++-
+>  package/softether/softether.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 2 deletions(-)
 
-You forgot the reverse dependencies of the reverse dependencies, i.e
-pulseview. I've fixed that and applied. Thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
