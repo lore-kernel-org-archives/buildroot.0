@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 21 Oct 2017 21:51:07 +0200
-Subject: [Buildroot] [RFC v2 1/4] package/go: fixing crosscompilation
- settings
-In-Reply-To: <1508173728-29181-1-git-send-email-angelo.compagnucci@gmail.com>
+Date: Sat, 21 Oct 2017 21:55:01 +0200
+Subject: [Buildroot] [RFC v2 2/4] package/pkg-golang: new package
+ infrastructure
+In-Reply-To: <1508173728-29181-2-git-send-email-angelo.compagnucci@gmail.com>
 References: <1508173728-29181-1-git-send-email-angelo.compagnucci@gmail.com>
-Message-ID: <20171021215107.1e4fa5e2@windsurf>
+ <1508173728-29181-2-git-send-email-angelo.compagnucci@gmail.com>
+Message-ID: <20171021215501.3b3e269f@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,23 +14,46 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 16 Oct 2017 19:08:45 +0200, Angelo Compagnucci wrote:
-> This patch fixes a bug with the BR2_TOOLCHAIN_HAS_THREADS variable
-> handling which causes CGO_ENABLED to be always 0.
-> 
-> Furthermore, it fixes the cross compilation options for the go compiler:
-> setting CGO_ENABLED should be done only for the target compiler not the
-> host one.
+On Mon, 16 Oct 2017 19:08:46 +0200, Angelo Compagnucci wrote:
+> This patch adds a new infrastructure for golang based packages.
 > 
 > Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-> ---
->  package/go/go.mk | 14 ++++++++------
->  1 file changed, 8 insertions(+), 6 deletions(-)
 
-Thanks applied the patch, with Christian's Acked-by.
+As Christian said, it seems that this infrastructure isn't "general"
+enough to really be useful. We would to see it applied to several
+packages and see that there is a real benefit to several packages to
+apply it.
 
-Thomas
+So I'd be happy to take a go package infrastructure, but it needs to be
+usable by more than one package in a useful way.
+
+> +# Target packages need the Go compiler on the host.
+> +$(2)_DEPENDENCIES += host-go
+> +
+> +#
+> +# go install command doesn't work well when cross compilation is enabled,
+> +# we set the executable output of the compilation to a specific location.
+> +# We set this variable here to be used by packages if needed.
+> +#
+> +$(2)_EXECUTABLE = $$(@D)/gopath/bin/$(1)
+
+This seems to make the assumption that a given package can only install
+a single executable, and that this executable is named after the
+package. It is true for flannel, but what about other Go packages ?
+
+> +# Source files in Go should be uncompressed in a precise folder in the
+> +# hiearchy of GOPATH. It usually resolves around domain/vendor/software.
+> +#
+> +$(1)_src_path ?= $$(call domain,$($(2)_SITE))/$$(firstword $$(subst /, ,$$(call notdomain,$($(2)_SITE))))
+> +$(2)_SRC_PATH  = $$(@D)/gopath/src/$$($(1)_src_path)/$(1)
+
+We don't use lower-case variables in Buildroot, especially if there is
+a variable with the same name upper-case.
+
+Best regards,
+
+Thomas Petazzoni
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
