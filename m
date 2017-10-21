@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 21 Oct 2017 09:44:05 +0200
-Subject: [Buildroot] Autobuild.b.o status
-In-Reply-To: <87vaj9c9cd.fsf@dell.be.48ers.dk>
-References: <20171021080444.648fcfa1@windsurf>
- <87vaj9c9cd.fsf@dell.be.48ers.dk>
-Message-ID: <20171021094405.300e1357@windsurf>
+Date: Sat, 21 Oct 2017 09:51:08 +0200
+Subject: [Buildroot] [V2 1/1] package/strongswan: Install libraries to
+ /usr/lib
+In-Reply-To: <1504192688-56951-1-git-send-email-sam.voss@rockwellcollins.com>
+References: <1504192688-56951-1-git-send-email-sam.voss@rockwellcollins.com>
+Message-ID: <20171021095108.0ea87545@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,24 +13,23 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 21 Oct 2017 08:18:26 +0200, Peter Korsgaard wrote:
-
->  > Due to the size of the data involved in the autobuilders (gigabytes of
->  > logs), I never bothered doing backups, so effectively the history of
->  > build results is lost. Retrospectively, now that I realize that it
->  > means all build result URLs that we embed in the commit logs are
->  > broken, I think making a back up of those results does make sense.  
+On Thu, 31 Aug 2017 10:18:08 -0500, Sam Voss wrote:
+> Install strongswan ipsec libraries into /usr/lib instead of
+> /usr/lib/ipsec in an effort to not need a custom RPATH for this package.
 > 
-> Out of interest, how many gigabytes are we talking about approx?
+> Signed-off-by: Sam Voss <sam.voss@rockwellcollins.com>
 
-Now that the data is lost, I obviously don't have numbers anymore, but
-it was in the order of a few tens of gigabytes.
+I think you said that the RPATH to /usr/lib/ipsec was being stripped
+from the Strongswan binary, therefore causing a runtime failure.
 
-Right now, we have 175 results and it's 56 MB of log/configs (i.e not
-counting the MySQL database size). I think we had 200.000 build
-results, so that would mean ~64 GB of data.
+However, I did a test build, and I do see /usr/lib/ipsec kept in the
+RPATH:
 
-An ASCII dump of the SQL database right now (with 175 results) is 64 MB.
+ 0x0000001d (RUNPATH)                    Library runpath: [/usr/lib/ipsec]
+
+So, even though installing the libraries in /usr/lib is indeed better
+for consistency, I'd like to understand why you had an issue running
+the Strongswan program.
 
 Best regards,
 
