@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 21 Oct 2017 11:47:00 +0200
-Subject: [Buildroot] [PATCH 1/1] qemu: bump to 2.10.1
-In-Reply-To: <20171019151444.2520-1-Adamduskett@outlook.com>
-References: <20171019151444.2520-1-Adamduskett@outlook.com>
-Message-ID: <20171021114700.4def69b7@windsurf>
+Date: Sat, 21 Oct 2017 11:47:35 +0200
+Subject: [Buildroot] [V2 1/3] prosody: refactor with PROSODY_CONF_OPTS
+ variable
+In-Reply-To: <20171018164650.514-1-francois.perrad@gadz.org>
+References: <20171018164650.514-1-francois.perrad@gadz.org>
+Message-ID: <20171021114735.33046964@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,16 +13,14 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 19 Oct 2017 11:14:44 -0400, Adam Duskett wrote:
-> Also add sha256sums for license files.
-> 
-> Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
+On Wed, 18 Oct 2017 18:46:48 +0200, Francois Perrad wrote:
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 > ---
->  package/qemu/qemu.hash | 4 +++-
->  package/qemu/qemu.mk   | 2 +-
->  2 files changed, 4 insertions(+), 2 deletions(-)
+>  package/prosody/prosody.mk | 19 ++++++++++---------
+>  1 file changed, 10 insertions(+), 9 deletions(-)
 
-Applied to master, thanks.
+Applied to master after re-adding TARGET_CONFIGURE_OPTS in the
+environment. Thanks!
 
 Thomas
 -- 
