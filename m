@@ -1,39 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 21 Oct 2017 21:20:30 +0200
-Subject: [Buildroot] [PATCH 1/1] package/x11r7/xlib_libXfont: bump
- version to 1.5.3
-In-Reply-To: <20171021175353.10854-1-bernd.kuhls@t-online.de>
-References: <20171021175353.10854-1-bernd.kuhls@t-online.de>
-Message-ID: <20171021212030.2bbcdd12@windsurf>
+Date: Sat, 21 Oct 2017 21:20:39 +0200
+Subject: [Buildroot] [git commit] package/tvheadend: bump version
+Message-ID: <20171021191325.8B8AA8110E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=42505e7a1d2a799aca618bb176175893e3fdf371
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 21 Oct 2017 19:53:53 +0200, Bernd Kuhls wrote:
-> Added all hashes provided by upstream.
-> 
-> Removed patches applied upstream:
-> https://cgit.freedesktop.org/xorg/lib/libXfont/commit/?h=libXfont-1.5-branch&id=a2a5fa591762b430037e33f1df55b460550ab406
-> https://cgit.freedesktop.org/xorg/lib/libXfont/commit/?h=libXfont-1.5-branch&id=3b08934dca75e4c559db7d83797bc3d365c2a50a
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  ...nd-of-string-in-PatternMatch-CVE-2017-137.patch | 34 --------------
->  ...rties-Check-string-boundaries-CVE-2017-13.patch | 52 ----------------------
->  package/x11r7/xlib_libXfont/xlib_libXfont.hash     |  7 ++-
->  package/x11r7/xlib_libXfont/xlib_libXfont.mk       |  2 +-
->  4 files changed, 6 insertions(+), 89 deletions(-)
->  delete mode 100644 package/x11r7/xlib_libXfont/0001-Check-for-end-of-string-in-PatternMatch-CVE-2017-137.patch
->  delete mode 100644 package/x11r7/xlib_libXfont/0002-pcfGetProperties-Check-string-boundaries-CVE-2017-13.patch
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/tvheadend/tvheadend.hash | 2 +-
+ package/tvheadend/tvheadend.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/tvheadend/tvheadend.hash b/package/tvheadend/tvheadend.hash
+index 515c36a..f9fd385 100644
+--- a/package/tvheadend/tvheadend.hash
++++ b/package/tvheadend/tvheadend.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 d61a6e45d0aef2370885be4c58ed95eaa36b2ba1d8fbb75f7759ddc08e020487  tvheadend-0d1cd06fb237504123a08de84afc25d73fa14ba8.tar.gz
++sha256 7ff9f6a583d7e288c69eb8bfbd628e630e85252e04a8394666cc3c9f9b785df3  tvheadend-a234e2ff6d140e6ffceb7057bf18a8fdd927a5ac.tar.gz
+diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
+index 3eb9161..88f9869 100644
+--- a/package/tvheadend/tvheadend.mk
++++ b/package/tvheadend/tvheadend.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TVHEADEND_VERSION = 0d1cd06fb237504123a08de84afc25d73fa14ba8
++TVHEADEND_VERSION = a234e2ff6d140e6ffceb7057bf18a8fdd927a5ac
+ TVHEADEND_SITE = $(call github,tvheadend,tvheadend,$(TVHEADEND_VERSION))
+ TVHEADEND_LICENSE = GPL-3.0+
+ TVHEADEND_LICENSE_FILES = LICENSE.md
