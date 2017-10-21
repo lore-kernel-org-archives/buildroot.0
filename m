@@ -1,60 +1,63 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 21 Oct 2017 12:39:02 +0200
-Subject: [Buildroot] [V2 2/3] prosody: bump to version 0.10.0
-In-Reply-To: <20171018164650.514-2-francois.perrad@gadz.org>
-References: <20171018164650.514-1-francois.perrad@gadz.org>
- <20171018164650.514-2-francois.perrad@gadz.org>
-Message-ID: <20171021123902.3ba3ecf9@windsurf>
+Date: Sat, 21 Oct 2017 12:39:42 +0200
+Subject: [Buildroot] [git commit] webkitgtk: security bump to version 2.18.1
+Message-ID: <20171021104922.636698102B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=6d623e72770534c8e40e5afd7aa8fb77e49d1974
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 18 Oct 2017 18:46:49 +0200, Francois Perrad wrote:
-> This version is not restricted to Lua 5.1.
-> The configure script try to run lua, so it needs a host lua.
-> 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+This is a maintenance release of the current stable WebKitGTK+ version,
+which contains bugfixes (many of them related to rendering, plus one
+important fix for touch input) and many security fixes.
 
-This fails to build with the following configuration:
+Release notes:
 
-BR2_arm=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2017.05-1078-g95b1dae.tar.bz2"
-BR2_TOOLCHAIN_EXTERNAL_GCC_4_9=y
-BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_10=y
-BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
-# BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
-BR2_TOOLCHAIN_EXTERNAL_CXX=y
-BR2_INIT_NONE=y
-BR2_SYSTEM_BIN_SH_NONE=y
-# BR2_PACKAGE_BUSYBOX is not set
-BR2_PACKAGE_LUA=y
-BR2_PACKAGE_LUA_5_1=y
-BR2_PACKAGE_PROSODY=y
-# BR2_TARGET_ROOTFS_TAR is not set
+    https://webkitgtk.org/2017/10/18/webkitgtk2.18.1-released.html
 
-With this failure:
+Fixes CVE-2017-7081, CVE-2017-7087, CVE-2017-7089, CVE-2017-7090,
+CVE-2017-7091, CVE-2017-7092, CVE-2017-7093, CVE-2017-7094,
+CVE-2017-7095, CVE-2017-7096, CVE-2017-7098, CVE-2017-7099,
+CVE-2017-7100, CVE-2017-7102, CVE-2017-7104, CVE-2017-7107,
+CVE-2017-7109, CVE-2017-7111, CVE-2017-7117, CVE-2017-7120,
+CVE-2017-7142:
 
-table.c: In function ?Lpack?:
-table.c:14:2: error: ?for? loop initial declarations are only allowed in C99 or C11 mode
-  for(int arg = n_args; arg >= 1; arg--) {
-  ^
-table.c:14:2: note: use option -std=c99, -std=gnu99, -std=c11 or -std=gnu11 to compile your code
-make[3]: *** [<builtin>: table.o] Error 1
-make[3]: *** Waiting for unfinished jobs....
-rm net.o encodings.o pposix.o hashes.o signal.o
-make[2]: *** [Makefile:25: all] Error 2
+    https://webkitgtk.org/security/WSA-2017-0008.html
 
-Best regards,
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/webkitgtk/webkitgtk.hash | 8 ++++----
+ package/webkitgtk/webkitgtk.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-Thomas Petazzoni
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
+index c7a87f8..f83bd08 100644
+--- a/package/webkitgtk/webkitgtk.hash
++++ b/package/webkitgtk/webkitgtk.hash
+@@ -1,4 +1,4 @@
+-# From https://webkitgtk.org/releases/webkitgtk-2.18.0.tar.xz.sums
+-md5 10d86dd5a5b68875654cc38af139f382 webkitgtk-2.18.0.tar.xz
+-sha1 e4d6cc7cff8729aa5ae6c17e10ed5ddf31048983 webkitgtk-2.18.0.tar.xz
+-sha256 b583e46a3de36a3e80ba33b084ead60512a2046aca01ff61e50e519436e5038d webkitgtk-2.18.0.tar.xz
++# From https://webkitgtk.org/releases/webkitgtk-2.18.1.tar.xz.sums
++md5 951a6082ada2f7d0292d3251a3f9532b webkitgtk-2.18.1.tar.xz
++sha1 5054dd6b8afdc6e98b947e361011d6dca6da74e2 webkitgtk-2.18.1.tar.xz
++sha256 9cdb7b302fbc8a2a7e1e783b80391e64f8b12d70d6ebad4eb756dd59bf3ed795 webkitgtk-2.18.1.tar.xz
+diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
+index 7cdf28c..55c2dd8 100644
+--- a/package/webkitgtk/webkitgtk.mk
++++ b/package/webkitgtk/webkitgtk.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WEBKITGTK_VERSION = 2.18.0
++WEBKITGTK_VERSION = 2.18.1
+ WEBKITGTK_SITE = http://www.webkitgtk.org/releases
+ WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
+ WEBKITGTK_INSTALL_STAGING = YES
