@@ -1,72 +1,39 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sat, 21 Oct 2017 19:57:41 +0200
-Subject: [Buildroot] [PATCH 1/1] package/openjpeg: bump version to 2.3.0
-In-Reply-To: <20171021195237.7dd23f8d@gmx.net>
-References: <20171015202717.22211-1-bernd.kuhls@t-online.de>
- <20171021175958.56a34929@windsurf>
- <CALdGskJxEYJ-kpm_Seprhk11fQKVoCxv3TLT8_2DTd7K6j99tQ@mail.gmail.com>
- <20171021190120.2652d095@windsurf>
- <20171021195237.7dd23f8d@gmx.net>
-Message-ID: <20171021195741.2333df85@gmx.net>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 21 Oct 2017 20:02:51 +0200
+Subject: [Buildroot] [PATCH 1/1] package/tvheadend: bump version
+Message-ID: <20171021180251.9170-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas, Olivier,
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/tvheadend/tvheadend.hash | 2 +-
+ package/tvheadend/tvheadend.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On Sat, 21 Oct 2017 19:52:37 +0200, Peter Seiderer <ps.report@gmx.net> wrote:
-
-> Hello Thomas, Olivier,
-> 
-> On Sat, 21 Oct 2017 19:01:20 +0200, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
-> 
-> > Hello,
-> > 
-> > On Sat, 21 Oct 2017 18:58:33 +0200, Olivier Schonken wrote:
-> >   
-> > > Looks like it is looking for openjpeg2.2 headers, should be changed to
-> > > openjpeg-2.3
-> > > 
-> > > make[5]: Entering directory
-> > > `/usr/lfs/v0/rc-buildroot-test/scripts/instance-1/output/build/gst1-plugins-bad-1.12.3/ext/srtp'
-> > >   CC       libgstsrtp_la-gstsrtp.lo
-> > > In file included from gstopenjpegdec.h:29:0,
-> > >                  from gstopenjpegdec.c:27:
-> > > gstopenjpeg.h:42:37: fatal error: openjpeg-2.2/openjpeg.h: No such
-> > > file or directory
-> > >  #  include <openjpeg-2.2/openjpeg.h>    
-> > 
-> > Will you send a patch? :-)  
-> 
-> There is a upstream patch handling this error 'gst-plugins-bad: openjpeg:
-> Support building with openjpeg 2.3' ([1]), maybe worth a try?
->
-
-And the actual ones are
-  - 'gst-plugins-bad: Revert "openjpeg: Support building with openjpeg 2.3"' ([2]) 
-  - 'gst-plugins-bad: openjpeg: Remove compatibility with openjpeg 2.0' ([3])
-  - 'gst-plugins-bad: openjpeg: Support building with openjpeg 2.3, simpler' ([4])
-
-Regards,
-Peter
-
-[2] https://lists.freedesktop.org/archives/gstreamer-commits/2017-October/103157.html
-[3] https://lists.freedesktop.org/archives/gstreamer-commits/2017-October/103158.html
-[4] https://lists.freedesktop.org/archives/gstreamer-commits/2017-October/103159.html
-
-> Regards,
-> Peter
-> 
-> [1] https://lists.freedesktop.org/archives/gstreamer-commits/2017-October/103076.html
-> 
-> > 
-> > Thanks!
-> > 
-> > Thomas  
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+diff --git a/package/tvheadend/tvheadend.hash b/package/tvheadend/tvheadend.hash
+index 515c36ab99..f9fd385e9b 100644
+--- a/package/tvheadend/tvheadend.hash
++++ b/package/tvheadend/tvheadend.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 d61a6e45d0aef2370885be4c58ed95eaa36b2ba1d8fbb75f7759ddc08e020487  tvheadend-0d1cd06fb237504123a08de84afc25d73fa14ba8.tar.gz
++sha256 7ff9f6a583d7e288c69eb8bfbd628e630e85252e04a8394666cc3c9f9b785df3  tvheadend-a234e2ff6d140e6ffceb7057bf18a8fdd927a5ac.tar.gz
+diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
+index 3eb9161a46..88f9869fa6 100644
+--- a/package/tvheadend/tvheadend.mk
++++ b/package/tvheadend/tvheadend.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TVHEADEND_VERSION = 0d1cd06fb237504123a08de84afc25d73fa14ba8
++TVHEADEND_VERSION = a234e2ff6d140e6ffceb7057bf18a8fdd927a5ac
+ TVHEADEND_SITE = $(call github,tvheadend,tvheadend,$(TVHEADEND_VERSION))
+ TVHEADEND_LICENSE = GPL-3.0+
+ TVHEADEND_LICENSE_FILES = LICENSE.md
+-- 
+2.11.0
