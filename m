@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 21 Oct 2017 15:29:37 +0200
-Subject: [Buildroot] [PATCH 1/1] boost: bump to 1.65.1
-In-Reply-To: <20171017204407.27704-1-Adamduskett@outlook.com>
-References: <20171017204407.27704-1-Adamduskett@outlook.com>
-Message-ID: <20171021152937.438dfae9@windsurf>
+Date: Sat, 21 Oct 2017 15:49:02 +0200
+Subject: [Buildroot] [PATCH 02/12] tini: new package
+In-Reply-To: <20171019002257.27646-2-christian@paral.in>
+References: <20171019002257.27646-1-christian@paral.in>
+ <20171019002257.27646-2-christian@paral.in>
+Message-ID: <20171021154902.37edd1b9@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,35 +13,19 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 17 Oct 2017 16:44:07 -0400, Adam Duskett wrote:
-> Other changes:
-> - The coroutine2 library has been removed.  As such it has been removed
->   from the boost.mk file, the boost Config.in file, and a new entry has
->   been added to Config.in.legacy explaining that it has been removed.
-> 
-> - Add LICENSE_1_0.txt sha256sum to boost.hash
-> 
-> Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
-> ---
->  Config.in.legacy         | 6 ++++++
->  package/boost/Config.in  | 4 ----
->  package/boost/boost.hash | 7 +++++--
->  package/boost/boost.mk   | 9 ++++-----
->  4 files changed, 15 insertions(+), 11 deletions(-)
+On Wed, 18 Oct 2017 20:22:47 -0400, Christian Stewart wrote:
 
-Following the comments from the reviewers (thanks to them!), I've:
+> +ifeq ($(BR2_TOOLCHAIN_HAS_SSP),y)
+> +TINI_CFLAGS += -fstack-protector --param=ssp-buffer-size=4
+> +endif
 
- - Reworded the commit log to be correct about what happened to
-   coroutine2
+I don't think we want this. Buildroot already passes -fstack-protector
+globally when BR2_SSP_REGULAR / BR2_SSP_STRONG / BR2_SSP_ALL.
 
- - Removed the Config.in.legacy handling: even though we're removing an
-   option, coroutine2 support is now unconditionally present in Boost,
-   so having legacy handling for this doesn't make much sense.
-
-Applied with those changes. Thanks!
+Best regards,
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
