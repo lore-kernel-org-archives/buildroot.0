@@ -1,9 +1,12 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 21 Oct 2017 21:33:45 +0200
-Subject: [Buildroot] [PATCH 00/13] Turn OpenSSL into a virtual package
-In-Reply-To: <20171018023240.22724-1-Adamduskett@outlook.com>
-References: <20171018023240.22724-1-Adamduskett@outlook.com>
-Message-ID: <20171021213345.3e20e080@windsurf>
+Date: Sat, 21 Oct 2017 21:34:28 +0200
+Subject: [Buildroot] [PATCH v1] gst1-plugins-bad: fix openjpeg-2.3
+ compile failure
+In-Reply-To: <20171021213328.474317e5@gmx.net>
+References: <20171021191617.17358-1-ps.report@gmx.net>
+ <20171021212422.55322cb1@windsurf>
+ <20171021213328.474317e5@gmx.net>
+Message-ID: <20171021213428.303e0e96@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,50 +15,19 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 17 Oct 2017 22:32:27 -0400, Adam Duskett wrote:
+On Sat, 21 Oct 2017 21:33:28 +0200, Peter Seiderer wrote:
 
-> Adam Duskett (13):
->   openssl: new virtual package
->   softether: depend on libopenssl
->   hostapd: add libressl-support.patch
->   ffmpeg: add libressl suport patch
->   mosquitto: add libressl support patch
->   opusfile: add libressl support patch
->   openldap: add libressl support patch
->   heirloom-mailx: add libressl support patch
->   libevent: add libressl support patch
->   wpa_supplicant: add libressl support patch
->   ca-certificates: fix installation against libressl
->   mosquitto: fix building against libressl
->   openssl: add libressl to virtual package
+> > >  ...upport-building-with-openjpeg-2.3-simpler.patch | 134 +++++++++++++++++++++
+> > >  1 file changed, 134 insertions(+)
+> > >  create mode 100644 package/gstreamer1/gst1-plugins-bad/0001-openjpeg-Support-building-with-openjpeg-2.3-simpler.patch    
+> > 
+> > Applied to master, thanks.  
+> 
+> Ups, to fast, I messed up the patch and have just sent a v2 one...
 
-So, we finally applied this series, but with quite a few changes:
+Could you please send a follow-up patch instead?
 
- - We were not happy with carrying all those patches to make those
-   packages compatible with LibreSSL, so instead we made them depend on
-   libopenssl only.
-
- - For heirloom-mailx, we kept the patch because it looks acceptable
-   upstream. Could you submit it upstream, please?
-
- - For softether, switching to a "depends on" was not acceptable, as it
-   would break existing defconfigs. So instead, we introduced a
-   BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL hidden boolean that tells the
-   openssl virtual package that only libopenssl is acceptable as a
-   provider.
-
- - With your series, ca-certificates would not build, because it needs
-   host-openssl, which would be host-libressl, which doesn't exist.
-   However, using host-libressl would mean that all packages that
-   depend on host-openssl would have to be checked. So instead, we
-   defined BR2_PACKAGE_PROVIDES_HOST_OPENSSL to host-libopenssl, which
-   forces host-openssl to always point to host-libopenssl.
-
-With those changes, series applied. Now, it would be helpful to update
-utils/genrandconfig to randomly enable libressl instead of openssl to
-get this situation tested by the autobuilders.
-
-Thanks a lot!
+Thanks,
 
 Thomas
 -- 
