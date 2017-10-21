@@ -1,115 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 21 Oct 2017 11:35:36 +0200
-Subject: [Buildroot] [PATCH 1/1] cups-filters: add new package
- cups-filters 1.17.9
-In-Reply-To: <20171019111502.23419-1-olivier.schonken@gmail.com>
-References: <20171019111502.23419-1-olivier.schonken@gmail.com>
-Message-ID: <20171021113536.08f1ba93@windsurf>
+Date: Sat, 21 Oct 2017 11:36:10 +0200
+Subject: [Buildroot] [git commit] qemu: bump to 2.10.1
+Message-ID: <20171021093917.BACC581148@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=13b02de4649fd9899719d2cdf03530b3d2eb67f6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 19 Oct 2017 13:15:02 +0200, Olivier Schonken wrote:
-> Signed-off-by: Olivier Schonken <olivier.schonken@gmail.com>
-> ---
->  Config.in.legacy                       |  1 +
->  package/Config.in                      |  1 +
->  package/cups-filters/Config.in         | 31 ++++++++++++++
->  package/cups-filters/cups-filters.hash |  2 +
->  package/cups-filters/cups-filters.mk   | 78 ++++++++++++++++++++++++++++++++++
->  5 files changed, 113 insertions(+)
->  create mode 100644 package/cups-filters/Config.in
->  create mode 100644 package/cups-filters/cups-filters.hash
->  create mode 100644 package/cups-filters/cups-filters.mk
+Also add sha256sums for license files.
 
-Thanks for this contribution. Unfortunately, it doesn't build here,
-even after fixing a number of build issues. Dependencies on fontconfig
-and freetype were missing, so I added them. But even with that, the
-build still fails with:
+Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/qemu/qemu.hash | 4 +++-
+ package/qemu/qemu.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
-checking for LIBQPDF... no
-configure: error: Package requirements (libqpdf >= 3.0.2) were not met:
-
-Package libjpeg was not found in the pkg-config search path.
-Perhaps you should add the directory containing `libjpeg.pc'
-to the PKG_CONFIG_PATH environment variable
-Package 'libjpeg', required by 'libqpdf', not found
-
-But libjpeg is installed (as a dependency of qpdf), but it hasn't
-installed any .pc file.
-
-Another minor issue is that you forgot to update the DEVELOPERS file.
-
-> diff --git a/package/cups-filters/Config.in b/package/cups-filters/Config.in
-> new file mode 100644
-> index 0000000000..2fd859a6b1
-> --- /dev/null
-> +++ b/package/cups-filters/Config.in
-> @@ -0,0 +1,31 @@
-> +config BR2_PACKAGE_CUPS_FILTERS
-> +       bool "cups-filters"
-> +       # needs fork()
-
-This entire file is broken: it uses spaces instead of tabs for
-indentation. If possible, try to use ./utils/check-package to check
-this kind of coding style problems.
-
-> +       help
-> +         This project provides backends, filters, and other software that was
-> +         once part of the core CUPS distribution but is no longer maintained
-> +         by Apple Inc. In addition it contains additional filters and software
-> +         developed independently of Apple, especially filters for the PDF-
-> +         centric printing workflow introduced by OpenPrinting and a daemon
-> +         to browse Bonjour broadcasts of remote CUPS printers to make these
-> +         printers available locally and to provide backward compatibility to
-> +         the old CUPS broadcasting and browsing of CUPS 1.5.x and older.
-> +         From CUPS 1.6.0 on, this package is required for using printer drivers
-> +         with CUPS under Linux. With CUPS 1.5.x and earlier this package can be
-> +         used optionally to switch over to PDF-based printing.
-
-Text needs to be wrapped at 72 characters.
-
-> +comment "cups-filters needs a toolchain w/ wchar, C++, threads and dynamic library  support"
-> +       depends on BR2_USE_MMU
-> +       depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR || !BR2_STATIC_LIBS
-> +
-
-Useless empty newline.
-
-> +CUPS_FILTERS_VERSION = 1.17.9
-> +CUPS_FILTERS_SITE = http://openprinting.org/download/cups-filters
-> +CUPS_FILTERS_LICENSE = GPL-2.0, GPL-2.0+, GPL-3.0, GPL-3.0+, LGPL-2, LGPL-2.1+, MIT, BSD-4-Clause
-
-I was hoping to get a description of what is under what license, but
-the list is super long, and it's anyway described very clearly in the
-COPYING file. So for me, what you did is good enough.
-
-> +CUPS_FILTERS_LICENSE_FILES = COPYING
-> +
-> +CUPS_FILTERS_DEPENDENCIES = cups libglib2 lcms2 qpdf
-
-So fontconfig and freetype missing here.
-
-> +
-> +CUPS_FILTERS_CONF_OPTS = --disable-imagefilters \
-> +       --disable-mutool \
-> +       --disable-foomatic \
-> +       --with-cups-config=$(STAGING_DIR)/usr/bin/cups-config \
-> +       --with-sysroot=$(STAGING_DIR) \
-> +       --with-pdftops=pdftops
-
-Please use one tab for indentation, not spaces.
-
-Could you fix those problems, and send an updated version?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/qemu/qemu.hash b/package/qemu/qemu.hash
+index 405d192..db43c9a 100644
+--- a/package/qemu/qemu.hash
++++ b/package/qemu/qemu.hash
+@@ -1,2 +1,4 @@
+ # Locally computed, tarball verified with GPG signature
+-sha256 7b50634d729dcabe4a96d74062832274fa2f4c883e82904f5e6955f801edab54  qemu-2.8.1.1.tar.xz
++sha256 1dd51a908fc68c7d935b0b31fb184c5669bc23b5a1b081816e824714f2a11caa  qemu-2.10.1.tar.xz
++sha256 6f04ae8364d0079a192b14635f4b1da294ce18724c034c39a6a41d1b09df6100  COPYING
++sha256 48ffe9fc7f1d5462dbd19340bc4dd1d8a9e37c61ed535813e614cbe4a5f0d4df  COPYING.LIB
+diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+index 0bf13cd..402ad68 100644
+--- a/package/qemu/qemu.mk
++++ b/package/qemu/qemu.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-QEMU_VERSION = 2.8.1.1
++QEMU_VERSION = 2.10.1
+ QEMU_SOURCE = qemu-$(QEMU_VERSION).tar.xz
+ QEMU_SITE = http://download.qemu.org
+ QEMU_LICENSE = GPL-2.0, LGPL-2.1, MIT, BSD-3-Clause, BSD-2-Clause, Others/BSD-1c
