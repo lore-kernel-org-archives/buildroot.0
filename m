@@ -1,74 +1,169 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 21 Oct 2017 21:12:59 +0200
-Subject: [Buildroot] [PATCH] musl: add upstream security fix for
-	CVE-2017-15650
-Message-ID: <20171021191259.20733-1-peter@korsgaard.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sat, 21 Oct 2017 21:16:17 +0200
+Subject: [Buildroot] [PATCH v1] gst1-plugins-bad: fix openjpeg-2.3 compile
+	failure
+Message-ID: <20171021191617.17358-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From the upstream announcement:
-http://www.openwall.com/lists/oss-security/2017/10/19/5
+Add upstream patch [1], fixes [2]:
 
-Felix Wilhelm has discovered a flaw in the dns response parsing for
-musl libc 1.1.16 that leads to overflow of a stack-based buffer.
-Earlier versions are also affected.
+  In file included from gstopenjpegdec.h:29:0,
+                   from gstopenjpegdec.c:27:
+  gstopenjpeg.h:42:37: fatal error: openjpeg-2.2/openjpeg.h: No such file or directory
+  #  include <openjpeg-2.2/openjpeg.h>
 
-When an application makes a request via getaddrinfo for both IPv4 and
-IPv6 results (AF_UNSPEC), an attacker who controls or can spoof the
-nameservers configured in resolv.conf can reply to both the A and AAAA
-queries with A results. Since A records are smaller than AAAA records,
-it's possible to fit more addresses than the precomputed bound, and a
-buffer overflow occurs.
+[1] https://cgit.freedesktop.org/gstreamer/gst-plugins-bad/commit/?id=bff2d834a4a38f64e555cee3d0144fde6c515acd
+[2] http://autobuild.buildroot.net/results/884/884956af56f63b2634a1984f5ea416075ed87bc8
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- ...ing-callback-enforce-MAXADDRS-to-preclude.patch | 35 ++++++++++++++++++++++
- 1 file changed, 35 insertions(+)
- create mode 100644 package/musl/0003-in-dns-parsing-callback-enforce-MAXADDRS-to-preclude.patch
+ ...upport-building-with-openjpeg-2.3-simpler.patch | 134 +++++++++++++++++++++
+ 1 file changed, 134 insertions(+)
+ create mode 100644 package/gstreamer1/gst1-plugins-bad/0001-openjpeg-Support-building-with-openjpeg-2.3-simpler.patch
 
-diff --git a/package/musl/0003-in-dns-parsing-callback-enforce-MAXADDRS-to-preclude.patch b/package/musl/0003-in-dns-parsing-callback-enforce-MAXADDRS-to-preclude.patch
+diff --git a/package/gstreamer1/gst1-plugins-bad/0001-openjpeg-Support-building-with-openjpeg-2.3-simpler.patch b/package/gstreamer1/gst1-plugins-bad/0001-openjpeg-Support-building-with-openjpeg-2.3-simpler.patch
 new file mode 100644
-index 0000000000..c6b5ef26b4
+index 0000000000..647cf5ac1a
 --- /dev/null
-+++ b/package/musl/0003-in-dns-parsing-callback-enforce-MAXADDRS-to-preclude.patch
-@@ -0,0 +1,35 @@
-+From 45ca5d3fcb6f874bf5ba55d0e9651cef68515395 Mon Sep 17 00:00:00 2001
-+From: Rich Felker <dalias@aerifal.cx>
-+Date: Wed, 18 Oct 2017 14:50:03 -0400
-+Subject: [PATCH] in dns parsing callback, enforce MAXADDRS to preclude
-+ overflow
++++ b/package/gstreamer1/gst1-plugins-bad/0001-openjpeg-Support-building-with-openjpeg-2.3-simpler.patch
+@@ -0,0 +1,134 @@
++From 47923096270ca79f362d3809f387463f6bdc1213 Mon Sep 17 00:00:00 2001
++From: "Jan Alexander Steffens (heftig)" <jan.steffens@gmail.com>
++Date: Thu, 19 Oct 2017 16:36:17 +0200
++Subject: [PATCH] openjpeg: Support building with openjpeg 2.3, simpler
 +
-+MAXADDRS was chosen not to need enforcement, but the logic used to
-+compute it assumes the answers received match the RR types of the
-+queries. specifically, it assumes that only one replu contains A
-+record answers. if the replies to both the A and the AAAA query have
-+their answer sections filled with A records, MAXADDRS can be exceeded
-+and clobber the stack of the calling function.
++OpenJPEG 2.3 installs its headers to /usr/include/openjpeg-2.3. However,
++since libopenjp2.pc seems to provide the right includedir CFLAGS at
++least since version 2.1, instead of adding yet another version check,
++just remove the subdir and the check for 2.2.
 +
-+this bug was found and reported by Felix Wilhelm.
++https://bugzilla.gnome.org/show_bug.cgi?id=788703
 +
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++Upstream: https://cgit.freedesktop.org/gstreamer/gst-plugins-bad/commit/?id=bff2d834a4a38f64e555cee3d0144fde6c515acd
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 +---
-+ src/network/lookup_name.c | 1 +
-+ 1 file changed, 1 insertion(+)
++ configure.ac                  |  5 -----
++ ext/openjpeg/gstopenjpeg.h    |  9 ++++-----
++ ext/openjpeg/gstopenjpegdec.c |  4 ----
++ ext/openjpeg/gstopenjpegenc.c |  4 ----
++ ext/openjpeg/meson.build      | 20 +++++++-------------
++ 5 files changed, 11 insertions(+), 31 deletions(-)
 +
-+diff --git a/src/network/lookup_name.c b/src/network/lookup_name.c
-+index 066be4d5..209c20f0 100644
-+--- a/src/network/lookup_name.c
-++++ b/src/network/lookup_name.c
-+@@ -111,6 +111,7 @@ static int dns_parse_callback(void *c, int rr, const void *data, int len, const
-+ {
-+ 	char tmp[256];
-+ 	struct dpc_ctx *ctx = c;
-++	if (ctx->cnt >= MAXADDRS) return -1;
-+ 	switch (rr) {
-+ 	case RR_A:
-+ 		if (len != 4) return -1;
++diff --git a/configure.ac b/configure.ac
++index 7a8d752..f9727ac 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -2815,11 +2815,6 @@ AG_GST_CHECK_FEATURE(OPENJPEG, [openjpeg library], openjpeg, [
++     AG_GST_PKG_CHECK_MODULES(OPENJPEG_2_1, libopenjp2 >= 2.1)
++     if test x"$HAVE_OPENJPEG_2_1" = x"yes"; then
++       AC_DEFINE([HAVE_OPENJPEG_2_1], 1, [Define if OpenJPEG 2.1 is used])
++-        dnl include paths changed for v2.2
++-        AG_GST_PKG_CHECK_MODULES(OPENJPEG_2_2, libopenjp2 >= 2.2)
++-        if test x"$HAVE_OPENJPEG_2_2" = x"yes"; then
++-          AC_DEFINE([HAVE_OPENJPEG_2_2], 1, [Define if OpenJPEG 2.2 is used])
++-        fi
++     fi
++   else
++     # Fallback to v1.5
++diff --git a/ext/openjpeg/gstopenjpeg.h b/ext/openjpeg/gstopenjpeg.h
++index 52410a4..14e46d4 100644
++--- a/ext/openjpeg/gstopenjpeg.h
+++++ b/ext/openjpeg/gstopenjpeg.h
++@@ -21,8 +21,9 @@
++ #ifndef __GST_OPENJPEG_H__
++ #define __GST_OPENJPEG_H__
++ 
++-#ifdef HAVE_OPENJPEG_1
++ #include <openjpeg.h>
+++
+++#ifdef HAVE_OPENJPEG_1
++ #define OPJ_CLRSPC_UNKNOWN CLRSPC_UNKNOWN
++ #define OPJ_CLRSPC_SRGB CLRSPC_SRGB
++ #define OPJ_CLRSPC_GRAY CLRSPC_GRAY
++@@ -38,10 +39,8 @@
++ #define OPJ_CPRL CPRL
++ #else
++ #include <stdio.h>
++-# if defined(HAVE_OPENJPEG_2_2)
++-#  include <openjpeg-2.2/openjpeg.h>
++-# elif defined(HAVE_OPENJPEG_2_1)
++-#  include <openjpeg-2.1/openjpeg.h>
+++# if defined(HAVE_OPENJPEG_2_1)
+++#  include <openjpeg.h>
++ # else
++ #  include <openjpeg-2.0/openjpeg.h>
++ # endif
++diff --git a/ext/openjpeg/gstopenjpegdec.c b/ext/openjpeg/gstopenjpegdec.c
++index 881769b..e387f19 100644
++--- a/ext/openjpeg/gstopenjpegdec.c
+++++ b/ext/openjpeg/gstopenjpegdec.c
++@@ -1036,11 +1036,7 @@ gst_openjpeg_dec_handle_frame (GstVideoDecoder * decoder,
++   opj_stream_set_write_function (stream, write_fn);
++   opj_stream_set_skip_function (stream, skip_fn);
++   opj_stream_set_seek_function (stream, seek_fn);
++-#ifdef HAVE_OPENJPEG_2_1
++   opj_stream_set_user_data (stream, &mstream, NULL);
++-#else
++-  opj_stream_set_user_data (stream, &mstream);
++-#endif
++   opj_stream_set_user_data_length (stream, mstream.size);
++ 
++   image = NULL;
++diff --git a/ext/openjpeg/gstopenjpegenc.c b/ext/openjpeg/gstopenjpegenc.c
++index 7514a35..1b0bdf8 100644
++--- a/ext/openjpeg/gstopenjpegenc.c
+++++ b/ext/openjpeg/gstopenjpegenc.c
++@@ -958,11 +958,7 @@ gst_openjpeg_enc_handle_frame (GstVideoEncoder * encoder,
++   opj_stream_set_write_function (stream, write_fn);
++   opj_stream_set_skip_function (stream, skip_fn);
++   opj_stream_set_seek_function (stream, seek_fn);
++-#ifdef HAVE_OPENJPEG_2_1
++   opj_stream_set_user_data (stream, &mstream, NULL);
++-#else
++-  opj_stream_set_user_data (stream, &mstream);
++-#endif
++   opj_stream_set_user_data_length (stream, mstream.size);
++ 
++   if (!opj_start_compress (enc, image, stream))
++diff --git a/ext/openjpeg/meson.build b/ext/openjpeg/meson.build
++index 0d97ebb..14b8583 100644
++--- a/ext/openjpeg/meson.build
+++++ b/ext/openjpeg/meson.build
++@@ -6,21 +6,15 @@ openjpeg_sources = [
++ 
++ openjpeg_cargs = []
++ 
++-# Check for 2.2, 2.1, then 2.0
++-openjpeg_dep = dependency('libopenjp2', version : '>=2.2', required : false)
+++# Check for 2.1, then 2.0, then 1.5
+++openjpeg_dep = dependency('libopenjp2', version : '>=2.1', required : false)
++ if openjpeg_dep.found()
++-  openjpeg_cargs += ['-DHAVE_OPENJPEG_2_2', '-DHAVE_OPENJPEG_2_1']
+++  openjpeg_cargs += ['-DHAVE_OPENJPEG_2_1']
++ else
++-  openjpeg_dep = dependency('libopenjp2', version : '>=2.1', required : false)
++-  if openjpeg_dep.found()
++-    openjpeg_cargs += ['-DHAVE_OPENJPEG_2_1']
++-  else
++-    openjpeg_dep = dependency('libopenjp2', required : false)
++-    # Fallback to 1.5
++-    if not openjpeg_dep.found()
++-      openjpeg_dep = dependency('libopenjpeg1', required : false)
++-      openjpeg_cargs += ['-DHAVE_OPENJPEG_1']
++-    endif
+++  openjpeg_dep = dependency('libopenjp2', required : false)
+++  if not openjpeg_dep.found()
+++    openjpeg_dep = dependency('libopenjpeg1', required : false)
+++    openjpeg_cargs += ['-DHAVE_OPENJPEG_1']
++   endif
++ endif
++ 
 +-- 
-+2.11.0
++2.14.2
 +
 -- 
-2.11.0
+2.14.2
