@@ -1,9 +1,9 @@
 From: Alexey Brodkin <alexey.brodkin@gmail.com>
-Date: Sat, 21 Oct 2017 23:49:10 +0300
-Subject: [Buildroot] [PATCH 1/2] mesa3d: Make Etnaviv arch-independent
+Date: Sat, 21 Oct 2017 23:49:11 +0300
+Subject: [Buildroot] [PATCH 2/2] libdrm: Make Etnaviv arch-independent
 In-Reply-To: <1508618951-24632-1-git-send-email-abrodkin@synopsys.com>
 References: <1508618951-24632-1-git-send-email-abrodkin@synopsys.com>
-Message-ID: <1508618951-24632-2-git-send-email-abrodkin@synopsys.com>
+Message-ID: <1508618951-24632-3-git-send-email-abrodkin@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,20 +15,20 @@ thus get rid of nonsense dependency.
 
 Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
 ---
- package/mesa3d/Config.in | 1 -
+ package/libdrm/Config.in | 1 -
  1 file changed, 1 deletion(-)
 
-diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index dd5d0d4385ab..9249b1d71a15 100644
---- a/package/mesa3d/Config.in
-+++ b/package/mesa3d/Config.in
-@@ -56,7 +56,6 @@ comment "Gallium drivers"
+diff --git a/package/libdrm/Config.in b/package/libdrm/Config.in
+index e48246ad785e..581f9219689a 100644
+--- a/package/libdrm/Config.in
++++ b/package/libdrm/Config.in
+@@ -64,7 +64,6 @@ config BR2_PACKAGE_LIBDRM_OMAP
  
- config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV
- 	bool "Gallium Etnaviv driver"
+ config BR2_PACKAGE_LIBDRM_ETNAVIV
+ 	bool "etnaviv (experimental)"
 -	depends on BR2_arm
- 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
- 	select BR2_PACKAGE_LIBDRM_ETNAVIV
- 	select BR2_PACKAGE_MESA3D_OPENGL_EGL
+ 	depends on BR2_PACKAGE_LIBDRM_HAS_ATOMIC
+ 	select BR2_PACKAGE_LIBDRM_ENABLE_ATOMIC
+ 	help
 -- 
 2.7.5
