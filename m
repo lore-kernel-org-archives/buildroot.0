@@ -1,86 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 21 Oct 2017 19:48:30 +0200
-Subject: [Buildroot] [git commit] support/testing: use more recent toolchains
-Message-ID: <20171021174133.AAA7980E58@busybox.osuosl.org>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sat, 21 Oct 2017 19:52:37 +0200
+Subject: [Buildroot] [PATCH 1/1] package/openjpeg: bump version to 2.3.0
+In-Reply-To: <20171021190120.2652d095@windsurf>
+References: <20171015202717.22211-1-bernd.kuhls@t-online.de>
+ <20171021175958.56a34929@windsurf>
+ <CALdGskJxEYJ-kpm_Seprhk11fQKVoCxv3TLT8_2DTd7K6j99tQ@mail.gmail.com>
+ <20171021190120.2652d095@windsurf>
+Message-ID: <20171021195237.7dd23f8d@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=193dfffa834a4cd76bc7b41089bd93d4c37dfc65
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Thomas, Olivier,
 
-With the hard disk crash of autobuild.b.o, we lost old toolchains, so
-use the latest toolchains, which have been restored.
+On Sat, 21 Oct 2017 19:01:20 +0200, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- support/testing/infra/basetest.py                | 5 ++---
- support/testing/tests/fs/test_iso9660.py         | 5 ++---
- support/testing/tests/toolchain/test_external.py | 6 +++---
- 3 files changed, 7 insertions(+), 9 deletions(-)
+> Hello,
+> 
+> On Sat, 21 Oct 2017 18:58:33 +0200, Olivier Schonken wrote:
+> 
+> > Looks like it is looking for openjpeg2.2 headers, should be changed to
+> > openjpeg-2.3
+> > 
+> > make[5]: Entering directory
+> > `/usr/lfs/v0/rc-buildroot-test/scripts/instance-1/output/build/gst1-plugins-bad-1.12.3/ext/srtp'
+> >   CC       libgstsrtp_la-gstsrtp.lo
+> > In file included from gstopenjpegdec.h:29:0,
+> >                  from gstopenjpegdec.c:27:
+> > gstopenjpeg.h:42:37: fatal error: openjpeg-2.2/openjpeg.h: No such
+> > file or directory
+> >  #  include <openjpeg-2.2/openjpeg.h>  
+> 
+> Will you send a patch? :-)
 
-diff --git a/support/testing/infra/basetest.py b/support/testing/infra/basetest.py
-index 5210f0a..7549226 100644
---- a/support/testing/infra/basetest.py
-+++ b/support/testing/infra/basetest.py
-@@ -11,12 +11,11 @@ BASIC_TOOLCHAIN_CONFIG = \
-     BR2_TOOLCHAIN_EXTERNAL=y
-     BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-     BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
--    BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2015.05-1190-g4a48479.tar.bz2"
--    BR2_TOOLCHAIN_EXTERNAL_GCC_4_7=y
-+    BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2017.05-1078-g95b1dae.tar.bz2"
-+    BR2_TOOLCHAIN_EXTERNAL_GCC_4_9=y
-     BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_10=y
-     BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
-     # BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
--    BR2_TOOLCHAIN_EXTERNAL_INET_RPC=y
-     BR2_TOOLCHAIN_EXTERNAL_CXX=y
-     """
- 
-diff --git a/support/testing/tests/fs/test_iso9660.py b/support/testing/tests/fs/test_iso9660.py
-index 41430eb..0cb15ad 100644
---- a/support/testing/tests/fs/test_iso9660.py
-+++ b/support/testing/tests/fs/test_iso9660.py
-@@ -8,12 +8,11 @@ BASIC_CONFIG = \
-     BR2_TOOLCHAIN_EXTERNAL=y
-     BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-     BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
--    BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-i386-pentium4-full-2015.05-496-g85945aa.tar.bz2"
--    BR2_TOOLCHAIN_EXTERNAL_GCC_4_9=y
-+    BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-i386-pentium4-full-2017.05-1078-g95b1dae.tar.bz2"
-+    BR2_TOOLCHAIN_EXTERNAL_GCC_6=y
-     BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_2=y
-     BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
-     # BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
--    BR2_TOOLCHAIN_EXTERNAL_INET_RPC=y
-     BR2_TOOLCHAIN_EXTERNAL_CXX=y
-     BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
-     BR2_TARGET_GENERIC_GETTY_BAUDRATE_115200=y
-diff --git a/support/testing/tests/toolchain/test_external.py b/support/testing/tests/toolchain/test_external.py
-index 072cf00..881d2b0 100644
---- a/support/testing/tests/toolchain/test_external.py
-+++ b/support/testing/tests/toolchain/test_external.py
-@@ -171,9 +171,9 @@ class TestExternalToolchainBuildrootMusl(TestExternalToolchain):
-         BR2_TOOLCHAIN_EXTERNAL=y
-         BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-         BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
--        BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-cortex-a9-musl-2017.05-444-g6c704ba.tar.bz2"
-+        BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-cortex-a9-musl-2017.05-1078-g95b1dae.tar.bz2"
-         BR2_TOOLCHAIN_EXTERNAL_GCC_6=y
--        BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_11=y
-+        BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_12=y
-         BR2_TOOLCHAIN_EXTERNAL_CUSTOM_MUSL=y
-         BR2_TOOLCHAIN_EXTERNAL_CXX=y
-         """
-@@ -222,7 +222,7 @@ class TestExternalToolchainBuildrootuClibc(TestExternalToolchain):
-         BR2_TOOLCHAIN_EXTERNAL=y
-         BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-         BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
--        BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2017.05-444-g6c704ba.tar.bz2"
-+        BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2017.05-1078-g95b1dae.tar.bz2"
-         BR2_TOOLCHAIN_EXTERNAL_GCC_4_9=y
-         BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_10=y
-         BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
+There is a upstream patch handling this error 'gst-plugins-bad: openjpeg:
+Support building with openjpeg 2.3' ([1]), maybe worth a try?
+
+Regards,
+Peter
+
+[1] https://lists.freedesktop.org/archives/gstreamer-commits/2017-October/103076.html
+
+> 
+> Thanks!
+> 
+> Thomas
