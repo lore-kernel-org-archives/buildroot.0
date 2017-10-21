@@ -1,59 +1,44 @@
-From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Sat, 21 Oct 2017 15:03:00 +0300
-Subject: [Buildroot] [PATCH 1/1] webkitgtk: update to version 2.18.1
-In-Reply-To: <20171021130256.5fa12c5a@windsurf>
-References: <20171018230706.1133-1-aperez@igalia.com>
- <20171021130256.5fa12c5a@windsurf>
-Message-ID: <20171021150300.GB4466@momiji>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 21 Oct 2017 13:34:45 +0200
+Subject: [Buildroot] [git commit] softether: bump to v4.22-9634-beta
+Message-ID: <20171021115856.1FA0D80FB8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+commit: https://git.buildroot.net/buildroot/commit/?id=7581e4f4d2de74062c3e2b6e38d27d5aec50855f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 21 Oct 2017 13:02:56 +0200, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
+Also add a sha256sum for the license file.
+
+Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/softether/softether.hash | 3 ++-
+ package/softether/softether.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/package/softether/softether.hash b/package/softether/softether.hash
+index 01de107..ec6e060 100644
+--- a/package/softether/softether.hash
++++ b/package/softether/softether.hash
+@@ -1,2 +1,3 @@
+ # Locally computed
+-sha256 a34dca9bdb940f9384ae50096f6485448ca539c557e36b3a7f6f810831ee5946 softether-e9006faf0c8739147ab97e27fe11c5cdd20ed9e6.tar.gz
++sha256 8e6310d36e579ea07171ce5fcb9ebe31235d218444c4e4836ca6c32aa49c1f93 softether-v4.22-9634-beta.tar.gz
++sha256 7aeb873293fa0e44425dabf68a8e46e26c848fe58efcfd3ac7c90a3386f3edd1 LICENSE
+diff --git a/package/softether/softether.mk b/package/softether/softether.mk
+index 5868438..77ce408 100644
+--- a/package/softether/softether.mk
++++ b/package/softether/softether.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-> On Thu, 19 Oct 2017 02:07:06 +0300, Adrian Perez de Castro wrote:
-> > This is a maintenance release of the current stable WebKitGTK+ version,
-> > which contains bugfixes (many of them related to rendering, plus one
-> > important fix for touch input) and many security fixes.
-> > 
-> > Release notes:
-> > 
-> >     https://webkitgtk.org/2017/10/18/webkitgtk2.18.1-released.html
-> > 
-> > Fixes CVE-2017-7081, CVE-2017-7087, CVE-2017-7089, CVE-2017-7090,
-> > CVE-2017-7091, CVE-2017-7092, CVE-2017-7093, CVE-2017-7094,
-> > CVE-2017-7095, CVE-2017-7096, CVE-2017-7098, CVE-2017-7099,
-> > CVE-2017-7100, CVE-2017-7102, CVE-2017-7104, CVE-2017-7107,
-> > CVE-2017-7109, CVE-2017-7111, CVE-2017-7117, CVE-2017-7120,
-> > CVE-2017-7142:
-> > 
-> >     https://webkitgtk.org/security/WSA-2017-0008.html
-> > 
-> > Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-> > ---
-> >  package/webkitgtk/webkitgtk.hash | 8 ++++----
-> >  package/webkitgtk/webkitgtk.mk   | 2 +-
-> >  2 files changed, 5 insertions(+), 5 deletions(-)
-> 
-> Since the update includes security fixes, I've changed the commit title
-> to "security bump to version ..." so that it's clear there are some
-> security fixes in there.
-
-Thanks! I'll make sure to have ?security? added in the first line of the
-commit next time there's a release that contains security fixes :-)
-
-Have a great Buildroot Developer's Meeting this weekend!
-
---
- Adri?n ?
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: not available
-Type: application/pgp-signature
-Size: 195 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20171021/1826774c/attachment.asc>
+-SOFTETHER_VERSION = e9006faf0c8739147ab97e27fe11c5cdd20ed9e6
++SOFTETHER_VERSION = v4.22-9634-beta
+ SOFTETHER_SITE = $(call github,SoftEtherVPN,SoftEtherVPN,$(SOFTETHER_VERSION))
+ SOFTETHER_LICENSE = GPL-2.0
+ SOFTETHER_LICENSE_FILES = LICENSE
