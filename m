@@ -1,115 +1,86 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 21 Oct 2017 21:28:13 +0200
-Subject: [Buildroot] [git commit] openssl: add libressl as a provider
-Message-ID: <20171021192125.DA3A181112@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] heirloom-mailx: add libressl support patch
+Message-ID: <20171021192125.6243C81110@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=791ceb583b3592621031e4241f12932d09e00a3a
+commit: https://git.buildroot.net/buildroot/commit/?id=9f145e4957fa562ed8df89527433fccd438b3502
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-At this point, libressl can be added to the openssl virtual package.
+heirloom-mailx has two small issues when compiling against LibreSSL:
+  - RAND_egd is used (LibreSSL does not support RAND_egd)
+    Solution: "Guard" the code calling RAND_egd
 
-- Remove the entry package/libressl/Config.in from package/Config.in
-- Remove the file: package/libressl/Config.in
-- Add libressl entry to package/openssl/Config.in
+  - SSLv3_client_method function is used (LibreSSL does not support SSLv3)
+    Solution: "Guard" the code with #ifndef OPENSSL_NO_SSL3
 
 Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in          |  2 --
- package/libressl/Config.in | 20 --------------------
- package/openssl/Config.in  | 24 +++++++++++++++++++++++-
- 3 files changed, 23 insertions(+), 23 deletions(-)
+ .../heirloom-mailx/0002-fix-libressl-support.patch | 54 ++++++++++++++++++++++
+ 1 file changed, 54 insertions(+)
 
-diff --git a/package/Config.in b/package/Config.in
-index 2a2df47..55fe801 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1031,8 +1031,6 @@ menu "Crypto"
- 	source "package/libuecc/Config.in"
- 	source "package/mbedtls/Config.in"
- 	source "package/nettle/Config.in"
--	# libressl is a openssl replacement
--	source "package/libressl/Config.in"
- 	source "package/openssl/Config.in"
- 	source "package/rhash/Config.in"
- 	source "package/tinydtls/Config.in"
-diff --git a/package/libressl/Config.in b/package/libressl/Config.in
-deleted file mode 100644
-index 0a1c9e2..0000000
---- a/package/libressl/Config.in
-+++ /dev/null
-@@ -1,20 +0,0 @@
--config BR2_PACKAGE_LIBRESSL
--	bool "libressl"
--	depends on !BR2_PACKAGE_OPENSSL
--	help
--	  LibreSSL is a version of the TLS/crypto stack forked from
--	  OpenSSL in 2014, with goals of modernizing the codebase,
--	  improving security, and applying best practice development
--	  processes.
--
--	  http://www.libressl.org/
--
--if BR2_PACKAGE_LIBRESSL
--
--config BR2_PACKAGE_LIBRESSL_BIN
--	bool "openssl binary"
--	help
--	  Install the openssl binary to the target file system. This is
--	  a command line tool for doing various cryptographic stuff.
--
--endif
-diff --git a/package/openssl/Config.in b/package/openssl/Config.in
-index b8d106f..df1d117 100644
---- a/package/openssl/Config.in
-+++ b/package/openssl/Config.in
-@@ -13,7 +13,7 @@ choice
- 	prompt "ssl library"
- 	default BR2_PACKAGE_LIBOPENSSL
- 	help
--	  Select OpenSSL.
-+	  Select OpenSSL or LibreSSL.
- 
- config BR2_PACKAGE_LIBOPENSSL
- 	bool "openssl"
-@@ -45,6 +45,27 @@ config BR2_PACKAGE_LIBOPENSSL_ENGINES
- 
- endif
- 
-+config BR2_PACKAGE_LIBRESSL
-+	bool "libressl"
-+	depends on !BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL
-+	help
-+	  LibreSSL is a version of the TLS/crypto stack forked from
-+	  OpenSSL in 2014, with goals of modernizing the codebase,
-+	  improving security, and applying best practice development
-+	  processes.
+diff --git a/package/heirloom-mailx/0002-fix-libressl-support.patch b/package/heirloom-mailx/0002-fix-libressl-support.patch
+new file mode 100644
+index 0000000..0fafa4a
+--- /dev/null
++++ b/package/heirloom-mailx/0002-fix-libressl-support.patch
+@@ -0,0 +1,54 @@
++From aad28d30af6c3a74c522dd61943788e908860c84 Mon Sep 17 00:00:00 2001
++From: Adam Duskett <Adamduskett@outlook.com>
++Date: Fri, 4 Aug 2017 07:22:47 -0400
++Subject: [PATCH] fix libressl support
 +
-+	  http://www.libressl.org/
++heirloom-mailx has two small issues when compiling against LibreSSL:
++  - RAND_egd is used (LibreSSL does not support RAND_egd)
++    Solution: "Guard" the code calling RAND_egd
 +
-+if BR2_PACKAGE_LIBRESSL
++  - SSLv3_client_method function is used (LibreSSL does not support SSLv3)
++    Solution: "Guard" the code with #ifndef OPENSSL_NO_SSL3
 +
-+config BR2_PACKAGE_LIBRESSL_BIN
-+	bool "openssl binary"
-+	help
-+	  Install the openssl binary to the target file system. This is
-+	  a command line tool for doing various cryptographic stuff.
++Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
++---
++ openssl.c | 7 +++++++
++ 1 file changed, 7 insertions(+)
 +
-+endif
++diff --git a/openssl.c b/openssl.c
++index 44fe4e5..c4a1bb7 100644
++--- a/openssl.c
+++++ b/openssl.c
++@@ -137,11 +137,13 @@ ssl_rand_init(void)
++ 
++ 	if ((cp = value("ssl-rand-egd")) != NULL) {
++ 		cp = expand(cp);
+++#ifndef OPENSSL_NO_EGD
++ 		if (RAND_egd(cp) == -1) {
++ 			fprintf(stderr, catgets(catd, CATSET, 245,
++ 				"entropy daemon at \"%s\" not available\n"),
++ 					cp);
++ 		} else
+++#endif
++ 			state = 1;
++ 	} else if ((cp = value("ssl-rand-file")) != NULL) {
++ 		cp = expand(cp);
++@@ -216,10 +218,15 @@ ssl_select_method(const char *uhp)
++ 
++ 	cp = ssl_method_string(uhp);
++ 	if (cp != NULL) {
+++		#ifndef OPENSSL_NO_SSL3
++ 		if (equal(cp, "ssl3"))
++ 			method = SSLv3_client_method();
++ 		else if (equal(cp, "tls1"))
++ 			method = TLSv1_client_method();
+++		#else
+++		if (equal(cp, "tls1"))
+++			method = TLSv1_client_method();
+++		#endif
++ 		else {
++ 			fprintf(stderr, catgets(catd, CATSET, 244,
++ 					"Invalid SSL method \"%s\"\n"), cp);
++-- 
++2.13.3
 +
- endchoice
- 
- config BR2_PACKAGE_HAS_OPENSSL
-@@ -53,6 +74,7 @@ config BR2_PACKAGE_HAS_OPENSSL
- config BR2_PACKAGE_PROVIDES_OPENSSL
- 	string
- 	default "libopenssl"  if BR2_PACKAGE_LIBOPENSSL
-+	default "libressl"  if BR2_PACKAGE_LIBRESSL
- 
- config BR2_PACKAGE_PROVIDES_HOST_OPENSSL
- 	string
