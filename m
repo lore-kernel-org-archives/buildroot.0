@@ -1,49 +1,152 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sat, 21 Oct 2017 19:52:37 +0200
-Subject: [Buildroot] [PATCH 1/1] package/openjpeg: bump version to 2.3.0
-In-Reply-To: <20171021190120.2652d095@windsurf>
-References: <20171015202717.22211-1-bernd.kuhls@t-online.de>
- <20171021175958.56a34929@windsurf>
- <CALdGskJxEYJ-kpm_Seprhk11fQKVoCxv3TLT8_2DTd7K6j99tQ@mail.gmail.com>
- <20171021190120.2652d095@windsurf>
-Message-ID: <20171021195237.7dd23f8d@gmx.net>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 21 Oct 2017 19:53:53 +0200
+Subject: [Buildroot] [PATCH 1/1] package/x11r7/xlib_libXfont: bump version
+	to 1.5.3
+Message-ID: <20171021175353.10854-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas, Olivier,
+Added all hashes provided by upstream.
 
-On Sat, 21 Oct 2017 19:01:20 +0200, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
+Removed patches applied upstream:
+https://cgit.freedesktop.org/xorg/lib/libXfont/commit/?h=libXfont-1.5-branch&id=a2a5fa591762b430037e33f1df55b460550ab406
+https://cgit.freedesktop.org/xorg/lib/libXfont/commit/?h=libXfont-1.5-branch&id=3b08934dca75e4c559db7d83797bc3d365c2a50a
 
-> Hello,
-> 
-> On Sat, 21 Oct 2017 18:58:33 +0200, Olivier Schonken wrote:
-> 
-> > Looks like it is looking for openjpeg2.2 headers, should be changed to
-> > openjpeg-2.3
-> > 
-> > make[5]: Entering directory
-> > `/usr/lfs/v0/rc-buildroot-test/scripts/instance-1/output/build/gst1-plugins-bad-1.12.3/ext/srtp'
-> >   CC       libgstsrtp_la-gstsrtp.lo
-> > In file included from gstopenjpegdec.h:29:0,
-> >                  from gstopenjpegdec.c:27:
-> > gstopenjpeg.h:42:37: fatal error: openjpeg-2.2/openjpeg.h: No such
-> > file or directory
-> >  #  include <openjpeg-2.2/openjpeg.h>  
-> 
-> Will you send a patch? :-)
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ ...nd-of-string-in-PatternMatch-CVE-2017-137.patch | 34 --------------
+ ...rties-Check-string-boundaries-CVE-2017-13.patch | 52 ----------------------
+ package/x11r7/xlib_libXfont/xlib_libXfont.hash     |  7 ++-
+ package/x11r7/xlib_libXfont/xlib_libXfont.mk       |  2 +-
+ 4 files changed, 6 insertions(+), 89 deletions(-)
+ delete mode 100644 package/x11r7/xlib_libXfont/0001-Check-for-end-of-string-in-PatternMatch-CVE-2017-137.patch
+ delete mode 100644 package/x11r7/xlib_libXfont/0002-pcfGetProperties-Check-string-boundaries-CVE-2017-13.patch
 
-There is a upstream patch handling this error 'gst-plugins-bad: openjpeg:
-Support building with openjpeg 2.3' ([1]), maybe worth a try?
-
-Regards,
-Peter
-
-[1] https://lists.freedesktop.org/archives/gstreamer-commits/2017-October/103076.html
-
-> 
-> Thanks!
-> 
-> Thomas
+diff --git a/package/x11r7/xlib_libXfont/0001-Check-for-end-of-string-in-PatternMatch-CVE-2017-137.patch b/package/x11r7/xlib_libXfont/0001-Check-for-end-of-string-in-PatternMatch-CVE-2017-137.patch
+deleted file mode 100644
+index 3795179af1..0000000000
+--- a/package/x11r7/xlib_libXfont/0001-Check-for-end-of-string-in-PatternMatch-CVE-2017-137.patch
++++ /dev/null
+@@ -1,34 +0,0 @@
+-From d1e670a4a8704b8708e493ab6155589bcd570608 Mon Sep 17 00:00:00 2001
+-From: Michal Srb <msrb@suse.com>
+-Date: Thu, 20 Jul 2017 13:38:53 +0200
+-Subject: [PATCH] Check for end of string in PatternMatch (CVE-2017-13720)
+-
+-If a pattern contains '?' character, any character in the string is skipped,
+-even if it is '\0'. The rest of the matching then reads invalid memory.
+-
+-Reviewed-by: Peter Hutterer <peter.hutterer@who-t.net>
+-Signed-off-by: Julien Cristau <jcristau@debian.org>
+-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+----
+- src/fontfile/fontdir.c | 4 +++-
+- 1 file changed, 3 insertions(+), 1 deletion(-)
+-
+-diff --git a/src/fontfile/fontdir.c b/src/fontfile/fontdir.c
+-index 4ce2473..996b7d1 100644
+---- a/src/fontfile/fontdir.c
+-+++ b/src/fontfile/fontdir.c
+-@@ -400,8 +400,10 @@ PatternMatch(char *pat, int patdashes, char *string, int stringdashes)
+- 		}
+- 	    }
+- 	case '?':
+--	    if (*string++ == XK_minus)
+-+	    if ((t = *string++) == XK_minus)
+- 		stringdashes--;
+-+	    if (!t)
+-+		return 0;
+- 	    break;
+- 	case '\0':
+- 	    return (*string == '\0');
+--- 
+-2.11.0
+-
+diff --git a/package/x11r7/xlib_libXfont/0002-pcfGetProperties-Check-string-boundaries-CVE-2017-13.patch b/package/x11r7/xlib_libXfont/0002-pcfGetProperties-Check-string-boundaries-CVE-2017-13.patch
+deleted file mode 100644
+index 709e446efe..0000000000
+--- a/package/x11r7/xlib_libXfont/0002-pcfGetProperties-Check-string-boundaries-CVE-2017-13.patch
++++ /dev/null
+@@ -1,52 +0,0 @@
+-From 672bb944311392e2415b39c0d63b1e1902905bcd Mon Sep 17 00:00:00 2001
+-From: Michal Srb <msrb@suse.com>
+-Date: Thu, 20 Jul 2017 17:05:23 +0200
+-Subject: [PATCH] pcfGetProperties: Check string boundaries (CVE-2017-13722)
+-
+-Without the checks a malformed PCF file can cause the library to make
+-atom from random heap memory that was behind the `strings` buffer.
+-This may crash the process or leak information.
+-
+-Signed-off-by: Julien Cristau <jcristau@debian.org>
+-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+----
+- src/bitmap/pcfread.c | 13 +++++++++++--
+- 1 file changed, 11 insertions(+), 2 deletions(-)
+-
+-diff --git a/src/bitmap/pcfread.c b/src/bitmap/pcfread.c
+-index dab1c44..ae34c28 100644
+---- a/src/bitmap/pcfread.c
+-+++ b/src/bitmap/pcfread.c
+-@@ -45,6 +45,7 @@ from The Open Group.
+- 
+- #include <stdarg.h>
+- #include <stdint.h>
+-+#include <string.h>
+- 
+- void
+- pcfError(const char* message, ...)
+-@@ -311,11 +312,19 @@ pcfGetProperties(FontInfoPtr pFontInfo, FontFilePtr file,
+-     if (IS_EOF(file)) goto Bail;
+-     position += string_size;
+-     for (i = 0; i < nprops; i++) {
+-+	if (props[i].name >= string_size) {
+-+	    pcfError("pcfGetProperties(): String starts out of bounds (%ld/%d)\n", props[i].name, string_size);
+-+	    goto Bail;
+-+	}
+- 	props[i].name = MakeAtom(strings + props[i].name,
+--				 strlen(strings + props[i].name), TRUE);
+-+				 strnlen(strings + props[i].name, string_size - props[i].name), TRUE);
+- 	if (isStringProp[i]) {
+-+	    if (props[i].value >= string_size) {
+-+		pcfError("pcfGetProperties(): String starts out of bounds (%ld/%d)\n", props[i].value, string_size);
+-+		goto Bail;
+-+	    }
+- 	    props[i].value = MakeAtom(strings + props[i].value,
+--				      strlen(strings + props[i].value), TRUE);
+-+				      strnlen(strings + props[i].value, string_size - props[i].value), TRUE);
+- 	}
+-     }
+-     free(strings);
+--- 
+-2.11.0
+-
+diff --git a/package/x11r7/xlib_libXfont/xlib_libXfont.hash b/package/x11r7/xlib_libXfont/xlib_libXfont.hash
+index 6db8339ce4..78700d3657 100644
+--- a/package/x11r7/xlib_libXfont/xlib_libXfont.hash
++++ b/package/x11r7/xlib_libXfont/xlib_libXfont.hash
+@@ -1,2 +1,5 @@
+-# From https://lists.x.org/archives/xorg-announce/2016-August/002702.html
+-sha256 02945ea68da447102f3e6c2b896c1d2061fd115de99404facc2aca3ad7010d71  libXfont-1.5.2.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2017-October/002816.html
++md5 9ba75bf38ba62a6ad52550ab716da9b3  libXfont-1.5.3.tar.bz2
++sha1 628b8ca2207f09324b8926084318a2fa2edb16d1  libXfont-1.5.3.tar.bz2
++sha256 ab85c10fd2683481dfef672a77fe60e6a2039558cbc0e9bf56b5e1df471c93d0  libXfont-1.5.3.tar.bz2
++sha512 e7c8a09c4d174129e5d550194d3c3dc2b4abf797e52fe588c6002920727c52cf33b7db8d07fc69c2987e766d3af2d6ddda72f0c70eb21b135c691c97656a81b4  libXfont-1.5.3.tar.bz2
+diff --git a/package/x11r7/xlib_libXfont/xlib_libXfont.mk b/package/x11r7/xlib_libXfont/xlib_libXfont.mk
+index 422c01d152..13e3b211f3 100644
+--- a/package/x11r7/xlib_libXfont/xlib_libXfont.mk
++++ b/package/x11r7/xlib_libXfont/xlib_libXfont.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XLIB_LIBXFONT_VERSION = 1.5.2
++XLIB_LIBXFONT_VERSION = 1.5.3
+ XLIB_LIBXFONT_SOURCE = libXfont-$(XLIB_LIBXFONT_VERSION).tar.bz2
+ XLIB_LIBXFONT_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBXFONT_LICENSE = MIT
+-- 
+2.11.0
