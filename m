@@ -1,30 +1,21 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 21 Oct 2017 23:11:35 +0200
-Subject: [Buildroot] [PATCH 0/2] Make Etnaviv drivers
- architecture-independent
-In-Reply-To: <1508618951-24632-1-git-send-email-abrodkin@synopsys.com>
-References: <1508618951-24632-1-git-send-email-abrodkin@synopsys.com>
-Message-ID: <20171021231135.059cc459@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 21 Oct 2017 23:12:39 +0200
+Subject: [Buildroot] [PATCH] busybox: add upstream post-1.27.2 httpd fix
+In-Reply-To: <20171021172033.974-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Sat, 21 Oct 2017 19:20:33 +0200")
+References: <20171021172033.974-1-peter@korsgaard.com>
+Message-ID: <87lgk4b3y0.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-On Sat, 21 Oct 2017 23:49:09 +0300, Alexey Brodkin wrote:
-> Vivante GPU could be a part of SoC along with any CPU architecture
-> thus get rid of nonsense dependency.
-> 
-> Alexey Brodkin (2):
->   mesa3d: Make Etnaviv arch-independent
->   libdrm: Make Etnaviv arch-independent
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-Both applied. Thanks!
+Committed, thanks.
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
