@@ -1,60 +1,71 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 21 Oct 2017 21:37:10 +0200
-Subject: [Buildroot] [git commit] raspberrypi: post-image.sh fix gpu_mem
-	option
-Message-ID: <20171021192949.D3E8681022@busybox.osuosl.org>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sat, 21 Oct 2017 21:37:28 +0200
+Subject: [Buildroot] [git commit] qt5base: make harfbuzz support selectable
+Message-ID: <20171021193007.6DCC581102@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d0b055239e10898b87ff8af02f8c4bd14426e3e7
+commit: https://git.buildroot.net/buildroot/commit/?id=e7e71c0124a998893962e5fcc3500206f3b57a59
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The gpu_mem option is not using the proper option argument which causes sed to
-fail.
+If selected use:
 
-	+ case "${arg}" in
-	+ gpu_mem=ome/gportay/output-rpi3-qtwe/images
-	+ sed -e '/^ome/gportay/output-rpi3-qtwe/images=/s,=.*,=ome/gportay/output-rpi3-qtwe/images,' -i /home/gportay/output-rpi3-qtwe/images/rpi-firmware/config.txt
-	sed: -e expression #1, char 8: extra characters after command
-	+ case "${arg}" in
-	+ gpu_mem=ome/gportay/output-rpi3-qtwe/images
-	+ sed -e '/^ome/gportay/output-rpi3-qtwe/images=/s,=.*,=ome/gportay/output-rpi3-qtwe/images,' -i /home/gportay/output-rpi3-qtwe/images/rpi-firmware/config.txt
-	sed: -e expression #1, char 8: extra characters after command
+ - system/buildroot harfbuzz in case __sync for 4 bytes is supported
+ - qt harfbuzz otherwise (using QAtomic instead)
 
-The issue comes from the use of $1 instead of $arg to extract the gpu_mem
-value. $1 is the $(BINARIES_DIR) which leads to a sed expression error.
-
-Also, it adds the error flag to the shell script to prevent from such situation
-and terminate the build in error.
-
-Signed-off-by: Ga??l PORTAY <gael.portay@savoirfairelinux.com>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- board/raspberrypi/post-image.sh | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ package/qt5/qt5base/Config.in  |  8 ++++++++
+ package/qt5/qt5base/qt5base.mk | 16 ++++++++++++++++
+ 2 files changed, 24 insertions(+)
 
-diff --git a/board/raspberrypi/post-image.sh b/board/raspberrypi/post-image.sh
-index a2d6a98..3c6c938 100755
---- a/board/raspberrypi/post-image.sh
-+++ b/board/raspberrypi/post-image.sh
-@@ -1,5 +1,7 @@
- #!/bin/bash
+diff --git a/package/qt5/qt5base/Config.in b/package/qt5/qt5base/Config.in
+index f5de272..dc56474 100644
+--- a/package/qt5/qt5base/Config.in
++++ b/package/qt5/qt5base/Config.in
+@@ -229,6 +229,14 @@ config BR2_PACKAGE_QT5BASE_FONTCONFIG
+ 	  This option enables Fontconfig and Freetype support using
+ 	  the system fontconfig and freetype2 libraries.
  
-+set -e
++config BR2_PACKAGE_QT5BASE_HARFBUZZ
++	bool "harfbuzz support"
++	select BR2_PACKAGE_HARFBUZZ if BR2_TOOLCHAIN_HAS_SYNC_4
++	help
++	  This option enables HarfBuzz support (either system harfbuzz
++	  if the toolchain supports __sync for 4 bytes, or the qt
++	  provided one which avoids this dependency by using QAtomic).
 +
- BOARD_DIR="$(dirname $0)"
- BOARD_NAME="$(basename ${BOARD_DIR})"
- GENIMAGE_CFG="${BOARD_DIR}/genimage-${BOARD_NAME}.cfg"
-@@ -40,7 +42,7 @@ __EOF__
- 		;;
- 		--gpu_mem_256=*|--gpu_mem_512=*|--gpu_mem_1024=*)
- 		# Set GPU memory
--		gpu_mem="${1:2}"
-+		gpu_mem="${arg:2}"
- 		sed -e "/^${gpu_mem%=*}=/s,=.*,=${gpu_mem##*=}," -i "${BINARIES_DIR}/rpi-firmware/config.txt"
- 		;;
- 	esac
+ config BR2_PACKAGE_QT5BASE_GIF
+ 	bool "GIF support"
+ 	help
+diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+index 0ca11a5..1683eda 100644
+--- a/package/qt5/qt5base/qt5base.mk
++++ b/package/qt5/qt5base/qt5base.mk
+@@ -105,6 +105,22 @@ QT5BASE_DEPENDENCIES += freetype
+ else
+ QT5BASE_CONFIGURE_OPTS += -no-gui -no-freetype
+ endif
++
++ifeq ($(BR2_PACKAGE_QT5BASE_HARFBUZZ),y)
++ifeq ($(BR2_TOOLCHAIN_HAS_SYNC_4),y)
++# system harfbuzz in case __sync for 4 bytes is supported
++QT5BASE_CONFIGURE_OPTS += -system-harfbuzz
++QT5BASE_DEPENDENCIES += harfbuzz
++else
++# qt harfbuzz otherwise (using QAtomic instead)
++QT5BASE_CONFIGURE_OPTS += -qt-harfbuzz
++QT5BASE_LICENSE := $(QT5BASE_LICENSE), MIT (harfbuzz)
++QT5BASE_LICENSE_FILES += src/3rdparty/harfbuzz-ng/COPYING
++endif
++else
++QT5BASE_CONFIGURE_OPTS += -no-harfbuzz
++endif
++
+ QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_WIDGETS),-widgets,-no-widgets)
+ # We have to use --enable-linuxfb, otherwise Qt thinks that -linuxfb
+ # is to add a link against the "inuxfb" library.
