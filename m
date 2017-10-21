@@ -1,55 +1,45 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 21 Oct 2017 20:16:09 +0200
-Subject: [Buildroot] [PATCH] .gitignore: ignore output*
-In-Reply-To: <20171021160404.579c29af@windsurf>
-References: <20171021140108.24066-1-gael.portay@savoirfairelinux.com>
- <20171021160404.579c29af@windsurf>
-Message-ID: <4d795892-5e4d-b1b6-fff5-2548874665af@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 21 Oct 2017 20:16:40 +0200
+Subject: [Buildroot] [PATCH 1/1] package/openjpeg: bump version to 2.3.0
+In-Reply-To: <20171021195741.2333df85@gmx.net>
+References: <20171015202717.22211-1-bernd.kuhls@t-online.de>
+ <20171021175958.56a34929@windsurf>
+ <CALdGskJxEYJ-kpm_Seprhk11fQKVoCxv3TLT8_2DTd7K6j99tQ@mail.gmail.com>
+ <20171021190120.2652d095@windsurf>
+ <20171021195237.7dd23f8d@gmx.net> <20171021195741.2333df85@gmx.net>
+Message-ID: <20171021201640.14e8be02@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello,
 
+On Sat, 21 Oct 2017 19:57:41 +0200, Peter Seiderer wrote:
 
-On 21-10-17 16:04, Thomas Petazzoni wrote:
-> Hello,
+> > There is a upstream patch handling this error 'gst-plugins-bad: openjpeg:
+> > Support building with openjpeg 2.3' ([1]), maybe worth a try?
+> >  
 > 
-> On Sat, 21 Oct 2017 10:01:08 -0400, Ga?l PORTAY wrote:
->> During development, it is often practical to have many output
->> directories.  The output directory is easily specified with O=<output>
->> though is it useful to have a convention of 'output...' e.g.
->> "output-rpi", "output-rpi2", and "output-rpi3-64".
->>
->> Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
->> ---
->>  .gitignore | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/.gitignore b/.gitignore
->> index bb02d9f572..ec5768d053 100644
->> --- a/.gitignore
->> +++ b/.gitignore
->> @@ -1,4 +1,4 @@
->> -/output
->> +/output*
+> And the actual ones are
+>   - 'gst-plugins-bad: Revert "openjpeg: Support building with openjpeg 2.3"' ([2]) 
+>   - 'gst-plugins-bad: openjpeg: Remove compatibility with openjpeg 2.0' ([3])
+>   - 'gst-plugins-bad: openjpeg: Support building with openjpeg 2.3, simpler' ([4])
 > 
-> Not sure this is a good idea, it kind of makes an assumption on how
-> people would name their output directories.
+> Regards,
+> Peter
 > 
-> If you're annoyed by your output directories, use make O=../output-rpi2
-> instead of make O=output-rpi2, and that's it :-)
+> [2] https://lists.freedesktop.org/archives/gstreamer-commits/2017-October/103157.html
+> [3] https://lists.freedesktop.org/archives/gstreamer-commits/2017-October/103158.html
+> [4] https://lists.freedesktop.org/archives/gstreamer-commits/2017-October/103159.html
 
- You can also add /output* to .git/info/exclude (this is what I do).
+Will you send a Buildroot patch adding those patches?
 
- Regards,
- Arnout
+Thanks!
 
+Thomas
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
