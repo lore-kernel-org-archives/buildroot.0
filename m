@@ -1,37 +1,74 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 21 Oct 2017 10:38:34 +0200
-Subject: [Buildroot] [PATCH 1/1] DEVELOPERS: remove package/sepolgen/
-In-Reply-To: <20171019110446.13543-1-camh@xdna.net>
-References: <20171019110446.13543-1-camh@xdna.net>
-Message-ID: <20171021103834.3db0d579@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 21 Oct 2017 11:25:15 +0200
+Subject: [Buildroot] [PATCH 2017.02.x] musl: add upstream security fix for
+	CVE-2017-15650
+Message-ID: <20171021092515.5812-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+From the upstream announcement:
+http://www.openwall.com/lists/oss-security/2017/10/19/5
 
-On Thu, 19 Oct 2017 22:04:46 +1100, Cam Hutchison wrote:
-> The directory package/sepolgen/ was removed in commit 9d6da7a26
-> (policycoreutils: split packages and bump to 2.7), but two
-> entries were left in the DEVELOPERS file.
-> 
-> This causes the following warnings when running util/get-developers:
-> WARNING: 'package/sepolgen/' doesn't match any file
-> WARNING: 'package/sepolgen/' doesn't match any file
-> 
-> Remove the erroneous entries.
-> 
-> Signed-off-by: Cam Hutchison <camh@xdna.net>
-> ---
->  DEVELOPERS | 2 --
->  1 file changed, 2 deletions(-)
+Felix Wilhelm has discovered a flaw in the dns response parsing for
+musl libc 1.1.16 that leads to overflow of a stack-based buffer.
+Earlier versions are also affected.
 
-Applied to master, thanks.
+When an application makes a request via getaddrinfo for both IPv4 and
+IPv6 results (AF_UNSPEC), an attacker who controls or can spoof the
+nameservers configured in resolv.conf can reply to both the A and AAAA
+queries with A results. Since A records are smaller than AAAA records,
+it's possible to fit more addresses than the precomputed bound, and a
+buffer overflow occurs.
 
-Thomas
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...ing-callback-enforce-MAXADDRS-to-preclude.patch | 35 ++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
+ create mode 100644 package/musl/0002-in-dns-parsing-callback-enforce-MAXADDRS-to-preclude.patch
+
+diff --git a/package/musl/0002-in-dns-parsing-callback-enforce-MAXADDRS-to-preclude.patch b/package/musl/0002-in-dns-parsing-callback-enforce-MAXADDRS-to-preclude.patch
+new file mode 100644
+index 0000000000..c6b5ef26b4
+--- /dev/null
++++ b/package/musl/0002-in-dns-parsing-callback-enforce-MAXADDRS-to-preclude.patch
+@@ -0,0 +1,35 @@
++From 45ca5d3fcb6f874bf5ba55d0e9651cef68515395 Mon Sep 17 00:00:00 2001
++From: Rich Felker <dalias@aerifal.cx>
++Date: Wed, 18 Oct 2017 14:50:03 -0400
++Subject: [PATCH] in dns parsing callback, enforce MAXADDRS to preclude
++ overflow
++
++MAXADDRS was chosen not to need enforcement, but the logic used to
++compute it assumes the answers received match the RR types of the
++queries. specifically, it assumes that only one replu contains A
++record answers. if the replies to both the A and the AAAA query have
++their answer sections filled with A records, MAXADDRS can be exceeded
++and clobber the stack of the calling function.
++
++this bug was found and reported by Felix Wilhelm.
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ src/network/lookup_name.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/src/network/lookup_name.c b/src/network/lookup_name.c
++index 066be4d5..209c20f0 100644
++--- a/src/network/lookup_name.c
+++++ b/src/network/lookup_name.c
++@@ -111,6 +111,7 @@ static int dns_parse_callback(void *c, int rr, const void *data, int len, const
++ {
++ 	char tmp[256];
++ 	struct dpc_ctx *ctx = c;
+++	if (ctx->cnt >= MAXADDRS) return -1;
++ 	switch (rr) {
++ 	case RR_A:
++ 		if (len != 4) return -1;
++-- 
++2.11.0
++
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.11.0
