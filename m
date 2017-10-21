@@ -1,46 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 21 Oct 2017 21:37:25 +0200
-Subject: [Buildroot] [PATCH] raspberrypi: post-image.sh fix gpu_mem
- option
-In-Reply-To: <20171021135214.18552-1-gael.portay@savoirfairelinux.com>
-References: <20171021135214.18552-1-gael.portay@savoirfairelinux.com>
-Message-ID: <20171021213725.67daa97a@windsurf>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 21 Oct 2017 21:38:46 +0200
+Subject: [Buildroot] [PATCH v3 3/3] qt5base: make harfbuzz support
+	selectable
+In-Reply-To: <20170218113202.14213-3-ps.report@gmx.net>
+References: <20170218113202.14213-1-ps.report@gmx.net>
+ <20170218113202.14213-3-ps.report@gmx.net>
+Message-ID: <492b91bf-c4a8-1918-9dc7-ff048955405c@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
 
-On Sat, 21 Oct 2017 09:52:14 -0400, Ga?l PORTAY wrote:
-> The gpu_mem option is not using the proper option argument which causes sed to
-> fail.
-> 
-> 	+ case "${arg}" in
-> 	+ gpu_mem=ome/gportay/output-rpi3-qtwe/images
-> 	+ sed -e '/^ome/gportay/output-rpi3-qtwe/images=/s,=.*,=ome/gportay/output-rpi3-qtwe/images,' -i /home/gportay/output-rpi3-qtwe/images/rpi-firmware/config.txt
-> 	sed: -e expression #1, char 8: extra characters after command
-> 	+ case "${arg}" in
-> 	+ gpu_mem=ome/gportay/output-rpi3-qtwe/images
-> 	+ sed -e '/^ome/gportay/output-rpi3-qtwe/images=/s,=.*,=ome/gportay/output-rpi3-qtwe/images,' -i /home/gportay/output-rpi3-qtwe/images/rpi-firmware/config.txt
-> 	sed: -e expression #1, char 8: extra characters after command
-> 
-> The issue comes from the use of $1 instead of $arg to extract the gpu_mem
-> value. $1 is the $(BINARIES_DIR) which leads to a sed expression error.
-> 
-> Also, it adds the error flag to the shell script to prevent from such situation
-> and terminate the build in error.
-> 
-> Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
-> ---
->  board/raspberrypi/post-image.sh | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
 
-Applied to master, thanks.
+On 18-02-17 12:32, Peter Seiderer wrote:
+> If selected use:
+> 
+>  - system/buildroot harfbuzz in case __sync for 4 bytes is supported
+>  - qt harfbuzz otherwise (using QAtomic instead)
+> 
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 
-Thomas
+
+ *Finally* applied to master, thanks.
+
+ Regards,
+ Arnout
+
+[snip]
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
