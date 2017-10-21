@@ -1,52 +1,115 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 21 Oct 2017 20:04:07 +0200
-Subject: [Buildroot] [PATCH] xen: add upstream post-4.9.0 security fix for
-	XSA-245
-Message-ID: <20171021180407.10320-1-peter@korsgaard.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 21 Oct 2017 20:12:53 +0200
+Subject: [Buildroot] [PATCH v3 1/1] package/waylandpp: new package
+Message-ID: <20171021181253.2705-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes XA-245: ARM: Some memory not scrubbed at boot
+Needed for Wayland support in the next Kodi release 18-Leia:
 
-https://xenbits.xenproject.org/xsa/advisory-245.html
+https://kodi.tv/article/gsoc-2017-update-wayland-support
+https://forum.kodi.tv/showthread.php?tid=309254
 
-Notice: Not applying XSA-237..244 as they are x86 only and have patch file
-name conflicts between 2017.02.x and master.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/xen/xen.hash | 2 ++
- package/xen/xen.mk   | 5 ++++-
- 2 files changed, 6 insertions(+), 1 deletion(-)
+v3: bumped to version 0.1.3
+v2: switched to cmake, added dependency on host-gcc >= 4.9
 
-diff --git a/package/xen/xen.hash b/package/xen/xen.hash
-index 3c5981a247..4a44d7a6d1 100644
---- a/package/xen/xen.hash
-+++ b/package/xen/xen.hash
-@@ -9,3 +9,5 @@ sha256 5068a78293daa58557c30c95141b775becfb650de6a5eda0d82a4a321ced551c xsa232.p
- sha256 f721cc49ba692b2f36299b631451f51d7340b8b4732f74c98f01cb7a80d8662b xsa233.patch
- sha256 213f9d81a4ab785db67b9f579c9e88c9c8586c46b93f466a309060750df2df32 xsa234-4.9.patch
- sha256 d8f012734fbf6019c1ff864744e308c41dfb9c7804ca3be2771c2c972cdf4bd5 xsa235-4.9.patch
-+sha256 526f9e1b127fbb316762ce8e8f4563bc9de0c55a1db581456a3017d570d35bdd 0001-xen-page_alloc-Cover-memory-unreserved-after-boot-in.patch
-+sha256 7164010112fcccd9cd88e72ace2eeabdb364dd6f4d05c434686267d18067f420 0002-xen-arm-Correctly-report-the-memory-region-in-the-du.patch
-diff --git a/package/xen/xen.mk b/package/xen/xen.mk
-index 5bb18e6e34..e07389e209 100644
---- a/package/xen/xen.mk
-+++ b/package/xen/xen.mk
-@@ -15,7 +15,10 @@ XEN_PATCH = \
- 	https://xenbits.xenproject.org/xsa/xsa232.patch \
- 	https://xenbits.xenproject.org/xsa/xsa233.patch \
- 	https://xenbits.xenproject.org/xsa/xsa234-4.9.patch \
--	https://xenbits.xenproject.org/xsa/xsa235-4.9.patch
-+	https://xenbits.xenproject.org/xsa/xsa235-4.9.patch \
-+	https://xenbits.xenproject.org/xsa/xsa245/0001-xen-page_alloc-Cover-memory-unreserved-after-boot-in.patch \
-+	https://xenbits.xenproject.org/xsa/xsa245/0002-xen-arm-Correctly-report-the-memory-region-in-the-du.patch
+ DEVELOPERS                       |  1 +
+ package/Config.in                |  1 +
+ package/waylandpp/Config.in      | 15 +++++++++++++++
+ package/waylandpp/waylandpp.hash |  2 ++
+ package/waylandpp/waylandpp.mk   | 24 ++++++++++++++++++++++++
+ 5 files changed, 43 insertions(+)
+ create mode 100644 package/waylandpp/Config.in
+ create mode 100644 package/waylandpp/waylandpp.hash
+ create mode 100644 package/waylandpp/waylandpp.mk
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index ac1bc9cefe..c039b8ddaf 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -321,6 +321,7 @@ F:	package/vdr/
+ F:	package/vdr-plugin-vnsiserver/
+ F:	package/vlc/
+ F:	package/vnstat/
++F:	package/waylandpp/
+ F:	package/x11r7/
+ F:	package/x264/
+ F:	package/x265/
+diff --git a/package/Config.in b/package/Config.in
+index 6a7950509a..77f345d7a2 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1143,6 +1143,7 @@ menu "Graphics"
+ 	source "package/powervr/Config.in"
+ 	source "package/tiff/Config.in"
+ 	source "package/wayland/Config.in"
++	source "package/waylandpp/Config.in"
+ 	source "package/wayland-protocols/Config.in"
+ 	source "package/webkitgtk/Config.in"
+ 	source "package/webp/Config.in"
+diff --git a/package/waylandpp/Config.in b/package/waylandpp/Config.in
+new file mode 100644
+index 0000000000..92af363789
+--- /dev/null
++++ b/package/waylandpp/Config.in
+@@ -0,0 +1,15 @@
++config BR2_PACKAGE_WAYLANDPP
++	bool "waylandpp"
++	depends on BR2_PACKAGE_HAS_LIBEGL_WAYLAND
++	depends on BR2_HOST_GCC_AT_LEAST_4_9
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
++	select BR2_PACKAGE_WAYLAND
++	help
++	  Wayland C++ bindings
 +
- XEN_LICENSE = GPL-2.0
- XEN_LICENSE_FILES = COPYING
- XEN_DEPENDENCIES = host-acpica host-python
++	  https://github.com/NilsBrause/waylandpp
++
++comment "waylandpp needs an OpenGL-EGL/wayland backend, gcc >= 4.9, host gcc >= 4.9"
++	depends on !BR2_PACKAGE_HAS_LIBEGL_WAYLAND || \
++		!BR2_HOST_GCC_AT_LEAST_4_9 || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+diff --git a/package/waylandpp/waylandpp.hash b/package/waylandpp/waylandpp.hash
+new file mode 100644
+index 0000000000..c1eeae7ff4
+--- /dev/null
++++ b/package/waylandpp/waylandpp.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256 cb779ffdfe72d0f8d79eb9085914f7b246aee6acb8c92b947ee2d19acead0cb5  waylandpp-0.1.3.tar.gz
+diff --git a/package/waylandpp/waylandpp.mk b/package/waylandpp/waylandpp.mk
+new file mode 100644
+index 0000000000..9ebb6b5466
+--- /dev/null
++++ b/package/waylandpp/waylandpp.mk
+@@ -0,0 +1,24 @@
++################################################################################
++#
++# waylandpp
++#
++################################################################################
++
++WAYLANDPP_VERSION = 0.1.3
++WAYLANDPP_SITE = $(call github,NilsBrause,waylandpp,$(WAYLANDPP_VERSION))
++WAYLANDPP_LICENSE = MIT, GPL-3.0+ (wayland_scanner)
++WAYLANDPP_LICENSE_FILES = LICENSE scanner/gpl-3.0.txt
++WAYLANDPP_INSTALL_STAGING = YES
++HOST_WAYLANDPP_DEPENDENCIES = host-pkgconf host-wayland
++WAYLANDPP_DEPENDENCIES = libegl host-pkgconf wayland host-waylandpp
++
++HOST_WAYLANDPP_CONF_OPTS = \
++	-DBUILD_LIBRARIES=OFF \
++	-DBUILD_SCANNER=ON
++WAYLANDPP_CONF_OPTS = \
++	-DBUILD_LIBRARIES=ON \
++	-DBUILD_SCANNER=OFF \
++	-DWAYLAND_SCANNERPP=$(HOST_DIR)/bin/wayland-scanner++
++
++$(eval $(cmake-package))
++$(eval $(host-cmake-package))
 -- 
 2.11.0
