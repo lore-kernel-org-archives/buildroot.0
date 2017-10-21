@@ -1,32 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 21 Oct 2017 21:23:57 +0200
-Subject: [Buildroot] [PATCH 1/1] gst1-plugins-bad: add upstream patch
- for openjpeg2.3
-In-Reply-To: <20171021212201.112d9b84@windsurf>
-References: <20171021190841.8636-1-olivier.schonken@gmail.com>
- <20171021212201.112d9b84@windsurf>
-Message-ID: <20171021212357.431dc12d@windsurf>
+From: =?UTF-8?q?Andr=C3=A9=20Hentschel?= <nerv@dawncrow.de>
+Date: Sat, 21 Oct 2017 21:18:03 +0200
+Subject: [Buildroot] [PATCH] wine: Bump to version 2.0.3
+Message-ID: <1508613483-9356-1-git-send-email-nerv@dawncrow.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
+---
+ package/wine/wine.hash | 2 +-
+ package/wine/wine.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On Sat, 21 Oct 2017 21:22:01 +0200, Thomas Petazzoni wrote:
-
-> > +https://bugzilla.gnome.org/show_bug.cgi?id=788703  
-> 
-> We need your Signed-off-by here.
-
-But Peter Seiderer already submitted the same patch, with a
-Signed-off-by in his patch, so I applied his.
-
-Thanks!
-
-Thomas
+diff --git a/package/wine/wine.hash b/package/wine/wine.hash
+index 2b22a4a..7f0a785 100644
+--- a/package/wine/wine.hash
++++ b/package/wine/wine.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256 f71884f539928877f4b415309f582825d3d3c9976104e43d566944c710713c9a wine-2.0.2.tar.xz
++sha256 a811c664f870a3a01449443a93a6fcee41aea2e912e58f72742eb7924962be56 wine-2.0.3.tar.xz
+diff --git a/package/wine/wine.mk b/package/wine/wine.mk
+index b733952..d540886 100644
+--- a/package/wine/wine.mk
++++ b/package/wine/wine.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WINE_VERSION = 2.0.2
++WINE_VERSION = 2.0.3
+ WINE_SOURCE = wine-$(WINE_VERSION).tar.xz
+ WINE_SITE = https://dl.winehq.org/wine/source/2.0
+ WINE_LICENSE = LGPL-2.1+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.7.4
