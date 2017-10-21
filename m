@@ -1,74 +1,67 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 21 Oct 2017 23:00:45 +0200
-Subject: [Buildroot] [git commit] musl: add upstream security fix for
-	CVE-2017-15650
-Message-ID: <20171021205344.48DC380FF7@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 21 Oct 2017 23:06:37 +0200
+Subject: [Buildroot] [PATCH v3 02/11] support/scripts: Add
+ sunxi64-post-build.sh
+In-Reply-To: <1508406333-27138-3-git-send-email-jagan@amarulasolutions.com>
+References: <1508406333-27138-1-git-send-email-jagan@amarulasolutions.com>
+ <1508406333-27138-3-git-send-email-jagan@amarulasolutions.com>
+Message-ID: <20171021230637.60959eed@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=209f42fd3a5f4357e22fb72f1597a6868566aabd
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-From the upstream announcement:
-http://www.openwall.com/lists/oss-security/2017/10/19/5
+On Thu, 19 Oct 2017 11:45:24 +0200, Jagan Teki wrote:
 
-Felix Wilhelm has discovered a flaw in the dns response parsing for
-musl libc 1.1.16 that leads to overflow of a stack-based buffer.
-Earlier versions are also affected.
+> +# sunxi64-post-build script
+> +#
+> +# Allwinner A64/H5 firmware consists of three parts:
+> +# 1) U-Boot's SPL
+> +# 2) ARM Trusted Firmware (ATF)
+> +# 3) U-Boot proper.
+> +#
+> +# The SPL will load both ATF and U-Boot proper along with the right device
+> +# tree blob (.dtb) and will pass execution to ATF (in EL3), which in turn will
+> +# drop into the U-Boot proper (in EL2).
+> +#
+> +# As the ATF binary will become part of the U-Boot image file, you will need
+> +# to build it first and export ATF variable to built U-Boot proper. Since
+> +# buildroot not take of building ATF first and export the binary, this post-build
+> +# script build the u-boot.itb
 
-When an application makes a request via getaddrinfo for both IPv4 and
-IPv6 results (AF_UNSPEC), an attacker who controls or can spoof the
-nameservers configured in resolv.conf can reply to both the A and AAAA
-queries with A results. Since A records are smaller than AAAA records,
-it's possible to fit more addresses than the precomputed bound, and a
-buffer overflow occurs.
+Thanks for this explanation. However, I am not too happy with the
+solution you propose. Indeed, the U-Boot build system already has all
+the logic to produce the u-boot.itb, provided the BL31 environment
+variable is defined.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...ing-callback-enforce-MAXADDRS-to-preclude.patch | 35 ++++++++++++++++++++++
- 1 file changed, 35 insertions(+)
+I think the problem is that the ATF package currently only supports
+the case where ATF embeds U-Boot (that is for example how it works on
+the ARM Juno platform if I remember correctly
+(configs/arm_juno_defconfig) or on Marvell platforms. This explains why
+the arm-trusted-firmware package depends on uboot.
 
-diff --git a/package/musl/0003-in-dns-parsing-callback-enforce-MAXADDRS-to-preclude.patch b/package/musl/0003-in-dns-parsing-callback-enforce-MAXADDRS-to-preclude.patch
-new file mode 100644
-index 0000000..c6b5ef2
---- /dev/null
-+++ b/package/musl/0003-in-dns-parsing-callback-enforce-MAXADDRS-to-preclude.patch
-@@ -0,0 +1,35 @@
-+From 45ca5d3fcb6f874bf5ba55d0e9651cef68515395 Mon Sep 17 00:00:00 2001
-+From: Rich Felker <dalias@aerifal.cx>
-+Date: Wed, 18 Oct 2017 14:50:03 -0400
-+Subject: [PATCH] in dns parsing callback, enforce MAXADDRS to preclude
-+ overflow
-+
-+MAXADDRS was chosen not to need enforcement, but the logic used to
-+compute it assumes the answers received match the RR types of the
-+queries. specifically, it assumes that only one replu contains A
-+record answers. if the replies to both the A and the AAAA query have
-+their answer sections filled with A records, MAXADDRS can be exceeded
-+and clobber the stack of the calling function.
-+
-+this bug was found and reported by Felix Wilhelm.
-+
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ src/network/lookup_name.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/src/network/lookup_name.c b/src/network/lookup_name.c
-+index 066be4d5..209c20f0 100644
-+--- a/src/network/lookup_name.c
-++++ b/src/network/lookup_name.c
-+@@ -111,6 +111,7 @@ static int dns_parse_callback(void *c, int rr, const void *data, int len, const
-+ {
-+ 	char tmp[256];
-+ 	struct dpc_ctx *ctx = c;
-++	if (ctx->cnt >= MAXADDRS) return -1;
-+ 	switch (rr) {
-+ 	case RR_A:
-+ 		if (len != 4) return -1;
-+-- 
-+2.11.0
-+
+The sunxi scenario is different because it wants ATF to be built
+*before* U-Boot, so basically the opposite.
+
+So I would propose:
+
+ * An option in ATF to decide if it needs U-Boot to be built before or
+   not.
+
+ * An option in U-Boot to decide if it needs ATF to be built before or
+   not.
+
+ * An option in U-Boot to pass custom variable on the build command
+   line so that we can pass the path to BL31. Or directly an option
+   that will make uboot.mk pass BL31.
+
+What do you think ?
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
