@@ -1,115 +1,96 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 21 Oct 2017 20:12:53 +0200
-Subject: [Buildroot] [PATCH v3 1/1] package/waylandpp: new package
-Message-ID: <20171021181253.2705-1-bernd.kuhls@t-online.de>
+From: Alexey Brodkin <alexey.brodkin@gmail.com>
+Date: Sat, 21 Oct 2017 21:15:46 +0300
+Subject: [Buildroot] [PATCH] python-numpy: Bump version to 1.13.3
+Message-ID: <1508609746-1781-1-git-send-email-abrodkin@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Needed for Wayland support in the next Kodi release 18-Leia:
+This is just a bug-fix release.
 
-https://kodi.tv/article/gsoc-2017-update-wayland-support
-https://forum.kodi.tv/showthread.php?tid=309254
+Removing 0003-BUG-Ensure-_npy_scaled_cexp-f-l-is-defined-when-need.patch
+as it is a part of the release.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
 ---
-v3: bumped to version 0.1.3
-v2: switched to cmake, added dependency on host-gcc >= 4.9
+ ..._npy_scaled_cexp-f-l-is-defined-when-need.patch | 43 ----------------------
+ package/python-numpy/python-numpy.hash             |  4 +-
+ package/python-numpy/python-numpy.mk               |  2 +-
+ 3 files changed, 3 insertions(+), 46 deletions(-)
+ delete mode 100644 package/python-numpy/0003-BUG-Ensure-_npy_scaled_cexp-f-l-is-defined-when-need.patch
 
- DEVELOPERS                       |  1 +
- package/Config.in                |  1 +
- package/waylandpp/Config.in      | 15 +++++++++++++++
- package/waylandpp/waylandpp.hash |  2 ++
- package/waylandpp/waylandpp.mk   | 24 ++++++++++++++++++++++++
- 5 files changed, 43 insertions(+)
- create mode 100644 package/waylandpp/Config.in
- create mode 100644 package/waylandpp/waylandpp.hash
- create mode 100644 package/waylandpp/waylandpp.mk
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index ac1bc9cefe..c039b8ddaf 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -321,6 +321,7 @@ F:	package/vdr/
- F:	package/vdr-plugin-vnsiserver/
- F:	package/vlc/
- F:	package/vnstat/
-+F:	package/waylandpp/
- F:	package/x11r7/
- F:	package/x264/
- F:	package/x265/
-diff --git a/package/Config.in b/package/Config.in
-index 6a7950509a..77f345d7a2 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1143,6 +1143,7 @@ menu "Graphics"
- 	source "package/powervr/Config.in"
- 	source "package/tiff/Config.in"
- 	source "package/wayland/Config.in"
-+	source "package/waylandpp/Config.in"
- 	source "package/wayland-protocols/Config.in"
- 	source "package/webkitgtk/Config.in"
- 	source "package/webp/Config.in"
-diff --git a/package/waylandpp/Config.in b/package/waylandpp/Config.in
-new file mode 100644
-index 0000000000..92af363789
---- /dev/null
-+++ b/package/waylandpp/Config.in
-@@ -0,0 +1,15 @@
-+config BR2_PACKAGE_WAYLANDPP
-+	bool "waylandpp"
-+	depends on BR2_PACKAGE_HAS_LIBEGL_WAYLAND
-+	depends on BR2_HOST_GCC_AT_LEAST_4_9
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-+	select BR2_PACKAGE_WAYLAND
-+	help
-+	  Wayland C++ bindings
-+
-+	  https://github.com/NilsBrause/waylandpp
-+
-+comment "waylandpp needs an OpenGL-EGL/wayland backend, gcc >= 4.9, host gcc >= 4.9"
-+	depends on !BR2_PACKAGE_HAS_LIBEGL_WAYLAND || \
-+		!BR2_HOST_GCC_AT_LEAST_4_9 || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-diff --git a/package/waylandpp/waylandpp.hash b/package/waylandpp/waylandpp.hash
-new file mode 100644
-index 0000000000..c1eeae7ff4
---- /dev/null
-+++ b/package/waylandpp/waylandpp.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha256 cb779ffdfe72d0f8d79eb9085914f7b246aee6acb8c92b947ee2d19acead0cb5  waylandpp-0.1.3.tar.gz
-diff --git a/package/waylandpp/waylandpp.mk b/package/waylandpp/waylandpp.mk
-new file mode 100644
-index 0000000000..9ebb6b5466
---- /dev/null
-+++ b/package/waylandpp/waylandpp.mk
-@@ -0,0 +1,24 @@
-+################################################################################
-+#
-+# waylandpp
-+#
-+################################################################################
-+
-+WAYLANDPP_VERSION = 0.1.3
-+WAYLANDPP_SITE = $(call github,NilsBrause,waylandpp,$(WAYLANDPP_VERSION))
-+WAYLANDPP_LICENSE = MIT, GPL-3.0+ (wayland_scanner)
-+WAYLANDPP_LICENSE_FILES = LICENSE scanner/gpl-3.0.txt
-+WAYLANDPP_INSTALL_STAGING = YES
-+HOST_WAYLANDPP_DEPENDENCIES = host-pkgconf host-wayland
-+WAYLANDPP_DEPENDENCIES = libegl host-pkgconf wayland host-waylandpp
-+
-+HOST_WAYLANDPP_CONF_OPTS = \
-+	-DBUILD_LIBRARIES=OFF \
-+	-DBUILD_SCANNER=ON
-+WAYLANDPP_CONF_OPTS = \
-+	-DBUILD_LIBRARIES=ON \
-+	-DBUILD_SCANNER=OFF \
-+	-DWAYLAND_SCANNERPP=$(HOST_DIR)/bin/wayland-scanner++
-+
-+$(eval $(cmake-package))
-+$(eval $(host-cmake-package))
+diff --git a/package/python-numpy/0003-BUG-Ensure-_npy_scaled_cexp-f-l-is-defined-when-need.patch b/package/python-numpy/0003-BUG-Ensure-_npy_scaled_cexp-f-l-is-defined-when-need.patch
+deleted file mode 100644
+index a243df544ebc..000000000000
+--- a/package/python-numpy/0003-BUG-Ensure-_npy_scaled_cexp-f-l-is-defined-when-need.patch
++++ /dev/null
+@@ -1,43 +0,0 @@
+-From 9aa5d577c58f04f9606674dd6f326aee1bf1e6e8 Mon Sep 17 00:00:00 2001
+-From: Charles Harris <charlesr.harris@gmail.com>
+-Date: Thu, 21 Sep 2017 10:10:05 -0600
+-Subject: [PATCH] BUG: Ensure `_npy_scaled_cexp{,f,l}` is defined when needed.
+-
+-The `_npy_scaled_cexp{,f,l}` functions were previously only defined when
+-the npy_cexp fallback functions were needed, but they are also called by
+-the npy_csinh and npy_ccosh functions.
+-
+-Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+----
+- numpy/core/src/npymath/npy_math_complex.c.src | 8 +++++++-
+- 1 file changed, 7 insertions(+), 1 deletion(-)
+-
+-diff --git a/numpy/core/src/npymath/npy_math_complex.c.src b/numpy/core/src/npymath/npy_math_complex.c.src
+-index a82a6737c..fb31e8e6a 100644
+---- a/numpy/core/src/npymath/npy_math_complex.c.src
+-+++ b/numpy/core/src/npymath/npy_math_complex.c.src
+-@@ -184,7 +184,9 @@ npy_carg at c@(@ctype@ z)
+- #define SCALED_CEXP_LOWERL 11357.216553474703895L
+- #define SCALED_CEXP_UPPERL 22756.021937783004509L
+- 
+--#ifndef HAVE_CEXP at C@
+-+#if !defined(HAVE_CSINH at C@) || \
+-+    !defined(HAVE_CCOSH at C@) || \
+-+    !defined(HAVE_CEXP at C@)
+- 
+- static
+- @ctype@
+-@@ -212,6 +214,10 @@ _npy_scaled_cexp at c@(@type@ x, @type@ y, npy_int expt)
+-                          npy_ldexp at c@(mant * mantsin, expt + exsin));
+- }
+- 
+-+#endif
+-+
+-+#ifndef HAVE_CEXP at C@
+-+
+- @ctype@
+- npy_cexp at c@(@ctype@ z)
+- {
+--- 
+-2.11.0
+-
+diff --git a/package/python-numpy/python-numpy.hash b/package/python-numpy/python-numpy.hash
+index 7dcdb44a008f..6e76c62e7d7a 100644
+--- a/package/python-numpy/python-numpy.hash
++++ b/package/python-numpy/python-numpy.hash
+@@ -1,2 +1,2 @@
+-# Copied from https://github.com/numpy/numpy/releases/tag/v1.13.1
+-sha256	de020ec06f1e9ce1115a50161a38bf8d4c2525379900f9cb478cc613a1e7cd93	numpy-1.13.1.tar.gz
++# Copied from https://github.com/numpy/numpy/releases/tag/v1.13.3
++sha256	4c6b4eef790528bebb7ec9590d74cc193868940fe68e4109a91c196df72d8094	numpy-1.13.3.tar.gz
+diff --git a/package/python-numpy/python-numpy.mk b/package/python-numpy/python-numpy.mk
+index d0c279f70686..d0d38371a36b 100644
+--- a/package/python-numpy/python-numpy.mk
++++ b/package/python-numpy/python-numpy.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PYTHON_NUMPY_VERSION = 1.13.1
++PYTHON_NUMPY_VERSION = 1.13.3
+ PYTHON_NUMPY_SOURCE = numpy-$(PYTHON_NUMPY_VERSION).tar.gz
+ PYTHON_NUMPY_SITE = https://github.com/numpy/numpy/releases/download/v$(PYTHON_NUMPY_VERSION)
+ PYTHON_NUMPY_LICENSE = BSD-3-Clause
 -- 
-2.11.0
+2.7.5
