@@ -1,39 +1,39 @@
-From: =?UTF-8?q?Andr=C3=A9=20Hentschel?= <nerv@dawncrow.de>
-Date: Sat, 21 Oct 2017 21:18:03 +0200
-Subject: [Buildroot] [PATCH] wine: Bump to version 2.0.3
-Message-ID: <1508613483-9356-1-git-send-email-nerv@dawncrow.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 21 Oct 2017 21:24:22 +0200
+Subject: [Buildroot] [PATCH v1] gst1-plugins-bad: fix openjpeg-2.3
+ compile failure
+In-Reply-To: <20171021191617.17358-1-ps.report@gmx.net>
+References: <20171021191617.17358-1-ps.report@gmx.net>
+Message-ID: <20171021212422.55322cb1@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
----
- package/wine/wine.hash | 2 +-
- package/wine/wine.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Hello,
 
-diff --git a/package/wine/wine.hash b/package/wine/wine.hash
-index 2b22a4a..7f0a785 100644
---- a/package/wine/wine.hash
-+++ b/package/wine/wine.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256 f71884f539928877f4b415309f582825d3d3c9976104e43d566944c710713c9a wine-2.0.2.tar.xz
-+sha256 a811c664f870a3a01449443a93a6fcee41aea2e912e58f72742eb7924962be56 wine-2.0.3.tar.xz
-diff --git a/package/wine/wine.mk b/package/wine/wine.mk
-index b733952..d540886 100644
---- a/package/wine/wine.mk
-+++ b/package/wine/wine.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WINE_VERSION = 2.0.2
-+WINE_VERSION = 2.0.3
- WINE_SOURCE = wine-$(WINE_VERSION).tar.xz
- WINE_SITE = https://dl.winehq.org/wine/source/2.0
- WINE_LICENSE = LGPL-2.1+
+On Sat, 21 Oct 2017 21:16:17 +0200, Peter Seiderer wrote:
+> Add upstream patch [1], fixes [2]:
+> 
+>   In file included from gstopenjpegdec.h:29:0,
+>                    from gstopenjpegdec.c:27:
+>   gstopenjpeg.h:42:37: fatal error: openjpeg-2.2/openjpeg.h: No such file or directory
+>   #  include <openjpeg-2.2/openjpeg.h>
+> 
+> [1] https://cgit.freedesktop.org/gstreamer/gst-plugins-bad/commit/?id=bff2d834a4a38f64e555cee3d0144fde6c515acd
+> [2] http://autobuild.buildroot.net/results/884/884956af56f63b2634a1984f5ea416075ed87bc8
+> 
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> ---
+>  ...upport-building-with-openjpeg-2.3-simpler.patch | 134 +++++++++++++++++++++
+>  1 file changed, 134 insertions(+)
+>  create mode 100644 package/gstreamer1/gst1-plugins-bad/0001-openjpeg-Support-building-with-openjpeg-2.3-simpler.patch
+
+Applied to master, thanks.
+
+Thomas
 -- 
-2.7.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
