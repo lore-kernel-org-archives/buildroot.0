@@ -1,39 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 21 Oct 2017 21:24:22 +0200
-Subject: [Buildroot] [PATCH v1] gst1-plugins-bad: fix openjpeg-2.3
- compile failure
-In-Reply-To: <20171021191617.17358-1-ps.report@gmx.net>
-References: <20171021191617.17358-1-ps.report@gmx.net>
-Message-ID: <20171021212422.55322cb1@windsurf>
+Date: Sat, 21 Oct 2017 21:28:13 +0200
+Subject: [Buildroot] [git commit] ffmpeg: supports only the real OpenSSL,
+	not LibreSSL
+Message-ID: <20171021192125.82B8381110@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=803c49891fc10659aea8e612bc85fae4a09a0269
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 21 Oct 2017 21:16:17 +0200, Peter Seiderer wrote:
-> Add upstream patch [1], fixes [2]:
-> 
->   In file included from gstopenjpegdec.h:29:0,
->                    from gstopenjpegdec.c:27:
->   gstopenjpeg.h:42:37: fatal error: openjpeg-2.2/openjpeg.h: No such file or directory
->   #  include <openjpeg-2.2/openjpeg.h>
-> 
-> [1] https://cgit.freedesktop.org/gstreamer/gst-plugins-bad/commit/?id=bff2d834a4a38f64e555cee3d0144fde6c515acd
-> [2] http://autobuild.buildroot.net/results/884/884956af56f63b2634a1984f5ea416075ed87bc8
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
->  ...upport-building-with-openjpeg-2.3-simpler.patch | 134 +++++++++++++++++++++
->  1 file changed, 134 insertions(+)
->  create mode 100644 package/gstreamer1/gst1-plugins-bad/0001-openjpeg-Support-building-with-openjpeg-2.3-simpler.patch
+ffmpeg will not build with LibreSSL without patches, so let's support
+only OpenSSL.
 
-Applied to master, thanks.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/ffmpeg/ffmpeg.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index 801615c..1e758d3 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
+@@ -208,13 +208,13 @@ FFMPEG_CONF_OPTS += --enable-gnutls --disable-openssl
+ FFMPEG_DEPENDENCIES += gnutls
+ else
+ FFMPEG_CONF_OPTS += --disable-gnutls
+-ifeq ($(BR2_PACKAGE_OPENSSL),y)
++ifeq ($(BR2_PACKAGE_LIBOPENSSL),y)
+ # openssl isn't license compatible with GPL
+ ifeq ($(BR2_PACKAGE_FFMPEG_GPL)x$(BR2_PACKAGE_FFMPEG_NONFREE),yx)
+ FFMPEG_CONF_OPTS += --disable-openssl
+ else
+ FFMPEG_CONF_OPTS += --enable-openssl
+-FFMPEG_DEPENDENCIES += openssl
++FFMPEG_DEPENDENCIES += libopenssl
+ endif
+ else
+ FFMPEG_CONF_OPTS += --disable-openssl
