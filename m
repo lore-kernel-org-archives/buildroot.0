@@ -1,85 +1,30 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 22 Oct 2017 16:59:44 +0200
-Subject: [Buildroot] [PATCH v2 2/2] package/kodi: use package
- host-openjdk-bootstrap to provide JDK
-In-Reply-To: <20171003201939.8382-2-bernd.kuhls@t-online.de>
-References: <20171003201939.8382-1-bernd.kuhls@t-online.de>
- <20171003201939.8382-2-bernd.kuhls@t-online.de>
-Message-ID: <d9ce345f-e008-d24e-50a6-1ef1527e9e19@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 22 Oct 2017 17:02:38 +0200
+Subject: [Buildroot] [PATCH] sqlite: add security patches
+In-Reply-To: <612f27420cbbca777de7bfcf3747769cebe1727b.1508680808.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Sun, 22 Oct 2017 16:00:08 +0200")
+References: <612f27420cbbca777de7bfcf3747769cebe1727b.1508680808.git.baruch@tkos.co.il>
+Message-ID: <87wp3n9qep.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Bernd,
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-On 03-10-17 22:19, Bernd Kuhls wrote:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de> ---
-> v2: removed BR2_PACKAGE_KODI_OPENJDK (Baruch)
-> 
->  package/kodi/Config.in | 3 ++-
->  package/kodi/kodi.mk   | 7 +++++++
->  2 files changed, 9 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-> index fc7eafa41a..8bce77d7e4 100644
-> --- a/package/kodi/Config.in
-> +++ b/package/kodi/Config.in
-> @@ -46,7 +46,8 @@ menuconfig BR2_PACKAGE_KODI
->  	depends on BR2_PACKAGE_KODI_ARCH_SUPPORTS
->  	depends on BR2_PACKAGE_PYTHON
->  	depends on !BR2_PACKAGE_PYTHON_PYC_ONLY
-> -	select BR2_NEEDS_HOST_JAVA
-> +	select BR2_NEEDS_HOST_JAVA if !(BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86")
-> +	select BR2_PACKAGE_HOST_OPENJDK_BOOTSTRAP if (BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86")
+ > CVE-2017-13685: The dump_callback function in SQLite 3.20.0 allows
+ > remote attackers to cause a denial of service (EXC_BAD_ACCESS and
+ > application crash) via a crafted file.
 
- So basically, what this series does is to allow you to build Kodi on a distro
-that doesn't have Java installed, by downloading a Java binary, instead of
-telling the user that they should install Java on the host.
+ > CVE-2017-15286: SQLite 3.20.1 has a NULL pointer dereference in
+ > tableColumnList in shell.c
+ > because it fails to consider certain cases where
+ > `sqlite3_step(pStmt)==SQLITE_ROW` is false and a data structure is never
+ > initialized.
 
- Although it indeed does make it simpler for a user to build Kodi in case they
-don't have Java installed, I wonder if it really is worth it. It's adding some
-complexity, it only works for x86 and x86_64 anyway, and I'm not sure it's even
-going to work on all hosts: the binaries are linked with glibc, libX11, etc.
-etc. and the build machines where you need this the most (old distros, funky
-stuff like Alpine) might not have the correct libraries installed...
-
- Therefore, I've marked this series as Rejected. If you have good reasons to
-have this and you can show that it does work on funky build machines, please
-resubmit.
-
- Regards,
- Arnout
-
-
->  	select BR2_PACKAGE_BZIP2
->  	select BR2_PACKAGE_EXPAT
->  	select BR2_PACKAGE_FFMPEG
-> diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
-> index 28fe256b65..9a3247dbbc 100644
-> --- a/package/kodi/kodi.mk
-> +++ b/package/kodi/kodi.mk
-> @@ -156,6 +156,13 @@ ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
->  KODI_CXX_FLAGS += -latomic
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_HOST_OPENJDK_BOOTSTRAP),y)
-> +KODI_CONF_ENV = \
-> +	JAVA_HOME=$(HOST_OPENJDK_BOOTSTRAP_DIR) \
-> +	PATH=$(HOST_OPENJDK_BOOTSTRAP_DIR)/bin:$(BR_PATH)
-> +KODI_DEPENDENCIES += host-openjdk-bootstrap
-> +endif
-> +
->  ifeq ($(BR2_PACKAGE_KODI_MYSQL),y)
->  KODI_CONF_OPTS += -DENABLE_MYSQLCLIENT=ON
->  KODI_DEPENDENCIES += mysql
-> 
+Do you know if this also applies to 2017.08.x (3.19.3) or 2017.02.x
+(3.16.2)?
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Bye, Peter Korsgaard
