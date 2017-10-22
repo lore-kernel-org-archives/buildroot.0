@@ -1,89 +1,34 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Sun, 22 Oct 2017 16:42:13 +0200
-Subject: [Buildroot] [V4 3/3] prosody: tweak configuration
-In-Reply-To: <20171022144213.5559-1-francois.perrad@gadz.org>
-References: <20171022144213.5559-1-francois.perrad@gadz.org>
-Message-ID: <20171022144213.5559-3-francois.perrad@gadz.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 22 Oct 2017 16:46:33 +0200
+Subject: [Buildroot] [git commit] CHANGES: update after netsnmp changes
+Message-ID: <20171022143933.1873A80F74@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-done by patches:
-  - enable syslog
-  - add pidfile
+commit: https://git.buildroot.net/buildroot/commit/?id=c2aa34d8cede20d4c8701f20ade9a016fb478b87
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Julien Floret <julien.floret@6wind.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/prosody/0001-enable-syslog.patch | 25 +++++++++++++++++++++++++
- package/prosody/0002-add-pidfile.patch   | 26 ++++++++++++++++++++++++++
- 2 files changed, 51 insertions(+)
- create mode 100644 package/prosody/0001-enable-syslog.patch
- create mode 100644 package/prosody/0002-add-pidfile.patch
+ CHANGES | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/package/prosody/0001-enable-syslog.patch b/package/prosody/0001-enable-syslog.patch
-new file mode 100644
-index 000000000..7b6db6fc5
---- /dev/null
-+++ b/package/prosody/0001-enable-syslog.patch
-@@ -0,0 +1,25 @@
-+From 267b5d195be0f3a8f00ccf4ccb62e25a9c4e48eb Mon Sep 17 00:00:00 2001
-+From: Francois Perrad <francois.perrad@gadz.org>
-+Date: Sun, 22 Oct 2017 08:44:01 +0200
-+Subject: [PATCH 1/2] enable syslog
+diff --git a/CHANGES b/CHANGES
+index c942fbf..c60d17d 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,9 @@
++2017.11-rc1, To be released
 +
-+note: the posix module is auto-loaded by default
++	netsnmp: all MIB files are now installed, making the target filesystem a
++	bit bigger than before. To remove unneeded MIBS, you should use a
++	post-build script.
 +
-+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-+
-+diff --git a/prosody.cfg.lua.dist b/prosody.cfg.lua.dist
-+index a0fc6c9e..af3cc0e4 100644
-+--- a/prosody.cfg.lua.dist
-++++ b/prosody.cfg.lua.dist
-+@@ -163,7 +163,7 @@ archive_expires_after = "1w" -- Remove archived messages after 1 week
-+ log = {
-+ 	info = "prosody.log"; -- Change 'info' to 'debug' for verbose logging
-+ 	error = "prosody.err";
-+-	-- "*syslog"; -- Uncomment this for logging to syslog
-++	"*syslog"; -- Uncomment this for logging to syslog
-+ 	-- "*console"; -- Log to the console, useful for debugging with daemonize=false
-+ }
-+ 
-+-- 
-+2.11.0
-+
-diff --git a/package/prosody/0002-add-pidfile.patch b/package/prosody/0002-add-pidfile.patch
-new file mode 100644
-index 000000000..ca01c4a72
---- /dev/null
-+++ b/package/prosody/0002-add-pidfile.patch
-@@ -0,0 +1,26 @@
-+From 124d479195ac8ec1747b5b89fe4860d0e92c2aae Mon Sep 17 00:00:00 2001
-+From: Francois Perrad <francois.perrad@gadz.org>
-+Date: Sun, 22 Oct 2017 08:58:11 +0200
-+Subject: [PATCH 2/2] add pidfile
-+
-+see https://prosody.im/doc/configure#posix-only_options
-+
-+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-+
-+diff --git a/prosody.cfg.lua.dist b/prosody.cfg.lua.dist
-+index af3cc0e4..675db12f 100644
-+--- a/prosody.cfg.lua.dist
-++++ b/prosody.cfg.lua.dist
-+@@ -181,6 +181,9 @@ log = {
-+ -- Location of directory to find certificates in (relative to main config file):
-+ certificates = "certs"
-+ 
-++-- This must match the PIDFILE used in S50prosody
-++pidfile = "/var/run/prosody/prosody.pid"
-++
-+ ----------- Virtual hosts -----------
-+ -- You need to add a VirtualHost entry for each domain you wish Prosody to serve.
-+ -- Settings under each VirtualHost entry apply *only* to that host.
-+-- 
-+2.11.0
-+
--- 
-2.11.0
+ 2017.08, Released September 1st, 2017
+ 
+ 	Minor fixes.
