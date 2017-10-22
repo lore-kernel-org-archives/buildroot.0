@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 Oct 2017 14:05:10 +0200
-Subject: [Buildroot] [PATCH] lame: security bump to version 3.100
-In-Reply-To: <20171022111508.5361-1-peter@korsgaard.com>
-References: <20171022111508.5361-1-peter@korsgaard.com>
-Message-ID: <20171022140510.6fb2b878@windsurf>
+Date: Sun, 22 Oct 2017 14:05:14 +0200
+Subject: [Buildroot] [PATCH] openssl: unconditionally define
+ BR2_PACKAGE_PROVIDES_HOST_OPENSSL
+In-Reply-To: <20171022115601.9220-1-peter@korsgaard.com>
+References: <20171022115601.9220-1-peter@korsgaard.com>
+Message-ID: <20171022140514.2161ed40@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,48 +13,21 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 22 Oct 2017 13:15:08 +0200, Peter Korsgaard wrote:
-> Fixes the following security issues:
+On Sun, 22 Oct 2017 13:56:01 +0200, Peter Korsgaard wrote:
+> Fixes:
+> http://autobuild.buildroot.net/results/207/207d0ca1fe5328e675246c851fcb0d5685f8c0bd/
+> http://autobuild.buildroot.net/results/546/546a56d6dd39e5e9ecfe25fd36a00510e6c0c45b/
 > 
-> CVE-2017-9410: fill_buffer_resample function in libmp3lame/util.c heap-based
-> buffer over-read and ap
+> host-openssl may be used without openssl being enabled for the target, so
+> move BR2_PACKAGE_PROVIDES_HOST_OPENSSL outside the BR2_PACKAGE_OPENSSL
+> conditional.
 > 
-> CVE-2017-9411: fill_buffer_resample function in libmp3lame/util.c invalid
-> memory read and application crash
-> 
-> CVE-2017-9412: unpack_read_samples function in frontend/get_audio.c invalid
-> memory read and application crash
-> 
-> Drop patches now upstream or no longer needed:
-> 
-> 0001-configure.patch: Upstream as mentioned in patch description
-> 
-> 0002-gtk1-ac-directives.patch: Upstream as mentioned in patch
-> description/release notes:
-> 
-> Resurrect Owen Taylor's code dated from 97-11-3 to properly deal with GTK1.
-> This was transplanted back from aclocal.m4 with a patch provided by Andres
-> Mejia. This change makes it easy to regenerate autotools' files with a simple
-> invocation of autoconf -vfi.
-> 
-> 0003-msse.patch: Not needed as -march <x86-variant-with-msse-support>
-> nowadays implies -msse.
-> 
-> With these removed, autoreconf is no longer needed.
-> 
-> Also add a hash for the license file while we're at it.
+> While we're at it, add a comment explaining what this magic config symbol does.
 > 
 > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 > ---
->  package/lame/0001-configure.patch          |  69 ----------
->  package/lame/0002-gtk1-ac-directives.patch | 210 -----------------------------
->  package/lame/0003-msse.patch               |  24 ----
->  package/lame/lame.hash                     |   3 +-
->  package/lame/lame.mk                       |   6 +-
->  5 files changed, 4 insertions(+), 308 deletions(-)
->  delete mode 100644 package/lame/0001-configure.patch
->  delete mode 100644 package/lame/0002-gtk1-ac-directives.patch
->  delete mode 100644 package/lame/0003-msse.patch
+>  package/openssl/Config.in | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
 
 Applied to master, thanks.
 
