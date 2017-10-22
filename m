@@ -1,44 +1,37 @@
-From: Kees van Unen <Keesvanunen@hotmail.com>
-Date: Sun, 22 Oct 2017 06:34:41 -0700 (MST)
-Subject: [Buildroot] Implicit declaration of mblen
-In-Reply-To: <bc9fed74-546a-a9f6-26b5-4698562b051e@mind.be>
-References: <1508584234482-0.post@n4.nabble.com>
- <87bml0cvqq.fsf@dell.be.48ers.dk> <1508618665952-0.post@n4.nabble.com>
- <0836e4ea-a773-fbe0-4c52-4414ad82389c@mind.be>
- <1508620062609-0.post@n4.nabble.com>
- <bc9fed74-546a-a9f6-26b5-4698562b051e@mind.be>
-Message-ID: <1508679281272-0.post@n4.nabble.com>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sun, 22 Oct 2017 15:42:26 +0200
+Subject: [Buildroot] [git commit] Add DEPENDENCIES_HOST_PREREQ to the list
+	of packages
+Message-ID: <20171022133510.BA8A980190@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> Copy the the make command line from the xlib_libX11, append V=1 to it, and 
-> you'll see the compilation commands. Copy the compilation command for the 
-> failing file, replace the -c with -E and the -o with some filename, so you
-> get 
-> the preprocessed file. Then in that preprocessed file check which stdlib.h
-> it 
->  includes. stdlib.h should be included from include/X11/Xlibint.h. 
+commit: https://git.buildroot.net/buildroot/commit/?id=862b76cfefc101943f09db2a73f5519f9a5bb2cb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Need some more help... When following steps above the following error
-appears:
+That way packages included in that list like ccache will also be
+regarded as a normal packages for targets like external-deps,
+show-targets or legal-info
 
-fatal error: cannot specify -o with -c, -S or -E with multiple files.
+Signed-off-by: Alfredo Alvarez Fernandez <alfredo.alvarez_fernandez@nokia.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ Makefile | 2 ++
+ 1 file changed, 2 insertions(+)
 
-I noticed that when executing abc_new the options -fPIC -DPIC -o
-.libs/imCallbk.o were automatically placed behind the compilation command
-
-abc_old is initial compilation command
-abc_new is adjusted compilation command to obtain preprocessed file
-
-abc_old.abc_old
-<http://buildroot-busybox.2317881.n4.nabble.com/file/t2263/abc_old.abc_old>  
-abc_new.abc_new
-<http://buildroot-busybox.2317881.n4.nabble.com/file/t2263/abc_new.abc_new>  
-
-
-
---
-Sent from: http://buildroot-busybox.2317881.n4.nabble.com/
+diff --git a/Makefile b/Makefile
+index 02f7cda..79db7fe 100644
+--- a/Makefile
++++ b/Makefile
+@@ -486,6 +486,8 @@ include package/Makefile.in
+ -include $(wildcard arch/arch.mk.*)
+ include support/dependencies/dependencies.mk
+ 
++PACKAGES += $(DEPENDENCIES_HOST_PREREQ)
++
+ include toolchain/*.mk
+ include toolchain/*/*.mk
+ 
