@@ -1,56 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 23 Oct 2017 00:39:21 +0200
-Subject: [Buildroot] [git commit branch/2017.08.x] dependencies: always use
-	HOSTCC_NOCACHE for DEPENDENCIES_HOST_PREREQ
-Message-ID: <20171022224415.0C3F280E27@busybox.osuosl.org>
+Date: Mon, 23 Oct 2017 00:41:33 +0200
+Subject: [Buildroot] [git commit branch/2017.08.x] linux-headers: bump 4.{4,
+	9, 13}.x series
+Message-ID: <20171022224415.4856080E27@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e63090a2d50a861dce71389c76f4315565471649
+commit: https://git.buildroot.net/buildroot/commit/?id=e04fc15a1dc1345824986ce333348db5aef7ca7a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.08.x
 
-Currently, HOSTCC and HOSTCXX are set to their _NOCACHE variants in the
-'dependencies' target. This is needed because at that time, ccache is
-not built yet - host-ccache is one of the dependencies. However, because
-this override is only specified for the 'dependencies' target (and
-thereby gets inherited by its dependencies), the override is only
-applied when the package is reached through the 'dependencies' target.
-This is not the case when one of DEPENDENCIES_HOST_PREREQ is built
-directly from the command line, e.g. when doing 'make host-ccache'. So
-in that case, ccache will be built with ccache... which fails of
-course.
-
-To fix this, directly apply the override to the DEPENCIES_HOST_PREREQ
-targets.
-
-Note that this only fixes the issue for 'make host-ccache', NOT for
-e.g. 'make host-ccache-configure'.
-
-Signed-off-by: Alfredo Alvarez Fernandez <alfredo.alvarez_fernandez@nokia.com>
-[Arnout: improve commit message]
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
-(cherry picked from commit 36d398ac30f35ca9d4405a9dee2b33560ec3595d)
+[Peter: drop 4.13.x bump]
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit f7479f4c818f335332fdca128d7d4f3e5e7c02ac)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/dependencies/dependencies.mk | 4 ++--
+ package/linux-headers/Config.in.host | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/support/dependencies/dependencies.mk b/support/dependencies/dependencies.mk
-index d4b0409..ef2ae9b 100644
---- a/support/dependencies/dependencies.mk
-+++ b/support/dependencies/dependencies.mk
-@@ -23,8 +23,8 @@ core-dependencies:
- 		DL_TOOLS="$(sort $(DL_TOOLS_DEPENDENCIES))" \
- 		$(TOPDIR)/support/dependencies/dependencies.sh
- 
--dependencies: HOSTCC=$(HOSTCC_NOCCACHE)
--dependencies: HOSTCXX=$(HOSTCXX_NOCCACHE)
-+core-dependencies $(DEPENDENCIES_HOST_PREREQ): HOSTCC=$(HOSTCC_NOCCACHE)
-+core-dependencies $(DEPENDENCIES_HOST_PREREQ): HOSTCXX=$(HOSTCXX_NOCCACHE)
- dependencies: core-dependencies $(DEPENDENCIES_HOST_PREREQ)
- 
- ################################################################################
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 32d4505..d531a88 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -236,8 +236,8 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.10.107"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.12.74"	if BR2_KERNEL_HEADERS_3_12
+ 	default "4.1.45"	if BR2_KERNEL_HEADERS_4_1
+-	default "4.4.93"	if BR2_KERNEL_HEADERS_4_4
+-	default "4.9.57"	if BR2_KERNEL_HEADERS_4_9
++	default "4.4.94"	if BR2_KERNEL_HEADERS_4_4
++	default "4.9.58"	if BR2_KERNEL_HEADERS_4_9
+ 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
+ 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
+ 	default "4.12.14"	if BR2_KERNEL_HEADERS_4_12
