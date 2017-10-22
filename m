@@ -1,76 +1,55 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 23 Oct 2017 00:35:55 +0200
-Subject: [Buildroot] [git commit branch/2017.08.x] musl: add upstream
-	security fix for CVE-2017-15650
-Message-ID: <20171022224414.B99248073F@busybox.osuosl.org>
+Date: Mon, 23 Oct 2017 00:38:31 +0200
+Subject: [Buildroot] [git commit branch/2017.08.x] xen: add upstream
+	post-4.9.0 security fix for XSA-245
+Message-ID: <20171022224414.F100580E27@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3c25932a4d1bbbcb74bb797ddd0ecf97e0e5b4ab
+commit: https://git.buildroot.net/buildroot/commit/?id=39948ac3ae0ef2e8dcc5e05bdfe19e96a37d866a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.08.x
 
-From the upstream announcement:
-http://www.openwall.com/lists/oss-security/2017/10/19/5
+Fixes XA-245: ARM: Some memory not scrubbed at boot
 
-Felix Wilhelm has discovered a flaw in the dns response parsing for
-musl libc 1.1.16 that leads to overflow of a stack-based buffer.
-Earlier versions are also affected.
+https://xenbits.xenproject.org/xsa/advisory-245.html
 
-When an application makes a request via getaddrinfo for both IPv4 and
-IPv6 results (AF_UNSPEC), an attacker who controls or can spoof the
-nameservers configured in resolv.conf can reply to both the A and AAAA
-queries with A results. Since A records are smaller than AAAA records,
-it's possible to fit more addresses than the precomputed bound, and a
-buffer overflow occurs.
+Notice: Not applying XSA-237..244 as they are x86 only and have patch file
+name conflicts between 2017.02.x and master.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 209f42fd3a5f4357e22fb72f1597a6868566aabd)
+(cherry picked from commit 90b9b457ecd5e6ebea9d48f36c030b95ca67059b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...ing-callback-enforce-MAXADDRS-to-preclude.patch | 35 ++++++++++++++++++++++
- 1 file changed, 35 insertions(+)
+ package/xen/xen.hash | 2 ++
+ package/xen/xen.mk   | 5 ++++-
+ 2 files changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/package/musl/0003-in-dns-parsing-callback-enforce-MAXADDRS-to-preclude.patch b/package/musl/0003-in-dns-parsing-callback-enforce-MAXADDRS-to-preclude.patch
-new file mode 100644
-index 0000000..c6b5ef2
---- /dev/null
-+++ b/package/musl/0003-in-dns-parsing-callback-enforce-MAXADDRS-to-preclude.patch
-@@ -0,0 +1,35 @@
-+From 45ca5d3fcb6f874bf5ba55d0e9651cef68515395 Mon Sep 17 00:00:00 2001
-+From: Rich Felker <dalias@aerifal.cx>
-+Date: Wed, 18 Oct 2017 14:50:03 -0400
-+Subject: [PATCH] in dns parsing callback, enforce MAXADDRS to preclude
-+ overflow
+diff --git a/package/xen/xen.hash b/package/xen/xen.hash
+index 3c5981a..4a44d7a 100644
+--- a/package/xen/xen.hash
++++ b/package/xen/xen.hash
+@@ -9,3 +9,5 @@ sha256 5068a78293daa58557c30c95141b775becfb650de6a5eda0d82a4a321ced551c xsa232.p
+ sha256 f721cc49ba692b2f36299b631451f51d7340b8b4732f74c98f01cb7a80d8662b xsa233.patch
+ sha256 213f9d81a4ab785db67b9f579c9e88c9c8586c46b93f466a309060750df2df32 xsa234-4.9.patch
+ sha256 d8f012734fbf6019c1ff864744e308c41dfb9c7804ca3be2771c2c972cdf4bd5 xsa235-4.9.patch
++sha256 526f9e1b127fbb316762ce8e8f4563bc9de0c55a1db581456a3017d570d35bdd 0001-xen-page_alloc-Cover-memory-unreserved-after-boot-in.patch
++sha256 7164010112fcccd9cd88e72ace2eeabdb364dd6f4d05c434686267d18067f420 0002-xen-arm-Correctly-report-the-memory-region-in-the-du.patch
+diff --git a/package/xen/xen.mk b/package/xen/xen.mk
+index 5bb18e6..e07389e 100644
+--- a/package/xen/xen.mk
++++ b/package/xen/xen.mk
+@@ -15,7 +15,10 @@ XEN_PATCH = \
+ 	https://xenbits.xenproject.org/xsa/xsa232.patch \
+ 	https://xenbits.xenproject.org/xsa/xsa233.patch \
+ 	https://xenbits.xenproject.org/xsa/xsa234-4.9.patch \
+-	https://xenbits.xenproject.org/xsa/xsa235-4.9.patch
++	https://xenbits.xenproject.org/xsa/xsa235-4.9.patch \
++	https://xenbits.xenproject.org/xsa/xsa245/0001-xen-page_alloc-Cover-memory-unreserved-after-boot-in.patch \
++	https://xenbits.xenproject.org/xsa/xsa245/0002-xen-arm-Correctly-report-the-memory-region-in-the-du.patch
 +
-+MAXADDRS was chosen not to need enforcement, but the logic used to
-+compute it assumes the answers received match the RR types of the
-+queries. specifically, it assumes that only one replu contains A
-+record answers. if the replies to both the A and the AAAA query have
-+their answer sections filled with A records, MAXADDRS can be exceeded
-+and clobber the stack of the calling function.
-+
-+this bug was found and reported by Felix Wilhelm.
-+
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ src/network/lookup_name.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/src/network/lookup_name.c b/src/network/lookup_name.c
-+index 066be4d5..209c20f0 100644
-+--- a/src/network/lookup_name.c
-++++ b/src/network/lookup_name.c
-+@@ -111,6 +111,7 @@ static int dns_parse_callback(void *c, int rr, const void *data, int len, const
-+ {
-+ 	char tmp[256];
-+ 	struct dpc_ctx *ctx = c;
-++	if (ctx->cnt >= MAXADDRS) return -1;
-+ 	switch (rr) {
-+ 	case RR_A:
-+ 		if (len != 4) return -1;
-+-- 
-+2.11.0
-+
+ XEN_LICENSE = GPL-2.0
+ XEN_LICENSE_FILES = COPYING
+ XEN_DEPENDENCIES = host-acpica host-python
