@@ -1,112 +1,75 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 22 Oct 2017 17:15:40 +0200
-Subject: [Buildroot] [PATCH 4/4 v2] core: check files are nto touched by
-	more than on package
-In-Reply-To: <cover.1508685316.git.yann.morin.1998@free.fr>
-References: <cover.1508685316.git.yann.morin.1998@free.fr>
-Message-ID: <64a5b7666e47d87d58845028f9576ab68a186f44.1508685316.git.yann.morin.1998@free.fr>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sun, 22 Oct 2017 17:16:21 +0200
+Subject: [Buildroot] [PATCH RFC] package/glibc: switch to using the
+ maintenance branch
+In-Reply-To: <5b08873b-fd57-5852-7920-3afc25368c0d@gmail.com>
+References: <20171021102206.29477-1-yann.morin.1998@free.fr>
+ <38b149b1-8f27-d747-3b16-be54b43cdbd4@gmail.com>
+ <20171021122223.GB7022@scaer>
+ <5b08873b-fd57-5852-7920-3afc25368c0d@gmail.com>
+Message-ID: <59e6c3e0-9492-c433-91e0-db4dda9c76e1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, we do nothing about packages that touch the same file: given
-a specific configuration, the result is reproducible (even though it
-might not be what the user expected) because the build order is
-guaranteed.
+Hi Yann, All,
 
-Hwever, when we later introduce top-level parallel buil, we will no
-longer be able to guarantee a build order, by the mere way of it being
-parallel. Reconcialliting all those modified files will be impossible to
-do automatically. The only way will be to  refuse such situations.
+Le 21/10/2017 ? 15:12, Romain Naour a ?crit?:
+> Hi Yann, All,
+> 
+> Le 21/10/2017 ? 14:22, Yann E. MORIN a ?crit?:
+>> Romain, All,
+>>
+>> On 2017-10-21 13:31 +0200, Romain Naour spake thusly:
+>>> Le 21/10/2017 ? 12:22, Yann E. MORIN a ?crit?:
 
-As a preliminary step, introduce a helper script that detects files that
-are being moified by two or more packages, and reports them and the
-impacted packages, at the end of the build.
+[...]
 
-The list being reported at the end of the build will make it prominently
-visible in autobuilder results, so we can assess the problem, if any.
+>>>> The version number is obtained with:
+>>>>     $ git describe --match 'glibc-*' --abbrev=40 origin/release/2.26/master
+>>>>
+>>>> The alternative options were:
+>>>>   - download the tarball from the git tree
+>>>>     --> does nto work; not an option
+>>>>   - download the 2.26 tarball, and bundle the individual patches in
+>>>>     Buildroot
+>>>>     --> maintenance of patches is a burden; not an option
+>>>>   - download the 2.26 tarball, maintain the list of patches to download from
+>>>>     the git tree
+>>>>     --> not an option for the same reason
+>>>>
+>>>> So we end up just doing a git clone. The git tree is today about ten
+>>>> times the size of the tarball, so a rough estimate makes it at about ten
+>>>> times the download time.
+>>>
+>>> I can't clone this repo from here using https:
+>>>
+>>> error: Unable to get pack index
+>>> https://sourceware.org/git/glibc.git/objects/pack/pack-f7640727c0f4d6c3389f46d7d6540bbd74f2c136.idx
+>>> error: Failed to connect to sourceware.org port 443: Connection timed out
+>>> (curl_result = 7, http_code = 0, sha1 = eb4488dc33fedcd7cdb5907a82f18f1d300d533b)
+>>> error: Unable to find a1fd1e8a3e17d0f846df142d93aa2af0bc16ced0 under
+>>> https://sourceware.org/git/glibc.git
+>>
+>> As seen on IRC, you've solved your issue, right?
+> 
+> Right, the build succeed here.
 
-Later on, calling that helper script can be done right after the package
-installation step, to bail out early.
+It seems that using https://sourceware.org/git/glibc.git is not a reliable.
+The https connection timeout most of the time.
+A lot of build has been broken in my gitlab when I was testing the
+toolchain-builder infra.
 
-Thanks Arnout for the pythonist way to write default dictionaries! ;-)
+Since git:// can't be used behind a proxy, we have no choice but use
+http://sourceware.org/git/glibc.git
 
-Note: doing it in python rather than a shell script is impressively
-faster: where the shell script takes ~1.2s on a minimalist build, the
-python script only takes ~0.015s, that is about 80 times faster.
+Best regards,
+Romain
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Peter Korsgaard <peter@korsgaard.com>
----
- Makefile                            |  4 ++++
- support/scripts/check-uniq-files.py | 40 +++++++++++++++++++++++++++++++++++++
- 2 files changed, 44 insertions(+)
- create mode 100755 support/scripts/check-uniq-files.py
-
-diff --git a/Makefile b/Makefile
-index 79db7fe48a..f0b60bae5c 100644
---- a/Makefile
-+++ b/Makefile
-@@ -679,6 +679,10 @@ $(TARGETS_ROOTFS): target-finalize
- .PHONY: target-finalize
- target-finalize: $(PACKAGES)
- 	@$(call MESSAGE,"Finalizing target directory")
-+	# Check files that are touched by more than one package
-+	./support/scripts/check-uniq-files.py -t target $(BUILD_DIR)/packages-file-list.txt
-+	./support/scripts/check-uniq-files.py -t staging $(BUILD_DIR)/packages-file-list-staging.txt
-+	./support/scripts/check-uniq-files.py -t host $(BUILD_DIR)/packages-file-list-host.txt
- 	$(foreach hook,$(TARGET_FINALIZE_HOOKS),$($(hook))$(sep))
- 	rm -rf $(TARGET_DIR)/usr/include $(TARGET_DIR)/usr/share/aclocal \
- 		$(TARGET_DIR)/usr/lib/pkgconfig $(TARGET_DIR)/usr/share/pkgconfig \
-diff --git a/support/scripts/check-uniq-files.py b/support/scripts/check-uniq-files.py
-new file mode 100755
-index 0000000000..e77472cf80
---- /dev/null
-+++ b/support/scripts/check-uniq-files.py
-@@ -0,0 +1,40 @@
-+#!/usr/bin/env python2
-+
-+import sys
-+import csv
-+import argparse
-+from collections import defaultdict
-+
-+warn = 'Warnng: {}s file "{}" is touched by more than one package: {}\n'
-+
-+def main():
-+    parser = argparse.ArgumentParser()
-+    parser.add_argument('packages_file_list', nargs='*',
-+                    help='The packages-file-list to check from')
-+    parser.add_argument('-t', '--type', metavar="TYPE",
-+                        help='Report as a TYPE file (TYPE is either target, staging, or host)')
-+
-+    args = parser.parse_args()
-+
-+    if not len(args.packages_file_list) == 1:
-+        sys.stderr.write('No packages-file-list was provided.\n')
-+        return False
-+
-+    if args.type is None:
-+        sys.stderr.write('No type was provided\n')
-+        return False
-+
-+    file_to_pkg = defaultdict(list)
-+    with open(args.packages_file_list[0], 'rb') as pkg_file_list:
-+        r = csv.reader(pkg_file_list, delimiter=',')
-+        for row in r:
-+            pkg = row[0]
-+            file = row[1]
-+            file_to_pkg[file].append(pkg)
-+
-+    for file in file_to_pkg:
-+        if len(file_to_pkg[file]) > 1:
-+            sys.stderr.write(warn.format(args.type, file, file_to_pkg[file]))
-+
-+if __name__ == "__main__":
-+    sys.exit(main())
--- 
-2.11.0
+> 
+>>
+>> Regards,
+>> Yann E. MORIN.
+>>
