@@ -1,46 +1,43 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 22 Oct 2017 16:17:52 +0200
-Subject: [Buildroot] [PATCH 2/2] dependencies: correct dependencies for
-	top-level parallel build
-In-Reply-To: <20171022141752.26105-1-arnout@mind.be>
-References: <20171022141752.26105-1-arnout@mind.be>
-Message-ID: <20171022141752.26105-2-arnout@mind.be>
+Date: Sun, 22 Oct 2017 16:17:51 +0200
+Subject: [Buildroot] [PATCH 1/2] core-dependencies: remove unneeded HOSTCC
+Message-ID: <20171022141752.26105-1-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit 4932c8a7cc94277b3d53cecd935f725b91cfa9fe introduced the
-core-dependencies target to make sure that the dependencies.sh script
-runs before we attempt to compile any host tool, so that the absence of
-a compiler is properly detected. However, this relied on the
-left-to-right evaluation of dependencies. This will no longer be true
-when we enable top-level parallel build.
+dependencies.sh uses HOSTCC_NOCCACHE directly, and this variable is
+exported from the top-level Makefile, so there is no need to pass
+HOSTCC to it. HOSTCC is not used at all in dependencies.sh.
 
-Fix this by letting DEPENDENCIES_HOST_PREREQ depend on
-core-dependencies.
-
-Note that it is not possible to remove the
-dependencies <- core-dependencies. Indeed, it is possible that
-DEPENDENCIES_HOST_PREREQ is completely empty, and in that case we still
-need to check core-dependencies.
+Thus, we also no longer need to apply the HOSTCC override for
+core-dependencies. The core-depencies rule doesn't use HOSTCC or
+HOSTCXX.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- support/dependencies/dependencies.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ support/dependencies/dependencies.mk | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
 diff --git a/support/dependencies/dependencies.mk b/support/dependencies/dependencies.mk
-index 80ba48a6a7..4f606f849d 100644
+index ef2ae9b7e1..80ba48a6a7 100644
 --- a/support/dependencies/dependencies.mk
 +++ b/support/dependencies/dependencies.mk
-@@ -24,6 +24,8 @@ core-dependencies:
+@@ -19,12 +19,11 @@ DEPENDENCIES_HOST_PREREQ += host-ccache
+ endif
  
- $(DEPENDENCIES_HOST_PREREQ): HOSTCC=$(HOSTCC_NOCCACHE)
- $(DEPENDENCIES_HOST_PREREQ): HOSTCXX=$(HOSTCXX_NOCCACHE)
-+$(DEPENDENCIES_HOST_PREREQ): core-dependencies
-+
+ core-dependencies:
+-	@HOSTCC="$(firstword $(HOSTCC))" MAKE="$(MAKE)" \
+-		DL_TOOLS="$(sort $(DL_TOOLS_DEPENDENCIES))" \
++	@MAKE="$(MAKE)" DL_TOOLS="$(sort $(DL_TOOLS_DEPENDENCIES))" \
+ 		$(TOPDIR)/support/dependencies/dependencies.sh
+ 
+-core-dependencies $(DEPENDENCIES_HOST_PREREQ): HOSTCC=$(HOSTCC_NOCCACHE)
+-core-dependencies $(DEPENDENCIES_HOST_PREREQ): HOSTCXX=$(HOSTCXX_NOCCACHE)
++$(DEPENDENCIES_HOST_PREREQ): HOSTCC=$(HOSTCC_NOCCACHE)
++$(DEPENDENCIES_HOST_PREREQ): HOSTCXX=$(HOSTCXX_NOCCACHE)
  dependencies: core-dependencies $(DEPENDENCIES_HOST_PREREQ)
  
  ################################################################################
