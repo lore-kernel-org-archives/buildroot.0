@@ -1,54 +1,76 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 23 Oct 2017 00:36:58 +0200
-Subject: [Buildroot] [git commit branch/2017.08.x] busybox: add upstream
-	post-1.27.2 httpd fix
-Message-ID: <20171022224414.D3200802AA@busybox.osuosl.org>
+Date: Mon, 23 Oct 2017 00:35:28 +0200
+Subject: [Buildroot] [git commit branch/2017.08.x] package/go: fix
+	cross-compilation settings
+Message-ID: <20171022224414.AB7338073F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=86a7d8cb0a78d4cb3aa4e37bbe5b68107d42f212
+commit: https://git.buildroot.net/buildroot/commit/?id=1a223cda9edb19b49e1a11713d0a8f5065e53f82
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.08.x
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit ec58149009776f63767644f9a3409f420c271766)
+This patch fixes a bug with the BR2_TOOLCHAIN_HAS_THREADS variable
+handling which causes CGO_ENABLED to be always 0.
+
+Furthermore, it fixes the cross compilation options for the go
+compiler: setting CGO_ENABLED should be done only for the target
+compiler not the host one.
+
+Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Acked-by: Christian Stewart <christian@paral.in>
+(cherry picked from commit 80ea21bc3c2147adf810731b0b242e94a3ad294e)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...0005-httpd-fix-handling-of-range-requests.patch | 27 ++++++++++++++++++++++
- 1 file changed, 27 insertions(+)
+ package/go/go.mk | 14 ++++++++------
+ 1 file changed, 8 insertions(+), 6 deletions(-)
 
-diff --git a/package/busybox/0005-httpd-fix-handling-of-range-requests.patch b/package/busybox/0005-httpd-fix-handling-of-range-requests.patch
-new file mode 100644
-index 0000000..b3ca32d
---- /dev/null
-+++ b/package/busybox/0005-httpd-fix-handling-of-range-requests.patch
-@@ -0,0 +1,27 @@
-+From 2b400d9b2b7309d6e479102fc3ce646e893058a5 Mon Sep 17 00:00:00 2001
-+From: Denys Vlasenko <vda.linux@googlemail.com>
-+Date: Mon, 18 Sep 2017 13:09:11 +0200
-+Subject: [PATCH] httpd: fix handling of range requests
-+
-+Signed-off-by: Denys Vlasenko <vda.linux@googlemail.com>
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ networking/httpd.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/networking/httpd.c b/networking/httpd.c
-+index e072f23c7..5e32fc936 100644
-+--- a/networking/httpd.c
-++++ b/networking/httpd.c
-+@@ -2337,7 +2337,7 @@ static void handle_incoming_and_exit(const len_and_sockaddr *fromAddr)
-+ 			if (STRNCASECMP(iobuf, "Range:") == 0) {
-+ 				/* We know only bytes=NNN-[MMM] */
-+ 				char *s = skip_whitespace(iobuf + sizeof("Range:")-1);
-+-				if (is_prefixed_with(s, "bytes=") == 0) {
-++				if (is_prefixed_with(s, "bytes=")) {
-+ 					s += sizeof("bytes=")-1;
-+ 					range_start = BB_STRTOOFF(s, &s, 10);
-+ 					if (s[0] != '-' || range_start < 0) {
-+-- 
-+2.11.0
-+
+diff --git a/package/go/go.mk b/package/go/go.mk
+index 0781dff..6035164 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
+@@ -52,7 +52,7 @@ HOST_GO_TARGET_ENV = \
+ # set, build in cgo support for any go programs that may need it.  Note that
+ # any target package needing cgo support must include
+ # 'depends on BR2_TOOLCHAIN_HAS_THREADS' in its config file.
+-ifeq (BR2_TOOLCHAIN_HAS_THREADS,y)
++ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+ HOST_GO_CGO_ENABLED = 1
+ else
+ HOST_GO_CGO_ENABLED = 0
+@@ -74,8 +74,8 @@ HOST_GO_MAKE_ENV = \
+ 	GOARCH=$(GO_GOARCH) \
+ 	$(if $(GO_GOARM),GOARM=$(GO_GOARM)) \
+ 	GOOS=linux \
+-	CGO_ENABLED=$(HOST_GO_CGO_ENABLED) \
+-	CC=$(HOSTCC_NOCCACHE)
++	CC=$(HOSTCC_NOCCACHE) \
++	CXX=$(HOSTCXX_NOCCACHE)
+ 
+ HOST_GO_TARGET_CC = \
+ 	CC_FOR_TARGET="$(TARGET_CC)" \
+@@ -83,16 +83,18 @@ HOST_GO_TARGET_CC = \
+ 
+ HOST_GO_HOST_CC = \
+ 	CC_FOR_TARGET=$(HOSTCC_NOCCACHE) \
+-	CXX_FOR_TARGET=$(HOSTCC_NOCCACHE)
++	CXX_FOR_TARGET=$(HOSTCXX_NOCCACHE)
+ 
+ HOST_GO_TMP = $(@D)/host-go-tmp
+ 
+ define HOST_GO_BUILD_CMDS
+-	cd $(@D)/src && $(HOST_GO_MAKE_ENV) $(HOST_GO_HOST_CC) ./make.bash
++	cd $(@D)/src && \
++		$(HOST_GO_MAKE_ENV) $(HOST_GO_HOST_CC) CGO_ENABLED=0 ./make.bash
+ 	mkdir -p $(HOST_GO_TMP)
+ 	mv $(@D)/pkg/tool $(HOST_GO_TMP)/
+ 	mv $(@D)/bin/ $(HOST_GO_TMP)/
+-	cd $(@D)/src && $(HOST_GO_MAKE_ENV) $(HOST_GO_TARGET_CC) ./make.bash
++	cd $(@D)/src && \
++		$(HOST_GO_MAKE_ENV) $(HOST_GO_TARGET_CC) CGO_ENABLED=$(HOST_GO_CGO_ENABLED) ./make.bash
+ endef
+ 
+ define HOST_GO_INSTALL_CMDS
