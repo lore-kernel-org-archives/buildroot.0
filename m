@@ -1,48 +1,38 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 22 Oct 2017 17:26:41 +0200
-Subject: [Buildroot] [PATCH v2 2/3] board/pc: add documentation for
-	testing with qemu
-In-Reply-To: <20171022135426.28901-2-nunes.erico@gmail.com> (Erico Nunes's
- message of "Sun, 22 Oct 2017 15:54:25 +0200")
-References: <20171022135426.28901-1-nunes.erico@gmail.com>
- <20171022135426.28901-2-nunes.erico@gmail.com>
-Message-ID: <87sheb9pam.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 22 Oct 2017 16:59:22 +0200
+Subject: [Buildroot] [git commit] bluez5_utils: define FIRMWARE_DIR for
+	hciattach_bcm43xx
+Message-ID: <20171022154030.D511880835@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Erico" == Erico Nunes <nunes.erico@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=361d1b969ecdba1a8a62613626f90fc025b94660
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Add some documentation about running the pc defconfigs in qemu.
- > In particular, document the use of the -bios parameter to use the OVMF
- > firmware to test the UEFI image.
+The tool hciattach_bcm43xx defines the default firmware path in `/etc/firmware`,
+but the Broadcom firmware blobs are usually stored in `/lib/firmware`.
 
- > Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
- > Cc: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/bluez5_utils/bluez5_utils.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-...
-
- > +Emulation in qemu (UEFI)
- > +========================
- > +
- > +1. Edit grub-efi.cfg
- > +
- > +  Since the driver will show up in the virtual machine as /dev/vda,
- > +  change board/pc/grub-efi.cfg to use root=/dev/vda2 instead of
- > +  root=/dev/sda2. Then rebuild grub2 and the image.
- > +
- > +2. Run the emulation with:
- > +
- > +qemu-system-x86_64 \
- > +	-M pc \
- > +	-bios </path/to/OVMF_CODE.fd> \
- > +	-drive file=output/images/disk.img,if=virtio,format=raw \
-
-Maybe it would be better to not use virtio for the disk image so we can
-keep root=/dev/sda? Unless the UEFI firmware doesn't support normal sata
-controllers?
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/bluez5_utils/bluez5_utils.mk b/package/bluez5_utils/bluez5_utils.mk
+index 1bc6969..57e9c26 100644
+--- a/package/bluez5_utils/bluez5_utils.mk
++++ b/package/bluez5_utils/bluez5_utils.mk
+@@ -80,6 +80,10 @@ define BLUEZ5_UTILS_INSTALL_GATTTOOL
+ 	$(INSTALL) -D -m 0755 $(@D)/attrib/gatttool $(TARGET_DIR)/usr/bin/gatttool
+ endef
+ BLUEZ5_UTILS_POST_INSTALL_TARGET_HOOKS += BLUEZ5_UTILS_INSTALL_GATTTOOL
++# hciattach_bcm43xx defines default firmware path in `/etc/firmware`, but
++# Broadcom firmware blobs are usually located in `/lib/firmware`.
++BLUEZ5_UTILS_CONF_ENV += \
++	CPPFLAGS='$(TARGET_CPPFLAGS) -DFIRMWARE_DIR=\"/lib/firmware\"'
+ BLUEZ5_UTILS_CONF_OPTS += --enable-deprecated
+ else
+ BLUEZ5_UTILS_CONF_OPTS += --disable-deprecated
