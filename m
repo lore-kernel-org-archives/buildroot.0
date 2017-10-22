@@ -1,44 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 Oct 2017 09:10:32 +0200
-Subject: [Buildroot] [git commit] go: bump version to 1.9
-Message-ID: <20171022100955.6933880804@busybox.osuosl.org>
+Date: Sun, 22 Oct 2017 12:18:05 +0200
+Subject: [Buildroot] [git commit] runc: bump to v1.0.0-rc4
+Message-ID: <20171022101044.97F98807B3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b3c2acba9b29aa2f9c2e36cae368ee98697002d0
+commit: https://git.buildroot.net/buildroot/commit/?id=3861ce09d0acd6425873332300c6caa75863017f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Go 1.9 is required for docker-engine and other Go packages in Buildroot.
+This is a dependency of docker-engine v2017.07.0-ce.
 
 Signed-off-by: Christian Stewart <christian@paral.in>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/go/go.hash | 4 ++--
- package/go/go.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/runc/runc.hash | 2 +-
+ package/runc/runc.mk   | 5 +++--
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/go/go.hash b/package/go/go.hash
-index 1836af2..445a0b7 100644
---- a/package/go/go.hash
-+++ b/package/go/go.hash
+diff --git a/package/runc/runc.hash b/package/runc/runc.hash
+index 3e188c5..08e306d 100644
+--- a/package/runc/runc.hash
++++ b/package/runc/runc.hash
 @@ -1,2 +1,2 @@
--# Locally computed:
--sha256	5f5dea2447e7dcfdc50fa6b94c512e58bfba5673c039259fd843f68829d99fa6	go1.8.3.src.tar.gz
-+# From https://golang.org/dl/
-+sha256	a4ab229028ed167ba1986825751463605264e44868362ca8e7accc8be057e993	go1.9.src.tar.gz
-diff --git a/package/go/go.mk b/package/go/go.mk
-index 6035164..23facbd 100644
---- a/package/go/go.mk
-+++ b/package/go/go.mk
+ # Locally computed
+-sha256	b5c50d7d9a5f610d5424f96196efa306ec708fd9299302dd919545099c16b7c1	runc-9c2d8d184e5da67c95d601382adf14862e4f2228.tar.gz
++sha256	3ffefd293932d2ad509701878dd7dd6ef498c3667198a33e8e5d5a3cbce0eeaa	runc-v1.0.0-rc4.tar.gz
+diff --git a/package/runc/runc.mk b/package/runc/runc.mk
+index fb3fec2..0b51e11 100644
+--- a/package/runc/runc.mk
++++ b/package/runc/runc.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GO_VERSION = 1.8.3
-+GO_VERSION = 1.9
- GO_SITE = https://storage.googleapis.com/golang
- GO_SOURCE = go$(GO_VERSION).src.tar.gz
+-RUNC_VERSION = 9c2d8d184e5da67c95d601382adf14862e4f2228
++RUNC_VERSION = v1.0.0-rc4
+ RUNC_SITE = $(call github,opencontainers,runc,$(RUNC_VERSION))
+ RUNC_LICENSE = Apache-2.0
+ RUNC_LICENSE_FILES = LICENSE
+@@ -38,7 +38,8 @@ define RUNC_CONFIGURE_CMDS
+ endef
  
+ define RUNC_BUILD_CMDS
+-	cd $(@D) && $(RUNC_MAKE_ENV) $(HOST_DIR)/bin/go \
++	cd $(RUNC_GOPATH)/src/github.com/opencontainers/runc && \
++		$(RUNC_MAKE_ENV) $(HOST_DIR)/bin/go \
+ 		build -v -o $(@D)/bin/runc \
+ 		-tags "$(RUNC_GOTAGS)" -ldflags "$(RUNC_GLDFLAGS)" .
+ endef
