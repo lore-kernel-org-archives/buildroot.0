@@ -1,60 +1,96 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 Oct 2017 16:37:12 +0200
-Subject: [Buildroot] [git commit] boost: fix build on ppc64le host
-Message-ID: <20171022143046.79DFF81018@busybox.osuosl.org>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Sun, 22 Oct 2017 16:42:11 +0200
+Subject: [Buildroot] [V4 1/3] prosody: bump to version 0.10.0
+Message-ID: <20171022144213.5559-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=df36d26d061000105de071af54774194cb39b665
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+this version is not restricted to Lua 5.1
 
-Fixes:
-http://autobuild.buildroot.net/results/57d/57d9f0ea27e5c8ba73002bd1d0b33027f27a3779/
-http://autobuild.buildroot.net/results/7c3/7c3133e822c997879fe00923ba0ad7903656c2e1/
-
-bootstrap by default runs ./tools/build/src/engine/build.sh --guess-toolset
-to detect what toolchain (compiler variant).  On x86 this returns gcc, but
-on the ppc64le gcc112 autobuilder this returns xlcpp causing bootstrap.sh to
-get confused and bail out:
-
-./bootstrap.sh ..
-Building Boost.Build engine with toolset ... tools/build/src/engine/###
-\### No toolset specified. Please use --toolset option.
-\###
-\### Known toolsets are: acc, borland, cc, como, clang, darwin, gcc, gcc-nocygwin, intel-darwin, intel-linux, intel-win32, kcc, kylix, metrowerks, mipspro, msvc, qcc, pathscale, pgi, sun, sunpro, tru64cxx, vacpp, xlcpp, vc7, vc8, vc9, vc10, vc11, vc12, vc14, vc141, vmsdecc
-\###/b2
-
-Fix it by explicitly specifying the gcc toolset mode to bootstrap, similar
-to how it was already done for the bjam invocations.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/boost/boost.mk | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ package/prosody/Config.in    |  4 ++--
+ package/prosody/prosody.hash |  8 ++++----
+ package/prosody/prosody.mk   | 20 +++++++++-----------
+ 3 files changed, 15 insertions(+), 17 deletions(-)
 
-diff --git a/package/boost/boost.mk b/package/boost/boost.mk
-index 8ba88a7..598ffbe 100644
---- a/package/boost/boost.mk
-+++ b/package/boost/boost.mk
-@@ -12,7 +12,7 @@ BOOST_LICENSE = BSL-1.0
- BOOST_LICENSE_FILES = LICENSE_1_0.txt
+diff --git a/package/prosody/Config.in b/package/prosody/Config.in
+index 77eeb85ab..1bc79b7f2 100644
+--- a/package/prosody/Config.in
++++ b/package/prosody/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_PROSODY
+ 	bool "prosody"
+-	depends on BR2_PACKAGE_LUA_5_1 || BR2_PACKAGE_LUAJIT
++	depends on BR2_PACKAGE_HAS_LUAINTERPRETER
+ 	select BR2_PACKAGE_LUAEXPAT # runtime
+ 	select BR2_PACKAGE_LUASEC # runtime
+ 	select BR2_PACKAGE_LUASOCKET # runtime
+@@ -15,4 +15,4 @@ config BR2_PACKAGE_PROSODY
+ 	  https://prosody.im
  
- # keep host variant as minimal as possible
--HOST_BOOST_FLAGS = --without-icu \
-+HOST_BOOST_FLAGS = --without-icu --with-toolset=gcc \
- 	--without-libraries=$(subst $(space),$(comma),atomic chrono context \
- 	coroutine date_time exception filesystem graph graph_parallel iostreams \
- 	locale log math mpi program_options python random regex serialization \
-@@ -50,6 +50,8 @@ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_WAVE),,wave)
+ comment "prosody needs the lua interpreter"
+-	depends on !BR2_PACKAGE_LUA_5_1 && !BR2_PACKAGE_LUAJIT
++	depends on !BR2_PACKAGE_HAS_LUAINTERPRETER
+diff --git a/package/prosody/prosody.hash b/package/prosody/prosody.hash
+index 38942ea7f..d56099456 100644
+--- a/package/prosody/prosody.hash
++++ b/package/prosody/prosody.hash
+@@ -1,5 +1,5 @@
+ # Hashes from: https://prosody.im/downloads/source/{MD5,SHA1,SHA256,SHA512}SUMS
+-md5    d743adea6cfbaacc3a24cc0c3928bb1b  prosody-0.9.12.tar.gz
+-sha1   1ee224263a5b3d67960e12edbbe6b2f16b95d147  prosody-0.9.12.tar.gz
+-sha256 1a59a322b71928a21985522aa00d0eab3552208d7bf9ecb318542a1b2fee3e8d  prosody-0.9.12.tar.gz
+-sha512 e87b5f3b3e327722cec9d8d0470684e2ec2788a1c5ae623c4f505a00572ef21f65afe84cd5b7de47d6a65fe8872506fe34e5e8886e20979ff84710669857ca76  prosody-0.9.12.tar.gz
++md5    0eebf7a18ce1fc7dd9954c94ebd85f54  prosody-0.10.0.tar.gz
++sha1   57c1c5a665e6453bdde06727ef398cd69accd9d7  prosody-0.10.0.tar.gz
++sha256 7414e447256c60b2645578c4a5913113cd74b419ca5a032b54db90d98a978498  prosody-0.10.0.tar.gz
++sha512 ee66e240afba6a8cb286623da48d9b535798153fb65e32070cec93aafe360e91f7087eeb49dec0f7d145e24f04339ed0878e50835b52f682130b204e22990ce9  prosody-0.10.0.tar.gz
+diff --git a/package/prosody/prosody.mk b/package/prosody/prosody.mk
+index b98748e3b..10f11579f 100644
+--- a/package/prosody/prosody.mk
++++ b/package/prosody/prosody.mk
+@@ -4,29 +4,27 @@
+ #
+ ################################################################################
  
- BOOST_TARGET_CXXFLAGS = $(TARGET_CXXFLAGS)
+-PROSODY_VERSION = 0.9.12
++PROSODY_VERSION = 0.10.0
+ PROSODY_SITE = https://prosody.im/downloads/source
+ PROSODY_LICENSE = MIT
+ PROSODY_LICENSE_FILES = COPYING
+-PROSODY_DEPENDENCIES = openssl libidn
+-
+-ifeq ($(BR2_PACKAGE_LUA_5_1),y)
+-PROSODY_DEPENDENCIES += lua
+-endif
+-
+-ifeq ($(BR2_PACKAGE_LUAJIT),y)
+-PROSODY_DEPENDENCIES += luajit
+-endif
++PROSODY_DEPENDENCIES = host-luainterpreter luainterpreter libidn openssl
  
-+BOOST_FLAGS = --with-toolset=gcc
+ PROSODY_CONF_OPTS = \
++	--with-lua-bin=$(HOST_DIR)/usr/bin \
+ 	--with-lua=$(STAGING_DIR)/usr \
++	--lua-version=$(LUAINTERPRETER_ABIVER) \
+ 	--c-compiler=$(TARGET_CC) \
+-	--cflags="$(TARGET_CFLAGS)" \
++	--cflags="$(TARGET_CFLAGS) -std=c99" \
+ 	--linker=$(TARGET_CC) \
+ 	--ldflags="$(TARGET_LDFLAGS) -shared" \
+ 	--sysconfdir=/etc/prosody \
+ 	--prefix=/usr
+ 
++ifeq ($(BR2_PACKAGE_LUAJIT),y)
++PROSODY_CONF_OPTS += --runwith=luajit
++endif
 +
- ifeq ($(BR2_PACKAGE_ICU),y)
- BOOST_FLAGS += --with-icu=$(STAGING_DIR)/usr
- BOOST_DEPENDENCIES += icu
+ define PROSODY_CONFIGURE_CMDS
+ 	cd $(@D) && \
+ 		$(TARGET_CONFIGURE_OPTS) \
+-- 
+2.11.0
