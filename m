@@ -1,66 +1,156 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 Oct 2017 14:29:19 +0200
-Subject: [Buildroot] [PATCH v3 02/11] support/scripts: Add
- sunxi64-post-build.sh
-In-Reply-To: <4cb45577-1f4a-ce9c-7204-74934272b789@arm.com>
-References: <1508406333-27138-1-git-send-email-jagan@amarulasolutions.com>
- <1508406333-27138-3-git-send-email-jagan@amarulasolutions.com>
- <20171021230637.60959eed@windsurf>
- <CAMty3ZCQSpztnqCa8=uZMB1LsF2zPq_OF5uUsagJ9Uv4Z8JUZA@mail.gmail.com>
- <4cb45577-1f4a-ce9c-7204-74934272b789@arm.com>
-Message-ID: <20171022142919.6dc03525@windsurf>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 22 Oct 2017 14:30:13 +0200
+Subject: [Buildroot] [PATCH v2 2/2] libxkbcommon: add support for
+ interactive-wayland test program
+In-Reply-To: <20170310195455.16117-2-ps.report@gmx.net>
+References: <20170310195455.16117-1-ps.report@gmx.net>
+ <20170310195455.16117-2-ps.report@gmx.net>
+Message-ID: <ff06b4f0-20af-7025-082e-e74cf0dca901@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+ Hi Peter,
 
-On Sun, 22 Oct 2017 12:05:52 +0100, Andr? Przywara wrote:
+ Sorry to come back to this after so much time.
 
-> > This wasn't only the case with sunxi it's been the U-Boot FIT
-> > behaviour..even rockchip do follow same build process.
-> > 
-> > Ideally FIT need input files to produce blob like dtb.
-> > 
-> > Added Andre he will give some more insight.  
-> 
-> So yes, ATF supports *multiple* ways of integration:
-> - On the Juno it has the capability of loading images - from NOR flash,
-> so not a big deal. This means the BL1 and BL2 stages read the BL31
-> (containing the PSCI runtime) and BL33 (U-Boot or EDK2), also this uses
-> the ATF defined FIP image format.
-> - For other platforms (like rockchip or sunxi) we usually load from MMC
-> or SPI flash. So using the traditional ATF approach would mean to have
-> MMC and SPI drivers in the early ATF stages, also do the DRAM
-> initialization there. Since ATF is BSD licensed, it's more involved than
-> just copying some code from U-Boot.
-> So the pragmatic approach - which ATF actually embraces - is to just use
-> a subset of the whole ATF (BL31) and do the rest via some platform
-> specific firmware: which is U-Boot's SPL in our case, since it already
-> has support for this hardware. Other platform (most ARM64 servers) tend
-> to have their proprietary early-init firmware there.
+On 10-03-17 20:54, Peter Seiderer wrote:
+[snip]
+> diff --git a/package/libxkbcommon/0001-configure.ac-prefere-AC_PATH_PROG-for-wayland-scanne.patch b/package/libxkbcommon/0001-configure.ac-prefere-AC_PATH_PROG-for-wayland-scanne.patch
+> new file mode 100644
+> index 000000000..630e45d3c
+> --- /dev/null
+> +++ b/package/libxkbcommon/0001-configure.ac-prefere-AC_PATH_PROG-for-wayland-scanne.patch
+> @@ -0,0 +1,33 @@
+> +From b44b0d5323985661b508948eac725048affd3221 Mon Sep 17 00:00:00 2001
+> +From: Peter Seiderer <ps.report@gmx.net>
+> +Date: Wed, 8 Mar 2017 09:36:39 +0100
+> +Subject: [PATCH] configure.ac: prefere AC_PATH_PROG for wayland-scanner
+                                  prefer
+> +
+> +Prefere AC_PATH_PROG result for wayland-scanner over the
+   Prefer
 
-Thanks for summarizing the context.
+> +pkg-config version (when cross-compiling the .pc file might
+> +point to the wrong wayland-scanner binary (target rather than
+> +host) resulting in a non-executable and wrong scanner).
+> +
+> +Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> +---
+> + configure.ac | 4 +++-
+> + 1 file changed, 3 insertions(+), 1 deletion(-)
+> +
+> +diff --git a/configure.ac b/configure.ac
+> +index 725915b..e4ff9d2 100644
+> +--- a/configure.ac
+> ++++ b/configure.ac
+> +@@ -194,7 +194,9 @@ AS_IF([test "x$enable_wayland" = xyes], [
+> +         [AC_MSG_ERROR([Wayland utilities require libwayland-client >= 1.2 which was not found. \
+> + You can disable Wayland support with --disable-wayland.])])
+> +     AC_PATH_PROG([wayland_scanner], [wayland-scanner])
+> +-    wayland_scanner=`$PKG_CONFIG --variable=wayland_scanner wayland-scanner`
+> ++    if test "x$wayland_scanner" = x; then
+> ++        wayland_scanner=`$PKG_CONFIG --variable=wayland_scanner wayland-scanner`
+> ++    fi
 
-> So I virtually know nothing about buildroot, but it might not be a good
-> idea to shoehorn the second approach into the Juno ATF build scheme.
-> As I believe that in fact more platforms use the second approach, it
-> might be worthwhile to introduce some extra code in buildroot to support
-> that specifically instead of working around the Juno ATF way.
-> Maybe it can be modelled as some U-Boot FIT build process with an
-> additional requirement, similar to a binary blob?
+ I don't really agree with this fix. The output of pkg-config really should be
+authorative. Can't we patch the .pc file in a WAYLAND_PROTOCOLS_POST_INSTALL_HOOK?
 
-And this is exactly what I was suggesting Jagan to do: extend Buildroot
-so that it covers the U-Boot-bundles-ATF scenario (sunxi/rockchip,
-etc.) in addition to the already supported ATF-bundles-U-Boot scenario
-(Juno).
+> +     ac_wayland_protocols_pkgdatadir=`$PKG_CONFIG --variable=pkgdatadir wayland-protocols`
+> +     AC_SUBST(WAYLAND_PROTOCOLS_DATADIR, $ac_wayland_protocols_pkgdatadir)
+> + ], [enable_wayland=no])
+> +-- 
+> +2.11.0
+> +
+> diff --git a/package/libxkbcommon/Config.in b/package/libxkbcommon/Config.in
+> index 4da12897f..9c15d5d41 100644
+> --- a/package/libxkbcommon/Config.in
+> +++ b/package/libxkbcommon/Config.in
+> @@ -1,9 +1,21 @@
+>  config BR2_PACKAGE_LIBXKBCOMMON
+>  	bool "libxkbcommon"
+>  	select BR2_PACKAGE_LIBXCB if BR2_PACKAGE_XORG7
+> +	select BR2_PACKAGE_WAYLAND_PROTOCOLS if BR2_PACKAGE_WAYLAND
 
-Best regards,
+ IIUC this is only needed when BR2_PACKAGE_LIBXKBCOMMON_INTERACTIVE_WAYLAND is
+selected, no? For sure it is redundant with the select below.
 
-Thomas
+>  	help
+>  	  xkbcommon is a keymap compiler and support library which
+>  	  processes a reduced subset of keymaps as defined by the XKB
+>  	  specification.
+>  
+>  	  http://xkbcommon.org/
+> +
+> +if BR2_PACKAGE_LIBXKBCOMMON && BR2_PACKAGE_WAYLAND
+
+ The BR2_PACKAGE_WAYLAND part should be a depends of _INTERACTIVE_WAYLAND, below.
+
+> +
+> +config BR2_PACKAGE_LIBXKBCOMMON_INTERACTIVE_WAYLAND
+> +	bool "interactive-wayland"
+> +	select BR2_PACKAGE_WAYLAND_PROTOCOLS
+> +	help
+> +	  interactive-wayland is a wayland test application
+> +	  for libxkbcommon.
+> +
+> +endif
+> diff --git a/package/libxkbcommon/libxkbcommon.mk b/package/libxkbcommon/libxkbcommon.mk
+> index 601181446..c25b149ef 100644
+> --- a/package/libxkbcommon/libxkbcommon.mk
+> +++ b/package/libxkbcommon/libxkbcommon.mk
+> @@ -11,7 +11,12 @@ LIBXKBCOMMON_LICENSE = MIT/X11
+>  LIBXKBCOMMON_LICENSE_FILES = LICENSE
+>  LIBXKBCOMMON_INSTALL_STAGING = YES
+>  LIBXKBCOMMON_DEPENDENCIES = host-bison host-flex
+> -LIBXKBCOMMON_CONF_OPTS = --disable-wayland
+> +
+> +# patch 0001-configure.ac-prefere-AC_PATH_PROG-for-wayland-scanne.patch
+> +# touches configure.ac
+> +LIBXKBCOMMON_AUTORECONF = YES
+> +LIBXKBCOMMON_DEPENDENCIES += host-xutil_util-macros
+> +
+>  # uses C99 features
+>  LIBXKBCOMMON_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -std=gnu99"
+>  
+> @@ -22,4 +27,21 @@ else
+>  LIBXKBCOMMON_CONF_OPTS += --disable-x11
+>  endif
+>  
+> +ifeq ($(BR2_PACKAGE_LIBXKBCOMMON_INTERACTIVE_WAYLAND),y)
+> +LIBXKBCOMMON_CONF_OPTS += --enable-wayland
+> +LIBXKBCOMMON_DEPENDENCIES += wayland wayland-protocols
+> +LIBXKBCOMMON_CONF_ENV += ac_cv_path_wayland_scanner=$(HOST_DIR)/usr/bin/wayland-scanner
+> +define LIBXKBCOMMON_BUILD_INTERACTIVE_WAYLAND
+> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) test/interactive-wayland
+
+ You could instead set LIBXKBCOMMON_MAKE_OPTS to 'all test/interactive-wayland'
+I think.
+
+> +endef
+> +LIBXKBCOMMON_POST_BUILD_HOOKS = LIBXKBCOMMON_BUILD_INTERACTIVE_WAYLAND
+> +define LIBXKBCOMMON_INSTALL_INTERACTIVE_WAYLAND
+> +	$(INSTALL) -D -m 0755 $(@D)/test/interactive-wayland \
+> +		$(TARGET_DIR)/usr/bin/interactive-wayland
+> +endef
+> +LIBXKBCOMMON_POST_INSTALL_TARGET_HOOKS = LIBXKBCOMMON_INSTALL_INTERACTIVE_WAYLAN> +else
+> +LIBXKBCOMMON_CONF_OPTS += --disable-wayland
+> +endif
+> +
+>  $(eval $(autotools-package))
+
+ That said, I wonder if it is really worthwhile to go through all this effort to
+install a test program that upstream doesn't even mean to install...
+
+ Regards,
+ Arnout
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
