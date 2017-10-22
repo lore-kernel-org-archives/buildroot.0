@@ -1,29 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 23 Oct 2017 00:50:23 +0200
-Subject: [Buildroot] [PATCH 1/2] Use HOSTCC_NOCCACHE for both
-	core-dependencies and DEPENDENCIES_HOST_PREREQ
-In-Reply-To: <efc013bf-90ed-d6c2-ae6e-12ef3335b50e@mind.be> (Arnout
- Vandecappelle's message of "Sun, 22 Oct 2017 15:43:31 +0200")
-References: <1493372121-32177-1-git-send-email-alfredo.alvarez_fernandez@nokia.com>
- <efc013bf-90ed-d6c2-ae6e-12ef3335b50e@mind.be>
-Message-ID: <874lqq94r4.fsf@dell.be.48ers.dk>
+Date: Mon, 23 Oct 2017 00:50:46 +0200
+Subject: [Buildroot] [git commit] libffi: add patch to fix MIPS support
+In-Reply-To: <20171022134900.3FE8080467@busybox.osuosl.org> (Thomas
+ Petazzoni's message of "Sun, 22 Oct 2017 15:56:20 +0200")
+References: <20171022134900.3FE8080467@busybox.osuosl.org>
+Message-ID: <87zi8i7q61.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- > On 28-04-17 11:35, Alfredo Alvarez Fernandez wrote:
- >> This also fixes make clean host-ccache
- >> 
- >> Signed-off-by: Alfredo Alvarez Fernandez <alfredo.alvarez_fernandez@nokia.com>
+ > commit: https://git.buildroot.net/buildroot/commit/?id=4852f05907cd365825f37c283a415a77ba1fcba9
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- >  Both applied to master, thanks. I extended the commit message quite a bit,
- > because it was not at all clear why this was needed.
+ > Building Python 3.x on MIPS with musl fails because the libffi code
+ > uses a "#ifdef linux" test to decide if we're building on Linux or
+ > not. When building with -std=c99, "linux" is not defined, so instead
+ > of including <asm/sgidefs.h>, libffi's code tries to include
+ > <sgidefs.h>, which doesn't exist on musl.
 
-Committed both to 2017.08.x, thanks.
+ > The right fix is to use __linux__, which is POSIX compliant, and
+ > therefore defined even when -std=c99 is used.
+
+ > Note that glibc and uClibc were not affected because they do provide a
+ > <sgidefs.h> header in addition to the <asm/sgidefs.h> one.
+
+ > Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
+ > [Thomas: reformat patch with Git, add a better commit log and description.]
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+Committed to 2017.08.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
