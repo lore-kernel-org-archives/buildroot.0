@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 Oct 2017 12:30:27 +0200
-Subject: [Buildroot] [PATCH 1/4] configs/pc: bump kernel version
-In-Reply-To: <20171022093842.21788-2-nunes.erico@gmail.com>
-References: <20171022093842.21788-1-nunes.erico@gmail.com>
- <20171022093842.21788-2-nunes.erico@gmail.com>
-Message-ID: <20171022123027.4db50ac2@windsurf>
+Date: Sun, 22 Oct 2017 12:37:59 +0200
+Subject: [Buildroot] [V3 1/3] prosody: bump to version 0.10.0
+In-Reply-To: <20171022071716.792-1-francois.perrad@gadz.org>
+References: <20171022071716.792-1-francois.perrad@gadz.org>
+Message-ID: <20171022123759.7bf669f9@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,24 +12,42 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 22 Oct 2017 11:38:39 +0200, Erico Nunes wrote:
-> Bump the kernel version to 4.13.8.
-> Tested with qemu 2.9.1 on bios and UEFI virtual machines.
+On Sun, 22 Oct 2017 09:17:14 +0200, Francois Perrad wrote:
+> this version is not restricted to Lua 5.1
 > 
-> Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
-> ---
->  configs/pc_x86_64_bios_defconfig | 6 +++---
->  configs/pc_x86_64_efi_defconfig  | 6 +++---
->  2 files changed, 6 insertions(+), 6 deletions(-)
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 
-Applied to master, thanks. Would you volunteer to maintain those PC
-defconfigs? That would be nice. If you're happy with doing this, you
-can send a patch to update the DEVELOPERS file :)
+I'm sorry, but it still doesn't build, with the same build error:
 
-Thanks!
+table.c: In function ?Lpack?:
+table.c:14:2: error: ?for? loop initial declarations are only allowed in C99 or C11 mode
+  for(int arg = n_args; arg >= 1; arg--) {
+  ^
+table.c:14:2: note: use option -std=c99, -std=gnu99, -std=c11 or -std=gnu11 to compile your code
+
+With the same defconfig:
+
+BR2_arm=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2017.05-1078-g95b1dae.tar.bz2"
+BR2_TOOLCHAIN_EXTERNAL_GCC_4_9=y
+BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_10=y
+BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
+# BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
+BR2_TOOLCHAIN_EXTERNAL_CXX=y
+BR2_INIT_NONE=y
+BR2_SYSTEM_BIN_SH_NONE=y
+# BR2_PACKAGE_BUSYBOX is not set
+BR2_PACKAGE_LUA=y
+BR2_PACKAGE_PROSODY=y
+# BR2_TARGET_ROOTFS_TAR is not set
+
+Best regards,
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
