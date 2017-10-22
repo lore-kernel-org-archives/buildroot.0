@@ -1,79 +1,75 @@
-From: Erico Nunes <nunes.erico@gmail.com>
-Date: Sun, 22 Oct 2017 15:54:25 +0200
-Subject: [Buildroot] [PATCH v2 2/3] board/pc: add documentation for testing
-	with qemu
-In-Reply-To: <20171022135426.28901-1-nunes.erico@gmail.com>
-References: <20171022135426.28901-1-nunes.erico@gmail.com>
-Message-ID: <20171022135426.28901-2-nunes.erico@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 22 Oct 2017 15:56:20 +0200
+Subject: [Buildroot] [git commit] libffi: add patch to fix MIPS support
+Message-ID: <20171022134900.3FE8080467@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add some documentation about running the pc defconfigs in qemu.
-In particular, document the use of the -bios parameter to use the OVMF
-firmware to test the UEFI image.
+commit: https://git.buildroot.net/buildroot/commit/?id=4852f05907cd365825f37c283a415a77ba1fcba9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
-Cc: Peter Korsgaard <peter@korsgaard.com>
----
-Changes v1 -> v2:
-  - Made the images path relative to output/ to match in-tree Buildroot
-  builds.
----
- board/pc/readme.txt | 42 ++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 42 insertions(+)
+Building Python 3.x on MIPS with musl fails because the libffi code
+uses a "#ifdef linux" test to decide if we're building on Linux or
+not. When building with -std=c99, "linux" is not defined, so instead
+of including <asm/sgidefs.h>, libffi's code tries to include
+<sgidefs.h>, which doesn't exist on musl.
 
-diff --git a/board/pc/readme.txt b/board/pc/readme.txt
-index 68ca21166f..5277ea5bc6 100644
---- a/board/pc/readme.txt
-+++ b/board/pc/readme.txt
-@@ -35,3 +35,45 @@ Bare PC sample config
-   the setup as well.
- 
- 3. Enjoy
+The right fix is to use __linux__, which is POSIX compliant, and
+therefore defined even when -std=c99 is used.
+
+Note that glibc and uClibc were not affected because they do provide a
+<sgidefs.h> header in addition to the <asm/sgidefs.h> one.
+
+Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
+[Thomas: reformat patch with Git, add a better commit log and description.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../0005-mips-use-__linux__-and-not-linux.patch    | 37 ++++++++++++++++++++++
+ 1 file changed, 37 insertions(+)
+
+diff --git a/package/libffi/0005-mips-use-__linux__-and-not-linux.patch b/package/libffi/0005-mips-use-__linux__-and-not-linux.patch
+new file mode 100644
+index 0000000..a48f3d3
+--- /dev/null
++++ b/package/libffi/0005-mips-use-__linux__-and-not-linux.patch
+@@ -0,0 +1,37 @@
++From 1f43e5edfd91bee80e518432b80db01f1bf226e3 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Date: Sun, 22 Oct 2017 15:02:11 +0200
++Subject: [PATCH] mips: use __linux__ and not linux
 +
++The "linux" symbol is not POSIX compliant [1], and therefore not
++defined when building with -std=c99. Due to this, the linux
++conditional block doesn't get used on Linux when building Python 3.x
++(which is built with -std=c99). To fix this, we use the POSIX
++compliant __linux__ symbol, which is defined when -std=c99 is used.
 +
-+Emulation in qemu (BIOS)
-+========================
++This fixes the build of Python 3.x on MIPS/musl configuration, as it
++makes sures that <asm/sgidefs.h> gets included and not <sgidefs.h>.
 +
-+1. Edit grub-bios.cfg
++[1] https://sourceforge.net/p/predef/wiki/OperatingSystems/
 +
-+  Since the driver will show up in the virtual machine as /dev/vda,
-+  change board/pc/grub-bios.cfg to use root=/dev/vda2 instead of
-+  root=/dev/sda2. Then rebuild grub2 and the image.
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ src/mips/ffitarget.h | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+2. Run the emulation with:
++diff --git a/src/mips/ffitarget.h b/src/mips/ffitarget.h
++index 717d659..6faa358 100644
++--- a/src/mips/ffitarget.h
+++++ b/src/mips/ffitarget.h
++@@ -32,7 +32,7 @@
++ #error "Please do not include ffitarget.h directly into your source.  Use ffi.h instead."
++ #endif
++ 
++-#ifdef linux
+++#ifdef __linux__
++ # include <asm/sgidefs.h>
++ #elif defined(__rtems__)
++ /*
++-- 
++2.13.6
 +
-+qemu-system-x86_64 \
-+	-M pc \
-+	-drive file=output/images/disk.img,if=virtio,format=raw \
-+	-net nic,model=virtio \
-+	-net user
-+
-+
-+Emulation in qemu (UEFI)
-+========================
-+
-+1. Edit grub-efi.cfg
-+
-+  Since the driver will show up in the virtual machine as /dev/vda,
-+  change board/pc/grub-efi.cfg to use root=/dev/vda2 instead of
-+  root=/dev/sda2. Then rebuild grub2 and the image.
-+
-+2. Run the emulation with:
-+
-+qemu-system-x86_64 \
-+	-M pc \
-+	-bios </path/to/OVMF_CODE.fd> \
-+	-drive file=output/images/disk.img,if=virtio,format=raw \
-+	-net nic,model=virtio \
-+	-net user
-+
-+Note that </path/to/QEMU_EFI.fd> needs to point to a valid x86_64 UEFI
-+firmware image for qemu.
-+It may be provided by your distribution as a edk2 or OVMF package, in
-+path such as /usr/share/edk2/ovmf/OVMF_CODE.fd .
--- 
-2.13.6
