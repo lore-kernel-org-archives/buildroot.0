@@ -1,12 +1,12 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 Oct 2017 16:49:38 +0200
-Subject: [Buildroot] [PATCH 3/3] mpv: add support for Raspberry Pi "rpi"
- output
-In-Reply-To: <656fbb70-d75e-6495-34aa-c845c9323099@mind.be>
-References: <20170914150238.31289-1-mahyar.koshkouei@gmail.com>
- <20170914150238.31289-2-mahyar.koshkouei@gmail.com>
- <656fbb70-d75e-6495-34aa-c845c9323099@mind.be>
-Message-ID: <20171022164938.1b27243c@windsurf>
+Date: Sun, 22 Oct 2017 16:55:51 +0200
+Subject: [Buildroot] [PATCH 2/2] bluez5_utils: add upstream patch to fix
+ timeout issue with fw download
+In-Reply-To: <4s4v8exukd.ln2@ID-313208.user.individual.net>
+References: <20170831094932.11121-1-joerg.krause@embedded.rocks>
+ <20170831094932.11121-2-joerg.krause@embedded.rocks>
+ <4s4v8exukd.ln2@ID-313208.user.individual.net>
+Message-ID: <20171022165551.2646dafe@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,30 +15,25 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 24 Sep 2017 15:06:03 +0200, Arnout Vandecappelle wrote:
-> On 14-09-17 17:02, Mahyar Koshkouei wrote:
-> > mpv now compiles with the "rpi" video driver that provides hardware
-> > acceleration on the Raspberry Pi.
+On Sat, 16 Sep 2017 10:44:20 +0200, Bernd Kuhls wrote:
+
+> > Add upstream patch [1] for the hciattach tool to fix timeout issue when
+> > downloading firmware to Broadcom bluetooth chips.
 > > 
-> > Tested working on a Raspberry Pi 1 Model B+.
-> > 
-> > Signed-off-by: Mahyar Koshkouei <mahyar.koshkouei@gmail.com>  
+> > [1]
+> > https://git.kernel.org/pub/scm/bluetooth/bluez.git/commit/?  
+> id=76255f732d68aef2b90d36d9c7be51a9e1739ce7
 > 
->  I didn't apply this patch since there was still some discussion upstream [1] of
-> what the proper approach is.
+> Hi,
 > 
-> [1] https://github.com/mpv-player/mpv/pull/4883
+> this patch was is included in upstream release 5.47 and can be marked as 
+> superseded by this patch: http://patchwork.ozlabs.org/patch/814482/
 
-And indeed, a person upstream suggested a patch in
-https://github.com/mpv-player/mpv/pull/4883#issuecomment-331506711, and
-apparently you tested it successfully.
+Thanks, I've marked J?rg's patch as Superseded.
 
-Could you update your Buildroot patch to use the improved fix proposed
-by upstream ?
+Best regards,
 
-Thanks!
-
-Thomas
+Thomas Petazzoni
 -- 
 Thomas Petazzoni, CTO, Free Electrons
 Embedded Linux and Kernel engineering
