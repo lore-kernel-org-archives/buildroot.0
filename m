@@ -1,76 +1,76 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 23 Oct 2017 00:35:28 +0200
-Subject: [Buildroot] [git commit branch/2017.08.x] package/go: fix
-	cross-compilation settings
-Message-ID: <20171022224414.AB7338073F@busybox.osuosl.org>
+Date: Mon, 23 Oct 2017 00:35:55 +0200
+Subject: [Buildroot] [git commit branch/2017.08.x] musl: add upstream
+	security fix for CVE-2017-15650
+Message-ID: <20171022224414.B99248073F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1a223cda9edb19b49e1a11713d0a8f5065e53f82
+commit: https://git.buildroot.net/buildroot/commit/?id=3c25932a4d1bbbcb74bb797ddd0ecf97e0e5b4ab
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.08.x
 
-This patch fixes a bug with the BR2_TOOLCHAIN_HAS_THREADS variable
-handling which causes CGO_ENABLED to be always 0.
+From the upstream announcement:
+http://www.openwall.com/lists/oss-security/2017/10/19/5
 
-Furthermore, it fixes the cross compilation options for the go
-compiler: setting CGO_ENABLED should be done only for the target
-compiler not the host one.
+Felix Wilhelm has discovered a flaw in the dns response parsing for
+musl libc 1.1.16 that leads to overflow of a stack-based buffer.
+Earlier versions are also affected.
 
-Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Acked-by: Christian Stewart <christian@paral.in>
-(cherry picked from commit 80ea21bc3c2147adf810731b0b242e94a3ad294e)
+When an application makes a request via getaddrinfo for both IPv4 and
+IPv6 results (AF_UNSPEC), an attacker who controls or can spoof the
+nameservers configured in resolv.conf can reply to both the A and AAAA
+queries with A results. Since A records are smaller than AAAA records,
+it's possible to fit more addresses than the precomputed bound, and a
+buffer overflow occurs.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 209f42fd3a5f4357e22fb72f1597a6868566aabd)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/go/go.mk | 14 ++++++++------
- 1 file changed, 8 insertions(+), 6 deletions(-)
+ ...ing-callback-enforce-MAXADDRS-to-preclude.patch | 35 ++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
 
-diff --git a/package/go/go.mk b/package/go/go.mk
-index 0781dff..6035164 100644
---- a/package/go/go.mk
-+++ b/package/go/go.mk
-@@ -52,7 +52,7 @@ HOST_GO_TARGET_ENV = \
- # set, build in cgo support for any go programs that may need it.  Note that
- # any target package needing cgo support must include
- # 'depends on BR2_TOOLCHAIN_HAS_THREADS' in its config file.
--ifeq (BR2_TOOLCHAIN_HAS_THREADS,y)
-+ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
- HOST_GO_CGO_ENABLED = 1
- else
- HOST_GO_CGO_ENABLED = 0
-@@ -74,8 +74,8 @@ HOST_GO_MAKE_ENV = \
- 	GOARCH=$(GO_GOARCH) \
- 	$(if $(GO_GOARM),GOARM=$(GO_GOARM)) \
- 	GOOS=linux \
--	CGO_ENABLED=$(HOST_GO_CGO_ENABLED) \
--	CC=$(HOSTCC_NOCCACHE)
-+	CC=$(HOSTCC_NOCCACHE) \
-+	CXX=$(HOSTCXX_NOCCACHE)
- 
- HOST_GO_TARGET_CC = \
- 	CC_FOR_TARGET="$(TARGET_CC)" \
-@@ -83,16 +83,18 @@ HOST_GO_TARGET_CC = \
- 
- HOST_GO_HOST_CC = \
- 	CC_FOR_TARGET=$(HOSTCC_NOCCACHE) \
--	CXX_FOR_TARGET=$(HOSTCC_NOCCACHE)
-+	CXX_FOR_TARGET=$(HOSTCXX_NOCCACHE)
- 
- HOST_GO_TMP = $(@D)/host-go-tmp
- 
- define HOST_GO_BUILD_CMDS
--	cd $(@D)/src && $(HOST_GO_MAKE_ENV) $(HOST_GO_HOST_CC) ./make.bash
-+	cd $(@D)/src && \
-+		$(HOST_GO_MAKE_ENV) $(HOST_GO_HOST_CC) CGO_ENABLED=0 ./make.bash
- 	mkdir -p $(HOST_GO_TMP)
- 	mv $(@D)/pkg/tool $(HOST_GO_TMP)/
- 	mv $(@D)/bin/ $(HOST_GO_TMP)/
--	cd $(@D)/src && $(HOST_GO_MAKE_ENV) $(HOST_GO_TARGET_CC) ./make.bash
-+	cd $(@D)/src && \
-+		$(HOST_GO_MAKE_ENV) $(HOST_GO_TARGET_CC) CGO_ENABLED=$(HOST_GO_CGO_ENABLED) ./make.bash
- endef
- 
- define HOST_GO_INSTALL_CMDS
+diff --git a/package/musl/0003-in-dns-parsing-callback-enforce-MAXADDRS-to-preclude.patch b/package/musl/0003-in-dns-parsing-callback-enforce-MAXADDRS-to-preclude.patch
+new file mode 100644
+index 0000000..c6b5ef2
+--- /dev/null
++++ b/package/musl/0003-in-dns-parsing-callback-enforce-MAXADDRS-to-preclude.patch
+@@ -0,0 +1,35 @@
++From 45ca5d3fcb6f874bf5ba55d0e9651cef68515395 Mon Sep 17 00:00:00 2001
++From: Rich Felker <dalias@aerifal.cx>
++Date: Wed, 18 Oct 2017 14:50:03 -0400
++Subject: [PATCH] in dns parsing callback, enforce MAXADDRS to preclude
++ overflow
++
++MAXADDRS was chosen not to need enforcement, but the logic used to
++compute it assumes the answers received match the RR types of the
++queries. specifically, it assumes that only one replu contains A
++record answers. if the replies to both the A and the AAAA query have
++their answer sections filled with A records, MAXADDRS can be exceeded
++and clobber the stack of the calling function.
++
++this bug was found and reported by Felix Wilhelm.
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ src/network/lookup_name.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/src/network/lookup_name.c b/src/network/lookup_name.c
++index 066be4d5..209c20f0 100644
++--- a/src/network/lookup_name.c
+++++ b/src/network/lookup_name.c
++@@ -111,6 +111,7 @@ static int dns_parse_callback(void *c, int rr, const void *data, int len, const
++ {
++ 	char tmp[256];
++ 	struct dpc_ctx *ctx = c;
+++	if (ctx->cnt >= MAXADDRS) return -1;
++ 	switch (rr) {
++ 	case RR_A:
++ 		if (len != 4) return -1;
++-- 
++2.11.0
++
