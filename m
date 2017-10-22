@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 Oct 2017 16:36:30 +0200
-Subject: [Buildroot] [PATCH v2 2/3] board/pc: add documentation for
- testing with qemu
-In-Reply-To: <20171022135426.28901-2-nunes.erico@gmail.com>
+Date: Sun, 22 Oct 2017 16:36:34 +0200
+Subject: [Buildroot] [PATCH v2 3/3] DEVELOPERS: add maintainer for
+ pc_x86_64_* defconfigs
+In-Reply-To: <20171022135426.28901-3-nunes.erico@gmail.com>
 References: <20171022135426.28901-1-nunes.erico@gmail.com>
- <20171022135426.28901-2-nunes.erico@gmail.com>
-Message-ID: <20171022163630.383b54f4@windsurf>
+ <20171022135426.28901-3-nunes.erico@gmail.com>
+Message-ID: <20171022163634.33fcaa03@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,21 +14,20 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 22 Oct 2017 15:54:25 +0200, Erico Nunes wrote:
+On Sun, 22 Oct 2017 15:54:26 +0200, Erico Nunes wrote:
+> I've been using this packages to test changes in the grub package, so
+> I can maintain them.
+> 
+> Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  DEVELOPERS | 1 +
+>  1 file changed, 1 insertion(+)
 
-> +qemu-system-x86_64 \
-> +	-M pc \
-> +	-bios </path/to/OVMF_CODE.fd> \
-> +	-drive file=output/images/disk.img,if=virtio,format=raw \
-> +	-net nic,model=virtio \
-> +	-net user
-> +
-> +Note that </path/to/QEMU_EFI.fd> needs to point to a valid x86_64 UEFI
-
-You meant OVMF_CODE.fd here, so I've fixed that up and applied. Thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
+Embedded Linux, Kernel and Android engineering
 http://free-electrons.com
