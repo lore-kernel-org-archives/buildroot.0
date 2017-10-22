@@ -1,35 +1,55 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 Oct 2017 16:09:53 +0200
-Subject: [Buildroot] [PATCH 1/1] Simple additional patch to allow
- compilation of python-3.6.1 under mipsel-buildroot-linux-musl.
-In-Reply-To: <20170421103308.6557-1-mc5686@mclink.it>
-References: <20170421103308.6557-1-mc5686@mclink.it>
-Message-ID: <20171022160953.193057be@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 22 Oct 2017 16:10:07 +0200
+Subject: [Buildroot] [PATCH] toolchain/wrapper: fake __DATE_ and
+	__TIME__ for older gcc
+In-Reply-To: <20171021203102.14520-1-arnout@mind.be> (Arnout Vandecappelle's
+ message of "Sat, 21 Oct 2017 22:31:02 +0200")
+References: <20171021203102.14520-1-arnout@mind.be>
+Message-ID: <871slvb7eo.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
 
-On Fri, 21 Apr 2017 12:33:08 +0200, Mauro Condarelli wrote:
-> Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
-> ---
->  .../0005-mips-musl-fix-sgidefs_h-not-found-error.patch       | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
->  create mode 100644 package/libffi/0005-mips-musl-fix-sgidefs_h-not-found-error.patch
+Hi,
 
-We finally got to this patch, and I pushed an improved version of it,
-i.e with a better commit log and patch description.
+ > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Starting with version 7, gcc automatically recognises and enforces the
+ > environment variable SOURCE_DATE_EPOCH, and fakes __DATE__ and __TIME__
+ > accordingly, to produce reproducible builds (at least in regards to date
+ > and time).
 
-See
-https://git.buildroot.org/buildroot/commit/?id=4852f05907cd365825f37c283a415a77ba1fcba9.
+ > However, older gcc versions do not offer this feature.
 
-Thanks!
+ > So, we use our toolchain wrapper to force-feed __DATE__ and __TIME__ as
+ > macros, which will take precedence over those that gcc may compute
+ > itself. We compute them according to the specs:
+ >     https://reproducible-builds.org/specs/source-date-epoch/
+ >     https://gcc.gnu.org/onlinedocs/cpp/Standard-Predefined-Macros.html
 
-Thomas
+ > Since we define macros otherwise internal to gcc, we have to tell it not
+ > to warn about that. The -Wno-builtin-macro-redefined flag was introduced
+ > in gcc-4.4.0. Therefore, we make BR2_REPRODUCIBLE depend on GCC >= 4.4.
+
+ > gcc-7 will ignore SOURCE_DATE_EPOCH when __DATE__ and __TIME__ are
+ > user-defined. Anyway, this is of no consequence: whether __DATE__ and
+ > __TIME__ or SOURCE_DATE_EPOCH takes precedence, it would yield the
+ > exact same end result since we use the same logic to compute it. Note
+ > that we didn't copy the code for it from gcc so using the same logic
+ > doesn't imply that we're inheriting GPL-3.0.
+
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Cc: J?r?me Pouiller <jezz@sysmic.org>
+ > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ > Cc: Arnout Vandecappelle <arnout@mind.be>
+ > Cc: Peter Korsgaard <peter@korsgaard.com>
+ > [Arnout: rewrite commit message]
+ > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+Committed, thanks.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
