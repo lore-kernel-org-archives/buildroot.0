@@ -1,28 +1,32 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 22 Oct 2017 18:29:54 +0200
-Subject: [Buildroot] [PATCH 1/1] package/x264: bump version
-References: <20171022152343.19014-1-bernd.kuhls@t-online.de>
- <20171022174903.33717136@windsurf>
-Message-ID: <2ltubexjp9.ln2@ID-313208.user.individual.net>
+Date: Sun, 22 Oct 2017 19:04:12 +0200
+Subject: [Buildroot] [PATCH 2/2] linux: bump default to version 4.13.9
+In-Reply-To: <20171022170412.18719-1-bernd.kuhls@t-online.de>
+References: <20171022170412.18719-1-bernd.kuhls@t-online.de>
+Message-ID: <20171022170412.18719-2-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Sun, 22 Oct 2017 17:49:03 +0200 schrieb Thomas Petazzoni:
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ linux/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> Bumping from a random Git commit, to another random Git commit, without
-> any explanation.
-> 
-> I've applied. But next time, without an explanation, I won't.
-
-Hi Thomas,
-
-upstream does not provide releases with version numbers:
-https://www.videolan.org/developers/x264.html
-
-I try to bump the package once during each buildroot release cycle. Do 
-you consider this explanation sufficient?
-
-Regards, Bernd
+diff --git a/linux/Config.in b/linux/Config.in
+index 2e7fa37329..34d6b85edc 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -116,7 +116,7 @@ endif
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "4.13.8" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "4.13.9" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "v4.4.83-cip8" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+-- 
+2.11.0
