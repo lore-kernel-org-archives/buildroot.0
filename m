@@ -1,47 +1,65 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 22 Oct 2017 17:09:57 +0200
-Subject: [Buildroot] [PATCH] sqlite: add security patches
-In-Reply-To: <87wp3n9qep.fsf@dell.be.48ers.dk>
-References: <612f27420cbbca777de7bfcf3747769cebe1727b.1508680808.git.baruch@tkos.co.il>
- <87wp3n9qep.fsf@dell.be.48ers.dk>
-Message-ID: <20171022150957.6vvwvgfhclafh4mf@sapphire.tkos.co.il>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 22 Oct 2017 17:15:30 +0200
+Subject: [Buildroot] [PATCH 0/4 v2] core/pkg-generic: store package<->files
+	for staging and host
+Message-ID: <cover.1508685316.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+Hello All!
 
-On Sun, Oct 22, 2017 at 05:02:38PM +0200, Peter Korsgaard wrote:
-> >>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
-> 
->  > CVE-2017-13685: The dump_callback function in SQLite 3.20.0 allows
->  > remote attackers to cause a denial of service (EXC_BAD_ACCESS and
->  > application crash) via a crafted file.
-> 
->  > CVE-2017-15286: SQLite 3.20.1 has a NULL pointer dereference in
->  > tableColumnList in shell.c
->  > because it fails to consider certain cases where
->  > `sqlite3_step(pStmt)==SQLITE_ROW` is false and a data structure is never
->  > initialized.
-> 
-> Do you know if this also applies to 2017.08.x (3.19.3) or 2017.02.x
-> (3.16.2)?
+This small series does for staging and host as we do for target:
+store the list of installed files and relate them to the package
+that installed each.
 
-According to the Debian CVE-2017-13685 tracker page[1] versions as old as 
-3.7.13 are affected.
+In the end, it also reports files that are touched by more than one
+package, for target, staging and host files.
 
-The CVE-2017-15286 page[2] indicates that 3.16.2 is not affected. Not sure 
-about 3.19.3.
+---
+Changes v1 -> v2:
+  - split in three patches
+  - in addition to staging, also store for host
+  - report files touched by more than one package
 
-[1] https://security-tracker.debian.org/tracker/CVE-2017-13685
 
-[2] https://security-tracker.debian.org/tracker/CVE-2017-15286
+Regards,
+Yann E. MORIN.
 
-baruch
+
+The following changes since commit c2aa34d8cede20d4c8701f20ade9a016fb478b87
+
+  CHANGES: update after netsnmp changes (2017-10-22 16:46:33 +0200)
+
+
+are available in the git repository at:
+
+  git://git.buildroot.org/~ymorin/git/buildroot.git
+
+for you to fetch changes up to 64a5b7666e47d87d58845028f9576ab68a186f44
+
+  core: check files are nto touched by more than on package (2017-10-22 16:55:40 +0200)
+
+
+----------------------------------------------------------------
+Yann E. MORIN (4):
+      core/pkg-generic: remove intermediate file-list files
+      core/pkg-generic: redirect only when listing package's installed files
+      core/pkg-generic: store file->package list for staging and host too
+      core: check files are nto touched by more than on package
+
+ Makefile                            |  4 ++++
+ package/pkg-generic.mk              | 45 ++++++++++++++++++++++++-------------
+ support/scripts/check-uniq-files.py | 40 +++++++++++++++++++++++++++++++++
+ 3 files changed, 73 insertions(+), 16 deletions(-)
+ create mode 100755 support/scripts/check-uniq-files.py
 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
