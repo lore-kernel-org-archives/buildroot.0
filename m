@@ -1,41 +1,58 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 Oct 2017 14:14:59 +0200
-Subject: [Buildroot] [PATCH] lua-sdl2: refactor with cmake
-In-Reply-To: <20170612082144.25846-1-francois.perrad@gadz.org>
-References: <20170612082144.25846-1-francois.perrad@gadz.org>
-Message-ID: <20171022141459.499df9c5@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 22 Oct 2017 14:18:06 +0200
+Subject: [Buildroot] [PATCH] boost: fix build on ppc64le host
+Message-ID: <20171022121806.11468-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Fixes:
+http://autobuild.buildroot.net/results/57d/57d9f0ea27e5c8ba73002bd1d0b33027f27a3779/
+http://autobuild.buildroot.net/results/7c3/7c3133e822c997879fe00923ba0ad7903656c2e1/
 
-On Mon, 12 Jun 2017 10:21:44 +0200, Francois Perrad wrote:
-> that allows optional dependencies
-> 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  package/lua-sdl2/0001-avoid-host-includes.patch | 18 +++++++++++++
->  package/lua-sdl2/Config.in                      |  4 ---
->  package/lua-sdl2/lua-sdl2.hash                  |  2 +-
->  package/lua-sdl2/lua-sdl2.mk                    | 36 +++++++++++++++++++++----
->  4 files changed, 50 insertions(+), 10 deletions(-)
->  create mode 100644 package/lua-sdl2/0001-avoid-host-includes.patch
+bootstrap by default runs ./tools/build/src/engine/build.sh --guess-toolset
+to detect what toolchain (compiler variant).  On x86 this returns gcc, but
+on the ppc64le gcc112 autobuilder this returns xlcpp causing bootstrap.sh to
+get confused and bail out:
 
-I've applied, but after fixing a few things:
+./bootstrap.sh ..
+Building Boost.Build engine with toolset ... tools/build/src/engine/###
+\### No toolset specified. Please use --toolset option.
+\###
+\### Known toolsets are: acc, borland, cc, como, clang, darwin, gcc, gcc-nocygwin, intel-darwin, intel-linux, intel-win32, kcc, kylix, metrowerks, mipspro, msvc, qcc, pathscale, pgi, sun, sunpro, tru64cxx, vacpp, xlcpp, vc7, vc8, vc9, vc10, vc11, vc12, vc14, vc141, vmsdecc
+\###/b2
 
- - The package should depend on luainterpreter, not lua, so that it
-   works correctly when LuaJIT is used.
+Fix it by explicitly specifying the gcc toolset mode to bootstrap, similar
+to how it was already done for the bjam invocations.
 
- - The patch should have been Git formatted (upstream uses Git), and
-   instead of commenting some code, the patch should just remove it.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/boost/boost.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-Thanks!
-
-Thomas
+diff --git a/package/boost/boost.mk b/package/boost/boost.mk
+index 8ba88a7b7c..598ffbe10e 100644
+--- a/package/boost/boost.mk
++++ b/package/boost/boost.mk
+@@ -12,7 +12,7 @@ BOOST_LICENSE = BSL-1.0
+ BOOST_LICENSE_FILES = LICENSE_1_0.txt
+ 
+ # keep host variant as minimal as possible
+-HOST_BOOST_FLAGS = --without-icu \
++HOST_BOOST_FLAGS = --without-icu --with-toolset=gcc \
+ 	--without-libraries=$(subst $(space),$(comma),atomic chrono context \
+ 	coroutine date_time exception filesystem graph graph_parallel iostreams \
+ 	locale log math mpi program_options python random regex serialization \
+@@ -50,6 +50,8 @@ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_WAVE),,wave)
+ 
+ BOOST_TARGET_CXXFLAGS = $(TARGET_CXXFLAGS)
+ 
++BOOST_FLAGS = --with-toolset=gcc
++
+ ifeq ($(BR2_PACKAGE_ICU),y)
+ BOOST_FLAGS += --with-icu=$(STAGING_DIR)/usr
+ BOOST_DEPENDENCIES += icu
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.11.0
