@@ -1,39 +1,58 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Sun, 22 Oct 2017 20:00:49 +0200
-Subject: [Buildroot] [PATCH] mpd: bump to version 0.20.11
-Message-ID: <20171022180049.968-1-joerg.krause@embedded.rocks>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 22 Oct 2017 20:05:21 +0200
+Subject: [Buildroot] [PATCH 1/1] package/weston: fix build with OpenGL ES
+	disabled
+Message-ID: <20171022180521.25751-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
----
- package/mpd/mpd.hash | 2 +-
- package/mpd/mpd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Building this defconfig
 
-diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
-index 9898c38c6e..717b92188f 100644
---- a/package/mpd/mpd.hash
-+++ b/package/mpd/mpd.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256  52fbc1125cdba41ba999add2820d45f3ce7cf493006bb04d8f0b2937204d3121  mpd-0.20.10.tar.xz
-+sha256  e9227d9daf32a63d6f34bf2ea18b3179b4a383e9d2b49d548702a37451e514bc  mpd-0.20.11.tar.xz
-diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
-index ff22593981..b337196762 100644
---- a/package/mpd/mpd.mk
-+++ b/package/mpd/mpd.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+BR2_TOOLCHAIN_BUILDROOT_LOCALE=y
+BR2_TOOLCHAIN_BUILDROOT_CXX=y
+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
+BR2_PACKAGE_MESA3D=y
+BR2_PACKAGE_MESA3D_DRI_DRIVER_I965=y
+BR2_PACKAGE_MESA3D_OPENGL_EGL=y
+BR2_PACKAGE_WESTON=y
+BR2_PACKAGE_XORG7=y
+
+is broken:
+
+  CC       clients/weston_simple_dmabuf_drm-simple-dmabuf-drm.o
+clients/simple-dmabuf-drm.c: In function 'create_display':
+clients/simple-dmabuf-drm.c:758:15: warning: implicit declaration of function 'eglQueryString' [-Wimplicit-function-declaration]
+  extensions = eglQueryString(EGL_NO_DISPLAY, EGL_EXTENSIONS);
+               ^~~~~~~~~~~~~~
+clients/simple-dmabuf-drm.c:758:30: error: 'EGL_NO_DISPLAY' undeclared (first use in this function)
+  extensions = eglQueryString(EGL_NO_DISPLAY, EGL_EXTENSIONS);
+                              ^~~~~~~~~~~~~~
+clients/simple-dmabuf-drm.c:758:30: note: each undeclared identifier is reported only once for each function it appears in
+clients/simple-dmabuf-drm.c:758:46: error: 'EGL_EXTENSIONS' undeclared (first use in this function)
+  extensions = eglQueryString(EGL_NO_DISPLAY, EGL_EXTENSIONS);
+                                              ^~~~~~~~~~~~~~
+clients/simple-dmabuf-drm.c:759:21: warning: implicit declaration of function 'weston_check_egl_extension' [-Wimplicit-function-declaration]
+  if (extensions && !weston_check_egl_extension(extensions,
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/weston/weston.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/weston/weston.mk b/package/weston/weston.mk
+index 93b0246e9e..638954f034 100644
+--- a/package/weston/weston.mk
++++ b/package/weston/weston.mk
+@@ -57,6 +57,7 @@ WESTON_DEPENDENCIES += libegl
+ else
+ WESTON_CONF_OPTS += \
+ 	--disable-egl \
++	--disable-simple-dmabuf-drm-client \
+ 	--disable-simple-egl-clients
+ endif
  
- MPD_VERSION_MAJOR = 0.20
--MPD_VERSION = $(MPD_VERSION_MAJOR).10
-+MPD_VERSION = $(MPD_VERSION_MAJOR).11
- MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
- MPD_SITE = http://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
- MPD_DEPENDENCIES = host-pkgconf boost
 -- 
-2.14.2
+2.11.0
