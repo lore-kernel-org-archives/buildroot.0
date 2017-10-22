@@ -1,40 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 22 Oct 2017 23:56:59 +0200
-Subject: [Buildroot] [git commit branch/2017.08.x] linux-headers: bump 4.{1,
-	4, 9, 13}.x series
-Message-ID: <20171022224414.745B981024@busybox.osuosl.org>
+Date: Mon, 23 Oct 2017 00:25:48 +0200
+Subject: [Buildroot] [git commit branch/2017.08.x] Config.in: fix help
+	comment for gcc optimization
+Message-ID: <20171022224414.80B878073F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a0121dbb170389a16b91847bacea658820b22d4e
+commit: https://git.buildroot.net/buildroot/commit/?id=7ddcc24e05406f8833c0596a93d8a80dbed5ca6b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.08.x
 
-[Peter: drop 4.13.x bump]
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 60e3da602d3d5b017b5176848abcba92866df3f3)
+The default for is set to BR2_OPTIMIZE_S, the help comment designated
+BR2_OPTIMIZE_0 as default.
+Changed the help comment to show that BR2_OPTIMIZE_S is the default.
+
+Signed-off-by: Lothar Felten <lothar.felten@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+(cherry picked from commit 4e09fd8bdef6ddea1097f91df07515abde389cd0)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-headers/Config.in.host | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ Config.in | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 7001bd2..32d4505 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -235,9 +235,9 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.4.113"	if BR2_KERNEL_HEADERS_3_4
- 	default "3.10.107"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.12.74"	if BR2_KERNEL_HEADERS_3_12
--	default "4.1.43"	if BR2_KERNEL_HEADERS_4_1
--	default "4.4.92"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.56"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.1.45"	if BR2_KERNEL_HEADERS_4_1
-+	default "4.4.93"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.9.57"	if BR2_KERNEL_HEADERS_4_9
- 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
- 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
- 	default "4.12.14"	if BR2_KERNEL_HEADERS_4_12
+diff --git a/Config.in b/Config.in
+index e395995..0b5a6bf 100644
+--- a/Config.in
++++ b/Config.in
+@@ -458,7 +458,7 @@ choice
+ config BR2_OPTIMIZE_0
+ 	bool "optimization level 0"
+ 	help
+-	  Do not optimize. This is the default.
++	  Do not optimize.
+ 
+ config BR2_OPTIMIZE_1
+ 	bool "optimization level 1"
+@@ -525,6 +525,7 @@ config BR2_OPTIMIZE_S
+ 	  -falign-loops -falign-labels -freorder-blocks
+ 	  -freorder-blocks-and-partition -fprefetch-loop-arrays
+ 	  -ftree-vect-loop-version
++	  This is the default.
+ 
+ endchoice
+ 
