@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 Oct 2017 14:37:08 +0200
-Subject: [Buildroot] [PATCH] libtomcrypt: fix build without wchar
-In-Reply-To: <217c4b97cdb72c68b7d6d669b1c3cbb9b47bf4ad.1508242375.git.baruch@tkos.co.il>
-References: <217c4b97cdb72c68b7d6d669b1c3cbb9b47bf4ad.1508242375.git.baruch@tkos.co.il>
-Message-ID: <20171022143708.456a666d@windsurf>
+Date: Sun, 22 Oct 2017 14:45:16 +0200
+Subject: [Buildroot] [PATCH v2,2/2] rygel: new package
+In-Reply-To: <1490387931-113759-2-git-send-email-fontaine.fabrice@gmail.com>
+References: <1490387931-113759-1-git-send-email-fontaine.fabrice@gmail.com>
+ <1490387931-113759-2-git-send-email-fontaine.fabrice@gmail.com>
+Message-ID: <20171022144516.12c61e8e@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,25 +13,31 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 17 Oct 2017 15:12:55 +0300, Baruch Siach wrote:
-> GCC defines wchar_t even when wchar support is disabled in uClibc. The
-> LTC_NO_WCHAR macro triggers a local definition of wchar_t that conflicts
-> with the GCC defined one. Remove LTC_NO_WCHAR to avoid that.
+On Fri, 24 Mar 2017 21:38:51 +0100, Fabrice Fontaine wrote:
+> Rygel is a home media solution (UPnP AV MediaServer) that allows you to
+> easily share audio, video and pictures to other devices.
 > 
-> Fixes:
-> http://autobuild.buildroot.net/results/895/895452ac973cab0e0bc22636d39cbec7fbf598d3/
-> http://autobuild.buildroot.net/results/c82/c82d0173878e58f7192d3cec271b45763e6ea269/
-> http://autobuild.buildroot.net/results/83f/83f433bcb608b341fca2180afa57fc81495bc3b4/
+> Additionally, media player software may use Rygel to become a
+> MediaRenderer that may be controlled remotely by a UPnP or DLNA
+> Controller.
 > 
-> Cc: Francois Perrad <francois.perrad@gadz.org>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  package/libtomcrypt/libtomcrypt.mk | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
+> Rygel achieves interoperability with other devices in the market by
+> trying to conform to the very strict requirements of DLNA and by
+> converting media on-the-fly to formats that client devices can handle.
+> 
+> Most Rygel functionality is implemented through a plug-in mechanism.
+> 
+> https://wiki.gnome.org/Projects/Rygel
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Applied to master after updating the autobuilder reference to a result
-that we still have in the database, and adding a reference to the
-interesting Github discussion.
+The patch generally looks good, however Romain Naour reported a build
+failure in static linking configurations when the patch is applied, so
+we need this to get resolved before applying the patch. Could you
+investigate this static linking failure?
+
+While you're at it, you should add yourself in the DEVELOPERS file for
+this package.
 
 Thanks!
 
