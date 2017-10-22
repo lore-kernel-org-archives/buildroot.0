@@ -1,20 +1,20 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 22 Oct 2017 23:49:20 +0200
-Subject: [Buildroot] [PATCH 2/2] linux: bump default to version 4.13.9
-In-Reply-To: <20171022170412.18719-2-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Sun, 22 Oct 2017 19:04:12 +0200")
-References: <20171022170412.18719-1-bernd.kuhls@t-online.de>
- <20171022170412.18719-2-bernd.kuhls@t-online.de>
-Message-ID: <87fuaaam5b.fsf@dell.be.48ers.dk>
+Date: Sun, 22 Oct 2017 23:49:36 +0200
+Subject: [Buildroot] [PATCH] mpd: bump to version 0.20.11
+In-Reply-To: <20171022180049.968-1-joerg.krause@embedded.rocks>
+ (=?utf-8?Q?=22J=C3=B6rg?=
+ Krause"'s message of "Sun, 22 Oct 2017 20:00:49 +0200")
+References: <20171022180049.968-1-joerg.krause@embedded.rocks>
+Message-ID: <87bmkyam4v.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+>>>>> "J?rg" == J?rg Krause <joerg.krause@embedded.rocks> writes:
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 
 Committed, thanks.
 
