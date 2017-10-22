@@ -1,10 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 23 Oct 2017 00:49:38 +0200
-Subject: [Buildroot] [PATCH] lame: security bump to version 3.100
-In-Reply-To: <20171022111508.5361-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Sun, 22 Oct 2017 13:15:08 +0200")
-References: <20171022111508.5361-1-peter@korsgaard.com>
-Message-ID: <87d15e94sd.fsf@dell.be.48ers.dk>
+Date: Mon, 23 Oct 2017 00:49:54 +0200
+Subject: [Buildroot] [PATCH] xen: add upstream post-4.9.0 security fix
+	for XSA-245
+In-Reply-To: <20171021180407.10320-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Sat, 21 Oct 2017 20:04:07 +0200")
+References: <20171021180407.10320-1-peter@korsgaard.com>
+Message-ID: <878tg294rx.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,34 +14,11 @@ To: buildroot@busybox.net
 
 >>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > Fixes the following security issues:
- > CVE-2017-9410: fill_buffer_resample function in libmp3lame/util.c heap-based
- > buffer over-read and ap
+ > Fixes XA-245: ARM: Some memory not scrubbed at boot
+ > https://xenbits.xenproject.org/xsa/advisory-245.html
 
- > CVE-2017-9411: fill_buffer_resample function in libmp3lame/util.c invalid
- > memory read and application crash
-
- > CVE-2017-9412: unpack_read_samples function in frontend/get_audio.c invalid
- > memory read and application crash
-
- > Drop patches now upstream or no longer needed:
-
- > 0001-configure.patch: Upstream as mentioned in patch description
-
- > 0002-gtk1-ac-directives.patch: Upstream as mentioned in patch
- > description/release notes:
-
- > Resurrect Owen Taylor's code dated from 97-11-3 to properly deal with GTK1.
- > This was transplanted back from aclocal.m4 with a patch provided by Andres
- > Mejia. This change makes it easy to regenerate autotools' files with a simple
- > invocation of autoconf -vfi.
-
- > 0003-msse.patch: Not needed as -march <x86-variant-with-msse-support>
- > nowadays implies -msse.
-
- > With these removed, autoreconf is no longer needed.
-
- > Also add a hash for the license file while we're at it.
+ > Notice: Not applying XSA-237..244 as they are x86 only and have patch file
+ > name conflicts between 2017.02.x and master.
 
  > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
