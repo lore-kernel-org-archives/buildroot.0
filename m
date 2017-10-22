@@ -1,28 +1,44 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 22 Oct 2017 15:10:19 +0200
-Subject: [Buildroot] [PATCH 2017.02.x] xen: add upstream post-4.7.3
-	security fix for XSA-245
-In-Reply-To: <20171021162437.9490-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Sat, 21 Oct 2017 18:24:37 +0200")
-References: <20171021162437.9490-1-peter@korsgaard.com>
-Message-ID: <878tg3ba6c.fsf@dell.be.48ers.dk>
+From: Kees van Unen <Keesvanunen@hotmail.com>
+Date: Sun, 22 Oct 2017 06:34:41 -0700 (MST)
+Subject: [Buildroot] Implicit declaration of mblen
+In-Reply-To: <bc9fed74-546a-a9f6-26b5-4698562b051e@mind.be>
+References: <1508584234482-0.post@n4.nabble.com>
+ <87bml0cvqq.fsf@dell.be.48ers.dk> <1508618665952-0.post@n4.nabble.com>
+ <0836e4ea-a773-fbe0-4c52-4414ad82389c@mind.be>
+ <1508620062609-0.post@n4.nabble.com>
+ <bc9fed74-546a-a9f6-26b5-4698562b051e@mind.be>
+Message-ID: <1508679281272-0.post@n4.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+> Copy the the make command line from the xlib_libX11, append V=1 to it, and 
+> you'll see the compilation commands. Copy the compilation command for the 
+> failing file, replace the -c with -E and the -o with some filename, so you
+> get 
+> the preprocessed file. Then in that preprocessed file check which stdlib.h
+> it 
+>  includes. stdlib.h should be included from include/X11/Xlibint.h. 
 
- > Fixes XA-245: ARM: Some memory not scrubbed at boot
- > https://xenbits.xenproject.org/xsa/advisory-245.html
+Need some more help... When following steps above the following error
+appears:
 
- > Notice: Not applying XSA-237..244 as they are x86 only and have patch file
- > name conflicts between 2017.02.x and master.
+fatal error: cannot specify -o with -c, -S or -E with multiple files.
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+I noticed that when executing abc_new the options -fPIC -DPIC -o
+.libs/imCallbk.o were automatically placed behind the compilation command
 
-Committed to 2017.02.x, thanks.
+abc_old is initial compilation command
+abc_new is adjusted compilation command to obtain preprocessed file
 
--- 
-Bye, Peter Korsgaard
+abc_old.abc_old
+<http://buildroot-busybox.2317881.n4.nabble.com/file/t2263/abc_old.abc_old>  
+abc_new.abc_new
+<http://buildroot-busybox.2317881.n4.nabble.com/file/t2263/abc_new.abc_new>  
+
+
+
+--
+Sent from: http://buildroot-busybox.2317881.n4.nabble.com/
