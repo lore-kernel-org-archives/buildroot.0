@@ -1,37 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 22 Oct 2017 23:47:01 +0200
-Subject: [Buildroot] [git commit] linux-headers: bump 4.{4, 9, 13}.x series
-Message-ID: <20171022214225.41F7E7FE4F@busybox.osuosl.org>
+Date: Sun, 22 Oct 2017 23:49:33 +0200
+Subject: [Buildroot] [git commit] mpd: bump to version 0.20.11
+Message-ID: <20171022214225.6AE6F7F8A4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f7479f4c818f335332fdca128d7d4f3e5e7c02ac
+commit: https://git.buildroot.net/buildroot/commit/?id=32caa954b032f9728231c85c8703fe5cad4567d4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-headers/Config.in.host | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/mpd/mpd.hash | 2 +-
+ package/mpd/mpd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 26f3fd9..83c319b 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -244,10 +244,10 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.10.107"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.12.74"	if BR2_KERNEL_HEADERS_3_12
- 	default "4.1.45"	if BR2_KERNEL_HEADERS_4_1
--	default "4.4.93"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.57"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.4.94"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.9.58"	if BR2_KERNEL_HEADERS_4_9
- 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
- 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
- 	default "4.12.14"	if BR2_KERNEL_HEADERS_4_12
--	default "4.13.8"	if BR2_KERNEL_HEADERS_4_13
-+	default "4.13.9"	if BR2_KERNEL_HEADERS_4_13
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
+index 9898c38..717b921 100644
+--- a/package/mpd/mpd.hash
++++ b/package/mpd/mpd.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256  52fbc1125cdba41ba999add2820d45f3ce7cf493006bb04d8f0b2937204d3121  mpd-0.20.10.tar.xz
++sha256  e9227d9daf32a63d6f34bf2ea18b3179b4a383e9d2b49d548702a37451e514bc  mpd-0.20.11.tar.xz
+diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
+index ff22593..b337196 100644
+--- a/package/mpd/mpd.mk
++++ b/package/mpd/mpd.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ MPD_VERSION_MAJOR = 0.20
+-MPD_VERSION = $(MPD_VERSION_MAJOR).10
++MPD_VERSION = $(MPD_VERSION_MAJOR).11
+ MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
+ MPD_SITE = http://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
+ MPD_DEPENDENCIES = host-pkgconf boost
