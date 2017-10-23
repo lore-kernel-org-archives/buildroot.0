@@ -1,66 +1,38 @@
-From: Thomas Preston <thomas.preston@codethink.co.uk>
-Date: Mon, 23 Oct 2017 15:26:14 +0100
-Subject: [Buildroot] [PATCH 1/1] .gitlab-ci.yml: use gitlab 9.0 varaible
-	names
-Message-ID: <20171023142614.11522-1-thomas.preston@codethink.co.uk>
+From: Alexey Roslyakov <alexey.roslyakov@gmail.com>
+Date: Mon, 23 Oct 2017 22:10:40 +0700
+Subject: [Buildroot] [PATCH 1/1] python-protobuf: update dependencies
+Message-ID: <20171023151040.27886-1-alexey.roslyakov@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gitlab 9.0 prefers "job" instead of "build" for CI variables names.
-http://docs.gitlab.com/ce/ci/variables/README.html#9-0-renaming
+Since protobuf is compatible with Python3, remove Python2-only
+dependency.
 
-Signed-off-by: Thomas Preston <thomas.preston@codethink.co.uk>
+It depends on python-six now, add this missing dependency.
+
+Signed-off-by: Alexey Roslyakov <alexey.roslyakov@gmail.com>
 ---
- .gitlab-ci.yml    | 4 ++--
- .gitlab-ci.yml.in | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-protobuf/Config.in | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index ebaac7a3d9..0dddb22f12 100644
---- a/.gitlab-ci.yml
-+++ b/.gitlab-ci.yml
-@@ -8,7 +8,7 @@ image: buildroot/base
+diff --git a/package/python-protobuf/Config.in b/package/python-protobuf/Config.in
+index 68523e9c60..66ce0163f6 100644
+--- a/package/python-protobuf/Config.in
++++ b/package/python-protobuf/Config.in
+@@ -1,9 +1,10 @@
+ config BR2_PACKAGE_PYTHON_PROTOBUF
+ 	bool "python-protobuf"
+-	depends on BR2_PACKAGE_PYTHON
++	depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
+ 	# host-protobuf only builds on certain architectures
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+ 	depends on BR2_HOST_GCC_AT_LEAST_4_5 # host-protobuf
++	select BR2_PACKAGE_PYTHON_SIX # runtime
+ 	help
+ 	  Python implementation of the Google Protocol Buffers.
  
- .defconfig_script: &defconfig_script
-     - echo 'Configure Buildroot'
--    - make ${CI_BUILD_NAME}
-+    - make ${CI_JOB_NAME}
-     - echo 'Build buildroot'
-     - |
-         make > >(tee build.log |grep '>>>') 2>&1 || {
-@@ -51,7 +51,7 @@ check-DEVELOPERS:
-     # runner will clean up those files for us.
-     # Multiply every emulator timeout by 10 to avoid sporadic failures in
-     # elastic runners.
--    script: ./support/testing/run-tests -o test-output/ -d test-dl/ -k --timeout-multiplier 10 ${CI_BUILD_NAME}
-+    script: ./support/testing/run-tests -o test-output/ -d test-dl/ -k --timeout-multiplier 10 ${CI_JOB_NAME}
-     artifacts:
-         when: always
-         expire_in: 2 weeks
-diff --git a/.gitlab-ci.yml.in b/.gitlab-ci.yml.in
-index 3abf7d5313..33c7b13725 100644
---- a/.gitlab-ci.yml.in
-+++ b/.gitlab-ci.yml.in
-@@ -8,7 +8,7 @@ image: buildroot/base
- 
- .defconfig_script: &defconfig_script
-     - echo 'Configure Buildroot'
--    - make ${CI_BUILD_NAME}
-+    - make ${CI_JOB_NAME}
-     - echo 'Build buildroot'
-     - |
-         make > >(tee build.log |grep '>>>') 2>&1 || {
-@@ -51,7 +51,7 @@ check-DEVELOPERS:
-     # runner will clean up those files for us.
-     # Multiply every emulator timeout by 10 to avoid sporadic failures in
-     # elastic runners.
--    script: ./support/testing/run-tests -o test-output/ -d test-dl/ -k --timeout-multiplier 10 ${CI_BUILD_NAME}
-+    script: ./support/testing/run-tests -o test-output/ -d test-dl/ -k --timeout-multiplier 10 ${CI_JOB_NAME}
-     artifacts:
-         when: always
-         expire_in: 2 weeks
 -- 
-2.11.0
+2.13.6
