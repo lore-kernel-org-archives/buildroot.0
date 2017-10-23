@@ -1,269 +1,192 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Mon, 23 Oct 2017 09:24:41 -0400
-Subject: [Buildroot] [PATCH v3 1/1] libcpprestsdk: new package
-Message-ID: <20171023132441.25039-1-aduskett@gmail.com>
+From: Olivier Schonken <olivier.schonken@gmail.com>
+Date: Mon, 23 Oct 2017 15:26:11 +0200
+Subject: [Buildroot] [PATCH v2 1/1] cups-filters: add new package
+	cups-filters 1.17.9
+Message-ID: <20171023132611.32525-1-olivier.schonken@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The C++ REST SDK is a Microsoft project for cloud-based client-server
-communication in native code using a modern asynchronous C++ API design.
-This project aims to help C++ developers connect to and interact with
-services.
-
-This package is licensed under the MIT package and depends on BOOST
-and OpenSSL/LibreSSL.
-
-Signed-off-by: Adam Duskett <aduskett@gmail.com>
+Signed-off-by: Olivier Schonken <olivier.schonken@gmail.com>
 ---
-Changes v1 -> v2:
-  - Add "depends on BR2_USE_WCHAR # boost" to boost.mk (Thomas)
-  - Remove "depends on BR2_USE_MMU" from boost.mk (Thomas)
-  - Add "!BR2_USE_WCHAR" to boost.mk (Thomas)
+v1 -> v2  -  Updated/Fixed indentation in .mk and Config.in
+	- Added fontconfig and freetype as dependencies
+	- Added entry in DEVELOPERS file
+	- Tested with libjpeg and libjpeg-turbo 
+	  (Build with libjpeg requires .pc patch for libjpeg)
 
-Changes v2 -> v3:
-  - Update to v2.10.0
-  - Remove check for libressl now that OpenSSL is a virtual package.
-  - Add 0001-remove-cast-align-error-flag.patch to prevent cross-compiling
-    warning errors.
-  - Add 0002-fix-xlocale-header-check.patch to prevent uclibc/musl errors
-    due to a missing header.
-  - Add 0003-fix-compilation-issues-with-musl.patch which adds sys/time.h to
-    asyncrt_utils.h.
+ Config.in.legacy                       |  1 +
+ DEVELOPERS                             |  1 +
+ package/Config.in                      |  1 +
+ package/cups-filters/Config.in         | 33 ++++++++++++++++
+ package/cups-filters/cups-filters.hash |  2 +
+ package/cups-filters/cups-filters.mk   | 71 ++++++++++++++++++++++++++++++++++
+ 6 files changed, 109 insertions(+)
+ create mode 100644 package/cups-filters/Config.in
+ create mode 100644 package/cups-filters/cups-filters.hash
+ create mode 100644 package/cups-filters/cups-filters.mk
 
- DEVELOPERS                                         |  1 +
- package/Config.in                                  |  1 +
- .../0001-remove-cast-align-error-flag.patch        | 29 ++++++++++++
- .../0002-fix-xlocale-header-check.patch            | 55 ++++++++++++++++++++++
- .../0003-fix-compilation-issues-with-musl.patch    | 28 +++++++++++
- package/libcpprestsdk/Config.in                    | 26 ++++++++++
- package/libcpprestsdk/libcpprestsdk.hash           |  3 ++
- package/libcpprestsdk/libcpprestsdk.mk             | 15 ++++++
- 8 files changed, 158 insertions(+)
- create mode 100644 package/libcpprestsdk/0001-remove-cast-align-error-flag.patch
- create mode 100644 package/libcpprestsdk/0002-fix-xlocale-header-check.patch
- create mode 100644 package/libcpprestsdk/0003-fix-compilation-issues-with-musl.patch
- create mode 100644 package/libcpprestsdk/Config.in
- create mode 100644 package/libcpprestsdk/libcpprestsdk.hash
- create mode 100644 package/libcpprestsdk/libcpprestsdk.mk
-
+diff --git a/Config.in.legacy b/Config.in.legacy
+index ea69f5a924..94ae490133 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -1303,6 +1303,7 @@ config BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 
+ config BR2_PACKAGE_CUPS_PDFTOPS
+ 	bool "Pdftops support has been removed from Cups"
++	select BR2_PACKAGE_CUPS_FILTERS
+ 	select BR2_LEGACY
+ 	help
+ 	  Pdftops support has been removed from the cups package
 diff --git a/DEVELOPERS b/DEVELOPERS
-index f0f83b0f42..bbc9fcdcc6 100644
+index f0f83b0f42..354824011f 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -34,6 +34,7 @@ F:	package/audit/
- F:	package/checkpolicy/
- F:	package/gstreamer1/gst1-vaapi/
- F:	package/janus-gateway/
-+F:	package/libcpprestsdk/
- F:	package/libressl/
- F:	package/libselinux/
- F:	package/libsemanage/
+@@ -1161,6 +1161,7 @@ N:	Olivier Matz <olivier.matz@6wind.com>
+ F:	package/python-pyelftools/
+ 
+ N:	Olivier Schonken <olivier.schonken@gmail.com>
++F:	package/cups-filters/
+ F:	package/ijs/
+ F:	package/poppler/
+ F:	package/qpdf/
 diff --git a/package/Config.in b/package/Config.in
-index 55fe80139e..d669953507 100644
+index 55fe80139e..d560023a37 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1337,6 +1337,7 @@ menu "Networking"
- 	source "package/libcgi/Config.in"
- 	source "package/libcgicc/Config.in"
- 	source "package/libcoap/Config.in"
-+	source "package/libcpprestsdk/Config.in"
- 	source "package/libcurl/Config.in"
- 	source "package/libdnet/Config.in"
- 	source "package/libeXosip2/Config.in"
-diff --git a/package/libcpprestsdk/0001-remove-cast-align-error-flag.patch b/package/libcpprestsdk/0001-remove-cast-align-error-flag.patch
+@@ -1621,6 +1621,7 @@ menu "Networking applications"
+ 	source "package/crda/Config.in"
+ 	source "package/ctorrent/Config.in"
+ 	source "package/cups/Config.in"
++	source "package/cups-filters/Config.in"
+ 	source "package/dante/Config.in"
+ 	source "package/darkhttpd/Config.in"
+ 	source "package/dhcp/Config.in"
+diff --git a/package/cups-filters/Config.in b/package/cups-filters/Config.in
 new file mode 100644
-index 0000000000..a8cfa2b093
+index 0000000000..b3a12b52f4
 --- /dev/null
-+++ b/package/libcpprestsdk/0001-remove-cast-align-error-flag.patch
-@@ -0,0 +1,29 @@
-+From 2b1b376b6daa96e663f30032e3ac047c9f0668d7 Mon Sep 17 00:00:00 2001
-+From: Adam Duskett <aduskett@gmail.com>
-+Date: Mon, 23 Oct 2017 07:47:42 -0400
-+Subject: [PATCH 1/1] remove cast-align error flag
-+
-+When cross compiling, frame.hpp and md5.hpp both have casts that will throw
-+a cast-align warning, by default this will throw an error.
-+
-+Signed-off-by: Adam Duskett <aduskett@gmail.com>
-+---
-+ Release/CMakeLists.txt | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/Release/CMakeLists.txt b/Release/CMakeLists.txt
-+index bc1d612..d57aa3d 100644
-+--- a/Release/CMakeLists.txt
-++++ b/Release/CMakeLists.txt
-+@@ -161,7 +161,7 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "Clang" OR IOS)
-+ elseif(CMAKE_CXX_COMPILER_ID MATCHES "GNU")
-+   message("-- Setting gcc options")
-+ 
-+-  set(WARNINGS -Wall -Wextra -Wunused-parameter -Wcast-align -Wcast-qual -Wconversion -Wformat=2 -Winit-self -Winvalid-pch -Wmissing-format-attribute -Wmissing-include-dirs -Wpacked -Wredundant-decls -Wunreachable-code)
-++  set(WARNINGS -Wall -Wextra -Wunused-parameter -Wcast-qual -Wconversion -Wformat=2 -Winit-self -Winvalid-pch -Wmissing-format-attribute -Wmissing-include-dirs -Wpacked -Wredundant-decls -Wunreachable-code)
-+   set(LD_FLAGS "${LD_FLAGS} -Wl,-z,defs")
-+ 
-+   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -fno-strict-aliasing")
-+-- 
-+2.13.6
-+
-diff --git a/package/libcpprestsdk/0002-fix-xlocale-header-check.patch b/package/libcpprestsdk/0002-fix-xlocale-header-check.patch
-new file mode 100644
-index 0000000000..9c95fdf36c
---- /dev/null
-+++ b/package/libcpprestsdk/0002-fix-xlocale-header-check.patch
-@@ -0,0 +1,55 @@
-+From a826b7b656c165bc35746d9af3ec371387d2bca1 Mon Sep 17 00:00:00 2001
-+From: Adam Duskett <aduskett@gmail.com>
-+Date: Mon, 23 Oct 2017 08:11:21 -0400
-+Subject: [PATCH 2/2] fix xlocale header check
-+
-+asyncrt_utils.h checks if __GLIBC__ is not defined before including
-+xlocal.h.  This will cause a compilation failure on uclibc and musl.
-+
-+Add a proper check in CMakeLists.txt and check for HAVE_XLOCALE_H
-+instead of __GLIBC__
-+
-+Upstream-Status: Pending
-+Signed-off-by: Adam Duskett <aduskett@gmail.com>
-+---
-+ Release/CMakeLists.txt                  | 3 +++
-+ Release/include/cpprest/asyncrt_utils.h | 2 +-
-+ 2 files changed, 4 insertions(+), 1 deletion(-)
-+
-+diff --git a/Release/CMakeLists.txt b/Release/CMakeLists.txt
-+index d57aa3d..eefae75 100644
-+--- a/Release/CMakeLists.txt
-++++ b/Release/CMakeLists.txt
-+@@ -42,6 +42,7 @@ include(cmake/cpprest_find_boost.cmake)
-+ include(cmake/cpprest_find_zlib.cmake)
-+ include(cmake/cpprest_find_openssl.cmake)
-+ include(cmake/cpprest_find_websocketpp.cmake)
-++include(CheckIncludeFiles)
-+ 
-+ find_package(Threads REQUIRED)
-+ if(THREADS_HAVE_PTHREAD_ARG)
-+@@ -56,6 +57,8 @@ if(CPPREST_EXCLUDE_WEBSOCKETS)
-+   set(CPPREST_WEBSOCKETS_IMPL none CACHE STRING "Internal use.")
-+ endif()
-+ 
-++CHECK_INCLUDE_FILES(xlocale.h HAVE_XLOCALE_H)
-++
-+ if(APPLE) # Note: also iOS
-+   set(CPPREST_PPLX_IMPL apple CACHE STRING "Internal use.")
-+   set(CPPREST_WEBSOCKETS_IMPL wspp CACHE STRING "Internal use.")
-+diff --git a/Release/include/cpprest/asyncrt_utils.h b/Release/include/cpprest/asyncrt_utils.h
-+index fac70a9..8faa2dc 100644
-+--- a/Release/include/cpprest/asyncrt_utils.h
-++++ b/Release/include/cpprest/asyncrt_utils.h
-+@@ -29,7 +29,7 @@
-+ 
-+ #ifndef _WIN32
-+ #include <boost/algorithm/string.hpp>
-+-#if !defined(ANDROID) && !defined(__ANDROID__) && !defined(__GLIBC__) // CodePlex 269
-++#if !defined(ANDROID) && !defined(__ANDROID__) && defined(HAVE_XLOCALE_H) // CodePlex 269
-+ /* Systems using glibc: xlocale.h has been removed from glibc 2.26
-+    The above include of locale.h is sufficient
-+    Further details: https://sourceware.org/git/?p=glibc.git;a=commit;h=f0be25b6336db7492e47d2e8e72eb8af53b5506d */
-+-- 
-+2.13.6
-+
-diff --git a/package/libcpprestsdk/0003-fix-compilation-issues-with-musl.patch b/package/libcpprestsdk/0003-fix-compilation-issues-with-musl.patch
-new file mode 100644
-index 0000000000..121c8e110a
---- /dev/null
-+++ b/package/libcpprestsdk/0003-fix-compilation-issues-with-musl.patch
-@@ -0,0 +1,28 @@
-+From c59d736f36d6ecdde836319a632dc1fdffd70f5a Mon Sep 17 00:00:00 2001
-+From: Adam Duskett <aduskett@gmail.com>
-+Date: Mon, 23 Oct 2017 08:57:01 -0400
-+Subject: [PATCH] fix compilation issues with musl
-+
-+sys/time.h needed for struct timeval
-+
-+Upstream-Status: Pending
-+Signed-off-by: Adam Duskett <aduskett@gmail.com>
-+---
-+ Release/include/cpprest/asyncrt_utils.h | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/Release/include/cpprest/asyncrt_utils.h b/Release/include/cpprest/asyncrt_utils.h
-+index fac70a9..7ba7a2c 100644
-+--- a/Release/include/cpprest/asyncrt_utils.h
-++++ b/Release/include/cpprest/asyncrt_utils.h
-+@@ -29,6 +29,7 @@
-+ 
-+ #ifndef _WIN32
-+ #include <boost/algorithm/string.hpp>
-++#include <sys/time.h>
-+ #if !defined(ANDROID) && !defined(__ANDROID__) && !defined(__GLIBC__) // CodePlex 269
-+ /* Systems using glibc: xlocale.h has been removed from glibc 2.26
-+    The above include of locale.h is sufficient
-+-- 
-+2.13.6
-+
-diff --git a/package/libcpprestsdk/Config.in b/package/libcpprestsdk/Config.in
-new file mode 100644
-index 0000000000..84fa783015
---- /dev/null
-+++ b/package/libcpprestsdk/Config.in
-@@ -0,0 +1,26 @@
-+config BR2_PACKAGE_LIBCPPRESTSDK
-+	bool "libcpprestsdk"
-+	depends on BR2_INSTALL_LIBSTDCPP # boost
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # boost
-+	depends on BR2_USE_WCHAR # boost
-+	select BR2_PACKAGE_BOOST
-+	select BR2_PACKAGE_BOOST_ATOMIC
-+	select BR2_PACKAGE_BOOST_CHRONO
-+	select BR2_PACKAGE_BOOST_DATE_TIME
-+	select BR2_PACKAGE_BOOST_FILESYSTEM
-+	select BR2_PACKAGE_BOOST_RANDOM
-+	select BR2_PACKAGE_BOOST_REGEX
-+	select BR2_PACKAGE_BOOST_THREAD
-+	select BR2_PACKAGE_OPENSSL
-+	select BR2_PACKAGE_ZLIB
++++ b/package/cups-filters/Config.in
+@@ -0,0 +1,33 @@
++config BR2_PACKAGE_CUPS_FILTERS
++	bool "cups-filters"
++	# needs fork()
++	depends on BR2_USE_MMU
++	depends on BR2_INSTALL_LIBSTDCPP #qpdf
++	depends on !BR2_STATIC_LIBS
++	depends on BR2_USE_WCHAR # libglib2
++	depends on BR2_TOOLCHAIN_HAS_THREADS #libglib2
++	depends on BR2_PACKAGE_CUPS
++	select BR2_PACKAGE_LIBGLIB2
++	select BR2_PACKAGE_LCMS2
++	select BR2_PACKAGE_QPDF
++	select BR2_PACKAGE_FREETYPE
++	select BR2_PACKAGE_FONTCONFIG
 +	help
-+	  The C++ REST SDK is a Microsoft project for cloud-based
-+	  client-server communication in native code using a modern
-+	  asynchronous C++ API design. This project aims to help C++
-+	  developers connect to and interact with services.
++	  This project provides backends, filters, and other software
++	  that was once part of the core CUPS distribution but is no
++	  longer maintained by Apple Inc. In addition it contains
++	  additional filters and software developed independently of
++	  Apple, especially filters for the PDF-centric printing
++	  workflow introduced by OpenPrinting and a daemon to browse
++	  Bonjour broadcasts of remote CUPS printers to make these
++	  printers available locally and to provide backward
++	  compatibility to the old CUPS broadcasting and browsing of
++	  CUPS 1.5.x and older.  From CUPS 1.6.0 on, this package is
++	  required for using printer drivers with CUPS under Linux.
++	  With CUPS 1.5.x and earlier this package can be used
++	  optionally to switch over to PDF-based printing.
 +
-+	  https://github.com/Microsoft/cpprestsdk
++	  http://www.linuxfoundation.org/collaborate/workgroups/openprinting/cups-filters
 +
-+comment "libcpprestsdk needs a toolchain w/ C++, wchar, threads"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS \
-+	|| !BR2_USE_WCHAR
-diff --git a/package/libcpprestsdk/libcpprestsdk.hash b/package/libcpprestsdk/libcpprestsdk.hash
++comment "cups-filters needs a toolchain w/ wchar, C++, threads and dynamic library  support"
++	depends on BR2_USE_MMU && (!BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR || BR2_STATIC_LIBS)
+diff --git a/package/cups-filters/cups-filters.hash b/package/cups-filters/cups-filters.hash
 new file mode 100644
-index 0000000000..85f4c4fcc9
+index 0000000000..da9d31c998
 --- /dev/null
-+++ b/package/libcpprestsdk/libcpprestsdk.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256 de333da67f1cb3d1b30be118860531092467f18d24ca6b4d36f6623fecab0de0 libcpprestsdk-v2.10.0.tar.gz
-+sha256 5c191789f502ac87df83b57008d2fc3e47fbf31315381b5bc4309f6602d0fe97	license.txt
-diff --git a/package/libcpprestsdk/libcpprestsdk.mk b/package/libcpprestsdk/libcpprestsdk.mk
++++ b/package/cups-filters/cups-filters.hash
+@@ -0,0 +1,2 @@
++# Locally computed:
++sha256 95254d7950df4c74d293ed7dfa0b714f51cff329a82da74a4ac976d342bb35ab  cups-filters-1.17.9.tar.gz
+diff --git a/package/cups-filters/cups-filters.mk b/package/cups-filters/cups-filters.mk
 new file mode 100644
-index 0000000000..87727901e7
+index 0000000000..abcd616cd9
 --- /dev/null
-+++ b/package/libcpprestsdk/libcpprestsdk.mk
-@@ -0,0 +1,15 @@
++++ b/package/cups-filters/cups-filters.mk
+@@ -0,0 +1,71 @@
 +################################################################################
 +#
-+# libcpprestsdk
++# cups-filters
 +#
 +################################################################################
 +
-+LIBCPPRESTSDK_VERSION = v2.10.0
-+LIBCPPRESTSDK_SITE = $(call github,Microsoft,cpprestsdk,$(LIBCPPRESTSDK_VERSION))
-+LIBCPPRESTSDK_DEPENDENCIES = boost
-+LIBCPPRESTSDK_LICENSE = MIT
-+LIBCPPRESTSDK_LICENSE_FILES = license.txt
-+LIBCPPRESTSDK_SUBDIR = Release
-+LIBCPPRESTSDK_DEPENDENCIES += openssl zlib
++CUPS_FILTERS_VERSION = 1.17.9
++CUPS_FILTERS_SITE = http://openprinting.org/download/cups-filters
++CUPS_FILTERS_LICENSE = GPL-2.0, GPL-2.0+, GPL-3.0, GPL-3.0+, LGPL-2, LGPL-2.1+, MIT, BSD-4-Clause
++CUPS_FILTERS_LICENSE_FILES = COPYING
 +
-+$(eval $(cmake-package))
++CUPS_FILTERS_DEPENDENCIES = cups libglib2 lcms2 qpdf fontconfig freetype libjpeg
++
++CUPS_FILTERS_CONF_OPTS = --disable-imagefilters \
++	--disable-mutool \
++	--disable-foomatic \
++	--with-cups-config=$(STAGING_DIR)/usr/bin/cups-config \
++	--with-sysroot=$(STAGING_DIR) \
++	--with-pdftops=pdftops \
++	--with-jpeg
++
++ifeq ($(BR2_PACKAGE_LIBPNG),y)
++CUPS_FILTERS_CONF_OPTS += --with-png
++CUPS_FILTERS_DEPENDENCIES += libpng
++else
++CUPS_FILTERS_CONF_OPTS += --without-png
++endif
++
++ifeq ($(BR2_PACKAGE_TIFF),y)
++CUPS_FILTERS_CONF_OPTS += --with-tiff
++CUPS_FILTERS_DEPENDENCIES += tiff
++else
++CUPS_FILTERS_CONF_OPTS += --without-tiff
++endif
++
++ifeq ($(BR2_PACKAGE_DBUS),y)
++CUPS_FILTERS_CONF_OPTS += --enable-dbus
++CUPS_FILTERS_DEPENDENCIES += dbus
++else
++CUPS_FILTERS_CONF_OPTS += --disable-dbus
++endif
++
++ifeq ($(BR2_PACKAGE_AVAHI),y)
++CUPS_FILTERS_DEPENDENCIES += avahi
++CUPS_FILTERS_CONF_OPTS += --enable-avahi
++else
++CUPS_FILTERS_CONF_OPTS += --disable-avahi
++endif
++
++ifeq ($(BR2_PACKAGE_GHOSTSCRIPT),y)
++CUPS_FILTERS_DEPENDENCIES += ghostscript
++CUPS_FILTERS_CONF_OPTS += --enable-ghostscript
++else
++CUPS_FILTERS_CONF_OPTS += --disable-ghostscript
++endif
++
++ifeq ($(BR2_PACKAGE_IJS),y)
++CUPS_FILTERS_DEPENDENCIES += ijs
++CUPS_FILTERS_CONF_OPTS += --enable-ijs
++else
++CUPS_FILTERS_CONF_OPTS += --disable-ijs
++endif
++
++ifeq ($(BR2_PACKAGE_POPPLER),y)
++CUPS_FILTERS_DEPENDENCIES += poppler
++CUPS_FILTERS_CONF_OPTS += --enable-poppler
++else
++CUPS_FILTERS_CONF_OPTS += --disable-poppler
++endif
++
++$(eval $(autotools-package))
 -- 
-2.13.6
+2.11.0
