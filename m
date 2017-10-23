@@ -1,11 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 23 Oct 2017 22:17:48 +0200
-Subject: [Buildroot] [PATCH 12/13] download: add flock call before
- dl-wrapper
-In-Reply-To: <20170704162211.13238-13-maxime.hadjinlian@gmail.com>
-References: <20170704162211.13238-1-maxime.hadjinlian@gmail.com>
- <20170704162211.13238-13-maxime.hadjinlian@gmail.com>
-Message-ID: <90fd1736-8465-94ff-ad56-7911a12f628d@mind.be>
+Date: Mon, 23 Oct 2017 22:23:10 +0200
+Subject: [Buildroot] Multiple root filesystems for single
+	kernel/toolchain
+In-Reply-To: <f5e13782-3ec4-1b63-ef4f-df269bfe8e9f@lynx.com>
+References: <f5e13782-3ec4-1b63-ef4f-df269bfe8e9f@lynx.com>
+Message-ID: <43ed600f-f03b-da68-4f2d-8931b40bbe41@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,66 +13,32 @@ To: buildroot@busybox.net
 
 
 
-On 04-07-17 18:22, Maxime Hadjinlian wrote:
-> In order to introduce the cache mechanisms, we need to have a lock on
-> the $(LIBFOO_DL_DIR), otherwise it would be impossible to do parallel
-> download (a shared DL_DIR for two buildroot instances).
-
- Note that this is also needed for top-level parallel build.
-
+On 23-10-17 21:59, Seamus Connor wrote:
+> I have a system with a few unique restrictions.? It has low memory, and its bulk
+> storage device is not available until some bits have been flipped in the
+> hardware.? What I would like to do is:
 > 
-> To make sure the directory exists, the mkdir call has been removed from
-> the dl-wrapper and put in the infrastructure.
+> 1) Create a bzImage with a baked in minimal initramfs.
 > 
-> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com> ---
->  package/pkg-download.mk     | 4 +++-
->  support/download/dl-wrapper | 1 -
->  2 files changed, 3 insertions(+), 2 deletions(-)
+> 2) Create a larger squashfs that is stored in MMC.
 > 
-> diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-> index 47671e21a7..c67f1ba4e1 100644
-> --- a/package/pkg-download.mk
-> +++ b/package/pkg-download.mk
-> @@ -19,6 +19,7 @@ SSH := $(call qstrip,$(BR2_SSH))
->  export LOCALFILES := $(call qstrip,$(BR2_LOCALFILES))
->  
->  DL_WRAPPER = support/download/dl-wrapper
-> +FLOCK = flock $($(PKG)_DL_DIR)/
+> What is the best procedure to create multiple file systems w/ buildroot?? Would
+> I just have two separate configs that specify different packages?
 
- IMO adding a variable for this makes things less clear.
+ Indeed, that's the way to go. This also allows you to specify completely
+different build options. For example, you might want to go for a uClibc
+statically linked toolchain in the initramfs and a glibc- or musl-based
+toolchain in the full rootfs.
 
- Also, I believe it is possible that DOWNLOAD gets called outside of package
-context. Therefore, it should be $(if $(PKG),$($(PKG)_DL_DIR),$(DL_DIR))
+ However, if all you need is a to toggle a few bits and to wait until the device
+is available, you might even get away with a simple C program that does that,
+mounts the rootfs, does a pivot_root(), and exec()s /sbin/init. Then you make a
+cpio archive with just that executable. Perhaps more work but you're very sure
+that it's small :-)
+
 
  Regards,
  Arnout
-
->  
->  # DL_DIR may have been set already from the environment
->  ifeq ($(origin DL_DIR),undefined)
-> @@ -91,7 +92,8 @@ endif
->  
->  define DOWNLOAD
->  	$(Q)$(if $(filter bzr cvs hg svn,$($(PKG)_SITE_METHOD)),export BR_NO_CHECK_HASH_FOR=$(notdir $(1));) \
-> -	$(EXTRA_ENV) $(DL_WRAPPER) \
-> +	$(Q)mkdir -p $($(PKG)_DL_DIR)/
-> +	$(EXTRA_ENV) $(FLOCK) $(DL_WRAPPER) \
->  		-c $($(PKG)_DL_VERSION) \
->  		-f $(notdir $(1)) \
->  		-H $(PKGDIR)/$($(PKG)_RAWNAME).hash \
-> diff --git a/support/download/dl-wrapper b/support/download/dl-wrapper
-> index f14a60c173..50c14a2e16 100755
-> --- a/support/download/dl-wrapper
-> +++ b/support/download/dl-wrapper
-> @@ -50,7 +50,6 @@ main() {
->      if [ -z "${output}" ]; then
->          error "no output specified, use -o\n"
->      fi
-> -    mkdir -p "$(dirname "${output}")"
->  
->      # If the output file already exists and:
->      # - there's no .hash file: do not download it again and exit promptly
-> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
