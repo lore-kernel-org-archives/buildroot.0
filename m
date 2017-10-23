@@ -1,57 +1,84 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Mon, 23 Oct 2017 21:51:37 +0200
-Subject: [Buildroot] [git commit] boost: add fiber module
-Message-ID: <20171023200255.044BB81003@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 23 Oct 2017 22:17:48 +0200
+Subject: [Buildroot] [PATCH 12/13] download: add flock call before
+ dl-wrapper
+In-Reply-To: <20170704162211.13238-13-maxime.hadjinlian@gmail.com>
+References: <20170704162211.13238-1-maxime.hadjinlian@gmail.com>
+ <20170704162211.13238-13-maxime.hadjinlian@gmail.com>
+Message-ID: <90fd1736-8465-94ff-ad56-7911a12f628d@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=657dbfa00af724c2539a08eaaf0c8044dd4051d7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This module requires NPTL. Without support for the module, it is built
-unconditionally, which was causing the following build errors:
-http://autobuild.buildroot.net/results/029/0298038fc126d15733d81c54e0bb7cb00be48b92/build-end.log
-http://autobuild.buildroot.net/results/6f3/6f3a218c47204e431100799482a3ed0ec159fa15/build-end.log
-http://autobuild.buildroot.net/results/63e/63e5569a90d3ace97cb6102509cbd04aeab6f5f7/build-end.log
 
-Signed-off-by: Adam Duskett <aduskett@gmail.com>
-[Arnout: add empty line in Config.in, reword commit message]
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/boost/Config.in | 7 +++++++
- package/boost/boost.mk  | 1 +
- 2 files changed, 8 insertions(+)
+On 04-07-17 18:22, Maxime Hadjinlian wrote:
+> In order to introduce the cache mechanisms, we need to have a lock on
+> the $(LIBFOO_DL_DIR), otherwise it would be impossible to do parallel
+> download (a shared DL_DIR for two buildroot instances).
 
-diff --git a/package/boost/Config.in b/package/boost/Config.in
-index 3b3c89b..37a7e73 100644
---- a/package/boost/Config.in
-+++ b/package/boost/Config.in
-@@ -79,6 +79,13 @@ config BR2_PACKAGE_BOOST_DATE_TIME
- config BR2_PACKAGE_BOOST_EXCEPTION
- 	bool "boost-exception"
- 
-+config BR2_PACKAGE_BOOST_FIBER
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
-+	bool "boost-fiber"
-+
-+comment "boost-fiber needs a toolchain w/ NPTL"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
-+
- config BR2_PACKAGE_BOOST_FILESYSTEM
- 	bool "boost-filesystem"
- 
-diff --git a/package/boost/boost.mk b/package/boost/boost.mk
-index 598ffbe..0fd6c4d 100644
---- a/package/boost/boost.mk
-+++ b/package/boost/boost.mk
-@@ -26,6 +26,7 @@ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_CONTEXT),,context)
- BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_COROUTINE),,coroutine)
- BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_DATE_TIME),,date_time)
- BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_EXCEPTION),,exception)
-+BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_FILESYSTEM),,fiber)
- BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_FILESYSTEM),,filesystem)
- BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_GRAPH),,graph)
- BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_GRAPH_PARALLEL),,graph_parallel)
+ Note that this is also needed for top-level parallel build.
+
+> 
+> To make sure the directory exists, the mkdir call has been removed from
+> the dl-wrapper and put in the infrastructure.
+> 
+> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com> ---
+>  package/pkg-download.mk     | 4 +++-
+>  support/download/dl-wrapper | 1 -
+>  2 files changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+> index 47671e21a7..c67f1ba4e1 100644
+> --- a/package/pkg-download.mk
+> +++ b/package/pkg-download.mk
+> @@ -19,6 +19,7 @@ SSH := $(call qstrip,$(BR2_SSH))
+>  export LOCALFILES := $(call qstrip,$(BR2_LOCALFILES))
+>  
+>  DL_WRAPPER = support/download/dl-wrapper
+> +FLOCK = flock $($(PKG)_DL_DIR)/
+
+ IMO adding a variable for this makes things less clear.
+
+ Also, I believe it is possible that DOWNLOAD gets called outside of package
+context. Therefore, it should be $(if $(PKG),$($(PKG)_DL_DIR),$(DL_DIR))
+
+ Regards,
+ Arnout
+
+>  
+>  # DL_DIR may have been set already from the environment
+>  ifeq ($(origin DL_DIR),undefined)
+> @@ -91,7 +92,8 @@ endif
+>  
+>  define DOWNLOAD
+>  	$(Q)$(if $(filter bzr cvs hg svn,$($(PKG)_SITE_METHOD)),export BR_NO_CHECK_HASH_FOR=$(notdir $(1));) \
+> -	$(EXTRA_ENV) $(DL_WRAPPER) \
+> +	$(Q)mkdir -p $($(PKG)_DL_DIR)/
+> +	$(EXTRA_ENV) $(FLOCK) $(DL_WRAPPER) \
+>  		-c $($(PKG)_DL_VERSION) \
+>  		-f $(notdir $(1)) \
+>  		-H $(PKGDIR)/$($(PKG)_RAWNAME).hash \
+> diff --git a/support/download/dl-wrapper b/support/download/dl-wrapper
+> index f14a60c173..50c14a2e16 100755
+> --- a/support/download/dl-wrapper
+> +++ b/support/download/dl-wrapper
+> @@ -50,7 +50,6 @@ main() {
+>      if [ -z "${output}" ]; then
+>          error "no output specified, use -o\n"
+>      fi
+> -    mkdir -p "$(dirname "${output}")"
+>  
+>      # If the output file already exists and:
+>      # - there's no .hash file: do not download it again and exit promptly
+> 
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
