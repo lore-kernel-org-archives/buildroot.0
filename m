@@ -1,119 +1,84 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 23 Oct 2017 10:53:32 +0200
-Subject: [Buildroot] [PATCH] autoconf: use host-gettext's autopoint if
- available in autoreconf
-In-Reply-To: <20170827110920.15579-1-aleksander@aleksander.es>
-References: <20170827110920.15579-1-aleksander@aleksander.es>
-Message-ID: <e3d4f8af-e660-ff80-7157-5b897b8e47c4@mind.be>
+Date: Mon, 23 Oct 2017 11:10:32 +0200
+Subject: [Buildroot] [PATCH] support/download: print dl hash if not
+ provided
+In-Reply-To: <20170911191208.at72rz23a7y25nvj@gportay>
+References: <20170720031836.977-1-gael.portay@savoirfairelinux.com>
+ <20170910092955.GD3536@scaer> <20170911191208.at72rz23a7y25nvj@gportay>
+Message-ID: <c473939d-e763-165f-5451-cd940f56fa38@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Aleksander,
+ Hi Ga?l,
 
-On 27-08-17 13:09, Aleksander Morgado wrote:
-> Commit 7ee8ebbd813ad0a6d2392ef628c17241 explicitly disabled autopoint
-> calls during autoreconf, to avoid having the host autopoint called, as
-> there was no host-gettext package.
+On 11-09-17 21:12, Ga?l PORTAY wrote:
+> Yann,
 > 
-> Commit 3a188b578e490f2a8b5922329b7abfae introduced the host-gettext
-> package support.
+> On Sun, Sep 10, 2017 at 11:29:55AM +0200, Yann E. MORIN wrote:
+>> Ga?l, All,
+>>
+>> On 2017-07-19 23:18 -0400, Ga?l PORTAY spake thusly:
+>>> ...
+>>>
+>>> It also fixes check_one_hash description. check_one_hash() takes three
+>>> arguments:
+>>>  - algo hash
+>>>  - known hash
+>>>  - file to hash
+>>>
+>>> Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
+>>
+>> NAK from me.
+>>
+>> The reason we do not want this is that we instead want the user to go
+>> fetch the hash(es) as provided by upstream, like in an announcement
+>> email, or in an on-the-side hash file.
+>>
+>> Having the download infra print the locally computed hash defeats the
+>> very purpose of hashes: check that we get what upstream provides.
+>>
+>> We only accept local calculations of hashes for the cases where upstream
+>> does not provide any (or too weak) hash.
+>>
 > 
-> This commit recovers the support for automatically calling autopoint
-> during autoreconf.
-> 
-> Signed-off-by: Aleksander Morgado <aleksander@aleksander.es>
-> ---
-> 
-> Hey,
-> 
-> I see this is a recurring issue when a package that builds from git (bootstrapping using autoreconf before configure) requires gettext processing. automake would fail as autopoint wasn't being run (disabled in buildroot's autoconf package) and therefore not creating config.rpath and ABOUT-NLS (among other things, although these are the ones automake complains about). Specifying $(PKG)_GETTEXTIZE isn't an option as that may actually update the gnulib-imported files in a non-expected way, and "touch"-ing the missing files just seems a bit of a hack...
-> 
-> Calling autopoint from autoreconf was disabled back in 2011 because no host-gettext package was available, but this package was added in 2013, so how about removing that limitation?
+> Okay.
 
- We tried to understand what was going on (at the BR developer meeting) but we
-failed :-(. Based on this patch and on the discussion in [1] and [2]
-(unfortunately pipermail splits threads when they straddle a month), we
-concluded that:
-- the current patch doesn't work (at least not for gst1-plugins-bad)
-- if running autopoint is in fact the right thing to do, then probably it is
-better to replace <PKG>_GETTEXTIZE with <PKG>_AUTOPOINT.
+ Thomas and I discussed this at the BR developer meeting, and we disagree with
+Yann that we should make life difficult for people bumping a package :-P. So we
+think this patch does have value. Would you be willing to respin it?
 
- Indeed, as we understand from your mails and from the autopoint info page:
-- autopoint installs the autoconf/automake support files for translations;
-- gettextize prepares a package for translation by extracting the strings from
-the source code, and additionally does the same as autopoint.
+ However, the text you propose is not strong enough. How about:
 
- If that is true, calling gettextize from Buildroot can never be correct,
-because the extracted strings would anyway still have to be translated before
-they're any use. And with autopoint there shouldn't be an issue of gettexttize
-versions because it will look for the required version declared in configure.ac.
-That makes us think that perhaps we should run autopoint instead of gettextize
-in the places where we currently run gettextize.
-
- What we certainly don't want is that whether autopoint gets run depends on
-whether host-gettext was previously built or not. We want builds to be
-reproducible so we want to avoid building something subtly different just
-because of the presence of some package which has no explicit dependency in the
-.mk file.
-
- What we also would like to avoid is that host-gettextize becomes a dependency
-of every package that needs AUTORECONF = YES. So always running autopoint is not
-so interesting.
+       Please find a hash in the upstream announcement or website
+       and add it to ${h_file}
+       If upstream doesn't provide a hash and the source is trusted,
+       consider adding these lines:
 
 
-> 
-> Cheers!
-> 
-> ---
->  package/autoconf/autoconf.mk | 2 +-
->  package/gettext/gettext.mk   | 1 +
->  2 files changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/autoconf/autoconf.mk b/package/autoconf/autoconf.mk
-> index e5f474c72..f1c60224f 100644
-> --- a/package/autoconf/autoconf.mk
-> +++ b/package/autoconf/autoconf.mk
-> @@ -23,4 +23,4 @@ $(eval $(host-autotools-package))
->  # variables used by other packages
->  AUTOCONF = $(HOST_DIR)/bin/autoconf
->  AUTOHEADER = $(HOST_DIR)/bin/autoheader
-> -AUTORECONF = $(HOST_CONFIGURE_OPTS) ACLOCAL="$(ACLOCAL)" AUTOCONF="$(AUTOCONF)" AUTOHEADER="$(AUTOHEADER)" AUTOMAKE="$(AUTOMAKE)" AUTOPOINT=/bin/true $(HOST_DIR)/bin/autoreconf -f -i -I "$(ACLOCAL_DIR)" -I "$(ACLOCAL_HOST_DIR)"
-> +AUTORECONF = $(HOST_CONFIGURE_OPTS) ACLOCAL="$(ACLOCAL)" AUTOCONF="$(AUTOCONF)" AUTOHEADER="$(AUTOHEADER)" AUTOMAKE="$(AUTOMAKE)" AUTOPOINT="$(AUTOPOINT)" $(HOST_DIR)/bin/autoreconf -f -i -I "$(ACLOCAL_DIR)" -I "$(ACLOCAL_HOST_DIR)" --verbose
-
- If you're going to change this long line, please split it first (in a separate
-patch) so we can actually see what changed.
-
-> diff --git a/package/gettext/gettext.mk b/package/gettext/gettext.mk
-> index ec9588f8a..08afc8fc3 100644
-> --- a/package/gettext/gettext.mk
-> +++ b/package/gettext/gettext.mk
-> @@ -95,6 +95,7 @@ endef
->  HOST_GETTEXT_POST_INSTALL_HOOKS += HOST_GETTEXT_ADD_ABOUT_NLS
-> 
->  GETTEXTIZE = $(HOST_CONFIGURE_OPTS) AUTOM4TE=$(HOST_DIR)/bin/autom4te $(HOST_DIR)/bin/gettextize -f
-> +AUTOPOINT = $(HOST_DIR)/bin/autopoint
-
- This is not correct, AUTOPOINT should be defined together with the rest in
-autoconf.mk. You seem to think that by putting it here, it will only be defined
-if host-gettext is built, but that's not at all true: it is globally set.
-
- So I think we need something like this in autoconf.mk:
-
-AUTOPOINT = $(if $(filter
-YES,$($(PKG)_GETTEXTIZE)),$(HOST_DIR)/bin/autopoint,/bin/true)
-
-(and remove the GETTEXTIZE support from pkg-autotools). In a later step we can
-rename <PKG>_GETTEXTIZE to <PKG>_AUTOPOINT.
+ Also, the most annoying thing actually is that when the hash is wrong, the
+just-downloaded file will be removed again. It would be convenient to avoid
+removing it, similar to how it is done when the file exists already.
 
  Regards,
  Arnout
 
-[1] http://lists.busybox.net/pipermail/buildroot/2017-September/201912.html
-[2] http://lists.busybox.net/pipermail/buildroot/2017-October/205034.html
-
+> 
+>> As an aside, this patch does two things: fix the comment for
+>> check_one_hash() and print the hash. It should be split.
+>>
+> 
+> I will send a patch for this tiny nitpick.
+> 
+> Regards,
+> Ga?l
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
