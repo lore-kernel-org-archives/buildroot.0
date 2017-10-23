@@ -1,59 +1,56 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Mon, 23 Oct 2017 21:10:31 +0200
-Subject: [Buildroot] [PATCH RFC] package/glibc: switch to using the
- maintenance branch
-In-Reply-To: <20171021122223.GB7022@scaer>
-References: <20171021102206.29477-1-yann.morin.1998@free.fr>
- <38b149b1-8f27-d747-3b16-be54b43cdbd4@gmail.com>
- <20171021122223.GB7022@scaer>
-Message-ID: <4d73920f-4566-08f2-ba7c-abdfcb8794c8@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 23 Oct 2017 21:11:13 +0200
+Subject: [Buildroot] [PATCH 1/1] libsepol: require threads
+In-Reply-To: <20171023180045.7259-1-aduskett@gmail.com>
+References: <20171023180045.7259-1-aduskett@gmail.com>
+Message-ID: <48fe77cc-b735-2b3c-6b0b-52bd91557a6d@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann, All,
+ Hi Adam,
 
-Le 21/10/2017 ? 14:22, Yann E. MORIN a ?crit?:
-> Romain, All,
+On 23-10-17 20:00, Adam Duskett wrote:
+> libsepol 2.7 now uses pthreads.h
 > 
-> On 2017-10-21 13:31 +0200, Romain Naour spake thusly:
->> Le 21/10/2017 ? 12:22, Yann E. MORIN a ?crit?:
-
-[...]
-
+> Signed-off-by: Adam Duskett <aduskett@gmail.com>
+> ---
+>  package/libsepol/Config.in | 4 ++++
+>  1 file changed, 4 insertions(+)
 > 
->> I guess it's a gitconfig issue. Maybe I should increase a buffer somewhere.
->>
->> Otherwise, it looks good.
->>
->> Note: My patch fixing gcc5.5 x86_64 toolchains whith glibc 2.26 is not yet
->> backported to the stable branch.
->> Maintainers are waiting some days before backporting a patch.
->>
->> https://sourceware.org/git/?p=glibc.git;a=commit;h=386e1c26ac473d6863133ab9cbe3bbda16c15816
->>
->> Maybe you can include it in this patch.
+> diff --git a/package/libsepol/Config.in b/package/libsepol/Config.in
+> index f92af52072..32214e4e9c 100644
+> --- a/package/libsepol/Config.in
+> +++ b/package/libsepol/Config.in
+> @@ -1,7 +1,11 @@
+>  config BR2_PACKAGE_LIBSEPOL
+>  	bool "libsepol"
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS
+
+ I believe you have been told before: when you add a dependency to a package,
+you have to propagate it to the reverse dependencies of that package. In this
+case libselinux, restorecond, semodule-utils. And you have to recurse to their
+reverse dependencies, etc. etc.
+
+ Regards,
+ Arnout
+
+>  	help
+>  	  Libsepol is the binary policy manipulation library. It doesn't
+>  	  depend upon or use any of the other SELinux components.
+>  
+>  	  http://selinuxproject.org/page/Main_Page
+> +
+> +comment "libsepol needs a toolchain w/ threads"
+> +        depends on BR2_TOOLCHAIN_HAS_THREADS
 > 
-> No, I won't. This commit is about just switching (and bumping as you
-> noticed). We can wait a bit more until your commit is applied and when
-> we're ready to tag 2017.11-rc1, and then bump to the latest HEAD of the
-> branch.
 
-I can respin your patch with an updated commit hash that include this patch [1].
-
-But I don't know how to deal with the download issue...
-
-Best regards,
-Romain
-
-[1]
-https://sourceware.org/git/?p=glibc.git;a=commit;h=f8279a4b3cc66d3ec8bfb8519e9987b8f7727f53
-
-> 
-> Regards,
-> Yann E. MORIN.
-> 
->> Best regards,
->> Romain
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
