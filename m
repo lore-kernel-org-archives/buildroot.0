@@ -1,140 +1,41 @@
-From: =?UTF-8?q?Ga=C3=ABl=20PORTAY?= <gael.portay@savoirfairelinux.com>
-Date: Mon, 23 Oct 2017 12:11:35 -0400
-Subject: [Buildroot] [PATCHv2] support/download: print dl hash if not
-	provided
-Message-ID: <20171023161135.8799-1-gael.portay@savoirfairelinux.com>
+From: Alexey Roslyakov <alexey.roslyakov@gmail.com>
+Date: Mon, 23 Oct 2017 23:19:44 +0700
+Subject: [Buildroot] [PATCH v2] python-protobuf: update dependencies
+Message-ID: <20171023161944.3652-1-alexey.roslyakov@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When a hash file exists but the hash is not provided, the script exits
-without any information about the hash of the downloaded file.
+Since version 3.0.0 protobuf is compatible with Python3, remove
+Python2-only dependency.
 
-	ERROR: No hash found for rpi-userland-a7976021a89451de0d008aa48f16c4e88872899b.tar.gz
+It depends on python-six now, add this missing dependency.
 
-Now, the script hashes the downloaded file and suggests its sha256 to
-the user.
+Signed-off-by: Alexey Roslyakov <alexey.roslyakov@gmail.com>
 
-	$ make
-	...
-	>>> rpi-userland a7976021a89451de0d008aa48f16c4e88872899b Downloading
-	--2017-10-23 15:29:46--  https://github.com/raspberrypi/userland/archive/a7976021a89451de0d008aa48f16c4e88872899b/rpi-userland-a7976021a89451de0d008aa48f16c4e88872899b.tar.gz
-	...
-	ERROR: No hash found for rpi-userland-a7976021a89451de0d008aa48f16c4e88872899b.tar.gz
-	ERROR: Please find a hash in the upstream announcement or website and add it to package/rpi-userland//rpi-userland.hash
-	ERROR: If upstream doesn't provide a hash and the source is trusted, consider adding these lines:
-	# Locally calculated from download
-	sha256 8ed745ea28ef9d5e6d2e5534acabe1ea1a6c6be9bab7f683527ce5da5a3f77cb rpi-userland-a7976021a89451de0d0
-	...
-
-Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
 ---
+Changes v1 -> v2:
+  - just remove "depends on BR2_PACKAGE_PYTHON" (suggested by Yegor)
+---
+ package/python-protobuf/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Hi all,
-
-I tested it without hash file, the build succeed
-
-	$ rm -Rf output/build/rpi-userland-*
-	$ rm -f package/rpi-userland/rpi-userland.hash
-	$ make && echo succeed
-	...
-	succeed
-
-I tested it with an empty hash file, the build failed
-
-	$ rm -Rf output/build/rpi-userland-*
-	$ rm -f package/rpi-userland/rpi-userland.hash
-	$ touch package/rpi-userland/rpi-userland.hash
-	$ make || echo oops
-	...
-	ERROR: No hash found for rpi-userland-a7976021a89451de0d008aa48f16c4e88872899b.tar.gz
-	ERROR: Please find a hash in the upstream announcement or website and add it to package/rpi-userland//rpi-userland.hash
-	ERROR: If upstream doesn't provide a hash and the source is trusted, consider adding these lines:
-	# Locally calculated from download
-sha256 8ed745ea28ef9d5e6d2e5534acabe1ea1a6c6be9bab7f683527ce5da5a3f77cb rpi-userland-a7976021a89451de0d008aa48f16c4e88872899b.tar.gz
-	...
-	oops
-
-I tested it with the new locally computed hash, the build succeed
-
-	$ rm -Rf output/build/rpi-userland-*
-	$ cat <<EOF >package/rpi-userland/rpi-userland.hash
-# Locally calculated from download
-sha256 8ed745ea28ef9d5e6d2e5534acabe1ea1a6c6be9bab7f683527ce5da5a3f77cb rpi-userland-a7976021a89451de0d008aa48f16c4e88872899b.tar.gz
-EOF
-	$ make && echo succeed
-	..
-	succeed
-
-Regards,
-Gael
-
-Changes since v1:
-	reword error message as suggested by Arnout.
-
- support/download/check-hash | 31 ++++++++++++++++++++++++-------
- 1 file changed, 24 insertions(+), 7 deletions(-)
-
-diff --git a/support/download/check-hash b/support/download/check-hash
-index fe9c10570e..663efa014f 100755
---- a/support/download/check-hash
-+++ b/support/download/check-hash
-@@ -41,14 +41,12 @@ if [ ! -f "${h_file}" ]; then
-     exit 0
- fi
+diff --git a/package/python-protobuf/Config.in b/package/python-protobuf/Config.in
+index 68523e9c60..607fe48c2a 100644
+--- a/package/python-protobuf/Config.in
++++ b/package/python-protobuf/Config.in
+@@ -1,9 +1,9 @@
+ config BR2_PACKAGE_PYTHON_PROTOBUF
+ 	bool "python-protobuf"
+-	depends on BR2_PACKAGE_PYTHON
+ 	# host-protobuf only builds on certain architectures
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+ 	depends on BR2_HOST_GCC_AT_LEAST_4_5 # host-protobuf
++	select BR2_PACKAGE_PYTHON_SIX # runtime
+ 	help
+ 	  Python implementation of the Google Protocol Buffers.
  
--# Check one hash for a file
-+# Compute hash for a file
- # $1: algo hash
--# $2: known hash
--# $3: file (full path)
--check_one_hash() {
-+# $2: file (full path)
-+compute_hash() {
-     _h="${1}"
--    _known="${2}"
--    _file="${3}"
-+    _file="${2}"
- 
-     # Note: md5 is supported, but undocumented on purpose.
-     # Note: sha3 is not supported, since there is currently no implementation
-@@ -67,8 +65,20 @@ check_one_hash() {
-             ;;
-     esac
- 
-+    ${_h}sum "${_file}" |cut -d ' ' -f 1
-+}
-+
-+# Check one hash for a file
-+# $1: algo hash
-+# $2: known hash
-+# $3: file (full path)
-+check_one_hash() {
-+    _h="${1}"
-+    _known="${2}"
-+    _file="${3}"
-+
-     # Do the hashes match?
--    _hash=$( ${_h}sum "${_file}" |cut -d ' ' -f 1 )
-+    _hash=$( compute_hash "${_h}" "${_file}" )
-     if [ "${_hash}" = "${_known}" ]; then
-         printf "%s: OK (%s: %s)\n" "${base}" "${_h}" "${_hash}"
-         return 0
-@@ -106,6 +116,13 @@ if [ ${nb_checks} -eq 0 ]; then
-         exit 0
-         ;;
-     esac
-+
-+    h="sha256"
-+    hash=$( compute_hash "${h}" "${file}" )
-     printf "ERROR: No hash found for %s\n" "${base}" >&2
-+    printf "ERROR: Please find a hash in the upstream announcement or website and add it to ${h_file}\n" >&2
-+    printf "ERROR: If upstream doesn't provide a hash and the source is trusted, consider adding these lines:\n" >&2
-+    printf "# Locally calculated from download\n" >&2
-+    printf "${h} ${hash} ${base}\n" >&2
-     exit 3
- fi
 -- 
-2.11.0
+2.13.6
