@@ -1,57 +1,27 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 23 Oct 2017 18:48:59 +0200
-Subject: [Buildroot] git clone https://git.busybox.net/buildroot works
- unexpectedly slow
-In-Reply-To: <4881796E12491D4BB15146FE0209CE6467FA4405@DE02WEMBXB.internal.synopsys.com>
-References: <4881796E12491D4BB15146FE0209CE6467FA4405@DE02WEMBXB.internal.synopsys.com>
-Message-ID: <6f6b1cf9-32ec-b403-6d0d-26bd5372aa4a@mind.be>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Mon, 23 Oct 2017 19:44:58 +0200
+Subject: [Buildroot] [PATCH v1] qt5base: add 3rdparty/harfbuzz-ng license
+	file hash
+Message-ID: <20171023174458.15127-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+ package/qt5/qt5base/qt5base.hash | 1 +
+ 1 file changed, 1 insertion(+)
 
-
-On 23-10-17 12:26, Alexey Brodkin wrote:
-> Hi,
-> 
-> Probably that's just me but could anyone please try if access to BR git repo via HTTPS
-> really works OK?
-> --------------------------------->8-------------------------------
-> $ time git clone https://git.busybox.net/buildroot
-> Cloning into 'buildroot'...
-> Checking connectivity... done.
-> Checking out files: 100% (9694/9694), done.
-> 
-> real    15m59.868s
-> user    1m56.969s
-> sys     5m16.609s
-> 
-> $ time git clone https://git.busybox.net/buildroot
-> Cloning into 'buildroot'...
-> error: Unable to find ba0bf240915229e94c0565b833be6ac273a4776d under https://git.busybox.net/buildroot
-> Cannot obtain needed blob ba0bf240915229e94c0565b833be6ac273a4776d
-> while processing commit 6bb75e43a42cddfa0a9e6e001d8d0224f124a64a.
-> error: Fetch failed.
-> 
-> real    8m8.317s
-> user    0m0.000s
-> sys     0m5.391s
-> --------------------------------->8-------------------------------
-> 
-> Note, via git it works as expected.
-
- So, the same problem as Romain and Yann detected for glibc? What's happening, a
-global attack on git https?
-
- Regards,
- Arnout
-
+diff --git a/package/qt5/qt5base/qt5base.hash b/package/qt5/qt5base/qt5base.hash
+index 2a073d4753..4883484d5b 100644
+--- a/package/qt5/qt5base/qt5base.hash
++++ b/package/qt5/qt5base/qt5base.hash
+@@ -11,3 +11,4 @@ sha256 0dbe024961f6ab5c52689cbd036c977975d0d0f6a67ff97762d96cb819dd5652 LICENSE.
+ sha256 68afaf3392f8c04218fbf29db43cc0b18bf651c1db086556aa584046de9f3e35 LICENSE.LGPLv3
+ sha256 ed8742a95cb9db653a09b050e27ccff5e67ba69c14aa2c3137f2a4e1892f6c0d LICENSE.FDL
+ sha256 8fdefa0b45d9f791f687da6c2c4c83c1b701aaee2c08008f55d522af214b88f0 header.BSD
++sha256 2a886915de4f296cdae5ed67064f86dba01d0c55286d86e8487f2a5caaf40216 src/3rdparty/harfbuzz-ng/COPYING
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.14.2
