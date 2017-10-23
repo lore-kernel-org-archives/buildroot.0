@@ -1,9 +1,10 @@
-From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Mon, 23 Oct 2017 00:38:57 -0200
-Subject: [Buildroot] [next v2 6/7] testing/tests/download: add test for
- sha1 as git ref
-References: <a0cb8592-2d28-58ca-cbf7-f5bec4cc2985@mind.be>
-Message-ID: <59ed56417df8a_5e463fc3acb4bba81935e@ultri3.mail>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 23 Oct 2017 07:44:31 +0200
+Subject: [Buildroot] [PATCH v2] mpv: add support for Raspberry Pi "rpi"
+ output
+In-Reply-To: <20171022172126.21775-1-mahyar.koshkouei@gmail.com>
+References: <20171022172126.21775-1-mahyar.koshkouei@gmail.com>
+Message-ID: <20171023074431.75d478ed@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,37 +13,46 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, Oct 06, 2017 at 06:57 PM, Arnout Vandecappelle wrote:
+Thanks for this new iteration.
 
-> On 27-08-17 00:20, Ricardo Martincoski wrote:
->> From: Ricardo Martincoski <ricardo.martincoski@datacom.ind.br>
->> 
->> Add a test to download the package with git method and its version set
->> to a sha1 reachable by a branch name, but not pointed by it.
->> This is the most common use case for git refs in the tree.
->> 
->> Besides the test case Python script, add:
->>  - a br2-external (git-refs) with a fake package (foo) as a fixture for
->>    this and upcoming tests;
+On Sun, 22 Oct 2017 18:21:26 +0100, Mahyar Koshkouei wrote:
+> mpv now compiles with the "rpi" video driver that provides hardware
+> acceleration on the Raspberry Pi.
 > 
->  I'd use a more descriptive name than foo, e.g. git-refs.mk
-
-OK. In order to use a static repo I will create one package for each ref type to
-check so I can have hashes for each tarball so I don't need to manually open the
-tarball to know it is OK. But I will keep the tip for "more descriptive name" in
-mind while creating the packages.
-
+> Tested working on a Raspberry Pi 1 Model B+ and Zero.
 > 
->>  - support in GitTestBase for repos created on the fly;
->>  - a new class GitRepo to create and manipulate repos. It is a class and
->>    not a simple module because it will become very useful when testing
->>    submodules.
+> Signed-off-by: Mahyar Koshkouei <mahyar.koshkouei@gmail.com>
 > 
->  So why do you suddenly need to create repos on the fly now? I still believe it
-> is much simpler to include the repo directly. I also think it's easier if the
-> same repo is used for all git tests - which should be possible, I think.
+> ---
+> Changes v1 -> v2:
+>   - Changed patch to use pkgconfig (thanks to github.com/Coacher)
+> ---
+>  .../mpv/0003-rpi-build-Fix-linking-errors.patch    | 72 ++++++++++++++++++++++
+>  package/mpv/mpv.mk                                 |  9 ++-
+>  2 files changed, 80 insertions(+), 1 deletion(-)
+>  create mode 100644 package/mpv/0003-rpi-build-Fix-linking-errors.patch
+> 
+> diff --git a/package/mpv/0003-rpi-build-Fix-linking-errors.patch b/package/mpv/0003-rpi-build-Fix-linking-errors.patch
+> new file mode 100644
+> index 0000000000..d1db6a51fa
+> --- /dev/null
+> +++ b/package/mpv/0003-rpi-build-Fix-linking-errors.patch
+> @@ -0,0 +1,72 @@
+> +diff --git a/waftools/checks/custom.py b/waftools/checks/custom.py
 
-Fair enough. I will switch to a single static repo in the next spin.
+Patches must have a description and be Signed-off-by by you. Also,
+since this patch has been contributed by someone else, a reference to
+where the patch was found should be included.
 
-Regards,
-Ricardo
+Finally, it should be a Git formatted patch, because the upstream
+project uses Git.
+
+Could you rework this? It should then be fine to be merged.
+
+Thanks a lot!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
