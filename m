@@ -1,123 +1,119 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 23 Oct 2017 10:34:57 +0200
-Subject: [Buildroot] [PATCH v2 6/6] support/testing: fix remaining code
-	style
-In-Reply-To: <59ed54297386a_5e461a34548181f6@ultri3.mail>
-References: <84479e08-ca74-2ebe-4d14-13758b227689@mind.be>
- <59ed54297386a_5e461a34548181f6@ultri3.mail>
-Message-ID: <270bdcac-d8f0-d6db-bd84-f850a2d645bc@mind.be>
+Date: Mon, 23 Oct 2017 10:53:32 +0200
+Subject: [Buildroot] [PATCH] autoconf: use host-gettext's autopoint if
+ available in autoreconf
+In-Reply-To: <20170827110920.15579-1-aleksander@aleksander.es>
+References: <20170827110920.15579-1-aleksander@aleksander.es>
+Message-ID: <e3d4f8af-e660-ff80-7157-5b897b8e47c4@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+ Hi Aleksander,
 
-
-On 23-10-17 04:30, Ricardo Martincoski wrote:
-> Hello,
+On 27-08-17 13:09, Aleksander Morgado wrote:
+> Commit 7ee8ebbd813ad0a6d2392ef628c17241 explicitly disabled autopoint
+> calls during autoreconf, to avoid having the host autopoint called, as
+> there was no host-gettext package.
 > 
-> On Fri, Oct 06, 2017 at 02:16 PM, Arnout Vandecappelle wrote:
+> Commit 3a188b578e490f2a8b5922329b7abfae introduced the host-gettext
+> package support.
 > 
->> On 05-10-17 23:42, Ricardo Martincoski wrote:
-> [snip]
->>> Number of warnings reported by flake8 for the test infra:
->>> before:   2
->>> after:    0
->>
->>  I still have a warning:
->>
->> $ python -m flake8 support/testing/
->> support/testing/tests/init/base.py:45:9: N803 argument name should be lowercase
->>
->>  Any idea why you didn't catch this?
+> This commit recovers the support for automatically calling autopoint
+> during autoreconf.
 > 
-> That's because you have flake8 plugin pep8-naming installed, which default to
-> on.
-> To always disable it (to ignore such warnings and get the same result with or
-> without it) this line could be added to .flake8:
-> ignore=N
-
- I don't think we want that.
-
-> I don't know a way to enforce it is always installed (to always generate such
-> warnings and get the same result).
-
- We don't need to enforce it. What we need is to make sure that GitLab-CI does
-have this, so it *will* check the naming (when we have a test for flake8,
-obviously). You can do that by updating support/docker/Dockerfile (and I'll
-rebuild the docker image when I apply the patch).
-
-
-> To also ignore warnings generated when the plugin flake8-docstrings is
-> installed, this line could be used instead:
-> ignore=N,D
-
- Good idea, let's check the docstrings as well!
-
-
->>  Also, there are still warnings in support/scripts and utils, care to take a
->> look at those?
+> Signed-off-by: Aleksander Morgado <aleksander@aleksander.es>
+> ---
 > 
-> I will.
+> Hey,
+> 
+> I see this is a recurring issue when a package that builds from git (bootstrapping using autoreconf before configure) requires gettext processing. automake would fail as autopoint wasn't being run (disabled in buildroot's autoconf package) and therefore not creating config.rpath and ABOUT-NLS (among other things, although these are the ones automake complains about). Specifying $(PKG)_GETTEXTIZE isn't an option as that may actually update the gnulib-imported files in a non-expected way, and "touch"-ing the missing files just seems a bit of a hack...
+> 
+> Calling autopoint from autoreconf was disabled back in 2011 because no host-gettext package was available, but this package was added in 2013, so how about removing that limitation?
 
- It's not urgent. Well, that is, until we start failing gitlab-CI because of it :-)
+ We tried to understand what was going on (at the BR developer meeting) but we
+failed :-(. Based on this patch and on the discussion in [1] and [2]
+(unfortunately pipermail splits threads when they straddle a month), we
+concluded that:
+- the current patch doesn't work (at least not for gst1-plugins-bad)
+- if running autopoint is in fact the right thing to do, then probably it is
+better to replace <PKG>_GETTEXTIZE with <PKG>_AUTOPOINT.
+
+ Indeed, as we understand from your mails and from the autopoint info page:
+- autopoint installs the autoconf/automake support files for translations;
+- gettextize prepares a package for translation by extracting the strings from
+the source code, and additionally does the same as autopoint.
+
+ If that is true, calling gettextize from Buildroot can never be correct,
+because the extracted strings would anyway still have to be translated before
+they're any use. And with autopoint there shouldn't be an issue of gettexttize
+versions because it will look for the required version declared in configure.ac.
+That makes us think that perhaps we should run autopoint instead of gettextize
+in the places where we currently run gettextize.
+
+ What we certainly don't want is that whether autopoint gets run depends on
+whether host-gettext was previously built or not. We want builds to be
+reproducible so we want to avoid building something subtly different just
+because of the presence of some package which has no explicit dependency in the
+.mk file.
+
+ What we also would like to avoid is that host-gettextize becomes a dependency
+of every package that needs AUTORECONF = YES. So always running autopoint is not
+so interesting.
+
 
 > 
->>  Also, you used to have a patch that ran flake8 from .gitlab-ci.yml, but it
->> seems to be gone from patchwork.
+> Cheers!
 > 
-> Yes, that was
-> http://patchwork.ozlabs.org/patch/820324/
+> ---
+>  package/autoconf/autoconf.mk | 2 +-
+>  package/gettext/gettext.mk   | 1 +
+>  2 files changed, 2 insertions(+), 1 deletion(-)
 > 
-> The main purpose (to check the test infra even if/when the tests become placed
-> in each package directory) was replaced by the .flake8 file in the main
-> directory. 
-> http://patchwork.ozlabs.org/patch/822105/
+> diff --git a/package/autoconf/autoconf.mk b/package/autoconf/autoconf.mk
+> index e5f474c72..f1c60224f 100644
+> --- a/package/autoconf/autoconf.mk
+> +++ b/package/autoconf/autoconf.mk
+> @@ -23,4 +23,4 @@ $(eval $(host-autotools-package))
+>  # variables used by other packages
+>  AUTOCONF = $(HOST_DIR)/bin/autoconf
+>  AUTOHEADER = $(HOST_DIR)/bin/autoheader
+> -AUTORECONF = $(HOST_CONFIGURE_OPTS) ACLOCAL="$(ACLOCAL)" AUTOCONF="$(AUTOCONF)" AUTOHEADER="$(AUTOHEADER)" AUTOMAKE="$(AUTOMAKE)" AUTOPOINT=/bin/true $(HOST_DIR)/bin/autoreconf -f -i -I "$(ACLOCAL_DIR)" -I "$(ACLOCAL_HOST_DIR)"
+> +AUTORECONF = $(HOST_CONFIGURE_OPTS) ACLOCAL="$(ACLOCAL)" AUTOCONF="$(AUTOCONF)" AUTOHEADER="$(AUTOHEADER)" AUTOMAKE="$(AUTOMAKE)" AUTOPOINT="$(AUTOPOINT)" $(HOST_DIR)/bin/autoreconf -f -i -I "$(ACLOCAL_DIR)" -I "$(ACLOCAL_HOST_DIR)" --verbose
 
- I don't really see any relation between the two... Patch 820324 creates a
-flake8 test, patch 822105 creates a flake8 config.
+ If you're going to change this long line, please split it first (in a separate
+patch) so we can actually see what changed.
 
- OK, now I look at patch 820324, I think it's not the right approach. There is
-no point making a unit test for that.  All we want is an update to
-.gitlab-ci.yml.in that adds something like this:
+> diff --git a/package/gettext/gettext.mk b/package/gettext/gettext.mk
+> index ec9588f8a..08afc8fc3 100644
+> --- a/package/gettext/gettext.mk
+> +++ b/package/gettext/gettext.mk
+> @@ -95,6 +95,7 @@ endef
+>  HOST_GETTEXT_POST_INSTALL_HOOKS += HOST_GETTEXT_ADD_ABOUT_NLS
+> 
+>  GETTEXTIZE = $(HOST_CONFIGURE_OPTS) AUTOM4TE=$(HOST_DIR)/bin/autom4te $(HOST_DIR)/bin/gettextize -f
+> +AUTOPOINT = $(HOST_DIR)/bin/autopoint
 
-check-flake8:
-    before_script:
-        - apt-get update -qq
-        - apt-get install -y -qq --no-install-recommends
-            python3-flake8 python3-pep8-naming python3-flake8-docstrings
-    script:
-        - flake8
+ This is not correct, AUTOPOINT should be defined together with the rest in
+autoconf.mk. You seem to think that by putting it here, it will only be defined
+if host-gettext is built, but that's not at all true: it is globally set.
 
-There is no real need to add flake8 to the Docker image since it's only used for
-this one test. And we can simply run flake8 at the top level; it's exit code
-will indicate failure.
+ So I think we need something like this in autoconf.mk:
 
- Oh, now I notice that this won't work because our test infra is not Python3
-compliant. That would be nice to fix as well :-) Apparently docstrings only
-exists for python3 (at least on my Debian, don't know about Ubuntu).
+AUTOPOINT = $(if $(filter
+YES,$($(PKG)_GETTEXTIZE)),$(HOST_DIR)/bin/autopoint,/bin/true)
+
+(and remove the GETTEXTIZE support from pkg-autotools). In a later step we can
+rename <PKG>_GETTEXTIZE to <PKG>_AUTOPOINT.
 
  Regards,
  Arnout
 
+[1] http://lists.busybox.net/pipermail/buildroot/2017-September/201912.html
+[2] http://lists.busybox.net/pipermail/buildroot/2017-October/205034.html
 
-> 
-> I should have replied to the first one explaining I marked it as Superseded by
-> the second one.
-> 
-> If you think the first patch is useful feel free to review it so I can respin,
-> or even take over if you wish.
-> 
->>  And finally, if you have nothing else to do :-), maybe you could make the tests
->> python3 compatible. For me, it'd be fine to even require python3 to be able to
->> run the tests, if that simplifies things.
-> 
-> I will do later (I guess in next December/January).
-> 
-> Regards,
-> Ricardo
-> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
