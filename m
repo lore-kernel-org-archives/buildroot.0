@@ -1,74 +1,65 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Mon, 23 Oct 2017 18:40:14 +0200
-Subject: [Buildroot] [RFC v3 4/4] package/runc: converting to golang
-	infrastructure
-In-Reply-To: <1508776814-18723-1-git-send-email-angelo.compagnucci@gmail.com>
-References: <1508776814-18723-1-git-send-email-angelo.compagnucci@gmail.com>
-Message-ID: <1508776814-18723-4-git-send-email-angelo.compagnucci@gmail.com>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Mon, 23 Oct 2017 18:42:27 +0200
+Subject: [Buildroot] [git commit] linux-tools/perf: fix build for MIPS by
+	using the right emulation on LD
+Message-ID: <20171023163650.AC5D78106E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch converts the runc package to the new golang
-infrastructure.
+commit: https://git.buildroot.net/buildroot/commit/?id=f574a8eba67a38d1e0e681ace57b44acff36310f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Passing just the endianness flag to LD is not enough. We need to pass
+the right emulation flag which will set everything for us, not only the
+endianness.
+
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/runc/runc.mk | 36 +++---------------------------------
- 1 file changed, 3 insertions(+), 33 deletions(-)
+ package/linux-tools/linux-tool-perf.mk.in | 30 +++++++++++++++++++-----------
+ 1 file changed, 19 insertions(+), 11 deletions(-)
 
-diff --git a/package/runc/runc.mk b/package/runc/runc.mk
-index 0b51e11..5d9e732 100644
---- a/package/runc/runc.mk
-+++ b/package/runc/runc.mk
-@@ -9,43 +9,13 @@ RUNC_SITE = $(call github,opencontainers,runc,$(RUNC_VERSION))
- RUNC_LICENSE = Apache-2.0
- RUNC_LICENSE_FILES = LICENSE
+diff --git a/package/linux-tools/linux-tool-perf.mk.in b/package/linux-tools/linux-tool-perf.mk.in
+index 16f3a58..69492ba 100644
+--- a/package/linux-tools/linux-tool-perf.mk.in
++++ b/package/linux-tools/linux-tool-perf.mk.in
+@@ -28,17 +28,25 @@ PERF_MAKE_FLAGS = \
+ 	NO_LIBPYTHON=1 \
+ 	NO_LIBBIONIC=1
  
--RUNC_DEPENDENCIES = host-go
-+RUNC_GO_LDFLAGS = -X main.gitCommit=$(RUNC_VERSION)
- 
--RUNC_GOPATH = "$(@D)/Godeps/_workspace"
--RUNC_MAKE_ENV = $(HOST_GO_TARGET_ENV) \
--	CGO_ENABLED=1 \
--	GOBIN="$(@D)/bin" \
--	GOPATH="$(RUNC_GOPATH)" \
--	PATH=$(BR_PATH)
--
--RUNC_GLDFLAGS = \
--	-X main.gitCommit=$(RUNC_VERSION)
--
--ifeq ($(BR2_STATIC_LIBS),y)
--RUNC_GLDFLAGS += -extldflags '-static'
--endif
--
--RUNC_GOTAGS = cgo static_build
-+RUNC_GO_TAGS = cgo static_build
- 
- ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
- RUNC_GOTAGS += seccomp
- RUNC_DEPENDENCIES += libseccomp host-pkgconf
+-# We need to pass an argument to ld for setting the endianness when
+-# building it for MIPS architecture, otherwise the default one will
+-# always be used (which is big endian) and the compilation for little
+-# endian will always fail showing an error like this one:
+-#  LD    foo.o
+-# mips-linux-gnu-ld: foo.o: compiled for a little endian system and
+-# target is big endian
+-ifeq ($(BR2_mips)$(BR2_mips64),y)
+-PERF_MAKE_FLAGS += LD="$(TARGET_LD) -EB"
+-else ifeq ($(BR2_mipsel)$(BR2_mips64el),y)
+-PERF_MAKE_FLAGS += LD="$(TARGET_LD) -EL"
++# We need to pass an argument to ld for setting the emulation when
++# building for MIPS architecture, otherwise the default one will always
++# be used and the compilation for most variants will fail.
++ifeq ($(BR2_mips),y)
++PERF_MAKE_FLAGS += LD="$(TARGET_LD) -m elf32btsmip"
++else ifeq ($(BR2_mipsel),y)
++PERF_MAKE_FLAGS += LD="$(TARGET_LD) -m elf32ltsmip"
++else ifeq ($(BR2_mips64),y)
++ifeq ($(BR2_MIPS_NABI32),y)
++PERF_MAKE_FLAGS += LD="$(TARGET_LD) -m elf32btsmipn32"
++else
++PERF_MAKE_FLAGS += LD="$(TARGET_LD) -m elf64btsmip"
++endif
++else ifeq ($(BR2_mips64el),y)
++ifeq ($(BR2_MIPS_NABI32),y)
++PERF_MAKE_FLAGS += LD="$(TARGET_LD) -m elf32ltsmipn32"
++else
++PERF_MAKE_FLAGS += LD="$(TARGET_LD) -m elf64ltsmip"
++endif
  endif
  
--define RUNC_CONFIGURE_CMDS
--	mkdir -p $(RUNC_GOPATH)/src/github.com/opencontainers
--	ln -s $(@D) $(RUNC_GOPATH)/src/github.com/opencontainers/runc
--endef
--
--define RUNC_BUILD_CMDS
--	cd $(RUNC_GOPATH)/src/github.com/opencontainers/runc && \
--		$(RUNC_MAKE_ENV) $(HOST_DIR)/bin/go \
--		build -v -o $(@D)/bin/runc \
--		-tags "$(RUNC_GOTAGS)" -ldflags "$(RUNC_GLDFLAGS)" .
--endef
--
--define RUNC_INSTALL_TARGET_CMDS
--	$(INSTALL) -D -m 0755 $(@D)/bin/runc $(TARGET_DIR)/usr/bin/runc
--endef
--
--$(eval $(generic-package))
-+$(eval $(golang-package))
--- 
-2.7.4
+ # The call to backtrace() function fails for ARC, because for some
