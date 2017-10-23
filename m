@@ -1,58 +1,28 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 23 Oct 2017 07:44:31 +0200
-Subject: [Buildroot] [PATCH v2] mpv: add support for Raspberry Pi "rpi"
- output
-In-Reply-To: <20171022172126.21775-1-mahyar.koshkouei@gmail.com>
-References: <20171022172126.21775-1-mahyar.koshkouei@gmail.com>
-Message-ID: <20171023074431.75d478ed@windsurf>
+From: Maksim Salau <msalau@iotecha.com>
+Date: Mon, 23 Oct 2017 09:46:05 +0300
+Subject: [Buildroot] [PATCH] pppd: Add an option to not to overwrite
+	/etc/resolv.conf
+In-Reply-To: <33618c20-7fa5-d02f-a937-e030506b0c77@mind.be>
+References: <1508234054-22360-1-git-send-email-msalau@iotecha.com>
+ <33618c20-7fa5-d02f-a937-e030506b0c77@mind.be>
+Message-ID: <CAHz4zbBeTw+adayjG+2FMNyboU7X1Zf_a5DVuA3ubPEMvSxw1w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Arnout,
 
-Thanks for this new iteration.
+ Applied to master, thanks. I did extend the help text a bit to explain
+> that the
+> pppd default doesn't work on a readonly rootfs out of the box.
+>
 
-On Sun, 22 Oct 2017 18:21:26 +0100, Mahyar Koshkouei wrote:
-> mpv now compiles with the "rpi" video driver that provides hardware
-> acceleration on the Raspberry Pi.
-> 
-> Tested working on a Raspberry Pi 1 Model B+ and Zero.
-> 
-> Signed-off-by: Mahyar Koshkouei <mahyar.koshkouei@gmail.com>
-> 
-> ---
-> Changes v1 -> v2:
->   - Changed patch to use pkgconfig (thanks to github.com/Coacher)
-> ---
->  .../mpv/0003-rpi-build-Fix-linking-errors.patch    | 72 ++++++++++++++++++++++
->  package/mpv/mpv.mk                                 |  9 ++-
->  2 files changed, 80 insertions(+), 1 deletion(-)
->  create mode 100644 package/mpv/0003-rpi-build-Fix-linking-errors.patch
-> 
-> diff --git a/package/mpv/0003-rpi-build-Fix-linking-errors.patch b/package/mpv/0003-rpi-build-Fix-linking-errors.patch
-> new file mode 100644
-> index 0000000000..d1db6a51fa
-> --- /dev/null
-> +++ b/package/mpv/0003-rpi-build-Fix-linking-errors.patch
-> @@ -0,0 +1,72 @@
-> +diff --git a/waftools/checks/custom.py b/waftools/checks/custom.py
+Thanks!
 
-Patches must have a description and be Signed-off-by by you. Also,
-since this patch has been contributed by someone else, a reference to
-where the patch was found should be included.
-
-Finally, it should be a Git formatted patch, because the upstream
-project uses Git.
-
-Could you rework this? It should then be fine to be merged.
-
-Thanks a lot!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Regards,
+Maksim.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20171023/7a2a294a/attachment.html>
