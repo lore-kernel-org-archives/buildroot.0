@@ -1,126 +1,35 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon, 23 Oct 2017 19:56:13 +0200
-Subject: [Buildroot] [PATCH 4/4 v2] core: check files are nto touched by
- more than on package
-In-Reply-To: <64a5b7666e47d87d58845028f9576ab68a186f44.1508685316.git.yann.morin.1998@free.fr>
-References: <cover.1508685316.git.yann.morin.1998@free.fr>
- <64a5b7666e47d87d58845028f9576ab68a186f44.1508685316.git.yann.morin.1998@free.fr>
-Message-ID: <20171023195613.7289359f@gmx.net>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Mon, 23 Oct 2017 14:00:45 -0400
+Subject: [Buildroot] [PATCH 1/1] libsepol: require threads
+Message-ID: <20171023180045.7259-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Yann,
+libsepol 2.7 now uses pthreads.h
 
-typo in the patch title s/nto/not/...
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
+---
+ package/libsepol/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-On Sun, 22 Oct 2017 17:15:40 +0200, "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
-
-> Currently, we do nothing about packages that touch the same file: given
-> a specific configuration, the result is reproducible (even though it
-> might not be what the user expected) because the build order is
-> guaranteed.
-> 
-> Hwever, when we later introduce top-level parallel buil, we will no
-
-s/Hwever/However/, s/buil/build/
-
-> longer be able to guarantee a build order, by the mere way of it being
-> parallel. Reconcialliting all those modified files will be impossible to
-> do automatically. The only way will be to  refuse such situations.
-
-s/  / /
-
-Regards,
-Peter
-
-> 
-> As a preliminary step, introduce a helper script that detects files that
-> are being moified by two or more packages, and reports them and the
-> impacted packages, at the end of the build.
-> 
-> The list being reported at the end of the build will make it prominently
-> visible in autobuilder results, so we can assess the problem, if any.
-> 
-> Later on, calling that helper script can be done right after the package
-> installation step, to bail out early.
-> 
-> Thanks Arnout for the pythonist way to write default dictionaries! ;-)
-> 
-> Note: doing it in python rather than a shell script is impressively
-> faster: where the shell script takes ~1.2s on a minimalist build, the
-> python script only takes ~0.015s, that is about 80 times faster.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  Makefile                            |  4 ++++
->  support/scripts/check-uniq-files.py | 40 +++++++++++++++++++++++++++++++++++++
->  2 files changed, 44 insertions(+)
->  create mode 100755 support/scripts/check-uniq-files.py
-> 
-> diff --git a/Makefile b/Makefile
-> index 79db7fe48a..f0b60bae5c 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -679,6 +679,10 @@ $(TARGETS_ROOTFS): target-finalize
->  .PHONY: target-finalize
->  target-finalize: $(PACKAGES)
->  	@$(call MESSAGE,"Finalizing target directory")
-> +	# Check files that are touched by more than one package
-> +	./support/scripts/check-uniq-files.py -t target $(BUILD_DIR)/packages-file-list.txt
-> +	./support/scripts/check-uniq-files.py -t staging $(BUILD_DIR)/packages-file-list-staging.txt
-> +	./support/scripts/check-uniq-files.py -t host $(BUILD_DIR)/packages-file-list-host.txt
->  	$(foreach hook,$(TARGET_FINALIZE_HOOKS),$($(hook))$(sep))
->  	rm -rf $(TARGET_DIR)/usr/include $(TARGET_DIR)/usr/share/aclocal \
->  		$(TARGET_DIR)/usr/lib/pkgconfig $(TARGET_DIR)/usr/share/pkgconfig \
-> diff --git a/support/scripts/check-uniq-files.py b/support/scripts/check-uniq-files.py
-> new file mode 100755
-> index 0000000000..e77472cf80
-> --- /dev/null
-> +++ b/support/scripts/check-uniq-files.py
-> @@ -0,0 +1,40 @@
-> +#!/usr/bin/env python2
-> +
-> +import sys
-> +import csv
-> +import argparse
-> +from collections import defaultdict
-> +
-> +warn = 'Warnng: {}s file "{}" is touched by more than one package: {}\n'
-> +
-> +def main():
-> +    parser = argparse.ArgumentParser()
-> +    parser.add_argument('packages_file_list', nargs='*',
-> +                    help='The packages-file-list to check from')
-> +    parser.add_argument('-t', '--type', metavar="TYPE",
-> +                        help='Report as a TYPE file (TYPE is either target, staging, or host)')
-> +
-> +    args = parser.parse_args()
-> +
-> +    if not len(args.packages_file_list) == 1:
-> +        sys.stderr.write('No packages-file-list was provided.\n')
-> +        return False
-> +
-> +    if args.type is None:
-> +        sys.stderr.write('No type was provided\n')
-> +        return False
-> +
-> +    file_to_pkg = defaultdict(list)
-> +    with open(args.packages_file_list[0], 'rb') as pkg_file_list:
-> +        r = csv.reader(pkg_file_list, delimiter=',')
-> +        for row in r:
-> +            pkg = row[0]
-> +            file = row[1]
-> +            file_to_pkg[file].append(pkg)
-> +
-> +    for file in file_to_pkg:
-> +        if len(file_to_pkg[file]) > 1:
-> +            sys.stderr.write(warn.format(args.type, file, file_to_pkg[file]))
-> +
-> +if __name__ == "__main__":
-> +    sys.exit(main())
+diff --git a/package/libsepol/Config.in b/package/libsepol/Config.in
+index f92af52072..32214e4e9c 100644
+--- a/package/libsepol/Config.in
++++ b/package/libsepol/Config.in
+@@ -1,7 +1,11 @@
+ config BR2_PACKAGE_LIBSEPOL
+ 	bool "libsepol"
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	help
+ 	  Libsepol is the binary policy manipulation library. It doesn't
+ 	  depend upon or use any of the other SELinux components.
+ 
+ 	  http://selinuxproject.org/page/Main_Page
++
++comment "libsepol needs a toolchain w/ threads"
++        depends on BR2_TOOLCHAIN_HAS_THREADS
+-- 
+2.13.6
