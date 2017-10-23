@@ -1,51 +1,47 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Mon, 23 Oct 2017 17:52:30 +0200
-Subject: [Buildroot] [PATCH 1/1] python-protobuf: update dependencies
-In-Reply-To: <20171023151040.27886-1-alexey.roslyakov@gmail.com>
-References: <20171023151040.27886-1-alexey.roslyakov@gmail.com>
-Message-ID: <CAGm1_kutBvYfSZwi2gRNL3J05zLQZBWzJNZfTZ-oS6H8fj_Y6w@mail.gmail.com>
+From: Kees van Unen <Keesvanunen@hotmail.com>
+Date: Mon, 23 Oct 2017 09:11:35 -0700 (MST)
+Subject: [Buildroot] Implicit declaration of mblen
+In-Reply-To: <bc9fed74-546a-a9f6-26b5-4698562b051e@mind.be>
+References: <1508584234482-0.post@n4.nabble.com>
+ <87bml0cvqq.fsf@dell.be.48ers.dk> <1508618665952-0.post@n4.nabble.com>
+ <0836e4ea-a773-fbe0-4c52-4414ad82389c@mind.be>
+ <1508620062609-0.post@n4.nabble.com>
+ <bc9fed74-546a-a9f6-26b5-4698562b051e@mind.be>
+Message-ID: <1508775095198-0.post@n4.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Alexey,
+> Copy the the make command line from the xlib_libX11, append V=1 to it, and 
+> you'll see the compilation commands. Copy the compilation command for the 
+> failing file, replace the -c with -E and the -o with some filename, so you
+> get 
+> the preprocessed file. Then in that preprocessed file check which stdlib.h
+> it 
+> includes. stdlib.h should be included from include/X11/Xlibint.h. 
 
-On Mon, Oct 23, 2017 at 5:10 PM, Alexey Roslyakov
-<alexey.roslyakov@gmail.com> wrote:
-> Since protobuf is compatible with Python3, remove Python2-only
-> dependency.
->
-> It depends on python-six now, add this missing dependency.
->
-> Signed-off-by: Alexey Roslyakov <alexey.roslyakov@gmail.com>
-> ---
->  package/python-protobuf/Config.in | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
->
-> diff --git a/package/python-protobuf/Config.in b/package/python-protobuf/Config.in
-> index 68523e9c60..66ce0163f6 100644
-> --- a/package/python-protobuf/Config.in
-> +++ b/package/python-protobuf/Config.in
-> @@ -1,9 +1,10 @@
->  config BR2_PACKAGE_PYTHON_PROTOBUF
->         bool "python-protobuf"
-> -       depends on BR2_PACKAGE_PYTHON
-> +       depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
+Hi, I managed to get the preprocessor file (see uploaded file). It includes
+the next stdlib.h:
 
-just remove "depends on BR2_PACKAGE_PYTHON". This means the package is
-compatible with both Python versions.
+output/host/arm-buildroot-linux-uclibc/gnueabihf/sysroot/usr/include/stdlib.h
 
-Yegor
+In this version of stdlib.h there is no reference to mblen (see uploaded
+file).
 
->         # host-protobuf only builds on certain architectures
->         depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
->         depends on BR2_HOST_GCC_AT_LEAST_4_5 # host-protobuf
-> +       select BR2_PACKAGE_PYTHON_SIX # runtime
->         help
->           Python implementation of the Google Protocol Buffers.
->
-> --
-> 2.13.6
->
+Regards,
+Kees
+
+imCallbk.o
+<http://buildroot-busybox.2317881.n4.nabble.com/file/t2263/imCallbk.o>  
+stdlib.h
+<http://buildroot-busybox.2317881.n4.nabble.com/file/t2263/stdlib.h>  
+
+
+
+
+
+
+--
+Sent from: http://buildroot-busybox.2317881.n4.nabble.com/
