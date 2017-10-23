@@ -1,116 +1,43 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon, 23 Oct 2017 20:33:10 +0200
-Subject: [Buildroot] Implicit declaration of mblen
-In-Reply-To: <1508775095198-0.post@n4.nabble.com>
-References: <1508584234482-0.post@n4.nabble.com>
- <87bml0cvqq.fsf@dell.be.48ers.dk>
- <1508618665952-0.post@n4.nabble.com>
- <0836e4ea-a773-fbe0-4c52-4414ad82389c@mind.be>
- <1508620062609-0.post@n4.nabble.com>
- <bc9fed74-546a-a9f6-26b5-4698562b051e@mind.be>
- <1508775095198-0.post@n4.nabble.com>
-Message-ID: <20171023203310.7ea017d0@gmx.net>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Mon, 23 Oct 2017 14:34:13 -0400
+Subject: [Buildroot] [PATCH 1/1] boost: require NPTL
+Message-ID: <20171023183413.18288-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Kees,
+pin_thread.cpp:31:39: error: '::pthread_setaffinity_np' has not been declared [1]
 
-On Mon, 23 Oct 2017 09:11:35 -0700 (MST), Kees van Unen <Keesvanunen@hotmail.com> wrote:
 
-> > Copy the the make command line from the xlib_libX11, append V=1 to it, and 
-> > you'll see the compilation commands. Copy the compilation command for the 
-> > failing file, replace the -c with -E and the -o with some filename, so you
-> > get 
-> > the preprocessed file. Then in that preprocessed file check which stdlib.h
-> > it 
-> > includes. stdlib.h should be included from include/X11/Xlibint.h.   
-> 
-> Hi, I managed to get the preprocessor file (see uploaded file). It includes
-> the next stdlib.h:
-> 
-> output/host/arm-buildroot-linux-uclibc/gnueabihf/sysroot/usr/include/stdlib.h
-> 
-> In this version of stdlib.h there is no reference to mblen (see uploaded
-> file).
-> 
-> Regards,
-> Kees
-> 
-> imCallbk.o
-> <http://buildroot-busybox.2317881.n4.nabble.com/file/t2263/imCallbk.o>  
-> stdlib.h
-> <http://buildroot-busybox.2317881.n4.nabble.com/file/t2263/stdlib.h>  
-> 
+[1]
+http://autobuild.buildroot.net/results/029/0298038fc126d15733d81c54e0bb7cb00be48b92/build-end.log
+http://autobuild.buildroot.net/results/6f3/6f3a218c47204e431100799482a3ed0ec159fa15/build-end.log
+http://autobuild.buildroot.net/results/63e/63e5569a90d3ace97cb6102509cbd04aeab6f5f7/build-end.log
 
-Compared against local build (git master):
 
-seiderer at localhost:~/Work/Buildroot/build-rpi0-xlib_libX11-1.6.5-mblen-error-001> wget http://buildroot-busybox.2317881.n4.nabble.com/file/t2263/stdlib.h
-seiderer at localhost:~/Work/Buildroot/build-rpi0-xlib_libX11-1.6.5-mblen-error-001> diff -u stdlib.h ./host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include/stdlib.h
---- stdlib.h	2017-10-23 20:17:01.351394515 +0200
-+++ ./host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include/stdlib.h	2017-10-21 23:29:09.028752219 +0200
-@@ -26,6 +26,7 @@
- /* Get size_t, wchar_t and NULL from <stddef.h>.  */
- #define		__need_size_t
- #ifndef __need_malloc_and_calloc
-+#  define	__need_wchar_t
- # define	__need_NULL
- #endif
- #include <stddef.h>
-@@ -138,7 +139,8 @@
- #define	MB_CUR_MAX	(__ctype_get_mb_cur_max ())
- extern size_t __ctype_get_mb_cur_max (void) __THROW __wur;
- #else
--# define	MB_CUR_MAX	1
-+# define	MB_CUR_MAX	(_stdlib_mb_cur_max ())
-+extern size_t _stdlib_mb_cur_max (void) __THROW __wur;
- #endif
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
+---
+ package/boost/Config.in | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/package/boost/Config.in b/package/boost/Config.in
+index 3b3c89b8c1..e06529a3fe 100644
+--- a/package/boost/Config.in
++++ b/package/boost/Config.in
+@@ -1,9 +1,10 @@
+-comment "boost needs a toolchain w/ C++, threads, wchar"
+-	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
++comment "boost needs a toolchain w/ C++, threads, wchar, NTPL"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS_NPTL
  
- 
-@@ -825,6 +827,29 @@
- #endif	/* use MISC || use X/Open Unix */
- 
- 
-+__BEGIN_NAMESPACE_STD
-+/* Return the length of the multibyte character
-+   in S, which is no longer than N.  */
-+extern int mblen (const char *__s, size_t __n) __THROW __wur;
-+/* Return the length of the given multibyte character,
-+   putting its `wchar_t' representation in *PWC.  */
-+extern int mbtowc (wchar_t *__restrict __pwc,
-+		   const char *__restrict __s, size_t __n) __THROW __wur;
-+/* Put the multibyte character represented
-+   by WCHAR in S, returning its length.  */
-+extern int wctomb (char *__s, wchar_t __wchar) __THROW __wur;
-+
-+
-+/* Convert a multibyte string to a wide char string.  */
-+extern size_t mbstowcs (wchar_t *__restrict  __pwcs,
-+			const char *__restrict __s, size_t __n) __THROW;
-+/* Convert a wide char string to multibyte string.  */
-+extern size_t wcstombs (char *__restrict __s,
-+			const wchar_t *__restrict __pwcs, size_t __n)
-+     __THROW;
-+__END_NAMESPACE_STD
-+
-+
- #ifdef __USE_SVID
- /* Determine whether the string value of RESPONSE matches the affirmation
-    or negative response expression as specified by the LC_MESSAGES category
-
-Regards,
-Peter
-
-> 
-> 
-> 
-> 
-> 
-> --
-> Sent from: http://buildroot-busybox.2317881.n4.nabble.com/
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+ config BR2_PACKAGE_BOOST
+ 	bool "boost"
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	# Boost could theorically be built with threading=single, but
+ 	# that unfortunately doesn't work. Until someone fixes that,
+ 	# let's depend on threads.
+-- 
+2.13.6
