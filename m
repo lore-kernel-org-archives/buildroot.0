@@ -1,68 +1,70 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Mon, 23 Oct 2017 21:03:21 +0200
-Subject: [Buildroot] [PATCH 00/13] New DL_DIR organisation;
-	git cache feature
-In-Reply-To: <f078c060-2284-7f03-fa76-f7396abf5f80@mind.be>
-References: <20170704162211.13238-1-maxime.hadjinlian@gmail.com>
- <20170728003756.3d675656@gmx.net>
- <CAGduivzEGzqMesGqkrKtchK3gDGVa9_3iOVzYZW2RFQfzbw4iw@mail.gmail.com>
- <20171017215649.492791d6@gmx.net>
- <CAGduivyAHYJQ43fGRqGyFBHvUHtqAqLXXz90_gH0nHM4R8+BSw@mail.gmail.com>
- <f078c060-2284-7f03-fa76-f7396abf5f80@mind.be>
-Message-ID: <CAGduivzECY1W5g-=eRt1NSXMWhLswu1_TGgRuCoUXWV9pMSGPw@mail.gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon, 23 Oct 2017 21:07:57 +0200
+Subject: [Buildroot] [PATCH 1/1] package/kodi: bump version to 17.5
+Message-ID: <20171023190757.22870-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Oct 23, 2017 at 8:42 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
->
->
-> On 23-10-17 20:24, Maxime Hadjinlian wrote:
->> Hi Peter,
->>
->> On Tue, Oct 17, 2017 at 9:56 PM, Peter Seiderer <ps.report@gmx.net> wrote:
->>> Hello Maxime,
->>>
->>> On Sun, 30 Jul 2017 18:32:27 +0200, Maxime Hadjinlian <maxime.hadjinlian@gmail.com> wrote:
->>>
-> [snip]
->>>> It's fixed on my branch on github for now.
->>> Any updates on this one? Mind to resend an actual version (would like to
->>> see this feature integrated into buildroot, tired of waiting for hours
->>> in case RaspberryPi kernel/firmware/userland git versions are updated)?
->> I think the most "up-to-date" is my branch on Github
->> (https://github.com/maximeh/buildroot/tree/git_cache).
->> I don't really think it's ready for a review, there's still many bugs
->> in there, at least that's what I remember.
->> What would really help me is, if you could test this and tell me what
->> breaks so I could look it up and try to fix this, this would be a huge
->> help !
->> If you come up with patches, that's really nice too ;).
->>
->> I won't make any promises on the time I can spend on this, we all know
->> how this goes.. but that being said, I am still really motivated by
->> this feature, I really need it too.
->
->  Maxime, correct me if I'm wrong, but you'd be happy if Peter does a respin of
-> the series, right?
-Oh sure, for me, the important part is that it's merged, who gets to
-do is not. Since I clearly can't make the time to make it happen; if
-someone can respin this, then please do it :). At least the topic is
-out there :).
->
->  It would be nice if we could already apply the first few patches, just to keep
-> things going.
-Agreed.
->
->  Regards,
->  Arnout
->
-> --
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk | 2 +-
+ package/kodi-texturepacker/kodi-texturepacker.mk         | 2 +-
+ package/kodi/kodi.hash                                   | 2 +-
+ package/kodi/kodi.mk                                     | 2 +-
+ 4 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk b/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
+index e3de102b74..3bb67d88a1 100644
+--- a/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
++++ b/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
+@@ -6,7 +6,7 @@
+ 
+ # Not possible to directly refer to kodi variables, because of
+ # first/second expansion trickery...
+-KODI_JSONSCHEMABUILDER_VERSION = 17.4-Krypton
++KODI_JSONSCHEMABUILDER_VERSION = 17.5-Krypton
+ KODI_JSONSCHEMABUILDER_SITE = $(call github,xbmc,xbmc,$(KODI_JSONSCHEMABUILDER_VERSION))
+ KODI_JSONSCHEMABUILDER_SOURCE = kodi-$(KODI_JSONSCHEMABUILDER_VERSION).tar.gz
+ KODI_JSONSCHEMABUILDER_LICENSE = GPL-2.0
+diff --git a/package/kodi-texturepacker/kodi-texturepacker.mk b/package/kodi-texturepacker/kodi-texturepacker.mk
+index 26776acbe3..77a9e3be4e 100644
+--- a/package/kodi-texturepacker/kodi-texturepacker.mk
++++ b/package/kodi-texturepacker/kodi-texturepacker.mk
+@@ -6,7 +6,7 @@
+ 
+ # Not possible to directly refer to kodi variables, because of
+ # first/second expansion trickery...
+-KODI_TEXTUREPACKER_VERSION = 17.4-Krypton
++KODI_TEXTUREPACKER_VERSION = 17.5-Krypton
+ KODI_TEXTUREPACKER_SITE = $(call github,xbmc,xbmc,$(KODI_TEXTUREPACKER_VERSION))
+ KODI_TEXTUREPACKER_SOURCE = kodi-$(KODI_TEXTUREPACKER_VERSION).tar.gz
+ KODI_TEXTUREPACKER_LICENSE = GPL-2.0
+diff --git a/package/kodi/kodi.hash b/package/kodi/kodi.hash
+index 0dc46133ee..ed3aea0255 100644
+--- a/package/kodi/kodi.hash
++++ b/package/kodi/kodi.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256 6b0886e7449fc201e0ec0584b37f9f654c429797a41e6d0b6a4b5a7fd5ec34dc  kodi-17.4-Krypton.tar.gz
++sha256 84c64acc270b9e845a67fbbe481ae5ddeb9b4568d76e42f2d5f9160fe0ce2de2  kodi-17.5-Krypton.tar.gz
+ # Locally computed - libdvdcss
+ sha256 b6eb2d929ff56cb051152c32010afc5e7cf5fe8c5ae32dca412a2b46b6b57e34  2f12236.tar.gz
+ # Locally computed - libdvdnav
+diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
+index b08f855aa5..845e42885c 100644
+--- a/package/kodi/kodi.mk
++++ b/package/kodi/kodi.mk
+@@ -6,7 +6,7 @@
+ 
+ # When updating the version, please also update kodi-jsonschemabuilder
+ # and kodi-texturepacker
+-KODI_VERSION = 17.4-Krypton
++KODI_VERSION = 17.5-Krypton
+ KODI_SITE = $(call github,xbmc,xbmc,$(KODI_VERSION))
+ KODI_LICENSE = GPL-2.0
+ KODI_LICENSE_FILES = LICENSE.GPL
+-- 
+2.11.0
