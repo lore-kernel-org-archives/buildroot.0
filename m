@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 23 Oct 2017 21:42:53 +0200
-Subject: [Buildroot] [PATCH 08/13] pkg-generic: add a subdirectory to
- the DL_DIR
-In-Reply-To: <20170704162211.13238-9-maxime.hadjinlian@gmail.com>
+Date: Mon, 23 Oct 2017 21:49:39 +0200
+Subject: [Buildroot] [PATCH 09/13] pkg-download: support new subdir for
+ mirrors
+In-Reply-To: <20170704162211.13238-10-maxime.hadjinlian@gmail.com>
 References: <20170704162211.13238-1-maxime.hadjinlian@gmail.com>
- <20170704162211.13238-9-maxime.hadjinlian@gmail.com>
-Message-ID: <ccef83e0-d47e-8f78-59b6-5d20c49c264a@mind.be>
+ <20170704162211.13238-10-maxime.hadjinlian@gmail.com>
+Message-ID: <5dd5ec31-1c3c-3c6b-d422-e0714399534d@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,41 +15,59 @@ To: buildroot@busybox.net
 
 
 On 04-07-17 18:22, Maxime Hadjinlian wrote:
-> With all the previous changes, we are now ready to add a subdirectory to
-> the DL_DIR.
-> The structure will now be DL_DIR/PKG_NAME/{FILE1,FILE2}
-> 
-> This is needed for multiple reasons:
->     - Avoid patches with name like SHA1.patch laying flat in DL_DIR,
-                           names
+> Since we introduced subdirectory to the DL_DIR, we need to support them
+                      subdirectories
 
->     which makes it hard to know to which packages they apply
->     - Avoid possible collisions if two releases have the same name
->     (e.g: v01.tar)
->     - Allow the possibility to handle a git cache per package in the
->     newly created subdirectory.
+> in the PRIMARY and BACKUP mirror as they evolve to the new tree
+> structure.
 > 
-> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+> We check first the new URI (with the subdir), and in case of failure, we
+> go check without.
+> By checking both URIs, we ensure that old mirror are usable.
+                                            mirrors
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
-> ---
->  package/pkg-generic.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index 5d169b20d6..7364551471 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -434,7 +434,7 @@ endif
+> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.co> ---
+>  package/pkg-download.mk | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+> index 9a455dc79b..47671e21a7 100644
+> --- a/package/pkg-download.mk
+> +++ b/package/pkg-download.mk
+> @@ -75,6 +75,7 @@ export BR_NO_CHECK_HASH_FOR =
 >  
->  $(2)_BASE_NAME	= $$(if $$($(2)_VERSION),$(1)-$$($(2)_VERSION),$(1))
->  $(2)_RAW_BASE_NAME = $$(if $$($(2)_VERSION),$$($(2)_RAWNAME)-$$($(2)_VERSION),$$($(2)_RAWNAME))
-> -$(2)_DL_DIR	=  $$(DL_DIR)
-> +$(2)_DL_DIR 	=  $$(DL_DIR)/$$($(2)_RAWNAME)
->  $(2)_DIR	=  $$(BUILD_DIR)/$$($(2)_BASE_NAME)
+>  ifneq ($(call qstrip,$(BR2_PRIMARY_SITE)),)
+>  DOWNLOAD_URIS += \
+> +	-u $(call getschemeplusuri,$(BR2_PRIMARY_SITE))/$(notdir $($(PKG)_DL_DIR)) \
+
+ I was thinking, it is a bit silly to first calculate that path and then
+applying notdir to it, but I guess this is more robust to a change of PKG_DL_DIR.
+
+ There is just one thing to check: I think that this DOWNLOAD_URIS may also be
+used outside the context of a package, in which case $(PKG) is not defined. It's
+not terrible because then we just go to PRIMARY_SITE without subdir, but it's a
+pity to do things twice. So maybe better
+
+	$(if $(PKG),$(call getschemeplusuri,$(BR2_PRIMARY_SITE))/$(notdir
+$($(PKG)_DL_DIR))) \
+
+ Oh yeah, completely easy to read :-)
+
+ Regards,
+ Arnout
+
+>  	-u $(call getschemeplusuri,$(BR2_PRIMARY_SITE))
+>  endif
 >  
->  ifndef $(2)_SUBDIR
+> @@ -83,6 +84,7 @@ DOWNLOAD_URIS += \
+>  	-u $($(PKG)_SITE_METHOD)+$(dir $(1))
+>  ifneq ($(call qstrip,$(BR2_BACKUP_SITE)),)
+>  DOWNLOAD_URIS += \
+> +	-u $(call getschemeplusuri,$(BR2_BACKUP_SITE))/$(notdir $($(PKG)_DL_DIR)) \
+>  	-u $(call getschemeplusuri,$(BR2_BACKUP_SITE))
+>  endif
+>  endif
 > 
 
 -- 
