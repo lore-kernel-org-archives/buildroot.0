@@ -1,52 +1,68 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Mon, 23 Oct 2017 14:48:24 -0400
-Subject: [Buildroot] [PATCH 1/1] boost: add fiber module
-Message-ID: <20171023184824.14896-1-aduskett@gmail.com>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Mon, 23 Oct 2017 21:03:21 +0200
+Subject: [Buildroot] [PATCH 00/13] New DL_DIR organisation;
+	git cache feature
+In-Reply-To: <f078c060-2284-7f03-fa76-f7396abf5f80@mind.be>
+References: <20170704162211.13238-1-maxime.hadjinlian@gmail.com>
+ <20170728003756.3d675656@gmx.net>
+ <CAGduivzEGzqMesGqkrKtchK3gDGVa9_3iOVzYZW2RFQfzbw4iw@mail.gmail.com>
+ <20171017215649.492791d6@gmx.net>
+ <CAGduivyAHYJQ43fGRqGyFBHvUHtqAqLXXz90_gH0nHM4R8+BSw@mail.gmail.com>
+ <f078c060-2284-7f03-fa76-f7396abf5f80@mind.be>
+Message-ID: <CAGduivzECY1W5g-=eRt1NSXMWhLswu1_TGgRuCoUXWV9pMSGPw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-requires NPTL which was causing the following build errors:
-http://autobuild.buildroot.net/results/029/0298038fc126d15733d81c54e0bb7cb00be48b92/build-end.log
-http://autobuild.buildroot.net/results/6f3/6f3a218c47204e431100799482a3ed0ec159fa15/build-end.log
-http://autobuild.buildroot.net/results/63e/63e5569a90d3ace97cb6102509cbd04aeab6f5f7/build-end.log
-
-Signed-off-by: Adam Duskett <aduskett@gmail.com>
----
- package/boost/Config.in | 6 ++++++
- package/boost/boost.mk  | 1 +
- 2 files changed, 7 insertions(+)
-
-diff --git a/package/boost/Config.in b/package/boost/Config.in
-index 3b3c89b8c1..fab31a2e8f 100644
---- a/package/boost/Config.in
-+++ b/package/boost/Config.in
-@@ -79,6 +79,12 @@ config BR2_PACKAGE_BOOST_DATE_TIME
- config BR2_PACKAGE_BOOST_EXCEPTION
- 	bool "boost-exception"
- 
-+config BR2_PACKAGE_BOOST_FIBER
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
-+	bool "boost-fiber"
-+
-+comment "boost-fiber needs a toolchain w/ NPTL"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
- config BR2_PACKAGE_BOOST_FILESYSTEM
- 	bool "boost-filesystem"
- 
-diff --git a/package/boost/boost.mk b/package/boost/boost.mk
-index 598ffbe10e..0fd6c4d0de 100644
---- a/package/boost/boost.mk
-+++ b/package/boost/boost.mk
-@@ -26,6 +26,7 @@ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_CONTEXT),,context)
- BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_COROUTINE),,coroutine)
- BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_DATE_TIME),,date_time)
- BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_EXCEPTION),,exception)
-+BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_FILESYSTEM),,fiber)
- BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_FILESYSTEM),,filesystem)
- BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_GRAPH),,graph)
- BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_GRAPH_PARALLEL),,graph_parallel)
--- 
-2.13.6
+On Mon, Oct 23, 2017 at 8:42 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+>
+>
+> On 23-10-17 20:24, Maxime Hadjinlian wrote:
+>> Hi Peter,
+>>
+>> On Tue, Oct 17, 2017 at 9:56 PM, Peter Seiderer <ps.report@gmx.net> wrote:
+>>> Hello Maxime,
+>>>
+>>> On Sun, 30 Jul 2017 18:32:27 +0200, Maxime Hadjinlian <maxime.hadjinlian@gmail.com> wrote:
+>>>
+> [snip]
+>>>> It's fixed on my branch on github for now.
+>>> Any updates on this one? Mind to resend an actual version (would like to
+>>> see this feature integrated into buildroot, tired of waiting for hours
+>>> in case RaspberryPi kernel/firmware/userland git versions are updated)?
+>> I think the most "up-to-date" is my branch on Github
+>> (https://github.com/maximeh/buildroot/tree/git_cache).
+>> I don't really think it's ready for a review, there's still many bugs
+>> in there, at least that's what I remember.
+>> What would really help me is, if you could test this and tell me what
+>> breaks so I could look it up and try to fix this, this would be a huge
+>> help !
+>> If you come up with patches, that's really nice too ;).
+>>
+>> I won't make any promises on the time I can spend on this, we all know
+>> how this goes.. but that being said, I am still really motivated by
+>> this feature, I really need it too.
+>
+>  Maxime, correct me if I'm wrong, but you'd be happy if Peter does a respin of
+> the series, right?
+Oh sure, for me, the important part is that it's merged, who gets to
+do is not. Since I clearly can't make the time to make it happen; if
+someone can respin this, then please do it :). At least the topic is
+out there :).
+>
+>  It would be nice if we could already apply the first few patches, just to keep
+> things going.
+Agreed.
+>
+>  Regards,
+>  Arnout
+>
+> --
+> Arnout Vandecappelle                          arnout at mind be
+> Senior Embedded Software Architect            +32-16-286500
+> Essensium/Mind                                http://www.mind.be
+> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
