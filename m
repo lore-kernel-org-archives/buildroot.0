@@ -1,9 +1,9 @@
 From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Mon, 23 Oct 2017 21:52:01 +0200
-Subject: [Buildroot] [PATCH 2/4] execline: bump version to 2.3.0.3
+Date: Mon, 23 Oct 2017 21:52:02 +0200
+Subject: [Buildroot] [PATCH 3/4] s6: bump version to 2.6.1.1
 In-Reply-To: <20171023195203.6775-1-eric.le.bihan.dev@free.fr>
 References: <20171023195203.6775-1-eric.le.bihan.dev@free.fr>
-Message-ID: <20171023195203.6775-3-eric.le.bihan.dev@free.fr>
+Message-ID: <20171023195203.6775-4-eric.le.bihan.dev@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,30 +12,30 @@ To: buildroot@busybox.net
 
 Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 ---
- package/execline/execline.hash | 2 +-
- package/execline/execline.mk   | 2 +-
+ package/s6/s6.hash | 2 +-
+ package/s6/s6.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/execline/execline.hash b/package/execline/execline.hash
-index f68ce1b5cf..1251d8d79e 100644
---- a/package/execline/execline.hash
-+++ b/package/execline/execline.hash
+diff --git a/package/s6/s6.hash b/package/s6/s6.hash
+index 41f3dff0c4..2f498b0d6a 100644
+--- a/package/s6/s6.hash
++++ b/package/s6/s6.hash
 @@ -1,2 +1,2 @@
  # Locally generated
--sha256 c11650651a7230bd5687945a7698b2da3fe13c3c0eb15e296bb91769d4775f45  execline-2.3.0.2.tar.gz
-+sha256 1a698425740a410a38be770f98b8faf94c633e29a74ba1d25adddbb294e979f5  execline-2.3.0.3.tar.gz
-diff --git a/package/execline/execline.mk b/package/execline/execline.mk
-index 7fed626d33..a4f4229f6c 100644
---- a/package/execline/execline.mk
-+++ b/package/execline/execline.mk
+-sha256 f0de303791134302f2630b9fe76a936b064e1e3aa772c8ae1b891155a6ea2c79  s6-2.6.1.0.tar.gz
++sha256 0172b7293d4d5607ca3ca77382fee9b87c10bd58680720b29625cf35afc75c5c  s6-2.6.1.1.tar.gz
+diff --git a/package/s6/s6.mk b/package/s6/s6.mk
+index da9917cb8c..3cf3885d5a 100644
+--- a/package/s6/s6.mk
++++ b/package/s6/s6.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--EXECLINE_VERSION = 2.3.0.2
-+EXECLINE_VERSION = 2.3.0.3
- EXECLINE_SITE = http://skarnet.org/software/execline
- EXECLINE_LICENSE = ISC
- EXECLINE_LICENSE_FILES = COPYING
+-S6_VERSION = 2.6.1.0
++S6_VERSION = 2.6.1.1
+ S6_SITE = http://skarnet.org/software/s6
+ S6_LICENSE = ISC
+ S6_LICENSE_FILES = COPYING
 -- 
 2.13.6
