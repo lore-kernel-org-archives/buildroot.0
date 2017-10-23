@@ -1,46 +1,59 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 23 Oct 2017 21:09:25 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libpciaccess: bump version to 0.14
-Message-ID: <20171023190925.30389-1-bernd.kuhls@t-online.de>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Mon, 23 Oct 2017 21:10:31 +0200
+Subject: [Buildroot] [PATCH RFC] package/glibc: switch to using the
+ maintenance branch
+In-Reply-To: <20171021122223.GB7022@scaer>
+References: <20171021102206.29477-1-yann.morin.1998@free.fr>
+ <38b149b1-8f27-d747-3b16-be54b43cdbd4@gmail.com>
+ <20171021122223.GB7022@scaer>
+Message-ID: <4d73920f-4566-08f2-ba7c-abdfcb8794c8@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/libpciaccess/libpciaccess.hash | 10 +++++-----
- package/libpciaccess/libpciaccess.mk   |  2 +-
- 2 files changed, 6 insertions(+), 6 deletions(-)
+Hi Yann, All,
 
-diff --git a/package/libpciaccess/libpciaccess.hash b/package/libpciaccess/libpciaccess.hash
-index b060e02ed6..b73c27c290 100644
---- a/package/libpciaccess/libpciaccess.hash
-+++ b/package/libpciaccess/libpciaccess.hash
-@@ -1,5 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2017-April/002791.html
--md5 d810ab17e24c1418dedf7207fb2841d4  libpciaccess-0.13.5.tar.bz2
--sha1 ea98c13623e218359ca6d9af9ab9aa4780201a5b  libpciaccess-0.13.5.tar.bz2
--sha256 752c54e9b3c311b4347cb50aea8566fa48eab274346ea8a06f7f15de3240b999  libpciaccess-0.13.5.tar.bz2
--sha512 4b77aa66b3429fd5f9bff0408b0624305e766bf209f3fa2a0a9024df55bf87ca68f9a5aa34f97ffe131997e0669c65cf542210cf308c0de09842424968c5a159  libpciaccess-0.13.5.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2017-October/002817.html
-+md5 8f436e151d5106a9cfaa71857a066d33  libpciaccess-0.14.tar.bz2
-+sha1 f70a958bf4e744cb4ee93be64e9bc52ac05cdaeb  libpciaccess-0.14.tar.bz2
-+sha256 3df543e12afd41fea8eac817e48cbfde5aed8817b81670a4e9e493bb2f5bf2a4  libpciaccess-0.14.tar.bz2
-+sha512 bf40214dfd22f2a223f7c948566e6eaa4bfed60116e71b3eb19f6fe7ab2c4546649eb0416c06d5983e476ea5e27de036936646eb5f800ea97763b6d1f1976f4b  libpciaccess-0.14.tar.bz2
-diff --git a/package/libpciaccess/libpciaccess.mk b/package/libpciaccess/libpciaccess.mk
-index 1ff2d4a763..93b5fc7ac2 100644
---- a/package/libpciaccess/libpciaccess.mk
-+++ b/package/libpciaccess/libpciaccess.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBPCIACCESS_VERSION = 0.13.5
-+LIBPCIACCESS_VERSION = 0.14
- LIBPCIACCESS_SOURCE = libpciaccess-$(LIBPCIACCESS_VERSION).tar.bz2
- LIBPCIACCESS_SITE = http://xorg.freedesktop.org/releases/individual/lib
- LIBPCIACCESS_LICENSE = MIT
--- 
-2.11.0
+Le 21/10/2017 ? 14:22, Yann E. MORIN a ?crit?:
+> Romain, All,
+> 
+> On 2017-10-21 13:31 +0200, Romain Naour spake thusly:
+>> Le 21/10/2017 ? 12:22, Yann E. MORIN a ?crit?:
+
+[...]
+
+> 
+>> I guess it's a gitconfig issue. Maybe I should increase a buffer somewhere.
+>>
+>> Otherwise, it looks good.
+>>
+>> Note: My patch fixing gcc5.5 x86_64 toolchains whith glibc 2.26 is not yet
+>> backported to the stable branch.
+>> Maintainers are waiting some days before backporting a patch.
+>>
+>> https://sourceware.org/git/?p=glibc.git;a=commit;h=386e1c26ac473d6863133ab9cbe3bbda16c15816
+>>
+>> Maybe you can include it in this patch.
+> 
+> No, I won't. This commit is about just switching (and bumping as you
+> noticed). We can wait a bit more until your commit is applied and when
+> we're ready to tag 2017.11-rc1, and then bump to the latest HEAD of the
+> branch.
+
+I can respin your patch with an updated commit hash that include this patch [1].
+
+But I don't know how to deal with the download issue...
+
+Best regards,
+Romain
+
+[1]
+https://sourceware.org/git/?p=glibc.git;a=commit;h=f8279a4b3cc66d3ec8bfb8519e9987b8f7727f53
+
+> 
+> Regards,
+> Yann E. MORIN.
+> 
+>> Best regards,
+>> Romain
