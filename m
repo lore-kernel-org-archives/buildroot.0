@@ -1,10 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 23 Oct 2017 21:40:01 +0200
-Subject: [Buildroot] [PATCH 1/1] boost: add fiber module
-In-Reply-To: <ef41afeb-7d33-5647-987e-1ce87fc3c5df@mind.be>
-References: <20171023184824.14896-1-aduskett@gmail.com>
- <ef41afeb-7d33-5647-987e-1ce87fc3c5df@mind.be>
-Message-ID: <c1e23a2c-816e-73db-18c4-6aac4514ad74@mind.be>
+Date: Mon, 23 Oct 2017 21:42:53 +0200
+Subject: [Buildroot] [PATCH 08/13] pkg-generic: add a subdirectory to
+ the DL_DIR
+In-Reply-To: <20170704162211.13238-9-maxime.hadjinlian@gmail.com>
+References: <20170704162211.13238-1-maxime.hadjinlian@gmail.com>
+ <20170704162211.13238-9-maxime.hadjinlian@gmail.com>
+Message-ID: <ccef83e0-d47e-8f78-59b6-5d20c49c264a@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,79 +14,42 @@ To: buildroot@busybox.net
 
 
 
-On 23-10-17 21:21, Arnout Vandecappelle wrote:
->  Sorry, I reviewed the wrong version of the patch...
+On 04-07-17 18:22, Maxime Hadjinlian wrote:
+> With all the previous changes, we are now ready to add a subdirectory to
+> the DL_DIR.
+> The structure will now be DL_DIR/PKG_NAME/{FILE1,FILE2}
 > 
->  But the good thing is: there are no reverse dependencies on fiber so no need to
-> propagate :-)
+> This is needed for multiple reasons:
+>     - Avoid patches with name like SHA1.patch laying flat in DL_DIR,
+                           names
+
+>     which makes it hard to know to which packages they apply
+>     - Avoid possible collisions if two releases have the same name
+>     (e.g: v01.tar)
+>     - Allow the possibility to handle a git cache per package in the
+>     newly created subdirectory.
 > 
-> On 23-10-17 20:48, Adam Duskett wrote:
->> requires NPTL which was causing the following build errors:
->> http://autobuild.buildroot.net/results/029/0298038fc126d15733d81c54e0bb7cb00be48b92/build-end.log
->> http://autobuild.buildroot.net/results/6f3/6f3a218c47204e431100799482a3ed0ec159fa15/build-end.log
->> http://autobuild.buildroot.net/results/63e/63e5569a90d3ace97cb6102509cbd04aeab6f5f7/build-end.log
->>
->> Signed-off-by: Adam Duskett <aduskett@gmail.com>
->> ---
->>  package/boost/Config.in | 6 ++++++
->>  package/boost/boost.mk  | 1 +
->>  2 files changed, 7 insertions(+)
->>
->> diff --git a/package/boost/Config.in b/package/boost/Config.in
->> index 3b3c89b8c1..fab31a2e8f 100644
->> --- a/package/boost/Config.in
->> +++ b/package/boost/Config.in
->> @@ -79,6 +79,12 @@ config BR2_PACKAGE_BOOST_DATE_TIME
->>  config BR2_PACKAGE_BOOST_EXCEPTION
->>  	bool "boost-exception"
->>  
->> +config BR2_PACKAGE_BOOST_FIBER
->> +	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
->> +	bool "boost-fiber"
->> +
->> +comment "boost-fiber needs a toolchain w/ NPTL"
->> +	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
->>  config BR2_PACKAGE_BOOST_FILESYSTEM
+> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+> ---
+>  package/pkg-generic.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
->  There should be an empty line between the comment and the next config.
-> 
->  But I'll fix that and apply (just doing a test build now).
-
- Right, the test build failed because I was doing it in static - cfr.
-
-http://autobuild.buildroot.net/results/692/692ffad93a7bd867ecc7ccbfc8c6280735d29435/build-end.log
-
-Could you take a look at that as well? I guess there's a new stacktrace module
-that depends on !STATIC.
-
- Note that there is also a new PolyCollection module, don't know if it's
-header-only or not.
-
- You can look at http://www.boost.org/doc/libs/1_65_1/ and search for "1.65" to
-find out the new modules.
-
- Regards,
- Arnout
-
-> 
->  Regards,
->  Arnout
-> 
->>  	bool "boost-filesystem"
->>  
->> diff --git a/package/boost/boost.mk b/package/boost/boost.mk
->> index 598ffbe10e..0fd6c4d0de 100644
->> --- a/package/boost/boost.mk
->> +++ b/package/boost/boost.mk
->> @@ -26,6 +26,7 @@ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_CONTEXT),,context)
->>  BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_COROUTINE),,coroutine)
->>  BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_DATE_TIME),,date_time)
->>  BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_EXCEPTION),,exception)
->> +BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_FILESYSTEM),,fiber)
->>  BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_FILESYSTEM),,filesystem)
->>  BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_GRAPH),,graph)
->>  BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_GRAPH_PARALLEL),,graph_parallel)
->>
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index 5d169b20d6..7364551471 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -434,7 +434,7 @@ endif
+>  
+>  $(2)_BASE_NAME	= $$(if $$($(2)_VERSION),$(1)-$$($(2)_VERSION),$(1))
+>  $(2)_RAW_BASE_NAME = $$(if $$($(2)_VERSION),$$($(2)_RAWNAME)-$$($(2)_VERSION),$$($(2)_RAWNAME))
+> -$(2)_DL_DIR	=  $$(DL_DIR)
+> +$(2)_DL_DIR 	=  $$(DL_DIR)/$$($(2)_RAWNAME)
+>  $(2)_DIR	=  $$(BUILD_DIR)/$$($(2)_BASE_NAME)
+>  
+>  ifndef $(2)_SUBDIR
 > 
 
 -- 
