@@ -1,102 +1,100 @@
-From: Scott Fan <fancp2007@gmail.com>
-Date: Tue, 24 Oct 2017 06:06:31 +0800
-Subject: [Buildroot] [git commit branch/2017.08.x] Update for 2017.08.1
-In-Reply-To: <20171023213451.2AD278111D@busybox.osuosl.org>
-References: <20171023213451.2AD278111D@busybox.osuosl.org>
-Message-ID: <CAFkzVZYhDP9SVTQt-_RVef370DVaRYvJSTaMQ21i86aGOjvHmA@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 24 Oct 2017 00:07:00 +0200
+Subject: [Buildroot] Buildroot 2017.08.1 released
+Message-ID: <87mv4h7c3f.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello, Peter
- Is there any scheduled update (2017.02.7) for the LTS branch 2017.02.x in
-the next days? Thanks
+Hi,
 
+Buildroot is a simple tool for creating complete embedded Linux systems
+(http://buildroot.org).
 
-Regards
-Scott Fan
+Buildroot 2017.08.1 is released - Go download it at:
 
+http://buildroot.org/downloads/buildroot-2017.08.1.tar.gz
 
+or
 
-2017?10?24? 05:42?"Peter Korsgaard" <peter@korsgaard.com>???
+http://buildroot.org/downloads/buildroot-2017.08.1.tar.bz2
 
-> commit: https://git.buildroot.net/buildroot/commit/?id=
-> 20b6624f4bb84353e690d897688fd7ac12d6a881
-> branch: https://git.buildroot.net/buildroot/commit/?id=refs/
-> heads/2017.08.x
->
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  CHANGES  | 34 ++++++++++++++++++++++++++++++++++
->  Makefile |  4 ++--
->  2 files changed, 36 insertions(+), 2 deletions(-)
->
-> diff --git a/CHANGES b/CHANGES
-> index c042bf5..cfe4894 100644
-> --- a/CHANGES
-> +++ b/CHANGES
-> @@ -1,3 +1,37 @@
-> +2017.08.1, Released October 23rd, 2017
-> +
-> +       Important / security related fixes.
-> +
-> +       Webkitgtk bumped to the 2.18.x series, fixing a large number
-> +       of security issues.
-> +
-> +       Defconfigs: galileo: fix ext4 related kernel config, bump
-> +       kernel for gcc 6.x compatibility, enable wchar support for
-> +       grub2. wandboard: correct rootfs offset
-> +
-> +       support: Ensure gzip compression level 6 is used for git
-> +       tarballs. check-bin-arch: Correctly handle (ignore) symbolic
-> +       links. check-rpath: Also handle PIE binaries
-> +
-> +       External toolchain: Correctly handle glibc Buildroot
-> +       toolchains built with merged /usr
-> +
-> +       musl: fix ARMv4 build with binutils 2.27.51+, fix for
-> +       CVE-2017-15650
-> +
-> +       Updated/fixed packages: apache, augeas, bind, bluez5_utils,
-> +       busybox, bzip2, cmake, dnsmasq, ejabberd, gcc, git, go, ffmpeg,
-> file,
-> +       flashrom, gd, gdk-pixbug, gnupg2, hostapd, ifupdown-scripts,
-> +       imagemagick, iucode-tool, kernel-module-imx-gpu-viv, lame,
-> +       libarchive, libcurl, libffi, libidn, libmbim, libnspr, libnss,
-> +       libressl, librsync, libsoup, libxml2, libzip, mbedtls, musl,
-> +       netplug, nginx, openvpn, pkgconf, poppler, proxychains-ng,
-> +       qemu, qt, rpi-userland, syslog, ruby, samba4, softether,
-> +       sqlite, strongswan, subversion, supertuxkart, supervisor, tcpdump,
-> +       tor, unrar, urq, vboot-utils, webkitgtk, wpa_supplicant, xen,
-> +       xmlstarlet, xlib_libXfont, xlib_libXfont2,
-> +       xserver_xorg-server, zsh
-> +
->  2017.08, Released September 1st, 2017
->
->         Minor fixes.
-> diff --git a/Makefile b/Makefile
-> index 42fcf6d..eb02092 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -87,9 +87,9 @@ all:
->  .PHONY: all
->
->  # Set and export the version string
-> -export BR2_VERSION := 2017.08
-> +export BR2_VERSION := 2017.08.1
->  # Actual time the release is cut (for reproducible builds)
-> -BR2_VERSION_EPOCH = 1504300000
-> +BR2_VERSION_EPOCH = 1508790000
->
->  # Save running make version since it's clobbered by the make package
->  RUNNING_MAKE_VERSION := $(MAKE_VERSION)
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20171024/18dace7a/attachment.html>
+Or get it from Git:
+
+git://git.buildroot.org/buildroot
+
+Buildroot 2017.08.1 is a bugfix release, fixing a number of important /
+security related issues discovered since the 2017.08 release.
+
+- Security fixes for apache, augeas, bluez5_utils, dnsmasq, ffmpeg,
+  file, gd, gdk-pixbuf, git, hostapd, imagemagick, iucode-tool, lame,
+  libarchive, libcurl, libidn, libnss, librsync, libsoup, libxml2,
+  libzip, mbedtls, musl, openvpn, proxychains-ng, qemu, ruby, samba4,
+  sqlite, strongswan, subversion, supervisor, tcpdump, tor, unrar,
+  webkitgtk, wpa_supplicant, xen, xlib_libXfont, xlib_libXfont2,
+  xserver_xorg-server
+
+- Fixes for download/compilation/runtime issues in bind, busybox, bzip2,
+  cmake, ejabberd, flashrom, go, ifupdown-scripts,
+  kernel-module-imx-gpu-viv, libffi, libmbim, libressl, netplug, nginx,
+  poppler, qt, rpi-userland, rsyslog, softether, supertuxkart, urg,
+  vboot-utils, xmlstarlet, zsh
+
+- Webkitgtk bumped to the 2.18.x series, fixing a large number of
+  security issues.
+
+- Defconfigs: galileo: fix ext4 related kernel config, bump kernel for
+  gcc 6.x compatibility, enable wchar support for grub2. wandboard:
+  correct rootfs offset
+
+- support: Ensure gzip compression level 6 is used for git tarballs.
+  check-bin-arch: Correctly handle (ignore) symbolic links.
+  check-rpath: Also handle PIE binaries
+
+- External toolchain: Correctly handle glibc Buildroot toolchains built
+  with merged /usr
+
+- musl: fix ARMv4 build with binutils 2.27.51+, fix for CVE-2017-15650
+
+Users of the affected packages are strongly encouraged to upgrade.
+
+Many thanks to all the people contributing to this release:
+
+git shortlog -sn 2017.08..
+
+    31  Bernd Kuhls
+    29  Peter Korsgaard
+    12  Baruch Siach
+     4  Nicholas Sielicki
+     3  Alexander Mukhin
+     3  Cam Hutchison
+     3  Thomas Petazzoni
+     2  Adam Duskett
+     2  Adrian Perez de Castro
+     2  Alfredo Alvarez Fernandez
+     2  Angelo Compagnucci
+     2  Fabio Estevam
+     2  Luca Ceresoli
+     2  Petr Kulhavy
+     2  Romain Naour
+     2  Thomas Claveirole
+     2  Yann E. MORIN
+     1  Aleksander Morgado
+     1  Alex Suykov
+     1  Carlos Santos
+     1  Evgeniy Didin
+     1  Gary Bisson
+     1  Johan Oudinet
+     1  Julien Corjon
+     1  J?rg Krause
+     1  Lothar Felten
+     1  Matt Weber
+     1  Mauro Condarelli
+     1  Max Filippov
+     1  Thomas De Schampheleire
+     1  Timothy Lee
+
+-- 
+Bye, Peter Korsgaard
