@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 23 Oct 2017 18:46:53 +0200
-Subject: [Buildroot] [PATCH] linux-tools/perf: fix build for MIPS by
- using the right emulation on LD
-In-Reply-To: <20170217105905.32151-1-Vincent.Riera@imgtec.com>
-References: <20170217105905.32151-1-Vincent.Riera@imgtec.com>
-Message-ID: <e2369c76-acfe-72e3-b30f-ff6c8036af84@mind.be>
+Date: Mon, 23 Oct 2017 18:48:59 +0200
+Subject: [Buildroot] git clone https://git.busybox.net/buildroot works
+ unexpectedly slow
+In-Reply-To: <4881796E12491D4BB15146FE0209CE6467FA4405@DE02WEMBXB.internal.synopsys.com>
+References: <4881796E12491D4BB15146FE0209CE6467FA4405@DE02WEMBXB.internal.synopsys.com>
+Message-ID: <6f6b1cf9-32ec-b403-6d0d-26bd5372aa4a@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,68 +13,40 @@ To: buildroot@busybox.net
 
 
 
-On 17-02-17 11:59, Vicente Olivert Riera wrote:
-> Passing just the endianness flag to LD is not enough. We need to pass
-> the right emulation flag which will set everything for us, not only the
-> endianness.
+On 23-10-17 12:26, Alexey Brodkin wrote:
+> Hi,
 > 
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> Probably that's just me but could anyone please try if access to BR git repo via HTTPS
+> really works OK?
+> --------------------------------->8-------------------------------
+> $ time git clone https://git.busybox.net/buildroot
+> Cloning into 'buildroot'...
+> Checking connectivity... done.
+> Checking out files: 100% (9694/9694), done.
+> 
+> real    15m59.868s
+> user    1m56.969s
+> sys     5m16.609s
+> 
+> $ time git clone https://git.busybox.net/buildroot
+> Cloning into 'buildroot'...
+> error: Unable to find ba0bf240915229e94c0565b833be6ac273a4776d under https://git.busybox.net/buildroot
+> Cannot obtain needed blob ba0bf240915229e94c0565b833be6ac273a4776d
+> while processing commit 6bb75e43a42cddfa0a9e6e001d8d0224f124a64a.
+> error: Fetch failed.
+> 
+> real    8m8.317s
+> user    0m0.000s
+> sys     0m5.391s
+> --------------------------------->8-------------------------------
+> 
+> Note, via git it works as expected.
 
- Since there really is no other way to fix this problem, even if the fix is
-ugly, I've applied to master, thanks.
-
- If anyone can come up with a better way (not involving an LD wrapper - just a
-few places need it so it's not worth it), please speak up!
+ So, the same problem as Romain and Yann detected for glibc? What's happening, a
+global attack on git https?
 
  Regards,
  Arnout
-
-> ---
->  package/linux-tools/linux-tool-perf.mk | 30 +++++++++++++++++++-----------
->  1 file changed, 19 insertions(+), 11 deletions(-)
-> 
-> diff --git a/package/linux-tools/linux-tool-perf.mk b/package/linux-tools/linux-tool-perf.mk
-> index 16f3a58..69492ba 100644
-> --- a/package/linux-tools/linux-tool-perf.mk
-> +++ b/package/linux-tools/linux-tool-perf.mk
-> @@ -28,17 +28,25 @@ PERF_MAKE_FLAGS = \
->  	NO_LIBPYTHON=1 \
->  	NO_LIBBIONIC=1
->  
-> -# We need to pass an argument to ld for setting the endianness when
-> -# building it for MIPS architecture, otherwise the default one will
-> -# always be used (which is big endian) and the compilation for little
-> -# endian will always fail showing an error like this one:
-> -#  LD    foo.o
-> -# mips-linux-gnu-ld: foo.o: compiled for a little endian system and
-> -# target is big endian
-> -ifeq ($(BR2_mips)$(BR2_mips64),y)
-> -PERF_MAKE_FLAGS += LD="$(TARGET_LD) -EB"
-> -else ifeq ($(BR2_mipsel)$(BR2_mips64el),y)
-> -PERF_MAKE_FLAGS += LD="$(TARGET_LD) -EL"
-> +# We need to pass an argument to ld for setting the emulation when
-> +# building for MIPS architecture, otherwise the default one will always
-> +# be used and the compilation for most variants will fail.
-> +ifeq ($(BR2_mips),y)
-> +PERF_MAKE_FLAGS += LD="$(TARGET_LD) -m elf32btsmip"
-> +else ifeq ($(BR2_mipsel),y)
-> +PERF_MAKE_FLAGS += LD="$(TARGET_LD) -m elf32ltsmip"
-> +else ifeq ($(BR2_mips64),y)
-> +ifeq ($(BR2_MIPS_NABI32),y)
-> +PERF_MAKE_FLAGS += LD="$(TARGET_LD) -m elf32btsmipn32"
-> +else
-> +PERF_MAKE_FLAGS += LD="$(TARGET_LD) -m elf64btsmip"
-> +endif
-> +else ifeq ($(BR2_mips64el),y)
-> +ifeq ($(BR2_MIPS_NABI32),y)
-> +PERF_MAKE_FLAGS += LD="$(TARGET_LD) -m elf32ltsmipn32"
-> +else
-> +PERF_MAKE_FLAGS += LD="$(TARGET_LD) -m elf64ltsmip"
-> +endif
->  endif
->  
->  # The call to backtrace() function fails for ARC, because for some
-> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
