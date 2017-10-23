@@ -1,10 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 23 Oct 2017 21:55:17 +0200
-Subject: [Buildroot] [PATCH 10/13] pkg-generic: introduce _SAME_SOURCE_AS
-In-Reply-To: <20170704162211.13238-11-maxime.hadjinlian@gmail.com>
+Date: Mon, 23 Oct 2017 22:00:49 +0200
+Subject: [Buildroot] [PATCH 05/13] packages: use new $($PKG)_DL_DIR)
+ variable
+In-Reply-To: <20170704162211.13238-6-maxime.hadjinlian@gmail.com>
 References: <20170704162211.13238-1-maxime.hadjinlian@gmail.com>
- <20170704162211.13238-11-maxime.hadjinlian@gmail.com>
-Message-ID: <6f239aca-e146-2a07-57fc-b94787c7bb54@mind.be>
+ <20170704162211.13238-6-maxime.hadjinlian@gmail.com>
+Message-ID: <06aba0c0-ced3-a9ee-3f35-93a7dcf67ade@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,49 +15,30 @@ To: buildroot@busybox.net
 
 
 On 04-07-17 18:22, Maxime Hadjinlian wrote:
-> This per package variable can be used to specify that a package shares
-> the same sources as another package.
+> Instead of DL_DIR, the package should now use $(PKG)_DL_DIR to ease the
+> transition into a new directory structure for DL_DIR.
 > 
-> The use case here is for example, you have linux-headers and linux, you
-> don't want to download twice the kernel (because of the introduction of
-> the subdirs in DL_DIR).
+> This commit has been generated with the following scripts:
 > 
-> So you want to specify in linux-headers, this variable, so it will use
-> the linux's source.
+> for i in package/*/*.mk; do
+> 	if ! grep -q "\$(DL_DIR)" ${i}; then
+> 		continue
+> 	fi
+> 	pkg_name="$(basename $(dirname ${i}))"
+> 	raw_pkg_name=$(echo ${pkg_name} | tr [a-z] [A-Z] | tr '-' '_')
+> 	pkg_dl_dir="${raw_pkg_name}_DL_DIR"
+> 	sed -i "s/\$(DL_DIR)/\$($pkg_dl_dir)/" ${i}
+> done
+> 
+> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+[snip]
+>  48 files changed, 52 insertions(+), 52 deletions(-)
 
- That patch at least should be part of this series. We *really* don't want to
-download linux twice.
-
- However, Yann is reviving the package out-of-tree build series, which IIRC will
-already do something similar but then reusing the source directory rather than
-the source tarball. Therefore, this patch may no longer be needed. Well, on
-condition that that series gets applied :-)
+ This patch could be a lot smaller if we first had a patch that adds support for
+unzip to suitable-extractor...
 
  Regards,
  Arnout
-
-> 
-> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-> ---
->  package/pkg-generic.mk | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index 7364551471..a8e0686068 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -434,7 +434,9 @@ endif
->  
->  $(2)_BASE_NAME	= $$(if $$($(2)_VERSION),$(1)-$$($(2)_VERSION),$(1))
->  $(2)_RAW_BASE_NAME = $$(if $$($(2)_VERSION),$$($(2)_RAWNAME)-$$($(2)_VERSION),$$($(2)_RAWNAME))
-> -$(2)_DL_DIR 	=  $$(DL_DIR)/$$($(2)_RAWNAME)
-> +$(2)_DL_DIR 	=  $$(if $$($(2)_SAME_SOURCE_AS), \
-> +	$$(DL_DIR)/$$($$(call UPPERCASE,$$($(2)_SAME_SOURCE_AS))_RAWNAME), \
-> +	$$(DL_DIR)/$$($(2)_RAWNAME))
->  $(2)_DIR	=  $$(BUILD_DIR)/$$($(2)_BASE_NAME)
->  
->  ifndef $(2)_SUBDIR
-> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
