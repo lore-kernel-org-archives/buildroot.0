@@ -1,78 +1,97 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 24 Oct 2017 01:08:36 +0200
-Subject: [Buildroot] [PATCH] irssi: security bump to version 1.0.5
-Message-ID: <20171023230836.23832-1-peter@korsgaard.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 24 Oct 2017 01:09:15 +0200
+Subject: [Buildroot] [PATCH 10/13] pkg-generic: introduce _SAME_SOURCE_AS
+In-Reply-To: <6f239aca-e146-2a07-57fc-b94787c7bb54@mind.be>
+References: <20170704162211.13238-1-maxime.hadjinlian@gmail.com>
+ <20170704162211.13238-11-maxime.hadjinlian@gmail.com>
+ <6f239aca-e146-2a07-57fc-b94787c7bb54@mind.be>
+Message-ID: <20171023230915.GA3156@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes the following security issues:
+Arnout, Maxime, All,
 
-(a) When installing themes with unterminated colour formatting
-    sequences, Irssi may access data beyond the end of the
-    string. (CWE-126) Found by Hanno B?ck.
+On 2017-10-23 21:55 +0200, Arnout Vandecappelle spake thusly:
+> 
+> 
+> On 04-07-17 18:22, Maxime Hadjinlian wrote:
+> > This per package variable can be used to specify that a package shares
+> > the same sources as another package.
+> > 
+> > The use case here is for example, you have linux-headers and linux, you
+> > don't want to download twice the kernel (because of the introduction of
+> > the subdirs in DL_DIR).
+> > 
+> > So you want to specify in linux-headers, this variable, so it will use
+> > the linux's source.
+> 
+>  That patch at least should be part of this series. We *really* don't want to
+> download linux twice.
+> 
+>  However, Yann is reviving the package out-of-tree build series, which IIRC will
+> already do something similar but then reusing the source directory rather than
+> the source tarball. Therefore, this patch may no longer be needed. Well, on
+> condition that that series gets applied :-)
 
-    CVE-2017-15228 was assigned to this issue.
+Yes I'm on it, but this is probably an at-least multi-week effort, if
+not months, so don't hold your breath.
 
-(b) While waiting for the channel synchronisation, Irssi may
-    incorrectly fail to remove destroyed channels from the query list,
-    resulting in use after free conditions when updating the state
-    later on. Found by Joseph Bisch. (CWE-416 caused by CWE-672)
+Besides, my work (based on Thomas' previous work) will not account for
+packages that share the same source tree (and thus the same download)
+except when they are a target and host variants.
 
-    CVE-2017-15227 was assigned to this issue.
+I.e. linux and linux-headers are two different packages, so my series
+will not try to address this use case, at least not for now.
 
-(c) Certain incorrectly formatted DCC CTCP messages could cause NULL
-    pointer dereference. Found by Joseph Bisch. This is a separate,
-    but similar issue to CVE-2017-9468. (CWE-690)
+So I think that this patch is still needed. The worst that may happen is
+that it today serves to share the download, and that tomorrow it may
+change to nmean also sharing the same source directory. Hence, naming
+this variable _SAME_SOURCE_AS is future-proof! ;-)
 
-    CVE-2017-15721 was assigned to this issue.
+Regards,
+Yann E. MORIN.
 
-(d) Overlong nicks or targets may result in a NULL pointer dereference
-    while splitting the message. Found by Joseph Bisch. (CWE-690)
+>  Regards,
+>  Arnout
+> 
+> > 
+> > Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+> > ---
+> >  package/pkg-generic.mk | 4 +++-
+> >  1 file changed, 3 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> > index 7364551471..a8e0686068 100644
+> > --- a/package/pkg-generic.mk
+> > +++ b/package/pkg-generic.mk
+> > @@ -434,7 +434,9 @@ endif
+> >  
+> >  $(2)_BASE_NAME	= $$(if $$($(2)_VERSION),$(1)-$$($(2)_VERSION),$(1))
+> >  $(2)_RAW_BASE_NAME = $$(if $$($(2)_VERSION),$$($(2)_RAWNAME)-$$($(2)_VERSION),$$($(2)_RAWNAME))
+> > -$(2)_DL_DIR 	=  $$(DL_DIR)/$$($(2)_RAWNAME)
+> > +$(2)_DL_DIR 	=  $$(if $$($(2)_SAME_SOURCE_AS), \
+> > +	$$(DL_DIR)/$$($$(call UPPERCASE,$$($(2)_SAME_SOURCE_AS))_RAWNAME), \
+> > +	$$(DL_DIR)/$$($(2)_RAWNAME))
+> >  $(2)_DIR	=  $$(BUILD_DIR)/$$($(2)_BASE_NAME)
+> >  
+> >  ifndef $(2)_SUBDIR
+> > 
+> 
+> -- 
+> Arnout Vandecappelle                          arnout at mind be
+> Senior Embedded Software Architect            +32-16-286500
+> Essensium/Mind                                http://www.mind.be
+> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
 
-    CVE-2017-15723 was assigned to this issue.
-
-(e) In certain cases Irssi may fail to verify that a Safe channel ID
-    is long enough, causing reads beyond the end of the string. Found
-    by Joseph Bisch. (CWE-126)
-
-    CVE-2017-15722 was assigned to this issue.
-
-For more details, see the advisory:
-https://irssi.org/security/irssi_sa_2017_10.txt
-
-While we're at it, also add a hash for the license file.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/irssi/irssi.hash | 4 +++-
- package/irssi/irssi.mk   | 2 +-
- 2 files changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/package/irssi/irssi.hash b/package/irssi/irssi.hash
-index 7b019025d8..0a6c3f614a 100644
---- a/package/irssi/irssi.hash
-+++ b/package/irssi/irssi.hash
-@@ -1,2 +1,4 @@
- # Locally calculated after checking pgp signature
--sha256	b85c07dbafe178213eccdc69f5f8f0ac024dea01c67244668f91ec1c06b986ca	irssi-1.0.4.tar.xz
-+sha256	c2556427e12eb06cabfed40839ac6f57eb8b1aa6365fab6dfcd331b7a04bb914  irssi-1.0.5.tar.xz
-+# Locally calculated
-+sha256	a1a27cb2ecee8d5378fbb3562f577104a445d6d66fee89286e16758305e63e2b  COPYING
-diff --git a/package/irssi/irssi.mk b/package/irssi/irssi.mk
-index d2b8169479..f9450783bc 100644
---- a/package/irssi/irssi.mk
-+++ b/package/irssi/irssi.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--IRSSI_VERSION = 1.0.4
-+IRSSI_VERSION = 1.0.5
- IRSSI_SOURCE = irssi-$(IRSSI_VERSION).tar.xz
- # Do not use the github helper here. The generated tarball is *NOT* the
- # same as the one uploaded by upstream for the release.
 -- 
-2.11.0
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
