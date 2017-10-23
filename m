@@ -1,27 +1,126 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon, 23 Oct 2017 19:44:58 +0200
-Subject: [Buildroot] [PATCH v1] qt5base: add 3rdparty/harfbuzz-ng license
-	file hash
-Message-ID: <20171023174458.15127-1-ps.report@gmx.net>
+Date: Mon, 23 Oct 2017 19:56:13 +0200
+Subject: [Buildroot] [PATCH 4/4 v2] core: check files are nto touched by
+ more than on package
+In-Reply-To: <64a5b7666e47d87d58845028f9576ab68a186f44.1508685316.git.yann.morin.1998@free.fr>
+References: <cover.1508685316.git.yann.morin.1998@free.fr>
+ <64a5b7666e47d87d58845028f9576ab68a186f44.1508685316.git.yann.morin.1998@free.fr>
+Message-ID: <20171023195613.7289359f@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
- package/qt5/qt5base/qt5base.hash | 1 +
- 1 file changed, 1 insertion(+)
+Hello Yann,
 
-diff --git a/package/qt5/qt5base/qt5base.hash b/package/qt5/qt5base/qt5base.hash
-index 2a073d4753..4883484d5b 100644
---- a/package/qt5/qt5base/qt5base.hash
-+++ b/package/qt5/qt5base/qt5base.hash
-@@ -11,3 +11,4 @@ sha256 0dbe024961f6ab5c52689cbd036c977975d0d0f6a67ff97762d96cb819dd5652 LICENSE.
- sha256 68afaf3392f8c04218fbf29db43cc0b18bf651c1db086556aa584046de9f3e35 LICENSE.LGPLv3
- sha256 ed8742a95cb9db653a09b050e27ccff5e67ba69c14aa2c3137f2a4e1892f6c0d LICENSE.FDL
- sha256 8fdefa0b45d9f791f687da6c2c4c83c1b701aaee2c08008f55d522af214b88f0 header.BSD
-+sha256 2a886915de4f296cdae5ed67064f86dba01d0c55286d86e8487f2a5caaf40216 src/3rdparty/harfbuzz-ng/COPYING
--- 
-2.14.2
+typo in the patch title s/nto/not/...
+
+On Sun, 22 Oct 2017 17:15:40 +0200, "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+
+> Currently, we do nothing about packages that touch the same file: given
+> a specific configuration, the result is reproducible (even though it
+> might not be what the user expected) because the build order is
+> guaranteed.
+> 
+> Hwever, when we later introduce top-level parallel buil, we will no
+
+s/Hwever/However/, s/buil/build/
+
+> longer be able to guarantee a build order, by the mere way of it being
+> parallel. Reconcialliting all those modified files will be impossible to
+> do automatically. The only way will be to  refuse such situations.
+
+s/  / /
+
+Regards,
+Peter
+
+> 
+> As a preliminary step, introduce a helper script that detects files that
+> are being moified by two or more packages, and reports them and the
+> impacted packages, at the end of the build.
+> 
+> The list being reported at the end of the build will make it prominently
+> visible in autobuilder results, so we can assess the problem, if any.
+> 
+> Later on, calling that helper script can be done right after the package
+> installation step, to bail out early.
+> 
+> Thanks Arnout for the pythonist way to write default dictionaries! ;-)
+> 
+> Note: doing it in python rather than a shell script is impressively
+> faster: where the shell script takes ~1.2s on a minimalist build, the
+> python script only takes ~0.015s, that is about 80 times faster.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Arnout Vandecappelle <arnout@mind.be>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Peter Korsgaard <peter@korsgaard.com>
+> ---
+>  Makefile                            |  4 ++++
+>  support/scripts/check-uniq-files.py | 40 +++++++++++++++++++++++++++++++++++++
+>  2 files changed, 44 insertions(+)
+>  create mode 100755 support/scripts/check-uniq-files.py
+> 
+> diff --git a/Makefile b/Makefile
+> index 79db7fe48a..f0b60bae5c 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -679,6 +679,10 @@ $(TARGETS_ROOTFS): target-finalize
+>  .PHONY: target-finalize
+>  target-finalize: $(PACKAGES)
+>  	@$(call MESSAGE,"Finalizing target directory")
+> +	# Check files that are touched by more than one package
+> +	./support/scripts/check-uniq-files.py -t target $(BUILD_DIR)/packages-file-list.txt
+> +	./support/scripts/check-uniq-files.py -t staging $(BUILD_DIR)/packages-file-list-staging.txt
+> +	./support/scripts/check-uniq-files.py -t host $(BUILD_DIR)/packages-file-list-host.txt
+>  	$(foreach hook,$(TARGET_FINALIZE_HOOKS),$($(hook))$(sep))
+>  	rm -rf $(TARGET_DIR)/usr/include $(TARGET_DIR)/usr/share/aclocal \
+>  		$(TARGET_DIR)/usr/lib/pkgconfig $(TARGET_DIR)/usr/share/pkgconfig \
+> diff --git a/support/scripts/check-uniq-files.py b/support/scripts/check-uniq-files.py
+> new file mode 100755
+> index 0000000000..e77472cf80
+> --- /dev/null
+> +++ b/support/scripts/check-uniq-files.py
+> @@ -0,0 +1,40 @@
+> +#!/usr/bin/env python2
+> +
+> +import sys
+> +import csv
+> +import argparse
+> +from collections import defaultdict
+> +
+> +warn = 'Warnng: {}s file "{}" is touched by more than one package: {}\n'
+> +
+> +def main():
+> +    parser = argparse.ArgumentParser()
+> +    parser.add_argument('packages_file_list', nargs='*',
+> +                    help='The packages-file-list to check from')
+> +    parser.add_argument('-t', '--type', metavar="TYPE",
+> +                        help='Report as a TYPE file (TYPE is either target, staging, or host)')
+> +
+> +    args = parser.parse_args()
+> +
+> +    if not len(args.packages_file_list) == 1:
+> +        sys.stderr.write('No packages-file-list was provided.\n')
+> +        return False
+> +
+> +    if args.type is None:
+> +        sys.stderr.write('No type was provided\n')
+> +        return False
+> +
+> +    file_to_pkg = defaultdict(list)
+> +    with open(args.packages_file_list[0], 'rb') as pkg_file_list:
+> +        r = csv.reader(pkg_file_list, delimiter=',')
+> +        for row in r:
+> +            pkg = row[0]
+> +            file = row[1]
+> +            file_to_pkg[file].append(pkg)
+> +
+> +    for file in file_to_pkg:
+> +        if len(file_to_pkg[file]) > 1:
+> +            sys.stderr.write(warn.format(args.type, file, file_to_pkg[file]))
+> +
+> +if __name__ == "__main__":
+> +    sys.exit(main())
