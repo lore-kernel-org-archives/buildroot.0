@@ -1,100 +1,69 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 24 Oct 2017 00:13:23 +0200
-Subject: [Buildroot] [git commit] docs/website: update for 2017.08.1
-Message-ID: <20171023220619.7C8057FD65@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 24 Oct 2017 00:18:19 +0200
+Subject: [Buildroot] Advice needed: Problem with clashing make variables
+ in pkg-generic.mk when building perl-xml-sax package.
+In-Reply-To: <5106c5c9-62e9-494c-76d8-2bbee56a34e1@mind.be>
+References: <DB5PR0701MB1992E58350C8DE5036F4DA61E0460@DB5PR0701MB1992.eurprd07.prod.outlook.com>
+ <5106c5c9-62e9-494c-76d8-2bbee56a34e1@mind.be>
+Message-ID: <20171023221819.GB18135@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f82b1edd6ab8f8f500f7849063f77bd0d02898a2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Joeri, Arnout, All,
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- docs/website/download.html | 18 +++++++++---------
- docs/website/news.html     | 19 +++++++++++++++++++
- 2 files changed, 28 insertions(+), 9 deletions(-)
+On 2017-10-23 23:05 +0200, Arnout Vandecappelle spake thusly:
+> On 23-10-17 16:41, Barbarien, Joeri (Nokia - BE/Antwerp) wrote:
+> > Hello all,
+> > 
+> > When building perl-xml-sax (and its dependency perl-xml-sax-base) I noticed something strange in output/build/packages-file-list.txt:
+> [snip]
+> > The files that are listed for perl-xml-sax-0.99 are actually those built by perl-xml-sax-base
+> > 
+> > This is due to a clash of make variables in package/pkg-generic.mk:
+> > 
+> > $(2)_BASE_NAME  = $$(if $$($(2)_VERSION),$(1)-$$($(2)_VERSION),$(1))
+> > $(2)_RAW_BASE_NAME = $$(if $$($(2)_VERSION),$$($(2)_RAWNAME)-$$($(2)_VERSION),$$($(2)_RAWNAME))
+> > $(2)_DL_DIR =  $$(DL_DIR)
+> > $(2)_DIR  =  $$(BUILD_DIR)/$$($(2)_BASE_NAME)
+> > 
+> > Due to the unfortunate naming of the packages,
+> > 
+> > $($(2)_BASE_NAME) for perl-xml-sax clashes with as $($(2)_NAME) for perl-xml-sax-base, leading to this wrong behavior.
+> 
+>  Wow, good catch! Incredible that this works at all...
 
-diff --git a/docs/website/download.html b/docs/website/download.html
-index 81b0c95..f9c8c1c 100644
---- a/docs/website/download.html
-+++ b/docs/website/download.html
-@@ -42,37 +42,37 @@
- 	</div>
-       </div>
- 
--      <h3 style="text-align: center;">Latest stable release: <b>2017.08</b></h3>
-+      <h3 style="text-align: center;">Latest stable release: <b>2017.08.1</b></h3>
- 
-       <div class="row mt centered">
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2017.08.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2017.08.1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2017.08.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2017.08.1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
--	  <h3><a href="/downloads/buildroot-2017.08.tar.gz">buildroot-2017.08.tar.gz</a></h3>
--	  <p><a href="/downloads/buildroot-2017.08.tar.gz.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2017.08.1.tar.gz">buildroot-2017.08.1.tar.gz</a></h3>
-+	  <p><a href="/downloads/buildroot-2017.08.1.tar.gz.sign">PGP signature</a></p>
- 	</div>
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2017.08.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2017.08.1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2017.08.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2017.08.1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
- 
--	  <h3><a href="/downloads/buildroot-2017.08.tar.bz2">buildroot-2017.08.tar.bz2</a></h3>
--	  <p><a href="/downloads/buildroot-2017.08.tar.bz2.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2017.08.1.tar.bz2">buildroot-2017.08.1.tar.bz2</a></h3>
-+	  <p><a href="/downloads/buildroot-2017.08.1.tar.bz2.sign">PGP signature</a></p>
- 	</div>
-       </div>
- <!--
-diff --git a/docs/website/news.html b/docs/website/news.html
-index 41a7577..909e239 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -9,6 +9,25 @@
- <h2>News</h2>
- <ul class="timeline">
- 
-+  <li>
-+    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-+    <div class="timeline-panel">
-+      <div class="timeline-heading">
-+	<h4 class="timeline-title">2017.08.1 released</h4>
-+	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>23 October 2017</small></p>
-+      </div>
-+      <div class="timeline-body">
-+	<p>The 2017.08.1 bugfix release is out, fixing a number of important /
-+	  security related issues discovered since the 2017.08 release. See the
-+	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2017.08.1">CHANGES</a>
-+	  file for more details, read the
-+	  <a href="http://lists.busybox.net/pipermail/buildroot/2017-October/205323.html">announcement</a>
-+	  and go to the <a href="/downloads/">downloads page</a> to pick up the
-+	  <a href="/downloads/buildroot-2017.08.1.tar.bz2">2017.08.1 release</a>.</p>
-+      </div>
-+    </div>
-+  </li>
-+
-   <li class="timeline-inverted">
-     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-     <div class="timeline-panel">
+Yes, this is a very good catch... Damned... :-/
+
+I am basically in line with the analysis by Arnout: any solution we
+decide on will be a huge work.
+
+I think we really need to sleep on it for a little while, because we
+definitely must be very cafreful that a solution:
+
+  - does not introduces regressions
+
+  - can be applied in as systematice a way as possible
+
+  - does not need a second round to fix a fallout.
+
+I think I will wait coming back from ELCE before I have a deep look at
+this, though.
+
+Notice that we have a similar problem for host packages: a target package
+that is named foo and has a host variant could be confused with a target
+package that is named host-foo, and then we'd have a clash in the
+variable names as well...
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
