@@ -1,155 +1,119 @@
-From: Mahyar Koshkouei <mahyar.koshkouei@gmail.com>
-Date: Tue, 24 Oct 2017 10:07:40 +0100
-Subject: [Buildroot] [PATCH v3] mpv: add support for Raspberry Pi "rpi"
-	output
-Message-ID: <20171024090740.13683-1-mahyar.koshkouei@gmail.com>
+From: Christian Kellermann <christian.kellermann@solectrix.de>
+Date: Tue, 24 Oct 2017 11:22:52 +0200
+Subject: [Buildroot] [PATCH v1] samba4: Make python2 dependency for waf
+	explicit
+In-Reply-To: <20171018173732.368ed195@windsurf.home>
+References: <20171018173732.368ed195@windsurf.home>
+Message-ID: <20171024092252.21506-1-christian.kellermann@solectrix.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-mpv now compiles with the "rpi" video driver that provides hardware
-acceleration on the Raspberry Pi.
+Without this patch the build environment will pick up host-python3
+binaries if host-python3 is a dependency for other packages. Currently
+waf does not support python3.
 
-Tested working on a Raspberry Pi 1 Model B+ and Zero.
-
-Signed-off-by: Mahyar Koshkouei <mahyar.koshkouei@gmail.com>
+Signed-off-by: Christian Kellermann <christian.kellermann@solectrix.de>
 
 ---
-Changes v2 -> v3:
-  - Reworked mpv patch to fix numerous issues.
 
-Changes v1 -> v2:
-  - Changed patch to use pkgconfig (thanks to github.com/Coacher)
+Changelog: v0 -> v1
+  - Patch samba Makefile to explicitly use python2 instead of patching
+     samba4.mk
 ---
- package/mpv/0003-rpi-fix-linking-errors.patch | 90 +++++++++++++++++++++++++++
- package/mpv/mpv.mk                            |  9 ++-
- 2 files changed, 98 insertions(+), 1 deletion(-)
- create mode 100644 package/mpv/0003-rpi-fix-linking-errors.patch
+ ...ake-python-2.7-dependency-in-waf-explicit.patch | 27 +++++++++++++++++++++
+ .../samba4/0003-Force-python2-in-Makefile.patch    | 28 ++++++++++++++++++++++
+ package/samba4/samba4.mk                           |  3 ++-
+ 3 files changed, 57 insertions(+), 1 deletion(-)
+ create mode 100644 package/samba4/0002-Make-python-2.7-dependency-in-waf-explicit.patch
+ create mode 100644 package/samba4/0003-Force-python2-in-Makefile.patch
 
-diff --git a/package/mpv/0003-rpi-fix-linking-errors.patch b/package/mpv/0003-rpi-fix-linking-errors.patch
+diff --git a/package/samba4/0002-Make-python-2.7-dependency-in-waf-explicit.patch b/package/samba4/0002-Make-python-2.7-dependency-in-waf-explicit.patch
 new file mode 100644
-index 0000000000..0e65a5a3eb
+index 0000000000..2a0d3696cd
 --- /dev/null
-+++ b/package/mpv/0003-rpi-fix-linking-errors.patch
-@@ -0,0 +1,90 @@
-+From fe482a600d507dc7ce77f6d154a9e8b395f74fdd Mon Sep 17 00:00:00 2001
-+From: Mahyar Koshkouei <mahyar.koshkouei@gmail.com>
-+Date: Tue, 24 Oct 2017 09:47:38 +0100
-+Subject: [PATCH] rpi: fix linking errors
++++ b/package/samba4/0002-Make-python-2.7-dependency-in-waf-explicit.patch
+@@ -0,0 +1,27 @@
++From f7295def3f04d8d8c2d62d9525c0f741ef2f964b Mon Sep 17 00:00:00 2001
++From: Christian Kellermann <christian.kellermann@solectrix.de>
++Date: Wed, 18 Oct 2017 14:00:36 +0200
++Subject: [PATCH] Make python 2.7 dependency in waf explicit
 +
-+Fixes linking issues when compiling with Raspberry Pi support.
++This prevents picking the wrong python during build as a Python3
++dependency will clobber the python symlink. Python3 is not
++supported (yet) in the samba4 build system.
 +
-+Signed-off-by: Mahyar Koshkouei <mahyar.koshkouei@gmail.com>
++Signed-off-by: Christian Kellermann <christian.kellermann@solectrix.de>
 +---
-+Status: pull request https://github.com/mpv-player/mpv/pull/4883
-+---
-+ waftools/checks/custom.py | 26 +++++++++++++++++++++++++-
-+ wscript                   | 18 +-----------------
-+ 2 files changed, 26 insertions(+), 18 deletions(-)
++ buildtools/bin/waf | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+diff --git a/waftools/checks/custom.py b/waftools/checks/custom.py
-+index d8065a3..9086795 100644
-+--- a/waftools/checks/custom.py
-++++ b/waftools/checks/custom.py
-+@@ -4,7 +4,7 @@ from waflib import Utils
-+ import os
++diff --git a/buildtools/bin/waf b/buildtools/bin/waf
++index 1b0f4662a56..f66b992e78c 100755
++--- a/buildtools/bin/waf
+++++ b/buildtools/bin/waf
++@@ -1,4 +1,4 @@
++-#!/usr/bin/env python
+++#!/usr/bin/env python2
++ # encoding: ISO-8859-1
++ # Thomas Nagy, 2005-2010
 + 
-+ __all__ = ["check_pthreads", "check_iconv", "check_lua",
-+-           "check_cocoa", "check_openal"]
-++           "check_cocoa", "check_openal", "check_rpi"]
-+ 
-+ pthreads_program = load_fragment('pthreads.c')
-+ 
-+@@ -103,3 +103,27 @@ def check_openal(ctx, dependency_identifier):
-+         if fn(ctx, dependency_identifier):
-+             return True
-+     return False
-++
-++def check_rpi(ctx, dependency_identifier):
-++    # We need MMAL/bcm_host/dispmanx APIs.
-++    # Upstream keeps pkgconfig files in '/opt/vc/lib/pkgconfig'.
-++    # See https://github.com/raspberrypi/userland/issues/245
-++    # PKG_CONFIG_SYSROOT_DIR helps with cross compilation.
-++    prev_pkg_path = os.getenv('PKG_CONFIG_PATH', '')
-++    os.environ['PKG_CONFIG_PATH'] = os.pathsep.join(
-++        filter(None, [os.path.join(os.getenv('PKG_CONFIG_SYSROOT_DIR', '/'),
-++                                   'opt/vc/lib/pkgconfig'),
-++                      prev_pkg_path]))
-++
-++    checks = [
-++        # We still need all OpenGL symbols, because the vo_opengl code is
-++        # generic and supports anything from GLES2/OpenGL 2.1 to OpenGL 4 core.
-++        check_pkg_config('bcm_host', uselib_store='bcm_host'),
-++        check_pkg_config('egl'),
-++        check_pkg_config('glesv2'),
-++        check_cc(lib=['mmal_core', 'mmal_util', 'mmal_vc_client'], use=['bcm_host']),
-++    ]
-++
-++    ret = all((fn(ctx, dependency_identifier) for fn in checks))
-++    os.environ['PKG_CONFIG_PATH'] = prev_pkg_path
-++    return ret
-+diff --git a/wscript b/wscript
-+index 9d88588..84e5f2e 100644
-+--- a/wscript
-++++ b/wscript
-+@@ -732,25 +732,9 @@ video_output_features = [
-+         'desc': 'Android support',
-+         'func': check_statement('android/api-level.h', '(void)__ANDROID__'),  # arbitrary android-specific header
-+     }, {
-+-        # We need MMAL/bcm_host/dispmanx APIs. Also, most RPI distros require
-+-        # every project to hardcode the paths to the include directories. Also,
-+-        # these headers are so broken that they spam tons of warnings by merely
-+-        # including them (compensate with -isystem and -fgnu89-inline).
-+         'name': '--rpi',
-+         'desc': 'Raspberry Pi support',
-+-        'func': compose_checks(
-+-            check_cc(cflags="-isystem/opt/vc/include/ "+
-+-                            "-isystem/opt/vc/include/interface/vcos/pthreads " +
-+-                            "-isystem/opt/vc/include/interface/vmcs_host/linux " +
-+-                            "-fgnu89-inline",
-+-                     linkflags="-L/opt/vc/lib",
-+-                     header_name="bcm_host.h",
-+-                     lib=['mmal_core', 'mmal_util', 'mmal_vc_client', 'bcm_host']),
-+-            # We still need all OpenGL symbols, because the vo_opengl code is
-+-            # generic and supports anything from GLES2/OpenGL 2.1 to OpenGL 4 core.
-+-            check_cc(lib="EGL"),
-+-            check_cc(lib="GLESv2"),
-+-        ),
-++        'func': check_rpi,
-+     } , {
-+         'name': '--ios-gl',
-+         'desc': 'iOS OpenGL ES hardware decoding interop support',
 +-- 
-+2.14.2
++2.12.1
 +
-diff --git a/package/mpv/mpv.mk b/package/mpv/mpv.mk
-index 730ced6c64..dfc3fa8f3b 100644
---- a/package/mpv/mpv.mk
-+++ b/package/mpv/mpv.mk
-@@ -26,7 +26,6 @@ MPV_CONF_OPTS = \
- 	--disable-cuda-hwaccel \
- 	--disable-libv4l2 \
- 	--disable-opensles \
--	--disable-rpi \
- 	--disable-rsound \
- 	--disable-rubberband \
- 	--disable-uchardet \
-@@ -169,6 +168,14 @@ else
- MPV_CONF_OPTS += --disable-sdl1 --disable-sdl2
- endif
- 
-+# Raspberry Pi support
-+ifeq ($(BR2_PACKAGE_RPI_FIRMWARE)$(BR2_PACKAGE_RPI_USERLAND),yy)
-+MPV_CONF_OPTS += --enable-rpi --enable-gl
-+FFMPEG_DEPENDENCIES += rpi-firmware rpi-userland
-+else
-+MPV_CONF_OPTS += --disable-rpi
-+endif
+diff --git a/package/samba4/0003-Force-python2-in-Makefile.patch b/package/samba4/0003-Force-python2-in-Makefile.patch
+new file mode 100644
+index 0000000000..e68da98adb
+--- /dev/null
++++ b/package/samba4/0003-Force-python2-in-Makefile.patch
+@@ -0,0 +1,28 @@
++From 716d7a780ba2403f84c6ea4220305d698c6a14f4 Mon Sep 17 00:00:00 2001
++From: Christian Kellermann <christian.kellermann@solectrix.de>
++Date: Tue, 24 Oct 2017 10:19:01 +0200
++Subject: [PATCH] Force python2 in Makefile
 +
- # va-api support
- # This requires one or more of the egl-drm, wayland, x11 backends
- # For now we support wayland and x11
++waf does not work with python3-host packages, so make it use python2
++explicitly.
++
++Signed-off-by: Christian Kellermann <christian.kellermann@solectrix.de>
++---
++ Makefile | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/Makefile b/Makefile
++index 5cc90771000..1496918b6de 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -1,6 +1,6 @@
++ # simple makefile wrapper to run waf
++ 
++-PYTHON?=python
+++PYTHON?=python2
++ WAF_BINARY=$(PYTHON) ./buildtools/bin/waf
++ WAF=WAF_MAKE=1 $(WAF_BINARY)
++ 
++-- 
++2.12.1
++
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index f8001bbe7f..4b9cc64b4c 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
+@@ -89,11 +89,12 @@ define SAMBA4_CONFIGURE_CMDS
+ 	cp package/samba4/samba4-cache.txt $(@D)/cache.txt;
+ 	echo 'Checking uname machine type: $(BR2_ARCH)' >>$(@D)/cache.txt;
+ 	(cd $(@D); \
+-		PYTHON_CONFIG="$(STAGING_DIR)/usr/bin/python-config" \
++		PYTHON_CONFIG="$(STAGING_DIR)/usr/bin/python2-config" \
+ 		python_LDFLAGS="" \
+ 		python_LIBDIR="" \
+ 		$(TARGET_CONFIGURE_OPTS) \
+ 		$(SAMBA4_CONF_ENV) \
++		PYTHON=python2 \
+ 		./buildtools/bin/waf configure \
+ 			--prefix=/usr \
+ 			--sysconfdir=/etc \
 -- 
-2.14.2
+2.12.1
