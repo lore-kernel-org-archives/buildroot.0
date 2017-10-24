@@ -1,404 +1,484 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 25 Oct 2017 09:32:15 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] lame: security bump to
-	version 3.100
-Message-ID: <20171025073526.C835C81106@busybox.osuosl.org>
+Date: Tue, 24 Oct 2017 08:30:06 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] webkitgtk: update to
+	version 2.18.0
+Message-ID: <20171025073526.803BB7F969@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=50dffb7d4a1f1c233c0e3a0e99903fa258f762fb
+commit: https://git.buildroot.net/buildroot/commit/?id=fdb7391ba840376c0b8153d4428864bc791df446
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Fixes the following security issues:
+Release notes:
+    https://webkitgtk.org/2017/09/11/webkitgtk2.18.0-released.html
 
-CVE-2017-9410: fill_buffer_resample function in libmp3lame/util.c heap-based
-buffer over-read and ap
+No corresponding WebKit Security Advisory (WSA) has been published.
 
-CVE-2017-9411: fill_buffer_resample function in libmp3lame/util.c invalid
-memory read and application crash
+All patches have been applied upstream.
 
-CVE-2017-9412: unpack_read_samples function in frontend/get_audio.c invalid
-memory read and application crash
+This also bumps the required target GCC version, due to the WebKit code
+now using more modern C++ features which were introduced in version
+5.x of the compiler.
 
-Drop patches now upstream or no longer needed:
-
-0001-configure.patch: Upstream as mentioned in patch description
-
-0002-gtk1-ac-directives.patch: Upstream as mentioned in patch
-description/release notes:
-
-Resurrect Owen Taylor's code dated from 97-11-3 to properly deal with GTK1.
-This was transplanted back from aclocal.m4 with a patch provided by Andres
-Mejia. This change makes it easy to regenerate autotools' files with a simple
-invocation of autoconf -vfi.
-
-0003-msse.patch: Not needed as -march <x86-variant-with-msse-support>
-nowadays implies -msse.
-
-With these removed, autoreconf is no longer needed.
-
-Also add a hash for the license file while we're at it.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 7e3583dd558925a447eaa4367d659f39482fbbc0)
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+[Arnout:
+ - propagate dependency to midori;
+ - mention in commit message why patches were removed.]
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit 905b1ab5c21f39f9cd1777f6d5745c90d863da4b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/lame/0001-configure.patch          |  69 ----------
- package/lame/0002-gtk1-ac-directives.patch | 210 -----------------------------
- package/lame/0003-msse.patch               |  24 ----
- package/lame/lame.hash                     |   3 +-
- package/lame/lame.mk                       |   6 +-
- 5 files changed, 4 insertions(+), 308 deletions(-)
+ package/midori/Config.in                           |   6 +-
+ ...-to-build-when-the-compiler-specifically-.patch |  36 ----
+ ...lure-to-build-when-the-compiler-specifica.patch |  36 ----
+ ...roken-build-when-ENABLE_VIDEO-is-disabled.patch | 207 ---------------------
+ ...AGS-from-pkg-config-for-E-GL-are-not-pass.patch |  64 -------
+ package/webkitgtk/Config.in                        |   6 +-
+ package/webkitgtk/webkitgtk.hash                   |   8 +-
+ package/webkitgtk/webkitgtk.mk                     |   2 +-
+ 8 files changed, 11 insertions(+), 354 deletions(-)
 
-diff --git a/package/lame/0001-configure.patch b/package/lame/0001-configure.patch
+diff --git a/package/midori/Config.in b/package/midori/Config.in
+index 0d7672c..35dac15 100644
+--- a/package/midori/Config.in
++++ b/package/midori/Config.in
+@@ -1,7 +1,7 @@
+-comment "midori needs libgtk3 and a glibc toolchain w/ C++, gcc >= 4.9"
++comment "midori needs libgtk3 and a glibc toolchain w/ C++, gcc >= 5"
+ 	depends on BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_PACKAGE_LIBGTK3 \
+-		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || !BR2_TOOLCHAIN_USES_GLIBC
++		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_5 || !BR2_TOOLCHAIN_USES_GLIBC
+ 
+ config BR2_PACKAGE_MIDORI
+ 	bool "midori"
+@@ -18,7 +18,7 @@ config BR2_PACKAGE_MIDORI
+ 	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgcrypt, gcr, gnupg2
+ 	depends on BR2_PACKAGE_LIBGTK3
+ 	depends on BR2_INSTALL_LIBSTDCPP # webkitgtk
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # webkitgtk
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 # webkitgtk
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC # webkitgtk
+ 	depends on BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
+ 	help
+diff --git a/package/webkitgtk/0001-WTF-Failure-to-build-when-the-compiler-specifically-.patch b/package/webkitgtk/0001-WTF-Failure-to-build-when-the-compiler-specifically-.patch
 deleted file mode 100644
-index 7e407f2..0000000
---- a/package/lame/0001-configure.patch
+index 017771a..0000000
+--- a/package/webkitgtk/0001-WTF-Failure-to-build-when-the-compiler-specifically-.patch
 +++ /dev/null
-@@ -1,69 +0,0 @@
--Various patches to fix autoreconf errors.
+@@ -1,36 +0,0 @@
+-From 09d5520d910b63fba67bea1d8c71f5d426f345b7 Mon Sep 17 00:00:00 2001
+-From: "aperez at igalia.com"
+- <aperez@igalia.com@268f45cc-cd09-0410-ab3c-d52691b4dbfc>
+-Date: Wed, 12 Jul 2017 18:42:29 +0000
+-Subject: [PATCH] [WTF] Failure to build when the compiler specifically targets
+- ARMv8-A / defines __ARM_ARCH_8A__
+- https://bugs.webkit.org/show_bug.cgi?id=174425
 -
--All patches besides
--- AM_ICONV in configure.in
--are already applied upstream:
--http://lame.cvs.sourceforge.net/viewvc/lame/lame/configure.in?r1=1.145&r2=1.146
--http://lame.cvs.sourceforge.net/viewvc/lame/lame/doc/html/Makefile.am?r1=1.8&r2=1.9
--http://lame.cvs.sourceforge.net/viewvc/lame/lame/doc/man/Makefile.am?r1=1.1&r2=1.2
+-Reviewed by Michael Catanzaro.
 -
--libmp3lame/i386/Makefile.am patch ported from Debian
--http://anonscm.debian.org/cgit/pkg-multimedia/lame.git/tree/debian/patches/ansi2knr2devnull.patch
+-* wtf/Platform.h: Also check for __ARCH_ARM_8A__ to detect ARMv8.
 -
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 -
--diff -uNr lame-3.99.5.org/configure.in lame-3.99.5/configure.in
----- lame-3.99.5.org/configure.in	2012-02-28 19:50:27.000000000 +0100
--+++ lame-3.99.5/configure.in	2015-04-11 11:36:15.464835008 +0200
--@@ -77,9 +77,6 @@
-- 	AC_MSG_RESULT(${GCC_version})
-- fi
+-git-svn-id: http://svn.webkit.org/repository/webkit/trunk at 219415 268f45cc-cd09-0410-ab3c-d52691b4dbfc
+----
+- Source/WTF/wtf/Platform.h | 3 ++-
+- 1 file changed, 2 insertions(+), 1 deletion(-)
+-
+-diff --git a/Source/WTF/wtf/Platform.h b/Source/WTF/wtf/Platform.h
+-index 44d929c333c..7dccb44fcbf 100644
+---- a/Source/WTF/wtf/Platform.h
+-+++ b/Source/WTF/wtf/Platform.h
+-@@ -238,7 +238,8 @@
+-     || defined(__ARM_ARCH_7S__)
+- #define WTF_ARM_ARCH_VERSION 7
 - 
---dnl more automake stuff
---AM_C_PROTOTYPES
---
-- AC_CHECK_HEADER(dmalloc.h)
-- if test "${ac_cv_header_dmalloc_h}" = "yes"; then
-- 	AM_WITH_DMALLOC
--@@ -376,8 +373,6 @@
-- AC_CHECK_LIB(curses, initscr, HAVE_TERMCAP="curses")
-- AC_CHECK_LIB(ncurses, initscr, HAVE_TERMCAP="ncurses")
+--#elif defined(__ARM_ARCH_8__)
+-+#elif defined(__ARM_ARCH_8__) \
+-+    || defined(__ARM_ARCH_8A__)
+- #define WTF_ARM_ARCH_VERSION 8
 - 
---AM_ICONV
--- 
-- dnl math lib
-- AC_CHECK_LIB(m, cos, USE_LIBM="-lm")
-- dnl free fast math library
--diff -uNr lame-3.99.5.org/doc/html/Makefile.am lame-3.99.5/doc/html/Makefile.am
----- lame-3.99.5.org/doc/html/Makefile.am	2010-09-30 22:58:40.000000000 +0200
--+++ lame-3.99.5/doc/html/Makefile.am	2015-04-11 11:37:02.880239754 +0200
--@@ -1,6 +1,6 @@
-- ## $Id: Makefile.am,v 1.7 2010/09/30 20:58:40 jaz001 Exp $
-- 
---AUTOMAKE_OPTIONS = foreign ansi2knr
--+AUTOMAKE_OPTIONS = foreign
-- 
-- docdir = $(datadir)/doc
-- pkgdocdir = $(docdir)/$(PACKAGE)
--diff -uNr lame-3.99.5.org/doc/man/Makefile.am lame-3.99.5/doc/man/Makefile.am
----- lame-3.99.5.org/doc/man/Makefile.am	2000-10-22 13:39:44.000000000 +0200
--+++ lame-3.99.5/doc/man/Makefile.am	2015-04-11 11:37:08.704167318 +0200
--@@ -1,6 +1,6 @@
-- ## $Id: Makefile.am,v 1.1 2000/10/22 11:39:44 aleidinger Exp $
-- 
---AUTOMAKE_OPTIONS = foreign ansi2knr
--+AUTOMAKE_OPTIONS = foreign
-- 
-- man_MANS = lame.1
-- EXTRA_DIST = ${man_MANS}
--diff -uNr lame-3.99.5.org/libmp3lame/i386/Makefile.am lame-3.99.5/libmp3lame/i386/Makefile.am
----- lame-3.99.5.org/libmp3lame/i386/Makefile.am	2011-04-04 11:42:34.000000000 +0200
--+++ lame-3.99.5/libmp3lame/i386/Makefile.am	2015-04-11 11:37:35.191833351 +0200
--@@ -1,6 +1,6 @@
-- ## $Id: Makefile.am,v 1.26 2011/04/04 09:42:34 aleidinger Exp $
-- 
---AUTOMAKE_OPTIONS = foreign $(top_srcdir)/ansi2knr
--+AUTOMAKE_OPTIONS = foreign
-- 
-- DEFS = @DEFS@ @CONFIG_DEFS@
-- 
-diff --git a/package/lame/0002-gtk1-ac-directives.patch b/package/lame/0002-gtk1-ac-directives.patch
+- /* MSVC sets _M_ARM */
+--- 
+-2.13.3
+-
+diff --git a/package/webkitgtk/0002-bmalloc-Failure-to-build-when-the-compiler-specifica.patch b/package/webkitgtk/0002-bmalloc-Failure-to-build-when-the-compiler-specifica.patch
 deleted file mode 100644
-index 858ee0b..0000000
---- a/package/lame/0002-gtk1-ac-directives.patch
+index e1623bf..0000000
+--- a/package/webkitgtk/0002-bmalloc-Failure-to-build-when-the-compiler-specifica.patch
 +++ /dev/null
-@@ -1,210 +0,0 @@
--Include GTK-1 autoconf directives in build system.
--Applied-Upstream: http://lame.cvs.sf.net/viewvc/lame/lame/acinclude.m4?r1=1.5&r2=1.6
+@@ -1,36 +0,0 @@
+-From 07dab7fe552c53e7840e34d3c8bb1cc43a921706 Mon Sep 17 00:00:00 2001
+-From: "aperez at igalia.com"
+- <aperez@igalia.com@268f45cc-cd09-0410-ab3c-d52691b4dbfc>
+-Date: Wed, 12 Jul 2017 18:43:36 +0000
+-Subject: [PATCH] bmalloc: Failure to build when the compiler specifically
+- targets ARMv8-A / defines __ARM_ARCH_8A__
+- https://bugs.webkit.org/show_bug.cgi?id=174424
 -
--Downloaded from
--http://lame.cvs.sf.net/viewvc/lame/lame/acinclude.m4?r1=1.5&r2=1.6&view=patch
+-Reviewed by Michael Catanzaro.
 -
--to fix autoreconf.
+-* bmalloc/BPlatform.h: Also check for __ARCH_ARM_8A__ to detect ARMv8.
 -
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 -
----- a/acinclude.m4	2006/12/21 09:03:03	1.5
--+++ b/acinclude.m4	2012/06/18 20:51:05	1.6
--@@ -85,4 +85,197 @@
-- [AC_MSG_WARN(can't check for IEEE854 compliant 80 bit floats)]
-- )])]) # alex_IEEE854_FLOAT80
+-git-svn-id: http://svn.webkit.org/repository/webkit/trunk at 219416 268f45cc-cd09-0410-ab3c-d52691b4dbfc
+----
+- Source/bmalloc/bmalloc/BPlatform.h | 3 ++-
+- 1 file changed, 2 insertions(+), 1 deletion(-)
+-
+-diff --git a/Source/bmalloc/bmalloc/BPlatform.h b/Source/bmalloc/bmalloc/BPlatform.h
+-index 8d768db63fb..400143a63fb 100644
+---- a/Source/bmalloc/bmalloc/BPlatform.h
+-+++ b/Source/bmalloc/bmalloc/BPlatform.h
+-@@ -120,7 +120,8 @@
+- || defined(__ARM_ARCH_7S__)
+- #define BARM_ARCH_VERSION 7
 - 
--+# Configure paths for GTK+
--+# Owen Taylor     97-11-3
+--#elif defined(__ARM_ARCH_8__)
+-+#elif defined(__ARM_ARCH_8__) \
+-+|| defined(__ARM_ARCH_8A__)
+- #define BARM_ARCH_VERSION 8
 - 
--+dnl AM_PATH_GTK([MINIMUM-VERSION, [ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND [, MODULES]]]])
--+dnl Test for GTK, and define GTK_CFLAGS and GTK_LIBS
--+dnl
--+AC_DEFUN([AM_PATH_GTK],
--+[dnl
--+dnl Get the cflags and libraries from the gtk-config script
--+dnl
--+AC_ARG_WITH(gtk-prefix,[  --with-gtk-prefix=PFX   Prefix where GTK is installed (optional)],
--+            gtk_config_prefix="$withval", gtk_config_prefix="")
--+AC_ARG_WITH(gtk-exec-prefix,[  --with-gtk-exec-prefix=PFX Exec prefix where GTK is installed (optional)],
--+            gtk_config_exec_prefix="$withval", gtk_config_exec_prefix="")
--+AC_ARG_ENABLE(gtktest, [  --disable-gtktest       Do not try to compile and run a test GTK program],
--+        , enable_gtktest=yes)
+- /* MSVC sets _M_ARM */
+--- 
+-2.13.3
+-
+diff --git a/package/webkitgtk/0003-Fix-broken-build-when-ENABLE_VIDEO-is-disabled.patch b/package/webkitgtk/0003-Fix-broken-build-when-ENABLE_VIDEO-is-disabled.patch
+deleted file mode 100644
+index b460b0c..0000000
+--- a/package/webkitgtk/0003-Fix-broken-build-when-ENABLE_VIDEO-is-disabled.patch
++++ /dev/null
+@@ -1,207 +0,0 @@
+-From c054224e551547c3e3593b60ca1226fa4ac41c01 Mon Sep 17 00:00:00 2001
+-From: "timothy at hatcher.name"
+- <timothy@hatcher.name@268f45cc-cd09-0410-ab3c-d52691b4dbfc>
+-Date: Tue, 11 Jul 2017 18:07:24 +0000
+-Subject: [PATCH] Fix broken build when ENABLE_VIDEO is disabled.
+- https://bugs.webkit.org/show_bug.cgi?id=174368
+-
+-Reviewed by Alex Christensen.
+-
+-* dom/Document.cpp:
+-* html/canvas/WebGLRenderingContextBase.cpp:
+-(WebCore::WebGLRenderingContextBase::texSubImage2D):
+-(WebCore::WebGLRenderingContextBase::texImage2D):
+-* html/canvas/WebGLRenderingContextBase.h:
+-* html/canvas/WebGLRenderingContextBase.idl:
+-* testing/Internals.cpp:
+-(WebCore::Internals::mediaResponseSources):
+-(WebCore::Internals::mediaResponseContentRanges):
+-* testing/Internals.h:
+-* testing/Internals.idl:
+-
+-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+-
+-git-svn-id: http://svn.webkit.org/repository/webkit/trunk at 219343 268f45cc-cd09-0410-ab3c-d52691b4dbfc
+----
+- .../html/canvas/WebGLRenderingContextBase.cpp      | 16 +++++++++++----
+- .../html/canvas/WebGLRenderingContextBase.h        | 12 ++++++++++-
+- .../html/canvas/WebGLRenderingContextBase.idl      |  4 ++++
+- Source/WebCore/testing/Internals.cpp               | 24 ++++++++++++++++++++++
+- Source/WebCore/testing/Internals.h                 |  2 ++
+- Source/WebCore/testing/Internals.idl               |  2 ++
+- 6 files changed, 55 insertions(+), 5 deletions(-)
+-
+-diff --git a/Source/WebCore/html/canvas/WebGLRenderingContextBase.cpp b/Source/WebCore/html/canvas/WebGLRenderingContextBase.cpp
+-index f8fd63f7d87..a76a44ff06b 100644
+---- a/Source/WebCore/html/canvas/WebGLRenderingContextBase.cpp
+-+++ b/Source/WebCore/html/canvas/WebGLRenderingContextBase.cpp
+-@@ -3597,7 +3597,9 @@ ExceptionOr<void> WebGLRenderingContextBase::texSubImage2D(GC3Denum target, GC3D
+-         else
+-             texSubImage2DImpl(target, level, xoffset, yoffset, format, type, canvas->copiedImage(), GraphicsContext3D::HtmlDomCanvas, m_unpackFlipY, m_unpackPremultiplyAlpha);
+-         return { };
+--    }, [&](const RefPtr<HTMLVideoElement>& video) -> ExceptionOr<void> {
+-+    }
+-+#if ENABLE(VIDEO)
+-+    , [&](const RefPtr<HTMLVideoElement>& video) -> ExceptionOr<void> {
+-         ExceptionCode ec = 0;
+-         if (isContextLostOrPending() || !validateHTMLVideoElement("texSubImage2D", video.get(), ec))
+-             return ec ? Exception { ec } : ExceptionOr<void> { };
+-@@ -3620,7 +3622,9 @@ ExceptionOr<void> WebGLRenderingContextBase::texSubImage2D(GC3Denum target, GC3D
+-             return { };
+-         texSubImage2DImpl(target, level, xoffset, yoffset, format, type, image.get(), GraphicsContext3D::HtmlDomVideo, m_unpackFlipY, m_unpackPremultiplyAlpha);
+-         return { };
+--    });
+-+    }
+-+#endif
+-+    );
+- 
+-     return WTF::visit(visitor, source.value());
+- }
+-@@ -4107,7 +4111,9 @@ ExceptionOr<void> WebGLRenderingContextBase::texImage2D(GC3Denum target, GC3Dint
+-         else
+-             texImage2DImpl(target, level, internalformat, format, type, canvas->copiedImage(), GraphicsContext3D::HtmlDomCanvas, m_unpackFlipY, m_unpackPremultiplyAlpha);
+-         return { };
+--    }, [&](const RefPtr<HTMLVideoElement>& video) -> ExceptionOr<void> {
+-+    }
+-+#if ENABLE(VIDEO)
+-+    , [&](const RefPtr<HTMLVideoElement>& video) -> ExceptionOr<void> {
+-         ExceptionCode ec = 0;
+-         if (isContextLostOrPending() || !validateHTMLVideoElement("texImage2D", video.get(), ec)
+-             || !validateTexFunc("texImage2D", TexImage, SourceHTMLVideoElement, target, level, internalformat, video->videoWidth(), video->videoHeight(), 0, format, type, 0, 0))
+-@@ -4137,7 +4143,9 @@ ExceptionOr<void> WebGLRenderingContextBase::texImage2D(GC3Denum target, GC3Dint
+-             return { };
+-         texImage2DImpl(target, level, internalformat, format, type, image.get(), GraphicsContext3D::HtmlDomVideo, m_unpackFlipY, m_unpackPremultiplyAlpha);
+-         return { };
+--    });
+-+    }
+-+#endif
+-+    );
+- 
+-     return WTF::visit(visitor, source.value());
+- }
+-diff --git a/Source/WebCore/html/canvas/WebGLRenderingContextBase.h b/Source/WebCore/html/canvas/WebGLRenderingContextBase.h
+-index 31e5542e612..d4738e834a1 100644
+---- a/Source/WebCore/html/canvas/WebGLRenderingContextBase.h
+-+++ b/Source/WebCore/html/canvas/WebGLRenderingContextBase.h
+-@@ -57,7 +57,6 @@ class EXTShaderTextureLOD;
+- class EXTsRGB;
+- class EXTFragDepth;
+- class HTMLImageElement;
+--class HTMLVideoElement;
+- class ImageData;
+- class IntSize;
+- class OESStandardDerivatives;
+-@@ -85,6 +84,10 @@ class WebGLSharedObject;
+- class WebGLShaderPrecisionFormat;
+- class WebGLUniformLocation;
+- 
+-+#if ENABLE(VIDEO)
+-+class HTMLVideoElement;
+-+#endif
 -+
--+  for module in . $4
--+  do
--+      case "$module" in
--+         gthread)
--+             gtk_config_args="$gtk_config_args gthread"
--+         ;;
--+      esac
--+  done
+- inline void clip1D(GC3Dint start, GC3Dsizei range, GC3Dsizei sourceRange, GC3Dint* clippedStart, GC3Dsizei* clippedRange)
+- {
+-     ASSERT(clippedStart && clippedRange);
+-@@ -244,7 +247,12 @@ public:
+- 
+-     void texImage2D(GC3Denum target, GC3Dint level, GC3Denum internalformat, GC3Dsizei width, GC3Dsizei height, GC3Dint border, GC3Denum format, GC3Denum type, RefPtr<ArrayBufferView>&&);
+- 
+-+#if ENABLE(VIDEO)
+-     using TexImageSource = WTF::Variant<RefPtr<ImageData>, RefPtr<HTMLImageElement>, RefPtr<HTMLCanvasElement>, RefPtr<HTMLVideoElement>>;
+-+#else
+-+    using TexImageSource = WTF::Variant<RefPtr<ImageData>, RefPtr<HTMLImageElement>, RefPtr<HTMLCanvasElement>>;
+-+#endif
 -+
--+  if test x$gtk_config_exec_prefix != x ; then
--+     gtk_config_args="$gtk_config_args --exec-prefix=$gtk_config_exec_prefix"
--+     if test x${GTK_CONFIG+set} != xset ; then
--+        GTK_CONFIG=$gtk_config_exec_prefix/bin/gtk-config
--+     fi
--+  fi
--+  if test x$gtk_config_prefix != x ; then
--+     gtk_config_args="$gtk_config_args --prefix=$gtk_config_prefix"
--+     if test x${GTK_CONFIG+set} != xset ; then
--+        GTK_CONFIG=$gtk_config_prefix/bin/gtk-config
--+     fi
--+  fi
--+
--+  AC_PATH_PROG(GTK_CONFIG, gtk-config, no)
--+  min_gtk_version=ifelse([$1], ,0.99.7,$1)
--+  AC_MSG_CHECKING(for GTK - version >= $min_gtk_version)
--+  no_gtk=""
--+  if test "$GTK_CONFIG" = "no" ; then
--+    no_gtk=yes
--+  else
--+    GTK_CFLAGS=`$GTK_CONFIG $gtk_config_args --cflags`
--+    GTK_LIBS=`$GTK_CONFIG $gtk_config_args --libs`
--+    gtk_config_major_version=`$GTK_CONFIG $gtk_config_args --version | \
--+           sed 's/\([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\1/'`
--+    gtk_config_minor_version=`$GTK_CONFIG $gtk_config_args --version | \
--+           sed 's/\([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\2/'`
--+    gtk_config_micro_version=`$GTK_CONFIG $gtk_config_args --version | \
--+           sed 's/\([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\3/'`
--+    if test "x$enable_gtktest" = "xyes" ; then
--+      ac_save_CFLAGS="$CFLAGS"
--+      ac_save_LIBS="$LIBS"
--+      CFLAGS="$CFLAGS $GTK_CFLAGS"
--+      LIBS="$GTK_LIBS $LIBS"
--+dnl
--+dnl Now check if the installed GTK is sufficiently new. (Also sanity
--+dnl checks the results of gtk-config to some extent
--+dnl
--+      rm -f conf.gtktest
--+      AC_TRY_RUN([
--+#include <gtk/gtk.h>
--+#include <stdio.h>
--+#include <stdlib.h>
--+
--+int
--+main ()
+-     ExceptionOr<void> texImage2D(GC3Denum target, GC3Dint level, GC3Denum internalformat, GC3Denum format, GC3Denum type, std::optional<TexImageSource>);
+- 
+-     void texParameterf(GC3Denum target, GC3Denum pname, GC3Dfloat param);
+-@@ -677,7 +685,9 @@ protected:
+-         SourceImageData,
+-         SourceHTMLImageElement,
+-         SourceHTMLCanvasElement,
+-+#if ENABLE(VIDEO)
+-         SourceHTMLVideoElement,
+-+#endif
+-     };
+- 
+-     // Helper function for tex{Sub}Image2D to check if the input format/type/level/target/width/height/border/xoffset/yoffset are valid.
+-diff --git a/Source/WebCore/html/canvas/WebGLRenderingContextBase.idl b/Source/WebCore/html/canvas/WebGLRenderingContextBase.idl
+-index 63b64cdebd2..3111e798a89 100644
+---- a/Source/WebCore/html/canvas/WebGLRenderingContextBase.idl
+-+++ b/Source/WebCore/html/canvas/WebGLRenderingContextBase.idl
+-@@ -42,7 +42,11 @@ typedef (Float32Array or sequence<GLfloat>) Float32List;
+- typedef (Int32Array or sequence<GLint>) Int32List;
+- 
+- // FIXME: Should allow ImageBitmap too.
+-+#ifdef ENABLE_VIDEO
+- typedef (ImageData or HTMLImageElement or HTMLCanvasElement or HTMLVideoElement) TexImageSource;
+-+#else
+-+typedef (ImageData or HTMLImageElement or HTMLCanvasElement) TexImageSource;
+-+#endif
+- 
+- [
+-     Conditional=WEBGL,
+-diff --git a/Source/WebCore/testing/Internals.cpp b/Source/WebCore/testing/Internals.cpp
+-index 6d26d556e33..6d64845fd27 100644
+---- a/Source/WebCore/testing/Internals.cpp
+-+++ b/Source/WebCore/testing/Internals.cpp
+-@@ -2765,6 +2765,30 @@ String Internals::getImageSourceURL(Element& element)
+- 
+- #if ENABLE(VIDEO)
+- 
+-+Vector<String> Internals::mediaResponseSources(HTMLMediaElement& media)
 -+{
--+  int major, minor, micro;
--+  char *tmp_version;
--+
--+  system ("touch conf.gtktest");
--+
--+  /* HP/UX 9 (%@#!) writes to sscanf strings */
--+  tmp_version = g_strdup("$min_gtk_version");
--+  if (sscanf(tmp_version, "%d.%d.%d", &major, &minor, &micro) != 3) {
--+     printf("%s, bad version string\n", "$min_gtk_version");
--+     exit(1);
--+   }
--+
--+  if ((gtk_major_version != $gtk_config_major_version) ||
--+      (gtk_minor_version != $gtk_config_minor_version) ||
--+      (gtk_micro_version != $gtk_config_micro_version))
--+    {
--+      printf("\n*** 'gtk-config --version' returned %d.%d.%d, but GTK+ (%d.%d.%d)\n",
--+             $gtk_config_major_version, $gtk_config_minor_version, $gtk_config_micro_version,
--+             gtk_major_version, gtk_minor_version, gtk_micro_version);
--+      printf ("*** was found! If gtk-config was correct, then it is best\n");
--+      printf ("*** to remove the old version of GTK+. You may also be able to fix the error\n");
--+      printf("*** by modifying your LD_LIBRARY_PATH enviroment variable, or by editing\n");
--+      printf("*** /etc/ld.so.conf. Make sure you have run ldconfig if that is\n");
--+      printf("*** required on your system.\n");
--+      printf("*** If gtk-config was wrong, set the environment variable GTK_CONFIG\n");
--+      printf("*** to point to the correct copy of gtk-config, and remove the file config.cache\n");
--+      printf("*** before re-running configure\n");
--+    }
--+#if defined (GTK_MAJOR_VERSION) && defined (GTK_MINOR_VERSION) && defined (GTK_MICRO_VERSION)
--+  else if ((gtk_major_version != GTK_MAJOR_VERSION) ||
--+     (gtk_minor_version != GTK_MINOR_VERSION) ||
--+           (gtk_micro_version != GTK_MICRO_VERSION))
--+    {
--+      printf("*** GTK+ header files (version %d.%d.%d) do not match\n",
--+       GTK_MAJOR_VERSION, GTK_MINOR_VERSION, GTK_MICRO_VERSION);
--+      printf("*** library (version %d.%d.%d)\n",
--+       gtk_major_version, gtk_minor_version, gtk_micro_version);
--+    }
--+#endif /* defined (GTK_MAJOR_VERSION) ... */
--+  else
--+    {
--+      if ((gtk_major_version > major) ||
--+        ((gtk_major_version == major) && (gtk_minor_version > minor)) ||
--+        ((gtk_major_version == major) && (gtk_minor_version == minor) && (gtk_micro_version >= micro)))
--+      {
--+        return 0;
--+       }
--+     else
--+      {
--+        printf("\n*** An old version of GTK+ (%d.%d.%d) was found.\n",
--+               gtk_major_version, gtk_minor_version, gtk_micro_version);
--+        printf("*** You need a version of GTK+ newer than %d.%d.%d. The latest version of\n",
--+         major, minor, micro);
--+        printf("*** GTK+ is always available from ftp://ftp.gtk.org.\n");
--+        printf("***\n");
--+        printf("*** If you have already installed a sufficiently new version, this error\n");
--+        printf("*** probably means that the wrong copy of the gtk-config shell script is\n");
--+        printf("*** being found. The easiest way to fix this is to remove the old version\n");
--+        printf("*** of GTK+, but you can also set the GTK_CONFIG environment to point to the\n");
--+        printf("*** correct copy of gtk-config. (In this case, you will have to\n");
--+        printf("*** modify your LD_LIBRARY_PATH enviroment variable, or edit /etc/ld.so.conf\n");
--+        printf("*** so that the correct libraries are found at run-time))\n");
--+      }
--+    }
--+  return 1;
+-+    auto* resourceLoader = media.lastMediaResourceLoaderForTesting();
+-+    if (!resourceLoader)
+-+        return { };
+-+    Vector<String> result;
+-+    auto responses = resourceLoader->responsesForTesting();
+-+    for (auto& response : responses)
+-+        result.append(responseSourceToString(response));
+-+    return result;
 -+}
--+],, no_gtk=yes,[echo $ac_n "cross compiling; assumed OK... $ac_c"])
--+       CFLAGS="$ac_save_CFLAGS"
--+       LIBS="$ac_save_LIBS"
--+     fi
--+  fi
--+  if test "x$no_gtk" = x ; then
--+     AC_MSG_RESULT(yes)
--+     ifelse([$2], , :, [$2])
--+  else
--+     AC_MSG_RESULT(no)
--+     if test "$GTK_CONFIG" = "no" ; then
--+       echo "*** The gtk-config script installed by GTK could not be found"
--+       echo "*** If GTK was installed in PREFIX, make sure PREFIX/bin is in"
--+       echo "*** your path, or set the GTK_CONFIG environment variable to the"
--+       echo "*** full path to gtk-config."
--+     else
--+       if test -f conf.gtktest ; then
--+        :
--+       else
--+          echo "*** Could not run GTK test program, checking why..."
--+          CFLAGS="$CFLAGS $GTK_CFLAGS"
--+          LIBS="$LIBS $GTK_LIBS"
--+          AC_TRY_LINK([
--+#include <gtk/gtk.h>
--+#include <stdio.h>
--+],      [ return ((gtk_major_version) || (gtk_minor_version) || (gtk_micro_version)); ],
--+        [ echo "*** The test program compiled, but did not run. This usually means"
--+          echo "*** that the run-time linker is not finding GTK or finding the wrong"
--+          echo "*** version of GTK. If it is not finding GTK, you'll need to set your"
--+          echo "*** LD_LIBRARY_PATH environment variable, or edit /etc/ld.so.conf to point"
--+          echo "*** to the installed location  Also, make sure you have run ldconfig if that"
--+          echo "*** is required on your system"
--+    echo "***"
--+          echo "*** If you have an old version installed, it is best to remove it, although"
--+          echo "*** you may also be able to get things to work by modifying LD_LIBRARY_PATH"
--+          echo "***"
--+          echo "*** If you have a RedHat 5.0 system, you should remove the GTK package that"
--+          echo "*** came with the system with the command"
--+          echo "***"
--+          echo "***    rpm --erase --nodeps gtk gtk-devel" ],
--+        [ echo "*** The test program failed to compile or link. See the file config.log for the"
--+          echo "*** exact error that occured. This usually means GTK was incorrectly installed"
--+          echo "*** or that you have moved GTK since it was installed. In the latter case, you"
--+          echo "*** may want to edit the gtk-config script: $GTK_CONFIG" ])
--+          CFLAGS="$ac_save_CFLAGS"
--+          LIBS="$ac_save_LIBS"
--+       fi
--+     fi
--+     GTK_CFLAGS=""
--+     GTK_LIBS=""
--+     ifelse([$3], , :, [$3])
--+  fi
--+  AC_SUBST(GTK_CFLAGS)
--+  AC_SUBST(GTK_LIBS)
--+  rm -f conf.gtktest
--+])
-diff --git a/package/lame/0003-msse.patch b/package/lame/0003-msse.patch
+-+
+-+Vector<String> Internals::mediaResponseContentRanges(HTMLMediaElement& media)
+-+{
+-+    auto* resourceLoader = media.lastMediaResourceLoaderForTesting();
+-+    if (!resourceLoader)
+-+        return { };
+-+    Vector<String> result;
+-+    auto responses = resourceLoader->responsesForTesting();
+-+    for (auto& response : responses)
+-+        result.append(response.httpHeaderField(HTTPHeaderName::ContentRange));
+-+    return result;
+-+}
+-+
+- void Internals::simulateAudioInterruption(HTMLMediaElement& element)
+- {
+- #if USE(GSTREAMER)
+-diff --git a/Source/WebCore/testing/Internals.h b/Source/WebCore/testing/Internals.h
+-index f5c08a87dfd..d35f651e452 100644
+---- a/Source/WebCore/testing/Internals.h
+-+++ b/Source/WebCore/testing/Internals.h
+-@@ -401,6 +401,8 @@ public:
+-     String getImageSourceURL(Element&);
+- 
+- #if ENABLE(VIDEO)
+-+    Vector<String> mediaResponseSources(HTMLMediaElement&);
+-+    Vector<String> mediaResponseContentRanges(HTMLMediaElement&);
+-     void simulateAudioInterruption(HTMLMediaElement&);
+-     ExceptionOr<bool> mediaElementHasCharacteristic(HTMLMediaElement&, const String&);
+- #endif
+-diff --git a/Source/WebCore/testing/Internals.idl b/Source/WebCore/testing/Internals.idl
+-index 155b70b4abf..3fe6885d362 100644
+---- a/Source/WebCore/testing/Internals.idl
+-+++ b/Source/WebCore/testing/Internals.idl
+-@@ -386,6 +386,8 @@ enum EventThrottlingBehavior {
+- 
+-     void enableAutoSizeMode(boolean enabled, long minimumWidth, long minimumHeight, long maximumWidth, long maximumHeight);
+- 
+-+    [Conditional=VIDEO] sequence<DOMString> mediaResponseSources(HTMLMediaElement media);
+-+    [Conditional=VIDEO] sequence<DOMString> mediaResponseContentRanges(HTMLMediaElement media);
+-     [Conditional=VIDEO] void simulateAudioInterruption(HTMLMediaElement element);
+-     [Conditional=VIDEO, MayThrowException] boolean mediaElementHasCharacteristic(HTMLMediaElement element, DOMString characteristic);
+- 
+--- 
+-2.13.3
+-
+diff --git a/package/webkitgtk/0004-GTK-WPE-CFLAGS-from-pkg-config-for-E-GL-are-not-pass.patch b/package/webkitgtk/0004-GTK-WPE-CFLAGS-from-pkg-config-for-E-GL-are-not-pass.patch
 deleted file mode 100644
-index ca4f65f..0000000
---- a/package/lame/0003-msse.patch
+index 91c5116..0000000
+--- a/package/webkitgtk/0004-GTK-WPE-CFLAGS-from-pkg-config-for-E-GL-are-not-pass.patch
 +++ /dev/null
-@@ -1,24 +0,0 @@
--Fix compile on 32bit Intel
+@@ -1,64 +0,0 @@
+-From 6579c307d85a9b447d3b7f13b25fb0a52177ed09 Mon Sep 17 00:00:00 2001
+-From: Carlos Alberto Lopez Perez <clopez@igalia.com>
+-Date: Thu, 3 Aug 2017 13:57:14 +0300
+-Subject: [PATCH] [GTK][WPE] CFLAGS from pkg-config for (E)GL are not passed to
+- WebKit https://bugs.webkit.org/show_bug.cgi?id=175125
 -
--Downloaded from
--http://anonscm.debian.org/cgit/pkg-multimedia/lame.git/tree/debian/patches/msse.patch
+-Patch by Carlos Alberto Lopez Perez <clopez@igalia.com> on 2017-08-03
+-Reviewed by NOBODY (OOPS!).
 -
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+-* CMakeLists.txt: Pass GL-related flags to the WebKit component when
+-  appropriate.
 -
--Description: Build xmm_quantize_sub.c with -msse
--Author: Sebastian Ramacher <sramacher@debian.org>
--Bug: http://sourceforge.net/p/lame/bugs/443/
--Bug-Debian: https://bugs.debian.org/760047
--Forwarded: http://sourceforge.net/p/lame/bugs/443/
--Last-Update: 2014-08-31
+-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 -
----- lame-3.99.5+repack1.orig/libmp3lame/vector/Makefile.am
--+++ lame-3.99.5+repack1/libmp3lame/vector/Makefile.am
--@@ -20,6 +20,7 @@ xmm_sources = xmm_quantize_sub.c
+----
+- Source/WebKit2/CMakeLists.txt | 31 +++++++++++++++++++++++++++++++
+- Source/WebKit2/ChangeLog      | 10 ++++++++++
+- 2 files changed, 41 insertions(+)
+-
+-diff --git a/Source/WebKit2/CMakeLists.txt b/Source/WebKit2/CMakeLists.txt
+-index 2d8215f6a35..b25e9872de2 100644
+---- a/Source/WebKit2/CMakeLists.txt
+-+++ b/Source/WebKit2/CMakeLists.txt
+-@@ -88,6 +88,37 @@ set(WebKit2_SYSTEM_INCLUDE_DIRECTORIES
+- )
 - 
-- if WITH_XMM
-- liblamevectorroutines_la_SOURCES = $(xmm_sources)
--+liblamevectorroutines_la_CFLAGS = -msse
-- endif
-- 
-- noinst_HEADERS = lame_intrin.h
-diff --git a/package/lame/lame.hash b/package/lame/lame.hash
-index 875b49c..58dc6f7 100644
---- a/package/lame/lame.hash
-+++ b/package/lame/lame.hash
-@@ -1,2 +1,3 @@
- # Locally computed:
--sha256  24346b4158e4af3bd9f2e194bb23eb473c75fb7377011523353196b19b9a23ff  lame-3.99.5.tar.gz
-+sha256  ddfe36cab873794038ae2c1210557ad34857a4b6bdc515785d1da9e175b1da1e  lame-3.100.tar.gz
-+sha256  bfe4a52dc4645385f356a8e83cc54216a293e3b6f1cb4f79f5fc0277abf937fd  COPYING
-diff --git a/package/lame/lame.mk b/package/lame/lame.mk
-index 9345799..342e5c4 100644
---- a/package/lame/lame.mk
-+++ b/package/lame/lame.mk
-@@ -4,11 +4,9 @@
+- if (ENABLE_GRAPHICS_CONTEXT_3D)
+-+    # For platforms that want to use system-provided OpenGL (ES) / EGL headers,
+-+    # these include directories, libraries or definitions need to be
+-+    # added before the ANGLE directories.
+-+    if (USE_OPENGL)
+-+        list(APPEND WebKit2_SYSTEM_INCLUDE_DIRECTORIES
+-+            ${OPENGL_INCLUDE_DIRS}
+-+        )
+-+        list(APPEND WebKit2_LIBRARIES
+-+            ${OPENGL_LIBRARIES}
+-+        )
+-+        add_definitions(${OPENGL_DEFINITIONS})
+-+    elseif (USE_OPENGL_ES_2)
+-+        list(APPEND WebKit2_SYSTEM_INCLUDE_DIRECTORIES
+-+            ${OPENGLES2_INCLUDE_DIRS}
+-+        )
+-+        list(APPEND WebKit2_LIBRARIES
+-+            ${OPENGLES2_LIBRARIES}
+-+        )
+-+        add_definitions(${OPENGLES2_DEFINITIONS})
+-+    endif ()
+-+
+-+    if (USE_EGL)
+-+        list(APPEND WebKit2_SYSTEM_INCLUDE_DIRECTORIES
+-+            ${EGL_INCLUDE_DIRS}
+-+        )
+-+        list(APPEND WebKit2_LIBRARIES
+-+            ${EGL_LIBRARIES}
+-+        )
+-+        add_definitions(${EGL_DEFINITIONS})
+-+    endif ()
+-+
+-     list(APPEND WebKit2_INCLUDE_DIRECTORIES
+-         "${THIRDPARTY_DIR}/ANGLE"
+-         "${THIRDPARTY_DIR}/ANGLE/include/KHR"
+---
+-2.13.4
+-
+diff --git a/package/webkitgtk/Config.in b/package/webkitgtk/Config.in
+index 7b50a13..bfe3444 100644
+--- a/package/webkitgtk/Config.in
++++ b/package/webkitgtk/Config.in
+@@ -11,17 +11,17 @@ config BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgcrypt
+ 
+-comment "webkitgtk needs libgtk3 and a glibc toolchain w/ C++, gcc >= 4.9"
++comment "webkitgtk needs libgtk3 and a glibc toolchain w/ C++, gcc >= 5"
+ 	depends on BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
+ 	depends on !BR2_PACKAGE_LIBGTK3 || !BR2_INSTALL_LIBSTDCPP || \
+ 		!BR2_TOOLCHAIN_USES_GLIBC || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_5
+ 	depends on BR2_USE_MMU
+ 
+ config BR2_PACKAGE_WEBKITGTK
+ 	bool "webkitgtk"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC
+ 	depends on BR2_PACKAGE_LIBGTK3
+ 	depends on BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
+diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
+index 2c0fc50..c7a87f8 100644
+--- a/package/webkitgtk/webkitgtk.hash
++++ b/package/webkitgtk/webkitgtk.hash
+@@ -1,4 +1,4 @@
+-# From https://webkitgtk.org/releases/webkitgtk-2.16.6.tar.xz.sums
+-md5  0e2d142a586e4ff79cf0324f4fdbf20c webkitgtk-2.16.6.tar.xz
+-sha1 f7fca3fbac3dc99e39f353a6df250635e684c922 webkitgtk-2.16.6.tar.xz
+-sha256 fc23650df953123c59b9c0edf3855e7bd55bd107820997fc72375811e1ea4b21 webkitgtk-2.16.6.tar.xz
++# From https://webkitgtk.org/releases/webkitgtk-2.18.0.tar.xz.sums
++md5 10d86dd5a5b68875654cc38af139f382 webkitgtk-2.18.0.tar.xz
++sha1 e4d6cc7cff8729aa5ae6c17e10ed5ddf31048983 webkitgtk-2.18.0.tar.xz
++sha256 b583e46a3de36a3e80ba33b084ead60512a2046aca01ff61e50e519436e5038d webkitgtk-2.18.0.tar.xz
+diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
+index fc51031..60d8333 100644
+--- a/package/webkitgtk/webkitgtk.mk
++++ b/package/webkitgtk/webkitgtk.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LAME_VERSION_MAJOR = 3.99
--LAME_VERSION = $(LAME_VERSION_MAJOR).5
--LAME_SITE = http://downloads.sourceforge.net/project/lame/lame/$(LAME_VERSION_MAJOR)
-+LAME_VERSION = 3.100
-+LAME_SITE = http://downloads.sourceforge.net/project/lame/lame/$(LAME_VERSION)
- LAME_DEPENDENCIES = host-pkgconf
--LAME_AUTORECONF = YES
- LAME_INSTALL_STAGING = YES
- LAME_CONF_ENV = GTK_CONFIG=/bin/false
- LAME_CONF_OPTS = --enable-dynamic-frontends
+-WEBKITGTK_VERSION = 2.16.6
++WEBKITGTK_VERSION = 2.18.0
+ WEBKITGTK_SITE = http://www.webkitgtk.org/releases
+ WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
+ WEBKITGTK_INSTALL_STAGING = YES
