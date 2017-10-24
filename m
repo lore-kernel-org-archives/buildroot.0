@@ -1,42 +1,150 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Tue, 24 Oct 2017 12:51:58 -0400
-Subject: [Buildroot] [PATCH 1/1] janus-gateway: bump to v0.2.5
-Message-ID: <20171024165158.10700-1-aduskett@gmail.com>
+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Tue, 24 Oct 2017 20:57:04 +0200
+Subject: [Buildroot] [Patch v3 1/2] meson: new package
+In-Reply-To: <cc27e1eb-8ea7-6e2a-6748-748c017b25b2@mind.be>
+References: <20171011065005.9235-1-eric.le.bihan.dev@free.fr>
+ <20171011065005.9235-2-eric.le.bihan.dev@free.fr>
+ <cc27e1eb-8ea7-6e2a-6748-748c017b25b2@mind.be>
+Message-ID: <20171024185704.GA14724@itchy>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also add hash for license file.
+Hi!
 
-Signed-off-by: Adam Duskett <aduskett@gmail.com>
----
- package/janus-gateway/janus-gateway.hash | 3 ++-
- package/janus-gateway/janus-gateway.mk   | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+On 17-10-11 23:04:56, Arnout Vandecappelle wrote:
+> On 11-10-17 08:50, Eric Le Bihan wrote:
+> > This new package provides the host variant of the Meson Build System, an
+> > open source build system meant to be both extremely fast, and as user
+> > friendly as possible.
+> >
+> > More precisely, Meson creates configuration files for the Ninja build
+> > system.
+> >
+> > Besides building Meson, it generates a configuration file
+> > ("$(HOST_DIR)/etc/meson/cross-compilation.conf") to be used when
+> > cross-compiling a Meson-based project.
+> >
+> > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+> > Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+> > ---
+> >  package/meson/cross-compilation.conf.in | 17 +++++++++++++++++
+> >  package/meson/meson.hash                |  2 ++
+> >  package/meson/meson.mk                  | 31 +++++++++++++++++++++++++++++++
+> >  3 files changed, 50 insertions(+)
+> >  create mode 100644 package/meson/cross-compilation.conf.in
+> >  create mode 100644 package/meson/meson.hash
+> >  create mode 100644 package/meson/meson.mk
+> >
+> > diff --git a/package/meson/cross-compilation.conf.in b/package/meson/cross-compilation.conf.in
+> > new file mode 100644
+> > index 0000000000..84b399f51f
+> > --- /dev/null
+> > +++ b/package/meson/cross-compilation.conf.in
+> > @@ -0,0 +1,17 @@
+> > +# Note: Buildroot's and Meson's terminologies differ about the meaning
+> > +# of 'build', 'host' and 'target':
+> > +# - Buildroot's 'host' is Meson's 'build'
+> > +# - Buildroot's 'target' is Meson's 'host'
+> > +
+> > +[binaries]
+> > +c = '@TARGET_CROSS at gcc'
+> > +cpp = '@TARGET_CROSS at g++'
+> > +ar = '@TARGET_CROSS at ar'
+> > +strip = '@TARGET_CROSS at strip'
+> > +pkgconfig = '@HOST_DIR@/usr/bin/pkg-config'
+> > +
+> > +[host_machine]
+> > +system = 'linux'
+> > +cpu_family ='@TARGET_ARCH@'
+>
+>  Does meson have the same definition of ARCH as we do? Does it support all our
+> ARCHes?
 
-diff --git a/package/janus-gateway/janus-gateway.hash b/package/janus-gateway/janus-gateway.hash
-index 9c8db67c61..1cb325c41d 100644
---- a/package/janus-gateway/janus-gateway.hash
-+++ b/package/janus-gateway/janus-gateway.hash
-@@ -1,2 +1,3 @@
- # Locally computed
--sha256 b1064036dcdaae804e9e76e58fa7ec639cfdf09c716ece32b5a0a459b48c2ba7 janus-gateway-v0.2.4.tar.gz
-+sha256 09610dc02ff0a1f23af0397baaa26a3cd88b3742d35b2e49849f099885cdcf08 janus-gateway-v0.2.5.tar.gz
-+sha256 0a884af515b4593503f6f0c9b424db3945bd77eaa2644d25f45eb93a412b3c19 COPYING
-diff --git a/package/janus-gateway/janus-gateway.mk b/package/janus-gateway/janus-gateway.mk
-index 767b4d54ad..bf3e590ac5 100644
---- a/package/janus-gateway/janus-gateway.mk
-+++ b/package/janus-gateway/janus-gateway.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--JANUS_GATEWAY_VERSION = v0.2.4
-+JANUS_GATEWAY_VERSION = v0.2.5
- JANUS_GATEWAY_SITE = $(call github,meetecho,janus-gateway,$(JANUS_GATEWAY_VERSION))
- JANUS_GATEWAY_LICENSE = GPL-3.0
- JANUS_GATEWAY_LICENSE_FILES = COPYING
--- 
-2.13.6
+It goes well with the usual suspects (arm, mips, ppc, x86, ...) but I'll
+have to check for sparc, sh4 and xtensa. If needed, how should I add a
+restriction, given that there is no Config.in.host?
+
+> > +cpu = '@TARGET_CPU@'
+> > +endian = '@TARGET_ENDIAN@'
+>
+>  I'm completely missing our TARGET_CFLAGS and TARGET_LDFLAGS here. Is there no
+> way to specify those?
+
+These are to be passed via the c_args, c_link_args parameters in the
+"properties" section of the cross-compilation configuration file. I will
+add this.
+
+> > diff --git a/package/meson/meson.hash b/package/meson/meson.hash
+> > new file mode 100644
+> > index 0000000000..cdb7d1b9ef
+> > --- /dev/null
+> > +++ b/package/meson/meson.hash
+> > @@ -0,0 +1,2 @@
+> > +# Locally generated
+>
+>  You should also verify it against upstream's meson-0.43.0.tar.gz.asc.
+
+Will do!
+
+> > +sha256 324894427dcd29f6156fe06b046c6ad1b998470714debd7c5705902f21aaaa73  meson-0.43.0.tar.gz
+> > diff --git a/package/meson/meson.mk b/package/meson/meson.mk
+> > new file mode 100644
+> > index 0000000000..e4bff229a6
+> > --- /dev/null
+> > +++ b/package/meson/meson.mk
+> > @@ -0,0 +1,31 @@
+> > +################################################################################
+> > +#
+> > +# meson
+> > +#
+> > +################################################################################
+> > +
+> > +MESON_VERSION = 0.43.0
+> > +MESON_SITE = $(call github,mesonbuild,meson,$(MESON_VERSION))
+>
+>  Upstream has an uploaded tarball. In that case, we use the uploaded tarball,
+> not the autogenerated one. The uploaded tarball is signed, and sometimes it is
+> subtly different (e.g. containing some generated files).
+
+Of course! It is mentionned in docs/manual/adding-packages-tips.txt. I
+should re-read the manual more often...
+
+> > +MESON_LICENSE = Apache-2.0
+> > +MESON_LICENSE_FILES = COPYING
+> > +MESON_SETUP_TYPE = setuptools
+> > +
+> > +HOST_MESON_DEPENDENCIES = host-ninja
+> > +HOST_MESON_NEEDS_HOST_PYTHON = python3
+> > +
+> > +HOST_MESON_TARGET_ENDIAN = $(shell echo $(BR2_ENDIAN) | tr 'A-Z' 'a-z')
+>
+>  $(call LOWERCASE,$(BR2_ENDIAN))
+
+Will do!
+
+BTW, the value of the "c_args" parameter in the "properties" section of the
+cross-compilation configuration file is formatted as follow:
+
+```
+[properties]
+c_args = ['foo', 'bar', 'baz']
+```
+
+$(TARGET_CFLAGS) is a string like "foo bar baz". To convert it, is
+the following OK?
+
+```
+qlist = $(shell echo $(1) | sed -e "s/[^ ][^ ]*/'&',/g")
+
+sed -e "s;@TARGET_CFLAGS@;$(call qlist,$(TARGET_CFLAGS));g" \
+        $(HOST_MESON_PKGDIR)/cross-compilation.conf.in \
+        > $(HOST_DIR)/etc/meson/cross-compilation.conf
+```
+
+Regards,
+
+--
+ELB
