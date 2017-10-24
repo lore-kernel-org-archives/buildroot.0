@@ -1,74 +1,45 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Tue, 24 Oct 2017 23:14:32 +0200
-Subject: [Buildroot] [RFC v4 4/4] package/runc: converting to golang
-	infrastructure
-In-Reply-To: <1508879672-12957-1-git-send-email-angelo.compagnucci@gmail.com>
-References: <1508879672-12957-1-git-send-email-angelo.compagnucci@gmail.com>
-Message-ID: <1508879672-12957-4-git-send-email-angelo.compagnucci@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 24 Oct 2017 23:31:22 +0200
+Subject: [Buildroot] [PATCH 03/12] docker-engine: add support for init
+ processes
+In-Reply-To: <CA+h8R2oWPvzJMZh9ZM91oe2nakty9Yn_NjCnDS9e4SyVnZh49Q@mail.gmail.com>
+References: <20171019002257.27646-1-christian@paral.in>
+ <20171019002257.27646-3-christian@paral.in>
+ <20171021155147.12c12362@windsurf>
+ <CA+h8R2oWPvzJMZh9ZM91oe2nakty9Yn_NjCnDS9e4SyVnZh49Q@mail.gmail.com>
+Message-ID: <762a0020-823d-a96a-51f2-afd54673181d@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch converts the runc package to the new golang
-infrastructure.
 
-Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
----
- package/runc/runc.mk | 36 +++---------------------------------
- 1 file changed, 3 insertions(+), 33 deletions(-)
 
-diff --git a/package/runc/runc.mk b/package/runc/runc.mk
-index 0b51e11..5d9e732 100644
---- a/package/runc/runc.mk
-+++ b/package/runc/runc.mk
-@@ -9,43 +9,13 @@ RUNC_SITE = $(call github,opencontainers,runc,$(RUNC_VERSION))
- RUNC_LICENSE = Apache-2.0
- RUNC_LICENSE_FILES = LICENSE
- 
--RUNC_DEPENDENCIES = host-go
-+RUNC_GO_LDFLAGS = -X main.gitCommit=$(RUNC_VERSION)
- 
--RUNC_GOPATH = "$(@D)/Godeps/_workspace"
--RUNC_MAKE_ENV = $(HOST_GO_TARGET_ENV) \
--	CGO_ENABLED=1 \
--	GOBIN="$(@D)/bin" \
--	GOPATH="$(RUNC_GOPATH)" \
--	PATH=$(BR_PATH)
--
--RUNC_GLDFLAGS = \
--	-X main.gitCommit=$(RUNC_VERSION)
--
--ifeq ($(BR2_STATIC_LIBS),y)
--RUNC_GLDFLAGS += -extldflags '-static'
--endif
--
--RUNC_GOTAGS = cgo static_build
-+RUNC_GO_TAGS = cgo static_build
- 
- ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
- RUNC_GOTAGS += seccomp
- RUNC_DEPENDENCIES += libseccomp host-pkgconf
- endif
- 
--define RUNC_CONFIGURE_CMDS
--	mkdir -p $(RUNC_GOPATH)/src/github.com/opencontainers
--	ln -s $(@D) $(RUNC_GOPATH)/src/github.com/opencontainers/runc
--endef
--
--define RUNC_BUILD_CMDS
--	cd $(RUNC_GOPATH)/src/github.com/opencontainers/runc && \
--		$(RUNC_MAKE_ENV) $(HOST_DIR)/bin/go \
--		build -v -o $(@D)/bin/runc \
--		-tags "$(RUNC_GOTAGS)" -ldflags "$(RUNC_GLDFLAGS)" .
--endef
--
--define RUNC_INSTALL_TARGET_CMDS
--	$(INSTALL) -D -m 0755 $(@D)/bin/runc $(TARGET_DIR)/usr/bin/runc
--endef
--
--$(eval $(generic-package))
-+$(eval $(golang-package))
+On 24-10-17 05:29, Christian Stewart wrote:
+> Hi Thomas,
+> 
+> On Sat, Oct 21, 2017 at 9:51 AM, Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com> wrote:
+>> Did you meant "dump-init" here instead of "docker-init" ?
+> 
+> No, definitely not.
+
+ I think you did. You had written
+
+The docker-init binary is backed by tini on default, but optionally can
+be changed to docker-init by user preference.
+
+so that would mean that the docker-init binary can be backed by docker-init...
+
+ Regards,
+ Arnout
+
+
 -- 
-2.7.4
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
