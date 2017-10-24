@@ -1,26 +1,47 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 24 Oct 2017 08:36:19 +0200
-Subject: [Buildroot] [PATCH 1/1] Config.in: fix help comment for gcc
-	optimization
-In-Reply-To: <1508498357-4257-1-git-send-email-lothar.felten@gmail.com>
- (Lothar Felten's message of "Fri, 20 Oct 2017 13:19:17 +0200")
-References: <1508498357-4257-1-git-send-email-lothar.felten@gmail.com>
-Message-ID: <87mv4h59y4.fsf@dell.be.48ers.dk>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Tue, 24 Oct 2017 10:17:09 +0200
+Subject: [Buildroot] [PATCH] boost: add stacktrace module
+Message-ID: <20171024081709.9445-1-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Lothar" == Lothar Felten <lothar.felten@gmail.com> writes:
+The stacktrace module was added in version 1.65.0. Without having a config
+option for the module, it is build unconditionally.
 
- > The default for is set to BR2_OPTIMIZE_S, the help comment designated
- > BR2_OPTIMIZE_0 as default.
- > Changed the help comment to show that BR2_OPTIMIZE_S is the default.
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+---
+ package/boost/Config.in | 3 +++
+ package/boost/boost.mk  | 1 +
+ 2 files changed, 4 insertions(+)
 
- > Signed-off-by: Lothar Felten <lothar.felten@gmail.com>
-
-Committed to 2017.02.x, thanks.
-
+diff --git a/package/boost/Config.in b/package/boost/Config.in
+index 37a7e7339f..1ee5821ee1 100644
+--- a/package/boost/Config.in
++++ b/package/boost/Config.in
+@@ -158,6 +158,9 @@ config BR2_PACKAGE_BOOST_SERIALIZATION
+ config BR2_PACKAGE_BOOST_SIGNALS
+ 	bool "boost-signals"
+ 
++config BR2_PACKAGE_BOOST_STACKTRACE
++	bool "boost-stacktrace"
++
+ config BR2_PACKAGE_BOOST_SYSTEM
+ 	bool "boost-system"
+ 
+diff --git a/package/boost/boost.mk b/package/boost/boost.mk
+index 0fd6c4d0de..750b40f7d2 100644
+--- a/package/boost/boost.mk
++++ b/package/boost/boost.mk
+@@ -42,6 +42,7 @@ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_RANDOM),,random)
+ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_REGEX),,regex)
+ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_SERIALIZATION),,serialization)
+ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_SIGNALS),,signals)
++BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_STACKTRACE),,stacktrace)
+ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_SYSTEM),,system)
+ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_TEST),,test)
+ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_THREAD),,thread)
 -- 
-Bye, Peter Korsgaard
+2.14.2
