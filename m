@@ -1,250 +1,275 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Tue, 24 Oct 2017 11:15:06 -0400
-Subject: [Buildroot] [PATCH 2/2] boost: add help messages to libraries
-In-Reply-To: <20171024151506.18116-1-aduskett@gmail.com>
-References: <20171024151506.18116-1-aduskett@gmail.com>
-Message-ID: <20171024151506.18116-2-aduskett@gmail.com>
+Date: Tue, 24 Oct 2017 11:20:22 -0400
+Subject: [Buildroot] [PATCH v5 1/1] libcpprestsdk: new package
+Message-ID: <20171024152022.18781-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All of the help messages come from http://www.boost.org/doc/libs/1_65_1/
+The C++ REST SDK is a Microsoft project for cloud-based client-server
+communication in native code using a modern asynchronous C++ API design.
+This project aims to help C++ developers connect to and interact with
+services.
+
+This package is licensed under the MIT package and depends on BOOST
+and OpenSSL/LibreSSL.
 
 Signed-off-by: Adam Duskett <aduskett@gmail.com>
 ---
- package/boost/Config.in | 102 +++++++++++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 101 insertions(+), 1 deletion(-)
+Changes v1 -> v2:
+  - Add "depends on BR2_USE_WCHAR # boost" to boost.mk (Thomas)
+  - Remove "depends on BR2_USE_MMU" from boost.mk (Thomas)
+  - Add "!BR2_USE_WCHAR" to boost.mk (Thomas)
 
-diff --git a/package/boost/Config.in b/package/boost/Config.in
-index e69e6c64af..8610932248 100644
---- a/package/boost/Config.in
-+++ b/package/boost/Config.in
-@@ -52,12 +52,18 @@ config BR2_PACKAGE_BOOST_LAYOUT
- 
- config BR2_PACKAGE_BOOST_ATOMIC
- 	bool "boost-atomic"
-+	help
-+	  C++11-style atomic<>.
- 
- config BR2_PACKAGE_BOOST_CHRONO
- 	bool "boost-chrono"
-+	help
-+	  Useful time utilities. C++11.
- 
- config BR2_PACKAGE_BOOST_CONTAINER
- 	bool "boost-container"
-+	help
-+	  Standard library containers and extensions.
- 
- # see
- # http://www.boost.org/doc/libs/1_59_0/libs/context/doc/html/context/architectures.html
-@@ -68,37 +74,64 @@ config BR2_PACKAGE_BOOST_CONTEXT
- 	depends on ((BR2_arm || BR2_armeb) && BR2_ARM_CPU_HAS_ARM) || \
- 		BR2_i386 || BR2_mips || BR2_mipsel || BR2_powerpc || BR2_x86_64
- 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735
-+	help
-+	  C++11 context switching library.
- 
- config BR2_PACKAGE_BOOST_COROUTINE
- 	bool "boost-coroutine"
- 	depends on BR2_PACKAGE_BOOST_CONTEXT
-+	help
-+	  deprecated coroutine library, the non-depricated coroutine2
-+	  library is a header-only library and does not need to be
-+	  selected.
- 
- config BR2_PACKAGE_BOOST_DATE_TIME
- 	bool "boost-date_time"
-+	help
-+	  A set of date-time libraries based on generic programming
-+	  concepts.
- 
- config BR2_PACKAGE_BOOST_EXCEPTION
- 	bool "boost-exception"
-+	help
-+	  The Boost Exception library supports transporting of arbitrary
-+	  data in exception objects, and transporting of exceptions
-+	  between threads.
- 
- config BR2_PACKAGE_BOOST_FIBER
--	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 	bool "boost-fiber"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
-+	help
-+	  C++11 userland threads library.
- 
- comment "boost-fiber needs a toolchain w/ NPTL"
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 
- config BR2_PACKAGE_BOOST_FILESYSTEM
- 	bool "boost-filesystem"
-+	help
-+	  The Boost Filesystem Library provides portable facilities to
-+	  query and manipulate paths, files, and directories.
- 
- config BR2_PACKAGE_BOOST_GRAPH
- 	bool "boost-graph"
-+	help
-+	  The BGL graph interface and graph components are generic, in
-+	  the same sense as the the Standard Template Library (STL).
- 
- config BR2_PACKAGE_BOOST_GRAPH_PARALLEL
- 	bool "boost-graph_parallel"
-+	help
-+	  The PBGL graph interface and graph components are generic, in
-+	  the same sense as the the Standard Template Library (STL).
- 
- config BR2_PACKAGE_BOOST_IOSTREAMS
- 	bool "boost-iostreams"
- 	select BR2_PACKAGE_BZIP2
- 	select BR2_PACKAGE_ZLIB
-+	help
-+	  Boost.IOStreams provides a framework for defining streams,
-+	  stream buffers and i/o filters.
- 
- config BR2_PACKAGE_BOOST_LOCALE
- 	bool "boost-locale"
-@@ -112,6 +145,8 @@ config BR2_PACKAGE_BOOST_LOCALE
- 	# details.
- 	depends on !(BR2_STATIC_LIBS && BR2_PACKAGE_ICU)
- 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
-+	help
-+	  Provide localization and Unicode handling tools for C++.
- 
- comment "boost-locale needs a toolchain w/ dynamic library"
- 	depends on BR2_PACKAGE_ICU
-@@ -123,6 +158,8 @@ config BR2_PACKAGE_BOOST_LOG
- 	# for some reason, uClibc on PowerPC fails to build the boost
- 	# log module
- 	depends on !(BR2_powerpc && BR2_TOOLCHAIN_USES_UCLIBC)
-+	help
-+	  Logging library.
- 
- comment "boost-log needs a toolchain w/ NPTL"
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
-@@ -130,33 +167,79 @@ comment "boost-log needs a toolchain w/ NPTL"
- 
- config BR2_PACKAGE_BOOST_MATH
- 	bool "boost-math"
-+	help
-+	  Boost.Math includes several contributions in the domain of
-+	  mathematics:
+Changes v2 -> v3:
+  - Update to v2.10.0
+  - Remove check for libressl now that OpenSSL is a virtual package.
+  - Add 0001-remove-cast-align-error-flag.patch to prevent cross-compiling
+    warning errors.
+  - Add 0002-fix-xlocale-header-check.patch to prevent uclibc/musl errors
+    due to a missing header.
+  - Add 0003-fix-compilation-issues-with-musl.patch which adds sys/time.h to
+    asyncrt_utils.h.
+
+Changes v3 -> v4:
+  - Fixed 0003-fix-compilation-issues-with-musl.patch
+  
+Changes v4 -> v5
+  - Patches now formatted with -N.
+  - Dependencies now on a single line.
+
+ DEVELOPERS                                         |  1 +
+ package/Config.in                                  |  1 +
+ .../0001-remove-cast-align-error-flag.patch        | 29 ++++++++++++
+ .../0002-fix-xlocale-header-check.patch            | 55 ++++++++++++++++++++++
+ .../0003-fix-compilation-issues-with-musl.patch    | 28 +++++++++++
+ package/libcpprestsdk/Config.in                    | 26 ++++++++++
+ package/libcpprestsdk/libcpprestsdk.hash           |  3 ++
+ package/libcpprestsdk/libcpprestsdk.mk             | 14 ++++++
+ 8 files changed, 157 insertions(+)
+ create mode 100644 package/libcpprestsdk/0001-remove-cast-align-error-flag.patch
+ create mode 100644 package/libcpprestsdk/0002-fix-xlocale-header-check.patch
+ create mode 100644 package/libcpprestsdk/0003-fix-compilation-issues-with-musl.patch
+ create mode 100644 package/libcpprestsdk/Config.in
+ create mode 100644 package/libcpprestsdk/libcpprestsdk.hash
+ create mode 100644 package/libcpprestsdk/libcpprestsdk.mk
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index f0f83b0f42..bbc9fcdcc6 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -34,6 +34,7 @@ F:	package/audit/
+ F:	package/checkpolicy/
+ F:	package/gstreamer1/gst1-vaapi/
+ F:	package/janus-gateway/
++F:	package/libcpprestsdk/
+ F:	package/libressl/
+ F:	package/libselinux/
+ F:	package/libsemanage/
+diff --git a/package/Config.in b/package/Config.in
+index 55fe80139e..d669953507 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1337,6 +1337,7 @@ menu "Networking"
+ 	source "package/libcgi/Config.in"
+ 	source "package/libcgicc/Config.in"
+ 	source "package/libcoap/Config.in"
++	source "package/libcpprestsdk/Config.in"
+ 	source "package/libcurl/Config.in"
+ 	source "package/libdnet/Config.in"
+ 	source "package/libeXosip2/Config.in"
+diff --git a/package/libcpprestsdk/0001-remove-cast-align-error-flag.patch b/package/libcpprestsdk/0001-remove-cast-align-error-flag.patch
+new file mode 100644
+index 0000000000..a886dafde9
+--- /dev/null
++++ b/package/libcpprestsdk/0001-remove-cast-align-error-flag.patch
+@@ -0,0 +1,29 @@
++From 2b1b376b6daa96e663f30032e3ac047c9f0668d7 Mon Sep 17 00:00:00 2001
++From: Adam Duskett <aduskett@gmail.com>
++Date: Mon, 23 Oct 2017 07:47:42 -0400
++Subject: [PATCH] remove cast-align error flag
 +
-+	  The Greatest Common Divisor and Least Common
-+	  Multiple library provides run-time and compile-time evaluation
-+	  of the greatest common divisor (GCD) or least common multiple
-+	  (LCM) of two integers.
++When cross compiling, frame.hpp and md5.hpp both have casts that will throw
++a cast-align warning, by default this will throw an error.
 +
-+	  The Special Functions library currently provides eight
-+	  templated special functions, in namespace boost.
++Signed-off-by: Adam Duskett <aduskett@gmail.com>
++---
++ Release/CMakeLists.txt | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+	  The Complex Number Inverse Trigonometric Functions are the
-+	  inverses of trigonometric functions currently present in the
-+	  C++ standard.
++diff --git a/Release/CMakeLists.txt b/Release/CMakeLists.txt
++index bc1d612..d57aa3d 100644
++--- a/Release/CMakeLists.txt
+++++ b/Release/CMakeLists.txt
++@@ -161,7 +161,7 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "Clang" OR IOS)
++ elseif(CMAKE_CXX_COMPILER_ID MATCHES "GNU")
++   message("-- Setting gcc options")
++ 
++-  set(WARNINGS -Wall -Wextra -Wunused-parameter -Wcast-align -Wcast-qual -Wconversion -Wformat=2 -Winit-self -Winvalid-pch -Wmissing-format-attribute -Wmissing-include-dirs -Wpacked -Wredundant-decls -Wunreachable-code)
+++  set(WARNINGS -Wall -Wextra -Wunused-parameter -Wcast-qual -Wconversion -Wformat=2 -Winit-self -Winvalid-pch -Wmissing-format-attribute -Wmissing-include-dirs -Wpacked -Wredundant-decls -Wunreachable-code)
++   set(LD_FLAGS "${LD_FLAGS} -Wl,-z,defs")
++ 
++   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -fno-strict-aliasing")
++-- 
++2.13.6
 +
-+	  Quaternions are a relative of complex numbers often used to
-+	  parameterise rotations in three dimentional space.
+diff --git a/package/libcpprestsdk/0002-fix-xlocale-header-check.patch b/package/libcpprestsdk/0002-fix-xlocale-header-check.patch
+new file mode 100644
+index 0000000000..807ba60e61
+--- /dev/null
++++ b/package/libcpprestsdk/0002-fix-xlocale-header-check.patch
+@@ -0,0 +1,55 @@
++From a826b7b656c165bc35746d9af3ec371387d2bca1 Mon Sep 17 00:00:00 2001
++From: Adam Duskett <aduskett@gmail.com>
++Date: Mon, 23 Oct 2017 08:11:21 -0400
++Subject: [PATCH] fix xlocale header check
 +
-+	  Octonions, like quaternions, are a relative of complex
-+	  numbers.
- 
- config BR2_PACKAGE_BOOST_METAPARSE
- 	bool "boost-metaparse"
- 	depends on BR2_USE_MMU # boost-test
- 	select BR2_PACKAGE_BOOST_TEST
++asyncrt_utils.h checks if __GLIBC__ is not defined before including
++xlocal.h.  This will cause a compilation failure on uclibc and musl.
++
++Add a proper check in CMakeLists.txt and check for HAVE_XLOCALE_H
++instead of __GLIBC__
++
++Upstream-Status: Pending
++Signed-off-by: Adam Duskett <aduskett@gmail.com>
++---
++ Release/CMakeLists.txt                  | 3 +++
++ Release/include/cpprest/asyncrt_utils.h | 2 +-
++ 2 files changed, 4 insertions(+), 1 deletion(-)
++
++diff --git a/Release/CMakeLists.txt b/Release/CMakeLists.txt
++index d57aa3d..eefae75 100644
++--- a/Release/CMakeLists.txt
+++++ b/Release/CMakeLists.txt
++@@ -42,6 +42,7 @@ include(cmake/cpprest_find_boost.cmake)
++ include(cmake/cpprest_find_zlib.cmake)
++ include(cmake/cpprest_find_openssl.cmake)
++ include(cmake/cpprest_find_websocketpp.cmake)
+++include(CheckIncludeFiles)
++ 
++ find_package(Threads REQUIRED)
++ if(THREADS_HAVE_PTHREAD_ARG)
++@@ -56,6 +57,8 @@ if(CPPREST_EXCLUDE_WEBSOCKETS)
++   set(CPPREST_WEBSOCKETS_IMPL none CACHE STRING "Internal use.")
++ endif()
++ 
+++CHECK_INCLUDE_FILES(xlocale.h HAVE_XLOCALE_H)
+++
++ if(APPLE) # Note: also iOS
++   set(CPPREST_PPLX_IMPL apple CACHE STRING "Internal use.")
++   set(CPPREST_WEBSOCKETS_IMPL wspp CACHE STRING "Internal use.")
++diff --git a/Release/include/cpprest/asyncrt_utils.h b/Release/include/cpprest/asyncrt_utils.h
++index fac70a9..8faa2dc 100644
++--- a/Release/include/cpprest/asyncrt_utils.h
+++++ b/Release/include/cpprest/asyncrt_utils.h
++@@ -29,7 +29,7 @@
++ 
++ #ifndef _WIN32
++ #include <boost/algorithm/string.hpp>
++-#if !defined(ANDROID) && !defined(__ANDROID__) && !defined(__GLIBC__) // CodePlex 269
+++#if !defined(ANDROID) && !defined(__ANDROID__) && defined(HAVE_XLOCALE_H) // CodePlex 269
++ /* Systems using glibc: xlocale.h has been removed from glibc 2.26
++    The above include of locale.h is sufficient
++    Further details: https://sourceware.org/git/?p=glibc.git;a=commit;h=f0be25b6336db7492e47d2e8e72eb8af53b5506d */
++-- 
++2.13.6
++
+diff --git a/package/libcpprestsdk/0003-fix-compilation-issues-with-musl.patch b/package/libcpprestsdk/0003-fix-compilation-issues-with-musl.patch
+new file mode 100644
+index 0000000000..80a74ed35a
+--- /dev/null
++++ b/package/libcpprestsdk/0003-fix-compilation-issues-with-musl.patch
+@@ -0,0 +1,28 @@
++From 25453f9c186cf441881b06bc5503d979acb0ab75 Mon Sep 17 00:00:00 2001
++From: Adam Duskett <aduskett@gmail.com>
++Date: Mon, 23 Oct 2017 09:38:11 -0400
++Subject: [PATCH] fix compilation issues with musl
++
++sys/time.h needed for struct timeval
++
++Upstream-Status: Pending
++Signed-off-by: Adam Duskett <aduskett@gmail.com>
++---
++ Release/include/cpprest/asyncrt_utils.h | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/Release/include/cpprest/asyncrt_utils.h b/Release/include/cpprest/asyncrt_utils.h
++index 8faa2dc..aab87a5 100644
++--- a/Release/include/cpprest/asyncrt_utils.h
+++++ b/Release/include/cpprest/asyncrt_utils.h
++@@ -28,6 +28,7 @@
++ #endif
++ 
++ #ifndef _WIN32
+++#include <sys/time.h>
++ #include <boost/algorithm/string.hpp>
++ #if !defined(ANDROID) && !defined(__ANDROID__) && defined(HAVE_XLOCALE_H) // CodePlex 269
++ /* Systems using glibc: xlocale.h has been removed from glibc 2.26
++-- 
++2.13.6
++
+diff --git a/package/libcpprestsdk/Config.in b/package/libcpprestsdk/Config.in
+new file mode 100644
+index 0000000000..84fa783015
+--- /dev/null
++++ b/package/libcpprestsdk/Config.in
+@@ -0,0 +1,26 @@
++config BR2_PACKAGE_LIBCPPRESTSDK
++	bool "libcpprestsdk"
++	depends on BR2_INSTALL_LIBSTDCPP # boost
++	depends on BR2_TOOLCHAIN_HAS_THREADS # boost
++	depends on BR2_USE_WCHAR # boost
++	select BR2_PACKAGE_BOOST
++	select BR2_PACKAGE_BOOST_ATOMIC
++	select BR2_PACKAGE_BOOST_CHRONO
++	select BR2_PACKAGE_BOOST_DATE_TIME
++	select BR2_PACKAGE_BOOST_FILESYSTEM
++	select BR2_PACKAGE_BOOST_RANDOM
++	select BR2_PACKAGE_BOOST_REGEX
++	select BR2_PACKAGE_BOOST_THREAD
++	select BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_ZLIB
 +	help
-+	  A library for generating compile time parsers parsing embedded
-+	  DSL code as part of the C++ compilation process
- 
- config BR2_PACKAGE_BOOST_MPI
- 	bool "boost-mpi"
-+	help
-+	  Message Passing Interface library, for use in
-+	  distributed-memory parallel application programming.
- 
- config BR2_PACKAGE_BOOST_PROGRAM_OPTIONS
- 	bool "boost-program_options"
-+	help
-+	  The program_options library allows program developers to
-+	  obtain program options, that is (name, value) pairs from the
-+	  user, via conventional methods such as command line and config
-+	  file.
- 
- config BR2_PACKAGE_BOOST_PYTHON
- 	bool "boost-python"
- 	depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
-+	help
-+	  The Boost Python Library is a framework for interfacing Python
-+	  and C++. It allows you to quickly and seamlessly expose C++
-+	  classes functions and objects to Python, and vice-versa,
-+	  using no special tools -- just your C++ compiler.
- 
- config BR2_PACKAGE_BOOST_RANDOM
- 	bool "boost-random"
-+	help
-+	  A complete system for random number generation.
- 
- config BR2_PACKAGE_BOOST_REGEX
- 	bool "boost-regex"
-+	help
-+	  A new infrastructure for generic algorithms that builds on top
-+	  of the new iterator concepts.
- 
- config BR2_PACKAGE_BOOST_SERIALIZATION
- 	bool "boost-serialization"
-+	help
-+	  Serialization for persistence and marshalling.
- 
- config BR2_PACKAGE_BOOST_SIGNALS
- 	bool "boost-signals"
-+	help
-+	  Managed signals & slots callback implementation.
- 
- config BR2_PACKAGE_BOOST_STACKTRACE
- 	bool "boost-stacktrace"
-@@ -169,24 +252,41 @@ comment "boost-stacktrace needs a toolchain w/ dynamic library"
- 
- config BR2_PACKAGE_BOOST_SYSTEM
- 	bool "boost-system"
-+	help
-+	  Operating system support, including the diagnostics support
-+	  that will be part of the C++0x standard library.
- 
- config BR2_PACKAGE_BOOST_TEST
- 	bool "boost-test"
- 	depends on BR2_USE_MMU # fork()
-+	help
-+	  Support for simple program testing, full unit testing, and for
-+	  program execution monitoring.
- 
- config BR2_PACKAGE_BOOST_THREAD
- 	bool "boost-thread"
-+	help
-+	  Portable C++ multi-threading. C++11, C++14.
- 
- config BR2_PACKAGE_BOOST_TIMER
- 	bool "boost-timer"
-+	help
-+	  Event timer, progress timer, and progress display classes.
- 
- config BR2_PACKAGE_BOOST_TYPE_ERASURE
- 	bool "boost-type_erasure"
-+	help
-+	  Runtime polymorphism based on concepts.
- 
- config BR2_PACKAGE_BOOST_WAVE
- 	bool "boost-wave"
- 	# limitation of assembler for coldfire
- 	# error: Tried to convert PC relative branch to absolute jump
- 	depends on !BR2_m68k_cf
-+	help
-+	  The Boost.Wave library is a Standards conformant, and highly
-+	  configurable implementation of the mandated C99/C++
-+	  preprocessor functionality packed behind an easy to use
-+	  iterator interface.
- 
- endif
++	  The C++ REST SDK is a Microsoft project for cloud-based
++	  client-server communication in native code using a modern
++	  asynchronous C++ API design. This project aims to help C++
++	  developers connect to and interact with services.
++
++	  https://github.com/Microsoft/cpprestsdk
++
++comment "libcpprestsdk needs a toolchain w/ C++, wchar, threads"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS \
++	|| !BR2_USE_WCHAR
+diff --git a/package/libcpprestsdk/libcpprestsdk.hash b/package/libcpprestsdk/libcpprestsdk.hash
+new file mode 100644
+index 0000000000..85f4c4fcc9
+--- /dev/null
++++ b/package/libcpprestsdk/libcpprestsdk.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256 de333da67f1cb3d1b30be118860531092467f18d24ca6b4d36f6623fecab0de0 libcpprestsdk-v2.10.0.tar.gz
++sha256 5c191789f502ac87df83b57008d2fc3e47fbf31315381b5bc4309f6602d0fe97	license.txt
+diff --git a/package/libcpprestsdk/libcpprestsdk.mk b/package/libcpprestsdk/libcpprestsdk.mk
+new file mode 100644
+index 0000000000..56261c8c7e
+--- /dev/null
++++ b/package/libcpprestsdk/libcpprestsdk.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# libcpprestsdk
++#
++################################################################################
++
++LIBCPPRESTSDK_VERSION = v2.10.0
++LIBCPPRESTSDK_SITE = $(call github,Microsoft,cpprestsdk,$(LIBCPPRESTSDK_VERSION))
++LIBCPPRESTSDK_LICENSE = MIT
++LIBCPPRESTSDK_LICENSE_FILES = license.txt
++LIBCPPRESTSDK_SUBDIR = Release
++LIBCPPRESTSDK_DEPENDENCIES += boost openssl zlib
++
++$(eval $(cmake-package))
 -- 
 2.13.6
