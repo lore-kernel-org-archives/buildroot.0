@@ -1,34 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 24 Oct 2017 08:08:58 +0200
-Subject: [Buildroot] Aarch32 support on aarch64
-In-Reply-To: <CANEuBv6hKFwqNw+4YXpyjdUF2wEu9s_0-Z1f8LzAQFhgfaMbUQ@mail.gmail.com>
- (Markus Mayer's message of "Thu, 12 Oct 2017 14:06:11 -0700")
-References: <CANEuBv6hKFwqNw+4YXpyjdUF2wEu9s_0-Z1f8LzAQFhgfaMbUQ@mail.gmail.com>
-Message-ID: <87vaj55b7p.fsf@dell.be.48ers.dk>
+Date: Tue, 24 Oct 2017 08:15:34 +0200
+Subject: [Buildroot] [PATCH] qt: Allow enabling of QtWebKit with GCC 6+
+In-Reply-To: <4881796E12491D4BB15146FE0209CE6467F9F640@DE02WEMBXB.internal.synopsys.com>
+ (Alexey Brodkin's message of "Tue, 17 Oct 2017 15:02:39 +0000")
+References: <20170922125003.32618-1-didin@synopsys.com>
+ <87d15mkv01.fsf@dell.be.48ers.dk>
+ <4881796E12491D4BB15146FE0209CE6467F9F640@DE02WEMBXB.internal.synopsys.com>
+Message-ID: <87r2tt5awp.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Markus" == Markus Mayer <code@mmayer.net> writes:
+>>>>> "Alexey" == Alexey Brodkin <Alexey.Brodkin@synopsys.com> writes:
 
 Hi,
 
- > So far, I have tried my luck using a post-install script. It works to
- > the point that I get a root file system that can execute both types of
- > binaries, but because the post-install script needs to muck with
- > directory names and symlinks under target/lib*, this approach doesn't
- > really work very well doing incremental builds. Buildroot as a whole
- > still expects target/lib to be the destination for 64 bit libraries,
- > but that is no longer the case after the post-install script changed
- > this and placed the 32 bit libraries there.
+ >> Committed to 2017.08.x, thanks.
 
-Buildroot is indeed not forseen for mixed 32/64bit setups. Potential
-alternatives:
+ > I see that commit was applied on 2 "LTS" branches already which is definitely good.
+ > But my question is are there any formal rules and guidelines for patches to be
+ > cherry-picked onto LTS branches? Something like
+ > https://github.com/torvalds/linux/blob/master/Documentation/process/stable-kernel-rules.rst?
 
-- Run 32bit application in chroot
-- Statically link application
+As discussed during the dev days, we don't really have any format
+rules. If you think specific patches should be backported, please let me
+know.
 
 -- 
 Bye, Peter Korsgaard
