@@ -1,47 +1,187 @@
-From: Max Filippov <jcmvbkbc@gmail.com>
-Date: Tue, 24 Oct 2017 13:51:33 -0700
-Subject: [Buildroot] [PATCH] support/dependencies: always run
-	check-host-tar.mk first
-Message-ID: <1508878293-15873-1-git-send-email-jcmvbkbc@gmail.com>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Tue, 24 Oct 2017 23:14:29 +0200
+Subject: [Buildroot] [RFC v4 1/4] package/pkg-golang: new package
+	infrastructure
+Message-ID: <1508879672-12957-1-git-send-email-angelo.compagnucci@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In case both host lzip and tar are not suitable the buildroot build
-fails with the following error:
+This patch adds a new infrastructure for golang based packages.
 
-  >>> host-lzip 1.19 Extracting
-  gzip -d -c dl/lzip-1.19.tar.gz | host/bin/tar --strip-components=1 -C
-    build/host-lzip-1.19 -xf -
-  /bin/sh: host/bin/tar: No such file or directory
-
-Make sure that if the tar dependency is present it is always the first
-one in the DEPENDENCIES_HOST_PREREQ.
-
-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 ---
- support/dependencies/dependencies.mk | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+Changelog:
+v2 -> v3:
+* Adding GO_LDFLAGS and GO_TAGS variables
+* Adding GOPATH variable
+* Adding option to build as static when BR2_STATIC_LIBS is enabled
+* Changed building logic to take into account multiple binaries
 
-diff --git a/support/dependencies/dependencies.mk b/support/dependencies/dependencies.mk
-index ef2ae9b7e158..4e8528b91f05 100644
---- a/support/dependencies/dependencies.mk
-+++ b/support/dependencies/dependencies.mk
-@@ -12,7 +12,12 @@
- define suitable-host-package
- $(shell support/dependencies/check-host-$(1).sh $(2))
- endef
---include $(sort $(wildcard support/dependencies/check-host-*.mk))
+v3 -> v4:
+* Changing GOPATH default value from gopath to _gopath
+
+ package/Makefile.in   |   1 +
+ package/pkg-golang.mk | 140 ++++++++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 141 insertions(+)
+ create mode 100644 package/pkg-golang.mk
+
+diff --git a/package/Makefile.in b/package/Makefile.in
+index a1a5316..60d98d0 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -429,3 +429,4 @@ include package/pkg-kconfig.mk
+ include package/pkg-rebar.mk
+ include package/pkg-kernel-module.mk
+ include package/pkg-waf.mk
++include package/pkg-golang.mk
+diff --git a/package/pkg-golang.mk b/package/pkg-golang.mk
+new file mode 100644
+index 0000000..2edc366
+--- /dev/null
++++ b/package/pkg-golang.mk
+@@ -0,0 +1,140 @@
++################################################################################
++# Golang package infrastructure
++#
++# This file implements an infrastructure that eases development of
++# package .mk files for Go packages. It should be used for all
++# packages that are written in go.
++#
++# See the Buildroot documentation for details on the usage of this
++# infrastructure
++#
++#
++# In terms of implementation, this golang infrastructure requires
++# the .mk file to only specify metadata information about the
++# package: name, version, download URL, etc.
++#
++# We still allow the package .mk file to override what the different
++# steps are doing, if needed. For example, if <PKG>_BUILD_CMDS is
++# already defined, it is used as the list of commands to perform to
++# build the package, instead of the default golang behavior. The
++# package can also define some post operation hooks.
++#
++################################################################################
 +
-+# Make sure that if the tar dependency is present it is always the first one in
-+# the DEPENDENCIES_HOST_PREREQ, otherwise sources for other dependencies will
-+# fail to unpack.
-+-include support/dependencies/check-host-tar.mk
-+-include $(sort $(filter-out %/check-host-tar.mk,$(wildcard support/dependencies/check-host-*.mk)))
- 
- ifeq ($(BR2_CCACHE),y)
- DEPENDENCIES_HOST_PREREQ += host-ccache
++################################################################################
++# inner-golang-package -- defines how the configuration, compilation and
++# installation of a Go package should be done, implements a few hooks to
++# tune the build process for Go specificities and calls the generic package
++# infrastructure to generate the necessary make targets
++#
++#  argument 1 is the lowercase package name
++#  argument 2 is the uppercase package name, including a HOST_ prefix
++#             for host packages
++#  argument 3 is the uppercase package name, without the HOST_ prefix
++#             for host packages
++#  argument 4 is the type (target or host)
++################################################################################
++
++define inner-golang-package
++
++$(2)_GOPATH ?= _gopath
++
++ifndef $(2)_MAKE_ENV
++define $(2)_MAKE_ENV
++	$$(HOST_GO_TARGET_ENV) \
++	GOPATH="$$(@D)/$$($(2)_GOPATH)" \
++	CGO_ENABLED=$$(HOST_GO_CGO_ENABLED)
++endef
++endif
++
++ifdef $(2)_GO_LDFLAGS
++	$(2)_BUILD_OPTS += -ldflags "$$($(2)_GO_LDFLAGS)"
++endif
++
++ifeq ($(BR2_STATIC_LIBS),y)
++	$(2)_BUILD_OPTS += -extldflags '-static'
++endif
++
++ifdef $(2)_GO_TAGS
++	$(2)_BUILD_OPTS += -tags "$$($(2)_GO_TAGS)"
++endif
++
++# Target packages need the Go compiler on the host.
++$(2)_DEPENDENCIES += host-go
++
++#
++# The go build/install command installs the binaries inside
++# gopath/bin/linux_GOARCH/ when cross compilation is enabled.
++# We set this variable here to be used by packages if needed.
++#
++$(2)_BINDIR = $$(@D)/$$($(2)_GOPATH)/bin/linux_$$(GO_GOARCH)
++
++#
++# Source files in Go should be uncompressed in a precise folder in the
++# hierarchy of GOPATH. It usually resolves around domain/vendor/software.
++#
++$(2)_GO_SRC_PATH ?= $$(call domain,$($(2)_SITE))/$$(firstword $$(subst /, ,$$(call notdomain,$($(2)_SITE))))
++$(2)_SRC_PATH  = $$(@D)/$$($(2)_GOPATH)/src/$$($(2)_GO_SRC_PATH)/$(1)
++
++#
++# Configure step. Only define it if not already defined by the package
++# .mk file. And take care of the differences between host and target
++# packages.
++#
++ifndef $(2)_CONFIGURE_CMDS
++define $(2)_CONFIGURE_CMDS
++	mkdir -p $$(@D)/$$($(2)_GOPATH)/bin
++	mkdir -p $$(@D)/$$($(2)_GOPATH)/src/$$($(2)_GO_SRC_PATH)
++	ln -sf $$(@D) $$($(2)_SRC_PATH)
++endef
++endif
++
++#
++# Build step. Only define it if not already defined by the package .mk file.
++# There is no differences between host and target packages.
++# We use the install command instead of build command here because the
++# install command also moves the package binaries in gopath/bin/linux_GOARCH/.
++# Using the install command also leverages the go build infrastructure
++# for building and installing multiple binaries.
++#
++ifndef $(2)_BUILD_CMDS
++define $(2)_BUILD_CMDS
++	cd $$($(2)_SRC_PATH) && \
++		$$($(2)_MAKE_ENV) $(HOST_DIR)/bin/go install \
++		-v $$($(2)_BUILD_OPTS)
++endef
++endif
++
++#
++# Host installation step. Only define it if not already defined by the
++# package .mk file.
++#
++ifndef $(2)_INSTALL_CMDS
++define $(2)_INSTALL_CMDS
++	$(INSTALL) -D -m 0755 $$($(2)_BINDIR)/$(1) $(HOST_DIR)/usr/bin/
++endef
++endif
++
++#
++# Target installation step. Only define it if not already defined by the
++# package .mk file.
++#
++ifndef $(2)_INSTALL_TARGET_CMDS
++define $(2)_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 0755 $$($(2)_BINDIR)/$(1) $(TARGET_DIR)/usr/bin/
++endef
++endif
++
++# Call the generic package infrastructure to generate the necessary make
++# targets
++$(call inner-generic-package,$(1),$(2),$(3),$(4))
++
++endef # inner-golang-package
++
++################################################################################
++# golang-package -- the target generator macro for Go packages
++################################################################################
++
++golang-package = $(call inner-golang-package,$(pkgname),$(call UPPERCASE,$(pkgname)),$(call UPPERCASE,$(pkgname)),target)
++host-golang-package = $(call inner-golang-package,host-$(pkgname),$(call UPPERCASE,host-$(pkgname)),$(call UPPERCASE,$(pkgname)),host)
++
 -- 
-2.1.4
+2.7.4
