@@ -1,150 +1,199 @@
-From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Tue, 24 Oct 2017 20:57:04 +0200
-Subject: [Buildroot] [Patch v3 1/2] meson: new package
-In-Reply-To: <cc27e1eb-8ea7-6e2a-6748-748c017b25b2@mind.be>
-References: <20171011065005.9235-1-eric.le.bihan.dev@free.fr>
- <20171011065005.9235-2-eric.le.bihan.dev@free.fr>
- <cc27e1eb-8ea7-6e2a-6748-748c017b25b2@mind.be>
-Message-ID: <20171024185704.GA14724@itchy>
+From: Cam Hutchison <cam@camh.ch>
+Date: Wed, 25 Oct 2017 06:56:35 +1100
+Subject: [Buildroot] [RFC v3 1/4] package/pkg-golang: new package
+	infrastructure
+In-Reply-To: <1508776814-18723-1-git-send-email-angelo.compagnucci@gmail.com>
+References: <1508776814-18723-1-git-send-email-angelo.compagnucci@gmail.com>
+Message-ID: <CABa6e=qOcvjw2pWR9YDxA=xpzm-7CY59R6yiRsCfeXfJkA6pNg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi!
-
-On 17-10-11 23:04:56, Arnout Vandecappelle wrote:
-> On 11-10-17 08:50, Eric Le Bihan wrote:
-> > This new package provides the host variant of the Meson Build System, an
-> > open source build system meant to be both extremely fast, and as user
-> > friendly as possible.
-> >
-> > More precisely, Meson creates configuration files for the Ninja build
-> > system.
-> >
-> > Besides building Meson, it generates a configuration file
-> > ("$(HOST_DIR)/etc/meson/cross-compilation.conf") to be used when
-> > cross-compiling a Meson-based project.
-> >
-> > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> > Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-> > ---
-> >  package/meson/cross-compilation.conf.in | 17 +++++++++++++++++
-> >  package/meson/meson.hash                |  2 ++
-> >  package/meson/meson.mk                  | 31 +++++++++++++++++++++++++++++++
-> >  3 files changed, 50 insertions(+)
-> >  create mode 100644 package/meson/cross-compilation.conf.in
-> >  create mode 100644 package/meson/meson.hash
-> >  create mode 100644 package/meson/meson.mk
-> >
-> > diff --git a/package/meson/cross-compilation.conf.in b/package/meson/cross-compilation.conf.in
-> > new file mode 100644
-> > index 0000000000..84b399f51f
-> > --- /dev/null
-> > +++ b/package/meson/cross-compilation.conf.in
-> > @@ -0,0 +1,17 @@
-> > +# Note: Buildroot's and Meson's terminologies differ about the meaning
-> > +# of 'build', 'host' and 'target':
-> > +# - Buildroot's 'host' is Meson's 'build'
-> > +# - Buildroot's 'target' is Meson's 'host'
-> > +
-> > +[binaries]
-> > +c = '@TARGET_CROSS at gcc'
-> > +cpp = '@TARGET_CROSS at g++'
-> > +ar = '@TARGET_CROSS at ar'
-> > +strip = '@TARGET_CROSS at strip'
-> > +pkgconfig = '@HOST_DIR@/usr/bin/pkg-config'
-> > +
-> > +[host_machine]
-> > +system = 'linux'
-> > +cpu_family ='@TARGET_ARCH@'
+On 24 October 2017 at 03:40, Angelo Compagnucci
+<angelo.compagnucci@gmail.com> wrote:
+> This patch adds a new infrastructure for golang based packages.
 >
->  Does meson have the same definition of ARCH as we do? Does it support all our
-> ARCHes?
-
-It goes well with the usual suspects (arm, mips, ppc, x86, ...) but I'll
-have to check for sparc, sh4 and xtensa. If needed, how should I add a
-restriction, given that there is no Config.in.host?
-
-> > +cpu = '@TARGET_CPU@'
-> > +endian = '@TARGET_ENDIAN@'
+> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+> ---
+>  package/Makefile.in   |   1 +
+>  package/pkg-golang.mk | 140 ++++++++++++++++++++++++++++++++++++++++++++++++++
+>  2 files changed, 141 insertions(+)
+>  create mode 100644 package/pkg-golang.mk
 >
->  I'm completely missing our TARGET_CFLAGS and TARGET_LDFLAGS here. Is there no
-> way to specify those?
+> diff --git a/package/Makefile.in b/package/Makefile.in
+> index a1a5316..60d98d0 100644
+> --- a/package/Makefile.in
+> +++ b/package/Makefile.in
+> @@ -429,3 +429,4 @@ include package/pkg-kconfig.mk
+>  include package/pkg-rebar.mk
+>  include package/pkg-kernel-module.mk
+>  include package/pkg-waf.mk
+> +include package/pkg-golang.mk
+> diff --git a/package/pkg-golang.mk b/package/pkg-golang.mk
+> new file mode 100644
+> index 0000000..262f0e0
+> --- /dev/null
+> +++ b/package/pkg-golang.mk
+> @@ -0,0 +1,140 @@
+> +################################################################################
+> +# Golang package infrastructure
+> +#
+> +# This file implements an infrastructure that eases development of
+> +# package .mk files for Go packages. It should be used for all
+> +# packages that are written in go.
+> +#
+> +# See the Buildroot documentation for details on the usage of this
+> +# infrastructure
+> +#
+> +#
+> +# In terms of implementation, this golang infrastructure requires
+> +# the .mk file to only specify metadata information about the
+> +# package: name, version, download URL, etc.
+> +#
+> +# We still allow the package .mk file to override what the different
+> +# steps are doing, if needed. For example, if <PKG>_BUILD_CMDS is
+> +# already defined, it is used as the list of commands to perform to
+> +# build the package, instead of the default golang behavior. The
+> +# package can also define some post operation hooks.
+> +#
+> +################################################################################
+> +
+> +################################################################################
+> +# inner-golang-package -- defines how the configuration, compilation and
+> +# installation of a Go package should be done, implements a few hooks to
+> +# tune the build process for Go specificities and calls the generic package
+> +# infrastructure to generate the necessary make targets
+> +#
+> +#  argument 1 is the lowercase package name
+> +#  argument 2 is the uppercase package name, including a HOST_ prefix
+> +#             for host packages
+> +#  argument 3 is the uppercase package name, without the HOST_ prefix
+> +#             for host packages
+> +#  argument 4 is the type (target or host)
+> +################################################################################
+> +
+> +define inner-golang-package
+> +
+> +$(2)_GOPATH ?= gopath
 
-These are to be passed via the c_args, c_link_args parameters in the
-"properties" section of the cross-compilation configuration file. I will
-add this.
+Normally there would not be a GOPATH inside the source directory - it
+is the other way around - a source directory under src/ in GOPATH. Since
+it is being done this way I think "gopath" should be "_gopath" or any
+other name starting with an underscore.
 
-> > diff --git a/package/meson/meson.hash b/package/meson/meson.hash
-> > new file mode 100644
-> > index 0000000000..cdb7d1b9ef
-> > --- /dev/null
-> > +++ b/package/meson/meson.hash
-> > @@ -0,0 +1,2 @@
-> > +# Locally generated
+https://golang.org/cmd/go/#hdr-Description_of_package_lists
+
+The last paragraph of that directories starting with an underscore are ignored
+by the go tool. This might help prevent infinite recursion if some tool keeps
+following the directory tree down though "gopath" and back to the source
+directory via the symlink installed by the CONFIGURE_CMD.
+
+> +
+> +ifndef $(2)_MAKE_ENV
+> +define $(2)_MAKE_ENV
+> +       $$(HOST_GO_TARGET_ENV) \
+> +       GOPATH="$$(@D)/$$($(2)_GOPATH)" \
+> +       CGO_ENABLED=$$(HOST_GO_CGO_ENABLED)
+> +endef
+> +endif
+> +
+> +ifdef $(2)_GO_LDFLAGS
+> +       $(2)_BUILD_OPTS += -ldflags "$$($(2)_GO_LDFLAGS)"
+> +endif
+> +
+> +ifeq ($(BR2_STATIC_LIBS),y)
+> +       $(2)_BUILD_OPTS += -extldflags '-static'
+> +endif
+> +
+> +ifdef $(2)_GO_TAGS
+> +       $(2)_BUILD_OPTS += -tags "$$($(2)_GO_TAGS)"
+> +endif
+> +
+> +# Target packages need the Go compiler on the host.
+> +$(2)_DEPENDENCIES += host-go
+> +
+> +#
+> +# The go build/install command installs the binaries inside
+> +# gopath/bin/linux_GOARCH/ when cross compilation is enabled.
+> +# We set this variable here to be used by packages if needed.
+> +#
+> +$(2)_BINDIR = $$(@D)/$$($(2)_GOPATH)/bin/linux_$$(GO_GOARCH)
+> +
+> +#
+> +# Source files in Go should be uncompressed in a precise folder in the
+> +# hierarchy of GOPATH. It usually resolves around domain/vendor/software.
+> +#
+> +$(2)_GO_SRC_PATH ?= $$(call domain,$($(2)_SITE))/$$(firstword $$(subst /, ,$$(call notdomain,$($(2)_SITE))))
+> +$(2)_SRC_PATH  = $$(@D)/$$($(2)_GOPATH)/src/$$($(2)_GO_SRC_PATH)/$(1)
+> +
+> +#
+> +# Configure step. Only define it if not already defined by the package
+> +# .mk file. And take care of the differences between host and target
+> +# packages.
+> +#
+> +ifndef $(2)_CONFIGURE_CMDS
+> +define $(2)_CONFIGURE_CMDS
+> +       mkdir -p $$(@D)/$$($(2)_GOPATH)/bin
+> +       mkdir -p $$(@D)/$$($(2)_GOPATH)/src/$$($(2)_GO_SRC_PATH)
+> +       ln -sf $$(@D) $$($(2)_SRC_PATH)
+> +endef
+> +endif
+> +
+> +#
+> +# Build step. Only define it if not already defined by the package .mk file.
+> +# There is no differences between host and target packages.
+> +# We use the install command instead of build command here because the
+> +# install command also moves the package binaries in gopath/bin/linux_GOARCH/.
+> +# Using the install command also leverages the go build infrastructure
+> +# for building and installing multiple binaries.
+> +#
+> +ifndef $(2)_BUILD_CMDS
+> +define $(2)_BUILD_CMDS
+> +       cd $$($(2)_SRC_PATH) && \
+> +               $$($(2)_MAKE_ENV) $(HOST_DIR)/bin/go install \
+> +               -v $$($(2)_BUILD_OPTS)
+> +endef
+> +endif
+> +
+> +#
+> +# Host installation step. Only define it if not already defined by the
+> +# package .mk file.
+> +#
+> +ifndef $(2)_INSTALL_CMDS
+> +define $(2)_INSTALL_CMDS
+> +       $(INSTALL) -D -m 0755 $$($(2)_BINDIR)/$(1) $(HOST_DIR)/usr/bin/
+> +endef
+> +endif
+> +
+> +#
+> +# Target installation step. Only define it if not already defined by the
+> +# package .mk file.
+> +#
+> +ifndef $(2)_INSTALL_TARGET_CMDS
+> +define $(2)_INSTALL_TARGET_CMDS
+> +       $(INSTALL) -D -m 0755 $$($(2)_BINDIR)/$(1) $(TARGET_DIR)/usr/bin/
+> +endef
+> +endif
+> +
+> +# Call the generic package infrastructure to generate the necessary make
+> +# targets
+> +$(call inner-generic-package,$(1),$(2),$(3),$(4))
+> +
+> +endef # inner-golang-package
+> +
+> +################################################################################
+> +# golang-package -- the target generator macro for Go packages
+> +################################################################################
+> +
+> +golang-package = $(call inner-golang-package,$(pkgname),$(call UPPERCASE,$(pkgname)),$(call UPPERCASE,$(pkgname)),target)
+> +host-golang-package = $(call inner-golang-package,host-$(pkgname),$(call UPPERCASE,host-$(pkgname)),$(call UPPERCASE,$(pkgname)),host)
+> +
+> --
+> 2.7.4
 >
->  You should also verify it against upstream's meson-0.43.0.tar.gz.asc.
-
-Will do!
-
-> > +sha256 324894427dcd29f6156fe06b046c6ad1b998470714debd7c5705902f21aaaa73  meson-0.43.0.tar.gz
-> > diff --git a/package/meson/meson.mk b/package/meson/meson.mk
-> > new file mode 100644
-> > index 0000000000..e4bff229a6
-> > --- /dev/null
-> > +++ b/package/meson/meson.mk
-> > @@ -0,0 +1,31 @@
-> > +################################################################################
-> > +#
-> > +# meson
-> > +#
-> > +################################################################################
-> > +
-> > +MESON_VERSION = 0.43.0
-> > +MESON_SITE = $(call github,mesonbuild,meson,$(MESON_VERSION))
->
->  Upstream has an uploaded tarball. In that case, we use the uploaded tarball,
-> not the autogenerated one. The uploaded tarball is signed, and sometimes it is
-> subtly different (e.g. containing some generated files).
-
-Of course! It is mentionned in docs/manual/adding-packages-tips.txt. I
-should re-read the manual more often...
-
-> > +MESON_LICENSE = Apache-2.0
-> > +MESON_LICENSE_FILES = COPYING
-> > +MESON_SETUP_TYPE = setuptools
-> > +
-> > +HOST_MESON_DEPENDENCIES = host-ninja
-> > +HOST_MESON_NEEDS_HOST_PYTHON = python3
-> > +
-> > +HOST_MESON_TARGET_ENDIAN = $(shell echo $(BR2_ENDIAN) | tr 'A-Z' 'a-z')
->
->  $(call LOWERCASE,$(BR2_ENDIAN))
-
-Will do!
-
-BTW, the value of the "c_args" parameter in the "properties" section of the
-cross-compilation configuration file is formatted as follow:
-
-```
-[properties]
-c_args = ['foo', 'bar', 'baz']
-```
-
-$(TARGET_CFLAGS) is a string like "foo bar baz". To convert it, is
-the following OK?
-
-```
-qlist = $(shell echo $(1) | sed -e "s/[^ ][^ ]*/'&',/g")
-
-sed -e "s;@TARGET_CFLAGS@;$(call qlist,$(TARGET_CFLAGS));g" \
-        $(HOST_MESON_PKGDIR)/cross-compilation.conf.in \
-        > $(HOST_DIR)/etc/meson/cross-compilation.conf
-```
-
-Regards,
-
---
-ELB
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
