@@ -1,29 +1,77 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 25 Oct 2017 09:54:34 +0200
-Subject: [Buildroot] [PATCH 2/2] rfkill: remove package
-In-Reply-To: <20171021223018.8858-2-casantos@datacom.ind.br>
-References: <20171021223018.8858-1-casantos@datacom.ind.br>
- <20171021223018.8858-2-casantos@datacom.ind.br>
-Message-ID: <ca358aa2-29c0-d952-76d4-67436adacdc4@mind.be>
+Date: Wed, 25 Oct 2017 10:09:01 +0200
+Subject: [Buildroot] [PATCH] support/dependencies: always run
+ check-host-tar.mk first
+In-Reply-To: <1508878293-15873-1-git-send-email-jcmvbkbc@gmail.com>
+References: <1508878293-15873-1-git-send-email-jcmvbkbc@gmail.com>
+Message-ID: <e8fd5b1a-3576-773a-35a4-562679eaa31f@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+ Hi Max,
 
-
-On 22-10-17 00:30, Carlos Santos wrote:
-> The rfkill program has been incorporated to the util-linux package.
+On 24-10-17 22:51, Max Filippov wrote:
+> In case both host lzip and tar are not suitable the buildroot build
+> fails with the following error:
 > 
-> The new implementation is based upon, and backward compatible with, the
-> original rfkill from Johannes Berg and Marcel Holtmann.
+>   >>> host-lzip 1.19 Extracting
+>   gzip -d -c dl/lzip-1.19.tar.gz | host/bin/tar --strip-components=1 -C
+>     build/host-lzip-1.19 -xf -
+>   /bin/sh: host/bin/tar: No such file or directory
+
+ Good catch! We really should have an autobuilder without suitable tar to
+capture this kind of issue.
+
+
+> Make sure that if the tar dependency is present it is always the first
+> one in the DEPENDENCIES_HOST_PREREQ.
+
+ However, this is not a proper solution. It will break with top-level parallel
+build and it just looks hackish.
+
+ The proper way to do it is to add a dependency on host-tar to all the other
+host-prereq packages. But that also doesn't scale well... I have to think a bit
+more about a good solution, but I wanted to flag the issue already.
+
+ One thing I though about is to put something like
+
+$(filter-out host-tar,$(DEPENDENCIES_HOST_PREREQ)): host-tar
+
+in check-host-tar.mk, but that only works if check-host-tar.mk is the *last* one
+to add anything to DEPENDENCIES_HOST_PREREQ...
+
+ Regards,
+ Arnout
+
 > 
-> Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+> Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+> ---
+>  support/dependencies/dependencies.mk | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
+> 
+> diff --git a/support/dependencies/dependencies.mk b/support/dependencies/dependencies.mk
+> index ef2ae9b7e158..4e8528b91f05 100644
+> --- a/support/dependencies/dependencies.mk
+> +++ b/support/dependencies/dependencies.mk
+> @@ -12,7 +12,12 @@
+>  define suitable-host-package
+>  $(shell support/dependencies/check-host-$(1).sh $(2))
+>  endef
+> --include $(sort $(wildcard support/dependencies/check-host-*.mk))
+> +
+> +# Make sure that if the tar dependency is present it is always the first one in
+> +# the DEPENDENCIES_HOST_PREREQ, otherwise sources for other dependencies will
+> +# fail to unpack.
+> +-include support/dependencies/check-host-tar.mk
+> +-include $(sort $(filter-out %/check-host-tar.mk,$(wildcard support/dependencies/check-host-*.mk)))
+>  
+>  ifeq ($(BR2_CCACHE),y)
+>  DEPENDENCIES_HOST_PREREQ += host-ccache
+> 
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
-[snip]
 -- 
 Arnout Vandecappelle                          arnout at mind be
 Senior Embedded Software Architect            +32-16-286500
