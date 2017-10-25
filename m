@@ -1,28 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 25 Oct 2017 09:42:07 +0200
-Subject: [Buildroot] [git commit] Add DEPENDENCIES_HOST_PREREQ to the
-	list of packages
-In-Reply-To: <20171022133510.BA8A980190@busybox.osuosl.org> (Arnout
- Vandecappelle's message of "Sun, 22 Oct 2017 15:42:26 +0200")
-References: <20171022133510.BA8A980190@busybox.osuosl.org>
-Message-ID: <87she74qsw.fsf@dell.be.48ers.dk>
+Date: Wed, 25 Oct 2017 09:42:18 +0200
+Subject: [Buildroot] [git commit] libffi: add patch to fix MIPS support
+In-Reply-To: <20171022134900.3FE8080467@busybox.osuosl.org> (Thomas
+ Petazzoni's message of "Sun, 22 Oct 2017 15:56:20 +0200")
+References: <20171022134900.3FE8080467@busybox.osuosl.org>
+Message-ID: <87o9ov4qsl.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=862b76cfefc101943f09db2a73f5519f9a5bb2cb
+ > commit: https://git.buildroot.net/buildroot/commit/?id=4852f05907cd365825f37c283a415a77ba1fcba9
  > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > That way packages included in that list like ccache will also be
- > regarded as a normal packages for targets like external-deps,
- > show-targets or legal-info
+ > Building Python 3.x on MIPS with musl fails because the libffi code
+ > uses a "#ifdef linux" test to decide if we're building on Linux or
+ > not. When building with -std=c99, "linux" is not defined, so instead
+ > of including <asm/sgidefs.h>, libffi's code tries to include
+ > <sgidefs.h>, which doesn't exist on musl.
 
- > Signed-off-by: Alfredo Alvarez Fernandez <alfredo.alvarez_fernandez@nokia.com>
- > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ > The right fix is to use __linux__, which is POSIX compliant, and
+ > therefore defined even when -std=c99 is used.
+
+ > Note that glibc and uClibc were not affected because they do provide a
+ > <sgidefs.h> header in addition to the <asm/sgidefs.h> one.
+
+ > Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
+ > [Thomas: reformat patch with Git, add a better commit log and description.]
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
 Committed to 2017.02.x, thanks.
 
