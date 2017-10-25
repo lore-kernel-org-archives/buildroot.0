@@ -1,95 +1,81 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 25 Oct 2017 21:45:11 +0200
-Subject: [Buildroot] Report of the Buildroot Developer meeting October 21-22
-	2017, Prague
-Message-ID: <3fbbe761-e93d-1a21-9f9e-3ef85da7d332@mind.be>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Wed, 25 Oct 2017 22:02:11 +0200
+Subject: [Buildroot] [PATCH 00/13] New DL_DIR organisation;
+ git cache feature
+In-Reply-To: <CAGduivzECY1W5g-=eRt1NSXMWhLswu1_TGgRuCoUXWV9pMSGPw@mail.gmail.com>
+References: <20170704162211.13238-1-maxime.hadjinlian@gmail.com>
+ <20170728003756.3d675656@gmx.net>
+ <CAGduivzEGzqMesGqkrKtchK3gDGVa9_3iOVzYZW2RFQfzbw4iw@mail.gmail.com>
+ <20171017215649.492791d6@gmx.net>
+ <CAGduivyAHYJQ43fGRqGyFBHvUHtqAqLXXz90_gH0nHM4R8+BSw@mail.gmail.com>
+ <f078c060-2284-7f03-fa76-f7396abf5f80@mind.be>
+ <CAGduivzECY1W5g-=eRt1NSXMWhLswu1_TGgRuCoUXWV9pMSGPw@mail.gmail.com>
+Message-ID: <20171025220211.6298b7aa@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi all,
+Hello Maxime, Arnout,
 
- Last weekend, October 21-22 2017, we held a Buildroot Developer meeting in
-conjunction with ELC-E / OSS-E in Prague. You can find the report of the meeting
-at [1]. The full report is too long to repeat here, but these are the highlights.
+On Mon, 23 Oct 2017 21:03:21 +0200, Maxime Hadjinlian <maxime.hadjinlian@gmail.com> wrote:
 
+> On Mon, Oct 23, 2017 at 8:42 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+> >
+> >
+> > On 23-10-17 20:24, Maxime Hadjinlian wrote:  
+> >> Hi Peter,
+> >>
+> >> On Tue, Oct 17, 2017 at 9:56 PM, Peter Seiderer <ps.report@gmx.net> wrote:  
+> >>> Hello Maxime,
+> >>>
+> >>> On Sun, 30 Jul 2017 18:32:27 +0200, Maxime Hadjinlian <maxime.hadjinlian@gmail.com> wrote:
+> >>>  
+> > [snip]  
+> >>>> It's fixed on my branch on github for now.  
+> >>> Any updates on this one? Mind to resend an actual version (would like to
+> >>> see this feature integrated into buildroot, tired of waiting for hours
+> >>> in case RaspberryPi kernel/firmware/userland git versions are updated)?  
+> >> I think the most "up-to-date" is my branch on Github
+> >> (https://github.com/maximeh/buildroot/tree/git_cache).
+> >> I don't really think it's ready for a review, there's still many bugs
+> >> in there, at least that's what I remember.
+> >> What would really help me is, if you could test this and tell me what
+> >> breaks so I could look it up and try to fix this, this would be a huge
+> >> help !
+> >> If you come up with patches, that's really nice too ;).
+> >>
+> >> I won't make any promises on the time I can spend on this, we all know
+> >> how this goes.. but that being said, I am still really motivated by
+> >> this feature, I really need it too.  
+> >
+> >  Maxime, correct me if I'm wrong, but you'd be happy if Peter does a respin of
+> > the series, right?  
+> Oh sure, for me, the important part is that it's merged, who gets to
+> do is not. Since I clearly can't make the time to make it happen; if
+> someone can respin this, then please do it :). At least the topic is
+> out there :).
+> >
+> >  It would be nice if we could already apply the first few patches, just to keep
+> > things going.  
+> Agreed.
 
- First of all, a warm thank you to the MacGyver hackerspace and particularly our
-host Petr Barton for welcoming us. It was a really nice environment, it put us
-right in the mood for a hacking session, and Petr helped us a lot when we had
-problems with food delivery and by posting the status of Patchwork on a LED display.
+I will send out a v2 patch series of Maximes patches from github (with
+a change log added), then hope to address some of Arnouts review comments (and
+do some more testing) and will send out a v3 series the next days...
 
+Regards,
+Peter
 
- The (according to me) most important and relevant points discussed were:
-
-* Support for "language" package managers. On the one hand, we will document in
-the FAQ why they don't work. On the other hand, we have to accept that they are
-coming (cfr. npm). Although for Python and Lua it works out quite well by just
-adding packages.
-
-* Evaluation of LTS releases. There is general agreement that they are important
-and we'll continue doing it. How to contribute to the LTS branch should be
-clarified.
-
-* The gitlab mirror[2] gets mirrored again (pushed from the autobuild server,
-rather than triggered from gitlab itself) and the gitlab-CI tests[3] run.
-
-* The Buildroot association needs more attention. We should use the money for
-something useful rather than just funding the bank. Some ideas both for
-gathering money and for spending it were proposed.
-
-* Google Summer of Code: Buildroot will not participate in GSoC'18.
-
-* Top-level parallel build: we had a fruitful discussion about various aspects.
-The most important open point is what to do when multiple packages write/update
-the same file. The idea is to not allow that in top-level parallel build. But
-first, we'll try to evaluate how bad this problem is by reporting it in the
-autobuilders.
-
-* The patchwork queue has been reduced by about 80 patches (patches keep getting
-posted while we work on it so it's hard to count exactly).
-
- Yes, this long list is the summary of the summary of what was discussed :-)
-
-
- Here is the list of action points from the meeting:
-* Alexey will try Buildroot on WSL and MacOS.
-* Arnout will add the requirements for "language" package managers, and the
-conclusion that this is not possible, to the FAQ.
-* Alexey will document the way something can be marked for the LTS branches.
-* Arnout will write a web page that invites people to become a member of the
-Buildroot Association and that explains what will be done with the money.
-* Peter will ask OSUOSL if it is feasible that they host sources.buildroot.org
-and autobuild.buildroot.org.
-* Thomas will set up a Paypal account for the association, so non-EU members can
-pay easily.
-
-
-Finally, also a thank you to Essensium/Mind[4] for sponsoring the Sunday evening
-dinner.[*]
-
-
- We forgot to decide on the next Buildroot Developer meeting, but normally it
-should be after FOSDEM, Mon-Tue February 5-6 2018.
-
-
- Regards,
- Arnout
-
-
-[1] https://elinux.org/Buildroot:DeveloperDaysELCE2017
-[2] https://gitlab.com/buildroot.org/buildroot
-[3] https://gitlab.com/buildroot.org/buildroot/pipelines
-[4] http://mind.be   <-- Check out the new website!
-
-[*] Yes, it feels weird to thank myself :-)
-
--- 
-Arnout Vandecappelle                          arnout@mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+> >
+> >  Regards,
+> >  Arnout
+> >
+> > --
+> > Arnout Vandecappelle                          arnout at mind be
+> > Senior Embedded Software Architect            +32-16-286500
+> > Essensium/Mind                                http://www.mind.be
+> > G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+> > LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+> > GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF  
