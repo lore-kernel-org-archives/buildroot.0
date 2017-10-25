@@ -1,82 +1,51 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Wed, 25 Oct 2017 11:26:49 +0200
-Subject: [Buildroot] [RFC v5 5/5] package/docker-containerd: converting to
-	golang infrastructure
-In-Reply-To: <1508923609-2022-1-git-send-email-angelo.compagnucci@gmail.com>
-References: <1508923609-2022-1-git-send-email-angelo.compagnucci@gmail.com>
-Message-ID: <1508923609-2022-5-git-send-email-angelo.compagnucci@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 25 Oct 2017 12:10:23 +0200
+Subject: [Buildroot] [WIP 0/2] gobject-introspection
+In-Reply-To: <20171020200856.19406-1-Adamduskett@outlook.com>
+References: <20171020200856.19406-1-Adamduskett@outlook.com>
+Message-ID: <0dddc375-85ee-5222-c90d-cfda74e1e601@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch converts the docker-containerd package to the new golang
-infrastructure.
 
-Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
----
- package/docker-containerd/docker-containerd.mk | 37 +++++++++++---------------
- 1 file changed, 15 insertions(+), 22 deletions(-)
 
-diff --git a/package/docker-containerd/docker-containerd.mk b/package/docker-containerd/docker-containerd.mk
-index ffbadb0..34e7674 100644
---- a/package/docker-containerd/docker-containerd.mk
-+++ b/package/docker-containerd/docker-containerd.mk
-@@ -9,39 +9,32 @@ DOCKER_CONTAINERD_SITE = $(call github,docker,containerd,$(DOCKER_CONTAINERD_VER
- DOCKER_CONTAINERD_LICENSE = Apache-2.0
- DOCKER_CONTAINERD_LICENSE_FILES = LICENSE.code
- 
--DOCKER_CONTAINERD_DEPENDENCIES = host-go
-+DOCKER_CONTAINERD_GOPATH = vendor
- 
--DOCKER_CONTAINERD_GOPATH = "$(@D)/vendor"
--DOCKER_CONTAINERD_MAKE_ENV = $(HOST_GO_TARGET_ENV) \
--	CGO_ENABLED=1 \
--	GOBIN="$(@D)/bin" \
--	GOPATH="$(DOCKER_CONTAINERD_GOPATH)"
--
--DOCKER_CONTAINERD_GLDFLAGS = \
-+DOCKER_CONTAINERD_GO_LDFLAGS = \
- 	-X github.com/docker/containerd.GitCommit=$(DOCKER_CONTAINERD_VERSION)
- 
--ifeq ($(BR2_STATIC_LIBS),y)
--DOCKER_CONTAINERD_GLDFLAGS += -extldflags '-static'
--endif
--
--define DOCKER_CONTAINERD_CONFIGURE_CMDS
--	mkdir -p $(DOCKER_CONTAINERD_GOPATH)/src/github.com/docker
--	ln -s $(@D) $(DOCKER_CONTAINERD_GOPATH)/src/github.com/docker/containerd
--	mkdir -p $(DOCKER_CONTAINERD_GOPATH)/src/github.com/opencontainers
--	ln -s $(RUNC_SRCDIR) $(DOCKER_CONTAINERD_GOPATH)/src/github.com/opencontainers/runc
-+define DOCKER_CONTAINERD_LINK_DIR
-+	ln -sf $(@D) $(@D)/$(DOCKER_CONTAINERD_GOPATH)/src/github.com/docker/containerd
-+	mkdir -p $(@D)/$(DOCKER_CONTAINERD_GOPATH)/src/github.com/opencontainers
-+	ln -s $(RUNC_SRCDIR) $(@D)/$(DOCKER_CONTAINERD_GOPATH)/src/github.com/opencontainers/runc
- endef
- 
-+DOCKER_CONTAINERD_POST_CONFIGURE_HOOKS += DOCKER_CONTAINERD_LINK_DIR
-+
- define DOCKER_CONTAINERD_BUILD_CMDS
- 	$(foreach d,ctr containerd containerd-shim,\
--		cd $(@D); $(DOCKER_CONTAINERD_MAKE_ENV) $(HOST_DIR)/bin/go build \
--			-v -o $(@D)/bin/$(d) -ldflags "$(DOCKER_CONTAINERD_GLDFLAGS)" ./$(d)$(sep))
-+		cd $(@D)/$(DOCKER_CONTAINERD_GOPATH)/src/github.com/docker/containerd; \
-+		$(DOCKER_CONTAINERD_GO_ENV) \
-+		$(DOCKER_CONTAINERD_GO) \
-+		$(DOCKER_CONTAINERD_BUILD_OPTS) ./$(d)$(sep))
- endef
- 
- define DOCKER_CONTAINERD_INSTALL_TARGET_CMDS
- 	ln -fs runc $(TARGET_DIR)/usr/bin/docker-runc
--	$(INSTALL) -D -m 0755 $(@D)/bin/containerd $(TARGET_DIR)/usr/bin/docker-containerd
--	$(INSTALL) -D -m 0755 $(@D)/bin/containerd-shim $(TARGET_DIR)/usr/bin/containerd-shim
-+	$(INSTALL) -D -m 0755 $(@D)/$(DOCKER_CONTAINERD_BINDIR)/containerd $(TARGET_DIR)/usr/bin/docker-containerd
-+	$(INSTALL) -D -m 0755 $(@D)/$(DOCKER_CONTAINERD_BINDIR)/containerd-shim $(TARGET_DIR)/usr/bin/containerd-shim
- 	ln -fs containerd-shim $(TARGET_DIR)/usr/bin/docker-containerd-shim
- endef
- 
--$(eval $(generic-package))
-+$(eval $(golang-package))
+On 20-10-17 22:08, Adam Duskett wrote:
+> Gstreamer will now fail to build!
+> Why? Gstreamer looks for an introspection library during the configure
+> stage, and if it finds it, attempts to use it.
+> Because some library paths not being making it to the introspection
+> compiler, it will now fail to build with linking errors! Oh no!
+> 
+> In Yocto, you can call out:
+> export GIR_EXTRA_LIBS_PATH="path" 
+> (see meta/recipes-multimedia/gstreamer/gstreamer1.0.inc for an example)
+> in the recipe file, which will be then get passed to g-ir-scanner-qemuwrapper,
+> which will then set the environment variable LD_LIBRARY_PATH to the value of
+> GIR_EXTRA_LIBS_PATH, whcih will then call g-ir-scanner, which will then
+> call the functions in the script entitled "ccompiler.py" in the host directory.
+> which will then resolve the library paths properly based off of the
+> LD_LIBRARY_PATH variable. It's a very easy and clean solution to the problem.
+> 
+> However, this isn't possible with BuildRoot because a script called from
+> a GNU Makefile can't change the parent environment, and so the build
+> will fail miserably.
+
+ So setting
+
+GSTREAMER_MAKE_ENV = GIR_EXTRA_LIBS_PATH="path"
+
+doesn't work? I wonder why not...
+
+ Regards,
+ Arnout
+
 -- 
-2.7.4
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
