@@ -1,26 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 25 Oct 2017 09:46:08 +0200
-Subject: [Buildroot] [PATCH 0/4] Bump skarnet.org packages to 2017.10
-In-Reply-To: <20171023195203.6775-1-eric.le.bihan.dev@free.fr> (Eric Le
- Bihan's message of "Mon, 23 Oct 2017 21:51:59 +0200")
-References: <20171023195203.6775-1-eric.le.bihan.dev@free.fr>
-Message-ID: <87y3nz3c1r.fsf@dell.be.48ers.dk>
+Date: Wed, 25 Oct 2017 09:44:09 +0200
+Subject: [Buildroot] [git commit] libcurl: security bump to version 7.56.1
+Message-ID: <20171025073940.A17FE80447@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Eric" == Eric Le Bihan <eric.le.bihan.dev@free.fr> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=62d4dd2999a0446c2b868a7c6fbcc764a470493d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > This series bumps all skarnet.org packages updated in release 2017.10.
- > Eric Le Bihan (4):
- >   skalibs: bump version to 2.6.0.1
- >   execline: bump version to 2.3.0.3
- >   s6: bump version to 2.6.1.1
- >   s6-rc: bump version to 0.3.0.0
+Fixes CVE-2017-1000257 - IMAP FETCH response out of bounds read
 
-Committed series, thanks.
+https://curl.haxx.se/docs/adv_20171023.html
 
--- 
-Bye, Peter Korsgaard
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libcurl/libcurl.hash | 4 ++--
+ package/libcurl/libcurl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
+index c697063..49292df 100644
+--- a/package/libcurl/libcurl.hash
++++ b/package/libcurl/libcurl.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# https://curl.haxx.se/download/curl-7.56.0.tar.xz.asc
+-sha256 32437bcca0e9434384329fdc733547879d25ba70335b3cf9e3d9cbc3e71fd172  curl-7.56.0.tar.xz
++# https://curl.haxx.se/download/curl-7.56.1.tar.xz.asc
++sha256 8eed282cf3a0158d567a0feaa3c4619e8e847970597b5a2c81879e8f0d1a39d1  curl-7.56.1.tar.xz
+ sha256 cbcf511f5702f7baf5424193a792bc9c18fab22bcbec2e6a587598389dc632c2  COPYING
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index a6b699c..57b9c2c 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBCURL_VERSION = 7.56.0
++LIBCURL_VERSION = 7.56.1
+ LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
+ LIBCURL_SITE = https://curl.haxx.se/download
+ LIBCURL_DEPENDENCIES = host-pkgconf \
