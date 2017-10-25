@@ -1,55 +1,126 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Wed, 25 Oct 2017 09:12:00 -0400
-Subject: [Buildroot] [PATCH v3 1/1] libsepol: require threads
-Message-ID: <20171025131200.18412-1-aduskett@gmail.com>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Wed, 25 Oct 2017 08:14:27 -0500
+Subject: [Buildroot] [PATCH v2] uboot-tools: disable pylibfdt
+In-Reply-To: <20171017201050.20888-1-matthew.weber@rockwellcollins.com>
+References: <20171017201050.20888-1-matthew.weber@rockwellcollins.com>
+Message-ID: <CANQCQpZXZEJpajP4dP8fxmS858NOTxRPTA83bvzRhyj4sFR_og@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libsepol 2.7 now uses pthreads.h
+All,
 
-Signed-off-by: Adam Duskett <aduskett@gmail.com>
----
-Changes v1 -> v2:
-  - Added thread dependency to semodule-utils (Arnout)
+On Tue, Oct 17, 2017 at 3:10 PM, Matt Weber
+<matthew.weber@rockwellcollins.com> wrote:
+> 1) Removed the host system swig check which is proposed
+> for being fixed upstream in 2017.11 by making pylibfdt
+> selectable via KCONFIG.
+>
+> http://u-boot.10912.n7.nabble.com/PATCH-v2-0-4-pylibfdt-compile-pylibfdt-in-scripts-dtc-pylibfdt-only-when-necessary-td309940.html
+>
+> 2) Removing the swig/python setup.py prevents the Python.h
+> error also causing build failures.  That bug was resolved in
+> 2017.9.
+>
+> http://git.denx.de/?p=u-boot.git;a=commitdiff;h=3809e30273e03d762595dbc2a62f3a8398281ec8
+>
+> Fixes (one of many):
+> http://autobuild.buildroot.net/results/f9e13caae9b31c9dcde7d24caecc036324f269cc
+>
 
-Changes v2 -> v3:
-  - Added explinations for dependencies (Matt Webber)
+Ping.  I'd like to get this one merged as without it until ~Dec
+timeframe(2017.11 uboot bump) there will continue to be the noted
+failures.
 
- package/libsepol/Config.in       | 1 +
- package/semodule-utils/Config.in | 4 ++++
- 2 files changed, 5 insertions(+)
+> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+> ---
+>  .../0004-uboot-tools-disable-pylibfdt.patch        | 63 ++++++++++++++++++++++
+>  1 file changed, 63 insertions(+)
+>  create mode 100644 package/uboot-tools/0004-uboot-tools-disable-pylibfdt.patch
+>
+> diff --git a/package/uboot-tools/0004-uboot-tools-disable-pylibfdt.patch b/package/uboot-tools/0004-uboot-tools-disable-pylibfdt.patch
+> new file mode 100644
+> index 0000000..1ac9bfb
+> --- /dev/null
+> +++ b/package/uboot-tools/0004-uboot-tools-disable-pylibfdt.patch
+> @@ -0,0 +1,63 @@
+> +From d8b1755bafb678ea28d7c9115dfc6a894d18e74a Mon Sep 17 00:00:00 2001
+> +From: Matt Weber <matthew.weber@rockwellcollins.com>
+> +Date: Tue, 17 Oct 2017 14:55:09 -0500
+> +Subject: [PATCH] uboot-tools: disable pylibfdt
+> +
+> +1) Removed the host system swig check which is proposed
+> +for being fixed upstream in 2017.11 by making pylibfdt
+> +selectable via KCONFIG.
+> +
+> +2) Removing the swig/python setup.py prevents the Python.h
+> +error also causing build failures.  That bug was resolved in
+> +2017.9.
+> +
+> +Fixes (one of many):
+> +http://autobuild.buildroot.net/results/f9e13caae9b31c9dcde7d24caecc036324f269cc
+> +
+> +Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+> +---
+> + tools/Makefile | 21 ---------------------
+> + 1 file changed, 21 deletions(-)
+> +
+> +diff --git a/tools/Makefile b/tools/Makefile
+> +index 77706a9..00a5d36 100644
+> +--- a/tools/Makefile
+> ++++ b/tools/Makefile
+> +@@ -122,23 +122,6 @@ mkimage-objs   := $(dumpimage-mkimage-objs) mkimage.o
+> + fit_info-objs   := $(dumpimage-mkimage-objs) fit_info.o
+> + fit_check_sign-objs   := $(dumpimage-mkimage-objs) fit_check_sign.o
+> +
+> +-# Unfortunately setup.py (or actually the Python distutil implementation)
+> +-# puts files into the same directory as the .i file. We cannot touch the source
+> +-# directory, so we copy the .i file into the tools/ build subdirectory before
+> +-# calling setup. This directory is safe to write to. This ensures that we get
+> +-# all three files in $(obj)/tools: _libfdt.so, libfdt.py and libfdt_wrap.c
+> +-# The latter is a temporary file which we could actually remove.
+> +-tools/_libfdt.so: $(LIBFDT_SRCS) $(LIBFDT_SWIG)
+> +-      cp $(LIBFDT_SWIG) tools/.
+> +-      unset CC; \
+> +-      unset CROSS_COMPILE; \
+> +-      LDFLAGS="$(HOSTLDFLAGS)" CFLAGS= VERSION="u-boot-$(UBOOTVERSION)" \
+> +-              CPPFLAGS="$(_hostc_flags)" OBJDIR=tools \
+> +-              SOURCES="$(LIBFDT_SRCS) tools/libfdt.i" \
+> +-              SWIG_OPTS="-I$(srctree)/lib/libfdt -I$(srctree)/lib" \
+> +-              $(libfdt_tree)/pylibfdt/setup.py --quiet build_ext \
+> +-                      --build-lib tools
+> +-
+> + ifneq ($(CONFIG_MX23)$(CONFIG_MX28),)
+> + # Add CONFIG_MXS into host CFLAGS, so we can check whether or not register
+> + # the mxsimage support within tools/mxsimage.c .
+> +@@ -226,10 +209,6 @@ clean-dirs := lib common
+> +
+> + always := $(hostprogs-y)
+> +
+> +-# Build a libfdt Python module if swig is available
+> +-# Use 'sudo apt-get install swig libpython-dev' to enable this
+> +-always += $(if $(shell which swig 2> /dev/null),_libfdt.so)
+> +-
+> + # Generated LCD/video logo
+> + LOGO_H = $(objtree)/include/bmp_logo.h
+> + LOGO_DATA_H = $(objtree)/include/bmp_logo_data.h
+> +--
+> +1.8.3.1
+> +
+> --
+> 1.8.3.1
+>
 
-diff --git a/package/libsepol/Config.in b/package/libsepol/Config.in
-index f92af52072..f17eb47448 100644
---- a/package/libsepol/Config.in
-+++ b/package/libsepol/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_LIBSEPOL
- 	bool "libsepol"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # pthread
- 	help
- 	  Libsepol is the binary policy manipulation library. It doesn't
- 	  depend upon or use any of the other SELinux components.
-diff --git a/package/semodule-utils/Config.in b/package/semodule-utils/Config.in
-index d9cb928c4c..38e043dc2c 100644
---- a/package/semodule-utils/Config.in
-+++ b/package/semodule-utils/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_SEMODULE_UTILS
- 	bool "semodule-utils"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libsepol
- 	select BR2_PACKAGE_LIBSEPOL
- 	help
- 	  semodule-utils is a package that contains tools for handling
-@@ -13,3 +14,6 @@ config BR2_PACKAGE_SEMODULE_UTILS
- 	  * semodule_package - Create a SELinux policy module package.
- 
- 	  https://github.com/SELinuxProject/selinux/wiki/Releases
-+
-+comment "semodule-utils needs a toolchain w/ threads"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
+
+
 -- 
-2.13.6
+Matthew L Weber / Pr Software Engineer
+Airborne Information Systems / Security Systems and Software / Secure Platforms
+MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
+www.rockwellcollins.com
+
+Note: Any Export License Required Information and License Restricted
+Third Party Intellectual Property (TPIP) content must be encrypted and
+sent to matthew.weber at corp.rockwellcollins.com.
