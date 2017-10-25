@@ -1,10 +1,10 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Wed, 25 Oct 2017 22:09:58 +0200
-Subject: [Buildroot] [PATCH v2 08/13] pkg-download: support new subdir for
-	mirrors
+Date: Wed, 25 Oct 2017 22:09:55 +0200
+Subject: [Buildroot] [PATCH v2 05/13] pkg-{download,
+	generic}: use new $($(PKG)_DL_DIR)
 In-Reply-To: <20171025201003.16105-1-ps.report@gmx.net>
 References: <20171025201003.16105-1-ps.report@gmx.net>
-Message-ID: <20171025201003.16105-9-ps.report@gmx.net>
+Message-ID: <20171025201003.16105-6-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,42 +13,42 @@ To: buildroot@busybox.net
 
 From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 
-Since we introduced subdirectory to the DL_DIR, we need to support them
-in the PRIMARY and BACKUP mirror as they evolve to the new tree
-structure.
-
-We check first the new URI (with the subdir), and in case of failure, we
-go check without.
-By checking both URIs, we ensure that old mirror are usable.
+Let the infrastructure use the new variable $(PKG)_DL_DIR
 
 Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 ---
 Changes v1 --> v2:
-  - from https://github.com/maximeh/buildroot/commit/a7d5ad4a34322e7f77849e2d5ef38ebc23e42149.patch
-  - use urlencode
+  - from https://github.com/maximeh/buildroot/commit/aa1e182e779f17715c391dfd0868ec7096c600b8.patch
 ---
- package/pkg-download.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/pkg-download.mk | 2 +-
+ package/pkg-generic.mk  | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-index b94a828579..b76d0ec289 100644
+index 233a9fafc7..b94a828579 100644
 --- a/package/pkg-download.mk
 +++ b/package/pkg-download.mk
-@@ -75,6 +75,7 @@ export BR_NO_CHECK_HASH_FOR =
+@@ -95,7 +95,7 @@ define DOWNLOAD
+ 		-H $(PKGDIR)/$($(PKG)_RAWNAME).hash \
+ 		-n $($(PKG)_RAW_BASE_NAME) \
+ 		-N $($(PKG)_RAWNAME) \
+-		-o $(DL_DIR)/$(notdir $(1)) \
++		-o $($(PKG)_DL_DIR)/$(notdir $(1)) \
+ 		$(if $($(PKG)_GIT_SUBMODULES),-r) \
+ 		$(DOWNLOAD_URIS) \
+ 		$(QUIET) \
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 5989417902..676625e0a6 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -589,7 +589,7 @@ $(2)_TARGET_DIRCLEAN =		$$($(2)_DIR)/.stamp_dircleaned
  
- ifneq ($(call qstrip,$(BR2_PRIMARY_SITE)),)
- DOWNLOAD_URIS += \
-+	-u $(call getschemeplusuri,$(BR2_PRIMARY_SITE)/$(notdir $($(PKG)_DL_DIR)),urlencode) \
- 	-u $(call getschemeplusuri,$(BR2_PRIMARY_SITE),urlencode)
- endif
- 
-@@ -83,6 +84,7 @@ DOWNLOAD_URIS += \
- 	-u $($(PKG)_SITE_METHOD)+$(dir $(1))
- ifneq ($(call qstrip,$(BR2_BACKUP_SITE)),)
- DOWNLOAD_URIS += \
-+	-u $(call getschemeplusuri,$(BR2_BACKUP_SITE)/$(notdir $($(PKG)_DL_DIR)),urlencode) \
- 	-u $(call getschemeplusuri,$(BR2_BACKUP_SITE),urlencode)
- endif
- endif
+ # default extract command
+ $(2)_EXTRACT_CMDS ?= \
+-	$$(if $$($(2)_SOURCE),$$(INFLATE$$(suffix $$($(2)_SOURCE))) $$(DL_DIR)/$$($(2)_SOURCE) | \
++	$$(if $$($(2)_SOURCE),$$(INFLATE$$(suffix $$($(2)_SOURCE))) $$($(2)_DL_DIR)/$$($(2)_SOURCE) | \
+ 	$$(TAR) --strip-components=$$($(2)_STRIP_COMPONENTS) \
+ 		-C $$($(2)_DIR) \
+ 		$$(foreach x,$$($(2)_EXCLUDES),--exclude='$$(x)' ) \
 -- 
 2.14.2
