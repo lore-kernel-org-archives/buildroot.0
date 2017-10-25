@@ -1,43 +1,49 @@
-From: Joshua Henderson <joshua.henderson@microchip.com>
-Date: Wed, 25 Oct 2017 08:50:57 -0700
-Subject: [Buildroot] [PATCH] qt5wayland: fix config option indentation
-Message-ID: <1508946657-25626-1-git-send-email-joshua.henderson@microchip.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 25 Oct 2017 18:03:26 +0200
+Subject: [Buildroot] [PATCH] sdl2: explicitly disable raspberry pi video
+	backend
+Message-ID: <20171025160326.19759-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Reorganize so the optional composer option for the qt5wayland package shows up
-as an indented option.
+Fixes:
+http://autobuild.buildroot.net/results/d59/d5992dcc9a49ee77afaebdcc9448ac1868fa7de1/
+http://autobuild.buildroot.net/results/e89/e894f21ce1983ee3bd8d65a8e59e1adab9a62707/
 
-Signed-off-by: Joshua Henderson <joshua.henderson@microchip.com>
+The configure script automatically enables support for the raspberry pi
+video backend if it detects the rpi-userland package.  Unfortunately it
+hardcodes a number of include/linker paths unsuitable for cross compilation,
+breaking the build:
+
+    if test x$enable_video = xyes -a x$enable_video_rpi = xyes; then
+..
+     RPI_CFLAGS="-I/opt/vc/include -I/opt/vc/include/interface/vcos/pthreads -I/opt/vc/include/interface/vmcs_host/linux"
+     RPI_LDFLAGS="-L/opt/vc/lib -lbcm_host"
+    fi
+
+So explicitly disable it until the configure script is fixed.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/qt5/qt5wayland/Config.in | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ package/sdl2/sdl2.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/qt5/qt5wayland/Config.in b/package/qt5/qt5wayland/Config.in
-index 82110cc..0182d3c 100644
---- a/package/qt5/qt5wayland/Config.in
-+++ b/package/qt5/qt5wayland/Config.in
-@@ -1,3 +1,7 @@
-+comment "qt5wayland needs an OpenGL-capable backend"
-+	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
-+	depends on !BR2_PACKAGE_QT5_GL_AVAILABLE
-+
- config BR2_PACKAGE_QT5WAYLAND
- 	bool "qt5wayland"
- 	depends on BR2_PACKAGE_QT5_GL_AVAILABLE
-@@ -12,10 +16,6 @@ config BR2_PACKAGE_QT5WAYLAND
+diff --git a/package/sdl2/sdl2.mk b/package/sdl2/sdl2.mk
+index facb41e527..fa3b57e6cd 100644
+--- a/package/sdl2/sdl2.mk
++++ b/package/sdl2/sdl2.mk
+@@ -18,7 +18,8 @@ SDL2_CONF_OPTS += \
+ 	--disable-esd \
+ 	--disable-dbus \
+ 	--disable-pulseaudio \
+-	--disable-video-wayland
++	--disable-video-wayland \
++	--disable-video-rpi
  
- 	  http://qt.io
- 
--comment "qt5wayland needs an OpenGL-capable backend"
--	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
--	depends on !BR2_PACKAGE_QT5_GL_AVAILABLE
--
- if BR2_PACKAGE_QT5WAYLAND
- 
- config BR2_PACKAGE_QT5WAYLAND_COMPOSITOR
+ # We must enable static build to get compilation successful.
+ SDL2_CONF_OPTS += --enable-static
 -- 
-2.7.4
+2.11.0
