@@ -1,47 +1,76 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 24 Oct 2017 08:20:55 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] Config.in: fix help
-	comment for gcc optimization
-Message-ID: <20171025073526.636C581106@busybox.osuosl.org>
+Date: Wed, 25 Oct 2017 09:31:24 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] musl: add upstream
+	security fix for CVE-2017-15650
+Message-ID: <20171025073526.B4A2281106@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=103facc2f24c77af7e6a39316caa5562f908d453
+commit: https://git.buildroot.net/buildroot/commit/?id=5a9013c6d1203f107b64d7003e7621e75b3972af
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-The default for is set to BR2_OPTIMIZE_S, the help comment designated
-BR2_OPTIMIZE_0 as default.
-Changed the help comment to show that BR2_OPTIMIZE_S is the default.
+From the upstream announcement:
+http://www.openwall.com/lists/oss-security/2017/10/19/5
 
-Signed-off-by: Lothar Felten <lothar.felten@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 4e09fd8bdef6ddea1097f91df07515abde389cd0)
+Felix Wilhelm has discovered a flaw in the dns response parsing for
+musl libc 1.1.16 that leads to overflow of a stack-based buffer.
+Earlier versions are also affected.
+
+When an application makes a request via getaddrinfo for both IPv4 and
+IPv6 results (AF_UNSPEC), an attacker who controls or can spoof the
+nameservers configured in resolv.conf can reply to both the A and AAAA
+queries with A results. Since A records are smaller than AAAA records,
+it's possible to fit more addresses than the precomputed bound, and a
+buffer overflow occurs.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 209f42fd3a5f4357e22fb72f1597a6868566aabd)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Config.in | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ ...ing-callback-enforce-MAXADDRS-to-preclude.patch | 35 ++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
 
-diff --git a/Config.in b/Config.in
-index 434935b..345d5c5 100644
---- a/Config.in
-+++ b/Config.in
-@@ -467,7 +467,7 @@ choice
- config BR2_OPTIMIZE_0
- 	bool "optimization level 0"
- 	help
--	  Do not optimize. This is the default.
-+	  Do not optimize.
- 
- config BR2_OPTIMIZE_1
- 	bool "optimization level 1"
-@@ -534,6 +534,7 @@ config BR2_OPTIMIZE_S
- 	  -falign-loops -falign-labels -freorder-blocks
- 	  -freorder-blocks-and-partition -fprefetch-loop-arrays
- 	  -ftree-vect-loop-version
-+	  This is the default.
- 
- endchoice
- 
+diff --git a/package/musl/0003-in-dns-parsing-callback-enforce-MAXADDRS-to-preclude.patch b/package/musl/0003-in-dns-parsing-callback-enforce-MAXADDRS-to-preclude.patch
+new file mode 100644
+index 0000000..c6b5ef2
+--- /dev/null
++++ b/package/musl/0003-in-dns-parsing-callback-enforce-MAXADDRS-to-preclude.patch
+@@ -0,0 +1,35 @@
++From 45ca5d3fcb6f874bf5ba55d0e9651cef68515395 Mon Sep 17 00:00:00 2001
++From: Rich Felker <dalias@aerifal.cx>
++Date: Wed, 18 Oct 2017 14:50:03 -0400
++Subject: [PATCH] in dns parsing callback, enforce MAXADDRS to preclude
++ overflow
++
++MAXADDRS was chosen not to need enforcement, but the logic used to
++compute it assumes the answers received match the RR types of the
++queries. specifically, it assumes that only one replu contains A
++record answers. if the replies to both the A and the AAAA query have
++their answer sections filled with A records, MAXADDRS can be exceeded
++and clobber the stack of the calling function.
++
++this bug was found and reported by Felix Wilhelm.
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ src/network/lookup_name.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/src/network/lookup_name.c b/src/network/lookup_name.c
++index 066be4d5..209c20f0 100644
++--- a/src/network/lookup_name.c
+++++ b/src/network/lookup_name.c
++@@ -111,6 +111,7 @@ static int dns_parse_callback(void *c, int rr, const void *data, int len, const
++ {
++ 	char tmp[256];
++ 	struct dpc_ctx *ctx = c;
+++	if (ctx->cnt >= MAXADDRS) return -1;
++ 	switch (rr) {
++ 	case RR_A:
++ 		if (len != 4) return -1;
++-- 
++2.11.0
++
