@@ -1,9 +1,9 @@
 From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Wed, 25 Oct 2017 08:14:27 -0500
-Subject: [Buildroot] [PATCH v2] uboot-tools: disable pylibfdt
-In-Reply-To: <20171017201050.20888-1-matthew.weber@rockwellcollins.com>
-References: <20171017201050.20888-1-matthew.weber@rockwellcollins.com>
-Message-ID: <CANQCQpZXZEJpajP4dP8fxmS858NOTxRPTA83bvzRhyj4sFR_og@mail.gmail.com>
+Date: Wed, 25 Oct 2017 08:19:48 -0500
+Subject: [Buildroot] [PATCH] python-config.sh: don't reassign ${prefix}
+In-Reply-To: <20171018165523.13145-1-matthew.weber@rockwellcollins.com>
+References: <20171018165523.13145-1-matthew.weber@rockwellcollins.com>
+Message-ID: <CANQCQpZz7emu-ZnQyo0v1KQgmo7Md+zfhDBjhvzqj_yQ9Tu6AQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,100 +12,96 @@ To: buildroot@busybox.net
 
 All,
 
-On Tue, Oct 17, 2017 at 3:10 PM, Matt Weber
+On Wed, Oct 18, 2017 at 11:55 AM, Matt Weber
 <matthew.weber@rockwellcollins.com> wrote:
-> 1) Removed the host system swig check which is proposed
-> for being fixed upstream in 2017.11 by making pylibfdt
-> selectable via KCONFIG.
+> When prefix is set to a path like /usr during crossbuild
+> the sed operations end up executing twice, once for the prefix
+> reassignment and another for includedir if it is set as a string
+> including the ${prefix} variable.  This results in an issue
+> when building on a machine that mounts local storage under /usr.
 >
-> http://u-boot.10912.n7.nabble.com/PATCH-v2-0-4-pylibfdt-compile-pylibfdt-in-scripts-dtc-pylibfdt-only-when-necessary-td309940.html
+> This patch updates the remaining location which uses the prefix
+> variable to also sed and update to use the real path.
 >
-> 2) Removing the swig/python setup.py prevents the Python.h
-> error also causing build failures.  That bug was resolved in
-> 2017.9.
+> Upstream bug report:
+> https://bugs.python.org/issue31713
 >
-> http://git.denx.de/?p=u-boot.git;a=commitdiff;h=3809e30273e03d762595dbc2a62f3a8398281ec8
+> Buildroot bug:
+> https://bugs.busybox.net/show_bug.cgi?id=10361
 >
-> Fixes (one of many):
-> http://autobuild.buildroot.net/results/f9e13caae9b31c9dcde7d24caecc036324f269cc
+> Fixes failures like the following:
+> python-gobject-2.28.6 | NOK |
+> http://autobuild.buildroot.net/results/ac6cf59125ba57402f926e6c65ffe19e065001b5
+> dbus-python-1.2.4 | NOK |
+> http://autobuild.buildroot.net/results/0d1459155ab6ad2e126e0845ecf6ba2f9381ec8b
 >
 
-Ping.  I'd like to get this one merged as without it until ~Dec
-timeframe(2017.11 uboot bump) there will continue to be the noted
-failures.
+Ping (no urgency on this one, figured I'd bring it back to the top of
+the stack.  Would resolve half a dozen autobr failures a day)
 
 > Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 > ---
->  .../0004-uboot-tools-disable-pylibfdt.patch        | 63 ++++++++++++++++++++++
->  1 file changed, 63 insertions(+)
->  create mode 100644 package/uboot-tools/0004-uboot-tools-disable-pylibfdt.patch
+>  ...29-python-config.sh-don-t-reassign-prefix.patch | 54 ++++++++++++++++++++++
+>  1 file changed, 54 insertions(+)
+>  create mode 100644 package/python3/0029-python-config.sh-don-t-reassign-prefix.patch
 >
-> diff --git a/package/uboot-tools/0004-uboot-tools-disable-pylibfdt.patch b/package/uboot-tools/0004-uboot-tools-disable-pylibfdt.patch
+> diff --git a/package/python3/0029-python-config.sh-don-t-reassign-prefix.patch b/package/python3/0029-python-config.sh-don-t-reassign-prefix.patch
 > new file mode 100644
-> index 0000000..1ac9bfb
+> index 0000000..6a9df14
 > --- /dev/null
-> +++ b/package/uboot-tools/0004-uboot-tools-disable-pylibfdt.patch
-> @@ -0,0 +1,63 @@
-> +From d8b1755bafb678ea28d7c9115dfc6a894d18e74a Mon Sep 17 00:00:00 2001
+> +++ b/package/python3/0029-python-config.sh-don-t-reassign-prefix.patch
+> @@ -0,0 +1,54 @@
+> +From 21f787cb9bf0c1440981262f03bc881c5b77c0d8 Mon Sep 17 00:00:00 2001
 > +From: Matt Weber <matthew.weber@rockwellcollins.com>
-> +Date: Tue, 17 Oct 2017 14:55:09 -0500
-> +Subject: [PATCH] uboot-tools: disable pylibfdt
+> +Date: Fri, 6 Oct 2017 09:54:15 -0500
+> +Subject: [PATCH] python-config.sh: don't reassign ${prefix}
 > +
-> +1) Removed the host system swig check which is proposed
-> +for being fixed upstream in 2017.11 by making pylibfdt
-> +selectable via KCONFIG.
+> +When prefix is set to a path like /usr during crossbuild
+> +the sed operations end up executing twice, once for the prefix
+> +reassignment and another for includedir if it is set as a string
+> +including the ${prefix} variable.  This results in an issue
+> +when building on a machine that mounts local storage under /usr.
 > +
-> +2) Removing the swig/python setup.py prevents the Python.h
-> +error also causing build failures.  That bug was resolved in
-> +2017.9.
+> +This patch updates the remaining location which uses the prefix
+> +variable to also sed and update to use the real path.
 > +
-> +Fixes (one of many):
-> +http://autobuild.buildroot.net/results/f9e13caae9b31c9dcde7d24caecc036324f269cc
+> +Upstream bug report:
+> +https://bugs.python.org/issue31713
+> +
+> +Buildroot bug:
+> +https://bugs.busybox.net/show_bug.cgi?id=10361
+> +
+> +Fixes failures like the following:
+> +python-gobject-2.28.6 | NOK | http://autobuild.buildroot.net/results/ac6cf59125ba57402f926e6c65ffe19e065001b5
+> +dbus-python-1.2.4 | NOK | http://autobuild.buildroot.net/results/0d1459155ab6ad2e126e0845ecf6ba2f9381ec8b
 > +
 > +Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 > +---
-> + tools/Makefile | 21 ---------------------
-> + 1 file changed, 21 deletions(-)
+> + Misc/python-config.sh.in | 3 +--
+> + 1 file changed, 1 insertion(+), 2 deletions(-)
 > +
-> +diff --git a/tools/Makefile b/tools/Makefile
-> +index 77706a9..00a5d36 100644
-> +--- a/tools/Makefile
-> ++++ b/tools/Makefile
-> +@@ -122,23 +122,6 @@ mkimage-objs   := $(dumpimage-mkimage-objs) mkimage.o
-> + fit_info-objs   := $(dumpimage-mkimage-objs) fit_info.o
-> + fit_check_sign-objs   := $(dumpimage-mkimage-objs) fit_check_sign.o
+> +diff --git a/Misc/python-config.sh.in b/Misc/python-config.sh.in
+> +index f905a71..e06be0f 100644
+> +--- a/Misc/python-config.sh.in
+> ++++ b/Misc/python-config.sh.in
+> +@@ -29,7 +29,7 @@ prefix_real=$(installed_prefix "$0")
 > +
-> +-# Unfortunately setup.py (or actually the Python distutil implementation)
-> +-# puts files into the same directory as the .i file. We cannot touch the source
-> +-# directory, so we copy the .i file into the tools/ build subdirectory before
-> +-# calling setup. This directory is safe to write to. This ensures that we get
-> +-# all three files in $(obj)/tools: _libfdt.so, libfdt.py and libfdt_wrap.c
-> +-# The latter is a temporary file which we could actually remove.
-> +-tools/_libfdt.so: $(LIBFDT_SRCS) $(LIBFDT_SWIG)
-> +-      cp $(LIBFDT_SWIG) tools/.
-> +-      unset CC; \
-> +-      unset CROSS_COMPILE; \
-> +-      LDFLAGS="$(HOSTLDFLAGS)" CFLAGS= VERSION="u-boot-$(UBOOTVERSION)" \
-> +-              CPPFLAGS="$(_hostc_flags)" OBJDIR=tools \
-> +-              SOURCES="$(LIBFDT_SRCS) tools/libfdt.i" \
-> +-              SWIG_OPTS="-I$(srctree)/lib/libfdt -I$(srctree)/lib" \
-> +-              $(libfdt_tree)/pylibfdt/setup.py --quiet build_ext \
-> +-                      --build-lib tools
-> +-
-> + ifneq ($(CONFIG_MX23)$(CONFIG_MX28),)
-> + # Add CONFIG_MXS into host CFLAGS, so we can check whether or not register
-> + # the mxsimage support within tools/mxsimage.c .
-> +@@ -226,10 +209,6 @@ clean-dirs := lib common
-> +
-> + always := $(hostprogs-y)
-> +
-> +-# Build a libfdt Python module if swig is available
-> +-# Use 'sudo apt-get install swig libpython-dev' to enable this
-> +-always += $(if $(shell which swig 2> /dev/null),_libfdt.so)
-> +-
-> + # Generated LCD/video logo
-> + LOGO_H = $(objtree)/include/bmp_logo.h
-> + LOGO_DATA_H = $(objtree)/include/bmp_logo_data.h
+> + # Use sed to fix paths from their built-to locations to their installed-to
+> + # locations.
+> +-prefix=$(echo "$prefix_build" | sed "s#^$prefix_build#$prefix_real#")
+> ++prefix=$prefix_build
+> + exec_prefix_build="@exec_prefix@"
+> + exec_prefix=$(echo "$exec_prefix_build" | sed "s#^$exec_prefix_build#$prefix_real#")
+> + includedir=$(echo "@includedir@" | sed "s#^$prefix_build#$prefix_real#")
+> +@@ -47,7 +46,7 @@ LINKFORSHARED="@LINKFORSHARED@"
+> + OPT="@OPT@"
+> + PY_ENABLE_SHARED="@PY_ENABLE_SHARED@"
+> + LDVERSION="@LDVERSION@"
+> +-LIBDEST=${prefix}/lib/python${VERSION}
+> ++LIBDEST=$( echo "${prefix}/lib/python${VERSION}" | sed "s#^$prefix_build#$prefix_real#")
+> + LIBPL=$(echo "@LIBPL@" | sed "s#^$prefix_build#$prefix_real#")
+> + SO="@EXT_SUFFIX@"
+> + PYTHONFRAMEWORK="@PYTHONFRAMEWORK@"
 > +--
 > +1.8.3.1
 > +
