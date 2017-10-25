@@ -1,37 +1,153 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Wed, 25 Oct 2017 07:51:35 -0500
-Subject: [Buildroot] [PATCH 1/2] stack protector: moved option to
-	security menu
-In-Reply-To: <6d607f68-8cb7-946d-08e7-910b47d7a12a@mind.be>
-References: <1508901900-11190-1-git-send-email-matthew.weber@rockwellcollins.com>
- <6d607f68-8cb7-946d-08e7-910b47d7a12a@mind.be>
-Message-ID: <CANQCQpZOUk34rxi15oGArpMi6ghrh_ZQe4aL7e16uwii4oBBBQ@mail.gmail.com>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Wed, 25 Oct 2017 07:59:56 -0500
+Subject: [Buildroot] [PATCH v2 1/2] stack protector: moved option out of adv
+	menu
+Message-ID: <1508936397-33651-1-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout,
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+---
+Changes
+v1 -> v2
+[Arnout
+ - Move to a comment breaking up the options vs submenu
+---
+ Config.in | 112 ++++++++++++++++++++++++++++++++------------------------------
+ 1 file changed, 57 insertions(+), 55 deletions(-)
 
-On Wed, Oct 25, 2017 at 2:53 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
->
->
-> On 25-10-17 05:24, Matt Weber wrote:
->> +menu "Security Hardening Options"
->
->  This is bikeshedding of course, but I don't like submenus too much. They make
-> it harder to find the options IMO. For the Advanced options it is good that it's
-> a bit hidden, but I think the security options should be pretty in-your-face.
->
->  I do understand though that we want some subdivisions in the menu structure so
-> the options that belong together stand out more. Would it be possible to achieve
-> the same with comments?
->
-
-I think we could.  I misunderstood your feedback on this back in Aug
-and thought pulling those options out of Advanced meant another menu.
-I'll wait to see if there is other feedback today and propose a v2
-with that update.
-
-Matt
+diff --git a/Config.in b/Config.in
+index 814dc02..61f6aa6 100644
+--- a/Config.in
++++ b/Config.in
+@@ -566,61 +566,6 @@ config BR2_GOOGLE_BREAKPAD_INCLUDE_FILES
+ endif
+ 
+ choice
+-	bool "build code with Stack Smashing Protection"
+-	default BR2_SSP_ALL if BR2_ENABLE_SSP # legacy
+-	depends on BR2_TOOLCHAIN_HAS_SSP
+-	help
+-	  Enable stack smashing protection support using GCC's
+-	  -fstack-protector option family.
+-
+-	  See
+-	  http://www.linuxfromscratch.org/hints/downloads/files/ssp.txt
+-	  for details.
+-
+-	  Note that this requires the toolchain to have SSP support.
+-	  This is always the case for glibc and eglibc toolchain, but is
+-	  optional in uClibc toolchains.
+-
+-config BR2_SSP_NONE
+-	bool "None"
+-	help
+-	  Disable stack-smashing protection.
+-
+-config BR2_SSP_REGULAR
+-	bool "-fstack-protector"
+-	help
+-	  Emit extra code to check for buffer overflows, such as stack
+-	  smashing attacks. This is done by adding a guard variable to
+-	  functions with vulnerable objects. This includes functions
+-	  that call alloca, and functions with buffers larger than 8
+-	  bytes. The guards are initialized when a function is entered
+-	  and then checked when the function exits. If a guard check
+-	  fails, an error message is printed and the program exits.
+-
+-config BR2_SSP_STRONG
+-	bool "-fstack-protector-strong"
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+-	help
+-	  Like -fstack-protector but includes additional functions to be
+-	  protected - those that have local array definitions, or have
+-	  references to local frame addresses.
+-
+-comment "Stack Smashing Protection strong needs a toolchain w/ gcc >= 4.9"
+-	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+-
+-config BR2_SSP_ALL
+-	bool "-fstack-protector-all"
+-	help
+-	  Like -fstack-protector except that all functions are
+-	  protected. This option might have a significant performance
+-	  impact on the compiled binaries.
+-
+-endchoice
+-
+-comment "Stack Smashing Protection needs a toolchain w/ SSP"
+-	depends on !BR2_TOOLCHAIN_HAS_SSP
+-
+-choice
+ 	bool "libraries"
+ 	default BR2_SHARED_LIBS if BR2_BINFMT_SUPPORTS_SHARED
+ 	default BR2_STATIC_LIBS if !BR2_BINFMT_SUPPORTS_SHARED
+@@ -728,6 +673,63 @@ config BR2_REPRODUCIBLE
+ 
+ endmenu
+ 
++comment "Security Hardening Options"
++
++choice
++	bool "Stack Smashing Protection"
++	default BR2_SSP_ALL if BR2_ENABLE_SSP # legacy
++	depends on BR2_TOOLCHAIN_HAS_SSP
++	help
++	  Enable stack smashing protection support using GCC's
++	  -fstack-protector option family.
++
++	  See
++	  http://www.linuxfromscratch.org/hints/downloads/files/ssp.txt
++	  for details.
++
++	  Note that this requires the toolchain to have SSP support.
++	  This is always the case for glibc and eglibc toolchain, but is
++	  optional in uClibc toolchains.
++
++config BR2_SSP_NONE
++	bool "None"
++	help
++	  Disable stack-smashing protection.
++
++config BR2_SSP_REGULAR
++	bool "-fstack-protector"
++	help
++	  Emit extra code to check for buffer overflows, such as stack
++	  smashing attacks. This is done by adding a guard variable to
++	  functions with vulnerable objects. This includes functions
++	  that call alloca, and functions with buffers larger than 8
++	  bytes. The guards are initialized when a function is entered
++	  and then checked when the function exits. If a guard check
++	  fails, an error message is printed and the program exits.
++
++config BR2_SSP_STRONG
++	bool "-fstack-protector-strong"
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
++	help
++	  Like -fstack-protector but includes additional functions to be
++	  protected - those that have local array definitions, or have
++	  references to local frame addresses.
++
++comment "Stack Smashing Protection strong needs a toolchain w/ gcc >= 4.9"
++	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
++
++config BR2_SSP_ALL
++	bool "-fstack-protector-all"
++	help
++	  Like -fstack-protector except that all functions are
++	  protected. This option might have a significant performance
++	  impact on the compiled binaries.
++
++endchoice
++
++comment "Stack Smashing Protection needs a toolchain w/ SSP"
++	depends on !BR2_TOOLCHAIN_HAS_SSP
++
+ endmenu
+ 
+ source "toolchain/Config.in"
+-- 
+1.9.1
