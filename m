@@ -1,11 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 25 Oct 2017 09:42:00 +0200
-Subject: [Buildroot] [git commit] dependencies: always use
-	HOSTCC_NOCACHE for DEPENDENCIES_HOST_PREREQ
-In-Reply-To: <20171022133510.B58B5810E1@busybox.osuosl.org> (Arnout
+Date: Wed, 25 Oct 2017 09:42:07 +0200
+Subject: [Buildroot] [git commit] Add DEPENDENCIES_HOST_PREREQ to the
+	list of packages
+In-Reply-To: <20171022133510.BA8A980190@busybox.osuosl.org> (Arnout
  Vandecappelle's message of "Sun, 22 Oct 2017 15:42:26 +0200")
-References: <20171022133510.B58B5810E1@busybox.osuosl.org>
-Message-ID: <87wp3j4qt3.fsf@dell.be.48ers.dk>
+References: <20171022133510.BA8A980190@busybox.osuosl.org>
+Message-ID: <87she74qsw.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,28 +14,14 @@ To: buildroot@busybox.net
 
 >>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=36d398ac30f35ca9d4405a9dee2b33560ec3595d
+ > commit: https://git.buildroot.net/buildroot/commit/?id=862b76cfefc101943f09db2a73f5519f9a5bb2cb
  > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Currently, HOSTCC and HOSTCXX are set to their _NOCACHE variants in the
- > 'dependencies' target. This is needed because at that time, ccache is
- > not built yet - host-ccache is one of the dependencies. However, because
- > this override is only specified for the 'dependencies' target (and
- > thereby gets inherited by its dependencies), the override is only
- > applied when the package is reached through the 'dependencies' target.
- > This is not the case when one of DEPENDENCIES_HOST_PREREQ is built
- > directly from the command line, e.g. when doing 'make host-ccache'. So
- > in that case, ccache will be built with ccache... which fails of
- > course.
-
- > To fix this, directly apply the override to the DEPENCIES_HOST_PREREQ
- > targets.
-
- > Note that this only fixes the issue for 'make host-ccache', NOT for
- > e.g. 'make host-ccache-configure'.
+ > That way packages included in that list like ccache will also be
+ > regarded as a normal packages for targets like external-deps,
+ > show-targets or legal-info
 
  > Signed-off-by: Alfredo Alvarez Fernandez <alfredo.alvarez_fernandez@nokia.com>
- > [Arnout: improve commit message]
  > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
 Committed to 2017.02.x, thanks.
