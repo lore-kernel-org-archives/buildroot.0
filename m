@@ -1,48 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 25 Oct 2017 09:41:46 +0200
-Subject: [Buildroot] [PATCH] lame: security bump to version 3.100
-In-Reply-To: <20171022111508.5361-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Sun, 22 Oct 2017 13:15:08 +0200")
-References: <20171022111508.5361-1-peter@korsgaard.com>
-Message-ID: <871slr65dx.fsf@dell.be.48ers.dk>
+Date: Wed, 25 Oct 2017 09:42:00 +0200
+Subject: [Buildroot] [git commit] dependencies: always use
+	HOSTCC_NOCACHE for DEPENDENCIES_HOST_PREREQ
+In-Reply-To: <20171022133510.B58B5810E1@busybox.osuosl.org> (Arnout
+ Vandecappelle's message of "Sun, 22 Oct 2017 15:42:26 +0200")
+References: <20171022133510.B58B5810E1@busybox.osuosl.org>
+Message-ID: <87wp3j4qt3.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
 
- > Fixes the following security issues:
- > CVE-2017-9410: fill_buffer_resample function in libmp3lame/util.c heap-based
- > buffer over-read and ap
+ > commit: https://git.buildroot.net/buildroot/commit/?id=36d398ac30f35ca9d4405a9dee2b33560ec3595d
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > CVE-2017-9411: fill_buffer_resample function in libmp3lame/util.c invalid
- > memory read and application crash
+ > Currently, HOSTCC and HOSTCXX are set to their _NOCACHE variants in the
+ > 'dependencies' target. This is needed because at that time, ccache is
+ > not built yet - host-ccache is one of the dependencies. However, because
+ > this override is only specified for the 'dependencies' target (and
+ > thereby gets inherited by its dependencies), the override is only
+ > applied when the package is reached through the 'dependencies' target.
+ > This is not the case when one of DEPENDENCIES_HOST_PREREQ is built
+ > directly from the command line, e.g. when doing 'make host-ccache'. So
+ > in that case, ccache will be built with ccache... which fails of
+ > course.
 
- > CVE-2017-9412: unpack_read_samples function in frontend/get_audio.c invalid
- > memory read and application crash
+ > To fix this, directly apply the override to the DEPENCIES_HOST_PREREQ
+ > targets.
 
- > Drop patches now upstream or no longer needed:
+ > Note that this only fixes the issue for 'make host-ccache', NOT for
+ > e.g. 'make host-ccache-configure'.
 
- > 0001-configure.patch: Upstream as mentioned in patch description
-
- > 0002-gtk1-ac-directives.patch: Upstream as mentioned in patch
- > description/release notes:
-
- > Resurrect Owen Taylor's code dated from 97-11-3 to properly deal with GTK1.
- > This was transplanted back from aclocal.m4 with a patch provided by Andres
- > Mejia. This change makes it easy to regenerate autotools' files with a simple
- > invocation of autoconf -vfi.
-
- > 0003-msse.patch: Not needed as -march <x86-variant-with-msse-support>
- > nowadays implies -msse.
-
- > With these removed, autoreconf is no longer needed.
-
- > Also add a hash for the license file while we're at it.
-
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > Signed-off-by: Alfredo Alvarez Fernandez <alfredo.alvarez_fernandez@nokia.com>
+ > [Arnout: improve commit message]
+ > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
 Committed to 2017.02.x, thanks.
 
