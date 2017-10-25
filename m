@@ -1,41 +1,36 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 25 Oct 2017 09:45:43 +0200
-Subject: [Buildroot] [git commit] s6: bump version to 2.6.1.1
-Message-ID: <20171025073940.DBAD17F9BA@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 25 Oct 2017 09:53:31 +0200
+Subject: [Buildroot] [PATCH 1/2] stack protector: moved option to
+ security menu
+In-Reply-To: <1508901900-11190-1-git-send-email-matthew.weber@rockwellcollins.com>
+References: <1508901900-11190-1-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <6d607f68-8cb7-946d-08e7-910b47d7a12a@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c43ed8d9d08ddab85373460e697a56311d663155
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/s6/s6.hash | 2 +-
- package/s6/s6.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/s6/s6.hash b/package/s6/s6.hash
-index 41f3dff..2f498b0 100644
---- a/package/s6/s6.hash
-+++ b/package/s6/s6.hash
-@@ -1,2 +1,2 @@
- # Locally generated
--sha256 f0de303791134302f2630b9fe76a936b064e1e3aa772c8ae1b891155a6ea2c79  s6-2.6.1.0.tar.gz
-+sha256 0172b7293d4d5607ca3ca77382fee9b87c10bd58680720b29625cf35afc75c5c  s6-2.6.1.1.tar.gz
-diff --git a/package/s6/s6.mk b/package/s6/s6.mk
-index da9917c..3cf3885 100644
---- a/package/s6/s6.mk
-+++ b/package/s6/s6.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--S6_VERSION = 2.6.1.0
-+S6_VERSION = 2.6.1.1
- S6_SITE = http://skarnet.org/software/s6
- S6_LICENSE = ISC
- S6_LICENSE_FILES = COPYING
+On 25-10-17 05:24, Matt Weber wrote:
+> +menu "Security Hardening Options"
+
+ This is bikeshedding of course, but I don't like submenus too much. They make
+it harder to find the options IMO. For the Advanced options it is good that it's
+a bit hidden, but I think the security options should be pretty in-your-face.
+
+ I do understand though that we want some subdivisions in the menu structure so
+the options that belong together stand out more. Would it be possible to achieve
+the same with comments?
+
+ Regards,
+ Arnout
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
