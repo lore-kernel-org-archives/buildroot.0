@@ -1,47 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 25 Oct 2017 09:44:09 +0200
-Subject: [Buildroot] [git commit] libcurl: security bump to version 7.56.1
-Message-ID: <20171025073940.A17FE80447@busybox.osuosl.org>
+Date: Wed, 25 Oct 2017 09:45:07 +0200
+Subject: [Buildroot] [git commit] janus-gateway: bump to v0.2.5
+Message-ID: <20171025073940.B070380447@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=62d4dd2999a0446c2b868a7c6fbcc764a470493d
+commit: https://git.buildroot.net/buildroot/commit/?id=7632237932611e50097612175d6489e68ee0926c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes CVE-2017-1000257 - IMAP FETCH response out of bounds read
+Also add hash for license file.
 
-https://curl.haxx.se/docs/adv_20171023.html
-
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libcurl/libcurl.hash | 4 ++--
- package/libcurl/libcurl.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/janus-gateway/janus-gateway.hash | 3 ++-
+ package/janus-gateway/janus-gateway.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
-index c697063..49292df 100644
---- a/package/libcurl/libcurl.hash
-+++ b/package/libcurl/libcurl.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--# https://curl.haxx.se/download/curl-7.56.0.tar.xz.asc
--sha256 32437bcca0e9434384329fdc733547879d25ba70335b3cf9e3d9cbc3e71fd172  curl-7.56.0.tar.xz
-+# https://curl.haxx.se/download/curl-7.56.1.tar.xz.asc
-+sha256 8eed282cf3a0158d567a0feaa3c4619e8e847970597b5a2c81879e8f0d1a39d1  curl-7.56.1.tar.xz
- sha256 cbcf511f5702f7baf5424193a792bc9c18fab22bcbec2e6a587598389dc632c2  COPYING
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index a6b699c..57b9c2c 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
+diff --git a/package/janus-gateway/janus-gateway.hash b/package/janus-gateway/janus-gateway.hash
+index 9c8db67..1cb325c 100644
+--- a/package/janus-gateway/janus-gateway.hash
++++ b/package/janus-gateway/janus-gateway.hash
+@@ -1,2 +1,3 @@
+ # Locally computed
+-sha256 b1064036dcdaae804e9e76e58fa7ec639cfdf09c716ece32b5a0a459b48c2ba7 janus-gateway-v0.2.4.tar.gz
++sha256 09610dc02ff0a1f23af0397baaa26a3cd88b3742d35b2e49849f099885cdcf08 janus-gateway-v0.2.5.tar.gz
++sha256 0a884af515b4593503f6f0c9b424db3945bd77eaa2644d25f45eb93a412b3c19 COPYING
+diff --git a/package/janus-gateway/janus-gateway.mk b/package/janus-gateway/janus-gateway.mk
+index 767b4d5..bf3e590 100644
+--- a/package/janus-gateway/janus-gateway.mk
++++ b/package/janus-gateway/janus-gateway.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBCURL_VERSION = 7.56.0
-+LIBCURL_VERSION = 7.56.1
- LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
- LIBCURL_SITE = https://curl.haxx.se/download
- LIBCURL_DEPENDENCIES = host-pkgconf \
+-JANUS_GATEWAY_VERSION = v0.2.4
++JANUS_GATEWAY_VERSION = v0.2.5
+ JANUS_GATEWAY_SITE = $(call github,meetecho,janus-gateway,$(JANUS_GATEWAY_VERSION))
+ JANUS_GATEWAY_LICENSE = GPL-3.0
+ JANUS_GATEWAY_LICENSE_FILES = COPYING
