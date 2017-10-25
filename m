@@ -1,79 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 25 Oct 2017 09:44:06 +0200
-Subject: [Buildroot] [git commit] irssi: security bump to version 1.0.5
-Message-ID: <20171025073940.9556F806C3@busybox.osuosl.org>
+Date: Wed, 25 Oct 2017 09:45:49 +0200
+Subject: [Buildroot] [git commit] s6-rc: bump version to 0.3.0.0
+Message-ID: <20171025073940.EE9D47F9BA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a9a4ec0dcce4500319e00e7d875414d6bc6606fa
+commit: https://git.buildroot.net/buildroot/commit/?id=68cd9373f88c8c4cea79f342d18bb75c742767bf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes the following security issues:
-
-(a) When installing themes with unterminated colour formatting
-    sequences, Irssi may access data beyond the end of the
-    string. (CWE-126) Found by Hanno B??ck.
-
-    CVE-2017-15228 was assigned to this issue.
-
-(b) While waiting for the channel synchronisation, Irssi may
-    incorrectly fail to remove destroyed channels from the query list,
-    resulting in use after free conditions when updating the state
-    later on. Found by Joseph Bisch. (CWE-416 caused by CWE-672)
-
-    CVE-2017-15227 was assigned to this issue.
-
-(c) Certain incorrectly formatted DCC CTCP messages could cause NULL
-    pointer dereference. Found by Joseph Bisch. This is a separate,
-    but similar issue to CVE-2017-9468. (CWE-690)
-
-    CVE-2017-15721 was assigned to this issue.
-
-(d) Overlong nicks or targets may result in a NULL pointer dereference
-    while splitting the message. Found by Joseph Bisch. (CWE-690)
-
-    CVE-2017-15723 was assigned to this issue.
-
-(e) In certain cases Irssi may fail to verify that a Safe channel ID
-    is long enough, causing reads beyond the end of the string. Found
-    by Joseph Bisch. (CWE-126)
-
-    CVE-2017-15722 was assigned to this issue.
-
-For more details, see the advisory:
-https://irssi.org/security/irssi_sa_2017_10.txt
-
-While we're at it, also add a hash for the license file.
-
+Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/irssi/irssi.hash | 4 +++-
- package/irssi/irssi.mk   | 2 +-
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ package/s6-rc/s6-rc.hash | 2 +-
+ package/s6-rc/s6-rc.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/irssi/irssi.hash b/package/irssi/irssi.hash
-index 7b01902..0a6c3f6 100644
---- a/package/irssi/irssi.hash
-+++ b/package/irssi/irssi.hash
-@@ -1,2 +1,4 @@
- # Locally calculated after checking pgp signature
--sha256	b85c07dbafe178213eccdc69f5f8f0ac024dea01c67244668f91ec1c06b986ca	irssi-1.0.4.tar.xz
-+sha256	c2556427e12eb06cabfed40839ac6f57eb8b1aa6365fab6dfcd331b7a04bb914  irssi-1.0.5.tar.xz
-+# Locally calculated
-+sha256	a1a27cb2ecee8d5378fbb3562f577104a445d6d66fee89286e16758305e63e2b  COPYING
-diff --git a/package/irssi/irssi.mk b/package/irssi/irssi.mk
-index d2b8169..f945078 100644
---- a/package/irssi/irssi.mk
-+++ b/package/irssi/irssi.mk
+diff --git a/package/s6-rc/s6-rc.hash b/package/s6-rc/s6-rc.hash
+index c39629b..7ee1387 100644
+--- a/package/s6-rc/s6-rc.hash
++++ b/package/s6-rc/s6-rc.hash
+@@ -1,2 +1,2 @@
+ # Locally generated
+-sha256 4fa35cf8af41498c9fa0c21220dcdc7595a18ebc2975a254d719f7e1c864b1f0  s6-rc-0.2.1.2.tar.gz
++sha256 78266a397330d35d5eac9e99d1436feba58e36f41bfe1db0fd16c4b6cc73c999  s6-rc-0.3.0.0.tar.gz
+diff --git a/package/s6-rc/s6-rc.mk b/package/s6-rc/s6-rc.mk
+index 9330c03..e651814 100644
+--- a/package/s6-rc/s6-rc.mk
++++ b/package/s6-rc/s6-rc.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--IRSSI_VERSION = 1.0.4
-+IRSSI_VERSION = 1.0.5
- IRSSI_SOURCE = irssi-$(IRSSI_VERSION).tar.xz
- # Do not use the github helper here. The generated tarball is *NOT* the
- # same as the one uploaded by upstream for the release.
+-S6_RC_VERSION = 0.2.1.2
++S6_RC_VERSION = 0.3.0.0
+ S6_RC_SITE = http://skarnet.org/software/s6-rc
+ S6_RC_LICENSE = ISC
+ S6_RC_LICENSE_FILES = COPYING
