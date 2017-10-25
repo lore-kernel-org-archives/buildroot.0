@@ -1,9 +1,9 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Wed, 25 Oct 2017 22:10:02 +0200
-Subject: [Buildroot] [PATCH v2 12/13] download: git: introduce cache feature
+Date: Wed, 25 Oct 2017 22:10:03 +0200
+Subject: [Buildroot] [PATCH v2 13/13] WIP: support package with '-'
 In-Reply-To: <20171025201003.16105-1-ps.report@gmx.net>
 References: <20171025201003.16105-1-ps.report@gmx.net>
-Message-ID: <20171025201003.16105-13-ps.report@gmx.net>
+Message-ID: <20171025201003.16105-14-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,119 +12,241 @@ To: buildroot@busybox.net
 
 From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 
-Now we keep the git clone that we download and generates our tarball
-from there.
-The main goal here is that if you change the version of a package (say
-Linux), instead of cloning all over again, you will simply 'git fetch'
-from the repo the missing objects, then generates the tarball again.
-
-This should speed the 'source' part of the build significantly.
-
-The drawback is that the DL_DIR will grow much larger; but time is more
-important than disk space nowadays.
-
-Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 ---
 Changes v1 --> v2:
-  - from https://github.com/maximeh/buildroot/commit/ce0c2175f25ee870b40a0f374f7fc99f50bcd3ae.patch
-  - fix links in created tar packages (reported by Peter Seiderer)
+  - from https://github.com/maximeh/buildroot/commit/39fb06a2b4d7662474520db849a56b9977650487.patch
+  - new WIP patch
 ---
- support/download/git | 69 ++++++++++++++++++++++++++++++----------------------
- 1 file changed, 40 insertions(+), 29 deletions(-)
+ package/pkg-download.mk     |  2 +-
+ support/download/bzr        |  3 ++-
+ support/download/cvs        |  3 ++-
+ support/download/dl-wrapper | 15 ++++++++-------
+ support/download/file       |  3 ++-
+ support/download/git        |  7 ++++---
+ support/download/hg         |  3 ++-
+ support/download/scp        |  3 ++-
+ support/download/svn        |  3 ++-
+ support/download/wget       |  3 ++-
+ 10 files changed, 27 insertions(+), 18 deletions(-)
 
-diff --git a/support/download/git b/support/download/git
-index 58a2c6ad9d..5d09cc0d7a 100755
---- a/support/download/git
-+++ b/support/download/git
-@@ -39,28 +39,34 @@ _git() {
-     eval ${GIT} "${@}"
+diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+index 307c415f64..3973778181 100644
+--- a/package/pkg-download.mk
++++ b/package/pkg-download.mk
+@@ -99,7 +99,7 @@ define DOWNLOAD
+ 		-H $(PKGDIR)/$($(PKG)_RAWNAME).hash \
+ 		-n $($(PKG)_RAW_BASE_NAME) \
+ 		-N $($(PKG)_RAWNAME) \
+-		-o $($(PKG)_DL_DIR)/$(notdir $(1)) \
++		-o $($(PKG)_DL_DIR) \
+ 		$(if $($(PKG)_GIT_SUBMODULES),-r) \
+ 		$(DOWNLOAD_URIS) \
+ 		$(QUIET) \
+diff --git a/support/download/bzr b/support/download/bzr
+index 5289a421cd..36f19cc0bb 100755
+--- a/support/download/bzr
++++ b/support/download/bzr
+@@ -20,6 +20,7 @@ verbose=
+ while getopts "${BR_BACKEND_DL_GETOPTS}" OPT; do
+     case "${OPT}" in
+     q)  verbose=-q;;
++    f)  filename="${OPTARG}";;
+     o)  output="${OPTARG}";;
+     u)  uri="${OPTARG}";;
+     c)  cset="${OPTARG}";;
+@@ -55,4 +56,4 @@ fi
+ 
+ _bzr export ${verbose} --root="'${basename}/'" --format=tgz \
+     ${timestamp_opt} - "${@}" "'${uri}'" -r "'${cset}'" \
+-    >"${output}"
++    >"${output}/${filename}"
+diff --git a/support/download/cvs b/support/download/cvs
+index 3f77b849e4..959583dcc0 100755
+--- a/support/download/cvs
++++ b/support/download/cvs
+@@ -21,6 +21,7 @@ while getopts "${BR_BACKEND_DL_GETOPTS}" OPT; do
+     case "${OPT}" in
+     q)  verbose=-Q;;
+     o)  output="${OPTARG}";;
++    f)  filename="${OPTARG}";;
+     u)  uri="${OPTARG#*://}";;
+     c)  rev="${OPTARG}";;
+     N)  rawname="${OPTARG}";;
+@@ -56,4 +57,4 @@ export TZ=UTC
+ _cvs ${verbose} -z3 -d"'${uri}'" \
+      co "${@}" -d "'${basename}'" ${select} "'${rev}'" -P "'${rawname}'"
+ 
+-tar czf "${output}" "${basename}"
++tar czf "${output}/${filename}" "${basename}"
+diff --git a/support/download/dl-wrapper b/support/download/dl-wrapper
+index 67e9742767..c022d356fa 100755
+--- a/support/download/dl-wrapper
++++ b/support/download/dl-wrapper
+@@ -19,7 +19,7 @@
+ # We want to catch any unexpected failure, and exit immediately.
+ set -e
+ 
+-export BR_BACKEND_DL_GETOPTS=":hc:o:n:N:H:ru:qf:e"
++export BR_BACKEND_DL_GETOPTS=":hc:o:n:N:H:ru:qf:eR:"
+ 
+ main() {
+     local OPT OPTARG
+@@ -56,8 +56,8 @@ main() {
+     # - matches all its hashes: do not download it again and exit promptly
+     # - fails at least one of its hashes: force a re-download
+     # - there's no hash (but a .hash file): consider it a hard error
+-    if [ -e "${output}" ]; then
+-        if support/download/check-hash ${quiet} "${hfile}" "${output}" "${output##*/}"; then
++    if [ -e "${output}/${filename}" ]; then
++        if support/download/check-hash ${quiet} "${hfile}" "${output}" "${filename}"; then
+             exit 0
+         elif [ ${?} -ne 2 ]; then
+             # Do not remove the file, otherwise it might get re-downloaded
+@@ -109,9 +109,10 @@ main() {
+                 -c "${cset}" \
+                 -n "${raw_base_name}" \
+                 -N "${raw_name}" \
+-                -f "${filename}" \
++                -f "$(basename ${tmpf})" \
++                -R "${filename}" \
+                 -u "${uri}" \
+-                -o "${tmpf}" \
++                -o "${tmpd}" \
+                 ${quiet} ${recurse} "${@}"
+         then
+             rm -rf "${tmpd:?}/*"
+@@ -125,7 +126,7 @@ main() {
+ 
+         # Check if the downloaded file is sane, and matches the stored hashes
+         # for that file
+-        if ! support/download/check-hash ${quiet} "${hfile}" "${tmpf}" "${output##*/}"; then
++        if ! support/download/check-hash ${quiet} "${hfile}" "${tmpf}" "${filename}"; then
+             rm -rf "${tmpd:?}/*"
+             # cd back to keep path coherence
+             cd "${OLDPWD}"
+@@ -181,7 +182,7 @@ main() {
+     # that 'mv' is atomic, because it then uses rename() that POSIX mandates
+     # to be atomic, see:
+     #   http://pubs.opengroup.org/onlinepubs/9699919799/functions/rename.html
+-    if ! mv -f "${tmp_output}" "${output}"; then
++    if ! mv -f "${tmp_output}" "${output}/${filename}"; then
+         rm -f "${tmp_output}"
+         exit 1
+     fi
+diff --git a/support/download/file b/support/download/file
+index a3e616a181..5d77d2b66c 100755
+--- a/support/download/file
++++ b/support/download/file
+@@ -22,6 +22,7 @@ verbose=-v
+ while getopts "${BR_BACKEND_DL_GETOPTS}" OPT; do
+     case "${OPT}" in
+     q)  verbose=;;
++    f)  filename="${OPTARG}";;
+     o)  output="${OPTARG}";;
+     u)  source="${OPTARG#*://}";;
+     :)  printf "option '%s' expects a mandatory argument\n" "${OPTARG}"; exit 1;;
+@@ -37,4 +38,4 @@ _localfiles() {
+     eval ${LOCALFILES} "${@}"
  }
  
--# Try a shallow clone, since it is faster than a full clone - but that only
--# works if the version is a ref (tag or branch). Before trying to do a shallow
--# clone we check if ${cset} is in the list provided by git ls-remote. If not
--# we fall back on a full clone.
--#
--# Messages for the type of clone used are provided to ease debugging in case of
--# problems
--git_done=0
--if [ -n "$(_git ls-remote "'${uri}'" "'${cset}'" 2>&1)" ]; then
--    printf "Doing shallow clone\n"
--    if _git clone ${verbose} "${@}" --depth 1 -b "'${cset}'" "'${uri}'" "'${basename}'"; then
--        git_done=1
--    else
--        printf "Shallow clone failed, falling back to doing a full clone\n"
-+# We want to check if a cache of the git clone of this repo already exists.
-+git_cache="${BR2_DL_DIR}/${basename%%-*}/git"
-+
-+# If the cache directory already exists, don't try to clone.
-+if [ ! -d "${git_cache}" ]; then
-+    # Try a shallow clone, since it is faster than a full clone - but that
-+    # only works if the versionis a ref (tag or branch). Before trying to do a
-+    # shallow clone we check if ${cset} is in the list provided by git
-+    # ls-remote. If not we fall back on a full clone.
-+    #
-+    # Messages for the type of clone used are provided to ease debugging in
-+    # case of problems
-+    git_done=0
-+    if [ -n "$(_git ls-remote "'${uri}'" "'${cset}'" 2>&1)" ]; then
-+        printf "Doing shallow clone\n"
-+        if _git clone ${verbose} "${@}" --depth 1 -b "'${cset}'" "'${uri}'" "'${git_cache}'"; then
-+            git_done=1
-+        else
-+            printf "Shallow clone failed, falling back to doing a full clone\n"
-+        fi
-+    fi
-+    if [ ${git_done} -eq 0 ]; then
-+        printf "Doing full clone\n"
-+        _git clone ${verbose} "${@}" "'${uri}'" "'${git_cache}'"
-     fi
--fi
--if [ ${git_done} -eq 0 ]; then
--    printf "Doing full clone\n"
--    _git clone ${verbose} "${@}" "'${uri}'" "'${basename}'"
- fi
- 
--pushd "${basename}" >/dev/null
-+pushd "${git_cache}" >/dev/null
- 
- # Try to get the special refs exposed by some forges (pull-requests for
- # github, changes for gerrit...). There is no easy way to know whether
-@@ -86,20 +92,25 @@ if [ ${recurse} -eq 1 ]; then
-     _git submodule update --init --recursive
- fi
- 
--# We do not want the .git dir; we keep other .git files, in case they
--# are the only files in their directory.
-+# Generate the archive, sort with the C locale so that it is reproducible
-+# We do not want the .git dir; we keep other .git
-+# files, in case they are the only files in their directory.
- # The .git dir would generate non reproducible tarballs as it depends on
- # the state of the remote server. It also would generate large tarballs
- # (gigabytes for some linux trees) when a full clone took place.
--rm -rf .git
-+find . -not -type d \
-+	-and -not -path "./.git/*" >"${BR2_DL_DIR}/${basename}.list"
-+LC_ALL=C sort <"${BR2_DL_DIR}/${basename}.list" >"${BR2_DL_DIR}/${basename}.list.sorted"
- 
--popd >/dev/null
--
--# Generate the archive, sort with the C locale so that it is reproducible
--find "${basename}" -not -type d >"${basename}.list"
--LC_ALL=C sort <"${basename}.list" >"${basename}.list.sorted"
- # Create GNU-format tarballs, since that's the format of the tarballs on
+-_localfiles ${verbose} "${@}""'${source}'" "'${output}'"
++_localfiles ${verbose} "${@}""'${source}'" "'${output}/${filename}'"
+diff --git a/support/download/git b/support/download/git
+index 5d09cc0d7a..813784970b 100755
+--- a/support/download/git
++++ b/support/download/git
+@@ -22,6 +22,7 @@ while getopts "${BR_BACKEND_DL_GETOPTS}" OPT; do
+     case "${OPT}" in
+     q)  verbose=-q; exec >/dev/null;;
+     r)  recurse=1;;
++    f)  filename="${OPTARG}";;
+     o)  output="${OPTARG}";;
+     u)  uri="${OPTARG}";;
+     c)  cset="${OPTARG}";;
+@@ -106,9 +107,9 @@ LC_ALL=C sort <"${BR2_DL_DIR}/${basename}.list" >"${BR2_DL_DIR}/${basename}.list
  # sources.buildroot.org and used in the *.hash files
--tar cf - --numeric-owner --owner=0 --group=0 --mtime="${date}" --format=gnu \
--         -T "${basename}.list.sorted" >"${output}.tar"
-+tar cf - --transform="s/^\.$/${basename}/" \
-+	--numeric-owner --owner=0 --group=0 --mtime="${date}" --format=gnu \
-+         -T "${BR2_DL_DIR}/${basename}.list.sorted" >"${output}.tar"
- gzip -6 -n <"${output}.tar" >"${output}"
-+tar tf "${output}"
-+
-+rm -f "${BR2_DL_DIR}/${basename}.list"
-+rm -f "${BR2_DL_DIR}/${basename}.list.sorted"
-+
-+popd >/dev/null
+ tar cf - --transform="s/^\.$/${basename}/" \
+ 	--numeric-owner --owner=0 --group=0 --mtime="${date}" --format=gnu \
+-         -T "${BR2_DL_DIR}/${basename}.list.sorted" >"${output}.tar"
+-gzip -6 -n <"${output}.tar" >"${output}"
+-tar tf "${output}"
++         -T "${BR2_DL_DIR}/${basename}.list.sorted" >"${output}/${filename}.tar"
++gzip -n <"${output}/${filename}.tar" >"${output}/${filename}"
++tar tf "${output}/${filename}"
+ 
+ rm -f "${BR2_DL_DIR}/${basename}.list"
+ rm -f "${BR2_DL_DIR}/${basename}.list.sorted"
+diff --git a/support/download/hg b/support/download/hg
+index efb515fca5..586d62f3be 100755
+--- a/support/download/hg
++++ b/support/download/hg
+@@ -19,6 +19,7 @@ verbose=
+ while getopts "${BR_BACKEND_DL_GETOPTS}" OPT; do
+     case "${OPT}" in
+     q)  verbose=-q;;
++    f)  filename="${OPTARG}";;
+     o)  output="${OPTARG}";;
+     u)  uri="${OPTARG}";;
+     c)  cset="${OPTARG}";;
+@@ -40,4 +41,4 @@ _hg clone ${verbose} "${@}" --noupdate "'${uri}'" "'${basename}'"
+ 
+ _hg archive ${verbose} --repository "'${basename}'" --type tgz \
+             --prefix "'${basename}'" --rev "'${cset}'" \
+-            - >"${output}"
++            - >"${output}/${filename}"
+diff --git a/support/download/scp b/support/download/scp
+index 8ecf2f4b22..92276dfef2 100755
+--- a/support/download/scp
++++ b/support/download/scp
+@@ -17,6 +17,7 @@ verbose=
+ while getopts "${BR_BACKEND_DL_GETOPTS}" OPT; do
+     case "${OPT}" in
+     q)  verbose=-q;;
++    f)  filename="${OPTARG}";;
+     o)  output="${OPTARG}";;
+     u)  uri="${OPTARG}";;
+     :)  printf "option '%s' expects a mandatory argument\n" "${OPTARG}"; exit 1;;
+@@ -32,4 +33,4 @@ _scp() {
+     eval ${SCP} "${@}"
+ }
+ 
+-_scp ${verbose} "${@}" "'${uri}'" "'${output}'"
++_scp ${verbose} "${@}" "'${uri}'" "'${output}/${filename}'"
+diff --git a/support/download/svn b/support/download/svn
+index 542b25c0a2..a326d0523e 100755
+--- a/support/download/svn
++++ b/support/download/svn
+@@ -19,6 +19,7 @@ verbose=
+ while getopts "${BR_BACKEND_DL_GETOPTS}" OPT; do
+     case "${OPT}" in
+     q)  verbose=-q;;
++    f)  filename="${OPTARG}";;
+     o)  output="${OPTARG}";;
+     u)  uri="${OPTARG}";;
+     c)  rev="${OPTARG}";;
+@@ -38,4 +39,4 @@ _svn() {
+ 
+ _svn export ${verbose} "${@}" "'${uri}@${rev}'" "'${basename}'"
+ 
+-tar czf "${output}" "${basename}"
++tar czf "${output}/${filename}" "${basename}"
+diff --git a/support/download/wget b/support/download/wget
+index c69e6071aa..97aa43de73 100755
+--- a/support/download/wget
++++ b/support/download/wget
+@@ -21,6 +21,7 @@ while getopts "${BR_BACKEND_DL_GETOPTS}" OPT; do
+     q)  verbose=-q;;
+     o)  output="${OPTARG}";;
+     f)  filename="${OPTARG}";;
++    R)  remote_filename="${OPTARG}";;
+     u)  url="${OPTARG}";;
+     e)  encode="-e";;
+     :)  printf "option '%s' expects a mandatory argument\n" "${OPTARG}"; exit 1;;
+@@ -40,4 +41,4 @@ _wget() {
+ # mirror
+ [ -n "${encode}" ] && filename=${filename//\?/%3F}
+ 
+-_wget ${verbose} "${@}" -O "'${output}'" "'${url}/${filename}'"
++_wget ${verbose} "${@}" -O "'${output}/${filename}'" "'${url}/${remote_filename}'"
 -- 
 2.14.2
