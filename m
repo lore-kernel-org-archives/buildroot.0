@@ -1,83 +1,86 @@
 From: Jagan Teki <jagannadh.teki@gmail.com>
-Date: Thu, 26 Oct 2017 20:11:43 +0200
-Subject: [Buildroot] [PATCH v4 03/11] board: Add Bananapi M64 support
+Date: Thu, 26 Oct 2017 20:11:44 +0200
+Subject: [Buildroot] [PATCH v4 04/11] board: Add Pine64 support
 In-Reply-To: <1509041511-30956-1-git-send-email-jagan@amarulasolutions.com>
 References: <1509041511-30956-1-git-send-email-jagan@amarulasolutions.com>
-Message-ID: <1509041511-30956-4-git-send-email-jagan@amarulasolutions.com>
+Message-ID: <1509041511-30956-5-git-send-email-jagan@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add initial support for bananapi M64 board with below features:
+Add initial support for Pine64 board with below features:
 - U-Boot 2017.09
 - Linux 4.13.7
 - Default packages from buildroot
 
-Cc: Jason <manager@sinovoip.com.cn>
-Cc: hailymei at banana-pi.com <hailymei@banana-pi.com>
+Cc: TL Lim <tllim@pine64.org>
+Cc: Andre Przywara <andre.przywara@arm.com>
 Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
 ---
- .gitlab-ci.yml                           |  1 +
- DEVELOPERS                               |  1 +
- board/bananapi/bananapi-m64/boot.cmd     |  6 ++++
- board/bananapi/bananapi-m64/genimage.cfg | 38 ++++++++++++++++++++++++++
- board/bananapi/bananapi-m64/readme.txt   | 37 +++++++++++++++++++++++++
- configs/bananapi_m64_defconfig           | 47 ++++++++++++++++++++++++++++++++
- 6 files changed, 130 insertions(+)
- create mode 100644 board/bananapi/bananapi-m64/boot.cmd
- create mode 100644 board/bananapi/bananapi-m64/genimage.cfg
- create mode 100644 board/bananapi/bananapi-m64/readme.txt
- create mode 100644 configs/bananapi_m64_defconfig
+ .gitlab-ci.yml                   |  1 +
+ DEVELOPERS                       |  2 ++
+ board/pine64/pine64/boot.cmd     |  6 +++++
+ board/pine64/pine64/genimage.cfg | 38 ++++++++++++++++++++++++++++++++
+ board/pine64/pine64/readme.txt   | 38 ++++++++++++++++++++++++++++++++
+ configs/pine64_defconfig         | 47 ++++++++++++++++++++++++++++++++++++++++
+ 6 files changed, 132 insertions(+)
+ create mode 100644 board/pine64/pine64/boot.cmd
+ create mode 100644 board/pine64/pine64/genimage.cfg
+ create mode 100644 board/pine64/pine64/readme.txt
+ create mode 100644 configs/pine64_defconfig
 
 diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index ebaac7a..3dd4f48 100644
+index 3dd4f48..44edc61 100644
 --- a/.gitlab-ci.yml
 +++ b/.gitlab-ci.yml
-@@ -90,6 +90,7 @@ atmel_sama5d4_xplained_mmc_defconfig: *defconfig
- atmel_sama5d4_xplained_mmc_dev_defconfig: *defconfig
- bananapi_m1_defconfig: *defconfig
- bananapi_m2_plus_defconfig: *defconfig
-+bananapi_m64_defconfig: *defconfig
- bananapro_defconfig: *defconfig
- beagleboardx15_defconfig: *defconfig
- beaglebone_defconfig: *defconfig
+@@ -161,6 +161,7 @@ orangepi_zero_defconfig: *defconfig
+ pandaboard_defconfig: *defconfig
+ pc_x86_64_bios_defconfig: *defconfig
+ pc_x86_64_efi_defconfig: *defconfig
++pine64_defconfig: *defconfig
+ qemu_aarch64_virt_defconfig: *defconfig
+ qemu_arm_versatile_defconfig: *defconfig
+ qemu_arm_versatile_nommu_defconfig: *defconfig
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 51283f1..6521aad 100644
+index 6521aad..780c674 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -729,6 +729,7 @@ N:	Jagan Teki <jagan@amarulasolutions.com>
+@@ -728,8 +728,10 @@ F:	package/keepalived/
+ N:	Jagan Teki <jagan@amarulasolutions.com>
  F:	board/bananapi/
  F:	board/engicam/
++F:	board/pine64/
  F:	configs/bananapi_m1_defconfig
-+F:	configs/bananapi_m64_defconfig
+ F:	configs/bananapi_m64_defconfig
++F:	configs/pine64_defconfig
  F:	configs/engicam_imx6qdl_icore_defconfig
  F:	configs/engicam_imx6qdl_icore_qt5_defconfig
  F:	configs/engicam_imx6qdl_icore_rqs_defconfig
-diff --git a/board/bananapi/bananapi-m64/boot.cmd b/board/bananapi/bananapi-m64/boot.cmd
+diff --git a/board/pine64/pine64/boot.cmd b/board/pine64/pine64/boot.cmd
 new file mode 100644
-index 0000000..d35c9b0
+index 0000000..14f5610
 --- /dev/null
-+++ b/board/bananapi/bananapi-m64/boot.cmd
++++ b/board/pine64/pine64/boot.cmd
 @@ -0,0 +1,6 @@
 +setenv bootargs console=ttyS0,115200 earlyprintk root=/dev/mmcblk0p2 rootwait
 +
 +fatload mmc 0 $kernel_addr_r Image
-+fatload mmc 0 $fdt_addr_r sun50i-a64-bananapi-m64.dtb
++fatload mmc 0 $fdt_addr_r sun50i-a64-pine64.dtb
 +
 +booti $kernel_addr_r - $fdt_addr_r
-diff --git a/board/bananapi/bananapi-m64/genimage.cfg b/board/bananapi/bananapi-m64/genimage.cfg
+diff --git a/board/pine64/pine64/genimage.cfg b/board/pine64/pine64/genimage.cfg
 new file mode 100644
-index 0000000..891217c
+index 0000000..8e12308
 --- /dev/null
-+++ b/board/bananapi/bananapi-m64/genimage.cfg
++++ b/board/pine64/pine64/genimage.cfg
 @@ -0,0 +1,38 @@
 +image boot.vfat {
 +	vfat {
 +		files = {
 +			"Image",
-+			"sun50i-a64-bananapi-m64.dtb",
++			"sun50i-a64-pine64.dtb",
 +			"boot.scr"
 +		}
 +	}
@@ -111,31 +114,32 @@ index 0000000..891217c
 +		image = "rootfs.ext4"
 +	}
 +}
-diff --git a/board/bananapi/bananapi-m64/readme.txt b/board/bananapi/bananapi-m64/readme.txt
+diff --git a/board/pine64/pine64/readme.txt b/board/pine64/pine64/readme.txt
 new file mode 100644
-index 0000000..0dec3e5
+index 0000000..54e6f9c
 --- /dev/null
-+++ b/board/bananapi/bananapi-m64/readme.txt
-@@ -0,0 +1,37 @@
++++ b/board/pine64/pine64/readme.txt
+@@ -0,0 +1,38 @@
 +Intro
 +=====
 +
 +This default configuration will allow you to start experimenting with the
-+buildroot environment for the Bananapi M64. With the current configuration
++buildroot environment for the Pine64. With the current configuration
 +it will bring-up the board, and allow access through the serial console.
 +
-+Bananapi M64 link:
-+http://www.banana-pi.org/m64.html
++Pine64 link:
++https://www.pine64.org/?page_id=1194
 +
 +Wiki link:
-+https://openedev.amarulasolutions.com/display/ODWIKI/Bananapi+M64
++https://confluence.amarulasolutions.com/display/ODWIKI/Pine64
 +
 +This configuration uses U-Boot mainline and kernel mainline.
 +
 +How to build
 +============
 +
-+    $ make bananapi_m64_defconfig
++    $ make pine64_defconfig
++
 +    $ make
 +
 +Note: you will need access to the internet to download the required
@@ -152,13 +156,13 @@ index 0000000..0dec3e5
 +  $ sudo dd if=output/images/sdcard.img of=/dev/sdX
 +  $ sudo sync
 +
-+Insert the micro SDcard in your Bananapi M64 and power it up. The console
++Insert the micro SDcard in your Pine64 and power it up. The console
 +is on the serial line, 115200 8N1.
-diff --git a/configs/bananapi_m64_defconfig b/configs/bananapi_m64_defconfig
+diff --git a/configs/pine64_defconfig b/configs/pine64_defconfig
 new file mode 100644
-index 0000000..168c93e
+index 0000000..76d2d77
 --- /dev/null
-+++ b/configs/bananapi_m64_defconfig
++++ b/configs/pine64_defconfig
 @@ -0,0 +1,47 @@
 +BR2_aarch64=y
 +BR2_cortex_a53=y
@@ -180,7 +184,7 @@ index 0000000..168c93e
 +BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
 +BR2_TARGET_UBOOT_CUSTOM_VERSION=y
 +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.09"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="bananapi_m64"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="pine64_plus"
 +BR2_TARGET_UBOOT_NEEDS_DTC=y
 +BR2_TARGET_UBOOT_NEEDS_ATF=y
 +BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
@@ -188,7 +192,7 @@ index 0000000..168c93e
 +BR2_TARGET_UBOOT_SPL=y
 +BR2_TARGET_UBOOT_SPL_NAME="spl/sunxi-spl.bin"
 +BR2_TARGET_UBOOT_BOOT_SCRIPT=y
-+BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE="board/bananapi/bananapi-m64/boot.cmd"
++BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE="board/pine64/pine64/boot.cmd"
 +
 +# Kernel
 +BR2_LINUX_KERNEL=y
@@ -196,16 +200,16 @@ index 0000000..168c93e
 +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.13.7"
 +BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
 +BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun50i-a64-bananapi-m64"
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun50i-a64-pine64"
 +
 +# Filesystem
-+BR2_TARGET_GENERIC_ISSUE="Welcome to Bananapi M64"
++BR2_TARGET_GENERIC_ISSUE="Welcome to PINE64"
 +BR2_TARGET_ROOTFS_EXT2=y
 +BR2_TARGET_ROOTFS_EXT2_4=y
 +BR2_PACKAGE_HOST_DOSFSTOOLS=y
 +BR2_PACKAGE_HOST_GENIMAGE=y
 +BR2_PACKAGE_HOST_MTOOLS=y
 +BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/bananapi/bananapi-m64/genimage.cfg"
++BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/pine64/pine64/genimage.cfg"
 -- 
 1.9.1
