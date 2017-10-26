@@ -1,62 +1,57 @@
-From: =?utf-8?Q?Pongr=C3=A1cz_Istv=C3=A1n?= <pongracz.istvan@gmail.com>
-Date: Thu, 26 Oct 2017 14:57:02 +0200
-Subject: [Buildroot] gtk binary application - pango_layout_set_text
-	assertion - empty strings on the UI
-Message-ID: <47b140fe1a82a32fdc6fc867e1b931ef@www.startit.hu>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 26 Oct 2017 15:17:16 +0200
+Subject: [Buildroot] [PATCH] irssi: security bump to version 1.0.5
+In-Reply-To: <20171023230836.23832-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Tue, 24 Oct 2017 01:08:36 +0200")
+References: <20171023230836.23832-1-peter@korsgaard.com>
+Message-ID: <874lqm2gmb.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- Hi,
+ > Fixes the following security issues:
+ > (a) When installing themes with unterminated colour formatting
+ >     sequences, Irssi may access data beyond the end of the
+ >     string. (CWE-126) Found by Hanno B?ck.
 
-I have an issue with buildroot, when I run a gtk application built for debian/i386 over ssh/X forwarding.
+ >     CVE-2017-15228 was assigned to this issue.
 
-The GUI shows empty strings instead of texts, even fonts are available.
+ > (b) While waiting for the channel synchronisation, Irssi may
+ >     incorrectly fail to remove destroyed channels from the query list,
+ >     resulting in use after free conditions when updating the state
+ >     later on. Found by Joseph Bisch. (CWE-416 caused by CWE-672)
 
-Here is an image where you can see the issue exactly: https://imagebin.ca/v/3f78XVw6bLW2
+ >     CVE-2017-15227 was assigned to this issue.
 
-In parallel, I can see the following in the console:
+ > (c) Certain incorrectly formatted DCC CTCP messages could cause NULL
+ >     pointer dereference. Found by Joseph Bisch. This is a separate,
+ >     but similar issue to CVE-2017-9468. (CWE-690)
 
- 
+ >     CVE-2017-15721 was assigned to this issue.
 
-Lot of messages, exactly the same:
+ > (d) Overlong nicks or targets may result in a NULL pointer dereference
+ >     while splitting the message. Found by Joseph Bisch. (CWE-690)
 
-(pwr_rtmon:354): Pango-CRITICAL **: pango_layout_set_text: assertion 'length == 0 || text != NULL' failed
+ >     CVE-2017-15723 was assigned to this issue.
 
-On startup of the applicaion I can see some of this (image loading for icons):
+ > (e) In certain cases Irssi may fail to verify that a Safe channel ID
+ >     is long enough, causing reads beyond the end of the string. Found
+ >     by Joseph Bisch. (CWE-126)
 
-(pwr_rtmon:354): GdkPixbuf-WARNING **: Couldn't convert text chunk value to UTF-8.
+ >     CVE-2017-15722 was assigned to this issue.
 
-What I tried:
+ > For more details, see the advisory:
+ > https://irssi.org/security/irssi_sa_2017_10.txt
 
- 
-Adding more and more fonts from the desktop -> the already exists texts changed a little bit, depending the used font, otherwise no effect
- 
-Deleting all fonts -> the characters on the shown buttons changed to black boxes, so, no texts but only bloxes (no fonts found)
- 
-I tried to add more and more X related applications, even xorg-server -> no effect
- 
-Using strace -f -ff -e open,read -o log.log whatever -> I can see the opened fonts etc.
- 
-Now I try to add gtk3 and gtk-demos to see, what happens with the demo applications.
+ > While we're at it, also add a hash for the license file.
 
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-Buildroot background:
+Committed to 2017.02.x, thanks.
 
- 
-2016.2, glibc (wchar)), busybox, gtk_engines, X.org X Window System (without X11R7 Servers), 
-
-
-I am pretty sure, the problem is not a missing font, but I cannot step forward at this moment. I suspect some UTF-8 issue, but I have no proof except I already provided.
-
-Do you have any hints, how to catch the problem? 
-
-Thank you!
-
-Istv?n
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20171026/d4dfd4b5/attachment.html>
+-- 
+Bye, Peter Korsgaard
