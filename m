@@ -1,102 +1,66 @@
-From: Jagan Teki <jagannadh.teki@gmail.com>
-Date: Thu, 26 Oct 2017 23:43:48 +0530
-Subject: [Buildroot] [PATCH v3 02/11] support/scripts: Add
-	sunxi64-post-build.sh
-In-Reply-To: <CAMty3ZAHk2gnOCWKiWSmYK6rBW4ZWFmdbZNzmciJnyjCHo3FsQ@mail.gmail.com>
-References: <1508406333-27138-1-git-send-email-jagan@amarulasolutions.com>
- <1508406333-27138-3-git-send-email-jagan@amarulasolutions.com>
- <20171021230637.60959eed@windsurf>
- <CAMty3ZCQSpztnqCa8=uZMB1LsF2zPq_OF5uUsagJ9Uv4Z8JUZA@mail.gmail.com>
- <4cb45577-1f4a-ce9c-7204-74934272b789@arm.com>
- <20171022142919.6dc03525@windsurf>
- <CAMty3ZAHk2gnOCWKiWSmYK6rBW4ZWFmdbZNzmciJnyjCHo3FsQ@mail.gmail.com>
-Message-ID: <CAD6G_RT0Pt5tRiZ+oNgShEakjBOLe848O5gHh=oZ05_gEV=5KA@mail.gmail.com>
+From: Sam Voss <sam.voss@rockwellcollins.com>
+Date: Thu, 26 Oct 2017 13:54:52 -0500
+Subject: [Buildroot] [PATCH 2/2] LIBSSH2: Update to newest version
+In-Reply-To: <1509044092-20922-1-git-send-email-sam.voss@rockwellcollins.com>
+References: <1509044092-20922-1-git-send-email-sam.voss@rockwellcollins.com>
+Message-ID: <1509044092-20922-2-git-send-email-sam.voss@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Oct 26, 2017 at 4:50 PM, Jagan Teki <jagan@amarulasolutions.com> wrote:
-> On Sun, Oct 22, 2017 at 5:59 PM, Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com> wrote:
->> Hello,
->>
->> On Sun, 22 Oct 2017 12:05:52 +0100, Andr? Przywara wrote:
->>
->>> > This wasn't only the case with sunxi it's been the U-Boot FIT
->>> > behaviour..even rockchip do follow same build process.
->>> >
->>> > Ideally FIT need input files to produce blob like dtb.
->>> >
->>> > Added Andre he will give some more insight.
->>>
->>> So yes, ATF supports *multiple* ways of integration:
->>> - On the Juno it has the capability of loading images - from NOR flash,
->>> so not a big deal. This means the BL1 and BL2 stages read the BL31
->>> (containing the PSCI runtime) and BL33 (U-Boot or EDK2), also this uses
->>> the ATF defined FIP image format.
->>> - For other platforms (like rockchip or sunxi) we usually load from MMC
->>> or SPI flash. So using the traditional ATF approach would mean to have
->>> MMC and SPI drivers in the early ATF stages, also do the DRAM
->>> initialization there. Since ATF is BSD licensed, it's more involved than
->>> just copying some code from U-Boot.
->>> So the pragmatic approach - which ATF actually embraces - is to just use
->>> a subset of the whole ATF (BL31) and do the rest via some platform
->>> specific firmware: which is U-Boot's SPL in our case, since it already
->>> has support for this hardware. Other platform (most ARM64 servers) tend
->>> to have their proprietary early-init firmware there.
->>
->> Thanks for summarizing the context.
->>
->>> So I virtually know nothing about buildroot, but it might not be a good
->>> idea to shoehorn the second approach into the Juno ATF build scheme.
->>> As I believe that in fact more platforms use the second approach, it
->>> might be worthwhile to introduce some extra code in buildroot to support
->>> that specifically instead of working around the Juno ATF way.
->>> Maybe it can be modelled as some U-Boot FIT build process with an
->>> additional requirement, similar to a binary blob?
->>
->> And this is exactly what I was suggesting Jagan to do: extend Buildroot
->> so that it covers the U-Boot-bundles-ATF scenario (sunxi/rockchip,
->> etc.) in addition to the already supported ATF-bundles-U-Boot scenario
->> (Juno).
->
-> Based on the ATF build this look not an exact U-Boot-bundles-ATF
-> scenario. Whether for Juno(ATF-bundles-U-Boot scenario) or for SUNXI,
-> ATF want a dependence to build U-Boot first atleast for FIP point.
->
-> ARM_TRUSTED_FIRMWARE_MAKE_OPTS += \
->         CROSS_COMPILE="$(TARGET_CROSS)" \
->         BL33=$(BINARIES_DIR)/u-boot.bin \
->
-> Here BL33 need u-boot.bin to export for building FIP in default that
-> could be the reason of making ARM_TRUSTED_FIRMWARE_DEPENDENCIES +=
-> uboot
-> in atf.
->
-> I tried to build for U-Boot-bundles-ATF scenario by not to dependent
-> U-Boot so that U-boot build later. Since at this movement there is no
-> U-Boot build, ATF is unable to get the BL33, I don't know whether this
-> BL33 is needed for all because I'm trying for BL31.
->
-> Build Log:
-> -------------
-> un50iw1p1 all fip
-> make[1]: Entering directory
-> `/mnt/jagan/buildroot/buildroot-sun32/output/build/arm-trusted-firmware-aa75c8da415158a94b82a430b2b40000778e851f'
-> make[1]: Nothing to be done for `bl31'.
-> make[1]: *** No rule to make target
-> `/mnt/jagan/buildroot/buildroot-sun32/output/images/u-boot.bin',
-> needed by `build/sun50iw1p1/release/fip.bin'.  Stop.
-> make[1]: *** Waiting for unfinished jobs....
-> Building sun50iw1p1
+Update libssh2 to use the newest version from git. This caused a
+transition from released version number to hash as it has not been
+version rev'd in over a year (see issue
+https://github.com/libssh2/libssh2/issues/220 for bump request).
 
-Seems like FIP need for BL33, I've sent new series please have a look.
+This brings in changes to the autoconf to correctly pick the crypto
+library.
 
-thanks!
+Update libssh2.mk to have a preconf hook to call buildconf. This
+generates the configuration file used by autotools, and is required when
+pulling source from git instead of a released version.
+
+Signed-off-by: Sam Voss <sam.voss@rockwellcollins.com>
+---
+ package/libssh2/libssh2.hash | 3 +--
+ package/libssh2/libssh2.mk   | 9 +++++++--
+ 2 files changed, 8 insertions(+), 4 deletions(-)
+
+diff --git a/package/libssh2/libssh2.hash b/package/libssh2/libssh2.hash
+index 6b1cced..f0df7a2 100644
+--- a/package/libssh2/libssh2.hash
++++ b/package/libssh2/libssh2.hash
+@@ -1,3 +1,2 @@
+ # Locally calculated after checking pgp signature
+-# https://www.libssh2.org/download/libssh2-1.8.0.tar.gz.asc
+-sha256	39f34e2f6835f4b992cafe8625073a88e5a28ba78f83e8099610a7b3af4676d4	libssh2-1.8.0.tar.gz
++sha256 e73d55cd512863aa6423c6e137039e3e1bcbf5ba87f130e7441132c2c78a5425 libssh2-616fd4d1b3e4a55de67c48819fefca83132126b5.tar.gz
+diff --git a/package/libssh2/libssh2.mk b/package/libssh2/libssh2.mk
+index 3978698..df9842d 100644
+--- a/package/libssh2/libssh2.mk
++++ b/package/libssh2/libssh2.mk
+@@ -4,13 +4,18 @@
+ #
+ ################################################################################
+ 
+-LIBSSH2_VERSION = 1.8.0
+-LIBSSH2_SITE = http://www.libssh2.org/download
++LIBSSH2_VERSION = 616fd4d1b3e4a55de67c48819fefca83132126b5
++LIBSSH2_SITE = $(call github,libssh2,libssh2,$(LIBSSH2_VERSION))
+ LIBSSH2_LICENSE = BSD
+ LIBSSH2_LICENSE_FILES = COPYING
+ LIBSSH2_INSTALL_STAGING = YES
+ LIBSSH2_CONF_OPTS = --disable-examples-build
+ 
++define LIBSSH2_BUILDCONF
++	cd $(@D) ; $(TARGET_MAKE_ENV) ./buildconf --force
++endef
++LIBSSH2_PRE_CONFIGURE_HOOKS += LIBSSH2_BUILDCONF
++
+ # Dependency is one of mbedtls, libgcrypt or openssl, guaranteed in
+ # Config.in.
+ ifeq ($(BR2_PACKAGE_LIBSSH2_MBEDTLS),y)
 -- 
-Jagan Teki
-Free Software Engineer | www.openedev.com
-U-Boot, Linux | Upstream Maintainer
-Hyderabad, India.
+1.9.1
