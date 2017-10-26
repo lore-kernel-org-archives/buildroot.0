@@ -1,29 +1,40 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 26 Oct 2017 12:18:45 +0200
-Subject: [Buildroot] Multiple root filesystems for single
-	kernel/toolchain
-In-Reply-To: <43ed600f-f03b-da68-4f2d-8931b40bbe41@mind.be> (Arnout
- Vandecappelle's message of "Mon, 23 Oct 2017 22:23:10 +0200")
-References: <f5e13782-3ec4-1b63-ef4f-df269bfe8e9f@lynx.com>
- <43ed600f-f03b-da68-4f2d-8931b40bbe41@mind.be>
-Message-ID: <87po9a2ovu.fsf@dell.be.48ers.dk>
+From: Martin Bark <martin@barkynet.com>
+Date: Thu, 26 Oct 2017 11:18:47 +0100
+Subject: [Buildroot] [PATCH 1/2] package/zic: bump version to 2017c
+Message-ID: <1509013128-30527-1-git-send-email-martin@barkynet.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+Signed-off-by: Martin Bark <martin@barkynet.com>
+---
+ package/zic/zic.hash | 4 ++--
+ package/zic/zic.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Hi,
-
- >  However, if all you need is a to toggle a few bits and to wait until the device
- > is available, you might even get away with a simple C program that does that,
- > mounts the rootfs, does a pivot_root(), and exec()s /sbin/init. Then you make a
- > cpio archive with just that executable. Perhaps more work but you're very sure
- > that it's small :-)
-
-Or alternatively do it in the boot loader if it is so simple.
-
+diff --git a/package/zic/zic.hash b/package/zic/zic.hash
+index 1a68887..e7eef7a 100644
+--- a/package/zic/zic.hash
++++ b/package/zic/zic.hash
+@@ -1,2 +1,2 @@
+-# From http://mm.icann.org/pipermail/tz-announce/2017-March/000046.html
+-sha512 9a73af4b868506d1f6287a8285dea489e68f6828da19509114f9144e2a2019c7fd28f4fb98ea907030d11d011ce3a87d99dbe43bca218beddafff151f0d61df1	tzcode2017b.tar.gz
++# From http://mm.icann.org/pipermail/tz-announce/2017-October/000047.html
++sha512 0d8c3e07b0de9015a137602450468ceb6358312a50eeda2a860882367107b8ba9ef275880b292570a671b9910afc54e6209e1e642387d246bc9c08c4ff660ffb	tzcode2017c.tar.gz
+diff --git a/package/zic/zic.mk b/package/zic/zic.mk
+index 236febf..a2f27e4 100644
+--- a/package/zic/zic.mk
++++ b/package/zic/zic.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ZIC_VERSION = 2017b
++ZIC_VERSION = 2017c
+ ZIC_SOURCE = tzcode$(ZIC_VERSION).tar.gz
+ ZIC_SITE = http://www.iana.org/time-zones/repository/releases
+ ZIC_STRIP_COMPONENTS = 0
 -- 
-Bye, Peter Korsgaard
+2.7.4
