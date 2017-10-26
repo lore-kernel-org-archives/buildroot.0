@@ -1,40 +1,42 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 26 Oct 2017 12:06:51 +0200
-Subject: [Buildroot] Report of the Buildroot Developer meeting October
-	21-22 2017, Prague
-In-Reply-To: <3fbbe761-e93d-1a21-9f9e-3ef85da7d332@mind.be> (Arnout
- Vandecappelle's message of "Wed, 25 Oct 2017 21:45:11 +0200")
-References: <3fbbe761-e93d-1a21-9f9e-3ef85da7d332@mind.be>
-Message-ID: <87tvym2pfo.fsf@dell.be.48ers.dk>
+From: Martin Bark <martin@barkynet.com>
+Date: Thu, 26 Oct 2017 11:07:31 +0100
+Subject: [Buildroot] [PATCH 1/1] package/nodejs: bump version to 8.8.1
+Message-ID: <1509012451-24161-1-git-send-email-martin@barkynet.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+See https://nodejs.org/en/blog/release/v8.8.1/
 
-Hi,
+Signed-off-by: Martin Bark <martin@barkynet.com>
+---
+ package/nodejs/nodejs.hash | 4 ++--
+ package/nodejs/nodejs.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
- >  First of all, a warm thank you to the MacGyver hackerspace and
- > particularly our host Petr Barton for welcoming us. It was a really
- > nice environment, it put us right in the mood for a hacking session,
- > and Petr helped us a lot when we had problems with food delivery and
- > by posting the status of Patchwork on a LED display.
-
-Yes, thanks a lot!
-
- > * Peter will ask OSUOSL if it is feasible that they host sources.buildroot.org
- > and autobuild.buildroot.org.
-
-FYI, I have mailed them but not heard back yet.
-
- >  We forgot to decide on the next Buildroot Developer meeting, but normally it
- > should be after FOSDEM, Mon-Tue February 5-6 2018.
-
-Yes, sounds good to me!
-
-Thanks for the writeup!
-
+diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
+index 3cc77b2..9367c54 100644
+--- a/package/nodejs/nodejs.hash
++++ b/package/nodejs/nodejs.hash
+@@ -1,2 +1,2 @@
+-# From http://nodejs.org/dist/v8.6.0/SHASUMS256.txt
+-sha256 b17071109238295b9f363b768afdff97a9f386203d4f080c91847ce76d4f7e93  node-v8.6.0.tar.xz
++# From http://nodejs.org/dist/v8.8.1/SHASUMS256.txt
++sha256 5ce2c47ab779992db49942f757a01cc5131db5cef4e0dd270e48151b0887b57a  node-v8.8.1.tar.xz
+diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+index c1bac35..a29f572 100644
+--- a/package/nodejs/nodejs.mk
++++ b/package/nodejs/nodejs.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-NODEJS_VERSION = 8.6.0
++NODEJS_VERSION = 8.8.1
+ NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.xz
+ NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
+ NODEJS_DEPENDENCIES = host-python host-nodejs c-ares \
 -- 
-Bye, Peter Korsgaard
+2.7.4
