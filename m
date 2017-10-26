@@ -1,50 +1,82 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 26 Oct 2017 15:19:56 +0200
-Subject: [Buildroot] [git commit branch/2017.08.x] libcurl: security bump to
-	version 7.56.1
-Message-ID: <20171026131259.8CC2280ABD@busybox.osuosl.org>
+Date: Thu, 26 Oct 2017 15:19:48 +0200
+Subject: [Buildroot] [git commit branch/2017.08.x] irssi: security bump to
+	version 1.0.5
+Message-ID: <20171026131259.7F67280AD6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=16796fadf7880d5c1b3bf6ea42af90a6e428940c
+commit: https://git.buildroot.net/buildroot/commit/?id=5b5d3581f870623bfde425afa17a3adf5cd328fb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.08.x
 
-Fixes CVE-2017-1000257 - IMAP FETCH response out of bounds read
+Fixes the following security issues:
 
-https://curl.haxx.se/docs/adv_20171023.html
+(a) When installing themes with unterminated colour formatting
+    sequences, Irssi may access data beyond the end of the
+    string. (CWE-126) Found by Hanno B??ck.
+
+    CVE-2017-15228 was assigned to this issue.
+
+(b) While waiting for the channel synchronisation, Irssi may
+    incorrectly fail to remove destroyed channels from the query list,
+    resulting in use after free conditions when updating the state
+    later on. Found by Joseph Bisch. (CWE-416 caused by CWE-672)
+
+    CVE-2017-15227 was assigned to this issue.
+
+(c) Certain incorrectly formatted DCC CTCP messages could cause NULL
+    pointer dereference. Found by Joseph Bisch. This is a separate,
+    but similar issue to CVE-2017-9468. (CWE-690)
+
+    CVE-2017-15721 was assigned to this issue.
+
+(d) Overlong nicks or targets may result in a NULL pointer dereference
+    while splitting the message. Found by Joseph Bisch. (CWE-690)
+
+    CVE-2017-15723 was assigned to this issue.
+
+(e) In certain cases Irssi may fail to verify that a Safe channel ID
+    is long enough, causing reads beyond the end of the string. Found
+    by Joseph Bisch. (CWE-126)
+
+    CVE-2017-15722 was assigned to this issue.
+
+For more details, see the advisory:
+https://irssi.org/security/irssi_sa_2017_10.txt
+
+While we're at it, also add a hash for the license file.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 62d4dd2999a0446c2b868a7c6fbcc764a470493d)
+(cherry picked from commit a9a4ec0dcce4500319e00e7d875414d6bc6606fa)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libcurl/libcurl.hash | 4 ++--
- package/libcurl/libcurl.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/irssi/irssi.hash | 4 +++-
+ package/irssi/irssi.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
-index c697063..49292df 100644
---- a/package/libcurl/libcurl.hash
-+++ b/package/libcurl/libcurl.hash
-@@ -1,4 +1,4 @@
+diff --git a/package/irssi/irssi.hash b/package/irssi/irssi.hash
+index 7b01902..0a6c3f6 100644
+--- a/package/irssi/irssi.hash
++++ b/package/irssi/irssi.hash
+@@ -1,2 +1,4 @@
  # Locally calculated after checking pgp signature
--# https://curl.haxx.se/download/curl-7.56.0.tar.xz.asc
--sha256 32437bcca0e9434384329fdc733547879d25ba70335b3cf9e3d9cbc3e71fd172  curl-7.56.0.tar.xz
-+# https://curl.haxx.se/download/curl-7.56.1.tar.xz.asc
-+sha256 8eed282cf3a0158d567a0feaa3c4619e8e847970597b5a2c81879e8f0d1a39d1  curl-7.56.1.tar.xz
- sha256 cbcf511f5702f7baf5424193a792bc9c18fab22bcbec2e6a587598389dc632c2  COPYING
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index a6b699c..57b9c2c 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
+-sha256	b85c07dbafe178213eccdc69f5f8f0ac024dea01c67244668f91ec1c06b986ca	irssi-1.0.4.tar.xz
++sha256	c2556427e12eb06cabfed40839ac6f57eb8b1aa6365fab6dfcd331b7a04bb914  irssi-1.0.5.tar.xz
++# Locally calculated
++sha256	a1a27cb2ecee8d5378fbb3562f577104a445d6d66fee89286e16758305e63e2b  COPYING
+diff --git a/package/irssi/irssi.mk b/package/irssi/irssi.mk
+index d2b8169..f945078 100644
+--- a/package/irssi/irssi.mk
++++ b/package/irssi/irssi.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBCURL_VERSION = 7.56.0
-+LIBCURL_VERSION = 7.56.1
- LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
- LIBCURL_SITE = https://curl.haxx.se/download
- LIBCURL_DEPENDENCIES = host-pkgconf \
+-IRSSI_VERSION = 1.0.4
++IRSSI_VERSION = 1.0.5
+ IRSSI_SOURCE = irssi-$(IRSSI_VERSION).tar.xz
+ # Do not use the github helper here. The generated tarball is *NOT* the
+ # same as the one uploaded by upstream for the release.
