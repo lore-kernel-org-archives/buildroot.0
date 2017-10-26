@@ -1,82 +1,44 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 26 Oct 2017 15:19:48 +0200
-Subject: [Buildroot] [git commit branch/2017.08.x] irssi: security bump to
-	version 1.0.5
-Message-ID: <20171026131259.7F67280AD6@busybox.osuosl.org>
+From: Seamus Connor <sconnor@lynx.com>
+Date: Thu, 26 Oct 2017 09:32:19 -0700
+Subject: [Buildroot] Multiple root filesystems for single
+	kernel/toolchain
+In-Reply-To: <87po9a2ovu.fsf@dell.be.48ers.dk>
+References: <f5e13782-3ec4-1b63-ef4f-df269bfe8e9f@lynx.com>
+ <43ed600f-f03b-da68-4f2d-8931b40bbe41@mind.be>
+ <87po9a2ovu.fsf@dell.be.48ers.dk>
+Message-ID: <d00f1836-8acf-b6ac-3d65-3836b963edb2@lynx.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5b5d3581f870623bfde425afa17a3adf5cd328fb
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.08.x
+Unfortunately the bootloader is not an option for my system.? The 
+bootloader we must use is targeted at a specific market segment, and the 
+vendor only gave me two things: a binary, and an NDA.
 
-Fixes the following security issues:
+Here is where I am ending up. I have created a script that builds a 
+secondary rootfs.cpio that includes a statically compiled busybox and an 
+init script.? I am currently working to integrate this new rootfs into 
+the buildroot build system so that it will automatically build it into 
+the kernel in the same way that the current mechanism works 
+(linux-rebuild-with-initramfs).
 
-(a) When installing themes with unterminated colour formatting
-    sequences, Irssi may access data beyond the end of the
-    string. (CWE-126) Found by Hanno B??ck.
+Again, thanks to everyone on the list who took the time to look at my 
+question.? If what I end up building doesn't turn out to be a complete 
+hack, I will send another message.? Maybe there would be interest in 
+having the ability to create a "filtered" rootfs.cpio in usptream buildroot?
 
-    CVE-2017-15228 was assigned to this issue.
 
-(b) While waiting for the channel synchronisation, Irssi may
-    incorrectly fail to remove destroyed channels from the query list,
-    resulting in use after free conditions when updating the state
-    later on. Found by Joseph Bisch. (CWE-416 caused by CWE-672)
-
-    CVE-2017-15227 was assigned to this issue.
-
-(c) Certain incorrectly formatted DCC CTCP messages could cause NULL
-    pointer dereference. Found by Joseph Bisch. This is a separate,
-    but similar issue to CVE-2017-9468. (CWE-690)
-
-    CVE-2017-15721 was assigned to this issue.
-
-(d) Overlong nicks or targets may result in a NULL pointer dereference
-    while splitting the message. Found by Joseph Bisch. (CWE-690)
-
-    CVE-2017-15723 was assigned to this issue.
-
-(e) In certain cases Irssi may fail to verify that a Safe channel ID
-    is long enough, causing reads beyond the end of the string. Found
-    by Joseph Bisch. (CWE-126)
-
-    CVE-2017-15722 was assigned to this issue.
-
-For more details, see the advisory:
-https://irssi.org/security/irssi_sa_2017_10.txt
-
-While we're at it, also add a hash for the license file.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit a9a4ec0dcce4500319e00e7d875414d6bc6606fa)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/irssi/irssi.hash | 4 +++-
- package/irssi/irssi.mk   | 2 +-
- 2 files changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/package/irssi/irssi.hash b/package/irssi/irssi.hash
-index 7b01902..0a6c3f6 100644
---- a/package/irssi/irssi.hash
-+++ b/package/irssi/irssi.hash
-@@ -1,2 +1,4 @@
- # Locally calculated after checking pgp signature
--sha256	b85c07dbafe178213eccdc69f5f8f0ac024dea01c67244668f91ec1c06b986ca	irssi-1.0.4.tar.xz
-+sha256	c2556427e12eb06cabfed40839ac6f57eb8b1aa6365fab6dfcd331b7a04bb914  irssi-1.0.5.tar.xz
-+# Locally calculated
-+sha256	a1a27cb2ecee8d5378fbb3562f577104a445d6d66fee89286e16758305e63e2b  COPYING
-diff --git a/package/irssi/irssi.mk b/package/irssi/irssi.mk
-index d2b8169..f945078 100644
---- a/package/irssi/irssi.mk
-+++ b/package/irssi/irssi.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--IRSSI_VERSION = 1.0.4
-+IRSSI_VERSION = 1.0.5
- IRSSI_SOURCE = irssi-$(IRSSI_VERSION).tar.xz
- # Do not use the github helper here. The generated tarball is *NOT* the
- # same as the one uploaded by upstream for the release.
+On 10/26/2017 03:18 AM, Peter Korsgaard wrote:
+>>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+> Hi,
+>
+>   >  However, if all you need is a to toggle a few bits and to wait until the device
+>   > is available, you might even get away with a simple C program that does that,
+>   > mounts the rootfs, does a pivot_root(), and exec()s /sbin/init. Then you make a
+>   > cpio archive with just that executable. Perhaps more work but you're very sure
+>   > that it's small :-)
+>
+> Or alternatively do it in the boot loader if it is so simple.
+>
