@@ -1,42 +1,29 @@
-From: Martin Bark <martin@barkynet.com>
-Date: Thu, 26 Oct 2017 11:07:31 +0100
-Subject: [Buildroot] [PATCH 1/1] package/nodejs: bump version to 8.8.1
-Message-ID: <1509012451-24161-1-git-send-email-martin@barkynet.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 26 Oct 2017 12:18:45 +0200
+Subject: [Buildroot] Multiple root filesystems for single
+	kernel/toolchain
+In-Reply-To: <43ed600f-f03b-da68-4f2d-8931b40bbe41@mind.be> (Arnout
+ Vandecappelle's message of "Mon, 23 Oct 2017 22:23:10 +0200")
+References: <f5e13782-3ec4-1b63-ef4f-df269bfe8e9f@lynx.com>
+ <43ed600f-f03b-da68-4f2d-8931b40bbe41@mind.be>
+Message-ID: <87po9a2ovu.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-See https://nodejs.org/en/blog/release/v8.8.1/
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-Signed-off-by: Martin Bark <martin@barkynet.com>
----
- package/nodejs/nodejs.hash | 4 ++--
- package/nodejs/nodejs.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Hi,
 
-diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
-index 3cc77b2..9367c54 100644
---- a/package/nodejs/nodejs.hash
-+++ b/package/nodejs/nodejs.hash
-@@ -1,2 +1,2 @@
--# From http://nodejs.org/dist/v8.6.0/SHASUMS256.txt
--sha256 b17071109238295b9f363b768afdff97a9f386203d4f080c91847ce76d4f7e93  node-v8.6.0.tar.xz
-+# From http://nodejs.org/dist/v8.8.1/SHASUMS256.txt
-+sha256 5ce2c47ab779992db49942f757a01cc5131db5cef4e0dd270e48151b0887b57a  node-v8.8.1.tar.xz
-diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-index c1bac35..a29f572 100644
---- a/package/nodejs/nodejs.mk
-+++ b/package/nodejs/nodejs.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--NODEJS_VERSION = 8.6.0
-+NODEJS_VERSION = 8.8.1
- NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.xz
- NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
- NODEJS_DEPENDENCIES = host-python host-nodejs c-ares \
+ >  However, if all you need is a to toggle a few bits and to wait until the device
+ > is available, you might even get away with a simple C program that does that,
+ > mounts the rootfs, does a pivot_root(), and exec()s /sbin/init. Then you make a
+ > cpio archive with just that executable. Perhaps more work but you're very sure
+ > that it's small :-)
+
+Or alternatively do it in the boot loader if it is so simple.
+
 -- 
-2.7.4
+Bye, Peter Korsgaard
