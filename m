@@ -1,56 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 26 Oct 2017 14:44:15 +0200
-Subject: [Buildroot] [PATCH] redis: bump to version 3.2.11
-Message-ID: <20171026124415.30102-1-peter@korsgaard.com>
+Date: Thu, 26 Oct 2017 14:52:47 +0200
+Subject: [Buildroot] [PATCH] openssh: security bump to version 7.6p1
+Message-ID: <20171026125247.1044-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-3.2.11 fixes important issues. From the release notes:
+Fixes CVE-2017-15906 - The process_open function in sftp-server.c in OpenSSH
+before 7.6 does not properly prevent write operations in readonly mode,
+which allows attackers to create zero-length files.
 
-================================================================================
-Redis 3.2.11     Released Thu Sep 21 15:47:53 CEST 2017
-================================================================================
-
-Upgrade urgency HIGH: Potentially critical bugs fixed.
-
-AOF flush on SHUTDOWN did not cared to really write the AOF buffers
-(not in the kernel but in the Redis process memory) to disk before exiting.
-Calling SHUTDOWN during traffic resulted into not every operation to be
-persisted on disk.
+For more details, see the release notes:
+https://www.openssh.com/txt/release-7.6
 
 Also add a hash for the license file while we're at it.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/redis/redis.hash | 4 +++-
- package/redis/redis.mk   | 2 +-
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ package/openssh/openssh.hash | 6 ++++--
+ package/openssh/openssh.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/package/redis/redis.hash b/package/redis/redis.hash
-index 2eef91cc0b..ce2d66b8c2 100644
---- a/package/redis/redis.hash
-+++ b/package/redis/redis.hash
+diff --git a/package/openssh/openssh.hash b/package/openssh/openssh.hash
+index 3685bc0dbf..d8a4da32ad 100644
+--- a/package/openssh/openssh.hash
++++ b/package/openssh/openssh.hash
 @@ -1,2 +1,4 @@
- # From https://github.com/antirez/redis-hashes/blob/master/README
--sha256 6eaacfa983b287e440d0839ead20c2231749d5d6b78bbe0e0ffa3a890c59ff26  redis-3.2.9.tar.gz
-+sha256 31ae927cab09f90c9ca5954aab7aeecc3bb4da6087d3d12ba0a929ceb54081b5  redis-3.2.11.tar.gz
+-# From http://www.openssh.com/txt/release-7.5 (base64 encoded)
+-sha256 9846e3c5fab9f0547400b4d2c017992f914222b3fd1f8eee6c7dc6bc5e59f9f0  openssh-7.5p1.tar.gz
++# From http://www.openssh.com/txt/release-7.6 (base64 encoded)
++sha256 a323caeeddfe145baaa0db16e98d784b1fbc7dd436a6bf1f479dfd5cd1d21723  openssh-7.6p1.tar.gz
 +# Locally calculated
-+sha256 cbf420a3672475a6e2765e3c0984c1f81efe0212afb94a3c998ee63bfd661063  COPYING
-diff --git a/package/redis/redis.mk b/package/redis/redis.mk
-index 6a7a3128c3..82969c9022 100644
---- a/package/redis/redis.mk
-+++ b/package/redis/redis.mk
++sha256 05a4c25ef464e19656c5259bd4f4da8428efab01044f3541b79fbb3ff209350f  LICENCE
+diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
+index 38a32bf54d..6b7ac22c19 100644
+--- a/package/openssh/openssh.mk
++++ b/package/openssh/openssh.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--REDIS_VERSION = 3.2.9
-+REDIS_VERSION = 3.2.11
- REDIS_SITE = http://download.redis.io/releases
- REDIS_LICENSE = BSD-3-Clause (core); MIT and BSD family licenses (Bundled components)
- REDIS_LICENSE_FILES = COPYING
+-OPENSSH_VERSION = 7.5p1
++OPENSSH_VERSION = 7.6p1
+ OPENSSH_SITE = http://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable
+ OPENSSH_LICENSE = BSD-3-Clause, BSD-2-Clause, Public Domain
+ OPENSSH_LICENSE_FILES = LICENCE
 -- 
 2.11.0
