@@ -1,33 +1,50 @@
-From: =?iso-8859-1?Q?Jan_Kundr=E1t?= <jan.kundrat@cesnet.cz>
-Date: Thu, 26 Oct 2017 01:10:05 +0200
-Subject: [Buildroot] Parallel top-level make and multiple rootfs types
-Message-ID: <71023202-b51d-49cb-bcf0-a49cffb7414a@cesnet.cz>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 26 Oct 2017 08:59:33 +0200
+Subject: [Buildroot] [PATCH] nodejs: security bump to version 8.8.0
+Message-ID: <20171026065933.8311-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-I've enabled that unsupported feature for parallel top-level make by 
-removing ".NOTPARALLEL". I'm doing this because it cuts my build time by a 
-factor of four (roughly 50min -> 12min; yes, these serialized configure 
-steps are extremely expensive on a 24-core build node).
+Fixes CVE-2017-14919 - In zlib v1.2.9, a change was made that causes an
+error to be raised when a raw deflate stream is initialized with windowBits
+set to 8.  On some versions this crashes Node and you cannot recover from
+it, while on some versions it throws an exception.  Node.js will now
+gracefully set windowBits to 9 replicating the legacy behavior to avoid a
+DOS vector.
 
-Everything works well for me up to and including the `target-finalize` 
-step. I have multiple CONFIG_TARGET_ROOTFS_*, and their rules clobber each 
-other's auxiliary files, either directly (_fakeroot.fs), or via mkusers 
-which creates duplicate rows in target/etc/group.
+For more details, see the announcement:
+https://nodejs.org/en/blog/vulnerability/oct-2017-dos/
 
-I tried to fix this by something like:
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/nodejs/nodejs.hash | 4 ++--
+ package/nodejs/nodejs.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-  .NOTPARALLEL: $$(BINARIES_DIR)/rootfs.$(1)
-
-...but it just caused the entire build to once again become serial, 
-package-after-package, which is not what I want.
-
-Is there a better fix than running `make -j32 target-finalize && make` as a 
-workaround?
-
-With kind regards,
-Jan
+diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
+index 3cc77b2524..30497eac53 100644
+--- a/package/nodejs/nodejs.hash
++++ b/package/nodejs/nodejs.hash
+@@ -1,2 +1,2 @@
+-# From http://nodejs.org/dist/v8.6.0/SHASUMS256.txt
+-sha256 b17071109238295b9f363b768afdff97a9f386203d4f080c91847ce76d4f7e93  node-v8.6.0.tar.xz
++# From http://nodejs.org/dist/v8.8.0/SHASUMS256.txt
++sha256 854f32d27cd62895a13a6af43b87e0542f512f40af960244d15cf16da0914ecf  node-v8.8.0.tar.xz
+diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+index c1bac35a64..8c30cb96d3 100644
+--- a/package/nodejs/nodejs.mk
++++ b/package/nodejs/nodejs.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-NODEJS_VERSION = 8.6.0
++NODEJS_VERSION = 8.8.0
+ NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.xz
+ NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
+ NODEJS_DEPENDENCIES = host-python host-nodejs c-ares \
+-- 
+2.11.0
