@@ -1,21 +1,28 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 26 Oct 2017 13:22:53 +0200
-Subject: [Buildroot] [git commit] package/nodejs: bump version to 8.8.1
-Message-ID: <20171026111655.C9C4081190@busybox.osuosl.org>
+Date: Thu, 26 Oct 2017 13:19:34 +0200
+Subject: [Buildroot] [git commit] nodejs: security bump to version 8.8.0
+Message-ID: <20171026111655.B9A0B803EC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=07e4910c56746336d35ae8ed7183c36b3675fc0d
+commit: https://git.buildroot.net/buildroot/commit/?id=228f68a137f4f73ae2655f4a223b472eb6cfa391
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes a regression introduced in 8.8.0.
-See https://nodejs.org/en/blog/release/v8.8.1/
+Fixes CVE-2017-14919 - In zlib v1.2.9, a change was made that causes an
+error to be raised when a raw deflate stream is initialized with windowBits
+set to 8.  On some versions this crashes Node and you cannot recover from
+it, while on some versions it throws an exception.  Node.js will now
+gracefully set windowBits to 9 replicating the legacy behavior to avoid a
+DOS vector.
 
-Peter: apply on top of 8.8.0, mention that it fixes regression]
-Signed-off-by: Martin Bark <martin@barkynet.com>
+For more details, see the announcement:
+https://nodejs.org/en/blog/vulnerability/oct-2017-dos/
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Peter Korsgaard &lt;<a href="mailto:peter@korsgaard.com">peter at korsgaard.com</a>&gt;<br>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
  package/nodejs/nodejs.hash | 4 ++--
@@ -23,24 +30,24 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  2 files changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
-index 30497ea..9367c54 100644
+index 3cc77b2..30497ea 100644
 --- a/package/nodejs/nodejs.hash
 +++ b/package/nodejs/nodejs.hash
 @@ -1,2 +1,2 @@
--# From http://nodejs.org/dist/v8.8.0/SHASUMS256.txt
--sha256 854f32d27cd62895a13a6af43b87e0542f512f40af960244d15cf16da0914ecf  node-v8.8.0.tar.xz
-+# From http://nodejs.org/dist/v8.8.1/SHASUMS256.txt
-+sha256 5ce2c47ab779992db49942f757a01cc5131db5cef4e0dd270e48151b0887b57a  node-v8.8.1.tar.xz
+-# From http://nodejs.org/dist/v8.6.0/SHASUMS256.txt
+-sha256 b17071109238295b9f363b768afdff97a9f386203d4f080c91847ce76d4f7e93  node-v8.6.0.tar.xz
++# From http://nodejs.org/dist/v8.8.0/SHASUMS256.txt
++sha256 854f32d27cd62895a13a6af43b87e0542f512f40af960244d15cf16da0914ecf  node-v8.8.0.tar.xz
 diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-index 8c30cb9..a29f572 100644
+index c1bac35..8c30cb9 100644
 --- a/package/nodejs/nodejs.mk
 +++ b/package/nodejs/nodejs.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--NODEJS_VERSION = 8.8.0
-+NODEJS_VERSION = 8.8.1
+-NODEJS_VERSION = 8.6.0
++NODEJS_VERSION = 8.8.0
  NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.xz
  NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
  NODEJS_DEPENDENCIES = host-python host-nodejs c-ares \
