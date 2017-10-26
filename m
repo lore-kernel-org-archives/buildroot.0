@@ -1,44 +1,141 @@
-From: Seamus Connor <sconnor@lynx.com>
-Date: Thu, 26 Oct 2017 09:32:19 -0700
-Subject: [Buildroot] Multiple root filesystems for single
-	kernel/toolchain
-In-Reply-To: <87po9a2ovu.fsf@dell.be.48ers.dk>
-References: <f5e13782-3ec4-1b63-ef4f-df269bfe8e9f@lynx.com>
- <43ed600f-f03b-da68-4f2d-8931b40bbe41@mind.be>
- <87po9a2ovu.fsf@dell.be.48ers.dk>
-Message-ID: <d00f1836-8acf-b6ac-3d65-3836b963edb2@lynx.com>
+From: Jagan Teki <jagannadh.teki@gmail.com>
+Date: Thu, 26 Oct 2017 20:11:40 +0200
+Subject: [Buildroot] [PATCH v4 00/11] board: Add Allwinner A64/H5 boards
+Message-ID: <1509041511-30956-1-git-send-email-jagan@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Unfortunately the bootloader is not an option for my system.? The 
-bootloader we must use is targeted at a specific market segment, and the 
-vendor only gave me two things: a binary, and an NDA.
+This patchset series drop 'sunxi64-post-build.sh'[1] for post-building
+U-Boot proper instead it add U-Boot-bundles-ATF scenario.
 
-Here is where I am ending up. I have created a script that builds a 
-secondary rootfs.cpio that includes a statically compiled busybox and an 
-init script.? I am currently working to integrate this new rootfs into 
-the buildroot build system so that it will automatically build it into 
-the kernel in the same way that the current mechanism works 
-(linux-rebuild-with-initramfs).
+All boards now use Mainline U-Boot, Linux and Nanaopi A64, A64-olinuxino
+used linux-next patches since 4.13.7 have not been merged.
 
-Again, thanks to everyone on the list who took the time to look at my 
-question.? If what I end up building doesn't turn out to be a complete 
-hack, I will send another message.? Maybe there would be interest in 
-having the ability to create a "filtered" rootfs.cpio in usptream buildroot?
+Tested on rea hardware.
 
+Changes for v3:
+- Added "arm-trusted-firmware: Build FIP for BL33" patch
+- Added "uboot: Add U-Boot-bundles-ATF support" patch
+- Droped sunxi64-post-build.sh config and script file
+Changes for v3:
+- Fixed Bananapi M1 comment on config file
+- Add sunxi64-post-build.sh
+- Add all sunxi64 boards
+Changes for v2:
+- Rebase on master
 
-On 10/26/2017 03:18 AM, Peter Korsgaard wrote:
->>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
-> Hi,
->
->   >  However, if all you need is a to toggle a few bits and to wait until the device
->   > is available, you might even get away with a simple C program that does that,
->   > mounts the rootfs, does a pivot_root(), and exec()s /sbin/init. Then you make a
->   > cpio archive with just that executable. Perhaps more work but you're very sure
->   > that it's small :-)
->
-> Or alternatively do it in the boot loader if it is so simple.
->
+[1] https://www.mail-archive.com/linux-sunxi at googlegroups.com/msg24703.html
+
+Jagan Teki (11):
+  arm-trusted-firmware: Build FIP for BL33
+  uboot: Add U-Boot-bundles-ATF support
+  board: Add Bananapi M64 support
+  board: Add Pine64 support
+  board: Add SoPine support
+  board: Add FriendlyARM Nanopi A64 support
+  board: Add FriendlyARM Nanopi NEO2 support
+  board: Add Olimex A64-OLinuXino support
+  board: Add Orangepi Win/Win Plus support
+  board: Add Orangepi Prime support
+  board: Add Orangepi Zero Plus2 support
+
+ .gitlab-ci.yml                                     |   9 +
+ DEVELOPERS                                         |  16 ++
+ board/bananapi/bananapi-m64/boot.cmd               |   6 +
+ board/bananapi/bananapi-m64/genimage.cfg           |  38 +++
+ board/bananapi/bananapi-m64/readme.txt             |  37 +++
+ board/friendlyarm/nanopi-a64/boot.cmd              |   6 +
+ board/friendlyarm/nanopi-a64/genimage.cfg          |  38 +++
+ board/friendlyarm/nanopi-a64/linux_axp.fragment    |   3 +
+ ...nner-a64-add-NMI-R_INTC-controller-on-A64.patch |  41 ++++
+ ...lwinner-a64-add-DTSI-file-for-AXP803-PMIC.patch | 176 ++++++++++++++
+ ...winner-a64-Add-initial-NanoPi-A64-support.patch | 254 +++++++++++++++++++++
+ board/friendlyarm/nanopi-a64/readme.txt            |  37 +++
+ board/friendlyarm/nanopi-neo2/boot.cmd             |   6 +
+ board/friendlyarm/nanopi-neo2/genimage.cfg         |  38 +++
+ board/friendlyarm/nanopi-neo2/readme.txt           |  37 +++
+ board/olimex/a64-olinuxino/boot.cmd                |   6 +
+ board/olimex/a64-olinuxino/genimage.cfg            |  38 +++
+ board/olimex/a64-olinuxino/linux_axp.fragment      |   3 +
+ ...nner-a64-add-NMI-R_INTC-controller-on-A64.patch |  41 ++++
+ ...lwinner-a64-add-DTSI-file-for-AXP803-PMIC.patch | 176 ++++++++++++++
+ ...nner-a64-Add-A64-OLinuXino-initial-suppor.patch | 244 ++++++++++++++++++++
+ board/olimex/a64-olinuxino/readme.txt              |  37 +++
+ board/orangepi/orangepi-prime/boot.cmd             |   6 +
+ board/orangepi/orangepi-prime/genimage.cfg         |  38 +++
+ board/orangepi/orangepi-prime/readme.txt           |  37 +++
+ board/orangepi/orangepi-win/boot.cmd               |   6 +
+ board/orangepi/orangepi-win/genimage.cfg           |  38 +++
+ board/orangepi/orangepi-win/readme.txt             |  37 +++
+ board/orangepi/orangepi-zero-plus2/boot.cmd        |   6 +
+ board/orangepi/orangepi-zero-plus2/genimage.cfg    |  38 +++
+ board/orangepi/orangepi-zero-plus2/readme.txt      |  37 +++
+ board/pine64/pine64/boot.cmd                       |   6 +
+ board/pine64/pine64/genimage.cfg                   |  38 +++
+ board/pine64/pine64/readme.txt                     |  38 +++
+ board/pine64/sopine/boot.cmd                       |   6 +
+ board/pine64/sopine/genimage.cfg                   |  38 +++
+ board/pine64/sopine/readme.txt                     |  38 +++
+ boot/arm-trusted-firmware/arm-trusted-firmware.mk  |  12 +-
+ boot/uboot/Config.in                               |  10 +
+ boot/uboot/uboot.mk                                |   5 +
+ configs/bananapi_m64_defconfig                     |  47 ++++
+ configs/friendlyarm_nanopi_a64_defconfig           |  51 +++++
+ configs/friendlyarm_nanopi_neo2_defconfig          |  47 ++++
+ configs/olimex_a64_olinuxino_defconfig             |  51 +++++
+ configs/orangepi_prime_defconfig                   |  47 ++++
+ configs/orangepi_win_defconfig                     |  47 ++++
+ configs/orangepi_zero_plus2_defconfig              |  47 ++++
+ configs/pine64_defconfig                           |  47 ++++
+ configs/pine64_sopine_defconfig                    |  47 ++++
+ 49 files changed, 2149 insertions(+), 3 deletions(-)
+ create mode 100644 board/bananapi/bananapi-m64/boot.cmd
+ create mode 100644 board/bananapi/bananapi-m64/genimage.cfg
+ create mode 100644 board/bananapi/bananapi-m64/readme.txt
+ create mode 100644 board/friendlyarm/nanopi-a64/boot.cmd
+ create mode 100644 board/friendlyarm/nanopi-a64/genimage.cfg
+ create mode 100644 board/friendlyarm/nanopi-a64/linux_axp.fragment
+ create mode 100644 board/friendlyarm/nanopi-a64/patches/linux/linux-0001-arm64-allwinner-a64-add-NMI-R_INTC-controller-on-A64.patch
+ create mode 100644 board/friendlyarm/nanopi-a64/patches/linux/linux-0002-arm64-allwinner-a64-add-DTSI-file-for-AXP803-PMIC.patch
+ create mode 100644 board/friendlyarm/nanopi-a64/patches/linux/linux-0003-arm64-allwinner-a64-Add-initial-NanoPi-A64-support.patch
+ create mode 100644 board/friendlyarm/nanopi-a64/readme.txt
+ create mode 100644 board/friendlyarm/nanopi-neo2/boot.cmd
+ create mode 100644 board/friendlyarm/nanopi-neo2/genimage.cfg
+ create mode 100644 board/friendlyarm/nanopi-neo2/readme.txt
+ create mode 100644 board/olimex/a64-olinuxino/boot.cmd
+ create mode 100644 board/olimex/a64-olinuxino/genimage.cfg
+ create mode 100644 board/olimex/a64-olinuxino/linux_axp.fragment
+ create mode 100644 board/olimex/a64-olinuxino/patches/linux/linux-0001-arm64-allwinner-a64-add-NMI-R_INTC-controller-on-A64.patch
+ create mode 100644 board/olimex/a64-olinuxino/patches/linux/linux-0002-arm64-allwinner-a64-add-DTSI-file-for-AXP803-PMIC.patch
+ create mode 100644 board/olimex/a64-olinuxino/patches/linux/linux-0003-arm64-allwinner-a64-Add-A64-OLinuXino-initial-suppor.patch
+ create mode 100644 board/olimex/a64-olinuxino/readme.txt
+ create mode 100644 board/orangepi/orangepi-prime/boot.cmd
+ create mode 100644 board/orangepi/orangepi-prime/genimage.cfg
+ create mode 100644 board/orangepi/orangepi-prime/readme.txt
+ create mode 100644 board/orangepi/orangepi-win/boot.cmd
+ create mode 100644 board/orangepi/orangepi-win/genimage.cfg
+ create mode 100644 board/orangepi/orangepi-win/readme.txt
+ create mode 100644 board/orangepi/orangepi-zero-plus2/boot.cmd
+ create mode 100644 board/orangepi/orangepi-zero-plus2/genimage.cfg
+ create mode 100644 board/orangepi/orangepi-zero-plus2/readme.txt
+ create mode 100644 board/pine64/pine64/boot.cmd
+ create mode 100644 board/pine64/pine64/genimage.cfg
+ create mode 100644 board/pine64/pine64/readme.txt
+ create mode 100644 board/pine64/sopine/boot.cmd
+ create mode 100644 board/pine64/sopine/genimage.cfg
+ create mode 100644 board/pine64/sopine/readme.txt
+ create mode 100644 configs/bananapi_m64_defconfig
+ create mode 100644 configs/friendlyarm_nanopi_a64_defconfig
+ create mode 100644 configs/friendlyarm_nanopi_neo2_defconfig
+ create mode 100644 configs/olimex_a64_olinuxino_defconfig
+ create mode 100644 configs/orangepi_prime_defconfig
+ create mode 100644 configs/orangepi_win_defconfig
+ create mode 100644 configs/orangepi_zero_plus2_defconfig
+ create mode 100644 configs/pine64_defconfig
+ create mode 100644 configs/pine64_sopine_defconfig
+
+-- 
+1.9.1
