@@ -1,51 +1,62 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 26 Oct 2017 14:52:47 +0200
-Subject: [Buildroot] [PATCH] openssh: security bump to version 7.6p1
-Message-ID: <20171026125247.1044-1-peter@korsgaard.com>
+From: =?utf-8?Q?Pongr=C3=A1cz_Istv=C3=A1n?= <pongracz.istvan@gmail.com>
+Date: Thu, 26 Oct 2017 14:57:02 +0200
+Subject: [Buildroot] gtk binary application - pango_layout_set_text
+	assertion - empty strings on the UI
+Message-ID: <47b140fe1a82a32fdc6fc867e1b931ef@www.startit.hu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes CVE-2017-15906 - The process_open function in sftp-server.c in OpenSSH
-before 7.6 does not properly prevent write operations in readonly mode,
-which allows attackers to create zero-length files.
 
-For more details, see the release notes:
-https://www.openssh.com/txt/release-7.6
+ Hi,
 
-Also add a hash for the license file while we're at it.
+I have an issue with buildroot, when I run a gtk application built for debian/i386 over ssh/X forwarding.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/openssh/openssh.hash | 6 ++++--
- package/openssh/openssh.mk   | 2 +-
- 2 files changed, 5 insertions(+), 3 deletions(-)
+The GUI shows empty strings instead of texts, even fonts are available.
 
-diff --git a/package/openssh/openssh.hash b/package/openssh/openssh.hash
-index 3685bc0dbf..d8a4da32ad 100644
---- a/package/openssh/openssh.hash
-+++ b/package/openssh/openssh.hash
-@@ -1,2 +1,4 @@
--# From http://www.openssh.com/txt/release-7.5 (base64 encoded)
--sha256 9846e3c5fab9f0547400b4d2c017992f914222b3fd1f8eee6c7dc6bc5e59f9f0  openssh-7.5p1.tar.gz
-+# From http://www.openssh.com/txt/release-7.6 (base64 encoded)
-+sha256 a323caeeddfe145baaa0db16e98d784b1fbc7dd436a6bf1f479dfd5cd1d21723  openssh-7.6p1.tar.gz
-+# Locally calculated
-+sha256 05a4c25ef464e19656c5259bd4f4da8428efab01044f3541b79fbb3ff209350f  LICENCE
-diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
-index 38a32bf54d..6b7ac22c19 100644
---- a/package/openssh/openssh.mk
-+++ b/package/openssh/openssh.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+Here is an image where you can see the issue exactly: https://imagebin.ca/v/3f78XVw6bLW2
+
+In parallel, I can see the following in the console:
+
  
--OPENSSH_VERSION = 7.5p1
-+OPENSSH_VERSION = 7.6p1
- OPENSSH_SITE = http://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable
- OPENSSH_LICENSE = BSD-3-Clause, BSD-2-Clause, Public Domain
- OPENSSH_LICENSE_FILES = LICENCE
--- 
-2.11.0
+
+Lot of messages, exactly the same:
+
+(pwr_rtmon:354): Pango-CRITICAL **: pango_layout_set_text: assertion 'length == 0 || text != NULL' failed
+
+On startup of the applicaion I can see some of this (image loading for icons):
+
+(pwr_rtmon:354): GdkPixbuf-WARNING **: Couldn't convert text chunk value to UTF-8.
+
+What I tried:
+
+ 
+Adding more and more fonts from the desktop -> the already exists texts changed a little bit, depending the used font, otherwise no effect
+ 
+Deleting all fonts -> the characters on the shown buttons changed to black boxes, so, no texts but only bloxes (no fonts found)
+ 
+I tried to add more and more X related applications, even xorg-server -> no effect
+ 
+Using strace -f -ff -e open,read -o log.log whatever -> I can see the opened fonts etc.
+ 
+Now I try to add gtk3 and gtk-demos to see, what happens with the demo applications.
+
+
+Buildroot background:
+
+ 
+2016.2, glibc (wchar)), busybox, gtk_engines, X.org X Window System (without X11R7 Servers), 
+
+
+I am pretty sure, the problem is not a missing font, but I cannot step forward at this moment. I suspect some UTF-8 issue, but I have no proof except I already provided.
+
+Do you have any hints, how to catch the problem? 
+
+Thank you!
+
+Istv?n
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20171026/d4dfd4b5/attachment.html>
