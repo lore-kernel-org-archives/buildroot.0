@@ -1,50 +1,56 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 26 Oct 2017 14:08:55 +0200
-Subject: [Buildroot] [git commit] sdl2: explicitly disable raspberry pi
-	video backend
-Message-ID: <20171026121140.42C8180FFB@busybox.osuosl.org>
+Date: Thu, 26 Oct 2017 14:44:15 +0200
+Subject: [Buildroot] [PATCH] redis: bump to version 3.2.11
+Message-ID: <20171026124415.30102-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3a798acf239dee04d573f575337bf823c13020fd
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+3.2.11 fixes important issues. From the release notes:
 
-Fixes:
-http://autobuild.buildroot.net/results/d59/d5992dcc9a49ee77afaebdcc9448ac1868fa7de1/
-http://autobuild.buildroot.net/results/e89/e894f21ce1983ee3bd8d65a8e59e1adab9a62707/
+================================================================================
+Redis 3.2.11     Released Thu Sep 21 15:47:53 CEST 2017
+================================================================================
 
-The configure script automatically enables support for the raspberry pi
-video backend if it detects the rpi-userland package.  Unfortunately it
-hardcodes a number of include/linker paths unsuitable for cross compilation,
-breaking the build:
+Upgrade urgency HIGH: Potentially critical bugs fixed.
 
-    if test x$enable_video = xyes -a x$enable_video_rpi = xyes; then
-..
-     RPI_CFLAGS="-I/opt/vc/include -I/opt/vc/include/interface/vcos/pthreads -I/opt/vc/include/interface/vmcs_host/linux"
-     RPI_LDFLAGS="-L/opt/vc/lib -lbcm_host"
-    fi
+AOF flush on SHUTDOWN did not cared to really write the AOF buffers
+(not in the kernel but in the Redis process memory) to disk before exiting.
+Calling SHUTDOWN during traffic resulted into not every operation to be
+persisted on disk.
 
-So explicitly disable it until the configure script is fixed.
+Also add a hash for the license file while we're at it.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/sdl2/sdl2.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/redis/redis.hash | 4 +++-
+ package/redis/redis.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/sdl2/sdl2.mk b/package/sdl2/sdl2.mk
-index facb41e..fa3b57e 100644
---- a/package/sdl2/sdl2.mk
-+++ b/package/sdl2/sdl2.mk
-@@ -18,7 +18,8 @@ SDL2_CONF_OPTS += \
- 	--disable-esd \
- 	--disable-dbus \
- 	--disable-pulseaudio \
--	--disable-video-wayland
-+	--disable-video-wayland \
-+	--disable-video-rpi
+diff --git a/package/redis/redis.hash b/package/redis/redis.hash
+index 2eef91cc0b..ce2d66b8c2 100644
+--- a/package/redis/redis.hash
++++ b/package/redis/redis.hash
+@@ -1,2 +1,4 @@
+ # From https://github.com/antirez/redis-hashes/blob/master/README
+-sha256 6eaacfa983b287e440d0839ead20c2231749d5d6b78bbe0e0ffa3a890c59ff26  redis-3.2.9.tar.gz
++sha256 31ae927cab09f90c9ca5954aab7aeecc3bb4da6087d3d12ba0a929ceb54081b5  redis-3.2.11.tar.gz
++# Locally calculated
++sha256 cbf420a3672475a6e2765e3c0984c1f81efe0212afb94a3c998ee63bfd661063  COPYING
+diff --git a/package/redis/redis.mk b/package/redis/redis.mk
+index 6a7a3128c3..82969c9022 100644
+--- a/package/redis/redis.mk
++++ b/package/redis/redis.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # We must enable static build to get compilation successful.
- SDL2_CONF_OPTS += --enable-static
+-REDIS_VERSION = 3.2.9
++REDIS_VERSION = 3.2.11
+ REDIS_SITE = http://download.redis.io/releases
+ REDIS_LICENSE = BSD-3-Clause (core); MIT and BSD family licenses (Bundled components)
+ REDIS_LICENSE_FILES = COPYING
+-- 
+2.11.0
