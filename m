@@ -1,52 +1,118 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 27 Oct 2017 13:49:02 +0200
-Subject: [Buildroot] [git commit] openssh: security bump to version 7.6p1
-Message-ID: <20171027114555.F14BC7F8A2@busybox.osuosl.org>
+Date: Fri, 27 Oct 2017 14:02:08 +0200
+Subject: [Buildroot] [PATCH] wget: security bump to version 1.19.2
+Message-ID: <20171027120208.1159-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=70663a9a4fcb9211fcef7668a8a35de11cc54775
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Fixes the following security issues:
 
-Fixes CVE-2017-15906 - The process_open function in sftp-server.c in OpenSSH
-before 7.6 does not properly prevent write operations in readonly mode,
-which allows attackers to create zero-length files.
+CVE-2017-13089: The http.c:skip_short_body() function is called in some
+circumstances, such as when processing redirects.  When the response is sent
+chunked, the chunk parser uses strtol() to read each chunk's length, but
+doesn't check that the chunk length is a non-negative number.  The code then
+tries to skip the chunk in pieces of 512 bytes by using the MIN() macro, but
+ends up passing the negative chunk length to connect.c:fd_read().  As
+fd_read() takes an int argument, the high 32 bits of the chunk length are
+discarded, leaving fd_read() with a completely attacker controlled length
+argument.
 
-For more details, see the release notes:
-https://www.openssh.com/txt/release-7.6
+CVE-2017-13090: The retr.c:fd_read_body() function is called when processing
+OK responses.  When the response is sent chunked, the chunk parser uses
+strtol() to read each chunk's length, but doesn't check that the chunk
+length is a non-negative number.  The code then tries to read the chunk in
+pieces of 8192 bytes by using the MIN() macro, but ends up passing the
+negative chunk length to retr.c:fd_read().  As fd_read() takes an int
+argument, the high 32 bits of the chunk length are discarded, leaving
+fd_read() with a completely attacker controlled length argument.  The
+attacker can corrupt malloc metadata after the allocated buffer.
+
+Drop now upstreamed patch and change to .tar.lz as .tar.xz is no longer
+available.
 
 Also add a hash for the license file while we're at it.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/openssh/openssh.hash | 6 ++++--
- package/openssh/openssh.mk   | 2 +-
- 2 files changed, 5 insertions(+), 3 deletions(-)
+ ...0001-Fix-CRLF-injection-in-Wget-host-part.patch | 40 ----------------------
+ package/wget/wget.hash                             |  4 ++-
+ package/wget/wget.mk                               |  4 +--
+ 3 files changed, 5 insertions(+), 43 deletions(-)
+ delete mode 100644 package/wget/0001-Fix-CRLF-injection-in-Wget-host-part.patch
 
-diff --git a/package/openssh/openssh.hash b/package/openssh/openssh.hash
-index 3685bc0..d8a4da3 100644
---- a/package/openssh/openssh.hash
-+++ b/package/openssh/openssh.hash
+diff --git a/package/wget/0001-Fix-CRLF-injection-in-Wget-host-part.patch b/package/wget/0001-Fix-CRLF-injection-in-Wget-host-part.patch
+deleted file mode 100644
+index 380b075244..0000000000
+--- a/package/wget/0001-Fix-CRLF-injection-in-Wget-host-part.patch
++++ /dev/null
+@@ -1,40 +0,0 @@
+-From 4d729e322fae359a1aefaafec1144764a54e8ad4 Mon Sep 17 00:00:00 2001
+-From: =?UTF-8?q?Tim=20R=C3=BChsen?= <tim.ruehsen@gmx.de>
+-Date: Mon, 6 Mar 2017 10:04:22 +0100
+-Subject: [PATCH] Fix CRLF injection in Wget host part
+-
+-* src/url.c (url_parse): Reject control characters in host part of URL
+-
+-Reported-by: Orange Tsai
+-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+----
+-Patch status: upstream commit 4d729e322fae35
+-
+- src/url.c | 11 +++++++++++
+- 1 file changed, 11 insertions(+)
+-
+-diff --git a/src/url.c b/src/url.c
+-index 8f8ff0b881af..7d36b27d7b92 100644
+---- a/src/url.c
+-+++ b/src/url.c
+-@@ -925,6 +925,17 @@ url_parse (const char *url, int *error, struct iri *iri, bool percent_encode)
+-       url_unescape (u->host);
+-       host_modified = true;
+- 
+-+      /* check for invalid control characters in host name */
+-+      for (p = u->host; *p; p++)
+-+        {
+-+          if (c_iscntrl(*p))
+-+            {
+-+              url_free(u);
+-+              error_code = PE_INVALID_HOST_NAME;
+-+              goto error;
+-+            }
+-+        }
+-+
+-       /* Apply IDNA regardless of iri->utf8_encode status */
+-       if (opt.enable_iri && iri)
+-         {
+--- 
+-2.11.0
+-
+diff --git a/package/wget/wget.hash b/package/wget/wget.hash
+index 5f22396b05..0048557946 100644
+--- a/package/wget/wget.hash
++++ b/package/wget/wget.hash
 @@ -1,2 +1,4 @@
--# From http://www.openssh.com/txt/release-7.5 (base64 encoded)
--sha256 9846e3c5fab9f0547400b4d2c017992f914222b3fd1f8eee6c7dc6bc5e59f9f0  openssh-7.5p1.tar.gz
-+# From http://www.openssh.com/txt/release-7.6 (base64 encoded)
-+sha256 a323caeeddfe145baaa0db16e98d784b1fbc7dd436a6bf1f479dfd5cd1d21723  openssh-7.6p1.tar.gz
+ # Locally calculated after checking pgp signature
+-sha256 0c950b9671881222a4d385b013c9604e98a8025d1988529dfca0e93617744cd2  wget-1.19.1.tar.xz
++sha256 d59a745ad2c522970660bb30d38601f9457b151b322e01fa20a5a0da0f55df07  wget-1.19.2.tar.lz
 +# Locally calculated
-+sha256 05a4c25ef464e19656c5259bd4f4da8428efab01044f3541b79fbb3ff209350f  LICENCE
-diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
-index 38a32bf..6b7ac22 100644
---- a/package/openssh/openssh.mk
-+++ b/package/openssh/openssh.mk
-@@ -4,7 +4,7 @@
++sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/wget/wget.mk b/package/wget/wget.mk
+index 4cb48dce67..a7d904405b 100644
+--- a/package/wget/wget.mk
++++ b/package/wget/wget.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--OPENSSH_VERSION = 7.5p1
-+OPENSSH_VERSION = 7.6p1
- OPENSSH_SITE = http://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable
- OPENSSH_LICENSE = BSD-3-Clause, BSD-2-Clause, Public Domain
- OPENSSH_LICENSE_FILES = LICENCE
+-WGET_VERSION = 1.19.1
+-WGET_SOURCE = wget-$(WGET_VERSION).tar.xz
++WGET_VERSION = 1.19.2
++WGET_SOURCE = wget-$(WGET_VERSION).tar.lz
+ WGET_SITE = $(BR2_GNU_MIRROR)/wget
+ WGET_DEPENDENCIES = host-pkgconf
+ WGET_LICENSE = GPL-3.0+
+-- 
+2.11.0
