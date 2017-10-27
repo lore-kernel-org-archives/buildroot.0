@@ -1,85 +1,112 @@
-From: Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com>
-Date: Fri, 27 Oct 2017 13:16:55 +0200
-Subject: [Buildroot] [PATCH 1/1] package: fix license typos
-Message-ID: <1509103015-5558-1-git-send-email-jerzy.m.grzegorek@gmail.com>
+From: Jagan Teki <jagannadh.teki@gmail.com>
+Date: Fri, 27 Oct 2017 17:16:52 +0530
+Subject: [Buildroot] [PATCH v3 02/11] support/scripts: Add
+	sunxi64-post-build.sh
+In-Reply-To: <e73be7ab-6435-5d11-41b5-37f3bf4053ee@arm.com>
+References: <1508406333-27138-1-git-send-email-jagan@amarulasolutions.com>
+ <1508406333-27138-3-git-send-email-jagan@amarulasolutions.com>
+ <20171021230637.60959eed@windsurf>
+ <CAMty3ZCQSpztnqCa8=uZMB1LsF2zPq_OF5uUsagJ9Uv4Z8JUZA@mail.gmail.com>
+ <4cb45577-1f4a-ce9c-7204-74934272b789@arm.com>
+ <20171022142919.6dc03525@windsurf>
+ <CAMty3ZAHk2gnOCWKiWSmYK6rBW4ZWFmdbZNzmciJnyjCHo3FsQ@mail.gmail.com>
+ <CAD6G_RT0Pt5tRiZ+oNgShEakjBOLe848O5gHh=oZ05_gEV=5KA@mail.gmail.com>
+ <e73be7ab-6435-5d11-41b5-37f3bf4053ee@arm.com>
+Message-ID: <CAD6G_RRXki6Xk+RrGr25satUShBkn8D4CzzP1siSg5e5Nqbr5w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com>
----
- .../python-backports-shutil-get-terminal-size.mk                        | 2 +-
- package/python-pathlib2/python-pathlib2.mk                              | 2 +-
- package/python-pickleshare/python-pickleshare.mk                        | 2 +-
- package/python-scandir/python-scandir.mk                                | 2 +-
- package/python-traitlets/python-traitlets.mk                            | 2 +-
- 5 files changed, 5 insertions(+), 5 deletions(-)
+On Fri, Oct 27, 2017 at 2:02 AM, Andr? Przywara <andre.przywara@arm.com> wrote:
+> On 26/10/17 19:13, Jagan Teki wrote:
+>> On Thu, Oct 26, 2017 at 4:50 PM, Jagan Teki <jagan@amarulasolutions.com> wrote:
+>>> On Sun, Oct 22, 2017 at 5:59 PM, Thomas Petazzoni
+>>> <thomas.petazzoni@free-electrons.com> wrote:
+>>>> Hello,
+>>>>
+>>>> On Sun, 22 Oct 2017 12:05:52 +0100, Andr? Przywara wrote:
+>>>>
+>>>>>> This wasn't only the case with sunxi it's been the U-Boot FIT
+>>>>>> behaviour..even rockchip do follow same build process.
+>>>>>>
+>>>>>> Ideally FIT need input files to produce blob like dtb.
+>>>>>>
+>>>>>> Added Andre he will give some more insight.
+>>>>>
+>>>>> So yes, ATF supports *multiple* ways of integration:
+>>>>> - On the Juno it has the capability of loading images - from NOR flash,
+>>>>> so not a big deal. This means the BL1 and BL2 stages read the BL31
+>>>>> (containing the PSCI runtime) and BL33 (U-Boot or EDK2), also this uses
+>>>>> the ATF defined FIP image format.
+>>>>> - For other platforms (like rockchip or sunxi) we usually load from MMC
+>>>>> or SPI flash. So using the traditional ATF approach would mean to have
+>>>>> MMC and SPI drivers in the early ATF stages, also do the DRAM
+>>>>> initialization there. Since ATF is BSD licensed, it's more involved than
+>>>>> just copying some code from U-Boot.
+>>>>> So the pragmatic approach - which ATF actually embraces - is to just use
+>>>>> a subset of the whole ATF (BL31) and do the rest via some platform
+>>>>> specific firmware: which is U-Boot's SPL in our case, since it already
+>>>>> has support for this hardware. Other platform (most ARM64 servers) tend
+>>>>> to have their proprietary early-init firmware there.
+>>>>
+>>>> Thanks for summarizing the context.
+>>>>
+>>>>> So I virtually know nothing about buildroot, but it might not be a good
+>>>>> idea to shoehorn the second approach into the Juno ATF build scheme.
+>>>>> As I believe that in fact more platforms use the second approach, it
+>>>>> might be worthwhile to introduce some extra code in buildroot to support
+>>>>> that specifically instead of working around the Juno ATF way.
+>>>>> Maybe it can be modelled as some U-Boot FIT build process with an
+>>>>> additional requirement, similar to a binary blob?
+>>>>
+>>>> And this is exactly what I was suggesting Jagan to do: extend Buildroot
+>>>> so that it covers the U-Boot-bundles-ATF scenario (sunxi/rockchip,
+>>>> etc.) in addition to the already supported ATF-bundles-U-Boot scenario
+>>>> (Juno).
+>>>
+>>> Based on the ATF build this look not an exact U-Boot-bundles-ATF
+>>> scenario. Whether for Juno(ATF-bundles-U-Boot scenario) or for SUNXI,
+>>> ATF want a dependence to build U-Boot first atleast for FIP point.
+>>>
+>>> ARM_TRUSTED_FIRMWARE_MAKE_OPTS += \
+>>>         CROSS_COMPILE="$(TARGET_CROSS)" \
+>>>         BL33=$(BINARIES_DIR)/u-boot.bin \
+>>>
+>>> Here BL33 need u-boot.bin to export for building FIP in default that
+>>> could be the reason of making ARM_TRUSTED_FIRMWARE_DEPENDENCIES +=
+>>> uboot
+>>> in atf.
+>>>
+>>> I tried to build for U-Boot-bundles-ATF scenario by not to dependent
+>>> U-Boot so that U-boot build later. Since at this movement there is no
+>>> U-Boot build, ATF is unable to get the BL33, I don't know whether this
+>>> BL33 is needed for all because I'm trying for BL31.
+>>>
+>>> Build Log:
+>>> -------------
+>>> un50iw1p1 all fip
+>>> make[1]: Entering directory
+>>> `/mnt/jagan/buildroot/buildroot-sun32/output/build/arm-trusted-firmware-aa75c8da415158a94b82a430b2b40000778e851f'
+>>> make[1]: Nothing to be done for `bl31'.
+>>> make[1]: *** No rule to make target
+>>> `/mnt/jagan/buildroot/buildroot-sun32/output/images/u-boot.bin',
+>>> needed by `build/sun50iw1p1/release/fip.bin'.  Stop.
+>>> make[1]: *** Waiting for unfinished jobs....
+>>> Building sun50iw1p1
+>
+> Why do build a fip then?
+> Please read board/sunxi/README.sunxi in the U-Boot sources, it tells you
+> how to build ATF: namely using the "bl31" target, and not "all fip" as
+> for the Juno, for instance.
 
-diff --git a/package/python-backports-shutil-get-terminal-size/python-backports-shutil-get-terminal-size.mk b/package/python-backports-shutil-get-terminal-size/python-backports-shutil-get-terminal-size.mk
-index 68ac9a0..7c24b19 100644
---- a/package/python-backports-shutil-get-terminal-size/python-backports-shutil-get-terminal-size.mk
-+++ b/package/python-backports-shutil-get-terminal-size/python-backports-shutil-get-terminal-size.mk
-@@ -9,6 +9,6 @@ PYTHON_BACKPORTS_SHUTIL_GET_TERMINAL_SIZE_SOURCE = backports.shutil_get_terminal
- PYTHON_BACKPORTS_SHUTIL_GET_TERMINAL_SIZE_SITE = https://pypi.python.org/packages/ec/9c/368086faa9c016efce5da3e0e13ba392c9db79e3ab740b763fe28620b18b
- PYTHON_BACKPORTS_SHUTIL_GET_TERMINAL_SIZE_SETUP_TYPE = setuptools
- PYTHON_BACKPORTS_SHUTIL_GET_TERMINAL_SIZE_LICENSE = MIT
--PYTHON_BACKPORTS_SHUTIL_GET_TERMINAL_SIZE_LICENSE_FILE = LICENSE
-+PYTHON_BACKPORTS_SHUTIL_GET_TERMINAL_SIZE_LICENSE_FILES = LICENSE
- 
- $(eval $(python-package))
-diff --git a/package/python-pathlib2/python-pathlib2.mk b/package/python-pathlib2/python-pathlib2.mk
-index db2df91..0116420 100644
---- a/package/python-pathlib2/python-pathlib2.mk
-+++ b/package/python-pathlib2/python-pathlib2.mk
-@@ -8,7 +8,7 @@ PYTHON_PATHLIB2_VERSION = 2.2.1
- PYTHON_PATHLIB2_SOURCE = pathlib2-$(PYTHON_PATHLIB2_VERSION).tar.gz
- PYTHON_PATHLIB2_SITE = https://pypi.python.org/packages/ab/d8/ac7489d50146f29d0a14f65545698f4545d8a6b739b24b05859942048b56
- PYTHON_PATHLIB2_LICENSE = MIT
--PYTHON_PATHLIB2_LICENSE_FILE = LICENSE.rst
-+PYTHON_PATHLIB2_LICENSE_FILES = LICENSE.rst
- PYTHON_PATHLIB2_SETUP_TYPE = setuptools
- 
- $(eval $(python-package))
-diff --git a/package/python-pickleshare/python-pickleshare.mk b/package/python-pickleshare/python-pickleshare.mk
-index b2a5e88..53fd84e 100644
---- a/package/python-pickleshare/python-pickleshare.mk
-+++ b/package/python-pickleshare/python-pickleshare.mk
-@@ -8,7 +8,7 @@ PYTHON_PICKLESHARE_VERSION = 0.7.4
- PYTHON_PICKLESHARE_SOURCE = pickleshare-$(PYTHON_PICKLESHARE_VERSION).tar.gz
- PYTHON_PICKLESHARE_SITE = https://pypi.python.org/packages/69/fe/dd137d84daa0fd13a709e448138e310d9ea93070620c9db5454e234af525
- PYTHON_PICKLESHARE_LICENSE = MIT
--PYTHON_PICKLESHARE_LICENSE_FILE = LICENSE
-+PYTHON_PICKLESHARE_LICENSE_FILES = LICENSE
- PYTHON_PICKLESHARE_SETUP_TYPE = setuptools
- 
- $(eval $(python-package))
-diff --git a/package/python-scandir/python-scandir.mk b/package/python-scandir/python-scandir.mk
-index 2ff8ea2..9b7ba70 100644
---- a/package/python-scandir/python-scandir.mk
-+++ b/package/python-scandir/python-scandir.mk
-@@ -8,7 +8,7 @@ PYTHON_SCANDIR_VERSION = 1.5
- PYTHON_SCANDIR_SOURCE = scandir-$(PYTHON_SCANDIR_VERSION).tar.gz
- PYTHON_SCANDIR_SITE = https://pypi.python.org/packages/bd/f4/3143e0289faf0883228017dbc6387a66d0b468df646645e29e1eb89ea10e
- PYTHON_SCANDIR_LICENSE = BSD-3-Clause
--PYTHON_SCANDIR_LICENSE_FILE = LICENSE.txt
-+PYTHON_SCANDIR_LICENSE_FILES = LICENSE.txt
- PYTHON_SCANDIR_SETUP_TYPE = setuptools
- 
- $(eval $(python-package))
-diff --git a/package/python-traitlets/python-traitlets.mk b/package/python-traitlets/python-traitlets.mk
-index c711bde..779f593 100644
---- a/package/python-traitlets/python-traitlets.mk
-+++ b/package/python-traitlets/python-traitlets.mk
-@@ -8,7 +8,7 @@ PYTHON_TRAITLETS_VERSION = 4.3.2
- PYTHON_TRAITLETS_SOURCE = traitlets-$(PYTHON_TRAITLETS_VERSION).tar.gz
- PYTHON_TRAITLETS_SITE = https://pypi.python.org/packages/a5/98/7f5ef2fe9e9e071813aaf9cb91d1a732e0a68b6c44a32b38cb8e14c3f069
- PYTHON_TRAITLETS_LICENSE = BSD-3-Clause
--PYTHON_TRAITLETS_LICENSE_FILE = COPYING.md
-+PYTHON_TRAITLETS_LICENSE_FILES = COPYING.md
- PYTHON_TRAITLETS_SETUP_TYPE = distutils
- 
- $(eval $(python-package))
+Yes, ie what I founded out. Currently buildroot is doing 'all fip',
+I've fixed and patches in ML.
+
+thanks!
 -- 
-1.9.1
+Jagan Teki
+Free Software Engineer | www.openedev.com
+U-Boot, Linux | Upstream Maintainer
+Hyderabad, India.
