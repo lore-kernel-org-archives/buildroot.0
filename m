@@ -1,112 +1,108 @@
-From: Jagan Teki <jagannadh.teki@gmail.com>
-Date: Fri, 27 Oct 2017 17:16:52 +0530
-Subject: [Buildroot] [PATCH v3 02/11] support/scripts: Add
-	sunxi64-post-build.sh
-In-Reply-To: <e73be7ab-6435-5d11-41b5-37f3bf4053ee@arm.com>
-References: <1508406333-27138-1-git-send-email-jagan@amarulasolutions.com>
- <1508406333-27138-3-git-send-email-jagan@amarulasolutions.com>
- <20171021230637.60959eed@windsurf>
- <CAMty3ZCQSpztnqCa8=uZMB1LsF2zPq_OF5uUsagJ9Uv4Z8JUZA@mail.gmail.com>
- <4cb45577-1f4a-ce9c-7204-74934272b789@arm.com>
- <20171022142919.6dc03525@windsurf>
- <CAMty3ZAHk2gnOCWKiWSmYK6rBW4ZWFmdbZNzmciJnyjCHo3FsQ@mail.gmail.com>
- <CAD6G_RT0Pt5tRiZ+oNgShEakjBOLe848O5gHh=oZ05_gEV=5KA@mail.gmail.com>
- <e73be7ab-6435-5d11-41b5-37f3bf4053ee@arm.com>
-Message-ID: <CAD6G_RRXki6Xk+RrGr25satUShBkn8D4CzzP1siSg5e5Nqbr5w@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 27 Oct 2017 13:47:16 +0200
+Subject: [Buildroot] [PATCH] lvm2: make basic package available under musl
+Message-ID: <20171027114716.29198-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Oct 27, 2017 at 2:02 AM, Andr? Przywara <andre.przywara@arm.com> wrote:
-> On 26/10/17 19:13, Jagan Teki wrote:
->> On Thu, Oct 26, 2017 at 4:50 PM, Jagan Teki <jagan@amarulasolutions.com> wrote:
->>> On Sun, Oct 22, 2017 at 5:59 PM, Thomas Petazzoni
->>> <thomas.petazzoni@free-electrons.com> wrote:
->>>> Hello,
->>>>
->>>> On Sun, 22 Oct 2017 12:05:52 +0100, Andr? Przywara wrote:
->>>>
->>>>>> This wasn't only the case with sunxi it's been the U-Boot FIT
->>>>>> behaviour..even rockchip do follow same build process.
->>>>>>
->>>>>> Ideally FIT need input files to produce blob like dtb.
->>>>>>
->>>>>> Added Andre he will give some more insight.
->>>>>
->>>>> So yes, ATF supports *multiple* ways of integration:
->>>>> - On the Juno it has the capability of loading images - from NOR flash,
->>>>> so not a big deal. This means the BL1 and BL2 stages read the BL31
->>>>> (containing the PSCI runtime) and BL33 (U-Boot or EDK2), also this uses
->>>>> the ATF defined FIP image format.
->>>>> - For other platforms (like rockchip or sunxi) we usually load from MMC
->>>>> or SPI flash. So using the traditional ATF approach would mean to have
->>>>> MMC and SPI drivers in the early ATF stages, also do the DRAM
->>>>> initialization there. Since ATF is BSD licensed, it's more involved than
->>>>> just copying some code from U-Boot.
->>>>> So the pragmatic approach - which ATF actually embraces - is to just use
->>>>> a subset of the whole ATF (BL31) and do the rest via some platform
->>>>> specific firmware: which is U-Boot's SPL in our case, since it already
->>>>> has support for this hardware. Other platform (most ARM64 servers) tend
->>>>> to have their proprietary early-init firmware there.
->>>>
->>>> Thanks for summarizing the context.
->>>>
->>>>> So I virtually know nothing about buildroot, but it might not be a good
->>>>> idea to shoehorn the second approach into the Juno ATF build scheme.
->>>>> As I believe that in fact more platforms use the second approach, it
->>>>> might be worthwhile to introduce some extra code in buildroot to support
->>>>> that specifically instead of working around the Juno ATF way.
->>>>> Maybe it can be modelled as some U-Boot FIT build process with an
->>>>> additional requirement, similar to a binary blob?
->>>>
->>>> And this is exactly what I was suggesting Jagan to do: extend Buildroot
->>>> so that it covers the U-Boot-bundles-ATF scenario (sunxi/rockchip,
->>>> etc.) in addition to the already supported ATF-bundles-U-Boot scenario
->>>> (Juno).
->>>
->>> Based on the ATF build this look not an exact U-Boot-bundles-ATF
->>> scenario. Whether for Juno(ATF-bundles-U-Boot scenario) or for SUNXI,
->>> ATF want a dependence to build U-Boot first atleast for FIP point.
->>>
->>> ARM_TRUSTED_FIRMWARE_MAKE_OPTS += \
->>>         CROSS_COMPILE="$(TARGET_CROSS)" \
->>>         BL33=$(BINARIES_DIR)/u-boot.bin \
->>>
->>> Here BL33 need u-boot.bin to export for building FIP in default that
->>> could be the reason of making ARM_TRUSTED_FIRMWARE_DEPENDENCIES +=
->>> uboot
->>> in atf.
->>>
->>> I tried to build for U-Boot-bundles-ATF scenario by not to dependent
->>> U-Boot so that U-boot build later. Since at this movement there is no
->>> U-Boot build, ATF is unable to get the BL33, I don't know whether this
->>> BL33 is needed for all because I'm trying for BL31.
->>>
->>> Build Log:
->>> -------------
->>> un50iw1p1 all fip
->>> make[1]: Entering directory
->>> `/mnt/jagan/buildroot/buildroot-sun32/output/build/arm-trusted-firmware-aa75c8da415158a94b82a430b2b40000778e851f'
->>> make[1]: Nothing to be done for `bl31'.
->>> make[1]: *** No rule to make target
->>> `/mnt/jagan/buildroot/buildroot-sun32/output/images/u-boot.bin',
->>> needed by `build/sun50iw1p1/release/fip.bin'.  Stop.
->>> make[1]: *** Waiting for unfinished jobs....
->>> Building sun50iw1p1
->
-> Why do build a fip then?
-> Please read board/sunxi/README.sunxi in the U-Boot sources, it tells you
-> how to build ATF: namely using the "bl31" target, and not "all fip" as
-> for the Juno, for instance.
+The basic lvm2 package (libdevmapper / dmsetup) does build under musl, only the
+standard (full) installation doesn't.
 
-Yes, ie what I founded out. Currently buildroot is doing 'all fip',
-I've fixed and patches in ML.
+Many setups only need the basic package, so move the !musl dependencies down
+to the sub options and adjust the reverse dependencies (cryptsetup/dmraid)
+to match.
 
-thanks!
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/cryptsetup/Config.in | 6 ++----
+ package/dmraid/Config.in     | 6 ++----
+ package/lvm2/Config.in       | 9 +++++++--
+ 3 files changed, 11 insertions(+), 10 deletions(-)
+
+diff --git a/package/cryptsetup/Config.in b/package/cryptsetup/Config.in
+index 5cd4676eaa..d24f7b0af6 100644
+--- a/package/cryptsetup/Config.in
++++ b/package/cryptsetup/Config.in
+@@ -3,7 +3,6 @@ config BR2_PACKAGE_CRYPTSETUP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # lvm2
+ 	depends on BR2_USE_MMU # lvm2
+ 	depends on !BR2_STATIC_LIBS # lvm2
+-	depends on !BR2_TOOLCHAIN_USES_MUSL # lvm2
+ 	select BR2_PACKAGE_POPT
+ 	select BR2_PACKAGE_LVM2
+ 	select BR2_PACKAGE_UTIL_LINUX
+@@ -14,7 +13,6 @@ config BR2_PACKAGE_CRYPTSETUP
+ 
+ 	  https://gitlab.com/cryptsetup/cryptsetup
+ 
+-comment "cryptsetup needs a glibc or uClibc toolchain w/ threads, dynamic library"
++comment "cryptsetup needs a toolchain w/ threads, dynamic library"
+ 	depends on BR2_USE_MMU
+-	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS \
+-		|| BR2_TOOLCHAIN_USES_MUSL
++	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/dmraid/Config.in b/package/dmraid/Config.in
+index d0acc4fd29..aa98c853a1 100644
+--- a/package/dmraid/Config.in
++++ b/package/dmraid/Config.in
+@@ -3,7 +3,6 @@ config BR2_PACKAGE_DMRAID
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # lvm2
+ 	depends on BR2_USE_MMU # lvm2
+ 	depends on !BR2_STATIC_LIBS # lvm2
+-	depends on !BR2_TOOLCHAIN_USES_MUSL # lvm2
+ 	select BR2_PACKAGE_LVM2
+ 	help
+ 	  dmraid discovers, activates, deactivates and displays
+@@ -13,7 +12,6 @@ config BR2_PACKAGE_DMRAID
+ 	  dmraid uses the Linux device-mapper to create devices with
+ 	  respective mappings for the ATARAID sets discovered.
+ 
+-comment "dmraid needs a glibc or uClibc toolchain w/ threads, dynamic library"
++comment "dmraid needs a toolchain w/ threads, dynamic library"
+ 	depends on BR2_USE_MMU
+-	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS \
+-		|| BR2_TOOLCHAIN_USES_MUSL
++	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/lvm2/Config.in b/package/lvm2/Config.in
+index 32c763978f..7ea4d3e260 100644
+--- a/package/lvm2/Config.in
++++ b/package/lvm2/Config.in
+@@ -3,8 +3,6 @@ config BR2_PACKAGE_LVM2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_MMU # needs fork()
+ 	depends on !BR2_STATIC_LIBS # It fails to build statically
+-	# http://lists.busybox.net/pipermail/buildroot/2016-August/170592.html
+-	depends on !BR2_TOOLCHAIN_USES_MUSL
+ 	help
+ 	  This is LVM2, the rewrite of The Linux Logical Volume Manager.
+ 	  LVM supports enterprise level volume management of disk and
+@@ -27,6 +25,8 @@ if BR2_PACKAGE_LVM2
+ 
+ config BR2_PACKAGE_LVM2_STANDARD_INSTALL
+ 	bool "standard install instead of only dmsetup"
++	# http://lists.busybox.net/pipermail/buildroot/2016-August/170592.html
++	depends on !BR2_TOOLCHAIN_USES_MUSL
+ 	default y if !BR2_PACKAGE_LVM2_DMSETUP_ONLY # legacy 2013.11
+ 	help
+ 	  Install the standard suite of lvm2 programs. When this option
+@@ -34,10 +34,15 @@ config BR2_PACKAGE_LVM2_STANDARD_INSTALL
+ 
+ config BR2_PACKAGE_LVM2_APP_LIBRARY
+ 	bool "install application library"
++	# http://lists.busybox.net/pipermail/buildroot/2016-August/170592.html
++	depends on !BR2_TOOLCHAIN_USES_MUSL
+ 	select BR2_PACKAGE_LVM2_STANDARD_INSTALL
+ 	help
+ 	  Install application library (liblvm2app).
+ 
++comment "lvm2 standard install needs a glibc or uClibc toolchain"
++	depends on BR2_TOOLCHAIN_USES_MUSL
++
+ endif
+ 
+ comment "lvm2 needs a glibc or uClibc toolchain w/ threads, dynamic library"
 -- 
-Jagan Teki
-Free Software Engineer | www.openedev.com
-U-Boot, Linux | Upstream Maintainer
-Hyderabad, India.
+2.11.0
