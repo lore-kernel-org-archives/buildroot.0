@@ -1,91 +1,77 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Fri, 27 Oct 2017 09:07:29 +0200
-Subject: [Buildroot] [PATCH 2/2] python-paho-mqtt: bump version to 1.3.1
-In-Reply-To: <1509088049-13995-1-git-send-email-yegorslists@googlemail.com>
-References: <1509088049-13995-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <1509088049-13995-2-git-send-email-yegorslists@googlemail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 27 Oct 2017 09:30:33 +0200
+Subject: [Buildroot] Multiple root filesystems for single
+	kernel/toolchain
+In-Reply-To: <d00f1836-8acf-b6ac-3d65-3836b963edb2@lynx.com>
+References: <f5e13782-3ec4-1b63-ef4f-df269bfe8e9f@lynx.com>
+ <43ed600f-f03b-da68-4f2d-8931b40bbe41@mind.be>
+ <87po9a2ovu.fsf@dell.be.48ers.dk>
+ <d00f1836-8acf-b6ac-3d65-3836b963edb2@lynx.com>
+Message-ID: <f20b63cc-2140-5c5b-0eb6-d7524b6f9ac4@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+ [FYI on this list we don't top-post, answer in-line like I do now.]
 
-Remove upstreamed patch and add licence checksums.
+On 26-10-17 18:32, Seamus Connor wrote:
+> Unfortunately the bootloader is not an option for my system.? The bootloader we
+> must use is targeted at a specific market segment, and the vendor only gave me
+> two things: a binary, and an NDA.
+> 
+> Here is where I am ending up. I have created a script that builds a secondary
+> rootfs.cpio that includes a statically compiled busybox and an init script.? I
+> am currently working to integrate this new rootfs into the buildroot build
+> system so that it will automatically build it into the kernel in the same way
+> that the current mechanism works (linux-rebuild-with-initramfs).
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- ...e-pytest-runner-a-conditional-requirement.patch | 30 ----------------------
- package/python-paho-mqtt/python-paho-mqtt.hash     |  7 +++--
- package/python-paho-mqtt/python-paho-mqtt.mk       |  4 +--
- 3 files changed, 7 insertions(+), 34 deletions(-)
- delete mode 100644 package/python-paho-mqtt/0001-Make-pytest-runner-a-conditional-requirement.patch
+ If you build your rootfs.cpio externally (i.e. if it doesn't depend on the rest
+of the Buildroot build), then you don't need the linux-rebuild-with-initramfs
+hack. Instead you can just configure your linux .config to point to that
+archive. Note that you can still make it generic if you use a BR2_EXTERNAL by
+using $(BR2_EXTERNAL_FOO_PATH)/path/to/rootfs.cpio. BR2_EXTERNAL_FOO_PATH is
+exported so it is also available in the linux.config.
 
-diff --git a/package/python-paho-mqtt/0001-Make-pytest-runner-a-conditional-requirement.patch b/package/python-paho-mqtt/0001-Make-pytest-runner-a-conditional-requirement.patch
-deleted file mode 100644
-index b2fbe246cb..0000000000
---- a/package/python-paho-mqtt/0001-Make-pytest-runner-a-conditional-requirement.patch
-+++ /dev/null
-@@ -1,30 +0,0 @@
--From 38373d36094b5a708c595f8c560d14e8ab61aac6 Mon Sep 17 00:00:00 2001
--From: Yegor Yefremov <yegorslists@googlemail.com>
--Date: Fri, 8 Sep 2017 08:58:31 +0200
--Subject: [PATCH] Make pytest-runner a conditional requirement
--
--Check for pytest-runner only if setup.py was invoked with 'test'
--argument.
--
--Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-----
-- setup.py | 3 ++-
-- 1 file changed, 2 insertions(+), 1 deletion(-)
--
--diff --git a/setup.py b/setup.py
--index 85d9c5f..10fb6df 100644
----- a/setup.py
--+++ b/setup.py
--@@ -12,7 +12,8 @@ with open('README.rst', 'rb') as readme_file:
-- 
-- requirements = []
-- test_requirements = ['pytest', 'pylama']
---setup_requirements = ['pytest-runner']
--+needs_pytest = set(['pytest', 'test', 'ptr']).intersection(sys.argv)
--+setup_requirements = ['pytest-runner'] if needs_pytest else []
-- 
-- if sys.version_info < (3, 0):
--     test_requirements += ['mock']
---- 
--2.11.0
--
-diff --git a/package/python-paho-mqtt/python-paho-mqtt.hash b/package/python-paho-mqtt/python-paho-mqtt.hash
-index 9add16d5c8..e791d367ea 100644
---- a/package/python-paho-mqtt/python-paho-mqtt.hash
-+++ b/package/python-paho-mqtt/python-paho-mqtt.hash
-@@ -1,3 +1,6 @@
- # md5 from https://pypi.python.org/pypi/paho-mqtt/json, sha256 locally computed
--md5	b9338236e2836e8579ef140956189cc4  paho-mqtt-1.3.0.tar.gz
--sha256	2c9ef5494cfc1e41a9fff6544c5a2cd59ea5d401d9119a06ecf7fad6a2ffeb93  paho-mqtt-1.3.0.tar.gz
-+md5	2cc27d8b369700b1fc99325add0dadd2  paho-mqtt-1.3.1.tar.gz
-+sha256	31911f6031de306c27ed79dc77b690d7c55b0dcb0f0434ca34ec6361d0371122  paho-mqtt-1.3.1.tar.gz
-+sha256	76f13729e84e9222e543303df00f87d1b2c0995b6a505cd859a285667e44babb  LICENSE.txt
-+sha256	e8cf7d54ea46c19aba793983889b7f7425e1ebfcaaccec764a7db091646e203c  edl-v10
-+sha256	3b9be6b894d0769de796e653571ff6cef494913c0ce78c35a97db939e7d9087c  epl-v10
-diff --git a/package/python-paho-mqtt/python-paho-mqtt.mk b/package/python-paho-mqtt/python-paho-mqtt.mk
-index b87b37aa9a..f335b35edb 100644
---- a/package/python-paho-mqtt/python-paho-mqtt.mk
-+++ b/package/python-paho-mqtt/python-paho-mqtt.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_PAHO_MQTT_VERSION = 1.3.0
-+PYTHON_PAHO_MQTT_VERSION = 1.3.1
- PYTHON_PAHO_MQTT_SOURCE = paho-mqtt-$(PYTHON_PAHO_MQTT_VERSION).tar.gz
--PYTHON_PAHO_MQTT_SITE = https://pypi.python.org/packages/33/7f/3ce1ffebaa0343d509aac003800b305d821e89dac3c11666f92e12feca14
-+PYTHON_PAHO_MQTT_SITE = https://pypi.python.org/packages/2a/5f/cf14b8f9f8ed1891cda893a2a7d1d6fa23de2a9fb4832f05cef02b79d01f
- PYTHON_PAHO_MQTT_LICENSE = EPL-1.0 or EDLv1.0
- PYTHON_PAHO_MQTT_LICENSE_FILES = LICENSE.txt edl-v10 epl-v10
- PYTHON_PAHO_MQTT_SETUP_TYPE = setuptools
+ If you're using the Buildroot-built busybox, that of course will not be possible.
+
+
+> Again, thanks to everyone on the list who took the time to look at my question.?
+> If what I end up building doesn't turn out to be a complete hack, I will send
+> another message.? Maybe there would be interest in having the ability to create
+> a "filtered" rootfs.cpio in usptream buildroot?
+
+ We think that there are too many different use cases. If we do offer something,
+it risks being either very complicated, or so specialised that it won't be
+useable in practice. But you can try of course :-)
+
+ Regards,
+ Arnout
+
+> 
+> 
+> On 10/26/2017 03:18 AM, Peter Korsgaard wrote:
+>>>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+>> Hi,
+>>
+>> ? >? However, if all you need is a to toggle a few bits and to wait until the
+>> device
+>> ? > is available, you might even get away with a simple C program that does that,
+>> ? > mounts the rootfs, does a pivot_root(), and exec()s /sbin/init. Then you
+>> make a
+>> ? > cpio archive with just that executable. Perhaps more work but you're very
+>> sure
+>> ? > that it's small :-)
+>>
+>> Or alternatively do it in the boot loader if it is so simple.
+>>
+> 
+
 -- 
-2.11.0
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
