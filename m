@@ -1,55 +1,59 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 27 Oct 2017 20:46:17 +0200
-Subject: [Buildroot] [git commit] barebox: bump to version 2017.09.0
-Message-ID: <20171027183957.0A0A9810FF@busybox.osuosl.org>
+Date: Fri, 27 Oct 2017 20:46:58 +0200
+Subject: [Buildroot] [git commit] webkitgtk: security bump to version 2.18.2
+Message-ID: <20171027183957.1162A810CB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8e4f5b79ab9a2d759a92cc834af7f98050fb60dd
+commit: https://git.buildroot.net/buildroot/commit/?id=e3459fd9c5cc4ddb04d22b534ef66b441e1aea71
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+This is a maintenance release of the current stable WebKitGTK+ version,
+which contains bugfixes; mostly for crashes and rendering issues, plus
+one important fix for the layout or Arabic text.
+
+Release notes:
+
+    https://webkitgtk.org/2017/10/27/webkitgtk2.18.2-released.html
+
+Even though an acconpanying security advisory has not been published
+for this release, the release contains fixes for several crashes (one
+of them for the decoder of the very common GIF image format), which
+arguably can be considered potential security issues.
+
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- boot/barebox/Config.in    | 4 ++--
- boot/barebox/barebox.hash | 6 +++---
+ package/webkitgtk/webkitgtk.hash | 8 ++++----
+ package/webkitgtk/webkitgtk.mk   | 2 +-
  2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
-index 85956d6..fd22d90 100644
---- a/boot/barebox/Config.in
-+++ b/boot/barebox/Config.in
-@@ -12,7 +12,7 @@ choice
- 	  Select the specific Barebox version you want to use
+diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
+index f83bd08..b116115 100644
+--- a/package/webkitgtk/webkitgtk.hash
++++ b/package/webkitgtk/webkitgtk.hash
+@@ -1,4 +1,4 @@
+-# From https://webkitgtk.org/releases/webkitgtk-2.18.1.tar.xz.sums
+-md5 951a6082ada2f7d0292d3251a3f9532b webkitgtk-2.18.1.tar.xz
+-sha1 5054dd6b8afdc6e98b947e361011d6dca6da74e2 webkitgtk-2.18.1.tar.xz
+-sha256 9cdb7b302fbc8a2a7e1e783b80391e64f8b12d70d6ebad4eb756dd59bf3ed795 webkitgtk-2.18.1.tar.xz
++# From https://webkitgtk.org/releases/webkitgtk-2.18.2.tar.xz.sums
++md5 f63b3897d6fbf660bf72dfaca1fdea16 webkitgtk-2.18.2.tar.xz
++sha1 75571807a1f8c9efdf62f1c37e9fadf52b73d367 webkitgtk-2.18.2.tar.xz
++sha256 b14cb3f1b5321b1dc50abcc0445a97f8e2f8813562bca7ce4d2f8069f6fec8e7 webkitgtk-2.18.2.tar.xz
+diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
+index 55c2dd8..c78f6b3 100644
+--- a/package/webkitgtk/webkitgtk.mk
++++ b/package/webkitgtk/webkitgtk.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_TARGET_BAREBOX_LATEST_VERSION
--	bool "2017.02.0"
-+	bool "2017.09.0"
- 
- config BR2_TARGET_BAREBOX_CUSTOM_VERSION
- 	bool "Custom version"
-@@ -40,7 +40,7 @@ endif
- 
- config BR2_TARGET_BAREBOX_VERSION
- 	string
--	default "2017.02.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
-+	default "2017.09.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
- 	default BR2_TARGET_BAREBOX_CUSTOM_VERSION_VALUE if BR2_TARGET_BAREBOX_CUSTOM_VERSION
- 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
- 	default BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
-diff --git a/boot/barebox/barebox.hash b/boot/barebox/barebox.hash
-index 5750597..b241970 100644
---- a/boot/barebox/barebox.hash
-+++ b/boot/barebox/barebox.hash
-@@ -1,5 +1,5 @@
--# http://www.barebox.org/download/barebox-2017.02.0.tar.bz2.md5
--md5 4651f5fa5e794a9739dd71eece0fe702  barebox-2017.02.0.tar.bz2
-+# http://www.barebox.org/download/barebox-2017.09.0.tar.bz2.md5
-+md5 b92e9c99cda7fbb61d01baf5679df261 barebox-2017.09.0.tar.bz2
- 
- # Locally calculated
--sha256 d65d864fe598d61ed9c6712e32d50742e6996aae02acaae5955c3b22166344cb  barebox-2017.02.0.tar.bz2
-+sha256 43283edc019f95a53fdb7d1b7c294afc4741bfcace348d6beeded5fe5147a81b barebox-2017.09.0.tar.bz2
+-WEBKITGTK_VERSION = 2.18.1
++WEBKITGTK_VERSION = 2.18.2
+ WEBKITGTK_SITE = http://www.webkitgtk.org/releases
+ WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
+ WEBKITGTK_INSTALL_STAGING = YES
