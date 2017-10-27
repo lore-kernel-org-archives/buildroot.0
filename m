@@ -1,52 +1,57 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Fri, 27 Oct 2017 18:09:19 +0200
-Subject: [Buildroot] [PATCH v1] qt5base: fix keyboard input in case of
-	libinput usage
-Message-ID: <20171027160919.3054-1-ps.report@gmx.net>
+From: Adrian Perez de Castro <aperez@igalia.com>
+Date: Fri, 27 Oct 2017 19:10:33 +0300
+Subject: [Buildroot] [PATCH 1/1] webkitgtk: security bump to version 2.18.2
+Message-ID: <20171027161033.8582-1-aperez@igalia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The libinput keyboard support needs libxbcommon to gain
-a functional keyboard input. Avoids the following runtime
-warning:
+This is a maintenance release of the current stable WebKitGTK+ version,
+which contains bugfixes; mostly for crashes and rendering issues, plus
+one important fix for the layout or Arabic text.
 
-  qt.qpa.input: X-less xkbcommon not available, not performing key mapping
+Release notes:
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+    https://webkitgtk.org/2017/10/27/webkitgtk2.18.2-released.html
+
+Even though an acconpanying security advisory has not been published
+for this release, the release contains fixes for several crashes (one
+of them for the decoder of the very common GIF image format), which
+arguably can be considered potential security issues.
+
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 ---
- package/qt5/qt5base/Config.in  | 1 +
- package/qt5/qt5base/qt5base.mk | 4 ++--
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ package/webkitgtk/webkitgtk.hash | 8 ++++----
+ package/webkitgtk/webkitgtk.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/qt5/qt5base/Config.in b/package/qt5/qt5base/Config.in
-index dc56474bbb..14c3bf4a84 100644
---- a/package/qt5/qt5base/Config.in
-+++ b/package/qt5/qt5base/Config.in
-@@ -119,6 +119,7 @@ config BR2_PACKAGE_QT5BASE_XML
- config BR2_PACKAGE_QT5BASE_GUI
- 	bool "gui module"
- 	select BR2_PACKAGE_FREETYPE
-+	select BR2_PACKAGE_LIBXKBCOMMON if BR2_PACKAGE_LIBINPUT
- 	# At least one graphic backend must be enabled, so enable
- 	# linuxfb if nothing is enabled.
- 	select BR2_PACKAGE_QT5BASE_LINUXFB if \
-diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-index 1683eda838..ea6653de15 100644
---- a/package/qt5/qt5base/qt5base.mk
-+++ b/package/qt5/qt5base/qt5base.mk
-@@ -200,8 +200,8 @@ endif
- endif
+diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
+index f83bd0878a..b1161157e7 100644
+--- a/package/webkitgtk/webkitgtk.hash
++++ b/package/webkitgtk/webkitgtk.hash
+@@ -1,4 +1,4 @@
+-# From https://webkitgtk.org/releases/webkitgtk-2.18.1.tar.xz.sums
+-md5 951a6082ada2f7d0292d3251a3f9532b webkitgtk-2.18.1.tar.xz
+-sha1 5054dd6b8afdc6e98b947e361011d6dca6da74e2 webkitgtk-2.18.1.tar.xz
+-sha256 9cdb7b302fbc8a2a7e1e783b80391e64f8b12d70d6ebad4eb756dd59bf3ed795 webkitgtk-2.18.1.tar.xz
++# From https://webkitgtk.org/releases/webkitgtk-2.18.2.tar.xz.sums
++md5 f63b3897d6fbf660bf72dfaca1fdea16 webkitgtk-2.18.2.tar.xz
++sha1 75571807a1f8c9efdf62f1c37e9fadf52b73d367 webkitgtk-2.18.2.tar.xz
++sha256 b14cb3f1b5321b1dc50abcc0445a97f8e2f8813562bca7ce4d2f8069f6fec8e7 webkitgtk-2.18.2.tar.xz
+diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
+index 55c2dd8cc4..c78f6b38e1 100644
+--- a/package/webkitgtk/webkitgtk.mk
++++ b/package/webkitgtk/webkitgtk.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_PACKAGE_LIBINPUT),y)
--QT5BASE_CONFIGURE_OPTS += -libinput
--QT5BASE_DEPENDENCIES += libinput
-+QT5BASE_CONFIGURE_OPTS += -libinput -xkbcommon-evdev
-+QT5BASE_DEPENDENCIES += libinput libxkbcommon
- else
- QT5BASE_CONFIGURE_OPTS += -no-libinput
- endif
+-WEBKITGTK_VERSION = 2.18.1
++WEBKITGTK_VERSION = 2.18.2
+ WEBKITGTK_SITE = http://www.webkitgtk.org/releases
+ WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
+ WEBKITGTK_INSTALL_STAGING = YES
 -- 
-2.14.2
+2.14.3
