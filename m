@@ -1,34 +1,86 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Fri, 27 Oct 2017 20:02:14 +0200
-Subject: [Buildroot] [PATCH v1] gdb: prevent installation of libbfd.so
-Message-ID: <20171027180214.12657-1-ps.report@gmx.net>
+Date: Fri, 27 Oct 2017 20:14:46 +0200
+Subject: [Buildroot] [PATCH 09/13] pkg-download: support new subdir for
+ mirrors
+In-Reply-To: <5dd5ec31-1c3c-3c6b-d422-e0714399534d@mind.be>
+References: <20170704162211.13238-1-maxime.hadjinlian@gmail.com>
+ <20170704162211.13238-10-maxime.hadjinlian@gmail.com>
+ <5dd5ec31-1c3c-3c6b-d422-e0714399534d@mind.be>
+Message-ID: <20171027201446.0457eccd@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
-For a previous discussion on this topic see [1].
+Hello Arnout,
 
-[1] http://lists.busybox.net/pipermail/buildroot/2017-September/202337.html
----
- package/gdb/gdb.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Mon, 23 Oct 2017 21:49:39 +0200, Arnout Vandecappelle <arnout@mind.be> wrote:
 
-diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
-index 7e86ba0c7e..8c4188b1fe 100644
---- a/package/gdb/gdb.mk
-+++ b/package/gdb/gdb.mk
-@@ -111,7 +111,7 @@ GDB_CONF_OPTS = \
- 	--with-curses \
- 	--without-included-gettext \
- 	--disable-werror \
--	--enable-static
-+	--enable-static --disable-shared
- 
- # When gdb is built as C++ application for ARC it segfaults at runtime
- # So we pass --disable-build-with-cxx config option to force gdb not to
--- 
-2.14.2
+> On 04-07-17 18:22, Maxime Hadjinlian wrote:
+> > Since we introduced subdirectory to the DL_DIR, we need to support them  
+>                       subdirectories
+> 
+> > in the PRIMARY and BACKUP mirror as they evolve to the new tree
+> > structure.
+> > 
+> > We check first the new URI (with the subdir), and in case of failure, we
+> > go check without.
+> > By checking both URIs, we ensure that old mirror are usable.  
+>                                             mirrors
+> 
+> > 
+> > Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.co> ---
+> >  package/pkg-download.mk | 2 ++
+> >  1 file changed, 2 insertions(+)
+> > 
+> > diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+> > index 9a455dc79b..47671e21a7 100644
+> > --- a/package/pkg-download.mk
+> > +++ b/package/pkg-download.mk
+> > @@ -75,6 +75,7 @@ export BR_NO_CHECK_HASH_FOR =
+> >  
+> >  ifneq ($(call qstrip,$(BR2_PRIMARY_SITE)),)
+> >  DOWNLOAD_URIS += \
+> > +	-u $(call getschemeplusuri,$(BR2_PRIMARY_SITE))/$(notdir $($(PKG)_DL_DIR)) \  
+> 
+>  I was thinking, it is a bit silly to first calculate that path and then
+> applying notdir to it, but I guess this is more robust to a change of PKG_DL_DIR.
+> 
+>  There is just one thing to check: I think that this DOWNLOAD_URIS may also be
+> used outside the context of a package, in which case $(PKG) is not defined. It's
+> not terrible because then we just go to PRIMARY_SITE without subdir, but it's a
+> pity to do things twice. So maybe better
+> 
+> 	$(if $(PKG),$(call getschemeplusuri,$(BR2_PRIMARY_SITE))/$(notdir $($(PKG)_DL_DIR))) \
+> 
+>  Oh yeah, completely easy to read :-)
+
+The original line changed in Maxims latest patchset to:
+
+	-u $(call getschemeplusuri,$(BR2_PRIMARY_SITE)/$(notdir $($(PKG)_DL_DIR)),urlencode) \
+
+would the following line be the correct improved change?
+
+	-u $(if $(PKG),$(call getschemeplusuri,$(BR2_PRIMARY_SITE)/$(notdir $($(PKG)_DL_DIR)),urlencode)) \
+
+Regards,
+Peter
+
+> 
+>  Regards,
+>  Arnout
+> 
+> >  	-u $(call getschemeplusuri,$(BR2_PRIMARY_SITE))
+> >  endif
+> >  
+> > @@ -83,6 +84,7 @@ DOWNLOAD_URIS += \
+> >  	-u $($(PKG)_SITE_METHOD)+$(dir $(1))
+> >  ifneq ($(call qstrip,$(BR2_BACKUP_SITE)),)
+> >  DOWNLOAD_URIS += \
+> > +	-u $(call getschemeplusuri,$(BR2_BACKUP_SITE))/$(notdir $($(PKG)_DL_DIR)) \
+> >  	-u $(call getschemeplusuri,$(BR2_BACKUP_SITE))
+> >  endif
+> >  endif
+> >   
+> 
