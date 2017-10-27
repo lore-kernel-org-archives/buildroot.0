@@ -1,35 +1,55 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 27 Oct 2017 20:46:48 +0200
-Subject: [Buildroot] [PATCH 1/1] webkitgtk: security bump to version
-	2.18.2
-In-Reply-To: <20171027161033.8582-1-aperez@igalia.com> (Adrian Perez de
- Castro's message of "Fri, 27 Oct 2017 19:10:33 +0300")
-References: <20171027161033.8582-1-aperez@igalia.com>
-Message-ID: <871sloo2cn.fsf@dell.be.48ers.dk>
+Date: Fri, 27 Oct 2017 20:46:17 +0200
+Subject: [Buildroot] [git commit] barebox: bump to version 2017.09.0
+Message-ID: <20171027183957.0A0A9810FF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Adrian" == Adrian Perez de Castro <aperez@igalia.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=8e4f5b79ab9a2d759a92cc834af7f98050fb60dd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > This is a maintenance release of the current stable WebKitGTK+ version,
- > which contains bugfixes; mostly for crashes and rendering issues, plus
- > one important fix for the layout or Arabic text.
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ boot/barebox/Config.in    | 4 ++--
+ boot/barebox/barebox.hash | 6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
- > Release notes:
-
- >     https://webkitgtk.org/2017/10/27/webkitgtk2.18.2-released.html
-
- > Even though an acconpanying security advisory has not been published
- > for this release, the release contains fixes for several crashes (one
- > of them for the decoder of the very common GIF image format), which
- > arguably can be considered potential security issues.
-
- > Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
+index 85956d6..fd22d90 100644
+--- a/boot/barebox/Config.in
++++ b/boot/barebox/Config.in
+@@ -12,7 +12,7 @@ choice
+ 	  Select the specific Barebox version you want to use
+ 
+ config BR2_TARGET_BAREBOX_LATEST_VERSION
+-	bool "2017.02.0"
++	bool "2017.09.0"
+ 
+ config BR2_TARGET_BAREBOX_CUSTOM_VERSION
+ 	bool "Custom version"
+@@ -40,7 +40,7 @@ endif
+ 
+ config BR2_TARGET_BAREBOX_VERSION
+ 	string
+-	default "2017.02.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
++	default "2017.09.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
+ 	default BR2_TARGET_BAREBOX_CUSTOM_VERSION_VALUE if BR2_TARGET_BAREBOX_CUSTOM_VERSION
+ 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
+ 	default BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
+diff --git a/boot/barebox/barebox.hash b/boot/barebox/barebox.hash
+index 5750597..b241970 100644
+--- a/boot/barebox/barebox.hash
++++ b/boot/barebox/barebox.hash
+@@ -1,5 +1,5 @@
+-# http://www.barebox.org/download/barebox-2017.02.0.tar.bz2.md5
+-md5 4651f5fa5e794a9739dd71eece0fe702  barebox-2017.02.0.tar.bz2
++# http://www.barebox.org/download/barebox-2017.09.0.tar.bz2.md5
++md5 b92e9c99cda7fbb61d01baf5679df261 barebox-2017.09.0.tar.bz2
+ 
+ # Locally calculated
+-sha256 d65d864fe598d61ed9c6712e32d50742e6996aae02acaae5955c3b22166344cb  barebox-2017.02.0.tar.bz2
++sha256 43283edc019f95a53fdb7d1b7c294afc4741bfcace348d6beeded5fe5147a81b barebox-2017.09.0.tar.bz2
