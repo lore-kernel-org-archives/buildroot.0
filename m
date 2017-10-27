@@ -1,87 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 27 Oct 2017 13:51:22 +0200
-Subject: [Buildroot] [git commit] package: fix license typos
-Message-ID: <20171027114556.3B6727F8A2@busybox.osuosl.org>
+Date: Fri, 27 Oct 2017 13:49:02 +0200
+Subject: [Buildroot] [git commit] openssh: security bump to version 7.6p1
+Message-ID: <20171027114555.F14BC7F8A2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b4f9a69aa3181cbdbf9e1604d1cfc64fb9ec5506
+commit: https://git.buildroot.net/buildroot/commit/?id=70663a9a4fcb9211fcef7668a8a35de11cc54775
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com>
+Fixes CVE-2017-15906 - The process_open function in sftp-server.c in OpenSSH
+before 7.6 does not properly prevent write operations in readonly mode,
+which allows attackers to create zero-length files.
+
+For more details, see the release notes:
+https://www.openssh.com/txt/release-7.6
+
+Also add a hash for the license file while we're at it.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../python-backports-shutil-get-terminal-size.mk                        | 2 +-
- package/python-pathlib2/python-pathlib2.mk                              | 2 +-
- package/python-pickleshare/python-pickleshare.mk                        | 2 +-
- package/python-scandir/python-scandir.mk                                | 2 +-
- package/python-traitlets/python-traitlets.mk                            | 2 +-
- 5 files changed, 5 insertions(+), 5 deletions(-)
+ package/openssh/openssh.hash | 6 ++++--
+ package/openssh/openssh.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-backports-shutil-get-terminal-size/python-backports-shutil-get-terminal-size.mk b/package/python-backports-shutil-get-terminal-size/python-backports-shutil-get-terminal-size.mk
-index 68ac9a0..7c24b19 100644
---- a/package/python-backports-shutil-get-terminal-size/python-backports-shutil-get-terminal-size.mk
-+++ b/package/python-backports-shutil-get-terminal-size/python-backports-shutil-get-terminal-size.mk
-@@ -9,6 +9,6 @@ PYTHON_BACKPORTS_SHUTIL_GET_TERMINAL_SIZE_SOURCE = backports.shutil_get_terminal
- PYTHON_BACKPORTS_SHUTIL_GET_TERMINAL_SIZE_SITE = https://pypi.python.org/packages/ec/9c/368086faa9c016efce5da3e0e13ba392c9db79e3ab740b763fe28620b18b
- PYTHON_BACKPORTS_SHUTIL_GET_TERMINAL_SIZE_SETUP_TYPE = setuptools
- PYTHON_BACKPORTS_SHUTIL_GET_TERMINAL_SIZE_LICENSE = MIT
--PYTHON_BACKPORTS_SHUTIL_GET_TERMINAL_SIZE_LICENSE_FILE = LICENSE
-+PYTHON_BACKPORTS_SHUTIL_GET_TERMINAL_SIZE_LICENSE_FILES = LICENSE
+diff --git a/package/openssh/openssh.hash b/package/openssh/openssh.hash
+index 3685bc0..d8a4da3 100644
+--- a/package/openssh/openssh.hash
++++ b/package/openssh/openssh.hash
+@@ -1,2 +1,4 @@
+-# From http://www.openssh.com/txt/release-7.5 (base64 encoded)
+-sha256 9846e3c5fab9f0547400b4d2c017992f914222b3fd1f8eee6c7dc6bc5e59f9f0  openssh-7.5p1.tar.gz
++# From http://www.openssh.com/txt/release-7.6 (base64 encoded)
++sha256 a323caeeddfe145baaa0db16e98d784b1fbc7dd436a6bf1f479dfd5cd1d21723  openssh-7.6p1.tar.gz
++# Locally calculated
++sha256 05a4c25ef464e19656c5259bd4f4da8428efab01044f3541b79fbb3ff209350f  LICENCE
+diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
+index 38a32bf..6b7ac22 100644
+--- a/package/openssh/openssh.mk
++++ b/package/openssh/openssh.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- $(eval $(python-package))
-diff --git a/package/python-pathlib2/python-pathlib2.mk b/package/python-pathlib2/python-pathlib2.mk
-index db2df91..0116420 100644
---- a/package/python-pathlib2/python-pathlib2.mk
-+++ b/package/python-pathlib2/python-pathlib2.mk
-@@ -8,7 +8,7 @@ PYTHON_PATHLIB2_VERSION = 2.2.1
- PYTHON_PATHLIB2_SOURCE = pathlib2-$(PYTHON_PATHLIB2_VERSION).tar.gz
- PYTHON_PATHLIB2_SITE = https://pypi.python.org/packages/ab/d8/ac7489d50146f29d0a14f65545698f4545d8a6b739b24b05859942048b56
- PYTHON_PATHLIB2_LICENSE = MIT
--PYTHON_PATHLIB2_LICENSE_FILE = LICENSE.rst
-+PYTHON_PATHLIB2_LICENSE_FILES = LICENSE.rst
- PYTHON_PATHLIB2_SETUP_TYPE = setuptools
- 
- $(eval $(python-package))
-diff --git a/package/python-pickleshare/python-pickleshare.mk b/package/python-pickleshare/python-pickleshare.mk
-index b2a5e88..53fd84e 100644
---- a/package/python-pickleshare/python-pickleshare.mk
-+++ b/package/python-pickleshare/python-pickleshare.mk
-@@ -8,7 +8,7 @@ PYTHON_PICKLESHARE_VERSION = 0.7.4
- PYTHON_PICKLESHARE_SOURCE = pickleshare-$(PYTHON_PICKLESHARE_VERSION).tar.gz
- PYTHON_PICKLESHARE_SITE = https://pypi.python.org/packages/69/fe/dd137d84daa0fd13a709e448138e310d9ea93070620c9db5454e234af525
- PYTHON_PICKLESHARE_LICENSE = MIT
--PYTHON_PICKLESHARE_LICENSE_FILE = LICENSE
-+PYTHON_PICKLESHARE_LICENSE_FILES = LICENSE
- PYTHON_PICKLESHARE_SETUP_TYPE = setuptools
- 
- $(eval $(python-package))
-diff --git a/package/python-scandir/python-scandir.mk b/package/python-scandir/python-scandir.mk
-index 2ff8ea2..9b7ba70 100644
---- a/package/python-scandir/python-scandir.mk
-+++ b/package/python-scandir/python-scandir.mk
-@@ -8,7 +8,7 @@ PYTHON_SCANDIR_VERSION = 1.5
- PYTHON_SCANDIR_SOURCE = scandir-$(PYTHON_SCANDIR_VERSION).tar.gz
- PYTHON_SCANDIR_SITE = https://pypi.python.org/packages/bd/f4/3143e0289faf0883228017dbc6387a66d0b468df646645e29e1eb89ea10e
- PYTHON_SCANDIR_LICENSE = BSD-3-Clause
--PYTHON_SCANDIR_LICENSE_FILE = LICENSE.txt
-+PYTHON_SCANDIR_LICENSE_FILES = LICENSE.txt
- PYTHON_SCANDIR_SETUP_TYPE = setuptools
- 
- $(eval $(python-package))
-diff --git a/package/python-traitlets/python-traitlets.mk b/package/python-traitlets/python-traitlets.mk
-index c711bde..779f593 100644
---- a/package/python-traitlets/python-traitlets.mk
-+++ b/package/python-traitlets/python-traitlets.mk
-@@ -8,7 +8,7 @@ PYTHON_TRAITLETS_VERSION = 4.3.2
- PYTHON_TRAITLETS_SOURCE = traitlets-$(PYTHON_TRAITLETS_VERSION).tar.gz
- PYTHON_TRAITLETS_SITE = https://pypi.python.org/packages/a5/98/7f5ef2fe9e9e071813aaf9cb91d1a732e0a68b6c44a32b38cb8e14c3f069
- PYTHON_TRAITLETS_LICENSE = BSD-3-Clause
--PYTHON_TRAITLETS_LICENSE_FILE = COPYING.md
-+PYTHON_TRAITLETS_LICENSE_FILES = COPYING.md
- PYTHON_TRAITLETS_SETUP_TYPE = distutils
- 
- $(eval $(python-package))
+-OPENSSH_VERSION = 7.5p1
++OPENSSH_VERSION = 7.6p1
+ OPENSSH_SITE = http://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable
+ OPENSSH_LICENSE = BSD-3-Clause, BSD-2-Clause, Public Domain
+ OPENSSH_LICENSE_FILES = LICENCE
