@@ -1,59 +1,73 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 27 Oct 2017 20:46:58 +0200
-Subject: [Buildroot] [git commit] webkitgtk: security bump to version 2.18.2
-Message-ID: <20171027183957.1162A810CB@busybox.osuosl.org>
+From: Wolfgang Grandegger <wg@grandegger.com>
+Date: Fri, 27 Oct 2017 21:13:32 +0200
+Subject: [Buildroot] [PATCH v1] qt5base: fix keyboard input in case of
+ libinput usage
+In-Reply-To: <20171027160919.3054-1-ps.report@gmx.net>
+References: <20171027160919.3054-1-ps.report@gmx.net>
+Message-ID: <f86081f3-eae6-3e04-3ae0-d1d2f390932c@grandegger.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e3459fd9c5cc4ddb04d22b534ef66b441e1aea71
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-This is a maintenance release of the current stable WebKitGTK+ version,
-which contains bugfixes; mostly for crashes and rendering issues, plus
-one important fix for the layout or Arabic text.
+Am 27.10.2017 um 18:09 schrieb Peter Seiderer:
+> The libinput keyboard support needs libxbcommon to gain
+> a functional keyboard input. Avoids the following runtime
+> warning:
+> 
+>    qt.qpa.input: X-less xkbcommon not available, not performing key mapping
+> 
 
-Release notes:
+I already tried to enable xkbcommon manually to fix that issue... but 
+then I get:
 
-    https://webkitgtk.org/2017/10/27/webkitgtk2.18.2-released.html
+# cd /usr/lib/qt/examples/touch/fingerpaint/
+# ./fingerpaint
+xkbcommon: ERROR: failed to add default include path /usr/share/X11/xkb
+Failed to create xkb context
 
-Even though an acconpanying security advisory has not been published
-for this release, the release contains fixes for several crashes (one
-of them for the decoder of the very common GIF image format), which
-arguably can be considered potential security issues.
+I guess that the files in that directory are normally provided by X11.
 
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/webkitgtk/webkitgtk.hash | 8 ++++----
- package/webkitgtk/webkitgtk.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+My workaroud is to disable libinput using QT_QPA_EGLFS_NO_LIBINPUT for 
+keypad input.
 
-diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
-index f83bd08..b116115 100644
---- a/package/webkitgtk/webkitgtk.hash
-+++ b/package/webkitgtk/webkitgtk.hash
-@@ -1,4 +1,4 @@
--# From https://webkitgtk.org/releases/webkitgtk-2.18.1.tar.xz.sums
--md5 951a6082ada2f7d0292d3251a3f9532b webkitgtk-2.18.1.tar.xz
--sha1 5054dd6b8afdc6e98b947e361011d6dca6da74e2 webkitgtk-2.18.1.tar.xz
--sha256 9cdb7b302fbc8a2a7e1e783b80391e64f8b12d70d6ebad4eb756dd59bf3ed795 webkitgtk-2.18.1.tar.xz
-+# From https://webkitgtk.org/releases/webkitgtk-2.18.2.tar.xz.sums
-+md5 f63b3897d6fbf660bf72dfaca1fdea16 webkitgtk-2.18.2.tar.xz
-+sha1 75571807a1f8c9efdf62f1c37e9fadf52b73d367 webkitgtk-2.18.2.tar.xz
-+sha256 b14cb3f1b5321b1dc50abcc0445a97f8e2f8813562bca7ce4d2f8069f6fec8e7 webkitgtk-2.18.2.tar.xz
-diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-index 55c2dd8..c78f6b3 100644
---- a/package/webkitgtk/webkitgtk.mk
-+++ b/package/webkitgtk/webkitgtk.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WEBKITGTK_VERSION = 2.18.1
-+WEBKITGTK_VERSION = 2.18.2
- WEBKITGTK_SITE = http://www.webkitgtk.org/releases
- WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
- WEBKITGTK_INSTALL_STAGING = YES
+Wolfgang.
+
+
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> ---
+>   package/qt5/qt5base/Config.in  | 1 +
+>   package/qt5/qt5base/qt5base.mk | 4 ++--
+>   2 files changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/qt5/qt5base/Config.in b/package/qt5/qt5base/Config.in
+> index dc56474bbb..14c3bf4a84 100644
+> --- a/package/qt5/qt5base/Config.in
+> +++ b/package/qt5/qt5base/Config.in
+> @@ -119,6 +119,7 @@ config BR2_PACKAGE_QT5BASE_XML
+>   config BR2_PACKAGE_QT5BASE_GUI
+>   	bool "gui module"
+>   	select BR2_PACKAGE_FREETYPE
+> +	select BR2_PACKAGE_LIBXKBCOMMON if BR2_PACKAGE_LIBINPUT
+>   	# At least one graphic backend must be enabled, so enable
+>   	# linuxfb if nothing is enabled.
+>   	select BR2_PACKAGE_QT5BASE_LINUXFB if \
+> diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+> index 1683eda838..ea6653de15 100644
+> --- a/package/qt5/qt5base/qt5base.mk
+> +++ b/package/qt5/qt5base/qt5base.mk
+> @@ -200,8 +200,8 @@ endif
+>   endif
+>   
+>   ifeq ($(BR2_PACKAGE_LIBINPUT),y)
+> -QT5BASE_CONFIGURE_OPTS += -libinput
+> -QT5BASE_DEPENDENCIES += libinput
+> +QT5BASE_CONFIGURE_OPTS += -libinput -xkbcommon-evdev
+> +QT5BASE_DEPENDENCIES += libinput libxkbcommon
+>   else
+>   QT5BASE_CONFIGURE_OPTS += -no-libinput
+>   endif
+> 
