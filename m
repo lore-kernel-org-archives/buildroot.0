@@ -1,51 +1,46 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Fri, 27 Oct 2017 21:24:23 +0200
-Subject: [Buildroot] [PATCH v1 1/2] libopenssl: do not leak the compiler
-	path (reproducible builds)
-Message-ID: <20171027192424.19760-1-ps.report@gmx.net>
+Date: Fri, 27 Oct 2017 21:24:24 +0200
+Subject: [Buildroot] [PATCH v1 2/2] dhcp: disable isc assertions
+	(reproducible builds)
+In-Reply-To: <20171027192424.19760-1-ps.report@gmx.net>
+References: <20171027192424.19760-1-ps.report@gmx.net>
+Message-ID: <20171027192424.19760-2-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+The isc assertions from the bundled bind dns library are
+using the __FILE__ macro for debug messages (see
+dhcp-4.3.5/bind/bind-9.9.9-P3/lib/isc/include/isc/assertions.h).
+
+Disabling the assertions gains:
+
+- reproducible builds (no built time pathes in the executable)
+- space saving on the target:
+  dhcpd: 1.9M -> 1.6M
+  dhcrelay: 1.6M -> 1.3M
+
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- ...roducible-build-do-not-leak-compiler-path.patch | 26 ++++++++++++++++++++++
- 1 file changed, 26 insertions(+)
- create mode 100644 package/libopenssl/0003-Reproducible-build-do-not-leak-compiler-path.patch
+ package/dhcp/dhcp.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/libopenssl/0003-Reproducible-build-do-not-leak-compiler-path.patch b/package/libopenssl/0003-Reproducible-build-do-not-leak-compiler-path.patch
-new file mode 100644
-index 0000000000..eff72c548a
---- /dev/null
-+++ b/package/libopenssl/0003-Reproducible-build-do-not-leak-compiler-path.patch
-@@ -0,0 +1,26 @@
-+From 875fcad2ad84877763cba86c1265b57679b878b0 Mon Sep 17 00:00:00 2001
-+From: Peter Seiderer <ps.report@gmx.net>
-+Date: Tue, 24 Oct 2017 16:58:32 +0200
-+Subject: [PATCH] Reproducible build: do not leak compiler path
+diff --git a/package/dhcp/dhcp.mk b/package/dhcp/dhcp.mk
+index 45cae087aa..0bae61283a 100644
+--- a/package/dhcp/dhcp.mk
++++ b/package/dhcp/dhcp.mk
+@@ -11,7 +11,9 @@ DHCP_LICENSE = ISC
+ DHCP_LICENSE_FILES = LICENSE
+ DHCP_CONF_ENV = \
+ 	CPPFLAGS='-D_PATH_DHCPD_CONF=\"/etc/dhcp/dhcpd.conf\" \
+-		-D_PATH_DHCLIENT_CONF=\"/etc/dhcp/dhclient.conf\"'
++		-D_PATH_DHCLIENT_CONF=\"/etc/dhcp/dhclient.conf\"' \
++	CFLAGS='$(TARGET_CFLAGS) -DISC_CHECK_NONE=1'
 +
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+---
-+ crypto/Makefile | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/crypto/Makefile b/crypto/Makefile
-+index 7869996..7e63291 100644
-+--- a/crypto/Makefile
-++++ b/crypto/Makefile
-+@@ -55,7 +55,7 @@ top:
-+ all: shared
-+ 
-+ buildinf.h: ../Makefile
-+-	$(PERL) $(TOP)/util/mkbuildinf.pl "$(CC) $(CFLAGS)" "$(PLATFORM)" >buildinf.h
-++	$(PERL) $(TOP)/util/mkbuildinf.pl "$$(basename $(CC)) $(CFLAGS)" "$(PLATFORM)" >buildinf.h
-+ 
-+ x86cpuid.s:	x86cpuid.pl perlasm/x86asm.pl
-+ 	$(PERL) x86cpuid.pl $(PERLASM_SCHEME) $(CFLAGS) $(PROCESSOR) > $@
-+-- 
-+2.11.0
-+
+ DHCP_CONF_OPTS = \
+ 	--with-randomdev=/dev/random \
+ 	--with-srv-lease-file=/var/lib/dhcp/dhcpd.leases \
 -- 
 2.14.2
