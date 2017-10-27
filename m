@@ -1,108 +1,30 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 27 Oct 2017 13:47:16 +0200
-Subject: [Buildroot] [PATCH] lvm2: make basic package available under musl
-Message-ID: <20171027114716.29198-1-peter@korsgaard.com>
+Date: Fri, 27 Oct 2017 13:49:16 +0200
+Subject: [Buildroot] [PATCH] sdl2: security bump to version 2.0.7
+In-Reply-To: <20171026121843.24668-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Thu, 26 Oct 2017 14:18:43 +0200")
+References: <20171026121843.24668-1-peter@korsgaard.com>
+Message-ID: <874lqkq08z.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The basic lvm2 package (libdevmapper / dmsetup) does build under musl, only the
-standard (full) installation doesn't.
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-Many setups only need the basic package, so move the !musl dependencies down
-to the sub options and adjust the reverse dependencies (cryptsetup/dmraid)
-to match.
+ > Fixes CVE-2017-2888 - An exploitable integer overflow vulnerability exists
+ > when creating a new RGB Surface in SDL 2.0.5.  A specially crafted file can
+ > cause an integer overflow resulting in too little memory being allocated
+ > which can lead to a buffer overflow and potential code execution.  An
+ > attacker can provide a specially crafted image file to trigger this
+ > vulnerability.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/cryptsetup/Config.in | 6 ++----
- package/dmraid/Config.in     | 6 ++----
- package/lvm2/Config.in       | 9 +++++++--
- 3 files changed, 11 insertions(+), 10 deletions(-)
+ > Also add a hash for the license file while we're at it.
 
-diff --git a/package/cryptsetup/Config.in b/package/cryptsetup/Config.in
-index 5cd4676eaa..d24f7b0af6 100644
---- a/package/cryptsetup/Config.in
-+++ b/package/cryptsetup/Config.in
-@@ -3,7 +3,6 @@ config BR2_PACKAGE_CRYPTSETUP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # lvm2
- 	depends on BR2_USE_MMU # lvm2
- 	depends on !BR2_STATIC_LIBS # lvm2
--	depends on !BR2_TOOLCHAIN_USES_MUSL # lvm2
- 	select BR2_PACKAGE_POPT
- 	select BR2_PACKAGE_LVM2
- 	select BR2_PACKAGE_UTIL_LINUX
-@@ -14,7 +13,6 @@ config BR2_PACKAGE_CRYPTSETUP
- 
- 	  https://gitlab.com/cryptsetup/cryptsetup
- 
--comment "cryptsetup needs a glibc or uClibc toolchain w/ threads, dynamic library"
-+comment "cryptsetup needs a toolchain w/ threads, dynamic library"
- 	depends on BR2_USE_MMU
--	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS \
--		|| BR2_TOOLCHAIN_USES_MUSL
-+	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/dmraid/Config.in b/package/dmraid/Config.in
-index d0acc4fd29..aa98c853a1 100644
---- a/package/dmraid/Config.in
-+++ b/package/dmraid/Config.in
-@@ -3,7 +3,6 @@ config BR2_PACKAGE_DMRAID
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # lvm2
- 	depends on BR2_USE_MMU # lvm2
- 	depends on !BR2_STATIC_LIBS # lvm2
--	depends on !BR2_TOOLCHAIN_USES_MUSL # lvm2
- 	select BR2_PACKAGE_LVM2
- 	help
- 	  dmraid discovers, activates, deactivates and displays
-@@ -13,7 +12,6 @@ config BR2_PACKAGE_DMRAID
- 	  dmraid uses the Linux device-mapper to create devices with
- 	  respective mappings for the ATARAID sets discovered.
- 
--comment "dmraid needs a glibc or uClibc toolchain w/ threads, dynamic library"
-+comment "dmraid needs a toolchain w/ threads, dynamic library"
- 	depends on BR2_USE_MMU
--	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS \
--		|| BR2_TOOLCHAIN_USES_MUSL
-+	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/lvm2/Config.in b/package/lvm2/Config.in
-index 32c763978f..7ea4d3e260 100644
---- a/package/lvm2/Config.in
-+++ b/package/lvm2/Config.in
-@@ -3,8 +3,6 @@ config BR2_PACKAGE_LVM2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_MMU # needs fork()
- 	depends on !BR2_STATIC_LIBS # It fails to build statically
--	# http://lists.busybox.net/pipermail/buildroot/2016-August/170592.html
--	depends on !BR2_TOOLCHAIN_USES_MUSL
- 	help
- 	  This is LVM2, the rewrite of The Linux Logical Volume Manager.
- 	  LVM supports enterprise level volume management of disk and
-@@ -27,6 +25,8 @@ if BR2_PACKAGE_LVM2
- 
- config BR2_PACKAGE_LVM2_STANDARD_INSTALL
- 	bool "standard install instead of only dmsetup"
-+	# http://lists.busybox.net/pipermail/buildroot/2016-August/170592.html
-+	depends on !BR2_TOOLCHAIN_USES_MUSL
- 	default y if !BR2_PACKAGE_LVM2_DMSETUP_ONLY # legacy 2013.11
- 	help
- 	  Install the standard suite of lvm2 programs. When this option
-@@ -34,10 +34,15 @@ config BR2_PACKAGE_LVM2_STANDARD_INSTALL
- 
- config BR2_PACKAGE_LVM2_APP_LIBRARY
- 	bool "install application library"
-+	# http://lists.busybox.net/pipermail/buildroot/2016-August/170592.html
-+	depends on !BR2_TOOLCHAIN_USES_MUSL
- 	select BR2_PACKAGE_LVM2_STANDARD_INSTALL
- 	help
- 	  Install application library (liblvm2app).
- 
-+comment "lvm2 standard install needs a glibc or uClibc toolchain"
-+	depends on BR2_TOOLCHAIN_USES_MUSL
-+
- endif
- 
- comment "lvm2 needs a glibc or uClibc toolchain w/ threads, dynamic library"
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+Committed, thanks.
+
 -- 
-2.11.0
+Bye, Peter Korsgaard
