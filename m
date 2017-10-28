@@ -1,69 +1,50 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 28 Oct 2017 17:30:54 +0200
-Subject: [Buildroot] [PATCH 0/4 v3] core/pkg-generic: store package<->files
-	for staging and host
-Message-ID: <cover.1509204637.git.yann.morin.1998@free.fr>
+Date: Sat, 28 Oct 2017 17:30:56 +0200
+Subject: [Buildroot] [PATCH 1/4 v3] core/pkg-generic: remove intermediate
+	file-list files
+In-Reply-To: <cover.1509204637.git.yann.morin.1998@free.fr>
+References: <cover.1509204637.git.yann.morin.1998@free.fr>
+Message-ID: <297a89e97062ee3fb93a34de5d5d57b3515f4852.1509204637.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+To compute the list of files added by a package, we first store the list
+of files before the install, do the install, list the files after the
+install, and finally compare the two lists. The two lists are stored in
+dot-files, hidden in the package's build dir.
 
-This small series does for staging and host as we do for target:
-store the list of installed files and relate them to the package
-that installed each.
+We currently keep those two files, and only list the files installed in
+target/
 
-In the end, it also reports files that are touched by more than one
-package, for target, staging and host files.
+In followup patches, we'll also list files installed in staging/ as well
+as files installed in host/.
 
+Rather than add even more internal, hidden files in the package build
+dir, we'll just re-use the same two temporary files to store the bfore
+and after lists.
+
+So, remove them after the comparison is done.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
-Changes v2 -> v3:
-  - make it python2 and python3 compatible  (Baruch)
-  - typoes  (Peter S.)
+ package/pkg-generic.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-Changes v1 -> v2:
-  - split in three patches
-  - in addition to staging, also store for host
-  - report files touched by more than one package
-
-
-Regards,
-Yann E. MORIN.
-
-
-The following changes since commit 5868ab5f22300e920474005e3ae4f78e0b210473
-
-  package/util-linux: drop _VERSION_MINOR variable (2017-10-28 14:24:55 +0200)
-
-
-are available in the git repository at:
-
-  git://git.buildroot.org/~ymorin/git/buildroot.git
-
-for you to fetch changes up to cd4d3c26158a9dc124b3ac584da2c61e004cbc8b
-
-  core: check files are not touched by more than one package (2017-10-28 16:02:56 +0200)
-
-
-----------------------------------------------------------------
-Yann E. MORIN (4):
-      core/pkg-generic: remove intermediate file-list files
-      core/pkg-generic: redirect only when listing package's installed files
-      core/pkg-generic: store file->package list for staging and host too
-      core: check files are not touched by more than one package
-
- Makefile                            |  4 ++++
- package/pkg-generic.mk              | 45 ++++++++++++++++++++++++-------------
- support/scripts/check-uniq-files.py | 40 +++++++++++++++++++++++++++++++++
- 3 files changed, 73 insertions(+), 16 deletions(-)
- create mode 100755 support/scripts/check-uniq-files.py
-
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index cca94ba338..c81a701834 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -85,6 +85,7 @@ define step_pkg_size_end
+ 		while read hash file ; do \
+ 			echo "$(1),$${file}" >> $(BUILD_DIR)/packages-file-list.txt ; \
+ 		done
++	rm -f $($(PKG)_DIR)/.br_filelist_before $($(PKG)_DIR)/.br_filelist_after
+ endef
+ 
+ define step_pkg_size
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.11.0
