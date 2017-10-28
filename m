@@ -1,162 +1,133 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 28 Oct 2017 18:55:33 +0200
-Subject: [Buildroot] [PATCH 13/13] download: git: introduce cache feature
-In-Reply-To: <20171027202841.1e831286@gmx.net>
-References: <20170704162211.13238-1-maxime.hadjinlian@gmail.com>
- <20170704162211.13238-14-maxime.hadjinlian@gmail.com>
- <20171027202841.1e831286@gmx.net>
-Message-ID: <da474a6b-0905-f03f-2212-661c08650ca9@mind.be>
+Date: Sat, 28 Oct 2017 19:05:54 +0200
+Subject: [Buildroot] [PATCH 1/2] LIBSSH2: Add selectable crypto libraries
+In-Reply-To: <1509044092-20922-1-git-send-email-sam.voss@rockwellcollins.com>
+References: <1509044092-20922-1-git-send-email-sam.voss@rockwellcollins.com>
+Message-ID: <a8b817e4-2ef5-d1ff-ec67-0297439ef8c0@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+ Hi Sam,
+
+On 26-10-17 20:54, Sam Voss wrote:
+> Add functionality to allow crypto libraries for libssh2 to be selectable
+> by a choice instead of a fallback that may not work in all cases.
+> Previous fallback is maintained from within the "defaults" of the choice
+> menu, but can be overridden by making a choice.
+> 
+> This fixes issues where two crypto libraries are present on the system,
+> but the fallback order picks the wrong one.
+
+ If I understand correctly, the problem that you're trying to solve is that you
+have (for example) both libgcrypt and openssl selected, and you want libssh2 to
+use openssl instead of libgcrypt? Is there any good reason why one is preferably
+over the other? Otherwise, the logic we have now should work fine as far as I
+can see.
 
 
-On 27-10-17 20:28, Peter Seiderer wrote:
-> Hello Maxime,
+> Signed-off-by: Sam Voss <sam.voss@rockwellcollins.com>
+> ---
+>  package/libssh2/Config.in  | 34 ++++++++++++++++++++++++++++++++++
+>  package/libssh2/libssh2.mk |  8 ++++----
+>  2 files changed, 38 insertions(+), 4 deletions(-)
 > 
-> On Tue,  4 Jul 2017 18:22:11 +0200, Maxime Hadjinlian <maxime.hadjinlian@gmail.com> wrote:
-> 
->> Now we keep the git clone that we download and generates our tarball
->> from there.
-> 
-> For my Raspberry testcase with 'BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/raspberrypi/linux.git"'
-> the cloned git repository is downloaded as 'dl/linux/git'.
-> 
-> This will lead to collisions e.g. for 'https://github.com/hardkernel/linux.git'.
-> 
-> I think a better approach would be to store the git clone under the complete
-> source url (escaped), e.g. 'github-com-raspberrypi-linux-git' or
-> 'github_com_raspberrypi_linux.git'?
+> diff --git a/package/libssh2/Config.in b/package/libssh2/Config.in
+> index 9b60823..61be054 100644
+> --- a/package/libssh2/Config.in
+> +++ b/package/libssh2/Config.in
+> @@ -8,3 +8,37 @@ config BR2_PACKAGE_LIBSSH2
 
- No, that's exactly what we want. When the full history has to be downloaded,
-90% of the objects in a linux tree are the same and can be reused, even for
-wildly different vendor trees. And even if they are completely different
-packages that happen to have the same name, then it is still not a problem that
-they are the same.
+ You should also remove the select of the library.
 
- The only possible problem is that there may be conflicting tags with the same
-name and different content. Therefore, it is essential that we still do a fetch
-every time, even if the tag that we're looking for is already there, to be sure
-that we are looking at the right tag.
+>  	  SECSH-FILEXFER(06)*, SECSH-DHGEX(04), and SECSH-NUMBERS(10)
+>  
+>  	  http://www.libssh2.org/
+> +
+> +if BR2_PACKAGE_LIBSSH2
+> +
+> +choice
+> +	prompt "Crypto Library"
+
+ Library -> backend
+
+> +	default BR2_PACKAGE_LIBSSH2_MBEDTLS if BR2_PACKAGE_MBEDTLS
+> +	default BR2_PACKAGE_LIBSSH2_LIBGCRYPT if BR2_PACKAGE_LIBGCRYPT
+> +	default BR2_PACKAGE_OPENSSL
+> +	help
+> +	  Select crypto library to be used in libssh2.
+> +
+> +config BR2_PACKAGE_LIBSSH2_MBEDTLS
+> +	depends on BR2_PACKAGE_MBEDTLS
+
+ This should be a select instead of a depend (and the same below)
+
+> +	bool "mbedtls"
+> +
+> +comment "mbedtls not selected"
+> +	depends on !BR2_PACKAGE_MBEDTLS
+
+ With select, the comment becomes unnecessary of course (and the same below).
+
+> +
+> +config BR2_PACKAGE_LIBSSH2_LIBGCRYPT
+> +	depends on BR2_PACKAGE_LIBGCRYPT
+
+ Also a select, but you have to inherit
+
+	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgcrypt -> libgpg-error
+
+No comment is needed since it's an arch dependency.
+
 
  Regards,
  Arnout
 
-> 
-> Regards,
-> Peter
-> 
->> The main goal here is that if you change the version of a package (say
->> Linux), instead of cloning all over again, you will simply 'git fetch'
->> from the repo the missing objects, then generates the tarball again.
->>
->> This should speed the 'source' part of the build significantly.
->>
->> The drawback is that the DL_DIR will grow much larger; but time is more
->> important than disk space nowadays.
->>
->> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
->> ---
->>  support/download/git | 69 ++++++++++++++++++++++++++++++----------------------
->>  1 file changed, 40 insertions(+), 29 deletions(-)
->>
->> diff --git a/support/download/git b/support/download/git
->> index a49e448e60..834345b53a 100755
->> --- a/support/download/git
->> +++ b/support/download/git
->> @@ -39,28 +39,34 @@ _git() {
->>      eval ${GIT} "${@}"
->>  }
->>  
->> -# Try a shallow clone, since it is faster than a full clone - but that only
->> -# works if the version is a ref (tag or branch). Before trying to do a shallow
->> -# clone we check if ${cset} is in the list provided by git ls-remote. If not
->> -# we fall back on a full clone.
->> -#
->> -# Messages for the type of clone used are provided to ease debugging in case of
->> -# problems
->> -git_done=0
->> -if [ -n "$(_git ls-remote "'${uri}'" "'${cset}'" 2>&1)" ]; then
->> -    printf "Doing shallow clone\n"
->> -    if _git clone ${verbose} "${@}" --depth 1 -b "'${cset}'" "'${uri}'" "'${basename}'"; then
->> -        git_done=1
->> -    else
->> -        printf "Shallow clone failed, falling back to doing a full clone\n"
->> +# We want to check if a cache of the git clone of this repo already exists.
->> +git_cache="${BR2_DL_DIR}/${basename%%-*}/git"
->> +
->> +# If the cache directory already exists, don't try to clone.
->> +if [ ! -d "${git_cache}" ]; then
->> +    # Try a shallow clone, since it is faster than a full clone - but that
->> +    # only works if the versionis a ref (tag or branch). Before trying to do a
->> +    # shallow clone we check if ${cset} is in the list provided by git
->> +    # ls-remote. If not we fall back on a full clone.
->> +    #
->> +    # Messages for the type of clone used are provided to ease debugging in
->> +    # case of problems
->> +    git_done=0
->> +    if [ -n "$(_git ls-remote "'${uri}'" "'${cset}'" 2>&1)" ]; then
->> +        printf "Doing shallow clone\n"
->> +        if _git clone ${verbose} "${@}" --depth 1 -b "'${cset}'" "'${uri}'" "'${git_cache}'"; then
->> +            git_done=1
->> +        else
->> +            printf "Shallow clone failed, falling back to doing a full clone\n"
->> +        fi
->> +    fi
->> +    if [ ${git_done} -eq 0 ]; then
->> +        printf "Doing full clone\n"
->> +        _git clone ${verbose} "${@}" "'${uri}'" "'${git_cache}'"
->>      fi
->> -fi
->> -if [ ${git_done} -eq 0 ]; then
->> -    printf "Doing full clone\n"
->> -    _git clone ${verbose} "${@}" "'${uri}'" "'${basename}'"
->>  fi
->>  
->> -pushd "${basename}" >/dev/null
->> +pushd "${git_cache}" >/dev/null
->>  
->>  # Try to get the special refs exposed by some forges (pull-requests for
->>  # github, changes for gerrit...). There is no easy way to know whether
->> @@ -86,20 +92,25 @@ if [ ${recurse} -eq 1 ]; then
->>      _git submodule update --init --recursive
->>  fi
->>  
->> -# We do not want the .git dir; we keep other .git files, in case they
->> -# are the only files in their directory.
->> +# Generate the archive, sort with the C locale so that it is reproducible
->> +# We do not want the .git dir; we keep other .git
->> +# files, in case they are the only files in their directory.
->>  # The .git dir would generate non reproducible tarballs as it depends on
->>  # the state of the remote server. It also would generate large tarballs
->>  # (gigabytes for some linux trees) when a full clone took place.
->> -rm -rf .git
->> +find . -not -type d \
->> +	-and -not -path "./.git/*" >"${BR2_DL_DIR}/${basename}.list"
->> +LC_ALL=C sort <"${BR2_DL_DIR}/${basename}.list" >"${BR2_DL_DIR}/${basename}.list.sorted"
->>  
->> -popd >/dev/null
->> -
->> -# Generate the archive, sort with the C locale so that it is reproducible
->> -find "${basename}" -not -type d >"${basename}.list"
->> -LC_ALL=C sort <"${basename}.list" >"${basename}.list.sorted"
->>  # Create GNU-format tarballs, since that's the format of the tarballs on
->>  # sources.buildroot.org and used in the *.hash files
->> -tar cf - --numeric-owner --owner=0 --group=0 --mtime="${date}" --format=gnu \
->> -         -T "${basename}.list.sorted" >"${output}.tar"
->> +tar cf - --transform="s/^\./${basename}/" \
->> +	--numeric-owner --owner=0 --group=0 --mtime="${date}" --format=gnu \
->> +         -T "${BR2_DL_DIR}/${basename}.list.sorted" >"${output}.tar"
->>  gzip -n <"${output}.tar" >"${output}"
->> +tar tf "${output}"
->> +
->> +rm -f "${BR2_DL_DIR}/${basename}.list"
->> +rm -f "${BR2_DL_DIR}/${basename}.list.sorted"
->> +
->> +popd >/dev/null
+> +	bool "gcrypt"
+> +
+> +comment "libgcrypt not selected"
+> +	depends on !BR2_PACKAGE_LIBGCRYPT
+> +
+> +config BR2_PACKAGE_LIBSSH2_OPENSSL
+> +	depends on BR2_PACKAGE_OPENSSL
+> +	bool "openssl"
+> +
+> +comment "openssl not selected"
+> +	depends on !BR2_PACKAGE_OPENSSL
+> +
+> +endchoice
+> +endif
+> diff --git a/package/libssh2/libssh2.mk b/package/libssh2/libssh2.mk
+> index dedb890..3978698 100644
+> --- a/package/libssh2/libssh2.mk
+> +++ b/package/libssh2/libssh2.mk
+> @@ -12,20 +12,20 @@ LIBSSH2_INSTALL_STAGING = YES
+>  LIBSSH2_CONF_OPTS = --disable-examples-build
+>  
+>  # Dependency is one of mbedtls, libgcrypt or openssl, guaranteed in
+> -# Config.in. Favour mbedtls.
+> -ifeq ($(BR2_PACKAGE_MBEDTLS),y)
+> +# Config.in.
+> +ifeq ($(BR2_PACKAGE_LIBSSH2_MBEDTLS),y)
+>  LIBSSH2_DEPENDENCIES += mbedtls
+>  LIBSSH2_CONF_OPTS += --with-mbedtls=$(STAGING_DIR)/usr \
+>  	--without-openssl --without-libgcrypt
+>  LIBSSH2_CONF_ENV += ac_cv_libgcrypt=no
+> -else ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
+> +else ifeq ($(BR2_PACKAGE_LIBSSH2_LIBGCRYPT),y)
+>  LIBSSH2_DEPENDENCIES += libgcrypt
+>  LIBSSH2_CONF_OPTS += --with-libgcrypt=$(STAGING_DIR)/usr \
+>  	--without-openssl --without-mbedtls
+>  # configure.ac forgets to link to dependent libraries of gcrypt breaking static
+>  # linking
+>  LIBSSH2_CONF_ENV += LIBS="`$(STAGING_DIR)/usr/bin/libgcrypt-config --libs`"
+> -else
+> +else ifeq ($(BR2_PACKAGE_LIBSSH2_OPENSSL),y)
+>  LIBSSH2_DEPENDENCIES += openssl
+>  LIBSSH2_CONF_OPTS += --with-openssl \
+>  	--with-libssl-prefix=$(STAGING_DIR)/usr \
 > 
 
 -- 
