@@ -1,46 +1,60 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 28 Oct 2017 15:22:10 +0200
-Subject: [Buildroot] [PATCH v2] package/glibc: switch to using the
+Date: Sat, 28 Oct 2017 15:24:44 +0200
+Subject: [Buildroot] [PATCH v3] package/glibc: switch to using the
 	maintenance branch
-In-Reply-To: <20171028151814.2c1b716e@windsurf>
-References: <20171024143033.15102-1-romain.naour@gmail.com>
- <20171028095538.GA3280@scaer>
- <17ee01ce-9b5b-6c85-ffcc-5ef7b6d60f11@gmail.com>
- <20171028151814.2c1b716e@windsurf>
-Message-ID: <20171028132210.GC3280@scaer>
+In-Reply-To: <20171028120055.1818-1-romain.naour@gmail.com>
+References: <20171028120055.1818-1-romain.naour@gmail.com>
+Message-ID: <20171028132444.GD3280@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, Romain, All,
+Romain, All,
 
-On 2017-10-28 15:18 +0200, Thomas Petazzoni spake thusly:
-> On Sat, 28 Oct 2017 12:58:18 +0200, Romain Naour wrote:
-> > > I would also add something like:
-> > > 
-> > >     Before bumping the version, first verify that the sha1 really
-> > >     exists on the official git tree.  
-> > 
-> > You meant "the sha1 really exists on the git mirror tree" I guess :)
-> 
-> No, I think Yann really meant "in the official tree". The idea is that
-> we shouldn't use a git hash from a "random" github mirror if this git
-> hash doesn't exist in the official Git repository of the project.
+On 2017-10-28 14:00 +0200, Romain Naour spake thusly:
+> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> glibc upstream has ruled against doing regular point-releases, but they
+> do have a lot of interesting and important fixes for regressions and
+> security.
+[--SNIP--]
+> diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+> index 0b8b440..d71137b 100644
+> --- a/package/glibc/glibc.mk
+> +++ b/package/glibc/glibc.mk
+> @@ -9,9 +9,16 @@ GLIBC_VERSION =  arc-2017.09-eng010
+>  GLIBC_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,glibc,$(GLIBC_VERSION))
+>  GLIBC_SOURCE = glibc-$(GLIBC_VERSION).tar.gz
+>  else
+> -GLIBC_VERSION = 2.26
+> -GLIBC_SITE = $(BR2_GNU_MIRROR)/libc
+> -GLIBC_SOURCE = glibc-$(GLIBC_VERSION).tar.xz
+> +# Generate version string using:
+> +#   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master
+> +GLIBC_VERSION = glibc-2.26-73-g4b692dffb95ac4812b161eb6a16113d7e824982e
+> +# Upstream doesn't officially provide an https download link.
+> +# There is one (https://sourceware.org/git/glibc.git) but it's not reliable,
+> +# sometimes the connection time out. So use a git mirror using https.
+> +# Before bumping the version, first verify that the sha1 really
+> +# exists on the git mirror tree.
 
-Exactly, yes.
+No, I really meant "exists in the official git tree".
 
-Regards,
-Yann E. MORIN.
+The idea is that we use the gthub mirror, but it is not official. So
+nothing guarantees us that it only contains legit commits.
 
-> Best regards,
-> 
-> Thomas
+So, we want to get the version from the *official* git tree, and only do
+the download from the mirror.
+
+> +GLIBC_SITE = https://github.com/bminor/glibc.git
+> +GLIBC_SITE_METHOD = git
+>  endif
+>  
+>  GLIBC_SRC_SUBDIR = .
 > -- 
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux and Kernel engineering
-> http://free-electrons.com
+> 2.9.5
+> 
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
