@@ -1,101 +1,48 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 28 Oct 2017 16:22:05 +0200
-Subject: [Buildroot] [PATCH v2 2/2] package/libssh2: Update to newest
- version
-In-Reply-To: <1509054225-19795-2-git-send-email-sam.voss@rockwellcollins.com>
-References: <1509054225-19795-1-git-send-email-sam.voss@rockwellcollins.com>
- <1509054225-19795-2-git-send-email-sam.voss@rockwellcollins.com>
-Message-ID: <20171028142205.GF3280@scaer>
+Date: Sat, 28 Oct 2017 16:36:08 +0200
+Subject: [Buildroot] "Buildroot: what's new" slides
+In-Reply-To: <20171027145402.2404fa4b@windsurf.lan>
+References: <20171027145402.2404fa4b@windsurf.lan>
+Message-ID: <20171028143608.GG3280@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sam, All,
+Thomas, All,
 
-On 2017-10-26 16:43 -0500, Sam Voss spake thusly:
-> Update libssh2 to use the newest version from git. This caused a
-> transition from released version number to hash as it has not been
-> version rev'd in over a year (see issue
-> https://github.com/libssh2/libssh2/issues/220 for bump request).
-> 
-> This brings in changes to the autoconf to correctly pick the crypto
-> library.
-> 
-> Update libssh2.mk to have a preconf hook to call buildconf. This
-> generates the configuration file used by autotools, and is required when
-> pulling source from git instead of a released version.
+On 2017-10-27 14:54 +0200, Thomas Petazzoni spake thusly:
+> On Tuesday this week, I gave a talk "Buildroot: what's new?" at the
+> Embedded Linux Conference Europe in Prague. I have published the slides
+> online at
+> http://free-electrons.com/pub/conferences/2017/elce/petazzoni-buildroot-whats-new/petazzoni-buildroot-whats-new.pdf.
 
-This part of the commit is now wrong; don;t mnention it, but [0]...
+And the video is now on-line;
+    https://www.youtube.com/watch?v=839WOdYPYuE
 
-> 
-> Signed-off-by: Sam Voss <sam.voss@rockwellcollins.com>
-> 
-> ----
-> 
-> [v1->v2]
->  - Use LIBSSH2_AUTORECONF instead of calling explicitly
-> 
-> Signed-off-by: Sam Voss <sam.voss@rockwellcollins.com>
-> ---
->  package/libssh2/libssh2.hash |  3 +--
->  package/libssh2/libssh2.mk   | 10 ++++++++--
->  2 files changed, 9 insertions(+), 4 deletions(-)
-> 
-> diff --git a/package/libssh2/libssh2.hash b/package/libssh2/libssh2.hash
-> index 6b1cced..f0df7a2 100644
-> --- a/package/libssh2/libssh2.hash
-> +++ b/package/libssh2/libssh2.hash
-> @@ -1,3 +1,2 @@
->  # Locally calculated after checking pgp signature
-> -# https://www.libssh2.org/download/libssh2-1.8.0.tar.gz.asc
-> -sha256	39f34e2f6835f4b992cafe8625073a88e5a28ba78f83e8099610a7b3af4676d4	libssh2-1.8.0.tar.gz
-> +sha256 e73d55cd512863aa6423c6e137039e3e1bcbf5ba87f130e7441132c2c78a5425 libssh2-616fd4d1b3e4a55de67c48819fefca83132126b5.tar.gz
-> diff --git a/package/libssh2/libssh2.mk b/package/libssh2/libssh2.mk
-> index 3978698..c803e0e 100644
-> --- a/package/libssh2/libssh2.mk
-> +++ b/package/libssh2/libssh2.mk
-> @@ -4,12 +4,18 @@
->  #
->  ################################################################################
->  
-> -LIBSSH2_VERSION = 1.8.0
-> -LIBSSH2_SITE = http://www.libssh2.org/download
-> +LIBSSH2_VERSION = 616fd4d1b3e4a55de67c48819fefca83132126b5
-> +LIBSSH2_SITE = $(call github,libssh2,libssh2,$(LIBSSH2_VERSION))
->  LIBSSH2_LICENSE = BSD
->  LIBSSH2_LICENSE_FILES = COPYING
->  LIBSSH2_INSTALL_STAGING = YES
->  LIBSSH2_CONF_OPTS = --disable-examples-build
-> +LIBSSH2_AUTORECONF = YES
+> The room was rather full, I believe perhaps 60-80 people in the
+> audience, but the projectors were so bright that I couldn't really see,
+> so perhaps Arnout, Peter or Yann who were in the audience can give
+> more details.
 
-... [0] here state why we need to autoreconf:
+Well, the room was 100% full, and I counted ~25 rows of ~15 chairs. So
+your maths are totally off by a factor of ~5. ;-)
 
-    # From the git tree; does not have generated autotools files.
-    LIBSSH2_AUTORECONF = YES
+> [...] It is worth mentioning that Yann
+> gave a Buildroot related talk right after mine, I'm sure he will be
+> publishing his slides very soon.
 
-> +
-> +define LIBSSH2_AUTORECONF_CMDS
-> +	cp $(@D)/src/libssh2_config.h.in $(@D)/example/libssh2_config.h.in
-> +endef
-> +LIBSSH2_PRE_CONFIGURE_HOOKS += LIBSSH2_AUTORECONF_CMDS
+The /other/ Yann E. MORIN already uploaded his slides to the official
+ELC-E website:
+    http://events.linuxfoundation.org/sites/events/files/slides/2017-10-24%20-%20ELCE-Buildroot.pdf
 
-Do we really need to copy that header, since we do not build the
-examples (explicitly disabled, above)?
+And the video is also on-line (but be prepared for an awfull prestation
+on-stage):
+    https://www.youtube.com/watch?v=SN2hYO2rYtk
 
 Regards,
 Yann E. MORIN.
-
->  # Dependency is one of mbedtls, libgcrypt or openssl, guaranteed in
->  # Config.in.
-> -- 
-> 1.9.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
