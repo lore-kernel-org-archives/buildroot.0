@@ -1,100 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 28 Oct 2017 21:26:15 +0200
-Subject: [Buildroot] [git commit] docs/website: update for 2017.02.7
-Message-ID: <20171028191911.E76218109C@busybox.osuosl.org>
+Date: Sat, 28 Oct 2017 21:23:15 +0200
+Subject: [Buildroot] [git commit] Update for 2017.02.7
+Message-ID: <20171028191911.D32358109C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=765453a278a01fe703f21b11b35e1cb787bb22e9
+commit: https://git.buildroot.net/buildroot/commit/?id=8b0dd65de86080008a96a1d655026297d532cbf1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+[Peter: drop Makefile changes]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 05a2e38af23ecdb04f54da97f5ce2b1f7f41b842)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/website/download.html | 18 +++++++++---------
- docs/website/news.html     | 19 +++++++++++++++++++
- 2 files changed, 28 insertions(+), 9 deletions(-)
+ CHANGES | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
 
-diff --git a/docs/website/download.html b/docs/website/download.html
-index f9c8c1c..cd23a1d 100644
---- a/docs/website/download.html
-+++ b/docs/website/download.html
-@@ -8,37 +8,37 @@
-     <div class="panel-heading">Download</div>
-     <div class="panel-body">
+diff --git a/CHANGES b/CHANGES
+index 23e5fa0..5782fd6 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -533,6 +533,24 @@
+ 	#9846: musl libc not installed correctly in target folder
+ 	#9856: build libubox failed on ubuntu 17.04 64bit
  
--      <h3 style="text-align: center;">Latest long term support release: <b>2017.02.6</b></h3>
-+      <h3 style="text-align: center;">Latest long term support release: <b>2017.02.7</b></h3>
- 
-       <div class="row mt centered">
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2017.02.6.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2017.02.7.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2017.02.6.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2017.02.7.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
--	  <h3><a href="/downloads/buildroot-2017.02.6.tar.gz">buildroot-2017.02.6.tar.gz</a></h3>
--	  <p><a href="/downloads/buildroot-2017.02.6.tar.gz.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2017.02.7.tar.gz">buildroot-2017.02.7.tar.gz</a></h3>
-+	  <p><a href="/downloads/buildroot-2017.02.7.tar.gz.sign">PGP signature</a></p>
- 	</div>
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2017.02.6.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2017.02.7.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2017.02.6.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2017.02.7.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
- 
--	  <h3><a href="/downloads/buildroot-2017.02.6.tar.bz2">buildroot-2017.02.6.tar.bz2</a></h3>
--	  <p><a href="/downloads/buildroot-2017.02.6.tar.bz2.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2017.02.7.tar.bz2">buildroot-2017.02.7.tar.bz2</a></h3>
-+	  <p><a href="/downloads/buildroot-2017.02.7.tar.bz2.sign">PGP signature</a></p>
- 	</div>
-       </div>
- 
-diff --git a/docs/website/news.html b/docs/website/news.html
-index 909e239..7a6bb6e 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -9,6 +9,25 @@
- <h2>News</h2>
- <ul class="timeline">
- 
-+  <li class="timeline-inverted">
-+    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-+    <div class="timeline-panel">
-+      <div class="timeline-heading">
-+	<h4 class="timeline-title">2017.02.7 released</h4>
-+	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>28 October 2017</small></p>
-+      </div>
-+      <div class="timeline-body">
-+	<p>The 2017.02.7 bugfix release is out, fixing a number of important /
-+	  security related issues discovered since the 2017.02.6 release. See the
-+	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2017.02.7">CHANGES</a>
-+	  file for more details, read the
-+	  <a href="http://lists.busybox.net/pipermail/buildroot/2017-October/205628.html">announcement</a>
-+	  and go to the <a href="/downloads/">downloads page</a> to pick up the
-+	  <a href="/downloads/buildroot-2017.02.7.tar.bz2">2017.02.7 release</a>.</p>
-+      </div>
-+    </div>
-+  </li>
++2017.02.7, Released October 28th, 2017
 +
-   <li>
-     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-     <div class="timeline-panel">
++	Important / security related fixes.
++
++	Webkitgtk bumped to the 2.18.x series, fixing a large number
++	of security issues.
++
++	Defconfigs: wandboard: Correct rootfs offset
++
++	Toolchain: Linaro toolchains updated to 2017.08 release,
++	fixing a number of issues. Musl: fix for CVE-2017-15650.
++
++	Updated/fixed packages: busybox, bzip2, dnsmasq, git, go,
++	hostapd, irssi, iucode-tool, lame, libcurl, libffi, libnspr,
++	libnss, nodejs, openssh, openvpn, qemu, qt, redis, sdl2,
++	webkitgtk, wget, wpa_supplicant, xen, xlib_libXfont,
++	xlib_libXfont2, xserver_xorg-server
++
+ 2017.02.6, Released September 24th, 2017
+ 
+ 	Important / security related fixes.
