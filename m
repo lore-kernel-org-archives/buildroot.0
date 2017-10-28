@@ -1,37 +1,62 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 28 Oct 2017 19:44:31 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] linux-headers: bump 4.{4,
-	9, 13}.x series
-Message-ID: <20171028174327.3115B80676@busybox.osuosl.org>
+Date: Sat, 28 Oct 2017 19:43:01 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] webkitgtk: security bump
+	to version 2.18.2
+Message-ID: <20171028174327.2251080676@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4a4d8f725885a17a660bb08c1e2ca0e0dc1cc23a
+commit: https://git.buildroot.net/buildroot/commit/?id=f34e9d9f6ef6451f0cf47a7ca9d28ced7c8c5fdf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-[Peter: drop 4.13.x bump]
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+This is a maintenance release of the current stable WebKitGTK+ version,
+which contains bugfixes; mostly for crashes and rendering issues, plus
+one important fix for the layout or Arabic text.
+
+Release notes:
+
+    https://webkitgtk.org/2017/10/27/webkitgtk2.18.2-released.html
+
+Even though an acconpanying security advisory has not been published
+for this release, the release contains fixes for several crashes (one
+of them for the decoder of the very common GIF image format), which
+arguably can be considered potential security issues.
+
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit ec2851f4b97b19ab386e6f8d7ca52c277c2cee91)
+(cherry picked from commit e3459fd9c5cc4ddb04d22b534ef66b441e1aea71)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-headers/Config.in.host | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/webkitgtk/webkitgtk.hash | 8 ++++----
+ package/webkitgtk/webkitgtk.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index fedfd7a..ed02cb5 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -222,7 +222,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
- 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
- 	default "4.1.45"	if BR2_KERNEL_HEADERS_4_1
--	default "4.4.94"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.4.95"	if BR2_KERNEL_HEADERS_4_4
- 	default "4.8.17"	if BR2_KERNEL_HEADERS_4_8
--	default "4.9.58"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.9.59"	if BR2_KERNEL_HEADERS_4_9
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
+index f83bd08..b116115 100644
+--- a/package/webkitgtk/webkitgtk.hash
++++ b/package/webkitgtk/webkitgtk.hash
+@@ -1,4 +1,4 @@
+-# From https://webkitgtk.org/releases/webkitgtk-2.18.1.tar.xz.sums
+-md5 951a6082ada2f7d0292d3251a3f9532b webkitgtk-2.18.1.tar.xz
+-sha1 5054dd6b8afdc6e98b947e361011d6dca6da74e2 webkitgtk-2.18.1.tar.xz
+-sha256 9cdb7b302fbc8a2a7e1e783b80391e64f8b12d70d6ebad4eb756dd59bf3ed795 webkitgtk-2.18.1.tar.xz
++# From https://webkitgtk.org/releases/webkitgtk-2.18.2.tar.xz.sums
++md5 f63b3897d6fbf660bf72dfaca1fdea16 webkitgtk-2.18.2.tar.xz
++sha1 75571807a1f8c9efdf62f1c37e9fadf52b73d367 webkitgtk-2.18.2.tar.xz
++sha256 b14cb3f1b5321b1dc50abcc0445a97f8e2f8813562bca7ce4d2f8069f6fec8e7 webkitgtk-2.18.2.tar.xz
+diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
+index 8b6c144..092c24e 100644
+--- a/package/webkitgtk/webkitgtk.mk
++++ b/package/webkitgtk/webkitgtk.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WEBKITGTK_VERSION = 2.18.1
++WEBKITGTK_VERSION = 2.18.2
+ WEBKITGTK_SITE = http://www.webkitgtk.org/releases
+ WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
+ WEBKITGTK_INSTALL_STAGING = YES
