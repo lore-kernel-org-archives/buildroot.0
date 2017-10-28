@@ -1,24 +1,20 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 28 Oct 2017 14:24:34 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libdrm: bump version to 2.4.85
-In-Reply-To: <20171028075335.23212-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Sat, 28 Oct 2017 09:53:35 +0200")
-References: <20171028075335.23212-1-bernd.kuhls@t-online.de>
-Message-ID: <87lgjvlat9.fsf@dell.be.48ers.dk>
+Date: Sat, 28 Oct 2017 14:25:26 +0200
+Subject: [Buildroot] [PATCH 1/1] package/util-linux: drop _VERSION_MINOR
+	variable
+In-Reply-To: <1509179300-4002-1-git-send-email-jerzy.m.grzegorek@gmail.com>
+ (Jerzy Grzegorek's message of "Sat, 28 Oct 2017 10:28:20 +0200")
+References: <1509179300-4002-1-git-send-email-jerzy.m.grzegorek@gmail.com>
+Message-ID: <87h8ujlart.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+>>>>> "Jerzy" == Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com> writes:
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
- > ---
- > Needed to compute the hash locally because upstream did not release an
- > announcement for the new version yet.
-
-:/
+ > Signed-off-by: Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com>
 
 Committed, thanks.
 
