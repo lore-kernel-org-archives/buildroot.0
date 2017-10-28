@@ -1,61 +1,65 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 28 Oct 2017 20:55:26 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] Update for 2017.02.7
-Message-ID: <20171028190913.D424B80F7A@busybox.osuosl.org>
+Date: Sat, 28 Oct 2017 20:47:31 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] Revert "musl: add
+	upstream security fix for CVE-2017-15650"
+Message-ID: <20171028190913.BFF1B80E50@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=05a2e38af23ecdb04f54da97f5ce2b1f7f41b842
+commit: https://git.buildroot.net/buildroot/commit/?id=dce5ba6dcb9edd60c54a0e5a559191c248e46e3d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
+
+This reverts commit 5a9013c6d1203f107b64d7003e7621e75b3972af.
+
+This patch was already added by commit 4c05a1fd669be68, no need to add it
+twice.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- CHANGES  | 18 ++++++++++++++++++
- Makefile |  4 ++--
- 2 files changed, 20 insertions(+), 2 deletions(-)
+ ...ing-callback-enforce-MAXADDRS-to-preclude.patch | 35 ----------------------
+ 1 file changed, 35 deletions(-)
 
-diff --git a/CHANGES b/CHANGES
-index 56f1c32..093f8f0 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,3 +1,21 @@
-+2017.02.7, Released October 28th, 2017
-+
-+	Important / security related fixes.
-+
-+	Webkitgtk bumped to the 2.18.x series, fixing a large number
-+	of security issues.
-+
-+	Defconfigs: wandboard: Correct rootfs offset
-+
-+	Toolchain: Linaro toolchains updated to 2017.08 release,
-+	fixing a number of issues. Musl: fix for CVE-2017-15650.
-+
-+	Updated/fixed packages: busybox, bzip2, dnsmasq, git, go,
-+	hostapd, irssi, iucode-tool, lame, libcurl, libffi, libnspr,
-+	libnss, nodejs, openssh, openvpn, qemu, qt, redis, sdl2,
-+	webkitgtk, wget, wpa_supplicant, xen, xlib_libXfont,
-+	xlib_libXfont2, xserver_xorg-server
-+
- 2017.02.6, Released September 24th, 2017
- 
- 	Important / security related fixes.
-diff --git a/Makefile b/Makefile
-index 7a369b3..ae36c66 100644
---- a/Makefile
-+++ b/Makefile
-@@ -86,9 +86,9 @@ else # umask / $(CURDIR) / $(O)
- all:
- 
- # Set and export the version string
--export BR2_VERSION := 2017.02.6
-+export BR2_VERSION := 2017.02.7
- # Actual time the release is cut (for reproducible builds)
--BR2_VERSION_EPOCH = 1506285000
-+BR2_VERSION_EPOCH = 1509216000
- 
- # Save running make version since it's clobbered by the make package
- RUNNING_MAKE_VERSION := $(MAKE_VERSION)
+diff --git a/package/musl/0003-in-dns-parsing-callback-enforce-MAXADDRS-to-preclude.patch b/package/musl/0003-in-dns-parsing-callback-enforce-MAXADDRS-to-preclude.patch
+deleted file mode 100644
+index c6b5ef2..0000000
+--- a/package/musl/0003-in-dns-parsing-callback-enforce-MAXADDRS-to-preclude.patch
++++ /dev/null
+@@ -1,35 +0,0 @@
+-From 45ca5d3fcb6f874bf5ba55d0e9651cef68515395 Mon Sep 17 00:00:00 2001
+-From: Rich Felker <dalias@aerifal.cx>
+-Date: Wed, 18 Oct 2017 14:50:03 -0400
+-Subject: [PATCH] in dns parsing callback, enforce MAXADDRS to preclude
+- overflow
+-
+-MAXADDRS was chosen not to need enforcement, but the logic used to
+-compute it assumes the answers received match the RR types of the
+-queries. specifically, it assumes that only one replu contains A
+-record answers. if the replies to both the A and the AAAA query have
+-their answer sections filled with A records, MAXADDRS can be exceeded
+-and clobber the stack of the calling function.
+-
+-this bug was found and reported by Felix Wilhelm.
+-
+-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+----
+- src/network/lookup_name.c | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/src/network/lookup_name.c b/src/network/lookup_name.c
+-index 066be4d5..209c20f0 100644
+---- a/src/network/lookup_name.c
+-+++ b/src/network/lookup_name.c
+-@@ -111,6 +111,7 @@ static int dns_parse_callback(void *c, int rr, const void *data, int len, const
+- {
+- 	char tmp[256];
+- 	struct dpc_ctx *ctx = c;
+-+	if (ctx->cnt >= MAXADDRS) return -1;
+- 	switch (rr) {
+- 	case RR_A:
+- 		if (len != 4) return -1;
+--- 
+-2.11.0
+-
