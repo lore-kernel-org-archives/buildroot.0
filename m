@@ -1,7 +1,7 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 28 Oct 2017 09:52:22 +0200
-Subject: [Buildroot] [PATCH 1/1] package/ffmpeg: bump version to 3.3.5
-Message-ID: <20171028075222.11563-1-bernd.kuhls@t-online.de>
+Date: Sat, 28 Oct 2017 09:53:35 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libdrm: bump version to 2.4.85
+Message-ID: <20171028075335.23212-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,30 +10,37 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/ffmpeg/ffmpeg.hash | 2 +-
- package/ffmpeg/ffmpeg.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Needed to compute the hash locally because upstream did not release an
+announcement for the new version yet.
 
-diff --git a/package/ffmpeg/ffmpeg.hash b/package/ffmpeg/ffmpeg.hash
-index 42cfeed68e..e986de98ca 100644
---- a/package/ffmpeg/ffmpeg.hash
-+++ b/package/ffmpeg/ffmpeg.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 98b97e1b908dfeb6aeb6d407e5a5eacdfc253a40c2d195f5867ed2d1d46ea957  ffmpeg-3.3.4.tar.xz
-+sha256 a893490c3a8a7caaa9c47373b789c0335d0ac3572f2ba61059de842b9e45d802  ffmpeg-3.3.5.tar.xz
-diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index 1e758d3f8c..3ac204f95e 100644
---- a/package/ffmpeg/ffmpeg.mk
-+++ b/package/ffmpeg/ffmpeg.mk
+ package/libdrm/libdrm.hash | 7 ++-----
+ package/libdrm/libdrm.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 6 deletions(-)
+
+diff --git a/package/libdrm/libdrm.hash b/package/libdrm/libdrm.hash
+index be24658b41..109be315d0 100644
+--- a/package/libdrm/libdrm.hash
++++ b/package/libdrm/libdrm.hash
+@@ -1,5 +1,2 @@
+-# From https://lists.freedesktop.org/archives/dri-devel/2017-October/154645.html
+-md5 35b9544bc2ad864acd1abaa1a2b99092  libdrm-2.4.84.tar.bz2
+-sha1 3a8835aaef89648757593f00008de9eff95990dd  libdrm-2.4.84.tar.bz2
+-sha256 7ae9c24d91139ac9a2cdee06fe46dbe1c401a1eda1c0bd2a6d1ecf72f479e0aa  libdrm-2.4.84.tar.bz2
+-sha512 860ebc5fa934edee97e9e7e13aaa2f2e70a68b946f4f3893cd7f93b8296c10b3cd4ce4c23b1676eefe375286e6e2292b96e917d7976f65c61da3fa661e5e641a  libdrm-2.4.84.tar.bz2
++# Locally computed
++sha256 64e4cd87eaee38ae60b2984ef02b66159b9bdd33030040db2a04339cf15f6173  libdrm-2.4.85.tar.bz2
+diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
+index da100b853b..e93864e556 100644
+--- a/package/libdrm/libdrm.mk
++++ b/package/libdrm/libdrm.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--FFMPEG_VERSION = 3.3.4
-+FFMPEG_VERSION = 3.3.5
- FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.xz
- FFMPEG_SITE = http://ffmpeg.org/releases
- FFMPEG_INSTALL_STAGING = YES
+-LIBDRM_VERSION = 2.4.84
++LIBDRM_VERSION = 2.4.85
+ LIBDRM_SOURCE = libdrm-$(LIBDRM_VERSION).tar.bz2
+ LIBDRM_SITE = https://dri.freedesktop.org/libdrm
+ LIBDRM_LICENSE = MIT
 -- 
 2.11.0
