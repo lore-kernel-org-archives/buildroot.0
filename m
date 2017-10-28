@@ -1,119 +1,168 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 28 Oct 2017 17:30:59 +0200
-Subject: [Buildroot] [PATCH 4/4 v3] core: check files are not touched by
-	more than one package
-In-Reply-To: <cover.1509204637.git.yann.morin.1998@free.fr>
-References: <cover.1509204637.git.yann.morin.1998@free.fr>
-Message-ID: <cd4d3c26158a9dc124b3ac584da2c61e004cbc8b.1509204637.git.yann.morin.1998@free.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 28 Oct 2017 18:55:33 +0200
+Subject: [Buildroot] [PATCH 13/13] download: git: introduce cache feature
+In-Reply-To: <20171027202841.1e831286@gmx.net>
+References: <20170704162211.13238-1-maxime.hadjinlian@gmail.com>
+ <20170704162211.13238-14-maxime.hadjinlian@gmail.com>
+ <20171027202841.1e831286@gmx.net>
+Message-ID: <da474a6b-0905-f03f-2212-661c08650ca9@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, we do nothing about packages that touch the same file: given
-a specific configuration, the result is reproducible (even though it
-might not be what the user expected) because the build order is
-guaranteed.
 
-However, when we later introduce top-level parallel build, we will no
-longer be able to guarantee a build order, by the mere way of it being
-parallel. Reconcialliting all those modified files will be impossible to
-do automatically. The only way will be to refuse such situations.
 
-As a preliminary step, introduce a helper script that detects files that
-are being moified by two or more packages, and reports them and the
-impacted packages, at the end of the build.
+On 27-10-17 20:28, Peter Seiderer wrote:
+> Hello Maxime,
+> 
+> On Tue,  4 Jul 2017 18:22:11 +0200, Maxime Hadjinlian <maxime.hadjinlian@gmail.com> wrote:
+> 
+>> Now we keep the git clone that we download and generates our tarball
+>> from there.
+> 
+> For my Raspberry testcase with 'BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/raspberrypi/linux.git"'
+> the cloned git repository is downloaded as 'dl/linux/git'.
+> 
+> This will lead to collisions e.g. for 'https://github.com/hardkernel/linux.git'.
+> 
+> I think a better approach would be to store the git clone under the complete
+> source url (escaped), e.g. 'github-com-raspberrypi-linux-git' or
+> 'github_com_raspberrypi_linux.git'?
 
-The list being reported at the end of the build will make it prominently
-visible in autobuilder results, so we can assess the problem, if any.
+ No, that's exactly what we want. When the full history has to be downloaded,
+90% of the objects in a linux tree are the same and can be reused, even for
+wildly different vendor trees. And even if they are completely different
+packages that happen to have the same name, then it is still not a problem that
+they are the same.
 
-Later on, calling that helper script can be done right after the package
-installation step, to bail out early.
+ The only possible problem is that there may be conflicting tags with the same
+name and different content. Therefore, it is essential that we still do a fetch
+every time, even if the tag that we're looking for is already there, to be sure
+that we are looking at the right tag.
 
-Thanks Arnout for the pythonist way to write default dictionaries! ;-)
+ Regards,
+ Arnout
 
-Note: doing it in python rather than a shell script is impressively
-faster: where the shell script takes ~1.2s on a minimalist build, the
-python script only takes ~0.015s, that is about 80 times faster.
+> 
+> Regards,
+> Peter
+> 
+>> The main goal here is that if you change the version of a package (say
+>> Linux), instead of cloning all over again, you will simply 'git fetch'
+>> from the repo the missing objects, then generates the tarball again.
+>>
+>> This should speed the 'source' part of the build significantly.
+>>
+>> The drawback is that the DL_DIR will grow much larger; but time is more
+>> important than disk space nowadays.
+>>
+>> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+>> ---
+>>  support/download/git | 69 ++++++++++++++++++++++++++++++----------------------
+>>  1 file changed, 40 insertions(+), 29 deletions(-)
+>>
+>> diff --git a/support/download/git b/support/download/git
+>> index a49e448e60..834345b53a 100755
+>> --- a/support/download/git
+>> +++ b/support/download/git
+>> @@ -39,28 +39,34 @@ _git() {
+>>      eval ${GIT} "${@}"
+>>  }
+>>  
+>> -# Try a shallow clone, since it is faster than a full clone - but that only
+>> -# works if the version is a ref (tag or branch). Before trying to do a shallow
+>> -# clone we check if ${cset} is in the list provided by git ls-remote. If not
+>> -# we fall back on a full clone.
+>> -#
+>> -# Messages for the type of clone used are provided to ease debugging in case of
+>> -# problems
+>> -git_done=0
+>> -if [ -n "$(_git ls-remote "'${uri}'" "'${cset}'" 2>&1)" ]; then
+>> -    printf "Doing shallow clone\n"
+>> -    if _git clone ${verbose} "${@}" --depth 1 -b "'${cset}'" "'${uri}'" "'${basename}'"; then
+>> -        git_done=1
+>> -    else
+>> -        printf "Shallow clone failed, falling back to doing a full clone\n"
+>> +# We want to check if a cache of the git clone of this repo already exists.
+>> +git_cache="${BR2_DL_DIR}/${basename%%-*}/git"
+>> +
+>> +# If the cache directory already exists, don't try to clone.
+>> +if [ ! -d "${git_cache}" ]; then
+>> +    # Try a shallow clone, since it is faster than a full clone - but that
+>> +    # only works if the versionis a ref (tag or branch). Before trying to do a
+>> +    # shallow clone we check if ${cset} is in the list provided by git
+>> +    # ls-remote. If not we fall back on a full clone.
+>> +    #
+>> +    # Messages for the type of clone used are provided to ease debugging in
+>> +    # case of problems
+>> +    git_done=0
+>> +    if [ -n "$(_git ls-remote "'${uri}'" "'${cset}'" 2>&1)" ]; then
+>> +        printf "Doing shallow clone\n"
+>> +        if _git clone ${verbose} "${@}" --depth 1 -b "'${cset}'" "'${uri}'" "'${git_cache}'"; then
+>> +            git_done=1
+>> +        else
+>> +            printf "Shallow clone failed, falling back to doing a full clone\n"
+>> +        fi
+>> +    fi
+>> +    if [ ${git_done} -eq 0 ]; then
+>> +        printf "Doing full clone\n"
+>> +        _git clone ${verbose} "${@}" "'${uri}'" "'${git_cache}'"
+>>      fi
+>> -fi
+>> -if [ ${git_done} -eq 0 ]; then
+>> -    printf "Doing full clone\n"
+>> -    _git clone ${verbose} "${@}" "'${uri}'" "'${basename}'"
+>>  fi
+>>  
+>> -pushd "${basename}" >/dev/null
+>> +pushd "${git_cache}" >/dev/null
+>>  
+>>  # Try to get the special refs exposed by some forges (pull-requests for
+>>  # github, changes for gerrit...). There is no easy way to know whether
+>> @@ -86,20 +92,25 @@ if [ ${recurse} -eq 1 ]; then
+>>      _git submodule update --init --recursive
+>>  fi
+>>  
+>> -# We do not want the .git dir; we keep other .git files, in case they
+>> -# are the only files in their directory.
+>> +# Generate the archive, sort with the C locale so that it is reproducible
+>> +# We do not want the .git dir; we keep other .git
+>> +# files, in case they are the only files in their directory.
+>>  # The .git dir would generate non reproducible tarballs as it depends on
+>>  # the state of the remote server. It also would generate large tarballs
+>>  # (gigabytes for some linux trees) when a full clone took place.
+>> -rm -rf .git
+>> +find . -not -type d \
+>> +	-and -not -path "./.git/*" >"${BR2_DL_DIR}/${basename}.list"
+>> +LC_ALL=C sort <"${BR2_DL_DIR}/${basename}.list" >"${BR2_DL_DIR}/${basename}.list.sorted"
+>>  
+>> -popd >/dev/null
+>> -
+>> -# Generate the archive, sort with the C locale so that it is reproducible
+>> -find "${basename}" -not -type d >"${basename}.list"
+>> -LC_ALL=C sort <"${basename}.list" >"${basename}.list.sorted"
+>>  # Create GNU-format tarballs, since that's the format of the tarballs on
+>>  # sources.buildroot.org and used in the *.hash files
+>> -tar cf - --numeric-owner --owner=0 --group=0 --mtime="${date}" --format=gnu \
+>> -         -T "${basename}.list.sorted" >"${output}.tar"
+>> +tar cf - --transform="s/^\./${basename}/" \
+>> +	--numeric-owner --owner=0 --group=0 --mtime="${date}" --format=gnu \
+>> +         -T "${BR2_DL_DIR}/${basename}.list.sorted" >"${output}.tar"
+>>  gzip -n <"${output}.tar" >"${output}"
+>> +tar tf "${output}"
+>> +
+>> +rm -f "${BR2_DL_DIR}/${basename}.list"
+>> +rm -f "${BR2_DL_DIR}/${basename}.list.sorted"
+>> +
+>> +popd >/dev/null
+> 
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Cc: Baruch Siach <baruch@tkos.co.il>
-Cc: Peter Seiderer <ps.report@gmx.net>
-
----
-Changes v2 -> v3:
-  - make it python2 *and* python3 compatible  (Baruch)
-  - typoes  (Peter S.)
----
- Makefile                            |  4 ++++
- support/scripts/check-uniq-files.py | 40 +++++++++++++++++++++++++++++++++++++
- 2 files changed, 44 insertions(+)
- create mode 100755 support/scripts/check-uniq-files.py
-
-diff --git a/Makefile b/Makefile
-index 79db7fe48a..f0b60bae5c 100644
---- a/Makefile
-+++ b/Makefile
-@@ -679,6 +679,10 @@ $(TARGETS_ROOTFS): target-finalize
- .PHONY: target-finalize
- target-finalize: $(PACKAGES)
- 	@$(call MESSAGE,"Finalizing target directory")
-+	# Check files that are touched by more than one package
-+	./support/scripts/check-uniq-files.py -t target $(BUILD_DIR)/packages-file-list.txt
-+	./support/scripts/check-uniq-files.py -t staging $(BUILD_DIR)/packages-file-list-staging.txt
-+	./support/scripts/check-uniq-files.py -t host $(BUILD_DIR)/packages-file-list-host.txt
- 	$(foreach hook,$(TARGET_FINALIZE_HOOKS),$($(hook))$(sep))
- 	rm -rf $(TARGET_DIR)/usr/include $(TARGET_DIR)/usr/share/aclocal \
- 		$(TARGET_DIR)/usr/lib/pkgconfig $(TARGET_DIR)/usr/share/pkgconfig \
-diff --git a/support/scripts/check-uniq-files.py b/support/scripts/check-uniq-files.py
-new file mode 100755
-index 0000000000..615c309491
---- /dev/null
-+++ b/support/scripts/check-uniq-files.py
-@@ -0,0 +1,40 @@
-+#!/usr/bin/env python
-+
-+import sys
-+import csv
-+import argparse
-+from collections import defaultdict
-+
-+warn = 'Warnng: {}s file "{}" is touched by more than one package: {}\n'
-+
-+def main():
-+    parser = argparse.ArgumentParser()
-+    parser.add_argument('packages_file_list', nargs='*',
-+                    help='The packages-file-list to check from')
-+    parser.add_argument('-t', '--type', metavar="TYPE",
-+                        help='Report as a TYPE file (TYPE is either target, staging, or host)')
-+
-+    args = parser.parse_args()
-+
-+    if not len(args.packages_file_list) == 1:
-+        sys.stderr.write('No packages-file-list was provided.\n')
-+        return False
-+
-+    if args.type is None:
-+        sys.stderr.write('No type was provided\n')
-+        return False
-+
-+    file_to_pkg = defaultdict(list)
-+    with open(args.packages_file_list[0], 'r') as pkg_file_list:
-+        r = csv.reader(pkg_file_list, delimiter=',')
-+        for row in r:
-+            pkg = row[0]
-+            file = row[1]
-+            file_to_pkg[file].append(pkg)
-+
-+    for file in file_to_pkg:
-+        if len(file_to_pkg[file]) > 1:
-+            sys.stderr.write(warn.format(args.type, file, file_to_pkg[file]))
-+
-+if __name__ == "__main__":
-+    sys.exit(main())
 -- 
-2.11.0
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
