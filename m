@@ -1,11 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 28 Oct 2017 19:15:36 +0200
-Subject: [Buildroot] [PATCH] sdl2: explicitly disable raspberry pi video
-	backend
-In-Reply-To: <20171025160326.19759-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Wed, 25 Oct 2017 18:03:26 +0200")
-References: <20171025160326.19759-1-peter@korsgaard.com>
-Message-ID: <87d157kxc7.fsf@dell.be.48ers.dk>
+Date: Sat, 28 Oct 2017 19:15:48 +0200
+Subject: [Buildroot] [PATCH] sdl2: security bump to version 2.0.7
+In-Reply-To: <20171026121843.24668-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Thu, 26 Oct 2017 14:18:43 +0200")
+References: <20171026121843.24668-1-peter@korsgaard.com>
+Message-ID: <878tfvkxbv.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,22 +13,14 @@ To: buildroot@busybox.net
 
 >>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > Fixes:
- > http://autobuild.buildroot.net/results/d59/d5992dcc9a49ee77afaebdcc9448ac1868fa7de1/
- > http://autobuild.buildroot.net/results/e89/e894f21ce1983ee3bd8d65a8e59e1adab9a62707/
+ > Fixes CVE-2017-2888 - An exploitable integer overflow vulnerability exists
+ > when creating a new RGB Surface in SDL 2.0.5.  A specially crafted file can
+ > cause an integer overflow resulting in too little memory being allocated
+ > which can lead to a buffer overflow and potential code execution.  An
+ > attacker can provide a specially crafted image file to trigger this
+ > vulnerability.
 
- > The configure script automatically enables support for the raspberry pi
- > video backend if it detects the rpi-userland package.  Unfortunately it
- > hardcodes a number of include/linker paths unsuitable for cross compilation,
- > breaking the build:
-
- >     if test x$enable_video = xyes -a x$enable_video_rpi = xyes; then
- > ..
- >      RPI_CFLAGS="-I/opt/vc/include -I/opt/vc/include/interface/vcos/pthreads -I/opt/vc/include/interface/vmcs_host/linux"
- >      RPI_LDFLAGS="-L/opt/vc/lib -lbcm_host"
- >     fi
-
- > So explicitly disable it until the configure script is fixed.
+ > Also add a hash for the license file while we're at it.
 
  > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
