@@ -1,52 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 28 Oct 2017 19:02:21 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] sdl2: explicitly disable
-	raspberry pi video backend
-Message-ID: <20171028171231.F30DE810AE@busybox.osuosl.org>
+Date: Sat, 28 Oct 2017 19:05:05 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] redis: bump version to
+	3.2.9
+Message-ID: <20171028171232.1BF0C801D6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2bcace3da781cad01ee8fca04d871e312108f916
+commit: https://git.buildroot.net/buildroot/commit/?id=7e10bd482597cdb76c54eb6777847a4d3ef3ab51
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Fixes:
-http://autobuild.buildroot.net/results/d59/d5992dcc9a49ee77afaebdcc9448ac1868fa7de1/
-http://autobuild.buildroot.net/results/e89/e894f21ce1983ee3bd8d65a8e59e1adab9a62707/
+Remove sha1 hash. Upstream provides now a sha256 hash.
 
-The configure script automatically enables support for the raspberry pi
-video backend if it detects the rpi-userland package.  Unfortunately it
-hardcodes a number of include/linker paths unsuitable for cross compilation,
-breaking the build:
-
-    if test x$enable_video = xyes -a x$enable_video_rpi = xyes; then
-..
-     RPI_CFLAGS="-I/opt/vc/include -I/opt/vc/include/interface/vcos/pthreads -I/opt/vc/include/interface/vmcs_host/linux"
-     RPI_LDFLAGS="-L/opt/vc/lib -lbcm_host"
-    fi
-
-So explicitly disable it until the configure script is fixed.
-
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 3a798acf239dee04d573f575337bf823c13020fd)
+(cherry picked from commit 34761b2c409cf4bfd8be46e2e531adeafb39b742)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/sdl2/sdl2.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/redis/redis.hash | 4 +---
+ package/redis/redis.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/package/sdl2/sdl2.mk b/package/sdl2/sdl2.mk
-index 7710a40..d15b198 100644
---- a/package/sdl2/sdl2.mk
-+++ b/package/sdl2/sdl2.mk
-@@ -20,7 +20,8 @@ SDL2_CONF_OPTS += \
- 	--disable-pulseaudio \
- 	--disable-video-opengl \
- 	--disable-video-opengles \
--	--disable-video-wayland
-+	--disable-video-wayland \
-+	--disable-video-rpi
+diff --git a/package/redis/redis.hash b/package/redis/redis.hash
+index 3cd8647..2eef91c 100644
+--- a/package/redis/redis.hash
++++ b/package/redis/redis.hash
+@@ -1,4 +1,2 @@
+ # From https://github.com/antirez/redis-hashes/blob/master/README
+-sha1 6780d1abb66f33a97aad0edbe020403d0a15b67f  redis-3.2.8.tar.gz
+-# Calculated based on the hash above
+-sha256 61b373c23d18e6cc752a69d5ab7f676c6216dc2853e46750a8c4ed791d68482c  redis-3.2.8.tar.gz
++sha256 6eaacfa983b287e440d0839ead20c2231749d5d6b78bbe0e0ffa3a890c59ff26  redis-3.2.9.tar.gz
+diff --git a/package/redis/redis.mk b/package/redis/redis.mk
+index c16bd23..671ffac 100644
+--- a/package/redis/redis.mk
++++ b/package/redis/redis.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # We must enable static build to get compilation successful.
- SDL2_CONF_OPTS += --enable-static
+-REDIS_VERSION = 3.2.8
++REDIS_VERSION = 3.2.9
+ REDIS_SITE = http://download.redis.io/releases
+ REDIS_LICENSE = BSD-3c (core); MIT and BSD family licenses (Bundled components)
+ REDIS_LICENSE_FILES = COPYING
