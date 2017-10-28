@@ -1,62 +1,55 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 28 Oct 2017 19:43:01 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] webkitgtk: security bump
-	to version 2.18.2
-Message-ID: <20171028174327.2251080676@busybox.osuosl.org>
+Date: Sat, 28 Oct 2017 19:41:15 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] openssh: security bump to
+	version 7.6p1
+Message-ID: <20171028174327.0F40080676@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f34e9d9f6ef6451f0cf47a7ca9d28ced7c8c5fdf
+commit: https://git.buildroot.net/buildroot/commit/?id=f0fb2d244df34f75bc71e39bc13c209a099c23cc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-This is a maintenance release of the current stable WebKitGTK+ version,
-which contains bugfixes; mostly for crashes and rendering issues, plus
-one important fix for the layout or Arabic text.
+Fixes CVE-2017-15906 - The process_open function in sftp-server.c in OpenSSH
+before 7.6 does not properly prevent write operations in readonly mode,
+which allows attackers to create zero-length files.
 
-Release notes:
+For more details, see the release notes:
+https://www.openssh.com/txt/release-7.6
 
-    https://webkitgtk.org/2017/10/27/webkitgtk2.18.2-released.html
+Also add a hash for the license file while we're at it.
 
-Even though an acconpanying security advisory has not been published
-for this release, the release contains fixes for several crashes (one
-of them for the decoder of the very common GIF image format), which
-arguably can be considered potential security issues.
-
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit e3459fd9c5cc4ddb04d22b534ef66b441e1aea71)
+(cherry picked from commit 70663a9a4fcb9211fcef7668a8a35de11cc54775)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/webkitgtk/webkitgtk.hash | 8 ++++----
- package/webkitgtk/webkitgtk.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/openssh/openssh.hash | 6 ++++--
+ package/openssh/openssh.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
-index f83bd08..b116115 100644
---- a/package/webkitgtk/webkitgtk.hash
-+++ b/package/webkitgtk/webkitgtk.hash
-@@ -1,4 +1,4 @@
--# From https://webkitgtk.org/releases/webkitgtk-2.18.1.tar.xz.sums
--md5 951a6082ada2f7d0292d3251a3f9532b webkitgtk-2.18.1.tar.xz
--sha1 5054dd6b8afdc6e98b947e361011d6dca6da74e2 webkitgtk-2.18.1.tar.xz
--sha256 9cdb7b302fbc8a2a7e1e783b80391e64f8b12d70d6ebad4eb756dd59bf3ed795 webkitgtk-2.18.1.tar.xz
-+# From https://webkitgtk.org/releases/webkitgtk-2.18.2.tar.xz.sums
-+md5 f63b3897d6fbf660bf72dfaca1fdea16 webkitgtk-2.18.2.tar.xz
-+sha1 75571807a1f8c9efdf62f1c37e9fadf52b73d367 webkitgtk-2.18.2.tar.xz
-+sha256 b14cb3f1b5321b1dc50abcc0445a97f8e2f8813562bca7ce4d2f8069f6fec8e7 webkitgtk-2.18.2.tar.xz
-diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-index 8b6c144..092c24e 100644
---- a/package/webkitgtk/webkitgtk.mk
-+++ b/package/webkitgtk/webkitgtk.mk
+diff --git a/package/openssh/openssh.hash b/package/openssh/openssh.hash
+index 3685bc0..d8a4da3 100644
+--- a/package/openssh/openssh.hash
++++ b/package/openssh/openssh.hash
+@@ -1,2 +1,4 @@
+-# From http://www.openssh.com/txt/release-7.5 (base64 encoded)
+-sha256 9846e3c5fab9f0547400b4d2c017992f914222b3fd1f8eee6c7dc6bc5e59f9f0  openssh-7.5p1.tar.gz
++# From http://www.openssh.com/txt/release-7.6 (base64 encoded)
++sha256 a323caeeddfe145baaa0db16e98d784b1fbc7dd436a6bf1f479dfd5cd1d21723  openssh-7.6p1.tar.gz
++# Locally calculated
++sha256 05a4c25ef464e19656c5259bd4f4da8428efab01044f3541b79fbb3ff209350f  LICENCE
+diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
+index f9167e5..368cb33 100644
+--- a/package/openssh/openssh.mk
++++ b/package/openssh/openssh.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WEBKITGTK_VERSION = 2.18.1
-+WEBKITGTK_VERSION = 2.18.2
- WEBKITGTK_SITE = http://www.webkitgtk.org/releases
- WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
- WEBKITGTK_INSTALL_STAGING = YES
+-OPENSSH_VERSION = 7.5p1
++OPENSSH_VERSION = 7.6p1
+ OPENSSH_SITE = http://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable
+ OPENSSH_LICENSE = BSD-3c, BSD-2c, Public Domain
+ OPENSSH_LICENSE_FILES = LICENCE
