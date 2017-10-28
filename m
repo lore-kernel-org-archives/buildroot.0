@@ -1,121 +1,184 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 28 Oct 2017 19:46:54 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] wget: security bump to
-	version 1.19.2
-Message-ID: <20171028174327.41D5C81137@busybox.osuosl.org>
+Date: Sat, 28 Oct 2017 19:41:05 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] openssh: don't download
+	patch from Github
+Message-ID: <20171028174327.01BD381137@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a34098ccc26e8deb599cdf158bd7934da79e8357
+commit: https://git.buildroot.net/buildroot/commit/?id=701f943d203eaa18879d800180764f8da2fce952
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Fixes the following security issues:
+Patches downloaded from Github are not stable, so bring them in the
+tree.
 
-CVE-2017-13089: The http.c:skip_short_body() function is called in some
-circumstances, such as when processing redirects.  When the response is sent
-chunked, the chunk parser uses strtol() to read each chunk's length, but
-doesn't check that the chunk length is a non-negative number.  The code then
-tries to skip the chunk in pieces of 512 bytes by using the MIN() macro, but
-ends up passing the negative chunk length to connect.c:fd_read().  As
-fd_read() takes an int argument, the high 32 bits of the chunk length are
-discarded, leaving fd_read() with a completely attacker controlled length
-argument.
-
-CVE-2017-13090: The retr.c:fd_read_body() function is called when processing
-OK responses.  When the response is sent chunked, the chunk parser uses
-strtol() to read each chunk's length, but doesn't check that the chunk
-length is a non-negative number.  The code then tries to read the chunk in
-pieces of 8192 bytes by using the MIN() macro, but ends up passing the
-negative chunk length to retr.c:fd_read().  As fd_read() takes an int
-argument, the high 32 bits of the chunk length are discarded, leaving
-fd_read() with a completely attacker controlled length argument.  The
-attacker can corrupt malloc metadata after the allocated buffer.
-
-Drop now upstreamed patch and change to .tar.lz as .tar.xz is no longer
-available.
-
-Also add a hash for the license file while we're at it.
-
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 86eb94636e0dcfaf332ba808eeee04a61b13af60)
+(cherry picked from commit 4e7522aacd4e76c0ab5e602ade9a60f5a4473939)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...0001-Fix-CRLF-injection-in-Wget-host-part.patch | 40 ----------------------
- package/wget/wget.hash                             |  4 ++-
- package/wget/wget.mk                               |  4 +--
- 3 files changed, 5 insertions(+), 43 deletions(-)
+ .../0001-configure-ac-detect-mips-abi.patch        | 44 +++++++++++++++
+ ...roperly-set-seccomp-audit-arch-for-mips64.patch | 63 ++++++++++++++++++++++
+ ...ch => 0003-fix-pam-uclibc-pthreads-clash.patch} |  0
+ ...nclude.patch => 0004-fix-howmany-include.patch} |  0
+ package/openssh/openssh.hash                       |  2 -
+ package/openssh/openssh.mk                         |  6 +--
+ 6 files changed, 109 insertions(+), 6 deletions(-)
 
-diff --git a/package/wget/0001-Fix-CRLF-injection-in-Wget-host-part.patch b/package/wget/0001-Fix-CRLF-injection-in-Wget-host-part.patch
-deleted file mode 100644
-index 380b075..0000000
---- a/package/wget/0001-Fix-CRLF-injection-in-Wget-host-part.patch
-+++ /dev/null
-@@ -1,40 +0,0 @@
--From 4d729e322fae359a1aefaafec1144764a54e8ad4 Mon Sep 17 00:00:00 2001
--From: =?UTF-8?q?Tim=20R=C3=BChsen?= <tim.ruehsen@gmx.de>
--Date: Mon, 6 Mar 2017 10:04:22 +0100
--Subject: [PATCH] Fix CRLF injection in Wget host part
--
--* src/url.c (url_parse): Reject control characters in host part of URL
--
--Reported-by: Orange Tsai
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-----
--Patch status: upstream commit 4d729e322fae35
--
-- src/url.c | 11 +++++++++++
-- 1 file changed, 11 insertions(+)
--
--diff --git a/src/url.c b/src/url.c
--index 8f8ff0b881af..7d36b27d7b92 100644
----- a/src/url.c
--+++ b/src/url.c
--@@ -925,6 +925,17 @@ url_parse (const char *url, int *error, struct iri *iri, bool percent_encode)
--       url_unescape (u->host);
--       host_modified = true;
-- 
--+      /* check for invalid control characters in host name */
--+      for (p = u->host; *p; p++)
--+        {
--+          if (c_iscntrl(*p))
--+            {
--+              url_free(u);
--+              error_code = PE_INVALID_HOST_NAME;
--+              goto error;
--+            }
--+        }
--+
--       /* Apply IDNA regardless of iri->utf8_encode status */
--       if (opt.enable_iri && iri)
--         {
---- 
--2.11.0
--
-diff --git a/package/wget/wget.hash b/package/wget/wget.hash
-index 5f22396..0048557 100644
---- a/package/wget/wget.hash
-+++ b/package/wget/wget.hash
-@@ -1,2 +1,4 @@
- # Locally calculated after checking pgp signature
--sha256 0c950b9671881222a4d385b013c9604e98a8025d1988529dfca0e93617744cd2  wget-1.19.1.tar.xz
-+sha256 d59a745ad2c522970660bb30d38601f9457b151b322e01fa20a5a0da0f55df07  wget-1.19.2.tar.lz
-+# Locally calculated
-+sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/wget/wget.mk b/package/wget/wget.mk
-index 22e057d..1081bb9 100644
---- a/package/wget/wget.mk
-+++ b/package/wget/wget.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--WGET_VERSION = 1.19.1
--WGET_SOURCE = wget-$(WGET_VERSION).tar.xz
-+WGET_VERSION = 1.19.2
-+WGET_SOURCE = wget-$(WGET_VERSION).tar.lz
- WGET_SITE = $(BR2_GNU_MIRROR)/wget
- WGET_DEPENDENCIES = host-pkgconf
- WGET_LICENSE = GPLv3+
+diff --git a/package/openssh/0001-configure-ac-detect-mips-abi.patch b/package/openssh/0001-configure-ac-detect-mips-abi.patch
+new file mode 100644
+index 0000000..0d43e6b
+--- /dev/null
++++ b/package/openssh/0001-configure-ac-detect-mips-abi.patch
+@@ -0,0 +1,44 @@
++From f4fcd8c788a4854d4ebae400cf55e3957f906835 Mon Sep 17 00:00:00 2001
++From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
++Date: Tue, 20 Jun 2017 16:42:11 +0100
++Subject: [PATCH] configure.ac: detect MIPS ABI
++
++Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
++[Upstream commit: ttps://github.com/openssh/openssh-portable/commit/f4fcd8c788a4854d4ebae400cf55e3957f906835]
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ configure.ac | 21 +++++++++++++++++++++
++ 1 file changed, 21 insertions(+)
++
++diff --git a/configure.ac b/configure.ac
++index 18079acba..f990cfe08 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -746,6 +746,27 @@ main() { if (NSVersionOfRunTimeLibrary("System") >= (60 << 16))
++ 	fi
++ 	AC_CHECK_HEADERS([linux/seccomp.h linux/filter.h linux/audit.h], [],
++ 	    [], [#include <linux/types.h>])
+++	# Obtain MIPS ABI
+++	case "$host" in
+++	mips*)
+++		AC_COMPILE_IFELSE([
+++#if _MIPS_SIM != _ABIO32
+++#error
+++#endif
+++			],[mips_abi="o32"],[AC_COMPILE_IFELSE([
+++#if _MIPS_SIM != _ABIN32
+++#error
+++#endif
+++				],[mips_abi="n32"],[AC_COMPILE_IFELSE([
+++#if _MIPS_SIM != _ABI64
+++#error
+++#endif
+++					],[mips_abi="n64"],[AC_MSG_ERROR([unknown MIPS ABI])
+++				])
+++			])
+++		])
+++		;;
+++	esac
++ 	AC_MSG_CHECKING([for seccomp architecture])
++ 	seccomp_audit_arch=
++ 	case "$host" in
+diff --git a/package/openssh/0002-configure-ac-properly-set-seccomp-audit-arch-for-mips64.patch b/package/openssh/0002-configure-ac-properly-set-seccomp-audit-arch-for-mips64.patch
+new file mode 100644
+index 0000000..879af5e
+--- /dev/null
++++ b/package/openssh/0002-configure-ac-properly-set-seccomp-audit-arch-for-mips64.patch
+@@ -0,0 +1,63 @@
++From afc3e31b637db9dae106d4fad78f7b481c8c24e3 Mon Sep 17 00:00:00 2001
++From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
++Date: Tue, 20 Jun 2017 16:42:28 +0100
++Subject: [PATCH] configure.ac: properly set seccomp_audit_arch for MIPS64
++
++Currently seccomp_audit_arch is set to AUDIT_ARCH_MIPS64 or
++AUDIT_ARCH_MIPSEL64 (depending on the endinness) when openssh is built
++for MIPS64. However, that's only valid for n64 ABI. The right macros for
++n32 ABI defined in seccomp.h are AUDIT_ARCH_MIPS64N32 and
++AUDIT_ARCH_MIPSEL64N32, for big and little endian respectively.
++
++Because of that an sshd built for MIPS64 n32 rejects connection attempts
++and the output of strace reveals that the problem is related to seccomp
++audit:
++
++[pid   194] prctl(PR_SET_SECCOMP, SECCOMP_MODE_FILTER, {len=57,
++filter=0x555d5da0}) = 0
++[pid   194] write(7, "\0\0\0]\0\0\0\5\0\0\0Ulist_hostkey_types: "..., 97) = ?
++[pid   193] <... poll resumed> )        = 2 ([{fd=5, revents=POLLIN|POLLHUP},
++{fd=6, revents=POLLHUP}])
++[pid   194] +++ killed by SIGSYS +++
++
++This patch fixes that problem by setting the right value to
++seccomp_audit_arch taking into account the MIPS64 ABI.
++
++Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
++[Upstream commit: https://github.com/openssh/openssh-portable/commit/afc3e31b637db9dae106d4fad78f7b481c8c24e3]
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ configure.ac | 18 ++++++++++++++++--
++ 1 file changed, 16 insertions(+), 2 deletions(-)
++
++diff --git a/configure.ac b/configure.ac
++index f990cfe08..5d640f679 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -801,10 +801,24 @@ main() { if (NSVersionOfRunTimeLibrary("System") >= (60 << 16))
++ 		seccomp_audit_arch=AUDIT_ARCH_MIPSEL
++ 		;;
++ 	mips64-*)
++-		seccomp_audit_arch=AUDIT_ARCH_MIPS64
+++		case "$mips_abi" in
+++		"n32")
+++			seccomp_audit_arch=AUDIT_ARCH_MIPS64N32
+++			;;
+++		"n64")
+++			seccomp_audit_arch=AUDIT_ARCH_MIPS64
+++			;;
+++		esac
++ 		;;
++ 	mips64el-*)
++-		seccomp_audit_arch=AUDIT_ARCH_MIPSEL64
+++		case "$mips_abi" in
+++		"n32")
+++			seccomp_audit_arch=AUDIT_ARCH_MIPSEL64N32
+++			;;
+++		"n64")
+++			seccomp_audit_arch=AUDIT_ARCH_MIPSEL64
+++			;;
+++		esac
++ 		;;
++ 	esac
++ 	if test "x$seccomp_audit_arch" != "x" ; then
+diff --git a/package/openssh/0001-fix-pam-uclibc-pthreads-clash.patch b/package/openssh/0003-fix-pam-uclibc-pthreads-clash.patch
+similarity index 100%
+rename from package/openssh/0001-fix-pam-uclibc-pthreads-clash.patch
+rename to package/openssh/0003-fix-pam-uclibc-pthreads-clash.patch
+diff --git a/package/openssh/0002-fix-howmany-include.patch b/package/openssh/0004-fix-howmany-include.patch
+similarity index 100%
+rename from package/openssh/0002-fix-howmany-include.patch
+rename to package/openssh/0004-fix-howmany-include.patch
+diff --git a/package/openssh/openssh.hash b/package/openssh/openssh.hash
+index ed628fa..3685bc0 100644
+--- a/package/openssh/openssh.hash
++++ b/package/openssh/openssh.hash
+@@ -1,4 +1,2 @@
+ # From http://www.openssh.com/txt/release-7.5 (base64 encoded)
+ sha256 9846e3c5fab9f0547400b4d2c017992f914222b3fd1f8eee6c7dc6bc5e59f9f0  openssh-7.5p1.tar.gz
+-sha256 310860606c4175cdfd095e724f624df27340c89a916f7a09300bcb7988d5cfbf  afc3e31b637db9dae106d4fad78f7b481c8c24e3.patch
+-sha256 395aa1006967713b599555440e09f898781a5559e496223587401768ece10904  f4fcd8c788a4854d4ebae400cf55e3957f906835.patch
+diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
+index dea7b47..f9167e5 100644
+--- a/package/openssh/openssh.mk
++++ b/package/openssh/openssh.mk
+@@ -9,11 +9,9 @@ OPENSSH_SITE = http://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable
+ OPENSSH_LICENSE = BSD-3c, BSD-2c, Public Domain
+ OPENSSH_LICENSE_FILES = LICENCE
+ # Autoreconf needed due to the following patches modifying configure.ac:
+-# f4fcd8c788a4854d4ebae400cf55e3957f906835.patch
+-# afc3e31b637db9dae106d4fad78f7b481c8c24e3.patch
++# 0001-configure-ac-detect-mips-abi.patch
++# 0002-configure-ac-properly-set-seccomp-audit-arch-for-mips64.patch
+ OPENSSH_AUTORECONF = YES
+-OPENSSH_PATCH = https://github.com/openssh/openssh-portable/commit/f4fcd8c788a4854d4ebae400cf55e3957f906835.patch \
+-	https://github.com/openssh/openssh-portable/commit/afc3e31b637db9dae106d4fad78f7b481c8c24e3.patch
+ OPENSSH_CONF_ENV = LD="$(TARGET_CC)" LDFLAGS="$(TARGET_CFLAGS)"
+ OPENSSH_CONF_OPTS = \
+ 	--sysconfdir=/etc/ssh \
