@@ -1,44 +1,43 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 28 Oct 2017 09:36:07 +0200
-Subject: [Buildroot] [PATCH 1/1] package/samba4: bump version to 4.6.9
-Message-ID: <20171028073607.4638-1-bernd.kuhls@t-online.de>
+Date: Sat, 28 Oct 2017 09:40:01 +0200
+Subject: [Buildroot] [PATCH 1/1] package/php: bump version to 7.1.11
+Message-ID: <20171028074001.25645-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Release notes: https://www.samba.org/samba/history/samba-4.6.9.html
-
-Added license hash.
-
+Changelog: http://www.php.net/ChangeLog-7.php#7.1.11
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/samba4/samba4.hash | 3 ++-
- package/samba4/samba4.mk   | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ package/php/php.hash | 2 +-
+ package/php/php.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
-index 19b175a58e..7446b1bdb8 100644
---- a/package/samba4/samba4.hash
-+++ b/package/samba4/samba4.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256 581deeb2543f5cedcb556cb950d0e82690d9f0cd33811d76624502ca0c32575d  samba-4.6.8.tar.gz
-+sha256 c31db4aad82f0b9588ef6c4b4dab5dce3fa1787bd298e62d953c2628bb1af21a  samba-4.6.9.tar.gz
-+sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index f8001bbe7f..7502fa6a13 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
+diff --git a/package/php/php.hash b/package/php/php.hash
+index cf2a73d2a4..d1f36f2d34 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
+@@ -1,5 +1,5 @@
+ # From http://php.net/downloads.php
+-sha256 2b8efa771a2ead0bb3ae67b530ca505b5b286adc873cca9ce97a6e1d6815c50b  php-7.1.10.tar.xz
++sha256 074093e9d7d21afedc5106904218a80a47b854abe368d2728ed22184c884893e  php-7.1.11.tar.xz
+ 
+ # License file
+ sha256 a44951f93b10c87c3f7cd9f311d95999c57c95ed950eec32b14c1c7ea6baf25e  LICENSE
+diff --git a/package/php/php.mk b/package/php/php.mk
+index d18442978b..aaeacde69a 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SAMBA4_VERSION = 4.6.8
-+SAMBA4_VERSION = 4.6.9
- SAMBA4_SITE = https://download.samba.org/pub/samba/stable
- SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
- SAMBA4_INSTALL_STAGING = YES
+-PHP_VERSION = 7.1.10
++PHP_VERSION = 7.1.11
+ PHP_SITE = http://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
 -- 
 2.11.0
