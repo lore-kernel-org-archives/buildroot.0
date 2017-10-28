@@ -1,32 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 28 Oct 2017 09:04:55 +0200
-Subject: [Buildroot] [git commit] linux: bump default to version 4.13.10
-Message-ID: <20171028070346.7F3037FE2A@busybox.osuosl.org>
+Date: Sat, 28 Oct 2017 09:07:02 +0200
+Subject: [Buildroot] [git commit] package/tor: bump version to 0.3.1.8
+Message-ID: <20171028070346.923377FE2A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6c53b9141ff5e5180cd6e015cef19da6e2433ade
+commit: https://git.buildroot.net/buildroot/commit/?id=fdace9e53cd8593bca954335a2479e22f1a5eaf0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Release notes:
+https://blog.torproject.org/new-stable-tor-releases-0318-03012-02913-02816-02515
+
+Added license hash.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- linux/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/tor/tor.hash | 3 ++-
+ package/tor/tor.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 34d6b85..33ae944 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -116,7 +116,7 @@ endif
+diff --git a/package/tor/tor.hash b/package/tor/tor.hash
+index fb8ddd0..cf8841a 100644
+--- a/package/tor/tor.hash
++++ b/package/tor/tor.hash
+@@ -1,2 +1,3 @@
+ # Locally computed
+-sha256 1df5dd4894bb2f5e0dc96c466955146353cf33ac50cd997cfc1b28ea3ed9c08f  tor-0.3.1.7.tar.gz
++sha256 7df6298860a59f410ff8829cf7905a50c8b3a9094d51a8553603b401e4b5b1a1  tor-0.3.1.8.tar.gz
++sha256 f9a4f724d8037711dde7d3f1d17094fb7d211545b3a3bbb1b03e769e13ca5608  LICENSE
+diff --git a/package/tor/tor.mk b/package/tor/tor.mk
+index 6052e09..c38ed90 100644
+--- a/package/tor/tor.mk
++++ b/package/tor/tor.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "4.13.9" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "4.13.10" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "v4.4.83-cip8" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+-TOR_VERSION = 0.3.1.7
++TOR_VERSION = 0.3.1.8
+ TOR_SITE = https://dist.torproject.org
+ TOR_LICENSE = BSD-3-Clause
+ TOR_LICENSE_FILES = LICENSE
