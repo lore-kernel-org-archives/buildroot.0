@@ -1,55 +1,60 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 28 Oct 2017 19:02:42 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] sdl2: security bump to
-	version 2.0.7
-Message-ID: <20171028171232.0AEAF80FD5@busybox.osuosl.org>
+Date: Sat, 28 Oct 2017 19:05:11 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] redis: bump to version
+	3.2.11
+Message-ID: <20171028171232.2C45D801D6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=17a169042ec1892717d617ff852f1397d12877f1
+commit: https://git.buildroot.net/buildroot/commit/?id=58ea6ad528a53b1b3f19efb441bbeb6451695b8e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Fixes CVE-2017-2888 - An exploitable integer overflow vulnerability exists
-when creating a new RGB Surface in SDL 2.0.5.  A specially crafted file can
-cause an integer overflow resulting in too little memory being allocated
-which can lead to a buffer overflow and potential code execution.  An
-attacker can provide a specially crafted image file to trigger this
-vulnerability.
+3.2.11 fixes important issues. From the release notes:
+
+================================================================================
+Redis 3.2.11     Released Thu Sep 21 15:47:53 CEST 2017
+================================================================================
+
+Upgrade urgency HIGH: Potentially critical bugs fixed.
+
+AOF flush on SHUTDOWN did not cared to really write the AOF buffers
+(not in the kernel but in the Redis process memory) to disk before exiting.
+Calling SHUTDOWN during traffic resulted into not every operation to be
+persisted on disk.
 
 Also add a hash for the license file while we're at it.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 07a9f0200cfd1c34f33e8054f62b990d05ccb934)
+(cherry picked from commit 751cd4cfab88ff15143d13eccf87f982a274e4e3)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/sdl2/sdl2.hash | 6 ++++--
- package/sdl2/sdl2.mk   | 2 +-
- 2 files changed, 5 insertions(+), 3 deletions(-)
+ package/redis/redis.hash | 4 +++-
+ package/redis/redis.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/sdl2/sdl2.hash b/package/sdl2/sdl2.hash
-index c0a8bfc..588f8f4 100644
---- a/package/sdl2/sdl2.hash
-+++ b/package/sdl2/sdl2.hash
+diff --git a/package/redis/redis.hash b/package/redis/redis.hash
+index 2eef91c..ce2d66b 100644
+--- a/package/redis/redis.hash
++++ b/package/redis/redis.hash
 @@ -1,2 +1,4 @@
--# Locally calculated after checking http://www.libsdl.org/release/SDL2-2.0.6.tar.gz.sig
--sha256 03658b5660d16d7b31263a691e058ed37acdab155d68dabbad79998fb552c5df  SDL2-2.0.6.tar.gz
-+# Locally calculated after checking http://www.libsdl.org/release/SDL2-2.0.7.tar.gz.sig
-+sha256 ee35c74c4313e2eda104b14b1b86f7db84a04eeab9430d56e001cea268bf4d5e  SDL2-2.0.7.tar.gz
+ # From https://github.com/antirez/redis-hashes/blob/master/README
+-sha256 6eaacfa983b287e440d0839ead20c2231749d5d6b78bbe0e0ffa3a890c59ff26  redis-3.2.9.tar.gz
++sha256 31ae927cab09f90c9ca5954aab7aeecc3bb4da6087d3d12ba0a929ceb54081b5  redis-3.2.11.tar.gz
 +# Locally calculated
-+sha256 bbd2edb1789c33de29bb9f8d1dbe2774584a9ce8c4e3162944b7a3a447f5e85d  COPYING.txt
-diff --git a/package/sdl2/sdl2.mk b/package/sdl2/sdl2.mk
-index d15b198..ce5f074 100644
---- a/package/sdl2/sdl2.mk
-+++ b/package/sdl2/sdl2.mk
++sha256 cbf420a3672475a6e2765e3c0984c1f81efe0212afb94a3c998ee63bfd661063  COPYING
+diff --git a/package/redis/redis.mk b/package/redis/redis.mk
+index 671ffac..d356b23 100644
+--- a/package/redis/redis.mk
++++ b/package/redis/redis.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SDL2_VERSION = 2.0.6
-+SDL2_VERSION = 2.0.7
- SDL2_SOURCE = SDL2-$(SDL2_VERSION).tar.gz
- SDL2_SITE = http://www.libsdl.org/release
- SDL2_LICENSE = zlib
+-REDIS_VERSION = 3.2.9
++REDIS_VERSION = 3.2.11
+ REDIS_SITE = http://download.redis.io/releases
+ REDIS_LICENSE = BSD-3c (core); MIT and BSD family licenses (Bundled components)
+ REDIS_LICENSE_FILES = COPYING
