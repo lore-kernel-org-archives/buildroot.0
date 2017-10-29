@@ -1,42 +1,46 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 29 Oct 2017 16:04:19 +0100
-Subject: [Buildroot] [PATCH 1/2] package/libnfs: bump version to 2.0.0
-Message-ID: <20171029150420.3384-1-bernd.kuhls@t-online.de>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 29 Oct 2017 16:55:47 +0100
+Subject: [Buildroot] [PATCH] package/libbsd: not available for arc
+Message-ID: <20171029155547.25602-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Added license hash.
+libbsd has explicit, hard-coded checks about the architectures it can
+work on, and arc is not one of those.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Add an explicit exclusion.
+
+Fixes:
+    http://autobuild.buildroot.org/results/603baa77e95620ad1416e0d1dc4202c334801efc
+    http://autobuild.buildroot.org/results/8a2ee5431501615cb150233e6d7bc9e7c3c5c1eb
+    http://autobuild.buildroot.org/results/ea52364f536485ff4e43e3bc37f2175eb6178c5a
+    http://autobuild.buildroot.org/results/32581f7a79372b525e4ad21e029ff0ede743ba94
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Evgeniy Didin <Evgeniy.Didin@synopsys.com>
+Cc: Alexey Brodkin <abrodkin@synopsys.com>
 ---
- package/libnfs/libnfs.hash | 3 ++-
- package/libnfs/libnfs.mk   | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ package/libbsd/Config.in | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/libnfs/libnfs.hash b/package/libnfs/libnfs.hash
-index 27a9e5d349..cfe6678842 100644
---- a/package/libnfs/libnfs.hash
-+++ b/package/libnfs/libnfs.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256	7f6c62a05c7e0f0749f2b13f178a4ed7aaf17bd09e65a10bb147bfe9807da272	libnfs-libnfs-1.10.0.tar.gz
-+sha256 7ea6cd8fa6c461d01091e584d424d28e137d23ff4b65b95d01a3fd0ef95d120e  libnfs-libnfs-2.0.0.tar.gz
-+sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENCE-LGPL-2.1.txt
-diff --git a/package/libnfs/libnfs.mk b/package/libnfs/libnfs.mk
-index b66a9be20b..3636a2acee 100644
---- a/package/libnfs/libnfs.mk
-+++ b/package/libnfs/libnfs.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/libbsd/Config.in b/package/libbsd/Config.in
+index 9b5b89812f..091b668075 100644
+--- a/package/libbsd/Config.in
++++ b/package/libbsd/Config.in
+@@ -1,7 +1,9 @@
+ config BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
+ 	bool
+-	# libbsd does not support the MicroBlaze ELF machine type (see local-elf.h)
+-	default y if !BR2_microblaze
++	# libbsd does not support those architectures (see src/local-elf.h)
++	default y
++	depends on !BR2_microblaze
++	depends on !BR2_arcle && !BR2_arcle
  
--LIBNFS_VERSION = libnfs-1.10.0
-+LIBNFS_VERSION = libnfs-2.0.0
- LIBNFS_SITE = $(call github,sahlberg,libnfs,$(LIBNFS_VERSION))
- LIBNFS_INSTALL_STAGING = YES
- LIBNFS_AUTORECONF = YES
+ config BR2_PACKAGE_LIBBSD
+ 	bool "libbsd"
 -- 
 2.11.0
