@@ -1,56 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 29 Oct 2017 15:45:13 +0100
-Subject: [Buildroot] [RESEND PATCH v4] libostree: new package
-In-Reply-To: <p5pgcexorq.ln2@ID-313208.user.individual.net>
-References: <20171029093756.23671-1-marcus.folkesson@gmail.com>
- <p5pgcexorq.ln2@ID-313208.user.individual.net>
-Message-ID: <20171029154513.487050d8@windsurf>
+Date: Sun, 29 Oct 2017 15:45:40 +0100
+Subject: [Buildroot] [git commit] package/tvheadend: transcoding depends on
+	ffmpeg
+Message-ID: <20171029143839.0AD32810D3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=b7826807d10a75e4f8890ea06f8fc1d7a528ed64
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 29 Oct 2017 12:03:53 +0100, Bernd Kuhls wrote:
-> Hi Marcus,
+Commit
+https://git.buildroot.net/buildroot/commit/package/tvheadend?id=a9a14dc4357d32f705a52a5da73c782576ce6bc8
+forgot to add the reverse dependency from ffmpeg.
 
-First of all Bernd, thanks a lot for your detailed review! Everything
-is obviously correct in your review, and needs to be addressed by
-Marcus. However, there is just one point that needs clarification.
+Fixes
+http://autobuild.buildroot.net/results/91a/91a08e63690421a0c197e987af15e91e78afb96f/
 
-> Please add openssl as optional dependency:
-> 
-> ifeq ($(BR2_PACKAGE_OPENSSL),y)
-> LIBOSTREE_CONF_OPTS += --with-openssl
-> LIBOSTREE_DEPENDENCIES += openssl
-> else
-> LIBOSTREE_CONF_OPTS += --without-openssl
-> endif
-> 
-> Same for avahi, libarchive, libcurl, libsoup and systemd.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/tvheadend/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-Adding support for optional dependencies is not a strict requirement,
-as long as the corresponding features are explicitly disabled.
-
-I.e, for each optional dependency, Marcus has the choice of:
-
- - Supporting it, by enabling the dependency if it's available in
-   Buildroot
-
- - Disabling explicitly the optional dependency by passing the
-   appropriate --disable-<foo>
-
-Indeed, we don't want to ask our contributors to support all possible
-optional dependencies. It might be a lot of work, and the contributor
-may not necessarily care about such optional dependencies. Hence,
-disabling a dependency explicitly is acceptable.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/tvheadend/Config.in b/package/tvheadend/Config.in
+index 56a3b38..2cde51d 100644
+--- a/package/tvheadend/Config.in
++++ b/package/tvheadend/Config.in
+@@ -29,6 +29,7 @@ if BR2_PACKAGE_TVHEADEND
+ 
+ config BR2_PACKAGE_TVHEADEND_TRANSCODING
+ 	bool "transcoding support"
++	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
+ 	select BR2_PACKAGE_FFMPEG
+ 	select BR2_PACKAGE_FFMPEG_AVRESAMPLE
+ 	select BR2_PACKAGE_FFMPEG_GPL # needed for x264 support
