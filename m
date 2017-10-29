@@ -1,53 +1,56 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 29 Oct 2017 17:51:38 +0100
-Subject: [Buildroot] [PATCH] package/libbsd: not available for arc
-In-Reply-To: <20171029173456.5007a31e@windsurf>
-References: <20171029155547.25602-1-yann.morin.1998@free.fr>
- <20171029173456.5007a31e@windsurf>
-Message-ID: <20171029165138.GD2899@scaer>
+Date: Sun, 29 Oct 2017 18:00:41 +0100
+Subject: [Buildroot] [PATCHv2] package/libbsd: not available for ARC
+Message-ID: <20171029170041.13206-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+libbsd has explicit, hard-coded checks about the architectures it can
+work on, and ARC is not one of those.
 
-On 2017-10-29 17:34 +0100, Thomas Petazzoni spake thusly:
-> On Sun, 29 Oct 2017 16:55:47 +0100, Yann E. MORIN wrote:
-> > diff --git a/package/libbsd/Config.in b/package/libbsd/Config.in
-> > index 9b5b89812f..091b668075 100644
-> > --- a/package/libbsd/Config.in
-> > +++ b/package/libbsd/Config.in
-> > @@ -1,7 +1,9 @@
-> >  config BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
-> >  	bool
-> > -	# libbsd does not support the MicroBlaze ELF machine type (see local-elf.h)
-> > -	default y if !BR2_microblaze
-> > +	# libbsd does not support those architectures (see src/local-elf.h)
-> > +	default y
-> > +	depends on !BR2_microblaze
-> > +	depends on !BR2_arcle && !BR2_arcle
-> 
-> Really? I guess you wanted to also exclude ARC big-endian, no?
+We did not notice so far, because we only recently added support for
+glibc on ARC (and only for a single variant) in 0633eb58a291 (toolchain:
+add glibc support for ARCv2).
 
-Yeah, obviously. :-/
+Add an explicit exclusion on arc.
 
-> Also, I believe it would be useful to explain in the commit log why
-> this problem was not visible before: because libbsd depends on glibc,
-> and we only recently enabled glibc support for ARC.
+Fixes:
+    http://autobuild.buildroot.org/results/603baa77e95620ad1416e0d1dc4202c334801efc
+    http://autobuild.buildroot.org/results/8a2ee5431501615cb150233e6d7bc9e7c3c5c1eb
+    http://autobuild.buildroot.org/results/ea52364f536485ff4e43e3bc37f2175eb6178c5a
+    http://autobuild.buildroot.org/results/32581f7a79372b525e4ad21e029ff0ede743ba94
 
-OK, will do.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Evgeniy Didin <Evgeniy.Didin@synopsys.com>
+Cc: Alexey Brodkin <abrodkin@synopsys.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-Thanks! :-)
+---
+Changes v1 -> v2:
+  - fix and simplify dependency !BR2_arc  (Thomas)
+  - enhance commit log  (Thomas)
+---
+ package/libbsd/Config.in | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/libbsd/Config.in b/package/libbsd/Config.in
+index 9b5b89812f..11e4c4d974 100644
+--- a/package/libbsd/Config.in
++++ b/package/libbsd/Config.in
+@@ -1,7 +1,9 @@
+ config BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
+ 	bool
+-	# libbsd does not support the MicroBlaze ELF machine type (see local-elf.h)
+-	default y if !BR2_microblaze
++	default y
++	# libbsd does not support those architectures (see src/local-elf.h)
++	depends on !BR2_microblaze
++	depends on !BR2_arc
+ 
+ config BR2_PACKAGE_LIBBSD
+ 	bool "libbsd"
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.11.0
