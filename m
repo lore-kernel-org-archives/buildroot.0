@@ -1,56 +1,54 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 29 Oct 2017 18:00:41 +0100
-Subject: [Buildroot] [PATCHv2] package/libbsd: not available for ARC
-Message-ID: <20171029170041.13206-1-yann.morin.1998@free.fr>
+From: Florian Fainelli <f.fainelli@gmail.com>
+Date: Sun, 29 Oct 2017 10:10:22 -0700
+Subject: [Buildroot] [RFC 0/2] Add support for specifying a custom
+ kernel directory
+In-Reply-To: <20171029073312.GB2899@scaer>
+References: <1509242782-14524-1-git-send-email-f.fainelli@gmail.com>
+ <20171029073312.GB2899@scaer>
+Message-ID: <5835fdce-74f9-eae0-6f2b-d851f08a408a@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libbsd has explicit, hard-coded checks about the architectures it can
-work on, and ARC is not one of those.
+Hi,
 
-We did not notice so far, because we only recently added support for
-glibc on ARC (and only for a single variant) in 0633eb58a291 (toolchain:
-add glibc support for ARCv2).
+On 10/29/2017 12:33 AM, Yann E. MORIN wrote:
+> Florian, All,
+> 
+> On 2017-10-28 19:06 -0700, Florian Fainelli spake thusly:
+>> This series allows specifying a custom kernel directory which could be an
+>> existing git tree. This is particularly useful when doing kernel development
+>> and having an existing git checkout where development is happening.
+> 
+> As I replied to the patch itself: this is already covered by the
+> opverride-srcdir mechanism, so I've marked this series as rejected in
+> our patchwork.
+> 
+>> Ideally, I would like to avoid doing the rsync operation involved with the "local" method
+>> and instead just have a symbolic link from /path/to/kernel -> output/build/linux.
+> 
+> The first rsync may take a few seconds, true, but subs=equent ones will
+> be much faster if all you do is change a few files, especially on a hot
+> directory, so there is not much gain to have with a local symlink.
 
-Add an explicit exclusion on arc.
+It is more about not duplicating sources unnecessarily. If you have all
+developers on your system do the same thing, you would end-up with a lot
+of copies of the same files, and if your filesystem does not already
+offer de-duplication, that becomes additional space used. The copy
+aspect is also potentially an issue since Linux kernel sources are
+significant enough this can become a concern over time.
 
-Fixes:
-    http://autobuild.buildroot.org/results/603baa77e95620ad1416e0d1dc4202c334801efc
-    http://autobuild.buildroot.org/results/8a2ee5431501615cb150233e6d7bc9e7c3c5c1eb
-    http://autobuild.buildroot.org/results/ea52364f536485ff4e43e3bc37f2175eb6178c5a
-    http://autobuild.buildroot.org/results/32581f7a79372b525e4ad21e029ff0ede743ba94
+> 
+> OTOH, I am currently working on out-of-tree per-pacakge build, which
+> will (eventually) allow us to make use of the O= mechanism to build the
+> kernel out-of-tree, and get rid of the rsync altogether. Don't hold your
+> breath, though. ;-)
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Evgeniy Didin <Evgeniy.Didin@synopsys.com>
-Cc: Alexey Brodkin <abrodkin@synopsys.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+OK, that's good to hear. Feel free to CC when you get there and I will
+happily try to test that too.
 
----
-Changes v1 -> v2:
-  - fix and simplify dependency !BR2_arc  (Thomas)
-  - enhance commit log  (Thomas)
----
- package/libbsd/Config.in | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/package/libbsd/Config.in b/package/libbsd/Config.in
-index 9b5b89812f..11e4c4d974 100644
---- a/package/libbsd/Config.in
-+++ b/package/libbsd/Config.in
-@@ -1,7 +1,9 @@
- config BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
- 	bool
--	# libbsd does not support the MicroBlaze ELF machine type (see local-elf.h)
--	default y if !BR2_microblaze
-+	default y
-+	# libbsd does not support those architectures (see src/local-elf.h)
-+	depends on !BR2_microblaze
-+	depends on !BR2_arc
- 
- config BR2_PACKAGE_LIBBSD
- 	bool "libbsd"
+Thanks!
 -- 
-2.11.0
+Florian
