@@ -1,9 +1,9 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 29 Oct 2017 17:34:56 +0100
-Subject: [Buildroot] [PATCH] package/libbsd: not available for arc
-In-Reply-To: <20171029155547.25602-1-yann.morin.1998@free.fr>
-References: <20171029155547.25602-1-yann.morin.1998@free.fr>
-Message-ID: <20171029173456.5007a31e@windsurf>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Sun, 29 Oct 2017 14:47:24 -0200
+Subject: [Buildroot] [PATCH 2/2] package/boinc: add optional dependency
+ to freetype
+References: <20171029161256.18607-2-bernd.kuhls@t-online.de>
+Message-ID: <59f6061c971dc_1ab03fe8a299247c4437d@ultri3.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,32 +12,21 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 29 Oct 2017 16:55:47 +0100, Yann E. MORIN wrote:
+On Sun, Oct 29, 2017 at 02:12 PM, Bernd Kuhls wrote:
 
-> diff --git a/package/libbsd/Config.in b/package/libbsd/Config.in
-> index 9b5b89812f..091b668075 100644
-> --- a/package/libbsd/Config.in
-> +++ b/package/libbsd/Config.in
-> @@ -1,7 +1,9 @@
->  config BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
->  	bool
-> -	# libbsd does not support the MicroBlaze ELF machine type (see local-elf.h)
-> -	default y if !BR2_microblaze
-> +	# libbsd does not support those architectures (see src/local-elf.h)
-> +	default y
-> +	depends on !BR2_microblaze
-> +	depends on !BR2_arcle && !BR2_arcle
+> No configure option present:
+> https://github.com/BOINC/boinc/blob/master/configure.ac#L497
 
-Really? I guess you wanted to also exclude ARC big-endian, no?
+A nit related to the url: when the master branch changes (drastic
+examples: 100 lines are removed from the file, or even a configure
+option is added for freetype) this url would point to a wrong location.
 
-Also, I believe it would be useful to explain in the commit log why
-this problem was not visible before: because libbsd depends on glibc,
-and we only recently enabled glibc support for ARC.
+A more future-proof url would be
+https://github.com/BOINC/boinc/blob/client_release/7.8/7.8.3/configure.ac#L497
+as we trust they won't change a tag.
 
-Thanks!
+Of course there is the super-safe url:
+https://github.com/BOINC/boinc/blob/efcd3928571992b30144db84b43af7470d8b2d6a/configure.ac#L497
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Regards,
+Ricardo
