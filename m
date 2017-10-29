@@ -1,34 +1,39 @@
 From: Florian Fainelli <f.fainelli@gmail.com>
-Date: Sat, 28 Oct 2017 19:06:20 -0700
-Subject: [Buildroot] [RFC 0/2] Add support for specifying a custom kernel
-	directory
-Message-ID: <1509242782-14524-1-git-send-email-f.fainelli@gmail.com>
+Date: Sat, 28 Oct 2017 19:06:21 -0700
+Subject: [Buildroot] [RFC 1/2] pkg-generic: Don't check for trailing slashes
+	for local method
+In-Reply-To: <1509242782-14524-1-git-send-email-f.fainelli@gmail.com>
+References: <1509242782-14524-1-git-send-email-f.fainelli@gmail.com>
+Message-ID: <1509242782-14524-2-git-send-email-f.fainelli@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Local methods might be used to specify a path to a directory, which could
+contain trailing slashes, don't bother checking those.
 
-This series allows specifying a custom kernel directory which could be an
-existing git tree. This is particularly useful when doing kernel development
-and having an existing git checkout where development is happening.
+Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+---
+ package/pkg-generic.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Ideally, I would like to avoid doing the rsync operation involved with the "local" method
-and instead just have a symbolic link from /path/to/kernel -> output/build/linux.
-
-Comments welcome!
-
-Florian Fainelli (2):
-  pkg-generic: Don't check for trailing slashes for local method
-  linux: Add support for specifying a custom directory
-
- linux/Config.in                        | 10 ++++++++++
- linux/linux.mk                         |  3 +++
- package/linux-headers/linux-headers.mk |  5 +++++
- package/pkg-generic.mk                 |  2 ++
- 4 files changed, 20 insertions(+)
-
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index cca94ba338fb..4c090f2daed3 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -998,9 +998,11 @@ $$(error $(2)_SITE cannot be empty when $(2)_SOURCE is not)
+ endif
+ endif
+ 
++ifneq ($$($(2)_SITE_METHOD),local)
+ ifeq ($$(patsubst %/,ERROR,$$($(2)_SITE)),ERROR)
+ $$(error $(2)_SITE ($$($(2)_SITE)) cannot have a trailing slash)
+ endif
++endif
+ 
+ ifneq ($$($(2)_HELP_CMDS),)
+ HELP_PACKAGES += $(2)
 -- 
 2.7.4
