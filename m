@@ -1,42 +1,153 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 29 Oct 2017 18:14:40 +0100
-Subject: [Buildroot] [PATCH 5/5] docs/manual: update the documentation about
-	test-pkg
+Date: Sun, 29 Oct 2017 18:14:39 +0100
+Subject: [Buildroot] [PATCH 4/5] test-pkg: test a subset of toolchains by
+	default, add -a and -n options
 In-Reply-To: <20171029171440.8095-1-thomas.petazzoni@free-electrons.com>
 References: <20171029171440.8095-1-thomas.petazzoni@free-electrons.com>
-Message-ID: <20171029171440.8095-6-thomas.petazzoni@free-electrons.com>
+Message-ID: <20171029171440.8095-5-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+During the latest Buildroot Developers meeting, we discussed that
+test-pkg would perhaps be more widely used if it tested a smaller
+subset of toolchains. Indeed, it currently tests 47 toolchains, which
+takes very long to build. Several of the toolchain configurations are
+quite similar, and it is perhaps not necessary for contributors to
+test them all before submitting a package.
+
+Therefore, this commit changes the test-pkg script to only test a
+subset of the toolchain configurations by default. The N first
+configurations of the CSV files are tested, where N is hard-coded in
+the script. The CSV file has therefore been re-organized to have the
+first N toolchains be the most important ones.
+
+A -a/--all option is added to test with all toolchains, while a
+-n/--number option is added to test with the first N toolchains, N
+being passed on the command line.
+
+Note that the list of toolchains (built in the "toolchains" shell
+variable) is no longer sorted. Indeed, when the first N toolchains are
+tested, we want them to be tested in the same order as they are listed
+in the CSV file, as we are careful to order them in an interesting
+order. We only sort when all toolchains are tested.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- docs/manual/adding-packages-tips.txt | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
+ utils/test-pkg | 56 +++++++++++++++++++++++++++++++++++++++++++++++++-------
+ 1 file changed, 49 insertions(+), 7 deletions(-)
 
-diff --git a/docs/manual/adding-packages-tips.txt b/docs/manual/adding-packages-tips.txt
-index 824f07547d..113172d0ab 100644
---- a/docs/manual/adding-packages-tips.txt
-+++ b/docs/manual/adding-packages-tips.txt
-@@ -77,9 +77,14 @@ and what package to test:
- $ ./utils/test-pkg -c libcurl.config -p libcurl
- ----
+diff --git a/utils/test-pkg b/utils/test-pkg
+index 1b7046eac4..54e5ad8bbb 100755
+--- a/utils/test-pkg
++++ b/utils/test-pkg
+@@ -5,16 +5,19 @@ TOOLCHAINS_CSV='support/config-fragments/autobuild/toolchain-configs.csv'
  
--This will try to build your package against all the toolchains used
--by the autobuilders (except for the internal toolchains, because it takes
--too long to do so). The output lists all toolchains and the corresponding
-+By default, +test-pkg+ will build your package against a subset of the
-+toolchains used by the autobuilders, which has been selected by the
-+Buildroot developers as being the most useful and representative
-+subset. If you want to test all toolchains, pass the +-a+ option. Note
-+that in any case, internal toolchains are excluded as they take too
-+long to build.
+ main() {
+     local o O opts
+-    local cfg dir pkg random toolchains_dir toolchain
++    local cfg dir pkg random toolchains_dir toolchain all number mode
+     local ret nb nb_skip nb_fail nb_legal nb_tc build_dir
+     local -a toolchains
+ 
+-    o='hc:d:p:r:t:'
++    o='han:c:d:p:r:t:'
+     O='help,config-snippet:build-dir:package:,random:,toolchains-dir:'
+     opts="$(getopt -n "${my_name}" -o "${o}" -l "${O}" -- "${@}")"
+     eval set -- "${opts}"
+ 
+     random=0
++    all=0
++    number=0
++    mode=0
+     toolchains_csv="${TOOLCHAINS_CSV}"
+     while [ ${#} -gt 0 ]; do
+         case "${1}" in
+@@ -33,6 +36,12 @@ main() {
+         (-r|--random)
+             random="${2}"; shift 2
+             ;;
++	(-a|--all)
++            all=1; shift 1
++            ;;
++	(-n|--number)
++            number="${2}"; shift 2
++            ;;
+         (-t|--toolchains-csv)
+             toolchains_csv="${2}"; shift 2
+             ;;
+@@ -51,15 +60,37 @@ main() {
+         dir="${HOME}/br-test-pkg"
+     fi
+ 
++    if [ ${random} -gt 0 ]; then
++        mode=$((mode+1))
++    fi
 +
-+The output lists all toolchains that are tested and the corresponding
- result (excerpt, results are fake):
++    if [ ${number} -gt 0 ]; then
++        mode=$((mode+1))
++    fi
++
++    if [ ${all} -eq 1 ]; then
++        mode=$((mode+1))
++    fi
++
++    # Default mode is to test the N first toolchains, which have been
++    # chosen to be a good selection of toolchains.
++    if [ ${mode} -eq 0 ] ; then
++        number=7
++    elif [ ${mode} -gt 1 ] ; then
++        printf "error: --all, --number and --random are mutually exclusive\n" >&2; exit 1
++    fi
++
+     # Extract the URLs of the toolchains; drop internal toolchains
+     # E.g.: http://server/path/to/name.config,arch,libc
+     #  -->  http://server/path/to/name.config
+     toolchains=($(sed -r -e 's/,.*//; /internal/d; /^#/d; /^$/d;' "${toolchains_csv}" \
+                   |if [ ${random} -gt 0 ]; then \
+                       sort -R |head -n ${random}
+-                   else
+-                      cat
+-                   fi |sort
++                  elif [ ${number} -gt 0 ]; then \
++                      head -n ${number}
++                  else
++                      sort
++                  fi
+                  )
+                )
  
- ----
+@@ -156,6 +187,10 @@ toolchain config fragment and the required host architecture, separated by a
+ comma. The config fragments should contain only the toolchain and architecture
+ settings.
+ 
++By default, a useful subset of toolchains is tested. If needed, all
++toolchains can be tested (-a), an arbitrary number of toolchains (-n
++in order, -r for random).
++
+ Options:
+ 
+     -h, --help
+@@ -172,9 +207,16 @@ Options:
+         Test-build the package PKG, by running 'make PKG'; if not specified,
+         just runs 'make'.
+ 
++    -a, --all
++        Test all toolchains, instead of the default subset defined by
++        Buildroot developers.
++
++    -n N, --number N
++        Test N toolchains, in the order defined in the toolchain CSV
++        file.
++
+     -r N, --random N
+-        Limit the tests to the N randomly selected toolchains, instead of
+-        building with all toolchains.
++        Limit the tests to the N randomly selected toolchains.
+ 
+     -t CSVFILE, --toolchains-csv CSVFILE
+         CSV file containing the paths to config fragments of toolchains to
 -- 
 2.13.6
