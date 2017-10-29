@@ -1,139 +1,130 @@
-From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Sun, 29 Oct 2017 02:03:27 -0200
-Subject: [Buildroot] [PATCH v2 6/6] support/testing: fix remaining code
-	style
-References: <270bdcac-d8f0-d6db-bd84-f850a2d645bc@mind.be>
-Message-ID: <59f5530f9807a_d683ff5ec889c9036b5@ultri3.mail>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 29 Oct 2017 08:26:49 +0100
+Subject: [Buildroot] [RFC 2/2] linux: Add support for specifying a
+ custom directory
+In-Reply-To: <1509242782-14524-3-git-send-email-f.fainelli@gmail.com>
+References: <1509242782-14524-1-git-send-email-f.fainelli@gmail.com>
+ <1509242782-14524-3-git-send-email-f.fainelli@gmail.com>
+Message-ID: <20171029072649.GA2899@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Florian, All,
 
-On Mon, Oct 23, 2017 at 06:34 AM, Arnout Vandecappelle wrote:
+On 2017-10-28 19:06 -0700, Florian Fainelli spake thusly:
+> Add the ability to specify a path to a custom directory where kernel sources
+> may be contained. This is useful when doing kernel development in an existing
+> git tree.
 
-> On 23-10-17 04:30, Ricardo Martincoski wrote:
->> On Fri, Oct 06, 2017 at 02:16 PM, Arnout Vandecappelle wrote:
->>> On 05-10-17 23:42, Ricardo Martincoski wrote:
->> [snip]
->>>> Number of warnings reported by flake8 for the test infra:
->>>> before:   2
->>>> after:    0
->>>
->>>  I still have a warning:
->>>
->>> $ python -m flake8 support/testing/
->>> support/testing/tests/init/base.py:45:9: N803 argument name should be lowercase
->>>
->>>  Any idea why you didn't catch this?
->> 
->> That's because you have flake8 plugin pep8-naming installed, which default to
->> on.
->> To always disable it (to ignore such warnings and get the same result with or
->> without it) this line could be added to .flake8:
->> ignore=N
-> 
->  I don't think we want that.
+This case is covered by the override-sourcedir mechanism.
 
-OK.
+Create a file (by default, local.mk) in your config directory (the one
+with the Buildroot .config file), and edit this file with:
 
-> 
->> I don't know a way to enforce it is always installed (to always generate such
->> warnings and get the same result).
-> 
->  We don't need to enforce it. What we need is to make sure that GitLab-CI does
-> have this, so it *will* check the naming (when we have a test for flake8,
-> obviously). You can do that by updating support/docker/Dockerfile (and I'll
-> rebuild the docker image when I apply the patch).
+    LINUX_OVERRIDE_SRCDIR = /path/to/your/linux
 
-Good to know how to add things to the image..
-I won't do that because I understand from you (below) that it's better to add
-apt install python-flake8
-to .gitlab-ci.yml.in in this case.
+and Buildroot will use that as a rsync source, instead of downloading
+the kernel sources.
 
->> To also ignore warnings generated when the plugin flake8-docstrings is
->> installed, this line could be used instead:
->> ignore=N,D
-> 
->  Good idea, let's check the docstrings as well!
-
-Eventually...
-
-By default the plugin would generate 200+ warnings because it expects every
-single package, module, function, method to be documented.
-I don't think it is useful to add a lot of obvious documentation, the good thing
-IMO is to document the tricky ones.
-
-So I suggest to use 'flake8 --ignore=D1' that will check the style of the
-docstrings but would not generate a lot of 'Missing docstring in'.
-And during the review ask for documentation on tricky parts of the code.
-
-Of course it's not good to let a test failing in the gitlab-ci for a long time,
-so let's fix style of the docstring already in the code before adding this.
-I will eventually do that.
-But first I will fix warnings in support/scripts and utils.
-
->>>  Also, there are still warnings in support/scripts and utils, care to take a
->>> look at those?
->> 
->> I will.
-> 
->  It's not urgent. Well, that is, until we start failing gitlab-CI because of it :-)
-
-I can include a patch at the end of the series that fixes warnings in
-support/scripts and utils, that adds check-flake8 as you detailed below.
-This way we start with a passing test.
-
->>>  Also, you used to have a patch that ran flake8 from .gitlab-ci.yml, but it
->>> seems to be gone from patchwork.
->> 
->> Yes, that was
->> http://patchwork.ozlabs.org/patch/820324/
->> 
->> The main purpose (to check the test infra even if/when the tests become placed
->> in each package directory) was replaced by the .flake8 file in the main
->> directory. 
->> http://patchwork.ozlabs.org/patch/822105/
-> 
->  I don't really see any relation between the two... Patch 820324 creates a
-> flake8 test, patch 822105 creates a flake8 config.
-> 
->  OK, now I look at patch 820324, I think it's not the right approach. There is
-> no point making a unit test for that.  All we want is an update to
-> .gitlab-ci.yml.in that adds something like this:
-> 
-> check-flake8:
->     before_script:
->         - apt-get update -qq
->         - apt-get install -y -qq --no-install-recommends
->             python3-flake8 python3-pep8-naming python3-flake8-docstrings
->     script:
->         - flake8
-
-Nice!
-
-> There is no real need to add flake8 to the Docker image since it's only used for
-> this one test. And we can simply run flake8 at the top level; it's exit code
-> will indicate failure.
-> 
->  Oh, now I notice that this won't work because our test infra is not Python3
-> compliant. That would be nice to fix as well :-) Apparently docstrings only
-> exists for python3 (at least on my Debian, don't know about Ubuntu).
-
-I started the image buildroot/base locally and using pip it succeeds for python
-2:
-apt update
-apt install python-pip
-pip install flake8-docstrings
-
-[snip]
->>>  And finally, if you have nothing else to do :-), maybe you could make the tests
->>> python3 compatible. For me, it'd be fine to even require python3 to be able to
->>> run the tests, if that simplifies things.
->> 
->> I will do later (I guess in next December/January).
+See also e782cd5b1bc (Revert "Added local directory as source of kernel
+code") for more in-depth explanations. ;-)
 
 Regards,
-Ricardo
+Yann E. MORIN.
+
+> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+> ---
+>  linux/Config.in                        | 10 ++++++++++
+>  linux/linux.mk                         |  3 +++
+>  package/linux-headers/linux-headers.mk |  5 +++++
+>  3 files changed, 18 insertions(+)
+> 
+> diff --git a/linux/Config.in b/linux/Config.in
+> index 33ae944557b6..7d4dcddc7ea7 100644
+> --- a/linux/Config.in
+> +++ b/linux/Config.in
+> @@ -87,6 +87,12 @@ config BR2_LINUX_KERNEL_CUSTOM_SVN
+>  	  This option allows Buildroot to get the Linux kernel source
+>  	  code from a Subversion repository.
+>  
+> +config BR2_LINUX_KERNEL_CUSTOM_DIRECTORY
+> +	bool "Custom directory"
+> +	help
+> +	  This option allows Buildroot to use the Linux kernel source
+> +	  code from an existing directory.
+> +
+>  endchoice
+>  
+>  config BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE
+> @@ -97,6 +103,10 @@ config BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION
+>  	string "URL of custom kernel tarball"
+>  	depends on BR2_LINUX_KERNEL_CUSTOM_TARBALL
+>  
+> +config BR2_LINUX_KERNEL_CUSTOM_DIRECTORY_LOCATION
+> +	string "Path of the custom kernel source"
+> +	depends on BR2_LINUX_KERNEL_CUSTOM_DIRECTORY
+> +
+>  if BR2_LINUX_KERNEL_CUSTOM_GIT || BR2_LINUX_KERNEL_CUSTOM_HG || BR2_LINUX_KERNEL_CUSTOM_SVN
+>  
+>  config BR2_LINUX_KERNEL_CUSTOM_REPO_URL
+> diff --git a/linux/linux.mk b/linux/linux.mk
+> index bd5589bae02d..192fd0d3ffb3 100644
+> --- a/linux/linux.mk
+> +++ b/linux/linux.mk
+> @@ -29,6 +29,9 @@ LINUX_SITE_METHOD = hg
+>  else ifeq ($(BR2_LINUX_KERNEL_CUSTOM_SVN),y)
+>  LINUX_SITE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_REPO_URL))
+>  LINUX_SITE_METHOD = svn
+> +else ifeq ($(BR2_LINUX_KERNEL_CUSTOM_DIRECTORY),y)
+> +LINUX_SITE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_DIRECTORY_LOCATION))
+> +LINUX_SITE_METHOD = local
+>  else ifeq ($(BR2_LINUX_KERNEL_LATEST_CIP_VERSION),y)
+>  LINUX_SITE = git://git.kernel.org/pub/scm/linux/kernel/git/bwh/linux-cip.git
+>  else ifneq ($(findstring -rc,$(LINUX_VERSION)),)
+> diff --git a/package/linux-headers/linux-headers.mk b/package/linux-headers/linux-headers.mk
+> index f1e379060834..e42af8a4d672 100644
+> --- a/package/linux-headers/linux-headers.mk
+> +++ b/package/linux-headers/linux-headers.mk
+> @@ -26,6 +26,9 @@ LINUX_HEADERS_SITE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_REPO_URL))
+>  LINUX_HEADERS_SITE_METHOD = hg
+>  # use same hg tarball as linux kernel
+>  LINUX_HEADERS_SOURCE = linux-$(LINUX_HEADERS_VERSION).tar.gz
+> +else ifeq ($(BR2_LINUX_KERNEL_CUSTOM_DIRECTORY),y)
+> +LINUX_HEADERS_SITE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_DIRECTORY_LOCATION))
+> +LINUX_HEADERS_SITE_METHOD = local
+>  else
+>  LINUX_HEADERS_SOURCE = linux-$(LINUX_HEADERS_VERSION).tar.xz
+>  # In X.Y.Z, get X and Y. We replace dots and dashes by spaces in order
+> @@ -122,6 +125,7 @@ define LINUX_HEADERS_INSTALL_STAGING_CMDS
+>  			headers_install)
+>  endef
+>  
+> +ifneq ($(BR2_LINUX_KERNEL_CUSTOM_DIRECTORY),y)
+>  ifeq ($(BR2_KERNEL_HEADERS_VERSION)$(BR2_KERNEL_HEADERS_AS_KERNEL),y)
+>  define LINUX_HEADERS_CHECK_VERSION
+>  	$(call check_kernel_headers_version,\
+> @@ -130,5 +134,6 @@ define LINUX_HEADERS_CHECK_VERSION
+>  endef
+>  LINUX_HEADERS_POST_INSTALL_STAGING_HOOKS += LINUX_HEADERS_CHECK_VERSION
+>  endif
+> +endif
+>  
+>  $(eval $(generic-package))
+> -- 
+> 2.7.4
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
