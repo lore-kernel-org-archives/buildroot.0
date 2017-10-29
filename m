@@ -1,33 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 29 Oct 2017 18:27:40 +0100
-Subject: [Buildroot] [git commit] package/libnfs: allow parallel build
-Message-ID: <20171029172109.2D8B580159@busybox.osuosl.org>
+Date: Sun, 29 Oct 2017 18:29:19 +0100
+Subject: [Buildroot] [PATCH 1/2] package/libnfs: bump version to 2.0.0
+In-Reply-To: <20171029150420.3384-1-bernd.kuhls@t-online.de>
+References: <20171029150420.3384-1-bernd.kuhls@t-online.de>
+Message-ID: <20171029182919.7100fb30@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2fe501818aaf12c4078cce0422495140b0be3d6c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Tested with BR2_JLEVEL=100.
+On Sun, 29 Oct 2017 16:04:19 +0100, Bernd Kuhls wrote:
+> Added license hash.
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/libnfs/libnfs.hash | 3 ++-
+>  package/libnfs/libnfs.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 2 deletions(-)
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/libnfs/libnfs.mk | 1 -
- 1 file changed, 1 deletion(-)
+Both applied. Thanks!
 
-diff --git a/package/libnfs/libnfs.mk b/package/libnfs/libnfs.mk
-index 3636a2a..d961fd1 100644
---- a/package/libnfs/libnfs.mk
-+++ b/package/libnfs/libnfs.mk
-@@ -8,7 +8,6 @@ LIBNFS_VERSION = libnfs-2.0.0
- LIBNFS_SITE = $(call github,sahlberg,libnfs,$(LIBNFS_VERSION))
- LIBNFS_INSTALL_STAGING = YES
- LIBNFS_AUTORECONF = YES
--LIBNFS_MAKE = $(MAKE1)
- LIBNFS_LICENSE = LGPL-2.1+
- LIBNFS_LICENSE_FILES = LICENCE-LGPL-2.1.txt
- LIBNFS_DEPENDENCIES = host-pkgconf
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
