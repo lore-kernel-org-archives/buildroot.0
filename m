@@ -1,33 +1,42 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 29 Oct 2017 16:04:20 +0100
-Subject: [Buildroot] [PATCH 2/2] package/libnfs: allow parallel build
-In-Reply-To: <20171029150420.3384-1-bernd.kuhls@t-online.de>
-References: <20171029150420.3384-1-bernd.kuhls@t-online.de>
-Message-ID: <20171029150420.3384-2-bernd.kuhls@t-online.de>
+Date: Sun, 29 Oct 2017 16:04:19 +0100
+Subject: [Buildroot] [PATCH 1/2] package/libnfs: bump version to 2.0.0
+Message-ID: <20171029150420.3384-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Tested with BR2_JLEVEL=100.
+Added license hash.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/libnfs/libnfs.mk | 1 -
- 1 file changed, 1 deletion(-)
+ package/libnfs/libnfs.hash | 3 ++-
+ package/libnfs/libnfs.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
+diff --git a/package/libnfs/libnfs.hash b/package/libnfs/libnfs.hash
+index 27a9e5d349..cfe6678842 100644
+--- a/package/libnfs/libnfs.hash
++++ b/package/libnfs/libnfs.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+-sha256	7f6c62a05c7e0f0749f2b13f178a4ed7aaf17bd09e65a10bb147bfe9807da272	libnfs-libnfs-1.10.0.tar.gz
++sha256 7ea6cd8fa6c461d01091e584d424d28e137d23ff4b65b95d01a3fd0ef95d120e  libnfs-libnfs-2.0.0.tar.gz
++sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENCE-LGPL-2.1.txt
 diff --git a/package/libnfs/libnfs.mk b/package/libnfs/libnfs.mk
-index 3636a2acee..d961fd1d4e 100644
+index b66a9be20b..3636a2acee 100644
 --- a/package/libnfs/libnfs.mk
 +++ b/package/libnfs/libnfs.mk
-@@ -8,7 +8,6 @@ LIBNFS_VERSION = libnfs-2.0.0
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBNFS_VERSION = libnfs-1.10.0
++LIBNFS_VERSION = libnfs-2.0.0
  LIBNFS_SITE = $(call github,sahlberg,libnfs,$(LIBNFS_VERSION))
  LIBNFS_INSTALL_STAGING = YES
  LIBNFS_AUTORECONF = YES
--LIBNFS_MAKE = $(MAKE1)
- LIBNFS_LICENSE = LGPL-2.1+
- LIBNFS_LICENSE_FILES = LICENCE-LGPL-2.1.txt
- LIBNFS_DEPENDENCIES = host-pkgconf
 -- 
 2.11.0
