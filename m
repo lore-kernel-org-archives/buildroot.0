@@ -1,32 +1,36 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 29 Oct 2017 13:40:08 +0100
-Subject: [Buildroot] [RESEND PATCH v4] libostree: new package
-References: <20171029093756.23671-1-marcus.folkesson@gmail.com>
-Message-ID: <8qugcexorq.ln2@ID-313208.user.individual.net>
+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Sun, 29 Oct 2017 13:43:43 +0100
+Subject: [Buildroot] "Buildroot: what's new" slides
+In-Reply-To: <20171027145402.2404fa4b@windsurf.lan>
+References: <20171027145402.2404fa4b@windsurf.lan>
+Message-ID: <20171029124343.GA18785@itchy>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Sun, 29 Oct 2017 10:37:56 +0100 schrieb Marcus Folkesson:
+Hi all!
+On 17-10-27 14:54:02, Thomas Petazzoni wrote:
 
-> OSTree is an upgrade system for Linux-based operating systems
-> 
-> Signed-off-by: Marcus Folkesson
-> <marcus.folkesson@gmail.com>
+>  - Is there some support for the Rust language. I mentioned the patches
+>    from Eric Le Bihan, and said help was definitely welcome.
 
-Hi,
+Regarding to this patch series, I did not sent a new version featuring
+latest Rust version (1.21.0), as there were some points to be cleared
+[1]:
 
-an additional note: The package is broken when used with musl:
+- should the standard library be available as a separate package?
+- how can the package providing the compiler as binary be used to
+  bootstrap the compiler built from source (in terms of Buildroot
+  package declaration)?
+- method for crate (Rust package) retrieval (i.e. package management).
 
-  CC       src/libostree/libostree_1_la-ostree-async-progress.lo
-In file included from ./libglnx/libglnx.h:33:0,
-                 from src/libostree/ostree-async-progress.c:24:
-./libglnx/glnx-dirfd.h: In function 'glnx_ensure_dir':
-./libglnx/glnx-dirfd.h:108:7: error: implicit declaration of function 
-'TEMP_FAILURE_RETRY' [-Werror=implicit-function-declaration]
-   if (TEMP_FAILURE_RETRY (mkdirat (dfd, path, mode)) != 0)
-       ^~~~~~~~~~~~~~~~~~
+Comments and suggestions welcome.
 
-Regards, Bernd
+[1] https://patchwork.ozlabs.org/comment/1764873/
+
+Regards,
+
+--
+ELB
