@@ -1,33 +1,49 @@
-From: Scott Ellis <scottellis.developer@gmail.com>
-Date: Sun, 29 Oct 2017 04:15:49 -0400
-Subject: [Buildroot] [PATCH] package/python-pyqt5: fix build with Qt 5.6.3'
-Message-ID: <1509264949-15907-1-git-send-email-scott@jumpnowtek.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 29 Oct 2017 10:12:49 +0100
+Subject: [Buildroot] [RFC 2/2] linux: Add support for specifying a
+ custom directory
+In-Reply-To: <20171029072649.GA2899@scaer>
+References: <1509242782-14524-1-git-send-email-f.fainelli@gmail.com>
+ <1509242782-14524-3-git-send-email-f.fainelli@gmail.com>
+ <20171029072649.GA2899@scaer>
+Message-ID: <20171029101249.19a91e32@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit adds 5_6_3 to the Timeline patch that fixed
-builds with Qt 5.6.2.
+Hello,
 
-Signed-off-by: Scott Ellis <scott@jumpnowtek.com>
----
- package/python-pyqt5/0002-fix-qt-5.6.2.patch | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Sun, 29 Oct 2017 08:26:49 +0100, Yann E. MORIN wrote:
 
-diff --git a/package/python-pyqt5/0002-fix-qt-5.6.2.patch b/package/python-pyqt5/0002-fix-qt-5.6.2.patch
-index a56af09..730104e 100644
---- a/package/python-pyqt5/0002-fix-qt-5.6.2.patch
-+++ b/package/python-pyqt5/0002-fix-qt-5.6.2.patch
-@@ -22,7 +22,7 @@ Index: PyQt5_gpl-5.7/sip/QtCore/QtCoremod.sip
-  %Module(name=PyQt5.QtCore, call_super_init=True, default_VirtualErrorHandler=PyQt5, keyword_arguments="Optional", version=1)
-  
- -%Timeline {Qt_5_0_0 Qt_5_0_1 Qt_5_0_2 Qt_5_1_0 Qt_5_1_1 Qt_5_2_0 Qt_5_2_1 Qt_5_3_0 Qt_5_3_1 Qt_5_3_2 Qt_5_4_0 Qt_5_4_1 Qt_5_4_2 Qt_5_5_0 Qt_5_5_1 Qt_5_6_0 Qt_5_6_1 Qt_5_7_0}
--+%Timeline {Qt_5_0_0 Qt_5_0_1 Qt_5_0_2 Qt_5_1_0 Qt_5_1_1 Qt_5_2_0 Qt_5_2_1 Qt_5_3_0 Qt_5_3_1 Qt_5_3_2 Qt_5_4_0 Qt_5_4_1 Qt_5_4_2 Qt_5_5_0 Qt_5_5_1 Qt_5_6_0 Qt_5_6_1 Qt_5_6_2 Qt_5_7_0}
-++%Timeline {Qt_5_0_0 Qt_5_0_1 Qt_5_0_2 Qt_5_1_0 Qt_5_1_1 Qt_5_2_0 Qt_5_2_1 Qt_5_3_0 Qt_5_3_1 Qt_5_3_2 Qt_5_4_0 Qt_5_4_1 Qt_5_4_2 Qt_5_5_0 Qt_5_5_1 Qt_5_6_0 Qt_5_6_1 Qt_5_6_2 Qt_5_6_3 Qt_5_7_0}
-  
-  %Platforms {WS_X11 WS_WIN WS_MACX}
-  
+> On 2017-10-28 19:06 -0700, Florian Fainelli spake thusly:
+> > Add the ability to specify a path to a custom directory where kernel sources
+> > may be contained. This is useful when doing kernel development in an existing
+> > git tree.  
+> 
+> This case is covered by the override-sourcedir mechanism.
+> 
+> Create a file (by default, local.mk) in your config directory (the one
+> with the Buildroot .config file), and edit this file with:
+> 
+>     LINUX_OVERRIDE_SRCDIR = /path/to/your/linux
+> 
+> and Buildroot will use that as a rsync source, instead of downloading
+> the kernel sources.
+> 
+> See also e782cd5b1bc (Revert "Added local directory as source of kernel
+> code") for more in-depth explanations. ;-)
+
+Fully agreed with Yann here: there is no point in adding a
+Linux-specific solution for this use case, as we already have a much
+more general solution that works for all packages, including the
+'linux' package.
+
+Best regards,
+
+Thomas
 -- 
-2.7.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
