@@ -1,115 +1,145 @@
 From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Sun, 29 Oct 2017 14:10:51 +0100
-Subject: [Buildroot] [PATCH v4 1/2] meson: new package
+Date: Sun, 29 Oct 2017 14:10:52 +0100
+Subject: [Buildroot] [PATCH v4 2/2] docs/manual: document meson-based
+	packages
 In-Reply-To: <20171029131052.18850-1-eric.le.bihan.dev@free.fr>
 References: <20171029131052.18850-1-eric.le.bihan.dev@free.fr>
-Message-ID: <20171029131052.18850-2-eric.le.bihan.dev@free.fr>
+Message-ID: <20171029131052.18850-3-eric.le.bihan.dev@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This new package provides the host variant of the Meson Build System, an
-open source build system meant to be both extremely fast, and as user
-friendly as possible.
-
-More precisely, Meson creates configuration files for the Ninja build
-system.
-
-Besides building Meson, it generates a configuration file
-("$(HOST_DIR)/etc/meson/cross-compilation.conf") to be used when
-cross-compiling a Meson-based project.
+Add instructions for adding a package which uses the Meson build system.
 
 Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 ---
- package/meson/cross-compilation.conf.in | 23 ++++++++++++++++++++++
- package/meson/meson.hash                |  3 +++
- package/meson/meson.mk                  | 35 +++++++++++++++++++++++++++++++++
- 3 files changed, 61 insertions(+)
- create mode 100644 package/meson/cross-compilation.conf.in
- create mode 100644 package/meson/meson.hash
- create mode 100644 package/meson/meson.mk
+ docs/manual/adding-packages-meson.txt | 101 ++++++++++++++++++++++++++++++++++
+ docs/manual/adding-packages.txt       |   2 +
+ 2 files changed, 103 insertions(+)
+ create mode 100644 docs/manual/adding-packages-meson.txt
 
-diff --git a/package/meson/cross-compilation.conf.in b/package/meson/cross-compilation.conf.in
+diff --git a/docs/manual/adding-packages-meson.txt b/docs/manual/adding-packages-meson.txt
 new file mode 100644
-index 0000000000..0eec74087b
+index 0000000000..65a0f6a962
 --- /dev/null
-+++ b/package/meson/cross-compilation.conf.in
-@@ -0,0 +1,23 @@
-+# Note: Buildroot's and Meson's terminologies differ about the meaning
-+# of 'build', 'host' and 'target':
-+# - Buildroot's 'host' is Meson's 'build'
-+# - Buildroot's 'target' is Meson's 'host'
++++ b/docs/manual/adding-packages-meson.txt
+@@ -0,0 +1,101 @@
++// -*- mode:doc; -*-
++// vim: set syntax=asciidoc:
 +
-+[binaries]
-+c = '@TARGET_CROSS at gcc'
-+cpp = '@TARGET_CROSS at g++'
-+ar = '@TARGET_CROSS at ar'
-+strip = '@TARGET_CROSS at strip'
-+pkgconfig = '@HOST_DIR@/usr/bin/pkg-config'
++=== Integration of Meson-based packages
 +
-+[properties]
-+c_args = [@TARGET_CFLAGS@]
-+c_link_args = [@TARGET_LDFLAGS@]
-+cpp_args = [@TARGET_CXXFLAGS@]
-+cpp_link_args = [@TARGET_LDFLAGS@]
++[[meson-package-tutorial]]
 +
-+[host_machine]
-+system = 'linux'
-+cpu_family ='@TARGET_ARCH@'
-+cpu = '@TARGET_CPU@'
-+endian = '@TARGET_ENDIAN@'
-diff --git a/package/meson/meson.hash b/package/meson/meson.hash
-new file mode 100644
-index 0000000000..412c10eb2f
---- /dev/null
-+++ b/package/meson/meson.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated after checking pgp signature
-+# https://github.com/mesonbuild/meson/releases/download/0.43.0/meson-0.43.0.tar.gz.asc
-+sha256 c513eca90e0d70bf14cd1eaafea2fa91cf40a73326a7ff61f08a005048057340  meson-0.43.0.tar.gz
-diff --git a/package/meson/meson.mk b/package/meson/meson.mk
-new file mode 100644
-index 0000000000..55ce84da07
---- /dev/null
-+++ b/package/meson/meson.mk
-@@ -0,0 +1,35 @@
-+################################################################################
-+#
-+# meson
-+#
-+################################################################################
++==== +meson-package+ tutorial
 +
-+MESON_VERSION = 0.43.0
-+MESON_SITE = https://github.com/mesonbuild/meson/releases/download/$(MESON_VERSION)
-+MESON_LICENSE = Apache-2.0
-+MESON_LICENSE_FILES = COPYING
-+MESON_SETUP_TYPE = setuptools
++http://mesonbuild.com[Meson] is an open source build system meant to be both
++extremely fast, and, even more importantly, as user friendly as possible.
 +
-+HOST_MESON_DEPENDENCIES = host-ninja
-+HOST_MESON_NEEDS_HOST_PYTHON = python3
++Buildroot does not (yet) provide a dedicated package infrastructure for
++meson-based packages. So, we will explain how to write a +.mk+ file for such a
++package. Let's start with an example:
 +
-+HOST_MESON_TARGET_ENDIAN = $(call LOWERCASE,$(BR2_ENDIAN))
-+HOST_MESON_TARGET_CPU = $(call qstrip,$(BR2_GCC_TARGET_CPU))
++------------------------------
++01: ################################################################################
++02: #
++03: # foo
++04: #
++05: ################################################################################
++06:
++07: FOO_VERSION = 1.0
++08: FOO_SOURCE = foo-$(FOO_VERSION).tar.gz
++09: FOO_SITE = http://www.foosoftware.org/download
++10: FOO_LICENSE = GPLv3+
++11: FOO_LICENSE_FILES = COPYING
++12: FOO_INSTALL_STAGING = YES
++13:
++14: FOO_DEPENDENCIES = host-meson host-pkgconf bar
++15:
++16: FOO_CONF_OPTS += \
++17: 	--prefix=/usr \
++18: 	--buildtype $(if $(BR2_ENABLE_DEBUG),debug,release) \
++19: 	--cross-file $(HOST_DIR)/etc/meson/cross-compilation.conf
++20:
++21: FOO_NINJA_OPTS = $(if $(VERBOSE),-v)
++22:
++23: ifeq ($(BR2_PACKAGE_BAZ),y)
++24: FOO_CONF_OPTS += -Dbaz
++25: endif
++26:
++27: define FOO_CONFIGURE_CMDS
++28: 	rm -rf $(@D)/build
++29: 	mkdir -p $(@D)/build
++30: 	$(TARGET_MAKE_ENV) meson $(FOO_CONF_OPTS) $(@D) $(@D)/build
++31: endef
++32:
++33: define FOO_BUILD_CMDS
++34: 	$(TARGET_MAKE_ENV) ninja $(FOO_NINJA_OPTS) -C $(@D)/build
++35: endef
++36:
++37: define FOO_INSTALL_TARGET_CMDS
++38: 	$(TARGET_MAKE_ENV) DESTDIR=$(TARGET_DIR) ninja $(FOO_NINJA_OPTS) \
++39: 		-C $(@D)/build install
++40: endef
++41:
++42: define FOO_INSTALL_STAGING_CMDS
++43: 	$(TARGET_MAKE_ENV) DESTDIR=$(STAGING_DIR) ninja $(FOO_NINJA_OPTS) \
++44: 		-C $(@D)/build install
++45: endef
++46:
++47: $(eval $(generic-package))
++--------------------------------
 +
-+define HOST_MESON_INSTALL_CROSS_CONF
-+	mkdir -p $(HOST_DIR)/etc/meson
-+	sed -e "s%@TARGET_CROSS@%$(TARGET_CROSS)%g" \
-+	    -e "s%@TARGET_ARCH@%$(ARCH)%g" \
-+	    -e "s%@TARGET_CPU@%$(HOST_MESON_TARGET_CPU)%g" \
-+	    -e "s%@TARGET_ENDIAN@%$(HOST_MESON_TARGET_ENDIAN)%g" \
-+	    -e "s%@TARGET_CFLAGS@%`printf '"%s", ' $(TARGET_CFLAGS)`%g" \
-+	    -e "s%@TARGET_LDFLAGS@%`printf '"%s", ' $(TARGET_LDFLAGS)`%g" \
-+	    -e "s%@TARGET_CXXFLAGS@%`printf '"%s", ' $(TARGET_CXXFLAGS)`%g" \
-+	    -e "s%@HOST_DIR@%$(HOST_DIR)%g" \
-+	    $(HOST_MESON_PKGDIR)/cross-compilation.conf.in \
-+	    > $(HOST_DIR)/etc/meson/cross-compilation.conf
-+endef
++The Makefile starts with the definition of the standard variables for package
++declaration (lines 7 to 11).
 +
-+HOST_MESON_POST_INSTALL_HOOKS += HOST_MESON_INSTALL_CROSS_CONF
++As seen in line 47, it is based on the
++xref:generic-package-tutorial[+generic-package+ infrastructure]. So, it defines
++the variables required by this particular infrastructure, where Meson and its
++companion tool, Ninja, are invoked:
 +
-+$(eval $(host-python-package))
++* +FOO_CONFIGURE_CMDS+: the build directory required by Meson is created, and
++  Meson is invoked to generate the Ninja build file. The options required to
++  configure the cross-compilation of the package are passed via
++  +FOO_CONF_OPTS+.
++
++* +FOO_BUILD_CMDS+: Ninja is invoked to perform the build.
++
++* +FOO_INSTALL_TARGET_CMDS+: Ninja is invoked to install the files generated
++  during the build step in the target directory.
++
++* +FOO_INSTALL_STAGING_CMDS+: Ninja is invoked to install the files generated
++  during the build step in the staging directory, as +FOO_INSTALL_STAGING+ is
++  set to "YES".
++
++In order to have Meson available for the build, +FOO_DEPENDENCIES+ needs to
++contain +host-meson+. In the example, +host-pkgconf+ and +bar+ are also
++declared as dependencies because the Meson build file of +foo+ uses `pkg-config`
++to determine the compilation flags and libraries of package +bar+.
++
++If the "baz" package is selected, then support for the "baz" feature in "foo"
++is activated by adding +-Dbaz+ to +FOO_CONF_OPTS+, as specified in the
+++meson_options.txt+ file in "foo" source tree.
++
++To sum it up, to add a new meson-based package, the Makefile example can be
++copied verbatim then edited to replace all occurences of +FOO+ with the
++uppercase name of the new package and update the values of the standard
++variables.
+diff --git a/docs/manual/adding-packages.txt b/docs/manual/adding-packages.txt
+index d577ff030e..e542124cf9 100644
+--- a/docs/manual/adding-packages.txt
++++ b/docs/manual/adding-packages.txt
+@@ -34,6 +34,8 @@ include::adding-packages-rebar.txt[]
+ 
+ include::adding-packages-waf.txt[]
+ 
++include::adding-packages-meson.txt[]
++
+ include::adding-packages-kernel-module.txt[]
+ 
+ include::adding-packages-asciidoc.txt[]
 -- 
 2.13.6
