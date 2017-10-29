@@ -1,30 +1,43 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 29 Oct 2017 17:14:04 +0100
-Subject: [Buildroot] [PATCH v4,1/1] boinc: new package
-References: <1499281026-4745-1-git-send-email-fontaine.fabrice@gmail.com>
-Message-ID: <cbbhcexqsq.ln2@ID-313208.user.individual.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 29 Oct 2017 17:34:56 +0100
+Subject: [Buildroot] [PATCH] package/libbsd: not available for arc
+In-Reply-To: <20171029155547.25602-1-yann.morin.1998@free.fr>
+References: <20171029155547.25602-1-yann.morin.1998@free.fr>
+Message-ID: <20171029173456.5007a31e@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Wed, 05 Jul 2017 20:57:06 +0200 schrieb Fabrice Fontaine:
+Hello,
 
-> Open-source software for volunteer computing and grid computing.
-> 
-> Use the idle time on your computer to cure diseases, study global
-> warming, discover pulsars, and do many other types of scientific
-> research.
-> 
-> https://boinc.berkeley.edu
-> 
-> Signed-off-by: Fabrice Fontaine
-> <fontaine.fabrice@gmail.com>
+On Sun, 29 Oct 2017 16:55:47 +0100, Yann E. MORIN wrote:
 
-Hi,
+> diff --git a/package/libbsd/Config.in b/package/libbsd/Config.in
+> index 9b5b89812f..091b668075 100644
+> --- a/package/libbsd/Config.in
+> +++ b/package/libbsd/Config.in
+> @@ -1,7 +1,9 @@
+>  config BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
+>  	bool
+> -	# libbsd does not support the MicroBlaze ELF machine type (see local-elf.h)
+> -	default y if !BR2_microblaze
+> +	# libbsd does not support those architectures (see src/local-elf.h)
+> +	default y
+> +	depends on !BR2_microblaze
+> +	depends on !BR2_arcle && !BR2_arcle
 
-superseded by v5 which includes my review:
-http://patchwork.ozlabs.org/patch/831762/
+Really? I guess you wanted to also exclude ARC big-endian, no?
 
-Regards, Bernd
+Also, I believe it would be useful to explain in the commit log why
+this problem was not visible before: because libbsd depends on glibc,
+and we only recently enabled glibc support for ARC.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
