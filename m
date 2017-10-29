@@ -1,76 +1,115 @@
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Sun, 29 Oct 2017 12:06:01 -0200
-Subject: [Buildroot] [PATCH v3 2/9] testing/infra/builder: split configure()
-	from build()
+Date: Sun, 29 Oct 2017 12:06:02 -0200
+Subject: [Buildroot] [PATCH v3 3/9] testing/infra/builder: build with target
+	and environment
 In-Reply-To: <20171029140608.26200-1-ricardo.martincoski@datacom.ind.br>
 References: <20171029140608.26200-1-ricardo.martincoski@datacom.ind.br>
-Message-ID: <20171029140608.26200-3-ricardo.martincoski@datacom.ind.br>
+Message-ID: <20171029140608.26200-4-ricardo.martincoski@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Some test cases don't use a full build as setup, so split the build()
-method into configure() and build().
-It allows a test case to perform configuration at the setup stage and
-the build inside the test itself.
+Make the builder able to call 'VAR1=1 make VAR2=2 target'.
 
-Call this new method just before build in the BRTest base class, to keep
-the current behavior for existing test cases.
+Allow to send extra parameters to be added to the end of make command
+line. It can be used for these purposes:
+ - to configure a br2-external, by passing 'BR2_EXTERNAL="dir"';
+ - to specify a make target, such as 'foo-source'.
+
+Allow to add variables to the environment in which make runs. It can be
+used to override values from environment, such as 'BR2_DL_DIR="dl"'.
 
 This change will be needed when adding a common class to test the git
 download infra.
 
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@datacom.ind.br>
-Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Cc: Arnout Vandecappelle <arnout@mind.be>
 ---
 Changes v2 -> v3:
-  - renumber 1 -> 2;
-  - rebased after new patch 1 "call make with empty env";
-  - removed reviewed tag because the rebase over new patch 1 is not
-    trivial (automatic);
+  - rebase after adding patch 1 to the series, which runs make using an
+    empty env;
+  - use docstring (Arnout Vandecappelle);
+  - use more descriptive parameter names (make_extra_opts,
+    make_extra_env) (Arnout Vandecappelle);
+  - default make_extra_env to {} and use update() (Arnout
+    Vandecappelle);
+  - for consistence I did the equivalent to make_extra_opts;
+  - for symmetry, use make_extra_env also in the configure() (Arnout
+    Vandecappelle);
+  - remove old example from commit message since using a static repo to
+    test git refs do not need to override _VERSION.
 
 Changes v1 -> v2:
-  - new patch to adapt the test infra to test git download
+  - new patch to adapt the test infra to test git download;
 ---
- support/testing/infra/basetest.py | 1 +
- support/testing/infra/builder.py  | 4 +++-
- 2 files changed, 4 insertions(+), 1 deletion(-)
+ support/testing/infra/builder.py | 38 ++++++++++++++++++++++++++++++++++----
+ 1 file changed, 34 insertions(+), 4 deletions(-)
 
-diff --git a/support/testing/infra/basetest.py b/support/testing/infra/basetest.py
-index b85e8627fd..f3f13ad97f 100644
---- a/support/testing/infra/basetest.py
-+++ b/support/testing/infra/basetest.py
-@@ -58,6 +58,7 @@ class BRTest(unittest.TestCase):
- 
-         if not self.b.is_finished():
-             self.show_msg("Building")
-+            self.b.configure()
-             self.b.build()
-             self.show_msg("Building done")
- 
 diff --git a/support/testing/infra/builder.py b/support/testing/infra/builder.py
-index 36f4801a2d..faf1eb1494 100644
+index faf1eb1494..d478c0d212 100644
 --- a/support/testing/infra/builder.py
 +++ b/support/testing/infra/builder.py
-@@ -12,7 +12,7 @@ class Builder(object):
+@@ -12,7 +12,18 @@ class Builder(object):
          self.builddir = builddir
          self.logfile = infra.open_log_file(builddir, "build", logtofile)
  
--    def build(self):
-+    def configure(self):
+-    def configure(self):
++    def configure(self, make_extra_opts=[], make_extra_env={}):
++        """
++        Configure the build.
++
++        make_extra_opts: a list of arguments to be passed to the make
++        command.
++        e.g. make_extra_opts=["BR2_EXTERNAL=/path"]
++
++        make_extra_env: a dict of variables to be appended (or replaced)
++        in the environment that calls make.
++        e.g. make_extra_env={"BR2_DL_DIR": "/path"}
++        """
          if not os.path.isdir(self.builddir):
              os.makedirs(self.builddir)
  
-@@ -33,6 +33,8 @@ class Builder(object):
+@@ -25,17 +36,36 @@ class Builder(object):
+         self.logfile.flush()
+ 
+         env = {"PATH": os.environ["PATH"]}
++        env.update(make_extra_env)
++
+         cmd = ["make",
+-               "O={}".format(self.builddir),
+-               "olddefconfig"]
++               "O={}".format(self.builddir)]
++        cmd += make_extra_opts
++        cmd += ["olddefconfig"]
++
+         ret = subprocess.call(cmd, stdout=self.logfile, stderr=self.logfile,
+                               env=env)
          if ret != 0:
              raise SystemError("Cannot olddefconfig")
  
-+    def build(self):
-+        env = {"PATH": os.environ["PATH"]}
+-    def build(self):
++    def build(self, make_extra_opts=[], make_extra_env={}):
++        """
++        Perform the build.
++
++        make_extra_opts: a list of arguments to be passed to the make
++        command. It can include a make target.
++        e.g. make_extra_opts=["foo-source"]
++
++        make_extra_env: a dict of variables to be appended (or replaced)
++        in the environment that calls make.
++        e.g. make_extra_env={"BR2_DL_DIR": "/path"}
++        """
+         env = {"PATH": os.environ["PATH"]}
++        env.update(make_extra_env)
++
          cmd = ["make", "-C", self.builddir]
++        cmd += make_extra_opts
++
          ret = subprocess.call(cmd, stdout=self.logfile, stderr=self.logfile,
                                env=env)
+         if ret != 0:
 -- 
 2.14.2
