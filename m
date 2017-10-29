@@ -1,153 +1,102 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 29 Oct 2017 18:14:39 +0100
-Subject: [Buildroot] [PATCH 4/5] test-pkg: test a subset of toolchains by
-	default, add -a and -n options
-In-Reply-To: <20171029171440.8095-1-thomas.petazzoni@free-electrons.com>
-References: <20171029171440.8095-1-thomas.petazzoni@free-electrons.com>
-Message-ID: <20171029171440.8095-5-thomas.petazzoni@free-electrons.com>
+Date: Sun, 29 Oct 2017 15:51:20 +0100
+Subject: [Buildroot] [git commit] socat: bump down to version 1.7.3.2
+Message-ID: <20171029170744.D45D47FF6F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-During the latest Buildroot Developers meeting, we discussed that
-test-pkg would perhaps be more widely used if it tested a smaller
-subset of toolchains. Indeed, it currently tests 47 toolchains, which
-takes very long to build. Several of the toolchain configurations are
-quite similar, and it is perhaps not necessary for contributors to
-test them all before submitting a package.
+commit: https://git.buildroot.net/buildroot/commit/?id=e697d86d55a480bfd778b43b3b9c594b45b6596c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Therefore, this commit changes the test-pkg script to only test a
-subset of the toolchain configurations by default. The N first
-configurations of the CSV files are tested, where N is hard-coded in
-the script. The CSV file has therefore been re-organized to have the
-first N toolchains be the most important ones.
+Upstream socat2 branch seems to be dead. Last commit is from January
+2016 . Over the last few years socat2 received only fixes cherry picked
+from the master 1.x branch. Most major general purpose distros only
+package socat 1.x.
 
-A -a/--all option is added to test with all toolchains, while a
--n/--number option is added to test with the first N toolchains, N
-being passed on the command line.
+Drop the threads dependency; not needed for 1.x.
 
-Note that the list of toolchains (built in the "toolchains" shell
-variable) is no longer sorted. Indeed, when the first N toolchains are
-tested, we want them to be tested in the same order as they are listed
-in the CSV file, as we are careful to order them in an interesting
-order. We only sort when all toolchains are tested.
+Mention the OpenSSL exception in the license. Add hashes for license
+files.
 
+Correct the autoconf comment. The tarball configure script is recent
+enough. But since we patch configure.in and Makefile.in we still need to
+autoconf.
+
+All patches we carry for socat2 are also needed for socat 1.x.
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- utils/test-pkg | 56 +++++++++++++++++++++++++++++++++++++++++++++++++-------
- 1 file changed, 49 insertions(+), 7 deletions(-)
+ package/socat/Config.in  |  5 -----
+ package/socat/socat.hash |  8 ++++++--
+ package/socat/socat.mk   | 13 ++++++-------
+ 3 files changed, 12 insertions(+), 14 deletions(-)
 
-diff --git a/utils/test-pkg b/utils/test-pkg
-index 1b7046eac4..54e5ad8bbb 100755
---- a/utils/test-pkg
-+++ b/utils/test-pkg
-@@ -5,16 +5,19 @@ TOOLCHAINS_CSV='support/config-fragments/autobuild/toolchain-configs.csv'
+diff --git a/package/socat/Config.in b/package/socat/Config.in
+index 09eb2b6..af456ab 100644
+--- a/package/socat/Config.in
++++ b/package/socat/Config.in
+@@ -1,12 +1,7 @@
+ config BR2_PACKAGE_SOCAT
+ 	bool "socat"
+-	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_MMU # fork()
+ 	help
+ 	  Multipurpose socket relay program.
  
- main() {
-     local o O opts
--    local cfg dir pkg random toolchains_dir toolchain
-+    local cfg dir pkg random toolchains_dir toolchain all number mode
-     local ret nb nb_skip nb_fail nb_legal nb_tc build_dir
-     local -a toolchains
+ 	  http://www.dest-unreach.org/socat/
+-
+-comment "socat needs a toolchain w/ threads"
+-	depends on BR2_USE_MMU
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/socat/socat.hash b/package/socat/socat.hash
+index d867d8a..77abcf2 100644
+--- a/package/socat/socat.hash
++++ b/package/socat/socat.hash
+@@ -1,4 +1,8 @@
+ # From http://www.dest-unreach.org/socat/download.md5sum
+-md5	553b1593d0a192cb09cbdc687ef1baac	socat-2.0.0-b9.tar.bz2
++md5	607a24c15bd2cb54e9328bfbbd3a1ae9	socat-1.7.3.2.tar.bz2
+ # Calculated based on the hash above
+-sha256	49efb0a5c66b94b279014addc2851faf8ebbd1ec4b7e31c1de7e912d7b4983d2	socat-2.0.0-b9.tar.bz2
++sha256	e3561f808739383eb10fada1e5d4f26883f0311b34fd0af7837d0c95ef379251	socat-1.7.3.2.tar.bz2
++# Locally calculated
++sha256	4846488cea98a2905dc75b7aa5eea721568e372447efe06b85bd896ee8c54f10	README
++sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYING
++sha256	fd9e48ca316a5032069b9521f4f4b4d9b1c60365012bae1e62286bcd5bd2e761	COPYING.OpenSSL
+diff --git a/package/socat/socat.mk b/package/socat/socat.mk
+index 97f6c5b..5fea067 100644
+--- a/package/socat/socat.mk
++++ b/package/socat/socat.mk
+@@ -4,11 +4,11 @@
+ #
+ ################################################################################
  
--    o='hc:d:p:r:t:'
-+    o='han:c:d:p:r:t:'
-     O='help,config-snippet:build-dir:package:,random:,toolchains-dir:'
-     opts="$(getopt -n "${my_name}" -o "${o}" -l "${O}" -- "${@}")"
-     eval set -- "${opts}"
+-SOCAT_VERSION = 2.0.0-b9
++SOCAT_VERSION = 1.7.3.2
+ SOCAT_SOURCE = socat-$(SOCAT_VERSION).tar.bz2
+ SOCAT_SITE = http://www.dest-unreach.org/socat/download
+-SOCAT_LICENSE = GPL-2.0
+-SOCAT_LICENSE_FILES = COPYING
++SOCAT_LICENSE = GPL-2.0 with OpenSSL exception
++SOCAT_LICENSE_FILES = README COPYING COPYING.OpenSSL
  
-     random=0
-+    all=0
-+    number=0
-+    mode=0
-     toolchains_csv="${TOOLCHAINS_CSV}"
-     while [ ${#} -gt 0 ]; do
-         case "${1}" in
-@@ -33,6 +36,12 @@ main() {
-         (-r|--random)
-             random="${2}"; shift 2
-             ;;
-+	(-a|--all)
-+            all=1; shift 1
-+            ;;
-+	(-n|--number)
-+            number="${2}"; shift 2
-+            ;;
-         (-t|--toolchains-csv)
-             toolchains_csv="${2}"; shift 2
-             ;;
-@@ -51,15 +60,37 @@ main() {
-         dir="${HOME}/br-test-pkg"
-     fi
+ SOCAT_CONF_ENV = sc_cv_termios_ispeed=no
  
-+    if [ ${random} -gt 0 ]; then
-+        mode=$((mode+1))
-+    fi
-+
-+    if [ ${number} -gt 0 ]; then
-+        mode=$((mode+1))
-+    fi
-+
-+    if [ ${all} -eq 1 ]; then
-+        mode=$((mode+1))
-+    fi
-+
-+    # Default mode is to test the N first toolchains, which have been
-+    # chosen to be a good selection of toolchains.
-+    if [ ${mode} -eq 0 ] ; then
-+        number=7
-+    elif [ ${mode} -gt 1 ] ; then
-+        printf "error: --all, --number and --random are mutually exclusive\n" >&2; exit 1
-+    fi
-+
-     # Extract the URLs of the toolchains; drop internal toolchains
-     # E.g.: http://server/path/to/name.config,arch,libc
-     #  -->  http://server/path/to/name.config
-     toolchains=($(sed -r -e 's/,.*//; /internal/d; /^#/d; /^$/d;' "${toolchains_csv}" \
-                   |if [ ${random} -gt 0 ]; then \
-                       sort -R |head -n ${random}
--                   else
--                      cat
--                   fi |sort
-+                  elif [ ${number} -gt 0 ]; then \
-+                      head -n ${number}
-+                  else
-+                      sort
-+                  fi
-                  )
-                )
+@@ -24,10 +24,9 @@ SOCAT_CONF_ENV += \
+ 	sc_cv_sys_csize_shift=4
+ endif
  
-@@ -156,6 +187,10 @@ toolchain config fragment and the required host architecture, separated by a
- comma. The config fragments should contain only the toolchain and architecture
- settings.
+-# We need to run autoconf to regenerate the configure script, in order
+-# to ensure that the test checking linux/ext2_fs.h works
+-# properly. However, the package only uses autoconf and not automake,
+-# so we can't use the normal autoreconf logic.
++# We need to run autoconf to regenerate the configure script, since we patch
++# configure.in and Makefile.in. However, the package only uses autoconf and not
++# automake, so we can't use the normal autoreconf logic.
  
-+By default, a useful subset of toolchains is tested. If needed, all
-+toolchains can be tested (-a), an arbitrary number of toolchains (-n
-+in order, -r for random).
-+
- Options:
+ SOCAT_DEPENDENCIES = host-autoconf
  
-     -h, --help
-@@ -172,9 +207,16 @@ Options:
-         Test-build the package PKG, by running 'make PKG'; if not specified,
-         just runs 'make'.
- 
-+    -a, --all
-+        Test all toolchains, instead of the default subset defined by
-+        Buildroot developers.
-+
-+    -n N, --number N
-+        Test N toolchains, in the order defined in the toolchain CSV
-+        file.
-+
-     -r N, --random N
--        Limit the tests to the N randomly selected toolchains, instead of
--        building with all toolchains.
-+        Limit the tests to the N randomly selected toolchains.
- 
-     -t CSVFILE, --toolchains-csv CSVFILE
-         CSV file containing the paths to config fragments of toolchains to
--- 
-2.13.6
