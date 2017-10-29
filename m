@@ -1,80 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 29 Oct 2017 18:14:38 +0100
-Subject: [Buildroot] [PATCH 3/5] toolchain-configs.csv: re-organize for
-	test-pkg
-In-Reply-To: <20171029171440.8095-1-thomas.petazzoni@free-electrons.com>
-References: <20171029171440.8095-1-thomas.petazzoni@free-electrons.com>
-Message-ID: <20171029171440.8095-4-thomas.petazzoni@free-electrons.com>
+Date: Sun, 29 Oct 2017 18:14:35 +0100
+Subject: [Buildroot] [PATCH 0/5] test-pkg: by default only test a subset of
+	toolchains
+Message-ID: <20171029171440.8095-1-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit reorganizes the toolchain-configs.csv so that the first
-toolchains are a subset of "useful" toolchains to be tested by
-contributors to validate a package. This subset is the one that will
-be used by default by test-pkg.
+Hello,
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- .../autobuild/toolchain-configs.csv                | 30 +++++++++++++++++-----
- 1 file changed, 24 insertions(+), 6 deletions(-)
+During the Buildroot Developers meeting, we discussed how to make
+test-pkg more usable for our contributors. Our idea is that test-pkg
+should not test all toolchains by default, but only a smaller subset
+of "interesting" toolchains, that exhibit the most common problems we
+encounter with new packages.
 
-diff --git a/support/config-fragments/autobuild/toolchain-configs.csv b/support/config-fragments/autobuild/toolchain-configs.csv
-index efb78eec4f..53d1d7234a 100644
---- a/support/config-fragments/autobuild/toolchain-configs.csv
-+++ b/support/config-fragments/autobuild/toolchain-configs.csv
-@@ -1,18 +1,37 @@
-+# This file is sorted by "importance" of toolchains, so that by
-+# default test-pkg tests a useful subset of toolchains
-+
-+# Test a regular uClibc toolchain
-+support/config-fragments/autobuild/br-arm-full.config,x86_64
-+
-+# Test a toolchain with glibc and a very recent gcc version
-+support/config-fragments/autobuild/br-arm-cortex-a9-glibc.config,x86_64
-+
-+# Test a noMMU toolchain with no dynamic library support
-+support/config-fragments/autobuild/br-arm-cortex-m4-full.config,x86_64
-+
-+# Test a musl toolchain
-+support/config-fragments/autobuild/br-x86-64-musl.config,x86_64
-+
-+# Test a noMMU toolchain with dynamic library support
-+support/config-fragments/autobuild/br-bfin-full.config,x86_64
-+
-+# Test a MMU toolchain without dynamic library support
-+support/config-fragments/autobuild/br-arm-full-static.config,x86_64
-+
-+# Test a toolchain with an old gcc version (gcc 4.8)
- support/config-fragments/autobuild/armv5-ctng-linux-gnueabi.config,x86
-+
-+# All other toolchains
- support/config-fragments/autobuild/armv7-ctng-linux-gnueabihf.config,x86
- support/config-fragments/autobuild/br-aarch64-glibc.config,x86_64
- support/config-fragments/autobuild/br-arc-full-internal.config,any
- support/config-fragments/autobuild/br-arc-internal-glibc.config,any
- support/config-fragments/autobuild/br-arcle-hs38.config,x86_64
- support/config-fragments/autobuild/br-arm-basic.config,x86_64
--support/config-fragments/autobuild/br-arm-cortex-a9-glibc.config,x86_64
- support/config-fragments/autobuild/br-arm-cortex-a9-musl.config,x86_64
--support/config-fragments/autobuild/br-arm-cortex-m4-full.config,x86_64
--support/config-fragments/autobuild/br-arm-full.config,x86_64
- support/config-fragments/autobuild/br-arm-full-nothread.config,x86_64
--support/config-fragments/autobuild/br-arm-full-static.config,x86_64
- support/config-fragments/autobuild/br-arm-internal-full.config,any
--support/config-fragments/autobuild/br-bfin-full.config,x86_64
- support/config-fragments/autobuild/br-i386-pentium4-full.config,x86_64
- support/config-fragments/autobuild/br-i386-pentium-mmx-musl.config,x86_64
- support/config-fragments/autobuild/br-m68k-5208-full.config,x86_64
-@@ -34,7 +53,6 @@ support/config-fragments/autobuild/br-sh4-full.config,x86_64
- support/config-fragments/autobuild/br-sparc-uclibc.config,x86_64
- support/config-fragments/autobuild/br-sparc64-glibc.config,x86_64
- support/config-fragments/autobuild/br-x86-64-core2-full.config,x86_64
--support/config-fragments/autobuild/br-x86-64-musl.config,x86_64
- support/config-fragments/autobuild/br-xtensa-full.config,x86_64
- support/config-fragments/autobuild/br-xtensa-full-internal.config,any
- support/config-fragments/autobuild/i686-ctng-linux-gnu.config,x86
+This series does that by:
+
+ - Fixing genrandconfig and test-pkg to ignore comments and empty
+   lines in the toolchain CSV file.
+
+ - Adjust the toolchain CSV file to have the interesting toolchains
+   first, adding comments and empty lines along the way to clarify
+   what is going on.
+
+ - Update test-pkg to test only the first 7 toolchains, add a --all
+   option to test all toolchains, and a --number option to test only
+   the first N toolchains.
+
+ - Update the Buildroot manual accordingly.
+
+Thanks!
+
+Thomas
+
+Thomas Petazzoni (5):
+  utils/genrandconfig: filter empty lines and comments in CSV file
+  test-pkg: filter empty lines and comments in CSV file
+  toolchain-configs.csv: re-organize for test-pkg
+  test-pkg: test a subset of toolchains by default, add -a and -n
+    options
+  docs/manual: update the documentation about test-pkg
+
+ docs/manual/adding-packages-tips.txt               | 11 ++--
+ .../autobuild/toolchain-configs.csv                | 30 ++++++++---
+ utils/genrandconfig                                |  5 +-
+ utils/test-pkg                                     | 58 +++++++++++++++++++---
+ 4 files changed, 86 insertions(+), 18 deletions(-)
+
 -- 
 2.13.6
