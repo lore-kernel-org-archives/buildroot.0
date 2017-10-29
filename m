@@ -1,54 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 29 Oct 2017 18:14:35 +0100
-Subject: [Buildroot] [PATCH 0/5] test-pkg: by default only test a subset of
-	toolchains
-Message-ID: <20171029171440.8095-1-thomas.petazzoni@free-electrons.com>
+Date: Sun, 29 Oct 2017 18:14:40 +0100
+Subject: [Buildroot] [PATCH 5/5] docs/manual: update the documentation about
+	test-pkg
+In-Reply-To: <20171029171440.8095-1-thomas.petazzoni@free-electrons.com>
+References: <20171029171440.8095-1-thomas.petazzoni@free-electrons.com>
+Message-ID: <20171029171440.8095-6-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ docs/manual/adding-packages-tips.txt | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
 
-During the Buildroot Developers meeting, we discussed how to make
-test-pkg more usable for our contributors. Our idea is that test-pkg
-should not test all toolchains by default, but only a smaller subset
-of "interesting" toolchains, that exhibit the most common problems we
-encounter with new packages.
-
-This series does that by:
-
- - Fixing genrandconfig and test-pkg to ignore comments and empty
-   lines in the toolchain CSV file.
-
- - Adjust the toolchain CSV file to have the interesting toolchains
-   first, adding comments and empty lines along the way to clarify
-   what is going on.
-
- - Update test-pkg to test only the first 7 toolchains, add a --all
-   option to test all toolchains, and a --number option to test only
-   the first N toolchains.
-
- - Update the Buildroot manual accordingly.
-
-Thanks!
-
-Thomas
-
-Thomas Petazzoni (5):
-  utils/genrandconfig: filter empty lines and comments in CSV file
-  test-pkg: filter empty lines and comments in CSV file
-  toolchain-configs.csv: re-organize for test-pkg
-  test-pkg: test a subset of toolchains by default, add -a and -n
-    options
-  docs/manual: update the documentation about test-pkg
-
- docs/manual/adding-packages-tips.txt               | 11 ++--
- .../autobuild/toolchain-configs.csv                | 30 ++++++++---
- utils/genrandconfig                                |  5 +-
- utils/test-pkg                                     | 58 +++++++++++++++++++---
- 4 files changed, 86 insertions(+), 18 deletions(-)
-
+diff --git a/docs/manual/adding-packages-tips.txt b/docs/manual/adding-packages-tips.txt
+index 824f07547d..113172d0ab 100644
+--- a/docs/manual/adding-packages-tips.txt
++++ b/docs/manual/adding-packages-tips.txt
+@@ -77,9 +77,14 @@ and what package to test:
+ $ ./utils/test-pkg -c libcurl.config -p libcurl
+ ----
+ 
+-This will try to build your package against all the toolchains used
+-by the autobuilders (except for the internal toolchains, because it takes
+-too long to do so). The output lists all toolchains and the corresponding
++By default, +test-pkg+ will build your package against a subset of the
++toolchains used by the autobuilders, which has been selected by the
++Buildroot developers as being the most useful and representative
++subset. If you want to test all toolchains, pass the +-a+ option. Note
++that in any case, internal toolchains are excluded as they take too
++long to build.
++
++The output lists all toolchains that are tested and the corresponding
+ result (excerpt, results are fake):
+ 
+ ----
 -- 
 2.13.6
