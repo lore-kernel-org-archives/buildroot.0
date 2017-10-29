@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 29 Oct 2017 18:35:36 +0100
-Subject: [Buildroot] [PATCH 3/5] toolchain-configs.csv: re-organize for
-	test-pkg
-In-Reply-To: <20171029171440.8095-4-thomas.petazzoni@free-electrons.com>
+Date: Sun, 29 Oct 2017 18:43:23 +0100
+Subject: [Buildroot] [PATCH 4/5] test-pkg: test a subset of toolchains
+ by default, add -a and -n options
+In-Reply-To: <20171029171440.8095-5-thomas.petazzoni@free-electrons.com>
 References: <20171029171440.8095-1-thomas.petazzoni@free-electrons.com>
- <20171029171440.8095-4-thomas.petazzoni@free-electrons.com>
-Message-ID: <20171029173536.GG2899@scaer>
+ <20171029171440.8095-5-thomas.petazzoni@free-electrons.com>
+Message-ID: <20171029174323.GH2899@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,104 +15,159 @@ To: buildroot@busybox.net
 Thomas, All,
 
 On 2017-10-29 18:14 +0100, Thomas Petazzoni spake thusly:
-> This commit reorganizes the toolchain-configs.csv so that the first
-> toolchains are a subset of "useful" toolchains to be tested by
-> contributors to validate a package. This subset is the one that will
-> be used by default by test-pkg.
-
-I would have done something else:
-
-    N:path:arch
-
-where:
-  - N is an integer that is the importance of the toolchain, in the
-    range [0..9], with 0 the most important and 9 the least important.
-
- - path and arch as they are today.
-
-So we'd tag the toolchains between 0 and 9, and default to test those <3
-for example.
-
-Which allows us to keep the ordering of the toolchain, which is nice.
-
-But I'm also OK with your solution, just suggesting an alternative.
-
+> During the latest Buildroot Developers meeting, we discussed that
+> test-pkg would perhaps be more widely used if it tested a smaller
+> subset of toolchains. Indeed, it currently tests 47 toolchains, which
+> takes very long to build. Several of the toolchain configurations are
+> quite similar, and it is perhaps not necessary for contributors to
+> test them all before submitting a package.
+> 
+> Therefore, this commit changes the test-pkg script to only test a
+> subset of the toolchain configurations by default. The N first
+> configurations of the CSV files are tested, where N is hard-coded in
+> the script. The CSV file has therefore been re-organized to have the
+> first N toolchains be the most important ones.
+> 
+> A -a/--all option is added to test with all toolchains, while a
+> -n/--number option is added to test with the first N toolchains, N
+> being passed on the command line.
+> 
+> Note that the list of toolchains (built in the "toolchains" shell
+> variable) is no longer sorted. Indeed, when the first N toolchains are
+> tested, we want them to be tested in the same order as they are listed
+> in the CSV file, as we are careful to order them in an interesting
+> order. We only sort when all toolchains are tested.
+> 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > ---
->  .../autobuild/toolchain-configs.csv                | 30 +++++++++++++++++-----
->  1 file changed, 24 insertions(+), 6 deletions(-)
+>  utils/test-pkg | 56 +++++++++++++++++++++++++++++++++++++++++++++++++-------
+>  1 file changed, 49 insertions(+), 7 deletions(-)
 > 
-> diff --git a/support/config-fragments/autobuild/toolchain-configs.csv b/support/config-fragments/autobuild/toolchain-configs.csv
-> index efb78eec4f..53d1d7234a 100644
-> --- a/support/config-fragments/autobuild/toolchain-configs.csv
-> +++ b/support/config-fragments/autobuild/toolchain-configs.csv
-> @@ -1,18 +1,37 @@
-> +# This file is sorted by "importance" of toolchains, so that by
-> +# default test-pkg tests a useful subset of toolchains
+> diff --git a/utils/test-pkg b/utils/test-pkg
+> index 1b7046eac4..54e5ad8bbb 100755
+> --- a/utils/test-pkg
+> +++ b/utils/test-pkg
+> @@ -5,16 +5,19 @@ TOOLCHAINS_CSV='support/config-fragments/autobuild/toolchain-configs.csv'
+>  
+>  main() {
+>      local o O opts
+> -    local cfg dir pkg random toolchains_dir toolchain
+> +    local cfg dir pkg random toolchains_dir toolchain all number mode
+>      local ret nb nb_skip nb_fail nb_legal nb_tc build_dir
+>      local -a toolchains
+>  
+> -    o='hc:d:p:r:t:'
+> +    o='han:c:d:p:r:t:'
 
-    # Toolchains used by default:
+Except for 'h' which is in a leading position, all other options where
+in alphabetical order.
 
-> +# Test a regular uClibc toolchain
-> +support/config-fragments/autobuild/br-arm-full.config,x86_64
-> +
-> +# Test a toolchain with glibc and a very recent gcc version
-> +support/config-fragments/autobuild/br-arm-cortex-a9-glibc.config,x86_64
-> +
-> +# Test a noMMU toolchain with no dynamic library support
-> +support/config-fragments/autobuild/br-arm-cortex-m4-full.config,x86_64
-> +
-> +# Test a musl toolchain
-> +support/config-fragments/autobuild/br-x86-64-musl.config,x86_64
-> +
-> +# Test a noMMU toolchain with dynamic library support
-> +support/config-fragments/autobuild/br-bfin-full.config,x86_64
-> +
-> +# Test a MMU toolchain without dynamic library support
-> +support/config-fragments/autobuild/br-arm-full-static.config,x86_64
-> +
-> +# Test a toolchain with an old gcc version (gcc 4.8)
->  support/config-fragments/autobuild/armv5-ctng-linux-gnueabi.config,x86
-> +
-> +# All other toolchains
+>      O='help,config-snippet:build-dir:package:,random:,toolchains-dir:'
+>      opts="$(getopt -n "${my_name}" -o "${o}" -l "${O}" -- "${@}")"
+>      eval set -- "${opts}"
+>  
+>      random=0
+> +    all=0
+> +    number=0
+> +    mode=0
+>      toolchains_csv="${TOOLCHAINS_CSV}"
+>      while [ ${#} -gt 0 ]; do
+>          case "${1}" in
+> @@ -33,6 +36,12 @@ main() {
+>          (-r|--random)
+>              random="${2}"; shift 2
+>              ;;
+> +	(-a|--all)
 
-    # All other toolchains, not used by default:
+This script uses leading spaces, not TABs.
 
-Do we want to reorder the remaining list by relevance, too, so that a
--n12 would pick the 12 most relevant toolchains?
+And keep options in aphabetical order. ;-)
 
-Or are we just happy that the 7 first are ordered, and we don't care
-about the rest?
+> +            all=1; shift 1
+> +            ;;
+> +	(-n|--number)
 
-I'm fine in either case.
+Ditto.
 
 Regards,
 Yann E. MORIN.
 
->  support/config-fragments/autobuild/armv7-ctng-linux-gnueabihf.config,x86
->  support/config-fragments/autobuild/br-aarch64-glibc.config,x86_64
->  support/config-fragments/autobuild/br-arc-full-internal.config,any
->  support/config-fragments/autobuild/br-arc-internal-glibc.config,any
->  support/config-fragments/autobuild/br-arcle-hs38.config,x86_64
->  support/config-fragments/autobuild/br-arm-basic.config,x86_64
-> -support/config-fragments/autobuild/br-arm-cortex-a9-glibc.config,x86_64
->  support/config-fragments/autobuild/br-arm-cortex-a9-musl.config,x86_64
-> -support/config-fragments/autobuild/br-arm-cortex-m4-full.config,x86_64
-> -support/config-fragments/autobuild/br-arm-full.config,x86_64
->  support/config-fragments/autobuild/br-arm-full-nothread.config,x86_64
-> -support/config-fragments/autobuild/br-arm-full-static.config,x86_64
->  support/config-fragments/autobuild/br-arm-internal-full.config,any
-> -support/config-fragments/autobuild/br-bfin-full.config,x86_64
->  support/config-fragments/autobuild/br-i386-pentium4-full.config,x86_64
->  support/config-fragments/autobuild/br-i386-pentium-mmx-musl.config,x86_64
->  support/config-fragments/autobuild/br-m68k-5208-full.config,x86_64
-> @@ -34,7 +53,6 @@ support/config-fragments/autobuild/br-sh4-full.config,x86_64
->  support/config-fragments/autobuild/br-sparc-uclibc.config,x86_64
->  support/config-fragments/autobuild/br-sparc64-glibc.config,x86_64
->  support/config-fragments/autobuild/br-x86-64-core2-full.config,x86_64
-> -support/config-fragments/autobuild/br-x86-64-musl.config,x86_64
->  support/config-fragments/autobuild/br-xtensa-full.config,x86_64
->  support/config-fragments/autobuild/br-xtensa-full-internal.config,any
->  support/config-fragments/autobuild/i686-ctng-linux-gnu.config,x86
+> +            number="${2}"; shift 2
+> +            ;;
+>          (-t|--toolchains-csv)
+>              toolchains_csv="${2}"; shift 2
+>              ;;
+> @@ -51,15 +60,37 @@ main() {
+>          dir="${HOME}/br-test-pkg"
+>      fi
+>  
+> +    if [ ${random} -gt 0 ]; then
+> +        mode=$((mode+1))
+> +    fi
+> +
+> +    if [ ${number} -gt 0 ]; then
+> +        mode=$((mode+1))
+> +    fi
+> +
+> +    if [ ${all} -eq 1 ]; then
+> +        mode=$((mode+1))
+> +    fi
+> +
+> +    # Default mode is to test the N first toolchains, which have been
+> +    # chosen to be a good selection of toolchains.
+> +    if [ ${mode} -eq 0 ] ; then
+> +        number=7
+> +    elif [ ${mode} -gt 1 ] ; then
+> +        printf "error: --all, --number and --random are mutually exclusive\n" >&2; exit 1
+> +    fi
+> +
+>      # Extract the URLs of the toolchains; drop internal toolchains
+>      # E.g.: http://server/path/to/name.config,arch,libc
+>      #  -->  http://server/path/to/name.config
+>      toolchains=($(sed -r -e 's/,.*//; /internal/d; /^#/d; /^$/d;' "${toolchains_csv}" \
+>                    |if [ ${random} -gt 0 ]; then \
+>                        sort -R |head -n ${random}
+> -                   else
+> -                      cat
+> -                   fi |sort
+> +                  elif [ ${number} -gt 0 ]; then \
+> +                      head -n ${number}
+> +                  else
+> +                      sort
+> +                  fi
+>                   )
+>                 )
+>  
+> @@ -156,6 +187,10 @@ toolchain config fragment and the required host architecture, separated by a
+>  comma. The config fragments should contain only the toolchain and architecture
+>  settings.
+>  
+> +By default, a useful subset of toolchains is tested. If needed, all
+> +toolchains can be tested (-a), an arbitrary number of toolchains (-n
+> +in order, -r for random).
+> +
+>  Options:
+>  
+>      -h, --help
+> @@ -172,9 +207,16 @@ Options:
+>          Test-build the package PKG, by running 'make PKG'; if not specified,
+>          just runs 'make'.
+>  
+> +    -a, --all
+> +        Test all toolchains, instead of the default subset defined by
+> +        Buildroot developers.
+> +
+> +    -n N, --number N
+> +        Test N toolchains, in the order defined in the toolchain CSV
+> +        file.
+> +
+>      -r N, --random N
+> -        Limit the tests to the N randomly selected toolchains, instead of
+> -        building with all toolchains.
+> +        Limit the tests to the N randomly selected toolchains.
+>  
+>      -t CSVFILE, --toolchains-csv CSVFILE
+>          CSV file containing the paths to config fragments of toolchains to
 > -- 
 > 2.13.6
 > 
