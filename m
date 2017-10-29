@@ -1,56 +1,44 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 29 Oct 2017 18:27:43 +0100
-Subject: [Buildroot] [PATCH 2/5] test-pkg: filter empty lines and
-	comments in CSV file
-In-Reply-To: <20171029171440.8095-3-thomas.petazzoni@free-electrons.com>
-References: <20171029171440.8095-1-thomas.petazzoni@free-electrons.com>
- <20171029171440.8095-3-thomas.petazzoni@free-electrons.com>
-Message-ID: <20171029172743.GF2899@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 29 Oct 2017 18:25:59 +0100
+Subject: [Buildroot] [git commit] package/libnfs: bump version to 2.0.0
+Message-ID: <20171029172109.1E2AE805E6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=271b8e19c634f1b3e6a60239ca2aa717e9822eb1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2017-10-29 18:14 +0100, Thomas Petazzoni spake thusly:
-> In preparation for the addition of comments in the CSV file listing
-> toolchain configurations, we filter out such lines when reading the
-> CSV file in utils/test-pkg.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Added license hash.
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libnfs/libnfs.hash | 3 ++-
+ package/libnfs/libnfs.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  utils/test-pkg | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/utils/test-pkg b/utils/test-pkg
-> index 6899d44f7c..1b7046eac4 100755
-> --- a/utils/test-pkg
-> +++ b/utils/test-pkg
-> @@ -54,7 +54,7 @@ main() {
->      # Extract the URLs of the toolchains; drop internal toolchains
->      # E.g.: http://server/path/to/name.config,arch,libc
->      #  -->  http://server/path/to/name.config
-> -    toolchains=($(sed -r -e 's/,.*//; /internal/d;' "${toolchains_csv}" \
-> +    toolchains=($(sed -r -e 's/,.*//; /internal/d; /^#/d; /^$/d;' "${toolchains_csv}" \
->                    |if [ ${random} -gt 0 ]; then \
->                        sort -R |head -n ${random}
->                     else
-> -- 
-> 2.13.6
-> 
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/libnfs/libnfs.hash b/package/libnfs/libnfs.hash
+index 27a9e5d..cfe6678 100644
+--- a/package/libnfs/libnfs.hash
++++ b/package/libnfs/libnfs.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+-sha256	7f6c62a05c7e0f0749f2b13f178a4ed7aaf17bd09e65a10bb147bfe9807da272	libnfs-libnfs-1.10.0.tar.gz
++sha256 7ea6cd8fa6c461d01091e584d424d28e137d23ff4b65b95d01a3fd0ef95d120e  libnfs-libnfs-2.0.0.tar.gz
++sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENCE-LGPL-2.1.txt
+diff --git a/package/libnfs/libnfs.mk b/package/libnfs/libnfs.mk
+index b66a9be..3636a2a 100644
+--- a/package/libnfs/libnfs.mk
++++ b/package/libnfs/libnfs.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBNFS_VERSION = libnfs-1.10.0
++LIBNFS_VERSION = libnfs-2.0.0
+ LIBNFS_SITE = $(call github,sahlberg,libnfs,$(LIBNFS_VERSION))
+ LIBNFS_INSTALL_STAGING = YES
+ LIBNFS_AUTORECONF = YES
