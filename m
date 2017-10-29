@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 29 Oct 2017 18:26:58 +0100
-Subject: [Buildroot] [PATCH 1/5] utils/genrandconfig: filter empty lines
- and comments in CSV file
-In-Reply-To: <20171029171440.8095-2-thomas.petazzoni@free-electrons.com>
+Date: Sun, 29 Oct 2017 18:27:43 +0100
+Subject: [Buildroot] [PATCH 2/5] test-pkg: filter empty lines and
+	comments in CSV file
+In-Reply-To: <20171029171440.8095-3-thomas.petazzoni@free-electrons.com>
 References: <20171029171440.8095-1-thomas.petazzoni@free-electrons.com>
- <20171029171440.8095-2-thomas.petazzoni@free-electrons.com>
-Message-ID: <20171029172658.GE2899@scaer>
+ <20171029171440.8095-3-thomas.petazzoni@free-electrons.com>
+Message-ID: <20171029172743.GF2899@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,47 +17,32 @@ Thomas, All,
 On 2017-10-29 18:14 +0100, Thomas Petazzoni spake thusly:
 > In preparation for the addition of comments in the CSV file listing
 > toolchain configurations, we filter out such lines when reading the
-> CSV file in utils/genrandconfig.
+> CSV file in utils/test-pkg.
 > 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Small nit, below...
-
-> ---
->  utils/genrandconfig | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/utils/genrandconfig b/utils/genrandconfig
-> index a67d46fad9..e963349d70 100755
-> --- a/utils/genrandconfig
-> +++ b/utils/genrandconfig
-> @@ -126,7 +126,9 @@ def get_toolchain_configs(toolchains_csv, buildrootdir):
->      """
->  
->      with open(toolchains_csv) as r:
-> -        toolchains = decode_byte_list(r.readlines())
-> +        # filter empty lines and comments
-> +        lines = [ t for t in r.readlines() if len(t.strip()) > 0 and t[0] != '#' ]
-> +        toolchains = decode_byte_list(lines)
->      configs = []
->  
->      (_, _, _, _, hostarch) = os.uname()
-> @@ -164,6 +166,7 @@ def get_toolchain_configs(toolchains_csv, buildrootdir):
->          with open(configfile) as r:
->              config = r.readlines()
->          configs.append(config)
-> +
-
-Spurious hunk.
-
 Regards,
 Yann E. MORIN.
 
->      return configs
->  
->  
+> ---
+>  utils/test-pkg | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/utils/test-pkg b/utils/test-pkg
+> index 6899d44f7c..1b7046eac4 100755
+> --- a/utils/test-pkg
+> +++ b/utils/test-pkg
+> @@ -54,7 +54,7 @@ main() {
+>      # Extract the URLs of the toolchains; drop internal toolchains
+>      # E.g.: http://server/path/to/name.config,arch,libc
+>      #  -->  http://server/path/to/name.config
+> -    toolchains=($(sed -r -e 's/,.*//; /internal/d;' "${toolchains_csv}" \
+> +    toolchains=($(sed -r -e 's/,.*//; /internal/d; /^#/d; /^$/d;' "${toolchains_csv}" \
+>                    |if [ ${random} -gt 0 ]; then \
+>                        sort -R |head -n ${random}
+>                     else
 > -- 
 > 2.13.6
 > 
