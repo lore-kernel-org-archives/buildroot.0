@@ -1,66 +1,29 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 30 Oct 2017 22:53:09 +0100
-Subject: [Buildroot] [PATCH] quagga: add upstream security fix for
-	CVE-2017-16227
-Message-ID: <20171030215309.21483-1-peter@korsgaard.com>
+Date: Mon, 30 Oct 2017 23:11:17 +0100
+Subject: [Buildroot] Unable to build an image with systemd
+In-Reply-To: <CAJCNcEb4+FOpcFD7ES6EHGtwWegY3WLxtFc6SsOS-ziY3dg-7g@mail.gmail.com>
+ (Gorka Lertxundi's message of "Mon, 30 Oct 2017 16:14:21 +0100")
+References: <CAJCNcEb8aemsJ3YrRwK78mv_XTAOsTx54mWaGBoy22uF6zAynA@mail.gmail.com>
+ <20171030153510.35066d4a@windsurf>
+ <CAJCNcEb4+FOpcFD7ES6EHGtwWegY3WLxtFc6SsOS-ziY3dg-7g@mail.gmail.com>
+Message-ID: <87she0i8vu.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From the advisory:
-http://www.openwall.com/lists/oss-security/2017/10/30/4
+>>>>> "Gorka" == Gorka Lertxundi <glertxundi@gmail.com> writes:
 
-It was discovered that the bgpd daemon in the Quagga routing suite does
-not properly calculate the length of multi-segment AS_PATH UPDATE
-messages, causing bgpd to drop a session and potentially resulting in
-loss of network connectivity.
+Hi,
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...x-AS_PATH-size-calculation-for-long-paths.patch | 33 ++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
- create mode 100644 package/quagga/0004-bgpd-Fix-AS_PATH-size-calculation-for-long-paths.patch
+ > I started taking the customizations from jumpnow (
+ > https://github.com/jumpnow/buildroot) and include them one-by-one on the
+ > original buildroot but when I changed from sysv to systemd this one failed
+ > to build.
 
-diff --git a/package/quagga/0004-bgpd-Fix-AS_PATH-size-calculation-for-long-paths.patch b/package/quagga/0004-bgpd-Fix-AS_PATH-size-calculation-for-long-paths.patch
-new file mode 100644
-index 0000000000..1425cf0426
---- /dev/null
-+++ b/package/quagga/0004-bgpd-Fix-AS_PATH-size-calculation-for-long-paths.patch
-@@ -0,0 +1,33 @@
-+From 7a42b78be9a4108d98833069a88e6fddb9285008 Mon Sep 17 00:00:00 2001
-+From: Andreas Jaggi <aj@open.ch>
-+Date: Mon, 2 Oct 2017 19:38:43 +0530
-+Subject: [PATCH] bgpd: Fix AS_PATH size calculation for long paths
-+
-+If you have an AS_PATH with more entries than
-+what can be written into a single AS_SEGMENT_MAX
-+it needs to be broken up.  The code that noticed
-+that the AS_PATH needs to be broken up was not
-+correctly calculating the size of the resulting
-+message.  This patch addresses this issue.
-+
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ bgpd/bgp_aspath.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/bgpd/bgp_aspath.c b/bgpd/bgp_aspath.c
-+index b7af5e88..d813bfba 100644
-+--- a/bgpd/bgp_aspath.c
-++++ b/bgpd/bgp_aspath.c
-+@@ -903,7 +903,7 @@ aspath_put (struct stream *s, struct aspath *as, int use32bit )
-+               assegment_header_put (s, seg->type, AS_SEGMENT_MAX);
-+               assegment_data_put (s, seg->as, AS_SEGMENT_MAX, use32bit);
-+               written += AS_SEGMENT_MAX;
-+-              bytes += ASSEGMENT_SIZE (written, use32bit);
-++              bytes += ASSEGMENT_SIZE (AS_SEGMENT_MAX, use32bit);
-+             }
-+           
-+           /* write the final segment, probably is also the first */
-+-- 
-+2.11.0
-+
+Just to be sure - You did a make clean when you changed from sysv to
+systemd, right?
+
 -- 
-2.11.0
+Bye, Peter Korsgaard
