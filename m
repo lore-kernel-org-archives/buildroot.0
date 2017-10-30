@@ -1,55 +1,90 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 30 Oct 2017 15:51:00 +0100
-Subject: [Buildroot] [git commit] domoticz: bump to version 3.8153
-Message-ID: <20171030144713.CBA84807D4@busybox.osuosl.org>
+From: Gorka Lertxundi <glertxundi@gmail.com>
+Date: Mon, 30 Oct 2017 16:14:21 +0100
+Subject: [Buildroot] Unable to build an image with systemd
+In-Reply-To: <20171030153510.35066d4a@windsurf>
+References: <CAJCNcEb8aemsJ3YrRwK78mv_XTAOsTx54mWaGBoy22uF6zAynA@mail.gmail.com>
+ <20171030153510.35066d4a@windsurf>
+Message-ID: <CAJCNcEb4+FOpcFD7ES6EHGtwWegY3WLxtFc6SsOS-ziY3dg-7g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=29b3305cde7dee80ac5374aa20d753e1e6cee86e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Thanks for getting me this fast.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/domoticz/domoticz.hash | 2 +-
- package/domoticz/domoticz.mk   | 9 ++++++++-
- 2 files changed, 9 insertions(+), 2 deletions(-)
+2017-10-30 15:35 GMT+01:00 Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com>:
 
-diff --git a/package/domoticz/domoticz.hash b/package/domoticz/domoticz.hash
-index 7feab8f..103618d 100644
---- a/package/domoticz/domoticz.hash
-+++ b/package/domoticz/domoticz.hash
-@@ -1,2 +1,2 @@
- # Locally computed:
--sha256	fb88edbe428851a7a337a85faa93f6da00713b3ad086ff6957031dc9b3b58bba	domoticz-3.5877.tar.gz
-+sha256	5ea8f37f2ef900e9bd17b1b5375e75bfdec4f09001e3e2e0b647a260989d014c	domoticz-3.8153.tar.gz
-diff --git a/package/domoticz/domoticz.mk b/package/domoticz/domoticz.mk
-index 59731b5..bd25708 100644
---- a/package/domoticz/domoticz.mk
-+++ b/package/domoticz/domoticz.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DOMOTICZ_VERSION = 3.5877
-+DOMOTICZ_VERSION = 3.8153
- DOMOTICZ_SITE = $(call github,domoticz,domoticz,$(DOMOTICZ_VERSION))
- DOMOTICZ_LICENSE = GPL-3.0
- DOMOTICZ_LICENSE_FILES = License.txt
-@@ -59,6 +59,13 @@ DOMOTICZ_DEPENDENCIES += openzwave
- DOMOTICZ_CONF_OPTS += -DUSE_STATIC_OPENZWAVE=OFF
- endif
- 
-+ifeq ($(BR2_PACKAGE_PYTHON3),y)
-+DOMOTICZ_DEPENDENCIES += python3
-+DOMOTICZ_CONF_OPTS += -DUSE_PYTHON=ON
-+else
-+DOMOTICZ_CONF_OPTS += -DUSE_PYTHON=OFF
-+endif
-+
- # Install domoticz in a dedicated directory (/opt/domoticz) as
- # domoticz expects by default that all its subdirectories (www,
- # Config, scripts, ...) are in the binary directory.
+> Hello,
+>
+> On Mon, 30 Oct 2017 13:57:24 +0100, Gorka Lertxundi wrote:
+>
+> > Yesterday I run into this issue I didn't know how to proceed, can anyone
+> > help me?
+> >
+> > configure: error: *** libmount support required but libraries not found
+> > package/pkg-generic.mk:217: recipe for target
+> > '/buildroot-src/output/build/systemd-234/.stamp_configured' failed
+> > make: *** [/buildroot-src/output/build/systemd-234/.stamp_configured]
+> Error
+> > 1
+>
+> Could you please provide a simple Buildroot .config that exhibits the
+> issue ?
+>
+
+https://gist.github.com/glerchundi/bafbb5c3b7b15c48e4058bb05d890edf
+
+
+>
+> > Cross compiling to ARM using the 2017.08.1 release which supposedly has
+> the
+> > systemd and libmount issue solved long time ago[1]. I don't know how it's
+> > possible my build is outputting that all the time.
+> >
+> > systemd uses pkg-config to check if libmount exists and, as expected,
+> using
+> > the host-deployed pkg-config wasn't able to find it.
+>
+> Why "as expected" ?
+>
+
+As expected because that was the reason why systemd failed in ./configure.
+That doesn't mean that it's the root of the problem of course, probably is
+my fault...
+
+
+>
+> > I manually created mount.pc in
+> > "output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/
+> lib/pkgconfig/mount.pc"
+>
+> Why would you do this? It should have been installed by util-linux.
+>
+> When reporting bug reports, please always include a Buildroot .config
+> file that allows to reproduce the issue. Also, make sure that the
+> problem is reproducible after a full clean build, i.e when doing "make
+> clean all".
+>
+
+Yeah, sounds reasonable. Will do next time sorry about that.
+
+I started taking the customizations from jumpnow (
+https://github.com/jumpnow/buildroot) and include them one-by-one on the
+original buildroot but when I changed from sysv to systemd this one failed
+to build.
+
+
+>
+> Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux and Kernel engineering
+> http://free-electrons.com
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20171030/0cb9b0ed/attachment.html>
