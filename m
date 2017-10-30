@@ -1,50 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 30 Oct 2017 20:43:36 +0100
-Subject: [Buildroot] [git commit] package/cryptodev-linux: bump to the
-	latest version (0a54e38)
-Message-ID: <20171030193655.5CA1B81047@busybox.osuosl.org>
+Date: Mon, 30 Oct 2017 20:43:37 +0100
+Subject: [Buildroot] [git commit] libmediaart: bump to version 1.9.4
+Message-ID: <20171030193655.70C1480737@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1a2a23a9a506b64e82f8ebab974ae25ceac4cc87
+commit: https://git.buildroot.net/buildroot/commit/?id=3f7499471d466fadc198541b62ee55843c5a5579
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The build of the cryptodev-linux version used in Buildroot is currently
-broken for kernels >= 4.13. A fix was pushed upstream:
-https://github.com/cryptodev-linux/cryptodev-linux/commit/f0d69774afb27ffc62bf353465fba145e70cb85a
-
-This patch bumps the cryptodev-linux package version to use the latest
-available one, which includes the commit fixing the build for recent
-kernels.
-
-Signed-off-by: Antoine Tenart <antoine.tenart@free-electrons.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/cryptodev-linux/cryptodev-linux.hash | 2 +-
- package/cryptodev-linux/cryptodev-linux.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libmediaart/libmediaart.hash | 4 ++--
+ package/libmediaart/libmediaart.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/cryptodev-linux/cryptodev-linux.hash b/package/cryptodev-linux/cryptodev-linux.hash
-index 6d9efca..48d608e 100644
---- a/package/cryptodev-linux/cryptodev-linux.hash
-+++ b/package/cryptodev-linux/cryptodev-linux.hash
+diff --git a/package/libmediaart/libmediaart.hash b/package/libmediaart/libmediaart.hash
+index 46e4035..65cf3cf 100644
+--- a/package/libmediaart/libmediaart.hash
++++ b/package/libmediaart/libmediaart.hash
 @@ -1,2 +1,2 @@
- # Locally calculated
--sha256 a87e354e1218e6a2e3083f7be6a3e351c42ec55515f1aff1b50bd301cee7d8dd cryptodev-linux-2b29be8ac41414ed19cb4f5d5626d9bd0d7b11a8.tar.gz
-+sha256 90a4c5e46d7d5fcc0c6155f1add824e73c27de9b1ff0b7fe2017a104cf9398dd cryptodev-linux-0a54e38b264d9a3bed74c642a61b88191660d0f8.tar.gz
-diff --git a/package/cryptodev-linux/cryptodev-linux.mk b/package/cryptodev-linux/cryptodev-linux.mk
-index 91802a7..dacb29d 100644
---- a/package/cryptodev-linux/cryptodev-linux.mk
-+++ b/package/cryptodev-linux/cryptodev-linux.mk
-@@ -4,7 +4,7 @@
- #
+-# Hash from: http://ftp.gnome.org/pub/gnome/sources/libmediaart/1.9/libmediaart-1.9.1.sha256sum:
+-sha256	5b14aa4e0cc84eaec57b6cb28f39092d503fdaecf36d5d165fac37583b7fe949	libmediaart-1.9.1.tar.xz
++# Hash from: http://ftp.gnome.org/pub/gnome/sources/libmediaart/1.9/libmediaart-1.9.4.sha256sum:
++sha256	a57be017257e4815389afe4f58fdacb6a50e74fd185452b23a652ee56b04813d	libmediaart-1.9.4.tar.xz
+diff --git a/package/libmediaart/libmediaart.mk b/package/libmediaart/libmediaart.mk
+index cac45f1..db4f1fa 100644
+--- a/package/libmediaart/libmediaart.mk
++++ b/package/libmediaart/libmediaart.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--CRYPTODEV_LINUX_VERSION = 2b29be8ac41414ed19cb4f5d5626d9bd0d7b11a8
-+CRYPTODEV_LINUX_VERSION = 0a54e38b264d9a3bed74c642a61b88191660d0f8
- CRYPTODEV_LINUX_SITE = $(call github,cryptodev-linux,cryptodev-linux,$(CRYPTODEV_LINUX_VERSION))
- CRYPTODEV_LINUX_INSTALL_STAGING = YES
- CRYPTODEV_LINUX_LICENSE = GPL-2.0+
+ LIBMEDIAART_VERSION_MAJOR = 1.9
+-LIBMEDIAART_VERSION = $(LIBMEDIAART_VERSION_MAJOR).1
++LIBMEDIAART_VERSION = $(LIBMEDIAART_VERSION_MAJOR).4
+ LIBMEDIAART_SOURCE = libmediaart-$(LIBMEDIAART_VERSION).tar.xz
+ LIBMEDIAART_SITE = \
+ 	http://ftp.gnome.org/pub/gnome/sources/libmediaart/$(LIBMEDIAART_VERSION_MAJOR)
