@@ -1,73 +1,97 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 30 Oct 2017 23:45:55 +0100
-Subject: [Buildroot] [PATCH] openssh: fix getpagesize() related static
-	linking issue
-Message-ID: <20171030224555.3220-1-peter@korsgaard.com>
+From: =?UTF-8?q?Stefan=20Fr=C3=B6berg?= <stefan.froberg@petroprogram.com>
+Date: Mon, 30 Oct 2017 07:09:36 +0000
+Subject: [Buildroot] [PATCH 1/1] turbovnc: new package
+Message-ID: <1509347376-12231-1-git-send-email-stefan.froberg@petroprogram.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/8cc/8cc30818a400c7a392a3de787cabc9cd8425495f/
+TurboVNC, a high-performance VNC.
 
-The configure script checks for getpagesize() and sets HAVE_GETPAGESIZE in
-config.h, but bsd-getpagesize.c forgot to include includes.h (which
-indirectly includes config.h) so the checks always fails, causing linker
-issues when linking statically on systems with getpagesize().
-
-Fix it by including includes.h.
-
-Patch submitted upstream:
-https://lists.mindrot.org/pipermail/openssh-unix-dev/2017-October/036413.html
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Stefan Fr?berg <stefan.froberg@petroprogram.com>
 ---
- ...pat-bsd-getpagesize.c-include-includes.h-.patch | 35 ++++++++++++++++++++++
- 1 file changed, 35 insertions(+)
- create mode 100644 package/openssh/0005-openbsd-compat-bsd-getpagesize.c-include-includes.h-.patch
+ package/Config.in              |  1 +
+ package/turbovnc/Config.in     | 16 ++++++++++++++++
+ package/turbovnc/turbovnc.hash |  5 +++++
+ package/turbovnc/turbovnc.mk   | 21 +++++++++++++++++++++
+ 4 files changed, 43 insertions(+)
+ create mode 100644 package/turbovnc/Config.in
+ create mode 100644 package/turbovnc/turbovnc.hash
+ create mode 100644 package/turbovnc/turbovnc.mk
 
-diff --git a/package/openssh/0005-openbsd-compat-bsd-getpagesize.c-include-includes.h-.patch b/package/openssh/0005-openbsd-compat-bsd-getpagesize.c-include-includes.h-.patch
+diff --git a/package/Config.in b/package/Config.in
+index dbfb288..2ab14bf 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -330,6 +330,7 @@ comment "X applications"
+ 	source "package/qt-webkit-kiosk/Config.in"
+ 	source "package/rdesktop/Config.in"
+ 	source "package/synergy/Config.in"
++	source "package/turbovnc/Config.in"
+ 	source "package/wmctrl/Config.in"
+ 	source "package/x11vnc/Config.in"
+ 	source "package/xdotool/Config.in"
+diff --git a/package/turbovnc/Config.in b/package/turbovnc/Config.in
 new file mode 100644
-index 0000000000..ce60072934
+index 0000000..6ea2882
 --- /dev/null
-+++ b/package/openssh/0005-openbsd-compat-bsd-getpagesize.c-include-includes.h-.patch
-@@ -0,0 +1,35 @@
-+From 9a43657a3dcb868b4f36ade3aba5dcf0871fb412 Mon Sep 17 00:00:00 2001
-+From: Peter Korsgaard <peter@korsgaard.com>
-+Date: Mon, 30 Oct 2017 23:36:56 +0100
-+Subject: [PATCH] openbsd-compat/bsd-getpagesize.c: include includes.h for
-+ config.h defines
++++ b/package/turbovnc/Config.in
+@@ -0,0 +1,16 @@
++config BR2_PACKAGE_TURBOVNC
++	bool "turbovnc"
++	help
++	  TurboVNC is a high-performance, enterprise-quality version 
++	  of VNC based on TightVNC, TigerVNC, and X.org.
++	  It contains a variant of Tight encoding that is tuned for
++	  maximum performance and compression with 3D applications
++	  (VirtualGL), video, and other image-intensive workloads.
++	  TurboVNC, in combination with VirtualGL, provides a 
++	  complete solution for remotely displaying 3D applications
++	  with interactive performance. TurboVNC's high-speed encoding
++	  methods have been adopted by TigerVNC and libvncserver,
++	  and TurboVNC is also compatible with any other TightVNC
++	  derivative.
 +
-+The configure script checks for getpagesize() and sets HAVE_GETPAGESIZE in
-+config.h, but bsd-getpagesize.c forgot to include includes.h (which
-+indirectly includes config.h) so the checks always fails, causing linker
-+issues when linking statically on systems with getpagesize():
++	  https://turbovnc.org
+diff --git a/package/turbovnc/turbovnc.hash b/package/turbovnc/turbovnc.hash
+new file mode 100644
+index 0000000..0cad264
+--- /dev/null
++++ b/package/turbovnc/turbovnc.hash
+@@ -0,0 +1,5 @@
++# From https://sourceforge.net/projects/turbovnc/files/2.1.2/
++md5	9d04b26d40664d0d8072e8b1828f69c4  turbovnc-2.1.2.tar.gz
++sha1	cd99a27cee86f0680410133beb25da1d6f35a3ea  turbovnc-2.1.2.tar.gz
++# Locally computed
++sha256	2389f76eafc48412b980a61280ffb8d111dacd9e51d5e3df2112f505558b48d4  turbovnc-2.1.2.tar.gz
+diff --git a/package/turbovnc/turbovnc.mk b/package/turbovnc/turbovnc.mk
+new file mode 100644
+index 0000000..a861f78
+--- /dev/null
++++ b/package/turbovnc/turbovnc.mk
+@@ -0,0 +1,21 @@
++################################################################################
++#
++# turbovnc
++#
++################################################################################
 +
-+http://autobuild.buildroot.net/results/8cc/8cc30818a400c7a392a3de787cabc9cd8425495f/build-end.log
++TURBOVNC_VERSION = 2.1.2
++TURBOVNC_SOURCE = turbovnc-$(TURBOVNC_VERSION).tar.gz
++TURBOVNC_SITE = https://downloads.sourceforge.net/project/turbovnc/$(TURBOVNC_VERSION)
++TURBOVNC_DEPENDENCIES = jpeg-turbo linux-pam openssl perl xfont_font-misc-misc xlib_libICE xlib_libSM xlib_libX11 \
++			xlib_libXext xlib_libXau xlib_libXdmcp 
++TURBOVNC_LICENSE = GPL-2.0, MIT (putty), Dual FTL/GPL-2.0+ (freetype) \
++		   bzip2 license (bzip2)
++TURBOVNC_LICENSE_FILES = doc/LICENSE.txt doc/LICENSE-PuTTY.txt \
++			 unix/Xvnc/extras/freetype2/doc/LICENSE.txt \
++			 unix/Xvnc/lib/bzip2/LICENSE
 +
-+Fix it by including includes.h
++# Build just server
++TURBOVNC_CONF_OPTS += -DTVNC_BUILDJAVA=0 -DTVNC_BUILDNATIVE=0
 +
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ openbsd-compat/bsd-getpagesize.c | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/openbsd-compat/bsd-getpagesize.c b/openbsd-compat/bsd-getpagesize.c
-+index 9daddfbd..416a8d4c 100644
-+--- a/openbsd-compat/bsd-getpagesize.c
-++++ b/openbsd-compat/bsd-getpagesize.c
-+@@ -1,5 +1,7 @@
-+ /* Placed in the public domain */
-+ 
-++#include "includes.h"
-++
-+ #ifndef HAVE_GETPAGESIZE
-+ 
-+ #include <unistd.h>
-+-- 
-+2.11.0
-+
++$(eval $(cmake-package))
 -- 
-2.11.0
+2.7.3
