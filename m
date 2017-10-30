@@ -1,46 +1,73 @@
-From: Gorka Lertxundi <glertxundi@gmail.com>
-Date: Mon, 30 Oct 2017 23:35:21 +0100
-Subject: [Buildroot] Unable to build an image with systemd
-In-Reply-To: <87she0i8vu.fsf@dell.be.48ers.dk>
-References: <CAJCNcEb8aemsJ3YrRwK78mv_XTAOsTx54mWaGBoy22uF6zAynA@mail.gmail.com>
- <20171030153510.35066d4a@windsurf>
- <CAJCNcEb4+FOpcFD7ES6EHGtwWegY3WLxtFc6SsOS-ziY3dg-7g@mail.gmail.com>
- <87she0i8vu.fsf@dell.be.48ers.dk>
-Message-ID: <CAJCNcEbO0kejSr4Sta=6oY59-Frpm5+gWB5sqVKYiwbxG1KLMA@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 30 Oct 2017 23:45:55 +0100
+Subject: [Buildroot] [PATCH] openssh: fix getpagesize() related static
+	linking issue
+Message-ID: <20171030224555.3220-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, Thomas,
+Fixes:
+http://autobuild.buildroot.net/results/8cc/8cc30818a400c7a392a3de787cabc9cd8425495f/
 
-Sorry for wasting your time, I thought I already did a clean because I'm
-building buildroot inside an ephemeral docker container and this shouldn't
-happen (I was caching buildroot through a shared volume...). The build
-didn't finish yet but it seems that systemd phase was successfully passed.
+The configure script checks for getpagesize() and sets HAVE_GETPAGESIZE in
+config.h, but bsd-getpagesize.c forgot to include includes.h (which
+indirectly includes config.h) so the checks always fails, causing linker
+issues when linking statically on systems with getpagesize().
 
-Thanks for your support.
+Fix it by including includes.h.
 
-2017-10-30 23:11 GMT+01:00 Peter Korsgaard <peter@korsgaard.com>:
+Patch submitted upstream:
+https://lists.mindrot.org/pipermail/openssh-unix-dev/2017-October/036413.html
 
-> >>>>> "Gorka" == Gorka Lertxundi <glertxundi@gmail.com> writes:
->
-> Hi,
->
->  > I started taking the customizations from jumpnow (
->  > https://github.com/jumpnow/buildroot) and include them one-by-one on
-> the
->  > original buildroot but when I changed from sysv to systemd this one
-> failed
->  > to build.
->
-> Just to be sure - You did a make clean when you changed from sysv to
-> systemd, right?
->
-> --
-> Bye, Peter Korsgaard
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20171030/9fb517d3/attachment.html>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...pat-bsd-getpagesize.c-include-includes.h-.patch | 35 ++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
+ create mode 100644 package/openssh/0005-openbsd-compat-bsd-getpagesize.c-include-includes.h-.patch
+
+diff --git a/package/openssh/0005-openbsd-compat-bsd-getpagesize.c-include-includes.h-.patch b/package/openssh/0005-openbsd-compat-bsd-getpagesize.c-include-includes.h-.patch
+new file mode 100644
+index 0000000000..ce60072934
+--- /dev/null
++++ b/package/openssh/0005-openbsd-compat-bsd-getpagesize.c-include-includes.h-.patch
+@@ -0,0 +1,35 @@
++From 9a43657a3dcb868b4f36ade3aba5dcf0871fb412 Mon Sep 17 00:00:00 2001
++From: Peter Korsgaard <peter@korsgaard.com>
++Date: Mon, 30 Oct 2017 23:36:56 +0100
++Subject: [PATCH] openbsd-compat/bsd-getpagesize.c: include includes.h for
++ config.h defines
++
++The configure script checks for getpagesize() and sets HAVE_GETPAGESIZE in
++config.h, but bsd-getpagesize.c forgot to include includes.h (which
++indirectly includes config.h) so the checks always fails, causing linker
++issues when linking statically on systems with getpagesize():
++
++http://autobuild.buildroot.net/results/8cc/8cc30818a400c7a392a3de787cabc9cd8425495f/build-end.log
++
++Fix it by including includes.h
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ openbsd-compat/bsd-getpagesize.c | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/openbsd-compat/bsd-getpagesize.c b/openbsd-compat/bsd-getpagesize.c
++index 9daddfbd..416a8d4c 100644
++--- a/openbsd-compat/bsd-getpagesize.c
+++++ b/openbsd-compat/bsd-getpagesize.c
++@@ -1,5 +1,7 @@
++ /* Placed in the public domain */
++ 
+++#include "includes.h"
+++
++ #ifndef HAVE_GETPAGESIZE
++ 
++ #include <unistd.h>
++-- 
++2.11.0
++
+-- 
+2.11.0
