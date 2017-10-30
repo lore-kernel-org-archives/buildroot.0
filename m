@@ -1,49 +1,55 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 30 Oct 2017 16:46:18 +0200
-Subject: [Buildroot] [PATCH v2 1/2] package/libssh2: Add selectable
- crypto libraries
-In-Reply-To: <CAH=K+6m_PJy-kk8TkTgfgL=UpqXeYhKYs5Czaje2yjdSTg1w0w@mail.gmail.com>
-References: <1509054225-19795-1-git-send-email-sam.voss@rockwellcollins.com>
- <20171030051949.n2w5iprgp6cv5zg2@sapphire.tkos.co.il>
- <CAH=K+6m_PJy-kk8TkTgfgL=UpqXeYhKYs5Czaje2yjdSTg1w0w@mail.gmail.com>
-Message-ID: <20171030144618.ljxx6wgujtq4nnfn@sapphire.tkos.co.il>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 30 Oct 2017 15:51:00 +0100
+Subject: [Buildroot] [git commit] domoticz: bump to version 3.8153
+Message-ID: <20171030144713.CBA84807D4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Sam,
+commit: https://git.buildroot.net/buildroot/commit/?id=29b3305cde7dee80ac5374aa20d753e1e6cee86e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, Oct 30, 2017 at 09:27:17AM -0500, Sam Voss wrote:
-> On Mon, Oct 30, 2017 at 12:19 AM, Baruch Siach <baruch@tkos.co.il> wrote:
-> [...]
-> > Have you tested combination of options after the version bump in the next
-> > patch?
-> 
-> Could you elaborate on this? I don't understand what you mean by
-> combination of options.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/domoticz/domoticz.hash | 2 +-
+ package/domoticz/domoticz.mk   | 9 ++++++++-
+ 2 files changed, 9 insertions(+), 2 deletions(-)
 
-When you have for example both openssl and mbedtls enabled, the 
---with-[backend] options will no longer work after the version bump. So the 
-crypto backend selection logic will have no effect, so you might end up with 
-the wrong backend being used.
-
-When testing these patches try enabling multiple crypto packages, and make 
-sure that only the backend you selected for libssh2 is the one that is 
-actually used.
-
-> > The master libssh2 branch changes the configure crypto selection options to
-> > --with-crypto=auto|openssl|libgcrypt|mbedtls. You should either take this into
-> > account in the version bump patch, or (preferably, IMO) reverse the patches
-> > order, change to --with-crypto in the version bump patch, and add selectable
-> > crypto backend in the second.
-> 
-> Good catch, I didn't catch this in the diffs. I will look into these options.
-
-baruch
-
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+diff --git a/package/domoticz/domoticz.hash b/package/domoticz/domoticz.hash
+index 7feab8f..103618d 100644
+--- a/package/domoticz/domoticz.hash
++++ b/package/domoticz/domoticz.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256	fb88edbe428851a7a337a85faa93f6da00713b3ad086ff6957031dc9b3b58bba	domoticz-3.5877.tar.gz
++sha256	5ea8f37f2ef900e9bd17b1b5375e75bfdec4f09001e3e2e0b647a260989d014c	domoticz-3.8153.tar.gz
+diff --git a/package/domoticz/domoticz.mk b/package/domoticz/domoticz.mk
+index 59731b5..bd25708 100644
+--- a/package/domoticz/domoticz.mk
++++ b/package/domoticz/domoticz.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DOMOTICZ_VERSION = 3.5877
++DOMOTICZ_VERSION = 3.8153
+ DOMOTICZ_SITE = $(call github,domoticz,domoticz,$(DOMOTICZ_VERSION))
+ DOMOTICZ_LICENSE = GPL-3.0
+ DOMOTICZ_LICENSE_FILES = License.txt
+@@ -59,6 +59,13 @@ DOMOTICZ_DEPENDENCIES += openzwave
+ DOMOTICZ_CONF_OPTS += -DUSE_STATIC_OPENZWAVE=OFF
+ endif
+ 
++ifeq ($(BR2_PACKAGE_PYTHON3),y)
++DOMOTICZ_DEPENDENCIES += python3
++DOMOTICZ_CONF_OPTS += -DUSE_PYTHON=ON
++else
++DOMOTICZ_CONF_OPTS += -DUSE_PYTHON=OFF
++endif
++
+ # Install domoticz in a dedicated directory (/opt/domoticz) as
+ # domoticz expects by default that all its subdirectories (www,
+ # Config, scripts, ...) are in the binary directory.
