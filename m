@@ -1,11 +1,12 @@
 From: Sam Voss <sam.voss@rockwellcollins.com>
-Date: Mon, 30 Oct 2017 09:21:35 -0500
-Subject: [Buildroot] [PATCH v2 1/2] package/libssh2: Add selectable
-	crypto libraries
-In-Reply-To: <20171028141649.GE3280@scaer>
+Date: Mon, 30 Oct 2017 09:24:33 -0500
+Subject: [Buildroot] [PATCH v2 2/2] package/libssh2: Update to newest
+	version
+In-Reply-To: <20171028142205.GF3280@scaer>
 References: <1509054225-19795-1-git-send-email-sam.voss@rockwellcollins.com>
- <20171028141649.GE3280@scaer>
-Message-ID: <CAH=K+6nJTQnPGAVHf_FfUXasApxCPNhURTqgF7gH6H4BtiGADA@mail.gmail.com>
+ <1509054225-19795-2-git-send-email-sam.voss@rockwellcollins.com>
+ <20171028142205.GF3280@scaer>
+Message-ID: <CAH=K+6m_byJ=nvfrvs1b2PLE7wKOG+O2jTupD8Z27TZtsW3edw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,47 +15,31 @@ To: buildroot@busybox.net
 
 Yann, All,
 
-(sorry for repeat Yann, miss clicked reply instead of all).
-
-On Sat, Oct 28, 2017 at 9:16 AM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> Sam, All,
->
-> On 2017-10-26 16:43 -0500, Sam Voss spake thusly:
+On Sat, Oct 28, 2017 at 9:22 AM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
 [..]
+>> +LIBSSH2_AUTORECONF = YES
+>
+> ... [0] here state why we need to autoreconf:
+
+Can do
+
+>
+>     # From the git tree; does not have generated autotools files.
+>     LIBSSH2_AUTORECONF = YES
+>
 >> +
->> +choice
->> +     prompt "Crypto Library"
->> +     default BR2_PACKAGE_LIBSSH2_MBEDTLS if BR2_PACKAGE_MBEDTLS
->> +     default BR2_PACKAGE_LIBSSH2_LIBGCRYPT if BR2_PACKAGE_LIBGCRYPT
->> +     default BR2_PACKAGE_OPENSSL
+>> +define LIBSSH2_AUTORECONF_CMDS
+>> +     cp $(@D)/src/libssh2_config.h.in $(@D)/example/libssh2_config.h.in
+>> +endef
+>> +LIBSSH2_PRE_CONFIGURE_HOOKS += LIBSSH2_AUTORECONF_CMDS
 >
-> All those 'default' lines are useless. A choice always defaults to the
-> first option which dependencies are fulfilled.
+> Do we really need to copy that header, since we do not build the
+> examples (explicitly disabled, above)?
 
-Interesting, I didn't know that. Great, saves some redundancy, I'll
-get those removed.
+It seems that, although we explicitly do not build the examples,
+autoconf can't take that into account at the time of running
+buildconf. I'll double check and make sure there isn't a way around
+this.
 
->> +comment "mbedtls not selected"
->> +     depends on !BR2_PACKAGE_MBEDTLS
->
-> Don't add those comments.
 
-I had done this based off of other packages doing something similar
-when requirements aren't met (to show availability). Do we only show
-comments on main packages, and not sub choices? Just so I know next
-time.
-
->>> +config BR2_PACKAGE_LIBSSH2_LIBGCRYPT
->> +     depends on BR2_PACKAGE_LIBGCRYPT
->> +     bool "gcrypt"
->> +
->> +comment "libgcrypt not selected"
->> +     depends on !BR2_PACKAGE_LIBGCRYPT
->
-> So this patch does two things:
->  1- make the backend selectable;
->  2- add libgcrypt as a backend.
->
-> This should be two patches.
-
-Libgcrypt was always an available crypto, and was not added in this patchset.
+Sam
