@@ -1,11 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 30 Oct 2017 11:29:47 +0100
-Subject: [Buildroot] [PATCH v4 04/11] board: Add Pine64 support
-In-Reply-To: <b8d92229-8f0c-2edf-7451-13ad2393eb4b@arm.com>
-References: <1509041511-30956-1-git-send-email-jagan@amarulasolutions.com>
- <1509041511-30956-5-git-send-email-jagan@amarulasolutions.com>
- <b8d92229-8f0c-2edf-7451-13ad2393eb4b@arm.com>
-Message-ID: <20171030112947.183f698d@windsurf>
+Date: Mon, 30 Oct 2017 11:36:51 +0100
+Subject: [Buildroot] Libpng missing a link dependency in 2017-08?
+In-Reply-To: <afc724e2-a455-82cd-80f8-ee329e2a3e47@ou.edu>
+References: <afc724e2-a455-82cd-80f8-ee329e2a3e47@ou.edu>
+Message-ID: <20171030113651.6b4bfc82@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,36 +12,25 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 30 Oct 2017 09:56:04 +0000, Andre Przywara wrote:
-
-> So how stable shall this recipe be, in general? I see a lot of fixed
-> versions (ATF, U-Boot, kernel) in here, which means it needs constant
-> updating (to benefit from security fixes, for instance)?
-> Is that intended? That looks a bit maintenance-heavy to me.
+On Sun, 29 Oct 2017 15:36:37 -0500, Steve Kenton wrote:
+> I recently began evaluating a switch to buildroot-2017.08 and started 
+> getting the following message (transcribed from a screen shot)
 > 
-> And do you have to specify a certain commit ID here?
-> I have some bugfixes on the "allwinner" branch, and am thinking about
-> pulling the allwinner-stable branch to the same commit.
-> So I strongly recommend to upgrade to the allwinner branch, which fixes
-> immediate crashes on CPU off/onlining, among other issues.
+> ffprobe: Relink `/usr/lib64/libpng16.so.16' with 
+> `/lib64/libpthread.so.0' for IFUNC symbol `longjmp'
+> 
+> As far as I can determine it is because libpng 1.6.31 uses longjmp() and 
+> it needs another link dependency to avoid the runtime fixup above.
+> 
+> I did not see anything on the list about this and buildroot 2017-08.1 
+> did not switch to libpng 1.6.32 although I'm building it anyway on 
+> general principles.
+> 
+> So, is this likely a libpng build issue or should I start digging into? 
+> ffmpeg?
 
-We do not want to use branch names, for two reasons:
-
- 1. A branch constantly changes, which means that the defconfig doesn't
- build the same bootloader/kernel version for everyone. So while the
- defconfig may work when it is submitted, it might stop to work later
- on. Therefore, we want to use fixed versions.
-
- 2. When fetching from Git, Buildroot creates a local tarball named
- "<package>-<version>.tar.gz". Once the tarball exists, Buildroot
- doesn't fetch again from upstream. So, if you specify a branch name, a
- tarball with this branch name is created once for all, and Buildroot
- will never re-fetch from that location, unless you manually remove the
- tarball from the download cache.
-
-So, want Jagan does is what we ask to do for all defconfigs. Yes, it is
-a bit heavy on maintenance, but that is the most reasonable trade-off
-we have.
+Could you provide a minimal .config that exhibits the problem you're
+seeing ?
 
 Best regards,
 
