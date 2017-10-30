@@ -1,44 +1,66 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 30 Oct 2017 22:49:46 +0100
-Subject: [Buildroot] [PATCH 1/1] package/pure-ftpd: bump version to 1.0.47
-Message-ID: <20171030214946.19950-1-bernd.kuhls@t-online.de>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 30 Oct 2017 22:53:09 +0100
+Subject: [Buildroot] [PATCH] quagga: add upstream security fix for
+	CVE-2017-16227
+Message-ID: <20171030215309.21483-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Added license hash, switched _SITE to https.
+From the advisory:
+http://www.openwall.com/lists/oss-security/2017/10/30/4
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+It was discovered that the bgpd daemon in the Quagga routing suite does
+not properly calculate the length of multi-segment AS_PATH UPDATE
+messages, causing bgpd to drop a session and potentially resulting in
+loss of network connectivity.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pure-ftpd/pure-ftpd.hash | 3 ++-
- package/pure-ftpd/pure-ftpd.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ ...x-AS_PATH-size-calculation-for-long-paths.patch | 33 ++++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
+ create mode 100644 package/quagga/0004-bgpd-Fix-AS_PATH-size-calculation-for-long-paths.patch
 
-diff --git a/package/pure-ftpd/pure-ftpd.hash b/package/pure-ftpd/pure-ftpd.hash
-index b66717a028..f01da51a37 100644
---- a/package/pure-ftpd/pure-ftpd.hash
-+++ b/package/pure-ftpd/pure-ftpd.hash
-@@ -1,2 +1,3 @@
- # Locally calculated after checking pgp signature
--sha256 9e733f366d8d600004bb171cf2ec75dad0da4b922b7102ee4b3e18824966192d  pure-ftpd-1.0.46.tar.bz2
-+sha256 cb1b695e779a06e42d62d7a1a428d2f605d621dfd5afe4e192b5f9fc4e343692  pure-ftpd-1.0.47.tar.bz2
-+sha256 e724ba991d8efa4c963e84ec31314c532dab00ac455ef77020fe60e78177bf23  COPYING
-diff --git a/package/pure-ftpd/pure-ftpd.mk b/package/pure-ftpd/pure-ftpd.mk
-index 0bb5f3cd43..815de90f3b 100644
---- a/package/pure-ftpd/pure-ftpd.mk
-+++ b/package/pure-ftpd/pure-ftpd.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--PURE_FTPD_VERSION = 1.0.46
--PURE_FTPD_SITE = http://download.pureftpd.org/pub/pure-ftpd/releases
-+PURE_FTPD_VERSION = 1.0.47
-+PURE_FTPD_SITE = https://download.pureftpd.org/pub/pure-ftpd/releases
- PURE_FTPD_SOURCE = pure-ftpd-$(PURE_FTPD_VERSION).tar.bz2
- PURE_FTPD_LICENSE = ISC
- PURE_FTPD_LICENSE_FILES = COPYING
+diff --git a/package/quagga/0004-bgpd-Fix-AS_PATH-size-calculation-for-long-paths.patch b/package/quagga/0004-bgpd-Fix-AS_PATH-size-calculation-for-long-paths.patch
+new file mode 100644
+index 0000000000..1425cf0426
+--- /dev/null
++++ b/package/quagga/0004-bgpd-Fix-AS_PATH-size-calculation-for-long-paths.patch
+@@ -0,0 +1,33 @@
++From 7a42b78be9a4108d98833069a88e6fddb9285008 Mon Sep 17 00:00:00 2001
++From: Andreas Jaggi <aj@open.ch>
++Date: Mon, 2 Oct 2017 19:38:43 +0530
++Subject: [PATCH] bgpd: Fix AS_PATH size calculation for long paths
++
++If you have an AS_PATH with more entries than
++what can be written into a single AS_SEGMENT_MAX
++it needs to be broken up.  The code that noticed
++that the AS_PATH needs to be broken up was not
++correctly calculating the size of the resulting
++message.  This patch addresses this issue.
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ bgpd/bgp_aspath.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/bgpd/bgp_aspath.c b/bgpd/bgp_aspath.c
++index b7af5e88..d813bfba 100644
++--- a/bgpd/bgp_aspath.c
+++++ b/bgpd/bgp_aspath.c
++@@ -903,7 +903,7 @@ aspath_put (struct stream *s, struct aspath *as, int use32bit )
++               assegment_header_put (s, seg->type, AS_SEGMENT_MAX);
++               assegment_data_put (s, seg->as, AS_SEGMENT_MAX, use32bit);
++               written += AS_SEGMENT_MAX;
++-              bytes += ASSEGMENT_SIZE (written, use32bit);
+++              bytes += ASSEGMENT_SIZE (AS_SEGMENT_MAX, use32bit);
++             }
++           
++           /* write the final segment, probably is also the first */
++-- 
++2.11.0
++
 -- 
 2.11.0
