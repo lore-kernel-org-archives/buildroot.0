@@ -1,51 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 30 Oct 2017 20:43:39 +0100
-Subject: [Buildroot] [git commit] apr: security bump to version 1.6.3
-Message-ID: <20171030193655.818A881173@busybox.osuosl.org>
+Date: Mon, 30 Oct 2017 20:43:40 +0100
+Subject: [Buildroot] [git commit] apr-util: security bump to version 1.6.1
+Message-ID: <20171030193655.8FF2C8013F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c91981a985108a83bfeca1a61a4457b5ac785574
+commit: https://git.buildroot.net/buildroot/commit/?id=1d3c611dee82090d9456730e24af368b51dcb4a9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes CVE-2017-12613: Out-of-bounds array deref in apr_time_exp*()
-functions.
+Fixes CVE-2017-12618: Out-of-bounds access in corrupted SDBM database.
+
+Switch to bz2 compressed tarball.
 
 Use upstream provided SHA256 hash.
 
-Add license has.
+Add license hash.
 
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/apr/apr.hash | 6 ++++--
- package/apr/apr.mk   | 2 +-
- 2 files changed, 5 insertions(+), 3 deletions(-)
+ package/apr-util/apr-util.hash | 6 ++++--
+ package/apr-util/apr-util.mk   | 3 ++-
+ 2 files changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/package/apr/apr.hash b/package/apr/apr.hash
-index 7a5969e..be130a5 100644
---- a/package/apr/apr.hash
-+++ b/package/apr/apr.hash
+diff --git a/package/apr-util/apr-util.hash b/package/apr-util/apr-util.hash
+index 3db4396..82ad475 100644
+--- a/package/apr-util/apr-util.hash
++++ b/package/apr-util/apr-util.hash
 @@ -1,2 +1,4 @@
--# From http://archive.apache.org/dist/apr/apr-1.6.2.tar.bz2.sha1
--sha1 01b0d4faa0194825e8e525b9ac7ccfb832471d50  apr-1.6.2.tar.bz2
-+# From http://www.apache.org/dist/apr/apr-1.6.3.tar.bz2.sha256
-+sha256 131f06d16d7aabd097fa992a33eec2b6af3962f93e6d570a9bd4d85e95993172  apr-1.6.3.tar.bz2
+-# From http://archive.apache.org/dist/apr/apr-util-1.5.4.tar.gz.sha1
+-sha1	72cc3ac693b52fb831063d5c0de18723bc8e0095	apr-util-1.5.4.tar.gz
++# From http://www.apache.org/dist/apr/apr-util-1.6.1.tar.bz2.sha256
++sha256	d3e12f7b6ad12687572a3a39475545a072608f4ba03a6ce8a3778f607dd0035b	apr-util-1.6.1.tar.bz2
 +# Locally calculated
-+sha256 f854aeef66ecd55a126226e82b3f26793fc3b1c584647f6a0edc5639974c38ad  LICENSE
-diff --git a/package/apr/apr.mk b/package/apr/apr.mk
-index ffb3099..58b1d86 100644
---- a/package/apr/apr.mk
-+++ b/package/apr/apr.mk
-@@ -4,7 +4,7 @@
++sha256	ef5609d18601645ad6fe22c6c122094be40e976725c1d0490778abacc836e7a2	LICENSE
+diff --git a/package/apr-util/apr-util.mk b/package/apr-util/apr-util.mk
+index bc0572e..c44cef0 100644
+--- a/package/apr-util/apr-util.mk
++++ b/package/apr-util/apr-util.mk
+@@ -4,7 +4,8 @@
  #
  ################################################################################
  
--APR_VERSION = 1.6.2
-+APR_VERSION = 1.6.3
- APR_SOURCE = apr-$(APR_VERSION).tar.bz2
- APR_SITE = http://archive.apache.org/dist/apr
- APR_LICENSE = Apache-2.0
+-APR_UTIL_VERSION = 1.5.4
++APR_UTIL_VERSION = 1.6.1
++APR_UTIL_SOURCE = apr-util-$(APR_UTIL_VERSION).tar.bz2
+ APR_UTIL_SITE = http://archive.apache.org/dist/apr
+ APR_UTIL_LICENSE = Apache-2.0
+ APR_UTIL_LICENSE_FILES = LICENSE
