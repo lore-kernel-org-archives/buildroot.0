@@ -1,45 +1,34 @@
 From: Sam Voss <sam.voss@rockwellcollins.com>
-Date: Mon, 30 Oct 2017 09:24:33 -0500
-Subject: [Buildroot] [PATCH v2 2/2] package/libssh2: Update to newest
-	version
-In-Reply-To: <20171028142205.GF3280@scaer>
+Date: Mon, 30 Oct 2017 09:27:17 -0500
+Subject: [Buildroot] [PATCH v2 1/2] package/libssh2: Add selectable
+	crypto libraries
+In-Reply-To: <20171030051949.n2w5iprgp6cv5zg2@sapphire.tkos.co.il>
 References: <1509054225-19795-1-git-send-email-sam.voss@rockwellcollins.com>
- <1509054225-19795-2-git-send-email-sam.voss@rockwellcollins.com>
- <20171028142205.GF3280@scaer>
-Message-ID: <CAH=K+6m_byJ=nvfrvs1b2PLE7wKOG+O2jTupD8Z27TZtsW3edw@mail.gmail.com>
+ <20171030051949.n2w5iprgp6cv5zg2@sapphire.tkos.co.il>
+Message-ID: <CAH=K+6m_PJy-kk8TkTgfgL=UpqXeYhKYs5Czaje2yjdSTg1w0w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann, All,
+Baruch, All,
 
-On Sat, Oct 28, 2017 at 9:22 AM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-[..]
->> +LIBSSH2_AUTORECONF = YES
+On Mon, Oct 30, 2017 at 12:19 AM, Baruch Siach <baruch@tkos.co.il> wrote:
+[...]
+> Have you tested combination of options after the version bump in the next
+> patch?
+
+Could you elaborate on this? I don't understand what you mean by
+combination of options.
+
 >
-> ... [0] here state why we need to autoreconf:
+> The master libssh2 branch changes the configure crypto selection options to
+> --with-crypto=auto|openssl|libgcrypt|mbedtls. You should either take this into
+> account in the version bump patch, or (preferably, IMO) reverse the patches
+> order, change to --with-crypto in the version bump patch, and add selectable
+> crypto backend in the second.
 
-Can do
-
->
->     # From the git tree; does not have generated autotools files.
->     LIBSSH2_AUTORECONF = YES
->
->> +
->> +define LIBSSH2_AUTORECONF_CMDS
->> +     cp $(@D)/src/libssh2_config.h.in $(@D)/example/libssh2_config.h.in
->> +endef
->> +LIBSSH2_PRE_CONFIGURE_HOOKS += LIBSSH2_AUTORECONF_CMDS
->
-> Do we really need to copy that header, since we do not build the
-> examples (explicitly disabled, above)?
-
-It seems that, although we explicitly do not build the examples,
-autoconf can't take that into account at the time of running
-buildconf. I'll double check and make sure there isn't a way around
-this.
-
+Good catch, I didn't catch this in the diffs. I will look into these options.
 
 Sam
