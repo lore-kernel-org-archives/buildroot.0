@@ -1,37 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 30 Oct 2017 20:40:54 +0100
-Subject: [Buildroot] [PATCH 1/1] Fix build of lttng-libust
-In-Reply-To: <20171030163121.939-1-norbert.lange@andritz.com>
-References: <20171030163121.939-1-norbert.lange@andritz.com>
-Message-ID: <20171030204054.723cdc99@windsurf>
+Date: Mon, 30 Oct 2017 20:43:39 +0100
+Subject: [Buildroot] [git commit] apr: security bump to version 1.6.3
+Message-ID: <20171030193655.818A881173@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=c91981a985108a83bfeca1a61a4457b5ac785574
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 30 Oct 2017 17:31:21 +0100, Norbert Lange wrote:
-> The build of doc/examples/cmake-multiple-shared-libraries
-> does fail as a dependend library is missing.
-> This issue is not specific to builroot and should ideally
-> be fixed upstream (Issue: https://bugs.lttng.org/issues/1132)
-> 
-> The fix is done without any indepth knowledge of the CMake
-> mechanisms, but seems to work correctly
-> 
-> Signed-off-by: Norbert Lange <norbert.lange@andritz.com>
+Fixes CVE-2017-12613: Out-of-bounds array deref in apr_time_exp*()
+functions.
 
-Which specific build problem are you fixing? Is this a problem that has
-been found by http://autobuild.buildroot.org? If that's the case, we
-like to include a reference to such an autobuilder failure in the
-commit log.
+Use upstream provided SHA256 hash.
 
-Thanks!
+Add license has.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/apr/apr.hash | 6 ++++--
+ package/apr/apr.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 3 deletions(-)
+
+diff --git a/package/apr/apr.hash b/package/apr/apr.hash
+index 7a5969e..be130a5 100644
+--- a/package/apr/apr.hash
++++ b/package/apr/apr.hash
+@@ -1,2 +1,4 @@
+-# From http://archive.apache.org/dist/apr/apr-1.6.2.tar.bz2.sha1
+-sha1 01b0d4faa0194825e8e525b9ac7ccfb832471d50  apr-1.6.2.tar.bz2
++# From http://www.apache.org/dist/apr/apr-1.6.3.tar.bz2.sha256
++sha256 131f06d16d7aabd097fa992a33eec2b6af3962f93e6d570a9bd4d85e95993172  apr-1.6.3.tar.bz2
++# Locally calculated
++sha256 f854aeef66ecd55a126226e82b3f26793fc3b1c584647f6a0edc5639974c38ad  LICENSE
+diff --git a/package/apr/apr.mk b/package/apr/apr.mk
+index ffb3099..58b1d86 100644
+--- a/package/apr/apr.mk
++++ b/package/apr/apr.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-APR_VERSION = 1.6.2
++APR_VERSION = 1.6.3
+ APR_SOURCE = apr-$(APR_VERSION).tar.bz2
+ APR_SITE = http://archive.apache.org/dist/apr
+ APR_LICENSE = Apache-2.0
