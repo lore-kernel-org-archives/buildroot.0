@@ -1,41 +1,41 @@
-From: Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com>
-Date: Mon, 30 Oct 2017 08:26:40 +0100
-Subject: [Buildroot] [PATCH 1/1] package/Config.in: fix alphabetical order
-Message-ID: <1509348400-3173-1-git-send-email-jerzy.m.grzegorek@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 30 Oct 2017 09:43:23 +0100
+Subject: [Buildroot] [PATCH] lvm2: make basic package available under
+	musl
+In-Reply-To: <20171029205707.4f82a902@windsurf> (Thomas Petazzoni's message of
+ "Sun, 29 Oct 2017 20:57:07 +0100")
+References: <20171027114716.29198-1-peter@korsgaard.com>
+ <20171029205707.4f82a902@windsurf>
+Message-ID: <8760axjaac.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com>
----
- package/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-diff --git a/package/Config.in b/package/Config.in
-index d7321b2..83ff25d 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1088,8 +1088,8 @@ menu "Graphics"
- 	source "package/gtksourceview/Config.in"
- 	source "package/harfbuzz/Config.in"
- 	source "package/ijs/Config.in"
--	source "package/irrlicht/Config.in"
- 	source "package/imlib2/Config.in"
-+	source "package/irrlicht/Config.in"
- 	source "package/jasper/Config.in"
- 	source "package/jpeg/Config.in"
- 	source "package/kmsxx/Config.in"
-@@ -1862,8 +1862,8 @@ comment "Utilities"
- 	source "package/crudini/Config.in"
- 	source "package/dialog/Config.in"
- 	source "package/dtach/Config.in"
--	source "package/file/Config.in"
- 	source "package/easy-rsa/Config.in"
-+	source "package/file/Config.in"
- 	source "package/gnupg/Config.in"
- 	source "package/gnupg2/Config.in"
- 	source "package/inotify-tools/Config.in"
+Hi,
+
+ >> Install application library (liblvm2app).
+ >> 
+ >> +comment "lvm2 standard install needs a glibc or uClibc toolchain"
+ >> +	depends on BR2_TOOLCHAIN_USES_MUSL
+
+ > For consistency, I've moved this comment below the "standard install"
+ > option, and added another comment for the "application library" option.
+
+Ok. In the general case this would screw up indentation of further sub
+option, but as the dependencies are the same this won't happen here.
+
+
+ >> comment "lvm2 needs a glibc or uClibc toolchain w/ threads, dynamic library"
+
+ > You had forgotten to update this comment: lvm2 no longer needs glibc or
+ > uClibc, and you also had forgotten to drop the BR2_TOOLCHAIN_USES_MUSL
+ > part of this comment dependencies.
+
+Ups, thanks for fixing it!
+
 -- 
-1.9.1
+Bye, Peter Korsgaard
