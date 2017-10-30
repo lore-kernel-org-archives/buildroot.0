@@ -1,111 +1,53 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Mon, 30 Oct 2017 13:56:18 -0400
-Subject: [Buildroot] [PATCH v2 2/2] gst1-interpipe: new package
-In-Reply-To: <20171027171622.16050-2-ps.report@gmx.net>
-References: <20171027171622.16050-1-ps.report@gmx.net>
- <20171027171622.16050-2-ps.report@gmx.net>
-Message-ID: <CAFSsvmrc9kPa36_o03YeXOOBo76Lc=N00v9LMknKfFNPEb2bDA@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon, 30 Oct 2017 21:11:02 +0200
+Subject: [Buildroot] [PATCH 2/2] apr-util: security bump to version 1.6.1
+In-Reply-To: <6c5b5801af6b7ce17eae8176827b0ce141a15c94.1509390662.git.baruch@tkos.co.il>
+References: <6c5b5801af6b7ce17eae8176827b0ce141a15c94.1509390662.git.baruch@tkos.co.il>
+Message-ID: <86642b9b91de8bec45167d6d947fa134f34334d5.1509390662.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All;
+Fixes CVE-2017-12618: Out-of-bounds access in corrupted SDBM database.
 
-On Fri, Oct 27, 2017 at 1:16 PM, Peter Seiderer <ps.report@gmx.net> wrote:
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
-> Changes v1 -> v2:
->   - add hash for the license file
-> ---
->  package/gstreamer1/Config.in                       |  1 +
->  package/gstreamer1/gst1-interpipe/Config.in        | 10 +++++++++
->  .../gstreamer1/gst1-interpipe/gst1-interpipe.hash  |  5 +++++
->  .../gstreamer1/gst1-interpipe/gst1-interpipe.mk    | 24 ++++++++++++++++++++++
->  4 files changed, 40 insertions(+)
->  create mode 100644 package/gstreamer1/gst1-interpipe/Config.in
->  create mode 100644 package/gstreamer1/gst1-interpipe/gst1-interpipe.hash
->  create mode 100644 package/gstreamer1/gst1-interpipe/gst1-interpipe.mk
->
-> diff --git a/package/gstreamer1/Config.in b/package/gstreamer1/Config.in
-> index aef75b55bf..ae7b982bf3 100644
-> --- a/package/gstreamer1/Config.in
-> +++ b/package/gstreamer1/Config.in
-> @@ -7,6 +7,7 @@ source "package/gstreamer1/gst1-plugins-good/Config.in"
->  source "package/gstreamer1/gst1-plugins-bad/Config.in"
->  source "package/gstreamer1/gst1-plugins-ugly/Config.in"
->  source "package/gstreamer1/gst1-imx/Config.in"
-> +source "package/gstreamer1/gst1-interpipe/Config.in"
->  source "package/gstreamer1/gst1-libav/Config.in"
->  source "package/gstreamer1/gst1-rtsp-server/Config.in"
->  source "package/gstreamer1/gst1-validate/Config.in"
-> diff --git a/package/gstreamer1/gst1-interpipe/Config.in b/package/gstreamer1/gst1-interpipe/Config.in
-> new file mode 100644
-> index 0000000000..0a169e8d4f
-> --- /dev/null
-> +++ b/package/gstreamer1/gst1-interpipe/Config.in
-> @@ -0,0 +1,10 @@
-> +menuconfig BR2_PACKAGE_GST1_INTERPIPE
-> +       bool "gst1-interpipe"
-> +       select BR2_PACKAGE_GSTREAMER1_CHECK
-> +       select BR2_PACKAGE_GST1_PLUGINS_BASE
-> +       select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_APP
-> +       help
-> +         GstInterpipe is a Gstreamer plug-in that allows communication
-> +         between two independent pipelines.
-> +
-> +         https://github.com/RidgeRun/gst-interpipe
-> diff --git a/package/gstreamer1/gst1-interpipe/gst1-interpipe.hash b/package/gstreamer1/gst1-interpipe/gst1-interpipe.hash
-> new file mode 100644
-> index 0000000000..b9b1c5e429
-> --- /dev/null
-> +++ b/package/gstreamer1/gst1-interpipe/gst1-interpipe.hash
-> @@ -0,0 +1,5 @@
-> +# locally computed hash
-> +sha256 3f8cc5cf4861e5836938c66415b47555550c93b06b1bc9faed83e89bacf705cf gst1-interpipe-10dba89eecc200e49f0b432e299f1c8a4312b657.tar.gz
-> +
-> +# Hashes for license files:
-> +sha256 16d7caa6cabbfd0ca47e064a7b48cb446d013e84ca88c854d6470851752136d5 COPYING
-> diff --git a/package/gstreamer1/gst1-interpipe/gst1-interpipe.mk b/package/gstreamer1/gst1-interpipe/gst1-interpipe.mk
-> new file mode 100644
-> index 0000000000..0a06aac41e
-> --- /dev/null
-> +++ b/package/gstreamer1/gst1-interpipe/gst1-interpipe.mk
-> @@ -0,0 +1,24 @@
-> +################################################################################
-> +#
-> +# gst1-interpipe
-> +#
-> +################################################################################
-> +
-> +GST1_INTERPIPE_VERSION = 10dba89eecc200e49f0b432e299f1c8a4312b657
-> +GST1_INTERPIPE_SITE = https://github.com/RidgeRun/gst-interpipe
-> +GST1_INTERPIPE_SITE_METHOD = git
-> +# fetch gst-interpipe/common sub module
-> +GST1_INTERPIPE_GIT_SUBMODULES = YES
-> +
-> +GST1_INTERPIPE_LICENSE = LGPL-2.1
-> +GST1_INTERPIPE_LICENSE_FILES = COPYING
-> +
-> +# from git source
-> +GST1_INTERPIPE_AUTORECONF = YES
-> +
-> +GST1_INTERPIPE_DEPENDENCIES += \
-> +       host-pkgconf \
-> +       gstreamer1 \
-> +       gst1-plugins-base
-> +
-> +$(eval $(autotools-package))
-> --
-> 2.14.2
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Switch to bz2 compressed tarball.
 
-Built and works on Fedora 26 64bit.
-Tested with uclibc, musl, and glibc.
+Use upstream provided SHA256 hash.
 
-Also checks out with check-pkg.
+Add license hash.
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/apr-util/apr-util.hash | 6 ++++--
+ package/apr-util/apr-util.mk   | 3 ++-
+ 2 files changed, 6 insertions(+), 3 deletions(-)
+
+diff --git a/package/apr-util/apr-util.hash b/package/apr-util/apr-util.hash
+index 3db43960585b..82ad475619e1 100644
+--- a/package/apr-util/apr-util.hash
++++ b/package/apr-util/apr-util.hash
+@@ -1,2 +1,4 @@
+-# From http://archive.apache.org/dist/apr/apr-util-1.5.4.tar.gz.sha1
+-sha1	72cc3ac693b52fb831063d5c0de18723bc8e0095	apr-util-1.5.4.tar.gz
++# From http://www.apache.org/dist/apr/apr-util-1.6.1.tar.bz2.sha256
++sha256	d3e12f7b6ad12687572a3a39475545a072608f4ba03a6ce8a3778f607dd0035b	apr-util-1.6.1.tar.bz2
++# Locally calculated
++sha256	ef5609d18601645ad6fe22c6c122094be40e976725c1d0490778abacc836e7a2	LICENSE
+diff --git a/package/apr-util/apr-util.mk b/package/apr-util/apr-util.mk
+index bc0572e1109a..c44cef009f82 100644
+--- a/package/apr-util/apr-util.mk
++++ b/package/apr-util/apr-util.mk
+@@ -4,7 +4,8 @@
+ #
+ ################################################################################
+ 
+-APR_UTIL_VERSION = 1.5.4
++APR_UTIL_VERSION = 1.6.1
++APR_UTIL_SOURCE = apr-util-$(APR_UTIL_VERSION).tar.bz2
+ APR_UTIL_SITE = http://archive.apache.org/dist/apr
+ APR_UTIL_LICENSE = Apache-2.0
+ APR_UTIL_LICENSE_FILES = LICENSE
+-- 
+2.14.2
