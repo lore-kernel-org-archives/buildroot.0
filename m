@@ -1,60 +1,40 @@
-From: Norbert Lange <nolange79@gmail.com>
-Date: Mon, 30 Oct 2017 17:31:21 +0100
-Subject: [Buildroot] [PATCH 1/1] Fix build of lttng-libust
-Message-ID: <20171030163121.939-1-norbert.lange@andritz.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 30 Oct 2017 18:02:43 +0100
+Subject: [Buildroot] [PATCH 1/1] libmediaart: bump to version 1.9.4
+Message-ID: <20171030170243.29005-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The build of doc/examples/cmake-multiple-shared-libraries
-does fail as a dependend library is missing.
-This issue is not specific to builroot and should ideally
-be fixed upstream (Issue: https://bugs.lttng.org/issues/1132)
-
-The fix is done without any indepth knowledge of the CMake
-mechanisms, but seems to work correctly
-
-Signed-off-by: Norbert Lange <norbert.lange@andritz.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/lttng-libust/0005_fix_build.patch | 28 ++++++++++++++++++++++++++++
- 1 file changed, 28 insertions(+)
- create mode 100644 package/lttng-libust/0005_fix_build.patch
+ package/libmediaart/libmediaart.hash | 4 ++--
+ package/libmediaart/libmediaart.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/lttng-libust/0005_fix_build.patch b/package/lttng-libust/0005_fix_build.patch
-new file mode 100644
-index 0000000000..96be80aaa6
---- /dev/null
-+++ b/package/lttng-libust/0005_fix_build.patch
-@@ -0,0 +1,28 @@
-+diff -burN lttng-ust-2.9.0.org/doc/examples/cmake-multiple-shared-libraries/cmake/FindLTTngUST.cmake lttng-ust-2.9.0/doc/examples/cmake-multiple-shared-libraries/cmake/FindLTTngUST.cmake
-+--- lttng-ust-2.9.0.org/doc/examples/cmake-multiple-shared-libraries/cmake/FindLTTngUST.cmake	2016-11-29 02:46:24.000000000 +0100
-++++ lttng-ust-2.9.0/doc/examples/cmake-multiple-shared-libraries/cmake/FindLTTngUST.cmake	2017-10-30 17:01:42.321775178 +0100
-+@@ -49,6 +49,8 @@
-+ # build is a possibility (Yocto).
-+ find_path(LTTNGUST_INCLUDE_DIRS_GENERATED NAMES lttng/ust-config.h)
-+ find_library(LTTNGUST_LIBRARIES NAMES lttng-ust)
-++find_library(LTTNGUST_LIBRARIES_DEP NAMES lttng-ust-tracepoint)
-++
-+ 
-+ if(LTTNGUST_INCLUDE_DIRS AND LTTNGUST_INCLUDE_DIRS_GENERATED AND LTTNGUST_LIBRARIES)
-+   # find tracef() and tracelog() support
-+@@ -97,13 +99,14 @@
-+     add_library(LTTng::UST UNKNOWN IMPORTED)
-+     set_target_properties(LTTng::UST PROPERTIES
-+       INTERFACE_INCLUDE_DIRECTORIES "${LTTNGUST_INCLUDE_DIRS};${LTTNGUST_INCLUDE_DIRS_GENERATED}"
-+-      INTERFACE_LINK_LIBRARIES ${CMAKE_DL_LIBS}
-++      INTERFACE_LINK_LIBRARIES "${LTTNGUST_LIBRARIES_DEP};${CMAKE_DL_LIBS}"
-+       IMPORTED_LINK_INTERFACE_LANGUAGES "C"
-+       IMPORTED_LOCATION "${LTTNGUST_LIBRARIES}")
-+   endif()
-+ 
-+   # add libdl to required libraries
-+-  set(LTTNGUST_LIBRARIES ${LTTNGUST_LIBRARIES} ${CMAKE_DL_LIBS})
-++  set(LTTNGUST_LIBRARIES ${LTTNGUST_LIBRARIES} ${LTTNGUST_LIBRARIES_DEP} ${CMAKE_DL_LIBS})
-+ endif()
-+ 
-+ # handle the QUIETLY and REQUIRED arguments and set LTTNGUST_FOUND to
+diff --git a/package/libmediaart/libmediaart.hash b/package/libmediaart/libmediaart.hash
+index 46e4035d7..65cf3cf9a 100644
+--- a/package/libmediaart/libmediaart.hash
++++ b/package/libmediaart/libmediaart.hash
+@@ -1,2 +1,2 @@
+-# Hash from: http://ftp.gnome.org/pub/gnome/sources/libmediaart/1.9/libmediaart-1.9.1.sha256sum:
+-sha256	5b14aa4e0cc84eaec57b6cb28f39092d503fdaecf36d5d165fac37583b7fe949	libmediaart-1.9.1.tar.xz
++# Hash from: http://ftp.gnome.org/pub/gnome/sources/libmediaart/1.9/libmediaart-1.9.4.sha256sum:
++sha256	a57be017257e4815389afe4f58fdacb6a50e74fd185452b23a652ee56b04813d	libmediaart-1.9.4.tar.xz
+diff --git a/package/libmediaart/libmediaart.mk b/package/libmediaart/libmediaart.mk
+index cac45f112..db4f1fa2a 100644
+--- a/package/libmediaart/libmediaart.mk
++++ b/package/libmediaart/libmediaart.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ LIBMEDIAART_VERSION_MAJOR = 1.9
+-LIBMEDIAART_VERSION = $(LIBMEDIAART_VERSION_MAJOR).1
++LIBMEDIAART_VERSION = $(LIBMEDIAART_VERSION_MAJOR).4
+ LIBMEDIAART_SOURCE = libmediaart-$(LIBMEDIAART_VERSION).tar.xz
+ LIBMEDIAART_SITE = \
+ 	http://ftp.gnome.org/pub/gnome/sources/libmediaart/$(LIBMEDIAART_VERSION_MAJOR)
 -- 
-2.14.2
+2.14.1
