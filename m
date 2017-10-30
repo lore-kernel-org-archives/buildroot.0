@@ -1,74 +1,66 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 30 Oct 2017 07:19:49 +0200
-Subject: [Buildroot] [PATCH v2 1/2] package/libssh2: Add selectable
- crypto libraries
-In-Reply-To: <1509054225-19795-1-git-send-email-sam.voss@rockwellcollins.com>
-References: <1509054225-19795-1-git-send-email-sam.voss@rockwellcollins.com>
-Message-ID: <20171030051949.n2w5iprgp6cv5zg2@sapphire.tkos.co.il>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 30 Oct 2017 08:00:08 +0100 (CET)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2017-10-29
+Message-ID: <20171030070008.1F34320765@mail.free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Sam,
+Hello,
 
-On Thu, Oct 26, 2017 at 04:43:44PM -0500, Sam Voss wrote:
-> Add functionality to allow crypto libraries for libssh2 to be selectable
-> by a choice instead of a fallback that may not work in all cases.
-> Previous fallback is maintained from within the "defaults" of the choice
-> menu, but can be overridden by making a choice.
-> 
-> This fixes issues where two crypto libraries are present on the system,
-> but the fallback order picks the wrong one.
-> 
-> Signed-off-by: Sam Voss <sam.voss@rockwellcollins.com>
-> ---
+Build statistics for 2017-10-29
+================================
 
-[...]
+      successes : 103
+       failures : 23 
+       timeouts : 0  
+          TOTAL : 126
 
-> diff --git a/package/libssh2/libssh2.mk b/package/libssh2/libssh2.mk
-> index dedb890..3978698 100644
-> --- a/package/libssh2/libssh2.mk
-> +++ b/package/libssh2/libssh2.mk
-> @@ -12,20 +12,20 @@ LIBSSH2_INSTALL_STAGING = YES
->  LIBSSH2_CONF_OPTS = --disable-examples-build
->  
->  # Dependency is one of mbedtls, libgcrypt or openssl, guaranteed in
-> -# Config.in. Favour mbedtls.
-> -ifeq ($(BR2_PACKAGE_MBEDTLS),y)
-> +# Config.in.
-> +ifeq ($(BR2_PACKAGE_LIBSSH2_MBEDTLS),y)
->  LIBSSH2_DEPENDENCIES += mbedtls
->  LIBSSH2_CONF_OPTS += --with-mbedtls=$(STAGING_DIR)/usr \
->  	--without-openssl --without-libgcrypt
->  LIBSSH2_CONF_ENV += ac_cv_libgcrypt=no
-> -else ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
-> +else ifeq ($(BR2_PACKAGE_LIBSSH2_LIBGCRYPT),y)
->  LIBSSH2_DEPENDENCIES += libgcrypt
->  LIBSSH2_CONF_OPTS += --with-libgcrypt=$(STAGING_DIR)/usr \
->  	--without-openssl --without-mbedtls
->  # configure.ac forgets to link to dependent libraries of gcrypt breaking static
->  # linking
->  LIBSSH2_CONF_ENV += LIBS="`$(STAGING_DIR)/usr/bin/libgcrypt-config --libs`"
-> -else
-> +else ifeq ($(BR2_PACKAGE_LIBSSH2_OPENSSL),y)
->  LIBSSH2_DEPENDENCIES += openssl
->  LIBSSH2_CONF_OPTS += --with-openssl \
->  	--with-libssl-prefix=$(STAGING_DIR)/usr \
+Classification of failures by reason
+====================================
 
-Have you tested combination of options after the version bump in the next 
-patch?
+                  boost-1.65.1 | 5 
+           argp-standalone-1.3 | 4 
+             dbus-python-1.2.4 | 2 
+      host-uboot-tools-2017.07 | 2 
+                     nmap-7.60 | 2 
+                prosody-0.9.12 | 2 
+                    gpm-1.20.7 | 1 
+             gstreamer-0.10.36 | 1 
+            lttng-libust-2.9.0 | 1 
+             lttng-tools-2.9.5 | 1 
+           lua-sdl2-v2.0.5-6.0 | 1 
+              python-pyqt5-5.7 | 1 
 
-The master libssh2 branch changes the configure crypto selection options to 
---with-crypto=auto|openssl|libgcrypt|mbedtls. You should either take this into 
-account in the version bump patch, or (preferably, IMO) reverse the patches 
-order, change to --with-crypto in the version bump patch, and add selectable 
-crypto backend in the second.
 
-baruch
+Detail of failures
+===================
+
+         arc |            argp-standalone-1.3 | NOK | http://autobuild.buildroot.net/results/8e2b1bf4dc707d1c6e9f78193fdb5357915bba73 | ORPH
+         arc |            argp-standalone-1.3 | NOK | http://autobuild.buildroot.net/results/d81dd107c8cbb9ad04a2ccc74a469a32cb75aaf6 | ORPH
+         arc |            argp-standalone-1.3 | NOK | http://autobuild.buildroot.net/results/4337c60866a0f68e5e764fb53b655487f744221a | ORPH
+         arc |            argp-standalone-1.3 | NOK | http://autobuild.buildroot.net/results/aa9fb0f89a09f5ed6e96738f6c1b34f0768cff67 | ORPH
+      mipsel |                   boost-1.65.1 | NOK | http://autobuild.buildroot.net/results/35c5df43dce65d417f83c00e85a2d791530a9b99 |     
+         arm |                   boost-1.65.1 | NOK | http://autobuild.buildroot.net/results/7e77f593d99c6c4bb5ea72b4370087e31a43c80c |     
+      mipsel |                   boost-1.65.1 | NOK | http://autobuild.buildroot.net/results/01c88dc7cc029fac23e906e3124f55e498e2314a |     
+     powerpc |                   boost-1.65.1 | NOK | http://autobuild.buildroot.net/results/0860e3fd058acaf212aab877410c78e91f86ec50 |     
+        m68k |                   boost-1.65.1 | NOK | http://autobuild.buildroot.net/results/103f69801f74f3eaa0d4f70e40cd6fc1c5ff21ee |     
+      x86_64 |              dbus-python-1.2.4 | NOK | http://autobuild.buildroot.net/results/e6a1360a939b304710a402a32c56138a584fc8d4 | ORPH
+      x86_64 |              dbus-python-1.2.4 | NOK | http://autobuild.buildroot.net/results/caaf69b10dd486aec42c11af8df642a5300b533f | ORPH
+         arc |                     gpm-1.20.7 | NOK | http://autobuild.buildroot.net/results/ddd61867e1aecf1eb5d68338ef76337df95f39e3 |     
+         arm |              gstreamer-0.10.36 | NOK | http://autobuild.buildroot.net/results/b8007874102502a5400e1cadcc63502cfbc82c6b | ORPH
+microblazeel |       host-uboot-tools-2017.07 | NOK | http://autobuild.buildroot.net/results/823aadad781e02edcf7c807450ff3d0ea6942655 | ORPH
+         arm |       host-uboot-tools-2017.07 | NOK | http://autobuild.buildroot.net/results/0a90eb440fe8e726435606b6d8876fafcb3b35d1 | ORPH
+      x86_64 |             lttng-libust-2.9.0 | NOK | http://autobuild.buildroot.net/results/c86a82b2fd41316a7a451b20d9274d5c95f89baa |     
+      x86_64 |              lttng-tools-2.9.5 | NOK | http://autobuild.buildroot.net/results/3a4021662a7dee66601cc11e55e6f8b9b8abb6eb |     
+         arm |            lua-sdl2-v2.0.5-6.0 | NOK | http://autobuild.buildroot.net/results/1a851f8089775ab41d4026b7ef1510e73da29dcb |     
+      x86_64 |                      nmap-7.60 | NOK | http://autobuild.buildroot.net/results/21d3b12c3fc247ba696fef7d97c0c58a5af462dc | ORPH
+    mips64el |                      nmap-7.60 | NOK | http://autobuild.buildroot.net/results/6f562ed839d165d040045ad933abaf627805caec | ORPH
+      x86_64 |                 prosody-0.9.12 | NOK | http://autobuild.buildroot.net/results/1fc360cc5e9c361092787c4ec19b4c3d4aa847c9 |     
+      x86_64 |                 prosody-0.9.12 | NOK | http://autobuild.buildroot.net/results/5a224de5349f592897d9cd6496ab4398562a7c4d |     
+       nios2 |               python-pyqt5-5.7 | NOK | http://autobuild.buildroot.net/results/51327b8d09c42dba557f25332a7525b5d623abc6 |     
 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+http://autobuild.buildroot.net
