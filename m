@@ -1,32 +1,151 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 31 Oct 2017 20:08:30 +0100
-Subject: [Buildroot] [git commit] package/dash: drop the default value of
-	the DASH_SOURCE variable
-Message-ID: <20171031190547.751BD7FE8D@busybox.osuosl.org>
+Date: Tue, 31 Oct 2017 20:08:04 +0100
+Subject: [Buildroot] [git commit] swupdate: Fix SHA256 hash verification
+Message-ID: <20171031190547.6916B811FA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e41f4d239b1efc6e4b595196152ae05fc18d3662
+commit: https://git.buildroot.net/buildroot/commit/?id=7386925e2d8776e8adb2982050ad21f0eafd119e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com>
+swupdate 2017.07 has a bug which makes hash verification faulty.
+The commit adds a patch to fix the issue. The fix has already been
+pushed to upstream and is a copy of the commit
+dba95dcd3739c604a81ffa2df2545e7a4cd430cf in the swupdate repo [1].
+
+[1] https://github.com/sbabic/swupdate
+
+Signed-off-by: Maksim Salau <msalau@iotecha.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/dash/dash.mk | 1 -
- 1 file changed, 1 deletion(-)
+ .../0001-Fix-SHA256-hash-verification.patch        | 119 +++++++++++++++++++++
+ 1 file changed, 119 insertions(+)
 
-diff --git a/package/dash/dash.mk b/package/dash/dash.mk
-index 72ef722..c8b4164 100644
---- a/package/dash/dash.mk
-+++ b/package/dash/dash.mk
-@@ -5,7 +5,6 @@
- ################################################################################
- 
- DASH_VERSION = 0.5.9.1
--DASH_SOURCE = dash-$(DASH_VERSION).tar.gz
- DASH_SITE = http://gondor.apana.org.au/~herbert/dash/files
- DASH_LICENSE = BSD-3-Clause, GPL-2.0+ (mksignames.c)
- DASH_LICENSE_FILES = COPYING
+diff --git a/package/swupdate/0001-Fix-SHA256-hash-verification.patch b/package/swupdate/0001-Fix-SHA256-hash-verification.patch
+new file mode 100644
+index 0000000..b7bd9d3
+--- /dev/null
++++ b/package/swupdate/0001-Fix-SHA256-hash-verification.patch
+@@ -0,0 +1,119 @@
++From dba95dcd3739c604a81ffa2df2545e7a4cd430cf Mon Sep 17 00:00:00 2001
++From: Maksim Salau <msalau@iotecha.com>
++Date: Wed, 25 Oct 2017 16:17:14 +0300
++Subject: [PATCH] Fix SHA256 hash verification
++
++If a CPIO archive is not valid or copying fails due to any reason,
++an error message is printed, but update process continues.
++The change makes the utility fail in case of read errors or
++hash verification errors.
++
++Signed-off-by: Maksim Salau <msalau@iotecha.com>
++Acked-by: Stefano Babic <sbabic@denx.de>
++---
++ core/cpio_utils.c   | 28 +++++++++++++++++++++-------
++ corelib/installer.c | 11 +++++++++--
++ 2 files changed, 30 insertions(+), 9 deletions(-)
++
++diff --git a/core/cpio_utils.c b/core/cpio_utils.c
++index e962fae..de674ec 100644
++--- a/core/cpio_utils.c
+++++ b/core/cpio_utils.c
++@@ -414,24 +414,34 @@ int extract_img_from_cpio(int fd, unsigned long offset, struct filehdr *fdh)
++ off_t extract_next_file(int fd, int fdout, off_t start, int compressed,
++ 		int encrypted, unsigned char *hash)
++ {
+++	int ret;
++ 	struct filehdr fdh;
++ 	uint32_t checksum = 0;
++ 	unsigned long offset = start;
++ 
++-	if (lseek(fd, offset, SEEK_SET) < 0) {
+++	ret = lseek(fd, offset, SEEK_SET);
+++	if (ret < 0) {
++ 		ERROR("CPIO file corrupted : %s\n",
++ 		strerror(errno));
++-		return -1;
+++		return ret;
++ 	}
++ 
++-	if (extract_cpio_header(fd, &fdh, &offset)) {
+++	ret = extract_cpio_header(fd, &fdh, &offset);
+++	if (ret) {
++ 		ERROR("CPIO Header wrong\n");
+++		return ret;
++ 	}
++ 
++-	if (lseek(fd, offset, SEEK_SET) < 0)
+++	ret = lseek(fd, offset, SEEK_SET);
+++	if (ret < 0) {
++ 		ERROR("CPIO file corrupted : %s\n", strerror(errno));
++-	if (copyfile(fd, &fdout, fdh.size, &offset, 0, 0, compressed, &checksum, hash, encrypted, NULL) < 0) {
+++		return ret;
+++	}
+++
+++	ret = copyfile(fd, &fdout, fdh.size, &offset, 0, 0, compressed, &checksum, hash, encrypted, NULL);
+++	if (ret < 0) {
++ 		ERROR("Error copying extracted file\n");
+++		return ret;
++ 	}
++ 
++ 	TRACE("Copied file:\n\tfilename %s\n\tsize %u\n\tchecksum 0x%lx %s\n",
++@@ -440,9 +450,11 @@ off_t extract_next_file(int fd, int fdout, off_t start, int compressed,
++ 		(unsigned long)checksum,
++ 		(checksum == fdh.chksum) ? "VERIFIED" : "WRONG");
++ 
++-	if (checksum != fdh.chksum)
+++	if (checksum != fdh.chksum) {
++ 		ERROR("Checksum WRONG ! Computed 0x%lx, it should be 0x%lx\n",
++ 			(unsigned long)checksum, fdh.chksum);
+++		return -EINVAL;
+++	}
++ 
++ 	return offset;
++ }
++@@ -492,8 +504,10 @@ int cpio_scan(int fd, struct swupdate_cfg *cfg, off_t start)
++ 
++ 		/* Next header must be 4-bytes aligned */
++ 		offset += NPAD_BYTES(offset);
++-		if (lseek(fd, offset, SEEK_SET) < 0)
+++		if (lseek(fd, offset, SEEK_SET) < 0) {
++ 			ERROR("CPIO file corrupted : %s\n", strerror(errno));
+++			return -1;
+++		}
++ 	}
++ 
++ 	return 0;
++diff --git a/corelib/installer.c b/corelib/installer.c
++index 592ada8..d2dee28 100644
++--- a/corelib/installer.c
+++++ b/corelib/installer.c
++@@ -154,6 +154,7 @@ static int extract_script(int fd, struct imglist *head, const char *dest)
++ {
++ 	struct img_type *script;
++ 	int fdout;
+++	int ret = 0;
++ 
++ 	LIST_FOREACH(script, head, next) {
++ 		if (script->provided == 0) {
++@@ -166,9 +167,15 @@ static int extract_script(int fd, struct imglist *head, const char *dest)
++ 				dest, script->fname);
++ 
++ 		fdout = openfileoutput(script->extract_file);
++-		extract_next_file(fd, fdout, script->offset, 0,
++-					script->is_encrypted, script->sha256);
+++		if (fdout < 0)
+++			return fdout;
+++
+++		ret = extract_next_file(fd, fdout, script->offset, 0,
+++								script->is_encrypted, script->sha256);
++ 		close(fdout);
+++
+++		if (ret < 0)
+++			return ret;
++ 	}
++ 	return 0;
++ }
++-- 
++2.7.4
++
