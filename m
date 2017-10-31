@@ -1,106 +1,123 @@
-From: Steve Kenton <skenton@ou.edu>
-Date: Mon, 30 Oct 2017 20:53:39 -0500
-Subject: [Buildroot] Libpng missing a link dependency in 2017-08?
-In-Reply-To: <20171030113651.6b4bfc82@windsurf>
-References: <afc724e2-a455-82cd-80f8-ee329e2a3e47@ou.edu>
- <20171030113651.6b4bfc82@windsurf>
-Message-ID: <5d0519b8-c5d3-6381-bc38-ae21c6ed0905@ou.edu>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 31 Oct 2017 06:58:26 +0200
+Subject: [Buildroot] [PATCH 1/1] turbovnc: new package
+In-Reply-To: <1509347376-12231-1-git-send-email-stefan.froberg@petroprogram.com>
+References: <1509347376-12231-1-git-send-email-stefan.froberg@petroprogram.com>
+Message-ID: <20171031045826.fiaekmm4omtiel2d@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10/30/2017 05:36 AM, Thomas Petazzoni wrote:Hello,
+Hi Stefan,
 
-> On Sun, 29 Oct 2017 15:36:37 -0500, Steve Kenton wrote:
->> I recently began evaluating a switch to buildroot-2017.08 and started
->> getting the following message (transcribed from a screen shot)
->>
->> ffprobe: Relink `/usr/lib64/libpng16.so.16' with
->> `/lib64/libpthread.so.0' for IFUNC symbol `longjmp'
->>
->> As far as I can determine it is because libpng 1.6.31 uses longjmp() and
->> it needs another link dependency to avoid the runtime fixup above.
->>
->> I did not see anything on the list about this and buildroot 2017-08.1
->> did not switch to libpng 1.6.32 although I'm building it anyway on
->> general principles.
->>
->> So, is this likely a libpng build issue or should I start digging into
->> ffmpeg?
-> Could you provide a minimal .config that exhibits the problem you're
-> seeing ?
->
-> Best regards,
->
-> Thomas
->
->
-Here you go, the small sample jpeg file attached is the one I used for 
-testing.
-I needed to add USB3 support for my motherboard or I could not login, 
-hence the script
-Just untar buildroot-2017.08.1 then copy in the jpeg file and the script 
-and run it
-The resulting bzImage file will illustrate the problem. See comments in 
-the script
+On Mon, Oct 30, 2017 at 07:09:36AM +0000, Stefan Fr?berg wrote:
+> TurboVNC, a high-performance VNC.
+> 
+> Signed-off-by: Stefan Fr?berg <stefan.froberg@petroprogram.com>
+> ---
+>  package/Config.in              |  1 +
+>  package/turbovnc/Config.in     | 16 ++++++++++++++++
+>  package/turbovnc/turbovnc.hash |  5 +++++
+>  package/turbovnc/turbovnc.mk   | 21 +++++++++++++++++++++
+>  4 files changed, 43 insertions(+)
+>  create mode 100644 package/turbovnc/Config.in
+>  create mode 100644 package/turbovnc/turbovnc.hash
+>  create mode 100644 package/turbovnc/turbovnc.mk
+> 
+> diff --git a/package/Config.in b/package/Config.in
+> index dbfb288..2ab14bf 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -330,6 +330,7 @@ comment "X applications"
+>  	source "package/qt-webkit-kiosk/Config.in"
+>  	source "package/rdesktop/Config.in"
+>  	source "package/synergy/Config.in"
+> +	source "package/turbovnc/Config.in"
+>  	source "package/wmctrl/Config.in"
+>  	source "package/x11vnc/Config.in"
+>  	source "package/xdotool/Config.in"
+> diff --git a/package/turbovnc/Config.in b/package/turbovnc/Config.in
+> new file mode 100644
+> index 0000000..6ea2882
+> --- /dev/null
+> +++ b/package/turbovnc/Config.in
+> @@ -0,0 +1,16 @@
+> +config BR2_PACKAGE_TURBOVNC
+> +	bool "turbovnc"
+> +	help
+> +	  TurboVNC is a high-performance, enterprise-quality version 
+> +	  of VNC based on TightVNC, TigerVNC, and X.org.
+> +	  It contains a variant of Tight encoding that is tuned for
+> +	  maximum performance and compression with 3D applications
+> +	  (VirtualGL), video, and other image-intensive workloads.
+> +	  TurboVNC, in combination with VirtualGL, provides a 
+> +	  complete solution for remotely displaying 3D applications
+> +	  with interactive performance. TurboVNC's high-speed encoding
+> +	  methods have been adopted by TigerVNC and libvncserver,
+> +	  and TurboVNC is also compatible with any other TightVNC
+> +	  derivative.
+> +
+> +	  https://turbovnc.org
+> diff --git a/package/turbovnc/turbovnc.hash b/package/turbovnc/turbovnc.hash
+> new file mode 100644
+> index 0000000..0cad264
+> --- /dev/null
+> +++ b/package/turbovnc/turbovnc.hash
+> @@ -0,0 +1,5 @@
+> +# From https://sourceforge.net/projects/turbovnc/files/2.1.2/
+> +md5	9d04b26d40664d0d8072e8b1828f69c4  turbovnc-2.1.2.tar.gz
+> +sha1	cd99a27cee86f0680410133beb25da1d6f35a3ea  turbovnc-2.1.2.tar.gz
+> +# Locally computed
+> +sha256	2389f76eafc48412b980a61280ffb8d111dacd9e51d5e3df2112f505558b48d4  turbovnc-2.1.2.tar.gz
+> diff --git a/package/turbovnc/turbovnc.mk b/package/turbovnc/turbovnc.mk
+> new file mode 100644
+> index 0000000..a861f78
+> --- /dev/null
+> +++ b/package/turbovnc/turbovnc.mk
+> @@ -0,0 +1,21 @@
+> +################################################################################
+> +#
+> +# turbovnc
+> +#
+> +################################################################################
+> +
+> +TURBOVNC_VERSION = 2.1.2
+> +TURBOVNC_SOURCE = turbovnc-$(TURBOVNC_VERSION).tar.gz
+> +TURBOVNC_SITE = https://downloads.sourceforge.net/project/turbovnc/$(TURBOVNC_VERSION)
+> +TURBOVNC_DEPENDENCIES = jpeg-turbo linux-pam openssl perl xfont_font-misc-misc xlib_libICE xlib_libSM xlib_libX11 \
+> +			xlib_libXext xlib_libXau xlib_libXdmcp 
 
-Steve Kenton
+You need to select these dependencies in Config.in to make sure that they 
+actually get built. Don't forget to propagate their dependencies as well. As 
+far as I can see perl is a run-time only dependency, so there is no need to 
+list it here, since build order doesn't matter. Same goes for 
+xfont_font-misc-misc, I guess.
 
-#! /bin/bash
-# buildme.sh - Reproduce the following message with a minimal 
-configuration for buildroot-2017-08.1 to simplify troubleshooting
-# Relink /usr/lib64/libpng16.so.16 with /lib64/libpthread.so.0 for IFUNC 
-symbol longjmp
-# The most applicable Google hit I found is:
-# 
-http://lists.openembedded.org/pipermail/openembedded-core/2017-January/130983.html
-# "> > > The gdk-pixbuf link does use -lpthread, is this saying that libpng
-# should be linked against pthread too?? I can replicate on demand if
-# you have any suggestions.
-# >
-# >
-# That's what it's saying, and this was introduced by the fix for:"
-#
-make clean # nothing up my sleeve
-# This is the minimal config resulting from "make savedefconfig"
-cat > .config <<'EOF'
-BR2_x86_64=y
-BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
-BR2_LINUX_KERNEL=y
-BR2_LINUX_KERNEL_DEFCONFIG="x86_64"
-BR2_PACKAGE_FFMPEG=y
-BR2_PACKAGE_FREETYPE=y
-BR2_PACKAGE_LIBPNG=y
-BR2_TARGET_ROOTFS_INITRAMFS=y
-EOF
-make olddefconfig # fill out buildroot .config file
-make # build the base buildroot system
-cp --force Splash.jpg output/target/root/ # the jpeg file used for testing
-# Tweak the kernel config for USB support to allow login with my motherboard
-eval $(grep BR2_LINUX_KERNEL_VERSION .config) # grab the kernel config 
-variable
-kernelver=$BR2_LINUX_KERNEL_VERSION # what kernel are we using
-kerneldir=$(readlink -e output/build/linux-$kernelver) # convert 
-relative path to absolute
-configscript=$kerneldir/scripts/config # a handy utility shipped with 
-the kernel source
-$configscript --file $kerneldir/.config --enable CONFIG_USB_XHCI_HCD # 
-USB 3.x support
-make --directory=$kerneldir olddefconfig # change to kernel source 
-directory to fill out the kernel .config file
-make linux-rebuild # rebuild a bit of stuff due to the kernel config changes
-make
-# output/images/bzImage should be ready to boot up if copied to 
-/boot/bzImage on another system
-# login as root with no password and run "ffmpeg -i Splash.jpg junk.jpg"
-# The message of interest will be near the top of the FFmpeg output
+unix/Xvnc/README indicates that linux-pam is an optional dependency. Having 
+linux-pam optional would allow building turbovnc with musl libc.
 
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: Splash.jpg
-Type: image/jpeg
-Size: 40354 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20171030/f165fce6/attachment-0001.jpg>
+> +TURBOVNC_LICENSE = GPL-2.0, MIT (putty), Dual FTL/GPL-2.0+ (freetype) \
+> +		   bzip2 license (bzip2)
+
+The README.txt file mentions also the zlib license.
+
+> +TURBOVNC_LICENSE_FILES = doc/LICENSE.txt doc/LICENSE-PuTTY.txt \
+> +			 unix/Xvnc/extras/freetype2/doc/LICENSE.txt \
+> +			 unix/Xvnc/lib/bzip2/LICENSE
+
+README.txt should also be here. Adding hashes for these files would also be 
+nice.
+
+> +# Build just server
+> +TURBOVNC_CONF_OPTS += -DTVNC_BUILDJAVA=0 -DTVNC_BUILDNATIVE=0
+> +
+> +$(eval $(cmake-package))
+
+baruch
+
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
