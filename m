@@ -1,89 +1,30 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 31 Oct 2017 19:31:29 +0200
+From: Sam Voss <sam.voss@rockwellcollins.com>
+Date: Tue, 31 Oct 2017 12:48:59 -0500
 Subject: [Buildroot] [PATCH v4 1/2] package/libssh2: Update to newest
 	version
-In-Reply-To: <1509470578-42323-1-git-send-email-sam.voss@rockwellcollins.com>
+In-Reply-To: <20171031173129.yqyibqxrtyoy4o2r@tarshish>
 References: <1509470578-42323-1-git-send-email-sam.voss@rockwellcollins.com>
-Message-ID: <20171031173129.yqyibqxrtyoy4o2r@tarshish>
+ <20171031173129.yqyibqxrtyoy4o2r@tarshish>
+Message-ID: <CAH=K+6=BOtbrQ2G+vUFtS_3GdQYhhiSFkJK=YY=ZVo+i_2C9cA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Sam,
+Baruch, All,
 
-On Tue, Oct 31, 2017 at 12:22:57PM -0500, Sam Voss wrote:
-> Update libssh2 to use the newest version from git. This caused a
-> transition from released version number to hash as it has not been
-> version rev'd in over a year (see issue
-> https://github.com/libssh2/libssh2/issues/220 for bump request).
-> 
-> This brings in changes to the autoconf to correctly pick the crypto
-> library.
-> 
-> Signed-off-by: Sam Voss <sam.voss@rockwellcollins.com>
-> 
-> --
-
+On Tue, Oct 31, 2017 at 12:31 PM, Baruch Siach <baruch@tkos.co.il> wrote:
+> Hi Sam,
 [...]
+>
+>>  # Dependency is one of mbedtls, libgcrypt or openssl, guaranteed in
+>>  # Config.in. Favour mbedtls.
+>> -ifeq ($(BR2_PACKAGE_MBEDTLS),y)
+>> +ifeq ($(BR2_PACKAGE_LIBSSH2_MBEDTLS),y)
+>
+> Now this part belongs to the next patch.
 
-> diff --git a/package/libssh2/libssh2.mk b/package/libssh2/libssh2.mk
-> index dedb890..f1f0ec6 100644
-> --- a/package/libssh2/libssh2.mk
-> +++ b/package/libssh2/libssh2.mk
-> @@ -4,32 +4,33 @@
->  #
->  ################################################################################
->  
-> -LIBSSH2_VERSION = 1.8.0
-> -LIBSSH2_SITE = http://www.libssh2.org/download
-> +LIBSSH2_VERSION = 616fd4d1b3e4a55de67c48819fefca83132126b5
-> +LIBSSH2_SITE = $(call github,libssh2,libssh2,$(LIBSSH2_VERSION))
->  LIBSSH2_LICENSE = BSD
->  LIBSSH2_LICENSE_FILES = COPYING
->  LIBSSH2_INSTALL_STAGING = YES
->  LIBSSH2_CONF_OPTS = --disable-examples-build
->  
-> +# autoreconf must be ran when building off git, as it has not been ran at hash
-> +LIBSSH2_AUTORECONF = YES
-> +
->  # Dependency is one of mbedtls, libgcrypt or openssl, guaranteed in
->  # Config.in. Favour mbedtls.
-> -ifeq ($(BR2_PACKAGE_MBEDTLS),y)
-> +ifeq ($(BR2_PACKAGE_LIBSSH2_MBEDTLS),y)
+This is embarrassing. Trying to do too many things at once.
 
-Now this part belongs to the next patch.
-
->  LIBSSH2_DEPENDENCIES += mbedtls
-> -LIBSSH2_CONF_OPTS += --with-mbedtls=$(STAGING_DIR)/usr \
-> -	--without-openssl --without-libgcrypt
-> -LIBSSH2_CONF_ENV += ac_cv_libgcrypt=no
-> +LIBSSH2_CONF_OPTS += --with-libmbedcrypto-prefix=$(STAGING_DIR)/usr \
-> +	--with-crypto=mbedtls
->  else ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
->  LIBSSH2_DEPENDENCIES += libgcrypt
-> -LIBSSH2_CONF_OPTS += --with-libgcrypt=$(STAGING_DIR)/usr \
-> -	--without-openssl --without-mbedtls
-> +LIBSSH2_CONF_OPTS += --with-libgcrypt-prefix=$(STAGING_DIR)/usr \
-> +	--with-crypto=libgcrypt
->  # configure.ac forgets to link to dependent libraries of gcrypt breaking static
->  # linking
->  LIBSSH2_CONF_ENV += LIBS="`$(STAGING_DIR)/usr/bin/libgcrypt-config --libs`"
->  else
->  LIBSSH2_DEPENDENCIES += openssl
-> -LIBSSH2_CONF_OPTS += --with-openssl \
-> -	--with-libssl-prefix=$(STAGING_DIR)/usr \
-> -	--without-libgcrypt --without-mbedtls
-> +LIBSSH2_CONF_OPTS += --with-libssl-prefix=$(STAGING_DIR)/usr \
-> +	--with-crypto=openssl
->  endif
->  
->  # Add zlib support if enabled
-
-baruch
-
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+Sam
