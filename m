@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 31 Oct 2017 11:57:19 +0100
-Subject: [Buildroot] [PATCH 1/1] libmediaart: bump to version 1.9.4
-In-Reply-To: <20171030170243.29005-1-fontaine.fabrice@gmail.com>
-References: <20171030170243.29005-1-fontaine.fabrice@gmail.com>
-Message-ID: <20171031115719.7da511ca@windsurf>
+Date: Tue, 31 Oct 2017 11:57:29 +0100
+Subject: [Buildroot] [PATCH 1/2] apr: security bump to version 1.6.3
+In-Reply-To: <6c5b5801af6b7ce17eae8176827b0ce141a15c94.1509390662.git.baruch@tkos.co.il>
+References: <6c5b5801af6b7ce17eae8176827b0ce141a15c94.1509390662.git.baruch@tkos.co.il>
+Message-ID: <20171031115729.52e60dd5@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,14 +12,21 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 30 Oct 2017 18:02:43 +0100, Fabrice Fontaine wrote:
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+On Mon, 30 Oct 2017 21:11:01 +0200, Baruch Siach wrote:
+> Fixes CVE-2017-12613: Out-of-bounds array deref in apr_time_exp*()
+> functions.
+> 
+> Use upstream provided SHA256 hash.
+> 
+> Add license has.
+> 
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 > ---
->  package/libmediaart/libmediaart.hash | 4 ++--
->  package/libmediaart/libmediaart.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>  package/apr/apr.hash | 6 ++++--
+>  package/apr/apr.mk   | 2 +-
+>  2 files changed, 5 insertions(+), 3 deletions(-)
 
-Applied to master, thanks.
+Both applied, thanks.
 
 Thomas
 -- 
