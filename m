@@ -1,26 +1,20 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 31 Oct 2017 20:08:42 +0100
-Subject: [Buildroot] [PATCH] swupdate: Fix SHA256 hash verification
-In-Reply-To: <1509436264-17646-1-git-send-email-msalau@iotecha.com> (Maksim
- Salau's message of "Tue, 31 Oct 2017 10:51:04 +0300")
-References: <1509436264-17646-1-git-send-email-msalau@iotecha.com>
-Message-ID: <87k1zbi18l.fsf@dell.be.48ers.dk>
+Date: Tue, 31 Oct 2017 20:09:00 +0100
+Subject: [Buildroot] [PATCH 1/1] package/dash: drop the default value of
+	the DASH_SOURCE variable
+In-Reply-To: <1509437772-19274-1-git-send-email-jerzy.m.grzegorek@gmail.com>
+ (Jerzy Grzegorek's message of "Tue, 31 Oct 2017 09:16:12 +0100")
+References: <1509437772-19274-1-git-send-email-jerzy.m.grzegorek@gmail.com>
+Message-ID: <87fu9zi183.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Maksim" == Maksim Salau <msalau@iotecha.com> writes:
+>>>>> "Jerzy" == Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com> writes:
 
- > swupdate 2017.07 has a bug which makes hash verification faulty.
- > The commit adds a patch to fix the issue. The fix has already been
- > pushed to upstream and is a copy of the commit
- > dba95dcd3739c604a81ffa2df2545e7a4cd430cf in the swupdate repo [1].
-
- > [1] https://github.com/sbabic/swupdate
-
- > Signed-off-by: Maksim Salau <msalau@iotecha.com>
+ > Signed-off-by: Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com>
 
 Committed, thanks.
 
