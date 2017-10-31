@@ -1,37 +1,44 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 31 Oct 2017 11:57:58 +0100
-Subject: [Buildroot] [PATCH] package/cryptodev-linux: bump to the latest
- version (0a54e38)
-In-Reply-To: <20171030144430.31189-1-antoine.tenart@free-electrons.com>
-References: <20171030144430.31189-1-antoine.tenart@free-electrons.com>
-Message-ID: <20171031115758.348c9db2@windsurf>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Tue, 31 Oct 2017 01:18:34 -0500
+Subject: [Buildroot] [PATCH] argp-standalone: fix build with > GCC5.1
+Message-ID: <20171031061834.27832-1-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+The problem is the change of the default C standard from gnu89 to gnu11
+which changes the semantics of 'inline'. The issue is described in the
+Porting guide at https://gcc.gnu.org/gcc-5/porting_to.html. Adding the
+'-fgnu89-inline' option fixes the issue.
 
-On Mon, 30 Oct 2017 15:44:30 +0100, Antoine Tenart wrote:
-> The build of the cryptodev-linux version used in Buildroot is currently
-> broken for kernels >= 4.13. A fix was pushed upstream:
-> https://github.com/cryptodev-linux/cryptodev-linux/commit/f0d69774afb27ffc62bf353465fba145e70cb85a
-> 
-> This patch bumps the cryptodev-linux package version to use the latest
-> available one, which includes the commit fixing the build for recent
-> kernels.
-> 
-> Signed-off-by: Antoine Tenart <antoine.tenart@free-electrons.com>
-> ---
->  package/cryptodev-linux/cryptodev-linux.hash | 2 +-
->  package/cryptodev-linux/cryptodev-linux.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Similar issue:
+https://www.mail-archive.com/ptxdist at pengutronix.de/msg09746.html
 
-Applied to master, thanks.
+Fixes:
+http://autobuild.buildroot.net/results/a9c/a9cedc54829b7bd2dd7ae6ff2bd6c6db242f1c35//
 
-Thomas
+Tested via test-pkg with the following cfg
+BR2_PACKAGE_ARGP_STANDALONE=y
+
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+---
+ package/argp-standalone/argp-standalone.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/argp-standalone/argp-standalone.mk b/package/argp-standalone/argp-standalone.mk
+index 7a7028c..977b954 100644
+--- a/package/argp-standalone/argp-standalone.mk
++++ b/package/argp-standalone/argp-standalone.mk
+@@ -10,7 +10,7 @@ ARGP_STANDALONE_INSTALL_STAGING = YES
+ ARGP_STANDALONE_LICENSE = LGPL-2.0+
+ 
+ ARGP_STANDALONE_CONF_ENV = \
+-	CFLAGS="$(TARGET_CFLAGS) -fPIC"
++	CFLAGS="$(TARGET_CFLAGS) -fPIC -fgnu89-inline"
+ 
+ define ARGP_STANDALONE_INSTALL_STAGING_CMDS
+ 	$(INSTALL) -D $(@D)/libargp.a $(STAGING_DIR)/usr/lib/libargp.a
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.7.4
