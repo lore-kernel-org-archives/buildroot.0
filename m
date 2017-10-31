@@ -1,123 +1,57 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 31 Oct 2017 06:58:26 +0200
-Subject: [Buildroot] [PATCH 1/1] turbovnc: new package
-In-Reply-To: <1509347376-12231-1-git-send-email-stefan.froberg@petroprogram.com>
-References: <1509347376-12231-1-git-send-email-stefan.froberg@petroprogram.com>
-Message-ID: <20171031045826.fiaekmm4omtiel2d@tarshish>
+From: Jagan Teki <jagannadh.teki@gmail.com>
+Date: Tue, 31 Oct 2017 12:21:13 +0530
+Subject: [Buildroot] [PATCH v4 05/11] board: Add SoPine support
+In-Reply-To: <24dff9c2-03e7-6c34-1f11-ca7eca71bc78@arm.com>
+References: <1509041511-30956-1-git-send-email-jagan@amarulasolutions.com>
+ <1509041511-30956-6-git-send-email-jagan@amarulasolutions.com>
+ <24dff9c2-03e7-6c34-1f11-ca7eca71bc78@arm.com>
+Message-ID: <CAD6G_RSdw6fkfK8O7c6ejw3M=xOpR-RBtMuM2Cn73Hbjod-pYg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Stefan,
+On Tue, Oct 31, 2017 at 6:58 AM, Andr? Przywara <andre.przywara@arm.com> wrote:
+> On 26/10/17 19:11, Jagan Teki wrote:
+>> Add initial support for SoPine board with below features:
+>> - U-Boot 2017.09
+>> - Linux 4.13.7
+>> - Default packages from buildroot
+>
+> ....
+>
+>> diff --git a/board/pine64/sopine/readme.txt b/board/pine64/sopine/readme.txt
+>> new file mode 100644
+>> index 0000000..05d26ee
+>> --- /dev/null
+>> +++ b/board/pine64/sopine/readme.txt
+>> @@ -0,0 +1,38 @@
+>> +Intro
+>> +=====
+>> +
+>> +This default configuration will allow you to start experimenting with the
+>> +buildroot environment for the SoPine. With the current configuration
+>> +it will bring-up the board, and allow access through the serial console.
+>> +
+>> +SoPINE link:
+>> +https://www.pine64.org/?page_id=1491
+>> +
+>> +Wiki link:
+>> +https://confluence.amarulasolutions.com/display/ODWIKI/Pine64+SoPine
+>
+> Is that supposed to be externally accessible? The name doesn't resolve
+> for me. But even if, how stable is that link anyway?
+> I guess you want to point to the linux-sunxi.org Wiki instead.
 
-On Mon, Oct 30, 2017 at 07:09:36AM +0000, Stefan Fr?berg wrote:
-> TurboVNC, a high-performance VNC.
-> 
-> Signed-off-by: Stefan Fr?berg <stefan.froberg@petroprogram.com>
-> ---
->  package/Config.in              |  1 +
->  package/turbovnc/Config.in     | 16 ++++++++++++++++
->  package/turbovnc/turbovnc.hash |  5 +++++
->  package/turbovnc/turbovnc.mk   | 21 +++++++++++++++++++++
->  4 files changed, 43 insertions(+)
->  create mode 100644 package/turbovnc/Config.in
->  create mode 100644 package/turbovnc/turbovnc.hash
->  create mode 100644 package/turbovnc/turbovnc.mk
-> 
-> diff --git a/package/Config.in b/package/Config.in
-> index dbfb288..2ab14bf 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -330,6 +330,7 @@ comment "X applications"
->  	source "package/qt-webkit-kiosk/Config.in"
->  	source "package/rdesktop/Config.in"
->  	source "package/synergy/Config.in"
-> +	source "package/turbovnc/Config.in"
->  	source "package/wmctrl/Config.in"
->  	source "package/x11vnc/Config.in"
->  	source "package/xdotool/Config.in"
-> diff --git a/package/turbovnc/Config.in b/package/turbovnc/Config.in
-> new file mode 100644
-> index 0000000..6ea2882
-> --- /dev/null
-> +++ b/package/turbovnc/Config.in
-> @@ -0,0 +1,16 @@
-> +config BR2_PACKAGE_TURBOVNC
-> +	bool "turbovnc"
-> +	help
-> +	  TurboVNC is a high-performance, enterprise-quality version 
-> +	  of VNC based on TightVNC, TigerVNC, and X.org.
-> +	  It contains a variant of Tight encoding that is tuned for
-> +	  maximum performance and compression with 3D applications
-> +	  (VirtualGL), video, and other image-intensive workloads.
-> +	  TurboVNC, in combination with VirtualGL, provides a 
-> +	  complete solution for remotely displaying 3D applications
-> +	  with interactive performance. TurboVNC's high-speed encoding
-> +	  methods have been adopted by TigerVNC and libvncserver,
-> +	  and TurboVNC is also compatible with any other TightVNC
-> +	  derivative.
-> +
-> +	  https://turbovnc.org
-> diff --git a/package/turbovnc/turbovnc.hash b/package/turbovnc/turbovnc.hash
-> new file mode 100644
-> index 0000000..0cad264
-> --- /dev/null
-> +++ b/package/turbovnc/turbovnc.hash
-> @@ -0,0 +1,5 @@
-> +# From https://sourceforge.net/projects/turbovnc/files/2.1.2/
-> +md5	9d04b26d40664d0d8072e8b1828f69c4  turbovnc-2.1.2.tar.gz
-> +sha1	cd99a27cee86f0680410133beb25da1d6f35a3ea  turbovnc-2.1.2.tar.gz
-> +# Locally computed
-> +sha256	2389f76eafc48412b980a61280ffb8d111dacd9e51d5e3df2112f505558b48d4  turbovnc-2.1.2.tar.gz
-> diff --git a/package/turbovnc/turbovnc.mk b/package/turbovnc/turbovnc.mk
-> new file mode 100644
-> index 0000000..a861f78
-> --- /dev/null
-> +++ b/package/turbovnc/turbovnc.mk
-> @@ -0,0 +1,21 @@
-> +################################################################################
-> +#
-> +# turbovnc
-> +#
-> +################################################################################
-> +
-> +TURBOVNC_VERSION = 2.1.2
-> +TURBOVNC_SOURCE = turbovnc-$(TURBOVNC_VERSION).tar.gz
-> +TURBOVNC_SITE = https://downloads.sourceforge.net/project/turbovnc/$(TURBOVNC_VERSION)
-> +TURBOVNC_DEPENDENCIES = jpeg-turbo linux-pam openssl perl xfont_font-misc-misc xlib_libICE xlib_libSM xlib_libX11 \
-> +			xlib_libXext xlib_libXau xlib_libXdmcp 
+Yes, we're maintaining these as stable as possible, in fact the
+content doesn't have redundant details with linux-sunxi.org and we
+show only Mainline details which we supported and used the same in
+buildroot. Even we link the linux-sunxi at the first point.
 
-You need to select these dependencies in Config.in to make sure that they 
-actually get built. Don't forget to propagate their dependencies as well. As 
-far as I can see perl is a run-time only dependency, so there is no need to 
-list it here, since build order doesn't matter. Same goes for 
-xfont_font-misc-misc, I guess.
-
-unix/Xvnc/README indicates that linux-pam is an optional dependency. Having 
-linux-pam optional would allow building turbovnc with musl libc.
-
-> +TURBOVNC_LICENSE = GPL-2.0, MIT (putty), Dual FTL/GPL-2.0+ (freetype) \
-> +		   bzip2 license (bzip2)
-
-The README.txt file mentions also the zlib license.
-
-> +TURBOVNC_LICENSE_FILES = doc/LICENSE.txt doc/LICENSE-PuTTY.txt \
-> +			 unix/Xvnc/extras/freetype2/doc/LICENSE.txt \
-> +			 unix/Xvnc/lib/bzip2/LICENSE
-
-README.txt should also be here. Adding hashes for these files would also be 
-nice.
-
-> +# Build just server
-> +TURBOVNC_CONF_OPTS += -DTVNC_BUILDJAVA=0 -DTVNC_BUILDNATIVE=0
-> +
-> +$(eval $(cmake-package))
-
-baruch
-
+thanks!
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+Jagan Teki
+Free Software Engineer | www.openedev.com
+U-Boot, Linux | Upstream Maintainer
+Hyderabad, India.
