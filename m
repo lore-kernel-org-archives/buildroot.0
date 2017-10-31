@@ -1,7 +1,8 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 31 Oct 2017 19:53:05 +0100
-Subject: [Buildroot] [PATCH 1/1] package/w_scan: bump version to 20170107
-Message-ID: <20171031185305.25419-1-bernd.kuhls@t-online.de>
+Date: Tue, 31 Oct 2017 19:55:43 +0100
+Subject: [Buildroot] [PATCH 1/1] package/vdr-plugin-vnsiserver: bump version
+	to 1.5.2
+Message-ID: <20171031185543.26342-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,45 +11,30 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/w_scan/0001-musl.patch | 4 ++--
- package/w_scan/w_scan.hash     | 2 +-
- package/w_scan/w_scan.mk       | 2 +-
- 3 files changed, 4 insertions(+), 4 deletions(-)
+ package/vdr-plugin-vnsiserver/vdr-plugin-vnsiserver.hash | 2 +-
+ package/vdr-plugin-vnsiserver/vdr-plugin-vnsiserver.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/w_scan/0001-musl.patch b/package/w_scan/0001-musl.patch
-index 7633d551dd..46d67677a8 100644
---- a/package/w_scan/0001-musl.patch
-+++ b/package/w_scan/0001-musl.patch
-@@ -20,7 +20,7 @@ diff -uNr w_scan-20141122.org/version.h w_scan-20141122/version.h
-  /* AUTOMATICALLY GENERATED - DO NOT EDIT MANUALLY */
-  #ifndef W_SCAN_VERSION_H
-  #define W_SCAN_VERSION_H
---uint version=20141122;
--+unsigned int version=20141122;
-+-uint version=20170107;
-++unsigned int version=20170107;
-  #endif
-  
-diff --git a/package/w_scan/w_scan.hash b/package/w_scan/w_scan.hash
-index 4c336f3d56..e04a084360 100644
---- a/package/w_scan/w_scan.hash
-+++ b/package/w_scan/w_scan.hash
+diff --git a/package/vdr-plugin-vnsiserver/vdr-plugin-vnsiserver.hash b/package/vdr-plugin-vnsiserver/vdr-plugin-vnsiserver.hash
+index cf403f50c8..97cb4b42aa 100644
+--- a/package/vdr-plugin-vnsiserver/vdr-plugin-vnsiserver.hash
++++ b/package/vdr-plugin-vnsiserver/vdr-plugin-vnsiserver.hash
 @@ -1,2 +1,2 @@
- # Locally calculated
--sha256  b6d7c9ab997c53a0b0d92e8390f313cc3b82ee8ece1756b4e526119fd5ba09b4  w_scan-20141122.tar.bz2
-+sha256 38e0f38a7bf06cff6d6ea01652ad4ee60da2cb0e937360468f936da785b46ffe  w_scan-20170107.tar.bz2
-diff --git a/package/w_scan/w_scan.mk b/package/w_scan/w_scan.mk
-index cdb4250164..c63f20cc9e 100644
---- a/package/w_scan/w_scan.mk
-+++ b/package/w_scan/w_scan.mk
+ # Locally computed
+-sha256 fd00fb6d833cad6a32a0d8259bb125abdf1716680650ba24b34bca2201745877  vdr-plugin-vnsiserver-v1.5.0.tar.gz
++sha256 f8170b4d6f983e7b5b5110e0432ff46355998e170f66459588170cc320717f7f  vdr-plugin-vnsiserver-v1.5.2.tar.gz
+diff --git a/package/vdr-plugin-vnsiserver/vdr-plugin-vnsiserver.mk b/package/vdr-plugin-vnsiserver/vdr-plugin-vnsiserver.mk
+index 9a02e4482c..a25a99dfa8 100644
+--- a/package/vdr-plugin-vnsiserver/vdr-plugin-vnsiserver.mk
++++ b/package/vdr-plugin-vnsiserver/vdr-plugin-vnsiserver.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--W_SCAN_VERSION = 20141122
-+W_SCAN_VERSION = 20170107
- W_SCAN_SOURCE = w_scan-$(W_SCAN_VERSION).tar.bz2
- W_SCAN_SITE = http://wirbel.htpc-forum.de/w_scan
- W_SCAN_LICENSE = GPL-2.0+
+-VDR_PLUGIN_VNSISERVER_VERSION = v1.5.0
++VDR_PLUGIN_VNSISERVER_VERSION = v1.5.2
+ VDR_PLUGIN_VNSISERVER_SITE = $(call github,FernetMenta,vdr-plugin-vnsiserver,$(VDR_PLUGIN_VNSISERVER_VERSION))
+ VDR_PLUGIN_VNSISERVER_LICENSE = GPL-2.0+
+ VDR_PLUGIN_VNSISERVER_LICENSE_FILES = COPYING
 -- 
 2.11.0
