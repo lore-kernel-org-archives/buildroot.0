@@ -1,45 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 31 Oct 2017 20:11:56 +0100
-Subject: [Buildroot] [git commit] tmux: bump to version 2.6
-Message-ID: <20171031190547.D7D27811FB@busybox.osuosl.org>
+Date: Tue, 31 Oct 2017 20:12:45 +0100
+Subject: [Buildroot] [git commit] perl-cross: bump to version 1.1.8
+Message-ID: <20171031190547.F2FF27FE8D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d69946cd225abfc4724d46ec28178ea7fc5bed4a
+commit: https://git.buildroot.net/buildroot/commit/?id=cb6759d36a33eb8dcaa1c30bd43a57771817a4bd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add license file hash.
-
-Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/tmux/tmux.hash | 3 ++-
- package/tmux/tmux.mk   | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ package/perl/perl.hash | 4 ++--
+ package/perl/perl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/tmux/tmux.hash b/package/tmux/tmux.hash
-index 8d82b80..752bbb4 100644
---- a/package/tmux/tmux.hash
-+++ b/package/tmux/tmux.hash
-@@ -1,2 +1,3 @@
- # Locally computed:
--sha256 ae135ec37c1bf6b7750a84e3a35e93d91033a806943e034521c8af51b12d95df  tmux-2.5.tar.gz
-+sha256 b17cd170a94d7b58c0698752e1f4f263ab6dc47425230df7e53a6435cc7cd7e8  tmux-2.6.tar.gz
-+sha256 94e2b1feb1202d3308cc7ab7ec42278d24f10562394bdf269f44649327c8198f  README
-diff --git a/package/tmux/tmux.mk b/package/tmux/tmux.mk
-index 44ba613..6e03d01 100644
---- a/package/tmux/tmux.mk
-+++ b/package/tmux/tmux.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/perl/perl.hash b/package/perl/perl.hash
+index 6892a64..14e6b11 100644
+--- a/package/perl/perl.hash
++++ b/package/perl/perl.hash
+@@ -3,5 +3,5 @@ md5    70e988b4318739b0cf3ad5e120bfde88                                 perl-5.2
+ sha1   403bb1804cb41416153d908eea093f2be22a77f6                         perl-5.26.1.tar.xz
+ sha256 fe8208133e73e47afc3251c08d2c21c5a60160165a8ab8b669c43a420e4ec680 perl-5.26.1.tar.xz
  
--TMUX_VERSION = 2.5
-+TMUX_VERSION = 2.6
- TMUX_SITE = https://github.com/tmux/tmux/releases/download/$(TMUX_VERSION)
- TMUX_LICENSE = ISC
- TMUX_LICENSE_FILES = README
+-# Hashes from: http://github.com/arsv/perl-cross/releases/download/1.1.7/perl-cross-1.1.7.hash
+-sha256	b79ce9d766b5f527ad7e73cb86d541da88ecbb69a443ee5f14658dd8f9e9415f  perl-cross-1.1.7.tar.gz
++# Hashes from: http://github.com/arsv/perl-cross/releases/download/1.1.8/perl-cross-1.1.8.hash
++sha256	08e626ed9c419b8a695a8762ff8b41a553023175e4ad67b5e858fc9b4322521c  perl-cross-1.1.8.tar.gz
+diff --git a/package/perl/perl.mk b/package/perl/perl.mk
+index 02cfec8..58bf3eb 100644
+--- a/package/perl/perl.mk
++++ b/package/perl/perl.mk
+@@ -13,7 +13,7 @@ PERL_LICENSE = Artistic or GPL-1.0+
+ PERL_LICENSE_FILES = Artistic Copying README
+ PERL_INSTALL_STAGING = YES
+ 
+-PERL_CROSS_VERSION = 1.1.7
++PERL_CROSS_VERSION = 1.1.8
+ # DO NOT refactor with the github helper (the result is not the same)
+ PERL_CROSS_SITE = https://github.com/arsv/perl-cross/releases/download/$(PERL_CROSS_VERSION)
+ PERL_CROSS_SOURCE = perl-cross-$(PERL_CROSS_VERSION).tar.gz
