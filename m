@@ -1,43 +1,67 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Tue, 31 Oct 2017 19:04:02 +0100
-Subject: [Buildroot] [PATCH] perl-cross: bump to version 1.1.8
-Message-ID: <20171031180402.16955-1-francois.perrad@gadz.org>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Tue, 31 Oct 2017 19:36:56 +0100
+Subject: [Buildroot] [PATCH v2 1/2] package/git: bump version to 2.15.0
+Message-ID: <20171031183657.27406-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/perl/perl.hash | 4 ++--
- package/perl/perl.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+To avoid the build error
 
-diff --git a/package/perl/perl.hash b/package/perl/perl.hash
-index 6892a643c..14e6b117c 100644
---- a/package/perl/perl.hash
-+++ b/package/perl/perl.hash
-@@ -3,5 +3,5 @@ md5    70e988b4318739b0cf3ad5e120bfde88                                 perl-5.2
- sha1   403bb1804cb41416153d908eea093f2be22a77f6                         perl-5.26.1.tar.xz
- sha256 fe8208133e73e47afc3251c08d2c21c5a60160165a8ab8b669c43a420e4ec680 perl-5.26.1.tar.xz
+grep.c:(.text+0xa02): undefined reference to `pcre_jit_exec'
+
+we need to add NO_LIBPCRE1_JIT=1 according to
+https://www.spinics.net/lists/git/msg314515.html
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+v2: no changes
+
+ package/git/git.hash | 2 +-
+ package/git/git.mk   | 5 +++--
+ 2 files changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/package/git/git.hash b/package/git/git.hash
+index d65296f17a..79a386eb72 100644
+--- a/package/git/git.hash
++++ b/package/git/git.hash
+@@ -1,4 +1,4 @@
+ # From: https://www.kernel.org/pub/software/scm/git/sha256sums.asc
+-sha256 bce97e403bea34f50378e90ade10c12666b2382cc247551b63dc5604e03b2523  git-2.13.6.tar.xz
++sha256 107116489f10b758b51af1c5dbdb9a274917b0fb67dc8eaefcdabc7bc3eb3e6a  git-2.15.0.tar.xz
+ sha256 5b2198d1645f767585e8a88ac0499b04472164c0d2da22e75ecf97ef443ab32e  COPYING
+ sha256 1922f45d2c49e390032c9c0ba6d7cac904087f7cec51af30c2b2ad022ce0e76a  LGPL-2.1
+diff --git a/package/git/git.mk b/package/git/git.mk
+index 9f13f0f6aa..181e7421e2 100644
+--- a/package/git/git.mk
++++ b/package/git/git.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--# Hashes from: http://github.com/arsv/perl-cross/releases/download/1.1.7/perl-cross-1.1.7.hash
--sha256	b79ce9d766b5f527ad7e73cb86d541da88ecbb69a443ee5f14658dd8f9e9415f  perl-cross-1.1.7.tar.gz
-+# Hashes from: http://github.com/arsv/perl-cross/releases/download/1.1.8/perl-cross-1.1.8.hash
-+sha256	08e626ed9c419b8a695a8762ff8b41a553023175e4ad67b5e858fc9b4322521c  perl-cross-1.1.8.tar.gz
-diff --git a/package/perl/perl.mk b/package/perl/perl.mk
-index 02cfec807..58bf3eb6a 100644
---- a/package/perl/perl.mk
-+++ b/package/perl/perl.mk
-@@ -13,7 +13,7 @@ PERL_LICENSE = Artistic or GPL-1.0+
- PERL_LICENSE_FILES = Artistic Copying README
- PERL_INSTALL_STAGING = YES
+-GIT_VERSION = 2.13.6
++GIT_VERSION = 2.15.0
+ GIT_SOURCE = git-$(GIT_VERSION).tar.xz
+ GIT_SITE = $(BR2_KERNEL_MIRROR)/software/scm/git
+ GIT_LICENSE = GPL-2.0, LGPL-2.1+
+@@ -22,6 +22,7 @@ endif
+ ifeq ($(BR2_PACKAGE_PCRE),y)
+ GIT_DEPENDENCIES += pcre
+ GIT_CONF_OPTS += --with-libpcre
++GIT_MAKE_OPTS += NO_LIBPCRE1_JIT=1
+ else
+ GIT_CONF_OPTS += --without-libpcre
+ endif
+@@ -58,7 +59,7 @@ GIT_CONF_OPTS += --without-tcltk
+ endif
  
--PERL_CROSS_VERSION = 1.1.7
-+PERL_CROSS_VERSION = 1.1.8
- # DO NOT refactor with the github helper (the result is not the same)
- PERL_CROSS_SITE = https://github.com/arsv/perl-cross/releases/download/$(PERL_CROSS_VERSION)
- PERL_CROSS_SOURCE = perl-cross-$(PERL_CROSS_VERSION).tar.gz
+ ifeq ($(BR2_SYSTEM_ENABLE_NLS),)
+-GIT_MAKE_OPTS = NO_GETTEXT=1
++GIT_MAKE_OPTS += NO_GETTEXT=1
+ endif
+ 
+ GIT_INSTALL_TARGET_OPTS = $(GIT_MAKE_OPTS) DESTDIR=$(TARGET_DIR) install
 -- 
 2.11.0
