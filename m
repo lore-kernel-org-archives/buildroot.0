@@ -1,93 +1,146 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 31 Oct 2017 20:11:25 +0100
-Subject: [Buildroot] [git commit] btrfs-progs: bump to version 4.13.3
-Message-ID: <20171031190547.CDE9D7FE8D@busybox.osuosl.org>
+Date: Tue, 31 Oct 2017 20:11:08 +0100
+Subject: [Buildroot] [git commit] sqlite: bump to version 3.21.0
+Message-ID: <20171031190547.C0CA47FE8D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=33cc29dac3432e4462370984e4a825afca7db85c
+commit: https://git.buildroot.net/buildroot/commit/?id=b44c395c0d2767ea2787a0d77a79424adf5cb050
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add a patch fixing build with musl.
+Drop upstream patches.
 
 Add license file hash.
 
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...fs-progs-convert-add-missing-types-header.patch | 39 ++++++++++++++++++++++
- package/btrfs-progs/btrfs-progs.hash               |  4 ++-
- package/btrfs-progs/btrfs-progs.mk                 |  2 +-
- 3 files changed, 43 insertions(+), 2 deletions(-)
+ package/sqlite/0001-CVE-2017-13685.patch | 54 --------------------------------
+ package/sqlite/0002-CVE-2017-15286.patch | 28 -----------------
+ package/sqlite/sqlite.hash               |  6 ++--
+ package/sqlite/sqlite.mk                 |  2 +-
+ 4 files changed, 5 insertions(+), 85 deletions(-)
 
-diff --git a/package/btrfs-progs/0003-btrfs-progs-convert-add-missing-types-header.patch b/package/btrfs-progs/0003-btrfs-progs-convert-add-missing-types-header.patch
-new file mode 100644
-index 0000000..7b09f27
---- /dev/null
-+++ b/package/btrfs-progs/0003-btrfs-progs-convert-add-missing-types-header.patch
-@@ -0,0 +1,39 @@
-+From dda485a3d788c47bb6849218f695db7b51822872 Mon Sep 17 00:00:00 2001
-+From: Baruch Siach <baruch@tkos.co.il>
-+Date: Tue, 31 Oct 2017 14:51:51 +0200
-+Subject: [PATCH] btrfs-progs: convert: add missing types header
-+
-+Build with musl libc needs the sys/types.h header for the dev_t type,
-+since this header is not included indirectly. This fixes the following
-+build failure:
-+
-+In file included from convert/source-fs.c:23:0:
-+./convert/source-fs.h:112:1: error: unknown type name ???dev_t???
-+ dev_t decode_dev(u32 dev);
-+ ^~~~~
-+convert/source-fs.c:31:1: error: unknown type name ???dev_t???
-+ dev_t decode_dev(u32 dev)
-+ ^~~~~
-+
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Upstream status: https://marc.info/?l=linux-btrfs&m=150945479718731&w=2
-+
-+ convert/source-fs.h | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/convert/source-fs.h b/convert/source-fs.h
-+index 23f33567b42d..4e5babefe6a2 100644
-+--- a/convert/source-fs.h
-++++ b/convert/source-fs.h
-+@@ -19,6 +19,7 @@
-+ 
-+ #include "kerncompat.h"
-+ #include <linux/kdev_t.h>
-++#include <sys/types.h>
-+ #include <pthread.h>
-+ 
-+ #define CONV_IMAGE_SUBVOL_OBJECTID BTRFS_FIRST_FREE_OBJECTID
-+-- 
-+2.14.2
-+
-diff --git a/package/btrfs-progs/btrfs-progs.hash b/package/btrfs-progs/btrfs-progs.hash
-index 0b213ee..bdcb8ba 100644
---- a/package/btrfs-progs/btrfs-progs.hash
-+++ b/package/btrfs-progs/btrfs-progs.hash
-@@ -1,2 +1,4 @@
- # From https://www.kernel.org/pub/linux/kernel/people/kdave/btrfs-progs/sha256sums.asc
--sha256 e17a68cc52a27d905b715445e91ddbaa4d42de4847d54836d6ed21e012dabf0e  btrfs-progs-v4.11.tar.xz
-+sha256 805bdb0031c21a0a5d2ba295a8c9bdd8ba831a68c3fa801aab85677ec902d783  btrfs-progs-v4.13.3.tar.xz
-+# Locally computed
-+sha256 0d5bf346df9e635a29dcdddf832dc5b002ca6cdc1c5c9c6c567d2a61bb0c5c15  COPYING
-diff --git a/package/btrfs-progs/btrfs-progs.mk b/package/btrfs-progs/btrfs-progs.mk
-index 2ea2f72..96c4350 100644
---- a/package/btrfs-progs/btrfs-progs.mk
-+++ b/package/btrfs-progs/btrfs-progs.mk
+diff --git a/package/sqlite/0001-CVE-2017-13685.patch b/package/sqlite/0001-CVE-2017-13685.patch
+deleted file mode 100644
+index 9fd88f2..0000000
+--- a/package/sqlite/0001-CVE-2017-13685.patch
++++ /dev/null
+@@ -1,54 +0,0 @@
+-Fix CVE-2017-13685
+-
+-The dump_callback function in SQLite 3.20.0 allows remote attackers to cause a
+-denial of service (EXC_BAD_ACCESS and application crash) via a crafted file.
+-
+-Patch taken from Debian:
+-https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=873762
+-
+-Upstream issue: https://sqlite.org/src/info/02f0f4c54f2819b3
+-
+-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+-
+-Index: src/shell.c
+-==================================================================
+---- src/shell.c
+-+++ src/shell.c
+-@@ -2657,10 +2657,11 @@
+-   int *aiType      /* Column types */
+- ){
+-   int i;
+-   ShellState *p = (ShellState*)pArg;
+- 
+-+  if( azArg==0 ) return 0;
+-   switch( p->cMode ){
+-     case MODE_Line: {
+-       int w = 5;
+-       if( azArg==0 ) break;
+-       for(i=0; i<nArg; i++){
+-@@ -3007,10 +3008,11 @@
+- */
+- static int captureOutputCallback(void *pArg, int nArg, char **azArg, char **az){
+-   ShellText *p = (ShellText*)pArg;
+-   int i;
+-   UNUSED_PARAMETER(az);
+-+  if( azArg==0 ) return 0;
+-   if( p->n ) appendText(p, "|", 0);
+-   for(i=0; i<nArg; i++){
+-     if( i ) appendText(p, ",", 0);
+-     if( azArg[i] ) appendText(p, azArg[i], 0);
+-   }
+-@@ -3888,11 +3890,11 @@
+-   const char *zType;
+-   const char *zSql;
+-   ShellState *p = (ShellState *)pArg;
+- 
+-   UNUSED_PARAMETER(azNotUsed);
+--  if( nArg!=3 ) return 1;
+-+  if( nArg!=3 || azArg==0 ) return 0;
+-   zTable = azArg[0];
+-   zType = azArg[1];
+-   zSql = azArg[2];
+- 
+-   if( strcmp(zTable, "sqlite_sequence")==0 ){
+-
+diff --git a/package/sqlite/0002-CVE-2017-15286.patch b/package/sqlite/0002-CVE-2017-15286.patch
+deleted file mode 100644
+index 681e9d0..0000000
+--- a/package/sqlite/0002-CVE-2017-15286.patch
++++ /dev/null
+@@ -1,28 +0,0 @@
+-Fix CVE-2017-15286
+-
+-SQLite 3.20.1 has a NULL pointer dereference in tableColumnList in shell.c 
+-because it fails to consider certain cases where 
+-`sqlite3_step(pStmt)==SQLITE_ROW` is false and a data structure is never 
+-initialized.
+-
+-https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=878680
+-
+-Upstream commit: http://www.sqlite.org/src/info/5d0ceb8dcdef92cd
+-
+-Index: src/shell.c
+-==================================================================
+---- src/shell.c
+-+++ src/shell.c
+-@@ -3807,10 +3807,11 @@
+-         isIPK = 0;
+-       }
+-     }
+-   }
+-   sqlite3_finalize(pStmt);
+-+  if( azCol==0 ) return 0;
+-   azCol[0] = 0;
+-   azCol[nCol+1] = 0;
+- 
+-   /* The decision of whether or not a rowid really needs to be preserved
+-   ** is tricky.  We never need to preserve a rowid for a WITHOUT ROWID table
+-
+diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
+index 22882c9..be5820e 100644
+--- a/package/sqlite/sqlite.hash
++++ b/package/sqlite/sqlite.hash
+@@ -1,4 +1,6 @@
+ # From http://www.sqlite.org/download.html
+-sha1 48593dcd19473f25fe6fcd08048e13ddbff4c983  sqlite-autoconf-3200100.tar.gz
++sha1 f56fe3407d8297fc0a68a058f4c9e6b77e83575c  sqlite-autoconf-3210000.tar.gz
+ # Calculated based on the hash above
+-sha256 ec66595b29bc0798b023a5122021ea646ab4fa9e2f735937c5426feeba950742  sqlite-autoconf-3200100.tar.gz
++sha256 d7dd516775005ad87a57f428b6f86afd206cb341722927f104d3f0cf65fbbbe3  sqlite-autoconf-3210000.tar.gz
++# Locally calculated
++sha256 66e056b6e8687f32af30d5187611b98b12a8f46f07aaf62f43585f276e8f0ac9  tea/license.terms
+diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
+index 39ea9ce..5239592 100644
+--- a/package/sqlite/sqlite.mk
++++ b/package/sqlite/sqlite.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--BTRFS_PROGS_VERSION = 4.11
-+BTRFS_PROGS_VERSION = 4.13.3
- BTRFS_PROGS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/people/kdave/btrfs-progs
- BTRFS_PROGS_SOURCE = btrfs-progs-v$(BTRFS_PROGS_VERSION).tar.xz
- BTRFS_PROGS_DEPENDENCIES = host-pkgconf e2fsprogs lzo util-linux zlib
+-SQLITE_VERSION = 3200100
++SQLITE_VERSION = 3210000
+ SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
+ SQLITE_SITE = http://www.sqlite.org/2017
+ SQLITE_LICENSE = Public domain
