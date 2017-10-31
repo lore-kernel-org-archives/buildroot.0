@@ -1,19 +1,27 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 31 Oct 2017 09:39:32 +0100
-Subject: [Buildroot] [PATCH v3,
-	1/2] gupnp-av: fix static library linking with gupnp
-Message-ID: <20171031083933.19956-1-fontaine.fabrice@gmail.com>
+Date: Tue, 31 Oct 2017 09:39:33 +0100
+Subject: [Buildroot] [PATCH v3,2/2] rygel: new package
+In-Reply-To: <20171031083933.19956-1-fontaine.fabrice@gmail.com>
+References: <20171031083933.19956-1-fontaine.fabrice@gmail.com>
+Message-ID: <20171031083933.19956-2-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-gupnp and gupnp-av defines two internal functions with the same name:
-xml_util_get_element and xml_util_get_child_element_content, as a result
-an application such as rygel can't be build statically.
-To fix this issue, rename both functions as
-xml_util_get_element2 and xml_util_get_child_element_content2
+Rygel is a home media solution (UPnP AV MediaServer) that allows you to
+easily share audio, video and pictures to other devices.
+
+Additionally, media player software may use Rygel to become a
+MediaRenderer that may be controlled remotely by a UPnP or DLNA
+Controller.
+
+Rygel achieves interoperability with other devices in the market by
+trying to conform to the very strict requirements of DLNA and by
+converting media on-the-fly to formats that client devices can handle.
+
+Most Rygel functionality is implemented through a plug-in mechanism.
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
@@ -30,369 +38,245 @@ Changes v1 -> v2 (after review of Rahul Bedarkar):
  - Update license from LGPLv2+ to "LGPLv2.1+, CC-BY-SA 3.0 (logo)"
  - Add a comment on missing COPYING.logo in archive
 
- ...001-Fix-static-library-linking-with-gupnp.patch | 354 +++++++++++++++++++++
- 1 file changed, 354 insertions(+)
- create mode 100644 package/gupnp-av/0001-Fix-static-library-linking-with-gupnp.patch
+ DEVELOPERS                  |  1 +
+ package/Config.in           |  1 +
+ package/rygel/Config.in     | 51 ++++++++++++++++++++++++++++++++
+ package/rygel/S99rygel      | 37 +++++++++++++++++++++++
+ package/rygel/rygel.hash    |  2 ++
+ package/rygel/rygel.mk      | 72 +++++++++++++++++++++++++++++++++++++++++++++
+ package/rygel/rygel.service | 10 +++++++
+ 7 files changed, 174 insertions(+)
+ create mode 100644 package/rygel/Config.in
+ create mode 100644 package/rygel/S99rygel
+ create mode 100644 package/rygel/rygel.hash
+ create mode 100644 package/rygel/rygel.mk
+ create mode 100644 package/rygel/rygel.service
 
-diff --git a/package/gupnp-av/0001-Fix-static-library-linking-with-gupnp.patch b/package/gupnp-av/0001-Fix-static-library-linking-with-gupnp.patch
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 862399b45..52da35086 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -596,6 +596,7 @@ F:	package/hiredis/
+ F:	package/igd2-for-linux/
+ F:	package/minissdpd/
+ F:	package/motion/
++F:	package/rygel/
+ F:	package/tinycbor/
+ F:	package/tinydtls/
+ 
+diff --git a/package/Config.in b/package/Config.in
+index dbfb288d5..ce389ce6a 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1759,6 +1759,7 @@ endif
+ 	source "package/rsync/Config.in"
+ 	source "package/rtorrent/Config.in"
+ 	source "package/rtptools/Config.in"
++	source "package/rygel/Config.in"
+ 	source "package/s6-dns/Config.in"
+ 	source "package/s6-networking/Config.in"
+ 	source "package/samba4/Config.in"
+diff --git a/package/rygel/Config.in b/package/rygel/Config.in
 new file mode 100644
-index 000000000..eba99da45
+index 000000000..b3a37eaf0
 --- /dev/null
-+++ b/package/gupnp-av/0001-Fix-static-library-linking-with-gupnp.patch
-@@ -0,0 +1,354 @@
-+From 268ec01e448ed7cedf90b37fbc27f01806637825 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Mon, 30 Oct 2017 22:10:23 +0100
-+Subject: [PATCH 1/1] Fix static library linking with gupnp
++++ b/package/rygel/Config.in
+@@ -0,0 +1,51 @@
++config BR2_PACKAGE_RYGEL
++	bool "rygel"
++	depends on BR2_USE_WCHAR # gupnp-av
++	depends on BR2_TOOLCHAIN_HAS_THREADS # gupnp-av
++	depends on BR2_USE_MMU # gupnp-av
++	select BR2_PACKAGE_GUPNP_AV
++	select BR2_PACKAGE_LIBGEE
++	select BR2_PACKAGE_LIBMEDIAART
++	select BR2_PACKAGE_SQLITE
++	help
++	  Rygel is a home media solution (UPnP AV MediaServer) that
++	  allows you to easily share audio, video and pictures to other
++	  devices.
 +
-+gupnp and gupnp-av defines two internal functions with the same name:
-+xml_util_get_element and xml_util_get_child_element_content, as a result
-+an application such as rygel can't be build statically.
-+To fix this issue, rename both functions as
-+xml_util_get_element2 and xml_util_get_child_element_content2
++	  Additionally, media player software may use Rygel to become a
++	  MediaRenderer that may be controlled remotely by a UPnP or
++	  DLNA Controller.
 +
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ libgupnp-av/gupnp-cds-last-change-parser.c |  2 +-
-+ libgupnp-av/gupnp-didl-lite-container.c    |  4 ++--
-+ libgupnp-av/gupnp-didl-lite-item.c         |  2 +-
-+ libgupnp-av/gupnp-didl-lite-object.c       | 26 +++++++++++++-------------
-+ libgupnp-av/gupnp-didl-lite-parser.c       |  4 ++--
-+ libgupnp-av/gupnp-didl-lite-writer.c       |  2 +-
-+ libgupnp-av/gupnp-feature-list-parser.c    |  2 +-
-+ libgupnp-av/gupnp-last-change-parser.c     |  2 +-
-+ libgupnp-av/xml-util.c                     | 16 ++++++++--------
-+ libgupnp-av/xml-util.h                     |  4 ++--
-+ 10 files changed, 32 insertions(+), 32 deletions(-)
++	  Rygel achieves interoperability with other devices in the
++	  market by trying to conform to the very strict requirements of
++	  DLNA and by converting media on-the-fly to formats that client
++	  devices can handle.
 +
-+diff --git a/libgupnp-av/gupnp-cds-last-change-parser.c b/libgupnp-av/gupnp-cds-last-change-parser.c
-+index cff5f0b..36f6b0a 100644
-+--- a/libgupnp-av/gupnp-cds-last-change-parser.c
-++++ b/libgupnp-av/gupnp-cds-last-change-parser.c
-+@@ -119,7 +119,7 @@ gupnp_cds_last_change_parser_parse (GUPnPCDSLastChangeParser *parser,
-+                 goto out;
-+         }
-+ 
-+-        state_event = xml_util_get_element ((xmlNode *) doc,
-++        state_event = xml_util_get_element2 ((xmlNode *) doc,
-+                                             "StateEvent",
-+                                             NULL);
-+         if (state_event == NULL) {
-+diff --git a/libgupnp-av/gupnp-didl-lite-container.c b/libgupnp-av/gupnp-didl-lite-container.c
-+index d7ac578..c0e7395 100644
-+--- a/libgupnp-av/gupnp-didl-lite-container.c
-++++ b/libgupnp-av/gupnp-didl-lite-container.c
-+@@ -340,7 +340,7 @@ gupnp_didl_lite_container_container_update_id_is_set
-+ 
-+         xml_node = gupnp_didl_lite_object_get_xml_node
-+                                         (GUPNP_DIDL_LITE_OBJECT (container));
-+-        content = xml_util_get_child_element_content (xml_node,
-++        content = xml_util_get_child_element_content2 (xml_node,
-+                                                       "containerUpdateID");
-+         return content != NULL;
-+ }
-+@@ -390,7 +390,7 @@ gupnp_didl_lite_container_total_deleted_child_count_is_set
-+ 
-+         xml_node = gupnp_didl_lite_object_get_xml_node
-+                                         (GUPNP_DIDL_LITE_OBJECT (container));
-+-        content = xml_util_get_child_element_content (xml_node,
-++        content = xml_util_get_child_element_content2 (xml_node,
-+                                                       "totalDeletedChildCount");
-+         return content != NULL;
-+ }
-+diff --git a/libgupnp-av/gupnp-didl-lite-item.c b/libgupnp-av/gupnp-didl-lite-item.c
-+index 3588052..3d6d4d0 100644
-+--- a/libgupnp-av/gupnp-didl-lite-item.c
-++++ b/libgupnp-av/gupnp-didl-lite-item.c
-+@@ -254,7 +254,7 @@ gupnp_didl_lite_item_get_lifetime (GUPnPDIDLLiteItem *item)
-+         object = GUPNP_DIDL_LITE_OBJECT (item);
-+         node = gupnp_didl_lite_object_get_xml_node (object);
-+ 
-+-        lifetime_str = xml_util_get_child_element_content (node, "lifetime");
-++        lifetime_str = xml_util_get_child_element_content2 (node, "lifetime");
-+         lifetime = seconds_from_time (lifetime_str);
-+ 
-+         return lifetime;
-+diff --git a/libgupnp-av/gupnp-didl-lite-object.c b/libgupnp-av/gupnp-didl-lite-object.c
-+index 68156dc..cab2359 100644
-+--- a/libgupnp-av/gupnp-didl-lite-object.c
-++++ b/libgupnp-av/gupnp-didl-lite-object.c
-+@@ -1065,7 +1065,7 @@ gupnp_didl_lite_object_get_upnp_class (GUPnPDIDLLiteObject *object)
-+ {
-+         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
-+ 
-+-        return xml_util_get_child_element_content (object->priv->xml_node,
-++        return xml_util_get_child_element_content2 (object->priv->xml_node,
-+                                                    "class");
-+ }
-+ 
-+@@ -1211,7 +1211,7 @@ gupnp_didl_lite_object_get_title (GUPnPDIDLLiteObject *object)
-+ {
-+         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
-+ 
-+-        return xml_util_get_child_element_content (object->priv->xml_node,
-++        return xml_util_get_child_element_content2 (object->priv->xml_node,
-+                                                    "title");
-+ }
-+ 
-+@@ -1228,7 +1228,7 @@ gupnp_didl_lite_object_get_creator (GUPnPDIDLLiteObject *object)
-+ {
-+         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
-+ 
-+-        return xml_util_get_child_element_content (object->priv->xml_node,
-++        return xml_util_get_child_element_content2 (object->priv->xml_node,
-+                                                    "creator");
-+ }
-+ 
-+@@ -1266,7 +1266,7 @@ gupnp_didl_lite_object_get_artist (GUPnPDIDLLiteObject *object)
-+ {
-+         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
-+ 
-+-        return xml_util_get_child_element_content (object->priv->xml_node,
-++        return xml_util_get_child_element_content2 (object->priv->xml_node,
-+                                                    "artist");
-+ }
-+ 
-+@@ -1303,7 +1303,7 @@ gupnp_didl_lite_object_get_author (GUPnPDIDLLiteObject *object)
-+ {
-+         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
-+ 
-+-        return xml_util_get_child_element_content (object->priv->xml_node,
-++        return xml_util_get_child_element_content2 (object->priv->xml_node,
-+                                                    "author");
-+ }
-+ 
-+@@ -1377,7 +1377,7 @@ gupnp_didl_lite_object_get_genre (GUPnPDIDLLiteObject *object)
-+ {
-+         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
-+ 
-+-        return xml_util_get_child_element_content (object->priv->xml_node,
-++        return xml_util_get_child_element_content2 (object->priv->xml_node,
-+                                                    "genre");
-+ }
-+ 
-+@@ -1394,7 +1394,7 @@ gupnp_didl_lite_object_get_write_status (GUPnPDIDLLiteObject *object)
-+ {
-+         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
-+ 
-+-        return xml_util_get_child_element_content (object->priv->xml_node,
-++        return xml_util_get_child_element_content2 (object->priv->xml_node,
-+                                                    "writeStatus");
-+ }
-+ 
-+@@ -1411,7 +1411,7 @@ gupnp_didl_lite_object_get_album (GUPnPDIDLLiteObject *object)
-+ {
-+         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
-+ 
-+-        return xml_util_get_child_element_content (object->priv->xml_node,
-++        return xml_util_get_child_element_content2 (object->priv->xml_node,
-+                                                    "album");
-+ }
-+ 
-+@@ -1428,7 +1428,7 @@ gupnp_didl_lite_object_get_album_art (GUPnPDIDLLiteObject *object)
-+ {
-+         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
-+ 
-+-        return xml_util_get_child_element_content (object->priv->xml_node,
-++        return xml_util_get_child_element_content2 (object->priv->xml_node,
-+                                                    "albumArtURI");
-+ }
-+ 
-+@@ -1445,7 +1445,7 @@ gupnp_didl_lite_object_get_description (GUPnPDIDLLiteObject *object)
-+ {
-+         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
-+ 
-+-        return xml_util_get_child_element_content (object->priv->xml_node,
-++        return xml_util_get_child_element_content2 (object->priv->xml_node,
-+                                                    "description");
-+ }
-+ 
-+@@ -1462,7 +1462,7 @@ gupnp_didl_lite_object_get_date (GUPnPDIDLLiteObject *object)
-+ {
-+         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
-+ 
-+-        return xml_util_get_child_element_content (object->priv->xml_node,
-++        return xml_util_get_child_element_content2 (object->priv->xml_node,
-+                                                    "date");
-+ }
-+ 
-+@@ -1481,7 +1481,7 @@ gupnp_didl_lite_object_get_track_number (GUPnPDIDLLiteObject *object)
-+ 
-+         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), -1);
-+ 
-+-        str = xml_util_get_child_element_content (object->priv->xml_node,
-++        str = xml_util_get_child_element_content2 (object->priv->xml_node,
-+                                                   "originalTrackNumber");
-+         if (str == NULL)
-+                 return -1;
-+@@ -1552,7 +1552,7 @@ gupnp_didl_lite_object_update_id_is_set (GUPnPDIDLLiteObject *object)
-+         g_return_val_if_fail (object != NULL, FALSE);
-+         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), FALSE);
-+ 
-+-        content = xml_util_get_child_element_content (object->priv->xml_node,
-++        content = xml_util_get_child_element_content2 (object->priv->xml_node,
-+                                                       "objectUpdateID");
-+         return content != NULL;
-+ }
-+diff --git a/libgupnp-av/gupnp-didl-lite-parser.c b/libgupnp-av/gupnp-didl-lite-parser.c
-+index 59255ef..93d03c0 100644
-+--- a/libgupnp-av/gupnp-didl-lite-parser.c
-++++ b/libgupnp-av/gupnp-didl-lite-parser.c
-+@@ -52,7 +52,7 @@ verify_didl_attributes (xmlNode *node)
-+ {
-+         const char *content;
-+ 
-+-        content = xml_util_get_child_element_content (node, "date");
-++        content = xml_util_get_child_element_content2 (node, "date");
-+         if (content) {
-+                 /* try to roughly verify the passed date with ^\d{4}-\d{2}-\d{2} */
-+                 char *ptr = (char *) content;
-+@@ -251,7 +251,7 @@ gupnp_didl_lite_parser_parse_didl_recursive (GUPnPDIDLLiteParser *parser,
-+         }
-+ 
-+         /* Get a pointer to root element */
-+-        element = xml_util_get_element ((xmlNode *) doc,
-++        element = xml_util_get_element2 ((xmlNode *) doc,
-+                                         "DIDL-Lite",
-+                                         NULL);
-+         if (element == NULL) {
-+diff --git a/libgupnp-av/gupnp-didl-lite-writer.c b/libgupnp-av/gupnp-didl-lite-writer.c
-+index fb37c0b..e61739a 100644
-+--- a/libgupnp-av/gupnp-didl-lite-writer.c
-++++ b/libgupnp-av/gupnp-didl-lite-writer.c
-+@@ -223,7 +223,7 @@ filter_node (xmlNode             *node,
-+ 
-+         if (strcmp ((const char *) node->name, "container") == 0) {
-+                 is_container = TRUE;
-+-                container_class = xml_util_get_child_element_content (node,
-++                container_class = xml_util_get_child_element_content2 (node,
-+                                                                       "class");
-+         }
-+ 
-+diff --git a/libgupnp-av/gupnp-feature-list-parser.c b/libgupnp-av/gupnp-feature-list-parser.c
-+index 85fb232..dcaad6b 100644
-+--- a/libgupnp-av/gupnp-feature-list-parser.c
-++++ b/libgupnp-av/gupnp-feature-list-parser.c
-+@@ -138,7 +138,7 @@ gupnp_feature_list_parser_parse_text
-+         }
-+ 
-+         /* Get a pointer to root element */
-+-        element = xml_util_get_element ((xmlNode *) doc, "Features", NULL);
-++        element = xml_util_get_element2 ((xmlNode *) doc, "Features", NULL);
-+         if (element == NULL) {
-+                 g_set_error (error,
-+                              G_MARKUP_ERROR,
-+diff --git a/libgupnp-av/gupnp-last-change-parser.c b/libgupnp-av/gupnp-last-change-parser.c
-+index a98aecf..7078713 100644
-+--- a/libgupnp-av/gupnp-last-change-parser.c
-++++ b/libgupnp-av/gupnp-last-change-parser.c
-+@@ -75,7 +75,7 @@ read_state_variable (const char *variable_name,
-+         xmlNode    *variable_node;
-+         const char *val_str;
-+ 
-+-        variable_node = xml_util_get_element (instance_node,
-++        variable_node = xml_util_get_element2 (instance_node,
-+                                               variable_name,
-+                                               NULL);
-+         if (!variable_node)
-+diff --git a/libgupnp-av/xml-util.c b/libgupnp-av/xml-util.c
-+index da718b2..8c937e0 100644
-+--- a/libgupnp-av/xml-util.c
-++++ b/libgupnp-av/xml-util.c
-+@@ -81,7 +81,7 @@ xml_doc_unref (GUPnPAVXMLDoc *doc)
-+ }
-+ 
-+ xmlNode *
-+-xml_util_get_element (xmlNode *node,
-++xml_util_get_element2 (xmlNode *node,
-+                       ...)
-+ {
-+         va_list var_args;
-+@@ -130,13 +130,13 @@ xml_util_get_child_elements_by_name (xmlNode *node, const char *name)
-+ }
-+ 
-+ const char *
-+-xml_util_get_child_element_content (xmlNode    *node,
-++xml_util_get_child_element_content2 (xmlNode    *node,
-+                                     const char *child_name)
-+ {
-+         xmlNode *child_node;
-+         const char *content;
-+ 
-+-        child_node = xml_util_get_element (node, child_name, NULL);
-++        child_node = xml_util_get_element2 (node, child_name, NULL);
-+         if (!child_node || !(child_node->children))
-+                 return NULL;
-+ 
-+@@ -154,7 +154,7 @@ xml_util_get_uint_child_element (xmlNode    *node,
-+ {
-+         const char *content;
-+ 
-+-        content = xml_util_get_child_element_content (node, child_name);
-++        content = xml_util_get_child_element_content2 (node, child_name);
-+         if (!content)
-+                 return default_value;
-+ 
-+@@ -168,7 +168,7 @@ xml_util_get_uint64_child_element (xmlNode    *node,
-+ {
-+         const char *content;
-+ 
-+-        content = xml_util_get_child_element_content (node, child_name);
-++        content = xml_util_get_child_element_content2 (node, child_name);
-+         if (!content)
-+                 return default_value;
-+ 
-+@@ -281,7 +281,7 @@ xml_util_set_child (xmlNode    *parent_node,
-+         xmlNode *node;
-+         xmlChar *escaped;
-+ 
-+-        node = xml_util_get_element (parent_node, name, NULL);
-++        node = xml_util_get_element2 (parent_node, name, NULL);
-+         if (node == NULL) {
-+                 xmlNsPtr ns_ptr = NULL;
-+ 
-+@@ -305,7 +305,7 @@ xml_util_unset_child (xmlNode    *parent_node,
-+ {
-+         xmlNode *node;
-+ 
-+-        node = xml_util_get_element (parent_node, name, NULL);
-++        node = xml_util_get_element2 (parent_node, name, NULL);
-+         if (node != NULL) {
-+                 xmlUnlinkNode (node);
-+                 xmlFreeNode (node);
-+@@ -342,7 +342,7 @@ xml_util_get_child_string (xmlNode    *parent_node,
-+         char      *ret;
-+         xmlNode   *node;
-+ 
-+-        node = xml_util_get_element (parent_node, name, NULL);
-++        node = xml_util_get_element2 (parent_node, name, NULL);
-+         if (!node)
-+                 return NULL;
-+ 
-+diff --git a/libgupnp-av/xml-util.h b/libgupnp-av/xml-util.h
-+index 9ae5b19..5ff2020 100644
-+--- a/libgupnp-av/xml-util.h
-++++ b/libgupnp-av/xml-util.h
-+@@ -63,7 +63,7 @@ xml_doc_get_type                        (void) G_GNUC_CONST;
-+ 
-+ /* Misc utilities for inspecting xmlNodes */
-+ G_GNUC_INTERNAL xmlNode *
-+-xml_util_get_element                    (xmlNode    *node,
-++xml_util_get_element2                   (xmlNode    *node,
-+                                          ...) G_GNUC_NULL_TERMINATED;
-+ 
-+ G_GNUC_INTERNAL GList *
-+@@ -71,7 +71,7 @@ xml_util_get_child_elements_by_name     (xmlNode *node,
-+                                          const char *name);
-+ 
-+ G_GNUC_INTERNAL const char *
-+-xml_util_get_child_element_content      (xmlNode    *node,
-++xml_util_get_child_element_content2     (xmlNode    *node,
-+                                          const char *child_name);
-+ 
-+ G_GNUC_INTERNAL guint
-+-- 
-+2.14.1
++	  Most Rygel functionality is implemented through a plug-in
++	  mechanism.
 +
++	  https://wiki.gnome.org/Projects/Rygel
++
++comment "rygel needs a toolchain w/ wchar, threads"
++	depends on BR2_USE_MMU
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
++
++if BR2_PACKAGE_RYGEL
++
++choice
++	prompt "media engine"
++	default BR2_PACKAGE_RYGEL_MEDIA_ENGINE_SIMPLE
++
++config BR2_PACKAGE_RYGEL_MEDIA_ENGINE_SIMPLE
++	bool "simple"
++
++config BR2_PACKAGE_RYGEL_MEDIA_ENGINE_GSTREAMER1
++	bool "gstreamer1"
++	select BR2_PACKAGE_GDK_PIXBUF
++	select BR2_PACKAGE_GUPNP_DLNA
++	select BR2_PACKAGE_GSTREAMER1
++	select BR2_PACKAGE_GST1_PLUGINS_BASE
++
++endchoice
++
++endif # BR2_PACKAGE_RYGEL
+diff --git a/package/rygel/S99rygel b/package/rygel/S99rygel
+new file mode 100644
+index 000000000..ee832e9ba
+--- /dev/null
++++ b/package/rygel/S99rygel
+@@ -0,0 +1,37 @@
++#!/bin/sh
++
++NAME=rygel
++PIDFILE=/var/run/$NAME.pid
++DAEMON=/usr/bin/$NAME
++
++start() {
++	printf "Starting $NAME: "
++	start-stop-daemon -S -q -m -b -p $PIDFILE --exec $DAEMON
++	[ $? = 0 ] && echo "OK" || echo "FAIL"
++}
++stop() {
++	printf "Stopping $NAME: "
++	start-stop-daemon -K -q -p $PIDFILE
++	[ $? = 0 ] && echo "OK" || echo "FAIL"
++}
++restart() {
++	stop
++	start
++}
++
++case "$1" in
++  start)
++	start
++	;;
++  stop)
++	stop
++	;;
++  restart|reload)
++	restart
++	;;
++  *)
++	echo "Usage: $0 {start|stop|restart|reload}"
++	exit 1
++esac
++
++exit $?
+diff --git a/package/rygel/rygel.hash b/package/rygel/rygel.hash
+new file mode 100644
+index 000000000..9f4533ed0
+--- /dev/null
++++ b/package/rygel/rygel.hash
+@@ -0,0 +1,2 @@
++# Hash from: http://ftp.gnome.org/pub/gnome/sources/rygel/0.36/rygel-0.36.0.sha256sum:
++sha256	31e8ade78b4ea59978d1b59056fa5cd8aef6b9c1457d3dd06de4d2e75a01813f	rygel-0.36.0.tar.xz
+diff --git a/package/rygel/rygel.mk b/package/rygel/rygel.mk
+new file mode 100644
+index 000000000..0f3168bfe
+--- /dev/null
++++ b/package/rygel/rygel.mk
+@@ -0,0 +1,72 @@
++################################################################################
++#
++# rygel
++#
++################################################################################
++
++RYGEL_VERSION_MAJOR = 0.36
++RYGEL_VERSION = $(RYGEL_VERSION_MAJOR).0
++RYGEL_SOURCE = rygel-$(RYGEL_VERSION).tar.xz
++RYGEL_SITE = http://ftp.gnome.org/pub/gnome/sources/rygel/$(RYGEL_VERSION_MAJOR)
++RYGEL_LICENSE = LGPLv2.1+, CC-BY-SA 3.0 (logo)
++RYGEL_LICENSE_FILES = COPYING COPYING.logo
++RYGEL_DEPENDENCIES = \
++	gupnp-av \
++	libgee \
++	libmediaart \
++	sqlite
++RYGEL_INSTALL_STAGING = YES
++
++RYGEL_CONF_OPTS += \
++	--disable-apidocs \
++	--disable-coverage \
++	--disable-example-plugins \
++	--enable-external-plugin \
++	--enable-lms-plugin \
++	--enable-mpris-plugin \
++	--enable-ruih-plugin \
++	--disable-tracker-plugin
++
++ifeq ($(BR2_PACKAGE_GDK_PIXBUF),y)
++RYGEL_DEPENDENCIES += gdk-pixbuf
++endif
++
++ifeq ($(BR2_PACKAGE_RYGEL_MEDIA_ENGINE_GSTREAMER1),y)
++RYGEL_CONF_OPTS += \
++	--with-media-engine=gstreamer \
++	--enable-playbin-plugin \
++	--enable-media_export-plugin \
++	--enable-gst-launch-plugin
++RYGEL_DEPENDENCIES += \
++	gupnp-dlna \
++	gst1-plugins-base \
++	gstreamer1
++else ifeq ($(BR2_PACKAGE_RYGEL_MEDIA_ENGINE_SIMPLE),y)
++RYGEL_CONF_OPTS += \
++	--with-media-engine=simple \
++	--disable-playbin-plugin \
++	--disable-media_export-plugin \
++	--disable-gst-launch-plugin
++endif
++
++ifeq ($(BR2_PACKAGE_LIBGTK3_X11),y)
++RYGEL_CONF_OPTS += --with-ui
++RYGEL_DEPENDENCIES += libgtk3
++else
++RYGEL_CONF_OPTS += --without-ui
++endif
++
++define RYGEL_INSTALL_INIT_SYSV
++	$(INSTALL) -D -m 0755 package/rygel/S99rygel \
++		$(TARGET_DIR)/etc/init.d/S99rygel
++endef
++
++define RYGEL_INSTALL_INIT_SYSTEMD
++	$(INSTALL) -D -m 644 package/rygel/rygel.service \
++		$(TARGET_DIR)/usr/lib/systemd/system/rygel.service
++	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
++	ln -sf ../../../../usr/lib/systemd/system/rygel.service \
++		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/rygel.service
++endef
++
++$(eval $(autotools-package))
+diff --git a/package/rygel/rygel.service b/package/rygel/rygel.service
+new file mode 100644
+index 000000000..6ae8ee727
+--- /dev/null
++++ b/package/rygel/rygel.service
+@@ -0,0 +1,10 @@
++[Unit]
++Description=Rygel DLNA server
++After=network.target
++
++[Service]
++ExecStart=/usr/bin/rygel
++Restart=always
++
++[Install]
++WantedBy=multi-user.target
 -- 
 2.14.1
