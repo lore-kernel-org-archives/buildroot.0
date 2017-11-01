@@ -1,73 +1,40 @@
-From: Olivier Schonken <olivier.schonken@gmail.com>
-Date: Wed, 1 Nov 2017 10:05:22 +0200
-Subject: [Buildroot] [PATCH 1/1] package/openjpeg: fix static library
-	install
-In-Reply-To: <20171101072018.29979-1-bernd.kuhls@t-online.de>
-References: <20171101072018.29979-1-bernd.kuhls@t-online.de>
-Message-ID: <CALdGsk+D+koTEgGJjTbD5QDygM5Jg-RW2zqnfb2O1dHj1Ofj0A@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 1 Nov 2017 10:29:51 +0100
+Subject: [Buildroot] Libpng missing a link dependency in 2017-08?
+In-Reply-To: <c5a035da-84c6-f07c-8f99-98b3a38456c9@gmail.com>
+References: <afc724e2-a455-82cd-80f8-ee329e2a3e47@ou.edu>
+ <20171031214249.7db64df4@windsurf>
+ <c5a035da-84c6-f07c-8f99-98b3a38456c9@gmail.com>
+Message-ID: <20171101102951.48ed6d91@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Acked-by: Olivier Schonken <olivier.schonken@gmail.com>
+Hello,
 
-On 1 November 2017 at 09:20, Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+Romain: thanks a lot for looking into this issue!
 
-> Fixes
-> http://autobuild.buildroot.net/results/c35/c35599e6bf09aebe456ea959d7c238
-> f82090fc62/
->
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/openjpeg/0004-install-static-lib.patch | 27
-> ++++++++++++++++++++++++++
->  1 file changed, 27 insertions(+)
->  create mode 100644 package/openjpeg/0004-install-static-lib.patch
->
-> diff --git a/package/openjpeg/0004-install-static-lib.patch
-> b/package/openjpeg/0004-install-static-lib.patch
-> new file mode 100644
-> index 0000000000..4a3bbfa28a
-> --- /dev/null
-> +++ b/package/openjpeg/0004-install-static-lib.patch
-> @@ -0,0 +1,27 @@
-> +From 66297f07a43d2770a97c8456d20202f3d051d980 Mon Sep 17 00:00:00 2001
-> +From: Even Rouault <even.rouault@spatialys.com>
-> +Date: Mon, 9 Oct 2017 11:40:43 +0200
-> +Subject: [PATCH] Unix build: fix regression of 2.3.0 where a shared-only
-> or
-> + static-only build lacks the installation target for the library (#1019,
-> fixes
-> + regression introduced by 3dfc6ca2bcf06fd1adb6b6b4cecc6c092f08ba0b)
-> +
-> +Downloaded from upstream commit
-> +https://github.com/uclouvain/openjpeg/commit/
-> 66297f07a43d2770a97c8456d20202f3d051d980
-> +
-> +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> +---
-> + src/lib/openjp2/CMakeLists.txt | 1 +
-> + 1 file changed, 1 insertion(+)
-> +
-> +diff --git a/src/lib/openjp2/CMakeLists.txt b/src/lib/openjp2/CMakeLists.
-> txt
-> +index 0b4520384..f8990ccf0 100644
-> +--- a/src/lib/openjp2/CMakeLists.txt
-> ++++ b/src/lib/openjp2/CMakeLists.txt
-> +@@ -99,6 +99,7 @@ else()
-> +     set(INSTALL_LIBS ${OPENJPEG_LIBRARY_NAME} openjp2_static)
-> +   else()
-> +     add_library(${OPENJPEG_LIBRARY_NAME} ${OPENJPEG_SRCS})
-> ++    set(INSTALL_LIBS ${OPENJPEG_LIBRARY_NAME})
-> +   endif()
-> + endif()
-> +
-> --
-> 2.11.0
->
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20171101/e67f7f3c/attachment.html>
+On Tue, 31 Oct 2017 23:22:19 +0100, Romain Naour wrote:
+
+> I don't know why this patch is not backported to 2.26 stable branch (and other
+> branch).
+> 
+> Steve, can you ask on the glibc mailing list ?
+
+Romain, since you're already on the glibc mailing list, and have
+already interacted with glibc developers, perhaps you could take care
+of this?
+
+In the mean time, we should backport this fix to our glibc 2.26+
+version, and possibly also to glibc 2.25 (used in 2017.08). Checking
+whether 2017.02 is affected as well would be useful.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
