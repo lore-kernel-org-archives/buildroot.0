@@ -1,67 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 1 Nov 2017 10:53:37 +0100
-Subject: [Buildroot] [git commit] package/{mesa3d,
-	mesa3d-headers}: bump version to 17.2.4
-Message-ID: <20171101094623.5854181132@busybox.osuosl.org>
+Date: Wed, 1 Nov 2017 10:53:42 +0100
+Subject: [Buildroot] [git commit] package/pure-ftpd: bump version to 1.0.47
+Message-ID: <20171101094623.6AC027FBDB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=82ec2e13d049faac213c6cca4c1f11aa5287ae28
+commit: https://git.buildroot.net/buildroot/commit/?id=a202e24ed2e6cb585008bbbff72cfc9d13649b72
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Added license hash.
+Added license hash, switched _SITE to https.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/mesa3d-headers/mesa3d-headers.mk |  2 +-
- package/mesa3d/mesa3d.hash               | 12 +++++++-----
- package/mesa3d/mesa3d.mk                 |  2 +-
- 3 files changed, 9 insertions(+), 7 deletions(-)
+ package/pure-ftpd/pure-ftpd.hash | 3 ++-
+ package/pure-ftpd/pure-ftpd.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-index a978e64..c9db3f5 100644
---- a/package/mesa3d-headers/mesa3d-headers.mk
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -12,7 +12,7 @@ endif
- 
- # Not possible to directly refer to mesa3d variables, because of
- # first/second expansion trickery...
--MESA3D_HEADERS_VERSION = 17.2.3
-+MESA3D_HEADERS_VERSION = 17.2.4
- MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
- MESA3D_HEADERS_SITE = https://mesa.freedesktop.org/archive
- MESA3D_HEADERS_LICENSE = MIT, SGI, Khronos
-diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
-index e4bd8ab..476e1bc 100644
---- a/package/mesa3d/mesa3d.hash
-+++ b/package/mesa3d/mesa3d.hash
-@@ -1,5 +1,7 @@
--# From https://lists.freedesktop.org/archives/mesa-announce/2017-October/000367.html
--md5 a7dca71afbc7294cb7d505067fd44ef6  mesa-17.2.3.tar.xz
--sha1 c46b8c71fe44e3346323835dc9a44cdfe2bffac7  mesa-17.2.3.tar.xz
--sha256 a0b0ec8f7b24dd044d7ab30a8c7e6d3767521e245f88d4ed5dd93315dc56f837  mesa-17.2.3.tar.xz
--sha512 749a0a46b772974633e405804ace7f509afb79f47811dbbdd390333721d744f2ac64f985ff1fd6c5aa3019b700be70bc1f75f60745ed9f4c5b08a9a8f77dfc76  mesa-17.2.3.tar.xz
-+# From https://lists.freedesktop.org/archives/mesa-announce/2017-October/000371.html
-+md5 cf0b7a297eedd0549cda5ba071d7561f  mesa-17.2.4.tar.xz
-+sha1 2faad5bd48243a1b80f5522a26144a176f841a20  mesa-17.2.4.tar.xz
-+sha256 5ba408fecd6e1132e5490eec1a2f04466214e4c65c8b89b331be844768c2e550  mesa-17.2.4.tar.xz
-+sha512 665b63aab6af3f8f263f182d85d9ad71db7a23bcbaf67d62fe53c258cb0f600266ac82e72d681ec20cf7c66b47d4076aad5c3f553519f19110ee577da2707085  mesa-17.2.4.tar.xz
-+# License
-+sha256 630e75b4fdeb75ee2bf9e55db54dd1e3ff7353d52d9314ca8512bfd460f8e24c  license.html
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index dca8d36..9305523 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/pure-ftpd/pure-ftpd.hash b/package/pure-ftpd/pure-ftpd.hash
+index b66717a..f01da51 100644
+--- a/package/pure-ftpd/pure-ftpd.hash
++++ b/package/pure-ftpd/pure-ftpd.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated after checking pgp signature
+-sha256 9e733f366d8d600004bb171cf2ec75dad0da4b922b7102ee4b3e18824966192d  pure-ftpd-1.0.46.tar.bz2
++sha256 cb1b695e779a06e42d62d7a1a428d2f605d621dfd5afe4e192b5f9fc4e343692  pure-ftpd-1.0.47.tar.bz2
++sha256 e724ba991d8efa4c963e84ec31314c532dab00ac455ef77020fe60e78177bf23  COPYING
+diff --git a/package/pure-ftpd/pure-ftpd.mk b/package/pure-ftpd/pure-ftpd.mk
+index 0bb5f3c..815de90 100644
+--- a/package/pure-ftpd/pure-ftpd.mk
++++ b/package/pure-ftpd/pure-ftpd.mk
+@@ -4,8 +4,8 @@
+ #
  ################################################################################
  
- # When updating the version, please also update mesa3d-headers
--MESA3D_VERSION = 17.2.3
-+MESA3D_VERSION = 17.2.4
- MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
- MESA3D_SITE = https://mesa.freedesktop.org/archive
- MESA3D_LICENSE = MIT, SGI, Khronos
+-PURE_FTPD_VERSION = 1.0.46
+-PURE_FTPD_SITE = http://download.pureftpd.org/pub/pure-ftpd/releases
++PURE_FTPD_VERSION = 1.0.47
++PURE_FTPD_SITE = https://download.pureftpd.org/pub/pure-ftpd/releases
+ PURE_FTPD_SOURCE = pure-ftpd-$(PURE_FTPD_VERSION).tar.bz2
+ PURE_FTPD_LICENSE = ISC
+ PURE_FTPD_LICENSE_FILES = COPYING
