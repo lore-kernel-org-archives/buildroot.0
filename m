@@ -1,36 +1,72 @@
-From: Sam Voss <sam.voss@rockwellcollins.com>
-Date: Wed, 1 Nov 2017 09:54:19 -0500
-Subject: [Buildroot] [PATCH v5 1/2] package/libssh2: Update to newest
-	version
-In-Reply-To: <20171101105823.6128ce6b@windsurf>
-References: <1509472591-12650-1-git-send-email-sam.voss@rockwellcollins.com>
- <20171101105823.6128ce6b@windsurf>
-Message-ID: <CAH=K+6=0mqS9-S4yheRsMWkEQzCxntiS47KiFP=_xq7xYrOL6w@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 1 Nov 2017 15:51:25 +0100
+Subject: [Buildroot] [git commit] argp-standalone: fix build with gcc 7.x
+Message-ID: <20171101145215.6E03D80DEB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=f0b65bd90ce4429d6b7e952ce7de2d5f92a2dd26
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, Nov 1, 2017 at 4:58 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
->> +
->> +Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
->> +Cc: Sam Voss <sam.voss@rockwellcollins.com>
->
-> Has this patch been submitted upstream?
+Back in commit a662ff7e79630ca0875dd8529fe54db27a275007
+("package/argp-standalone: Fix build with c99 compilers"), we fixed
+the build of argp-standalone with compilers defaulting to C99 inline
+semantics, i.e starting from gcc 5.x.
 
-Yep, Yann submitted it at https://github.com/libssh2/libssh2/pull/224
+This was done as part of a patch that used "inline" instead of "extern
+inline". However, using "inline" once again broke the build with gcc
+7.x. To fix this, revert back to using just "extern inline" (hence
+removing a patch of patch 0003-fix_build_with_c99_compilers.patch) and
+instead use -fgnu89-inline in the CFLAGS.
 
->> +# autoreconf must be ran when building off git, as it has not been ran at hash
->> +LIBSSH2_AUTORECONF = YES
->
-> "it has not been ran at hash" doesn't make much sense. I've simplified
-> the whole comment to "building from a git clone".
+See https://gcc.gnu.org/gcc-5/porting_to.html for more details.
 
-I agree, poor phrasing.
+Fixes:
 
-Sam
+  http://autobuild.buildroot.net/results/a9cedc54829b7bd2dd7ae6ff2bd6c6db242f1c35/
+
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+[Thomas: also drop the patch of
+0003-fix_build_with_c99_compilers.patch that is no longer needed.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../argp-standalone/0003-fix_build_with_c99_compilers.patch  | 12 ------------
+ package/argp-standalone/argp-standalone.mk                   |  2 +-
+ 2 files changed, 1 insertion(+), 13 deletions(-)
+
+diff --git a/package/argp-standalone/0003-fix_build_with_c99_compilers.patch b/package/argp-standalone/0003-fix_build_with_c99_compilers.patch
+index bfa0bb5..56b753b 100644
+--- a/package/argp-standalone/0003-fix_build_with_c99_compilers.patch
++++ b/package/argp-standalone/0003-fix_build_with_c99_compilers.patch
+@@ -66,15 +66,3 @@ index e797b11..828f435 100644
+  
+  /* Internal routines.  */
+  extern void _argp_fmtstream_update (argp_fmtstream_t __fs);
+-@@ -216,7 +220,11 @@
+- #endif
+- 
+- #ifndef ARGP_FS_EI
+-+#if defined(__GNUC__) && !defined(__GNUC_STDC_INLINE__)
+- #define ARGP_FS_EI extern inline
+-+#else
+-+#define ARGP_FS_EI inline
+-+#endif
+- #endif
+- 
+- ARGP_FS_EI size_t
+diff --git a/package/argp-standalone/argp-standalone.mk b/package/argp-standalone/argp-standalone.mk
+index 7a7028c..977b954 100644
+--- a/package/argp-standalone/argp-standalone.mk
++++ b/package/argp-standalone/argp-standalone.mk
+@@ -10,7 +10,7 @@ ARGP_STANDALONE_INSTALL_STAGING = YES
+ ARGP_STANDALONE_LICENSE = LGPL-2.0+
+ 
+ ARGP_STANDALONE_CONF_ENV = \
+-	CFLAGS="$(TARGET_CFLAGS) -fPIC"
++	CFLAGS="$(TARGET_CFLAGS) -fPIC -fgnu89-inline"
+ 
+ define ARGP_STANDALONE_INSTALL_STAGING_CMDS
+ 	$(INSTALL) -D $(@D)/libargp.a $(STAGING_DIR)/usr/lib/libargp.a
