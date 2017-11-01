@@ -1,65 +1,76 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Wed, 1 Nov 2017 11:17:33 +0100
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 1 Nov 2017 11:24:28 +0100
 Subject: [Buildroot] Analysis of build results for 2017-10-30
-In-Reply-To: <20171031230519.3feb2619@windsurf>
+In-Reply-To: <1509530473.6560.11.camel@synopsys.com>
 References: <20171031070013.AD75D207B2@mail.free-electrons.com>
  <20171031230519.3feb2619@windsurf>
-Message-ID: <CAHXCMMKsPg-DZW385VWMgUQmtngB_L9ALJqJiuZPj2Oz9g0uJQ@mail.gmail.com>
+ <CANQCQpYxR6nParzHgEswkZyh8K2-DUHnTu5VsOtyJOksd3rU5w@mail.gmail.com>
+ <20171101104532.43dcd164@windsurf>
+ <1509530473.6560.11.camel@synopsys.com>
+Message-ID: <20171101112428.710e7181@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, all,
+Hello,
 
-On Tue, Oct 31, 2017 at 11:05 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
->
-> Since Peter is about to release -rc1, it's time to restart with
-> analyzing the build failures we have. And we have *lots* of them!
->
-> Alexey, Yann, Adam, Peter (both Korsgaard and Seiderer?, Olivier,
-> Matthew, Johan, Angelo, J?rg, Samuel, Waldemar, Bernd and Baruch: there
-> are some questions/issues/topics for you below. Please read on! Thanks
-> for your support!
->
-[...]
+On Wed, 1 Nov 2017 10:01:14 +0000, Alexey Brodkin wrote:
 
->>     mips64el |                opencv-2.4.13.3 | NOK | http://autobuild.buildroot.net/results/b27d324331f6e351e95dd4742f4d0a50af60c590 |
->>     mips64el |                opencv-2.4.13.3 | NOK | http://autobuild.buildroot.net/results/44ed0be0bd94028b7b37e7bf21233adc1753d94b |
->
-> CMake Error at cmake/OpenCVCompilerOptions.cmake:21 (else):
->   A duplicate ELSE command was found inside an IF block.
-> Call Stack (most recent call first):
->   CMakeLists.txt:437 (include)
->
-> Should be easy to fix. Samuel, do you think you will find some time to
-> have a look at this?
+> As a matter of fact the same problem happens on ARM if GCC 7 is used.
+> That's my defconfig:
+> --------------------------->8---------------------  
+> BR2_arm=y
+> BR2_GCC_VERSION_7_X=y
+> --------------------------->8---------------------  
 
-I was about to check on these failures when the abo were off for
-maintainance yesterday.
-Hopefully I should have time to look into this by the end of the week.
+I was surprised because our configuration
+https://git.buildroot.org/buildroot/tree/support/config-fragments/autobuild/br-arm-cortex-a9-glibc.config
+is using gcc 7.x. But what I missed is that it's a glibc configuration,
+and argp-standalone is only available for !glibc configurations.
 
->
->>         bfin |                 openobex-1.7.2 | NOK | http://autobuild.buildroot.net/results/78e033fe9f43845581a5d87b21a8451f67520e44 |
->
-> /usr/lfs/v0/rc-buildroot-test/scripts/instance-2/output/build/openobex-1.7.2/lib/obex_transport_sock.c:(.text+0x5f6): undefined reference to `accept4'
->
-> Not sure what's going on. accept4() not wired in Linux or uClibc for
-> Blackfin? Something else? Waldemar, could you have a look?
->
+So that explains it all.
 
-I have a pending patch for openobex,.
-It seems accept4 is not available in uclibc for blackfin architecture [1].
-Grepping at the git log, similar issues were fixed by disabling the
-package on blackfin target.
+> --------------------------->8---------------------  
+> make argp-standalone
+> ...
+> .../output/build/argp-standalone-1.3/argp-help.c:1217: undefined reference to `argp_fmtstream_set_wmargin'
+> .../output/build/argp-standalone-1.3/argp-help.c:1199: undefined reference to `argp_fmtstream_puts'
+> collect2: error: ld returned 1 exit status
+> --------------------------->8---------------------  
+> 
+> Speaking about a fix for this problem I guess more elegant could be:
+> --------------------------->8---------------------  
+> ?argp-fmtstream.h | 2 +-
+> ?1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/argp-fmtstream.h b/argp-fmtstream.h
+> index 2dd0925..cb0bead 100644
+> --- a/argp-fmtstream.h
+> +++ b/argp-fmtstream.h
+> @@ -215,7 +215,7 @@ extern int __argp_fmtstream_ensure (argp_fmtstream_t __fs, size_t __amount);
+> ?#if defined(__GNUC__) && !defined(__GNUC_STDC_INLINE__)
+> ?#define ARGP_FS_EI extern inline
+> ?#else
+> -#define ARGP_FS_EI inline
+> +#define ARGP_FS_EI inline __attribute__((__always_inline__))
+> ?#endif
+> ?#endif
+> --------------------------->8---------------------  
+> 
+> If that looks fine to you guys Eugeniy will send out that fix.
 
+The gnu89-inline solution is the one also used by Alpine Linux,
+https://git.alpinelinux.org/cgit/aports/tree/main/argp-standalone/gnu89-inline.patch,
+so I believe it's good enough.
 
-Regards,
+I'll apply Matt's patch after changing the commit log.
 
-[1] https://cgit.openadk.org/cgi/cgit/uclibc-ng.git/tree/libc/sysdeps/linux/common/bits/kernel-features.h#n452
+Thanks!
 
+Thomas
 -- 
-Samuel
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
