@@ -1,94 +1,107 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 1 Nov 2017 16:40:36 +0100
-Subject: [Buildroot] [git commit] nmap: fix libssh2 build failure
-Message-ID: <20171101153340.94807810E2@busybox.osuosl.org>
+From: Sam Voss <sam.voss@rockwellcollins.com>
+Date: Wed,  1 Nov 2017 11:22:56 -0500
+Subject: [Buildroot] [PATCH v4 1/1] package/libssh2: Add selectable crypto
+ libraries
+Message-ID: <1509553376-43168-1-git-send-email-sam.voss@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=302ab5ed258c366dfc3853954ef9ec20b22661ce
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Currently, the selection of the backend is based on a priority order,
+which is not always desirable: not all features are available for all
+backends, as reported upstream:
+    https://github.com/libssh2/libssh2/issues/213
 
-This commit adds a patch that fixes the libssh2 AC_CHECK_LIB() check,
-and makes sure it is taken into account by doing an autoconf in the
-package. We can't autoreconf as the package doesn't autoreconf
-properly, so we do a manual autoconf.
+As such, allow a user to select the backend most appropriate to their
+use-case.
 
-Based on prior work from Baruch Siach and Max Filippov.
+Signed-off-by: Sam Voss <sam.voss@rockwellcollins.com>
 
-Fixes:
+--
 
-  http://autobuild.buildroot.net/results/9e636919c98cd31b5067c8306d0e481a672434cf
-  http://autobuild.buildroot.net/results/912561f505ad10d1eaa96dbe247d5838e9968e14
+[v3->v4]
+ - Update configuration for "type->depends->select" ordering
+ - Update patch message to be more descriptive
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+[v2->v3]
+ - Fix comment about favoring mbedtls
+
+[v1->v2]
+ - Do not have comments when crypo is not selected, select it instead.
+ - Do not select OpenSSL by default when libssh2 is selected if no
+   others are chosen
 ---
- ...c-fix-AC_CHECK_HEADER-call-to-test-for-li.patch | 30 ++++++++++++++++++++++
- package/nmap/nmap.mk                               | 10 +++++++-
- 2 files changed, 39 insertions(+), 1 deletion(-)
+ package/libssh2/Config.in  | 24 +++++++++++++++++++++++-
+ package/libssh2/libssh2.mk |  8 ++++----
+ 2 files changed, 27 insertions(+), 5 deletions(-)
 
-diff --git a/package/nmap/0002-configure.ac-fix-AC_CHECK_HEADER-call-to-test-for-li.patch b/package/nmap/0002-configure.ac-fix-AC_CHECK_HEADER-call-to-test-for-li.patch
-new file mode 100644
-index 0000000..ed5cae2
---- /dev/null
-+++ b/package/nmap/0002-configure.ac-fix-AC_CHECK_HEADER-call-to-test-for-li.patch
-@@ -0,0 +1,30 @@
-+From ff629766dbd3b5e179330ba4f07fd7e3d8384ec0 Mon Sep 17 00:00:00 2001
-+From: Max Filippov <jcmvbkbc@gmail.com>
-+Date: Wed, 1 Nov 2017 15:30:40 +0100
-+Subject: [PATCH] configure.ac: fix AC_CHECK_HEADER call to test for libssh2
-+
-+The -lm argument is passed as an argument to AC_CHECK_HEADER(), which
-+doesn't make sense. The intention was to pass it as the fifth
-+argument of AC_CHECK_LIB().
-+
-+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-+---
-+ configure.ac | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 3d00e164e..67db42e08 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -674,7 +674,7 @@ AC_HELP_STRING([--without-libssh2], [Compile without libssh2]),
-+       AC_CHECK_LIB(ssh2, libssh2_version,
-+         [have_libssh2=yes
-+         LIBSSH2_INC=$with_libssh2/include
-+-        LIBSSH2_LIB=$with_libssh2/lib])],,[-lm])
-++        LIBSSH2_LIB=$with_libssh2/lib],,[-lm])])
-+ 
-+     LDFLAGS=$_ldflags
-+     CPPFLAGS=$_cppflags
-+-- 
-+2.13.6
-+
-diff --git a/package/nmap/nmap.mk b/package/nmap/nmap.mk
-index 9db06d1..ceb08ec 100644
---- a/package/nmap/nmap.mk
-+++ b/package/nmap/nmap.mk
-@@ -7,13 +7,21 @@
- NMAP_VERSION = 7.60
- NMAP_SITE = https://nmap.org/dist
- NMAP_SOURCE = nmap-$(NMAP_VERSION).tar.bz2
--NMAP_DEPENDENCIES = libpcap pcre
-+NMAP_DEPENDENCIES = libpcap pcre host-autoconf
- NMAP_CONF_OPTS = --without-liblua --without-zenmap \
- 	--with-libdnet=included --with-liblinear=included \
- 	--with-libpcre="$(STAGING_DIR)/usr" --without-ncat
- NMAP_LICENSE = GPL-2.0
- NMAP_LICENSE_FILES = COPYING
+diff --git a/package/libssh2/Config.in b/package/libssh2/Config.in
+index 9b60823..f2d32a9 100644
+--- a/package/libssh2/Config.in
++++ b/package/libssh2/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_LIBSSH2
+ 	bool "libssh2"
+-	select BR2_PACKAGE_OPENSSL if !(BR2_PACKAGE_MBEDTLS || BR2_PACKAGE_LIBGCRYPT)
+ 	help
+ 	  libssh2 is a client-side C library implementing the SSH2
+ 	  protocol as defined by Internet Drafts: SECSH-TRANS(22),
+@@ -8,3 +7,26 @@ config BR2_PACKAGE_LIBSSH2
+ 	  SECSH-FILEXFER(06)*, SECSH-DHGEX(04), and SECSH-NUMBERS(10)
  
-+# nmap doesn't autoreconf properly, so we just re-generate the
-+# top-level configure script, since we are patching configure.ac.
-+define NMAP_DO_AUTOCONF
-+	(cd $(@D); $(HOST_DIR)/bin/autoconf)
-+endef
+ 	  http://www.libssh2.org/
 +
-+NMAP_PRE_CONFIGURE_HOOKS += NMAP_DO_AUTOCONF
++if BR2_PACKAGE_LIBSSH2
 +
- # needed by libpcap
- NMAP_LIBS_FOR_STATIC_LINK += `$(STAGING_DIR)/usr/bin/pcap-config --static --additional-libs`
++choice
++	prompt "Crypto Backend"
++	help
++	  Select crypto library to be used in libssh2.
++
++config BR2_PACKAGE_LIBSSH2_MBEDTLS
++	bool "mbedtls"
++	select BR2_PACKAGE_MBEDTLS
++
++config BR2_PACKAGE_LIBSSH2_LIBGCRYPT
++	bool "gcrypt"
++	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgcrypt -> libgpg-error
++	select BR2_PACKAGE_LIBGCRYPT
++
++config BR2_PACKAGE_LIBSSH2_OPENSSL
++	bool "openssl"
++	select BR2_PACKAGE_OPENSSL
++
++endchoice
++endif
+diff --git a/package/libssh2/libssh2.mk b/package/libssh2/libssh2.mk
+index d40e844..befac92 100644
+--- a/package/libssh2/libssh2.mk
++++ b/package/libssh2/libssh2.mk
+@@ -15,19 +15,19 @@ LIBSSH2_CONF_OPTS = --disable-examples-build
+ LIBSSH2_AUTORECONF = YES
  
+ # Dependency is one of mbedtls, libgcrypt or openssl, guaranteed in
+-# Config.in. Favour mbedtls.
+-ifeq ($(BR2_PACKAGE_MBEDTLS),y)
++# Config.in.
++ifeq ($(BR2_PACKAGE_LIBSSH2_MBEDTLS),y)
+ LIBSSH2_DEPENDENCIES += mbedtls
+ LIBSSH2_CONF_OPTS += --with-libmbedcrypto-prefix=$(STAGING_DIR)/usr \
+ 	--with-crypto=mbedtls
+-else ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
++else ifeq ($(BR2_PACKAGE_LIBSSH2_LIBGCRYPT),y)
+ LIBSSH2_DEPENDENCIES += libgcrypt
+ LIBSSH2_CONF_OPTS += --with-libgcrypt-prefix=$(STAGING_DIR)/usr \
+ 	--with-crypto=libgcrypt
+ # configure.ac forgets to link to dependent libraries of gcrypt breaking static
+ # linking
+ LIBSSH2_CONF_ENV += LIBS="`$(STAGING_DIR)/usr/bin/libgcrypt-config --libs`"
+-else
++else ifeq ($(BR2_PACKAGE_LIBSSH2_OPENSSL),y)
+ LIBSSH2_DEPENDENCIES += openssl
+ LIBSSH2_CONF_OPTS += --with-libssl-prefix=$(STAGING_DIR)/usr \
+ 	--with-crypto=openssl
+-- 
+1.9.1
