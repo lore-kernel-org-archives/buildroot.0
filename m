@@ -1,65 +1,31 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Wed,  1 Nov 2017 21:11:35 +0100
-Subject: [Buildroot] [PATCH 2/4] package/opencv: fix build failure
+Date: Wed,  1 Nov 2017 21:11:36 +0100
+Subject: [Buildroot] [PATCH 3/4] package/opencv: add hashes for patch and
+ license files
 In-Reply-To: <20171101201137.29939-1-s.martin49@gmail.com>
 References: <20171101201137.29939-1-s.martin49@gmail.com>
-Message-ID: <20171101201137.29939-2-s.martin49@gmail.com>
+Message-ID: <20171101201137.29939-3-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Backport fix from upstream.
-
-Fixes:
-  http://autobuild.buildroot.net/results/b27d324331f6e351e95dd4742f4d0a50af60c590
-  http://autobuild.buildroot.net/results/44ed0be0bd94028b7b37e7bf21233adc1753d94b
-
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 ---
- .../0003-Update-OpenCVCompilerOptions.cmake.patch  | 33 ++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
- create mode 100644 package/opencv/0003-Update-OpenCVCompilerOptions.cmake.patch
+ package/opencv/opencv.hash | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/opencv/0003-Update-OpenCVCompilerOptions.cmake.patch b/package/opencv/0003-Update-OpenCVCompilerOptions.cmake.patch
-new file mode 100644
-index 0000000000..290eef4d10
---- /dev/null
-+++ b/package/opencv/0003-Update-OpenCVCompilerOptions.cmake.patch
-@@ -0,0 +1,33 @@
-+Fetch from upstream: https://github.com/opencv/opencv/commit/126de0cd95418811e302996161e03195bf7e631a
-+
-+From 126de0cd95418811e302996161e03195bf7e631a Mon Sep 17 00:00:00 2001
-+From: neok-m4700 <neok-m4700@users.noreply.github.com>
-+Date: Tue, 25 Jul 2017 10:25:20 +0200
-+Subject: [PATCH] Update OpenCVCompilerOptions.cmake
-+
-+misplaced else
-+
-+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-+---
-+ cmake/OpenCVCompilerOptions.cmake | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/cmake/OpenCVCompilerOptions.cmake b/cmake/OpenCVCompilerOptions.cmake
-+index 9b2a4e42e..7b079c5f9 100644
-+--- a/cmake/OpenCVCompilerOptions.cmake
-++++ b/cmake/OpenCVCompilerOptions.cmake
-+@@ -18,9 +18,9 @@ if(ENABLE_CCACHE AND NOT CMAKE_COMPILER_IS_CCACHE)
-+         message(STATUS "Unable to compile program with enabled ccache, reverting...")
-+         set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE "${__OLD_RULE_LAUNCH_COMPILE}")
-+       endif()
-+-    else()
-+-      message(STATUS "Looking for ccache - not found")
-+     endif()
-++  else()
-++    message(STATUS "Looking for ccache - not found")
-+   endif()
-+ endif()
-+ 
-+-- 
-+2.15.0
-+
+diff --git a/package/opencv/opencv.hash b/package/opencv/opencv.hash
+index 85a3e0b8f4..31bbaf6777 100644
+--- a/package/opencv/opencv.hash
++++ b/package/opencv/opencv.hash
+@@ -1,2 +1,6 @@
+ # Locally calculated
+ sha256 fb4769d0119c35426c3754b7fb079b407911e863958db53bdec83c7794582e41  opencv-2.4.13.3.tar.gz
++sha256 934825dcbd68ec46936d5b12f4734d07fffc864226a9122e46a23c55d0e5bb5c  0001-atomic.patch
++sha256 f211b79c126021de2f553e894bb5d0896be542289e8f55f5289eba45c86f5d6e  0002-CMakeLists.txt-Do-not-add-libdl-to-LINKER_LIBS-for-s.patch
++sha256 78622658634e0297588037e26e54ee37754f739e30336184921f42f4888cda7f  0003-Update-OpenCVCompilerOptions.cmake.patch
++sha256 46e42877dfc3ac65769292cb4dc1a04b204ad9e40859a390f4c035d6179fbcc4  LICENSE
 -- 
 2.15.0
