@@ -1,38 +1,31 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Wed,  1 Nov 2017 21:11:37 +0100
-Subject: [Buildroot] [PATCH 4/4] package/ussp-push: removed deprecated/no
- longer needed deps on openobex-bluez
-In-Reply-To: <20171101201137.29939-1-s.martin49@gmail.com>
-References: <20171101201137.29939-1-s.martin49@gmail.com>
-Message-ID: <20171101201137.29939-4-s.martin49@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 01 Nov 2017 21:28:14 +0100
+Subject: [Buildroot] [PATCH] wireguard: bump to version 0.0.20171101
+In-Reply-To: <20171101122903.460-1-Jason@zx2c4.com> (Jason A. Donenfeld's
+ message of "Wed, 1 Nov 2017 13:29:03 +0100")
+References: <20171101122903.460-1-Jason@zx2c4.com>
+Message-ID: <87vaitg2w1.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit 49a9fb0f13789298e65f21405502a9106e2c7382 deprecates the
-BR2_PACKAGE_OPENOBEX_BLUEZ option, which should be turned in
-BR2_PACKAGE_BLUEZ_UTILS instead.
+>>>>> "Jason" == Jason A Donenfeld <Jason@zx2c4.com> writes:
 
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
-Reported-by: Romain Naour <romain.naour@gmail.com>
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
----
- package/ussp-push/Config.in | 1 -
- 1 file changed, 1 deletion(-)
+ > Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 
-diff --git a/package/ussp-push/Config.in b/package/ussp-push/Config.in
-index e6695bb197..aefec85a20 100644
---- a/package/ussp-push/Config.in
-+++ b/package/ussp-push/Config.in
-@@ -5,7 +5,6 @@ config BR2_PACKAGE_USSP_PUSH
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, alsa-lib, libglib2
- 	depends on BR2_USE_MMU # dbus
- 	select BR2_PACKAGE_OPENOBEX
--	select BR2_PACKAGE_OPENOBEX_BLUEZ
- 	select BR2_PACKAGE_BLUEZ_UTILS
- 	help
- 	  ussp-push is an OBEX object pusher for Linux, using the BlueZ
+Committed, thanks.
+
+ > ---
+ > I probably won't send these patches regularly, as I'm focused on
+ > upstream work, but I figure a nudge might be useful, since it's been
+ > some time since the last snapshot.
+
+I'm on the list, so I will normally get around to bump the version
+whenever there are important changes / I have time, but others are
+definately also welcome to send patches. I already got a request offlist
+earlier this week to bump the version.
+
 -- 
-2.15.0
+Bye, Peter Korsgaard
