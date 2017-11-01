@@ -1,54 +1,29 @@
-From: Fabio Estevam <fabio.estevam@nxp.com>
-Date: Wed, 1 Nov 2017 16:53:18 -0200
-Subject: [Buildroot] [PATCH v2] uboot-tools: bump to version 2017.09
-Message-ID: <1509562398-20833-1-git-send-email-fabio.estevam@nxp.com>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Wed, 1 Nov 2017 17:03:29 -0200
+Subject: [Buildroot] [PATCH 2/2] uboot-tools: bump to version 2017.09
+In-Reply-To: <3652605d-ef46-081f-aec1-4b41b02c822d@mind.be>
+References: <1505157066-25651-1-git-send-email-festevam@gmail.com>
+ <1505157066-25651-2-git-send-email-festevam@gmail.com>
+ <87vakn656b.fsf@dell.be.48ers.dk>
+ <CAOMZO5Cy39dYHhhRA05UgG_T=P98w57RcESzonyTJvpwVH=yeA@mail.gmail.com>
+ <87mv5z61zs.fsf@dell.be.48ers.dk>
+ <CAOMZO5Dn536fDzp7jmg+4vNVW81LGxvBMXpuXEC-0=QkGy2Z8w@mail.gmail.com>
+ <3652605d-ef46-081f-aec1-4b41b02c822d@mind.be>
+Message-ID: <CAOMZO5AzoO_b58nit8AK72MGcg8TMEoqyV=0T0U+VQXfY1Az=g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The 'env' target has been renamed to 'envtools' so change it
-accordingly.
+Hi Arnout,
 
-Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
----
-Changes since v1:
-- Take the 'env' target rename into account
+On Sun, Sep 24, 2017 at 1:45 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
 
- package/uboot-tools/uboot-tools.hash | 2 +-
- package/uboot-tools/uboot-tools.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+>  I can reproduce with any defconfig I try.
+>
+>  I think the issue is that the "env" target was renamed to "envtools".
 
-diff --git a/package/uboot-tools/uboot-tools.hash b/package/uboot-tools/uboot-tools.hash
-index 3ba8e34..82efc79 100644
---- a/package/uboot-tools/uboot-tools.hash
-+++ b/package/uboot-tools/uboot-tools.hash
-@@ -1,2 +1,2 @@
- # Locally computed:
--sha256  5374bfdc8acb9a38c025371b1ff20f45e7533668e84e685d0df5d9e7c0e4feff  u-boot-2017.07.tar.bz2
-+sha256  b2d15f2cf5f72e706025cde73d67247c6da8cd35f7e10891eefe7d9095089744  u-boot-2017.09.tar.bz2
-diff --git a/package/uboot-tools/uboot-tools.mk b/package/uboot-tools/uboot-tools.mk
-index 4f39f4a..c936575 100644
---- a/package/uboot-tools/uboot-tools.mk
-+++ b/package/uboot-tools/uboot-tools.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--UBOOT_TOOLS_VERSION = 2017.07
-+UBOOT_TOOLS_VERSION = 2017.09
- UBOOT_TOOLS_SOURCE = u-boot-$(UBOOT_TOOLS_VERSION).tar.bz2
- UBOOT_TOOLS_SITE = ftp://ftp.denx.de/pub/u-boot
- UBOOT_TOOLS_LICENSE = GPL-2.0+
-@@ -35,7 +35,7 @@ define UBOOT_TOOLS_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(UBOOT_TOOLS_MAKE_OPTS) \
- 		CROSS_BUILD_TOOLS=y tools-only
- 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(UBOOT_TOOLS_MAKE_OPTS) \
--		env no-dot-config-targets=env
-+		envtools no-dot-config-targets=envtools
- endef
- 
- ifeq ($(BR2_PACKAGE_UBOOT_TOOLS_MKIMAGE),y)
--- 
-2.7.4
+Yes, just sent a v2 with this fix.
+
+Thanks
