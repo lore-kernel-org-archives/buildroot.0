@@ -1,63 +1,74 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 1 Nov 2017 10:45:32 +0100
-Subject: [Buildroot] Analysis of build results for 2017-10-30
-In-Reply-To: <CANQCQpYxR6nParzHgEswkZyh8K2-DUHnTu5VsOtyJOksd3rU5w@mail.gmail.com>
-References: <20171031070013.AD75D207B2@mail.free-electrons.com>
- <20171031230519.3feb2619@windsurf>
- <CANQCQpYxR6nParzHgEswkZyh8K2-DUHnTu5VsOtyJOksd3rU5w@mail.gmail.com>
-Message-ID: <20171101104532.43dcd164@windsurf>
+Date: Wed, 1 Nov 2017 10:46:29 +0100
+Subject: [Buildroot] [git commit] openssh: fix getpagesize() related static
+	linking issue
+Message-ID: <20171101093925.9136480F81@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=cc856401e8ac6a2c7a8767737b73dde933a5798a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 31 Oct 2017 21:37:28 -0500, Matthew Weber wrote:
+Fixes:
+http://autobuild.buildroot.net/results/8cc/8cc30818a400c7a392a3de787cabc9cd8425495f/
 
-> > This is happening only on ARC. Why? Matt Weber proposed a patch,
-> > https://patchwork.ozlabs.org/patch/832397/, but I am not terribly
-> > convinced because it doesn't explain why this problem happens only on
-> > ARC, and why it appeared suddenly.  
-> 
-> I kicked off a test build reverting the following commit.  We'll see
-> in the morning if it changed the behavior or the pass/fail.  (ie bump
-> from GCC 6.x to 7.x)
-> 5bd21f991f3 Evgeniy Didin     2017-09-21 21:28:28
+The configure script checks for getpagesize() and sets HAVE_GETPAGESIZE in
+config.h, but bsd-getpagesize.c forgot to include includes.h (which
+indirectly includes config.h) so the checks always fails, causing linker
+issues when linking statically on systems with getpagesize().
 
-OK, we'll see the result.
+Fix it by including includes.h.
 
-> One interesting thing to notes is the test-pkg is using a external ARC
-> GCC6 uclibc toolchain  and the failing builds are all internal
-> toolchain and GCC 7.
+Patch submitted upstream:
+https://lists.mindrot.org/pipermail/openssh-unix-dev/2017-October/036413.html
 
-Yes. But we have other toolchains tested by test-pkg that use gcc 7.x,
-so I'm surprised the problem doesn't pop up on other architectures.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...pat-bsd-getpagesize.c-include-includes.h-.patch | 35 ++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
 
-
-> >>          arc |       host-uboot-tools-2017.07 | NOK | http://autobuild.buildroot.net/results/9567703c95823be10400c0a330c3997a4cd6a62c | ORPH
-> >>          arm |       host-uboot-tools-2017.07 | NOK | http://autobuild.buildroot.net/results/e3ee47e30a01e68a80fcbef3178f8eb051fe509f | ORPH
-> >>          sh4 |       host-uboot-tools-2017.07 | NOK | http://autobuild.buildroot.net/results/7d60ebf31fd9df7a5fef7e7723859c32d7972f5b | ORPH  
-> >
-> > The libfdt/python issue. Matt Weber has proposed a patch to fix it:
-> > https://patchwork.ozlabs.org/patch/827287/, however I have some
-> > questions/concerns about it.  
-> 
-> Should we just wait for the November uboot release that resolves the
-> underlying design issue upstream?
-
-No, because we want to fix this problem before the next Buildroot
-release in November.
-
-Unrelated note: when you're replying to only a few parts of a lengthy
-e-mail, it's good practice to delete the parts of the e-mail that are
-not relevant. See what I did here :)
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/openssh/0005-openbsd-compat-bsd-getpagesize.c-include-includes.h-.patch b/package/openssh/0005-openbsd-compat-bsd-getpagesize.c-include-includes.h-.patch
+new file mode 100644
+index 0000000..ce60072
+--- /dev/null
++++ b/package/openssh/0005-openbsd-compat-bsd-getpagesize.c-include-includes.h-.patch
+@@ -0,0 +1,35 @@
++From 9a43657a3dcb868b4f36ade3aba5dcf0871fb412 Mon Sep 17 00:00:00 2001
++From: Peter Korsgaard <peter@korsgaard.com>
++Date: Mon, 30 Oct 2017 23:36:56 +0100
++Subject: [PATCH] openbsd-compat/bsd-getpagesize.c: include includes.h for
++ config.h defines
++
++The configure script checks for getpagesize() and sets HAVE_GETPAGESIZE in
++config.h, but bsd-getpagesize.c forgot to include includes.h (which
++indirectly includes config.h) so the checks always fails, causing linker
++issues when linking statically on systems with getpagesize():
++
++http://autobuild.buildroot.net/results/8cc/8cc30818a400c7a392a3de787cabc9cd8425495f/build-end.log
++
++Fix it by including includes.h
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ openbsd-compat/bsd-getpagesize.c | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/openbsd-compat/bsd-getpagesize.c b/openbsd-compat/bsd-getpagesize.c
++index 9daddfbd..416a8d4c 100644
++--- a/openbsd-compat/bsd-getpagesize.c
+++++ b/openbsd-compat/bsd-getpagesize.c
++@@ -1,5 +1,7 @@
++ /* Placed in the public domain */
++ 
+++#include "includes.h"
+++
++ #ifndef HAVE_GETPAGESIZE
++ 
++ #include <unistd.h>
++-- 
++2.11.0
++
