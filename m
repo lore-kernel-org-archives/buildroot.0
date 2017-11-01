@@ -1,42 +1,67 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 1 Nov 2017 10:47:00 +0100
-Subject: [Buildroot] [PATCH] openssh: fix getpagesize() related static
- linking issue
-In-Reply-To: <20171030224555.3220-1-peter@korsgaard.com>
-References: <20171030224555.3220-1-peter@korsgaard.com>
-Message-ID: <20171101104700.036fad1f@windsurf>
+Date: Wed, 1 Nov 2017 10:47:12 +0100
+Subject: [Buildroot] [git commit] quagga: add upstream security fix for
+	CVE-2017-16227
+Message-ID: <20171101093953.9F35F811E9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=d77d7220a7ced8daa89e3e0aa0090a4e60074001
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 30 Oct 2017 23:45:55 +0100, Peter Korsgaard wrote:
-> Fixes:
-> http://autobuild.buildroot.net/results/8cc/8cc30818a400c7a392a3de787cabc9cd8425495f/
-> 
-> The configure script checks for getpagesize() and sets HAVE_GETPAGESIZE in
-> config.h, but bsd-getpagesize.c forgot to include includes.h (which
-> indirectly includes config.h) so the checks always fails, causing linker
-> issues when linking statically on systems with getpagesize().
-> 
-> Fix it by including includes.h.
-> 
-> Patch submitted upstream:
-> https://lists.mindrot.org/pipermail/openssh-unix-dev/2017-October/036413.html
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  ...pat-bsd-getpagesize.c-include-includes.h-.patch | 35 ++++++++++++++++++++++
->  1 file changed, 35 insertions(+)
->  create mode 100644 package/openssh/0005-openbsd-compat-bsd-getpagesize.c-include-includes.h-.patch
+From the advisory:
+http://www.openwall.com/lists/oss-security/2017/10/30/4
 
-Applied to master, thanks.
+It was discovered that the bgpd daemon in the Quagga routing suite does
+not properly calculate the length of multi-segment AS_PATH UPDATE
+messages, causing bgpd to drop a session and potentially resulting in
+loss of network connectivity.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...x-AS_PATH-size-calculation-for-long-paths.patch | 33 ++++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
+
+diff --git a/package/quagga/0004-bgpd-Fix-AS_PATH-size-calculation-for-long-paths.patch b/package/quagga/0004-bgpd-Fix-AS_PATH-size-calculation-for-long-paths.patch
+new file mode 100644
+index 0000000..1425cf0
+--- /dev/null
++++ b/package/quagga/0004-bgpd-Fix-AS_PATH-size-calculation-for-long-paths.patch
+@@ -0,0 +1,33 @@
++From 7a42b78be9a4108d98833069a88e6fddb9285008 Mon Sep 17 00:00:00 2001
++From: Andreas Jaggi <aj@open.ch>
++Date: Mon, 2 Oct 2017 19:38:43 +0530
++Subject: [PATCH] bgpd: Fix AS_PATH size calculation for long paths
++
++If you have an AS_PATH with more entries than
++what can be written into a single AS_SEGMENT_MAX
++it needs to be broken up.  The code that noticed
++that the AS_PATH needs to be broken up was not
++correctly calculating the size of the resulting
++message.  This patch addresses this issue.
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ bgpd/bgp_aspath.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/bgpd/bgp_aspath.c b/bgpd/bgp_aspath.c
++index b7af5e88..d813bfba 100644
++--- a/bgpd/bgp_aspath.c
+++++ b/bgpd/bgp_aspath.c
++@@ -903,7 +903,7 @@ aspath_put (struct stream *s, struct aspath *as, int use32bit )
++               assegment_header_put (s, seg->type, AS_SEGMENT_MAX);
++               assegment_data_put (s, seg->as, AS_SEGMENT_MAX, use32bit);
++               written += AS_SEGMENT_MAX;
++-              bytes += ASSEGMENT_SIZE (written, use32bit);
+++              bytes += ASSEGMENT_SIZE (AS_SEGMENT_MAX, use32bit);
++             }
++           
++           /* write the final segment, probably is also the first */
++-- 
++2.11.0
++
