@@ -1,107 +1,121 @@
-From: Sam Voss <sam.voss@rockwellcollins.com>
-Date: Wed,  1 Nov 2017 11:22:56 -0500
-Subject: [Buildroot] [PATCH v4 1/1] package/libssh2: Add selectable crypto
- libraries
-Message-ID: <1509553376-43168-1-git-send-email-sam.voss@rockwellcollins.com>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Wed,  1 Nov 2017 12:18:49 -0500
+Subject: [Buildroot] [PATCH v3] uboot-tools: disable pylibfdt
+Message-ID: <20171101171849.7957-1-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, the selection of the backend is based on a priority order,
-which is not always desirable: not all features are available for all
-backends, as reported upstream:
-    https://github.com/libssh2/libssh2/issues/213
+Using concepts from the future upstream fix (post 2017.11),
+which sets up a kconfig variable for pylibfdt and
+conditionally enables the swig wrapper creation (default=n).
+(https://patchwork.ozlabs.org/patch/826742/)
+(https://patchwork.ozlabs.org/patch/826752/)
 
-As such, allow a user to select the backend most appropriate to their
-use-case.
+This does not disable the use of the swig wrapper directly with
+the version of u-boot being used. The uboot package still has
+the BR2_TARGET_UBOOT_NEEDS_PYLIBFDT option to enable this feature.
 
-Signed-off-by: Sam Voss <sam.voss@rockwellcollins.com>
+Fixes (one of many):
+http://autobuild.buildroot.net/results/f9e13caae9b31c9dcde7d24caecc036324f269cc
+
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 
 --
+Changes
+v2 -> v3
+ - Moved from removing the swig and python to instead following
+   the pattern of the future changes captured in this patchset
+   to expose it through kconfig.
+   (https://lists.denx.de/pipermail/u-boot/2017-October/309560.html)
 
-[v3->v4]
- - Update configuration for "type->depends->select" ordering
- - Update patch message to be more descriptive
-
-[v2->v3]
- - Fix comment about favoring mbedtls
-
-[v1->v2]
- - Do not have comments when crypo is not selected, select it instead.
- - Do not select OpenSSL by default when libssh2 is selected if no
-   others are chosen
+v1 -> v2
+ - Removed all swig and python content from Makefile and noted
+   future changes coming upstream in 2017.11
 ---
- package/libssh2/Config.in  | 24 +++++++++++++++++++++++-
- package/libssh2/libssh2.mk |  8 ++++----
- 2 files changed, 27 insertions(+), 5 deletions(-)
+ .../0004-uboot-tools-disable-pylibfdt.patch        | 72 ++++++++++++++++++++++
+ 1 file changed, 72 insertions(+)
+ create mode 100644 package/uboot-tools/0004-uboot-tools-disable-pylibfdt.patch
 
-diff --git a/package/libssh2/Config.in b/package/libssh2/Config.in
-index 9b60823..f2d32a9 100644
---- a/package/libssh2/Config.in
-+++ b/package/libssh2/Config.in
-@@ -1,6 +1,5 @@
- config BR2_PACKAGE_LIBSSH2
- 	bool "libssh2"
--	select BR2_PACKAGE_OPENSSL if !(BR2_PACKAGE_MBEDTLS || BR2_PACKAGE_LIBGCRYPT)
- 	help
- 	  libssh2 is a client-side C library implementing the SSH2
- 	  protocol as defined by Internet Drafts: SECSH-TRANS(22),
-@@ -8,3 +7,26 @@ config BR2_PACKAGE_LIBSSH2
- 	  SECSH-FILEXFER(06)*, SECSH-DHGEX(04), and SECSH-NUMBERS(10)
- 
- 	  http://www.libssh2.org/
+diff --git a/package/uboot-tools/0004-uboot-tools-disable-pylibfdt.patch b/package/uboot-tools/0004-uboot-tools-disable-pylibfdt.patch
+new file mode 100644
+index 0000000..1e38944
+--- /dev/null
++++ b/package/uboot-tools/0004-uboot-tools-disable-pylibfdt.patch
+@@ -0,0 +1,72 @@
++From d882c99de59316e50bfee7f5fce10fe9062dfa32 Mon Sep 17 00:00:00 2001
++From: Matt Weber <matthew.weber@rockwellcollins.com>
++Date: Wed, 1 Nov 2017 10:57:31 -0500
++Subject: [PATCH] uboot-tools: disable pylibfdt
 +
-+if BR2_PACKAGE_LIBSSH2
++Using concepts from the future upstream fix (post 2017.11),
++which sets up a kconfig variable for pylibfdt and
++conditionally enables the swig wrapper creation (default=n).
++(https://patchwork.ozlabs.org/patch/826742/)
++(https://patchwork.ozlabs.org/patch/826752/)
 +
-+choice
-+	prompt "Crypto Backend"
-+	help
-+	  Select crypto library to be used in libssh2.
++This does not disable the use of the swig wrapper directly with
++the version of u-boot being used. The u-boot package still has
++the option to kconfig enable this feature.
 +
-+config BR2_PACKAGE_LIBSSH2_MBEDTLS
-+	bool "mbedtls"
-+	select BR2_PACKAGE_MBEDTLS
++Fixes (one of many):
++http://autobuild.buildroot.net/results/f9e13caae9b31c9dcde7d24caecc036324f269cc
 +
-+config BR2_PACKAGE_LIBSSH2_LIBGCRYPT
-+	bool "gcrypt"
-+	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgcrypt -> libgpg-error
-+	select BR2_PACKAGE_LIBGCRYPT
++Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 +
-+config BR2_PACKAGE_LIBSSH2_OPENSSL
-+	bool "openssl"
-+	select BR2_PACKAGE_OPENSSL
++--
++Changes
++v2 -> v3
++ - Moved from removing the swig and python to instead following
++   the pattern of the future changes captured in this patchset
++   to expose it through kconfig.
++   (https://lists.denx.de/pipermail/u-boot/2017-October/309560.html)
 +
-+endchoice
-+endif
-diff --git a/package/libssh2/libssh2.mk b/package/libssh2/libssh2.mk
-index d40e844..befac92 100644
---- a/package/libssh2/libssh2.mk
-+++ b/package/libssh2/libssh2.mk
-@@ -15,19 +15,19 @@ LIBSSH2_CONF_OPTS = --disable-examples-build
- LIBSSH2_AUTORECONF = YES
- 
- # Dependency is one of mbedtls, libgcrypt or openssl, guaranteed in
--# Config.in. Favour mbedtls.
--ifeq ($(BR2_PACKAGE_MBEDTLS),y)
-+# Config.in.
-+ifeq ($(BR2_PACKAGE_LIBSSH2_MBEDTLS),y)
- LIBSSH2_DEPENDENCIES += mbedtls
- LIBSSH2_CONF_OPTS += --with-libmbedcrypto-prefix=$(STAGING_DIR)/usr \
- 	--with-crypto=mbedtls
--else ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
-+else ifeq ($(BR2_PACKAGE_LIBSSH2_LIBGCRYPT),y)
- LIBSSH2_DEPENDENCIES += libgcrypt
- LIBSSH2_CONF_OPTS += --with-libgcrypt-prefix=$(STAGING_DIR)/usr \
- 	--with-crypto=libgcrypt
- # configure.ac forgets to link to dependent libraries of gcrypt breaking static
- # linking
- LIBSSH2_CONF_ENV += LIBS="`$(STAGING_DIR)/usr/bin/libgcrypt-config --libs`"
--else
-+else ifeq ($(BR2_PACKAGE_LIBSSH2_OPENSSL),y)
- LIBSSH2_DEPENDENCIES += openssl
- LIBSSH2_CONF_OPTS += --with-libssl-prefix=$(STAGING_DIR)/usr \
- 	--with-crypto=openssl
++v1 -> v2
++ - Removed all swig and python content from Makefile and noted
++   future changes coming upstream in 2017.11
++---
++ Kconfig        | 5 +++++
++ tools/Makefile | 6 +++---
++ 2 files changed, 8 insertions(+), 3 deletions(-)
++
++diff --git a/Kconfig b/Kconfig
++index bb80ada..99b0258 100644
++--- a/Kconfig
+++++ b/Kconfig
++@@ -358,6 +358,11 @@ source "disk/Kconfig"
++ 
++ source "dts/Kconfig"
++ 
+++config PYLIBFDT
+++	bool
+++	help
+++	  Enables the generation of the pylibfdt swig wrapper.
+++
++ source "net/Kconfig"
++ 
++ source "drivers/Kconfig"
++diff --git a/tools/Makefile b/tools/Makefile
++index 77706a9..cb6cb7a 100644
++--- a/tools/Makefile
+++++ b/tools/Makefile
++@@ -226,9 +226,9 @@ clean-dirs := lib common
++ 
++ always := $(hostprogs-y)
++ 
++-# Build a libfdt Python module if swig is available
++-# Use 'sudo apt-get install swig libpython-dev' to enable this
++-always += $(if $(shell which swig 2> /dev/null),_libfdt.so)
+++ifneq ($(CONFIG_PYLIBFDT),)
+++always += _libfdt.so
+++endif
++ 
++ # Generated LCD/video logo
++ LOGO_H = $(objtree)/include/bmp_logo.h
++-- 
++1.8.3.1
++
 -- 
-1.9.1
+1.8.3.1
