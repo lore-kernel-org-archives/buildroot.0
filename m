@@ -1,67 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 1 Nov 2017 10:47:12 +0100
-Subject: [Buildroot] [git commit] quagga: add upstream security fix for
-	CVE-2017-16227
-Message-ID: <20171101093953.9F35F811E9@busybox.osuosl.org>
+Date: Wed, 1 Nov 2017 10:47:23 +0100
+Subject: [Buildroot] [PATCH] quagga: add upstream security fix for
+ CVE-2017-16227
+In-Reply-To: <20171030215309.21483-1-peter@korsgaard.com>
+References: <20171030215309.21483-1-peter@korsgaard.com>
+Message-ID: <20171101104723.55597da1@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d77d7220a7ced8daa89e3e0aa0090a4e60074001
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-From the advisory:
-http://www.openwall.com/lists/oss-security/2017/10/30/4
+On Mon, 30 Oct 2017 22:53:09 +0100, Peter Korsgaard wrote:
+> From the advisory:
+> http://www.openwall.com/lists/oss-security/2017/10/30/4
+> 
+> It was discovered that the bgpd daemon in the Quagga routing suite does
+> not properly calculate the length of multi-segment AS_PATH UPDATE
+> messages, causing bgpd to drop a session and potentially resulting in
+> loss of network connectivity.
+> 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> ---
+>  ...x-AS_PATH-size-calculation-for-long-paths.patch | 33 ++++++++++++++++++++++
+>  1 file changed, 33 insertions(+)
+>  create mode 100644 package/quagga/0004-bgpd-Fix-AS_PATH-size-calculation-for-long-paths.patch
 
-It was discovered that the bgpd daemon in the Quagga routing suite does
-not properly calculate the length of multi-segment AS_PATH UPDATE
-messages, causing bgpd to drop a session and potentially resulting in
-loss of network connectivity.
+Applied to master, thanks.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- ...x-AS_PATH-size-calculation-for-long-paths.patch | 33 ++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
-
-diff --git a/package/quagga/0004-bgpd-Fix-AS_PATH-size-calculation-for-long-paths.patch b/package/quagga/0004-bgpd-Fix-AS_PATH-size-calculation-for-long-paths.patch
-new file mode 100644
-index 0000000..1425cf0
---- /dev/null
-+++ b/package/quagga/0004-bgpd-Fix-AS_PATH-size-calculation-for-long-paths.patch
-@@ -0,0 +1,33 @@
-+From 7a42b78be9a4108d98833069a88e6fddb9285008 Mon Sep 17 00:00:00 2001
-+From: Andreas Jaggi <aj@open.ch>
-+Date: Mon, 2 Oct 2017 19:38:43 +0530
-+Subject: [PATCH] bgpd: Fix AS_PATH size calculation for long paths
-+
-+If you have an AS_PATH with more entries than
-+what can be written into a single AS_SEGMENT_MAX
-+it needs to be broken up.  The code that noticed
-+that the AS_PATH needs to be broken up was not
-+correctly calculating the size of the resulting
-+message.  This patch addresses this issue.
-+
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ bgpd/bgp_aspath.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/bgpd/bgp_aspath.c b/bgpd/bgp_aspath.c
-+index b7af5e88..d813bfba 100644
-+--- a/bgpd/bgp_aspath.c
-++++ b/bgpd/bgp_aspath.c
-+@@ -903,7 +903,7 @@ aspath_put (struct stream *s, struct aspath *as, int use32bit )
-+               assegment_header_put (s, seg->type, AS_SEGMENT_MAX);
-+               assegment_data_put (s, seg->as, AS_SEGMENT_MAX, use32bit);
-+               written += AS_SEGMENT_MAX;
-+-              bytes += ASSEGMENT_SIZE (written, use32bit);
-++              bytes += ASSEGMENT_SIZE (AS_SEGMENT_MAX, use32bit);
-+             }
-+           
-+           /* write the final segment, probably is also the first */
-+-- 
-+2.11.0
-+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
