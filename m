@@ -1,147 +1,168 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 1 Nov 2017 16:27:51 +0100
-Subject: [Buildroot] Advice needed: Problem with clashing make variables
- in pkg-generic.mk when building perl-xml-sax package.
-In-Reply-To: <5106c5c9-62e9-494c-76d8-2bbee56a34e1@mind.be>
-References: <DB5PR0701MB1992E58350C8DE5036F4DA61E0460@DB5PR0701MB1992.eurprd07.prod.outlook.com>
- <5106c5c9-62e9-494c-76d8-2bbee56a34e1@mind.be>
-Message-ID: <20171101152751.GB3954@scaer>
+From: Marcus Folkesson <marcus.folkesson@gmail.com>
+Date: Wed,  1 Nov 2017 16:28:13 +0100
+Subject: [Buildroot] [PATCH v5] libostree: new package
+Message-ID: <20171101152813.30630-1-marcus.folkesson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Joeri, Arnout, All,
+OSTree is an upgrade system for Linux-based operating systems
 
-On 2017-10-23 23:05 +0200, Arnout Vandecappelle spake thusly:
-> On 23-10-17 16:41, Barbarien, Joeri (Nokia - BE/Antwerp) wrote:
-> > Hello all,
-> > 
-> > When building perl-xml-sax (and its dependency perl-xml-sax-base) I noticed something strange in output/build/packages-file-list.txt:
-> [snip]
-> > The files that are listed for perl-xml-sax-0.99 are actually those built by perl-xml-sax-base
-> > 
-> > This is due to a clash of make variables in package/pkg-generic.mk:
-> > 
-> > $(2)_BASE_NAME  = $$(if $$($(2)_VERSION),$(1)-$$($(2)_VERSION),$(1))
-> > $(2)_RAW_BASE_NAME = $$(if $$($(2)_VERSION),$$($(2)_RAWNAME)-$$($(2)_VERSION),$$($(2)_RAWNAME))
-> > $(2)_DL_DIR =  $$(DL_DIR)
-> > $(2)_DIR  =  $$(BUILD_DIR)/$$($(2)_BASE_NAME)
-> > 
-> > Due to the unfortunate naming of the packages,
-> > 
-> > $($(2)_BASE_NAME) for perl-xml-sax clashes with as $($(2)_NAME) for perl-xml-sax-base, leading to this wrong behavior.
-> > 
-> > I made a quick fix by renaming the _BASE_NAME suffix to _BR_BASE_NAME but perhaps a more comprehensive / cleaner solution is preferred.
-> > 
-> > Could you please advise on how this should be "properly" fixed? Some fast ideas:
-> > 
-> > 1) Make sure common part of suffixes is in the front, e.g. _NAME, _NAME_BASE, _NAME_BASE_RAW
-> 
->  I guess that this reduces the risk, but there is still a possibility of
-> conflicts, no?
+Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
+---
+v5:
+Fix comments from Bernd Kuhls:
+- use tarball provided by upstream
+- propagate dependencies
+- set optional dependencies
+- depend on !musl
 
-I don;t think we can ensure we'd have no more clash, no. This is not a
-viable solution long-term.
+v4:
+- bump version to 2017.12
 
-> > 2) Use lowercase for internal suffixes so they cannot clash with by construction uppercase $(PKG)
-> 
->  That would work. Or the reverse, that $(PKG) is lower case. But that is a
-> *huge* change to Buildroot, with changes to every package. It is not going to
-> happen. Note that for the complete solution, it is not only for internal
-> suffixes, but also for some that are set outside the infrastructure. E.g. the
-> _OVERRIDE_SRCDIR of package foo conflicts with the _SRCDIR of package foo-override.
-> 
-> > 3) A check on allowed package names ensuring clashes cannot happen
->  That would be really good, but complicated because there are a lot of variables
-> to check. And when new variables are introduced, we have to remember to add them
-> to the list. Also it doesn't solve the problem with perl-xml-sax, we'd still
-> have to e.g. rename the perl-xml-sax-base package.
-> 
->  I think that your first idea is probably the best one.
+v3:
+- move with the package within Config.in to match the chronological order
+  (the former name was just 'ostree')
 
-Alternatively, we can change the way we serparate the "namespace", by
-using something else than an underscore.
+v2:
+- add e2fsprogs as dependency
 
-For example, we could be using a dot '.' to separate the package-side
-on the LHS, vs. the Buildroot side on the RHS., like so:
+ DEVELOPERS                       |  3 ++
+ package/Config.in                |  1 +
+ package/libostree/Config.in      | 20 ++++++++++++++
+ package/libostree/libostree.hash |  1 +
+ package/libostree/libostree.mk   | 60 ++++++++++++++++++++++++++++++++++++++++
+ 5 files changed, 85 insertions(+)
+ create mode 100644 package/libostree/Config.in
+ create mode 100644 package/libostree/libostree.hash
+ create mode 100644 package/libostree/libostree.mk
 
-    $(2).BASE_NAME = $$(if $$($(2)_VERSION),$(1)-$$($(2)_VERSION),$(1))
-
-But that is not very nice when we tell the user to reuse those
-variables, like $(2)_PKGDIR for example, which would have to become
-$(2).PKGDIR for consistency.
-
-Regards,
-Yann E. MORIN.
-
->  I've done a quick check: there are 142 variables with 2 underscores used in all
-> the package infras (only the ones with two underscores run this risk). You can
-> get these with
-> 
-> grep -h -o ')\(_[A-Z0-9]*\)\{2,10\}' package/pkg*.mk | sort -u
-> 
->  I got the following to find conflicts, but I'm not sure it is complete:
-> 
-> for i in $(grep -h -o ')\(_[A-Z0-9]*\)\{2,10\}' package/pkg*.mk | \
->            sed s/.*_// | \
->            sort -u); do \
->   grep -q ")_$i\>" package/pkg*.mk && echo "$i"; \
-> done
-> 
->  That comes up with the following potential conflicts:
-> 
-> _DEPENDENCIES with _FINAL_DEPENDENCIES, _FINAL_ALL_DEPENDENCIES,
-> _FINAL_PATCH_DEPENDENCIES
-> 
-> _DIR with _DEPS_DIR, _DL_DIR, _REBAR_DEPS_DIR, _REDIST_SOURCES_DIR
-> 
-> _ENV with _AUTORECONF_ENV, _BASE_ENV, _CONFIGURATOR_MAKE_ENV, _CONF_ENV,
-> _MAKE_ENV, and _REBAR_ENV. Impressive that we didn't hit this one yet :-)
-> 
-> _MAKE with _KCONFIG_MAKE
-> 
-> _NAME with _BASE_NAME and _RAW_BASE_NAME
-> 
-> _PATCH with _TARGET_PATH and _LIBTOOL_PATCH
-> 
-> _REBAR with _USE_BUNDLED_REBAR
-> 
-> _SITE with _ACTUAL_SOURCE_SITE
-> 
-> _SOURCE with _TARGET_ACTUAL_SOURCE and _TARGET_SOURCE
-> 
-> _SRCDIR with _OVERRIDE_SRCDIR
-> 
-> _TYPE with _SETUP_TYPE
-> 
-> _VERSION with _DL_VERSION
-> 
-> _WAF with _NEEDS_EXTERNAL_WAF
-> 
-> 
->  Quite an impressive list...
-> 
-> 
->  I really don't know how we're going to tackle this... Does anyone have an
-> innovative idea?
-> 
->  Regards,
->  Arnout
-> 
-> -- 
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
-
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 632d87a829..c10a62e4f8 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -985,6 +985,9 @@ F:	package/turbolua/
+ N:	Marcin Nowakowski <marcin.nowakowski@imgtec.com>
+ F:	package/libkcapi/
+ 
++N:	Marcus Folkesson <marcus.folkesson@gmail.com>
++F:	package/libostree/
++
+ N:	Marek Belisko <marek.belisko@open-nandra.com>
+ F:	package/libatasmart/
+ F:	package/polkit/
+diff --git a/package/Config.in b/package/Config.in
+index dbfb288d53..c7bec5152b 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1916,6 +1916,7 @@ menu "System tools"
+ 	source "package/keyutils/Config.in"
+ 	source "package/kmod/Config.in"
+ 	source "package/kvmtool/Config.in"
++	source "package/libostree/Config.in"
+ 	source "package/lxc/Config.in"
+ 	source "package/monit/Config.in"
+ 	source "package/ncdu/Config.in"
+diff --git a/package/libostree/Config.in b/package/libostree/Config.in
+new file mode 100644
+index 0000000000..d4a802a6b6
+--- /dev/null
++++ b/package/libostree/Config.in
+@@ -0,0 +1,20 @@
++config BR2_PACKAGE_LIBOSTREE
++	bool "libostree"
++	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgpgme
++	depends on !BR2_STATIC_LIBS # libfuse
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
++	depends on BR2_USE_WCHAR # libglib2
++	depends on BR2_USE_MMU # e2fsprogs, libfuse,libglib2, libgpgme
++
++	# doesn't build with musl due to lack of TEMP_FAILURE_RETRY()
++	depends on !BR2_TOOLCHAIN_USES_MUSL
++
++	select BR2_PACKAGE_E2FSPROGS
++	select BR2_PACKAGE_LIBFUSE
++	select BR2_PACKAGE_LIBGLIB2
++	select BR2_PACKAGE_LIBGPGME
++	select BR2_PACKAGE_XZ
++	help
++	  OSTree is an upgrade system for Linux-based operating systems.
++
++	  https://ostree.readthedocs.io/en/latest/
+diff --git a/package/libostree/libostree.hash b/package/libostree/libostree.hash
+new file mode 100644
+index 0000000000..b8bdd974c4
+--- /dev/null
++++ b/package/libostree/libostree.hash
+@@ -0,0 +1 @@
++sha256 fc409f04c9fd440b83b4fa324f3b912cbf61145389378d44254b8b191c9fef08  libostree-2017.12.tar.xz
+diff --git a/package/libostree/libostree.mk b/package/libostree/libostree.mk
+new file mode 100644
+index 0000000000..cb928af66a
+--- /dev/null
++++ b/package/libostree/libostree.mk
+@@ -0,0 +1,60 @@
++################################################################################
++#
++# libostree
++#
++################################################################################
++
++LIBOSTREE_VERSION = 2017.12
++LIBOSTREE_SOURCE = libostree-$(LIBOSTREE_VERSION).tar.xz
++LIBOSTREE_SITE = https://github.com/ostreedev/ostree/releases/download/v$(LIBOSTREE_VERSION)
++
++LIBOSTREE_LICENSE = GPLv2
++LIBOSTREE_LICENSE_FILES = COPYING
++LIBOSTREE_DEPENDENCIES = e2fsprogs host-pkgconf libfuse libglib2 libgpgme xz
++
++LIBOSTREE_CONF_OPTS += --with-gpgme-prefix=$(STAGING_DIR)/usr
++
++ifeq ($(BR2_PACKAGE_OPENSSL),y)
++LIBOSTREE_CONF_OPTS += --with-openssl
++LIBOSTREE_DEPENDENCIES += openssl
++else
++LIBOSTREE_CONF_OPTS += --without-openssl
++endif
++
++ifeq ($(BR2_PACKAGE_AVAHI),y)
++LIBOSTREE_CONF_OPTS += --with-avahi
++LIBOSTREE_DEPENDENCIES += avahi
++else
++LIBOSTREE_CONF_OPTS += --without-avahi
++endif
++
++#cURL depends on libsoup
++ifeq ($(BR2_PACKAGE_LIBCURL),y)
++LIBOSTREE_CONF_OPTS += --with-curl --with-libsoup
++LIBOSTREE_DEPENDENCIES += libcurl libsoup
++else
++LIBOSTREE_CONF_OPTS += --without-curl
++
++ifeq ($(BR2_PACKAGE_LIBSOUP),y)
++LIBOSTREE_CONF_OPTS += --with-libsoup
++LIBOSTREE_DEPENDENCIES += libsoup
++else
++LIBOSTREE_CONF_OPTS += --without-libsoup
++endif
++endif
++
++ifeq ($(BR2_PACKAGE_LIBARCHIVE),y)
++LIBOSTREE_CONF_OPTS += --with-libarchive
++LIBOSTREE_DEPENDENCIES += libarchive
++else
++LIBOSTREE_CONF_OPTS += --without-libarchive
++endif
++
++ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
++LIBOSTREE_CONF_OPTS += --with-selinux
++LIBOSTREE_DEPENDENCIES += libselinux
++else
++LIBOSTREE_CONF_OPTS += --without-selinux
++endif
++
++$(eval $(autotools-package))
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.13.1
