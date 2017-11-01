@@ -1,82 +1,83 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 1 Nov 2017 10:58:23 +0100
-Subject: [Buildroot] [PATCH v5 1/2] package/libssh2: Update to newest
- version
-In-Reply-To: <1509472591-12650-1-git-send-email-sam.voss@rockwellcollins.com>
-References: <1509472591-12650-1-git-send-email-sam.voss@rockwellcollins.com>
-Message-ID: <20171101105823.6128ce6b@windsurf>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Wed, 1 Nov 2017 10:01:14 +0000
+Subject: [Buildroot] Analysis of build results for 2017-10-30
+In-Reply-To: <20171101104532.43dcd164@windsurf>
+References: <20171031070013.AD75D207B2@mail.free-electrons.com>
+ <20171031230519.3feb2619@windsurf>
+ <CANQCQpYxR6nParzHgEswkZyh8K2-DUHnTu5VsOtyJOksd3rU5w@mail.gmail.com>
+ <20171101104532.43dcd164@windsurf>
+Message-ID: <1509530473.6560.11.camel@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Thomas, Matthew,
 
-On Tue, 31 Oct 2017 12:56:30 -0500, Sam Voss wrote:
-> Update libssh2 to use the newest version from git. This caused a
-> transition from released version number to hash as it has not been
-> version rev'd in over a year (see issue
-> https://github.com/libssh2/libssh2/issues/220 for bump request).
+On Wed, 2017-11-01 at 10:45 +0100, Thomas Petazzoni wrote:
+> Hello,
 > 
-> This brings in changes to the autoconf to correctly pick the crypto
-> library.
+> On Tue, 31 Oct 2017 21:37:28 -0500, Matthew Weber wrote:
 > 
-> Signed-off-by: Sam Voss <sam.voss@rockwellcollins.com>
+> > 
+> > > 
+> > > This is happening only on ARC. Why? Matt Weber proposed a patch,
+> > > https://urldefense.proofpoint.com/v2/url?u=https-3A__patchwork.ozlabs.org_patch_832397_&d=DwICAg&c=DPL6_X_6JkXFx7AXWqB0tg&r=lqdeeSSEes0GFDDl656e
+> > > ViXO7breS55ytWkhpk5R81I&m=TIK4hy7KeHKzHVuof5f5an0Z8AexpTLUombe2nPAH8Y&s=9PIyZnaKCbGWuYkmizNBoKWkNQZ90OFwPSaZUl4-FTQ&e=, but I am not terribly
+> > > convinced because it doesn't explain why this problem happens only on
+> > > ARC, and why it appeared suddenly.??
+> > 
+> > I kicked off a test build reverting the following commit.??We'll see
+> > in the morning if it changed the behavior or the pass/fail.??(ie bump
+> > from GCC 6.x to 7.x)
+> > 5bd21f991f3 Evgeniy Didin?????2017-09-21 21:28:28
+> 
+> OK, we'll see the result.
+> 
+> > 
+> > One interesting thing to notes is the test-pkg is using a external ARC
+> > GCC6 uclibc toolchain??and the failing builds are all internal
+> > toolchain and GCC 7.
+> 
+> Yes. But we have other toolchains tested by test-pkg that use gcc 7.x,
+> so I'm surprised the problem doesn't pop up on other architectures.
 
-I've applied, thanks! See a few comments/questions below.
+As a matter of fact the same problem happens on ARM if GCC 7 is used.
+That's my defconfig:
+--------------------------->8---------------------
+BR2_arm=y
+BR2_GCC_VERSION_7_X=y
+--------------------------->8---------------------
 
-> diff --git a/package/libssh2/0001-drop-custom-buildconf-script.patch b/package/libssh2/0001-drop-custom-buildconf-script.patch
-> new file mode 100644
-> index 0000000..a9a98e0
-> --- /dev/null
-> +++ b/package/libssh2/0001-drop-custom-buildconf-script.patch
-> @@ -0,0 +1,121 @@
-> +From 39a2a444a32896bd2dab37c9b247ccfd11ff4693 Mon Sep 17 00:00:00 2001
-> +From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> +Date: Mon, 30 Oct 2017 19:29:12 +0100
-> +Subject: [PATCH] buildsystem: drop custom buildconf script, rely on autoreconf
-> +
-> +The buildconf script is currently required, because we need to copy a
-> +header around, because it is used both from the library and the examples
-> +sources.
-> +
-> +However, having a custom 'buildconf'-like script is not needed if we can
-> +ensure that the header / exists by the time it is needed. For That, we
-> +can just append the src/ directory to the headers search path for the
-> +examples.
-> +
-> +And then it means we no longer need to generate the same header twice,
-> +so we remove the second one from configure.ac.
-> +
-> +Now, we can just call "autoreconf -fi" to generate the autotools files,
-> +instead of relying on the canned sequence in "buildconf", since
-> +autoreconf has now long known what to do at the correct moment (future
-> +versions of autotools, automake, autopoint, autoheader etc... may
-> +require an other ordering, or other intermediate steps, etc...).
-> +
-> +Eventually, get rid of buildconf now it is no longer needed. In fact, we
-> +really keep it for legacy, but have it just call autoreconf (and print a
-> +nice user-friendly warning).
-> +
-> +Update gitignore accordingly, too.
-> +
-> +Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> +Cc: Sam Voss <sam.voss@rockwellcollins.com>
+Now:
+--------------------------->8---------------------
+make argp-standalone
+...
+.../output/build/argp-standalone-1.3/argp-help.c:1217: undefined reference to `argp_fmtstream_set_wmargin'
+.../output/build/argp-standalone-1.3/argp-help.c:1199: undefined reference to `argp_fmtstream_puts'
+collect2: error: ld returned 1 exit status
+--------------------------->8---------------------
 
-Has this patch been submitted upstream?
+Speaking about a fix for this problem I guess more elegant could be:
+--------------------------->8---------------------
+?argp-fmtstream.h | 2 +-
+?1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/argp-fmtstream.h b/argp-fmtstream.h
+index 2dd0925..cb0bead 100644
+--- a/argp-fmtstream.h
++++ b/argp-fmtstream.h
+@@ -215,7 +215,7 @@ extern int __argp_fmtstream_ensure (argp_fmtstream_t __fs, size_t __amount);
+?#if defined(__GNUC__) && !defined(__GNUC_STDC_INLINE__)
+?#define ARGP_FS_EI extern inline
+?#else
+-#define ARGP_FS_EI inline
++#define ARGP_FS_EI inline __attribute__((__always_inline__))
+?#endif
+?#endif
+--------------------------->8---------------------
 
-> +# autoreconf must be ran when building off git, as it has not been ran at hash
-> +LIBSSH2_AUTORECONF = YES
+If that looks fine to you guys Eugeniy will send out that fix.
 
-"it has not been ran at hash" doesn't make much sense. I've simplified
-the whole comment to "building from a git clone".
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+-Alexey
