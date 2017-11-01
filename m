@@ -1,122 +1,142 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 1 Nov 2017 16:15:03 +0100
-Subject: [Buildroot] [PATCH v5 2/2] package/libssh2: Add selectable
- crypto libraries
-In-Reply-To: <1509472591-12650-2-git-send-email-sam.voss@rockwellcollins.com>
-References: <1509472591-12650-1-git-send-email-sam.voss@rockwellcollins.com>
- <1509472591-12650-2-git-send-email-sam.voss@rockwellcollins.com>
-Message-ID: <20171101151503.GA3954@scaer>
+Date: Wed, 1 Nov 2017 16:27:51 +0100
+Subject: [Buildroot] Advice needed: Problem with clashing make variables
+ in pkg-generic.mk when building perl-xml-sax package.
+In-Reply-To: <5106c5c9-62e9-494c-76d8-2bbee56a34e1@mind.be>
+References: <DB5PR0701MB1992E58350C8DE5036F4DA61E0460@DB5PR0701MB1992.eurprd07.prod.outlook.com>
+ <5106c5c9-62e9-494c-76d8-2bbee56a34e1@mind.be>
+Message-ID: <20171101152751.GB3954@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sam, All,
+Joeri, Arnout, All,
 
-On 2017-10-31 12:56 -0500, Sam Voss spake thusly:
-> Add functionality to allow crypto libraries for libssh2 to be selectable
-> by a choice instead of a fallback that may not work in all cases.
-> Previous fallback is maintained from within the "defaults" of the choice
-> menu, but can be overridden by making a choice.
+On 2017-10-23 23:05 +0200, Arnout Vandecappelle spake thusly:
+> On 23-10-17 16:41, Barbarien, Joeri (Nokia - BE/Antwerp) wrote:
+> > Hello all,
+> > 
+> > When building perl-xml-sax (and its dependency perl-xml-sax-base) I noticed something strange in output/build/packages-file-list.txt:
+> [snip]
+> > The files that are listed for perl-xml-sax-0.99 are actually those built by perl-xml-sax-base
+> > 
+> > This is due to a clash of make variables in package/pkg-generic.mk:
+> > 
+> > $(2)_BASE_NAME  = $$(if $$($(2)_VERSION),$(1)-$$($(2)_VERSION),$(1))
+> > $(2)_RAW_BASE_NAME = $$(if $$($(2)_VERSION),$$($(2)_RAWNAME)-$$($(2)_VERSION),$$($(2)_RAWNAME))
+> > $(2)_DL_DIR =  $$(DL_DIR)
+> > $(2)_DIR  =  $$(BUILD_DIR)/$$($(2)_BASE_NAME)
+> > 
+> > Due to the unfortunate naming of the packages,
+> > 
+> > $($(2)_BASE_NAME) for perl-xml-sax clashes with as $($(2)_NAME) for perl-xml-sax-base, leading to this wrong behavior.
+> > 
+> > I made a quick fix by renaming the _BASE_NAME suffix to _BR_BASE_NAME but perhaps a more comprehensive / cleaner solution is preferred.
+> > 
+> > Could you please advise on how this should be "properly" fixed? Some fast ideas:
+> > 
+> > 1) Make sure common part of suffixes is in the front, e.g. _NAME, _NAME_BASE, _NAME_BASE_RAW
 > 
-> This fixes issues where two crypto libraries are present on the system,
-> but the fallback order picks the wrong one.
+>  I guess that this reduces the risk, but there is still a possibility of
+> conflicts, no?
 
-As seen on IRC, you have to explain a bit more why one would want to
-select a specific backend rather than the "priority" choice we have now.
+I don;t think we can ensure we'd have no more clash, no. This is not a
+viable solution long-term.
 
-> Signed-off-by: Sam Voss <sam.voss@rockwellcollins.com>
-[--SNIP--]
-> diff --git a/package/libssh2/Config.in b/package/libssh2/Config.in
-> index 9b60823..fcdbbf3 100644
-> --- a/package/libssh2/Config.in
-> +++ b/package/libssh2/Config.in
-> @@ -1,6 +1,5 @@
->  config BR2_PACKAGE_LIBSSH2
->  	bool "libssh2"
-> -	select BR2_PACKAGE_OPENSSL if !(BR2_PACKAGE_MBEDTLS || BR2_PACKAGE_LIBGCRYPT)
->  	help
->  	  libssh2 is a client-side C library implementing the SSH2
->  	  protocol as defined by Internet Drafts: SECSH-TRANS(22),
-> @@ -8,3 +7,26 @@ config BR2_PACKAGE_LIBSSH2
->  	  SECSH-FILEXFER(06)*, SECSH-DHGEX(04), and SECSH-NUMBERS(10)
->  
->  	  http://www.libssh2.org/
-> +
-> +if BR2_PACKAGE_LIBSSH2
-> +
-> +choice
-> +	prompt "Crypto Backend"
-> +	help
-> +	  Select crypto library to be used in libssh2.
-> +
-> +config BR2_PACKAGE_LIBSSH2_MBEDTLS
-> +	select BR2_PACKAGE_MBEDTLS
-> +	bool "mbedtls"
+> > 2) Use lowercase for internal suffixes so they cannot clash with by construction uppercase $(PKG)
+> 
+>  That would work. Or the reverse, that $(PKG) is lower case. But that is a
+> *huge* change to Buildroot, with changes to every package. It is not going to
+> happen. Note that for the complete solution, it is not only for internal
+> suffixes, but also for some that are set outside the infrastructure. E.g. the
+> _OVERRIDE_SRCDIR of package foo conflicts with the _SRCDIR of package foo-override.
+> 
+> > 3) A check on allowed package names ensuring clashes cannot happen
+>  That would be really good, but complicated because there are a lot of variables
+> to check. And when new variables are introduced, we have to remember to add them
+> to the list. Also it doesn't solve the problem with perl-xml-sax, we'd still
+> have to e.g. rename the perl-xml-sax-base package.
+> 
+>  I think that your first idea is probably the best one.
 
-Ordering of options is type, depends, then select:
+Alternatively, we can change the way we serparate the "namespace", by
+using something else than an underscore.
 
-    config BR2_PACKAGE_LIBSSH2_MBEDTLS
-        bool "mbedtls"
-        select BR2_PACKAGE_MBEDTLS
+For example, we could be using a dot '.' to separate the package-side
+on the LHS, vs. the Buildroot side on the RHS., like so:
 
-> +config BR2_PACKAGE_LIBSSH2_LIBGCRYPT
-> +	select BR2_PACKAGE_LIBGCRYPT
-> +	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgcrypt -> libgpg-error
-> +	bool "gcrypt"
+    $(2).BASE_NAME = $$(if $$($(2)_VERSION),$(1)-$$($(2)_VERSION),$(1))
 
-And here:
-
-    config BR2_PACKAGE_LIBSSH2_LIBGCRYPT
-        bool "gcrypt"
-        depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgcrypt -> libgpg-error
-        select BR2_PACKAGE_LIBGCRYPT
+But that is not very nice when we tell the user to reuse those
+variables, like $(2)_PKGDIR for example, which would have to become
+$(2).PKGDIR for consistency.
 
 Regards,
 Yann E. MORIN.
 
-> +config BR2_PACKAGE_LIBSSH2_OPENSSL
-> +	select BR2_PACKAGE_OPENSSL
-> +	bool "openssl"
-> +
-> +endchoice
-> +endif
-> diff --git a/package/libssh2/libssh2.mk b/package/libssh2/libssh2.mk
-> index d40e844..befac92 100644
-> --- a/package/libssh2/libssh2.mk
-> +++ b/package/libssh2/libssh2.mk
-> @@ -15,19 +15,19 @@ LIBSSH2_CONF_OPTS = --disable-examples-build
->  LIBSSH2_AUTORECONF = YES
->  
->  # Dependency is one of mbedtls, libgcrypt or openssl, guaranteed in
-> -# Config.in. Favour mbedtls.
-> -ifeq ($(BR2_PACKAGE_MBEDTLS),y)
-> +# Config.in.
-> +ifeq ($(BR2_PACKAGE_LIBSSH2_MBEDTLS),y)
->  LIBSSH2_DEPENDENCIES += mbedtls
->  LIBSSH2_CONF_OPTS += --with-libmbedcrypto-prefix=$(STAGING_DIR)/usr \
->  	--with-crypto=mbedtls
-> -else ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
-> +else ifeq ($(BR2_PACKAGE_LIBSSH2_LIBGCRYPT),y)
->  LIBSSH2_DEPENDENCIES += libgcrypt
->  LIBSSH2_CONF_OPTS += --with-libgcrypt-prefix=$(STAGING_DIR)/usr \
->  	--with-crypto=libgcrypt
->  # configure.ac forgets to link to dependent libraries of gcrypt breaking static
->  # linking
->  LIBSSH2_CONF_ENV += LIBS="`$(STAGING_DIR)/usr/bin/libgcrypt-config --libs`"
-> -else
-> +else ifeq ($(BR2_PACKAGE_LIBSSH2_OPENSSL),y)
->  LIBSSH2_DEPENDENCIES += openssl
->  LIBSSH2_CONF_OPTS += --with-libssl-prefix=$(STAGING_DIR)/usr \
->  	--with-crypto=openssl
-> -- 
-> 1.9.1
+>  I've done a quick check: there are 142 variables with 2 underscores used in all
+> the package infras (only the ones with two underscores run this risk). You can
+> get these with
 > 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> grep -h -o ')\(_[A-Z0-9]*\)\{2,10\}' package/pkg*.mk | sort -u
+> 
+>  I got the following to find conflicts, but I'm not sure it is complete:
+> 
+> for i in $(grep -h -o ')\(_[A-Z0-9]*\)\{2,10\}' package/pkg*.mk | \
+>            sed s/.*_// | \
+>            sort -u); do \
+>   grep -q ")_$i\>" package/pkg*.mk && echo "$i"; \
+> done
+> 
+>  That comes up with the following potential conflicts:
+> 
+> _DEPENDENCIES with _FINAL_DEPENDENCIES, _FINAL_ALL_DEPENDENCIES,
+> _FINAL_PATCH_DEPENDENCIES
+> 
+> _DIR with _DEPS_DIR, _DL_DIR, _REBAR_DEPS_DIR, _REDIST_SOURCES_DIR
+> 
+> _ENV with _AUTORECONF_ENV, _BASE_ENV, _CONFIGURATOR_MAKE_ENV, _CONF_ENV,
+> _MAKE_ENV, and _REBAR_ENV. Impressive that we didn't hit this one yet :-)
+> 
+> _MAKE with _KCONFIG_MAKE
+> 
+> _NAME with _BASE_NAME and _RAW_BASE_NAME
+> 
+> _PATCH with _TARGET_PATH and _LIBTOOL_PATCH
+> 
+> _REBAR with _USE_BUNDLED_REBAR
+> 
+> _SITE with _ACTUAL_SOURCE_SITE
+> 
+> _SOURCE with _TARGET_ACTUAL_SOURCE and _TARGET_SOURCE
+> 
+> _SRCDIR with _OVERRIDE_SRCDIR
+> 
+> _TYPE with _SETUP_TYPE
+> 
+> _VERSION with _DL_VERSION
+> 
+> _WAF with _NEEDS_EXTERNAL_WAF
+> 
+> 
+>  Quite an impressive list...
+> 
+> 
+>  I really don't know how we're going to tackle this... Does anyone have an
+> innovative idea?
+> 
+>  Regards,
+>  Arnout
+> 
+> -- 
+> Arnout Vandecappelle                          arnout at mind be
+> Senior Embedded Software Architect            +32-16-286500
+> Essensium/Mind                                http://www.mind.be
+> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
