@@ -1,76 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 1 Nov 2017 14:05:16 +0100
-Subject: [Buildroot] [PATCH 1/1] cups: add dependency on threads
-In-Reply-To: <20171101102438.6086-1-olivier.schonken@gmail.com>
-References: <20171101102438.6086-1-olivier.schonken@gmail.com>
-Message-ID: <20171101140516.112d3502@windsurf>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Wed, 1 Nov 2017 08:24:54 -0500
+Subject: [Buildroot] Analysis of build results for 2017-10-30
+In-Reply-To: <20171101104532.43dcd164@windsurf>
+References: <20171031070013.AD75D207B2@mail.free-electrons.com>
+ <20171031230519.3feb2619@windsurf>
+ <CANQCQpYxR6nParzHgEswkZyh8K2-DUHnTu5VsOtyJOksd3rU5w@mail.gmail.com>
+ <20171101104532.43dcd164@windsurf>
+Message-ID: <CANQCQpbp4Eu7V=FMj_azMoR22w=QScoVL69ToHKhYkU-_FLFbQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Thomas,
 
-On Wed,  1 Nov 2017 12:24:38 +0200, Olivier Schonken wrote:
-> Add myself as CUPS maintainer in DEVELOPERS list
-> Fixes
-> http://autobuild.buildroot.net/results/0f1cb8d72d0a78eb8b5c46548bc7c7bade93c674
-> 
-> Signed-off-by: Olivier Schonken <olivier.schonken@gmail.com>
-> ---
->  DEVELOPERS             | 1 +
->  package/cups/Config.in | 6 ++++--
->  2 files changed, 5 insertions(+), 2 deletions(-)
-> 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 862399b45a..6c1319ccc4 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -1168,6 +1168,7 @@ F:	package/ijs/
->  F:	package/poppler/
->  F:	package/qpdf/
->  F:	package/openjpeg/
-> +F:  package/cups/
+On Wed, Nov 1, 2017 at 4:45 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
+>
+> On Tue, 31 Oct 2017 21:37:28 -0500, Matthew Weber wrote:
+>
 
-This should have been a separate patch. Also, the indentation is wrong,
-and you broke alphabetic ordering. I've fixed this and applied as a
-separate patch.
+<snip>
 
-Remember: independent changes should be made in separate patches.
+>> >>          arc |       host-uboot-tools-2017.07 | NOK | http://autobuild.buildroot.net/results/9567703c95823be10400c0a330c3997a4cd6a62c | ORPH
+>> >>          arm |       host-uboot-tools-2017.07 | NOK | http://autobuild.buildroot.net/results/e3ee47e30a01e68a80fcbef3178f8eb051fe509f | ORPH
+>> >>          sh4 |       host-uboot-tools-2017.07 | NOK | http://autobuild.buildroot.net/results/7d60ebf31fd9df7a5fef7e7723859c32d7972f5b | ORPH
+>> >
+>> > The libfdt/python issue. Matt Weber has proposed a patch to fix it:
+>> > https://patchwork.ozlabs.org/patch/827287/, however I have some
+>> > questions/concerns about it.
+>>
+>> Should we just wait for the November uboot release that resolves the
+>> underlying design issue upstream?
+>
+> No, because we want to fix this problem before the next Buildroot
+> release in November.
+>
 
-> diff --git a/package/cups/Config.in b/package/cups/Config.in
-> index 3f5460c11b..635c0273c5 100644
-> --- a/package/cups/Config.in
-> +++ b/package/cups/Config.in
-> @@ -2,6 +2,8 @@ config BR2_PACKAGE_CUPS
->  	bool "cups"
->  	# needs libstdcpp for ppdc
->  	depends on BR2_INSTALL_LIBSTDCPP
-> +	# needs threads for ippserver
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS
->  	# needs fork()
->  	depends on BR2_USE_MMU
->  	help
-> @@ -9,5 +11,5 @@ config BR2_PACKAGE_CUPS
->  
->  	  http://www.cups.org
->  
-> -comment "cups needs a toolchain w/ C++"
-> -	depends on !BR2_INSTALL_LIBSTDCPP
-> +comment "cups needs a toolchain w/ C++, threads"
-> +	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_TOOLCHAIN_HAS_THREADS)
+I'll work on pulling in this patchset from upstream.  It looks like it
+was reviewed but missed the merge window for 2017.11.
+https://lists.denx.de/pipermail/u-boot/2017-October/309560.html
 
-We generally use:
-
-	depends on !foo || !bar
-
-instead, so I've fixed that and applied.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Matt
