@@ -1,116 +1,219 @@
-From: Carlos Santos <casantos@datacom.ind.br>
-Date: Sat, 30 Sep 2017 20:35:20 -0300
-Subject: [Buildroot] [PATCH v2] syslinux: Use the host compiler to build
-	extlinux
-In-Reply-To: <20170930231309.17677-1-casantos@datacom.ind.br>
-References: <20170930231309.17677-1-casantos@datacom.ind.br>
-Message-ID: <20170930233520.20143-1-casantos@datacom.ind.br>
+From: Steve Kenton <skenton@ou.edu>
+Date: Tue, 31 Oct 2017 20:01:29 -0500
+Subject: [Buildroot] Libpng missing a link dependency in 2017-08?
+In-Reply-To: <c5a035da-84c6-f07c-8f99-98b3a38456c9@gmail.com>
+References: <afc724e2-a455-82cd-80f8-ee329e2a3e47@ou.edu>
+ <20171031214249.7db64df4@windsurf>
+ <c5a035da-84c6-f07c-8f99-98b3a38456c9@gmail.com>
+Message-ID: <b3fbde15-9996-3467-7c30-afd3f6eff7d9@ou.edu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Like the utilities, it is meant to run on the host machine, hence must
-be built using the host toolchain.
+On 10/31/2017 05:22 PM, Romain Naour wrote:
+> Hi Steve, Thomas,
+>
+> Le 31/10/2017 ? 21:42, Thomas Petazzoni a ?crit?:
+>> Hello,
+>>
+>> On Sun, 29 Oct 2017 15:36:37 -0500, Steve Kenton wrote:
+>>> I recently began evaluating a switch to buildroot-2017.08 and started
+>>> getting the following message (transcribed from a screen shot)
+>>>
+>>> ffprobe: Relink `/usr/lib64/libpng16.so.16' with
+>>> `/lib64/libpthread.so.0' for IFUNC symbol `longjmp'
+>>>
+>>> As far as I can determine it is because libpng 1.6.31 uses longjmp() and
+>>> it needs another link dependency to avoid the runtime fixup above.
+>>>
+>>> I did not see anything on the list about this and buildroot 2017-08.1
+>>> did not switch to libpng 1.6.32 although I'm building it anyway on
+>>> general principles.
+>>>
+>>> So, is this likely a libpng build issue or should I start digging into
+>>> ffmpeg?
+>> It seems to be a glibc issue. Very similar to the report at
+>> https://sourceware.org/bugzilla/show_bug.cgi?id=21041, which says the
+>> bug is fixed by
+>> https://sourceware.org/git/gitweb.cgi?p=glibc.git;a=commitdiff;h=fc5ad7024c620cdfe9b76e94638aac83b99c5bf8
+>> in glibc.
+>>
+>> However, this patch is only available in glibc's master branch. It has
+>> not been backported to the 2.25 and 2.26 branches apparently.
+>>
+>> It would be nice to see if the patch fixes the problem on glibc 2.25
+>> (which Buildroot 2017.08 is using).
+> I'm able to reproduce this issue with my latest bleeding edge toolchain (gcc
+> 7.2, glibc 2.26-73
+>
+> # ffmpeg -i Splash.jpg junk.jpg
+> ffmpeg: Relink `/usr/lib64/libpng16.so.16' with `/lib64/libpthread.so.0' for
+> IFUNC symbol `longjmp'
+> ffmpeg version 3.3.5 Copyright (c) 2000-2017 the FFmpeg developers
+>    built with gcc 7.2.0 (Buildroot 2017.11-git-00863-g82f356d)
+>    configuration: --enable-cross-compile
+> --cross-prefix=/home/naourr/buildroot-test/test/arete/host/bin/x86_64-linux-
+> --sysroot=/home/naourr/buildroot-test/test/arete/host/x86_64-buildroot-linux-gnu/sysroot
+> --host-cc=/usr/bin/gcc --arch=x86_64 --target-os=linux --disable-stripping
+> --pkg-config=/home/naourr/buildroot-test/test/arete/host/bin/pkg-config
+> --disable-static --enable-shared --prefix=/usr --enable-avfilter
+> --disable-version3 --enable-logging --enable-optimizations
+> --disable-extra-warnings --enable-avdevice --enable-avcodec --enable-avformat
+> --enable-network --disable-gray --enable-swscale-alpha --disable-small
+> --enable-dct --enable-fft --enable-mdct --enable-rdft --disable-crystalhd
+> --disable-dxva2 --enable-runtime-cpudetect --disable-hardcoded-tables
+> --disable-mipsdsp --disable-mipsdspr2 --disable-msa --enable-hwaccels
+> --disable-cuda --disable-cuvid --disable-nvenc --disable-avisynth
+> --disable-frei0r --disable-libopencore-amrnb --disable-libopencore-amrwb
+> --disable-libcdio --disable-libdc1394 --disable-libgsm --disable-libilbc
+> --disable-libnut --disable-libopenjpeg --disable-libschroedinger
+> --disable-libvo-amrwbenc --disable-symver --disable-doc --disable-gpl
+> --disable-nonfree --enable-ffmpeg --disable-ffplay --disable-ffserver
+> --disable-avresample --disable-ffprobe --disable-postproc --disable-swscale
+> --enable-indevs --enable-outdevs --enable-pthreads --enable-zlib --enable-bzlib
+> --disable-libfdk-aac --disable-gnutls --enable-openssl --disable-libopenh264
+> --enable-libvorbis --enable-muxer=ogg --enable-encoder=libvorbis --enable-vaapi
+> --enable-vdpau --disable-mmal --disable-omx --disable-omx-rpi
+> --disable-libopencv --disable-libopus --disable-libvpx --disable-libass
+> --disable-libbluray --disable-librtmp --disable-libmp3lame --enable-libmodplug
+> --enable-libspeex --enable-libtheora --disable-libwavpack --enable-libfreetype
+> --enable-fontconfig --disable-libx264 --disable-libx265 --enable-yasm
+> --enable-sse --enable-sse2 --enable-sse3 --disable-ssse3 --disable-sse4
+> --disable-sse42 --disable-avx --disable-avx2 --disable-armv6 --disable-armv6t2
+> --disable-vfp --disable-neon --disable-altivec --extra-libs=-latomic
+> --enable-pic --cpu=nocona
+>    libavutil      55. 58.100 / 55. 58.100
+>    libavcodec     57. 89.100 / 57. 89.100
+>    libavformat    57. 71.100 / 57. 71.100
+>    libavdevice    57.  6.100 / 57.  6.100
+>    libavfilter     6. 82.100 /  6. 82.100
+>    libswresample   2.  7.100 /  2.  7.100
+> Input #0, image2, from 'Splash.jpg':
+>    Duration: 00:00:00.04, start: 0.000000, bitrate: 8070 kb/s
+>      Stream #0:0: Video: mjpeg, yuvj420p(pc, bt470bg/unknown/unknown), 720x486
+> [SAR 28:28 DAR 40:27], 25 tbr, 25 tbn, 25 tbc
+> Stream mapping:
+>    Stream #0:0 -> #0:0 (mjpeg (native) -> mjpeg (native))
+> Press [q] to stop, [?] for help
+> Output #0, image2, to 'junk.jpg':
+>    Metadata:
+>      encoder         : Lavf57.71.100
+>      Stream #0:0: Video: mjpeg, yuvj420p(pc), 720x486 [SAR 28:28 DAR 40:27],
+> q=2-31, 200 kb/s, 25 fps, 25 tbn, 25 tbc
+>      Metadata:
+>        encoder         : Lavc57.89.100 mjpeg
+>      Side data:
+>        cpb: bitrate max/min/avg: 0/0/200000 buffer size: 0 vbv_delay: -1
+> frame=    1 fps=0.0 q=5.5 Lsize=N/A time=00:00:00.04 bitrate=N/A speed=0.636x
+> video:27kB audio:0kB subtitle:0kB other streams:0kB global headers:0kB muxing
+> overhead: unknown
+>
+>
+> And with the same toolchain + the patch [1] applied:
+>
+> [1]
+> https://sourceware.org/git/gitweb.cgi?p=glibc.git;a=commitdiff;h=fc5ad7024c620cdfe9b76e94638aac83b99c5bf8
+>
+>
+> # ffmpeg -i Splash.jpg junk.jpg
+> ffmpeg version 3.3.5 Copyright (c) 2000-2017 the FFmpeg developers
+>    built with gcc 7.2.0 (Buildroot 2017.11-git-00942-g79922c1)
+>    configuration: --enable-cross-compile
+> --cross-prefix=/home/naourr/buildroot-test/test/random/host/bin/x86_64-linux-
+> --sysroot=/home/naourr/buildroot-test/test/random/host/x86_64-buildroot-linux-gnu/sysroot
+> --host-cc=/usr/bin/gcc --arch=x86_64 --target-os=linux --disable-stripping
+> --pkg-config=/home/naourr/buildroot-test/test/random/host/bin/pkg-config
+> --disable-static --enable-shared --prefix=/usr --enable-avfilter
+> --disable-version3 --enable-logging --enable-optimizations
+> --disable-extra-warnings --enable-avdevice --enable-avcodec --enable-avformat
+> --enable-network --disable-gray --enable-swscale-alpha --disable-small
+> --enable-dct --enable-fft --enable-mdct --enable-rdft --disable-crystalhd
+> --disable-dxva2 --enable-runtime-cpudetect --disable-hardcoded-tables
+> --disable-mipsdsp --disable-mipsdspr2 --disable-msa --enable-hwaccels
+> --disable-cuda --disable-cuvid --disable-nvenc --disable-avisynth
+> --disable-frei0r --disable-libopencore-amrnb --disable-libopencore-amrwb
+> --disable-libcdio --disable-libdc1394 --disable-libgsm --disable-libilbc
+> --disable-libnut --disable-libopenjpeg --disable-libschroedinger
+> --disable-libvo-amrwbenc --disable-symver --disable-doc --disable-gpl
+> --disable-nonfree --enable-ffmpeg --disable-ffplay --disable-ffserver
+> --disable-avresample --disable-ffprobe --disable-postproc --disable-swscale
+> --enable-indevs --enable-outdevs --enable-pthreads --enable-zlib --disable-bzlib
+> --disable-libfdk-aac --disable-gnutls --disable-openssl --disable-libopenh264
+> --disable-vaapi --disable-vdpau --disable-mmal --disable-omx --disable-omx-rpi
+> --disable-libopencv --disable-libopus --disable-libvpx --disable-libass
+> --disable-libbluray --disable-librtmp --disable-libmp3lame --disable-libmodplug
+> --disable-libspeex --disable-libtheora --disable-libwavpack --enable-libfreetype
+> --disable-fontconfig --disable-libx264 --disable-libx265 --enable-yasm
+> --enable-sse --enable-sse2 --enable-sse3 --disable-ssse3 --disable-sse4
+> --disable-sse42 --disable-avx --disable-avx2 --disable-armv6 --disable-armv6t2
+> --disable-vfp --disable-neon --disable-altivec --extra-libs=-latomic
+> --enable-pic --cpu=nocona
+>    libavutil      55. 58.100 / 55. 58.100
+>    libavcodec     57. 89.100 / 57. 89.100
+>    libavformat    57. 71.100 / 57. 71.100
+>    libavdevice    57.  6.100 / 57.  6.100
+>    libavfilter     6. 82.100 /  6. 82.100
+>    libswresample   2.  7.100 /  2.  7.100
+> Input #0, image2, from 'Splash.jpg':
+>    Duration: 00:00:00.04, start: 0.000000, bitrate: 8070 kb/s
+>      Stream #0:0: Video: mjpeg, yuvj420p(pc, bt470bg/unknown/unknown), 720x486
+> [SAR 28:28 DAR 40:27], 25 tbr, 25 tbn, 25 tbc
+> Stream mapping:
+>    Stream #0:0 -> #0:0 (mjpeg (native) -> mjpeg (native))
+> Press [q] to stop, [?] for help
+> Output #0, image2, to 'junk.jpg':
+>    Metadata:
+>      encoder         : Lavf57.71.100
+>      Stream #0:0: Video: mjpeg, yuvj420p(pc), 720x486 [SAR 28:28 DAR 40:27],
+> q=2-31, 200 kb/s, 25 fps, 25 tbn, 25 tbc
+>      Metadata:
+>        encoder         : Lavc57.89.100 mjpeg
+>      Side data:
+>        cpb: bitrate max/min/avg: 0/0/200000 buffer size: 0 vbv_delay: -1
+> frame=    1 fps=0.0 q=5.5 Lsize=N/A time=00:00:00.04 bitrate=N/A speed=2.05x
+> video:27kB audio:0kB subtitle:0kB other streams:0kB global headers:0kB muxing
+> overhead: unknown
+>
+> I don't know why this patch is not backported to 2.26 stable branch (and other
+> branch).
+>
+> Steve, can you ask on the glibc mailing list ?
+>
+> Thanks for the report!
+>
+> Best regards,
+> Romain
+>
+>> Best regards,
+>>
+>> Thomas
+>>
+Progress,
 
-Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
----
-Changes v1->v2
-  - Patch for syslinux version 6.03 (the previous one was for the master
-    branch (syslinux-6.04-pre1).
----
-Tested with the following defconfig:
+I downloaded the indicated patch and tried it with buildroot-2017-08.1 
+using glibc-2.25
+The first hunk did not apply, but since it was just the change log I 
+deleted it and the other hunks applied without error as a test
+Then I dropped that modified patch into my buildroot tree as:
+buildroot-2017.08.1/package/glibc/0008-glibc.git-fc5ad7024c620cdfe9b76e94638aac83b99c5bf8.patch
+There being two 0005 patches I opted for 0008 :-)
+When I did a clean build there was no "Relink" error and everything 
+seemed to work with light testing.
+Whether it is a correct fix with no side effects is beyond me so say, 
+someone *WAY* more familiar with glibc is needed
 
-BR2_x86_64=y
-BR2_x86_atom=y
-BR2_DL_DIR="$(HOME)/src"
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-x86-64-core2-full-2017.05-1078-g95b1dae.tar.bz2"
-BR2_TOOLCHAIN_EXTERNAL_GCC_6=y
-BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_4=y
-BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
-BR2_TOOLCHAIN_EXTERNAL_CXX=y
-BR2_TARGET_GENERIC_ROOT_PASSWD="root"
-BR2_TARGET_GENERIC_GETTY_PORT="ttyS1"
-BR2_ENABLE_LOCALE_WHITELIST=""
-BR2_ROOTFS_OVERLAY="board/technologic/ts5x00/fs-overlay"
-BR2_LINUX_KERNEL=y
-BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/pc/linux.config"
-BR2_LINUX_KERNEL_INSTALL_TARGET=y
-BR2_TARGET_ROOTFS_EXT2=y
-BR2_TARGET_ROOTFS_EXT2_4=y
-BR2_TARGET_SYSLINUX=y
-BR2_TARGET_SYSLINUX_MBR=y
-BR2_TARGET_SYSLINUX_EFI=y
+Steve Kenton
 
-Notice that I did not actualy use a ts5x00 board, just used its
-defconfig as a base to create my configuration.
----
- ...-extlinux-Use-the-host-toolchain-to-build.patch | 53 ++++++++++++++++++++++
- 1 file changed, 53 insertions(+)
- create mode 100644 boot/syslinux/0011-extlinux-Use-the-host-toolchain-to-build.patch
 
-diff --git a/boot/syslinux/0011-extlinux-Use-the-host-toolchain-to-build.patch b/boot/syslinux/0011-extlinux-Use-the-host-toolchain-to-build.patch
-new file mode 100644
-index 0000000000..62675cf6cc
---- /dev/null
-+++ b/boot/syslinux/0011-extlinux-Use-the-host-toolchain-to-build.patch
-@@ -0,0 +1,53 @@
-+From 4df2e7c0ae84bfbdba0ed285c0664aa089b38b7e Mon Sep 17 00:00:00 2001
-+From: Carlos Santos <casantos@datacom.ind.br>
-+Date: Sat, 30 Sep 2017 19:49:55 -0300
-+Subject: [PATCH] extlinux: Use the host toolchain to build.
-+
-+It is meant to run on the host machine, hence must be built using the
-+host toolchain.
-+
-+Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
-+---
-+ extlinux/Makefile | 12 ++++++------
-+ 1 file changed, 6 insertions(+), 6 deletions(-)
-+
-+diff --git a/extlinux/Makefile b/extlinux/Makefile
-+index 02d1db51..5c4baa5a 100644
-+--- a/extlinux/Makefile
-++++ b/extlinux/Makefile
-+@@ -18,9 +18,9 @@ include $(MAKEDIR)/syslinux.mk
-+ 
-+ OPTFLAGS = -g -Os
-+ INCLUDES = -I$(SRC) -I$(objdir) -I$(SRC)/../libinstaller
-+-CFLAGS	 = $(GCCWARN) -Wno-sign-compare -D_FILE_OFFSET_BITS=64 \
-++CFLAGS	 = $(CFLAGS_FOR_BUILD) $(GCCWARN) -Wno-sign-compare -D_FILE_OFFSET_BITS=64 \
-+ 	   $(OPTFLAGS) $(INCLUDES)
-+-LDFLAGS	 = 
-++LDFLAGS	 = $(LDFLAGS_FOR_BUILD)
-+ 
-+ SRCS     = main.c \
-+ 	   mountinfo.c \
-+@@ -52,16 +52,16 @@ spotless: clean
-+ installer: extlinux
-+ 
-+ extlinux: $(OBJS)
-+-	$(CC) $(LDFLAGS) -o $@ $^
-++	$(CC_FOR_BUILD) $(LDFLAGS) -o $@ $^
-+ 
-+ strip:
-+ 	$(STRIP) extlinux
-+ 
-+ %.o: %.c
-+-	$(CC) $(UMAKEDEPS) $(CFLAGS) -c -o $@ $<
-++	$(CC_FOR_BUILD) $(UMAKEDEPS) $(CFLAGS) -c -o $@ $<
-+ %.i: %.c
-+-	$(CC) $(UMAKEDEPS) $(CFLAGS) -E -o $@ $<
-++	$(CC_FOR_BUILD) $(UMAKEDEPS) $(CFLAGS) -E -o $@ $<
-+ %.s: %.c
-+-	$(CC) $(UMAKEDEPS) $(CFLAGS) -S -o $@ $<
-++	$(CC_FOR_BUILD) $(UMAKEDEPS) $(CFLAGS) -S -o $@ $<
-+ 
-+ -include .*.d
-+-- 
-+2.13.5
-+
--- 
-2.13.5
+ From fc5ad7024c620cdfe9b76e94638aac83b99c5bf8 Mon Sep 17 00:00:00 2001
+From: Andreas Schwab <schwab@suse.de>
+Date: Tue, 8 Aug 2017 16:21:58 +0200
+Subject: [PATCH] Don't use IFUNC resolver for longjmp or system in 
+libpthread
+ ?(bug 21041)
+
+Unlike the vfork forwarder and like the fork forwarder as in bug 19861,
+there won't be a problem when the compiler does not turn this into a tail
+call.
