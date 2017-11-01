@@ -1,121 +1,54 @@
-From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Wed,  1 Nov 2017 12:18:49 -0500
-Subject: [Buildroot] [PATCH v3] uboot-tools: disable pylibfdt
-Message-ID: <20171101171849.7957-1-matthew.weber@rockwellcollins.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 1 Nov 2017 20:03:19 +0200
+Subject: [Buildroot] Analysis of build results for 2017-10-30
+In-Reply-To: <20171031230519.3feb2619@windsurf>
+References: <20171031070013.AD75D207B2@mail.free-electrons.com>
+ <20171031230519.3feb2619@windsurf>
+Message-ID: <20171101180319.qs5oueonqz2robr5@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Using concepts from the future upstream fix (post 2017.11),
-which sets up a kconfig variable for pylibfdt and
-conditionally enables the swig wrapper creation (default=n).
-(https://patchwork.ozlabs.org/patch/826742/)
-(https://patchwork.ozlabs.org/patch/826752/)
+Hi Thomas, Peter,
 
-This does not disable the use of the swig wrapper directly with
-the version of u-boot being used. The uboot package still has
-the BR2_TARGET_UBOOT_NEEDS_PYLIBFDT option to enable this feature.
+On Tue, Oct 31, 2017 at 11:05:19PM +0100, Thomas Petazzoni wrote: 
+> > microblazeel |           usb_modeswitch-2.5.0 | NOK | http://autobuild.buildroot.net/results/20a9a75f701ce70c2ae434085a85ad8d34adc67b | ORPH
+> >          arm |           usb_modeswitch-2.5.0 | NOK | http://autobuild.buildroot.net/results/46844b028989808aa7340c14af22f2855ec803d8 | ORPH
+> 
+> Not sure. Is it just:
+> 
+> make[2]: *** [jim/libjim.a] Error 1
+> make[2]: *** Waiting for unfinished jobs....
+> usb_modeswitch.c: In function 'checkSuccess':
+> usb_modeswitch.c:1579:7: warning: 'i' may be used uninitialized in this function [-Wmaybe-uninitialized]
+>     if (i == CheckSuccess-1) {
+> 
+> That makes the build fail?
 
-Fixes (one of many):
-http://autobuild.buildroot.net/results/f9e13caae9b31c9dcde7d24caecc036324f269cc
+No. The cause is a few lines above that:
 
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+UNAME_MACHINE = ppc64le
+UNAME_RELEASE = 3.10.0-514.10.2.el7.ppc64le
+UNAME_SYSTEM  = Linux
+UNAME_VERSION = #1 SMP Fri Mar 3 16:16:38 GMT 2017
+child process exited abnormally
+    while executing
+[...]
+make[2]: *** [jim/libjim.a] Error 1
+make[2]: *** Waiting for unfinished jobs....
 
---
-Changes
-v2 -> v3
- - Moved from removing the swig and python to instead following
-   the pattern of the future changes captured in this patchset
-   to expose it through kconfig.
-   (https://lists.denx.de/pipermail/u-boot/2017-October/309560.html)
+> Baruch, you are the last person who bumped this package, could you have a look?
 
-v1 -> v2
- - Removed all swig and python content from Makefile and noted
-   future changes coming upstream in 2017.11
----
- .../0004-uboot-tools-disable-pylibfdt.patch        | 72 ++++++++++++++++++++++
- 1 file changed, 72 insertions(+)
- create mode 100644 package/uboot-tools/0004-uboot-tools-disable-pylibfdt.patch
+The autobuilder indicates[1] that it only fails on Peter's gcc112 Powerpc 
+host. Debugging this requires access to a Powerpc host.
 
-diff --git a/package/uboot-tools/0004-uboot-tools-disable-pylibfdt.patch b/package/uboot-tools/0004-uboot-tools-disable-pylibfdt.patch
-new file mode 100644
-index 0000000..1e38944
---- /dev/null
-+++ b/package/uboot-tools/0004-uboot-tools-disable-pylibfdt.patch
-@@ -0,0 +1,72 @@
-+From d882c99de59316e50bfee7f5fce10fe9062dfa32 Mon Sep 17 00:00:00 2001
-+From: Matt Weber <matthew.weber@rockwellcollins.com>
-+Date: Wed, 1 Nov 2017 10:57:31 -0500
-+Subject: [PATCH] uboot-tools: disable pylibfdt
-+
-+Using concepts from the future upstream fix (post 2017.11),
-+which sets up a kconfig variable for pylibfdt and
-+conditionally enables the swig wrapper creation (default=n).
-+(https://patchwork.ozlabs.org/patch/826742/)
-+(https://patchwork.ozlabs.org/patch/826752/)
-+
-+This does not disable the use of the swig wrapper directly with
-+the version of u-boot being used. The u-boot package still has
-+the option to kconfig enable this feature.
-+
-+Fixes (one of many):
-+http://autobuild.buildroot.net/results/f9e13caae9b31c9dcde7d24caecc036324f269cc
-+
-+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-+
-+--
-+Changes
-+v2 -> v3
-+ - Moved from removing the swig and python to instead following
-+   the pattern of the future changes captured in this patchset
-+   to expose it through kconfig.
-+   (https://lists.denx.de/pipermail/u-boot/2017-October/309560.html)
-+
-+v1 -> v2
-+ - Removed all swig and python content from Makefile and noted
-+   future changes coming upstream in 2017.11
-+---
-+ Kconfig        | 5 +++++
-+ tools/Makefile | 6 +++---
-+ 2 files changed, 8 insertions(+), 3 deletions(-)
-+
-+diff --git a/Kconfig b/Kconfig
-+index bb80ada..99b0258 100644
-+--- a/Kconfig
-++++ b/Kconfig
-+@@ -358,6 +358,11 @@ source "disk/Kconfig"
-+ 
-+ source "dts/Kconfig"
-+ 
-++config PYLIBFDT
-++	bool
-++	help
-++	  Enables the generation of the pylibfdt swig wrapper.
-++
-+ source "net/Kconfig"
-+ 
-+ source "drivers/Kconfig"
-+diff --git a/tools/Makefile b/tools/Makefile
-+index 77706a9..cb6cb7a 100644
-+--- a/tools/Makefile
-++++ b/tools/Makefile
-+@@ -226,9 +226,9 @@ clean-dirs := lib common
-+ 
-+ always := $(hostprogs-y)
-+ 
-+-# Build a libfdt Python module if swig is available
-+-# Use 'sudo apt-get install swig libpython-dev' to enable this
-+-always += $(if $(shell which swig 2> /dev/null),_libfdt.so)
-++ifneq ($(CONFIG_PYLIBFDT),)
-++always += _libfdt.so
-++endif
-+ 
-+ # Generated LCD/video logo
-+ LOGO_H = $(objtree)/include/bmp_logo.h
-+-- 
-+1.8.3.1
-+
+[1] http://autobuild.buildroot.net/?reason=usb_modeswitch-2.5.0
+
+baruch
+
 -- 
-1.8.3.1
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
