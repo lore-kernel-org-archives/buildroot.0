@@ -1,31 +1,38 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Wed,  1 Nov 2017 21:11:36 +0100
-Subject: [Buildroot] [PATCH 3/4] package/opencv: add hashes for patch and
- license files
+Date: Wed,  1 Nov 2017 21:11:37 +0100
+Subject: [Buildroot] [PATCH 4/4] package/ussp-push: removed deprecated/no
+ longer needed deps on openobex-bluez
 In-Reply-To: <20171101201137.29939-1-s.martin49@gmail.com>
 References: <20171101201137.29939-1-s.martin49@gmail.com>
-Message-ID: <20171101201137.29939-3-s.martin49@gmail.com>
+Message-ID: <20171101201137.29939-4-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Commit 49a9fb0f13789298e65f21405502a9106e2c7382 deprecates the
+BR2_PACKAGE_OPENOBEX_BLUEZ option, which should be turned in
+BR2_PACKAGE_BLUEZ_UTILS instead.
+
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+Reported-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 ---
- package/opencv/opencv.hash | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/ussp-push/Config.in | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/opencv/opencv.hash b/package/opencv/opencv.hash
-index 85a3e0b8f4..31bbaf6777 100644
---- a/package/opencv/opencv.hash
-+++ b/package/opencv/opencv.hash
-@@ -1,2 +1,6 @@
- # Locally calculated
- sha256 fb4769d0119c35426c3754b7fb079b407911e863958db53bdec83c7794582e41  opencv-2.4.13.3.tar.gz
-+sha256 934825dcbd68ec46936d5b12f4734d07fffc864226a9122e46a23c55d0e5bb5c  0001-atomic.patch
-+sha256 f211b79c126021de2f553e894bb5d0896be542289e8f55f5289eba45c86f5d6e  0002-CMakeLists.txt-Do-not-add-libdl-to-LINKER_LIBS-for-s.patch
-+sha256 78622658634e0297588037e26e54ee37754f739e30336184921f42f4888cda7f  0003-Update-OpenCVCompilerOptions.cmake.patch
-+sha256 46e42877dfc3ac65769292cb4dc1a04b204ad9e40859a390f4c035d6179fbcc4  LICENSE
+diff --git a/package/ussp-push/Config.in b/package/ussp-push/Config.in
+index e6695bb197..aefec85a20 100644
+--- a/package/ussp-push/Config.in
++++ b/package/ussp-push/Config.in
+@@ -5,7 +5,6 @@ config BR2_PACKAGE_USSP_PUSH
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, alsa-lib, libglib2
+ 	depends on BR2_USE_MMU # dbus
+ 	select BR2_PACKAGE_OPENOBEX
+-	select BR2_PACKAGE_OPENOBEX_BLUEZ
+ 	select BR2_PACKAGE_BLUEZ_UTILS
+ 	help
+ 	  ussp-push is an OBEX object pusher for Linux, using the BlueZ
 -- 
 2.15.0
