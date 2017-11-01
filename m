@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 1 Nov 2017 20:56:25 +0100
-Subject: [Buildroot] [PATCH] package/nmap: fix libssh2 test
-In-Reply-To: <20171101121955.15426-1-jcmvbkbc@gmail.com>
-References: <20171101121955.15426-1-jcmvbkbc@gmail.com>
-Message-ID: <20171101205625.5ea3b3ad@windsurf>
+Date: Wed, 1 Nov 2017 20:58:54 +0100
+Subject: [Buildroot] [PATCH] argp-standalone: fix build with > GCC5.1
+In-Reply-To: <20171031061834.27832-1-matthew.weber@rockwellcollins.com>
+References: <20171031061834.27832-1-matthew.weber@rockwellcollins.com>
+Message-ID: <20171101205854.4e849a17@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,41 +12,46 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed,  1 Nov 2017 15:19:55 +0300, Max Filippov wrote:
-> nmap configure script adds '-lm' to the list of included headers when it
-> runs the test that checks the presence of libssh2.h. The test fails and
-> nmap tries to build and use bundled libssh2.
-> Fix the test.
+On Tue, 31 Oct 2017 01:18:34 -0500, Matt Weber wrote:
+> The problem is the change of the default C standard from gnu89 to gnu11
+> which changes the semantics of 'inline'. The issue is described in the
+> Porting guide at https://gcc.gnu.org/gcc-5/porting_to.html. Adding the
+> '-fgnu89-inline' option fixes the issue.
+> 
+> Similar issue:
+> https://www.mail-archive.com/ptxdist at pengutronix.de/msg09746.html
 > 
 > Fixes:
->   http://autobuild.buildroot.net/results/9e636919c98cd31b5067c8306d0e481a672434cf
->   http://autobuild.buildroot.net/results/912561f505ad10d1eaa96dbe247d5838e9968e14
+> http://autobuild.buildroot.net/results/a9c/a9cedc54829b7bd2dd7ae6ff2bd6c6db242f1c35//
 > 
-> Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+> Tested via test-pkg with the following cfg
+> BR2_PACKAGE_ARGP_STANDALONE=y
+> 
+> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 
-I committed a different version of your patch, but based on the same
-idea. The main changes are:
+So, I've applied, but with those tweaks. Indeed, your patch could
+definitely not be fixing an issue with gcc >= 5.x, because we have been
+using gcc 5.x for a while, and this build error was not popping up with
+anything but gcc 7.x.
 
- - Instead of dropping -lm entirely, I keep it, but at the right place,
-   i.e as the fifth argument of the AC_CHECK_LIB() call rather than as
-   an argument of the AC_CHECK_HEADER() call.
+So, what happened is that in commit
+a662ff7e79630ca0875dd8529fe54db27a275007, we added a patch that fixes
+the build with C99 compilers (in fact this means gcc 5.x, which uses
+C99 inline semantics). This changed "extern inline" to just "inline".
+But that broke again with gcc 7.x, and causes the problem we're seeing
+now.
 
- - Instead of patching the configure script, I'm doing an autoconf (but
-   not a full autoreconf, as that doesn't work, as you and Baruch have
-   noticed). It is worth mentioning that Debian has a nmap patch that
-   fixes the AC_DEFINE() issues, but then I fell into another problem:
-   there is no Makefile.am in the top-level source directory, and
-   therefore automake complains. This is why I resorted to using just
-   autoconf.
+So instead, I've dropped the chunk of the patch that changed from
+extern inline to inline, and passsed -fgnu89-inline as you suggested. I
+updated the commit log accordingly.
 
 See
-https://git.buildroot.org/buildroot/commit/?id=302ab5ed258c366dfc3853954ef9ec20b22661ce
-for what I ended up committing.
+https://git.buildroot.org/buildroot/commit/?id=f0b65bd90ce4429d6b7e952ce7de2d5f92a2dd26
+for more details.
 
-Thanks for all the research. Could you submit the patch to upstream
-nmap?
+Thanks for all your research behind this issue!
 
-Thanks!
+Best regards,
 
 Thomas
 -- 
