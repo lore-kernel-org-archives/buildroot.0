@@ -1,83 +1,65 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Wed, 1 Nov 2017 10:01:14 +0000
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Wed, 1 Nov 2017 11:17:33 +0100
 Subject: [Buildroot] Analysis of build results for 2017-10-30
-In-Reply-To: <20171101104532.43dcd164@windsurf>
+In-Reply-To: <20171031230519.3feb2619@windsurf>
 References: <20171031070013.AD75D207B2@mail.free-electrons.com>
  <20171031230519.3feb2619@windsurf>
- <CANQCQpYxR6nParzHgEswkZyh8K2-DUHnTu5VsOtyJOksd3rU5w@mail.gmail.com>
- <20171101104532.43dcd164@windsurf>
-Message-ID: <1509530473.6560.11.camel@synopsys.com>
+Message-ID: <CAHXCMMKsPg-DZW385VWMgUQmtngB_L9ALJqJiuZPj2Oz9g0uJQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas, Matthew,
+Thomas, all,
 
-On Wed, 2017-11-01 at 10:45 +0100, Thomas Petazzoni wrote:
+On Tue, Oct 31, 2017 at 11:05 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
 > Hello,
-> 
-> On Tue, 31 Oct 2017 21:37:28 -0500, Matthew Weber wrote:
-> 
-> > 
-> > > 
-> > > This is happening only on ARC. Why? Matt Weber proposed a patch,
-> > > https://urldefense.proofpoint.com/v2/url?u=https-3A__patchwork.ozlabs.org_patch_832397_&d=DwICAg&c=DPL6_X_6JkXFx7AXWqB0tg&r=lqdeeSSEes0GFDDl656e
-> > > ViXO7breS55ytWkhpk5R81I&m=TIK4hy7KeHKzHVuof5f5an0Z8AexpTLUombe2nPAH8Y&s=9PIyZnaKCbGWuYkmizNBoKWkNQZ90OFwPSaZUl4-FTQ&e=, but I am not terribly
-> > > convinced because it doesn't explain why this problem happens only on
-> > > ARC, and why it appeared suddenly.??
-> > 
-> > I kicked off a test build reverting the following commit.??We'll see
-> > in the morning if it changed the behavior or the pass/fail.??(ie bump
-> > from GCC 6.x to 7.x)
-> > 5bd21f991f3 Evgeniy Didin?????2017-09-21 21:28:28
-> 
-> OK, we'll see the result.
-> 
-> > 
-> > One interesting thing to notes is the test-pkg is using a external ARC
-> > GCC6 uclibc toolchain??and the failing builds are all internal
-> > toolchain and GCC 7.
-> 
-> Yes. But we have other toolchains tested by test-pkg that use gcc 7.x,
-> so I'm surprised the problem doesn't pop up on other architectures.
+>
+> Since Peter is about to release -rc1, it's time to restart with
+> analyzing the build failures we have. And we have *lots* of them!
+>
+> Alexey, Yann, Adam, Peter (both Korsgaard and Seiderer?, Olivier,
+> Matthew, Johan, Angelo, J?rg, Samuel, Waldemar, Bernd and Baruch: there
+> are some questions/issues/topics for you below. Please read on! Thanks
+> for your support!
+>
+[...]
 
-As a matter of fact the same problem happens on ARM if GCC 7 is used.
-That's my defconfig:
---------------------------->8---------------------
-BR2_arm=y
-BR2_GCC_VERSION_7_X=y
---------------------------->8---------------------
+>>     mips64el |                opencv-2.4.13.3 | NOK | http://autobuild.buildroot.net/results/b27d324331f6e351e95dd4742f4d0a50af60c590 |
+>>     mips64el |                opencv-2.4.13.3 | NOK | http://autobuild.buildroot.net/results/44ed0be0bd94028b7b37e7bf21233adc1753d94b |
+>
+> CMake Error at cmake/OpenCVCompilerOptions.cmake:21 (else):
+>   A duplicate ELSE command was found inside an IF block.
+> Call Stack (most recent call first):
+>   CMakeLists.txt:437 (include)
+>
+> Should be easy to fix. Samuel, do you think you will find some time to
+> have a look at this?
 
-Now:
---------------------------->8---------------------
-make argp-standalone
-...
-.../output/build/argp-standalone-1.3/argp-help.c:1217: undefined reference to `argp_fmtstream_set_wmargin'
-.../output/build/argp-standalone-1.3/argp-help.c:1199: undefined reference to `argp_fmtstream_puts'
-collect2: error: ld returned 1 exit status
---------------------------->8---------------------
+I was about to check on these failures when the abo were off for
+maintainance yesterday.
+Hopefully I should have time to look into this by the end of the week.
 
-Speaking about a fix for this problem I guess more elegant could be:
---------------------------->8---------------------
-?argp-fmtstream.h | 2 +-
-?1 file changed, 1 insertion(+), 1 deletion(-)
+>
+>>         bfin |                 openobex-1.7.2 | NOK | http://autobuild.buildroot.net/results/78e033fe9f43845581a5d87b21a8451f67520e44 |
+>
+> /usr/lfs/v0/rc-buildroot-test/scripts/instance-2/output/build/openobex-1.7.2/lib/obex_transport_sock.c:(.text+0x5f6): undefined reference to `accept4'
+>
+> Not sure what's going on. accept4() not wired in Linux or uClibc for
+> Blackfin? Something else? Waldemar, could you have a look?
+>
 
-diff --git a/argp-fmtstream.h b/argp-fmtstream.h
-index 2dd0925..cb0bead 100644
---- a/argp-fmtstream.h
-+++ b/argp-fmtstream.h
-@@ -215,7 +215,7 @@ extern int __argp_fmtstream_ensure (argp_fmtstream_t __fs, size_t __amount);
-?#if defined(__GNUC__) && !defined(__GNUC_STDC_INLINE__)
-?#define ARGP_FS_EI extern inline
-?#else
--#define ARGP_FS_EI inline
-+#define ARGP_FS_EI inline __attribute__((__always_inline__))
-?#endif
-?#endif
---------------------------->8---------------------
+I have a pending patch for openobex,.
+It seems accept4 is not available in uclibc for blackfin architecture [1].
+Grepping at the git log, similar issues were fixed by disabling the
+package on blackfin target.
 
-If that looks fine to you guys Eugeniy will send out that fix.
 
--Alexey
+Regards,
+
+[1] https://cgit.openadk.org/cgi/cgit/uclibc-ng.git/tree/libc/sysdeps/linux/common/bits/kernel-features.h#n452
+
+-- 
+Samuel
