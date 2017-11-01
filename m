@@ -1,16 +1,16 @@
 From: Jagan Teki <jagannadh.teki@gmail.com>
-Date: Wed,  1 Nov 2017 19:05:46 +0100
-Subject: [Buildroot] [PATCH v5 04/11] board: Add Pine64 support
+Date: Wed,  1 Nov 2017 19:05:47 +0100
+Subject: [Buildroot] [PATCH v5 05/11] board: Add SoPine support
 In-Reply-To: <1509559553-26544-1-git-send-email-jagan@amarulasolutions.com>
 References: <1509559553-26544-1-git-send-email-jagan@amarulasolutions.com>
-Message-ID: <1509559553-26544-5-git-send-email-jagan@amarulasolutions.com>
+Message-ID: <1509559553-26544-6-git-send-email-jagan@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add initial support for Pine64 board with below features:
+Add initial support for SoPine board with below features:
 - U-Boot 2017.09
 - Linux 4.13.7
 - Default packages from buildroot
@@ -20,67 +20,64 @@ Cc: Andre Przywara <andre.przywara@arm.com>
 Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
 ---
  .gitlab-ci.yml                   |  1 +
- DEVELOPERS                       |  2 ++
- board/pine64/pine64/boot.cmd     |  6 +++++
- board/pine64/pine64/genimage.cfg | 38 ++++++++++++++++++++++++++++++++
- board/pine64/pine64/readme.txt   | 38 ++++++++++++++++++++++++++++++++
- configs/pine64_defconfig         | 47 ++++++++++++++++++++++++++++++++++++++++
- 6 files changed, 132 insertions(+)
- create mode 100644 board/pine64/pine64/boot.cmd
- create mode 100644 board/pine64/pine64/genimage.cfg
- create mode 100644 board/pine64/pine64/readme.txt
- create mode 100644 configs/pine64_defconfig
+ DEVELOPERS                       |  1 +
+ board/pine64/sopine/boot.cmd     |  6 +++++
+ board/pine64/sopine/genimage.cfg | 38 ++++++++++++++++++++++++++++++++
+ board/pine64/sopine/readme.txt   | 38 ++++++++++++++++++++++++++++++++
+ configs/pine64_sopine_defconfig  | 47 ++++++++++++++++++++++++++++++++++++++++
+ 6 files changed, 131 insertions(+)
+ create mode 100644 board/pine64/sopine/boot.cmd
+ create mode 100644 board/pine64/sopine/genimage.cfg
+ create mode 100644 board/pine64/sopine/readme.txt
+ create mode 100644 configs/pine64_sopine_defconfig
 
 diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index 3dd4f48..44edc61 100644
+index 44edc61..a690b17 100644
 --- a/.gitlab-ci.yml
 +++ b/.gitlab-ci.yml
-@@ -161,6 +161,7 @@ orangepi_zero_defconfig: *defconfig
- pandaboard_defconfig: *defconfig
+@@ -162,6 +162,7 @@ pandaboard_defconfig: *defconfig
  pc_x86_64_bios_defconfig: *defconfig
  pc_x86_64_efi_defconfig: *defconfig
-+pine64_defconfig: *defconfig
+ pine64_defconfig: *defconfig
++pine64_sopine_defconfig: *defconfig
  qemu_aarch64_virt_defconfig: *defconfig
  qemu_arm_versatile_defconfig: *defconfig
  qemu_arm_versatile_nommu_defconfig: *defconfig
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 6521aad..780c674 100644
+index 780c674..106d793 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -728,8 +728,10 @@ F:	package/keepalived/
- N:	Jagan Teki <jagan@amarulasolutions.com>
- F:	board/bananapi/
- F:	board/engicam/
-+F:	board/pine64/
+@@ -732,6 +732,7 @@ F:	board/pine64/
  F:	configs/bananapi_m1_defconfig
  F:	configs/bananapi_m64_defconfig
-+F:	configs/pine64_defconfig
+ F:	configs/pine64_defconfig
++F:	configs/pine64_sopine_defconfig
  F:	configs/engicam_imx6qdl_icore_defconfig
  F:	configs/engicam_imx6qdl_icore_qt5_defconfig
  F:	configs/engicam_imx6qdl_icore_rqs_defconfig
-diff --git a/board/pine64/pine64/boot.cmd b/board/pine64/pine64/boot.cmd
+diff --git a/board/pine64/sopine/boot.cmd b/board/pine64/sopine/boot.cmd
 new file mode 100644
-index 0000000..14f5610
+index 0000000..2eab642
 --- /dev/null
-+++ b/board/pine64/pine64/boot.cmd
++++ b/board/pine64/sopine/boot.cmd
 @@ -0,0 +1,6 @@
 +setenv bootargs console=ttyS0,115200 earlyprintk root=/dev/mmcblk0p2 rootwait
 +
 +fatload mmc 0 $kernel_addr_r Image
-+fatload mmc 0 $fdt_addr_r sun50i-a64-pine64.dtb
++fatload mmc 0 $fdt_addr_r sun50i-a64-sopine-baseboard.dtb
 +
 +booti $kernel_addr_r - $fdt_addr_r
-diff --git a/board/pine64/pine64/genimage.cfg b/board/pine64/pine64/genimage.cfg
+diff --git a/board/pine64/sopine/genimage.cfg b/board/pine64/sopine/genimage.cfg
 new file mode 100644
-index 0000000..8e12308
+index 0000000..5606d34
 --- /dev/null
-+++ b/board/pine64/pine64/genimage.cfg
++++ b/board/pine64/sopine/genimage.cfg
 @@ -0,0 +1,38 @@
 +image boot.vfat {
 +	vfat {
 +		files = {
 +			"Image",
-+			"sun50i-a64-pine64.dtb",
++			"sun50i-a64-sopine-baseboard.dtb",
 +			"boot.scr"
 +		}
 +	}
@@ -114,31 +111,31 @@ index 0000000..8e12308
 +		image = "rootfs.ext4"
 +	}
 +}
-diff --git a/board/pine64/pine64/readme.txt b/board/pine64/pine64/readme.txt
+diff --git a/board/pine64/sopine/readme.txt b/board/pine64/sopine/readme.txt
 new file mode 100644
-index 0000000..85226fd
+index 0000000..08cb380
 --- /dev/null
-+++ b/board/pine64/pine64/readme.txt
++++ b/board/pine64/sopine/readme.txt
 @@ -0,0 +1,38 @@
 +Intro
 +=====
 +
 +This default configuration will allow you to start experimenting with the
-+buildroot environment for the Pine64. With the current configuration
++buildroot environment for the SoPine. With the current configuration
 +it will bring-up the board, and allow access through the serial console.
 +
-+Pine64 link:
-+https://www.pine64.org/?page_id=1194
++SoPINE link:
++https://www.pine64.org/?page_id=1491
 +
 +Wiki link:
-+https://openedev.amarulasolutions.com/display/ODWIKI/Pine64
++https://openedev.amarulasolutions.com/display/ODWIKI/SoPine
 +
 +This configuration uses U-Boot mainline and kernel mainline.
 +
 +How to build
 +============
 +
-+    $ make pine64_defconfig
++    $ make pine64_sopine_defconfig
 +
 +    $ make
 +
@@ -156,13 +153,13 @@ index 0000000..85226fd
 +  $ sudo dd if=output/images/sdcard.img of=/dev/sdX
 +  $ sudo sync
 +
-+Insert the micro SDcard in your Pine64 and power it up. The console
++Insert the micro SDcard in your SoPine and power it up. The console
 +is on the serial line, 115200 8N1.
-diff --git a/configs/pine64_defconfig b/configs/pine64_defconfig
+diff --git a/configs/pine64_sopine_defconfig b/configs/pine64_sopine_defconfig
 new file mode 100644
-index 0000000..76d2d77
+index 0000000..3d52501
 --- /dev/null
-+++ b/configs/pine64_defconfig
++++ b/configs/pine64_sopine_defconfig
 @@ -0,0 +1,47 @@
 +BR2_aarch64=y
 +BR2_cortex_a53=y
@@ -184,7 +181,7 @@ index 0000000..76d2d77
 +BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
 +BR2_TARGET_UBOOT_CUSTOM_VERSION=y
 +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.09"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="pine64_plus"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sopine_baseboard"
 +BR2_TARGET_UBOOT_NEEDS_DTC=y
 +BR2_TARGET_UBOOT_NEEDS_ATF=y
 +BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
@@ -192,7 +189,7 @@ index 0000000..76d2d77
 +BR2_TARGET_UBOOT_SPL=y
 +BR2_TARGET_UBOOT_SPL_NAME="spl/sunxi-spl.bin"
 +BR2_TARGET_UBOOT_BOOT_SCRIPT=y
-+BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE="board/pine64/pine64/boot.cmd"
++BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE="board/pine64/sopine/boot.cmd"
 +
 +# Kernel
 +BR2_LINUX_KERNEL=y
@@ -200,16 +197,16 @@ index 0000000..76d2d77
 +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.13.7"
 +BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
 +BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun50i-a64-pine64"
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun50i-a64-sopine-baseboard"
 +
 +# Filesystem
-+BR2_TARGET_GENERIC_ISSUE="Welcome to PINE64"
++BR2_TARGET_GENERIC_ISSUE="Welcome to PINE64 SOPINE"
 +BR2_TARGET_ROOTFS_EXT2=y
 +BR2_TARGET_ROOTFS_EXT2_4=y
 +BR2_PACKAGE_HOST_DOSFSTOOLS=y
 +BR2_PACKAGE_HOST_GENIMAGE=y
 +BR2_PACKAGE_HOST_MTOOLS=y
 +BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/pine64/pine64/genimage.cfg"
++BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/pine64/sopine/genimage.cfg"
 -- 
 1.9.1
