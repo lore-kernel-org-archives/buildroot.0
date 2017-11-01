@@ -1,57 +1,68 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 1 Nov 2017 10:36:49 +0100
-Subject: [Buildroot] [git commit] package/openjpeg: fix static library
-	install
-Message-ID: <20171101092952.CABEE80FE0@busybox.osuosl.org>
+Date: Wed, 1 Nov 2017 10:42:56 +0100
+Subject: [Buildroot] [PATCH] package/collectd: Specify correct FP layout
+ for PowerPC
+In-Reply-To: <20171031003539.919-1-andrew.smirnov@gmail.com>
+References: <20171031003539.919-1-andrew.smirnov@gmail.com>
+Message-ID: <20171101104256.4da2b465@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=84ec4f15ebbc3fb0691c7775766864c5a5039ff5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Fixes
-http://autobuild.buildroot.net/results/c35/c35599e6bf09aebe456ea959d7c238f82090fc62/
+On Mon, 30 Oct 2017 17:35:39 -0700, Andrey Smirnov wrote:
+> PowerPC stores floating point as big endian, so, in order for
+> 'network' plugin to work correctly (and potentially any user of
+> htond() in collectd's codebase), --with-fp-layout=endianflip as
+> opposed to --with-fp-layout=nothing needs to be specified during
+> configuration phase.
+> 
+> Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
+> ---
+>  package/collectd/collectd.mk | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
+> index 626fba81bf..80791b618d 100644
+> --- a/package/collectd/collectd.mk
+> +++ b/package/collectd/collectd.mk
+> @@ -24,9 +24,15 @@ COLLECTD_PLUGINS_DISABLE = \
+>  
+>  COLLECTD_CONF_ENV += LIBS="-lm"
+>  
+> +ifeq ($(BR2_powerpc)$(BR2_powerpc64)$(BR2_powerpc64le),y)
+> +COLLECTD_FP_LAYOUT=endianflip
+> +else
+> +COLLECTD_FP_LAYOUT=nothing
+> +endif
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Acked-by: Olivier Schonken <olivier.schonken@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/openjpeg/0004-install-static-lib.patch | 27 ++++++++++++++++++++++++++
- 1 file changed, 27 insertions(+)
+I am not sure that the problem is PowerPC vs. rest of the world, but
+rather big endian vs. little endian. For example, OpenWRT is using
+endianflip on all big endian platforms, and "nothing" on all little
+endian platforms:
+https://dev.openwrt.org/browser/packages/utils/collectd/Makefile?rev=28960.
 
-diff --git a/package/openjpeg/0004-install-static-lib.patch b/package/openjpeg/0004-install-static-lib.patch
-new file mode 100644
-index 0000000..4a3bbfa
---- /dev/null
-+++ b/package/openjpeg/0004-install-static-lib.patch
-@@ -0,0 +1,27 @@
-+From 66297f07a43d2770a97c8456d20202f3d051d980 Mon Sep 17 00:00:00 2001
-+From: Even Rouault <even.rouault@spatialys.com>
-+Date: Mon, 9 Oct 2017 11:40:43 +0200
-+Subject: [PATCH] Unix build: fix regression of 2.3.0 where a shared-only or
-+ static-only build lacks the installation target for the library (#1019, fixes
-+ regression introduced by 3dfc6ca2bcf06fd1adb6b6b4cecc6c092f08ba0b)
-+
-+Downloaded from upstream commit
-+https://github.com/uclouvain/openjpeg/commit/66297f07a43d2770a97c8456d20202f3d051d980
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ src/lib/openjp2/CMakeLists.txt | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/src/lib/openjp2/CMakeLists.txt b/src/lib/openjp2/CMakeLists.txt
-+index 0b4520384..f8990ccf0 100644
-+--- a/src/lib/openjp2/CMakeLists.txt
-++++ b/src/lib/openjp2/CMakeLists.txt
-+@@ -99,6 +99,7 @@ else()
-+     set(INSTALL_LIBS ${OPENJPEG_LIBRARY_NAME} openjp2_static)
-+   else()
-+     add_library(${OPENJPEG_LIBRARY_NAME} ${OPENJPEG_SRCS})
-++    set(INSTALL_LIBS ${OPENJPEG_LIBRARY_NAME})
-+   endif()
-+ endif()
-+ 
+So I believe the correct patch is to use:
+
+ifeq ($(BR2_ENDIAN),"BIG")
+COLLECTD_FP_LAYOUT = endianflip
+else
+COLLECTD_FP_LAYOUT = normal
+endif
+
+However, there is a third FP layout called "intswap", and I'm not sure
+in which situations it should be used. Some additional investigation of
+collectd configure.ac script is probably needed to understand the
+AC_RUN_IFELSE() tests it does to figure out what the FP layout is when
+doing a native build.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
