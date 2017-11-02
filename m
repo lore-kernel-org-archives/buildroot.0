@@ -1,60 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 2 Nov 2017 12:04:23 +0100
-Subject: [Buildroot] [PATCH 3/4] luajit: only available on x86(-64) hosts
-In-Reply-To: <20171102104520.29257-4-peter@korsgaard.com>
-References: <20171102104520.29257-1-peter@korsgaard.com>
- <20171102104520.29257-4-peter@korsgaard.com>
-Message-ID: <20171102120423.0f8e5ef7@windsurf>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Thu,  2 Nov 2017 12:04:59 +0100
+Subject: [Buildroot] [PATCH 1/4] python-six: bump version to 1.11.0
+Message-ID: <20171102110502.18102-1-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-On Thu,  2 Nov 2017 11:45:19 +0100, Peter Korsgaard wrote:
-> The -m32 compiler flag is used for 32bit builds and host-luajit has limited
-> architecture support, so limit to x86(-64) hosts.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/5f5b5edb058efe976c003678e21bcc28a87cc828/
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  package/luajit/Config.in | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/package/luajit/Config.in b/package/luajit/Config.in
-> index 1a27c434e1..6b9c6e6ae8 100644
-> --- a/package/luajit/Config.in
-> +++ b/package/luajit/Config.in
-> @@ -1,5 +1,8 @@
->  config BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
->  	bool
-> +	# -m32 flag is used for 32bit builds and host-luajit has
-> +	# limited architecture support
-> +	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
->  	default y if BR2_i386 || \
->  		(BR2_x86_64 && BR2_HOSTARCH='x86_64') || \
->  		BR2_powerpc || BR2_arm || BR2_armeb || \
+Add licence file checksum.
 
-How is this going to prevent other packages from depending on
-host-luajit. BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS is all about the target
-variant of luajit, not the host variant.
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ package/python-six/python-six.hash | 6 ++++--
+ package/python-six/python-six.mk   | 4 ++--
+ 2 files changed, 6 insertions(+), 4 deletions(-)
 
-Do we need a BR2_PACKAGE_HOST_LUAJIT_ARCH_SUPPORTS or something like
-that ?
-
-For example, if you enable moarvm, host-luajit will be built, but not
-luajit.
-
-Don't we have a problem here if your solution is used ?
-
-Thanks!
-
-Thomas
+diff --git a/package/python-six/python-six.hash b/package/python-six/python-six.hash
+index a90c79b75c..f9dbf09eaa 100644
+--- a/package/python-six/python-six.hash
++++ b/package/python-six/python-six.hash
+@@ -1,2 +1,4 @@
+-# Locally computed:
+-sha256  105f8d68616f8248e24bf0e9372ef04d3cc10104f1980f54d57b2ce73a5ad56a  six-1.10.0.tar.gz
++# md5 from https://pypi.python.org/pypi/six/json, sha256 locally computed
++md5	d12789f9baf7e9fb2524c0c64f1773f8  six-1.11.0.tar.gz
++sha256	70e8a77beed4562e7f14fe23a786b54f6296e34344c23bc42f07b15018ff98e9  six-1.11.0.tar.gz
++sha256  63478682e84e8c98f4c46308995f1f521a6886976e25421827d2a2be03581328  LICENSE
+diff --git a/package/python-six/python-six.mk b/package/python-six/python-six.mk
+index 850f9340d3..cd80634233 100644
+--- a/package/python-six/python-six.mk
++++ b/package/python-six/python-six.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_SIX_VERSION = 1.10.0
++PYTHON_SIX_VERSION = 1.11.0
+ PYTHON_SIX_SOURCE = six-$(PYTHON_SIX_VERSION).tar.gz
+-PYTHON_SIX_SITE = https://pypi.python.org/packages/source/s/six
++PYTHON_SIX_SITE = https://pypi.python.org/packages/16/d8/bc6316cf98419719bd59c91742194c111b6f2e85abac88e496adefaf7afe
+ PYTHON_SIX_SETUP_TYPE = setuptools
+ PYTHON_SIX_LICENSE = MIT
+ PYTHON_SIX_LICENSE_FILES = LICENSE
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.11.0
