@@ -1,10 +1,14 @@
 From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Thu, 2 Nov 2017 03:14:34 +0100
-Subject: [Buildroot] [PATCH 1/4] package/openobex: disable on Blackfin
-In-Reply-To: <20171101232343.764c231a@windsurf>
-References: <20171101201137.29939-1-s.martin49@gmail.com>
- <20171101232343.764c231a@windsurf>
-Message-ID: <20171102021434.GJ1829@waldemar-brodkorb.de>
+Date: Thu, 2 Nov 2017 03:31:31 +0100
+Subject: [Buildroot] Analysis of build results for 2017-10-30
+In-Reply-To: <20171101112428.710e7181@windsurf>
+References: <20171031070013.AD75D207B2@mail.free-electrons.com>
+ <20171031230519.3feb2619@windsurf>
+ <CANQCQpYxR6nParzHgEswkZyh8K2-DUHnTu5VsOtyJOksd3rU5w@mail.gmail.com>
+ <20171101104532.43dcd164@windsurf>
+ <1509530473.6560.11.camel@synopsys.com>
+ <20171101112428.710e7181@windsurf>
+Message-ID: <20171102023131.GK1829@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,46 +20,25 @@ Thomas Petazzoni wrote,
 
 > Hello,
 > 
-> On Wed,  1 Nov 2017 21:11:34 +0100, Samuel Martin wrote:
-> > Openobex uses accept4 syscall, which is not available on Blackfin flavored uclibc.
-> > So, diasble openobex on blackfin (do not add extra checks on the c-library since
-> > uclibc is the only choice for Blackfin).
-> > 
-> > Fixed:
-> >   http://autobuild.buildroot.net/results/78e033fe9f43845581a5d87b21a8451f67520e44
-> > 
-> > Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-> > ---
-> >  package/openobex/Config.in | 1 +
-> >  1 file changed, 1 insertion(+)
-> > 
-> > diff --git a/package/openobex/Config.in b/package/openobex/Config.in
-> > index e611b8d803..4a4dc214ef 100644
-> > --- a/package/openobex/Config.in
-> > +++ b/package/openobex/Config.in
-> > @@ -1,5 +1,6 @@
-> >  config BR2_PACKAGE_OPENOBEX
-> >  	bool "openobex"
-> > +	depends on !BR2_bfin
-> >  	help
-> >  	  Free open source implementation of the Object Exchange (OBEX)
-> >  	  protocol.
+> On Wed, 1 Nov 2017 10:01:14 +0000, Alexey Brodkin wrote:
 > 
-> What about the Config.in comment, and the reverse dependencies of
-> BR2_PACKAGE_OPENOBEX ?
+> > As a matter of fact the same problem happens on ARM if GCC 7 is used.
+> > That's my defconfig:
+> > --------------------------->8---------------------  
+> > BR2_arm=y
+> > BR2_GCC_VERSION_7_X=y
+> > --------------------------->8---------------------  
 > 
-> Also, I'd like to hear from Waldemar about accept4 availability on
-> Blackfin/uClibc-ng.
+> I was surprised because our configuration
+> https://git.buildroot.org/buildroot/tree/support/config-fragments/autobuild/br-arm-cortex-a9-glibc.config
+> is using gcc 7.x. But what I missed is that it's a glibc configuration,
+> and argp-standalone is only available for !glibc configurations.
+> 
+> So that explains it all.
 
-For me it looks like a uClibc bug.
-When socketcalls.c was converted to use cancel.h for syscall
-cancellation (19607f1113ef9916a0a0ac2bf99b5bc32526f0de)
-it seems accept4 was left out for no specific reason.
-
-For Linuxthreads the syscall wrapper for accept4 isn't compiled in.
-I think for NPTL we do not see the issue.
-
-I am going to sent out a patch soon.
+Just as a sidenote, uClibc-ng does include argp support
+if enabled via UCLIBC_HAS_ARGP. Is argp-standalone used for musl
+toolchains, too?
 
 best regards
  Waldemar
