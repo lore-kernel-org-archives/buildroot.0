@@ -1,38 +1,63 @@
-From: Guo Ren <ren_guo@c-sky.com>
-Date: Thu,  2 Nov 2017 20:14:33 +0800
-Subject: [Buildroot] [PATCH 1/1] package/dtc: qemu system build need libfdt.
-Message-ID: <1509624873-16240-1-git-send-email-ren_guo@c-sky.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 2 Nov 2017 13:32:08 +0100
+Subject: [Buildroot] [PATCH 2/4] package/opencv: fix build failure
+In-Reply-To: <20171101201137.29939-2-s.martin49@gmail.com>
+References: <20171101201137.29939-1-s.martin49@gmail.com>
+ <20171101201137.29939-2-s.martin49@gmail.com>
+Message-ID: <20171102133208.5e7c16e0@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The "install-bin" just install dtc's programs to host/bin without
-libfdt, but qemu system compile need libfdt.
+Hello,
 
-see: https://gitlab.com/c-sky/buildroot/-/jobs/38654503
+On Wed,  1 Nov 2017 21:11:35 +0100, Samuel Martin wrote:
+> Backport fix from upstream.
+> 
+> Fixes:
+>   http://autobuild.buildroot.net/results/b27d324331f6e351e95dd4742f4d0a50af60c590
+>   http://autobuild.buildroot.net/results/44ed0be0bd94028b7b37e7bf21233adc1753d94b
+> 
+> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
-So we need install libfdt to satisfy qemu system compile.
+Applied, with one small change, see below.
 
-Change-Id: I85748479ac11e1c6452d3f79d04f02666218774a
-Signed-off-by: Guo Ren <ren_guo@c-sky.com>
----
- package/dtc/dtc.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> ---
+>  .../0003-Update-OpenCVCompilerOptions.cmake.patch  | 33 ++++++++++++++++++++++
+>  1 file changed, 33 insertions(+)
+>  create mode 100644 package/opencv/0003-Update-OpenCVCompilerOptions.cmake.patch
+> 
+> diff --git a/package/opencv/0003-Update-OpenCVCompilerOptions.cmake.patch b/package/opencv/0003-Update-OpenCVCompilerOptions.cmake.patch
+> new file mode 100644
+> index 0000000000..290eef4d10
+> --- /dev/null
+> +++ b/package/opencv/0003-Update-OpenCVCompilerOptions.cmake.patch
+> @@ -0,0 +1,33 @@
+> +Fetch from upstream: https://github.com/opencv/opencv/commit/126de0cd95418811e302996161e03195bf7e631a
 
-diff --git a/package/dtc/dtc.mk b/package/dtc/dtc.mk
-index dd0f30d..1bcee29 100644
---- a/package/dtc/dtc.mk
-+++ b/package/dtc/dtc.mk
-@@ -51,7 +51,7 @@ define HOST_DTC_BUILD_CMDS
- endef
- 
- define HOST_DTC_INSTALL_CMDS
--	$(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) PREFIX=$(HOST_DIR) install-bin
-+	$(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) PREFIX=$(HOST_DIR) install
- endef
- 
- $(eval $(generic-package))
+By putting this comment here, you break the possibility of applying the
+patch with "git am", i.e the patch is no longer a proper Git formatted
+patch. Therefore, such comments should go...
+
+> +
+> +From 126de0cd95418811e302996161e03195bf7e631a Mon Sep 17 00:00:00 2001
+> +From: neok-m4700 <neok-m4700@users.noreply.github.com>
+> +Date: Tue, 25 Jul 2017 10:25:20 +0200
+> +Subject: [PATCH] Update OpenCVCompilerOptions.cmake
+> +
+> +misplaced else
+
+... here.
+
+> +
+> +Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+
+Applied with this change. Thanks!
+
+Thomas
 -- 
-2.7.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
