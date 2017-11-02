@@ -1,32 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 2 Nov 2017 14:19:12 +0100
-Subject: [Buildroot] [PATCH 1/4] python-six: bump version to 1.11.0
-In-Reply-To: <20171102110502.18102-1-yegorslists@googlemail.com>
-References: <20171102110502.18102-1-yegorslists@googlemail.com>
-Message-ID: <20171102141912.12cab747@windsurf>
+From: Carlos Santos <casantos@datacom.ind.br>
+Date: Thu, 2 Nov 2017 11:40:55 -0200 (BRST)
+Subject: [Buildroot] [PATCH v2] util-linux: security bump to version 2.31
+In-Reply-To: <87r2thf431.fsf@dell.be.48ers.dk>
+References: <1509446871-25076-1-git-send-email-casantos@datacom.ind.br>
+ <87zi87ezym.fsf@dell.be.48ers.dk>
+ <232020389.16019836.1509500098756.JavaMail.zimbra@datacom.ind.br>
+ <87r2thf431.fsf@dell.be.48ers.dk>
+Message-ID: <253552528.16218833.1509630055116.JavaMail.zimbra@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+> From: "Peter Korsgaard" <peter@korsgaard.com>
+> To: "Carlos Santos" <casantos@datacom.ind.br>, sv99 at inbox.ru
+> Cc: buildroot at buildroot.org
+> Sent: Thursday, November 2, 2017 7:00:02 AM
+> Subject: Re: [PATCH v2] util-linux: security bump to version 2.31
 
-On Thu,  2 Nov 2017 12:04:59 +0100, yegorslists at googlemail.com wrote:
-> From: Yegor Yefremov <yegorslists@googlemail.com>
+>>>>>> "Carlos" == Carlos Santos <casantos@datacom.ind.br> writes:
 > 
-> Add licence file checksum.
+> > How many nommu architectures does Buildroot support? The only boards I
+> > found without BR2_USE_MMU were qemu_{arm_versatile,xtensa_lx60}_nommu,
+> > which obviously do not even have RF radios to turn on/off.
 > 
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> ---
->  package/python-six/python-six.hash | 6 ++++--
->  package/python-six/python-six.mk   | 4 ++--
->  2 files changed, 6 insertions(+), 4 deletions(-)
+> It is indeed probably a quite rare combination. Perhaps we should get
+> rid of the separate rfkill package then and add Config.in.legacy
+> handling for it selecting the util-linux option?
+> 
+> Volkov, you added the rfkill package. Any issues with moving to the
+> util-linux variant instead?
 
-All four patches applied. Thanks!
+I already submitted a patch to remove the rfkill package:
 
-Thomas
+    https://patchwork.ozlabs.org/patch/828969/
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Carlos Santos (Casantos) - DATACOM, P&D
+?The greatest triumph that modern PR can offer is the transcendent 
+success of having your words and actions judged by your reputation, 
+rather than the other way about.? ? Christopher Hitchens
