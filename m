@@ -1,42 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 2 Nov 2017 21:23:37 +0100
-Subject: [Buildroot] [git commit] package/libglib2: Bump to version 2.54.2
-Message-ID: <20171102201710.7B2937FD8D@busybox.osuosl.org>
+Date: Thu, 2 Nov 2017 21:23:32 +0100
+Subject: [Buildroot] [git commit] package/feh: Bump to version 2.21
+Message-ID: <20171102201710.6C7A57FD8D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9ae977ebe3360813cc0677cdf8f8a043634e0180
+commit: https://git.buildroot.net/buildroot/commit/?id=233242baed3ea1d980f23e53d8317b86b8114e2d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libglib2/libglib2.hash | 4 ++--
- package/libglib2/libglib2.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/feh/feh.hash | 2 +-
+ package/feh/feh.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libglib2/libglib2.hash b/package/libglib2/libglib2.hash
-index 4316378..fb9321e 100644
---- a/package/libglib2/libglib2.hash
-+++ b/package/libglib2/libglib2.hash
+diff --git a/package/feh/feh.hash b/package/feh/feh.hash
+index c11ff64..f3f7ced 100644
+--- a/package/feh/feh.hash
++++ b/package/feh/feh.hash
 @@ -1,2 +1,2 @@
--# https://download.gnome.org/sources/glib/2.54/glib-2.54.1.sha256sum
--sha256  50c01b1419324f10fbf9b9709ec2164b18586968bdce7540583bf32302cf47a3  glib-2.54.1.tar.xz
-+# https://download.gnome.org/sources/glib/2.54/glib-2.54.2.sha256sum
-+sha256  bb89e5c5aad33169a8c7f28b45671c7899c12f74caf707737f784d7102758e6c  glib-2.54.2.tar.xz
-diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
-index 2defcf0..b13da33 100644
---- a/package/libglib2/libglib2.mk
-+++ b/package/libglib2/libglib2.mk
-@@ -5,7 +5,7 @@
+ # Locally calculated after checking pgp signature
+-sha256 d82f68c7a96e1860dab3584ed58bda69446b692ae79a4ca999018507da310563  feh-2.18.3.tar.bz2
++sha256 520481c9908d999f8f7546103b78ff9b11f41d25b0938f0a22f10aaa48beef2b  feh-2.21.tar.bz2
+diff --git a/package/feh/feh.mk b/package/feh/feh.mk
+index ac8f683..3f4c410 100644
+--- a/package/feh/feh.mk
++++ b/package/feh/feh.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- LIBGLIB2_VERSION_MAJOR = 2.54
--LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).1
-+LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).2
- LIBGLIB2_SOURCE = glib-$(LIBGLIB2_VERSION).tar.xz
- LIBGLIB2_SITE = http://ftp.gnome.org/pub/gnome/sources/glib/$(LIBGLIB2_VERSION_MAJOR)
- LIBGLIB2_LICENSE = LGPL-2.0+
+-FEH_VERSION = 2.18.3
++FEH_VERSION = 2.21
+ FEH_SOURCE = feh-$(FEH_VERSION).tar.bz2
+ FEH_SITE = http://feh.finalrewind.org
+ FEH_DEPENDENCIES = libcurl imlib2 libpng xlib_libXinerama xlib_libXt
