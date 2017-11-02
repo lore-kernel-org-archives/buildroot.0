@@ -1,132 +1,192 @@
-From: =?UTF-8?q?S=C3=A9bastien=20Szymanski?= <sebastien.szymanski@armadeus.com>
-Date: Thu,  2 Nov 2017 17:27:02 +0100
-Subject: [Buildroot] [PATCH 1/1] qt5charts: new package
-Message-ID: <1509640022-16933-1-git-send-email-sebastien.szymanski@armadeus.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 2 Nov 2017 18:18:31 +0100
+Subject: [Buildroot] [PATCH 1/1] qt5: remove Qt Quick dependency on
+ opengl
+In-Reply-To: <1509639751-16841-1-git-send-email-sebastien.szymanski@armadeus.com>
+References: <1509639751-16841-1-git-send-email-sebastien.szymanski@armadeus.com>
+Message-ID: <20171102171831.GC3238@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
----
- package/qt5/Config.in                |  1 +
- package/qt5/qt5charts/Config.in      | 15 +++++++++
- package/qt5/qt5charts/qt5charts.hash |  5 +++
- package/qt5/qt5charts/qt5charts.mk   | 59 ++++++++++++++++++++++++++++++++++++
- 4 files changed, 80 insertions(+)
- create mode 100644 package/qt5/qt5charts/Config.in
- create mode 100644 package/qt5/qt5charts/qt5charts.hash
- create mode 100644 package/qt5/qt5charts/qt5charts.mk
+S?bastien, Joshua, Peter, All,
 
-diff --git a/package/qt5/Config.in b/package/qt5/Config.in
-index 8513c36..cf21235 100644
---- a/package/qt5/Config.in
-+++ b/package/qt5/Config.in
-@@ -61,6 +61,7 @@ endchoice
- source "package/qt5/qt53d/Config.in"
- source "package/qt5/qt5base/Config.in"
- source "package/qt5/qt5canvas3d/Config.in"
-+source "package/qt5/qt5charts/Config.in"
- source "package/qt5/qt5connectivity/Config.in"
- source "package/qt5/qt5declarative/Config.in"
- source "package/qt5/qt5enginio/Config.in"
-diff --git a/package/qt5/qt5charts/Config.in b/package/qt5/qt5charts/Config.in
-new file mode 100644
-index 0000000..993f4db
---- /dev/null
-+++ b/package/qt5/qt5charts/Config.in
-@@ -0,0 +1,15 @@
-+comment "qt5charts needs at least qt-5.7"
-+	depends on !BR2_PACKAGE_QT5_VERSION_LATEST
-+
-+config BR2_PACKAGE_QT5CHARTS
-+	bool "qt5charts"
-+	select BR2_PACKAGE_QT5BASE
-+	select BR2_PACKAGE_QT5BASE_WIDGETS
-+	depends on BR2_PACKAGE_QT5_VERSION_LATEST
-+	help
-+	  Qt is a cross-platform application and UI framework for
-+	  developers using C++.
-+
-+	  Qt Charts module provides a set of easy to use chart components.
-+
-+	  https://doc.qt.io/qt-5/qtcharts-index.html
-diff --git a/package/qt5/qt5charts/qt5charts.hash b/package/qt5/qt5charts/qt5charts.hash
-new file mode 100644
-index 0000000..ba7ccc7
---- /dev/null
-+++ b/package/qt5/qt5charts/qt5charts.hash
-@@ -0,0 +1,5 @@
-+# Hash from: https://download.qt.io/official_releases/qt/5.9/5.9.2/submodules/qtcharts-opensource-src-5.9.2.tar.xz.mirrorlist
-+sha256 4e7af70a73828ee1eb9606bd2c071cc7347c5f928aaf07b420dce7376b1c6aa4  qtcharts-opensource-src-5.9.2.tar.xz
-+
-+# Hashes for license files:
-+sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903 LICENSE.GPL3
-diff --git a/package/qt5/qt5charts/qt5charts.mk b/package/qt5/qt5charts/qt5charts.mk
-new file mode 100644
-index 0000000..17fdd96
---- /dev/null
-+++ b/package/qt5/qt5charts/qt5charts.mk
-@@ -0,0 +1,59 @@
-+################################################################################
-+#
-+# qt5charts
-+#
-+################################################################################
-+
-+QT5CHARTS_VERSION = $(QT5_VERSION)
-+QT5CHARTS_SITE = $(QT5_SITE)
-+QT5CHARTS_SOURCE = qtcharts-opensource-src-$(QT5CHARTS_VERSION).tar.xz
-+QT5CHARTS_DEPENDENCIES = qt5base
-+QT5CHARTS_INSTALL_STAGING = YES
-+
-+QT5CHARTS_LICENSE = GPL-3.0
-+QT5CHARTS_LICENSE_FILES = LICENSE.GPL3
-+
-+ifeq ($(BR2_PACKAGE_QT5DECLARATIVE),y)
-+QT5CHARTS_DEPENDENCIES += qt5declarative
-+endif
-+
-+define QT5CHARTS_CONFIGURE_CMDS
-+	(cd $(@D); $(TARGET_MAKE_ENV) $(HOST_DIR)/bin/qmake)
-+endef
-+
-+define QT5CHARTS_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
-+endef
-+
-+define QT5CHARTS_INSTALL_STAGING_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install
-+	$(QT5_LA_PRL_FILES_FIXUP)
-+endef
-+
-+ifeq ($(BR2_STATIC_LIBS),)
-+define QT5CHARTS_INSTALL_TARGET_LIBS
-+	cp -dpf $(STAGING_DIR)/usr/lib/libQt5Charts*.so.* $(TARGET_DIR)/usr/lib
-+	cp -dpfr $(STAGING_DIR)/usr/lib/qt/plugins/* $(TARGET_DIR)/usr/lib/qt/plugins
-+endef
-+endif
-+
-+# this is only built with quick support enabled
-+ifeq ($(BR2_PACKAGE_QT5DECLARATIVE_QUICK),y)
-+define QT5CHARTS_INSTALL_TARGET_QMLS
-+	cp -dpfr $(STAGING_DIR)/usr/qml/QtCharts $(TARGET_DIR)/usr/qml/
-+endef
-+endif
-+
-+ifeq ($(BR2_PACKAGE_QT5BASE_EXAMPLES),y)
-+define QT5CHARTS_INSTALL_TARGET_EXAMPLES
-+	cp -dpfr $(STAGING_DIR)/usr/lib/qt/examples/charts* $(TARGET_DIR)/usr/lib/qt/examples/
-+endef
-+endif
-+
-+define QT5CHARTS_INSTALL_TARGET_CMDS
-+	$(QT5CHARTS_INSTALL_TARGET_LIBS)
-+	$(QT5CHARTS_INSTALL_TARGET_QMLS)
-+	$(QT5CHARTS_INSTALL_TARGET_EXAMPLES)
-+endef
-+
-+$(eval $(generic-package))
+On 2017-11-02 17:22 +0100, S?bastien Szymanski spake thusly:
+> From: Joshua Henderson <joshua.henderson@microchip.com>
+> 
+> From: Joshua Henderson <joshua.henderson@microchip.com>
+> 
+> Qt Quick should no longer depend on opengl, and instead fallback to the limited
+> functionality software renderer as a replacement [1] when not available. This
+> also pulls a qt5declarative patch into 5.9.2 to fix examples compiling without
+> opengl.
+> 
+> [1] http://blog.qt.io/blog/2016/08/15/the-qt-quick-graphics-stack-in-qt-5-8/
+> 
+> Cc: Peter Seiderer <ps.report@gmx.net>
+> Cc: Julien Corjon <corjon.j@ecagroup.com>
+> Signed-off-by: Joshua Henderson <joshua.henderson@microchip.com>
+> [S?bastien: remove dependency on qt5virtualkeyboard]
+> Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
+> ---
+>  ...uickviewcomparison-and-quickwidget-needs-.patch | 57 ++++++++++++++++++++++
+>  package/qt5/qt5declarative/Config.in               |  6 +--
+>  package/qt5/qt5multimedia/qt5multimedia.mk         |  3 +-
+>  package/qt5/qt5quickcontrols/Config.in             |  4 +-
+>  package/qt5/qt5quickcontrols2/Config.in            |  4 +-
+>  package/qt5/qt5virtualkeyboard/Config.in           |  4 +-
+>  6 files changed, 68 insertions(+), 10 deletions(-)
+>  create mode 100644 package/qt5/qt5declarative/5.9.2/0002-examples-qquickviewcomparison-and-quickwidget-needs-.patch
+> 
+> diff --git a/package/qt5/qt5declarative/5.9.2/0002-examples-qquickviewcomparison-and-quickwidget-needs-.patch b/package/qt5/qt5declarative/5.9.2/0002-examples-qquickviewcomparison-and-quickwidget-needs-.patch
+> new file mode 100644
+> index 0000000..9c247d3
+> --- /dev/null
+> +++ b/package/qt5/qt5declarative/5.9.2/0002-examples-qquickviewcomparison-and-quickwidget-needs-.patch
+> @@ -0,0 +1,57 @@
+> +From b4db5c6cef877b33b5e7cd5a07fe4a7e6797dcfc Mon Sep 17 00:00:00 2001
+> +From: Peter Seiderer <ps.report@gmx.net>
+> +Date: Tue, 16 May 2017 19:47:19 +0200
+> +Subject: [PATCH] examples: qquickviewcomparison and quickwidget needs OpenGL
+> + support
+> +
+> +Fixes:
+[--SNIP--]
+> +Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> +---
+> + examples/quick/quick.pro | 5 ++++-
+> + 1 file changed, 4 insertions(+), 1 deletion(-)
+> +
+> +diff --git a/examples/quick/quick.pro b/examples/quick/quick.pro
+> +index 445dfb0fa..26ca0138e 100644
+> +--- a/examples/quick/quick.pro
+> ++++ b/examples/quick/quick.pro
+> +@@ -36,7 +36,10 @@ qtConfig(opengl(es1|es2)?) {
+> + # Widget dependent examples
+> + qtHaveModule(widgets) {
+> +     SUBDIRS += embeddedinwidgets
+> +-    qtHaveModule(quickwidgets): SUBDIRS += quickwidgets
+> ++    # OpenGL Support Required
+> ++    qtConfig(opengl(es1|es2)?) {
+> ++        qtHaveModule(quickwidgets): SUBDIRS += quickwidgets
+
+Upstream has a different patch, as commit fa52bb665d6b. Can you use that
+instead of your own?
+
+Regards,
+Yann E. MORIN.
+
+> ++    }
+> + }
+> +
+> + EXAMPLE_FILES = \
+> +--
+> +2.11.0
+> diff --git a/package/qt5/qt5declarative/Config.in b/package/qt5/qt5declarative/Config.in
+> index 5384b5f..3a353a8 100644
+> --- a/package/qt5/qt5declarative/Config.in
+> +++ b/package/qt5/qt5declarative/Config.in
+> @@ -17,11 +17,11 @@ config BR2_PACKAGE_QT5DECLARATIVE
+>  if BR2_PACKAGE_QT5DECLARATIVE
+>  
+>  comment "quick module needs an OpenGL-capable backend"
+> -	depends on !BR2_PACKAGE_QT5_GL_AVAILABLE
+> +	depends on !BR2_PACKAGE_QT5_GL_AVAILABLE && !BR2_PACKAGE_QT5_VERSION_LATEST
+>  
+>  config BR2_PACKAGE_QT5DECLARATIVE_QUICK
+>  	bool "quick module"
+> -	depends on BR2_PACKAGE_QT5_GL_AVAILABLE
+> -	select BR2_PACKAGE_QT5BASE_OPENGL
+> +	depends on BR2_PACKAGE_QT5_GL_AVAILABLE || BR2_PACKAGE_QT5_VERSION_LATEST
+> +	select BR2_PACKAGE_QT5BASE_OPENGL if BR2_PACKAGE_QT5_GL_AVAILABLE
+>  
+>  endif
+> diff --git a/package/qt5/qt5multimedia/qt5multimedia.mk b/package/qt5/qt5multimedia/qt5multimedia.mk
+> index 835142e..6df96bc 100644
+> --- a/package/qt5/qt5multimedia/qt5multimedia.mk
+> +++ b/package/qt5/qt5multimedia/qt5multimedia.mk
+> @@ -61,7 +61,8 @@ define QT5MULTIMEDIA_INSTALL_TARGET_LIBS
+>  endef
+>  endif
+>  
+> -ifeq ($(BR2_PACKAGE_QT5DECLARATIVE_QUICK),y)
+> +# this is only built with quick/opengl support enabled
+> +ifeq ($(BR2_PACKAGE_QT5DECLARATIVE_QUICK)$(BR2_PACKAGE_QT5_GL_AVAILABLE),yy)
+>  define QT5MULTIMEDIA_INSTALL_TARGET_QMLS
+>  	cp -dpfr $(STAGING_DIR)/usr/qml/QtMultimedia $(TARGET_DIR)/usr/qml/
+>  endef
+> diff --git a/package/qt5/qt5quickcontrols/Config.in b/package/qt5/qt5quickcontrols/Config.in
+> index 3cc5821..59f6ca4 100644
+> --- a/package/qt5/qt5quickcontrols/Config.in
+> +++ b/package/qt5/qt5quickcontrols/Config.in
+> @@ -1,6 +1,6 @@
+>  config BR2_PACKAGE_QT5QUICKCONTROLS
+>  	bool "qt5quickcontrols"
+> -	depends on BR2_PACKAGE_QT5_GL_AVAILABLE
+> +	depends on BR2_PACKAGE_QT5_GL_AVAILABLE || BR2_PACKAGE_QT5_VERSION_LATEST
+>  	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
+>  	select BR2_PACKAGE_QT5DECLARATIVE
+>  	select BR2_PACKAGE_QT5DECLARATIVE_QUICK
+> @@ -14,5 +14,5 @@ config BR2_PACKAGE_QT5QUICKCONTROLS
+>  	  http://doc.qt.io/qt-5/qtquickcontrols-index.html
+>  
+>  comment "qt5quickcontrols needs an OpenGL-capable backend"
+> -	depends on !BR2_PACKAGE_QT5_GL_AVAILABLE
+> +	depends on !BR2_PACKAGE_QT5_GL_AVAILABLE && !BR2_PACKAGE_QT5_VERSION_LATEST
+>  	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
+> diff --git a/package/qt5/qt5quickcontrols2/Config.in b/package/qt5/qt5quickcontrols2/Config.in
+> index 1066b17..d036f74 100644
+> --- a/package/qt5/qt5quickcontrols2/Config.in
+> +++ b/package/qt5/qt5quickcontrols2/Config.in
+> @@ -1,6 +1,6 @@
+>  config BR2_PACKAGE_QT5QUICKCONTROLS2
+>  	bool "qt5quickcontrols2"
+> -	depends on BR2_PACKAGE_QT5_GL_AVAILABLE # qt5declarative/quick
+> +	depends on BR2_PACKAGE_QT5_GL_AVAILABLE || BR2_PACKAGE_QT5_VERSION_LATEST # qt5declarative/quick
+>  	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE # qt5declarative/quick
+>  	select BR2_PACKAGE_QT5DECLARATIVE
+>  	select BR2_PACKAGE_QT5DECLARATIVE_QUICK
+> @@ -16,5 +16,5 @@ config BR2_PACKAGE_QT5QUICKCONTROLS2
+>  	  https://doc.qt.io/qt-5/qtquickcontrols2-index.html
+>  
+>  comment "qt5quickcontrols2 needs an OpenGL-capable backend"
+> -	depends on !BR2_PACKAGE_QT5_GL_AVAILABLE
+> +	depends on !BR2_PACKAGE_QT5_GL_AVAILABLE && !BR2_PACKAGE_QT5_VERSION_LATEST
+>  	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
+> diff --git a/package/qt5/qt5virtualkeyboard/Config.in b/package/qt5/qt5virtualkeyboard/Config.in
+> index a685815..f0e4f03 100644
+> --- a/package/qt5/qt5virtualkeyboard/Config.in
+> +++ b/package/qt5/qt5virtualkeyboard/Config.in
+> @@ -1,13 +1,13 @@
+>  comment "qt5virtualkeyboard needs at least qt-5.7 and an OpenGL backend"
+>  	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
+> -	depends on !BR2_PACKAGE_QT5_VERSION_LATEST || !BR2_PACKAGE_QT5_GL_AVAILABLE
+> +	depends on !BR2_PACKAGE_QT5_GL_AVAILABLE && !BR2_PACKAGE_QT5_VERSION_LATEST
+>  
+>  config BR2_PACKAGE_QT5VIRTUALKEYBOARD
+>  	bool "qt5virtualkeyboard"
+>  	# needs at least Qt 5.7
+>  	depends on BR2_PACKAGE_QT5_VERSION_LATEST
+>  	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE # qt5declarative
+> -	depends on BR2_PACKAGE_QT5_GL_AVAILABLE # qt5declarative quick
+> +	depends on BR2_PACKAGE_QT5_GL_AVAILABLE || BR2_PACKAGE_QT5_VERSION_LATEST # qt5declarative/quick
+>  	select BR2_PACKAGE_QT5DECLARATIVE
+>  	select BR2_PACKAGE_QT5DECLARATIVE_QUICK
+>  	select BR2_PACKAGE_QT5SVG
+> -- 
+> 2.7.3
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.7.3
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
