@@ -1,40 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 2 Nov 2017 22:13:54 +0100
-Subject: [Buildroot] [git commit] package/dtc: qemu system build need libfdt
-Message-ID: <20171102210708.4138781021@busybox.osuosl.org>
+Date: Thu, 2 Nov 2017 22:14:44 +0100
+Subject: [Buildroot] [PATCH 1/1] package/dtc: qemu system build need
+ libfdt.
+In-Reply-To: <1509624873-16240-1-git-send-email-ren_guo@c-sky.com>
+References: <1509624873-16240-1-git-send-email-ren_guo@c-sky.com>
+Message-ID: <20171102221444.640d928d@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b8c3e941731ddfc3728045142aa9081adeeeaee2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-The "install-bin" target just installs dtc's programs to host/bin
-without libfdt, but building qemu system requires libfdt.
+On Thu,  2 Nov 2017 20:14:33 +0800, Guo Ren wrote:
+> The "install-bin" just install dtc's programs to host/bin without
+> libfdt, but qemu system compile need libfdt.
+> 
+> see: https://gitlab.com/c-sky/buildroot/-/jobs/38654503
+> 
+> So we need install libfdt to satisfy qemu system compile.
+> 
+> Change-Id: I85748479ac11e1c6452d3f79d04f02666218774a
+> Signed-off-by: Guo Ren <ren_guo@c-sky.com>
+> ---
+>  package/dtc/dtc.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-see: https://gitlab.com/c-sky/buildroot/-/jobs/38654503
+Applied to master, after minor commit log tweaks.
 
-So we need to install libfdt to satisfy the requirements of qemu.
+Thanks!
 
-Signed-off-by: Guo Ren <ren_guo@c-sky.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/dtc/dtc.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/package/dtc/dtc.mk b/package/dtc/dtc.mk
-index dd0f30d..1bcee29 100644
---- a/package/dtc/dtc.mk
-+++ b/package/dtc/dtc.mk
-@@ -51,7 +51,7 @@ define HOST_DTC_BUILD_CMDS
- endef
- 
- define HOST_DTC_INSTALL_CMDS
--	$(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) PREFIX=$(HOST_DIR) install-bin
-+	$(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) PREFIX=$(HOST_DIR) install
- endef
- 
- $(eval $(generic-package))
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
