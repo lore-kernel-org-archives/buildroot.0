@@ -1,32 +1,44 @@
-From: Joshua Henderson <joshua.henderson@microchip.com>
-Date: Thu, 2 Nov 2017 14:40:27 -0700
-Subject: [Buildroot] [PATCH v3] qt5: remove Qt Quick dependency on opengl
-In-Reply-To: <20171102210137.GD30054@scaer>
-References: <1509655079-27158-1-git-send-email-joshua.henderson@microchip.com>
- <20171102210137.GD30054@scaer>
-Message-ID: <946ee87f-2ece-5b90-b364-e334aa36bc37@microchip.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 2 Nov 2017 22:41:22 +0100
+Subject: [Buildroot] [PATCH v2 1/1] package/python-networkmanager: Bump
+ to version 2.0.1
+In-Reply-To: <20171102213829.f45xdbpzr63nnxyk@x230>
+References: <20171102210144.27993-1-petr.vorel@gmail.com>
+ <20171102220948.6a4e757b@windsurf>
+ <20171102213829.f45xdbpzr63nnxyk@x230>
+Message-ID: <20171102224122.7eaa833c@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11/02/2017 02:01 PM, Yann E. MORIN wrote:
-> Joshua, All,
-> 
-> On 2017-11-02 13:37 -0700, Joshua Henderson spake thusly:
->> Qt Quick should no longer depend on opengl, and instead fallback to the limited
->> functionality software renderer as a replacement [1] when not available. This
->> also pulls in an upstream qt5declarative 5.10 patch [2], replacing an existing
->> one, to qt5 5.6.3 and 5.9.2 to fix no-opengl builds.
-> 
-> Arg, no, we do not want to backport the upstream patch to the 5.6.3
-> branch, because they are not under the same license.
-> 
-> Please keep the one we have for 5.6.3. To avoid this issue in the
-> future, you may add a comment in its commit log that explains why it is
-> not an upstream backport.
+Hello,
 
-Now, there's some dots I didn't connect. Good call.
+On Thu, 2 Nov 2017 22:38:30 +0100, Petr Vorel wrote:
 
-Josh
+> > So this one is really just a runtime dependency, as opposed to
+> > dbus-python, which is a build time dependency. Correct?  
+> IMHO both are runtime dependencies.
+
+Well, if dbus-python is really a runtime dependency, it shouldn't be
+listed in PYTHON_NETWORKMANAGER_DEPENDENCIES.
+
+Could you double check this?
+
+Remove dbus-python from PYTHON_NETWORKMANAGER_DEPENDENCIES, and then do
+a clean build like this:
+
+	$ make clean
+	$ make python-networkmanager
+
+This will only build python-networkmanager and its build dependencies,
+but not its runtime dependencies.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
