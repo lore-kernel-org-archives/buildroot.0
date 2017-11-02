@@ -1,39 +1,29 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Thu,  2 Nov 2017 12:18:12 -0200
-Subject: [Buildroot] [PATCH 2/2] linux-headers: bump 4.{4, 9, 13}.x series
-In-Reply-To: <1509632292-30822-1-git-send-email-festevam@gmail.com>
-References: <1509632292-30822-1-git-send-email-festevam@gmail.com>
-Message-ID: <1509632292-30822-2-git-send-email-festevam@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 2 Nov 2017 15:30:23 +0100
+Subject: [Buildroot] [PATCH 0/4] Fix BR2_HOSTARCH_NEEDS_IA32_*
+ autobuilder issues
+In-Reply-To: <20171102104520.29257-1-peter@korsgaard.com>
+References: <20171102104520.29257-1-peter@korsgaard.com>
+Message-ID: <CACXmViZAuY-59MULsMeRbO1x6X7SwtpFDnU5oGxyafG5yS=MYA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Fabio Estevam <fabio.estevam@nxp.com>
+Hmm, this apparently never made it to the list.
 
-Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
----
- package/linux-headers/Config.in.host | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+On Thu, Nov 2, 2017 at 11:45 AM, Peter Korsgaard <peter@korsgaard.com> wrote:
+> Hi,
+>
+> The following patch series fixes various autobuilder issues from packages
+> selecting BR2_HOSTARCH_NEEDS_IA32_* without ensuring hostarch is x86(-64),
+> breaking the build on the gcc112 ppc64le autobuilder.
+>
+> --
+> Bye, Peter Korsgaard
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 23393f4..cb915cc 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -244,10 +244,10 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.10.107"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.12.74"	if BR2_KERNEL_HEADERS_3_12
- 	default "4.1.45"	if BR2_KERNEL_HEADERS_4_1
--	default "4.4.95"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.59"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.4.96"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.9.60"	if BR2_KERNEL_HEADERS_4_9
- 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
- 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
- 	default "4.12.14"	if BR2_KERNEL_HEADERS_4_12
--	default "4.13.10"	if BR2_KERNEL_HEADERS_4_13
-+	default "4.13.11"	if BR2_KERNEL_HEADERS_4_13
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+
+
 -- 
-2.7.4
+Bye, Peter Korsgaard
