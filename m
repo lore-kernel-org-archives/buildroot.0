@@ -1,52 +1,61 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 1 Nov 2017 23:23:43 +0100
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Thu, 2 Nov 2017 03:14:34 +0100
 Subject: [Buildroot] [PATCH 1/4] package/openobex: disable on Blackfin
-In-Reply-To: <20171101201137.29939-1-s.martin49@gmail.com>
+In-Reply-To: <20171101232343.764c231a@windsurf>
 References: <20171101201137.29939-1-s.martin49@gmail.com>
-Message-ID: <20171101232343.764c231a@windsurf>
+ <20171101232343.764c231a@windsurf>
+Message-ID: <20171102021434.GJ1829@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Thomas,
+Thomas Petazzoni wrote,
 
-On Wed,  1 Nov 2017 21:11:34 +0100, Samuel Martin wrote:
-> Openobex uses accept4 syscall, which is not available on Blackfin flavored uclibc.
-> So, diasble openobex on blackfin (do not add extra checks on the c-library since
-> uclibc is the only choice for Blackfin).
+> Hello,
 > 
-> Fixed:
->   http://autobuild.buildroot.net/results/78e033fe9f43845581a5d87b21a8451f67520e44
+> On Wed,  1 Nov 2017 21:11:34 +0100, Samuel Martin wrote:
+> > Openobex uses accept4 syscall, which is not available on Blackfin flavored uclibc.
+> > So, diasble openobex on blackfin (do not add extra checks on the c-library since
+> > uclibc is the only choice for Blackfin).
+> > 
+> > Fixed:
+> >   http://autobuild.buildroot.net/results/78e033fe9f43845581a5d87b21a8451f67520e44
+> > 
+> > Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+> > ---
+> >  package/openobex/Config.in | 1 +
+> >  1 file changed, 1 insertion(+)
+> > 
+> > diff --git a/package/openobex/Config.in b/package/openobex/Config.in
+> > index e611b8d803..4a4dc214ef 100644
+> > --- a/package/openobex/Config.in
+> > +++ b/package/openobex/Config.in
+> > @@ -1,5 +1,6 @@
+> >  config BR2_PACKAGE_OPENOBEX
+> >  	bool "openobex"
+> > +	depends on !BR2_bfin
+> >  	help
+> >  	  Free open source implementation of the Object Exchange (OBEX)
+> >  	  protocol.
 > 
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-> ---
->  package/openobex/Config.in | 1 +
->  1 file changed, 1 insertion(+)
+> What about the Config.in comment, and the reverse dependencies of
+> BR2_PACKAGE_OPENOBEX ?
 > 
-> diff --git a/package/openobex/Config.in b/package/openobex/Config.in
-> index e611b8d803..4a4dc214ef 100644
-> --- a/package/openobex/Config.in
-> +++ b/package/openobex/Config.in
-> @@ -1,5 +1,6 @@
->  config BR2_PACKAGE_OPENOBEX
->  	bool "openobex"
-> +	depends on !BR2_bfin
->  	help
->  	  Free open source implementation of the Object Exchange (OBEX)
->  	  protocol.
+> Also, I'd like to hear from Waldemar about accept4 availability on
+> Blackfin/uClibc-ng.
 
-What about the Config.in comment, and the reverse dependencies of
-BR2_PACKAGE_OPENOBEX ?
+For me it looks like a uClibc bug.
+When socketcalls.c was converted to use cancel.h for syscall
+cancellation (19607f1113ef9916a0a0ac2bf99b5bc32526f0de)
+it seems accept4 was left out for no specific reason.
 
-Also, I'd like to hear from Waldemar about accept4 availability on
-Blackfin/uClibc-ng.
+For Linuxthreads the syscall wrapper for accept4 isn't compiled in.
+I think for NPTL we do not see the issue.
 
-Thanks!
+I am going to sent out a patch soon.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+best regards
+ Waldemar
