@@ -1,146 +1,148 @@
-From: Aleksander Morgado <aleksander@aleksander.es>
-Date: Thu, 2 Nov 2017 18:27:16 +0100
-Subject: [Buildroot] [PATCH] autoconf: use host-gettext's autopoint if
- available in autoreconf
-In-Reply-To: <e3d4f8af-e660-ff80-7157-5b897b8e47c4@mind.be>
-References: <20170827110920.15579-1-aleksander@aleksander.es>
- <e3d4f8af-e660-ff80-7157-5b897b8e47c4@mind.be>
-Message-ID: <CAAP7ucJmmHCD+ceC7_w+zR8-Pdy3UexKMBhoC4bYQTvZwKBm3A@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 2 Nov 2017 18:43:38 +0100
+Subject: [Buildroot] Analysis of build results for 2017-10-30
+In-Reply-To: <20171031230519.3feb2619@windsurf>
+References: <20171031070013.AD75D207B2@mail.free-electrons.com>
+ <20171031230519.3feb2619@windsurf>
+Message-ID: <20171102174338.GD3238@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hey,
+Thomas, All,
 
-> On 27-08-17 13:09, Aleksander Morgado wrote:
->> Commit 7ee8ebbd813ad0a6d2392ef628c17241 explicitly disabled autopoint
->> calls during autoreconf, to avoid having the host autopoint called, as
->> there was no host-gettext package.
->>
->> Commit 3a188b578e490f2a8b5922329b7abfae introduced the host-gettext
->> package support.
->>
->> This commit recovers the support for automatically calling autopoint
->> during autoreconf.
->>
->> Signed-off-by: Aleksander Morgado <aleksander@aleksander.es>
->> ---
->>
->> Hey,
->>
->> I see this is a recurring issue when a package that builds from git (bootstrapping using autoreconf before configure) requires gettext processing. automake would fail as autopoint wasn't being run (disabled in buildroot's autoconf package) and therefore not creating config.rpath and ABOUT-NLS (among other things, although these are the ones automake complains about). Specifying $(PKG)_GETTEXTIZE isn't an option as that may actually update the gnulib-imported files in a non-expected way, and "touch"-ing the missing files just seems a bit of a hack...
->>
->> Calling autopoint from autoreconf was disabled back in 2011 because no host-gettext package was available, but this package was added in 2013, so how about removing that limitation?
->
->  We tried to understand what was going on (at the BR developer meeting) but we
-> failed :-(. Based on this patch and on the discussion in [1] and [2]
-> (unfortunately pipermail splits threads when they straddle a month), we
-> concluded that:
-> - the current patch doesn't work (at least not for gst1-plugins-bad)
-> - if running autopoint is in fact the right thing to do, then probably it is
-> better to replace <PKG>_GETTEXTIZE with <PKG>_AUTOPOINT.
->
+On 2017-10-31 23:05 +0100, Thomas Petazzoni spake thusly:
+[--SNIP--]
+> >          arc |   host-gdb-arc-2017.09-rc1-gdb | NOK | http://autobuild.buildroot.net/results/43eae264991aa369490236c7bd59c0b6a67fcf25 | ORPH
+> 
+> checking whether /usr/bin/g++ supports C++11 features with -h std=c++11... no
+> configure: error: *** A compiler with support for C++11 language features is required.
+> make[2]: *** [configure-gdb] Error 1
+> 
+> The ARC special version needs:
+> 
+>         depends on BR2_HOST_GCC_AT_LEAST_4_8
+>         depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+> 
+> Just like the gdb 8.0 version.
+> 
+> Yann, perhaps you could have a look at this ?
 
-Or, at least initially, have both available?. My custom ModemManager
-builds from git master only succeed when autopoint is run by
-autoreconf; gettextize actually broke the build.
+I'm not sure how I got dragged into an ARC-related issue... ;-]
 
->  Indeed, as we understand from your mails and from the autopoint info page:
-> - autopoint installs the autoconf/automake support files for translations;
-> - gettextize prepares a package for translation by extracting the strings from
-> the source code, and additionally does the same as autopoint.
->
+But here, we're speaking about the host-gdb, and that one is not
+protected:
 
-That is my understanding as well, yes.
+    config BR2_PACKAGE_HOST_GDB
+        bool "Build cross gdb for the host"
+        # When the external toolchain gdbserver is used, we shouldn't
+        # allow to build a cross-gdb, as the one of the external
+        # toolchain should be used.
+        depends on !BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY
+        depends on !((BR2_arm || BR2_armeb) && BR2_BINFMT_FLAT)
+        depends on !BR2_microblaze
+        depends on !BR2_nios2
+        depends on !BR2_or1k
+        help
+          Build a cross gdb that runs on the host machine and debugs
+          programs running on the target. It requires 'gdbserver'
+          installed on the target, see BR2_PACKAGE_GDB_SERVER to
+          enable it.
 
->  If that is true, calling gettextize from Buildroot can never be correct,
-> because the extracted strings would anyway still have to be translated before
-> they're any use. And with autopoint there shouldn't be an issue of gettexttize
-> versions because it will look for the required version declared in configure.ac.
-> That makes us think that perhaps we should run autopoint instead of gettextize
-> in the places where we currently run gettextize.
->
+    [--SNIP--]
 
-Yes, I believe that most packages that have translations would you be
-fine with autopoint and not gettexttize. From my understanding from a
-recent issue, gettextize may still be needed if the gettext version
-used by the maintainer of the package differs a lot from the gettext
-version in use by buildroot. But that has the side effect of having
-gettext touching "too much" as in my use case with ModemManager.
+    config BR2_GDB_VERSION
+        string
+        default "arc-2017.09-rc1-gdb" if BR2_arc
 
->  What we certainly don't want is that whether autopoint gets run depends on
-> whether host-gettext was previously built or not. We want builds to be
-> reproducible so we want to avoid building something subtly different just
-> because of the presence of some package which has no explicit dependency in the
-> .mk file.
->
->  What we also would like to avoid is that host-gettextize becomes a dependency
-> of every package that needs AUTORECONF = YES. So always running autopoint is not
-> so interesting.
->
+And on that autobuilder, the host gcc is a 4.7 (toward the top of the
+file): http://autobuild.buildroot.org/results/43eae264991aa369490236c7bd59c0b6a67fcf25/config
 
-Fair enough, yes.
+So, we'd need to add:
 
->
->>
->> Cheers!
->>
->> ---
->>  package/autoconf/autoconf.mk | 2 +-
->>  package/gettext/gettext.mk   | 1 +
->>  2 files changed, 2 insertions(+), 1 deletion(-)
->>
->> diff --git a/package/autoconf/autoconf.mk b/package/autoconf/autoconf.mk
->> index e5f474c72..f1c60224f 100644
->> --- a/package/autoconf/autoconf.mk
->> +++ b/package/autoconf/autoconf.mk
->> @@ -23,4 +23,4 @@ $(eval $(host-autotools-package))
->>  # variables used by other packages
->>  AUTOCONF = $(HOST_DIR)/bin/autoconf
->>  AUTOHEADER = $(HOST_DIR)/bin/autoheader
->> -AUTORECONF = $(HOST_CONFIGURE_OPTS) ACLOCAL="$(ACLOCAL)" AUTOCONF="$(AUTOCONF)" AUTOHEADER="$(AUTOHEADER)" AUTOMAKE="$(AUTOMAKE)" AUTOPOINT=/bin/true $(HOST_DIR)/bin/autoreconf -f -i -I "$(ACLOCAL_DIR)" -I "$(ACLOCAL_HOST_DIR)"
->> +AUTORECONF = $(HOST_CONFIGURE_OPTS) ACLOCAL="$(ACLOCAL)" AUTOCONF="$(AUTOCONF)" AUTOHEADER="$(AUTOHEADER)" AUTOMAKE="$(AUTOMAKE)" AUTOPOINT="$(AUTOPOINT)" $(HOST_DIR)/bin/autoreconf -f -i -I "$(ACLOCAL_DIR)" -I "$(ACLOCAL_HOST_DIR)" --verbose
->
->  If you're going to change this long line, please split it first (in a separate
-> patch) so we can actually see what changed.
->
+    config BR2_PACKAGE_HOST_GDB
+        depends on BR2_HOST_GCC_AT_LEAST_4_8 || !BR2_arc
 
-Aha, ok.
+or something like that?
 
->> diff --git a/package/gettext/gettext.mk b/package/gettext/gettext.mk
->> index ec9588f8a..08afc8fc3 100644
->> --- a/package/gettext/gettext.mk
->> +++ b/package/gettext/gettext.mk
->> @@ -95,6 +95,7 @@ endef
->>  HOST_GETTEXT_POST_INSTALL_HOOKS += HOST_GETTEXT_ADD_ABOUT_NLS
->>
->>  GETTEXTIZE = $(HOST_CONFIGURE_OPTS) AUTOM4TE=$(HOST_DIR)/bin/autom4te $(HOST_DIR)/bin/gettextize -f
->> +AUTOPOINT = $(HOST_DIR)/bin/autopoint
->
->  This is not correct, AUTOPOINT should be defined together with the rest in
-> autoconf.mk. You seem to think that by putting it here, it will only be defined
-> if host-gettext is built, but that's not at all true: it is globally set.
->
+> >         m68k |                   tremor-19427 | TIM | http://autobuild.buildroot.net/results/5bff9fbd24264b3515a669d585e10ef23127d569 |     
+> >       mipsel |                   tremor-19427 | TIM | http://autobuild.buildroot.net/results/d1c8e74477797b597c38186343e4d6c69b05560d |     
+> 
+> SVN repo is dead, and it locks up the build until we time out? Doesn't
+> look great. Yann? :-)
 
-Oh, yes, I was understanding it wrong indeed.
+Not sure why I got fragged into an SVN-related issue... ;-]
 
->  So I think we need something like this in autoconf.mk:
->
-> AUTOPOINT = $(if $(filter
-> YES,$($(PKG)_GETTEXTIZE)),$(HOST_DIR)/bin/autopoint,/bin/true)
->
+The repository is not dead from here, though:
 
-That makes sense yes.
+    $ svn ls http://svn.xiph.org/trunk/Tremor
+    Redirecting to URL 'https://svn.xiph.org/trunk/Tremor':
+    Error validating server certificate for 'https://svn.xiph.org:443':
+     - The certificate is not issued by a trusted authority. Use the
+       fingerprint to validate the certificate manually!
+    Certificate information:
+     - Hostname: xiph.org
+     - Valid: from Mar 31 21:45:50 2016 GMT until Mar 31 21:45:50 2018 GMT
+     - Issuer: StartCom Class 2 IV Server CA, StartCom Certification
+       Authority, StartCom Ltd., IL
+     - Fingerprint:
+       B9:AF:55:63:87:0A:45:9C:BD:B9:39:43:08:DA:7C:CA:87:20:BF:11
+    (R)eject, accept (t)emporarily or accept (p)ermanently? t
+    CHANGELOG
+    COPYING
+    [...]
 
-> (and remove the GETTEXTIZE support from pkg-autotools). In a later step we can
-> rename <PKG>_GETTEXTIZE to <PKG>_AUTOPOINT.
->
+But there is an https redirect, and the certificate is not recognised
+somehow (my Firefox has no problem with it, though)...
 
-How about having both available for now? i.e. letting packages select
-<PKG>_GETTEXTIZE or <PKG>_AUTOPOINT.
+We should probably at least add '--non-interactive' to have it at least
+fail if it needs to prompt.
+
+We could also make use of '--trust-server-cert-failures=ARG' where ARG
+is one of 'unknown-ca', 'cn-mismatch', 'expired', 'not-yet-valid' or
+'other'. But I am a bit reluctant at silently quiesce certificate
+errors...
+
+Your call.
+
+> > microblazeel |           usb_modeswitch-2.5.0 | NOK | http://autobuild.buildroot.net/results/20a9a75f701ce70c2ae434085a85ad8d34adc67b | ORPH
+> >          arm |           usb_modeswitch-2.5.0 | NOK | http://autobuild.buildroot.net/results/46844b028989808aa7340c14af22f2855ec803d8 | ORPH
+> > 
+> 
+> Not sure. Is it just:
+> 
+> 
+> make[2]: *** [jim/libjim.a] Error 1
+> make[2]: *** Waiting for unfinished jobs....
+> usb_modeswitch.c: In function 'checkSuccess':
+> usb_modeswitch.c:1579:7: warning: 'i' may be used uninitialized in this function [-Wmaybe-uninitialized]
+>     if (i == CheckSuccess-1) {
+> 
+> That makes the build fail?
+
+The problem is higher in the stack:
+
+    autosetup/system.tcl:203 /home/peko/autobuild/instance-2/output/build/usb_modeswitch-2.5.0/jim/autosetup/config.guess: unable to guess system type
+
+Regards,
+Yann E. MORIN.
+
+> Baruch, you are the last person who bumped this package, could you have a look?
+> 
+> Thanks!
+> 
+> Thomas
+> -- 
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux and Kernel engineering
+> http://free-electrons.com
 
 -- 
-Aleksander
-https://aleksander.es
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
