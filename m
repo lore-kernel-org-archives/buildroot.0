@@ -1,43 +1,32 @@
-From: Carlos Santos <casantos@datacom.ind.br>
-Date: Thu, 2 Nov 2017 11:40:55 -0200 (BRST)
-Subject: [Buildroot] [PATCH v2] util-linux: security bump to version 2.31
-In-Reply-To: <87r2thf431.fsf@dell.be.48ers.dk>
-References: <1509446871-25076-1-git-send-email-casantos@datacom.ind.br>
- <87zi87ezym.fsf@dell.be.48ers.dk>
- <232020389.16019836.1509500098756.JavaMail.zimbra@datacom.ind.br>
- <87r2thf431.fsf@dell.be.48ers.dk>
-Message-ID: <253552528.16218833.1509630055116.JavaMail.zimbra@datacom.ind.br>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Thu,  2 Nov 2017 12:18:11 -0200
+Subject: [Buildroot] [PATCH 1/2] linux: bump default to version 4.13.11
+Message-ID: <1509632292-30822-1-git-send-email-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> From: "Peter Korsgaard" <peter@korsgaard.com>
-> To: "Carlos Santos" <casantos@datacom.ind.br>, sv99 at inbox.ru
-> Cc: buildroot at buildroot.org
-> Sent: Thursday, November 2, 2017 7:00:02 AM
-> Subject: Re: [PATCH v2] util-linux: security bump to version 2.31
+From: Fabio Estevam <fabio.estevam@nxp.com>
 
->>>>>> "Carlos" == Carlos Santos <casantos@datacom.ind.br> writes:
-> 
-> > How many nommu architectures does Buildroot support? The only boards I
-> > found without BR2_USE_MMU were qemu_{arm_versatile,xtensa_lx60}_nommu,
-> > which obviously do not even have RF radios to turn on/off.
-> 
-> It is indeed probably a quite rare combination. Perhaps we should get
-> rid of the separate rfkill package then and add Config.in.legacy
-> handling for it selecting the util-linux option?
-> 
-> Volkov, you added the rfkill package. Any issues with moving to the
-> util-linux variant instead?
+Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
+---
+ linux/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I already submitted a patch to remove the rfkill package:
-
-    https://patchwork.ozlabs.org/patch/828969/
-
+diff --git a/linux/Config.in b/linux/Config.in
+index 33ae944..6300e7a 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -116,7 +116,7 @@ endif
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "4.13.10" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "4.13.11" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "v4.4.83-cip8" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
 -- 
-Carlos Santos (Casantos) - DATACOM, P&D
-?The greatest triumph that modern PR can offer is the transcendent 
-success of having your words and actions judged by your reputation, 
-rather than the other way about.? ? Christopher Hitchens
+2.7.4
