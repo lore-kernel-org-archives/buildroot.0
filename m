@@ -1,55 +1,54 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 2 Nov 2017 22:25:30 +0100
-Subject: [Buildroot] [git commit] uboot-tools: bump to version 2017.09
-Message-ID: <20171102212420.59F97802E0@busybox.osuosl.org>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Thu, 2 Nov 2017 21:31:39 +0000
+Subject: [Buildroot] [PATCH] package/gdb: ARC version has stringent
+ dependencies on host gcc
+In-Reply-To: <20171102181405.6476-1-yann.morin.1998@free.fr>
+References: <20171102181405.6476-1-yann.morin.1998@free.fr>
+Message-ID: <1509658298.7985.2.camel@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9229e61ff448afb2c5c1117069546599fd5eb562
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Yann,
 
-The 'env' target has been renamed to 'envtools' so change it
-accordingly.
+On Thu, 2017-11-02 at 19:14 +0100, Yann E. MORIN wrote:
+> The ARC gdb version requires a gcc >= 4.8 (because C++11).
+> 
+> Since the host variant uses the same sources as the target variant, we
+> must ensure that we have a host gcc >= 4.8 as well.
+> 
+> Move the architecture dependencies to their own symbol, and also hide
+> the comment when they are not met.
+> 
+> Fixes:
+> ????https://urldefense.proofpoint.com/v2/url?u=http-3A__autobuild.buildroot.net_results_43eae264991aa369490236c7bd59c0b6a67fcf25_&d=DwIBAg&c=DPL6_X_
+> 6JkXFx7AXWqB0tg&r=lqdeeSSEes0GFDDl656eViXO7breS55ytWkhpk5R81I&m=b-eGjVYMXoKYiImFRBhs00VOY_pLPUoEpAcAm77-
+> fbo&s=SxA_U3jSTkTx7D0f8Am0c_uZWHh4B6AFeUeYz9ZKe9c&e=
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+> ?package/gdb/Config.in.host | 18 ++++++++++++++----
+> ?1 file changed, 14 insertions(+), 4 deletions(-)
+> 
+> diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
+> index c2cfc34284..797c07c3f9 100644
+> --- a/package/gdb/Config.in.host
+> +++ b/package/gdb/Config.in.host
+> @@ -1,4 +1,17 @@
+> +config BR2_PACKAGE_HOST_GDB_ARCH_SUPPORTS
+> +	bool
+> +	default y
+> +	# The ARC version needs C++11, thus gcc >= 4.8, like gdb-8.0.x
 
-Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
-Tested-by: Jan Kundr??t <jan.kundrat@cesnet.cz>
-Reviewed-by: Jan Kundr??t <jan.kundrat@cesnet.cz>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/uboot-tools/uboot-tools.hash | 2 +-
- package/uboot-tools/uboot-tools.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Indeed our GDB is based on very up to date upstream sources so all
+limitations for GDB 8.x are valid for ARC's one.
 
-diff --git a/package/uboot-tools/uboot-tools.hash b/package/uboot-tools/uboot-tools.hash
-index 3ba8e34..82efc79 100644
---- a/package/uboot-tools/uboot-tools.hash
-+++ b/package/uboot-tools/uboot-tools.hash
-@@ -1,2 +1,2 @@
- # Locally computed:
--sha256  5374bfdc8acb9a38c025371b1ff20f45e7533668e84e685d0df5d9e7c0e4feff  u-boot-2017.07.tar.bz2
-+sha256  b2d15f2cf5f72e706025cde73d67247c6da8cd35f7e10891eefe7d9095089744  u-boot-2017.09.tar.bz2
-diff --git a/package/uboot-tools/uboot-tools.mk b/package/uboot-tools/uboot-tools.mk
-index 4f39f4a..c936575 100644
---- a/package/uboot-tools/uboot-tools.mk
-+++ b/package/uboot-tools/uboot-tools.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--UBOOT_TOOLS_VERSION = 2017.07
-+UBOOT_TOOLS_VERSION = 2017.09
- UBOOT_TOOLS_SOURCE = u-boot-$(UBOOT_TOOLS_VERSION).tar.bz2
- UBOOT_TOOLS_SITE = ftp://ftp.denx.de/pub/u-boot
- UBOOT_TOOLS_LICENSE = GPL-2.0+
-@@ -35,7 +35,7 @@ define UBOOT_TOOLS_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(UBOOT_TOOLS_MAKE_OPTS) \
- 		CROSS_BUILD_TOOLS=y tools-only
- 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(UBOOT_TOOLS_MAKE_OPTS) \
--		env no-dot-config-targets=env
-+		envtools no-dot-config-targets=envtools
- endef
- 
- ifeq ($(BR2_PACKAGE_UBOOT_TOOLS_MKIMAGE),y)
+That said it has nothing to do with ARCH but only GDB version makes sense.
+So why don't we just introduce BR2_GDB_VERSION_ARC which will be the only option
+for ARC and will have the same set of "depends" as BR2_GDB_VERSION_8_0?
+
+-Alexey
