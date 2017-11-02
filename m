@@ -1,12 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 2 Nov 2017 22:28:11 +0100
-Subject: [Buildroot] [PATCH v2 1/1] turbovnc: new package
-In-Reply-To: <59FB8C69.7050108@petroprogram.com>
-References: <1509367204-12966-1-git-send-email-stefan.froberg@petroprogram.com>
- <20171101060657.tzjnt4ceb25irb3o@sapphire.tkos.co.il>
- <20171101105305.1cd82e60@windsurf>
- <59FB8C69.7050108@petroprogram.com>
-Message-ID: <20171102222811.4d501282@windsurf>
+Date: Thu, 2 Nov 2017 22:31:30 +0100
+Subject: [Buildroot] [PATCH] package/gdb: ARC version has stringent
+ dependencies on host gcc
+In-Reply-To: <20171102212543.GE30054@scaer>
+References: <20171102181405.6476-1-yann.morin.1998@free.fr>
+ <20171102221215.1250bc0b@windsurf> <20171102212543.GE30054@scaer>
+Message-ID: <20171102223130.5354ecd5@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,51 +14,33 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 02 Nov 2017 23:21:45 +0200, Stefan Fr?berg wrote:
+On Thu, 2 Nov 2017 22:25:43 +0100, Yann E. MORIN wrote:
 
-
-> libbzip2.a      libfontenc.a    librandr.a    libXau.a libxkb.a
-> libcomposite.a  libfreetype2.a  librender.a   libXdmcp.a libXNVCtrl.a
-> libdamage.a     libmain.a       libsha1.a     libXext-server.a libzlib.a
-> libdamageext.a  libmi.a         libsync.a     libxfixes.a
-> libdix.a        libos.a         libvnc.a      libXfont.a
-> libfb.a         libpixman.a     libvncauth.a  libXi.a
-
-That's a lot of static libraries, but I'm sure TurboVNC didn't
-duplicate the source code for all of these. Perhaps it is copying them
-from their system-wide location to its build directory, for some funky
-reason?
-
-> But then doing ldd for Xvnc binary gives this:
-> Xvnc:
->          linux-vdso.so.1 (0x00007fffbbffe000)
->          libturbojpeg.so.0 => /usr/lib64/libturbojpeg.so.0 
-> (0x00007f1d221b8000)
->          libm.so.6 => /lib64/libm.so.6 (0x00007f1d21eba000)
->          libpthread.so.0 => /lib64/libpthread.so.0 (0x00007f1d21c9e000)
->          libpam.so.0 => /lib64/libpam.so.0 (0x00007f1d21a90000)
->          libdl.so.2 => /lib64/libdl.so.2 (0x00007f1d2188c000)
->          libSM.so.6 => /usr/lib64/libSM.so.6 (0x00007f1d21683000)
->          libICE.so.6 => /usr/lib64/libICE.so.6 (0x00007f1d21466000)
->          libX11.so.6 => /usr/lib64/libX11.so.6 (0x00007f1d21124000)
->          libXext.so.6 => /usr/lib64/libXext.so.6 (0x00007f1d20f12000)
->          libc.so.6 => /lib64/libc.so.6 (0x00007f1d20b76000)
->          /lib64/ld-linux-x86-64.so.2 (0x00007f1d2242b000)
->          libuuid.so.1 => /lib64/libuuid.so.1 (0x00007f1d20971000)
->          libbsd.so.0 => /usr/lib64/libbsd.so.0 (0x00007f1d2075b000)
->          libxcb.so.1 => /usr/lib64/libxcb.so.1 (0x00007f1d20532000)
->          librt.so.1 => /lib64/librt.so.1 (0x00007f1d2032a000)
->          libXau.so.6 => /usr/lib64/libXau.so.6 (0x00007f1d20126000)
->          libXdmcp.so.6 => /usr/lib64/libXdmcp.so.6 (0x00007f1d1ff20000)
+> > Why do we have a dependency on the target compiler version for
+> > host-gdb ?  
 > 
-> So it builds a static versions of libXau.a libXdmcp.a for example, but 
-> then does not use them anyway in the final link but instead the system 
-> wide versions ?
+> For two reasons:
 > 
-> I posted question to github if bzip2, freetype2 and zlib can be external 
-> dependencies or if they contain some TurboVNC specific stuff.
+> 1. you said so in your analysis. OK, you could be wrong, so...
+> 2. that is the case for gdb-8.0.x, later in that same file.
 
-Thanks. Let's see what upstream says.
+I think I know the logic for gdb 8.x. The logic is that:
+
+ * If you chose only target gdb (and not host gdb), you don't have a
+   version choice, and we currently use gdb 7.11, which doesn't have a
+   compiler version requirement.
+
+ * If you chose to build both host gdb and target gdb, then the
+   selection of the gdb version for the host gdb affects the version
+   used to build target gdb. I.e, you select gdb 8.0 as the host-gdb,
+   and gdb 8.0 will also be built as the target gdb. Therefore we need
+   to ensure that the host gdb 8.0 option can only be selected if both
+   the host *and* the target compiler are >= 4.8.
+
+That is a bit tricky, and would warrant a comment in the Config.in file
+I guess.
+
+But anyway, this means your patch is correct! :)
 
 Best regards,
 
