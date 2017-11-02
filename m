@@ -1,40 +1,45 @@
 From: Petr Vorel <petr.vorel@gmail.com>
-Date: Thu,  2 Nov 2017 21:12:58 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libglib2: Bump to version 2.54.2
-Message-ID: <20171102201258.18370-1-petr.vorel@gmail.com>
+Date: Thu,  2 Nov 2017 21:14:08 +0100
+Subject: [Buildroot] [PATCH 1/1] package/modem-manager: Bump to version
+ 1.6.10
+Message-ID: <20171102201408.18982-1-petr.vorel@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+From: Petr Vorel <pvorel@suse.cz>
+
+Signed-off-by: Petr Vorel <pvorel@suse.cz>
 Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 ---
- package/libglib2/libglib2.hash | 4 ++--
- package/libglib2/libglib2.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/modem-manager/modem-manager.hash | 2 +-
+ package/modem-manager/modem-manager.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libglib2/libglib2.hash b/package/libglib2/libglib2.hash
-index 4316378098..fb9321e397 100644
---- a/package/libglib2/libglib2.hash
-+++ b/package/libglib2/libglib2.hash
-@@ -1,2 +1,2 @@
--# https://download.gnome.org/sources/glib/2.54/glib-2.54.1.sha256sum
--sha256  50c01b1419324f10fbf9b9709ec2164b18586968bdce7540583bf32302cf47a3  glib-2.54.1.tar.xz
-+# https://download.gnome.org/sources/glib/2.54/glib-2.54.2.sha256sum
-+sha256  bb89e5c5aad33169a8c7f28b45671c7899c12f74caf707737f784d7102758e6c  glib-2.54.2.tar.xz
-diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
-index 2defcf05ec..b13da333d8 100644
---- a/package/libglib2/libglib2.mk
-+++ b/package/libglib2/libglib2.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/modem-manager/modem-manager.hash b/package/modem-manager/modem-manager.hash
+index d94fda15fd..bc0804485f 100644
+--- a/package/modem-manager/modem-manager.hash
++++ b/package/modem-manager/modem-manager.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256  ffc035c4bfeb07780c4580bb4488ade0ab1d197c3cdf89cb8ab36386cfb34376  ModemManager-1.6.8.tar.xz
++sha256  bc74326fa69ae8012f806e235f3d296144922669b952d4d4987dd0af645d5f68  ModemManager-1.6.10.tar.xz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
+diff --git a/package/modem-manager/modem-manager.mk b/package/modem-manager/modem-manager.mk
+index 65ad0961bd..b741acf066 100644
+--- a/package/modem-manager/modem-manager.mk
++++ b/package/modem-manager/modem-manager.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- LIBGLIB2_VERSION_MAJOR = 2.54
--LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).1
-+LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).2
- LIBGLIB2_SOURCE = glib-$(LIBGLIB2_VERSION).tar.xz
- LIBGLIB2_SITE = http://ftp.gnome.org/pub/gnome/sources/glib/$(LIBGLIB2_VERSION_MAJOR)
- LIBGLIB2_LICENSE = LGPL-2.0+
+-MODEM_MANAGER_VERSION = 1.6.8
++MODEM_MANAGER_VERSION = 1.6.10
+ MODEM_MANAGER_SOURCE = ModemManager-$(MODEM_MANAGER_VERSION).tar.xz
+ MODEM_MANAGER_SITE = http://www.freedesktop.org/software/ModemManager
+ MODEM_MANAGER_LICENSE = GPL-2.0+ (programs, plugins), LGPL-2.0+ (libmm-glib)
 -- 
 2.14.2
