@@ -1,36 +1,60 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 02 Nov 2017 11:54:41 +0100
-Subject: [Buildroot] Analysis of build results for 2017-10-30
-In-Reply-To: <20171101180319.qs5oueonqz2robr5@tarshish> (Baruch Siach's
- message of "Wed, 1 Nov 2017 20:03:19 +0200")
-References: <20171031070013.AD75D207B2@mail.free-electrons.com>
- <20171031230519.3feb2619@windsurf>
- <20171101180319.qs5oueonqz2robr5@tarshish>
-Message-ID: <87efpheyry.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 2 Nov 2017 12:04:23 +0100
+Subject: [Buildroot] [PATCH 3/4] luajit: only available on x86(-64) hosts
+In-Reply-To: <20171102104520.29257-4-peter@korsgaard.com>
+References: <20171102104520.29257-1-peter@korsgaard.com>
+ <20171102104520.29257-4-peter@korsgaard.com>
+Message-ID: <20171102120423.0f8e5ef7@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+Hello,
 
-Hi,
+On Thu,  2 Nov 2017 11:45:19 +0100, Peter Korsgaard wrote:
+> The -m32 compiler flag is used for 32bit builds and host-luajit has limited
+> architecture support, so limit to x86(-64) hosts.
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/5f5b5edb058efe976c003678e21bcc28a87cc828/
+> 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> ---
+>  package/luajit/Config.in | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/package/luajit/Config.in b/package/luajit/Config.in
+> index 1a27c434e1..6b9c6e6ae8 100644
+> --- a/package/luajit/Config.in
+> +++ b/package/luajit/Config.in
+> @@ -1,5 +1,8 @@
+>  config BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
+>  	bool
+> +	# -m32 flag is used for 32bit builds and host-luajit has
+> +	# limited architecture support
+> +	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+>  	default y if BR2_i386 || \
+>  		(BR2_x86_64 && BR2_HOSTARCH='x86_64') || \
+>  		BR2_powerpc || BR2_arm || BR2_armeb || \
 
- > make[2]: *** [jim/libjim.a] Error 1
- > make[2]: *** Waiting for unfinished jobs....
+How is this going to prevent other packages from depending on
+host-luajit. BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS is all about the target
+variant of luajit, not the host variant.
 
- >> Baruch, you are the last person who bumped this package, could you have a look?
+Do we need a BR2_PACKAGE_HOST_LUAJIT_ARCH_SUPPORTS or something like
+that ?
 
- > The autobuilder indicates[1] that it only fails on Peter's gcc112 Powerpc 
- > host. Debugging this requires access to a Powerpc host.
+For example, if you enable moarvm, host-luajit will be built, but not
+luajit.
 
-You can request an account on the cfarm machines here:
+Don't we have a problem here if your solution is used ?
 
-https://cfarm.tetaneutral.net/users/new/
+Thanks!
 
-But I have just started a manual build on gcc112 to debug what the issue
-is.
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
