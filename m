@@ -1,46 +1,61 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 2 Nov 2017 23:03:02 +0100
-Subject: [Buildroot] [PATCH v4] qt5: remove Qt Quick dependency on opengl
-In-Reply-To: <1509658876-29888-1-git-send-email-joshua.henderson@microchip.com>
-References: <1509658876-29888-1-git-send-email-joshua.henderson@microchip.com>
-Message-ID: <20171102230302.26744909@windsurf>
+Date: Thu, 2 Nov 2017 23:03:36 +0100
+Subject: [Buildroot] [git commit] dhcpcd: add systemd start-up service
+Message-ID: <20171102215619.72A248101B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=e04c5d3c34961aebf254b01a2bcb8508979446aa
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 2 Nov 2017 14:41:16 -0700, Joshua Henderson wrote:
+Add systemd start-up configuration for dhcpcd that is executed after
+the network has been brought up.
 
-> diff --git a/package/qt5/qt5declarative/5.9.2/0001-Fix-no-opengl-builds.patch b/package/qt5/qt5declarative/5.9.2/0001-Fix-no-opengl-builds.patch
-> new file mode 100644
-> index 0000000..aca93be
-> --- /dev/null
-> +++ b/package/qt5/qt5declarative/5.9.2/0001-Fix-no-opengl-builds.patch
-> @@ -0,0 +1,29 @@
-> +From fa52bb665d6beb77a951c14c8edcba3541850afc Mon Sep 17 00:00:00 2001
-> +From: Allan Sandfeld Jensen <allan.jensen@qt.io>
-> +Date: Mon, 25 Sep 2017 16:53:24 +0200
-> +Subject: [PATCH] Fix no-opengl builds
-> +
-> +The qquickwidgets examples uses OpenGL directly
-> +
-> +Change-Id: I1cc8cfbcf249abc98473287a9d499032232828c7
-> +Reviewed-by: Simon Hausmann <simon.hausmann@qt.io>
+Signed-off-by: Markus Mayer <mmayer@broadcom.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/dhcpcd/dhcpcd.mk      |  8 ++++++++
+ package/dhcpcd/dhcpcd.service | 13 +++++++++++++
+ 2 files changed, 21 insertions(+)
 
-Who did the backport of this patch in Buildroot? It should carry the
-Signed-off-by from the person who did this backport. I don't know if
-it's you or S?bastien Szymanski.
-
-Also, another question: I assume that if OpenGL is available, Qt Quick
-will use it. How does it detect that OpenGL is available?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/dhcpcd/dhcpcd.mk b/package/dhcpcd/dhcpcd.mk
+index cf1da4f..dc5c69b 100644
+--- a/package/dhcpcd/dhcpcd.mk
++++ b/package/dhcpcd/dhcpcd.mk
+@@ -41,6 +41,14 @@ define DHCPCD_INSTALL_INIT_SYSV
+ 		$(TARGET_DIR)/etc/init.d/S41dhcpcd
+ endef
+ 
++define DHCPCD_INSTALL_INIT_SYSTEMD
++	$(INSTALL) -D -m 0644 package/dhcpcd/dhcpcd.service \
++		$(TARGET_DIR)/usr/lib/systemd/system/dhcpcd.service
++	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
++	ln -sf ../../../../usr/lib/systemd/system/dhcpcd.service \
++		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/dhcpcd.service
++endef
++
+ # NOTE: Even though this package has a configure script, it is not generated
+ # using the autotools, so we have to use the generic package infrastructure.
+ 
+diff --git a/package/dhcpcd/dhcpcd.service b/package/dhcpcd/dhcpcd.service
+new file mode 100644
+index 0000000..0552b5c
+--- /dev/null
++++ b/package/dhcpcd/dhcpcd.service
+@@ -0,0 +1,13 @@
++[Unit]
++Description=DHCP client
++After=network.target
++
++[Service]
++Type=forking
++EnvironmentFile=-/etc/default/dhcpcd
++PIDFile=/var/run/dhcpcd.pid
++ExecStart=/sbin/dhcpcd $DAEMON_ARGS
++Restart=always
++
++[Install]
++WantedBy=multi-user.target
