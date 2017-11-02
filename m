@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 2 Nov 2017 23:06:02 +0100
-Subject: [Buildroot] [PATCH 1/2] dhcpcd: add SysV start-up script
-In-Reply-To: <20171031223659.6831-2-code@mmayer.net>
+Date: Thu, 2 Nov 2017 23:06:05 +0100
+Subject: [Buildroot] [PATCH 2/2] dhcpcd: add systemd start-up service
+In-Reply-To: <20171031223659.6831-3-code@mmayer.net>
 References: <20171031223659.6831-1-code@mmayer.net>
- <20171031223659.6831-2-code@mmayer.net>
-Message-ID: <20171102230602.3c61e8d2@windsurf>
+ <20171031223659.6831-3-code@mmayer.net>
+Message-ID: <20171102230605.6edbeed6@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,41 +13,23 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 31 Oct 2017 15:36:58 -0700, Markus Mayer wrote:
+On Tue, 31 Oct 2017 15:36:59 -0700, Markus Mayer wrote:
 > From: Markus Mayer <mmayer@broadcom.com>
 > 
-> Add System V start-up script for dhcpcd that is run after the network
-> has been brought up.
+> Add systemd start-up configuration for dhcpcd that is executed after
+> the network has been brought up.
 > 
 > Signed-off-by: Markus Mayer <mmayer@broadcom.com>
+> ---
+>  package/dhcpcd/dhcpcd.mk      |  8 ++++++++
+>  package/dhcpcd/dhcpcd.service | 13 +++++++++++++
+>  2 files changed, 21 insertions(+)
+>  create mode 100644 package/dhcpcd/dhcpcd.service
 
-I've applied, just two comments.
-
-> +DAEMON=/sbin/dhcpcd
-> +CONFIG=/etc/dhcpcd.conf
-> +PIDFILE=/var/run/dhcpcd.pid
-> +
-> +[ -x $DAEMON ] || exit 0
-> +[ -f $CONFIG ] || exit 0
-
-We have these in a lot of init scripts, so I kept them. But I find
-those tests pretty silly in fact:
-
- - The daemon should definitely be there, as it's installed by the same
-   package. And if it turns out not to be there, I'd prefer a loud
-   failure than an init script that silently ignores the problem.
-
- - Same for the configuration file: I prefer a loud error than an init
-   script that ignores the problem.
-
-Yann, Peter, Arnout, can we agree that such tests should be removed
-entirely, and we let the init script fail if the daemon does not exist,
-and the daemon fail if its configuration file does not exist ?
-
-Thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
+Embedded Linux, Kernel and Android engineering
 http://free-electrons.com
