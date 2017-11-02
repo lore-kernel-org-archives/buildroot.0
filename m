@@ -1,39 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 2 Nov 2017 22:12:15 +0100
-Subject: [Buildroot] [PATCH] package/gdb: ARC version has stringent
- dependencies on host gcc
-In-Reply-To: <20171102181405.6476-1-yann.morin.1998@free.fr>
-References: <20171102181405.6476-1-yann.morin.1998@free.fr>
-Message-ID: <20171102221215.1250bc0b@windsurf>
+Date: Thu, 2 Nov 2017 22:12:57 +0100
+Subject: [Buildroot] [git commit] linux: bump default to version 4.13.11
+Message-ID: <20171102210542.6817D80FB1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=2c21a4615b417105a5019ff67eae73e9ce5bef07
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thanks for looking into this issue!
+Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ linux/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On Thu,  2 Nov 2017 19:14:05 +0100, Yann E. MORIN wrote:
-
-> diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
-> index c2cfc34284..797c07c3f9 100644
-> --- a/package/gdb/Config.in.host
-> +++ b/package/gdb/Config.in.host
-> @@ -1,4 +1,17 @@
-> +config BR2_PACKAGE_HOST_GDB_ARCH_SUPPORTS
-> +	bool
-> +	default y
-> +	# The ARC version needs C++11, thus gcc >= 4.8, like gdb-8.0.x
-> +	depends on BR2_HOST_GCC_AT_LEAST_4_8 || !BR2_arc
-> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || !BR2_arc
-
-Why do we have a dependency on the target compiler version for
-host-gdb ?
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/linux/Config.in b/linux/Config.in
+index 33ae944..6300e7a 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -116,7 +116,7 @@ endif
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "4.13.10" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "4.13.11" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "v4.4.83-cip8" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
