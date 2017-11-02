@@ -1,41 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 2 Nov 2017 21:23:27 +0100
-Subject: [Buildroot] [git commit] package/ofono: Bump to version 1.21
-Message-ID: <20171102201710.6181780190@busybox.osuosl.org>
+Date: Thu, 2 Nov 2017 21:24:20 +0100
+Subject: [Buildroot] [git commit] package/network-manager: Bump to version
+ 1.8.4
+Message-ID: <20171102201710.9641380190@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d2d1101c54197b2ba98a0df50f4fd759ba0777f4
+commit: https://git.buildroot.net/buildroot/commit/?id=a0fa19b26de26e31c3a6e36dab10dfd03208c5ff
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/ofono/ofono.hash | 2 +-
- package/ofono/ofono.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/network-manager/network-manager.hash | 4 ++--
+ package/network-manager/network-manager.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/ofono/ofono.hash b/package/ofono/ofono.hash
-index ef955a9..37933f1 100644
---- a/package/ofono/ofono.hash
-+++ b/package/ofono/ofono.hash
+diff --git a/package/network-manager/network-manager.hash b/package/network-manager/network-manager.hash
+index 2861aed..3262ad3 100644
+--- a/package/network-manager/network-manager.hash
++++ b/package/network-manager/network-manager.hash
 @@ -1,2 +1,2 @@
- # From https://www.kernel.org/pub/linux/network/ofono/sha256sums.asc
--sha256 5d7ba8f481a7715d013a79f8d6477eb89d8aaae399395d5d008a1317c34a31d5  ofono-1.20.tar.xz
-+sha256 a6b021cda0b444b772897cd637d5f455857fb5819b62c279a8302b44f9c7f2c3  ofono-1.21.tar.xz
-diff --git a/package/ofono/ofono.mk b/package/ofono/ofono.mk
-index 1aea2d4..b4b7915 100644
---- a/package/ofono/ofono.mk
-+++ b/package/ofono/ofono.mk
-@@ -4,7 +4,7 @@
- #
+-# From https://download.gnome.org/sources/NetworkManager/1.8/NetworkManager-1.8.0.sha256sum
+-sha256 fa5a5c6a36cdf95b12df34cc575bd61a74f297ede9be22cac4807a1aff3cf69e  NetworkManager-1.8.0.tar.xz
++# From http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/1.8/NetworkManager-1.8.4.sha256sum
++sha256 625e2eb36386dcae599075226200140d010f213b47f7202d83b3b1a202029212  NetworkManager-1.8.4.tar.xz
+diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
+index 4a05a65..caf462e 100644
+--- a/package/network-manager/network-manager.mk
++++ b/package/network-manager/network-manager.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--OFONO_VERSION = 1.20
-+OFONO_VERSION = 1.21
- OFONO_SOURCE = ofono-$(OFONO_VERSION).tar.xz
- OFONO_SITE = $(BR2_KERNEL_MIRROR)/linux/network/ofono
- OFONO_LICENSE = GPL-2.0
+ NETWORK_MANAGER_VERSION_MAJOR = 1.8
+-NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).0
++NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).4
+ NETWORK_MANAGER_SOURCE = NetworkManager-$(NETWORK_MANAGER_VERSION).tar.xz
+ NETWORK_MANAGER_SITE = http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/$(NETWORK_MANAGER_VERSION_MAJOR)
+ NETWORK_MANAGER_INSTALL_STAGING = YES
