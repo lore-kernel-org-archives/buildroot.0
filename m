@@ -1,27 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 2 Nov 2017 13:32:45 +0100
-Subject: [Buildroot] [git commit] package/opencv: add hash for license file
-Message-ID: <20171102122535.B29067FCED@busybox.osuosl.org>
+Date: Thu, 2 Nov 2017 13:33:50 +0100
+Subject: [Buildroot] [PATCH 3/4] package/opencv: add hashes for patch
+ and license files
+In-Reply-To: <20171101201137.29939-3-s.martin49@gmail.com>
+References: <20171101201137.29939-1-s.martin49@gmail.com>
+ <20171101201137.29939-3-s.martin49@gmail.com>
+Message-ID: <20171102133350.3c2d0686@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9092d5aa7fef58b0c70de8f8f57641697e7352eb
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/opencv/opencv.hash | 1 +
- 1 file changed, 1 insertion(+)
+On Wed,  1 Nov 2017 21:11:36 +0100, Samuel Martin wrote:
+> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+> ---
+>  package/opencv/opencv.hash | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/package/opencv/opencv.hash b/package/opencv/opencv.hash
+> index 85a3e0b8f4..31bbaf6777 100644
+> --- a/package/opencv/opencv.hash
+> +++ b/package/opencv/opencv.hash
+> @@ -1,2 +1,6 @@
+>  # Locally calculated
+>  sha256 fb4769d0119c35426c3754b7fb079b407911e863958db53bdec83c7794582e41  opencv-2.4.13.3.tar.gz
+> +sha256 934825dcbd68ec46936d5b12f4734d07fffc864226a9122e46a23c55d0e5bb5c  0001-atomic.patch
+> +sha256 f211b79c126021de2f553e894bb5d0896be542289e8f55f5289eba45c86f5d6e  0002-CMakeLists.txt-Do-not-add-libdl-to-LINKER_LIBS-for-s.patch
+> +sha256 78622658634e0297588037e26e54ee37754f739e30336184921f42f4888cda7f  0003-Update-OpenCVCompilerOptions.cmake.patch
+> +sha256 46e42877dfc3ac65769292cb4dc1a04b204ad9e40859a390f4c035d6179fbcc4  LICENSE
 
-diff --git a/package/opencv/opencv.hash b/package/opencv/opencv.hash
-index 85a3e0b..5b4b80d 100644
---- a/package/opencv/opencv.hash
-+++ b/package/opencv/opencv.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
- sha256 fb4769d0119c35426c3754b7fb079b407911e863958db53bdec83c7794582e41  opencv-2.4.13.3.tar.gz
-+sha256 46e42877dfc3ac65769292cb4dc1a04b204ad9e40859a390f4c035d6179fbcc4  LICENSE
+Since when are we adding hashes for patches that are stored in
+Buildroot itself? We are not doing this for any other package, and the
+package infrastructure is not even checking the hashes for patches
+available locally I believe.
+
+So I've tweaked your patch to only add the license file hash, and
+applied.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
