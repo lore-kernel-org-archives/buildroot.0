@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 2 Nov 2017 22:10:03 +0100
-Subject: [Buildroot] [PATCH] azure-iot-sdk-c: use github for homepage
-In-Reply-To: <d319638c428df5d8c66bec892d079b04a8d47c45.1509628676.git.baruch@tkos.co.il>
-References: <d319638c428df5d8c66bec892d079b04a8d47c45.1509628676.git.baruch@tkos.co.il>
-Message-ID: <20171102221003.674fe522@windsurf>
+Date: Thu, 2 Nov 2017 22:12:15 +0100
+Subject: [Buildroot] [PATCH] package/gdb: ARC version has stringent
+ dependencies on host gcc
+In-Reply-To: <20171102181405.6476-1-yann.morin.1998@free.fr>
+References: <20171102181405.6476-1-yann.morin.1998@free.fr>
+Message-ID: <20171102221215.1250bc0b@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,22 +13,27 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu,  2 Nov 2017 15:17:56 +0200, Baruch Siach wrote:
-> Many Buildroot users can not read Dutch. Although there is an English
-> version of this page, the github page looks more suitable as a link for
-> the software package itself, and the readme.md file is pretty
-> informative.
-> 
-> Cc: Andr? Hentschel <nerv@dawncrow.de>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  package/azure-iot-sdk-c/Config.in | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Thanks for looking into this issue!
 
-Applied to master, thanks.
+On Thu,  2 Nov 2017 19:14:05 +0100, Yann E. MORIN wrote:
+
+> diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
+> index c2cfc34284..797c07c3f9 100644
+> --- a/package/gdb/Config.in.host
+> +++ b/package/gdb/Config.in.host
+> @@ -1,4 +1,17 @@
+> +config BR2_PACKAGE_HOST_GDB_ARCH_SUPPORTS
+> +	bool
+> +	default y
+> +	# The ARC version needs C++11, thus gcc >= 4.8, like gdb-8.0.x
+> +	depends on BR2_HOST_GCC_AT_LEAST_4_8 || !BR2_arc
+> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || !BR2_arc
+
+Why do we have a dependency on the target compiler version for
+host-gdb ?
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
