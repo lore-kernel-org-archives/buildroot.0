@@ -1,51 +1,71 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 2 Nov 2017 23:11:03 +0100
-Subject: [Buildroot] [git commit] stress-ng: not available on ARC
-Message-ID: <20171102220502.2F55D80803@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 2 Nov 2017 23:18:47 +0100
+Subject: [Buildroot] [PATCH 1/2] dhcpcd: add SysV start-up script
+In-Reply-To: <20171102230602.3c61e8d2@windsurf>
+References: <20171031223659.6831-1-code@mmayer.net>
+ <20171031223659.6831-2-code@mmayer.net>
+ <20171102230602.3c61e8d2@windsurf>
+Message-ID: <20171102221847.GA23314@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7a4fd532b7e5012b532c842639e3b82f751f0f7c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Thomas, All,
 
-Now that ARC supports glibc, stress-ng can be built. Unfortunately,
-like NIOS2, it doesn't implement FE_INVALID and a bunch of other
-<fenv.h> definitions, so let's prevent stress-ng from being built on
-ARC.
+On 2017-11-02 23:06 +0100, Thomas Petazzoni spake thusly:
+> On Tue, 31 Oct 2017 15:36:58 -0700, Markus Mayer wrote:
+> > From: Markus Mayer <mmayer@broadcom.com>
+> > 
+> > Add System V start-up script for dhcpcd that is run after the network
+> > has been brought up.
+> > 
+> > Signed-off-by: Markus Mayer <mmayer@broadcom.com>
+> 
+> I've applied, just two comments.
+> 
+> > +DAEMON=/sbin/dhcpcd
+> > +CONFIG=/etc/dhcpcd.conf
+> > +PIDFILE=/var/run/dhcpcd.pid
+> > +
+> > +[ -x $DAEMON ] || exit 0
+> > +[ -f $CONFIG ] || exit 0
+> 
+> We have these in a lot of init scripts, so I kept them. But I find
+> those tests pretty silly in fact:
+> 
+>  - The daemon should definitely be there, as it's installed by the same
+>    package. And if it turns out not to be there, I'd prefer a loud
+>    failure than an init script that silently ignores the problem.
 
-Fixes:
+Agreed.
 
-  http://autobuild.buildroot.net/results/296b14584c200593f88af75cdda65c4ca03cd863/
+>  - Same for the configuration file: I prefer a loud error than an init
+>    script that ignores the problem.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/stress-ng/Config.in | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+Agreed, too.
 
-diff --git a/package/stress-ng/Config.in b/package/stress-ng/Config.in
-index 20ec93a..8816322 100644
---- a/package/stress-ng/Config.in
-+++ b/package/stress-ng/Config.in
-@@ -7,8 +7,9 @@ config BR2_PACKAGE_STRESS_NG
- 	# perf.c needs PERF_COUNT_HW_REF_CPU_CYCLES
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_3
- 	depends on !BR2_microblaze # keyutils
--	# fenv.h lacks FE_INVALID, FE_OVERFLOW & FE_UNDERFLOW on nios2
-+	# fenv.h lacks FE_INVALID, FE_OVERFLOW & FE_UNDERFLOW on nios2 and ARC
- 	depends on !BR2_nios2
-+	depends on !BR2_arc
- 	depends on !BR2_STATIC_LIBS # keyutils
- 	select BR2_PACKAGE_KEYUTILS # stress-key.c needs keyutils.h
- 	select BR2_PACKAGE_ATTR # stress-xattr.c needs xattr.h
-@@ -21,7 +22,7 @@ config BR2_PACKAGE_STRESS_NG
- 	  http://kernel.ubuntu.com/~cking/stress-ng/
- 
- comment "stress-ng needs a glibc toolchain w/ dynamic library, headers >= 3.3"
--	depends on !BR2_microblaze && !BR2_nios2
-+	depends on !BR2_microblaze && !BR2_nios2 && !BR2_arc
- 	depends on BR2_USE_MMU
- 	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_3 \
- 		|| !BR2_TOOLCHAIN_USES_GLIBC
+However:
+
+  - if the config file is mandatory, then this should be a failure.
+
+  - if the config file is optional, then it missing should be silently
+    ignored and the service started nonetheless.
+
+> Yann, Peter, Arnout, can we agree that such tests should be removed
+> entirely, and we let the init script fail if the daemon does not exist,
+> and the daemon fail if its configuration file does not exist ?
+
+Yes, except for the above.
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
