@@ -1,64 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 2 Nov 2017 12:32:50 +0100
-Subject: [Buildroot] [git commit] package/opencv: fix build failure
-Message-ID: <20171102112537.5575A7FFBA@busybox.osuosl.org>
+From: Guo Ren <ren_guo@c-sky.com>
+Date: Thu,  2 Nov 2017 20:14:33 +0800
+Subject: [Buildroot] [PATCH 1/1] package/dtc: qemu system build need libfdt.
+Message-ID: <1509624873-16240-1-git-send-email-ren_guo@c-sky.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dd609b38325d0b8949dcb6677b4e8ba020932b0c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+The "install-bin" just install dtc's programs to host/bin without
+libfdt, but qemu system compile need libfdt.
 
-Backport fix from upstream.
+see: https://gitlab.com/c-sky/buildroot/-/jobs/38654503
 
-Fixes:
+So we need install libfdt to satisfy qemu system compile.
 
-  http://autobuild.buildroot.net/results/b27d324331f6e351e95dd4742f4d0a50af60c590
-  http://autobuild.buildroot.net/results/44ed0be0bd94028b7b37e7bf21233adc1753d94b
-
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Change-Id: I85748479ac11e1c6452d3f79d04f02666218774a
+Signed-off-by: Guo Ren <ren_guo@c-sky.com>
 ---
- .../0003-Update-OpenCVCompilerOptions.cmake.patch  | 32 ++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
+ package/dtc/dtc.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/opencv/0003-Update-OpenCVCompilerOptions.cmake.patch b/package/opencv/0003-Update-OpenCVCompilerOptions.cmake.patch
-new file mode 100644
-index 0000000..9a81d93
---- /dev/null
-+++ b/package/opencv/0003-Update-OpenCVCompilerOptions.cmake.patch
-@@ -0,0 +1,32 @@
-+From 126de0cd95418811e302996161e03195bf7e631a Mon Sep 17 00:00:00 2001
-+From: neok-m4700 <neok-m4700@users.noreply.github.com>
-+Date: Tue, 25 Jul 2017 10:25:20 +0200
-+Subject: [PATCH] Update OpenCVCompilerOptions.cmake
-+
-+misplaced else
-+
-+[Upstream commit: https://github.com/opencv/opencv/commit/126de0cd95418811e302996161e03195bf7e631a]
-+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-+---
-+ cmake/OpenCVCompilerOptions.cmake | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/cmake/OpenCVCompilerOptions.cmake b/cmake/OpenCVCompilerOptions.cmake
-+index 9b2a4e42e..7b079c5f9 100644
-+--- a/cmake/OpenCVCompilerOptions.cmake
-++++ b/cmake/OpenCVCompilerOptions.cmake
-+@@ -18,9 +18,9 @@ if(ENABLE_CCACHE AND NOT CMAKE_COMPILER_IS_CCACHE)
-+         message(STATUS "Unable to compile program with enabled ccache, reverting...")
-+         set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE "${__OLD_RULE_LAUNCH_COMPILE}")
-+       endif()
-+-    else()
-+-      message(STATUS "Looking for ccache - not found")
-+     endif()
-++  else()
-++    message(STATUS "Looking for ccache - not found")
-+   endif()
-+ endif()
-+ 
-+-- 
-+2.15.0
-+
+diff --git a/package/dtc/dtc.mk b/package/dtc/dtc.mk
+index dd0f30d..1bcee29 100644
+--- a/package/dtc/dtc.mk
++++ b/package/dtc/dtc.mk
+@@ -51,7 +51,7 @@ define HOST_DTC_BUILD_CMDS
+ endef
+ 
+ define HOST_DTC_INSTALL_CMDS
+-	$(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) PREFIX=$(HOST_DIR) install-bin
++	$(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) PREFIX=$(HOST_DIR) install
+ endef
+ 
+ $(eval $(generic-package))
+-- 
+2.7.4
