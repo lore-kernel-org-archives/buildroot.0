@@ -1,78 +1,60 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Thu,  2 Nov 2017 23:45:31 +0100
-Subject: [Buildroot] [PATCH v3 1/1] package/python-networkmanager: Bump to
- version 2.0.1
-Message-ID: <20171102224531.19739-1-petr.vorel@gmail.com>
+From: Joshua Henderson <joshua.henderson@microchip.com>
+Date: Thu, 2 Nov 2017 16:06:12 -0700
+Subject: [Buildroot] [PATCH v4] qt5: remove Qt Quick dependency on opengl
+In-Reply-To: <20171102230302.26744909@windsurf>
+References: <1509658876-29888-1-git-send-email-joshua.henderson@microchip.com>
+ <20171102230302.26744909@windsurf>
+Message-ID: <bd5262d5-19d7-fdcd-dd0d-5fd6b00bffaa@microchip.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Added new runtime dependency on python-six.
+Thomas,
 
-Dropped dbus-python as build time dependency (it's only runtime
-dependency).
+On 11/02/2017 03:03 PM, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Thu, 2 Nov 2017 14:41:16 -0700, Joshua Henderson wrote:
+> 
+>> diff --git a/package/qt5/qt5declarative/5.9.2/0001-Fix-no-opengl-builds.patch b/package/qt5/qt5declarative/5.9.2/0001-Fix-no-opengl-builds.patch
+>> new file mode 100644
+>> index 0000000..aca93be
+>> --- /dev/null
+>> +++ b/package/qt5/qt5declarative/5.9.2/0001-Fix-no-opengl-builds.patch
+>> @@ -0,0 +1,29 @@
+>> +From fa52bb665d6beb77a951c14c8edcba3541850afc Mon Sep 17 00:00:00 2001
+>> +From: Allan Sandfeld Jensen <allan.jensen@qt.io>
+>> +Date: Mon, 25 Sep 2017 16:53:24 +0200
+>> +Subject: [PATCH] Fix no-opengl builds
+>> +
+>> +The qquickwidgets examples uses OpenGL directly
+>> +
+>> +Change-Id: I1cc8cfbcf249abc98473287a9d499032232828c7
+>> +Reviewed-by: Simon Hausmann <simon.hausmann@qt.io>
+> 
+> Who did the backport of this patch in Buildroot? It should carry the
+> Signed-off-by from the person who did this backport. I don't know if
+> it's you or S?bastien Szymanski.
 
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-CC: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
-Changes v2->v3:
-* Dropped dbus-python as build time dependency (it's only runtime
-dependency).
+I am the one guilty. Sigh.
 
-Thomas, it seems, it's really only runtime dependency. Building as
-make clean; make python-networkmanager
-is successful and dbus-python-1.2.4 is not built.
----
- package/python-networkmanager/Config.in                  |  1 +
- package/python-networkmanager/python-networkmanager.hash |  6 +++---
- package/python-networkmanager/python-networkmanager.mk   | 10 +++++-----
- 3 files changed, 9 insertions(+), 8 deletions(-)
+> 
+> Also, another question: I assume that if OpenGL is available, Qt Quick
+> will use it. How does it detect that OpenGL is available?
+> 
 
-diff --git a/package/python-networkmanager/Config.in b/package/python-networkmanager/Config.in
-index fcbce5748d..c99f2c31ad 100644
---- a/package/python-networkmanager/Config.in
-+++ b/package/python-networkmanager/Config.in
-@@ -5,6 +5,7 @@ config BR2_PACKAGE_PYTHON_NETWORKMANAGER
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus-python
- 	depends on BR2_PACKAGE_DBUS # dbus-python
- 	select BR2_PACKAGE_DBUS_PYTHON
-+	select BR2_PACKAGE_PYTHON_SIX
- 	help
- 	  python-networkmanager wraps NetworkManagers D-Bus interface
- 	  so you can be less verbose when talking to NetworkManager
-diff --git a/package/python-networkmanager/python-networkmanager.hash b/package/python-networkmanager/python-networkmanager.hash
-index cbd6febcd1..1fed4befb7 100644
---- a/package/python-networkmanager/python-networkmanager.hash
-+++ b/package/python-networkmanager/python-networkmanager.hash
-@@ -1,3 +1,3 @@
--# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=97c84c19b84b1124903a06379b107f77, sha256 locally computed
--md5	97c84c19b84b1124903a06379b107f77  python-networkmanager-1.2.1.tar.gz
--sha256	7107c07383f8077cfac33fdbb3c4cda4de40be20a6b20d30840055eb519a0e89  python-networkmanager-1.2.1.tar.gz
-+# md5 from https://pypi.python.org/pypi/python-networkmanager/json, sha256 locally computed
-+md5	5fc644a65463031295c6b7dd51a0f1bd  python-networkmanager-2.0.1.tar.gz
-+sha256	bc36507506ad29bfdac941b0987ebd1cc9633c9a9291d7378e229e4515a0a517  python-networkmanager-2.0.1.tar.gz
-diff --git a/package/python-networkmanager/python-networkmanager.mk b/package/python-networkmanager/python-networkmanager.mk
-index d0e4011421..7401396421 100644
---- a/package/python-networkmanager/python-networkmanager.mk
-+++ b/package/python-networkmanager/python-networkmanager.mk
-@@ -4,11 +4,11 @@
- #
- ################################################################################
- 
--PYTHON_NETWORKMANAGER_VERSION = 1.2.1
--PYTHON_NETWORKMANAGER_SITE = https://pypi.python.org/packages/e7/b1/09993250ceea9e03bc65fbabcd5286540200292c011b22237b2963c11471
--PYTHON_NETWORKMANAGER_SETUP_TYPE = distutils
--PYTHON_NETWORKMANAGER_LICENSE = GPL-3.0+
-+PYTHON_NETWORKMANAGER_VERSION = 2.0.1
-+PYTHON_NETWORKMANAGER_SOURCE = python-networkmanager-$(PYTHON_NETWORKMANAGER_VERSION).tar.gz
-+PYTHON_NETWORKMANAGER_SITE = https://pypi.python.org/packages/d7/f9/5cbd99fd24a072875ce048e48d1754285f137aab447de8fee63b6cba990a
-+PYTHON_NETWORKMANAGER_SETUP_TYPE = setuptools
-+PYTHON_NETWORKMANAGER_LICENSE = Zlib
- PYTHON_NETWORKMANAGER_LICENSE_FILES = COPYING
--PYTHON_NETWORKMANAGER_DEPENDENCIES = dbus-python
- 
- $(eval $(python-package))
--- 
-2.14.2
+qt5declarative depends on qt5base.  If mesa3d is configured, qt5base depends
+on mesa3d and is told to build with opengl.  Then, we leave buildroot. qt5base
+build will try to find various incarnations of opengl through its own build
+tests.  qt5base and qt5declarative use the result of those config tests
+through qtConfig() to see if opengl is available.  If you build qt5base you
+can see config.log and the actual tests under config.tests/ in the build_dir.
+
+Now, you can still build QT with opengl support, and still opt to not use it
+and instead use the software renderer at runtime with the environment variable
+QMLSCENE_DEVICE=softwarecontext.  This patch is all about not making opengl a
+requirement, where it is not.
+
+Josh
