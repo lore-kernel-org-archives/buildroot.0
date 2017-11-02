@@ -1,38 +1,132 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 2 Nov 2017 22:14:44 +0100
-Subject: [Buildroot] [PATCH 1/1] package/dtc: qemu system build need
- libfdt.
-In-Reply-To: <1509624873-16240-1-git-send-email-ren_guo@c-sky.com>
-References: <1509624873-16240-1-git-send-email-ren_guo@c-sky.com>
-Message-ID: <20171102221444.640d928d@windsurf>
+Date: Thu, 2 Nov 2017 22:15:08 +0100
+Subject: [Buildroot] [git commit] uclibc: convert accept4 to use cancel.h
+ macros
+Message-ID: <20171102210747.CA4BB8110E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=93a86b4dec9e73fbe0e186cdde8fb04a36a44762
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu,  2 Nov 2017 20:14:33 +0800, Guo Ren wrote:
-> The "install-bin" just install dtc's programs to host/bin without
-> libfdt, but qemu system compile need libfdt.
-> 
-> see: https://gitlab.com/c-sky/buildroot/-/jobs/38654503
-> 
-> So we need install libfdt to satisfy qemu system compile.
-> 
-> Change-Id: I85748479ac11e1c6452d3f79d04f02666218774a
-> Signed-off-by: Guo Ren <ren_guo@c-sky.com>
-> ---
->  package/dtc/dtc.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Fixes:
+ http://autobuild.buildroot.net/results/78e033fe9f43845581a5d87b21a8451f67520e44
 
-Applied to master, after minor commit log tweaks.
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Tested-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...03-convert-accept4-to-use-cancel.h-macros.patch | 102 +++++++++++++++++++++
+ 1 file changed, 102 insertions(+)
 
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/uclibc/0003-convert-accept4-to-use-cancel.h-macros.patch b/package/uclibc/0003-convert-accept4-to-use-cancel.h-macros.patch
+new file mode 100644
+index 0000000..178dcde
+--- /dev/null
++++ b/package/uclibc/0003-convert-accept4-to-use-cancel.h-macros.patch
+@@ -0,0 +1,102 @@
++From c7e82668bd23fbdd02ebe1e83ff2bb6877812423 Mon Sep 17 00:00:00 2001
++From: Waldemar Brodkorb <wbx@uclibc-ng.org>
++Date: Thu, 2 Nov 2017 02:40:43 +0100
++Subject: [PATCH] convert accept4() to use cancel.h macros
++
++Signed-off-by: Waldemar Brodkorb <wbx@uclibc-ng.org>
++---
++ include/sys/socket.h                  |  1 +
++ libc/inet/socketcalls.c               | 37 +++++++++--------------------------
++ libpthread/linuxthreads/wrapsyscall.c |  7 +++++++
++ 3 files changed, 17 insertions(+), 28 deletions(-)
++
++diff --git a/include/sys/socket.h b/include/sys/socket.h
++index 63dc4b953..83e1fcaa2 100644
++--- a/include/sys/socket.h
+++++ b/include/sys/socket.h
++@@ -269,6 +269,7 @@ libc_hidden_proto(accept)
++    __THROW.  */
++ extern int accept4 (int __fd, __SOCKADDR_ARG __addr,
++ 		    socklen_t *__restrict __addr_len, int __flags);
+++libc_hidden_proto(accept4)
++ #endif
++ 
++ /* Shut down all or part of the connection open on socket FD.
++diff --git a/libc/inet/socketcalls.c b/libc/inet/socketcalls.c
++index e33d69344..1b92609d0 100644
++--- a/libc/inet/socketcalls.c
+++++ b/libc/inet/socketcalls.c
++@@ -76,43 +76,24 @@ lt_libc_hidden(accept)
++ #endif
++ 
++ #ifdef L_accept4
++-#ifdef __NR_accept4
++-# define __NR___sys_accept4  __NR_accept4
++-static _syscall4(int, __sys_accept4, int, fd, struct sockaddr *, addr, socklen_t *, addrlen, int, flags)
++-int accept4(int fd, struct sockaddr *addr, socklen_t * addrlen, int flags)
++-{
++-	if (SINGLE_THREAD_P)
++-		return __sys_accept4(fd, addr, addrlen, flags);
++-#ifdef __UCLIBC_HAS_THREADS_NATIVE__
++-	else {
++-		int oldtype = LIBC_CANCEL_ASYNC ();
++-		int result = __sys_accept4(fd, addr, addrlen, flags);
++-		LIBC_CANCEL_RESET (oldtype);
++-		return result;
++-	}
++-#endif
++-}
++-#elif defined(__NR_socketcall)
++-int accept4(int fd, struct sockaddr *addr, socklen_t *addrlen, int flags)
+++static int __NC(accept4)(int fd, struct sockaddr *addr, socklen_t *addrlen, int flags)
++ {
+++# ifdef __NR_accept4
+++	return INLINE_SYSCALL(accept4, 4, fd, addr, addrlen, flags);
+++# elif defined(__NR_socketcall)
++ 	unsigned long args[4];
++ 
++ 	args[0] = fd;
++ 	args[1] = (unsigned long) addr;
++ 	args[2] = (unsigned long) addrlen;
++ 	args[3] = flags;
++-	if (SINGLE_THREAD_P)
++-		return __socketcall(SYS_ACCEPT4, args);
++-#ifdef __UCLIBC_HAS_THREADS_NATIVE__
++-	else {
++-		int oldtype = LIBC_CANCEL_ASYNC ();
++-		int result = __socketcall(SYS_ACCEPT4, args);
++-		LIBC_CANCEL_RESET (oldtype);
++-		return result;
++-	}
+++
+++	return __socketcall(SYS_ACCEPT4, args);
++ #endif
++ }
++-#endif
+++CANCELLABLE_SYSCALL(int, accept4, (int fd, struct sockaddr *addr, socklen_t *addrlen, int flags),
+++		    (fd, addr, addrlen, flags))
+++lt_libc_hidden(accept4)
++ #endif
++ 
++ #ifdef L_bind
++diff --git a/libpthread/linuxthreads/wrapsyscall.c b/libpthread/linuxthreads/wrapsyscall.c
++index ca046a442..2386bfdef 100644
++--- a/libpthread/linuxthreads/wrapsyscall.c
+++++ b/libpthread/linuxthreads/wrapsyscall.c
++@@ -192,6 +192,13 @@ CANCELABLE_SYSCALL (int, accept, (int fd, __SOCKADDR_ARG addr,
++ 				  socklen_t *addr_len),
++ 		    (fd, addr, addr_len))
++ 
+++#if defined __UCLIBC_LINUX_SPECIFIC__
+++/* accept4(2).  */
+++CANCELABLE_SYSCALL (int, accept4, (int fd, __SOCKADDR_ARG addr,
+++				  socklen_t *addr_len, int flags),
+++		    (fd, addr, addr_len, flags))
+++#endif
+++
++ /* connect(2).  */
++ CANCELABLE_SYSCALL (int, connect, (int fd, __CONST_SOCKADDR_ARG addr,
++ 				     socklen_t len),
++-- 
++2.11.0
++
