@@ -1,44 +1,27 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 02 Nov 2017 10:00:02 +0100
-Subject: [Buildroot] [PATCH v2] util-linux: security bump to version 2.31
-In-Reply-To: <232020389.16019836.1509500098756.JavaMail.zimbra@datacom.ind.br>
- (Carlos Santos's message of "Tue, 31 Oct 2017 23:34:58 -0200 (BRST)")
-References: <1509446871-25076-1-git-send-email-casantos@datacom.ind.br>
- <87zi87ezym.fsf@dell.be.48ers.dk>
- <232020389.16019836.1509500098756.JavaMail.zimbra@datacom.ind.br>
-Message-ID: <87r2thf431.fsf@dell.be.48ers.dk>
+Date: Thu, 02 Nov 2017 10:00:26 +0100
+Subject: [Buildroot] [PATCH] wireguard: bump to version 0.0.20171101
+In-Reply-To: <CAHmME9rMLbnUL41ADnOHVSNMktN2jNy3XXi_W9qcAO2MycwQZg@mail.gmail.com>
+ (Jason A. Donenfeld's message of "Wed, 1 Nov 2017 21:51:18 +0100")
+References: <20171101122903.460-1-Jason@zx2c4.com>
+ <87vaitg2w1.fsf@dell.be.48ers.dk>
+ <CAHmME9rMLbnUL41ADnOHVSNMktN2jNy3XXi_W9qcAO2MycwQZg@mail.gmail.com>
+Message-ID: <87mv45f42d.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Carlos" == Carlos Santos <casantos@datacom.ind.br> writes:
+>>>>> "Jason" == Jason A Donenfeld <Jason@zx2c4.com> writes:
 
-Hi,
+ > On Wed, Nov 1, 2017 at 9:28 PM, Peter Korsgaard <peter@korsgaard.com> wrote:
+ >> definately also welcome to send patches. I already got a request offlist
+ >> earlier this week to bump the version.
 
- >> Do you know if there's any reason to prefer this version over our
- >> existing rfkill package? The fact that it isn't available on nommu
- >> probably means we cannot get rid of the separate package, but we may
- >> want to add it to UTIL_LINUX_DEPENDENCIES so the util-linux version
- >> "wins".
+ > Woah nelly, users are using it! That's pretty cool.
 
- > I think this one is preferable because util-linux is actively maintained
- > while the original rfkill seems to be abandoned (the last commit in its
- > git repository is from Jan 8 2015).
-
-Ok.
-
- > How many nommu architectures does Buildroot support? The only boards I
- > found without BR2_USE_MMU were qemu_{arm_versatile,xtensa_lx60}_nommu,
- > which obviously do not even have RF radios to turn on/off.
-
-It is indeed probably a quite rare combination. Perhaps we should get
-rid of the separate rfkill package then and add Config.in.legacy
-handling for it selecting the util-linux option?
-
-Volkov, you added the rfkill package. Any issues with moving to the
-util-linux variant instead?
+Indeed ;)
 
 -- 
 Bye, Peter Korsgaard
