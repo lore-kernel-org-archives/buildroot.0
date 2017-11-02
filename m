@@ -1,91 +1,78 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Thu, 2 Nov 2017 22:30:51 +0000
-Subject: [Buildroot] Analysis of build results for 2017-10-30
-In-Reply-To: <20171102232155.11995715@windsurf>
-References: <20171031070013.AD75D207B2@mail.free-electrons.com>
- <20171031230519.3feb2619@windsurf> <20171102232155.11995715@windsurf>
-Message-ID: <1509661850.7985.41.camel@synopsys.com>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Thu,  2 Nov 2017 23:45:31 +0100
+Subject: [Buildroot] [PATCH v3 1/1] package/python-networkmanager: Bump to
+ version 2.0.1
+Message-ID: <20171102224531.19739-1-petr.vorel@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas, all,
+Added new runtime dependency on python-six.
 
-On Thu, 2017-11-02 at 23:21 +0100, Thomas Petazzoni wrote:
-> Hello,
-> 
-> Quick feedback on all the build issues.
-> 
-> On Tue, 31 Oct 2017 23:05:19 +0100, Thomas Petazzoni wrote:
-> 
-> > 
-> > On Tue, 31 Oct 2017 08:00:13 +0100 (CET), Thomas Petazzoni wrote:
-> > 
-> > > ? ? ? ? ?arc |?????????????????busybox-1.27.2 | NOK | https://urldefense.proofpoint.com/v2/url?u=http-3A__autobuild.buildroot.net_results_2cb531
-> > > b9f9c75bb5dae10c02f2afeca225c65947&d=DwIFaQ&c=DPL6_X_6JkXFx7AXWqB0tg&r=lqdeeSSEes0GFDDl656eViXO7breS55ytWkhpk5R81I&m=SAoW0E6nimRIdKo5CmAKyfsXXQO
-> > > z_SQmi2vzF0vzHlU&s=ZI69s1d8Fhd0U0CQ_OKm3nRZMN96MGVA18cf7tkNTqg&e= | ORPH??
-> > 
-> > 
-> > ? CC??????console-tools/setlogcons.o
-> > libbb/appletlib.c:206:8: error: 'NUM_APPLETS' undeclared (first use in this function); did you mean 'PF_APPLETALK'?
-> > ? max = NUM_APPLETS;
-> > 
-> > What is going on here?!?
-> 
-> It still occurred only once,
-> https://urldefense.proofpoint.com/v2/url?u=http-3A__autobuild.buildroot.net_-3Freason-3Dbusybox-2D1.27.2&d=DwIFaQ&c=DPL6_X_6JkXFx7AXWqB0tg&r=lqdeeSS
-> Ees0GFDDl656eViXO7breS55ytWkhpk5R81I&m=SAoW0E6nimRIdKo5CmAKyfsXXQOz_SQmi2vzF0vzHlU&s=wzUJlrejybSwFO6Qu3hTo_4dl74GCFzSh_RgSlNUAbY&e=. Not sure what
-> this means.
+Dropped dbus-python as build time dependency (it's only runtime
+dependency).
 
-As I just wrote let's not spend too much time on this one before we see more manifestations.
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+CC: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+Changes v2->v3:
+* Dropped dbus-python as build time dependency (it's only runtime
+dependency).
 
-> > > ?????????arc |???????????????????ffmpeg-3.3.5 | NOK | https://urldefense.proofpoint.com/v2/url?u=http-
-> > > 3A__autobuild.buildroot.net_results_b8fd41b127ab7702a2b69998076d737ea2e092b5&d=DwIFaQ&c=DPL6_X_6JkXFx7AXWqB0tg&r=lqdeeSSEes0GFDDl656eViXO7breS55
-> > > ytWkhpk5R81I&m=SAoW0E6nimRIdKo5CmAKyfsXXQOz_SQmi2vzF0vzHlU&s=id9_4gCi8sNYG1DOhijn81A1Q54eebDnpM1PyF0n3RQ&e= |?????
-> > > ?????????arc |???????????????????ffmpeg-3.3.5 | NOK | https://urldefense.proofpoint.com/v2/url?u=http-3A__autobuild.buildroot.net_results_43c90f
-> > > bad3662101ef4eb5958f73700d1ff57b38&d=DwIFaQ&c=DPL6_X_6JkXFx7AXWqB0tg&r=lqdeeSSEes0GFDDl656eViXO7breS55ytWkhpk5R81I&m=SAoW0E6nimRIdKo5CmAKyfsXXQO
-> > > z_SQmi2vzF0vzHlU&s=jQSJNcBcuOTAEj4CB77TeJherexKlUNtXrlf6NAS4MU&e= |?????
-> > > ?????????arc |???????????????????ffmpeg-3.3.5 | NOK | https://urldefense.proofpoint.com/v2/url?u=http-3A__autobuild.buildroot.net_results_a152a1
-> > > 90108986392346efbba001b9dd0bdc89bc&d=DwIFaQ&c=DPL6_X_6JkXFx7AXWqB0tg&r=lqdeeSSEes0GFDDl656eViXO7breS55ytWkhpk5R81I&m=SAoW0E6nimRIdKo5CmAKyfsXXQO
-> > > z_SQmi2vzF0vzHlU&s=KF6aCgUc-UaJozlh0VzdCWa7_6K5deiQzaatTTvXPs8&e= |?????
-> > > ?????????arc |???????????????????ffmpeg-3.3.5 | NOK | https://urldefense.proofpoint.com/v2/url?u=http-3A__autobuild.buildroot.net_results_60d442
-> > > 46fe6a54b02b53564761807204b9a190d0&d=DwIFaQ&c=DPL6_X_6JkXFx7AXWqB0tg&r=lqdeeSSEes0GFDDl656eViXO7breS55ytWkhpk5R81I&m=SAoW0E6nimRIdKo5CmAKyfsXXQO
-> > > z_SQmi2vzF0vzHlU&s=F9ANvupxEY3G1UFbyoeVY8IN30fn5d92A8cRAsN1d6I&e= |???????
-> > 
-> > libavcodec/vp9dsp_template.c:1685:1: internal compiler error: Segmentation fault
-> > 
-> > Alexey, could you have a look ?
-> 
-> Alexey, this continues to happen:
-> https://urldefense.proofpoint.com/v2/url?u=http-3A__autobuild.buildroot.net_-3Freason-3Dffmpeg-2D3.3.5&d=DwIFaQ&c=DPL6_X_6JkXFx7AXWqB0tg&r=lqdeeSSEe
-> s0GFDDl656eViXO7breS55ytWkhpk5R81I&m=SAoW0E6nimRIdKo5CmAKyfsXXQOz_SQmi2vzF0vzHlU&s=3_daceeHk2UEFoExTryReYH8JdlkdARTaxBDDQVNuf4&e=. Should we disable
-> this package on ARC ?
+Thomas, it seems, it's really only runtime dependency. Building as
+make clean; make python-networkmanager
+is successful and dbus-python-1.2.4 is not built.
+---
+ package/python-networkmanager/Config.in                  |  1 +
+ package/python-networkmanager/python-networkmanager.hash |  6 +++---
+ package/python-networkmanager/python-networkmanager.mk   | 10 +++++-----
+ 3 files changed, 9 insertions(+), 8 deletions(-)
 
-Please not disable ffmpeg for ARC :)
-The fix is in ARC tools update [the one to the final release].
-
-> > > ?????????arc |??????????????stress-ng-0.06.15 | NOK | https://urldefense.proofpoint.com/v2/url?u=http-3A__autobuild.buildroot.net_results_296b14
-> > > 584c200593f88af75cdda65c4ca03cd863&d=DwIFaQ&c=DPL6_X_6JkXFx7AXWqB0tg&r=lqdeeSSEes0GFDDl656eViXO7breS55ytWkhpk5R81I&m=SAoW0E6nimRIdKo5CmAKyfsXXQO
-> > > z_SQmi2vzF0vzHlU&s=TMAIAi0joOmhtuYC0EOziiVpJPEqM-9kDTxX6WI40Io&e= |???????
-> > 
-> > stress-fp-error.c: In function 'stress_fp_error':
-> > stress-fp-error.c:100:10: error: 'FE_INVALID' undeclared (first use in this function); did you mean 'EINVAL'?
-> > ????EDOM, FE_INVALID);
-> > ??????????^~~~~~~~~~
-> > 
-> > We already exclude nios2, we should probably exclude ARC as well.
-> > Alexey, do you confirm?
-> 
-> Alexey, I've disabled stress-ng on ARC. If you get to fix the <fenv.h>
-> support in glibc, we can re-enable it.
-
-Sure, sounds like a plan!
-
-So it looks like so far we don't have any critical failures for ARC and
-the only thing to look at is "stress-ng".
-
-Thanks for all the help with fixing our issues!
-
--Alexey
+diff --git a/package/python-networkmanager/Config.in b/package/python-networkmanager/Config.in
+index fcbce5748d..c99f2c31ad 100644
+--- a/package/python-networkmanager/Config.in
++++ b/package/python-networkmanager/Config.in
+@@ -5,6 +5,7 @@ config BR2_PACKAGE_PYTHON_NETWORKMANAGER
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus-python
+ 	depends on BR2_PACKAGE_DBUS # dbus-python
+ 	select BR2_PACKAGE_DBUS_PYTHON
++	select BR2_PACKAGE_PYTHON_SIX
+ 	help
+ 	  python-networkmanager wraps NetworkManagers D-Bus interface
+ 	  so you can be less verbose when talking to NetworkManager
+diff --git a/package/python-networkmanager/python-networkmanager.hash b/package/python-networkmanager/python-networkmanager.hash
+index cbd6febcd1..1fed4befb7 100644
+--- a/package/python-networkmanager/python-networkmanager.hash
++++ b/package/python-networkmanager/python-networkmanager.hash
+@@ -1,3 +1,3 @@
+-# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=97c84c19b84b1124903a06379b107f77, sha256 locally computed
+-md5	97c84c19b84b1124903a06379b107f77  python-networkmanager-1.2.1.tar.gz
+-sha256	7107c07383f8077cfac33fdbb3c4cda4de40be20a6b20d30840055eb519a0e89  python-networkmanager-1.2.1.tar.gz
++# md5 from https://pypi.python.org/pypi/python-networkmanager/json, sha256 locally computed
++md5	5fc644a65463031295c6b7dd51a0f1bd  python-networkmanager-2.0.1.tar.gz
++sha256	bc36507506ad29bfdac941b0987ebd1cc9633c9a9291d7378e229e4515a0a517  python-networkmanager-2.0.1.tar.gz
+diff --git a/package/python-networkmanager/python-networkmanager.mk b/package/python-networkmanager/python-networkmanager.mk
+index d0e4011421..7401396421 100644
+--- a/package/python-networkmanager/python-networkmanager.mk
++++ b/package/python-networkmanager/python-networkmanager.mk
+@@ -4,11 +4,11 @@
+ #
+ ################################################################################
+ 
+-PYTHON_NETWORKMANAGER_VERSION = 1.2.1
+-PYTHON_NETWORKMANAGER_SITE = https://pypi.python.org/packages/e7/b1/09993250ceea9e03bc65fbabcd5286540200292c011b22237b2963c11471
+-PYTHON_NETWORKMANAGER_SETUP_TYPE = distutils
+-PYTHON_NETWORKMANAGER_LICENSE = GPL-3.0+
++PYTHON_NETWORKMANAGER_VERSION = 2.0.1
++PYTHON_NETWORKMANAGER_SOURCE = python-networkmanager-$(PYTHON_NETWORKMANAGER_VERSION).tar.gz
++PYTHON_NETWORKMANAGER_SITE = https://pypi.python.org/packages/d7/f9/5cbd99fd24a072875ce048e48d1754285f137aab447de8fee63b6cba990a
++PYTHON_NETWORKMANAGER_SETUP_TYPE = setuptools
++PYTHON_NETWORKMANAGER_LICENSE = Zlib
+ PYTHON_NETWORKMANAGER_LICENSE_FILES = COPYING
+-PYTHON_NETWORKMANAGER_DEPENDENCIES = dbus-python
+ 
+ $(eval $(python-package))
+-- 
+2.14.2
