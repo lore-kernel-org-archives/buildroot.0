@@ -1,51 +1,40 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Fri,  3 Nov 2017 15:49:38 +0100
-Subject: [Buildroot] [PATCH 2/2] python-mistune: bump version to 0.8
-In-Reply-To: <20171103144938.17147-1-yegorslists@googlemail.com>
-References: <20171103144938.17147-1-yegorslists@googlemail.com>
-Message-ID: <20171103144938.17147-2-yegorslists@googlemail.com>
+From: Guo Ren <ren_guo@c-sky.com>
+Date: Fri, 3 Nov 2017 22:56:17 +0800
+Subject: [Buildroot] [PATCH v2] uboot-tools: bump to version 2017.09
+In-Reply-To: <d6fb31e1-ae41-4af6-824c-5330461abc64@cesnet.cz>
+References: <1509562398-20833-1-git-send-email-fabio.estevam@nxp.com>
+ <20171103135056.47701a6c@windsurf>
+ <d6fb31e1-ae41-4af6-824c-5330461abc64@cesnet.cz>
+Message-ID: <20171103145617.GA27609@gary-OptiPlex-3050>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+Hi Jan,
 
-Add licence file checksum.
+On Fri, Nov 03, 2017 at 02:15:18PM +0100, Jan Kundr?t wrote:
+> On p?tek 3. listopadu 2017 13:50:56 CET, Thomas Petazzoni wrote:
+> >I'm not sure if it's this version bump, or Matthew Weber's patch about
+> >pylibfdt, but we're seeing new build failures with host-uboot-tools:
+> >
+> >  http://autobuild.buildroot.net/?reason=host-uboot-tools-2017.09
+> >
+> >Could one of you have a look?
+> 
+> Hi,
+> I believe that this is caused by a change to host-dtc in commit
+> b8c3e941731ddfc3728045142aa9081adeeeaee2. Since this commit, host-dtc has
+> started installing its own libfdt into host/include/libfdt*. U-Boot uses
+> #include directives in form of <system/ones>, not "user/ones", so it finds a
+> copy of libfdt provided by dtc, not its own modified version. I sent a quick
+> and dirty patch which fixes this earlier today:
+> 
+> http://lists.busybox.net/pipermail/buildroot/2017-November/206092.html
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/python-mistune/python-mistune.hash | 5 +++--
- package/python-mistune/python-mistune.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 4 deletions(-)
+Tested your patch on my machine and I could build host-uboot-tools and
+host-qemu together without error.
 
-diff --git a/package/python-mistune/python-mistune.hash b/package/python-mistune/python-mistune.hash
-index cfc6a25e2c..e939aefc86 100644
---- a/package/python-mistune/python-mistune.hash
-+++ b/package/python-mistune/python-mistune.hash
-@@ -1,3 +1,4 @@
- # md5 from https://pypi.python.org/pypi/mistune/json, sha256 locally computed
--md5	4eba50bd121b83716fa4be6a4049004b  mistune-0.7.3.tar.gz
--sha256	21d0e869df3b9189f248e022f1c9763cf9069e1a2f00676f1f1852bd7f98b713  mistune-0.7.3.tar.gz
-+md5	8bd955fe74ce37af54b16c0d9b89a2ef  mistune-0.8.tar.gz
-+sha256	dc3f43e7cf0abb95cdfecbf82d85c419108d5f13e1844b2a8a2fc0abf24c7a47  mistune-0.8.tar.gz
-+sha256  0c5259c3dd0a7c46f4835221645f62a0638c9b9faa02af08676e8069e1ff964b  LICENSE
-diff --git a/package/python-mistune/python-mistune.mk b/package/python-mistune/python-mistune.mk
-index 4141729da8..405216ccb4 100644
---- a/package/python-mistune/python-mistune.mk
-+++ b/package/python-mistune/python-mistune.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_MISTUNE_VERSION = 0.7.3
-+PYTHON_MISTUNE_VERSION = 0.8
- PYTHON_MISTUNE_SOURCE = mistune-$(PYTHON_MISTUNE_VERSION).tar.gz
--PYTHON_MISTUNE_SITE = https://pypi.python.org/packages/88/1e/be99791262b3a794332fda598a07c2749a433b9378586361ba9d8e824607
-+PYTHON_MISTUNE_SITE = https://pypi.python.org/packages/d3/66/a45d1c7c50fd63a707cd1bd340b969523137c5284d9466c41012fe54c621
- PYTHON_MISTUNE_LICENSE = BSD-3-Clause
- PYTHON_MISTUNE_LICENSE_FILES = LICENSE
- PYTHON_MISTUNE_SETUP_TYPE = setuptools
--- 
-2.11.0
+Best Regards
+ Guo Ren
