@@ -1,52 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 3 Nov 2017 22:01:18 +0100
-Subject: [Buildroot] [git commit] package/python-toml: bump to version 0.9.3
-Message-ID: <20171103205425.A10DD80F86@busybox.osuosl.org>
+Date: Fri, 3 Nov 2017 21:59:54 +0100
+Subject: [Buildroot] [git commit] Revert "libiio: Disable IIOD on Blackfin"
+Message-ID: <20171103205424.42F0581064@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ebaf9f7ffd2504e48d32e16b327aae1162eba8f2
+commit: https://git.buildroot.net/buildroot/commit/?id=ddb1a631fa3e4944131395d33e4c7cf283b0bb7c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Bump package to version 0.9.3 and change _SETUP_TYPE to
-'setuptools', since its setup.py now uses 'setuptools' by default and
-switches to 'distutils' only as a fallback[1]
+This reverts commit 53996bee433f09a91b12aa53b2be0f7d22c0acbe.
 
-[1] https://github.com/uiri/toml/blob/0.9.3/setup.py#L2
+Commit 93a86b4dec9e73fbe0e186cdde8fb04a36a44762 fixes accept4 support
+in uclibc on Blackfin, so re-enable iiod on this target.
 
-Cc: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
-Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+Cc: Paul Cercueil <paul.cercueil@analog.com>
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python-toml/python-toml.hash | 2 +-
- package/python-toml/python-toml.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libiio/Config.in | 5 -----
+ 1 file changed, 5 deletions(-)
 
-diff --git a/package/python-toml/python-toml.hash b/package/python-toml/python-toml.hash
-index cbc71a9..20737c3 100644
---- a/package/python-toml/python-toml.hash
-+++ b/package/python-toml/python-toml.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256	aee9679726f42fb09f48b9701a321571e0b6a51305c3e0f3913b3057d8bf7083  python-toml-0.9.2.tar.gz
-+sha256	633a90ecb1f5665b58f0c94153fcf519313ef53e1de0eac90929cd6b6a014235  python-toml-0.9.3.tar.gz
-diff --git a/package/python-toml/python-toml.mk b/package/python-toml/python-toml.mk
-index fec113e..fae15f9 100644
---- a/package/python-toml/python-toml.mk
-+++ b/package/python-toml/python-toml.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+diff --git a/package/libiio/Config.in b/package/libiio/Config.in
+index baa1631..b58ac7f 100644
+--- a/package/libiio/Config.in
++++ b/package/libiio/Config.in
+@@ -53,7 +53,6 @@ config BR2_PACKAGE_LIBIIO_IIOD
+ 	bool "IIO Daemon"
+ 	default y
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+-	depends on !BR2_bfin
+ 	select BR2_PACKAGE_LIBIIO_LOCAL_BACKEND
+ 	help
+ 	  Install the IIO Daemon.
+@@ -74,10 +73,6 @@ comment "USB support in the IIO Daemon requires libaio, headers >= 3.18"
  
--PYTHON_TOML_VERSION = 0.9.2
-+PYTHON_TOML_VERSION = 0.9.3
- PYTHON_TOML_SITE = $(call github,uiri,toml,$(PYTHON_TOML_VERSION))
--PYTHON_TOML_SETUP_TYPE = distutils
-+PYTHON_TOML_SETUP_TYPE = setuptools
- PYTHON_TOML_LICENSE = MIT
- PYTHON_TOML_LICENSE_FILES = LICENSE
+ comment "IIO Daemon needs a toolchain w/ threads"
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS
+-	depends on !BR2_bfin
+-
+-comment "IIO Daemon is not yet available on Blackfin"
+-	depends on BR2_bfin
  
+ config BR2_PACKAGE_LIBIIO_TESTS
+ 	bool "Install test programs"
