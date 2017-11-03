@@ -1,40 +1,48 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 03 Nov 2017 16:59:09 +0100
-Subject: [Buildroot] [PATCH 1/2] dhcpcd: add SysV start-up script
-In-Reply-To: <20171102230602.3c61e8d2@windsurf> (Thomas Petazzoni's message of
- "Thu, 2 Nov 2017 23:06:02 +0100")
-References: <20171031223659.6831-1-code@mmayer.net>
- <20171031223659.6831-2-code@mmayer.net>
- <20171102230602.3c61e8d2@windsurf>
-Message-ID: <877ev75p6a.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri,  3 Nov 2017 17:06:24 +0100
+Subject: [Buildroot] [RFCv1 1/4] pkgconf: use relative path to STAGING_DIR
+ instead of absolute path
+In-Reply-To: <20171103160627.6468-1-thomas.petazzoni@free-electrons.com>
+References: <20171103160627.6468-1-thomas.petazzoni@free-electrons.com>
+Message-ID: <20171103160627.6468-2-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+The pkg-config wrapper script is currently generated with absolute
+paths to $(STAGING_DIR). However, this will not work properly with
+per-package SDK, and each package will be built with a different
+STAGING_DIR value.
 
-Hi,
+In order to fix this, we adjust how the pkg-config wrapper script is
+generated, so that it uses a relative path to itself: the sysroot (i.e
+STAGING_DIR) is always located in $(path of
+pkg-config)/../$(STAGING_SUBDIR).
 
- >> +[ -x $DAEMON ] || exit 0
- >> +[ -f $CONFIG ] || exit 0
+This change is independent from the per-package SDK work, and could be
+applied independently from it.
 
- > We have these in a lot of init scripts, so I kept them. But I find
- > those tests pretty silly in fact:
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/pkgconf/pkgconf.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
- >  - The daemon should definitely be there, as it's installed by the same
- >    package. And if it turns out not to be there, I'd prefer a loud
- >    failure than an init script that silently ignores the problem.
-
- >  - Same for the configuration file: I prefer a loud error than an init
- >    script that ignores the problem.
-
- > Yann, Peter, Arnout, can we agree that such tests should be removed
- > entirely, and we let the init script fail if the daemon does not exist,
- > and the daemon fail if its configuration file does not exist ?
-
-Sounds sensible to me.
-
+diff --git a/package/pkgconf/pkgconf.mk b/package/pkgconf/pkgconf.mk
+index cc190d26da..d11ce485f7 100644
+--- a/package/pkgconf/pkgconf.mk
++++ b/package/pkgconf/pkgconf.mk
+@@ -19,8 +19,8 @@ endef
+ define HOST_PKGCONF_INSTALL_WRAPPER
+ 	$(INSTALL) -m 0755 -D package/pkgconf/pkg-config.in \
+ 		$(HOST_DIR)/bin/pkg-config
+-	$(SED) 's, at PKG_CONFIG_LIBDIR@,$(STAGING_DIR)/usr/lib/pkgconfig:$(STAGING_DIR)/usr/share/pkgconfig,' \
+-		-e 's, at STAGING_DIR@,$(STAGING_DIR),' \
++	$(SED) 's, at PKG_CONFIG_LIBDIR@,$$(dirname $$0)/../$(STAGING_SUBDIR)/usr/lib/pkgconfig:$$(dirname $$0)/../$(STAGING_SUBDIR)/usr/share/pkgconfig,' \
++		-e 's, at STAGING_DIR@,$$(dirname $$0)/../$(STAGING_SUBDIR),' \
+ 		$(HOST_DIR)/bin/pkg-config
+ endef
+ 
 -- 
-Bye, Peter Korsgaard
+2.13.6
