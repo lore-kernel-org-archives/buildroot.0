@@ -1,49 +1,113 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 3 Nov 2017 22:01:37 +0100
-Subject: [Buildroot] [git commit] python-docutils: bump version to 0.14
-Message-ID: <20171103205426.2491B81064@busybox.osuosl.org>
+Date: Fri, 3 Nov 2017 21:59:58 +0100
+Subject: [Buildroot] [git commit] package/ussp-push: add patches fixing the
+ build
+Message-ID: <20171103205426.231D480FDE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b20351941764b447e7f861130a19a0768730f870
+commit: https://git.buildroot.net/buildroot/commit/?id=ec9486d3374070d56b6b9a0dfe99c26a28129923
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add licence file checksum.
+Fixes:
+  http://autobuild.buildroot.net/results/bdd932424a45399836f27c435d6f1f6fb8b97c29
+  http://autobuild.buildroot.net/results/287b7d35d64d72cbc587192cce1271bda9647608
+  http://autobuild.buildroot.net/results/82e1484d9a43df7387137a1bd679a4d74d460a79
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python-docutils/python-docutils.hash | 5 +++--
- package/python-docutils/python-docutils.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 4 deletions(-)
+ .../0002-fix-build-again-obex-bluez.patch          | 28 +++++++++++++
+ .../ussp-push/0003-add-OBEX_CharToUnicode.patch    | 47 ++++++++++++++++++++++
+ 2 files changed, 75 insertions(+)
 
-diff --git a/package/python-docutils/python-docutils.hash b/package/python-docutils/python-docutils.hash
-index 23941e7..dbf0fde 100644
---- a/package/python-docutils/python-docutils.hash
-+++ b/package/python-docutils/python-docutils.hash
-@@ -1,3 +1,4 @@
- # md5 from https://pypi.python.org/pypi/docutils/json, sha256 locally computed
--md5 ea4a893c633c788be9b8078b6b305d53 docutils-0.13.1.tar.gz
--sha256 718c0f5fb677be0f34b781e04241c4067cbd9327b66bdd8e763201130f5175be docutils-0.13.1.tar.gz
-+md5	c53768d63db3873b7d452833553469de  docutils-0.14.tar.gz
-+sha256	51e64ef2ebfb29cae1faa133b3710143496eca21c530f3f71424d77687764274  docutils-0.14.tar.gz
-+sha256  58c2807e9e6e3297ad4da08acc8884d09d8c5ffc9d824dd100922d0bb1ee4717  COPYING.txt
-diff --git a/package/python-docutils/python-docutils.mk b/package/python-docutils/python-docutils.mk
-index 1ce259b..53da1a5 100644
---- a/package/python-docutils/python-docutils.mk
-+++ b/package/python-docutils/python-docutils.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_DOCUTILS_VERSION = 0.13.1
-+PYTHON_DOCUTILS_VERSION = 0.14
- PYTHON_DOCUTILS_SOURCE = docutils-$(PYTHON_DOCUTILS_VERSION).tar.gz
--PYTHON_DOCUTILS_SITE = https://pypi.python.org/packages/05/25/7b5484aca5d46915493f1fd4ecb63c38c333bd32aa9ad6e19da8d08895ae
-+PYTHON_DOCUTILS_SITE = https://pypi.python.org/packages/84/f4/5771e41fdf52aabebbadecc9381d11dea0fa34e4759b4071244fa094804c
- PYTHON_DOCUTILS_LICENSE = Public Domain, BSD-2-Clause, GPL-3.0 (emacs mode), other
- PYTHON_DOCUTILS_LICENSE_FILES = COPYING.txt
- PYTHON_DOCUTILS_SETUP_TYPE = distutils
+diff --git a/package/ussp-push/0002-fix-build-again-obex-bluez.patch b/package/ussp-push/0002-fix-build-again-obex-bluez.patch
+new file mode 100644
+index 0000000..e98fe6e
+--- /dev/null
++++ b/package/ussp-push/0002-fix-build-again-obex-bluez.patch
+@@ -0,0 +1,28 @@
++From 2d732026044d8e6cd16465ee87a73ac9692c021b Mon Sep 17 00:00:00 2001
++From: Samuel Martin <s.martin49@gmail.com>
++Date: Fri, 3 Nov 2017 09:04:12 +0100
++Subject: [PATCH] fix build again obex/bluez
++
++[fetch from debian source: http://http.debian.net/debian/pool/main/u/ussp-push/ussp-push_0.11-4.debian.tar.xz]
++
++Signed-off-by: Samuel Martin <s.martin49@gmail.com>
++---
++ src/obex_main.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/obex_main.c b/src/obex_main.c
++index a7126e6..6233d7e 100644
++--- a/src/obex_main.c
+++++ b/src/obex_main.c
++@@ -197,7 +197,7 @@ obex_t *__obex_connect(int devid, void *addr, int timeout, int *err)
++ 		*err = -1;
++ 		return NULL;
++ 	}
++-	if (!(handle = OBEX_Init(OBEX_TRANS_CUST, obex_event, 0))) {
+++	if (!(handle = OBEX_Init(OBEX_TRANS_CUSTOM, obex_event, 0))) {
++ 		BTERROR("OBEX_Init failed: %s\n", strerror(errno));
++ 		obex_free(gt);
++ 		*err = -1;
++-- 
++2.15.0
++
+diff --git a/package/ussp-push/0003-add-OBEX_CharToUnicode.patch b/package/ussp-push/0003-add-OBEX_CharToUnicode.patch
+new file mode 100644
+index 0000000..a660b55
+--- /dev/null
++++ b/package/ussp-push/0003-add-OBEX_CharToUnicode.patch
+@@ -0,0 +1,47 @@
++From eafac77d76d2a23c191a56f715d6c4afc0800da8 Mon Sep 17 00:00:00 2001
++From: Samuel Martin <s.martin49@gmail.com>
++Date: Fri, 3 Nov 2017 09:10:01 +0100
++Subject: [PATCH] add OBEX_CharToUnicode
++
++[fetch from debian source: http://http.debian.net/debian/pool/main/u/ussp-push/ussp-push_0.11-4.debian.tar.xz]
++
++Signed-off-by: Samuel Martin <s.martin49@gmail.com>
++---
++ src/obex_main.c | 20 ++++++++++++++++++++
++ 1 file changed, 20 insertions(+)
++
++diff --git a/src/obex_main.c b/src/obex_main.c
++index 6233d7e..971cc37 100644
++--- a/src/obex_main.c
+++++ b/src/obex_main.c
++@@ -84,7 +84,27 @@ void request_done(obex_t * handle, obex_object_t * object, int obex_cmd, int obe
++ 
++ int bt_debug;
++ 
+++static int OBEX_CharToUnicode(uint8_t *uc, const uint8_t *c, int size)
+++{
+++	int len, n;
+++
+++	if (uc == NULL || c == NULL)
+++		return -1;
+++
+++	len = n = strlen((char *) c);
+++	if (n*2+2 > size)
+++		return -1;
+++
+++	uc[n*2+1] = 0;
+++	uc[n*2] = 0;
++ 
+++	while (n--) {
+++		uc[n*2+1] = c[n];
+++		uc[n*2] = 0;
+++	}
+++
+++	return (len * 2) + 2;
+++}
++ 
++ /*
++  * These two functions are from affix/profiles/obex/obex_io.c
++-- 
++2.15.0
++
