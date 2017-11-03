@@ -1,35 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 3 Nov 2017 21:56:32 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libopenssl: security bump to
- version 1.0.2m
-In-Reply-To: <20171103183359.7598-1-bernd.kuhls@t-online.de>
-References: <20171103183359.7598-1-bernd.kuhls@t-online.de>
-Message-ID: <20171103215632.14cdfd77@windsurf>
+Date: Fri, 3 Nov 2017 21:57:08 +0100
+Subject: [Buildroot] [git commit] moarvm: use host-lua instead of host-luajit
+Message-ID: <20171103204947.2E3C381214@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=a7e216845800c257c9c0bf427d2871de62c70d11
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri,  3 Nov 2017 19:33:59 +0100, Bernd Kuhls wrote:
-> Fixes the following CVEs:
-> bn_sqrx8x_internal carry bug on x86_64 (CVE-2017-3736)
-> Malformed X.509 IPAddressFamily could cause OOB read (CVE-2017-3735)
-> 
-> Release notes: https://www.openssl.org/news/secadv/20171102.txt
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/libopenssl/libopenssl.hash | 4 ++--
->  package/libopenssl/libopenssl.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+host-luajit has limited architecture support, and moarvm does not need
+anything luajit specific - So use host-lua instead.
 
-Applied to master, thanks.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/moarvm/moarvm.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/moarvm/moarvm.mk b/package/moarvm/moarvm.mk
+index 276fb2c..705c939 100644
+--- a/package/moarvm/moarvm.mk
++++ b/package/moarvm/moarvm.mk
+@@ -10,7 +10,7 @@ MOARVM_SOURCE = MoarVM-$(MOARVM_VERSION).tar.gz
+ MOARVM_LICENSE = Artistic-2.0
+ MOARVM_LICENSE_FILES = Artistic2.txt
+ MOARVM_INSTALL_STAGING = YES
+-MOARVM_DEPENDENCIES = host-luajit host-pkgconf libuv libtommath libatomic_ops
++MOARVM_DEPENDENCIES = host-lua host-pkgconf libuv libtommath libatomic_ops
+ 
+ MOARVM_CONF_OPTS = \
+ 	--build=$(GNU_HOST_NAME) \
+@@ -20,7 +20,7 @@ MOARVM_CONF_OPTS = \
+ 	--ld="$(TARGET_CC)" \
+ 	--prefix="/usr" \
+ 	--pkgconfig=$(PKG_CONFIG_HOST_BINARY) \
+-	--lua=$(HOST_DIR)/bin/luajit \
++	--lua=$(HOST_DIR)/bin/lua \
+ 	--has-libuv \
+ 	--has-libtommath \
+ 	--has-libatomic
