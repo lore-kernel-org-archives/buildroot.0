@@ -1,48 +1,63 @@
-From: Ryan Coe <bluemrp9@gmail.com>
-Date: Fri,  3 Nov 2017 06:30:04 -0700
-Subject: [Buildroot] [PATCH 3/3] inadyn: bump version to 2.2.1
-In-Reply-To: <20171103133004.8083-1-bluemrp9@gmail.com>
-References: <20171103133004.8083-1-bluemrp9@gmail.com>
-Message-ID: <20171103133004.8083-3-bluemrp9@gmail.com>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Fri,  3 Nov 2017 09:33:06 -0400
+Subject: [Buildroot] [PATCH v4 1/1] libsepol: require threads
+Message-ID: <20171103133306.20198-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also add hash for license file.
+libsepol 2.7 now uses pthreads.h
 
-Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
 ---
- package/inadyn/inadyn.hash | 7 ++++---
- package/inadyn/inadyn.mk   | 2 +-
- 2 files changed, 5 insertions(+), 4 deletions(-)
+Changes v1 -> v2:
+  - Added thread dependency to semodule-utils (Arnout)
 
-diff --git a/package/inadyn/inadyn.hash b/package/inadyn/inadyn.hash
-index f573be2862..c6c062ce15 100644
---- a/package/inadyn/inadyn.hash
-+++ b/package/inadyn/inadyn.hash
-@@ -1,4 +1,5 @@
--# From https://github.com/troglobit/inadyn/releases/download/v2.1/inadyn-2.1.tar.xz.md5
--md5 b410684e38e628284a631ec763c2fdb8  inadyn-2.1.tar.xz
-+# From https://github.com/troglobit/inadyn/releases/download/v2.2.1/inadyn-2.2.1.tar.xz.md5
-+md5 8f7796ee45b2a2e282a54a2d31d03953  inadyn-2.2.1.tar.xz
- # Locally computed
--sha256 87639a7c1ddc047074601ad60188279a2a0d9393367f046c153de0e24586b3ac  inadyn-2.1.tar.xz
-+sha256 e7a74fcf8b7c069990940c0dc4d4d18071005be225667fdfcfa4156c44384579  inadyn-2.2.1.tar.xz
-+sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/inadyn/inadyn.mk b/package/inadyn/inadyn.mk
-index 0ef8b5a520..5eac3b5c3a 100644
---- a/package/inadyn/inadyn.mk
-+++ b/package/inadyn/inadyn.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+Changes v2 -> v3:
+  - Added explanations for dependencies (Matt Webber)
+
+Changes v3 -> v4:
+  - Added Config.in comment in libsepol for threads. (Thomas)
+
+ package/libsepol/Config.in       | 4 ++++
+ package/semodule-utils/Config.in | 4 ++++
+ 2 files changed, 8 insertions(+)
+
+diff --git a/package/libsepol/Config.in b/package/libsepol/Config.in
+index f92af52072..cfa923e452 100644
+--- a/package/libsepol/Config.in
++++ b/package/libsepol/Config.in
+@@ -1,7 +1,11 @@
+ config BR2_PACKAGE_LIBSEPOL
+ 	bool "libsepol"
++	depends on BR2_TOOLCHAIN_HAS_THREADS # pthread
+ 	help
+ 	  Libsepol is the binary policy manipulation library. It doesn't
+ 	  depend upon or use any of the other SELinux components.
  
--INADYN_VERSION = 2.1
-+INADYN_VERSION = 2.2.1
- INADYN_SITE = https://github.com/troglobit/inadyn/releases/download/v$(INADYN_VERSION)
- INADYN_SOURCE = inadyn-$(INADYN_VERSION).tar.xz
- INADYN_LICENSE = GPL-2.0+
+ 	  http://selinuxproject.org/page/Main_Page
++
++comment "libsepol needs a toolchain w/ threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/semodule-utils/Config.in b/package/semodule-utils/Config.in
+index d9cb928c4c..38e043dc2c 100644
+--- a/package/semodule-utils/Config.in
++++ b/package/semodule-utils/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_SEMODULE_UTILS
+ 	bool "semodule-utils"
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libsepol
+ 	select BR2_PACKAGE_LIBSEPOL
+ 	help
+ 	  semodule-utils is a package that contains tools for handling
+@@ -13,3 +14,6 @@ config BR2_PACKAGE_SEMODULE_UTILS
+ 	  * semodule_package - Create a SELinux policy module package.
+ 
+ 	  https://github.com/SELinuxProject/selinux/wiki/Releases
++
++comment "semodule-utils needs a toolchain w/ threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
 -- 
-2.15.0
+2.13.6
