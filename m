@@ -1,58 +1,49 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Fri, 3 Nov 2017 07:22:09 +0100
-Subject: [Buildroot] [PATCH] package/python-toml: bump to version 0.9.3
-In-Reply-To: <20171103004757.20717-1-andrew.smirnov@gmail.com>
-References: <20171103004757.20717-1-andrew.smirnov@gmail.com>
-Message-ID: <CAGm1_kuCXNSnw2z8XM+GmCwc2giE4UWbgjGB3PBHAtaYmoR07g@mail.gmail.com>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Fri,  3 Nov 2017 07:39:35 +0100
+Subject: [Buildroot] [PATCH] python-docutils: bump version to 0.14
+Message-ID: <20171103063935.30906-1-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Nov 3, 2017 at 1:47 AM, Andrey Smirnov <andrew.smirnov@gmail.com> wrote:
-> Bump package to version 0.9.3 and change _SETUP_TYPE to
-> 'setuptools', since its setup.py now uses 'setuptools' by default and
-> switches to 'distutils' only as a fallback[1]
->
-> [1] https://github.com/uiri/toml/blob/0.9.3/setup.py#L2
->
-> Cc: Yegor Yefremov <yegorslists@googlemail.com>
-> Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+Add licence file checksum.
 
-Yegor
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ package/python-docutils/python-docutils.hash | 5 +++--
+ package/python-docutils/python-docutils.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
-> ---
->  package/python-toml/python-toml.hash | 2 +-
->  package/python-toml/python-toml.mk   | 4 ++--
->  2 files changed, 3 insertions(+), 3 deletions(-)
->
-> diff --git a/package/python-toml/python-toml.hash b/package/python-toml/python-toml.hash
-> index cbc71a961b..20737c3ca4 100644
-> --- a/package/python-toml/python-toml.hash
-> +++ b/package/python-toml/python-toml.hash
-> @@ -1,2 +1,2 @@
->  # Locally computed
-> -sha256 aee9679726f42fb09f48b9701a321571e0b6a51305c3e0f3913b3057d8bf7083  python-toml-0.9.2.tar.gz
-> +sha256 633a90ecb1f5665b58f0c94153fcf519313ef53e1de0eac90929cd6b6a014235  python-toml-0.9.3.tar.gz
-> diff --git a/package/python-toml/python-toml.mk b/package/python-toml/python-toml.mk
-> index fec113e1cb..fae15f938d 100644
-> --- a/package/python-toml/python-toml.mk
-> +++ b/package/python-toml/python-toml.mk
-> @@ -4,9 +4,9 @@
->  #
->  ################################################################################
->
-> -PYTHON_TOML_VERSION = 0.9.2
-> +PYTHON_TOML_VERSION = 0.9.3
->  PYTHON_TOML_SITE = $(call github,uiri,toml,$(PYTHON_TOML_VERSION))
-> -PYTHON_TOML_SETUP_TYPE = distutils
-> +PYTHON_TOML_SETUP_TYPE = setuptools
->  PYTHON_TOML_LICENSE = MIT
->  PYTHON_TOML_LICENSE_FILES = LICENSE
->
-> --
-> 2.13.6
->
+diff --git a/package/python-docutils/python-docutils.hash b/package/python-docutils/python-docutils.hash
+index 23941e79bc..dbf0fde8fd 100644
+--- a/package/python-docutils/python-docutils.hash
++++ b/package/python-docutils/python-docutils.hash
+@@ -1,3 +1,4 @@
+ # md5 from https://pypi.python.org/pypi/docutils/json, sha256 locally computed
+-md5 ea4a893c633c788be9b8078b6b305d53 docutils-0.13.1.tar.gz
+-sha256 718c0f5fb677be0f34b781e04241c4067cbd9327b66bdd8e763201130f5175be docutils-0.13.1.tar.gz
++md5	c53768d63db3873b7d452833553469de  docutils-0.14.tar.gz
++sha256	51e64ef2ebfb29cae1faa133b3710143496eca21c530f3f71424d77687764274  docutils-0.14.tar.gz
++sha256  58c2807e9e6e3297ad4da08acc8884d09d8c5ffc9d824dd100922d0bb1ee4717  COPYING.txt
+diff --git a/package/python-docutils/python-docutils.mk b/package/python-docutils/python-docutils.mk
+index 1ce259bd15..53da1a56de 100644
+--- a/package/python-docutils/python-docutils.mk
++++ b/package/python-docutils/python-docutils.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_DOCUTILS_VERSION = 0.13.1
++PYTHON_DOCUTILS_VERSION = 0.14
+ PYTHON_DOCUTILS_SOURCE = docutils-$(PYTHON_DOCUTILS_VERSION).tar.gz
+-PYTHON_DOCUTILS_SITE = https://pypi.python.org/packages/05/25/7b5484aca5d46915493f1fd4ecb63c38c333bd32aa9ad6e19da8d08895ae
++PYTHON_DOCUTILS_SITE = https://pypi.python.org/packages/84/f4/5771e41fdf52aabebbadecc9381d11dea0fa34e4759b4071244fa094804c
+ PYTHON_DOCUTILS_LICENSE = Public Domain, BSD-2-Clause, GPL-3.0 (emacs mode), other
+ PYTHON_DOCUTILS_LICENSE_FILES = COPYING.txt
+ PYTHON_DOCUTILS_SETUP_TYPE = distutils
+-- 
+2.11.0
