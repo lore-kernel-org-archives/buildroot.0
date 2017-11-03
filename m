@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 3 Nov 2017 21:58:44 +0100
-Subject: [Buildroot] [PATCH 1/2] python-m2r: bump version to 0.1.12
-In-Reply-To: <20171103144938.17147-1-yegorslists@googlemail.com>
-References: <20171103144938.17147-1-yegorslists@googlemail.com>
-Message-ID: <20171103215844.47abfa9d@windsurf>
+Date: Fri, 3 Nov 2017 22:00:12 +0100
+Subject: [Buildroot] [PATCH 1/2] Revert "libiio: Disable IIOD on
+ Blackfin"
+In-Reply-To: <20171103103034.24937-1-s.martin49@gmail.com>
+References: <20171103103034.24937-1-s.martin49@gmail.com>
+Message-ID: <20171103220012.31af82f5@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,18 +13,19 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri,  3 Nov 2017 15:49:37 +0100, yegorslists at googlemail.com wrote:
-> From: Yegor Yefremov <yegorslists@googlemail.com>
+On Fri,  3 Nov 2017 11:30:33 +0100, Samuel Martin wrote:
+> This reverts commit 53996bee433f09a91b12aa53b2be0f7d22c0acbe.
 > 
-> Add licence file checksum.
+> Commit 93a86b4dec9e73fbe0e186cdde8fb04a36a44762 fixes accept4 support
+> in uclibc on Blackfin, so re-enable iiod on this target.
 > 
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+> Cc: Paul Cercueil <paul.cercueil@analog.com>
+> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 > ---
->  package/python-m2r/python-m2r.hash | 5 +++--
->  package/python-m2r/python-m2r.mk   | 4 ++--
->  2 files changed, 5 insertions(+), 4 deletions(-)
+>  package/libiio/Config.in | 5 -----
+>  1 file changed, 5 deletions(-)
 
-Both applied to master. Thanks!
+Both patches applied. Thanks!
 
 Thomas
 -- 
