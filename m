@@ -1,90 +1,84 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 3 Nov 2017 10:23:24 +0100
-Subject: [Buildroot] [RFC 2/2] linux: Add support for specifying a
- custom directory
-In-Reply-To: <b3918167-5b3d-fb4d-19a8-8775228135c0@gmail.com>
-References: <1509242782-14524-1-git-send-email-f.fainelli@gmail.com>
- <1509242782-14524-3-git-send-email-f.fainelli@gmail.com>
- <20171029072649.GA2899@scaer> <20171029101249.19a91e32@windsurf>
- <6ad5572c-a3a8-2164-9086-ebd3691541a5@gmail.com>
- <20171029181251.GI2899@scaer>
- <d7e6d392-b7d1-7bdc-5048-d88fc6f0ab79@gmail.com>
- <20171030223246.GC3150@scaer>
- <b3918167-5b3d-fb4d-19a8-8775228135c0@gmail.com>
-Message-ID: <20171103102324.64c1fedb@windsurf>
+From: Olivier Maignial <olivier.maignial@smile.fr>
+Date: Fri,  3 Nov 2017 11:23:59 +0100
+Subject: [Buildroot] [PATCH 1/1] janus-gateway: add option for libcurl
+ support
+Message-ID: <1509704639-20360-1-git-send-email-olivier.maignial@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+libcurl is not mandatory to compile Janus, but Janus use it in several way:
+    - RTSP stream support in plugin streaming
+    - TURN REST API support
+    - HTTP backend for text room plugin
+    - ...
+This commit add an option "libcurl support" to add dependency on libcurl.
 
-On Thu, 2 Nov 2017 22:03:32 -0700, Florian Fainelli wrote:
+Signed-off-by: Olivier Maignial <olivier.maignial@smile.fr>
+---
+ package/janus-gateway/Config.in        | 18 ++++++++++++++++++
+ package/janus-gateway/janus-gateway.mk |  4 ++++
+ 2 files changed, 22 insertions(+)
 
-> OK. So by the same token, I should not expect that rsync operation
-> syncing my development tree to output/build/linux-custom to work past
-> the initial build/configuration? Right now it does not, I can make as
-> many changes as I want in the directory reference from local.mk and
-> output/build/linux-custom remains the same as it was the first time it
-> got rsync'd, is that really expected?
-> 
-> I really wonder how you guys are doing serious kernel development with
-> buildroot?
-
-Come on Florian, such a silly and uninformed statement coming from you?
-I could expect that from a less seasoned open-source contributor, but
-from you, I'm really surprised.
-
-This is explained very clearly in the section "8.12.6. Using Buildroot
-during development" of the manual,
-https://buildroot.org/downloads/manual/manual.html, which states:
-
-"""
-
-  When Buildroot finds that for a given package, an
-  <pkg>_OVERRIDE_SRCDIR has been defined, it will no longer attempt to
-  download, extract and patch the package. Instead, it will directly
-  use the source code available in in the specified directory and make
-  clean will not touch this directory. This allows to point Buildroot
-  to your own directories, that can be managed by Git, Subversion, or
-  any other version control system. To achieve this, Buildroot will use
-  rsync to copy the source code of the component from the specified
-  <pkg>_OVERRIDE_SRCDIR to output/build/<package>-custom/.
-
-  This mechanism is best used in conjunction with the make <pkg>-rebuild
-  and make <pkg>-reconfigure targets. A make <pkg>-rebuild all sequence
-  will rsync the source code from <pkg>_OVERRIDE_SRCDIR to
-  output/build/<package>-custom (thanks to rsync, only the modified
-  files are copied), and restart the build process of just this package.
-
-"""
-
-This is also explained in details in the Buildroot training materials,
-http://free-electrons.com/doc/training/buildroot/buildroot-slides.pdf
-slide 269 and following.
-
-So, before making such statements, could you perhaps read the
-documentation first?
-
-Also, it's worth mentioning that when I do active kernel development, I
-personally don't build my kernel within Buildroot, but separately. I
-use Buildroot to build the root filesystem (often a simple initramfs),
-but I build the kernel separately. The kernel build process is simple
-enough that building it separately is often easier.
-
-<pkg>_OVERRIDE_SRCDIR can however be useful if you're building kernel
-modules, as it ensures they are installed in the root filesystem.
-
-However, I believe <pkg>_OVERRIDE_SRCDIR is particularly useful when
-you're actively developing/debugging a user-space application/library
-that has a complicated build process. In this case, having Buildroot
-trigger the build is easier.
-
-Best regards,
-
-Thomas
+diff --git a/package/janus-gateway/Config.in b/package/janus-gateway/Config.in
+index 5bd4e95..156fac6 100644
+--- a/package/janus-gateway/Config.in
++++ b/package/janus-gateway/Config.in
+@@ -38,6 +38,12 @@ config  BR2_PACKAGE_JANUS_STREAMING
+ 	# SO_REUSEPORT
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_9
+ 
++if BR2_PACKAGE_JANUS_STREAMING
++config BR2_PACKAGE_JANUS_STREAMING_RTSP
++	bool "Support RTSP feed"
++	select BR2_PACKAGE_JANUS_LIBCURL
++endif
++
+ comment "streaming plugin needs a toolchain w/ headers >= 3.9"
+ 	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_9
+ 
+@@ -77,6 +83,7 @@ config BR2_PACKAGE_JANUS_REST
+ 	bool "REST (HTTP/HTTPS)"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_PACKAGE_LIBMICROHTTPD
++	select BR2_PACKAGE_JANUS_LIBCURL	
+ 
+ comment "REST transport needs a toolchain w/ threads"
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS
+@@ -90,6 +97,17 @@ config BR2_PACKAGE_JANUS_WEBSOCKETS
+ 	depends on BR2_USE_MMU
+ 	select BR2_PACKAGE_LIBWEBSOCKETS
+ 
++comment "libcurl support"
++
++config BR2_PACKAGE_JANUS_LIBCURL
++	bool "Enable libcurl support"
++	default y
++	help
++	  Janus uses libcurl to several purposes:
++	    - Enable TURN REST API	
++	    - Implement Sample Event Handler plugin
++	    - Support RTSP stream in streaming plugin
++
+ endif
+ 
+ comment "janus-gateway needs a toolchain w/ dynamic library, threads, wchar"
+diff --git a/package/janus-gateway/janus-gateway.mk b/package/janus-gateway/janus-gateway.mk
+index bf3e590..7314d1c 100644
+--- a/package/janus-gateway/janus-gateway.mk
++++ b/package/janus-gateway/janus-gateway.mk
+@@ -117,6 +117,10 @@ else
+ JANUS_GATEWAY_CONF_OPTS += --disable-websockets
+ endif
+ 
++ifeq ($(BR2_PACKAGE_JANUS_LIBCURL),y)
++JANUS_GATEWAY_DEPENDENCIES += libcurl
++endif
++
+ # Parallel build broken
+ JANUS_GATEWAY_MAKE = $(MAKE1)
+ 
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.7.4
