@@ -1,39 +1,68 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Fri,  3 Nov 2017 08:08:11 -0400
-Subject: [Buildroot] [PATCH 1/1] DEVELOPERS: Add myself to several packages
-Message-ID: <20171103120811.7287-1-aduskett@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 03 Nov 2017 13:17:42 +0100
+Subject: [Buildroot] [PATCH 3/4] luajit: only available on x86(-64) hosts
+In-Reply-To: <20171102120423.0f8e5ef7@windsurf> (Thomas Petazzoni's message of
+ "Thu, 2 Nov 2017 12:04:23 +0100")
+References: <20171102104520.29257-1-peter@korsgaard.com>
+ <20171102104520.29257-4-peter@korsgaard.com>
+ <20171102120423.0f8e5ef7@windsurf>
+Message-ID: <87bmkj5zfd.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Adam Duskett <aduskett@gmail.com>
----
- DEVELOPERS | 8 ++++++++
- 1 file changed, 8 insertions(+)
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index caf1d7c712..585d76a63b 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -31,9 +31,17 @@ F:	package/gstreamer1/gst1-rtsp-server/
- 
- N:	Adam Duskett <aduskett@gmail.com>
- F:	package/audit/
-+F:	package/busybox/
- F:	package/checkpolicy/
-+F:	package/cppdb/
-+F:	package/gstreamer1/gstreamer1/
-+F:	package/gstreamer1/gst1-plugins-bad/
-+F:	package/gstreamer1/gst1-plugins-base/
-+F:	package/gstreamer1/gst1-plugins-good/
-+F:	package/gstreamer1/gst1-plugins-ugly/
- F:	package/gstreamer1/gst1-vaapi/
- F:	package/janus-gateway/
-+F:	package/imx-usb-loader/
- F:	package/libressl/
- F:	package/libselinux/
- F:	package/libsemanage/
+Hi,
+
+ >> +	# -m32 flag is used for 32bit builds and host-luajit has
+ >> +	# limited architecture support
+ >> +	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+ >> default y if BR2_i386 || \
+ >> (BR2_x86_64 && BR2_HOSTARCH='x86_64') || \
+ >> BR2_powerpc || BR2_arm || BR2_armeb || \
+
+ > How is this going to prevent other packages from depending on
+ > host-luajit. BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS is all about the target
+ > variant of luajit, not the host variant.
+
+Correct.
+
+ > Do we need a BR2_PACKAGE_HOST_LUAJIT_ARCH_SUPPORTS or something like
+ > that ?
+
+ > For example, if you enable moarvm, host-luajit will be built, but not
+ > luajit.
+
+Ahh, I had missed moarvm. Moarvm seems quite special as no other
+packages need host-luajit but no luajit on the target.
+
+Looking at the upstream project, it doesn't seem to explicitly need
+host-luajit, just host-lua would do. From Configure.pl:
+
+=item --lua=path/to/lua/executable
+Path to a lua executable. (Used during the build when JIT is enabled).
+
+This configure option is even dropped in 2017.10 with the following
+information in the changelog:
+
++ Removal of Configure.pl --lua and --has-dynasm options, compiling with these
+included 3rdparty libs is now required
+
+Where the embedded lua copy is a tweaked lua-5.1.5:
+
+https://github.com/MoarVM/dynasm/blob/d84e11714c9460bbb032de6cb1e06c3cb1c31f07/minilua.c
+
+And indeed, moarvm still builds if moarvm.mk is changed to pull in
+host-lua and the --lua path is adjusted. Francois, is there a specific
+reason you went with host-luajit over host-lua?
+
+So I would prefer to do that change instead of adding
+BR2_PACKAGE_HOST_LUAJIT_ARCH_SUPPORTS.
+
+I'll send a patch for moarvm.
+
 -- 
-2.13.6
+Bye, Peter Korsgaard
