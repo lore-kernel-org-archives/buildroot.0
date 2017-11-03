@@ -1,48 +1,61 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 3 Nov 2017 21:10:32 +0100
-Subject: [Buildroot] [git commit] inadyn: bump version to 2.2.1
-Message-ID: <20171103200322.9A8E88118B@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 03 Nov 2017 21:15:45 +0100
+Subject: [Buildroot] BR2_REPRODUCIBLE issues
+In-Reply-To: <1509720041684-0.post@n4.nabble.com> ("Einar =?utf-8?Q?J?=
+ =?utf-8?Q?=C3=B3n?= Gunnarsson"'s
+ message of "Fri, 3 Nov 2017 07:40:41 -0700 (MST)")
+References: <1509720041684-0.post@n4.nabble.com>
+Message-ID: <87y3nn3yq6.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4f560b5554629e865e3609f3f47034ad213a46a4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Einar" == Einar J?n Gunnarsson <tolvupostur@gmail.com> writes:
 
-Also add hash for license file.
+ > Hello all.
+ > I've been using BR2_REPRODUCIBLE, and it mostly works.
 
-Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/inadyn/inadyn.hash | 7 ++++---
- package/inadyn/inadyn.mk   | 2 +-
- 2 files changed, 5 insertions(+), 4 deletions(-)
+ > But when it is using a git repo, I have the following issues with creating
+ > SOURCE_DATE_EPOCH:
+ > 1) It uses $(GIT), but the GIT variable is only defined in line 487:
+ > "include package/Makefile.in".
+ > Note that this is done around line 250 in $(TOPDIR)/Makefile, so sometimes
+ > $(GIT) is unset then getting BR2_VERSION_GIT_EPOCH
 
-diff --git a/package/inadyn/inadyn.hash b/package/inadyn/inadyn.hash
-index f573be2..c6c062c 100644
---- a/package/inadyn/inadyn.hash
-+++ b/package/inadyn/inadyn.hash
-@@ -1,4 +1,5 @@
--# From https://github.com/troglobit/inadyn/releases/download/v2.1/inadyn-2.1.tar.xz.md5
--md5 b410684e38e628284a631ec763c2fdb8  inadyn-2.1.tar.xz
-+# From https://github.com/troglobit/inadyn/releases/download/v2.2.1/inadyn-2.2.1.tar.xz.md5
-+md5 8f7796ee45b2a2e282a54a2d31d03953  inadyn-2.2.1.tar.xz
- # Locally computed
--sha256 87639a7c1ddc047074601ad60188279a2a0d9393367f046c153de0e24586b3ac  inadyn-2.1.tar.xz
-+sha256 e7a74fcf8b7c069990940c0dc4d4d18071005be225667fdfcfa4156c44384579  inadyn-2.2.1.tar.xz
-+sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/inadyn/inadyn.mk b/package/inadyn/inadyn.mk
-index 0ef8b5a..5eac3b5 100644
---- a/package/inadyn/inadyn.mk
-+++ b/package/inadyn/inadyn.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--INADYN_VERSION = 2.1
-+INADYN_VERSION = 2.2.1
- INADYN_SITE = https://github.com/troglobit/inadyn/releases/download/v$(INADYN_VERSION)
- INADYN_SOURCE = inadyn-$(INADYN_VERSION).tar.xz
- INADYN_LICENSE = GPL-2.0+
+What make version (and buildroot version) are you using? It works here:
+
+strace -s 100 -f -e execve make BR2_REPRODUCIBLE=y printvars VARS=SOURCE_DATE_EPOCH 2>&1 | grep log
+[pid  9504] execve("/bin/bash", ["/bin/bash", "-c", "GIT_DIR=/home/peko/source/buildroot/.git git log -1 --format=%at"], [/* 46 vars */]) = 0
+[pid  9504] execve("/usr/bin/git", ["git", "log", "-1", "--format=%at"], [/* 47 vars */]) = 0
+[pid  9505] execve("/bin/bash", ["/bin/bash", "-c", "GIT_DIR=/home/peko/source/buildroot/.git git log -1 --format=%at"], [/* 46 vars */]) = 0
+[pid  9505] execve("/usr/bin/git", ["git", "log", "-1", "--format=%at"], [/* 47 vars */]) = 0
+
+It uses the BR2_GIT setting, E.G.:
+
+strace -s 100 -f -e execve make BR2_REPRODUCIBLE=y printvars VARS=SOURCE_DATE_EPOCH BR2_GIT=foot 2>&1 | grep log
+[pid  9880] execve("/bin/bash", ["/bin/bash", "-c", "GIT_DIR=/home/peko/source/buildroot/.git foot log -1 --format=%at"], [/* 46 vars */]) = 0
+[pid  9881] execve("/bin/bash", ["/bin/bash", "-c", "GIT_DIR=/home/peko/source/buildroot/.git foot log -1 --format=%at"], [/* 46 vars */]) = 0
+
+This is with current master and make 4.1.
+
+
+> 2) It always uses the last git commit to calculate the date. So any commit
+ > changes the timestamp, while the non-git timestamp stays the same.
+ > This makes the whole thing almost useless.
+ > If the git log command could take a parameter, you could make reproducible
+ > builds based on e.g. tag 2017.08, which would be much more useful.
+
+Well, SOURCE_DATE_EPOCH is meant to refer to the date of the last source
+code change rather than the build time (E.G. so repeated builds of the
+same sources would give the same results, but builds of changed sources
+would return a newer timestamp).
+
+So I don't really agree that it useless. What we could perhaps do is to
+only export our value for SOURCE_DATE_EPOCH if not already set in the
+enviroment, so you can set it outside Buildroot if you want a different
+behaviour.
+
+-- 
+Bye, Peter Korsgaard
