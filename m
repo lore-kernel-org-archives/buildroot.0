@@ -1,71 +1,91 @@
-From: Florian Fainelli <f.fainelli@gmail.com>
-Date: Thu, 2 Nov 2017 22:03:32 -0700
-Subject: [Buildroot] [RFC 2/2] linux: Add support for specifying a
- custom directory
-In-Reply-To: <20171030223246.GC3150@scaer>
-References: <1509242782-14524-1-git-send-email-f.fainelli@gmail.com>
- <1509242782-14524-3-git-send-email-f.fainelli@gmail.com>
- <20171029072649.GA2899@scaer> <20171029101249.19a91e32@windsurf>
- <6ad5572c-a3a8-2164-9086-ebd3691541a5@gmail.com>
- <20171029181251.GI2899@scaer>
- <d7e6d392-b7d1-7bdc-5048-d88fc6f0ab79@gmail.com>
- <20171030223246.GC3150@scaer>
-Message-ID: <b3918167-5b3d-fb4d-19a8-8775228135c0@gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Fri, 3 Nov 2017 07:01:30 +0200
+Subject: [Buildroot] [PATCH v3 1/1] package/python-networkmanager: Bump
+ to version 2.0.1
+In-Reply-To: <20171102224531.19739-1-petr.vorel@gmail.com>
+References: <20171102224531.19739-1-petr.vorel@gmail.com>
+Message-ID: <20171103050130.6uvq2nfbbalzk6uc@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi Petr,
 
-
-On 10/30/2017 03:32 PM, Yann E. MORIN wrote:
-> Florian, All,
+On Thu, Nov 02, 2017 at 11:45:31PM +0100, Petr Vorel wrote:
+> Added new runtime dependency on python-six.
 > 
-> On 2017-10-29 20:27 -0700, Florian Fainelli spake thusly:
->> Le 10/29/17 ? 11:12, Yann E. MORIN a ?crit?:
->>> On 2017-10-29 10:26 -0700, Florian Fainelli spake thusly:
->>>> package/linux-headers/linux-headers.mk:134: *** LINUX_HEADERS_SITE
->>>> cannot be empty when LINUX_HEADERS_SOURCE is not.  Stop.
->>>> Makefile:79: recipe for target '_all' failed
->>>> make: *** [_all] Error 2
->>>> zsh: exit 2     make
->>>
->>> Hmm... Even when you keep the kernel version to its default value?
->>
->> That was also because I had set the "custom kernel version" to an empty
->> string, which could have indicated "don't care" but was still needed.
->> This is also probably fine to set to anything once you set your kernel
->> headers to a particular version.
->>
->> It seems like we should not prompted any kernel version in case since we
->> use a local kernel directory, or, the version should be derived directly
->> from the kernel  directory so it does not have to be manually specified
->> at all but that's a tad more complicated.
+> Dropped dbus-python as build time dependency (it's only runtime
+> dependency).
 > 
-> But in truth, the override-srcdir mechanism is just that: an _override_
-> of the configured values, to be used only for development.
-
-OK. So by the same token, I should not expect that rsync operation
-syncing my development tree to output/build/linux-custom to work past
-the initial build/configuration? Right now it does not, I can make as
-many changes as I want in the directory reference from local.mk and
-output/build/linux-custom remains the same as it was the first time it
-got rsync'd, is that really expected?
-
-I really wonder how you guys are doing serious kernel development with
-buildroot?
-
+> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+> CC: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+> Changes v2->v3:
+> * Dropped dbus-python as build time dependency (it's only runtime
+> dependency).
 > 
-> So, the premise is that you start off from a "known" configuration, and
-> override just that one or two packages you are working on.
+> Thomas, it seems, it's really only runtime dependency. Building as
+> make clean; make python-networkmanager
+> is successful and dbus-python-1.2.4 is not built.
+> ---
+>  package/python-networkmanager/Config.in                  |  1 +
+>  package/python-networkmanager/python-networkmanager.hash |  6 +++---
+>  package/python-networkmanager/python-networkmanager.mk   | 10 +++++-----
+>  3 files changed, 9 insertions(+), 8 deletions(-)
 > 
->> Thanks for your help, it's been pretty interesting to use another build
->> system thus far :)
-> 
-> I was rather surprised (in a good sense!) to see you here, yes. Trying
-> the Dark Side of the Force, are we? ;-]
+> diff --git a/package/python-networkmanager/Config.in b/package/python-networkmanager/Config.in
+> index fcbce5748d..c99f2c31ad 100644
+> --- a/package/python-networkmanager/Config.in
+> +++ b/package/python-networkmanager/Config.in
+> @@ -5,6 +5,7 @@ config BR2_PACKAGE_PYTHON_NETWORKMANAGER
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus-python
+>  	depends on BR2_PACKAGE_DBUS # dbus-python
+>  	select BR2_PACKAGE_DBUS_PYTHON
+> +	select BR2_PACKAGE_PYTHON_SIX
 
-Yes, and so far, it's quite dark, looks about as friendly as Dagoba :)
+Run-time only dependencies are usually marked with a '# run-time' comment.
+
+>  	help
+>  	  python-networkmanager wraps NetworkManagers D-Bus interface
+>  	  so you can be less verbose when talking to NetworkManager
+> diff --git a/package/python-networkmanager/python-networkmanager.hash b/package/python-networkmanager/python-networkmanager.hash
+> index cbd6febcd1..1fed4befb7 100644
+> --- a/package/python-networkmanager/python-networkmanager.hash
+> +++ b/package/python-networkmanager/python-networkmanager.hash
+> @@ -1,3 +1,3 @@
+> -# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=97c84c19b84b1124903a06379b107f77, sha256 locally computed
+> -md5	97c84c19b84b1124903a06379b107f77  python-networkmanager-1.2.1.tar.gz
+> -sha256	7107c07383f8077cfac33fdbb3c4cda4de40be20a6b20d30840055eb519a0e89  python-networkmanager-1.2.1.tar.gz
+> +# md5 from https://pypi.python.org/pypi/python-networkmanager/json, sha256 locally computed
+> +md5	5fc644a65463031295c6b7dd51a0f1bd  python-networkmanager-2.0.1.tar.gz
+> +sha256	bc36507506ad29bfdac941b0987ebd1cc9633c9a9291d7378e229e4515a0a517  python-networkmanager-2.0.1.tar.gz
+> diff --git a/package/python-networkmanager/python-networkmanager.mk b/package/python-networkmanager/python-networkmanager.mk
+> index d0e4011421..7401396421 100644
+> --- a/package/python-networkmanager/python-networkmanager.mk
+> +++ b/package/python-networkmanager/python-networkmanager.mk
+> @@ -4,11 +4,11 @@
+>  #
+>  ################################################################################
+>  
+> -PYTHON_NETWORKMANAGER_VERSION = 1.2.1
+> -PYTHON_NETWORKMANAGER_SITE = https://pypi.python.org/packages/e7/b1/09993250ceea9e03bc65fbabcd5286540200292c011b22237b2963c11471
+> -PYTHON_NETWORKMANAGER_SETUP_TYPE = distutils
+> -PYTHON_NETWORKMANAGER_LICENSE = GPL-3.0+
+> +PYTHON_NETWORKMANAGER_VERSION = 2.0.1
+> +PYTHON_NETWORKMANAGER_SOURCE = python-networkmanager-$(PYTHON_NETWORKMANAGER_VERSION).tar.gz
+> +PYTHON_NETWORKMANAGER_SITE = https://pypi.python.org/packages/d7/f9/5cbd99fd24a072875ce048e48d1754285f137aab447de8fee63b6cba990a
+> +PYTHON_NETWORKMANAGER_SETUP_TYPE = setuptools
+> +PYTHON_NETWORKMANAGER_LICENSE = Zlib
+>  PYTHON_NETWORKMANAGER_LICENSE_FILES = COPYING
+> -PYTHON_NETWORKMANAGER_DEPENDENCIES = dbus-python
+>  
+>  $(eval $(python-package))
+
+baruch
+
 -- 
-Florian
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
