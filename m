@@ -1,36 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 3 Nov 2017 18:53:01 +0100
-Subject: [Buildroot] [PATCH] package/mono: bump to version 5.4.0.201
-In-Reply-To: <1509720211-9625-1-git-send-email-angelo.compagnucci@gmail.com>
-References: <1509720211-9625-1-git-send-email-angelo.compagnucci@gmail.com>
-Message-ID: <20171103185301.6fb471ca@windsurf>
+Date: Fri, 3 Nov 2017 18:53:36 +0100
+Subject: [Buildroot] [git commit] DEVELOPERS: Add myself to several packages
+Message-ID: <20171103174619.BE58A80676@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=bce8c0ec6a8cfc7d5c5f766c3bde3daebe3cf8e4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri,  3 Nov 2017 15:43:31 +0100, Angelo Compagnucci wrote:
-> This patch bumps mono to version 5.4.0.201 and monolite
-> to version 1050400003.
-> It also removes a patch not needed anymore.
-> 
-> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-> ---
->  ...-monodoc-Fixing-wrong-monodoc-search-path.patch | 29 ----------------------
->  package/mono/mono.hash                             |  2 +-
->  package/mono/mono.mk                               |  2 +-
->  package/monolite/monolite.hash                     |  2 +-
->  package/monolite/monolite.mk                       |  6 ++---
->  5 files changed, 6 insertions(+), 35 deletions(-)
->  delete mode 100644 package/mono/0008-monodoc-Fixing-wrong-monodoc-search-path.patch
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ DEVELOPERS | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/DEVELOPERS b/DEVELOPERS
+index b357693..49fa789 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -31,8 +31,16 @@ F:	package/gstreamer1/gst1-rtsp-server/
+ 
+ N:	Adam Duskett <aduskett@gmail.com>
+ F:	package/audit/
++F:	package/busybox/
+ F:	package/checkpolicy/
++F:	package/cppdb/
++F:	package/gstreamer1/gstreamer1/
++F:	package/gstreamer1/gst1-plugins-bad/
++F:	package/gstreamer1/gst1-plugins-base/
++F:	package/gstreamer1/gst1-plugins-good/
++F:	package/gstreamer1/gst1-plugins-ugly/
+ F:	package/gstreamer1/gst1-vaapi/
++F:	package/imx-usb-loader/
+ F:	package/janus-gateway/
+ F:	package/libressl/
+ F:	package/libselinux/
