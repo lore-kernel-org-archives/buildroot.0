@@ -1,70 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri,  3 Nov 2017 23:28:38 +0100
-Subject: [Buildroot] [PATCH 2/2] usb_modeswitch: explicitly set --host /
- --build for the embedded jimtcl
-In-Reply-To: <20171103222838.3974-1-peter@korsgaard.com>
-References: <20171103222838.3974-1-peter@korsgaard.com>
-Message-ID: <20171103222838.3974-2-peter@korsgaard.com>
+Date: Fri, 03 Nov 2017 23:31:17 +0100
+Subject: [Buildroot] Analysis of build results for 2017-10-30
+In-Reply-To: <87efpheyry.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
+ "Thu, 02 Nov 2017 11:54:41 +0100")
+References: <20171031070013.AD75D207B2@mail.free-electrons.com>
+ <20171031230519.3feb2619@windsurf>
+ <20171101180319.qs5oueonqz2robr5@tarshish>
+ <87efpheyry.fsf@dell.be.48ers.dk>
+Message-ID: <87r2tf3sga.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/106/106af20196089e74c35daabdae46f030981600bd/
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-Otherwise the (handwritten) configure script uses a config.guess script from
-2010 to figure out the build host, breaking builds on ppc64le hosts.
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+ > Hi,
 
-The result of --host / --build is only used to detect if we are building for
-Windows or not, which is why things are working on x86(-64) build hosts
-without specifying --host even though we are cross compiling - But this may
-change in the future, so we better pass the correct values.
+ >> make[2]: *** [jim/libjim.a] Error 1
+ >> make[2]: *** Waiting for unfinished jobs....
 
-Passing extra jimtcl configure flags is unfortunately not forseen in the
-usb_modeswitch Makefile, so add a small patch making this possible.
+ >>> Baruch, you are the last person who bumped this package, could you have a look?
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...low-extra-configure-flags-to-be-passed-to.patch | 29 ++++++++++++++++++++++
- 1 file changed, 29 insertions(+)
- create mode 100644 package/usb_modeswitch/0001-Makefile-allow-extra-configure-flags-to-be-passed-to.patch
+ >> The autobuilder indicates[1] that it only fails on Peter's gcc112 Powerpc 
+ >> host. Debugging this requires access to a Powerpc host.
 
-diff --git a/package/usb_modeswitch/0001-Makefile-allow-extra-configure-flags-to-be-passed-to.patch b/package/usb_modeswitch/0001-Makefile-allow-extra-configure-flags-to-be-passed-to.patch
-new file mode 100644
-index 0000000000..9e1e681fa5
---- /dev/null
-+++ b/package/usb_modeswitch/0001-Makefile-allow-extra-configure-flags-to-be-passed-to.patch
-@@ -0,0 +1,29 @@
-+From 1309df373c882f27f476130b06746a6d1e1a0f85 Mon Sep 17 00:00:00 2001
-+From: Peter Korsgaard <peter@korsgaard.com>
-+Date: Fri, 3 Nov 2017 23:21:44 +0100
-+Subject: [PATCH] Makefile: allow extra configure flags to be passed to jimtcl
-+ on the make command line
-+
-+E.G. to pass --host / --build for cross compilation.
-+
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ Makefile | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/Makefile b/Makefile
-+index a151e2a..94dabd9 100644
-+--- a/Makefile
-++++ b/Makefile
-+@@ -19,7 +19,7 @@ TCL        ?= $(HOST_TCL)
-+ else
-+ TCL        ?= /usr/bin/tclsh
-+ endif
-+-JIM_CONFIGURE_OPTS = --disable-lineedit \
-++override JIM_CONFIGURE_OPTS += --disable-lineedit \
-+ 	--with-out-jim-ext="stdlib posix load signal syslog" --prefix=/usr
-+ 
-+ .PHONY: clean install install-common uninstall \
-+-- 
-+2.11.0
-+
+ > You can request an account on the cfarm machines here:
+
+ > https://cfarm.tetaneutral.net/users/new/
+
+ > But I have just started a manual build on gcc112 to debug what the issue
+ > is.
+
+It was because jimtcl used an old config.guess without ppc64le support
+and we weren't passing the correct --host / --build arguments. I've send
+a patch series fixing this:
+
+https://patchwork.ozlabs.org/project/buildroot/list/?series=11854
+
 -- 
-2.11.0
+Bye, Peter Korsgaard
