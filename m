@@ -1,80 +1,91 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 3 Nov 2017 23:08:43 +0100
-Subject: [Buildroot] [PATCH] fs: add missing $$(sep) to pre- and
- post-command hooks code
-In-Reply-To: <20171103184953.32650-1-andrew.smirnov@gmail.com>
-References: <20171103184953.32650-1-andrew.smirnov@gmail.com>
-Message-ID: <20171103220843.GD3387@scaer>
+From: =?UTF-8?B?U3RlZmFuIEZyw7ZiZXJn?= <stefan.froberg@petroprogram.com>
+Date: Sat, 04 Nov 2017 00:17:42 +0200
+Subject: [Buildroot] [PATCH v2 1/1] turbovnc: new package
+In-Reply-To: <20171102222811.4d501282@windsurf>
+References: <1509367204-12966-1-git-send-email-stefan.froberg@petroprogram.com>	<20171101060657.tzjnt4ceb25irb3o@sapphire.tkos.co.il>	<20171101105305.1cd82e60@windsurf>	<59FB8C69.7050108@petroprogram.com>
+ <20171102222811.4d501282@windsurf>
+Message-ID: <59FCEB06.8000702@petroprogram.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Andrey, All,
+Hi
 
-On 2017-11-03 11:49 -0700, Andrey Smirnov spake thusly:
-> When multiple hooks are registred, both pre-a and post-command hooks'
-> foreach loops need to have a separator at the end in order for the
-> code to work as intended. Without the separator all hooks end up as a
-> one single line command thus making all but the first hook into
-> no-ops.
+Upstream was very helpfull and fast :-)
+https://github.com/TurboVNC/turbovnc/issues/111
 
-I had a hard time figuring out why they were ignored (and I was the one
-writing that). And it is pretty trivial: each hook is printed with
-PRINTF, which expands the hook in single quote, and there is no format
-string at all.
+So system-wide bzip2,freetype and zlib should be possible with version 
+2.1.3
+:-)
+https://github.com/TurboVNC/turbovnc/commit/88fae55850b4888e4aef6512e183a959d73df1e7
 
-So two hooks get expanded into (all on one line):
-    printf 'something expnded from first hook\n' print 'something else'
+But the following raises a tought:
 
-and so on for the third and subsquent hooks. This should have been part
-of the commit message, I guess...
+"On RHEL 7 & Fedora, I can generate a fully system-specific build of 
+TurboVNC like so:
 
-> Fixes: 4628b6f3b4 ("fs: add pre- and post-command hooks")
-> Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-> Cc: Romain Naour <romain.naour@gmail.com>
-> Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
+cmake -G"Unix Makefiles" -DTVNC_SYSTEMLIBS=1 -DTVNC_SYSTEMX11=1 
+-DTVNC_DLOPENSSL=0 -DTJPEG_INCLUDE_DIR=/usr/include 
+-DTJPEG_LIBRARY=-lturbojpeg
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Generally TVNC_SYSTEMX11 won't work unless the system is using the same 
+version of X.org as the TurboVNC Server, or a newer version."
 
-Yet, could you explain the use-case where you need other such hooks?
+So how should I check, if using -DTVNC_SYSTEMX11=1 switch, that the 
+builded system Xorg headers/libs and the
+TurboVNC bundled Xorg are at least same version ???
 
-Regards,
-Yann E. MORIN.
+-S-
 
-> ---
->  fs/common.mk | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/fs/common.mk b/fs/common.mk
-> index 9a7758ff49..5b612a3f41 100644
-> --- a/fs/common.mk
-> +++ b/fs/common.mk
-> @@ -96,13 +96,13 @@ endif
->  		echo "echo '$$(TERM_BOLD)>>>   Executing fakeroot script $$(s)$$(TERM_RESET)'" >> $$(FAKEROOT_SCRIPT); \
->  		echo $$(s) $$(TARGET_DIR) $$(BR2_ROOTFS_POST_SCRIPT_ARGS) >> $$(FAKEROOT_SCRIPT)$$(sep))
->  	$$(foreach hook,$$(ROOTFS_PRE_CMD_HOOKS),\
-> -		$$(call PRINTF,$$($$(hook))) >> $$(FAKEROOT_SCRIPT))
-> +		$$(call PRINTF,$$($$(hook))) >> $$(FAKEROOT_SCRIPT)$$(sep))
->  ifeq ($$(BR2_REPRODUCIBLE),y)
->  	echo "find $$(TARGET_DIR) -print0 | xargs -0 -r touch -hd @$$(SOURCE_DATE_EPOCH)" >> $$(FAKEROOT_SCRIPT)
->  endif
->  	$$(call PRINTF,$$(ROOTFS_$(2)_CMD)) >> $$(FAKEROOT_SCRIPT)
->  	$$(foreach hook,$$(ROOTFS_POST_CMD_HOOKS),\
-> -		$$(call PRINTF,$$($$(hook))) >> $$(FAKEROOT_SCRIPT))
-> +		$$(call PRINTF,$$($$(hook))) >> $$(FAKEROOT_SCRIPT)$$(sep))
->  	chmod a+x $$(FAKEROOT_SCRIPT)
->  	PATH=$$(BR_PATH) $$(HOST_DIR)/bin/fakeroot -- $$(FAKEROOT_SCRIPT)
->  	$$(INSTALL) -m 0644 support/misc/target-dir-warning.txt $$(TARGET_DIR_WARNING_FILE)
-> -- 
-> 2.13.6
-> 
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.11.2017, 23:28, Thomas Petazzoni kirjoitti:
+> Hello,
+>
+> On Thu, 02 Nov 2017 23:21:45 +0200, Stefan Fr?berg wrote:
+>
+>
+>> libbzip2.a      libfontenc.a    librandr.a    libXau.a libxkb.a
+>> libcomposite.a  libfreetype2.a  librender.a   libXdmcp.a libXNVCtrl.a
+>> libdamage.a     libmain.a       libsha1.a     libXext-server.a libzlib.a
+>> libdamageext.a  libmi.a         libsync.a     libxfixes.a
+>> libdix.a        libos.a         libvnc.a      libXfont.a
+>> libfb.a         libpixman.a     libvncauth.a  libXi.a
+> That's a lot of static libraries, but I'm sure TurboVNC didn't
+> duplicate the source code for all of these. Perhaps it is copying them
+> from their system-wide location to its build directory, for some funky
+> reason?
+>
+>> But then doing ldd for Xvnc binary gives this:
+>> Xvnc:
+>>           linux-vdso.so.1 (0x00007fffbbffe000)
+>>           libturbojpeg.so.0 => /usr/lib64/libturbojpeg.so.0
+>> (0x00007f1d221b8000)
+>>           libm.so.6 => /lib64/libm.so.6 (0x00007f1d21eba000)
+>>           libpthread.so.0 => /lib64/libpthread.so.0 (0x00007f1d21c9e000)
+>>           libpam.so.0 => /lib64/libpam.so.0 (0x00007f1d21a90000)
+>>           libdl.so.2 => /lib64/libdl.so.2 (0x00007f1d2188c000)
+>>           libSM.so.6 => /usr/lib64/libSM.so.6 (0x00007f1d21683000)
+>>           libICE.so.6 => /usr/lib64/libICE.so.6 (0x00007f1d21466000)
+>>           libX11.so.6 => /usr/lib64/libX11.so.6 (0x00007f1d21124000)
+>>           libXext.so.6 => /usr/lib64/libXext.so.6 (0x00007f1d20f12000)
+>>           libc.so.6 => /lib64/libc.so.6 (0x00007f1d20b76000)
+>>           /lib64/ld-linux-x86-64.so.2 (0x00007f1d2242b000)
+>>           libuuid.so.1 => /lib64/libuuid.so.1 (0x00007f1d20971000)
+>>           libbsd.so.0 => /usr/lib64/libbsd.so.0 (0x00007f1d2075b000)
+>>           libxcb.so.1 => /usr/lib64/libxcb.so.1 (0x00007f1d20532000)
+>>           librt.so.1 => /lib64/librt.so.1 (0x00007f1d2032a000)
+>>           libXau.so.6 => /usr/lib64/libXau.so.6 (0x00007f1d20126000)
+>>           libXdmcp.so.6 => /usr/lib64/libXdmcp.so.6 (0x00007f1d1ff20000)
+>>
+>> So it builds a static versions of libXau.a libXdmcp.a for example, but
+>> then does not use them anyway in the final link but instead the system
+>> wide versions ?
+>>
+>> I posted question to github if bzip2, freetype2 and zlib can be external
+>> dependencies or if they contain some TurboVNC specific stuff.
+> Thanks. Let's see what upstream says.
+>
+> Best regards,
+>
+> Thomas
