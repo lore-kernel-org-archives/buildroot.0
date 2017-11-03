@@ -1,91 +1,58 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri, 3 Nov 2017 07:01:30 +0200
-Subject: [Buildroot] [PATCH v3 1/1] package/python-networkmanager: Bump
- to version 2.0.1
-In-Reply-To: <20171102224531.19739-1-petr.vorel@gmail.com>
-References: <20171102224531.19739-1-petr.vorel@gmail.com>
-Message-ID: <20171103050130.6uvq2nfbbalzk6uc@tarshish>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Fri, 3 Nov 2017 07:22:09 +0100
+Subject: [Buildroot] [PATCH] package/python-toml: bump to version 0.9.3
+In-Reply-To: <20171103004757.20717-1-andrew.smirnov@gmail.com>
+References: <20171103004757.20717-1-andrew.smirnov@gmail.com>
+Message-ID: <CAGm1_kuCXNSnw2z8XM+GmCwc2giE4UWbgjGB3PBHAtaYmoR07g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Petr,
+On Fri, Nov 3, 2017 at 1:47 AM, Andrey Smirnov <andrew.smirnov@gmail.com> wrote:
+> Bump package to version 0.9.3 and change _SETUP_TYPE to
+> 'setuptools', since its setup.py now uses 'setuptools' by default and
+> switches to 'distutils' only as a fallback[1]
+>
+> [1] https://github.com/uiri/toml/blob/0.9.3/setup.py#L2
+>
+> Cc: Yegor Yefremov <yegorslists@googlemail.com>
+> Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
 
-On Thu, Nov 02, 2017 at 11:45:31PM +0100, Petr Vorel wrote:
-> Added new runtime dependency on python-six.
-> 
-> Dropped dbus-python as build time dependency (it's only runtime
-> dependency).
-> 
-> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-> CC: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+
+Yegor
+
 > ---
-> Changes v2->v3:
-> * Dropped dbus-python as build time dependency (it's only runtime
-> dependency).
-> 
-> Thomas, it seems, it's really only runtime dependency. Building as
-> make clean; make python-networkmanager
-> is successful and dbus-python-1.2.4 is not built.
-> ---
->  package/python-networkmanager/Config.in                  |  1 +
->  package/python-networkmanager/python-networkmanager.hash |  6 +++---
->  package/python-networkmanager/python-networkmanager.mk   | 10 +++++-----
->  3 files changed, 9 insertions(+), 8 deletions(-)
-> 
-> diff --git a/package/python-networkmanager/Config.in b/package/python-networkmanager/Config.in
-> index fcbce5748d..c99f2c31ad 100644
-> --- a/package/python-networkmanager/Config.in
-> +++ b/package/python-networkmanager/Config.in
-> @@ -5,6 +5,7 @@ config BR2_PACKAGE_PYTHON_NETWORKMANAGER
->  	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus-python
->  	depends on BR2_PACKAGE_DBUS # dbus-python
->  	select BR2_PACKAGE_DBUS_PYTHON
-> +	select BR2_PACKAGE_PYTHON_SIX
-
-Run-time only dependencies are usually marked with a '# run-time' comment.
-
->  	help
->  	  python-networkmanager wraps NetworkManagers D-Bus interface
->  	  so you can be less verbose when talking to NetworkManager
-> diff --git a/package/python-networkmanager/python-networkmanager.hash b/package/python-networkmanager/python-networkmanager.hash
-> index cbd6febcd1..1fed4befb7 100644
-> --- a/package/python-networkmanager/python-networkmanager.hash
-> +++ b/package/python-networkmanager/python-networkmanager.hash
-> @@ -1,3 +1,3 @@
-> -# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=97c84c19b84b1124903a06379b107f77, sha256 locally computed
-> -md5	97c84c19b84b1124903a06379b107f77  python-networkmanager-1.2.1.tar.gz
-> -sha256	7107c07383f8077cfac33fdbb3c4cda4de40be20a6b20d30840055eb519a0e89  python-networkmanager-1.2.1.tar.gz
-> +# md5 from https://pypi.python.org/pypi/python-networkmanager/json, sha256 locally computed
-> +md5	5fc644a65463031295c6b7dd51a0f1bd  python-networkmanager-2.0.1.tar.gz
-> +sha256	bc36507506ad29bfdac941b0987ebd1cc9633c9a9291d7378e229e4515a0a517  python-networkmanager-2.0.1.tar.gz
-> diff --git a/package/python-networkmanager/python-networkmanager.mk b/package/python-networkmanager/python-networkmanager.mk
-> index d0e4011421..7401396421 100644
-> --- a/package/python-networkmanager/python-networkmanager.mk
-> +++ b/package/python-networkmanager/python-networkmanager.mk
-> @@ -4,11 +4,11 @@
+>  package/python-toml/python-toml.hash | 2 +-
+>  package/python-toml/python-toml.mk   | 4 ++--
+>  2 files changed, 3 insertions(+), 3 deletions(-)
+>
+> diff --git a/package/python-toml/python-toml.hash b/package/python-toml/python-toml.hash
+> index cbc71a961b..20737c3ca4 100644
+> --- a/package/python-toml/python-toml.hash
+> +++ b/package/python-toml/python-toml.hash
+> @@ -1,2 +1,2 @@
+>  # Locally computed
+> -sha256 aee9679726f42fb09f48b9701a321571e0b6a51305c3e0f3913b3057d8bf7083  python-toml-0.9.2.tar.gz
+> +sha256 633a90ecb1f5665b58f0c94153fcf519313ef53e1de0eac90929cd6b6a014235  python-toml-0.9.3.tar.gz
+> diff --git a/package/python-toml/python-toml.mk b/package/python-toml/python-toml.mk
+> index fec113e1cb..fae15f938d 100644
+> --- a/package/python-toml/python-toml.mk
+> +++ b/package/python-toml/python-toml.mk
+> @@ -4,9 +4,9 @@
 >  #
 >  ################################################################################
->  
-> -PYTHON_NETWORKMANAGER_VERSION = 1.2.1
-> -PYTHON_NETWORKMANAGER_SITE = https://pypi.python.org/packages/e7/b1/09993250ceea9e03bc65fbabcd5286540200292c011b22237b2963c11471
-> -PYTHON_NETWORKMANAGER_SETUP_TYPE = distutils
-> -PYTHON_NETWORKMANAGER_LICENSE = GPL-3.0+
-> +PYTHON_NETWORKMANAGER_VERSION = 2.0.1
-> +PYTHON_NETWORKMANAGER_SOURCE = python-networkmanager-$(PYTHON_NETWORKMANAGER_VERSION).tar.gz
-> +PYTHON_NETWORKMANAGER_SITE = https://pypi.python.org/packages/d7/f9/5cbd99fd24a072875ce048e48d1754285f137aab447de8fee63b6cba990a
-> +PYTHON_NETWORKMANAGER_SETUP_TYPE = setuptools
-> +PYTHON_NETWORKMANAGER_LICENSE = Zlib
->  PYTHON_NETWORKMANAGER_LICENSE_FILES = COPYING
-> -PYTHON_NETWORKMANAGER_DEPENDENCIES = dbus-python
->  
->  $(eval $(python-package))
-
-baruch
-
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+>
+> -PYTHON_TOML_VERSION = 0.9.2
+> +PYTHON_TOML_VERSION = 0.9.3
+>  PYTHON_TOML_SITE = $(call github,uiri,toml,$(PYTHON_TOML_VERSION))
+> -PYTHON_TOML_SETUP_TYPE = distutils
+> +PYTHON_TOML_SETUP_TYPE = setuptools
+>  PYTHON_TOML_LICENSE = MIT
+>  PYTHON_TOML_LICENSE_FILES = LICENSE
+>
+> --
+> 2.13.6
+>
