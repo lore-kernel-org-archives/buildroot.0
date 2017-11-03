@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 3 Nov 2017 22:00:12 +0100
-Subject: [Buildroot] [PATCH 1/2] Revert "libiio: Disable IIOD on
- Blackfin"
-In-Reply-To: <20171103103034.24937-1-s.martin49@gmail.com>
-References: <20171103103034.24937-1-s.martin49@gmail.com>
-Message-ID: <20171103220012.31af82f5@windsurf>
+Date: Fri, 3 Nov 2017 22:01:25 +0100
+Subject: [Buildroot] [PATCH] package/python-toml: bump to version 0.9.3
+In-Reply-To: <20171103004757.20717-1-andrew.smirnov@gmail.com>
+References: <20171103004757.20717-1-andrew.smirnov@gmail.com>
+Message-ID: <20171103220125.0301f1b0@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,19 +12,21 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri,  3 Nov 2017 11:30:33 +0100, Samuel Martin wrote:
-> This reverts commit 53996bee433f09a91b12aa53b2be0f7d22c0acbe.
+On Thu,  2 Nov 2017 17:47:57 -0700, Andrey Smirnov wrote:
+> Bump package to version 0.9.3 and change _SETUP_TYPE to
+> 'setuptools', since its setup.py now uses 'setuptools' by default and
+> switches to 'distutils' only as a fallback[1]
 > 
-> Commit 93a86b4dec9e73fbe0e186cdde8fb04a36a44762 fixes accept4 support
-> in uclibc on Blackfin, so re-enable iiod on this target.
+> [1] https://github.com/uiri/toml/blob/0.9.3/setup.py#L2
 > 
-> Cc: Paul Cercueil <paul.cercueil@analog.com>
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+> Cc: Yegor Yefremov <yegorslists@googlemail.com>
+> Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
 > ---
->  package/libiio/Config.in | 5 -----
->  1 file changed, 5 deletions(-)
+>  package/python-toml/python-toml.hash | 2 +-
+>  package/python-toml/python-toml.mk   | 4 ++--
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
-Both patches applied. Thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
