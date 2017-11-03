@@ -1,75 +1,36 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Fri, 3 Nov 2017 15:35:14 +0100
-Subject: [Buildroot] Analysis of build results for 2017-10-30
-In-Reply-To: <20171103152854.4cfb8076@windsurf>
-References: <20171031070013.AD75D207B2@mail.free-electrons.com>
- <20171031230519.3feb2619@windsurf> <20171102232155.11995715@windsurf>
- <CA+TH9Vkq1oPHSwTTJTzr4MdVRo6=zWMgG5pLKTsf3-ZAwhNKjw@mail.gmail.com>
- <20171103143828.4f57ab67@windsurf>
- <CA+TH9V=Uw2C7L4M0P9+uos5M66EGjLLHFFq50EqJPEGppKhV2Q@mail.gmail.com>
- <20171103145257.172edd86@windsurf>
- <CA+TH9VmEJrzwPHW8c6qR5K1bN5uTTce54vm9Fpq6met2we_bMA@mail.gmail.com>
- <20171103152854.4cfb8076@windsurf>
-Message-ID: <CA+TH9Vnz0nTfDaAoqPrmbVVxJppBhVo3jz73XYA-ZoOud+9FNg@mail.gmail.com>
+From: =?UTF-8?Q?Einar_J=C3=B3n_Gunnarsson?= <tolvupostur@gmail.com>
+Date: Fri, 3 Nov 2017 07:40:41 -0700 (MST)
+Subject: [Buildroot] BR2_REPRODUCIBLE issues
+Message-ID: <1509720041684-0.post@n4.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas Petazzoni,
+Hello all.
 
-2017-11-03 15:28 GMT+01:00 Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com>:
-> Hello,
->
-> On Fri, 3 Nov 2017 15:18:24 +0100, Angelo Compagnucci wrote:
->
->> > But you won't be able to reproduce the problem on your PC, because your
->> > PC is x86-64, and the build failure seems to be specific to building on
->> > ppc64le.
->> >
->> > Do you have an account on the gcc compile farm ?
->>
->> Of course no.
->
-> You could ask for one, see https://cfarm.tetaneutral.net/users/new/.
+I've been using BR2_REPRODUCIBLE, and it mostly works.
 
-Wonderful! I'll do in minutes!
+But when it is using a git repo, I have the following issues with creating
+SOURCE_DATE_EPOCH:
+1) It uses $(GIT), but the GIT variable is only defined in line 487:
+"include package/Makefile.in".
+Note that this is done around line 250 in $(TOPDIR)/Makefile, so sometimes
+$(GIT) is unset then getting BR2_VERSION_GIT_EPOCH
+2) It always uses the last git commit to calculate the date. So any commit
+changes the timestamp, while the non-git timestamp stays the same.
+This makes the whole thing almost useless.
+If the git log command could take a parameter, you could make reproducible
+builds based on e.g. tag 2017.08, which would be much more useful.
 
->
->> I don't think I can help here. If the problem persists,
->> probably the best way is to disable mono when the host is ppc64le.
->
-> Which host platforms does mono support? Should we enable it only for
-> x86/x86-64 build machines?
+Regards,
+Einar J?n
 
-Mono supports PPC architectures at least stating to the documentation [1]
-
-> Do you think you could report this issue upstream?
-
-I don't think this should be reported as a bug. Mono is running while
-that error happens, so the problem is somewhere in a library or
-similar.
-I'll investigate more when the account on the farm will be enabled.
-
-I'm just sending a mono bump upstream and hopefully the new version
-will solve the problem. Do you think I'm late?
-
-Sincerely, Angelo
-
->
-> Thanks,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux and Kernel engineering
-> http://free-electrons.com
-
-[1] http://www.mono-project.com/docs/about-mono/supported-platforms/
-
-
-
--- 
-Profile: http://it.linkedin.com/in/compagnucciangelo
+An idea for a patch made against origin/next - feel free to do whatever with
+it.
+if BR2_REPRODUCIBLE_CUSTOM_REPO_VERSION is empty, the behaviour is unchanged
+from before.
+Maybe setting the default value of BR2_REPRODUCIBLE_CUSTOM_REPO_VERSION to
+the last major tag version might make sense.
+------
