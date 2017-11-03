@@ -1,109 +1,52 @@
-From: Joseph Kogut <joseph.kogut@gmail.com>
-Date: Fri,  3 Nov 2017 14:01:27 -0700
-Subject: [Buildroot] [PATCH v2] python-raven: new package
-Message-ID: <20171103210127.19979-1-joseph.kogut@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 3 Nov 2017 22:01:18 +0100
+Subject: [Buildroot] [git commit] package/python-toml: bump to version 0.9.3
+Message-ID: <20171103205425.A10DD80F86@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Changes since v1:
-- reword commit to match upstream style
-- fold the DEVELOPERS modifications into the same commit
-- add Config selections for required python core modules
-- bump version to 6.3.0
+commit: https://git.buildroot.net/buildroot/commit/?id=ebaf9f7ffd2504e48d32e16b327aae1162eba8f2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Tested in a clean chroot, events are generated for exceptions, and
-reported to the server configured for the client.
+Bump package to version 0.9.3 and change _SETUP_TYPE to
+'setuptools', since its setup.py now uses 'setuptools' by default and
+switches to 'distutils' only as a fallback[1]
 
-Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
+[1] https://github.com/uiri/toml/blob/0.9.3/setup.py#L2
+
+Cc: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
+Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- DEVELOPERS                             |  3 +++
- package/Config.in                      |  1 +
- package/python-raven/Config.in         | 15 +++++++++++++++
- package/python-raven/python-raven.hash |  3 +++
- package/python-raven/python-raven.mk   | 14 ++++++++++++++
- 5 files changed, 36 insertions(+)
- create mode 100644 package/python-raven/Config.in
- create mode 100644 package/python-raven/python-raven.hash
- create mode 100644 package/python-raven/python-raven.mk
+ package/python-toml/python-toml.hash | 2 +-
+ package/python-toml/python-toml.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 49fa789c1d..3fc9d52a1b 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -787,6 +787,9 @@ F:	package/pdbg/
- F:	board/qemu/ppc64le-pseries/
- F:	configs/qemu_ppc64le_pseries_defconfig
-
-+N:	Joseph Kogut <joseph.kogut@gmail.com>
-+F:	package/python-raven/
-+
- N:	Johan Derycke <johanderycke@gmail.com>
- F:	package/python-libconfig/
-
-diff --git a/package/Config.in b/package/Config.in
-index 28444f64de..13a3bf0406 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -874,6 +874,7 @@ menu "External python modules"
- 	source "package/python-pyxb/Config.in"
- 	source "package/python-pyyaml/Config.in"
- 	source "package/python-pyzmq/Config.in"
-+	source "package/python-raven/Config.in"
- 	source "package/python-requests/Config.in"
- 	source "package/python-requests-toolbelt/Config.in"
- 	source "package/python-rpi-gpio/Config.in"
-diff --git a/package/python-raven/Config.in b/package/python-raven/Config.in
-new file mode 100644
-index 0000000000..f8954e085c
---- /dev/null
-+++ b/package/python-raven/Config.in
-@@ -0,0 +1,15 @@
-+config BR2_PACKAGE_PYTHON_RAVEN
-+	bool "python-raven"
-+	select BR2_PACKAGE_PYTHON_ZLIB if BR2_PACKAGE_PYTHON
-+	select BR2_PACKAGE_PYTHON3_ZLIB if BR2_PACKAGE_PYTHON3
-+
-+	select BR2_PACKAGE_PYTHON_SSL if BR2_PACKAGE_PYTHON
-+	select BR2_PACKAGE_PYTHON3_SSL if BR2_PACKAGE_PYTHON3
-+
-+	select BR2_PACKAGE_PYTHON_UNICODEDATA if BR2_PACKAGE_PYTHON
-+	select BR2_PACKAGE_PYTHON3_UNICODEDATA if BR2_PACKAGE_PYTHON3
-+
-+	help
-+	  Raven is a client for Sentry (https://getsentry.com).
-+
-+	  https://github.com/getsentry/raven-python
-diff --git a/package/python-raven/python-raven.hash b/package/python-raven/python-raven.hash
-new file mode 100644
-index 0000000000..0e0a4f56e5
---- /dev/null
-+++ b/package/python-raven/python-raven.hash
-@@ -0,0 +1,3 @@
-+# md5 from https://pypi.python.org/pypi/raven/json, sha256 locally computed
-+md5	2efce7acbabe1a0f32d168736a654789  raven-6.3.0.tar.gz
-+sha256	f3e465a545dcdb6a387d1fcb199d08f786ba3732d7ce6aa681718b04da6aedf1  raven-6.3.0.tar.gz
-diff --git a/package/python-raven/python-raven.mk b/package/python-raven/python-raven.mk
-new file mode 100644
-index 0000000000..c17aac4a3d
---- /dev/null
-+++ b/package/python-raven/python-raven.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-raven
-+#
-+################################################################################
-+
-+PYTHON_RAVEN_VERSION = 6.3.0
-+PYTHON_RAVEN_SOURCE = raven-$(PYTHON_RAVEN_VERSION).tar.gz
-+PYTHON_RAVEN_SITE = https://pypi.python.org/packages/e8/b0/27886f69cdb4d9f6265bba1c4973bb5371b060272a5795c511d8839a6028
-+PYTHON_RAVEN_SETUP_TYPE = setuptools
-+PYTHON_RAVEN_LICENSE = BSD-3-Clause
-+PYTHON_RAVEN_LICENSE_FILES = LICENSE
-+
-+$(eval $(python-package))
---
-2.15.0
+diff --git a/package/python-toml/python-toml.hash b/package/python-toml/python-toml.hash
+index cbc71a9..20737c3 100644
+--- a/package/python-toml/python-toml.hash
++++ b/package/python-toml/python-toml.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256	aee9679726f42fb09f48b9701a321571e0b6a51305c3e0f3913b3057d8bf7083  python-toml-0.9.2.tar.gz
++sha256	633a90ecb1f5665b58f0c94153fcf519313ef53e1de0eac90929cd6b6a014235  python-toml-0.9.3.tar.gz
+diff --git a/package/python-toml/python-toml.mk b/package/python-toml/python-toml.mk
+index fec113e..fae15f9 100644
+--- a/package/python-toml/python-toml.mk
++++ b/package/python-toml/python-toml.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_TOML_VERSION = 0.9.2
++PYTHON_TOML_VERSION = 0.9.3
+ PYTHON_TOML_SITE = $(call github,uiri,toml,$(PYTHON_TOML_VERSION))
+-PYTHON_TOML_SETUP_TYPE = distutils
++PYTHON_TOML_SETUP_TYPE = setuptools
+ PYTHON_TOML_LICENSE = MIT
+ PYTHON_TOML_LICENSE_FILES = LICENSE
+ 
