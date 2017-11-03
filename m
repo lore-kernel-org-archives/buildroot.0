@@ -1,113 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 3 Nov 2017 21:59:58 +0100
-Subject: [Buildroot] [git commit] package/ussp-push: add patches fixing the
- build
-Message-ID: <20171103205426.231D480FDE@busybox.osuosl.org>
+Date: Fri, 3 Nov 2017 22:01:56 +0100
+Subject: [Buildroot] [PATCH] python-docutils: bump version to 0.14
+In-Reply-To: <20171103063935.30906-1-yegorslists@googlemail.com>
+References: <20171103063935.30906-1-yegorslists@googlemail.com>
+Message-ID: <20171103220156.2b6cd80e@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ec9486d3374070d56b6b9a0dfe99c26a28129923
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Fixes:
-  http://autobuild.buildroot.net/results/bdd932424a45399836f27c435d6f1f6fb8b97c29
-  http://autobuild.buildroot.net/results/287b7d35d64d72cbc587192cce1271bda9647608
-  http://autobuild.buildroot.net/results/82e1484d9a43df7387137a1bd679a4d74d460a79
+On Fri,  3 Nov 2017 07:39:35 +0100, yegorslists at googlemail.com wrote:
+> From: Yegor Yefremov <yegorslists@googlemail.com>
+> 
+> Add licence file checksum.
+> 
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+> ---
+>  package/python-docutils/python-docutils.hash | 5 +++--
+>  package/python-docutils/python-docutils.mk   | 4 ++--
+>  2 files changed, 5 insertions(+), 4 deletions(-)
 
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- .../0002-fix-build-again-obex-bluez.patch          | 28 +++++++++++++
- .../ussp-push/0003-add-OBEX_CharToUnicode.patch    | 47 ++++++++++++++++++++++
- 2 files changed, 75 insertions(+)
+Applied to master, thanks.
 
-diff --git a/package/ussp-push/0002-fix-build-again-obex-bluez.patch b/package/ussp-push/0002-fix-build-again-obex-bluez.patch
-new file mode 100644
-index 0000000..e98fe6e
---- /dev/null
-+++ b/package/ussp-push/0002-fix-build-again-obex-bluez.patch
-@@ -0,0 +1,28 @@
-+From 2d732026044d8e6cd16465ee87a73ac9692c021b Mon Sep 17 00:00:00 2001
-+From: Samuel Martin <s.martin49@gmail.com>
-+Date: Fri, 3 Nov 2017 09:04:12 +0100
-+Subject: [PATCH] fix build again obex/bluez
-+
-+[fetch from debian source: http://http.debian.net/debian/pool/main/u/ussp-push/ussp-push_0.11-4.debian.tar.xz]
-+
-+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-+---
-+ src/obex_main.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/obex_main.c b/src/obex_main.c
-+index a7126e6..6233d7e 100644
-+--- a/src/obex_main.c
-++++ b/src/obex_main.c
-+@@ -197,7 +197,7 @@ obex_t *__obex_connect(int devid, void *addr, int timeout, int *err)
-+ 		*err = -1;
-+ 		return NULL;
-+ 	}
-+-	if (!(handle = OBEX_Init(OBEX_TRANS_CUST, obex_event, 0))) {
-++	if (!(handle = OBEX_Init(OBEX_TRANS_CUSTOM, obex_event, 0))) {
-+ 		BTERROR("OBEX_Init failed: %s\n", strerror(errno));
-+ 		obex_free(gt);
-+ 		*err = -1;
-+-- 
-+2.15.0
-+
-diff --git a/package/ussp-push/0003-add-OBEX_CharToUnicode.patch b/package/ussp-push/0003-add-OBEX_CharToUnicode.patch
-new file mode 100644
-index 0000000..a660b55
---- /dev/null
-+++ b/package/ussp-push/0003-add-OBEX_CharToUnicode.patch
-@@ -0,0 +1,47 @@
-+From eafac77d76d2a23c191a56f715d6c4afc0800da8 Mon Sep 17 00:00:00 2001
-+From: Samuel Martin <s.martin49@gmail.com>
-+Date: Fri, 3 Nov 2017 09:10:01 +0100
-+Subject: [PATCH] add OBEX_CharToUnicode
-+
-+[fetch from debian source: http://http.debian.net/debian/pool/main/u/ussp-push/ussp-push_0.11-4.debian.tar.xz]
-+
-+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-+---
-+ src/obex_main.c | 20 ++++++++++++++++++++
-+ 1 file changed, 20 insertions(+)
-+
-+diff --git a/src/obex_main.c b/src/obex_main.c
-+index 6233d7e..971cc37 100644
-+--- a/src/obex_main.c
-++++ b/src/obex_main.c
-+@@ -84,7 +84,27 @@ void request_done(obex_t * handle, obex_object_t * object, int obex_cmd, int obe
-+ 
-+ int bt_debug;
-+ 
-++static int OBEX_CharToUnicode(uint8_t *uc, const uint8_t *c, int size)
-++{
-++	int len, n;
-++
-++	if (uc == NULL || c == NULL)
-++		return -1;
-++
-++	len = n = strlen((char *) c);
-++	if (n*2+2 > size)
-++		return -1;
-++
-++	uc[n*2+1] = 0;
-++	uc[n*2] = 0;
-+ 
-++	while (n--) {
-++		uc[n*2+1] = c[n];
-++		uc[n*2] = 0;
-++	}
-++
-++	return (len * 2) + 2;
-++}
-+ 
-+ /*
-+  * These two functions are from affix/profiles/obex/obex_io.c
-+-- 
-+2.15.0
-+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
