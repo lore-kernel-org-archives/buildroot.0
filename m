@@ -1,50 +1,47 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri,  3 Nov 2017 19:33:59 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libopenssl: security bump to
- version 1.0.2m
-Message-ID: <20171103183359.7598-1-bernd.kuhls@t-online.de>
+From: Andrey Smirnov <andrew.smirnov@gmail.com>
+Date: Fri,  3 Nov 2017 11:49:53 -0700
+Subject: [Buildroot] [PATCH] fs: add missing $$(sep) to pre- and
+ post-command hooks code
+Message-ID: <20171103184953.32650-1-andrew.smirnov@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes the following CVEs:
-bn_sqrx8x_internal carry bug on x86_64 (CVE-2017-3736)
-Malformed X.509 IPAddressFamily could cause OOB read (CVE-2017-3735)
+When multiple hooks are registred, both pre-a and post-command hooks'
+foreach loops need to have a separator at the end in order for the
+code to work as intended. Without the separator all hooks end up as a
+one single line command thus making all but the first hook into
+no-ops.
 
-Release notes: https://www.openssl.org/news/secadv/20171102.txt
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Fixes: 4628b6f3b4 ("fs: add pre- and post-command hooks")
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
 ---
- package/libopenssl/libopenssl.hash | 4 ++--
- package/libopenssl/libopenssl.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ fs/common.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libopenssl/libopenssl.hash b/package/libopenssl/libopenssl.hash
-index da911c5ce9..c6226c302f 100644
---- a/package/libopenssl/libopenssl.hash
-+++ b/package/libopenssl/libopenssl.hash
-@@ -1,5 +1,5 @@
--# From https://www.openssl.org/source/openssl-1.0.2l.tar.gz.sha256
--sha256	ce07195b659e75f4e1db43552860070061f156a98bb37b672b101ba6e3ddf30c	openssl-1.0.2l.tar.gz
-+# From https://www.openssl.org/source/openssl-1.0.2m.tar.gz.sha256
-+sha256	8c6ff15ec6b319b50788f42c7abc2890c08ba5a1cdcd3810eb9092deada37b0f	openssl-1.0.2m.tar.gz
- # Locally computed
- sha256	eddd8a5123748052c598214487ac178e4bfa4e31ba2ec520c70d59c8c5bfa2e9	openssl-1.0.2a-parallel-install-dirs.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d
- sha256	147c3eeaad614c044749ea527cb433eae5e2d5cad34a78c6ba61cd967bfbe01f	openssl-1.0.2a-parallel-obj-headers.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d
-diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
-index 90cff585f8..8cccb9c606 100644
---- a/package/libopenssl/libopenssl.mk
-+++ b/package/libopenssl/libopenssl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBOPENSSL_VERSION = 1.0.2l
-+LIBOPENSSL_VERSION = 1.0.2m
- LIBOPENSSL_SITE = http://www.openssl.org/source
- LIBOPENSSL_SOURCE = openssl-$(LIBOPENSSL_VERSION).tar.gz
- LIBOPENSSL_LICENSE = OpenSSL or SSLeay
+diff --git a/fs/common.mk b/fs/common.mk
+index 9a7758ff49..5b612a3f41 100644
+--- a/fs/common.mk
++++ b/fs/common.mk
+@@ -96,13 +96,13 @@ endif
+ 		echo "echo '$$(TERM_BOLD)>>>   Executing fakeroot script $$(s)$$(TERM_RESET)'" >> $$(FAKEROOT_SCRIPT); \
+ 		echo $$(s) $$(TARGET_DIR) $$(BR2_ROOTFS_POST_SCRIPT_ARGS) >> $$(FAKEROOT_SCRIPT)$$(sep))
+ 	$$(foreach hook,$$(ROOTFS_PRE_CMD_HOOKS),\
+-		$$(call PRINTF,$$($$(hook))) >> $$(FAKEROOT_SCRIPT))
++		$$(call PRINTF,$$($$(hook))) >> $$(FAKEROOT_SCRIPT)$$(sep))
+ ifeq ($$(BR2_REPRODUCIBLE),y)
+ 	echo "find $$(TARGET_DIR) -print0 | xargs -0 -r touch -hd @$$(SOURCE_DATE_EPOCH)" >> $$(FAKEROOT_SCRIPT)
+ endif
+ 	$$(call PRINTF,$$(ROOTFS_$(2)_CMD)) >> $$(FAKEROOT_SCRIPT)
+ 	$$(foreach hook,$$(ROOTFS_POST_CMD_HOOKS),\
+-		$$(call PRINTF,$$($$(hook))) >> $$(FAKEROOT_SCRIPT))
++		$$(call PRINTF,$$($$(hook))) >> $$(FAKEROOT_SCRIPT)$$(sep))
+ 	chmod a+x $$(FAKEROOT_SCRIPT)
+ 	PATH=$$(BR_PATH) $$(HOST_DIR)/bin/fakeroot -- $$(FAKEROOT_SCRIPT)
+ 	$$(INSTALL) -m 0644 support/misc/target-dir-warning.txt $$(TARGET_DIR_WARNING_FILE)
 -- 
-2.11.0
+2.13.6
