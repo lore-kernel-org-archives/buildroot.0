@@ -1,9 +1,9 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Fri,  3 Nov 2017 11:36:44 +0100
-Subject: [Buildroot] [PATCH 09/31] package/clapack: add license hash
+Date: Fri,  3 Nov 2017 11:36:46 +0100
+Subject: [Buildroot] [PATCH 11/31] package/fakeroot: add license hash
 In-Reply-To: <20171103103706.25574-1-s.martin49@gmail.com>
 References: <20171103103706.25574-1-s.martin49@gmail.com>
-Message-ID: <20171103103706.25574-10-s.martin49@gmail.com>
+Message-ID: <20171103103706.25574-12-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,17 +12,18 @@ To: buildroot@busybox.net
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 ---
- package/clapack/clapack.hash | 2 ++
+ package/fakeroot/fakeroot.hash | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/package/clapack/clapack.hash b/package/clapack/clapack.hash
-index 08657fc594..350120d588 100644
---- a/package/clapack/clapack.hash
-+++ b/package/clapack/clapack.hash
-@@ -1,2 +1,4 @@
- # Locally calculated
- sha256 0b3f782bc24845d85f36bafbff0f2f1384dc72df730fda4e7924ec1a70baca5a clapack-3.2.1-CMAKE.tgz
-+sha256 23014869214a231525b38c39fdb5f82364fa24154ac80fdcab2a79671460fd09 COPYING
-+sha256 44561c447e91203ddc747beeca5cc2794d95ee982c17c578670e4f0408bc3904 F2CLIBS/libf2c/Notice
+diff --git a/package/fakeroot/fakeroot.hash b/package/fakeroot/fakeroot.hash
+index f0d436e5c3..ef1adc0559 100644
+--- a/package/fakeroot/fakeroot.hash
++++ b/package/fakeroot/fakeroot.hash
+@@ -2,3 +2,5 @@
+ sha1	367040df07043edb630942b21939e493f3fad888	fakeroot_1.20.2.orig.tar.bz2
+ # Calculated based on the hash above
+ sha256	7c0a164d19db3efa9e802e0fc7cdfeff70ec6d26cdbdc4338c9c2823c5ea230c	fakeroot_1.20.2.orig.tar.bz2
++# Locally computed
++sha256	fc82ca8b6fdb18d4e3e85cfd8ab58d1bcd3f1b29abe782895abd91d64763f8e7	COPYING
 -- 
 2.15.0
