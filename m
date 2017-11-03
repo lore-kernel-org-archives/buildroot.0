@@ -1,7 +1,9 @@
 From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Fri,  3 Nov 2017 15:49:37 +0100
-Subject: [Buildroot] [PATCH 1/2] python-m2r: bump version to 0.1.12
-Message-ID: <20171103144938.17147-1-yegorslists@googlemail.com>
+Date: Fri,  3 Nov 2017 15:49:38 +0100
+Subject: [Buildroot] [PATCH 2/2] python-mistune: bump version to 0.8
+In-Reply-To: <20171103144938.17147-1-yegorslists@googlemail.com>
+References: <20171103144938.17147-1-yegorslists@googlemail.com>
+Message-ID: <20171103144938.17147-2-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,36 +16,36 @@ Add licence file checksum.
 
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- package/python-m2r/python-m2r.hash | 5 +++--
- package/python-m2r/python-m2r.mk   | 4 ++--
+ package/python-mistune/python-mistune.hash | 5 +++--
+ package/python-mistune/python-mistune.mk   | 4 ++--
  2 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-m2r/python-m2r.hash b/package/python-m2r/python-m2r.hash
-index 102da33b55..50de2b4f17 100644
---- a/package/python-m2r/python-m2r.hash
-+++ b/package/python-m2r/python-m2r.hash
+diff --git a/package/python-mistune/python-mistune.hash b/package/python-mistune/python-mistune.hash
+index cfc6a25e2c..e939aefc86 100644
+--- a/package/python-mistune/python-mistune.hash
++++ b/package/python-mistune/python-mistune.hash
 @@ -1,3 +1,4 @@
- # md5 from https://pypi.python.org/pypi/m2r/json, sha256 locally computed
--md5	aac67f2167a3d81c8ccd7615e9c2cb7a  m2r-0.1.6.tar.gz
--sha256	a26bc2e25e0ad3f8650385aea25cf734ac4fcd30e54faec92fd39675da75e527  m2r-0.1.6.tar.gz
-+md5	906eb6dabb0295c93881f32d0a1c0919  m2r-0.1.12.tar.gz
-+sha256	adfb86ebb7ff3fcd3ebb27ce8cd6f795c409a13f0c03363e265f17419ce5b9ab  m2r-0.1.12.tar.gz
-+sha256  28728ec0ecbd8c171ebaeccebf69e3961282fd81f06abc7424c65546b6ae6f27  LICENSE
-diff --git a/package/python-m2r/python-m2r.mk b/package/python-m2r/python-m2r.mk
-index b506ad8517..7c8ed28800 100644
---- a/package/python-m2r/python-m2r.mk
-+++ b/package/python-m2r/python-m2r.mk
+ # md5 from https://pypi.python.org/pypi/mistune/json, sha256 locally computed
+-md5	4eba50bd121b83716fa4be6a4049004b  mistune-0.7.3.tar.gz
+-sha256	21d0e869df3b9189f248e022f1c9763cf9069e1a2f00676f1f1852bd7f98b713  mistune-0.7.3.tar.gz
++md5	8bd955fe74ce37af54b16c0d9b89a2ef  mistune-0.8.tar.gz
++sha256	dc3f43e7cf0abb95cdfecbf82d85c419108d5f13e1844b2a8a2fc0abf24c7a47  mistune-0.8.tar.gz
++sha256  0c5259c3dd0a7c46f4835221645f62a0638c9b9faa02af08676e8069e1ff964b  LICENSE
+diff --git a/package/python-mistune/python-mistune.mk b/package/python-mistune/python-mistune.mk
+index 4141729da8..405216ccb4 100644
+--- a/package/python-mistune/python-mistune.mk
++++ b/package/python-mistune/python-mistune.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_M2R_VERSION = 0.1.6
-+PYTHON_M2R_VERSION = 0.1.12
- PYTHON_M2R_SOURCE = m2r-$(PYTHON_M2R_VERSION).tar.gz
--PYTHON_M2R_SITE = https://pypi.python.org/packages/8d/74/558f9aba132bb34cd661fad9e17d42bfa1332363466ff314e600096f78c3
-+PYTHON_M2R_SITE = https://pypi.python.org/packages/a0/95/7273d54664e74c3100d07206fe6b30247be046b39676972fc90ae04376a1
- PYTHON_M2R_SETUP_TYPE = setuptools
- PYTHON_M2R_LICENSE = MIT
- PYTHON_M2R_LICENSE_FILES = LICENSE
+-PYTHON_MISTUNE_VERSION = 0.7.3
++PYTHON_MISTUNE_VERSION = 0.8
+ PYTHON_MISTUNE_SOURCE = mistune-$(PYTHON_MISTUNE_VERSION).tar.gz
+-PYTHON_MISTUNE_SITE = https://pypi.python.org/packages/88/1e/be99791262b3a794332fda598a07c2749a433b9378586361ba9d8e824607
++PYTHON_MISTUNE_SITE = https://pypi.python.org/packages/d3/66/a45d1c7c50fd63a707cd1bd340b969523137c5284d9466c41012fe54c621
+ PYTHON_MISTUNE_LICENSE = BSD-3-Clause
+ PYTHON_MISTUNE_LICENSE_FILES = LICENSE
+ PYTHON_MISTUNE_SETUP_TYPE = setuptools
 -- 
 2.11.0
