@@ -1,27 +1,26 @@
-From: Guo Ren <ren_guo@c-sky.com>
-Date: Fri, 3 Nov 2017 09:49:20 +0800
-Subject: [Buildroot] [PATCH 1/1] package/dtc: qemu system build need
- libfdt.
-In-Reply-To: <20171102162708.GB3238@scaer>
+From: =?iso-8859-1?Q?Jan_Kundr=E1t?= <jan.kundrat@cesnet.cz>
+Date: Fri, 03 Nov 2017 03:00:29 +0100
+Subject: [Buildroot] 
+ =?iso-8859-1?q?=5BPATCH_1/1=5D_package/dtc=3A_qemu_s?=
+ =?iso-8859-1?q?ystem_build_need_libfdt=2E?=
+In-Reply-To: <1509624873-16240-1-git-send-email-ren_guo@c-sky.com>
 References: <1509624873-16240-1-git-send-email-ren_guo@c-sky.com>
- <20171102162708.GB3238@scaer>
-Message-ID: <20171103014920.GA8551@gary-OptiPlex-3050>
+Message-ID: <09523a7a-0125-4c10-bb29-e15cfa00165f@cesnet.cz>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yanni E,
+This change breaks U-Boot 2017.09 because now U-Boot finds a copy of libfdt 
+installed by host-dtc. Yes, it's probably a bug in U-Boot that it includes 
+these files via <system-path>.
 
-On Thu, Noj 02, 2017 at 05:27:08PM +0100, Yann E. MORIN wrote:
-> What's this Change-Id tag? We do not want to carry per-project specific
-> tags. If you want/need to point to some related reference, just add an
-> URL pointing to it.
-> 
+Here's how U-Boot build dies for me now:
 
-Change-Id is from my git-hook for my gerrit system, and I forgot to
-remove it, sorry.
+tools/fdtgrep.c:228:21: error: array type has incomplete element type
+   struct fdt_region region[], int count)
+                     ^
 
-Best Regards
- Guo Ren
+Cheers,
+Jan
