@@ -1,49 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 3 Nov 2017 21:57:36 +0100
-Subject: [Buildroot] [git commit] python-mistune: bump version to 0.8
-Message-ID: <20171103205100.088F68121B@busybox.osuosl.org>
+Date: Fri, 3 Nov 2017 21:58:44 +0100
+Subject: [Buildroot] [PATCH 1/2] python-m2r: bump version to 0.1.12
+In-Reply-To: <20171103144938.17147-1-yegorslists@googlemail.com>
+References: <20171103144938.17147-1-yegorslists@googlemail.com>
+Message-ID: <20171103215844.47abfa9d@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6ed9516dfe4d034b0ddb2484401ea9615340da91
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Add licence file checksum.
+On Fri,  3 Nov 2017 15:49:37 +0100, yegorslists at googlemail.com wrote:
+> From: Yegor Yefremov <yegorslists@googlemail.com>
+> 
+> Add licence file checksum.
+> 
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+> ---
+>  package/python-m2r/python-m2r.hash | 5 +++--
+>  package/python-m2r/python-m2r.mk   | 4 ++--
+>  2 files changed, 5 insertions(+), 4 deletions(-)
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/python-mistune/python-mistune.hash | 5 +++--
- package/python-mistune/python-mistune.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 4 deletions(-)
+Both applied to master. Thanks!
 
-diff --git a/package/python-mistune/python-mistune.hash b/package/python-mistune/python-mistune.hash
-index cfc6a25..e939aef 100644
---- a/package/python-mistune/python-mistune.hash
-+++ b/package/python-mistune/python-mistune.hash
-@@ -1,3 +1,4 @@
- # md5 from https://pypi.python.org/pypi/mistune/json, sha256 locally computed
--md5	4eba50bd121b83716fa4be6a4049004b  mistune-0.7.3.tar.gz
--sha256	21d0e869df3b9189f248e022f1c9763cf9069e1a2f00676f1f1852bd7f98b713  mistune-0.7.3.tar.gz
-+md5	8bd955fe74ce37af54b16c0d9b89a2ef  mistune-0.8.tar.gz
-+sha256	dc3f43e7cf0abb95cdfecbf82d85c419108d5f13e1844b2a8a2fc0abf24c7a47  mistune-0.8.tar.gz
-+sha256  0c5259c3dd0a7c46f4835221645f62a0638c9b9faa02af08676e8069e1ff964b  LICENSE
-diff --git a/package/python-mistune/python-mistune.mk b/package/python-mistune/python-mistune.mk
-index 4141729..405216c 100644
---- a/package/python-mistune/python-mistune.mk
-+++ b/package/python-mistune/python-mistune.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_MISTUNE_VERSION = 0.7.3
-+PYTHON_MISTUNE_VERSION = 0.8
- PYTHON_MISTUNE_SOURCE = mistune-$(PYTHON_MISTUNE_VERSION).tar.gz
--PYTHON_MISTUNE_SITE = https://pypi.python.org/packages/88/1e/be99791262b3a794332fda598a07c2749a433b9378586361ba9d8e824607
-+PYTHON_MISTUNE_SITE = https://pypi.python.org/packages/d3/66/a45d1c7c50fd63a707cd1bd340b969523137c5284d9466c41012fe54c621
- PYTHON_MISTUNE_LICENSE = BSD-3-Clause
- PYTHON_MISTUNE_LICENSE_FILES = LICENSE
- PYTHON_MISTUNE_SETUP_TYPE = setuptools
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
