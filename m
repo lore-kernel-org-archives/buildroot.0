@@ -1,46 +1,61 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri,  3 Nov 2017 18:15:06 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libdrm: bump version to 2.4.88
-Message-ID: <20171103171506.14472-1-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 3 Nov 2017 18:46:44 +0100
+Subject: [Buildroot] [git commit] libsepol: require threads
+Message-ID: <20171103173941.237FD8120D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/libdrm/libdrm.hash | 10 +++++-----
- package/libdrm/libdrm.mk   |  2 +-
- 2 files changed, 6 insertions(+), 6 deletions(-)
+commit: https://git.buildroot.net/buildroot/commit/?id=3947b14c68d9502fd297e9513cec015eb72fc171
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/libdrm/libdrm.hash b/package/libdrm/libdrm.hash
-index 735164cf8f..87fdc893cb 100644
---- a/package/libdrm/libdrm.hash
-+++ b/package/libdrm/libdrm.hash
-@@ -1,5 +1,5 @@
--# From https://lists.freedesktop.org/archives/dri-devel/2017-October/156384.html
--md5 b4f9063838559d08649d45fec2d1184a  libdrm-2.4.87.tar.bz2
--sha1 26b976c8901061399b8b934854b960f5b0761f36  libdrm-2.4.87.tar.bz2
--sha256 4c1c5293bdbfa248e029d3e6446767e17a3208387a719ec9da2d20c19849ed48  libdrm-2.4.87.tar.bz2
--sha512 9ce259d38eaffbcaf82a6975ffa513307da6750bcc31a53cade5717f854151b0e7b6d4ce25c0b518cab5a542c544d5984329f216dc4cdc9369b4adae19a68e48  libdrm-2.4.87.tar.bz2
-+# From https://lists.freedesktop.org/archives/dri-devel/2017-November/156682.html
-+md5 fe4d5c77f1468ee73d0bbb30d76945d7  libdrm-2.4.88.tar.bz2
-+sha1 9cac721d33eb1e65a89a764cb71a7a63ceb6d7c1  libdrm-2.4.88.tar.bz2
-+sha256 b5e55dbac2124e742e639f5b8553e8b7395863bf73dab4f77e99fe2fc25572b5  libdrm-2.4.88.tar.bz2
-+sha512 0d9d4bcc0d9be1fb6b1ca075339b22b0f927288a4c02bbcbf95406b5c095051890f3d2e0d32e529ef9b6952ce1250afd1e0765ad3188c2bac924dda8c33afabb  libdrm-2.4.88.tar.bz2
-diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
-index 71a30035e3..3d7b67122b 100644
---- a/package/libdrm/libdrm.mk
-+++ b/package/libdrm/libdrm.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+libsepol 2.7 now uses <pthread.h>
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/5f1c6872a395d8c6d55e2b1722730871b4daf6a3
+
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
+Tested-by: Matt Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libsepol/Config.in       | 4 ++++
+ package/semodule-utils/Config.in | 4 ++++
+ 2 files changed, 8 insertions(+)
+
+diff --git a/package/libsepol/Config.in b/package/libsepol/Config.in
+index f92af52..cfa923e 100644
+--- a/package/libsepol/Config.in
++++ b/package/libsepol/Config.in
+@@ -1,7 +1,11 @@
+ config BR2_PACKAGE_LIBSEPOL
+ 	bool "libsepol"
++	depends on BR2_TOOLCHAIN_HAS_THREADS # pthread
+ 	help
+ 	  Libsepol is the binary policy manipulation library. It doesn't
+ 	  depend upon or use any of the other SELinux components.
  
--LIBDRM_VERSION = 2.4.87
-+LIBDRM_VERSION = 2.4.88
- LIBDRM_SOURCE = libdrm-$(LIBDRM_VERSION).tar.bz2
- LIBDRM_SITE = https://dri.freedesktop.org/libdrm
- LIBDRM_LICENSE = MIT
--- 
-2.11.0
+ 	  http://selinuxproject.org/page/Main_Page
++
++comment "libsepol needs a toolchain w/ threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/semodule-utils/Config.in b/package/semodule-utils/Config.in
+index d9cb928..38e043d 100644
+--- a/package/semodule-utils/Config.in
++++ b/package/semodule-utils/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_SEMODULE_UTILS
+ 	bool "semodule-utils"
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libsepol
+ 	select BR2_PACKAGE_LIBSEPOL
+ 	help
+ 	  semodule-utils is a package that contains tools for handling
+@@ -13,3 +14,6 @@ config BR2_PACKAGE_SEMODULE_UTILS
+ 	  * semodule_package - Create a SELinux policy module package.
+ 
+ 	  https://github.com/SELinuxProject/selinux/wiki/Releases
++
++comment "semodule-utils needs a toolchain w/ threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
