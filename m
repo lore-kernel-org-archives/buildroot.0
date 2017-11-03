@@ -1,34 +1,32 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri,  3 Nov 2017 22:22:16 +0100
-Subject: [Buildroot] [PATCH] suport/download: force svn to be non-interactive
-Message-ID: <20171103212216.11772-1-yann.morin.1998@free.fr>
+From: =?UTF-8?B?QW5kcsOpcyBGZXJuw6FuZGV6?= <jafb123@gmail.com>
+Date: Fri, 3 Nov 2017 15:23:23 -0600
+Subject: [Buildroot] Fwd: Is grub-bios-setup the way to go to make a
+ bootable CF?
+In-Reply-To: <CACznjz+wnkYCFfzYph7=N7QvS=WRznT8RHXXDTmoVeULkzDL+w@mail.gmail.com>
+References: <CACznjz+wnkYCFfzYph7=N7QvS=WRznT8RHXXDTmoVeULkzDL+w@mail.gmail.com>
+Message-ID: <CACznjzK_AA_p348WfNZ9DTBtH0c+Qv3p3su4jAFAhN8NGuXX=g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-    http://autobuild.buildroot.org/results/2af/2af7412846c576089f8596857ab8c81ac31c1bed/
+Hello BR people.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Andr? Hentschel <nerv@dawncrow.de>
----
- support/download/svn | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/support/download/svn b/support/download/svn
-index 77abf3d02d..9f27d71f86 100755
---- a/support/download/svn
-+++ b/support/download/svn
-@@ -33,6 +33,6 @@ _svn() {
-     eval ${SVN} "${@}"
- }
- 
--_svn export ${verbose} "${@}" "'${repo}@${rev}'" "'${basename}'"
-+_svn --non-interactive export ${verbose} "${@}" "'${repo}@${rev}'" "'${basename}'"
- 
- tar czf "${output}" "${basename}"
--- 
-2.11.0
+
+I have exactly the same problem described in this e-mail list:
+http://lists.busybox.net/pipermail/buildroot/2014-June/100652.html
+
+Have these issue any solution?
+
+
+
+BR,
+
+Andr?s Fern?ndez
+
+CRC
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20171103/6bbbca10/attachment.html>
