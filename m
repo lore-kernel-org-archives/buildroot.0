@@ -1,10 +1,9 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Fri,  3 Nov 2017 11:36:36 +0100
-Subject: [Buildroot] [PATCH 01/31] pkg-generic: allow legal-info to be
- verbose
+Date: Fri,  3 Nov 2017 11:36:37 +0100
+Subject: [Buildroot] [PATCH 02/31] package/armadillo: add license hash
 In-Reply-To: <20171103103706.25574-1-s.martin49@gmail.com>
 References: <20171103103706.25574-1-s.martin49@gmail.com>
-Message-ID: <20171103103706.25574-2-s.martin49@gmail.com>
+Message-ID: <20171103103706.25574-3-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,24 +12,17 @@ To: buildroot@busybox.net
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 ---
- package/pkg-generic.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/armadillo/armadillo.hash | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index cca94ba338..0e28675fbe 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -861,9 +861,9 @@ ifneq ($$(call qstrip,$$($(2)_SOURCE)),)
- # is that the license still applies to the files distributed as part
- # of the rootfs, even if the sources are not themselves redistributed.
- ifeq ($$(call qstrip,$$($(2)_LICENSE_FILES)),)
--	@$$(call legal-warning-pkg,$$($(2)_RAW_BASE_NAME),cannot save license ($(2)_LICENSE_FILES not defined))
-+	$(Q)$$(call legal-warning-pkg,$$($(2)_RAW_BASE_NAME),cannot save license ($(2)_LICENSE_FILES not defined))
- else
--	@$$(foreach F,$$($(2)_LICENSE_FILES),$$(call legal-license-file,$$($(2)_RAWNAME),$$($(2)_RAW_BASE_NAME),$$($(2)_PKGDIR),$$(F),$$($(2)_DIR)/$$(F),$$(call UPPERCASE,$(4)))$$(sep))
-+	$(Q)$$(foreach F,$$($(2)_LICENSE_FILES),$$(call legal-license-file,$$($(2)_RAWNAME),$$($(2)_RAW_BASE_NAME),$$($(2)_PKGDIR),$$(F),$$($(2)_DIR)/$$(F),$$(call UPPERCASE,$(4)))$$(sep))
- endif # license files
- 
- ifeq ($$($(2)_SITE_METHOD),local)
+diff --git a/package/armadillo/armadillo.hash b/package/armadillo/armadillo.hash
+index 7fd599f296..edaf92c3d0 100644
+--- a/package/armadillo/armadillo.hash
++++ b/package/armadillo/armadillo.hash
+@@ -3,3 +3,4 @@ md5 5ef71763bd429a3d481499878351f3be  armadillo-7.900.1.tar.xz
+ sha1 8118faf1c6a7a39c55a1103a1f90e85e613cc377  armadillo-7.900.1.tar.xz
+ # Locally computed:
+ sha256 33eec7013990b5477ccc5ad3abc68bc2326c7a7a2790014d625cfcf37c0e07d3  armadillo-7.900.1.tar.xz
++sha256 3ddf9be5c28fe27dad143a5dc76eea25222ad1dd68934a047064e56ed2fa40c5  LICENSE.txt
 -- 
 2.15.0
