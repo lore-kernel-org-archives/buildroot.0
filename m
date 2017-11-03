@@ -1,42 +1,49 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 03 Nov 2017 07:04:51 +0000
-Subject: [Buildroot] [RFC 2/2] linux: Add support for specifying a
- custom directory
-In-Reply-To: <b3918167-5b3d-fb4d-19a8-8775228135c0@gmail.com>
-References: <1509242782-14524-1-git-send-email-f.fainelli@gmail.com>
- <1509242782-14524-3-git-send-email-f.fainelli@gmail.com>
- <20171029072649.GA2899@scaer> <20171029101249.19a91e32@windsurf>
- <6ad5572c-a3a8-2164-9086-ebd3691541a5@gmail.com>
- <20171029181251.GI2899@scaer>
- <d7e6d392-b7d1-7bdc-5048-d88fc6f0ab79@gmail.com>
- <20171030223246.GC3150@scaer>
- <b3918167-5b3d-fb4d-19a8-8775228135c0@gmail.com>
-Message-ID: <8008D374-79D0-4B47-847C-B32C7BE7DEC8@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 3 Nov 2017 09:03:16 +0100
+Subject: [Buildroot] [PATCH v4] qt5: remove Qt Quick dependency on opengl
+In-Reply-To: <bd5262d5-19d7-fdcd-dd0d-5fd6b00bffaa@microchip.com>
+References: <1509658876-29888-1-git-send-email-joshua.henderson@microchip.com>
+ <20171102230302.26744909@windsurf>
+ <bd5262d5-19d7-fdcd-dd0d-5fd6b00bffaa@microchip.com>
+Message-ID: <20171103090316.66922552@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 3 November 2017 06:03:32 CET, Florian Fainelli <f.fainelli@gmail.com> wrote:
->OK. So by the same token, I should not expect that rsync operation
->syncing my development tree to output/build/linux-custom to work past
->the initial build/configuration? Right now it does not, I can make as
->many changes as I want in the directory reference from local.mk and
->output/build/linux-custom remains the same as it was the first time it
->got rsync'd, is that really expected?
+Hello,
 
-Sorta, yes.
+On Thu, 2 Nov 2017 16:06:12 -0700, Joshua Henderson wrote:
 
->I really wonder how you guys are doing serious kernel development with
->buildroot?
+> > Who did the backport of this patch in Buildroot? It should carry the
+> > Signed-off-by from the person who did this backport. I don't know if
+> > it's you or S?bastien Szymanski.  
+> 
+> I am the one guilty. Sigh.
 
-'make linux-rebuild' is what you're looking for.
+Thanks, seen your v5, looks good.
 
-If you need 'oldconfig' to be run, 'make linux-reconfigure' you will want instead.
+> qt5declarative depends on qt5base.  If mesa3d is configured, qt5base depends
+> on mesa3d and is told to build with opengl.  Then, we leave buildroot. qt5base
+> build will try to find various incarnations of opengl through its own build
+> tests.  qt5base and qt5declarative use the result of those config tests
+> through qtConfig() to see if opengl is available.  If you build qt5base you
+> can see config.log and the actual tests under config.tests/ in the build_dir.
+> 
+> Now, you can still build QT with opengl support, and still opt to not use it
+> and instead use the software renderer at runtime with the environment variable
+> QMLSCENE_DEVICE=softwarecontext.  This patch is all about not making opengl a
+> requirement, where it is not.
 
-Regards,
-Yann E. MORIN.
-Florian, All,
+Thanks for the extended explanation!
+
+I'll apply your v5.
+
+Thanks!
+
+Thomas
 -- 
-Sent from my phone. Please excuse my brevity.
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
