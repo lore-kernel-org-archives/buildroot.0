@@ -1,36 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 3 Nov 2017 22:03:23 +0100
-Subject: [Buildroot] [PATCH 1/1] lxc: bump to version 2.1.1
-In-Reply-To: <20171102220934.19446-1-fontaine.fabrice@gmail.com>
-References: <20171102220934.19446-1-fontaine.fabrice@gmail.com>
-Message-ID: <20171103220323.34c0b63b@windsurf>
+From: Joseph Kogut <joseph.kogut@gmail.com>
+Date: Fri,  3 Nov 2017 14:10:53 -0700
+Subject: [Buildroot] [PATCH 1/1] docs: update DEVELOPERS modification process
+Message-ID: <20171103211053.20886-1-joseph.kogut@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
+---
+ docs/manual/contribute.txt | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-On Thu,  2 Nov 2017 23:09:34 +0100, Fabrice Fontaine wrote:
-> Remove 0001-conf-fix-build-without-libcap.patch (already in 2.1.1)
-> Add 0001-Fix-compilation-on-toolchain-without-prlimit.patch (merged
-> upstream)
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  ...-compilation-on-toolchain-without-prlimit.patch | 98 ++++++++++++++++++++++
->  .../lxc/0001-conf-fix-build-without-libcap.patch   | 31 -------
->  package/lxc/lxc.hash                               |  2 +-
->  package/lxc/lxc.mk                                 |  4 +-
->  4 files changed, 102 insertions(+), 33 deletions(-)
->  create mode 100644 package/lxc/0001-Fix-compilation-on-toolchain-without-prlimit.patch
->  delete mode 100644 package/lxc/0001-conf-fix-build-without-libcap.patch
+diff --git a/docs/manual/contribute.txt b/docs/manual/contribute.txt
+index a58945f395..8bbc2b9eb7 100644
+--- a/docs/manual/contribute.txt
++++ b/docs/manual/contribute.txt
+@@ -260,9 +260,9 @@ options that no longer exist or are no longer needed.
 
-Applied to master, thanks.
+ If you are interested in getting notified of build failures and of
+ further changes in the packages you added or modified, please add
+-yourself to the DEVELOPERS file. This should be done in a separate
+-patch of the series. See xref:DEVELOPERS[the DEVELOPERS file] for more
+-information.
++yourself to the DEVELOPERS file. This should be done in the same patch
++creating or modifying the package. See xref:DEVELOPERS[the DEVELOPERS file]
++for more information.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+ ==== Preparing a patch series
+
+--
+2.15.0
