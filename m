@@ -1,42 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri,  3 Nov 2017 16:51:40 +0100
-Subject: [Buildroot] [PATCH] moarvm: use host-lua instead of host-luajit
-Message-ID: <20171103155140.1790-1-peter@korsgaard.com>
+Date: Fri, 03 Nov 2017 16:59:09 +0100
+Subject: [Buildroot] [PATCH 1/2] dhcpcd: add SysV start-up script
+In-Reply-To: <20171102230602.3c61e8d2@windsurf> (Thomas Petazzoni's message of
+ "Thu, 2 Nov 2017 23:06:02 +0100")
+References: <20171031223659.6831-1-code@mmayer.net>
+ <20171031223659.6831-2-code@mmayer.net>
+ <20171102230602.3c61e8d2@windsurf>
+Message-ID: <877ev75p6a.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-host-luajit has limited architecture support, and moarvm does not need
-anything luajit specific - So use host-lua instead.
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/moarvm/moarvm.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Hi,
 
-diff --git a/package/moarvm/moarvm.mk b/package/moarvm/moarvm.mk
-index 276fb2c463..705c93934d 100644
---- a/package/moarvm/moarvm.mk
-+++ b/package/moarvm/moarvm.mk
-@@ -10,7 +10,7 @@ MOARVM_SOURCE = MoarVM-$(MOARVM_VERSION).tar.gz
- MOARVM_LICENSE = Artistic-2.0
- MOARVM_LICENSE_FILES = Artistic2.txt
- MOARVM_INSTALL_STAGING = YES
--MOARVM_DEPENDENCIES = host-luajit host-pkgconf libuv libtommath libatomic_ops
-+MOARVM_DEPENDENCIES = host-lua host-pkgconf libuv libtommath libatomic_ops
- 
- MOARVM_CONF_OPTS = \
- 	--build=$(GNU_HOST_NAME) \
-@@ -20,7 +20,7 @@ MOARVM_CONF_OPTS = \
- 	--ld="$(TARGET_CC)" \
- 	--prefix="/usr" \
- 	--pkgconfig=$(PKG_CONFIG_HOST_BINARY) \
--	--lua=$(HOST_DIR)/bin/luajit \
-+	--lua=$(HOST_DIR)/bin/lua \
- 	--has-libuv \
- 	--has-libtommath \
- 	--has-libatomic
+ >> +[ -x $DAEMON ] || exit 0
+ >> +[ -f $CONFIG ] || exit 0
+
+ > We have these in a lot of init scripts, so I kept them. But I find
+ > those tests pretty silly in fact:
+
+ >  - The daemon should definitely be there, as it's installed by the same
+ >    package. And if it turns out not to be there, I'd prefer a loud
+ >    failure than an init script that silently ignores the problem.
+
+ >  - Same for the configuration file: I prefer a loud error than an init
+ >    script that ignores the problem.
+
+ > Yann, Peter, Arnout, can we agree that such tests should be removed
+ > entirely, and we let the init script fail if the daemon does not exist,
+ > and the daemon fail if its configuration file does not exist ?
+
+Sounds sensible to me.
+
 -- 
-2.11.0
+Bye, Peter Korsgaard
