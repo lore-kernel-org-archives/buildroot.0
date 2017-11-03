@@ -1,91 +1,80 @@
-From: =?UTF-8?B?U3RlZmFuIEZyw7ZiZXJn?= <stefan.froberg@petroprogram.com>
-Date: Sat, 04 Nov 2017 00:17:42 +0200
-Subject: [Buildroot] [PATCH v2 1/1] turbovnc: new package
-In-Reply-To: <20171102222811.4d501282@windsurf>
-References: <1509367204-12966-1-git-send-email-stefan.froberg@petroprogram.com>	<20171101060657.tzjnt4ceb25irb3o@sapphire.tkos.co.il>	<20171101105305.1cd82e60@windsurf>	<59FB8C69.7050108@petroprogram.com>
- <20171102222811.4d501282@windsurf>
-Message-ID: <59FCEB06.8000702@petroprogram.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri, 3 Nov 2017 23:20:17 +0100
+Subject: [Buildroot] [PATCH 1/1] duktape: new package
+In-Reply-To: <20171103223514.13a83e94@windsurf>
+References: <20171103195343.29670-1-fontaine.fabrice@gmail.com>
+ <20171103223514.13a83e94@windsurf>
+Message-ID: <CAPi7W80e2AUko7WXdKbbZ9pBQE+SDUHnKTstA7386msnVOEuxg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi
+Dear Thomas,
 
-Upstream was very helpfull and fast :-)
-https://github.com/TurboVNC/turbovnc/issues/111
+Thanks for this quick review.
 
-So system-wide bzip2,freetype and zlib should be possible with version 
-2.1.3
-:-)
-https://github.com/TurboVNC/turbovnc/commit/88fae55850b4888e4aef6512e183a959d73df1e7
+2017-11-03 22:35 GMT+01:00 Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com>:
 
-But the following raises a tought:
-
-"On RHEL 7 & Fedora, I can generate a fully system-specific build of 
-TurboVNC like so:
-
-cmake -G"Unix Makefiles" -DTVNC_SYSTEMLIBS=1 -DTVNC_SYSTEMX11=1 
--DTVNC_DLOPENSSL=0 -DTJPEG_INCLUDE_DIR=/usr/include 
--DTJPEG_LIBRARY=-lturbojpeg
-
-Generally TVNC_SYSTEMX11 won't work unless the system is using the same 
-version of X.org as the TurboVNC Server, or a newer version."
-
-So how should I check, if using -DTVNC_SYSTEMX11=1 switch, that the 
-builded system Xorg headers/libs and the
-TurboVNC bundled Xorg are at least same version ???
-
--S-
-
-2.11.2017, 23:28, Thomas Petazzoni kirjoitti:
 > Hello,
 >
-> On Thu, 02 Nov 2017 23:21:45 +0200, Stefan Fr?berg wrote:
+> Thanks for this new contribution!
 >
+> On Fri,  3 Nov 2017 20:53:43 +0100, Fabrice Fontaine wrote:
 >
->> libbzip2.a      libfontenc.a    librandr.a    libXau.a libxkb.a
->> libcomposite.a  libfreetype2.a  librender.a   libXdmcp.a libXNVCtrl.a
->> libdamage.a     libmain.a       libsha1.a     libXext-server.a libzlib.a
->> libdamageext.a  libmi.a         libsync.a     libxfixes.a
->> libdix.a        libos.a         libvnc.a      libXfont.a
->> libfb.a         libpixman.a     libvncauth.a  libXi.a
-> That's a lot of static libraries, but I'm sure TurboVNC didn't
-> duplicate the source code for all of these. Perhaps it is copying them
-> from their system-wide location to its build directory, for some funky
-> reason?
+> > diff --git a/package/duktape/0002-Don-t-copy-headers-in-install-target.patch
+> b/package/duktape/0002-Don-t-copy-headers-in-install-target.patch
+> > new file mode 100644
+> > index 000000000..391a89f6d
+> > --- /dev/null
+> > +++ b/package/duktape/0002-Don-t-copy-headers-in-install-target.patch
+> > @@ -0,0 +1,28 @@
+> > +From e5e839b96332229a860424b451fe3d678ff2d0f2 Mon Sep 17 00:00:00 2001
+> > +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> > +Date: Fri, 3 Nov 2017 20:10:41 +0100
+> > +Subject: [PATCH] Don't copy headers in install target
+> > +
+> > +Don't copy headers in install target to be able to use this Makefile to
+> > +install duktape library in staging and target directory
 >
->> But then doing ldd for Xvnc binary gives this:
->> Xvnc:
->>           linux-vdso.so.1 (0x00007fffbbffe000)
->>           libturbojpeg.so.0 => /usr/lib64/libturbojpeg.so.0
->> (0x00007f1d221b8000)
->>           libm.so.6 => /lib64/libm.so.6 (0x00007f1d21eba000)
->>           libpthread.so.0 => /lib64/libpthread.so.0 (0x00007f1d21c9e000)
->>           libpam.so.0 => /lib64/libpam.so.0 (0x00007f1d21a90000)
->>           libdl.so.2 => /lib64/libdl.so.2 (0x00007f1d2188c000)
->>           libSM.so.6 => /usr/lib64/libSM.so.6 (0x00007f1d21683000)
->>           libICE.so.6 => /usr/lib64/libICE.so.6 (0x00007f1d21466000)
->>           libX11.so.6 => /usr/lib64/libX11.so.6 (0x00007f1d21124000)
->>           libXext.so.6 => /usr/lib64/libXext.so.6 (0x00007f1d20f12000)
->>           libc.so.6 => /lib64/libc.so.6 (0x00007f1d20b76000)
->>           /lib64/ld-linux-x86-64.so.2 (0x00007f1d2242b000)
->>           libuuid.so.1 => /lib64/libuuid.so.1 (0x00007f1d20971000)
->>           libbsd.so.0 => /usr/lib64/libbsd.so.0 (0x00007f1d2075b000)
->>           libxcb.so.1 => /usr/lib64/libxcb.so.1 (0x00007f1d20532000)
->>           librt.so.1 => /lib64/librt.so.1 (0x00007f1d2032a000)
->>           libXau.so.6 => /usr/lib64/libXau.so.6 (0x00007f1d20126000)
->>           libXdmcp.so.6 => /usr/lib64/libXdmcp.so.6 (0x00007f1d1ff20000)
->>
->> So it builds a static versions of libXau.a libXdmcp.a for example, but
->> then does not use them anyway in the final link but instead the system
->> wide versions ?
->>
->> I posted question to github if bzip2, freetype2 and zlib can be external
->> dependencies or if they contain some TurboVNC specific stuff.
-> Thanks. Let's see what upstream says.
+> I'm not sure what you're trying to do here. Install headers to
+> $(TARGET_DIR) is perfectly fine, they get cleaned up at the end of the
+> build during the target-finalize step. Essentially all libraries
+> install everything to $(TARGET_DIR): headers, static library, shared
+> library, pkg-config files, documentation, and what is not needed on the
+> target gets cleaned up by the logic in target-finalize.
 >
-> Best regards,
+> We don't want to hack each and every package so that it doesn't install
+> its headers or static library to $(TARGET_DIR). We very much prefer to
+> use the existing "make install" logic of packages, and have a common,
+> shared, logic in target-finalize to do the cleanup.
+>
+> Or did I miss the purpose of this particular patch?
+>
+The issue with the original Makefile is that it tries to copy the two
+header files in $(TARGET_DIR)/usr/include which does not exist so I had
+several choices:
+- create this directory in duktape.mk
+- add "-a" option to the cp in the original Makefile
+- remove the cp
+
+I chose the third option but I can go with the first or second one. Which
+one do you prefer?
+
+>
+> Thanks!
 >
 > Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux and Kernel engineering
+> http://free-electrons.com
+>
+Best Regards,
+
+Fabrice
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20171103/bde32727/attachment.html>
