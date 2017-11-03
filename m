@@ -1,80 +1,94 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 3 Nov 2017 23:20:17 +0100
-Subject: [Buildroot] [PATCH 1/1] duktape: new package
-In-Reply-To: <20171103223514.13a83e94@windsurf>
-References: <20171103195343.29670-1-fontaine.fabrice@gmail.com>
- <20171103223514.13a83e94@windsurf>
-Message-ID: <CAPi7W80e2AUko7WXdKbbZ9pBQE+SDUHnKTstA7386msnVOEuxg@mail.gmail.com>
+From: Joseph Kogut <joseph.kogut@gmail.com>
+Date: Fri,  3 Nov 2017 15:25:33 -0700
+Subject: [Buildroot] [PATCH 1/1] python-websockets: new package
+Message-ID: <20171103222533.19410-1-joseph.kogut@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas,
+Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
+---
+ DEVELOPERS                                       |  3 +++
+ package/Config.in                                |  1 +
+ package/python-websockets/Config.in              | 10 ++++++++++
+ package/python-websockets/python-websockets.hash |  2 ++
+ package/python-websockets/python-websockets.mk   | 14 ++++++++++++++
+ 5 files changed, 30 insertions(+)
+ create mode 100644 package/python-websockets/Config.in
+ create mode 100644 package/python-websockets/python-websockets.hash
+ create mode 100644 package/python-websockets/python-websockets.mk
 
-Thanks for this quick review.
-
-2017-11-03 22:35 GMT+01:00 Thomas Petazzoni <
-thomas.petazzoni@free-electrons.com>:
-
-> Hello,
->
-> Thanks for this new contribution!
->
-> On Fri,  3 Nov 2017 20:53:43 +0100, Fabrice Fontaine wrote:
->
-> > diff --git a/package/duktape/0002-Don-t-copy-headers-in-install-target.patch
-> b/package/duktape/0002-Don-t-copy-headers-in-install-target.patch
-> > new file mode 100644
-> > index 000000000..391a89f6d
-> > --- /dev/null
-> > +++ b/package/duktape/0002-Don-t-copy-headers-in-install-target.patch
-> > @@ -0,0 +1,28 @@
-> > +From e5e839b96332229a860424b451fe3d678ff2d0f2 Mon Sep 17 00:00:00 2001
-> > +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> > +Date: Fri, 3 Nov 2017 20:10:41 +0100
-> > +Subject: [PATCH] Don't copy headers in install target
-> > +
-> > +Don't copy headers in install target to be able to use this Makefile to
-> > +install duktape library in staging and target directory
->
-> I'm not sure what you're trying to do here. Install headers to
-> $(TARGET_DIR) is perfectly fine, they get cleaned up at the end of the
-> build during the target-finalize step. Essentially all libraries
-> install everything to $(TARGET_DIR): headers, static library, shared
-> library, pkg-config files, documentation, and what is not needed on the
-> target gets cleaned up by the logic in target-finalize.
->
-> We don't want to hack each and every package so that it doesn't install
-> its headers or static library to $(TARGET_DIR). We very much prefer to
-> use the existing "make install" logic of packages, and have a common,
-> shared, logic in target-finalize to do the cleanup.
->
-> Or did I miss the purpose of this particular patch?
->
-The issue with the original Makefile is that it tries to copy the two
-header files in $(TARGET_DIR)/usr/include which does not exist so I had
-several choices:
-- create this directory in duktape.mk
-- add "-a" option to the cp in the original Makefile
-- remove the cp
-
-I chose the third option but I can go with the first or second one. Which
-one do you prefer?
-
->
-> Thanks!
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux and Kernel engineering
-> http://free-electrons.com
->
-Best Regards,
-
-Fabrice
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20171103/bde32727/attachment.html>
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 49fa789c1d..c651bf26fa 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -787,6 +787,9 @@ F:	package/pdbg/
+ F:	board/qemu/ppc64le-pseries/
+ F:	configs/qemu_ppc64le_pseries_defconfig
+ 
++N:	Joseph Kogut <joseph.kogut@gmail.com>
++F:	package/python-websockets/
++
+ N:	Johan Derycke <johanderycke@gmail.com>
+ F:	package/python-libconfig/
+ 
+diff --git a/package/Config.in b/package/Config.in
+index 28444f64de..fe5ccc434e 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -920,6 +920,7 @@ menu "External python modules"
+ 	source "package/python-wcwidth/Config.in"
+ 	source "package/python-web2py/Config.in"
+ 	source "package/python-webpy/Config.in"
++	source "package/python-websockets/Config.in"
+ 	source "package/python-werkzeug/Config.in"
+ 	source "package/python-whoosh/Config.in"
+ 	source "package/python-ws4py/Config.in"
+diff --git a/package/python-websockets/Config.in b/package/python-websockets/Config.in
+new file mode 100644
+index 0000000000..dea02e2bfd
+--- /dev/null
++++ b/package/python-websockets/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_PYTHON_WEBSOCKETS
++	bool "python-websockets"
++	depends on BR2_PACKAGE_PYTHON3
++	select BR2_PACKAGE_PYTHON3_ZLIB
++	select BR2_PACKAGE_PYTHON3_SSL
++
++	help
++	  An implementation of the WebSocket Protocol (RFC 6455)
++
++	  https://github.com/aaugustin/websockets
+diff --git a/package/python-websockets/python-websockets.hash b/package/python-websockets/python-websockets.hash
+new file mode 100644
+index 0000000000..fbd746d7bb
+--- /dev/null
++++ b/package/python-websockets/python-websockets.hash
+@@ -0,0 +1,2 @@
++md5	9e8c6b3c70def4146d75fbb0f52bdfc7  websockets-4.0.1.tar.gz
++sha256	da4d4fbe059b0453e726d6d993760065d69b823a27efc3040402a6fcfe6a1ed9  websockets-4.0.1.tar.gz
+diff --git a/package/python-websockets/python-websockets.mk b/package/python-websockets/python-websockets.mk
+new file mode 100644
+index 0000000000..64af1dcc43
+--- /dev/null
++++ b/package/python-websockets/python-websockets.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-websockets
++#
++################################################################################
++
++PYTHON_WEBSOCKETS_VERSION = 4.0.1
++PYTHON_WEBSOCKETS_SOURCE = websockets-${PYTHON_WEBSOCKETS_VERSION}.tar.gz
++PYTHON_WEBSOCKETS_SITE = https://pypi.python.org/packages/b6/12/6194aac840c65253e45a38912e318f9ac548f9ba86d75bdb8fe66841b335
++PYTHON_WEBSOCKETS_SETUP_TYPE = setuptools
++PYTHON_WEBSOCKETS_LICENSE = BSD-3
++PYTHON_WEBSOCKETS_LICENSE_FILES = LICENSE
++
++$(eval $(python-package))
+-- 
+2.15.0
