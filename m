@@ -1,9 +1,9 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Fri,  3 Nov 2017 11:37:00 +0100
-Subject: [Buildroot] [PATCH 25/31] package/python-numpy: add license hash
+Date: Fri,  3 Nov 2017 11:37:01 +0100
+Subject: [Buildroot] [PATCH 26/31] package/python: add license hash
 In-Reply-To: <20171103103706.25574-1-s.martin49@gmail.com>
 References: <20171103103706.25574-1-s.martin49@gmail.com>
-Message-ID: <20171103103706.25574-26-s.martin49@gmail.com>
+Message-ID: <20171103103706.25574-27-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,17 +12,17 @@ To: buildroot@busybox.net
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 ---
- package/python-numpy/python-numpy.hash | 2 ++
- 1 file changed, 2 insertions(+)
+ package/python/python.hash | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/python-numpy/python-numpy.hash b/package/python-numpy/python-numpy.hash
-index 6e76c62e7d..78facce597 100644
---- a/package/python-numpy/python-numpy.hash
-+++ b/package/python-numpy/python-numpy.hash
-@@ -1,2 +1,4 @@
- # Copied from https://github.com/numpy/numpy/releases/tag/v1.13.3
- sha256	4c6b4eef790528bebb7ec9590d74cc193868940fe68e4109a91c196df72d8094	numpy-1.13.3.tar.gz
-+# Locally computed
-+sha256	94eebc7c8f86a287c1e9146ed52ebcde88183806d848d8c66e0e52d1aebf3b13	LICENSE.txt
+diff --git a/package/python/python.hash b/package/python/python.hash
+index 3f64b83611..e30cbaa9fe 100644
+--- a/package/python/python.hash
++++ b/package/python/python.hash
+@@ -2,3 +2,4 @@
+ md5 1f6db41ad91d9eb0a6f0c769b8613c5b  Python-2.7.14.tar.xz
+ # Locally calculated
+ sha256 71ffb26e09e78650e424929b2b457b9c912ac216576e6bd9e7d204ed03296a66  Python-2.7.14.tar.xz
++sha256 d2d17b17388da74dc9c6bdbf78eb7237432c3f8a0c87852df740ec99de2ec680  LICENSE
 -- 
 2.15.0
