@@ -1,9 +1,9 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Fri,  3 Nov 2017 11:36:48 +0100
-Subject: [Buildroot] [PATCH 13/31] package/flite: add license hash
+Date: Fri,  3 Nov 2017 11:36:49 +0100
+Subject: [Buildroot] [PATCH 14/31] package/gettext: add license hash
 In-Reply-To: <20171103103706.25574-1-s.martin49@gmail.com>
 References: <20171103103706.25574-1-s.martin49@gmail.com>
-Message-ID: <20171103103706.25574-14-s.martin49@gmail.com>
+Message-ID: <20171103103706.25574-15-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,16 +12,18 @@ To: buildroot@busybox.net
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 ---
- package/flite/flite.hash | 1 +
- 1 file changed, 1 insertion(+)
+ package/gettext/gettext.hash | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/flite/flite.hash b/package/flite/flite.hash
-index e4dd0c633b..4cec6024b4 100644
---- a/package/flite/flite.hash
-+++ b/package/flite/flite.hash
-@@ -1,2 +1,3 @@
- # locally computed hash
- sha256 45c662160aeca6560589f78daf42ab62c6111dd4d244afc28118c4e6f553cd0c flite-1.4-release.tar.bz2
-+sha256 4cbeaee8c9a8f23f251f0ce56e9212d244d9ea6b0dbe48601623d920054249a1 flite-1.4-release/COPYING
+diff --git a/package/gettext/gettext.hash b/package/gettext/gettext.hash
+index cff6eb1090..340f6fc959 100644
+--- a/package/gettext/gettext.hash
++++ b/package/gettext/gettext.hash
+@@ -1,3 +1,5 @@
+ # From http://lists.gnu.org/archive/html/bug-gettext/2016-06/msg00008.html
+ md5	df3f5690eaa30fd228537b00cb7b7590	gettext-0.19.8.1.tar.xz
+ sha1	e0fe90ede22f7f16bbde7bdea791a835f2773fc9	gettext-0.19.8.1.tar.xz
++# Locally computed
++sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	COPYING
 -- 
 2.15.0
