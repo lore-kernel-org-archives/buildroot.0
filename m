@@ -1,12 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 4 Nov 2017 22:00:25 +0100
-Subject: [Buildroot] [PATCH] autoconf: use host-gettext's autopoint if
- available in autoreconf
-In-Reply-To: <CAAP7ucJmmHCD+ceC7_w+zR8-Pdy3UexKMBhoC4bYQTvZwKBm3A@mail.gmail.com>
-References: <20170827110920.15579-1-aleksander@aleksander.es>
- <e3d4f8af-e660-ff80-7157-5b897b8e47c4@mind.be>
- <CAAP7ucJmmHCD+ceC7_w+zR8-Pdy3UexKMBhoC4bYQTvZwKBm3A@mail.gmail.com>
-Message-ID: <16379dac-2375-5830-68c3-06540e293d75@mind.be>
+Date: Sat, 4 Nov 2017 22:13:07 +0100
+Subject: [Buildroot] [PATCH v2] util-linux: security bump to version 2.31
+In-Reply-To: <232020389.16019836.1509500098756.JavaMail.zimbra@datacom.ind.br>
+References: <1509446871-25076-1-git-send-email-casantos@datacom.ind.br>
+ <87zi87ezym.fsf@dell.be.48ers.dk>
+ <232020389.16019836.1509500098756.JavaMail.zimbra@datacom.ind.br>
+Message-ID: <d99d0654-6124-b1cf-b11e-fbedb04e5d59@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,18 +14,53 @@ To: buildroot@busybox.net
 
 
 
-On 02-11-17 18:27, Aleksander Morgado wrote:
->> (and remove the GETTEXTIZE support from pkg-autotools). In a later step we can
->> rename <PKG>_GETTEXTIZE to <PKG>_AUTOPOINT.
+On 01-11-17 02:34, Carlos Santos wrote:
+>> From: "Peter Korsgaard" <peter@korsgaard.com>
+>> To: "Carlos Santos" <casantos@datacom.ind.br>
+>> Cc: buildroot at buildroot.org
+>> Sent: Tuesday, October 31, 2017 8:04:33 PM
+>> Subject: Re: [PATCH v2] util-linux: security bump to version 2.31
+> 
+>>>>>>> "Carlos" == Carlos Santos <casantos@datacom.ind.br> writes:
 >>
-> How about having both available for now? i.e. letting packages select
-> <PKG>_GETTEXTIZE or <PKG>_AUTOPOINT.
+>>> Fix CVE-2016-2779: runuser in util-linux allows local users to escape to
+>>> the parent session via a crafted TIOCSTI ioctl call, which pushes
+>>> characters to the terminal's input buffer.
+>>
+>>> The new experimental "su --pty" feature has been implemented to fix this
+>>> issue. The feature is not enabled by default and the new command line
+>>> option --pty is necessary.
+>>
+>>> Add rfkill, a command for enabling and disabling wireless devices. This
+>>> implementation is based upon, and backward compatible with, the original
+>>> rfkill from Johannes Berg and Marcel Holtmann, currently provided by the
+>>> standalone "rfkill" package.
+>>
+>> Do you know if there's any reason to prefer this version over our
+>> existing rfkill package? The fact that it isn't available on nommu
+>> probably means we cannot get rid of the separate package, but we may
+>> want to add it to UTIL_LINUX_DEPENDENCIES so the util-linux version
+>> "wins".
+> 
+> I think this one is preferable because util-linux is actively maintained
+> while the original rfkill seems to be abandoned (the last commit in its
+> git repository is from Jan 8 2015).
+> 
+> How many nommu architectures does Buildroot support? The only boards I
+> found without BR2_USE_MMU were qemu_{arm_versatile,xtensa_lx60}_nommu,
+> which obviously do not even have RF radios to turn on/off.
 
- Yeah, that would be an option to avoid having a big bang change: introduce
-<PKG>_AUTOPOINT, and then slowly convert packages that currently use _GETTEXTIZE.
+stm32f429_disco_defconfig and stm32f469_disco_defconfig are NOMMU. I don't think
+these two have RF, but STM32L4 Discovery boards do have Wifi, Bluetooth, NFC and
+900 MHz radio. Probably not supported by rfkill however :-)
+
+ Anyway, if anybody needs it, the MMU requirement of libsmartcols could be
+removed. It is only there for the pager functionality which is not used by
+either libsmartcols or rfkill, but just happens to be linked into the .so file...
 
  Regards,
  Arnout
+
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
