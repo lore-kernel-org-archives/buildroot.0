@@ -1,52 +1,68 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 04 Nov 2017 21:49:01 +0100
-Subject: [Buildroot] BR2_REPRODUCIBLE issues
-In-Reply-To: <5c52008b-1ffa-7260-8681-5abeecd09665@mind.be> (Arnout
- Vandecappelle's message of "Sat, 4 Nov 2017 20:53:27 +0100")
-References: <1509720041684-0.post@n4.nabble.com>
- <87y3nn3yq6.fsf@dell.be.48ers.dk>
- <5c52008b-1ffa-7260-8681-5abeecd09665@mind.be>
-Message-ID: <87bmkh4vnm.fsf@dell.be.48ers.dk>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 4 Nov 2017 21:51:36 +0100
+Subject: [Buildroot] [PATCH 1/1] package/dtc: qemu system build need
+ libfdt.
+In-Reply-To: <cecbedfb-98a5-4b52-a59b-3129c7e0da51@cesnet.cz>
+References: <1509624873-16240-1-git-send-email-ren_guo@c-sky.com>
+ <09523a7a-0125-4c10-bb29-e15cfa00165f@cesnet.cz>
+ <cecbedfb-98a5-4b52-a59b-3129c7e0da51@cesnet.cz>
+Message-ID: <d6dd36db-bf3f-217e-cf1f-978c9c0ebf16@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-Hi,
 
- >> This is with current master and make 4.1.
+On 03-11-17 03:33, Jan Kundr?t wrote:
+> ...and here's a simple patch against U-Boot which fixes the build for me. 
 
- >  But not when there is no .config file:
+ Isn't the build already fixed if you only replace the ../include line? The
+../lib/libfdt/fdt.h should not be problematic since that file doesn't exist in
+STAGING_DIR. Right? Same for libfdt_internal.h.
 
- > $ make O=/tmp/brtest BR2_REPRODUCIBLE=y printvars VARS=SOURCE_DATE_EPOCH
- > /bin/sh: log: command not found
- > SOURCE_DATE_EPOCH=
- > /bin/sh: log: command not found
+> It
+> seems that U-Boot is special in Buildroot when it comes to patch handling. 
 
-No, but that makes sense as there isn't a BR2_GIT setting, so moving the
-assignment around won't fix that.
+ Indeed, because the U-Boot version is configurable so it's impossible to say if
+a patch can apply.
 
-Having the SOURCE_DATE_EPOCH assignment fail when you don't have a
-.config (and hence also no BR2_REPRODUCIBLE=y) is imho not a big deal.
+ However, it would be possible to do the fixup using sed, e.g.
 
- >  Solution: move the GIT definition to top-level Makefile.
+$(SED) 's%<../include/libfdt.h>%"../include/libfdt.h"%' $(@D)/tools/fdtgrep.c
 
-Sorry, what does that fix? GIT comes from BR2_GIT, E.G. the .config.
+in a post-patch hook.
 
- >> So I don't really agree that it useless. What we could perhaps do is to
- >> only export our value for SOURCE_DATE_EPOCH if not already set in the
- >> enviroment, so you can set it outside Buildroot if you want a different
- >> behaviour.
+ Regards,
+ Arnout
 
- >  Well, the proposed solution of using a config variable sounds OK. Only, I think
- > it would make more sense to have a config variable with a date, rather than a
- > commit ID.
-
-Agreed, or simply only set SOURCE_DATE_EPOCH if it isn't already set in
-the environment which imho is a more generic solution.
+> I
+> also don't know whether it's reasonable to patch it like this instead of not
+> installing libfdt from the DTC. I also looked at U-Boot's patchwork and noticed
+> that there's aparently an active series where someone is refactoring libfdt
+> wrappers.
+> 
+> TL;DR: it's a mess. This fixes stuff for me, feel free to pick in any way you
+> feel is appropriate.
+> 
+> My mail with this patch to upstream U-Boot is in a moderation queue, so I'm
+> posting it at least here.
+> 
+> Cheers,
+> Jan
+> 
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
 
 -- 
-Bye, Peter Korsgaard
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
