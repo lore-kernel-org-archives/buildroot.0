@@ -1,77 +1,99 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Sat,  4 Nov 2017 16:34:58 +0100
-Subject: [Buildroot] [PATCH v4 1/1] package/python-networkmanager: Bump to
- version 2.0.1
-Message-ID: <20171104153458.6777-1-petr.vorel@gmail.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sat,  4 Nov 2017 17:01:25 +0100
+Subject: [Buildroot] [PATCH] package/mesa3d: remove old patch for uClibc
+Message-ID: <20171104160125.17383-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Added new runtime dependency on python-six.
+This patch is no longer necessary since Buildroot is using uClibc-ng
+and the patch [1] as been merged upstream.
+It's 2017 and uClibc toolchains have been rebuild with uClibc-ng.
 
-Dropped dbus-python as build time dependency (it's only runtime
-dependency).
+Drop upstream patch and rename remaining one.
 
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+[1] https://cgit.openadk.org/cgi/cgit/uclibc-ng.git/commit/?id=6c4538905e65ceb203f59aaa9a61728e81c6bc0a
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
-Changes v3->v4:
-* Add comment about runtime.
-Changes v2->v3:
-* Dropped dbus-python as build time dependency (it's only runtime
-dependency).
----
- package/python-networkmanager/Config.in                  |  3 ++-
- package/python-networkmanager/python-networkmanager.hash |  6 +++---
- package/python-networkmanager/python-networkmanager.mk   | 10 +++++-----
- 3 files changed, 10 insertions(+), 9 deletions(-)
+ .../0001-Fix-runtime-error-with-uClibc.patch       | 48 ----------------------
+ .../mesa3d/{0002-musl.patch => 0001-musl.patch}    |  0
+ ...ess-detection-with-musl-based-toolchains.patch} |  0
+ ...c-invert-order-for-wayland-scanner-check.patch} |  0
+ 4 files changed, 48 deletions(-)
+ delete mode 100644 package/mesa3d/0001-Fix-runtime-error-with-uClibc.patch
+ rename package/mesa3d/{0002-musl.patch => 0001-musl.patch} (100%)
+ rename package/mesa3d/{0003-Fix-endianess-detection-with-musl-based-toolchains.patch => 0002-Fix-endianess-detection-with-musl-based-toolchains.patch} (100%)
+ rename package/mesa3d/{0004-configure.ac-invert-order-for-wayland-scanner-check.patch => 0003-configure.ac-invert-order-for-wayland-scanner-check.patch} (100%)
 
-diff --git a/package/python-networkmanager/Config.in b/package/python-networkmanager/Config.in
-index fcbce5748d..9b2b474d4b 100644
---- a/package/python-networkmanager/Config.in
-+++ b/package/python-networkmanager/Config.in
-@@ -4,7 +4,8 @@ config BR2_PACKAGE_PYTHON_NETWORKMANAGER
- 	depends on BR2_USE_WCHAR # dbus-python
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus-python
- 	depends on BR2_PACKAGE_DBUS # dbus-python
--	select BR2_PACKAGE_DBUS_PYTHON
-+	select BR2_PACKAGE_DBUS_PYTHON # runtime
-+	select BR2_PACKAGE_PYTHON_SIX # runtime
- 	help
- 	  python-networkmanager wraps NetworkManagers D-Bus interface
- 	  so you can be less verbose when talking to NetworkManager
-diff --git a/package/python-networkmanager/python-networkmanager.hash b/package/python-networkmanager/python-networkmanager.hash
-index cbd6febcd1..1fed4befb7 100644
---- a/package/python-networkmanager/python-networkmanager.hash
-+++ b/package/python-networkmanager/python-networkmanager.hash
-@@ -1,3 +1,3 @@
--# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=97c84c19b84b1124903a06379b107f77, sha256 locally computed
--md5	97c84c19b84b1124903a06379b107f77  python-networkmanager-1.2.1.tar.gz
--sha256	7107c07383f8077cfac33fdbb3c4cda4de40be20a6b20d30840055eb519a0e89  python-networkmanager-1.2.1.tar.gz
-+# md5 from https://pypi.python.org/pypi/python-networkmanager/json, sha256 locally computed
-+md5	5fc644a65463031295c6b7dd51a0f1bd  python-networkmanager-2.0.1.tar.gz
-+sha256	bc36507506ad29bfdac941b0987ebd1cc9633c9a9291d7378e229e4515a0a517  python-networkmanager-2.0.1.tar.gz
-diff --git a/package/python-networkmanager/python-networkmanager.mk b/package/python-networkmanager/python-networkmanager.mk
-index d0e4011421..7401396421 100644
---- a/package/python-networkmanager/python-networkmanager.mk
-+++ b/package/python-networkmanager/python-networkmanager.mk
-@@ -4,11 +4,11 @@
- #
- ################################################################################
- 
--PYTHON_NETWORKMANAGER_VERSION = 1.2.1
--PYTHON_NETWORKMANAGER_SITE = https://pypi.python.org/packages/e7/b1/09993250ceea9e03bc65fbabcd5286540200292c011b22237b2963c11471
--PYTHON_NETWORKMANAGER_SETUP_TYPE = distutils
--PYTHON_NETWORKMANAGER_LICENSE = GPL-3.0+
-+PYTHON_NETWORKMANAGER_VERSION = 2.0.1
-+PYTHON_NETWORKMANAGER_SOURCE = python-networkmanager-$(PYTHON_NETWORKMANAGER_VERSION).tar.gz
-+PYTHON_NETWORKMANAGER_SITE = https://pypi.python.org/packages/d7/f9/5cbd99fd24a072875ce048e48d1754285f137aab447de8fee63b6cba990a
-+PYTHON_NETWORKMANAGER_SETUP_TYPE = setuptools
-+PYTHON_NETWORKMANAGER_LICENSE = Zlib
- PYTHON_NETWORKMANAGER_LICENSE_FILES = COPYING
--PYTHON_NETWORKMANAGER_DEPENDENCIES = dbus-python
- 
- $(eval $(python-package))
+diff --git a/package/mesa3d/0001-Fix-runtime-error-with-uClibc.patch b/package/mesa3d/0001-Fix-runtime-error-with-uClibc.patch
+deleted file mode 100644
+index 59627be..0000000
+--- a/package/mesa3d/0001-Fix-runtime-error-with-uClibc.patch
++++ /dev/null
+@@ -1,48 +0,0 @@
+-Fix runtime error with uClibc
+-
+-Patch inspired by
+-https://www.winehq.org/pipermail/wine-bugs/2011-September/288987.html
+-http://git.alpinelinux.org/cgit/aports/tree/main/wine/uclibc-fmaxf-fminf.patch?id=c9b491b6099eec02a835ffd05539b5c783c6c43a
+-
+-Starting an app using mesa3d 10.5.x, Kodi for example, fails:
+-
+-/usr/lib/kodi/kodi.bin: symbol 'fminf': can't resolve symbol in lib '/usr/lib/dri/i965_dri.so'.
+-libGL error: unable to load driver: i965_dri.so
+-libGL error: driver pointer missing
+-libGL error: failed to load driver: i965
+-libGL error: unable to load driver: swrast_dri.so
+-libGL error: failed to load driver: swrast
+-
+-This patch was rejected by upstream mesa3d:
+-http://lists.freedesktop.org/archives/mesa-dev/2015-March/079436.html
+-
+-The real fix was committed to uClibc:
+-http://git.uclibc.org/uClibc/commit/?id=6c4538905e65ceb203f59aaa9a61728e81c6bc0a
+-
+-Until the external toolchains do not contain this uClibc patch we keep this
+-patch: http://lists.busybox.net/pipermail/buildroot/2015-March/123410.html
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+----
+-diff -uNr mesa-10.5.3.org/src/glsl/nir/nir_constant_expressions.c mesa-10.5.3/src/glsl/nir/nir_constant_expressions.c
+---- mesa-10.5.3.org/src/compiler/nir/nir_constant_expressions.c	2015-04-12 23:31:29.000000000 +0200
+-+++ mesa-10.5.3/src/compiler/nir/nir_constant_expressions.c	2015-04-13 19:59:37.819786541 +0200
+-@@ -48,6 +48,18 @@
+- }
+- #endif
+- 
+-+#ifdef __UCLIBC__
+-+float fmaxf(float a, float b)
+-+{
+-+	return (a > b) ? a : b;
+-+}
+-+
+-+float fminf(float a, float b)
+-+{
+-+	return (a < b) ? a : b;
+-+}
+-+#endif
+-+
+- /**
+-  * Evaluate one component of packSnorm4x8.
+-  */
+diff --git a/package/mesa3d/0002-musl.patch b/package/mesa3d/0001-musl.patch
+similarity index 100%
+rename from package/mesa3d/0002-musl.patch
+rename to package/mesa3d/0001-musl.patch
+diff --git a/package/mesa3d/0003-Fix-endianess-detection-with-musl-based-toolchains.patch b/package/mesa3d/0002-Fix-endianess-detection-with-musl-based-toolchains.patch
+similarity index 100%
+rename from package/mesa3d/0003-Fix-endianess-detection-with-musl-based-toolchains.patch
+rename to package/mesa3d/0002-Fix-endianess-detection-with-musl-based-toolchains.patch
+diff --git a/package/mesa3d/0004-configure.ac-invert-order-for-wayland-scanner-check.patch b/package/mesa3d/0003-configure.ac-invert-order-for-wayland-scanner-check.patch
+similarity index 100%
+rename from package/mesa3d/0004-configure.ac-invert-order-for-wayland-scanner-check.patch
+rename to package/mesa3d/0003-configure.ac-invert-order-for-wayland-scanner-check.patch
 -- 
-2.14.2
+2.9.5
