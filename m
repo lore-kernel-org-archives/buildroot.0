@@ -1,71 +1,97 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 4 Nov 2017 22:13:07 +0100
-Subject: [Buildroot] [PATCH v2] util-linux: security bump to version 2.31
-In-Reply-To: <232020389.16019836.1509500098756.JavaMail.zimbra@datacom.ind.br>
-References: <1509446871-25076-1-git-send-email-casantos@datacom.ind.br>
- <87zi87ezym.fsf@dell.be.48ers.dk>
- <232020389.16019836.1509500098756.JavaMail.zimbra@datacom.ind.br>
-Message-ID: <d99d0654-6124-b1cf-b11e-fbedb04e5d59@mind.be>
+From: Marcus Folkesson <marcus.folkesson@gmail.com>
+Date: Sat, 4 Nov 2017 22:23:16 +0100
+Subject: [Buildroot] [PATCH 1/1] zlib-ng: new package
+In-Reply-To: <1509690851-23677-1-git-send-email-stefan.froberg@petroprogram.com>
+References: <1509690851-23677-1-git-send-email-stefan.froberg@petroprogram.com>
+Message-ID: <20171104212316.GA4491@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi Stefan,
 
-
-On 01-11-17 02:34, Carlos Santos wrote:
->> From: "Peter Korsgaard" <peter@korsgaard.com>
->> To: "Carlos Santos" <casantos@datacom.ind.br>
->> Cc: buildroot at buildroot.org
->> Sent: Tuesday, October 31, 2017 8:04:33 PM
->> Subject: Re: [PATCH v2] util-linux: security bump to version 2.31
+On Fri, Nov 03, 2017 at 06:34:11AM +0000, Stefan Fr?berg wrote:
+> zlib-ng, SIMD optimized zlib
 > 
->>>>>>> "Carlos" == Carlos Santos <casantos@datacom.ind.br> writes:
->>
->>> Fix CVE-2016-2779: runuser in util-linux allows local users to escape to
->>> the parent session via a crafted TIOCSTI ioctl call, which pushes
->>> characters to the terminal's input buffer.
->>
->>> The new experimental "su --pty" feature has been implemented to fix this
->>> issue. The feature is not enabled by default and the new command line
->>> option --pty is necessary.
->>
->>> Add rfkill, a command for enabling and disabling wireless devices. This
->>> implementation is based upon, and backward compatible with, the original
->>> rfkill from Johannes Berg and Marcel Holtmann, currently provided by the
->>> standalone "rfkill" package.
->>
->> Do you know if there's any reason to prefer this version over our
->> existing rfkill package? The fact that it isn't available on nommu
->> probably means we cannot get rid of the separate package, but we may
->> want to add it to UTIL_LINUX_DEPENDENCIES so the util-linux version
->> "wins".
+> Signed-off-by: Stefan Fr?berg <stefan.froberg@petroprogram.com>
+> ---
+>  package/Config.in          |  1 +
+>  package/zlib-ng/Config.in  |  8 ++++++++
+>  package/zlib-ng/zlib-ng.mk | 15 +++++++++++++++
+>  3 files changed, 24 insertions(+)
+>  create mode 100644 package/zlib-ng/Config.in
+>  create mode 100644 package/zlib-ng/zlib-ng.mk
 > 
-> I think this one is preferable because util-linux is actively maintained
-> while the original rfkill seems to be abandoned (the last commit in its
-> git repository is from Jan 8 2015).
-> 
-> How many nommu architectures does Buildroot support? The only boards I
-> found without BR2_USE_MMU were qemu_{arm_versatile,xtensa_lx60}_nommu,
-> which obviously do not even have RF radios to turn on/off.
+> diff --git a/package/Config.in b/package/Config.in
+> index dbfb288..3e2b034 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -1003,6 +1003,7 @@ menu "Compression and decompression"
+>  	source "package/snappy/Config.in"
+>  	source "package/szip/Config.in"
+>  	source "package/zlib/Config.in"
+> +	source "package/zlib-ng/Config.in"
+>  endmenu
+>  
+>  menu "Crypto"
+> diff --git a/package/zlib-ng/Config.in b/package/zlib-ng/Config.in
+> new file mode 100644
+> index 0000000..06de97c
+> --- /dev/null
+> +++ b/package/zlib-ng/Config.in
+> @@ -0,0 +1,8 @@
+> +config BR2_PACKAGE_ZLIB_NG
+> +	bool "zlib-ng"
+> +	help
+> +	  zlib replacement with optimizations for
+> +	  "next generation" systems.
+> +
+> +	  https://github.com/Dead2/zlib-ng
+> +
+> diff --git a/package/zlib-ng/zlib-ng.mk b/package/zlib-ng/zlib-ng.mk
+> new file mode 100644
+> index 0000000..eaa93cd
+> --- /dev/null
+> +++ b/package/zlib-ng/zlib-ng.mk
+> @@ -0,0 +1,15 @@
+> +################################################################################
+> +#
+> +# zlib-ng
+> +#
+> +################################################################################
+> +
+> +ZLIB_NG_SITE = https://github.com/Dead2/zlib-ng.git
+> +ZLIB_NG_SOURCE = develop.zip
 
-stm32f429_disco_defconfig and stm32f469_disco_defconfig are NOMMU. I don't think
-these two have RF, but STM32L4 Discovery boards do have Wifi, Bluetooth, NFC and
-900 MHz radio. Probably not supported by rfkill however :-)
+I guess the intention is to point to
+ZLIB_NG_SITE = https://github.com/Dead2/zlib-ng/archive
 
- Anyway, if anybody needs it, the MMU requirement of libsmartcols could be
-removed. It is only there for the pager functionality which is not used by
-either libsmartcols or rfkill, but just happens to be linked into the .so file...
+Otherwise it will try to download
+http://github/Dead2/zlib-ng.git/develop.zip
+which is incorrect.
 
- Regards,
- Arnout
+However, this will result in a file ./dl/develop.zip, which says nothing
+about package or version.
+
+I think it is better to use git:
+ZLIB_NG_SITE_METHOD = git
+
+and specify version
+ZLIB_NG_VERSION = xxxxx
 
 
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+> +ZLIB_NG_SUBDIR = zlib-ng-develop
+> +ZLIB_NG_EXTRACT_CMDS = unzip $(DL_DIR)/$(ZLIB_NG_SOURCE) -d $(ZLIB_NG_DIR)
+
+This is affected by the comment above
+
+> +ZLIB_NG_LICENSE = Zlib
+> +ZLIB_NG_LICENSE_FILES = README.md
+
+The license file is LICENSE.md, not README.md.
+
+
+Best regards
+Marcus Folkesson
