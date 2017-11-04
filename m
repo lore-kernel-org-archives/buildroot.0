@@ -1,11 +1,12 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 4 Nov 2017 20:56:55 +0100
-Subject: [Buildroot] [PATCH 1/2] dhcpcd: add SysV start-up script
-In-Reply-To: <20171102232345.5a434af8@windsurf>
-References: <20171031223659.6831-1-code@mmayer.net>
- <20171031223659.6831-2-code@mmayer.net> <20171102230602.3c61e8d2@windsurf>
- <20171102221847.GA23314@scaer> <20171102232345.5a434af8@windsurf>
-Message-ID: <3f7fff7b-be5a-42ff-985f-0e860c98acb3@mind.be>
+Date: Sat, 4 Nov 2017 21:35:25 +0100
+Subject: [Buildroot] [PATCH] package/collectd: Specify correct FP layout
+ for PowerPC
+In-Reply-To: <CAHQ1cqEGDEcCAJ2roAXy6jgzYk2nNaVc8MVCSLBQ--Lw9AEwtQ@mail.gmail.com>
+References: <20171031003539.919-1-andrew.smirnov@gmail.com>
+ <20171101104256.4da2b465@windsurf>
+ <CAHQ1cqEGDEcCAJ2roAXy6jgzYk2nNaVc8MVCSLBQ--Lw9AEwtQ@mail.gmail.com>
+Message-ID: <42995d92-330a-ed8f-9da6-1fc90543dd13@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,36 +15,30 @@ To: buildroot@busybox.net
 
 
 
-On 02-11-17 23:23, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Thu, 2 Nov 2017 23:18:47 +0100, Yann E. MORIN wrote:
-> 
->>>  - Same for the configuration file: I prefer a loud error than an init
->>>    script that ignores the problem.  
+On 03-11-17 00:24, Andrey Smirnov wrote:
+>> However, there is a third FP layout called "intswap", and I'm not sure
+>> in which situations it should be used. Some additional investigation of
+>> collectd configure.ac script is probably needed to understand the
+>> AC_RUN_IFELSE() tests it does to figure out what the FP layout is when
+>> doing a native build.
 >>
->> Agreed, too.
->>
->> However:
->>
->>   - if the config file is mandatory, then this should be a failure.
->>
->>   - if the config file is optional, then it missing should be silently
->>     ignored and the service started nonetheless.
-> 
-> So you want explicitly handling for the "missing configuration file"
-> situation in the init script?
-> 
-> I wanted to avoid explicit handling, and just let the daemon whine (or
-> not) if its config file is missing.
+> I looked at that part of config.ac when I was debugging the problem
+> and AFACT all "intswap()" does is swapping upper and lower 32-bits of
+> a 64-bit word. I can't think of an architecture that would require
+> such a transformation and commit that introduced that check in
+> collectd didn't have any helpful hints either. Can we limit the scope
+> of this fix to big vs. little endian the way you suggested and leave
+> the "intswap" case out?
 
- I vaguely remember a recently added package where the daemon would silently
-fail to start if the config file is missing, and which doesn't even have a
-default config file. So I think checking for existence of the config file in the
-init script (if the config file is mandatory) makes sense.
+ That would be old ARM FP which had mixed-endian doubles? I can't find a good
+reference to it, just [1]. I remember from years ago that on ARM I had to do
+some weird word-swapping when converting doubles to/from network byte order.
 
  Regards,
  Arnout
+
+
+[1] https://en.wikipedia.org/wiki/Endianness#Floating_point
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
