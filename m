@@ -1,15 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 4 Nov 2017 23:22:46 +0100
-Subject: [Buildroot] [PATCH 1/2] dhcpcd: add SysV start-up script
-In-Reply-To: <7c1fde5e-099e-7a22-4b13-4ac9e81f3d87@mind.be>
-References: <20171031223659.6831-1-code@mmayer.net>
- <20171031223659.6831-2-code@mmayer.net>
- <20171102230602.3c61e8d2@windsurf> <20171102221847.GA23314@scaer>
- <20171102232345.5a434af8@windsurf>
- <3f7fff7b-be5a-42ff-985f-0e860c98acb3@mind.be>
- <20171104230331.7ee309cb@windsurf>
- <7c1fde5e-099e-7a22-4b13-4ac9e81f3d87@mind.be>
-Message-ID: <20171104232246.444c7ca3@windsurf>
+Date: Sat, 4 Nov 2017 23:24:41 +0100
+Subject: [Buildroot] BR2_REPRODUCIBLE issues
+In-Reply-To: <5c52008b-1ffa-7260-8681-5abeecd09665@mind.be>
+References: <1509720041684-0.post@n4.nabble.com>
+ <87y3nn3yq6.fsf@dell.be.48ers.dk>
+ <5c52008b-1ffa-7260-8681-5abeecd09665@mind.be>
+Message-ID: <20171104232441.4d7a4754@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,28 +14,20 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 4 Nov 2017 23:07:01 +0100, Arnout Vandecappelle wrote:
+On Sat, 4 Nov 2017 20:53:27 +0100, Arnout Vandecappelle wrote:
 
->  Exactly. "Failure" anyway just means an error message on the console, not that
-> the system fails to boot.
+> > So I don't really agree that it useless. What we could perhaps do is to
+> > only export our value for SOURCE_DATE_EPOCH if not already set in the
+> > enviroment, so you can set it outside Buildroot if you want a different
+> > behaviour.  
+> 
+>  Well, the proposed solution of using a config variable sounds OK. Only, I think
+> it would make more sense to have a config variable with a date, rather than a
+> commit ID.
 
-Sure, but some scripts currently just "exit 0" with no error message
-whatsoever when the configuration file is missing.
-
-So, let's summarize our policy:
-
- * Never check if the daemon executable is present, because that's
-   silly, Buildroot guarantees it's there.
-
- * If the daemon needs a configuration file, always check if it exists,
-   and if not, bail out with an error message.
-
-But... wait, if Buildroot guarantees that it installs a configuration
-file for this daemon, having the init script check its presence is
-pretty much as silly as checking the presence of the daemon executable
-itself.
-
-So?
+Why would we want a config option, rather than just comply with the
+SOURCE_DATE_EPOCH environment variable, if already defined in the
+environment?
 
 Thomas
 -- 
