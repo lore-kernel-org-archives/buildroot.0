@@ -1,81 +1,79 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat,  4 Nov 2017 09:47:07 +0100
-Subject: [Buildroot] [PATCH v2] usb_modeswitch: explicitly set --host /
- --build for the embedded jimtcl
-Message-ID: <20171104084707.25418-1-peter@korsgaard.com>
+Date: Sat, 04 Nov 2017 10:31:51 +0100
+Subject: [Buildroot] [PATCH 1/1] python-websockets: new package
+In-Reply-To: <20171103222533.19410-1-joseph.kogut@gmail.com> (Joseph Kogut's
+ message of "Fri, 3 Nov 2017 15:25:33 -0700")
+References: <20171103222533.19410-1-joseph.kogut@gmail.com>
+Message-ID: <87fu9u4cfs.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/106/106af20196089e74c35daabdae46f030981600bd/
+>>>>> "Joseph" == Joseph Kogut <joseph.kogut@gmail.com> writes:
 
-Otherwise the (handwritten) configure script uses a config.guess script from
-2010 to figure out the build host, breaking builds on ppc64le hosts.
+ > Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
+ > ---
+ >  DEVELOPERS                                       |  3 +++
+ >  package/Config.in                                |  1 +
+ >  package/python-websockets/Config.in              | 10 ++++++++++
+ >  package/python-websockets/python-websockets.hash |  2 ++
+ >  package/python-websockets/python-websockets.mk   | 14 ++++++++++++++
+ >  5 files changed, 30 insertions(+)
+ >  create mode 100644 package/python-websockets/Config.in
+ >  create mode 100644 package/python-websockets/python-websockets.hash
+ >  create mode 100644 package/python-websockets/python-websockets.mk
 
-The result of --host / --build is only used to detect if we are building for
-Windows or not, which is why things are working on x86(-64) build hosts
-without specifying --host even though we are cross compiling - But this may
-change in the future, so we better pass the correct values.
-
-Passing extra jimtcl configure flags is unfortunately not forseen in the
-usb_modeswitch Makefile, so add a small patch making this possible.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...low-extra-configure-flags-to-be-passed-to.patch | 29 ++++++++++++++++++++++
- package/usb_modeswitch/usb_modeswitch.mk           |  1 +
- 2 files changed, 30 insertions(+)
- create mode 100644 package/usb_modeswitch/0001-Makefile-allow-extra-configure-flags-to-be-passed-to.patch
-
-diff --git a/package/usb_modeswitch/0001-Makefile-allow-extra-configure-flags-to-be-passed-to.patch b/package/usb_modeswitch/0001-Makefile-allow-extra-configure-flags-to-be-passed-to.patch
-new file mode 100644
-index 0000000000..9e1e681fa5
---- /dev/null
-+++ b/package/usb_modeswitch/0001-Makefile-allow-extra-configure-flags-to-be-passed-to.patch
-@@ -0,0 +1,29 @@
-+From 1309df373c882f27f476130b06746a6d1e1a0f85 Mon Sep 17 00:00:00 2001
-+From: Peter Korsgaard <peter@korsgaard.com>
-+Date: Fri, 3 Nov 2017 23:21:44 +0100
-+Subject: [PATCH] Makefile: allow extra configure flags to be passed to jimtcl
-+ on the make command line
-+
-+E.G. to pass --host / --build for cross compilation.
-+
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ Makefile | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/Makefile b/Makefile
-+index a151e2a..94dabd9 100644
-+--- a/Makefile
-++++ b/Makefile
-+@@ -19,7 +19,7 @@ TCL        ?= $(HOST_TCL)
-+ else
-+ TCL        ?= /usr/bin/tclsh
-+ endif
-+-JIM_CONFIGURE_OPTS = --disable-lineedit \
-++override JIM_CONFIGURE_OPTS += --disable-lineedit \
-+ 	--with-out-jim-ext="stdlib posix load signal syslog" --prefix=/usr
-+ 
-+ .PHONY: clean install install-common uninstall \
-+-- 
-+2.11.0
-+
-diff --git a/package/usb_modeswitch/usb_modeswitch.mk b/package/usb_modeswitch/usb_modeswitch.mk
-index 1901767f89..ea08de256b 100644
---- a/package/usb_modeswitch/usb_modeswitch.mk
-+++ b/package/usb_modeswitch/usb_modeswitch.mk
-@@ -23,6 +23,7 @@ endif
- define USB_MODESWITCH_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
- 		CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE -Wall -I." \
-+		JIM_CONFIGURE_OPTS="--host=$(GNU_TARGET_NAME) --build=$(GNU_HOST_NAME)" \
- 		-C $(@D) $(USB_MODESWITCH_BUILD_TARGETS)
- endef
+ > diff --git a/DEVELOPERS b/DEVELOPERS
+ > index 49fa789c1d..c651bf26fa 100644
+ > --- a/DEVELOPERS
+ > +++ b/DEVELOPERS
+ > @@ -787,6 +787,9 @@ F:	package/pdbg/
+ >  F:	board/qemu/ppc64le-pseries/
+ >  F:	configs/qemu_ppc64le_pseries_defconfig
  
+ > +N:	Joseph Kogut <joseph.kogut@gmail.com>
+ > +F:	package/python-websockets/
+ > +
+ >  N:	Johan Derycke <johanderycke@gmail.com>
+ >  F:	package/python-libconfig/
+ 
+ > diff --git a/package/Config.in b/package/Config.in
+ > index 28444f64de..fe5ccc434e 100644
+ > --- a/package/Config.in
+ > +++ b/package/Config.in
+ > @@ -920,6 +920,7 @@ menu "External python modules"
+ >  	source "package/python-wcwidth/Config.in"
+ >  	source "package/python-web2py/Config.in"
+ >  	source "package/python-webpy/Config.in"
+ > +	source "package/python-websockets/Config.in"
+ >  	source "package/python-werkzeug/Config.in"
+ >  	source "package/python-whoosh/Config.in"
+ >  	source "package/python-ws4py/Config.in"
+ > diff --git a/package/python-websockets/Config.in b/package/python-websockets/Config.in
+ > new file mode 100644
+ > index 0000000000..dea02e2bfd
+ > --- /dev/null
+ > +++ b/package/python-websockets/Config.in
+ > @@ -0,0 +1,10 @@
+ > +config BR2_PACKAGE_PYTHON_WEBSOCKETS
+ > +	bool "python-websockets"
+ > +	depends on BR2_PACKAGE_PYTHON3
+ > +	select BR2_PACKAGE_PYTHON3_ZLIB
+ > +	select BR2_PACKAGE_PYTHON3_SSL
+ > +
+ > +	help
+
+The extra newline before help shouldn't be there.
+
+> +++ b/package/python-websockets/python-websockets.hash
+ > @@ -0,0 +1,2 @@
+ > +md5	9e8c6b3c70def4146d75fbb0f52bdfc7  websockets-4.0.1.tar.gz
+ > +sha256	da4d4fbe059b0453e726d6d993760065d69b823a27efc3040402a6fcfe6a1ed9  websockets-4.0.1.tar.gz
+
+I've added the hash of the license file and the comments Yegor had and
+committed, thanks.
+
 -- 
-2.11.0
+Bye, Peter Korsgaard
