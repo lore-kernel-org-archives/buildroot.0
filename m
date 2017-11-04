@@ -1,10 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 4 Nov 2017 20:54:30 +0100
-Subject: [Buildroot] [PATCH 1/1] refpolicy: bump to 2.20170805
-In-Reply-To: <CANQCQpYTXtXMUh3jF++H8OwiAkPi_gJ7T8D1m9bPn+NJk7bYgg@mail.gmail.com>
-References: <20171103125856.16518-1-aduskett@gmail.com>
- <CANQCQpYTXtXMUh3jF++H8OwiAkPi_gJ7T8D1m9bPn+NJk7bYgg@mail.gmail.com>
-Message-ID: <12c29c43-1ecf-8756-8d03-b8c98375fc6d@mind.be>
+Date: Sat, 4 Nov 2017 20:56:55 +0100
+Subject: [Buildroot] [PATCH 1/2] dhcpcd: add SysV start-up script
+In-Reply-To: <20171102232345.5a434af8@windsurf>
+References: <20171031223659.6831-1-code@mmayer.net>
+ <20171031223659.6831-2-code@mmayer.net> <20171102230602.3c61e8d2@windsurf>
+ <20171102221847.GA23314@scaer> <20171102232345.5a434af8@windsurf>
+Message-ID: <3f7fff7b-be5a-42ff-985f-0e860c98acb3@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,20 +14,33 @@ To: buildroot@busybox.net
 
 
 
-On 03-11-17 14:08, Matthew Weber wrote:
-> Adam,
+On 02-11-17 23:23, Thomas Petazzoni wrote:
+> Hello,
 > 
-> On Fri, Nov 3, 2017 at 7:58 AM, Adam Duskett <aduskett@gmail.com> wrote:
->> In addition to a simple bump, the following extra changes have occured:
->>   - Change the refpolicy site to the official release URL.
->>   - Remove REFPOLICY_SITE_METHOD.
->>   - Remove REFPOLICY_GIT_SUBMODULES.
+> On Thu, 2 Nov 2017 23:18:47 +0100, Yann E. MORIN wrote:
 > 
-> Interesting, do you know how the upstream plan changed for the contrib
-> material?  Doesn't look like the refpolicy repo has any of that at
-> first glance.
+>>>  - Same for the configuration file: I prefer a loud error than an init
+>>>    script that ignores the problem.  
+>>
+>> Agreed, too.
+>>
+>> However:
+>>
+>>   - if the config file is mandatory, then this should be a failure.
+>>
+>>   - if the config file is optional, then it missing should be silently
+>>     ignored and the service started nonetheless.
+> 
+> So you want explicitly handling for the "missing configuration file"
+> situation in the init script?
+> 
+> I wanted to avoid explicit handling, and just let the daemon whine (or
+> not) if its config file is missing.
 
- As far as I can see, the contrib submodule is included in the tarball, isn't it?
+ I vaguely remember a recently added package where the daemon would silently
+fail to start if the config file is missing, and which doesn't even have a
+default config file. So I think checking for existence of the config file in the
+init script (if the config file is mandatory) makes sense.
 
  Regards,
  Arnout
