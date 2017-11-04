@@ -1,10 +1,12 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 4 Nov 2017 21:56:58 +0100
-Subject: [Buildroot] Parallel top-level make and multiple rootfs types
-In-Reply-To: <daa6be72-cbd0-4f65-8e48-83d1c43ddd8c@cesnet.cz>
-References: <71023202-b51d-49cb-bcf0-a49cffb7414a@cesnet.cz>
- <daa6be72-cbd0-4f65-8e48-83d1c43ddd8c@cesnet.cz>
-Message-ID: <32f8ab99-e828-f276-fc5a-61f9955db8cc@mind.be>
+Date: Sat, 4 Nov 2017 22:00:25 +0100
+Subject: [Buildroot] [PATCH] autoconf: use host-gettext's autopoint if
+ available in autoreconf
+In-Reply-To: <CAAP7ucJmmHCD+ceC7_w+zR8-Pdy3UexKMBhoC4bYQTvZwKBm3A@mail.gmail.com>
+References: <20170827110920.15579-1-aleksander@aleksander.es>
+ <e3d4f8af-e660-ff80-7157-5b897b8e47c4@mind.be>
+ <CAAP7ucJmmHCD+ceC7_w+zR8-Pdy3UexKMBhoC4bYQTvZwKBm3A@mail.gmail.com>
+Message-ID: <16379dac-2375-5830-68c3-06540e293d75@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,44 +15,18 @@ To: buildroot@busybox.net
 
 
 
-On 02-11-17 19:27, Jan Kundr?t wrote:
-> On ?tvrtek 26. ??jna 2017 1:10:05 CEST, Jan Kundr?t wrote:
->> Hi,
->> I've enabled that unsupported feature for parallel top-level make by removing
->> ".NOTPARALLEL". I'm doing this because it cuts my build time by a factor of
->> four (roughly 50min -> 12min; yes, these serialized configure steps are
->> extremely expensive on a 24-core build node).
+On 02-11-17 18:27, Aleksander Morgado wrote:
+>> (and remove the GETTEXTIZE support from pkg-autotools). In a later step we can
+>> rename <PKG>_GETTEXTIZE to <PKG>_AUTOPOINT.
 >>
->> Everything works well for me up to and including the `target-finalize` step. I
->> have multiple CONFIG_TARGET_ROOTFS_*, and their rules clobber each other's
->> auxiliary files, either directly (_fakeroot.fs), or via mkusers which creates
->> duplicate rows in target/etc/group.
->>
->> I tried to fix this by something like:
->>
->> ?.NOTPARALLEL: $$(BINARIES_DIR)/rootfs.$(1)
->>
->> ...but it just caused the entire build to once again become serial,
->> package-after-package, which is not what I want.
->>
->> Is there a better fix than running `make -j32 target-finalize && make` as a
->> workaround?
-> 
-> Hi,
-> can I disable parallel execution of the rootfs-* build steps while still
-> building everything up to target-finalize in parallel?
+> How about having both available for now? i.e. letting packages select
+> <PKG>_GETTEXTIZE or <PKG>_AUTOPOINT.
 
- No, that's not possible with make. I don't know if Thomas has already thought
-about this aspect of top-level parallel...
-
- I think the solution is to change the way we build the rootfs: instead of doing
-the fakeroot steps over and over again, do it once, save with the -s option, and
-then do the individual filesystems in a separate (readonly) fakeroot with -i to
-read the previously created fakeroot file.
+ Yeah, that would be an option to avoid having a big bang change: introduce
+<PKG>_AUTOPOINT, and then slowly convert packages that currently use _GETTEXTIZE.
 
  Regards,
  Arnout
-
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
