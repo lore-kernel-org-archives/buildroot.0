@@ -1,88 +1,49 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun,  5 Nov 2017 20:24:17 +0200
-Subject: [Buildroot] [PATCH] dbus: bump to version 1.12.0
-Message-ID: <8ad470089db5ea9391181af416f64952559b76be.1509906257.git.baruch@tkos.co.il>
+From: Sergey Matyukevich <geomatsi@gmail.com>
+Date: Sun,  5 Nov 2017 21:28:52 +0300
+Subject: [Buildroot] [PATCH] configs/pcduino: bump kernel and u-boot versions
+Message-ID: <20171105182852.13082-1-geomatsi@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Remove --enable-abstract-sockets; dropped upstream. Remove
-ac_cv_have_abstract_sockets that is dropped as well.
+Update kernel to 4.13 and U-Boot to 2017.09.
 
-Remove --disable-selinux; we handle selinux as an optional dependency
-below.
-
-Remove --{enable,disable}-dnotify; this options has been removed in
-version 1.7.6, broken since 2010.
-
-Remove --with-init-scripts; dropped upstream.
-
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
 ---
- package/dbus/dbus.hash |  4 ++--
- package/dbus/dbus.mk   | 11 ++---------
- 2 files changed, 4 insertions(+), 11 deletions(-)
+ configs/linksprite_pcduino_defconfig | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/dbus/dbus.hash b/package/dbus/dbus.hash
-index b174391c1303..df1891b6d8b4 100644
---- a/package/dbus/dbus.hash
-+++ b/package/dbus/dbus.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--# https://dbus.freedesktop.org/releases/dbus/dbus-1.10.24.tar.gz.asc
--sha256	71184eb27638e224579ffa998e88f01d0f1fef17a7811406e53350735eaecd1b  dbus-1.10.24.tar.gz
-+# https://dbus.freedesktop.org/releases/dbus/dbus-1.12.0.tar.gz.asc
-+sha256	39af0d9267391434b549c5c4adc001b735518c96f7630c3fe7162af1d13ef3c0  dbus-1.12.0.tar.gz
- # Locally calculated
- sha256	0e46f54efb12d04ab5c33713bacd0e140c9a35b57ae29e03c853203266e8f3a1  COPYING
-diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
-index 6fa04962baf7..56a54e309c8c 100644
---- a/package/dbus/dbus.mk
-+++ b/package/dbus/dbus.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/configs/linksprite_pcduino_defconfig b/configs/linksprite_pcduino_defconfig
+index e736e48068..79e0939792 100644
+--- a/configs/linksprite_pcduino_defconfig
++++ b/configs/linksprite_pcduino_defconfig
+@@ -17,13 +17,13 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/linksprite/pcduino/post-image.sh"
+ # For kernel modules autoloading
+ BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
  
--DBUS_VERSION = 1.10.24
-+DBUS_VERSION = 1.12.0
- DBUS_SITE = https://dbus.freedesktop.org/releases/dbus
- DBUS_LICENSE = AFL-2.1 or GPL-2.0+ (library, tools), GPL-2.0+ (tools)
- DBUS_LICENSE_FILES = COPYING
-@@ -20,20 +20,15 @@ endef
+-# Linux headers same as kernel, a 4.11 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_11=y
++# Linux headers same as kernel, a 4.13 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_13=y
  
- DBUS_DEPENDENCIES = host-pkgconf expat
- 
--DBUS_CONF_ENV = ac_cv_have_abstract_sockets=yes
- DBUS_CONF_OPTS = \
- 	--with-dbus-user=dbus \
- 	--disable-tests \
- 	--disable-asserts \
--	--enable-abstract-sockets \
--	--disable-selinux \
- 	--disable-xml-docs \
- 	--disable-doxygen-docs \
--	--disable-dnotify \
- 	--with-xml=expat \
- 	--with-system-socket=/var/run/dbus/system_bus_socket \
--	--with-system-pid-file=/var/run/messagebus.pid \
--	--with-init-scripts=none
-+	--with-system-pid-file=/var/run/messagebus.pid
- 
- ifeq ($(BR2_STATIC_LIBS),y)
- DBUS_CONF_OPTS += LIBS='-pthread'
-@@ -109,11 +104,9 @@ HOST_DBUS_CONF_OPTS = \
- 	--with-dbus-user=dbus \
- 	--disable-tests \
- 	--disable-asserts \
--	--enable-abstract-sockets \
- 	--disable-selinux \
- 	--disable-xml-docs \
- 	--disable-doxygen-docs \
--	--enable-dnotify \
- 	--without-x \
- 	--with-xml=expat
- 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.11"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.13"
+ BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun4i-a10-pcduino"
+@@ -37,7 +37,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.03"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.09"
+ BR2_TARGET_UBOOT_USE_DEFCONFIG=y
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="Linksprite_pcDuino"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
 -- 
-2.14.2
+2.11.0
