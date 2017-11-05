@@ -1,7 +1,7 @@
 From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Sun,  5 Nov 2017 23:19:13 +0100
-Subject: [Buildroot] [PATCH 1/1] add sunxi-mali mainline kernel
-Message-ID: <1509920353-23438-1-git-send-email-giulio.benetti@micronovasrl.com>
+Date: Sun,  5 Nov 2017 23:23:44 +0100
+Subject: [Buildroot] [PATCH 1/1] add sunxi-mali r6p2 mainline user space blob
+Message-ID: <1509920624-24325-1-git-send-email-giulio.benetti@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,125 +10,159 @@ To: buildroot@busybox.net
 
 Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
 ---
- package/sunxi-mali-driver-mainline/Config.in       |  9 +++++
- package/sunxi-mali-driver-mainline/S80mali         | 43 ++++++++++++++++++++++
- .../sunxi-mali-driver-mainline.mk                  | 43 ++++++++++++++++++++++
- 3 files changed, 95 insertions(+)
- create mode 100644 package/sunxi-mali-driver-mainline/Config.in
- create mode 100644 package/sunxi-mali-driver-mainline/S80mali
- create mode 100644 package/sunxi-mali-driver-mainline/sunxi-mali-driver-mainline.mk
+ package/sunxi-mali-mainline/Config.in              | 38 ++++++++++++++
+ package/sunxi-mali-mainline/egl.pc                 | 12 +++++
+ package/sunxi-mali-mainline/glesv2.pc              | 12 +++++
+ package/sunxi-mali-mainline/sunxi-mali-mainline.mk | 59 ++++++++++++++++++++++
+ 4 files changed, 121 insertions(+)
+ create mode 100644 package/sunxi-mali-mainline/Config.in
+ create mode 100644 package/sunxi-mali-mainline/egl.pc
+ create mode 100644 package/sunxi-mali-mainline/glesv2.pc
+ create mode 100644 package/sunxi-mali-mainline/sunxi-mali-mainline.mk
 
-diff --git a/package/sunxi-mali-driver-mainline/Config.in b/package/sunxi-mali-driver-mainline/Config.in
+diff --git a/package/sunxi-mali-mainline/Config.in b/package/sunxi-mali-mainline/Config.in
 new file mode 100644
-index 0000000..8f2c960
+index 0000000..0b180d7
 --- /dev/null
-+++ b/package/sunxi-mali-driver-mainline/Config.in
-@@ -0,0 +1,9 @@
-+comment "sunxi-mali-driver-mainline needs a Linux kernel to be built"
-+	depends on !BR2_LINUX_KERNEL
-+
-+config BR2_PACKAGE_SUNXI_MALI_DRIVER_MAINLINE
-+	bool "sunxi-mali-driver-mainline"
-+	depends on BR2_LINUX_KERNEL
-+	select BR2_LINUX_NEEDS_MODULES # not using kernel-module infra
++++ b/package/sunxi-mali-mainline/Config.in
+@@ -0,0 +1,38 @@
++config BR2_PACKAGE_SUNXI_MALI_MAINLINE
++	bool "sunxi-mali-mainline"
++	depends on BR2_arm
++	depends on BR2_ARM_EABIHF
++	depends on BR2_TOOLCHAIN_USES_GLIBC
++	select BR2_PACKAGE_HAS_LIBEGL
++	select BR2_PACKAGE_HAS_LIBGLES
 +	help
-+	  Sunxi Mali Kernel space driver
-diff --git a/package/sunxi-mali-driver-mainline/S80mali b/package/sunxi-mali-driver-mainline/S80mali
++	  Install the ARM Mali drivers for sunxi based systems (i.e
++	  systems based on ARM Allwinner SoCs). This driver requires
++	  either the sunxi-kernel with the ARM Mali driver enabled or
++	  the installation of the ARM Mali drivers as an external
++	  module.
++
++if BR2_PACKAGE_SUNXI_MALI_MAINLINE
++
++config BR2_PACKAGE_PROVIDES_LIBEGL
++	default "sunxi-mali-mainline"
++
++config BR2_PACKAGE_PROVIDES_LIBGLES
++	default "sunxi-mali-mainline"
++
++choice
++	prompt "Version"
++	default BR2_PACKAGE_SUNXI_MALI_MAINLINE_R6P2
++	help
++	  Select the version of the kernel module.
++
++config BR2_PACKAGE_SUNXI_MALI_MAINLINE_R6P2
++	bool "r6p2"
++
++endchoice
++
++endif
++
++comment "sunxi-mali needs an EABIhf glibc toolchain"
++	depends on BR2_arm
++	depends on !BR2_TOOLCHAIN_USES_GLIBC || !BR2_ARM_EABIHF
+diff --git a/package/sunxi-mali-mainline/egl.pc b/package/sunxi-mali-mainline/egl.pc
 new file mode 100644
-index 0000000..3db342e
+index 0000000..3854e5f
 --- /dev/null
-+++ b/package/sunxi-mali-driver-mainline/S80mali
-@@ -0,0 +1,43 @@
-+#!/bin/sh -e
++++ b/package/sunxi-mali-mainline/egl.pc
+@@ -0,0 +1,12 @@
++prefix=/usr/
++exec_prefix=${prefix}
++libdir=${exec_prefix}/lib
++includedir=${prefix}/include
 +
-+install_driver() {
-+	DRIVER=$1
-+	OPTS=$2
++Name: egl
++Description: ARM Mali implementation of EGL
++Version: 1.4
++Requires:
++Libs: -L${libdir} -lEGL -lGLESv2
++Cflags: -I${includedir}
 +
-+	modprobe $DRIVER $OPTS
-+	maj=$(awk "\$2==\"${DRIVER}\" { print \$1; }" /proc/devices)
-+
-+	rm -f /dev/${DRIVER}
-+
-+	mknod /dev/${DRIVER} c $maj 0
-+	chmod 600 /dev/${DRIVER}
-+}
-+
-+start() {
-+	echo "mali: starting driver"
-+
-+	install_driver mali
-+}
-+
-+stop() {
-+	echo "mali: stopping driver"
-+
-+	rmmod mali
-+}
-+
-+case "$1" in
-+start)
-+	start
-+;;
-+stop)
-+	stop
-+;;
-+restart)
-+	stop
-+	start
-+;;
-+*)
-+	echo "mali: Please use start, stop, or restart."
-+	exit 1
-+;;
-+esac
-diff --git a/package/sunxi-mali-driver-mainline/sunxi-mali-driver-mainline.mk b/package/sunxi-mali-driver-mainline/sunxi-mali-driver-mainline.mk
+diff --git a/package/sunxi-mali-mainline/glesv2.pc b/package/sunxi-mali-mainline/glesv2.pc
 new file mode 100644
-index 0000000..73f7359
+index 0000000..6910b46
 --- /dev/null
-+++ b/package/sunxi-mali-driver-mainline/sunxi-mali-driver-mainline.mk
-@@ -0,0 +1,43 @@
++++ b/package/sunxi-mali-mainline/glesv2.pc
+@@ -0,0 +1,12 @@
++prefix=/usr
++exec_prefix=${prefix}
++libdir=${exec_prefix}/lib
++includedir=${prefix}/include
++
++Name: glesv2
++Description: ARM Mali implementation of OpenGL ESv2
++Version: 2.0
++Requires:
++Libs: -L${libdir} -lGLESv2 -lGLESv1_CM
++Cflags: -I${includedir}
++
+diff --git a/package/sunxi-mali-mainline/sunxi-mali-mainline.mk b/package/sunxi-mali-mainline/sunxi-mali-mainline.mk
+new file mode 100644
+index 0000000..42f973e
+--- /dev/null
++++ b/package/sunxi-mali-mainline/sunxi-mali-mainline.mk
+@@ -0,0 +1,59 @@
 +################################################################################
 +#
-+# sunxi-mali-driver-mainline
++# sunxi-mali-mainline
 +#
 +################################################################################
 +
 +# last sha1 character dropped to ensure unique filename
-+SUNXI_MALI_DRIVER_MAINLINE_VERSION = 88ba3cecfc7082bf8e52d7ded16cbbf0ef9e6ca
-+SUNXI_MALI_DRIVER_MAINLINE_SITE = https://github.com/mripard/sunxi-mali.git
-+SUNXI_MALI_DRIVER_MAINLINE_SITE_METHOD = git
++SUNXI_MALI_MAINLINE_VERSION = cb3e8ece9b2c3a70cbeb3204cd6f30eceaa3202
++SUNXI_MALI_MAINLINE_SITE = https://github.com/free-electrons/mali-blobs.git
++SUNXI_MALI_MAINLINE_SITE_METHOD = git
 +
-+SUNXI_MALI_DRIVER_MAINLINE_DEPENDENCIES = linux
++SUNXI_MALI_MAINLINE_INSTALL_STAGING = YES
++SUNXI_MALI_MAINLINE_PROVIDES = libegl libgles
 +
-+SUNXI_MALI_DRIVER_MAINLINE_MAKE_OPTS = \
-+	KDIR=$(LINUX_DIR) \
-+	USING_UMP=0 \
-+	BUILD=release \
-+	USING_DVFS=1 \
-+	USING_DEVFREQ=1 \
-+	CROSS_COMPILE=$(TARGET_CROSS)
++ifeq ($(BR2_PACKAGE_SUNXI_MALI_MAINLINE_R6P2),y)
++SUNXI_MALI_LIB_VER=r6p2
++endif
 +
-+define SUNXI_MALI_DRIVER_MAINLINE_BUILD_CMDS
-+	$(APPLY_PATCHES) $(@D)/r6p2 $(@D)/patches \*.patch
++ifeq ($(BR2_PACKAGE_XLIB_LIBX11),y)
++SUNXI_MALI_MAINLINE_DEPENDENCIES += xlib_libX11 xlib_libXfixes \
++				    xlib_libXext xlib_libXdamage libdrm
++endif
 +
-+	$(SUNXI_MALI_MAINLINE_MAKE_ENV) $(MAKE) \
-+		$(SUNXI_MALI_DRIVER_MAINLINE_MAKE_OPTS) \
-+		-C $(@D)/r6p2/src/devicedrv/mali
++define SUNXI_MALI_MAINLINE_BUILD_CMDS
 +endef
 +
-+define SUNXI_MALI_DRIVER_MAINLINE_INSTALL_TARGET_CMDS
-+	mkdir -p $(TARGET_DIR)/lib/modules/$(LINUX_VERSION_PROBED)/kernel/gpu/
++ifeq ($(BR2_PACKAGE_XLIB_LIBX11),y)
++define SUNXI_MALI_MAINLINE_INSTALL_STAGING_CMDS
++	cp -rf $(@D)/$(SUNXI_MALI_LIB_VER)/x11_dma_buf/lib_x11_dma_buf/* $(STAGING_DIR)/usr/lib
++	cp -rf $(@D)/$(SUNXI_MALI_LIB_VER)/fbdev/include/* $(STAGING_DIR)/usr/include/
 +
-+	cp $(@D)/r6p2/src/devicedrv/mali/mali.ko \
-+		$(TARGET_DIR)/lib/modules/$(LINUX_VERSION_PROBED)/kernel/gpu/
-+
-+	echo kernel/gpu/mali.ko >> \
-+	$(TARGET_DIR)/lib/modules/$(LINUX_VERSION_PROBED)/modules.dep
-+
-+	$(INSTALL) -D -m 0755 package/sunxi-mali-driver-mainline/S80mali \
-+		$(TARGET_DIR)/etc/init.d/S80mali
++	$(INSTALL) -D -m 0644 package/sunxi-mali-mainline/egl.pc \
++		$(STAGING_DIR)/usr/lib/pkgconfig/egl.pc
++	$(INSTALL) -D -m 0644 package/sunxi-mali-mainline/glesv2.pc \
++		$(STAGING_DIR)/usr/lib/pkgconfig/glesv2.pc
 +endef
++else
++define SUNXI_MALI_MAINLINE_INSTALL_STAGING_CMDS
++	cp -rf $(@D)/$(SUNXI_MALI_LIB_VER)/fbdev/lib/lib_fb_dev/* $(STAGING_DIR)/usr/lib/
++	cp -rf $(@D)/$(SUNXI_MALI_LIB_VER)/fbdev/include/* $(STAGING_DIR)/usr/include/
++
++	$(INSTALL) -D -m 0644 package/sunxi-mali-mainline/egl.pc \
++		$(STAGING_DIR)/usr/lib/pkgconfig/egl.pc
++	$(INSTALL) -D -m 0644 package/sunxi-mali-mainline/glesv2.pc \
++		$(STAGING_DIR)/usr/lib/pkgconfig/glesv2.pc
++endef
++endif
++
++ifeq ($(BR2_PACKAGE_XLIB_LIBX11),y)
++define SUNXI_MALI_MAINLINE_INSTALL_TARGET_CMDS
++	cp -rf $(@D)/$(SUNXI_MALI_LIB_VER)/x11_dma_buf/lib_x11_dma_buf/* $(TARGET_DIR)/usr/lib
++endef
++else
++define SUNXI_MALI_MAINLINE_INSTALL_TARGET_CMDS
++	cp -rf $(@D)/$(SUNXI_MALI_LIB_VER)/fbdev/lib/lib_fb_dev/* $(TARGET_DIR)/usr/lib/
++endef
++endif
 +
 +$(eval $(generic-package))
 -- 
