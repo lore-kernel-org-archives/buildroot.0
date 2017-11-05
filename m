@@ -1,14 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 5 Nov 2017 15:40:25 +0100
-Subject: [Buildroot] Analysis of build results for 2017-10-30
-In-Reply-To: <877ev54qos.fsf@dell.be.48ers.dk>
-References: <20171031070013.AD75D207B2@mail.free-electrons.com>
- <20171031230519.3feb2619@windsurf>
- <20171102232155.11995715@windsurf>
- <ba942bc0-1444-1f44-875e-94dd973d6e09@mind.be>
- <20171104232055.2e196d56@windsurf>
- <877ev54qos.fsf@dell.be.48ers.dk>
-Message-ID: <20171105154025.0d8c749d@windsurf.home>
+Date: Sun, 5 Nov 2017 15:44:20 +0100
+Subject: [Buildroot] [RFCv1 2/4] core: change host RPATH handling
+In-Reply-To: <20171105085756.GG2996@scaer>
+References: <20171103160627.6468-1-thomas.petazzoni@free-electrons.com>
+ <20171103160627.6468-3-thomas.petazzoni@free-electrons.com>
+ <20171105085756.GG2996@scaer>
+Message-ID: <20171105154420.52d67acd@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,17 +14,47 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 04 Nov 2017 23:36:19 +0100, Peter Korsgaard wrote:
+On Sun, 5 Nov 2017 09:57:56 +0100, Yann E. MORIN wrote:
 
->  > I wouldn't mind removing it.  
+> In the past, we explicitly got rid of LD_LIBRARY_PATH because it does
+> not work. See 34d081674a (core/pkg-infrastructures: remove LD_LIBRARY_PATH
+> from the environment).
 > 
->  > Peter? Your call?  
+> Briefly, it does not work when we build a library that is also present
+> on the distro, which is used by a tool from the distro, and we build it
+> in an incompatibl way.
 > 
-> If the only thing broken about it is static linking then I think I would
-> prefer to just mark it as !static for now.
+> So, we'll have to come up with another solution, like your suggested
+> alternative.
+> 
+> >  - At the end of the build, in order to make sure that binaries are
+> >    usable without LD_LIBRARY_PATH, we fixup the host binaries to use
+> >    $ORIGIN/../lib. This is more-or-less what was done previously in
+> >    the "make sdk" target, except that instead of turning absolute
+> >    paths into relative paths in the RPATH, we are simply setting the
+> >    RPATH to $ORIGIN/../lib.
+> > 
+> >    In order to implement this, the fix-rpath script logic is adjusted
+> >    for the "host" case.
+> > 
+> > An alternative strategy would have been to keep the
+> > -Wl,-rpath,$(HOST_DIR) flag, and therefore the absolute RPATH in the
+> > host binaries, and fix such RPATH at the end of the build of every
+> > package. However, that would require calling fix-rpath after the
+> > installation of every package, which is a bit expensive.  
+> 
+> I wonder how expensive that would be. It would be nice to time this.
+> 
+> Also note that, even if the overhead is noticeable, this would be
+> compensated by the mere fact that we are now doing a parallel build, so
+> we would end up winning.
 
-There are only a few packages that select BR2_PACKAGE_GSTREAMER, so it
-should be quite easy to do.
+Thanks for the feedback. We already discussed this on IRC, and I agree.
+I'll have a look at implementing the solution of doing the patchelf
+adding $ORIGIN/../lib as an RPATH directly after the installation of
+each package.
+
+Thanks!
 
 Thomas
 -- 
