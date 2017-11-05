@@ -1,36 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 05 Nov 2017 20:36:24 +0100
-Subject: [Buildroot] Analysis of build results for 2017-10-30
-In-Reply-To: <20171105154025.0d8c749d@windsurf.home> (Thomas Petazzoni's
- message of "Sun, 5 Nov 2017 15:40:25 +0100")
-References: <20171031070013.AD75D207B2@mail.free-electrons.com>
- <20171031230519.3feb2619@windsurf> <20171102232155.11995715@windsurf>
- <ba942bc0-1444-1f44-875e-94dd973d6e09@mind.be>
- <20171104232055.2e196d56@windsurf> <877ev54qos.fsf@dell.be.48ers.dk>
- <20171105154025.0d8c749d@windsurf.home>
-Message-ID: <87fu9s1ps7.fsf@dell.be.48ers.dk>
+Date: Sun, 05 Nov 2017 20:37:44 +0100
+Subject: [Buildroot] [PATCH] dbus: bump to version 1.12.0
+In-Reply-To: <8ad470089db5ea9391181af416f64952559b76be.1509906257.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Sun, 5 Nov 2017 20:24:17 +0200")
+References: <8ad470089db5ea9391181af416f64952559b76be.1509906257.git.baruch@tkos.co.il>
+Message-ID: <87bmkg1ppz.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > Hello,
- > On Sat, 04 Nov 2017 23:36:19 +0100, Peter Korsgaard wrote:
+ > Remove --enable-abstract-sockets; dropped upstream. Remove
+ > ac_cv_have_abstract_sockets that is dropped as well.
 
- >> > I wouldn't mind removing it.  
- >> 
- >> > Peter? Your call?  
- >> 
- >> If the only thing broken about it is static linking then I think I would
- >> prefer to just mark it as !static for now.
+ > Remove --disable-selinux; we handle selinux as an optional dependency
+ > below.
 
- > There are only a few packages that select BR2_PACKAGE_GSTREAMER, so it
- > should be quite easy to do.
+ > Remove --{enable,disable}-dnotify; this options has been removed in
+ > version 1.7.6, broken since 2010.
 
-Great - Will you send patches for it or do you want me to handle it?
+ > Remove --with-init-scripts; dropped upstream.
+
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
