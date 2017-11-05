@@ -1,37 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 5 Nov 2017 21:13:58 +0100
-Subject: [Buildroot] [git commit] docs: update DEVELOPERS modification
- process
-Message-ID: <20171105200745.0EE3A810A9@busybox.osuosl.org>
+Date: Sun, 5 Nov 2017 21:16:51 +0100
+Subject: [Buildroot] [git commit] suport/download: force svn to be
+ non-interactive
+Message-ID: <20171105200936.AE96780F9F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8209d72211ab9b8f84ad89aa62f2b038211c32bb
+commit: https://git.buildroot.net/buildroot/commit/?id=4013f11a5b71f238b36f45dcdeb46b7f7a01e600
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
+Fixes:
+    http://autobuild.buildroot.org/results/2af/2af7412846c576089f8596857ab8c81ac31c1bed/
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Andr?? Hentschel <nerv@dawncrow.de>
+Reviewed-by: Andr?? Hentschel <nerv@dawncrow.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/manual/contribute.txt | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ support/download/svn | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/docs/manual/contribute.txt b/docs/manual/contribute.txt
-index a58945f..8bbc2b9 100644
---- a/docs/manual/contribute.txt
-+++ b/docs/manual/contribute.txt
-@@ -260,9 +260,9 @@ options that no longer exist or are no longer needed.
+diff --git a/support/download/svn b/support/download/svn
+index 77abf3d..9f27d71 100755
+--- a/support/download/svn
++++ b/support/download/svn
+@@ -33,6 +33,6 @@ _svn() {
+     eval ${SVN} "${@}"
+ }
  
- If you are interested in getting notified of build failures and of
- further changes in the packages you added or modified, please add
--yourself to the DEVELOPERS file. This should be done in a separate
--patch of the series. See xref:DEVELOPERS[the DEVELOPERS file] for more
--information.
-+yourself to the DEVELOPERS file. This should be done in the same patch
-+creating or modifying the package. See xref:DEVELOPERS[the DEVELOPERS file]
-+for more information.
+-_svn export ${verbose} "${@}" "'${repo}@${rev}'" "'${basename}'"
++_svn --non-interactive export ${verbose} "${@}" "'${repo}@${rev}'" "'${basename}'"
  
- ==== Preparing a patch series
- 
+ tar czf "${output}" "${basename}"
