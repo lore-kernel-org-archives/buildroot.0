@@ -1,9 +1,9 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 5 Nov 2017 18:04:47 +0100
-Subject: [Buildroot] [PATCH] package/mesa3d: remove old patch for uClibc
-In-Reply-To: <20171104160125.17383-1-romain.naour@gmail.com>
-References: <20171104160125.17383-1-romain.naour@gmail.com>
-Message-ID: <fa7c2322-0f69-0896-a2e8-35ed4174e553@mind.be>
+Date: Sun, 5 Nov 2017 18:04:08 +0100
+Subject: [Buildroot] [PATCH 1/2] jimtcl: explicitly set --host / --build
+In-Reply-To: <20171103222838.3974-1-peter@korsgaard.com>
+References: <20171103222838.3974-1-peter@korsgaard.com>
+Message-ID: <618a9fff-a540-1081-cdc1-ee0b228447ef@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,25 +12,44 @@ To: buildroot@busybox.net
 
 
 
-On 04-11-17 17:01, Romain Naour wrote:
-> This patch is no longer necessary since Buildroot is using uClibc-ng
-> and the patch [1] as been merged upstream.
-> It's 2017 and uClibc toolchains have been rebuild with uClibc-ng.
+On 03-11-17 23:28, Peter Korsgaard wrote:
+> Fixes:
+> http://autobuild.buildroot.net/results/d13/d137680bf1c0ebfacef635cb2f0fc14524759143/
 > 
-> Drop upstream patch and rename remaining one.
+> Otherwise the (handwritten) configure script uses a config.guess script from
+> 2010 to figure out the build host, breaking builds on ppc64le hosts.
 > 
-> [1] https://cgit.openadk.org/cgi/cgit/uclibc-ng.git/commit/?id=6c4538905e65ceb203f59aaa9a61728e81c6bc0a
+> The result of --host / --build is only used to detect if we are building for
+> Windows or not, which is why things are working on x86(-64) build hosts
+> without specifying --host even though we are cross compiling - But this may
+> change in the future, so we better pass the correct values.
 > 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> ---
+>  package/jimtcl/jimtcl.mk | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/package/jimtcl/jimtcl.mk b/package/jimtcl/jimtcl.mk
+> index cdbf8ae477..313970d94a 100644
+> --- a/package/jimtcl/jimtcl.mk
+> +++ b/package/jimtcl/jimtcl.mk
+> @@ -42,6 +42,8 @@ define JIMTCL_CONFIGURE_CMDS
+>  	(cd $(@D); \
+>  		$(TARGET_CONFIGURE_OPTS) CCACHE=none \
+>  		./configure --prefix=/usr \
+> +		--host=$(GNU_TARGET_NAME) \
+> +		--build=$(GNU_HOST_NAME) \
 
- Applied to master, thanks.
+ For consistency with pkg-autotools, perhaps you should specify --target as well?
 
  Regards,
  Arnout
 
 
-[snip]
+>  		$(JIMTCL_SHARED) \
+>  	)
+>  endef
+> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
