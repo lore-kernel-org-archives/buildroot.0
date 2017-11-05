@@ -1,57 +1,35 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 5 Nov 2017 18:42:35 +0200
-Subject: [Buildroot] [PATCH 2/2] squid: Add libkrb5 dependency check
-In-Reply-To: <1509898955-17124-2-git-send-email-nerv@dawncrow.de>
-References: <1509898955-17124-1-git-send-email-nerv@dawncrow.de>
- <1509898955-17124-2-git-send-email-nerv@dawncrow.de>
-Message-ID: <20171105164235.i5i36g545t3xri7m@tarshish>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sun, 5 Nov 2017 17:21:16 +0100
+Subject: [Buildroot] [git commit] pkg-generic: allow legal-info to be verbose
+Message-ID: <20171105163750.8FF9781173@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Andr?,
+commit: https://git.buildroot.net/buildroot/commit/?id=e888733df048c72fd957b71a401d3e265e122cd9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, Nov 05, 2017 at 05:22:35PM +0100, Andr? Hentschel wrote:
-> Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
-> ---
->  package/squid/squid.mk | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/squid/squid.mk b/package/squid/squid.mk
-> index d334d14..3b3649a 100644
-> --- a/package/squid/squid.mk
-> +++ b/package/squid/squid.mk
-> @@ -29,7 +29,6 @@ SQUID_CONF_OPTS = \
->  	--enable-removal-policies="lru,heap" \
->  	--with-filedescriptors=1024 \
->  	--disable-ident-lookups \
-> -	--without-mit-krb5 \
->  	--enable-auth-basic="fake getpwnam" \
->  	--enable-auth-digest="file" \
->  	--enable-auth-negotiate="wrapper" \
-> @@ -50,6 +49,13 @@ else
->  SQUID_CONF_ENV += squid_cv_gnu_atomics=no
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_LIBKRB5),y)
-> +SQUID_CONF_OPTS += --without-krb5
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/pkg-generic.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-without? Are you sure this is correct? If so, it needs an explanation comment.
-
-> +SQUID_DEPENDENCIES += libkrb5
-> +else
-> +SQUID_CONF_OPTS += --without-mit-krb5
-> +endif
-> +
->  ifeq ($(BR2_PACKAGE_OPENSSL),y)
->  SQUID_CONF_OPTS += --with-openssl
->  SQUID_DEPENDENCIES += openssl
-
-baruch
-
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index cca94ba..0e28675 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -861,9 +861,9 @@ ifneq ($$(call qstrip,$$($(2)_SOURCE)),)
+ # is that the license still applies to the files distributed as part
+ # of the rootfs, even if the sources are not themselves redistributed.
+ ifeq ($$(call qstrip,$$($(2)_LICENSE_FILES)),)
+-	@$$(call legal-warning-pkg,$$($(2)_RAW_BASE_NAME),cannot save license ($(2)_LICENSE_FILES not defined))
++	$(Q)$$(call legal-warning-pkg,$$($(2)_RAW_BASE_NAME),cannot save license ($(2)_LICENSE_FILES not defined))
+ else
+-	@$$(foreach F,$$($(2)_LICENSE_FILES),$$(call legal-license-file,$$($(2)_RAWNAME),$$($(2)_RAW_BASE_NAME),$$($(2)_PKGDIR),$$(F),$$($(2)_DIR)/$$(F),$$(call UPPERCASE,$(4)))$$(sep))
++	$(Q)$$(foreach F,$$($(2)_LICENSE_FILES),$$(call legal-license-file,$$($(2)_RAWNAME),$$($(2)_RAW_BASE_NAME),$$($(2)_PKGDIR),$$(F),$$($(2)_DIR)/$$(F),$$(call UPPERCASE,$(4)))$$(sep))
+ endif # license files
+ 
+ ifeq ($$($(2)_SITE_METHOD),local)
