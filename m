@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 5 Nov 2017 17:01:33 +0100
-Subject: [Buildroot] [PATCH 4/4] qt5webengine: only available on
- x86(-64) hosts
-In-Reply-To: <20171102104520.29257-5-peter@korsgaard.com>
-References: <20171102104520.29257-1-peter@korsgaard.com>
- <20171102104520.29257-5-peter@korsgaard.com>
-Message-ID: <e03d8db3-8eb4-8190-722c-07bb250a0576@mind.be>
+Date: Sun, 5 Nov 2017 17:13:23 +0100
+Subject: [Buildroot] [PATCH 1/1] Fix build of lttng-libust
+In-Reply-To: <CADYdroP3-gaXzRy61r7FraPq+g6MeB5CUGN_nFLyFy3MxxfVvw@mail.gmail.com>
+References: <20171030163121.939-1-norbert.lange@andritz.com>
+ <20171030204054.723cdc99@windsurf>
+ <CADYdroP3-gaXzRy61r7FraPq+g6MeB5CUGN_nFLyFy3MxxfVvw@mail.gmail.com>
+Message-ID: <cf2f5ee6-d0e2-fcfa-f2af-5ff722d3388c@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,39 +14,68 @@ To: buildroot@busybox.net
 
 
 
-On 02-11-17 11:45, Peter Korsgaard wrote:
-> The -m32 compiler flag is used for 32bit builds and the host tools have
-> limited architecture support, so limit to x86(-64) hosts.
+On 31-10-17 11:20, Norbert Lange wrote:
+> Hello Thomas,
+> 
+> I dont know about the autobuilder (can I upload configs to test
+> there?), this is an issue I encountered with a private buildroot
+> config.
+> I tried to reduce it as much as possible, and added the defconfig.
+> 
+> 2017-10-30 20:40 GMT+01:00 Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com>:
+>> Hello,
+>>
+>> On Mon, 30 Oct 2017 17:31:21 +0100, Norbert Lange wrote:
+>>> The build of doc/examples/cmake-multiple-shared-libraries
+>>> does fail as a dependend library is missing.
+>>> This issue is not specific to builroot and should ideally
+>>> be fixed upstream (Issue: https://bugs.lttng.org/issues/1132)
+>>>
+>>> The fix is done without any indepth knowledge of the CMake
+>>> mechanisms, but seems to work correctly
+>>>
+>>> Signed-off-by: Norbert Lange <norbert.lange@andritz.com>
+>>
+>> Which specific build problem are you fixing? Is this a problem that has
+>> been found by http://autobuild.buildroot.org? If that's the case, we
+>> like to include a reference to such an autobuilder failure in the
+>> commit log.
 
- Same story here: there are combinations that should work, e.g. building for
-x86_64 target on an aarch64 host. However, it's equally likely to break, and the
-Config.in expressions would be quite complicated to allow it. So I've applied
-after extending the commit message a little.
+ It has not been found by the autobuilders, the only failure is
+http://autobuild.buildroot.net/results/c86a82b2fd41316a7a451b20d9274d5c95f89baa
+and that's due to CMake version.
+
+ The build error is:
+
+output/host/lib/gcc/x86_64-buildroot-linux-gnu/7.2.0/../../../../x86_64-buildroot-linux-gnu/bin/ld:
+warning: liblttng-ust-tracepoint.so.0, needed by
+output/build/lttng-libust-2.9.0/liblttng-ust/.libs/liblttng-ust.so, not found
+(try using -rpath or -rpath-link)
+output/build/lttng-libust-2.9.0/liblttng-ust/.libs/liblttng-ust.so: undefined
+reference to `exit_tracepoint'
+output/build/lttng-libust-2.9.0/liblttng-ust/.libs/liblttng-ust.so: undefined
+reference to `__tracepoint_probe_unregister_queue_release'
+output/build/lttng-libust-2.9.0/liblttng-ust/.libs/liblttng-ust.so: undefined
+reference to `__tracepoint_probe_register_queue_release'
+output/build/lttng-libust-2.9.0/liblttng-ust/.libs/liblttng-ust.so: undefined
+reference to `__tracepoint_probe_prune_release_queue'
+output/build/lttng-libust-2.9.0/liblttng-ust/.libs/liblttng-ust.so: undefined
+reference to `init_tracepoint'
+collect2: error: ld returned 1 exit status
+
+ The weird thing is: liblttng-ust.so.0 does have the correct RPATH to find the
+tracepoint library. And on all other builds I tried (and apparently including
+all the autobuilders), it does find it. So I guess it's either binutils 2.29 or
+GCC 7's LTO plugin that is acting up somehow...
+
+
+ Since this is anyway just an example, wouldn't it be better to just disable the
+documentation entirely? I.e. teach configure.ac to understand --disable-doc and
+teach Makefile.am to not recurse into doc if docs are disabled?
 
  Regards,
  Arnout
-
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  package/qt5/qt5webengine/Config.in | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/package/qt5/qt5webengine/Config.in b/package/qt5/qt5webengine/Config.in
-> index 6b68d1b2a8..d40b58062e 100644
-> --- a/package/qt5/qt5webengine/Config.in
-> +++ b/package/qt5/qt5webengine/Config.in
-> @@ -3,6 +3,9 @@ config BR2_PACKAGE_QT5WEBENGINE_ARCH_SUPPORTS
->  	default y if BR2_aarch64 || BR2_arm || \
->  		BR2_i386 || BR2_x86_64 || \
->  		BR2_mips || BR2_mips64
-> +	# -m32 flag is used for 32bit builds and host tools have
-> +	# limited architecture support
-> +	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
->  	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE # qt5declarative
->  	depends on !BR2_BINFMT_FLAT # qt5base-icu
->  	depends on BR2_USE_MMU # libglib2, qt5base-dbus
-> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
