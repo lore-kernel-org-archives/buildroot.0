@@ -1,36 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 05 Nov 2017 20:50:06 +0100
-Subject: [Buildroot] [PATCH v2] usb_modeswitch: explicitly set --host /
- --build for the embedded jimtcl
-In-Reply-To: <20171104084707.25418-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Sat, 4 Nov 2017 09:47:07 +0100")
-References: <20171104084707.25418-1-peter@korsgaard.com>
-Message-ID: <87y3nkzes1.fsf@dell.be.48ers.dk>
+Date: Sun, 5 Nov 2017 20:44:08 +0100
+Subject: [Buildroot] [git commit] jimtcl: explicitly set --host / --build
+Message-ID: <20171105194304.4E6D581139@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=962561a57521dc778df99904aff06c6d1bc435ee
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Fixes:
- > http://autobuild.buildroot.net/results/106/106af20196089e74c35daabdae46f030981600bd/
+Fixes:
+http://autobuild.buildroot.net/results/d13/d137680bf1c0ebfacef635cb2f0fc14524759143/
 
- > Otherwise the (handwritten) configure script uses a config.guess script from
- > 2010 to figure out the build host, breaking builds on ppc64le hosts.
+Otherwise the (handwritten) configure script uses a config.guess script from
+2010 to figure out the build host, breaking builds on ppc64le hosts.
 
- > The result of --host / --build is only used to detect if we are building for
- > Windows or not, which is why things are working on x86(-64) build hosts
- > without specifying --host even though we are cross compiling - But this may
- > change in the future, so we better pass the correct values.
+The result of --host / --build is only used to detect if we are building for
+Windows or not, which is why things are working on x86(-64) build hosts
+without specifying --host even though we are cross compiling - But this may
+change in the future, so we better pass the correct values.
 
- > Passing extra jimtcl configure flags is unfortunately not forseen in the
- > usb_modeswitch Makefile, so add a small patch making this possible.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/jimtcl/jimtcl.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/jimtcl/jimtcl.mk b/package/jimtcl/jimtcl.mk
+index cdbf8ae..313970d 100644
+--- a/package/jimtcl/jimtcl.mk
++++ b/package/jimtcl/jimtcl.mk
+@@ -42,6 +42,8 @@ define JIMTCL_CONFIGURE_CMDS
+ 	(cd $(@D); \
+ 		$(TARGET_CONFIGURE_OPTS) CCACHE=none \
+ 		./configure --prefix=/usr \
++		--host=$(GNU_TARGET_NAME) \
++		--build=$(GNU_HOST_NAME) \
+ 		$(JIMTCL_SHARED) \
+ 	)
+ endef
