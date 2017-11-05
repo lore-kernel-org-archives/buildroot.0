@@ -1,90 +1,87 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 5 Nov 2017 20:36:56 +0100
-Subject: [Buildroot] [git commit] dbus: bump to version 1.12.0
-Message-ID: <20171105193630.670DB81125@busybox.osuosl.org>
+Date: Sun, 5 Nov 2017 20:42:18 +0100
+Subject: [Buildroot] [git commit] package/libplist: security bump to version
+ 2.0.0
+Message-ID: <20171105193630.890107FE84@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0123e33a11779a574c80f162eb04b566ec1f9dc6
+commit: https://git.buildroot.net/buildroot/commit/?id=4c3820248761c279e3c8f9839e5b24c8b39891fd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Remove --enable-abstract-sockets; dropped upstream. Remove
-ac_cv_have_abstract_sockets that is dropped as well.
+Release notes:
+https://github.com/libimobiledevice/libplist/blob/master/NEWS
 
-Remove --disable-selinux; we handle selinux as an optional dependency
-below.
+This version bump fixes
+  * CVE-2017-6440
+  * CVE-2017-6439
+  * CVE-2017-6438
+  * CVE-2017-6437
+  * CVE-2017-6436
+  * CVE-2017-6435
+  * CVE-2017-5836
+  * CVE-2017-5835
+  * CVE-2017-5834
+  * CVE-2017-5545
+  * CVE-2017-5209
+... and several others that didn't receive any CVE (yet).
 
-Remove --{enable,disable}-dnotify; this options has been removed in
-version 1.7.6, broken since 2010.
+The dependency to libxml2 was removed.
+Autoreconf is not needed anymore, the upstream tarball includes a
+configure script.
 
-Remove --with-init-scripts; dropped upstream.
-
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+[Peter: also drop host-pkgconf dependency, only used for cython]
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/dbus/dbus.hash |  4 ++--
- package/dbus/dbus.mk   | 11 ++---------
- 2 files changed, 4 insertions(+), 11 deletions(-)
+ package/libplist/Config.in     | 1 -
+ package/libplist/libplist.hash | 2 +-
+ package/libplist/libplist.mk   | 6 +-----
+ 3 files changed, 2 insertions(+), 7 deletions(-)
 
-diff --git a/package/dbus/dbus.hash b/package/dbus/dbus.hash
-index b174391..df1891b 100644
---- a/package/dbus/dbus.hash
-+++ b/package/dbus/dbus.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--# https://dbus.freedesktop.org/releases/dbus/dbus-1.10.24.tar.gz.asc
--sha256	71184eb27638e224579ffa998e88f01d0f1fef17a7811406e53350735eaecd1b  dbus-1.10.24.tar.gz
-+# https://dbus.freedesktop.org/releases/dbus/dbus-1.12.0.tar.gz.asc
-+sha256	39af0d9267391434b549c5c4adc001b735518c96f7630c3fe7162af1d13ef3c0  dbus-1.12.0.tar.gz
+diff --git a/package/libplist/Config.in b/package/libplist/Config.in
+index 5f96746..4a9575f 100644
+--- a/package/libplist/Config.in
++++ b/package/libplist/Config.in
+@@ -1,7 +1,6 @@
+ config BR2_PACKAGE_LIBPLIST
+ 	bool "libplist"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+-	select BR2_PACKAGE_LIBXML2
+ 	help
+ 	  libplist is a client for manipulating Apple Property List
+ 	  (.plist) files
+diff --git a/package/libplist/libplist.hash b/package/libplist/libplist.hash
+index 06d1b16..63c2515 100644
+--- a/package/libplist/libplist.hash
++++ b/package/libplist/libplist.hash
+@@ -1,2 +1,2 @@
  # Locally calculated
- sha256	0e46f54efb12d04ab5c33713bacd0e140c9a35b57ae29e03c853203266e8f3a1  COPYING
-diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
-index 6fa0496..56a54e3 100644
---- a/package/dbus/dbus.mk
-+++ b/package/dbus/dbus.mk
-@@ -4,7 +4,7 @@
+-sha256 0effdedcb3de128c4930d8c03a3854c74c426c16728b8ab5f0a5b6bdc0b644be  libplist-1.12.tar.bz2
++sha256 3a7e9694c2d9a85174ba1fa92417cfabaea7f6d19631e544948dc7e17e82f602  libplist-2.0.0.tar.bz2
+diff --git a/package/libplist/libplist.mk b/package/libplist/libplist.mk
+index 0d3e417..09fc816 100644
+--- a/package/libplist/libplist.mk
++++ b/package/libplist/libplist.mk
+@@ -4,17 +4,13 @@
  #
  ################################################################################
  
--DBUS_VERSION = 1.10.24
-+DBUS_VERSION = 1.12.0
- DBUS_SITE = https://dbus.freedesktop.org/releases/dbus
- DBUS_LICENSE = AFL-2.1 or GPL-2.0+ (library, tools), GPL-2.0+ (tools)
- DBUS_LICENSE_FILES = COPYING
-@@ -20,20 +20,15 @@ endef
+-LIBPLIST_VERSION = 1.12
++LIBPLIST_VERSION = 2.0.0
+ LIBPLIST_SOURCE = libplist-$(LIBPLIST_VERSION).tar.bz2
+ LIBPLIST_SITE = http://www.libimobiledevice.org/downloads
+-LIBPLIST_DEPENDENCIES = libxml2 host-pkgconf
+ LIBPLIST_INSTALL_STAGING = YES
+ LIBPLIST_LICENSE = LGPL-2.1+
+ LIBPLIST_LICENSE_FILES = COPYING
  
- DBUS_DEPENDENCIES = host-pkgconf expat
- 
--DBUS_CONF_ENV = ac_cv_have_abstract_sockets=yes
- DBUS_CONF_OPTS = \
- 	--with-dbus-user=dbus \
- 	--disable-tests \
- 	--disable-asserts \
--	--enable-abstract-sockets \
--	--disable-selinux \
- 	--disable-xml-docs \
- 	--disable-doxygen-docs \
--	--disable-dnotify \
- 	--with-xml=expat \
- 	--with-system-socket=/var/run/dbus/system_bus_socket \
--	--with-system-pid-file=/var/run/messagebus.pid \
--	--with-init-scripts=none
-+	--with-system-pid-file=/var/run/messagebus.pid
- 
- ifeq ($(BR2_STATIC_LIBS),y)
- DBUS_CONF_OPTS += LIBS='-pthread'
-@@ -109,11 +104,9 @@ HOST_DBUS_CONF_OPTS = \
- 	--with-dbus-user=dbus \
- 	--disable-tests \
- 	--disable-asserts \
--	--enable-abstract-sockets \
- 	--disable-selinux \
- 	--disable-xml-docs \
- 	--disable-doxygen-docs \
--	--enable-dnotify \
- 	--without-x \
- 	--with-xml=expat
- 
+-# Straight out of the git tree:
+-LIBPLIST_AUTORECONF = YES
+-
+ # Disable building Python bindings, because it requires host-cython, which
+ # is not packaged in Buildroot at all.
+ LIBPLIST_CONF_OPTS = --without-cython
