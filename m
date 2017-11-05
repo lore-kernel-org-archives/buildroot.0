@@ -1,18 +1,19 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 5 Nov 2017 20:44:08 +0100
-Subject: [Buildroot] [git commit] jimtcl: explicitly set --host / --build
-Message-ID: <20171105194304.4E6D581139@busybox.osuosl.org>
+Date: Sun, 5 Nov 2017 20:49:47 +0100
+Subject: [Buildroot] [git commit] usb_modeswitch: explicitly set --host /
+ --build for the embedded jimtcl
+Message-ID: <20171105194304.5A86C810E4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=962561a57521dc778df99904aff06c6d1bc435ee
+commit: https://git.buildroot.net/buildroot/commit/?id=29cccab4476bc58b2acb50887a67e310045efb24
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Fixes:
-http://autobuild.buildroot.net/results/d13/d137680bf1c0ebfacef635cb2f0fc14524759143/
+http://autobuild.buildroot.net/results/106/106af20196089e74c35daabdae46f030981600bd/
 
 Otherwise the (handwritten) configure script uses a config.guess script from
 2010 to figure out the build host, breaking builds on ppc64le hosts.
@@ -22,21 +23,59 @@ Windows or not, which is why things are working on x86(-64) build hosts
 without specifying --host even though we are cross compiling - But this may
 change in the future, so we better pass the correct values.
 
+Passing extra jimtcl configure flags is unfortunately not forseen in the
+usb_modeswitch Makefile, so add a small patch making this possible.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/jimtcl/jimtcl.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ ...low-extra-configure-flags-to-be-passed-to.patch | 29 ++++++++++++++++++++++
+ package/usb_modeswitch/usb_modeswitch.mk           |  1 +
+ 2 files changed, 30 insertions(+)
 
-diff --git a/package/jimtcl/jimtcl.mk b/package/jimtcl/jimtcl.mk
-index cdbf8ae..313970d 100644
---- a/package/jimtcl/jimtcl.mk
-+++ b/package/jimtcl/jimtcl.mk
-@@ -42,6 +42,8 @@ define JIMTCL_CONFIGURE_CMDS
- 	(cd $(@D); \
- 		$(TARGET_CONFIGURE_OPTS) CCACHE=none \
- 		./configure --prefix=/usr \
-+		--host=$(GNU_TARGET_NAME) \
-+		--build=$(GNU_HOST_NAME) \
- 		$(JIMTCL_SHARED) \
- 	)
+diff --git a/package/usb_modeswitch/0001-Makefile-allow-extra-configure-flags-to-be-passed-to.patch b/package/usb_modeswitch/0001-Makefile-allow-extra-configure-flags-to-be-passed-to.patch
+new file mode 100644
+index 0000000..9e1e681
+--- /dev/null
++++ b/package/usb_modeswitch/0001-Makefile-allow-extra-configure-flags-to-be-passed-to.patch
+@@ -0,0 +1,29 @@
++From 1309df373c882f27f476130b06746a6d1e1a0f85 Mon Sep 17 00:00:00 2001
++From: Peter Korsgaard <peter@korsgaard.com>
++Date: Fri, 3 Nov 2017 23:21:44 +0100
++Subject: [PATCH] Makefile: allow extra configure flags to be passed to jimtcl
++ on the make command line
++
++E.G. to pass --host / --build for cross compilation.
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ Makefile | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/Makefile b/Makefile
++index a151e2a..94dabd9 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -19,7 +19,7 @@ TCL        ?= $(HOST_TCL)
++ else
++ TCL        ?= /usr/bin/tclsh
++ endif
++-JIM_CONFIGURE_OPTS = --disable-lineedit \
+++override JIM_CONFIGURE_OPTS += --disable-lineedit \
++ 	--with-out-jim-ext="stdlib posix load signal syslog" --prefix=/usr
++ 
++ .PHONY: clean install install-common uninstall \
++-- 
++2.11.0
++
+diff --git a/package/usb_modeswitch/usb_modeswitch.mk b/package/usb_modeswitch/usb_modeswitch.mk
+index 1901767..ea08de2 100644
+--- a/package/usb_modeswitch/usb_modeswitch.mk
++++ b/package/usb_modeswitch/usb_modeswitch.mk
+@@ -23,6 +23,7 @@ endif
+ define USB_MODESWITCH_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
+ 		CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE -Wall -I." \
++		JIM_CONFIGURE_OPTS="--host=$(GNU_TARGET_NAME) --build=$(GNU_HOST_NAME)" \
+ 		-C $(@D) $(USB_MODESWITCH_BUILD_TARGETS)
  endef
+ 
