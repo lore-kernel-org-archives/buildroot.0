@@ -1,53 +1,103 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 05 Nov 2017 21:34:53 +0100
-Subject: [Buildroot] [PATCH 1/4] kvm-unit-test: x86-64 variant only
- available on x86-64 hosts
-In-Reply-To: <54eed396-cdc0-759d-81b8-cdb387e792a2@mind.be> (Arnout
- Vandecappelle's message of "Sun, 5 Nov 2017 21:23:43 +0100")
-References: <20171102104520.29257-1-peter@korsgaard.com>
- <20171102104520.29257-2-peter@korsgaard.com>
- <687901ac-c7d7-81bb-944b-b2c860f90bae@mind.be>
- <87k1z41q6t.fsf@dell.be.48ers.dk>
- <54eed396-cdc0-759d-81b8-cdb387e792a2@mind.be>
-Message-ID: <87d14wzcpe.fsf@dell.be.48ers.dk>
+From: Norbert Lange <nolange79@gmail.com>
+Date: Sun, 5 Nov 2017 21:36:59 +0100
+Subject: [Buildroot] [PATCH 1/1] Fix build of lttng-libust
+In-Reply-To: <cf2f5ee6-d0e2-fcfa-f2af-5ff722d3388c@mind.be>
+References: <20171030163121.939-1-norbert.lange@andritz.com>
+ <20171030204054.723cdc99@windsurf>
+ <CADYdroP3-gaXzRy61r7FraPq+g6MeB5CUGN_nFLyFy3MxxfVvw@mail.gmail.com>
+ <cf2f5ee6-d0e2-fcfa-f2af-5ff722d3388c@mind.be>
+Message-ID: <CADYdroNJAbhAJb3=cghUYj1807k02PGs--nN258J8AKRsN4U8w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+2017-11-05 17:13 GMT+01:00 Arnout Vandecappelle <arnout@mind.be>:
+>
+>
+> On 31-10-17 11:20, Norbert Lange wrote:
+>> Hello Thomas,
+>>
+>> I dont know about the autobuilder (can I upload configs to test
+>> there?), this is an issue I encountered with a private buildroot
+>> config.
+>> I tried to reduce it as much as possible, and added the defconfig.
+>>
+>> 2017-10-30 20:40 GMT+01:00 Thomas Petazzoni
+>> <thomas.petazzoni@free-electrons.com>:
+>>> Hello,
+>>>
+>>> On Mon, 30 Oct 2017 17:31:21 +0100, Norbert Lange wrote:
+>>>> The build of doc/examples/cmake-multiple-shared-libraries
+>>>> does fail as a dependend library is missing.
+>>>> This issue is not specific to builroot and should ideally
+>>>> be fixed upstream (Issue: https://bugs.lttng.org/issues/1132)
+>>>>
+>>>> The fix is done without any indepth knowledge of the CMake
+>>>> mechanisms, but seems to work correctly
+>>>>
+>>>> Signed-off-by: Norbert Lange <norbert.lange@andritz.com>
+>>>
+>>> Which specific build problem are you fixing? Is this a problem that has
+>>> been found by http://autobuild.buildroot.org? If that's the case, we
+>>> like to include a reference to such an autobuilder failure in the
+>>> commit log.
+>
+>  It has not been found by the autobuilders, the only failure is
+> http://autobuild.buildroot.net/results/c86a82b2fd41316a7a451b20d9274d5c95f89baa
+> and that's due to CMake version.
 
-Hi,
+So, is that a problem, or even something I should do anything about?
+I am not sure why you bring this up repeatedly.
 
- >> But some parts of kvm-unit-tests presumably are 64bit when building for
- >> x86-64, 
+>
+>  The build error is:
+>
+> output/host/lib/gcc/x86_64-buildroot-linux-gnu/7.2.0/../../../../x86_64-buildroot-linux-gnu/bin/ld:
+> warning: liblttng-ust-tracepoint.so.0, needed by
+> output/build/lttng-libust-2.9.0/liblttng-ust/.libs/liblttng-ust.so, not found
+> (try using -rpath or -rpath-link)
+> output/build/lttng-libust-2.9.0/liblttng-ust/.libs/liblttng-ust.so: undefined
+> reference to `exit_tracepoint'
+> output/build/lttng-libust-2.9.0/liblttng-ust/.libs/liblttng-ust.so: undefined
+> reference to `__tracepoint_probe_unregister_queue_release'
+> output/build/lttng-libust-2.9.0/liblttng-ust/.libs/liblttng-ust.so: undefined
+> reference to `__tracepoint_probe_register_queue_release'
+> output/build/lttng-libust-2.9.0/liblttng-ust/.libs/liblttng-ust.so: undefined
+> reference to `__tracepoint_probe_prune_release_queue'
+> output/build/lttng-libust-2.9.0/liblttng-ust/.libs/liblttng-ust.so: undefined
+> reference to `init_tracepoint'
+> collect2: error: ld returned 1 exit status
 
- >  OK, I assumed everything was built with -m32. If some parts are indeed still
- > 64-bit then it won't work in i386 host.
+So I take, you can reproduce it.
 
-Exactly.
+>
+>  The weird thing is: liblttng-ust.so.0 does have the correct RPATH to find the
+> tracepoint library. And on all other builds I tried (and apparently including
+> all the autobuilders), it does find it. So I guess it's either binutils 2.29 or
+> GCC 7's LTO plugin that is acting up somehow...
 
- >> which wouldn't work when using the host compiler on a x86
- >> system, right? I don't think x86 system compilers are 32/64bit multilib
+LTO doesn't seem involved (I think?)
 
- >  Actually, on Debian i386 it is possible to install 64-bit multilib I think. But
- > obviously we can't count on that.
+>
+>
+>  Since this is anyway just an example, wouldn't it be better to just disable the
+> documentation entirely? I.e. teach configure.ac to understand --disable-doc and
+> teach Makefile.am to not recurse into doc if docs are disabled?
 
- >  BTW, what happens on x32, does anybody know that?
+No problem with that, for the upstream package this might be more of an issue.
+I am certainly curious where this issue comes from, and what other problems
+could be showing up. Whether this is a lttng, CMake, gcc or binutils issue...
 
-Is x32 really used by any mainstream distro? I would guess it is as rare
-as building on a !x86 machine.
-
-
- >> But I haven't actually used a x86 distribution in the last 10 years or
- >> so, so perhaps I'm missing something?
-
- >  Yeah, it's pretty unlikely as well I guess.
-
- >  I'll apply this patch as well then.
-
-Great, thanks!
-
--- 
-Bye, Peter Korsgaard
+>
+>  Regards,
+>  Arnout
+>
+> --
+> Arnout Vandecappelle                          arnout at mind be
+> Senior Embedded Software Architect            +32-16-286500
+> Essensium/Mind                                http://www.mind.be
+> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
