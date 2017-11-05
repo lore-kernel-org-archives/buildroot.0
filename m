@@ -1,59 +1,91 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 05 Nov 2017 12:53:47 +0100
-Subject: [Buildroot] [PATCH 1/5] xr819-firmware: new package
-In-Reply-To: <20171104194049.24550-2-geomatsi@gmail.com> (Sergey Matyukevich's
- message of "Sat, 4 Nov 2017 22:40:45 +0300")
-References: <20171104194049.24550-1-geomatsi@gmail.com>
- <20171104194049.24550-2-geomatsi@gmail.com>
-Message-ID: <87a8012b78.fsf@dell.be.48ers.dk>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 5 Nov 2017 13:18:29 +0100
+Subject: [Buildroot] [PATCH 1/2] dhcpcd: add SysV start-up script
+In-Reply-To: <20171105081028.GA2996@scaer>
+References: <20171031223659.6831-1-code@mmayer.net>
+ <20171031223659.6831-2-code@mmayer.net> <20171102230602.3c61e8d2@windsurf>
+ <20171102221847.GA23314@scaer> <20171102232345.5a434af8@windsurf>
+ <3f7fff7b-be5a-42ff-985f-0e860c98acb3@mind.be> <20171105081028.GA2996@scaer>
+Message-ID: <28382f3f-71d0-27d3-f78f-66fe47c9186b@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Sergey" == Sergey Matyukevich <geomatsi@gmail.com> writes:
 
- > Add firmware for XR819 SDIO WiFi chip.
 
-Thanks. I had a quick look at doing so myself some time ago, but never
-got around to finishing it.
+On 05-11-17 09:10, Yann E. MORIN wrote:
+> Arnout, All,
+> 
+> On 2017-11-04 20:56 +0100, Arnout Vandecappelle spake thusly:
+>> On 02-11-17 23:23, Thomas Petazzoni wrote:
+>>> Hello,
+>>>
+>>> On Thu, 2 Nov 2017 23:18:47 +0100, Yann E. MORIN wrote:
+>>>
+>>>>>  - Same for the configuration file: I prefer a loud error than an init
+>>>>>    script that ignores the problem.  
+>>>>
+>>>> Agreed, too.
+>>>>
+>>>> However:
+>>>>
+>>>>   - if the config file is mandatory, then this should be a failure.
+>>>>
+>>>>   - if the config file is optional, then it missing should be silently
+>>>>     ignored and the service started nonetheless.
+>>>
+>>> So you want explicitly handling for the "missing configuration file"
+>>> situation in the init script?
+>>>
+>>> I wanted to avoid explicit handling, and just let the daemon whine (or
+>>> not) if its config file is missing.
+>>
+>>  I vaguely remember a recently added package where the daemon would silently
+>> fail to start if the config file is missing, and which doesn't even have a
+>> default config file. So I think checking for existence of the config file in the
+>> init script (if the config file is mandatory) makes sense.
+> 
+> Then it is the responsibility of the package.mk to install one if it is
+> mandatory. Otherwise,that means the packaging is incomplete because it
+> does not allow the package to work as expected.
 
-> +++ b/package/xr819-firmware/xr819-firmware.mk
- > @@ -0,0 +1,25 @@
- > +################################################################################
- > +#
- > +# xr819-firmware
- > +#
- > +################################################################################
- > +
- > +XR819_FIRMWARE_VERSION = v2017.07
- > +XR819_FIRMWARE_SITE =  https://github.com/armbian/build/raw/$(XR819_FIRMWARE_VERSION)/packages/extras/firmware/xr819
- > +XR819_FIRMWARE_SOURCE = fw_xr819.bin
- > +XR819_FIRMWARE_EXTRA_DOWNLOADS = boot_xr819.bin sdd_xr819.bin
- > +XR819_FIRMWARE_LICENSE = PROPRIETARY
+ So you mean all packages should do like inadyn: install an example
+configuration file even if that is guaranteed not to work.
 
-These firmware blobs are quite icky. If I understand correctly, the
-firmware comes from some kind of (android?) disk image. Given that, I'm
-not sure we are really allowed to redistribute them so we should set
-XR819_FIRMWARE_REDISTRIBUTE = NO
+ Regards,
+ Arnout
 
-The fact that the filenames are not versioned is also a pain, as we
-cannot really handle any future version bumps without breaking older
-releases.
-
-I agree that cloning the huge armbian build repo for these small files
-isn't really nice, but I had a look at the armbian github and I see they
-have recently moved the firmware blobs to a separate repo:
-
-https://github.com/armbian/firmware
-
-Which is only around ~9MB, so I suggest we download that with git
-similar to linux-firmware, then at least we have a git revision.
-
-Care to rework the package to be such an "armbian-firmware" package
-instead? For now it is fine to just have a single sub option to install
-the xr819 files.
+> 
+> And in that case, I side with Thomas' initial suggestion: we should not
+> check from the init scripts, because we expect the .mk files to be
+> correct.
+> 
+> Regards,
+> Yann E. MORIN.
+> 
+>>
+>>  Regards,
+>>  Arnout
+>>
+>> -- 
+>> Arnout Vandecappelle                          arnout at mind be
+>> Senior Embedded Software Architect            +32-16-286500
+>> Essensium/Mind                                http://www.mind.be
+>> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+>> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+>> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
 
 -- 
-Bye, Peter Korsgaard
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
