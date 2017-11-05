@@ -1,97 +1,40 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 5 Nov 2017 15:42:33 +0100
-Subject: [Buildroot] [git commit] python-config.sh: don't reassign ${prefix}
-Message-ID: <20171105143713.0756D801DD@busybox.osuosl.org>
+From: =?UTF-8?Q?Andr=c3=a9_Hentschel?= <nerv@dawncrow.de>
+Date: Sun, 5 Nov 2017 15:46:14 +0100
+Subject: [Buildroot] [PATCH] suport/download: force svn to be
+ non-interactive
+In-Reply-To: <20171103212216.11772-1-yann.morin.1998@free.fr>
+References: <20171103212216.11772-1-yann.morin.1998@free.fr>
+Message-ID: <5c06394b-324c-f7fe-77b5-53fc7eeedc76@dawncrow.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=04d1699ba4cecaa77f688b4effbcac5e84419b15
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Am 03.11.2017 um 22:22 schrieb Yann E. MORIN:
+> Fixes:
+>     http://autobuild.buildroot.org/results/2af/2af7412846c576089f8596857ab8c81ac31c1bed/
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Andr? Hentschel <nerv@dawncrow.de>
+> ---
+>  support/download/svn | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/support/download/svn b/support/download/svn
+> index 77abf3d02d..9f27d71f86 100755
+> --- a/support/download/svn
+> +++ b/support/download/svn
+> @@ -33,6 +33,6 @@ _svn() {
+>      eval ${SVN} "${@}"
+>  }
+>  
+> -_svn export ${verbose} "${@}" "'${repo}@${rev}'" "'${basename}'"
+> +_svn --non-interactive export ${verbose} "${@}" "'${repo}@${rev}'" "'${basename}'"
+>  
+>  tar czf "${output}" "${basename}"
+> 
 
-When prefix is set to a path like /usr during crossbuild
-the sed operations end up executing twice, once for the prefix
-reassignment and another for includedir if it is set as a string
-including the ${prefix} variable.  This results in an issue
-when the build directory is under /usr.
 
-This patch updates the remaining location which uses the prefix
-variable to also sed and update to use the real path.
-
-Upstream bug report:
-https://bugs.python.org/issue31713
-
-Buildroot bug:
-https://bugs.busybox.net/show_bug.cgi?id=10361
-
-Fixes failures like the following:
-dbus-python-1.2.4 | NOK | http://autobuild.buildroot.net/results/758858efa97b6273c1b470513f5492258a6d8853
-
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-[Arnout: refer to autobuild failures that still exist]
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- ...29-python-config.sh-don-t-reassign-prefix.patch | 53 ++++++++++++++++++++++
- 1 file changed, 53 insertions(+)
-
-diff --git a/package/python3/0029-python-config.sh-don-t-reassign-prefix.patch b/package/python3/0029-python-config.sh-don-t-reassign-prefix.patch
-new file mode 100644
-index 0000000..49137f2
---- /dev/null
-+++ b/package/python3/0029-python-config.sh-don-t-reassign-prefix.patch
-@@ -0,0 +1,53 @@
-+From 21f787cb9bf0c1440981262f03bc881c5b77c0d8 Mon Sep 17 00:00:00 2001
-+From: Matt Weber <matthew.weber@rockwellcollins.com>
-+Date: Fri, 6 Oct 2017 09:54:15 -0500
-+Subject: [PATCH] python-config.sh: don't reassign ${prefix}
-+
-+When prefix is set to a path like /usr during crossbuild
-+the sed operations end up executing twice, once for the prefix
-+reassignment and another for includedir if it is set as a string
-+including the ${prefix} variable.  This results in an issue
-+when the build directory is under /usr.
-+
-+This patch updates the remaining location which uses the prefix
-+variable to also sed and update to use the real path.
-+
-+Upstream bug report:
-+https://bugs.python.org/issue31713
-+
-+Buildroot bug:
-+https://bugs.busybox.net/show_bug.cgi?id=10361
-+
-+Fixes failures like the following:
-+dbus-python-1.2.4 | NOK | http://autobuild.buildroot.net/results/758858efa97b6273c1b470513f5492258a6d8853
-+
-+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-+---
-+ Misc/python-config.sh.in | 3 +--
-+ 1 file changed, 1 insertion(+), 2 deletions(-)
-+
-+diff --git a/Misc/python-config.sh.in b/Misc/python-config.sh.in
-+index f905a71..e06be0f 100644
-+--- a/Misc/python-config.sh.in
-++++ b/Misc/python-config.sh.in
-+@@ -29,7 +29,7 @@ prefix_real=$(installed_prefix "$0")
-+ 
-+ # Use sed to fix paths from their built-to locations to their installed-to
-+ # locations.
-+-prefix=$(echo "$prefix_build" | sed "s#^$prefix_build#$prefix_real#")
-++prefix=$prefix_build
-+ exec_prefix_build="@exec_prefix@"
-+ exec_prefix=$(echo "$exec_prefix_build" | sed "s#^$exec_prefix_build#$prefix_real#")
-+ includedir=$(echo "@includedir@" | sed "s#^$prefix_build#$prefix_real#")
-+@@ -47,7 +46,7 @@ LINKFORSHARED="@LINKFORSHARED@"
-+ OPT="@OPT@"
-+ PY_ENABLE_SHARED="@PY_ENABLE_SHARED@"
-+ LDVERSION="@LDVERSION@"
-+-LIBDEST=${prefix}/lib/python${VERSION}
-++LIBDEST=$( echo "${prefix}/lib/python${VERSION}" | sed "s#^$prefix_build#$prefix_real#")
-+ LIBPL=$(echo "@LIBPL@" | sed "s#^$prefix_build#$prefix_real#")
-+ SO="@EXT_SUFFIX@"
-+ PYTHONFRAMEWORK="@PYTHONFRAMEWORK@"
-+-- 
-+1.8.3.1
-+
+Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
