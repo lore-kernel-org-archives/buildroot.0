@@ -1,53 +1,40 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 5 Nov 2017 11:43:19 +0100
-Subject: [Buildroot] [git commit] core/reproducible: do not override
- SOURCE_DATE_EPOCH
-Message-ID: <20171105104117.142D58045D@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun,  5 Nov 2017 11:49:58 +0100
+Subject: [Buildroot] [PATCH 1/1] mesa3d: fix build with
+ BR2_SHARED_STATIC_LIBS
+Message-ID: <20171105104958.28634-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0437d2f8f6ef8c10b529c154f4534453ce34607b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+mesa3d does not allow to enable both static and shared libraries so if
+BR2_SHARED_STATIC_LIBS is set, disable static
 
-SOURCE_DATE_EPOCH is currently forcibly set (to either the git commit
-date, or the last release date).
+Fixes https://bugs.busybox.net/show_bug.cgi?id=10326
 
-However, the spec mandates that it should not be modified if already
-set: https://reproducible-builds.org/specs/source-date-epoch/
-
-    Build systems MUST NOT overwrite this variable for child
-    processes to consume if it is already present.
-
-Abide by the rule, and only set it if not already set.
-
-This will allow users to pass it from an upper-layer buildsystem (e.g. a
-jenkins or gitlab-ci job, for example), when they have a reson to do so.
-
-Reported-by: Peter Korsgaard <peter@korsgaard.com>
-Reported-by: Einar J??n Gunnarsson <tolvupostur@gmail.com>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Cc: Einar J??n Gunnarsson <tolvupostur@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/mesa3d/mesa3d.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/Makefile b/Makefile
-index 79db7fe..7a72707 100644
---- a/Makefile
-+++ b/Makefile
-@@ -254,7 +254,7 @@ export LANG = C
- export LC_ALL = C
- export GZIP = -n
- BR2_VERSION_GIT_EPOCH = $(shell GIT_DIR=$(TOPDIR)/.git $(GIT) log -1 --format=%at)
--export SOURCE_DATE_EPOCH = $(if $(wildcard $(TOPDIR)/.git),$(BR2_VERSION_GIT_EPOCH),$(BR2_VERSION_EPOCH))
-+export SOURCE_DATE_EPOCH ?= $(if $(wildcard $(TOPDIR)/.git),$(BR2_VERSION_GIT_EPOCH),$(BR2_VERSION_EPOCH))
- DEPENDENCIES_HOST_PREREQ += host-fakedate
- endif
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 9305523bd..5627344f0 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -26,6 +26,12 @@ MESA3D_DEPENDENCIES = \
+ # Disable assembly usage.
+ MESA3D_CONF_OPTS = --disable-asm
  
++# Disable static, otherwise configure will fail with: "Cannot enable both static
++# and shared."
++ifeq ($(BR2_SHARED_STATIC_LIBS),y)
++MESA3D_CONF_OPTS += --disable-static
++endif
++
+ # The Sourcery MIPS toolchain has a special (non-upstream) feature to
+ # have "compact exception handling", which unfortunately breaks with
+ # mesa3d, so we disable it here by passing -mno-compact-eh.
+-- 
+2.14.1
