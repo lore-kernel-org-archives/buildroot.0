@@ -1,35 +1,29 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 5 Nov 2017 17:21:16 +0100
-Subject: [Buildroot] [git commit] pkg-generic: allow legal-info to be verbose
-Message-ID: <20171105163750.8FF9781173@busybox.osuosl.org>
+Date: Sun, 5 Nov 2017 17:44:56 +0100
+Subject: [Buildroot] [git commit] package/armadillo: add license hash
+Message-ID: <20171105163750.A2CD07F8A2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e888733df048c72fd957b71a401d3e265e122cd9
+commit: https://git.buildroot.net/buildroot/commit/?id=4d6bbff3b03107cafc1c2e6beee1e28c72616cf3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/pkg-generic.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/armadillo/armadillo.hash | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index cca94ba..0e28675 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -861,9 +861,9 @@ ifneq ($$(call qstrip,$$($(2)_SOURCE)),)
- # is that the license still applies to the files distributed as part
- # of the rootfs, even if the sources are not themselves redistributed.
- ifeq ($$(call qstrip,$$($(2)_LICENSE_FILES)),)
--	@$$(call legal-warning-pkg,$$($(2)_RAW_BASE_NAME),cannot save license ($(2)_LICENSE_FILES not defined))
-+	$(Q)$$(call legal-warning-pkg,$$($(2)_RAW_BASE_NAME),cannot save license ($(2)_LICENSE_FILES not defined))
- else
--	@$$(foreach F,$$($(2)_LICENSE_FILES),$$(call legal-license-file,$$($(2)_RAWNAME),$$($(2)_RAW_BASE_NAME),$$($(2)_PKGDIR),$$(F),$$($(2)_DIR)/$$(F),$$(call UPPERCASE,$(4)))$$(sep))
-+	$(Q)$$(foreach F,$$($(2)_LICENSE_FILES),$$(call legal-license-file,$$($(2)_RAWNAME),$$($(2)_RAW_BASE_NAME),$$($(2)_PKGDIR),$$(F),$$($(2)_DIR)/$$(F),$$(call UPPERCASE,$(4)))$$(sep))
- endif # license files
- 
- ifeq ($$($(2)_SITE_METHOD),local)
+diff --git a/package/armadillo/armadillo.hash b/package/armadillo/armadillo.hash
+index 7fd599f..6b3c4a8 100644
+--- a/package/armadillo/armadillo.hash
++++ b/package/armadillo/armadillo.hash
+@@ -3,3 +3,5 @@ md5 5ef71763bd429a3d481499878351f3be  armadillo-7.900.1.tar.xz
+ sha1 8118faf1c6a7a39c55a1103a1f90e85e613cc377  armadillo-7.900.1.tar.xz
+ # Locally computed:
+ sha256 33eec7013990b5477ccc5ad3abc68bc2326c7a7a2790014d625cfcf37c0e07d3  armadillo-7.900.1.tar.xz
++# License files, locally calculated
++sha256 3ddf9be5c28fe27dad143a5dc76eea25222ad1dd68934a047064e56ed2fa40c5  LICENSE.txt
