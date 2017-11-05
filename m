@@ -1,85 +1,29 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  5 Nov 2017 15:58:52 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libplist: security bump to version
- 2.0.0
-Message-ID: <20171105145852.2494-1-bernd.kuhls@t-online.de>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sun, 5 Nov 2017 15:52:25 +0100
+Subject: [Buildroot] [git commit] qt5base: add 3rdparty/harfbuzz-ng license
+ file hash
+Message-ID: <20171105145201.72A0481172@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Release notes:
-https://github.com/libimobiledevice/libplist/blob/master/NEWS
+commit: https://git.buildroot.net/buildroot/commit/?id=8fbff9651bdb1cb74c20d751bdc175ea315cfbff
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This version bump fixes
-  * CVE-2017-6440
-  * CVE-2017-6439
-  * CVE-2017-6438
-  * CVE-2017-6437
-  * CVE-2017-6436
-  * CVE-2017-6435
-  * CVE-2017-5836
-  * CVE-2017-5835
-  * CVE-2017-5834
-  * CVE-2017-5545
-  * CVE-2017-5209
-... and several others that didn't receive any CVE (yet).
-
-The dependency to libxml2 was removed.
-Autoreconf is not needed anymore, the upstream tarball includes a
-configure script.
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/libplist/Config.in     | 1 -
- package/libplist/libplist.hash | 2 +-
- package/libplist/libplist.mk   | 7 ++-----
- 3 files changed, 3 insertions(+), 7 deletions(-)
+ package/qt5/qt5base/qt5base.hash | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/libplist/Config.in b/package/libplist/Config.in
-index 5f96746ea9..4a9575f545 100644
---- a/package/libplist/Config.in
-+++ b/package/libplist/Config.in
-@@ -1,7 +1,6 @@
- config BR2_PACKAGE_LIBPLIST
- 	bool "libplist"
- 	depends on BR2_INSTALL_LIBSTDCPP
--	select BR2_PACKAGE_LIBXML2
- 	help
- 	  libplist is a client for manipulating Apple Property List
- 	  (.plist) files
-diff --git a/package/libplist/libplist.hash b/package/libplist/libplist.hash
-index 06d1b16426..63c2515062 100644
---- a/package/libplist/libplist.hash
-+++ b/package/libplist/libplist.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 0effdedcb3de128c4930d8c03a3854c74c426c16728b8ab5f0a5b6bdc0b644be  libplist-1.12.tar.bz2
-+sha256 3a7e9694c2d9a85174ba1fa92417cfabaea7f6d19631e544948dc7e17e82f602  libplist-2.0.0.tar.bz2
-diff --git a/package/libplist/libplist.mk b/package/libplist/libplist.mk
-index 0d3e417d47..50ddbaf607 100644
---- a/package/libplist/libplist.mk
-+++ b/package/libplist/libplist.mk
-@@ -4,17 +4,14 @@
- #
- ################################################################################
- 
--LIBPLIST_VERSION = 1.12
-+LIBPLIST_VERSION = 2.0.0
- LIBPLIST_SOURCE = libplist-$(LIBPLIST_VERSION).tar.bz2
- LIBPLIST_SITE = http://www.libimobiledevice.org/downloads
--LIBPLIST_DEPENDENCIES = libxml2 host-pkgconf
-+LIBPLIST_DEPENDENCIES = host-pkgconf
- LIBPLIST_INSTALL_STAGING = YES
- LIBPLIST_LICENSE = LGPL-2.1+
- LIBPLIST_LICENSE_FILES = COPYING
- 
--# Straight out of the git tree:
--LIBPLIST_AUTORECONF = YES
--
- # Disable building Python bindings, because it requires host-cython, which
- # is not packaged in Buildroot at all.
- LIBPLIST_CONF_OPTS = --without-cython
--- 
-2.11.0
+diff --git a/package/qt5/qt5base/qt5base.hash b/package/qt5/qt5base/qt5base.hash
+index 2a073d4..4883484 100644
+--- a/package/qt5/qt5base/qt5base.hash
++++ b/package/qt5/qt5base/qt5base.hash
+@@ -11,3 +11,4 @@ sha256 0dbe024961f6ab5c52689cbd036c977975d0d0f6a67ff97762d96cb819dd5652 LICENSE.
+ sha256 68afaf3392f8c04218fbf29db43cc0b18bf651c1db086556aa584046de9f3e35 LICENSE.LGPLv3
+ sha256 ed8742a95cb9db653a09b050e27ccff5e67ba69c14aa2c3137f2a4e1892f6c0d LICENSE.FDL
+ sha256 8fdefa0b45d9f791f687da6c2c4c83c1b701aaee2c08008f55d522af214b88f0 header.BSD
++sha256 2a886915de4f296cdae5ed67064f86dba01d0c55286d86e8487f2a5caaf40216 src/3rdparty/harfbuzz-ng/COPYING
