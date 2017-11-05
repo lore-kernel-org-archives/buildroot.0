@@ -1,29 +1,28 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 5 Nov 2017 17:45:05 +0100
-Subject: [Buildroot] [git commit] package/fakeroot: add license hash
-Message-ID: <20171105163752.07B34811D8@busybox.osuosl.org>
+Date: Sun, 5 Nov 2017 17:45:07 +0100
+Subject: [Buildroot] [git commit] package/patchelf: add license hash
+Message-ID: <20171105163753.6402A7F9C7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e4c530de3e68d79258eee77e9ed7e181329d18c7
+commit: https://git.buildroot.net/buildroot/commit/?id=8aa50b9cf1dd407b1eba17b29ff6ed7668f260e3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/fakeroot/fakeroot.hash | 2 ++
+ package/patchelf/patchelf.hash | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/package/fakeroot/fakeroot.hash b/package/fakeroot/fakeroot.hash
-index f0d436e..d1d959d 100644
---- a/package/fakeroot/fakeroot.hash
-+++ b/package/fakeroot/fakeroot.hash
-@@ -2,3 +2,5 @@
- sha1	367040df07043edb630942b21939e493f3fad888	fakeroot_1.20.2.orig.tar.bz2
- # Calculated based on the hash above
- sha256	7c0a164d19db3efa9e802e0fc7cdfeff70ec6d26cdbdc4338c9c2823c5ea230c	fakeroot_1.20.2.orig.tar.bz2
+diff --git a/package/patchelf/patchelf.hash b/package/patchelf/patchelf.hash
+index 653eb46..0f54560 100644
+--- a/package/patchelf/patchelf.hash
++++ b/package/patchelf/patchelf.hash
+@@ -1,2 +1,4 @@
+ # Locally calculated
+ sha256	a0f65c1ba148890e9f2f7823f4bedf7ecad5417772f64f994004f59a39014f83	patchelf-0.9.tar.bz2
 +# License files, locally calculated
-+sha256	fc82ca8b6fdb18d4e3e85cfd8ab58d1bcd3f1b29abe782895abd91d64763f8e7	COPYING
++sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	COPYING
