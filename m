@@ -1,63 +1,97 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 5 Nov 2017 15:44:20 +0100
-Subject: [Buildroot] [RFCv1 2/4] core: change host RPATH handling
-In-Reply-To: <20171105085756.GG2996@scaer>
-References: <20171103160627.6468-1-thomas.petazzoni@free-electrons.com>
- <20171103160627.6468-3-thomas.petazzoni@free-electrons.com>
- <20171105085756.GG2996@scaer>
-Message-ID: <20171105154420.52d67acd@windsurf.home>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sun, 5 Nov 2017 15:42:33 +0100
+Subject: [Buildroot] [git commit] python-config.sh: don't reassign ${prefix}
+Message-ID: <20171105143713.0756D801DD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=04d1699ba4cecaa77f688b4effbcac5e84419b15
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 5 Nov 2017 09:57:56 +0100, Yann E. MORIN wrote:
+When prefix is set to a path like /usr during crossbuild
+the sed operations end up executing twice, once for the prefix
+reassignment and another for includedir if it is set as a string
+including the ${prefix} variable.  This results in an issue
+when the build directory is under /usr.
 
-> In the past, we explicitly got rid of LD_LIBRARY_PATH because it does
-> not work. See 34d081674a (core/pkg-infrastructures: remove LD_LIBRARY_PATH
-> from the environment).
-> 
-> Briefly, it does not work when we build a library that is also present
-> on the distro, which is used by a tool from the distro, and we build it
-> in an incompatibl way.
-> 
-> So, we'll have to come up with another solution, like your suggested
-> alternative.
-> 
-> >  - At the end of the build, in order to make sure that binaries are
-> >    usable without LD_LIBRARY_PATH, we fixup the host binaries to use
-> >    $ORIGIN/../lib. This is more-or-less what was done previously in
-> >    the "make sdk" target, except that instead of turning absolute
-> >    paths into relative paths in the RPATH, we are simply setting the
-> >    RPATH to $ORIGIN/../lib.
-> > 
-> >    In order to implement this, the fix-rpath script logic is adjusted
-> >    for the "host" case.
-> > 
-> > An alternative strategy would have been to keep the
-> > -Wl,-rpath,$(HOST_DIR) flag, and therefore the absolute RPATH in the
-> > host binaries, and fix such RPATH at the end of the build of every
-> > package. However, that would require calling fix-rpath after the
-> > installation of every package, which is a bit expensive.  
-> 
-> I wonder how expensive that would be. It would be nice to time this.
-> 
-> Also note that, even if the overhead is noticeable, this would be
-> compensated by the mere fact that we are now doing a parallel build, so
-> we would end up winning.
+This patch updates the remaining location which uses the prefix
+variable to also sed and update to use the real path.
 
-Thanks for the feedback. We already discussed this on IRC, and I agree.
-I'll have a look at implementing the solution of doing the patchelf
-adding $ORIGIN/../lib as an RPATH directly after the installation of
-each package.
+Upstream bug report:
+https://bugs.python.org/issue31713
 
-Thanks!
+Buildroot bug:
+https://bugs.busybox.net/show_bug.cgi?id=10361
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Fixes failures like the following:
+dbus-python-1.2.4 | NOK | http://autobuild.buildroot.net/results/758858efa97b6273c1b470513f5492258a6d8853
+
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+[Arnout: refer to autobuild failures that still exist]
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ ...29-python-config.sh-don-t-reassign-prefix.patch | 53 ++++++++++++++++++++++
+ 1 file changed, 53 insertions(+)
+
+diff --git a/package/python3/0029-python-config.sh-don-t-reassign-prefix.patch b/package/python3/0029-python-config.sh-don-t-reassign-prefix.patch
+new file mode 100644
+index 0000000..49137f2
+--- /dev/null
++++ b/package/python3/0029-python-config.sh-don-t-reassign-prefix.patch
+@@ -0,0 +1,53 @@
++From 21f787cb9bf0c1440981262f03bc881c5b77c0d8 Mon Sep 17 00:00:00 2001
++From: Matt Weber <matthew.weber@rockwellcollins.com>
++Date: Fri, 6 Oct 2017 09:54:15 -0500
++Subject: [PATCH] python-config.sh: don't reassign ${prefix}
++
++When prefix is set to a path like /usr during crossbuild
++the sed operations end up executing twice, once for the prefix
++reassignment and another for includedir if it is set as a string
++including the ${prefix} variable.  This results in an issue
++when the build directory is under /usr.
++
++This patch updates the remaining location which uses the prefix
++variable to also sed and update to use the real path.
++
++Upstream bug report:
++https://bugs.python.org/issue31713
++
++Buildroot bug:
++https://bugs.busybox.net/show_bug.cgi?id=10361
++
++Fixes failures like the following:
++dbus-python-1.2.4 | NOK | http://autobuild.buildroot.net/results/758858efa97b6273c1b470513f5492258a6d8853
++
++Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
++---
++ Misc/python-config.sh.in | 3 +--
++ 1 file changed, 1 insertion(+), 2 deletions(-)
++
++diff --git a/Misc/python-config.sh.in b/Misc/python-config.sh.in
++index f905a71..e06be0f 100644
++--- a/Misc/python-config.sh.in
+++++ b/Misc/python-config.sh.in
++@@ -29,7 +29,7 @@ prefix_real=$(installed_prefix "$0")
++ 
++ # Use sed to fix paths from their built-to locations to their installed-to
++ # locations.
++-prefix=$(echo "$prefix_build" | sed "s#^$prefix_build#$prefix_real#")
+++prefix=$prefix_build
++ exec_prefix_build="@exec_prefix@"
++ exec_prefix=$(echo "$exec_prefix_build" | sed "s#^$exec_prefix_build#$prefix_real#")
++ includedir=$(echo "@includedir@" | sed "s#^$prefix_build#$prefix_real#")
++@@ -47,7 +46,7 @@ LINKFORSHARED="@LINKFORSHARED@"
++ OPT="@OPT@"
++ PY_ENABLE_SHARED="@PY_ENABLE_SHARED@"
++ LDVERSION="@LDVERSION@"
++-LIBDEST=${prefix}/lib/python${VERSION}
+++LIBDEST=$( echo "${prefix}/lib/python${VERSION}" | sed "s#^$prefix_build#$prefix_real#")
++ LIBPL=$(echo "@LIBPL@" | sed "s#^$prefix_build#$prefix_real#")
++ SO="@EXT_SUFFIX@"
++ PYTHONFRAMEWORK="@PYTHONFRAMEWORK@"
++-- 
++1.8.3.1
++
