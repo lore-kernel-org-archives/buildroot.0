@@ -1,28 +1,28 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 5 Nov 2017 17:45:06 +0100
-Subject: [Buildroot] [git commit] package/flite: add license hash
-Message-ID: <20171105163752.050A1811C4@busybox.osuosl.org>
+Date: Sun, 5 Nov 2017 17:45:07 +0100
+Subject: [Buildroot] [git commit] package/python-numpy: add license hash
+Message-ID: <20171105163753.A922A7F8A2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=24dd28688eadfbc8b8be230d51a059727bf2ea03
+commit: https://git.buildroot.net/buildroot/commit/?id=9fac11bb7e048c10362f926de2cbb71c7e78c27e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/flite/flite.hash | 2 ++
+ package/python-numpy/python-numpy.hash | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/package/flite/flite.hash b/package/flite/flite.hash
-index e4dd0c6..67d6941 100644
---- a/package/flite/flite.hash
-+++ b/package/flite/flite.hash
+diff --git a/package/python-numpy/python-numpy.hash b/package/python-numpy/python-numpy.hash
+index 6e76c62..854f202 100644
+--- a/package/python-numpy/python-numpy.hash
++++ b/package/python-numpy/python-numpy.hash
 @@ -1,2 +1,4 @@
- # locally computed hash
- sha256 45c662160aeca6560589f78daf42ab62c6111dd4d244afc28118c4e6f553cd0c flite-1.4-release.tar.bz2
+ # Copied from https://github.com/numpy/numpy/releases/tag/v1.13.3
+ sha256	4c6b4eef790528bebb7ec9590d74cc193868940fe68e4109a91c196df72d8094	numpy-1.13.3.tar.gz
 +# License files, locally calculated
-+sha256 4cbeaee8c9a8f23f251f0ce56e9212d244d9ea6b0dbe48601623d920054249a1 flite-1.4-release/COPYING
++sha256	94eebc7c8f86a287c1e9146ed52ebcde88183806d848d8c66e0e52d1aebf3b13	LICENSE.txt
