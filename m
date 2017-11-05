@@ -1,35 +1,53 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 5 Nov 2017 21:32:31 +0100
-Subject: [Buildroot] [git commit] kvm-unit-test: x86-64 variant only
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 05 Nov 2017 21:34:53 +0100
+Subject: [Buildroot] [PATCH 1/4] kvm-unit-test: x86-64 variant only
  available on x86-64 hosts
-Message-ID: <20171105202517.9796E80F72@busybox.osuosl.org>
+In-Reply-To: <54eed396-cdc0-759d-81b8-cdb387e792a2@mind.be> (Arnout
+ Vandecappelle's message of "Sun, 5 Nov 2017 21:23:43 +0100")
+References: <20171102104520.29257-1-peter@korsgaard.com>
+ <20171102104520.29257-2-peter@korsgaard.com>
+ <687901ac-c7d7-81bb-944b-b2c860f90bae@mind.be>
+ <87k1z41q6t.fsf@dell.be.48ers.dk>
+ <54eed396-cdc0-759d-81b8-cdb387e792a2@mind.be>
+Message-ID: <87d14wzcpe.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a13029996f25c1fb60ee68a67344b963dee374c1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-We use the host compiler for x86-64 builds, so ensure it is only available
-on x86-64 hosts.
+Hi,
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/kvm-unit-tests/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ >> But some parts of kvm-unit-tests presumably are 64bit when building for
+ >> x86-64, 
 
-diff --git a/package/kvm-unit-tests/Config.in b/package/kvm-unit-tests/Config.in
-index d0d9e2e..8b7908e 100644
---- a/package/kvm-unit-tests/Config.in
-+++ b/package/kvm-unit-tests/Config.in
-@@ -15,6 +15,7 @@ config BR2_PACKAGE_KVM_UNIT_TESTS
- 	# x86-64 we use the host gcc (see .mk file for details)
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_5 || !BR2_i386
- 	depends on BR2_HOST_GCC_AT_LEAST_4_5 || !BR2_x86_64
-+	depends on BR2_HOSTARCH = "x86_64" || !BR2_x86_64
- 	select BR2_HOSTARCH_NEEDS_IA32_COMPILER if BR2_x86_64=y
- 	help
- 	  kvm-unit-tests is a project as old as KVM. As its name
+ >  OK, I assumed everything was built with -m32. If some parts are indeed still
+ > 64-bit then it won't work in i386 host.
+
+Exactly.
+
+ >> which wouldn't work when using the host compiler on a x86
+ >> system, right? I don't think x86 system compilers are 32/64bit multilib
+
+ >  Actually, on Debian i386 it is possible to install 64-bit multilib I think. But
+ > obviously we can't count on that.
+
+ >  BTW, what happens on x32, does anybody know that?
+
+Is x32 really used by any mainstream distro? I would guess it is as rare
+as building on a !x86 machine.
+
+
+ >> But I haven't actually used a x86 distribution in the last 10 years or
+ >> so, so perhaps I'm missing something?
+
+ >  Yeah, it's pretty unlikely as well I guess.
+
+ >  I'll apply this patch as well then.
+
+Great, thanks!
+
+-- 
+Bye, Peter Korsgaard
