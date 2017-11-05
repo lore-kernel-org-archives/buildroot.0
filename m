@@ -1,35 +1,44 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 05 Nov 2017 14:50:28 +0100
-Subject: [Buildroot] [PATCH v4 1/1] package/libssh2: Add selectable
- crypto libraries
-In-Reply-To: <6626fb96-a677-2bbe-d801-7352cc4c6428@mind.be> (Arnout
- Vandecappelle's message of "Sun, 5 Nov 2017 13:46:33 +0100")
-References: <1509553376-43168-1-git-send-email-sam.voss@rockwellcollins.com>
- <9271f8cc-651b-e302-f82c-9e44a0af24d4@mind.be>
- <87tvy92lyy.fsf@dell.be.48ers.dk> <20171105081900.GC2996@scaer>
- <87lgjl2el7.fsf@dell.be.48ers.dk>
- <6626fb96-a677-2bbe-d801-7352cc4c6428@mind.be>
-Message-ID: <871slc3kd7.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 5 Nov 2017 15:39:18 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libressl: needs MMU
+In-Reply-To: <2f141bf5-ccdb-ecff-88d8-17e59e724e90@mind.be>
+References: <20170723200844.13004-1-bernd.kuhls@t-online.de>
+ <20170724180723.4786fad5@windsurf.lan>
+ <20170724210702.GM12791@waldemar-brodkorb.de>
+ <20170725093230.17956ffc@windsurf.lan>
+ <2f141bf5-ccdb-ecff-88d8-17e59e724e90@mind.be>
+Message-ID: <20171105153918.58d05c6f@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+Hello,
 
-Hi,
+On Sat, 4 Nov 2017 23:25:57 +0100, Arnout Vandecappelle wrote:
 
- >> Hmm, I could only find Arnouts mail asking to use select, but he didn't
- >> write why. Arnout, why not use depends on here?
+> >> But I think the commit log isn't correct, as pthread_atfork can be
+> >> used for glibc, musl and uClibc-ng. (for glibc -lpthread must be
+> >> added)
+> >>
+> >> One possible solution might be, to check for __register_atfork, if
+> >> it does not exist, fallback to pthread_atfork, if it does not exist
+> >> provide a pthread_atfork dummy (noMMU case).  
+> > 
+> > This should be doable without too much effort I believe.  
+> 
+>  But someone has to do it :-)
+> 
+>  Note that the autobuilders no longer complain about this since libressl is now
+> a choice, so it never gets built. But the problem still persists.
 
- >  I was just applying the default principle that you should use select rather
- > than depends unless there is a good reason to use depends. I hadn't thought of
- > backward compatibility back then, and I didn't think of using depends now.
+We discussed it during the Developers Meeting (remember?) and I have in
+my notes to mark it as not available on noMMU platforms that use uClibc
+(because it's really a uClibc limitation).
 
- >  I've already committed, can you fix it up?
-
-Sure!
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
