@@ -1,12 +1,13 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 5 Nov 2017 13:18:29 +0100
-Subject: [Buildroot] [PATCH 1/2] dhcpcd: add SysV start-up script
-In-Reply-To: <20171105081028.GA2996@scaer>
-References: <20171031223659.6831-1-code@mmayer.net>
- <20171031223659.6831-2-code@mmayer.net> <20171102230602.3c61e8d2@windsurf>
- <20171102221847.GA23314@scaer> <20171102232345.5a434af8@windsurf>
- <3f7fff7b-be5a-42ff-985f-0e860c98acb3@mind.be> <20171105081028.GA2996@scaer>
-Message-ID: <28382f3f-71d0-27d3-f78f-66fe47c9186b@mind.be>
+Date: Sun, 5 Nov 2017 13:46:33 +0100
+Subject: [Buildroot] [PATCH v4 1/1] package/libssh2: Add selectable
+ crypto libraries
+In-Reply-To: <87lgjl2el7.fsf@dell.be.48ers.dk>
+References: <1509553376-43168-1-git-send-email-sam.voss@rockwellcollins.com>
+ <9271f8cc-651b-e302-f82c-9e44a0af24d4@mind.be>
+ <87tvy92lyy.fsf@dell.be.48ers.dk> <20171105081900.GC2996@scaer>
+ <87lgjl2el7.fsf@dell.be.48ers.dk>
+Message-ID: <6626fb96-a677-2bbe-d801-7352cc4c6428@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,72 +16,44 @@ To: buildroot@busybox.net
 
 
 
-On 05-11-17 09:10, Yann E. MORIN wrote:
-> Arnout, All,
+On 05-11-17 11:40, Peter Korsgaard wrote:
+>>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 > 
-> On 2017-11-04 20:56 +0100, Arnout Vandecappelle spake thusly:
->> On 02-11-17 23:23, Thomas Petazzoni wrote:
->>> Hello,
->>>
->>> On Thu, 2 Nov 2017 23:18:47 +0100, Yann E. MORIN wrote:
->>>
->>>>>  - Same for the configuration file: I prefer a loud error than an init
->>>>>    script that ignores the problem.  
->>>>
->>>> Agreed, too.
->>>>
->>>> However:
->>>>
->>>>   - if the config file is mandatory, then this should be a failure.
->>>>
->>>>   - if the config file is optional, then it missing should be silently
->>>>     ignored and the service started nonetheless.
->>>
->>> So you want explicitly handling for the "missing configuration file"
->>> situation in the init script?
->>>
->>> I wanted to avoid explicit handling, and just let the daemon whine (or
->>> not) if its config file is missing.
->>
->>  I vaguely remember a recently added package where the daemon would silently
->> fail to start if the config file is missing, and which doesn't even have a
->> default config file. So I think checking for existence of the config file in the
->> init script (if the config file is mandatory) makes sense.
+> Hi,
 > 
-> Then it is the responsibility of the package.mk to install one if it is
-> mandatory. Otherwise,that means the packaging is incomplete because it
-> does not allow the package to work as expected.
+>  >> >  This does affect people updating Buildroot, so it needs to be mentioned in CHANGES.
+>  >> 
+>  >> Why don't we just keep the old logic instead? E.G. leave the select
+>  >> openssl if !(mbedtls || libgcrypt) and then change the selects to
+>  >> depends on in the choice:
+>  >> 
+>  >> choice
+>  >> 
+>  >> config BR2_PACKAGE_LIBSSH2_MBEDTLS
+>  >> bool "mbedtls"
+>  >> depends on BR2_PACKAGE_MBEDTLS
+>  >> 
+>  >> ...
+>  >> 
+>  >> Doesn't that give us the best of both worlds? Same behaviour as before
+>  >> by default and still the option to explicitly chose when multiple
+>  >> backends are available?
+> 
+>  > That's what Sam did in the initial iterations of his patchset, but
+>  > Arnout and Thomas (IIRC) both requested he replaces that with a select
+>  > instead.
+> 
+> Hmm, I could only find Arnouts mail asking to use select, but he didn't
+> write why. Arnout, why not use depends on here?
 
- So you mean all packages should do like inadyn: install an example
-configuration file even if that is guaranteed not to work.
+ I was just applying the default principle that you should use select rather
+than depends unless there is a good reason to use depends. I hadn't thought of
+backward compatibility back then, and I didn't think of using depends now.
+
+ I've already committed, can you fix it up?
 
  Regards,
  Arnout
-
-> 
-> And in that case, I side with Thomas' initial suggestion: we should not
-> check from the init scripts, because we expect the .mk files to be
-> correct.
-> 
-> Regards,
-> Yann E. MORIN.
-> 
->>
->>  Regards,
->>  Arnout
->>
->> -- 
->> Arnout Vandecappelle                          arnout at mind be
->> Senior Embedded Software Architect            +32-16-286500
->> Essensium/Mind                                http://www.mind.be
->> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
->> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
->> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
