@@ -1,49 +1,55 @@
-From: Sergey Matyukevich <geomatsi@gmail.com>
-Date: Sun,  5 Nov 2017 21:28:52 +0300
-Subject: [Buildroot] [PATCH] configs/pcduino: bump kernel and u-boot versions
-Message-ID: <20171105182852.13082-1-geomatsi@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun,  5 Nov 2017 19:46:44 +0100
+Subject: [Buildroot] [PATCH 0/2] package/freerdp: fix fallout after version
+ bump
+Message-ID: <cover.1509907598.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update kernel to 4.13 and U-Boot to 2017.09.
+Hello All!
 
-Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
----
- configs/linksprite_pcduino_defconfig | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+Add two patches to fix FreeRDP dependencies:
 
-diff --git a/configs/linksprite_pcduino_defconfig b/configs/linksprite_pcduino_defconfig
-index e736e48068..79e0939792 100644
---- a/configs/linksprite_pcduino_defconfig
-+++ b/configs/linksprite_pcduino_defconfig
-@@ -17,13 +17,13 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/linksprite/pcduino/post-image.sh"
- # For kernel modules autoloading
- BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
- 
--# Linux headers same as kernel, a 4.11 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_11=y
-+# Linux headers same as kernel, a 4.13 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_13=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.11"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.13"
- BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun4i-a10-pcduino"
-@@ -37,7 +37,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.03"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.09"
- BR2_TARGET_UBOOT_USE_DEFCONFIG=y
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="Linksprite_pcDuino"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
+  - pkg-config is now used for more than gstreamer-0.x, so make it a
+    mandatory dependency,
+
+  - FreeRDP can now log to systemd's journald, so add proper dependency
+    and options
+
+
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit 3253c6fa4573307ec1631f3b34856b1daec9d1e1
+
+  package/mesa3d: remove old patch for uClibc (2017-11-05 17:57:10 +0100)
+
+
+are available in the git repository at:
+
+  git://git.buildroot.org/~ymorin/git/buildroot.git
+
+for you to fetch changes up to f3ea53ecff0ea344fcc64197b75f4ee5be1ac09c
+
+  package/freerdp: always uses pkg-config (2017-11-05 19:45:15 +0100)
+
+
+----------------------------------------------------------------
+Yann E. MORIN (2):
+      package/freerdp: optional systemd's journald support
+      package/freerdp: always uses pkg-config
+
+ package/freerdp/freerdp.mk | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
+
 -- 
-2.11.0
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
