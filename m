@@ -1,56 +1,85 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 5 Nov 2017 15:54:38 +0100
-Subject: [Buildroot] [PATCH] suport/download: force svn to be
- non-interactive
-In-Reply-To: <5c06394b-324c-f7fe-77b5-53fc7eeedc76@dawncrow.de>
-References: <20171103212216.11772-1-yann.morin.1998@free.fr>
- <5c06394b-324c-f7fe-77b5-53fc7eeedc76@dawncrow.de>
-Message-ID: <20171105145438.GK2996@scaer>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun,  5 Nov 2017 15:58:52 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libplist: security bump to version
+ 2.0.0
+Message-ID: <20171105145852.2494-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Andr?, All,
+Release notes:
+https://github.com/libimobiledevice/libplist/blob/master/NEWS
 
-On 2017-11-05 15:46 +0100, Andr? Hentschel spake thusly:
-> Am 03.11.2017 um 22:22 schrieb Yann E. MORIN:
-> > Fixes:
-> >     http://autobuild.buildroot.org/results/2af/2af7412846c576089f8596857ab8c81ac31c1bed/
-> > 
-> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> > Cc: Andr? Hentschel <nerv@dawncrow.de>
-> > ---
-> >  support/download/svn | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/support/download/svn b/support/download/svn
-> > index 77abf3d02d..9f27d71f86 100755
-> > --- a/support/download/svn
-> > +++ b/support/download/svn
-> > @@ -33,6 +33,6 @@ _svn() {
-> >      eval ${SVN} "${@}"
-> >  }
-> >  
-> > -_svn export ${verbose} "${@}" "'${repo}@${rev}'" "'${basename}'"
-> > +_svn --non-interactive export ${verbose} "${@}" "'${repo}@${rev}'" "'${basename}'"
-> >  
-> >  tar czf "${output}" "${basename}"
-> > 
-> 
-> Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
+This version bump fixes
+  * CVE-2017-6440
+  * CVE-2017-6439
+  * CVE-2017-6438
+  * CVE-2017-6437
+  * CVE-2017-6436
+  * CVE-2017-6435
+  * CVE-2017-5836
+  * CVE-2017-5835
+  * CVE-2017-5834
+  * CVE-2017-5545
+  * CVE-2017-5209
+... and several others that didn't receive any CVE (yet).
 
-Did you mean "Tested-by" or "Reviewed-by" instead?
+The dependency to libxml2 was removed.
+Autoreconf is not needed anymore, the upstream tarball includes a
+configure script.
 
-Regards,
-Yann E. MORIN.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/libplist/Config.in     | 1 -
+ package/libplist/libplist.hash | 2 +-
+ package/libplist/libplist.mk   | 7 ++-----
+ 3 files changed, 3 insertions(+), 7 deletions(-)
 
+diff --git a/package/libplist/Config.in b/package/libplist/Config.in
+index 5f96746ea9..4a9575f545 100644
+--- a/package/libplist/Config.in
++++ b/package/libplist/Config.in
+@@ -1,7 +1,6 @@
+ config BR2_PACKAGE_LIBPLIST
+ 	bool "libplist"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+-	select BR2_PACKAGE_LIBXML2
+ 	help
+ 	  libplist is a client for manipulating Apple Property List
+ 	  (.plist) files
+diff --git a/package/libplist/libplist.hash b/package/libplist/libplist.hash
+index 06d1b16426..63c2515062 100644
+--- a/package/libplist/libplist.hash
++++ b/package/libplist/libplist.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 0effdedcb3de128c4930d8c03a3854c74c426c16728b8ab5f0a5b6bdc0b644be  libplist-1.12.tar.bz2
++sha256 3a7e9694c2d9a85174ba1fa92417cfabaea7f6d19631e544948dc7e17e82f602  libplist-2.0.0.tar.bz2
+diff --git a/package/libplist/libplist.mk b/package/libplist/libplist.mk
+index 0d3e417d47..50ddbaf607 100644
+--- a/package/libplist/libplist.mk
++++ b/package/libplist/libplist.mk
+@@ -4,17 +4,14 @@
+ #
+ ################################################################################
+ 
+-LIBPLIST_VERSION = 1.12
++LIBPLIST_VERSION = 2.0.0
+ LIBPLIST_SOURCE = libplist-$(LIBPLIST_VERSION).tar.bz2
+ LIBPLIST_SITE = http://www.libimobiledevice.org/downloads
+-LIBPLIST_DEPENDENCIES = libxml2 host-pkgconf
++LIBPLIST_DEPENDENCIES = host-pkgconf
+ LIBPLIST_INSTALL_STAGING = YES
+ LIBPLIST_LICENSE = LGPL-2.1+
+ LIBPLIST_LICENSE_FILES = COPYING
+ 
+-# Straight out of the git tree:
+-LIBPLIST_AUTORECONF = YES
+-
+ # Disable building Python bindings, because it requires host-cython, which
+ # is not packaged in Buildroot at all.
+ LIBPLIST_CONF_OPTS = --without-cython
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.11.0
