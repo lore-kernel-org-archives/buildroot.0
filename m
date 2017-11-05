@@ -1,38 +1,51 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 5 Nov 2017 09:59:50 +0100
-Subject: [Buildroot] BR2_REPRODUCIBLE issues
-In-Reply-To: <87po8x2jh8.fsf@dell.be.48ers.dk>
-References: <1509720041684-0.post@n4.nabble.com> <20171105083549.GD2996@scaer>
- <87po8x2jh8.fsf@dell.be.48ers.dk>
-Message-ID: <20171105085950.GH2996@scaer>
+Date: Sun,  5 Nov 2017 10:14:56 +0100
+Subject: [Buildroot] [PATCH] core/reproducible: do not override
+ SOURCE_DATE_EPOCH
+Message-ID: <20171105091456.5277-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+SOURCE_DATE_EPOCH is currently forcibly set (to either the git commit
+date, or the last release date).
 
-On 2017-11-05 09:54 +0100, Peter Korsgaard spake thusly:
-> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
->  > However, if you really, like realy-really, want to override it to
->  > something else, then just export SOURCE_DATE_EPOCH before calling
->  > Buildroot.
-> 
-> We afaik don't support this yet as SOURCE_DATE_EPOCH is unconditionally
-> exported, but that could get fixed naturally.
+However, the spec mandates that it should not be modified if already
+set: https://reproducible-builds.org/specs/source-date-epoch/
 
-Ah, rioght, we do have a bug here: we must keep it as-is if it set.
+    Build systems MUST NOT overwrite this variable for child
+    processes to consume if it is already present.
 
-I'll cook-up a patch...
+Abide by the rule, and only set it if not already set.
 
-Regards,
-Yann E. MORIN.
+This will allow users to pass it from an upper-layer buildsystem (e.g. a
+jenkins or gitlab-ci job, for example), when they have a reson to do so.
 
+Reported-by: Peter Korsgaard <peter@korsgaard.com>
+Reported-by: Einar J?n Gunnarsson <tolvupostur@gmail.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Cc: Einar J?n Gunnarsson <tolvupostur@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+---
+ Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Makefile b/Makefile
+index 79db7fe48a..7a727075ea 100644
+--- a/Makefile
++++ b/Makefile
+@@ -254,7 +254,7 @@ export LANG = C
+ export LC_ALL = C
+ export GZIP = -n
+ BR2_VERSION_GIT_EPOCH = $(shell GIT_DIR=$(TOPDIR)/.git $(GIT) log -1 --format=%at)
+-export SOURCE_DATE_EPOCH = $(if $(wildcard $(TOPDIR)/.git),$(BR2_VERSION_GIT_EPOCH),$(BR2_VERSION_EPOCH))
++export SOURCE_DATE_EPOCH ?= $(if $(wildcard $(TOPDIR)/.git),$(BR2_VERSION_GIT_EPOCH),$(BR2_VERSION_EPOCH))
+ DEPENDENCIES_HOST_PREREQ += host-fakedate
+ endif
+ 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.11.0
