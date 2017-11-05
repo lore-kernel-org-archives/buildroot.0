@@ -1,10 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 5 Nov 2017 15:46:06 +0100
-Subject: [Buildroot] [PATCH] python-config.sh: don't reassign ${prefix}
-In-Reply-To: <CANQCQpZz7emu-ZnQyo0v1KQgmo7Md+zfhDBjhvzqj_yQ9Tu6AQ@mail.gmail.com>
-References: <20171018165523.13145-1-matthew.weber@rockwellcollins.com>
- <CANQCQpZz7emu-ZnQyo0v1KQgmo7Md+zfhDBjhvzqj_yQ9Tu6AQ@mail.gmail.com>
-Message-ID: <046ace6d-ebe5-a939-7747-bce18543d08a@mind.be>
+Date: Sun, 5 Nov 2017 15:48:17 +0100
+Subject: [Buildroot] [RFCv1 2/4] core: change host RPATH handling
+In-Reply-To: <20171105154420.52d67acd@windsurf.home>
+References: <20171103160627.6468-1-thomas.petazzoni@free-electrons.com>
+ <20171103160627.6468-3-thomas.petazzoni@free-electrons.com>
+ <20171105085756.GG2996@scaer> <20171105154420.52d67acd@windsurf.home>
+Message-ID: <3bf8725b-d9d8-b2a6-1fb4-fdcca0c96fdc@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,44 +14,55 @@ To: buildroot@busybox.net
 
 
 
-On 25-10-17 15:19, Matthew Weber wrote:
-> All,
+On 05-11-17 15:44, Thomas Petazzoni wrote:
+> Hello,
 > 
-> On Wed, Oct 18, 2017 at 11:55 AM, Matt Weber
-> <matthew.weber@rockwellcollins.com> wrote:
->> When prefix is set to a path like /usr during crossbuild
->> the sed operations end up executing twice, once for the prefix
->> reassignment and another for includedir if it is set as a string
->> including the ${prefix} variable.  This results in an issue
->> when building on a machine that mounts local storage under /usr.
->>
->> This patch updates the remaining location which uses the prefix
->> variable to also sed and update to use the real path.
->>
->> Upstream bug report:
->> https://bugs.python.org/issue31713
->>
->> Buildroot bug:
->> https://bugs.busybox.net/show_bug.cgi?id=10361
->>
->> Fixes failures like the following:
->> python-gobject-2.28.6 | NOK |
->> http://autobuild.buildroot.net/results/ac6cf59125ba57402f926e6c65ffe19e065001b5
->> dbus-python-1.2.4 | NOK |
->> http://autobuild.buildroot.net/results/0d1459155ab6ad2e126e0845ecf6ba2f9381ec8b
->>
-> Ping (no urgency on this one, figured I'd bring it back to the top of
-> the stack.  Would resolve half a dozen autobr failures a day)
+> On Sun, 5 Nov 2017 09:57:56 +0100, Yann E. MORIN wrote:
 > 
->> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+>> In the past, we explicitly got rid of LD_LIBRARY_PATH because it does
+>> not work. See 34d081674a (core/pkg-infrastructures: remove LD_LIBRARY_PATH
+>> from the environment).
+>>
+>> Briefly, it does not work when we build a library that is also present
+>> on the distro, which is used by a tool from the distro, and we build it
+>> in an incompatibl way.
+>>
+>> So, we'll have to come up with another solution, like your suggested
+>> alternative.
+>>
+>>>  - At the end of the build, in order to make sure that binaries are
+>>>    usable without LD_LIBRARY_PATH, we fixup the host binaries to use
+>>>    $ORIGIN/../lib. This is more-or-less what was done previously in
+>>>    the "make sdk" target, except that instead of turning absolute
+>>>    paths into relative paths in the RPATH, we are simply setting the
+>>>    RPATH to $ORIGIN/../lib.
+>>>
+>>>    In order to implement this, the fix-rpath script logic is adjusted
+>>>    for the "host" case.
+>>>
+>>> An alternative strategy would have been to keep the
+>>> -Wl,-rpath,$(HOST_DIR) flag, and therefore the absolute RPATH in the
+>>> host binaries, and fix such RPATH at the end of the build of every
+>>> package. However, that would require calling fix-rpath after the
+>>> installation of every package, which is a bit expensive.  
+>>
+>> I wonder how expensive that would be. It would be nice to time this.
+>>
+>> Also note that, even if the overhead is noticeable, this would be
+>> compensated by the mere fact that we are now doing a parallel build, so
+>> we would end up winning.
+> 
+> Thanks for the feedback. We already discussed this on IRC, and I agree.
+> I'll have a look at implementing the solution of doing the patchelf
+> adding $ORIGIN/../lib as an RPATH directly after the installation of
+> each package.
 
- Applied to master, thanks. I updated the commit log with an autobuilder
-reference that still exists after the crash, and I replaced "on a machine that
-mounts local storage under /usr" into "in a subdirectory of /usr".
+ Note that according to Wolfgang's measurements (if I remember correctly), doing
+fix-rpath on the host dir didn't take too long, but doing it in staging does.
+There aren't that many host files.
 
  Regards,
  Arnout
-
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
