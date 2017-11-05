@@ -1,55 +1,45 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  5 Nov 2017 19:46:44 +0100
-Subject: [Buildroot] [PATCH 0/2] package/freerdp: fix fallout after version
- bump
-Message-ID: <cover.1509907598.git.yann.morin.1998@free.fr>
+Date: Sun,  5 Nov 2017 19:46:48 +0100
+Subject: [Buildroot] [PATCH 1/2] package/freerdp: optional systemd's
+ journald support
+In-Reply-To: <cover.1509907598.git.yann.morin.1998@free.fr>
+References: <cover.1509907598.git.yann.morin.1998@free.fr>
+Message-ID: <71f6fa9a2fb7b720f16c296a0f68096b2d87f4a6.1509907598.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+FreeRDP now has support for writing to the journal, so we must ensure
+proper dependency and correct options.
 
-Add two patches to fix FreeRDP dependencies:
+Partially fixes:
+    http://autobuild.buildroot.org/results/81aa66ddd88919295ccb5f34b527b737627263a7/
 
-  - pkg-config is now used for more than gstreamer-0.x, so make it a
-    mandatory dependency,
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ package/freerdp/freerdp.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-  - FreeRDP can now log to systemd's journald, so add proper dependency
-    and options
-
-
-Regards,
-Yann E. MORIN.
-
-
-The following changes since commit 3253c6fa4573307ec1631f3b34856b1daec9d1e1
-
-  package/mesa3d: remove old patch for uClibc (2017-11-05 17:57:10 +0100)
-
-
-are available in the git repository at:
-
-  git://git.buildroot.org/~ymorin/git/buildroot.git
-
-for you to fetch changes up to f3ea53ecff0ea344fcc64197b75f4ee5be1ac09c
-
-  package/freerdp: always uses pkg-config (2017-11-05 19:45:15 +0100)
-
-
-----------------------------------------------------------------
-Yann E. MORIN (2):
-      package/freerdp: optional systemd's journald support
-      package/freerdp: always uses pkg-config
-
- package/freerdp/freerdp.mk | 12 ++++++++++--
- 1 file changed, 10 insertions(+), 2 deletions(-)
-
+diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
+index 382cd39647..d6320de4c2 100644
+--- a/package/freerdp/freerdp.mk
++++ b/package/freerdp/freerdp.mk
+@@ -56,6 +56,14 @@ else
+ FREERDP_CONF_OPTS += -DWITH_PULSEAUDIO=OFF
+ endif
+ 
++# For the systemd journal
++ifeq ($(BR2_PACAKGE_SYSTEMD),y)
++FREERDP_CONF_OPTS += -DWITH_LIBSYSTEMD=ON
++FREERDP_DEPENDENCIES += systemd
++else
++FREERDP_CONF_OPTS += -DWITH_LIBSYSTEMD=OFF
++endif
++
+ ifeq ($(BR2_ARM_CPU_HAS_NEON),y)
+ FREERDP_CONF_OPTS += -DWITH_NEON=ON
+ else
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.11.0
