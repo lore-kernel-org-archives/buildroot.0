@@ -1,13 +1,13 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 5 Nov 2017 09:55:29 +0100
+Date: Sun, 5 Nov 2017 09:55:44 +0100
 Subject: [Buildroot] [PATCH 1/1] docs: update DEVELOPERS modification
  process
-In-Reply-To: <20171105060749.p5d7vwxbdveg67ck@sapphire.tkos.co.il>
+In-Reply-To: <87y3nl2mt2.fsf@dell.be.48ers.dk>
 References: <20171103211053.20886-1-joseph.kogut@gmail.com>
  <20171104185305.5vkjjg6iwrhctcis@tarshish>
  <20171104231427.3b3f436a@windsurf>
- <20171105060749.p5d7vwxbdveg67ck@sapphire.tkos.co.il>
-Message-ID: <20171105095529.092e08be@windsurf>
+ <87y3nl2mt2.fsf@dell.be.48ers.dk>
+Message-ID: <20171105095544.2b045a56@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,29 +16,24 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 5 Nov 2017 08:07:49 +0200, Baruch Siach wrote:
+On Sun, 05 Nov 2017 08:43:05 +0100, Peter Korsgaard wrote:
 
-> > > Not sure about "or modifying". Mixing a DEVELOPERS update into a random 
-> > > package update does not always make sense. The manual only refers to new 
-> > > packages/boards. I suggest to drop this sentence entirely, and leave the 
-> > > details for the manual.  
-> > 
-> > Joseph is modifying the manual here, so I'm not sure what your last
-> > sentence means.  
+>  > However, I agree that doing the DEVELOPERS change in a patch just
+>  > modifying the package is perhaps not desirable. When adding a new
+>  > package, yes, definitely, the DEVELOPERS entry should be added as part
+>  > of the same patch. However, when a package is being modified, that's a
+>  > different story, and the package change should be in a separate patch
+>  > than the DEVELOPERS addition.  
 > 
-> Ah. For some reason I had the impression that this change is against the 
-> DEVELOPERS file itself. So let me rephrase my suggestion:
+> I'm not sure it really matters much. A package change with a
+> modification of DEVELOPERS would most likely be for a version bump of an
+> unmaintained package where the person bumping wants to take over
+> ownership, or similar.
 > 
->   I suggest to drop this sentence entirely, and leave the details for the 
->   DEVELOPERS manual section.
+> I don't think it is a problem to update DEVELOPERS together with the
+> package in such cases, but keeping it separately is also fine.
 
-No, I think it is good to have this sentence in the "Adding a new
-package" section of the manual. Indeed new contributors are much more
-likely to read this section when contributing a new package than an
-obscure section specific to the DEVELOPERS file at the end of the
-manual.
-
-Best regards,
+Agreed.
 
 Thomas
 -- 
