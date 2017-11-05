@@ -1,37 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 5 Nov 2017 14:25:02 +0100
-Subject: [Buildroot] [PATCH] pkg-autotools: explicitly use /usr/{bin,
- sbin, lib}, with merged usr
-In-Reply-To: <14c66d15-281b-8701-697c-d869581c8706@mind.be>
-References: <20171101033627.26253-1-casantos@datacom.ind.br>
- <14c66d15-281b-8701-697c-d869581c8706@mind.be>
-Message-ID: <20171105142502.0e6ef572@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 05 Nov 2017 14:50:14 +0100
+Subject: [Buildroot] [PATCH v4 1/1] package/libssh2: Add selectable
+ crypto libraries
+In-Reply-To: <20171105133145.GJ2996@scaer> (Yann E. MORIN's message of "Sun, 5
+ Nov 2017 14:31:45 +0100")
+References: <1509553376-43168-1-git-send-email-sam.voss@rockwellcollins.com>
+ <9271f8cc-651b-e302-f82c-9e44a0af24d4@mind.be>
+ <87tvy92lyy.fsf@dell.be.48ers.dk> <20171105081900.GC2996@scaer>
+ <87lgjl2el7.fsf@dell.be.48ers.dk>
+ <6626fb96-a677-2bbe-d801-7352cc4c6428@mind.be>
+ <20171105133145.GJ2996@scaer>
+Message-ID: <8760ao3kdl.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-On Sun, 5 Nov 2017 13:52:29 +0100, Arnout Vandecappelle wrote:
+ >> > Hmm, I could only find Arnouts mail asking to use select, but he didn't
+ >> > write why. Arnout, why not use depends on here?
+ >> 
+ >> I was just applying the default principle that you should use select rather
+ >> than depends unless there is a good reason to use depends. I hadn't thought of
+ >> backward compatibility back then, and I didn't think of using depends now.
+ >> 
+ >> I've already committed, can you fix it up?
 
-> > Fortunalely that error is not fatal but other packages may do similar
-> > things with bad results, so let's avoid possible problems.  
-> 
->  Well, since the default for bindir is <exec_prefix>/bin and exec_prefix is
-> /usr, for most packages this is not going to be an issue. It's only util-linux
-> that overrides it.
-> 
->  Therefore, I don't think this should be done globally, but specifically for
-> util-linux.
+ > I think that using select is better, so we should keep it as-is, even
+ > though that means backward incompatibility.
 
-I would also be more comfortable to do this just for util-linux, as
-it's a bit easier to validate the impact/consequences of such a change
-if it's limited to a single package.
+Really? I do think the new behaviour is less nice than what we
+had. E.G. imagine that you have openssl enabled (which is very likely,
+given the number of packages using it) and you enable some package that
+pulls in libssh2. In the past libssh2 used the openssl backend and all
+was fine, but now you end up with mbedtls as well and libssh2 using it
+instead of the "better" openssl backend.
 
-Thomas
+I don't really think that is progress.
+
+ > After all, a user should review their configuration pon updating
+ > Buildroot.
+
+It is not just existing users, it is also any future libssh2 users.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
