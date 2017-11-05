@@ -1,35 +1,91 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 05 Nov 2017 21:29:47 +0100
-Subject: [Buildroot] [PATCH 1/8] libselinux: bump to 2.7
-In-Reply-To: <2953b871-102e-5fdf-4be5-80d9cbb85be0@mind.be> (Arnout
- Vandecappelle's message of "Tue, 10 Oct 2017 12:20:51 +0200")
-References: <20171009222731.15119-1-Adamduskett@outlook.com>
- <8f8f5547-b7f4-8172-4989-36a5d8767c16@mind.be>
- <20171010103540.44ee4777@windsurf.lan>
- <2953b871-102e-5fdf-4be5-80d9cbb85be0@mind.be>
-Message-ID: <87h8u8zcxw.fsf@dell.be.48ers.dk>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sun, 5 Nov 2017 21:31:22 +0100
+Subject: [Buildroot] [PATCH] gstreamer: needs dynamic libraries
+Message-ID: <20171105203122.23724-1-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+g_cclosure_marshal_VOID__VOID is defined both in libgobject.a and
+libgstreamer.a. It is probably possible to fix this, but gstreamer0.10
+has been deprecated for a long time now and is anyway unlikely to be
+used in static-only situations, so let's just require dynamic linking.
 
-Hi,
+Propagate to the reverse dependencies. opencv3 already did depend on
+dynamic libs.
 
- >  That said, I'm not such a sucker for bisectability anyway. Bisecting is rarely
- > useful in Buildroot, since you usually know pretty well which commits may have
- > broken things (and AFAIK git bisect has no option to specify "only consider
- > patches affecting these subdirs"). And when it's a series anyway, it's pretty
- > unlikely that the bisect gets stuck in the middle of the series.
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/gstreamer/gstreamer/Config.in | 6 ++++--
+ package/libplayer/Config.in           | 6 ++++--
+ package/opencv/Config.in              | 7 +++++--
+ 3 files changed, 13 insertions(+), 6 deletions(-)
 
-Actually it does: git bisect start -- <paths>
-
- >  So possibly the least effort approach is: fine-grained patches, don't comment
- > on their bisectability, and committer may squash if they feel like it.
-
-Agreed.
-
+diff --git a/package/gstreamer/gstreamer/Config.in b/package/gstreamer/gstreamer/Config.in
+index eb1249ac5f..99c90f1a14 100644
+--- a/package/gstreamer/gstreamer/Config.in
++++ b/package/gstreamer/gstreamer/Config.in
+@@ -1,12 +1,14 @@
+-comment "gstreamer 0.10 needs a toolchain w/ wchar, threads"
++comment "gstreamer 0.10 needs a toolchain w/ wchar, threads, dynamic library"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
++		BR2_STATIC_LIBS
+ 
+ config BR2_PACKAGE_GSTREAMER
+ 	bool "gstreamer 0.10"
+ 	depends on BR2_USE_WCHAR # glib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
+ 	depends on BR2_USE_MMU # glib2
++	depends on !BR2_STATIC_LIBS
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	help
+ 	  GStreamer is an open source multimedia framework.
+diff --git a/package/libplayer/Config.in b/package/libplayer/Config.in
+index 0ae558d8df..82083a0eea 100644
+--- a/package/libplayer/Config.in
++++ b/package/libplayer/Config.in
+@@ -20,11 +20,13 @@ config BR2_PACKAGE_LIBPLAYER_GSTREAMER
+ 	depends on BR2_USE_WCHAR # glib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
+ 	depends on BR2_USE_MMU # glib2
++	depends on !BR2_STATIC_LIBS # gstreamer
+ 	select BR2_PACKAGE_GSTREAMER
+ 
+-comment "gstreamer backend needs a toolchain w/ wchar, threads"
++comment "gstreamer backend needs a toolchain w/ wchar, threads, dynamic library"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
++		BR2_STATIC_LIBS
+ endif
+ 
+ comment "libplayer needs a toolchain w/ threads"
+diff --git a/package/opencv/Config.in b/package/opencv/Config.in
+index 742ae3ebba..26109a707d 100644
+--- a/package/opencv/Config.in
++++ b/package/opencv/Config.in
+@@ -208,13 +208,16 @@ config BR2_PACKAGE_OPENCV_WITH_GSTREAMER
+ 	depends on BR2_USE_MMU # gstreamer -> libglib2
+ 	depends on BR2_USE_WCHAR # gstreamer -> libglib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # gstreamer -> libglib2
++	depends on !BR2_STATIC_LIBS # gstreamer
+ 	select BR2_PACKAGE_GSTREAMER
+ 	select BR2_PACKAGE_GST_PLUGINS_BASE
+ 	select BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_APP
+ 
+-comment "gstreamer-0.10 support needs a toolchain w/ wchar, threads"
++comment "gstreamer-0.10 support needs a toolchain w/ wchar, threads, dynamic library"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
++		BR2_STATIC_LIBS
++
+ 
+ config BR2_PACKAGE_OPENCV_WITH_GSTREAMER1
+ 	bool "gstreamer-1.x"
 -- 
-Bye, Peter Korsgaard
+2.15.0
