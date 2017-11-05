@@ -1,30 +1,47 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 05 Nov 2017 09:54:59 +0100
-Subject: [Buildroot] BR2_REPRODUCIBLE issues
-In-Reply-To: <20171105083549.GD2996@scaer> (Yann E. MORIN's message of "Sun, 5
- Nov 2017 09:35:49 +0100")
-References: <1509720041684-0.post@n4.nabble.com> <20171105083549.GD2996@scaer>
-Message-ID: <87po8x2jh8.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 5 Nov 2017 09:55:29 +0100
+Subject: [Buildroot] [PATCH 1/1] docs: update DEVELOPERS modification
+ process
+In-Reply-To: <20171105060749.p5d7vwxbdveg67ck@sapphire.tkos.co.il>
+References: <20171103211053.20886-1-joseph.kogut@gmail.com>
+ <20171104185305.5vkjjg6iwrhctcis@tarshish>
+ <20171104231427.3b3f436a@windsurf>
+ <20171105060749.p5d7vwxbdveg67ck@sapphire.tkos.co.il>
+Message-ID: <20171105095529.092e08be@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+Hello,
 
-Hi,
+On Sun, 5 Nov 2017 08:07:49 +0200, Baruch Siach wrote:
 
- > So, this patch is NAK from me.
+> > > Not sure about "or modifying". Mixing a DEVELOPERS update into a random 
+> > > package update does not always make sense. The manual only refers to new 
+> > > packages/boards. I suggest to drop this sentence entirely, and leave the 
+> > > details for the manual.  
+> > 
+> > Joseph is modifying the manual here, so I'm not sure what your last
+> > sentence means.  
+> 
+> Ah. For some reason I had the impression that this change is against the 
+> DEVELOPERS file itself. So let me rephrase my suggestion:
+> 
+>   I suggest to drop this sentence entirely, and leave the details for the 
+>   DEVELOPERS manual section.
 
-Agreed.
+No, I think it is good to have this sentence in the "Adding a new
+package" section of the manual. Indeed new contributors are much more
+likely to read this section when contributing a new package than an
+obscure section specific to the DEVELOPERS file at the end of the
+manual.
 
- > However, if you really, like realy-really, want to override it to
- > something else, then just export SOURCE_DATE_EPOCH before calling
- > Buildroot.
+Best regards,
 
-We afaik don't support this yet as SOURCE_DATE_EPOCH is unconditionally
-exported, but that could get fixed naturally.
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
