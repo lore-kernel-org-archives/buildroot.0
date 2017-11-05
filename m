@@ -1,12 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 05 Nov 2017 20:07:37 +0100
-Subject: [Buildroot] [PATCH 4/5] package/xr819-xradio: update to the
- latest version
-In-Reply-To: <20171104194049.24550-5-geomatsi@gmail.com> (Sergey Matyukevich's
- message of "Sat, 4 Nov 2017 22:40:48 +0300")
+Date: Sun, 05 Nov 2017 20:08:24 +0100
+Subject: [Buildroot] [PATCH 3/5] orange-pi-zero: bump kernel version
+In-Reply-To: <20171104194049.24550-4-geomatsi@gmail.com> (Sergey Matyukevich's
+ message of "Sat, 4 Nov 2017 22:40:47 +0300")
 References: <20171104194049.24550-1-geomatsi@gmail.com>
- <20171104194049.24550-5-geomatsi@gmail.com>
-Message-ID: <87wp341r46.fsf@dell.be.48ers.dk>
+ <20171104194049.24550-4-geomatsi@gmail.com>
+Message-ID: <87shds1r2v.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,10 +14,10 @@ To: buildroot@busybox.net
 
 >>>>> "Sergey" == Sergey Matyukevich <geomatsi@gmail.com> writes:
 
- > Bump kernel module git revision to make it work with Linux v4.13.
+ > Bump kernel and kernel headers to 4.13.
+ > Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
 
-This should have come before patch 3/5 to not break the build. Committed,
-thanks.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
