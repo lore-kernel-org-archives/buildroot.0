@@ -1,73 +1,74 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 5 Nov 2017 22:10:39 +0100
-Subject: [Buildroot] [PATCH 1/1] Fix build of lttng-libust
-In-Reply-To: <CAB4xu_0eaJgvj1dvixdnOSj8c1eO2cpXmo1m2sHp+FasXkuWYQ@mail.gmail.com>
-References: <20171030163121.939-1-norbert.lange@andritz.com>
- <20171030204054.723cdc99@windsurf>
- <CADYdroP3-gaXzRy61r7FraPq+g6MeB5CUGN_nFLyFy3MxxfVvw@mail.gmail.com>
- <cf2f5ee6-d0e2-fcfa-f2af-5ff722d3388c@mind.be>
- <20171105163141.GL2996@scaer>
- <CAB4xu_0eaJgvj1dvixdnOSj8c1eO2cpXmo1m2sHp+FasXkuWYQ@mail.gmail.com>
-Message-ID: <20171105211039.GA10472@scaer>
+Date: Sun, 5 Nov 2017 22:13:35 +0100
+Subject: [Buildroot] [PATCH 1/2] package/freerdp: optional systemd's
+ journald support
+In-Reply-To: <42fde6ff-e432-184c-a25f-38440eeea207@mind.be>
+References: <cover.1509907598.git.yann.morin.1998@free.fr>
+ <71f6fa9a2fb7b720f16c296a0f68096b2d87f4a6.1509907598.git.yann.morin.1998@free.fr>
+ <42fde6ff-e432-184c-a25f-38440eeea207@mind.be>
+Message-ID: <20171105211335.GB10472@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Philippe, All,
+Arnout, All,
 
-On 2017-11-05 14:55 -0500, Philippe Proulx spake thusly:
-> On Sun, Nov 5, 2017 at 11:31 AM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-[--SNIP--]
-> > But I digress, and I think a better fix would indeed be to teach
-> > configure.ac and Makefile.am to disable building the examples.
-> I'll have a look at what we can do upstream for this.
+On 2017-11-05 20:22 +0100, Arnout Vandecappelle spake thusly:
+> On 05-11-17 19:46, Yann E. MORIN wrote:
+> > FreeRDP now has support for writing to the journal, so we must ensure
+> > proper dependency and correct options.
+> > 
+> > Partially fixes:
+> >     http://autobuild.buildroot.org/results/81aa66ddd88919295ccb5f34b527b737627263a7/
+> > 
+> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> > ---
+> >  package/freerdp/freerdp.mk | 8 ++++++++
+> >  1 file changed, 8 insertions(+)
+> > 
+> > diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
+> > index 382cd39647..d6320de4c2 100644
+> > --- a/package/freerdp/freerdp.mk
+> > +++ b/package/freerdp/freerdp.mk
+> > @@ -56,6 +56,14 @@ else
+> >  FREERDP_CONF_OPTS += -DWITH_PULSEAUDIO=OFF
+> >  endif
+> >  
+> > +# For the systemd journal
+> > +ifeq ($(BR2_PACAKGE_SYSTEMD),y)
+> 
+>  PACAKGE?
 
-Here is a very quick-n-dirty patch against your master, that should do
-the trick (but is totally untested). Feel free to use it as-is if you
-like it.
+Seriously? :-]
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Damned, no wonders it is now working! Muahaha!... Aha... Eh. Meh... :-]
 
-diff --git a/configure.ac b/configure.ac
-index ca1de874..adbd8f90 100644
---- a/configure.ac
-+++ b/configure.ac
-@@ -468,6 +468,19 @@ they will not be installed.
- AM_CONDITIONAL([MAN_PAGES_OPT], [test "x$man_pages_opt" != "xno"])
- AM_CONDITIONAL([HAVE_ASCIIDOC_XMLTO], [test "x$have_asciidoc_xmlto" = "xyes"])
- 
-+# Do we want to build example?
-+AC_ARG_ENABLE(
-+examples,
-+AS_HELP_STRING(
-+[--d				isable-examples],
-+[Do not build examples]
-+),
-+[examples_opt=$enab				leval],
-+[examples_opt=yes]
-+)
-+
-+AM_CONDITIONAL([EXAMPLES_OPT], [test	 "x$examples_opt" != "xno"])
-+
- # Default values
- AC_DEFUN([_AC_DEFINE_AND_SUBST], [
- 	AC_DEFINE_UNQUOTED([CONFIG_$1], [$2], [$1])
-diff --git a/doc/Makefile.am b/doc/Makefile.am
-index e110ed85..82689c5c 100644
---- a/doc/Makefile.am
-+++ b/doc/Makefile.am
-@@ -1,3 +1,7 @@
--SUBDIRS = . man examples
-+if EXAMPLES_OPT
-+EXAMPLES_SUBDIRS = examples
-+endif
-+
-+SUBDIRS = . man $(EXAMPLES_SUBDIRS)
- 
- dist_doc_DATA = java-agent.txt
+Regards,
+Yann E. MORIN.
 
+>  Regards,
+>  Arnout
+> 
+> > +FREERDP_CONF_OPTS += -DWITH_LIBSYSTEMD=ON
+> > +FREERDP_DEPENDENCIES += systemd
+> > +else
+> > +FREERDP_CONF_OPTS += -DWITH_LIBSYSTEMD=OFF
+> > +endif
+> > +
+> >  ifeq ($(BR2_ARM_CPU_HAS_NEON),y)
+> >  FREERDP_CONF_OPTS += -DWITH_NEON=ON
+> >  else
+> > 
+> 
+> -- 
+> Arnout Vandecappelle                          arnout at mind be
+> Senior Embedded Software Architect            +32-16-286500
+> Essensium/Mind                                http://www.mind.be
+> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
