@@ -1,87 +1,56 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 5 Nov 2017 20:42:18 +0100
-Subject: [Buildroot] [git commit] package/libplist: security bump to version
- 2.0.0
-Message-ID: <20171105193630.890107FE84@busybox.osuosl.org>
+Date: Sun, 05 Nov 2017 20:49:24 +0100
+Subject: [Buildroot] [PATCH 1/2] jimtcl: explicitly set --host / --build
+In-Reply-To: <618a9fff-a540-1081-cdc1-ee0b228447ef@mind.be> (Arnout
+ Vandecappelle's message of "Sun, 5 Nov 2017 18:04:08 +0100")
+References: <20171103222838.3974-1-peter@korsgaard.com>
+ <618a9fff-a540-1081-cdc1-ee0b228447ef@mind.be>
+Message-ID: <87375s1p6j.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4c3820248761c279e3c8f9839e5b24c8b39891fd
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-Release notes:
-https://github.com/libimobiledevice/libplist/blob/master/NEWS
+ > On 03-11-17 23:28, Peter Korsgaard wrote:
+ >> Fixes:
+ >> http://autobuild.buildroot.net/results/d13/d137680bf1c0ebfacef635cb2f0fc14524759143/
+ >> 
+ >> Otherwise the (handwritten) configure script uses a config.guess script from
+ >> 2010 to figure out the build host, breaking builds on ppc64le hosts.
+ >> 
+ >> The result of --host / --build is only used to detect if we are building for
+ >> Windows or not, which is why things are working on x86(-64) build hosts
+ >> without specifying --host even though we are cross compiling - But this may
+ >> change in the future, so we better pass the correct values.
+ >> 
+ >> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ >> ---
+ >> package/jimtcl/jimtcl.mk | 2 ++
+ >> 1 file changed, 2 insertions(+)
+ >> 
+ >> diff --git a/package/jimtcl/jimtcl.mk b/package/jimtcl/jimtcl.mk
+ >> index cdbf8ae477..313970d94a 100644
+ >> --- a/package/jimtcl/jimtcl.mk
+ >> +++ b/package/jimtcl/jimtcl.mk
+ >> @@ -42,6 +42,8 @@ define JIMTCL_CONFIGURE_CMDS
+ >> (cd $(@D); \
+ >> $(TARGET_CONFIGURE_OPTS) CCACHE=none \
+ >> ./configure --prefix=/usr \
+ >> +		--host=$(GNU_TARGET_NAME) \
+ >> +		--build=$(GNU_HOST_NAME) \
 
-This version bump fixes
-  * CVE-2017-6440
-  * CVE-2017-6439
-  * CVE-2017-6438
-  * CVE-2017-6437
-  * CVE-2017-6436
-  * CVE-2017-6435
-  * CVE-2017-5836
-  * CVE-2017-5835
-  * CVE-2017-5834
-  * CVE-2017-5545
-  * CVE-2017-5209
-... and several others that didn't receive any CVE (yet).
+ >  For consistency with pkg-autotools, perhaps you should specify --target as well?
 
-The dependency to libxml2 was removed.
-Autoreconf is not needed anymore, the upstream tarball includes a
-configure script.
+--target is only for cross compilers, and the configure script (or
+rather system.tcl) doesn't accept it:
 
-[Peter: also drop host-pkgconf dependency, only used for cython]
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libplist/Config.in     | 1 -
- package/libplist/libplist.hash | 2 +-
- package/libplist/libplist.mk   | 6 +-----
- 3 files changed, 2 insertions(+), 7 deletions(-)
+Error: Unknown option --target
+Try: 'configure --help' for options
 
-diff --git a/package/libplist/Config.in b/package/libplist/Config.in
-index 5f96746..4a9575f 100644
---- a/package/libplist/Config.in
-+++ b/package/libplist/Config.in
-@@ -1,7 +1,6 @@
- config BR2_PACKAGE_LIBPLIST
- 	bool "libplist"
- 	depends on BR2_INSTALL_LIBSTDCPP
--	select BR2_PACKAGE_LIBXML2
- 	help
- 	  libplist is a client for manipulating Apple Property List
- 	  (.plist) files
-diff --git a/package/libplist/libplist.hash b/package/libplist/libplist.hash
-index 06d1b16..63c2515 100644
---- a/package/libplist/libplist.hash
-+++ b/package/libplist/libplist.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 0effdedcb3de128c4930d8c03a3854c74c426c16728b8ab5f0a5b6bdc0b644be  libplist-1.12.tar.bz2
-+sha256 3a7e9694c2d9a85174ba1fa92417cfabaea7f6d19631e544948dc7e17e82f602  libplist-2.0.0.tar.bz2
-diff --git a/package/libplist/libplist.mk b/package/libplist/libplist.mk
-index 0d3e417..09fc816 100644
---- a/package/libplist/libplist.mk
-+++ b/package/libplist/libplist.mk
-@@ -4,17 +4,13 @@
- #
- ################################################################################
- 
--LIBPLIST_VERSION = 1.12
-+LIBPLIST_VERSION = 2.0.0
- LIBPLIST_SOURCE = libplist-$(LIBPLIST_VERSION).tar.bz2
- LIBPLIST_SITE = http://www.libimobiledevice.org/downloads
--LIBPLIST_DEPENDENCIES = libxml2 host-pkgconf
- LIBPLIST_INSTALL_STAGING = YES
- LIBPLIST_LICENSE = LGPL-2.1+
- LIBPLIST_LICENSE_FILES = COPYING
- 
--# Straight out of the git tree:
--LIBPLIST_AUTORECONF = YES
--
- # Disable building Python bindings, because it requires host-cython, which
- # is not packaged in Buildroot at all.
- LIBPLIST_CONF_OPTS = --without-cython
+So committed as is, thanks.
+
+-- 
+Bye, Peter Korsgaard
