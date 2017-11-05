@@ -1,43 +1,61 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 5 Nov 2017 22:22:20 +0100
-Subject: [Buildroot] [PATCH 2/2] package/freerdp: always uses pkg-config
-In-Reply-To: <CAHXCMMJuTNZJhqOBdjAP3zfAQ2heOXoq+qscLXwKFy8GE8oYmw@mail.gmail.com>
-References: <cover.1509907598.git.yann.morin.1998@free.fr>
- <f3ea53ecff0ea344fcc64197b75f4ee5be1ac09c.1509907598.git.yann.morin.1998@free.fr>
- <CAHXCMMJuTNZJhqOBdjAP3zfAQ2heOXoq+qscLXwKFy8GE8oYmw@mail.gmail.com>
-Message-ID: <20171105212220.GD10472@scaer>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun,  5 Nov 2017 22:34:02 +0100
+Subject: [Buildroot] [PATCH] libssh2: revert to previous crypto defaults
+Message-ID: <20171105213402.26615-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2017-11-05 22:17 +0100, Samuel Martin spake thusly:
-> On Sun, Nov 5, 2017 at 7:46 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> > Currently, we only deopend on host-pkgconf for gstreamer-0.x
-> >
-> > However, we also need it at least for gstreamer-1.x and waylabnd, too.
-> >
-> > Make it a mandatory dependency, no matter what.
-> 
-> Since freerdp uses the cmake infrastructure, it already has
-> host-pkgconf among its dependencies (c.f. [1])
+The recent crypto handling change (commit 04a1031d3: package/libssh2: Add
+selectable crypto libraries) had the unfortunate side effect that it no
+longer automatically selects the most suitable crypto backend (E.G.  one
+where the dependency is already enabled), so all users not wanting to use
+the mbedtls backend need to explicitly configure this.
 
-OK, god to know, indeed...
+Fix this by inverting the logic so the crypto backend sub options use
+'depends on' their dependencies instead of 'select', so only the available
+backends are displayed.
 
-Then, that does not explain the errors we're seeing... Damned... :-(
+Like before, default to openssl if no crypto backend dependencies are
+currently enabled.
 
-I'll update the patch to just drop the depenency altogether, then.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libssh2/Config.in | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-Thanks!
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/libssh2/Config.in b/package/libssh2/Config.in
+index f2d32a90ae..90c38813b3 100644
+--- a/package/libssh2/Config.in
++++ b/package/libssh2/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_LIBSSH2
+ 	bool "libssh2"
++	select BR2_PACKAGE_OPENSSL if !(BR2_PACKAGE_MBEDTLS || BR2_PACKAGE_LIBGCRYPT)
+ 	help
+ 	  libssh2 is a client-side C library implementing the SSH2
+ 	  protocol as defined by Internet Drafts: SECSH-TRANS(22),
+@@ -17,16 +18,15 @@ choice
+ 
+ config BR2_PACKAGE_LIBSSH2_MBEDTLS
+ 	bool "mbedtls"
+-	select BR2_PACKAGE_MBEDTLS
++	depends on BR2_PACKAGE_MBEDTLS
+ 
+ config BR2_PACKAGE_LIBSSH2_LIBGCRYPT
+ 	bool "gcrypt"
+-	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgcrypt -> libgpg-error
+-	select BR2_PACKAGE_LIBGCRYPT
++	depends on BR2_PACKAGE_LIBGCRYPT
+ 
+ config BR2_PACKAGE_LIBSSH2_OPENSSL
+ 	bool "openssl"
+-	select BR2_PACKAGE_OPENSSL
++	depends on BR2_PACKAGE_OPENSSL
+ 
+ endchoice
+ endif
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.11.0
