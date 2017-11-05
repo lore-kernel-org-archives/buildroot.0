@@ -1,63 +1,83 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 5 Nov 2017 09:16:04 +0100
-Subject: [Buildroot] [PATCH 1/2] dhcpcd: add SysV start-up script
-In-Reply-To: <20171104232246.444c7ca3@windsurf>
-References: <20171031223659.6831-1-code@mmayer.net>
- <20171031223659.6831-2-code@mmayer.net>
- <20171102230602.3c61e8d2@windsurf> <20171102221847.GA23314@scaer>
- <20171102232345.5a434af8@windsurf>
- <3f7fff7b-be5a-42ff-985f-0e860c98acb3@mind.be>
- <20171104230331.7ee309cb@windsurf>
- <7c1fde5e-099e-7a22-4b13-4ac9e81f3d87@mind.be>
- <20171104232246.444c7ca3@windsurf>
-Message-ID: <20171105081604.GB2996@scaer>
+Date: Sun, 5 Nov 2017 09:19:00 +0100
+Subject: [Buildroot] [PATCH v4 1/1] package/libssh2: Add selectable
+ crypto libraries
+In-Reply-To: <87tvy92lyy.fsf@dell.be.48ers.dk>
+References: <1509553376-43168-1-git-send-email-sam.voss@rockwellcollins.com>
+ <9271f8cc-651b-e302-f82c-9e44a0af24d4@mind.be>
+ <87tvy92lyy.fsf@dell.be.48ers.dk>
+Message-ID: <20171105081900.GC2996@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, Arnout,  All,
+Peter, All,
 
-On 2017-11-04 23:22 +0100, Thomas Petazzoni spake thusly:
-> On Sat, 4 Nov 2017 23:07:01 +0100, Arnout Vandecappelle wrote:
-> >  Exactly. "Failure" anyway just means an error message on the console, not that
-> > the system fails to boot.
+On 2017-11-05 09:01 +0100, Peter Korsgaard spake thusly:
+> >>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+>  > On 01-11-17 17:22, Sam Voss wrote:
+[--SNIP--]
+> >> +++ b/package/libssh2/Config.in
+>  >> @@ -1,6 +1,5 @@
+>  >> config BR2_PACKAGE_LIBSSH2
+>  >> bool "libssh2"
+>  >> -	select BR2_PACKAGE_OPENSSL if !(BR2_PACKAGE_MBEDTLS || BR2_PACKAGE_LIBGCRYPT)
+>  >> help
+>  >> libssh2 is a client-side C library implementing the SSH2
+>  >> protocol as defined by Internet Drafts: SECSH-TRANS(22),
+>  >> @@ -8,3 +7,26 @@ config BR2_PACKAGE_LIBSSH2
+>  >> SECSH-FILEXFER(06)*, SECSH-DHGEX(04), and SECSH-NUMBERS(10)
+>  >> 
+>  >> http://www.libssh2.org/
+>  >> +
+>  >> +if BR2_PACKAGE_LIBSSH2
+>  >> +
+>  >> +choice
+>  >> +	prompt "Crypto Backend"
+>  >> +	help
+>  >> +	  Select crypto library to be used in libssh2.
+>  >> +
+>  >> +config BR2_PACKAGE_LIBSSH2_MBEDTLS
+>  >> +	bool "mbedtls"
+>  >> +	select BR2_PACKAGE_MBEDTLS
 > 
-> Sure, but some scripts currently just "exit 0" with no error message
-> whatsoever when the configuration file is missing.
+>  >  Note that this changes the defaults we had previously. If openssl was already
+>  > selected and you select libssh2, then openssl would be used as a backend. Now,
+>  > the default is mbedtls, so if you don't take any action, it will be mbedtls.
 > 
-> So, let's summarize our policy:
+>  >  This does affect people updating Buildroot, so it needs to be mentioned in CHANGES.
 > 
->  * Never check if the daemon executable is present, because that's
->    silly, Buildroot guarantees it's there.
+> Why don't we just keep the old logic instead? E.G. leave the select
+> openssl if !(mbedtls || libgcrypt) and then change the selects to
+> depends on in the choice:
 > 
->  * If the daemon needs a configuration file, always check if it exists,
->    and if not, bail out with an error message.
+> choice
 > 
-> But... wait, if Buildroot guarantees that it installs a configuration
-> file for this daemon, having the init script check its presence is
-> pretty much as silly as checking the presence of the daemon executable
-> itself.
+> config BR2_PACKAGE_LIBSSH2_MBEDTLS
+>        bool "mbedtls"
+>        depends on BR2_PACKAGE_MBEDTLS
 > 
-> So?
+> ...
+> 
+> Doesn't that give us the best of both worlds? Same behaviour as before
+> by default and still the option to explicitly chose when multiple
+> backends are available?
 
-  * Never check if the daemon executable is present, because that's
-    silly: Buildroot guarantees it's there;
-
-  * Never check for the daemon configuration file, because that's silly:
-    Buildroot guarantees it's there;
-
-  * Check if there is a startup-script override configuration file in
-    /etc/default/<foo>, and source it if present.
-
-The /etc/default/<foo> config file is here to override the options pased
-to the daemoin, for example to add more options, or to entorely replace
-them. Its format is daemon-dependent (we don't want to enforce one, at
-least).
+That's what Sam did in the initial iterations of his patchset, but
+Arnout and Thomas (IIRC) both requested he replaces that with a select
+instead.
 
 Regards,
 Yann E. MORIN.
+
+> -- 
+> Bye, Peter Korsgaard
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
