@@ -1,29 +1,28 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 5 Nov 2017 17:45:05 +0100
-Subject: [Buildroot] [git commit] package/clapack: add license hash
-Message-ID: <20171105163751.5AF52811C4@busybox.osuosl.org>
+Date: Sun, 5 Nov 2017 17:45:07 +0100
+Subject: [Buildroot] [git commit] package/nginx: add license hash
+Message-ID: <20171105163752.CFA0F811E8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cd5642211691c22127f88039c22110e93b318499
+commit: https://git.buildroot.net/buildroot/commit/?id=a301b72620146bab2868ada0a0873777ff733261
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/clapack/clapack.hash | 3 +++
- 1 file changed, 3 insertions(+)
+ package/nginx/nginx.hash | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/clapack/clapack.hash b/package/clapack/clapack.hash
-index 08657fc..ad586fa 100644
---- a/package/clapack/clapack.hash
-+++ b/package/clapack/clapack.hash
-@@ -1,2 +1,5 @@
- # Locally calculated
- sha256 0b3f782bc24845d85f36bafbff0f2f1384dc72df730fda4e7924ec1a70baca5a clapack-3.2.1-CMAKE.tgz
+diff --git a/package/nginx/nginx.hash b/package/nginx/nginx.hash
+index 22e4007..6eef1db 100644
+--- a/package/nginx/nginx.hash
++++ b/package/nginx/nginx.hash
+@@ -1,2 +1,4 @@
+ # Locally calculated after checking pgp signature
+ sha256	8793bf426485a30f91021b6b945a9fd8a84d87d17b566562c3797aba8fac76fb	nginx-1.12.1.tar.gz
 +# License files, locally calculated
-+sha256 23014869214a231525b38c39fdb5f82364fa24154ac80fdcab2a79671460fd09 COPYING
-+sha256 44561c447e91203ddc747beeca5cc2794d95ee982c17c578670e4f0408bc3904 F2CLIBS/libf2c/Notice
++sha256	75820469c890db641e54078df018e497fde0542211aa704e15320316a2175780	LICENSE
