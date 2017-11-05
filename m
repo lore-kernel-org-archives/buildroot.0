@@ -1,76 +1,63 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 5 Nov 2017 09:10:28 +0100
+Date: Sun, 5 Nov 2017 09:16:04 +0100
 Subject: [Buildroot] [PATCH 1/2] dhcpcd: add SysV start-up script
-In-Reply-To: <3f7fff7b-be5a-42ff-985f-0e860c98acb3@mind.be>
+In-Reply-To: <20171104232246.444c7ca3@windsurf>
 References: <20171031223659.6831-1-code@mmayer.net>
  <20171031223659.6831-2-code@mmayer.net>
  <20171102230602.3c61e8d2@windsurf> <20171102221847.GA23314@scaer>
  <20171102232345.5a434af8@windsurf>
  <3f7fff7b-be5a-42ff-985f-0e860c98acb3@mind.be>
-Message-ID: <20171105081028.GA2996@scaer>
+ <20171104230331.7ee309cb@windsurf>
+ <7c1fde5e-099e-7a22-4b13-4ac9e81f3d87@mind.be>
+ <20171104232246.444c7ca3@windsurf>
+Message-ID: <20171105081604.GB2996@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
+Thomas, Arnout,  All,
 
-On 2017-11-04 20:56 +0100, Arnout Vandecappelle spake thusly:
-> On 02-11-17 23:23, Thomas Petazzoni wrote:
-> > Hello,
-> > 
-> > On Thu, 2 Nov 2017 23:18:47 +0100, Yann E. MORIN wrote:
-> > 
-> >>>  - Same for the configuration file: I prefer a loud error than an init
-> >>>    script that ignores the problem.  
-> >>
-> >> Agreed, too.
-> >>
-> >> However:
-> >>
-> >>   - if the config file is mandatory, then this should be a failure.
-> >>
-> >>   - if the config file is optional, then it missing should be silently
-> >>     ignored and the service started nonetheless.
-> > 
-> > So you want explicitly handling for the "missing configuration file"
-> > situation in the init script?
-> > 
-> > I wanted to avoid explicit handling, and just let the daemon whine (or
-> > not) if its config file is missing.
+On 2017-11-04 23:22 +0100, Thomas Petazzoni spake thusly:
+> On Sat, 4 Nov 2017 23:07:01 +0100, Arnout Vandecappelle wrote:
+> >  Exactly. "Failure" anyway just means an error message on the console, not that
+> > the system fails to boot.
 > 
->  I vaguely remember a recently added package where the daemon would silently
-> fail to start if the config file is missing, and which doesn't even have a
-> default config file. So I think checking for existence of the config file in the
-> init script (if the config file is mandatory) makes sense.
+> Sure, but some scripts currently just "exit 0" with no error message
+> whatsoever when the configuration file is missing.
+> 
+> So, let's summarize our policy:
+> 
+>  * Never check if the daemon executable is present, because that's
+>    silly, Buildroot guarantees it's there.
+> 
+>  * If the daemon needs a configuration file, always check if it exists,
+>    and if not, bail out with an error message.
+> 
+> But... wait, if Buildroot guarantees that it installs a configuration
+> file for this daemon, having the init script check its presence is
+> pretty much as silly as checking the presence of the daemon executable
+> itself.
+> 
+> So?
 
-Then it is the responsibility of the package.mk to install one if it is
-mandatory. Otherwise,that means the packaging is incomplete because it
-does not allow the package to work as expected.
+  * Never check if the daemon executable is present, because that's
+    silly: Buildroot guarantees it's there;
 
-And in that case, I side with Thomas' initial suggestion: we should not
-check from the init scripts, because we expect the .mk files to be
-correct.
+  * Never check for the daemon configuration file, because that's silly:
+    Buildroot guarantees it's there;
+
+  * Check if there is a startup-script override configuration file in
+    /etc/default/<foo>, and source it if present.
+
+The /etc/default/<foo> config file is here to override the options pased
+to the daemoin, for example to add more options, or to entorely replace
+them. Its format is daemon-dependent (we don't want to enforce one, at
+least).
 
 Regards,
 Yann E. MORIN.
-
-> 
->  Regards,
->  Arnout
-> 
-> -- 
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
