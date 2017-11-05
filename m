@@ -1,151 +1,88 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Sun,  5 Nov 2017 13:09:44 -0500
-Subject: [Buildroot] [PATCH v2 1/1] refpolicy: bump to 2.20170805
-Message-ID: <20171105180944.6773-1-Adamduskett@outlook.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sun,  5 Nov 2017 20:24:17 +0200
+Subject: [Buildroot] [PATCH] dbus: bump to version 1.12.0
+Message-ID: <8ad470089db5ea9391181af416f64952559b76be.1509906257.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In addition to a simple bump, the following extra changes have occured:
-  - Change the refpolicy site to the official release URL.
-  - Remove REFPOLICY_SITE_METHOD.
-  - Remove REFPOLICY_GIT_SUBMODULES.
-  - Refpolicy is now compatible with python3, as such, remove host-python.
-    from the dependencies and add a check for python3 or python in it's place.
-  - Add upstreamed 0001-fix-regex-escape-sequence-error.patch to fix building
-    against python3.6.
-  - Add sha256 license hash to hash file.
+Remove --enable-abstract-sockets; dropped upstream. Remove
+ac_cv_have_abstract_sockets that is dropped as well.
 
-Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
+Remove --disable-selinux; we handle selinux as an optional dependency
+below.
+
+Remove --{enable,disable}-dnotify; this options has been removed in
+version 1.7.6, broken since 2010.
+
+Remove --with-init-scripts; dropped upstream.
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
-Changes v1 -> v2:
-  - removed REFPOLICY_PYTHON variable from refpolicy.mk (Thomas)
+ package/dbus/dbus.hash |  4 ++--
+ package/dbus/dbus.mk   | 11 ++---------
+ 2 files changed, 4 insertions(+), 11 deletions(-)
 
- .../0001-fix-regex-escape-sequence-error.patch     | 59 ++++++++++++++++++++++
- package/refpolicy/refpolicy.hash                   |  7 ++-
- package/refpolicy/refpolicy.mk                     | 18 ++++---
- 3 files changed, 74 insertions(+), 10 deletions(-)
- create mode 100644 package/refpolicy/0001-fix-regex-escape-sequence-error.patch
-
-diff --git a/package/refpolicy/0001-fix-regex-escape-sequence-error.patch b/package/refpolicy/0001-fix-regex-escape-sequence-error.patch
-new file mode 100644
-index 0000000000..1aa01892d0
---- /dev/null
-+++ b/package/refpolicy/0001-fix-regex-escape-sequence-error.patch
-@@ -0,0 +1,59 @@
-+From 6c9cc47e6cc9c6e67b1b822f7a1a2e1f6d836118 Mon Sep 17 00:00:00 2001
-+From: Adam Duskett <Adamduskett@outlook.com>
-+Date: Tue, 10 Oct 2017 18:00:30 -0400
-+Subject: [PATCH] fix regex escape sequence error.
-+
-+python3.6 will error out with the message "invalid escape sequence"
-+in genhomedircon.py.  This patch fixes these errors by turning the string
-+in the into a raw string.
-+
-+Upstream status: accepted
-+
-+Signed-off-by: Adam Duskett <aduskett@gmail.com>
-+---
-+ support/genhomedircon.py | 16 ++++++++--------
-+ 1 file changed, 8 insertions(+), 8 deletions(-)
-+
-+diff --git a/support/genhomedircon.py b/support/genhomedircon.py
-+index 036f5cc9..6662f412 100644
-+--- a/support/genhomedircon.py
-++++ b/support/genhomedircon.py
-+@@ -189,13 +189,13 @@ def oldgenhomedircon(filecontextdir, filecontext):
-+                 addme = 1
-+                 for regex in prefix_regex:
-+                         #match a trailing (/*)? which is actually a bug in rpc_pipefs
-+-                        regex = re.sub("\(/\*\)\?$", "", regex)
-++                        regex = re.sub(r"\(/\*\)\?$", "", regex)
-+                         #match a trailing .+
-+-                        regex = re.sub("\.+$", "", regex)
-++                        regex = re.sub(r"\.+$", "", regex)
-+                         #match a trailing .*
-+-                        regex = re.sub("\.\*$", "", regex)
-++                        regex = re.sub(r"\.\*$", "", regex)
-+                         #strip a (/.*)? which matches anything trailing to a /*$ which matches trailing /'s
-+-                        regex = re.sub("\(\/\.\*\)\?", "", regex)
-++                        regex = re.sub(r"\(\/\.\*\)\?", "", regex)
-+                         regex = regex + "/*$"
-+                         if re.search(regex, potential, 0):
-+                                 addme = 0
-+@@ -391,13 +391,13 @@ class selinuxConfig:
-+ 		exists=1
-+ 		for regex in prefix_regex:
-+ 			#match a trailing (/*)? which is actually a bug in rpc_pipefs
-+-			regex = re.sub("\(/\*\)\?$", "", regex)
-++			regex = re.sub(r"\(/\*\)\?$", "", regex)
-+ 			#match a trailing .+
-+-			regex = re.sub("\.+$", "", regex)
-++			regex = re.sub(r"\.+$", "", regex)
-+ 			#match a trailing .*
-+-			regex = re.sub("\.\*$", "", regex)
-++			regex = re.sub(r"\.\*$", "", regex)
-+ 			#strip a (/.*)? which matches anything trailing to a /*$ which matches trailing /'s
-+-			regex = re.sub("\(\/\.\*\)\?", "", regex)
-++			regex = re.sub(r"\(\/\.\*\)\?", "", regex)
-+ 			regex = regex + "/*$"
-+ 			if re.search(regex, home, 0):
-+ 				exists = 0
-+-- 
-+2.13.6
-+
-diff --git a/package/refpolicy/refpolicy.hash b/package/refpolicy/refpolicy.hash
-index 7aeac4113d..905ac88542 100644
---- a/package/refpolicy/refpolicy.hash
-+++ b/package/refpolicy/refpolicy.hash
-@@ -1,2 +1,5 @@
--#From https://github.com/TresysTechnology/refpolicy/wiki/DownloadRelease
--sha256 08f9e2afc5e4939c23e56deeec7c47da029d7b85d82fb4ded01a36eb5da0651e  refpolicy-RELEASE_2_20170204.tar.gz
-+# From https://github.com/TresysTechnology/refpolicy/wiki/DownloadRelease
-+sha256 045709f5e44199f402149b31c6aab9666bdb1540a5c5ed0312a46c90dedfa52d  refpolicy-2.20170805.tar.bz2
-+
-+# Locally computed
-+sha256 204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994 COPYING
-diff --git a/package/refpolicy/refpolicy.mk b/package/refpolicy/refpolicy.mk
-index 2da151f321..64b31d8cdf 100644
---- a/package/refpolicy/refpolicy.mk
-+++ b/package/refpolicy/refpolicy.mk
-@@ -4,12 +4,9 @@
+diff --git a/package/dbus/dbus.hash b/package/dbus/dbus.hash
+index b174391c1303..df1891b6d8b4 100644
+--- a/package/dbus/dbus.hash
++++ b/package/dbus/dbus.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-# https://dbus.freedesktop.org/releases/dbus/dbus-1.10.24.tar.gz.asc
+-sha256	71184eb27638e224579ffa998e88f01d0f1fef17a7811406e53350735eaecd1b  dbus-1.10.24.tar.gz
++# https://dbus.freedesktop.org/releases/dbus/dbus-1.12.0.tar.gz.asc
++sha256	39af0d9267391434b549c5c4adc001b735518c96f7630c3fe7162af1d13ef3c0  dbus-1.12.0.tar.gz
+ # Locally calculated
+ sha256	0e46f54efb12d04ab5c33713bacd0e140c9a35b57ae29e03c853203266e8f3a1  COPYING
+diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
+index 6fa04962baf7..56a54e309c8c 100644
+--- a/package/dbus/dbus.mk
++++ b/package/dbus/dbus.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--REFPOLICY_VERSION = RELEASE_2_20170204
--
--# Do not use GitHub helper as git submodules are needed for refpolicy-contrib
--REFPOLICY_SITE = https://github.com/TresysTechnology/refpolicy.git
--REFPOLICY_SITE_METHOD = git
--REFPOLICY_GIT_SUBMODULES = y # Required for refpolicy-contrib
-+REFPOLICY_VERSION = 2.20170805
-+REFPOLICY_SOURCE = refpolicy-$(REFPOLICY_VERSION).tar.bz2
-+REFPOLICY_SITE = https://raw.githubusercontent.com/wiki/TresysTechnology/refpolicy/files
- REFPOLICY_LICENSE = GPL-2.0
- REFPOLICY_LICENSE_FILES = COPYING
- REFPOLICY_INSTALL_STAGING = YES
-@@ -19,13 +16,18 @@ REFPOLICY_DEPENDENCIES = \
- 	host-policycoreutils \
- 	host-setools \
- 	host-gawk \
--	host-python \
- 	policycoreutils
+-DBUS_VERSION = 1.10.24
++DBUS_VERSION = 1.12.0
+ DBUS_SITE = https://dbus.freedesktop.org/releases/dbus
+ DBUS_LICENSE = AFL-2.1 or GPL-2.0+ (library, tools), GPL-2.0+ (tools)
+ DBUS_LICENSE_FILES = COPYING
+@@ -20,20 +20,15 @@ endef
  
-+ifeq ($(BR2_PACKAGE_PYTHON3),y)
-+REFPOLICY_DEPENDENCIES += host-python3
-+else
-+REFPOLICY_DEPENDENCIES += host-python
-+endif
-+
- # Cannot use multiple threads to build the reference policy
- REFPOLICY_MAKE = \
- 	TEST_TOOLCHAIN=$(HOST_DIR) \
--	PYTHON="$(HOST_DIR)/bin/python2" \
-+	PYHON=$(HOST_DIR)/bin/python \
- 	$(TARGET_MAKE_ENV) \
- 	$(MAKE1)
+ DBUS_DEPENDENCIES = host-pkgconf expat
+ 
+-DBUS_CONF_ENV = ac_cv_have_abstract_sockets=yes
+ DBUS_CONF_OPTS = \
+ 	--with-dbus-user=dbus \
+ 	--disable-tests \
+ 	--disable-asserts \
+-	--enable-abstract-sockets \
+-	--disable-selinux \
+ 	--disable-xml-docs \
+ 	--disable-doxygen-docs \
+-	--disable-dnotify \
+ 	--with-xml=expat \
+ 	--with-system-socket=/var/run/dbus/system_bus_socket \
+-	--with-system-pid-file=/var/run/messagebus.pid \
+-	--with-init-scripts=none
++	--with-system-pid-file=/var/run/messagebus.pid
+ 
+ ifeq ($(BR2_STATIC_LIBS),y)
+ DBUS_CONF_OPTS += LIBS='-pthread'
+@@ -109,11 +104,9 @@ HOST_DBUS_CONF_OPTS = \
+ 	--with-dbus-user=dbus \
+ 	--disable-tests \
+ 	--disable-asserts \
+-	--enable-abstract-sockets \
+ 	--disable-selinux \
+ 	--disable-xml-docs \
+ 	--disable-doxygen-docs \
+-	--enable-dnotify \
+ 	--without-x \
+ 	--with-xml=expat
  
 -- 
-2.13.6
+2.14.2
