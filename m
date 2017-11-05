@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 5 Nov 2017 15:59:14 +0100
-Subject: [Buildroot] [PATCH v1] qt5base: add 3rdparty/harfbuzz-ng
- license file hash
-In-Reply-To: <20171023174458.15127-1-ps.report@gmx.net>
-References: <20171023174458.15127-1-ps.report@gmx.net>
-Message-ID: <0af4065c-c126-fab5-82cc-b95d07114267@mind.be>
+Date: Sun, 5 Nov 2017 16:00:31 +0100
+Subject: [Buildroot] [PATCH 1/1] .gitlab-ci.yml: use gitlab 9.0 varaible
+ names
+In-Reply-To: <20171023142614.11522-1-thomas.preston@codethink.co.uk>
+References: <20171023142614.11522-1-thomas.preston@codethink.co.uk>
+Message-ID: <23b2b26d-93fe-9bbc-9f71-111cf762926f@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,30 +13,67 @@ To: buildroot@busybox.net
 
 
 
-On 23-10-17 19:44, Peter Seiderer wrote:
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+On 23-10-17 16:26, Thomas Preston wrote:
+> Gitlab 9.0 prefers "job" instead of "build" for CI variables names.
+> http://docs.gitlab.com/ce/ci/variables/README.html#9-0-renaming
+> 
+> Signed-off-by: Thomas Preston <thomas.preston@codethink.co.uk>
 
- Applied to master, thanks.
-
- You're building qt5 on sparc or m68k then? Those are the only platforms where
-the internal harfbuzz (and thus this license file) will be used...
+ Applied to master, thanks. Good catch! Did you see a warning somewhere or did
+it come naturally after looking at the file?
 
  Regards,
  Arnout
 
 > ---
->  package/qt5/qt5base/qt5base.hash | 1 +
->  1 file changed, 1 insertion(+)
+>  .gitlab-ci.yml    | 4 ++--
+>  .gitlab-ci.yml.in | 4 ++--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 > 
-> diff --git a/package/qt5/qt5base/qt5base.hash b/package/qt5/qt5base/qt5base.hash
-> index 2a073d4753..4883484d5b 100644
-> --- a/package/qt5/qt5base/qt5base.hash
-> +++ b/package/qt5/qt5base/qt5base.hash
-> @@ -11,3 +11,4 @@ sha256 0dbe024961f6ab5c52689cbd036c977975d0d0f6a67ff97762d96cb819dd5652 LICENSE.
->  sha256 68afaf3392f8c04218fbf29db43cc0b18bf651c1db086556aa584046de9f3e35 LICENSE.LGPLv3
->  sha256 ed8742a95cb9db653a09b050e27ccff5e67ba69c14aa2c3137f2a4e1892f6c0d LICENSE.FDL
->  sha256 8fdefa0b45d9f791f687da6c2c4c83c1b701aaee2c08008f55d522af214b88f0 header.BSD
-> +sha256 2a886915de4f296cdae5ed67064f86dba01d0c55286d86e8487f2a5caaf40216 src/3rdparty/harfbuzz-ng/COPYING
+> diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+> index ebaac7a3d9..0dddb22f12 100644
+> --- a/.gitlab-ci.yml
+> +++ b/.gitlab-ci.yml
+> @@ -8,7 +8,7 @@ image: buildroot/base
+>  
+>  .defconfig_script: &defconfig_script
+>      - echo 'Configure Buildroot'
+> -    - make ${CI_BUILD_NAME}
+> +    - make ${CI_JOB_NAME}
+>      - echo 'Build buildroot'
+>      - |
+>          make > >(tee build.log |grep '>>>') 2>&1 || {
+> @@ -51,7 +51,7 @@ check-DEVELOPERS:
+>      # runner will clean up those files for us.
+>      # Multiply every emulator timeout by 10 to avoid sporadic failures in
+>      # elastic runners.
+> -    script: ./support/testing/run-tests -o test-output/ -d test-dl/ -k --timeout-multiplier 10 ${CI_BUILD_NAME}
+> +    script: ./support/testing/run-tests -o test-output/ -d test-dl/ -k --timeout-multiplier 10 ${CI_JOB_NAME}
+>      artifacts:
+>          when: always
+>          expire_in: 2 weeks
+> diff --git a/.gitlab-ci.yml.in b/.gitlab-ci.yml.in
+> index 3abf7d5313..33c7b13725 100644
+> --- a/.gitlab-ci.yml.in
+> +++ b/.gitlab-ci.yml.in
+> @@ -8,7 +8,7 @@ image: buildroot/base
+>  
+>  .defconfig_script: &defconfig_script
+>      - echo 'Configure Buildroot'
+> -    - make ${CI_BUILD_NAME}
+> +    - make ${CI_JOB_NAME}
+>      - echo 'Build buildroot'
+>      - |
+>          make > >(tee build.log |grep '>>>') 2>&1 || {
+> @@ -51,7 +51,7 @@ check-DEVELOPERS:
+>      # runner will clean up those files for us.
+>      # Multiply every emulator timeout by 10 to avoid sporadic failures in
+>      # elastic runners.
+> -    script: ./support/testing/run-tests -o test-output/ -d test-dl/ -k --timeout-multiplier 10 ${CI_BUILD_NAME}
+> +    script: ./support/testing/run-tests -o test-output/ -d test-dl/ -k --timeout-multiplier 10 ${CI_JOB_NAME}
+>      artifacts:
+>          when: always
+>          expire_in: 2 weeks
 > 
 
 -- 
