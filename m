@@ -1,43 +1,102 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 4 Nov 2017 23:38:03 +0100
-Subject: [Buildroot] [git commit] ethtool: Bump to version 4.13
-Message-ID: <20171104223155.B003281137@busybox.osuosl.org>
+From: =?windows-1252?Q?Stefan_Fr=F6berg?= <stefan.froberg@petroprogram.com>
+Date: Sun, 05 Nov 2017 02:00:57 +0200
+Subject: [Buildroot] [PATCH 1/1] zlib-ng: new package
+In-Reply-To: <20171104212316.GA4491@gmail.com>
+References: <1509690851-23677-1-git-send-email-stefan.froberg@petroprogram.com>
+ <20171104212316.GA4491@gmail.com>
+Message-ID: <59FE54B9.8080400@petroprogram.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=89d525186161d4651366379ac21e80eead6a754e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Marcus
 
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/ethtool/ethtool.hash | 2 +-
- package/ethtool/ethtool.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Okay, will do another patch soon.
 
-diff --git a/package/ethtool/ethtool.hash b/package/ethtool/ethtool.hash
-index 77fb600..39e10ff 100644
---- a/package/ethtool/ethtool.hash
-+++ b/package/ethtool/ethtool.hash
-@@ -1,4 +1,4 @@
- # From https://www.kernel.org/pub/software/network/ethtool/sha256sums.asc
--sha256	12d8edaa8064966b8ef19cc44fecc096a68828035b6a1f2c67a27531a718e1b2	ethtool-4.11.tar.xz
-+sha256	b7c1a380007d30eaf261a63b3cfc000f9d93f9eb7626dcd48b5d2a733af99cba	ethtool-4.13.tar.xz
- # Locally calculated
- sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYING
-diff --git a/package/ethtool/ethtool.mk b/package/ethtool/ethtool.mk
-index 225eedd..991df49 100644
---- a/package/ethtool/ethtool.mk
-+++ b/package/ethtool/ethtool.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ETHTOOL_VERSION = 4.11
-+ETHTOOL_VERSION = 4.13
- ETHTOOL_SOURCE = ethtool-$(ETHTOOL_VERSION).tar.xz
- ETHTOOL_SITE = $(BR2_KERNEL_MIRROR)/software/network/ethtool
- ETHTOOL_LICENSE = GPL-2.0
+-S-
+
+4.11.2017, 23:23, Marcus Folkesson kirjoitti:
+> Hi Stefan,
+>
+> On Fri, Nov 03, 2017 at 06:34:11AM +0000, Stefan Fr?berg wrote:
+>> zlib-ng, SIMD optimized zlib
+>>
+>> Signed-off-by: Stefan Fr?berg <stefan.froberg@petroprogram.com>
+>> ---
+>>   package/Config.in          |  1 +
+>>   package/zlib-ng/Config.in  |  8 ++++++++
+>>   package/zlib-ng/zlib-ng.mk | 15 +++++++++++++++
+>>   3 files changed, 24 insertions(+)
+>>   create mode 100644 package/zlib-ng/Config.in
+>>   create mode 100644 package/zlib-ng/zlib-ng.mk
+>>
+>> diff --git a/package/Config.in b/package/Config.in
+>> index dbfb288..3e2b034 100644
+>> --- a/package/Config.in
+>> +++ b/package/Config.in
+>> @@ -1003,6 +1003,7 @@ menu "Compression and decompression"
+>>   	source "package/snappy/Config.in"
+>>   	source "package/szip/Config.in"
+>>   	source "package/zlib/Config.in"
+>> +	source "package/zlib-ng/Config.in"
+>>   endmenu
+>>   
+>>   menu "Crypto"
+>> diff --git a/package/zlib-ng/Config.in b/package/zlib-ng/Config.in
+>> new file mode 100644
+>> index 0000000..06de97c
+>> --- /dev/null
+>> +++ b/package/zlib-ng/Config.in
+>> @@ -0,0 +1,8 @@
+>> +config BR2_PACKAGE_ZLIB_NG
+>> +	bool "zlib-ng"
+>> +	help
+>> +	  zlib replacement with optimizations for
+>> +	  "next generation" systems.
+>> +
+>> +	  https://github.com/Dead2/zlib-ng
+>> +
+>> diff --git a/package/zlib-ng/zlib-ng.mk b/package/zlib-ng/zlib-ng.mk
+>> new file mode 100644
+>> index 0000000..eaa93cd
+>> --- /dev/null
+>> +++ b/package/zlib-ng/zlib-ng.mk
+>> @@ -0,0 +1,15 @@
+>> +################################################################################
+>> +#
+>> +# zlib-ng
+>> +#
+>> +################################################################################
+>> +
+>> +ZLIB_NG_SITE = https://github.com/Dead2/zlib-ng.git
+>> +ZLIB_NG_SOURCE = develop.zip
+> I guess the intention is to point to
+> ZLIB_NG_SITE = https://github.com/Dead2/zlib-ng/archive
+>
+> Otherwise it will try to download
+> http://github/Dead2/zlib-ng.git/develop.zip
+> which is incorrect.
+>
+> However, this will result in a file ./dl/develop.zip, which says nothing
+> about package or version.
+>
+> I think it is better to use git:
+> ZLIB_NG_SITE_METHOD = git
+>
+> and specify version
+> ZLIB_NG_VERSION = xxxxx
+>
+>
+>> +ZLIB_NG_SUBDIR = zlib-ng-develop
+>> +ZLIB_NG_EXTRACT_CMDS = unzip $(DL_DIR)/$(ZLIB_NG_SOURCE) -d $(ZLIB_NG_DIR)
+> This is affected by the comment above
+>
+>> +ZLIB_NG_LICENSE = Zlib
+>> +ZLIB_NG_LICENSE_FILES = README.md
+> The license file is LICENSE.md, not README.md.
+>
+>
+> Best regards
+> Marcus Folkesson
