@@ -1,44 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 5 Nov 2017 20:15:36 +0100
-Subject: [Buildroot] [git commit] package/xr819-xradio: update to the latest
- version
-Message-ID: <20171105192817.E0C3C810CD@busybox.osuosl.org>
+Date: Sun, 05 Nov 2017 20:36:24 +0100
+Subject: [Buildroot] Analysis of build results for 2017-10-30
+In-Reply-To: <20171105154025.0d8c749d@windsurf.home> (Thomas Petazzoni's
+ message of "Sun, 5 Nov 2017 15:40:25 +0100")
+References: <20171031070013.AD75D207B2@mail.free-electrons.com>
+ <20171031230519.3feb2619@windsurf> <20171102232155.11995715@windsurf>
+ <ba942bc0-1444-1f44-875e-94dd973d6e09@mind.be>
+ <20171104232055.2e196d56@windsurf> <877ev54qos.fsf@dell.be.48ers.dk>
+ <20171105154025.0d8c749d@windsurf.home>
+Message-ID: <87fu9s1ps7.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4d80fc8a37ace4230ebccaa79d0281358bd2e514
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Bump kernel module git revision to make it work with Linux v4.13.
+ > Hello,
+ > On Sat, 04 Nov 2017 23:36:19 +0100, Peter Korsgaard wrote:
 
-Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/xr819-xradio/xr819-xradio.hash | 2 +-
- package/xr819-xradio/xr819-xradio.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ >> > I wouldn't mind removing it.  
+ >> 
+ >> > Peter? Your call?  
+ >> 
+ >> If the only thing broken about it is static linking then I think I would
+ >> prefer to just mark it as !static for now.
 
-diff --git a/package/xr819-xradio/xr819-xradio.hash b/package/xr819-xradio/xr819-xradio.hash
-index bdb0f96..75e3c49 100644
---- a/package/xr819-xradio/xr819-xradio.hash
-+++ b/package/xr819-xradio/xr819-xradio.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 5e9f59942b3880768b4812ab6db395bd1fa6d423cae9c09504baa416f064a10d xr819-xradio-014dfdd203102c5fd2370a73ec4ae3e6dd4e9ded.tar.gz
-+sha256 91095bd2d49d54c5e26919dc0c767be56eb0a2430c133d0bacdc814e97a5df4c xr819-xradio-c03a053a9e731d56c89c0c09627e886db2a0e04e.tar.gz
-diff --git a/package/xr819-xradio/xr819-xradio.mk b/package/xr819-xradio/xr819-xradio.mk
-index dfe2ee6..429c665 100644
---- a/package/xr819-xradio/xr819-xradio.mk
-+++ b/package/xr819-xradio/xr819-xradio.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XR819_XRADIO_VERSION = 014dfdd203102c5fd2370a73ec4ae3e6dd4e9ded
-+XR819_XRADIO_VERSION = c03a053a9e731d56c89c0c09627e886db2a0e04e
- XR819_XRADIO_SITE = $(call github,fifteenhex,xradio,$(XR819_XRADIO_VERSION))
- XR819_XRADIO_LICENSE = GPL-2.0
- XR819_XRADIO_LICENSE_FILES = LICENSE
+ > There are only a few packages that select BR2_PACKAGE_GSTREAMER, so it
+ > should be quite easy to do.
+
+Great - Will you send patches for it or do you want me to handle it?
+
+-- 
+Bye, Peter Korsgaard
