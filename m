@@ -1,75 +1,35 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 5 Nov 2017 21:23:43 +0100
-Subject: [Buildroot] [PATCH 1/4] kvm-unit-test: x86-64 variant only
- available on x86-64 hosts
-In-Reply-To: <87k1z41q6t.fsf@dell.be.48ers.dk>
-References: <20171102104520.29257-1-peter@korsgaard.com>
- <20171102104520.29257-2-peter@korsgaard.com>
- <687901ac-c7d7-81bb-944b-b2c860f90bae@mind.be>
- <87k1z41q6t.fsf@dell.be.48ers.dk>
-Message-ID: <54eed396-cdc0-759d-81b8-cdb387e792a2@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 05 Nov 2017 21:29:47 +0100
+Subject: [Buildroot] [PATCH 1/8] libselinux: bump to 2.7
+In-Reply-To: <2953b871-102e-5fdf-4be5-80d9cbb85be0@mind.be> (Arnout
+ Vandecappelle's message of "Tue, 10 Oct 2017 12:20:51 +0200")
+References: <20171009222731.15119-1-Adamduskett@outlook.com>
+ <8f8f5547-b7f4-8172-4989-36a5d8767c16@mind.be>
+ <20171010103540.44ee4777@windsurf.lan>
+ <2953b871-102e-5fdf-4be5-80d9cbb85be0@mind.be>
+Message-ID: <87h8u8zcxw.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
+Hi,
 
-On 05-11-17 20:27, Peter Korsgaard wrote:
->>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
-> 
->  > On 02-11-17 11:45, Peter Korsgaard wrote:
->  >> We use the host compiler for x86-64 builds, so ensure it is only available
->  >> on x86-64 hosts.
->  >> 
->  >> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
->  >> ---
->  >> package/kvm-unit-tests/Config.in | 1 +
->  >> 1 file changed, 1 insertion(+)
->  >> 
->  >> diff --git a/package/kvm-unit-tests/Config.in b/package/kvm-unit-tests/Config.in
->  >> index d0d9e2ef96..8b7908eee9 100644
->  >> --- a/package/kvm-unit-tests/Config.in
->  >> +++ b/package/kvm-unit-tests/Config.in
->  >> @@ -15,6 +15,7 @@ config BR2_PACKAGE_KVM_UNIT_TESTS
->  >> # x86-64 we use the host gcc (see .mk file for details)
->  >> depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_5 || !BR2_i386
->  >> depends on BR2_HOST_GCC_AT_LEAST_4_5 || !BR2_x86_64
->  >> +	depends on BR2_HOSTARCH = "x86_64" || !BR2_x86_64
-> 
->  >  I don't think this is correct: it will also build correctly for x86_64 if the
->  > host is i386, because it uses -m32 (which is the reason to use the host compiler
->  > instead of the target compiler).
-> 
-> But some parts of kvm-unit-tests presumably are 64bit when building for
-> x86-64, 
+ >  That said, I'm not such a sucker for bisectability anyway. Bisecting is rarely
+ > useful in Buildroot, since you usually know pretty well which commits may have
+ > broken things (and AFAIK git bisect has no option to specify "only consider
+ > patches affecting these subdirs"). And when it's a series anyway, it's pretty
+ > unlikely that the bisect gets stuck in the middle of the series.
 
- OK, I assumed everything was built with -m32. If some parts are indeed still
-64-bit then it won't work in i386 host.
+Actually it does: git bisect start -- <paths>
 
-> which wouldn't work when using the host compiler on a x86
-> system, right? I don't think x86 system compilers are 32/64bit multilib
+ >  So possibly the least effort approach is: fine-grained patches, don't comment
+ > on their bisectability, and committer may squash if they feel like it.
 
- Actually, on Debian i386 it is possible to install 64-bit multilib I think. But
-obviously we can't count on that.
-
- BTW, what happens on x32, does anybody know that?
-
-> But I haven't actually used a x86 distribution in the last 10 years or
-> so, so perhaps I'm missing something?
-
- Yeah, it's pretty unlikely as well I guess.
-
- I'll apply this patch as well then.
-
- Regards,
- Arnout
+Agreed.
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Bye, Peter Korsgaard
