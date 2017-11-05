@@ -1,142 +1,121 @@
-From: =?UTF-8?q?Andr=C3=A9=20Hentschel?= <nerv@dawncrow.de>
-Date: Sun,  5 Nov 2017 17:22:34 +0100
-Subject: [Buildroot] [PATCH 1/2] libkrb5: New package
-Message-ID: <1509898955-17124-1-git-send-email-nerv@dawncrow.de>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 5 Nov 2017 17:31:41 +0100
+Subject: [Buildroot] [PATCH 1/1] Fix build of lttng-libust
+In-Reply-To: <cf2f5ee6-d0e2-fcfa-f2af-5ff722d3388c@mind.be>
+References: <20171030163121.939-1-norbert.lange@andritz.com>
+ <20171030204054.723cdc99@windsurf>
+ <CADYdroP3-gaXzRy61r7FraPq+g6MeB5CUGN_nFLyFy3MxxfVvw@mail.gmail.com>
+ <cf2f5ee6-d0e2-fcfa-f2af-5ff722d3388c@mind.be>
+Message-ID: <20171105163141.GL2996@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
----
- DEVELOPERS                               |  1 +
- package/Config.in                        |  1 +
- package/libkrb5/0001-cross-compile.patch | 39 ++++++++++++++++++++++++++++++++
- package/libkrb5/Config.in                | 11 +++++++++
- package/libkrb5/libkrb5.hash             |  2 ++
- package/libkrb5/libkrb5.mk               | 16 +++++++++++++
- 6 files changed, 70 insertions(+)
- create mode 100644 package/libkrb5/0001-cross-compile.patch
- create mode 100644 package/libkrb5/Config.in
- create mode 100644 package/libkrb5/libkrb5.hash
- create mode 100644 package/libkrb5/libkrb5.mk
+Arnout, All,
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index c651bf2..b43d867 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -101,6 +101,7 @@ F:	package/ktap/
- 
- N:	Andr? Hentschel <nerv@dawncrow.de>
- F:	package/azure-iot-sdk-c/
-+F:	package/libkrb5/
- F:	package/openal/
- F:	package/p7zip/
- F:	package/wine/
-diff --git a/package/Config.in b/package/Config.in
-index fe5ccc4..c37ff1b 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1345,6 +1345,7 @@ menu "Networking"
- 	source "package/libhttpparser/Config.in"
- 	source "package/libidn/Config.in"
- 	source "package/libiscsi/Config.in"
-+	source "package/libkrb5/Config.in"
- 	source "package/libldns/Config.in"
- 	source "package/libmaxminddb/Config.in"
- 	source "package/libmbus/Config.in"
-diff --git a/package/libkrb5/0001-cross-compile.patch b/package/libkrb5/0001-cross-compile.patch
-new file mode 100644
-index 0000000..13a29bb
---- /dev/null
-+++ b/package/libkrb5/0001-cross-compile.patch
-@@ -0,0 +1,39 @@
-+Add sane assumptions about cross-compiling
-+
-+Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
-+
-+diff --git a/src/aclocal.m4 b/src/aclocal.m4
-+index 9c46da4..eb1a8a6 100644
-+--- a/src/aclocal.m4
-++++ b/src/aclocal.m4
-+@@ -729,7 +729,7 @@ AC_TRY_RUN([
-+ #include <regex.h>
-+ regex_t x; regmatch_t m;
-+ int main() { return regcomp(&x,"pat.*",0) || regexec(&x,"pattern",1,&m,0); }
-+-], ac_cv_func_regcomp=yes, ac_cv_func_regcomp=no, AC_MSG_ERROR([Cannot test regcomp when cross compiling]))])
-++], ac_cv_func_regcomp=yes, ac_cv_func_regcomp=no, AC_MSG_WARN([Cannot test regcomp when cross compiling]); ac_cv_func_regcomp=yes)])
-+ AC_MSG_RESULT($ac_cv_func_regcomp)
-+ test $ac_cv_func_regcomp = yes && AC_DEFINE(HAVE_REGCOMP,1,[Define if regcomp exists and functions])
-+ dnl
-+@@ -1593,7 +1593,7 @@ void foo2() __attribute__((destructor));
-+ void foo2() { unlink("conftest.2"); }
-+ int main () { return 0; }],
-+ [test -r conftest.1 || a=yes
-+-test -r conftest.2 || b=yes], , AC_MSG_ERROR(Cannot test for constructor/destructor support when cross compiling))
-++test -r conftest.2 || b=yes], , AC_MSG_WARN(Cannot test for constructor/destructor support when cross compiling); a=yes; b=yes)
-+ case $krb5_cv_host in
-+ *-*-aix4.*)
-+ 	# Under AIX 4.3.3, at least, shared library destructor functions
-+diff --git a/src/configure.in b/src/configure.in
-+index 037c9f3..e6990c0 100644
-+--- a/src/configure.in
-++++ b/src/configure.in
-+@@ -892,7 +892,7 @@ int main () {
-+ }],
-+   ac_cv_printf_positional=yes,
-+   ac_cv_printf_positional=no,
-+-  AC_MSG_ERROR([Cannot test for printf positional argument support when cross compiling]))])
-++  AC_MSG_WARN([Cannot test for printf positional argument support when cross compiling]); ac_cv_printf_positional=yes)])
-+ # Nothing for autoconf.h for now.
-+ AC_MSG_RESULT($ac_cv_printf_positional)
-+ 
-diff --git a/package/libkrb5/Config.in b/package/libkrb5/Config.in
-new file mode 100644
-index 0000000..b2cb873
---- /dev/null
-+++ b/package/libkrb5/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_LIBKRB5
-+	bool "libkrb5"
-+	help
-+	  Kerberos is a system for authenticating users and services
-+	  on a network. Kerberos is a trusted third-party service.
-+	  That means that there is a third party (the Kerberos server)
-+	  that is trusted by all the entities on the network
-+	  (users and services, usually called "principals").
-+	  This is the MIT reference implementation of Kerberos V5.
-+
-+	  https://web.mit.edu/kerberos/
-diff --git a/package/libkrb5/libkrb5.hash b/package/libkrb5/libkrb5.hash
-new file mode 100644
-index 0000000..4ba59fa
---- /dev/null
-+++ b/package/libkrb5/libkrb5.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated after checking pgp signature
-+sha256	1639e392edf25e3b6cfec2ae68f97eb53e07c2dbe74bfeede0108465d5d1c87e	krb5-1.15.2.tar.gz
-diff --git a/package/libkrb5/libkrb5.mk b/package/libkrb5/libkrb5.mk
-new file mode 100644
-index 0000000..84ded3c
---- /dev/null
-+++ b/package/libkrb5/libkrb5.mk
-@@ -0,0 +1,16 @@
-+################################################################################
-+#
-+# libkrb5
-+#
-+################################################################################
-+
-+LIBKRB5_VERSION = 1.15.2
-+LIBKRB5_SITE = https://web.mit.edu/kerberos/dist/krb5/1.15
-+LIBKRB5_SOURCE = krb5-$(LIBKRB5_VERSION).tar.gz
-+LIBKRB5_SUBDIR = src
-+LIBKRB5_LICENSE = MIT
-+LIBKRB5_LICENSE_FILES = NOTICE
-+LIBKRB5_INSTALL_STAGING = YES
-+LIBKRB5_AUTORECONF = YES
-+
-+$(eval $(autotools-package))
+On 2017-11-05 17:13 +0100, Arnout Vandecappelle spake thusly:
+> On 31-10-17 11:20, Norbert Lange wrote:
+> > Hello Thomas,
+> > 
+> > I dont know about the autobuilder (can I upload configs to test
+> > there?), this is an issue I encountered with a private buildroot
+> > config.
+> > I tried to reduce it as much as possible, and added the defconfig.
+> > 
+> > 2017-10-30 20:40 GMT+01:00 Thomas Petazzoni
+> > <thomas.petazzoni@free-electrons.com>:
+> >> Hello,
+> >>
+> >> On Mon, 30 Oct 2017 17:31:21 +0100, Norbert Lange wrote:
+> >>> The build of doc/examples/cmake-multiple-shared-libraries
+> >>> does fail as a dependend library is missing.
+> >>> This issue is not specific to builroot and should ideally
+> >>> be fixed upstream (Issue: https://bugs.lttng.org/issues/1132)
+> >>>
+> >>> The fix is done without any indepth knowledge of the CMake
+> >>> mechanisms, but seems to work correctly
+> >>>
+> >>> Signed-off-by: Norbert Lange <norbert.lange@andritz.com>
+> >>
+> >> Which specific build problem are you fixing? Is this a problem that has
+> >> been found by http://autobuild.buildroot.org? If that's the case, we
+> >> like to include a reference to such an autobuilder failure in the
+> >> commit log.
+> 
+>  It has not been found by the autobuilders, the only failure is
+> http://autobuild.buildroot.net/results/c86a82b2fd41316a7a451b20d9274d5c95f89baa
+> and that's due to CMake version.
+
+But aren't we supposed to build our own host-cmake if the system cmake
+is tool old? And IIRC, we consider cmake < 3.1 to be too old:
+
+    $ grep 3.1 support/dependencies/check-host-cmake.mk
+    BR2_CMAKE_VERSION_MIN = 3.1
+
+So in that case, we should have been using our own cmake, while the
+build log clearly state that was not the case:
+
+    CMake Error@CMakeLists.txt:1 (cmake_minimum_required):
+      CMake 2.8.11 or higher is required.  You are running version 2.8.9
+
+But lttng-libust is an autotools package, which explains why our
+host-cmake is not necessarily built.
+
+But I digress, and I think a better fix would indeed be to teach
+configure.ac and Makefile.am to disable building the examples.
+
+Regards,
+Yann E. MORIN.
+
+>  The build error is:
+> 
+> output/host/lib/gcc/x86_64-buildroot-linux-gnu/7.2.0/../../../../x86_64-buildroot-linux-gnu/bin/ld:
+> warning: liblttng-ust-tracepoint.so.0, needed by
+> output/build/lttng-libust-2.9.0/liblttng-ust/.libs/liblttng-ust.so, not found
+> (try using -rpath or -rpath-link)
+> output/build/lttng-libust-2.9.0/liblttng-ust/.libs/liblttng-ust.so: undefined
+> reference to `exit_tracepoint'
+> output/build/lttng-libust-2.9.0/liblttng-ust/.libs/liblttng-ust.so: undefined
+> reference to `__tracepoint_probe_unregister_queue_release'
+> output/build/lttng-libust-2.9.0/liblttng-ust/.libs/liblttng-ust.so: undefined
+> reference to `__tracepoint_probe_register_queue_release'
+> output/build/lttng-libust-2.9.0/liblttng-ust/.libs/liblttng-ust.so: undefined
+> reference to `__tracepoint_probe_prune_release_queue'
+> output/build/lttng-libust-2.9.0/liblttng-ust/.libs/liblttng-ust.so: undefined
+> reference to `init_tracepoint'
+> collect2: error: ld returned 1 exit status
+> 
+>  The weird thing is: liblttng-ust.so.0 does have the correct RPATH to find the
+> tracepoint library. And on all other builds I tried (and apparently including
+> all the autobuilders), it does find it. So I guess it's either binutils 2.29 or
+> GCC 7's LTO plugin that is acting up somehow...
+> 
+> 
+>  Since this is anyway just an example, wouldn't it be better to just disable the
+> documentation entirely? I.e. teach configure.ac to understand --disable-doc and
+> teach Makefile.am to not recurse into doc if docs are disabled?
+> 
+>  Regards,
+>  Arnout
+> 
+> -- 
+> Arnout Vandecappelle                          arnout at mind be
+> Senior Embedded Software Architect            +32-16-286500
+> Essensium/Mind                                http://www.mind.be
+> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.7.4
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
