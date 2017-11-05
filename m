@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 5 Nov 2017 15:48:17 +0100
-Subject: [Buildroot] [RFCv1 2/4] core: change host RPATH handling
-In-Reply-To: <20171105154420.52d67acd@windsurf.home>
-References: <20171103160627.6468-1-thomas.petazzoni@free-electrons.com>
- <20171103160627.6468-3-thomas.petazzoni@free-electrons.com>
- <20171105085756.GG2996@scaer> <20171105154420.52d67acd@windsurf.home>
-Message-ID: <3bf8725b-d9d8-b2a6-1fb4-fdcca0c96fdc@mind.be>
+Date: Sun, 5 Nov 2017 15:50:43 +0100
+Subject: [Buildroot] [PATCH] suport/download: force svn to be
+ non-interactive
+In-Reply-To: <5c06394b-324c-f7fe-77b5-53fc7eeedc76@dawncrow.de>
+References: <20171103212216.11772-1-yann.morin.1998@free.fr>
+ <5c06394b-324c-f7fe-77b5-53fc7eeedc76@dawncrow.de>
+Message-ID: <0a3cb936-3bac-c0c9-6bf8-28b0b3f13c3f@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,52 +14,43 @@ To: buildroot@busybox.net
 
 
 
-On 05-11-17 15:44, Thomas Petazzoni wrote:
-> Hello,
+On 05-11-17 15:46, Andr? Hentschel wrote:
+> Am 03.11.2017 um 22:22 schrieb Yann E. MORIN:
+>> Fixes:
+>>     http://autobuild.buildroot.org/results/2af/2af7412846c576089f8596857ab8c81ac31c1bed/
+>>
+>> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+>> Cc: Andr? Hentschel <nerv@dawncrow.de>
+>> ---
+>>  support/download/svn | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/support/download/svn b/support/download/svn
+>> index 77abf3d02d..9f27d71f86 100755
+>> --- a/support/download/svn
+>> +++ b/support/download/svn
+>> @@ -33,6 +33,6 @@ _svn() {
+>>      eval ${SVN} "${@}"
+>>  }
+>>  
+>> -_svn export ${verbose} "${@}" "'${repo}@${rev}'" "'${basename}'"
+>> +_svn --non-interactive export ${verbose} "${@}" "'${repo}@${rev}'" "'${basename}'"
+>>  
+>>  tar czf "${output}" "${basename}"
+>>
 > 
-> On Sun, 5 Nov 2017 09:57:56 +0100, Yann E. MORIN wrote:
 > 
->> In the past, we explicitly got rid of LD_LIBRARY_PATH because it does
->> not work. See 34d081674a (core/pkg-infrastructures: remove LD_LIBRARY_PATH
->> from the environment).
->>
->> Briefly, it does not work when we build a library that is also present
->> on the distro, which is used by a tool from the distro, and we build it
->> in an incompatibl way.
->>
->> So, we'll have to come up with another solution, like your suggested
->> alternative.
->>
->>>  - At the end of the build, in order to make sure that binaries are
->>>    usable without LD_LIBRARY_PATH, we fixup the host binaries to use
->>>    $ORIGIN/../lib. This is more-or-less what was done previously in
->>>    the "make sdk" target, except that instead of turning absolute
->>>    paths into relative paths in the RPATH, we are simply setting the
->>>    RPATH to $ORIGIN/../lib.
->>>
->>>    In order to implement this, the fix-rpath script logic is adjusted
->>>    for the "host" case.
->>>
->>> An alternative strategy would have been to keep the
->>> -Wl,-rpath,$(HOST_DIR) flag, and therefore the absolute RPATH in the
->>> host binaries, and fix such RPATH at the end of the build of every
->>> package. However, that would require calling fix-rpath after the
->>> installation of every package, which is a bit expensive.  
->>
->> I wonder how expensive that would be. It would be nice to time this.
->>
->> Also note that, even if the overhead is noticeable, this would be
->> compensated by the mere fact that we are now doing a parallel build, so
->> we would end up winning.
-> 
-> Thanks for the feedback. We already discussed this on IRC, and I agree.
-> I'll have a look at implementing the solution of doing the patchelf
-> adding $ORIGIN/../lib as an RPATH directly after the installation of
-> each package.
+> Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
 
- Note that according to Wolfgang's measurements (if I remember correctly), doing
-fix-rpath on the host dir didn't take too long, but doing it in staging does.
-There aren't that many host files.
+ Signed-off-by is only relevant when you propagate a patch (create one or resend
+someone else's). The Signed-off-by is a short way for you to assert that you are
+entitled to contribute the patch under buildroot's GPL license.  See
+http://elinux.org/Developer_Certificate_Of_Origin for more details.
+
+ I guess you meant either Tested-by, Reviewed-by or Acked-by. Note that those
+three get picked up by patchwork, will be part of the git log, and will be
+reported in the release announcement.
 
  Regards,
  Arnout
