@@ -1,55 +1,34 @@
-From: Maxime Ripard <maxime.ripard@free-electrons.com>
-Date: Mon, 6 Nov 2017 16:03:05 +0100
-Subject: [Buildroot] [PATCH] qt5base: add qmake.conf fixup for i.MX
- platforms
-In-Reply-To: <20170815161428.7765-1-gary.bisson@boundarydevices.com>
-References: <20170815161428.7765-1-gary.bisson@boundarydevices.com>
-Message-ID: <20171106150305.7ifz7iv2gakyj47e@flea>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Mon, 6 Nov 2017 09:41:23 -0600
+Subject: [Buildroot] [PATCH 1/1] package/dtc: qemu system build need
+ libfdt.
+In-Reply-To: <d6dd36db-bf3f-217e-cf1f-978c9c0ebf16@mind.be>
+References: <1509624873-16240-1-git-send-email-ren_guo@c-sky.com>
+ <09523a7a-0125-4c10-bb29-e15cfa00165f@cesnet.cz>
+ <cecbedfb-98a5-4b52-a59b-3129c7e0da51@cesnet.cz>
+ <d6dd36db-bf3f-217e-cf1f-978c9c0ebf16@mind.be>
+Message-ID: <CANQCQpb7ZUUxiC9Br8NtGb863+PEhtJ5-JJ9bGXT7rBBxpusRw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Jan/Arnout,
 
-On Tue, Aug 15, 2017 at 06:14:28PM +0200, Gary Bisson wrote:
-> As stated in QTBUG-61156 [1], since Qt5.9 all the Qt apps fail to start
-> on i.MX platforms.
-> 
-> The reason is that the qmake.conf should apparently now specify which
-> eglfs backend to use.
-> 
-> It can be seen in the qmake.conf example for i.MX [2].
-> 
-> It has also been integrated into the Yocto meta-freescale layer [3].
-> 
-> Although this issue can be worked around by exporting a variable
-> (QT_QPA_EGLFS_INTEGRATION=eglfs_viv), this patch aims at providing
-> a more user-friendly approach by modifying qmake.conf when created.
-> 
-> [1]: https://bugreports.qt.io/browse/QTBUG-61156
-> [2]: https://github.com/qt/qtbase/blob/5.9/mkspecs/devices/linux-imx6-g%2B%2B/qmake.conf#L35
-> [3]: https://github.com/Freescale/meta-freescale/blob/master/dynamic-layers/qt5-layer/recipes-qt/qt5/qtbase/0015-Add-eglfs-to-IMX-GPU.patch
+On Sat, Nov 4, 2017 at 3:51 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
 >
-> Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+>
+> On 03-11-17 03:33, Jan Kundr?t wrote:
+>> ...and here's a simple patch against U-Boot which fixes the build for me.
+>
+>  Isn't the build already fixed if you only replace the ../include line? The
+> ../lib/libfdt/fdt.h should not be problematic since that file doesn't exist in
+> STAGING_DIR. Right? Same for libfdt_internal.h.
+>
 
-I'm a bit late at the party, but I encountered the same bug, and that
-fixed it.
+I've got a number of internal CI failures from this one.  I'm testing
+the combined uboot-tools and uboot fix against my cases and will send
+a patch later today.
 
-Tested-by: Maxime Ripard <maxime.ripard@free-electrons.com>
-
-Thanks!
-Maxime
-
--- 
-Maxime Ripard, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 801 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20171106/690c0681/attachment.asc>
+Matt
