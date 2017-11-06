@@ -1,47 +1,61 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 6 Nov 2017 15:17:45 +0100
-Subject: [Buildroot] [git commit] openssl: disable libressl on uClibc noMMU
-Message-ID: <20171106141125.BC94A81151@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 6 Nov 2017 15:46:44 +0100
+Subject: [Buildroot] [PATCH 2/2] squid: Add libkrb5 dependency check
+In-Reply-To: <20171105164235.i5i36g545t3xri7m@tarshish>
+References: <1509898955-17124-1-git-send-email-nerv@dawncrow.de>
+ <1509898955-17124-2-git-send-email-nerv@dawncrow.de>
+ <20171105164235.i5i36g545t3xri7m@tarshish>
+Message-ID: <20171106154644.68d6bbea@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1f1a242e62c0654893e6563d09eb90a2ae807334
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-uClibc doesn't implement __register_atfork() on noMMU systems, causing
-a build failure of libressl. Since openssl is available as an
-alternative on such platforms, we just disable libressl on
-uClibc/noMMU systems.
+On Sun, 5 Nov 2017 18:42:35 +0200, Baruch Siach wrote:
 
-Fixes:
+> On Sun, Nov 05, 2017 at 05:22:35PM +0100, Andr? Hentschel wrote:
+> > Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
+> > ---
+> >  package/squid/squid.mk | 8 +++++++-
+> >  1 file changed, 7 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/package/squid/squid.mk b/package/squid/squid.mk
+> > index d334d14..3b3649a 100644
+> > --- a/package/squid/squid.mk
+> > +++ b/package/squid/squid.mk
+> > @@ -29,7 +29,6 @@ SQUID_CONF_OPTS = \
+> >  	--enable-removal-policies="lru,heap" \
+> >  	--with-filedescriptors=1024 \
+> >  	--disable-ident-lookups \
+> > -	--without-mit-krb5 \
+> >  	--enable-auth-basic="fake getpwnam" \
+> >  	--enable-auth-digest="file" \
+> >  	--enable-auth-negotiate="wrapper" \
+> > @@ -50,6 +49,13 @@ else
+> >  SQUID_CONF_ENV += squid_cv_gnu_atomics=no
+> >  endif
+> >  
+> > +ifeq ($(BR2_PACKAGE_LIBKRB5),y)
+> > +SQUID_CONF_OPTS += --without-krb5  
+> 
+> without? Are you sure this is correct? If so, it needs an explanation comment.
+> 
+> > +SQUID_DEPENDENCIES += libkrb5
+> > +else
+> > +SQUID_CONF_OPTS += --without-mit-krb5
+> > +endif
 
-/home/thomas/projets/buildroot/output/build/libressl-2.5.5/crypto/.libs/libcrypto.a(arc4random.o): In function `_rs_init.part.1':
-arc4random.c:(.text+0x74): undefined reference to `__register_atfork'
-collect2: error: ld returned 1 exit status
+Since a respin is needed, I want to suggest a better commit title too:
 
-This build issue is not visible in the autobuilders, because libressl
-is only selectable through a choice, which isn't randomized by the
-autobuilder logic.
+	squid: add optional dependency on libkrb5
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/openssl/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+Thanks!
 
-diff --git a/package/openssl/Config.in b/package/openssl/Config.in
-index e33320a..d840331 100644
---- a/package/openssl/Config.in
-+++ b/package/openssl/Config.in
-@@ -48,6 +48,8 @@ endif
- config BR2_PACKAGE_LIBRESSL
- 	bool "libressl"
- 	depends on !BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL
-+	# uClibc on noMMU doesn't provide __register_atfork()
-+	depends on !(BR2_TOOLCHAIN_USES_UCLIBC && !BR2_USE_MMU)
- 	help
- 	  LibreSSL is a version of the TLS/crypto stack forked from
- 	  OpenSSL in 2014, with goals of modernizing the codebase,
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
