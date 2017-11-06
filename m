@@ -1,45 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 6 Nov 2017 21:05:31 +0100
-Subject: [Buildroot] [PATCH v2 1/1] turbovnc: new package
-In-Reply-To: <20171106195934.tw433kt5ojiupxrg@tarshish>
-References: <1509367204-12966-1-git-send-email-stefan.froberg@petroprogram.com>
- <20171101060657.tzjnt4ceb25irb3o@sapphire.tkos.co.il>
- <20171101105305.1cd82e60@windsurf>
- <59FB8C69.7050108@petroprogram.com>
- <20171102222811.4d501282@windsurf>
- <5A005FF1.5000204@petroprogram.com>
- <20171106195934.tw433kt5ojiupxrg@tarshish>
-Message-ID: <20171106210531.190000eb@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 06 Nov 2017 21:07:58 +0100
+Subject: [Buildroot] [git commit] luajit: only available on x86(-64)
+ hosts
+In-Reply-To: <CAGhdn54e+_wmfbjhJjiq5fDqgcTjZkD_0jpvD7eNXMQefourNQ@mail.gmail.com>
+ (=?utf-8?Q?=22Fran=C3=A7ois?= Perrad"'s message of "Mon, 6 Nov 2017
+ 19:01:19 +0100")
+References: <20171105155244.192977FB27@busybox.osuosl.org>
+ <20171106101232.5ad247cb@windsurf.home>
+ <CAGhdn54e+_wmfbjhJjiq5fDqgcTjZkD_0jpvD7eNXMQefourNQ@mail.gmail.com>
+Message-ID: <87tvy7w4pt.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Fran?ois" == Fran?ois Perrad <fperrad@gmail.com> writes:
 
-On Mon, 6 Nov 2017 21:59:34 +0200, Baruch Siach wrote:
+ > moarvm could be build without any host lua (Lua or LuaJIT),
+ > it embeds its own minilua for bootstrapping.
+ > see https://patchwork.ozlabs.org/patch/601314/
 
-> On Mon, Nov 06, 2017 at 03:13:21PM +0200, Stefan Fr?berg wrote:
-> > 1. TurboVNC really does depend of turbo-jpeg, that's one of the reasons it's
-> > so fast. So for now I have made it "depends on BR2_PACKAGE_JPEG_TURBO" so 
-> > that turbovnc package will only appear to menu only if jpeg-turbo has been 
-> > also selected. Is that okay?  
-> 
-> I don't think so.
-> 
-> The manual (?17.2.3) says you should "use a select type of dependency for 
-> dependencies on libraries", and conversely "use a depends on type of 
-> dependency when the user really needs to be aware of the dependency". In this 
-> case there is nothing obvious about having to enable turbo-jpeg for turbovnc, 
-> IMO.
+Correct, and since 2017.10 you even cannot use an external lua:
 
-Yes, but Stefan cannot select jpeg-turbo, because it is part of a
-choice, and you can't "select" one item of a choice. So this suggestion
-from the manual doesn't apply in this specific case.
+https://github.com/MoarVM/MoarVM/blob/master/docs/ChangeLog
 
-Thomas
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
