@@ -1,49 +1,65 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 06 Nov 2017 14:37:33 +0100
-Subject: [Buildroot] [PATCH 1/1] package/nodejs: bump version to 9.0.0
-In-Reply-To: <CAFGQKxdp473snHnkzeCmNUhXjHXE51gEZ7v6nWmLo6YhW5pM+w@mail.gmail.com>
- (Martin Bark's message of "Mon, 6 Nov 2017 13:06:51 +0000")
-References: <20171106102049.14681-1-martin@barkynet.com>
- <87k1z3y5f8.fsf@dell.be.48ers.dk>
- <CAFGQKxdp473snHnkzeCmNUhXjHXE51gEZ7v6nWmLo6YhW5pM+w@mail.gmail.com>
-Message-ID: <87bmkfy1cy.fsf@dell.be.48ers.dk>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Mon, 6 Nov 2017 07:51:16 -0600
+Subject: [Buildroot] [PATCH 1/1] refpolicy: bump to 2.20170805
+In-Reply-To: <CAFSsvmqDWvMtg5hYYugd6VKSO3YUNFWB8dKp6t1M73SOwPWm2Q@mail.gmail.com>
+References: <20171103125856.16518-1-aduskett@gmail.com>
+ <20171103185619.3de8abde@windsurf>
+ <CAFSsvmqDWvMtg5hYYugd6VKSO3YUNFWB8dKp6t1M73SOwPWm2Q@mail.gmail.com>
+Message-ID: <CANQCQpZEdK7rMrNF_Xw-icCcAEExjZm2zJBKNVd-giXp+fpGLQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Martin" == Martin Bark <martin@barkynet.com> writes:
+Adam,
 
-Hi,
+On Sun, Nov 5, 2017 at 11:34 AM, Adam Duskett <aduskett@gmail.com> wrote:
+>
+> Hello;
+>
+> On Fri, Nov 3, 2017 at 1:56 PM, Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com> wrote:
+> > Hello,
+> >
+> > On Fri,  3 Nov 2017 08:58:56 -0400, Adam Duskett wrote:
+> >
+> >> +ifeq ($(BR2_PACKAGE_PYTHON3),y)
+> >> +REFPOLICY_DEPENDENCIES += host-python3
+> >> +REFPOLICY_PYTHON="$(HOST_DIR)/bin/python(PYTHON3_VERSION_MAJOR)"
+> >> +else
+> >> +REFPOLICY_DEPENDENCIES += host-python
+> >> +REFPOLICY_PYTHON="$(HOST_DIR)/bin/python(PYTHON_VERSION_MAJOR)"
+> >> +endif
+> >
+> > I'm not sure why this is needed. Indeed, if BR2_PACKAGE_PYTHON3=y,
+> > $(HOST_DIR)/bin/python points to python3, and if
+> > BR2_PACKAGE_PYTHON=y, $(HOST_DIR)/bin/python points to python2.
+> >
+> Huh, didn't know that.  I will change that asap!
+>
+> > Therefore, you should be able to just use $(HOST_DIR)/bin/python.
+> >
+> > Could you try that instead?
+> >
+> > Also, please answer Matt's concerns before sending a v2. Thanks!
+> >
+> We talked on IRC. :)  The contrib module is included in the tarball as
+> Arnout has said.
+>
+>
 
->> > +NODEJS_VERSION = 9.0.0
- >> 
- >> Thanks. I will not bump the version for 2017.11 as I'll release -rc1
- >> today. With 2018.02 becoming the next LTS, wouldn't it make more sense
- >> to move to 8.9.0 instead?
- >> 
- >> https://nodejs.org/en/blog/release/v8.9.0/
+Sorry took a bit to get back to this email.  I've figured out what
+happened.  Nothing has changed in how refpolicy and refpolicy-contrib
+are released.  This patch series changes the package to use a released
+archive vs the git repo.  In the upstream git repo it still uses the
+submodule for retrieving the contrib repository.  I don't have a good
+reason to go either way, but my development approach for refpolicy
+leverage's the fact it's a GIT clone (less lines of change in a patch
+I maintain on top of buildroot providing selectable GIT repo for this
+package).  I could propose this patch if there is interest and that
+would clear up which way to go....  we found it was hard to do
+refpolicy development purely via patches.
 
- > When we discussed this in the past it was decided to track the latest
- > version of nodejs.  This simplified buildroot to only support one version
- > of nodejs.  The release schedule of buildroot and nodejs don't really align
- > so what you're saying in practice means we would have to only track the LTS
- > versions of node (the even version numbers).
 
-What I'm saying is that there is a tradeoff. If we move to the 9.x
-version for the 2018.02 release then we'll have to migrate to 10.x quite
-soon during the LTS period to get bug/security fixes - Which isn't
-really nice.
-
-We may move to 9.x for the 2018.05 release if there's a good reason for
-it (I wouldn't know, I don't use nodejs), but again it means extra
-effort for the LTS as fixes from master cannot simply be cherry picked -
-E.G. you haven't submitted any nodejs version bumps for the 2017.02.x
-series.
-
-Do these odd non-LTS releases bring a lot of new features making it
-worth the extra effort?
-
--- 
-Bye, Peter Korsgaard
+Matt
