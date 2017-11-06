@@ -1,101 +1,74 @@
-From: =?UTF-8?B?U3RlZmFuIEZyw7ZiZXJn?= <stefan.froberg@petroprogram.com>
-Date: Mon, 06 Nov 2017 15:13:21 +0200
-Subject: [Buildroot] [PATCH v2 1/1] turbovnc: new package
-In-Reply-To: <20171102222811.4d501282@windsurf>
-References: <1509367204-12966-1-git-send-email-stefan.froberg@petroprogram.com>	<20171101060657.tzjnt4ceb25irb3o@sapphire.tkos.co.il>	<20171101105305.1cd82e60@windsurf>	<59FB8C69.7050108@petroprogram.com>
- <20171102222811.4d501282@windsurf>
-Message-ID: <5A005FF1.5000204@petroprogram.com>
+From: Martin Bark <martin@barkynet.com>
+Date: Mon, 6 Nov 2017 13:06:51 +0000
+Subject: [Buildroot] [PATCH 1/1] package/nodejs: bump version to 9.0.0
+In-Reply-To: <87k1z3y5f8.fsf@dell.be.48ers.dk>
+References: <20171106102049.14681-1-martin@barkynet.com>
+ <87k1z3y5f8.fsf@dell.be.48ers.dk>
+Message-ID: <CAFGQKxdp473snHnkzeCmNUhXjHXE51gEZ7v6nWmLo6YhW5pM+w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi
+Peter,
 
-I have now successfully compiled latest TurboVNC from git and with 
-bzip2,freetype and zlib as
-external dependencies, also, libXau, libXdmcp and libXfont are now external.
+On 6 November 2017 at 12:09, Peter Korsgaard <peter@korsgaard.com> wrote:
 
-But there are two issues that need resolving:
-
-1. TurboVNC really does depend of turbo-jpeg, that's one of the reasons 
-it's so fast.
-So for now I have made it "depends on BR2_PACKAGE_JPEG_TURBO" so that 
-turbovnc
-package will only appear to menu only if jpeg-turbo has been also selected.
-Is that okay?
-
-2. TurboVNC (Xvnc binary) really is two servers rolled into one. Actual 
-normally working,
-altought TurboVNC patched Xorg server and VNC server.
-So, maybe the right place for turbovnc in the menus would be below 
-"Alternate X servers",
-below Xvfb.
-And then I just copy dependencies from xorg package, so that if the user 
-want's both
-VNC and Xorg then he just selects the turbovnc without needing to waste 
-space for
-the real, vanilla Xorg installation.
-Is that okay?
-
-Maybe in future, there could be even virtual package virtual-xvnc, like 
-"Xvnc --->"  below Xvfb in the
-menu where user could select what Xvnc implementation (TurboVNC, 
-TightVNC, TigerVNC etc...)
-he/she want's to use.
-
-Tought?
-
--S-
-
-2.11.2017, 23:28, Thomas Petazzoni kirjoitti:
-> Hello,
+> >>>>> "Martin" == Martin Bark <martin@barkynet.com> writes:
 >
-> On Thu, 02 Nov 2017 23:21:45 +0200, Stefan Fr?berg wrote:
+>  > See https://nodejs.org/en/blog/release/v9.0.0/
+>  > Signed-off-by: Martin Bark <martin@barkynet.com>
+>  > ---
+>  >  package/nodejs/nodejs.hash | 4 ++--
+>  >  package/nodejs/nodejs.mk   | 2 +-
+>  >  2 files changed, 3 insertions(+), 3 deletions(-)
 >
+>  > diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
+>  > index 9367c543be..14dde1162b 100644
+>  > --- a/package/nodejs/nodejs.hash
+>  > +++ b/package/nodejs/nodejs.hash
+>  > @@ -1,2 +1,2 @@
+>  > -# From http://nodejs.org/dist/v8.8.1/SHASUMS256.txt
+>  > -sha256 5ce2c47ab779992db49942f757a01cc5131db5cef4e0dd270e48151b0887b57a
+> node-v8.8.1.tar.xz
+>  > +# From http://nodejs.org/dist/v9.0.0/SHASUMS256.txt
+>  > +sha256 5b52bd6a90a611a42e11a908022ccfc1c2e77dcc70bfe38054a18dc57a3d5fa5
+> node-v9.0.0.tar.xz
+>  > diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+>  > index a29f5726cc..f3e532b4ed 100644
+>  > --- a/package/nodejs/nodejs.mk
+>  > +++ b/package/nodejs/nodejs.mk
+>  > @@ -4,7 +4,7 @@
+>  >  #
+>  >  ############################################################
+> ####################
 >
->> libbzip2.a      libfontenc.a    librandr.a    libXau.a libxkb.a
->> libcomposite.a  libfreetype2.a  librender.a   libXdmcp.a libXNVCtrl.a
->> libdamage.a     libmain.a       libsha1.a     libXext-server.a libzlib.a
->> libdamageext.a  libmi.a         libsync.a     libxfixes.a
->> libdix.a        libos.a         libvnc.a      libXfont.a
->> libfb.a         libpixman.a     libvncauth.a  libXi.a
-> That's a lot of static libraries, but I'm sure TurboVNC didn't
-> duplicate the source code for all of these. Perhaps it is copying them
-> from their system-wide location to its build directory, for some funky
-> reason?
+>  > -NODEJS_VERSION = 8.8.1
+>  > +NODEJS_VERSION = 9.0.0
 >
->> But then doing ldd for Xvnc binary gives this:
->> Xvnc:
->>           linux-vdso.so.1 (0x00007fffbbffe000)
->>           libturbojpeg.so.0 => /usr/lib64/libturbojpeg.so.0
->> (0x00007f1d221b8000)
->>           libm.so.6 => /lib64/libm.so.6 (0x00007f1d21eba000)
->>           libpthread.so.0 => /lib64/libpthread.so.0 (0x00007f1d21c9e000)
->>           libpam.so.0 => /lib64/libpam.so.0 (0x00007f1d21a90000)
->>           libdl.so.2 => /lib64/libdl.so.2 (0x00007f1d2188c000)
->>           libSM.so.6 => /usr/lib64/libSM.so.6 (0x00007f1d21683000)
->>           libICE.so.6 => /usr/lib64/libICE.so.6 (0x00007f1d21466000)
->>           libX11.so.6 => /usr/lib64/libX11.so.6 (0x00007f1d21124000)
->>           libXext.so.6 => /usr/lib64/libXext.so.6 (0x00007f1d20f12000)
->>           libc.so.6 => /lib64/libc.so.6 (0x00007f1d20b76000)
->>           /lib64/ld-linux-x86-64.so.2 (0x00007f1d2242b000)
->>           libuuid.so.1 => /lib64/libuuid.so.1 (0x00007f1d20971000)
->>           libbsd.so.0 => /usr/lib64/libbsd.so.0 (0x00007f1d2075b000)
->>           libxcb.so.1 => /usr/lib64/libxcb.so.1 (0x00007f1d20532000)
->>           librt.so.1 => /lib64/librt.so.1 (0x00007f1d2032a000)
->>           libXau.so.6 => /usr/lib64/libXau.so.6 (0x00007f1d20126000)
->>           libXdmcp.so.6 => /usr/lib64/libXdmcp.so.6 (0x00007f1d1ff20000)
->>
->> So it builds a static versions of libXau.a libXdmcp.a for example, but
->> then does not use them anyway in the final link but instead the system
->> wide versions ?
->>
->> I posted question to github if bzip2, freetype2 and zlib can be external
->> dependencies or if they contain some TurboVNC specific stuff.
-> Thanks. Let's see what upstream says.
+> Thanks. I will not bump the version for 2017.11 as I'll release -rc1
+> today. With 2018.02 becoming the next LTS, wouldn't it make more sense
+> to move to 8.9.0 instead?
 >
-> Best regards,
+> https://nodejs.org/en/blog/release/v8.9.0/
+
+
+When we discussed this in the past it was decided to track the latest
+version of nodejs.  This simplified buildroot to only support one version
+of nodejs.  The release schedule of buildroot and nodejs don't really align
+so what you're saying in practice means we would have to only track the LTS
+versions of node (the even version numbers).
+
+Thanks
+
+Martin
+
+
 >
-> Thomas
+> --
+> Bye, Peter Korsgaard
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20171106/6d698887/attachment.html>
