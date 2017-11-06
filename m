@@ -1,195 +1,214 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 6 Nov 2017 22:14:42 +0100
-Subject: [Buildroot] [PATCH v2 2/2] security hardening: add RELFO,
- FORTIFY options
-In-Reply-To: <1508936397-33651-2-git-send-email-matthew.weber@rockwellcollins.com>
-References: <1508936397-33651-1-git-send-email-matthew.weber@rockwellcollins.com>
- <1508936397-33651-2-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <e29b21b0-6c5f-ef3b-4123-9e8782639f43@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 06 Nov 2017 22:19:20 +0100
+Subject: [Buildroot] Buildroot 2017.11-rc1 released
+Message-ID: <874lq7w1ev.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Matt,
+Hi,
 
- In the subject: s/RELFO/RELRO/
+Buildroot 2017.11-rc1 is released - Go download it at:
 
-On 25-10-17 14:59, Matt Weber wrote:
-> This enables a user to build a complete system using these
-> options.  It is important to note that not all packages will
-> build correctly to start with.
+http://buildroot.net/downloads/buildroot-2017.11-rc1.tar.gz
 
- So perhaps you could make another patch that extends the autobuilders to test
-this option. Just modify utils/genrandconfig and in the gen_config function
-randomly enable these options.
+or
 
-> Additional initial patches
-> which update linker ordering changes, etc will be upstreamed
-> and then submitted to buildroot as a patch or bump.
-> 
-> A good testing tool to check a target's elf files for compliance
-> to an array of hardening techniques can be found here:
-> https://github.com/slimm609/checksec.sh
-> 
-> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-> ---
-> Changes
-> v1 -> v2
->  - Cosmetic caps on titles
-> ---
->  Config.in           | 58 +++++++++++++++++++++++++++++++++++++++++++++++++++++
->  package/Makefile.in | 25 +++++++++++++++++++++++
->  2 files changed, 83 insertions(+)
-> 
-> diff --git a/Config.in b/Config.in
-> index 61f6aa6..68eff24 100644
-> --- a/Config.in
-> +++ b/Config.in
-> @@ -730,6 +730,64 @@ endchoice
->  comment "Stack Smashing Protection needs a toolchain w/ SSP"
->  	depends on !BR2_TOOLCHAIN_HAS_SSP
->  
-> +choice
-> +	bool "RELRO Protection"
-> +	help
-> +	  Enable a link-time protection know as RELRO (RELocation Read Only)
-> +	  which helps to protect from certain type of exploitation techniques
-> +	  altering the content of some ELF sections.
-> +
-> +config BR2_RELRO_NONE
-> +	bool "None"
-> +	help
-> +	  Enables Relocation link-time protections.
-> +
-> +config BR2_RELRO_PARTIAL
-> +	bool "Partial"
-> +	help
-> +	  This option makes the dynamic section not writeable after
-> +	  initialization (with almost no performance penalty).
-> +
-> +config BR2_RELRO_FULL
-> +	bool "Full"
-> +	help
-> +	  This option includes the partial configuration, but also
-> +	  marks the GOT as read-only at the cost of initialization time
-> +	  during program loading, i.e every time an executable is started.
+http://buildroot.net/downloads/buildroot-2017.11-rc1.tar.bz2
 
- Do these options make sense at all in static linking? Isn't it implicit then
-(text is always readonly I think)? -pie is certainly invalid in static linking
-(at least with uClibc).
+Or get it from Git:
 
- Also, does it make sense on NOMMU, even shared? I mean, "readonly" doesn't mean
-much when there is no MMU I think...
+git://git.buildroot.net/buildroot
 
-> +
-> +endchoice
-> +
-> +choice
-> +	bool "Buffer-overflow Detection (FORTIFY_SOURCE)"
-> +	help
-> +	  Enable the _FORTIFY_SOURCE macro which introduces additional
-> +	  checks to detect buffer-overflows in the following standard library
-> +	  functions: memcpy, mempcpy, memmove, memset, strcpy, stpcpy,
-> +	  strncpy, strcat, strncat, sprintf, vsprintf, snprintf, vsnprintf,
-> +	  gets.
-> +
-> +config BR2_FORTIFY_SOURCE_NONE
-> +	bool "None"
-> +	help
-> +	  Enables additional checks to detect buffer-overflows.
-> +
-> +config BR2_FORTIFY_SOURCE_1
-> +	bool "Conservative"
-> +	help
-> +	  This option sets _FORTIFY_SOURCE set to 1 and only introduces
-> +	  checks that shouldn't change the behavior of conforming programs.
-> +	  Adds checks at compile-time only.
-> +
-> +config BR2_FORTIFY_SOURCE_2
-> +	bool "Aggressive"
-> +	help
-> +	  This option sets _FORTIFY_SOURCES set to 2 and some more checking
-> +	  is added, but some conforming programs might fail.
-> +	  Also adds checks at run-time (detected buffer overflow terminates
-> +	  the program)
+Please give it a spin and report any problems to the mailing list or
+bug tracker.
 
- Do you know how these behave in uClibc and musl? Waldemar, any idea? Obviously
-the gcc part will still be activated, which covers about half of the functionality.
+Slightly smaller (1026 changes) than other recent cycles, but still a
+lot of activity and contributions from more than 100 unique
+contributors!
 
-> +
-> +endchoice
-> +
->  endmenu
->  
->  source "toolchain/Config.in"
-> diff --git a/package/Makefile.in b/package/Makefile.in
-> index a1a5316..c99361f 100644
-> --- a/package/Makefile.in
-> +++ b/package/Makefile.in
-> @@ -144,6 +144,9 @@ TARGET_CXXFLAGS = $(TARGET_CFLAGS)
->  TARGET_FCFLAGS = $(TARGET_ABI) $(TARGET_OPTIMIZATION) $(TARGET_DEBUGGING)
->  TARGET_LDFLAGS = $(call qstrip,$(BR2_TARGET_LDFLAGS))
->  
-> +TARGET_CFLAGS_RELRO = -Wl,-z,relro
-> +TARGET_CFLAGS_RELRO_FULL = -Wl,-z,now $(TARGET_CFLAGS_RELRO)
-> +
->  ifeq ($(BR2_BINFMT_FLAT),y)
->  TARGET_CFLAGS += $(if $($(PKG)_FLAT_STACKSIZE),-Wl$(comma)-elf2flt=-s$($(PKG)_FLAT_STACKSIZE),\
->  	-Wl$(comma)-elf2flt)
-> @@ -181,6 +184,28 @@ TARGET_CXXFLAGS += -fstack-protector-all
->  TARGET_FCFLAGS += -fstack-protector-all
->  endif
->  
-> +ifeq ($(BR2_RELRO_PARTIAL),y)
-> +TARGET_CFLAGS += $(TARGET_CFLAGS_RELRO)
-> +TARGET_CXXFLAGS += $(TARGET_CFLAGS_RELRO)
-> +TARGET_FCFLAGS += $(TARGET_CFLAGS_RELRO)
+Of noteworthy new features/changes we have:
 
- Since these are linker flags, it _should_ be sufficient to add them to LDFLAGS.
-There may be some packages that don't listen to LDFLAGS so in that sense it
-could be a good idea to add it to CFLAGS as well, but I tend to prefer to fix
-the packages. Only, there is no easy way to detect that LDFLAGS are ignored.
+- Openssl is now a virtual package, which may be provided by OpenSSL
+  (now renamed to libopenssl) or LibreSSL.
 
-> +TARGET_LDFLAGS += $(TARGET_CFLAGS_RELRO)
-> +else ifeq ($(BR2_RELRO_FULL),y)
-> +TARGET_CFLAGS += -fPIE $(TARGET_CFLAGS_RELRO_FULL)
-> +TARGET_CXXFLAGS += -fPIE $(TARGET_CFLAGS_RELRO_FULL)
-> +TARGET_FCFLAGS += -fPIE $(TARGET_CFLAGS_RELRO_FULL)
-> +TARGET_LDFLAGS += -pie
-> +endif
-> +
-> +ifeq ($(BR2_FORTIFY_SOURCE_1),y)
-> +TARGET_CFLAGS += -D_FORTIFY_SOURCE=1
-> +TARGET_CXXFLAGS += -D_FORTIFY_SOURCE=1
+- libssh2: there is now an explicit choice of the backend to use
+  (mbedtls, gnutls or openssl). Previously, the choice was implicit
+  based on the TLS library that was selected. Now, it is possible to
+  choose the backend, which is important if several TLS libraries are
+  selected.
 
- It should go into CPPFLAGS (which automatically goes into CFLAGS and CXXFLAGS).
+- netsnmp: all MIB files are now installed, making the target filesystem
+  a bit bigger than before. To remove unneeded MIBS, you should use a
+  post-build script.
 
-> +TARGET_FCFLAGS += -D_FORTIFY_SOURCE=1
+- New defconfigs: Atmel SAM45D27, Bananapi M1 and M2 Plus, Engicam
+  i.CoreM6 Qt5 configuration, i.MX6 sabreauto (mainline kernel/u-boot),
+  i.MX6Q sabresd Qt5 configuration, i.MX7d-pico, QEMU ppc64le, Raspberry
+  pi3 Qt5 webengine configuration, Technologic TS-7680.
 
- FCFLAGS indeed needs to be handled separately. Except: is FORTIFY valid/useful
-for Fortran?
+- Linaro ARM(eb) 2017.08 support, Glibc 2.26, Glibc support for ARCv2
+
+- Reproducible: SOURCE_DATE_EPOCH handling in the toolchain wrapper for
+  older (pre-gcc7) compilers.
 
 
- Regards,
- Arnout
+New packages: asterisk, azmq, bcg729, boinc, dahdi-linux, dahdi-tools,
+freeswitch-mod-bcg729, fscryptctl, libb64, libpri, libss7, lua-basexx,
+lua-compat53, lua-cqueues, lua-curl, lua-datafile, lua-fifo, lua-httpd,
+lua-lpeg-patterns, lua-markdown, lua-sailor, lua-value, luksmeta,
+minetest, minetest-game, pdmenu, prosody, python-aiocoap,
+python-automat, python-ibmiotf, python-iso8601, python-m2r,
+python-simplesqlite, python-websockets, python-xmltodict, qt5wayland,
+qt5webengine, restorecond, selinux-python, semodule-utils, uhubctl,
+wireguard, wsapi-fcgi, wsapi-xavante
 
-> +else ifeq ($(BR2_FORTIFY_SOURCE_2),y)
-> +TARGET_CFLAGS += -D_FORTIFY_SOURCE=2
-> +TARGET_CXXFLAGS += -D_FORTIFY_SOURCE=2
-> +TARGET_FCFLAGS += -D_FORTIFY_SOURCE=2
-> +endif
-> +
->  ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
->  TARGET_CROSS = $(HOST_DIR)/bin/$(GNU_TARGET_NAME)-
->  else
-> 
+Removed packages: aiccu, rfkill, sepolgen
+
+And the usual package version updates and bug fixes. See the CHANGES
+file for details:
+
+http://git.buildroot.net/buildroot/plain/CHANGES?id=2017.11-rc1
+
+
+Many thanks to the people contributing to this release:
+
+git shortlog -s -n 2017.08..
+
+   223	Bernd Kuhls
+   102	Peter Korsgaard
+    70	Francois Perrad
+    62	Baruch Siach
+    50	Yann E. MORIN
+    44	Adam Duskett
+    40	Romain Naour
+    36	Samuel Martin
+    34	Thomas Petazzoni
+    32	Fabio Estevam
+    31	Yegor Yefremov
+    16	Eric Le Bihan
+    16	J?rg Krause
+    15	Olivier Schonken
+    12	Angelo Compagnucci
+    12	Peter Seiderer
+    11	Aleksander Morgado
+     9	Matt Weber
+     8	Arnout Vandecappelle (Essensium/Mind)
+     8	Petr Vorel
+     7	Alexey Brodkin
+     7	Carlos Santos
+     7	Jagan Teki
+     6	Ga?l PORTAY
+     6	Martin Bark
+     6	Martin Kepplinger
+     6	Ricardo Martincoski
+     5	Adrian Perez de Castro
+     5	Alexander Mukhin
+     5	Cam Hutchison
+     5	Fabrice Fontaine
+     5	Jerzy Grzegorek
+     5	Joel Stanley
+     4	Andrey Smirnov
+     4	Erico Nunes
+     4	Evgeniy Didin
+     4	Joshua Henderson
+     4	Mahyar Koshkouei
+     4	Nicholas Sielicki
+     4	Petr Kulhavy
+     4	Sergey Matyukevich
+     4	bradford barr
+     3	Bartosz Golaszewski
+     3	Julien Floret
+     3	Ryan Coe
+     3	Sergio Prado
+     3	Thomas De Schampheleire
+     2	Alfredo Alvarez Fernandez
+     2	Christian Stewart
+     2	Florian Fainelli
+     2	Joseph Kogut
+     2	Luca Ceresoli
+     2	Maksim Salau
+     2	Marcin Nowakowski
+     2	Markus Mayer
+     2	Nicolas Ferre
+     2	Sam Voss
+     2	Sven Haardiek
+     2	Thomas Claveirole
+     2	Waldemar Brodkorb
+     1	Adri?n P?rez de Castro
+     1	Alex Suykov
+     1	Alexey Roslyakov
+     1	Andr? Hentschel
+     1	Antoine Tenart
+     1	Arnout Vandecappelle
+     1	Aur?lien Chabot
+     1	Breno Lima
+     1	Brock Williams
+     1	B?la Becker
+     1	Chris Packham
+     1	Dushara Jayasinghe
+     1	Erik Stromdahl
+     1	Gary Bisson
+     1	Guo Ren
+     1	Gustavo Zacarias
+     1	Jason A. Donenfeld
+     1	Joe Lin
+     1	Johan Oudinet
+     1	Julien BOIBESSOT
+     1	Julien Corjon
+     1	Julien Grossholtz
+     1	Kurt Van Dijck
+     1	Lothar Felten
+     1	Marcin Niestroj
+     1	Marcus Folkesson
+     1	Mathieu Audat
+     1	Mauro Condarelli
+     1	Max Filippov
+     1	Mike Harmony
+     1	Miquel Raynal
+     1	Naoki Matsumoto
+     1	RJ Ascani
+     1	Robin Jarry
+     1	Sam Mendoza-Jonas
+     1	Samuel Mendoza-Jonas
+     1	Scott Ellis
+     1	Thomas Faivre
+     1	Thomas Preston
+     1	Timothy Lee
+     1	Vanessa Maegima
+     1	Vicente Olivert Riera
+     1	Wolfgang Grandegger
+
+And a special thanks to our patch reviewers:
+
+git log 2017.08.. | grep -Ei '(reviewed|acked)-by:' | \
+    sed 's/.*by: //' | sort | uniq -c | sort -n -r
+
+     24 "Yann E. MORIN" <yann.morin.1998@free.fr>
+      6 Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+      4 Olivier Schonken <olivier.schonken@gmail.com>
+      2 Yegor Yefremov <yegorslists@googlemail.com>
+      2 Romain Naour <romain.naour@gmail.com>
+      2 Joel Stanley <joel@jms.id.au>
+      2 Jan Kundr?t <jan.kundrat@cesnet.cz>
+      2 Bernd Kuhls <bernd.kuhls@t-online.de>
+      1 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+      1 Samuel Martin <s.martin49@gmail.com>
+      1 Rahul Bedarkar <rahulbedarkar89@gmail.com>
+      1 Peter Seiderer <ps.report@gmx.net>
+      1 J?rg Krause <joerg.krause@embedded.rocks>
+      1 "J?rg Krause <joerg.krause@embedded.rocks>"
+      1 Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+      1 Dagg <daggs@gmx.com>
+      1 Christian Stewart <christian@paral.in>
+      1 Carlos Santos <casantos@datacom.ind.br>
+      1 Andr? Hentschel <nerv@dawncrow.de>
+      1 Alistair Francis <alistair.francis@xilinx.com>
+
+Like usual, I will now create a next branch and start merging in new
+features, rather than wait until 2017.11 is released.
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Bye, Peter Korsgaard
