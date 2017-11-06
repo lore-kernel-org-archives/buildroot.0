@@ -1,62 +1,37 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Mon, 6 Nov 2017 16:16:40 -0600
-Subject: [Buildroot] [PATCH 1/1] refpolicy: bump to 2.20170805
-In-Reply-To: <d60a5544-08f0-ea73-1c40-c8409f3b4106@mind.be>
-References: <20171103125856.16518-1-aduskett@gmail.com>
- <20171103185619.3de8abde@windsurf>
- <CAFSsvmqDWvMtg5hYYugd6VKSO3YUNFWB8dKp6t1M73SOwPWm2Q@mail.gmail.com>
- <CANQCQpZEdK7rMrNF_Xw-icCcAEExjZm2zJBKNVd-giXp+fpGLQ@mail.gmail.com>
- <d60a5544-08f0-ea73-1c40-c8409f3b4106@mind.be>
-Message-ID: <CANQCQpaFqGEXwbPpWRwBr4uz76vCufY8pAMs4yO67Rn0vGQzbg@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 6 Nov 2017 23:19:00 +0100
+Subject: [Buildroot] [PATCH v2 1/1] turbovnc: new package
+In-Reply-To: <5A005FF1.5000204@petroprogram.com>
+References: <1509367204-12966-1-git-send-email-stefan.froberg@petroprogram.com>
+ <20171101060657.tzjnt4ceb25irb3o@sapphire.tkos.co.il>
+ <20171101105305.1cd82e60@windsurf> <59FB8C69.7050108@petroprogram.com>
+ <20171102222811.4d501282@windsurf> <5A005FF1.5000204@petroprogram.com>
+Message-ID: <2241958e-38c2-6075-1d08-a129e1124251@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout,
 
-On Mon, Nov 6, 2017 at 4:11 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
->
->
-> On 06-11-17 14:51, Matthew Weber wrote:
->> Adam,
 
->>> We talked on IRC. :)  The contrib module is included in the tarball as
->>> Arnout has said.
->>>
->>>
->>
->> Sorry took a bit to get back to this email.  I've figured out what
->> happened.  Nothing has changed in how refpolicy and refpolicy-contrib
->> are released.  This patch series changes the package to use a released
->> archive vs the git repo.  In the upstream git repo it still uses the
->> submodule for retrieving the contrib repository.  I don't have a good
->> reason to go either way, but my development approach for refpolicy
->> leverage's the fact it's a GIT clone (less lines of change in a patch
->> I maintain on top of buildroot providing selectable GIT repo for this
->> package).  I could propose this patch if there is interest and that
->> would clear up which way to go....  we found it was hard to do
->> refpolicy development purely via patches.
->
->  In that case I think the way to go is to make a custom clone of refpolicy
-> (including submodules) and using OVERRIDE_SRCDIR to build it. I usually have the
-> following in my external:
->
-> OVERRIDE_BASE_DIR := $(dir $(lastword $(MAKEFILE_LIST)))
-> AUTO_OVERRIDES = $(notdir $(wildcard $(OVERRIDE_BASE_DIR)src/*))
-> do_override = $(1)_OVERRIDE_SRCDIR = $(OVERRIDE_BASE_DIR)src/$(2)
-> $(foreach override,$(AUTO_OVERRIDES),\
->         $(eval $(call do_override,$(call UPPERCASE,$(override)),$(override))))
->
->
-> and then I put anything that needs a custom version as a git submodule under
-> src/. I usually also put custom packages there, i.e. I don't use any versioning
-> for them other than git itself.
->
+On 06-11-17 14:13, Stefan Fr?berg wrote:
+> 1. TurboVNC really does depend of turbo-jpeg, that's one of the reasons it's so
+> fast.
+> So for now I have made it "depends on BR2_PACKAGE_JPEG_TURBO" so that turbovnc
+> package will only appear to menu only if jpeg-turbo has been also selected.
+> Is that okay?
 
-Yep, I think we're headed the path of a out-of-tree build of refpolicy
-using the SDK instead.  So no issue on my end.  Thanks for the update
-Adam!
+ Yes, there is no other way. However, please do add a comment (separately from
+the toolchain comments) that it needs jpeg-turbo.
 
-Matt
+ Regards,
+ Arnout
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
