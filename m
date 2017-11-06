@@ -1,29 +1,40 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 06 Nov 2017 09:45:30 +0000
-Subject: [Buildroot] [Bug 10361] python3 python-config script generates
- invalid includes
-In-Reply-To: <bug-10361-163@https.bugs.busybox.net/>
-References: <bug-10361-163@https.bugs.busybox.net/>
-Message-ID: <bug-10361-163-JmZty8rnCB@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 6 Nov 2017 10:48:26 +0100
+Subject: [Buildroot] [PATCH v5 00/11] board: Add Allwinner A64/H5 boards
+In-Reply-To: <CAD6G_RRovKuVcVzreKh=K7HSzOddSBg+jau3CYdhwd-fBM_bVg@mail.gmail.com>
+References: <1509559553-26544-1-git-send-email-jagan@amarulasolutions.com>
+ <CAD6G_RRovKuVcVzreKh=K7HSzOddSBg+jau3CYdhwd-fBM_bVg@mail.gmail.com>
+Message-ID: <20171106104826.0300f412@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=10361
+Hello,
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+On Mon, 6 Nov 2017 15:09:14 +0530, Jagan Teki wrote:
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-         Resolution|---                         |FIXED
-             Status|NEW                         |RESOLVED
+> > Jagan Teki (11):
+> >   arm-trusted-firmware: Build FIP for BL33
+> >   uboot: Add U-Boot-bundles-ATF support
+> >   board: Add Bananapi M64 support
+> >   board: Add Pine64 support
+> >   board: Add SoPine support
+> >   board: Add FriendlyARM Nanopi A64 support
+> >   board: Add FriendlyARM Nanopi NEO2 support
+> >   board: Add Olimex A64-OLinuXino support
+> >   board: Add Orangepi Win/Win Plus support
+> >   board: Add Orangepi Prime support
+> >   board: Add Orangepi Zero Plus2 support  
+> 
+> Any comments?
 
---- Comment #3 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
-Fixed by
-https://git.buildroot.org/buildroot/commit/?id=04d1699ba4cecaa77f688b4effbcac5e84419b15
+I intend to review this series (since I commented on the previous
+iterations), but haven't gotten to it yet.
 
+Thomas
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
