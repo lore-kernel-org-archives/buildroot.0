@@ -1,49 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 6 Nov 2017 21:25:31 +0100
-Subject: [Buildroot] [git commit] uboot: use local libfdt.h
-Message-ID: <20171106201938.56CD37FC1A@busybox.osuosl.org>
+Date: Mon, 06 Nov 2017 21:27:54 +0100
+Subject: [Buildroot] [PATCH] orange-pi-one: bump kernel and uboot
+ versions
+In-Reply-To: <20171106183145.axufx2iddcziad7x@speedy.hunter> (Sergey
+ Matyukevich's message of "Mon, 6 Nov 2017 21:31:45 +0300")
+References: <20171106092602.24565-1-geomatsi@gmail.com>
+ <CANQCQpaFx=wEYOo3mzRLzfbEwxdSLN-rHkdjiaRkXwO+6Gp33w@mail.gmail.com>
+ <20171106183145.axufx2iddcziad7x@speedy.hunter>
+Message-ID: <87h8u7w3sl.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3a6573ccee2624de0c604abf2c7df6704a4cf566
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Sergey" == Sergey Matyukevich <geomatsi@gmail.com> writes:
 
-Use of libfdt.h by u-boot is currently using
-the <system-path>.
+ >> > Bump kernel to 4.13.11 and U-Boot to 2017.09.
+ >> >
+ >> 
+ >> <snip>
+ >> 
+ >> > @@ -18,7 +18,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ >> >  BR2_TARGET_UBOOT=y
+ >> >  BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ >> >  BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+ >> > -BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.03"
+ >> > +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.09"
+ >> 
+ >> This bump requires BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y .  You can't see
+ >> the failure if your host machine has swig.
+ >> 
+ >> Similar to what was observed with uboot-tools:
+ >> https://git.busybox.net/buildroot/commit/?id=0bcd09ffcabbcce74ed00bc38620f71a34a59b45
 
-Jan submitted the following upstream
-https://patchwork.ozlabs.org/patch/833760/
+ > Thanks a lot ! I noticed this problem on one of my machines, but haven't
+ > yet investigated the root cause. Actually in my case both host-uboot-tools
+ > and u-boot fail unless I modify path to libfdt headers.
 
-Resolves a failure like this one observed on uboot-tools
-http://autobuild.buildroot.net/results/347cde4b5c0e6ca76d354396385be4ec1294da73
+That is a separate issue. I have just pushed two fixes for this (which
+patch the fdtgrep.c include line).
 
-[Peter: only sed if file exists]
-CC: Jan Kundr??t <jan.kundrat@cesnet.cz>
-CC: Arnout Vandecappelle <arnout@mind.be>
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- boot/uboot/uboot.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
-
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index fdacf16..a1fac7d 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -183,6 +183,13 @@ define UBOOT_APPLY_LOCAL_PATCHES
- endef
- UBOOT_POST_PATCH_HOOKS += UBOOT_APPLY_LOCAL_PATCHES
- 
-+# Bug: https://patchwork.ozlabs.org/patch/833760/
-+define UBOOT_FIX_LIBFDT_SYSTEM_PATH
-+	[ ! -e $(@D)/tools/fdtgrep.c ] || \
-+	$(SED) 's%<../include/libfdt.h>%"../include/libfdt.h"%' $(@D)/tools/fdtgrep.c
-+endef
-+UBOOT_POST_PATCH_HOOKS += UBOOT_FIX_LIBFDT_SYSTEM_PATH
-+
- ifeq ($(BR2_TARGET_UBOOT_BUILD_SYSTEM_LEGACY),y)
- define UBOOT_CONFIGURE_CMDS
- 	$(TARGET_CONFIGURE_OPTS) 	\
+-- 
+Bye, Peter Korsgaard
