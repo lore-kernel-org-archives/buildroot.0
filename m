@@ -1,55 +1,48 @@
-From: Alex Suykov <alex.suykov@gmail.com>
-Date: Mon, 6 Nov 2017 21:06:11 +0200
-Subject: [Buildroot] [PATCH] vboot-utils: fix ARCH detection
-Message-ID: <20171106190611.GA31849@latitude.localdomain>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 6 Nov 2017 20:48:08 +0100
+Subject: [Buildroot] vboot-utils issue in Buildroot
+In-Reply-To: <20171106184840.GA28366@latitude.localdomain>
+References: <20171106172452.4579763b@windsurf.home>
+ <20171106184840.GA28366@latitude.localdomain>
+Message-ID: <20171106204808.52b09e63@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The package includes some target-specific code that is irrelevant
-in a host package but gets built anyway. The target for this code
-must be one of the supported ChromeOS targets.
+Hello,
 
-Supplied Makefile apparently relies on the environment to provide
-a valid target, with a simple fallback to host arch. This breaks
-the build if no value is provided and the host arch is not among
-the supported ones.
+Thanks for your feedback. However, please keep the mailing list in Cc.
+Thanks!
 
-Should fix
-http://autobuild.buildroot.net/results/d118a83b6c4f7f910d0d44c279f36251d7ba29e8/
-and similar failures.
+On Mon, 6 Nov 2017 20:48:40 +0200, Alex Suykov wrote:
 
-Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
----
- package/vboot-utils/Config.in.host | 1 +
- package/vboot-utils/vboot-utils.mk | 1 +
- 2 files changed, 2 insertions(+)
+> > Could you have a look at what this architecture specific code is doing?
+> > It's somewhat weird in a set of host utilities to have something that
+> > would depend on the target architecture.  
+> 
+> Those are target-specific definitions for sure, so ARCH must
+> be the target architecture there. I'll try to send a patch now.
 
-diff --git a/package/vboot-utils/Config.in.host b/package/vboot-utils/Config.in.host
-index aa0caef2e2..1b23e1c644 100644
---- a/package/vboot-utils/Config.in.host
-+++ b/package/vboot-utils/Config.in.host
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_HOST_VBOOT_UTILS
- 	bool "host vboot utils"
- 	select BR2_PACKAGE_HOST_UTIL_LINUX
-+	depends on BR2_arm || BR2_x86_64 || BR2_i386
- 	help
- 	  Chromium OS verified boot utilities: futility and cgpt.
- 
-diff --git a/package/vboot-utils/vboot-utils.mk b/package/vboot-utils/vboot-utils.mk
-index a6a67ad317..bfbd6d204a 100644
---- a/package/vboot-utils/vboot-utils.mk
-+++ b/package/vboot-utils/vboot-utils.mk
-@@ -27,6 +27,7 @@ define HOST_VBOOT_UTILS_BUILD_CMDS
- 		CC="$(HOSTCC)" \
- 		CFLAGS="$(HOST_CFLAGS) -D_LARGEFILE64_SOURCE -D_GNU_SOURCE" \
- 		LDFLAGS="$(HOST_LDFLAGS)" \
-+		ARCH=$(BR2_ARCH) \
- 		futil cgpt
- endef
- 
+Gentoo defines ARCH == HOST_ARCH. Be careful that if they are
+different, vboot-utils will try to use Qemu.
+
+> vboot-utils aren't really host-only, it's also a target package in ChromeOS
+> and it fills the role of efibootmgr on PC. The code in crossystem_arch
+> seems to be about boot configuration, so completely irrelevant when building
+> a host package. But it always gets built.
+> 
+> Chromeos does support cross-compiling, but I suspect no-one ever tried
+> building it on a host that wasn't x86_64 or maybe arm.
+
+But it's quite weird to have a dependency on the target architecture
+when building a host tool. Looking at the ARM specific code for
+example, it pokes into /proc/firmware/device-tree/, which obviously has
+no chance to exist on the build machine.
+
+Thomas
 -- 
-2.14.1
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
