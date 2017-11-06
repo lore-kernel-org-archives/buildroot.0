@@ -1,44 +1,67 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Mon, 6 Nov 2017 11:41:22 -0600
-Subject: [Buildroot] [PATCH v2] uboot-tools: bump to version 2017.09
-In-Reply-To: <d6fb31e1-ae41-4af6-824c-5330461abc64@cesnet.cz>
-References: <1509562398-20833-1-git-send-email-fabio.estevam@nxp.com>
- <20171103135056.47701a6c@windsurf>
- <d6fb31e1-ae41-4af6-824c-5330461abc64@cesnet.cz>
-Message-ID: <CANQCQpbkFY15zM=zqUZZLs4+s+Wf6X4iJvemKsM+4wFMXd3SzQ@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 6 Nov 2017 18:41:22 +0100
+Subject: [Buildroot] [git commit] qt5base: add qmake.conf fixup for i.MX
+ platforms
+Message-ID: <20171106173439.E5B41810DB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Jan,
+commit: https://git.buildroot.net/buildroot/commit/?id=0c219ddb8ac2736057402144825b22812b5a642c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, Nov 3, 2017 at 8:15 AM, Jan Kundr?t <jan.kundrat@cesnet.cz> wrote:
-> On p?tek 3. listopadu 2017 13:50:56 CET, Thomas Petazzoni wrote:
->>
->> I'm not sure if it's this version bump, or Matthew Weber's patch about
->> pylibfdt, but we're seeing new build failures with host-uboot-tools:
->>
->>   http://autobuild.buildroot.net/?reason=host-uboot-tools-2017.09
->>
->> Could one of you have a look?
->
->
-> Hi,
-> I believe that this is caused by a change to host-dtc in commit
-> b8c3e941731ddfc3728045142aa9081adeeeaee2. Since this commit, host-dtc has
-> started installing its own libfdt into host/include/libfdt*. U-Boot uses
-> #include directives in form of <system/ones>, not "user/ones", so it finds a
-> copy of libfdt provided by dtc, not its own modified version. I sent a quick
-> and dirty patch which fixes this earlier today:
->
-> http://lists.busybox.net/pipermail/buildroot/2017-November/206092.html
->
+As stated in QTBUG-61156 [1], since Qt5.9 all the Qt apps fail to start
+on i.MX platforms.
 
-Based on Jan's submission and Arnout's feedback
+The reason is that the qmake.conf should apparently now specify which
+eglfs backend to use.
 
-https://patchwork.ozlabs.org/patch/834861/
-https://patchwork.ozlabs.org/patch/834862/
+It can be seen in the qmake.conf example for i.MX [2].
 
-Matt
+It has also been integrated into the Yocto meta-freescale layer [3].
+
+Although this issue can be worked around by exporting a variable
+(QT_QPA_EGLFS_INTEGRATION=eglfs_viv), this patch aims at providing
+a more user-friendly approach by modifying qmake.conf when created.
+
+[1]: https://bugreports.qt.io/browse/QTBUG-61156
+[2]: https://github.com/qt/qtbase/blob/5.9/mkspecs/devices/linux-imx6-g%2B%2B/qmake.conf#L35
+[3]: https://github.com/Freescale/meta-freescale/blob/master/dynamic-layers/qt5-layer/recipes-qt/qt5/qtbase/0015-Add-eglfs-to-IMX-GPU.patch
+
+[Peter: simplify conditional, add comment explaining why]
+Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+Tested-by: Maxime Ripard <maxime.ripard@free-electrons.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/qt5/qt5base/qt5base.mk | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+index 1683eda..b3f9c79 100644
+--- a/package/qt5/qt5base/qt5base.mk
++++ b/package/qt5/qt5base/qt5base.mk
+@@ -240,6 +240,14 @@ QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_PRINTSUPPORT) += Qt5PrintSupport
+ 
+ QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_DBUS) += Qt5DBus
+ 
++ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST)$(BR2_PACKAGE_IMX_GPU_VIV),yy)
++# use vivante backend
++define QT5BASE_CONFIGURE_QMAKE_CONFIG
++	echo "EGLFS_DEVICE_INTEGRATION = eglfs_viv" >> \
++		$(@D)/mkspecs/devices/linux-buildroot-g++/qmake.conf
++endef
++endif
++
+ ifneq ($(QT5BASE_CONFIG_FILE),)
+ define QT5BASE_CONFIGURE_CONFIG_FILE
+ 	cp $(QT5BASE_CONFIG_FILE) $(@D)/src/corelib/global/qconfig-buildroot.h
+@@ -257,6 +265,7 @@ endif
+ define QT5BASE_CONFIGURE_CMDS
+ 	$(INSTALL) -m 0644 -D $(QT5BASE_PKGDIR)/qmake.conf \
+ 		$(@D)/mkspecs/devices/linux-buildroot-g++/qmake.conf
++	$(QT5BASE_CONFIGURE_QMAKE_CONFIG)
+ 	$(INSTALL) -m 0644 -D $(QT5BASE_PKGDIR)/qplatformdefs.h \
+ 		$(@D)/mkspecs/devices/linux-buildroot-g++/qplatformdefs.h
+ 	$(QT5BASE_CONFIGURE_CONFIG_FILE)
