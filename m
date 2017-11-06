@@ -1,65 +1,41 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Mon, 6 Nov 2017 07:51:16 -0600
-Subject: [Buildroot] [PATCH 1/1] refpolicy: bump to 2.20170805
-In-Reply-To: <CAFSsvmqDWvMtg5hYYugd6VKSO3YUNFWB8dKp6t1M73SOwPWm2Q@mail.gmail.com>
-References: <20171103125856.16518-1-aduskett@gmail.com>
- <20171103185619.3de8abde@windsurf>
- <CAFSsvmqDWvMtg5hYYugd6VKSO3YUNFWB8dKp6t1M73SOwPWm2Q@mail.gmail.com>
-Message-ID: <CANQCQpZEdK7rMrNF_Xw-icCcAEExjZm2zJBKNVd-giXp+fpGLQ@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon,  6 Nov 2017 15:17:09 +0100
+Subject: [Buildroot] [PATCH 1/2] jimtcl: update config.guess / config.sub
+Message-ID: <20171106141710.6029-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Adam,
+Fixes:
+http://autobuild.buildroot.net/results/284/284876bd649cab26e5ecd696c03c71c077ea7411/
 
-On Sun, Nov 5, 2017 at 11:34 AM, Adam Duskett <aduskett@gmail.com> wrote:
->
-> Hello;
->
-> On Fri, Nov 3, 2017 at 1:56 PM, Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com> wrote:
-> > Hello,
-> >
-> > On Fri,  3 Nov 2017 08:58:56 -0400, Adam Duskett wrote:
-> >
-> >> +ifeq ($(BR2_PACKAGE_PYTHON3),y)
-> >> +REFPOLICY_DEPENDENCIES += host-python3
-> >> +REFPOLICY_PYTHON="$(HOST_DIR)/bin/python(PYTHON3_VERSION_MAJOR)"
-> >> +else
-> >> +REFPOLICY_DEPENDENCIES += host-python
-> >> +REFPOLICY_PYTHON="$(HOST_DIR)/bin/python(PYTHON_VERSION_MAJOR)"
-> >> +endif
-> >
-> > I'm not sure why this is needed. Indeed, if BR2_PACKAGE_PYTHON3=y,
-> > $(HOST_DIR)/bin/python points to python3, and if
-> > BR2_PACKAGE_PYTHON=y, $(HOST_DIR)/bin/python points to python2.
-> >
-> Huh, didn't know that.  I will change that asap!
->
-> > Therefore, you should be able to just use $(HOST_DIR)/bin/python.
-> >
-> > Could you try that instead?
-> >
-> > Also, please answer Matt's concerns before sending a v2. Thanks!
-> >
-> We talked on IRC. :)  The contrib module is included in the tarball as
-> Arnout has said.
->
->
+The build system doesn't use autotools, but does use an old version of
+gnuconfig which doesn't know all the architectures supported by Buildroot,
+so update config.guess / config.sub like we do in pkg-autotools.mk
 
-Sorry took a bit to get back to this email.  I've figured out what
-happened.  Nothing has changed in how refpolicy and refpolicy-contrib
-are released.  This patch series changes the package to use a released
-archive vs the git repo.  In the upstream git repo it still uses the
-submodule for retrieving the contrib repository.  I don't have a good
-reason to go either way, but my development approach for refpolicy
-leverage's the fact it's a GIT clone (less lines of change in a patch
-I maintain on top of buildroot providing selectable GIT repo for this
-package).  I could propose this patch if there is interest and that
-would clear up which way to go....  we found it was hard to do
-refpolicy development purely via patches.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/jimtcl/jimtcl.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-
-Matt
+diff --git a/package/jimtcl/jimtcl.mk b/package/jimtcl/jimtcl.mk
+index 313970d94a..68c8a914db 100644
+--- a/package/jimtcl/jimtcl.mk
++++ b/package/jimtcl/jimtcl.mk
+@@ -38,6 +38,12 @@ define JIMTCL_INSTALL_LIB
+ endef
+ endif
+ 
++# build system doesn't use autotools, but does use an old version of
++# gnuconfig which doesn't know all the architectures supported by
++# Buildroot, so update config.guess / config.sub like we do in
++# pkg-autotools.mk
++JIMTCL_POST_PATCH_HOOKS += UPDATE_CONFIG_HOOK
++
+ define JIMTCL_CONFIGURE_CMDS
+ 	(cd $(@D); \
+ 		$(TARGET_CONFIGURE_OPTS) CCACHE=none \
+-- 
+2.11.0
