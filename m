@@ -1,65 +1,55 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon,  6 Nov 2017 22:14:15 +0100
-Subject: [Buildroot] [PATCH 4/4 v2] package/freerdp: fix build of wayland
- client
-In-Reply-To: <cover.1510002833.git.yann.morin.1998@free.fr>
-References: <cover.1510002833.git.yann.morin.1998@free.fr>
-Message-ID: <acb107d38bfc324e8108f58f192a9dc05c5098bd.1510002833.git.yann.morin.1998@free.fr>
+From: Alex Suykov <alex.suykov@gmail.com>
+Date: Mon, 6 Nov 2017 23:15:07 +0200
+Subject: [Buildroot] vboot-utils issue in Buildroot
+In-Reply-To: <20171106204808.52b09e63@windsurf>
+References: <20171106172452.4579763b@windsurf.home>
+ <20171106184840.GA28366@latitude.localdomain>
+ <20171106204808.52b09e63@windsurf>
+Message-ID: <20171106211507.GA1361@latitude.localdomain>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, FreeRDP uses pkg-config to find whether wayland is available.
-When it is, it gets the CFLAGS and LDFLAGS and so on from pkg-config,
-which is OK.
+Mon, Nov 06, 2017 at 08:48:08PM +0100, Thomas Petazzoni wrote:
 
-But I also gets the path to the wayland scanner from pkg-config. And
-this points to the target one, when we really need the host one.
+> Thanks for your feedback. However, please keep the mailing list in Cc.
 
-So we force-feed the correct path as a configure option.
+Sorry, did not notice it was a list message. This one should go with Cc.
 
-Furthermore, wayland support needs libxkbcommon, so add this missing
-dependency as well.
+> But it's quite weird to have a dependency on the target architecture
+> when building a host tool. Looking at the ARM specific code for
+> example, it pokes into /proc/firmware/device-tree/, which obviously has
+> no chance to exist on the build machine.
 
-Fixes:
-    http://autobuild.buildroot.org/results/bdfe233ade36a56d0f65ef3c3d1698fca548beed/
+Here's what I think happens there: they have a common library that gets
+used both for target-independent tools (futility) and target-specific
+tools (crossystem). This library includes some target-specific code that
+is only needed for crossystem, but gets built anyway because it's a part
+of the library.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- package/freerdp/Config.in  | 1 +
- package/freerdp/freerdp.mk | 6 ++++--
- 2 files changed, 5 insertions(+), 2 deletions(-)
+Actually within Buildroot this whole problem can be solved with a simple
+patch that would delete this line:
 
-diff --git a/package/freerdp/Config.in b/package/freerdp/Config.in
-index 9dd2505a44..59bc18b672 100644
---- a/package/freerdp/Config.in
-+++ b/package/freerdp/Config.in
-@@ -81,6 +81,7 @@ config BR2_PACKAGE_FREERDP_CLIENT_WL
- 	bool "wayland client"
- 	default y
- 	depends on BR2_PACKAGE_WAYLAND
-+	select BR2_PACKAGE_LIBXKBCOMMON
- 
- endif
- 
-diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
-index 458bd5eea7..69a89a190c 100644
---- a/package/freerdp/freerdp.mk
-+++ b/package/freerdp/freerdp.mk
-@@ -199,8 +199,10 @@ FREERDP_CONF_OPTS += -DWITH_XV=OFF
- endif
- 
- ifeq ($(BR2_PACKAGE_WAYLAND),y)
--FREERDP_DEPENDENCIES += wayland
--FREERDP_CONF_OPTS += -DWITH_WAYLAND=ON
-+FREERDP_DEPENDENCIES += wayland libxkbcommon
-+FREERDP_CONF_OPTS += \
-+	-DWITH_WAYLAND=ON \
-+	-DWAYLAND_SCANNER=$(HOST_DIR)/bin/wayland-scanner
- else
- FREERDP_CONF_OPTS += -DWITH_WAYLAND=OFF
- endif
--- 
-2.11.0
+	host/arch/${ARCH}/lib/crossystem_arch.c \
+
+crossystem seems to be the only tool that calls anything from that file, 
+no idea why it's a part of the library.
+
+> Gentoo defines ARCH == HOST_ARCH. Be careful that if they are
+> different, vboot-utils will try to use Qemu.
+
+Looks like qemu is only used there for tests.
+Also, the way they choose qemu command:
+
+    ifeq (${ARCH},${HOST_ARCH})
+      ...
+    else
+      QEMU_ARCH := ${ARCH}
+    endif
+
+    ...
+      QEMU_BIN = qemu-${QEMU_ARCH}
+
+doesn't make any sense if ARCH is HOST_ARCH.
