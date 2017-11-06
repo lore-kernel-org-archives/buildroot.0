@@ -1,88 +1,101 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 6 Nov 2017 13:10:58 +0100
-Subject: [Buildroot] [git commit] lxc: fix legacy PR_{G,
- S}ET_NO_NEW_PRIVS handling
-Message-ID: <20171106120413.97FD9802E5@busybox.osuosl.org>
+From: =?UTF-8?B?U3RlZmFuIEZyw7ZiZXJn?= <stefan.froberg@petroprogram.com>
+Date: Mon, 06 Nov 2017 15:13:21 +0200
+Subject: [Buildroot] [PATCH v2 1/1] turbovnc: new package
+In-Reply-To: <20171102222811.4d501282@windsurf>
+References: <1509367204-12966-1-git-send-email-stefan.froberg@petroprogram.com>	<20171101060657.tzjnt4ceb25irb3o@sapphire.tkos.co.il>	<20171101105305.1cd82e60@windsurf>	<59FB8C69.7050108@petroprogram.com>
+ <20171102222811.4d501282@windsurf>
+Message-ID: <5A005FF1.5000204@petroprogram.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=35bf58d3101a04d518d90d237ea9bc11baa1398a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi
 
-Fixes:
-http://autobuild.buildroot.net/results/841/841e9601a6afc023d2a303ffb4b7ea63edd816af/
+I have now successfully compiled latest TurboVNC from git and with 
+bzip2,freetype and zlib as
+external dependencies, also, libXau, libXdmcp and libXfont are now external.
 
-The configure checks for these use AC_CHECK_DECLS, which define the symbol
-to 0 if not available - So adjust the code to match. From the autoconf
-manual:
+But there are two issues that need resolving:
 
-https://www.gnu.org/software/autoconf/manual/autoconf-2.65/html_node/Generic-Declarations.html)
+1. TurboVNC really does depend of turbo-jpeg, that's one of the reasons 
+it's so fast.
+So for now I have made it "depends on BR2_PACKAGE_JPEG_TURBO" so that 
+turbovnc
+package will only appear to menu only if jpeg-turbo has been also selected.
+Is that okay?
 
-For each of the symbols (comma-separated list), define HAVE_DECL_symbol (in
-all capitals) to ???1??? if symbol is declared, otherwise to ???0???.
+2. TurboVNC (Xvnc binary) really is two servers rolled into one. Actual 
+normally working,
+altought TurboVNC patched Xorg server and VNC server.
+So, maybe the right place for turbovnc in the menus would be below 
+"Alternate X servers",
+below Xvfb.
+And then I just copy dependencies from xorg package, so that if the user 
+want's both
+VNC and Xorg then he just selects the turbovnc without needing to waste 
+space for
+the real, vanilla Xorg installation.
+Is that okay?
 
-Patch submitted upstream: https://github.com/lxc/lxc/pull/1901
+Maybe in future, there could be even virtual package virtual-xvnc, like 
+"Xvnc --->"  below Xvfb in the
+menu where user could select what Xvnc implementation (TurboVNC, 
+TightVNC, TigerVNC etc...)
+he/she want's to use.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...-Fix-legacy-PR_-G-S-ET_NO_NEW_PRIVS-handl.patch | 49 ++++++++++++++++++++++
- 1 file changed, 49 insertions(+)
+Tought?
 
-diff --git a/package/lxc/0002-lxc-start.c-Fix-legacy-PR_-G-S-ET_NO_NEW_PRIVS-handl.patch b/package/lxc/0002-lxc-start.c-Fix-legacy-PR_-G-S-ET_NO_NEW_PRIVS-handl.patch
-new file mode 100644
-index 0000000..a11f785
---- /dev/null
-+++ b/package/lxc/0002-lxc-start.c-Fix-legacy-PR_-G-S-ET_NO_NEW_PRIVS-handl.patch
-@@ -0,0 +1,49 @@
-+From 995accccbb07d59381aa60939cd44b41dc092dda Mon Sep 17 00:00:00 2001
-+From: Peter Korsgaard <peter@korsgaard.com>
-+Date: Mon, 6 Nov 2017 09:35:48 +0100
-+Subject: [PATCH] lxc/start.c: Fix legacy PR_{G,S}ET_NO_NEW_PRIVS handling
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+The configure checks for these use AC_CHECK_DECLS, which define the symbol
-+to 0 if not available - So adjust the code to match.  From the autoconf
-+manual:
-+
-+https://www.gnu.org/software/autoconf/manual/autoconf-2.65/html_node/Generic-Declarations.html)
-+
-+For each of the symbols (comma-separated list), define HAVE_DECL_symbol (in
-+all capitals) to ???1??? if symbol is declared, otherwise to ???0???.
-+
-+[Submitted upstream: https://github.com/lxc/lxc/pull/1901]
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ src/lxc/start.c | 6 +++---
-+ 1 file changed, 3 insertions(+), 3 deletions(-)
-+
-+diff --git a/src/lxc/start.c b/src/lxc/start.c
-+index 2632a9b1..fe76b235 100644
-+--- a/src/lxc/start.c
-++++ b/src/lxc/start.c
-+@@ -52,15 +52,15 @@
-+ #include <sys/capability.h>
-+ #endif
-+ 
-+-#ifndef HAVE_DECL_PR_CAPBSET_DROP
-++#if !HAVE_DECL_PR_CAPBSET_DROP
-+ #define PR_CAPBSET_DROP 24
-+ #endif
-+ 
-+-#ifndef HAVE_DECL_PR_SET_NO_NEW_PRIVS
-++#if !HAVE_DECL_PR_SET_NO_NEW_PRIVS
-+ #define PR_SET_NO_NEW_PRIVS 38
-+ #endif
-+ 
-+-#ifndef HAVE_DECL_PR_GET_NO_NEW_PRIVS
-++#if !HAVE_DECL_PR_GET_NO_NEW_PRIVS
-+ #define PR_GET_NO_NEW_PRIVS 39
-+ #endif
-+ 
-+-- 
-+2.11.0
-+
+-S-
+
+2.11.2017, 23:28, Thomas Petazzoni kirjoitti:
+> Hello,
+>
+> On Thu, 02 Nov 2017 23:21:45 +0200, Stefan Fr?berg wrote:
+>
+>
+>> libbzip2.a      libfontenc.a    librandr.a    libXau.a libxkb.a
+>> libcomposite.a  libfreetype2.a  librender.a   libXdmcp.a libXNVCtrl.a
+>> libdamage.a     libmain.a       libsha1.a     libXext-server.a libzlib.a
+>> libdamageext.a  libmi.a         libsync.a     libxfixes.a
+>> libdix.a        libos.a         libvnc.a      libXfont.a
+>> libfb.a         libpixman.a     libvncauth.a  libXi.a
+> That's a lot of static libraries, but I'm sure TurboVNC didn't
+> duplicate the source code for all of these. Perhaps it is copying them
+> from their system-wide location to its build directory, for some funky
+> reason?
+>
+>> But then doing ldd for Xvnc binary gives this:
+>> Xvnc:
+>>           linux-vdso.so.1 (0x00007fffbbffe000)
+>>           libturbojpeg.so.0 => /usr/lib64/libturbojpeg.so.0
+>> (0x00007f1d221b8000)
+>>           libm.so.6 => /lib64/libm.so.6 (0x00007f1d21eba000)
+>>           libpthread.so.0 => /lib64/libpthread.so.0 (0x00007f1d21c9e000)
+>>           libpam.so.0 => /lib64/libpam.so.0 (0x00007f1d21a90000)
+>>           libdl.so.2 => /lib64/libdl.so.2 (0x00007f1d2188c000)
+>>           libSM.so.6 => /usr/lib64/libSM.so.6 (0x00007f1d21683000)
+>>           libICE.so.6 => /usr/lib64/libICE.so.6 (0x00007f1d21466000)
+>>           libX11.so.6 => /usr/lib64/libX11.so.6 (0x00007f1d21124000)
+>>           libXext.so.6 => /usr/lib64/libXext.so.6 (0x00007f1d20f12000)
+>>           libc.so.6 => /lib64/libc.so.6 (0x00007f1d20b76000)
+>>           /lib64/ld-linux-x86-64.so.2 (0x00007f1d2242b000)
+>>           libuuid.so.1 => /lib64/libuuid.so.1 (0x00007f1d20971000)
+>>           libbsd.so.0 => /usr/lib64/libbsd.so.0 (0x00007f1d2075b000)
+>>           libxcb.so.1 => /usr/lib64/libxcb.so.1 (0x00007f1d20532000)
+>>           librt.so.1 => /lib64/librt.so.1 (0x00007f1d2032a000)
+>>           libXau.so.6 => /usr/lib64/libXau.so.6 (0x00007f1d20126000)
+>>           libXdmcp.so.6 => /usr/lib64/libXdmcp.so.6 (0x00007f1d1ff20000)
+>>
+>> So it builds a static versions of libXau.a libXdmcp.a for example, but
+>> then does not use them anyway in the final link but instead the system
+>> wide versions ?
+>>
+>> I posted question to github if bzip2, freetype2 and zlib can be external
+>> dependencies or if they contain some TurboVNC specific stuff.
+> Thanks. Let's see what upstream says.
+>
+> Best regards,
+>
+> Thomas
