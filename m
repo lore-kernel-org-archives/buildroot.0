@@ -1,48 +1,39 @@
-From: Florian Fainelli <f.fainelli@gmail.com>
-Date: Sun, 05 Nov 2017 21:36:39 -0800
-Subject: [Buildroot] [PATCH] ethtool: Allow enabling/disabling pretty
- printing
-In-Reply-To: <20171106053002.br4zv6aq3hvjc4q7@sapphire.tkos.co.il>
-References: <20171106012906.22000-1-f.fainelli@gmail.com>
- <20171106053002.br4zv6aq3hvjc4q7@sapphire.tkos.co.il>
-Message-ID: <78E2EA83-B6D6-448B-8B89-60A15B5E0658@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 06 Nov 2017 07:22:46 +0100
+Subject: [Buildroot] [PATCH] libssh2: revert to previous crypto defaults
+In-Reply-To: <20171106044905.dmcl4skovwtypj63@sapphire.tkos.co.il> (Baruch
+ Siach's message of "Mon, 6 Nov 2017 06:49:05 +0200")
+References: <20171105213402.26615-1-peter@korsgaard.com>
+ <20171106044905.dmcl4skovwtypj63@sapphire.tkos.co.il>
+Message-ID: <874lq8ylhl.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On November 5, 2017 9:30:03 PM PST, Baruch Siach <baruch@tkos.co.il> wrote:
->Hi Florian,
->
->On Sun, Nov 05, 2017 at 05:29:06PM -0800, Florian Fainelli wrote:
->> Ethtool has a configure script option allowing the enabling or
->disabling of
->> pretty printing for drivers, SFP modules etc which can save a
->significant
->> amount of bytes on the root filesystem. Allow selecting that, and
->turn it on by
->> default (like ethtool's configure script).
->
->Have you measured the impact on the target size?
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-Yes, this was included in the original commit message:
+ > Hi Peter,
+ > On Sun, Nov 05, 2017 at 10:34:02PM +0100, Peter Korsgaard wrote:
+ >> The recent crypto handling change (commit 04a1031d3: package/libssh2: Add
+ >> selectable crypto libraries) had the unfortunate side effect that it no
+ >> longer automatically selects the most suitable crypto backend (E.G.  one
+ >> where the dependency is already enabled), so all users not wanting to use
+ >> the mbedtls backend need to explicitly configure this.
+ >> 
+ >> Fix this by inverting the logic so the crypto backend sub options use
+ >> 'depends on' their dependencies instead of 'select', so only the available
+ >> backends are displayed.
+ >> 
+ >> Like before, default to openssl if no crypto backend dependencies are
+ >> currently enabled.
 
-https://git.kernel.org/pub/scm/network/ethtool/ethtool.git/commit/?id=875616dfcbe57ea0f639a20d85fcbad2172ad744
+ > The CHANGES file needs an update. It currently says:
 
-~500 Kbytes on a x86_64 build
-~337 Kbytes on a arm build 
+ >   The default is mbedtls, even if you didn't have mbedtls selected before.
 
-(savings from the original size)
+Correct, that needs to adjusted when/if this gets applied.
 
->
->A test build I ran here (ARM Cortex-A9, musl) showed a significant
->reduction 
->of the (stripped) binary size from 233124 to 60408.
-
-My numbers were not stripped AFAIR, but what you are posting sounds about right.
-
-Thanks
-Hello,
 -- 
-Florian
+Bye, Peter Korsgaard
