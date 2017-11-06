@@ -1,64 +1,45 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 6 Nov 2017 17:24:52 +0100
-Subject: [Buildroot] vboot-utils issue in Buildroot
-Message-ID: <20171106172452.4579763b@windsurf.home>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Mon,  6 Nov 2017 06:13:27 -0600
+Subject: [Buildroot] [PATCH 1/2] uboot: use local libfdt.h
+Message-ID: <20171106121328.20330-1-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Alexey,
+Use of libfdt.h by u-boot is currently using
+the <system-path>.
 
-I'm contacting you because you are listed in Buildroot's DEVELOPERS
-file for the vboot-utils package.
+Jan submitted the following upstream
+https://patchwork.ozlabs.org/patch/833760/
 
-We recently started to have build failures of host-vboot-utils:
+Resolves a failure like this one observed on uboot-tools
+http://autobuild.buildroot.net/results/347cde4b5c0e6ca76d354396385be4ec1294da73
 
-  http://autobuild.buildroot.net/?reason=host-vboot-utils-bbdd62f9b030db7ad8eef789aaf58a7ff9a25656
+CC: Jan Kundr?t <jan.kundrat@cesnet.cz>
+CC: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+---
+ boot/uboot/uboot.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-These all happen because we have enabled a new ppc64le build machine.
-To be clear: it is not about building *for* a ppc64le target, it's
-about the machine running Buildroot using a ppc64le processor.
-
-The build fails with:
-
-make[2]: *** No rule to make target `/home/peko/autobuild/instance-0/output/build/host-vboot-utils-bbdd62f9b030db7ad8eef789aaf58a7ff9a25656/build/host/arch/ppc64le/lib/crossystem_arch.o', needed by `/home/peko/autobuild/instance-0/output/build/host-vboot-utils-bbdd62f9b030db7ad8eef789aaf58a7ff9a25656/build/libvboot_util.a'.  Stop.
-
-And obviously, host/arch/ppc64le/lib/crossystem_arch.c doesn't exist in
-the vboot-utils source code, there's only a file for x86, x86_64, arm
-and mips.
-
-However, reading the logic in Makefile, it is not entirely clear what
-this list of supported architectures is. It does this:
-
-_machname := $(shell uname -m)
-HOST_ARCH ?= ${_machname}
-
-# ARCH and/or FIRMWARE_ARCH are defined by the Chromium OS ebuild.
-# Pick a sane target architecture if none is defined.
-ifeq (${ARCH},)
-  ARCH := ${HOST_ARCH}
-[...]
-
-So it has some concept of HOST_ARCH vs. ARCH. But later on in the
-Makefile, it apparently wants to use Qemu if ARCH != HOST_ARCH.
-
-The problematic file being used is:
-
-          host/arch/${ARCH}/lib/crossystem_arch.c \
-
-Could you have a look at what this architecture specific code is doing?
-It's somewhat weird in a set of host utilities to have something that
-would depend on the target architecture.
-
-It would be nice to see what the right solution is, as this package is
-causing a significant number of build failures at the moment.
-
-Thanks!
-
-Thomas
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index fdacf16856..3350814a82 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -183,6 +183,12 @@ define UBOOT_APPLY_LOCAL_PATCHES
+ endef
+ UBOOT_POST_PATCH_HOOKS += UBOOT_APPLY_LOCAL_PATCHES
+ 
++# Bug: https://patchwork.ozlabs.org/patch/833760/
++define UBOOT_FIX_LIBFDT_SYSTEM_PATH
++	$(SED) 's%<../include/libfdt.h>%"../include/libfdt.h"%' $(@D)/tools/fdtgrep.c 2> /dev/null
++endef
++UBOOT_POST_PATCH_HOOKS += UBOOT_FIX_LIBFDT_SYSTEM_PATH
++
+ ifeq ($(BR2_TARGET_UBOOT_BUILD_SYSTEM_LEGACY),y)
+ define UBOOT_CONFIGURE_CMDS
+ 	$(TARGET_CONFIGURE_OPTS) 	\
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.14.2
