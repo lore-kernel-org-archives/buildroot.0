@@ -1,47 +1,55 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Mon, 6 Nov 2017 14:11:28 -0600
-Subject: [Buildroot] [PATCH] orange-pi-one: bump kernel and uboot
- versions
-In-Reply-To: <20171106183145.axufx2iddcziad7x@speedy.hunter>
-References: <20171106092602.24565-1-geomatsi@gmail.com>
- <CANQCQpaFx=wEYOo3mzRLzfbEwxdSLN-rHkdjiaRkXwO+6Gp33w@mail.gmail.com>
- <20171106183145.axufx2iddcziad7x@speedy.hunter>
-Message-ID: <CANQCQpZOopUiSJ9mW22r3uirBz5aOJeNLxhT-Jbynz=EznN2Kw@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 06 Nov 2017 21:26:34 +0100
+Subject: [Buildroot] [PATCH 1/2] uboot: use local libfdt.h
+In-Reply-To: <CANQCQpatZzVxThWn6kSjgJf92EMS8SCmTOFVN6naFFnvGPTuPg@mail.gmail.com>
+ (Matthew Weber's message of "Mon, 6 Nov 2017 12:06:50 -0600")
+References: <20171106121328.20330-1-matthew.weber@rockwellcollins.com>
+ <CANQCQpatZzVxThWn6kSjgJf92EMS8SCmTOFVN6naFFnvGPTuPg@mail.gmail.com>
+Message-ID: <87lgjjw3ut.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sergey,
+>>>>> "Matthew" == Matthew Weber <matthew.weber@rockwellcollins.com> writes:
 
-On Mon, Nov 6, 2017 at 12:31 PM, Sergey Matyukevich <geomatsi@gmail.com> wrote:
->> > Bump kernel to 4.13.11 and U-Boot to 2017.09.
->> >
->>
->> <snip>
->>
->> > @@ -18,7 +18,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
->> >  BR2_TARGET_UBOOT=y
->> >  BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
->> >  BR2_TARGET_UBOOT_CUSTOM_VERSION=y
->> > -BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.03"
->> > +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.09"
->>
->> This bump requires BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y .  You can't see
->> the failure if your host machine has swig.
->>
->> Similar to what was observed with uboot-tools:
->> https://git.busybox.net/buildroot/commit/?id=0bcd09ffcabbcce74ed00bc38620f71a34a59b45
->
-> Thanks a lot ! I noticed this problem on one of my machines, but haven't
-> yet investigated the root cause. Actually in my case both host-uboot-tools
-> and u-boot fail unless I modify path to libfdt headers.
->
-> I will verify the fix for all my recent board updates and then submit it.
->
+ > All,
+ > On Mon, Nov 6, 2017 at 6:13 AM, Matt Weber
+ > <matthew.weber@rockwellcollins.com> wrote:
+ >> Use of libfdt.h by u-boot is currently using
+ >> the <system-path>.
+ >> 
+ >> Jan submitted the following upstream
+ >> https://patchwork.ozlabs.org/patch/833760/
+ >> 
+ >> Resolves a failure like this one observed on uboot-tools
+ >> http://autobuild.buildroot.net/results/347cde4b5c0e6ca76d354396385be4ec1294da73
+ >> 
+ >> CC: Jan Kundr?t <jan.kundrat@cesnet.cz>
+ >> CC: Arnout Vandecappelle <arnout@mind.be>
+ >> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+ >> ---
+ >> boot/uboot/uboot.mk | 6 ++++++
+ >> 1 file changed, 6 insertions(+)
+ >> 
+ >> diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+ >> index fdacf16856..3350814a82 100644
+ >> --- a/boot/uboot/uboot.mk
+ >> +++ b/boot/uboot/uboot.mk
+ >> @@ -183,6 +183,12 @@ define UBOOT_APPLY_LOCAL_PATCHES
+ >> endef
+ >> UBOOT_POST_PATCH_HOOKS += UBOOT_APPLY_LOCAL_PATCHES
+ >> 
+ >> +# Bug: https://patchwork.ozlabs.org/patch/833760/
+ >> +define UBOOT_FIX_LIBFDT_SYSTEM_PATH
+ >> +       $(SED) 's%<../include/libfdt.h>%"../include/libfdt.h"%' $(@D)/tools/fdtgrep.c 2> /dev/null
 
-I just sent the fix for the libfdt headers.  I need to do a v2 for an
-issue with older uboots but the general idea is there.
 
-Matt
+ > Found a bug, I need to go back and test again with an older uboot.  I
+ > thought I had but it looks like it errors out even with the re-direct.
+
+I reworked it to only run sed if fdtgrep.c exists and applied, thanks.
+
+-- 
+Bye, Peter Korsgaard
