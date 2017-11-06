@@ -1,12 +1,9 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 6 Nov 2017 23:19:00 +0100
-Subject: [Buildroot] [PATCH v2 1/1] turbovnc: new package
-In-Reply-To: <5A005FF1.5000204@petroprogram.com>
-References: <1509367204-12966-1-git-send-email-stefan.froberg@petroprogram.com>
- <20171101060657.tzjnt4ceb25irb3o@sapphire.tkos.co.il>
- <20171101105305.1cd82e60@windsurf> <59FB8C69.7050108@petroprogram.com>
- <20171102222811.4d501282@windsurf> <5A005FF1.5000204@petroprogram.com>
-Message-ID: <2241958e-38c2-6075-1d08-a129e1124251@mind.be>
+Date: Mon, 6 Nov 2017 23:24:54 +0100
+Subject: [Buildroot] [git commit] uboot: use local libfdt.h
+In-Reply-To: <20171106201938.56CD37FC1A@busybox.osuosl.org>
+References: <20171106201938.56CD37FC1A@busybox.osuosl.org>
+Message-ID: <ff9910b0-ff51-4d4d-6f68-8fc7732c5273@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,18 +12,17 @@ To: buildroot@busybox.net
 
 
 
-On 06-11-17 14:13, Stefan Fr?berg wrote:
-> 1. TurboVNC really does depend of turbo-jpeg, that's one of the reasons it's so
-> fast.
-> So for now I have made it "depends on BR2_PACKAGE_JPEG_TURBO" so that turbovnc
-> package will only appear to menu only if jpeg-turbo has been also selected.
-> Is that okay?
+On 06-11-17 21:25, Peter Korsgaard wrote:
+> +define UBOOT_FIX_LIBFDT_SYSTEM_PATH
+> +	[ ! -e $(@D)/tools/fdtgrep.c ] || \
 
- Yes, there is no other way. However, please do add a comment (separately from
-the toolchain comments) that it needs jpeg-turbo.
+ Is there any reason to use [ ! ... ] || instead of [ ... ] && ?
 
  Regards,
  Arnout
+
+> +	$(SED) 's%<../include/libfdt.h>%"../include/libfdt.h"%' $(@D)/tools/fdtgrep.c
+> +endef
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
