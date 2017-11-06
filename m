@@ -1,98 +1,44 @@
-From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Mon,  6 Nov 2017 06:13:28 -0600
-Subject: [Buildroot] [PATCH 2/2] uboot-tools: use local libfdt.h
-In-Reply-To: <20171106121328.20330-1-matthew.weber@rockwellcollins.com>
-References: <20171106121328.20330-1-matthew.weber@rockwellcollins.com>
-Message-ID: <20171106121328.20330-2-matthew.weber@rockwellcollins.com>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Mon, 6 Nov 2017 11:40:31 -0600
+Subject: [Buildroot] [PATCH 1/1] package/dtc: qemu system build need
+ libfdt.
+In-Reply-To: <CANQCQpb7ZUUxiC9Br8NtGb863+PEhtJ5-JJ9bGXT7rBBxpusRw@mail.gmail.com>
+References: <1509624873-16240-1-git-send-email-ren_guo@c-sky.com>
+ <09523a7a-0125-4c10-bb29-e15cfa00165f@cesnet.cz>
+ <cecbedfb-98a5-4b52-a59b-3129c7e0da51@cesnet.cz>
+ <d6dd36db-bf3f-217e-cf1f-978c9c0ebf16@mind.be>
+ <CANQCQpb7ZUUxiC9Br8NtGb863+PEhtJ5-JJ9bGXT7rBBxpusRw@mail.gmail.com>
+Message-ID: <CANQCQpbnchZ=u0EQ_86C2ADenNZZ8=3k6J3KfUBVX=287Rgugw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The use of libfdt.h by u-boot is using the
-<system-path>.  The libfdt part of uboot
-is expriencing a lot of change and this patch
-should be overcome by events post uboot-2017.11
-release.
+Arnout, Jan
 
-Jan submitted the following upstream
-https://patchwork.ozlabs.org/patch/833760/
+On Mon, Nov 6, 2017 at 9:41 AM, Matthew Weber
+<matthew.weber@rockwellcollins.com> wrote:
+>
+> Jan/Arnout,
+>
+> On Sat, Nov 4, 2017 at 3:51 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+> >
+> >
+> > On 03-11-17 03:33, Jan Kundr?t wrote:
+> >> ...and here's a simple patch against U-Boot which fixes the build for me.
+> >
+> >  Isn't the build already fixed if you only replace the ../include line? The
+> > ../lib/libfdt/fdt.h should not be problematic since that file doesn't exist in
+> > STAGING_DIR. Right? Same for libfdt_internal.h.
+> >
+>
+> I've got a number of internal CI failures from this one.  I'm testing
+> the combined uboot-tools and uboot fix against my cases and will send
+> a patch later today.
+>
 
-Resolves:
-http://autobuild.buildroot.net/results/347cde4b5c0e6ca76d354396385be4ec1294da73
-http://autobuild.buildroot.net/results/2b429f82bed1f03d69021e0f959da4e2db2b5a0b
-http://autobuild.buildroot.net/results/b18012963926682ba192b9176bd3e35fb07cdf56
+https://patchwork.ozlabs.org/patch/834861/
+https://patchwork.ozlabs.org/patch/834862/
 
-CC: Jan Kundr?t <jan.kundrat@cesnet.cz>
-CC: Arnout Vandecappelle <arnout@mind.be>
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
----
- ...-not-attempt-to-use-the-systemwide-libfdt.patch | 56 ++++++++++++++++++++++
- 1 file changed, 56 insertions(+)
- create mode 100644 package/uboot-tools/0005-Do-not-attempt-to-use-the-systemwide-libfdt.patch
-
-diff --git a/package/uboot-tools/0005-Do-not-attempt-to-use-the-systemwide-libfdt.patch b/package/uboot-tools/0005-Do-not-attempt-to-use-the-systemwide-libfdt.patch
-new file mode 100644
-index 0000000000..abeef65929
---- /dev/null
-+++ b/package/uboot-tools/0005-Do-not-attempt-to-use-the-systemwide-libfdt.patch
-@@ -0,0 +1,56 @@
-+From 477ecb8d9ffa7b90d8bec0d8317b7e464e906f7c Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Jan=20Kundr=C3=A1t?= <jan.kundrat@cesnet.cz>
-+Date: Fri, 3 Nov 2017 03:06:35 +0100
-+Subject: [PATCH] Do not attempt to use the systemwide libfdt
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+U-Boot bundles a patched copy of libfdt, so it's wrong to attempt to
-+include it <like/this>. This breaks the build for me when I have dtc
-+fully installed in my host -- as happened earlier tonight with
-+Buildroot, for example.
-+
-+There are several other occurrences throughout the code where '<libfdt'
-+matches. I'm not modifying these because I have no clue why the
-+<systemwide> include style is being used -- IMHO wrongly.
-+
-+Signed-off-by: Jan Kundr?t <jan.kundrat@cesnet.cz>
-+---
-+ include/fdt.h    | 2 +-
-+ include/libfdt.h | 2 +-
-+ tools/fdtgrep.c  | 4 ++--
-+ 3 files changed, 4 insertions(+), 4 deletions(-)
-+
-+diff --git a/include/fdt.h b/include/fdt.h
-+index 7ead62e..f40b56c 100644
-+--- a/include/fdt.h
-++++ b/include/fdt.h
-+@@ -1 +1 @@
-+-#include <../lib/libfdt/fdt.h>
-++#include "../lib/libfdt/fdt.h"
-+diff --git a/include/libfdt.h b/include/libfdt.h
-+index 10296a2..7ba13e6 100644
-+--- a/include/libfdt.h
-++++ b/include/libfdt.h
-+@@ -1 +1 @@
-+-#include <../lib/libfdt/libfdt.h>
-++#include "../lib/libfdt/libfdt.h"
-+diff --git a/tools/fdtgrep.c b/tools/fdtgrep.c
-+index f51f5f1..5897b6d 100644
-+--- a/tools/fdtgrep.c
-++++ b/tools/fdtgrep.c
-+@@ -16,8 +16,8 @@
-+ #include <string.h>
-+ #include <unistd.h>
-+ 
-+-#include <../include/libfdt.h>
-+-#include <libfdt_internal.h>
-++#include "../include/libfdt.h"
-++#include "libfdt_internal.h"
-+ 
-+ /* Define DEBUG to get some debugging output on stderr */
-+ #ifdef DEBUG
-+-- 
-+2.14.2
-+
--- 
-2.14.2
+Matt
