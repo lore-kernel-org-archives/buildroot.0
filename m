@@ -1,34 +1,64 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Mon, 6 Nov 2017 09:41:23 -0600
-Subject: [Buildroot] [PATCH 1/1] package/dtc: qemu system build need
- libfdt.
-In-Reply-To: <d6dd36db-bf3f-217e-cf1f-978c9c0ebf16@mind.be>
-References: <1509624873-16240-1-git-send-email-ren_guo@c-sky.com>
- <09523a7a-0125-4c10-bb29-e15cfa00165f@cesnet.cz>
- <cecbedfb-98a5-4b52-a59b-3129c7e0da51@cesnet.cz>
- <d6dd36db-bf3f-217e-cf1f-978c9c0ebf16@mind.be>
-Message-ID: <CANQCQpb7ZUUxiC9Br8NtGb863+PEhtJ5-JJ9bGXT7rBBxpusRw@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 6 Nov 2017 17:24:52 +0100
+Subject: [Buildroot] vboot-utils issue in Buildroot
+Message-ID: <20171106172452.4579763b@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Jan/Arnout,
+Hello Alexey,
 
-On Sat, Nov 4, 2017 at 3:51 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
->
->
-> On 03-11-17 03:33, Jan Kundr?t wrote:
->> ...and here's a simple patch against U-Boot which fixes the build for me.
->
->  Isn't the build already fixed if you only replace the ../include line? The
-> ../lib/libfdt/fdt.h should not be problematic since that file doesn't exist in
-> STAGING_DIR. Right? Same for libfdt_internal.h.
->
+I'm contacting you because you are listed in Buildroot's DEVELOPERS
+file for the vboot-utils package.
 
-I've got a number of internal CI failures from this one.  I'm testing
-the combined uboot-tools and uboot fix against my cases and will send
-a patch later today.
+We recently started to have build failures of host-vboot-utils:
 
-Matt
+  http://autobuild.buildroot.net/?reason=host-vboot-utils-bbdd62f9b030db7ad8eef789aaf58a7ff9a25656
+
+These all happen because we have enabled a new ppc64le build machine.
+To be clear: it is not about building *for* a ppc64le target, it's
+about the machine running Buildroot using a ppc64le processor.
+
+The build fails with:
+
+make[2]: *** No rule to make target `/home/peko/autobuild/instance-0/output/build/host-vboot-utils-bbdd62f9b030db7ad8eef789aaf58a7ff9a25656/build/host/arch/ppc64le/lib/crossystem_arch.o', needed by `/home/peko/autobuild/instance-0/output/build/host-vboot-utils-bbdd62f9b030db7ad8eef789aaf58a7ff9a25656/build/libvboot_util.a'.  Stop.
+
+And obviously, host/arch/ppc64le/lib/crossystem_arch.c doesn't exist in
+the vboot-utils source code, there's only a file for x86, x86_64, arm
+and mips.
+
+However, reading the logic in Makefile, it is not entirely clear what
+this list of supported architectures is. It does this:
+
+_machname := $(shell uname -m)
+HOST_ARCH ?= ${_machname}
+
+# ARCH and/or FIRMWARE_ARCH are defined by the Chromium OS ebuild.
+# Pick a sane target architecture if none is defined.
+ifeq (${ARCH},)
+  ARCH := ${HOST_ARCH}
+[...]
+
+So it has some concept of HOST_ARCH vs. ARCH. But later on in the
+Makefile, it apparently wants to use Qemu if ARCH != HOST_ARCH.
+
+The problematic file being used is:
+
+          host/arch/${ARCH}/lib/crossystem_arch.c \
+
+Could you have a look at what this architecture specific code is doing?
+It's somewhat weird in a set of host utilities to have something that
+would depend on the target architecture.
+
+It would be nice to see what the right solution is, as this package is
+causing a significant number of build failures at the moment.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
