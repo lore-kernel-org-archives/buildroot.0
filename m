@@ -1,42 +1,34 @@
-From: Martin Bark <martin@barkynet.com>
-Date: Mon,  6 Nov 2017 10:20:49 +0000
-Subject: [Buildroot] [PATCH 1/1] package/nodejs: bump version to 9.0.0
-Message-ID: <20171106102049.14681-1-martin@barkynet.com>
+From: Jagan Teki <jagan@amarulasolutions.com>
+Date: Mon, 6 Nov 2017 16:03:19 +0530
+Subject: [Buildroot] [PATCH v2] orange-pi-zero: misc updates
+In-Reply-To: <20171106101652.28861-1-geomatsi@gmail.com>
+References: <20171106101652.28861-1-geomatsi@gmail.com>
+Message-ID: <CAMty3ZAH2GJVU84vm5VCRyR3VRq6anrvtM5sdz26xnrSC_QG9Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-See https://nodejs.org/en/blog/release/v9.0.0/
+On Mon, Nov 6, 2017 at 3:46 PM, Sergey Matyukevich <geomatsi@gmail.com> wrote:
+> Hi all,
+>
+> This is the second iteration of the patchset which aimes at enabling WiFi
+> on orange-pi-zero board right out-of-the-box. The first approach suggested
+> to pull xr819 WiFi chip firmware from armbian repositories.
+>
+> Meanwhile it turned out that Armbian project created a separate github
+> repository to keep firmware binary blobs for all their supported boards.
+> Reviewers (Peter Korsgaard and Yann E. Morin) suggested to use new
+> Armbian firmware repository and organize access to firmware files
+> in a similar way to what linux-firmware does.
 
-Signed-off-by: Martin Bark <martin@barkynet.com>
----
- package/nodejs/nodejs.hash | 4 ++--
- package/nodejs/nodejs.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+It would be good if you update or write some readme on board dir,
+about how to test wifi
 
-diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
-index 9367c543be..14dde1162b 100644
---- a/package/nodejs/nodejs.hash
-+++ b/package/nodejs/nodejs.hash
-@@ -1,2 +1,2 @@
--# From http://nodejs.org/dist/v8.8.1/SHASUMS256.txt
--sha256 5ce2c47ab779992db49942f757a01cc5131db5cef4e0dd270e48151b0887b57a  node-v8.8.1.tar.xz
-+# From http://nodejs.org/dist/v9.0.0/SHASUMS256.txt
-+sha256 5b52bd6a90a611a42e11a908022ccfc1c2e77dcc70bfe38054a18dc57a3d5fa5  node-v9.0.0.tar.xz
-diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-index a29f5726cc..f3e532b4ed 100644
---- a/package/nodejs/nodejs.mk
-+++ b/package/nodejs/nodejs.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--NODEJS_VERSION = 8.8.1
-+NODEJS_VERSION = 9.0.0
- NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.xz
- NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
- NODEJS_DEPENDENCIES = host-python host-nodejs c-ares \
+thanks!
 -- 
-2.15.0
+Jagan Teki
+Senior Linux Kernel Engineer | Amarula Solutions
+U-Boot, Linux | Upstream Maintainer
+Hyderabad, India.
