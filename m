@@ -1,49 +1,58 @@
-From: Sergey Matyukevich <geomatsi@gmail.com>
-Date: Mon,  6 Nov 2017 12:26:02 +0300
-Subject: [Buildroot] [PATCH] orange-pi-one: bump kernel and uboot versions
-Message-ID: <20171106092602.24565-1-geomatsi@gmail.com>
+From: Jagan Teki <jagannadh.teki@gmail.com>
+Date: Mon, 6 Nov 2017 15:09:14 +0530
+Subject: [Buildroot] [PATCH v5 00/11] board: Add Allwinner A64/H5 boards
+In-Reply-To: <1509559553-26544-1-git-send-email-jagan@amarulasolutions.com>
+References: <1509559553-26544-1-git-send-email-jagan@amarulasolutions.com>
+Message-ID: <CAD6G_RRovKuVcVzreKh=K7HSzOddSBg+jau3CYdhwd-fBM_bVg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bump kernel to 4.13.11 and U-Boot to 2017.09.
+On Wed, Nov 1, 2017 at 11:35 PM, Jagan Teki <jagannadh.teki@gmail.com> wrote:
+> This patchset fix wiki link and update dtb file for sopine board.
+> [1] was previous set.
+>
+> All boards now use Mainline U-Boot, Linux and Nanaopi A64, A64-olinuxino
+> used linux-next patches since 4.13.7 have not been merged.
+>
+> Tested on rea hardware.
+>
+> Changes for v5:
+> - Fixed wiki links
+> - Update dtb file for sopine
+> Changes for v4:
+> - Added "arm-trusted-firmware: Build FIP for BL33" patch
+> - Added "uboot: Add U-Boot-bundles-ATF support" patch
+> - Droped sunxi64-post-build.sh config and script file
+> Changes for v3:
+> - Fixed Bananapi M1 comment on config file
+> - Add sunxi64-post-build.sh
+> - Add all sunxi64 boards
+> Changes for v2:
+> - Rebase on master
+>
+> [1] http://buildroot-busybox.2317881.n4.nabble.com/PATCH-v4-00-11-board-Add-Allwinner-A64-H5-boards-td178509.html
+>
+> Jagan Teki (11):
+>   arm-trusted-firmware: Build FIP for BL33
+>   uboot: Add U-Boot-bundles-ATF support
+>   board: Add Bananapi M64 support
+>   board: Add Pine64 support
+>   board: Add SoPine support
+>   board: Add FriendlyARM Nanopi A64 support
+>   board: Add FriendlyARM Nanopi NEO2 support
+>   board: Add Olimex A64-OLinuXino support
+>   board: Add Orangepi Win/Win Plus support
+>   board: Add Orangepi Prime support
+>   board: Add Orangepi Zero Plus2 support
 
-Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
----
- configs/orangepi_one_defconfig | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Any comments?
 
-diff --git a/configs/orangepi_one_defconfig b/configs/orangepi_one_defconfig
-index bc3216389c..507e4deda4 100644
---- a/configs/orangepi_one_defconfig
-+++ b/configs/orangepi_one_defconfig
-@@ -1,14 +1,14 @@
- BR2_arm=y
- BR2_cortex_a7=y
- BR2_ARM_FPU_VFPV4=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_11=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_13=y
- BR2_TARGET_GENERIC_HOSTNAME="OrangePi_One"
- BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for the Orange Pi One"
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/orangepi/orangepi-one/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/orangepi/orangepi-one/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.11"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.13.11"
- BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-h3-orangepi-one"
-@@ -18,7 +18,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.03"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.09"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="orangepi_one"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+thanks!
 -- 
-2.11.0
+Jagan Teki
+Free Software Engineer | www.openedev.com
+U-Boot, Linux | Upstream Maintainer
+Hyderabad, India.
