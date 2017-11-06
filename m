@@ -1,91 +1,62 @@
-From: Joseph Kogut <joseph.kogut@gmail.com>
-Date: Mon,  6 Nov 2017 10:28:23 -0800
-Subject: [Buildroot] [PATCH 1/1] python-schedule: new package
-Message-ID: <20171106182823.28656-1-joseph.kogut@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 6 Nov 2017 18:43:54 +0100
+Subject: [Buildroot] [git commit] libssh2: revert to previous crypto defaults
+Message-ID: <20171106182336.57CD981096@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
----
- DEVELOPERS                                   |  1 +
- package/Config.in                            |  1 +
- package/python-schedule/Config.in            |  6 ++++++
- package/python-schedule/python-schedule.hash |  5 +++++
- package/python-schedule/python-schedule.mk   | 14 ++++++++++++++
- 5 files changed, 27 insertions(+)
- create mode 100644 package/python-schedule/Config.in
- create mode 100644 package/python-schedule/python-schedule.hash
- create mode 100644 package/python-schedule/python-schedule.mk
+commit: https://git.buildroot.net/buildroot/commit/?id=d9a521f00886e4c9082bd998f267b4bafcfe2b17
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index c651bf26fa..7f6f2a276b 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -789,6 +789,7 @@ F:	configs/qemu_ppc64le_pseries_defconfig
+The recent crypto handling change (commit 04a1031d3: package/libssh2: Add
+selectable crypto libraries) had the unfortunate side effect that it no
+longer automatically selects the most suitable crypto backend (E.G.  one
+where the dependency is already enabled), so all users not wanting to use
+the mbedtls backend need to explicitly configure this.
+
+Fix this by inverting the logic so the crypto backend sub options use
+'depends on' their dependencies instead of 'select', so only the available
+backends are displayed.
+
+Like before, default to openssl if no crypto backend dependencies are
+currently enabled.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libssh2/Config.in | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/package/libssh2/Config.in b/package/libssh2/Config.in
+index f2d32a9..90c3881 100644
+--- a/package/libssh2/Config.in
++++ b/package/libssh2/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_LIBSSH2
+ 	bool "libssh2"
++	select BR2_PACKAGE_OPENSSL if !(BR2_PACKAGE_MBEDTLS || BR2_PACKAGE_LIBGCRYPT)
+ 	help
+ 	  libssh2 is a client-side C library implementing the SSH2
+ 	  protocol as defined by Internet Drafts: SECSH-TRANS(22),
+@@ -17,16 +18,15 @@ choice
  
- N:	Joseph Kogut <joseph.kogut@gmail.com>
- F:	package/python-websockets/
-+F:	package/python-schedule/
+ config BR2_PACKAGE_LIBSSH2_MBEDTLS
+ 	bool "mbedtls"
+-	select BR2_PACKAGE_MBEDTLS
++	depends on BR2_PACKAGE_MBEDTLS
  
- N:	Johan Derycke <johanderycke@gmail.com>
- F:	package/python-libconfig/
-diff --git a/package/Config.in b/package/Config.in
-index fe5ccc434e..c14cbe85a4 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -880,6 +880,7 @@ menu "External python modules"
- 	source "package/python-rtslib-fb/Config.in"
- 	source "package/python-scandir/Config.in"
- 	source "package/python-scapy3k/Config.in"
-+	source "package/python-schedule/Config.in"
- 	source "package/python-sdnotify/Config.in"
- 	source "package/python-serial/Config.in"
- 	source "package/python-service-identity/Config.in"
-diff --git a/package/python-schedule/Config.in b/package/python-schedule/Config.in
-new file mode 100644
-index 0000000000..d00c245948
---- /dev/null
-+++ b/package/python-schedule/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PYTHON_SCHEDULE
-+	bool "python-schedule"
-+	help
-+	  Job scheduling for humans.
-+
-+	  https://github.com/dbader/schedule
-diff --git a/package/python-schedule/python-schedule.hash b/package/python-schedule/python-schedule.hash
-new file mode 100644
-index 0000000000..9f64cc4373
---- /dev/null
-+++ b/package/python-schedule/python-schedule.hash
-@@ -0,0 +1,5 @@
-+# md5 from https://pypi.python.org/pypi/schedule/json, sha256 locally computed
-+md5	ab135a73458547d2b836beddd168528b  schedule-0.4.3.tar.gz
-+sha256	31a160546a17838842199c792ba267575cf41339ca730aaf060567b798f4f46e  schedule-0.4.3.tar.gz
-+# License file, locally calculated
-+30a8352c318ce1b645acde0299697342d4380ed2637d7ca18a8ad25661e3b41b  LICENSE.txt
-diff --git a/package/python-schedule/python-schedule.mk b/package/python-schedule/python-schedule.mk
-new file mode 100644
-index 0000000000..26a3f5bce1
---- /dev/null
-+++ b/package/python-schedule/python-schedule.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-schedule
-+#
-+################################################################################
-+
-+PYTHON_SCHEDULE_VERSION = 0.4.3
-+PYTHON_SCHEDULE_SOURCE = schedule-$(PYTHON_SCHEDULE_VERSION).tar.gz
-+PYTHON_SCHEDULE_SITE = https://pypi.python.org/packages/ee/68/ba6b0bb69b2be13b32983971bca6c5adf22df6321945232e1419bc34a82f
-+PYTHON_SCHEDULE_SETUP_TYPE = setuptools
-+PYTHON_SCHEDULE_LICENSE = MIT
-+PYTHON_SCHEDULE_LICENSE_FILES = LICENSE.txt
-+
-+$(eval $(python-package))
--- 
-2.15.0
+ config BR2_PACKAGE_LIBSSH2_LIBGCRYPT
+ 	bool "gcrypt"
+-	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgcrypt -> libgpg-error
+-	select BR2_PACKAGE_LIBGCRYPT
++	depends on BR2_PACKAGE_LIBGCRYPT
+ 
+ config BR2_PACKAGE_LIBSSH2_OPENSSL
+ 	bool "openssl"
+-	select BR2_PACKAGE_OPENSSL
++	depends on BR2_PACKAGE_OPENSSL
+ 
+ endchoice
+ endif
