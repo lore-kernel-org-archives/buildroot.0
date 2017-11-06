@@ -1,10 +1,13 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 6 Nov 2017 10:12:32 +0100
-Subject: [Buildroot] [git commit] luajit: only available on x86(-64)
- hosts
-In-Reply-To: <20171105155244.192977FB27@busybox.osuosl.org>
-References: <20171105155244.192977FB27@busybox.osuosl.org>
-Message-ID: <20171106101232.5ad247cb@windsurf.home>
+Date: Mon, 6 Nov 2017 10:19:38 +0100
+Subject: [Buildroot] [PATCH] ethtool: Allow enabling/disabling pretty
+ printing
+In-Reply-To: <20171106090757.kekhjjkecm3ck3e3@sapphire.tkos.co.il>
+References: <20171106012906.22000-1-f.fainelli@gmail.com>
+ <87zi7zyeju.fsf@dell.be.48ers.dk>
+ <20171106100535.1ae977ce@windsurf.home>
+ <20171106090757.kekhjjkecm3ck3e3@sapphire.tkos.co.il>
+Message-ID: <20171106101938.327397d6@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,37 +16,26 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 5 Nov 2017 16:51:59 +0100, Arnout Vandecappelle
-(Essensium/Mind) wrote:
+On Mon, 6 Nov 2017 11:07:57 +0200, Baruch Siach wrote:
 
-> diff --git a/package/luajit/Config.in b/package/luajit/Config.in
-> index 1a27c43..6b9c6e6 100644
-> --- a/package/luajit/Config.in
-> +++ b/package/luajit/Config.in
-> @@ -1,5 +1,8 @@
->  config BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
->  	bool
-> +	# -m32 flag is used for 32bit builds and host-luajit has
-> +	# limited architecture support
-> +	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
->  	default y if BR2_i386 || \
->  		(BR2_x86_64 && BR2_HOSTARCH='x86_64') || \
->  		BR2_powerpc || BR2_arm || BR2_armeb || \
+> On Mon, Nov 06, 2017 at 10:05:35AM +0100, Thomas Petazzoni wrote:
+> > On Mon, 06 Nov 2017 09:52:37 +0100, Peter Korsgaard wrote:
+> >   
+> > >  > +if BR2_PACKAGE_ETHTOOL
+> > >  > +
+> > >  > +	config BR2_PACKAGE_ETHTOOL_PRETTY_PRINT
+> > >  > +		bool "enable pretty printing"
+> > >  > +		default y  
+> > 
+> > Should this really be "default y" ? Baruch reported a significant size
+> > increase with this option enabled.  
+> 
+> This is the current default. The added option only allows to to remove pretty 
+> printing.
 
-I said it during the review, and apparently my comment was not taken
-into account: I'm not entirely happy with this change, because it's
-really host-luajit that has an architecture dependency, and not luajit.
-So all packages that use host-luajit (without needing luajit) should
-also have this dependency. I know the only package in this situation
-today was moarvm, and it was fixed, but only because I pointed out this
-problem, which will pop up again in the future if we keep this
-implementation.
+Aah, ok. Works for me then.
 
-Perhaps we should have package/luajit/Config.in.host with just a blind
-BR2_PACKAGE_HOST_LUAJIT_ARCH_SUPPORTS, and make
-BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS depend on it. Yes, I'm being pedantic
-here, but the fact that moarvm was initially overlooked is a good
-indication that a clearer dependency would be useful.
+Thanks!
 
 Thomas
 -- 
