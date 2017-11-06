@@ -1,34 +1,40 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 6 Nov 2017 18:44:15 +0100
-Subject: [Buildroot] [git commit] CHANGES: update with recent libssh2 changes
-Message-ID: <20171106182336.69C0C800EC@busybox.osuosl.org>
+From: Sergey Matyukevich <geomatsi@gmail.com>
+Date: Mon, 6 Nov 2017 21:31:45 +0300
+Subject: [Buildroot] [PATCH] orange-pi-one: bump kernel and uboot
+ versions
+In-Reply-To: <CANQCQpaFx=wEYOo3mzRLzfbEwxdSLN-rHkdjiaRkXwO+6Gp33w@mail.gmail.com>
+References: <20171106092602.24565-1-geomatsi@gmail.com>
+ <CANQCQpaFx=wEYOo3mzRLzfbEwxdSLN-rHkdjiaRkXwO+6Gp33w@mail.gmail.com>
+Message-ID: <20171106183145.axufx2iddcziad7x@speedy.hunter>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=354722ca0171d5b934554fa66e85d4866eb0898e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+> > Bump kernel to 4.13.11 and U-Boot to 2017.09.
+> >
+> 
+> <snip>
+> 
+> > @@ -18,7 +18,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+> >  BR2_TARGET_UBOOT=y
+> >  BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+> >  BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+> > -BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.03"
+> > +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.09"
+> 
+> This bump requires BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y .  You can't see
+> the failure if your host machine has swig.
+> 
+> Similar to what was observed with uboot-tools:
+> https://git.busybox.net/buildroot/commit/?id=0bcd09ffcabbcce74ed00bc38620f71a34a59b45
 
-With the revert to the old behavior, mbedtls is no longer the default.
+Thanks a lot ! I noticed this problem on one of my machines, but haven't
+yet investigated the root cause. Actually in my case both host-uboot-tools
+and u-boot fail unless I modify path to libfdt headers.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- CHANGES | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+I will verify the fix for all my recent board updates and then submit it.
 
-diff --git a/CHANGES b/CHANGES
-index 7050af3..c247f7a 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -6,8 +6,7 @@
- 	(mbedtls, gnutls or openssl). Previously, the choice was implicit
- 	based on the TLS library that was selected. Now, it is possible to
- 	choose the backend, which is important if several TLS libraries are
--	selected. The default is mbedtls, even if you didn't have mbedtls
--	selected before.
-+	selected.
- 
- 	netsnmp: all MIB files are now installed, making the target filesystem a
- 	bit bigger than before. To remove unneeded MIBS, you should use a
+Regards,
+Sergey
