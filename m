@@ -1,73 +1,82 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 6 Nov 2017 23:56:19 +0100
-Subject: [Buildroot] [git commit] luajit: only available on x86(-64)
- hosts
-In-Reply-To: <20171106101232.5ad247cb@windsurf.home>
-References: <20171105155244.192977FB27@busybox.osuosl.org>
- <20171106101232.5ad247cb@windsurf.home>
-Message-ID: <14e09144-6087-772e-649d-26d9850cb72c@mind.be>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Tue,  7 Nov 2017 00:14:01 +0100
+Subject: [Buildroot] [PATCH] util-linux: fix link failures due to name clash
+Message-ID: <1510010041-4377-1-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Several packages have a similar md5.c file, and each has a function
+named byteReverse(). This generates link errors ("multiple definition
+of `byteReverse'").
 
+Fix by declaring byteReverse as static, since it is just an internal
+function.
 
-On 06-11-17 10:12, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Sun, 5 Nov 2017 16:51:59 +0100, Arnout Vandecappelle
-> (Essensium/Mind) wrote:
-> 
->> diff --git a/package/luajit/Config.in b/package/luajit/Config.in
->> index 1a27c43..6b9c6e6 100644
->> --- a/package/luajit/Config.in
->> +++ b/package/luajit/Config.in
->> @@ -1,5 +1,8 @@
->>  config BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
->>  	bool
->> +	# -m32 flag is used for 32bit builds and host-luajit has
->> +	# limited architecture support
->> +	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
->>  	default y if BR2_i386 || \
->>  		(BR2_x86_64 && BR2_HOSTARCH='x86_64') || \
->>  		BR2_powerpc || BR2_arm || BR2_armeb || \
-> 
-> I said it during the review, and apparently my comment was not taken
-> into account:
+Fixes:
+  http://autobuild.buildroot.net/results/419ab2c0e034cc68991281c51caa8271b0fadbab/
 
- Yes, sorry about that. I had read it too quickly and interpreted it as just
-saying that moarvm had to be fixed as well.
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Cc: Adam Duskett <aduskett@gmail.com>
 
-> I'm not entirely happy with this change, because it's
-> really host-luajit that has an architecture dependency, and not luajit.
-> So all packages that use host-luajit (without needing luajit) should
-> also have this dependency. I know the only package in this situation
-> today was moarvm, and it was fixed, but only because I pointed out this
-> problem, which will pop up again in the future if we keep this
-> implementation.
-> 
-> Perhaps we should have package/luajit/Config.in.host with just a blind
-> BR2_PACKAGE_HOST_LUAJIT_ARCH_SUPPORTS, and make
-> BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS depend on it. 
+---
 
- Sounds like a great idea, go for it!
+I sent this patch upstream more than half an hour ago, but it still
+hasn't landed on the mailing-list...
+---
+ .../0001-md5-declare-byteReverse-as-static.patch   | 42 ++++++++++++++++++++++
+ 1 file changed, 42 insertions(+)
+ create mode 100644 package/util-linux/0001-md5-declare-byteReverse-as-static.patch
 
- Regards,
- Arnout
-
-> Yes, I'm being pedantic
-> here, but the fact that moarvm was initially overlooked is a good
-> indication that a clearer dependency would be useful.
-> 
-> Thomas
-> 
-
+diff --git a/package/util-linux/0001-md5-declare-byteReverse-as-static.patch b/package/util-linux/0001-md5-declare-byteReverse-as-static.patch
+new file mode 100644
+index 000000000000..12f77a906f9e
+--- /dev/null
++++ b/package/util-linux/0001-md5-declare-byteReverse-as-static.patch
+@@ -0,0 +1,42 @@
++From a02ec53951ea8ac10fef1115f323c0c288596163 Mon Sep 17 00:00:00 2001
++From: Luca Ceresoli <luca@lucaceresoli.net>
++Date: Mon, 6 Nov 2017 22:58:09 +0100
++Subject: [PATCH] md5: declare byteReverse as static
++
++byteReverse() is an internal function in md5.c, and is not exposed via
++any header file, but it is not declared as static. This is a problem
++with the md5.c file since it is copied more or less verbatim in other
++programs (fontconfig and pjsip among others), causing a link error
++when linking two of them together.
++
++Fixes link failures such as:
++  http://autobuild.buildroot.net/results/419ab2c0e034cc68991281c51caa8271b0fadbab/build-end.log
++
++Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
++---
++ lib/md5.c | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/lib/md5.c b/lib/md5.c
++index 488d16ef69b4..282e2d22af25 100644
++--- a/lib/md5.c
+++++ b/lib/md5.c
++@@ -21,13 +21,13 @@
++ #if !defined(WORDS_BIGENDIAN)
++ #define byteReverse(buf, len)	/* Nothing */
++ #else
++-void byteReverse(unsigned char *buf, unsigned longs);
+++static void byteReverse(unsigned char *buf, unsigned longs);
++ 
++ #ifndef ASM_MD5
++ /*
++  * Note: this code is harmless on little-endian machines.
++  */
++-void byteReverse(unsigned char *buf, unsigned longs)
+++static void byteReverse(unsigned char *buf, unsigned longs)
++ {
++     uint32_t t;
++     do {
++-- 
++2.7.4
++
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.7.4
