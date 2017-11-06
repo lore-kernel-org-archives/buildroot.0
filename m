@@ -1,118 +1,39 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon,  6 Nov 2017 20:54:13 +0100
-Subject: [Buildroot] [PATCH v4 1/1] package/waylandpp: new package
-Message-ID: <20171106195413.28781-1-bernd.kuhls@t-online.de>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon, 6 Nov 2017 21:59:34 +0200
+Subject: [Buildroot] [PATCH v2 1/1] turbovnc: new package
+In-Reply-To: <5A005FF1.5000204@petroprogram.com>
+References: <1509367204-12966-1-git-send-email-stefan.froberg@petroprogram.com>
+ <20171101060657.tzjnt4ceb25irb3o@sapphire.tkos.co.il>
+ <20171101105305.1cd82e60@windsurf>
+ <59FB8C69.7050108@petroprogram.com>
+ <20171102222811.4d501282@windsurf>
+ <5A005FF1.5000204@petroprogram.com>
+Message-ID: <20171106195934.tw433kt5ojiupxrg@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Needed for Wayland support in the next Kodi release 18-Leia:
+Hi Stefan,
 
-https://kodi.tv/article/gsoc-2017-update-wayland-support
-https://forum.kodi.tv/showthread.php?tid=309254
+On Mon, Nov 06, 2017 at 03:13:21PM +0200, Stefan Fr?berg wrote:
+> 1. TurboVNC really does depend of turbo-jpeg, that's one of the reasons it's
+> so fast. So for now I have made it "depends on BR2_PACKAGE_JPEG_TURBO" so 
+> that turbovnc package will only appear to menu only if jpeg-turbo has been 
+> also selected. Is that okay?
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
-v4: bumped to version 0.1.4, added license hashes
-v3: bumped to version 0.1.3
-v2: switched to cmake, added dependency on host-gcc >= 4.9
+I don't think so.
 
- DEVELOPERS                       |  1 +
- package/Config.in                |  1 +
- package/waylandpp/Config.in      | 15 +++++++++++++++
- package/waylandpp/waylandpp.hash |  4 ++++
- package/waylandpp/waylandpp.mk   | 24 ++++++++++++++++++++++++
- 5 files changed, 45 insertions(+)
- create mode 100644 package/waylandpp/Config.in
- create mode 100644 package/waylandpp/waylandpp.hash
- create mode 100644 package/waylandpp/waylandpp.mk
+The manual (?17.2.3) says you should "use a select type of dependency for 
+dependencies on libraries", and conversely "use a depends on type of 
+dependency when the user really needs to be aware of the dependency". In this 
+case there is nothing obvious about having to enable turbo-jpeg for turbovnc, 
+IMO.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index c651bf26fa..4ec248d844 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -331,6 +331,7 @@ F:	package/vdr/
- F:	package/vdr-plugin-vnsiserver/
- F:	package/vlc/
- F:	package/vnstat/
-+F:	package/waylandpp/
- F:	package/x11r7/
- F:	package/x264/
- F:	package/x265/
-diff --git a/package/Config.in b/package/Config.in
-index fe5ccc434e..73d53c6074 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1141,6 +1141,7 @@ menu "Graphics"
- 	source "package/powervr/Config.in"
- 	source "package/tiff/Config.in"
- 	source "package/wayland/Config.in"
-+	source "package/waylandpp/Config.in"
- 	source "package/wayland-protocols/Config.in"
- 	source "package/webkitgtk/Config.in"
- 	source "package/webp/Config.in"
-diff --git a/package/waylandpp/Config.in b/package/waylandpp/Config.in
-new file mode 100644
-index 0000000000..92af363789
---- /dev/null
-+++ b/package/waylandpp/Config.in
-@@ -0,0 +1,15 @@
-+config BR2_PACKAGE_WAYLANDPP
-+	bool "waylandpp"
-+	depends on BR2_PACKAGE_HAS_LIBEGL_WAYLAND
-+	depends on BR2_HOST_GCC_AT_LEAST_4_9
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-+	select BR2_PACKAGE_WAYLAND
-+	help
-+	  Wayland C++ bindings
-+
-+	  https://github.com/NilsBrause/waylandpp
-+
-+comment "waylandpp needs an OpenGL-EGL/wayland backend, gcc >= 4.9, host gcc >= 4.9"
-+	depends on !BR2_PACKAGE_HAS_LIBEGL_WAYLAND || \
-+		!BR2_HOST_GCC_AT_LEAST_4_9 || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-diff --git a/package/waylandpp/waylandpp.hash b/package/waylandpp/waylandpp.hash
-new file mode 100644
-index 0000000000..11b8e3cda9
---- /dev/null
-+++ b/package/waylandpp/waylandpp.hash
-@@ -0,0 +1,4 @@
-+# Locally computed
-+sha256 fc767573f7334525839221ac52e3dc4b56ebaf3f7a7cdaf4f05eb6baa6dd88ab  waylandpp-0.1.4.tar.gz
-+sha256 49aa6d728fd13226952c9e3a5a9cae46379b2a501010064760172b5ce7cd94bb  LICENSE
-+sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  scanner/gpl-3.0.txt
-diff --git a/package/waylandpp/waylandpp.mk b/package/waylandpp/waylandpp.mk
-new file mode 100644
-index 0000000000..b1560f16d1
---- /dev/null
-+++ b/package/waylandpp/waylandpp.mk
-@@ -0,0 +1,24 @@
-+################################################################################
-+#
-+# waylandpp
-+#
-+################################################################################
-+
-+WAYLANDPP_VERSION = 0.1.4
-+WAYLANDPP_SITE = $(call github,NilsBrause,waylandpp,$(WAYLANDPP_VERSION))
-+WAYLANDPP_LICENSE = MIT, GPL-3.0+ (wayland_scanner)
-+WAYLANDPP_LICENSE_FILES = LICENSE scanner/gpl-3.0.txt
-+WAYLANDPP_INSTALL_STAGING = YES
-+HOST_WAYLANDPP_DEPENDENCIES = host-pkgconf host-wayland
-+WAYLANDPP_DEPENDENCIES = libegl host-pkgconf wayland host-waylandpp
-+
-+HOST_WAYLANDPP_CONF_OPTS = \
-+	-DBUILD_LIBRARIES=OFF \
-+	-DBUILD_SCANNER=ON
-+WAYLANDPP_CONF_OPTS = \
-+	-DBUILD_LIBRARIES=ON \
-+	-DBUILD_SCANNER=OFF \
-+	-DWAYLAND_SCANNERPP=$(HOST_DIR)/bin/wayland-scanner++
-+
-+$(eval $(cmake-package))
-+$(eval $(host-cmake-package))
+baruch
+
 -- 
-2.11.0
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
