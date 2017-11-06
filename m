@@ -1,44 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon,  6 Nov 2017 21:04:14 +0100
-Subject: [Buildroot] [PATCH] prosody: build with -fPIC
-Message-ID: <20171106200414.5268-1-thomas.petazzoni@free-electrons.com>
+Date: Mon, 6 Nov 2017 21:05:31 +0100
+Subject: [Buildroot] [PATCH v2 1/1] turbovnc: new package
+In-Reply-To: <20171106195934.tw433kt5ojiupxrg@tarshish>
+References: <1509367204-12966-1-git-send-email-stefan.froberg@petroprogram.com>
+ <20171101060657.tzjnt4ceb25irb3o@sapphire.tkos.co.il>
+ <20171101105305.1cd82e60@windsurf>
+ <59FB8C69.7050108@petroprogram.com>
+ <20171102222811.4d501282@windsurf>
+ <5A005FF1.5000204@petroprogram.com>
+ <20171106195934.tw433kt5ojiupxrg@tarshish>
+Message-ID: <20171106210531.190000eb@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The prosody configure script defines CFLAGS as -fPIC -Wall, but
-because we pass our own CFLAGS, the -fPIC goes away, causing a build
-failure when building shared libraries on x86-64:
+Hello,
 
-/home/test/autobuild/run/instance-0/output/host/opt/ext-toolchain/bin/../lib/gcc/x86_64-amd-linux-gnu/6.2.0/../../../../x86_64-amd-linux-gnu/bin/ld: encodings.o: relocation R_X86_64_32 against `.rodata' can not be used when making a shared object; recompile with -fPIC
+On Mon, 6 Nov 2017 21:59:34 +0200, Baruch Siach wrote:
 
-So let's pass this -fPIC flag explicitly in CFLAGS. We don't bother
-passing it conditionally !BR2_STATIC_LIBS because other packages (e.g
-lua) also pass -fPIC unconditionally.
+> On Mon, Nov 06, 2017 at 03:13:21PM +0200, Stefan Fr?berg wrote:
+> > 1. TurboVNC really does depend of turbo-jpeg, that's one of the reasons it's
+> > so fast. So for now I have made it "depends on BR2_PACKAGE_JPEG_TURBO" so 
+> > that turbovnc package will only appear to menu only if jpeg-turbo has been 
+> > also selected. Is that okay?  
+> 
+> I don't think so.
+> 
+> The manual (?17.2.3) says you should "use a select type of dependency for 
+> dependencies on libraries", and conversely "use a depends on type of 
+> dependency when the user really needs to be aware of the dependency". In this 
+> case there is nothing obvious about having to enable turbo-jpeg for turbovnc, 
+> IMO.
 
-Fixes:
+Yes, but Stefan cannot select jpeg-turbo, because it is part of a
+choice, and you can't "select" one item of a choice. So this suggestion
+from the manual doesn't apply in this specific case.
 
-  http://autobuild.buildroot.net/results/7f0eb285b75cdeacb21a1f9a9f64d2f0cbbf1d59/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/prosody/prosody.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/package/prosody/prosody.mk b/package/prosody/prosody.mk
-index b98748e3b6..d19653503d 100644
---- a/package/prosody/prosody.mk
-+++ b/package/prosody/prosody.mk
-@@ -21,7 +21,7 @@ endif
- PROSODY_CONF_OPTS = \
- 	--with-lua=$(STAGING_DIR)/usr \
- 	--c-compiler=$(TARGET_CC) \
--	--cflags="$(TARGET_CFLAGS)" \
-+	--cflags="$(TARGET_CFLAGS) -fPIC" \
- 	--linker=$(TARGET_CC) \
- 	--ldflags="$(TARGET_LDFLAGS) -shared" \
- 	--sysconfdir=/etc/prosody \
+Thomas
 -- 
-2.13.6
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
