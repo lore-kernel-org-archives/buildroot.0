@@ -1,95 +1,51 @@
-From: Joseph Kogut <joseph.kogut@gmail.com>
-Date: Mon,  6 Nov 2017 12:35:39 -0800
-Subject: [Buildroot] [PATCH 1/1] python-cython: new package
-Message-ID: <20171106203539.26391-1-joseph.kogut@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 06 Nov 2017 21:39:07 +0100
+Subject: [Buildroot] BR2_REPRODUCIBLE issues
+In-Reply-To: <20171106175012.GA2763@scaer> (Yann E. MORIN's message of "Mon, 6
+ Nov 2017 18:50:12 +0100")
+References: <1509720041684-0.post@n4.nabble.com>
+ <87y3nn3yq6.fsf@dell.be.48ers.dk>
+ <5c52008b-1ffa-7260-8681-5abeecd09665@mind.be>
+ <20171105084630.GF2996@scaer>
+ <CABhNV22jMFZdR8mp4ss_21XPmt2r8GmcLoahdn48_HsM9+RTpQ@mail.gmail.com>
+ <20171106175012.GA2763@scaer>
+Message-ID: <87d14vw39w.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
----
- DEVELOPERS                               |  1 +
- package/Config.in.host                   |  1 +
- package/python-cython/Config.in.host     |  7 +++++++
- package/python-cython/python-cython.hash |  6 ++++++
- package/python-cython/python-cython.mk   | 16 ++++++++++++++++
- 5 files changed, 31 insertions(+)
- create mode 100644 package/python-cython/Config.in.host
- create mode 100644 package/python-cython/python-cython.hash
- create mode 100644 package/python-cython/python-cython.mk
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index c651bf26fa..faeab79d63 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -788,6 +788,7 @@ F:	board/qemu/ppc64le-pseries/
- F:	configs/qemu_ppc64le_pseries_defconfig
- 
- N:	Joseph Kogut <joseph.kogut@gmail.com>
-+F:	package/python-cython/
- F:	package/python-websockets/
- 
- N:	Johan Derycke <johanderycke@gmail.com>
-diff --git a/package/Config.in.host b/package/Config.in.host
-index 3755310de4..a15a11b07d 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -38,6 +38,7 @@ menu "Host utilities"
- 	source "package/pkgconf/Config.in.host"
- 	source "package/pru-software-support/Config.in.host"
- 	source "package/pwgen/Config.in.host"
-+	source "package/python-cython/Config.in.host"
- 	source "package/python-lxml/Config.in.host"
- 	source "package/python-six/Config.in.host"
- 	source "package/qemu/Config.in.host"
-diff --git a/package/python-cython/Config.in.host b/package/python-cython/Config.in.host
-new file mode 100644
-index 0000000000..69d32d5ab3
---- /dev/null
-+++ b/package/python-cython/Config.in.host
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_HOST_PYTHON_CYTHON
-+	bool "host python-cython"
-+	help
-+	  The Cython compiler for writing C extensions for the Python
-+	  language.
-+
-+	  http://cython.org/
-diff --git a/package/python-cython/python-cython.hash b/package/python-cython/python-cython.hash
-new file mode 100644
-index 0000000000..33b6bb6bbf
---- /dev/null
-+++ b/package/python-cython/python-cython.hash
-@@ -0,0 +1,6 @@
-+# md5 from https://pypi.python.org/pypi/Cython/json, sha256 locally computed
-+md5	6149238287d662bd5d5e572482252493  Cython-0.27.3.tar.gz
-+sha256	6a00512de1f2e3ce66ba35c5420babaef1fe2d9c43a8faab4080b0dbcc26bc64  Cython-0.27.3.tar.gz
-+# License files, locally calculated
-+sha256	a6cba85bc92e0cff7a450b1d873c0eaa2e9fc96bf472df0247a26bec77bf3ff9  LICENSE.txt
-+sha256	e1eb1c49a8508e8173dac30157e4a6439a44ad8846194746c424fbc3fc2b95d7  COPYING.txt
-diff --git a/package/python-cython/python-cython.mk b/package/python-cython/python-cython.mk
-new file mode 100644
-index 0000000000..26fbaa4253
---- /dev/null
-+++ b/package/python-cython/python-cython.mk
-@@ -0,0 +1,16 @@
-+################################################################################
-+#
-+# cython
-+#
-+################################################################################
-+
-+PYTHON_CYTHON_VERSION = 0.27.3
-+PYTHON_CYTHON_SOURCE = Cython-$(PYTHON_CYTHON_VERSION).tar.gz
-+PYTHON_CYTHON_SITE = https://pypi.python.org/packages/ee/2a/c4d2cdd19c84c32d978d18e9355d1ba9982a383de87d0fcb5928553d37f4
-+PYTHON_CYTHON_SETUP_TYPE = setuptools
-+PYTHON_CYTHON_LICENSE = Apache-2.0
-+PYTHON_CYTHON_LICENSE_FILES = COPYING.txt LICENSE.txt
-+
-+# Since there's no toolchain or development files on the target, it makes no
-+# sense to allow Cython to be installed to the target
-+$(eval $(host-python-package))
+Hi,
+
+ > I do see your use case, and I do understand it: you basically want to do
+ > partial upgrades of your system (for various reasons that are your own
+ > right).
+
+ > But Buildroot does not build packages like a distro, like OpenEmbedded
+ > or like openWRT (or others) do.
+
+ > Instead, Buildroot builds a complete rootfs; it is the atomic artefact
+ > output by Buildroot. As such, what matters for Buildroot is the whole,
+ > not the parts.
+
+ > See also the manual, where we explain at length why we are not doing
+ > binary packages, especially the last part about our position statement,
+ > tangentially related to the explanation of your use-case:
+ >     https://buildroot.org/downloads/manual/manual.html#faq-no-binary-packages
+
+Small deltas might be interesting even though you do full system
+upgrades, E.G. to save on bandwidth with binary delta tools like xdelta/bsdiff
+or casync. I believe there was some talk about adding casync support to
+rauc.
+
+ > Sorry if you found my and the others' replies to imply that you should
+ > "shut up". That was definitely not my intention, and I know Peter,
+ > Arnout and Thomas enough to know that it was not theirs as well.
+
+Exactly!
+
 -- 
-2.15.0
+Bye, Peter Korsgaard
