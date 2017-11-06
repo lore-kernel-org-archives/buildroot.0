@@ -1,54 +1,76 @@
-From: Florian Fainelli <f.fainelli@gmail.com>
-Date: Sun,  5 Nov 2017 17:29:06 -0800
-Subject: [Buildroot] [PATCH] ethtool: Allow enabling/disabling pretty
- printing
-Message-ID: <20171106012906.22000-1-f.fainelli@gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon, 6 Nov 2017 06:49:05 +0200
+Subject: [Buildroot] [PATCH] libssh2: revert to previous crypto defaults
+In-Reply-To: <20171105213402.26615-1-peter@korsgaard.com>
+References: <20171105213402.26615-1-peter@korsgaard.com>
+Message-ID: <20171106044905.dmcl4skovwtypj63@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ethtool has a configure script option allowing the enabling or disabling of
-pretty printing for drivers, SFP modules etc which can save a significant
-amount of bytes on the root filesystem. Allow selecting that, and turn it on by
-default (like ethtool's configure script).
+Hi Peter,
 
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
----
- package/ethtool/Config.in  | 10 ++++++++++
- package/ethtool/ethtool.mk |  2 ++
- 2 files changed, 12 insertions(+)
+On Sun, Nov 05, 2017 at 10:34:02PM +0100, Peter Korsgaard wrote:
+> The recent crypto handling change (commit 04a1031d3: package/libssh2: Add
+> selectable crypto libraries) had the unfortunate side effect that it no
+> longer automatically selects the most suitable crypto backend (E.G.  one
+> where the dependency is already enabled), so all users not wanting to use
+> the mbedtls backend need to explicitly configure this.
+> 
+> Fix this by inverting the logic so the crypto backend sub options use
+> 'depends on' their dependencies instead of 'select', so only the available
+> backends are displayed.
+> 
+> Like before, default to openssl if no crypto backend dependencies are
+> currently enabled.
 
-diff --git a/package/ethtool/Config.in b/package/ethtool/Config.in
-index 09704979e864..77795a838971 100644
---- a/package/ethtool/Config.in
-+++ b/package/ethtool/Config.in
-@@ -5,3 +5,13 @@ config BR2_PACKAGE_ETHTOOL
- 	  ethernet-based network interface.
- 
- 	  https://www.kernel.org/pub/software/network/ethtool/
-+
-+if BR2_PACKAGE_ETHTOOL
-+
-+	config BR2_PACKAGE_ETHTOOL_PRETTY_PRINT
-+		bool "enable pretty printing"
-+		default y
-+		help
-+		  Enables ethtool's pretty printing for drivers
-+		  and SFP modules.
-+endif
-diff --git a/package/ethtool/ethtool.mk b/package/ethtool/ethtool.mk
-index 991df499a8fd..d8ebba5fae05 100644
---- a/package/ethtool/ethtool.mk
-+++ b/package/ethtool/ethtool.mk
-@@ -9,5 +9,7 @@ ETHTOOL_SOURCE = ethtool-$(ETHTOOL_VERSION).tar.xz
- ETHTOOL_SITE = $(BR2_KERNEL_MIRROR)/software/network/ethtool
- ETHTOOL_LICENSE = GPL-2.0
- ETHTOOL_LICENSE_FILES = COPYING
-+ETHTOOL_CONF_OPTS = \
-+	$(if $(BR2_PACKAGE_ETHTOOL_PRETTY_PRINT),--enable-pretty-dump,--disable-pretty-dump)
- 
- $(eval $(autotools-package))
+The CHANGES file needs an update. It currently says:
+
+  The default is mbedtls, even if you didn't have mbedtls selected before.
+
+baruch
+
+> 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> ---
+>  package/libssh2/Config.in | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/package/libssh2/Config.in b/package/libssh2/Config.in
+> index f2d32a90ae..90c38813b3 100644
+> --- a/package/libssh2/Config.in
+> +++ b/package/libssh2/Config.in
+> @@ -1,5 +1,6 @@
+>  config BR2_PACKAGE_LIBSSH2
+>  	bool "libssh2"
+> +	select BR2_PACKAGE_OPENSSL if !(BR2_PACKAGE_MBEDTLS || BR2_PACKAGE_LIBGCRYPT)
+>  	help
+>  	  libssh2 is a client-side C library implementing the SSH2
+>  	  protocol as defined by Internet Drafts: SECSH-TRANS(22),
+> @@ -17,16 +18,15 @@ choice
+>  
+>  config BR2_PACKAGE_LIBSSH2_MBEDTLS
+>  	bool "mbedtls"
+> -	select BR2_PACKAGE_MBEDTLS
+> +	depends on BR2_PACKAGE_MBEDTLS
+>  
+>  config BR2_PACKAGE_LIBSSH2_LIBGCRYPT
+>  	bool "gcrypt"
+> -	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgcrypt -> libgpg-error
+> -	select BR2_PACKAGE_LIBGCRYPT
+> +	depends on BR2_PACKAGE_LIBGCRYPT
+>  
+>  config BR2_PACKAGE_LIBSSH2_OPENSSL
+>  	bool "openssl"
+> -	select BR2_PACKAGE_OPENSSL
+> +	depends on BR2_PACKAGE_OPENSSL
+>  
+>  endchoice
+>  endif
+
 -- 
-2.14.1
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
