@@ -1,10 +1,15 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 6 Nov 2017 23:32:11 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2017-11-05
-In-Reply-To: <20171106070008.EF932203A4@mail.free-electrons.com>
-References: <20171106070008.EF932203A4@mail.free-electrons.com>
-Message-ID: <20171106233211.4d44f84b@windsurf>
+Date: Mon, 6 Nov 2017 23:38:21 +0100
+Subject: [Buildroot] [PATCH v2 1/1] turbovnc: new package
+In-Reply-To: <2241958e-38c2-6075-1d08-a129e1124251@mind.be>
+References: <1509367204-12966-1-git-send-email-stefan.froberg@petroprogram.com>
+ <20171101060657.tzjnt4ceb25irb3o@sapphire.tkos.co.il>
+ <20171101105305.1cd82e60@windsurf>
+ <59FB8C69.7050108@petroprogram.com>
+ <20171102222811.4d501282@windsurf>
+ <5A005FF1.5000204@petroprogram.com>
+ <2241958e-38c2-6075-1d08-a129e1124251@mind.be>
+Message-ID: <20171106233821.2a5aed3b@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,22 +18,24 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon,  6 Nov 2017 08:00:08 +0100 (CET), Thomas Petazzoni wrote:
+On Mon, 6 Nov 2017 23:19:00 +0100, Arnout Vandecappelle wrote:
 
->     mips64el | pdbg-77158819158d1d7053a737... | NOK | http://autobuild.buildroot.net/results/556b5b82e3307944c261edfe9e2a9246a605d8d5 |     
->       mipsel | pdbg-77158819158d1d7053a737... | NOK | http://autobuild.buildroot.net/results/2f3b30620799193572fc24eca07d34f6c33a2482 |     
->         bfin | pdbg-77158819158d1d7053a737... | NOK | http://autobuild.buildroot.net/results/a7f70de99f1f088ee0b003cdb912bdfb87f03f5a |     
+> > 1. TurboVNC really does depend of turbo-jpeg, that's one of the reasons it's so
+> > fast.
+> > So for now I have made it "depends on BR2_PACKAGE_JPEG_TURBO" so that turbovnc
+> > package will only appear to menu only if jpeg-turbo has been also selected.
+> > Is that okay?  
+> 
+>  Yes, there is no other way. However, please do add a comment (separately from
+> the toolchain comments) that it needs jpeg-turbo.
 
-I worked on a fix for this one, which I have submitted upstream:
-https://github.com/open-power/pdbg/pull/23/commits/854c2b513af2d28c552e28f43a80dc7c55eabe27.
-Since the fix is far from trivial, I'll wait for upstream feedback
-before submitting to Buildroot.
+I still would like to challenge why it needs jpeg-turbo. libjpeg and
+jpeg-turbo are supposed to be API compatible, so how can TurboVNC need
+one rather than the other? I can understand that TurboVNC's performance
+might be horrible with the regular libjpeg, but I don't get why it
+wouldn't work.
 
-Alternatively, we could restrict this package to a smaller set of
-architectures, as it's very unlikely (impossible?) to see this package
-used on mips or bfin.
-
-Best regards,
+Stefan?
 
 Thomas
 -- 
