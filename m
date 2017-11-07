@@ -1,47 +1,95 @@
-From: Carlos Santos <casantos@datacom.ind.br>
-Date: Mon, 6 Nov 2017 22:45:28 -0200 (BRST)
-Subject: [Buildroot] [PATCH] util-linux: fix link failures due to name
- clash
-In-Reply-To: <1111696854.16420170.1510013995647.JavaMail.zimbra@datacom.ind.br>
-References: <1510010041-4377-1-git-send-email-luca@lucaceresoli.net>
- <1111696854.16420170.1510013995647.JavaMail.zimbra@datacom.ind.br>
-Message-ID: <498746333.16420841.1510015528782.JavaMail.zimbra@datacom.ind.br>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Mon,  6 Nov 2017 19:08:54 -0600
+Subject: [Buildroot] [PATCH] DEVELOPERS: add myself to packages
+Message-ID: <1510016934-2840-1-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> From: "Carlos Santos" <casantos@datacom.ind.br>
-> To: "Luca Ceresoli" <luca@lucaceresoli.net>
-> Cc: "Adam Duskett" <aduskett@gmail.com>, buildroot at buildroot.org
-> Sent: Monday, November 6, 2017 10:19:55 PM
-> Subject: Re: [Buildroot] [PATCH] util-linux: fix link failures due to name clash
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+---
+ DEVELOPERS | 41 +++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 41 insertions(+)
 
->> From: "Luca Ceresoli" <luca@lucaceresoli.net>
->> To: buildroot at buildroot.org
->> Cc: "Luca Ceresoli" <luca@lucaceresoli.net>, "Adam Duskett" <aduskett@gmail.com>
->> Sent: Monday, November 6, 2017 9:14:01 PM
->> Subject: [Buildroot] [PATCH] util-linux: fix link failures due to name clash
-> 
->> Several packages have a similar md5.c file, and each has a function
->> named byteReverse(). This generates link errors ("multiple definition
->> of `byteReverse'").
->> 
->> Fix by declaring byteReverse as static, since it is just an internal
->> function.
->> 
->> Fixes:
->>  http://autobuild.buildroot.net/results/419ab2c0e034cc68991281c51caa8271b0fadbab/
-> 
-> Did you submit this patch upstream?
-
-[Do not hit ?send? before completing the the message, dooh!]
-
-Perhaps it was blocked by the util-linux MLM. Did you submit the patch as a plain-text message using git send-email?
-
+diff --git a/DEVELOPERS b/DEVELOPERS
+index c651bf2..d198c61 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1030,32 +1030,73 @@ F:	configs/ts4900_defconfig
+ F:	package/ts4900-fpga/
+ 
+ N:	Matt Weber <matthew.weber@rockwellcollins.com>
++F:	package/argp-standalone/
++F:	package/aufs/
++F:	package/aufs-util/
+ F:	package/bc/
++F:	package/bridge-utils/
+ F:	package/checkpolicy/
+ F:	package/cgroupfs-mount/
++F:	package/crda/
++F:	package/devmem2/
++F:	package/dnsmasq/
++F:	package/dosfstools/
++F:	package/eeprog/
+ F:	package/eigen/
++F:	package/ethtool/
++F:	package/flashbench/
+ F:	package/fmc/
+ F:	package/fmlib/
++F:	package/git/
++F:	package/gnutls/
++F:	package/hostapd/
++F:	package/i2c-tools/
++F:	package/ifplugd/
+ F:	package/igmpproxy/
++F:	package/iperf/
++F:	package/iperf3/
+ F:	package/iputils/
++F:	package/iw/
+ F:	package/libcsv/
++F:	package/libcurl/
++F:	package/libfcgi/
++F:	package/libopenssl/
+ F:	package/libselinux/
+ F:	package/libsemanage/
+ F:	package/libsepol/
++F:	package/libssh2/
+ F:	package/libqmi/
++F:	package/lighttpd/
++F:	package/logrotate/
++F:	package/makedevs/
++F:	package/memtester/
++F:	package/mii-diag/
++F:	package/mrouted/
++F:	package/mtd/
++F:	package/mtools/
+ F:	package/nginx-upload/
+ F:	package/omniorb/
+ F:	package/paxtest/
++F:	package/picocom/
+ F:	package/policycoreutils/
++F:	package/proftpd/
++F:	package/protobuf-c/
++F:	package/protobuf/
+ F:	package/python-ipy/
+ F:	package/python-posix-ipc/
+ F:	package/python-pypcap/
+ F:	package/python-pyrex/
+ F:	package/raptor/
++F:	package/rng-tools/
++F:	package/rsyslog/
+ F:	package/setools/
+ F:	package/smcroute/
+ F:	package/tclap/
++F:	package/uboot-tools/
++F:	package/unionfs/
+ F:	package/valijson/
++F:	package/wpa_supplicant/
++F:	package/wireless-tools/
+ 
+ N:	Mauro Condarelli <mc5686@mclink.it>
+ F:	package/mc/
 -- 
-Carlos Santos (Casantos) - DATACOM, P&D
-?The greatest triumph that modern PR can offer is the transcendent 
-success of having your words and actions judged by your reputation, 
-rather than the other way about.? ? Christopher Hitchens
+1.9.1
