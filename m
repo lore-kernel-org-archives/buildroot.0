@@ -1,64 +1,73 @@
-From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Tue, 7 Nov 2017 21:22:56 +0100
-Subject: [Buildroot] [PATCH 1/1] add qmake.conf fixup for sunxi-mali
- platforms
-In-Reply-To: <fd2c8e8f-ebe0-79a7-df05-a4c2bc01ba11@mind.be>
-References: <1510066081-35701-1-git-send-email-giulio.benetti@micronovasrl.com>
- <002cc8ca-ccf5-7610-905a-735e0740d942@micronovasrl.com>
- <fd2c8e8f-ebe0-79a7-df05-a4c2bc01ba11@mind.be>
-Message-ID: <e96e3434-e0f5-23c4-0e31-887564e331a0@micronovasrl.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 7 Nov 2017 21:42:31 +0100
+Subject: [Buildroot] [PATCH v2 2/2] security hardening: add RELFO,
+ FORTIFY options
+In-Reply-To: <20171107193127.GX1829@waldemar-brodkorb.de>
+References: <1508936397-33651-1-git-send-email-matthew.weber@rockwellcollins.com>
+ <1508936397-33651-2-git-send-email-matthew.weber@rockwellcollins.com>
+ <e29b21b0-6c5f-ef3b-4123-9e8782639f43@mind.be>
+ <CANQCQpZ4kVabQPuCNjazZdMB_O-jUxoOFzALR=CKZh5x36pwKQ@mail.gmail.com>
+ <CANQCQpZekGq2j7d0KJ=gaJSKUe8YBHm-G8QLyTiMJmsdv7r02A@mail.gmail.com>
+ <00a38063-e166-6ba4-6927-b90285ce031e@mind.be>
+ <20171107193127.GX1829@waldemar-brodkorb.de>
+Message-ID: <a299aee3-6f93-b07e-a659-12ea9a2395bc@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Perfect,
 
-tomorrow I submit a patch.
 
-Thanks
-Cheers
-
-Il 07/11/2017 21:21, Arnout Vandecappelle ha scritto:
->
-> On 07-11-17 19:58, Giulio Benetti wrote:
->> This patch is buggy.
->> The same for Gary Bisson patch.
->> Must put "EGLFS_DEVICE_INTEGRATION = eglfs_mali"
->> before:
+On 07-11-17 20:31, Waldemar Brodkorb wrote:
+> Hi Arnout,
+> Arnout Vandecappelle wrote,
+> 
+>>>>> Do you know how these behave in uClibc and musl? Waldemar, any idea?
+>>>>> Obviously
+>>>>> the gcc part will still be activated, which covers about half of the
+>>>>> functionality.
+>>>>>
+>>>>
+>>>> Checking on the answer, but we ran through the complete test-pkg build list.
+>>>> I'll see which were skipped. We didn't see specific failures.
+>>>>
+>>>
+>>> The set of test packages I used ended up forcing a glibc only test-pkg
+>>> build.  I'll rerun with a basic busybox scenario.
 >>
->> include(../common/linux_device_post.conf)
->> load(qt_config)
->>
->> otherwise qmake ignores it.
->> I thought to use sed to append EGLFS_DEVICE_INTEGRATION = eglfs_mali/viv just
->> after include(arch.conf).
->   Yes, with sed is a good idea. Preferably by renaming qmake.conf to
-> qmake.conf.in and always using sed to generate the actual qmake.conf file. Add a
-> line
->
-> EGLFS_DEVICE_INTEGRATION = @EGLFS_DEVICE@
->
-> at the appropriate place. The sed then either replaces @EGLFS_DEVICE@ with the
-> proper string, or deletes the line.
->
->   Regards,
->   Arnout
->
->> What do you think?
-> [snip]
->
+>>  It will build, that's for sure. My question is: will it actually do anything
+>> useful? The effect of fortify is shared a bit between GCC and glibc. E.g.
+>> 'memset' has a GCC implementation (used when it can be inlined) and a glibc
+>> implementation (used when it's too big or unpredictable). As far as I can see,
+>> neither uClibc nor musl have support for FORTIFY. So only the GCC part will take
+>> effect. But I think that that is so little that it's hardly worth it.
+> 
+> I can confirm uClibc-ng does not support FORTIFY security
+> mechanisms.
+> There is some old unused code since
+> 82098ab9b853c33ee8ade61c9510b295cc696de1, but I am considering
+> removing it, because it is unused and incomplete.
 
+ So I did a little bit more research [1], and it looks like a significant part
+of the FORTIFY support comes from gcc. However, the gcc support is only
+activated if the appropriate header is included that replaces memcpy with
+__builtin___memcpy_chk etc.
+
+ In addition, GCC's check will call __fortify_fail if the check fails. So you
+can easily find out if it's supported: does the libc define __fortify_fail or
+not? Neither uClibc nor musl does.
+
+ In short, the fortify options should depend on glibc.
+
+ Regards,
+ Arnout
+
+[1] https://access.redhat.com/blogs/766093/posts/1976213
 -- 
-Giulio Benetti
-R&D Manager &
-Advanced Research
-
-MICRONOVA SRL
-Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
-Tel. 049/8931563 - Fax 049/8931346
-Cod.Fiscale - P.IVA 02663420285
-Capitale Sociale ? 26.000 i.v.
-Iscritta al Reg. Imprese di Padova N. 02663420285
-Numero R.E.A. 258642
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
