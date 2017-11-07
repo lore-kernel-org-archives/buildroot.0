@@ -1,64 +1,73 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 7 Nov 2017 21:54:19 +0100
-Subject: [Buildroot] [RFCv1 0/4] Per-package SDK and target directories
-In-Reply-To: <20171107205558.315ce04c@windsurf>
-References: <5DBA847110A28B46BBA17BE675F0C9B2181A8D38@cnshjmbx01>
- <20171107181307.58471ad9@windsurf>
- <d79b315e-3ccd-5da3-4794-7ea97a296c0d@mind.be>
- <20171107205558.315ce04c@windsurf>
-Message-ID: <32d492f8-4c57-16c9-1602-61117f556e3a@mind.be>
+Date: Tue, 7 Nov 2017 21:57:56 +0100
+Subject: [Buildroot] [PATCH 1/1] Allow adding per-package overrlice
+ rsync exclusions
+In-Reply-To: <20171107015730.20311-1-aperez@igalia.com>
+References: <20171107015730.20311-1-aperez@igalia.com>
+Message-ID: <04ece7d7-8192-2029-5edc-63ae48bb7532@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+ Hi Adrien,
 
+On 07-11-17 02:57, Adrian Perez de Castro wrote:
+> This allows using <PKG>_SRCDIR_OVERRIDE_RSYNC_EXCLUSIONS in local.mk to
+> skip copying parts of source trees unneeded for building. For example,
+> when developing WebKitGTK+, it's handy to skip copying all the tests and
+> other build directories, which are huge:
+> 
+>     WEBKITGTK_OVERRIDE_SRCDIR = /home/aperez/WebKit
+>     WEBKITGTK_OVERRIDE_SRCDIR_RSYNC_EXCLUSIONS = \
+>         --exclude JSTests --exclude ManualTests \
+> 	--exclude PerformanceTests --exclude WebDriverTests \
+> 	--exclude WebKitBuild --exclude WebKitLibraries \
+> 	--exclude WebKit.xcworkspace --exclude Websites \
+> 	--exclude Examples
+> 
+> This saves a good chunk of time when rsync is used for the first time to
+> copy the source tree over before building.
 
-On 07-11-17 20:55, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Tue, 7 Nov 2017 18:55:20 +0100, Arnout Vandecappelle wrote:
-> 
->>> in package/pkg-generic.mk. But of course, we need to exclude the
->>> host-ccache package from this, otherwise we would have a circular
->>> dependency. Do you want to try something like this?  
->>
->>  Ha, I didn't understand the original problem but now I see. The issue is that
->> ccache is part of DEPENDENCIES_HOST_PREREQ, and DEPENDENCIES_HOST_PREREQ is
->> *not* added to each package's DEPENDENCIES,
-> 
-> Exactly.
-> 
->> instead it is added to the
->> core-dependencies target and each package depends on that. It's an easy way to
->> avoid circular dependencies, I guess.
->>
->>  So I think the proper solution would be to add DEPENDENCIES_HOST_PREREQ to the
->> dependencies of all packages except themselves, similar to how it's done for
->> toolchain.
-> 
-> Isn't this DEPENDENCIES_HOST_PREREQ thing a bit crappy in the first
-> place?
+ Looks like an interesting feature. Although, if the out-of-tree build feature
+gets merged, it's probably less useful. That is, assuming that webkitgtk
+supports out-of-tree build, which is not a given...
 
- Nobody claimed it wasn't :-) It's a relic from 2007...
+ I could bikeshed a little on the name, but it's actually OK.
 
-> Why isn't host-ccache simply added as a dependency of all
-> packages, except itself?
 > 
-> Another example is that today, host-lzip is always built at the
-> beginning of build, even if you're not building any package that needs
-> the lzip "decompressor".
+> Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+> ---
+>  package/pkg-generic.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> So perhaps this calls for a little bit of rework in this area, no?
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index 0e28675fbe..c895afc498 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -181,7 +181,7 @@ $(BUILD_DIR)/%/.stamp_rsynced:
+>  	@$(call MESSAGE,"Syncing from source dir $(SRCDIR)")
+>  	$(foreach hook,$($(PKG)_PRE_RSYNC_HOOKS),$(call $(hook))$(sep))
+>  	@test -d $(SRCDIR) || (echo "ERROR: $(SRCDIR) does not exist" ; exit 1)
+> -	rsync -au --chmod=u=rwX,go=rX $(RSYNC_VCS_EXCLUSIONS) $(call qstrip,$(SRCDIR))/ $(@D)
+> +	rsync -au --chmod=u=rwX,go=rX $(RSYNC_VCS_EXCLUSIONS) $($(PKG)_OVERRIDE_SRCDIR_RSYNC_EXCLUSIONS) $(call qstrip,$(SRCDIR))/ $(@D)
 
- Yep. For cmake it is done the right way. The same could be done for the other
-dependencies. And it may be useful to extend the mechanism to other system
-packages. E.g. m4 is not really sensitive to version changes.
+ Would have been nice to split the long line. But even without split:
+
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+ Could you also add this feature to the documentation of _OVERRIDE_SRCDIR in the
+manual?
 
  Regards,
  Arnout
 
+
+>  	$(foreach hook,$($(PKG)_POST_RSYNC_HOOKS),$(call $(hook))$(sep))
+>  	$(Q)touch $@
+>  
+> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
