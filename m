@@ -1,12 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 7 Nov 2017 22:33:47 +0100
-Subject: [Buildroot] [RFCv1 3/4] toolchain: post-pone evaluation of
- TOOLCHAIN_EXTERNAL_BIN
-In-Reply-To: <42689797-2392-a70c-16d4-eb96c6bcc8c0@mind.be>
-References: <20171103160627.6468-1-thomas.petazzoni@free-electrons.com>
- <20171103160627.6468-4-thomas.petazzoni@free-electrons.com>
- <42689797-2392-a70c-16d4-eb96c6bcc8c0@mind.be>
-Message-ID: <20171107223347.143e3642@windsurf>
+Date: Tue, 7 Nov 2017 22:37:52 +0100
+Subject: [Buildroot] [PATCH v2 1/1] package/ffmpeg: fix fenv build
+ failure on ARCv2 with glibc
+In-Reply-To: <20171107211149.17617-1-bernd.kuhls@t-online.de>
+References: <20171107211149.17617-1-bernd.kuhls@t-online.de>
+Message-ID: <20171107223752.3844357c@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,36 +13,55 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 7 Nov 2017 22:23:24 +0100, Arnout Vandecappelle wrote:
-
-> > diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
-> > index dc0588c536..b9ad1720a1 100644
-> > --- a/toolchain/toolchain-external/pkg-toolchain-external.mk
-> > +++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
-> > @@ -77,7 +77,7 @@ ifneq ($(TOOLCHAIN_EXTERNAL_PREFIX),)
-> >  TOOLCHAIN_EXTERNAL_BIN := $(dir $(shell which $(TOOLCHAIN_EXTERNAL_PREFIX)-gcc))
-> >  endif
-> >  else
-> > -TOOLCHAIN_EXTERNAL_BIN := $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/bin
-> > +TOOLCHAIN_EXTERNAL_BIN = $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/bin  
+On Tue,  7 Nov 2017 22:11:49 +0100, Bernd Kuhls wrote:
+> https://git.buildroot.net/buildroot/commit/toolchain?id=0633eb58a2912328508a76f8fe9875a0d113a880
+> added glibc support for ARCv2 which lacks fenv.h.
 > 
->  It gives me the shivers to see the same variable sometimes defined recursive
-> and sometimes defined immediate... But I can't find an elegant solution (other
-> than introducing an artificial extra variable, which is also ugly), so
+> Fixes
+> http://autobuild.buildroot.net/results/aec/aec300d7d4472421398a24202d6871c965bd1be5/
 > 
-> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-I also saw the other TOOLCHAIN_EXTERNAL_BIN assignment using := above,
-and didn't change it for now because that was not the case I was
-interested in testing/fixing. But my plan was to get back to this :=
-assignment at some point. However, it seems like you have concluded
-that we have to keep := here. Could you explain why?
+Thanks!
 
-Note: I think keeping the := is OK, because TOOLCHAIN_EXTERNAL_PREFIX
-doesn't reference anything like HOST_DIR/STAGING_DIR/TARGET_DIR, so
-it's fine to have evaluation at the time of assignment for this case.
+Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-Perhaps a comment above would help clarify that it's intentional?
+> -	# fenv.h lacks FE_INVALID, FE_OVERFLOW & FE_UNDERFLOW on nios2
+> +	# fenv.h lacks FE_INVALID, FE_OVERFLOW & FE_UNDERFLOW on archs38
+> +	# in combination with glibc and nios2
+>  	# No support for ARMv7-M in the ARM assembly logic
+>  	# Microblaze build affected by gcc PR71124 (infinite loop)
+>  	# m68k coldfire causes a build failure, because the check for
+> @@ -9,7 +10,9 @@ config BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
+>  	# not. See https://patchwork.ozlabs.org/patch/756664/ and
+>  	# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=68467 for more
+>  	# details.
+> -	default y if !BR2_nios2 && !BR2_ARM_CPU_ARMV7M && !BR2_microblaze && !BR2_m68k_cf
+> +	default y if !(BR2_archs38 && BR2_TOOLCHAIN_USES_GLIBC) && \
+> +		!BR2_nios2 && !BR2_ARM_CPU_ARMV7M && \
+> +		!BR2_microblaze && !BR2_m68k_cf
+
+We don't want to fix that now, but this is getting unreadable. Perhaps
+we could improve that by doing this:
+
+config BR2_PACKAGE_FFMPEG_ARCH_BROKEN
+	bool
+	# blabla why
+	default y if BR2_archs38 && BR2_TOOLCHAIN_USES_GLIBC
+	# blabla why
+	default y if BR2_nios2
+	# ...
+	default y if BR2_ARM_CPU_ARMV7M
+	# ...
+	default y if BR2_microblaze
+	# blabla why
+	default y if BR2_m68k_cf
+
+config BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
+	bool
+	default y if !BR2_PACKAGE_FFMPEG_ARCH_BROKEN
+
+It's probably more readable :)
 
 Thomas
 -- 
