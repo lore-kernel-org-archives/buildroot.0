@@ -1,16 +1,12 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 7 Nov 2017 21:42:31 +0100
-Subject: [Buildroot] [PATCH v2 2/2] security hardening: add RELFO,
- FORTIFY options
-In-Reply-To: <20171107193127.GX1829@waldemar-brodkorb.de>
-References: <1508936397-33651-1-git-send-email-matthew.weber@rockwellcollins.com>
- <1508936397-33651-2-git-send-email-matthew.weber@rockwellcollins.com>
- <e29b21b0-6c5f-ef3b-4123-9e8782639f43@mind.be>
- <CANQCQpZ4kVabQPuCNjazZdMB_O-jUxoOFzALR=CKZh5x36pwKQ@mail.gmail.com>
- <CANQCQpZekGq2j7d0KJ=gaJSKUe8YBHm-G8QLyTiMJmsdv7r02A@mail.gmail.com>
- <00a38063-e166-6ba4-6927-b90285ce031e@mind.be>
- <20171107193127.GX1829@waldemar-brodkorb.de>
-Message-ID: <a299aee3-6f93-b07e-a659-12ea9a2395bc@mind.be>
+Date: Tue, 7 Nov 2017 21:54:19 +0100
+Subject: [Buildroot] [RFCv1 0/4] Per-package SDK and target directories
+In-Reply-To: <20171107205558.315ce04c@windsurf>
+References: <5DBA847110A28B46BBA17BE675F0C9B2181A8D38@cnshjmbx01>
+ <20171107181307.58471ad9@windsurf>
+ <d79b315e-3ccd-5da3-4794-7ea97a296c0d@mind.be>
+ <20171107205558.315ce04c@windsurf>
+Message-ID: <32d492f8-4c57-16c9-1602-61117f556e3a@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -19,51 +15,51 @@ To: buildroot@busybox.net
 
 
 
-On 07-11-17 20:31, Waldemar Brodkorb wrote:
-> Hi Arnout,
-> Arnout Vandecappelle wrote,
+On 07-11-17 20:55, Thomas Petazzoni wrote:
+> Hello,
 > 
->>>>> Do you know how these behave in uClibc and musl? Waldemar, any idea?
->>>>> Obviously
->>>>> the gcc part will still be activated, which covers about half of the
->>>>> functionality.
->>>>>
->>>>
->>>> Checking on the answer, but we ran through the complete test-pkg build list.
->>>> I'll see which were skipped. We didn't see specific failures.
->>>>
->>>
->>> The set of test packages I used ended up forcing a glibc only test-pkg
->>> build.  I'll rerun with a basic busybox scenario.
+> On Tue, 7 Nov 2017 18:55:20 +0100, Arnout Vandecappelle wrote:
+> 
+>>> in package/pkg-generic.mk. But of course, we need to exclude the
+>>> host-ccache package from this, otherwise we would have a circular
+>>> dependency. Do you want to try something like this?  
 >>
->>  It will build, that's for sure. My question is: will it actually do anything
->> useful? The effect of fortify is shared a bit between GCC and glibc. E.g.
->> 'memset' has a GCC implementation (used when it can be inlined) and a glibc
->> implementation (used when it's too big or unpredictable). As far as I can see,
->> neither uClibc nor musl have support for FORTIFY. So only the GCC part will take
->> effect. But I think that that is so little that it's hardly worth it.
+>>  Ha, I didn't understand the original problem but now I see. The issue is that
+>> ccache is part of DEPENDENCIES_HOST_PREREQ, and DEPENDENCIES_HOST_PREREQ is
+>> *not* added to each package's DEPENDENCIES,
 > 
-> I can confirm uClibc-ng does not support FORTIFY security
-> mechanisms.
-> There is some old unused code since
-> 82098ab9b853c33ee8ade61c9510b295cc696de1, but I am considering
-> removing it, because it is unused and incomplete.
+> Exactly.
+> 
+>> instead it is added to the
+>> core-dependencies target and each package depends on that. It's an easy way to
+>> avoid circular dependencies, I guess.
+>>
+>>  So I think the proper solution would be to add DEPENDENCIES_HOST_PREREQ to the
+>> dependencies of all packages except themselves, similar to how it's done for
+>> toolchain.
+> 
+> Isn't this DEPENDENCIES_HOST_PREREQ thing a bit crappy in the first
+> place?
 
- So I did a little bit more research [1], and it looks like a significant part
-of the FORTIFY support comes from gcc. However, the gcc support is only
-activated if the appropriate header is included that replaces memcpy with
-__builtin___memcpy_chk etc.
+ Nobody claimed it wasn't :-) It's a relic from 2007...
 
- In addition, GCC's check will call __fortify_fail if the check fails. So you
-can easily find out if it's supported: does the libc define __fortify_fail or
-not? Neither uClibc nor musl does.
+> Why isn't host-ccache simply added as a dependency of all
+> packages, except itself?
+> 
+> Another example is that today, host-lzip is always built at the
+> beginning of build, even if you're not building any package that needs
+> the lzip "decompressor".
+> 
+> So perhaps this calls for a little bit of rework in this area, no?
 
- In short, the fortify options should depend on glibc.
+ Yep. For cmake it is done the right way. The same could be done for the other
+dependencies. And it may be useful to extend the mechanism to other system
+packages. E.g. m4 is not really sensitive to version changes.
 
  Regards,
  Arnout
 
-[1] https://access.redhat.com/blogs/766093/posts/1976213
+
 -- 
 Arnout Vandecappelle                          arnout at mind be
 Senior Embedded Software Architect            +32-16-286500
