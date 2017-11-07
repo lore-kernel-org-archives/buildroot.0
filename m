@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 7 Nov 2017 22:23:24 +0100
-Subject: [Buildroot] [RFCv1 3/4] toolchain: post-pone evaluation of
- TOOLCHAIN_EXTERNAL_BIN
-In-Reply-To: <20171103160627.6468-4-thomas.petazzoni@free-electrons.com>
-References: <20171103160627.6468-1-thomas.petazzoni@free-electrons.com>
- <20171103160627.6468-4-thomas.petazzoni@free-electrons.com>
-Message-ID: <42689797-2392-a70c-16d4-eb96c6bcc8c0@mind.be>
+Date: Tue, 7 Nov 2017 22:24:27 +0100
+Subject: [Buildroot] [git commit] DEVELOPERS: add myself to packages
+In-Reply-To: <CANQCQpYyeXFZ+ovaYZ11cOTLwosnMja9c+sJU58hzAujZzjPbw@mail.gmail.com>
+References: <20171107162052.8304C81096@busybox.osuosl.org>
+ <cak9dexi8m.ln2@ID-313208.user.individual.net>
+ <CANQCQpYyeXFZ+ovaYZ11cOTLwosnMja9c+sJU58hzAujZzjPbw@mail.gmail.com>
+Message-ID: <435554ab-f880-6df9-259a-9ffc67e255ee@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,50 +14,30 @@ To: buildroot@busybox.net
 
 
 
-On 03-11-17 17:06, Thomas Petazzoni wrote:
-> The upcoming per-package SDK functionality is heavily based on the
-> fact that HOST_DIR, STAGING_DIR and TARGET_DIR are evaluated during
-> the configure/build/install steps of the packages. Therefore, any
-> evaluation-during-assignment using := is going to cause problems, and
-> need to be turned into evaluation-during-use using =.
+On 07-11-17 22:19, Matthew Weber wrote:
+> Bernd,
 > 
-> This patch fix up one such instance in the external toolchain code.
-             fixes
+> On Tue, Nov 7, 2017 at 3:14 PM, Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+>> Am Tue, 07 Nov 2017 17:27:20 +0100 schrieb Peter Korsgaard:
+>>
+>>> +F:   package/wireless-tools/
+>>
+>> Hi,
+>>
+>> this package does not exist in buildroot:
+>>
+>> WARNING: 'package/wireless-tools/' doesn't match any file
+>>
+> 
+> 
+> :-(  preparing patch...
 
-> 
-> This change is independent from the per-package SDK functionality, and
-> could be applied separately.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  toolchain/toolchain-external/pkg-toolchain-external.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
-> index dc0588c536..b9ad1720a1 100644
-> --- a/toolchain/toolchain-external/pkg-toolchain-external.mk
-> +++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
-> @@ -77,7 +77,7 @@ ifneq ($(TOOLCHAIN_EXTERNAL_PREFIX),)
->  TOOLCHAIN_EXTERNAL_BIN := $(dir $(shell which $(TOOLCHAIN_EXTERNAL_PREFIX)-gcc))
->  endif
->  else
-> -TOOLCHAIN_EXTERNAL_BIN := $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/bin
-> +TOOLCHAIN_EXTERNAL_BIN = $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/bin
-
- It gives me the shivers to see the same variable sometimes defined recursive
-and sometimes defined immediate... But I can't find an elegant solution (other
-than introducing an artificial extra variable, which is also ugly), so
-
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ By the way, instead of 'myself', it's better to put your name in the commit
+subject. When doing 'git log --oneline' for example the author isn't immediately
+visible.
 
  Regards,
  Arnout
-
-
->  endif
->  
->  # If this is a buildroot toolchain, it already has a wrapper which we want to
-> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
