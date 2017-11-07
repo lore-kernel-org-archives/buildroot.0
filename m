@@ -1,55 +1,77 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 7 Nov 2017 22:05:03 +0100
-Subject: [Buildroot] [PATCH 1/1] Allow adding per-package overrlice
- rsync exclusions
-In-Reply-To: <04ece7d7-8192-2029-5edc-63ae48bb7532@mind.be>
-References: <20171107015730.20311-1-aperez@igalia.com>
- <04ece7d7-8192-2029-5edc-63ae48bb7532@mind.be>
-Message-ID: <20171107220503.179cc727@windsurf>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 7 Nov 2017 22:05:11 +0100
+Subject: [Buildroot] [RFCv1 1/4] pkgconf: use relative path to
+ STAGING_DIR instead of absolute path
+In-Reply-To: <20171103160627.6468-2-thomas.petazzoni@free-electrons.com>
+References: <20171103160627.6468-1-thomas.petazzoni@free-electrons.com>
+ <20171103160627.6468-2-thomas.petazzoni@free-electrons.com>
+Message-ID: <c4576062-3b90-5541-6b87-32218c2984de@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
 
-On Tue, 7 Nov 2017 21:57:56 +0100, Arnout Vandecappelle wrote:
 
-> >     WEBKITGTK_OVERRIDE_SRCDIR = /home/aperez/WebKit
-> >     WEBKITGTK_OVERRIDE_SRCDIR_RSYNC_EXCLUSIONS = \
-> >         --exclude JSTests --exclude ManualTests \
-> > 	--exclude PerformanceTests --exclude WebDriverTests \
-> > 	--exclude WebKitBuild --exclude WebKitLibraries \
-> > 	--exclude WebKit.xcworkspace --exclude Websites \
-> > 	--exclude Examples
-> > 
-> > This saves a good chunk of time when rsync is used for the first time to
-> > copy the source tree over before building.  
+On 03-11-17 17:06, Thomas Petazzoni wrote:
+> The pkg-config wrapper script is currently generated with absolute
+> paths to $(STAGING_DIR). However, this will not work properly with
+> per-package SDK, and each package will be built with a different
+> STAGING_DIR value.
 > 
->  Looks like an interesting feature. Although, if the out-of-tree build feature
-> gets merged, it's probably less useful. That is, assuming that webkitgtk
-> supports out-of-tree build, which is not a given...
-
-Also my thinking: per-package out of tree build is going to make this
-new feature a lot less relevant. That being said, per-package out of
-tree build is not there yet, and this new feature is just a very simple
-change, so I believe it's OK to merge it.
-
-> > +	rsync -au --chmod=u=rwX,go=rX $(RSYNC_VCS_EXCLUSIONS) $($(PKG)_OVERRIDE_SRCDIR_RSYNC_EXCLUSIONS) $(call qstrip,$(SRCDIR))/ $(@D)  
+> In order to fix this, we adjust how the pkg-config wrapper script is
+> generated, so that it uses a relative path to itself: the sysroot (i.e
+> STAGING_DIR) is always located in $(path of
+> pkg-config)/../$(STAGING_SUBDIR).
 > 
->  Would have been nice to split the long line. But even without split:
+> This change is independent from the per-package SDK work, and could be
+> applied independently from it.
 > 
-> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+ It's OK as it is
+
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+ However...
+
+> ---
+>  package/pkgconf/pkgconf.mk | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
->  Could you also add this feature to the documentation of _OVERRIDE_SRCDIR in the
-> manual?
+> diff --git a/package/pkgconf/pkgconf.mk b/package/pkgconf/pkgconf.mk
+> index cc190d26da..d11ce485f7 100644
+> --- a/package/pkgconf/pkgconf.mk
+> +++ b/package/pkgconf/pkgconf.mk
+> @@ -19,8 +19,8 @@ endef
+>  define HOST_PKGCONF_INSTALL_WRAPPER
+>  	$(INSTALL) -m 0755 -D package/pkgconf/pkg-config.in \
+>  		$(HOST_DIR)/bin/pkg-config
+> -	$(SED) 's, at PKG_CONFIG_LIBDIR@,$(STAGING_DIR)/usr/lib/pkgconfig:$(STAGING_DIR)/usr/share/pkgconfig,' \
+> -		-e 's, at STAGING_DIR@,$(STAGING_DIR),' \
+> +	$(SED) 's, at PKG_CONFIG_LIBDIR@,$$(dirname $$0)/../$(STAGING_SUBDIR)/usr/lib/pkgconfig:$$(dirname $$0)/../$(STAGING_SUBDIR)/usr/share/pkgconfig,' \
+> +		-e 's, at STAGING_DIR@,$$(dirname $$0)/../$(STAGING_SUBDIR),' \
 
-I think we really want the documentation update as part of the patch
-series :)
+ Instead of all this complexity, why not do it directly in pkg-config.in, and
+just substitute @STAGING_SUBDIR@ ? Note that the file will have 4 instances of
+$(dirname $0) so an intermediary variable is called for.
 
-Thomas
+ If you do that, you can maybe also do some line splitting there, and add the
+missing exec.
+
+ Regards,
+ Arnout
+
+>  		$(HOST_DIR)/bin/pkg-config
+>  endef
+>  
+> 
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
