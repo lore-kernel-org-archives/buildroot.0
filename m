@@ -1,67 +1,84 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 7 Nov 2017 18:55:20 +0100
-Subject: [Buildroot] [RFCv1 0/4] Per-package SDK and target directories
-In-Reply-To: <20171107181307.58471ad9@windsurf>
-References: <5DBA847110A28B46BBA17BE675F0C9B2181A8D38@cnshjmbx01>
- <20171107181307.58471ad9@windsurf>
-Message-ID: <d79b315e-3ccd-5da3-4794-7ea97a296c0d@mind.be>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Tue, 7 Nov 2017 19:58:01 +0100
+Subject: [Buildroot] [PATCH 1/1] add qmake.conf fixup for sunxi-mali
+ platforms
+In-Reply-To: <1510066081-35701-1-git-send-email-giulio.benetti@micronovasrl.com>
+References: <1510066081-35701-1-git-send-email-giulio.benetti@micronovasrl.com>
+Message-ID: <002cc8ca-ccf5-7610-905a-735e0740d942@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+This patch is buggy.
+The same for Gary Bisson patch.
+Must put "EGLFS_DEVICE_INTEGRATION = eglfs_mali"
+before:
 
+include(../common/linux_device_post.conf)
+load(qt_config)
 
-On 07-11-17 18:13, Thomas Petazzoni wrote:
->> diff --git a/package/ccache/ccache.mk b/package/ccache/ccache.mk
->> index afbec44..66bfcad 100644
->> --- a/package/ccache/ccache.mk
->> +++ b/package/ccache/ccache.mk
->> @@ -50,6 +50,7 @@ BR_CCACHE_INITIAL_SETUP = $(call qstrip,$(BR2_CCACHE_INITIAL_SETUP))
->>  ifneq ($(BR_CCACHE_INITIAL_SETUP),)
->>  define HOST_CCACHE_DO_INITIAL_SETUP
->>      @$(call MESSAGE,"Applying initial settings")
->> +    rsync -au --link-dest=$(HOST_DIR) $(HOST_DIR) $(call qstrip,$(BR2_HOST_DIR))
->>      $(CCACHE) $(BR_CCACHE_INITIAL_SETUP)
->>      $(CCACHE) -s
->>  endef
-> I don't think that's what we want. The global HOST_DIR (output/host)
-> should basically be empty during the entire build process. Instead,
-> what we want is to have the ccache host tools installed in the
-> per-package SDK. This means that all packages have to have a dependency
-> on host-ccache, which is not currently the case. So we probably instead
-> want something like:
+otherwise qmake ignores it.
+I thought to use sed to append EGLFS_DEVICE_INTEGRATION = eglfs_mali/viv 
+just after include(arch.conf).
+
+What do you think?
+
+Kind regards
+
+Il 07/11/2017 15:48, Giulio Benetti ha scritto:
+> Based on Gary Bisson patch qt5base: add qmake.conf fixup for i.MX platforms
+> Same happens for eglfs_mali.
 > 
-> ifeq ($(BR2_CCACHE),y)
-> $(2)_DEPENDENCIES += host-ccache
-> endif
+> As stated in QTBUG-61156 [1], since Qt5.9 all the Qt apps fail to start
+> on sunxi-mali platforms.
 > 
-> in package/pkg-generic.mk. But of course, we need to exclude the
-> host-ccache package from this, otherwise we would have a circular
-> dependency. Do you want to try something like this?
+> The reason is that the qmake.conf should apparently now specify which
+> eglfs backend to use.
+> 
+> Although this issue can be worked around by exporting a variable
+> (QT_QPA_EGLFS_INTEGRATION=eglfs_mali), this patch aims at providing
+> a more user-friendly approach by modifying qmake.conf when created.
+> 
+> [1]: https://bugreports.qt.io/browse/QTBUG-61156
+> 
+> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+> ---
+>   package/qt5/qt5base/qt5base.mk | 8 ++++++++
+>   1 file changed, 8 insertions(+)
+> 
+> diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+> index b3f9c79..494031e 100644
+> --- a/package/qt5/qt5base/qt5base.mk
+> +++ b/package/qt5/qt5base/qt5base.mk
+> @@ -248,6 +248,14 @@ define QT5BASE_CONFIGURE_QMAKE_CONFIG
+>   endef
+>   endif
+>   
+> +ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST)$(BR2_PACKAGE_SUNXI_MALI_MAINLINE),yy)
+> +# use vivante backend
+> +define QT5BASE_CONFIGURE_QMAKE_CONFIG
+> +	echo "EGLFS_DEVICE_INTEGRATION = eglfs_mali" >> \
+> +		$(@D)/mkspecs/devices/linux-buildroot-g++/qmake.conf
+> +endef
+> +endif
+> +
+>   ifneq ($(QT5BASE_CONFIG_FILE),)
+>   define QT5BASE_CONFIGURE_CONFIG_FILE
+>   	cp $(QT5BASE_CONFIG_FILE) $(@D)/src/corelib/global/qconfig-buildroot.h
+> 
 
- Ha, I didn't understand the original problem but now I see. The issue is that
-ccache is part of DEPENDENCIES_HOST_PREREQ, and DEPENDENCIES_HOST_PREREQ is
-*not* added to each package's DEPENDENCIES, instead it is added to the
-core-dependencies target and each package depends on that. It's an easy way to
-avoid circular dependencies, I guess.
-
- So I think the proper solution would be to add DEPENDENCIES_HOST_PREREQ to the
-dependencies of all packages except themselves, similar to how it's done for
-toolchain.
-
- By the way there will also be a problem when host-tar is part of
-DEPENDENCIES_HOST_PREREQ: ccache needs host-tar to be able to build, but there
-is no explicit dependency between them, it relies purely on left-to-right order.
-
- Regards,
- Arnout
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Giulio Benetti
+R&D Manager &
+Advanced Research
+
+MICRONOVA SRL
+Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
+Tel. 049/8931563 - Fax 049/8931346
+Cod.Fiscale - P.IVA 02663420285
+Capitale Sociale ? 26.000 i.v.
+Iscritta al Reg. Imprese di Padova N. 02663420285
+Numero R.E.A. 258642
