@@ -1,28 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 07 Nov 2017 09:48:52 +0100
-Subject: [Buildroot] [git commit] uboot: use local libfdt.h
-In-Reply-To: <ff9910b0-ff51-4d4d-6f68-8fc7732c5273@mind.be> (Arnout
- Vandecappelle's message of "Mon, 6 Nov 2017 23:24:54 +0100")
-References: <20171106201938.56CD37FC1A@busybox.osuosl.org>
- <ff9910b0-ff51-4d4d-6f68-8fc7732c5273@mind.be>
-Message-ID: <87zi7yv5hn.fsf@dell.be.48ers.dk>
+Date: Tue, 07 Nov 2017 10:04:26 +0100
+Subject: [Buildroot] [PATCH v2 1/3] armbian-firmware: new package
+In-Reply-To: <20171106101652.28861-2-geomatsi@gmail.com> (Sergey Matyukevich's
+ message of "Mon, 6 Nov 2017 13:16:50 +0300")
+References: <20171106101652.28861-1-geomatsi@gmail.com>
+ <20171106101652.28861-2-geomatsi@gmail.com>
+Message-ID: <87vaimv4rp.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+>>>>> "Sergey" == Sergey Matyukevich <geomatsi@gmail.com> writes:
 
- > On 06-11-17 21:25, Peter Korsgaard wrote:
- >> +define UBOOT_FIX_LIBFDT_SYSTEM_PATH
- >> +	[ ! -e $(@D)/tools/fdtgrep.c ] || \
+ > This package enables access to firmware blobs from Armbian firmware
+ > repository: https://github.com/armbian/firmware
 
- >  Is there any reason to use [ ! ... ] || instead of [ ... ] && ?
+ > That repository contains multiple firmware blobs grouped by vendor.
+ > For the sake of convenience each group can be independently selected
+ > using Kconfig options. This commit enables the following options:
+ > - firmware blobs for XR819 SDIO WiFi chip
+ > - firmware blobs for AP6212 WiFi/BT combo
 
-You would need to add .. || true to not exit with a non-zero exit code
-if the file doesn't exist (and stop make), so doing it like this is
-shorter.
+ > Armbian firmware repository does not include any specific licenses.
+ > Most part of those firmware blobs belongs to various Android/Linux
+ > SDK packages provided by board vendors. As a result, this package
+ > makes use of the following conservative approach for all the
+ > selected firmware binaries:
+ >   FIRMWARE_LICENSE = PROPRIETARY
+ >   FIRMWARE_REDISTRIBUTE = NO
+
+ > Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
+
+Committed to next, thanks.
 
 -- 
 Bye, Peter Korsgaard
