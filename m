@@ -1,65 +1,53 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Tue,  7 Nov 2017 16:29:06 -0500
-Subject: [Buildroot] [PATCH 1/1] ntp: no longer require openssl
-Message-ID: <20171107212906.31336-1-Adamduskett@outlook.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 7 Nov 2017 22:33:47 +0100
+Subject: [Buildroot] [RFCv1 3/4] toolchain: post-pone evaluation of
+ TOOLCHAIN_EXTERNAL_BIN
+In-Reply-To: <42689797-2392-a70c-16d4-eb96c6bcc8c0@mind.be>
+References: <20171103160627.6468-1-thomas.petazzoni@free-electrons.com>
+ <20171103160627.6468-4-thomas.petazzoni@free-electrons.com>
+ <42689797-2392-a70c-16d4-eb96c6bcc8c0@mind.be>
+Message-ID: <20171107223347.143e3642@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-4.2.8p10 no longer requires openssl to compile.
+Hello,
 
-Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
----
- package/ntp/Config.in |  1 -
- package/ntp/ntp.mk    | 10 ++++++++--
- 2 files changed, 8 insertions(+), 3 deletions(-)
+On Tue, 7 Nov 2017 22:23:24 +0100, Arnout Vandecappelle wrote:
 
-diff --git a/package/ntp/Config.in b/package/ntp/Config.in
-index 1af02dbc0b..8ce9a5b0bb 100644
---- a/package/ntp/Config.in
-+++ b/package/ntp/Config.in
-@@ -1,7 +1,6 @@
- config BR2_PACKAGE_NTP
- 	bool "ntp"
- 	select BR2_PACKAGE_LIBEVENT
--	select BR2_PACKAGE_OPENSSL
- 	help
- 	  Network Time Protocol suite/programs.
- 	  Provides things like ntpd, ntpdate, ntpq, etc...
-diff --git a/package/ntp/ntp.mk b/package/ntp/ntp.mk
-index c70d6e6351..8c30b749d4 100644
---- a/package/ntp/ntp.mk
-+++ b/package/ntp/ntp.mk
-@@ -7,7 +7,7 @@
- NTP_VERSION_MAJOR = 4.2
- NTP_VERSION = $(NTP_VERSION_MAJOR).8p10
- NTP_SITE = https://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-$(NTP_VERSION_MAJOR)
--NTP_DEPENDENCIES = host-pkgconf libevent openssl $(if $(BR2_PACKAGE_BUSYBOX),busybox)
-+NTP_DEPENDENCIES = host-pkgconf libevent $(if $(BR2_PACKAGE_BUSYBOX),busybox)
- NTP_LICENSE = NTP
- NTP_LICENSE_FILES = COPYRIGHT
- NTP_CONF_ENV = ac_cv_lib_md5_MD5Init=no
-@@ -18,12 +18,18 @@ NTP_CONF_OPTS = \
- 	--disable-debugging \
- 	--with-yielding-select=yes \
- 	--disable-local-libevent \
--	--with-crypto
- 
- # 0002-ntp-syscalls-fallback.patch
- # 0003-ntpq-fpic.patch
- NTP_AUTORECONF = YES
- 
-+ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+NTP_CONF_OPTS += --with-crypto
-+NTP_DEPENDENCIES += openssl
-+else
-+NTP_CONF_OPTS += --without-crypto --disable-openssl-random
-+endif
-+ 
- ifeq ($(BR2_TOOLCHAIN_HAS_SSP),y)
- NTP_CONF_OPTS += --with-locfile=linux
- else
+> > diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
+> > index dc0588c536..b9ad1720a1 100644
+> > --- a/toolchain/toolchain-external/pkg-toolchain-external.mk
+> > +++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
+> > @@ -77,7 +77,7 @@ ifneq ($(TOOLCHAIN_EXTERNAL_PREFIX),)
+> >  TOOLCHAIN_EXTERNAL_BIN := $(dir $(shell which $(TOOLCHAIN_EXTERNAL_PREFIX)-gcc))
+> >  endif
+> >  else
+> > -TOOLCHAIN_EXTERNAL_BIN := $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/bin
+> > +TOOLCHAIN_EXTERNAL_BIN = $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/bin  
+> 
+>  It gives me the shivers to see the same variable sometimes defined recursive
+> and sometimes defined immediate... But I can't find an elegant solution (other
+> than introducing an artificial extra variable, which is also ugly), so
+> 
+> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+I also saw the other TOOLCHAIN_EXTERNAL_BIN assignment using := above,
+and didn't change it for now because that was not the case I was
+interested in testing/fixing. But my plan was to get back to this :=
+assignment at some point. However, it seems like you have concluded
+that we have to keep := here. Could you explain why?
+
+Note: I think keeping the := is OK, because TOOLCHAIN_EXTERNAL_PREFIX
+doesn't reference anything like HOST_DIR/STAGING_DIR/TARGET_DIR, so
+it's fine to have evaluation at the time of assignment for this case.
+
+Perhaps a comment above would help clarify that it's intentional?
+
+Thomas
 -- 
-2.13.6
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
