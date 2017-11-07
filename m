@@ -1,66 +1,52 @@
-From: Andrey Smirnov <andrew.smirnov@gmail.com>
-Date: Tue,  7 Nov 2017 12:04:42 -0800
-Subject: [Buildroot] [PATCH v2] package/collectd: Specify FP layout based on
- endianness
-Message-ID: <20171107200442.23067-1-andrew.smirnov@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 7 Nov 2017 21:21:03 +0100
+Subject: [Buildroot] [PATCH 1/1] add qmake.conf fixup for sunxi-mali
+ platforms
+In-Reply-To: <002cc8ca-ccf5-7610-905a-735e0740d942@micronovasrl.com>
+References: <1510066081-35701-1-git-send-email-giulio.benetti@micronovasrl.com>
+ <002cc8ca-ccf5-7610-905a-735e0740d942@micronovasrl.com>
+Message-ID: <fd2c8e8f-ebe0-79a7-df05-a4c2bc01ba11@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Big-endian CPUs store floating point as big endian (at lest majority
-of them do), so, in order for 'network' plugin to work correctly (and
-potentially any user of htond() in collectd's codebase),
---with-fp-layout=endianflip as opposed to --with-fp-layout=nothing
-needs to be specified during configuration phase.
 
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
----
 
-Changes in [v2]:
+On 07-11-17 19:58, Giulio Benetti wrote:
+> This patch is buggy.
+> The same for Gary Bisson patch.
+> Must put "EGLFS_DEVICE_INTEGRATION = eglfs_mali"
+> before:
+> 
+> include(../common/linux_device_post.conf)
+> load(qt_config)
+> 
+> otherwise qmake ignores it.
+> I thought to use sed to append EGLFS_DEVICE_INTEGRATION = eglfs_mali/viv just
+> after include(arch.conf).
 
- - Patch converted to use target's endianness as opposed to CPU
-   architecture
- 
- - Added a notes about the discussion around "intswap"
+ Yes, with sed is a good idea. Preferably by renaming qmake.conf to
+qmake.conf.in and always using sed to generate the actual qmake.conf file. Add a
+line
 
-[v2] http://lists.busybox.net/pipermail/buildroot/2017-October/205773.html
+EGLFS_DEVICE_INTEGRATION = @EGLFS_DEVICE@
 
- package/collectd/collectd.mk | 16 +++++++++++++++-
- 1 file changed, 15 insertions(+), 1 deletion(-)
+at the appropriate place. The sed then either replaces @EGLFS_DEVICE@ with the
+proper string, or deletes the line.
 
-diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
-index 626fba81bf..6c987b2e36 100644
---- a/package/collectd/collectd.mk
-+++ b/package/collectd/collectd.mk
-@@ -24,9 +24,23 @@ COLLECTD_PLUGINS_DISABLE = \
- 
- COLLECTD_CONF_ENV += LIBS="-lm"
- 
-+#
-+# NOTE: There's also a third availible setting "intswap", which might
-+# be needed on some old ARM hardware (see [2]), but is not being
-+# accounted for as per discussion [1]
-+#
-+# [1] http://lists.busybox.net/pipermail/buildroot/2017-November/206100.html
-+# [2] http://lists.busybox.net/pipermail/buildroot/2017-November/206251.html
-+#
-+ifeq ($(BR2_ENDIAN),"BIG")
-+COLLECTD_FP_LAYOUT=endianflip
-+else
-+COLLECTD_FP_LAYOUT=nothing
-+endif
-+
- COLLECTD_CONF_OPTS += \
- 	--with-nan-emulation \
--	--with-fp-layout=nothing \
-+	--with-fp-layout=$(COLLECTD_FP_LAYOUT) \
- 	--with-perl-bindings=no \
- 	$(foreach p, $(COLLECTD_PLUGINS_DISABLE), --disable-$(p)) \
- 	$(if $(BR2_PACKAGE_COLLECTD_AGGREGATION),--enable-aggregation,--disable-aggregation) \
+ Regards,
+ Arnout
+
+> 
+> What do you think?
+[snip]
+
 -- 
-2.13.6
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
