@@ -1,69 +1,68 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 7 Nov 2017 22:22:59 +0100
-Subject: [Buildroot] [RFCv1 2/4] core: change host RPATH handling
-In-Reply-To: <ca5edb67-da78-bf4c-1578-c897a26218c6@mind.be>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 7 Nov 2017 22:23:24 +0100
+Subject: [Buildroot] [RFCv1 3/4] toolchain: post-pone evaluation of
+ TOOLCHAIN_EXTERNAL_BIN
+In-Reply-To: <20171103160627.6468-4-thomas.petazzoni@free-electrons.com>
 References: <20171103160627.6468-1-thomas.petazzoni@free-electrons.com>
- <20171103160627.6468-3-thomas.petazzoni@free-electrons.com>
- <ca5edb67-da78-bf4c-1578-c897a26218c6@mind.be>
-Message-ID: <20171107222259.4ec2548c@windsurf>
+ <20171103160627.6468-4-thomas.petazzoni@free-electrons.com>
+Message-ID: <42689797-2392-a70c-16d4-eb96c6bcc8c0@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
 
-On Tue, 7 Nov 2017 22:15:38 +0100, Arnout Vandecappelle wrote:
 
-> > An alternative strategy would have been to keep the
-> > -Wl,-rpath,$(HOST_DIR) flag, and therefore the absolute RPATH in the
-> > host binaries, and fix such RPATH at the end of the build of every
-> > package. However, that would require calling fix-rpath after the
-> > installation of every package, which is a bit expensive.  
+On 03-11-17 17:06, Thomas Petazzoni wrote:
+> The upcoming per-package SDK functionality is heavily based on the
+> fact that HOST_DIR, STAGING_DIR and TARGET_DIR are evaluated during
+> the configure/build/install steps of the packages. Therefore, any
+> evaluation-during-assignment using := is going to cause problems, and
+> need to be turned into evaluation-during-use using =.
 > 
->  As discussed, this would be the preferred approach after all.
+> This patch fix up one such instance in the external toolchain code.
+             fixes
 
-Yes, agreed.
-
-> > This change is independent from the per-package SDK functionality, and
-> > could be applied separately.  
 > 
->  Shouldn't this type of comment be below the --- ?
-
-Well, it's not really that I expected the v1 of the patches to be
-merged :-)
-
-> > @@ -89,7 +89,8 @@ main() {
-> >              cp "${PATCHELF}" "${PATCHELF}.__to_be_patched"
-> >  
-> >              # we always want $ORIGIN-based rpaths to make it relocatable.
-> > -            sanitize_extra_args+=( "--relative-to-file" )
-> > +            sanitize_args+=( "--set-rpath" )
-> > +            sanitize_args+=( "\$ORIGIN/../lib" )  
+> This change is independent from the per-package SDK functionality, and
+> could be applied separately.
 > 
->  One advantage of --make-rpath-relative over --set-rpath is that the former will
-> also remove rpaths that are not needed (which I guess is often the case for host
-> tools).
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  toolchain/toolchain-external/pkg-toolchain-external.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
+> index dc0588c536..b9ad1720a1 100644
+> --- a/toolchain/toolchain-external/pkg-toolchain-external.mk
+> +++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
+> @@ -77,7 +77,7 @@ ifneq ($(TOOLCHAIN_EXTERNAL_PREFIX),)
+>  TOOLCHAIN_EXTERNAL_BIN := $(dir $(shell which $(TOOLCHAIN_EXTERNAL_PREFIX)-gcc))
+>  endif
+>  else
+> -TOOLCHAIN_EXTERNAL_BIN := $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/bin
+> +TOOLCHAIN_EXTERNAL_BIN = $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/bin
 
-Well, --set-rpath sets the RPATH, so I believe it entirely removes any
-existing RPATH and replaces them all by just $ORIGIN/../lib. So I don't
-see how it could be more "efficient", since we're down to a single
-RPATH, which is the only rpath that is needed.
+ It gives me the shivers to see the same variable sometimes defined recursive
+and sometimes defined immediate... But I can't find an elegant solution (other
+than introducing an artificial extra variable, which is also ugly), so
 
-Perhaps the only problem that I can think of is if some host binaries
-do have libraries installed in non-standard locations, and really need
-a custom absolute RPATH such
-as /home/foo/buildroot/output/per-package/host/lib/baz/ to be turned
-into $ORIGIN/../lib/baz/. However, I don't think we have such
-non-standard library locations for host packages, so I simply ignored
-this possible problem for now. It is a problem that can be fixed later
-on if needed by adjusting the host rpath mangling logic.
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-Best regards,
+ Regards,
+ Arnout
 
-Thomas
+
+>  endif
+>  
+>  # If this is a buildroot toolchain, it already has a wrapper which we want to
+> 
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
