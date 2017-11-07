@@ -1,39 +1,97 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 07 Nov 2017 17:27:50 +0100
-Subject: [Buildroot] [PATCH] DEVELOPERS: add myself to packages
-In-Reply-To: <20171107145434.0d5c0b6b@windsurf> (Thomas Petazzoni's message of
- "Tue, 7 Nov 2017 14:54:34 +0100")
-References: <1510016934-2840-1-git-send-email-matthew.weber@rockwellcollins.com>
- <87a7zyuwhj.fsf@dell.be.48ers.dk> <20171107145434.0d5c0b6b@windsurf>
-Message-ID: <8760amuk8p.fsf@dell.be.48ers.dk>
+Date: Tue, 7 Nov 2017 17:27:20 +0100
+Subject: [Buildroot] [git commit] DEVELOPERS: add myself to packages
+Message-ID: <20171107162052.8304C81096@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=335eb9845eae4afa0288c8666a363508f41f0e4e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Hello,
- > On Tue, 07 Nov 2017 13:03:20 +0100, Peter Korsgaard wrote:
- >> >>>>> "Matt" == Matt Weber <matthew.weber@rockwellcollins.com> writes:  
- >> 
- >> > Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>  
- >> 
- >> Committed to next, thanks (it could have gone to master, but to limit
- >> merge conflicts I guess next is better).
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ DEVELOPERS | 41 +++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 41 insertions(+)
 
- > Merging to next is a bit sad, as it means that none of the autobuilder
- > failures that will occur on those packages will be reported to Matthew,
- > until next is merged back in master. Indeed, I use the "master" branch
- > to decide to whom which autobuilder failure should be sent to.
-
- > So I would have preferred to see this patch in master. Yes, it will
- > conflict with changes to the DEVELOPERS file merged in next for new
- > package additions, but those conflicts are trivial to resolve.
-
-True - I've cherry picked this on master as well, so we have the best of
-both worlds.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/DEVELOPERS b/DEVELOPERS
+index c651bf2..d198c61 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1030,32 +1030,73 @@ F:	configs/ts4900_defconfig
+ F:	package/ts4900-fpga/
+ 
+ N:	Matt Weber <matthew.weber@rockwellcollins.com>
++F:	package/argp-standalone/
++F:	package/aufs/
++F:	package/aufs-util/
+ F:	package/bc/
++F:	package/bridge-utils/
+ F:	package/checkpolicy/
+ F:	package/cgroupfs-mount/
++F:	package/crda/
++F:	package/devmem2/
++F:	package/dnsmasq/
++F:	package/dosfstools/
++F:	package/eeprog/
+ F:	package/eigen/
++F:	package/ethtool/
++F:	package/flashbench/
+ F:	package/fmc/
+ F:	package/fmlib/
++F:	package/git/
++F:	package/gnutls/
++F:	package/hostapd/
++F:	package/i2c-tools/
++F:	package/ifplugd/
+ F:	package/igmpproxy/
++F:	package/iperf/
++F:	package/iperf3/
+ F:	package/iputils/
++F:	package/iw/
+ F:	package/libcsv/
++F:	package/libcurl/
++F:	package/libfcgi/
++F:	package/libopenssl/
+ F:	package/libselinux/
+ F:	package/libsemanage/
+ F:	package/libsepol/
++F:	package/libssh2/
+ F:	package/libqmi/
++F:	package/lighttpd/
++F:	package/logrotate/
++F:	package/makedevs/
++F:	package/memtester/
++F:	package/mii-diag/
++F:	package/mrouted/
++F:	package/mtd/
++F:	package/mtools/
+ F:	package/nginx-upload/
+ F:	package/omniorb/
+ F:	package/paxtest/
++F:	package/picocom/
+ F:	package/policycoreutils/
++F:	package/proftpd/
++F:	package/protobuf-c/
++F:	package/protobuf/
+ F:	package/python-ipy/
+ F:	package/python-posix-ipc/
+ F:	package/python-pypcap/
+ F:	package/python-pyrex/
+ F:	package/raptor/
++F:	package/rng-tools/
++F:	package/rsyslog/
+ F:	package/setools/
+ F:	package/smcroute/
+ F:	package/tclap/
++F:	package/uboot-tools/
++F:	package/unionfs/
+ F:	package/valijson/
++F:	package/wpa_supplicant/
++F:	package/wireless-tools/
+ 
+ N:	Mauro Condarelli <mc5686@mclink.it>
+ F:	package/mc/
