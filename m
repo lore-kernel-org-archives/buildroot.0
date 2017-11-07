@@ -1,95 +1,47 @@
-From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Mon,  6 Nov 2017 19:08:54 -0600
-Subject: [Buildroot] [PATCH] DEVELOPERS: add myself to packages
-Message-ID: <1510016934-2840-1-git-send-email-matthew.weber@rockwellcollins.com>
+From: Adrian Perez de Castro <aperez@igalia.com>
+Date: Tue,  7 Nov 2017 03:57:30 +0200
+Subject: [Buildroot] [PATCH 1/1] Allow adding per-package overrlice rsync
+ exclusions
+Message-ID: <20171107015730.20311-1-aperez@igalia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
----
- DEVELOPERS | 41 +++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 41 insertions(+)
+This allows using <PKG>_SRCDIR_OVERRIDE_RSYNC_EXCLUSIONS in local.mk to
+skip copying parts of source trees unneeded for building. For example,
+when developing WebKitGTK+, it's handy to skip copying all the tests and
+other build directories, which are huge:
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index c651bf2..d198c61 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1030,32 +1030,73 @@ F:	configs/ts4900_defconfig
- F:	package/ts4900-fpga/
+    WEBKITGTK_OVERRIDE_SRCDIR = /home/aperez/WebKit
+    WEBKITGTK_OVERRIDE_SRCDIR_RSYNC_EXCLUSIONS = \
+        --exclude JSTests --exclude ManualTests \
+	--exclude PerformanceTests --exclude WebDriverTests \
+	--exclude WebKitBuild --exclude WebKitLibraries \
+	--exclude WebKit.xcworkspace --exclude Websites \
+	--exclude Examples
+
+This saves a good chunk of time when rsync is used for the first time to
+copy the source tree over before building.
+
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+---
+ package/pkg-generic.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 0e28675fbe..c895afc498 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -181,7 +181,7 @@ $(BUILD_DIR)/%/.stamp_rsynced:
+ 	@$(call MESSAGE,"Syncing from source dir $(SRCDIR)")
+ 	$(foreach hook,$($(PKG)_PRE_RSYNC_HOOKS),$(call $(hook))$(sep))
+ 	@test -d $(SRCDIR) || (echo "ERROR: $(SRCDIR) does not exist" ; exit 1)
+-	rsync -au --chmod=u=rwX,go=rX $(RSYNC_VCS_EXCLUSIONS) $(call qstrip,$(SRCDIR))/ $(@D)
++	rsync -au --chmod=u=rwX,go=rX $(RSYNC_VCS_EXCLUSIONS) $($(PKG)_OVERRIDE_SRCDIR_RSYNC_EXCLUSIONS) $(call qstrip,$(SRCDIR))/ $(@D)
+ 	$(foreach hook,$($(PKG)_POST_RSYNC_HOOKS),$(call $(hook))$(sep))
+ 	$(Q)touch $@
  
- N:	Matt Weber <matthew.weber@rockwellcollins.com>
-+F:	package/argp-standalone/
-+F:	package/aufs/
-+F:	package/aufs-util/
- F:	package/bc/
-+F:	package/bridge-utils/
- F:	package/checkpolicy/
- F:	package/cgroupfs-mount/
-+F:	package/crda/
-+F:	package/devmem2/
-+F:	package/dnsmasq/
-+F:	package/dosfstools/
-+F:	package/eeprog/
- F:	package/eigen/
-+F:	package/ethtool/
-+F:	package/flashbench/
- F:	package/fmc/
- F:	package/fmlib/
-+F:	package/git/
-+F:	package/gnutls/
-+F:	package/hostapd/
-+F:	package/i2c-tools/
-+F:	package/ifplugd/
- F:	package/igmpproxy/
-+F:	package/iperf/
-+F:	package/iperf3/
- F:	package/iputils/
-+F:	package/iw/
- F:	package/libcsv/
-+F:	package/libcurl/
-+F:	package/libfcgi/
-+F:	package/libopenssl/
- F:	package/libselinux/
- F:	package/libsemanage/
- F:	package/libsepol/
-+F:	package/libssh2/
- F:	package/libqmi/
-+F:	package/lighttpd/
-+F:	package/logrotate/
-+F:	package/makedevs/
-+F:	package/memtester/
-+F:	package/mii-diag/
-+F:	package/mrouted/
-+F:	package/mtd/
-+F:	package/mtools/
- F:	package/nginx-upload/
- F:	package/omniorb/
- F:	package/paxtest/
-+F:	package/picocom/
- F:	package/policycoreutils/
-+F:	package/proftpd/
-+F:	package/protobuf-c/
-+F:	package/protobuf/
- F:	package/python-ipy/
- F:	package/python-posix-ipc/
- F:	package/python-pypcap/
- F:	package/python-pyrex/
- F:	package/raptor/
-+F:	package/rng-tools/
-+F:	package/rsyslog/
- F:	package/setools/
- F:	package/smcroute/
- F:	package/tclap/
-+F:	package/uboot-tools/
-+F:	package/unionfs/
- F:	package/valijson/
-+F:	package/wpa_supplicant/
-+F:	package/wireless-tools/
- 
- N:	Mauro Condarelli <mc5686@mclink.it>
- F:	package/mc/
 -- 
-1.9.1
+2.15.0
