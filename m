@@ -1,54 +1,69 @@
-From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Tue, 7 Nov 2017 23:39:01 +0100
-Subject: [Buildroot] [git commit] qt5base: add qmake.conf fixup for i.MX
- platforms
-In-Reply-To: <99db5e0a-c259-96db-9ac7-4d9797543809@micronovasrl.com>
-References: <20171106173439.E5B41810DB@busybox.osuosl.org>
- <1510080818847-0.post@n4.nabble.com> <20171107224151.3ab12019@windsurf>
- <CAAMH-yu4D14PbDxjvHsZRjKdZAppqM7Xrmk_zaRyH=sVbnW4rQ@mail.gmail.com>
- <99db5e0a-c259-96db-9ac7-4d9797543809@micronovasrl.com>
-Message-ID: <4dd77751-4f83-c8d7-7a52-e445d86411fa@micronovasrl.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 7 Nov 2017 23:41:18 +0100
+Subject: [Buildroot] [RFCv1 2/4] core: change host RPATH handling
+In-Reply-To: <20171105085756.GG2996@scaer>
+References: <20171103160627.6468-1-thomas.petazzoni@free-electrons.com>
+ <20171103160627.6468-3-thomas.petazzoni@free-electrons.com>
+ <20171105085756.GG2996@scaer>
+Message-ID: <20171107234118.177ed856@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Forgot to add Arnout.
+Hello,
 
-Il 07/11/2017 23:25, Giulio Benetti ha scritto:
-> Hi,
-> 
-> I based my patch on yours for eglfs_mali,
-> tried to compile from scratch
-> and that doesn't work unfortunately.
-> I've already submitted my patch,
-> so I've updated that it was buggy.
-> 
-> Here you find the answer of Arnout Vandecapp:
-> http://buildroot-busybox.2317881.n4.nabble.com/PATCH-1-1-add-qmake-conf-fixup-for-sunxi-mali-platforms-td179615.html 
-> 
-> 
-> Adding Arnout in Cc
-> 
-> I'm planning to use sed as Arnout suggested.
-> 
-> Will you do the change as described or will I?
-> Because I'd like to add eglfs_mali as I've tried.
-> 
-> Regards
-> 
+On Sun, 5 Nov 2017 09:57:56 +0100, Yann E. MORIN wrote:
 
+> > An alternative strategy would have been to keep the
+> > -Wl,-rpath,$(HOST_DIR) flag, and therefore the absolute RPATH in the
+> > host binaries, and fix such RPATH at the end of the build of every
+> > package. However, that would require calling fix-rpath after the
+> > installation of every package, which is a bit expensive.  
+> 
+> I wonder how expensive that would be. It would be nice to time this.
 
+OK, to time this, I did a quick hacky shell script
+(http://code.bulix.org/uboevd-223829). What it does is:
+
+ - Generate a mix of ELF files and random data files (half of the files
+   are ELF files, half are random data files). This is the "generate"
+   target of the script.
+
+ - Fixup rpath to $ORIGIN/../lib if not already fixed. We don't want to
+   fixup files repeatedly, as we don't want to duplicate files over and
+   over by breaking hard links. So we really want to set the RPATH only
+   once per binary.
+
+Results are as follows:
+
+$ ./rpath-evaluation.sh generate 0 500
+... generate 250 random data files, 250 ELF programs with a crappy
+rpath ...
+
+$ time ./rpath-evaluation.sh fixup
+
+real	0m0.976s
+user	0m0.546s
+sys	0m0.457s
+$ time ./rpath-evaluation.sh fixup
+
+real	0m0.610s
+user	0m0.393s
+sys	0m0.234s
+
+So the first fixup pass, which actually fixes the RPATH of 250 binaries
+takes about one second. The next fixup pass doesn't do anything, except
+checking that all binaries already have a fixed RPATH.
+
+So we see that it will take ~600ms to scan 500 files, provided half
+of them are ELF files, verify that they already have the correct RPATH.
+
+To me, this sounds very reasonable. What do you think?
+
+Thomas
 -- 
-Giulio Benetti
-R&D Manager &
-Advanced Research
-
-MICRONOVA SRL
-Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
-Tel. 049/8931563 - Fax 049/8931346
-Cod.Fiscale - P.IVA 02663420285
-Capitale Sociale ? 26.000 i.v.
-Iscritta al Reg. Imprese di Padova N. 02663420285
-Numero R.E.A. 258642
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
