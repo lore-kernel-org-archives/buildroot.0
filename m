@@ -1,22 +1,65 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 07 Nov 2017 22:14:20 +0100
-Subject: [Buildroot] [git commit] DEVELOPERS: add myself to packages
-References: <20171107162052.8304C81096@busybox.osuosl.org>
-Message-ID: <cak9dexi8m.ln2@ID-313208.user.individual.net>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Tue, 7 Nov 2017 16:15:36 -0500
+Subject: [Buildroot] [V2 1/1] ntp: security bump to verserion 4.2.8p9
+In-Reply-To: <20171107182620.3c8df7ff@windsurf>
+References: <20170206141225.2311-1-aduskett@codeblue.com>
+ <20171107182620.3c8df7ff@windsurf>
+Message-ID: <CAFSsvmp7Mb=Qk6j2XiypTzTHtU6kXdQcBJMdY6=3gRHFRQUodQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Tue, 07 Nov 2017 17:27:20 +0100 schrieb Peter Korsgaard:
+Thomas;
 
-> +F:	package/wireless-tools/
 
-Hi,
 
-this package does not exist in buildroot:
+On Tue, Nov 7, 2017 at 12:26 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
+>
+> On Mon,  6 Feb 2017 09:12:25 -0500, Adam Duskett wrote:
+>> This version of ntp fixes several vulnerabilities.
+>>
+>> CVE-2016-9311
+>> CVE-2016-9310
+>> CVE-2016-7427
+>> CVE-2016-7428
+>> CVE-2016-9312
+>> CVE-2016-7431
+>> CVE-2016-7434
+>> CVE-2016-7429
+>> CVE-2016-7426
+>> CVE-2016-7433
+>>
+>> http://www.kb.cert.org/vuls/id/633847
+>>
+>> In addition, libssl_compat.h is now included in many files, which
+>> references openssl/evp.h, openssl/dsa.h, and openssl/rsa.h.
+>> Even if a you pass --disable-ssl as a configuration option, these
+>> files are now required.
+>>
+>> As such, I have also added openssl as a dependency, and it is now
+>> automatically selected when you select ntp.
+>>
+>> Signed-off-by: Adam Duskett <aduskett@codeblue.com>
+>
+> This patch raised a comment on Github:
+> https://github.com/buildroot/buildroot/commit/ebf6f64b76059e31a85f982cb04f80ad5982dac3#commitcomment-25458671.
+> Apparently, building without OpenSSL is still possible (perhaps has
+> been fixed in 4.2.8p10 ?), and some users would like ntp without
+> OpenSSL support.
+>
+> Adam, could you have a look into this ?
+>
+Looks like p10 fixed the issue! I will submit a patch to revert the
+new dependency.
 
-WARNING: 'package/wireless-tools/' doesn't match any file
-
-Regards, Bernd
+> Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux and Kernel engineering
+> http://free-electrons.com
