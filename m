@@ -1,77 +1,51 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 7 Nov 2017 22:05:11 +0100
-Subject: [Buildroot] [RFCv1 1/4] pkgconf: use relative path to
- STAGING_DIR instead of absolute path
-In-Reply-To: <20171103160627.6468-2-thomas.petazzoni@free-electrons.com>
-References: <20171103160627.6468-1-thomas.petazzoni@free-electrons.com>
- <20171103160627.6468-2-thomas.petazzoni@free-electrons.com>
-Message-ID: <c4576062-3b90-5541-6b87-32218c2984de@mind.be>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Tue,  7 Nov 2017 22:11:49 +0100
+Subject: [Buildroot] [PATCH v2 1/1] package/ffmpeg: fix fenv build failure
+ on ARCv2 with glibc
+Message-ID: <20171107211149.17617-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+https://git.buildroot.net/buildroot/commit/toolchain?id=0633eb58a2912328508a76f8fe9875a0d113a880
+added glibc support for ARCv2 which lacks fenv.h.
 
+Fixes
+http://autobuild.buildroot.net/results/aec/aec300d7d4472421398a24202d6871c965bd1be5/
 
-On 03-11-17 17:06, Thomas Petazzoni wrote:
-> The pkg-config wrapper script is currently generated with absolute
-> paths to $(STAGING_DIR). However, this will not work properly with
-> per-package SDK, and each package will be built with a different
-> STAGING_DIR value.
-> 
-> In order to fix this, we adjust how the pkg-config wrapper script is
-> generated, so that it uses a relative path to itself: the sysroot (i.e
-> STAGING_DIR) is always located in $(path of
-> pkg-config)/../$(STAGING_SUBDIR).
-> 
-> This change is independent from the per-package SDK work, and could be
-> applied independently from it.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+v2: Restricted dependency to BR2_archs38 && BR2_TOOLCHAIN_USES_GLIBC
+    (Thomas)
 
- It's OK as it is
+ package/ffmpeg/Config.in | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
- However...
-
-> ---
->  package/pkgconf/pkgconf.mk | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/pkgconf/pkgconf.mk b/package/pkgconf/pkgconf.mk
-> index cc190d26da..d11ce485f7 100644
-> --- a/package/pkgconf/pkgconf.mk
-> +++ b/package/pkgconf/pkgconf.mk
-> @@ -19,8 +19,8 @@ endef
->  define HOST_PKGCONF_INSTALL_WRAPPER
->  	$(INSTALL) -m 0755 -D package/pkgconf/pkg-config.in \
->  		$(HOST_DIR)/bin/pkg-config
-> -	$(SED) 's, at PKG_CONFIG_LIBDIR@,$(STAGING_DIR)/usr/lib/pkgconfig:$(STAGING_DIR)/usr/share/pkgconfig,' \
-> -		-e 's, at STAGING_DIR@,$(STAGING_DIR),' \
-> +	$(SED) 's, at PKG_CONFIG_LIBDIR@,$$(dirname $$0)/../$(STAGING_SUBDIR)/usr/lib/pkgconfig:$$(dirname $$0)/../$(STAGING_SUBDIR)/usr/share/pkgconfig,' \
-> +		-e 's, at STAGING_DIR@,$$(dirname $$0)/../$(STAGING_SUBDIR),' \
-
- Instead of all this complexity, why not do it directly in pkg-config.in, and
-just substitute @STAGING_SUBDIR@ ? Note that the file will have 4 instances of
-$(dirname $0) so an intermediary variable is called for.
-
- If you do that, you can maybe also do some line splitting there, and add the
-missing exec.
-
- Regards,
- Arnout
-
->  		$(HOST_DIR)/bin/pkg-config
->  endef
->  
-> 
-
+diff --git a/package/ffmpeg/Config.in b/package/ffmpeg/Config.in
+index ed87ddd492..9890a22deb 100644
+--- a/package/ffmpeg/Config.in
++++ b/package/ffmpeg/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
+ 	bool
+-	# fenv.h lacks FE_INVALID, FE_OVERFLOW & FE_UNDERFLOW on nios2
++	# fenv.h lacks FE_INVALID, FE_OVERFLOW & FE_UNDERFLOW on archs38
++	# in combination with glibc and nios2
+ 	# No support for ARMv7-M in the ARM assembly logic
+ 	# Microblaze build affected by gcc PR71124 (infinite loop)
+ 	# m68k coldfire causes a build failure, because the check for
+@@ -9,7 +10,9 @@ config BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
+ 	# not. See https://patchwork.ozlabs.org/patch/756664/ and
+ 	# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=68467 for more
+ 	# details.
+-	default y if !BR2_nios2 && !BR2_ARM_CPU_ARMV7M && !BR2_microblaze && !BR2_m68k_cf
++	default y if !(BR2_archs38 && BR2_TOOLCHAIN_USES_GLIBC) && \
++		!BR2_nios2 && !BR2_ARM_CPU_ARMV7M && \
++		!BR2_microblaze && !BR2_m68k_cf
+ 
+ menuconfig BR2_PACKAGE_FFMPEG
+ 	bool "ffmpeg"
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.11.0
