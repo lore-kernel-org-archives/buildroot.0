@@ -1,84 +1,75 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Tue,  7 Nov 2017 22:59:31 +0100
-Subject: [Buildroot] [PATCH v2] util-linux: fix link failures due to name
- clash
-Message-ID: <1510091971-15916-1-git-send-email-luca@lucaceresoli.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue,  7 Nov 2017 23:10:59 +0100
+Subject: [Buildroot] [PATCH] go-bootstrap: add
+ BR2_PACKAGE_HOST_GO_BOOTSTRAP_ARCH_SUPPORTS
+Message-ID: <20171107221059.25796-1-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Several packages have a similar md5.c file, and each has a function
-named byteReverse(). This generates link errors ("multiple definition
-of `byteReverse'").
+go-bootstrap is a host package that builds a first stage Go compiler,
+later used to build the final Go compiler. However, this first stage
+compiler only supports building on x86, x86-64 and arm as host
+architectures, so we need to add the relevant architecture
+dependencies to avoid having go-bootstrap built on other unsupported
+platforms.
 
-Fix by declaring byteReverse as static, since it is just an internal
-function.
+We do this by introducing BR2_PACKAGE_HOST_GO_BOOTSTRAP_ARCH_SUPPORTS
+in a new package/go-bootstrap/Config.in.host file. This option is then
+used by BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS to make sure we can't enable
+Go packages when the host architecture doesn't allow building the Go
+compiler.
 
 Fixes:
-  http://autobuild.buildroot.net/results/419ab2c0e034cc68991281c51caa8271b0fadbab/
 
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-Cc: Adam Duskett <aduskett@gmail.com>
+  http://autobuild.buildroot.net/results/cbd419c6ab6fa8a6d18dc137c91f895867e53b8a/
 
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
+ package/Config.in.host              | 1 +
+ package/go-bootstrap/Config.in.host | 7 +++++++
+ package/go/Config.in.host           | 1 +
+ 3 files changed, 9 insertions(+)
+ create mode 100644 package/go-bootstrap/Config.in.host
 
-Changed v1 -> v2:
- - add Submitted-upstream tag now that it's on the util-linux ml
----
- .../0001-md5-declare-byteReverse-as-static.patch   | 43 ++++++++++++++++++++++
- 1 file changed, 43 insertions(+)
- create mode 100644 package/util-linux/0001-md5-declare-byteReverse-as-static.patch
-
-diff --git a/package/util-linux/0001-md5-declare-byteReverse-as-static.patch b/package/util-linux/0001-md5-declare-byteReverse-as-static.patch
+diff --git a/package/Config.in.host b/package/Config.in.host
+index 3755310de4..59be666143 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -19,6 +19,7 @@ menu "Host utilities"
+ 	source "package/genimage/Config.in.host"
+ 	source "package/genpart/Config.in.host"
+ 	source "package/go/Config.in.host"
++	source "package/go-bootstrap/Config.in.host"
+ 	source "package/gptfdisk/Config.in.host"
+ 	source "package/imx-usb-loader/Config.in.host"
+ 	source "package/jq/Config.in.host"
+diff --git a/package/go-bootstrap/Config.in.host b/package/go-bootstrap/Config.in.host
 new file mode 100644
-index 000000000000..e11d3ae7f2a7
+index 0000000000..fab80d24b4
 --- /dev/null
-+++ b/package/util-linux/0001-md5-declare-byteReverse-as-static.patch
-@@ -0,0 +1,43 @@
-+From a02ec53951ea8ac10fef1115f323c0c288596163 Mon Sep 17 00:00:00 2001
-+From: Luca Ceresoli <luca@lucaceresoli.net>
-+Date: Mon, 6 Nov 2017 22:58:09 +0100
-+Subject: [PATCH] md5: declare byteReverse as static
-+
-+byteReverse() is an internal function in md5.c, and is not exposed via
-+any header file, but it is not declared as static. This is a problem
-+with the md5.c file since it is copied more or less verbatim in other
-+programs (fontconfig and pjsip among others), causing a link error
-+when linking two of them together.
-+
-+Fixes link failures such as:
-+  http://autobuild.buildroot.net/results/419ab2c0e034cc68991281c51caa8271b0fadbab/build-end.log
-+
-+Submitted-upstream: https://marc.info/?l=util-linux-ng&m=151006195915652&w=2
-+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-+---
-+ lib/md5.c | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/lib/md5.c b/lib/md5.c
-+index 488d16ef69b4..282e2d22af25 100644
-+--- a/lib/md5.c
-++++ b/lib/md5.c
-+@@ -21,13 +21,13 @@
-+ #if !defined(WORDS_BIGENDIAN)
-+ #define byteReverse(buf, len)	/* Nothing */
-+ #else
-+-void byteReverse(unsigned char *buf, unsigned longs);
-++static void byteReverse(unsigned char *buf, unsigned longs);
-+ 
-+ #ifndef ASM_MD5
-+ /*
-+  * Note: this code is harmless on little-endian machines.
-+  */
-+-void byteReverse(unsigned char *buf, unsigned longs)
-++static void byteReverse(unsigned char *buf, unsigned longs)
-+ {
-+     uint32_t t;
-+     do {
-+-- 
-+2.7.4
-+
++++ b/package/go-bootstrap/Config.in.host
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_HOST_GO_BOOTSTRAP_ARCH_SUPPORTS
++	bool
++	# See src/cmd/dist/unix.c for the list of support
++	# architectures
++	default y if BR2_HOSTARCH = "x86"
++	default y if BR2_HOSTARCH = "x86_64"
++	default y if BR2_HOSTARCH = "arm"
+diff --git a/package/go/Config.in.host b/package/go/Config.in.host
+index a210033efd..c871ac4196 100644
+--- a/package/go/Config.in.host
++++ b/package/go/Config.in.host
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
+ 	bool
+ 	default y
++	depends on BR2_PACKAGE_HOST_GO_BOOTSTRAP_ARCH_SUPPORTS
+ 	depends on (BR2_arm && BR2_TOOLCHAIN_SUPPORTS_PIE) || BR2_aarch64 \
+ 		|| BR2_i386 || BR2_x86_64 || BR2_powerpc64le \
+ 		|| BR2_mips64 || BR2_mips64el
 -- 
-2.7.4
+2.13.6
