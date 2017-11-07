@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 7 Nov 2017 22:38:25 +0100
-Subject: [Buildroot] [PATCH v2] package/collectd: Specify FP layout
- based on endianness
-In-Reply-To: <20171107200442.23067-1-andrew.smirnov@gmail.com>
-References: <20171107200442.23067-1-andrew.smirnov@gmail.com>
-Message-ID: <20171107223825.1f999b1f@windsurf>
+Date: Tue, 7 Nov 2017 22:41:51 +0100
+Subject: [Buildroot] [git commit] qt5base: add qmake.conf fixup for i.MX
+ platforms
+In-Reply-To: <1510080818847-0.post@n4.nabble.com>
+References: <20171106173439.E5B41810DB@busybox.osuosl.org>
+ <1510080818847-0.post@n4.nabble.com>
+Message-ID: <20171107224151.3ab12019@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,23 +14,26 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue,  7 Nov 2017 12:04:42 -0800, Andrey Smirnov wrote:
-> Big-endian CPUs store floating point as big endian (at lest majority
-> of them do), so, in order for 'network' plugin to work correctly (and
-> potentially any user of htond() in collectd's codebase),
-> --with-fp-layout=endianflip as opposed to --with-fp-layout=nothing
-> needs to be specified during configuration phase.
+On Tue, 7 Nov 2017 11:53:38 -0700 (MST), Giulio Benetti wrote:
+> Hi Peter,
 > 
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-> Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
+> unfortunately it doesn't work.
+> The problem is that you can't put at the end of file
+> EGLFS_DEVICE_INTEGRATION = eglfs_viv
+> It must stay before:
+> 
+> include(../common/linux_device_post.conf)
+> load(qt_config)
+> 
+> I did the same for eglfs_mali and failed,
+> so I've retried putting it there, and it works.
+
+Adding Gary Bisson in Cc. Gary, what do you think about the above
+report?
 
 Thanks!
 
-Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-Thomas
+Thomasa
 -- 
 Thomas Petazzoni, CTO, Free Electrons
 Embedded Linux and Kernel engineering
