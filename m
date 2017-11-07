@@ -1,9 +1,7 @@
 From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Tue,  7 Nov 2017 15:47:44 -0600
-Subject: [Buildroot] [PATCH 2/2] Manual: DEVELOPERS file integrity check
-In-Reply-To: <1510091264-4024-1-git-send-email-matthew.weber@rockwellcollins.com>
-References: <1510091264-4024-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <1510091264-4024-2-git-send-email-matthew.weber@rockwellcollins.com>
+Date: Tue,  7 Nov 2017 15:47:43 -0600
+Subject: [Buildroot] [PATCH 1/2] DEVELOPERS: fix wireless_tools entry
+Message-ID: <1510091264-4024-1-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,18 +10,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 ---
- docs/manual/developers.txt | 2 ++
- 1 file changed, 2 insertions(+)
+ DEVELOPERS | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/docs/manual/developers.txt b/docs/manual/developers.txt
-index 4e2cd71..a0a3668 100644
---- a/docs/manual/developers.txt
-+++ b/docs/manual/developers.txt
-@@ -44,3 +44,5 @@ the +DEVELOPERS+ file for various tasks:
-   list the ones that are not handled by any developer. The purpose of
-   this option is to help completing the +DEVELOPERS+ file.
+diff --git a/DEVELOPERS b/DEVELOPERS
+index d198c61..cfbe64b 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1096,7 +1096,7 @@ F:	package/uboot-tools/
+ F:	package/unionfs/
+ F:	package/valijson/
+ F:	package/wpa_supplicant/
+-F:	package/wireless-tools/
++F:	package/wireless_tools/
  
-+- When using without any arguments, it validates the integrity of the
-+  DEVELOPERS file and will note WARNINGS for items that don't match.
+ N:	Mauro Condarelli <mc5686@mclink.it>
+ F:	package/mc/
 -- 
 1.9.1
