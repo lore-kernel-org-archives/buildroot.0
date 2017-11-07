@@ -1,13 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 8 Nov 2017 00:49:07 +0100
-Subject: [Buildroot] [RFCv1 3/4] toolchain: post-pone evaluation of
- TOOLCHAIN_EXTERNAL_BIN
-In-Reply-To: <20171107223347.143e3642@windsurf>
+Date: Wed, 8 Nov 2017 00:50:15 +0100
+Subject: [Buildroot] [RFCv1 2/4] core: change host RPATH handling
+In-Reply-To: <20171107234118.177ed856@windsurf>
 References: <20171103160627.6468-1-thomas.petazzoni@free-electrons.com>
- <20171103160627.6468-4-thomas.petazzoni@free-electrons.com>
- <42689797-2392-a70c-16d4-eb96c6bcc8c0@mind.be>
- <20171107223347.143e3642@windsurf>
-Message-ID: <8d8dbdfa-8e75-b6d3-a6b9-52db295c25c5@mind.be>
+ <20171103160627.6468-3-thomas.petazzoni@free-electrons.com>
+ <20171105085756.GG2996@scaer> <20171107234118.177ed856@windsurf>
+Message-ID: <8f6dece3-96bf-d71d-085f-117c92d6447b@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,49 +14,64 @@ To: buildroot@busybox.net
 
 
 
-On 07-11-17 22:33, Thomas Petazzoni wrote:
+On 07-11-17 23:41, Thomas Petazzoni wrote:
 > Hello,
 > 
-> On Tue, 7 Nov 2017 22:23:24 +0100, Arnout Vandecappelle wrote:
+> On Sun, 5 Nov 2017 09:57:56 +0100, Yann E. MORIN wrote:
 > 
->>> diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
->>> index dc0588c536..b9ad1720a1 100644
->>> --- a/toolchain/toolchain-external/pkg-toolchain-external.mk
->>> +++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
->>> @@ -77,7 +77,7 @@ ifneq ($(TOOLCHAIN_EXTERNAL_PREFIX),)
->>>  TOOLCHAIN_EXTERNAL_BIN := $(dir $(shell which $(TOOLCHAIN_EXTERNAL_PREFIX)-gcc))
->>>  endif
->>>  else
->>> -TOOLCHAIN_EXTERNAL_BIN := $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/bin
->>> +TOOLCHAIN_EXTERNAL_BIN = $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/bin  
+>>> An alternative strategy would have been to keep the
+>>> -Wl,-rpath,$(HOST_DIR) flag, and therefore the absolute RPATH in the
+>>> host binaries, and fix such RPATH at the end of the build of every
+>>> package. However, that would require calling fix-rpath after the
+>>> installation of every package, which is a bit expensive.  
 >>
->>  It gives me the shivers to see the same variable sometimes defined recursive
->> and sometimes defined immediate... But I can't find an elegant solution (other
->> than introducing an artificial extra variable, which is also ugly), so
->>
->> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+>> I wonder how expensive that would be. It would be nice to time this.
 > 
-> I also saw the other TOOLCHAIN_EXTERNAL_BIN assignment using := above,
-> and didn't change it for now because that was not the case I was
-> interested in testing/fixing. But my plan was to get back to this :=
-> assignment at some point. However, it seems like you have concluded
-> that we have to keep := here. Could you explain why?
-
- It's using $(shell which ...). That variable ends up in $(TARGET_CC), so it is
-re-evaluated hundreds of times. I don't know if it really makes much of a
-difference, but the rule of thumb is: think twice about using
-recursively-expanded if it's used in many places and it contains $(shell ...)
-constructs.
-
+> OK, to time this, I did a quick hacky shell script
+> (http://code.bulix.org/uboevd-223829). What it does is:
 > 
-> Note: I think keeping the := is OK, because TOOLCHAIN_EXTERNAL_PREFIX
-> doesn't reference anything like HOST_DIR/STAGING_DIR/TARGET_DIR, so
-> it's fine to have evaluation at the time of assignment for this case.
+>  - Generate a mix of ELF files and random data files (half of the files
+>    are ELF files, half are random data files). This is the "generate"
+>    target of the script.
 > 
-> Perhaps a comment above would help clarify that it's intentional?
+>  - Fixup rpath to $ORIGIN/../lib if not already fixed. We don't want to
+>    fixup files repeatedly, as we don't want to duplicate files over and
+>    over by breaking hard links. So we really want to set the RPATH only
+>    once per binary.
+> 
+> Results are as follows:
+> 
+> $ ./rpath-evaluation.sh generate 0 500
+> ... generate 250 random data files, 250 ELF programs with a crappy
+> rpath ...
+> 
+> $ time ./rpath-evaluation.sh fixup
+> 
+> real	0m0.976s
+> user	0m0.546s
+> sys	0m0.457s
+> $ time ./rpath-evaluation.sh fixup
+> 
+> real	0m0.610s
+> user	0m0.393s
+> sys	0m0.234s
+> 
+> So the first fixup pass, which actually fixes the RPATH of 250 binaries
+> takes about one second. The next fixup pass doesn't do anything, except
+> checking that all binaries already have a fixed RPATH.
+> 
+> So we see that it will take ~600ms to scan 500 files, provided half
+> of them are ELF files, verify that they already have the correct RPATH.
+> 
+> To me, this sounds very reasonable. What do you think?
 
- Not really needed, the code speaks for itself. The $(shell) makes it quite easy
-to see why immediate expansion is chosen there.
+ 500 files is not a lot if you include staging as well, so I've repeated the
+experiment with 50000 files and on a HDD. First pass takes 3m34, second pass
+3m43. Hm, perhaps I should have left my computer alone for a while during this
+experiment :-).
+
+ Anyway, I think the bottom line is that the fixup script should avoid going
+over staging. But $(HOST_DIR)/{bin,sbin,lib} should be enough anyway.
 
  Regards,
  Arnout
