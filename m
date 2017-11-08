@@ -1,33 +1,75 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Wed,  8 Nov 2017 08:18:39 -0500
-Subject: [Buildroot] [PATCH 1/1] ntp: implicitly enable openssl-random
-Message-ID: <20171108131839.27491-1-aduskett@gmail.com>
+From: Adrian Perez de Castro <aperez@igalia.com>
+Date: Wed,  8 Nov 2017 15:26:41 +0200
+Subject: [Buildroot] [PATCH v2 1/1] Allow adding per-package override rsync
+ exclusions
+Message-ID: <20171108132641.8234-1-aperez@igalia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-If OpenSSL is selected, --enable-openssl-random should be implicitly
-set as well.
+This allows using <PKG>_SRCDIR_OVERRIDE_RSYNC_EXCLUSIONS in local.mk to
+skip copying parts of source trees unneeded for building. For example,
+when developing WebKitGTK+, it's handy to skip copying all the tests and
+other build directories, which are huge:
 
-Signed-off-by: Adam Duskett <aduskett@gmail.com>
+    WEBKITGTK_OVERRIDE_SRCDIR = /home/aperez/WebKit
+    WEBKITGTK_OVERRIDE_SRCDIR_RSYNC_EXCLUSIONS = \
+        --exclude JSTests --exclude ManualTests \
+	--exclude PerformanceTests --exclude WebDriverTests \
+	--exclude WebKitBuild --exclude WebKitLibraries \
+	--exclude WebKit.xcworkspace --exclude Websites \
+	--exclude Examples
+
+This saves a good chunk of time when rsync is used for the first time to
+copy the source tree over before building.
+
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 ---
- package/ntp/ntp.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ docs/manual/using-buildroot-development.txt | 16 ++++++++++++++++
+ package/pkg-generic.mk                      |  2 +-
+ 2 files changed, 17 insertions(+), 1 deletion(-)
 
-diff --git a/package/ntp/ntp.mk b/package/ntp/ntp.mk
-index 6605c3b85b..26d186e976 100644
---- a/package/ntp/ntp.mk
-+++ b/package/ntp/ntp.mk
-@@ -24,7 +24,7 @@ NTP_CONF_OPTS = \
- NTP_AUTORECONF = YES
+diff --git a/docs/manual/using-buildroot-development.txt b/docs/manual/using-buildroot-development.txt
+index 1071de5132..d16dc482f3 100644
+--- a/docs/manual/using-buildroot-development.txt
++++ b/docs/manual/using-buildroot-development.txt
+@@ -64,6 +64,22 @@ This mechanism is best used in conjunction with the +make
+ _rsync_, only the modified files are copied), and restart the build
+ process of just this package.
  
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
--NTP_CONF_OPTS += --with-crypto
-+NTP_CONF_OPTS += --with-crypto --enable-openssl-random
- NTP_DEPENDENCIES += openssl
- else
- NTP_CONF_OPTS += --without-crypto --disable-openssl-random
++Source trees for big projects often contain hundreds or thousands of
++files which are not needed for building, but will slow down the process
++of copying the sources with _rsync_. Optionally, it is possible define
+++<pkg>_OVERRIDE_SRCDIR_RSYNC_EXCLUSIONS+ to skip syncing certain files
++from the source tree. For example, when working on the +webkitgtk+
++package, the following will exclude the tests and in-tree builds from
++a local WebKit source tree:
++
++------------------
++WEBKITGTK_OVERRIDE_SRCDIR = /home/bob/WebKit
++WEBKITGTK_OVERRIDE_SRCDIR_RSYNC_EXCLUSIONS = \
++	--exclude JSTests --exclude ManualTests --exclude PerformanceTests \
++	--exclude WebDriverTests --exclude WebKitBuild --exclude WebKitLibraries \
++	--exclude WebKit.xcworkspace --exclude Websites --exclude Examples
++------------------
++
+ In the example of the +linux+ package above, the developer can then
+ make a source code change in +/home/bob/linux+ and then run:
+ 
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 0e28675fbe..c895afc498 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -181,7 +181,7 @@ $(BUILD_DIR)/%/.stamp_rsynced:
+ 	@$(call MESSAGE,"Syncing from source dir $(SRCDIR)")
+ 	$(foreach hook,$($(PKG)_PRE_RSYNC_HOOKS),$(call $(hook))$(sep))
+ 	@test -d $(SRCDIR) || (echo "ERROR: $(SRCDIR) does not exist" ; exit 1)
+-	rsync -au --chmod=u=rwX,go=rX $(RSYNC_VCS_EXCLUSIONS) $(call qstrip,$(SRCDIR))/ $(@D)
++	rsync -au --chmod=u=rwX,go=rX $(RSYNC_VCS_EXCLUSIONS) $($(PKG)_OVERRIDE_SRCDIR_RSYNC_EXCLUSIONS) $(call qstrip,$(SRCDIR))/ $(@D)
+ 	$(foreach hook,$($(PKG)_POST_RSYNC_HOOKS),$(call $(hook))$(sep))
+ 	$(Q)touch $@
+ 
 -- 
-2.13.6
+2.15.0
