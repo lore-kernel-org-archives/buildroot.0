@@ -1,33 +1,21 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 8 Nov 2017 13:19:19 +0100
-Subject: [Buildroot] [git commit branch/next] DEVELOPERS: fix wireless_tools
- entry
-Message-ID: <20171108121206.09ED88109D@busybox.osuosl.org>
+Date: Wed, 08 Nov 2017 13:19:29 +0100
+Subject: [Buildroot] [PATCH] DEVELOPERS: fix wireless_tools entry
+In-Reply-To: <1510089919-31078-1-git-send-email-matthew.weber@rockwellcollins.com>
+ (Matt Weber's message of "Tue, 7 Nov 2017 15:25:19 -0600")
+References: <1510089919-31078-1-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <87d14tgdym.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9dfb4345e01beec43d9391debc1bb83f03062f00
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+>>>>> "Matt" == Matt Weber <matthew.weber@rockwellcollins.com> writes:
 
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- DEVELOPERS | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ > Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index be34f24..7a4218d 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1096,7 +1096,7 @@ F:	package/uboot-tools/
- F:	package/unionfs/
- F:	package/valijson/
- F:	package/wpa_supplicant/
--F:	package/wireless-tools/
-+F:	package/wireless_tools/
- 
- N:	Mauro Condarelli <mc5686@mclink.it>
- F:	package/mc/
+Committed to master and next, thanks.
+
+-- 
+Bye, Peter Korsgaard
