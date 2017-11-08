@@ -1,9 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 8 Nov 2017 18:02:14 +0100
-Subject: [Buildroot] [PATCH] python-numpy: disable for ARCompact
-In-Reply-To: <20171108164114.1041-1-didin@synopsys.com>
-References: <20171108164114.1041-1-didin@synopsys.com>
-Message-ID: <20171108180214.03abd04b@windsurf>
+Date: Wed, 8 Nov 2017 18:03:10 +0100
+Subject: [Buildroot] [PATCH 1/1] ntp: no longer require openssl
+In-Reply-To: <87fu9peysf.fsf@dell.be.48ers.dk>
+References: <20171107212906.31336-1-Adamduskett@outlook.com>
+ <20171108114348.491097e5@windsurf>
+ <87fu9peysf.fsf@dell.be.48ers.dk>
+Message-ID: <20171108180310.144957c1@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,58 +14,30 @@ To: buildroot@busybox.net
 
 Hello,
 
-> The same issue appears building "trousers" package for ARCompact.
+On Wed, 08 Nov 2017 13:32:32 +0100, Peter Korsgaard wrote:
+> >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:  
+> 
+>  > Hello,
+>  > On Tue,  7 Nov 2017 16:29:06 -0500, Adam Duskett wrote:  
+>  >> 4.2.8p10 no longer requires openssl to compile.
+>  >> 
+>  >> Signed-off-by: Adam Duskett <Adamduskett@outlook.com>  
+> 
+>  > Peter: I'm wondering if we should apply this to next or master. It is
+>  > not a bug fix per-se, but it fixes a kind of regression introduced with
+>  > the bump of ntp to 4.2.8p9, which was merged in 2017.02, and brought in
+>  > OpenSSL as a mandatory dependency. A user reported on Github that it
+>  > increased quite a lot the installed size (due to the additional OpenSSL
+>  > dependency).  
+> 
+>  > So, I'm tempted to apply this to master. Peter, are you OK?  
+> 
+> Yes. I've just applied it. I will also cherry pick to the LTS branch.
 
-But trousers is not using python-numpy. Are you going to send a similar
-patch for trousers ?
-
-On Wed,  8 Nov 2017 19:41:14 +0300, Evgeniy Didin wrote:
-
-> diff --git a/package/python-numpy/Config.in b/package/python-numpy/Config.in
-> index 859542f584..403b466417 100644
-> --- a/package/python-numpy/Config.in
-> +++ b/package/python-numpy/Config.in
-> @@ -1,13 +1,15 @@
->  config BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
->  	bool
->  	# Numpy has some CPU specific code
-> -	default y if BR2_arc || BR2_aarch64 || BR2_arm || BR2_armeb || BR2_i386 \
-> -		|| BR2_mips || BR2_mipsel || BR2_powerpc || BR2_powerpc64 \
-> -		|| BR2_sh || BR2_x86_64
-> +	default y if (BR2_arc && !(BR2_arc770d && BR2_arc750d)) || BR2_aarch64 \
-> +		|| BR2_arm || BR2_armeb || BR2_i386 || BR2_mips || BR2_mipsel \
-> +		|| BR2_powerpc || BR2_powerpc64 || BR2_sh || BR2_x86_64
-
-This is getting ugly. It would be nice to have a first patch (separate
-from your addition) that reformats to:
-
-	default y if BR2_arc
-	default y if BR2_aarch64
-	default y if BR2_arm
-	default y if BR2_armeb
-	...
-
-And then your patch would be:
-
--	default y if BR2_arc
-+	default y if BR2_arc && !BR2_arc770d && !BR2_arc750d
-
->  
->  config BR2_PACKAGE_PYTHON_NUMPY
->  	bool "python-numpy"
->  	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
-> +	#ARC toolchain issues for ARCompact
-> +	depends on !BR2_arc770d && !BR2_arc750d
-
-Why are you duplicating this here? You've already excluded the
-problematic ARC architectures from
-BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS (which is the right thing to
-do), and BR2_PACKAGE_PYTHON_NUMPY depends on
-BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS.
-
-Could you rework your patch accordingly?
-
-Thanks a lot!
+Be careful if you cherry-pick in the LTS branch: it depends on p10
+version of ntp, which was committed after 2017.02 was released. I
+haven't looked if the p10 bump has already been cherry-picked in the
+LTS branch.
 
 Thomas
 -- 
