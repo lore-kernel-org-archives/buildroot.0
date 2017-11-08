@@ -1,29 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 8 Nov 2017 13:20:02 +0100
-Subject: [Buildroot] [git commit] Manual: DEVELOPERS file integrity check
-Message-ID: <20171108121509.4AF0C811C2@busybox.osuosl.org>
+Date: Wed, 8 Nov 2017 13:21:47 +0100
+Subject: [Buildroot] [git commit] linux: bump default to version 4.13.12
+Message-ID: <20171108121509.610257FAA8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d7f9f1da6b09a8658e66a46c55b15186921098a9
+commit: https://git.buildroot.net/buildroot/commit/?id=8744fedee4daec90be10a6d8ce303f4552a47ffa
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/manual/developers.txt | 2 ++
- 1 file changed, 2 insertions(+)
+ linux/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/docs/manual/developers.txt b/docs/manual/developers.txt
-index 4e2cd71..a0a3668 100644
---- a/docs/manual/developers.txt
-+++ b/docs/manual/developers.txt
-@@ -44,3 +44,5 @@ the +DEVELOPERS+ file for various tasks:
-   list the ones that are not handled by any developer. The purpose of
-   this option is to help completing the +DEVELOPERS+ file.
+diff --git a/linux/Config.in b/linux/Config.in
+index 6300e7a..e90ab6b 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -116,7 +116,7 @@ endif
  
-+- When using without any arguments, it validates the integrity of the
-+  DEVELOPERS file and will note WARNINGS for items that don't match.
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "4.13.11" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "4.13.12" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "v4.4.83-cip8" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
