@@ -1,39 +1,33 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Wed,  8 Nov 2017 08:36:38 -0200
-Subject: [Buildroot] [PATCH 2/2] linux-headers: bump 4.{4, 9, 13}.x series
-In-Reply-To: <1510137398-23923-1-git-send-email-festevam@gmail.com>
-References: <1510137398-23923-1-git-send-email-festevam@gmail.com>
-Message-ID: <1510137398-23923-2-git-send-email-festevam@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 8 Nov 2017 11:43:48 +0100
+Subject: [Buildroot] [PATCH 1/1] ntp: no longer require openssl
+In-Reply-To: <20171107212906.31336-1-Adamduskett@outlook.com>
+References: <20171107212906.31336-1-Adamduskett@outlook.com>
+Message-ID: <20171108114348.491097e5@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Fabio Estevam <fabio.estevam@nxp.com>
+Hello,
 
-Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
----
- package/linux-headers/Config.in.host | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+On Tue,  7 Nov 2017 16:29:06 -0500, Adam Duskett wrote:
+> 4.2.8p10 no longer requires openssl to compile.
+> 
+> Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index cb915cc..82a27f8 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -244,10 +244,10 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.10.107"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.12.74"	if BR2_KERNEL_HEADERS_3_12
- 	default "4.1.45"	if BR2_KERNEL_HEADERS_4_1
--	default "4.4.96"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.60"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.4.97"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.9.61"	if BR2_KERNEL_HEADERS_4_9
- 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
- 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
- 	default "4.12.14"	if BR2_KERNEL_HEADERS_4_12
--	default "4.13.11"	if BR2_KERNEL_HEADERS_4_13
-+	default "4.13.12"	if BR2_KERNEL_HEADERS_4_13
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+Peter: I'm wondering if we should apply this to next or master. It is
+not a bug fix per-se, but it fixes a kind of regression introduced with
+the bump of ntp to 4.2.8p9, which was merged in 2017.02, and brought in
+OpenSSL as a mandatory dependency. A user reported on Github that it
+increased quite a lot the installed size (due to the additional OpenSSL
+dependency).
+
+So, I'm tempted to apply this to master. Peter, are you OK?
+
+Thomas
 -- 
-2.7.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
