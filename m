@@ -1,79 +1,61 @@
-From: Martin Bark <martin@barkynet.com>
-Date: Wed, 8 Nov 2017 11:27:46 +0000
-Subject: [Buildroot] [PATCH 1/1] package/nodejs: bump version to 9.0.0
-In-Reply-To: <87efpauwm2.fsf@dell.be.48ers.dk>
-References: <20171106102049.14681-1-martin@barkynet.com>
- <87k1z3y5f8.fsf@dell.be.48ers.dk>
- <CAFGQKxdp473snHnkzeCmNUhXjHXE51gEZ7v6nWmLo6YhW5pM+w@mail.gmail.com>
- <87bmkfy1cy.fsf@dell.be.48ers.dk>
- <CAFGQKxdgGc4wSLa5uoTTz7Qt5_D9FPhucEQkyS1Pi+pHinLbtg@mail.gmail.com>
- <87efpauwm2.fsf@dell.be.48ers.dk>
-Message-ID: <CAFGQKxefjkOi5ODcX0JZQduKRV7kVj+t1HqSKGtD4xCS1bt-pw@mail.gmail.com>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Wed,  8 Nov 2017 12:30:35 +0100
+Subject: [Buildroot] [PATCH 2/2] add qmake.conf eglfs_mali option
+In-Reply-To: <1510140635-80618-1-git-send-email-giulio.benetti@micronovasrl.com>
+References: <1510140635-80618-1-git-send-email-giulio.benetti@micronovasrl.com>
+Message-ID: <1510140635-80618-2-git-send-email-giulio.benetti@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+I didn't know I could annotate the subsequent patches.
+Anyway, since eglfs_mali is not supported by EGLFS_DEVICE_INTEGRATION = @EGLFS_DEVICE@
+I add it inserting same as vivante,
+except I filter both sunxi-mali and upcoming sunxi-mali-mainline,
+to maintain compatibility with legacy
 
-On 7 November 2017 at 12:00, Peter Korsgaard <peter@korsgaard.com> wrote:
+Kind regards
 
-> >>>>> "Martin" == Martin Bark <martin@barkynet.com> writes:
->
-> Hi,
->
->  >> Do these odd non-LTS releases bring a lot of new features making it
->  >> worth the extra effort?
->  >>
->
->  > They can do, it varies.  It really just depends what major changes are
->  > queued up.  Major releases can include breaking changes e.g. API changes
->
-> Correct.
->
->  > I can see arguments for following only LTS, only latest or both.  I
-> guess
->  > all i need is a final decision to be made.
->
-> I think we should at least do it for the LTS releases (E.G. now).
->
-> I don't know much about nodejs. What do other distibutions / build
-> systems do? We already have precedent in E.G. the gtk/freedesktop stack
-> (gtk/glib/gstreamer/..) where we don't package the uneven (development)
-> versions.
->
+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+---
+ package/qt5/qt5base/qt5base.mk | 13 +++++++++++--
+ 1 file changed, 11 insertions(+), 2 deletions(-)
 
-Frankly most distros and build systems seem to do a terrible job of keep
-packages like nodejs up to date.  It's common to not use the packaged
-version and instead use an program like nvm (node version manager) to
-install a local copy similar to rvm for ruby.
-
-archlinux is one of the few distos I've found that does it well. Just like
-buildroot it too uses shared libs instead of the bundled libs included in
-nodejs.  It updates frequently but since it's a rolling distro it always
-tracks the latest nodejs version.
-
-
->
->  > We don't have to solve this right now.  How about i submit an 8.9.0
-> patch.
->
-> Yes, please!
->
-
-I've just submitted a new patch for version 8.9.1 and changed this patch's
-state to superseded.
-
-Thanks
-
-Martin
-
-
->
-> --
-> Bye, Peter Korsgaard
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20171108/53995c11/attachment.html>
+diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+index d58a58a..23f5138 100644
+--- a/package/qt5/qt5base/qt5base.mk
++++ b/package/qt5/qt5base/qt5base.mk
+@@ -240,18 +240,27 @@ QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_PRINTSUPPORT) += Qt5PrintSupport
+ 
+ QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_DBUS) += Qt5DBus
+ 
+-ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST)$(BR2_PACKAGE_IMX_GPU_VIV),yy)
+-# use vivante backend
++ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
++ifeq ($(BR2_PACKAGE_IMX_GPU_VIV),y)
++# use eglfs vivante backend
+ define QT5BASE_CONFIGURE_QMAKE_CONFIG
+ 	sed 's/@EGLFS_DEVICE@/eglfs_viv/g' $(QT5BASE_PKGDIR)/qmake.conf.in > \
+ 		$(QT5BASE_PKGDIR)/qmake.conf
+ endef
++else ifeq ($(filter y,$(BR2_PACKAGE_SUNXI_MALI) $(BR2_PACKAGE_SUNXI_MALI_MAINLINE)),y)
++# use eglfs mali backend
++define QT5BASE_CONFIGURE_QMAKE_CONFIG
++	sed 's/@EGLFS_DEVICE@/eglfs_mali/g' $(QT5BASE_PKGDIR)/qmake.conf.in > \
++		$(QT5BASE_PKGDIR)/qmake.conf
++endef
+ else
++# don't use any eglfs backend
+ define QT5BASE_CONFIGURE_QMAKE_CONFIG
+ 	sed '/@EGLFS_DEVICE@/,+1d' $(QT5BASE_PKGDIR)/qmake.conf.in > \
+ 		$(QT5BASE_PKGDIR)/qmake.conf
+ endef
+ endif
++endif
+ 
+ ifneq ($(QT5BASE_CONFIG_FILE),)
+ define QT5BASE_CONFIGURE_CONFIG_FILE
+-- 
+2.7.4
