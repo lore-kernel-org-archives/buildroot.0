@@ -1,47 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 11 Nov 2017 23:26:50 +0100
-Subject: [Buildroot] [git commit branch/next] python-numpy: disable for
- ARCompact
-Message-ID: <20171113221622.81B17807B2@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 8 Nov 2017 13:34:31 +0100
+Subject: [Buildroot] [git commit branch/next] jimtcl: update config.guess /
+ config.sub
+Message-ID: <20171113221621.E478A7FDB3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=636f4d81ff4be52dc7818c51b9d479a9cb6ecea1
+commit: https://git.buildroot.net/buildroot/commit/?id=bca1d4af9bf6b60b37bf5d39e9e3e1b827854f52
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This package fails when building for ARCompact due to toolchain issue.
-
-Marking this with special comment "#ARC toolchain issues for
-ARCompact" as the package is to be enabled as soon as the issue with
-the ARC toolchain is resolved.
-
 Fixes:
+http://autobuild.buildroot.net/results/284/284876bd649cab26e5ecd696c03c71c077ea7411/
 
-  http://autobuild.buildroot.net/results/4c4eaa90335756448007ae3c5ae3839fb17d4442/
+The build system doesn't use autotools, but does use an old version of
+gnuconfig which doesn't know all the architectures supported by Buildroot,
+so update config.guess / config.sub like we do in pkg-autotools.mk
 
-Signed-off-by: Evgeniy Didin <didin@synopsys.com>
-Cc: Alexey Brodkin <abrodkin@synopsys.com>
-Cc: arc-buildroot at synopsys.com
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-numpy/Config.in | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/jimtcl/jimtcl.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/package/python-numpy/Config.in b/package/python-numpy/Config.in
-index 5abe04b..1405218 100644
---- a/package/python-numpy/Config.in
-+++ b/package/python-numpy/Config.in
-@@ -1,7 +1,8 @@
- config BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
- 	bool
- 	# Numpy has some CPU specific code
--	default y if BR2_arc 
-+	# ARC toolchain issues for ARCompact
-+	default y if BR2_arc && !(BR2_arc770d || BR2_arc750d)
- 	default y if BR2_aarch64
- 	default y if BR2_arm 
- 	default y if BR2_armeb
+diff --git a/package/jimtcl/jimtcl.mk b/package/jimtcl/jimtcl.mk
+index 313970d..68c8a91 100644
+--- a/package/jimtcl/jimtcl.mk
++++ b/package/jimtcl/jimtcl.mk
+@@ -38,6 +38,12 @@ define JIMTCL_INSTALL_LIB
+ endef
+ endif
+ 
++# build system doesn't use autotools, but does use an old version of
++# gnuconfig which doesn't know all the architectures supported by
++# Buildroot, so update config.guess / config.sub like we do in
++# pkg-autotools.mk
++JIMTCL_POST_PATCH_HOOKS += UPDATE_CONFIG_HOOK
++
+ define JIMTCL_CONFIGURE_CMDS
+ 	(cd $(@D); \
+ 		$(TARGET_CONFIGURE_OPTS) CCACHE=none \
