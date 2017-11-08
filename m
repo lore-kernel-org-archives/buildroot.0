@@ -1,75 +1,39 @@
-From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Wed,  8 Nov 2017 15:26:41 +0200
-Subject: [Buildroot] [PATCH v2 1/1] Allow adding per-package override rsync
- exclusions
-Message-ID: <20171108132641.8234-1-aperez@igalia.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 8 Nov 2017 15:31:19 +0200
+Subject: [Buildroot] [PATCH 1/2] openntpd: update to 6.2p3
+In-Reply-To: <20171108130459.25412-1-aduskett@gmail.com>
+References: <20171108130459.25412-1-aduskett@gmail.com>
+Message-ID: <20171108133119.5f3vd7d2owvvtevc@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This allows using <PKG>_SRCDIR_OVERRIDE_RSYNC_EXCLUSIONS in local.mk to
-skip copying parts of source trees unneeded for building. For example,
-when developing WebKitGTK+, it's handy to skip copying all the tests and
-other build directories, which are huge:
+Hi Adam,
 
-    WEBKITGTK_OVERRIDE_SRCDIR = /home/aperez/WebKit
-    WEBKITGTK_OVERRIDE_SRCDIR_RSYNC_EXCLUSIONS = \
-        --exclude JSTests --exclude ManualTests \
-	--exclude PerformanceTests --exclude WebDriverTests \
-	--exclude WebKitBuild --exclude WebKitLibraries \
-	--exclude WebKit.xcworkspace --exclude Websites \
-	--exclude Examples
+On Wed, Nov 08, 2017 at 08:04:58AM -0500, Adam Duskett wrote:
+> Other changes:
+>   - Remove upstream patch.
 
-This saves a good chunk of time when rsync is used for the first time to
-copy the source tree over before building.
+I think you can drop the AUTORECONF as well.
 
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
----
- docs/manual/using-buildroot-development.txt | 16 ++++++++++++++++
- package/pkg-generic.mk                      |  2 +-
- 2 files changed, 17 insertions(+), 1 deletion(-)
+>   - change locally computed hash to hash from the SHA256 URL.
+>   - Add sha256sum for license file.
+> 
+> Signed-off-by: Adam Duskett <aduskett@gmail.com>
+> ---
+>  ...-Revert-use-__dead-macro-from-sys-cdefs.h.patch | 91 ----------------------
+>  .../{0002-fix-musl.patch => 0001-fix-musl.patch}   |  0
+>  package/openntpd/openntpd.hash                     |  5 +-
+>  package/openntpd/openntpd.mk                       |  2 +-
+>  4 files changed, 5 insertions(+), 93 deletions(-)
+>  delete mode 100644 package/openntpd/0001-Revert-use-__dead-macro-from-sys-cdefs.h.patch
+>  rename package/openntpd/{0002-fix-musl.patch => 0001-fix-musl.patch} (100%)
 
-diff --git a/docs/manual/using-buildroot-development.txt b/docs/manual/using-buildroot-development.txt
-index 1071de5132..d16dc482f3 100644
---- a/docs/manual/using-buildroot-development.txt
-+++ b/docs/manual/using-buildroot-development.txt
-@@ -64,6 +64,22 @@ This mechanism is best used in conjunction with the +make
- _rsync_, only the modified files are copied), and restart the build
- process of just this package.
- 
-+Source trees for big projects often contain hundreds or thousands of
-+files which are not needed for building, but will slow down the process
-+of copying the sources with _rsync_. Optionally, it is possible define
-++<pkg>_OVERRIDE_SRCDIR_RSYNC_EXCLUSIONS+ to skip syncing certain files
-+from the source tree. For example, when working on the +webkitgtk+
-+package, the following will exclude the tests and in-tree builds from
-+a local WebKit source tree:
-+
-+------------------
-+WEBKITGTK_OVERRIDE_SRCDIR = /home/bob/WebKit
-+WEBKITGTK_OVERRIDE_SRCDIR_RSYNC_EXCLUSIONS = \
-+	--exclude JSTests --exclude ManualTests --exclude PerformanceTests \
-+	--exclude WebDriverTests --exclude WebKitBuild --exclude WebKitLibraries \
-+	--exclude WebKit.xcworkspace --exclude Websites --exclude Examples
-+------------------
-+
- In the example of the +linux+ package above, the developer can then
- make a source code change in +/home/bob/linux+ and then run:
- 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 0e28675fbe..c895afc498 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -181,7 +181,7 @@ $(BUILD_DIR)/%/.stamp_rsynced:
- 	@$(call MESSAGE,"Syncing from source dir $(SRCDIR)")
- 	$(foreach hook,$($(PKG)_PRE_RSYNC_HOOKS),$(call $(hook))$(sep))
- 	@test -d $(SRCDIR) || (echo "ERROR: $(SRCDIR) does not exist" ; exit 1)
--	rsync -au --chmod=u=rwX,go=rX $(RSYNC_VCS_EXCLUSIONS) $(call qstrip,$(SRCDIR))/ $(@D)
-+	rsync -au --chmod=u=rwX,go=rX $(RSYNC_VCS_EXCLUSIONS) $($(PKG)_OVERRIDE_SRCDIR_RSYNC_EXCLUSIONS) $(call qstrip,$(SRCDIR))/ $(@D)
- 	$(foreach hook,$($(PKG)_POST_RSYNC_HOOKS),$(call $(hook))$(sep))
- 	$(Q)touch $@
- 
+baruch
+
 -- 
-2.15.0
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
