@@ -1,12 +1,14 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 8 Nov 2017 08:38:48 +0100
-Subject: [Buildroot] [PATCH v2 1/1] package/ffmpeg: fix fenv build
- failure on ARCv2 with glibc
-In-Reply-To: <3fa86dc3-5825-96ed-3466-32862ef55088@mind.be>
-References: <20171107211149.17617-1-bernd.kuhls@t-online.de>
- <20171107223752.3844357c@windsurf>
- <3fa86dc3-5825-96ed-3466-32862ef55088@mind.be>
-Message-ID: <20171108083848.223b0089@windsurf>
+Date: Wed, 8 Nov 2017 08:39:50 +0100
+Subject: [Buildroot] 
+ =?utf-8?b?5Zue5aSNOiBSZTogW1BBVENIIHY1IDAzLzExXSBi?=
+ =?utf-8?q?oard=3A_Add_Bananapi_M64_support?=
+In-Reply-To: <2017110815285072387665@banana-pi.com>
+References: <1509559553-26544-1-git-send-email-jagan@amarulasolutions.com>
+ <1509559553-26544-4-git-send-email-jagan@amarulasolutions.com>
+ <20171103181810202829132@banana-pi.com>
+ <2017110815285072387665@banana-pi.com>
+Message-ID: <20171108083950.7b442f80@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,23 +17,19 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 8 Nov 2017 00:24:50 +0100, Arnout Vandecappelle wrote:
+On Wed, 8 Nov 2017 15:28:51 +0800, hailymei at banana-pi.com wrote:
 
->  Doesn't this work?
-> 
-> config BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
-> 	bool
-> 	default y
-> 	# blabla why
-> 	depends on !BR2_archs38 || !BR2_TOOLCHAIN_USES_GLIBC
-> 	# blabla why
-> 	depends on !BR2_nios
-> 	...
-> 
->  I believe we use that construct elsewhere...
+> Good day!
+> We have arranged shipment for you by DHL with the tracking no. of 5151974822,
+> pls track it on: http://www.dhl.com/en/express/tracking.html?AWB=5151974822&brand=DHL
 
-Absolutely. Not sure why I over-engineered the thing, your solution
-should work perfectly fine.
+Just for the record: you are posting to two public mailing lists here,
+while those exchanges should probably be private.
+
+That being said, if you're sending BananaPi boards, I'm also
+interested :-)
+
+Thanks :-)
 
 Thomas
 -- 
