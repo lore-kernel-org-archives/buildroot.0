@@ -1,10 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 08 Nov 2017 13:19:29 +0100
-Subject: [Buildroot] [PATCH] DEVELOPERS: fix wireless_tools entry
-In-Reply-To: <1510089919-31078-1-git-send-email-matthew.weber@rockwellcollins.com>
- (Matt Weber's message of "Tue, 7 Nov 2017 15:25:19 -0600")
-References: <1510089919-31078-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <87d14tgdym.fsf@dell.be.48ers.dk>
+Date: Wed, 08 Nov 2017 13:20:28 +0100
+Subject: [Buildroot] [PATCH 2/2] Manual: DEVELOPERS file integrity check
+In-Reply-To: <1510091264-4024-2-git-send-email-matthew.weber@rockwellcollins.com>
+ (Matt Weber's message of "Tue, 7 Nov 2017 15:47:44 -0600")
+References: <1510091264-4024-1-git-send-email-matthew.weber@rockwellcollins.com>
+ <1510091264-4024-2-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <878tfhgdwz.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,7 +16,7 @@ To: buildroot@busybox.net
 
  > Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 
-Committed to master and next, thanks.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
