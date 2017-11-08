@@ -1,38 +1,55 @@
-From: Jagan Teki <jagan@amarulasolutions.com>
-Date: Wed, 8 Nov 2017 13:14:46 +0530
-Subject: [Buildroot] 
-	=?utf-8?b?5Zue5aSNOiBSZTogW1BBVENIIHY1IDAzLzExXSBi?=
-	=?utf-8?q?oard=3A_Add_Bananapi_M64_support?=
-In-Reply-To: <20171108083950.7b442f80@windsurf>
-References: <1509559553-26544-1-git-send-email-jagan@amarulasolutions.com>
- <1509559553-26544-4-git-send-email-jagan@amarulasolutions.com>
- <20171103181810202829132@banana-pi.com> <2017110815285072387665@banana-pi.com>
- <20171108083950.7b442f80@windsurf>
-Message-ID: <CAMty3ZCqDczRRfDhXX--nUg2maBhCDfK28ezhxMzRJUzUksAjQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 8 Nov 2017 09:55:45 +0100
+Subject: [Buildroot] [RFCv1 2/4] core: change host RPATH handling
+In-Reply-To: <8f6dece3-96bf-d71d-085f-117c92d6447b@mind.be>
+References: <20171103160627.6468-1-thomas.petazzoni@free-electrons.com>
+ <20171103160627.6468-3-thomas.petazzoni@free-electrons.com>
+ <20171105085756.GG2996@scaer> <20171107234118.177ed856@windsurf>
+ <8f6dece3-96bf-d71d-085f-117c92d6447b@mind.be>
+Message-ID: <20171108095545.64debde9@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Nov 8, 2017 at 1:09 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
->
-> On Wed, 8 Nov 2017 15:28:51 +0800, hailymei at banana-pi.com wrote:
->
->> Good day!
->> We have arranged shipment for you by DHL with the tracking no. of 5151974822,
->> pls track it on: http://www.dhl.com/en/express/tracking.html?AWB=5151974822&brand=DHL
->
-> Just for the record: you are posting to two public mailing lists here,
-> while those exchanges should probably be private.
+Hello,
 
-Sorry,  Haily Mei accidentally reply all.
+On Wed, 8 Nov 2017 00:50:15 +0100, Arnout Vandecappelle wrote:
 
-thanks!
+> > To me, this sounds very reasonable. What do you think?  
+> 
+>  500 files is not a lot if you include staging as well
+
+Why would I include staging? I don't see at all why fixing up RPATH in
+staging after each package build would be necessary.
+
+> so I've repeated the experiment with 50000 files and on a HDD. First
+> pass takes 3m34, second pass 3m43. Hm, perhaps I should have left my
+> computer alone for a while during this experiment :-).
+
+It's not very logical that the second pass is longer than the first
+pass, since the first pass does do patchelf invocations per file, while
+the second pass does only one patchelf invocation per file.
+
+>  Anyway, I think the bottom line is that the fixup script should
+> avoid going over staging.
+
+Why would it need to go over staging?
+
+> But $(HOST_DIR)/{bin,sbin,lib} should be enough anyway.
+
+Yes, that was my intent. If needed, we could optimize it by only doing
+the fixup at the end of a host package installation. But since we have
+a few target packages installing host stuff (toolchain, qt, etc.), it
+would require them to explicitly state that they need host rpath
+fixups. Perhaps it's easiest for now to just do the rpath fixup after
+every package installation.
+
+Best regards,
+
+Thomas
 -- 
-Jagan Teki
-Senior Linux Kernel Engineer | Amarula Solutions
-U-Boot, Linux | Upstream Maintainer
-Hyderabad, India.
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
