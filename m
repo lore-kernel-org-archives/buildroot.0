@@ -1,42 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 8 Nov 2017 13:34:31 +0100
-Subject: [Buildroot] [git commit] jimtcl: update config.guess / config.sub
-Message-ID: <20171108122956.18DC9807E9@busybox.osuosl.org>
+Date: Wed, 8 Nov 2017 13:34:39 +0100
+Subject: [Buildroot] [git commit] usb_modeswitch: update config.guess /
+ config.sub
+Message-ID: <20171108122956.27EA28050E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bca1d4af9bf6b60b37bf5d39e9e3e1b827854f52
+commit: https://git.buildroot.net/buildroot/commit/?id=90d86994f86fec8578772a8a7465bf912c69e1ca
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Fixes:
-http://autobuild.buildroot.net/results/284/284876bd649cab26e5ecd696c03c71c077ea7411/
+http://autobuild.buildroot.net/results/fbe/fbe21bd173e6566dd93dddd58d4a848de8a3465e/
 
-The build system doesn't use autotools, but does use an old version of
-gnuconfig which doesn't know all the architectures supported by Buildroot,
-so update config.guess / config.sub like we do in pkg-autotools.mk
+The build system of the embedded jimtcl copy doesn't use autotools, but does
+use an old version of gnuconfig which doesn't know all the architectures
+supported by Buildroot, so update config.guess / config.sub like we do in
+pkg-autotools.mk
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/jimtcl/jimtcl.mk | 6 ++++++
+ package/usb_modeswitch/usb_modeswitch.mk | 6 ++++++
  1 file changed, 6 insertions(+)
 
-diff --git a/package/jimtcl/jimtcl.mk b/package/jimtcl/jimtcl.mk
-index 313970d..68c8a91 100644
---- a/package/jimtcl/jimtcl.mk
-+++ b/package/jimtcl/jimtcl.mk
-@@ -38,6 +38,12 @@ define JIMTCL_INSTALL_LIB
- endef
+diff --git a/package/usb_modeswitch/usb_modeswitch.mk b/package/usb_modeswitch/usb_modeswitch.mk
+index ea08de2..c67d4cd 100644
+--- a/package/usb_modeswitch/usb_modeswitch.mk
++++ b/package/usb_modeswitch/usb_modeswitch.mk
+@@ -20,6 +20,12 @@ USB_MODESWITCH_BUILD_TARGETS = script
+ USB_MODESWITCH_INSTALL_TARGETS = install-script
  endif
  
-+# build system doesn't use autotools, but does use an old version of
-+# gnuconfig which doesn't know all the architectures supported by
-+# Buildroot, so update config.guess / config.sub like we do in
-+# pkg-autotools.mk
-+JIMTCL_POST_PATCH_HOOKS += UPDATE_CONFIG_HOOK
++# build system of embedded jimtcl doesn't use autotools, but does use
++# an old version of gnuconfig which doesn't know all the architectures
++# supported by Buildroot, so update config.guess / config.sub like we
++# do in pkg-autotools.mk
++USB_MODESWITCH_POST_PATCH_HOOKS += UPDATE_CONFIG_HOOK
 +
- define JIMTCL_CONFIGURE_CMDS
- 	(cd $(@D); \
- 		$(TARGET_CONFIGURE_OPTS) CCACHE=none \
+ define USB_MODESWITCH_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
+ 		CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE -Wall -I." \
