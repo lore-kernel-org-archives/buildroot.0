@@ -1,11 +1,12 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 8 Nov 2017 18:03:10 +0100
-Subject: [Buildroot] [PATCH 1/1] ntp: no longer require openssl
-In-Reply-To: <87fu9peysf.fsf@dell.be.48ers.dk>
-References: <20171107212906.31336-1-Adamduskett@outlook.com>
- <20171108114348.491097e5@windsurf>
- <87fu9peysf.fsf@dell.be.48ers.dk>
-Message-ID: <20171108180310.144957c1@windsurf>
+Date: Wed, 8 Nov 2017 18:06:29 +0100
+Subject: [Buildroot] [PATCH 1/1] Allow adding per-package overrlice
+ rsync exclusions
+In-Reply-To: <20171108144635.GB28359@momiji>
+References: <20171107015730.20311-1-aperez@igalia.com>
+ <04ece7d7-8192-2029-5edc-63ae48bb7532@mind.be>
+ <20171107220503.179cc727@windsurf> <20171108144635.GB28359@momiji>
+Message-ID: <20171108180629.6f7d418b@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,30 +15,26 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 08 Nov 2017 13:32:32 +0100, Peter Korsgaard wrote:
-> >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:  
-> 
->  > Hello,
->  > On Tue,  7 Nov 2017 16:29:06 -0500, Adam Duskett wrote:  
->  >> 4.2.8p10 no longer requires openssl to compile.
->  >> 
->  >> Signed-off-by: Adam Duskett <Adamduskett@outlook.com>  
-> 
->  > Peter: I'm wondering if we should apply this to next or master. It is
->  > not a bug fix per-se, but it fixes a kind of regression introduced with
->  > the bump of ntp to 4.2.8p9, which was merged in 2017.02, and brought in
->  > OpenSSL as a mandatory dependency. A user reported on Github that it
->  > increased quite a lot the installed size (due to the additional OpenSSL
->  > dependency).  
-> 
->  > So, I'm tempted to apply this to master. Peter, are you OK?  
-> 
-> Yes. I've just applied it. I will also cherry pick to the LTS branch.
+On Wed, 8 Nov 2017 14:46:35 +0200, Adrian Perez de Castro wrote:
 
-Be careful if you cherry-pick in the LTS branch: it depends on p10
-version of ntp, which was committed after 2017.02 was released. I
-haven't looked if the p10 bump has already been cherry-picked in the
-LTS branch.
+> > Also my thinking: per-package out of tree build is going to make this
+> > new feature a lot less relevant. That being said, per-package out of
+> > tree build is not there yet, and this new feature is just a very simple
+> > change, so I believe it's OK to merge it.  
+> 
+> How about packages which do not support out-of-tree builds? Wouldn't it still
+> be useful to be to define additional rsync flags for them? 
+
+Indeed, packages that don't support out of tree build will continue
+using rsync, and therefore it makes sense to have this exclusion thing.
+
+> > I think we really want the documentation update as part of the patch
+> > series :)  
+> 
+> Good point, I'll add add the edit for the manual as well and submit a new
+> version of the patch.
+
+Thanks :)
 
 Thomas
 -- 
