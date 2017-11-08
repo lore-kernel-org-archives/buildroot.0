@@ -1,28 +1,41 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Wed, 8 Nov 2017 13:36:23 -0600
-Subject: [Buildroot] [PATCH v3 1/1] refpolicy: bump to 2.20170805
-In-Reply-To: <20171107144915.32423-1-Adamduskett@outlook.com>
-References: <20171107144915.32423-1-Adamduskett@outlook.com>
-Message-ID: <CANQCQpbe8w17u-ZbGP_WBvRn9NxgF3xDgWRC9d_3v0oRrNxZhQ@mail.gmail.com>
+From: Sergey Matyukevich <geomatsi@gmail.com>
+Date: Wed,  8 Nov 2017 22:43:31 +0300
+Subject: [Buildroot] [PATCH 0/3] orangepi_pc_plus: new board and its drivers
+Message-ID: <20171108194334.10031-1-geomatsi@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Adam,
+Hi all,
 
-On Tue, Nov 7, 2017 at 8:49 AM, Adam Duskett <aduskett@gmail.com> wrote:
-> In addition to a simple bump, the following extra changes have occured:
->   - Change the refpolicy site to the official release URL.
->   - Remove REFPOLICY_SITE_METHOD and REFPOLICY_GIT_SUBMODULES as the contrib
->     submodule is included in the release tarball.
->   - Refpolicy is now compatible with python3, as such, remove host-python.
->     from the dependencies and add a check for python3 or python in it's place.
->   - Add upstreamed 0001-fix-regex-escape-sequence-error.patch to fix building
->     against python3.6.
->   - Add sha256 license hash to hash file.
->
-> Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
+This patchset adds support for orange-pi-pc-plus board and its wireless driver.
+In fact this board is a variant of orangepi-pc board. It adds 8GB eMMC and
+Realtek RTL8189FTV SDIO WiFi chip. On the other hand, this variant has
+a separate support in U-Boot and kernel. So it looks like it makes
+sense to create a separate entry for this board in buildroot.
 
-Tested-by: Matt Weber <matthew.weber@rockwellcollins.com>
+Patches are rebased on top of the up-to-date master branch.
+
+Regards,
+Sergey
+
+Sergey Matyukevich (3): 
+  board/orangepi: add support for orangepi-pc-plus board
+  rtl8189fs: new package
+  orangepi-pc-plus: enable WiFi support
+
+ DEVELOPERS                                          |    1 
+ board/orangepi/orangepi-pc-plus/boot.cmd            |    8 +++
+ board/orangepi/orangepi-pc-plus/genimage.cfg        |   36 ++++++++++++++++
+ board/orangepi/orangepi-pc-plus/linux-extras.config |    8 +++
+ board/orangepi/orangepi-pc-plus/post-build.sh       |    1 
+ board/orangepi/orangepi-pc-plus/post-image.sh       |    1 
+ board/orangepi/orangepi-pc-plus/readme.txt          |   29 +++++++++++++
+ configs/orangepi_pc_plus_defconfig                  |   44 ++++++++++++++++++++
+ package/Config.in                                   |    1 
+ package/rtl8189fs/Config.in                         |   10 ++++
+ package/rtl8189fs/rtl8189fs.hash                    |    2 
+ package/rtl8189fs/rtl8189fs.mk                      |   17 +++++++
+  12 files changed, 158 insertions(+)
