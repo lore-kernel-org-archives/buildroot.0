@@ -1,72 +1,80 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 8 Nov 2017 13:38:11 +0100
-Subject: [Buildroot] [RFCv1 2/4] core: change host RPATH handling
-In-Reply-To: <20171108133003.13a24547@windsurf>
-References: <20171103160627.6468-1-thomas.petazzoni@free-electrons.com>
- <20171103160627.6468-3-thomas.petazzoni@free-electrons.com>
- <20171105085756.GG2996@scaer> <20171107234118.177ed856@windsurf>
- <8f6dece3-96bf-d71d-085f-117c92d6447b@mind.be>
- <20171108095545.64debde9@windsurf>
- <c1b899b3-2b3b-0b35-2f4c-43f4e4935449@mind.be>
- <20171108133003.13a24547@windsurf>
-Message-ID: <14a4d286-b5ec-a306-16db-2ff63b24cbdd@mind.be>
+From: Adrian Perez de Castro <aperez@igalia.com>
+Date: Wed, 8 Nov 2017 14:46:35 +0200
+Subject: [Buildroot] [PATCH 1/1] Allow adding per-package overrlice
+ rsync exclusions
+In-Reply-To: <20171107220503.179cc727@windsurf>
+References: <20171107015730.20311-1-aperez@igalia.com>
+ <04ece7d7-8192-2029-5edc-63ae48bb7532@mind.be>
+ <20171107220503.179cc727@windsurf>
+Message-ID: <20171108144635.GB28359@momiji>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello,
 
+I have just noticed that there's a typo in the patch subject line
+(s/overrlice/override/), which I have to fix  O:-)
 
-On 08-11-17 13:30, Thomas Petazzoni wrote:
+On Tue, 7 Nov 2017 22:05:03 +0100, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
 > Hello,
 > 
-> On Wed, 8 Nov 2017 11:55:19 +0100, Arnout Vandecappelle wrote:
+> On Tue, 7 Nov 2017 21:57:56 +0100, Arnout Vandecappelle wrote:
 > 
->>>>> To me, this sounds very reasonable. What do you think?    
->>>>
->>>>  500 files is not a lot if you include staging as well  
->>>
->>> Why would I include staging? I don't see at all why fixing up RPATH in
->>> staging after each package build would be necessary.  
->>
->>  The simplest way would be to do find $(HOST_DIR) -type f but that includes staging.
-> 
-> Hum, you didn't reply to my question, which was: "Why would we need to
-> fixup RPATHs in STAGING_DIR" ?
+> > >     WEBKITGTK_OVERRIDE_SRCDIR = /home/aperez/WebKit
+> > >     WEBKITGTK_OVERRIDE_SRCDIR_RSYNC_EXCLUSIONS = \
+> > >         --exclude JSTests --exclude ManualTests \
+> > > 	--exclude PerformanceTests --exclude WebDriverTests \
+> > > 	--exclude WebKitBuild --exclude WebKitLibraries \
+> > > 	--exclude WebKit.xcworkspace --exclude Websites \
+> > > 	--exclude Examples
+> > > 
+> > > This saves a good chunk of time when rsync is used for the first time to
+> > > copy the source tree over before building.  
+> > 
+> >  Looks like an interesting feature. Although, if the out-of-tree build feature
+> > gets merged, it's probably less useful. That is, assuming that webkitgtk
+> > supports out-of-tree build, which is not a given...
 
- We don't, obviously. However, if we naively go through HOST_DIR we will include
-STAGING_DIR. I thought that was obvious :-)
+WebKit supports out-of-tree builds (thanks to CMake, and that our build
+definitions do not do anything weird in this regard). I know that at least
+we the WebKitGTK+ developers make out-of-tree builds regularly so it is not
+likely to break in the future ? and if it did, it would be a bug on our side.
 
- Regards,
- Arnout
+> Also my thinking: per-package out of tree build is going to make this
+> new feature a lot less relevant. That being said, per-package out of
+> tree build is not there yet, and this new feature is just a very simple
+> change, so I believe it's OK to merge it.
 
-> 
->>>> But $(HOST_DIR)/{bin,sbin,lib} should be enough anyway.  
->>
->>  So this is not true, we also need $(HOST_DIR)/$(GNU_TARGET_NAME)/{bin,lib}.
->> So then it's perhaps easier to just -prune staging.
-> 
-> Absolutely.
-> 
->>> Yes, that was my intent. If needed, we could optimize it by only doing
->>> the fixup at the end of a host package installation. But since we have
->>> a few target packages installing host stuff (toolchain, qt, etc.), it
->>> would require them to explicitly state that they need host rpath
->>> fixups. Perhaps it's easiest for now to just do the rpath fixup after
->>> every package installation.  
->>
->>  After every package installation would be better, yes.
-> 
-> ACK.
-> 
-> Thomas
-> 
+How about packages which do not support out-of-tree builds? Wouldn't it still
+be useful to be to define additional rsync flags for them? 
 
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+> > > +	rsync -au --chmod=u=rwX,go=rX $(RSYNC_VCS_EXCLUSIONS) $($(PKG)_OVERRIDE_SRCDIR_RSYNC_EXCLUSIONS) $(call qstrip,$(SRCDIR))/ $(@D)  
+> > 
+> >  Would have been nice to split the long line. But even without split:
+> > 
+> > Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> > 
+> >  Could you also add this feature to the documentation of _OVERRIDE_SRCDIR in the
+> > manual?
+> 
+> I think we really want the documentation update as part of the patch
+> series :)
+
+Good point, I'll add add the edit for the manual as well and submit a new
+version of the patch.
+
+Cheers,
+
+--
+ Adri?n ?
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: not available
+Type: application/pgp-signature
+Size: 195 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20171108/08ca02ae/attachment.asc>
