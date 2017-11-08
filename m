@@ -1,44 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 8 Nov 2017 19:45:42 +0100
-Subject: [Buildroot] [git commit] package/nodejs: bump version to 8.9.1
-Message-ID: <20171108183850.3BAA580E50@busybox.osuosl.org>
+Date: Wed, 8 Nov 2017 19:45:45 +0100
+Subject: [Buildroot] [git commit] package/libuv: bump version to 1.16.0
+Message-ID: <20171108183850.51A5D8019F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=582496635cd26678f8c1b9a48b73c0e1d8534d01
+commit: https://git.buildroot.net/buildroot/commit/?id=0521285e6703eb3408139e5c6e6ee04ef3f59bb0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-See https://nodejs.org/en/blog/release/v8.9.1/
+See https://github.com/libuv/libuv/releases/tag/v1.16.0
 
 Signed-off-by: Martin Bark <martin@barkynet.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/nodejs/nodejs.hash | 4 ++--
- package/nodejs/nodejs.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libuv/libuv.hash | 2 +-
+ package/libuv/libuv.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
-index 9367c54..658f80b 100644
---- a/package/nodejs/nodejs.hash
-+++ b/package/nodejs/nodejs.hash
+diff --git a/package/libuv/libuv.hash b/package/libuv/libuv.hash
+index 5b29640..748e1d2 100644
+--- a/package/libuv/libuv.hash
++++ b/package/libuv/libuv.hash
 @@ -1,2 +1,2 @@
--# From http://nodejs.org/dist/v8.8.1/SHASUMS256.txt
--sha256 5ce2c47ab779992db49942f757a01cc5131db5cef4e0dd270e48151b0887b57a  node-v8.8.1.tar.xz
-+# From http://nodejs.org/dist/v8.9.1/SHASUMS256.txt
-+sha256 ef160c21f60f8aca64145985e01b4044435e381dc16e8f0640ed0223e84f17e0  node-v8.9.1.tar.xz
-diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-index a29f572..9cf26da 100644
---- a/package/nodejs/nodejs.mk
-+++ b/package/nodejs/nodejs.mk
+ # Locally calculated
+-sha256  17afc94ec307be28fe8d4316679171219770df4f993905a79643c7583e106489  libuv-v1.15.0.tar.gz
++sha256  fe53b53eee3b15db8ae1b25cbfb8740944273e02f5ccd731b176800e2807d832  libuv-v1.16.0.tar.gz
+diff --git a/package/libuv/libuv.mk b/package/libuv/libuv.mk
+index 504f621..bbb4282 100644
+--- a/package/libuv/libuv.mk
++++ b/package/libuv/libuv.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--NODEJS_VERSION = 8.8.1
-+NODEJS_VERSION = 8.9.1
- NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.xz
- NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
- NODEJS_DEPENDENCIES = host-python host-nodejs c-ares \
+-LIBUV_VERSION = v1.15.0
++LIBUV_VERSION = v1.16.0
+ LIBUV_SITE = $(call github,libuv,libuv,$(LIBUV_VERSION))
+ LIBUV_DEPENDENCIES = host-pkgconf
+ LIBUV_INSTALL_STAGING = YES
