@@ -1,64 +1,53 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Wed, 8 Nov 2017 10:16:16 -0600
-Subject: [Buildroot] Analysis of build results for 2017-10-30
-In-Reply-To: <CAJtjsKZ-OFFehKRd-XD79XobUnUqGpFqRcXL4P1d-cqaFHoKmg@mail.gmail.com>
-References: <20171031070013.AD75D207B2@mail.free-electrons.com>
- <20171031230519.3feb2619@windsurf>
- <CAJtjsKZ-OFFehKRd-XD79XobUnUqGpFqRcXL4P1d-cqaFHoKmg@mail.gmail.com>
-Message-ID: <CANQCQpY2fsEJkaU1-0_Sg+Mqb3sH_m_TLxUPCAT6DRRUwWVgsg@mail.gmail.com>
+From: Evgeniy Didin <Evgeniy.Didin@synopsys.com>
+Date: Wed,  8 Nov 2017 19:41:14 +0300
+Subject: [Buildroot] [PATCH] python-numpy: disable for ARCompact
+Message-ID: <20171108164114.1041-1-didin@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Johan,
+This package fails when building for ARCompact due to toolchain issue.
 
-On Wed, Nov 8, 2017 at 6:49 AM, Johan Oudinet <johan.oudinet@gmail.com> wrote:
-> Hi Thomas, all,
->
-> On Tue, Oct 31, 2017 at 11:05 PM, Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com> wrote:
->>
->>>          arm |        host-erlang-rebar-2.6.4 | TIM | http://autobuild.buildroot.net/results/6c4c7b3094bd48a72786f5be3d760f0356557403 |
->>>          arm |        host-erlang-rebar-2.6.4 | TIM | http://autobuild.buildroot.net/results/a17d5eb1aac01dab19412aa28d523625577730db |
->>
->> The infamous ./bootstrap issue that consumes 100% of the CPU before
->> timing out the build job. Johan, we really need to find a solution to
->> this problem. How can we proceed to debug this?
->>
->
-> The bootstrap file is an erlang script:
-> #!/usr/bin/env escript
->
-> When trying to reproduce this bug, I see it prints "No beam files
-> found". As this message is printed quite early in this script, I guess
-> the problem is in loading escript from the host. Unfortunately, I
-> wasn't able to reproduce this bug on my machine, so this is only a
-> guess.
-> Is it possible to execute ./bootstrap --help from this machine? If the
-> problem is in loading escript, it should lead to the same timeout
-> error.
->
+Marking this with special comment "#ARC toolchain issues for ARCompact"
+as the package is to be enabled as soon as the issue with the ARC toolchain is resolved.
+Fixes:
+	http://autobuild.buildroot.net/results/4c4/4c4eaa90335756448007ae3c5ae3839fb17d4442//
 
-I ran the same build on that machine ( make clean host-erlang-rebar ).
-It ran without error and printed the following early in the build
-step.
+The same issue appears building "trousers" package for ARCompact.
 
-make[1]: Entering directory
-`/usr/lfs/v0/rc-buildroot/output/build/host-erlang-rebar-2.6.4'
-./bootstrap
-No beam files found.
-Recompile: src/rebar
-Recompile: src/rebar_abnfc_compiler
+Signed-off-by: Evgeniy Didin <didin@synopsys.com>
+CC: Alexey Brodkin <abrodkin@synopsys.com>
+CC: arc-buildroot at synopsys.com
+CC: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-As a note, that machine doesn't have escript, ie I go into the
-host-erlang-rebar folder and if I run the bootstrap --help I get a
-escript error  (which is expected).
-./bootstrap --help
-/usr/bin/env: escript: No such file or directory
+---
+ package/python-numpy/Config.in | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-
-I'll run the complete build a few times and see if anything pops up.
-
-Matt
+diff --git a/package/python-numpy/Config.in b/package/python-numpy/Config.in
+index 859542f584..403b466417 100644
+--- a/package/python-numpy/Config.in
++++ b/package/python-numpy/Config.in
+@@ -1,13 +1,15 @@
+ config BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
+ 	bool
+ 	# Numpy has some CPU specific code
+-	default y if BR2_arc || BR2_aarch64 || BR2_arm || BR2_armeb || BR2_i386 \
+-		|| BR2_mips || BR2_mipsel || BR2_powerpc || BR2_powerpc64 \
+-		|| BR2_sh || BR2_x86_64
++	default y if (BR2_arc && !(BR2_arc770d && BR2_arc750d)) || BR2_aarch64 \
++		|| BR2_arm || BR2_armeb || BR2_i386 || BR2_mips || BR2_mipsel \
++		|| BR2_powerpc || BR2_powerpc64 || BR2_sh || BR2_x86_64
+ 
+ config BR2_PACKAGE_PYTHON_NUMPY
+ 	bool "python-numpy"
+ 	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
++	#ARC toolchain issues for ARCompact
++	depends on !BR2_arc770d && !BR2_arc750d
+ 	help
+ 	  NumPy is the fundamental package for scientific computing
+ 	  with Python.
+-- 
+2.11.0
