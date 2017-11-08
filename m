@@ -1,40 +1,28 @@
 From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Wed, 8 Nov 2017 13:35:13 -0600
-Subject: [Buildroot] Analysis of build results for 2017-10-30
-In-Reply-To: <20171108173346.GB4602@scaer>
-References: <20171031070013.AD75D207B2@mail.free-electrons.com>
- <20171031230519.3feb2619@windsurf>
- <CAJtjsKZ-OFFehKRd-XD79XobUnUqGpFqRcXL4P1d-cqaFHoKmg@mail.gmail.com>
- <CANQCQpY2fsEJkaU1-0_Sg+Mqb3sH_m_TLxUPCAT6DRRUwWVgsg@mail.gmail.com>
- <20171108173346.GB4602@scaer>
-Message-ID: <CANQCQpYhG=ZH0MH768m02HzT0Bap+YfX+xt7067e5NKdoMAAAA@mail.gmail.com>
+Date: Wed, 8 Nov 2017 13:36:23 -0600
+Subject: [Buildroot] [PATCH v3 1/1] refpolicy: bump to 2.20170805
+In-Reply-To: <20171107144915.32423-1-Adamduskett@outlook.com>
+References: <20171107144915.32423-1-Adamduskett@outlook.com>
+Message-ID: <CANQCQpbe8w17u-ZbGP_WBvRn9NxgF3xDgWRC9d_3v0oRrNxZhQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann,
+Adam,
 
-On Wed, Nov 8, 2017 at 11:33 AM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> Matthew, Johan, All,
+On Tue, Nov 7, 2017 at 8:49 AM, Adam Duskett <aduskett@gmail.com> wrote:
+> In addition to a simple bump, the following extra changes have occured:
+>   - Change the refpolicy site to the official release URL.
+>   - Remove REFPOLICY_SITE_METHOD and REFPOLICY_GIT_SUBMODULES as the contrib
+>     submodule is included in the release tarball.
+>   - Refpolicy is now compatible with python3, as such, remove host-python.
+>     from the dependencies and add a check for python3 or python in it's place.
+>   - Add upstreamed 0001-fix-regex-escape-sequence-error.patch to fix building
+>     against python3.6.
+>   - Add sha256 license hash to hash file.
 >
-> On 2017-11-08 10:16 -0600, Matthew Weber spake thusly:
->> On Wed, Nov 8, 2017 at 6:49 AM, Johan Oudinet <johan.oudinet@gmail.com> wrote:
->> > Hi Thomas, all,
->> >
->> > On Tue, Oct 31, 2017 at 11:05 PM, Thomas Petazzoni
+> Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
 
-<snip>
-
->
-> We've already concluded that this error does not always happen,
-> unfortunately. IIRC, it however happenned on almost all the
-> autobuilders, so it probably is not related to the host machine.
->
-> Thomas and I tried to reproduce on our respective autobuilders, to no
-> avail... IIRC, I even had a loop that ran more than 100 times.
-
-I started a loop this morning.  I'll probably kill it then at this point.
-
-Matt
+Tested-by: Matt Weber <matthew.weber@rockwellcollins.com>
