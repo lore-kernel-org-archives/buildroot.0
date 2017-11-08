@@ -1,166 +1,58 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 8 Nov 2017 18:29:14 +0100
-Subject: [Buildroot] [RFCv1 0/4] Per-package SDK and target directories
-In-Reply-To: <5DBA847110A28B46BBA17BE675F0C9B2181A8D38@cnshjmbx01>
-References: <5DBA847110A28B46BBA17BE675F0C9B2181A8D38@cnshjmbx01>
-Message-ID: <20171108172914.GA4602@scaer>
+Date: Wed, 8 Nov 2017 18:33:46 +0100
+Subject: [Buildroot] Analysis of build results for 2017-10-30
+In-Reply-To: <CANQCQpY2fsEJkaU1-0_Sg+Mqb3sH_m_TLxUPCAT6DRRUwWVgsg@mail.gmail.com>
+References: <20171031070013.AD75D207B2@mail.free-electrons.com>
+ <20171031230519.3feb2619@windsurf>
+ <CAJtjsKZ-OFFehKRd-XD79XobUnUqGpFqRcXL4P1d-cqaFHoKmg@mail.gmail.com>
+ <CANQCQpY2fsEJkaU1-0_Sg+Mqb3sH_m_TLxUPCAT6DRRUwWVgsg@mail.gmail.com>
+Message-ID: <20171108173346.GB4602@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Chu, Zhuliang; All,
+Matthew, Johan, All,
 
-On 2017-11-07 11:48 +0000, Chu, Zhuliang (NSB - CN/Shanghai) spake thusly:
-> I have seen your mail on the buildroot mailing list.
-> I download your buildroot branch 'ppsh' and test it with my configurations.
-> After my test, I will report about 4 problem under below.
-
-Thanks for the feedback on this early series, very valuable indeed! :-)
-
-> Test environment:
-> when using your buildroot, I will execute the parallel build command 'make -j8'.
-> when using mainstream buildroot, I will execute 'make -j1'.
-> config?
-> 1\ qemu_x86_defconfig
-> 2\ my_private_configuration(it is ok in mainstream buildroot)
+On 2017-11-08 10:16 -0600, Matthew Weber spake thusly:
+> On Wed, Nov 8, 2017 at 6:49 AM, Johan Oudinet <johan.oudinet@gmail.com> wrote:
+> > Hi Thomas, all,
+> >
+> > On Tue, Oct 31, 2017 at 11:05 PM, Thomas Petazzoni
+> > <thomas.petazzoni@free-electrons.com> wrote:
+> >>
+> >>>          arm |        host-erlang-rebar-2.6.4 | TIM | http://autobuild.buildroot.net/results/6c4c7b3094bd48a72786f5be3d760f0356557403 |
+> >>>          arm |        host-erlang-rebar-2.6.4 | TIM | http://autobuild.buildroot.net/results/a17d5eb1aac01dab19412aa28d523625577730db |
+> >>
+> >> The infamous ./bootstrap issue that consumes 100% of the CPU before
+> >> timing out the build job. Johan, we really need to find a solution to
+> >> this problem. How can we proceed to debug this?
+> >>
+> >
+> > The bootstrap file is an erlang script:
+> > #!/usr/bin/env escript
+> >
+> > When trying to reproduce this bug, I see it prints "No beam files
+> > found". As this message is printed quite early in this script, I guess
+> > the problem is in loading escript from the host. Unfortunately, I
+> > wasn't able to reproduce this bug on my machine, so this is only a
+> > guess.
+> > Is it possible to execute ./bootstrap --help from this machine? If the
+> > problem is in loading escript, it should lead to the same timeout
+> > error.
+> >
 > 
-> Q1: Compatibility Issues
-> In qemu_x86_defconfig, mainstream and 'ppsh' is all ok because it is simple.
-> In my private, if using 'make -j8' in the 'ppsh', there still has the first question as shows in lines 103-116 of the top-level
-> Makefile.
-> i.e.
-> >>> openssl Configuring
-> checking whether we are using A... yes(A has been compiled)/no(A has not been compiled)
+> I ran the same build on that machine ( make clean host-erlang-rebar ).
+> It ran without error and printed the following early in the build
+> step.
 
-This does not look like this is opensl configure messages...
+We've already concluded that this error does not always happen,
+unfortunately. IIRC, it however happenned on almost all the
+autobuilders, so it probably is not related to the host machine.
 
-Here, openssl (really, libopenssl nowadays) configure step says things
-like:
-
-    ---8<---
-    Configuring for linux-armv4
-        no-ec_nistp_64_gcc_128 [default]  OPENSSL_NO_EC_NISTP_64_GCC_128 (skip dir)
-        no-gmp          [default]  OPENSSL_NO_GMP (skip dir)
-        no-jpake        [experimental] OPENSSL_NO_JPAKE (skip dir)
-        no-krb5         [krb5-flavor not specified] OPENSSL_NO_KRB5
-        no-libunbound   [experimental] OPENSSL_NO_LIBUNBOUND (skip dir)
-        no-md2          [default]  OPENSSL_NO_MD2 (skip dir)
-        no-rc5          [option]   OPENSSL_NO_RC5 (skip dir)
-        no-rfc3779      [default]  OPENSSL_NO_RFC3779 (skip dir)
-        no-sctp         [default]  OPENSSL_NO_SCTP (skip dir)
-        no-ssl-trace    [default]  OPENSSL_NO_SSL_TRACE (skip dir)
-        no-ssl2         [default]  OPENSSL_NO_SSL2 (skip dir)
-        no-store        [experimental] OPENSSL_NO_STORE (skip dir)
-        no-unit-test    [default]  OPENSSL_NO_UNIT_TEST (skip dir)
-        no-weak-ssl-ciphers [default]  OPENSSL_NO_WEAK_SSL_CIPHERS (skip dir)
-    IsMK1MF=0
-    CC            =/home/ymorin/dev/buildroot/O/host/bin/arm-linux-gnueabihf-gcc
-    CFLAG         =-fPIC -DOPENSSL_PIC -DZLIB_SHARED -DZLIB -DOPENSSL_THREADS -D_REENTRANT -DDSO_DLFCN -DHAVE_DLFCN_H -O3 -Wall -DOPENSSL_BN_ASM_MONT -DOPENSSL_BN_ASM_GF2m -DSHA1_ASM -DSHA256_ASM -DSHA512_ASM -DAES_ASM -DBSAES_ASM -DGHASH_ASM
-    EX_LIBS       =-ldl
-    CPUID_OBJ     =armcap.o armv4cpuid.o
-    BN_ASM        =bn_asm.o armv4-mont.o armv4-gf2m.o
-    EC_ASM        =
-    DES_ENC       =des_enc.o fcrypt_b.o
-    AES_ENC       =aes_cbc.o aes-armv4.o bsaes-armv7.o aesv8-armx.o
-    BF_ENC        =bf_enc.o
-    CAST_ENC      =c_enc.o
-    RC4_ENC       =rc4_enc.o rc4_skey.o
-    RC5_ENC       =rc5_enc.o
-    MD5_OBJ_ASM   =
-    SHA1_OBJ_ASM  =sha1-armv4-large.o sha256-armv4.o sha512-armv4.o
-    RMD160_OBJ_ASM=
-    CMLL_ENC      =camellia.o cmll_misc.o cmll_cbc.o
-    MODES_OBJ     =ghash-armv4.o ghashv8-armx.o
-    ENGINES_OBJ   =
-    PROCESSOR     =
-    RANLIB        =/home/ymorin/dev/buildroot/O/host/bin/arm-linux-gnueabihf-ranlib
-    ARFLAGS       =
-    PERL          =/usr/bin/perl
-    THIRTY_TWO_BIT mode
-    DES_UNROLL used
-    DES_INT used
-    BN_LLONG mode
-    RC4 uses uchar
-    RC4_CHUNK is unsigned long
-    BF_PTR used
-    created directory `include/openssl'
-    e_os2.h => include/openssl/e_os2.h
-    making links in crypto...
-    crypto.h => ../include/openssl/crypto.h
-    [...]
-    ---8<---
-
-So, I wonder what openssl you are using... :-/
-
-> in mainstream buildroot, the order of package A is before openssl. So openssl is always support A.
-> but in 'ppsh', openssl is always not support A. if once 'ppsh' is merged into the mainstream, there will cause software
-> inconsistencies.
-
-This behavioural change is expected, indeed. Top-level parallel build
-can no longer guarantee the build order, by the mere fact of being
-parallel. Whatever currently depends on the build order will indeed be
-broken once top-level parralel build is merged.
-
-The solution is to correctly express dependencies in the .mk files.
-
-Now, if your 'A' package is not something that is known to buildroot,
-but changes the way a package known to buildroot behaves, there is not
-much we in Buildroot can do, unless you submit the 'A' package for
-inclusion in Buildroot...
-
-> Q2: Space Expension
-> in qemu_x86_defconfig, the size of output increased from 3.4G to 3.6G between mainstream with 'ppsh'.
-> in my private, the rate of space occupancy growth is higher. it`s crazy from 3.6G to 9G .This obviously can not accept. (A large
-> part of reason is that I use a very large toolchain-external which about 1.5G)
-> Before a package only consumes one space, but now a package maybe reoccupied space below per-package.
-> BEFORE(mainstream):
-> 1.7G    ./build
-> 115M    ./images
-> 37M    ./target
-> 1.8G    ./host
-> 3.6G    .
-> 
-> NOW('ppsh')
-> 1.7G    ./build
-> 5.5G    ./per-package
-> 115M    ./images
-> 37M    ./target
-> 1.8G    ./host
-> 8.9G    .
-
-As others already stated, in may depend on the tools you use to report
-the disk usage, but can also depend on the type of filesystem.
-
-What filesystem are you using: ext3/4, btrfs, xfs, other?
-
-What command did you run to come up with those numbers?
-
-> Q3: ERROR: Could not generate syscalls.(uclibc_error.log)
-> I have not solved this problem, I put the error message in the attachment
-> 
-> Q4: Ccache path needs to be fixed(ccache_error.log)
-> When ccache is enabled, it will generate the 'command not found' error like below.
-> make: /home/zhulianc/inprogress/orig/tpbuildroot/output/host/bin/ccache: Command not found
-> this issue has been fix.
-> 
-> patch(0001-ccache-fix-ccache-HOST_DIR.patch):
-> -----------------------------------------------------------------------------------
-> From 2e60c344a47fe64d92b3d29af8143d73802e71c4 Mon Sep 17 00:00:00 2001
-> From: Zhuliang Chu <zhuliang.chu@nokia-sbell.com>
-> Date: Tue, 7 Nov 2017 19:23:46 +0800
-> Subject: [PATCH 1/1] ccache: fix ccache HOST_DIR
-> 
-> The ccache binary is located in the per-package directory when ccache is installed.
-> But it is set at '$(HOST_DIR)/usr/bin/ccache' in top-level Makefile as below:
-> CCACHE := $(HOST_DIR)/usr/bin/ccache
-
-I wonder on what version of Buildroot you applied the patches: we no
-longer have the usr directory in $(HOST_DIR) now.
-
-Can you try to reproduce your issues using the current master branch of
-Buildroot, please?
+Thomas and I tried to reproduce on our respective autobuilders, to no
+avail... IIRC, I even had a loop that ran more than 100 times.
 
 Regards,
 Yann E. MORIN.
