@@ -1,38 +1,67 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 8 Nov 2017 13:21:52 +0100
-Subject: [Buildroot] [git commit branch/next] linux-headers: bump 4.{4, 9,
- 13}.x series
-Message-ID: <20171113221621.CD520807B2@busybox.osuosl.org>
+Date: Wed, 8 Nov 2017 13:33:20 +0100
+Subject: [Buildroot] [git commit branch/next] ntp: no longer require openssl
+Message-ID: <20171113221621.D6E93807B2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2aa12565d6645b5bf85b0da8f0b736f5482f1333
+commit: https://git.buildroot.net/buildroot/commit/?id=8a2111258ace2fc4d01a6bb3d3287ec0115eef29
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
+4.2.8p10 no longer requires openssl to compile.
+
+Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-headers/Config.in.host | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/ntp/Config.in |  1 -
+ package/ntp/ntp.mk    | 10 ++++++++--
+ 2 files changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index cb915cc..82a27f8 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -244,10 +244,10 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.10.107"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.12.74"	if BR2_KERNEL_HEADERS_3_12
- 	default "4.1.45"	if BR2_KERNEL_HEADERS_4_1
--	default "4.4.96"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.60"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.4.97"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.9.61"	if BR2_KERNEL_HEADERS_4_9
- 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
- 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
- 	default "4.12.14"	if BR2_KERNEL_HEADERS_4_12
--	default "4.13.11"	if BR2_KERNEL_HEADERS_4_13
-+	default "4.13.12"	if BR2_KERNEL_HEADERS_4_13
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/package/ntp/Config.in b/package/ntp/Config.in
+index 1af02db..8ce9a5b 100644
+--- a/package/ntp/Config.in
++++ b/package/ntp/Config.in
+@@ -1,7 +1,6 @@
+ config BR2_PACKAGE_NTP
+ 	bool "ntp"
+ 	select BR2_PACKAGE_LIBEVENT
+-	select BR2_PACKAGE_OPENSSL
+ 	help
+ 	  Network Time Protocol suite/programs.
+ 	  Provides things like ntpd, ntpdate, ntpq, etc...
+diff --git a/package/ntp/ntp.mk b/package/ntp/ntp.mk
+index c70d6e6..6605c3b 100644
+--- a/package/ntp/ntp.mk
++++ b/package/ntp/ntp.mk
+@@ -7,7 +7,7 @@
+ NTP_VERSION_MAJOR = 4.2
+ NTP_VERSION = $(NTP_VERSION_MAJOR).8p10
+ NTP_SITE = https://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-$(NTP_VERSION_MAJOR)
+-NTP_DEPENDENCIES = host-pkgconf libevent openssl $(if $(BR2_PACKAGE_BUSYBOX),busybox)
++NTP_DEPENDENCIES = host-pkgconf libevent $(if $(BR2_PACKAGE_BUSYBOX),busybox)
+ NTP_LICENSE = NTP
+ NTP_LICENSE_FILES = COPYRIGHT
+ NTP_CONF_ENV = ac_cv_lib_md5_MD5Init=no
+@@ -18,12 +18,18 @@ NTP_CONF_OPTS = \
+ 	--disable-debugging \
+ 	--with-yielding-select=yes \
+ 	--disable-local-libevent \
+-	--with-crypto
+ 
+ # 0002-ntp-syscalls-fallback.patch
+ # 0003-ntpq-fpic.patch
+ NTP_AUTORECONF = YES
+ 
++ifeq ($(BR2_PACKAGE_OPENSSL),y)
++NTP_CONF_OPTS += --with-crypto
++NTP_DEPENDENCIES += openssl
++else
++NTP_CONF_OPTS += --without-crypto --disable-openssl-random
++endif
++
+ ifeq ($(BR2_TOOLCHAIN_HAS_SSP),y)
+ NTP_CONF_OPTS += --with-locfile=linux
+ else
