@@ -1,44 +1,30 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 8 Nov 2017 19:45:45 +0100
-Subject: [Buildroot] [git commit branch/next] package/libuv: bump version to
- 1.16.0
-Message-ID: <20171113221622.1B198807B2@busybox.osuosl.org>
+Date: Wed, 8 Nov 2017 13:20:02 +0100
+Subject: [Buildroot] [git commit branch/next] Manual: DEVELOPERS file
+ integrity check
+Message-ID: <20171113221621.B76D8807B2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0521285e6703eb3408139e5c6e6ee04ef3f59bb0
+commit: https://git.buildroot.net/buildroot/commit/?id=d7f9f1da6b09a8658e66a46c55b15186921098a9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-See https://github.com/libuv/libuv/releases/tag/v1.16.0
-
-Signed-off-by: Martin Bark <martin@barkynet.com>
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libuv/libuv.hash | 2 +-
- package/libuv/libuv.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ docs/manual/developers.txt | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/libuv/libuv.hash b/package/libuv/libuv.hash
-index 5b29640..748e1d2 100644
---- a/package/libuv/libuv.hash
-+++ b/package/libuv/libuv.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  17afc94ec307be28fe8d4316679171219770df4f993905a79643c7583e106489  libuv-v1.15.0.tar.gz
-+sha256  fe53b53eee3b15db8ae1b25cbfb8740944273e02f5ccd731b176800e2807d832  libuv-v1.16.0.tar.gz
-diff --git a/package/libuv/libuv.mk b/package/libuv/libuv.mk
-index 504f621..bbb4282 100644
---- a/package/libuv/libuv.mk
-+++ b/package/libuv/libuv.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/docs/manual/developers.txt b/docs/manual/developers.txt
+index 4e2cd71..a0a3668 100644
+--- a/docs/manual/developers.txt
++++ b/docs/manual/developers.txt
+@@ -44,3 +44,5 @@ the +DEVELOPERS+ file for various tasks:
+   list the ones that are not handled by any developer. The purpose of
+   this option is to help completing the +DEVELOPERS+ file.
  
--LIBUV_VERSION = v1.15.0
-+LIBUV_VERSION = v1.16.0
- LIBUV_SITE = $(call github,libuv,libuv,$(LIBUV_VERSION))
- LIBUV_DEPENDENCIES = host-pkgconf
- LIBUV_INSTALL_STAGING = YES
++- When using without any arguments, it validates the integrity of the
++  DEVELOPERS file and will note WARNINGS for items that don't match.
