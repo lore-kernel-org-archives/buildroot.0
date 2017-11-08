@@ -1,42 +1,38 @@
-From: Joshua Henderson <joshua.henderson@microchip.com>
-Date: Wed, 8 Nov 2017 11:42:35 -0700
-Subject: [Buildroot] [PATCH v2 1/2] qt5 add qmake.conf.in for eglfs
-In-Reply-To: <1510165263-7599-1-git-send-email-giulio.benetti@micronovasrl.com>
-References: <1510165263-7599-1-git-send-email-giulio.benetti@micronovasrl.com>
-Message-ID: <52578484-a127-0727-e677-49c17058cc17@microchip.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 08 Nov 2017 19:46:04 +0100
+Subject: [Buildroot] [PATCH 1/2] package/nodejs: bump version to 8.9.1
+In-Reply-To: <CAFGQKxf6E4Zk_rbYaJweQ8YOo5_ioc6=4b2yeNvXr_1AHVN6BA@mail.gmail.com>
+ (Martin Bark's message of "Wed, 8 Nov 2017 15:55:14 +0000")
+References: <20171108112542.8163-1-martin@barkynet.com>
+ <87vailez4i.fsf@dell.be.48ers.dk>
+ <CAFGQKxf6E4Zk_rbYaJweQ8YOo5_ioc6=4b2yeNvXr_1AHVN6BA@mail.gmail.com>
+Message-ID: <87y3ngehhv.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Giulio,
+>>>>> "Martin" == Martin Bark <martin@barkynet.com> writes:
 
-On 11/08/2017 11:21 AM, Giulio Benetti wrote:
-> EGLFS_DEVICE_INTEGRATION = eglfs_* doesn't work correctly with previous patch
-> EGLFS_DEVICE_INTEGRATION = eglfs_viv/eglfs_* must be written before include(../common/linux_device_post.conf)
-> 
-> Starting from qmake.conf.in, 
-> generate qmake.conf substituting @EGLFS_DEVICE@ with eglfs_viv or eglfs_mali
-> according to Package selection
-> 
+ > Hi,
+ > On 8 November 2017 at 12:25, Peter Korsgaard <peter@korsgaard.com> wrote:
+ >>>>>>> "Martin" == Martin Bark <martin@barkynet.com> writes:
+ >> 
+ >> > See https://nodejs.org/en/blog/release/v8.9.1/
+ >> > Signed-off-by: Martin Bark <martin@barkynet.com>
+ >> 
+ >> Are these meant for master or next? The nodejs bump looks like master
+ >> material to me, but what about libuv? Does the new nodejs version depend
+ >> on the libuv bump?
 
----
+ > I would prefer master but if you can't because of the 2017.11 release
+ > then i'm fine with next.
 
-Tip: In the future, put 3 dashes right here so the revision notes, and any notes
-in general you want to include in the email, are not included in the final
-commit log. You can apply the generated email yourself to a clean tree and see
-that anything below the 3 dashes is dropped.
+ > Yes the nodejs version needs the libuv bump.  nodejs 8.9.1 includes a
+ > cherry picked patch from libuv which is present in the 1.16.0 release.
 
-> Changes v1 -> v2:
-> 
-> * Moved qmake.conf to qmake.conf.in
-> * Added @EGLFS_DEVICE@ placeholder into qmake.conf.in
-> * Modified QT5BASE_CONFIGURE_QMAKE_CONFIG to use sed
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
-> ---
+Ok - Committed both to master then, thanks.
 
-...
-
-Josh
+-- 
+Bye, Peter Korsgaard
