@@ -1,43 +1,51 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 8 Nov 2017 19:45:45 +0100
-Subject: [Buildroot] [git commit] package/libuv: bump version to 1.16.0
-Message-ID: <20171108183850.51A5D8019F@busybox.osuosl.org>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Wed, 8 Nov 2017 19:52:02 +0100
+Subject: [Buildroot] [PATCH v2 1/2] qt5 add qmake.conf.in for eglfs
+In-Reply-To: <52578484-a127-0727-e677-49c17058cc17@microchip.com>
+References: <1510165263-7599-1-git-send-email-giulio.benetti@micronovasrl.com>
+ <52578484-a127-0727-e677-49c17058cc17@microchip.com>
+Message-ID: <2AD72CC1-4D0B-471E-A176-9FF8962712B4@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0521285e6703eb3408139e5c6e6ee04ef3f59bb0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi,
 
-See https://github.com/libuv/libuv/releases/tag/v1.16.0
+> Il giorno 08 nov 2017, alle ore 19:42, Joshua Henderson <joshua.henderson@microchip.com> ha scritto:
+> 
+> Giulio,
+> 
+>> On 11/08/2017 11:21 AM, Giulio Benetti wrote:
+>> EGLFS_DEVICE_INTEGRATION = eglfs_* doesn't work correctly with previous patch
+>> EGLFS_DEVICE_INTEGRATION = eglfs_viv/eglfs_* must be written before include(../common/linux_device_post.conf)
+>> 
+>> Starting from qmake.conf.in, 
+>> generate qmake.conf substituting @EGLFS_DEVICE@ with eglfs_viv or eglfs_mali
+>> according to Package selection
+>> 
+> 
+> ---
+> 
+> Tip: In the future, put 3 dashes right here so the revision notes, and any notes
+> in general you want to include in the email, are not included in the final
+> commit log. You can apply the generated email yourself to a clean tree and see
+> that anything below the 3 dashes is dropped.
 
-Signed-off-by: Martin Bark <martin@barkynet.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libuv/libuv.hash | 2 +-
- package/libuv/libuv.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Ok, I didn?t know about that.
+Thank you very much!
 
-diff --git a/package/libuv/libuv.hash b/package/libuv/libuv.hash
-index 5b29640..748e1d2 100644
---- a/package/libuv/libuv.hash
-+++ b/package/libuv/libuv.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  17afc94ec307be28fe8d4316679171219770df4f993905a79643c7583e106489  libuv-v1.15.0.tar.gz
-+sha256  fe53b53eee3b15db8ae1b25cbfb8740944273e02f5ccd731b176800e2807d832  libuv-v1.16.0.tar.gz
-diff --git a/package/libuv/libuv.mk b/package/libuv/libuv.mk
-index 504f621..bbb4282 100644
---- a/package/libuv/libuv.mk
-+++ b/package/libuv/libuv.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBUV_VERSION = v1.15.0
-+LIBUV_VERSION = v1.16.0
- LIBUV_SITE = $(call github,libuv,libuv,$(LIBUV_VERSION))
- LIBUV_DEPENDENCIES = host-pkgconf
- LIBUV_INSTALL_STAGING = YES
+> 
+>> Changes v1 -> v2:
+>> 
+>> * Moved qmake.conf to qmake.conf.in
+>> * Added @EGLFS_DEVICE@ placeholder into qmake.conf.in
+>> * Modified QT5BASE_CONFIGURE_QMAKE_CONFIG to use sed
+>> 
+>> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+>> ---
+> 
+> ...
+> 
+> Josh
