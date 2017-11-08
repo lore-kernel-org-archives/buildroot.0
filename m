@@ -1,53 +1,38 @@
-From: Evgeniy Didin <Evgeniy.Didin@synopsys.com>
-Date: Wed,  8 Nov 2017 19:41:14 +0300
-Subject: [Buildroot] [PATCH] python-numpy: disable for ARCompact
-Message-ID: <20171108164114.1041-1-didin@synopsys.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 8 Nov 2017 17:55:24 +0100
+Subject: [Buildroot] [RFCv1 0/4] Per-package SDK and target directories
+In-Reply-To: <5DBA847110A28B46BBA17BE675F0C9B2181A8D38@cnshjmbx01>
+References: <5DBA847110A28B46BBA17BE675F0C9B2181A8D38@cnshjmbx01>
+Message-ID: <20171108175524.29e9a458@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This package fails when building for ARCompact due to toolchain issue.
+Hello,
 
-Marking this with special comment "#ARC toolchain issues for ARCompact"
-as the package is to be enabled as soon as the issue with the ARC toolchain is resolved.
-Fixes:
-	http://autobuild.buildroot.net/results/4c4/4c4eaa90335756448007ae3c5ae3839fb17d4442//
+On Tue, 7 Nov 2017 11:48:17 +0000, Chu, Zhuliang (NSB - CN/Shanghai)
+wrote:
 
-The same issue appears building "trousers" package for ARCompact.
+> Q3: ERROR: Could not generate syscalls.(uclibc_error.log)
+> I have not solved this problem, I put the error message in the attachment
 
-Signed-off-by: Evgeniy Didin <didin@synopsys.com>
-CC: Alexey Brodkin <abrodkin@synopsys.com>
-CC: arc-buildroot at synopsys.com
-CC: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+So I built a basic uClibc system, toolchain included with the following
+defconfig:
 
----
- package/python-numpy/Config.in | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+BR2_arm=y
+BR2_cortex_a8=y
 
-diff --git a/package/python-numpy/Config.in b/package/python-numpy/Config.in
-index 859542f584..403b466417 100644
---- a/package/python-numpy/Config.in
-+++ b/package/python-numpy/Config.in
-@@ -1,13 +1,15 @@
- config BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
- 	bool
- 	# Numpy has some CPU specific code
--	default y if BR2_arc || BR2_aarch64 || BR2_arm || BR2_armeb || BR2_i386 \
--		|| BR2_mips || BR2_mipsel || BR2_powerpc || BR2_powerpc64 \
--		|| BR2_sh || BR2_x86_64
-+	default y if (BR2_arc && !(BR2_arc770d && BR2_arc750d)) || BR2_aarch64 \
-+		|| BR2_arm || BR2_armeb || BR2_i386 || BR2_mips || BR2_mipsel \
-+		|| BR2_powerpc || BR2_powerpc64 || BR2_sh || BR2_x86_64
- 
- config BR2_PACKAGE_PYTHON_NUMPY
- 	bool "python-numpy"
- 	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
-+	#ARC toolchain issues for ARCompact
-+	depends on !BR2_arc770d && !BR2_arc750d
- 	help
- 	  NumPy is the fundamental package for scientific computing
- 	  with Python.
+And it built just fine.
+
+Are you able to reproduce this problem? Does it happen every time, or
+just once in a while?
+
+Best regards,
+
+Thomas
 -- 
-2.11.0
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
