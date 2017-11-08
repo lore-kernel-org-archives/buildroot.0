@@ -1,43 +1,79 @@
 From: Martin Bark <martin@barkynet.com>
-Date: Wed,  8 Nov 2017 11:25:42 +0000
-Subject: [Buildroot] [PATCH 2/2] package/libuv: bump version to 1.16.0
-In-Reply-To: <20171108112542.8163-1-martin@barkynet.com>
-References: <20171108112542.8163-1-martin@barkynet.com>
-Message-ID: <20171108112542.8163-2-martin@barkynet.com>
+Date: Wed, 8 Nov 2017 11:27:46 +0000
+Subject: [Buildroot] [PATCH 1/1] package/nodejs: bump version to 9.0.0
+In-Reply-To: <87efpauwm2.fsf@dell.be.48ers.dk>
+References: <20171106102049.14681-1-martin@barkynet.com>
+ <87k1z3y5f8.fsf@dell.be.48ers.dk>
+ <CAFGQKxdp473snHnkzeCmNUhXjHXE51gEZ7v6nWmLo6YhW5pM+w@mail.gmail.com>
+ <87bmkfy1cy.fsf@dell.be.48ers.dk>
+ <CAFGQKxdgGc4wSLa5uoTTz7Qt5_D9FPhucEQkyS1Pi+pHinLbtg@mail.gmail.com>
+ <87efpauwm2.fsf@dell.be.48ers.dk>
+Message-ID: <CAFGQKxefjkOi5ODcX0JZQduKRV7kVj+t1HqSKGtD4xCS1bt-pw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-See https://github.com/libuv/libuv/releases/tag/v1.16.0
+Hi,
 
-Signed-off-by: Martin Bark <martin@barkynet.com>
----
- package/libuv/libuv.hash | 2 +-
- package/libuv/libuv.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On 7 November 2017 at 12:00, Peter Korsgaard <peter@korsgaard.com> wrote:
 
-diff --git a/package/libuv/libuv.hash b/package/libuv/libuv.hash
-index 5b29640d2c..748e1d2f0f 100644
---- a/package/libuv/libuv.hash
-+++ b/package/libuv/libuv.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  17afc94ec307be28fe8d4316679171219770df4f993905a79643c7583e106489  libuv-v1.15.0.tar.gz
-+sha256  fe53b53eee3b15db8ae1b25cbfb8740944273e02f5ccd731b176800e2807d832  libuv-v1.16.0.tar.gz
-diff --git a/package/libuv/libuv.mk b/package/libuv/libuv.mk
-index 504f621c85..bbb42823b4 100644
---- a/package/libuv/libuv.mk
-+++ b/package/libuv/libuv.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBUV_VERSION = v1.15.0
-+LIBUV_VERSION = v1.16.0
- LIBUV_SITE = $(call github,libuv,libuv,$(LIBUV_VERSION))
- LIBUV_DEPENDENCIES = host-pkgconf
- LIBUV_INSTALL_STAGING = YES
--- 
-2.15.0
+> >>>>> "Martin" == Martin Bark <martin@barkynet.com> writes:
+>
+> Hi,
+>
+>  >> Do these odd non-LTS releases bring a lot of new features making it
+>  >> worth the extra effort?
+>  >>
+>
+>  > They can do, it varies.  It really just depends what major changes are
+>  > queued up.  Major releases can include breaking changes e.g. API changes
+>
+> Correct.
+>
+>  > I can see arguments for following only LTS, only latest or both.  I
+> guess
+>  > all i need is a final decision to be made.
+>
+> I think we should at least do it for the LTS releases (E.G. now).
+>
+> I don't know much about nodejs. What do other distibutions / build
+> systems do? We already have precedent in E.G. the gtk/freedesktop stack
+> (gtk/glib/gstreamer/..) where we don't package the uneven (development)
+> versions.
+>
+
+Frankly most distros and build systems seem to do a terrible job of keep
+packages like nodejs up to date.  It's common to not use the packaged
+version and instead use an program like nvm (node version manager) to
+install a local copy similar to rvm for ruby.
+
+archlinux is one of the few distos I've found that does it well. Just like
+buildroot it too uses shared libs instead of the bundled libs included in
+nodejs.  It updates frequently but since it's a rolling distro it always
+tracks the latest nodejs version.
+
+
+>
+>  > We don't have to solve this right now.  How about i submit an 8.9.0
+> patch.
+>
+> Yes, please!
+>
+
+I've just submitted a new patch for version 8.9.1 and changed this patch's
+state to superseded.
+
+Thanks
+
+Martin
+
+
+>
+> --
+> Bye, Peter Korsgaard
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20171108/53995c11/attachment.html>
