@@ -1,76 +1,72 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 8 Nov 2017 13:35:55 +0100
-Subject: [Buildroot] [git commit] go-bootstrap: add
- BR2_PACKAGE_HOST_GO_BOOTSTRAP_ARCH_SUPPORTS
-Message-ID: <20171108122956.386218050E@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 8 Nov 2017 13:38:11 +0100
+Subject: [Buildroot] [RFCv1 2/4] core: change host RPATH handling
+In-Reply-To: <20171108133003.13a24547@windsurf>
+References: <20171103160627.6468-1-thomas.petazzoni@free-electrons.com>
+ <20171103160627.6468-3-thomas.petazzoni@free-electrons.com>
+ <20171105085756.GG2996@scaer> <20171107234118.177ed856@windsurf>
+ <8f6dece3-96bf-d71d-085f-117c92d6447b@mind.be>
+ <20171108095545.64debde9@windsurf>
+ <c1b899b3-2b3b-0b35-2f4c-43f4e4935449@mind.be>
+ <20171108133003.13a24547@windsurf>
+Message-ID: <14a4d286-b5ec-a306-16db-2ff63b24cbdd@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a3fda8e292c4b5b98482b5b75f551476c570a034
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-go-bootstrap is a host package that builds a first stage Go compiler,
-later used to build the final Go compiler. However, this first stage
-compiler only supports building on x86, x86-64 and arm as host
-architectures, so we need to add the relevant architecture
-dependencies to avoid having go-bootstrap built on other unsupported
-platforms.
 
-We do this by introducing BR2_PACKAGE_HOST_GO_BOOTSTRAP_ARCH_SUPPORTS
-in a new package/go-bootstrap/Config.in.host file. This option is then
-used by BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS to make sure we can't enable
-Go packages when the host architecture doesn't allow building the Go
-compiler.
+On 08-11-17 13:30, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Wed, 8 Nov 2017 11:55:19 +0100, Arnout Vandecappelle wrote:
+> 
+>>>>> To me, this sounds very reasonable. What do you think?    
+>>>>
+>>>>  500 files is not a lot if you include staging as well  
+>>>
+>>> Why would I include staging? I don't see at all why fixing up RPATH in
+>>> staging after each package build would be necessary.  
+>>
+>>  The simplest way would be to do find $(HOST_DIR) -type f but that includes staging.
+> 
+> Hum, you didn't reply to my question, which was: "Why would we need to
+> fixup RPATHs in STAGING_DIR" ?
 
-Fixes:
+ We don't, obviously. However, if we naively go through HOST_DIR we will include
+STAGING_DIR. I thought that was obvious :-)
 
-  http://autobuild.buildroot.net/results/cbd419c6ab6fa8a6d18dc137c91f895867e53b8a/
+ Regards,
+ Arnout
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/Config.in.host              | 1 +
- package/go-bootstrap/Config.in.host | 7 +++++++
- package/go/Config.in.host           | 1 +
- 3 files changed, 9 insertions(+)
+> 
+>>>> But $(HOST_DIR)/{bin,sbin,lib} should be enough anyway.  
+>>
+>>  So this is not true, we also need $(HOST_DIR)/$(GNU_TARGET_NAME)/{bin,lib}.
+>> So then it's perhaps easier to just -prune staging.
+> 
+> Absolutely.
+> 
+>>> Yes, that was my intent. If needed, we could optimize it by only doing
+>>> the fixup at the end of a host package installation. But since we have
+>>> a few target packages installing host stuff (toolchain, qt, etc.), it
+>>> would require them to explicitly state that they need host rpath
+>>> fixups. Perhaps it's easiest for now to just do the rpath fixup after
+>>> every package installation.  
+>>
+>>  After every package installation would be better, yes.
+> 
+> ACK.
+> 
+> Thomas
+> 
 
-diff --git a/package/Config.in.host b/package/Config.in.host
-index 3755310..59be666 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -19,6 +19,7 @@ menu "Host utilities"
- 	source "package/genimage/Config.in.host"
- 	source "package/genpart/Config.in.host"
- 	source "package/go/Config.in.host"
-+	source "package/go-bootstrap/Config.in.host"
- 	source "package/gptfdisk/Config.in.host"
- 	source "package/imx-usb-loader/Config.in.host"
- 	source "package/jq/Config.in.host"
-diff --git a/package/go-bootstrap/Config.in.host b/package/go-bootstrap/Config.in.host
-new file mode 100644
-index 0000000..fab80d2
---- /dev/null
-+++ b/package/go-bootstrap/Config.in.host
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_HOST_GO_BOOTSTRAP_ARCH_SUPPORTS
-+	bool
-+	# See src/cmd/dist/unix.c for the list of support
-+	# architectures
-+	default y if BR2_HOSTARCH = "x86"
-+	default y if BR2_HOSTARCH = "x86_64"
-+	default y if BR2_HOSTARCH = "arm"
-diff --git a/package/go/Config.in.host b/package/go/Config.in.host
-index a210033..c871ac4 100644
---- a/package/go/Config.in.host
-+++ b/package/go/Config.in.host
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
- 	bool
- 	default y
-+	depends on BR2_PACKAGE_HOST_GO_BOOTSTRAP_ARCH_SUPPORTS
- 	depends on (BR2_arm && BR2_TOOLCHAIN_SUPPORTS_PIE) || BR2_aarch64 \
- 		|| BR2_i386 || BR2_x86_64 || BR2_powerpc64le \
- 		|| BR2_mips64 || BR2_mips64el
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
