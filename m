@@ -1,66 +1,87 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 8 Nov 2017 18:33:46 +0100
-Subject: [Buildroot] Analysis of build results for 2017-10-30
-In-Reply-To: <CANQCQpY2fsEJkaU1-0_Sg+Mqb3sH_m_TLxUPCAT6DRRUwWVgsg@mail.gmail.com>
-References: <20171031070013.AD75D207B2@mail.free-electrons.com>
- <20171031230519.3feb2619@windsurf>
- <CAJtjsKZ-OFFehKRd-XD79XobUnUqGpFqRcXL4P1d-cqaFHoKmg@mail.gmail.com>
- <CANQCQpY2fsEJkaU1-0_Sg+Mqb3sH_m_TLxUPCAT6DRRUwWVgsg@mail.gmail.com>
-Message-ID: <20171108173346.GB4602@scaer>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Wed,  8 Nov 2017 18:38:01 +0100
+Subject: [Buildroot] [PATCH v3] util-linux: fix link failures due to name
+ clash
+Message-ID: <1510162681-20797-1-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Matthew, Johan, All,
+Several packages have a similar md5.c file, and each has a function
+named byteReverse(). This generates link errors when building
+statically ("multiple definition of `byteReverse'").
 
-On 2017-11-08 10:16 -0600, Matthew Weber spake thusly:
-> On Wed, Nov 8, 2017 at 6:49 AM, Johan Oudinet <johan.oudinet@gmail.com> wrote:
-> > Hi Thomas, all,
-> >
-> > On Tue, Oct 31, 2017 at 11:05 PM, Thomas Petazzoni
-> > <thomas.petazzoni@free-electrons.com> wrote:
-> >>
-> >>>          arm |        host-erlang-rebar-2.6.4 | TIM | http://autobuild.buildroot.net/results/6c4c7b3094bd48a72786f5be3d760f0356557403 |
-> >>>          arm |        host-erlang-rebar-2.6.4 | TIM | http://autobuild.buildroot.net/results/a17d5eb1aac01dab19412aa28d523625577730db |
-> >>
-> >> The infamous ./bootstrap issue that consumes 100% of the CPU before
-> >> timing out the build job. Johan, we really need to find a solution to
-> >> this problem. How can we proceed to debug this?
-> >>
-> >
-> > The bootstrap file is an erlang script:
-> > #!/usr/bin/env escript
-> >
-> > When trying to reproduce this bug, I see it prints "No beam files
-> > found". As this message is printed quite early in this script, I guess
-> > the problem is in loading escript from the host. Unfortunately, I
-> > wasn't able to reproduce this bug on my machine, so this is only a
-> > guess.
-> > Is it possible to execute ./bootstrap --help from this machine? If the
-> > problem is in loading escript, it should lead to the same timeout
-> > error.
-> >
-> 
-> I ran the same build on that machine ( make clean host-erlang-rebar ).
-> It ran without error and printed the following early in the build
-> step.
+Fix by applying a patch from upstream.
 
-We've already concluded that this error does not always happen,
-unfortunately. IIRC, it however happenned on almost all the
-autobuilders, so it probably is not related to the host machine.
+Fixes:
+  http://autobuild.buildroot.net/results/419ab2c0e034cc68991281c51caa8271b0fadbab/
 
-Thomas and I tried to reproduce on our respective autobuilders, to no
-avail... IIRC, I even had a loop that ran more than 100 times.
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Cc: Adam Duskett <aduskett@gmail.com>
 
-Regards,
-Yann E. MORIN.
+---
 
+Changed v2 -> v3:
+ - patch is now upstream, so add URL
+
+Changed v1 -> v2:
+ - add Submitted-upstream tag now that it's on the util-linux ml
+---
+ .../0001-md5-declare-byteReverse-as-static.patch   | 44 ++++++++++++++++++++++
+ 1 file changed, 44 insertions(+)
+ create mode 100644 package/util-linux/0001-md5-declare-byteReverse-as-static.patch
+
+diff --git a/package/util-linux/0001-md5-declare-byteReverse-as-static.patch b/package/util-linux/0001-md5-declare-byteReverse-as-static.patch
+new file mode 100644
+index 000000000000..a5b290c4dbe6
+--- /dev/null
++++ b/package/util-linux/0001-md5-declare-byteReverse-as-static.patch
+@@ -0,0 +1,44 @@
++From 424cee0f06ece9473786c189ab4741e1dea7061d Mon Sep 17 00:00:00 2001
++From: Luca Ceresoli <luca@lucaceresoli.net>
++Date: Tue, 7 Nov 2017 14:39:09 +0100
++Subject: [PATCH] md5: declare byteReverse as static
++
++byteReverse() is an internal function in md5.c, and is not exposed via
++any header file, but it is not declared as static. This is a problem
++with the md5.c file since it is copied more or less verbatim in other
++programs (fontconfig and pjsip among others), causing a link error
++when linking two of them together.
++
++Fixes link failures such as:
++  http://autobuild.buildroot.net/results/419ab2c0e034cc68991281c51caa8271b0fadbab/build-end.log
++
++[Upstream patch: https://git.kernel.org/pub/scm/utils/util-linux/util-linux.git/commit/?id=424cee0f06ece9473786c189ab4741e1dea7061d]
++
++Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
++---
++ lib/md5.c | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/lib/md5.c b/lib/md5.c
++index 488d16ef69b4..282e2d22af25 100644
++--- a/lib/md5.c
+++++ b/lib/md5.c
++@@ -21,13 +21,13 @@
++ #if !defined(WORDS_BIGENDIAN)
++ #define byteReverse(buf, len)	/* Nothing */
++ #else
++-void byteReverse(unsigned char *buf, unsigned longs);
+++static void byteReverse(unsigned char *buf, unsigned longs);
++ 
++ #ifndef ASM_MD5
++ /*
++  * Note: this code is harmless on little-endian machines.
++  */
++-void byteReverse(unsigned char *buf, unsigned longs)
+++static void byteReverse(unsigned char *buf, unsigned longs)
++ {
++     uint32_t t;
++     do {
++-- 
++2.7.4
++
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.7.4
