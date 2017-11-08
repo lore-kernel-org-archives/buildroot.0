@@ -1,38 +1,64 @@
-From: Martin Bark <martin@barkynet.com>
-Date: Wed, 8 Nov 2017 15:55:14 +0000
-Subject: [Buildroot] [PATCH 1/2] package/nodejs: bump version to 8.9.1
-In-Reply-To: <87vailez4i.fsf@dell.be.48ers.dk>
-References: <20171108112542.8163-1-martin@barkynet.com>
- <87vailez4i.fsf@dell.be.48ers.dk>
-Message-ID: <CAFGQKxf6E4Zk_rbYaJweQ8YOo5_ioc6=4b2yeNvXr_1AHVN6BA@mail.gmail.com>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Wed, 8 Nov 2017 10:16:16 -0600
+Subject: [Buildroot] Analysis of build results for 2017-10-30
+In-Reply-To: <CAJtjsKZ-OFFehKRd-XD79XobUnUqGpFqRcXL4P1d-cqaFHoKmg@mail.gmail.com>
+References: <20171031070013.AD75D207B2@mail.free-electrons.com>
+ <20171031230519.3feb2619@windsurf>
+ <CAJtjsKZ-OFFehKRd-XD79XobUnUqGpFqRcXL4P1d-cqaFHoKmg@mail.gmail.com>
+Message-ID: <CANQCQpY2fsEJkaU1-0_Sg+Mqb3sH_m_TLxUPCAT6DRRUwWVgsg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Johan,
 
-On 8 November 2017 at 12:25, Peter Korsgaard <peter@korsgaard.com> wrote:
->>>>>> "Martin" == Martin Bark <martin@barkynet.com> writes:
+On Wed, Nov 8, 2017 at 6:49 AM, Johan Oudinet <johan.oudinet@gmail.com> wrote:
+> Hi Thomas, all,
 >
->  > See https://nodejs.org/en/blog/release/v8.9.1/
->  > Signed-off-by: Martin Bark <martin@barkynet.com>
+> On Tue, Oct 31, 2017 at 11:05 PM, Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com> wrote:
+>>
+>>>          arm |        host-erlang-rebar-2.6.4 | TIM | http://autobuild.buildroot.net/results/6c4c7b3094bd48a72786f5be3d760f0356557403 |
+>>>          arm |        host-erlang-rebar-2.6.4 | TIM | http://autobuild.buildroot.net/results/a17d5eb1aac01dab19412aa28d523625577730db |
+>>
+>> The infamous ./bootstrap issue that consumes 100% of the CPU before
+>> timing out the build job. Johan, we really need to find a solution to
+>> this problem. How can we proceed to debug this?
+>>
 >
-> Are these meant for master or next? The nodejs bump looks like master
-> material to me, but what about libuv? Does the new nodejs version depend
-> on the libuv bump?
-
-I would prefer master but if you can't because of the 2017.11 release
-then i'm fine with next.
-
-Yes the nodejs version needs the libuv bump.  nodejs 8.9.1 includes a
-cherry picked patch from libuv which is present in the 1.16.0 release.
-
-Thanks
-
-Martin
-
+> The bootstrap file is an erlang script:
+> #!/usr/bin/env escript
 >
-> --
-> Bye, Peter Korsgaard
+> When trying to reproduce this bug, I see it prints "No beam files
+> found". As this message is printed quite early in this script, I guess
+> the problem is in loading escript from the host. Unfortunately, I
+> wasn't able to reproduce this bug on my machine, so this is only a
+> guess.
+> Is it possible to execute ./bootstrap --help from this machine? If the
+> problem is in loading escript, it should lead to the same timeout
+> error.
+>
+
+I ran the same build on that machine ( make clean host-erlang-rebar ).
+It ran without error and printed the following early in the build
+step.
+
+make[1]: Entering directory
+`/usr/lfs/v0/rc-buildroot/output/build/host-erlang-rebar-2.6.4'
+./bootstrap
+No beam files found.
+Recompile: src/rebar
+Recompile: src/rebar_abnfc_compiler
+
+As a note, that machine doesn't have escript, ie I go into the
+host-erlang-rebar folder and if I run the bootstrap --help I get a
+escript error  (which is expected).
+./bootstrap --help
+/usr/bin/env: escript: No such file or directory
+
+
+I'll run the complete build a few times and see if anything pops up.
+
+Matt
