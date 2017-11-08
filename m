@@ -1,39 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 08 Nov 2017 13:37:07 +0100
-Subject: [Buildroot] [PATCH] go-bootstrap: add
- BR2_PACKAGE_HOST_GO_BOOTSTRAP_ARCH_SUPPORTS
-In-Reply-To: <20171107221059.25796-1-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Tue, 7 Nov 2017 23:10:59 +0100")
-References: <20171107221059.25796-1-thomas.petazzoni@free-electrons.com>
-Message-ID: <87375peyks.fsf@dell.be.48ers.dk>
+Date: Wed, 8 Nov 2017 13:34:31 +0100
+Subject: [Buildroot] [git commit] jimtcl: update config.guess / config.sub
+Message-ID: <20171108122956.18DC9807E9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=bca1d4af9bf6b60b37bf5d39e9e3e1b827854f52
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > go-bootstrap is a host package that builds a first stage Go compiler,
- > later used to build the final Go compiler. However, this first stage
- > compiler only supports building on x86, x86-64 and arm as host
- > architectures, so we need to add the relevant architecture
- > dependencies to avoid having go-bootstrap built on other unsupported
- > platforms.
+Fixes:
+http://autobuild.buildroot.net/results/284/284876bd649cab26e5ecd696c03c71c077ea7411/
 
- > We do this by introducing BR2_PACKAGE_HOST_GO_BOOTSTRAP_ARCH_SUPPORTS
- > in a new package/go-bootstrap/Config.in.host file. This option is then
- > used by BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS to make sure we can't enable
- > Go packages when the host architecture doesn't allow building the Go
- > compiler.
+The build system doesn't use autotools, but does use an old version of
+gnuconfig which doesn't know all the architectures supported by Buildroot,
+so update config.guess / config.sub like we do in pkg-autotools.mk
 
- > Fixes:
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/jimtcl/jimtcl.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
- >   http://autobuild.buildroot.net/results/cbd419c6ab6fa8a6d18dc137c91f895867e53b8a/
-
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/jimtcl/jimtcl.mk b/package/jimtcl/jimtcl.mk
+index 313970d..68c8a91 100644
+--- a/package/jimtcl/jimtcl.mk
++++ b/package/jimtcl/jimtcl.mk
+@@ -38,6 +38,12 @@ define JIMTCL_INSTALL_LIB
+ endef
+ endif
+ 
++# build system doesn't use autotools, but does use an old version of
++# gnuconfig which doesn't know all the architectures supported by
++# Buildroot, so update config.guess / config.sub like we do in
++# pkg-autotools.mk
++JIMTCL_POST_PATCH_HOOKS += UPDATE_CONFIG_HOOK
++
+ define JIMTCL_CONFIGURE_CMDS
+ 	(cd $(@D); \
+ 		$(TARGET_CONFIGURE_OPTS) CCACHE=none \
