@@ -1,38 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 08 Nov 2017 19:46:04 +0100
-Subject: [Buildroot] [PATCH 1/2] package/nodejs: bump version to 8.9.1
-In-Reply-To: <CAFGQKxf6E4Zk_rbYaJweQ8YOo5_ioc6=4b2yeNvXr_1AHVN6BA@mail.gmail.com>
- (Martin Bark's message of "Wed, 8 Nov 2017 15:55:14 +0000")
-References: <20171108112542.8163-1-martin@barkynet.com>
- <87vailez4i.fsf@dell.be.48ers.dk>
- <CAFGQKxf6E4Zk_rbYaJweQ8YOo5_ioc6=4b2yeNvXr_1AHVN6BA@mail.gmail.com>
-Message-ID: <87y3ngehhv.fsf@dell.be.48ers.dk>
+Date: Wed, 8 Nov 2017 19:45:42 +0100
+Subject: [Buildroot] [git commit] package/nodejs: bump version to 8.9.1
+Message-ID: <20171108183850.3BAA580E50@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Martin" == Martin Bark <martin@barkynet.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=582496635cd26678f8c1b9a48b73c0e1d8534d01
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Hi,
- > On 8 November 2017 at 12:25, Peter Korsgaard <peter@korsgaard.com> wrote:
- >>>>>>> "Martin" == Martin Bark <martin@barkynet.com> writes:
- >> 
- >> > See https://nodejs.org/en/blog/release/v8.9.1/
- >> > Signed-off-by: Martin Bark <martin@barkynet.com>
- >> 
- >> Are these meant for master or next? The nodejs bump looks like master
- >> material to me, but what about libuv? Does the new nodejs version depend
- >> on the libuv bump?
+See https://nodejs.org/en/blog/release/v8.9.1/
 
- > I would prefer master but if you can't because of the 2017.11 release
- > then i'm fine with next.
+Signed-off-by: Martin Bark <martin@barkynet.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/nodejs/nodejs.hash | 4 ++--
+ package/nodejs/nodejs.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
- > Yes the nodejs version needs the libuv bump.  nodejs 8.9.1 includes a
- > cherry picked patch from libuv which is present in the 1.16.0 release.
-
-Ok - Committed both to master then, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
+index 9367c54..658f80b 100644
+--- a/package/nodejs/nodejs.hash
++++ b/package/nodejs/nodejs.hash
+@@ -1,2 +1,2 @@
+-# From http://nodejs.org/dist/v8.8.1/SHASUMS256.txt
+-sha256 5ce2c47ab779992db49942f757a01cc5131db5cef4e0dd270e48151b0887b57a  node-v8.8.1.tar.xz
++# From http://nodejs.org/dist/v8.9.1/SHASUMS256.txt
++sha256 ef160c21f60f8aca64145985e01b4044435e381dc16e8f0640ed0223e84f17e0  node-v8.9.1.tar.xz
+diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+index a29f572..9cf26da 100644
+--- a/package/nodejs/nodejs.mk
++++ b/package/nodejs/nodejs.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-NODEJS_VERSION = 8.8.1
++NODEJS_VERSION = 8.9.1
+ NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.xz
+ NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
+ NODEJS_DEPENDENCIES = host-python host-nodejs c-ares \
