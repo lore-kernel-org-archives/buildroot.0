@@ -1,24 +1,22 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 08 Nov 2017 13:25:17 +0100
-Subject: [Buildroot] [PATCH 1/2] package/nodejs: bump version to 8.9.1
-In-Reply-To: <20171108112542.8163-1-martin@barkynet.com> (Martin Bark's
- message of "Wed, 8 Nov 2017 11:25:41 +0000")
-References: <20171108112542.8163-1-martin@barkynet.com>
-Message-ID: <87vailez4i.fsf@dell.be.48ers.dk>
+Date: Wed, 08 Nov 2017 13:27:22 +0100
+Subject: [Buildroot] [PATCH 1/1] libressl: bump to 2.6.3
+In-Reply-To: <20171107215107.559-1-Adamduskett@outlook.com> (Adam Duskett's
+ message of "Tue, 7 Nov 2017 16:51:07 -0500")
+References: <20171107215107.559-1-Adamduskett@outlook.com>
+Message-ID: <87r2t9ez11.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Martin" == Martin Bark <martin@barkynet.com> writes:
+>>>>> "Adam" == Adam Duskett <aduskett@gmail.com> writes:
 
- > See https://nodejs.org/en/blog/release/v8.9.1/
- > Signed-off-by: Martin Bark <martin@barkynet.com>
+ > Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
 
-Are these meant for master or next? The nodejs bump looks like master
-material to me, but what about libuv? Does the new nodejs version depend
-on the libuv bump?
+Is this for master or for next? E.G. does it fix important (security)
+issues?
 
 -- 
 Bye, Peter Korsgaard
