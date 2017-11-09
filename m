@@ -1,49 +1,33 @@
-From: Chu, Zhuliang (NSB - CN/Shanghai) <zhuliang.chu@nokia-sbell.com>
-Date: Thu, 9 Nov 2017 08:19:10 +0000
-Subject: [Buildroot] [RFCv1 0/4] Per-package SDK and target directories
-In-Reply-To: <20171108172914.GA4602@scaer>
-References: <5DBA847110A28B46BBA17BE675F0C9B2181A8D38@cnshjmbx01>,
- <20171108172914.GA4602@scaer>
-Message-ID: <5DBA847110A28B46BBA17BE675F0C9B2181AA4B9@cnshjmbx01>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 09 Nov 2017 08:30:28 +0000
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2017-11-08
+In-Reply-To: <20171109072720.ysow3pwt4igf5vva@tarshish>
+References: <20171109070011.4320C209F1@mail.free-electrons.com>
+ <20171109072720.ysow3pwt4igf5vva@tarshish>
+Message-ID: <CC62AB95-94C0-4E7A-B14C-C8D0F9843DB6@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Yann E,
+Baruch, all,
 
+On 9 November 2017 08:27:20 CET, Baruch Siach <baruch@tkos.co.il> wrote:
+>Unrelated to that (I think), DNS resolution for autobuild.buildroot.net
+>looks 
+>strange this morning:
 >
->So, I wonder what openssl you are using... :-/
-I am sorry to cause your confusion. This is an imaginary example I give.
-I've already explained this issue in the email that responded to Thomas Petazzoni.
+>$ host autobuild.buildroot.net
+>autobuild.buildroot.net is an alias for ks383786.kimsufi.com.
+>ks383786.kimsufi.com has address 94.23.254.152
 
->> Q2: Space Expension
->> in qemu_x86_defconfig, the size of output increased from 3.4G to 3.6G between mainstream with 'ppsh'.
->> in my private, the rate of space occupancy growth is higher. it`s crazy from 3.6G to 9G .This obviously can not accept. (A large
->> part of reason is that I use a very large toolchain-external which about 1.5G)
->> Before a package only consumes one space, but now a package maybe reoccupied space below per-package.
->
->As others already stated, in may depend on the tools you use to report
->the disk usage, but can also depend on the type of filesystem.
->
->What filesystem are you using: ext3/4, btrfs, xfs, other?
->
->What command did you run to come up with those numbers?
+Yes, it seems all the OVH infra (on which a.b.o. is) is down this morning.
 
-my filesystem is xfs of centos7.
-Sorry.This problem is likely to be one of my mistake rather than 'per-package'.
-That day I encountered a compilation error 'toolchain HOST_DIR' which had been reported to Thomas Petazzoni.
-The details:
-when run the command 'output/per-package/toolchain/host//usr/bin/mips64-octeon-linux-gnu-gcc  --version'.
-there will raise a error 'output/per-package/toolchain-external-custom/host/opt/ext-toolchain/bin/mips64-octeon-linux-gnu-gcc: No such file or directory'
-When I encountered this error. I made a patch to solve it.
-But after I saw thomas reply, I carefully checked my patch and I found out that my patch duplicates the toolchain-tar in the per-package/ package which dependent toolchain.
+Regards,
+Yann E. MORIN
 
-I am currently testing per-package. I have not finished all the compilation.
-I have encountered many problems, of which some are my own environment issues and others are per-package issues.
-I am trying to solve these problems to promote its progress.
-Hopefully per-package SDK can be pushed into the mainstream as soon as possible.
 
-Chu,Zhuliang
-Best Regards,
+-- 
+Sent from my phone. Please excuse my brevity.
