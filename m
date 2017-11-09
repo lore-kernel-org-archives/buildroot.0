@@ -1,125 +1,81 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Thu, 9 Nov 2017 07:27:00 +0100
-Subject: [Buildroot] [PATCH v2 1/1] python-raven: new package
-In-Reply-To: <20171109015511.24715-1-joseph.kogut@gmail.com>
-References: <20171102163022.23953-1-joseph.kogut@gmail.com>
- <20171109015511.24715-1-joseph.kogut@gmail.com>
-Message-ID: <CAGm1_kv4WM_9Ko=tN6psKwAcjLzXDNvHkdcMbZxz8tsmcb2Jeg@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu,  9 Nov 2017 08:00:11 +0100 (CET)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2017-11-08
+Message-ID: <20171109070011.4320C209F1@mail.free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Nov 9, 2017 at 2:55 AM, Joseph Kogut <joseph.kogut@gmail.com> wrote:
-> Changes since v1:
-> - reword commit to match upstream style
-> - fold the DEVELOPERS modifications into the same commit
-> - add Config selections for required python core modules
-> - bump version to 6.3.0
->
-> Tested in a clean chroot, events are generated for exceptions, and
-> reported to the server configured for the client.
->
-> Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
-> ---
->  DEVELOPERS                             |  1 +
->  package/Config.in                      |  1 +
->  package/python-raven/Config.in         | 15 +++++++++++++++
->  package/python-raven/python-raven.hash |  3 +++
->  package/python-raven/python-raven.mk   | 14 ++++++++++++++
->  5 files changed, 34 insertions(+)
->  create mode 100644 package/python-raven/Config.in
->  create mode 100644 package/python-raven/python-raven.hash
->  create mode 100644 package/python-raven/python-raven.mk
->
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index cfbe64b0b2..8526b2c515 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -788,6 +788,7 @@ F:  board/qemu/ppc64le-pseries/
->  F:     configs/qemu_ppc64le_pseries_defconfig
->
->  N:     Joseph Kogut <joseph.kogut@gmail.com>
-> +F:     package/python-raven/
->  F:     package/python-websockets/
->
->  N:     Johan Derycke <johanderycke@gmail.com>
-> diff --git a/package/Config.in b/package/Config.in
-> index fe5ccc434e..2fe85e927f 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -874,6 +874,7 @@ menu "External python modules"
->         source "package/python-pyxb/Config.in"
->         source "package/python-pyyaml/Config.in"
->         source "package/python-pyzmq/Config.in"
-> +       source "package/python-raven/Config.in"
->         source "package/python-requests/Config.in"
->         source "package/python-requests-toolbelt/Config.in"
->         source "package/python-rpi-gpio/Config.in"
-> diff --git a/package/python-raven/Config.in b/package/python-raven/Config.in
-> new file mode 100644
-> index 0000000000..f8954e085c
-> --- /dev/null
-> +++ b/package/python-raven/Config.in
-> @@ -0,0 +1,15 @@
-> +config BR2_PACKAGE_PYTHON_RAVEN
-> +       bool "python-raven"
-> +       select BR2_PACKAGE_PYTHON_ZLIB if BR2_PACKAGE_PYTHON
-> +       select BR2_PACKAGE_PYTHON3_ZLIB if BR2_PACKAGE_PYTHON3
-> +
-> +       select BR2_PACKAGE_PYTHON_SSL if BR2_PACKAGE_PYTHON
-> +       select BR2_PACKAGE_PYTHON3_SSL if BR2_PACKAGE_PYTHON3
-> +
-> +       select BR2_PACKAGE_PYTHON_UNICODEDATA if BR2_PACKAGE_PYTHON
-> +       select BR2_PACKAGE_PYTHON3_UNICODEDATA if BR2_PACKAGE_PYTHON3
+Hello,
 
-Please remove newlines between selects.
+Build statistics for 2017-11-08
+===============================
 
-> +
-> +       help
-> +         Raven is a client for Sentry (https://getsentry.com).
-> +
-> +         https://github.com/getsentry/raven-python
-> diff --git a/package/python-raven/python-raven.hash b/package/python-raven/python-raven.hash
-> new file mode 100644
-> index 0000000000..0e0a4f56e5
-> --- /dev/null
-> +++ b/package/python-raven/python-raven.hash
-> @@ -0,0 +1,3 @@
-> +# md5 from https://pypi.python.org/pypi/raven/json, sha256 locally computed
-> +md5    2efce7acbabe1a0f32d168736a654789  raven-6.3.0.tar.gz
-> +sha256 f3e465a545dcdb6a387d1fcb199d08f786ba3732d7ce6aa681718b04da6aedf1  raven-6.3.0.tar.gz
+      branch |  OK | NOK | TIM | TOT |
+      master | 142 |  31 |   0 | 173 |
+   2017.08.x |   6 |   0 |   0 |   6 |
 
-Add LICENSE checksum.
+Results for branch 'master'
+===========================
 
-With these changes done you can add my
+Classification of failures by reason
+------------------------------------
 
-Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+                  ffmpeg-3.3.5 | 6 
+          usb_modeswitch-2.5.0 | 5 
+                      qt-4.8.7 | 3 
+             freerdp-2.0.0-rc0 | 2 
+              host-erlang-19.3 | 2 
+host-vboot-utils-bbdd62f9b0... | 2 
+                   mp4v2-2.0.0 | 2 
+               asterisk-14.5.0 | 1 
+                  cc-tool-0.26 | 1 
+                      feh-2.21 | 1 
+                  fwup-v0.15.4 | 1 
+       host-go-bootstrap-1.4.3 | 1 
+       kompexsqlite-v1.10.12-1 | 1 
+                openobex-1.7.2 | 1 
+           python-numpy-1.13.3 | 1 
+              wireshark-2.2.10 | 1 
 
-Regards,
-Yegor
 
-> diff --git a/package/python-raven/python-raven.mk b/package/python-raven/python-raven.mk
-> new file mode 100644
-> index 0000000000..c17aac4a3d
-> --- /dev/null
-> +++ b/package/python-raven/python-raven.mk
-> @@ -0,0 +1,14 @@
-> +################################################################################
-> +#
-> +# python-raven
-> +#
-> +################################################################################
-> +
-> +PYTHON_RAVEN_VERSION = 6.3.0
-> +PYTHON_RAVEN_SOURCE = raven-$(PYTHON_RAVEN_VERSION).tar.gz
-> +PYTHON_RAVEN_SITE = https://pypi.python.org/packages/e8/b0/27886f69cdb4d9f6265bba1c4973bb5371b060272a5795c511d8839a6028
-> +PYTHON_RAVEN_SETUP_TYPE = setuptools
-> +PYTHON_RAVEN_LICENSE = BSD-3-Clause
-> +PYTHON_RAVEN_LICENSE_FILES = LICENSE
-> +
-> +$(eval $(python-package))
-> --
-> 2.15.0
->
+Detail of failures
+------------------
+
+         arc |                asterisk-14.5.0 | NOK | http://autobuild.buildroot.net/results/4812f29a164baa390cf8b525c43676fdd7a0aad8 |     
+        m68k |                   cc-tool-0.26 | NOK | http://autobuild.buildroot.net/results/0fb7cb19049d9b8e075e17ff881e740c2996c9e2 |     
+         arm |                       feh-2.21 | NOK | http://autobuild.buildroot.net/results/e58e248fab88015580cff8ae1e247ed67a6a859c |     
+         arc |                   ffmpeg-3.3.5 | NOK | http://autobuild.buildroot.net/results/f0848a27c5cd57187e2681755ade4bbcc549067d |     
+         arc |                   ffmpeg-3.3.5 | NOK | http://autobuild.buildroot.net/results/ff3e8ab1d1dd49156de8a10b225adf0876ced31d |     
+         arc |                   ffmpeg-3.3.5 | NOK | http://autobuild.buildroot.net/results/a4da63c5535ddc7eb97342a2bb2b03206b1501bf |     
+         arc |                   ffmpeg-3.3.5 | NOK | http://autobuild.buildroot.net/results/88b2ac13c69540d1dfadf206b1a91eb3db72fdc2 |     
+         arc |                   ffmpeg-3.3.5 | NOK | http://autobuild.buildroot.net/results/4010d4ffcb46cbc3b73a525107a0b9eb3fff908f |     
+         arc |                   ffmpeg-3.3.5 | NOK | http://autobuild.buildroot.net/results/038e450dc9c1bb9d20de7ad8ffacccb23193c4b5 |     
+      xtensa |              freerdp-2.0.0-rc0 | NOK | http://autobuild.buildroot.net/results/72c7128d1befb9202f9807d7e93a09d30ff062f9 |     
+         arm |              freerdp-2.0.0-rc0 | NOK | http://autobuild.buildroot.net/results/5d5e4dab4ffe2cab0ebb3904c93f630b0de09ff2 |     
+         arc |                   fwup-v0.15.4 | NOK | http://autobuild.buildroot.net/results/bd59b622afd09264668f80ec122ea5eca85bbbf6 |     
+         arm |               host-erlang-19.3 | NOK | http://autobuild.buildroot.net/results/fcf58b415435f635f4256c6edab57c138bff9d7f |     
+         arm |               host-erlang-19.3 | NOK | http://autobuild.buildroot.net/results/20c0b26e8b852dec317db4e6a7ce7b6a4698cbff |     
+         arm |        host-go-bootstrap-1.4.3 | NOK | http://autobuild.buildroot.net/results/4f73a401e300b574653e4ec76dd9ed939d838ee8 |     
+      xtensa | host-vboot-utils-bbdd62f9b0... | NOK | http://autobuild.buildroot.net/results/31ee0cf45455b08e9064f402a447723604450ee9 |     
+      xtensa | host-vboot-utils-bbdd62f9b0... | NOK | http://autobuild.buildroot.net/results/54dd995e4e7171ccc47402276044c7854948098f |     
+      xtensa |        kompexsqlite-v1.10.12-1 | NOK | http://autobuild.buildroot.net/results/4d9f5f0ffada5cff729fb3b618ee3a11ad1e3790 |     
+         arc |                    mp4v2-2.0.0 | NOK | http://autobuild.buildroot.net/results/81037735394a73ea24e494348bb1580d1c5840ef |     
+         arc |                    mp4v2-2.0.0 | NOK | http://autobuild.buildroot.net/results/f58f9d3c481155594d46570f20734eeb93cbef78 |     
+        bfin |                 openobex-1.7.2 | NOK | http://autobuild.buildroot.net/results/e5d11cced3d1cb09f4b859e5a8ebf9a24376dbcf |     
+         arc |            python-numpy-1.13.3 | NOK | http://autobuild.buildroot.net/results/4c4eaa90335756448007ae3c5ae3839fb17d4442 |     
+         arc |                       qt-4.8.7 | NOK | http://autobuild.buildroot.net/results/01b52fec0f55161207246a1cd39835261dac4395 |     
+      xtensa |                       qt-4.8.7 | NOK | http://autobuild.buildroot.net/results/5d626189a1b141b201c95c7eab9beb8960383c4f |     
+         arc |                       qt-4.8.7 | NOK | http://autobuild.buildroot.net/results/36167e6c59947ca0999190c41e3664ffc13e883b |     
+        i586 |           usb_modeswitch-2.5.0 | NOK | http://autobuild.buildroot.net/results/db78329dc008760a5c8873f4c05e1fcba98b8dd3 |     
+microblazeel |           usb_modeswitch-2.5.0 | NOK | http://autobuild.buildroot.net/results/b735fa553160a178e1461f82ff6a2824e405a470 |     
+        or1k |           usb_modeswitch-2.5.0 | NOK | http://autobuild.buildroot.net/results/52240059e181d8bf1acd9a55460cae5daffbad6c |     
+     aarch64 |           usb_modeswitch-2.5.0 | NOK | http://autobuild.buildroot.net/results/ec9004c6c5ea05213b0207917a395b0dcd39fdac |     
+microblazeel |           usb_modeswitch-2.5.0 | NOK | http://autobuild.buildroot.net/results/6499634c2cae14faef15bd35a563e20e33ef60b1 |     
+      xtensa |               wireshark-2.2.10 | NOK | http://autobuild.buildroot.net/results/d7de55c8c778cd530c02a51fe2e534c966d922ac |     
+
+
+-- 
+http://autobuild.buildroot.net
