@@ -1,97 +1,125 @@
-From: Chu, Zhuliang (NSB - CN/Shanghai) <zhuliang.chu@nokia-sbell.com>
-Date: Thu, 9 Nov 2017 05:02:24 +0000
-Subject: [Buildroot] [RFCv1 0/4] Per-package SDK and target directories
-In-Reply-To: <d79b315e-3ccd-5da3-4794-7ea97a296c0d@mind.be>
-References: <5DBA847110A28B46BBA17BE675F0C9B2181A8D38@cnshjmbx01>
- <20171107181307.58471ad9@windsurf>,
- <d79b315e-3ccd-5da3-4794-7ea97a296c0d@mind.be>
-Message-ID: <5DBA847110A28B46BBA17BE675F0C9B2181AA436@cnshjmbx01>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Thu, 9 Nov 2017 07:27:00 +0100
+Subject: [Buildroot] [PATCH v2 1/1] python-raven: new package
+In-Reply-To: <20171109015511.24715-1-joseph.kogut@gmail.com>
+References: <20171102163022.23953-1-joseph.kogut@gmail.com>
+ <20171109015511.24715-1-joseph.kogut@gmail.com>
+Message-ID: <CAGm1_kv4WM_9Ko=tN6psKwAcjLzXDNvHkdcMbZxz8tsmcb2Jeg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
-
->By the way there will also be a problem when host-tar is part of
->DEPENDENCIES_HOST_PREREQ: ccache needs host-tar to be able to build, but there
->is no explicit dependency between them, it relies purely on left-to-right order.
-
-the host-ccache mainly because its directory is defined in the top-level Makefile as below.
- 453 ifeq ($(BR2_CCACHE),y)
- 454 CCACHE := $(HOST_DIR)/bin/ccache
- 455 BR_CACHE_DIR ?= $(call qstrip,$(BR2_CCACHE_DIR))
- 456 export BR_CACHE_DIR
- 457 HOSTCC := $(CCACHE) $(HOSTCC)
- 458 HOSTCXX := $(CCACHE) $(HOSTCXX)
- 459 else
- 460 export BR_NO_CCACHE
- 461 endif
-
-In the top Makefile, $(CCACHE) is defined as 'output/host/bin/ccache'. So during the compilation process, the $(CCACHE) will do not be found. 
-In fact, its real location is in `output/per-package/host-ccache/host/bin/ccache`.
-The path to host-tar is not defined in top Makefile, So host-tar did not report the same error.
-
-Chu,Zhuliang
-Best Regards?
-
-________________________________________
-From: Arnout Vandecappelle [arnout at mind.be]
-Sent: Wednesday, November 08, 2017 1:55
-To: Thomas Petazzoni; Chu, Zhuliang (NSB - CN/Shanghai)
-Cc: buildroot at uclibc.org; yann.morin.1998 at free.fr; peter at korsgaard.com; patrickdepinguin+buildroot at gmail.com
-Subject: Re: [Buildroot] [RFCv1 0/4] Per-package SDK and target directories
-
-On 07-11-17 18:13, Thomas Petazzoni wrote:
->> diff --git a/package/ccache/ccache.mk b/package/ccache/ccache.mk
->> index afbec44..66bfcad 100644
->> --- a/package/ccache/ccache.mk
->> +++ b/package/ccache/ccache.mk
->> @@ -50,6 +50,7 @@ BR_CCACHE_INITIAL_SETUP = $(call qstrip,$(BR2_CCACHE_INITIAL_SETUP))
->>  ifneq ($(BR_CCACHE_INITIAL_SETUP),)
->>  define HOST_CCACHE_DO_INITIAL_SETUP
->>      @$(call MESSAGE,"Applying initial settings")
->> +    rsync -au --link-dest=$(HOST_DIR) $(HOST_DIR) $(call qstrip,$(BR2_HOST_DIR))
->>      $(CCACHE) $(BR_CCACHE_INITIAL_SETUP)
->>      $(CCACHE) -s
->>  endef
-> I don't think that's what we want. The global HOST_DIR (output/host)
-> should basically be empty during the entire build process. Instead,
-> what we want is to have the ccache host tools installed in the
-> per-package SDK. This means that all packages have to have a dependency
-> on host-ccache, which is not currently the case. So we probably instead
-> want something like:
+On Thu, Nov 9, 2017 at 2:55 AM, Joseph Kogut <joseph.kogut@gmail.com> wrote:
+> Changes since v1:
+> - reword commit to match upstream style
+> - fold the DEVELOPERS modifications into the same commit
+> - add Config selections for required python core modules
+> - bump version to 6.3.0
 >
-> ifeq ($(BR2_CCACHE),y)
-> $(2)_DEPENDENCIES += host-ccache
-> endif
+> Tested in a clean chroot, events are generated for exceptions, and
+> reported to the server configured for the client.
 >
-> in package/pkg-generic.mk. But of course, we need to exclude the
-> host-ccache package from this, otherwise we would have a circular
-> dependency. Do you want to try something like this?
+> Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
+> ---
+>  DEVELOPERS                             |  1 +
+>  package/Config.in                      |  1 +
+>  package/python-raven/Config.in         | 15 +++++++++++++++
+>  package/python-raven/python-raven.hash |  3 +++
+>  package/python-raven/python-raven.mk   | 14 ++++++++++++++
+>  5 files changed, 34 insertions(+)
+>  create mode 100644 package/python-raven/Config.in
+>  create mode 100644 package/python-raven/python-raven.hash
+>  create mode 100644 package/python-raven/python-raven.mk
+>
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index cfbe64b0b2..8526b2c515 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -788,6 +788,7 @@ F:  board/qemu/ppc64le-pseries/
+>  F:     configs/qemu_ppc64le_pseries_defconfig
+>
+>  N:     Joseph Kogut <joseph.kogut@gmail.com>
+> +F:     package/python-raven/
+>  F:     package/python-websockets/
+>
+>  N:     Johan Derycke <johanderycke@gmail.com>
+> diff --git a/package/Config.in b/package/Config.in
+> index fe5ccc434e..2fe85e927f 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -874,6 +874,7 @@ menu "External python modules"
+>         source "package/python-pyxb/Config.in"
+>         source "package/python-pyyaml/Config.in"
+>         source "package/python-pyzmq/Config.in"
+> +       source "package/python-raven/Config.in"
+>         source "package/python-requests/Config.in"
+>         source "package/python-requests-toolbelt/Config.in"
+>         source "package/python-rpi-gpio/Config.in"
+> diff --git a/package/python-raven/Config.in b/package/python-raven/Config.in
+> new file mode 100644
+> index 0000000000..f8954e085c
+> --- /dev/null
+> +++ b/package/python-raven/Config.in
+> @@ -0,0 +1,15 @@
+> +config BR2_PACKAGE_PYTHON_RAVEN
+> +       bool "python-raven"
+> +       select BR2_PACKAGE_PYTHON_ZLIB if BR2_PACKAGE_PYTHON
+> +       select BR2_PACKAGE_PYTHON3_ZLIB if BR2_PACKAGE_PYTHON3
+> +
+> +       select BR2_PACKAGE_PYTHON_SSL if BR2_PACKAGE_PYTHON
+> +       select BR2_PACKAGE_PYTHON3_SSL if BR2_PACKAGE_PYTHON3
+> +
+> +       select BR2_PACKAGE_PYTHON_UNICODEDATA if BR2_PACKAGE_PYTHON
+> +       select BR2_PACKAGE_PYTHON3_UNICODEDATA if BR2_PACKAGE_PYTHON3
 
- Ha, I didn't understand the original problem but now I see. The issue is that
-ccache is part of DEPENDENCIES_HOST_PREREQ, and DEPENDENCIES_HOST_PREREQ is
-*not* added to each package's DEPENDENCIES, instead it is added to the
-core-dependencies target and each package depends on that. It's an easy way to
-avoid circular dependencies, I guess.
+Please remove newlines between selects.
 
- So I think the proper solution would be to add DEPENDENCIES_HOST_PREREQ to the
-dependencies of all packages except themselves, similar to how it's done for
-toolchain.
+> +
+> +       help
+> +         Raven is a client for Sentry (https://getsentry.com).
+> +
+> +         https://github.com/getsentry/raven-python
+> diff --git a/package/python-raven/python-raven.hash b/package/python-raven/python-raven.hash
+> new file mode 100644
+> index 0000000000..0e0a4f56e5
+> --- /dev/null
+> +++ b/package/python-raven/python-raven.hash
+> @@ -0,0 +1,3 @@
+> +# md5 from https://pypi.python.org/pypi/raven/json, sha256 locally computed
+> +md5    2efce7acbabe1a0f32d168736a654789  raven-6.3.0.tar.gz
+> +sha256 f3e465a545dcdb6a387d1fcb199d08f786ba3732d7ce6aa681718b04da6aedf1  raven-6.3.0.tar.gz
 
- By the way there will also be a problem when host-tar is part of
-DEPENDENCIES_HOST_PREREQ: ccache needs host-tar to be able to build, but there
-is no explicit dependency between them, it relies purely on left-to-right order.
+Add LICENSE checksum.
 
- Regards,
- Arnout
+With these changes done you can add my
 
---
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+
+Regards,
+Yegor
+
+> diff --git a/package/python-raven/python-raven.mk b/package/python-raven/python-raven.mk
+> new file mode 100644
+> index 0000000000..c17aac4a3d
+> --- /dev/null
+> +++ b/package/python-raven/python-raven.mk
+> @@ -0,0 +1,14 @@
+> +################################################################################
+> +#
+> +# python-raven
+> +#
+> +################################################################################
+> +
+> +PYTHON_RAVEN_VERSION = 6.3.0
+> +PYTHON_RAVEN_SOURCE = raven-$(PYTHON_RAVEN_VERSION).tar.gz
+> +PYTHON_RAVEN_SITE = https://pypi.python.org/packages/e8/b0/27886f69cdb4d9f6265bba1c4973bb5371b060272a5795c511d8839a6028
+> +PYTHON_RAVEN_SETUP_TYPE = setuptools
+> +PYTHON_RAVEN_LICENSE = BSD-3-Clause
+> +PYTHON_RAVEN_LICENSE_FILES = LICENSE
+> +
+> +$(eval $(python-package))
+> --
+> 2.15.0
+>
