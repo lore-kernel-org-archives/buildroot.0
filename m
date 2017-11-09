@@ -1,76 +1,78 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 9 Nov 2017 19:46:43 +0100
-Subject: [Buildroot] Buildroot Developers meeting in Brussels, Feb 5-6
-Message-ID: <20171109194643.2ecf4585@windsurf>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Thu, 9 Nov 2017 19:48:31 +0100
+Subject: [Buildroot] [PATCH v2 1/1] add sunxi-mali mainline kernel
+In-Reply-To: <20171109184305.ntt5ghwe4p3qdtld@tarshish>
+References: <1510250621-27660-1-git-send-email-giulio.benetti@micronovasrl.com>
+ <20171109184305.ntt5ghwe4p3qdtld@tarshish>
+Message-ID: <147f5bce-6dc7-a4cb-7271-c730204f190d@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Baruch,
 
-I am happy to announce that the next Buildroot Developers Meeting will
-take place as usual right after the FOSDEM conference, in Brussels, on
-February 5-6.
+Il 09/11/2017 19:43, Baruch Siach ha scritto:
+> Hi Giulio,
+> 
+> On Thu, Nov 09, 2017 at 07:03:41PM +0100, Giulio Benetti wrote:
+>> As it's not present in buildroot,
+>> add support for sunxi-mali mainline kernel driver.
+>>
+>> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+>> ---
+>> Changes v1 -> v2:
+>> * use github macros
+>> * use build.sh to compile and install
+>> * add check linux >= 4.4
+>>
+>>   package/sunxi-mali-driver-mainline/Config.in       | 10 +++++++++
+>>   .../sunxi-mali-driver-mainline.mk                  | 26 ++++++++++++++++++++++
+>>   2 files changed, 36 insertions(+)
+>>   create mode 100644 package/sunxi-mali-driver-mainline/Config.in
+>>   create mode 100644 package/sunxi-mali-driver-mainline/sunxi-mali-driver-mainline.mk
+>>
+>> diff --git a/package/sunxi-mali-driver-mainline/Config.in b/package/sunxi-mali-driver-mainline/Config.in
+>> new file mode 100644
+>> index 0000000..1d7d313
+>> --- /dev/null
+>> +++ b/package/sunxi-mali-driver-mainline/Config.in
+>> @@ -0,0 +1,10 @@
+>> +comment "sunxi-mali-driver-mainline needs a Linux kernel to be built"
+>> +	depends on !BR2_LINUX_KERNEL
+>> +
+>> +config BR2_PACKAGE_SUNXI_MALI_DRIVER_MAINLINE
+>> +	bool "sunxi-mali-driver-mainline"
+>> +	depends on BR2_LINUX_KERNEL
+>> +	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_4
+> 
+> You want to check that the kernel you build is 4.4 or later. The toolchain
+> headers have nothing to do with that. These headers are not used when you
+> build the kernel.
 
-This 2-day meeting is always a great opportunity to make progress on
-current Buildroot topics, review and apply patches, discuss the future
-of Buildroot, and generally meet each other.
+You're right, as I see there is no way in Buildroot to check this.
+So I only can add this in help section.
+Right?
 
-If you're a regular Buildroot contributor, I really recommend attending
-this event. Together with FOSDEM, it makes the trip to Brussels very
-useful.
+> 
+>> +	select BR2_LINUX_NEEDS_MODULES # not using kernel-module infra
+>> +	help
+>> +	  Sunxi Mali Kernel space driver
+> 
+> baruch
+> 
 
-The Buildroot Developers meeting is free. It is sponsored by Google,
-who provides the meeting room and lunch for all participants.
-
-See https://elinux.org/Buildroot:DeveloperDaysFOSDEM2018 for the event
-page.
-
-Over the last year, the following people contributed more than 20
-patches to Buildroot and are therefore invited to join us for this
-meeting:
-
-   686  Bernd Kuhls
-   361  Thomas Petazzoni
-   261  Peter Korsgaard
-   234  Baruch Siach
-   224  Yann E. MORIN
-   194  Vicente Olivert Riera
-   193  Arnout Vandecappelle
-   191  Adam Duskett
-   160  Romain Naour
-    96  Francois Perrad
-    94  Fabio Estevam
-    83  Rahul Bedarkar
-    82  Yegor Yefremov
-    53  J?rg Krause
-    48  Martin Bark
-    48  Ricardo Martincoski
-    46  Samuel Martin
-    45  Peter Seiderer
-    42  Fabrice Fontaine
-    42  Gustavo Zacarias
-    41  Eric Le Bihan
-    37  Andrey Smirnov
-    35  Waldemar Brodkorb
-    32  Carlos Santos
-    28  Thomas De Schampheleire
-    26  Martin Kepplinger
-    26  Matt Weber
-    24  Luca Ceresoli
-    20  Angelo Compagnucci
-    20  Johan Oudinet
-
-If travel expenses are an issue that prevents you from attending,
-please contact me. We may have some (limited) budget to cover travel
-expenses.
-
-Thanks a lot for your participation!
-
-Thomas
+Cheers
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Giulio Benetti
+R&D Manager &
+Advanced Research
+
+MICRONOVA SRL
+Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
+Tel. 049/8931563 - Fax 049/8931346
+Cod.Fiscale - P.IVA 02663420285
+Capitale Sociale ? 26.000 i.v.
+Iscritta al Reg. Imprese di Padova N. 02663420285
+Numero R.E.A. 258642
