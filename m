@@ -1,10 +1,10 @@
 From: Carlos Santos <casantos@datacom.ind.br>
-Date: Wed,  8 Nov 2017 21:42:58 -0200
+Date: Wed,  8 Nov 2017 22:05:33 -0200
 Subject: [Buildroot] [PATCH] util-linux: explicitly use /usr/{bin, sbin, lib},
  with merged usr
-In-Reply-To: <20171105142502.0e6ef572@windsurf>
-References: <20171105142502.0e6ef572@windsurf>
-Message-ID: <20171108234258.15035-1-casantos@datacom.ind.br>
+In-Reply-To: <20171108234258.15035-1-casantos@datacom.ind.br>
+References: <20171108234258.15035-1-casantos@datacom.ind.br>
+Message-ID: <20171109000533.26181-1-casantos@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,7 +12,7 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Prevent the installation from attempting to move shared libraries from
-${usrlib_execdir} to ${libdir} if both paths are not the same, leading
+${usrlib_execdir} to ${libdir} if both paths are the same, which leads
 to error messages like this:
 
   mv: '$(TARGET_DIR)/usr/lib/libfoo.so.1' and '$(TARGET_DIR)/lib/libfoo.so.1' are the same file
@@ -20,6 +20,9 @@ to error messages like this:
 That error is not fatal but let's avoid possible future problems.
 
 Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+---
+Changes v1->v2:
+  Fix commit message to remove spurious "not".
 ---
  package/util-linux/util-linux.mk | 7 +++++++
  1 file changed, 7 insertions(+)
