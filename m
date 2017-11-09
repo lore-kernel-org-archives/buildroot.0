@@ -1,114 +1,111 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 9 Nov 2017 18:13:57 +0200
-Subject: [Buildroot] How do I pass arguments into autoconfig tools
- ./confgiure
-In-Reply-To: <CAB8Uub2JYu4iTHY7BOfQDJjSkDGe-ddYiMFfNS6BogsHAMtWDg@mail.gmail.com>
-References: <CAB8Uub1EsVQa-xKPqczyRdmL2eWW4UONkC4XZKBemct+BoPpQg@mail.gmail.com>
- <20171107044151.4wetl3obfzyqrpgr@tarshish>
- <CAB8Uub2JYu4iTHY7BOfQDJjSkDGe-ddYiMFfNS6BogsHAMtWDg@mail.gmail.com>
-Message-ID: <20171109161357.hfs2b4xliv2pdipu@tarshish>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Thu, 9 Nov 2017 18:00:17 +0100
+Subject: [Buildroot] [PATCH 1/1] add sunxi-mali mainline kernel
+In-Reply-To: <20171109080524.irywhbolqtlowcxf@flea.lan>
+References: <1509920353-23438-1-git-send-email-giulio.benetti@micronovasrl.com>
+ <20171108102753.nisqsfaibybjul4x@flea.lan>
+ <35a55788-8cf6-2f65-e110-dfc467fad8cd@mind.be>
+ <20171109080524.irywhbolqtlowcxf@flea.lan>
+Message-ID: <723365bc-0b44-0139-fdac-88863312c755@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Kyle,
+Hi Maxime,
 
-Please keep the list on Cc.
-
-On Tue, Nov 07, 2017 at 02:27:36PM -0600, Kyle Sulek wrote:
-> Thanks for the help Baruch!
+Il 09/11/2017 09:05, Maxime Ripard ha scritto:
+> Hi,
 > 
-> The only other thing that the TI script does is handle the current
-> directory. Can I expect buildroot to handle this?
+> On Thu, Nov 09, 2017 at 12:05:23AM +0100, Arnout Vandecappelle wrote:
+>>>> +++ b/package/sunxi-mali-driver-mainline/Config.in
+>>>> @@ -0,0 +1,9 @@
+>>>> +comment "sunxi-mali-driver-mainline needs a Linux kernel to be built"
+>>>> +	depends on !BR2_LINUX_KERNEL
+>>>> +
+>>>> +config BR2_PACKAGE_SUNXI_MALI_DRIVER_MAINLINE
+>>>> +	bool "sunxi-mali-driver-mainline"
+>>>> +	depends on BR2_LINUX_KERNEL
+>>>> +	select BR2_LINUX_NEEDS_MODULES # not using kernel-module infra
+>>>> +	help
+>>>> +	  Sunxi Mali Kernel space driver
+>>
+>>   Please also mention in the help text what the kernel requirements
+>> are (>= 4.12 I think?)
+> 
+> At least as far back as 4.4, but I haven't tried with anything older.
 
-Which script?
+On v2 patch I will put >=4.4 to begin,
+then it could be patched again after testing.
 
-> I ask because the libgbm from the compilation in the official ti-meta layer
-> for yocto works but my version in buildroot doesn't. I am trying to
-> pinpoint where the difference in the build process is.
+> 
+>>>> +
+>>>> +SUNXI_MALI_DRIVER_MAINLINE_DEPENDENCIES = linux
+>>>> +
+>>>> +SUNXI_MALI_DRIVER_MAINLINE_MAKE_OPTS = \
+>>>> +	KDIR=$(LINUX_DIR) \
+>>>> +	USING_UMP=0 \
+>>>> +	BUILD=release \
+>>>> +	USING_DVFS=1 \
+>>>> +	USING_DEVFREQ=1 \
+>>>> +	CROSS_COMPILE=$(TARGET_CROSS)
+>>>> +
+>>>> +define SUNXI_MALI_DRIVER_MAINLINE_BUILD_CMDS
+>>>> +	$(APPLY_PATCHES) $(@D)/r6p2 $(@D)/patches \*.patch
+>>
+>>   Maxime, WTF? Why is this maintained as patches and not as a proper history?
+>>
+>>   If it's for rebasing, you can maintain separate branches for the
+>> upstream-tracking and the modified stuff. If it is because the same patches need
+>> to be applied to different upstream versions, you can do it in different
+>> branches and use subtree merge. This applying of patches is really not user
+>> friendly IMO.
+> 
+> So, while I'm really not happy about the current code, I haven't found
+> better yet.
+> 
+> The idea is that we have various versions coming from ARM as
+> tarballs. On this various versions, the changes needed are the same
+> (but obviously the code to apply it on isn't), and maintaining two
+> sets of changes (through git commits or something else) would be very
+> inefficient and wouldn't scale.
+> 
+> So I went for the same set of patches that we apply on whatever
+> version is currently being built. Like I was saying, I'm not really
+> happy about it either so I'm definitely open to suggestions. We
+> discussed it with Thomas quite some time ago and it's the only
+> solution that stuck.
+> 
+> I didn't know about the git subtrees, but as far as I can see, you
+> need to have a git upstream, and it's doing a complete merge, so
+> whenever you would merge the r6p2 changes to the r6p0 version, it
+> would also bring the rest of the r6p2 code with it, or am I missing
+> something?
+> 
+>> Giulio, the proper way to do this is in a POST_PATCH_HOOK. Otherwise, if you
+>> rebuild it, it will also be patched again (which will fail).
+> 
+> We also have a build.sh script that abstracts all this away.
 
-What error do you see?
+You are right, now I have build.sh script, and everything is easier.
+It only needed bash to work.
 
-> Here is the build recipe in Yocto:
-> https://git.yoctoproject.org/cgit/cgit.cgi/meta-ti/tree/recipes-graphics/gbm/libgbm_10.0.0.bb
+> 
+> Maxime
+> 
 
-I'm not a Yocto expert, but I don't see anything obvious in this recipe. Maybe 
-someone else on the list can help with that.
-
-baruch
-
-> On Mon, Nov 6, 2017 at 10:41 PM, Baruch Siach <baruch@tkos.co.il> wrote:
-> >
-> > On Mon, Nov 06, 2017 at 09:25:49PM -0600, Kyle Sulek wrote:
-> > > I am trying to add a package to buildroot. The autogen.sh file in the
-> > > source directory is as follows
-> > >
-> > > ===================================================
-> > > #! /bin/sh
-> > >
-> > > srcdir=`dirname $0`
-> > > echo "srdir: $srcdir"
-> > > test -z "$srcdir" && srcdir=.
-> > >
-> > > ORIGDIR=`pwd`
-> > > cd $srcdir
-> > >
-> > > autoreconf -v --install || exit 1
-> > > cd $ORIGDIR || exit $?
-> > >
-> > > $srcdir/configure --enable-maintainer-mode "$@"
-> > >
-> > > ===================================================
-> > >
-> > >
-> > > This is what I have for my package .mk file
-> > > ===================================================
-> > > ############################################################
-> > > ####################
-> > > #
-> > > # ti-gbm
-> > > #
-> > > ############################################################
-> > > ####################
-> > >
-> > > # This correpsonds to SDK 02.00.00.00
-> > > TI_GBM_VERSION = 96f37555c7e82a417b02051661377b10e6b3966e
-> > > TI_GBM_SITE = git://git.ti.com/glsdk/libgbm.git
-> > > TI_GBM_LICENSE = GPL-2.0
-> >
-> > The license text in source files heading comments look more like MIT.
-> >
-> > > TI_GBM_LICENSE_FILES = GPL-COPYING
-> >
-> > I could not find this file in the source tree.
-> >
-> > > TI_GBM_INSTALL_STAGING = YES
-> > > TT_GBM_INSTALL_TARGET = YES
-> > > TI_GBM_AUTORECONF = YES
-> > > TI_GBM_AUTORECONF_OPTS = -v --install
-> >
-> > Buildroot adds the -i (i.e. --install) parameter already. See
-> > package/autoconf/autoconf.mk.
-> >
-> > > $(eval $(autotools-package))
-> > > ===================================================
-> > >
-> > > However, I cannot figure out how to pass --enable-maintainer-mode "$@"
-> > into
-> > > the configure script.
-> >
-> > Since you need AUTORECONF anyway, the --{enable,disable}-maintainer-mode
-> > has
-> > no effect in practice, AFAIU. So I think you can just leave it out.
-> >
-> >   https://www.gnu.org/software/automake/manual/automake.html#
-> > maintainer_002dmode
-> >
-> > baruch
+v2 patch is coming
 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+Giulio Benetti
+R&D Manager &
+Advanced Research
+
+MICRONOVA SRL
+Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
+Tel. 049/8931563 - Fax 049/8931346
+Cod.Fiscale - P.IVA 02663420285
+Capitale Sociale ? 26.000 i.v.
+Iscritta al Reg. Imprese di Padova N. 02663420285
+Numero R.E.A. 258642
