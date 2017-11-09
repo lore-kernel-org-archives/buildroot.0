@@ -1,91 +1,76 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 9 Nov 2017 16:17:32 +0100
-Subject: [Buildroot] Multi-branch support in the autobuilders
-Message-ID: <20171109161732.4f37b03b@windsurf>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 9 Nov 2017 17:55:28 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2017-11-08
+In-Reply-To: <20171109124249.4f57a264@windsurf>
+References: <20171109070011.4320C209F1@mail.free-electrons.com>
+ <20171109072720.ysow3pwt4igf5vva@tarshish>
+ <20171109124249.4f57a264@windsurf>
+Message-ID: <20171109155528.4pzxpewdk5te2ztw@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Thomas,
 
-Signs of this have shown up since a few days on
-autobuild.buildroot.org, and then this morning in the daily e-mail, but
-since the implementation seems to now be complete, here is an
-announcement.
+On Thu, Nov 09, 2017 at 12:42:49PM +0100, Thomas Petazzoni wrote:
+> On Thu, 9 Nov 2017 09:27:20 +0200, Baruch Siach wrote:
+> 
+> > > Build statistics for 2017-11-08
+> > > ===============================
+> > > 
+> > >       branch |  OK | NOK | TIM | TOT |
+> > >       master | 142 |  31 |   0 | 173 |
+> > >    2017.08.x |   6 |   0 |   0 |   6 |  
+> > 
+> > Nice. Thanks for working on that.
+> 
+> You're welcome :)
+> 
+> However, in fact, it was not really planned to be deployed today, I
+> forgot yesterday evening to revert the script to its original state.
+> The support is not complete yet, and due to my changes, the individual
+> e-mails normally sent to each developer have not been sent today.
+> 
+> > > Results for branch 'master'
+> > > ===========================
+> 
+> The name of the branch is here ^^^
 
-The autobuilder infrastructure is now capable of testing multiple
-Buildroot branches, so that we can test master, a maintenance branch,
-the next branch, and more.
+I missed that.
 
-A very simple CSV file hosted at
-http://autobuild.buildroot.net/branches defines the branches to be
-tested, as well as some "weight". The current file contains:
+> > > Detail of failures
+> > > ------------------  
+> > 
+> > Having an additional 'branch' column here might be useful now.
+> 
+> The list of failures below is only for the master branch, as you're in
+> the "Results for branch 'master'".
+> 
+> Failures for other branches would show up in another section "Results
+> for branch '2017.08.x'". However, since there has been 0 failures on
+> 2017.08.x yesterday, the section was not generated at all (which is
+> expected).
+> 
+> Let me know if that is unclear and if you have a better proposal.
+> Mixing the results in the same table was to me not a good option, as we
+> clearly don't want the "List of failures by reason" to contain results
+> for multiple branches, as this classification only makes sense per
+> branch. That's why I opted for one section per branch, rather than
+> mixing the results together. I'm open to other suggestions, as the
+> drawback of my solution is the length of the e-mail.
 
-master,10
-next,4
-2017.08.x,1
+That is reasonable, I think. It only adds a few more lines per email.
 
-This means that out of 15 builds, statistically, we should have 10
-builds done on master, 4 builds done on next, and one build done on
-2017.08.x.
+And besides, this is all only for the time being, until we fix all remaining 
+build failures.
 
-This file is downloaded by the autobuilder instances (in the
-autobuild-run script) every time they start a build, to decide which
-branch should be used for the next build.
+Thanks,
+baruch
 
-In terms of visualization/reporting:
-
- - http://autobuild.buildroot.org/ shows all the branches
-
- - http://autobuild.buildroot.org/?branch=<branch> allows to filter the
-   results for just one branch
-
- - http://autobuild.buildroot.org/stats.php shows the result of just
-   one branch (master by default), and one can select a different
-   branch. The graph of the build results over time is also updated on
-   a per branch basis.
-
- - The e-mail sent every day to the mailing list has been updated to
-   report results from all branches. A first table shows in a very
-   synthetic way the result for all branches. And then, with one
-   section per branch, the failures are detailed. Note that if a branch
-   has seen no failure the past day, then the section for this branch
-   is entirely omitted, since there is no failure to report.
-
- - The e-mail sent every day to the individual developers based on the
-   DEVELOPERS file information has also been updated, and has pretty
-   much the same logic: one section per branch, with the failures, and
-   the section for a given branch is omitted if there are no failures
-   to report.
-
-Note that we are currently not testing the 2017.02.x LTS branch,
-because the autobuilder infrastructure now relies on having the
-toolchain configurations inside the Buildroot source code, as well as
-the utils/genrandconfig script. However, it is definitely possible to
-backport this script to the LTS branch, as well as a selection of
-toolchain configurations, in which case we could add the 2017.02.x LTS
-branch to the overall testing effort.
-
-So:
-
- - People running autobuilder instances today, please update your
-   autobuild-run script.
-
-   Peter: please don't update your autobuild-run script on gcc112 until
-   you backport to 2017.08.x all the ppc64le-as-host fixes that have
-   been put on master, or we will be flooded by build failures.
-
- - People who are not yet running an autobuilder instance and have some
-   spare CPU cycles, please run an autobuilder instance! Do not
-   hesitate to get in touch with me if you need details on the
-   requirements or setup.
-
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
