@@ -1,113 +1,76 @@
-From: Joseph Kogut <joseph.kogut@gmail.com>
-Date: Thu,  9 Nov 2017 09:14:17 -0800
-Subject: [Buildroot] [PATCH v3 1/1] python-raven: new package
-In-Reply-To: <CAGm1_kv4WM_9Ko=tN6psKwAcjLzXDNvHkdcMbZxz8tsmcb2Jeg@mail.gmail.com>
-References: <CAGm1_kv4WM_9Ko=tN6psKwAcjLzXDNvHkdcMbZxz8tsmcb2Jeg@mail.gmail.com>
-Message-ID: <20171109171417.30187-1-joseph.kogut@gmail.com>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Thu,  9 Nov 2017 19:03:41 +0100
+Subject: [Buildroot] [PATCH v2 1/1] add sunxi-mali mainline kernel
+Message-ID: <1510250621-27660-1-git-send-email-giulio.benetti@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Changes since v2:
-- remove newlines from Config.in
-- add LICENSE hash
+As it's not present in buildroot,
+add support for sunxi-mali mainline kernel driver.
 
-Changes since v1:
-- reword commit to match upstream style
-- fold the DEVELOPERS modifications into the same commit
-- add Config selections for required python core modules
-- bump version to 6.3.0
-
-Tested in a clean chroot, events are generated for exceptions, and
-reported to the server configured for the client.
-
-Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
-Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
 ---
- DEVELOPERS                             |  1 +
- package/Config.in                      |  1 +
- package/python-raven/Config.in         | 12 ++++++++++++
- package/python-raven/python-raven.hash |  5 +++++
- package/python-raven/python-raven.mk   | 14 ++++++++++++++
- 5 files changed, 33 insertions(+)
- create mode 100644 package/python-raven/Config.in
- create mode 100644 package/python-raven/python-raven.hash
- create mode 100644 package/python-raven/python-raven.mk
+Changes v1 -> v2:
+* use github macros
+* use build.sh to compile and install
+* add check linux >= 4.4
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index cfbe64b0b2..8526b2c515 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -788,6 +788,7 @@ F:	board/qemu/ppc64le-pseries/
- F:	configs/qemu_ppc64le_pseries_defconfig
+ package/sunxi-mali-driver-mainline/Config.in       | 10 +++++++++
+ .../sunxi-mali-driver-mainline.mk                  | 26 ++++++++++++++++++++++
+ 2 files changed, 36 insertions(+)
+ create mode 100644 package/sunxi-mali-driver-mainline/Config.in
+ create mode 100644 package/sunxi-mali-driver-mainline/sunxi-mali-driver-mainline.mk
 
- N:	Joseph Kogut <joseph.kogut@gmail.com>
-+F:	package/python-raven/
- F:	package/python-websockets/
-
- N:	Johan Derycke <johanderycke@gmail.com>
-diff --git a/package/Config.in b/package/Config.in
-index fe5ccc434e..2fe85e927f 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -874,6 +874,7 @@ menu "External python modules"
- 	source "package/python-pyxb/Config.in"
- 	source "package/python-pyyaml/Config.in"
- 	source "package/python-pyzmq/Config.in"
-+	source "package/python-raven/Config.in"
- 	source "package/python-requests/Config.in"
- 	source "package/python-requests-toolbelt/Config.in"
- 	source "package/python-rpi-gpio/Config.in"
-diff --git a/package/python-raven/Config.in b/package/python-raven/Config.in
+diff --git a/package/sunxi-mali-driver-mainline/Config.in b/package/sunxi-mali-driver-mainline/Config.in
 new file mode 100644
-index 0000000000..0d4b26c054
+index 0000000..1d7d313
 --- /dev/null
-+++ b/package/python-raven/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_PYTHON_RAVEN
-+	bool "python-raven"
-+	select BR2_PACKAGE_PYTHON_ZLIB if BR2_PACKAGE_PYTHON
-+	select BR2_PACKAGE_PYTHON3_ZLIB if BR2_PACKAGE_PYTHON3
-+	select BR2_PACKAGE_PYTHON_SSL if BR2_PACKAGE_PYTHON
-+	select BR2_PACKAGE_PYTHON3_SSL if BR2_PACKAGE_PYTHON3
-+	select BR2_PACKAGE_PYTHON_UNICODEDATA if BR2_PACKAGE_PYTHON
-+	select BR2_PACKAGE_PYTHON3_UNICODEDATA if BR2_PACKAGE_PYTHON3
++++ b/package/sunxi-mali-driver-mainline/Config.in
+@@ -0,0 +1,10 @@
++comment "sunxi-mali-driver-mainline needs a Linux kernel to be built"
++	depends on !BR2_LINUX_KERNEL
++
++config BR2_PACKAGE_SUNXI_MALI_DRIVER_MAINLINE
++	bool "sunxi-mali-driver-mainline"
++	depends on BR2_LINUX_KERNEL
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_4
++	select BR2_LINUX_NEEDS_MODULES # not using kernel-module infra
 +	help
-+	  Raven is a client for Sentry (https://getsentry.com).
-+
-+	  https://github.com/getsentry/raven-python
-diff --git a/package/python-raven/python-raven.hash b/package/python-raven/python-raven.hash
++	  Sunxi Mali Kernel space driver
+diff --git a/package/sunxi-mali-driver-mainline/sunxi-mali-driver-mainline.mk b/package/sunxi-mali-driver-mainline/sunxi-mali-driver-mainline.mk
 new file mode 100644
-index 0000000000..3ed123996d
+index 0000000..b6125d4
 --- /dev/null
-+++ b/package/python-raven/python-raven.hash
-@@ -0,0 +1,5 @@
-+# md5 from https://pypi.python.org/pypi/raven/json, sha256 locally computed
-+md5	2efce7acbabe1a0f32d168736a654789  raven-6.3.0.tar.gz
-+sha256	f3e465a545dcdb6a387d1fcb199d08f786ba3732d7ce6aa681718b04da6aedf1  raven-6.3.0.tar.gz
-+# License file, locally calculated
-+sha256	5ce9459bc19ced99cc9eb135d4f559ed01e336354bdf16dd998be85aa688c233  LICENSE
-diff --git a/package/python-raven/python-raven.mk b/package/python-raven/python-raven.mk
-new file mode 100644
-index 0000000000..c17aac4a3d
---- /dev/null
-+++ b/package/python-raven/python-raven.mk
-@@ -0,0 +1,14 @@
++++ b/package/sunxi-mali-driver-mainline/sunxi-mali-driver-mainline.mk
+@@ -0,0 +1,26 @@
 +################################################################################
 +#
-+# python-raven
++# sunxi-mali-driver-mainline
 +#
 +################################################################################
 +
-+PYTHON_RAVEN_VERSION = 6.3.0
-+PYTHON_RAVEN_SOURCE = raven-$(PYTHON_RAVEN_VERSION).tar.gz
-+PYTHON_RAVEN_SITE = https://pypi.python.org/packages/e8/b0/27886f69cdb4d9f6265bba1c4973bb5371b060272a5795c511d8839a6028
-+PYTHON_RAVEN_SETUP_TYPE = setuptools
-+PYTHON_RAVEN_LICENSE = BSD-3-Clause
-+PYTHON_RAVEN_LICENSE_FILES = LICENSE
++SUNXI_MALI_DRIVER_MAINLINE_VERSION = 5b7b3c0b6e1736676c90928816d271debbb09d95
++SUNXI_MALI_DRIVER_MAINLINE_SITE = $(call github,mripard,sunxi-mali,$(SUNXI_MALI_DRIVER_MAINLINE_VERSION))
++SUNXI_MALI_DRIVER_MAINLINE_DEPENDENCIES = linux
 +
-+$(eval $(python-package))
---
-2.15.0
++SUNXI_MALI_DRIVER_MAINLINE_MAKE_OPTS = \
++	KDIR=$(LINUX_DIR) \
++	CROSS_COMPILE=$(TARGET_CROSS) \
++	INSTALL_MOD_PATH=$(TARGET_DIR)
++
++define SUNXI_MALI_DRIVER_MAINLINE_BUILD_CMDS
++	cd $(@D) &&	$(SUNXI_MALI_DRIVER_MAINLINE_MAKE_OPTS) \
++		bash ./build.sh -r r6p2 -b
++endef
++
++define SUNXI_MALI_DRIVER_MAINLINE_INSTALL_TARGET_CMDS
++	cd $(@D) &&	$(SUNXI_MALI_DRIVER_MAINLINE_MAKE_OPTS) \
++		bash ./build.sh -r r6p2 -i
++endef
++
++$(eval $(generic-package))
+-- 
+2.7.4
