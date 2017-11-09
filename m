@@ -1,110 +1,109 @@
-From: Carlos Santos <casantos@datacom.ind.br>
-Date: Wed, 8 Nov 2017 23:02:10 -0200 (BRST)
-Subject: [Buildroot] [PATCH v3] util-linux: fix link failures due to
- name clash
-In-Reply-To: <1510162681-20797-1-git-send-email-luca@lucaceresoli.net>
-References: <1510162681-20797-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <1844443647.16713503.1510189330735.JavaMail.zimbra@datacom.ind.br>
+From: Joseph Kogut <joseph.kogut@gmail.com>
+Date: Wed,  8 Nov 2017 17:55:11 -0800
+Subject: [Buildroot] [PATCH v2 1/1] python-raven: new package
+In-Reply-To: <20171102163022.23953-1-joseph.kogut@gmail.com>
+References: <20171102163022.23953-1-joseph.kogut@gmail.com>
+Message-ID: <20171109015511.24715-1-joseph.kogut@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> From: "Luca Ceresoli" <luca@lucaceresoli.net>
-> To: buildroot at buildroot.org
-> Cc: "Luca Ceresoli" <luca@lucaceresoli.net>, "Adam Duskett" <aduskett@gmail.com>
-> Sent: Wednesday, November 8, 2017 3:38:01 PM
-> Subject: [Buildroot] [PATCH v3] util-linux: fix link failures due to name clash
+Changes since v1:
+- reword commit to match upstream style
+- fold the DEVELOPERS modifications into the same commit
+- add Config selections for required python core modules
+- bump version to 6.3.0
 
-> Several packages have a similar md5.c file, and each has a function
-> named byteReverse(). This generates link errors when building
-> statically ("multiple definition of `byteReverse'").
-> 
-> Fix by applying a patch from upstream.
-> 
-> Fixes:
->  http://autobuild.buildroot.net/results/419ab2c0e034cc68991281c51caa8271b0fadbab/
-> 
-> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-> Cc: Adam Duskett <aduskett@gmail.com>
-> 
-> ---
-> 
-> Changed v2 -> v3:
-> - patch is now upstream, so add URL
-> 
-> Changed v1 -> v2:
-> - add Submitted-upstream tag now that it's on the util-linux ml
-> ---
-> .../0001-md5-declare-byteReverse-as-static.patch   | 44 ++++++++++++++++++++++
-> 1 file changed, 44 insertions(+)
-> create mode 100644
-> package/util-linux/0001-md5-declare-byteReverse-as-static.patch
-> 
-> diff --git a/package/util-linux/0001-md5-declare-byteReverse-as-static.patch
-> b/package/util-linux/0001-md5-declare-byteReverse-as-static.patch
-> new file mode 100644
-> index 000000000000..a5b290c4dbe6
-> --- /dev/null
-> +++ b/package/util-linux/0001-md5-declare-byteReverse-as-static.patch
-> @@ -0,0 +1,44 @@
-> +From 424cee0f06ece9473786c189ab4741e1dea7061d Mon Sep 17 00:00:00 2001
-> +From: Luca Ceresoli <luca@lucaceresoli.net>
-> +Date: Tue, 7 Nov 2017 14:39:09 +0100
-> +Subject: [PATCH] md5: declare byteReverse as static
-> +
-> +byteReverse() is an internal function in md5.c, and is not exposed via
-> +any header file, but it is not declared as static. This is a problem
-> +with the md5.c file since it is copied more or less verbatim in other
-> +programs (fontconfig and pjsip among others), causing a link error
-> +when linking two of them together.
-> +
-> +Fixes link failures such as:
-> +
-> http://autobuild.buildroot.net/results/419ab2c0e034cc68991281c51caa8271b0fadbab/build-end.log
-> +
-> +[Upstream patch:
-> https://git.kernel.org/pub/scm/utils/util-linux/util-linux.git/commit/?id=424cee0f06ece9473786c189ab4741e1dea7061d]
-> +
-> +Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-> +---
-> + lib/md5.c | 4 ++--
-> + 1 file changed, 2 insertions(+), 2 deletions(-)
-> +
-> +diff --git a/lib/md5.c b/lib/md5.c
-> +index 488d16ef69b4..282e2d22af25 100644
-> +--- a/lib/md5.c
-> ++++ b/lib/md5.c
-> +@@ -21,13 +21,13 @@
-> + #if !defined(WORDS_BIGENDIAN)
-> + #define byteReverse(buf, len)	/* Nothing */
-> + #else
-> +-void byteReverse(unsigned char *buf, unsigned longs);
-> ++static void byteReverse(unsigned char *buf, unsigned longs);
-> +
-> + #ifndef ASM_MD5
-> + /*
-> +  * Note: this code is harmless on little-endian machines.
-> +  */
-> +-void byteReverse(unsigned char *buf, unsigned longs)
-> ++static void byteReverse(unsigned char *buf, unsigned longs)
-> + {
-> +     uint32_t t;
-> +     do {
-> +--
-> +2.7.4
-> +
-> --
-> 2.7.4
+Tested in a clean chroot, events are generated for exceptions, and
+reported to the server configured for the client.
 
-Tested-by: Carlos Santos <casantos@datacom.ind.br>
+Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
+---
+ DEVELOPERS                             |  1 +
+ package/Config.in                      |  1 +
+ package/python-raven/Config.in         | 15 +++++++++++++++
+ package/python-raven/python-raven.hash |  3 +++
+ package/python-raven/python-raven.mk   | 14 ++++++++++++++
+ 5 files changed, 34 insertions(+)
+ create mode 100644 package/python-raven/Config.in
+ create mode 100644 package/python-raven/python-raven.hash
+ create mode 100644 package/python-raven/python-raven.mk
 
-Rebuilt libpjsip after applying the patch and confirmed it solves the
-static linking issue.
+diff --git a/DEVELOPERS b/DEVELOPERS
+index cfbe64b0b2..8526b2c515 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -788,6 +788,7 @@ F:	board/qemu/ppc64le-pseries/
+ F:	configs/qemu_ppc64le_pseries_defconfig
 
--- 
-Carlos Santos (Casantos) - DATACOM, P&D
-?The greatest triumph that modern PR can offer is the transcendent 
-success of having your words and actions judged by your reputation, 
-rather than the other way about.? ? Christopher Hitchens
+ N:	Joseph Kogut <joseph.kogut@gmail.com>
++F:	package/python-raven/
+ F:	package/python-websockets/
+
+ N:	Johan Derycke <johanderycke@gmail.com>
+diff --git a/package/Config.in b/package/Config.in
+index fe5ccc434e..2fe85e927f 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -874,6 +874,7 @@ menu "External python modules"
+ 	source "package/python-pyxb/Config.in"
+ 	source "package/python-pyyaml/Config.in"
+ 	source "package/python-pyzmq/Config.in"
++	source "package/python-raven/Config.in"
+ 	source "package/python-requests/Config.in"
+ 	source "package/python-requests-toolbelt/Config.in"
+ 	source "package/python-rpi-gpio/Config.in"
+diff --git a/package/python-raven/Config.in b/package/python-raven/Config.in
+new file mode 100644
+index 0000000000..f8954e085c
+--- /dev/null
++++ b/package/python-raven/Config.in
+@@ -0,0 +1,15 @@
++config BR2_PACKAGE_PYTHON_RAVEN
++	bool "python-raven"
++	select BR2_PACKAGE_PYTHON_ZLIB if BR2_PACKAGE_PYTHON
++	select BR2_PACKAGE_PYTHON3_ZLIB if BR2_PACKAGE_PYTHON3
++
++	select BR2_PACKAGE_PYTHON_SSL if BR2_PACKAGE_PYTHON
++	select BR2_PACKAGE_PYTHON3_SSL if BR2_PACKAGE_PYTHON3
++
++	select BR2_PACKAGE_PYTHON_UNICODEDATA if BR2_PACKAGE_PYTHON
++	select BR2_PACKAGE_PYTHON3_UNICODEDATA if BR2_PACKAGE_PYTHON3
++
++	help
++	  Raven is a client for Sentry (https://getsentry.com).
++
++	  https://github.com/getsentry/raven-python
+diff --git a/package/python-raven/python-raven.hash b/package/python-raven/python-raven.hash
+new file mode 100644
+index 0000000000..0e0a4f56e5
+--- /dev/null
++++ b/package/python-raven/python-raven.hash
+@@ -0,0 +1,3 @@
++# md5 from https://pypi.python.org/pypi/raven/json, sha256 locally computed
++md5	2efce7acbabe1a0f32d168736a654789  raven-6.3.0.tar.gz
++sha256	f3e465a545dcdb6a387d1fcb199d08f786ba3732d7ce6aa681718b04da6aedf1  raven-6.3.0.tar.gz
+diff --git a/package/python-raven/python-raven.mk b/package/python-raven/python-raven.mk
+new file mode 100644
+index 0000000000..c17aac4a3d
+--- /dev/null
++++ b/package/python-raven/python-raven.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-raven
++#
++################################################################################
++
++PYTHON_RAVEN_VERSION = 6.3.0
++PYTHON_RAVEN_SOURCE = raven-$(PYTHON_RAVEN_VERSION).tar.gz
++PYTHON_RAVEN_SITE = https://pypi.python.org/packages/e8/b0/27886f69cdb4d9f6265bba1c4973bb5371b060272a5795c511d8839a6028
++PYTHON_RAVEN_SETUP_TYPE = setuptools
++PYTHON_RAVEN_LICENSE = BSD-3-Clause
++PYTHON_RAVEN_LICENSE_FILES = LICENSE
++
++$(eval $(python-package))
+--
+2.15.0
