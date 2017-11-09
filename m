@@ -1,51 +1,46 @@
-From: Evgeniy Didin <Evgeniy.Didin@synopsys.com>
-Date: Thu,  9 Nov 2017 12:53:48 +0300
-Subject: [Buildroot] [PATCHv2]python-numpy: disable for ARCompact
-In-Reply-To: <20171109095348.31755-1-didin@synopsys.com>
-References: <20171109095348.31755-1-didin@synopsys.com>
-Message-ID: <20171109095348.31755-2-didin@synopsys.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 09 Nov 2017 11:34:39 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2017-11-08
+In-Reply-To: <20171109072720.ysow3pwt4igf5vva@tarshish> (Baruch Siach's
+ message of "Thu, 9 Nov 2017 09:27:20 +0200")
+References: <20171109070011.4320C209F1@mail.free-electrons.com>
+ <20171109072720.ysow3pwt4igf5vva@tarshish>
+Message-ID: <87lgjfeo5c.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This package fails when building for ARCompact due to toolchain issue.
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-Marking this with special comment "#ARC toolchain issues for ARCompact"
-as the package is to be enabled as soon as the issue with the ARC toolchain is resolved.
-Fixes:
-        http://autobuild.buildroot.net/results/4c4/4c4eaa90335756448007ae3c5ae3839fb17d4442//
+Hi,
 
-The same compiler error appears building "trousers" package for ARCompact. This package
-is already disabled for ARC.
+ > Hi Thomas,
+ > On Thu, Nov 09, 2017 at 08:00:11AM +0100, Thomas Petazzoni wrote:
+ >> Hello,
+ >> 
+ >> Build statistics for 2017-11-08
+ >> ===============================
+ >> 
+ >> branch |  OK | NOK | TIM | TOT |
+ >> master | 142 |  31 |   0 | 173 |
+ >> 2017.08.x |   6 |   0 |   0 |   6 |
 
-Signed-off-by: Evgeniy Didin <didin@synopsys.com>
-Cc: Alexey Brodkin <abrodkin@synopsys.com>
-Cc: arc-buildroot at synopsys.com
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ > Nice. Thanks for working on that.
 
----
-Changes since v1:
--Removed duplicate entry in BR2_PACKAGE_PYTHON_NUMPY
--Now disables python-numpy accordingly to new format
+Yes, thanks!
 
- package/python-numpy/Config.in | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ > Unrelated to that (I think), DNS resolution for autobuild.buildroot.net looks 
+ > strange this morning:
 
-diff --git a/package/python-numpy/Config.in b/package/python-numpy/Config.in
-index 5abe04bde9..97d706178f 100644
---- a/package/python-numpy/Config.in
-+++ b/package/python-numpy/Config.in
-@@ -1,7 +1,8 @@
- config BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
- 	bool
- 	# Numpy has some CPU specific code
--	default y if BR2_arc 
-+        # ARC toolchain issues for ARCompact
-+	default y if BR2_arc && !(BR2_arc770d || BR2_arc750d)
- 	default y if BR2_aarch64
- 	default y if BR2_arm 
- 	default y if BR2_armeb
+ > $ host autobuild.buildroot.net
+ > autobuild.buildroot.net is an alias for ks383786.kimsufi.com.
+ > ks383786.kimsufi.com has address 94.23.254.152
+
+What is strange about it? autobuild.buildroot.{net,org} has always been
+a cname to Thomas' machine.
+
 -- 
-2.11.0
+Bye, Peter Korsgaard
