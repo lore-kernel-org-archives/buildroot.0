@@ -1,41 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 10 Nov 2017 18:19:51 +0100
-Subject: [Buildroot] [git commit branch/next] libressl: bump to 2.6.3
-Message-ID: <20171110171800.B1FD981218@busybox.osuosl.org>
+Date: Fri, 10 Nov 2017 18:25:33 +0100
+Subject: [Buildroot] [git commit branch/next] webp: bump to 0.6.0
+Message-ID: <20171110171816.E2C8881218@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=469093acb153e25260c67432d2878c275f50b5f7
+commit: https://git.buildroot.net/buildroot/commit/?id=ba9e779e83acd31f88d4cf8f2a2b6907a0e4ab2f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
+Signed-off-by: Marcus Hoffmann <m.hoffmann@cartelsol.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libressl/libressl.hash | 2 +-
- package/libressl/libressl.mk   | 2 +-
+ package/webp/webp.hash | 2 +-
+ package/webp/webp.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libressl/libressl.hash b/package/libressl/libressl.hash
-index 580701d..42f3028 100644
---- a/package/libressl/libressl.hash
-+++ b/package/libressl/libressl.hash
+diff --git a/package/webp/webp.hash b/package/webp/webp.hash
+index bf4ee8f..e9b2060 100644
+--- a/package/webp/webp.hash
++++ b/package/webp/webp.hash
 @@ -1,2 +1,2 @@
- # From https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/SHA256
--sha256	e57f5e3d5842a81fe9351b6e817fcaf0a749ca4ef35a91465edba9e071dce7c4	libressl-2.5.5.tar.gz
-+sha256	aead6598263171b96970da0d881e616d0813b69b35ebdc5991f87ff2ea7f5c98	libressl-2.6.3.tar.gz
-diff --git a/package/libressl/libressl.mk b/package/libressl/libressl.mk
-index ccd236d..0806ff6 100644
---- a/package/libressl/libressl.mk
-+++ b/package/libressl/libressl.mk
+ # Locally calculated
+-sha256	b75310c810b3eda222c77f6d6c26b061240e3d9060095de44b2c1bae291ecdef	libwebp-0.5.2.tar.gz
++sha256	c928119229d4f8f35e20113ffb61f281eda267634a8dc2285af4b0ee27cf2b40	libwebp-0.6.0.tar.gz
+diff --git a/package/webp/webp.mk b/package/webp/webp.mk
+index 7cf3df2..8213027 100644
+--- a/package/webp/webp.mk
++++ b/package/webp/webp.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBRESSL_VERSION = 2.5.5
-+LIBRESSL_VERSION = 2.6.3
- LIBRESSL_SITE = https://ftp.openbsd.org/pub/OpenBSD/LibreSSL
- LIBRESSL_LICENSE = ISC (new additions), OpenSSL or SSLeay (original OpenSSL code)
- LIBRESSL_LICENSE_FILES = COPYING
+-WEBP_VERSION = 0.5.2
++WEBP_VERSION = 0.6.0
+ WEBP_SOURCE = libwebp-$(WEBP_VERSION).tar.gz
+ WEBP_SITE = http://downloads.webmproject.org/releases/webp
+ WEBP_LICENSE = BSD-3-Clause
