@@ -1,39 +1,55 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 10 Nov 2017 18:24:45 +0100
-Subject: [Buildroot] [git commit] DEVELOPERS: add packages to Baruch Siach
-Message-ID: <20171110171738.B9CDD80E24@busybox.osuosl.org>
+Date: Fri, 10 Nov 2017 18:24:01 +0100
+Subject: [Buildroot] [git commit] webkitgtk: security bump to version 2.18.3
+Message-ID: <20171110171738.AAC088118F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f8281ab59ec777b93f15e048dfad8190f906042f
+commit: https://git.buildroot.net/buildroot/commit/?id=5ff18880e9647e446a3d720b7c6c74eed97ef0b4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+This is a maintenance release of the current stable WebKitGTK+ version,
+which contains a minor rendering fix, another for the WebDriver
+implementation, and security fixes for CVE-2017-13798, CVE-2017-13788,
+and CVE-2017-13803.
+
+Release notes:
+
+    https://webkitgtk.org/2017/11/10/webkitgtk2.18.3-released.html
+
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS | 6 ++++++
- 1 file changed, 6 insertions(+)
+ package/webkitgtk/webkitgtk.hash | 8 ++++----
+ package/webkitgtk/webkitgtk.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index cfbe64b..ddd675e 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -190,9 +190,15 @@ F:	package/sigrok-cli/
+diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
+index b116115..669bb1c 100644
+--- a/package/webkitgtk/webkitgtk.hash
++++ b/package/webkitgtk/webkitgtk.hash
+@@ -1,4 +1,4 @@
+-# From https://webkitgtk.org/releases/webkitgtk-2.18.2.tar.xz.sums
+-md5 f63b3897d6fbf660bf72dfaca1fdea16 webkitgtk-2.18.2.tar.xz
+-sha1 75571807a1f8c9efdf62f1c37e9fadf52b73d367 webkitgtk-2.18.2.tar.xz
+-sha256 b14cb3f1b5321b1dc50abcc0445a97f8e2f8813562bca7ce4d2f8069f6fec8e7 webkitgtk-2.18.2.tar.xz
++# From https://webkitgtk.org/releases/webkitgtk-2.18.3.tar.xz.sums
++md5 264a22d7467deae606e42b6eb5dd65af webkitgtk-2.18.3.tar.xz
++sha1 164cad34281ef597a3d4ad214e8037c3ddef4d17 webkitgtk-2.18.3.tar.xz
++sha256 e15420e1616a6f70f321541d467af5ca285bff66b1e0fa68a01df3ccf1b18f9e webkitgtk-2.18.3.tar.xz
+diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
+index c78f6b3..c467546 100644
+--- a/package/webkitgtk/webkitgtk.mk
++++ b/package/webkitgtk/webkitgtk.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- N:	Baruch Siach <baruch@tkos.co.il>
- F:	package/daemon/
-+F:	package/dropbear/
- F:	package/ebtables/
-+F:	package/i2c-tools/
-+F:	package/libcurl/
-+F:	package/libpcap/
- F:	package/openipmi/
- F:	package/socat/
-+F:	package/strace/
-+F:	package/tcpdump/
- F:	package/ti-uim/
- F:	package/uhubctl/
- 
+-WEBKITGTK_VERSION = 2.18.2
++WEBKITGTK_VERSION = 2.18.3
+ WEBKITGTK_SITE = http://www.webkitgtk.org/releases
+ WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
+ WEBKITGTK_INSTALL_STAGING = YES
