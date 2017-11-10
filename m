@@ -1,55 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 10 Nov 2017 18:24:01 +0100
-Subject: [Buildroot] [git commit] webkitgtk: security bump to version 2.18.3
-Message-ID: <20171110171738.AAC088118F@busybox.osuosl.org>
+Date: Fri, 10 Nov 2017 18:19:51 +0100
+Subject: [Buildroot] [git commit branch/next] libressl: bump to 2.6.3
+Message-ID: <20171110171800.B1FD981218@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5ff18880e9647e446a3d720b7c6c74eed97ef0b4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+commit: https://git.buildroot.net/buildroot/commit/?id=469093acb153e25260c67432d2878c275f50b5f7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This is a maintenance release of the current stable WebKitGTK+ version,
-which contains a minor rendering fix, another for the WebDriver
-implementation, and security fixes for CVE-2017-13798, CVE-2017-13788,
-and CVE-2017-13803.
-
-Release notes:
-
-    https://webkitgtk.org/2017/11/10/webkitgtk2.18.3-released.html
-
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/webkitgtk/webkitgtk.hash | 8 ++++----
- package/webkitgtk/webkitgtk.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/libressl/libressl.hash | 2 +-
+ package/libressl/libressl.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
-index b116115..669bb1c 100644
---- a/package/webkitgtk/webkitgtk.hash
-+++ b/package/webkitgtk/webkitgtk.hash
-@@ -1,4 +1,4 @@
--# From https://webkitgtk.org/releases/webkitgtk-2.18.2.tar.xz.sums
--md5 f63b3897d6fbf660bf72dfaca1fdea16 webkitgtk-2.18.2.tar.xz
--sha1 75571807a1f8c9efdf62f1c37e9fadf52b73d367 webkitgtk-2.18.2.tar.xz
--sha256 b14cb3f1b5321b1dc50abcc0445a97f8e2f8813562bca7ce4d2f8069f6fec8e7 webkitgtk-2.18.2.tar.xz
-+# From https://webkitgtk.org/releases/webkitgtk-2.18.3.tar.xz.sums
-+md5 264a22d7467deae606e42b6eb5dd65af webkitgtk-2.18.3.tar.xz
-+sha1 164cad34281ef597a3d4ad214e8037c3ddef4d17 webkitgtk-2.18.3.tar.xz
-+sha256 e15420e1616a6f70f321541d467af5ca285bff66b1e0fa68a01df3ccf1b18f9e webkitgtk-2.18.3.tar.xz
-diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-index c78f6b3..c467546 100644
---- a/package/webkitgtk/webkitgtk.mk
-+++ b/package/webkitgtk/webkitgtk.mk
+diff --git a/package/libressl/libressl.hash b/package/libressl/libressl.hash
+index 580701d..42f3028 100644
+--- a/package/libressl/libressl.hash
++++ b/package/libressl/libressl.hash
+@@ -1,2 +1,2 @@
+ # From https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/SHA256
+-sha256	e57f5e3d5842a81fe9351b6e817fcaf0a749ca4ef35a91465edba9e071dce7c4	libressl-2.5.5.tar.gz
++sha256	aead6598263171b96970da0d881e616d0813b69b35ebdc5991f87ff2ea7f5c98	libressl-2.6.3.tar.gz
+diff --git a/package/libressl/libressl.mk b/package/libressl/libressl.mk
+index ccd236d..0806ff6 100644
+--- a/package/libressl/libressl.mk
++++ b/package/libressl/libressl.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WEBKITGTK_VERSION = 2.18.2
-+WEBKITGTK_VERSION = 2.18.3
- WEBKITGTK_SITE = http://www.webkitgtk.org/releases
- WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
- WEBKITGTK_INSTALL_STAGING = YES
+-LIBRESSL_VERSION = 2.5.5
++LIBRESSL_VERSION = 2.6.3
+ LIBRESSL_SITE = https://ftp.openbsd.org/pub/OpenBSD/LibreSSL
+ LIBRESSL_LICENSE = ISC (new additions), OpenSSL or SSLeay (original OpenSSL code)
+ LIBRESSL_LICENSE_FILES = COPYING
