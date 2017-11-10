@@ -1,53 +1,47 @@
-From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Fri, 10 Nov 2017 16:03:04 +0200
-Subject: [Buildroot] [PATCH 1/1] webkitgtk: security bump to version 2.18.3
-Message-ID: <20171110140304.12234-1-aperez@igalia.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 10 Nov 2017 16:40:03 +0100
+Subject: [Buildroot] [PATCH] binutils: Allow upstream 2.29 to be chosen
+ for ARC
+In-Reply-To: <20171109215901.17381-1-abrodkin@synopsys.com>
+References: <20171109215901.17381-1-abrodkin@synopsys.com>
+Message-ID: <e30aedee-15f1-a8eb-c959-4c9269ce1929@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This is a maintenance release of the current stable WebKitGTK+ version,
-which contains a minor rendering fix, another for the WebDriver
-implementation, and security fixes for CVE-2017-13798, CVE-2017-13788,
-and CVE-2017-13803.
 
-Release notes:
+ Small nit...
 
-    https://webkitgtk.org/2017/11/10/webkitgtk2.18.3-released.html
+On 09-11-17 22:59, Alexey Brodkin wrote:
+[snip]
+> diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
+> index d2bf5b9..8654239 100644
+> --- a/package/binutils/binutils.mk
+> +++ b/package/binutils/binutils.mk
+> @@ -15,7 +15,7 @@ BINUTILS_VERSION = 2.28.1
+>  endif
+>  endif # BINUTILS_VERSION
+>  
+> -ifeq ($(BR2_arc),y)
+> +ifneq ($(BR2_BINUTILS_VERSION_ARC),)
 
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
----
- package/webkitgtk/webkitgtk.hash | 8 ++++----
- package/webkitgtk/webkitgtk.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ Use positive logic:
 
-diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
-index b1161157e7..669bb1cc62 100644
---- a/package/webkitgtk/webkitgtk.hash
-+++ b/package/webkitgtk/webkitgtk.hash
-@@ -1,4 +1,4 @@
--# From https://webkitgtk.org/releases/webkitgtk-2.18.2.tar.xz.sums
--md5 f63b3897d6fbf660bf72dfaca1fdea16 webkitgtk-2.18.2.tar.xz
--sha1 75571807a1f8c9efdf62f1c37e9fadf52b73d367 webkitgtk-2.18.2.tar.xz
--sha256 b14cb3f1b5321b1dc50abcc0445a97f8e2f8813562bca7ce4d2f8069f6fec8e7 webkitgtk-2.18.2.tar.xz
-+# From https://webkitgtk.org/releases/webkitgtk-2.18.3.tar.xz.sums
-+md5 264a22d7467deae606e42b6eb5dd65af webkitgtk-2.18.3.tar.xz
-+sha1 164cad34281ef597a3d4ad214e8037c3ddef4d17 webkitgtk-2.18.3.tar.xz
-+sha256 e15420e1616a6f70f321541d467af5ca285bff66b1e0fa68a01df3ccf1b18f9e webkitgtk-2.18.3.tar.xz
-diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-index c78f6b38e1..c4675463fa 100644
---- a/package/webkitgtk/webkitgtk.mk
-+++ b/package/webkitgtk/webkitgtk.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WEBKITGTK_VERSION = 2.18.2
-+WEBKITGTK_VERSION = 2.18.3
- WEBKITGTK_SITE = http://www.webkitgtk.org/releases
- WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
- WEBKITGTK_INSTALL_STAGING = YES
+ifeq ($(BR2_BINUTILS_VERSION_ARC),y)
+
+ Regards,
+ Arnout
+
+>  BINUTILS_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,binutils-gdb,$(BINUTILS_VERSION))
+>  BINUTILS_SOURCE = binutils-$(BINUTILS_VERSION).tar.gz
+>  BINUTILS_FROM_GIT = y
+
 -- 
-2.15.0
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
