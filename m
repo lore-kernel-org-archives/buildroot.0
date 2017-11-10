@@ -1,42 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 13 Nov 2017 23:19:48 +0100
-Subject: [Buildroot] [git commit branch/next] linux: bump default to version
- 4.14
-Message-ID: <20171113221623.8E86A807B2@busybox.osuosl.org>
+Date: Fri, 10 Nov 2017 18:24:45 +0100
+Subject: [Buildroot] [git commit branch/next] DEVELOPERS: add packages to
+ Baruch Siach
+Message-ID: <20171113221622.3E4377FDB3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=37e1e641465196f791f5256842bd23dcb4c17ed8
+commit: https://git.buildroot.net/buildroot/commit/?id=f8281ab59ec777b93f15e048dfad8190f906042f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- linux/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ DEVELOPERS | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index e90ab6b..a4977d1 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -26,7 +26,7 @@ choice
- 	prompt "Kernel version"
+diff --git a/DEVELOPERS b/DEVELOPERS
+index cfbe64b..ddd675e 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -190,9 +190,15 @@ F:	package/sigrok-cli/
  
- config BR2_LINUX_KERNEL_LATEST_VERSION
--	bool "Latest version (4.13)"
-+	bool "Latest version (4.14)"
+ N:	Baruch Siach <baruch@tkos.co.il>
+ F:	package/daemon/
++F:	package/dropbear/
+ F:	package/ebtables/
++F:	package/i2c-tools/
++F:	package/libcurl/
++F:	package/libpcap/
+ F:	package/openipmi/
+ F:	package/socat/
++F:	package/strace/
++F:	package/tcpdump/
+ F:	package/ti-uim/
+ F:	package/uhubctl/
  
- config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	bool "Latest CIP SLTS version (v4.4.83-cip8)"
-@@ -116,7 +116,7 @@ endif
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "4.13.12" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "4.14" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "v4.4.83-cip8" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
