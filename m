@@ -1,90 +1,71 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Fri, 10 Nov 2017 19:37:26 +0300
-Subject: [Buildroot] [PATCH v2] binutils: Allow upstream 2.29 to be chosen
- for ARC
-Message-ID: <20171110163726.2463-1-abrodkin@synopsys.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 10 Nov 2017 18:17:55 +0100
+Subject: [Buildroot] [PATCH 1/1] libpjsip: bump to 2.7.1
+In-Reply-To: <20171109215147.7361-1-Adamduskett@outlook.com> (Adam Duskett's
+ message of "Thu, 9 Nov 2017 16:51:47 -0500")
+References: <20171109215147.7361-1-Adamduskett@outlook.com>
+Message-ID: <87h8u29hoc.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As of today quite a lot of ARC stuff got merged in upsream
-such that we may finally use upstream realease for building
-and even running Linux kernel and rootfs built with vanilla
-binutils.
+>>>>> "Adam" == Adam Duskett <aduskett@gmail.com> writes:
 
-Essentially upstream release is still a bit behind our
-GitHub-based releases but let's try to use vanilla version
-and if we're lucky enough with just a small set of back-ported patches
-we'll be able to use vanilla release(s) for everything in Buildroot.
+ > Also add hash for license file
+ > Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
 
-Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Peter Korsgaard <peter@korsgaard.com>
----
+Please state clearly if these version bumps are for master or next. I
+was going to apply to next until I checked the website:
 
-Changes v1->v2:
+https://trac.pjsip.org/repos/milestone/release-2.7.1
 
- * Use positive logic on selection of ARC tools in binutils.mk (Arnout)
+Security update. This version is recommended for all users to improve
+the security of applications using PJSIP.
 
- package/binutils/Config.in.host | 11 ++++++++---
- package/binutils/binutils.mk    |  2 +-
- 2 files changed, 9 insertions(+), 4 deletions(-)
+So I've updated the commit message to make this clear and applied to
+master, thanks.
 
-diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
-index 95144c8..4a2992a 100644
---- a/package/binutils/Config.in.host
-+++ b/package/binutils/Config.in.host
-@@ -2,8 +2,8 @@ comment "Binutils Options"
+> ---
+ >  package/libpjsip/libpjsip.hash | 7 ++++---
+ >  package/libpjsip/libpjsip.mk   | 2 +-
+ >  2 files changed, 5 insertions(+), 4 deletions(-)
+
+ > diff --git a/package/libpjsip/libpjsip.hash b/package/libpjsip/libpjsip.hash
+ > index b35fed3403..edac3d578f 100644
+ > --- a/package/libpjsip/libpjsip.hash
+ > +++ b/package/libpjsip/libpjsip.hash
+ > @@ -1,5 +1,6 @@
+ > -# From http://www.pjsip.org/release/2.7/MD5SUM.TXT
+ > -md5	c0d322261e526cafecc176facbb0bab7  pjproject-2.7.tar.bz2
+ > +# From http://www.pjsip.org/release/2.7.1/MD5SUM.TXT
+ > +md5	99a64110fa5c2debff40e0e8d4676380  pjproject-2.7.1.tar.bz2
  
- choice
- 	prompt "Binutils Version"
--	default BR2_BINUTILS_VERSION_2_28_X
--	depends on !BR2_arc
-+	default BR2_BINUTILS_VERSION_2_28_X if !BR2_arc
-+	default BR2_BINUTILS_VERSION_ARC if BR2_arc
- 	help
- 	  Select the version of binutils you wish to use.
+ >  # Locally computed
+ > -sha256	1c80621a11c39151b3c2511f06abc8ef031fc712bb2f9e9923b5301b04b28f6b	pjproject-2.7.tar.bz2
+ > +sha256	59fabc62a02b2b80857297cfb10e2c68c473f4a0acc6e848cfefe8421f2c3126	pjproject-2.7.1.tar.bz2
+ > +sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYING
+ > diff --git a/package/libpjsip/libpjsip.mk b/package/libpjsip/libpjsip.mk
+ > index a7fbd21503..6f3f9e3f1a 100644
+ > --- a/package/libpjsip/libpjsip.mk
+ > +++ b/package/libpjsip/libpjsip.mk
+ > @@ -4,7 +4,7 @@
+ >  #
+ >  ################################################################################
  
-@@ -11,18 +11,23 @@ config BR2_BINUTILS_VERSION_2_27_X
- 	bool "binutils 2.27"
- 	# binutils 2.27 triggers a bug in elf2flt on ARM/noMMU
- 	depends on !(BR2_arm && !BR2_USE_MMU)
-+	depends on !BR2_arc
- 
- config BR2_BINUTILS_VERSION_2_28_X
- 	bool "binutils 2.28.1"
-+	depends on !BR2_arc
- 
- config BR2_BINUTILS_VERSION_2_29_X
- 	bool "binutils 2.29.1"
- 
-+config BR2_BINUTILS_VERSION_ARC
-+	bool "binutils arc (2.29)"
-+	depends on BR2_arc
- endchoice
- 
- config BR2_BINUTILS_VERSION
- 	string
--	default "arc-2017.09-release"	if BR2_arc
-+	default "arc-2017.09-release"	if BR2_BINUTILS_VERSION_ARC
- 	default "2.27"		if BR2_BINUTILS_VERSION_2_27_X
- 	default "2.28.1"	if BR2_BINUTILS_VERSION_2_28_X
- 	default "2.29.1"	if BR2_BINUTILS_VERSION_2_29_X
-diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
-index d2bf5b9..e802952 100644
---- a/package/binutils/binutils.mk
-+++ b/package/binutils/binutils.mk
-@@ -15,7 +15,7 @@ BINUTILS_VERSION = 2.28.1
- endif
- endif # BINUTILS_VERSION
- 
--ifeq ($(BR2_arc),y)
-+ifeq ($(BR2_BINUTILS_VERSION_ARC),y)
- BINUTILS_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,binutils-gdb,$(BINUTILS_VERSION))
- BINUTILS_SOURCE = binutils-$(BINUTILS_VERSION).tar.gz
- BINUTILS_FROM_GIT = y
+ > -LIBPJSIP_VERSION = 2.7
+ > +LIBPJSIP_VERSION = 2.7.1
+ >  LIBPJSIP_SOURCE = pjproject-$(LIBPJSIP_VERSION).tar.bz2
+ >  LIBPJSIP_SITE = http://www.pjsip.org/release/$(LIBPJSIP_VERSION)
+ >  LIBPJSIP_DEPENDENCIES = libsrtp
+ > -- 
+ > 2.13.6
+
+ > _______________________________________________
+ > buildroot mailing list
+ > buildroot at busybox.net
+ > http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.10.2
+Bye, Peter Korsgaard
