@@ -1,23 +1,23 @@
-From: nimaim <nimaim@gmail.com>
-Date: Fri, 10 Nov 2017 05:33:18 -0700 (MST)
-Subject: [Buildroot] [PATCH v5 00/11] board: Add Allwinner A64/H5 boards
-In-Reply-To: <CAD6G_RRbFzgqtGv9Rd-dSQtO33ADV3G91nqgG51YHdiXE1U=jA@mail.gmail.com>
-References: <1509559553-26544-1-git-send-email-jagan@amarulasolutions.com>
- <CAD6G_RRovKuVcVzreKh=K7HSzOddSBg+jau3CYdhwd-fBM_bVg@mail.gmail.com>
- <20171106104826.0300f412@windsurf.home>
- <CAD6G_RRbFzgqtGv9Rd-dSQtO33ADV3G91nqgG51YHdiXE1U=jA@mail.gmail.com>
-Message-ID: <1510317198034-0.post@n4.nabble.com>
+From: John O'Sullivan <John.OSullivan@BlackBox.com>
+Date: Fri, 10 Nov 2017 13:17:15 +0000
+Subject: [Buildroot] Regenerating Skeleton without a clean in 2017
+Message-ID: <eff7c8c514764b54a3a11924db80c3bb@PGHPRDEXCH02.corp.bbns.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Wow I've been waiting for BR support for these builds for a long time now.
-Thanks a lot for this. I have a orangepi zero and nanopi neo2 I could test
-on later next week.
+Hi,
 
+In the older buildroot releases  one could force a reintegration of a skeleton overlay with various hacks like removing the .root file in build, are there any equivalents in Buildroot-2017.02-4. I understand this is not best practice but I have some quick prototyping to do and the build time is an issue.
 
+Regards
+JohnOS
 
---
-Sent from: http://buildroot-busybox.2317881.n4.nabble.com/
+________________________________
+
+This email and any files transmitted with it are confidential and are intended for the sole use of the individual to whom they are addressed. Black Box Corporation reserves the right to scan all e-mail traffic for restricted content and to monitor all e-mail in general. If you are not the intended recipient or you have received this email in error, any use, dissemination or forwarding of this email is strictly prohibited. If you have received this email in error, please notify the sender by replying to this email.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20171110/d4ac3b22/attachment.html>
