@@ -1,60 +1,59 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Fri, 10 Nov 2017 15:21:09 -0500
-Subject: [Buildroot] [NEXT 17/17] libpjsip: add speex codec
-In-Reply-To: <20171110202109.25215-1-aduskett@gmail.com>
-References: <20171110202109.25215-1-aduskett@gmail.com>
-Message-ID: <20171110202109.25215-17-aduskett@gmail.com>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Fri, 10 Nov 2017 23:16:29 +0100
+Subject: [Buildroot] [PATCH] libpjsip: fix static build failures due to name
+ clash
+Message-ID: <1510352189-20531-1-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Adam Duskett <aduskett@gmail.com>
----
- package/libpjsip/Config.in   | 4 ++++
- package/libpjsip/libpjsip.mk | 9 +++++++--
- 2 files changed, 11 insertions(+), 2 deletions(-)
+Several packages have a similar md5.c file, and each has a function
+named byteReverse(). This generates link errors when building
+statically ("multiple definition of `byteReverse'").
 
-diff --git a/package/libpjsip/Config.in b/package/libpjsip/Config.in
-index 8cde5370ae..3e410d4f02 100644
---- a/package/libpjsip/Config.in
-+++ b/package/libpjsip/Config.in
-@@ -90,6 +90,10 @@ config BR2_PACKAGE_LIBPJSIP_CODEC_OPUS
- 	bool "Opus"
- 	select BR2_PACKAGE_OPUS
- 
-+config BR2_PACKAGE_LIBPJSIP_CODEC_SPEEX
-+	bool "Speex"
-+	select BR2_PACKAGE_SPEEX
-+
- endif # BR2_PACKAGE_LIBPJSIP
- 
- comment "libpjsip needs a toolchain w/ C++, threads"
-diff --git a/package/libpjsip/libpjsip.mk b/package/libpjsip/libpjsip.mk
-index c053d5e80b..87339fd067 100644
---- a/package/libpjsip/libpjsip.mk
-+++ b/package/libpjsip/libpjsip.mk
-@@ -25,8 +25,6 @@ LIBPJSIP_CONF_ENV = \
- 	CFLAGS="$(LIBPJSIP_CFLAGS)"
- 
- LIBPJSIP_CONF_OPTS = \
--	--disable-speex-codec \
--	--disable-speex-aec \
- 	--disable-resample \
- 	--disable-opencore-amr \
- 	--disable-libwebrtc \
-@@ -138,4 +136,11 @@ else
- LIBPJSIP_CONF_OPTS += --disable-opus
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBPJSIP_CODEC_SPEEX),y)
-+LIBPJSIP_DEPENDENCIES += speex
-+LIBPJSIP_CONF_OPTS += --with-external-speex
-+else
-+LIBPJSIP_CONF_OPTS += --disable-speex-codec --disable-speex-aec
-+endif
-+
- $(eval $(autotools-package))
+Fix by applying a patch from upstream:
+  https://trac.pjsip.org/repos/changeset/5688
+
+Fixes:
+  http://autobuild.buildroot.org/results/5d7/5d72e0f8517a555399978d5a0e9f7efd0a278189/
+  http://autobuild.buildroot.org/results/c47/c47ccbb9b40011cf0d79c7040bed061ddefd9629/
+  http://autobuild.buildroot.org/results/419/419ab2c0e034cc68991281c51caa8271b0fadbab/
+
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Cc: Adam Duskett <aduskett@gmail.com>
+---
+ .../0001-Fixed-possible-function-name-clash.patch   | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
+ create mode 100644 package/libpjsip/0001-Fixed-possible-function-name-clash.patch
+
+diff --git a/package/libpjsip/0001-Fixed-possible-function-name-clash.patch b/package/libpjsip/0001-Fixed-possible-function-name-clash.patch
+new file mode 100644
+index 000000000000..80a05ab50a6c
+--- /dev/null
++++ b/package/libpjsip/0001-Fixed-possible-function-name-clash.patch
+@@ -0,0 +1,21 @@
++Index: pjlib-util/src/pjlib-util/md5.c
++===================================================================
++diff --git a/pjproject/pjlib-util/src/pjlib-util/md5.c b/pjproject/pjlib-util/src/pjlib-util/md5.c
++--- a/pjlib-util/src/pjlib-util/md5.c	(revision 5687)
+++++ b/pjlib-util/src/pjlib-util/md5.c	(revision 5688)
++@@ -29,13 +29,13 @@
++ #ifndef HIGHFIRST
++ #define byteReverse(buf, len)	/* Nothing */
++ #else
++-void byteReverse(unsigned char *buf, unsigned longs);
+++static void byteReverse(unsigned char *buf, unsigned longs);
++ 
++ #ifndef ASM_MD5
++ /*
++  * Note: this code is harmless on little-endian machines.
++  */
++-void byteReverse(unsigned char *buf, unsigned longs)
+++static void byteReverse(unsigned char *buf, unsigned longs)
++ {
++     pj_uint32_t t;
++     do {
 -- 
-2.13.6
+2.7.4
