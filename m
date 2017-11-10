@@ -1,41 +1,24 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 10 Nov 2017 18:25:33 +0100
-Subject: [Buildroot] [git commit branch/next] webp: bump to 0.6.0
-Message-ID: <20171110171816.E2C8881218@busybox.osuosl.org>
+Date: Fri, 10 Nov 2017 18:25:49 +0100
+Subject: [Buildroot] [PATCH 1/1] webp: bump to 0.6.0
+In-Reply-To: <20171109144440.14646-1-m.hoffmann@cartelsol.com> (Marcus
+ Hoffmann's message of "Thu, 9 Nov 2017 15:44:40 +0100")
+References: <20171109144440.14646-1-m.hoffmann@cartelsol.com>
+Message-ID: <87zi7u82qq.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ba9e779e83acd31f88d4cf8f2a2b6907a0e4ab2f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+>>>>> "Marcus" == Marcus Hoffmann <m.hoffmann@cartelsol.com> writes:
 
-Signed-off-by: Marcus Hoffmann <m.hoffmann@cartelsol.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/webp/webp.hash | 2 +-
- package/webp/webp.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ > Signed-off-by: Marcus Hoffmann <m.hoffmann@cartelsol.com>
+> ---
+ > Tested with ./utils/test-pkg.
+ > Patch should go into next.
 
-diff --git a/package/webp/webp.hash b/package/webp/webp.hash
-index bf4ee8f..e9b2060 100644
---- a/package/webp/webp.hash
-+++ b/package/webp/webp.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	b75310c810b3eda222c77f6d6c26b061240e3d9060095de44b2c1bae291ecdef	libwebp-0.5.2.tar.gz
-+sha256	c928119229d4f8f35e20113ffb61f281eda267634a8dc2285af4b0ee27cf2b40	libwebp-0.6.0.tar.gz
-diff --git a/package/webp/webp.mk b/package/webp/webp.mk
-index 7cf3df2..8213027 100644
---- a/package/webp/webp.mk
-+++ b/package/webp/webp.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WEBP_VERSION = 0.5.2
-+WEBP_VERSION = 0.6.0
- WEBP_SOURCE = libwebp-$(WEBP_VERSION).tar.gz
- WEBP_SITE = http://downloads.webmproject.org/releases/webp
- WEBP_LICENSE = BSD-3-Clause
+Committed to next, thanks.
+
+-- 
+Bye, Peter Korsgaard
