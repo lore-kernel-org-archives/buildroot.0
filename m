@@ -1,53 +1,59 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 11 Nov 2017 23:26:42 +0100
-Subject: [Buildroot] [git commit branch/next] python-numpy: reformat
- BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
-Message-ID: <20171113221622.77279807B2@busybox.osuosl.org>
+Date: Sat, 11 Nov 2017 23:31:14 +0100
+Subject: [Buildroot] [git commit branch/next] package/collectd: Specify FP
+ layout based on endianness
+Message-ID: <20171113221622.8B57B807B2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=855002f22b4795b7ff3e37880c3ed65011cd036c
+commit: https://git.buildroot.net/buildroot/commit/?id=bdd8475b90fa46644149d34bf852b213ec60ce71
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Current BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS variable layout going
-to be inconvenient and ugly for adding new architectures or
-restricting specific architectures. Lets reformat layout of this
-variable.
+Big-endian CPUs store floating point as big endian (at lest majority
+of them do), so, in order for 'network' plugin to work correctly (and
+potentially any user of htond() in collectd's codebase),
+--with-fp-layout=endianflip as opposed to --with-fp-layout=nothing
+needs to be specified during configuration phase.
 
-Signed-off-by: Evgeniy Didin <didin@synopsys.com>
-Cc: Alexey Brodkin <abrodkin@synopsys.com>
-Cc: arc-buildroot at synopsys.com
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
+Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python-numpy/Config.in | 14 +++++++++++---
- 1 file changed, 11 insertions(+), 3 deletions(-)
+ package/collectd/collectd.mk | 16 +++++++++++++++-
+ 1 file changed, 15 insertions(+), 1 deletion(-)
 
-diff --git a/package/python-numpy/Config.in b/package/python-numpy/Config.in
-index 859542f..5abe04b 100644
---- a/package/python-numpy/Config.in
-+++ b/package/python-numpy/Config.in
-@@ -1,9 +1,17 @@
- config BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
- 	bool
- 	# Numpy has some CPU specific code
--	default y if BR2_arc || BR2_aarch64 || BR2_arm || BR2_armeb || BR2_i386 \
--		|| BR2_mips || BR2_mipsel || BR2_powerpc || BR2_powerpc64 \
--		|| BR2_sh || BR2_x86_64
-+	default y if BR2_arc 
-+	default y if BR2_aarch64
-+	default y if BR2_arm 
-+	default y if BR2_armeb
-+	default y if BR2_i386 
-+	default y if BR2_mips
-+	default y if BR2_mipsel
-+	default y if BR2_powerpc
-+	default y if BR2_powerpc64 
-+	default y if BR2_sh 
-+	default y if BR2_x86_64
+diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
+index 626fba8..6c987b2 100644
+--- a/package/collectd/collectd.mk
++++ b/package/collectd/collectd.mk
+@@ -24,9 +24,23 @@ COLLECTD_PLUGINS_DISABLE = \
  
- config BR2_PACKAGE_PYTHON_NUMPY
- 	bool "python-numpy"
+ COLLECTD_CONF_ENV += LIBS="-lm"
+ 
++#
++# NOTE: There's also a third availible setting "intswap", which might
++# be needed on some old ARM hardware (see [2]), but is not being
++# accounted for as per discussion [1]
++#
++# [1] http://lists.busybox.net/pipermail/buildroot/2017-November/206100.html
++# [2] http://lists.busybox.net/pipermail/buildroot/2017-November/206251.html
++#
++ifeq ($(BR2_ENDIAN),"BIG")
++COLLECTD_FP_LAYOUT=endianflip
++else
++COLLECTD_FP_LAYOUT=nothing
++endif
++
+ COLLECTD_CONF_OPTS += \
+ 	--with-nan-emulation \
+-	--with-fp-layout=nothing \
++	--with-fp-layout=$(COLLECTD_FP_LAYOUT) \
+ 	--with-perl-bindings=no \
+ 	$(foreach p, $(COLLECTD_PLUGINS_DISABLE), --disable-$(p)) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_AGGREGATION),--enable-aggregation,--disable-aggregation) \
