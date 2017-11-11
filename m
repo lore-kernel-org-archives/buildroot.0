@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 11 Nov 2017 10:31:33 +0100
-Subject: [Buildroot] [NEXT 05/17] libpjsip: add portaudio option
-In-Reply-To: <20171110202109.25215-5-aduskett@gmail.com>
+Date: Sat, 11 Nov 2017 10:33:51 +0100
+Subject: [Buildroot] [NEXT 07/17] libpjsip: add ffmpeg option
+In-Reply-To: <20171110202109.25215-7-aduskett@gmail.com>
 References: <20171110202109.25215-1-aduskett@gmail.com>
- <20171110202109.25215-5-aduskett@gmail.com>
-Message-ID: <89962c8f-9c81-2619-8b10-01fd179939ec@mind.be>
+ <20171110202109.25215-7-aduskett@gmail.com>
+Message-ID: <ea87b1a3-113c-983d-bd7c-d2db44af825e@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,43 +16,62 @@ To: buildroot@busybox.net
 On 10-11-17 21:20, Adam Duskett wrote:
 > Signed-off-by: Adam Duskett <aduskett@gmail.com>
 > ---
->  package/libpjsip/Config.in   | 4 ++++
->  package/libpjsip/libpjsip.mk | 5 +++++
->  2 files changed, 9 insertions(+)
+>  package/libpjsip/Config.in   | 11 +++++++++++
+>  package/libpjsip/libpjsip.mk |  8 +++++++-
+>  2 files changed, 18 insertions(+), 1 deletion(-)
 > 
 > diff --git a/package/libpjsip/Config.in b/package/libpjsip/Config.in
-> index 0a6398d508..e00a4a30b0 100644
+> index 20b8568d52..1ad7d77f2a 100644
 > --- a/package/libpjsip/Config.in
 > +++ b/package/libpjsip/Config.in
-> @@ -26,6 +26,10 @@ config BR2_PACKAGE_LIBPJSIP_ALSA
->  config BR2_PACKAGE_LIBPJSIP_OSS
->  	bool "OSS support"
+> @@ -35,6 +35,17 @@ endif # BR2_PACKAGE_LIBPJSIP_SOUND
+>  config BR2_PACKAGE_LIBPJSIP_VIDEO
+>  	bool "Enable video"
 >  
-> +config BR2_PACKAGE_LIBPJSIP_PORTAUDIO
-> +	bool "portaudio support"
-> +	select BR2_PACKAGE_PORTAUDIO
+> +if BR2_PACKAGE_LIBPJSIP_VIDEO
 > +
->  endif # BR2_PACKAGE_LIBPJSIP_SOUND
->  
+> +config BR2_PACKAGE_LIBPJSIP_FFMPEG
+> +	bool "ffmpeg support"
+> +	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
+> +	select BR2_PACKAGE_FFMPEG
+> +	help
+> +	  Enable ffmpeg support
+> +
+> +endif # BR2_PACKAGE_LIBPJSIP_VIDEO
+> +
 >  endif # BR2_PACKAGE_LIBPJSIP
+>  
+>  comment "libpjsip needs a toolchain w/ C++, threads"
 > diff --git a/package/libpjsip/libpjsip.mk b/package/libpjsip/libpjsip.mk
-> index d02ca4e803..774959d50b 100644
+> index f45d9d1caf..5421789948 100644
 > --- a/package/libpjsip/libpjsip.mk
 > +++ b/package/libpjsip/libpjsip.mk
-> @@ -78,4 +78,9 @@ ifneq ($(BR2_PACKAGE_LIBPJSIP_OSS),y)
->  LIBPJSIP_CONF_OPTS += --disable-oss
+> @@ -40,7 +40,6 @@ LIBPJSIP_CONF_OPTS = \
+>  	--disable-g722-codec \
+>  	--disable-libsamplerate \
+>  	--disable-sdl \
+> -	--disable-ffmpeg \
+>  	--disable-v4l2 \
+>  	--disable-openh264 \
+>  	--disable-libyuv \
+> @@ -86,4 +85,11 @@ ifneq ($(BR2_PACKAGE_LIBPJSIP_VIDEO),y)
+>  LIBPJSIP_CONF_OPTS += --disable-video
 >  endif
 >  
-> +ifeq ($(BR2_PACKAGE_LIBPJSIP_PORTAUDIO),y)
-> +LIBPJSIP_DEPENDENCIES += portaudio
-> +LIBPJSIP_CONF_OPTS += --with-external-pa
+> +ifeq ($(BR2_PACKAGE_LIBPJSIP_FFMPEG),y)
+> +LIBPJSIP_DEPENDENCIES += ffmpeg
+> +LIBPJSIP_CONF_OPTS += --with-ffmpeg=$(STAGING_DIR)/usr/lib
 
- It his option is not selected, will it use an internal copy of portaudio? Do we
-really want that?
+ Why is this needed? This is the standard library search path so shouldn't be
+needed. Also, normally it would be --with-ffmpeg=$(STAGING_DIR)/usr and
+configure uses .../include for -I and .../lib for -L. Please add an explanation
+in the commit log.
 
  Regards,
  Arnout
 
+> +else
+> +LIBPJSIP_CONF_OPTS += --disable-ffmpeg
 > +endif
 > +
 >  $(eval $(autotools-package))
