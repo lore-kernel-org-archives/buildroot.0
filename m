@@ -1,60 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 11 Nov 2017 23:23:55 +0100
-Subject: [Buildroot] [git commit branch/next] postgresql: security bump to
- version 9.6.6
-Message-ID: <20171113221622.64AAB807B2@busybox.osuosl.org>
+Date: Sat, 11 Nov 2017 23:40:13 +0100
+Subject: [Buildroot] [git commit branch/next] mesa3d: fix build with
+ BR2_SHARED_STATIC_LIBS
+Message-ID: <20171113221622.C1FDC807B2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b97353f2b50add10971e8477ad0b4cede9244578
+commit: https://git.buildroot.net/buildroot/commit/?id=dd09d500aa6972808b2549e4b8c7fa4e396ca91f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fixes the following security issues:
+mesa3d does not allow to enable both static and shared libraries so if
+BR2_SHARED_STATIC_LIBS is set, disable static
 
-CVE-2017-12172: Start scripts permit database administrator to modify
-root-owned files.
+Fixes https://bugs.busybox.net/show_bug.cgi?id=10326
 
-CVE-2017-15098: Memory disclosure in JSON functions.
-
-CVE-2017-15099: INSERT ... ON CONFLICT DO UPDATE fails to enforce SELECT
-privileges.
-
-See the announcement for more details:
-https://www.postgresql.org/about/news/1801/
-
-While we're at it, also add a hash for the license file.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/postgresql/postgresql.hash | 6 ++++--
- package/postgresql/postgresql.mk   | 2 +-
- 2 files changed, 5 insertions(+), 3 deletions(-)
+ package/mesa3d/mesa3d.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
-index 62ce9a7..e628389 100644
---- a/package/postgresql/postgresql.hash
-+++ b/package/postgresql/postgresql.hash
-@@ -1,2 +1,4 @@
--# From https://ftp.postgresql.org/pub/source/v9.6.5/postgresql-9.6.5.tar.bz2.sha256
--sha256 06da12a7e3dddeb803962af8309fa06da9d6989f49e22865335f0a14bad0744c  postgresql-9.6.5.tar.bz2
-+# From https://ftp.postgresql.org/pub/source/v9.6.6/postgresql-9.6.6.tar.bz2.sha256
-+sha256 399cdffcb872f785ba67e25d275463d74521566318cfef8fe219050d063c8154  postgresql-9.6.6.tar.bz2
-+# License file, Locally calculated
-+sha256 7dc8de32741ad1b03e21710771b55a1b9d460671d47f28a8840f917e38c66676  COPYRIGHT
-diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
-index 7adb957..50ce212 100644
---- a/package/postgresql/postgresql.mk
-+++ b/package/postgresql/postgresql.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 9305523..5627344 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -26,6 +26,12 @@ MESA3D_DEPENDENCIES = \
+ # Disable assembly usage.
+ MESA3D_CONF_OPTS = --disable-asm
  
--POSTGRESQL_VERSION = 9.6.5
-+POSTGRESQL_VERSION = 9.6.6
- POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
- POSTGRESQL_SITE = http://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
- POSTGRESQL_LICENSE = PostgreSQL
++# Disable static, otherwise configure will fail with: "Cannot enable both static
++# and shared."
++ifeq ($(BR2_SHARED_STATIC_LIBS),y)
++MESA3D_CONF_OPTS += --disable-static
++endif
++
+ # The Sourcery MIPS toolchain has a special (non-upstream) feature to
+ # have "compact exception handling", which unfortunately breaks with
+ # mesa3d, so we disable it here by passing -mno-compact-eh.
