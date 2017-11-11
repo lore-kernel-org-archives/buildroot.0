@@ -1,56 +1,53 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 13 Nov 2017 23:19:36 +0100
-Subject: [Buildroot] [git commit branch/next] toolchain: add 4.14.x choice
- for headers
-Message-ID: <20171113221623.7CACB807B2@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 11 Nov 2017 23:26:42 +0100
+Subject: [Buildroot] [git commit branch/next] python-numpy: reformat
+ BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
+Message-ID: <20171113221622.77279807B2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bf91e4bd77280fa1b24c15b51a79ef6a8917baf2
+commit: https://git.buildroot.net/buildroot/commit/?id=855002f22b4795b7ff3e37880c3ed65011cd036c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- toolchain/toolchain-common.in                                        | 5 +++++
- .../toolchain-external/toolchain-external-custom/Config.in.options   | 4 ++++
- 2 files changed, 9 insertions(+)
+Current BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS variable layout going
+to be inconvenient and ugly for adding new architectures or
+restricting specific architectures. Lets reformat layout of this
+variable.
 
-diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
-index d87d4d7..1555377 100644
---- a/toolchain/toolchain-common.in
-+++ b/toolchain/toolchain-common.in
-@@ -253,10 +253,15 @@ config BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_13
+Signed-off-by: Evgeniy Didin <didin@synopsys.com>
+Cc: Alexey Brodkin <abrodkin@synopsys.com>
+Cc: arc-buildroot at synopsys.com
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/python-numpy/Config.in | 14 +++++++++++---
+ 1 file changed, 11 insertions(+), 3 deletions(-)
+
+diff --git a/package/python-numpy/Config.in b/package/python-numpy/Config.in
+index 859542f..5abe04b 100644
+--- a/package/python-numpy/Config.in
++++ b/package/python-numpy/Config.in
+@@ -1,9 +1,17 @@
+ config BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
  	bool
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12
+ 	# Numpy has some CPU specific code
+-	default y if BR2_arc || BR2_aarch64 || BR2_arm || BR2_armeb || BR2_i386 \
+-		|| BR2_mips || BR2_mipsel || BR2_powerpc || BR2_powerpc64 \
+-		|| BR2_sh || BR2_x86_64
++	default y if BR2_arc 
++	default y if BR2_aarch64
++	default y if BR2_arm 
++	default y if BR2_armeb
++	default y if BR2_i386 
++	default y if BR2_mips
++	default y if BR2_mipsel
++	default y if BR2_powerpc
++	default y if BR2_powerpc64 
++	default y if BR2_sh 
++	default y if BR2_x86_64
  
-+config BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_14
-+	bool
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_13
-+
- # This order guarantees that the highest version is set, as kconfig
- # stops affecting a value on the first matching default.
- config BR2_TOOLCHAIN_HEADERS_AT_LEAST
- 	string
-+	default "4.14" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_14
- 	default "4.13" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_13
- 	default "4.12" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12
- 	default "4.11" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_11
-diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-index a285340..b9e7c20 100644
---- a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-+++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-@@ -93,6 +93,10 @@ choice
- 	    m = ( LINUX_VERSION_CODE >> 8  ) & 0xFF
- 	    p = ( LINUX_VERSION_CODE >> 0  ) & 0xFF
- 
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_14
-+	bool "4.14.x"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_14
-+
- config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_13
- 	bool "4.13.x"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_13
+ config BR2_PACKAGE_PYTHON_NUMPY
+ 	bool "python-numpy"
