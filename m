@@ -1,33 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 11 Nov 2017 23:40:26 +0100
-Subject: [Buildroot] [PATCH 1/1] mesa3d: fix build with
- BR2_SHARED_STATIC_LIBS
-In-Reply-To: <20171105104958.28634-1-fontaine.fabrice@gmail.com>
-References: <20171105104958.28634-1-fontaine.fabrice@gmail.com>
-Message-ID: <20171111234026.71ad1af6@windsurf.home>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat, 11 Nov 2017 22:40:50 +0000
+Subject: [Buildroot] [Bug 10326] mesa3d package fails to build when
+ BR2_SHARED_STATIC_LIBS=y
+In-Reply-To: <bug-10326-163@https.bugs.busybox.net/>
+References: <bug-10326-163@https.bugs.busybox.net/>
+Message-ID: <bug-10326-163-KxrgMCnwev@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=10326
 
-On Sun,  5 Nov 2017 11:49:58 +0100, Fabrice Fontaine wrote:
-> mesa3d does not allow to enable both static and shared libraries so if
-> BR2_SHARED_STATIC_LIBS is set, disable static
-> 
-> Fixes https://bugs.busybox.net/show_bug.cgi?id=10326
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/mesa3d/mesa3d.mk | 6 ++++++
->  1 file changed, 6 insertions(+)
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
-Applied to master, thanks.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+         Resolution|---                         |FIXED
+             Status|ASSIGNED                    |RESOLVED
 
-Thomas
+--- Comment #6 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
+Fixed by
+https://git.buildroot.org/buildroot/commit/?id=dd09d500aa6972808b2549e4b8c7fa4e396ca91f.
+Thanks!
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+You are receiving this mail because:
+You are on the CC list for the bug.
