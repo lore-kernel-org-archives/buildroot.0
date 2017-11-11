@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 11 Nov 2017 23:21:48 +0100
-Subject: [Buildroot] [PATCH 1/2] package/ffmpeg: simplify
- BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS logic
-In-Reply-To: <20171111162242.15110-1-bernd.kuhls@t-online.de>
+Date: Sat, 11 Nov 2017 23:22:42 +0100
+Subject: [Buildroot] [PATCH 2/2] package/ffmpeg: fix fenv build failure
+ on ARCv2 with glibc
+In-Reply-To: <20171111162242.15110-2-bernd.kuhls@t-online.de>
 References: <20171111162242.15110-1-bernd.kuhls@t-online.de>
-Message-ID: <20171111232148.4f826e11@windsurf.home>
+ <20171111162242.15110-2-bernd.kuhls@t-online.de>
+Message-ID: <20171111232242.7e90bd33@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,19 +14,22 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 11 Nov 2017 17:22:41 +0100, Bernd Kuhls wrote:
-> Suggested by Arnout:
-> http://lists.busybox.net/pipermail/buildroot/2017-November/206631.html
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/ffmpeg/Config.in | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
+On Sat, 11 Nov 2017 17:22:42 +0100, Bernd Kuhls wrote:
 
-Applied to master, thanks.
+> +	# fenv.h lacks FE_INVALID, FE_OVERFLOW & FE_UNDERFLOW
+> +	depends on !BR2_archs38 || !BR2_TOOLCHAIN_USES_GLIBC
+
+I've changed this to:
+
+	depends on !(BR2_archs38 && BR2_TOOLCHAIN_USES_GLIBC)
+
+which IMO is easier to read as it match the human way of expressingthe
+dependency: "not available on ARC HS38 with glibc".
+
+Applied with this change. Thanks!
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
