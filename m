@@ -1,47 +1,38 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 12 Nov 2017 17:52:22 +0100
-Subject: [Buildroot] [git commit branch/next] package/imagemagick: security
- bump to version 7.0.7-10
-Message-ID: <20171113221622.D73C6807B2@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 11 Nov 2017 23:24:53 +0100
+Subject: [Buildroot] [git commit branch/next] package/openjpeg: fix build
+ with threads disabled
+Message-ID: <20171113221622.6D8C6807B2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3c8dc542936484cf94efd06d96161c8a04fb17a5
+commit: https://git.buildroot.net/buildroot/commit/?id=a6facc809b01e1c7b02bb93ede4a4bff7b91a091
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Version 7.0.7-3 fixes CVE-2017-15218:
-Stop potential leaks in the JNG decoder
-
-Changelog: https://www.imagemagick.org/script/changelog.php
+Fixes
+http://autobuild.buildroot.net/results/f16/f16a558c30199a92e93a31e0ba391b99a9bd689f/
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/imagemagick/imagemagick.hash | 2 +-
- package/imagemagick/imagemagick.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/openjpeg/openjpeg.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
-index 92880a9..2468bdb 100644
---- a/package/imagemagick/imagemagick.hash
-+++ b/package/imagemagick/imagemagick.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 5a45e29509dbb23793a9c8db5c47ef1114c1ee82c9ca60053eaf06b3fc243e2c  7.0.7-1.tar.gz
-+sha256 924d1161ed2399bcb72f98419072b3130a466e07d9a6fce43d27458ffa907ffa  7.0.7-10.tar.gz
-diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
-index 9043ce8..c2171a7 100644
---- a/package/imagemagick/imagemagick.mk
-+++ b/package/imagemagick/imagemagick.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/openjpeg/openjpeg.mk b/package/openjpeg/openjpeg.mk
+index df85168..9a8fdab 100644
+--- a/package/openjpeg/openjpeg.mk
++++ b/package/openjpeg/openjpeg.mk
+@@ -15,4 +15,10 @@ OPENJPEG_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBPNG),libpng)
+ OPENJPEG_DEPENDENCIES += $(if $(BR2_PACKAGE_TIFF),tiff)
+ OPENJPEG_DEPENDENCIES += $(if $(BR2_PACKAGE_LCMS2),lcms2)
  
--IMAGEMAGICK_VERSION = 7.0.7-1
-+IMAGEMAGICK_VERSION = 7.0.7-10
- IMAGEMAGICK_SOURCE = $(IMAGEMAGICK_VERSION).tar.gz
- IMAGEMAGICK_SITE = https://github.com/ImageMagick/ImageMagick/archive
- IMAGEMAGICK_LICENSE = Apache-2.0
++ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
++OPENJPEG_CONF_OPTS += -DOPJ_USE_THREAD=ON
++else
++OPENJPEG_CONF_OPTS += -DOPJ_USE_THREAD=OFF
++endif
++
+ $(eval $(cmake-package))
