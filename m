@@ -1,86 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 11 Nov 2017 23:38:25 +0100
-Subject: [Buildroot] [PATCH] support/config-fragments/autobuild: update
- toolchains for 2017.11-rc1
-In-Reply-To: <20171107142143.11527-1-thomas.petazzoni@free-electrons.com>
-References: <20171107142143.11527-1-thomas.petazzoni@free-electrons.com>
-Message-ID: <20171111233825.3242132a@windsurf.home>
+Date: Sat, 11 Nov 2017 23:38:49 +0100
+Subject: [Buildroot] [git commit] vboot-utils: fix ARCH detection
+Message-ID: <20171111223132.0FAD57FFC2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=bbb25c3ad7b66e6882508e49028d1739732bca34
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue,  7 Nov 2017 15:21:43 +0100, Thomas Petazzoni wrote:
-> All Buildroot pre-built toolchains have been rebuilt with Buildroot
-> 2017.11-rc1, so that they have the latest version of
-> glibc/musl/uClibc, and also the latest gcc/binutils updates.
-> 
-> Specifically, this will fix the build failures on Blackfin that were
-> due to the missing accept4() support:
-> 
->   http://autobuild.buildroot.net/results/8b5a72dd7cde685f6f68f46aeee8b1b60c96d559/
->   (openobex)
-> 
->   http://autobuild.buildroot.net/results/b19dd9ed29944d7f79c6f824669e3baaa0bb045a/
->   (libiio)
-> 
-> In terms of changes to the toolchains:
-> 
->  - AArch64 glibc toolchain changed to use 4.4 kernel headers instead
->    of 4.1, in order to increase the variety of kernel header versions
->    being tested.
-> 
->  - Most configurations now use 4.13 kernel headers instead of 4.12
->    (except the configurations that were explicitly using an older
->    kernel headers version)
-> 
->  - The mips64 n64 configuration is changed from using gcc 4.9 to gcc
->    5, since another ARM configuration already tests gcc 4.9.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
-> This should be committed to the master branch.
-> ---
->  support/config-fragments/autobuild/br-aarch64-glibc.config          | 4 ++--
->  support/config-fragments/autobuild/br-arcle-hs38.config             | 4 ++--
->  support/config-fragments/autobuild/br-arm-basic.config              | 4 ++--
->  support/config-fragments/autobuild/br-arm-cortex-a9-glibc.config    | 4 ++--
->  support/config-fragments/autobuild/br-arm-cortex-a9-musl.config     | 4 ++--
->  support/config-fragments/autobuild/br-arm-cortex-m4-full.config     | 4 ++--
->  support/config-fragments/autobuild/br-arm-full-nothread.config      | 4 ++--
->  support/config-fragments/autobuild/br-arm-full-static.config        | 2 +-
->  support/config-fragments/autobuild/br-arm-full.config               | 2 +-
->  support/config-fragments/autobuild/br-bfin-full.config              | 4 ++--
->  support/config-fragments/autobuild/br-i386-pentium-mmx-musl.config  | 2 +-
->  support/config-fragments/autobuild/br-i386-pentium4-full.config     | 2 +-
->  support/config-fragments/autobuild/br-m68k-5208-full.config         | 4 ++--
->  support/config-fragments/autobuild/br-m68k-68040-full.config        | 4 ++--
->  support/config-fragments/autobuild/br-microblazeel-full.config      | 2 +-
->  support/config-fragments/autobuild/br-mips32r6-el-hf-glibc.config   | 4 ++--
->  support/config-fragments/autobuild/br-mips64-n64-full.config        | 6 +++---
->  support/config-fragments/autobuild/br-mips64r6-el-hf-glibc.config   | 4 ++--
->  support/config-fragments/autobuild/br-mipsel-o32-full.config        | 4 ++--
->  support/config-fragments/autobuild/br-nios2-glibc.config            | 4 ++--
->  support/config-fragments/autobuild/br-openrisc-uclibc.config        | 4 ++--
->  support/config-fragments/autobuild/br-powerpc-603e-basic-cpp.config | 4 ++--
->  support/config-fragments/autobuild/br-powerpc-e500mc-full.config    | 4 ++--
->  support/config-fragments/autobuild/br-powerpc64-power7-glibc.config | 4 ++--
->  .../config-fragments/autobuild/br-powerpc64le-power8-glibc.config   | 4 ++--
->  support/config-fragments/autobuild/br-sh4-full.config               | 4 ++--
->  support/config-fragments/autobuild/br-sparc-uclibc.config           | 2 +-
->  support/config-fragments/autobuild/br-sparc64-glibc.config          | 2 +-
->  support/config-fragments/autobuild/br-x86-64-core2-full.config      | 2 +-
->  support/config-fragments/autobuild/br-x86-64-musl.config            | 4 ++--
->  support/config-fragments/autobuild/br-xtensa-full.config            | 4 ++--
->  31 files changed, 55 insertions(+), 55 deletions(-)
+The package includes some target-specific code that is irrelevant
+in a host package but gets built anyway. The target for this code
+must be one of the supported ChromeOS targets.
 
-Applied to master, thanks.
+Supplied Makefile apparently relies on the environment to provide
+a valid target, with a simple fallback to host arch. This breaks
+the build if no value is provided and the host arch is not among
+the supported ones.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Should fix
+http://autobuild.buildroot.net/results/d118a83b6c4f7f910d0d44c279f36251d7ba29e8/
+and similar failures.
+
+Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/vboot-utils/vboot-utils.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/package/vboot-utils/vboot-utils.mk b/package/vboot-utils/vboot-utils.mk
+index a6a67ad..3f63f45 100644
+--- a/package/vboot-utils/vboot-utils.mk
++++ b/package/vboot-utils/vboot-utils.mk
+@@ -21,12 +21,17 @@ HOST_VBOOT_UTILS_DEPENDENCIES = host-openssl host-util-linux host-pkgconf
+ # media partitioning.
+ #
+ # make target for futility is "futil".
++#
++# The value of ARCH is only relevant for crossystem (a target tool) and
++# does not affect futil or cgpt in any way as long as it is one of the
++# supported targets.
+ 
+ define HOST_VBOOT_UTILS_BUILD_CMDS
+ 	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) \
+ 		CC="$(HOSTCC)" \
+ 		CFLAGS="$(HOST_CFLAGS) -D_LARGEFILE64_SOURCE -D_GNU_SOURCE" \
+ 		LDFLAGS="$(HOST_LDFLAGS)" \
++		ARCH=arm \
+ 		futil cgpt
+ endef
+ 
