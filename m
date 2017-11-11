@@ -1,95 +1,69 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 11 Nov 2017 23:41:41 +0100
-Subject: [Buildroot] [PATCH 1/1] gst1-imx: bump version to 0.13.0
-In-Reply-To: <20171110194320.12812-1-alexandre.esse.dev@gmail.com>
-References: <20171110194320.12812-1-alexandre.esse.dev@gmail.com>
-Message-ID: <20171111234141.2b76e5af@windsurf.home>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Sun, 12 Nov 2017 00:06:31 +0100
+Subject: [Buildroot] [PATCH v2] libpjsip: fix static build failures due to
+ name clash
+Message-ID: <1510441591-10698-1-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Several packages have a similar md5.c file, and each has a function
+named byteReverse(). This generates link errors when building
+statically ("multiple definition of `byteReverse'").
 
-On Fri, 10 Nov 2017 20:43:20 +0100, Alexandre Esse wrote:
-> Changelog:
-> 
-> ==== version 0.13.0 (2017-11-01) ====
-> 
-> * New imxv4l2videosink element
->   Currently only supports input physically contiguous memory blocks
->   as input (so, for example, no videotestsrc)
-> 
-> * New Pango-based overlay elements using G2D for rendering
-> 
-> * gstimxcommon library is now public
->   Necessary when implementing external sinks to retrieve the mapped
->   physical memory address from gstreamer buffers
->   (NOTE: ABI may change in the next few releases until this is stabilized)
-> 
-> * New optional ability to use GstPhysMemory from gst-plugins-bad
-> 
-> * imxv4l2videosrc:
->   * Fix compile prior to Gstreamer 1.3.1
->   * v4l2_buffer_pool: Add special case for tw6869 driver
->     The tw6869 driver requires a different physical address to allow
->     DMA'able buffers for decreasing latency between chip and display
->   * v4l2src: add fractional "fps" property
->     (obsoletes the "fps-n" property)
->   * Add GstImxV4l2Meta init function
->     This avoids the g_assert() that was caused by the missing init
->     function
->   * Add num-additional-buffers property
->     This can be useful if capturing video isn't smooth; it sets the
->     number of internal additional buffers, so if downstream consumes
->     too many buffers, imxv4l2videosrc might end up doing a blocking
->     wait until buffers are returned
-> 
-> * imxv4l2src plugin is now called imxv4l2video, because it also
->   contains imxv4l2videosink
->   Also, the v4l2 elements can be enabled/disabled in the build
->   configuration individually now
-> 
-> * compositor:
->   * Only copy compositor input buffers to DMA memory once
->     If a single input frame is used for multiple output frames, we would
->     otherwise copy multiple times which can easily go to the limit of the
->     memory bandwidth
-> 
-> * vpu:
->   * Handle releasing of buffers without assigned framebuffer
->     This can happen if the buffer is released before it was actually
->     used, e.g. when renegotiating at the very beginning; prevents
->     a crash that would otherwise occur
->   * Add parameter check to avoid encoder crash on flush
-> 
-> * g2d:
->   * Add build configuration switches to explicitely specify G2D include
->     and library paths
->   * Disable cacheable memory allocation
->     Several issues were reported with cacheable DMA memory, so it is
->     turned off, at least for now
-> 
-> * blitter:
->   * Add property to clear screen to black in blitter sinks
->   * Add output-rotation property to videotransform base class
-> 
-> * audio:
->   * Fix reference counting for caps
->   * Mark static codec caps as may be leaked
->     This gets rid of the false positive in the leak tracer
-> 
-> Signed-off-by: Alexandre Esse <alexandre.esse.dev@gmail.com>
-> ---
->  package/gstreamer1/gst1-imx/gst1-imx.hash | 2 +-
->  package/gstreamer1/gst1-imx/gst1-imx.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Fix by applying a patch from upstream:
+  https://trac.pjsip.org/repos/changeset/5688
 
-Applied to next, thanks.
+Fixes:
+  http://autobuild.buildroot.org/results/5d7/5d72e0f8517a555399978d5a0e9f7efd0a278189/
+  http://autobuild.buildroot.org/results/c47/c47ccbb9b40011cf0d79c7040bed061ddefd9629/
+  http://autobuild.buildroot.org/results/419/419ab2c0e034cc68991281c51caa8271b0fadbab/
 
-Thomas
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Cc: Adam Duskett <aduskett@gmail.com>
+
+---
+
+Changes v1 -> v2:
+ - Add commit message and SoB line to patch file (Arnout)
+---
+ .../0001-Fixed-possible-function-name-clash.patch  | 26 ++++++++++++++++++++++
+ 1 file changed, 26 insertions(+)
+ create mode 100644 package/libpjsip/0001-Fixed-possible-function-name-clash.patch
+
+diff --git a/package/libpjsip/0001-Fixed-possible-function-name-clash.patch b/package/libpjsip/0001-Fixed-possible-function-name-clash.patch
+new file mode 100644
+index 000000000000..435b0eab548d
+--- /dev/null
++++ b/package/libpjsip/0001-Fixed-possible-function-name-clash.patch
+@@ -0,0 +1,26 @@
++Re #2059 (misc): Fixed possible function name clash with md5 due to non-static function.
++
++Backported from: https://trac.pjsip.org/repos/changeset/5688
++Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
++
++Index: pjlib-util/src/pjlib-util/md5.c
++===================================================================
++diff --git a/pjproject/pjlib-util/src/pjlib-util/md5.c b/pjproject/pjlib-util/src/pjlib-util/md5.c
++--- a/pjlib-util/src/pjlib-util/md5.c	(revision 5687)
+++++ b/pjlib-util/src/pjlib-util/md5.c	(revision 5688)
++@@ -29,13 +29,13 @@
++ #ifndef HIGHFIRST
++ #define byteReverse(buf, len)	/* Nothing */
++ #else
++-void byteReverse(unsigned char *buf, unsigned longs);
+++static void byteReverse(unsigned char *buf, unsigned longs);
++ 
++ #ifndef ASM_MD5
++ /*
++  * Note: this code is harmless on little-endian machines.
++  */
++-void byteReverse(unsigned char *buf, unsigned longs)
+++static void byteReverse(unsigned char *buf, unsigned longs)
++ {
++     pj_uint32_t t;
++     do {
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.7.4
