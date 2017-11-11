@@ -1,35 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 11 Nov 2017 23:31:49 +0100
-Subject: [Buildroot] [PATCH v2] package/collectd: Specify FP layout
- based on endianness
-In-Reply-To: <20171107200442.23067-1-andrew.smirnov@gmail.com>
-References: <20171107200442.23067-1-andrew.smirnov@gmail.com>
-Message-ID: <20171111233149.17181019@windsurf.home>
+Date: Sat, 11 Nov 2017 23:32:36 +0100
+Subject: [Buildroot] [git commit] snmp++: security bump to v3.3.10
+Message-ID: <20171111222515.A4BE280291@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=6be1631bf27cb0d2aa6ddcbad835d614f33698e6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue,  7 Nov 2017 12:04:42 -0800, Andrey Smirnov wrote:
-> Big-endian CPUs store floating point as big endian (at lest majority
-> of them do), so, in order for 'network' plugin to work correctly (and
-> potentially any user of htond() in collectd's codebase),
-> --with-fp-layout=endianflip as opposed to --with-fp-layout=nothing
-> needs to be specified during configuration phase.
-> 
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-> Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
-> ---
+From the changelong:
+Set the FD_CLOEXEC flag on sockets, so they are not "leaked" to
+spawned processes
 
-Applied to master, thanks.
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/snmppp/snmppp.hash | 3 ++-
+ package/snmppp/snmppp.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/snmppp/snmppp.hash b/package/snmppp/snmppp.hash
+index 75ecdda..5c8feee 100644
+--- a/package/snmppp/snmppp.hash
++++ b/package/snmppp/snmppp.hash
+@@ -1,2 +1,3 @@
+ # Locally computed:
+-sha256 2ef0cb20658c1eb9e053f8a7a9d5c8f5ebf2f734d37b692fdbf7163ea17dde6f  snmp++-3.3.9.tar.gz
++sha256 6827adb6a6a68a7f32c41fa12bdfd0aa48f4825b8773f63fc4d5c8482d4ed481	snmp++-3.3.10.tar.gz
++sha256 d00d5deb9ce44fa01ddf6f882de3ea8b9e8402f776b546dd982d55367ebbd392	src/v3.cpp
+diff --git a/package/snmppp/snmppp.mk b/package/snmppp/snmppp.mk
+index 67410d9..4ceb61c 100644
+--- a/package/snmppp/snmppp.mk
++++ b/package/snmppp/snmppp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SNMPPP_VERSION = 3.3.9
++SNMPPP_VERSION = 3.3.10
+ SNMPPP_SOURCE = snmp++-$(SNMPPP_VERSION).tar.gz
+ SNMPPP_SITE = http://www.agentpp.com/download
+ SNMPPP_DEPENDENCIES = host-pkgconf
