@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 11 Nov 2017 23:34:24 +0100
-Subject: [Buildroot] [PATCH/next 1/1] package/{mesa3d,
- mesa3d-headers}: bump version to 17.2.5
-In-Reply-To: <20171111121348.32718-1-bernd.kuhls@t-online.de>
-References: <20171111121348.32718-1-bernd.kuhls@t-online.de>
-Message-ID: <20171111233424.3a262c73@windsurf.home>
+Date: Sat, 11 Nov 2017 23:35:06 +0100
+Subject: [Buildroot] [PATCH 1/1] ntp: implicitly enable openssl-random
+In-Reply-To: <20171108131839.27491-1-aduskett@gmail.com>
+References: <20171108131839.27491-1-aduskett@gmail.com>
+Message-ID: <20171111233506.04e40d0a@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,18 +12,14 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 11 Nov 2017 13:13:48 +0100, Bernd Kuhls wrote:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/mesa3d-headers/mesa3d-headers.mk |  2 +-
->  package/mesa3d/mesa3d.hash               | 10 +++++-----
->  package/mesa3d/mesa3d.mk                 |  2 +-
->  3 files changed, 7 insertions(+), 7 deletions(-)
+On Wed,  8 Nov 2017 08:18:39 -0500, Adam Duskett wrote:
+> If OpenSSL is selected, --enable-openssl-random should be implicitly
+> set as well.
 
-Applied to next, thanks.
+So you meant "explicitly", right ?
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
