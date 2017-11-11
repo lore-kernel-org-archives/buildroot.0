@@ -1,48 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 11 Nov 2017 23:20:42 +0100
-Subject: [Buildroot] [git commit branch/next] package/ffmpeg: simplify
- BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS logic
-Message-ID: <20171113221622.4D7D97FDB3@busybox.osuosl.org>
+Date: Sat, 11 Nov 2017 23:26:50 +0100
+Subject: [Buildroot] [git commit branch/next] python-numpy: disable for
+ ARCompact
+Message-ID: <20171113221622.81B17807B2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bd2544d3d3903935fc4dc0ec9c930720441e545f
+commit: https://git.buildroot.net/buildroot/commit/?id=636f4d81ff4be52dc7818c51b9d479a9cb6ecea1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Suggested by Arnout:
-http://lists.busybox.net/pipermail/buildroot/2017-November/206631.html
+This package fails when building for ARCompact due to toolchain issue.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Marking this with special comment "#ARC toolchain issues for
+ARCompact" as the package is to be enabled as soon as the issue with
+the ARC toolchain is resolved.
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/4c4eaa90335756448007ae3c5ae3839fb17d4442/
+
+Signed-off-by: Evgeniy Didin <didin@synopsys.com>
+Cc: Alexey Brodkin <abrodkin@synopsys.com>
+Cc: arc-buildroot at synopsys.com
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/ffmpeg/Config.in | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ package/python-numpy/Config.in | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/ffmpeg/Config.in b/package/ffmpeg/Config.in
-index ed87ddd..17a4881 100644
---- a/package/ffmpeg/Config.in
-+++ b/package/ffmpeg/Config.in
-@@ -1,15 +1,19 @@
- config BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
+diff --git a/package/python-numpy/Config.in b/package/python-numpy/Config.in
+index 5abe04b..1405218 100644
+--- a/package/python-numpy/Config.in
++++ b/package/python-numpy/Config.in
+@@ -1,7 +1,8 @@
+ config BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
  	bool
-+	default y
- 	# fenv.h lacks FE_INVALID, FE_OVERFLOW & FE_UNDERFLOW on nios2
-+	depends on !BR2_nios
- 	# No support for ARMv7-M in the ARM assembly logic
-+	depends on !BR2_ARM_CPU_ARMV7M
- 	# Microblaze build affected by gcc PR71124 (infinite loop)
-+	depends on !BR2_microblaze
- 	# m68k coldfire causes a build failure, because the check for
- 	# atomics (atomic_store) succeeds, which causes ffmpeg to
- 	# think atomic intrinsics are available, while they are
- 	# not. See https://patchwork.ozlabs.org/patch/756664/ and
- 	# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=68467 for more
- 	# details.
--	default y if !BR2_nios2 && !BR2_ARM_CPU_ARMV7M && !BR2_microblaze && !BR2_m68k_cf
-+	depends on !BR2_m68k_cf
- 
- menuconfig BR2_PACKAGE_FFMPEG
- 	bool "ffmpeg"
+ 	# Numpy has some CPU specific code
+-	default y if BR2_arc 
++	# ARC toolchain issues for ARCompact
++	default y if BR2_arc && !(BR2_arc770d || BR2_arc750d)
+ 	default y if BR2_aarch64
+ 	default y if BR2_arm 
+ 	default y if BR2_armeb
