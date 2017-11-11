@@ -1,82 +1,42 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 11 Nov 2017 14:03:32 +0100
-Subject: [Buildroot] [git commit branch/next] olimex_a20_olinuxino_lime2:
- bump versions
-Message-ID: <20171111125705.C23DD80489@busybox.osuosl.org>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 11 Nov 2017 17:22:42 +0100
+Subject: [Buildroot] [PATCH 2/2] package/ffmpeg: fix fenv build failure on
+ ARCv2 with glibc
+In-Reply-To: <20171111162242.15110-1-bernd.kuhls@t-online.de>
+References: <20171111162242.15110-1-bernd.kuhls@t-online.de>
+Message-ID: <20171111162242.15110-2-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f723fa7f5302df8a71254ea9db09ac310420bf34
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+https://git.buildroot.net/buildroot/commit/toolchain?id=0633eb58a2912328508a76f8fe9875a0d113a880
+added glibc support for ARCv2 which lacks fenv.h.
 
-(aligned with olimex_a20_olinuxino_lime)
+Code format was suggested by Arnout:
+http://lists.busybox.net/pipermail/buildroot/2017-November/206631.html
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Fixes
+http://autobuild.buildroot.net/results/aec/aec300d7d4472421398a24202d6871c965bd1be5/
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- configs/olimex_a20_olinuxino_lime2_defconfig | 27 ++++++++++++++++++++-------
- 1 file changed, 20 insertions(+), 7 deletions(-)
+ package/ffmpeg/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/configs/olimex_a20_olinuxino_lime2_defconfig b/configs/olimex_a20_olinuxino_lime2_defconfig
-index 611c082..228160d 100644
---- a/configs/olimex_a20_olinuxino_lime2_defconfig
-+++ b/configs/olimex_a20_olinuxino_lime2_defconfig
-@@ -1,35 +1,48 @@
-+# Architecture
- BR2_arm=y
- BR2_cortex_a7=y
- BR2_ARM_EABIHF=y
--# Linux headers same as kernel, a 4.1 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
-+
-+# Linux headers same as kernel, a 4.9 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
-+
-+# System configuration
- BR2_TARGET_GENERIC_HOSTNAME="a20-olinuxino"
- BR2_TARGET_GENERIC_ISSUE="Welcome to OLinuXino!"
-+BR2_TARGET_GENERIC_GETTY=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/olimex/a20_olinuxino/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/olimex/a20_olinuxino/genimage.cfg"
-+
-+# Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.1.4"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.9.49"
-+BR2_LINUX_KERNEL_USE_DEFCONFIG=y
- BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun7i-a20-olinuxino-lime2"
- BR2_LINUX_KERNEL_INSTALL_TARGET=y
--BR2_PACKAGE_SUNXI_TOOLS=y
--BR2_PACKAGE_SUNXI_BOARDS=y
--BR2_PACKAGE_SUNXI_BOARDS_FEX_FILE="a20/a20-olinuxino_lime.fex"
-+
-+# Filesystem
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
- # BR2_TARGET_ROOTFS_TAR is not set
-+
-+# Bootloaders
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.05"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.09"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="A20-OLinuXino-Lime2"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
-+BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
-+BR2_TARGET_UBOOT_FORMAT_BIN=y
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
- BR2_TARGET_UBOOT_BOOT_SCRIPT=y
- BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE="board/olimex/a20_olinuxino/boot.cmd"
-+
-+# Additional tools
- BR2_PACKAGE_HOST_GENIMAGE=y
+diff --git a/package/ffmpeg/Config.in b/package/ffmpeg/Config.in
+index 17a4881348..1b0e71a836 100644
+--- a/package/ffmpeg/Config.in
++++ b/package/ffmpeg/Config.in
+@@ -1,6 +1,8 @@
+ config BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
+ 	bool
+ 	default y
++	# fenv.h lacks FE_INVALID, FE_OVERFLOW & FE_UNDERFLOW
++	depends on !BR2_archs38 || !BR2_TOOLCHAIN_USES_GLIBC
+ 	# fenv.h lacks FE_INVALID, FE_OVERFLOW & FE_UNDERFLOW on nios2
+ 	depends on !BR2_nios
+ 	# No support for ARMv7-M in the ARM assembly logic
+-- 
+2.11.0
