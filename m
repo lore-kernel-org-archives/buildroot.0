@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 11 Nov 2017 23:30:06 +0100
-Subject: [Buildroot] [PATCH] configs/at91: refactor to use genimage.sh
-In-Reply-To: <1510164921-11497-2-git-send-email-joshua.henderson@microchip.com>
+Date: Sat, 11 Nov 2017 23:31:07 +0100
+Subject: [Buildroot] [PATCH] configs/atmel: refactor to use genimage.sh
+In-Reply-To: <20171111233001.6d5eff3f@windsurf.home>
 References: <1510164921-11497-1-git-send-email-joshua.henderson@microchip.com>
- <1510164921-11497-2-git-send-email-joshua.henderson@microchip.com>
-Message-ID: <20171111233006.33f0a242@windsurf.home>
+ <20171111233001.6d5eff3f@windsurf.home>
+Message-ID: <20171111233107.002993cc@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,23 +13,21 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 8 Nov 2017 11:15:21 -0700, Joshua Henderson wrote:
-> Prefer the commom genimage.sh instead of a custom post-image.sh script.
-> 
-> Cc: Ludovic Desroches <ludovic.desroches@atmel.com>
-> Cc: Peter Korsgaard <peter@korsgaard.com>
-> Signed-off-by: Joshua Henderson <joshua.henderson@microchip.com>
-> ---
->  board/atmel/at91sam9x5ek_mmc/post-image.sh | 20 --------------------
->  configs/at91sam9x5ek_mmc_defconfig         |  3 ++-
->  configs/at91sam9x5ek_mmc_dev_defconfig     |  3 ++-
->  3 files changed, 4 insertions(+), 22 deletions(-)
->  delete mode 100755 board/atmel/at91sam9x5ek_mmc/post-image.sh
+On Sat, 11 Nov 2017 23:30:01 +0100, Thomas Petazzoni wrote:
 
-Applied to next, thanks.
+> >  delete mode 100755 board/atmel/sama5d27_som1_ek_mmc/post-image.sh
+> >  delete mode 100755 board/atmel/sama5d2_xplained_mmc/post-image.sh
+> >  delete mode 100755 board/atmel/sama5d3_xplained_mmc/post-image.sh
+> >  delete mode 100755 board/atmel/sama5d4_xplained_mmc/post-image.sh  
+> 
+> Applied to master, thanks.
+
+Sorry, I wanted to say: "Applied to next, thanks"
+
+Best regards,
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
