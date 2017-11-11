@@ -1,12 +1,12 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 11 Nov 2017 11:03:53 +0100
-Subject: [Buildroot] [PATCH 1/1] add sunxi-mali mainline kernel
-In-Reply-To: <20171109080524.irywhbolqtlowcxf@flea.lan>
-References: <1509920353-23438-1-git-send-email-giulio.benetti@micronovasrl.com>
- <20171108102753.nisqsfaibybjul4x@flea.lan>
- <35a55788-8cf6-2f65-e110-dfc467fad8cd@mind.be>
- <20171109080524.irywhbolqtlowcxf@flea.lan>
-Message-ID: <fb2e4cfc-6320-5f99-b478-879502c7c0e2@mind.be>
+Date: Sat, 11 Nov 2017 11:20:01 +0100
+Subject: [Buildroot] [RFCv1 0/4] Per-package SDK and target directories
+In-Reply-To: <5DBA847110A28B46BBA17BE675F0C9B2181AA436@cnshjmbx01>
+References: <5DBA847110A28B46BBA17BE675F0C9B2181A8D38@cnshjmbx01>
+ <20171107181307.58471ad9@windsurf>
+ <d79b315e-3ccd-5da3-4794-7ea97a296c0d@mind.be>
+ <5DBA847110A28B46BBA17BE675F0C9B2181AA436@cnshjmbx01>
+Message-ID: <6dc6ae96-ac4c-8f47-fe89-ac158f99b16e@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,72 +15,54 @@ To: buildroot@busybox.net
 
 
 
-On 09-11-17 09:05, Maxime Ripard wrote:
-> So, while I'm really not happy about the current code, I haven't found
-> better yet.
+On 09-11-17 06:02, Chu, Zhuliang (NSB - CN/Shanghai) wrote:
+> Hello,
 > 
-> The idea is that we have various versions coming from ARM as
-> tarballs. On this various versions, the changes needed are the same
-> (but obviously the code to apply it on isn't), and maintaining two
-> sets of changes (through git commits or something else) would be very
-> inefficient and wouldn't scale.
+>> By the way there will also be a problem when host-tar is part of
+>> DEPENDENCIES_HOST_PREREQ: ccache needs host-tar to be able to build, but there
+>> is no explicit dependency between them, it relies purely on left-to-right order.
+> the host-ccache mainly because its directory is defined in the top-level Makefile as below.
+
+ Good catch!
+
+>  453 ifeq ($(BR2_CCACHE),y)
+>  454 CCACHE := $(HOST_DIR)/bin/ccache
+>  455 BR_CACHE_DIR ?= $(call qstrip,$(BR2_CCACHE_DIR))
+>  456 export BR_CACHE_DIR
+>  457 HOSTCC := $(CCACHE) $(HOSTCC)
+>  458 HOSTCXX := $(CCACHE) $(HOSTCXX)
+
+ The problem is that these things are assigned with := instead of = so
+$(HOST_DIR) will not get expanded to per-package like it should. Putting = here
+will lead to a self-referencing recursive variable. The obvious thing would be
+to change it into
+HOSTCC_CCACHE = $(CCACHE) $(HOSTCC)
+and use HOSTCC_CCACHE everywhere. Unfortunately, that is *very* risky because we
+export HOSTCC, so we have no full control over all its uses. (Admittedly, the
+risk is limited to not using ccache in some cases, which is not that bad.)
+
+ Perhaps the following can work:
+
+HOSTCC_ORIG := $(HOSTCC)
+HOSTCC = $(CCACHE) $(HOSTCC_ORIG)
+
+(and we can probably reuse HOSTCC_NOCCACHE instead of HOSTCC_ORIG). This does
+seem to work from a very quick check.
+
+>  459 else
+>  460 export BR_NO_CCACHE
+>  461 endif
 > 
-> So I went for the same set of patches that we apply on whatever
-> version is currently being built.
+> In the top Makefile, $(CCACHE) is defined as 'output/host/bin/ccache'. So during the compilation process, the $(CCACHE) will do not be found. 
 
- But it's pretty unlikely that those patches will always apply unmodified on all
-versions, right?
-
-> Like I was saying, I'm not really
-> happy about it either so I'm definitely open to suggestions. We
-> discussed it with Thomas quite some time ago and it's the only
-> solution that stuck.
-
- If I understand correctly, for a specific project you will always use a
-specific release (i.e. version coming from ARM), you never need to mix two
-releases, right?
-
- How we solved this for a similar situation with drivers coming from the company
-I love so much is as follows. We have an "incoming" branch that just contains
-the unmodified code coming from the tarballs. Whenever a new tarball comes in,
-you check out that branch, remove everything, untar, git add -A, and commit.
-Then, for each release, a new branch is created, by rebasing the old release
-branch on top of the new release: git checkout -b r6p2 r6p0; git rebase
-incoming. And in the project configuration you check out the branch you need.
-If you create a new patch, it needs to be cherry-picked on each branch and this
-is indeed annoying. OTOH you need to separately test that new patch on each
-release anyway so it's not that much extra effort.
-
- So our history would look like this (time goes down, columns are branches)
-
-incoming            r5p4           r6p0           r6p2
-import r5p4
-           -------> create
-                    add feat1
-                    add feat2
-import r6p0
-            --------rebase-------->add feat1
-                                  >add feat2
-                                   add feat3
-                     cherry feat3
-import r6p2
-            -----------------------rebase------->add feat1
-                                                >add feat2
-                                                >add feat3
-                                   add feat4
-                     (abandoned)                 cherry feat4
-
-
- Note that rebasing does not hurt downstreams because you're always rebasing
-into a new branch, so there can't be a conflicting downstream checkout. Note
-that there is no master branch with the latest and greatest - you always have to
-explicitly check out a release.
-
- Maybe for an open source project there are other constraints that I didn't
-think about. But for us, this worked.
+ For CCACHE itself there is no real problem, we can use = instead of := there,
+it does not reference itself.
 
  Regards,
  Arnout
+
+> In fact, its real location is in `output/per-package/host-ccache/host/bin/ccache`.
+> The path to host-tar is not defined in top Makefile, So host-tar did not report the same error.
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
