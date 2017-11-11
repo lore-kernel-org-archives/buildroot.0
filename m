@@ -1,67 +1,71 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 11 Nov 2017 10:38:40 +0100
-Subject: [Buildroot] [NEXT 04/17] libpjsip: add oss option
-In-Reply-To: <20171110202109.25215-4-aduskett@gmail.com>
-References: <20171110202109.25215-1-aduskett@gmail.com>
- <20171110202109.25215-4-aduskett@gmail.com>
-Message-ID: <5c4cc1f5-5a41-2141-8ac6-1dc97e267bb9@mind.be>
+Date: Sat, 11 Nov 2017 10:40:51 +0100
+Subject: [Buildroot] [PATCH] libpjsip: fix static build failures due to
+ name clash
+In-Reply-To: <1510352189-20531-1-git-send-email-luca@lucaceresoli.net>
+References: <1510352189-20531-1-git-send-email-luca@lucaceresoli.net>
+Message-ID: <29066e8f-3749-4fa2-2715-f044391b992e@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+ Hi Luca,
 
-
-On 10-11-17 21:20, Adam Duskett wrote:
-> Signed-off-by: Adam Duskett <aduskett@gmail.com>
-> ---
->  package/libpjsip/Config.in   | 3 +++
->  package/libpjsip/libpjsip.mk | 5 ++++-
->  2 files changed, 7 insertions(+), 1 deletion(-)
+On 10-11-17 23:16, Luca Ceresoli wrote:
+> Several packages have a similar md5.c file, and each has a function
+> named byteReverse(). This generates link errors when building
+> statically ("multiple definition of `byteReverse'").
 > 
-> diff --git a/package/libpjsip/Config.in b/package/libpjsip/Config.in
-> index a289c90a92..0a6398d508 100644
-> --- a/package/libpjsip/Config.in
-> +++ b/package/libpjsip/Config.in
-> @@ -23,6 +23,9 @@ config BR2_PACKAGE_LIBPJSIP_ALSA
->  	bool "alsa support"
->  	select BR2_PACKAGE_ALSA_LIB
->  
-> +config BR2_PACKAGE_LIBPJSIP_OSS
-> +	bool "OSS support"
+> Fix by applying a patch from upstream:
+>   https://trac.pjsip.org/repos/changeset/5688
+> 
+> Fixes:
+>   http://autobuild.buildroot.org/results/5d7/5d72e0f8517a555399978d5a0e9f7efd0a278189/
+>   http://autobuild.buildroot.org/results/c47/c47ccbb9b40011cf0d79c7040bed061ddefd9629/
+>   http://autobuild.buildroot.org/results/419/419ab2c0e034cc68991281c51caa8271b0fadbab/
+> 
+> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+> Cc: Adam Duskett <aduskett@gmail.com>
+> ---
+>  .../0001-Fixed-possible-function-name-clash.patch   | 21 +++++++++++++++++++++
+>  1 file changed, 21 insertions(+)
+>  create mode 100644 package/libpjsip/0001-Fixed-possible-function-name-clash.patch
+> 
+> diff --git a/package/libpjsip/0001-Fixed-possible-function-name-clash.patch b/package/libpjsip/0001-Fixed-possible-function-name-clash.patch
+> new file mode 100644
+> index 000000000000..80a05ab50a6c
+> --- /dev/null
+> +++ b/package/libpjsip/0001-Fixed-possible-function-name-clash.patch
+> @@ -0,0 +1,21 @@
+> +Index: pjlib-util/src/pjlib-util/md5.c
+> +===================================================================
 
- I don't think adding support for OSS is useful. OSS has been deprecated for,
-what, 10 years now?
+ You forgot to add a commit message and your Sob to the patch.
 
  Regards,
  Arnout
 
-> +
->  endif # BR2_PACKAGE_LIBPJSIP_SOUND
->  
->  endif # BR2_PACKAGE_LIBPJSIP
-> diff --git a/package/libpjsip/libpjsip.mk b/package/libpjsip/libpjsip.mk
-> index f354cd3538..d02ca4e803 100644
-> --- a/package/libpjsip/libpjsip.mk
-> +++ b/package/libpjsip/libpjsip.mk
-> @@ -35,7 +35,6 @@ LIBPJSIP_CONF_OPTS = \
->  	--disable-ilbc-codec \
->  	--disable-libwebrtc \
->  	--disable-opus \
-> -	--disable-oss \
->  	--disable-ext-sound \
->  	--disable-g711-codec \
->  	--disable-l16-codec \
-> @@ -75,4 +74,8 @@ ifeq ($(BR2_PACKAGE_LIBPJSIP_ALSA),y)
->  LIBPJSIP_DEPENDENCIES += alsa-lib
->  endif
->  
-> +ifneq ($(BR2_PACKAGE_LIBPJSIP_OSS),y)
-> +LIBPJSIP_CONF_OPTS += --disable-oss
-> +endif
-> +
->  $(eval $(autotools-package))
+> +diff --git a/pjproject/pjlib-util/src/pjlib-util/md5.c b/pjproject/pjlib-util/src/pjlib-util/md5.c
+> +--- a/pjlib-util/src/pjlib-util/md5.c	(revision 5687)
+> ++++ b/pjlib-util/src/pjlib-util/md5.c	(revision 5688)
+> +@@ -29,13 +29,13 @@
+> + #ifndef HIGHFIRST
+> + #define byteReverse(buf, len)	/* Nothing */
+> + #else
+> +-void byteReverse(unsigned char *buf, unsigned longs);
+> ++static void byteReverse(unsigned char *buf, unsigned longs);
+> + 
+> + #ifndef ASM_MD5
+> + /*
+> +  * Note: this code is harmless on little-endian machines.
+> +  */
+> +-void byteReverse(unsigned char *buf, unsigned longs)
+> ++static void byteReverse(unsigned char *buf, unsigned longs)
+> + {
+> +     pj_uint32_t t;
+> +     do {
 > 
 
 -- 
