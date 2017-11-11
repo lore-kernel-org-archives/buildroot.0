@@ -1,58 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 11 Nov 2017 23:18:23 +0100
-Subject: [Buildroot] [PATCH] wpa_supplicant: mesh support needs openssl
-Message-ID: <20171111221823.9546-1-thomas.petazzoni@free-electrons.com>
+Date: Sat, 11 Nov 2017 23:21:15 +0100
+Subject: [Buildroot] [git commit] package/ffmpeg: fix fenv build failure on
+ ARCv2 with glibc
+Message-ID: <20171111221414.7F3A7802F6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When BR2_PACKAGE_WPA_SUPPLICANT_MESH_NETWORKING is enabeld,
-wpa_supplicant currently fails to build with:
+commit: https://git.buildroot.net/buildroot/commit/?id=0a0042f6d7a526d4addce81286ca77c0a8ca656f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-../src/common/sae.o: In function `sae_cn_confirm.isra.2':
-sae.c:(.text+0x168): undefined reference to `crypto_bignum_to_bin'
-sae.c:(.text+0x198): undefined reference to `crypto_bignum_to_bin'
-../src/common/sae.o: In function `sae_cn_confirm_ffc':
-sae.c:(.text+0x214): undefined reference to `crypto_bignum_to_bin'
-sae.c:(.text+0x22c): undefined reference to `crypto_bignum_to_bin'
-../src/common/sae.o: In function `sae_cn_confirm_ecc':
-sae.c:(.text+0x2a4): undefined reference to `crypto_ec_point_to_bin'
-sae.c:(.text+0x2c0): undefined reference to `crypto_ec_point_to_bin'
+https://git.buildroot.net/buildroot/commit/toolchain?id=0633eb58a2912328508a76f8fe9875a0d113a880
+added glibc support for ARCv2 which lacks fenv.h.
 
-[...]
+Code format was suggested by Arnout:
+http://lists.busybox.net/pipermail/buildroot/2017-November/206631.html
 
-This is due to the fact that the SAE code, used for the mesh network
-support, needs OpenSSL support. Therefore, we ensure that
-BR2_PACKAGE_WPA_SUPPLICANT_MESH_NETWORKING selects OpenSSL. Only
-OpenSSL is supported, which is why
-BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL is selected as well.
+Fixes
+http://autobuild.buildroot.net/results/aec/aec300d7d4472421398a24202d6871c965bd1be5/
 
-No changes to the .mk files are needed, because we were already
-handling OpenSSL as an optional dependency.
-
-This problem was not yet caught by the autobuilders.
-
-Reported-by: Maxime Ripard <maxime.ripard@free-electrons.com>
-Cc: Maxime Ripard <maxime.ripard@free-electrons.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+[Thomas: adjust how the Config.in dependency is expressed.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/wpa_supplicant/Config.in | 2 ++
+ package/ffmpeg/Config.in | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/package/wpa_supplicant/Config.in b/package/wpa_supplicant/Config.in
-index 4b810bf1a8..de03141e40 100644
---- a/package/wpa_supplicant/Config.in
-+++ b/package/wpa_supplicant/Config.in
-@@ -48,6 +48,8 @@ config BR2_PACKAGE_WPA_SUPPLICANT_WIFI_DISPLAY
- config BR2_PACKAGE_WPA_SUPPLICANT_MESH_NETWORKING
- 	bool "Enable mesh networking"
- 	depends on BR2_PACKAGE_WPA_SUPPLICANT_AP_SUPPORT
-+	select BR2_PACKAGE_OPENSSL
-+	select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL
- 	help
- 	  Enable support for open and secured mesh networking
- 	  (IEEE 802.11s)
--- 
-2.13.6
+diff --git a/package/ffmpeg/Config.in b/package/ffmpeg/Config.in
+index 17a4881..487ca44 100644
+--- a/package/ffmpeg/Config.in
++++ b/package/ffmpeg/Config.in
+@@ -1,6 +1,8 @@
+ config BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
+ 	bool
+ 	default y
++	# fenv.h lacks FE_INVALID, FE_OVERFLOW & FE_UNDERFLOW
++	depends on !(BR2_archs38 && BR2_TOOLCHAIN_USES_GLIBC)
+ 	# fenv.h lacks FE_INVALID, FE_OVERFLOW & FE_UNDERFLOW on nios2
+ 	depends on !BR2_nios
+ 	# No support for ARMv7-M in the ARM assembly logic
