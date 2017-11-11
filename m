@@ -1,46 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 11 Nov 2017 23:26:50 +0100
-Subject: [Buildroot] [git commit] python-numpy: disable for ARCompact
-Message-ID: <20171111221932.E0F4E80F7A@busybox.osuosl.org>
+Date: Sat, 11 Nov 2017 23:27:25 +0100
+Subject: [Buildroot] [PATCH 0/2] python-numpy: disable for ARCompact
+In-Reply-To: <20171109151551.4858-1-didin@synopsys.com>
+References: <20171109151551.4858-1-didin@synopsys.com>
+Message-ID: <20171111232725.08f9ea43@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=636f4d81ff4be52dc7818c51b9d479a9cb6ecea1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-This package fails when building for ARCompact due to toolchain issue.
+On Thu,  9 Nov 2017 18:15:49 +0300, Evgeniy Didin wrote:
 
-Marking this with special comment "#ARC toolchain issues for
-ARCompact" as the package is to be enabled as soon as the issue with
-the ARC toolchain is resolved.
+> Evgeniy Didin (2):
+>   python-numpy: reformat config
+>   python-numpy: disable for ARCompact
 
-Fixes:
+Both applied, thanks.
 
-  http://autobuild.buildroot.net/results/4c4eaa90335756448007ae3c5ae3839fb17d4442/
-
-Signed-off-by: Evgeniy Didin <didin@synopsys.com>
-Cc: Alexey Brodkin <abrodkin@synopsys.com>
-Cc: arc-buildroot at synopsys.com
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/python-numpy/Config.in | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/package/python-numpy/Config.in b/package/python-numpy/Config.in
-index 5abe04b..1405218 100644
---- a/package/python-numpy/Config.in
-+++ b/package/python-numpy/Config.in
-@@ -1,7 +1,8 @@
- config BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
- 	bool
- 	# Numpy has some CPU specific code
--	default y if BR2_arc 
-+	# ARC toolchain issues for ARCompact
-+	default y if BR2_arc && !(BR2_arc770d || BR2_arc750d)
- 	default y if BR2_aarch64
- 	default y if BR2_arm 
- 	default y if BR2_armeb
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
