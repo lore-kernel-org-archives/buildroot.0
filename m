@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 11 Nov 2017 10:33:51 +0100
-Subject: [Buildroot] [NEXT 07/17] libpjsip: add ffmpeg option
-In-Reply-To: <20171110202109.25215-7-aduskett@gmail.com>
+Date: Sat, 11 Nov 2017 10:38:40 +0100
+Subject: [Buildroot] [NEXT 04/17] libpjsip: add oss option
+In-Reply-To: <20171110202109.25215-4-aduskett@gmail.com>
 References: <20171110202109.25215-1-aduskett@gmail.com>
- <20171110202109.25215-7-aduskett@gmail.com>
-Message-ID: <ea87b1a3-113c-983d-bd7c-d2db44af825e@mind.be>
+ <20171110202109.25215-4-aduskett@gmail.com>
+Message-ID: <5c4cc1f5-5a41-2141-8ac6-1dc97e267bb9@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,62 +16,49 @@ To: buildroot@busybox.net
 On 10-11-17 21:20, Adam Duskett wrote:
 > Signed-off-by: Adam Duskett <aduskett@gmail.com>
 > ---
->  package/libpjsip/Config.in   | 11 +++++++++++
->  package/libpjsip/libpjsip.mk |  8 +++++++-
->  2 files changed, 18 insertions(+), 1 deletion(-)
+>  package/libpjsip/Config.in   | 3 +++
+>  package/libpjsip/libpjsip.mk | 5 ++++-
+>  2 files changed, 7 insertions(+), 1 deletion(-)
 > 
 > diff --git a/package/libpjsip/Config.in b/package/libpjsip/Config.in
-> index 20b8568d52..1ad7d77f2a 100644
+> index a289c90a92..0a6398d508 100644
 > --- a/package/libpjsip/Config.in
 > +++ b/package/libpjsip/Config.in
-> @@ -35,6 +35,17 @@ endif # BR2_PACKAGE_LIBPJSIP_SOUND
->  config BR2_PACKAGE_LIBPJSIP_VIDEO
->  	bool "Enable video"
+> @@ -23,6 +23,9 @@ config BR2_PACKAGE_LIBPJSIP_ALSA
+>  	bool "alsa support"
+>  	select BR2_PACKAGE_ALSA_LIB
 >  
-> +if BR2_PACKAGE_LIBPJSIP_VIDEO
-> +
-> +config BR2_PACKAGE_LIBPJSIP_FFMPEG
-> +	bool "ffmpeg support"
-> +	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
-> +	select BR2_PACKAGE_FFMPEG
-> +	help
-> +	  Enable ffmpeg support
-> +
-> +endif # BR2_PACKAGE_LIBPJSIP_VIDEO
-> +
->  endif # BR2_PACKAGE_LIBPJSIP
->  
->  comment "libpjsip needs a toolchain w/ C++, threads"
-> diff --git a/package/libpjsip/libpjsip.mk b/package/libpjsip/libpjsip.mk
-> index f45d9d1caf..5421789948 100644
-> --- a/package/libpjsip/libpjsip.mk
-> +++ b/package/libpjsip/libpjsip.mk
-> @@ -40,7 +40,6 @@ LIBPJSIP_CONF_OPTS = \
->  	--disable-g722-codec \
->  	--disable-libsamplerate \
->  	--disable-sdl \
-> -	--disable-ffmpeg \
->  	--disable-v4l2 \
->  	--disable-openh264 \
->  	--disable-libyuv \
-> @@ -86,4 +85,11 @@ ifneq ($(BR2_PACKAGE_LIBPJSIP_VIDEO),y)
->  LIBPJSIP_CONF_OPTS += --disable-video
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_LIBPJSIP_FFMPEG),y)
-> +LIBPJSIP_DEPENDENCIES += ffmpeg
-> +LIBPJSIP_CONF_OPTS += --with-ffmpeg=$(STAGING_DIR)/usr/lib
+> +config BR2_PACKAGE_LIBPJSIP_OSS
+> +	bool "OSS support"
 
- Why is this needed? This is the standard library search path so shouldn't be
-needed. Also, normally it would be --with-ffmpeg=$(STAGING_DIR)/usr and
-configure uses .../include for -I and .../lib for -L. Please add an explanation
-in the commit log.
+ I don't think adding support for OSS is useful. OSS has been deprecated for,
+what, 10 years now?
 
  Regards,
  Arnout
 
-> +else
-> +LIBPJSIP_CONF_OPTS += --disable-ffmpeg
+> +
+>  endif # BR2_PACKAGE_LIBPJSIP_SOUND
+>  
+>  endif # BR2_PACKAGE_LIBPJSIP
+> diff --git a/package/libpjsip/libpjsip.mk b/package/libpjsip/libpjsip.mk
+> index f354cd3538..d02ca4e803 100644
+> --- a/package/libpjsip/libpjsip.mk
+> +++ b/package/libpjsip/libpjsip.mk
+> @@ -35,7 +35,6 @@ LIBPJSIP_CONF_OPTS = \
+>  	--disable-ilbc-codec \
+>  	--disable-libwebrtc \
+>  	--disable-opus \
+> -	--disable-oss \
+>  	--disable-ext-sound \
+>  	--disable-g711-codec \
+>  	--disable-l16-codec \
+> @@ -75,4 +74,8 @@ ifeq ($(BR2_PACKAGE_LIBPJSIP_ALSA),y)
+>  LIBPJSIP_DEPENDENCIES += alsa-lib
+>  endif
+>  
+> +ifneq ($(BR2_PACKAGE_LIBPJSIP_OSS),y)
+> +LIBPJSIP_CONF_OPTS += --disable-oss
 > +endif
 > +
 >  $(eval $(autotools-package))
