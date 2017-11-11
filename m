@@ -1,56 +1,48 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 10 Nov 2017 18:24:01 +0100
-Subject: [Buildroot] [git commit branch/next] webkitgtk: security bump to
- version 2.18.3
-Message-ID: <20171113221622.335067FDB3@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 11 Nov 2017 23:20:42 +0100
+Subject: [Buildroot] [git commit branch/next] package/ffmpeg: simplify
+ BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS logic
+Message-ID: <20171113221622.4D7D97FDB3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5ff18880e9647e446a3d720b7c6c74eed97ef0b4
+commit: https://git.buildroot.net/buildroot/commit/?id=bd2544d3d3903935fc4dc0ec9c930720441e545f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This is a maintenance release of the current stable WebKitGTK+ version,
-which contains a minor rendering fix, another for the WebDriver
-implementation, and security fixes for CVE-2017-13798, CVE-2017-13788,
-and CVE-2017-13803.
+Suggested by Arnout:
+http://lists.busybox.net/pipermail/buildroot/2017-November/206631.html
 
-Release notes:
-
-    https://webkitgtk.org/2017/11/10/webkitgtk2.18.3-released.html
-
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/webkitgtk/webkitgtk.hash | 8 ++++----
- package/webkitgtk/webkitgtk.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/ffmpeg/Config.in | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
-index b116115..669bb1c 100644
---- a/package/webkitgtk/webkitgtk.hash
-+++ b/package/webkitgtk/webkitgtk.hash
-@@ -1,4 +1,4 @@
--# From https://webkitgtk.org/releases/webkitgtk-2.18.2.tar.xz.sums
--md5 f63b3897d6fbf660bf72dfaca1fdea16 webkitgtk-2.18.2.tar.xz
--sha1 75571807a1f8c9efdf62f1c37e9fadf52b73d367 webkitgtk-2.18.2.tar.xz
--sha256 b14cb3f1b5321b1dc50abcc0445a97f8e2f8813562bca7ce4d2f8069f6fec8e7 webkitgtk-2.18.2.tar.xz
-+# From https://webkitgtk.org/releases/webkitgtk-2.18.3.tar.xz.sums
-+md5 264a22d7467deae606e42b6eb5dd65af webkitgtk-2.18.3.tar.xz
-+sha1 164cad34281ef597a3d4ad214e8037c3ddef4d17 webkitgtk-2.18.3.tar.xz
-+sha256 e15420e1616a6f70f321541d467af5ca285bff66b1e0fa68a01df3ccf1b18f9e webkitgtk-2.18.3.tar.xz
-diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-index c78f6b3..c467546 100644
---- a/package/webkitgtk/webkitgtk.mk
-+++ b/package/webkitgtk/webkitgtk.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/ffmpeg/Config.in b/package/ffmpeg/Config.in
+index ed87ddd..17a4881 100644
+--- a/package/ffmpeg/Config.in
++++ b/package/ffmpeg/Config.in
+@@ -1,15 +1,19 @@
+ config BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
+ 	bool
++	default y
+ 	# fenv.h lacks FE_INVALID, FE_OVERFLOW & FE_UNDERFLOW on nios2
++	depends on !BR2_nios
+ 	# No support for ARMv7-M in the ARM assembly logic
++	depends on !BR2_ARM_CPU_ARMV7M
+ 	# Microblaze build affected by gcc PR71124 (infinite loop)
++	depends on !BR2_microblaze
+ 	# m68k coldfire causes a build failure, because the check for
+ 	# atomics (atomic_store) succeeds, which causes ffmpeg to
+ 	# think atomic intrinsics are available, while they are
+ 	# not. See https://patchwork.ozlabs.org/patch/756664/ and
+ 	# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=68467 for more
+ 	# details.
+-	default y if !BR2_nios2 && !BR2_ARM_CPU_ARMV7M && !BR2_microblaze && !BR2_m68k_cf
++	depends on !BR2_m68k_cf
  
--WEBKITGTK_VERSION = 2.18.2
-+WEBKITGTK_VERSION = 2.18.3
- WEBKITGTK_SITE = http://www.webkitgtk.org/releases
- WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
- WEBKITGTK_INSTALL_STAGING = YES
+ menuconfig BR2_PACKAGE_FFMPEG
+ 	bool "ffmpeg"
