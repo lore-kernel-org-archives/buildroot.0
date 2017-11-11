@@ -1,101 +1,57 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 11 Nov 2017 11:42:05 +0100
-Subject: [Buildroot] [PATCH v2 2/2] security hardening: add RELFO,
- FORTIFY options
-In-Reply-To: <5A026567.8070101@petroprogram.com>
-References: <1508936397-33651-1-git-send-email-matthew.weber@rockwellcollins.com>
- <1508936397-33651-2-git-send-email-matthew.weber@rockwellcollins.com>
- <e29b21b0-6c5f-ef3b-4123-9e8782639f43@mind.be>
- <5A026567.8070101@petroprogram.com>
-Message-ID: <4e2865a3-6656-75a6-4e01-f95935d2d465@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 11 Nov 2017 11:44:56 +0100
+Subject: [Buildroot] [PATCH] postgresql: security bump to version 9.6.6
+Message-ID: <20171111104456.30603-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Fixes the following security issues:
 
+CVE-2017-12172: Start scripts permit database administrator to modify
+root-owned files.
 
-On 08-11-17 03:01, Stefan Fr?berg wrote:
-> 
-> 
-> 6.11.2017, 23:14, Arnout Vandecappelle kirjoitti:
->> @@ -181,6 +184,28 @@ TARGET_CXXFLAGS += -fstack-protector-all
->> ? TARGET_FCFLAGS += -fstack-protector-all
->> ? endif
->> ? +ifeq ($(BR2_RELRO_PARTIAL),y)
->> +TARGET_CFLAGS += $(TARGET_CFLAGS_RELRO)
->> +TARGET_CXXFLAGS += $(TARGET_CFLAGS_RELRO)
->> +TARGET_FCFLAGS += $(TARGET_CFLAGS_RELRO)
->> ? Since these are linker flags, it _should_ be sufficient to add them to LDFLAGS.
->> There may be some packages that don't listen to LDFLAGS so in that sense it
->> could be a good idea to add it to CFLAGS as well, but I tend to prefer to fix
->> the packages. Only, there is no easy way to detect that LDFLAGS are ignored.
->>
-> 
-> There could be a way to tell if package shows middle finger to
-> CFLAGS/CXXFLAGS/LDFLAGS
-> and just ignores the hardening options.
-> 
-> There's a little perl script called hardening-check that could be used to do
-> post installation checking
-> of what packages actually respected the flags.
-> 
-> http://manpages.ubuntu.com/manpages/trusty/man1/hardening-check.1.html
-> 
-> I have a copy of that perl script here:
-> https://www.orwell1984.today/hardening-check
+CVE-2017-15098: Memory disclosure in JSON functions.
 
- Yeah, Matthew already proposed to include a (different) hardening check script.
-I think that that's a good idea.
+CVE-2017-15099: INSERT ... ON CONFLICT DO UPDATE fails to enforce SELECT
+privileges.
 
-[snip]
-> Maybe there could be hardened directory with some premade "profiles" (gcc spec
-> files) for various arch-lib combos
-> which could be selected from menu and then the buildroot cross-compiler would have
-> it's `dirname $($HOST_CC) --print-libgcc-file-name`/specs be a just symlink to
-> that arch-lib combos like this:
-> 
-> output/host/lib/gcc/i686-buildroot-linux-uclibc/6.4.0/specs -->
-> ../../../../../../hardened/i686/uclibc/specs
-> 
-> If selecting vanilla, non-hardened toolchain from menu, it would just remove the
-> symlink.
+See the announcement for more details:
+https://www.postgresql.org/about/news/1801/
 
- Hm, I think messing with the specs file is making things complicated...
+While we're at it, also add a hash for the license file.
 
- However, we do have a toolchain wrapper and we could add the hardening options
-in there instead of in CFLAGS. One small caveat, however: some packages may not
-build at all with some of the hardening options (-pie for example), in
-particular bootloaders and kernels are prone to be problematic. Otherwise it
-sounds like a viable option though.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/postgresql/postgresql.hash | 6 ++++--
+ package/postgresql/postgresql.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
-> And maybe there could be an option to run hardening-check script at the end of
-> installation.
-
- Yep, certainly.
-
- Regards,
- Arnout
-
-> 
-> Just throwing thoughts around
-> -S-
-> 
-> 
-> 
-> 
-> 
-> 
-> 
-> 
-> 
-> 
-
+diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
+index 62ce9a7407..e62838911e 100644
+--- a/package/postgresql/postgresql.hash
++++ b/package/postgresql/postgresql.hash
+@@ -1,2 +1,4 @@
+-# From https://ftp.postgresql.org/pub/source/v9.6.5/postgresql-9.6.5.tar.bz2.sha256
+-sha256 06da12a7e3dddeb803962af8309fa06da9d6989f49e22865335f0a14bad0744c  postgresql-9.6.5.tar.bz2
++# From https://ftp.postgresql.org/pub/source/v9.6.6/postgresql-9.6.6.tar.bz2.sha256
++sha256 399cdffcb872f785ba67e25d275463d74521566318cfef8fe219050d063c8154  postgresql-9.6.6.tar.bz2
++# License file, Locally calculated
++sha256 7dc8de32741ad1b03e21710771b55a1b9d460671d47f28a8840f917e38c66676  COPYRIGHT
+diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+index 7adb957cf0..50ce212c1c 100644
+--- a/package/postgresql/postgresql.mk
++++ b/package/postgresql/postgresql.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-POSTGRESQL_VERSION = 9.6.5
++POSTGRESQL_VERSION = 9.6.6
+ POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
+ POSTGRESQL_SITE = http://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
+ POSTGRESQL_LICENSE = PostgreSQL
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.11.0
