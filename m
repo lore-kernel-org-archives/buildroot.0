@@ -1,38 +1,60 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 11 Nov 2017 23:24:53 +0100
-Subject: [Buildroot] [git commit branch/next] package/openjpeg: fix build
- with threads disabled
-Message-ID: <20171113221622.6D8C6807B2@busybox.osuosl.org>
+Date: Sat, 11 Nov 2017 23:23:55 +0100
+Subject: [Buildroot] [git commit branch/next] postgresql: security bump to
+ version 9.6.6
+Message-ID: <20171113221622.64AAB807B2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a6facc809b01e1c7b02bb93ede4a4bff7b91a091
+commit: https://git.buildroot.net/buildroot/commit/?id=b97353f2b50add10971e8477ad0b4cede9244578
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fixes
-http://autobuild.buildroot.net/results/f16/f16a558c30199a92e93a31e0ba391b99a9bd689f/
+Fixes the following security issues:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+CVE-2017-12172: Start scripts permit database administrator to modify
+root-owned files.
+
+CVE-2017-15098: Memory disclosure in JSON functions.
+
+CVE-2017-15099: INSERT ... ON CONFLICT DO UPDATE fails to enforce SELECT
+privileges.
+
+See the announcement for more details:
+https://www.postgresql.org/about/news/1801/
+
+While we're at it, also add a hash for the license file.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/openjpeg/openjpeg.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+ package/postgresql/postgresql.hash | 6 ++++--
+ package/postgresql/postgresql.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/package/openjpeg/openjpeg.mk b/package/openjpeg/openjpeg.mk
-index df85168..9a8fdab 100644
---- a/package/openjpeg/openjpeg.mk
-+++ b/package/openjpeg/openjpeg.mk
-@@ -15,4 +15,10 @@ OPENJPEG_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBPNG),libpng)
- OPENJPEG_DEPENDENCIES += $(if $(BR2_PACKAGE_TIFF),tiff)
- OPENJPEG_DEPENDENCIES += $(if $(BR2_PACKAGE_LCMS2),lcms2)
+diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
+index 62ce9a7..e628389 100644
+--- a/package/postgresql/postgresql.hash
++++ b/package/postgresql/postgresql.hash
+@@ -1,2 +1,4 @@
+-# From https://ftp.postgresql.org/pub/source/v9.6.5/postgresql-9.6.5.tar.bz2.sha256
+-sha256 06da12a7e3dddeb803962af8309fa06da9d6989f49e22865335f0a14bad0744c  postgresql-9.6.5.tar.bz2
++# From https://ftp.postgresql.org/pub/source/v9.6.6/postgresql-9.6.6.tar.bz2.sha256
++sha256 399cdffcb872f785ba67e25d275463d74521566318cfef8fe219050d063c8154  postgresql-9.6.6.tar.bz2
++# License file, Locally calculated
++sha256 7dc8de32741ad1b03e21710771b55a1b9d460671d47f28a8840f917e38c66676  COPYRIGHT
+diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+index 7adb957..50ce212 100644
+--- a/package/postgresql/postgresql.mk
++++ b/package/postgresql/postgresql.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
-+OPENJPEG_CONF_OPTS += -DOPJ_USE_THREAD=ON
-+else
-+OPENJPEG_CONF_OPTS += -DOPJ_USE_THREAD=OFF
-+endif
-+
- $(eval $(cmake-package))
+-POSTGRESQL_VERSION = 9.6.5
++POSTGRESQL_VERSION = 9.6.6
+ POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
+ POSTGRESQL_SITE = http://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
+ POSTGRESQL_LICENSE = PostgreSQL
