@@ -1,64 +1,45 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 12 Nov 2017 13:24:19 +0100
-Subject: [Buildroot] [PATCH v6] libostree: new package
-References: <20171102112722.19414-1-marcus.folkesson@gmail.com>
-Message-ID: <j4rldexder.ln2@ID-313208.user.individual.net>
+Date: Sun, 12 Nov 2017 13:54:11 +0100
+Subject: [Buildroot] [PATCH 1/1] package/imagemagick: security bump to
+ version 7.0.7-10
+Message-ID: <20171112125411.17303-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Marcus,
+Version 7.0.7-3 fixes CVE-2017-15218:
+Stop potential leaks in the JNG decoder
 
-Am Thu, 02 Nov 2017 12:27:22 +0100 schrieb Marcus Folkesson:
+Changelog: https://www.imagemagick.org/script/changelog.php
 
-> diff --git a/package/libostree/Config.in b/package/libostree/Config.in
-> new file mode 100644
-> index 0000000000..d4a802a6b6
-> --- /dev/null
-> +++ b/package/libostree/Config.in
-> @@ -0,0 +1,20 @@
-> +config BR2_PACKAGE_LIBOSTREE
-> +	bool "libostree"
-> +	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgpgme
-> +	depends on !BR2_STATIC_LIBS # libfuse
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
-> +	depends on BR2_USE_WCHAR # libglib2
-> +	depends on BR2_USE_MMU # e2fsprogs, libfuse,libglib2, libgpgme
-> +
-> +	# doesn't build with musl due to lack of TEMP_FAILURE_RETRY()
-> +	depends on !BR2_TOOLCHAIN_USES_MUSL
-> +
-> +	select BR2_PACKAGE_E2FSPROGS
-> +	select BR2_PACKAGE_LIBFUSE
-> +	select BR2_PACKAGE_LIBGLIB2
-> +	select BR2_PACKAGE_LIBGPGME
-> +	select BR2_PACKAGE_XZ
-> +	help
-> +	  OSTree is an upgrade system for Linux-based operating systems.
-> +
-> +	  https://ostree.readthedocs.io/en/latest/
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/imagemagick/imagemagick.hash | 2 +-
+ package/imagemagick/imagemagick.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-please add a comment which is displayed when the dependencies
-are not met by the current config to help users to enable this
-package:
-
-comment "libostree needs a uClibc or glibc toolchain w/ threads, dynamic library, wchar"
-        depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS \
-                || !BR2_USE_WCHAR || BR2_TOOLCHAIN_USES_MUSL
-        depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS
-        depends on BR2_USE_MMU
-
-> diff --git a/package/libostree/libostree.hash b/package/libostree/libostree.hash
-> new file mode 100644
-> index 0000000000..b8bdd974c4
-> --- /dev/null
-> +++ b/package/libostree/libostree.hash
-> @@ -0,0 +1 @@
-> +sha256 fc409f04c9fd440b83b4fa324f3b912cbf61145389378d44254b8b191c9fef08  libostree-2017.12.tar.xz
-> diff --git a/package/libostree/libostree.mk b/package/libostree/libostree.mk
-
-Please add the hash of the license file as well.
-
-Regards, Bernd
+diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
+index 92880a9aec..2468bdbc23 100644
+--- a/package/imagemagick/imagemagick.hash
++++ b/package/imagemagick/imagemagick.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 5a45e29509dbb23793a9c8db5c47ef1114c1ee82c9ca60053eaf06b3fc243e2c  7.0.7-1.tar.gz
++sha256 924d1161ed2399bcb72f98419072b3130a466e07d9a6fce43d27458ffa907ffa  7.0.7-10.tar.gz
+diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+index 9043ce8e5e..c2171a7564 100644
+--- a/package/imagemagick/imagemagick.mk
++++ b/package/imagemagick/imagemagick.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-IMAGEMAGICK_VERSION = 7.0.7-1
++IMAGEMAGICK_VERSION = 7.0.7-10
+ IMAGEMAGICK_SOURCE = $(IMAGEMAGICK_VERSION).tar.gz
+ IMAGEMAGICK_SITE = https://github.com/ImageMagick/ImageMagick/archive
+ IMAGEMAGICK_LICENSE = Apache-2.0
+-- 
+2.11.0
