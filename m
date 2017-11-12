@@ -1,118 +1,105 @@
-From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Sun, 12 Nov 2017 23:11:12 +0100
-Subject: [Buildroot] [PATCH v4 1/1] sunxi-mali-driver-mainline: new package
-Message-ID: <1510524672-23177-1-git-send-email-giulio.benetti@micronovasrl.com>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Sun, 12 Nov 2017 23:18:12 +0100
+Subject: [Buildroot] [PATCH/next v2 2/3]
+ package/python-requests-oauthlib: new package
+In-Reply-To: <20171112104523.16791-2-bernd.kuhls@t-online.de>
+References: <20171112104523.16791-1-bernd.kuhls@t-online.de>
+ <20171112104523.16791-2-bernd.kuhls@t-online.de>
+Message-ID: <CAGm1_ku3fxMMkw2VQPhg97NQTRyY=Rp-mwkrnvsPjQd17SjVDw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Added kernel allwinner mali driver package.
-Used combined with userspace Allwinner openGL blob,
-it gives possibility to use 3D openGL SoC acceleration.
+On Sun, Nov 12, 2017 at 11:45 AM, Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+> Needed for python-mwclient version bump to 0.8.6.
+>
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
----
-Changes:
-v3 -> v4:
-* improved and cleaned up Config.in help
-* cleaned up .mk recipe
-* added myself to DEVELOPERS
+Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
 
- DEVELOPERS                                         |  3 +++
- package/Config.in                                  |  1 +
- package/sunxi-mali-driver-mainline/Config.in       | 22 ++++++++++++++++++
- .../sunxi-mali-driver-mainline.mk                  | 26 ++++++++++++++++++++++
- 4 files changed, 52 insertions(+)
- create mode 100644 package/sunxi-mali-driver-mainline/Config.in
- create mode 100644 package/sunxi-mali-driver-mainline/sunxi-mali-driver-mainline.mk
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index ddd675e..2fe95c8 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -695,6 +695,9 @@ F:	package/ocrad/
- F:	package/tesseract-ocr/
- F:	package/webp/
- 
-+N:	Giulio Benetti <giulio.benetti@micronovasrl.com>
-+F:	package/sunxi-mali-driver-mainline/
-+
- N:	Gregory Dymarek <gregd72002@gmail.com>
- F:	package/ding-libs/
- F:	package/gengetopt/
-diff --git a/package/Config.in b/package/Config.in
-index fe5ccc4..8de2227 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -496,6 +496,7 @@ endmenu
- 	source "package/statserial/Config.in"
- 	source "package/stm32flash/Config.in"
- 	source "package/sunxi-cedarx/Config.in"
-+	source "package/sunxi-mali-driver-mainline/Config.in"
- 	source "package/sunxi-mali/Config.in"
- 	source "package/sysstat/Config.in"
- 	source "package/targetcli-fb/Config.in"
-diff --git a/package/sunxi-mali-driver-mainline/Config.in b/package/sunxi-mali-driver-mainline/Config.in
-new file mode 100644
-index 0000000..5b7b2ba
---- /dev/null
-+++ b/package/sunxi-mali-driver-mainline/Config.in
-@@ -0,0 +1,22 @@
-+comment "sunxi-mali-driver-mainline needs a Linux kernel to be built"
-+	depends on !BR2_LINUX_KERNEL
-+
-+config BR2_PACKAGE_SUNXI_MALI_DRIVER_MAINLINE
-+	bool "sunxi-mali-driver-mainline"
-+	depends on BR2_LINUX_KERNEL
-+	select BR2_LINUX_NEEDS_MODULES # not using kernel-module infra
-+	help
-+	  This package builds and installs the Linux kernel driver for
-+	  the Mali GPU on Allwinner platforms, compatible with recent
-+	  Linux kernels (>= 4.4). Note that it should be installed
-+	  together with the corresponding userspace binary blobs to
-+	  provide complete OpenGL functionality.
-+
-+	  sunxi-mali-driver-mainline requires a Linux kernel >= 4.4 with the
-+	  following options enabled:
-+
-+	  - CONFIG_CMA
-+	  - CONFIG_DMA_CMA
-+	  - CONFIG_DRM_FBDEV_OVERALLOC >= 200 for double buffer or more
-+
-+	  https://github.com/mripard/sunxi-mali/blob/master/README.md
-diff --git a/package/sunxi-mali-driver-mainline/sunxi-mali-driver-mainline.mk b/package/sunxi-mali-driver-mainline/sunxi-mali-driver-mainline.mk
-new file mode 100644
-index 0000000..4998010
---- /dev/null
-+++ b/package/sunxi-mali-driver-mainline/sunxi-mali-driver-mainline.mk
-@@ -0,0 +1,26 @@
-+################################################################################
-+#
-+# sunxi-mali-driver-mainline
-+#
-+################################################################################
-+
-+SUNXI_MALI_DRIVER_MAINLINE_VERSION = 5b7b3c0b6e1736676c90928816d271debbb09d95
-+SUNXI_MALI_DRIVER_MAINLINE_SITE = $(call github,mripard,sunxi-mali,$(SUNXI_MALI_DRIVER_MAINLINE_VERSION))
-+SUNXI_MALI_DRIVER_MAINLINE_DEPENDENCIES = linux
-+
-+SUNXI_MALI_DRIVER_MAINLINE_MAKE_OPTS = \
-+	KDIR=$(LINUX_DIR) \
-+	CROSS_COMPILE=$(TARGET_CROSS) \
-+	INSTALL_MOD_PATH=$(TARGET_DIR)
-+
-+define SUNXI_MALI_DRIVER_MAINLINE_BUILD_CMDS
-+	cd $(@D) && $(SUNXI_MALI_DRIVER_MAINLINE_MAKE_OPTS) \
-+		$(SHELL) ./build.sh -r r6p2 -b
-+endef
-+
-+define SUNXI_MALI_DRIVER_MAINLINE_INSTALL_TARGET_CMDS
-+	cd $(@D) && $(SUNXI_MALI_DRIVER_MAINLINE_MAKE_OPTS) \
-+		$(SHELL) ./build.sh -r r6p2 -i
-+endef
-+
-+$(eval $(generic-package))
--- 
-2.7.4
+> ---
+> v2: fixed license (Yegor)
+>
+>  DEVELOPERS                                                 |  1 +
+>  package/Config.in                                          |  1 +
+>  package/python-requests-oauthlib/Config.in                 |  8 ++++++++
+>  .../python-requests-oauthlib/python-requests-oauthlib.hash |  4 ++++
+>  .../python-requests-oauthlib/python-requests-oauthlib.mk   | 14 ++++++++++++++
+>  5 files changed, 28 insertions(+)
+>  create mode 100644 package/python-requests-oauthlib/Config.in
+>  create mode 100644 package/python-requests-oauthlib/python-requests-oauthlib.hash
+>  create mode 100644 package/python-requests-oauthlib/python-requests-oauthlib.mk
+>
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index db9ff974b1..adcf818747 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -325,6 +325,7 @@ F:  package/python-mako/
+>  F:     package/python-oauthlib/
+>  F:     package/python-pyicu/
+>  F:     package/python-pylru/
+> +F:     package/python-requests-oauthlib/
+>  F:     package/python-slob/
+>  F:     package/rtmpdump/
+>  F:     package/softether/
+> diff --git a/package/Config.in b/package/Config.in
+> index 8ac25eff78..550fee84b2 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -876,6 +876,7 @@ menu "External python modules"
+>         source "package/python-pyyaml/Config.in"
+>         source "package/python-pyzmq/Config.in"
+>         source "package/python-requests/Config.in"
+> +       source "package/python-requests-oauthlib/Config.in"
+>         source "package/python-requests-toolbelt/Config.in"
+>         source "package/python-rpi-gpio/Config.in"
+>         source "package/python-rtslib-fb/Config.in"
+> diff --git a/package/python-requests-oauthlib/Config.in b/package/python-requests-oauthlib/Config.in
+> new file mode 100644
+> index 0000000000..85283b209c
+> --- /dev/null
+> +++ b/package/python-requests-oauthlib/Config.in
+> @@ -0,0 +1,8 @@
+> +config BR2_PACKAGE_PYTHON_REQUESTS_OAUTHLIB
+> +       bool "python-requests-oauthlib"
+> +       select BR2_PACKAGE_PYTHON_OAUTHLIB # runtime
+> +       select BR2_PACKAGE_PYTHON_REQUESTS # runtime
+> +       help
+> +         OAuthlib authentication support for Requests.
+> +
+> +         https://github.com/requests/requests-oauthlib
+> diff --git a/package/python-requests-oauthlib/python-requests-oauthlib.hash b/package/python-requests-oauthlib/python-requests-oauthlib.hash
+> new file mode 100644
+> index 0000000000..be0f644b80
+> --- /dev/null
+> +++ b/package/python-requests-oauthlib/python-requests-oauthlib.hash
+> @@ -0,0 +1,4 @@
+> +# md5 from https://pypi.python.org/pypi/requests_oauthlib/json, sha256 locally computed
+> +md5    4358a879a4377393bcfd37d0f9ae6d4d  requests-oauthlib-0.8.0.tar.gz
+> +sha256 883ac416757eada6d3d07054ec7092ac21c7f35cb1d2cf82faf205637081f468  requests-oauthlib-0.8.0.tar.gz
+> +sha256 ae01846afad8a8291fe6a08966f3015af9a8ff675d84b981f9793c122f7876e8  LICENSE
+> diff --git a/package/python-requests-oauthlib/python-requests-oauthlib.mk b/package/python-requests-oauthlib/python-requests-oauthlib.mk
+> new file mode 100644
+> index 0000000000..02e3114e59
+> --- /dev/null
+> +++ b/package/python-requests-oauthlib/python-requests-oauthlib.mk
+> @@ -0,0 +1,14 @@
+> +################################################################################
+> +#
+> +# python-requests-oauthlib
+> +#
+> +################################################################################
+> +
+> +PYTHON_REQUESTS_OAUTHLIB_VERSION = 0.8.0
+> +PYTHON_REQUESTS_OAUTHLIB_SOURCE = requests-oauthlib-$(PYTHON_REQUESTS_OAUTHLIB_VERSION).tar.gz
+> +PYTHON_REQUESTS_OAUTHLIB_SITE = https://pypi.python.org/packages/80/14/ad120c720f86c547ba8988010d5186102030591f71f7099f23921ca47fe5
+> +PYTHON_REQUESTS_OAUTHLIB_SETUP_TYPE = setuptools
+> +PYTHON_REQUESTS_OAUTHLIB_LICENSE = ISC
+> +PYTHON_REQUESTS_OAUTHLIB_LICENSE_FILES = LICENSE
+> +
+> +$(eval $(python-package))
+> --
+> 2.11.0
+>
