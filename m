@@ -1,86 +1,56 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 12 Nov 2017 18:45:42 +0100
-Subject: [Buildroot] [PATCH 04/14] fs/initramfs: cleanups, enhance comments
+Date: Sun, 12 Nov 2017 18:45:43 +0100
+Subject: [Buildroot] [PATCH 05/14] fs/ext2: use a post-gen hook rather than
+ a post-target rule
 In-Reply-To: <cover.1510508733.git.yann.morin.1998@free.fr>
 References: <cover.1510508733.git.yann.morin.1998@free.fr>
-Message-ID: <93d8d6336819d11744ec18e868706a51c7e0dd47.1510508733.git.yann.morin.1998@free.fr>
+Message-ID: <de8e5a11b3da8b8726d37dde8c14ff9f0052072d.1510508733.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-rootfs-initramfs is not using the generic fs infrastructure, because
-there is virtually nothing to do to build the initramfs image: there is
-no actual image to be built to begin with.
+post-target rules are probably not resilient to parallel builds, given
+that they do not depend on the image being generated first.
 
-The only purpose of rootfs-initramfs is to ensure the rootfs.cpio image
-is built and then that the Linux kernel is rebuilt with that rootfs.cpio
-as initramfs source.
+Beside, we already have a mechanism for running stuff after the
+filesystem is generated, and that's called post-gen hooks.
 
-Using variables of the fs infra like if it were used is misleading. It
-looked nice as long as there was the possibility that rootfs-initramfs
-would one day use the fs infra. But there's no way that will happen any
-time soon.
+Use those hooks.
 
-Furthermore, the linux' rule linux-rebuild-with-initramfs now already
-depends on rootfs-cpio by itself, so we need not duplicate this
-dependency in rootfs-initramfs.
-
-Still, we want to advertise that the dependency is on rootfs-cpio, so
-we get nice dependency graphs (and not expose the internal
-linux-rebuild-with-initramfs rule to the users).
-
-So, remove the variables and directly define the rules.
+Note: this basically reverts 75b6303 (rootfs-ext2: make the symlink as a
+_POST_TARGET) since we've now re-introduced post-gen hooks.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Romain Naour <romain.naour@openwide.fr>
+Cc: Arnout Vandecappelle <arnout@mind.be>
 Reviewed-by: Romain Naour <romain.naour@gmail.com>
-
 ---
-Changes v2 -> v3:
-  - fix comment about now non-existent stamp file  (Romain)
----
- fs/initramfs/initramfs.mk | 22 +++++++++++++++-------
- 1 file changed, 15 insertions(+), 7 deletions(-)
+ fs/ext2/ext2.mk | 10 ++++------
+ 1 file changed, 4 insertions(+), 6 deletions(-)
 
-diff --git a/fs/initramfs/initramfs.mk b/fs/initramfs/initramfs.mk
-index db5081224c..b8dee18ec5 100644
---- a/fs/initramfs/initramfs.mk
-+++ b/fs/initramfs/initramfs.mk
-@@ -5,17 +5,25 @@
- #
- ################################################################################
+diff --git a/fs/ext2/ext2.mk b/fs/ext2/ext2.mk
+index 5439e2b993..12b87a722c 100644
+--- a/fs/ext2/ext2.mk
++++ b/fs/ext2/ext2.mk
+@@ -36,13 +36,11 @@ define ROOTFS_EXT2_CMD
+ 	}
+ endef
  
--ROOTFS_INITRAMFS_DEPENDENCIES += rootfs-cpio
+-rootfs-ext2-symlink:
+-	ln -sf rootfs.ext2$(ROOTFS_EXT2_COMPRESS_EXT) $(BINARIES_DIR)/rootfs.ext$(BR2_TARGET_ROOTFS_EXT2_GEN)$(ROOTFS_EXT2_COMPRESS_EXT)
 -
--ROOTFS_INITRAMFS_POST_TARGETS += linux-rebuild-with-initramfs
+-.PHONY: rootfs-ext2-symlink
 -
--
- # The generic fs infrastructure isn't very useful here.
-+#
-+# The initramfs image does not actually build an image; its only purpose is:
-+# 1- to ensure rootfs.cpio is generated,
-+# 2- to then rebuild the kernel with rootfs.cpio as initramfs
-+#
-+# Note: ordering of the dependencies is not guaranteed here, but in
-+# linux/linux.mk, via the linux-rebuild-with-initramfs rule, which depends
-+# on the rootfs-cpio filesystem rule.
-+#
-+# Note: the trick here is that we directly depend on rebuilding the Linux
-+# kernel image (which itself depends on the rootfs-cpio rule), while we
-+# advertise that our dependency is on the rootfs-cpio rule, which is
-+# cleaner in the dependency graph.
+ ifneq ($(BR2_TARGET_ROOTFS_EXT2_GEN),2)
+-ROOTFS_EXT2_POST_TARGETS += rootfs-ext2-symlink
++define ROOTFS_EXT2_SYMLINK
++	ln -sf rootfs.ext2$(ROOTFS_EXT2_COMPRESS_EXT) $(BINARIES_DIR)/rootfs.ext$(BR2_TARGET_ROOTFS_EXT2_GEN)$(ROOTFS_EXT2_COMPRESS_EXT)
++endef
++ROOTFS_EXT2_POST_GEN_HOOKS += ROOTFS_EXT2_SYMLINK
+ endif
  
--rootfs-initramfs: $(ROOTFS_INITRAMFS_DEPENDENCIES) $(ROOTFS_INITRAMFS_POST_TARGETS)
-+rootfs-initramfs: linux-rebuild-with-initramfs
- 
- rootfs-initramfs-show-depends:
--	@echo $(ROOTFS_INITRAMFS_DEPENDENCIES)
-+	@echo rootfs-cpio
- 
- .PHONY: rootfs-initramfs rootfs-initramfs-show-depends
- 
+ $(eval $(call ROOTFS_TARGET,ext2))
 -- 
 2.11.0
