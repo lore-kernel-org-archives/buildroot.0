@@ -1,42 +1,61 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 11 Nov 2017 23:40:13 +0100
-Subject: [Buildroot] [git commit branch/next] mesa3d: fix build with
- BR2_SHARED_STATIC_LIBS
-Message-ID: <20171113221622.C1FDC807B2@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 12 Nov 2017 10:12:08 +0100
+Subject: [Buildroot] [git commit branch/next] wpa_supplicant: mesh support
+ needs openssl
+Message-ID: <20171113221622.CDA8B807B2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dd09d500aa6972808b2549e4b8c7fa4e396ca91f
+commit: https://git.buildroot.net/buildroot/commit/?id=7feaac43718bdfff056e35ffdeec424bf03f1e9c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-mesa3d does not allow to enable both static and shared libraries so if
-BR2_SHARED_STATIC_LIBS is set, disable static
+When BR2_PACKAGE_WPA_SUPPLICANT_MESH_NETWORKING is enabeld,
+wpa_supplicant currently fails to build with:
 
-Fixes https://bugs.busybox.net/show_bug.cgi?id=10326
+../src/common/sae.o: In function `sae_cn_confirm.isra.2':
+sae.c:(.text+0x168): undefined reference to `crypto_bignum_to_bin'
+sae.c:(.text+0x198): undefined reference to `crypto_bignum_to_bin'
+../src/common/sae.o: In function `sae_cn_confirm_ffc':
+sae.c:(.text+0x214): undefined reference to `crypto_bignum_to_bin'
+sae.c:(.text+0x22c): undefined reference to `crypto_bignum_to_bin'
+../src/common/sae.o: In function `sae_cn_confirm_ecc':
+sae.c:(.text+0x2a4): undefined reference to `crypto_ec_point_to_bin'
+sae.c:(.text+0x2c0): undefined reference to `crypto_ec_point_to_bin'
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+[...]
+
+This is due to the fact that the SAE code, used for the mesh network
+support, needs OpenSSL support. Therefore, we ensure that
+BR2_PACKAGE_WPA_SUPPLICANT_MESH_NETWORKING selects OpenSSL. Only
+OpenSSL is supported, which is why
+BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL is selected as well.
+
+No changes to the .mk files are needed, because we were already
+handling OpenSSL as an optional dependency.
+
+This problem was not yet caught by the autobuilders.
+
+Reported-by: Maxime Ripard <maxime.ripard@free-electrons.com>
+Cc: Maxime Ripard <maxime.ripard@free-electrons.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mesa3d/mesa3d.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+ package/wpa_supplicant/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 9305523..5627344 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -26,6 +26,12 @@ MESA3D_DEPENDENCIES = \
- # Disable assembly usage.
- MESA3D_CONF_OPTS = --disable-asm
- 
-+# Disable static, otherwise configure will fail with: "Cannot enable both static
-+# and shared."
-+ifeq ($(BR2_SHARED_STATIC_LIBS),y)
-+MESA3D_CONF_OPTS += --disable-static
-+endif
-+
- # The Sourcery MIPS toolchain has a special (non-upstream) feature to
- # have "compact exception handling", which unfortunately breaks with
- # mesa3d, so we disable it here by passing -mno-compact-eh.
+diff --git a/package/wpa_supplicant/Config.in b/package/wpa_supplicant/Config.in
+index 4b810bf..de03141 100644
+--- a/package/wpa_supplicant/Config.in
++++ b/package/wpa_supplicant/Config.in
+@@ -48,6 +48,8 @@ config BR2_PACKAGE_WPA_SUPPLICANT_WIFI_DISPLAY
+ config BR2_PACKAGE_WPA_SUPPLICANT_MESH_NETWORKING
+ 	bool "Enable mesh networking"
+ 	depends on BR2_PACKAGE_WPA_SUPPLICANT_AP_SUPPORT
++	select BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL
+ 	help
+ 	  Enable support for open and secured mesh networking
+ 	  (IEEE 802.11s)
