@@ -1,74 +1,48 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 12 Nov 2017 09:13:21 +0100
-Subject: [Buildroot] [PATCH 0/4 v3] package/freerdp: fix fallout after
- version bump
-Message-ID: <cover.1510474387.git.yann.morin.1998@free.fr>
+Date: Sun, 12 Nov 2017 09:13:23 +0100
+Subject: [Buildroot] [PATCH 1/4 v3] package/freerdp: drop dependency on
+ host-pkgconf
+In-Reply-To: <cover.1510474387.git.yann.morin.1998@free.fr>
+References: <cover.1510474387.git.yann.morin.1998@free.fr>
+Message-ID: <67b488af759e72096a4cf414c5fa06344561c677.1510474387.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+Currently, we only depend on host-pkgconf for gstreamer-0.x
 
-Add a few patches to fix FreeRDP dependencies and build:
+However, we also need it at least for gstreamer-1.x and waylabnd, too.
 
-  - pkg-config is now used for more than gstreamer-0.x, so make
-    it a mandatory dependency;
+But since FreeRDP is a cmake package, host-pkgconf is always pulled in
+as a dependency by the cmake-package infrastructure.
 
-  - FreeRDP can now log to systemd's journald, so add proper
-    dependency and options;
+So, drop the gstreamer-conditional host-pkgconf dependency.
 
-  - backport an upstream patch to fix detection of gstreamer-1.x;
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Samuel Martin <s.martin49@gmail.com>
+Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-  - fix build of the wayland client, by adding a missing dependency
-    and pointing to the correct wayland-scanner tool.
-
-Changes v2 -> v3:
-  - carry Thomas' tag
-  - respin because Patchwork did not grab the previous ieration
-
+---
 Changes v1 -> v2:
-  - reorder patches, pkg-confif first
-  - fix typo in variable name  (Arnout)
-  - add patches 3 and 4
+  - drop host-pkgconf, as it is inherited via the infra  (Samuel)
+---
+ package/freerdp/freerdp.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-
-Regards,
-Yann E. MORIN.
-
-
-The following changes since commit dd09d500aa6972808b2549e4b8c7fa4e396ca91f
-
-  mesa3d: fix build with BR2_SHARED_STATIC_LIBS (2017-11-11 23:40:13 +0100)
-
-
-are available in the git repository at:
-
-  git://git.buildroot.org/~ymorin/git/buildroot.git
-
-for you to fetch changes up to fda5340f59b762950ec832ecae9d7893c495a277
-
-  package/freerdp: fix build of wayland client (2017-11-12 09:10:32 +0100)
-
-
-----------------------------------------------------------------
-Yann E. MORIN (4):
-      package/freerdp: drop dependency on host-pkgconf
-      package/freerdp: optional systemd's journald support
-      package/freerdp: fix gstreamer-1.x detection
-      package/freerdp: fix build of wayland client
-
- .../freerdp/0001-Fix-gstreamer-1.0-detection.patch | 28 ++++++++++++++++++++++
- package/freerdp/Config.in                          |  1 +
- package/freerdp/freerdp.mk                         | 16 ++++++++++---
- 3 files changed, 42 insertions(+), 3 deletions(-)
- create mode 100644 package/freerdp/0001-Fix-gstreamer-1.0-detection.patch
-
+diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
+index 382cd39647..6d1664b86e 100644
+--- a/package/freerdp/freerdp.mk
++++ b/package/freerdp/freerdp.mk
+@@ -16,7 +16,7 @@ FREERDP_CONF_OPTS = -DWITH_MANPAGES=OFF -Wno-dev
+ 
+ ifeq ($(BR2_PACKAGE_FREERDP_GSTREAMER),y)
+ FREERDP_CONF_OPTS += -DWITH_GSTREAMER_0_10=ON
+-FREERDP_DEPENDENCIES += gstreamer gst-plugins-base libxml2 host-pkgconf
++FREERDP_DEPENDENCIES += gstreamer gst-plugins-base libxml2
+ else
+ FREERDP_CONF_OPTS += -DWITH_GSTREAMER_0_10=OFF
+ endif
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.11.0
