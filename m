@@ -1,43 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 8 Nov 2017 13:34:31 +0100
-Subject: [Buildroot] [git commit branch/next] jimtcl: update config.guess /
- config.sub
-Message-ID: <20171113221621.E478A7FDB3@busybox.osuosl.org>
+Date: Sun, 12 Nov 2017 17:52:22 +0100
+Subject: [Buildroot] [git commit branch/next] package/imagemagick: security
+ bump to version 7.0.7-10
+Message-ID: <20171113221622.D73C6807B2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bca1d4af9bf6b60b37bf5d39e9e3e1b827854f52
+commit: https://git.buildroot.net/buildroot/commit/?id=3c8dc542936484cf94efd06d96161c8a04fb17a5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fixes:
-http://autobuild.buildroot.net/results/284/284876bd649cab26e5ecd696c03c71c077ea7411/
+Version 7.0.7-3 fixes CVE-2017-15218:
+Stop potential leaks in the JNG decoder
 
-The build system doesn't use autotools, but does use an old version of
-gnuconfig which doesn't know all the architectures supported by Buildroot,
-so update config.guess / config.sub like we do in pkg-autotools.mk
+Changelog: https://www.imagemagick.org/script/changelog.php
 
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/jimtcl/jimtcl.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+ package/imagemagick/imagemagick.hash | 2 +-
+ package/imagemagick/imagemagick.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/jimtcl/jimtcl.mk b/package/jimtcl/jimtcl.mk
-index 313970d..68c8a91 100644
---- a/package/jimtcl/jimtcl.mk
-+++ b/package/jimtcl/jimtcl.mk
-@@ -38,6 +38,12 @@ define JIMTCL_INSTALL_LIB
- endef
- endif
+diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
+index 92880a9..2468bdb 100644
+--- a/package/imagemagick/imagemagick.hash
++++ b/package/imagemagick/imagemagick.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 5a45e29509dbb23793a9c8db5c47ef1114c1ee82c9ca60053eaf06b3fc243e2c  7.0.7-1.tar.gz
++sha256 924d1161ed2399bcb72f98419072b3130a466e07d9a6fce43d27458ffa907ffa  7.0.7-10.tar.gz
+diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+index 9043ce8..c2171a7 100644
+--- a/package/imagemagick/imagemagick.mk
++++ b/package/imagemagick/imagemagick.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+# build system doesn't use autotools, but does use an old version of
-+# gnuconfig which doesn't know all the architectures supported by
-+# Buildroot, so update config.guess / config.sub like we do in
-+# pkg-autotools.mk
-+JIMTCL_POST_PATCH_HOOKS += UPDATE_CONFIG_HOOK
-+
- define JIMTCL_CONFIGURE_CMDS
- 	(cd $(@D); \
- 		$(TARGET_CONFIGURE_OPTS) CCACHE=none \
+-IMAGEMAGICK_VERSION = 7.0.7-1
++IMAGEMAGICK_VERSION = 7.0.7-10
+ IMAGEMAGICK_SOURCE = $(IMAGEMAGICK_VERSION).tar.gz
+ IMAGEMAGICK_SITE = https://github.com/ImageMagick/ImageMagick/archive
+ IMAGEMAGICK_LICENSE = Apache-2.0
