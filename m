@@ -1,88 +1,101 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 12 Nov 2017 18:42:50 +0100
-Subject: [Buildroot] Bug in RPATH fixing logic
-In-Reply-To: <20171112182403.5d5c8fe4@windsurf.home>
-References: <20171112174013.25d90333@windsurf.home>
- <20171112174955.18449728@windsurf.home>
- <87y3nbs9jz.fsf@dell.be.48ers.dk>
- <20171112182403.5d5c8fe4@windsurf.home>
-Message-ID: <20171112174250.GD2947@scaer>
+Date: Sun, 12 Nov 2017 18:45:47 +0100
+Subject: [Buildroot] [PATCH 00/14] fs: cleanups and enhancements
+Message-ID: <cover.1510508733.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2017-11-12 18:24 +0100, Thomas Petazzoni spake thusly:
-> Hello,
-> 
-> On Sun, 12 Nov 2017 18:15:12 +0100, Peter Korsgaard wrote:
-> 
-> >  > So this happens because the ARC binutils version is fetched from Git,
-> >  > so we need to have host-flex installed, and binutils detects the flex
-> >  > library and decides to use it.  
-> > 
-> > And there is no configure flag to disable that?
-> 
-> Not that I can see.
+Hello All!
 
-A long time ago (when I was too young to have a beard), libfl was only
-available as a static library.
+This series brings a few cleanups, fixes and enhancements to the
+filesystem infra. More is to come, but this is already large enough
+and self-contained, so that it warrants being pushed.
 
-That library contained (and stil contains) a 'main()' symbol (is it even
-a weak one?), so it really is a weird library to begin with... I would
-not mind building that host library with --disable-shared --enable-static
-and only install the static library...
+The underlying reason for this series if many-fold.
 
-That would solve this specific issue.
+First, some comments and code in the fs infra have started to bit-rot
+and are now wrong, misleading, sub-optimal. So, we update those to the
+current state with patches 1..7, essentially to get rid of the
+duplication between post-gen hooks and post-target rules, which
+basically serve the exact same purpose.
 
-Until we need another library...
+The second part of the series deals with re-organising the infra, so
+that all actions common to all image generations are done only once, not
+once per image. As a side effect, the scripts used to do the generation
+are moved to their own directory, and kept afterward to help debugging
+if needed.
 
-> >  >> - The absolute rpath in $(HOST_DIR)/<tuple>/bin/ar is wrong in the
-> >  >> first place, but I'm not sure how to fix this.  
-> > 
-> >  > I'm wrong on this: $(HOST_DIR)/<tuple>/bin/ar RPATH is totally fine:  
-> > 
-> >  > $ readelf -d arc-buildroot-linux-uclibc/bin/ar  | grep rpath
-> >  >  0x000000000000000f (RPATH)              Library rpath: [/opt/br-arcle-hs38-full-2017.11-rc1/lib]  
-> > 
-> >  > The problem is that this gets turned into $ORIGIN/../lib by patchelf.  
-> > 
-> >  > I don't see any other solution than de-duplicating such binaries.  
-> > 
-> >  > Do you see another option ?  
-> > 
-> > Not if we *need* both binaries (do we?)
-> 
-> I think we do need both binaries. <tuple>-<tool> is the "publicly"
-> visible copy, while <tuple>/bin/<tool> is the one called internally by
-> gcc (for example when it calls as or ld). Yann can explain more about
-> this perhaps.
+As a side effect, this common part is now done only once, so it will
+automatically act as a synchronisation point when we later add support
+for top-level aparallel build: no two filesystem images will have to
+modify the content of tartget/ at the same time anymore.
 
-I can't explain much more than you did, sorry...
+Now, since we have pre- and post-fs hooks registered by packages, the
+target directory is no longer immutable during the creation of
+filesystem images. So, when two filesystem images are enabled, they
+will both try to run the pre-rootfs hooks, generate the image, then run
+the post-rootfs hooks; none of this is atomic, obviously, so they will
+conflict. At best, there will be a failure, at worst there will be
+silent corruption.
 
-> > Is there a way to get binutils to use soft links instead of hard links?
-> 
-> How would this solve the problem?
+So, the last patch makes the target-finalize step act on a copy of
+target/, so as to leave target/ in the state it was set by installing
+packages, and each filesystem image generator only sees that and can
+tweak it as needed without impacting the others. That copy is deleted
+after the filesystem image is generated.
 
-I guess the reasoning of Peter was that maybe $ORIGIN is relative to the
-real file not the symlink.
-
-Thus by having <tuple>/bin/<tool> a symlink to ../../bin/<tuple>-<tool>
-would solve the issue.
-
-But I am not sure of it either, and the manpage for ld.so does not
-mention that. It only states:
-
-    $ORIGIN (or equivalently ${ORIGIN})
-        This expands to the directory containing the program or
-        shared object.
-
-No mention of the behaviour when the program is being called through a
-symlink in another directory... :-/
 
 Regards,
 Yann E. MORIN.
+
+
+The following changes since commit 7feaac43718bdfff056e35ffdeec424bf03f1e9c
+
+  wpa_supplicant: mesh support needs openssl (2017-11-12 10:12:08 +0100)
+
+
+are available in the git repository at:
+
+  git://git.buildroot.org/~ymorin/git/buildroot.git
+
+for you to fetch changes up to 8a74ac07aaa7e2f745ab75dde70f42ee0bff5cb1
+
+  TEST-ME (2017-11-12 12:19:34 +0100)
+
+
+----------------------------------------------------------------
+Yann E. MORIN (14):
+      core: sort packages and eliminate duplicates in show-targets
+      linux: split overly-long dependency line for readability
+      linux: meddle not in the internals of filesystems
+      fs/initramfs: cleanups, enhance comments
+      fs/ext2: use a post-gen hook rather than a post-target rule
+      fs/cpio: use a post-gen hook rather than a post-target rule
+      fs/common: get rid of post-target rules
+      fs: remove TARGET_DIR_WARNING_FILE late
+      fs: don't pollute $(BUILD_DIR) with temp files
+      fs/iso9660: don't pollute $(BUILD_DIR) with temp dir
+      fs: don't remove intermediate files
+      fs: move actions common to all filesystems to their own rule
+      core: finalise target in its own location
+      TEST-ME
+
+ .gitlab-ci.yml                                     | 204 ---------------------
+ Makefile                                           |  30 ++-
+ fs/common.mk                                       |  89 +++++----
+ fs/cpio/cpio.mk                                    |  11 +-
+ fs/ext2/ext2.mk                                    |  10 +-
+ fs/initramfs/initramfs.mk                          |  22 ++-
+ fs/iso9660/iso9660.mk                              |   2 +-
+ linux/linux.mk                                     |  15 +-
+ package/pkg-generic.mk                             |   2 -
+ .../skeleton-init-systemd/skeleton-init-systemd.mk |   6 -
+ support/testing/tests/core/test_post_scripts.py    |   8 +-
+ support/testing/tests/core/test_rootfs_overlay.py  |   4 +-
+ 12 files changed, 117 insertions(+), 286 deletions(-)
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
