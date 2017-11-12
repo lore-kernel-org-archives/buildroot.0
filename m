@@ -1,9 +1,9 @@
 From: Fabio Estevam <festevam@gmail.com>
-Date: Sun, 12 Nov 2017 20:47:08 -0200
-Subject: [Buildroot] [PATCH 3/5] linux: bump default to version 4.14
+Date: Sun, 12 Nov 2017 20:47:09 -0200
+Subject: [Buildroot] [PATCH 4/5] configs/imx6-sabresd: Bump to kernel 4.14
 In-Reply-To: <1510526830-8044-1-git-send-email-festevam@gmail.com>
 References: <1510526830-8044-1-git-send-email-festevam@gmail.com>
-Message-ID: <1510526830-8044-3-git-send-email-festevam@gmail.com>
+Message-ID: <1510526830-8044-4-git-send-email-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,30 +12,32 @@ To: buildroot@busybox.net
 
 Signed-off-by: Fabio Estevam <festevam@gmail.com>
 ---
- linux/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ configs/imx6-sabresd_defconfig | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index e90ab6b..a4977d1 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -26,7 +26,7 @@ choice
- 	prompt "Kernel version"
+diff --git a/configs/imx6-sabresd_defconfig b/configs/imx6-sabresd_defconfig
+index 18dfe27..5b2b014 100644
+--- a/configs/imx6-sabresd_defconfig
++++ b/configs/imx6-sabresd_defconfig
+@@ -4,8 +4,8 @@ BR2_ARM_ENABLE_NEON=y
+ BR2_ARM_ENABLE_VFP=y
+ BR2_ARM_FPU_VFPV3=y
  
- config BR2_LINUX_KERNEL_LATEST_VERSION
--	bool "Latest version (4.13)"
-+	bool "Latest version (4.14)"
+-# Linux headers same as kernel, a 4.13 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_13=y
++# Linux headers same as kernel, a 4.14 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
  
- config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	bool "Latest CIP SLTS version (v4.4.83-cip8)"
-@@ -116,7 +116,7 @@ endif
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "4.13.12" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "4.14" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "v4.4.83-cip8" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+ # System
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+@@ -32,7 +32,7 @@ BR2_TARGET_UBOOT_SPL_NAME="SPL"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.13.3"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.14"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-sabresd imx6dl-sabresd imx6qp-sabresd"
 -- 
 2.7.4
