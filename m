@@ -1,58 +1,60 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Sun, 12 Nov 2017 00:08:46 +0100
-Subject: [Buildroot] [PATCH] libpjsip: fix static build failures due to
- name clash
-In-Reply-To: <29066e8f-3749-4fa2-2715-f044391b992e@mind.be>
-References: <1510352189-20531-1-git-send-email-luca@lucaceresoli.net>
- <29066e8f-3749-4fa2-2715-f044391b992e@mind.be>
-Message-ID: <1240a661-1e4d-e939-50f2-47efb1e24ae3@lucaceresoli.net>
+From: Martin Kepplinger <martink@posteo.de>
+Date: Sun, 12 Nov 2017 01:40:02 +0100
+Subject: [Buildroot] [PATCH] tslib: update to 1.14
+Message-ID: <20171112004002.24624-1-martink@posteo.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+As usual, https://github.com/kergoth/tslib/releases has the changelog
+summary.
 
-On 11/11/2017 10:40, Arnout Vandecappelle wrote:
->  Hi Luca,
-> 
-> On 10-11-17 23:16, Luca Ceresoli wrote:
->> Several packages have a similar md5.c file, and each has a function
->> named byteReverse(). This generates link errors when building
->> statically ("multiple definition of `byteReverse'").
->>
->> Fix by applying a patch from upstream:
->>   https://trac.pjsip.org/repos/changeset/5688
->>
->> Fixes:
->>   http://autobuild.buildroot.org/results/5d7/5d72e0f8517a555399978d5a0e9f7efd0a278189/
->>   http://autobuild.buildroot.org/results/c47/c47ccbb9b40011cf0d79c7040bed061ddefd9629/
->>   http://autobuild.buildroot.org/results/419/419ab2c0e034cc68991281c51caa8271b0fadbab/
->>
->> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
->> Cc: Adam Duskett <aduskett@gmail.com>
->> ---
->>  .../0001-Fixed-possible-function-name-clash.patch   | 21 +++++++++++++++++++++
->>  1 file changed, 21 insertions(+)
->>  create mode 100644 package/libpjsip/0001-Fixed-possible-function-name-clash.patch
->>
->> diff --git a/package/libpjsip/0001-Fixed-possible-function-name-clash.patch b/package/libpjsip/0001-Fixed-possible-function-name-clash.patch
->> new file mode 100644
->> index 000000000000..80a05ab50a6c
->> --- /dev/null
->> +++ b/package/libpjsip/0001-Fixed-possible-function-name-clash.patch
->> @@ -0,0 +1,21 @@
->> +Index: pjlib-util/src/pjlib-util/md5.c
->> +===================================================================
-> 
->  You forgot to add a commit message and your Sob to the patch.
+This release includes a new plugin "lowpass" that is being built by
+default; so we add that to the list of statically compiled in plugins
+for static builds.
 
-My bad, I'm so comfortable with using 'git format-patch' to extract
-patches that I forget the basics whenever I use a non-git repository...
+Signed-off-by: Martin Kepplinger <martink@posteo.de>
+---
+ package/tslib/tslib.hash | 4 ++--
+ package/tslib/tslib.mk   | 5 +++--
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
-Sorry about that, I just sent v2.
-
-Bye,
+diff --git a/package/tslib/tslib.hash b/package/tslib/tslib.hash
+index cca74fc827..8184143bec 100644
+--- a/package/tslib/tslib.hash
++++ b/package/tslib/tslib.hash
+@@ -1,5 +1,5 @@
+-# https://github.com/kergoth/tslib/releases/download/1.13/tslib-1.13.tar.xz.sha256
+-sha256  b381279f2d6ad6acb80cfc4852860853b7bcd1a9440821e9fe920c33f4e4f8da  tslib-1.13.tar.xz
++# https://github.com/kergoth/tslib/releases/download/1.14/tslib-1.14.tar.xz.sha256
++sha256  56ce7adfb896442001938470a7f946cc029bfb03ed74e7f62db92d9c9ba83df4  tslib-1.14.tar.xz
+ 
+ # Locally computed
+ sha256  9b872a8a070b8ad329c4bd380fb1bf0000f564c75023ec8e1e6803f15364b9e9  COPYING
+diff --git a/package/tslib/tslib.mk b/package/tslib/tslib.mk
+index 06f887a151..7a6379cc48 100644
+--- a/package/tslib/tslib.mk
++++ b/package/tslib/tslib.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TSLIB_VERSION = 1.13
++TSLIB_VERSION = 1.14
+ TSLIB_SITE = https://github.com/kergoth/tslib/releases/download/$(TSLIB_VERSION)
+ TSLIB_SOURCE = tslib-$(TSLIB_VERSION).tar.xz
+ TSLIB_LICENSE = GPL-2.0+ (programs), LGPL-2.1+ (libraries)
+@@ -26,7 +26,8 @@ TSLIB_CONF_OPTS += \
+ 	--enable-iir=static \
+ 	--enable-dejitter=static \
+ 	--enable-debounce=static \
+-	--enable-skip=static
++	--enable-skip=static \
++	--enable-lowpass=static
+ endif
+ 
+ $(eval $(autotools-package))
 -- 
-Luca
+2.11.0
