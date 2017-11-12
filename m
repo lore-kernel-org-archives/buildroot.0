@@ -1,246 +1,34 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 12 Nov 2017 18:45:52 +0100
+Date: Sun, 12 Nov 2017 18:53:07 +0100
 Subject: [Buildroot] [PATCH 14/14] TEST-ME
-In-Reply-To: <cover.1510508733.git.yann.morin.1998@free.fr>
+In-Reply-To: <8a74ac07aaa7e2f745ab75dde70f42ee0bff5cb1.1510508733.git.yann.morin.1998@free.fr>
 References: <cover.1510508733.git.yann.morin.1998@free.fr>
-Message-ID: <8a74ac07aaa7e2f745ab75dde70f42ee0bff5cb1.1510508733.git.yann.morin.1998@free.fr>
+ <8a74ac07aaa7e2f745ab75dde70f42ee0bff5cb1.1510508733.git.yann.morin.1998@free.fr>
+Message-ID: <20171112175307.GE2947@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
----
- .gitlab-ci.yml | 204 ---------------------------------------------------------
- 1 file changed, 204 deletions(-)
+All,
 
-diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index 0dddb22f12..41ab248229 100644
---- a/.gitlab-ci.yml
-+++ b/.gitlab-ci.yml
-@@ -17,19 +17,6 @@ image: buildroot/base
-             exit 1
-         }
- 
--check-gitlab-ci.yml:
--    script:
--        - mv .gitlab-ci.yml .gitlab-ci.yml.orig
--        - make .gitlab-ci.yml
--        - diff -u .gitlab-ci.yml.orig .gitlab-ci.yml
--
--check-DEVELOPERS:
--    # get-developers should print just "No action specified"; if it prints
--    # anything else, it's a parse error.
--    # The initial ! is removed by YAML so we need to quote it.
--    script:
--        - "! utils/get-developers | grep -v 'No action specified'"
--
- .defconfig: &defconfig
-     # Running the defconfigs for every push is too much, so limit to
-     # explicit triggers through the API.
-@@ -58,175 +45,8 @@ check-DEVELOPERS:
-         paths:
-             - test-output/*.log
-             - test-output/*/images/*
--acmesystems_aria_g25_128mb_defconfig: *defconfig
--acmesystems_aria_g25_256mb_defconfig: *defconfig
--acmesystems_arietta_g25_128mb_defconfig: *defconfig
--acmesystems_arietta_g25_256mb_defconfig: *defconfig
--arcturus_ucp1020_defconfig: *defconfig
--arm_foundationv8_defconfig: *defconfig
--arm_juno_defconfig: *defconfig
--armadeus_apf27_defconfig: *defconfig
--armadeus_apf28_defconfig: *defconfig
--armadeus_apf51_defconfig: *defconfig
--at91sam9260eknf_defconfig: *defconfig
--at91sam9g20dfc_defconfig: *defconfig
--at91sam9g45m10ek_defconfig: *defconfig
--at91sam9rlek_defconfig: *defconfig
--at91sam9x5ek_defconfig: *defconfig
--at91sam9x5ek_dev_defconfig: *defconfig
--at91sam9x5ek_mmc_defconfig: *defconfig
--at91sam9x5ek_mmc_dev_defconfig: *defconfig
--atmel_sama5d27_som1_ek_mmc_dev_defconfig: *defconfig
--atmel_sama5d2_xplained_mmc_defconfig: *defconfig
--atmel_sama5d2_xplained_mmc_dev_defconfig: *defconfig
--atmel_sama5d3_xplained_defconfig: *defconfig
--atmel_sama5d3_xplained_dev_defconfig: *defconfig
--atmel_sama5d3_xplained_mmc_defconfig: *defconfig
--atmel_sama5d3_xplained_mmc_dev_defconfig: *defconfig
--atmel_sama5d3xek_defconfig: *defconfig
--atmel_sama5d4_xplained_defconfig: *defconfig
--atmel_sama5d4_xplained_dev_defconfig: *defconfig
--atmel_sama5d4_xplained_mmc_defconfig: *defconfig
--atmel_sama5d4_xplained_mmc_dev_defconfig: *defconfig
--bananapi_m1_defconfig: *defconfig
--bananapi_m2_plus_defconfig: *defconfig
--bananapro_defconfig: *defconfig
--beagleboardx15_defconfig: *defconfig
--beaglebone_defconfig: *defconfig
--beaglebone_qt5_defconfig: *defconfig
--chromebook_snow_defconfig: *defconfig
--ci20_defconfig: *defconfig
--ci40_defconfig: *defconfig
--csky_gx6605s_defconfig: *defconfig
--cubieboard2_defconfig: *defconfig
--engicam_imx6qdl_icore_defconfig: *defconfig
--engicam_imx6qdl_icore_qt5_defconfig: *defconfig
--engicam_imx6qdl_icore_rqs_defconfig: *defconfig
--engicam_imx6ul_geam_defconfig: *defconfig
--engicam_imx6ul_isiot_defconfig: *defconfig
--firefly_rk3288_defconfig: *defconfig
--firefly_rk3288_demo_defconfig: *defconfig
--freescale_imx28evk_defconfig: *defconfig
--freescale_imx31_3stack_defconfig: *defconfig
--freescale_imx6dlsabreauto_defconfig: *defconfig
--freescale_imx6dlsabresd_defconfig: *defconfig
--freescale_imx6qsabreauto_defconfig: *defconfig
--freescale_imx6qsabresd_defconfig: *defconfig
--freescale_imx6sololiteevk_defconfig: *defconfig
--freescale_imx6sxsabresd_defconfig: *defconfig
--freescale_imx6ulevk_defconfig: *defconfig
--freescale_imx7dsabresd_defconfig: *defconfig
--freescale_mpc8315erdb_defconfig: *defconfig
--freescale_p1010rdb_pa_defconfig: *defconfig
--galileo_defconfig: *defconfig
--gdb_bfin_bf512_defconfig: *defconfig
--grinn_chiliboard_defconfig: *defconfig
--grinn_liteboard_defconfig: *defconfig
--imx23evk_defconfig: *defconfig
--imx6-sabreauto_defconfig: *defconfig
--imx6-sabresd_defconfig: *defconfig
--imx6-sabresd_qt5_defconfig: *defconfig
--imx6ulpico_defconfig: *defconfig
--imx7dpico_defconfig: *defconfig
--lego_ev3_defconfig: *defconfig
--linksprite_pcduino_defconfig: *defconfig
--minnowboard_max-graphical_defconfig: *defconfig
--minnowboard_max_defconfig: *defconfig
--mx25pdk_defconfig: *defconfig
--mx51evk_defconfig: *defconfig
--mx53loco_defconfig: *defconfig
--mx6cubox_defconfig: *defconfig
--mx6sx_udoo_neo_defconfig: *defconfig
--mx6udoo_defconfig: *defconfig
--nanopi_m1_defconfig: *defconfig
--nanopi_m1_plus_defconfig: *defconfig
--nanopi_neo_defconfig: *defconfig
--nexbox_a95x_defconfig: *defconfig
--nitrogen6sx_defconfig: *defconfig
--nitrogen6x_defconfig: *defconfig
--nitrogen7_defconfig: *defconfig
--odroidc2_defconfig: *defconfig
--olimex_a13_olinuxino_defconfig: *defconfig
--olimex_a20_olinuxino_lime2_defconfig: *defconfig
--olimex_a20_olinuxino_lime_defconfig: *defconfig
--olimex_a20_olinuxino_lime_mali_defconfig: *defconfig
--olimex_a20_olinuxino_micro_defconfig: *defconfig
--olimex_imx233_olinuxino_defconfig: *defconfig
--openblocks_a6_defconfig: *defconfig
--orangepi_one_defconfig: *defconfig
--orangepi_pc_defconfig: *defconfig
--orangepi_plus_defconfig: *defconfig
--orangepi_zero_defconfig: *defconfig
--pandaboard_defconfig: *defconfig
--pc_x86_64_bios_defconfig: *defconfig
--pc_x86_64_efi_defconfig: *defconfig
--qemu_aarch64_virt_defconfig: *defconfig
--qemu_arm_versatile_defconfig: *defconfig
--qemu_arm_versatile_nommu_defconfig: *defconfig
--qemu_arm_vexpress_defconfig: *defconfig
--qemu_m68k_mcf5208_defconfig: *defconfig
--qemu_m68k_q800_defconfig: *defconfig
--qemu_microblazebe_mmu_defconfig: *defconfig
--qemu_microblazeel_mmu_defconfig: *defconfig
--qemu_mips32r2_malta_defconfig: *defconfig
--qemu_mips32r2el_malta_defconfig: *defconfig
--qemu_mips32r6_malta_defconfig: *defconfig
--qemu_mips32r6el_malta_defconfig: *defconfig
--qemu_mips64_malta_defconfig: *defconfig
--qemu_mips64el_malta_defconfig: *defconfig
--qemu_mips64r6_malta_defconfig: *defconfig
--qemu_mips64r6el_malta_defconfig: *defconfig
--qemu_nios2_10m50_defconfig: *defconfig
--qemu_or1k_defconfig: *defconfig
--qemu_ppc64_pseries_defconfig: *defconfig
--qemu_ppc64le_pseries_defconfig: *defconfig
--qemu_ppc_g3beige_defconfig: *defconfig
--qemu_ppc_mpc8544ds_defconfig: *defconfig
--qemu_ppc_virtex_ml507_defconfig: *defconfig
--qemu_sh4_r2d_defconfig: *defconfig
--qemu_sh4eb_r2d_defconfig: *defconfig
--qemu_sparc64_sun4u_defconfig: *defconfig
--qemu_sparc_ss10_defconfig: *defconfig
--qemu_x86_64_defconfig: *defconfig
--qemu_x86_defconfig: *defconfig
--qemu_xtensa_lx60_defconfig: *defconfig
--qemu_xtensa_lx60_nommu_defconfig: *defconfig
--raspberrypi0_defconfig: *defconfig
--raspberrypi2_defconfig: *defconfig
--raspberrypi3_64_defconfig: *defconfig
--raspberrypi3_defconfig: *defconfig
--raspberrypi3_qt5we_defconfig: *defconfig
--raspberrypi_defconfig: *defconfig
--riotboard_defconfig: *defconfig
--roseapplepi_defconfig: *defconfig
--s6lx9_microboard_defconfig: *defconfig
--sheevaplug_defconfig: *defconfig
--snps_aarch64_vdk_defconfig: *defconfig
--snps_arc700_axs101_defconfig: *defconfig
--snps_archs38_axs103_defconfig: *defconfig
--snps_archs38_haps_defconfig: *defconfig
--snps_archs38_vdk_defconfig: *defconfig
--socrates_cyclone5_defconfig: *defconfig
--stm32f429_disco_defconfig: *defconfig
--stm32f469_disco_defconfig: *defconfig
--telit_evk_pro3_defconfig: *defconfig
--toradex_apalis_imx6_defconfig: *defconfig
--ts4800_defconfig: *defconfig
--ts4900_defconfig: *defconfig
--ts5x00_defconfig: *defconfig
--ts7680_defconfig: *defconfig
--wandboard_defconfig: *defconfig
--warp7_defconfig: *defconfig
--warpboard_defconfig: *defconfig
--zynq_microzed_defconfig: *defconfig
--zynq_zc706_defconfig: *defconfig
--zynq_zed_defconfig: *defconfig
--zynq_zybo_defconfig: *defconfig
- tests.core.test_post_scripts.TestPostScripts: *runtime_test
- tests.core.test_rootfs_overlay.TestRootfsOverlay: *runtime_test
--tests.core.test_timezone.TestGlibcAllTimezone: *runtime_test
--tests.core.test_timezone.TestGlibcNonDefaultLimitedTimezone: *runtime_test
--tests.core.test_timezone.TestNoTimezone: *runtime_test
- tests.fs.test_ext.TestExt2: *runtime_test
- tests.fs.test_ext.TestExt2r1: *runtime_test
- tests.fs.test_ext.TestExt3: *runtime_test
-@@ -239,27 +59,3 @@ tests.fs.test_jffs2.TestJffs2: *runtime_test
- tests.fs.test_squashfs.TestSquashfs: *runtime_test
- tests.fs.test_ubi.TestUbi: *runtime_test
- tests.fs.test_yaffs2.TestYaffs2: *runtime_test
--tests.init.test_busybox.TestInitSystemBusyboxRo: *runtime_test
--tests.init.test_busybox.TestInitSystemBusyboxRoNet: *runtime_test
--tests.init.test_busybox.TestInitSystemBusyboxRw: *runtime_test
--tests.init.test_busybox.TestInitSystemBusyboxRwNet: *runtime_test
--tests.init.test_none.TestInitSystemNone: *runtime_test
--tests.init.test_systemd.TestInitSystemSystemdRoFull: *runtime_test
--tests.init.test_systemd.TestInitSystemSystemdRoIfupdown: *runtime_test
--tests.init.test_systemd.TestInitSystemSystemdRoNetworkd: *runtime_test
--tests.init.test_systemd.TestInitSystemSystemdRwFull: *runtime_test
--tests.init.test_systemd.TestInitSystemSystemdRwIfupdown: *runtime_test
--tests.init.test_systemd.TestInitSystemSystemdRwNetworkd: *runtime_test
--tests.package.test_dropbear.TestDropbear: *runtime_test
--tests.package.test_ipython.TestIPythonPy2: *runtime_test
--tests.package.test_ipython.TestIPythonPy3: *runtime_test
--tests.package.test_python.TestPython2: *runtime_test
--tests.package.test_python.TestPython3: *runtime_test
--tests.toolchain.test_external.TestExternalToolchainBuildrootMusl: *runtime_test
--tests.toolchain.test_external.TestExternalToolchainBuildrootuClibc: *runtime_test
--tests.toolchain.test_external.TestExternalToolchainCCache: *runtime_test
--tests.toolchain.test_external.TestExternalToolchainCtngMusl: *runtime_test
--tests.toolchain.test_external.TestExternalToolchainLinaroArm: *runtime_test
--tests.toolchain.test_external.TestExternalToolchainSourceryArmv4: *runtime_test
--tests.toolchain.test_external.TestExternalToolchainSourceryArmv5: *runtime_test
--tests.toolchain.test_external.TestExternalToolchainSourceryArmv7: *runtime_test
+On 2017-11-12 18:45 +0100, Yann E. MORIN spake thusly:
+>  .gitlab-ci.yml | 204 ---------------------------------------------------------
+>  1 file changed, 204 deletions(-)
+
+Sorry, I should not have sent that patch as part of the series. It was
+there so that gitlab-ci would only test my changes.
+
+I've marked it as rejected on patchwork. Sorry for the noise...
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.11.0
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
