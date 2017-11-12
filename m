@@ -1,96 +1,46 @@
 From: Sergey Matyukevich <geomatsi@gmail.com>
-Date: Sun, 12 Nov 2017 23:16:43 +0300
-Subject: [Buildroot] [PATCH/next 2/5] armada-ddr: new package
+Date: Sun, 12 Nov 2017 23:16:44 +0300
+Subject: [Buildroot] [PATCH/next 3/5] atf: add support for Marvell Armada
+ SoCs
 In-Reply-To: <20171112201646.15558-1-geomatsi@gmail.com>
 References: <20171112201646.15558-1-geomatsi@gmail.com>
-Message-ID: <20171112201646.15558-3-geomatsi@gmail.com>
+Message-ID: <20171112201646.15558-4-geomatsi@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This package adds Marvell Armada SoC DDR training algorithms.
-This code is not built separately, it is needed as dependency
-to build ATF firmware for Marvell Armada SoCs.
+Add support for Marvell Armada SoCs to arm-trusted-firmware package.
 
 Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
 ---
- boot/Config.in                  |  1 +
- boot/armada-ddr/Config.in       | 16 ++++++++++++++++
- boot/armada-ddr/armada-ddr.hash |  2 ++
- boot/armada-ddr/armada-ddr.mk   | 20 ++++++++++++++++++++
- 4 files changed, 39 insertions(+)
- create mode 100644 boot/armada-ddr/Config.in
- create mode 100644 boot/armada-ddr/armada-ddr.hash
- create mode 100644 boot/armada-ddr/armada-ddr.mk
+ boot/arm-trusted-firmware/arm-trusted-firmware.mk | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-diff --git a/boot/Config.in b/boot/Config.in
-index 0ffbd7288b..1363181fc5 100644
---- a/boot/Config.in
-+++ b/boot/Config.in
-@@ -18,5 +18,6 @@ source "boot/uboot/Config.in"
- source "boot/vexpress-firmware/Config.in"
- source "boot/xloader/Config.in"
- source "boot/armada-firmware/Config.in"
-+source "boot/armada-ddr/Config.in"
+diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+index 7b1cc6ebb6..d6bde29894 100644
+--- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
++++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+@@ -39,6 +39,19 @@ ARM_TRUSTED_FIRMWARE_MAKE_OPTS += SCP_BL2=$(BINARIES_DIR)/scp-fw.bin
+ ARM_TRUSTED_FIRMWARE_DEPENDENCIES += vexpress-firmware
+ endif
  
- endmenu
-diff --git a/boot/armada-ddr/Config.in b/boot/armada-ddr/Config.in
-new file mode 100644
-index 0000000000..23b71b8345
---- /dev/null
-+++ b/boot/armada-ddr/Config.in
-@@ -0,0 +1,16 @@
-+config BR2_TARGET_ARMADA_DDR
-+	bool "armada-ddr"
-+	depends on BR2_aarch64
-+	help
-+	  Marvell keeps algorithms for DDR training in a separate repository.
-+	  This code is not built separately, it is needed as dependency
-+	  to build ATF firmware for Marvell Armada 7040 and 8040 SoCs.
-+
-+if BR2_TARGET_ARMADA_DDR
-+
-+config BR2_TARGET_ARMADA_DDR_VERSION
-+	string "Armada DDR training code version"
-+	help
-+	  Marvell Armada DDR training code version
-+
++ifeq ($(BR2_TARGET_ARMADA_FIRMWARE),y)
++ARMADA_FIRMWARE_IMAGE = $(call qstrip,$(BR2_TARGET_ARMADA_FIRMWARE_IMAGE))
++ARM_TRUSTED_FIRMWARE_MAKE_OPTS += \
++	SCP_BL2=$(BINARIES_DIR)/$(ARMADA_FIRMWARE_IMAGE)
++ARM_TRUSTED_FIRMWARE_DEPENDENCIES += armada-firmware
 +endif
-diff --git a/boot/armada-ddr/armada-ddr.hash b/boot/armada-ddr/armada-ddr.hash
-new file mode 100644
-index 0000000000..2dc36e0975
---- /dev/null
-+++ b/boot/armada-ddr/armada-ddr.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256 5f6f2b8c0742eb8b4ff716dc6715d20507c6ceadd5576aa446e407a428861de9 armada-ddr-mv_ddr-armada-17.10.tar.gz
-diff --git a/boot/armada-ddr/armada-ddr.mk b/boot/armada-ddr/armada-ddr.mk
-new file mode 100644
-index 0000000000..5f76bfd7ed
---- /dev/null
-+++ b/boot/armada-ddr/armada-ddr.mk
-@@ -0,0 +1,20 @@
-+################################################################################
-+#
-+# Marvell Armada DDR training code
-+#
-+################################################################################
 +
-+ARMADA_DDR_VERSION = $(call qstrip,$(BR2_TARGET_ARMADA_DDR_VERSION))
-+ARMADA_DDR_SITE = $(call github,MarvellEmbeddedProcessors,mv-ddr-marvell,$(ARMADA_DDR_VERSION))
-+ARMADA_DDR_LICENSE = Proprietary
++ifeq ($(BR2_TARGET_ARMADA_DDR),y)
++ARM_TRUSTED_FIRMWARE_MAKE_OPTS += \
++	MV_DDR_PATH=$(DL_DIR)/mv-ddr-marvell
++ARM_TRUSTED_FIRMWARE_DEPENDENCIES += armada-ddr
++endif
 +
-+ARMADA_DDR_INSTALL_IMAGES  = YES
-+
-+define ARMADA_DDR_INSTALL_IMAGES_CMDS
-+	$(INSTALL) -m 0755 -d $(DL_DIR)/mv-ddr-marvell
-+	$(call suitable-extractor,$(notdir $(ARMADA_DDR_SOURCE))) \
-+		$(DL_DIR)/$(notdir $(ARMADA_DDR_SOURCE)) | \
-+		$(TAR) --strip-components=1 -C $(DL_DIR)/mv-ddr-marvell $(TAR_OPTIONS) -
-+endef
-+
-+$(eval $(generic-package))
+ define ARM_TRUSTED_FIRMWARE_BUILD_CMDS
+ 	$(TARGET_CONFIGURE_OPTS) \
+ 		$(MAKE) -C $(@D) $(ARM_TRUSTED_FIRMWARE_MAKE_OPTS) \
 -- 
 2.11.0
