@@ -1,7 +1,7 @@
 From: Marcus Folkesson <marcus.folkesson@gmail.com>
-Date: Sun, 12 Nov 2017 21:59:13 +0100
-Subject: [Buildroot] [PATCH v7] libostree: new package
-Message-ID: <20171112205913.11579-1-marcus.folkesson@gmail.com>
+Date: Sun, 12 Nov 2017 22:06:09 +0100
+Subject: [Buildroot] [PATCH v8] libostree: new package
+Message-ID: <20171112210609.12275-1-marcus.folkesson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,11 +12,13 @@ OSTree is an upgrade system for Linux-based operating systems
 
 Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
 ---
+v8:
+- fix typo in comment
+
 v7:
 Fix comments from Bernd Kuhls:
 - add "comment"-section in Config.in
 - add hash of the license file 
-
 v6:
 - Rearrange logic for curl and libsoup check
 
@@ -74,7 +76,7 @@ index fe5ccc434e..0a9582addf 100644
  	source "package/ncdu/Config.in"
 diff --git a/package/libostree/Config.in b/package/libostree/Config.in
 new file mode 100644
-index 0000000000..528824542c
+index 0000000000..2edd8664a4
 --- /dev/null
 +++ b/package/libostree/Config.in
 @@ -0,0 +1,26 @@
@@ -102,7 +104,7 @@ index 0000000000..528824542c
 +comment "libostree needs a uClibc or glibc toolchain w/ threads, dynamic library, wchar"
 +	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS \
 +		|| !BR2_USE_WCHAR || BR2_TOOLCHAIN_USES_MUSL
-+	depends on !BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS
++	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS
 +	depends on BR2_USE_MMU
 diff --git a/package/libostree/libostree.hash b/package/libostree/libostree.hash
 new file mode 100644
