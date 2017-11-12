@@ -1,34 +1,41 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 12 Nov 2017 18:53:07 +0100
-Subject: [Buildroot] [PATCH 14/14] TEST-ME
-In-Reply-To: <8a74ac07aaa7e2f745ab75dde70f42ee0bff5cb1.1510508733.git.yann.morin.1998@free.fr>
-References: <cover.1510508733.git.yann.morin.1998@free.fr>
- <8a74ac07aaa7e2f745ab75dde70f42ee0bff5cb1.1510508733.git.yann.morin.1998@free.fr>
-Message-ID: <20171112175307.GE2947@scaer>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 12 Nov 2017 19:03:47 +0100
+Subject: [Buildroot] Bug in RPATH fixing logic
+In-Reply-To: <20171112182403.5d5c8fe4@windsurf.home> (Thomas Petazzoni's
+ message of "Sun, 12 Nov 2017 18:24:03 +0100")
+References: <20171112174013.25d90333@windsurf.home>
+ <20171112174955.18449728@windsurf.home>
+ <87y3nbs9jz.fsf@dell.be.48ers.dk>
+ <20171112182403.5d5c8fe4@windsurf.home>
+Message-ID: <87tvxzs7b0.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-On 2017-11-12 18:45 +0100, Yann E. MORIN spake thusly:
->  .gitlab-ci.yml | 204 ---------------------------------------------------------
->  1 file changed, 204 deletions(-)
+ > Hello,
+ > On Sun, 12 Nov 2017 18:15:12 +0100, Peter Korsgaard wrote:
 
-Sorry, I should not have sent that patch as part of the series. It was
-there so that gitlab-ci would only test my changes.
+ >> > So this happens because the ARC binutils version is fetched from Git,
+ >> > so we need to have host-flex installed, and binutils detects the flex
+ >> > library and decides to use it.  
+ >> 
+ >> And there is no configure flag to disable that?
 
-I've marked it as rejected on patchwork. Sorry for the noise...
+ > Not that I can see.
 
-Regards,
-Yann E. MORIN.
+Ok.
+
+ >> Is there a way to get binutils to use soft links instead of hard links?
+
+ > How would this solve the problem?
+
+Well, the problem is that the binary gets processed twice in different
+directories because of the hard link, so if it instead was a softlink it
+woud get ignored by the RPATH logic and only get fixed up once - Right?
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
