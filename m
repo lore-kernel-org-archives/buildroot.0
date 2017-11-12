@@ -1,45 +1,27 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Nov 2017 17:49:55 +0100
-Subject: [Buildroot] Bug in RPATH fixing logic
-In-Reply-To: <20171112174013.25d90333@windsurf.home>
-References: <20171112174013.25d90333@windsurf.home>
-Message-ID: <20171112174955.18449728@windsurf.home>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 12 Nov 2017 17:52:34 +0100
+Subject: [Buildroot] [PATCH 1/1] package/imagemagick: security bump to
+ version 7.0.7-10
+In-Reply-To: <20171112125411.17303-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Sun, 12 Nov 2017 13:54:11 +0100")
+References: <20171112125411.17303-1-bernd.kuhls@t-online.de>
+Message-ID: <87fu9jtp65.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-On Sun, 12 Nov 2017 17:40:13 +0100, Thomas Petazzoni wrote:
+ > Version 7.0.7-3 fixes CVE-2017-15218:
+ > Stop potential leaks in the JNG decoder
 
-> So, we have two things that are a bit weird here:
-> 
->  - Why are the binutils linked to libfl ? This happens only on the ARC
->    architecture, where we use a special version of binutils that gets
->    autoreconf'ed.
+ > Changelog: https://www.imagemagick.org/script/changelog.php
 
-So this happens because the ARC binutils version is fetched from Git,
-so we need to have host-flex installed, and binutils detects the flex
-library and decides to use it.
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
->  - The absolute rpath in $(HOST_DIR)/<tuple>/bin/ar is wrong in the
->    first place, but I'm not sure how to fix this.
+Committed, thanks.
 
-I'm wrong on this: $(HOST_DIR)/<tuple>/bin/ar RPATH is totally fine:
-
-$ readelf -d arc-buildroot-linux-uclibc/bin/ar  | grep rpath
- 0x000000000000000f (RPATH)              Library rpath: [/opt/br-arcle-hs38-full-2017.11-rc1/lib]
-
-The problem is that this gets turned into $ORIGIN/../lib by patchelf.
-
-I don't see any other solution than de-duplicating such binaries.
-
-Do you see another option ?
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
