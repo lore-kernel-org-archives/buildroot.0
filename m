@@ -1,60 +1,41 @@
-From: Martin Kepplinger <martink@posteo.de>
-Date: Sun, 12 Nov 2017 01:40:02 +0100
-Subject: [Buildroot] [PATCH] tslib: update to 1.14
-Message-ID: <20171112004002.24624-1-martink@posteo.de>
+From: Andrey Yurovsky <yurovsky@gmail.com>
+Date: Sat, 11 Nov 2017 18:17:36 -0800
+Subject: [Buildroot] potential divide by zero in support/scripts/size-stats
+Message-ID: <CAAkeqgUXF5eVOjQEUkM0OARw+cvMxGG-REv2rw-3BRu9y-yz0A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As usual, https://github.com/kergoth/tslib/releases has the changelog
-summary.
+I see a divide by zero exception in support/scripts/size-stats when I
+use the graph-size target, the package of size zero causing this is
+skeleton-init-systemd which I worked out by catching the exception. Is
+this package erroneously of size zero or should that be OK?
 
-This release includes a new plugin "lowpass" that is being built by
-default; so we add that to the list of statically compiled in plugins
-for static builds.
-
-Signed-off-by: Martin Kepplinger <martink@posteo.de>
 ---
- package/tslib/tslib.hash | 4 ++--
- package/tslib/tslib.mk   | 5 +++--
- 2 files changed, 5 insertions(+), 4 deletions(-)
+ support/scripts/size-stats | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/package/tslib/tslib.hash b/package/tslib/tslib.hash
-index cca74fc827..8184143bec 100644
---- a/package/tslib/tslib.hash
-+++ b/package/tslib/tslib.hash
-@@ -1,5 +1,5 @@
--# https://github.com/kergoth/tslib/releases/download/1.13/tslib-1.13.tar.xz.sha256
--sha256  b381279f2d6ad6acb80cfc4852860853b7bcd1a9440821e9fe920c33f4e4f8da  tslib-1.13.tar.xz
-+# https://github.com/kergoth/tslib/releases/download/1.14/tslib-1.14.tar.xz.sha256
-+sha256  56ce7adfb896442001938470a7f946cc029bfb03ed74e7f62db92d9c9ba83df4  tslib-1.14.tar.xz
- 
- # Locally computed
- sha256  9b872a8a070b8ad329c4bd380fb1bf0000f564c75023ec8e1e6803f15364b9e9  COPYING
-diff --git a/package/tslib/tslib.mk b/package/tslib/tslib.mk
-index 06f887a151..7a6379cc48 100644
---- a/package/tslib/tslib.mk
-+++ b/package/tslib/tslib.mk
-@@ -4,7 +4,7 @@
+diff --git a/support/scripts/size-stats b/support/scripts/size-stats
+index af45000..3cd6838 100755
+--- a/support/scripts/size-stats
++++ b/support/scripts/size-stats
+@@ -178,9 +178,12 @@ def gen_files_csv(filesdict, pkgsizes, outputf):
+                      "File size in system (%)"])
+         for f, (pkgname, filesize) in filesdict.items():
+             pkgsize = pkgsizes[pkgname]
+-            wr.writerow([f, pkgname, filesize, pkgsize,
+-                         "%.1f" % (float(filesize) / pkgsize * 100),
+-                         "%.1f" % (float(filesize) / total * 100)])
++            try:
++                wr.writerow([f, pkgname, filesize, pkgsize,
++                        "%.1f" % (float(filesize) / pkgsize * 100),
++                        "%.1f" % (float(filesize) / total * 100)])
++            except ZeroDivisionError:
++                print('WARNING: \"%s\" is size 0!' % pkgname)
+
+
  #
- ################################################################################
- 
--TSLIB_VERSION = 1.13
-+TSLIB_VERSION = 1.14
- TSLIB_SITE = https://github.com/kergoth/tslib/releases/download/$(TSLIB_VERSION)
- TSLIB_SOURCE = tslib-$(TSLIB_VERSION).tar.xz
- TSLIB_LICENSE = GPL-2.0+ (programs), LGPL-2.1+ (libraries)
-@@ -26,7 +26,8 @@ TSLIB_CONF_OPTS += \
- 	--enable-iir=static \
- 	--enable-dejitter=static \
- 	--enable-debounce=static \
--	--enable-skip=static
-+	--enable-skip=static \
-+	--enable-lowpass=static
- endif
- 
- $(eval $(autotools-package))
 -- 
-2.11.0
+2.9.5
