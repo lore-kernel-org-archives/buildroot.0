@@ -1,33 +1,56 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 12 Nov 2017 18:22:06 +0100
-Subject: [Buildroot] [PATCH 1/1] package/ffmpeg: fix typo "nios" -> "nios2"
-Message-ID: <20171112172206.17550-1-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 12 Nov 2017 18:24:03 +0100
+Subject: [Buildroot] Bug in RPATH fixing logic
+In-Reply-To: <87y3nbs9jz.fsf@dell.be.48ers.dk>
+References: <20171112174013.25d90333@windsurf.home>
+ <20171112174955.18449728@windsurf.home>
+ <87y3nbs9jz.fsf@dell.be.48ers.dk>
+Message-ID: <20171112182403.5d5c8fe4@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Typo added recently by
-https://git.buildroot.net/buildroot/commit/package/ffmpeg?id=bd2544d3d3903935fc4dc0ec9c930720441e545f
+Hello,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/ffmpeg/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Sun, 12 Nov 2017 18:15:12 +0100, Peter Korsgaard wrote:
 
-diff --git a/package/ffmpeg/Config.in b/package/ffmpeg/Config.in
-index 487ca449c8..2d94c5712a 100644
---- a/package/ffmpeg/Config.in
-+++ b/package/ffmpeg/Config.in
-@@ -4,7 +4,7 @@ config BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
- 	# fenv.h lacks FE_INVALID, FE_OVERFLOW & FE_UNDERFLOW
- 	depends on !(BR2_archs38 && BR2_TOOLCHAIN_USES_GLIBC)
- 	# fenv.h lacks FE_INVALID, FE_OVERFLOW & FE_UNDERFLOW on nios2
--	depends on !BR2_nios
-+	depends on !BR2_nios2
- 	# No support for ARMv7-M in the ARM assembly logic
- 	depends on !BR2_ARM_CPU_ARMV7M
- 	# Microblaze build affected by gcc PR71124 (infinite loop)
+>  > So this happens because the ARC binutils version is fetched from Git,
+>  > so we need to have host-flex installed, and binutils detects the flex
+>  > library and decides to use it.  
+> 
+> And there is no configure flag to disable that?
+
+Not that I can see.
+
+>  >> - The absolute rpath in $(HOST_DIR)/<tuple>/bin/ar is wrong in the
+>  >> first place, but I'm not sure how to fix this.  
+> 
+>  > I'm wrong on this: $(HOST_DIR)/<tuple>/bin/ar RPATH is totally fine:  
+> 
+>  > $ readelf -d arc-buildroot-linux-uclibc/bin/ar  | grep rpath
+>  >  0x000000000000000f (RPATH)              Library rpath: [/opt/br-arcle-hs38-full-2017.11-rc1/lib]  
+> 
+>  > The problem is that this gets turned into $ORIGIN/../lib by patchelf.  
+> 
+>  > I don't see any other solution than de-duplicating such binaries.  
+> 
+>  > Do you see another option ?  
+> 
+> Not if we *need* both binaries (do we?)
+
+I think we do need both binaries. <tuple>-<tool> is the "publicly"
+visible copy, while <tuple>/bin/<tool> is the one called internally by
+gcc (for example when it calls as or ld). Yann can explain more about
+this perhaps.
+
+> Is there a way to get binutils to use soft links instead of hard links?
+
+How would this solve the problem?
+
+Thomas
 -- 
-2.11.0
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
