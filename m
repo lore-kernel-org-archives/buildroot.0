@@ -1,55 +1,36 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 12 Nov 2017 18:45:44 +0100
-Subject: [Buildroot] [PATCH 06/14] fs/cpio: use a post-gen hook rather than
- a post-target rule
+Date: Sun, 12 Nov 2017 18:45:48 +0100
+Subject: [Buildroot] [PATCH 10/14] fs/iso9660: don't pollute $(BUILD_DIR)
+ with temp dir
 In-Reply-To: <cover.1510508733.git.yann.morin.1998@free.fr>
 References: <cover.1510508733.git.yann.morin.1998@free.fr>
-Message-ID: <efd1a7ebeca0cc3aa7b7827fb8403a16a31df75e.1510508733.git.yann.morin.1998@free.fr>
+Message-ID: <874cbe4206f74a4f0f80009dc71c0529e49ebd01.1510508733.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We already have a mechanism for running stuff after the filesystem is
-generated, and that's called post-gen hooks.
-
-Use those hooks.
-
-Note: for cpio (and unlike ext2 previously), the dependency chain was
-correct, in that the post-target rule correctly depended on the image
-rule. Nonetheless, we still want to fix it for consistency.
+Use the newly-introdued $(FS_DIR) location to store temporary files.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Reviewed-by: Romain Naour <romain.naour@gmail.com>
 ---
- fs/cpio/cpio.mk | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+ fs/iso9660/iso9660.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/fs/cpio/cpio.mk b/fs/cpio/cpio.mk
-index e82167e512..c68e0bfb97 100644
---- a/fs/cpio/cpio.mk
-+++ b/fs/cpio/cpio.mk
-@@ -31,12 +31,13 @@ define ROOTFS_CPIO_CMD
- 	cd $(TARGET_DIR) && find . | cpio --quiet -o -H newc > $@
- endef
- 
--$(BINARIES_DIR)/rootfs.cpio.uboot: $(BINARIES_DIR)/rootfs.cpio host-uboot-tools
--	$(MKIMAGE) -A $(MKIMAGE_ARCH) -T ramdisk \
--		-C none -d $<$(ROOTFS_CPIO_COMPRESS_EXT) $@
--
- ifeq ($(BR2_TARGET_ROOTFS_CPIO_UIMAGE),y)
--ROOTFS_CPIO_POST_TARGETS += $(BINARIES_DIR)/rootfs.cpio.uboot
-+ROOTFS_CPIO_DEPENDENCIES += host-uboot-tools
-+define ROOTFS_CPIO_UBOOT_MKIMAGE
-+	$(MKIMAGE) -A $(MKIMAGE_ARCH) -T ramdisk \
-+		-C none -d $@$(ROOTFS_CPIO_COMPRESS_EXT) $@.uboot
-+endef
-+ROOTFS_CPIO_POST_GEN_HOOKS += ROOTFS_CPIO_UBOOT_MKIMAGE
+diff --git a/fs/iso9660/iso9660.mk b/fs/iso9660/iso9660.mk
+index d49d593bd6..c2de27101a 100644
+--- a/fs/iso9660/iso9660.mk
++++ b/fs/iso9660/iso9660.mk
+@@ -35,7 +35,7 @@ ROOTFS_ISO9660_USE_INITRD = YES
  endif
  
- $(eval $(call ROOTFS_TARGET,cpio))
+ ifeq ($(ROOTFS_ISO9660_USE_INITRD),YES)
+-ROOTFS_ISO9660_TARGET_DIR = $(BUILD_DIR)/rootfs.iso9660.tmp
++ROOTFS_ISO9660_TARGET_DIR = $(FS_DIR)/rootfs.iso9660.tmp
+ define ROOTFS_ISO9660_CREATE_TEMPDIR
+ 	$(RM) -rf $(ROOTFS_ISO9660_TARGET_DIR)
+ 	mkdir -p $(ROOTFS_ISO9660_TARGET_DIR)
 -- 
 2.11.0
