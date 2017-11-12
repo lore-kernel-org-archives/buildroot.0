@@ -1,31 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 12 Nov 2017 17:53:02 +0100
-Subject: [Buildroot] [PATCH 2/2] python-numpy: also disable ARC HS with
- glibc
-In-Reply-To: <20171112141751.11051-2-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Sun, 12 Nov 2017 15:17:51 +0100")
-References: <20171112141751.11051-1-thomas.petazzoni@free-electrons.com>
- <20171112141751.11051-2-thomas.petazzoni@free-electrons.com>
-Message-ID: <87375jtp5d.fsf@dell.be.48ers.dk>
+Date: Sun, 12 Nov 2017 17:53:14 +0100
+Subject: [Buildroot] [git commit] python-numpy: remove trailing whitespace
+Message-ID: <20171112164614.4620C81125@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=1b9c562dfdac123e707dc8283338b11b24832ba7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Building python-numpy on ARC HS with glibc fails due to missing FE_*
- > definitions in <fenv.h>. Therefore, python-numpy is only available on
- > ARC HS with a C library other than glibc.
+Remove trailing whitespace introduced by commit
+855002f22b4795b7ff3e37880c3ed65011cd036c ("python-numpy: reformat
+BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS")
 
- > Fixes:
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/python-numpy/Config.in | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
- >   http://autobuild.buildroot.net/results/6b9a3310bb4f8c1fd7db0ef4476458b3eec2bf2e/
-
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/python-numpy/Config.in b/package/python-numpy/Config.in
+index 1405218..aa47087 100644
+--- a/package/python-numpy/Config.in
++++ b/package/python-numpy/Config.in
+@@ -4,14 +4,14 @@ config BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
+ 	# ARC toolchain issues for ARCompact
+ 	default y if BR2_arc && !(BR2_arc770d || BR2_arc750d)
+ 	default y if BR2_aarch64
+-	default y if BR2_arm 
++	default y if BR2_arm
+ 	default y if BR2_armeb
+-	default y if BR2_i386 
++	default y if BR2_i386
+ 	default y if BR2_mips
+ 	default y if BR2_mipsel
+ 	default y if BR2_powerpc
+-	default y if BR2_powerpc64 
+-	default y if BR2_sh 
++	default y if BR2_powerpc64
++	default y if BR2_sh
+ 	default y if BR2_x86_64
+ 
+ config BR2_PACKAGE_PYTHON_NUMPY
