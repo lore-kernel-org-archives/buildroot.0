@@ -1,44 +1,57 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 12 Nov 2017 18:45:46 +0100
-Subject: [Buildroot] [PATCH 08/14] fs: remove TARGET_DIR_WARNING_FILE late
+Date: Sun, 12 Nov 2017 18:45:47 +0100
+Subject: [Buildroot] [PATCH 09/14] fs: don't pollute $(BUILD_DIR) with temp
+ files
 In-Reply-To: <cover.1510508733.git.yann.morin.1998@free.fr>
 References: <cover.1510508733.git.yann.morin.1998@free.fr>
-Message-ID: <37cdd5eac486a60b2657a8a0e53fcf6bedac976e.1510508733.git.yann.morin.1998@free.fr>
+Message-ID: <a6bfdcf6c7cf1495a15914f8f1226eeb37d7e86f.1510508733.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Remove it just before generating the filesystem image.
+Currently, we create a bunch of temporary files in $(BUILD_DIR), while
+assembling the filesystem images.
 
-This way, removing-and-recreating the file encloses the actual
-image generation as tightly as possible.
+Move those files to their own sub-directory.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- fs/common.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ fs/common.mk | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
 diff --git a/fs/common.mk b/fs/common.mk
-index 378907e9ed..d4d5c183a5 100644
+index d4d5c183a5..7bbc143892 100644
 --- a/fs/common.mk
 +++ b/fs/common.mk
-@@ -70,7 +70,6 @@ $$(BINARIES_DIR)/rootfs.$(1): target-finalize $$(ROOTFS_$(2)_DEPENDENCIES)
+@@ -27,11 +27,12 @@
+ # BR2_TARGET_ROOTFS_$(FSTYPE)_LZMA exist and are enabled, then the
+ # macro will automatically generate a compressed filesystem image.
+ 
+-FAKEROOT_SCRIPT = $(BUILD_DIR)/_fakeroot.fs
+-FULL_DEVICE_TABLE = $(BUILD_DIR)/_device_table.txt
++FS_DIR = $(BUILD_DIR)/buildroot-fs
++FAKEROOT_SCRIPT = $(FS_DIR)/fakeroot.fs
++FULL_DEVICE_TABLE = $(FS_DIR)/device_table.txt
+ ROOTFS_DEVICE_TABLES = $(call qstrip,$(BR2_ROOTFS_DEVICE_TABLE) \
+ 	$(BR2_ROOTFS_STATIC_DEVICE_TABLE))
+-USERS_TABLE = $(BUILD_DIR)/_users_table.txt
++USERS_TABLE = $(FS_DIR)/users_table.txt
+ ROOTFS_USERS_TABLES = $(call qstrip,$(BR2_ROOTFS_USERS_TABLES))
+ 
+ # Since this function will be called from within an $(eval ...)
+@@ -69,8 +70,8 @@ endif
+ $$(BINARIES_DIR)/rootfs.$(1): target-finalize $$(ROOTFS_$(2)_DEPENDENCIES)
  	@$$(call MESSAGE,"Generating root filesystem image rootfs.$(1)")
  	$$(foreach hook,$$(ROOTFS_$(2)_PRE_GEN_HOOKS),$$(call $$(hook))$$(sep))
- 	rm -f $$(FAKEROOT_SCRIPT)
--	rm -f $$(TARGET_DIR_WARNING_FILE)
- 	rm -f $$(USERS_TABLE)
+-	rm -f $$(FAKEROOT_SCRIPT)
+-	rm -f $$(USERS_TABLE)
++	rm -rf $(FS_DIR)
++	mkdir -p $(FS_DIR)
  	echo '#!/bin/sh' > $$(FAKEROOT_SCRIPT)
  	echo "set -e" >> $$(FAKEROOT_SCRIPT)
-@@ -100,6 +99,7 @@ endif
- 	$$(foreach hook,$$(ROOTFS_POST_CMD_HOOKS),\
- 		$$(call PRINTF,$$($$(hook))) >> $$(FAKEROOT_SCRIPT)$$(sep))
- 	chmod a+x $$(FAKEROOT_SCRIPT)
-+	rm -f $$(TARGET_DIR_WARNING_FILE)
- 	PATH=$$(BR_PATH) $$(HOST_DIR)/bin/fakeroot -- $$(FAKEROOT_SCRIPT)
- 	$$(INSTALL) -m 0644 support/misc/target-dir-warning.txt $$(TARGET_DIR_WARNING_FILE)
- 	- at rm -f $$(FAKEROOT_SCRIPT) $$(FULL_DEVICE_TABLE)
+ 	echo "chown -h -R 0:0 $$(TARGET_DIR)" >> $$(FAKEROOT_SCRIPT)
 -- 
 2.11.0
