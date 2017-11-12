@@ -1,113 +1,130 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 12 Nov 2017 11:45:23 +0100
-Subject: [Buildroot] [PATCH/next v2 3/3] package/python-mwclient: bump
- version to 0.8.6
-In-Reply-To: <20171112104523.16791-1-bernd.kuhls@t-online.de>
-References: <20171112104523.16791-1-bernd.kuhls@t-online.de>
-Message-ID: <20171112104523.16791-3-bernd.kuhls@t-online.de>
+Date: Sun, 12 Nov 2017 13:13:04 +0100
+Subject: [Buildroot] [PATCH/next v5 1/1] package/waylandpp: new package
+Message-ID: <20171112121304.11834-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Version 0.8.2 added OAuth support so we need python-requests-oauthlib
-as runtime dependency from now on. This package also has a runtime
-dependency on python-requests so all we need is to update the select
-command in Config.in.
-
-Removed patch applied upstream.
+Building waylandpp for the target requires a wayland-scanner++ binary
+built for the host.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
-v2: no changes
+Package is needed for Wayland support in the next Kodi release 18-Leia:
 
- .../0001-use-exec-in-py3-compatible-manner.patch   | 36 ----------------------
- package/python-mwclient/Config.in                  |  2 +-
- package/python-mwclient/python-mwclient.hash       |  4 +--
- package/python-mwclient/python-mwclient.mk         |  4 +--
- 4 files changed, 5 insertions(+), 41 deletions(-)
- delete mode 100644 package/python-mwclient/0001-use-exec-in-py3-compatible-manner.patch
+https://kodi.tv/article/gsoc-2017-update-wayland-support
+https://forum.kodi.tv/showthread.php?tid=309254
 
-diff --git a/package/python-mwclient/0001-use-exec-in-py3-compatible-manner.patch b/package/python-mwclient/0001-use-exec-in-py3-compatible-manner.patch
-deleted file mode 100644
-index ac7838a7f7..0000000000
---- a/package/python-mwclient/0001-use-exec-in-py3-compatible-manner.patch
-+++ /dev/null
-@@ -1,36 +0,0 @@
--From 5de1bb82465d39962e26175c62f644a3e423d030 Mon Sep 17 00:00:00 2001
--From: Adam Williamson <awilliam@redhat.com>
--Date: Thu, 21 Jan 2016 17:21:52 -0800
--Subject: [PATCH] use 'exec' in py3-compatible manner
--
--per https://docs.python.org/2/reference/simple_stmts.html ,
--as exec is a function not a statement in py3, the py2 version
--has been set to allow the subsequent statement to be a tuple,
--so we can invoke it like this to make it both py2 and py3
--compatible. Without this, byte-compiling the file fails under
--py3.
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-----
--downloaded from upstream commit:
--https://github.com/mwclient/mwclient/commit/5de1bb82465d39962e26175c62f644a3e423d030
--
-- mwclient/ex.py | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/mwclient/ex.py b/mwclient/ex.py
--index db4006c..c0b1eae 100644
----- a/mwclient/ex.py
--+++ b/mwclient/ex.py
--@@ -12,7 +12,7 @@ def read_config(config_files, **predata):
-- 
-- def _read_config_file(_config_file, predata):
--     _file = open(_config_file)
---    exec _file in globals(), predata
--+    exec(_file, globals(), predata)
--     _file.close()
-- 
--     for _k, _v in predata.iteritems():
---- 
--2.9.3
--
-diff --git a/package/python-mwclient/Config.in b/package/python-mwclient/Config.in
-index be8897864c..76bf794892 100644
---- a/package/python-mwclient/Config.in
-+++ b/package/python-mwclient/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_PYTHON_MWCLIENT
- 	bool "python-mwclient"
--	select BR2_PACKAGE_PYTHON_REQUESTS # runtime
-+	select BR2_PACKAGE_PYTHON_REQUESTS_OAUTHLIB # runtime
- 	select BR2_PACKAGE_PYTHON_SIX # runtime
- 	help
- 	  MediaWiki API client.
-diff --git a/package/python-mwclient/python-mwclient.hash b/package/python-mwclient/python-mwclient.hash
-index 109897173e..1e9744ce38 100644
---- a/package/python-mwclient/python-mwclient.hash
-+++ b/package/python-mwclient/python-mwclient.hash
-@@ -1,3 +1,3 @@
- # md5 from https://pypi.python.org/pypi/mwclient/json, sha256 locally computed
--md5	c1334facf2d6ca54fe6dba4ab75ecf34  mwclient-0.8.1.tar.gz
--sha256	5f892711cc0b23ff2a6d8b7986ee63cd43fd1ec92b0783604ffa7613cd1662e4  mwclient-0.8.1.tar.gz
-+md5	a73687e8caa4248e9f48caece76592ff  mwclient-0.8.6.tar.gz
-+sha256	08f917b995b331b937ed8c7e297406e3c8d33b80234679ee7fbfeeafd7570a8e  mwclient-0.8.6.tar.gz
-diff --git a/package/python-mwclient/python-mwclient.mk b/package/python-mwclient/python-mwclient.mk
-index 1f1e209661..7c2a0b0025 100644
---- a/package/python-mwclient/python-mwclient.mk
-+++ b/package/python-mwclient/python-mwclient.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_MWCLIENT_VERSION = 0.8.1
-+PYTHON_MWCLIENT_VERSION = 0.8.6
- PYTHON_MWCLIENT_SOURCE = mwclient-$(PYTHON_MWCLIENT_VERSION).tar.gz
--PYTHON_MWCLIENT_SITE = https://pypi.python.org/packages/19/79/481b288a497f625ee8f76141ff3472d81428b1f14b7155a28a63a3247197
-+PYTHON_MWCLIENT_SITE = https://pypi.python.org/packages/cd/38/beaf985032b42a0b0c8f9028b469c4dcb0bd7bfab62707ec27af7e890e84
- PYTHON_MWCLIENT_LICENSE = MIT
- PYTHON_MWCLIENT_LICENSE_FILES = mwclient/__init__.py
- PYTHON_MWCLIENT_SETUP_TYPE = setuptools
+v5: added dependencies for threads and !static (Yann)
+    added note why host package is needed (Yann)
+    fixed sorting in package/Config.in (Yann)
+v4: bumped to version 0.1.4, added license hashes
+v3: bumped to version 0.1.3
+v2: switched to cmake, added dependency on host-gcc >= 4.9
+
+ DEVELOPERS                       |  1 +
+ package/Config.in                |  1 +
+ package/waylandpp/Config.in      | 18 ++++++++++++++++++
+ package/waylandpp/waylandpp.hash |  4 ++++
+ package/waylandpp/waylandpp.mk   | 27 +++++++++++++++++++++++++++
+ 5 files changed, 51 insertions(+)
+ create mode 100644 package/waylandpp/Config.in
+ create mode 100644 package/waylandpp/waylandpp.hash
+ create mode 100644 package/waylandpp/waylandpp.mk
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index ddd675ea3a..d89e72827f 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -337,6 +337,7 @@ F:	package/vdr/
+ F:	package/vdr-plugin-vnsiserver/
+ F:	package/vlc/
+ F:	package/vnstat/
++F:	package/waylandpp/
+ F:	package/x11r7/
+ F:	package/x264/
+ F:	package/x265/
+diff --git a/package/Config.in b/package/Config.in
+index fe5ccc434e..070132e437 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1142,6 +1142,7 @@ menu "Graphics"
+ 	source "package/tiff/Config.in"
+ 	source "package/wayland/Config.in"
+ 	source "package/wayland-protocols/Config.in"
++	source "package/waylandpp/Config.in"
+ 	source "package/webkitgtk/Config.in"
+ 	source "package/webp/Config.in"
+ 	source "package/zbar/Config.in"
+diff --git a/package/waylandpp/Config.in b/package/waylandpp/Config.in
+new file mode 100644
+index 0000000000..726653421c
+--- /dev/null
++++ b/package/waylandpp/Config.in
+@@ -0,0 +1,18 @@
++config BR2_PACKAGE_WAYLANDPP
++	bool "waylandpp"
++	depends on BR2_PACKAGE_HAS_LIBEGL_WAYLAND
++	depends on BR2_HOST_GCC_AT_LEAST_4_9
++	depends on !BR2_STATIC_LIBS # wayland
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
++	depends on BR2_TOOLCHAIN_HAS_THREADS # wayland
++	select BR2_PACKAGE_WAYLAND
++	help
++	  Wayland C++ bindings
++
++	  https://github.com/NilsBrause/waylandpp
++
++comment "waylandpp needs an OpenGL-EGL/wayland backend, a toolchain w/ threads, dynamic library, gcc >= 4.9, host gcc >= 4.9"
++	depends on !BR2_PACKAGE_HAS_LIBEGL_WAYLAND || \
++		!BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS || \
++		!BR2_HOST_GCC_AT_LEAST_4_9 || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+diff --git a/package/waylandpp/waylandpp.hash b/package/waylandpp/waylandpp.hash
+new file mode 100644
+index 0000000000..11b8e3cda9
+--- /dev/null
++++ b/package/waylandpp/waylandpp.hash
+@@ -0,0 +1,4 @@
++# Locally computed
++sha256 fc767573f7334525839221ac52e3dc4b56ebaf3f7a7cdaf4f05eb6baa6dd88ab  waylandpp-0.1.4.tar.gz
++sha256 49aa6d728fd13226952c9e3a5a9cae46379b2a501010064760172b5ce7cd94bb  LICENSE
++sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  scanner/gpl-3.0.txt
+diff --git a/package/waylandpp/waylandpp.mk b/package/waylandpp/waylandpp.mk
+new file mode 100644
+index 0000000000..02b14339fe
+--- /dev/null
++++ b/package/waylandpp/waylandpp.mk
+@@ -0,0 +1,27 @@
++################################################################################
++#
++# waylandpp
++#
++################################################################################
++
++WAYLANDPP_VERSION = 0.1.4
++WAYLANDPP_SITE = $(call github,NilsBrause,waylandpp,$(WAYLANDPP_VERSION))
++WAYLANDPP_LICENSE = MIT, GPL-3.0+ (wayland_scanner)
++WAYLANDPP_LICENSE_FILES = LICENSE scanner/gpl-3.0.txt
++WAYLANDPP_INSTALL_STAGING = YES
++HOST_WAYLANDPP_DEPENDENCIES = host-pkgconf host-wayland
++WAYLANDPP_DEPENDENCIES = libegl host-pkgconf wayland host-waylandpp
++
++# host variant of wayland-scanner++ is needed for building the target
++# package
++HOST_WAYLANDPP_CONF_OPTS = \
++	-DBUILD_LIBRARIES=OFF \
++	-DBUILD_SCANNER=ON
++
++WAYLANDPP_CONF_OPTS = \
++	-DBUILD_LIBRARIES=ON \
++	-DBUILD_SCANNER=OFF \
++	-DWAYLAND_SCANNERPP=$(HOST_DIR)/bin/wayland-scanner++
++
++$(eval $(cmake-package))
++$(eval $(host-cmake-package))
 -- 
 2.11.0
