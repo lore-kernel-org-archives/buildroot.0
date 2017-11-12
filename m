@@ -1,36 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 13 Nov 2017 14:39:06 +0100
-Subject: [Buildroot] [git commit branch/next] package/ffmpeg: fix typo
- "nios" -> "nios2"
-Message-ID: <20171113221623.0E199807B2@busybox.osuosl.org>
+Date: Sun, 12 Nov 2017 17:53:17 +0100
+Subject: [Buildroot] [git commit branch/next] python-numpy: also disable ARC
+ HS with glibc
+Message-ID: <20171113221623.0420D807B2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8cd840b7e821aa777e835ec11d7a3762f0b33443
+commit: https://git.buildroot.net/buildroot/commit/?id=1c0c55c0288775d8139facbacf651c67ecd397ba
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Typo added recently by
-https://git.buildroot.net/buildroot/commit/package/ffmpeg?id=bd2544d3d3903935fc4dc0ec9c930720441e545f
+Building python-numpy on ARC HS with glibc fails due to missing FE_*
+definitions in <fenv.h>. Therefore, python-numpy is only available on
+ARC HS with a C library other than glibc.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Fixes:
+
+  http://autobuild.buildroot.net/results/6b9a3310bb4f8c1fd7db0ef4476458b3eec2bf2e/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ffmpeg/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/python-numpy/Config.in | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/ffmpeg/Config.in b/package/ffmpeg/Config.in
-index 487ca44..2d94c57 100644
---- a/package/ffmpeg/Config.in
-+++ b/package/ffmpeg/Config.in
-@@ -4,7 +4,7 @@ config BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
- 	# fenv.h lacks FE_INVALID, FE_OVERFLOW & FE_UNDERFLOW
- 	depends on !(BR2_archs38 && BR2_TOOLCHAIN_USES_GLIBC)
- 	# fenv.h lacks FE_INVALID, FE_OVERFLOW & FE_UNDERFLOW on nios2
--	depends on !BR2_nios
-+	depends on !BR2_nios2
- 	# No support for ARMv7-M in the ARM assembly logic
- 	depends on !BR2_ARM_CPU_ARMV7M
- 	# Microblaze build affected by gcc PR71124 (infinite loop)
+diff --git a/package/python-numpy/Config.in b/package/python-numpy/Config.in
+index aa47087..067085b 100644
+--- a/package/python-numpy/Config.in
++++ b/package/python-numpy/Config.in
+@@ -1,8 +1,9 @@
+ config BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
+ 	bool
+ 	# Numpy has some CPU specific code
+-	# ARC toolchain issues for ARCompact
+-	default y if BR2_arc && !(BR2_arc770d || BR2_arc750d)
++	# ARCompact build fails due to toolchain issue
++	# ARC HS38 build fails on glibc due to missing FE_* definitions
++	default y if BR2_arc && BR2_archs38 && !BR2_TOOLCHAIN_USES_GLIBC
+ 	default y if BR2_aarch64
+ 	default y if BR2_arm
+ 	default y if BR2_armeb
