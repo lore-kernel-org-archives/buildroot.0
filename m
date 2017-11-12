@@ -1,9 +1,10 @@
 From: Fabio Estevam <festevam@gmail.com>
-Date: Sun, 12 Nov 2017 20:47:09 -0200
-Subject: [Buildroot] [PATCH 4/5] configs/imx6-sabresd: Bump to kernel 4.14
+Date: Sun, 12 Nov 2017 20:47:10 -0200
+Subject: [Buildroot] [PATCH 5/5] configs/imx6-sabresd_qt5: Bump to kernel
+ 4.14
 In-Reply-To: <1510526830-8044-1-git-send-email-festevam@gmail.com>
 References: <1510526830-8044-1-git-send-email-festevam@gmail.com>
-Message-ID: <1510526830-8044-4-git-send-email-festevam@gmail.com>
+Message-ID: <1510526830-8044-5-git-send-email-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,13 +13,13 @@ To: buildroot@busybox.net
 
 Signed-off-by: Fabio Estevam <festevam@gmail.com>
 ---
- configs/imx6-sabresd_defconfig | 6 +++---
+ configs/imx6-sabresd_qt5_defconfig | 6 +++---
  1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/configs/imx6-sabresd_defconfig b/configs/imx6-sabresd_defconfig
-index 18dfe27..5b2b014 100644
---- a/configs/imx6-sabresd_defconfig
-+++ b/configs/imx6-sabresd_defconfig
+diff --git a/configs/imx6-sabresd_qt5_defconfig b/configs/imx6-sabresd_qt5_defconfig
+index e20266e..d805456 100644
+--- a/configs/imx6-sabresd_qt5_defconfig
++++ b/configs/imx6-sabresd_qt5_defconfig
 @@ -4,8 +4,8 @@ BR2_ARM_ENABLE_NEON=y
  BR2_ARM_ENABLE_VFP=y
  BR2_ARM_FPU_VFPV3=y
@@ -28,9 +29,9 @@ index 18dfe27..5b2b014 100644
 +# Linux headers same as kernel, a 4.14 series
 +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
  
- # System
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
-@@ -32,7 +32,7 @@ BR2_TARGET_UBOOT_SPL_NAME="SPL"
+ # Additional features needed for packages
+ BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+@@ -38,7 +38,7 @@ BR2_TARGET_UBOOT_SPL_NAME="SPL"
  # Kernel
  BR2_LINUX_KERNEL=y
  BR2_LINUX_KERNEL_CUSTOM_VERSION=y
