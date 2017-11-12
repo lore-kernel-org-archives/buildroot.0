@@ -1,41 +1,44 @@
 From: Andrey Yurovsky <yurovsky@gmail.com>
-Date: Sat, 11 Nov 2017 18:17:36 -0800
-Subject: [Buildroot] potential divide by zero in support/scripts/size-stats
-Message-ID: <CAAkeqgUXF5eVOjQEUkM0OARw+cvMxGG-REv2rw-3BRu9y-yz0A@mail.gmail.com>
+Date: Sat, 11 Nov 2017 20:38:10 -0800
+Subject: [Buildroot] [PATCH] imx-usb-loader: bump to latest commit
+Message-ID: <20171112043810.21640-1-ayurovsky@impinj.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I see a divide by zero exception in support/scripts/size-stats when I
-use the graph-size target, the package of size zero causing this is
-skeleton-init-systemd which I worked out by catching the exception. Is
-this package erroneously of size zero or should that be OK?
+From: Andrey Yurovsky <yurovsky@gmail.com>
 
+Latest commit is from Oct 5, 2017. This adds support for the i.MX7
+family.
+
+Signed-off-by: Andrey Yurovsky <yurovsky@gmail.com>
 ---
- support/scripts/size-stats | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ package/imx-usb-loader/imx-usb-loader.hash | 2 +-
+ package/imx-usb-loader/imx-usb-loader.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/support/scripts/size-stats b/support/scripts/size-stats
-index af45000..3cd6838 100755
---- a/support/scripts/size-stats
-+++ b/support/scripts/size-stats
-@@ -178,9 +178,12 @@ def gen_files_csv(filesdict, pkgsizes, outputf):
-                      "File size in system (%)"])
-         for f, (pkgname, filesize) in filesdict.items():
-             pkgsize = pkgsizes[pkgname]
--            wr.writerow([f, pkgname, filesize, pkgsize,
--                         "%.1f" % (float(filesize) / pkgsize * 100),
--                         "%.1f" % (float(filesize) / total * 100)])
-+            try:
-+                wr.writerow([f, pkgname, filesize, pkgsize,
-+                        "%.1f" % (float(filesize) / pkgsize * 100),
-+                        "%.1f" % (float(filesize) / total * 100)])
-+            except ZeroDivisionError:
-+                print('WARNING: \"%s\" is size 0!' % pkgname)
-
-
+diff --git a/package/imx-usb-loader/imx-usb-loader.hash b/package/imx-usb-loader/imx-usb-loader.hash
+index 6cb5811..fd80e6e 100644
+--- a/package/imx-usb-loader/imx-usb-loader.hash
++++ b/package/imx-usb-loader/imx-usb-loader.hash
+@@ -1,2 +1,2 @@
+ # locally computed
+-sha256  5232292cb1ad853905357de59ed251b57060562dc8d7f1cce0bb6c0c8d280dae  imx-usb-loader-f04f225ebc1c38e81eb24745333c8622deda6b49.tar.gz
++sha256  717b64cec31f7e1167d4a31e4f511eea97ab80039dd435b7b183c6f41352213a imx-usb-loader-7e77787c83288a421080a9bf2f67063931f561be.tar.gz
+diff --git a/package/imx-usb-loader/imx-usb-loader.mk b/package/imx-usb-loader/imx-usb-loader.mk
+index 7593e3c..946a1f3 100644
+--- a/package/imx-usb-loader/imx-usb-loader.mk
++++ b/package/imx-usb-loader/imx-usb-loader.mk
+@@ -4,7 +4,7 @@
  #
+ ################################################################################
+ 
+-IMX_USB_LOADER_VERSION = f04f225ebc1c38e81eb24745333c8622deda6b49
++IMX_USB_LOADER_VERSION = 7e77787c83288a421080a9bf2f67063931f561be
+ IMX_USB_LOADER_SITE = $(call github,boundarydevices,imx_usb_loader,$(IMX_USB_LOADER_VERSION))
+ IMX_USB_LOADER_LICENSE = LGPL-2.1+
+ IMX_USB_LOADER_LICENSE_FILES = COPYING
 -- 
 2.9.5
