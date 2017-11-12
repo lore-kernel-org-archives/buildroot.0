@@ -1,34 +1,28 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun, 12 Nov 2017 10:10:28 +0100
-Subject: [Buildroot] [PATCH 1/4 v3] package/freerdp: drop dependency on
- host-pkgconf
-In-Reply-To: <67b488af759e72096a4cf414c5fa06344561c677.1510474387.git.yann.morin.1998@free.fr>
-References: <cover.1510474387.git.yann.morin.1998@free.fr>
- <67b488af759e72096a4cf414c5fa06344561c677.1510474387.git.yann.morin.1998@free.fr>
-Message-ID: <CAHXCMMKN1XQpqMFM_XPphg6vNdYx1m4rJEfokZYDpcfg=iUbTA@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 12 Nov 2017 10:11:39 +0100
+Subject: [Buildroot] [PATCH] tslib: update to 1.14
+In-Reply-To: <20171112004002.24624-1-martink@posteo.de> (Martin Kepplinger's
+ message of "Sun, 12 Nov 2017 01:40:02 +0100")
+References: <20171112004002.24624-1-martink@posteo.de>
+Message-ID: <87o9o7uaic.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Nov 12, 2017 at 9:13 AM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> Currently, we only depend on host-pkgconf for gstreamer-0.x
->
-> However, we also need it at least for gstreamer-1.x and waylabnd, too.
->
-> But since FreeRDP is a cmake package, host-pkgconf is always pulled in
-> as a dependency by the cmake-package infrastructure.
->
-> So, drop the gstreamer-conditional host-pkgconf dependency.
->
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Samuel Martin <s.martin49@gmail.com>
-> Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+>>>>> "Martin" == Martin Kepplinger <martink@posteo.de> writes:
 
-Acked-by: Samuel Martin <s.martin49@gmail.com>
+ > As usual, https://github.com/kergoth/tslib/releases has the changelog
+ > summary.
 
-Regards,
+ > This release includes a new plugin "lowpass" that is being built by
+ > default; so we add that to the list of statically compiled in plugins
+ > for static builds.
+
+ > Signed-off-by: Martin Kepplinger <martink@posteo.de>
+
+Committed to next, thanks.
 
 -- 
-Samuel
+Bye, Peter Korsgaard
