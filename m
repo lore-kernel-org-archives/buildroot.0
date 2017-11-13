@@ -1,39 +1,41 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 13 Nov 2017 13:06:46 +0200
-Subject: [Buildroot] Cannot rebuild autobuild
-In-Reply-To: <20171113102757.ir7so5o7h7zopcvq@dell5510>
-References: <20171113102757.ir7so5o7h7zopcvq@dell5510>
-Message-ID: <20171113110646.k7a3i3y2u7l42bjx@sapphire.tkos.co.il>
+From: Evgeniy Didin <Evgeniy.Didin@synopsys.com>
+Date: Mon, 13 Nov 2017 07:34:16 +0300
+Subject: [Buildroot] [PATCH] Linux: Clear CONFIG_INITRAMFS_SOURCE if
+ BR2_TARGET_ROOTFS_INITRAMFS is not set
+Message-ID: <20171113043416.43750-1-didin@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Petr,
+This patch makes sure CONFIG_INITRAMFS_SOURCE option gets reset
+when BR2_TARGET_ROOTFS_INITRAMFS is not set. Some kernel defconfigs, 
+for example for ARC processors, set CONFIG_INITRAMFS_SOURCE value, which cause such error:
+"./scripts/gen_initramfs_list.sh: Cannot open '../../arc_initramfs_hs/'"
 
-On Mon, Nov 13, 2017 at 11:27:58AM +0100, Petr Vorel wrote:
-> I'm trying to fix failing feh on mips64el [1] (btw an easy fix, just to add 
-> -std=c99 or
-> -std=c11 to TARGET_CFLAGS either globally or just for this toolchain/architecture).
-> 
-> But I cannot rebuild it as it fails to pass configure:
-> 
-> $ make distclean
-> $ wget -c http://autobuild.buildroot.net/results/bf31199cdaa18971a9b599c26fbefac73b2d6f30/config -O .config.old
+Signed-off-by: Evgeniy Didin <didin@synopsys.com> 
+CC: Alexey Brodkin <abrodkin@synopsys.com>
+Cc: arc-buildroot at synopsys.com
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-If you do '-O .config' here, does that work better?
+---
+ linux/linux.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-> $ make olddefconfig
-> $ make
-> make: *** No rule to make target 'toolchain-external-custom', needed by '/home/foo/install/src/buildroot.git/output/build/toolchain-external/.stamp_configured'.  Stop.
-> 
-> What can be wrong? I've done it this way in the past (with other autobuild items, which
-> had different toolchains).
-
-baruch
-
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 9c2aa77..0eee315 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -269,7 +269,8 @@ define LINUX_KCONFIG_FIXUP_CMDS
+ 		touch $(BINARIES_DIR)/rootfs.cpio
+ 		$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_SOURCE,"$${BR_BINARIES_DIR}/rootfs.cpio",$(@D)/.config)
+ 		$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_ROOT_UID,0,$(@D)/.config)
+-		$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_ROOT_GID,0,$(@D)/.config))
++		$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_ROOT_GID,0,$(@D)/.config),
++		$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_SOURCE,"",$(@D)/.config))
+ 	$(if $(BR2_ROOTFS_DEVICE_CREATION_STATIC),,
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_DEVTMPFS,$(@D)/.config)
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_DEVTMPFS_MOUNT,$(@D)/.config))
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+2.9.3
