@@ -1,50 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 13 Nov 2017 23:29:14 +0100
-Subject: [Buildroot] [PATCH] support/config-fragments: update ARC toolchain
-Message-ID: <20171113222914.1487-1-thomas.petazzoni@free-electrons.com>
+Date: Mon, 13 Nov 2017 23:36:28 +0100
+Subject: [Buildroot] [PATCH/next 4/5] solidrun/macchiatobin: add new
+ board
+In-Reply-To: <20171113200610.ztfqw55iyk52i53a@speedy.hunter>
+References: <20171112201646.15558-1-geomatsi@gmail.com>
+ <20171112201646.15558-5-geomatsi@gmail.com>
+ <20171113122702.o63kfb7j4iny6sfl@sapphire.tkos.co.il>
+ <20171113200610.ztfqw55iyk52i53a@speedy.hunter>
+Message-ID: <20171113233628.64f1e58d@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit updates the br-arcle-hs38 configuration fragment to use a
-slightly updated ARC toolchain in which the RPATH of the ar and ranlib
-tools have been manually fixed to be correct. This is a temporary
-workaround until the issue gets resolved properly in the RPATH fixing
-logic, and is needed to fix a number of build issues.
+Hello,
 
-Fixes:
+On Mon, 13 Nov 2017 23:06:10 +0300, Sergey Matyukevich wrote:
 
-  http://autobuild.buildroot.net/results/0ae0d6eba6e2cd8d2298cc4ba6380b8c3e9dd86a/
-  (libnl)
+> This issue is not specific to MacchiatoBin board. I observed it last week
+> testing images for another arm64 board - Orange Pi Zero Plus2 board.
+> I haven't investigated it yet.
+> 
+> Meanwhile this is not the only problem with mainline BSP. It turned out that
+> network interfaces do not work properly neither on v4.13.11 nor in fresh v4.14.
+> Kernel v4.13.11 doesn't enable them in DTS. Kernel v4.14 does enable them,
+> but I couldn't make them work: Tx looks ok, but no Rx. Meanwhile on kernel from
+> devel-4.14/all branch from https://github.com/MISL-EBU-System-SW/mainline-public
+> management 1Gb interface appears to be working fine.
 
-  http://autobuild.buildroot.net/results/fa9bdad8d8b57d1db7f22abdb063ade470e9f938/
-  (pcsc-lite)
+The fact that network interfaces don't work on mcbin with the stock
+4.14 is not expected. I've added in Cc: my colleague Antoine T?nart who
+worked on this topic.
 
-  http://autobuild.buildroot.net/results/fca2ad71c7d446e4738834a1f220d950bce5fddd/
-  (alsa-lib)
+Antoine, do you know which patches are missing in 4.14 ?
 
-  http://autobuild.buildroot.net/results/945c60ff942dfd3daa4da27f5e19470e3d97aed4/
-  (libcap)
+Thanks!
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- support/config-fragments/autobuild/br-arcle-hs38.config | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/support/config-fragments/autobuild/br-arcle-hs38.config b/support/config-fragments/autobuild/br-arcle-hs38.config
-index 8484f62683..6020dae6d7 100644
---- a/support/config-fragments/autobuild/br-arcle-hs38.config
-+++ b/support/config-fragments/autobuild/br-arcle-hs38.config
-@@ -3,7 +3,7 @@ BR2_archs38=y
- BR2_TOOLCHAIN_EXTERNAL=y
- BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
- BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
--BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arcle-hs38-full-2017.11-rc1.tar.bz2"
-+BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arcle-hs38-full-2017.11-rc1.1.tar.bz2"
- BR2_TOOLCHAIN_EXTERNAL_GCC_7=y
- BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_1=y
- BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
+Thomas
 -- 
-2.13.6
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
