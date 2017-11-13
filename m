@@ -1,61 +1,144 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 13 Nov 2017 21:26:01 +0100
-Subject: [Buildroot] [git commit branch/next] package/freerdp: fix
- gstreamer-1.x detection
-Message-ID: <20171113221623.315E8807B2@busybox.osuosl.org>
+Date: Mon, 13 Nov 2017 22:28:15 +0100
+Subject: [Buildroot] [git commit branch/next] Update for 2017.11-rc2
+Message-ID: <20171113221623.69218807B2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=45f0c11aaab8eff3c8c041936b64931f66fc8a8d
+commit: https://git.buildroot.net/buildroot/commit/?id=071cc43892f4a6c0b26b7a145f844acde31e7ee0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Backport a patch from upstream.
-
-Partially fixes:
-    http://autobuild.buildroot.org/results/81aa66ddd88919295ccb5f34b527b737627263a7/
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Reviewed-by: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../freerdp/0001-Fix-gstreamer-1.0-detection.patch | 28 ++++++++++++++++++++++
- 1 file changed, 28 insertions(+)
+ CHANGES                    | 15 +++++++++++++++
+ Makefile                   |  4 ++--
+ docs/website/download.html | 18 +++++++++---------
+ docs/website/news.html     | 22 ++++++++++++++++++++++
+ 4 files changed, 48 insertions(+), 11 deletions(-)
 
-diff --git a/package/freerdp/0001-Fix-gstreamer-1.0-detection.patch b/package/freerdp/0001-Fix-gstreamer-1.0-detection.patch
-new file mode 100644
-index 0000000..fadfe11
---- /dev/null
-+++ b/package/freerdp/0001-Fix-gstreamer-1.0-detection.patch
-@@ -0,0 +1,28 @@
-+From 368989526c32cdf9d680a397fede3cb773fa2609 Mon Sep 17 00:00:00 2001
-+From: Mike Gilbert <floppym@gentoo.org>
-+Date: Fri, 28 Jul 2017 16:31:41 -0400
-+Subject: [PATCH 1/1] Fix gstreamer-1.0 detection
+diff --git a/CHANGES b/CHANGES
+index a9f3365..c0595f6 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,18 @@
++2017.11-rc2, Released November 13th, 2017
 +
-+[yann.morin.1998 at free.fr: backport from upstream]
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++	Fixes all over the tree.
 +
-+---
-+ cmake/FindGStreamer_1_0.cmake | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
++	Updated/fixed packages: collectd, ffmpeg, freerdp,
++	go-bootstrap, imagemagick, jimtcl, libpjsip, libplist, libuv,
++	mesa3d, nodejs, ntp, openjpeg, postgresql, python-numpy, ruby,
++	snmp++, usb_modeswitch, util-linux, vboot-utils, webkitgtk,
++	wireshark, wpa_supplicant, xapp_xdriinfo
 +
-+diff --git a/cmake/FindGStreamer_1_0.cmake b/cmake/FindGStreamer_1_0.cmake
-+index 3aa8fc6dc..6fbc0ecc5 100644
-+--- a/cmake/FindGStreamer_1_0.cmake
-++++ b/cmake/FindGStreamer_1_0.cmake
-+@@ -59,7 +59,7 @@ macro(FIND_GSTREAMER_COMPONENT _component_prefix _pkgconfig_name _library)
-+ 
-+     string(REGEX MATCH "(.*)>=(.*)" _dummy "${_pkgconfig_name}")
-+     if ("${CMAKE_MATCH_2}" STREQUAL "")
-+-        pkg_check_modules(PC_${_component_prefix} "${_pkgconfig_name} >= ${GStreamer_FIND_VERSION}")
-++        pkg_check_modules(PC_${_component_prefix} "${_pkgconfig_name} >= ${GSTREAMER_1_0_MINIMUM_VERSION}")
-+     else ()
-+         pkg_check_modules(PC_${_component_prefix} ${_pkgconfig_name})
-+     endif ()
-+-- 
-+2.11.0
++	Issues resolved (http://bugs.buildroot.org):
 +
++	#10326: mesa3d package fails to build when BR2_SHARED_STATIC_LIBS=y
++	#10491: Cannot output security warning when compiled with buildroot..
++
+ 2017.11-rc1, Released November 6th, 2017
+ 
+ 	Fixes all over the tree and new features.
+diff --git a/Makefile b/Makefile
+index 9240d0a..55409b9 100644
+--- a/Makefile
++++ b/Makefile
+@@ -87,9 +87,9 @@ all:
+ .PHONY: all
+ 
+ # Set and export the version string
+-export BR2_VERSION := 2017.11-rc1
++export BR2_VERSION := 2017.11-rc2
+ # Actual time the release is cut (for reproducible builds)
+-BR2_VERSION_EPOCH = 1510000000
++BR2_VERSION_EPOCH = 1510608000
+ 
+ # Save running make version since it's clobbered by the make package
+ RUNNING_MAKE_VERSION := $(MAKE_VERSION)
+diff --git a/docs/website/download.html b/docs/website/download.html
+index 5c8a51b..a7842b4 100644
+--- a/docs/website/download.html
++++ b/docs/website/download.html
+@@ -76,37 +76,37 @@
+ 	</div>
+       </div>
+ 
+-      <h3 style="text-align: center;">Latest release candidate: <b>2017.11-rc1</b></h3>
++      <h3 style="text-align: center;">Latest release candidate: <b>2017.11-rc2</b></h3>
+       <div class="row mt centered">
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2017.11-rc1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2017.11-rc2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2017.11-rc1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2017.11-rc2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+ 
+-	  <h3><a href="/downloads/buildroot-2017.11-rc1.tar.gz">buildroot-2017.11-rc1.tar.gz</a></h3>
+-	  <p><a href="/downloads/buildroot-2017.11-rc1.tar.gz.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2017.11-rc2.tar.gz">buildroot-2017.11-rc2.tar.gz</a></h3>
++	  <p><a href="/downloads/buildroot-2017.11-rc2.tar.gz.sign">PGP signature</a></p>
+ 	</div>
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2017.11-rc1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2017.11-rc2.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2017.11-rc1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2017.11-rc2.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+ 
+-	  <h3><a href="/downloads/buildroot-2017.11-rc1.tar.bz2">buildroot-2017.11-rc1.tar.bz2</a></h3>
+-	  <p><a href="/downloads/buildroot-2017.11-rc1.tar.bz2.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2017.11-rc2.tar.bz2">buildroot-2017.11-rc2.tar.bz2</a></h3>
++	  <p><a href="/downloads/buildroot-2017.11-rc2.tar.bz2.sign">PGP signature</a></p>
+ 	</div>
+       </div>
+ 
+diff --git a/docs/website/news.html b/docs/website/news.html
+index bbb4cb9..f2186f2 100644
+--- a/docs/website/news.html
++++ b/docs/website/news.html
+@@ -9,6 +9,28 @@
+ <h2>News</h2>
+ <ul class="timeline">
+ 
++  <li class="timeline-inverted">
++    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
++    <div class="timeline-panel">
++      <div class="timeline-heading">
++	<h4 class="timeline-title">2017.11-rc2 released</h4>
++	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>13 November 2017</small></p>
++      </div>
++      <div class="timeline-body">
++        <p>Another week, another release candidate with more cleanups
++          and build fixes. See the
++	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2017.11-rc2">CHANGES</a>
++	  file for details.</p>
++
++	<p>Head to the <a href="/downloads/">downloads page</a> to pick up the
++	  <a href="/downloads/buildroot-2017.11-rc2.tar.bz2">2017.11-rc2
++	  release candidate</a>, and report any problems found to the
++	  <a href="support.html">mailing list</a> or
++	  <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++      </div>
++    </div>
++  </li>
++
+   <li>
+     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
+     <div class="timeline-panel">
