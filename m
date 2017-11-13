@@ -1,64 +1,88 @@
-From: Wolfgang Grandegger <wg@grandegger.com>
-Date: Mon, 13 Nov 2017 19:04:47 +0100
-Subject: [Buildroot] Bug in RPATH fixing logic
-In-Reply-To: <20171113173611.GB2861@scaer>
-References: <20171112174013.25d90333@windsurf.home>
- <20171112174955.18449728@windsurf.home> <87y3nbs9jz.fsf@dell.be.48ers.dk>
- <20171112182403.5d5c8fe4@windsurf.home> <20171112174250.GD2947@scaer>
- <734d391a-b9b9-d728-9878-4e8c4599b106@grandegger.com>
- <87d14ms2x2.fsf@dell.be.48ers.dk> <20171113173611.GB2861@scaer>
-Message-ID: <d632b876-9cbe-bbec-5195-d383b6ebd440@grandegger.com>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Mon, 13 Nov 2017 19:40:43 +0100
+Subject: [Buildroot] [PATCH v3 1/1] qt5base: correct eglfs support in
+ qmake.conf.in
+Message-ID: <1510598444-29408-1-git-send-email-giulio.benetti@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+qt5base: correct eglfs support in qmake.conf.in
 
-Am 13.11.2017 um 18:36 schrieb Yann E. MORIN:
-> Peter, All,
-> 
-> On 2017-11-13 14:50 +0100, Peter Korsgaard spake thusly:
->>>>>>> "Wolfgang" == Wolfgang Grandegger <wg@grandegger.com> writes:
->>   > This means: A symbolic link would work.
->> Ok, great - Makes sense. I wonder how much effort it wil be to get
->> binutils to generate symbolic links instead of hard links.
-> 
-> No way.
+Setting EGLFS_DEVICE_INTEGRATION at the end of qmake.conf like is done by commit
+0c219ddb8a doesn't work correctly: it has to be set before the
+include(../common/linux_device_post.conf)
 
-Well, the attached patch fixes the issue with the binary utilities (ld,
-ar, objdump, as, ...). I think only the fixes in "binutils/Makefile.in" and
-"gas/Makefile.in" are need, IIRC. And in the fixes did not break the
-build, at least. Will do more checks...
+Instead of appending to the file, change it into a qmake.conf.in template file
+that contains an EGLFS_DEVICE_INTEGRATION assignment and update it with sed.
 
-> We'll have to provide post-install hooks to do the de-hardlinking step
-> ourselves.
+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+---
+Changes v1 -> v2:
+* write directly to package target qmake.conf
+* simplified eglfs backend choice
+ package/qt5/qt5base/{qmake.conf => qmake.conf.in} |  2 ++
+ package/qt5/qt5base/qt5base.mk                    | 22 +++++++++++++++++-----
+ 2 files changed, 19 insertions(+), 5 deletions(-)
+ rename package/qt5/qt5base/{qmake.conf => qmake.conf.in} (95%)
 
-> Also, as Wolfgang noticed, gcc is also affected by the hardlink issue.
-
-No, with the patch above I get:
-
-./bin/x86_64-buildroot-linux-gnu-gcc-6.4.0.br_real: Device: 811h/2065d	Inode: 64370910    Links: 3
-./bin/x86_64-buildroot-linux-gnu-g++.br_real: Device: 811h/2065d	Inode: 64370887    Links: 2
-./bin/x86_64-buildroot-linux-gnu-gcc.br_real: Device: 811h/2065d	Inode: 64370910    Links: 3
-./bin/x86_64-buildroot-linux-gnu-c++.br_real: Device: 811h/2065d	Inode: 64370887    Links: 2
-./bin/x86_64-buildroot-linux-gnu-cc.br_real: Device: 811h/2065d	Inode: 64370910    Links: 3
-./x86_64-buildroot-linux-gnu/sysroot/usr/libexec/getconf/XBS5_LP64_OFF64: Device: 811h/2065d	Inode: 72747785    Links: 4
-./x86_64-buildroot-linux-gnu/sysroot/usr/libexec/getconf/POSIX_V6_LP64_OFF64: Device: 811h/2065d	Inode: 72747785    Links: 4
-./x86_64-buildroot-linux-gnu/sysroot/usr/libexec/getconf/POSIX_V7_LP64_OFF64: Device: 811h/2065d	Inode: 72747785    Links: 4
-./x86_64-buildroot-linux-gnu/sysroot/usr/bin/getconf: Device: 811h/2065d	Inode: 72747785    Links: 4
-./x86_64-buildroot-linux-gnu/sysroot/usr/lib/dri/i965_dri.so: Device: 811h/2065d	Inode: 72748076    Links: 2
-./x86_64-buildroot-linux-gnu/sysroot/usr/lib/dri/i915_dri.so: Device: 811h/2065d	Inode: 72748076    Links: 2
-
-The gcc hard links are all in the same directory. Just "getconf" remains,
-but the RPATH is already empty.
-
-Wolfgang.
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: binutils-use-symbolic-instead-of-hard-links.patch
-Type: text/x-patch
-Size: 6710 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20171113/d079cb1b/attachment.bin>
+diff --git a/package/qt5/qt5base/qmake.conf b/package/qt5/qt5base/qmake.conf.in
+similarity index 95%
+rename from package/qt5/qt5base/qmake.conf
+rename to package/qt5/qt5base/qmake.conf.in
+index 8b6debe..fb698b9 100644
+--- a/package/qt5/qt5base/qmake.conf
++++ b/package/qt5/qt5base/qmake.conf.in
+@@ -24,5 +24,7 @@ QMAKE_CFLAGS_ISYSTEM   =
+ # Architecturespecific configuration
+ include(arch.conf)
+ 
++EGLFS_DEVICE_INTEGRATION = @EGLFS_DEVICE@
++
+ include(../common/linux_device_post.conf)
+ load(qt_config)
+diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+index b3f9c79..ef99131 100644
+--- a/package/qt5/qt5base/qt5base.mk
++++ b/package/qt5/qt5base/qt5base.mk
+@@ -240,10 +240,23 @@ QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_PRINTSUPPORT) += Qt5PrintSupport
+ 
+ QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_DBUS) += Qt5DBus
+ 
+-ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST)$(BR2_PACKAGE_IMX_GPU_VIV),yy)
+-# use vivante backend
++ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
++ifeq ($(BR2_PACKAGE_IMX_GPU_VIV),y)
++QT5BASE_EGLFS_DEVICE = eglfs_viv
++else ifeq ($(BR2_PACKAGE_SUNXI_MALI),y)
++QT5BASE_EGLFS_DEVICE = eglfs_mali
++endif
++endif
++
++ifeq ($(QT5BASE_EGLFS_DEVICE),)
+ define QT5BASE_CONFIGURE_QMAKE_CONFIG
+-	echo "EGLFS_DEVICE_INTEGRATION = eglfs_viv" >> \
++	sed '/@EGLFS_DEVICE@/,+1d' $(QT5BASE_PKGDIR)/qmake.conf.in > \
++		$(@D)/mkspecs/devices/linux-buildroot-g++/qmake.conf
++endef
++else
++define QT5BASE_CONFIGURE_QMAKE_CONFIG
++	sed 's/@EGLFS_DEVICE@/$(QT5BASE_EGLFS_DEVICE)/g' \
++		$(QT5BASE_PKGDIR)/qmake.conf.in > \
+ 		$(@D)/mkspecs/devices/linux-buildroot-g++/qmake.conf
+ endef
+ endif
+@@ -263,8 +276,7 @@ endef
+ endif
+ 
+ define QT5BASE_CONFIGURE_CMDS
+-	$(INSTALL) -m 0644 -D $(QT5BASE_PKGDIR)/qmake.conf \
+-		$(@D)/mkspecs/devices/linux-buildroot-g++/qmake.conf
++	mkdir -p $(@D)/mkspecs/devices/linux-buildroot-g++/
+ 	$(QT5BASE_CONFIGURE_QMAKE_CONFIG)
+ 	$(INSTALL) -m 0644 -D $(QT5BASE_PKGDIR)/qplatformdefs.h \
+ 		$(@D)/mkspecs/devices/linux-buildroot-g++/qplatformdefs.h
+-- 
+2.7.4
