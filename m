@@ -1,43 +1,67 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 11 Nov 2017 23:21:15 +0100
-Subject: [Buildroot] [git commit branch/next] package/ffmpeg: fix fenv build
- failure on ARCv2 with glibc
-Message-ID: <20171113221622.5888E7FDB3@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 13 Nov 2017 21:26:16 +0100
+Subject: [Buildroot] [git commit branch/next] package/freerdp: fix build of
+ wayland client
+Message-ID: <20171113221623.3C606807B2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0a0042f6d7a526d4addce81286ca77c0a8ca656f
+commit: https://git.buildroot.net/buildroot/commit/?id=c2824fba2f2f4df6c1e0273fa546a203d1e6d5ac
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-https://git.buildroot.net/buildroot/commit/toolchain?id=0633eb58a2912328508a76f8fe9875a0d113a880
-added glibc support for ARCv2 which lacks fenv.h.
+Currently, FreeRDP uses pkg-config to find whether wayland is available.
+When it is, it gets the CFLAGS and LDFLAGS and so on from pkg-config,
+which is OK.
 
-Code format was suggested by Arnout:
-http://lists.busybox.net/pipermail/buildroot/2017-November/206631.html
+But I also gets the path to the wayland scanner from pkg-config. And
+this points to the target one, when we really need the host one.
 
-Fixes
-http://autobuild.buildroot.net/results/aec/aec300d7d4472421398a24202d6871c965bd1be5/
+So we force-feed the correct path as a configure option.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-[Thomas: adjust how the Config.in dependency is expressed.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Furthermore, wayland support needs libxkbcommon, so add this missing
+dependency as well.
+
+Fixes:
+    http://autobuild.buildroot.org/results/bdfe233ade36a56d0f65ef3c3d1698fca548beed/
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Reviewed-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ffmpeg/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+ package/freerdp/Config.in  | 1 +
+ package/freerdp/freerdp.mk | 6 ++++--
+ 2 files changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/package/ffmpeg/Config.in b/package/ffmpeg/Config.in
-index 17a4881..487ca44 100644
---- a/package/ffmpeg/Config.in
-+++ b/package/ffmpeg/Config.in
-@@ -1,6 +1,8 @@
- config BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
- 	bool
+diff --git a/package/freerdp/Config.in b/package/freerdp/Config.in
+index 9dd2505..59bc18b 100644
+--- a/package/freerdp/Config.in
++++ b/package/freerdp/Config.in
+@@ -81,6 +81,7 @@ config BR2_PACKAGE_FREERDP_CLIENT_WL
+ 	bool "wayland client"
  	default y
-+	# fenv.h lacks FE_INVALID, FE_OVERFLOW & FE_UNDERFLOW
-+	depends on !(BR2_archs38 && BR2_TOOLCHAIN_USES_GLIBC)
- 	# fenv.h lacks FE_INVALID, FE_OVERFLOW & FE_UNDERFLOW on nios2
- 	depends on !BR2_nios
- 	# No support for ARMv7-M in the ARM assembly logic
+ 	depends on BR2_PACKAGE_WAYLAND
++	select BR2_PACKAGE_LIBXKBCOMMON
+ 
+ endif
+ 
+diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
+index 458bd5e..69a89a1 100644
+--- a/package/freerdp/freerdp.mk
++++ b/package/freerdp/freerdp.mk
+@@ -199,8 +199,10 @@ FREERDP_CONF_OPTS += -DWITH_XV=OFF
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_WAYLAND),y)
+-FREERDP_DEPENDENCIES += wayland
+-FREERDP_CONF_OPTS += -DWITH_WAYLAND=ON
++FREERDP_DEPENDENCIES += wayland libxkbcommon
++FREERDP_CONF_OPTS += \
++	-DWITH_WAYLAND=ON \
++	-DWAYLAND_SCANNER=$(HOST_DIR)/bin/wayland-scanner
+ else
+ FREERDP_CONF_OPTS += -DWITH_WAYLAND=OFF
+ endif
