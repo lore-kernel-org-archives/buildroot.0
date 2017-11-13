@@ -1,54 +1,49 @@
 From: Sergey Matyukevich <geomatsi@gmail.com>
-Date: Mon, 13 Nov 2017 23:10:14 +0300
-Subject: [Buildroot] [PATCH/next 3/5] atf: add support for Marvell
- Armada SoCs
-In-Reply-To: <20171113082339.wzqq5ijnhlksuklq@sapphire.tkos.co.il>
+Date: Mon, 13 Nov 2017 23:12:08 +0300
+Subject: [Buildroot] [PATCH/next 2/5] armada-ddr: new package
+In-Reply-To: <20171113080000.twkales7r7helbfr@sapphire.tkos.co.il>
 References: <20171112201646.15558-1-geomatsi@gmail.com>
- <20171112201646.15558-4-geomatsi@gmail.com>
- <20171113082339.wzqq5ijnhlksuklq@sapphire.tkos.co.il>
-Message-ID: <20171113201014.boksxitl6fssuzzh@speedy.hunter>
+ <20171112201646.15558-3-geomatsi@gmail.com>
+ <20171113080000.twkales7r7helbfr@sapphire.tkos.co.il>
+Message-ID: <20171113201208.hekdh7iekpquvnkg@speedy.hunter>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> > Add support for Marvell Armada SoCs to arm-trusted-firmware package.
-> > 
-> > Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
-> > ---
-> >  boot/arm-trusted-firmware/arm-trusted-firmware.mk | 13 +++++++++++++
-> >  1 file changed, 13 insertions(+)
-> > 
-> > diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-> > index 7b1cc6ebb6..d6bde29894 100644
-> > --- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-> > +++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-> > @@ -39,6 +39,19 @@ ARM_TRUSTED_FIRMWARE_MAKE_OPTS += SCP_BL2=$(BINARIES_DIR)/scp-fw.bin
-> >  ARM_TRUSTED_FIRMWARE_DEPENDENCIES += vexpress-firmware
-> >  endif
-> >  
-> > +ifeq ($(BR2_TARGET_ARMADA_FIRMWARE),y)
-> > +ARMADA_FIRMWARE_IMAGE = $(call qstrip,$(BR2_TARGET_ARMADA_FIRMWARE_IMAGE))
-> > +ARM_TRUSTED_FIRMWARE_MAKE_OPTS += \
-> > +	SCP_BL2=$(BINARIES_DIR)/$(ARMADA_FIRMWARE_IMAGE)
-> > +ARM_TRUSTED_FIRMWARE_DEPENDENCIES += armada-firmware
-> > +endif
+> > +################################################################################
+> > +#
+> > +# Marvell Armada DDR training code
+> > +#
+> > +################################################################################
 > > +
-> > +ifeq ($(BR2_TARGET_ARMADA_DDR),y)
-> > +ARM_TRUSTED_FIRMWARE_MAKE_OPTS += \
-> > +	MV_DDR_PATH=$(DL_DIR)/mv-ddr-marvell
-> > +ARM_TRUSTED_FIRMWARE_DEPENDENCIES += armada-ddr
-> > +endif
+> > +ARMADA_DDR_VERSION = $(call qstrip,$(BR2_TARGET_ARMADA_DDR_VERSION))
 > 
-> These are not really optional dependencies of ATF in general. It's only the 
-> Marvell specific ATF version that needs them, and they are not optional.
+> Here again, should be a static commit id.
 > 
-> I don't have any better suggestion at the moment.
+> > +ARMADA_DDR_SITE = $(call github,MarvellEmbeddedProcessors,mv-ddr-marvell,$(ARMADA_DDR_VERSION))
+> > +ARMADA_DDR_LICENSE = Proprietary
+> 
+> The few files I looked into each have a few optional license headings, 
+> including a Commercial License, GPL-2.0+, GPL with exception, and BSD.
+> 
+> > +
+> > +ARMADA_DDR_INSTALL_IMAGES  = YES
+> > +
+> > +define ARMADA_DDR_INSTALL_IMAGES_CMDS
+> > +	$(INSTALL) -m 0755 -d $(DL_DIR)/mv-ddr-marvell
+> > +	$(call suitable-extractor,$(notdir $(ARMADA_DDR_SOURCE))) \
+> > +		$(DL_DIR)/$(notdir $(ARMADA_DDR_SOURCE)) | \
+> > +		$(TAR) --strip-components=1 -C $(DL_DIR)/mv-ddr-marvell $(TAR_OPTIONS) -
+> > +endef
+> 
+> Can't you use $(BUILD_DIR)/... for ATF, where mv-ddr-marvell source are 
+> extracted anyway?
 
-Neither do I. Another obvious option is to create a separate ATF package
-for Marvell. But it doesn't look like a good idea. I opted the same
-approach as for Versatile firmware, at least for the time being.
+All noted and will be implemented in v2.
+
+Thanks again for your thorough review !
 
 Regards,
 Sergey
