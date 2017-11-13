@@ -1,44 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 13 Nov 2017 21:34:09 +0100
-Subject: [Buildroot] [git commit] package/libplist: needs threads
-Message-ID: <20171113202651.8E37481270@busybox.osuosl.org>
+Date: Mon, 13 Nov 2017 21:46:34 +0100
+Subject: [Buildroot] [PATCH v2] libpjsip: fix static build failures due
+ to name clash
+In-Reply-To: <1510441591-10698-1-git-send-email-luca@lucaceresoli.net> (Luca
+ Ceresoli's message of "Sun, 12 Nov 2017 00:06:31 +0100")
+References: <1510441591-10698-1-git-send-email-luca@lucaceresoli.net>
+Message-ID: <87d14l52l1.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dbd9915caa884073e4a644086a5783fb687d76f0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Luca" == Luca Ceresoli <luca@lucaceresoli.net> writes:
 
-Upstream added a mandatory pthread check:
-https://github.com/libimobiledevice/libplist/commit/eec2e855b4f192cb1808d1f02b6bc8935a979025
+ > Several packages have a similar md5.c file, and each has a function
+ > named byteReverse(). This generates link errors when building
+ > statically ("multiple definition of `byteReverse'").
 
-Fixes
-http://autobuild.buildroot.net/results/863/863bb43db222f8e63d60b1fc4a53299575727de1/
+ > Fix by applying a patch from upstream:
+ >   https://trac.pjsip.org/repos/changeset/5688
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libplist/Config.in | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ > Fixes:
+ >   http://autobuild.buildroot.org/results/5d7/5d72e0f8517a555399978d5a0e9f7efd0a278189/
+ >   http://autobuild.buildroot.org/results/c47/c47ccbb9b40011cf0d79c7040bed061ddefd9629/
+ >   http://autobuild.buildroot.org/results/419/419ab2c0e034cc68991281c51caa8271b0fadbab/
 
-diff --git a/package/libplist/Config.in b/package/libplist/Config.in
-index 4a9575f..5a246b4 100644
---- a/package/libplist/Config.in
-+++ b/package/libplist/Config.in
-@@ -1,11 +1,12 @@
- config BR2_PACKAGE_LIBPLIST
- 	bool "libplist"
- 	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	help
- 	  libplist is a client for manipulating Apple Property List
- 	  (.plist) files
- 
- 	  http://www.libimobiledevice.org/
- 
--comment "libplist needs a toolchain w/ C++"
--	depends on !BR2_INSTALL_LIBSTDCPP
-+comment "libplist needs a toolchain w/ C++, threads"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
+ > Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+ > Cc: Adam Duskett <aduskett@gmail.com>
+
+ > ---
+
+ > Changes v1 -> v2:
+ >  - Add commit message and SoB line to patch file (Arnout)
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
