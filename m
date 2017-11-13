@@ -1,115 +1,137 @@
-From: Wolfgang Grandegger <wg@grandegger.com>
-Date: Mon, 13 Nov 2017 08:17:20 +0100
-Subject: [Buildroot] Bug in RPATH fixing logic
-In-Reply-To: <20171112174250.GD2947@scaer>
-References: <20171112174013.25d90333@windsurf.home>
- <20171112174955.18449728@windsurf.home> <87y3nbs9jz.fsf@dell.be.48ers.dk>
- <20171112182403.5d5c8fe4@windsurf.home> <20171112174250.GD2947@scaer>
-Message-ID: <734d391a-b9b9-d728-9878-4e8c4599b106@grandegger.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon, 13 Nov 2017 09:30:24 +0200
+Subject: [Buildroot] [PATCH/next 1/5] armada-firmware: new package
+In-Reply-To: <20171112201646.15558-2-geomatsi@gmail.com>
+References: <20171112201646.15558-1-geomatsi@gmail.com>
+ <20171112201646.15558-2-geomatsi@gmail.com>
+Message-ID: <20171113073023.h6was3yb6up7wna3@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Sergey,
 
-Am 12.11.2017 um 18:42 schrieb Yann E. MORIN:
-> On 2017-11-12 18:24 +0100, Thomas Petazzoni spake thusly:
->> Hello,
->>
->> On Sun, 12 Nov 2017 18:15:12 +0100, Peter Korsgaard wrote:
->>
->>>   > So this happens because the ARC binutils version is fetched from Git,
->>>   > so we need to have host-flex installed, and binutils detects the flex
->>>   > library and decides to use it.
->>>
->>> And there is no configure flag to disable that?
->>
->> Not that I can see.
+On Sun, Nov 12, 2017 at 11:16:42PM +0300, Sergey Matyukevich wrote:
+> This package adds SCP BL2 firmware for Marvell Armada 7040 and 8040 SoCs.
 > 
-> A long time ago (when I was too young to have a beard), libfl was only
-> available as a static library.
+> Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
+> ---
+>  boot/Config.in                            |  1 +
+>  boot/armada-firmware/Config.in            | 19 +++++++++++++++++++
+>  boot/armada-firmware/armada-firmware.hash |  2 ++
+>  boot/armada-firmware/armada-firmware.mk   | 18 ++++++++++++++++++
+>  4 files changed, 40 insertions(+)
+>  create mode 100644 boot/armada-firmware/Config.in
+>  create mode 100644 boot/armada-firmware/armada-firmware.hash
+>  create mode 100644 boot/armada-firmware/armada-firmware.mk
 > 
-> That library contained (and stil contains) a 'main()' symbol (is it even
-> a weak one?), so it really is a weird library to begin with... I would
-> not mind building that host library with --disable-shared --enable-static
-> and only install the static library...
-> 
-> That would solve this specific issue.
-> 
-> Until we need another library...
-> 
->>>   >> - The absolute rpath in $(HOST_DIR)/<tuple>/bin/ar is wrong in the
->>>   >> first place, but I'm not sure how to fix this.
->>>
->>>   > I'm wrong on this: $(HOST_DIR)/<tuple>/bin/ar RPATH is totally fine:
->>>
->>>   > $ readelf -d arc-buildroot-linux-uclibc/bin/ar  | grep rpath
->>>   >  0x000000000000000f (RPATH)              Library rpath: [/opt/br-arcle-hs38-full-2017.11-rc1/lib]
->>>
->>>   > The problem is that this gets turned into $ORIGIN/../lib by patchelf.
->>>
->>>   > I don't see any other solution than de-duplicating such binaries.
->>>
->>>   > Do you see another option ?
->>>
->>> Not if we *need* both binaries (do we?)
->>
->> I think we do need both binaries. <tuple>-<tool> is the "publicly"
->> visible copy, while <tuple>/bin/<tool> is the one called internally by
->> gcc (for example when it calls as or ld). Yann can explain more about
->> this perhaps.
-> 
-> I can't explain much more than you did, sorry...
-> 
->>> Is there a way to get binutils to use soft links instead of hard links?
->>
->> How would this solve the problem?
-> 
-> I guess the reasoning of Peter was that maybe $ORIGIN is relative to the
-> real file not the symlink.
-> 
-> Thus by having <tuple>/bin/<tool> a symlink to ../../bin/<tuple>-<tool>
-> would solve the issue.
-> 
-> But I am not sure of it either, and the manpage for ld.so does not
-> mention that. It only states:
-> 
->      $ORIGIN (or equivalently ${ORIGIN})
->          This expands to the directory containing the program or
->          shared object.
-> 
-> No mention of the behaviour when the program is being called through a
-> symlink in another directory... :-/
+> diff --git a/boot/Config.in b/boot/Config.in
+> index 2f46c8546e..0ffbd7288b 100644
+> --- a/boot/Config.in
+> +++ b/boot/Config.in
+> @@ -17,5 +17,6 @@ source "boot/ts4800-mbrboot/Config.in"
+>  source "boot/uboot/Config.in"
+>  source "boot/vexpress-firmware/Config.in"
+>  source "boot/xloader/Config.in"
+> +source "boot/armada-firmware/Config.in"
+>  
+>  endmenu
+> diff --git a/boot/armada-firmware/Config.in b/boot/armada-firmware/Config.in
+> new file mode 100644
+> index 0000000000..530b5622c8
+> --- /dev/null
+> +++ b/boot/armada-firmware/Config.in
+> @@ -0,0 +1,19 @@
+> +config BR2_TARGET_ARMADA_FIRMWARE
+> +	bool "armada-firmware"
+> +	depends on BR2_aarch64
+> +	help
+> +	  Marvell Armada SCP BL2 firmware images.
+> +
+> +if BR2_TARGET_ARMADA_FIRMWARE
+> +
+> +config BR2_TARGET_ARMADA_FIRMWARE_IMAGE
+> +	string "Armada SCP BL2 image name"
+> +	help
+> +	  Armada SCP BL2 firmware image name.
 
-A symlink seem to be resolved before using $ORIGIN:
+This symbol is not used here, which is quite unusual. Instead, you set this 
+symbol in the defconfig, and use it in the ATF package. But since we'll use 
+only one of the 7k/8k images (right?), I suggest to add a 7k/8k choice, and 
+make BR2_TARGET_ARMADA_FIRMWARE_IMAGE a blink symbol that is set (default) 
+according to the choice.
 
-  $ cd <buildroot-build-dir>
+Something like (abbreviated; untested):
 
-  $ ldd host/bin/xgettext
-  ...
-	libgettextsrc-0.19.8.1.so => /work/bdo/dcu/host/bin/../lib/libgettextsrc-0.19.8.1.so (0x00007f2ae6832000)
-	libgettextlib-0.19.8.1.so => /work/bdo/dcu/host/bin/../lib/libgettextlib-0.19.8.1.so (0x00007f2ae652f000)
+choice
+    prompt "Armada platform"
 
-  # Hard link
-  $ ln host/bin/xgettext xgettext
-  $ ./xgettext
-  ./xgettext: error while loading shared libraries: libgettextsrc-0.19.8.1.so: cannot open shared object file: No such file or directory
+config BR2_PACKAGE_ARMADA_8040
+    bool "8040"
 
-  # Soft link:
-  $ rm xgettext
-  $ ln -s ost/bin/xgettext xgettext
-  $ ./xgettext
-  ./xgettext: Eingabedatei fehlt
+config BR2_PACKAGE_ARMADA_7040
+    bool "7040"
 
-But:
+endchoice
 
-  $ ldd xgettext
-  ... 
-	libgettextsrc-0.19.8.1.so => not found
-	libgettextlib-0.19.8.1.so => not found
+config BR2_TARGET_ARMADA_FIRMWARE_IMAGE
+    string
+    default "mrvl_scp_bl2_8040.img" if BR2_PACKAGE_ARMADA_8040
+    default "mrvl_scp_bl2_7040.img" if BR2_PACKAGE_ARMADA_7040
 
-This means: A symbolic link would work.
+> +config BR2_TARGET_ARMADA_FIRMWARE_VERSION
+> +	string "Armada SCP BL2 image version"
+> +	help
+> +	  Armada SCP BL2 firmware image version.
+> +
+> +endif
+> diff --git a/boot/armada-firmware/armada-firmware.hash b/boot/armada-firmware/armada-firmware.hash
+> new file mode 100644
+> index 0000000000..5eeca9d6ea
+> --- /dev/null
+> +++ b/boot/armada-firmware/armada-firmware.hash
+> @@ -0,0 +1,2 @@
+> +# Locally calculated
+> +sha256 b310443c0d51d07b7c11597548685ae608b8478eee7095925427da6ab71e0168 armada-firmware-binaries-marvell-armada-17.10.tar.gz
+> diff --git a/boot/armada-firmware/armada-firmware.mk b/boot/armada-firmware/armada-firmware.mk
+> new file mode 100644
+> index 0000000000..d75dc7cb6c
+> --- /dev/null
+> +++ b/boot/armada-firmware/armada-firmware.mk
+> @@ -0,0 +1,18 @@
+> +################################################################################
+> +#
+> +# Marvell Armada SCP BL2 firmware images
+> +#
+> +################################################################################
+> +
+> +ARMADA_FIRMWARE_VERSION = $(call qstrip,$(BR2_TARGET_ARMADA_FIRMWARE_VERSION))
 
-Wofgang.
+Having a configurable version is an exception of very few packages (linux, 
+uboot, ATF). Other packages should set to a static version string or a commit 
+id when there is no official version release.
+
+> +ARMADA_FIRMWARE_SITE = $(call github,MarvellEmbeddedProcessors,binaries-marvell,$(ARMADA_FIRMWARE_VERSION))
+> +ARMADA_FIRMWARE_LICENSE = Proprietary
+
+These binaries come with no license, so you should also add 
+ARMADA_FIRMWARE_REDISTRIBUTE = NO.
+
+> +
+> +ARMADA_FIRMWARE_INSTALL_IMAGES  = YES
+> +
+> +define ARMADA_FIRMWARE_INSTALL_IMAGES_CMDS
+> +	$(INSTALL) -D -m 0644 $(@D)/mrvl_scp_bl2_7040.img $(BINARIES_DIR)/mrvl_scp_bl2_7040.img
+> +	$(INSTALL) -D -m 0644 $(@D)/mrvl_scp_bl2_8040.img $(BINARIES_DIR)/mrvl_scp_bl2_8040.img
+> +endef
+> +
+> +$(eval $(generic-package))
+
+baruch
+
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
