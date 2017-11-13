@@ -1,45 +1,65 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 13 Nov 2017 21:24:55 +0100
-Subject: [Buildroot] [git commit branch/next] package/freerdp: drop
- dependency on host-pkgconf
-Message-ID: <20171113221623.19844807B2@busybox.osuosl.org>
+Date: Mon, 13 Nov 2017 21:46:15 +0100
+Subject: [Buildroot] [git commit branch/next] libpjsip: fix static build
+ failures due to name clash
+Message-ID: <20171113221623.508AA807B2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1c219d396e31551785731b0ff7adb38782431b03
+commit: https://git.buildroot.net/buildroot/commit/?id=8d44fb66085723b87efd8d111db50fdba7fa63ea
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Currently, we only depend on host-pkgconf for gstreamer-0.x
+Several packages have a similar md5.c file, and each has a function
+named byteReverse(). This generates link errors when building
+statically ("multiple definition of `byteReverse'").
 
-However, we also need it at least for gstreamer-1.x and waylabnd, too.
+Fix by applying a patch from upstream:
+  https://trac.pjsip.org/repos/changeset/5688
 
-But since FreeRDP is a cmake package, host-pkgconf is always pulled in
-as a dependency by the cmake-package infrastructure.
+Fixes:
+  http://autobuild.buildroot.org/results/5d7/5d72e0f8517a555399978d5a0e9f7efd0a278189/
+  http://autobuild.buildroot.org/results/c47/c47ccbb9b40011cf0d79c7040bed061ddefd9629/
+  http://autobuild.buildroot.org/results/419/419ab2c0e034cc68991281c51caa8271b0fadbab/
 
-So, drop the gstreamer-conditional host-pkgconf dependency.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Samuel Martin <s.martin49@gmail.com>
-Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Acked-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Cc: Adam Duskett <aduskett@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/freerdp/freerdp.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../0001-Fixed-possible-function-name-clash.patch  | 26 ++++++++++++++++++++++
+ 1 file changed, 26 insertions(+)
 
-diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
-index 382cd39..6d1664b 100644
---- a/package/freerdp/freerdp.mk
-+++ b/package/freerdp/freerdp.mk
-@@ -16,7 +16,7 @@ FREERDP_CONF_OPTS = -DWITH_MANPAGES=OFF -Wno-dev
- 
- ifeq ($(BR2_PACKAGE_FREERDP_GSTREAMER),y)
- FREERDP_CONF_OPTS += -DWITH_GSTREAMER_0_10=ON
--FREERDP_DEPENDENCIES += gstreamer gst-plugins-base libxml2 host-pkgconf
-+FREERDP_DEPENDENCIES += gstreamer gst-plugins-base libxml2
- else
- FREERDP_CONF_OPTS += -DWITH_GSTREAMER_0_10=OFF
- endif
+diff --git a/package/libpjsip/0001-Fixed-possible-function-name-clash.patch b/package/libpjsip/0001-Fixed-possible-function-name-clash.patch
+new file mode 100644
+index 0000000..435b0ea
+--- /dev/null
++++ b/package/libpjsip/0001-Fixed-possible-function-name-clash.patch
+@@ -0,0 +1,26 @@
++Re #2059 (misc): Fixed possible function name clash with md5 due to non-static function.
++
++Backported from: https://trac.pjsip.org/repos/changeset/5688
++Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
++
++Index: pjlib-util/src/pjlib-util/md5.c
++===================================================================
++diff --git a/pjproject/pjlib-util/src/pjlib-util/md5.c b/pjproject/pjlib-util/src/pjlib-util/md5.c
++--- a/pjlib-util/src/pjlib-util/md5.c	(revision 5687)
+++++ b/pjlib-util/src/pjlib-util/md5.c	(revision 5688)
++@@ -29,13 +29,13 @@
++ #ifndef HIGHFIRST
++ #define byteReverse(buf, len)	/* Nothing */
++ #else
++-void byteReverse(unsigned char *buf, unsigned longs);
+++static void byteReverse(unsigned char *buf, unsigned longs);
++ 
++ #ifndef ASM_MD5
++ /*
++  * Note: this code is harmless on little-endian machines.
++  */
++-void byteReverse(unsigned char *buf, unsigned longs)
+++static void byteReverse(unsigned char *buf, unsigned longs)
++ {
++     pj_uint32_t t;
++     do {
