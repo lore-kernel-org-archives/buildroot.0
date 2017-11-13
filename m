@@ -1,76 +1,49 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Mon, 13 Nov 2017 10:04:20 -0500
-Subject: [Buildroot] [NEXT 04/17] libpjsip: add oss option
-In-Reply-To: <5c4cc1f5-5a41-2141-8ac6-1dc97e267bb9@mind.be>
-References: <20171110202109.25215-1-aduskett@gmail.com>
- <20171110202109.25215-4-aduskett@gmail.com>
- <5c4cc1f5-5a41-2141-8ac6-1dc97e267bb9@mind.be>
-Message-ID: <CAFSsvmqrE6L+_P9s5WPYzUzWw-j5rAa4da+hegpFf_LojRxcEA@mail.gmail.com>
+From: Wolfgang Grandegger <wg@grandegger.com>
+Date: Mon, 13 Nov 2017 16:19:57 +0100
+Subject: [Buildroot] Bug in RPATH fixing logic
+In-Reply-To: <87d14ms2x2.fsf@dell.be.48ers.dk>
+References: <20171112174013.25d90333@windsurf.home>
+ <20171112174955.18449728@windsurf.home> <87y3nbs9jz.fsf@dell.be.48ers.dk>
+ <20171112182403.5d5c8fe4@windsurf.home> <20171112174250.GD2947@scaer>
+ <734d391a-b9b9-d728-9878-4e8c4599b106@grandegger.com>
+ <87d14ms2x2.fsf@dell.be.48ers.dk>
+Message-ID: <4d389dc8-cdfa-9185-7873-b19a062cfe96@grandegger.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Nov 11, 2017 at 4:38 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
->
->
-> On 10-11-17 21:20, Adam Duskett wrote:
->> Signed-off-by: Adam Duskett <aduskett@gmail.com>
->> ---
->>  package/libpjsip/Config.in   | 3 +++
->>  package/libpjsip/libpjsip.mk | 5 ++++-
->>  2 files changed, 7 insertions(+), 1 deletion(-)
->>
->> diff --git a/package/libpjsip/Config.in b/package/libpjsip/Config.in
->> index a289c90a92..0a6398d508 100644
->> --- a/package/libpjsip/Config.in
->> +++ b/package/libpjsip/Config.in
->> @@ -23,6 +23,9 @@ config BR2_PACKAGE_LIBPJSIP_ALSA
->>       bool "alsa support"
->>       select BR2_PACKAGE_ALSA_LIB
->>
->> +config BR2_PACKAGE_LIBPJSIP_OSS
->> +     bool "OSS support"
->
->  I don't think adding support for OSS is useful. OSS has been deprecated for,
-> what, 10 years now?
->
-You would be surprised how often it's used in embedded environments. :(
->  Regards,
->  Arnout
->
->> +
->>  endif # BR2_PACKAGE_LIBPJSIP_SOUND
->>
->>  endif # BR2_PACKAGE_LIBPJSIP
->> diff --git a/package/libpjsip/libpjsip.mk b/package/libpjsip/libpjsip.mk
->> index f354cd3538..d02ca4e803 100644
->> --- a/package/libpjsip/libpjsip.mk
->> +++ b/package/libpjsip/libpjsip.mk
->> @@ -35,7 +35,6 @@ LIBPJSIP_CONF_OPTS = \
->>       --disable-ilbc-codec \
->>       --disable-libwebrtc \
->>       --disable-opus \
->> -     --disable-oss \
->>       --disable-ext-sound \
->>       --disable-g711-codec \
->>       --disable-l16-codec \
->> @@ -75,4 +74,8 @@ ifeq ($(BR2_PACKAGE_LIBPJSIP_ALSA),y)
->>  LIBPJSIP_DEPENDENCIES += alsa-lib
->>  endif
->>
->> +ifneq ($(BR2_PACKAGE_LIBPJSIP_OSS),y)
->> +LIBPJSIP_CONF_OPTS += --disable-oss
->> +endif
->> +
->>  $(eval $(autotools-package))
->>
->
-> --
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Hello,
+
+Am 13.11.2017 um 14:50 schrieb Peter Korsgaard:
+>>>>>> "Wolfgang" == Wolfgang Grandegger <wg@grandegger.com> writes:
+> 
+> Hi,
+> 
+>   > This means: A symbolic link would work.
+> 
+> Ok, great - Makes sense. I wonder how much effort it wil be to get
+> binutils to generate symbolic links instead of hard links.
+> 
+
+If I look into the HOST_DIR of my X86_64 build, I find the attached files
+with hard links. For example "ar" is in:
+
+./bin/x86_64-buildroot-linux-gnu-ar: Device: 811h/2065d	Inode: 52043071    Links: 2
+./x86_64-buildroot-linux-gnu/bin/ar: Device: 811h/2065d	Inode: 52043071    Links: 2
+
+$ patchelf --print-rpath ./bin/x86_64-buildroot-linux-gnu-ar
+/work/agco/bdo/dcu/host/lib
+
+And this RPATH will be removed for the known reasons. Trying to use
+symbolic instead of hard links in the binutils now...
+
+Wolfgang.
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: hard-links-x86_64-build.log
+Type: text/x-log
+Size: 3092 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20171113/fbbb79e4/attachment.bin>
