@@ -1,55 +1,95 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 13 Nov 2017 22:35:52 +0100
-Subject: [Buildroot] Buildroot 2017.11-rc2 released
-Message-ID: <87r2t13lqf.fsf@dell.be.48ers.dk>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 13 Nov 2017 23:00:09 +0100
+Subject: [Buildroot] [PATCH] Revert "pkg-download: remove explicit
+ PKG_VERSION from github helper"
+Message-ID: <20171113220009.3372-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+This reverts commit 1e5a8916b2ab4c9c99548fa6fbd4855eee323881.
 
-Buildroot 2017.11-rc2 is released - Go download it at:
+The idea was that the version string can be derived because we know the
+package name.
 
-http://buildroot.net/downloads/buildroot-2017.11-rc2.tar.gz
+However, this patch does not account for the fact that $(pkgname) always
+points to the latest pacakge scanned, which in all other situation we're
+using it, is the current package, because it is used inside one ot he
+xxx-inner macros that are $(eval)ualed. So $(pkgname) is evaluated
+"early" and gets the expected value.
 
-or
+However, the github value is not in one of those macros, so it gets
+evaluated "late", when doing the actual download. So, by that time,
+$(pkgname) will expand to the last package scanned, which is actuall the
+manual (without a br2-external tree).
 
-http://buildroot.net/downloads/buildroot-2017.11-rc2.tar.bz2
+That would require that the _SITE variable be assigned with the :=
+assignment operator. This is weird, because that would make it the only
+variable to require that, but only when using the github helper, which
+is even less obvious and would cause a lot of trouble...
 
-Or get it from Git:
+The obvious fixup would seem to be to use $(PKG) instead, because that
+already contains the upper-case package name that vcan be used as a
+prefix to variables.
 
-git://git.buildroot.net/buildroot
+However, that does not work either, because we have a check that forbids
+a trsailing slash in _SITE, check that is done in pacakge/pkg-generic,
+inside the xxx-inner macro, during the $(eval) call.
 
-Another week, another release candidate.
+And at that time, PKG is not yet defined, because it is only defined for
+an actual recipe.
 
-Please give it a spin and report any problems to the mailing list or
-bug tracker. Many thanks to the people contributing to this release:
+So we can't seem to have a workable solution. So, just revert the patch.
 
-git shortlog -sn 2017.11-rc1..
-     7  Bernd Kuhls
-     6  Peter Korsgaard
-     5  Thomas Petazzoni
-     4  Yann E. MORIN
-     3  Adam Duskett
-     3  Matt Weber
-     2  Evgeniy Didin
-     2  Fabio Estevam
-     2  Luca Ceresoli
-     2  Martin Bark
-     1  Adrian Perez de Castro
-     1  Alex Suykov
-     1  Andrey Smirnov
-     1  Andr? Hentschel
-     1  Baruch Siach
-     1  Fabrice Fontaine
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Marcin Nowakowski <marcin.nowakowski@imgtec.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ docs/manual/adding-packages-tips.txt | 5 +----
+ package/pkg-download.mk              | 4 ++--
+ 2 files changed, 3 insertions(+), 6 deletions(-)
 
-For more details, see the CHANGES file:
-
-http://git.buildroot.net/buildroot/plain/CHANGES?id=2017.11-rc2
-
-Expect the final 2017.11 release by the end of the month.
-
+diff --git a/docs/manual/adding-packages-tips.txt b/docs/manual/adding-packages-tips.txt
+index 824f07547d..19577fa821 100644
+--- a/docs/manual/adding-packages-tips.txt
++++ b/docs/manual/adding-packages-tips.txt
+@@ -138,7 +138,7 @@ past, the 'github' helper function should be used as shown below.
+ ------------------------
+ # Use a tag or a full commit ID
+ FOO_VERSION = v1.0
+-FOO_SITE = $(call github,<user>,<package>[,<version>])
++FOO_SITE = $(call github,<user>,<package>,$(FOO_VERSION))
+ ------------------------
+ 
+ .Notes
+@@ -147,9 +147,6 @@ FOO_SITE = $(call github,<user>,<package>[,<version>])
+   Buildroot (e.g.: +foo-f6fb6654af62045239caed5950bc6c7971965e60.tar.gz+),
+   so it is not necessary to specify it in the +.mk+ file.
+ - When using a commit ID as version, you should use the full 40 hex characters.
+-- The +version+ parameter is optional and should only be specified if anything
+-  other than FOO_VERSION needs to be used, e.g. when this function is used to
+-  specify a custom Linux or U-Boot tarball.
+ 
+ If the package you wish to add does have a release section on GitHub, the
+ maintainer may have uploaded a release tarball, or the release may just point
+diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+index dc4ff1c8c7..fbbc2d7391 100644
+--- a/package/pkg-download.mk
++++ b/package/pkg-download.mk
+@@ -52,8 +52,8 @@ notdomain = $(patsubst $(call domain,$(1),$(2))$(call domainseparator,$(2))%,%,$
+ # default domainseparator is /, specify alternative value as first argument
+ domainseparator = $(if $(1),$(1),/)
+ 
+-# github(user,package[,version]): returns site of GitHub repository
+-github = https://github.com/$(1)/$(2)/archive/$(or $(3),$($(call UPPERCASE,$(pkgname))_VERSION))
++# github(user,package,version): returns site of GitHub repository
++github = https://github.com/$(1)/$(2)/archive/$(3)
+ 
+ # Expressly do not check hashes for those files
+ # Exported variables default to immediately expanded in some versions of
 -- 
-Bye, Peter Korsgaard
+2.11.0
