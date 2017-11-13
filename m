@@ -1,7 +1,11 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 13 Nov 2017 08:00:40 +0100 (CET)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2017-11-12
-Message-ID: <20171113070040.7E49A207C6@mail.free-electrons.com>
+From: Wolfgang Grandegger <wg@grandegger.com>
+Date: Mon, 13 Nov 2017 08:17:20 +0100
+Subject: [Buildroot] Bug in RPATH fixing logic
+In-Reply-To: <20171112174250.GD2947@scaer>
+References: <20171112174013.25d90333@windsurf.home>
+ <20171112174955.18449728@windsurf.home> <87y3nbs9jz.fsf@dell.be.48ers.dk>
+ <20171112182403.5d5c8fe4@windsurf.home> <20171112174250.GD2947@scaer>
+Message-ID: <734d391a-b9b9-d728-9878-4e8c4599b106@grandegger.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,106 +14,102 @@ To: buildroot@busybox.net
 
 Hello,
 
-Build statistics for 2017-11-12
-===============================
+Am 12.11.2017 um 18:42 schrieb Yann E. MORIN:
+> On 2017-11-12 18:24 +0100, Thomas Petazzoni spake thusly:
+>> Hello,
+>>
+>> On Sun, 12 Nov 2017 18:15:12 +0100, Peter Korsgaard wrote:
+>>
+>>>   > So this happens because the ARC binutils version is fetched from Git,
+>>>   > so we need to have host-flex installed, and binutils detects the flex
+>>>   > library and decides to use it.
+>>>
+>>> And there is no configure flag to disable that?
+>>
+>> Not that I can see.
+> 
+> A long time ago (when I was too young to have a beard), libfl was only
+> available as a static library.
+> 
+> That library contained (and stil contains) a 'main()' symbol (is it even
+> a weak one?), so it really is a weird library to begin with... I would
+> not mind building that host library with --disable-shared --enable-static
+> and only install the static library...
+> 
+> That would solve this specific issue.
+> 
+> Until we need another library...
+> 
+>>>   >> - The absolute rpath in $(HOST_DIR)/<tuple>/bin/ar is wrong in the
+>>>   >> first place, but I'm not sure how to fix this.
+>>>
+>>>   > I'm wrong on this: $(HOST_DIR)/<tuple>/bin/ar RPATH is totally fine:
+>>>
+>>>   > $ readelf -d arc-buildroot-linux-uclibc/bin/ar  | grep rpath
+>>>   >  0x000000000000000f (RPATH)              Library rpath: [/opt/br-arcle-hs38-full-2017.11-rc1/lib]
+>>>
+>>>   > The problem is that this gets turned into $ORIGIN/../lib by patchelf.
+>>>
+>>>   > I don't see any other solution than de-duplicating such binaries.
+>>>
+>>>   > Do you see another option ?
+>>>
+>>> Not if we *need* both binaries (do we?)
+>>
+>> I think we do need both binaries. <tuple>-<tool> is the "publicly"
+>> visible copy, while <tuple>/bin/<tool> is the one called internally by
+>> gcc (for example when it calls as or ld). Yann can explain more about
+>> this perhaps.
+> 
+> I can't explain much more than you did, sorry...
+> 
+>>> Is there a way to get binutils to use soft links instead of hard links?
+>>
+>> How would this solve the problem?
+> 
+> I guess the reasoning of Peter was that maybe $ORIGIN is relative to the
+> real file not the symlink.
+> 
+> Thus by having <tuple>/bin/<tool> a symlink to ../../bin/<tuple>-<tool>
+> would solve the issue.
+> 
+> But I am not sure of it either, and the manpage for ld.so does not
+> mention that. It only states:
+> 
+>      $ORIGIN (or equivalently ${ORIGIN})
+>          This expands to the directory containing the program or
+>          shared object.
+> 
+> No mention of the behaviour when the program is being called through a
+> symlink in another directory... :-/
 
-      branch |  OK | NOK | TIM | TOT |
-   2017.08.x |   8 |   0 |   0 |   8 |
-      master | 108 |  32 |   1 | 141 |
-        next |  22 |   7 |   0 |  29 |
+A symlink seem to be resolved before using $ORIGIN:
 
-Results for branch 'master'
-===========================
+  $ cd <buildroot-build-dir>
 
-Classification of failures by reason
-------------------------------------
+  $ ldd host/bin/xgettext
+  ...
+	libgettextsrc-0.19.8.1.so => /work/bdo/dcu/host/bin/../lib/libgettextsrc-0.19.8.1.so (0x00007f2ae6832000)
+	libgettextlib-0.19.8.1.so => /work/bdo/dcu/host/bin/../lib/libgettextlib-0.19.8.1.so (0x00007f2ae652f000)
 
-                      qt-4.8.7 | 4 
-pdbg-77158819158d1d7053a737... | 3 
-              alsa-lib-1.1.4.1 | 2 
-                    chrony-3.2 | 2 
-              host-erlang-19.3 | 2 
-host-google-breakpad-7515ab... | 2 
-                libplist-2.0.0 | 2 
-                  cc-tool-0.26 | 1 
-                      feh-2.21 | 1 
-                  fwup-v0.15.4 | 1 
-google-breakpad-7515ab13768... | 1 
-           host-mono-5.4.0.201 | 1 
-host-vboot-utils-bbdd62f9b0... | 1 
-                       jose-10 | 1 
-kvm-unit-tests-5731572b2ac2... | 1 
-                   libcap-2.25 | 1 
-make[9]: *** [do-all] Termi... | 1 
-                   mp4v2-2.0.0 | 1 
-           python-numpy-1.13.3 | 1 
-              qt5enginio-1.6.2 | 1 
-                 tn5250-0.17.4 | 1 
-                       unknown | 1 
-               upmpdcli-1.2.15 | 1 
+  # Hard link
+  $ ln host/bin/xgettext xgettext
+  $ ./xgettext
+  ./xgettext: error while loading shared libraries: libgettextsrc-0.19.8.1.so: cannot open shared object file: No such file or directory
 
+  # Soft link:
+  $ rm xgettext
+  $ ln -s ost/bin/xgettext xgettext
+  $ ./xgettext
+  ./xgettext: Eingabedatei fehlt
 
-Detail of failures
-------------------
+But:
 
-         arc |               alsa-lib-1.1.4.1 | NOK | http://autobuild.buildroot.net/results/5e969d52c28ad1afcca6e2219232026bf0c93f1c |     
-         arc |               alsa-lib-1.1.4.1 | NOK | http://autobuild.buildroot.net/results/fca2ad71c7d446e4738834a1f220d950bce5fddd |     
-        m68k |                   cc-tool-0.26 | NOK | http://autobuild.buildroot.net/results/1d3ddaece1582bed29a66b8f2cf73e57ffe5e9c4 |     
-      x86_64 |                     chrony-3.2 | NOK | http://autobuild.buildroot.net/results/fc8440db025f51c176240ca127bc68a367add21c |     
-         arm |                     chrony-3.2 | NOK | http://autobuild.buildroot.net/results/aab3210d6d0c60fb07415d9bbdb09f2d4091446c |     
-    mips64el |                       feh-2.21 | NOK | http://autobuild.buildroot.net/results/bf31199cdaa18971a9b599c26fbefac73b2d6f30 |     
-         arc |                   fwup-v0.15.4 | NOK | http://autobuild.buildroot.net/results/dd3000bd99d71383ce82cd6b01b543cd9660130e |     
-      mipsel | google-breakpad-7515ab13768... | NOK | http://autobuild.buildroot.net/results/c1aa07fd2e8507bd01d3807d94855b1d1d65f321 |     
-         arm |               host-erlang-19.3 | NOK | http://autobuild.buildroot.net/results/04397429b221b2d59ab5560d3821b33662356509 |     
-         arm |               host-erlang-19.3 | NOK | http://autobuild.buildroot.net/results/0646e28b7b54115ef3ec922a0a95df4f043af910 |     
-         arm | host-google-breakpad-7515ab... | NOK | http://autobuild.buildroot.net/results/479a26f40327719fd5c6d98e7354a1793fd5f234 |     
-         arm | host-google-breakpad-7515ab... | NOK | http://autobuild.buildroot.net/results/f002d07bebf39948116b3f3448b6e19342804d3d |     
-         arm |            host-mono-5.4.0.201 | NOK | http://autobuild.buildroot.net/results/357f082875ffd0a3db5406bbf24e7401528a1748 |     
-         arm | host-vboot-utils-bbdd62f9b0... | NOK | http://autobuild.buildroot.net/results/c3a3dffd55dde45d6149a128992e09b05db8adda |     
-     powerpc |                        jose-10 | NOK | http://autobuild.buildroot.net/results/a1834e4c7b8ae57faf3ea7f65408e0061945c86f |     
- powerpc64le | kvm-unit-tests-5731572b2ac2... | NOK | http://autobuild.buildroot.net/results/fdcc8a1971e8c69d96419e38c29d7849c7f99939 |     
-         arc |                    libcap-2.25 | NOK | http://autobuild.buildroot.net/results/945c60ff942dfd3daa4da27f5e19470e3d97aed4 |     
-         arm |                 libplist-2.0.0 | NOK | http://autobuild.buildroot.net/results/423abc9b87934983bad8b9e1b79d07ada6b1b092 |     
-         arm |                 libplist-2.0.0 | NOK | http://autobuild.buildroot.net/results/c351b7a90e670f73cd675f2f24b439b77991c19e |     
-         arm | make[9]: *** [do-all] Termi... | TIM | http://autobuild.buildroot.net/results/86b71a197e287c6c0c0d9ebf48d027f5cf524303 |     
-         arm |                    mp4v2-2.0.0 | NOK | http://autobuild.buildroot.net/results/6e717fdbd8a39e3d54005332283119069017e6e0 |     
-    mips64el | pdbg-77158819158d1d7053a737... | NOK | http://autobuild.buildroot.net/results/5ff9099412fd44d08f460d73346d848c07d68103 |     
-    mips64el | pdbg-77158819158d1d7053a737... | NOK | http://autobuild.buildroot.net/results/ee9fa0233afccf9bbbd968fd542d2a507895638b |     
-    mips64el | pdbg-77158819158d1d7053a737... | NOK | http://autobuild.buildroot.net/results/208938c256e223694093a10ba22e4201a885bcc8 |     
-         arc |            python-numpy-1.13.3 | NOK | http://autobuild.buildroot.net/results/6b9a3310bb4f8c1fd7db0ef4476458b3eec2bf2e |     
-      xtensa |                       qt-4.8.7 | NOK | http://autobuild.buildroot.net/results/d9d7f72d980a2cef5db8d3462ad1d380f2e10944 | ORPH
-         arc |                       qt-4.8.7 | NOK | http://autobuild.buildroot.net/results/e7a48f12682d93afcd7c7c69158c038589b6c32f | ORPH
-      xtensa |                       qt-4.8.7 | NOK | http://autobuild.buildroot.net/results/1bdc8fabb476ba19d580d8ef4900e15f8bece2eb | ORPH
-         arc |                       qt-4.8.7 | NOK | http://autobuild.buildroot.net/results/a7b9e4d4ca672b75916734ce0b898769a484e6a4 | ORPH
-     aarch64 |               qt5enginio-1.6.2 | NOK | http://autobuild.buildroot.net/results/84c04122596f11f4baf13fb2d65400f0a1838ca7 |     
-         arm |                  tn5250-0.17.4 | NOK | http://autobuild.buildroot.net/results/42535e697dc21ca5222efc7d2721f669856c521f | ORPH
-        i686 |                        unknown | NOK | http://autobuild.buildroot.net/results/d8aeed2f64e21a277eb0bc5dc08d2339a14c682e |     
-     powerpc |                upmpdcli-1.2.15 | NOK | http://autobuild.buildroot.net/results/56b08228c2e8fa54882323e9bfff6c5f0a5b6f90 |     
+  $ ldd xgettext
+  ... 
+	libgettextsrc-0.19.8.1.so => not found
+	libgettextlib-0.19.8.1.so => not found
 
-Results for branch 'next'
-=========================
+This means: A symbolic link would work.
 
-Classification of failures by reason
-------------------------------------
-
-        host-xapp_bdftopcf-1.1 | 2 
-                   jimtcl-0.75 | 2 
-                  boost-1.65.1 | 1 
-                 mesa3d-17.2.5 | 1 
-pdbg-77158819158d1d7053a737... | 1 
-
-
-Detail of failures
-------------------
-
-     powerpc |                   boost-1.65.1 | NOK | http://autobuild.buildroot.net/results/a20c6be063311e65dec958e67a7d491c52084574 |     
-         arc |         host-xapp_bdftopcf-1.1 | NOK | http://autobuild.buildroot.net/results/0494e362f11aee42638703a1a13cb97dc0e047f2 |     
-         arm |         host-xapp_bdftopcf-1.1 | NOK | http://autobuild.buildroot.net/results/a779f5cc8b1ddd84f79fdd346e8aff834414244d |     
-        or1k |                    jimtcl-0.75 | NOK | http://autobuild.buildroot.net/results/87b09418c0355c8f57c1b60571e4f97dca42820c |     
-     aarch64 |                    jimtcl-0.75 | NOK | http://autobuild.buildroot.net/results/9273db8d1afa178505f892ee4650182f022c5e74 |     
-     powerpc |                  mesa3d-17.2.5 | NOK | http://autobuild.buildroot.net/results/1e77180fca70ea59738dad21e0c7f5673d438172 |     
-      mipsel | pdbg-77158819158d1d7053a737... | NOK | http://autobuild.buildroot.net/results/f467ae84e3fd41382c034a3ae2e4033e8a6f90b8 |     
-
-
--- 
-http://autobuild.buildroot.net
+Wofgang.
