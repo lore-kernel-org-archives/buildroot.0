@@ -1,32 +1,25 @@
-From: Arvid Picciani <aep@exys.org>
-Date: Mon, 13 Nov 2017 14:31:31 +0100
-Subject: [Buildroot] musl static pie
-Message-ID: <CABukmmPJ0MbOF9YP+DoA15OCHU_8B9dEXYFz3X0194qcjSGcbg@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 13 Nov 2017 14:39:39 +0100
+Subject: [Buildroot] [PATCH 1/1] package/ffmpeg: fix typo "nios" ->
+ "nios2"
+In-Reply-To: <20171112172206.17550-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Sun, 12 Nov 2017 18:22:06 +0100")
+References: <20171112172206.17550-1-bernd.kuhls@t-online.de>
+Message-ID: <87h8tys3fo.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-musl does support static pie, which we need for implement linking with
-korhal bolter.
-Is there any general resistance against implement that?
+ > Typo added recently by
+ > https://git.buildroot.net/buildroot/commit/package/ffmpeg?id=bd2544d3d3903935fc4dc0ec9c930720441e545f
 
-as far as i understand this requires adding a .spec file, since gcc does
-not natively understand static pie yet. A different crt needs to be added
-for self-relocation without an ldso.
-https://gcc.gnu.org/ml/gcc-patches/2017-11/msg00247.html
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-it would also involve adding -fPIC to TARGET_CFLAGS.
+Committed, thanks.
 
-i'd suggest adding it as Build options -> position independant executables
-
-but behind !BR2_STATIC_LIBS || BR2_TOOLCHAIN_USES_MUSL
-
-
-/b/
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20171113/9a67e617/attachment.html>
+-- 
+Bye, Peter Korsgaard
