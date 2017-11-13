@@ -1,44 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 13 Nov 2017 21:34:09 +0100
-Subject: [Buildroot] [git commit branch/next] package/libplist: needs threads
-Message-ID: <20171113221623.46657807B2@busybox.osuosl.org>
+Date: Mon, 13 Nov 2017 23:19:48 +0100
+Subject: [Buildroot] [git commit branch/next] linux: bump default to version
+ 4.14
+Message-ID: <20171113221623.8E86A807B2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dbd9915caa884073e4a644086a5783fb687d76f0
+commit: https://git.buildroot.net/buildroot/commit/?id=37e1e641465196f791f5256842bd23dcb4c17ed8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Upstream added a mandatory pthread check:
-https://github.com/libimobiledevice/libplist/commit/eec2e855b4f192cb1808d1f02b6bc8935a979025
-
-Fixes
-http://autobuild.buildroot.net/results/863/863bb43db222f8e63d60b1fc4a53299575727de1/
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libplist/Config.in | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ linux/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libplist/Config.in b/package/libplist/Config.in
-index 4a9575f..5a246b4 100644
---- a/package/libplist/Config.in
-+++ b/package/libplist/Config.in
-@@ -1,11 +1,12 @@
- config BR2_PACKAGE_LIBPLIST
- 	bool "libplist"
- 	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	help
- 	  libplist is a client for manipulating Apple Property List
- 	  (.plist) files
+diff --git a/linux/Config.in b/linux/Config.in
+index e90ab6b..a4977d1 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -26,7 +26,7 @@ choice
+ 	prompt "Kernel version"
  
- 	  http://www.libimobiledevice.org/
+ config BR2_LINUX_KERNEL_LATEST_VERSION
+-	bool "Latest version (4.13)"
++	bool "Latest version (4.14)"
  
--comment "libplist needs a toolchain w/ C++"
--	depends on !BR2_INSTALL_LIBSTDCPP
-+comment "libplist needs a toolchain w/ C++, threads"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
+ config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	bool "Latest CIP SLTS version (v4.4.83-cip8)"
+@@ -116,7 +116,7 @@ endif
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "4.13.12" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "4.14" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "v4.4.83-cip8" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
