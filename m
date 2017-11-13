@@ -1,28 +1,64 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 13 Nov 2017 14:50:49 +0100
-Subject: [Buildroot] Bug in RPATH fixing logic
-In-Reply-To: <734d391a-b9b9-d728-9878-4e8c4599b106@grandegger.com> (Wolfgang
- Grandegger's message of "Mon, 13 Nov 2017 08:17:20 +0100")
-References: <20171112174013.25d90333@windsurf.home>
- <20171112174955.18449728@windsurf.home>
- <87y3nbs9jz.fsf@dell.be.48ers.dk>
- <20171112182403.5d5c8fe4@windsurf.home> <20171112174250.GD2947@scaer>
- <734d391a-b9b9-d728-9878-4e8c4599b106@grandegger.com>
-Message-ID: <87d14ms2x2.fsf@dell.be.48ers.dk>
+Date: Mon, 13 Nov 2017 15:03:57 +0100
+Subject: [Buildroot] [PATCH] Linux: Clear CONFIG_INITRAMFS_SOURCE if
+ BR2_TARGET_ROOTFS_INITRAMFS is not set
+In-Reply-To: <20171113043416.43750-1-didin@synopsys.com> (Evgeniy Didin's
+ message of "Mon, 13 Nov 2017 07:34:16 +0300")
+References: <20171113043416.43750-1-didin@synopsys.com>
+Message-ID: <878tfas2b6.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Wolfgang" == Wolfgang Grandegger <wg@grandegger.com> writes:
+>>>>> "Evgeniy" == Evgeniy Didin <Evgeniy.Didin@synopsys.com> writes:
 
-Hi,
+ > This patch makes sure CONFIG_INITRAMFS_SOURCE option gets reset
+ > when BR2_TARGET_ROOTFS_INITRAMFS is not set. Some kernel defconfigs, 
+ > for example for ARC processors, set CONFIG_INITRAMFS_SOURCE value, which cause such error:
+ > "./scripts/gen_initramfs_list.sh: Cannot open '../../arc_initramfs_hs/'"
 
- > This means: A symbolic link would work.
+I'm not sure. I really would like to keep our "magic" .config fixups to
+a minimum as they are kind of hidden and force specific use cases
+without any options of disabling it (E.G. perhaps somebody has a
+prebuilt initramfs they would like to include even though buildroot
+builds the real rootfs (so BR2_TARGET_ROOTFS_INITRAMFS is not set). With
+this change, this is no longer possible.
 
-Ok, great - Makes sense. I wonder how much effort it wil be to get
-binutils to generate symbolic links instead of hard links.
+Couldn't you fix these arc specific defconfig issues with a small
+kconfig fragment instead?
+
+ > Signed-off-by: Evgeniy Didin <didin@synopsys.com> 
+ > CC: Alexey Brodkin <abrodkin@synopsys.com>
+ > Cc: arc-buildroot at synopsys.com
+ > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+ > ---
+ >  linux/linux.mk | 3 ++-
+ >  1 file changed, 2 insertions(+), 1 deletion(-)
+
+ > diff --git a/linux/linux.mk b/linux/linux.mk
+ > index 9c2aa77..0eee315 100644
+ > --- a/linux/linux.mk
+ > +++ b/linux/linux.mk
+ > @@ -269,7 +269,8 @@ define LINUX_KCONFIG_FIXUP_CMDS
+ >  		touch $(BINARIES_DIR)/rootfs.cpio
+ >  		$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_SOURCE,"$${BR_BINARIES_DIR}/rootfs.cpio",$(@D)/.config)
+ >  		$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_ROOT_UID,0,$(@D)/.config)
+ > -		$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_ROOT_GID,0,$(@D)/.config))
+ > +		$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_ROOT_GID,0,$(@D)/.config),
+ > +		$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_SOURCE,"",$(@D)/.config))
+ >  	$(if $(BR2_ROOTFS_DEVICE_CREATION_STATIC),,
+ >  		$(call KCONFIG_ENABLE_OPT,CONFIG_DEVTMPFS,$(@D)/.config)
+ >  		$(call KCONFIG_ENABLE_OPT,CONFIG_DEVTMPFS_MOUNT,$(@D)/.config))
+ > -- 
+ > 2.9.3
+
+ > _______________________________________________
+ > buildroot mailing list
+ > buildroot at busybox.net
+ > http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 Bye, Peter Korsgaard
