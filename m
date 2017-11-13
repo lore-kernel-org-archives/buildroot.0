@@ -1,65 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 13 Nov 2017 21:46:15 +0100
-Subject: [Buildroot] [git commit branch/next] libpjsip: fix static build
- failures due to name clash
-Message-ID: <20171113221623.508AA807B2@busybox.osuosl.org>
+Date: Mon, 13 Nov 2017 23:19:59 +0100
+Subject: [Buildroot] [git commit branch/next] configs/imx6-sabresd: Bump to
+ kernel 4.14
+Message-ID: <20171113221623.96A02807B2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8d44fb66085723b87efd8d111db50fdba7fa63ea
+commit: https://git.buildroot.net/buildroot/commit/?id=332310b40339f916b358dc2093e64cdbe002bc4d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Several packages have a similar md5.c file, and each has a function
-named byteReverse(). This generates link errors when building
-statically ("multiple definition of `byteReverse'").
-
-Fix by applying a patch from upstream:
-  https://trac.pjsip.org/repos/changeset/5688
-
-Fixes:
-  http://autobuild.buildroot.org/results/5d7/5d72e0f8517a555399978d5a0e9f7efd0a278189/
-  http://autobuild.buildroot.org/results/c47/c47ccbb9b40011cf0d79c7040bed061ddefd9629/
-  http://autobuild.buildroot.org/results/419/419ab2c0e034cc68991281c51caa8271b0fadbab/
-
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-Cc: Adam Duskett <aduskett@gmail.com>
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0001-Fixed-possible-function-name-clash.patch  | 26 ++++++++++++++++++++++
- 1 file changed, 26 insertions(+)
+ configs/imx6-sabresd_defconfig | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libpjsip/0001-Fixed-possible-function-name-clash.patch b/package/libpjsip/0001-Fixed-possible-function-name-clash.patch
-new file mode 100644
-index 0000000..435b0ea
---- /dev/null
-+++ b/package/libpjsip/0001-Fixed-possible-function-name-clash.patch
-@@ -0,0 +1,26 @@
-+Re #2059 (misc): Fixed possible function name clash with md5 due to non-static function.
-+
-+Backported from: https://trac.pjsip.org/repos/changeset/5688
-+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-+
-+Index: pjlib-util/src/pjlib-util/md5.c
-+===================================================================
-+diff --git a/pjproject/pjlib-util/src/pjlib-util/md5.c b/pjproject/pjlib-util/src/pjlib-util/md5.c
-+--- a/pjlib-util/src/pjlib-util/md5.c	(revision 5687)
-++++ b/pjlib-util/src/pjlib-util/md5.c	(revision 5688)
-+@@ -29,13 +29,13 @@
-+ #ifndef HIGHFIRST
-+ #define byteReverse(buf, len)	/* Nothing */
-+ #else
-+-void byteReverse(unsigned char *buf, unsigned longs);
-++static void byteReverse(unsigned char *buf, unsigned longs);
-+ 
-+ #ifndef ASM_MD5
-+ /*
-+  * Note: this code is harmless on little-endian machines.
-+  */
-+-void byteReverse(unsigned char *buf, unsigned longs)
-++static void byteReverse(unsigned char *buf, unsigned longs)
-+ {
-+     pj_uint32_t t;
-+     do {
+diff --git a/configs/imx6-sabresd_defconfig b/configs/imx6-sabresd_defconfig
+index 18dfe27..5b2b014 100644
+--- a/configs/imx6-sabresd_defconfig
++++ b/configs/imx6-sabresd_defconfig
+@@ -4,8 +4,8 @@ BR2_ARM_ENABLE_NEON=y
+ BR2_ARM_ENABLE_VFP=y
+ BR2_ARM_FPU_VFPV3=y
+ 
+-# Linux headers same as kernel, a 4.13 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_13=y
++# Linux headers same as kernel, a 4.14 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
+ 
+ # System
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+@@ -32,7 +32,7 @@ BR2_TARGET_UBOOT_SPL_NAME="SPL"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.13.3"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.14"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-sabresd imx6dl-sabresd imx6qp-sabresd"
