@@ -1,81 +1,45 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 11 Nov 2017 23:35:48 +0100
-Subject: [Buildroot] [git commit branch/next] util-linux: fix link failures
- due to name clash
-Message-ID: <20171113221622.A090D807B2@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 13 Nov 2017 21:24:55 +0100
+Subject: [Buildroot] [git commit branch/next] package/freerdp: drop
+ dependency on host-pkgconf
+Message-ID: <20171113221623.19844807B2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1a4b5bb4b21f05dd42ddd6158d74d431ac003c92
+commit: https://git.buildroot.net/buildroot/commit/?id=1c219d396e31551785731b0ff7adb38782431b03
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Several packages have a similar md5.c file, and each has a function
-named byteReverse(). This generates link errors when building
-statically ("multiple definition of `byteReverse'").
+Currently, we only depend on host-pkgconf for gstreamer-0.x
 
-Fix by applying a patch from upstream.
+However, we also need it at least for gstreamer-1.x and waylabnd, too.
 
-Fixes:
-  http://autobuild.buildroot.net/results/419ab2c0e034cc68991281c51caa8271b0fadbab/
+But since FreeRDP is a cmake package, host-pkgconf is always pulled in
+as a dependency by the cmake-package infrastructure.
 
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-Cc: Adam Duskett <aduskett@gmail.com>
-Tested-by: Carlos Santos <casantos@datacom.ind.br>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+So, drop the gstreamer-conditional host-pkgconf dependency.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Samuel Martin <s.martin49@gmail.com>
+Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Acked-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0001-md5-declare-byteReverse-as-static.patch   | 44 ++++++++++++++++++++++
- 1 file changed, 44 insertions(+)
+ package/freerdp/freerdp.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/util-linux/0001-md5-declare-byteReverse-as-static.patch b/package/util-linux/0001-md5-declare-byteReverse-as-static.patch
-new file mode 100644
-index 0000000..a5b290c
---- /dev/null
-+++ b/package/util-linux/0001-md5-declare-byteReverse-as-static.patch
-@@ -0,0 +1,44 @@
-+From 424cee0f06ece9473786c189ab4741e1dea7061d Mon Sep 17 00:00:00 2001
-+From: Luca Ceresoli <luca@lucaceresoli.net>
-+Date: Tue, 7 Nov 2017 14:39:09 +0100
-+Subject: [PATCH] md5: declare byteReverse as static
-+
-+byteReverse() is an internal function in md5.c, and is not exposed via
-+any header file, but it is not declared as static. This is a problem
-+with the md5.c file since it is copied more or less verbatim in other
-+programs (fontconfig and pjsip among others), causing a link error
-+when linking two of them together.
-+
-+Fixes link failures such as:
-+  http://autobuild.buildroot.net/results/419ab2c0e034cc68991281c51caa8271b0fadbab/build-end.log
-+
-+[Upstream patch: https://git.kernel.org/pub/scm/utils/util-linux/util-linux.git/commit/?id=424cee0f06ece9473786c189ab4741e1dea7061d]
-+
-+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-+---
-+ lib/md5.c | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/lib/md5.c b/lib/md5.c
-+index 488d16ef69b4..282e2d22af25 100644
-+--- a/lib/md5.c
-++++ b/lib/md5.c
-+@@ -21,13 +21,13 @@
-+ #if !defined(WORDS_BIGENDIAN)
-+ #define byteReverse(buf, len)	/* Nothing */
-+ #else
-+-void byteReverse(unsigned char *buf, unsigned longs);
-++static void byteReverse(unsigned char *buf, unsigned longs);
-+ 
-+ #ifndef ASM_MD5
-+ /*
-+  * Note: this code is harmless on little-endian machines.
-+  */
-+-void byteReverse(unsigned char *buf, unsigned longs)
-++static void byteReverse(unsigned char *buf, unsigned longs)
-+ {
-+     uint32_t t;
-+     do {
-+-- 
-+2.7.4
-+
+diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
+index 382cd39..6d1664b 100644
+--- a/package/freerdp/freerdp.mk
++++ b/package/freerdp/freerdp.mk
+@@ -16,7 +16,7 @@ FREERDP_CONF_OPTS = -DWITH_MANPAGES=OFF -Wno-dev
+ 
+ ifeq ($(BR2_PACKAGE_FREERDP_GSTREAMER),y)
+ FREERDP_CONF_OPTS += -DWITH_GSTREAMER_0_10=ON
+-FREERDP_DEPENDENCIES += gstreamer gst-plugins-base libxml2 host-pkgconf
++FREERDP_DEPENDENCIES += gstreamer gst-plugins-base libxml2
+ else
+ FREERDP_CONF_OPTS += -DWITH_GSTREAMER_0_10=OFF
+ endif
