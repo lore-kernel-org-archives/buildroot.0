@@ -1,201 +1,43 @@
-From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Mon, 13 Nov 2017 18:11:24 +0100
-Subject: [Buildroot] [PATCH v2 1/1] sunxi-mali-mainline: new package
-Message-ID: <1510593084-14702-1-git-send-email-giulio.benetti@micronovasrl.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 13 Nov 2017 18:36:11 +0100
+Subject: [Buildroot] Bug in RPATH fixing logic
+In-Reply-To: <87d14ms2x2.fsf@dell.be.48ers.dk>
+References: <20171112174013.25d90333@windsurf.home>
+ <20171112174955.18449728@windsurf.home>
+ <87y3nbs9jz.fsf@dell.be.48ers.dk>
+ <20171112182403.5d5c8fe4@windsurf.home>
+ <20171112174250.GD2947@scaer>
+ <734d391a-b9b9-d728-9878-4e8c4599b106@grandegger.com>
+ <87d14ms2x2.fsf@dell.be.48ers.dk>
+Message-ID: <20171113173611.GB2861@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add Allwinner Mali openGL userspace driver r6p2.
-Used combined with kernelspace Mali driver,
-it gives possibility to use 3D openGL SoC acceleration.
-It provides both fbdev and X11 libraries and headers.
-It is compatible with Linux >= 4.4 as sunxi-mali-driver-mainline.
+Peter, All,
 
-Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
----
-Changes v1 -> v2:
-* add X11 dependencies
-* cleaned up .mk to respect 80 columns
-* used github macro
-* added myself to DEVELOPERS
- DEVELOPERS                                         |  1 +
- package/sunxi-mali-mainline/Config.in              | 43 +++++++++++++++
- package/sunxi-mali-mainline/egl.pc                 | 12 +++++
- package/sunxi-mali-mainline/glesv2.pc              | 12 +++++
- package/sunxi-mali-mainline/sunxi-mali-mainline.mk | 62 ++++++++++++++++++++++
- 5 files changed, 130 insertions(+)
- create mode 100644 package/sunxi-mali-mainline/Config.in
- create mode 100644 package/sunxi-mali-mainline/egl.pc
- create mode 100644 package/sunxi-mali-mainline/glesv2.pc
- create mode 100644 package/sunxi-mali-mainline/sunxi-mali-mainline.mk
+On 2017-11-13 14:50 +0100, Peter Korsgaard spake thusly:
+> >>>>> "Wolfgang" == Wolfgang Grandegger <wg@grandegger.com> writes:
+>  > This means: A symbolic link would work.
+> Ok, great - Makes sense. I wonder how much effort it wil be to get
+> binutils to generate symbolic links instead of hard links.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 2fe95c8..1a751b8 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -697,6 +697,7 @@ F:	package/webp/
- 
- N:	Giulio Benetti <giulio.benetti@micronovasrl.com>
- F:	package/sunxi-mali-driver-mainline/
-+F:	package/sunxi-mali-mainline/
- 
- N:	Gregory Dymarek <gregd72002@gmail.com>
- F:	package/ding-libs/
-diff --git a/package/sunxi-mali-mainline/Config.in b/package/sunxi-mali-mainline/Config.in
-new file mode 100644
-index 0000000..652cbc5
---- /dev/null
-+++ b/package/sunxi-mali-mainline/Config.in
-@@ -0,0 +1,43 @@
-+config BR2_PACKAGE_SUNXI_MALI_MAINLINE
-+	bool "sunxi-mali-mainline"
-+	depends on BR2_arm
-+	depends on BR2_ARM_EABIHF
-+	depends on BR2_TOOLCHAIN_USES_GLIBC
-+	select BR2_PACKAGE_HAS_LIBEGL
-+	select BR2_PACKAGE_HAS_LIBGLES
-+	select BR2_PACKAGE_LIBDRM if BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_XLIB_LIBXEXT if BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_XLIB_LIBXFIXES if BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_XLIB_LIBXDAMAGE if BR2_PACKAGE_XORG7
-+	help
-+	  Install the ARM Mali drivers for sunxi based systems (i.e
-+	  systems based on ARM Allwinner SoCs). This driver requires
-+	  either the sunxi-kernel with the ARM Mali driver enabled or
-+	  the installation of the ARM Mali drivers as an external
-+	  module.
-+
-+if BR2_PACKAGE_SUNXI_MALI_MAINLINE
-+
-+config BR2_PACKAGE_PROVIDES_LIBEGL
-+	default "sunxi-mali-mainline"
-+
-+config BR2_PACKAGE_PROVIDES_LIBGLES
-+	default "sunxi-mali-mainline"
-+
-+choice
-+	prompt "Version"
-+	default BR2_PACKAGE_SUNXI_MALI_MAINLINE_R6P2
-+	help
-+	  Select the version of the kernel module.
-+
-+config BR2_PACKAGE_SUNXI_MALI_MAINLINE_R6P2
-+	bool "r6p2"
-+
-+endchoice
-+
-+endif
-+
-+comment "sunxi-mali needs an EABIhf glibc toolchain"
-+	depends on BR2_arm
-+	depends on !BR2_TOOLCHAIN_USES_GLIBC || !BR2_ARM_EABIHF
-diff --git a/package/sunxi-mali-mainline/egl.pc b/package/sunxi-mali-mainline/egl.pc
-new file mode 100644
-index 0000000..3854e5f
---- /dev/null
-+++ b/package/sunxi-mali-mainline/egl.pc
-@@ -0,0 +1,12 @@
-+prefix=/usr/
-+exec_prefix=${prefix}
-+libdir=${exec_prefix}/lib
-+includedir=${prefix}/include
-+
-+Name: egl
-+Description: ARM Mali implementation of EGL
-+Version: 1.4
-+Requires:
-+Libs: -L${libdir} -lEGL -lGLESv2
-+Cflags: -I${includedir}
-+
-diff --git a/package/sunxi-mali-mainline/glesv2.pc b/package/sunxi-mali-mainline/glesv2.pc
-new file mode 100644
-index 0000000..6910b46
---- /dev/null
-+++ b/package/sunxi-mali-mainline/glesv2.pc
-@@ -0,0 +1,12 @@
-+prefix=/usr
-+exec_prefix=${prefix}
-+libdir=${exec_prefix}/lib
-+includedir=${prefix}/include
-+
-+Name: glesv2
-+Description: ARM Mali implementation of OpenGL ESv2
-+Version: 2.0
-+Requires:
-+Libs: -L${libdir} -lGLESv2 -lGLESv1_CM
-+Cflags: -I${includedir}
-+
-diff --git a/package/sunxi-mali-mainline/sunxi-mali-mainline.mk b/package/sunxi-mali-mainline/sunxi-mali-mainline.mk
-new file mode 100644
-index 0000000..6540b2c
---- /dev/null
-+++ b/package/sunxi-mali-mainline/sunxi-mali-mainline.mk
-@@ -0,0 +1,62 @@
-+################################################################################
-+#
-+# sunxi-mali-mainline
-+#
-+################################################################################
-+
-+SUNXI_MALI_MAINLINE_VERSION = cb3e8ece9b2c3a70cbeb3204cd6f30eceaa32023
-+SUNXI_MALI_MAINLINE_SITE = $(call github,free-electrons,mali-blobs,$(SUNXI_MALI_MAINLINE_VERSION))
-+SUNXI_MALI_MAINLINE_INSTALL_STAGING = YES
-+SUNXI_MALI_MAINLINE_PROVIDES = libegl libgles
-+
-+ifeq ($(BR2_PACKAGE_SUNXI_MALI_MAINLINE_R6P2),y)
-+SUNXI_MALI_LIB_VER=r6p2
-+endif
-+
-+ifeq ($(BR2_PACKAGE_XLIB_LIBX11),y)
-+SUNXI_MALI_MAINLINE_DEPENDENCIES += xlib_libX11 xlib_libXfixes \
-+				    xlib_libXext xlib_libXdamage libdrm
-+endif
-+
-+define SUNXI_MALI_MAINLINE_BUILD_CMDS
-+endef
-+
-+ifeq ($(BR2_PACKAGE_XLIB_LIBX11),y)
-+define SUNXI_MALI_MAINLINE_INSTALL_STAGING_CMDS
-+	cp -rf $(@D)/$(SUNXI_MALI_LIB_VER)/x11_dma_buf/lib_x11_dma_buf/* \
-+		$(STAGING_DIR)/usr/lib
-+	cp -rf $(@D)/$(SUNXI_MALI_LIB_VER)/x11_ump/include/* \
-+		$(STAGING_DIR)/usr/include/
-+
-+	$(INSTALL) -D -m 0644 package/sunxi-mali-mainline/egl.pc \
-+		$(STAGING_DIR)/usr/lib/pkgconfig/egl.pc
-+	$(INSTALL) -D -m 0644 package/sunxi-mali-mainline/glesv2.pc \
-+		$(STAGING_DIR)/usr/lib/pkgconfig/glesv2.pc
-+endef
-+else
-+define SUNXI_MALI_MAINLINE_INSTALL_STAGING_CMDS
-+	cp -rf $(@D)/$(SUNXI_MALI_LIB_VER)/fbdev/lib/lib_fb_dev/* \
-+		$(STAGING_DIR)/usr/lib/
-+	cp -rf $(@D)/$(SUNXI_MALI_LIB_VER)/fbdev/include/* \
-+		$(STAGING_DIR)/usr/include/
-+
-+	$(INSTALL) -D -m 0644 package/sunxi-mali-mainline/egl.pc \
-+		$(STAGING_DIR)/usr/lib/pkgconfig/egl.pc
-+	$(INSTALL) -D -m 0644 package/sunxi-mali-mainline/glesv2.pc \
-+		$(STAGING_DIR)/usr/lib/pkgconfig/glesv2.pc
-+endef
-+endif
-+
-+ifeq ($(BR2_PACKAGE_XLIB_LIBX11),y)
-+define SUNXI_MALI_MAINLINE_INSTALL_TARGET_CMDS
-+	cp -rf $(@D)/$(SUNXI_MALI_LIB_VER)/x11_dma_buf/lib_x11_dma_buf/* \
-+		$(TARGET_DIR)/usr/lib
-+endef
-+else
-+define SUNXI_MALI_MAINLINE_INSTALL_TARGET_CMDS
-+	cp -rf $(@D)/$(SUNXI_MALI_LIB_VER)/fbdev/lib/lib_fb_dev/* \
-+		$(TARGET_DIR)/usr/lib/
-+endef
-+endif
-+
-+$(eval $(generic-package))
+No way.
+
+We'll have to provide post-install hooks to do the de-hardlinking step
+ourselves.
+
+Also, as Wolfgang noticed, gcc is also affected by the hardlink issue.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.7.4
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
