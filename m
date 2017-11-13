@@ -1,40 +1,65 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 13 Nov 2017 21:46:34 +0100
-Subject: [Buildroot] [PATCH v2] libpjsip: fix static build failures due
- to name clash
-In-Reply-To: <1510441591-10698-1-git-send-email-luca@lucaceresoli.net> (Luca
- Ceresoli's message of "Sun, 12 Nov 2017 00:06:31 +0100")
-References: <1510441591-10698-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <87d14l52l1.fsf@dell.be.48ers.dk>
+Date: Mon, 13 Nov 2017 21:46:15 +0100
+Subject: [Buildroot] [git commit] libpjsip: fix static build failures due to
+ name clash
+Message-ID: <20171113203917.AEBEC810CC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Luca" == Luca Ceresoli <luca@lucaceresoli.net> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=8d44fb66085723b87efd8d111db50fdba7fa63ea
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Several packages have a similar md5.c file, and each has a function
- > named byteReverse(). This generates link errors when building
- > statically ("multiple definition of `byteReverse'").
+Several packages have a similar md5.c file, and each has a function
+named byteReverse(). This generates link errors when building
+statically ("multiple definition of `byteReverse'").
 
- > Fix by applying a patch from upstream:
- >   https://trac.pjsip.org/repos/changeset/5688
+Fix by applying a patch from upstream:
+  https://trac.pjsip.org/repos/changeset/5688
 
- > Fixes:
- >   http://autobuild.buildroot.org/results/5d7/5d72e0f8517a555399978d5a0e9f7efd0a278189/
- >   http://autobuild.buildroot.org/results/c47/c47ccbb9b40011cf0d79c7040bed061ddefd9629/
- >   http://autobuild.buildroot.org/results/419/419ab2c0e034cc68991281c51caa8271b0fadbab/
+Fixes:
+  http://autobuild.buildroot.org/results/5d7/5d72e0f8517a555399978d5a0e9f7efd0a278189/
+  http://autobuild.buildroot.org/results/c47/c47ccbb9b40011cf0d79c7040bed061ddefd9629/
+  http://autobuild.buildroot.org/results/419/419ab2c0e034cc68991281c51caa8271b0fadbab/
 
- > Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
- > Cc: Adam Duskett <aduskett@gmail.com>
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Cc: Adam Duskett <aduskett@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ .../0001-Fixed-possible-function-name-clash.patch  | 26 ++++++++++++++++++++++
+ 1 file changed, 26 insertions(+)
 
- > ---
-
- > Changes v1 -> v2:
- >  - Add commit message and SoB line to patch file (Arnout)
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libpjsip/0001-Fixed-possible-function-name-clash.patch b/package/libpjsip/0001-Fixed-possible-function-name-clash.patch
+new file mode 100644
+index 0000000..435b0ea
+--- /dev/null
++++ b/package/libpjsip/0001-Fixed-possible-function-name-clash.patch
+@@ -0,0 +1,26 @@
++Re #2059 (misc): Fixed possible function name clash with md5 due to non-static function.
++
++Backported from: https://trac.pjsip.org/repos/changeset/5688
++Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
++
++Index: pjlib-util/src/pjlib-util/md5.c
++===================================================================
++diff --git a/pjproject/pjlib-util/src/pjlib-util/md5.c b/pjproject/pjlib-util/src/pjlib-util/md5.c
++--- a/pjlib-util/src/pjlib-util/md5.c	(revision 5687)
+++++ b/pjlib-util/src/pjlib-util/md5.c	(revision 5688)
++@@ -29,13 +29,13 @@
++ #ifndef HIGHFIRST
++ #define byteReverse(buf, len)	/* Nothing */
++ #else
++-void byteReverse(unsigned char *buf, unsigned longs);
+++static void byteReverse(unsigned char *buf, unsigned longs);
++ 
++ #ifndef ASM_MD5
++ /*
++  * Note: this code is harmless on little-endian machines.
++  */
++-void byteReverse(unsigned char *buf, unsigned longs)
+++static void byteReverse(unsigned char *buf, unsigned longs)
++ {
++     pj_uint32_t t;
++     do {
