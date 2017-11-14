@@ -1,9 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 14 Nov 2017 22:58:43 +0100
-Subject: [Buildroot] [PATCH/next 0/5] Add support for MacchiatoBin board
-In-Reply-To: <20171112201646.15558-1-geomatsi@gmail.com>
+Date: Tue, 14 Nov 2017 23:07:31 +0100
+Subject: [Buildroot] [PATCH/next 1/5] armada-firmware: new package
+In-Reply-To: <20171112201646.15558-2-geomatsi@gmail.com>
 References: <20171112201646.15558-1-geomatsi@gmail.com>
-Message-ID: <aaad6d28-b49d-9461-e689-94a9826ed0e6@mind.be>
+ <20171112201646.15558-2-geomatsi@gmail.com>
+Message-ID: <dbbc1ce7-1847-a08d-fca0-a667b555b71c@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,63 +14,117 @@ To: buildroot@busybox.net
 
 
 On 12-11-17 21:16, Sergey Matyukevich wrote:
-> Hi all,
+> This package adds SCP BL2 firmware for Marvell Armada 7040 and 8040 SoCs.
 > 
-> This patchset adds support for SolidRun MacchiatoBin board based on
-> Marvell Armada 8040 SoC. For convenience the following two different
-> build configurations are added:
+> Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
+> ---
+>  boot/Config.in                            |  1 +
+>  boot/armada-firmware/Config.in            | 19 +++++++++++++++++++
+>  boot/armada-firmware/armada-firmware.hash |  2 ++
+>  boot/armada-firmware/armada-firmware.mk   | 18 ++++++++++++++++++
+>  4 files changed, 40 insertions(+)
+>  create mode 100644 boot/armada-firmware/Config.in
+>  create mode 100644 boot/armada-firmware/armada-firmware.hash
+>  create mode 100644 boot/armada-firmware/armada-firmware.mk
 > 
-> - mainline BSP
->   mainline Linux v4.13.11 and U-Boot v2017.09
-> 
-> - vendor BSP (enables more hardware)
->   BSP from Marvell based on Linux 4.4.52 and U-Boot v2017.03
+> diff --git a/boot/Config.in b/boot/Config.in
+> index 2f46c8546e..0ffbd7288b 100644
+> --- a/boot/Config.in
+> +++ b/boot/Config.in
+> @@ -17,5 +17,6 @@ source "boot/ts4800-mbrboot/Config.in"
+>  source "boot/uboot/Config.in"
+>  source "boot/vexpress-firmware/Config.in"
+>  source "boot/xloader/Config.in"
+> +source "boot/armada-firmware/Config.in"
 
- Do we really want to have defconfigs for both upstream and vendor BSP?
-Especially because we will also probably have a graphical defconfig later...
-This way, we end up with 3-4 defconfigs per board, for dozens of boards...
+ Please keep things alphabetic. However, I don't think the boot loader menu is
+appropriate. Yes, it's an image that is used by the bootloader, but really it is
+a piece of firmware, not really related to booting the SoC.
 
- That said, I do think it is useful to have both of these for this specific
-board. It's just that I'm afraid we're going to be overwhelmed by the number of
-defconfigs...
+>  
+>  endmenu
+> diff --git a/boot/armada-firmware/Config.in b/boot/armada-firmware/Config.in
+> new file mode 100644
+> index 0000000000..530b5622c8
+> --- /dev/null
+> +++ b/boot/armada-firmware/Config.in
+> @@ -0,0 +1,19 @@
+> +config BR2_TARGET_ARMADA_FIRMWARE
+> +	bool "armada-firmware"
+> +	depends on BR2_aarch64
+> +	help
+> +	  Marvell Armada SCP BL2 firmware images.
 
- What do the others think?
+ Could you write a little more help text? Like, that it's the firmware for the
+management coprocessor and that it is needed for power management. The first
+paragraph of [1] can be a source of inspiration.
+
+ We normally also want an upstream URL. [1] might be usable but I'm not sure.
+
+> +
+> +if BR2_TARGET_ARMADA_FIRMWARE
+> +
+> +config BR2_TARGET_ARMADA_FIRMWARE_IMAGE
+> +	string "Armada SCP BL2 image name"
+> +	help
+> +	  Armada SCP BL2 firmware image name.
+> +
+> +config BR2_TARGET_ARMADA_FIRMWARE_VERSION
+> +	string "Armada SCP BL2 image version"
+> +	help
+> +	  Armada SCP BL2 firmware image version.
+> +
+> +endif
+> diff --git a/boot/armada-firmware/armada-firmware.hash b/boot/armada-firmware/armada-firmware.hash
+> new file mode 100644
+> index 0000000000..5eeca9d6ea
+> --- /dev/null
+> +++ b/boot/armada-firmware/armada-firmware.hash
+> @@ -0,0 +1,2 @@
+> +# Locally calculated
+> +sha256 b310443c0d51d07b7c11597548685ae608b8478eee7095925427da6ab71e0168 armada-firmware-binaries-marvell-armada-17.10.tar.gz
+> diff --git a/boot/armada-firmware/armada-firmware.mk b/boot/armada-firmware/armada-firmware.mk
+> new file mode 100644
+> index 0000000000..d75dc7cb6c
+> --- /dev/null
+> +++ b/boot/armada-firmware/armada-firmware.mk
+> @@ -0,0 +1,18 @@
+> +################################################################################
+> +#
+> +# Marvell Armada SCP BL2 firmware images
+> +#
+> +################################################################################
+> +
+> +ARMADA_FIRMWARE_VERSION = $(call qstrip,$(BR2_TARGET_ARMADA_FIRMWARE_VERSION))
+> +ARMADA_FIRMWARE_SITE = $(call github,MarvellEmbeddedProcessors,binaries-marvell,$(ARMADA_FIRMWARE_VERSION))
+
+ We try to keep the upstream name as the package name. Is there anything wrong
+with binaries-marvell?
+
+> +ARMADA_FIRMWARE_LICENSE = Proprietary
+> +
+> +ARMADA_FIRMWARE_INSTALL_IMAGES  = YES
+> +
+> +define ARMADA_FIRMWARE_INSTALL_IMAGES_CMDS
+> +	$(INSTALL) -D -m 0644 $(@D)/mrvl_scp_bl2_7040.img $(BINARIES_DIR)/mrvl_scp_bl2_7040.img
+> +	$(INSTALL) -D -m 0644 $(@D)/mrvl_scp_bl2_8040.img $(BINARIES_DIR)/mrvl_scp_bl2_8040.img
+
+ I don't think the name is really relevant, is it? So maybe you could always
+copy it to the same file in BINARIES_DIR so on the ATF side you don't need to
+access variables of this package.
 
  Regards,
  Arnout
 
+> +endef
+> +
+> +$(eval $(generic-package))
 > 
-> Patches are rebased on top of next branch.
-> 
-> Regards,
-> Sergey
-> 
-> Sergey Matyukevich (5):
->   armada-firmware: new package
->   armada-ddr: new package
->   atf: add support for Marvell Armada SoCs
->   solidrun/macchiatobin: add new board
->   DEVELOPERS: add myself to MacchiatoBin releated packages
-> 
->  DEVELOPERS                                        |    6 +
->  board/solidrun/macchiatobin/genimage.cfg          |   16 +++++
->  board/solidrun/macchiatobin/readme.txt            |   70 ++++++++++++++++++++++
->  boot/Config.in                                    |    2 
->  boot/arm-trusted-firmware/arm-trusted-firmware.mk |   13 ++++
->  boot/armada-ddr/Config.in                         |   16 +++++
->  boot/armada-ddr/armada-ddr.hash                   |    2 
->  boot/armada-ddr/armada-ddr.mk                     |   20 ++++++
->  boot/armada-firmware/Config.in                    |   19 +++++
->  boot/armada-firmware/armada-firmware.hash         |    2 
->  boot/armada-firmware/armada-firmware.mk           |   18 +++++
->  configs/solidrun_macchiatobin_mainline_defconfig  |   46 ++++++++++++++
->  configs/solidrun_macchiatobin_marvell_defconfig   |   48 +++++++++++++++
->  13 files changed, 278 insertions(+)
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+
+[1]
+http://wiki.macchiatobin.net/tiki-index.php?page=Enable+Power+Management+on+MACCHIATObin#Bootloader
+
+
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
