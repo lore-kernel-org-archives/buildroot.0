@@ -1,52 +1,73 @@
-From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Tue, 14 Nov 2017 12:11:58 +0100
-Subject: [Buildroot] xf86-video-armsoc
-In-Reply-To: <20171114110844.ut5udekj5wibzbim@flea.lan>
-References: <3bdc214f-ee7b-85c1-5794-85b1c28ef9a9@micronovasrl.com>
- <20171114110844.ut5udekj5wibzbim@flea.lan>
-Message-ID: <5003d938-9aff-9c9e-f49e-9f8639edba66@micronovasrl.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 14 Nov 2017 13:37:54 +0200
+Subject: [Buildroot] [PATCH] chrony: fix build with musl
+Message-ID: <464b10815ee2e59be56aef7c79d5569ecde913f5.1510659474.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+The SCM_TIMESTAMPING_PKTINFO macro is missing from the socket.h header
+that musl libc provides as of version 1.1.16 that we currently use in
+Buildroot. Patch the code to add this macro locally until we update
+musl.
 
-Il 14/11/2017 12:08, Maxime Ripard ha scritto:
-> Hi,
-> 
-> On Mon, Nov 13, 2017 at 08:00:40PM +0100, Giulio Benetti wrote:
->> to get r6p2 mali openGL working with X11 DMA_BUF,
->> do I need xf86-video-armsoc?
-> 
-> Yes, from here:
-> https://github.com/mripard/xf86-video-armsoc
-> 
-> You'll also need that patch:
-> https://github.com/NextThingCo/linux/commit/e390023d73a8dcbea85e5156e3930e37ca431472
-> 
-> But I'm not sure this is wise to add support for it in buildroot. That
-> ioctl will never be merged in the upstream kernel.
+Fixes:
+http://autobuild.buildroot.net/results/aab/aab3210d6d0c60fb07415d9bbdb09f2d4091446c/
+http://autobuild.buildroot.net/results/fc8/fc8440db025f51c176240ca127bc68a367add21c/
 
-So what could be the right way to keep up to date with upstream kernel?
+Cc: Nathan Lynch <ntl@pobox.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ .../chrony/0001-ntp-fix-build-with-musl-libc.patch | 39 ++++++++++++++++++++++
+ 1 file changed, 39 insertions(+)
+ create mode 100644 package/chrony/0001-ntp-fix-build-with-musl-libc.patch
 
-> 
-> Maxime
-> 
-
-Thank you pointing me to that
-
-
+diff --git a/package/chrony/0001-ntp-fix-build-with-musl-libc.patch b/package/chrony/0001-ntp-fix-build-with-musl-libc.patch
+new file mode 100644
+index 000000000000..c927b343f754
+--- /dev/null
++++ b/package/chrony/0001-ntp-fix-build-with-musl-libc.patch
+@@ -0,0 +1,39 @@
++From 1e64bc4c4379ae3e55be3c518e0e3e22c8c4ae77 Mon Sep 17 00:00:00 2001
++From: Baruch Siach <baruch@tkos.co.il>
++Date: Tue, 14 Nov 2017 13:23:57 +0200
++Subject: [PATCH] ntp: fix build with musl libc
++
++The configure script enables HAVE_LINUX_TIMESTAMPING_OPT_PKTINFO based
++on the existence of struct scm_ts_pktinfo and
++SOF_TIMESTAMPING_OPT_PKTINFO that were introduced in Linux kernel v4.13
++in the linux/net_tstamp.h kernel header. But this feature also requires
++SCM_TIMESTAMPING_PKTINFO that is defined in the socket.h header. musl
++libc provides its own version of socket.h, and as of musl version 1.1.16
++this macro is missing. Define this macro in the code as a temporary
++measure until musl is updated to its latest version.
++
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Upstream status: not upstreamable
++---
++ ntp_io_linux.c | 4 ++++
++ 1 file changed, 4 insertions(+)
++
++diff --git a/ntp_io_linux.c b/ntp_io_linux.c
++index 00caed06f7ba..2214a6f6f6c5 100644
++--- a/ntp_io_linux.c
+++++ b/ntp_io_linux.c
++@@ -574,6 +574,10 @@ extract_udp_data(unsigned char *msg, NTP_Remote_Address *remote_addr, int len)
++ 
++ /* ================================================== */
++ 
+++#ifndef SCM_TIMESTAMPING_PKTINFO
+++#define SCM_TIMESTAMPING_PKTINFO 58
+++#endif
+++
++ int
++ NIO_Linux_ProcessMessage(NTP_Remote_Address *remote_addr, NTP_Local_Address *local_addr,
++                          NTP_Local_Timestamp *local_ts, struct msghdr *hdr, int length)
++-- 
++2.15.0
++
 -- 
-Giulio Benetti
-R&D Manager &
-Advanced Research
-
-MICRONOVA SRL
-Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
-Tel. 049/8931563 - Fax 049/8931346
-Cod.Fiscale - P.IVA 02663420285
-Capitale Sociale ? 26.000 i.v.
-Iscritta al Reg. Imprese di Padova N. 02663420285
-Numero R.E.A. 258642
+2.15.0
