@@ -1,177 +1,70 @@
-From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Tue, 14 Nov 2017 20:39:05 +0100
-Subject: [Buildroot] [PATCH v4 1/1] sunxi-mali-mainline: new package
-Message-ID: <1510688345-16840-1-git-send-email-giulio.benetti@micronovasrl.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Tue, 14 Nov 2017 21:25:20 +0100
+Subject: [Buildroot] [PATCH 1/1] package/kodi: bump version to 17.6
+Message-ID: <20171114202520.6633-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add Allwinner Mali openGL userspace driver r6p2.
-Used combined with kernelspace Mali driver,
-it gives possibility to use 3D openGL SoC acceleration.
-It provides fbdev libraries and headers.
-It is compatible with Linux >= 4.4 as sunxi-mali-driver-mainline.
-
-Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
-Changes v3 -> v4:
-* removed X11 support
- DEVELOPERS                                         |  1 +
- package/Config.in                                  |  1 +
- package/sunxi-mali-mainline/Config.in              | 38 ++++++++++++++++++++++
- package/sunxi-mali-mainline/egl.pc                 | 12 +++++++
- package/sunxi-mali-mainline/glesv2.pc              | 12 +++++++
- package/sunxi-mali-mainline/sunxi-mali-mainline.mk | 33 +++++++++++++++++++
- 6 files changed, 97 insertions(+)
- create mode 100644 package/sunxi-mali-mainline/Config.in
- create mode 100644 package/sunxi-mali-mainline/egl.pc
- create mode 100644 package/sunxi-mali-mainline/glesv2.pc
- create mode 100644 package/sunxi-mali-mainline/sunxi-mali-mainline.mk
+ package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk | 2 +-
+ package/kodi-texturepacker/kodi-texturepacker.mk         | 2 +-
+ package/kodi/kodi.hash                                   | 2 +-
+ package/kodi/kodi.mk                                     | 2 +-
+ 4 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 2fe95c8..1a751b8 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -697,6 +697,7 @@ F:	package/webp/
+diff --git a/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk b/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
+index 3bb67d88a1..fcf4888a9c 100644
+--- a/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
++++ b/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
+@@ -6,7 +6,7 @@
  
- N:	Giulio Benetti <giulio.benetti@micronovasrl.com>
- F:	package/sunxi-mali-driver-mainline/
-+F:	package/sunxi-mali-mainline/
+ # Not possible to directly refer to kodi variables, because of
+ # first/second expansion trickery...
+-KODI_JSONSCHEMABUILDER_VERSION = 17.5-Krypton
++KODI_JSONSCHEMABUILDER_VERSION = 17.6-Krypton
+ KODI_JSONSCHEMABUILDER_SITE = $(call github,xbmc,xbmc,$(KODI_JSONSCHEMABUILDER_VERSION))
+ KODI_JSONSCHEMABUILDER_SOURCE = kodi-$(KODI_JSONSCHEMABUILDER_VERSION).tar.gz
+ KODI_JSONSCHEMABUILDER_LICENSE = GPL-2.0
+diff --git a/package/kodi-texturepacker/kodi-texturepacker.mk b/package/kodi-texturepacker/kodi-texturepacker.mk
+index 77a9e3be4e..31e3580aed 100644
+--- a/package/kodi-texturepacker/kodi-texturepacker.mk
++++ b/package/kodi-texturepacker/kodi-texturepacker.mk
+@@ -6,7 +6,7 @@
  
- N:	Gregory Dymarek <gregd72002@gmail.com>
- F:	package/ding-libs/
-diff --git a/package/Config.in b/package/Config.in
-index 8de2227..041c6f6 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -497,6 +497,7 @@ endmenu
- 	source "package/stm32flash/Config.in"
- 	source "package/sunxi-cedarx/Config.in"
- 	source "package/sunxi-mali-driver-mainline/Config.in"
-+	source "package/sunxi-mali-mainline/Config.in"
- 	source "package/sunxi-mali/Config.in"
- 	source "package/sysstat/Config.in"
- 	source "package/targetcli-fb/Config.in"
-diff --git a/package/sunxi-mali-mainline/Config.in b/package/sunxi-mali-mainline/Config.in
-new file mode 100644
-index 0000000..0b180d7
---- /dev/null
-+++ b/package/sunxi-mali-mainline/Config.in
-@@ -0,0 +1,38 @@
-+config BR2_PACKAGE_SUNXI_MALI_MAINLINE
-+	bool "sunxi-mali-mainline"
-+	depends on BR2_arm
-+	depends on BR2_ARM_EABIHF
-+	depends on BR2_TOOLCHAIN_USES_GLIBC
-+	select BR2_PACKAGE_HAS_LIBEGL
-+	select BR2_PACKAGE_HAS_LIBGLES
-+	help
-+	  Install the ARM Mali drivers for sunxi based systems (i.e
-+	  systems based on ARM Allwinner SoCs). This driver requires
-+	  either the sunxi-kernel with the ARM Mali driver enabled or
-+	  the installation of the ARM Mali drivers as an external
-+	  module.
-+
-+if BR2_PACKAGE_SUNXI_MALI_MAINLINE
-+
-+config BR2_PACKAGE_PROVIDES_LIBEGL
-+	default "sunxi-mali-mainline"
-+
-+config BR2_PACKAGE_PROVIDES_LIBGLES
-+	default "sunxi-mali-mainline"
-+
-+choice
-+	prompt "Version"
-+	default BR2_PACKAGE_SUNXI_MALI_MAINLINE_R6P2
-+	help
-+	  Select the version of the kernel module.
-+
-+config BR2_PACKAGE_SUNXI_MALI_MAINLINE_R6P2
-+	bool "r6p2"
-+
-+endchoice
-+
-+endif
-+
-+comment "sunxi-mali needs an EABIhf glibc toolchain"
-+	depends on BR2_arm
-+	depends on !BR2_TOOLCHAIN_USES_GLIBC || !BR2_ARM_EABIHF
-diff --git a/package/sunxi-mali-mainline/egl.pc b/package/sunxi-mali-mainline/egl.pc
-new file mode 100644
-index 0000000..3854e5f
---- /dev/null
-+++ b/package/sunxi-mali-mainline/egl.pc
-@@ -0,0 +1,12 @@
-+prefix=/usr/
-+exec_prefix=${prefix}
-+libdir=${exec_prefix}/lib
-+includedir=${prefix}/include
-+
-+Name: egl
-+Description: ARM Mali implementation of EGL
-+Version: 1.4
-+Requires:
-+Libs: -L${libdir} -lEGL -lGLESv2
-+Cflags: -I${includedir}
-+
-diff --git a/package/sunxi-mali-mainline/glesv2.pc b/package/sunxi-mali-mainline/glesv2.pc
-new file mode 100644
-index 0000000..6910b46
---- /dev/null
-+++ b/package/sunxi-mali-mainline/glesv2.pc
-@@ -0,0 +1,12 @@
-+prefix=/usr
-+exec_prefix=${prefix}
-+libdir=${exec_prefix}/lib
-+includedir=${prefix}/include
-+
-+Name: glesv2
-+Description: ARM Mali implementation of OpenGL ESv2
-+Version: 2.0
-+Requires:
-+Libs: -L${libdir} -lGLESv2 -lGLESv1_CM
-+Cflags: -I${includedir}
-+
-diff --git a/package/sunxi-mali-mainline/sunxi-mali-mainline.mk b/package/sunxi-mali-mainline/sunxi-mali-mainline.mk
-new file mode 100644
-index 0000000..1f7c05c
---- /dev/null
-+++ b/package/sunxi-mali-mainline/sunxi-mali-mainline.mk
-@@ -0,0 +1,33 @@
-+################################################################################
-+#
-+# sunxi-mali-mainline
-+#
-+################################################################################
-+
-+SUNXI_MALI_MAINLINE_VERSION = cb3e8ece9b2c3a70cbeb3204cd6f30eceaa32023
-+SUNXI_MALI_MAINLINE_SITE = $(call github,free-electrons,mali-blobs,$(SUNXI_MALI_MAINLINE_VERSION))
-+SUNXI_MALI_MAINLINE_INSTALL_STAGING = YES
-+SUNXI_MALI_MAINLINE_PROVIDES = libegl libgles
-+
-+ifeq ($(BR2_PACKAGE_SUNXI_MALI_MAINLINE_R6P2),y)
-+SUNXI_MALI_LIB_VER=r6p2
-+endif
-+
-+define SUNXI_MALI_MAINLINE_INSTALL_STAGING_CMDS
-+	cp -rf $(@D)/$(SUNXI_MALI_LIB_VER)/fbdev/lib/lib_fb_dev/* \
-+		$(STAGING_DIR)/usr/lib/
-+	cp -rf $(@D)/$(SUNXI_MALI_LIB_VER)/fbdev/include/* \
-+		$(STAGING_DIR)/usr/include/
-+
-+	$(INSTALL) -D -m 0644 package/sunxi-mali-mainline/egl.pc \
-+		$(STAGING_DIR)/usr/lib/pkgconfig/egl.pc
-+	$(INSTALL) -D -m 0644 package/sunxi-mali-mainline/glesv2.pc \
-+		$(STAGING_DIR)/usr/lib/pkgconfig/glesv2.pc
-+endef
-+
-+define SUNXI_MALI_MAINLINE_INSTALL_TARGET_CMDS
-+	cp -rf $(@D)/$(SUNXI_MALI_LIB_VER)/fbdev/lib/lib_fb_dev/* \
-+		$(TARGET_DIR)/usr/lib/
-+endef
-+
-+$(eval $(generic-package))
+ # Not possible to directly refer to kodi variables, because of
+ # first/second expansion trickery...
+-KODI_TEXTUREPACKER_VERSION = 17.5-Krypton
++KODI_TEXTUREPACKER_VERSION = 17.6-Krypton
+ KODI_TEXTUREPACKER_SITE = $(call github,xbmc,xbmc,$(KODI_TEXTUREPACKER_VERSION))
+ KODI_TEXTUREPACKER_SOURCE = kodi-$(KODI_TEXTUREPACKER_VERSION).tar.gz
+ KODI_TEXTUREPACKER_LICENSE = GPL-2.0
+diff --git a/package/kodi/kodi.hash b/package/kodi/kodi.hash
+index ed3aea0255..23a11ca494 100644
+--- a/package/kodi/kodi.hash
++++ b/package/kodi/kodi.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256 84c64acc270b9e845a67fbbe481ae5ddeb9b4568d76e42f2d5f9160fe0ce2de2  kodi-17.5-Krypton.tar.gz
++sha256 c8312fe92e5bab1cdac1da93d60baed88fa1574146c50c44e3c86d01671c2b1d  kodi-17.6-Krypton.tar.gz
+ # Locally computed - libdvdcss
+ sha256 b6eb2d929ff56cb051152c32010afc5e7cf5fe8c5ae32dca412a2b46b6b57e34  2f12236.tar.gz
+ # Locally computed - libdvdnav
+diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
+index cd84a2b22b..05a4fbdda6 100644
+--- a/package/kodi/kodi.mk
++++ b/package/kodi/kodi.mk
+@@ -6,7 +6,7 @@
+ 
+ # When updating the version, please also update kodi-jsonschemabuilder
+ # and kodi-texturepacker
+-KODI_VERSION = 17.5-Krypton
++KODI_VERSION = 17.6-Krypton
+ KODI_SITE = $(call github,xbmc,xbmc,$(KODI_VERSION))
+ KODI_LICENSE = GPL-2.0
+ KODI_LICENSE_FILES = LICENSE.GPL
 -- 
-2.7.4
+2.11.0
