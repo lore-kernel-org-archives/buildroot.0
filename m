@@ -1,73 +1,202 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Tue, 14 Nov 2017 14:22:41 +0100
-Subject: [Buildroot] [PATCH] python-treq: bump version to 17.8.0
-Message-ID: <20171114132241.6831-1-yegorslists@googlemail.com>
+From: Maxime Ripard <maxime.ripard@free-electrons.com>
+Date: Tue, 14 Nov 2017 14:56:19 +0100
+Subject: [Buildroot] [PATCH v3 1/1] sunxi-mali-mainline: new package
+In-Reply-To: <1510598938-29999-1-git-send-email-giulio.benetti@micronovasrl.com>
+References: <1510598938-29999-1-git-send-email-giulio.benetti@micronovasrl.com>
+Message-ID: <20171114135619.4jslv5l36sobhznd@flea.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+Hi,
 
-Add new runtime dependencies and add licence file checksum.
+On Mon, Nov 13, 2017 at 07:48:58PM +0100, Giulio Benetti wrote:
+> Add Allwinner Mali openGL userspace driver r6p2.
+> Used combined with kernelspace Mali driver,
+> it gives possibility to use 3D openGL SoC acceleration.
+> It provides both fbdev and X11 libraries and headers.
+> It is compatible with Linux >= 4.4 as sunxi-mali-driver-mainline.
+> 
+> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+> ---
+> Changes v2 -> v3:
+> * added package into package/Config.in
+>  DEVELOPERS                                         |  1 +
+>  package/Config.in                                  |  1 +
+>  package/sunxi-mali-mainline/Config.in              | 43 +++++++++++++++
+>  package/sunxi-mali-mainline/egl.pc                 | 12 +++++
+>  package/sunxi-mali-mainline/glesv2.pc              | 12 +++++
+>  package/sunxi-mali-mainline/sunxi-mali-mainline.mk | 62 ++++++++++++++++++++++
+>  6 files changed, 131 insertions(+)
+>  create mode 100644 package/sunxi-mali-mainline/Config.in
+>  create mode 100644 package/sunxi-mali-mainline/egl.pc
+>  create mode 100644 package/sunxi-mali-mainline/glesv2.pc
+>  create mode 100644 package/sunxi-mali-mainline/sunxi-mali-mainline.mk
+> 
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 2fe95c8..1a751b8 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -697,6 +697,7 @@ F:	package/webp/
+>  
+>  N:	Giulio Benetti <giulio.benetti@micronovasrl.com>
+>  F:	package/sunxi-mali-driver-mainline/
+> +F:	package/sunxi-mali-mainline/
+>  
+>  N:	Gregory Dymarek <gregd72002@gmail.com>
+>  F:	package/ding-libs/
+> diff --git a/package/Config.in b/package/Config.in
+> index 8de2227..041c6f6 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -497,6 +497,7 @@ endmenu
+>  	source "package/stm32flash/Config.in"
+>  	source "package/sunxi-cedarx/Config.in"
+>  	source "package/sunxi-mali-driver-mainline/Config.in"
+> +	source "package/sunxi-mali-mainline/Config.in"
+>  	source "package/sunxi-mali/Config.in"
+>  	source "package/sysstat/Config.in"
+>  	source "package/targetcli-fb/Config.in"
+> diff --git a/package/sunxi-mali-mainline/Config.in b/package/sunxi-mali-mainline/Config.in
+> new file mode 100644
+> index 0000000..652cbc5
+> --- /dev/null
+> +++ b/package/sunxi-mali-mainline/Config.in
+> @@ -0,0 +1,43 @@
+> +config BR2_PACKAGE_SUNXI_MALI_MAINLINE
+> +	bool "sunxi-mali-mainline"
+> +	depends on BR2_arm
+> +	depends on BR2_ARM_EABIHF
+> +	depends on BR2_TOOLCHAIN_USES_GLIBC
+> +	select BR2_PACKAGE_HAS_LIBEGL
+> +	select BR2_PACKAGE_HAS_LIBGLES
+> +	select BR2_PACKAGE_LIBDRM if BR2_PACKAGE_XORG7
+> +	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XORG7
+> +	select BR2_PACKAGE_XLIB_LIBXEXT if BR2_PACKAGE_XORG7
+> +	select BR2_PACKAGE_XLIB_LIBXFIXES if BR2_PACKAGE_XORG7
+> +	select BR2_PACKAGE_XLIB_LIBXDAMAGE if BR2_PACKAGE_XORG7
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/python-treq/Config.in        | 6 ++++--
- package/python-treq/python-treq.hash | 5 +++--
- package/python-treq/python-treq.mk   | 4 ++--
- 3 files changed, 9 insertions(+), 6 deletions(-)
+Can't you make the selection of whether you want X11 vs fbdev
+interfaces a choice rather than inferring it from the configuration?
 
-diff --git a/package/python-treq/Config.in b/package/python-treq/Config.in
-index 2047cc0dc7..3a121ea71a 100644
---- a/package/python-treq/Config.in
-+++ b/package/python-treq/Config.in
-@@ -1,14 +1,16 @@
- config BR2_PACKAGE_PYTHON_TREQ
- 	bool "python-treq"
- 	depends on BR2_INSTALL_LIBSTDCPP # python-pyopenssl
-+	select BR2_PACKAGE_PYTHON_ATTRS # runtime
-+	select BR2_PACKAGE_PYTHON_IDNA # runtime
-+	select BR2_PACKAGE_PYTHON_PYOPENSSL # runtime
- 	select BR2_PACKAGE_PYTHON_REQUESTS # runtime
- 	select BR2_PACKAGE_PYTHON_SERVICE_IDENTITY # runtime
- 	select BR2_PACKAGE_PYTHON_SIX # runtime
- 	select BR2_PACKAGE_PYTHON_TWISTED # runtime
--	select BR2_PACKAGE_PYTHON_PYOPENSSL # runtime
- 	help
- 	  treq is an HTTP library inspired by requests but written on
--	  top of Twisted's Agents.  It provides a simple, higher level
-+	  top of Twisted's Agents. It provides a simple, higher level
- 	  API for making HTTP requests when using Twisted.
- 
- 	  https://github.com/twisted/treq
-diff --git a/package/python-treq/python-treq.hash b/package/python-treq/python-treq.hash
-index a961b809ae..14f39460fa 100644
---- a/package/python-treq/python-treq.hash
-+++ b/package/python-treq/python-treq.hash
-@@ -1,3 +1,4 @@
- # md5 from https://pypi.python.org/pypi/treq/json, sha256 locally computed
--md5 421dea5bc8294c14aa24d64628a2eaea treq-16.12.0.tar.gz
--sha256 b008edc81157969ad2bf23bece083adedb0adf249368a3896bb5ac9a871b91a9 treq-16.12.0.tar.gz
-+md5	7e1f5079b85ec104d4759fc0fb89071e  treq-17.8.0.tar.gz
-+sha256	ef72d2d5e0b24bdf29267b608fa33df0ac401743af8524438b073e1fb2b66f16  treq-17.8.0.tar.gz
-+sha256  7cc1b65e1937b1cc07052bb864ec96d8e5fd413400c0842e5b89a8201a600293  LICENSE
-diff --git a/package/python-treq/python-treq.mk b/package/python-treq/python-treq.mk
-index 051b8ffaaf..73c47152a8 100644
---- a/package/python-treq/python-treq.mk
-+++ b/package/python-treq/python-treq.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_TREQ_VERSION = 16.12.0
-+PYTHON_TREQ_VERSION = 17.8.0
- PYTHON_TREQ_SOURCE = treq-$(PYTHON_TREQ_VERSION).tar.gz
--PYTHON_TREQ_SITE = https://pypi.python.org/packages/26/4b/303880fb5bab1111654df2df0f201f4ba038221bdc52f5a395f0abfc0cb1
-+PYTHON_TREQ_SITE = https://pypi.python.org/packages/11/3e/1014f26bfd4d07db015ad48384446b3bdc4de4bbdd2eba3be7fbb149cc44
- PYTHON_TREQ_LICENSE = MIT
- PYTHON_TREQ_LICENSE_FILES = LICENSE
- PYTHON_TREQ_SETUP_TYPE = setuptools
+> +	help
+> +	  Install the ARM Mali drivers for sunxi based systems (i.e
+> +	  systems based on ARM Allwinner SoCs). This driver requires
+> +	  either the sunxi-kernel with the ARM Mali driver enabled or
+> +	  the installation of the ARM Mali drivers as an external
+> +	  module.
+> +
+> +if BR2_PACKAGE_SUNXI_MALI_MAINLINE
+> +
+> +config BR2_PACKAGE_PROVIDES_LIBEGL
+> +	default "sunxi-mali-mainline"
+> +
+> +config BR2_PACKAGE_PROVIDES_LIBGLES
+> +	default "sunxi-mali-mainline"
+> +
+> +choice
+> +	prompt "Version"
+> +	default BR2_PACKAGE_SUNXI_MALI_MAINLINE_R6P2
+> +	help
+> +	  Select the version of the kernel module.
+> +
+> +config BR2_PACKAGE_SUNXI_MALI_MAINLINE_R6P2
+> +	bool "r6p2"
+> +
+> +endchoice
+> +
+> +endif
+> +
+> +comment "sunxi-mali needs an EABIhf glibc toolchain"
+> +	depends on BR2_arm
+> +	depends on !BR2_TOOLCHAIN_USES_GLIBC || !BR2_ARM_EABIHF
+> diff --git a/package/sunxi-mali-mainline/egl.pc b/package/sunxi-mali-mainline/egl.pc
+> new file mode 100644
+> index 0000000..3854e5f
+> --- /dev/null
+> +++ b/package/sunxi-mali-mainline/egl.pc
+> @@ -0,0 +1,12 @@
+> +prefix=/usr/
+> +exec_prefix=${prefix}
+> +libdir=${exec_prefix}/lib
+> +includedir=${prefix}/include
+> +
+> +Name: egl
+> +Description: ARM Mali implementation of EGL
+> +Version: 1.4
+> +Requires:
+> +Libs: -L${libdir} -lEGL -lGLESv2
+> +Cflags: -I${includedir}
+> +
+> diff --git a/package/sunxi-mali-mainline/glesv2.pc b/package/sunxi-mali-mainline/glesv2.pc
+> new file mode 100644
+> index 0000000..6910b46
+> --- /dev/null
+> +++ b/package/sunxi-mali-mainline/glesv2.pc
+> @@ -0,0 +1,12 @@
+> +prefix=/usr
+> +exec_prefix=${prefix}
+> +libdir=${exec_prefix}/lib
+> +includedir=${prefix}/include
+> +
+> +Name: glesv2
+> +Description: ARM Mali implementation of OpenGL ESv2
+> +Version: 2.0
+> +Requires:
+> +Libs: -L${libdir} -lGLESv2 -lGLESv1_CM
+> +Cflags: -I${includedir}
+> +
+> diff --git a/package/sunxi-mali-mainline/sunxi-mali-mainline.mk b/package/sunxi-mali-mainline/sunxi-mali-mainline.mk
+> new file mode 100644
+> index 0000000..6540b2c
+> --- /dev/null
+> +++ b/package/sunxi-mali-mainline/sunxi-mali-mainline.mk
+> @@ -0,0 +1,62 @@
+> +################################################################################
+> +#
+> +# sunxi-mali-mainline
+> +#
+> +################################################################################
+> +
+> +SUNXI_MALI_MAINLINE_VERSION = cb3e8ece9b2c3a70cbeb3204cd6f30eceaa32023
+> +SUNXI_MALI_MAINLINE_SITE = $(call github,free-electrons,mali-blobs,$(SUNXI_MALI_MAINLINE_VERSION))
+> +SUNXI_MALI_MAINLINE_INSTALL_STAGING = YES
+> +SUNXI_MALI_MAINLINE_PROVIDES = libegl libgles
+> +
+> +ifeq ($(BR2_PACKAGE_SUNXI_MALI_MAINLINE_R6P2),y)
+> +SUNXI_MALI_LIB_VER=r6p2
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_XLIB_LIBX11),y)
+> +SUNXI_MALI_MAINLINE_DEPENDENCIES += xlib_libX11 xlib_libXfixes \
+> +				    xlib_libXext xlib_libXdamage libdrm
+> +endif
+> +
+> +define SUNXI_MALI_MAINLINE_BUILD_CMDS
+> +endef
+> +
+> +ifeq ($(BR2_PACKAGE_XLIB_LIBX11),y)
+> +define SUNXI_MALI_MAINLINE_INSTALL_STAGING_CMDS
+> +	cp -rf $(@D)/$(SUNXI_MALI_LIB_VER)/x11_dma_buf/lib_x11_dma_buf/* \
+> +		$(STAGING_DIR)/usr/lib
+> +	cp -rf $(@D)/$(SUNXI_MALI_LIB_VER)/x11_ump/include/* \
+> +		$(STAGING_DIR)/usr/include/
+
+That seems hackish. At least having a comment on why it's not an issue
+would be good.
+
+Maxime
+
 -- 
-2.11.0
+Maxime Ripard, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 801 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20171114/5397f0af/attachment.asc>
