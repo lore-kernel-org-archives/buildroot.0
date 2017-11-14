@@ -1,219 +1,227 @@
-From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Tue, 14 Nov 2017 15:44:16 +0100
-Subject: [Buildroot] [PATCH v3 1/1] sunxi-mali-mainline: new package
-In-Reply-To: <20171114135619.4jslv5l36sobhznd@flea.lan>
-References: <1510598938-29999-1-git-send-email-giulio.benetti@micronovasrl.com>
- <20171114135619.4jslv5l36sobhznd@flea.lan>
-Message-ID: <3e05bdb1-c91a-a4c7-cc24-520614e05b7c@micronovasrl.com>
+From: Norbert Lange <nolange79@gmail.com>
+Date: Tue, 14 Nov 2017 15:54:42 +0100
+Subject: [Buildroot] [PATCH 1/1] Add TCF Agent package
+Message-ID: <20171114145442.16734-1-norbert.lange@andritz.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Signed-off-by: Norbert Lange <norbert.lange@andritz.com>
+---
+ package/Config.in                                  |  1 +
+ ...add-CMake-install-target-for-agent-binary.patch | 35 ++++++++++++++++
+ package/tcfagent/Config.in                         | 16 ++++++++
+ package/tcfagent/S55tcfagent                       | 47 ++++++++++++++++++++++
+ package/tcfagent/tcfagent.hash                     |  4 ++
+ package/tcfagent/tcfagent.mk                       | 38 +++++++++++++++++
+ package/tcfagent/tcfagent.service                  | 10 +++++
+ 7 files changed, 151 insertions(+)
+ create mode 100644 package/tcfagent/0001-add-CMake-install-target-for-agent-binary.patch
+ create mode 100644 package/tcfagent/Config.in
+ create mode 100755 package/tcfagent/S55tcfagent
+ create mode 100644 package/tcfagent/tcfagent.hash
+ create mode 100644 package/tcfagent/tcfagent.mk
+ create mode 100644 package/tcfagent/tcfagent.service
 
-Il 14/11/2017 14:56, Maxime Ripard ha scritto:
-> Hi,
-> 
-> On Mon, Nov 13, 2017 at 07:48:58PM +0100, Giulio Benetti wrote:
->> Add Allwinner Mali openGL userspace driver r6p2.
->> Used combined with kernelspace Mali driver,
->> it gives possibility to use 3D openGL SoC acceleration.
->> It provides both fbdev and X11 libraries and headers.
->> It is compatible with Linux >= 4.4 as sunxi-mali-driver-mainline.
->>
->> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
->> ---
->> Changes v2 -> v3:
->> * added package into package/Config.in
->>   DEVELOPERS                                         |  1 +
->>   package/Config.in                                  |  1 +
->>   package/sunxi-mali-mainline/Config.in              | 43 +++++++++++++++
->>   package/sunxi-mali-mainline/egl.pc                 | 12 +++++
->>   package/sunxi-mali-mainline/glesv2.pc              | 12 +++++
->>   package/sunxi-mali-mainline/sunxi-mali-mainline.mk | 62 ++++++++++++++++++++++
->>   6 files changed, 131 insertions(+)
->>   create mode 100644 package/sunxi-mali-mainline/Config.in
->>   create mode 100644 package/sunxi-mali-mainline/egl.pc
->>   create mode 100644 package/sunxi-mali-mainline/glesv2.pc
->>   create mode 100644 package/sunxi-mali-mainline/sunxi-mali-mainline.mk
->>
->> diff --git a/DEVELOPERS b/DEVELOPERS
->> index 2fe95c8..1a751b8 100644
->> --- a/DEVELOPERS
->> +++ b/DEVELOPERS
->> @@ -697,6 +697,7 @@ F:	package/webp/
->>   
->>   N:	Giulio Benetti <giulio.benetti@micronovasrl.com>
->>   F:	package/sunxi-mali-driver-mainline/
->> +F:	package/sunxi-mali-mainline/
->>   
->>   N:	Gregory Dymarek <gregd72002@gmail.com>
->>   F:	package/ding-libs/
->> diff --git a/package/Config.in b/package/Config.in
->> index 8de2227..041c6f6 100644
->> --- a/package/Config.in
->> +++ b/package/Config.in
->> @@ -497,6 +497,7 @@ endmenu
->>   	source "package/stm32flash/Config.in"
->>   	source "package/sunxi-cedarx/Config.in"
->>   	source "package/sunxi-mali-driver-mainline/Config.in"
->> +	source "package/sunxi-mali-mainline/Config.in"
->>   	source "package/sunxi-mali/Config.in"
->>   	source "package/sysstat/Config.in"
->>   	source "package/targetcli-fb/Config.in"
->> diff --git a/package/sunxi-mali-mainline/Config.in b/package/sunxi-mali-mainline/Config.in
->> new file mode 100644
->> index 0000000..652cbc5
->> --- /dev/null
->> +++ b/package/sunxi-mali-mainline/Config.in
->> @@ -0,0 +1,43 @@
->> +config BR2_PACKAGE_SUNXI_MALI_MAINLINE
->> +	bool "sunxi-mali-mainline"
->> +	depends on BR2_arm
->> +	depends on BR2_ARM_EABIHF
->> +	depends on BR2_TOOLCHAIN_USES_GLIBC
->> +	select BR2_PACKAGE_HAS_LIBEGL
->> +	select BR2_PACKAGE_HAS_LIBGLES
->> +	select BR2_PACKAGE_LIBDRM if BR2_PACKAGE_XORG7
->> +	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XORG7
->> +	select BR2_PACKAGE_XLIB_LIBXEXT if BR2_PACKAGE_XORG7
->> +	select BR2_PACKAGE_XLIB_LIBXFIXES if BR2_PACKAGE_XORG7
->> +	select BR2_PACKAGE_XLIB_LIBXDAMAGE if BR2_PACKAGE_XORG7
-> 
-> Can't you make the selection of whether you want X11 vs fbdev
-> interfaces a choice rather than inferring it from the configuration?
-
-As you told about X11 DMA_BUF Mali on "Re: xf86-video-armsoc":
-"There's no proper way available at the moment.",
-I think it doesn't make sense to add X11 support,
-what do you think?
-
-> 
->> +	help
->> +	  Install the ARM Mali drivers for sunxi based systems (i.e
->> +	  systems based on ARM Allwinner SoCs). This driver requires
->> +	  either the sunxi-kernel with the ARM Mali driver enabled or
->> +	  the installation of the ARM Mali drivers as an external
->> +	  module.
->> +
->> +if BR2_PACKAGE_SUNXI_MALI_MAINLINE
->> +
->> +config BR2_PACKAGE_PROVIDES_LIBEGL
->> +	default "sunxi-mali-mainline"
->> +
->> +config BR2_PACKAGE_PROVIDES_LIBGLES
->> +	default "sunxi-mali-mainline"
->> +
->> +choice
->> +	prompt "Version"
->> +	default BR2_PACKAGE_SUNXI_MALI_MAINLINE_R6P2
->> +	help
->> +	  Select the version of the kernel module.
->> +
->> +config BR2_PACKAGE_SUNXI_MALI_MAINLINE_R6P2
->> +	bool "r6p2"
->> +
->> +endchoice
->> +
->> +endif
->> +
->> +comment "sunxi-mali needs an EABIhf glibc toolchain"
->> +	depends on BR2_arm
->> +	depends on !BR2_TOOLCHAIN_USES_GLIBC || !BR2_ARM_EABIHF
->> diff --git a/package/sunxi-mali-mainline/egl.pc b/package/sunxi-mali-mainline/egl.pc
->> new file mode 100644
->> index 0000000..3854e5f
->> --- /dev/null
->> +++ b/package/sunxi-mali-mainline/egl.pc
->> @@ -0,0 +1,12 @@
->> +prefix=/usr/
->> +exec_prefix=${prefix}
->> +libdir=${exec_prefix}/lib
->> +includedir=${prefix}/include
->> +
->> +Name: egl
->> +Description: ARM Mali implementation of EGL
->> +Version: 1.4
->> +Requires:
->> +Libs: -L${libdir} -lEGL -lGLESv2
->> +Cflags: -I${includedir}
->> +
->> diff --git a/package/sunxi-mali-mainline/glesv2.pc b/package/sunxi-mali-mainline/glesv2.pc
->> new file mode 100644
->> index 0000000..6910b46
->> --- /dev/null
->> +++ b/package/sunxi-mali-mainline/glesv2.pc
->> @@ -0,0 +1,12 @@
->> +prefix=/usr
->> +exec_prefix=${prefix}
->> +libdir=${exec_prefix}/lib
->> +includedir=${prefix}/include
->> +
->> +Name: glesv2
->> +Description: ARM Mali implementation of OpenGL ESv2
->> +Version: 2.0
->> +Requires:
->> +Libs: -L${libdir} -lGLESv2 -lGLESv1_CM
->> +Cflags: -I${includedir}
->> +
->> diff --git a/package/sunxi-mali-mainline/sunxi-mali-mainline.mk b/package/sunxi-mali-mainline/sunxi-mali-mainline.mk
->> new file mode 100644
->> index 0000000..6540b2c
->> --- /dev/null
->> +++ b/package/sunxi-mali-mainline/sunxi-mali-mainline.mk
->> @@ -0,0 +1,62 @@
->> +################################################################################
->> +#
->> +# sunxi-mali-mainline
->> +#
->> +################################################################################
->> +
->> +SUNXI_MALI_MAINLINE_VERSION = cb3e8ece9b2c3a70cbeb3204cd6f30eceaa32023
->> +SUNXI_MALI_MAINLINE_SITE = $(call github,free-electrons,mali-blobs,$(SUNXI_MALI_MAINLINE_VERSION))
->> +SUNXI_MALI_MAINLINE_INSTALL_STAGING = YES
->> +SUNXI_MALI_MAINLINE_PROVIDES = libegl libgles
->> +
->> +ifeq ($(BR2_PACKAGE_SUNXI_MALI_MAINLINE_R6P2),y)
->> +SUNXI_MALI_LIB_VER=r6p2
->> +endif
->> +
->> +ifeq ($(BR2_PACKAGE_XLIB_LIBX11),y)
->> +SUNXI_MALI_MAINLINE_DEPENDENCIES += xlib_libX11 xlib_libXfixes \
->> +				    xlib_libXext xlib_libXdamage libdrm
->> +endif
->> +
->> +define SUNXI_MALI_MAINLINE_BUILD_CMDS
->> +endef
->> +
->> +ifeq ($(BR2_PACKAGE_XLIB_LIBX11),y)
->> +define SUNXI_MALI_MAINLINE_INSTALL_STAGING_CMDS
->> +	cp -rf $(@D)/$(SUNXI_MALI_LIB_VER)/x11_dma_buf/lib_x11_dma_buf/* \
->> +		$(STAGING_DIR)/usr/lib
->> +	cp -rf $(@D)/$(SUNXI_MALI_LIB_VER)/x11_ump/include/* \
->> +		$(STAGING_DIR)/usr/include/
-> 
-> That seems hackish. At least having a comment on why it's not an issue
-> would be good.
-
-As told before, it makes sense to remove it.
-Anyway you're right, it seems a mistake and I had to comment it.
-
-> 
-> Maxime
-> 
-
-
+diff --git a/package/Config.in b/package/Config.in
+index fe5ccc434e..ab152677e5 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -124,6 +124,7 @@ menu "Debugging, profiling and benchmark"
+ 	source "package/stress-ng/Config.in"
+ 	source "package/sysdig/Config.in"
+ 	source "package/sysprof/Config.in"
++	source "package/tcfagent/Config.in"
+ 	source "package/tinymembench/Config.in"
+ 	source "package/trace-cmd/Config.in"
+ 	source "package/trinity/Config.in"
+diff --git a/package/tcfagent/0001-add-CMake-install-target-for-agent-binary.patch b/package/tcfagent/0001-add-CMake-install-target-for-agent-binary.patch
+new file mode 100644
+index 0000000000..bb9c334d91
+--- /dev/null
++++ b/package/tcfagent/0001-add-CMake-install-target-for-agent-binary.patch
+@@ -0,0 +1,35 @@
++From 9140c630085833acfe565f27195a876c6656f068 Mon Sep 17 00:00:00 2001
++From: Norbert Lange <norbert.lange@andritz.com>
++Date: Mon, 30 Oct 2017 16:22:40 +0100
++Subject: [PATCH] add CMake install target for agent binary
++
++allows use in automated buildsystems like Buildroot
++---
++ agent/CMakeLists.txt | 5 +++++
++ 1 file changed, 5 insertions(+)
++
++diff --git a/agent/CMakeLists.txt b/agent/CMakeLists.txt
++index aef15b96..7868987a 100644
++--- a/agent/CMakeLists.txt
+++++ b/agent/CMakeLists.txt
++@@ -1,6 +1,7 @@
++ # -*- cmake -*-
++ 
++ cmake_minimum_required(VERSION 2.8)
+++include(GNUInstallDirs)
++ 
++ set(CMAKE_COLOR_MAKEFILE OFF)
++ 
++@@ -43,3 +44,9 @@ message(STATUS "machine:" ${TCF_MACHINE})
++ 
++ add_executable(agent tcf/main/main.c)
++ target_link_libraries(agent ${TCF_LIB_NAME})
+++
+++install(TARGETS agent ${TCF_LIB_NAME}
+++  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+++  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+++  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+++)
++-- 
++2.14.2
++
+diff --git a/package/tcfagent/Config.in b/package/tcfagent/Config.in
+new file mode 100644
+index 0000000000..1374fdf88d
+--- /dev/null
++++ b/package/tcfagent/Config.in
+@@ -0,0 +1,16 @@
++config BR2_PACKAGE_TCFAGENT
++	bool "tcfagent"
++	depends on BR2_TOOLCHAIN_HAS_THREADS # snmp++
++	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
++	help
++	  Target Communication Framework Agent is an example application
++	  using the Target Communication Framework Library.
++
++	  Target Communication Framework is universal, extensible, simple,
++	  lightweight, vendor agnostic framework for tools and targets to
++	  communicate for purpose of debugging, profiling, code patching and
++	  other device software development needs. tcf-agent is a daemon,
++	  which provides TCF services that can be used by local and remote clients.
++
++comment "tcfagent needs a toolchain w/ threads, C++, dynamic library"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/tcfagent/S55tcfagent b/package/tcfagent/S55tcfagent
+new file mode 100755
+index 0000000000..b022d5eb92
+--- /dev/null
++++ b/package/tcfagent/S55tcfagent
+@@ -0,0 +1,47 @@
++#!/bin/sh
++#
++# Start tcf-agent....
++#
++
++DAEMON_PATH=/usr/sbin/tcf-agent
++DAEMON_NAME=tcf-agent
++DAEMON_ARGS="-d -L- -l0"
++
++PIDFILE=/var/run/$DAEMON_NAME.pid
++[ ! -r /etc/default/$DAEMON_NAME ] || . /etc/default/$DAEMON_NAME
++
++start() {
++      printf "Starting $DAEMON_NAME: "
++      start-stop-daemon -S -q -o \
++      -x $DAEMON_PATH -- $DAEMON_ARGS &&
++        PPID=$(pidof $(basename $DAEMON_PATH)) &&
++        echo $PPID > $PIDFILE
++
++      [ $? = 0 ] && echo "OK" || echo "FAIL"
++}
++
++stop() {
++  printf "Stopping $DAEMON_NAME: "
++  start-stop-daemon -K -o -s HUP -q -p $PIDFILE \
++        -x $DAEMON_PATH &&
++        rm -f $PIDFILE
++  [ $? = 0 ] && echo "OK" || echo "FAIL"
++}
++
++case "$1" in
++    start)
++  start
++  ;;
++    stop)
++  stop
++  ;;
++    restart|reload)
++  stop
++  start
++  ;;
++  *)
++  echo "Usage: $0 {start|stop|restart}"
++  exit 1
++esac
++
++exit $?
+diff --git a/package/tcfagent/tcfagent.hash b/package/tcfagent/tcfagent.hash
+new file mode 100644
+index 0000000000..ffed5dcb19
+--- /dev/null
++++ b/package/tcfagent/tcfagent.hash
+@@ -0,0 +1,4 @@
++# Locally computed:
++sha256  47d34c0778aa8b9e2c26132c9bb03d643bfb8e44d03ce862d06f2f93edcb63ae  org.eclipse.tcf.agent-1.3.0.tar.gz
++sha256  34188fd2daeadf6574071f5004f9a7a55b3ac73efe9db203a01559ee1013b2db  org.eclipse.tcf.agent-1.4_neon.tar.gz
++sha256  4b6c757e2bed92a0a791d0687425d462c974abe4c79f80e27e362fdaa59107f5  org.eclipse.tcf.agent-1.5_oxygen.tar.gz
+diff --git a/package/tcfagent/tcfagent.mk b/package/tcfagent/tcfagent.mk
+new file mode 100644
+index 0000000000..30bd366137
+--- /dev/null
++++ b/package/tcfagent/tcfagent.mk
+@@ -0,0 +1,38 @@
++################################################################################
++#
++# TCFAGENT
++#
++################################################################################
++
++TCFAGENT_VERSION = 1.5_oxygen
++# the tar.xz link was broken the time this file got authored
++TCFAGENT_SOURCE = org.eclipse.tcf.agent-$(TCFAGENT_VERSION).tar.gz
++TCFAGENT_SITE = http://git.eclipse.org/c/tcf/org.eclipse.tcf.agent.git/snapshot
++# see https://wiki.spdx.org/view/Legal_Team/License_List/Licenses_Under_Consideration
++TCFAGENT_LICENSE = BSD-3-Clause
++TCFAGENT_LICENSE_FILES = agent/edl-v10.html
++
++TCFAGENT_DEPENDENCIES = util-linux
++TCFAGENT_SUBDIR = agent
++TCFAGENT_CONF_OPTS = -DBUILD_SHARED_LIBS=Off
++
++define TCFAGENT_RENAME_AGENT
++	mv $(TARGET_DIR)/usr/bin/agent $(TARGET_DIR)/usr/sbin/tcf-agent
++endef
++
++TCFAGENT_POST_INSTALL_TARGET_HOOKS += TCFAGENT_RENAME_AGENT
++
++define TCFAGENT_INSTALL_INIT_SYSTEMD
++	$(INSTALL) -D -m 644 package/tcfagent/tcfagent.service \
++		$(TARGET_DIR)/usr/lib/systemd/system/tcfagent.service
++	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
++	ln -fs ../../../../usr/lib/systemd/system/tcfagent.service \
++		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/tcfagent.service
++endef
++
++define TCFAGENT_INSTALL_INIT_SYSV
++	$(INSTALL) -D -m 755 package/tcfagent/S55tcfagent \
++		$(TARGET_DIR)/etc/init.d/S55tcfagent
++endef
++
++$(eval $(cmake-package))
+diff --git a/package/tcfagent/tcfagent.service b/package/tcfagent/tcfagent.service
+new file mode 100644
+index 0000000000..2f57fca3c8
+--- /dev/null
++++ b/package/tcfagent/tcfagent.service
+@@ -0,0 +1,10 @@
++[Unit]
++Description=Target Communication Framework Agent
++After=network.target
++
++[Service]
++Type=forking
++ExecStart=@SBINDIR@/tcf-agent -L- -l0
++
++[Install]
++WantedBy=multi-user.target
 -- 
-Giulio Benetti
-R&D Manager &
-Advanced Research
-
-MICRONOVA SRL
-Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
-Tel. 049/8931563 - Fax 049/8931346
-Cod.Fiscale - P.IVA 02663420285
-Capitale Sociale ? 26.000 i.v.
-Iscritta al Reg. Imprese di Padova N. 02663420285
-Numero R.E.A. 258642
+2.15.0
