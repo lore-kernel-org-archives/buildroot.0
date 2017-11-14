@@ -1,37 +1,48 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Tue, 14 Nov 2017 11:07:06 -0500
-Subject: [Buildroot] [NEXT v2 1/7] libpjsip: remove disable-ext-sound option
-Message-ID: <20171114160712.20086-1-aduskett@gmail.com>
+Date: Tue, 14 Nov 2017 11:07:07 -0500
+Subject: [Buildroot] [NEXT v2 2/7] libpjsip: enable alsa support
+In-Reply-To: <20171114160712.20086-1-aduskett@gmail.com>
+References: <20171114160712.20086-1-aduskett@gmail.com>
+Message-ID: <20171114160712.20086-2-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The configure option --disable-ext-sound currently isn't a valid option
-in libpjsip. Originally it was used to prevent portaudio from building
-in the third_party directory, however, portaudio no longer exists in that
-directory.
+If alsa-lib is selected, libpjsip should depend on it.
+Also, remove --disable-sound in the configure options or else sound would
+still be disabled.
 
 Signed-off-by: Adam Duskett <aduskett@gmail.com>
 ---
 Changes v1 -> v2:
-  - Added this patch to the start of the series.
-
- package/libpjsip/libpjsip.mk | 1 -
- 1 file changed, 1 deletion(-)
+  - Remove the option to enable or disable alsa support in favor of
+    just depending on alsa-lib if it's selected by the user.
+  
+ package/libpjsip/libpjsip.mk | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
 diff --git a/package/libpjsip/libpjsip.mk b/package/libpjsip/libpjsip.mk
-index c772d41..2eaefaf 100644
+index 2eaefaf..14dbb8e 100644
 --- a/package/libpjsip/libpjsip.mk
 +++ b/package/libpjsip/libpjsip.mk
-@@ -37,7 +37,6 @@ LIBPJSIP_CONF_OPTS = \
- 	--disable-libwebrtc \
- 	--disable-opus \
- 	--disable-oss \
--	--disable-ext-sound \
- 	--disable-g711-codec \
- 	--disable-l16-codec \
- 	--disable-g722-codec \
+@@ -25,7 +25,6 @@ LIBPJSIP_CONF_ENV = \
+ 	CFLAGS="$(LIBPJSIP_CFLAGS)"
+ 
+ LIBPJSIP_CONF_OPTS = \
+-	--disable-sound \
+ 	--disable-gsm-codec \
+ 	--disable-speex-codec \
+ 	--disable-speex-aec \
+@@ -67,4 +66,8 @@ ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBUUID),y)
+ LIBPJSIP_DEPENDENCIES += util-linux
+ endif
+ 
++ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
++LIBPJSIP_DEPENDENCIES += alsa-lib
++endif
++
+ $(eval $(autotools-package))
 -- 
 2.13.6
