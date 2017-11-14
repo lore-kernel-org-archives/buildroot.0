@@ -1,44 +1,45 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 13 Nov 2017 23:36:28 +0100
-Subject: [Buildroot] [PATCH/next 4/5] solidrun/macchiatobin: add new
- board
-In-Reply-To: <20171113200610.ztfqw55iyk52i53a@speedy.hunter>
-References: <20171112201646.15558-1-geomatsi@gmail.com>
- <20171112201646.15558-5-geomatsi@gmail.com>
- <20171113122702.o63kfb7j4iny6sfl@sapphire.tkos.co.il>
- <20171113200610.ztfqw55iyk52i53a@speedy.hunter>
-Message-ID: <20171113233628.64f1e58d@windsurf.home>
+From: Andrey Yurovsky <yurovsky@gmail.com>
+Date: Mon, 13 Nov 2017 20:31:41 -0800
+Subject: [Buildroot] [PATCH] rauc: bump version to 0.2
+Message-ID: <20171114043141.8245-1-ayurovsky@impinj.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+From: Andrey Yurovsky <yurovsky@gmail.com>
 
-On Mon, 13 Nov 2017 23:06:10 +0300, Sergey Matyukevich wrote:
+Version 0.2 provides various bug fixes and feature enhancements.
 
-> This issue is not specific to MacchiatoBin board. I observed it last week
-> testing images for another arm64 board - Orange Pi Zero Plus2 board.
-> I haven't investigated it yet.
-> 
-> Meanwhile this is not the only problem with mainline BSP. It turned out that
-> network interfaces do not work properly neither on v4.13.11 nor in fresh v4.14.
-> Kernel v4.13.11 doesn't enable them in DTS. Kernel v4.14 does enable them,
-> but I couldn't make them work: Tx looks ok, but no Rx. Meanwhile on kernel from
-> devel-4.14/all branch from https://github.com/MISL-EBU-System-SW/mainline-public
-> management 1Gb interface appears to be working fine.
+Signed-off-by: Andrey Yurovsky <yurovsky@gmail.com>
+---
+ package/rauc/rauc.hash | 4 ++--
+ package/rauc/rauc.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-The fact that network interfaces don't work on mcbin with the stock
-4.14 is not expected. I've added in Cc: my colleague Antoine T?nart who
-worked on this topic.
-
-Antoine, do you know which patches are missing in 4.14 ?
-
-Thanks!
-
-Thomas
+diff --git a/package/rauc/rauc.hash b/package/rauc/rauc.hash
+index 78c3e27..649d195 100644
+--- a/package/rauc/rauc.hash
++++ b/package/rauc/rauc.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated, after verifying against
+-# https://github.com/rauc/rauc/releases/download/v0.1.1/rauc-0.1.1.tar.xz.asc
+-sha256 d2901d493f1d3210aef6411e83b02edac3a678d6d825d71a1c61b5b6afc7e478 rauc-0.1.1.tar.xz
++# https://github.com/rauc/rauc/releases/download/v0.2/rauc-0.2.tar.xz.asc
++sha256 83aa3ac3716e1c29315162e3cbf5d4db79f26dd95efe1bc634bbce364b95491a rauc-0.2.tar.xz
+diff --git a/package/rauc/rauc.mk b/package/rauc/rauc.mk
+index 479a583..11991ed 100644
+--- a/package/rauc/rauc.mk
++++ b/package/rauc/rauc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-RAUC_VERSION = 0.1.1
++RAUC_VERSION = 0.2
+ RAUC_SITE = https://github.com/rauc/rauc/releases/download/v$(RAUC_VERSION)
+ RAUC_SOURCE = rauc-$(RAUC_VERSION).tar.xz
+ RAUC_LICENSE = LGPL-2.1
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.9.5
