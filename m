@@ -1,61 +1,84 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 14 Nov 2017 14:04:29 +0100
-Subject: [Buildroot] [git commit] wireguard: bump to version 0.0.20171111
-Message-ID: <20171114125733.E8D627FA57@busybox.osuosl.org>
+From: Evgeniy Didin <Evgeniy.Didin@synopsys.com>
+Date: Tue, 14 Nov 2017 08:59:56 +0300
+Subject: [Buildroot] [PATCH] fwup: fix for ARC toolchain
+Message-ID: <20171114055956.45043-1-didin@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7e794acfcd9f9e325a67a7172ee0f5cd0043b0ac
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Building fwup package with ARC toolchain causes internal compiler error.
+Adding patch for ARC gcc solves this issue. In the next version of toolchain,
+this problem has already been taken into account.
 
-Contains a number of important fixes. From the relase notes:
+Fixes:
+	http://autobuild.buildroot.net/results/a1b/a1bd5084309ced6c2d1b311617e5d9f0c362557a//
+	http://autobuild.buildroot.net/results/dd3/dd3000bd99d71383ce82cd6b01b543cd9660130e//
 
-https://lists.zx2c4.com/pipermail/wireguard/2017-November/001935.html
-
-  * netlink: plug memory leak
-  * qemu: check for memory leaks
-
-  There was a small memory leak on the netlink configuration layer that's now
-  been fixed.
-
-  * netlink: make sure we reserve space for NLMSG_DONE
-
-  A rather important change - due to an upstream kernel bug, that's existed
-  since the advent of netlink itself, sometimes wg(8) failed to receive valid
-  data back from kernelspace, resulting in "ENOBUFS" when trying to dump all
-  peers. This patch works around it while we wait for upstream to commit the
-  fix.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Evgeniy Didin <didin@synopsys.com>
+Cc: Alexey Brodkin <abrodkin@synopsys.com>
+Cc: arc-buildroot at synopsys.com
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/wireguard/wireguard.hash | 4 ++--
- package/wireguard/wireguard.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ .../0001-fix-checking-for-jumps.patch              | 49 ++++++++++++++++++++++
+ 1 file changed, 49 insertions(+)
+ create mode 100644 package/gcc/arc-2017.09-release/0001-fix-checking-for-jumps.patch
 
-diff --git a/package/wireguard/wireguard.hash b/package/wireguard/wireguard.hash
-index 050d466..3749456 100644
---- a/package/wireguard/wireguard.hash
-+++ b/package/wireguard/wireguard.hash
-@@ -1,4 +1,4 @@
--# From https://lists.zx2c4.com/pipermail/wireguard/2017-November/001881.html
--sha256 096b6482a65e566c7bf8c059f5ee6aadb2de565b04b6d810c685f1c377540325  WireGuard-0.0.20171101.tar.xz
-+# From https://lists.zx2c4.com/pipermail/wireguard/2017-November/001935.html
-+sha256 d9347786a9406ac276d86321ca64aadb1f0639cb0582c6e0519c634cf6e81157  WireGuard-0.0.20171111.tar.xz
- # Locally calculated
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/wireguard/wireguard.mk b/package/wireguard/wireguard.mk
-index 63d5366..2eacb22 100644
---- a/package/wireguard/wireguard.mk
-+++ b/package/wireguard/wireguard.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WIREGUARD_VERSION = 0.0.20171101
-+WIREGUARD_VERSION = 0.0.20171111
- WIREGUARD_SITE = https://git.zx2c4.com/WireGuard/snapshot
- WIREGUARD_SOURCE = WireGuard-$(WIREGUARD_VERSION).tar.xz
- WIREGUARD_LICENSE = GPL-2.0
+diff --git a/package/gcc/arc-2017.09-release/0001-fix-checking-for-jumps.patch b/package/gcc/arc-2017.09-release/0001-fix-checking-for-jumps.patch
+new file mode 100644
+index 0000000000..ce78fac2e6
+--- /dev/null
++++ b/package/gcc/arc-2017.09-release/0001-fix-checking-for-jumps.patch
+@@ -0,0 +1,49 @@
++From c2694d3739d90ea3350b42252638b604a2c122b7 Mon Sep 17 00:00:00 2001
++From: Claudiu Zissulescu <claziss@gmail.com>
++Date: Tue, 7 Nov 2017 20:16:41 +0200
++Subject: [PATCH] [FIX][ZOL] fix checking for jumps
++
++Signed-off-by: Evgeniy Didin <didin@synopsys.com>
++---
++ gcc/config/arc/arc.c                  |  3 ++-
++ gcc/testsuite/gcc.target/arc/loop-4.c | 14 ++++++++++++++
++ 2 files changed, 16 insertions(+), 1 deletion(-)
++ create mode 100644 gcc/testsuite/gcc.target/arc/loop-4.c
++
++diff --git a/gcc/config/arc/arc.c b/gcc/config/arc/arc.c
++index 22eeb34a371..5d367499d03 100644
++--- a/gcc/config/arc/arc.c
+++++ b/gcc/config/arc/arc.c
++@@ -7505,7 +7505,8 @@ hwloop_optimize (hwloop_info loop)
++       && INSN_P (last_insn)
++       && (JUMP_P (last_insn) || CALL_P (last_insn)
++ 	  || GET_CODE (PATTERN (last_insn)) == SEQUENCE
++-	  || JUMP_P (prev_active_insn (last_insn))
+++	  || (prev_active_insn (last_insn)
+++	      && JUMP_P (prev_active_insn (last_insn)))
++ 	  /* At this stage we can have (insn (clobber (mem:BLK
++ 	     (reg)))) instructions, ignpre them.  */
++ 	  || (GET_CODE (PATTERN (last_insn)) != CLOBBER
++diff --git a/gcc/testsuite/gcc.target/arc/loop-4.c b/gcc/testsuite/gcc.target/arc/loop-4.c
++new file mode 100644
++index 00000000000..99a93a74d1e
++--- /dev/null
+++++ b/gcc/testsuite/gcc.target/arc/loop-4.c
++@@ -0,0 +1,14 @@
+++/* { dg-do assemble } */
+++/* { dg-do compile } */
+++/* { dg-options "-Os" } */
+++
+++
+++void fn1(void *p1, int p2, int p3)
+++{
+++  char *d = p1;
+++  do
+++    *d++ = p2;
+++  while (--p3);
+++}
+++
+++/* { dg-final { scan-assembler "lp_count" } } */
++-- 
++2.11.0
++
+-- 
+2.11.0
