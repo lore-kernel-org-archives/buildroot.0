@@ -1,59 +1,51 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue, 14 Nov 2017 23:44:09 +0100
-Subject: [Buildroot] Cannot rebuild autobuild
-In-Reply-To: <20171113144231.gddccsqlelrhrokw@dell5510>
-References: <20171113102757.ir7so5o7h7zopcvq@dell5510>
- <20171113144231.gddccsqlelrhrokw@dell5510>
-Message-ID: <20171114234409.114f002f@gmx.net>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Tue, 14 Nov 2017 20:54:53 -0200
+Subject: [Buildroot] [PATCH] configs/mx6cubox: Bump U-Boot and kernel
+ versions
+Message-ID: <1510700093-8905-1-git-send-email-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Petr,
+From: Fabio Estevam <fabio.estevam@nxp.com>
 
-On Mon, 13 Nov 2017 15:42:32 +0100, Petr Vorel <petr.vorel@gmail.com> wrote:
+Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
+---
+ configs/mx6cubox_defconfig | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-> > But I cannot rebuild it as it fails to pass configure:  
-> 
-> > $ make distclean
-> > $ wget -c http://autobuild.buildroot.net/results/bf31199cdaa18971a9b599c26fbefac73b2d6f30/config -O .config.old
-
-Your should store the downloaded config file definitely as '.config' instead of '.config.old' (there is only
-the way .config --> .config.old and not the other way round in buildroot)...
- 
-> > $ make olddefconfig
-> > $ make
-> > make: *** No rule to make target 'toolchain-external-custom', needed by '/home/foo/install/src/buildroot.git/output/build/toolchain-external/.stamp_configured'.  Stop.  
-> 
-> > What can be wrong? I've done it this way in the past (with other autobuild items, which
-> > had different toolchains).  
-
-Same here with a fresh installed openSUSE Tumbleweed x86_64 without 32-bit support packages installed.
-
-Until commit ec54092c916440501006bfa51a820eb953100510 ('toolchain-external-custom: new package'), or with
-2016.11.3 the same config gives the following error instead:
-
-[...]
-Cannot execute cross-compiler '.../host/opt/ext-toolchain/bin/x86_64-ctng_locales-linux-gnu-gcc'
-make[1]: *** [package/pkg-generic.mk:209: .../build/toolchain-external/.stamp_configured] Error 1
-make: *** [Makefile:16: _all] Error 2
-
-Maybe the toolchain definition should select BR2_HOSTARCH_NEEDS_IA32_LIBS?
-
-Regards,
-Peter
-
-> 
-> > [1] http://autobuild.buildroot.net/results/bf31199cdaa18971a9b599c26fbefac73b2d6f30  
-> 
-> And of course, I'm working on current master.
-> 
-> 
-> Kind regards,
-> Petr
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+diff --git a/configs/mx6cubox_defconfig b/configs/mx6cubox_defconfig
+index 5a4e934..5cb44fd 100644
+--- a/configs/mx6cubox_defconfig
++++ b/configs/mx6cubox_defconfig
+@@ -3,8 +3,8 @@ BR2_cortex_a9=y
+ BR2_ARM_ENABLE_NEON=y
+ BR2_ARM_ENABLE_VFP=y
+ BR2_ARM_FPU_VFPV3=y
+-# Linux headers same as kernel, a 4.13 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_13=y
++# Linux headers same as kernel, a 4.14 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/solidrun/mx6cubox/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/solidrun/mx6cubox/post-image.sh"
+@@ -13,13 +13,13 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="mx6cuboxi"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.09"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.11"
+ BR2_TARGET_UBOOT_FORMAT_IMG=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="SPL"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.13.3"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.14"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-cubox-i imx6dl-cubox-i imx6q-hummingboard imx6dl-hummingboard"
+-- 
+2.7.4
