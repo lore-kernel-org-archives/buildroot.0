@@ -1,67 +1,36 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 14 Nov 2017 18:58:08 +0200
-Subject: [Buildroot] [PATCH 1/1] qt5cinex: depends also on
- qt5quickcontrols
-In-Reply-To: <e8c172b8-f2ec-ced1-dda8-236d0d945b12@micronovasrl.com>
-References: <1510677027-24076-1-git-send-email-giulio.benetti@micronovasrl.com>
- <e8c172b8-f2ec-ced1-dda8-236d0d945b12@micronovasrl.com>
-Message-ID: <20171114165808.akqens5j5obw2n5c@tarshish>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 14 Nov 2017 18:00:48 +0100
+Subject: [Buildroot] [NEXT v2 2/7] libpjsip: enable alsa support
+In-Reply-To: <20171114160712.20086-2-aduskett@gmail.com>
+References: <20171114160712.20086-1-aduskett@gmail.com>
+ <20171114160712.20086-2-aduskett@gmail.com>
+Message-ID: <20171114180048.7933434f@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Giulio,
+Hello,
 
-On Tue, Nov 14, 2017 at 05:32:26PM +0100, Giulio Benetti wrote:
-> Errata:
+On Tue, 14 Nov 2017 11:07:07 -0500, Adam Duskett wrote:
+> If alsa-lib is selected, libpjsip should depend on it.
+> Also, remove --disable-sound in the configure options or else sound would
+> still be disabled.
 > 
-> Il 14/11/2017 17:30, Giulio Benetti ha scritto:
-> > qt5cinex failed to build if qt5quickcontrols is not selected
-> qt5cinex fail to execute on runtime if qt5quickcontrols is not selected
+> Signed-off-by: Adam Duskett <aduskett@gmail.com>
+> ---
+> Changes v1 -> v2:
+>   - Remove the option to enable or disable alsa support in favor of
+>     just depending on alsa-lib if it's selected by the user.
 
-If it's a runtime only dependency you should not list it in _DEPENDENCIES ...
+Why? This seems completely backward with the typical Buildroot
+practices.
 
-> > add qt5quickcontrols to qt5cinex dependencies in .mk
-> > select BR2_PACKAGE_QT5QUICKCONTROLS in Config.in
-> > 
-> > Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
-> > ---
-> >   package/qt5cinex/Config.in   | 1 +
-> >   package/qt5cinex/qt5cinex.mk | 2 +-
-> >   2 files changed, 2 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/package/qt5cinex/Config.in b/package/qt5cinex/Config.in
-> > index 5adf6c3..7cc459a 100644
-> > --- a/package/qt5cinex/Config.in
-> > +++ b/package/qt5cinex/Config.in
-> > @@ -16,6 +16,7 @@ config BR2_PACKAGE_QT5CINEX
-> >   	select BR2_PACKAGE_QT5BASE_WIDGETS
-> >   	select BR2_PACKAGE_QT5BASE_EGLFS
-> >   	select BR2_PACKAGE_QT5GRAPHICALEFFECTS
-> > +	select BR2_PACKAGE_QT5QUICKCONTROLS
+Best regards,
 
-... but you should add a 'runtime' comment here.
-
-> >   	help
-> >   	  This application demonstrates the power of Qt5 and few of the new
-> >   	  additions available in QtQuick 2.0.
-> > diff --git a/package/qt5cinex/qt5cinex.mk b/package/qt5cinex/qt5cinex.mk
-> > index d9254f5..44c53a1 100644
-> > --- a/package/qt5cinex/qt5cinex.mk
-> > +++ b/package/qt5cinex/qt5cinex.mk
-> > @@ -12,7 +12,7 @@ QT5CINEX_HD = "rpi_"
-> >   endif
-> >   QT5CINEX_SOURCE = Qt5_CinematicExperience_$(QT5CINEX_HD)$(QT5CINEX_VERSION).tgz
-> > -QT5CINEX_DEPENDENCIES = qt5base qt5declarative
-> > +QT5CINEX_DEPENDENCIES = qt5base qt5declarative qt5quickcontrols
-> >   QT5CINEX_LICENSE = CC-BY-3.0
-> >   QT5CINEX_LICENSE_FILES = README
-
-baruch
-
+Thomas
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
