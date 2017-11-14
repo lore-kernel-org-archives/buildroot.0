@@ -1,54 +1,183 @@
-From: Angelo Compagnucci <angelo@amarulasolutions.com>
-Date: Tue, 14 Nov 2017 11:51:43 +0100
-Subject: [Buildroot] [PATCH 1/2] package/i2c-tools: bump to version 4.0
-Message-ID: <1510656704-11153-1-git-send-email-angelo@amarulasolutions.com>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Tue, 14 Nov 2017 11:58:56 +0100
+Subject: [Buildroot] [PATCH] scanpypi: get license names from SPDX database
+Message-ID: <20171114105856.2077-1-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch bumps i2c-tools to version 4.0 and adds a new command
-named i2ctransfer.
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+Use spdx_lookup package to compare packages' license file texts
+with SPDX database.
+
+This feature is optional.
+
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- package/i2c-tools/i2c-tools.hash | 2 +-
- package/i2c-tools/i2c-tools.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ utils/scanpypi | 131 +++++++++++++++++++++++++++++++++------------------------
+ 1 file changed, 76 insertions(+), 55 deletions(-)
 
-diff --git a/package/i2c-tools/i2c-tools.hash b/package/i2c-tools/i2c-tools.hash
-index 464219d..3475d20 100644
---- a/package/i2c-tools/i2c-tools.hash
-+++ b/package/i2c-tools/i2c-tools.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256 6d6079153cd49a62d4addacef4c092db1a46ba60b2807070a3fbe050262aef87  i2c-tools-3.1.2.tar.xz
-+sha256 d900ca1c11c51ea20caa50b096f948008b8a7ad832311b23353e21baa7af28d6  i2c-tools-4.0.tar.xz
+diff --git a/utils/scanpypi b/utils/scanpypi
+index 02384f2569..90fec63305 100755
+--- a/utils/scanpypi
++++ b/utils/scanpypi
+@@ -24,6 +24,12 @@ import tempfile
+ import imp
+ from functools import wraps
  
- # License file
- sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/i2c-tools/i2c-tools.mk b/package/i2c-tools/i2c-tools.mk
-index 3bbaf38..2bbb12f 100644
---- a/package/i2c-tools/i2c-tools.mk
-+++ b/package/i2c-tools/i2c-tools.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
++try:
++    import spdx_lookup as liclookup
++except ImportError:
++    # spdx_lookup is not installed
++    liclookup = None
++
+ def setup_decorator(func, method):
+     """
+     Decorator for distutils.core.setup and setuptools.setup.
+@@ -354,71 +360,86 @@ class BuildrootPackage():
+         lines.append(setup_type_line)
+         return lines
  
--I2C_TOOLS_VERSION = 3.1.2
-+I2C_TOOLS_VERSION = 4.0
- I2C_TOOLS_SOURCE = i2c-tools-$(I2C_TOOLS_VERSION).tar.xz
- I2C_TOOLS_SITE = https://www.kernel.org/pub/software/utils/i2c-tools
- I2C_TOOLS_LICENSE = GPL-2.0+, GPL-2.0 (py-smbus)
-@@ -52,7 +52,7 @@ define I2C_TOOLS_BUILD_CMDS
- endef
+-    def __create_mk_license(self):
++    def __get_license_names(self, license_files):
+         """
+-        Create the lines referring to the package's license informations of the
+-        <package_name>.mk file
++        Try to determine the related license name.
++
++        There are two possibilities. Either the scripts tries to
++        get license name from package's metadata or, if spdx_lookup
++        package is available, the script compares license files with
++        SPDX database.
++        """
++        license_line = ''
++        if liclookup is None:
++            license_dict = {
++                'Apache Software License': 'Apache-2.0',
++                'BSD License': 'BSD',
++                'European Union Public Licence 1.0': 'EUPL-1.0',
++                'European Union Public Licence 1.1': 'EUPL-1.1',
++                "GNU General Public License": "GPL",
++                "GNU General Public License v2": "GPL-2.0",
++                "GNU General Public License v2 or later": "GPL-2.0+",
++                "GNU General Public License v3": "GPL-3.0",
++                "GNU General Public License v3 or later": "GPL-3.0+",
++                "GNU Lesser General Public License v2": "LGPL-2.1",
++                "GNU Lesser General Public License v2 or later": "LGPL-2.1+",
++                "GNU Lesser General Public License v3": "LGPL-3.0",
++                "GNU Lesser General Public License v3 or later": "LGPL-3.0+",
++                "GNU Library or Lesser General Public License": "LGPL-2.0",
++                "ISC License": "ISC",
++                "MIT License": "MIT",
++                "Mozilla Public License 1.0": "MPL-1.0",
++                "Mozilla Public License 1.1": "MPL-1.1",
++                "Mozilla Public License 2.0": "MPL-2.0",
++                "Zope Public License": "ZPL"
++                }
++            regexp = re.compile('^License :* *.* *:+ (.*)( \(.*\))?$')
++            classifiers_licenses = [regexp.sub(r"\1", lic)
++                                    for lic in self.metadata['info']['classifiers']
++                                    if regexp.match(lic)]
++            licenses = map(lambda x: license_dict[x] if x in license_dict else x,
++                           classifiers_licenses)
++            if not len(licenses):
++                print('WARNING: License has been set to "{license}". It is most'
++                      ' likely wrong, please change it if need be'.format(
++                          license=', '.join(licenses)))
++                licenses = [self.metadata['info']['license']]
++            license_line = '{name}_LICENSE = {license}\n'.format(
++                name=self.mk_name,
++                license=', '.join(licenses))
++        else:
++            license_names = []
++            for license_file in license_files:
++                with open(license_file) as lic_file:
++                    match = liclookup.match(lic_file.read())
++                if match.confidence >= 90.0:
++                    license_names.append(match.license.id)
  
- define I2C_TOOLS_INSTALL_TARGET_CMDS
--	for i in i2cdump i2cget i2cset i2cdetect; \
-+	for i in i2cdump i2cget i2cset i2cdetect i2ctransfer; \
- 	do \
- 		$(INSTALL) -m 755 -D $(@D)/tools/$$i $(TARGET_DIR)/usr/sbin/$$i; \
- 	done
+-        The license is found using the metadata from pypi.
+-        In the metadata, the license can be found either with standard names in
+-        the classifiers part or with naming from the packager in the "License"
+-        part.
++            if len(license_names) > 0:
++                license_line = ('{name}_LICENSE ='
++                                ' {names}\n'.format(
++                                    name=self.mk_name,
++                                    names=', '.join(license_names)))
+ 
+-        From the classifiers, the license is "translated" according to
+-        buildroot standards if need be (i.e. from Apache Software License to
+-        Apache-2.0).
++        return license_line
+ 
+-        From the License part, we cannot guess what formatting the packager
+-        used. Hence, it is likely to be incorrect. (i.e. Apache License 2.0
+-        instead of Apache-2.0).
++    def __create_mk_license(self):
++        """
++        Create the lines referring to the package's license informations of the
++        <package_name>.mk file
+ 
+-        The license's files are found by searching the package for files named
+-        license or license.txt (case insensitive).
+-        If more than one license file is found, the user is asked to select
+-        which ones he wants to use.
++        The license's files are found by searching the package (case insensitive)
++        for files named license, license.txt etc. If more than one license file
++        is found, the user is asked to select which ones he wants to use.
+         """
+-        license_dict = {
+-            'Apache Software License': 'Apache-2.0',
+-            'BSD License': 'BSD',
+-            'European Union Public Licence 1.0': 'EUPL-1.0',
+-            'European Union Public Licence 1.1': 'EUPL-1.1',
+-            "GNU General Public License": "GPL",
+-            "GNU General Public License v2": "GPL-2.0",
+-            "GNU General Public License v2 or later": "GPL-2.0+",
+-            "GNU General Public License v3": "GPL-3.0",
+-            "GNU General Public License v3 or later": "GPL-3.0+",
+-            "GNU Lesser General Public License v2": "LGPL-2.1",
+-            "GNU Lesser General Public License v2 or later": "LGPL-2.1+",
+-            "GNU Lesser General Public License v3": "LGPL-3.0",
+-            "GNU Lesser General Public License v3 or later": "LGPL-3.0+",
+-            "GNU Library or Lesser General Public License": "LGPL-2.0",
+-            "ISC License": "ISC",
+-            "MIT License": "MIT",
+-            "Mozilla Public License 1.0": "MPL-1.0",
+-            "Mozilla Public License 1.1": "MPL-1.1",
+-            "Mozilla Public License 2.0": "MPL-2.0",
+-            "Zope Public License": "ZPL"
+-            }
+-        regexp = re.compile('^License :* *.* *:+ (.*)( \(.*\))?$')
+-        classifiers_licenses = [regexp.sub(r"\1", lic)
+-                                for lic in self.metadata['info']['classifiers']
+-                                if regexp.match(lic)]
+-        licenses = map(lambda x: license_dict[x] if x in license_dict else x,
+-                       classifiers_licenses)
+         lines = []
+-        if not len(licenses):
+-            print('WARNING: License has been set to "{license}". It is most'
+-                  ' likely wrong, please change it if need be'.format(
+-                      license=', '.join(licenses)))
+-            licenses = [self.metadata['info']['license']]
+-        license_line = '{name}_LICENSE = {license}\n'.format(
+-            name=self.mk_name,
+-            license=', '.join(licenses))
+-        lines.append(license_line)
+ 
+         filenames = ['LICENCE', 'LICENSE', 'LICENSE.RST', 'LICENSE.TXT',
+-		     'COPYING', 'COPYING.TXT']
++                     'COPYING', 'COPYING.TXT']
+         license_files = list(find_file_upper_case(filenames, self.tmp_extract))
++
++        lines.append(self.__get_license_names(license_files))
++
+         license_files = [license.replace(self.tmp_extract, '')[1:]
+                          for license in license_files]
+         if len(license_files) > 0:
 -- 
-2.7.4
+2.11.0
