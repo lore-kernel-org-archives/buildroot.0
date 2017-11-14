@@ -1,130 +1,62 @@
-From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Tue, 14 Nov 2017 18:11:12 +0100
-Subject: [Buildroot] [PATCH 1/1] qt5cinex: depends also on
- qt5quickcontrols
-In-Reply-To: <20171114170737.lo3cqwk23bg64ojb@tarshish>
-References: <1510677027-24076-1-git-send-email-giulio.benetti@micronovasrl.com>
- <e8c172b8-f2ec-ced1-dda8-236d0d945b12@micronovasrl.com>
- <20171114165808.akqens5j5obw2n5c@tarshish>
- <32a0057b-1840-ef45-c199-9da6b14ae09c@micronovasrl.com>
- <20171114170737.lo3cqwk23bg64ojb@tarshish>
-Message-ID: <704ac8c0-a2c0-a728-a1fe-0cf1d433dd6d@micronovasrl.com>
+From: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
+Date: Tue, 14 Nov 2017 12:46:51 -0500
+Subject: [Buildroot] [PATCH] genimage: change upstream URL
+Message-ID: <20171114174651.12184-1-vivien.didelot@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Pengutronix moved the official genimage repository to Github.
 
-Il 14/11/2017 18:07, Baruch Siach ha scritto:
-> Hi Giulio,
-> 
-> On Tue, Nov 14, 2017 at 06:03:53PM +0100, Giulio Benetti wrote:
->> Sorry, my mistake.
->> It installed correctly on STAGING_DIR, but not in TARGET_DIR.
->> This why it compiled fine, but on target it didn't find that libQtQuick.so
->> library.
->> This is a problem on building Qt5 I've noticed.
->>
->> If I build first time Qt5 with few features,
->> than select other more features,
->> those can be built partially and installed partially too.
->>
->> To reproduce you can build qt5base.
->> After that, select qt5cinex,
->> then you should find that libraries are in STAGING_DIR but not in
->> TARGET_DIR.
->>
->> So to have it working properly you have to rm and rebuild qt5base and
->> qt5declarative from beginning.
->>
->> Did someone else noticed this?
-> 
-> Buildroot can't reliably rebuild reverse dependencies of packages that change
-> configuration. This is a known issue. See the manual section:
-> 
->    http://nightly.buildroot.org/manual.html#full-rebuild
+This patch updates the official URL from the package description. The
+sources from Github do not include the configure script so update the
+sha256 hash and set GENIMAGE_AUTORECONF to execute ./autogen.sh first.
 
-Ok, thank you and sorry to rise useless question.
+Signed-off-by: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
+---
+ package/genimage/Config.in.host | 2 +-
+ package/genimage/genimage.hash  | 2 +-
+ package/genimage/genimage.mk    | 6 +++---
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-> 
-> baruch
-> 
->> Il 14/11/2017 17:58, Baruch Siach ha scritto:
->>> On Tue, Nov 14, 2017 at 05:32:26PM +0100, Giulio Benetti wrote:
->>>> Errata:
->>>>
->>>> Il 14/11/2017 17:30, Giulio Benetti ha scritto:
->>>>> qt5cinex failed to build if qt5quickcontrols is not selected
->>>> qt5cinex fail to execute on runtime if qt5quickcontrols is not selected
->>>
->>> If it's a runtime only dependency you should not list it in _DEPENDENCIES ...
->>>
->>>>> add qt5quickcontrols to qt5cinex dependencies in .mk
->>>>> select BR2_PACKAGE_QT5QUICKCONTROLS in Config.in
->>>>>
->>>>> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
->>>>> ---
->>>>>     package/qt5cinex/Config.in   | 1 +
->>>>>     package/qt5cinex/qt5cinex.mk | 2 +-
->>>>>     2 files changed, 2 insertions(+), 1 deletion(-)
->>>>>
->>>>> diff --git a/package/qt5cinex/Config.in b/package/qt5cinex/Config.in
->>>>> index 5adf6c3..7cc459a 100644
->>>>> --- a/package/qt5cinex/Config.in
->>>>> +++ b/package/qt5cinex/Config.in
->>>>> @@ -16,6 +16,7 @@ config BR2_PACKAGE_QT5CINEX
->>>>>     	select BR2_PACKAGE_QT5BASE_WIDGETS
->>>>>     	select BR2_PACKAGE_QT5BASE_EGLFS
->>>>>     	select BR2_PACKAGE_QT5GRAPHICALEFFECTS
->>>>> +	select BR2_PACKAGE_QT5QUICKCONTROLS
->>>
->>> ... but you should add a 'runtime' comment here.
->>>
->>>>>     	help
->>>>>     	  This application demonstrates the power of Qt5 and few of the new
->>>>>     	  additions available in QtQuick 2.0.
->>>>> diff --git a/package/qt5cinex/qt5cinex.mk b/package/qt5cinex/qt5cinex.mk
->>>>> index d9254f5..44c53a1 100644
->>>>> --- a/package/qt5cinex/qt5cinex.mk
->>>>> +++ b/package/qt5cinex/qt5cinex.mk
->>>>> @@ -12,7 +12,7 @@ QT5CINEX_HD = "rpi_"
->>>>>     endif
->>>>>     QT5CINEX_SOURCE = Qt5_CinematicExperience_$(QT5CINEX_HD)$(QT5CINEX_VERSION).tgz
->>>>> -QT5CINEX_DEPENDENCIES = qt5base qt5declarative
->>>>> +QT5CINEX_DEPENDENCIES = qt5base qt5declarative qt5quickcontrols
->>>>>     QT5CINEX_LICENSE = CC-BY-3.0
->>>>>     QT5CINEX_LICENSE_FILES = README
->>>
->>> baruch
->>>
->>
->>
->> -- 
->> Giulio Benetti
->> R&D Manager &
->> Advanced Research
->>
->> MICRONOVA SRL
->> Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
->> Tel. 049/8931563 - Fax 049/8931346
->> Cod.Fiscale - P.IVA 02663420285
->> Capitale Sociale ? 26.000 i.v.
->> Iscritta al Reg. Imprese di Padova N. 02663420285
->> Numero R.E.A. 258642
-> 
-
-
+diff --git a/package/genimage/Config.in.host b/package/genimage/Config.in.host
+index 5c5a8a8a2c..cf831a143c 100644
+--- a/package/genimage/Config.in.host
++++ b/package/genimage/Config.in.host
+@@ -10,4 +10,4 @@ config BR2_PACKAGE_HOST_GENIMAGE
+ 	  environment variables, the config file or commandline
+ 	  switches.
+ 
+-	  http://www.pengutronix.de/software/genimage/
++	  https://github.com/pengutronix/genimage
+diff --git a/package/genimage/genimage.hash b/package/genimage/genimage.hash
+index 4be2fca873..0c304629c7 100644
+--- a/package/genimage/genimage.hash
++++ b/package/genimage/genimage.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	69f35af7edf6f4dbdac7a18ddc69dcf38c501e43d8b50c524555754c51479078	genimage-9.tar.xz
++sha256 c5f6063cab834cd9a6d484c5773430f68cb61aa7203c8270c9e42dac2a0461f0        genimage-v9.tar.gz
+diff --git a/package/genimage/genimage.mk b/package/genimage/genimage.mk
+index 2e7aad20c6..913d745cec 100644
+--- a/package/genimage/genimage.mk
++++ b/package/genimage/genimage.mk
+@@ -4,11 +4,11 @@
+ #
+ ################################################################################
+ 
+-GENIMAGE_VERSION = 9
+-GENIMAGE_SOURCE = genimage-$(GENIMAGE_VERSION).tar.xz
+-GENIMAGE_SITE = http://www.pengutronix.de/software/genimage/download
++GENIMAGE_VERSION = v9
++GENIMAGE_SITE = $(call github,pengutronix,genimage,$(GENIMAGE_VERSION))
+ HOST_GENIMAGE_DEPENDENCIES = host-pkgconf host-libconfuse
+ GENIMAGE_LICENSE = GPL-2.0
+ GENIMAGE_LICENSE_FILES = COPYING
++GENIMAGE_AUTORECONF = YES
+ 
+ $(eval $(host-autotools-package))
 -- 
-Giulio Benetti
-R&D Manager &
-Advanced Research
-
-MICRONOVA SRL
-Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
-Tel. 049/8931563 - Fax 049/8931346
-Cod.Fiscale - P.IVA 02663420285
-Capitale Sociale ? 26.000 i.v.
-Iscritta al Reg. Imprese di Padova N. 02663420285
-Numero R.E.A. 258642
+2.15.0
