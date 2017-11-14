@@ -1,45 +1,39 @@
-From: Antoine =?iso-8859-1?Q?T=E9nart?= <antoine.tenart@free-electrons.com>
-Date: Tue, 14 Nov 2017 10:42:37 +0100
-Subject: [Buildroot] [PATCH/next 4/5] solidrun/macchiatobin: add new
- board
-In-Reply-To: <20171114092024.juocxhwoaqd7xiql@bars>
-References: <20171112201646.15558-1-geomatsi@gmail.com>
- <20171112201646.15558-5-geomatsi@gmail.com>
- <20171113122702.o63kfb7j4iny6sfl@sapphire.tkos.co.il>
- <20171113200610.ztfqw55iyk52i53a@speedy.hunter>
- <20171113233628.64f1e58d@windsurf.home>
- <20171114074148.GC25491@kwain>
- <20171114092024.juocxhwoaqd7xiql@bars>
-Message-ID: <20171114094237.GA4995@kwain>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Tue, 14 Nov 2017 10:51:43 +0100
+Subject: [Buildroot] [PATCH] libogg: bump to version 1.3.3
+Message-ID: <20171114095143.24635-1-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Sergey,
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+---
+ package/libogg/libogg.hash | 2 +-
+ package/libogg/libogg.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On Tue, Nov 14, 2017 at 12:20:24PM +0300, Sergey Matyukevich wrote:
-> 
-> Thanks for detailed summary of mcbin networking support. However it sill looks
-> like there is a missing piece here. I have checked behavior of both mainline 4.14
-> (516fb7f2e73dcc) and marvell-mainline devel-4.14/all (a3d9036af3c6033). I did no
-> changes to kernel/dts/defconfig at all other than enabling Marvell PHYs for mainline
-> kernel. But the result is still the same: 1Gb eth2 interface works with devel-4.14/all,
-> but doesn't work with mainline. Though PHY is recognized and attached, mii-diag also
-> provides sane report. Tx packet counter in ifconfig is increased, but no packets
-> on wire.
-> 
-> Probably I am missing something obvious. I will do more checks and comparisons
-> later this week. Setup is just the same: mainline U-Boot 2017.09 and images
-> built using this patchset.
-
-Note that I never tested with the upstream U-Boot. Do the interfaces
-work in U-Boot?
-
-Antoine
-
+diff --git a/package/libogg/libogg.hash b/package/libogg/libogg.hash
+index 393ebee2a3..0c65b8e1a9 100644
+--- a/package/libogg/libogg.hash
++++ b/package/libogg/libogg.hash
+@@ -1,2 +1,2 @@
+ # From: http://www.xiph.org/downloads/
+-sha256 3f687ccdd5ac8b52d76328fbbfebc70c459a40ea891dbf3dccb74a210826e79b libogg-1.3.2.tar.xz
++sha256 4f3fc6178a533d392064f14776b23c397ed4b9f48f5de297aba73b643f955c08 libogg-1.3.3.tar.xz
+diff --git a/package/libogg/libogg.mk b/package/libogg/libogg.mk
+index 28b55a888f..4c97e9a913 100644
+--- a/package/libogg/libogg.mk
++++ b/package/libogg/libogg.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBOGG_VERSION = 1.3.2
++LIBOGG_VERSION = 1.3.3
+ LIBOGG_SOURCE = libogg-$(LIBOGG_VERSION).tar.xz
+ LIBOGG_SITE = http://downloads.xiph.org/releases/ogg
+ LIBOGG_LICENSE = BSD-3-Clause
 -- 
-Antoine T?nart, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.15.0
