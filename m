@@ -1,50 +1,179 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 14 Nov 2017 14:02:39 +0200
-Subject: [Buildroot] [PATCH next v2 2/2] gnupg2: bump to version 2.2.2
-In-Reply-To: <4f74cc073562f0ae1d00bdb8b49fb13151a6cf20.1510660959.git.baruch@tkos.co.il>
-References: <4f74cc073562f0ae1d00bdb8b49fb13151a6cf20.1510660959.git.baruch@tkos.co.il>
-Message-ID: <24021b2b045ed82c59fd83d878b08e2bafcd279f.1510660959.git.baruch@tkos.co.il>
+Date: Tue, 14 Nov 2017 14:36:45 +0200
+Subject: [Buildroot] [PATCH next] libnl: bump to version 3.4.0
+Message-ID: <a6f7e751386a971150355817e83615d71e231abd.1510663005.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Drop static build fix patch; upstream fixed static build in a different
+way (https://github.com/thom311/libnl/pull/141).
+
+Following the patch removal, autoreconf is not needed anymore.
+
+Add license hash.
+
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
-v2: bump to 2.2.2
----
- package/gnupg2/gnupg2.hash | 8 ++++----
- package/gnupg2/gnupg2.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ ...rt-build-enable-building-cli-during-tests.patch | 115 ---------------------
+ package/libnl/libnl.hash                           |   6 +-
+ package/libnl/libnl.mk                             |   4 +-
+ 3 files changed, 5 insertions(+), 120 deletions(-)
+ delete mode 100644 package/libnl/0003-Revert-build-enable-building-cli-during-tests.patch
 
-diff --git a/package/gnupg2/gnupg2.hash b/package/gnupg2/gnupg2.hash
-index 84152ee4f2c6..43ce3c632876 100644
---- a/package/gnupg2/gnupg2.hash
-+++ b/package/gnupg2/gnupg2.hash
-@@ -1,5 +1,5 @@
--# From https://lists.gnupg.org/pipermail/gnupg-announce/2017q3/000413.html
--sha1 36ee693d0b2ec529ecf53dd6d397cc38ba71c0a7  gnupg-2.2.0.tar.bz2
-+# From https://lists.gnupg.org/pipermail/gnupg-announce/2017q4/000416.html
-+sha1 efa00fc20295b1cafe467359107ea170258870e2  gnupg-2.2.2.tar.bz2
- # Calculated based on the hash above and signature
--# https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.2.0.tar.bz2.sig
--sha256 d4514a0be0f7a1ff263193330019eb4b53c82f0f5e230af3c14df371271a45e6  gnupg-2.2.0.tar.bz2
-+# https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.2.2.tar.bz2.sig
-+sha256 bfb62c7412ceb3b9422c6c7134a34ff01a560f98eb981c2d96829c1517c08197  gnupg-2.2.2.tar.bz2
-diff --git a/package/gnupg2/gnupg2.mk b/package/gnupg2/gnupg2.mk
-index f5fcb15e369b..baf85e716370 100644
---- a/package/gnupg2/gnupg2.mk
-+++ b/package/gnupg2/gnupg2.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/libnl/0003-Revert-build-enable-building-cli-during-tests.patch b/package/libnl/0003-Revert-build-enable-building-cli-during-tests.patch
+deleted file mode 100644
+index f715bb83f9dc..000000000000
+--- a/package/libnl/0003-Revert-build-enable-building-cli-during-tests.patch
++++ /dev/null
+@@ -1,115 +0,0 @@
+-From 68f8393bd356a3d0598cf77e1044b7e8b98aa4d8 Mon Sep 17 00:00:00 2001
+-Message-Id: <68f8393bd356a3d0598cf77e1044b7e8b98aa4d8.1493920165.git.baruch@tkos.co.il>
+-From: Baruch Siach <baruch@tkos.co.il>
+-Date: Thu, 4 May 2017 15:56:14 +0300
+-Subject: [PATCH] Revert "build: enable building cli during tests"
+-
+-This reverts commit 3cb28534d34392ceec4adead0cfa97039796ccb7.
+-
+-Contrary to what 3cb28534d commit log claims, the cli programs depend on
+-dynamic libraries support of the toolchain. Enabling cli programs
+-unconditionally breaks static build as follows:
+-
+-In file included from lib/cli/cls/basic.c:12:0:
+-./include/netlink/cli/utils.h:25:19: fatal error: dlfcn.h: No such file or directory
+-compilation terminated.
+-Makefile:3666: recipe for target 'lib/cli/cls/lib_cli_cls_basic_la-basic.lo' failed
+-make[1]: *** [lib/cli/cls/lib_cli_cls_basic_la-basic.lo] Error 1
+-
+-Revert that commit to restore the ability of static only build of libnl, and
+-its dependencies.
+-
+-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+----
+-Upstream status: https://github.com/thom311/libnl/pull/141
+-
+- Makefile.am | 21 ++++++---------------
+- 1 file changed, 6 insertions(+), 15 deletions(-)
+-
+-diff --git a/Makefile.am b/Makefile.am
+-index 1b95a559304f..279548394650 100644
+---- a/Makefile.am
+-+++ b/Makefile.am
+-@@ -3,8 +3,6 @@
+- ACLOCAL_AMFLAGS = -I m4
+- 
+- lib_LTLIBRARIES =
+--noinst_LTLIBRARIES =
+--check_LTLIBRARIES =
+- 
+- check_PROGRAMS =
+- check_programs =
+-@@ -500,6 +498,8 @@ EXTRA_lib_libnl_xfrm_3_la_DEPENDENCIES = \
+- lib_libnl_xfrm_3_la_LIBADD = \
+- 	lib/libnl-3.la
+- 
+-+if ENABLE_CLI
+-+
+- lib_cli_ltlibraries_cls = \
+- 	lib/cli/cls/basic.la \
+- 	lib/cli/cls/cgroup.la
+-@@ -513,15 +513,11 @@ lib_cli_ltlibraries_qdisc = \
+- 	lib/cli/qdisc/pfifo.la \
+- 	lib/cli/qdisc/plug.la
+- 
+--if ENABLE_CLI
+- pkglib_clsdir = $(pkglibdir)/cli/cls
+- pkglib_qdiscdir = $(pkglibdir)/cli/qdisc
+- pkglib_cls_LTLIBRARIES = $(lib_cli_ltlibraries_cls)
+- pkglib_qdisc_LTLIBRARIES = $(lib_cli_ltlibraries_qdisc)
+--else
+--noinst_LTLIBRARIES += \
+--	$(lib_cli_ltlibraries_cls) \
+--	$(lib_cli_ltlibraries_qdisc)
+-+
+- endif
+- 
+- lib_cli_ldflags = \
+-@@ -550,13 +546,8 @@ lib_cli_qdisc_plug_la_LDFLAGS       = $(lib_cli_ldflags)
+- 
+- ###############################################################################
+- 
+--src_lib_ldflags =
+--
+- if ENABLE_CLI
+- lib_LTLIBRARIES += src/lib/libnl-cli-3.la
+--src_lib_ldflags += -version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE)
+--else
+--check_LTLIBRARIES += src/lib/libnl-cli-3.la
+- endif
+- 
+- src_lib_libnl_cli_3_la_SOURCES = \
+-@@ -583,7 +574,7 @@ src_lib_libnl_cli_3_la_CPPFLAGS = \
+- 	-I$(srcdir)/include \
+- 	-I$(builddir)/include
+- src_lib_libnl_cli_3_la_LDFLAGS = \
+--	$(src_lib_ldflags) \
+-+	-version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE) \
+- 	-Wl,--version-script=$(srcdir)/libnl-cli-3.sym
+- src_lib_libnl_cli_3_la_LIBADD = \
+- 	lib/libnl-3.la \
+-@@ -668,8 +659,6 @@ else
+- noinst_PROGRAMS += $(cli_programs)
+- endif
+- endif
+--else
+--check_PROGRAMS += $(cli_programs)
+- endif
+- 
+- src_genl_ctrl_list_CPPFLAGS =       $(src_cppflags)
+-@@ -847,10 +836,12 @@ tests_test_complex_HTB_with_hash_filters_LDADD    = $(tests_ldadd)
+- tests_test_u32_filter_with_actions_CPPFLAGS       = $(tests_cppflags)
+- tests_test_u32_filter_with_actions_LDADD          = $(tests_ldadd)
+- 
+-+if ENABLE_CLI
+- check_PROGRAMS += \
+- 	tests/test-cache-mngr \
+- 	tests/test-genl \
+- 	tests/test-nf-cache-mngr
+-+endif
+- 
+- tests_cli_ldadd = \
+- 	$(tests_ldadd) \
+--- 
+-2.11.0
+-
+diff --git a/package/libnl/libnl.hash b/package/libnl/libnl.hash
+index ae502c2cf822..b9c626043d45 100644
+--- a/package/libnl/libnl.hash
++++ b/package/libnl/libnl.hash
+@@ -1,2 +1,4 @@
+-# From https://github.com/thom311/libnl/releases/download/libnl3_3_0/libnl-3.3.0.tar.gz.sha256sum
+-sha256	705468b5ae4cd1eb099d2d1c476d6a3abe519bc2810becf12fb1e32de1e074e4	libnl-3.3.0.tar.gz
++# From https://github.com/thom311/libnl/releases/download/libnl3_4_0/libnl-3.4.0.tar.gz.sha256sum
++sha256	b7287637ae71c6db6f89e1422c995f0407ff2fe50cecd61a312b6a9b0921f5bf	libnl-3.4.0.tar.gz
++# Locally calculated
++sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551	COPYING
+diff --git a/package/libnl/libnl.mk b/package/libnl/libnl.mk
+index e1a37aabfe5b..397910c4a736 100644
+--- a/package/libnl/libnl.mk
++++ b/package/libnl/libnl.mk
+@@ -4,14 +4,12 @@
  #
  ################################################################################
  
--GNUPG2_VERSION = 2.2.0
-+GNUPG2_VERSION = 2.2.2
- GNUPG2_SOURCE = gnupg-$(GNUPG2_VERSION).tar.bz2
- GNUPG2_SITE = https://gnupg.org/ftp/gcrypt/gnupg
- GNUPG2_LICENSE = GPL-3.0+
+-LIBNL_VERSION = 3.3.0
++LIBNL_VERSION = 3.4.0
+ LIBNL_SITE = https://github.com/thom311/libnl/releases/download/libnl$(subst .,_,$(LIBNL_VERSION))
+ LIBNL_LICENSE = LGPL-2.1+
+ LIBNL_LICENSE_FILES = COPYING
+ LIBNL_INSTALL_STAGING = YES
+ LIBNL_DEPENDENCIES = host-bison host-flex host-pkgconf
+-# Patching Makefile.am
+-LIBNL_AUTORECONF = YES
+ 
+ ifeq ($(BR2_PACKAGE_LIBNL_TOOLS),y)
+ LIBNL_CONF_OPTS += --enable-cli
 -- 
 2.15.0
