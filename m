@@ -1,39 +1,47 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Tue, 14 Nov 2017 10:51:43 +0100
-Subject: [Buildroot] [PATCH] libogg: bump to version 1.3.3
-Message-ID: <20171114095143.24635-1-joerg.krause@embedded.rocks>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 14 Nov 2017 11:39:36 +0100
+Subject: [Buildroot] Bug in RPATH fixing logic
+In-Reply-To: <c56927b6-b854-36cb-5329-0e3f42f92ce7@grandegger.com> (Wolfgang
+ Grandegger's message of "Tue, 14 Nov 2017 10:05:28 +0100")
+References: <20171112174013.25d90333@windsurf.home>
+ <20171112174955.18449728@windsurf.home>
+ <87y3nbs9jz.fsf@dell.be.48ers.dk>
+ <20171112182403.5d5c8fe4@windsurf.home> <20171112174250.GD2947@scaer>
+ <734d391a-b9b9-d728-9878-4e8c4599b106@grandegger.com>
+ <87d14ms2x2.fsf@dell.be.48ers.dk> <20171113173611.GB2861@scaer>
+ <d632b876-9cbe-bbec-5195-d383b6ebd440@grandegger.com>
+ <20171113203343.GC2861@scaer>
+ <fbbec566-444f-39de-d23e-6b50de62294e@grandegger.com>
+ <c56927b6-b854-36cb-5329-0e3f42f92ce7@grandegger.com>
+Message-ID: <87ined2lg7.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
----
- package/libogg/libogg.hash | 2 +-
- package/libogg/libogg.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+>>>>> "Wolfgang" == Wolfgang Grandegger <wg@grandegger.com> writes:
 
-diff --git a/package/libogg/libogg.hash b/package/libogg/libogg.hash
-index 393ebee2a3..0c65b8e1a9 100644
---- a/package/libogg/libogg.hash
-+++ b/package/libogg/libogg.hash
-@@ -1,2 +1,2 @@
- # From: http://www.xiph.org/downloads/
--sha256 3f687ccdd5ac8b52d76328fbbfebc70c459a40ea891dbf3dccb74a210826e79b libogg-1.3.2.tar.xz
-+sha256 4f3fc6178a533d392064f14776b23c397ed4b9f48f5de297aba73b643f955c08 libogg-1.3.3.tar.xz
-diff --git a/package/libogg/libogg.mk b/package/libogg/libogg.mk
-index 28b55a888f..4c97e9a913 100644
---- a/package/libogg/libogg.mk
-+++ b/package/libogg/libogg.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBOGG_VERSION = 1.3.2
-+LIBOGG_VERSION = 1.3.3
- LIBOGG_SOURCE = libogg-$(LIBOGG_VERSION).tar.xz
- LIBOGG_SITE = http://downloads.xiph.org/releases/ogg
- LIBOGG_LICENSE = BSD-3-Clause
+Hi,
+
+ >>> I think providing a post-install hook is better than patching.
+ >> 
+ >> I agree.
+
+ > You mean post-install for the "binutil" packages only? A generic
+ > solution would be better, but not straight-forward, unfortunately.
+
+I guess we could do something with find -type f -links +1 and then stat
+those files to find the inode number and search for the other links with
+find -inum <inode>, but yeah, it is not going to be pretty.
+
+A package specific post-install hook is most likely going to be a lot
+simpler/cleaner.
+
+ > Do we want to have symbolic instead of hard links or is a special
+ > RPATH with directories for all hard linked ELF files acceptable?
+
+I think using symlinks is the simplest solution.
+
 -- 
-2.15.0
+Bye, Peter Korsgaard
