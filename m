@@ -1,57 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 14 Nov 2017 13:56:06 +0100
-Subject: [Buildroot] [PATCH] Revert "pkg-download: remove explicit
- PKG_VERSION from github helper"
-In-Reply-To: <20171113220009.3372-1-yann.morin.1998@free.fr> (Yann E. MORIN's
- message of "Mon, 13 Nov 2017 23:00:09 +0100")
-References: <20171113220009.3372-1-yann.morin.1998@free.fr>
-Message-ID: <87efp12f4p.fsf@dell.be.48ers.dk>
+Date: Tue, 14 Nov 2017 13:56:29 +0100
+Subject: [Buildroot] [PATCH] support/config-fragments: update ARC
+ toolchain
+In-Reply-To: <20171113222914.1487-1-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Mon, 13 Nov 2017 23:29:14 +0100")
+References: <20171113222914.1487-1-thomas.petazzoni@free-electrons.com>
+Message-ID: <87a7zp2f42.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- > This reverts commit 1e5a8916b2ab4c9c99548fa6fbd4855eee323881.
- > The idea was that the version string can be derived because we know the
- > package name.
+ > This commit updates the br-arcle-hs38 configuration fragment to use a
+ > slightly updated ARC toolchain in which the RPATH of the ar and ranlib
+ > tools have been manually fixed to be correct. This is a temporary
+ > workaround until the issue gets resolved properly in the RPATH fixing
+ > logic, and is needed to fix a number of build issues.
 
- > However, this patch does not account for the fact that $(pkgname) always
- > points to the latest pacakge scanned, which in all other situation we're
- > using it, is the current package, because it is used inside one ot he
- > xxx-inner macros that are $(eval)ualed. So $(pkgname) is evaluated
- > "early" and gets the expected value.
+ > Fixes:
 
- > However, the github value is not in one of those macros, so it gets
- > evaluated "late", when doing the actual download. So, by that time,
- > $(pkgname) will expand to the last package scanned, which is actuall the
- > manual (without a br2-external tree).
+ >   http://autobuild.buildroot.net/results/0ae0d6eba6e2cd8d2298cc4ba6380b8c3e9dd86a/
+ >   (libnl)
 
- > That would require that the _SITE variable be assigned with the :=
- > assignment operator. This is weird, because that would make it the only
- > variable to require that, but only when using the github helper, which
- > is even less obvious and would cause a lot of trouble...
+ >   http://autobuild.buildroot.net/results/fa9bdad8d8b57d1db7f22abdb063ade470e9f938/
+ >   (pcsc-lite)
 
- > The obvious fixup would seem to be to use $(PKG) instead, because that
- > already contains the upper-case package name that vcan be used as a
- > prefix to variables.
+ >   http://autobuild.buildroot.net/results/fca2ad71c7d446e4738834a1f220d950bce5fddd/
+ >   (alsa-lib)
 
- > However, that does not work either, because we have a check that forbids
- > a trsailing slash in _SITE, check that is done in pacakge/pkg-generic,
- > inside the xxx-inner macro, during the $(eval) call.
+ >   http://autobuild.buildroot.net/results/945c60ff942dfd3daa4da27f5e19470e3d97aed4/
+ >   (libcap)
 
- > And at that time, PKG is not yet defined, because it is only defined for
- > an actual recipe.
-
- > So we can't seem to have a workable solution. So, just revert the patch.
-
- > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > Cc: Marcin Nowakowski <marcin.nowakowski@imgtec.com>
- > Cc: Peter Korsgaard <peter@korsgaard.com>
- > Cc: Arnout Vandecappelle <arnout@mind.be>
- > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
 Committed, thanks.
 
