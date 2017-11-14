@@ -1,47 +1,72 @@
-From: Sergey Matyukevich <geomatsi@gmail.com>
-Date: Tue, 14 Nov 2017 23:27:00 +0300
-Subject: [Buildroot] [PATCH/next 4/5] solidrun/macchiatobin: add new
- board
-In-Reply-To: <20171114094237.GA4995@kwain>
-References: <20171112201646.15558-1-geomatsi@gmail.com>
- <20171112201646.15558-5-geomatsi@gmail.com>
- <20171113122702.o63kfb7j4iny6sfl@sapphire.tkos.co.il>
- <20171113200610.ztfqw55iyk52i53a@speedy.hunter>
- <20171113233628.64f1e58d@windsurf.home>
- <20171114074148.GC25491@kwain>
- <20171114092024.juocxhwoaqd7xiql@bars>
- <20171114094237.GA4995@kwain>
-Message-ID: <20171114202700.dckpamhga4x5nfuc@speedy.hunter>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Tue, 14 Nov 2017 21:39:24 +0100
+Subject: [Buildroot] [PATCH/next v2 1/1] package/kodi: bump version to 17.6
+Message-ID: <20171114203924.25632-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Antoine,
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+v2: added "/next" to patch subject
 
-> > Thanks for detailed summary of mcbin networking support. However it sill looks
-> > like there is a missing piece here. I have checked behavior of both mainline 4.14
-> > (516fb7f2e73dcc) and marvell-mainline devel-4.14/all (a3d9036af3c6033). I did no
-> > changes to kernel/dts/defconfig at all other than enabling Marvell PHYs for mainline
-> > kernel. But the result is still the same: 1Gb eth2 interface works with devel-4.14/all,
-> > but doesn't work with mainline. Though PHY is recognized and attached, mii-diag also
-> > provides sane report. Tx packet counter in ifconfig is increased, but no packets
-> > on wire.
-> > 
-> > Probably I am missing something obvious. I will do more checks and comparisons
-> > later this week. Setup is just the same: mainline U-Boot 2017.09 and images
-> > built using this patchset.
-> 
-> Note that I never tested with the upstream U-Boot. Do the interfaces
-> work in U-Boot?
+ package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk | 2 +-
+ package/kodi-texturepacker/kodi-texturepacker.mk         | 2 +-
+ package/kodi/kodi.hash                                   | 2 +-
+ package/kodi/kodi.mk                                     | 2 +-
+ 4 files changed, 4 insertions(+), 4 deletions(-)
 
-No, interfaces do not work in U-Boot. Probably U-Boot matters,
-but even with the same mainline U-Boot interface eth2 works
-just fine on devel-4.14/all kernel.
-
-By the way, could you please advise how to switch eth0
-from SFP to RJ45 when using mainline kernel 4.14 ?
-
-Regards,
-Sergey
+diff --git a/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk b/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
+index 3bb67d88a1..fcf4888a9c 100644
+--- a/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
++++ b/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
+@@ -6,7 +6,7 @@
+ 
+ # Not possible to directly refer to kodi variables, because of
+ # first/second expansion trickery...
+-KODI_JSONSCHEMABUILDER_VERSION = 17.5-Krypton
++KODI_JSONSCHEMABUILDER_VERSION = 17.6-Krypton
+ KODI_JSONSCHEMABUILDER_SITE = $(call github,xbmc,xbmc,$(KODI_JSONSCHEMABUILDER_VERSION))
+ KODI_JSONSCHEMABUILDER_SOURCE = kodi-$(KODI_JSONSCHEMABUILDER_VERSION).tar.gz
+ KODI_JSONSCHEMABUILDER_LICENSE = GPL-2.0
+diff --git a/package/kodi-texturepacker/kodi-texturepacker.mk b/package/kodi-texturepacker/kodi-texturepacker.mk
+index 77a9e3be4e..31e3580aed 100644
+--- a/package/kodi-texturepacker/kodi-texturepacker.mk
++++ b/package/kodi-texturepacker/kodi-texturepacker.mk
+@@ -6,7 +6,7 @@
+ 
+ # Not possible to directly refer to kodi variables, because of
+ # first/second expansion trickery...
+-KODI_TEXTUREPACKER_VERSION = 17.5-Krypton
++KODI_TEXTUREPACKER_VERSION = 17.6-Krypton
+ KODI_TEXTUREPACKER_SITE = $(call github,xbmc,xbmc,$(KODI_TEXTUREPACKER_VERSION))
+ KODI_TEXTUREPACKER_SOURCE = kodi-$(KODI_TEXTUREPACKER_VERSION).tar.gz
+ KODI_TEXTUREPACKER_LICENSE = GPL-2.0
+diff --git a/package/kodi/kodi.hash b/package/kodi/kodi.hash
+index ed3aea0255..23a11ca494 100644
+--- a/package/kodi/kodi.hash
++++ b/package/kodi/kodi.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256 84c64acc270b9e845a67fbbe481ae5ddeb9b4568d76e42f2d5f9160fe0ce2de2  kodi-17.5-Krypton.tar.gz
++sha256 c8312fe92e5bab1cdac1da93d60baed88fa1574146c50c44e3c86d01671c2b1d  kodi-17.6-Krypton.tar.gz
+ # Locally computed - libdvdcss
+ sha256 b6eb2d929ff56cb051152c32010afc5e7cf5fe8c5ae32dca412a2b46b6b57e34  2f12236.tar.gz
+ # Locally computed - libdvdnav
+diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
+index da11839c03..93f4dd4b31 100644
+--- a/package/kodi/kodi.mk
++++ b/package/kodi/kodi.mk
+@@ -6,7 +6,7 @@
+ 
+ # When updating the version, please also update kodi-jsonschemabuilder
+ # and kodi-texturepacker
+-KODI_VERSION = 17.5-Krypton
++KODI_VERSION = 17.6-Krypton
+ KODI_SITE = $(call github,xbmc,xbmc,$(KODI_VERSION))
+ KODI_LICENSE = GPL-2.0
+ KODI_LICENSE_FILES = LICENSE.GPL
+-- 
+2.11.0
