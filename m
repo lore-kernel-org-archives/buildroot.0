@@ -1,113 +1,47 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Tue, 14 Nov 2017 11:07:12 -0500
-Subject: [Buildroot] [NEXT v2 7/7] libpjsip: add codecs with dependencies
-In-Reply-To: <20171114160712.20086-1-aduskett@gmail.com>
-References: <20171114160712.20086-1-aduskett@gmail.com>
-Message-ID: <20171114160712.20086-7-aduskett@gmail.com>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Tue, 14 Nov 2017 17:30:27 +0100
+Subject: [Buildroot] [PATCH 1/1] qt5cinex: depends also on qt5quickcontrols
+Message-ID: <1510677027-24076-1-git-send-email-giulio.benetti@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add all supported codecs that rely on external dependencies. These codecs are:
-- bcg729
-- gsm
-- opus
-- speex
+qt5cinex failed to build if qt5quickcontrols is not selected
+add qt5quickcontrols to qt5cinex dependencies in .mk
+select BR2_PACKAGE_QT5QUICKCONTROLS in Config.in
 
-Signed-off-by: Adam Duskett <aduskett@gmail.com>
+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
 ---
-Changes v1 -> v2:
-  - Combine all codecs with external dependencies into a single patch.
+ package/qt5cinex/Config.in   | 1 +
+ package/qt5cinex/qt5cinex.mk | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
- package/libpjsip/Config.in   | 22 ++++++++++++++++++++++
- package/libpjsip/libpjsip.mk | 32 ++++++++++++++++++++++++++++----
- 2 files changed, 50 insertions(+), 4 deletions(-)
-
-diff --git a/package/libpjsip/Config.in b/package/libpjsip/Config.in
-index d21a5b5..ef05dea 100644
---- a/package/libpjsip/Config.in
-+++ b/package/libpjsip/Config.in
-@@ -29,6 +29,28 @@ config BR2_PACKAGE_LIBPJSIP_CODEC_ILBC
- config BR2_PACKAGE_LIBPJSIP_CODEC_L16
- 	bool "L16"
- 
-+comment "Codecs with external dependencies"
-+
-+config BR2_PACKAGE_LIBPJSIP_CODEC_BCG729
-+	bool "BCG729"
-+	select BR2_PACKAGE_BCG729
-+
-+config BR2_PACKAGE_LIBPJSIP_CODEC_GSM
-+	bool "GSM"
-+	depends on !BR2_STATIC_LIBS # libgsm
-+	select BR2_PACKAGE_LIBGSM
-+
-+comment "GSM codec needs a toolchain w/ shared libraries"
-+	depends on BR2_STATIC_LIBS
-+
-+config BR2_PACKAGE_LIBPJSIP_CODEC_OPUS
-+	bool "Opus"
-+	select BR2_PACKAGE_OPUS
-+
-+config BR2_PACKAGE_LIBPJSIP_CODEC_SPEEX
-+	bool "Speex"
-+	select BR2_PACKAGE_SPEEX
-+
- endif #BR2_PACKAGE_LIBPJSIP
- 
- comment "libpjsip needs a toolchain w/ C++, threads"
-diff --git a/package/libpjsip/libpjsip.mk b/package/libpjsip/libpjsip.mk
-index 69d412a..cfdb3af 100644
---- a/package/libpjsip/libpjsip.mk
-+++ b/package/libpjsip/libpjsip.mk
-@@ -25,13 +25,9 @@ LIBPJSIP_CONF_ENV = \
- 	CFLAGS="$(LIBPJSIP_CFLAGS)"
- 
- LIBPJSIP_CONF_OPTS = \
--	--disable-gsm-codec \
--	--disable-speex-codec \
--	--disable-speex-aec \
- 	--disable-resample \
- 	--disable-opencore-amr \
- 	--disable-libwebrtc \
--	--disable-opus \
- 	--disable-oss \
- 	--disable-libsamplerate \
- 	--disable-sdl \
-@@ -109,4 +105,32 @@ ifneq ($(BR2_PACKAGE_LIBPJSIP_CODEC_L16),y)
- LIBPJSIP_CONF_OPTS += --disable-l16-codec
+diff --git a/package/qt5cinex/Config.in b/package/qt5cinex/Config.in
+index 5adf6c3..7cc459a 100644
+--- a/package/qt5cinex/Config.in
++++ b/package/qt5cinex/Config.in
+@@ -16,6 +16,7 @@ config BR2_PACKAGE_QT5CINEX
+ 	select BR2_PACKAGE_QT5BASE_WIDGETS
+ 	select BR2_PACKAGE_QT5BASE_EGLFS
+ 	select BR2_PACKAGE_QT5GRAPHICALEFFECTS
++	select BR2_PACKAGE_QT5QUICKCONTROLS
+ 	help
+ 	  This application demonstrates the power of Qt5 and few of the new
+ 	  additions available in QtQuick 2.0.
+diff --git a/package/qt5cinex/qt5cinex.mk b/package/qt5cinex/qt5cinex.mk
+index d9254f5..44c53a1 100644
+--- a/package/qt5cinex/qt5cinex.mk
++++ b/package/qt5cinex/qt5cinex.mk
+@@ -12,7 +12,7 @@ QT5CINEX_HD = "rpi_"
  endif
  
-+# Codecs with external dependencies
-+ifeq ($(BR2_PACKAGE_LIBPJSIP_CODEC_BCG729),y)
-+LIBPJSIP_DEPENDENCIES += bcg729
-+LIBPJSIP_CONF_OPTS += --with-bcg729=$(STAGING_DIR)/usr
-+else
-+LIBPJSIP_CONF_OPTS += --disable-bcg729
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBPJSIP_CODEC_GSM),y)
-+LIBPJSIP_DEPENDENCIES += libgsm
-+LIBPJSIP_CONF_OPTS += --with-external-gsm
-+else
-+LIBPJSIP_CONF_OPTS += --disable-gsm-codec
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBPJSIP_CODEC_OPUS),y)
-+LIBPJSIP_DEPENDENCIES += opus
-+else
-+LIBPJSIP_CONF_OPTS += --disable-opus
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBPJSIP_CODEC_SPEEX),y)
-+LIBPJSIP_DEPENDENCIES += speex
-+LIBPJSIP_CONF_OPTS += --with-external-speex
-+else
-+LIBPJSIP_CONF_OPTS += --disable-speex-codec --disable-speex-aec
-+endif
-+
- $(eval $(autotools-package))
+ QT5CINEX_SOURCE = Qt5_CinematicExperience_$(QT5CINEX_HD)$(QT5CINEX_VERSION).tgz
+-QT5CINEX_DEPENDENCIES = qt5base qt5declarative
++QT5CINEX_DEPENDENCIES = qt5base qt5declarative qt5quickcontrols
+ 
+ QT5CINEX_LICENSE = CC-BY-3.0
+ QT5CINEX_LICENSE_FILES = README
 -- 
-2.13.6
+2.7.4
