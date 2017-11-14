@@ -1,73 +1,85 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 14 Nov 2017 13:37:54 +0200
-Subject: [Buildroot] [PATCH] chrony: fix build with musl
-Message-ID: <464b10815ee2e59be56aef7c79d5569ecde913f5.1510659474.git.baruch@tkos.co.il>
+From: Jagan Teki <jagannadh.teki@gmail.com>
+Date: Tue, 14 Nov 2017 12:43:50 +0100
+Subject: [Buildroot] [PATCH v2 1/2] uboot: Add support for U-Boot TPL
+Message-ID: <1510659831-22535-1-git-send-email-jagan@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The SCM_TIMESTAMPING_PKTINFO macro is missing from the socket.h header
-that musl libc provides as of version 1.1.16 that we currently use in
-Buildroot. Patch the code to add this macro locally until we update
-musl.
+TPL is first stage bootloader, On rk3288 vyasa board due to size
+limitation on SPL.
 
-Fixes:
-http://autobuild.buildroot.net/results/aab/aab3210d6d0c60fb07415d9bbdb09f2d4091446c/
-http://autobuild.buildroot.net/results/fc8/fc8440db025f51c176240ca127bc68a367add21c/
+Since the size of SPL can't be exceeded 0x8000 bytes in RK3288,
+it is not possible add new SPL features like Falcon mode or etc.
 
-Cc: Nathan Lynch <ntl@pobox.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+So add TPL stage so-that adding new features to SPL is possible.
+- TPL: DRAM init, clocks
+- SPL: MMC, falcon, etc
+
+u-boot-tpl.bin is the file name.
+
+Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
 ---
- .../chrony/0001-ntp-fix-build-with-musl-libc.patch | 39 ++++++++++++++++++++++
- 1 file changed, 39 insertions(+)
- create mode 100644 package/chrony/0001-ntp-fix-build-with-musl-libc.patch
+Changes for v2:
+- None
 
-diff --git a/package/chrony/0001-ntp-fix-build-with-musl-libc.patch b/package/chrony/0001-ntp-fix-build-with-musl-libc.patch
-new file mode 100644
-index 000000000000..c927b343f754
---- /dev/null
-+++ b/package/chrony/0001-ntp-fix-build-with-musl-libc.patch
-@@ -0,0 +1,39 @@
-+From 1e64bc4c4379ae3e55be3c518e0e3e22c8c4ae77 Mon Sep 17 00:00:00 2001
-+From: Baruch Siach <baruch@tkos.co.il>
-+Date: Tue, 14 Nov 2017 13:23:57 +0200
-+Subject: [PATCH] ntp: fix build with musl libc
+ boot/uboot/Config.in | 25 +++++++++++++++++++++++++
+ boot/uboot/uboot.mk  |  5 +++++
+ 2 files changed, 30 insertions(+)
+
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index 8215912..43e4947 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -342,6 +342,31 @@ config BR2_TARGET_UBOOT_SPL_NAME
+ 	  u-boot build. For most platform it is spl/u-boot-spl.bin but
+ 	  not always. It is MLO on OMAP and SPL on i.MX6 for example.
+ 
++config BR2_TARGET_UBOOT_TPL
++	bool "Install U-Boot TPL binary image"
++	depends on BR2_TARGET_UBOOT_SPL
++	help
++	  Install the U-Boot TPL binary image to the images
++	  directory.
++	  TPL is first stage bootloader, On rk3288 vyasa board due to size
++	  limitation on SPL.
 +
-+The configure script enables HAVE_LINUX_TIMESTAMPING_OPT_PKTINFO based
-+on the existence of struct scm_ts_pktinfo and
-+SOF_TIMESTAMPING_OPT_PKTINFO that were introduced in Linux kernel v4.13
-+in the linux/net_tstamp.h kernel header. But this feature also requires
-+SCM_TIMESTAMPING_PKTINFO that is defined in the socket.h header. musl
-+libc provides its own version of socket.h, and as of musl version 1.1.16
-+this macro is missing. Define this macro in the code as a temporary
-+measure until musl is updated to its latest version.
++	  Since the size of SPL can't be exceeded 0x8000 bytes in RK3288,
++	  it is not possible add new SPL features like Falcon mode or etc.
 +
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Upstream status: not upstreamable
-+---
-+ ntp_io_linux.c | 4 ++++
-+ 1 file changed, 4 insertions(+)
++	  So add TPL stage so-that adding new features to SPL is possible.
++	  - TPL: DRAM init, clocks
++	  - SPL: MMC, falcon, etc
 +
-+diff --git a/ntp_io_linux.c b/ntp_io_linux.c
-+index 00caed06f7ba..2214a6f6f6c5 100644
-+--- a/ntp_io_linux.c
-++++ b/ntp_io_linux.c
-+@@ -574,6 +574,10 @@ extract_udp_data(unsigned char *msg, NTP_Remote_Address *remote_addr, int len)
-+ 
-+ /* ================================================== */
-+ 
-++#ifndef SCM_TIMESTAMPING_PKTINFO
-++#define SCM_TIMESTAMPING_PKTINFO 58
-++#endif
-++
-+ int
-+ NIO_Linux_ProcessMessage(NTP_Remote_Address *remote_addr, NTP_Local_Address *local_addr,
-+                          NTP_Local_Timestamp *local_ts, struct msghdr *hdr, int length)
-+-- 
-+2.15.0
++config BR2_TARGET_UBOOT_TPL_NAME
++	string "U-Boot TPL binary image name"
++	default "tpl/u-boot-tpl.bin"
++	depends on BR2_TARGET_UBOOT_TPL
++	help
++	  A space-separated list of TPL binaries, generated during
++	  u-boot build. For most platform it is spl/u-boot-tpl.bin but
++	  not always.
 +
+ config BR2_TARGET_UBOOT_ZYNQ_IMAGE
+ 	bool "Generate image for Xilinx Zynq"
+ 	depends on BR2_arm
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index fdacf16..5702ca6 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -242,6 +242,11 @@ define UBOOT_INSTALL_IMAGES_CMDS
+ 			cp -dpf $(@D)/$(f) $(BINARIES_DIR)/
+ 		)
+ 	)
++	$(if $(BR2_TARGET_UBOOT_TPL),
++		$(foreach f,$(call qstrip,$(BR2_TARGET_UBOOT_TPL_NAME)), \
++			cp -dpf $(@D)/$(f) $(BINARIES_DIR)/
++		)
++	)
+ 	$(if $(BR2_TARGET_UBOOT_ENVIMAGE),
+ 		cat $(call qstrip,$(BR2_TARGET_UBOOT_ENVIMAGE_SOURCE)) | \
+ 			$(HOST_DIR)/bin/mkenvimage -s $(BR2_TARGET_UBOOT_ENVIMAGE_SIZE) \
 -- 
-2.15.0
+1.9.1
