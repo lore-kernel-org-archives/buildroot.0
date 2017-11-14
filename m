@@ -1,45 +1,85 @@
-From: Andrey Yurovsky <yurovsky@gmail.com>
-Date: Mon, 13 Nov 2017 20:31:41 -0800
-Subject: [Buildroot] [PATCH] rauc: bump version to 0.2
-Message-ID: <20171114043141.8245-1-ayurovsky@impinj.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Tue, 14 Nov 2017 07:51:50 +0100
+Subject: [Buildroot] [PATCH/next 1/2] package/dovecot: bump version to
+ 2.2.33.2
+Message-ID: <20171114065151.24659-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Andrey Yurovsky <yurovsky@gmail.com>
+Added license hashes.
 
-Version 0.2 provides various bug fixes and feature enhancements.
-
-Signed-off-by: Andrey Yurovsky <yurovsky@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/rauc/rauc.hash | 4 ++--
- package/rauc/rauc.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ .../0001-byteorder.h-fix-uclibc-build.patch        | 32 ++++++++++++++++++++++
+ package/dovecot/dovecot.hash                       |  5 +++-
+ package/dovecot/dovecot.mk                         |  2 +-
+ 3 files changed, 37 insertions(+), 2 deletions(-)
+ create mode 100644 package/dovecot/0001-byteorder.h-fix-uclibc-build.patch
 
-diff --git a/package/rauc/rauc.hash b/package/rauc/rauc.hash
-index 78c3e27..649d195 100644
---- a/package/rauc/rauc.hash
-+++ b/package/rauc/rauc.hash
-@@ -1,3 +1,3 @@
- # Locally calculated, after verifying against
--# https://github.com/rauc/rauc/releases/download/v0.1.1/rauc-0.1.1.tar.xz.asc
--sha256 d2901d493f1d3210aef6411e83b02edac3a678d6d825d71a1c61b5b6afc7e478 rauc-0.1.1.tar.xz
-+# https://github.com/rauc/rauc/releases/download/v0.2/rauc-0.2.tar.xz.asc
-+sha256 83aa3ac3716e1c29315162e3cbf5d4db79f26dd95efe1bc634bbce364b95491a rauc-0.2.tar.xz
-diff --git a/package/rauc/rauc.mk b/package/rauc/rauc.mk
-index 479a583..11991ed 100644
---- a/package/rauc/rauc.mk
-+++ b/package/rauc/rauc.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/dovecot/0001-byteorder.h-fix-uclibc-build.patch b/package/dovecot/0001-byteorder.h-fix-uclibc-build.patch
+new file mode 100644
+index 0000000000..7111031456
+--- /dev/null
++++ b/package/dovecot/0001-byteorder.h-fix-uclibc-build.patch
+@@ -0,0 +1,32 @@
++From 902917880ca29f1007750a70cf46e7246b2d0a2a Mon Sep 17 00:00:00 2001
++From: Josef 'Jeff' Sipek <jeff.sipek@dovecot.fi>
++Date: Tue, 14 Nov 2017 06:01:21 +0100
++Subject: [PATCH 1/1] byteorder.h: fix uclibc build
++
++Patch suggested on upstream mailinglist:
++https://www.dovecot.org/pipermail/dovecot/2017-November/110019.html
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ src/lib/byteorder.h | 5 +++++
++ 1 file changed, 5 insertions(+)
++
++diff --git a/src/lib/byteorder.h b/src/lib/byteorder.h
++index 2f5dc7c17..4ffe8da21 100644
++--- a/src/lib/byteorder.h
+++++ b/src/lib/byteorder.h
++@@ -23,6 +23,11 @@
++ #ifndef BYTEORDER_H
++ #define BYTEORDER_H
++ 
+++#undef bswap_8
+++#undef bswap_16
+++#undef bswap_32
+++#undef bswap_64
+++
++ /*
++  * These prototypes exist to catch bugs in the code generating macros below.
++  */
++-- 
++2.11.0
++
+diff --git a/package/dovecot/dovecot.hash b/package/dovecot/dovecot.hash
+index 184745b394..33163d6d8c 100644
+--- a/package/dovecot/dovecot.hash
++++ b/package/dovecot/dovecot.hash
+@@ -1,2 +1,5 @@
+ # Locally computed after checking signature
+-sha256 034be40907748128d65088a4f59789b2f99ae7b33a88974eae0b6a68ece376a1  dovecot-2.2.31.tar.gz
++sha256 fe1e3b78609a56ee22fc209077e4b75348fa1bbd54c46f52bde2472a4c4cee84  dovecot-2.2.33.2.tar.gz
++sha256 a363b132e494f662d98c820d1481297e6ae72f194c2c91b6c39e1518b86240a8  COPYING
++sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
++sha256 52b8c95fabb19575281874b661ef7968ea47e8f5d74ba0dd40ce512e52b3fc97  COPYING.MIT
+diff --git a/package/dovecot/dovecot.mk b/package/dovecot/dovecot.mk
+index 4cc6ae4de7..25a78b9f78 100644
+--- a/package/dovecot/dovecot.mk
++++ b/package/dovecot/dovecot.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--RAUC_VERSION = 0.1.1
-+RAUC_VERSION = 0.2
- RAUC_SITE = https://github.com/rauc/rauc/releases/download/v$(RAUC_VERSION)
- RAUC_SOURCE = rauc-$(RAUC_VERSION).tar.xz
- RAUC_LICENSE = LGPL-2.1
+ DOVECOT_VERSION_MAJOR = 2.2
+-DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).31
++DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).33.2
+ DOVECOT_SITE = http://www.dovecot.org/releases/$(DOVECOT_VERSION_MAJOR)
+ DOVECOT_INSTALL_STAGING = YES
+ DOVECOT_LICENSE = LGPL-2.1
 -- 
-2.9.5
+2.11.0
