@@ -1,10 +1,9 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 14 Nov 2017 23:07:31 +0100
-Subject: [Buildroot] [PATCH/next 1/5] armada-firmware: new package
-In-Reply-To: <20171112201646.15558-2-geomatsi@gmail.com>
-References: <20171112201646.15558-1-geomatsi@gmail.com>
- <20171112201646.15558-2-geomatsi@gmail.com>
-Message-ID: <dbbc1ce7-1847-a08d-fca0-a667b555b71c@mind.be>
+Date: Tue, 14 Nov 2017 23:12:26 +0100
+Subject: [Buildroot] [PATCH] genimage: change upstream URL
+In-Reply-To: <20171114174651.12184-1-vivien.didelot@savoirfairelinux.com>
+References: <20171114174651.12184-1-vivien.didelot@savoirfairelinux.com>
+Message-ID: <1f1f2eba-dfd9-c253-34c1-1902c7d934ce@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,118 +12,68 @@ To: buildroot@busybox.net
 
 
 
-On 12-11-17 21:16, Sergey Matyukevich wrote:
-> This package adds SCP BL2 firmware for Marvell Armada 7040 and 8040 SoCs.
+On 14-11-17 18:46, Vivien Didelot wrote:
+> Pengutronix moved the official genimage repository to Github.
 > 
-> Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
-> ---
->  boot/Config.in                            |  1 +
->  boot/armada-firmware/Config.in            | 19 +++++++++++++++++++
->  boot/armada-firmware/armada-firmware.hash |  2 ++
->  boot/armada-firmware/armada-firmware.mk   | 18 ++++++++++++++++++
->  4 files changed, 40 insertions(+)
->  create mode 100644 boot/armada-firmware/Config.in
->  create mode 100644 boot/armada-firmware/armada-firmware.hash
->  create mode 100644 boot/armada-firmware/armada-firmware.mk
-> 
-> diff --git a/boot/Config.in b/boot/Config.in
-> index 2f46c8546e..0ffbd7288b 100644
-> --- a/boot/Config.in
-> +++ b/boot/Config.in
-> @@ -17,5 +17,6 @@ source "boot/ts4800-mbrboot/Config.in"
->  source "boot/uboot/Config.in"
->  source "boot/vexpress-firmware/Config.in"
->  source "boot/xloader/Config.in"
-> +source "boot/armada-firmware/Config.in"
+> This patch updates the official URL from the package description. The
+> sources from Github do not include the configure script so update the
+> sha256 hash and set GENIMAGE_AUTORECONF to execute ./autogen.sh first.
 
- Please keep things alphabetic. However, I don't think the boot loader menu is
-appropriate. Yes, it's an image that is used by the bootloader, but really it is
-a piece of firmware, not really related to booting the SoC.
+ Since the archive still exists on Pengutronix, and there it's an .xz instead of
+a .gz, and that archive doesn't need to be AUTORECONF'ed, I think it's better to
+stick with the original archive.
 
->  
->  endmenu
-> diff --git a/boot/armada-firmware/Config.in b/boot/armada-firmware/Config.in
-> new file mode 100644
-> index 0000000000..530b5622c8
-> --- /dev/null
-> +++ b/boot/armada-firmware/Config.in
-> @@ -0,0 +1,19 @@
-> +config BR2_TARGET_ARMADA_FIRMWARE
-> +	bool "armada-firmware"
-> +	depends on BR2_aarch64
-> +	help
-> +	  Marvell Armada SCP BL2 firmware images.
-
- Could you write a little more help text? Like, that it's the firmware for the
-management coprocessor and that it is needed for power management. The first
-paragraph of [1] can be a source of inspiration.
-
- We normally also want an upstream URL. [1] might be usable but I'm not sure.
-
-> +
-> +if BR2_TARGET_ARMADA_FIRMWARE
-> +
-> +config BR2_TARGET_ARMADA_FIRMWARE_IMAGE
-> +	string "Armada SCP BL2 image name"
-> +	help
-> +	  Armada SCP BL2 firmware image name.
-> +
-> +config BR2_TARGET_ARMADA_FIRMWARE_VERSION
-> +	string "Armada SCP BL2 image version"
-> +	help
-> +	  Armada SCP BL2 firmware image version.
-> +
-> +endif
-> diff --git a/boot/armada-firmware/armada-firmware.hash b/boot/armada-firmware/armada-firmware.hash
-> new file mode 100644
-> index 0000000000..5eeca9d6ea
-> --- /dev/null
-> +++ b/boot/armada-firmware/armada-firmware.hash
-> @@ -0,0 +1,2 @@
-> +# Locally calculated
-> +sha256 b310443c0d51d07b7c11597548685ae608b8478eee7095925427da6ab71e0168 armada-firmware-binaries-marvell-armada-17.10.tar.gz
-> diff --git a/boot/armada-firmware/armada-firmware.mk b/boot/armada-firmware/armada-firmware.mk
-> new file mode 100644
-> index 0000000000..d75dc7cb6c
-> --- /dev/null
-> +++ b/boot/armada-firmware/armada-firmware.mk
-> @@ -0,0 +1,18 @@
-> +################################################################################
-> +#
-> +# Marvell Armada SCP BL2 firmware images
-> +#
-> +################################################################################
-> +
-> +ARMADA_FIRMWARE_VERSION = $(call qstrip,$(BR2_TARGET_ARMADA_FIRMWARE_VERSION))
-> +ARMADA_FIRMWARE_SITE = $(call github,MarvellEmbeddedProcessors,binaries-marvell,$(ARMADA_FIRMWARE_VERSION))
-
- We try to keep the upstream name as the package name. Is there anything wrong
-with binaries-marvell?
-
-> +ARMADA_FIRMWARE_LICENSE = Proprietary
-> +
-> +ARMADA_FIRMWARE_INSTALL_IMAGES  = YES
-> +
-> +define ARMADA_FIRMWARE_INSTALL_IMAGES_CMDS
-> +	$(INSTALL) -D -m 0644 $(@D)/mrvl_scp_bl2_7040.img $(BINARIES_DIR)/mrvl_scp_bl2_7040.img
-> +	$(INSTALL) -D -m 0644 $(@D)/mrvl_scp_bl2_8040.img $(BINARIES_DIR)/mrvl_scp_bl2_8040.img
-
- I don't think the name is really relevant, is it? So maybe you could always
-copy it to the same file in BINARIES_DIR so on the ATF side you don't need to
-access variables of this package.
+ Changing the upstream URL in Config.in is still relevant though.
 
  Regards,
  Arnout
 
-> +endef
-> +
-> +$(eval $(generic-package))
 > 
-
-[1]
-http://wiki.macchiatobin.net/tiki-index.php?page=Enable+Power+Management+on+MACCHIATObin#Bootloader
-
-
+> Signed-off-by: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
+> ---
+>  package/genimage/Config.in.host | 2 +-
+>  package/genimage/genimage.hash  | 2 +-
+>  package/genimage/genimage.mk    | 6 +++---
+>  3 files changed, 5 insertions(+), 5 deletions(-)
+> 
+> diff --git a/package/genimage/Config.in.host b/package/genimage/Config.in.host
+> index 5c5a8a8a2c..cf831a143c 100644
+> --- a/package/genimage/Config.in.host
+> +++ b/package/genimage/Config.in.host
+> @@ -10,4 +10,4 @@ config BR2_PACKAGE_HOST_GENIMAGE
+>  	  environment variables, the config file or commandline
+>  	  switches.
+>  
+> -	  http://www.pengutronix.de/software/genimage/
+> +	  https://github.com/pengutronix/genimage
+> diff --git a/package/genimage/genimage.hash b/package/genimage/genimage.hash
+> index 4be2fca873..0c304629c7 100644
+> --- a/package/genimage/genimage.hash
+> +++ b/package/genimage/genimage.hash
+> @@ -1,2 +1,2 @@
+>  # Locally calculated
+> -sha256	69f35af7edf6f4dbdac7a18ddc69dcf38c501e43d8b50c524555754c51479078	genimage-9.tar.xz
+> +sha256 c5f6063cab834cd9a6d484c5773430f68cb61aa7203c8270c9e42dac2a0461f0        genimage-v9.tar.gz
+> diff --git a/package/genimage/genimage.mk b/package/genimage/genimage.mk
+> index 2e7aad20c6..913d745cec 100644
+> --- a/package/genimage/genimage.mk
+> +++ b/package/genimage/genimage.mk
+> @@ -4,11 +4,11 @@
+>  #
+>  ################################################################################
+>  
+> -GENIMAGE_VERSION = 9
+> -GENIMAGE_SOURCE = genimage-$(GENIMAGE_VERSION).tar.xz
+> -GENIMAGE_SITE = http://www.pengutronix.de/software/genimage/download
+> +GENIMAGE_VERSION = v9
+> +GENIMAGE_SITE = $(call github,pengutronix,genimage,$(GENIMAGE_VERSION))
+>  HOST_GENIMAGE_DEPENDENCIES = host-pkgconf host-libconfuse
+>  GENIMAGE_LICENSE = GPL-2.0
+>  GENIMAGE_LICENSE_FILES = COPYING
+> +GENIMAGE_AUTORECONF = YES
+>  
+>  $(eval $(host-autotools-package))
+> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
