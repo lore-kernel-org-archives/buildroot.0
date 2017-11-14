@@ -1,104 +1,73 @@
-From: Fabio Estevam <fabio.estevam@nxp.com>
-Date: Tue, 14 Nov 2017 11:18:11 -0200
-Subject: [Buildroot] [PATCH v2] configs/imx6slevk: Add new defconfig
-Message-ID: <1510665491-10279-1-git-send-email-fabio.estevam@nxp.com>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Tue, 14 Nov 2017 14:22:41 +0100
+Subject: [Buildroot] [PATCH] python-treq: bump version to 17.8.0
+Message-ID: <20171114132241.6831-1-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add support for imx6slevk_defconfig that allows booting a mainline
-kernel and mainline U-Boot.
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
+Add new runtime dependencies and add licence file checksum.
+
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
-Changes since v1:
-- Use U-Boot 2017.11 and kernel 4.14
+ package/python-treq/Config.in        | 6 ++++--
+ package/python-treq/python-treq.hash | 5 +++--
+ package/python-treq/python-treq.mk   | 4 ++--
+ 3 files changed, 9 insertions(+), 6 deletions(-)
 
- .gitlab-ci.yml                       |  1 +
- DEVELOPERS                           |  1 +
- board/freescale/imx6slevk/readme.txt | 14 ++++++++++++++
- configs/imx6slevk_defconfig          | 26 ++++++++++++++++++++++++++
- 4 files changed, 42 insertions(+)
- create mode 100644 board/freescale/imx6slevk/readme.txt
- create mode 100644 configs/imx6slevk_defconfig
-
-diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index 0dddb22..5f859fa 100644
---- a/.gitlab-ci.yml
-+++ b/.gitlab-ci.yml
-@@ -126,6 +126,7 @@ imx23evk_defconfig: *defconfig
- imx6-sabreauto_defconfig: *defconfig
- imx6-sabresd_defconfig: *defconfig
- imx6-sabresd_qt5_defconfig: *defconfig
-+imx6slevk_defconfig: *defconfig
- imx6ulpico_defconfig: *defconfig
- imx7dpico_defconfig: *defconfig
- lego_ev3_defconfig: *defconfig
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 37b7dfe..ad481f2 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -577,6 +577,7 @@ N:	Fabio Estevam <festevam@gmail.com>
- F:	board/warp7/
- F:	configs/freescale_imx*
- F:	configs/imx6-sabresd*
-+F:	configs/imx6slevk_defconfig
- F:	configs/imx6ulpico_defconfig
- F:	configs/mx6cubox_defconfig
- F:	configs/mx6sx_udoo_neo_defconfig
-diff --git a/board/freescale/imx6slevk/readme.txt b/board/freescale/imx6slevk/readme.txt
-new file mode 100644
-index 0000000..424380e
---- /dev/null
-+++ b/board/freescale/imx6slevk/readme.txt
-@@ -0,0 +1,14 @@
-+NXP i.MX6SL EVK board
-+---------------------
-+
-+To build a minimal support for this board:
-+
-+$ make imx6slevk_defconfig
-+$ make
-+
-+Buildroot prepares a bootable "sdcard.img" image in the output/images/
-+directory, ready to be flashed into the SD card:
-+
-+$ sudo dd if=output/images/sdcard.img of=/dev/<sd-card-device>; sync
-+
-+Then insert the SD card into the SD2 slot and boot the board.
-diff --git a/configs/imx6slevk_defconfig b/configs/imx6slevk_defconfig
-new file mode 100644
-index 0000000..be4b42e
---- /dev/null
-+++ b/configs/imx6slevk_defconfig
-@@ -0,0 +1,26 @@
-+BR2_arm=y
-+BR2_cortex_a9=y
-+BR2_ARM_ENABLE_NEON=y
-+BR2_ARM_ENABLE_VFP=y
-+BR2_ARM_FPU_VFPV3=y
-+# Linux headers same as kernel, a 4.14 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
-+BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BOARDNAME="mx6slevk"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.11"
-+BR2_TARGET_UBOOT_FORMAT_IMX=y
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.14"
-+BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6sl-evk"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/post-image.sh"
-+# required tools to create the SD card image
-+BR2_PACKAGE_HOST_DOSFSTOOLS=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_MTOOLS=y
+diff --git a/package/python-treq/Config.in b/package/python-treq/Config.in
+index 2047cc0dc7..3a121ea71a 100644
+--- a/package/python-treq/Config.in
++++ b/package/python-treq/Config.in
+@@ -1,14 +1,16 @@
+ config BR2_PACKAGE_PYTHON_TREQ
+ 	bool "python-treq"
+ 	depends on BR2_INSTALL_LIBSTDCPP # python-pyopenssl
++	select BR2_PACKAGE_PYTHON_ATTRS # runtime
++	select BR2_PACKAGE_PYTHON_IDNA # runtime
++	select BR2_PACKAGE_PYTHON_PYOPENSSL # runtime
+ 	select BR2_PACKAGE_PYTHON_REQUESTS # runtime
+ 	select BR2_PACKAGE_PYTHON_SERVICE_IDENTITY # runtime
+ 	select BR2_PACKAGE_PYTHON_SIX # runtime
+ 	select BR2_PACKAGE_PYTHON_TWISTED # runtime
+-	select BR2_PACKAGE_PYTHON_PYOPENSSL # runtime
+ 	help
+ 	  treq is an HTTP library inspired by requests but written on
+-	  top of Twisted's Agents.  It provides a simple, higher level
++	  top of Twisted's Agents. It provides a simple, higher level
+ 	  API for making HTTP requests when using Twisted.
+ 
+ 	  https://github.com/twisted/treq
+diff --git a/package/python-treq/python-treq.hash b/package/python-treq/python-treq.hash
+index a961b809ae..14f39460fa 100644
+--- a/package/python-treq/python-treq.hash
++++ b/package/python-treq/python-treq.hash
+@@ -1,3 +1,4 @@
+ # md5 from https://pypi.python.org/pypi/treq/json, sha256 locally computed
+-md5 421dea5bc8294c14aa24d64628a2eaea treq-16.12.0.tar.gz
+-sha256 b008edc81157969ad2bf23bece083adedb0adf249368a3896bb5ac9a871b91a9 treq-16.12.0.tar.gz
++md5	7e1f5079b85ec104d4759fc0fb89071e  treq-17.8.0.tar.gz
++sha256	ef72d2d5e0b24bdf29267b608fa33df0ac401743af8524438b073e1fb2b66f16  treq-17.8.0.tar.gz
++sha256  7cc1b65e1937b1cc07052bb864ec96d8e5fd413400c0842e5b89a8201a600293  LICENSE
+diff --git a/package/python-treq/python-treq.mk b/package/python-treq/python-treq.mk
+index 051b8ffaaf..73c47152a8 100644
+--- a/package/python-treq/python-treq.mk
++++ b/package/python-treq/python-treq.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_TREQ_VERSION = 16.12.0
++PYTHON_TREQ_VERSION = 17.8.0
+ PYTHON_TREQ_SOURCE = treq-$(PYTHON_TREQ_VERSION).tar.gz
+-PYTHON_TREQ_SITE = https://pypi.python.org/packages/26/4b/303880fb5bab1111654df2df0f201f4ba038221bdc52f5a395f0abfc0cb1
++PYTHON_TREQ_SITE = https://pypi.python.org/packages/11/3e/1014f26bfd4d07db015ad48384446b3bdc4de4bbdd2eba3be7fbb149cc44
+ PYTHON_TREQ_LICENSE = MIT
+ PYTHON_TREQ_LICENSE_FILES = LICENSE
+ PYTHON_TREQ_SETUP_TYPE = setuptools
 -- 
-2.7.4
+2.11.0
