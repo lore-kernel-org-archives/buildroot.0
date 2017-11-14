@@ -1,49 +1,85 @@
-From: Fabio Estevam <fabio.estevam@nxp.com>
-Date: Tue, 14 Nov 2017 10:56:57 -0200
-Subject: [Buildroot] [PATCH] configs/mx53loco: Bump U-Boot and kernel
- versions
-Message-ID: <1510664217-18286-1-git-send-email-fabio.estevam@nxp.com>
+From: Jagan Teki <jagannadh.teki@gmail.com>
+Date: Tue, 14 Nov 2017 13:57:05 +0100
+Subject: [Buildroot] [PATCH v3 1/2] uboot: Add support for U-Boot TPL
+Message-ID: <1510664226-32208-1-git-send-email-jagan@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
----
- configs/mx53loco_defconfig | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+TPL is first stage bootloader, On rk3288 vyasa board due to size
+limitation on SPL.
 
-diff --git a/configs/mx53loco_defconfig b/configs/mx53loco_defconfig
-index 0f94aa7..1b10518 100644
---- a/configs/mx53loco_defconfig
-+++ b/configs/mx53loco_defconfig
-@@ -2,8 +2,8 @@
- BR2_arm=y
- BR2_cortex_a8=y
+Since the size of SPL can't be exceeded 0x8000 bytes in RK3288,
+it is not possible add new SPL features like Falcon mode or etc.
+
+So add TPL stage so-that adding new features to SPL is possible.
+- TPL: DRAM init, clocks
+- SPL: MMC, falcon, etc
+
+u-boot-tpl.bin is the file name.
+
+Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
+---
+Changes for v3, v2:
+- None
+
+ boot/uboot/Config.in | 25 +++++++++++++++++++++++++
+ boot/uboot/uboot.mk  |  5 +++++
+ 2 files changed, 30 insertions(+)
+
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index 8215912..43e4947 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -342,6 +342,31 @@ config BR2_TARGET_UBOOT_SPL_NAME
+ 	  u-boot build. For most platform it is spl/u-boot-spl.bin but
+ 	  not always. It is MLO on OMAP and SPL on i.MX6 for example.
  
--# Linux headers same as kernel, a 4.12 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_12=y
-+# Linux headers same as kernel, a 4.14 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
- 
- # System
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
-@@ -22,13 +22,13 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="mx53loco"
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.09"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.11"
- BR2_TARGET_UBOOT_FORMAT_IMX=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.12.12"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.14"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx53-qsb imx53-qsrb"
++config BR2_TARGET_UBOOT_TPL
++	bool "Install U-Boot TPL binary image"
++	depends on BR2_TARGET_UBOOT_SPL
++	help
++	  Install the U-Boot TPL binary image to the images
++	  directory.
++	  TPL is first stage bootloader, On rk3288 vyasa board due to size
++	  limitation on SPL.
++
++	  Since the size of SPL can't be exceeded 0x8000 bytes in RK3288,
++	  it is not possible add new SPL features like Falcon mode or etc.
++
++	  So add TPL stage so-that adding new features to SPL is possible.
++	  - TPL: DRAM init, clocks
++	  - SPL: MMC, falcon, etc
++
++config BR2_TARGET_UBOOT_TPL_NAME
++	string "U-Boot TPL binary image name"
++	default "tpl/u-boot-tpl.bin"
++	depends on BR2_TARGET_UBOOT_TPL
++	help
++	  A space-separated list of TPL binaries, generated during
++	  u-boot build. For most platform it is spl/u-boot-tpl.bin but
++	  not always.
++
+ config BR2_TARGET_UBOOT_ZYNQ_IMAGE
+ 	bool "Generate image for Xilinx Zynq"
+ 	depends on BR2_arm
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index fdacf16..5702ca6 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -242,6 +242,11 @@ define UBOOT_INSTALL_IMAGES_CMDS
+ 			cp -dpf $(@D)/$(f) $(BINARIES_DIR)/
+ 		)
+ 	)
++	$(if $(BR2_TARGET_UBOOT_TPL),
++		$(foreach f,$(call qstrip,$(BR2_TARGET_UBOOT_TPL_NAME)), \
++			cp -dpf $(@D)/$(f) $(BINARIES_DIR)/
++		)
++	)
+ 	$(if $(BR2_TARGET_UBOOT_ENVIMAGE),
+ 		cat $(call qstrip,$(BR2_TARGET_UBOOT_ENVIMAGE_SOURCE)) | \
+ 			$(HOST_DIR)/bin/mkenvimage -s $(BR2_TARGET_UBOOT_ENVIMAGE_SIZE) \
 -- 
-2.7.4
+1.9.1
