@@ -1,55 +1,55 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 15 Nov 2017 19:43:30 +0100
-Subject: [Buildroot] [git commit branch/2017.08.x] openssh: security bump to
- version 7.6p1
-Message-ID: <20171115184824.E4FC38047F@busybox.osuosl.org>
+Date: Wed, 15 Nov 2017 19:41:36 +0100
+Subject: [Buildroot] [git commit branch/2017.08.x] sdl2: security bump to
+ version 2.0.7
+Message-ID: <20171115184824.D4A3381373@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=633c49b3a32ef3c706f3e2d823c6596f975dc22a
+commit: https://git.buildroot.net/buildroot/commit/?id=a532c29d7f0404a6b9d071c7fcd537c9e3a14f4b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.08.x
 
-Fixes CVE-2017-15906 - The process_open function in sftp-server.c in OpenSSH
-before 7.6 does not properly prevent write operations in readonly mode,
-which allows attackers to create zero-length files.
-
-For more details, see the release notes:
-https://www.openssh.com/txt/release-7.6
+Fixes CVE-2017-2888 - An exploitable integer overflow vulnerability exists
+when creating a new RGB Surface in SDL 2.0.5.  A specially crafted file can
+cause an integer overflow resulting in too little memory being allocated
+which can lead to a buffer overflow and potential code execution.  An
+attacker can provide a specially crafted image file to trigger this
+vulnerability.
 
 Also add a hash for the license file while we're at it.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 70663a9a4fcb9211fcef7668a8a35de11cc54775)
+(cherry picked from commit 07a9f0200cfd1c34f33e8054f62b990d05ccb934)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/openssh/openssh.hash | 6 ++++--
- package/openssh/openssh.mk   | 2 +-
+ package/sdl2/sdl2.hash | 6 ++++--
+ package/sdl2/sdl2.mk   | 2 +-
  2 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/package/openssh/openssh.hash b/package/openssh/openssh.hash
-index 3685bc0..d8a4da3 100644
---- a/package/openssh/openssh.hash
-+++ b/package/openssh/openssh.hash
+diff --git a/package/sdl2/sdl2.hash b/package/sdl2/sdl2.hash
+index c0a8bfc..588f8f4 100644
+--- a/package/sdl2/sdl2.hash
++++ b/package/sdl2/sdl2.hash
 @@ -1,2 +1,4 @@
--# From http://www.openssh.com/txt/release-7.5 (base64 encoded)
--sha256 9846e3c5fab9f0547400b4d2c017992f914222b3fd1f8eee6c7dc6bc5e59f9f0  openssh-7.5p1.tar.gz
-+# From http://www.openssh.com/txt/release-7.6 (base64 encoded)
-+sha256 a323caeeddfe145baaa0db16e98d784b1fbc7dd436a6bf1f479dfd5cd1d21723  openssh-7.6p1.tar.gz
+-# Locally calculated after checking http://www.libsdl.org/release/SDL2-2.0.6.tar.gz.sig
+-sha256 03658b5660d16d7b31263a691e058ed37acdab155d68dabbad79998fb552c5df  SDL2-2.0.6.tar.gz
++# Locally calculated after checking http://www.libsdl.org/release/SDL2-2.0.7.tar.gz.sig
++sha256 ee35c74c4313e2eda104b14b1b86f7db84a04eeab9430d56e001cea268bf4d5e  SDL2-2.0.7.tar.gz
 +# Locally calculated
-+sha256 05a4c25ef464e19656c5259bd4f4da8428efab01044f3541b79fbb3ff209350f  LICENCE
-diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
-index 38a32bf..6b7ac22 100644
---- a/package/openssh/openssh.mk
-+++ b/package/openssh/openssh.mk
++sha256 bbd2edb1789c33de29bb9f8d1dbe2774584a9ce8c4e3162944b7a3a447f5e85d  COPYING.txt
+diff --git a/package/sdl2/sdl2.mk b/package/sdl2/sdl2.mk
+index e370980..75531e8 100644
+--- a/package/sdl2/sdl2.mk
++++ b/package/sdl2/sdl2.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--OPENSSH_VERSION = 7.5p1
-+OPENSSH_VERSION = 7.6p1
- OPENSSH_SITE = http://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable
- OPENSSH_LICENSE = BSD-3-Clause, BSD-2-Clause, Public Domain
- OPENSSH_LICENSE_FILES = LICENCE
+-SDL2_VERSION = 2.0.6
++SDL2_VERSION = 2.0.7
+ SDL2_SOURCE = SDL2-$(SDL2_VERSION).tar.gz
+ SDL2_SITE = http://www.libsdl.org/release
+ SDL2_LICENSE = Zlib
