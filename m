@@ -1,103 +1,73 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 15 Nov 2017 21:49:02 +0100
-Subject: [Buildroot] [git commit branch/2017.08.x] support/testing: update
- ISO9660 test case Linux kernel
-Message-ID: <20171115204836.4282480FEE@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed, 15 Nov 2017 22:04:10 +0100
+Subject: [Buildroot] [PATCH 1/1] libupnp: add 1.8.3 version
+In-Reply-To: <20171115134342.60226366@windsurf.lan>
+References: <20171114193821.25188-1-fontaine.fabrice@gmail.com>
+ <20171115134342.60226366@windsurf.lan>
+Message-ID: <CAPi7W81AhUJjdFm5F-7MJmKQ3XVO8FtHFU5NoR+hGrWvBSSSuw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a0b501bb6593d15dc7d5d1936ddebfc8f6618371
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.08.x
+Dear Thomas,
 
-The Linux 4.0 kernel doesn't build with gcc 6.x, which is used since
-the toolchain update in commit
-193dfffa834a4cd76bc7b41089bd93d4c37dfc65 ("support/testing: use more
-recent toolchains"). So let's update to Linux 4.11 instead (like the
-existing Qemu x86 defconfig does), and update the kernel configuration
-file accordingly.
+2017-11-15 13:43 GMT+01:00 Thomas Petazzoni <thomas.petazzoni@free-
+electrons.com>:
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- .../testing/conf/minimal-x86-qemu-kernel.config    | 45 +++++++++++++++++-----
- support/testing/tests/fs/test_iso9660.py           |  2 +-
- 2 files changed, 36 insertions(+), 11 deletions(-)
+> Hello,
+>
+> On Tue, 14 Nov 2017 20:38:21 +0100, Fabrice Fontaine wrote:
+>
+> > diff --git a/package/libupnp/Config.in b/package/libupnp/Config.in
+> > index 7c6c37607..0a8e98c97 100644
+> > --- a/package/libupnp/Config.in
+> > +++ b/package/libupnp/Config.in
+> > @@ -10,5 +10,19 @@ config BR2_PACKAGE_LIBUPNP
+> >
+> >         http://pupnp.sourceforge.net/
+> >
+> > +choice
+> > +     prompt "libupnp version"
+> > +     default BR2_PACKAGE_LIBUPNP_1_6
+> > +     help
+> > +       Select the version of libupnp API you wish to use.
+> > +
+> > +config BR2_PACKAGE_LIBUPNP_1_6
+> > +     bool "libupnp 1.6.x"
+> > +
+> > +config BR2_PACKAGE_LIBUPNP_1_8
+> > +     bool "libupnp 1.8.x"
+> > +
+> > +endchoice
+>
+> I believe we should perhaps instead add a separate libupnp18 package,
+> all those "depends on" to decide which package should be visible
+> depending on the version of libupnp that is currently selected are a
+> bit annoying. But don't rewrite your patch right now: wait for other
+> Buildroot developers to give their opinion on this matter.
+>
+> Is it possible to install both libupnp 1.6 and libupnp 1.8 in the same
+> system without any conflict ?
+>
+Unfortunately no, it was possible in 1.8.0 and 1.8.1 but we had to rollback
+due to the vlc developer who wasn't happy with this change:
+https://github.com/mrjimenez/pupnp/commit/07f504c61bd9e4d93eb3d373ffc852
+7cafe0b9af
 
-diff --git a/support/testing/conf/minimal-x86-qemu-kernel.config b/support/testing/conf/minimal-x86-qemu-kernel.config
-index 8f6ceef..4aaaab7 100644
---- a/support/testing/conf/minimal-x86-qemu-kernel.config
-+++ b/support/testing/conf/minimal-x86-qemu-kernel.config
-@@ -1,23 +1,48 @@
--# CONFIG_64BIT is not set
- CONFIG_SYSVIPC=y
--CONFIG_BLK_DEV_INITRD=y
--# CONFIG_SUSPEND is not set
--# CONFIG_ACPI is not set
--CONFIG_CPU_IDLE=y
--CONFIG_DEVTMPFS=y
--CONFIG_DEVTMPFS_MOUNT=y
-+CONFIG_MODULES=y
-+CONFIG_MODULE_UNLOAD=y
-+CONFIG_SMP=y
-+CONFIG_HYPERVISOR_GUEST=y
-+CONFIG_PARAVIRT=y
-+CONFIG_NET=y
-+CONFIG_PACKET=y
-+CONFIG_UNIX=y
-+CONFIG_INET=y
-+CONFIG_VIRTIO_BLK=y
- CONFIG_BLK_DEV_SD=y
- CONFIG_BLK_DEV_SR=y
-+CONFIG_SCSI_VIRTIO=y
- CONFIG_ATA=y
- CONFIG_ATA_PIIX=y
-+CONFIG_NETDEVICES=y
-+CONFIG_VIRTIO_NET=y
-+CONFIG_NE2K_PCI=y
-+CONFIG_8139CP=y
- CONFIG_INPUT_EVDEV=y
- CONFIG_SERIAL_8250=y
- CONFIG_SERIAL_8250_CONSOLE=y
--CONFIG_POWER_SUPPLY=y
--CONFIG_THERMAL=y
-+CONFIG_VIRTIO_CONSOLE=y
-+CONFIG_HW_RANDOM_VIRTIO=m
-+CONFIG_DRM=y
-+CONFIG_DRM_BOCHS=y
-+CONFIG_DRM_QXL=y
-+CONFIG_DRM_VIRTIO_GPU=y
-+CONFIG_SOUND=y
-+CONFIG_SND=y
-+CONFIG_SND_HDA_INTEL=y
-+CONFIG_SND_HDA_GENERIC=y
-+CONFIG_USB=y
-+CONFIG_USB_XHCI_HCD=y
-+CONFIG_USB_EHCI_HCD=y
-+CONFIG_USB_UHCI_HCD=y
-+CONFIG_USB_STORAGE=y
-+CONFIG_VIRTIO_PCI=y
-+CONFIG_VIRTIO_BALLOON=y
-+CONFIG_VIRTIO_INPUT=y
-+CONFIG_VIRTIO_MMIO=y
-+CONFIG_VIRTIO_MMIO_CMDLINE_DEVICES=y
- CONFIG_EXT4_FS=y
- CONFIG_ISO9660_FS=y
- CONFIG_JOLIET=y
- CONFIG_TMPFS=y
- CONFIG_TMPFS_POSIX_ACL=y
--# CONFIG_VIRTUALIZATION is not set
-diff --git a/support/testing/tests/fs/test_iso9660.py b/support/testing/tests/fs/test_iso9660.py
-index 118c99d..3745b9e 100644
---- a/support/testing/tests/fs/test_iso9660.py
-+++ b/support/testing/tests/fs/test_iso9660.py
-@@ -18,7 +18,7 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
- BR2_TARGET_GENERIC_GETTY_BAUDRATE_115200=y
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.0"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.11"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="{}"
- # BR2_TARGET_ROOTFS_TAR is not set
+>
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux and Kernel engineering
+> http://free-electrons.com
+>
+Best Regards,
+
+Fabrice
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20171115/11ca7dc7/attachment.html>
