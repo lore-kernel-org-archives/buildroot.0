@@ -1,49 +1,59 @@
-From: Sergey Matyukevich <geomatsi@gmail.com>
-Date: Thu, 16 Nov 2017 00:20:36 +0300
-Subject: [Buildroot] [PATCH/next 4/5] solidrun/macchiatobin: add new
- board
-In-Reply-To: <20171114205302.GA2527@kwain>
-References: <20171112201646.15558-1-geomatsi@gmail.com>
- <20171112201646.15558-5-geomatsi@gmail.com>
- <20171113122702.o63kfb7j4iny6sfl@sapphire.tkos.co.il>
- <20171113200610.ztfqw55iyk52i53a@speedy.hunter>
- <20171113233628.64f1e58d@windsurf.home>
- <20171114074148.GC25491@kwain>
- <20171114092024.juocxhwoaqd7xiql@bars>
- <20171114094237.GA4995@kwain>
- <20171114202700.dckpamhga4x5nfuc@speedy.hunter>
- <20171114205302.GA2527@kwain>
-Message-ID: <20171115212036.owp6x4phejpelpdc@speedy.hunter>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 15 Nov 2017 22:22:57 +0100
+Subject: [Buildroot] [PATCH 1/1] libupnp: add 1.8.3 version
+In-Reply-To: <CAPi7W81AhUJjdFm5F-7MJmKQ3XVO8FtHFU5NoR+hGrWvBSSSuw@mail.gmail.com>
+References: <20171114193821.25188-1-fontaine.fabrice@gmail.com>
+ <20171115134342.60226366@windsurf.lan>
+ <CAPi7W81AhUJjdFm5F-7MJmKQ3XVO8FtHFU5NoR+hGrWvBSSSuw@mail.gmail.com>
+Message-ID: <20171115222257.10defebb@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello,
 
-Hi Antoine,
+On Wed, 15 Nov 2017 22:04:10 +0100, Fabrice Fontaine wrote:
 
-Thanks for the update on upstream status of this board.
+> > > +choice
+> > > +     prompt "libupnp version"
+> > > +     default BR2_PACKAGE_LIBUPNP_1_6
+> > > +     help
+> > > +       Select the version of libupnp API you wish to use.
+> > > +
+> > > +config BR2_PACKAGE_LIBUPNP_1_6
+> > > +     bool "libupnp 1.6.x"
+> > > +
+> > > +config BR2_PACKAGE_LIBUPNP_1_8
+> > > +     bool "libupnp 1.8.x"
+> > > +
+> > > +endchoice  
+> >
+> > I believe we should perhaps instead add a separate libupnp18 package,
+> > all those "depends on" to decide which package should be visible
+> > depending on the version of libupnp that is currently selected are a
+> > bit annoying. But don't rewrite your patch right now: wait for other
+> > Buildroot developers to give their opinion on this matter.
+> >
+> > Is it possible to install both libupnp 1.6 and libupnp 1.8 in the same
+> > system without any conflict ?
+> >  
+> Unfortunately no, it was possible in 1.8.0 and 1.8.1 but we had to rollback
+> due to the vlc developer who wasn't happy with this change:
+> https://github.com/mrjimenez/pupnp/commit/07f504c61bd9e4d93eb3d373ffc852
+> 7cafe0b9af
 
-> > By the way, could you please advise how to switch eth0
-> > from SFP to RJ45 when using mainline kernel 4.14 ?
-> 
-> You need to apply the dt patches I provided. You should then be able to
-> use eth0 and eth1 with either an SFP or an RJ45 cable, depending on
-> what's (dynamically) connected. To sum up, you just need to plugin
-> either the SFP or the RJ45 cable to start using the interface in the
-> right mode. You can switch from one to the other without rebooting the
-> board.
-> 
-> To get this board supported in Buildroot with an upstream kernel, I
-> would suggest to put the device tree patches I gave you, so that the
-> kernel can not rely on the bootloader configuration. And as soon as 4.15
-> is out the patches can be removed from Buildroot.
+OK, the reasoning makes sense.
 
-With those 3 dts patches J5 management interface is working fine
-even with upstream U-Boot. So I will add those patches to board
-files for the time being, just to enable network access to the board
-right out of the box.
+What is the transition plan ? Will the different Buildroot packages that
+use the 1.6 version be upgraded to use 1.8 at some point in the
+reasonably near future ? Or will we have to keep both versions forever ?
 
-Regards,
-Sergey
+Peter, Arnout, what are your thoughts on how to handle this?
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
