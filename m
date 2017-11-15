@@ -1,54 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 15 Nov 2017 13:43:42 +0100
-Subject: [Buildroot] [PATCH 1/1] libupnp: add 1.8.3 version
-In-Reply-To: <20171114193821.25188-1-fontaine.fabrice@gmail.com>
-References: <20171114193821.25188-1-fontaine.fabrice@gmail.com>
-Message-ID: <20171115134342.60226366@windsurf.lan>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Wed, 15 Nov 2017 13:48:01 +0100
+Subject: [Buildroot] [PATCH 1/2] package/feh: Fix build issue with some
+ older cross-compilers
+In-Reply-To: <20171115124111.e6rdg5i6hxg3uorh@sapphire.tkos.co.il>
+References: <20171115115155.4830-1-petr.vorel@gmail.com>
+ <20171115124111.e6rdg5i6hxg3uorh@sapphire.tkos.co.il>
+Message-ID: <20171115124801.rtttv64tqyddnrsp@dell5510>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Baruch,
 
-On Tue, 14 Nov 2017 20:38:21 +0100, Fabrice Fontaine wrote:
+> Hi Petr,
 
-> diff --git a/package/libupnp/Config.in b/package/libupnp/Config.in
-> index 7c6c37607..0a8e98c97 100644
-> --- a/package/libupnp/Config.in
-> +++ b/package/libupnp/Config.in
-> @@ -10,5 +10,19 @@ config BR2_PACKAGE_LIBUPNP
->  
->  	  http://pupnp.sourceforge.net/
->  
-> +choice
-> +	prompt "libupnp version"
-> +	default BR2_PACKAGE_LIBUPNP_1_6
-> +	help
-> +	  Select the version of libupnp API you wish to use.
-> +
-> +config BR2_PACKAGE_LIBUPNP_1_6
-> +	bool "libupnp 1.6.x"
-> +
-> +config BR2_PACKAGE_LIBUPNP_1_8
-> +	bool "libupnp 1.8.x"
-> +
-> +endchoice
+> How did you overcome the build issue you had?
+Build on another machine with Debian. I'll write about it in the original thread (and CC
+you and.
 
-I believe we should perhaps instead add a separate libupnp18 package,
-all those "depends on" to decide which package should be visible
-depending on the version of libupnp that is currently selected are a
-bit annoying. But don't rewrite your patch right now: wait for other
-Buildroot developers to give their opinion on this matter.
+> On Wed, Nov 15, 2017 at 12:51:54PM +0100, Petr Vorel wrote:
+> > by adding -std=gnu11 to CFLAGS.
 
-Is it possible to install both libupnp 1.6 and libupnp 1.8 in the same
-system without any conflict ?
+> > Also: build in parallel, use TARGET_CONFIGURE_OPTS and cleanup
+> > FEH_INSTALL_TARGET_CMDS.
 
-Best regards,
+> This should be a separate patch, I think.
+I don't like squashing things in one commit either, but this looked obvious to me. OK,
+I'll split it.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+
+Kind regards,
+Petr
