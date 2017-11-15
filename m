@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 15 Nov 2017 19:53:53 +0100
-Subject: [Buildroot] [PATCH] redis: bump to version 3.2.11
-In-Reply-To: <20171026124415.30102-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Thu, 26 Oct 2017 14:44:15 +0200")
-References: <20171026124415.30102-1-peter@korsgaard.com>
-Message-ID: <87bmk3l6f2.fsf@dell.be.48ers.dk>
+Date: Wed, 15 Nov 2017 19:54:08 +0100
+Subject: [Buildroot] [PATCH] openssh: security bump to version 7.6p1
+In-Reply-To: <20171026125247.1044-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Thu, 26 Oct 2017 14:52:47 +0200")
+References: <20171026125247.1044-1-peter@korsgaard.com>
+Message-ID: <877eurl6en.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,17 +13,12 @@ To: buildroot@busybox.net
 
 >>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > 3.2.11 fixes important issues. From the release notes:
- > ================================================================================
- > Redis 3.2.11     Released Thu Sep 21 15:47:53 CEST 2017
- > ================================================================================
+ > Fixes CVE-2017-15906 - The process_open function in sftp-server.c in OpenSSH
+ > before 7.6 does not properly prevent write operations in readonly mode,
+ > which allows attackers to create zero-length files.
 
- > Upgrade urgency HIGH: Potentially critical bugs fixed.
-
- > AOF flush on SHUTDOWN did not cared to really write the AOF buffers
- > (not in the kernel but in the Redis process memory) to disk before exiting.
- > Calling SHUTDOWN during traffic resulted into not every operation to be
- > persisted on disk.
+ > For more details, see the release notes:
+ > https://www.openssh.com/txt/release-7.6
 
  > Also add a hash for the license file while we're at it.
 
