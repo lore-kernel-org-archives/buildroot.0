@@ -1,34 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 15 Nov 2017 22:09:35 +0100
-Subject: [Buildroot] [PATCH v2 1/3] package/feh: Fix build issue with
- some older cross-compilers
-In-Reply-To: <20171115132754.9755-1-petr.vorel@gmail.com>
-References: <20171115132754.9755-1-petr.vorel@gmail.com>
-Message-ID: <20171115220935.03b64e14@windsurf.lan>
+Date: Wed, 15 Nov 2017 22:11:10 +0100
+Subject: [Buildroot] [git commit] DEVELOPERS: Add myself to iproute2 and
+ iputils
+Message-ID: <20171115210408.15D9881341@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=53a067711248b316aaba2a6ae7a7a9fb32bd0c30
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 15 Nov 2017 14:27:52 +0100, Petr Vorel wrote:
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ DEVELOPERS | 2 ++
+ 1 file changed, 2 insertions(+)
 
->  define FEH_BUILD_CMDS
-> -	$(TARGET_MAKE_ENV) $(MAKE1) CC="$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS)" \
-> -		-C $(@D) all
-> +	$(TARGET_MAKE_ENV) CFLAGS="$(TARGET_CFLAGS) -std=gnu11" $(MAKE1) \
-
-std=gnu11 was only added in gcc 4.7, so using this would break the
-build with gcc < 4.7. According to the error message, only C99 is
-needed, so could you try instead -std=c99, which is available since at
-least gcc 4.2 ?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/DEVELOPERS b/DEVELOPERS
+index ddd675e..c39348a 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1300,6 +1300,8 @@ N:	Petr Vorel <petr.vorel@gmail.com>
+ F:	package/connman/
+ F:	package/feh/
+ F:	package/imlib2/
++F:	package/iproute2/
++F:	package/iputils/
+ F:	package/libmbim/
+ F:	package/libqmi/
+ F:	package/linux-backports/
