@@ -1,10 +1,14 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 15 Nov 2017 17:59:15 +0200
-Subject: [Buildroot] [PATCH/next 0/5] Add support for MacchiatoBin board
-In-Reply-To: <aaad6d28-b49d-9461-e689-94a9826ed0e6@mind.be>
-References: <20171112201646.15558-1-geomatsi@gmail.com>
- <aaad6d28-b49d-9461-e689-94a9826ed0e6@mind.be>
-Message-ID: <20171115155915.em7l5z5gfjvtyb4g@sapphire.tkos.co.il>
+From: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
+Date: Wed, 15 Nov 2017 12:42:36 -0500
+Subject: [Buildroot] [PATCH] genimage: change upstream URL
+In-Reply-To: <d5d8f6c6-bac5-ceb4-da30-07a0045ba318@mind.be>
+References: <20171114174651.12184-1-vivien.didelot@savoirfairelinux.com>
+ <1f1f2eba-dfd9-c253-34c1-1902c7d934ce@mind.be>
+ <87zi7oo67l.fsf@weeman.i-did-not-set--mail-host-address--so-tickle-me>
+ <5394fb27-6a6d-7a4d-e312-b2ad2a65510a@mind.be>
+ <1510735935.7019.123.camel@pengutronix.de>
+ <d5d8f6c6-bac5-ceb4-da30-07a0045ba318@mind.be>
+Message-ID: <87shdfe8vn.fsf@weeman.i-did-not-set--mail-host-address--so-tickle-me>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,35 +17,33 @@ To: buildroot@busybox.net
 
 Hi Arnout,
 
-On Tue, Nov 14, 2017 at 10:58:43PM +0100, Arnout Vandecappelle wrote:
-> On 12-11-17 21:16, Sergey Matyukevich wrote:
-> > This patchset adds support for SolidRun MacchiatoBin board based on
-> > Marvell Armada 8040 SoC. For convenience the following two different
-> > build configurations are added:
-> > 
-> > - mainline BSP
-> >   mainline Linux v4.13.11 and U-Boot v2017.09
-> > 
-> > - vendor BSP (enables more hardware)
-> >   BSP from Marvell based on Linux 4.4.52 and U-Boot v2017.03
-> 
->  Do we really want to have defconfigs for both upstream and vendor BSP?
-> Especially because we will also probably have a graphical defconfig later...
-> This way, we end up with 3-4 defconfigs per board, for dozens of boards...
-> 
->  That said, I do think it is useful to have both of these for this specific
-> board. It's just that I'm afraid we're going to be overwhelmed by the number of
-> defconfigs...
-> 
->  What do the others think?
+Arnout Vandecappelle <arnout@mind.be> writes:
 
-This board has no native graphic interface. So you can think of it as a basic 
-(mainline) defconfig, and a fully featured (vendor) defconfig. This is similar 
-to the basic and "demo" defconfigs that we have for other boards.
+>>> AFAIK that message has always been there, but still all the genimage
+>>> releases can be downloaded from it.
+>>>
+>>>  Maybe for the next release, Pengutronix will upload a tar.xz to
+>>> github? Then we can certainly switch. Now, especially the
+>>> AUTORECONF'ing is IMO really annoying (it will multiply the build
+>>> time with a factor of four for a simple config with just busybox and
+>>> an external toolchain).
+>> 
+>> I've just uploaded all old release tarballs to the github release page:
+>> https://github.com/pengutronix/genimage/releases
+>
+>  I just love reactive upstreams :-)
+>
+>  Vivien, will you respin?
 
-baruch
+Having to autoreconf is unfortunate, but is a parallel issue IMO.
 
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+We should ask confirmation from Pengutronix which web page is considered
+the official one from now on, and Buildroot must reflect that.
+
+But if they keep uploading tarballs including the configure script to
+http://public.pengutronix.de/software/genimage/ I'd drop this patch
+completely.
+
+Thanks,
+
+        Vivien
