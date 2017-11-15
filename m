@@ -1,54 +1,50 @@
-From: Markus Mayer <code@mmayer.net>
-Date: Wed, 15 Nov 2017 11:45:09 -0800
-Subject: [Buildroot] [PATCH] dropbear: change start-up script to honour
- pre-existing keys
-Message-ID: <20171115194509.78132-1-code@mmayer.net>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Wed, 15 Nov 2017 21:11:01 +0100
+Subject: [Buildroot] [PATCH 1/1] package/samba4: bump version to 4.6.10
+Message-ID: <20171115201101.16575-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Markus Mayer <mmayer@broadcom.com>
+Quoting release notes
+https://www.samba.org/samba/history/samba-4.6.10.html
 
-Rather than starting dropbear with option -R at all times, we only do
-so if no existing key file is found. This lets dropbear honour
-pre-existing key files, including keys copied into the root file system
-at build time.
+"This is an additional bugfix release to address a possible data
+ corruption issue. Please update immediately! For details, please see
 
-Signed-off-by: Markus Mayer <mmayer@broadcom.com>
+  https://bugzilla.samba.org/show_bug.cgi?id=13130
+
+ Samba 4.6.0 and newer is affected by this issue."
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/dropbear/S50dropbear | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+ package/samba4/samba4.hash | 2 +-
+ package/samba4/samba4.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/dropbear/S50dropbear b/package/dropbear/S50dropbear
-index 9474eaa..8eea9ae 100644
---- a/package/dropbear/S50dropbear
-+++ b/package/dropbear/S50dropbear
-@@ -7,7 +7,7 @@
- test -r /etc/default/dropbear && . /etc/default/dropbear
+diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
+index 7446b1bdb8..6821144d1d 100644
+--- a/package/samba4/samba4.hash
++++ b/package/samba4/samba4.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 c31db4aad82f0b9588ef6c4b4dab5dce3fa1787bd298e62d953c2628bb1af21a  samba-4.6.9.tar.gz
++sha256 5913a569b54c6bc261bc245d7326fabfcba42839d15a82db48c047de1eb19626  samba-4.6.10.tar.gz
+ sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index 7502fa6a13..40436ca731 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- start() {
--	DROPBEAR_ARGS="$DROPBEAR_ARGS -R"
-+	msg=' '
- 
- 	# If /etc/dropbear is a symlink to /var/run/dropbear, and
- 	#   - the filesystem is RO (i.e. we can not rm the symlink),
-@@ -26,7 +26,14 @@ start() {
- 		fi
- 	fi
- 
--	printf "Starting dropbear sshd: "
-+	ls /etc/dropbear/*host_key >/dev/null 2>&1
-+	if [ $? != 0 ]; then
-+		# No key files found. We need to generate a key.
-+		DROPBEAR_ARGS="$DROPBEAR_ARGS -R"
-+		msg='(with new key) '
-+	fi
-+
-+	printf "Starting dropbear sshd: $msg"
- 	umask 077
- 
- 	start-stop-daemon -S -q -p /var/run/dropbear.pid \
+-SAMBA4_VERSION = 4.6.9
++SAMBA4_VERSION = 4.6.10
+ SAMBA4_SITE = https://download.samba.org/pub/samba/stable
+ SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+ SAMBA4_INSTALL_STAGING = YES
 -- 
-2.7.4
+2.11.0
