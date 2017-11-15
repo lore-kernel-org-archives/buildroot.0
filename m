@@ -1,62 +1,62 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 15 Nov 2017 19:42:40 +0100
-Subject: [Buildroot] [git commit branch/2017.08.x] redis: bump to version
- 3.2.11
-Message-ID: <20171115184824.DC9318047F@busybox.osuosl.org>
+Date: Wed, 15 Nov 2017 19:44:23 +0100
+Subject: [Buildroot] [git commit branch/2017.08.x] webkitgtk: security bump
+ to version 2.18.2
+Message-ID: <20171115184824.EE1368047F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=34aba0a9e79ef5bca7b5dfe02b27f18ccc2659e7
+commit: https://git.buildroot.net/buildroot/commit/?id=d9dd0cb06a709ef1d69b20a7926499d1b72cbc9a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.08.x
 
-3.2.11 fixes important issues. From the release notes:
+This is a maintenance release of the current stable WebKitGTK+ version,
+which contains bugfixes; mostly for crashes and rendering issues, plus
+one important fix for the layout or Arabic text.
 
-================================================================================
-Redis 3.2.11     Released Thu Sep 21 15:47:53 CEST 2017
-================================================================================
+Release notes:
 
-Upgrade urgency HIGH: Potentially critical bugs fixed.
+    https://webkitgtk.org/2017/10/27/webkitgtk2.18.2-released.html
 
-AOF flush on SHUTDOWN did not cared to really write the AOF buffers
-(not in the kernel but in the Redis process memory) to disk before exiting.
-Calling SHUTDOWN during traffic resulted into not every operation to be
-persisted on disk.
+Even though an acconpanying security advisory has not been published
+for this release, the release contains fixes for several crashes (one
+of them for the decoder of the very common GIF image format), which
+arguably can be considered potential security issues.
 
-Also add a hash for the license file while we're at it.
-
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 751cd4cfab88ff15143d13eccf87f982a274e4e3)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 58ea6ad528a53b1b3f19efb441bbeb6451695b8e)
+(cherry picked from commit e3459fd9c5cc4ddb04d22b534ef66b441e1aea71)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/redis/redis.hash | 4 +++-
- package/redis/redis.mk   | 2 +-
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ package/webkitgtk/webkitgtk.hash | 8 ++++----
+ package/webkitgtk/webkitgtk.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/redis/redis.hash b/package/redis/redis.hash
-index 2eef91c..ce2d66b 100644
---- a/package/redis/redis.hash
-+++ b/package/redis/redis.hash
-@@ -1,2 +1,4 @@
- # From https://github.com/antirez/redis-hashes/blob/master/README
--sha256 6eaacfa983b287e440d0839ead20c2231749d5d6b78bbe0e0ffa3a890c59ff26  redis-3.2.9.tar.gz
-+sha256 31ae927cab09f90c9ca5954aab7aeecc3bb4da6087d3d12ba0a929ceb54081b5  redis-3.2.11.tar.gz
-+# Locally calculated
-+sha256 cbf420a3672475a6e2765e3c0984c1f81efe0212afb94a3c998ee63bfd661063  COPYING
-diff --git a/package/redis/redis.mk b/package/redis/redis.mk
-index 6a7a312..82969c9 100644
---- a/package/redis/redis.mk
-+++ b/package/redis/redis.mk
+diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
+index f83bd08..b116115 100644
+--- a/package/webkitgtk/webkitgtk.hash
++++ b/package/webkitgtk/webkitgtk.hash
+@@ -1,4 +1,4 @@
+-# From https://webkitgtk.org/releases/webkitgtk-2.18.1.tar.xz.sums
+-md5 951a6082ada2f7d0292d3251a3f9532b webkitgtk-2.18.1.tar.xz
+-sha1 5054dd6b8afdc6e98b947e361011d6dca6da74e2 webkitgtk-2.18.1.tar.xz
+-sha256 9cdb7b302fbc8a2a7e1e783b80391e64f8b12d70d6ebad4eb756dd59bf3ed795 webkitgtk-2.18.1.tar.xz
++# From https://webkitgtk.org/releases/webkitgtk-2.18.2.tar.xz.sums
++md5 f63b3897d6fbf660bf72dfaca1fdea16 webkitgtk-2.18.2.tar.xz
++sha1 75571807a1f8c9efdf62f1c37e9fadf52b73d367 webkitgtk-2.18.2.tar.xz
++sha256 b14cb3f1b5321b1dc50abcc0445a97f8e2f8813562bca7ce4d2f8069f6fec8e7 webkitgtk-2.18.2.tar.xz
+diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
+index 62f99073..fefe751 100644
+--- a/package/webkitgtk/webkitgtk.mk
++++ b/package/webkitgtk/webkitgtk.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--REDIS_VERSION = 3.2.9
-+REDIS_VERSION = 3.2.11
- REDIS_SITE = http://download.redis.io/releases
- REDIS_LICENSE = BSD-3-Clause (core); MIT and BSD family licenses (Bundled components)
- REDIS_LICENSE_FILES = COPYING
+-WEBKITGTK_VERSION = 2.18.1
++WEBKITGTK_VERSION = 2.18.2
+ WEBKITGTK_SITE = http://www.webkitgtk.org/releases
+ WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
+ WEBKITGTK_INSTALL_STAGING = YES
