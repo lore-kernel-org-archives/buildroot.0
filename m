@@ -1,62 +1,172 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 15 Nov 2017 19:44:23 +0100
-Subject: [Buildroot] [git commit branch/2017.08.x] webkitgtk: security bump
- to version 2.18.2
-Message-ID: <20171115184824.EE1368047F@busybox.osuosl.org>
+Date: Wed, 15 Nov 2017 19:39:55 +0100
+Subject: [Buildroot] [git commit branch/2017.08.x] sdl2: Bump version to
+ 2.0.6
+Message-ID: <20171115184824.B41AE8133E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d9dd0cb06a709ef1d69b20a7926499d1b72cbc9a
+commit: https://git.buildroot.net/buildroot/commit/?id=1b865bc1123666975e46215c03c2e6232126bf39
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.08.x
 
-This is a maintenance release of the current stable WebKitGTK+ version,
-which contains bugfixes; mostly for crashes and rendering issues, plus
-one important fix for the layout or Arabic text.
+Bump version and remove patches that were merged upstream
 
-Release notes:
-
-    https://webkitgtk.org/2017/10/27/webkitgtk2.18.2-released.html
-
-Even though an acconpanying security advisory has not been published
-for this release, the release contains fixes for several crashes (one
-of them for the decoder of the very common GIF image format), which
-arguably can be considered potential security issues.
-
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Olivier Schonken <olivier.schonken@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit e3459fd9c5cc4ddb04d22b534ef66b441e1aea71)
+(cherry picked from commit 380093238674031d51c56abb0a2a22f721504931)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/webkitgtk/webkitgtk.hash | 8 ++++----
- package/webkitgtk/webkitgtk.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/sdl2/0001-ppc.patch  | 47 --------------------------------
+ package/sdl2/0002-gcc6.patch | 64 --------------------------------------------
+ package/sdl2/sdl2.hash       |  4 +--
+ package/sdl2/sdl2.mk         |  2 +-
+ 4 files changed, 3 insertions(+), 114 deletions(-)
 
-diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
-index f83bd08..b116115 100644
---- a/package/webkitgtk/webkitgtk.hash
-+++ b/package/webkitgtk/webkitgtk.hash
-@@ -1,4 +1,4 @@
--# From https://webkitgtk.org/releases/webkitgtk-2.18.1.tar.xz.sums
--md5 951a6082ada2f7d0292d3251a3f9532b webkitgtk-2.18.1.tar.xz
--sha1 5054dd6b8afdc6e98b947e361011d6dca6da74e2 webkitgtk-2.18.1.tar.xz
--sha256 9cdb7b302fbc8a2a7e1e783b80391e64f8b12d70d6ebad4eb756dd59bf3ed795 webkitgtk-2.18.1.tar.xz
-+# From https://webkitgtk.org/releases/webkitgtk-2.18.2.tar.xz.sums
-+md5 f63b3897d6fbf660bf72dfaca1fdea16 webkitgtk-2.18.2.tar.xz
-+sha1 75571807a1f8c9efdf62f1c37e9fadf52b73d367 webkitgtk-2.18.2.tar.xz
-+sha256 b14cb3f1b5321b1dc50abcc0445a97f8e2f8813562bca7ce4d2f8069f6fec8e7 webkitgtk-2.18.2.tar.xz
-diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-index 62f99073..fefe751 100644
---- a/package/webkitgtk/webkitgtk.mk
-+++ b/package/webkitgtk/webkitgtk.mk
+diff --git a/package/sdl2/0001-ppc.patch b/package/sdl2/0001-ppc.patch
+deleted file mode 100644
+index 0161103..0000000
+--- a/package/sdl2/0001-ppc.patch
++++ /dev/null
+@@ -1,47 +0,0 @@
+-Fixed bug 3466 - Can't build 2.0.5 on ppc64
+-
+-/home/fedora/SDL2-2.0.5/src/video/SDL_blit_N.c: In function 'calc_swizzle32':
+-/home/fedora/SDL2-2.0.5/src/video/SDL_blit_N.c:127:5: error: ISO C90 forbids mixed declarations and code [-Werror=declaration-after-statement]
+-const vector unsigned char plus = VECUINT8_LITERAL(0x00, 0x00, 0x00, 0x00,
+-^ 
+-
+-Downloaded from upstream repo
+-https://hg.libsdl.org/SDL/rev/5184186d4366
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+-
+-diff -r 71d4148e32de -r 5184186d4366 src/video/SDL_blit_N.c
+---- a/src/video/SDL_blit_N.c	Wed Oct 19 21:22:42 2016 -0700
+-+++ b/src/video/SDL_blit_N.c	Sat Oct 22 11:01:55 2016 -0700
+-@@ -118,12 +118,6 @@
+-         16, 8, 0, 24,
+-         0, NULL
+-     };
+--    if (!srcfmt) {
+--        srcfmt = &default_pixel_format;
+--    }
+--    if (!dstfmt) {
+--        dstfmt = &default_pixel_format;
+--    }
+-     const vector unsigned char plus = VECUINT8_LITERAL(0x00, 0x00, 0x00, 0x00,
+-                                                        0x04, 0x04, 0x04, 0x04,
+-                                                        0x08, 0x08, 0x08, 0x08,
+-@@ -136,6 +130,14 @@
+-     Uint32 gmask = RESHIFT(srcfmt->Gshift) << (dstfmt->Gshift);
+-     Uint32 bmask = RESHIFT(srcfmt->Bshift) << (dstfmt->Bshift);
+-     Uint32 amask;
+-+
+-+    if (!srcfmt) {
+-+        srcfmt = &default_pixel_format;
+-+    }
+-+    if (!dstfmt) {
+-+        dstfmt = &default_pixel_format;
+-+    }
+-+
+-     /* Use zero for alpha if either surface doesn't have alpha */
+-     if (dstfmt->Amask) {
+-         amask =
+-
+-
+-
+-
+diff --git a/package/sdl2/0002-gcc6.patch b/package/sdl2/0002-gcc6.patch
+deleted file mode 100644
+index 6b5e901..0000000
+--- a/package/sdl2/0002-gcc6.patch
++++ /dev/null
+@@ -1,64 +0,0 @@
+-
+-# HG changeset patch
+-# User Sam Lantinga <slouken@libsdl.org>
+-# Date 1479201270 28800
+-# Node ID ea44906e19b837f4d5b309525ca79ed9d00b1897
+-# Parent  6b2307dbec54f0bf4d5d8abf86241e29f3a03562
+-Fixed bug 3490 - Build failure with --enable-video-directfb
+-
+-felix
+-
+-Building SDL 2.0.5, or even the Mercurial snapshot (r10608) with GCC 6.2.1 and --enable-video-directfb generates a number of compiler diagnostics and fails.
+-
+-Downloaded from upstream repo
+-https://hg.libsdl.org/SDL/rev/ea44906e19b8
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+-
+-diff -r 6b2307dbec54 -r ea44906e19b8 src/video/directfb/SDL_DirectFB_render.c
+---- a/src/video/directfb/SDL_DirectFB_render.c	Tue Nov 15 01:12:27 2016 -0800
+-+++ b/src/video/directfb/SDL_DirectFB_render.c	Tue Nov 15 01:14:30 2016 -0800
+-@@ -1273,7 +1273,7 @@
+-                      Uint32 format, void * pixels, int pitch)
+- {
+-     Uint32 sdl_format;
+--    void * laypixels;
+-+    unsigned char* laypixels;
+-     int laypitch;
+-     DFBSurfacePixelFormat dfb_format;
+-     DirectFB_RenderData *data = (DirectFB_RenderData *) renderer->driverdata;
+-@@ -1303,7 +1303,7 @@
+-     SDL_Window *window = renderer->window;
+-     SDL_DFB_WINDOWDATA(window);
+-     Uint32 sdl_format;
+--    void * laypixels;
+-+    unsigned char* laypixels;
+-     int laypitch;
+-     DFBSurfacePixelFormat dfb_format;
+- 
+-diff -r 6b2307dbec54 -r ea44906e19b8 src/video/directfb/SDL_DirectFB_shape.c
+---- a/src/video/directfb/SDL_DirectFB_shape.c	Tue Nov 15 01:12:27 2016 -0800
+-+++ b/src/video/directfb/SDL_DirectFB_shape.c	Tue Nov 15 01:14:30 2016 -0800
+-@@ -37,17 +37,19 @@
+- SDL_WindowShaper*
+- DirectFB_CreateShaper(SDL_Window* window) {
+-     SDL_WindowShaper* result = NULL;
+-+    SDL_ShapeData* data;
+-+    int resized_properly;
+- 
+-     result = malloc(sizeof(SDL_WindowShaper));
+-     result->window = window;
+-     result->mode.mode = ShapeModeDefault;
+-     result->mode.parameters.binarizationCutoff = 1;
+-     result->userx = result->usery = 0;
+--    SDL_ShapeData* data = SDL_malloc(sizeof(SDL_ShapeData));
+-+    data = SDL_malloc(sizeof(SDL_ShapeData));
+-     result->driverdata = data;
+-     data->surface = NULL;
+-     window->shaper = result;
+--    int resized_properly = DirectFB_ResizeWindowShape(window);
+-+    resized_properly = DirectFB_ResizeWindowShape(window);
+-     SDL_assert(resized_properly == 0);
+- 
+-     return result;
+-
+diff --git a/package/sdl2/sdl2.hash b/package/sdl2/sdl2.hash
+index d69d438..c0a8bfc 100644
+--- a/package/sdl2/sdl2.hash
++++ b/package/sdl2/sdl2.hash
+@@ -1,2 +1,2 @@
+-# Locally calculated after checking http://www.libsdl.org/release/SDL2-2.0.5.tar.gz.sig
+-sha256 442038cf55965969f2ff06d976031813de643af9c9edc9e331bd761c242e8785  SDL2-2.0.5.tar.gz
++# Locally calculated after checking http://www.libsdl.org/release/SDL2-2.0.6.tar.gz.sig
++sha256 03658b5660d16d7b31263a691e058ed37acdab155d68dabbad79998fb552c5df  SDL2-2.0.6.tar.gz
+diff --git a/package/sdl2/sdl2.mk b/package/sdl2/sdl2.mk
+index a0a4489..e64628d 100644
+--- a/package/sdl2/sdl2.mk
++++ b/package/sdl2/sdl2.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WEBKITGTK_VERSION = 2.18.1
-+WEBKITGTK_VERSION = 2.18.2
- WEBKITGTK_SITE = http://www.webkitgtk.org/releases
- WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
- WEBKITGTK_INSTALL_STAGING = YES
+-SDL2_VERSION = 2.0.5
++SDL2_VERSION = 2.0.6
+ SDL2_SOURCE = SDL2-$(SDL2_VERSION).tar.gz
+ SDL2_SITE = http://www.libsdl.org/release
+ SDL2_LICENSE = Zlib
