@@ -1,38 +1,121 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 15 Nov 2017 19:46:34 +0100
-Subject: [Buildroot] [git commit branch/2017.08.x] linux-headers: bump 4.{4,
- 9, 13}.x series
-Message-ID: <20171115184825.031878047F@busybox.osuosl.org>
+Date: Wed, 15 Nov 2017 19:47:27 +0100
+Subject: [Buildroot] [git commit branch/2017.08.x] wget: security bump to
+ version 1.19.2
+Message-ID: <20171115184825.0ED278047F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=afe60d8349dd0f88eddda29054a8073f06fae5ba
+commit: https://git.buildroot.net/buildroot/commit/?id=d35d6ff5021fdd55296daa0394338e50d7640dc2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.08.x
 
-[Peter: drop 4.13.x bump]
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Fixes the following security issues:
+
+CVE-2017-13089: The http.c:skip_short_body() function is called in some
+circumstances, such as when processing redirects.  When the response is sent
+chunked, the chunk parser uses strtol() to read each chunk's length, but
+doesn't check that the chunk length is a non-negative number.  The code then
+tries to skip the chunk in pieces of 512 bytes by using the MIN() macro, but
+ends up passing the negative chunk length to connect.c:fd_read().  As
+fd_read() takes an int argument, the high 32 bits of the chunk length are
+discarded, leaving fd_read() with a completely attacker controlled length
+argument.
+
+CVE-2017-13090: The retr.c:fd_read_body() function is called when processing
+OK responses.  When the response is sent chunked, the chunk parser uses
+strtol() to read each chunk's length, but doesn't check that the chunk
+length is a non-negative number.  The code then tries to read the chunk in
+pieces of 8192 bytes by using the MIN() macro, but ends up passing the
+negative chunk length to retr.c:fd_read().  As fd_read() takes an int
+argument, the high 32 bits of the chunk length are discarded, leaving
+fd_read() with a completely attacker controlled length argument.  The
+attacker can corrupt malloc metadata after the allocated buffer.
+
+Drop now upstreamed patch and change to .tar.lz as .tar.xz is no longer
+available.
+
+Also add a hash for the license file while we're at it.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit ec2851f4b97b19ab386e6f8d7ca52c277c2cee91)
+(cherry picked from commit 86eb94636e0dcfaf332ba808eeee04a61b13af60)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-headers/Config.in.host | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ ...0001-Fix-CRLF-injection-in-Wget-host-part.patch | 40 ----------------------
+ package/wget/wget.hash                             |  4 ++-
+ package/wget/wget.mk                               |  4 +--
+ 3 files changed, 5 insertions(+), 43 deletions(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index d531a88..51cc209 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -236,8 +236,8 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.10.107"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.12.74"	if BR2_KERNEL_HEADERS_3_12
- 	default "4.1.45"	if BR2_KERNEL_HEADERS_4_1
--	default "4.4.94"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.58"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.4.95"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.9.59"	if BR2_KERNEL_HEADERS_4_9
- 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
- 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
- 	default "4.12.14"	if BR2_KERNEL_HEADERS_4_12
+diff --git a/package/wget/0001-Fix-CRLF-injection-in-Wget-host-part.patch b/package/wget/0001-Fix-CRLF-injection-in-Wget-host-part.patch
+deleted file mode 100644
+index 380b075..0000000
+--- a/package/wget/0001-Fix-CRLF-injection-in-Wget-host-part.patch
++++ /dev/null
+@@ -1,40 +0,0 @@
+-From 4d729e322fae359a1aefaafec1144764a54e8ad4 Mon Sep 17 00:00:00 2001
+-From: =?UTF-8?q?Tim=20R=C3=BChsen?= <tim.ruehsen@gmx.de>
+-Date: Mon, 6 Mar 2017 10:04:22 +0100
+-Subject: [PATCH] Fix CRLF injection in Wget host part
+-
+-* src/url.c (url_parse): Reject control characters in host part of URL
+-
+-Reported-by: Orange Tsai
+-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+----
+-Patch status: upstream commit 4d729e322fae35
+-
+- src/url.c | 11 +++++++++++
+- 1 file changed, 11 insertions(+)
+-
+-diff --git a/src/url.c b/src/url.c
+-index 8f8ff0b881af..7d36b27d7b92 100644
+---- a/src/url.c
+-+++ b/src/url.c
+-@@ -925,6 +925,17 @@ url_parse (const char *url, int *error, struct iri *iri, bool percent_encode)
+-       url_unescape (u->host);
+-       host_modified = true;
+- 
+-+      /* check for invalid control characters in host name */
+-+      for (p = u->host; *p; p++)
+-+        {
+-+          if (c_iscntrl(*p))
+-+            {
+-+              url_free(u);
+-+              error_code = PE_INVALID_HOST_NAME;
+-+              goto error;
+-+            }
+-+        }
+-+
+-       /* Apply IDNA regardless of iri->utf8_encode status */
+-       if (opt.enable_iri && iri)
+-         {
+--- 
+-2.11.0
+-
+diff --git a/package/wget/wget.hash b/package/wget/wget.hash
+index 5f22396..0048557 100644
+--- a/package/wget/wget.hash
++++ b/package/wget/wget.hash
+@@ -1,2 +1,4 @@
+ # Locally calculated after checking pgp signature
+-sha256 0c950b9671881222a4d385b013c9604e98a8025d1988529dfca0e93617744cd2  wget-1.19.1.tar.xz
++sha256 d59a745ad2c522970660bb30d38601f9457b151b322e01fa20a5a0da0f55df07  wget-1.19.2.tar.lz
++# Locally calculated
++sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/wget/wget.mk b/package/wget/wget.mk
+index 4cb48dc..a7d9044 100644
+--- a/package/wget/wget.mk
++++ b/package/wget/wget.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-WGET_VERSION = 1.19.1
+-WGET_SOURCE = wget-$(WGET_VERSION).tar.xz
++WGET_VERSION = 1.19.2
++WGET_SOURCE = wget-$(WGET_VERSION).tar.lz
+ WGET_SITE = $(BR2_GNU_MIRROR)/wget
+ WGET_DEPENDENCIES = host-pkgconf
+ WGET_LICENSE = GPL-3.0+
