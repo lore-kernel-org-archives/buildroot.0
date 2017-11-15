@@ -1,35 +1,57 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 15 Nov 2017 15:08:34 +0100
-Subject: [Buildroot] [PATCH] iproute2: bump to version 4.14.1
-In-Reply-To: <20171115092154.wkmktmstb5i7ujwc@sapphire.tkos.co.il> (Baruch
- Siach's message of "Wed, 15 Nov 2017 11:21:55 +0200")
-References: <9307d429db0bf9d7d141aa49ddc2e72425460882.1510684057.git.baruch@tkos.co.il>
- <87wp2rlx3i.fsf@dell.be.48ers.dk>
- <20171115092154.wkmktmstb5i7ujwc@sapphire.tkos.co.il>
-Message-ID: <87o9o3ljml.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 15 Nov 2017 15:50:26 +0100
+Subject: [Buildroot] Suggestion to improving buildroot download infra
+In-Reply-To: <5A0C4958.9040608@petroprogram.com>
+References: <5A0C4958.9040608@petroprogram.com>
+Message-ID: <20171115155026.69153059@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+Hello,
 
-Hi,
+On Wed, 15 Nov 2017 16:04:08 +0200, Stefan Fr?berg wrote:
 
- >> I see that you didn't mark this as being for next. Is that on purpose?
- >> If so, why?
+> Is there a way to integrate parallel wget download into buildroot?
 
- > No purpose. I just thought it's obvious.
+This will be a direct consequence of top-level parallel build support.
+Not only parallel download, but downloading package A, while package B
+is being built, etc.
 
- > Would you prefer to have all patches for next marked in the subject prefix 
- > during the -rc period?
+> That would greatly speed the downloading process when doing "make source"
+> and maybe even later all the downloading could be done in the 
+> background, even
+> when compiling some big package (for example, gentoo linux does that).
+> 
+> If I understand it correctly, there are at least two (if not including 
+> the crude & fork method)
+> ways to do parallel wget:
+> 
+> 1. use xarg:
+> 
+> echo $URL_LIST | xargs -n 1 -P ${NUMBER_OF_PARALLEL_DOWNLOADS} wget
+> 
+> or 2. use GNU parallel
+> 
+> parallel -a $URL_LIST --jobs ${NUMBER_OF_PARALLEL_DOWNLOADS} wget
+> 
+> How exactly, does buildroot collect the download urls when doing example,
+> "make source" ? Does it collect them first into some list and then do 
+> wget -i list ?
+> Or does it just go each selected packet one-by-one and fetch the url for 
+> each?
 
-It is always nice to be explicit, but it isn't a big deal. I just
-wondered as you used next in the patch just before, but not here:
+For the moment, the easiest is to comment the .NOTPARALLEL: statement
+in the main Makefile, and then run:
 
- [  96: Baruch Siach        ] [PATCH next v2 1/2] gnupg2: don't preserve the old gpg2 executable name [9.7k]
- [ 239: Baruch Siach        ] [PATCH] iproute2: bump to version 4.14.1 [14k]
+	make -j8 source
 
+Best regards,
+
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
