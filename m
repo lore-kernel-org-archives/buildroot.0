@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 16 Nov 2017 11:06:28 +0100
-Subject: [Buildroot] [git commit branch/2017.08.x] qt5: bump LTS version to
+Date: Wed, 15 Nov 2017 21:36:32 +0100
+Subject: [Buildroot] [git commit branch/2017.02.x] qt5: bump LTS version to
  5.6.3
-Message-ID: <20171116142100.D92E9812A8@busybox.osuosl.org>
+Message-ID: <20171116142116.0C4F68136D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f9d8efd7d1c3c303b9dbe161ae8b455a100ff6fe
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=12b7130bc50760c2a22d00374b81e20db7e3776a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
 qt5base:
   - move hash file to 5.6.3
@@ -40,8 +40,6 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  package/qt5/qt5base/qt5base.hash                   |  4 +-
  package/qt5/qt5canvas3d/qt5canvas3d.hash           |  4 +-
  package/qt5/qt5connectivity/qt5connectivity.hash   |  4 +-
- ...xamples-photoviewer-needs-widgets-support.patch |  0
- ...uickviewcomparison-and-quickwidget-needs-.patch |  0
  package/qt5/qt5declarative/qt5declarative.hash     |  4 +-
  package/qt5/qt5enginio/qt5enginio.hash             |  2 +-
  .../qt5graphicaleffects/qt5graphicaleffects.hash   |  4 +-
@@ -57,21 +55,18 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  package/qt5/qt5svg/qt5svg.hash                     |  4 +-
  package/qt5/qt5tools/qt5tools.hash                 |  4 +-
  package/qt5/qt5webchannel/qt5webchannel.hash       |  4 +-
- .../0001-qtwebkit-fix-QA-issue-bad-RPATH.patch     |  0
- .../0002-Remove-TEXTREL-tag-in-x86.patch           |  0
- ...ude-backtrace-API-for-non-glibc-libraries.patch |  0
  package/qt5/qt5webkit/qt5webkit.hash               |  4 +-
  package/qt5/qt5websockets/qt5websockets.hash       |  4 +-
  package/qt5/qt5x11extras/qt5x11extras.hash         |  4 +-
  package/qt5/qt5xmlpatterns/qt5xmlpatterns.hash     |  4 +-
- 31 files changed, 46 insertions(+), 99 deletions(-)
+ 26 files changed, 46 insertions(+), 99 deletions(-)
 
 diff --git a/package/qt5/qt5.mk b/package/qt5/qt5.mk
-index 55b16e0..c3a3e74 100644
+index 9e77ce3..5ba5e8f 100644
 --- a/package/qt5/qt5.mk
 +++ b/package/qt5/qt5.mk
-@@ -10,7 +10,7 @@ QT5_VERSION = $(QT5_VERSION_MAJOR).1
- QT5_SITE = http://download.qt.io/official_releases/qt/$(QT5_VERSION_MAJOR)/$(QT5_VERSION)/submodules
+@@ -5,7 +5,7 @@ QT5_SITE = http://download.qt.io/official_releases/qt/$(QT5_VERSION_MAJOR)/$(QT5
+ QT5_SNAPSHOTS_SITE = http://download.qt.io/snapshots/qt/$(QT5_VERSION_MAJOR)/$(QT5_VERSION)/latest_src/submodules
  else
  QT5_VERSION_MAJOR = 5.6
 -QT5_VERSION = $(QT5_VERSION_MAJOR).2
@@ -80,7 +75,7 @@ index 55b16e0..c3a3e74 100644
  QT5_SNAPSHOTS_SITE = http://download.qt.io/snapshots/qt/$(QT5_VERSION_MAJOR)/$(QT5_VERSION)/latest_src/submodules
  endif
 diff --git a/package/qt5/qt53d/qt53d.hash b/package/qt5/qt53d/qt53d.hash
-index 5616dcb..2163e87 100644
+index 7eaf2cd..e342c12 100644
 --- a/package/qt5/qt53d/qt53d.hash
 +++ b/package/qt5/qt53d/qt53d.hash
 @@ -1,5 +1,5 @@
@@ -89,8 +84,8 @@ index 5616dcb..2163e87 100644
 +# Hash from: https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qt3d-opensource-src-5.6.3.tar.xz.mirrorlist
 +sha256 10d05a30e925fcad971126c7f47a5e32c39f007dab96b298b2094501f9607ffe qt3d-opensource-src-5.6.3.tar.xz
  
- # Hash from: http://download.qt.io/official_releases/qt/5.9/5.9.1/submodules/qt3d-opensource-src-5.9.1.tar.xz.mirrorlist
- sha256 4f1fe5b812d78987341b854e7f2907f0375dc188cfa6cf9db101b26e9dfd4996 qt3d-opensource-src-5.9.1.tar.xz
+ # Hash from: http://download.qt.io/official_releases/qt/5.8/5.8.0/submodules/qt3d-opensource-src-5.8.0.tar.xz
+ sha256 3a224576fc922195ac0063b5b351cd6b9d13afcde9cec14317be0347d10c8ae5  qt3d-opensource-src-5.8.0.tar.xz
 diff --git a/package/qt5/qt5base/5.6.2/0002-eglfs-fix-eglfs_mali-compile-for-odroid-mali.patch b/package/qt5/qt5base/5.6.2/0002-eglfs-fix-eglfs_mali-compile-for-odroid-mali.patch
 deleted file mode 100644
 index cbafb39..0000000
@@ -155,7 +150,7 @@ similarity index 100%
 rename from package/qt5/qt5base/5.6.2/0001-eglfs-rasp-pi-header-inclusion.patch
 rename to package/qt5/qt5base/5.6.3/0001-eglfs-rasp-pi-header-inclusion.patch
 diff --git a/package/qt5/qt5base/qt5base.hash b/package/qt5/qt5base/qt5base.hash
-index 5d86701..04b5d69 100644
+index 3f6af8a..fb27dcb 100644
 --- a/package/qt5/qt5base/qt5base.hash
 +++ b/package/qt5/qt5base/qt5base.hash
 @@ -1,5 +1,5 @@
@@ -164,10 +159,10 @@ index 5d86701..04b5d69 100644
 +# Hash from: https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qtbase-opensource-src-5.6.3.tar.xz.mirrorlist
 +sha256 fef48529a6fc2617a30d75d952cb327c6be341fd104154993922184b3b3b4da1 qtbase-opensource-src-5.6.3.tar.xz
  
- # Hash from: http://download.qt.io/official_releases/qt/5.9/5.9.1/submodules/qtbase-opensource-src-5.9.1.tar.xz.mirrorlist
- sha256 bc9a21e9f6fff9629019fdf9f989f064751d5073c3a28dc596def92f4d4275c6 qtbase-opensource-src-5.9.1.tar.xz
+ # Hash from: http://download.qt.io/official_releases/qt/5.8/5.8.0/submodules/qtbase-opensource-src-5.8.0.tar.xz
+ sha256 c17111ae02a44dc7be1ec2cf979a47ee9e58edf4904041a525c21f4fa53fc005  qtbase-opensource-src-5.8.0.tar.xz
 diff --git a/package/qt5/qt5canvas3d/qt5canvas3d.hash b/package/qt5/qt5canvas3d/qt5canvas3d.hash
-index 81386e0..d4afd94 100644
+index 2d84fe4..f4b35d3 100644
 --- a/package/qt5/qt5canvas3d/qt5canvas3d.hash
 +++ b/package/qt5/qt5canvas3d/qt5canvas3d.hash
 @@ -1,5 +1,5 @@
@@ -176,10 +171,10 @@ index 81386e0..d4afd94 100644
 +# Hash from: https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qtcanvas3d-opensource-src-5.6.3.tar.xz.mirrorlist
 +sha256 e99e0e159f2fba539b7947a1921072f6807f20958d32809edbf12aac571f56ff qtcanvas3d-opensource-src-5.6.3.tar.xz
  
- # Hash from: http://download.qt.io/official_releases/qt/5.9/5.9.1/submodules/qtcanvas3d-opensource-src-5.9.1.tar.xz.mirrorlist
- sha256 4b8bf09330f03d2b3998f5447991546704715478c54f4f8d82d00bee3047de81 qtcanvas3d-opensource-src-5.9.1.tar.xz
+ # Hash from: http://download.qt.io/official_releases/qt/5.8/5.8.0/submodules/qtcanvas3d-opensource-src-5.8.0.tar.xz
+ sha256 5446f790f526f582df7790e1e1442357f61aac9c23ea9b00d4a791c9d78ccaa3  qtcanvas3d-opensource-src-5.8.0.tar.xz
 diff --git a/package/qt5/qt5connectivity/qt5connectivity.hash b/package/qt5/qt5connectivity/qt5connectivity.hash
-index b6762f4..54c97c1 100644
+index d6b841a..f872721 100644
 --- a/package/qt5/qt5connectivity/qt5connectivity.hash
 +++ b/package/qt5/qt5connectivity/qt5connectivity.hash
 @@ -1,5 +1,5 @@
@@ -188,18 +183,10 @@ index b6762f4..54c97c1 100644
 +# Hash from: https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qtconnectivity-opensource-src-5.6.3.tar.xz.mirrorlist
 +sha256 fa406e3d63fa4a2acc8ecae6d110f20c766f19a21c7061a12f3c167deb07ccde qtconnectivity-opensource-src-5.6.3.tar.xz
  
- # Hash from: http://download.qt.io/official_releases/qt/5.9/5.9.1/submodules/qtconnectivity-opensource-src-5.9.1.tar.xz.mirrorlist
- sha256 40638b715517bff8509fe9fe1e6a4e45e0f66e68920605048e080dd023ae7fd5 qtconnectivity-opensource-src-5.9.1.tar.xz
-diff --git a/package/qt5/qt5declarative/0001-examples-photoviewer-needs-widgets-support.patch b/package/qt5/qt5declarative/5.6.3/0001-examples-photoviewer-needs-widgets-support.patch
-similarity index 100%
-rename from package/qt5/qt5declarative/0001-examples-photoviewer-needs-widgets-support.patch
-rename to package/qt5/qt5declarative/5.6.3/0001-examples-photoviewer-needs-widgets-support.patch
-diff --git a/package/qt5/qt5declarative/0002-examples-qquickviewcomparison-and-quickwidget-needs-.patch b/package/qt5/qt5declarative/5.6.3/0002-examples-qquickviewcomparison-and-quickwidget-needs-.patch
-similarity index 100%
-rename from package/qt5/qt5declarative/0002-examples-qquickviewcomparison-and-quickwidget-needs-.patch
-rename to package/qt5/qt5declarative/5.6.3/0002-examples-qquickviewcomparison-and-quickwidget-needs-.patch
+ # Hash from: http://download.qt.io/official_releases/qt/5.8/5.8.0/submodules/qtconnectivity-opensource-src-5.8.0.tar.xz
+ sha256 7b2d01e9d67f6390a9e64bdae62e81a965b0f0b21137cf1a021e08a28bb227f1  qtconnectivity-opensource-src-5.8.0.tar.xz
 diff --git a/package/qt5/qt5declarative/qt5declarative.hash b/package/qt5/qt5declarative/qt5declarative.hash
-index 76f3f02..a5ced08 100644
+index 98a46f1..c05a9ef 100644
 --- a/package/qt5/qt5declarative/qt5declarative.hash
 +++ b/package/qt5/qt5declarative/qt5declarative.hash
 @@ -1,5 +1,5 @@
@@ -208,8 +195,8 @@ index 76f3f02..a5ced08 100644
 +# Hash from: https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qtdeclarative-opensource-src-5.6.3.tar.xz.mirrorlist
 +sha256 f63fc053d0d16b8a9ca9308f8ead77874b470ae31b66057e2bd336bf648191fc qtdeclarative-opensource-src-5.6.3.tar.xz
  
- # Hash from: http://download.qt.io/official_releases/qt/5.9/5.9.1/submodules/qtdeclarative-opensource-src-5.9.1.tar.xz.mirrorlist
- sha256 d2fe6c9c1a9f19af6e96553c6d75366ab8f397bc232acd67d31476955fee94ff qtdeclarative-opensource-src-5.9.1.tar.xz
+ # Hash from: http://download.qt.io/official_releases/qt/5.8/5.8.0/submodules/qtdeclarative-opensource-src-5.8.0.tar.xz
+ sha256 32941eb9ad12d8735dfc64de8b50b5ab830a6d8705a421c57369de7cb5708a46  qtdeclarative-opensource-src-5.8.0.tar.xz
 diff --git a/package/qt5/qt5enginio/qt5enginio.hash b/package/qt5/qt5enginio/qt5enginio.hash
 index 9951834..3cf904a 100644
 --- a/package/qt5/qt5enginio/qt5enginio.hash
@@ -219,7 +206,7 @@ index 9951834..3cf904a 100644
 +# Hash from: http://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qtenginio-opensource-src-1.6.2.tar.xz.mirrorlist
  sha256 90ffc38d214a75ab0ef90a4760843f12bc073ae49c17de24c677d1d403bddcc3 qtenginio-opensource-src-1.6.2.tar.xz
 diff --git a/package/qt5/qt5graphicaleffects/qt5graphicaleffects.hash b/package/qt5/qt5graphicaleffects/qt5graphicaleffects.hash
-index 816186b..1a0f9e9 100644
+index ac4167b..a0383ce 100644
 --- a/package/qt5/qt5graphicaleffects/qt5graphicaleffects.hash
 +++ b/package/qt5/qt5graphicaleffects/qt5graphicaleffects.hash
 @@ -1,5 +1,5 @@
@@ -228,10 +215,10 @@ index 816186b..1a0f9e9 100644
 +# Hash from: https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qtgraphicaleffects-opensource-src-5.6.3.tar.xz.mirrorlist
 +sha256 c742592d5e45b122b29df60b69be23ba7c817f2dc471db86e054f6ea24a999ed qtgraphicaleffects-opensource-src-5.6.3.tar.xz
  
- # Hash from: http://download.qt.io/official_releases/qt/5.9/5.9.1/submodules/qtgraphicaleffects-opensource-src-5.9.1.tar.xz.mirrorlist
- sha256 5f86c38e36d9553049cfbe56d4869e73cf8ab920905402cbcafb56dd8a1a59ff qtgraphicaleffects-opensource-src-5.9.1.tar.xz
+ # Hash from: http://download.qt.io/official_releases/qt/5.8/5.8.0/submodules/qtgraphicaleffects-opensource-src-5.8.0.tar.xz
+ sha256 5f2a9b50530ac83d7c2b2ce73fbdf03ac61f83a9521e9d4b796fa17a969dd919  qtgraphicaleffects-opensource-src-5.8.0.tar.xz
 diff --git a/package/qt5/qt5imageformats/qt5imageformats.hash b/package/qt5/qt5imageformats/qt5imageformats.hash
-index 6e0448a..369eb16 100644
+index 0a63523..f6cf9c8 100644
 --- a/package/qt5/qt5imageformats/qt5imageformats.hash
 +++ b/package/qt5/qt5imageformats/qt5imageformats.hash
 @@ -1,5 +1,5 @@
@@ -240,10 +227,10 @@ index 6e0448a..369eb16 100644
 +# Hash from: https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qtimageformats-opensource-src-5.6.3.tar.xz.mirrorlist
 +sha256 efe4da3c90c976c9b9a2eb6b081d2b8e1435935695104456276ce98e8a5848c3 qtimageformats-opensource-src-5.6.3.tar.xz
  
- # Hash from: http://download.qt.io/official_releases/qt/5.9/5.9.1/submodules/qtimageformats-opensource-src-5.9.1.tar.xz.mirrorlist
- sha256 79fee307310a66100bd3d907ea69bd039dcd727c15f27e990167e7a27d1b8a47 qtimageformats-opensource-src-5.9.1.tar.xz
+ # Hash from: http://download.qt.io/official_releases/qt/5.8/5.8.0/submodules/qtimageformats-opensource-src-5.8.0.tar.xz
+ sha256 75045eeac11c96194260badbdb4d3e9eb7b7f9972d18d3491230ea820be4606f  qtimageformats-opensource-src-5.8.0.tar.xz
 diff --git a/package/qt5/qt5location/qt5location.hash b/package/qt5/qt5location/qt5location.hash
-index 4046060..30f0f6a 100644
+index 6afc918..8ac821c 100644
 --- a/package/qt5/qt5location/qt5location.hash
 +++ b/package/qt5/qt5location/qt5location.hash
 @@ -1,5 +1,5 @@
@@ -252,10 +239,10 @@ index 4046060..30f0f6a 100644
 +# Hash from: https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qtlocation-opensource-src-5.6.3.tar.xz.mirrorlist
 +sha256 b7a81c58cc331fb15bea8fba21d3c9a59f6dc6ad2e4855e30a14ce59a2af1466 qtlocation-opensource-src-5.6.3.tar.xz
  
- # Hash from: http://download.qt.io/official_releases/qt/5.9/5.9.1/submodules/qtlocation-opensource-src-5.9.1.tar.xz.mirrorlist
- sha256 4bc43c1df69c5322f982588711d4a65f8408b71a36e43ba19b39d1aae87e1515 qtlocation-opensource-src-5.9.1.tar.xz
+ # Hash from: http://download.qt.io/official_releases/qt/5.8/5.8.0/submodules/qtlocation-opensource-src-5.8.0.tar.xz
+ sha256 48a1e39ed989f0133aeacaa379e9c3958ec9b08c043626bba503619891d21abb  qtlocation-opensource-src-5.8.0.tar.xz
 diff --git a/package/qt5/qt5multimedia/qt5multimedia.hash b/package/qt5/qt5multimedia/qt5multimedia.hash
-index 3e85272..df6a51c 100644
+index ffd8a77..9125d21 100644
 --- a/package/qt5/qt5multimedia/qt5multimedia.hash
 +++ b/package/qt5/qt5multimedia/qt5multimedia.hash
 @@ -1,5 +1,5 @@
@@ -264,10 +251,10 @@ index 3e85272..df6a51c 100644
 +# Hash from: https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qtmultimedia-opensource-src-5.6.3.tar.xz.mirrorlist
 +sha256 ae36039ea8037742342f1615687e0ca2188f3ed0d700627a5e5be546c15e1b46 qtmultimedia-opensource-src-5.6.3.tar.xz
  
- # Hash from: http://download.qt.io/official_releases/qt/5.9/5.9.1/submodules/qtmultimedia-opensource-src-5.9.1.tar.xz.mirrorlist
- sha256 e48fbe71b4418eb7caba5ef5aa422483fb28d0e894cbc41f3d8b73b3d7fee6e4 qtmultimedia-opensource-src-5.9.1.tar.xz
+ # Hash from: http://download.qt.io/official_releases/qt/5.8/5.8.0/submodules/qtmultimedia-opensource-src-5.8.0.tar.xz
+ sha256 a8bc044834f95208261915feefe5e2fdb6761b76f0f99e21062963bd9f9d4a07  qtmultimedia-opensource-src-5.8.0.tar.xz
 diff --git a/package/qt5/qt5quickcontrols/qt5quickcontrols.hash b/package/qt5/qt5quickcontrols/qt5quickcontrols.hash
-index aecc142..9931412 100644
+index 95657d2..d1843a1 100644
 --- a/package/qt5/qt5quickcontrols/qt5quickcontrols.hash
 +++ b/package/qt5/qt5quickcontrols/qt5quickcontrols.hash
 @@ -1,5 +1,5 @@
@@ -276,10 +263,10 @@ index aecc142..9931412 100644
 +# Hash from: https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qtquickcontrols-opensource-src-5.6.3.tar.xz.mirrorlist
 +sha256 31bb0fc8f21b855af6ff02c415be3246128b523d0ef7c05e248e92281ab0db8e qtquickcontrols-opensource-src-5.6.3.tar.xz
  
- # Hash from: http://download.qt.io/official_releases/qt/5.9/5.9.1/submodules/qtquickcontrols-opensource-src-5.9.1.tar.xz.mirrorlist
- sha256 520ed0e110f9d0977eb873ea0e05a3d205c9c1b1ad2dd606875708848b21ec2e qtquickcontrols-opensource-src-5.9.1.tar.xz
+ # Hash from: http://download.qt.io/official_releases/qt/5.8/5.8.0/submodules/qtquickcontrols-opensource-src-5.8.0.tar.xz
+ sha256 04e70d0ccfd9ba882691a5e8f81e3428ae1b72a76bb9f43ba242f1c33bd7b326  qtquickcontrols-opensource-src-5.8.0.tar.xz
 diff --git a/package/qt5/qt5quickcontrols2/qt5quickcontrols2.hash b/package/qt5/qt5quickcontrols2/qt5quickcontrols2.hash
-index fefaba8..da6d5eb 100644
+index 80a3103..fae1a87 100644
 --- a/package/qt5/qt5quickcontrols2/qt5quickcontrols2.hash
 +++ b/package/qt5/qt5quickcontrols2/qt5quickcontrols2.hash
 @@ -1,5 +1,5 @@
@@ -288,10 +275,10 @@ index fefaba8..da6d5eb 100644
 +# Hash from: https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qtquickcontrols2-opensource-src-5.6.3.tar.xz.mirrorlist
 +sha256 ec5078470abe2da888c2be5d1749b5961ef5132487c180ce4d4aa19ea7ff81cb qtquickcontrols2-opensource-src-5.6.3.tar.xz
  
- # Hash from: http://download.qt.io/official_releases/qt/5.9/5.9.1/submodules/qtquickcontrols2-opensource-src-5.9.1.tar.xz.mirrorlist
- sha256 203be0321112d1513b722fce463f9e30d7d00befb33349901d9517f4f13408ff qtquickcontrols2-opensource-src-5.9.1.tar.xz
+ # Hash from: http://download.qt.io/official_releases/qt/5.8/5.8.0/submodules/qtquickcontrols2-opensource-src-5.8.0.tar.xz
+ sha256 b099866ec74f13cf0047274c61f0486d1eba27716fa07b69f682c54d3a4ade1b  qtquickcontrols2-opensource-src-5.8.0.tar.xz
 diff --git a/package/qt5/qt5script/qt5script.hash b/package/qt5/qt5script/qt5script.hash
-index 5177d68..4486b68 100644
+index 6e369d8..a77ad9d 100644
 --- a/package/qt5/qt5script/qt5script.hash
 +++ b/package/qt5/qt5script/qt5script.hash
 @@ -1,5 +1,5 @@
@@ -300,10 +287,10 @@ index 5177d68..4486b68 100644
 +# Hash from: https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qtscript-opensource-src-5.6.3.tar.xz.mirrorlist
 +sha256 f08720dd0e3a70377c1cb7fa3b129e24f4cdedade279e51b67c9271ab470b389 qtscript-opensource-src-5.6.3.tar.xz
  
- # Hash from: http://download.qt.io/official_releases/qt/5.9/5.9.1/submodules/qtscript-opensource-src-5.9.1.tar.xz.mirrorlist
- sha256 176a08865d5f66437b0f279fc5d7f381f359f20bafbffcebdcac61e86415188f qtscript-opensource-src-5.9.1.tar.xz
+ # Hash from: http://download.qt.io/official_releases/qt/5.8/5.8.0/submodules/qtscript-opensource-src-5.8.0.tar.xz
+ sha256 293ab91d2d189d889dc80609aa259190fb7de636d360e904784a5ce1a45e5ad3  qtscript-opensource-src-5.8.0.tar.xz
 diff --git a/package/qt5/qt5sensors/qt5sensors.hash b/package/qt5/qt5sensors/qt5sensors.hash
-index 4abf631..1422da7 100644
+index 307ad6f..5160451 100644
 --- a/package/qt5/qt5sensors/qt5sensors.hash
 +++ b/package/qt5/qt5sensors/qt5sensors.hash
 @@ -1,5 +1,5 @@
@@ -312,10 +299,10 @@ index 4abf631..1422da7 100644
 +# Hash from: https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qtsensors-opensource-src-5.6.3.tar.xz.mirrorlist
 +sha256 7502d4dc5571865a7eea2a4180c3be396dfb8ce22df4c4f3d7e9ff32ab334973 qtsensors-opensource-src-5.6.3.tar.xz
  
- # Hash from: http://download.qt.io/official_releases/qt/5.9/5.9.1/submodules/qtsensors-opensource-src-5.9.1.tar.xz.mirrorlist
- sha256 5af19397aa8ccd88c1fbb7cda4ee2a583f05bdf8ae090eb616bb276ff2e9e29c qtsensors-opensource-src-5.9.1.tar.xz
+ # Hash from: http://download.qt.io/official_releases/qt/5.8/5.8.0/submodules/qtsensors-opensource-src-5.8.0.tar.xz
+ sha256 3a5d0639ecf8cd30c8ca349c353a8f3c424889b53831e70b6d8c481fc45de796  qtsensors-opensource-src-5.8.0.tar.xz
 diff --git a/package/qt5/qt5serialbus/qt5serialbus.hash b/package/qt5/qt5serialbus/qt5serialbus.hash
-index c56cfb5..600b46e 100644
+index f15945c..5bc6863 100644
 --- a/package/qt5/qt5serialbus/qt5serialbus.hash
 +++ b/package/qt5/qt5serialbus/qt5serialbus.hash
 @@ -1,5 +1,5 @@
@@ -324,10 +311,10 @@ index c56cfb5..600b46e 100644
 +# Hash from: https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qtserialbus-opensource-src-5.6.3.tar.xz.mirrorlist
 +sha256 71c89be3879414e2a11cad93a4882758f9259b1c0aec980560309192c99f9a9e qtserialbus-opensource-src-5.6.3.tar.xz
  
- # Hash from: http://download.qt.io/official_releases/qt/5.9/5.9.1/submodules/qtserialbus-opensource-src-5.9.1.tar.xz.mirrorlist
- sha256 caa9feefbf1d51b38d6bc923428009d524c0c5eb77f30e4b6d84fec1ce19f3c3 qtserialbus-opensource-src-5.9.1.tar.xz
+ # Hash from: http://download.qt.io/official_releases/qt/5.8/5.8.0/submodules/qtserialbus-opensource-src-5.8.0.tar.xz
+ sha256 58343dd9f2e339d4900a2d4b54ee25ed959cf62bacb012fe61e6b99d7958c10a  qtserialbus-opensource-src-5.8.0.tar.xz
 diff --git a/package/qt5/qt5serialport/qt5serialport.hash b/package/qt5/qt5serialport/qt5serialport.hash
-index 7851cd1..1ffa071 100644
+index 18c590b..9728100 100644
 --- a/package/qt5/qt5serialport/qt5serialport.hash
 +++ b/package/qt5/qt5serialport/qt5serialport.hash
 @@ -1,5 +1,5 @@
@@ -336,10 +323,10 @@ index 7851cd1..1ffa071 100644
 +# Hash from: https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qtserialport-opensource-src-5.6.3.tar.xz.mirrorlist
 +sha256 082d1fee2703aed19f840c4e4031e37c9b929e5bd8ebef2ebac4b28c509bae1a qtserialport-opensource-src-5.6.3.tar.xz
  
- # Hash from: http://download.qt.io/official_releases/qt/5.9/5.9.1/submodules/qtserialport-opensource-src-5.9.1.tar.xz.mirrorlist
- sha256 e1fe85bf292929c3a62cb4d21efaaa4e89f70f48ea10914da07d0670ec617a69 qtserialport-opensource-src-5.9.1.tar.xz
+ # Hash from: http://download.qt.io/official_releases/qt/5.8/5.8.0/submodules/qtserialport-opensource-src-5.8.0.tar.xz
+ sha256 52317fded73ad0beb0a2ecf93124a8e2dfdcf14270a762c1f4fd06fb075506ad  qtserialport-opensource-src-5.8.0.tar.xz
 diff --git a/package/qt5/qt5svg/qt5svg.hash b/package/qt5/qt5svg/qt5svg.hash
-index c954efd..971acb7 100644
+index 6855e85..237c072 100644
 --- a/package/qt5/qt5svg/qt5svg.hash
 +++ b/package/qt5/qt5svg/qt5svg.hash
 @@ -1,5 +1,5 @@
@@ -348,10 +335,10 @@ index c954efd..971acb7 100644
 +# Hash from: https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qtsvg-opensource-src-5.6.3.tar.xz.mirrorlist
 +sha256 100f183517b46554079beabd8d2cabe3070a74dd0a2e64b6a304eac71cfadcec qtsvg-opensource-src-5.6.3.tar.xz
  
- # Hash from: http://download.qt.io/official_releases/qt/5.9/5.9.1/submodules/qtsvg-opensource-src-5.9.1.tar.xz.mirrorlist
- sha256 99f294f874b13553e4ed49cd9465580ad0c9b92e29cdfa47b2e4096835c1e2e5 qtsvg-opensource-src-5.9.1.tar.xz
+ # Hash from: http://download.qt.io/official_releases/qt/5.8/5.8.0/submodules/qtsvg-opensource-src-5.8.0.tar.xz
+ sha256 9873191c211ab4da9c0bc47b1e3549f475db4d448bba3175e0f86b24eefadc89  qtsvg-opensource-src-5.8.0.tar.xz
 diff --git a/package/qt5/qt5tools/qt5tools.hash b/package/qt5/qt5tools/qt5tools.hash
-index ae8513f..3f22ef7 100644
+index 541d95b..6ea4c27 100644
 --- a/package/qt5/qt5tools/qt5tools.hash
 +++ b/package/qt5/qt5tools/qt5tools.hash
 @@ -1,5 +1,5 @@
@@ -360,10 +347,10 @@ index ae8513f..3f22ef7 100644
 +# Hash from: https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qttools-opensource-src-5.6.3.tar.xz.mirrorlist
 +sha256 1a63ba838058d73cb540040589b235ded77f76402693decfd6d4d3c75ea67926 qttools-opensource-src-5.6.3.tar.xz
  
- # Hash from: http://download.qt.io/official_releases/qt/5.9/5.9.1/submodules/qttools-opensource-src-5.9.1.tar.xz.mirrorlist
- sha256 c4eb56cf24a75661b8317b566be37396c90357b4f6730ef12b8c97a7079ca0e8 qttools-opensource-src-5.9.1.tar.xz
+ # Hash from: http://download.qt.io/official_releases/qt/5.8/5.8.0/submodules/qttools-opensource-src-5.8.0.tar.xz
+ sha256 95ec8e76d393b6ba26ffff5041fce41946d2bf3aec1402c6533e24d9fc269d83  qttools-opensource-src-5.8.0.tar.xz
 diff --git a/package/qt5/qt5webchannel/qt5webchannel.hash b/package/qt5/qt5webchannel/qt5webchannel.hash
-index 27c3b0a..cebc34a 100644
+index 7fd01efb..ac6a827 100644
 --- a/package/qt5/qt5webchannel/qt5webchannel.hash
 +++ b/package/qt5/qt5webchannel/qt5webchannel.hash
 @@ -1,5 +1,5 @@
@@ -372,22 +359,10 @@ index 27c3b0a..cebc34a 100644
 +# Hash from: https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qtwebchannel-opensource-src-5.6.3.tar.xz.mirrorlist
 +sha256 8eb1b0ac2286653c7932758c21e7760788a5d7cfd6162da09afa926d5be50713 qtwebchannel-opensource-src-5.6.3.tar.xz
  
- # Hash from: http://download.qt.io/official_releases/qt/5.9/5.9.1/submodules/qtwebchannel-opensource-src-5.9.1.tar.xz.mirrorlist
- sha256 80425f5a6df8784f5221809ffd664486ed38427f514ab4ec174e20456b027000 qtwebchannel-opensource-src-5.9.1.tar.xz
-diff --git a/package/qt5/qt5webkit/5.6.2/0001-qtwebkit-fix-QA-issue-bad-RPATH.patch b/package/qt5/qt5webkit/5.6.3/0001-qtwebkit-fix-QA-issue-bad-RPATH.patch
-similarity index 100%
-rename from package/qt5/qt5webkit/5.6.2/0001-qtwebkit-fix-QA-issue-bad-RPATH.patch
-rename to package/qt5/qt5webkit/5.6.3/0001-qtwebkit-fix-QA-issue-bad-RPATH.patch
-diff --git a/package/qt5/qt5webkit/5.6.2/0002-Remove-TEXTREL-tag-in-x86.patch b/package/qt5/qt5webkit/5.6.3/0002-Remove-TEXTREL-tag-in-x86.patch
-similarity index 100%
-rename from package/qt5/qt5webkit/5.6.2/0002-Remove-TEXTREL-tag-in-x86.patch
-rename to package/qt5/qt5webkit/5.6.3/0002-Remove-TEXTREL-tag-in-x86.patch
-diff --git a/package/qt5/qt5webkit/5.6.2/0003-Exclude-backtrace-API-for-non-glibc-libraries.patch b/package/qt5/qt5webkit/5.6.3/0003-Exclude-backtrace-API-for-non-glibc-libraries.patch
-similarity index 100%
-rename from package/qt5/qt5webkit/5.6.2/0003-Exclude-backtrace-API-for-non-glibc-libraries.patch
-rename to package/qt5/qt5webkit/5.6.3/0003-Exclude-backtrace-API-for-non-glibc-libraries.patch
+ # Hash from: http://download.qt.io/official_releases/qt/5.8/5.8.0/submodules/qtwebchannel-opensource-src-5.8.0.tar.xz
+ sha256 5bf5b15413baa235ee2cbfd136ea3b9303b32879b54f9f25bfb4dc96d37d0b4a  qtwebchannel-opensource-src-5.8.0.tar.xz
 diff --git a/package/qt5/qt5webkit/qt5webkit.hash b/package/qt5/qt5webkit/qt5webkit.hash
-index 93f0594..860d4e4 100644
+index 4431e2d..293aef5 100644
 --- a/package/qt5/qt5webkit/qt5webkit.hash
 +++ b/package/qt5/qt5webkit/qt5webkit.hash
 @@ -1,5 +1,5 @@
@@ -396,10 +371,10 @@ index 93f0594..860d4e4 100644
 +# Hash from: http://download.qt.io/snapshots/qt/5.6/5.6.3/latest_src/submodules/qtwebkit-opensource-src-5.6.3.tar.xz.mirrorlist
 +sha256  qtwebkit-opensource-src-5.6.3.tar.xz
  
- # hash from: http://download.qt.io/official_releases/qt/5.9/5.9.1/submodules/qtwebkit-opensource-src-5.9.1.tar.xz.mirrorlist
- sha256  28a560becd800a4229bfac317c2e5407cd3cc95308bc4c3ca90dba2577b052cf  qtwebkit-opensource-src-5.9.1.tar.xz
+ # Hash from: http://download.qt.io/official_releases/qt/5.8/5.8.0/submodules/qtwebkit-opensource-src-5.8.0.tar.xz
+ sha256 79ae8660086bf92ffb0008b17566270e6477c8fa0daf9bb3ac29404fb5911bec  qtwebkit-opensource-src-5.8.0.tar.xz
 diff --git a/package/qt5/qt5websockets/qt5websockets.hash b/package/qt5/qt5websockets/qt5websockets.hash
-index c95027b..d83de2d 100644
+index a91e084..f69c805 100644
 --- a/package/qt5/qt5websockets/qt5websockets.hash
 +++ b/package/qt5/qt5websockets/qt5websockets.hash
 @@ -1,5 +1,5 @@
@@ -408,10 +383,10 @@ index c95027b..d83de2d 100644
 +# Hash from: https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qtwebsockets-opensource-src-5.6.3.tar.xz.mirrorlist
 +sha256 a2439045616c89dfe06333734ff4726075c92e01db6e6b6863bc138e39c028eb qtwebsockets-opensource-src-5.6.3.tar.xz
  
- # Hash from: http://download.qt.io/official_releases/qt/5.9/5.9.1/submodules/qtwebsockets-opensource-src-5.9.1.tar.xz.mirrorlist
- sha256 01277362430b5a75c19a16ded8cf4c53a3bccddcc0ba2f50648e0f2985f23464 qtwebsockets-opensource-src-5.9.1.tar.xz
+ # Hash from: http://download.qt.io/official_releases/qt/5.8/5.8.0/submodules/qtwebsockets-opensource-src-5.8.0.tar.xz
+ sha256 aa110af297d0d3239f346c3ee0cd43621adf463eb62a04941bbfe3fcccb845f5  qtwebsockets-opensource-src-5.8.0.tar.xz
 diff --git a/package/qt5/qt5x11extras/qt5x11extras.hash b/package/qt5/qt5x11extras/qt5x11extras.hash
-index a1ac2b7..72be0d5 100644
+index eb0dc6c..b251899 100644
 --- a/package/qt5/qt5x11extras/qt5x11extras.hash
 +++ b/package/qt5/qt5x11extras/qt5x11extras.hash
 @@ -1,5 +1,5 @@
@@ -420,10 +395,10 @@ index a1ac2b7..72be0d5 100644
 +# Hash from: https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qtx11extras-opensource-src-5.6.3.tar.xz.mirrorlist
 +sha256 1e7a8e96e0629f2b2b78de684b156b357210cf5df6b42f30789423f2cb07677f qtx11extras-opensource-src-5.6.3.tar.xz
  
- # Hash from: http://download.qt.io/official_releases/qt/5.9/5.9.1/submodules/qtx11extras-opensource-src-5.9.1.tar.xz.mirrorlist
- sha256 a63d0e28958331d672dbd0f8c554bdaddbc974a27be37601f7f221a2ef1ad601 qtx11extras-opensource-src-5.9.1.tar.xz
+ # Hash from: http://download.qt.io/official_releases/qt/5.8/5.8.0/submodules/qtx11extras-opensource-src-5.8.0.tar.xz
+ sha256 bed7f2b5123a9849ec94afa67db5f296e6f527c6330f47a680c83586d3a4280e  qtx11extras-opensource-src-5.8.0.tar.xz
 diff --git a/package/qt5/qt5xmlpatterns/qt5xmlpatterns.hash b/package/qt5/qt5xmlpatterns/qt5xmlpatterns.hash
-index bf8c04a..5c3ce53 100644
+index c1bb663..f9db184 100644
 --- a/package/qt5/qt5xmlpatterns/qt5xmlpatterns.hash
 +++ b/package/qt5/qt5xmlpatterns/qt5xmlpatterns.hash
 @@ -1,5 +1,5 @@
@@ -432,5 +407,5 @@ index bf8c04a..5c3ce53 100644
 +# Hash from: https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qtxmlpatterns-opensource-src-5.6.3.tar.xz.mirrorlist
 +sha256 a461ff9f0d7310de9b9904ff9cd34919e958bf4071a6fc7096450b8990ab51f6 qtxmlpatterns-opensource-src-5.6.3.tar.xz
  
- # Hash from: http://download.qt.io/official_releases/qt/5.9/5.9.1/submodules/qtxmlpatterns-opensource-src-5.9.1.tar.xz.mirrorlist
- sha256 b584686496ad1b1b3426d642bd705cab3fc02313b067a33d1b826a27aee29c24 qtxmlpatterns-opensource-src-5.9.1.tar.xz
+ # Hash from: http://download.qt.io/official_releases/qt/5.8/5.8.0/submodules/qtxmlpatterns-opensource-src-5.8.0.tar.xz
+ sha256 7bffa65ea52e54fb1314b45222888612d55eaf51a936a6119b8756266439da04  qtxmlpatterns-opensource-src-5.8.0.tar.xz
