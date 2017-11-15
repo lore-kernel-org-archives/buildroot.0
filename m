@@ -1,42 +1,51 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 15 Nov 2017 14:54:39 +0200
-Subject: [Buildroot] [PATCH 1/2] package/feh: Fix build issue with some
- older cross-compilers
-In-Reply-To: <20171115124801.rtttv64tqyddnrsp@dell5510>
-References: <20171115115155.4830-1-petr.vorel@gmail.com>
- <20171115124111.e6rdg5i6hxg3uorh@sapphire.tkos.co.il>
- <20171115124801.rtttv64tqyddnrsp@dell5510>
-Message-ID: <20171115125439.nyzaqd234orgm2kv@sapphire.tkos.co.il>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Wed, 15 Nov 2017 13:58:58 +0100
+Subject: [Buildroot] Cannot rebuild autobuild
+In-Reply-To: <20171114234409.114f002f@gmx.net>
+References: <20171113102757.ir7so5o7h7zopcvq@dell5510>
+ <20171113144231.gddccsqlelrhrokw@dell5510>
+ <20171114234409.114f002f@gmx.net>
+Message-ID: <20171115125857.dcy6j7qvjt32ww43@dell5510>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Petr,
+Hi Peter,
 
-On Wed, Nov 15, 2017 at 01:48:01PM +0100, Petr Vorel wrote:
-> Hi Baruch,
-> > How did you overcome the build issue you had?
-> Build on another machine with Debian. I'll write about it in the original thread (and CC
-> you and.
-> 
-> > On Wed, Nov 15, 2017 at 12:51:54PM +0100, Petr Vorel wrote:
-> > > by adding -std=gnu11 to CFLAGS.
-> 
-> > > Also: build in parallel, use TARGET_CONFIGURE_OPTS and cleanup
-> > > FEH_INSTALL_TARGET_CMDS.
-> 
-> > This should be a separate patch, I think.
-> I don't like squashing things in one commit either, but this looked obvious to me. OK,
-> I'll split it.
+...
+> > > $ wget -c http://autobuild.buildroot.net/results/bf31199cdaa18971a9b599c26fbefac73b2d6f30/config -O .config.old
 
-Apart from keeping separate changes in separate patches, I think we'd like to 
-have the fix in master, but the cleanup in next.
+> Your should store the downloaded config file definitely as '.config' instead of '.config.old' (there is only
+> the way .config --> .config.old and not the other way round in buildroot)...
+Thanks for clarification. I actually realised this as well. This is not an issue, as I
+tested it as being .config.
 
-baruch
+> > > $ make olddefconfig
+> > > $ make
+> > > make: *** No rule to make target 'toolchain-external-custom', needed by '/home/foo/install/src/buildroot.git/output/build/toolchain-external/.stamp_configured'.  Stop.  
 
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+> > > What can be wrong? I've done it this way in the past (with other autobuild items, which
+> > > had different toolchains).  
+
+> Same here with a fresh installed openSUSE Tumbleweed x86_64 without 32-bit support packages installed.
+
+> Until commit ec54092c916440501006bfa51a820eb953100510 ('toolchain-external-custom: new package'), or with
+> 2016.11.3 the same config gives the following error instead:
+
+> [...]
+> Cannot execute cross-compiler '.../host/opt/ext-toolchain/bin/x86_64-ctng_locales-linux-gnu-gcc'
+> make[1]: *** [package/pkg-generic.mk:209: .../build/toolchain-external/.stamp_configured] Error 1
+> make: *** [Makefile:16: _all] Error 2
+
+> Maybe the toolchain definition should select BR2_HOSTARCH_NEEDS_IA32_LIBS?
+It must be some system library dependency as I was able to run the build on Debian unstable.
+Failing build is on openSUSE Tumbleweed x86_64 (the same as you), but I have glibc-32bit
+and many other 32 bit packages installed (as well on Debian machine).
+I tried to play with BR2_HOSTARCH_NEEDS_IA32_LIBS, but didn't found the solution.
+Thomas, any idea what can be wrong?
+
+
+Kind regards,
+Petr
