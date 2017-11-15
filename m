@@ -1,66 +1,42 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 15 Nov 2017 10:16:31 +0100
-Subject: [Buildroot] [git commit] mp4v2: add upstream patch fixing build
- issue with gcc 7+
-Message-ID: <20171115091214.4A3F281064@busybox.osuosl.org>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 15 Nov 2017 11:21:55 +0200
+Subject: [Buildroot] [PATCH] iproute2: bump to version 4.14.1
+In-Reply-To: <87wp2rlx3i.fsf@dell.be.48ers.dk>
+References: <9307d429db0bf9d7d141aa49ddc2e72425460882.1510684057.git.baruch@tkos.co.il>
+ <87wp2rlx3i.fsf@dell.be.48ers.dk>
+Message-ID: <20171115092154.wkmktmstb5i7ujwc@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0b1509107dc1720f7da6149a8791085794b5677f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Peter,
 
-Fixes:
-http://autobuild.buildroot.net/results/fc0/fc0f51f3ee1364f55248e8fe713995bc07f877c6/
-http://autobuild.buildroot.net/results/b0e/b0e68ad2aeb7c191cdaa9856a36bd2cae4bcd5f0/
-http://autobuild.buildroot.net/results/a66/a66c89e3fb3f1d9802581aaffad87a547c6e67f5/
+On Wed, Nov 15, 2017 at 10:17:37AM +0100, Peter Korsgaard wrote:
+> >>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+> 
+>  > Remove uClibc build fix; current uClibc version defines the required
+>  > macro.
+> 
+>  > Remove static link fix; fixed upstream.
+> 
+>  > Rebase the musl libc-compat.h workaround to adapt to upstream headers
+>  > location change.
+> 
+>  > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> 
+> I see that you didn't mark this as being for next. Is that on purpose?
+> If so, why?
 
-And many more.
+No purpose. I just thought it's obvious.
 
-Add an upstream patch fixing invalid code that now triggers a build error on gcc7+.
+Would you prefer to have all patches for next marked in the subject prefix 
+during the -rc period?
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/mp4v2/0001-Fix-GCC7-build.patch | 32 ++++++++++++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
+baruch
 
-diff --git a/package/mp4v2/0001-Fix-GCC7-build.patch b/package/mp4v2/0001-Fix-GCC7-build.patch
-new file mode 100644
-index 0000000..90222c1
---- /dev/null
-+++ b/package/mp4v2/0001-Fix-GCC7-build.patch
-@@ -0,0 +1,32 @@
-+From 855e9674232808ff3be7191b697dfb56917db21f Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?S=C3=A9rgio=20M=2E=20Basto?= <sergio@serjux.com>
-+Date: Wed, 8 Feb 2017 00:56:32 +0000
-+Subject: [PATCH] Fix GCC7 build
-+
-+if (*pSlash != '\0') {
-+
-+As it stands the body of that if will always execute and when there are
-+no encoding parameters ppEncodingParams will be returned as a pointer to
-+an empty string rather than as a null pointer
-+
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ src/rtphint.cpp | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/rtphint.cpp b/src/rtphint.cpp
-+index e07309d..1eb01f5 100644
-+--- a/src/rtphint.cpp
-++++ b/src/rtphint.cpp
-+@@ -339,7 +339,7 @@ void MP4RtpHintTrack::GetPayload(
-+                 pSlash = strchr(pSlash, '/');
-+                 if (pSlash != NULL) {
-+                     pSlash++;
-+-                    if (pSlash != '\0') {
-++                    if (*pSlash != '\0') {
-+                         length = (uint32_t)strlen(pRtpMap) - (pSlash - pRtpMap);
-+                         *ppEncodingParams = (char *)MP4Calloc(length + 1);
-+                         strncpy(*ppEncodingParams, pSlash, length);
-+-- 
-+2.11.0
-+
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
