@@ -1,37 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 15 Nov 2017 23:12:13 +0100
-Subject: [Buildroot] [PATCH next] libnl: bump to version 3.4.0
-In-Reply-To: <a6f7e751386a971150355817e83615d71e231abd.1510663005.git.baruch@tkos.co.il>
-References: <a6f7e751386a971150355817e83615d71e231abd.1510663005.git.baruch@tkos.co.il>
-Message-ID: <20171115231213.4ff4686a@windsurf.lan>
+Date: Wed, 15 Nov 2017 23:12:28 +0100
+Subject: [Buildroot] [git commit branch/next] uboot: bump to version 2017.11
+Message-ID: <20171115220558.7D5448104A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=b75d54d18e139d8c1af527ef6e63c5b8fde30ed4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Tue, 14 Nov 2017 14:36:45 +0200, Baruch Siach wrote:
-> Drop static build fix patch; upstream fixed static build in a different
-> way (https://github.com/thom311/libnl/pull/141).
-> 
-> Following the patch removal, autoreconf is not needed anymore.
-> 
-> Add license hash.
-> 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  ...rt-build-enable-building-cli-during-tests.patch | 115 ---------------------
->  package/libnl/libnl.hash                           |   6 +-
->  package/libnl/libnl.mk                             |   4 +-
->  3 files changed, 5 insertions(+), 120 deletions(-)
->  delete mode 100644 package/libnl/0003-Revert-build-enable-building-cli-during-tests.patch
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ boot/uboot/Config.in  | 4 ++--
+ boot/uboot/uboot.hash | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Applied to next, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index 8215912..14caafa 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -38,7 +38,7 @@ choice
+ 	  Select the specific U-Boot version you want to use
+ 
+ config BR2_TARGET_UBOOT_LATEST_VERSION
+-	bool "2017.09"
++	bool "2017.11"
+ 
+ config BR2_TARGET_UBOOT_CUSTOM_VERSION
+ 	bool "Custom version"
+@@ -86,7 +86,7 @@ endif
+ 
+ config BR2_TARGET_UBOOT_VERSION
+ 	string
+-	default "2017.09"	if BR2_TARGET_UBOOT_LATEST_VERSION
++	default "2017.11"	if BR2_TARGET_UBOOT_LATEST_VERSION
+ 	default BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE \
+ 		if BR2_TARGET_UBOOT_CUSTOM_VERSION
+ 	default "custom"	if BR2_TARGET_UBOOT_CUSTOM_TARBALL
+diff --git a/boot/uboot/uboot.hash b/boot/uboot/uboot.hash
+index 82efc79..db15efb 100644
+--- a/boot/uboot/uboot.hash
++++ b/boot/uboot/uboot.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256  b2d15f2cf5f72e706025cde73d67247c6da8cd35f7e10891eefe7d9095089744  u-boot-2017.09.tar.bz2
++sha256  6a018fd3caf58f3dcfa23ee989a82bd35df03af71872b9dca8c6d758a0d26c05  u-boot-2017.11.tar.bz2
