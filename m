@@ -1,45 +1,60 @@
-From: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
-Date: Wed, 15 Nov 2017 13:14:35 -0500
-Subject: [Buildroot] [PATCH v2] genimage: change upstream URL
-Message-ID: <20171115181435.5925-1-vivien.didelot@savoirfairelinux.com>
+From: =?UTF-8?B?U3RlZmFuIEZyw7ZiZXJn?= <stefan.froberg@petroprogram.com>
+Date: Wed, 15 Nov 2017 20:40:22 +0200
+Subject: [Buildroot] Suggestion to improving buildroot download infra
+In-Reply-To: <20171115155026.69153059@windsurf.lan>
+References: <5A0C4958.9040608@petroprogram.com>
+ <20171115155026.69153059@windsurf.lan>
+Message-ID: <5A0C8A16.40507@petroprogram.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Pengutronix is now hosting the official genimage repository and release
-tarballs on Github. This patch updates the official URL from the package
-description and its download website described in GENIMAGE_SITE.
+Hi
 
-Signed-off-by: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
----
- package/genimage/Config.in.host | 2 +-
- package/genimage/genimage.mk    | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Ah, okay. I will try it soon and see what packages will break.
+Thanks :-)
 
-diff --git a/package/genimage/Config.in.host b/package/genimage/Config.in.host
-index 5c5a8a8a2c..cf831a143c 100644
---- a/package/genimage/Config.in.host
-+++ b/package/genimage/Config.in.host
-@@ -10,4 +10,4 @@ config BR2_PACKAGE_HOST_GENIMAGE
- 	  environment variables, the config file or commandline
- 	  switches.
- 
--	  http://www.pengutronix.de/software/genimage/
-+	  https://github.com/pengutronix/genimage
-diff --git a/package/genimage/genimage.mk b/package/genimage/genimage.mk
-index 2e7aad20c6..8d11c66a25 100644
---- a/package/genimage/genimage.mk
-+++ b/package/genimage/genimage.mk
-@@ -6,7 +6,7 @@
- 
- GENIMAGE_VERSION = 9
- GENIMAGE_SOURCE = genimage-$(GENIMAGE_VERSION).tar.xz
--GENIMAGE_SITE = http://www.pengutronix.de/software/genimage/download
-+GENIMAGE_SITE = https://github.com/pengutronix/genimage/releases/download/v$(GENIMAGE_VERSION)
- HOST_GENIMAGE_DEPENDENCIES = host-pkgconf host-libconfuse
- GENIMAGE_LICENSE = GPL-2.0
- GENIMAGE_LICENSE_FILES = COPYING
--- 
-2.15.0
+-S-
+
+15.11.2017, 16:50, Thomas Petazzoni kirjoitti:
+> Hello,
+>
+> On Wed, 15 Nov 2017 16:04:08 +0200, Stefan Fr?berg wrote:
+>
+>> Is there a way to integrate parallel wget download into buildroot?
+> This will be a direct consequence of top-level parallel build support.
+> Not only parallel download, but downloading package A, while package B
+> is being built, etc.
+>
+>> That would greatly speed the downloading process when doing "make source"
+>> and maybe even later all the downloading could be done in the
+>> background, even
+>> when compiling some big package (for example, gentoo linux does that).
+>>
+>> If I understand it correctly, there are at least two (if not including
+>> the crude & fork method)
+>> ways to do parallel wget:
+>>
+>> 1. use xarg:
+>>
+>> echo $URL_LIST | xargs -n 1 -P ${NUMBER_OF_PARALLEL_DOWNLOADS} wget
+>>
+>> or 2. use GNU parallel
+>>
+>> parallel -a $URL_LIST --jobs ${NUMBER_OF_PARALLEL_DOWNLOADS} wget
+>>
+>> How exactly, does buildroot collect the download urls when doing example,
+>> "make source" ? Does it collect them first into some list and then do
+>> wget -i list ?
+>> Or does it just go each selected packet one-by-one and fetch the url for
+>> each?
+> For the moment, the easiest is to comment the .NOTPARALLEL: statement
+> in the main Makefile, and then run:
+>
+> 	make -j8 source
+>
+> Best regards,
+>
+> Thomas
