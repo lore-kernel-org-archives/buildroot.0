@@ -1,96 +1,103 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 15 Nov 2017 22:55:36 +0100
-Subject: [Buildroot] [PATCH/next 1/5] armada-firmware: new package
-In-Reply-To: <20171115211525.kthewizyrikb4wiz@speedy.hunter>
-References: <20171112201646.15558-1-geomatsi@gmail.com>
- <20171112201646.15558-2-geomatsi@gmail.com>
- <dbbc1ce7-1847-a08d-fca0-a667b555b71c@mind.be>
- <20171115211525.kthewizyrikb4wiz@speedy.hunter>
-Message-ID: <e3badf0d-7c2f-b2fe-99fa-fbb7bc208530@mind.be>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed, 15 Nov 2017 23:08:54 +0100
+Subject: [Buildroot] [PATCH 1/1] libupnp: add 1.8.3 version
+In-Reply-To: <cc34ba6a-323c-0559-4c11-358cea497f19@mind.be>
+References: <20171114193821.25188-1-fontaine.fabrice@gmail.com>
+ <20171115134342.60226366@windsurf.lan>
+ <CAPi7W81AhUJjdFm5F-7MJmKQ3XVO8FtHFU5NoR+hGrWvBSSSuw@mail.gmail.com>
+ <20171115222257.10defebb@windsurf.lan>
+ <cc34ba6a-323c-0559-4c11-358cea497f19@mind.be>
+Message-ID: <CAPi7W81j7c1uTi_hp-vA1=hbU8djFA+wuaPkxdFPZYpyRaFBwA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Dear all,
 
+2017-11-15 22:32 GMT+01:00 Arnout Vandecappelle <arnout@mind.be>:
 
-On 15-11-17 22:15, Sergey Matyukevich wrote:
-> Hi Arnout,
-> 
-> Thanks for the review !
-> 
->>> This package adds SCP BL2 firmware for Marvell Armada 7040 and 8040 SoCs.
-> 
-> ...
-> 
->>> diff --git a/boot/Config.in b/boot/Config.in
->>> index 2f46c8546e..0ffbd7288b 100644
->>> --- a/boot/Config.in
->>> +++ b/boot/Config.in
->>> @@ -17,5 +17,6 @@ source "boot/ts4800-mbrboot/Config.in"
->>>  source "boot/uboot/Config.in"
->>>  source "boot/vexpress-firmware/Config.in"
->>>  source "boot/xloader/Config.in"
->>> +source "boot/armada-firmware/Config.in"
->>
->>  Please keep things alphabetic. However, I don't think the boot loader menu is
->> appropriate. Yes, it's an image that is used by the bootloader, but really it is
->> a piece of firmware, not really related to booting the SoC.
-> 
-> Will fix the order. However it looks like boot menu is the right place for this
-> package. This package is similar to versatile-firmware. It is SCP_BL2 image
-> which is used by ATF to boot SCP coprocessor. A bit more details are available
-> in ATF design document:
-> https://github.com/ARM-software/arm-trusted-firmware/blob/master/docs/firmware-design.rst#scp-bl2-system-control-processor-firmware-image-load
+>
+>
+> On 15-11-17 22:22, Thomas Petazzoni wrote:
+> > Hello,
+> >
+> > On Wed, 15 Nov 2017 22:04:10 +0100, Fabrice Fontaine wrote:
+> >
+> >>>> +choice
+> >>>> +     prompt "libupnp version"
+> >>>> +     default BR2_PACKAGE_LIBUPNP_1_6
+> >>>> +     help
+> >>>> +       Select the version of libupnp API you wish to use.
+> >>>> +
+> >>>> +config BR2_PACKAGE_LIBUPNP_1_6
+> >>>> +     bool "libupnp 1.6.x"
+> >>>> +
+> >>>> +config BR2_PACKAGE_LIBUPNP_1_8
+> >>>> +     bool "libupnp 1.8.x"
+> >>>> +
+> >>>> +endchoice
+> >>>
+> >>> I believe we should perhaps instead add a separate libupnp18 package,
+> >>> all those "depends on" to decide which package should be visible
+> >>> depending on the version of libupnp that is currently selected are a
+> >>> bit annoying. But don't rewrite your patch right now: wait for other
+> >>> Buildroot developers to give their opinion on this matter.
+> >>>
+> >>> Is it possible to install both libupnp 1.6 and libupnp 1.8 in the same
+> >>> system without any conflict ?
+> >>>
+> >> Unfortunately no, it was possible in 1.8.0 and 1.8.1 but we had to
+> rollback
+> >> due to the vlc developer who wasn't happy with this change:
+> >> https://github.com/mrjimenez/pupnp/commit/
+> 07f504c61bd9e4d93eb3d373ffc852
+> >> 7cafe0b9af
+> >
+> > OK, the reasoning makes sense.
+> >
+> > What is the transition plan ? Will the different Buildroot packages that
+> > use the 1.6 version be upgraded to use 1.8 at some point in the
+> > reasonably near future ? Or will we have to keep both versions forever ?
+>
+The transition plan is not very clear, 1.8.x is a major change to libupnp,
+parameters can't be retrieved/updated through pointers anymore, the
+applications have to use getter/setter functions. Moreover, internal APIs,
+such as threadutil is no more public anymore. So, this could be a massive
+rework for applications and some of them are not very active anymore.
 
- As I understand it, it should also be possible to load the SCP firmware after
-boot. Maybe not on all platforms. But even if it weren't I wouldn't consider it
-a bootloader. And the same goes for vexpress-firmware by the way.
+> >
+> > Peter, Arnout, what are your thoughts on how to handle this?
+>
+Personally, I prefer your suggestion of creating a libupnp18 package if
+this is the standard way of handling this in buildroot.
 
- That said, it's not such a big deal for me.
+>
+>  For libraries that change API, we've almost always created a new package,
+> and
+> sometimes they are not side-by-side installable. Python3 is a great
+> example, but
+> also e.g. opencv3.
+>
+>  So I agree it should be a new package libupnp18 that depends on
+> !BR2_PACKAGE_LIBUPNP and where that dependency has to be propagated to
+> gerbera.
+>
+>  Regards,
+>  Arnout
+>
+> --
+> Arnout Vandecappelle                          arnout at mind be
+> Senior Embedded Software Architect            +32-16-286500
+> Essensium/Mind                                http://www.mind.be
+> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+>
+Best Regards,
 
-[snip]
->>> +define ARMADA_FIRMWARE_INSTALL_IMAGES_CMDS
->>> +	$(INSTALL) -D -m 0644 $(@D)/mrvl_scp_bl2_7040.img $(BINARIES_DIR)/mrvl_scp_bl2_7040.img
->>> +	$(INSTALL) -D -m 0644 $(@D)/mrvl_scp_bl2_8040.img $(BINARIES_DIR)/mrvl_scp_bl2_8040.img
->>
->>  I don't think the name is really relevant, is it? So maybe you could always
->> copy it to the same file in BINARIES_DIR so on the ATF side you don't need to
->> access variables of this package.
-> 
-> This file depends on platform. Now we are adding MacchiatoBin, but another
-> interesting networking board called EspressoBin from the same vendor is on the
-> horizon. So it makes sense to keep things a little bit more flexible.
-> 
-> It looks like, together with review comments from Baruch, this brings us
-> to the following implementation:
-> - choice submenu for available platforms in armada-firmware config menu
->   ..
->   config BR2_TARGET_ARMADA_FIRMWARE_IMAGE
->     string
->     default "mrvl_scp_bl2_8040.img" if BR2_PACKAGE_ARMADA_8040
->     default "mrvl_scp_bl2_7040.img" if BR2_PACKAGE_ARMADA_7040
-> 
-> - copy only selected BR2_TARGET_ARMADA_FIRMWARE_IMAGE to BINARIES_DIR
-> 
-> - use the same BR2_TARGET_ARMADA_FIRMWARE_FIRMWARE variable in ATF package
->   to specify correct firmware
-
- My point was: you can copy the image to $(BINARIES_DIR)/scp-fw.bin, then in the
-ATF package you don't need to specify the firmware name but just always use
-scp-fw.bin. A further step would be to introduce an arm-scp-firmware (or
-atf-scp-firmware) virtual package (implemented by vexpress-firmware and
-armada-firmware). That way no change is needed in ATF to add an additional
-firmware package, and it's possible to add new firmware in BR2_EXTERNAL.
-
- Regards,
- Arnout
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Fabrice
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20171115/1dc44a8f/attachment.html>
