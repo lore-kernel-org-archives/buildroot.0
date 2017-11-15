@@ -1,47 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 15 Nov 2017 22:04:15 +0100
-Subject: [Buildroot] [git commit branch/next] genimage: change upstream URL
-Message-ID: <20171115205655.9D63981125@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 15 Nov 2017 22:05:25 +0100
+Subject: [Buildroot] [PATCH] dropbear: change start-up script to honour
+ pre-existing keys
+In-Reply-To: <20171115194509.78132-1-code@mmayer.net> (Markus Mayer's message
+ of "Wed, 15 Nov 2017 11:45:09 -0800")
+References: <20171115194509.78132-1-code@mmayer.net>
+Message-ID: <874lpv9rsa.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=325e60767da45efe507ea13fc304866257421334
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+>>>>> "Markus" == Markus Mayer <code@mmayer.net> writes:
 
-Pengutronix is now hosting the official genimage repository and release
-tarballs on Github. This patch updates the official URL from the package
-description and its download website described in GENIMAGE_SITE.
+ > From: Markus Mayer <mmayer@broadcom.com>
+ > Rather than starting dropbear with option -R at all times, we only do
+ > so if no existing key file is found. This lets dropbear honour
+ > pre-existing key files, including keys copied into the root file system
+ > at build time.
 
-Signed-off-by: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/genimage/Config.in.host | 2 +-
- package/genimage/genimage.mk    | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+But -R already only generates keys if needed?
 
-diff --git a/package/genimage/Config.in.host b/package/genimage/Config.in.host
-index 5c5a8a8..cf831a1 100644
---- a/package/genimage/Config.in.host
-+++ b/package/genimage/Config.in.host
-@@ -10,4 +10,4 @@ config BR2_PACKAGE_HOST_GENIMAGE
- 	  environment variables, the config file or commandline
- 	  switches.
- 
--	  http://www.pengutronix.de/software/genimage/
-+	  https://github.com/pengutronix/genimage
-diff --git a/package/genimage/genimage.mk b/package/genimage/genimage.mk
-index 2e7aad2..8d11c66 100644
---- a/package/genimage/genimage.mk
-+++ b/package/genimage/genimage.mk
-@@ -6,7 +6,7 @@
- 
- GENIMAGE_VERSION = 9
- GENIMAGE_SOURCE = genimage-$(GENIMAGE_VERSION).tar.xz
--GENIMAGE_SITE = http://www.pengutronix.de/software/genimage/download
-+GENIMAGE_SITE = https://github.com/pengutronix/genimage/releases/download/v$(GENIMAGE_VERSION)
- HOST_GENIMAGE_DEPENDENCIES = host-pkgconf host-libconfuse
- GENIMAGE_LICENSE = GPL-2.0
- GENIMAGE_LICENSE_FILES = COPYING
+See svr-kex.c::svr_ensure_hostkey()
+
+Why is that not working for you?
+
+-- 
+Bye, Peter Korsgaard
