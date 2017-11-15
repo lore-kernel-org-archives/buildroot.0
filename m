@@ -1,28 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 15 Nov 2017 22:36:19 +0100
-Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 4.{4, 9,
- 13}.x series
-In-Reply-To: <20171115201306.16790-1-bernd.kuhls@t-online.de>
-References: <20171115201306.16790-1-bernd.kuhls@t-online.de>
-Message-ID: <20171115223619.38c1651e@windsurf.lan>
+Date: Wed, 15 Nov 2017 22:41:01 +0100
+Subject: [Buildroot] [git commit branch/next] libpjsip: remove deprecated
+ config options
+Message-ID: <20171115213344.03EAF80FFC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=3af2a3437f19babfcda5377d4e1b16a894af7a86
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Wed, 15 Nov 2017 21:13:05 +0100, Bernd Kuhls wrote:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/linux-headers/Config.in.host | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+disable-small-filter and disable-large-filter have been deprecated as
+of 2.7, causing messages during compile time complaining about how they
+are deprecated and have no effect.
 
-Both applied to master. Thanks!
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libpjsip/libpjsip.mk | 2 --
+ 1 file changed, 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/libpjsip/libpjsip.mk b/package/libpjsip/libpjsip.mk
+index 6f3f9e3..c772d41 100644
+--- a/package/libpjsip/libpjsip.mk
++++ b/package/libpjsip/libpjsip.mk
+@@ -38,8 +38,6 @@ LIBPJSIP_CONF_OPTS = \
+ 	--disable-opus \
+ 	--disable-oss \
+ 	--disable-ext-sound \
+-	--disable-small-filter \
+-	--disable-large-filter \
+ 	--disable-g711-codec \
+ 	--disable-l16-codec \
+ 	--disable-g722-codec \
