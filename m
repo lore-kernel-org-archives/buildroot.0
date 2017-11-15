@@ -1,10 +1,19 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 15 Nov 2017 22:18:38 +0100
-Subject: [Buildroot] [PATCH] dropbear: change start-up script to honour
- pre-existing keys
-In-Reply-To: <20171115194509.78132-1-code@mmayer.net>
-References: <20171115194509.78132-1-code@mmayer.net>
-Message-ID: <74751d46-877e-ef18-ce79-0e7c6f46e5d9@mind.be>
+From: Sergey Matyukevich <geomatsi@gmail.com>
+Date: Thu, 16 Nov 2017 00:20:36 +0300
+Subject: [Buildroot] [PATCH/next 4/5] solidrun/macchiatobin: add new
+ board
+In-Reply-To: <20171114205302.GA2527@kwain>
+References: <20171112201646.15558-1-geomatsi@gmail.com>
+ <20171112201646.15558-5-geomatsi@gmail.com>
+ <20171113122702.o63kfb7j4iny6sfl@sapphire.tkos.co.il>
+ <20171113200610.ztfqw55iyk52i53a@speedy.hunter>
+ <20171113233628.64f1e58d@windsurf.home>
+ <20171114074148.GC25491@kwain>
+ <20171114092024.juocxhwoaqd7xiql@bars>
+ <20171114094237.GA4995@kwain>
+ <20171114202700.dckpamhga4x5nfuc@speedy.hunter>
+ <20171114205302.GA2527@kwain>
+Message-ID: <20171115212036.owp6x4phejpelpdc@speedy.hunter>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,62 +21,29 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
+Hi Antoine,
 
-On 15-11-17 20:45, Markus Mayer wrote:
-> From: Markus Mayer <mmayer@broadcom.com>
+Thanks for the update on upstream status of this board.
+
+> > By the way, could you please advise how to switch eth0
+> > from SFP to RJ45 when using mainline kernel 4.14 ?
 > 
-> Rather than starting dropbear with option -R at all times, we only do
-> so if no existing key file is found. This lets dropbear honour
-> pre-existing key files, including keys copied into the root file system
-> at build time.
-
- That's exactly what the -R option does, no? It creates host keys if they don't
-exist yet. Cfr. svr_ensure_hostkey in svr-kex.c.
-
- Regards,
- Arnout
-
+> You need to apply the dt patches I provided. You should then be able to
+> use eth0 and eth1 with either an SFP or an RJ45 cable, depending on
+> what's (dynamically) connected. To sum up, you just need to plugin
+> either the SFP or the RJ45 cable to start using the interface in the
+> right mode. You can switch from one to the other without rebooting the
+> board.
 > 
-> Signed-off-by: Markus Mayer <mmayer@broadcom.com>
-> ---
->  package/dropbear/S50dropbear | 11 +++++++++--
->  1 file changed, 9 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/dropbear/S50dropbear b/package/dropbear/S50dropbear
-> index 9474eaa..8eea9ae 100644
-> --- a/package/dropbear/S50dropbear
-> +++ b/package/dropbear/S50dropbear
-> @@ -7,7 +7,7 @@
->  test -r /etc/default/dropbear && . /etc/default/dropbear
->  
->  start() {
-> -	DROPBEAR_ARGS="$DROPBEAR_ARGS -R"
-> +	msg=' '
->  
->  	# If /etc/dropbear is a symlink to /var/run/dropbear, and
->  	#   - the filesystem is RO (i.e. we can not rm the symlink),
-> @@ -26,7 +26,14 @@ start() {
->  		fi
->  	fi
->  
-> -	printf "Starting dropbear sshd: "
-> +	ls /etc/dropbear/*host_key >/dev/null 2>&1
-> +	if [ $? != 0 ]; then
-> +		# No key files found. We need to generate a key.
-> +		DROPBEAR_ARGS="$DROPBEAR_ARGS -R"
-> +		msg='(with new key) '
-> +	fi
-> +
-> +	printf "Starting dropbear sshd: $msg"
->  	umask 077
->  
->  	start-stop-daemon -S -q -p /var/run/dropbear.pid \
-> 
+> To get this board supported in Buildroot with an upstream kernel, I
+> would suggest to put the device tree patches I gave you, so that the
+> kernel can not rely on the bootloader configuration. And as soon as 4.15
+> is out the patches can be removed from Buildroot.
 
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+With those 3 dts patches J5 management interface is working fine
+even with upstream U-Boot. So I will add those patches to board
+files for the time being, just to enable network access to the board
+right out of the box.
+
+Regards,
+Sergey
