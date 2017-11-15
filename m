@@ -1,57 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 15 Nov 2017 15:50:26 +0100
-Subject: [Buildroot] Suggestion to improving buildroot download infra
-In-Reply-To: <5A0C4958.9040608@petroprogram.com>
-References: <5A0C4958.9040608@petroprogram.com>
-Message-ID: <20171115155026.69153059@windsurf.lan>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 15 Nov 2017 17:59:15 +0200
+Subject: [Buildroot] [PATCH/next 0/5] Add support for MacchiatoBin board
+In-Reply-To: <aaad6d28-b49d-9461-e689-94a9826ed0e6@mind.be>
+References: <20171112201646.15558-1-geomatsi@gmail.com>
+ <aaad6d28-b49d-9461-e689-94a9826ed0e6@mind.be>
+Message-ID: <20171115155915.em7l5z5gfjvtyb4g@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Arnout,
 
-On Wed, 15 Nov 2017 16:04:08 +0200, Stefan Fr?berg wrote:
-
-> Is there a way to integrate parallel wget download into buildroot?
-
-This will be a direct consequence of top-level parallel build support.
-Not only parallel download, but downloading package A, while package B
-is being built, etc.
-
-> That would greatly speed the downloading process when doing "make source"
-> and maybe even later all the downloading could be done in the 
-> background, even
-> when compiling some big package (for example, gentoo linux does that).
+On Tue, Nov 14, 2017 at 10:58:43PM +0100, Arnout Vandecappelle wrote:
+> On 12-11-17 21:16, Sergey Matyukevich wrote:
+> > This patchset adds support for SolidRun MacchiatoBin board based on
+> > Marvell Armada 8040 SoC. For convenience the following two different
+> > build configurations are added:
+> > 
+> > - mainline BSP
+> >   mainline Linux v4.13.11 and U-Boot v2017.09
+> > 
+> > - vendor BSP (enables more hardware)
+> >   BSP from Marvell based on Linux 4.4.52 and U-Boot v2017.03
 > 
-> If I understand it correctly, there are at least two (if not including 
-> the crude & fork method)
-> ways to do parallel wget:
+>  Do we really want to have defconfigs for both upstream and vendor BSP?
+> Especially because we will also probably have a graphical defconfig later...
+> This way, we end up with 3-4 defconfigs per board, for dozens of boards...
 > 
-> 1. use xarg:
+>  That said, I do think it is useful to have both of these for this specific
+> board. It's just that I'm afraid we're going to be overwhelmed by the number of
+> defconfigs...
 > 
-> echo $URL_LIST | xargs -n 1 -P ${NUMBER_OF_PARALLEL_DOWNLOADS} wget
-> 
-> or 2. use GNU parallel
-> 
-> parallel -a $URL_LIST --jobs ${NUMBER_OF_PARALLEL_DOWNLOADS} wget
-> 
-> How exactly, does buildroot collect the download urls when doing example,
-> "make source" ? Does it collect them first into some list and then do 
-> wget -i list ?
-> Or does it just go each selected packet one-by-one and fetch the url for 
-> each?
+>  What do the others think?
 
-For the moment, the easiest is to comment the .NOTPARALLEL: statement
-in the main Makefile, and then run:
+This board has no native graphic interface. So you can think of it as a basic 
+(mainline) defconfig, and a fully featured (vendor) defconfig. This is similar 
+to the basic and "demo" defconfigs that we have for other boards.
 
-	make -j8 source
+baruch
 
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
