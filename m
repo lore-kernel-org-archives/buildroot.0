@@ -1,42 +1,50 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 15 Nov 2017 11:21:55 +0200
-Subject: [Buildroot] [PATCH] iproute2: bump to version 4.14.1
-In-Reply-To: <87wp2rlx3i.fsf@dell.be.48ers.dk>
-References: <9307d429db0bf9d7d141aa49ddc2e72425460882.1510684057.git.baruch@tkos.co.il>
- <87wp2rlx3i.fsf@dell.be.48ers.dk>
-Message-ID: <20171115092154.wkmktmstb5i7ujwc@sapphire.tkos.co.il>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Wed, 15 Nov 2017 12:51:54 +0100
+Subject: [Buildroot] [PATCH 1/2] package/feh: Fix build issue with some
+ older cross-compilers
+Message-ID: <20171115115155.4830-1-petr.vorel@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+by adding -std=gnu11 to CFLAGS.
 
-On Wed, Nov 15, 2017 at 10:17:37AM +0100, Peter Korsgaard wrote:
-> >>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
-> 
->  > Remove uClibc build fix; current uClibc version defines the required
->  > macro.
-> 
->  > Remove static link fix; fixed upstream.
-> 
->  > Rebase the musl libc-compat.h workaround to adapt to upstream headers
->  > location change.
-> 
->  > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> 
-> I see that you didn't mark this as being for next. Is that on purpose?
-> If so, why?
+Also: build in parallel, use TARGET_CONFIGURE_OPTS and cleanup
+FEH_INSTALL_TARGET_CMDS.
 
-No purpose. I just thought it's obvious.
+Fixes:
+http://autobuild.buildroot.net/results/94527fcd70fa85298c366537013c939534beead0/
+http://autobuild.buildroot.net/results/bf31199cdaa18971a9b599c26fbefac73b2d6f30/
+http://autobuild.buildroot.net/results/5b65c305b50664e02d5f8022278055c80739342d/
+http://autobuild.buildroot.net/results/ed3b9fb8d09cd677af4b8825566877c552926ae5/
 
-Would you prefer to have all patches for next marked in the subject prefix 
-during the -rc period?
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+---
+ package/feh/feh.mk | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-baruch
-
+diff --git a/package/feh/feh.mk b/package/feh/feh.mk
+index 3f4c410440..e0ca21b9ca 100644
+--- a/package/feh/feh.mk
++++ b/package/feh/feh.mk
+@@ -12,13 +12,12 @@ FEH_LICENSE = MIT
+ FEH_LICENSE_FILES = COPYING
+ 
+ define FEH_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE1) CC="$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS)" \
+-		-C $(@D) all
++	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) CFLAGS="$(TARGET_CFLAGS) -std=gnu11" \
++		$(MAKE) -C $(@D) all
+ endef
+ 
+ define FEH_INSTALL_TARGET_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE1) CC="$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS) " \
+-		PREFIX=/usr DESTDIR=$(TARGET_DIR) -C $(@D) install
++	$(TARGET_MAKE_ENV) $(MAKE) PREFIX=/usr DESTDIR=$(TARGET_DIR) -C $(@D) install
+ endef
+ 
+ $(eval $(generic-package))
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+2.15.0
