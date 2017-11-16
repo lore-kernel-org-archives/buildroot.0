@@ -1,57 +1,51 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 16 Nov 2017 20:07:52 +0200
-Subject: [Buildroot] [PATCH 2/2] DEVELOPERS: Add myself
-In-Reply-To: <87lgj6aylz.fsf@home.blind.guru>
-References: <20171116120959.17554-1-mlang@blind.guru>
- <20171116120959.17554-2-mlang@blind.guru>
- <20171116125310.tnklgwkdon7gm3vp@tarshish>
- <87lgj6aylz.fsf@home.blind.guru>
-Message-ID: <20171116180752.34gcimkr4zn2nqz7@tarshish>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 16 Nov 2017 19:19:42 +0100
+Subject: [Buildroot] [arc-buildroot] [autobuild.buildroot.net] Your
+ build results for 2017-11-15
+In-Reply-To: <1510851029.31683.28.camel@synopsys.com> (Alexey Brodkin's
+ message of "Thu, 16 Nov 2017 16:50:30 +0000")
+References: <20171116070015.DBD4B20671@mail.free-electrons.com>
+ <1510851029.31683.28.camel@synopsys.com>
+Message-ID: <87po8i9jcx.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Mario,
+>>>>> "Alexey" == Alexey Brodkin <Alexey.Brodkin@synopsys.com> writes:
 
-On Thu, Nov 16, 2017 at 07:04:56PM +0100, Mario Lang wrote:
-> Baruch Siach <baruch@tkos.co.il> writes:
-> 
-> > On Thu, Nov 16, 2017 at 01:09:59PM +0100, Mario Lang wrote:
-> >> Signed-off-by: Mario Lang <mlang@blind.guru>
-> >> ---
-> >>  DEVELOPERS | 3 +++
-> >>  1 file changed, 3 insertions(+)
-> >> 
-> >> diff --git a/DEVELOPERS b/DEVELOPERS
-> >> index c39348a0b2..190e2b2f60 100644
-> >> --- a/DEVELOPERS
-> >> +++ b/DEVELOPERS
-> >> @@ -1008,6 +1008,9 @@ F:	package/polkit/
-> >>  F:	package/sg3_utils/
-> >>  F:	package/udisks/
-> >>  
-> >> +N:	Mario Lang <mlang@blind.guru>
-> >> +F:	package/brltty/
-> >
-> > This should be included in the previous patch.
-> 
-> I would have done so, but the current documentation suggests otherwise:
-> 
-> "If you are interested in getting notified of build failures and of
-> further changes in the packages you added or modified, please add
-> yourself to the DEVELOPERS file. This should be done in a separate
-> patch of the series."
-> 
-> Maybe the documentation needs updating?
+ > Hi Peter,
+ > On Thu, 2017-11-16 at 08:00 +0100, Thomas Petazzoni wrote:
+ >> ?
+ >> ?????????arc |???????????????????????qt-4.8.7 |
+ >> https://urldefense.proofpoint.com/v2/url?u=http-3A__autobuild.buildroot.net_results_f92fb57954904d55
+ >> 839ecc7e0759f52869fb8987&d=DwICAg&c=DPL6_X_6JkXFx7AXWqB0tg&r=Z74rKOsEpOUneCxYxwKcXHwrAmW8mJhNZjcWnDDJI2U&m=PyZ3d9KImQtwJn7aAlpsgbrtVTFuIem1QqiTGlZkk
+ >> fE&s=YR3T_mxXLqDkCWBrYCkWPkZcIItCeTYfI8mnL3siESE&e=
+ >> ?????????arc |???????????????????????qt-4.8.7 |
+ >> https://urldefense.proofpoint.com/v2/url?u=http-3A__autobuild.buildroot.net_results_0d14e112d5ca94cf
+ >> 36cbd2605d270215236ffbde&d=DwICAg&c=DPL6_X_6JkXFx7AXWqB0tg&r=Z74rKOsEpOUneCxYxwKcXHwrAmW8mJhNZjcWnDDJI2U&m=PyZ3d9KImQtwJn7aAlpsgbrtVTFuIem1QqiTGlZkk
+ >> fE&s=_dHTQWl51LzxdleE3rcayzRk1v03T7kC6mFmqrmLj3g&e=
+ >> ?????????arc |???????????????????????qt-4.8.7 |
+ >> https://urldefense.proofpoint.com/v2/url?u=http-3A__autobuild.buildroot.net_results_4634366b7dfea6d6
+ >> f11ae4d4410e35beed80f9e7&d=DwICAg&c=DPL6_X_6JkXFx7AXWqB0tg&r=Z74rKOsEpOUneCxYxwKcXHwrAmW8mJhNZjcWnDDJI2U&m=PyZ3d9KImQtwJn7aAlpsgbrtVTFuIem1QqiTGlZkk
+ >> fE&s=kxc6E07u2PjhognKYoc-m1pEszYqY_uZUCAsvmnnw4c&e=
 
-The documentation has been updated in commit 8209d72211a (docs: update 
-DEVELOPERS modification process).
+ > All build above failed on your "gcc112" machine and we cannot reproduce the same problem locally
+ > on CentOS 7.x machines.
 
-baruch
+ > I remember you mentioned one of your build servers is non-x86 machine.
+ > Is this the one?
+
+Yes:
+
+ssh gcc112.fsffrance.org 'uname -a'
+Linux gcc2-power8.osuosl.org 3.10.0-514.10.2.el7.ppc64le #1 SMP Fri Mar 3 16:16:38 GMT 2017 ppc64le ppc64le ppc64le GNU/Linux
+
+> BTW maybe it worth adding not only host name but its architecture and
+> distro version in Autobuilder artifacts?
+
+Ok. I've changed the submitter info to add ppc64le for this machine.
 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+Bye, Peter Korsgaard
