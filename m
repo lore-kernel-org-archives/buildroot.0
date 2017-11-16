@@ -1,33 +1,35 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 16 Nov 2017 08:32:45 +0100
-Subject: [Buildroot] [PATCH] dropbear: change start-up script to honour
- pre-existing keys
-In-Reply-To: <a34d3f69-8595-0d2b-1728-c0fdcfe676ad@mind.be> (Arnout
- Vandecappelle's message of "Wed, 15 Nov 2017 23:29:30 +0100")
-References: <20171115194509.78132-1-code@mmayer.net>
- <74751d46-877e-ef18-ce79-0e7c6f46e5d9@mind.be>
- <CAGt4E5uZzBjfTqQh9RAN+wek9B+31PgWn3XJwSrDYz-sg6yFCA@mail.gmail.com>
- <a34d3f69-8595-0d2b-1728-c0fdcfe676ad@mind.be>
-Message-ID: <87zi7m8yqq.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 16 Nov 2017 08:46:19 +0100
+Subject: [Buildroot] [PATCH] chrony: fix build with musl
+In-Reply-To: <20171116040130.qqgusklzyv4y2z2r@tarshish>
+References: <464b10815ee2e59be56aef7c79d5569ecde913f5.1510659474.git.baruch@tkos.co.il>
+ <20171115231141.4dfc7b97@windsurf.lan>
+ <20171116040130.qqgusklzyv4y2z2r@tarshish>
+Message-ID: <20171116084619.30f091df@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+Hello,
 
-Hi,
+On Thu, 16 Nov 2017 06:01:30 +0200, Baruch Siach wrote:
 
- >  I still don't think that your solution in the init script is very elegant. I
- > think it's rather exceptional that you want only an RSA host key in your rootfs
- > and not an ECDSA and/or DSS key. If you really want that, you can put a custom
- > init script in your fs overlay that removes -R completely. Or you can add a
- > DROPBEAR_POST_EXTRACT_HOOK in your local.mk that removes DROPBEAR_ECDSA from
- > options.h.
+> > >  .../chrony/0001-ntp-fix-build-with-musl-libc.patch | 39 ++++++++++++++++++++++
+> > >  1 file changed, 39 insertions(+)
+> > >  create mode 100644 package/chrony/0001-ntp-fix-build-with-musl-libc.patch  
+> > 
+> > Applied to master, thanks. Is the problem fixed in upstream musl? If
+> > not, did you report the problem?  
+> 
+> musl version 1.1.18 defines the SCM_TIMESTAMPING_PKTINFO macro. So once we 
+> bump musl and rebuild the toolchain, we can remove this patch.
 
-Agreed, don't enable ecdsa support (in your client and in dropbear) if
-you don't want it.
+OK, thanks!
 
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
