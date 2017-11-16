@@ -1,34 +1,45 @@
-From: Christian Stewart <christian@paral.in>
-Date: Thu, 16 Nov 2017 18:30:33 +0000
-Subject: [Buildroot] go: -a bug fixed in 1.10
-Message-ID: <CA+h8R2r=Mo9nuyre8xiXHDh3D__LKsK6FwC6DfSzYjj8CKosGw@mail.gmail.com>
+From: =?UTF-8?q?Andr=C3=A9=20Hentschel?= <nerv@dawncrow.de>
+Date: Thu, 16 Nov 2017 20:05:54 +0100
+Subject: [Buildroot] [PATCH v3 2/2] squid: Add optional dependency on libkrb5
+In-Reply-To: <1510859154-26878-1-git-send-email-nerv@dawncrow.de>
+References: <1510859154-26878-1-git-send-email-nerv@dawncrow.de>
+Message-ID: <1510859154-26878-2-git-send-email-nerv@dawncrow.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
+---
+ package/squid/squid.mk | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-Just a FYI for Go 1.10:
-
-The go build command now detects out-of-date packages purely based on the
-content of source files, specified build flags, and metadata stored in the
-compiled packages. Modification times are no longer consulted or relevant.
-The old advice to add -a to force a rebuild in cases where the modification
-times were misleading for one reason or another (for example, changes in
-build flags) is no longer necessary: builds now always detect when packages
-must be rebuilt. (If you observe otherwise, please file a bug.)
-
-I believe we addressed this bug in the Go package by adding -a and touching
-the source tree to update mtime. I don't think this is necessary anymore as
-of 1.10.
-
-This email is intended to be a note for future reference, once 1.10 is
-released.
-
-Best,
-Christian Stewart
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20171116/5181d411/attachment.html>
+diff --git a/package/squid/squid.mk b/package/squid/squid.mk
+index d334d14..04b51b9 100644
+--- a/package/squid/squid.mk
++++ b/package/squid/squid.mk
+@@ -29,7 +29,6 @@ SQUID_CONF_OPTS = \
+ 	--enable-removal-policies="lru,heap" \
+ 	--with-filedescriptors=1024 \
+ 	--disable-ident-lookups \
+-	--without-mit-krb5 \
+ 	--enable-auth-basic="fake getpwnam" \
+ 	--enable-auth-digest="file" \
+ 	--enable-auth-negotiate="wrapper" \
+@@ -50,6 +49,13 @@ else
+ SQUID_CONF_ENV += squid_cv_gnu_atomics=no
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBKRB5),y)
++SQUID_CONF_OPTS += --with-mit-krb5
++SQUID_DEPENDENCIES += libkrb5
++else
++SQUID_CONF_OPTS += --without-mit-krb5
++endif
++
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ SQUID_CONF_OPTS += --with-openssl
+ SQUID_DEPENDENCIES += openssl
+-- 
+2.7.4
