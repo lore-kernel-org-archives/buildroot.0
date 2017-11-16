@@ -1,39 +1,54 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Thu, 16 Nov 2017 18:41:15 +0100
-Subject: [Buildroot] [PATCH] luasec: bump to version 0.6
-Message-ID: <20171116174115.28916-1-francois.perrad@gadz.org>
+From: Mario Lang <mlang@blind.guru>
+Date: Thu, 16 Nov 2017 19:04:56 +0100
+Subject: [Buildroot] [PATCH 2/2] DEVELOPERS: Add myself
+In-Reply-To: <20171116125310.tnklgwkdon7gm3vp@tarshish> (Baruch Siach's
+ message of "Thu, 16 Nov 2017 14:53:10 +0200")
+References: <20171116120959.17554-1-mlang@blind.guru>
+ <20171116120959.17554-2-mlang@blind.guru>
+ <20171116125310.tnklgwkdon7gm3vp@tarshish>
+Message-ID: <87lgj6aylz.fsf@home.blind.guru>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/luasec/luasec.hash | 2 +-
- package/luasec/luasec.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Baruch Siach <baruch@tkos.co.il> writes:
 
-diff --git a/package/luasec/luasec.hash b/package/luasec/luasec.hash
-index 1e9f70ad6..9d721ed48 100644
---- a/package/luasec/luasec.hash
-+++ b/package/luasec/luasec.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	d2198cc39b3fa55bd5020046742b34093b6efcb619cf4032948b8c8556202a32  luasec-0.5-2.src.rock
-+sha256	1d04e2f70bc055348dda3cc3566d27d8408094bc944aa5c6a4ae18bffe5c0007  luasec-0.6-1.src.rock
-diff --git a/package/luasec/luasec.mk b/package/luasec/luasec.mk
-index b059e1c6e..28c4b2c64 100644
---- a/package/luasec/luasec.mk
-+++ b/package/luasec/luasec.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LUASEC_VERSION = 0.5-2
-+LUASEC_VERSION = 0.6-1
- LUASEC_SUBDIR = luasec
- LUASEC_LICENSE = MIT
- LUASEC_LICENSE_FILES = $(LUASEC_SUBDIR)/LICENSE
+> On Thu, Nov 16, 2017 at 01:09:59PM +0100, Mario Lang wrote:
+>> Signed-off-by: Mario Lang <mlang@blind.guru>
+>> ---
+>>  DEVELOPERS | 3 +++
+>>  1 file changed, 3 insertions(+)
+>> 
+>> diff --git a/DEVELOPERS b/DEVELOPERS
+>> index c39348a0b2..190e2b2f60 100644
+>> --- a/DEVELOPERS
+>> +++ b/DEVELOPERS
+>> @@ -1008,6 +1008,9 @@ F:	package/polkit/
+>>  F:	package/sg3_utils/
+>>  F:	package/udisks/
+>>  
+>> +N:	Mario Lang <mlang@blind.guru>
+>> +F:	package/brltty/
+>
+> This should be included in the previous patch.
+
+I would have done so, but the current documentation suggests otherwise:
+
+"If you are interested in getting notified of build failures and of
+further changes in the packages you added or modified, please add
+yourself to the DEVELOPERS file. This should be done in a separate
+patch of the series."
+
+Maybe the documentation needs updating?
+
+Thanks for your feedback, will send an updated version of that patch later.
+
 -- 
-2.11.0
+CYa,
+  ????? | Blog: <https://blind.guru/>  GitHub: <https://github.com/mlang/>
+  .''`. |
+ : :' : | SoundCloud: <soundcloud.com/mario-lang>
+ `. `'  | YouTube: <youtube.com/user/mlang23>
+   `-
