@@ -1,124 +1,53 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 16 Nov 2017 15:23:05 +0100
-Subject: [Buildroot] [PATCH 2/2] qt5webkit: backport upstream icu-59 fix
- from 5.9 branch to 5.6.3
-In-Reply-To: <20171116142305.29500-1-peter@korsgaard.com>
-References: <20171116142305.29500-1-peter@korsgaard.com>
-Message-ID: <20171116142305.29500-2-peter@korsgaard.com>
+Date: Thu, 16 Nov 2017 15:28:08 +0100
+Subject: [Buildroot] [PATCH v1] qt5: bump LTS version to 5.6.3
+In-Reply-To: <20171020184110.13216-1-ps.report@gmx.net> (Peter Seiderer's
+ message of "Fri, 20 Oct 2017 20:41:10 +0200")
+References: <20171020184110.13216-1-ps.report@gmx.net>
+Message-ID: <87375eb8nb.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-icu-59.x slightly changed the API, breaking qt5webkit builds. For details, see:
+>>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
 
-https://bugreports.qt.io/browse/QTBUG-60532
+ > qt5base:
+ >   - move hash file to 5.6.3
+ >   - move 0001-eglfs-rasp-pi-header-inclusion.patch to 5.6.3
+ >   - remove 0002-eglfs-fix-eglfs_mali-compile-for-odroid-mali.patch (upstream committed [1])
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .../5.6.3/0004-Fix-compilation-with-ICU-59.patch   | 93 ++++++++++++++++++++++
- 1 file changed, 93 insertions(+)
- create mode 100644 package/qt5/qt5webkit/5.6.3/0004-Fix-compilation-with-ICU-59.patch
+ > qt5declarative:
+ >   - move patches to 5.6.3
 
-diff --git a/package/qt5/qt5webkit/5.6.3/0004-Fix-compilation-with-ICU-59.patch b/package/qt5/qt5webkit/5.6.3/0004-Fix-compilation-with-ICU-59.patch
-new file mode 100644
-index 0000000000..f3b590eadd
---- /dev/null
-+++ b/package/qt5/qt5webkit/5.6.3/0004-Fix-compilation-with-ICU-59.patch
-@@ -0,0 +1,93 @@
-+From bf172ae289a1348842005a9421797970f9b72060 Mon Sep 17 00:00:00 2001
-+From: Konstantin Tokarev <annulen@yandex.ru>
-+Date: Thu, 4 May 2017 15:12:37 +0300
-+Subject: [PATCH] Fix compilation with ICU 59
-+
-+Upstream fix: https://bugs.webkit.org/show_bug.cgi?id=171612
-+
-+Task-number: QTBUG-60532
-+Change-Id: I6014feea213aa70ebe40b09d9d1a03fd1ed3c843
-+Reviewed-by: Allan Sandfeld Jensen <allan.jensen@qt.io>
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ Source/JavaScriptCore/API/JSStringRef.cpp        | 6 +++---
-+ Source/JavaScriptCore/runtime/DateConversion.cpp | 3 ++-
-+ Source/WTF/wtf/TypeTraits.h                      | 3 +++
-+ Source/WebKit2/Shared/API/c/WKString.cpp         | 2 +-
-+ 4 files changed, 9 insertions(+), 5 deletions(-)
-+
-+diff --git a/Source/JavaScriptCore/API/JSStringRef.cpp b/Source/JavaScriptCore/API/JSStringRef.cpp
-+index 812f3d413..77a3fd0f4 100644
-+--- a/Source/JavaScriptCore/API/JSStringRef.cpp
-++++ b/Source/JavaScriptCore/API/JSStringRef.cpp
-+@@ -37,7 +37,7 @@ using namespace WTF::Unicode;
-+ JSStringRef JSStringCreateWithCharacters(const JSChar* chars, size_t numChars)
-+ {
-+     initializeThreading();
-+-    return OpaqueJSString::create(chars, numChars).leakRef();
-++    return OpaqueJSString::create(reinterpret_cast<const UChar*>(chars), numChars).leakRef();
-+ }
-+ 
-+ JSStringRef JSStringCreateWithUTF8CString(const char* string)
-+@@ -62,7 +62,7 @@ JSStringRef JSStringCreateWithUTF8CString(const char* string)
-+ JSStringRef JSStringCreateWithCharactersNoCopy(const JSChar* chars, size_t numChars)
-+ {
-+     initializeThreading();
-+-    return OpaqueJSString::create(StringImpl::createWithoutCopying(chars, numChars, WTF::DoesNotHaveTerminatingNullCharacter)).leakRef();
-++    return OpaqueJSString::create(StringImpl::createWithoutCopying(reinterpret_cast<const UChar*>(chars), numChars, WTF::DoesNotHaveTerminatingNullCharacter)).leakRef();
-+ }
-+ 
-+ JSStringRef JSStringRetain(JSStringRef string)
-+@@ -83,7 +83,7 @@ size_t JSStringGetLength(JSStringRef string)
-+ 
-+ const JSChar* JSStringGetCharactersPtr(JSStringRef string)
-+ {
-+-    return string->characters();
-++    return reinterpret_cast<const JSChar*>(string->characters());
-+ }
-+ 
-+ size_t JSStringGetMaximumUTF8CStringSize(JSStringRef string)
-+diff --git a/Source/JavaScriptCore/runtime/DateConversion.cpp b/Source/JavaScriptCore/runtime/DateConversion.cpp
-+index 0b57f012d..05e27338b 100644
-+--- a/Source/JavaScriptCore/runtime/DateConversion.cpp
-++++ b/Source/JavaScriptCore/runtime/DateConversion.cpp
-+@@ -107,7 +107,8 @@ String formatDateTime(const GregorianDateTime& t, DateTimeFormat format, bool as
-+ #if OS(WINDOWS)
-+             TIME_ZONE_INFORMATION timeZoneInformation;
-+             GetTimeZoneInformation(&timeZoneInformation);
-+-            const WCHAR* timeZoneName = t.isDST() ? timeZoneInformation.DaylightName : timeZoneInformation.StandardName;
-++            const WCHAR* winTimeZoneName = t.isDST() ? timeZoneInformation.DaylightName : timeZoneInformation.StandardName;
-++            String timeZoneName(reinterpret_cast<const UChar*>(winTimeZoneName));
-+ #else
-+             struct tm gtm = t;
-+             char timeZoneName[70];
-+diff --git a/Source/WTF/wtf/TypeTraits.h b/Source/WTF/wtf/TypeTraits.h
-+index 9df2c95cf..f5d6121fd 100644
-+--- a/Source/WTF/wtf/TypeTraits.h
-++++ b/Source/WTF/wtf/TypeTraits.h
-+@@ -72,6 +72,9 @@ namespace WTF {
-+     template<> struct IsInteger<unsigned long>      { static const bool value = true; };
-+     template<> struct IsInteger<long long>          { static const bool value = true; };
-+     template<> struct IsInteger<unsigned long long> { static const bool value = true; };
-++#if __cplusplus >= 201103L || defined(__GXX_EXPERIMENTAL_CXX0X__) || (defined(_HAS_CHAR16_T_LANGUAGE_SUPPORT) && _HAS_CHAR16_T_LANGUAGE_SUPPORT)
-++    template<> struct IsInteger<char16_t>           { static const bool value = true; };
-++#endif
-+ #if !COMPILER(MSVC) || defined(_NATIVE_WCHAR_T_DEFINED)
-+     template<> struct IsInteger<wchar_t>            { static const bool value = true; };
-+ #endif
-+diff --git a/Source/WebKit2/Shared/API/c/WKString.cpp b/Source/WebKit2/Shared/API/c/WKString.cpp
-+index cbac67dd8..23400a64e 100644
-+--- a/Source/WebKit2/Shared/API/c/WKString.cpp
-++++ b/Source/WebKit2/Shared/API/c/WKString.cpp
-+@@ -55,7 +55,7 @@ size_t WKStringGetLength(WKStringRef stringRef)
-+ size_t WKStringGetCharacters(WKStringRef stringRef, WKChar* buffer, size_t bufferLength)
-+ {
-+     COMPILE_ASSERT(sizeof(WKChar) == sizeof(UChar), WKStringGetCharacters_sizeof_WKChar_matches_UChar);
-+-    return (toImpl(stringRef)->getCharacters(static_cast<UChar*>(buffer), bufferLength));
-++    return (toImpl(stringRef)->getCharacters(reinterpret_cast<UChar*>(buffer), bufferLength));
-+ }
-+ 
-+ size_t WKStringGetMaximumUTF8CStringSize(WKStringRef stringRef)
-+-- 
-+2.11.0
-+
+ > qt5quickcontrols2:
+ >   - move hash file to 5.6.3
+
+ > qt5webkit:
+ >   - move patches to 5.6.3
+
+ > [1] http://code.qt.io/cgit/qt/qtbase.git/commit/?h=5.6&id=f1b4bd4790860e1ff5afcec111a359bc3a91cfda
+
+ > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+
+Committed to 2017.02.x and 2017.08.x, thanks.
+
+While backporting, I noticed that qt5webkit is screwed up:
+
+ > +++ b/package/qt5/qt5webkit/qt5webkit.hash
+ > @@ -1,5 +1,5 @@
+ > -# Hash from: http://download.qt.io/snapshots/qt/5.6/5.6.2/latest_src/submodules/qtwebkit-opensource-src-5.6.2.tar.xz.mirrorlist
+ > -sha256 528a6b8b1c5095367b26e8ce4f3a46bb739e2e9913ff4dfc6ef58a04fcd73966 qtwebkit-opensource-src-5.6.2.tar.xz
+ > +# Hash from: http://download.qt.io/snapshots/qt/5.6/5.6.3/latest_src/submodules/qtwebkit-opensource-src-5.6.3.tar.xz.mirrorlist
+ > +sha256  qtwebkit-opensource-src-5.6.3.tar.xz
+
+Empty hash, and the download location isn't correct. The 5.6.x series
+also needs a icu-59.x compatibility fix backported from the 5.9 series.
+
+I've sent patches for both:
+
+http://lists.busybox.net/pipermail/buildroot/2017-November/207280.html
+
 -- 
-2.11.0
+Bye, Peter Korsgaard
