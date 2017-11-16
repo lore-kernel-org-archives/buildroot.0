@@ -1,44 +1,41 @@
 From: Petr Vorel <petr.vorel@gmail.com>
-Date: Thu, 16 Nov 2017 11:04:58 +0100
-Subject: [Buildroot] [PATCH v3 2/3] package/feh: Cleanup build configuration
+Date: Thu, 16 Nov 2017 11:04:59 +0100
+Subject: [Buildroot] [PATCH v3 3/3] package/feh: Bump to version 2.22.2
 In-Reply-To: <20171116100459.5801-1-petr.vorel@gmail.com>
 References: <20171116100459.5801-1-petr.vorel@gmail.com>
-Message-ID: <20171116100459.5801-2-petr.vorel@gmail.com>
+Message-ID: <20171116100459.5801-3-petr.vorel@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-* build in parallel
-* use TARGET_CONFIGURE_OPTS
-* cleanup FEH_INSTALL_TARGET_CMDS
-
 Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 ---
- package/feh/feh.mk | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ package/feh/feh.hash | 2 +-
+ package/feh/feh.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
+diff --git a/package/feh/feh.hash b/package/feh/feh.hash
+index f3f7ceddd9..0f8ac8c0b0 100644
+--- a/package/feh/feh.hash
++++ b/package/feh/feh.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256 520481c9908d999f8f7546103b78ff9b11f41d25b0938f0a22f10aaa48beef2b  feh-2.21.tar.bz2
++sha256 05a81fbe0997f6274c7617efc351647be38e5244c2624bd203459025c9a68ecd  feh-2.22.2.tar.bz2
 diff --git a/package/feh/feh.mk b/package/feh/feh.mk
-index 7211dc7bdd..3442f57197 100644
+index 3442f57197..311cef3afb 100644
 --- a/package/feh/feh.mk
 +++ b/package/feh/feh.mk
-@@ -12,13 +12,12 @@ FEH_LICENSE = MIT
- FEH_LICENSE_FILES = COPYING
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- define FEH_BUILD_CMDS
--	$(TARGET_MAKE_ENV) CFLAGS="$(TARGET_CFLAGS) -std=gnu99" $(MAKE1) \
--		CC="$(TARGET_CC) $(TARGET_LDFLAGS)" -C $(@D) all
-+	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) CFLAGS="$(TARGET_CFLAGS) -std=gnu99" \
-+		$(MAKE) -C $(@D) all
- endef
- 
- define FEH_INSTALL_TARGET_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE1) CC="$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS) " \
--		PREFIX=/usr DESTDIR=$(TARGET_DIR) -C $(@D) install
-+	$(TARGET_MAKE_ENV) $(MAKE) PREFIX=/usr DESTDIR=$(TARGET_DIR) -C $(@D) install
- endef
- 
- $(eval $(generic-package))
+-FEH_VERSION = 2.21
++FEH_VERSION = 2.22.2
+ FEH_SOURCE = feh-$(FEH_VERSION).tar.bz2
+ FEH_SITE = http://feh.finalrewind.org
+ FEH_DEPENDENCIES = libcurl imlib2 libpng xlib_libXinerama xlib_libXt
 -- 
 2.15.0
