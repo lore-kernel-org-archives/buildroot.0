@@ -1,34 +1,42 @@
-From: Wolfgang Grandegger <wg@grandegger.com>
-Date: Thu, 16 Nov 2017 09:00:49 +0100
-Subject: [Buildroot] binutils: symbolic instead of hard links for the
- utilities
-Message-ID: <7845d629-0d63-6d8c-e887-3531373d1fab@grandegger.com>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Thu, 16 Nov 2017 11:04:57 +0100
+Subject: [Buildroot] [PATCH v3 1/3] package/feh: Fix build issue with some
+ older cross-compilers
+Message-ID: <20171116100459.5801-1-petr.vorel@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+by adding -std=gnu99 to CFLAGS.
 
-in the buildroot [1] project, we are currently facing a problem with 
-hard linked utilities, e.g.:
+Fixes:
+http://autobuild.buildroot.net/results/392b58cca2671e206c85a530221ce7b2d42f31fb/
+http://autobuild.buildroot.net/results/94527fcd70fa85298c366537013c939534beead0/
+http://autobuild.buildroot.net/results/bf31199cdaa18971a9b599c26fbefac73b2d6f30/
+http://autobuild.buildroot.net/results/5b65c305b50664e02d5f8022278055c80739342d/
+http://autobuild.buildroot.net/results/ed3b9fb8d09cd677af4b8825566877c552926ae5/
 
-   ./bin/x86_64-buildroot-linux-gnu-ar
-   ./x86_64-buildroot-linux-gnu/bin/ar
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+---
+ package/feh/feh.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-To make a relocatable SDK, we sanitize and replace the absolute RPATH 
-directories of all ELF files with relative paths using "$ORIGIN". e.g. 
-"$ORIGIN/../lib". Unfortunately, this does not work with hard-linked 
-files in different levels of the file hierarchy. Using symbolic links 
-instead would fix the issue as the linker/loader seems to resolve 
-symbolic links before searching for the libs in the RPATH directories.
-
-Is there a rational behind using hard in favor of symbolic links?
-
-Does a configuration option using symbolic instead of hard links has a 
-chance to get accepted?
-
-[1] https://buildroot.org/
-
-Wolfgang.
+diff --git a/package/feh/feh.mk b/package/feh/feh.mk
+index 3f4c410440..7211dc7bdd 100644
+--- a/package/feh/feh.mk
++++ b/package/feh/feh.mk
+@@ -12,8 +12,8 @@ FEH_LICENSE = MIT
+ FEH_LICENSE_FILES = COPYING
+ 
+ define FEH_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE1) CC="$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS)" \
+-		-C $(@D) all
++	$(TARGET_MAKE_ENV) CFLAGS="$(TARGET_CFLAGS) -std=gnu99" $(MAKE1) \
++		CC="$(TARGET_CC) $(TARGET_LDFLAGS)" -C $(@D) all
+ endef
+ 
+ define FEH_INSTALL_TARGET_CMDS
+-- 
+2.15.0
