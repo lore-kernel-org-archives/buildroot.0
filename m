@@ -1,72 +1,53 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 16 Nov 2017 14:43:48 +0100
-Subject: [Buildroot] Cannot rebuild autobuild
-In-Reply-To: <20171116072948.smctbcvxwkxgqoah@x230>
-References: <20171113102757.ir7so5o7h7zopcvq@dell5510>
- <20171113144231.gddccsqlelrhrokw@dell5510> <20171114234409.114f002f@gmx.net>
- <20171115125857.dcy6j7qvjt32ww43@dell5510>
- <61134b08-bb0a-4665-4b68-3ea2e4063563@mind.be>
- <20171116001919.67e98b4b@gmx.net>
- <58b8ef53-75b6-fc8b-8d37-e21570ae4e3b@mind.be>
- <20171116072948.smctbcvxwkxgqoah@x230>
-Message-ID: <d13312cf-ae70-92fd-8819-a86c79d1723b@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 16 Nov 2017 15:23:04 +0100
+Subject: [Buildroot] [PATCH 1/2] qt5webkit: correct download URL and hash
+ for 5.6 variant
+Message-ID: <20171116142305.29500-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Commit 06a4975d4bd03 (qt5: bump LTS version to 5.6.3) added an empty hash
+for the 5.6.3 variant of qt5webkit, causing failures.
 
+It also forgot to adjust the download URL as the qt5webkit tarballs are no
+longer available under official_releases/ like the other submodules, but only
+under community_releases/.
 
-On 16-11-17 08:29, Petr Vorel wrote:
-> Hi,
-> 
-> ...
->>> make[1]: *** No rule to make target 'toolchain-external-custom', needed by '.../build-prebuild-toolchain-001/build/toolchain-external/.stamp_configured'.  Stop.
->>> make: *** [Makefile:16: _all] Error 2
-> 
->>> The error occurs  before the prebuild toolchain is downloaded/extracted...
-> 
->>  That is really weird, the toolchain-external-custom dependencies should be
->> defined no matter what... Could you pastebin the output make 'make -qp' somewhere?
-> Here it is:
-> http://sipe.cz/buildroot/out.log (68M)
-> http://sipe.cz/buildroot/out.log.tar.gz (9MB)
+Fix both issues.
 
- Oh boy...
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/qt5/qt5webkit/qt5webkit.hash | 4 ++--
+ package/qt5/qt5webkit/qt5webkit.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
- The problem is that on Tumbleweed the order of inclusion seems to be different,
-which causes toolchain-external-package not to be defined at the time that
-toolchain-external-custom.mk is included (same for all other external toolchains).
-
-Makefile:492:include toolchain/*/*.mk
-
-This causes inclusion of
-toolchain/toolchain-external/toolchain-external.mk:28:include
-toolchain/toolchain-external/*/*.mk
-and
-toolchain/toolchain-external/pkg-toolchain-external.mk:592:toolchain-external-package
-= ...
-
- If the *.mk is expanded in alphabetical order, pkg-toolchain-external.mk will
-always come before toolchain-external.mk. Otherwise it is possible (depending on
-the state of hash tables or inode numbers or whatever) that
-toolchain-external-custom.mk gets included first.
-
- The short-term solution is of course $(sort $(wildcard ...))
-
- But for the long term, I think it's better to move pkg-*.mk to support/misc (or
-maybe to support/make) and organise the order of inclusion from there.
-
- Any takers? Yann?
-
- Regards,
- Arnout
-
+diff --git a/package/qt5/qt5webkit/qt5webkit.hash b/package/qt5/qt5webkit/qt5webkit.hash
+index 1a5e72664f..aa3a71c8d0 100644
+--- a/package/qt5/qt5webkit/qt5webkit.hash
++++ b/package/qt5/qt5webkit/qt5webkit.hash
+@@ -1,5 +1,5 @@
+-# Hash from: http://download.qt.io/snapshots/qt/5.6/5.6.3/latest_src/submodules/qtwebkit-opensource-src-5.6.3.tar.xz.mirrorlist
+-sha256  qtwebkit-opensource-src-5.6.3.tar.xz
++# Hash from: http://download.qt.io/community_releases/5.6/5.6.3/qtwebkit-opensource-src-5.6.3.tar.xz.mirrorlist
++sha256  098c6bb25798fbf1b619b540621287787064efc9b586d76ac0ce7e39b87a3896  qtwebkit-opensource-src-5.6.3.tar.xz
+ 
+ # hash from: http://download.qt.io/official_releases/qt/5.9/5.9.1/submodules/qtwebkit-opensource-src-5.9.1.tar.xz.mirrorlist
+ sha256  28a560becd800a4229bfac317c2e5407cd3cc95308bc4c3ca90dba2577b052cf  qtwebkit-opensource-src-5.9.1.tar.xz
+diff --git a/package/qt5/qt5webkit/qt5webkit.mk b/package/qt5/qt5webkit/qt5webkit.mk
+index 6e982e6bc7..592eae908d 100644
+--- a/package/qt5/qt5webkit/qt5webkit.mk
++++ b/package/qt5/qt5webkit/qt5webkit.mk
+@@ -10,7 +10,7 @@ QT5WEBKIT_VERSION = 5.9.1
+ QT5WEBKIT_SITE = http://download.qt.io/official_releases/qt/5.9/5.9.1/submodules
+ else
+ QT5WEBKIT_VERSION = $(QT5_VERSION)
+-QT5WEBKIT_SITE = $(QT5_SITE)
++QT5WEBKIT_SITE = http://download.qt.io/community_releases/5.6/$(QT5_VERSION)/submodules
+ endif
+ 
+ QT5WEBKIT_SOURCE = qtwebkit-opensource-src-$(QT5WEBKIT_VERSION).tar.xz
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.11.0
