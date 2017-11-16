@@ -1,39 +1,39 @@
-From: John Keeping <john@metanate.com>
-Date: Thu, 16 Nov 2017 17:03:16 +0000
-Subject: [Buildroot] [PATCH] systemd: set time epoch for reproducible builds
-Message-ID: <20171116170316.19081-1-john@metanate.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Thu, 16 Nov 2017 18:41:15 +0100
+Subject: [Buildroot] [PATCH] luasec: bump to version 0.6
+Message-ID: <20171116174115.28916-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Systemd embeds a timestamp which is used to impose a minimum bound on
-the system time during boot.  Normally this comes from stat'ing the NEWS
-file included with the systemd source, but this makes the build
-non-reproducible.  Pass in $SOURCE_DATE_EPOCH to use a deterministic
-timestamp when reproducible builds are enabled.
-
-Signed-off-by: John Keeping <john@metanate.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/systemd/systemd.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/luasec/luasec.hash | 2 +-
+ package/luasec/luasec.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 9f286fd54b..d87c9d33dd 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -40,6 +40,11 @@ SYSTEMD_CONF_OPTS += \
- 	--with-default-dnssec=no \
- 	--without-python
+diff --git a/package/luasec/luasec.hash b/package/luasec/luasec.hash
+index 1e9f70ad6..9d721ed48 100644
+--- a/package/luasec/luasec.hash
++++ b/package/luasec/luasec.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	d2198cc39b3fa55bd5020046742b34093b6efcb619cf4032948b8c8556202a32  luasec-0.5-2.src.rock
++sha256	1d04e2f70bc055348dda3cc3566d27d8408094bc944aa5c6a4ae18bffe5c0007  luasec-0.6-1.src.rock
+diff --git a/package/luasec/luasec.mk b/package/luasec/luasec.mk
+index b059e1c6e..28c4b2c64 100644
+--- a/package/luasec/luasec.mk
++++ b/package/luasec/luasec.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+ifeq ($(BR2_REPRODUCIBLE),y)
-+SYSTEMD_CONF_OPTS += \
-+	--with-time-epoch=$(SOURCE_DATE_EPOCH)
-+endif
-+
- SYSTEMD_CFLAGS = $(TARGET_CFLAGS) -fno-lto
- 
- # Override paths to a few utilities needed at runtime, to
+-LUASEC_VERSION = 0.5-2
++LUASEC_VERSION = 0.6-1
+ LUASEC_SUBDIR = luasec
+ LUASEC_LICENSE = MIT
+ LUASEC_LICENSE_FILES = $(LUASEC_SUBDIR)/LICENSE
 -- 
-2.15.0
+2.11.0
