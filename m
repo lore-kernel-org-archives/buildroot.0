@@ -1,53 +1,25 @@
-From: Trent Piepho <tpiepho@impinj.com>
-Date: Thu, 16 Nov 2017 16:29:02 -0800
-Subject: [Buildroot] [PATCH] gptfdisk: bump to version 1.0.3
-Message-ID: <20171117002902.10084-1-tpiepho@impinj.com>
+From: Stephen Polkowski <stephen@centtech.com>
+Date: Thu, 16 Nov 2017 19:34:19 -0600
+Subject: [Buildroot] How to configure the kernel with allnoconfig and my own
+ customizations
+Message-ID: <5A0E3C9B.5000100@centtech.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This version has a new command line argument to sgdisk, -j, that lets one
-change the starting address of where the GPT partition table entries are
-stored.
+Hello,
 
-The iMX SoC ROM loader, and perhaps others, expects the bootloader to start
-at sector 2.  Using this option with gptfdisk lets the table entries move
-to make space for the bootloader image.
+     Does anyone know how to setup buildroot to automatically configure 
+the kernel with allnoconfig and then apply my own customizations?  For 
+example:
 
-Signed-off-by: Trent Piepho <tpiepho@impinj.com>
----
- package/gptfdisk/gptfdisk.hash | 8 ++++----
- package/gptfdisk/gptfdisk.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+cd output/build/linux-4.11.3
 
-diff --git a/package/gptfdisk/gptfdisk.hash b/package/gptfdisk/gptfdisk.hash
-index c3a38af5f6..d55797c05a 100644
---- a/package/gptfdisk/gptfdisk.hash
-+++ b/package/gptfdisk/gptfdisk.hash
-@@ -1,5 +1,5 @@
--# From http://sourceforge.net/projects/gptfdisk/files/gptfdisk/1.0.1/
--md5 d7f3d306b083123bcc6f5941efade586  gptfdisk-1.0.1.tar.gz
--sha1 ad28c511c642235815b83fffddf728c117057cba  gptfdisk-1.0.1.tar.gz
-+# From http://sourceforge.net/projects/gptfdisk/files/gptfdisk/1.0.3/
-+md5 07b625a583b66c8c5840be5923f3e3fe  gptfdisk-1.0.3.tar.gz
-+sha1 9a74bbe7805d562316e92417f71e4b03155308e6  gptfdisk-1.0.3.tar.gz
- # Locally computed
--sha256 864c8aee2efdda50346804d7e6230407d5f42a8ae754df70404dd8b2fdfaeac7  gptfdisk-1.0.1.tar.gz
-+sha256 89fd5aec35c409d610a36cb49c65b442058565ed84042f767bba614b8fc91b5c  gptfdisk-1.0.3.tar.gz
-diff --git a/package/gptfdisk/gptfdisk.mk b/package/gptfdisk/gptfdisk.mk
-index a7bc41c89f..b669e22aa8 100644
---- a/package/gptfdisk/gptfdisk.mk
-+++ b/package/gptfdisk/gptfdisk.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GPTFDISK_VERSION = 1.0.1
-+GPTFDISK_VERSION = 1.0.3
- GPTFDISK_SITE = http://downloads.sourceforge.net/sourceforge/gptfdisk
- GPTFDISK_LICENSE = GPL-2.0+
- GPTFDISK_LICENSE_FILES = COPYING
--- 
-2.14.3
+make KCONFIG_ALLCONFIG=custom.config allnoconfig
+
+
+Thanks,
+
+Stephen
