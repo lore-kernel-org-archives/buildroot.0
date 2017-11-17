@@ -1,60 +1,38 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 16 Nov 2017 22:24:47 +0100
-Subject: [Buildroot] musl static pie
-In-Reply-To: <CABukmmPJ0MbOF9YP+DoA15OCHU_8B9dEXYFz3X0194qcjSGcbg@mail.gmail.com>
-References: <CABukmmPJ0MbOF9YP+DoA15OCHU_8B9dEXYFz3X0194qcjSGcbg@mail.gmail.com>
-Message-ID: <29422da9-526a-1140-3614-47a98abc5648@mind.be>
+From: Markus Mayer <mmayer@broadcom.com>
+Date: Thu, 16 Nov 2017 16:03:32 -0800
+Subject: [Buildroot] [PATCH] dropbear: change start-up script to honour
+ pre-existing keys
+In-Reply-To: <87zi7m8yqq.fsf@dell.be.48ers.dk>
+References: <20171115194509.78132-1-code@mmayer.net>
+ <74751d46-877e-ef18-ce79-0e7c6f46e5d9@mind.be>
+ <CAGt4E5uZzBjfTqQh9RAN+wek9B+31PgWn3XJwSrDYz-sg6yFCA@mail.gmail.com>
+ <a34d3f69-8595-0d2b-1728-c0fdcfe676ad@mind.be>
+ <87zi7m8yqq.fsf@dell.be.48ers.dk>
+Message-ID: <CAGt4E5sajn8+gBfuKrWPJ9CjZnvcdLPJ7BdTK2v+aeN-UAAr1Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-
-
-On 13-11-17 14:31, Arvid Picciani wrote:
+On 15 November 2017 at 23:32, Peter Korsgaard <peter@korsgaard.com> wrote:
+>>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+>
 > Hi,
-> 
-> musl does support static pie, which we need for implement linking with korhal
-> bolter.
-> Is there any general resistance against implement that?
-> 
-> as far as i understand this requires adding a .spec file, since gcc does not
-> natively understand static pie yet. A different crt needs to be added for
-> self-relocation without an ldso.
-> https://gcc.gnu.org/ml/gcc-patches/2017-11/msg00247.html
-> <https://gcc.gnu.org/ml/gcc-patches/2017-11/msg00247.html>
+>
+>  >  I still don't think that your solution in the init script is very elegant. I
+>  > think it's rather exceptional that you want only an RSA host key in your rootfs
+>  > and not an ECDSA and/or DSS key. If you really want that, you can put a custom
+>  > init script in your fs overlay that removes -R completely. Or you can add a
+>  > DROPBEAR_POST_EXTRACT_HOOK in your local.mk that removes DROPBEAR_ECDSA from
+>  > options.h.
+>
+> Agreed, don't enable ecdsa support (in your client and in dropbear) if
+> you don't want it.
 
- I took the autobuilder's musl toolchain [1] and built a simple main(){} with
--static -pie -fPIE and that seemed to work fine. So I'm not sure we need to hack
-spec files. It does request /usr/lib/ld.so.1 as the program interpreter, and
-that file doesn't exist. I haven't done a runtime test.
+Sure. I have no problem using a different solution. I was just
+surprised that dropbear wouldn't look for all key types before
+generating a new one. But that's not a buildroot issue.
 
-> it would also involve adding -fPIC to TARGET_CFLAGS.
-> 
-> i'd suggest adding it as Build options -> position independant executables
-                                                     independent
-
-> 
-> but behind !BR2_STATIC_LIBS ||?BR2_TOOLCHAIN_USES_MUSL
-
- That looks like a good idea.
-
- You'll want to add -fPIE (or -fpie?) -pie in the toolchain wrapper. But I don't
-know if this might have detrimental effects for bootloader/kernel/... packages
-that require special linking...
-
- Regards,
- Arnout
-
-
-[1]
-http://autobuild.buildroot.org/toolchains/tarballs/br-arm-cortex-a9-musl-2016.08-613-ge98b4dd.tar.bz2
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Regards,
+-Markus
