@@ -1,51 +1,40 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 17 Nov 2017 22:33:32 +0100
-Subject: [Buildroot] out of tree kernel patches question
-In-Reply-To: <trinity-0d97f4a0-c1ac-416e-bfea-7bcafcb3ce1d-1510924577452@3c-app-mailcom-bs07>
- (daggs@gmx.com's message of "Fri, 17 Nov 2017 14:16:17 +0100")
-References: <trinity-0d97f4a0-c1ac-416e-bfea-7bcafcb3ce1d-1510924577452@3c-app-mailcom-bs07>
-Message-ID: <87efowy4ib.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 17 Nov 2017 23:40:57 +0100
+Subject: [Buildroot] [git commit] support/config-fragments: update ARC
+ pre-built toolchain
+Message-ID: <20171117223423.8347E81314@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "daggs" == daggs  <daggs@gmx.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=e5b85ccf56372b073912029d00f395401f2d7452
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Greetings,
- > when it comes to the odroidc2 support, there are 3 things that I'm concerned about:
- > 1. gcc is limited to 4.9.x
- > 2. old uboot (2005.11).
- > 3. very old kernel (3.14.79).
+This is needed to get the autobuilders to use a toolchain that
+includes the fix merged in 9d544feb8a277a43abec889450f917017d666e49
+("fwup: fix for ARC toolchain").
 
- > #1 is needed because #2, currently upstream uboot support this board
- > from 2007.05 but I've tried for months to get upstream uboot to work
- > with the vendor's kernel without any luck.
- > unfortunately, the uboot mailing list isn't helpful at all (no one seems to care much),
- > this means that in order to solve issue #2, the kernel needs to be upgraded.
- > latest upstream kernel holds bask support for this board, the
- > development is progressing. now assuming that I take patches existing
- > in the kernel mailing list that adds missing support for features in
- > the kernel to a point that the board can be used in a decent manner,
- > what is the policy of adding out of the kernel patches to a board in
- > buildroot?
+In addition, this new toolchain version also fixes for real the RPATH
+issue that should have been fixed by
+f90f28a6dfe85439d11e5fd83f2462ff29502e11, but wasn't done properly.
 
-Maybe it makes more sense to do it the other way around? First move to
-the mainline kernel and once that is done move to mainline u-boot as
-well. I've used 4.13 with the vendor u-boot without problems.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ support/config-fragments/autobuild/br-arcle-hs38.config | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-The only issue I am aware of for moving to mainline u-boot was an issue
-with HDMI output, as the driver assumed certain things were initialized
-in the bootloader, which was true for the vendor one but not mainline -
-But that is getting fixed:
-
-https://lkml.org/lkml/2017/10/17/134
-
-As for carrying patches in Buildroot - That is OK for me as long as they
-are not huge and the patches are only temporary (E.G. patches have
-already been submitted upstream and hopefully acked, but they just
-haven't been merged yet).
-
--- 
-Bye, Peter Korsgaard
+diff --git a/support/config-fragments/autobuild/br-arcle-hs38.config b/support/config-fragments/autobuild/br-arcle-hs38.config
+index 6020dae..be4f535 100644
+--- a/support/config-fragments/autobuild/br-arcle-hs38.config
++++ b/support/config-fragments/autobuild/br-arcle-hs38.config
+@@ -3,7 +3,7 @@ BR2_archs38=y
+ BR2_TOOLCHAIN_EXTERNAL=y
+ BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+ BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+-BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arcle-hs38-full-2017.11-rc1.1.tar.bz2"
++BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arcle-hs38-full-2017.11-rc2-15-g9d544fe.tar.bz2"
+ BR2_TOOLCHAIN_EXTERNAL_GCC_7=y
+ BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_1=y
+ BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
