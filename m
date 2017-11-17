@@ -1,43 +1,55 @@
-From: Trent Piepho <tpiepho@impinj.com>
-Date: Fri, 17 Nov 2017 18:21:40 +0000
-Subject: [Buildroot] Conditional setup of TARGET_ABI
-In-Reply-To: <1510906984.31683.79.camel@synopsys.com>
-References: <1510906984.31683.79.camel@synopsys.com>
-Message-ID: <1510942899.15881.70.camel@impinj.com>
+From: Sam Voss <sam.voss@rockwellcollins.com>
+Date: Fri, 17 Nov 2017 12:50:34 -0600
+Subject: [Buildroot] [PATCH 1/1] support/download: svn non-interactive in
+ BR2_SVN
+Message-ID: <1510944634-3374-1-git-send-email-sam.voss@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 2017-11-17 at 08:23 +0000, Alexey Brodkin wrote:
-> 
-> Let me explain what is encrypted in the log above.
-> 
-> 1. __do_global_dtors_aux() gets built as a part of libgcc and is supposed to
->    be then used as it is with all the apps we build later on.
->    And what's also important our GCC by default tries to use as compact
->    relocations as possible to save memory footprint, instruction cache
->    utilization etc. So given libgcc is very compact GCC simply decides
->    to use so-called R_ARC_S25W_PCREL relocation which means +-16MiB
->    offset from the current location.
-> 
-> 2. Qt5WebKit [as well as all other libs and apps] uses functions from libgcc.
->    In that case it's our __do_global_dtors_aux() which in its turn uses another
->    function called __st_r13_to_r15(). And from (1) we know that distance
->    between them should be less than 16MiB. Now given libQt5WebKit is much larger
->    that means if the functions in question end-up placed closer to opposite ends
->    of libQtxxx they won't be reachable to each other... and that's what we see here.
+Instead of overriding the _svn command and injecting --non-interactive,
+change the default value of BR2_SVN to include this flag so the end user
+can choose not to use the flag.
 
-I don't know if this works with current ld, maybe some things have
-changed and the assumptions no longer hold.  But what I've been able to
-do is to incrementally link multiple objects into one object, so that
-the relative distance between code in those objects is fixed at the
-incremental link step.  Then the combined object can be come part of a
-static library and then linked into a much larger DSO or executable. 
-Because ld treats each (section,object) blob as indivisible, the code
-inside the incremetally linked objected will not be moved throughout
-the larger final product.
+This change helps users behind corporate system rules which may not
+allow them to locally cache credentials and require interactive mode.
 
-In your case, I think one would need to link crtbeginS.o with
-_millicodethunk_st.o to produce a replacement crtbeginS.o file.
+Signed-off-by: Sam Voss <sam.voss@rockwellcollins.com>
+
+[Originally implemented by]
+CC: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ Config.in            | 2 +-
+ support/download/svn | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/Config.in b/Config.in
+index 90f793a..d192995 100644
+--- a/Config.in
++++ b/Config.in
+@@ -106,7 +106,7 @@ config BR2_WGET
+ 
+ config BR2_SVN
+ 	string "Subversion (svn) command"
+-	default "svn"
++	default "svn --non-interactive"
+ 
+ config BR2_BZR
+ 	string "Bazaar (bzr) command"
+diff --git a/support/download/svn b/support/download/svn
+index ee799f4..ad84a39 100755
+--- a/support/download/svn
++++ b/support/download/svn
+@@ -33,7 +33,7 @@ _svn() {
+     eval ${SVN} "${@}"
+ }
+ 
+-_svn --non-interactive export ${verbose} "${@}" "'${repo}@${rev}'" "'${basename}'"
++_svn export ${verbose} "${@}" "'${repo}@${rev}'" "'${basename}'"
+ 
+ # If this is a HEAD revision, export the exact version
+ # that was checked out.
+-- 
+1.9.1
