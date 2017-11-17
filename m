@@ -1,38 +1,53 @@
-From: Markus Mayer <mmayer@broadcom.com>
-Date: Thu, 16 Nov 2017 16:03:32 -0800
-Subject: [Buildroot] [PATCH] dropbear: change start-up script to honour
- pre-existing keys
-In-Reply-To: <87zi7m8yqq.fsf@dell.be.48ers.dk>
-References: <20171115194509.78132-1-code@mmayer.net>
- <74751d46-877e-ef18-ce79-0e7c6f46e5d9@mind.be>
- <CAGt4E5uZzBjfTqQh9RAN+wek9B+31PgWn3XJwSrDYz-sg6yFCA@mail.gmail.com>
- <a34d3f69-8595-0d2b-1728-c0fdcfe676ad@mind.be>
- <87zi7m8yqq.fsf@dell.be.48ers.dk>
-Message-ID: <CAGt4E5sajn8+gBfuKrWPJ9CjZnvcdLPJ7BdTK2v+aeN-UAAr1Q@mail.gmail.com>
+From: Trent Piepho <tpiepho@impinj.com>
+Date: Thu, 16 Nov 2017 16:29:02 -0800
+Subject: [Buildroot] [PATCH] gptfdisk: bump to version 1.0.3
+Message-ID: <20171117002902.10084-1-tpiepho@impinj.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 15 November 2017 at 23:32, Peter Korsgaard <peter@korsgaard.com> wrote:
->>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
->
-> Hi,
->
->  >  I still don't think that your solution in the init script is very elegant. I
->  > think it's rather exceptional that you want only an RSA host key in your rootfs
->  > and not an ECDSA and/or DSS key. If you really want that, you can put a custom
->  > init script in your fs overlay that removes -R completely. Or you can add a
->  > DROPBEAR_POST_EXTRACT_HOOK in your local.mk that removes DROPBEAR_ECDSA from
->  > options.h.
->
-> Agreed, don't enable ecdsa support (in your client and in dropbear) if
-> you don't want it.
+This version has a new command line argument to sgdisk, -j, that lets one
+change the starting address of where the GPT partition table entries are
+stored.
 
-Sure. I have no problem using a different solution. I was just
-surprised that dropbear wouldn't look for all key types before
-generating a new one. But that's not a buildroot issue.
+The iMX SoC ROM loader, and perhaps others, expects the bootloader to start
+at sector 2.  Using this option with gptfdisk lets the table entries move
+to make space for the bootloader image.
 
-Regards,
--Markus
+Signed-off-by: Trent Piepho <tpiepho@impinj.com>
+---
+ package/gptfdisk/gptfdisk.hash | 8 ++++----
+ package/gptfdisk/gptfdisk.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/package/gptfdisk/gptfdisk.hash b/package/gptfdisk/gptfdisk.hash
+index c3a38af5f6..d55797c05a 100644
+--- a/package/gptfdisk/gptfdisk.hash
++++ b/package/gptfdisk/gptfdisk.hash
+@@ -1,5 +1,5 @@
+-# From http://sourceforge.net/projects/gptfdisk/files/gptfdisk/1.0.1/
+-md5 d7f3d306b083123bcc6f5941efade586  gptfdisk-1.0.1.tar.gz
+-sha1 ad28c511c642235815b83fffddf728c117057cba  gptfdisk-1.0.1.tar.gz
++# From http://sourceforge.net/projects/gptfdisk/files/gptfdisk/1.0.3/
++md5 07b625a583b66c8c5840be5923f3e3fe  gptfdisk-1.0.3.tar.gz
++sha1 9a74bbe7805d562316e92417f71e4b03155308e6  gptfdisk-1.0.3.tar.gz
+ # Locally computed
+-sha256 864c8aee2efdda50346804d7e6230407d5f42a8ae754df70404dd8b2fdfaeac7  gptfdisk-1.0.1.tar.gz
++sha256 89fd5aec35c409d610a36cb49c65b442058565ed84042f767bba614b8fc91b5c  gptfdisk-1.0.3.tar.gz
+diff --git a/package/gptfdisk/gptfdisk.mk b/package/gptfdisk/gptfdisk.mk
+index a7bc41c89f..b669e22aa8 100644
+--- a/package/gptfdisk/gptfdisk.mk
++++ b/package/gptfdisk/gptfdisk.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GPTFDISK_VERSION = 1.0.1
++GPTFDISK_VERSION = 1.0.3
+ GPTFDISK_SITE = http://downloads.sourceforge.net/sourceforge/gptfdisk
+ GPTFDISK_LICENSE = GPL-2.0+
+ GPTFDISK_LICENSE_FILES = COPYING
+-- 
+2.14.3
