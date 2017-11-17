@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 17 Nov 2017 21:24:17 +0100
-Subject: [Buildroot] out of tree kernel patches question
-In-Reply-To: <trinity-0d97f4a0-c1ac-416e-bfea-7bcafcb3ce1d-1510924577452@3c-app-mailcom-bs07>
-References: <trinity-0d97f4a0-c1ac-416e-bfea-7bcafcb3ce1d-1510924577452@3c-app-mailcom-bs07>
-Message-ID: <20171117212417.43162ed7@windsurf.lan>
+Date: Fri, 17 Nov 2017 21:40:45 +0100
+Subject: [Buildroot] [PATCH v3 1/2] libkrb5: New package
+In-Reply-To: <1510859154-26878-1-git-send-email-nerv@dawncrow.de>
+References: <1510859154-26878-1-git-send-email-nerv@dawncrow.de>
+Message-ID: <20171117214045.1563ed6f@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,30 +12,24 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 17 Nov 2017 14:16:17 +0100, daggs wrote:
+On Thu, 16 Nov 2017 20:05:53 +0100, Andr? Hentschel wrote:
 
-> when it comes to the odroidc2 support, there are 3 things that I'm concerned about:
-> 1. gcc is limited to 4.9.x
-> 2. old uboot (2005.11).
-> 3. very old kernel (3.14.79).
-> 
-> #1 is needed because #2, currently upstream uboot support this board
-> from 2007.05 but I've tried for months to get upstream uboot to work
-> with the vendor's kernel without any luck. unfortunately, the uboot
-> mailing list isn't helpful at all (no one seems to care much), this
-> means that in order to solve issue #2, the kernel needs to be
-> upgraded.
+> diff --git a/package/libkrb5/0001-cross-compile.patch b/package/libkrb5/0001-cross-compile.patch
+> new file mode 100644
+> index 0000000..13a29bb
+> --- /dev/null
+> +++ b/package/libkrb5/0001-cross-compile.patch
+> @@ -0,0 +1,39 @@
+> +Add sane assumptions about cross-compiling
+> +
+> +Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
 
-> latest upstream kernel holds bask support for this board, the
-> development is progressing. now assuming that I take patches existing
-> in the kernel mailing list that adds missing support for features in
-> the kernel to a point that the board can be used in a decent manner,
-> what is the policy of adding out of the kernel patches to a board in
-> buildroot?
+You should be able to replace this patch with:
 
-We are generally OK to integrate kernel patches if they are merged
-upstream already, or seriously on their way upstream. Also, we can do
-this only if the stack of patches is not several hundreds of patches.
+LIBKRB5_CONF_ENV = \
+	ac_cv_printf_positional=yes \
+	ac_cv_func_regcomp=yes \
+	krb5_cv_attr_constructor_destructor=yes
 
 Best regards,
 
