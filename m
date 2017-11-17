@@ -1,63 +1,80 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 17 Nov 2017 16:14:16 +0100
-Subject: [Buildroot] [PATCH] libfastjson: indicate explicitly which gcc -std
- option to use
-Message-ID: <20171117151416.26736-1-thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 17 Nov 2017 18:00:27 +0100
+Subject: [Buildroot] [PATCH] Revert "runc: bump to v1.0.0-rc4"
+Message-ID: <20171117170027.3347-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit fixes the following build issue of libfastjson with old
-enough compilers (4.8) and wchar disabled:
+This reverts commit 3861ce09d0acd6425873332300c6caa75863017f.
 
-json_object.c: In function 'fjson_object_object_delete':
-json_object.c:385:3: error: 'for' loop initial declarations are only allowed in C99 mode
-   for (int i = 0 ; i < FJSON_OBJECT_CHLD_PG_SIZE ; ++i) {
-   ^
+As reported on IRC, runc v1.0.0-rc4 is not compatible with the docker-engine
+version we are using, so lets revert for 2017.11:
 
-The code of libfastjson requires C99. If your compiler is recent
-enough (gcc 5.x), then no problem, it is C99 by default, no additional
-flags are needed.
+20:27 < eschu> It looks like 25 days ago buildroot had runc updated to
+               1.0.0-rc4, which breaks compatibility with the docker-engine
+               version 17.05.  Is there somewhere issues like this are
+               reported?  Or is it just expected on non-release versions of
+               buildroot?
 
-If your compiler is older (for example gcc 4.8), then -std=c99 or
--std=gnu99 is explicitly needed to tell the compiler to accept C99
-constructs. Testing the compiler for the availability of such flags is
-done by libfastjson configure script. However, the test program used
-by the configure script uses some wchar_t types, and therefore the
-test checking for C99 availability fails on toolchains with wchar
-disabled. From config.log:
+20:47 < Jacmet> eschu: ahh, so the new runc doesn't work with the old
+                docker-engine?  what kind of errors do you get exactly?
 
-configure:3928: checking for /home/test/buildroot/output/host/usr/bin/i586-buildroot-linux-uclibc-gcc option to accept ISO C99
-[...]
-configure:4077: /home/test/buildroot/output/host/usr/bin/i586-buildroot-linux-uclibc-gcc -std=gnu99 -c -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 conftest.c >&5
-conftest.c:54:3: error: unknown type name 'wchar_t'
-   const wchar_t *name;
-   ^
+20:49 < eschu> Jacmet:  yes, runc made a change from -console to
+               --console-socket, which results in "Incorrect Usage" error
+               "flag provided but not defined: -console"
 
-So, just like we did in libv4l in commit
-f01396a158f14c53b781c35f7ff29da0bea8c8d6 ("libv4l: fix uclibc-ng
-configure/compile"), let's hint directly the configure script that it
-should use -std=gnu99. This fixes the build of libfastjson with old
-compilers and wchar disabled.
+20:51 < eschu> Jacmet:  basically docker-engine 17.05 uses -console, but
+               support for that was cut off in runc around the first 1.0.0
+               versions.  I'll check the patches out, or might just
+               downgrade to buildroot 2017.08 release
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+20:51 < agb> Jacmet: unfortunately this issue has hit a number of distributions
+             https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=877146
+
+20:53 < Jacmet> agb: thanks.  I'll send a revert for 2017.11 and hopefully
+                we can make progress on the other docker packages for
+                2018.02
+
+Cc: Christian Stewart <christian@paral.in>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libfastjson/libfastjson.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/runc/runc.hash | 2 +-
+ package/runc/runc.mk   | 5 ++---
+ 2 files changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/package/libfastjson/libfastjson.mk b/package/libfastjson/libfastjson.mk
-index b1cdd6a158..06da0d8edd 100644
---- a/package/libfastjson/libfastjson.mk
-+++ b/package/libfastjson/libfastjson.mk
-@@ -7,6 +7,7 @@
- LIBFASTJSON_VERSION = v0.99.4
- LIBFASTJSON_SITE = $(call github,rsyslog,libfastjson,$(LIBFASTJSON_VERSION))
- LIBFASTJSON_INSTALL_STAGING = YES
-+LIBFASTJSON_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
- # From git
- LIBFASTJSON_AUTORECONF = YES
- LIBFASTJSON_LICENSE = MIT
+diff --git a/package/runc/runc.hash b/package/runc/runc.hash
+index 08e306d0dc..3e188c5c79 100644
+--- a/package/runc/runc.hash
++++ b/package/runc/runc.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256	3ffefd293932d2ad509701878dd7dd6ef498c3667198a33e8e5d5a3cbce0eeaa	runc-v1.0.0-rc4.tar.gz
++sha256	b5c50d7d9a5f610d5424f96196efa306ec708fd9299302dd919545099c16b7c1	runc-9c2d8d184e5da67c95d601382adf14862e4f2228.tar.gz
+diff --git a/package/runc/runc.mk b/package/runc/runc.mk
+index 0b51e11896..fb3fec20f5 100644
+--- a/package/runc/runc.mk
++++ b/package/runc/runc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-RUNC_VERSION = v1.0.0-rc4
++RUNC_VERSION = 9c2d8d184e5da67c95d601382adf14862e4f2228
+ RUNC_SITE = $(call github,opencontainers,runc,$(RUNC_VERSION))
+ RUNC_LICENSE = Apache-2.0
+ RUNC_LICENSE_FILES = LICENSE
+@@ -38,8 +38,7 @@ define RUNC_CONFIGURE_CMDS
+ endef
+ 
+ define RUNC_BUILD_CMDS
+-	cd $(RUNC_GOPATH)/src/github.com/opencontainers/runc && \
+-		$(RUNC_MAKE_ENV) $(HOST_DIR)/bin/go \
++	cd $(@D) && $(RUNC_MAKE_ENV) $(HOST_DIR)/bin/go \
+ 		build -v -o $(@D)/bin/runc \
+ 		-tags "$(RUNC_GOTAGS)" -ldflags "$(RUNC_GLDFLAGS)" .
+ endef
 -- 
-2.13.6
+2.11.0
