@@ -1,122 +1,113 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 17 Nov 2017 10:31:58 +0100
-Subject: [Buildroot] [git commit] qt5webkit: backport upstream icu-59 fix
- from 5.9 branch to 5.6.3
-Message-ID: <20171117092511.9C293802A8@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 17 Nov 2017 10:48:22 +0100
+Subject: [Buildroot] Conditional setup of TARGET_ABI
+In-Reply-To: <1510906984.31683.79.camel@synopsys.com>
+References: <1510906984.31683.79.camel@synopsys.com>
+Message-ID: <20171117104822.38277917@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cab0d0a8acc920c6d240e9d503816b9ffb0508d2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-icu-59.x slightly changed the API, breaking qt5webkit builds. For details, see:
+On Fri, 17 Nov 2017 08:23:06 +0000, Alexey Brodkin wrote:
 
-https://bugreports.qt.io/browse/QTBUG-60532
+> I'm facing a problem which is both quite simple and obvious as well as
+> there's a really good solution to it... that's in theory but on practice
+> it's not that simple.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .../5.6.3/0004-Fix-compilation-with-ICU-59.patch   | 93 ++++++++++++++++++++++
- 1 file changed, 93 insertions(+)
+First of all, thanks for summarizing the problem!
 
-diff --git a/package/qt5/qt5webkit/5.6.3/0004-Fix-compilation-with-ICU-59.patch b/package/qt5/qt5webkit/5.6.3/0004-Fix-compilation-with-ICU-59.patch
-new file mode 100644
-index 0000000..f3b590e
---- /dev/null
-+++ b/package/qt5/qt5webkit/5.6.3/0004-Fix-compilation-with-ICU-59.patch
-@@ -0,0 +1,93 @@
-+From bf172ae289a1348842005a9421797970f9b72060 Mon Sep 17 00:00:00 2001
-+From: Konstantin Tokarev <annulen@yandex.ru>
-+Date: Thu, 4 May 2017 15:12:37 +0300
-+Subject: [PATCH] Fix compilation with ICU 59
-+
-+Upstream fix: https://bugs.webkit.org/show_bug.cgi?id=171612
-+
-+Task-number: QTBUG-60532
-+Change-Id: I6014feea213aa70ebe40b09d9d1a03fd1ed3c843
-+Reviewed-by: Allan Sandfeld Jensen <allan.jensen@qt.io>
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ Source/JavaScriptCore/API/JSStringRef.cpp        | 6 +++---
-+ Source/JavaScriptCore/runtime/DateConversion.cpp | 3 ++-
-+ Source/WTF/wtf/TypeTraits.h                      | 3 +++
-+ Source/WebKit2/Shared/API/c/WKString.cpp         | 2 +-
-+ 4 files changed, 9 insertions(+), 5 deletions(-)
-+
-+diff --git a/Source/JavaScriptCore/API/JSStringRef.cpp b/Source/JavaScriptCore/API/JSStringRef.cpp
-+index 812f3d413..77a3fd0f4 100644
-+--- a/Source/JavaScriptCore/API/JSStringRef.cpp
-++++ b/Source/JavaScriptCore/API/JSStringRef.cpp
-+@@ -37,7 +37,7 @@ using namespace WTF::Unicode;
-+ JSStringRef JSStringCreateWithCharacters(const JSChar* chars, size_t numChars)
-+ {
-+     initializeThreading();
-+-    return OpaqueJSString::create(chars, numChars).leakRef();
-++    return OpaqueJSString::create(reinterpret_cast<const UChar*>(chars), numChars).leakRef();
-+ }
-+ 
-+ JSStringRef JSStringCreateWithUTF8CString(const char* string)
-+@@ -62,7 +62,7 @@ JSStringRef JSStringCreateWithUTF8CString(const char* string)
-+ JSStringRef JSStringCreateWithCharactersNoCopy(const JSChar* chars, size_t numChars)
-+ {
-+     initializeThreading();
-+-    return OpaqueJSString::create(StringImpl::createWithoutCopying(chars, numChars, WTF::DoesNotHaveTerminatingNullCharacter)).leakRef();
-++    return OpaqueJSString::create(StringImpl::createWithoutCopying(reinterpret_cast<const UChar*>(chars), numChars, WTF::DoesNotHaveTerminatingNullCharacter)).leakRef();
-+ }
-+ 
-+ JSStringRef JSStringRetain(JSStringRef string)
-+@@ -83,7 +83,7 @@ size_t JSStringGetLength(JSStringRef string)
-+ 
-+ const JSChar* JSStringGetCharactersPtr(JSStringRef string)
-+ {
-+-    return string->characters();
-++    return reinterpret_cast<const JSChar*>(string->characters());
-+ }
-+ 
-+ size_t JSStringGetMaximumUTF8CStringSize(JSStringRef string)
-+diff --git a/Source/JavaScriptCore/runtime/DateConversion.cpp b/Source/JavaScriptCore/runtime/DateConversion.cpp
-+index 0b57f012d..05e27338b 100644
-+--- a/Source/JavaScriptCore/runtime/DateConversion.cpp
-++++ b/Source/JavaScriptCore/runtime/DateConversion.cpp
-+@@ -107,7 +107,8 @@ String formatDateTime(const GregorianDateTime& t, DateTimeFormat format, bool as
-+ #if OS(WINDOWS)
-+             TIME_ZONE_INFORMATION timeZoneInformation;
-+             GetTimeZoneInformation(&timeZoneInformation);
-+-            const WCHAR* timeZoneName = t.isDST() ? timeZoneInformation.DaylightName : timeZoneInformation.StandardName;
-++            const WCHAR* winTimeZoneName = t.isDST() ? timeZoneInformation.DaylightName : timeZoneInformation.StandardName;
-++            String timeZoneName(reinterpret_cast<const UChar*>(winTimeZoneName));
-+ #else
-+             struct tm gtm = t;
-+             char timeZoneName[70];
-+diff --git a/Source/WTF/wtf/TypeTraits.h b/Source/WTF/wtf/TypeTraits.h
-+index 9df2c95cf..f5d6121fd 100644
-+--- a/Source/WTF/wtf/TypeTraits.h
-++++ b/Source/WTF/wtf/TypeTraits.h
-+@@ -72,6 +72,9 @@ namespace WTF {
-+     template<> struct IsInteger<unsigned long>      { static const bool value = true; };
-+     template<> struct IsInteger<long long>          { static const bool value = true; };
-+     template<> struct IsInteger<unsigned long long> { static const bool value = true; };
-++#if __cplusplus >= 201103L || defined(__GXX_EXPERIMENTAL_CXX0X__) || (defined(_HAS_CHAR16_T_LANGUAGE_SUPPORT) && _HAS_CHAR16_T_LANGUAGE_SUPPORT)
-++    template<> struct IsInteger<char16_t>           { static const bool value = true; };
-++#endif
-+ #if !COMPILER(MSVC) || defined(_NATIVE_WCHAR_T_DEFINED)
-+     template<> struct IsInteger<wchar_t>            { static const bool value = true; };
-+ #endif
-+diff --git a/Source/WebKit2/Shared/API/c/WKString.cpp b/Source/WebKit2/Shared/API/c/WKString.cpp
-+index cbac67dd8..23400a64e 100644
-+--- a/Source/WebKit2/Shared/API/c/WKString.cpp
-++++ b/Source/WebKit2/Shared/API/c/WKString.cpp
-+@@ -55,7 +55,7 @@ size_t WKStringGetLength(WKStringRef stringRef)
-+ size_t WKStringGetCharacters(WKStringRef stringRef, WKChar* buffer, size_t bufferLength)
-+ {
-+     COMPILE_ASSERT(sizeof(WKChar) == sizeof(UChar), WKStringGetCharacters_sizeof_WKChar_matches_UChar);
-+-    return (toImpl(stringRef)->getCharacters(static_cast<UChar*>(buffer), bufferLength));
-++    return (toImpl(stringRef)->getCharacters(reinterpret_cast<UChar*>(buffer), bufferLength));
-+ }
-+ 
-+ size_t WKStringGetMaximumUTF8CStringSize(WKStringRef stringRef)
-+-- 
-+2.11.0
-+
+> So the problem is linkage of Qt5Webkit library failing like that:
+> ------------------------>8------------------------  
+> .../output/host/lib/gcc/arc-buildroot-linux-uclibc/7.1.1/crtbeginS.o: In function
+> '__do_global_dtors_aux':
+> 
+> crtstuff.c:(.text+0x66): relocation truncated to fit: R_ARC_S25W_PCREL
+> against symbol `__st_r13_to_r15' defined in .text section in
+> .../output/host/lib/gcc/arc-buildroot-linux-uclibc/7.1.1/libgcc.a(_millicodethunk_st.o)
+> ------------------------>8------------------------  
+> 
+> Let me explain what is encrypted in the log above.
+> 
+> 1. __do_global_dtors_aux() gets built as a part of libgcc and is supposed to
+> ? ?be then used as it is with all the apps we build later on.
+> ? ?And what's also important our GCC by default tries to use as compact
+> ? ?relocations as possible to save memory footprint, instruction cache
+> ? ?utilization etc. So given libgcc is very compact GCC simply decides
+> ? ?to use so-called R_ARC_S25W_PCREL relocation which means +-16MiB
+> ? ?offset from the current location.
+> 
+> 2. Qt5WebKit [as well as all other libs and apps] uses functions from libgcc.
+> ? ?In that case it's our __do_global_dtors_aux() which in its turn uses another
+> ? ?function called __st_r13_to_r15(). And from (1) we know that distance
+> ? ?between them should be less than 16MiB. Now given libQt5WebKit is much larger
+> ? ?that means if the functions in question end-up placed closer to opposite ends
+> ? ?of libQtxxx they won't be reachable to each other... and that's what we see here.
+
+What isn't clear to me is where are those two functions? One is in
+crtbeginS.o, so it ends up linked into the program .text section, while
+the other one is in libgcc, correct?
+
+How can the size of QtWebkit have an influence on the distance between
+those functions? How can the linker now about the relative locations of
+libraries, since they are loaded at runtime by the dynamic linker? Or
+perhaps this issue only occurs with BR2_STATIC_LIBS=y ?
+
+> Now what kind of solutions could be applied to that problem?
+> 
+> 1. Make sure problematic functions are placed close to each other.
+> ? ?But that will require changes in Qt's build infrastructure... almost
+> ? ?for nothing as then there comes another dependency like that,
+> ? ?so it's an obvious no-go.
+> 
+> 2. The best fix is so-called link-time relaxation. This if exists and works
+> ? ?just solves the problem. But the problem is we don't have it yet... even though
+> ? ?it's a long-standing item on out todo list.
+> 
+> 3. Not very good but at least feasible and simple solution to rebuild libgcc
+> ? ?such that longer relocations are used. That could be simply done with passing
+> ? ?"-mlong-calls" to the GCC.
+> ? ?But given most of the time shorter relocations work perfectly fine for us
+> ? ?we'd prefer to not use longer relocations all the time... especially knowing
+> ? ?that by default we use so-called "millicode" functions (that for example save and
+> ? ?restore core registers on entry and exit of functions) from libgcc for each and
+> ? ?every function we build it will be pretty significant performance hit system-wise.
+> 
+> ? ?But strictly speaking it might be any other library but not only libgcc and so
+> ? ?it IMHO makes sense to build everything with "-mlong-calls".
+> 
+> As a shorter summary:
+> IMHO the short term solution is to append "-mlong-calls" to TARGET_ABI so this
+> gcc option gets applied to everything we build for the target like that:
+> ---------------------->8---------------------  
+> ifeq ($(BR2_arc)$(BR2_PACKAGE_QT5WEBKIT),yy)
+> TARGET_ABI += -mlong-calls
+> endif
+> ---------------------->8---------------------  
+> 
+> Any thoughts?
+
+Yes, one thought: this proposed solution of tweaking TARGET_ABI doesn't
+work with pre-built external toolchains. Indeed, when you build the
+toolchain, you have no idea that it will be used for building "large"
+libraries such as Qt5Webkit.
+
+So perhaps we should handle this more explicitly, i.e have an
+architecture/toolchain option to enable the use of "long calls", so
+that a toolchain can be built with it. Conversely, in the external
+toolchain support, have a config knob that allows to say "my toolchain
+uses long calls or not". And then packages can depend on it.
+
+Is it possible to easily verify if an external toolchain was built with
+-mlong-calls or not?
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
