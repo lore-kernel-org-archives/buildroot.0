@@ -1,11 +1,7 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 17 Nov 2017 09:06:47 +0100
-Subject: [Buildroot] [arc-buildroot] [autobuild.buildroot.net] Your
- build results for 2017-11-15
-In-Reply-To: <1510851029.31683.28.camel@synopsys.com>
-References: <20171116070015.DBD4B20671@mail.free-electrons.com>
- <1510851029.31683.28.camel@synopsys.com>
-Message-ID: <20171117090647.4f104447@windsurf.lan>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Fri, 17 Nov 2017 08:23:06 +0000
+Subject: [Buildroot] Conditional setup of TARGET_ABI
+Message-ID: <1510906984.31683.79.camel@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,66 +10,69 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 16 Nov 2017 16:50:30 +0000, Alexey Brodkin wrote:
+I'm facing a problem which is both quite simple and obvious as well as
+there's a really good solution to it... that's in theory but on practice
+it's not that simple.
 
-> > ?????????arc |???????????????????????qt-4.8.7 | https://urldefense.proofpoint.com/v2/url?u=http-3A__autobuild.buildroot.net_results_f92fb57954904d55
-> > 839ecc7e0759f52869fb8987&d=DwICAg&c=DPL6_X_6JkXFx7AXWqB0tg&r=Z74rKOsEpOUneCxYxwKcXHwrAmW8mJhNZjcWnDDJI2U&m=PyZ3d9KImQtwJn7aAlpsgbrtVTFuIem1QqiTGlZkk
-> > fE&s=YR3T_mxXLqDkCWBrYCkWPkZcIItCeTYfI8mnL3siESE&e=
-> > ?????????arc |???????????????????????qt-4.8.7 | https://urldefense.proofpoint.com/v2/url?u=http-3A__autobuild.buildroot.net_results_0d14e112d5ca94cf
-> > 36cbd2605d270215236ffbde&d=DwICAg&c=DPL6_X_6JkXFx7AXWqB0tg&r=Z74rKOsEpOUneCxYxwKcXHwrAmW8mJhNZjcWnDDJI2U&m=PyZ3d9KImQtwJn7aAlpsgbrtVTFuIem1QqiTGlZkk
-> > fE&s=_dHTQWl51LzxdleE3rcayzRk1v03T7kC6mFmqrmLj3g&e=
-> > ?????????arc |???????????????????????qt-4.8.7 | https://urldefense.proofpoint.com/v2/url?u=http-3A__autobuild.buildroot.net_results_4634366b7dfea6d6
-> > f11ae4d4410e35beed80f9e7&d=DwICAg&c=DPL6_X_6JkXFx7AXWqB0tg&r=Z74rKOsEpOUneCxYxwKcXHwrAmW8mJhNZjcWnDDJI2U&m=PyZ3d9KImQtwJn7aAlpsgbrtVTFuIem1QqiTGlZkk
-> > fE&s=kxc6E07u2PjhognKYoc-m1pEszYqY_uZUCAsvmnnw4c&e=  
-> 
-> All build above failed on your "gcc112" machine and we cannot reproduce the same problem locally
-> on CentOS 7.x machines.
-> 
-> I remember you mentioned one of your build servers is non-x86 machine.
-> Is this the one? If that's a flavour of x86 still what is its Linux distro?
-> 
-> BTW maybe it worth adding not only host name but its architecture and distro version in Autobuilder artifacts?
+So the problem is linkage of Qt5Webkit library failing like that:
+------------------------>8------------------------
+.../output/host/lib/gcc/arc-buildroot-linux-uclibc/7.1.1/crtbeginS.o: In function
+'__do_global_dtors_aux':
 
-All these errors indeed occur on ppc64le. I have already started
-investigating this qt-4.8.7 issue. I reproduced it on gcc112, and
-started looking into it. The issue is that for some reason, qt uses the
-target compiler to build qmake, and therefore later fails to run qmake.
+crtstuff.c:(.text+0x66): relocation truncated to fit: R_ARC_S25W_PCREL
+against symbol `__st_r13_to_r15' defined in .text section in
+.../output/host/lib/gcc/arc-buildroot-linux-uclibc/7.1.1/libgcc.a(_millicodethunk_st.o)
+------------------------>8------------------------
 
-Interestingly, this doesn't happen if the target architecture is ARM.
-If the target architecture is ARM, Qt says:
+Let me explain what is encrypted in the log above.
 
-====
-Determining system architecture...
-(Linux:3.10.0-514.10.2.el7.ppc64le:ppc64le) 64-bit PowerPC (powerpc)
-    'arm' is supported
-    'powerpc' is supported
-System architecture: 'arm'
-Host architecture: 'powerpc'
-====
+1. __do_global_dtors_aux() gets built as a part of libgcc and is supposed to
+? ?be then used as it is with all the apps we build later on.
+? ?And what's also important our GCC by default tries to use as compact
+? ?relocations as possible to save memory footprint, instruction cache
+? ?utilization etc. So given libgcc is very compact GCC simply decides
+? ?to use so-called R_ARC_S25W_PCREL relocation which means +-16MiB
+? ?offset from the current location.
 
-So, System architecture != Host architecture, and therefore it uses the
-host compiler to build qmake, and everything is fine.
+2. Qt5WebKit [as well as all other libs and apps] uses functions from libgcc.
+? ?In that case it's our __do_global_dtors_aux() which in its turn uses another
+? ?function called __st_r13_to_r15(). And from (1) we know that distance
+? ?between them should be less than 16MiB. Now given libQt5WebKit is much larger
+? ?that means if the functions in question end-up placed closer to opposite ends
+? ?of libQtxxx they won't be reachable to each other... and that's what we see here.
 
-But with Xtensa or ARC as the target architecture, I get:
+Now what kind of solutions could be applied to that problem?
 
-====
-Determining system architecture...
-(Linux:3.10.0-514.10.2.el7.ppc64le:ppc64le) 64-bit PowerPC (powerpc)
-    'powerpc' is supported
-System architecture: 'powerpc'
-Host architecture: 'powerpc'
-Symbol visibility control enabled.
-====
+1. Make sure problematic functions are placed close to each other.
+? ?But that will require changes in Qt's build infrastructure... almost
+? ?for nothing as then there comes another dependency like that,
+? ?so it's an obvious no-go.
 
-I.e, it thinks that the target architecture is PowerPC. Of course,
-building Qt4 for ARC and Xtensa does work on other build machines, so
-it's not just "Qt's configure script doesn't know about ARC or Xtensa".
-I haven't yet figure out what's going on here.
+2. The best fix is so-called link-time relaxation. This if exists and works
+? ?just solves the problem. But the problem is we don't have it yet... even though
+? ?it's a long-standing item on out todo list.
 
-Best regards,
+3. Not very good but at least feasible and simple solution to rebuild libgcc
+? ?such that longer relocations are used. That could be simply done with passing
+? ?"-mlong-calls" to the GCC.
+? ?But given most of the time shorter relocations work perfectly fine for us
+? ?we'd prefer to not use longer relocations all the time... especially knowing
+? ?that by default we use so-called "millicode" functions (that for example save and
+? ?restore core registers on entry and exit of functions) from libgcc for each and
+? ?every function we build it will be pretty significant performance hit system-wise.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+? ?But strictly speaking it might be any other library but not only libgcc and so
+? ?it IMHO makes sense to build everything with "-mlong-calls".
+
+As a shorter summary:
+IMHO the short term solution is to append "-mlong-calls" to TARGET_ABI so this
+gcc option gets applied to everything we build for the target like that:
+---------------------->8---------------------
+ifeq ($(BR2_arc)$(BR2_PACKAGE_QT5WEBKIT),yy)
+TARGET_ABI += -mlong-calls
+endif
+---------------------->8---------------------
+
+Any thoughts?
+
+-Alexey
