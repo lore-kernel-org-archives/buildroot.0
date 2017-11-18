@@ -1,33 +1,52 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 18 Nov 2017 09:26:03 +0100
-Subject: [Buildroot] out of tree kernel patches question
-In-Reply-To: <trinity-0708c540-baa1-463a-a0ad-5bf573ebc7e7-1510991011672@3c-app-mailcom-bs13>
- (daggs@gmx.com's message of "Sat, 18 Nov 2017 08:43:31 +0100")
-References: <trinity-0d97f4a0-c1ac-416e-bfea-7bcafcb3ce1d-1510924577452@3c-app-mailcom-bs07>
- <20171117212417.43162ed7@windsurf.lan>
- <trinity-0708c540-baa1-463a-a0ad-5bf573ebc7e7-1510991011672@3c-app-mailcom-bs13>
-Message-ID: <87shdcvvqc.fsf@dell.be.48ers.dk>
+From: Sergey Matyukevich <geomatsi@gmail.com>
+Date: Sat, 18 Nov 2017 11:35:45 +0300
+Subject: [Buildroot] [PATCH/next v2 0/4] Add support for MacchiatoBin board
+Message-ID: <20171118083549.9108-1-geomatsi@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "daggs" == daggs  <daggs@gmx.com> writes:
+Hi all,
+This is the second revision of the patchset adding support for MacchiatoBin
+board. The most part of changes address review comments provided by
+Baruch Siach and Arnout Vandecappelle. Besides, dts kernel patches by
+Antoine T?nart has been added in order to enable networking on mainline
+kernel and make the board more usable from the start.
 
-Hi,
+Changes v1->v2
+- update mv-ddr-marvell package: rename/cleanup
+- update binary-marvell package: rename/cleanup
+- update changes for atf package: cleanup
+- update board readme.txt
+- add example U-Boot environment
+- bump Linux kernel version to 4.14
+- add dts patches to enable networking on mainline U-Boot/kernel
 
- > so I'd like to propose adding a new buildroot config named
- > odroidc2-next which will support that along side the existing one.
- > with time, hopefully, the old one will be replaced by the new one.
+Sergey Matyukevich (4):
+  mv-ddr-marvell: new package
+  binaries-marvell: new package
+  atf: add support for Marvell Armada
+  solidrun/macchiatobin: add new board
 
- > any objections?
-
-I don't think "next" really explains what this is about, what about
-odroidc2_mainline_defconfig?
-
-We have a number of other boards where it may be interesting to do so,
-E.G. rpi, roseapplepi, ..
-
--- 
-Bye, Peter Korsgaard
+ DEVELOPERS                                                                                       |   14 -
+ board/solidrun/macchiatobin/genimage.cfg                                                         |   16 +
+ board/solidrun/macchiatobin/linux-extras.config                                                  |    3 
+ board/solidrun/macchiatobin/patches/linux/0001-arm64-dts-marvell-extend-cp110-syscon-regs.patch  |   38 +++
+ board/solidrun/macchiatobin/patches/linux/0002-arm64-dts-marvell-add-comphy-nodes-on-cp110.patch |  111 ++++++++++
+ board/solidrun/macchiatobin/patches/linux/0003-arm64-dts-marvell-mcbin-add-comphy.patch          |   52 ++++
+ board/solidrun/macchiatobin/post-build.sh                                                        |    5 
+ board/solidrun/macchiatobin/readme.txt                                                           |   82 +++++++
+ board/solidrun/macchiatobin/uEnv-example.txt                                                     |    7 
+ boot/Config.in                                                                                   |    2 
+ boot/arm-trusted-firmware/arm-trusted-firmware.mk                                                |   11 
+ boot/binaries-marvell/Config.in                                                                  |   29 ++
+ boot/binaries-marvell/binaries-marvell.hash                                                      |    2 
+ boot/binaries-marvell/binaries-marvell.mk                                                        |   19 +
+ boot/mv-ddr-marvell/Config.in                                                                    |    7 
+ boot/mv-ddr-marvell/mv-ddr-marvell.hash                                                          |    2 
+ boot/mv-ddr-marvell/mv-ddr-marvell.mk                                                            |   18 +
+ configs/solidrun_macchiatobin_mainline_defconfig                                                 |   45 ++++
+ configs/solidrun_macchiatobin_marvell_defconfig                                                  |   45 ++++
+ 19 files changed, 504 insertions(+), 4 deletions(-)
