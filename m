@@ -1,109 +1,52 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sat, 18 Nov 2017 22:22:50 +0100
-Subject: [Buildroot] Cannot rebuild autobuild
-In-Reply-To: <d13312cf-ae70-92fd-8819-a86c79d1723b@mind.be>
-References: <20171113102757.ir7so5o7h7zopcvq@dell5510>
- <20171113144231.gddccsqlelrhrokw@dell5510>
- <20171114234409.114f002f@gmx.net>
- <20171115125857.dcy6j7qvjt32ww43@dell5510>
- <61134b08-bb0a-4665-4b68-3ea2e4063563@mind.be>
- <20171116001919.67e98b4b@gmx.net>
- <58b8ef53-75b6-fc8b-8d37-e21570ae4e3b@mind.be>
- <20171116072948.smctbcvxwkxgqoah@x230>
- <d13312cf-ae70-92fd-8819-a86c79d1723b@mind.be>
-Message-ID: <20171118222250.4f4e8e3d@gmx.net>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat, 18 Nov 2017 21:30:39 +0000
+Subject: [Buildroot] [Bug 10501] New: host-localedef fails to compile on
+ Ubuntu 17.10
+Message-ID: <bug-10501-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Arnout,
+https://bugs.busybox.net/show_bug.cgi?id=10501
 
-On Thu, 16 Nov 2017 14:43:48 +0100, Arnout Vandecappelle <arnout@mind.be> wrote:
+            Bug ID: 10501
+           Summary: host-localedef fails to compile on Ubuntu 17.10
+           Product: buildroot
+           Version: unspecified
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: m.hoffmann at cartelsol.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-> On 16-11-17 08:29, Petr Vorel wrote:
-> > Hi,
-> > 
-> > ...  
-> >>> make[1]: *** No rule to make target 'toolchain-external-custom', needed by '.../build-prebuild-toolchain-001/build/toolchain-external/.stamp_configured'.  Stop.
-> >>> make: *** [Makefile:16: _all] Error 2  
-> >   
-> >>> The error occurs  before the prebuild toolchain is downloaded/extracted...  
-> >   
-> >>  That is really weird, the toolchain-external-custom dependencies should be
-> >> defined no matter what... Could you pastebin the output make 'make -qp' somewhere?  
-> > Here it is:
-> > http://sipe.cz/buildroot/out.log (68M)
-> > http://sipe.cz/buildroot/out.log.tar.gz (9MB)  
-> 
->  Oh boy...
-> 
->  The problem is that on Tumbleweed the order of inclusion seems to be different,
-> which causes toolchain-external-package not to be defined at the time that
-> toolchain-external-custom.mk is included (same for all other external toolchains).
-> 
-> Makefile:492:include toolchain/*/*.mk
-> 
-> This causes inclusion of
-> toolchain/toolchain-external/toolchain-external.mk:28:include
-> toolchain/toolchain-external/*/*.mk
-> and
-> toolchain/toolchain-external/pkg-toolchain-external.mk:592:toolchain-external-package
-> = ...
-> 
->  If the *.mk is expanded in alphabetical order, pkg-toolchain-external.mk will
-> always come before toolchain-external.mk. Otherwise it is possible (depending on
-> the state of hash tables or inode numbers or whatever) that
-> toolchain-external-custom.mk gets included first.
-> 
->  The short-term solution is of course $(sort $(wildcard ...))
+When trying to build the following defconfig I get a compile failure in
+host-localedef.
 
-Your investigation seems to be right, the following patch fixes it for me (no
-32-bit support installed yet, but the cross compiler is extracted and I get
-the 'Cannot execute cross-compiler' error message again):
+BR2_arm=y
+BR2_cortex_a9=y
+BR2_ARM_ENABLE_NEON=y
+BR2_ARM_ENABLE_VFP=y
+BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
+BR2_GENERATE_LOCALE="en_US"
 
-diff --git a/Makefile b/Makefile
-index 55409b99af..9d9737332d 100644
---- a/Makefile
-+++ b/Makefile
-@@ -483,13 +483,13 @@ include system/system.mk
- include package/Makefile.in
- # arch/arch.mk.* must be after package/Makefile.in because it may need to
- # complement variables defined therein, like BR_NO_CHECK_HASH_FOR.
---include $(wildcard arch/arch.mk.*)
-+-include $(sort $(wildcard arch/arch.mk.*))
- include support/dependencies/dependencies.mk
- 
- PACKAGES += $(DEPENDENCIES_HOST_PREREQ)
- 
--include toolchain/*.mk
--include toolchain/*/*.mk
-+include $(sort $(wildcard toolchain/*.mk))
-+include $(sort $(wildcard toolchain/*/*.mk))
- 
- # Include the package override file if one has been provided in the
- # configuration.
-diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index 48de1e71f2..dd07884c7e 100644
---- a/toolchain/toolchain-external/toolchain-external.mk
-+++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -25,4 +25,4 @@ $(error No prefix selected for external toolchain package $(BR2_PACKAGE_PROVIDES
- endif
- endif
- 
--include toolchain/toolchain-external/*/*.mk
-+include $(sort $(wildcard toolchain/toolchain-external/*/*.mk))
+In file included from ./include/locale.h:1:0,
+                 from /usr/include/libintl.h:103,
+                 from ./include/libintl.h:2,
+                 from glibc/locale/programs/charmap.c:25:
+glibc/locale/locale.h:146:11: fatal error: xlocale.h: No such file or directory
+ # include <xlocale.h>
 
-Regards,
-Peter
+(and some more of the same error)
 
-> 
->  But for the long term, I think it's better to move pkg-*.mk to support/misc (or
-> maybe to support/make) and organise the order of inclusion from there.
-> 
->  Any takers? Yann?
-> 
->  Regards,
->  Arnout
-> 
+This is on Ubuntu 17.10 with host gcc 7.2.0.
+
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
