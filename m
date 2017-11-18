@@ -1,188 +1,65 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 18 Nov 2017 09:07:45 +0100
-Subject: [Buildroot] [git commit] qt: add patch to fix build on non-x86
- platforms
-Message-ID: <20171118080127.6CC868007A@busybox.osuosl.org>
+Date: Sat, 18 Nov 2017 09:02:43 +0100
+Subject: [Buildroot] [git commit] libfastjson: indicate explicitly which gcc
+ -std option to use
+Message-ID: <20171118080127.56876803C4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e86b74333e740516b6472dab5fa8f7822ae82840
+commit: https://git.buildroot.net/buildroot/commit/?id=90430237ccdcc369d3e206fdd24266c0cad0dcb6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This commit adds a patch to Qt that adjusts its build system to
-properly support building on non-x86 platforms. The problem was due to
-the PLATFORM and XPLATFORM variables having the same value when
-building on a ppc64le system targetting an uncommon architecture
-(Xtensa or ARC for example). We fix this problem by making sure
-PLATFORM and XPLATFORM will always be different.
+This commit fixes the following build issue of libfastjson with old
+enough compilers (4.8) and wchar disabled:
 
-Fixes the following build failures occuring on gcc112 (a ppc64le
-autobuilder machine):
+json_object.c: In function 'fjson_object_object_delete':
+json_object.c:385:3: error: 'for' loop initial declarations are only allowed in C99 mode
+   for (int i = 0 ; i < FJSON_OBJECT_CHLD_PG_SIZE ; ++i) {
+   ^
 
-  http://autobuild.buildroot.net/results/527747a2fbb31195bb6fdb37cfdaa624e69b7d68/
-  (qt on xtensa)
+The code of libfastjson requires C99. If your compiler is recent
+enough (gcc 5.x), then no problem, it is C99 by default, no additional
+flags are needed.
 
-  http://autobuild.buildroot.net/results/7db1265f6f34be3a498881564292517a8fc0e44e/
-  (qt on ARC)
+If your compiler is older (for example gcc 4.8), then -std=c99 or
+-std=gnu99 is explicitly needed to tell the compiler to accept C99
+constructs. Testing the compiler for the availability of such flags is
+done by libfastjson configure script. However, the test program used
+by the configure script uses some wchar_t types, and therefore the
+test checking for C99 availability fails on toolchains with wchar
+disabled. From config.log:
+
+configure:3928: checking for /home/test/buildroot/output/host/usr/bin/i586-buildroot-linux-uclibc-gcc option to accept ISO C99
+[...]
+configure:4077: /home/test/buildroot/output/host/usr/bin/i586-buildroot-linux-uclibc-gcc -std=gnu99 -c -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 conftest.c >&5
+conftest.c:54:3: error: unknown type name 'wchar_t'
+   const wchar_t *name;
+   ^
+
+So, just like we did in libv4l in commit
+f01396a158f14c53b781c35f7ff29da0bea8c8d6 ("libv4l: fix uclibc-ng
+configure/compile"), let's hint directly the configure script that it
+should use -std=gnu99. This fixes the build of libfastjson with old
+compilers and wchar disabled.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...-configure-fix-build-on-non-x86-platforms.patch | 146 +++++++++++++++++++++
- 1 file changed, 146 insertions(+)
+ package/libfastjson/libfastjson.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/qt/0015-configure-fix-build-on-non-x86-platforms.patch b/package/qt/0015-configure-fix-build-on-non-x86-platforms.patch
-new file mode 100644
-index 0000000..a599548
---- /dev/null
-+++ b/package/qt/0015-configure-fix-build-on-non-x86-platforms.patch
-@@ -0,0 +1,146 @@
-+From 02e9698c96ca78342b82fa7239e93bab4aa45db2 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Date: Fri, 17 Nov 2017 22:20:06 +0100
-+Subject: [PATCH] configure: fix build on non-x86 platforms
-+
-+When building for an uncommon platform on a ppc64le machine, Qt build
-+fails because it builds qmake with the target compiler instead of
-+using the host compiler. This is due to the fact that Qt configure
-+script believes that both the host and target platforms are "powerpc",
-+even though the target really is Xtensa or ARC for example.
-+
-+Qt's configure script defines a variable called PLATFORM that points to
-+the mkspecs describing the host machine. For x86, its value is
-+qws/linux-x86-g++ and for x86-64, its value is
-+qws/linux-x86_64-g++. For any other host architecture, its value is
-+qws/linux-generic-g++.
-+
-+In parallel to this, Qt's configure script defines a variable called
-+XPLATFORM that points to the mkspecs describing the target machine. It
-+points to qws/linux-${CFG_EMBEDDED}-g++, where CFG_EMBEDDED is
-+simply "generic" for most uncommon architectures.
-+
-+Therefore, when we're building for an uncommon architecture, on a
-+ppc64le machine, we have:
-+
-+  PLATFORM = qws/linux-generic-g++
-+  XPLATFORM = qws/linux-generic-g++
-+
-+i.e, both values are equal. Due to this, the following condition is
-+false:
-+
-+if [ "$PLATFORM" != "$XPLATFORM" -a "$CFG_EMBEDDED" != "no" ]; then
-+
-+which causes Qt's configure script to fallback to:
-+
-+elif [ "$PLATFORM_MAC" = "yes" ] || [ -z "$CFG_ARCH" ]; then
-+    CFG_ARCH=$CFG_HOST_ARCH
-+fi
-+
-+because CFG_ARCH is not defined, and therefore gets defined to
-+CFG_HOST_ARCH. So we have CFG_ARCH == CFG_HOST_ARCH, and Qt believes
-+we're doing a native build.
-+
-+Therefore, we need to ensure that PLATFORM and XPLATFORM always have a
-+different value. To achieve this, we create a
-+qws/linux-host-generic-g++ mkspecs, which is always used as
-+PLATFORM. It is identical to qws/linux-x86-g++. Compared to
-+qws/linux-x86_64-g++, the only difference is that we're not passing
-+the -m64 flag, but that isn't needed when building host tools.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+---
-+ configure                                          |  8 +----
-+ mkspecs/qws/linux-host-generic-g++/qmake.conf      | 10 ++++++
-+ mkspecs/qws/linux-host-generic-g++/qplatformdefs.h | 42 ++++++++++++++++++++++
-+ 3 files changed, 53 insertions(+), 7 deletions(-)
-+ create mode 100644 mkspecs/qws/linux-host-generic-g++/qmake.conf
-+ create mode 100644 mkspecs/qws/linux-host-generic-g++/qplatformdefs.h
-+
-+diff --git a/configure b/configure
-+index 10ad7ca0b0..d25f90be1e 100755
-+--- a/configure
-++++ b/configure
-+@@ -2806,14 +2806,8 @@ if [ "$CFG_EMBEDDED" != "no" ]; then
-+     Linux:*)
-+         if [ -z "$PLATFORM" ]; then
-+             case "$UNAME_MACHINE" in
-+-            *86)
-+-                PLATFORM=qws/linux-x86-g++
-+-                ;;
-+-            *86_64)
-+-                PLATFORM=qws/linux-x86_64-g++
-+-                ;;
-+             *)
-+-                PLATFORM=qws/linux-generic-g++
-++                PLATFORM=qws/linux-host-generic-g++
-+                 ;;
-+             esac
-+         fi
-+diff --git a/mkspecs/qws/linux-host-generic-g++/qmake.conf b/mkspecs/qws/linux-host-generic-g++/qmake.conf
-+new file mode 100644
-+index 0000000000..55011ec52b
-+--- /dev/null
-++++ b/mkspecs/qws/linux-host-generic-g++/qmake.conf
-+@@ -0,0 +1,10 @@
-++#
-++# qmake configuration for building with linux-g++
-++#
-++
-++include(../../common/linux.conf)
-++include(../../common/gcc-base-unix.conf)
-++include(../../common/g++-unix.conf)
-++include(../../common/qws.conf)
-++
-++load(qt_config)
-+diff --git a/mkspecs/qws/linux-host-generic-g++/qplatformdefs.h b/mkspecs/qws/linux-host-generic-g++/qplatformdefs.h
-+new file mode 100644
-+index 0000000000..a654aa78a2
-+--- /dev/null
-++++ b/mkspecs/qws/linux-host-generic-g++/qplatformdefs.h
-+@@ -0,0 +1,42 @@
-++/****************************************************************************
-++**
-++** Copyright (C) 2015 The Qt Company Ltd.
-++** Contact: http://www.qt.io/licensing/
-++**
-++** This file is part of the qmake spec of the Qt Toolkit.
-++**
-++** $QT_BEGIN_LICENSE:LGPL$
-++** Commercial License Usage
-++** Licensees holding valid commercial Qt licenses may use this file in
-++** accordance with the commercial license agreement provided with the
-++** Software or, alternatively, in accordance with the terms contained in
-++** a written agreement between you and The Qt Company. For licensing terms
-++** and conditions see http://www.qt.io/terms-conditions. For further
-++** information use the contact form at http://www.qt.io/contact-us.
-++**
-++** GNU Lesser General Public License Usage
-++** Alternatively, this file may be used under the terms of the GNU Lesser
-++** General Public License version 2.1 or version 3 as published by the Free
-++** Software Foundation and appearing in the file LICENSE.LGPLv21 and
-++** LICENSE.LGPLv3 included in the packaging of this file. Please review the
-++** following information to ensure the GNU Lesser General Public License
-++** requirements will be met: https://www.gnu.org/licenses/lgpl.html and
-++** http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
-++**
-++** As a special exception, The Qt Company gives you certain additional
-++** rights. These rights are described in The Qt Company LGPL Exception
-++** version 1.1, included in the file LGPL_EXCEPTION.txt in this package.
-++**
-++** GNU General Public License Usage
-++** Alternatively, this file may be used under the terms of the GNU
-++** General Public License version 3.0 as published by the Free Software
-++** Foundation and appearing in the file LICENSE.GPL included in the
-++** packaging of this file.  Please review the following information to
-++** ensure the GNU General Public License version 3.0 requirements will be
-++** met: http://www.gnu.org/copyleft/gpl.html.
-++**
-++** $QT_END_LICENSE$
-++**
-++****************************************************************************/
-++
-++#include "../../linux-g++/qplatformdefs.h"
-+-- 
-+2.13.6
-+
+diff --git a/package/libfastjson/libfastjson.mk b/package/libfastjson/libfastjson.mk
+index b1cdd6a..06da0d8 100644
+--- a/package/libfastjson/libfastjson.mk
++++ b/package/libfastjson/libfastjson.mk
+@@ -7,6 +7,7 @@
+ LIBFASTJSON_VERSION = v0.99.4
+ LIBFASTJSON_SITE = $(call github,rsyslog,libfastjson,$(LIBFASTJSON_VERSION))
+ LIBFASTJSON_INSTALL_STAGING = YES
++LIBFASTJSON_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
+ # From git
+ LIBFASTJSON_AUTORECONF = YES
+ LIBFASTJSON_LICENSE = MIT
