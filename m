@@ -1,39 +1,32 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 30 Nov 2017 15:50:53 +0100
-Subject: [Buildroot] [git commit branch/next] fs: don't remove intermediate
- files
-Message-ID: <20171201162321.DB9508151C@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 18 Nov 2017 11:48:09 +0100
+Subject: [Buildroot] [git commit] netcat-openbsd: bump to 1.178-3
+Message-ID: <20171201205331.C70C97FBCD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=787a31fed42f98a8e2e6a0bd2079376c861436f2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+commit: https://git.buildroot.net/buildroot/commit/?id=4f50d30a944b1e39c7f3983fcebbd9e7ae8e587f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Now that they are in their own directory and no longer pollute the build
-dir, there is no point in removing them.
-
-Furthermore, a follow-up patch will require that those files survive
-when more than one filesystem image is generated.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Ga??l PORTAY <gael.portay@savoirfairelinux.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- fs/common.mk | 1 -
- 1 file changed, 1 deletion(-)
+ package/netcat-openbsd/netcat-openbsd.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/fs/common.mk b/fs/common.mk
-index 7bbc143..c17c458 100644
---- a/fs/common.mk
-+++ b/fs/common.mk
-@@ -103,7 +103,6 @@ endif
- 	rm -f $$(TARGET_DIR_WARNING_FILE)
- 	PATH=$$(BR_PATH) $$(HOST_DIR)/bin/fakeroot -- $$(FAKEROOT_SCRIPT)
- 	$$(INSTALL) -m 0644 support/misc/target-dir-warning.txt $$(TARGET_DIR_WARNING_FILE)
--	- at rm -f $$(FAKEROOT_SCRIPT) $$(FULL_DEVICE_TABLE)
- ifneq ($$(ROOTFS_$(2)_COMPRESS_CMD),)
- 	PATH=$$(BR_PATH) $$(ROOTFS_$(2)_COMPRESS_CMD) $$@ > $$@$$(ROOTFS_$(2)_COMPRESS_EXT)
- endif
+diff --git a/package/netcat-openbsd/netcat-openbsd.mk b/package/netcat-openbsd/netcat-openbsd.mk
+index e1a6fee..a758714 100644
+--- a/package/netcat-openbsd/netcat-openbsd.mk
++++ b/package/netcat-openbsd/netcat-openbsd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-NETCAT_OPENBSD_VERSION = debian/1.105-7
++NETCAT_OPENBSD_VERSION = debian/1.178-3
+ NETCAT_OPENBSD_SITE = git://anonscm.debian.org/collab-maint/netcat-openbsd
+ NETCAT_OPENBSD_LICENSE = BSD-3-Clause
+ NETCAT_OPENBSD_LICENSE_FILES = debian/copyright
