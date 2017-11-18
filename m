@@ -1,28 +1,22 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 18 Nov 2017 21:03:19 +0100
-Subject: [Buildroot] [PATCH] board: bananapi-m1: Fix to use dtb instead
- of dts
-In-Reply-To: <1511029600-22795-1-git-send-email-jagan@amarulasolutions.com>
- (Jagan Teki's message of "Sat, 18 Nov 2017 19:26:40 +0100")
-References: <1511029600-22795-1-git-send-email-jagan@amarulasolutions.com>
-Message-ID: <87k1ynwe0o.fsf@dell.be.48ers.dk>
+From: Ran Shalit <ranshalit@gmail.com>
+Date: Sat, 18 Nov 2017 22:13:32 +0200
+Subject: [Buildroot] Deploy NFS rootfs
+Message-ID: <CAJ2oMhKdX3x4ujPknQ+wDnvj__pQGoYJOLA=fJNEfh6Vd-=zyw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Jagan" == Jagan Teki <jagannadh.teki@gmail.com> writes:
+Hello,
 
- > boot.cmd using dts file instead of dtb which was
- > added in below commit, so fix the same.
+How should we deploy nfs filsystem.
+I understand it should not be from /output/target, because of the
+THIS_IS_NOT_YOUR_ROOT_FILESYSTEM warning.
+But How should it be done ?
 
- > "board: Add Bananapi M1 support"
- > (sha1: 5f50fb8d1df51b622537da015f8c3b7b6dcbbc35)
+Do I need to generate tar from /output/target with different
+ownership/privilege ?
 
- > Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+Regards,
+Ran
