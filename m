@@ -1,34 +1,68 @@
-From: =?UTF-8?q?Ga=C3=ABl=20PORTAY?= <gael.portay@savoirfairelinux.com>
-Date: Sat, 18 Nov 2017 20:54:58 -0500
-Subject: [Buildroot] [PATCH] netcat-openbsd: add source and license hashes
-Message-ID: <20171119015458.6725-1-gael.portay@savoirfairelinux.com>
+From: Ran Shalit <ranshalit@gmail.com>
+Date: Sun, 19 Nov 2017 08:22:12 +0200
+Subject: [Buildroot] Deploy NFS rootfs
+In-Reply-To: <20171118220259.35d05c0d@gmx.net>
+References: <CAJ2oMhKdX3x4ujPknQ+wDnvj__pQGoYJOLA=fJNEfh6Vd-=zyw@mail.gmail.com>
+ <20171118220259.35d05c0d@gmx.net>
+Message-ID: <CAJ2oMhK=OG5HXyRKcWyCXp-gje_sxoq0Pg+F+8+PkMcXJjg9DQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
----
-Hi,
+Hi Peter,
 
-Hashes have been locally computed.
+Thank you for the information.
+I also interested to know if the files inside tar are with different
+ownership/privilege.
+It is said that we can't run directly from target folder becauae of this.
+From that I assume that files in tar must have different owners/privilege.
+Is that correct?
 
-Regards,
-Gael
+Thanks
+Ran
 
- package/netcat-openbsd/netcat-openbsd.hash | 3 +++
- 1 file changed, 3 insertions(+)
- create mode 100644 package/netcat-openbsd/netcat-openbsd.hash
-
-diff --git a/package/netcat-openbsd/netcat-openbsd.hash b/package/netcat-openbsd/netcat-openbsd.hash
-new file mode 100644
-index 0000000000..58f229517e
---- /dev/null
-+++ b/package/netcat-openbsd/netcat-openbsd.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated from download
-+sha256 f587c02139aedb0bae12fdaef94f8c00649a0b4d603b5a22612e42cb317ba7cf netcat-openbsd-debian_1.178-3.tar.gz
-+sha256 e2e86d58c38f044a49f51e45515747585db58a2305419c73323eaad88fcaef5c debian/copyright
--- 
-2.15.0
+?????? 18 ???? 2017 23:24, "Peter Seiderer" <ps.report@gmx.net> ???:
+>
+> Hello Ran,
+>
+> On Sat, 18 Nov 2017 22:13:32 +0200, Ran Shalit <ranshalit@gmail.com>
+wrote:
+>
+> > Hello,
+> >
+> > How should we deploy nfs filsystem.
+> > I understand it should not be from /output/target, because of the
+> > THIS_IS_NOT_YOUR_ROOT_FILESYSTEM warning.
+> > But How should it be done ?
+> >
+> > Do I need to generate tar from /output/target with different
+> > ownership/privilege ?
+>
+> No need to do it by hand, take a look at 'make menuconfig':
+>   Filesystem images ---> tar the root filesystem
+> or add 'BR2_TARGET_ROOTFS_TAR=y' to your .config file and
+> after the next 'make' your will find the result as
+>   images/rootfs.tar
+>
+> The documentation is missing the enabling option information ;-)
+>
+> Regards,
+> Peter
+>
+> >
+> > Regards,
+> > Ran
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20171119/582b9700/attachment.html>
