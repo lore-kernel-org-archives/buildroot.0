@@ -1,31 +1,51 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 19 Nov 2017 15:01:37 +0000
-Subject: [Buildroot] [Bug 10506] Changed kernel image type (e.g. zImage to
- uImage) does not build on next "make"
-In-Reply-To: <bug-10506-163@https.bugs.busybox.net/>
-References: <bug-10506-163@https.bugs.busybox.net/>
-Message-ID: <bug-10506-163-7eAA7NnNyI@https.bugs.busybox.net/>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 19 Nov 2017 17:58:23 +0100
+Subject: [Buildroot] [PATCH 1/1] webp: add an option to enable webpmux
+Message-ID: <20171119165823.20182-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=10506
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/webp/Config.in | 7 +++++++
+ package/webp/webp.mk   | 6 ++++++
+ 2 files changed, 13 insertions(+)
 
-Arnout Vandecappelle <arnout@mind.be> changed:
-
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|---                         |WONTFIX
-
---- Comment #1 from Arnout Vandecappelle <arnout@mind.be> ---
-Buildroot doesn't automatically rebuild when you change the configuration.
-Ideally you should indeed to a clean rebuild (i.e. 'make clean; make').
-Sometimes you may get away with a shortcut. In this specific case, 'make
-linux-rebuild' will do the job.
-
+diff --git a/package/webp/Config.in b/package/webp/Config.in
+index 646eb9ef5..e8263a95f 100644
+--- a/package/webp/Config.in
++++ b/package/webp/Config.in
+@@ -15,4 +15,11 @@ config BR2_PACKAGE_WEBP_DEMUX
+ 	  of an extended format WebP file, which can have features
+ 	  like color profile, metadata and animation.
+ 
++config BR2_PACKAGE_WEBP_MUX
++	bool "webpmux"
++	help
++	  Mux is a part of WebPMux for creation and manipulation
++	  of an extended format WebP file, which can have features
++	  like color profile, metadata and animation.
++
+ endif
+diff --git a/package/webp/webp.mk b/package/webp/webp.mk
+index 7cf3df23c..8e6572dbe 100644
+--- a/package/webp/webp.mk
++++ b/package/webp/webp.mk
+@@ -23,6 +23,12 @@ else
+ WEBP_CONF_OPTS += --disable-libwebpdemux
+ endif
+ 
++ifeq ($(BR2_PACKAGE_WEBP_MUX),y)
++WEBP_CONF_OPTS += --enable-libwebpmux
++else
++WEBP_CONF_OPTS += --disable-libwebpmux
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBPNG),y)
+ WEBP_DEPENDENCIES += libpng
+ WEBP_CONF_ENV += ac_cv_path_LIBPNG_CONFIG=$(STAGING_DIR)/usr/bin/libpng-config
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.14.1
