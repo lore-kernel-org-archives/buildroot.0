@@ -1,49 +1,55 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 20 Nov 2017 08:47:57 +0100
-Subject: [Buildroot] [PATCH 1/1] freerdp: fix wayland client dependency
- chain failure
-In-Reply-To: <20171119214852.27459-1-Adamduskett@outlook.com>
-References: <20171119214852.27459-1-Adamduskett@outlook.com>
-Message-ID: <20171120084757.04cf0411@windsurf>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon, 20 Nov 2017 10:06:56 +0200
+Subject: [Buildroot] [PATCH] kvm-unit-tests: Bump version
+In-Reply-To: <20171120054840.22149-1-cyrilbur@gmail.com>
+References: <20171120054840.22149-1-cyrilbur@gmail.com>
+Message-ID: <20171120080656.fjizps3wus3hcodj@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Cyril,
 
-+Yann in Cc.
-
-On Sun, 19 Nov 2017 16:48:52 -0500, Adam Duskett wrote:
-> If the wayland client is selected, freerdp depends on libxkbcommon without
-> depending on it in the mk file.
+On Mon, Nov 20, 2017 at 04:48:40PM +1100, Cyril Bur wrote:
+> Since binutils commit 1a9ccd70f9a7 ("Fix the linker so that it will not
+> silently generate ELF binaries with invalid program headers. Fix readelf
+> to report such invalid binaries.") the behaviour has changed and
+> binutils tries to create a program header segment for which there is no
+> space. Thanks to Nicholas Piggin and his patch to Linux:
+> https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git/commit/?h=next&id=ff45000fcb56b5b0f
+> 
+> Cedric fixed this in kvm-unit-tests commit 95062c20790d ("powerpc: add
+> -n to LDFLAGS") so bump to that version.
 > 
 > Fixes:
-> http://autobuild.buildroot.net/results/dc3/dc3e11f7076a8355f3d2f9cb49c6325dcf7084bd
-> Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
+> http://autobuild.buildroot.net/results/80825b492abf61313637b109d6a0944b38d5f739
+> Signed-off-by: Cyril Bur <cyrilbur@gmail.com>
 > ---
->  package/freerdp/freerdp.mk | 4 ++++
->  1 file changed, 4 insertions(+)
+>  package/kvm-unit-tests/kvm-unit-tests.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
-> index 69a89a190c..29c35164c3 100644
-> --- a/package/freerdp/freerdp.mk
-> +++ b/package/freerdp/freerdp.mk
-> @@ -207,6 +207,10 @@ else
->  FREERDP_CONF_OPTS += -DWITH_WAYLAND=OFF
->  endif
+> diff --git a/package/kvm-unit-tests/kvm-unit-tests.mk b/package/kvm-unit-tests/kvm-unit-tests.mk
+> index 0ddb017802..767e855d26 100644
+> --- a/package/kvm-unit-tests/kvm-unit-tests.mk
+> +++ b/package/kvm-unit-tests/kvm-unit-tests.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
 >  
-> +ifeq ($(BR2_PACKAGE_FREERDP_CLIENT_WL),y)
-> +FREERDP_DEPENDENCIES += libxkbcommon
-> +endif
+> -KVM_UNIT_TESTS_VERSION = 5731572b2ac23eb410732110b93425b5bb7f27dd
+> +KVM_UNIT_TESTS_VERSION = 95062c20790d82713bfa7475b61a4adef3f3645a
+>  KVM_UNIT_TESTS_SITE = $(BR2_KERNEL_MIRROR)/scm/virt/kvm/kvm-unit-tests.git
+>  KVM_UNIT_TESTS_SITE_METHOD = git
+>  KVM_UNIT_TESTS_LICENSE = LGPLv2
 
-https://git.buildroot.org/buildroot/commit/?id=c2824fba2f2f4df6c1e0273fa546a203d1e6d5ac
-already makes libxkbcommon a dependency of freerdp when wayland is
-enabled. Isn't this sufficient ?
+This context line is not in current master branch. Please rebase on current 
+master.
 
-Thomas
+baruch
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
