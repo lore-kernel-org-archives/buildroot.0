@@ -1,96 +1,130 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Mon, 20 Nov 2017 13:09:00 -0500
-Subject: [Buildroot] [NEXT v3 3/8] libpjsip: enable ffmpeg support
+Date: Mon, 20 Nov 2017 13:09:02 -0500
+Subject: [Buildroot] [NEXT v3 5/8] libpjsip: add dependency-less codecs
 In-Reply-To: <20171120180905.5903-1-aduskett@gmail.com>
 References: <20171120180905.5903-1-aduskett@gmail.com>
-Message-ID: <20171120180905.5903-3-aduskett@gmail.com>
+Message-ID: <20171120180905.5903-5-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
---enable-video has no effect at all on Linux (only on Android and Darwin).
---disable-video has the effect of disabling SDL, FFmpeg, v4l2, openh264, and
-libyuv. Since all of these are enabled/disabled explicitly already, there is no
-need to specify --disable-video. To do so correctly is non-trivial when we want
-to support e.g. FFmpeg OR v4l2.
+libpjsip has several codecs, all of which can be disabled or enabled
+individually. A few reasons for adding each codec as an individual choice
+are:
+
+1) Many products might not want some of the more obscure codecs such as
+   ILBC or L16.
+
+2) libpjsip has functions that will enumerate all the codecs that were built.
+   If all the codecs where built, this would require a developer to have to
+   parse out the codecs they don't want.
+
+As such, turn libpjsip into a menuconfig and add each supported codec as an
+individual choice.
+
+Start with the codecs that are built into libpjsip and have no external
+dependencies.  These codecs are:
+- G.711
+- G.722
+- G.722.1
+- iLBC
+- L16
 
 Signed-off-by: Adam Duskett <aduskett@gmail.com>
 ---
 Changes v1 -> v2:
-  - Remove the option to enable or disable FFmpeg support in favor of
-    just depending on FFmpeg if it's selected by the user.
-  - Add explination as to why with-ffmpeg is being passed to libpjsip (Arnout)
-  
-Changes v2 -> v3:
-  - Re-add the option to enable or disable support
-  - Add a better commit message (Arnout)
-  - Add a more thorough comment in the make file explaining why passing
-    --enable-ffmpeg actually disables it. (Arnout)
-  - Remove the =$(STAGING_DIR)/usr from --with-ffmpeg (Arnout)
+  - Combine all dependency-less codecs into a single patch.
+  - Add a more-detailed commit message explaining the reasoning for
+    enabling each codec as a individual option. (Arnout)
 
- package/libpjsip/Config.in   |  9 +++++++++
- package/libpjsip/libpjsip.mk | 14 +++++++++++---
- 2 files changed, 20 insertions(+), 3 deletions(-)
+Changes v2 -> v3:
+  - None
+
+ package/libpjsip/Config.in   | 17 +++++++++++++++++
+ package/libpjsip/libpjsip.mk | 32 +++++++++++++++++++++++++++-----
+ 2 files changed, 44 insertions(+), 5 deletions(-)
 
 diff --git a/package/libpjsip/Config.in b/package/libpjsip/Config.in
-index 4d4777a..a1676aa 100644
+index 80b94e4..7fb5a87 100644
 --- a/package/libpjsip/Config.in
 +++ b/package/libpjsip/Config.in
-@@ -25,6 +25,15 @@ config BR2_PACKAGE_LIBPJSIP_PORTAUDIO
- 	# disable sound, which would be useless.
- 	select BR2_PACKAGE_LIBPJSIP_ALSA
+@@ -44,6 +44,23 @@ config BR2_PACKAGE_LIBPJSIP_V4L2
+ comment "v4l2 support needs headers >= 3.0"
+ 	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
  
-+comment "video"
++comment "dependency-less codecs"
 +
-+config BR2_PACKAGE_LIBPJSIP_FFMPEG
-+	bool "ffmpeg support"
-+	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
-+	select BR2_PACKAGE_FFMPEG
-+	help
-+	  Enable ffmpeg support
++config BR2_PACKAGE_LIBPJSIP_CODEC_G711
++	bool "G.711"
++
++config BR2_PACKAGE_LIBPJSIP_CODEC_G722
++	bool "G.722"
++
++config BR2_PACKAGE_LIBPJSIP_CODEC_G7221
++	bool "G.722.1"
++
++config BR2_PACKAGE_LIBPJSIP_CODEC_ILBC
++	bool "iLBC"
++
++config BR2_PACKAGE_LIBPJSIP_CODEC_L16
++	bool "L16"
 +
  endif #BR2_PACKAGE_LIBPJSIP
  
  comment "libpjsip needs a toolchain w/ C++, threads"
 diff --git a/package/libpjsip/libpjsip.mk b/package/libpjsip/libpjsip.mk
-index 850b3c0..d3d00f1 100644
+index 6de12e3..48edf62 100644
 --- a/package/libpjsip/libpjsip.mk
 +++ b/package/libpjsip/libpjsip.mk
-@@ -29,7 +29,6 @@ LIBPJSIP_CONF_OPTS = \
- 	--disable-speex-codec \
+@@ -30,15 +30,10 @@ LIBPJSIP_CONF_OPTS = \
  	--disable-speex-aec \
  	--disable-resample \
--	--disable-video \
  	--disable-opencore-amr \
- 	--disable-g7221-codec \
- 	--disable-ilbc-codec \
-@@ -42,7 +41,6 @@ LIBPJSIP_CONF_OPTS = \
- 	--disable-g722-codec \
+-	--disable-g7221-codec \
+-	--disable-ilbc-codec \
+ 	--disable-libwebrtc \
+ 	--disable-opus \
+ 	--disable-oss \
+ 	--disable-ext-sound \
+-	--disable-g711-codec \
+-	--disable-l16-codec \
+-	--disable-g722-codec \
  	--disable-libsamplerate \
  	--disable-sdl \
--	--disable-ffmpeg \
- 	--disable-v4l2 \
  	--disable-openh264 \
- 	--disable-libyuv \
-@@ -81,6 +79,16 @@ else
- LIBPJSIP_CONF_OPTS += --without-external-pa
+@@ -96,4 +91,31 @@ else
+ LIBPJSIP_CONF_OPTS += --disable-v4l2
  endif
  
--
-+# When --enable-ffmpeg is given, the code to enable FFmpeg is not executed.
-+# Also, when cross-compiling and no --with-ffmpeg option is given, FFmpeg is
-+# disabled. Therefore, a --with-ffmpeg option needs to be given. Normally it
-+# is used to pass the path to the directory where FFmpeg is installed, but
-+# since we install it directly under sysroot we can pass it empty.
-+ifeq ($(BR2_PACKAGE_LIBPJSIP_FFMPEG),y)
-+LIBPJSIP_DEPENDENCIES += ffmpeg
-+LIBPJSIP_CONF_OPTS += --with-ffmpeg
-+else
-+LIBPJSIP_CONF_OPTS += --disable-ffmpeg
++# Codecs can only be disabled. If explicitly enabled, the check is
++# omitted (but successful), and there is no configure trace "Checking
++# if [codec] codec is disabled...no". So we only explicitly disable it
++# and we do not explicitly enable it, so we get the configure log in
++# both cases.
++ifneq ($(BR2_PACKAGE_LIBPJSIP_CODEC_G711),y)
++LIBPJSIP_CONF_OPTS += --disable-g711-codec
 +endif
- 
++
++ifneq ($(BR2_PACKAGE_LIBPJSIP_CODEC_G722),y)
++LIBPJSIP_CONF_OPTS += --disable-g722-codec
++endif
++
++# libpjsip can only use a bundled version of libg7221
++ifneq ($(BR2_PACKAGE_LIBPJSIP_CODEC_G7221),y)
++LIBPJSIP_CONF_OPTS += --disable-g7221-codec
++endif
++
++# libpjsip can only use a bundled version of libilbc
++ifneq ($(BR2_PACKAGE_LIBPJSIP_CODEC_ILBC),y)
++LIBPJSIP_CONF_OPTS += --disable-ilbc-codec
++endif
++
++ifneq ($(BR2_PACKAGE_LIBPJSIP_CODEC_L16),y)
++LIBPJSIP_CONF_OPTS += --disable-l16-codec
++endif
++
  $(eval $(autotools-package))
 -- 
 2.13.6
