@@ -1,289 +1,120 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 20 Nov 2017 23:23:31 +0100
-Subject: [Buildroot] [PATCH] jose: fix build with old compilers
-Message-ID: <20171120222331.13672-1-thomas.petazzoni@free-electrons.com>
+Date: Mon, 20 Nov 2017 23:32:53 +0100
+Subject: [Buildroot] Analysis of build results for 2017-11-19
+In-Reply-To: <20171120070004.B482020743@mail.free-electrons.com>
+References: <20171120070004.B482020743@mail.free-electrons.com>
+Message-ID: <20171120233253.541c48ad@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit adds two patches to the jose package that fix the build
-with old compilers such as gcc 4.7.
+Hello,
 
-Fixes:
+Let's look at the results for the master branch. If you're in To:,
+there are some questions/topics for you below! :-)
 
-  http://autobuild.buildroot.net/results/00d5a4b809922f8fa42c0de9d461c9754d2f8098
+On Mon, 20 Nov 2017 08:00:04 +0100 (CET), Thomas Petazzoni wrote:
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- .../0001-lib-hsh.c-rename-hsh-local-variable.patch |  71 +++++++++
- ...02-configure-fix-build-with-old-compilers.patch | 165 +++++++++++++++++++++
- package/jose/jose.mk                               |   2 +
- 3 files changed, 238 insertions(+)
- create mode 100644 package/jose/0001-lib-hsh.c-rename-hsh-local-variable.patch
- create mode 100644 package/jose/0002-configure-fix-build-with-old-compilers.patch
+>       mipsel |                   boost-1.65.1 | NOK | http://autobuild.buildroot.net/results/bf800f2de69cedced594d60b4012a45c27e49698 |     
+>       mipsel |                   boost-1.65.1 | NOK | http://autobuild.buildroot.net/results/0439790b6f472e3d4b2d5431a05aa5b408f62e56 |
 
-diff --git a/package/jose/0001-lib-hsh.c-rename-hsh-local-variable.patch b/package/jose/0001-lib-hsh.c-rename-hsh-local-variable.patch
-new file mode 100644
-index 0000000000..0bd259ad8b
---- /dev/null
-+++ b/package/jose/0001-lib-hsh.c-rename-hsh-local-variable.patch
-@@ -0,0 +1,71 @@
-+From 591fc6da944ffc29936e0019b2bc225ddc81dbba Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Date: Mon, 20 Nov 2017 22:48:33 +0100
-+Subject: [PATCH] lib/hsh.c: rename hsh local variable
-+
-+The hsh local variable name conflicts with the function prototype of
-+hsh() in hsh.h, causing the following build issues with old compilers
-+(gcc 4.7):
-+
-+hsh.c: In function 'hsh':
-+hsh.c:28:21: error: declaration of 'hsh' shadows a global declaration [-Werror=shadow]
-+hsh.c:26:1: error: shadowed declaration is here [-Werror=shadow]
-+hsh.c: In function 'hsh_buf':
-+hsh.c:60:21: error: declaration of 'hsh' shadows a global declaration [-Werror=shadow]
-+hsh.c:26:1: error: shadowed declaration is here [-Werror=shadow]
-+
-+Therefore, we rename this local variable to _hsh.
-+
-+Submitted-upstream: https://github.com/latchset/jose/pull/51
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+---
-+ lib/hsh.c | 12 ++++++------
-+ 1 file changed, 6 insertions(+), 6 deletions(-)
-+
-+diff --git a/lib/hsh.c b/lib/hsh.c
-+index c59a95f..a2a891b 100644
-+--- a/lib/hsh.c
-++++ b/lib/hsh.c
-+@@ -25,7 +25,7 @@
-+ json_t *
-+ hsh(jose_cfg_t *cfg, const char *alg, const void *data, size_t dlen)
-+ {
-+-    jose_io_auto_t *hsh = NULL;
-++    jose_io_auto_t *_hsh = NULL;
-+     jose_io_auto_t *enc = NULL;
-+     jose_io_auto_t *buf = NULL;
-+     char b[1024] = {};
-+@@ -33,8 +33,8 @@ hsh(jose_cfg_t *cfg, const char *alg, const void *data, size_t dlen)
-+ 
-+     buf = jose_io_buffer(cfg, b, &l);
-+     enc = jose_b64_enc_io(buf);
-+-    hsh = hsh_io(cfg, alg, enc);
-+-    if (!buf || !enc || !hsh || !hsh->feed(hsh, data, dlen) || !hsh->done(hsh))
-++    _hsh = hsh_io(cfg, alg, enc);
-++    if (!buf || !enc || !_hsh || !_hsh->feed(_hsh, data, dlen) || !_hsh->done(_hsh))
-+         return NULL;
-+ 
-+     return json_stringn(b, l);
-+@@ -57,7 +57,7 @@ hsh_buf(jose_cfg_t *cfg, const char *alg,
-+         const void *data, size_t dlen, void *hash, size_t hlen)
-+ {
-+     const jose_hook_alg_t *a = NULL;
-+-    jose_io_auto_t *hsh = NULL;
-++    jose_io_auto_t *_hsh = NULL;
-+     jose_io_auto_t *buf = NULL;
-+ 
-+     a = jose_hook_alg_find(JOSE_HOOK_ALG_KIND_HASH, alg);
-+@@ -71,8 +71,8 @@ hsh_buf(jose_cfg_t *cfg, const char *alg,
-+         return SIZE_MAX;
-+ 
-+     buf = jose_io_buffer(cfg, hash, &hlen);
-+-    hsh = a->hash.hsh(a, cfg, buf);
-+-    if (!buf || !hsh || !hsh->feed(hsh, data, dlen) || !hsh->done(hsh))
-++    _hsh = a->hash.hsh(a, cfg, buf);
-++    if (!buf || !_hsh || !_hsh->feed(_hsh, data, dlen) || !_hsh->done(_hsh))
-+         return SIZE_MAX;
-+ 
-+     return hlen;
-+-- 
-+2.13.6
-+
-diff --git a/package/jose/0002-configure-fix-build-with-old-compilers.patch b/package/jose/0002-configure-fix-build-with-old-compilers.patch
-new file mode 100644
-index 0000000000..0484f38f0d
---- /dev/null
-+++ b/package/jose/0002-configure-fix-build-with-old-compilers.patch
-@@ -0,0 +1,165 @@
-+From 98e9faa4d39cd5b6aaab882877e19ae394ba3810 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Date: Mon, 20 Nov 2017 23:10:38 +0100
-+Subject: [PATCH] configure: fix build with old compilers
-+
-+Old gcc versions (gcc 4.7) do not support all warnings flags currently
-+hard-coded by configure.ac. In order to fix this, we import the
-+AX_CHECK_COMPILE_FLAG() macro from the autoconf-archive, and use it in
-+the configure.ac to only use warning flags when the compiler supports
-+them.
-+
-+Submitted-upstream: https://github.com/latchset/jose/pull/51
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+---
-+ configure.ac                | 46 +++++++++++++++-------------
-+ m4/ax_check_compile_flag.m4 | 74 +++++++++++++++++++++++++++++++++++++++++++++
-+ 3 files changed, 105 insertions(+), 22 deletions(-)
-+ create mode 100644 m4/ax_check_compile_flag.m4
-+
-+diff --git a/configure.ac b/configure.ac
-+index cf8c9a6..6fe4ded 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -1,5 +1,6 @@
-+ AC_PREREQ(2.62)
-+ AC_INIT(jose, 10)
-++AC_CONFIG_MACRO_DIRS([m4])
-+ AC_CANONICAL_SYSTEM
-+ AC_PROG_CC_C99
-+ 
-+@@ -18,27 +19,30 @@ PKG_CHECK_MODULES([libcrypto], [libcrypto >= 1.0.2])
-+ AC_OPENMP
-+ AC_SUBST([OPENMP_CFLAGS])
-+ 
-+-JOSE_CFLAGS="\
-+--Wall \
-+--Wextra \
-+--Werror \
-+--Wstrict-aliasing \
-+--Wchar-subscripts \
-+--Wformat-security \
-+--Wmissing-declarations \
-+--Wmissing-prototypes \
-+--Wnested-externs \
-+--Wpointer-arith \
-+--Wshadow \
-+--Wsign-compare \
-+--Wstrict-prototypes \
-+--Wtype-limits \
-+--Wunused-function \
-+--Wno-missing-field-initializers \
-+--Wno-unused-command-line-argument \
-+--Wno-unused-parameter \
-+--Wno-unknown-pragmas \
-+-"
-++for flag in \
-++    -Wall \
-++    -Wextra \
-++    -Werror \
-++    -Wstrict-aliasing \
-++    -Wchar-subscripts \
-++    -Wformat-security \
-++    -Wmissing-declarations \
-++    -Wmissing-prototypes \
-++    -Wnested-externs \
-++    -Wpointer-arith \
-++    -Wshadow \
-++    -Wsign-compare \
-++    -Wstrict-prototypes \
-++    -Wtype-limits \
-++    -Wunused-function \
-++    -Wno-missing-field-initializers \
-++    -Wno-unused-command-line-argument \
-++    -Wno-unused-parameter \
-++    -Wno-unknown-pragmas ; do
-++    AX_CHECK_COMPILE_FLAG([${flag}],
-++		[JOSE_CFLAGS="${JOSE_CFLAGS} ${flag}"])
-++done
-++
-+ AC_SUBST([JOSE_CFLAGS])
-+ 
-+ AC_MSG_CHECKING([for linker script support])
-+diff --git a/m4/ax_check_compile_flag.m4 b/m4/ax_check_compile_flag.m4
-+new file mode 100644
-+index 0000000..dcabb92
-+--- /dev/null
-++++ b/m4/ax_check_compile_flag.m4
-+@@ -0,0 +1,74 @@
-++# ===========================================================================
-++#  https://www.gnu.org/software/autoconf-archive/ax_check_compile_flag.html
-++# ===========================================================================
-++#
-++# SYNOPSIS
-++#
-++#   AX_CHECK_COMPILE_FLAG(FLAG, [ACTION-SUCCESS], [ACTION-FAILURE], [EXTRA-FLAGS], [INPUT])
-++#
-++# DESCRIPTION
-++#
-++#   Check whether the given FLAG works with the current language's compiler
-++#   or gives an error.  (Warnings, however, are ignored)
-++#
-++#   ACTION-SUCCESS/ACTION-FAILURE are shell commands to execute on
-++#   success/failure.
-++#
-++#   If EXTRA-FLAGS is defined, it is added to the current language's default
-++#   flags (e.g. CFLAGS) when the check is done.  The check is thus made with
-++#   the flags: "CFLAGS EXTRA-FLAGS FLAG".  This can for example be used to
-++#   force the compiler to issue an error when a bad flag is given.
-++#
-++#   INPUT gives an alternative input source to AC_COMPILE_IFELSE.
-++#
-++#   NOTE: Implementation based on AX_CFLAGS_GCC_OPTION. Please keep this
-++#   macro in sync with AX_CHECK_{PREPROC,LINK}_FLAG.
-++#
-++# LICENSE
-++#
-++#   Copyright (c) 2008 Guido U. Draheim <guidod@gmx.de>
-++#   Copyright (c) 2011 Maarten Bosmans <mkbosmans@gmail.com>
-++#
-++#   This program is free software: you can redistribute it and/or modify it
-++#   under the terms of the GNU General Public License as published by the
-++#   Free Software Foundation, either version 3 of the License, or (at your
-++#   option) any later version.
-++#
-++#   This program is distributed in the hope that it will be useful, but
-++#   WITHOUT ANY WARRANTY; without even the implied warranty of
-++#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
-++#   Public License for more details.
-++#
-++#   You should have received a copy of the GNU General Public License along
-++#   with this program. If not, see <https://www.gnu.org/licenses/>.
-++#
-++#   As a special exception, the respective Autoconf Macro's copyright owner
-++#   gives unlimited permission to copy, distribute and modify the configure
-++#   scripts that are the output of Autoconf when processing the Macro. You
-++#   need not follow the terms of the GNU General Public License when using
-++#   or distributing such scripts, even though portions of the text of the
-++#   Macro appear in them. The GNU General Public License (GPL) does govern
-++#   all other use of the material that constitutes the Autoconf Macro.
-++#
-++#   This special exception to the GPL applies to versions of the Autoconf
-++#   Macro released by the Autoconf Archive. When you make and distribute a
-++#   modified version of the Autoconf Macro, you may extend this special
-++#   exception to the GPL to apply to your modified version as well.
-++
-++#serial 5
-++
-++AC_DEFUN([AX_CHECK_COMPILE_FLAG],
-++[AC_PREREQ(2.64)dnl for _AC_LANG_PREFIX and AS_VAR_IF
-++AS_VAR_PUSHDEF([CACHEVAR],[ax_cv_check_[]_AC_LANG_ABBREV[]flags_$4_$1])dnl
-++AC_CACHE_CHECK([whether _AC_LANG compiler accepts $1], CACHEVAR, [
-++  ax_check_save_flags=$[]_AC_LANG_PREFIX[]FLAGS
-++  _AC_LANG_PREFIX[]FLAGS="$[]_AC_LANG_PREFIX[]FLAGS $4 $1"
-++  AC_COMPILE_IFELSE([m4_default([$5],[AC_LANG_PROGRAM()])],
-++    [AS_VAR_SET(CACHEVAR,[yes])],
-++    [AS_VAR_SET(CACHEVAR,[no])])
-++  _AC_LANG_PREFIX[]FLAGS=$ax_check_save_flags])
-++AS_VAR_IF(CACHEVAR,yes,
-++  [m4_default([$2], :)],
-++  [m4_default([$3], :)])
-++AS_VAR_POPDEF([CACHEVAR])dnl
-++])dnl AX_CHECK_COMPILE_FLAGS
-+-- 
-+2.13.6
-+
-diff --git a/package/jose/jose.mk b/package/jose/jose.mk
-index 1f5e3e4ded..2758d408da 100644
---- a/package/jose/jose.mk
-+++ b/package/jose/jose.mk
-@@ -9,6 +9,8 @@ JOSE_SOURCE = jose-$(JOSE_VERSION).tar.bz2
- JOSE_SITE = https://github.com/latchset/jose/releases/download/v$(JOSE_VERSION)
- JOSE_LICENSE = Apache-2.0
- JOSE_LICENSE_FILES = COPYING
-+# 0002-configure-fix-build-with-old-compilers.patch
-+JOSE_AUTORECONF = YES
- JOSE_INSTALL_STAGING = YES
- JOSE_DEPENDENCIES = host-pkgconf zlib jansson openssl
- 
+/tmp/ccfDMgDL.s:1480: Error: opcode not supported on this processor: mips32 (mips32) `pause'
+
+Not sure what's going on here. Was this happening before? Any idea?
+     
+>          sh4 |                   cppcms-1.0.5 | NOK | http://autobuild.buildroot.net/results/7d2cd95bc75250b47f5c9947cd996852925f6e0b | ORPH
+
+/tmp/ccFVFYgX.s: Assembler messages:
+/tmp/ccFVFYgX.s:34102: Error: pcrel too far
+
+Toolchain issue that nobody is ever going to fix I guess.
+
+This issue was reported a long time ago on binutils (for SuperH), and
+was apparently fixed. But now it appears again.
+
+What should we do?
+
+>     mips64el |                       feh-2.21 | NOK | http://autobuild.buildroot.net/results/f6260a8d53ccffc1e51326bb5e3c375aeacacd12 |     
+
+Fixed by https://git.buildroot.org/buildroot/commit/?id=17299cd0182df1b4202429a9c567765b3d2510bc.
+
+>          arm | google-breakpad-7515ab13768... | NOK | http://autobuild.buildroot.net/results/6380341dbb6c114e4452c5cda37da6b44b80d178 |     
+>      aarch64 | google-breakpad-7515ab13768... | NOK | http://autobuild.buildroot.net/results/4ecf770df7c984a62082d59f8fab632d3efbe06b |     
+>       mipsel | google-breakpad-7515ab13768... | NOK | http://autobuild.buildroot.net/results/e1473a12cf38ccf4dd3ed0f26a8ff9e6b57f0810 |     
+
+This is a build issue caused by glibc 2.26. Pascal, since you added
+google-breakpad, could you have a look? Perhaps Romain Naour can help
+as well, since he bumped glibc to 2.26.
+
+>          arc |                       icu-59.1 | NOK | http://autobuild.buildroot.net/results/09b2f38adf0ed6b8c646125c75f8ab89f110adcb | ORPH
+
+/usr/bin/install -c -m 644 ./config/mh-linux /home/peko/autobuild/instance-0/output/host/arc-buildroot-linux-gnu/sysroot/usr/share/icu/59.1/config/mh-linux
+/usr/bin/install -c -m 644 ./config/mh-linux /home/peko/autobuild/instance-0/output/host/arc-buildroot-linux-gnu/sysroot/usr/share/icu/59.1/config/mh-linux
+/usr/bin/install: cannot create regular file '/home/peko/autobuild/instance-0/output/host/arc-buildroot-linux-gnu/sysroot/usr/share/icu/59.1/config/mh-linux': File exists
+make[3]: *** [install-icu] Error 1
+
+Trying to install two times the same file ? What's going on here ?
+
+>      powerpc |                        jose-10 | NOK | http://autobuild.buildroot.net/results/00d5a4b809922f8fa42c0de9d461c9754d2f8098 |     
+
+I've submitted a patch to fix this, waiting for review:
+
+  http://lists.busybox.net/pipermail/buildroot/2017-November/207427.html
+
+>          arm |        kompexsqlite-v1.10.12-1 | NOK | http://autobuild.buildroot.net/results/06beee7473d1730903b86e2f62498a56e5ea3f05 | ORPH
+
+Weird issue:
+
+src/KompexSQLiteBlob.cpp:108:1: fatal error: opening dependency file build/shared/KompexSQLiteBlob.o.d: No such file or directory
+
+Parallel build problem, perhaps?
+
+>    powerpc64 | kvm-unit-tests-5731572b2ac2... | NOK | http://autobuild.buildroot.net/results/5ddc852a238f39a1f9b1d43ec6e68662f6d957ab |     
+>  powerpc64le | kvm-unit-tests-5731572b2ac2... | NOK | http://autobuild.buildroot.net/results/1ecee82c8da51277272990d10c781dfe5a9bc5d1 |     
+>  powerpc64le | kvm-unit-tests-5731572b2ac2... | NOK | http://autobuild.buildroot.net/results/a7e3e6d39b5b1b2cbf8b9a578041127ab317cfbb |     
+>  powerpc64le | kvm-unit-tests-5731572b2ac2... | NOK | http://autobuild.buildroot.net/results/16024e16655a919599f096322a19c70b7fdbac26 |     
+
+Hopefully all fixed by https://git.buildroot.org/buildroot/commit/?id=041715cc5337bbd7311da4f5b0fd97da1b902a38
+
+>      powerpc |                  mesa3d-17.2.4 | NOK | http://autobuild.buildroot.net/results/a89d3249486f0cdd06c5e28f8492dad337937dcf |     
+
+/usr/lfs/v0/rc-buildroot-test/scripts/instance-0/output/host/opt/ext-toolchain/bin/../lib/gcc/powerpc-ctng_e500v2-linux-gnuspe/4.7.3/../../../../powerpc-ctng_e500v2-linux-gnuspe/bin/ld: cannot find -latomic
+
+Bernd, could you have a look at this one ?
+
+>          arc |            oracle-mysql-5.1.73 | NOK | http://autobuild.buildroot.net/results/9e3a0b5b8f2506fb2ce2fcc3d5d3a494a14439cb | ORPH
+>          arc |            oracle-mysql-5.1.73 | NOK | http://autobuild.buildroot.net/results/42e53c8451949d36540d60ca4b2a422ea878b6c5 | ORPH
+
+I fixed this in https://git.buildroot.org/buildroot/commit/?id=317b72f469867bd3e1765418e325515d6065d45f
+
+>      powerpc |                       qt-4.8.7 | NOK | http://autobuild.buildroot.net/results/84bf2eb1b7888040a866cbcda1cb03b8738bda0a | ORPH
+>      powerpc |                       qt-4.8.7 | NOK | http://autobuild.buildroot.net/results/23f5af34ad48fb4139a2b964baca752d1ab1732f | ORPH
+
+Compiler blows up:
+
+tools/qtextboundaryfinder.cpp:444:1: internal compiler error: in validate_condition_mode, at config/rs6000/rs6000.c:18074
+
+>          arc |                 supertux-0.5.1 | NOK | http://autobuild.buildroot.net/results/69032f10edcfd65fd81d62a6854a4c06fa204d76 |     
+
+/usr/lfs/v0/rc-buildroot-test/scripts/instance-0/output/build/supertux-0.5.1/external/squirrel/sq/sq.c:42: undefined reference to `__mcount'
+
+Alexey, is there something special about __mcount on ARC ?
+
+>        nios2 |                        unknown | NOK | http://autobuild.buildroot.net/results/db5d8c14705b6b05eb467c413195d4cc0c03b281 |     
+
+The freerdp/libxkbcommon issue that Yann/Adam are discussing.
+
+>         i686 |               wireshark-2.2.10 | NOK | http://autobuild.buildroot.net/results/14391727e980e69234f379174c80c267410b09f3 | ORPH
+
+/home/dawncrow/buildroot-test/scripts/instance-0/output/host/opt/ext-toolchain/i686-buildroot-linux-uclibc/include/c++/6.4.0/cstdlib:75:25: fatal error: stdlib.h: No such file or directory
+ #include_next <stdlib.h>
+
+Meh? What is this?
+
+Thomas
 -- 
-2.13.6
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
