@@ -1,40 +1,43 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 20 Nov 2017 16:54:19 +0200
-Subject: [Buildroot] [NEXT 1/1] bash: bump to 4.4.12
-In-Reply-To: <20171120140546.23268-1-aduskett@gmail.com>
-References: <20171120140546.23268-1-aduskett@gmail.com>
-Message-ID: <20171120145419.pxjyln3kj4idd6sg@sapphire.tkos.co.il>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Mon, 20 Nov 2017 09:57:58 -0500
+Subject: [Buildroot] [NEXT 1/1] pango: bump to 1.140.14
+Message-ID: <20171120145758.17150-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Adam,
+In addition, add a hash for the license file.
 
-On Mon, Nov 20, 2017 at 09:05:46AM -0500, Adam Duskett wrote:
-> In addition, remove upstreamed patches and add a hash for the license file.
-> 
-> Signed-off-by: Adam Duskett <aduskett@gmail.com>
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
+---
+ package/pango/pango.hash | 5 +++--
+ package/pango/pango.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-[...]
-
-> diff --git a/package/bash/bash.hash b/package/bash/bash.hash
-> index adbd608..3a0ed7e 100644
-> --- a/package/bash/bash.hash
-> +++ b/package/bash/bash.hash
-> @@ -1,2 +1,3 @@
->  # Locally calculated after checking pgp signature
-
-Having a link to the signature here would be nice.
-
-  http://ftp.gnu.org/gnu/bash/bash-4.4.12.tar.gz.sig
-
-> -sha256 d86b3392c1202e8ff5a423b302e6284db7f8f435ea9f39b5b1b20fd3ac36dfcb  bash-4.4.tar.gz
-> +sha256 57d8432be54541531a496fd4904fdc08c12542f43605a9202594fa5d5f9f2331	bash-4.4.12.tar.gz
-> +sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	COPYING
-
+diff --git a/package/pango/pango.hash b/package/pango/pango.hash
+index 1b6da7d..6df08e9 100644
+--- a/package/pango/pango.hash
++++ b/package/pango/pango.hash
+@@ -1,2 +1,3 @@
+-# From http://ftp.gnome.org/pub/GNOME/sources/pango/1.40/pango-1.40.12.sha256sum
+-sha256	75f1a9a8e4e2b28cbc078b50c1fa927ee4ded994d1ade97c5603e2d1f3161cfc	pango-1.40.12.tar.xz
++# From http://ftp.gnome.org/pub/GNOME/sources/pango/1.40/pango-1.40.14.sha256sum
++sha256	90af1beaa7bf9e4c52db29ec251ec4fd0a8f2cc185d521ad1f88d01b3a6a17e3	pango-1.40.14.tar.xz
++sha256	d245807f90032872d1438d741ed21e2490e1175dc8aa3afa5ddb6c8e529b58e5	COPYING
+diff --git a/package/pango/pango.mk b/package/pango/pango.mk
+index 79283e8..805d35e 100644
+--- a/package/pango/pango.mk
++++ b/package/pango/pango.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ PANGO_VERSION_MAJOR = 1.40
+-PANGO_VERSION = $(PANGO_VERSION_MAJOR).12
++PANGO_VERSION = $(PANGO_VERSION_MAJOR).14
+ PANGO_SOURCE = pango-$(PANGO_VERSION).tar.xz
+ PANGO_SITE = http://ftp.gnome.org/pub/GNOME/sources/pango/$(PANGO_VERSION_MAJOR)
+ PANGO_AUTORECONF = YES
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+2.13.6
