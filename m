@@ -1,42 +1,44 @@
-From: Cyril Bur <cyrilbur@gmail.com>
-Date: Mon, 20 Nov 2017 16:48:40 +1100
-Subject: [Buildroot] [PATCH] kvm-unit-tests: Bump version
-Message-ID: <20171120054840.22149-1-cyrilbur@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 20 Nov 2017 08:45:21 +0100
+Subject: [Buildroot] [PATCH 1/1] motion: bump to version 4.1
+In-Reply-To: <20171119142641.1867-1-fontaine.fabrice@gmail.com>
+References: <20171119142641.1867-1-fontaine.fabrice@gmail.com>
+Message-ID: <20171120084521.410ba491@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since binutils commit 1a9ccd70f9a7 ("Fix the linker so that it will not
-silently generate ELF binaries with invalid program headers. Fix readelf
-to report such invalid binaries.") the behaviour has changed and
-binutils tries to create a program header segment for which there is no
-space. Thanks to Nicholas Piggin and his patch to Linux:
-https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git/commit/?h=next&id=ff45000fcb56b5b0f
+Hello,
 
-Cedric fixed this in kvm-unit-tests commit 95062c20790d ("powerpc: add
--n to LDFLAGS") so bump to that version.
+On Sun, 19 Nov 2017 15:26:41 +0100, Fabrice Fontaine wrote:
+> - Remove 0001-configure.ac-use-given-CFLAGS-LIBS-for-mysqlclient-l.patch,
+> it does not have been sent upstream but issue has been fixed by
+> https://github.com/Motion-Project/motion/commit/3b7164f7f9c2b123f850f8cd1bc0a860ca51c0fe#diff-67e997bcfdac55191033d57a16d1408a
+> - 0002-Rename-base64_encode.patch has been integrated into this version
+> - --without-jpeg-turbo has been deleted from configure.ac
+> - libsdl dependency has been removed
 
-Fixes:
-http://autobuild.buildroot.net/results/80825b492abf61313637b109d6a0944b38d5f739
-Signed-off-by: Cyril Bur <cyrilbur@gmail.com>
----
- package/kvm-unit-tests/kvm-unit-tests.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thanks for this detailed commit log. However..
 
-diff --git a/package/kvm-unit-tests/kvm-unit-tests.mk b/package/kvm-unit-tests/kvm-unit-tests.mk
-index 0ddb017802..767e855d26 100644
---- a/package/kvm-unit-tests/kvm-unit-tests.mk
-+++ b/package/kvm-unit-tests/kvm-unit-tests.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KVM_UNIT_TESTS_VERSION = 5731572b2ac23eb410732110b93425b5bb7f27dd
-+KVM_UNIT_TESTS_VERSION = 95062c20790d82713bfa7475b61a4adef3f3645a
- KVM_UNIT_TESTS_SITE = $(BR2_KERNEL_MIRROR)/scm/virt/kvm/kvm-unit-tests.git
- KVM_UNIT_TESTS_SITE_METHOD = git
- KVM_UNIT_TESTS_LICENSE = LGPLv2
+>  ifeq ($(BR2_PACKAGE_FFMPEG_SWSCALE),y)
+>  MOTION_DEPENDENCIES += ffmpeg
+> @@ -29,10 +27,6 @@ MOTION_CONF_OPTS += \
+>  	--with-mysql \
+>  	--with-mysql-include=$(STAGING_DIR)/usr/include/mysql \
+>  	--with-mysql-lib=$(STAGING_DIR)/usr/lib
+> -# static link of mysql needs -lz
+> -ifeq ($(BR2_STATIC_LIBS)$(BR2_PACKAGE_ZLIB),yy)
+> -MOTION_CONF_ENV += LIBS="-lz"
+> -endif
+
+... this particular change isn't described. Is it done intentionally?
+
+Thanks!
+
+Thomas
 -- 
-2.15.0
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
