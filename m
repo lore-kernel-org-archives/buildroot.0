@@ -1,48 +1,53 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Mon, 20 Nov 2017 10:18:40 -0500
-Subject: [Buildroot] [NEXT 1/1] expat: bump to 2.2.5
-Message-ID: <20171120151840.12099-1-aduskett@gmail.com>
+Date: Mon, 20 Nov 2017 10:24:24 -0500
+Subject: [Buildroot] [NEXT 1/1] freetype: bump to 2.8.1
+Message-ID: <20171120152424.18511-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+In addition, add hashes for all three license files.
+
 Signed-off-by: Adam Duskett <aduskett@gmail.com>
 ---
- package/expat/expat.hash | 10 +++++-----
- package/expat/expat.mk   |  2 +-
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ package/freetype/freetype.hash | 15 ++++++++++-----
+ package/freetype/freetype.mk   |  2 +-
+ 2 files changed, 11 insertions(+), 6 deletions(-)
 
-diff --git a/package/expat/expat.hash b/package/expat/expat.hash
-index ef01ec9..3cba4ad 100644
---- a/package/expat/expat.hash
-+++ b/package/expat/expat.hash
-@@ -1,7 +1,7 @@
--# From https://sourceforge.net/projects/expat/files/expat/2.2.4/
--md5	6e3980aba29a224a9f478d88ac7ec207	expat-2.2.4.tar.bz2
--sha1	3394d6390c041a8f5dec1d5fe7c4af0a23ae4504	expat-2.2.4.tar.bz2
--# Calculated based on the hashes above
--sha256	03ad85db965f8ab2d27328abcf0bc5571af6ec0a414874b2066ee3fdd372019e	expat-2.2.4.tar.bz2
-+# From https://sourceforge.net/projects/expat/files/expat/2.2.5/
-+md5	789e297f547980fc9ecc036f9a070d49		expat-2.2.5.tar.bz2
-+sha1	490659abd7d6c6d4cb4e60c945a15fbf081564f6	expat-2.2.5.tar.bz2
+diff --git a/package/freetype/freetype.hash b/package/freetype/freetype.hash
+index beff858..3997e81 100644
+--- a/package/freetype/freetype.hash
++++ b/package/freetype/freetype.hash
+@@ -1,5 +1,10 @@
+-# From https://sourceforge.net/projects/freetype/files/freetype2/2.8/
+-md5 2413ac3eaf508ada019c63959ea81a92  freetype-2.8.tar.bz2
+-sha1 42c6b1f733fe13a3eba135f5025b22cb68450f91  freetype-2.8.tar.bz2
+-# Locally calculated after checking pgp signature
+-sha256 a3c603ed84c3c2495f9c9331fe6bba3bb0ee65e06ec331e0a0fb52158291b40b  freetype-2.8.tar.bz2
++# From https://sourceforge.net/projects/freetype/files/freetype2/2.8.1/
++md5	bf0a210b6fe781228fa0e4a80691a521		freetype-2.8.1.tar.bz2
++sha1	417bb3747c4ac95b6f2652024a53fad45581fa1c	freetype-2.8.1.tar.bz2
 +
- # Locally calculated
-+sha256	d9dc32efba7e74f788fcc4f212a43216fc37cf5f23f4c2339664d473353aedf6	expat-2.2.5.tar.bz2
- sha256	46336ab2fec900803e2f1a4253e325ac01d998efb09bc6906651f7259e636f76	COPYING
-diff --git a/package/expat/expat.mk b/package/expat/expat.mk
-index ef196ec..69c457d 100644
---- a/package/expat/expat.mk
-+++ b/package/expat/expat.mk
++# Locally calculated
++sha256	e5435f02e02d2b87bb8e4efdcaa14b1f78c9cf3ab1ed80f94b6382fb6acc7d78	freetype-2.8.1.tar.bz2
++sha256	fd056de4196903a676208ef58cfddafc7d583d1f28fa2e44c309cf84a59e62fb	docs/LICENSE.TXT
++sha256	4a9a548027a2c1d37788519dea833294c9c81f1ebc280e817f41f50d0c642d78	docs/FTL.TXT
++sha256	c4120c6752c910c299e3bd9cb3a46ff262c268303ca2069b61f92f10a5656c18	docs/GPLv2.TXT
++
+diff --git a/package/freetype/freetype.mk b/package/freetype/freetype.mk
+index 9a98b40..1028664 100644
+--- a/package/freetype/freetype.mk
++++ b/package/freetype/freetype.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--EXPAT_VERSION = 2.2.4
-+EXPAT_VERSION = 2.2.5
- EXPAT_SITE = http://downloads.sourceforge.net/project/expat/expat/$(EXPAT_VERSION)
- EXPAT_SOURCE = expat-$(EXPAT_VERSION).tar.bz2
- EXPAT_INSTALL_STAGING = YES
+-FREETYPE_VERSION = 2.8
++FREETYPE_VERSION = 2.8.1
+ FREETYPE_SOURCE = freetype-$(FREETYPE_VERSION).tar.bz2
+ FREETYPE_SITE = http://download.savannah.gnu.org/releases/freetype
+ FREETYPE_INSTALL_STAGING = YES
 -- 
 2.13.6
