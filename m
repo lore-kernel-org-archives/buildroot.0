@@ -1,52 +1,34 @@
-From: daggs <daggs@gmx.com>
-Date: Mon, 20 Nov 2017 21:34:17 +0100
-Subject: [Buildroot] out of tree kernel patches question
-In-Reply-To: <trinity-b97a3f75-3a2f-4d1f-9533-e53cf3e87617-1511007038638@3c-app-mailcom-bs07>
-References: <trinity-0d97f4a0-c1ac-416e-bfea-7bcafcb3ce1d-1510924577452@3c-app-mailcom-bs07>
- <20171117212417.43162ed7@windsurf.lan>
- <trinity-0708c540-baa1-463a-a0ad-5bf573ebc7e7-1510991011672@3c-app-mailcom-bs13>
- <87shdcvvqc.fsf@dell.be.48ers.dk>
- <trinity-b97a3f75-3a2f-4d1f-9533-e53cf3e87617-1511007038638@3c-app-mailcom-bs07>
-Message-ID: <trinity-b3528282-ab50-44dc-a1e4-fa4c1f98e9e1-1511210057143@3c-app-mailcom-bs11>
+From: Julien Boibessot <julien.boibessot@free.fr>
+Date: Mon, 20 Nov 2017 21:40:58 +0100
+Subject: [Buildroot] Tkinter
+In-Reply-To: <1510827457861-0.post@n4.nabble.com>
+References: <1510648594356-0.post@n4.nabble.com>
+ <1510827457861-0.post@n4.nabble.com>
+Message-ID: <b6c5f85e-19c3-31b6-b09f-f065e52a0ac1@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+Hello Kees,
 
-> Sent: Saturday, November 18, 2017 at 2:10 PM
-> From: daggs <daggs@gmx.com>
-> To: "Peter Korsgaard" <peter@korsgaard.com>
-> Cc: "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>, buildroot at buildroot.org
-> Subject: Re: [Buildroot] out of tree kernel patches question
+On 16/11/2017 11:17, Kees van Unen wrote:
+> Hi guys, 
 >
-> Greeting Peter,
-> 
-> >
-> > >>>>> "daggs" == daggs  <daggs@gmx.com> writes:
-> > 
-> > Hi,
-> > 
-> >  > so I'd like to propose adding a new buildroot config named
-> >  > odroidc2-next which will support that along side the existing one.
-> >  > with time, hopefully, the old one will be replaced by the new one.
-> > 
-> >  > any objections?
-> > 
-> > I don't think "next" really explains what this is about, what about
-> > odroidc2_mainline_defconfig?
-> > 
-> > We have a number of other boards where it may be interesting to do so,
-> > E.G. rpi, roseapplepi, ..
-> > 
-> > -- 
-> > Bye, Peter Korsgaard
-> > 
-> 
-> sounds great, I'll wait for Thomas's input on this and will advance from there.
-> 
-> Dagg.
+> I wasn't aware that this question is too difficult. Apologies.
 
-any objections to this?
+If by Tkinter you mean "Tk module for python" then you should first add
+Tk package to Buildroot, then Tkinter.
+
+Please find below 2 patches to do that (they didn't find their way to BR
+mainline yet):
+*
+https://sourceforge.net/p/armadeus/code/ci/master/tree/patches/buildroot/2017.02/011-armadeus-add-tk-package.patch
+*
+https://sourceforge.net/p/armadeus/code/ci/master/tree/patches/buildroot/2017.02/012-armadeus-add-tkinter-support-to-python.patch
+
+Feel free to test them, update them and submit them to Buildroot ;-)
+
+Regards,
+Julien
