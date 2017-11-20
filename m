@@ -1,46 +1,101 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 20 Nov 2017 22:14:04 +0100
-Subject: [Buildroot] [PATCH] kvm-unit-tests: Bump version
-In-Reply-To: <20171120054840.22149-1-cyrilbur@gmail.com>
-References: <20171120054840.22149-1-cyrilbur@gmail.com>
-Message-ID: <20171120221404.256dc295@windsurf.lan>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 20 Nov 2017 22:14:45 +0100
+Subject: [Buildroot] [PATCH 1/1] freerdp: fix wayland client dependency
+ chain failure
+In-Reply-To: <20171120084757.04cf0411@windsurf>
+References: <20171119214852.27459-1-Adamduskett@outlook.com>
+ <20171120084757.04cf0411@windsurf>
+Message-ID: <20171120211445.GA2867@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Thomas, Adam, All,
 
-On Mon, 20 Nov 2017 16:48:40 +1100, Cyril Bur wrote:
-> Since binutils commit 1a9ccd70f9a7 ("Fix the linker so that it will not
-> silently generate ELF binaries with invalid program headers. Fix readelf
-> to report such invalid binaries.") the behaviour has changed and
-> binutils tries to create a program header segment for which there is no
-> space. Thanks to Nicholas Piggin and his patch to Linux:
-> https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git/commit/?h=next&id=ff45000fcb56b5b0f
+On 2017-11-20 08:47 +0100, Thomas Petazzoni spake thusly:
+> On Sun, 19 Nov 2017 16:48:52 -0500, Adam Duskett wrote:
+> > If the wayland client is selected, freerdp depends on libxkbcommon without
+> > depending on it in the mk file.
+> > 
+> > Fixes:
+> > http://autobuild.buildroot.net/results/dc3/dc3e11f7076a8355f3d2f9cb49c6325dcf7084bd
+> > Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
+> > ---
+> >  package/freerdp/freerdp.mk | 4 ++++
+> >  1 file changed, 4 insertions(+)
+> > 
+> > diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
+> > index 69a89a190c..29c35164c3 100644
+> > --- a/package/freerdp/freerdp.mk
+> > +++ b/package/freerdp/freerdp.mk
+> > @@ -207,6 +207,10 @@ else
+> >  FREERDP_CONF_OPTS += -DWITH_WAYLAND=OFF
+> >  endif
+> >  
+> > +ifeq ($(BR2_PACKAGE_FREERDP_CLIENT_WL),y)
+> > +FREERDP_DEPENDENCIES += libxkbcommon
+> > +endif
 > 
-> Cedric fixed this in kvm-unit-tests commit 95062c20790d ("powerpc: add
-> -n to LDFLAGS") so bump to that version.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/80825b492abf61313637b109d6a0944b38d5f739
-> Signed-off-by: Cyril Bur <cyrilbur@gmail.com>
-> ---
->  package/kvm-unit-tests/kvm-unit-tests.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> https://git.buildroot.org/buildroot/commit/?id=c2824fba2f2f4df6c1e0273fa546a203d1e6d5ac
+> already makes libxkbcommon a dependency of freerdp when wayland is
+> enabled. Isn't this sufficient ?
 
-I'm not sure how you tested this patch. The change to the hash file was
-missing, and one of the patches in package/kvm-unit-tests/ was not
-applying anymore.
+I think the current code might indeed not be correct, but that the patch
+is not correct either...
 
-I've fixed up those issues and applied your patch to the master branch,
-but it'd be nice to have a patch tested a bit better next time :-)
+The issue with FreeRDP, as much as I can remember, is the way it builds
+the clients: either clients are enabled ot they are not. But once you
+enable clients, it will look for dependencies of each client, and build
+those whose dependencies are met.
 
-Thanks!
+So, if you have X11 and wayland libs around, then FreeRDP will biuld
+both clients, even if you are only interested in one and not both.
 
-Thomas
+The situation where you want only (say) the wayland client and not the
+X11 one is if you are running a wayland system, with XWayland to run
+legacy X11 apps ontop of this, and only want to use FreeRDP as a wayland
+client.
+
+So we have code in freerdp.mk to get rid of the unneeded client(s).
+
+But now, the select and dependency on libxbcommon are under two slightly
+different conditions:
+
+  - the select is only when the wayland client is enabled,
+  - the dependency is when the wayland package is enabled.
+
+Now, if the wayland client is disabled, but the walyand package is
+enabled, then nothing from FreeRDP selects libxbkcommon, but it ends up
+in the dependency chain of FreeRDP nonetheless.
+
+I think a better patch would be something like:
+
+diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
+index 69a89a190c..0ceef576a8 100644
+--- a/package/freerdp/freerdp.mk
++++ b/package/freerdp/freerdp.mk
+@@ -198,7 +198,7 @@ else
+ FREERDP_CONF_OPTS += -DWITH_XV=OFF
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_WAYLAND),y)
++ifeq ($(BR2_PACKAGE_FREERDP_CLIENT_WL),y)
+ FREERDP_DEPENDENCIES += wayland libxkbcommon
+ FREERDP_CONF_OPTS += \
+ 	-DWITH_WAYLAND=ON \
+
+TBH, I'm a bit under the weather those days, so Adam, I'd be gratefull
+if you were to check the above, please.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
