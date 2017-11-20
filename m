@@ -1,48 +1,34 @@
-From: Cyril Bur <cyrilbur@gmail.com>
-Date: Tue, 21 Nov 2017 10:27:32 +1100
-Subject: [Buildroot] [PATCH] kvm-unit-tests: Bump version
-In-Reply-To: <20171120221404.256dc295@windsurf.lan>
-References: <20171120054840.22149-1-cyrilbur@gmail.com>
- <20171120221404.256dc295@windsurf.lan>
-Message-ID: <1511220452.6880.2.camel@gmail.com>
+From: Danick Desjardins <danick.desjardins@coveloz.com>
+Date: Mon, 20 Nov 2017 22:38:48 +0000
+Subject: [Buildroot] ZeroMQ Version 4.2.X for POLLPRI
+Message-ID: <YTOPR0101MB12259ED71BEB34B7087A2FD1EC220@YTOPR0101MB1225.CANPRD01.PROD.OUTLOOK.COM>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 2017-11-20 at 22:14 +0100, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Mon, 20 Nov 2017 16:48:40 +1100, Cyril Bur wrote:
-> > Since binutils commit 1a9ccd70f9a7 ("Fix the linker so that it will not
-> > silently generate ELF binaries with invalid program headers. Fix readelf
-> > to report such invalid binaries.") the behaviour has changed and
-> > binutils tries to create a program header segment for which there is no
-> > space. Thanks to Nicholas Piggin and his patch to Linux:
-> > https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git/commit/?h=next&id=ff45000fcb56b5b0f
-> > 
-> > Cedric fixed this in kvm-unit-tests commit 95062c20790d ("powerpc: add
-> > -n to LDFLAGS") so bump to that version.
-> > 
-> > Fixes:
-> > http://autobuild.buildroot.net/results/80825b492abf61313637b109d6a0944b38d5f739
-> > Signed-off-by: Cyril Bur <cyrilbur@gmail.com>
-> > ---
-> >  package/kvm-unit-tests/kvm-unit-tests.mk | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> I'm not sure how you tested this patch. The change to the hash file was
-> missing, and one of the patches in package/kvm-unit-tests/ was not
-> applying anymore.
-> 
-> I've fixed up those issues and applied your patch to the master branch,
-> but it'd be nice to have a patch tested a bit better next time :-)
-> 
-> Thanks!
-> 
+Hi everyone,
 
-Yeah sorry, I think I had a really old tree, I use buildroot for so
-much I think there was a fail on my part to check the tree. Sorry!
 
-> Thomas
+I need a feature of ZMQ related to POLLPRI to get interrupts from GPIO fds. This feature is only available on ZeroMQ 4.2.x and above.
+
+
+Looking at the master branch the version is only at 4.1.6. Just curious to know if there is any reason this is being held back.
+
+
+I am manually updating it to 4.2.2 locally for my purpose but was curious if there were any gotchas with moving to a more recent version that people know about.
+
+
+Thanks,
+
+Danick
+
+----------------------------------------------
+
+This e-mail and any attachments may contain information that is confidential to COVELOZ Technologies Inc.
+
+If you are not the intended recipient, please notify me immediately by replying to this message. Please also delete all copies. Thank you.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20171120/60327b0c/attachment.html>
