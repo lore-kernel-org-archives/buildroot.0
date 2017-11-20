@@ -1,74 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 20 Nov 2017 22:41:41 +0100
-Subject: [Buildroot] [git commit] oracle-mysql: fix build with gcc 7.x
-Message-ID: <20171120213453.CA0B280DF1@busybox.osuosl.org>
+Date: Mon, 20 Nov 2017 22:42:40 +0100
+Subject: [Buildroot] [git commit] package/feh: Fix build issue with some
+ older cross-compilers
+Message-ID: <20171120213528.CEFDE8110E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=317b72f469867bd3e1765418e325515d6065d45f
+commit: https://git.buildroot.net/buildroot/commit/?id=17299cd0182df1b4202429a9c567765b3d2510bc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This adjusts an existing patch to also fix gcc 7.x build issues on the
-server side of MySQL.
+by adding -std=gnu99 to CFLAGS.
 
 Fixes:
+http://autobuild.buildroot.net/results/392b58cca2671e206c85a530221ce7b2d42f31fb/
+http://autobuild.buildroot.net/results/94527fcd70fa85298c366537013c939534beead0/
+http://autobuild.buildroot.net/results/bf31199cdaa18971a9b599c26fbefac73b2d6f30/
+http://autobuild.buildroot.net/results/5b65c305b50664e02d5f8022278055c80739342d/
+http://autobuild.buildroot.net/results/ed3b9fb8d09cd677af4b8825566877c552926ae5/
 
-  http://autobuild.buildroot.net/results/9e3a0b5b8f2506fb2ce2fcc3d5d3a494a14439cb
-
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/oracle-mysql/0008-gcc7.patch | 29 +++++++++++++++++++++++++----
- 1 file changed, 25 insertions(+), 4 deletions(-)
+ package/feh/feh.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/oracle-mysql/0008-gcc7.patch b/package/oracle-mysql/0008-gcc7.patch
-index 2cf6d26..321112d 100644
---- a/package/oracle-mysql/0008-gcc7.patch
-+++ b/package/oracle-mysql/0008-gcc7.patch
-@@ -4,15 +4,17 @@ mysql.cc: In function 'void build_completion_hash(bool, bool)':
- mysql.cc:2687:37: error: invalid conversion from 'char' to 'char*' [-fpermissive]
-        field_names[i][num_fields*2]= '\0';
-                                      ^~~~
--
- Patch was partly backported from upstream commit:
- https://github.com/mysql/mysql-server/commit/ae21683d980d5fe9e39bd0193827ea3604256eb9
+diff --git a/package/feh/feh.mk b/package/feh/feh.mk
+index 3f4c410..7211dc7 100644
+--- a/package/feh/feh.mk
++++ b/package/feh/feh.mk
+@@ -12,8 +12,8 @@ FEH_LICENSE = MIT
+ FEH_LICENSE_FILES = COPYING
  
- Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+[Thomas: add more gcc 7.x fixes in instance_map.cc.]
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ define FEH_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE1) CC="$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS)" \
+-		-C $(@D) all
++	$(TARGET_MAKE_ENV) CFLAGS="$(TARGET_CFLAGS) -std=gnu99" $(MAKE1) \
++		CC="$(TARGET_CC) $(TARGET_LDFLAGS)" -C $(@D) all
+ endef
  
--diff -uNr mysql-5.1.73.org/client/mysql.cc mysql-5.1.73/client/mysql.cc
----- mysql-5.1.73.org/client/mysql.cc	2013-11-04 19:52:27.000000000 +0100
--+++ mysql-5.1.73/client/mysql.cc	2017-05-13 19:52:10.125101101 +0200
-+Index: b/client/mysql.cc
-+===================================================================
-+--- a/client/mysql.cc
-++++ b/client/mysql.cc
- @@ -2684,7 +2684,7 @@
-          mysql_free_result(fields);
-          break;
-@@ -22,3 +24,22 @@ diff -uNr mysql-5.1.73.org/client/mysql.cc mysql-5.1.73/client/mysql.cc
-        j=0;
-        while ((sql_field=mysql_fetch_field(fields)))
-        {
-+Index: b/server-tools/instance-manager/instance_map.cc
-+===================================================================
-+--- a/server-tools/instance-manager/instance_map.cc
-++++ b/server-tools/instance-manager/instance_map.cc
-+@@ -526,12 +526,12 @@
-+              Options::Main::config_file);
-+ 
-+     argv_options[1]= defaults_file_arg;
-+-    argv_options[2]= '\0';
-++    argv_options[2]= NULL;
-+ 
-+     argc= 2;
-+   }
-+   else
-+-    argv_options[1]= '\0';
-++    argv_options[1]= NULL;
-+ 
-+   /*
-+     If the routine failed, we'll simply fallback to defaults in
+ define FEH_INSTALL_TARGET_CMDS
