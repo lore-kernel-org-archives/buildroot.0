@@ -1,77 +1,46 @@
-From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Tue, 21 Nov 2017 16:27:06 +0100
-Subject: [Buildroot] [PATCH][next] gst1-imx: fix v4l2 plugins disable options
-Message-ID: <20171121152706.17883-1-gary.bisson@boundarydevices.com>
+From: =?UTF-8?Q?Andr=c3=a9_Hentschel?= <nerv@dawncrow.de>
+Date: Tue, 21 Nov 2017 18:21:26 +0100
+Subject: [Buildroot] [PATCH v4 1/2] libkrb5: New package
+In-Reply-To: <20171121135622.033678af@windsurf.lan>
+References: <1511213549-1878-1-git-send-email-nerv@dawncrow.de>
+ <20171121135622.033678af@windsurf.lan>
+Message-ID: <2a42b590-14f0-9fff-dfd5-31f021c5cbae@dawncrow.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Latest bump to v0.13.0 didn't take care of the following commit:
-7bfbf71 v4l2: Rename to v4l2video and add switches to enable/disable
- sink/source
+Am 21.11.2017 um 13:56 schrieb Thomas Petazzoni:
+> Hello,
+> 
+> Thanks for this new iteration. Much better without the
+> configure.ac patch.
+> 
+> On Mon, 20 Nov 2017 22:32:28 +0100, Andr? Hentschel wrote:
+> 
+>> +LIBKRB5_VERSION = 1.15.2
+>> +LIBKRB5_SITE = https://web.mit.edu/kerberos/dist/krb5/1.15
+>> +LIBKRB5_SOURCE = krb5-$(LIBKRB5_VERSION).tar.gz
+>> +LIBKRB5_SUBDIR = src
+>> +LIBKRB5_LICENSE = MIT
+>> +LIBKRB5_LICENSE_FILES = NOTICE
+>> +LIBKRB5_INSTALL_STAGING = YES
+>> +LIBKRB5_AUTORECONF = YES
+> 
+> Are you sure you still need to AUTORECONF the package? Now that the
+> configure.ac patch is gone, I don't think this is necessary anymore.
+> 
+>> +# Add sane assumptions about cross-compiling
+> 
+> Rather than "sane assumptions", a clearer comment would be: "The
+> configure script uses AC_TRY_RUN tests to check for those values, which
+> doesn't work in a cross-compilation scenario. Therefore, we feed the
+> configure script with the correct answer for those tests". Or something
+> along those lines.
+> 
+> Note: both issues can be fixed when applying, no need to resend just
+> for that.
 
-Updating options to match the new naming of the V4L2 plugins.
-
-Fixes http://autobuild.buildroot.net/results/5c404a2a28a4052056e5c9a7edda40641fe55f9e
-
-Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
----
-Hi,
-
-Also, there are new options for the g2d pango plugin that should be
-taken care of. I unfortunaly do not have time to do it right now,
-Alexandre can you have a look?
-
-Note that this won't break the build, it is just that the user can't
-control the build of g2dpango plugin.
-
-Thanks,
-Gary
----
- package/gstreamer1/gst1-imx/Config.in   |  6 ++++++
- package/gstreamer1/gst1-imx/gst1-imx.mk | 11 +++++++++--
- 2 files changed, 15 insertions(+), 2 deletions(-)
-
-diff --git a/package/gstreamer1/gst1-imx/Config.in b/package/gstreamer1/gst1-imx/Config.in
-index 9f792d1c82..9b977bdde8 100644
---- a/package/gstreamer1/gst1-imx/Config.in
-+++ b/package/gstreamer1/gst1-imx/Config.in
-@@ -84,4 +84,10 @@ config BR2_PACKAGE_GST1_IMX_V4L2VIDEOSRC
- 	help
- 	  Elements for V4L2 capture
- 
-+config BR2_PACKAGE_GST1_IMX_V4L2VIDEOSINK
-+	bool "imxv4l2videosink"
-+	select BR2_PACKAGE_GST1_PLUGINS_BAD
-+	help
-+	  Elements for V4L2 output
-+
- endif
-diff --git a/package/gstreamer1/gst1-imx/gst1-imx.mk b/package/gstreamer1/gst1-imx/gst1-imx.mk
-index c621c360f4..a8fe6fe041 100644
---- a/package/gstreamer1/gst1-imx/gst1-imx.mk
-+++ b/package/gstreamer1/gst1-imx/gst1-imx.mk
-@@ -83,10 +83,17 @@ GST1_IMX_CONF_OPTS += --disable-vpu
- endif
- 
- ifeq ($(BR2_PACKAGE_GST1_IMX_V4L2VIDEOSRC),y)
--# There's no --enable-v4l2src option
-+# There's no --enable-imxv4l2videosrc option
- GST1_IMX_DEPENDENCIES += gst1-plugins-bad
- else
--GST1_IMX_CONF_OPTS += --disable-v4l2src
-+GST1_IMX_CONF_OPTS += --disable-imxv4l2videosrc
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_IMX_V4L2VIDEOSINK),y)
-+# There's no --enable-imxv4l2videosink option
-+GST1_IMX_DEPENDENCIES += gst1-plugins-bad
-+else
-+GST1_IMX_CONF_OPTS += --disable-imxv4l2videosink
- endif
- 
- $(eval $(waf-package))
--- 
-2.15.0
+Yes, thanks for taking care!
+The autoreconf isn't needed anymore, I just tested it.
