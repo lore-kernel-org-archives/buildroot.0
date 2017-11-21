@@ -1,115 +1,63 @@
-From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Tue, 21 Nov 2017 23:07:52 +0100
-Subject: [Buildroot] [PATCH v5 1/1] sunxi-mali-driver-mainline: new package
-Message-ID: <1511302072-9290-1-git-send-email-giulio.benetti@micronovasrl.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Tue, 21 Nov 2017 23:24:13 +0100
+Subject: [Buildroot] Analysis of build results for 2017-11-19
+In-Reply-To: <20171120233253.541c48ad@windsurf.lan>
+References: <20171120070004.B482020743@mail.free-electrons.com>
+ <20171120233253.541c48ad@windsurf.lan>
+Message-ID: <acc6eff1-ae4c-4f49-74fa-bc30df9af86a@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Added kernel allwinner mali driver package.
-Used combined with userspace Allwinner openGL blob,
-it gives possibility to use 3D openGL SoC acceleration.
+Hi Thomas, All,
 
-Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
----
-Changes v4 -> v5:
-* prevent build twice
+Le 20/11/2017 ? 23:32, Thomas Petazzoni a ?crit?:
+> Hello,
+> 
+> Let's look at the results for the master branch. If you're in To:,
+> there are some questions/topics for you below! :-)
+> 
+> On Mon, 20 Nov 2017 08:00:04 +0100 (CET), Thomas Petazzoni wrote:
+>      
+>>          sh4 |                   cppcms-1.0.5 | NOK | http://autobuild.buildroot.net/results/7d2cd95bc75250b47f5c9947cd996852925f6e0b | ORPH
+> 
+> /tmp/ccFVFYgX.s: Assembler messages:
+> /tmp/ccFVFYgX.s:34102: Error: pcrel too far
+> 
+> Toolchain issue that nobody is ever going to fix I guess.
+> 
+> This issue was reported a long time ago on binutils (for SuperH), and
+> was apparently fixed. But now it appears again.
+> 
+> What should we do?
 
- DEVELOPERS                                         |  3 +++
- package/Config.in                                  |  1 +
- package/sunxi-mali-driver-mainline/Config.in       | 22 ++++++++++++++++++
- .../sunxi-mali-driver-mainline.mk                  | 26 ++++++++++++++++++++++
- 4 files changed, 52 insertions(+)
- create mode 100644 package/sunxi-mali-driver-mainline/Config.in
- create mode 100644 package/sunxi-mali-driver-mainline/sunxi-mali-driver-mainline.mk
+I don't really know about sh4 issue but a new cppcms 1.1.x version will be
+available in near future [1].
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index bb81a19..3fdb28b 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -695,6 +695,9 @@ F:	package/ocrad/
- F:	package/tesseract-ocr/
- F:	package/webp/
- 
-+N:	Giulio Benetti <giulio.benetti@micronovasrl.com>
-+F:	package/sunxi-mali-driver-mainline/
-+
- N:	Gregory Dymarek <gregd72002@gmail.com>
- F:	package/ding-libs/
- F:	package/gengetopt/
-diff --git a/package/Config.in b/package/Config.in
-index fe5ccc4..8de2227 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -496,6 +496,7 @@ endmenu
- 	source "package/statserial/Config.in"
- 	source "package/stm32flash/Config.in"
- 	source "package/sunxi-cedarx/Config.in"
-+	source "package/sunxi-mali-driver-mainline/Config.in"
- 	source "package/sunxi-mali/Config.in"
- 	source "package/sysstat/Config.in"
- 	source "package/targetcli-fb/Config.in"
-diff --git a/package/sunxi-mali-driver-mainline/Config.in b/package/sunxi-mali-driver-mainline/Config.in
-new file mode 100644
-index 0000000..5b7b2ba
---- /dev/null
-+++ b/package/sunxi-mali-driver-mainline/Config.in
-@@ -0,0 +1,22 @@
-+comment "sunxi-mali-driver-mainline needs a Linux kernel to be built"
-+	depends on !BR2_LINUX_KERNEL
-+
-+config BR2_PACKAGE_SUNXI_MALI_DRIVER_MAINLINE
-+	bool "sunxi-mali-driver-mainline"
-+	depends on BR2_LINUX_KERNEL
-+	select BR2_LINUX_NEEDS_MODULES # not using kernel-module infra
-+	help
-+	  This package builds and installs the Linux kernel driver for
-+	  the Mali GPU on Allwinner platforms, compatible with recent
-+	  Linux kernels (>= 4.4). Note that it should be installed
-+	  together with the corresponding userspace binary blobs to
-+	  provide complete OpenGL functionality.
-+
-+	  sunxi-mali-driver-mainline requires a Linux kernel >= 4.4 with the
-+	  following options enabled:
-+
-+	  - CONFIG_CMA
-+	  - CONFIG_DMA_CMA
-+	  - CONFIG_DRM_FBDEV_OVERALLOC >= 200 for double buffer or more
-+
-+	  https://github.com/mripard/sunxi-mali/blob/master/README.md
-diff --git a/package/sunxi-mali-driver-mainline/sunxi-mali-driver-mainline.mk b/package/sunxi-mali-driver-mainline/sunxi-mali-driver-mainline.mk
-new file mode 100644
-index 0000000..1692646
---- /dev/null
-+++ b/package/sunxi-mali-driver-mainline/sunxi-mali-driver-mainline.mk
-@@ -0,0 +1,26 @@
-+################################################################################
-+#
-+# sunxi-mali-driver-mainline
-+#
-+################################################################################
-+
-+SUNXI_MALI_DRIVER_MAINLINE_VERSION = 5b7b3c0b6e1736676c90928816d271debbb09d95
-+SUNXI_MALI_DRIVER_MAINLINE_SITE = $(call github,mripard,sunxi-mali,$(SUNXI_MALI_DRIVER_MAINLINE_VERSION))
-+SUNXI_MALI_DRIVER_MAINLINE_DEPENDENCIES = linux
-+
-+SUNXI_MALI_DRIVER_MAINLINE_MAKE_OPTS = \
-+	KDIR=$(LINUX_DIR) \
-+	CROSS_COMPILE=$(TARGET_CROSS) \
-+	INSTALL_MOD_PATH=$(TARGET_DIR)
-+
-+define SUNXI_MALI_DRIVER_MAINLINE_BUILD_CMDS
-+	cd $(@D) && $(SUNXI_MALI_DRIVER_MAINLINE_MAKE_OPTS) \
-+		$(SHELL) ./build.sh -r r6p2 -a
-+endef
-+
-+define SUNXI_MALI_DRIVER_MAINLINE_INSTALL_TARGET_CMDS
-+	cd $(@D) && $(SUNXI_MALI_DRIVER_MAINLINE_MAKE_OPTS) \
-+		$(SHELL) ./build.sh -r r6p2 -i
-+endef
-+
-+$(eval $(generic-package))
--- 
-2.7.4
+The 1.0.x version is getting old.
+
+[1] https://sourceforge.net/projects/cppcms/files/cppcms
+
+> 
+>>          arm | google-breakpad-7515ab13768... | NOK | http://autobuild.buildroot.net/results/6380341dbb6c114e4452c5cda37da6b44b80d178 |     
+>>      aarch64 | google-breakpad-7515ab13768... | NOK | http://autobuild.buildroot.net/results/4ecf770df7c984a62082d59f8fab632d3efbe06b |     
+>>       mipsel | google-breakpad-7515ab13768... | NOK | http://autobuild.buildroot.net/results/e1473a12cf38ccf4dd3ed0f26a8ff9e6b57f0810 |     
+> 
+> This is a build issue caused by glibc 2.26. Pascal, since you added
+> google-breakpad, could you have a look? Perhaps Romain Naour can help
+> as well, since he bumped glibc to 2.26.
+
+As for gcc, we need to replace struct ucontext with ucontext_t.
+I'll try to backport this patch [2]
+
+[2]
+https://github.com/google/breakpad/commit/bddcc58860f522a0d4cbaa7e9d04058caee0db9d
+
+Best regards,
+Romain
+
+> 
+> Thomas
+> 
