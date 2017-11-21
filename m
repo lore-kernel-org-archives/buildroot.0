@@ -1,63 +1,62 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Tue, 21 Nov 2017 23:24:13 +0100
-Subject: [Buildroot] Analysis of build results for 2017-11-19
-In-Reply-To: <20171120233253.541c48ad@windsurf.lan>
-References: <20171120070004.B482020743@mail.free-electrons.com>
- <20171120233253.541c48ad@windsurf.lan>
-Message-ID: <acc6eff1-ae4c-4f49-74fa-bc30df9af86a@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 21 Nov 2017 23:43:13 +0100
+Subject: [Buildroot] [PATCH] samba4: security bump to version 4.6.11
+Message-ID: <20171121224313.26215-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas, All,
+Fixes the following security issues:
 
-Le 20/11/2017 ? 23:32, Thomas Petazzoni a ?crit?:
-> Hello,
-> 
-> Let's look at the results for the master branch. If you're in To:,
-> there are some questions/topics for you below! :-)
-> 
-> On Mon, 20 Nov 2017 08:00:04 +0100 (CET), Thomas Petazzoni wrote:
->      
->>          sh4 |                   cppcms-1.0.5 | NOK | http://autobuild.buildroot.net/results/7d2cd95bc75250b47f5c9947cd996852925f6e0b | ORPH
-> 
-> /tmp/ccFVFYgX.s: Assembler messages:
-> /tmp/ccFVFYgX.s:34102: Error: pcrel too far
-> 
-> Toolchain issue that nobody is ever going to fix I guess.
-> 
-> This issue was reported a long time ago on binutils (for SuperH), and
-> was apparently fixed. But now it appears again.
-> 
-> What should we do?
+ - CVE-2017-14746:
+   All versions of Samba from 4.0.0 onwards are vulnerable to a use after
+   free vulnerability, where a malicious SMB1 request can be used to
+   control the contents of heap memory via a deallocated heap pointer. It
+   is possible this may be used to compromise the SMB server.
 
-I don't really know about sh4 issue but a new cppcms 1.1.x version will be
-available in near future [1].
+ - CVE-2017-15275:
+   All versions of Samba from 3.6.0 onwards are vulnerable to a heap
+   memory information leak, where server allocated heap memory may be
+   returned to the client without being cleared.
 
-The 1.0.x version is getting old.
+   There is no known vulnerability associated with this error, but
+   uncleared heap memory may contain previously used data that may help
+   an attacker compromise the server via other methods. Uncleared heap
+   memory may potentially contain password hashes or other high-value
+   data.
 
-[1] https://sourceforge.net/projects/cppcms/files/cppcms
+For more details, see the release notes:
+https://www.samba.org/samba/history/samba-4.6.11.html
 
-> 
->>          arm | google-breakpad-7515ab13768... | NOK | http://autobuild.buildroot.net/results/6380341dbb6c114e4452c5cda37da6b44b80d178 |     
->>      aarch64 | google-breakpad-7515ab13768... | NOK | http://autobuild.buildroot.net/results/4ecf770df7c984a62082d59f8fab632d3efbe06b |     
->>       mipsel | google-breakpad-7515ab13768... | NOK | http://autobuild.buildroot.net/results/e1473a12cf38ccf4dd3ed0f26a8ff9e6b57f0810 |     
-> 
-> This is a build issue caused by glibc 2.26. Pascal, since you added
-> google-breakpad, could you have a look? Perhaps Romain Naour can help
-> as well, since he bumped glibc to 2.26.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/samba4/samba4.hash | 2 +-
+ package/samba4/samba4.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-As for gcc, we need to replace struct ucontext with ucontext_t.
-I'll try to backport this patch [2]
-
-[2]
-https://github.com/google/breakpad/commit/bddcc58860f522a0d4cbaa7e9d04058caee0db9d
-
-Best regards,
-Romain
-
-> 
-> Thomas
-> 
+diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
+index 6821144d1d..3bf46d3bcc 100644
+--- a/package/samba4/samba4.hash
++++ b/package/samba4/samba4.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 5913a569b54c6bc261bc245d7326fabfcba42839d15a82db48c047de1eb19626  samba-4.6.10.tar.gz
++sha256 051b7ab0fa088d77dc0df039ff5d6b8fd998372f0c29ecb455b149457c20ed1d  samba-4.6.11.tar.gz
+ sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index 40436ca731..7836df5beb 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SAMBA4_VERSION = 4.6.10
++SAMBA4_VERSION = 4.6.11
+ SAMBA4_SITE = https://download.samba.org/pub/samba/stable
+ SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+ SAMBA4_INSTALL_STAGING = YES
+-- 
+2.11.0
