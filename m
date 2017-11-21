@@ -1,49 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 21 Nov 2017 09:08:15 +0100
-Subject: [Buildroot] [PATCH 2/2] board/qemu/x86*: use quotes around -append
- Qemu option value
-In-Reply-To: <20171121080815.31347-1-thomas.petazzoni@free-electrons.com>
-References: <20171121080815.31347-1-thomas.petazzoni@free-electrons.com>
-Message-ID: <20171121080815.31347-2-thomas.petazzoni@free-electrons.com>
+Date: Tue, 21 Nov 2017 09:12:18 +0100
+Subject: [Buildroot] ZeroMQ Version 4.2.X for POLLPRI
+In-Reply-To: <YTOPR0101MB12259ED71BEB34B7087A2FD1EC220@YTOPR0101MB1225.CANPRD01.PROD.OUTLOOK.COM>
+References: <YTOPR0101MB12259ED71BEB34B7087A2FD1EC220@YTOPR0101MB1225.CANPRD01.PROD.OUTLOOK.COM>
+Message-ID: <20171121091218.037a1860@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This helps the toolchains.free-electrons.com build logic re-use
-directly the Qemu command lines from this readme.txt file, by having a
--append option similar to the ones used in other readme.txt files.
+Hello,
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- board/qemu/x86/readme.txt    | 2 +-
- board/qemu/x86_64/readme.txt | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On Mon, 20 Nov 2017 22:38:48 +0000, Danick Desjardins wrote:
 
-diff --git a/board/qemu/x86/readme.txt b/board/qemu/x86/readme.txt
-index 17500961d3..b003ad5373 100644
---- a/board/qemu/x86/readme.txt
-+++ b/board/qemu/x86/readme.txt
-@@ -1,6 +1,6 @@
- Run the emulation with:
- 
--  qemu-system-i386 -M pc -kernel output/images/bzImage -drive file=output/images/rootfs.ext2,if=virtio,format=raw -append root=/dev/vda -net nic,model=virtio -net user
-+  qemu-system-i386 -M pc -kernel output/images/bzImage -drive file=output/images/rootfs.ext2,if=virtio,format=raw -append "root=/dev/vda" -net nic,model=virtio -net user
- 
- Optionally add -smp N to emulate a SMP system with N CPUs.
- 
-diff --git a/board/qemu/x86_64/readme.txt b/board/qemu/x86_64/readme.txt
-index ecd7813a1e..ed7b5f5532 100644
---- a/board/qemu/x86_64/readme.txt
-+++ b/board/qemu/x86_64/readme.txt
-@@ -1,6 +1,6 @@
- Run the emulation with:
- 
--  qemu-system-x86_64 -M pc -kernel output/images/bzImage -drive file=output/images/rootfs.ext2,if=virtio,format=raw -append root=/dev/vda -net nic,model=virtio -net user
-+  qemu-system-x86_64 -M pc -kernel output/images/bzImage -drive file=output/images/rootfs.ext2,if=virtio,format=raw -append "root=/dev/vda" -net nic,model=virtio -net user
- 
- Optionally add -smp N to emulate a SMP system with N CPUs.
- 
+> I need a feature of ZMQ related to POLLPRI to get interrupts from
+> GPIO fds. This feature is only available on ZeroMQ 4.2.x and above.
+> 
+> Looking at the master branch the version is only at 4.1.6. Just
+> curious to know if there is any reason this is being held back.
+
+Nope, just that nobody sent a patch to update ZeroMQ.
+
+> I am manually updating it to 4.2.2 locally for my purpose but was
+> curious if there were any gotchas with moving to a more recent
+> version that people know about.
+
+I don't think we're aware of any gotcha, but as a user of ZeroMQ, you
+are probably more likely to know if the 4.2 version of ZeroMQ
+introduces changes that are likely to break other packages that use
+ZeroMQ.
+
+As part of your ZeroMQ bump, I'd recommend testing a few of the
+packages that depend on ZeroMQ, to make sure everything is still OK:
+
+package/azmq/Config.in: select BR2_PACKAGE_ZEROMQ
+package/cppzmq/Config.in:       select BR2_PACKAGE_ZEROMQ
+package/czmq/Config.in: select BR2_PACKAGE_ZEROMQ
+package/filemq/Config.in:       select BR2_PACKAGE_ZEROMQ
+package/mongrel2/Config.in:     select BR2_PACKAGE_ZEROMQ
+package/php-zmq/Config.in:      select BR2_PACKAGE_ZEROMQ
+package/python-pyzmq/Config.in: select BR2_PACKAGE_ZEROMQ
+package/swupdate/Config.in:       * Select BR2_PACKAGE_ZEROMQ to add support for using a remote
+package/swupdate/swupdate.mk:ifeq ($(BR2_PACKAGE_ZEROMQ),y)
+package/zmqpp/Config.in:        select BR2_PACKAGE_ZEROMQ
+package/zyre/Config.in: select BR2_PACKAGE_ZEROMQ
+
+Thanks!
+
+Thomas
 -- 
-2.13.6
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
