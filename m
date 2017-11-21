@@ -1,49 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 21 Nov 2017 13:56:22 +0100
-Subject: [Buildroot] [PATCH v4 1/2] libkrb5: New package
-In-Reply-To: <1511213549-1878-1-git-send-email-nerv@dawncrow.de>
-References: <1511213549-1878-1-git-send-email-nerv@dawncrow.de>
-Message-ID: <20171121135622.033678af@windsurf.lan>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 21 Nov 2017 14:37:30 +0000
+Subject: [Buildroot] [Bug 10511] New: Packages get downloaded uncompressed
+ with wget
+Message-ID: <bug-10511-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=10511
 
-Thanks for this new iteration. Much better without the
-configure.ac patch.
+            Bug ID: 10511
+           Summary: Packages get downloaded uncompressed with wget
+           Product: buildroot
+           Version: 2017.08
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: jean.parpaillon at free.fr
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-On Mon, 20 Nov 2017 22:32:28 +0100, Andr? Hentschel wrote:
+Using buildroot with wget version 1.19.2 on Debian, through nerves toolchain.
+(https://github.com/nerves-project/nerves_system_br)
 
-> +LIBKRB5_VERSION = 1.15.2
-> +LIBKRB5_SITE = https://web.mit.edu/kerberos/dist/krb5/1.15
-> +LIBKRB5_SOURCE = krb5-$(LIBKRB5_VERSION).tar.gz
-> +LIBKRB5_SUBDIR = src
-> +LIBKRB5_LICENSE = MIT
-> +LIBKRB5_LICENSE_FILES = NOTICE
-> +LIBKRB5_INSTALL_STAGING = YES
-> +LIBKRB5_AUTORECONF = YES
+When downloading otp (http://erlang.org/download/otp_src_20.1.tar.gz), wget
+(through pkg-download.mk recipes) uncompress the data, resulting with an
+gunzipe'd .tar.gz, hence md5 mismatch.
 
-Are you sure you still need to AUTORECONF the package? Now that the
-configure.ac patch is gone, I don't think this is necessary anymore.
+Downloading the package with 'wget --compress=none' fixed the problem, but may
+depend on wget versions.
 
-> +# Add sane assumptions about cross-compiling
-
-Rather than "sane assumptions", a clearer comment would be: "The
-configure script uses AC_TRY_RUN tests to check for those values, which
-doesn't work in a cross-compilation scenario. Therefore, we feed the
-configure script with the correct answer for those tests". Or something
-along those lines.
-
-Note: both issues can be fixed when applying, no need to resend just
-for that.
-
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+You are receiving this mail because:
+You are on the CC list for the bug.
