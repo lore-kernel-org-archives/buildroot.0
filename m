@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 21 Nov 2017 09:12:18 +0100
-Subject: [Buildroot] ZeroMQ Version 4.2.X for POLLPRI
-In-Reply-To: <YTOPR0101MB12259ED71BEB34B7087A2FD1EC220@YTOPR0101MB1225.CANPRD01.PROD.OUTLOOK.COM>
-References: <YTOPR0101MB12259ED71BEB34B7087A2FD1EC220@YTOPR0101MB1225.CANPRD01.PROD.OUTLOOK.COM>
-Message-ID: <20171121091218.037a1860@windsurf.lan>
+Date: Tue, 21 Nov 2017 09:13:33 +0100
+Subject: [Buildroot] [PATCH 3/3] lttng-tools: bump to version 2.10.1
+In-Reply-To: <20171120232006.22588-3-eeppeliteloop@gmail.com>
+References: <20171120232006.22588-1-eeppeliteloop@gmail.com>
+ <20171120232006.22588-3-eeppeliteloop@gmail.com>
+Message-ID: <20171121091333.6213c754@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,39 +13,52 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 20 Nov 2017 22:38:48 +0000, Danick Desjardins wrote:
-
-> I need a feature of ZMQ related to POLLPRI to get interrupts from
-> GPIO fds. This feature is only available on ZeroMQ 4.2.x and above.
+On Mon, 20 Nov 2017 18:20:06 -0500, Philippe Proulx wrote:
+> Adding 0001-Fix-detect-dlmopen-and-disable-corresponding-tests-i.patch
+> to detect if dlmopen() exists and disable parts of the build accordingly
+> if not. This fixes a bug when building with musl or uClibc-ng.
 > 
-> Looking at the master branch the version is only at 4.1.6. Just
-> curious to know if there is any reason this is being held back.
+> Adding 0002-Fix-src-common-pipe.h-include-sys-types.h-for-ssize_.patch
+> to fix an #include bug when building with musl.
+> 
+> Adding 0003-Fix-warning-src-bin-lttng-utils.c-cast-incompatible-.patch
+> to remove compilation warnings.
+> 
+> All three new patches are in upstream's master branch as of this date
+> and will be part of an eventual release.
+> 
+> Signed-off-by: Philippe Proulx <eeppeliteloop@gmail.com>
 
-Nope, just that nobody sent a patch to update ZeroMQ.
+Thanks for working on this!
 
-> I am manually updating it to 4.2.2 locally for my purpose but was
-> curious if there were any gotchas with moving to a more recent
-> version that people know about.
+> diff --git a/package/lttng-tools/0001-Fix-detect-dlmopen-and-disable-corresponding-tests-i.patch b/package/lttng-tools/0001-Fix-detect-dlmopen-and-disable-corresponding-tests-i.patch
+> new file mode 100644
+> index 0000000000..8e14a14413
+> --- /dev/null
+> +++ b/package/lttng-tools/0001-Fix-detect-dlmopen-and-disable-corresponding-tests-i.patch
+> @@ -0,0 +1,249 @@
+> +From bc1d8ca01415710d40224de312c7ecf6f4223301 Mon Sep 17 00:00:00 2001
+> +From: Philippe Proulx <eeppeliteloop@gmail.com>
+> +Date: Mon, 6 Nov 2017 18:46:41 -0500
+> +Subject: [PATCH] Fix: detect dlmopen() and disable corresponding tests if not
+> + available
+> +MIME-Version: 1.0
+> +Content-Type: text/plain; charset=UTF-8
+> +Content-Transfer-Encoding: 8bit
+> +
+> +musl and uClibc-ng are known not to support dlmopen(). LTTng-UST has
+> +this dlmopen() detection.
+> +
+> +Signed-off-by: Philippe Proulx <eeppeliteloop@gmail.com>
+> +[Philippe: backport from upstream commit bc1d8ca0
+> +           edited to remove .gitignore part]
+> +Signed-off-by: J?r?mie Galarneau <jeremie.galarneau@efficios.com>
 
-I don't think we're aware of any gotcha, but as a user of ZeroMQ, you
-are probably more likely to know if the 4.2 version of ZeroMQ
-introduces changes that are likely to break other packages that use
-ZeroMQ.
+Would it be possible to get just this patch, on the current version of
+lttng-tools.
 
-As part of your ZeroMQ bump, I'd recommend testing a few of the
-packages that depend on ZeroMQ, to make sure everything is still OK:
-
-package/azmq/Config.in: select BR2_PACKAGE_ZEROMQ
-package/cppzmq/Config.in:       select BR2_PACKAGE_ZEROMQ
-package/czmq/Config.in: select BR2_PACKAGE_ZEROMQ
-package/filemq/Config.in:       select BR2_PACKAGE_ZEROMQ
-package/mongrel2/Config.in:     select BR2_PACKAGE_ZEROMQ
-package/php-zmq/Config.in:      select BR2_PACKAGE_ZEROMQ
-package/python-pyzmq/Config.in: select BR2_PACKAGE_ZEROMQ
-package/swupdate/Config.in:       * Select BR2_PACKAGE_ZEROMQ to add support for using a remote
-package/swupdate/swupdate.mk:ifeq ($(BR2_PACKAGE_ZEROMQ),y)
-package/zmqpp/Config.in:        select BR2_PACKAGE_ZEROMQ
-package/zyre/Config.in: select BR2_PACKAGE_ZEROMQ
+Indeed, we want to fix the build issue of lttng-tools in Buildroot's
+master branch, but the version bumps can only got in the next branch.
 
 Thanks!
 
