@@ -1,46 +1,38 @@
-From: =?UTF-8?Q?Andr=c3=a9_Hentschel?= <nerv@dawncrow.de>
-Date: Tue, 21 Nov 2017 18:21:26 +0100
-Subject: [Buildroot] [PATCH v4 1/2] libkrb5: New package
-In-Reply-To: <20171121135622.033678af@windsurf.lan>
-References: <1511213549-1878-1-git-send-email-nerv@dawncrow.de>
- <20171121135622.033678af@windsurf.lan>
-Message-ID: <2a42b590-14f0-9fff-dfd5-31f021c5cbae@dawncrow.de>
+From: Philippe Proulx <eeppeliteloop@gmail.com>
+Date: Tue, 21 Nov 2017 14:06:22 -0500
+Subject: [Buildroot] [2/3] lttng-libust: bump version to 2.10.0
+In-Reply-To: <1511291049.19578.1.camel@impinj.com>
+References: <20171120232006.22588-2-eeppeliteloop@gmail.com>
+ <1511291049.19578.1.camel@impinj.com>
+Message-ID: <CAB4xu_2SRnFad-VX0A68XCrCrrag95=+M0pJ24zYsyj4dkgcOg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am 21.11.2017 um 13:56 schrieb Thomas Petazzoni:
-> Hello,
-> 
-> Thanks for this new iteration. Much better without the
-> configure.ac patch.
-> 
-> On Mon, 20 Nov 2017 22:32:28 +0100, Andr? Hentschel wrote:
-> 
->> +LIBKRB5_VERSION = 1.15.2
->> +LIBKRB5_SITE = https://web.mit.edu/kerberos/dist/krb5/1.15
->> +LIBKRB5_SOURCE = krb5-$(LIBKRB5_VERSION).tar.gz
->> +LIBKRB5_SUBDIR = src
->> +LIBKRB5_LICENSE = MIT
->> +LIBKRB5_LICENSE_FILES = NOTICE
->> +LIBKRB5_INSTALL_STAGING = YES
->> +LIBKRB5_AUTORECONF = YES
-> 
-> Are you sure you still need to AUTORECONF the package? Now that the
-> configure.ac patch is gone, I don't think this is necessary anymore.
-> 
->> +# Add sane assumptions about cross-compiling
-> 
-> Rather than "sane assumptions", a clearer comment would be: "The
-> configure script uses AC_TRY_RUN tests to check for those values, which
-> doesn't work in a cross-compilation scenario. Therefore, we feed the
-> configure script with the correct answer for those tests". Or something
-> along those lines.
-> 
-> Note: both issues can be fixed when applying, no need to resend just
-> for that.
+On Tue, Nov 21, 2017 at 2:04 PM, Trent Piepho <tpiepho@impinj.com> wrote:
+>
+> On Mon, 2017-11-20 at 18:20 -0500, Philippe Proulx wrote:
+> > diff --git a/package/lttng-libust/lttng-libust.hash b/package/lttng-libust/lttng-libust.hash
+> > index e080361a57..dd77690fef 100644
+> > --- a/package/lttng-libust/lttng-libust.hash
+> > +++ b/package/lttng-libust/lttng-libust.hash
+> > @@ -1,3 +1,3 @@
+> > -# From http://lttng.org/files/lttng-ust/lttng-ust-2.9.0.tar.bz2.{md5,sha1}
+> > -md5 77f3378ba37a36801420bce87b702e9c  lttng-ust-2.9.0.tar.bz2
+> > -sha1 9937eae64540821b8597cce081e92be76e6b5568  lttng-ust-2.9.0.tar.bz2
+> > +# From http://lttng.org/files/lttng-ust/lttng-ust-2.10.0.tar.bz2.{md5,sha1}
+> > +md5 cc1f0938fa0d46d8d400864de0c1da02  lttng-ust-2.10.0-rc2.tar.bz2
+> > +sha1 aba45026b05939a83b8d29414927ac8e2ce5c4a8  lttng-ust-2.10.0-rc2.tar.bz2
+>
+>
+> Looks like the hashes are for the wrong file, as the .mk is downloading
+> 2.10.0, not 2.10.0-rc2.
 
-Yes, thanks for taking care!
-The autoreconf isn't needed anymore, I just tested it.
+Oh yes I noticed this, just forgot to include the change. Sorry.
+
+Anyway I'll be sending a v2 of this whole patchset to split the version bump of
+lttng-tools from the dlmopen() fixing patch as Thomas asked.
+
+Phil
