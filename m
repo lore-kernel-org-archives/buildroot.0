@@ -1,36 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 Nov 2017 22:17:03 +0100
-Subject: [Buildroot] [PATCH] gptfdisk: bump to version 1.0.3
-In-Reply-To: <20171117002902.10084-1-tpiepho@impinj.com>
-References: <20171117002902.10084-1-tpiepho@impinj.com>
-Message-ID: <20171122221703.08dceadc@windsurf.lan>
+Date: Wed, 22 Nov 2017 22:17:12 +0100
+Subject: [Buildroot] [git commit branch/next] luasec: bump to version 0.6
+Message-ID: <20171122210951.3A1B08102C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=fa1f589c411df04d6dff0cb27d5abf4465605c73
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Thu, 16 Nov 2017 16:29:02 -0800, Trent Piepho wrote:
-> This version has a new command line argument to sgdisk, -j, that lets one
-> change the starting address of where the GPT partition table entries are
-> stored.
-> 
-> The iMX SoC ROM loader, and perhaps others, expects the bootloader to start
-> at sector 2.  Using this option with gptfdisk lets the table entries move
-> to make space for the bootloader image.
-> 
-> Signed-off-by: Trent Piepho <tpiepho@impinj.com>
-> ---
->  package/gptfdisk/gptfdisk.hash | 8 ++++----
->  package/gptfdisk/gptfdisk.mk   | 2 +-
->  2 files changed, 5 insertions(+), 5 deletions(-)
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/luasec/luasec.hash | 2 +-
+ package/luasec/luasec.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Applied to next, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/luasec/luasec.hash b/package/luasec/luasec.hash
+index 1e9f70a..9d721ed 100644
+--- a/package/luasec/luasec.hash
++++ b/package/luasec/luasec.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	d2198cc39b3fa55bd5020046742b34093b6efcb619cf4032948b8c8556202a32  luasec-0.5-2.src.rock
++sha256	1d04e2f70bc055348dda3cc3566d27d8408094bc944aa5c6a4ae18bffe5c0007  luasec-0.6-1.src.rock
+diff --git a/package/luasec/luasec.mk b/package/luasec/luasec.mk
+index b059e1c..28c4b2c 100644
+--- a/package/luasec/luasec.mk
++++ b/package/luasec/luasec.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LUASEC_VERSION = 0.5-2
++LUASEC_VERSION = 0.6-1
+ LUASEC_SUBDIR = luasec
+ LUASEC_LICENSE = MIT
+ LUASEC_LICENSE_FILES = $(LUASEC_SUBDIR)/LICENSE
