@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 Nov 2017 22:26:28 +0100
-Subject: [Buildroot] [NEXT 1/1] time: bump to 1.8
-In-Reply-To: <20171120143203.23316-1-aduskett@gmail.com>
-References: <20171120143203.23316-1-aduskett@gmail.com>
-Message-ID: <20171122222628.31b34808@windsurf.lan>
+Date: Wed, 22 Nov 2017 22:28:58 +0100
+Subject: [Buildroot] [NEXT 1/1] postgresql: bump to 10.1
+In-Reply-To: <20171120144352.11599-1-aduskett@gmail.com>
+References: <20171120144352.11599-1-aduskett@gmail.com>
+Message-ID: <20171122222858.62ab3d5f@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,27 +12,22 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 20 Nov 2017 09:32:03 -0500, Adam Duskett wrote:
-> In addition:
-> - Update license to GPL-3.0+
-> - Add a shash for the license file.
-> 
-> See: https://lists.gnu.org/archive/html/info-gnu/2017-11/msg00002.html for
-> more information.
-> 
-> Signed-off-by: Adam Duskett <aduskett@gmail.com>
-> ---
->  package/time/time.hash | 3 ++-
->  package/time/time.mk   | 4 ++--
->  2 files changed, 4 insertions(+), 3 deletions(-)
+> - PostgreSQL 10.0 and above will default to checking for /dev/urandom if an
+>   SSL library is not found, which will fail when cross compiling.
+>   The workaround is to add --disable-strong-random to the configure options
+>   if a SSL library not selected.
 
-Applied to next, thanks. Thanks for spotting the very important license
-change!
+Since /dev/urandom is guaranteed to be provided on Linux systems, I
+believe a better solution is to pass ac_cv_file__dev_urandom=yes in
+POSTGRESQL_CONF_ENV, so that the PostgreSQL configure script knows
+that /dev/urandom will be available on the target.
 
-Thanks,
+Could you test this instead?
+
+Thanks!
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
