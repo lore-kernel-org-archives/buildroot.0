@@ -1,30 +1,36 @@
-From: Joel Stanley <joel@jms.id.au>
-Date: Wed, 22 Nov 2017 11:54:14 +1030
-Subject: [Buildroot] [PATCH 0/2] pdbg updates
-Message-ID: <20171122012416.25862-1-joel@jms.id.au>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 22 Nov 2017 02:58:51 +0000
+Subject: [Buildroot] [Bug 10521] New: U-Boot 2017.09 has a bug in fdt set
+ command
+Message-ID: <bug-10521-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-A bump to fix build issues. Thanks for writing the fix Thomas! This
-should go into master as well as next.
+https://bugs.busybox.net/show_bug.cgi?id=10521
 
-The help text update could go in too, but it is not urgent.
+            Bug ID: 10521
+           Summary: U-Boot 2017.09 has a bug in fdt set command
+           Product: buildroot
+           Version: 2017.08
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Outdated package
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: sjr_ee at yahoo.ca
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-Build tested on ARM and mips64el.
-
-Joel Stanley (2):
-  pdbg: update help text
-  pdbg: Bump to latest upstream version
-
- ...bg-Remove-unused-__unused-from-compiler.h.patch | 39 ----------------------
- package/pdbg/Config.in                             |  4 +--
- package/pdbg/pdbg.hash                             |  2 +-
- package/pdbg/pdbg.mk                               |  2 +-
- 4 files changed, 4 insertions(+), 43 deletions(-)
- delete mode 100644 package/pdbg/0001-libpdbg-Remove-unused-__unused-from-compiler.h.patch
+There is a bug in U-Boot 2017.09 in the fdt set command, which prevents it from
+being able to add a property to a device tree node. That version is the default
+in buildroot-2017.11-rc2. U-Boot 2017.11 is now the current release. I haven't
+yet confirmed if the bug is fixed in 2017.11.
 
 -- 
-2.14.1
+You are receiving this mail because:
+You are on the CC list for the bug.
