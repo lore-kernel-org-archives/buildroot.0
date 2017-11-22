@@ -1,47 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 Nov 2017 22:29:39 +0100
-Subject: [Buildroot] [git commit branch/next] harfbuzz: bump to 1.7.1
-Message-ID: <20171122212320.79B96805AA@busybox.osuosl.org>
+Date: Wed, 22 Nov 2017 22:29:59 +0100
+Subject: [Buildroot] [git commit branch/next] freetype: bump to 2.8.1
+Message-ID: <20171122212320.9DF6580F95@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=40d26ab924ab5db3bfa31c126c7a8c37f300faeb
+commit: https://git.buildroot.net/buildroot/commit/?id=223e5867eda125ae10b0e2b963ff9ce3ed6eaa30
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-In addition, add a hash for the license file.
+In addition, add hashes for all three license files.
 
 Signed-off-by: Adam Duskett <aduskett@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/harfbuzz/harfbuzz.hash | 7 +++++--
- package/harfbuzz/harfbuzz.mk   | 2 +-
- 2 files changed, 6 insertions(+), 3 deletions(-)
+ package/freetype/freetype.hash | 15 ++++++++++-----
+ package/freetype/freetype.mk   |  2 +-
+ 2 files changed, 11 insertions(+), 6 deletions(-)
 
-diff --git a/package/harfbuzz/harfbuzz.hash b/package/harfbuzz/harfbuzz.hash
-index d44bd56..5f786dc 100644
---- a/package/harfbuzz/harfbuzz.hash
-+++ b/package/harfbuzz/harfbuzz.hash
-@@ -1,2 +1,5 @@
--# From https://www.freedesktop.org/software/harfbuzz/release/harfbuzz-1.5.0.tar.bz2.sha256
--sha256 c088ec363be8d03f7708feb76dd22d5f102678e67d6ce63b02496ca0beb64ac1  harfbuzz-1.5.0.tar.bz2
-+# From https://www.freedesktop.org/software/harfbuzz/release/harfbuzz-1.7.1.tar.bz2.sha256
-+sha256	9645a6e83313b690602017f18d4eb2adf81f2e54c6fc4471e19331304965154e	harfbuzz-1.7.1.tar.bz2
+diff --git a/package/freetype/freetype.hash b/package/freetype/freetype.hash
+index beff858..3997e81 100644
+--- a/package/freetype/freetype.hash
++++ b/package/freetype/freetype.hash
+@@ -1,5 +1,10 @@
+-# From https://sourceforge.net/projects/freetype/files/freetype2/2.8/
+-md5 2413ac3eaf508ada019c63959ea81a92  freetype-2.8.tar.bz2
+-sha1 42c6b1f733fe13a3eba135f5025b22cb68450f91  freetype-2.8.tar.bz2
+-# Locally calculated after checking pgp signature
+-sha256 a3c603ed84c3c2495f9c9331fe6bba3bb0ee65e06ec331e0a0fb52158291b40b  freetype-2.8.tar.bz2
++# From https://sourceforge.net/projects/freetype/files/freetype2/2.8.1/
++md5	bf0a210b6fe781228fa0e4a80691a521		freetype-2.8.1.tar.bz2
++sha1	417bb3747c4ac95b6f2652024a53fad45581fa1c	freetype-2.8.1.tar.bz2
 +
-+# Locally computed
-+sha256	2a886915de4f296cdae5ed67064f86dba01d0c55286d86e8487f2a5caaf40216	COPYING
-diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
-index 0ee6a6b..5708745 100644
---- a/package/harfbuzz/harfbuzz.mk
-+++ b/package/harfbuzz/harfbuzz.mk
++# Locally calculated
++sha256	e5435f02e02d2b87bb8e4efdcaa14b1f78c9cf3ab1ed80f94b6382fb6acc7d78	freetype-2.8.1.tar.bz2
++sha256	fd056de4196903a676208ef58cfddafc7d583d1f28fa2e44c309cf84a59e62fb	docs/LICENSE.TXT
++sha256	4a9a548027a2c1d37788519dea833294c9c81f1ebc280e817f41f50d0c642d78	docs/FTL.TXT
++sha256	c4120c6752c910c299e3bd9cb3a46ff262c268303ca2069b61f92f10a5656c18	docs/GPLv2.TXT
++
+diff --git a/package/freetype/freetype.mk b/package/freetype/freetype.mk
+index 9a98b40..1028664 100644
+--- a/package/freetype/freetype.mk
++++ b/package/freetype/freetype.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--HARFBUZZ_VERSION = 1.5.0
-+HARFBUZZ_VERSION = 1.7.1
- HARFBUZZ_SITE = https://www.freedesktop.org/software/harfbuzz/release
- HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.bz2
- HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
+-FREETYPE_VERSION = 2.8
++FREETYPE_VERSION = 2.8.1
+ FREETYPE_SOURCE = freetype-$(FREETYPE_VERSION).tar.bz2
+ FREETYPE_SITE = http://download.savannah.gnu.org/releases/freetype
+ FREETYPE_INSTALL_STAGING = YES
