@@ -1,30 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 Nov 2017 22:30:40 +0100
-Subject: [Buildroot] [NEXT 1/1] freetype: bump to 2.8.1
-In-Reply-To: <20171120152424.18511-1-aduskett@gmail.com>
-References: <20171120152424.18511-1-aduskett@gmail.com>
-Message-ID: <20171122223040.0ed27615@windsurf.lan>
+Date: Wed, 22 Nov 2017 22:32:05 +0100
+Subject: [Buildroot] [git commit] DEVELOPERS: Add myself to libepoxy
+Message-ID: <20171122212445.4E02180E61@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=194acd0b69c7c6c6b0e0fb1c589902460c632b49
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 20 Nov 2017 10:24:24 -0500, Adam Duskett wrote:
-> In addition, add hashes for all three license files.
-> 
-> Signed-off-by: Adam Duskett <aduskett@gmail.com>
-> ---
->  package/freetype/freetype.hash | 15 ++++++++++-----
->  package/freetype/freetype.mk   |  2 +-
->  2 files changed, 11 insertions(+), 6 deletions(-)
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ DEVELOPERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-Applied to next, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 73b1424..c076415 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -57,6 +57,7 @@ F:	package/setools/
+ F:	package/sngrep/
+ 
+ N:	Adrian Perez de Castro <aperez@igalia.com>
++F:	package/libepoxy/
+ F:	package/webkitgtk/
+ 
+ N:	Aleksander Morgado <aleksander@aleksander.es>
