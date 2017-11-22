@@ -1,49 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 Nov 2017 21:33:36 +0100
-Subject: [Buildroot] [PATCH v2] rauc: bump to version 0.2
-In-Reply-To: <20171122041747.11363-1-yurovsky@gmail.com>
-References: <20171114043141.8245-1-ayurovsky@impinj.com>
- <20171122041747.11363-1-yurovsky@gmail.com>
-Message-ID: <20171122213336.52a3e196@windsurf.lan>
+Date: Wed, 22 Nov 2017 21:34:06 +0100
+Subject: [Buildroot] [git commit branch/next] kexec-lite: Bump version
+Message-ID: <20171122202644.DF38D811D5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=39640c94a8f266d620fc25df83b6a6392eedee17
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Tue, 21 Nov 2017 20:17:47 -0800, Andrey Yurovsky wrote:
+From this version kexec-lite gained support for FreeBSD kernel
+loading.
 
-> -RAUC_VERSION = 0.1.1
-> +RAUC_VERSION = 0.2
->  RAUC_SITE = https://github.com/rauc/rauc/releases/download/v$(RAUC_VERSION)
->  RAUC_SOURCE = rauc-$(RAUC_VERSION).tar.xz
->  RAUC_LICENSE = LGPL-2.1
-> @@ -29,7 +29,7 @@ ifeq ($(BR2_PACKAGE_SYSTEMD),y)
->  RAUC_DEPENDENCIES += systemd
->  endif
->  
-> -HOST_RAUC_DEPENDENCIES = host-pkgconf host-openssl host-libglib2
-> +HOST_RAUC_DEPENDENCIES = host-pkgconf host-openssl host-libglib2 host-squashfs
->  HOST_RAUC_CONF_OPTS += --disable-network --disable-json --disable-service
+Signed-off-by: Patryk Duda <pdk@semihalf.com>
+Signed-off-by: Joel Stanley <joel@jms.id.au>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/kexec-lite/kexec-lite.hash | 2 +-
+ package/kexec-lite/kexec-lite.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Another question about this dependency: how is it possible that
-host-squashfs is a runtime dependency of the host variant of rauc, but
-that squashfs is not a runtime dependency of the target variant of
-rauc ?
-
-I can imagine that host-mksquashfs is needed by host-rauc to prepare
-some filesystem image. But how does the target build of RAUC know that
-it doesn't need mksquashfs ?
-
-Is host-mksquashfs always needed by host-rauc, or only under certain
-conditions/configurations ?
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/kexec-lite/kexec-lite.hash b/package/kexec-lite/kexec-lite.hash
+index 0f21224..d71e8d0 100644
+--- a/package/kexec-lite/kexec-lite.hash
++++ b/package/kexec-lite/kexec-lite.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 5786ddc0c94ead4fd4a1fded44bb1da0c9bc91af08049fed373ea161603e1e1f  kexec-lite-86e45a47e8cc1f598ccfa9b873a23067f4ecc36f.tar.gz
++sha256 2e9b131324cec9d27840179daa35e3159a4032ff78b74e301850faa007567d0e kexec-lite-87d044a895b1c004320a2676099a54a5a2a74f2e.tar.gz
+diff --git a/package/kexec-lite/kexec-lite.mk b/package/kexec-lite/kexec-lite.mk
+index 76b6819..8e1ad8d 100644
+--- a/package/kexec-lite/kexec-lite.mk
++++ b/package/kexec-lite/kexec-lite.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KEXEC_LITE_VERSION = 86e45a47e8cc1f598ccfa9b873a23067f4ecc36f
++KEXEC_LITE_VERSION = 87d044a895b1c004320a2676099a54a5a2a74f2e
+ KEXEC_LITE_SITE = $(call github,antonblanchard,kexec-lite,$(KEXEC_LITE_VERSION))
+ KEXEC_LITE_LICENSE = GPL-2.0+
+ KEXEC_LITE_LICENSE_FILES = COPYING
