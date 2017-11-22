@@ -1,11 +1,12 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 Nov 2017 22:46:14 +0100
-Subject: [Buildroot] [PATCH] util-linux: explicitly use /usr/{bin, sbin,
- lib}, with merged usr
-In-Reply-To: <20171109000533.26181-1-casantos@datacom.ind.br>
-References: <20171108234258.15035-1-casantos@datacom.ind.br>
- <20171109000533.26181-1-casantos@datacom.ind.br>
-Message-ID: <20171122224614.2d6ec602@windsurf.lan>
+Date: Wed, 22 Nov 2017 22:54:39 +0100
+Subject: [Buildroot] [PATCH 1/2] openntpd: update to 6.2p3
+In-Reply-To: <20171120051147.qoedwxoxivo3encc@sapphire.tkos.co.il>
+References: <20171108130459.25412-1-aduskett@gmail.com>
+ <20171108133119.5f3vd7d2owvvtevc@tarshish>
+ <CAFSsvmqDFVSSwmT0FaUqQmZh3xR92pSxmdV_V2PQ2H_EFEF1Pg@mail.gmail.com>
+ <20171120051147.qoedwxoxivo3encc@sapphire.tkos.co.il>
+Message-ID: <20171122225439.7b411286@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,27 +15,22 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed,  8 Nov 2017 22:05:33 -0200, Carlos Santos wrote:
-> Prevent the installation from attempting to move shared libraries from
-> ${usrlib_execdir} to ${libdir} if both paths are the same, which leads
-> to error messages like this:
-> 
->   mv: '$(TARGET_DIR)/usr/lib/libfoo.so.1' and '$(TARGET_DIR)/lib/libfoo.so.1' are the same file
-> 
-> That error is not fatal but let's avoid possible future problems.
-> 
-> Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
-> ---
-> Changes v1->v2:
->   Fix commit message to remove spurious "not".
-> ---
->  package/util-linux/util-linux.mk | 7 +++++++
->  1 file changed, 7 insertions(+)
+On Mon, 20 Nov 2017 07:11:47 +0200, Baruch Siach wrote:
 
-Applied to next, thanks.
+> > Still broken :\  
+> 
+> What is broken?
+> 
+> I case AUTORECONF is still necessary even after the Makefile.am patch removal, 
+> the comment needs update.
+
+Because our libtool patch doesn't apply to openntpd's ltmain.sh. So
+I've kept the AUTORECONF = YES (after updating the comment, of course).
+
+Thanks!
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
