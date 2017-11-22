@@ -1,37 +1,30 @@
 From: Joel Stanley <joel@jms.id.au>
-Date: Wed, 22 Nov 2017 11:54:15 +1030
-Subject: [Buildroot] [PATCH 1/2] pdbg: update help text
-In-Reply-To: <20171122012416.25862-1-joel@jms.id.au>
-References: <20171122012416.25862-1-joel@jms.id.au>
-Message-ID: <20171122012416.25862-2-joel@jms.id.au>
+Date: Wed, 22 Nov 2017 11:54:14 +1030
+Subject: [Buildroot] [PATCH 0/2] pdbg updates
+Message-ID: <20171122012416.25862-1-joel@jms.id.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update the help text to reflect features added in recent versions.
+A bump to fix build issues. Thanks for writing the fix Thomas! This
+should go into master as well as next.
 
-Signed-off-by: Joel Stanley <joel@jms.id.au>
----
- package/pdbg/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+The help text update could go in too, but it is not urgent.
 
-diff --git a/package/pdbg/Config.in b/package/pdbg/Config.in
-index 3e23c210c920..4a902694f50c 100644
---- a/package/pdbg/Config.in
-+++ b/package/pdbg/Config.in
-@@ -2,9 +2,9 @@ config BR2_PACKAGE_PDBG
- 	bool "pdbg"
- 	help
- 	  PowerPC FSI Debugger, for low level debugging of a IBM
--	  Power8 CPU over FSI.
-+	  Power8 and Power9 CPU over FSI.
- 
- 	  pdbg runs on a BMC, which is generally an ARM-powered system
--	  monitoring/controlling a host CPU.
-+	  monitoring/controlling a host CPU. It can also run on the host.
- 
- 	  https://github.com/open-power/pdbg
+Build tested on ARM and mips64el.
+
+Joel Stanley (2):
+  pdbg: update help text
+  pdbg: Bump to latest upstream version
+
+ ...bg-Remove-unused-__unused-from-compiler.h.patch | 39 ----------------------
+ package/pdbg/Config.in                             |  4 +--
+ package/pdbg/pdbg.hash                             |  2 +-
+ package/pdbg/pdbg.mk                               |  2 +-
+ 4 files changed, 4 insertions(+), 43 deletions(-)
+ delete mode 100644 package/pdbg/0001-libpdbg-Remove-unused-__unused-from-compiler.h.patch
+
 -- 
 2.14.1
