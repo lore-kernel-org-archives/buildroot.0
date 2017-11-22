@@ -1,36 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 Nov 2017 22:54:39 +0100
-Subject: [Buildroot] [PATCH 1/2] openntpd: update to 6.2p3
-In-Reply-To: <20171120051147.qoedwxoxivo3encc@sapphire.tkos.co.il>
-References: <20171108130459.25412-1-aduskett@gmail.com>
- <20171108133119.5f3vd7d2owvvtevc@tarshish>
- <CAFSsvmqDFVSSwmT0FaUqQmZh3xR92pSxmdV_V2PQ2H_EFEF1Pg@mail.gmail.com>
- <20171120051147.qoedwxoxivo3encc@sapphire.tkos.co.il>
-Message-ID: <20171122225439.7b411286@windsurf.lan>
+Date: Wed, 22 Nov 2017 22:46:06 +0100
+Subject: [Buildroot] [git commit branch/next] util-linux: explicitly use
+ /usr/{bin, sbin, lib}, with merged usr
+Message-ID: <20171122214737.9BEE88145F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=099c2ceaa8adfcdcbbaf039000e1fe26a33a6165
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Mon, 20 Nov 2017 07:11:47 +0200, Baruch Siach wrote:
+Prevent the installation from attempting to move shared libraries from
+${usrlib_execdir} to ${libdir} if both paths are the same, which leads
+to error messages like this:
 
-> > Still broken :\  
-> 
-> What is broken?
-> 
-> I case AUTORECONF is still necessary even after the Makefile.am patch removal, 
-> the comment needs update.
+  mv: '$(TARGET_DIR)/usr/lib/libfoo.so.1' and '$(TARGET_DIR)/lib/libfoo.so.1' are the same file
 
-Because our libtool patch doesn't apply to openntpd's ltmain.sh. So
-I've kept the AUTORECONF = YES (after updating the comment, of course).
+That error is not fatal but let's avoid possible future problems.
 
-Thanks!
+Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/util-linux/util-linux.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+index 8464288..31a3fe4 100644
+--- a/package/util-linux/util-linux.mk
++++ b/package/util-linux/util-linux.mk
+@@ -41,6 +41,13 @@ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+ UTIL_LINUX_DEPENDENCIES += busybox
+ endif
+ 
++# Prevent the installation from attempting to move shared libraries from
++# ${usrlib_execdir} (/usr/lib) to ${libdir} (/lib), since both paths are
++# the same when merged usr is in use.
++ifeq ($(BR2_ROOTFS_MERGED_USR),y)
++UTIL_LINUX_CONF_OPTS += --bindir=/usr/bin --sbindir=/usr/sbin --libdir=/usr/lib
++endif
++
+ ifeq ($(BR2_PACKAGE_NCURSES),y)
+ UTIL_LINUX_DEPENDENCIES += ncurses
+ ifeq ($(BR2_PACKAGE_NCURSES_WCHAR),y)
