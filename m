@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 Nov 2017 22:14:34 +0100
-Subject: [Buildroot] [PATCH] Revert "runc: bump to v1.0.0-rc4"
-In-Reply-To: <20171117170027.3347-1-peter@korsgaard.com>
-References: <20171117170027.3347-1-peter@korsgaard.com>
-Message-ID: <20171122221434.3a8c0127@windsurf.lan>
+Date: Wed, 22 Nov 2017 22:16:39 +0100
+Subject: [Buildroot] [PATCH] systemd: set time epoch for reproducible
+ builds
+In-Reply-To: <20171116170316.19081-1-john@metanate.com>
+References: <20171116170316.19081-1-john@metanate.com>
+Message-ID: <20171122221639.40f60340@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,45 +13,27 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 17 Nov 2017 18:00:27 +0100, Peter Korsgaard wrote:
-> This reverts commit 3861ce09d0acd6425873332300c6caa75863017f.
+On Thu, 16 Nov 2017 17:03:16 +0000, John Keeping wrote:
+> Systemd embeds a timestamp which is used to impose a minimum bound on
+> the system time during boot.  Normally this comes from stat'ing the NEWS
+> file included with the systemd source, but this makes the build
+> non-reproducible.  Pass in $SOURCE_DATE_EPOCH to use a deterministic
+> timestamp when reproducible builds are enabled.
 > 
-> As reported on IRC, runc v1.0.0-rc4 is not compatible with the docker-engine
-> version we are using, so lets revert for 2017.11:
-> 
-> 20:27 < eschu> It looks like 25 days ago buildroot had runc updated to
->                1.0.0-rc4, which breaks compatibility with the docker-engine
->                version 17.05.  Is there somewhere issues like this are
->                reported?  Or is it just expected on non-release versions of
->                buildroot?
-> 
-> 20:47 < Jacmet> eschu: ahh, so the new runc doesn't work with the old
->                 docker-engine?  what kind of errors do you get exactly?
-> 
-> 20:49 < eschu> Jacmet:  yes, runc made a change from -console to
->                --console-socket, which results in "Incorrect Usage" error
->                "flag provided but not defined: -console"
-> 
-> 20:51 < eschu> Jacmet:  basically docker-engine 17.05 uses -console, but
->                support for that was cut off in runc around the first 1.0.0
->                versions.  I'll check the patches out, or might just
->                downgrade to buildroot 2017.08 release
-> 
-> 20:51 < agb> Jacmet: unfortunately this issue has hit a number of distributions
->              https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=877146
-> 
-> 20:53 < Jacmet> agb: thanks.  I'll send a revert for 2017.11 and hopefully
->                 we can make progress on the other docker packages for
->                 2018.02
-> 
-> Cc: Christian Stewart <christian@paral.in>
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> Signed-off-by: John Keeping <john@metanate.com>
 > ---
->  package/runc/runc.hash | 2 +-
->  package/runc/runc.mk   | 5 ++---
->  2 files changed, 3 insertions(+), 4 deletions(-)
+>  package/systemd/systemd.mk | 5 +++++
+>  1 file changed, 5 insertions(+)
 
-Applied to master, thanks.
+Following the feedback from Peter Korsgaard and myself, and the lack of
+additional justification, I've marked this patch as "Rejected" in our
+patch tracking system.
+
+John: don't hesitate to get back to us with a more detailed explanation
+of the issue if you have not been convinced by Peter's explantion and
+mine.
+
+Thanks!
 
 Thomas
 -- 
