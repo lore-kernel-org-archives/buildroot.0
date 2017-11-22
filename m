@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 Nov 2017 22:28:58 +0100
-Subject: [Buildroot] [NEXT 1/1] postgresql: bump to 10.1
-In-Reply-To: <20171120144352.11599-1-aduskett@gmail.com>
-References: <20171120144352.11599-1-aduskett@gmail.com>
-Message-ID: <20171122222858.62ab3d5f@windsurf.lan>
+Date: Wed, 22 Nov 2017 22:30:04 +0100
+Subject: [Buildroot] [NEXT 1/1] pango: bump to 1.140.14
+In-Reply-To: <20171120145758.17150-1-aduskett@gmail.com>
+References: <20171120145758.17150-1-aduskett@gmail.com>
+Message-ID: <20171122223004.4f644e3d@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,22 +12,19 @@ To: buildroot@busybox.net
 
 Hello,
 
-> - PostgreSQL 10.0 and above will default to checking for /dev/urandom if an
->   SSL library is not found, which will fail when cross compiling.
->   The workaround is to add --disable-strong-random to the configure options
->   if a SSL library not selected.
+On Mon, 20 Nov 2017 09:57:58 -0500, Adam Duskett wrote:
+> In addition, add a hash for the license file.
+> 
+> Signed-off-by: Adam Duskett <aduskett@gmail.com>
+> ---
+>  package/pango/pango.hash | 5 +++--
+>  package/pango/pango.mk   | 2 +-
+>  2 files changed, 4 insertions(+), 3 deletions(-)
 
-Since /dev/urandom is guaranteed to be provided on Linux systems, I
-believe a better solution is to pass ac_cv_file__dev_urandom=yes in
-POSTGRESQL_CONF_ENV, so that the PostgreSQL configure script knows
-that /dev/urandom will be available on the target.
-
-Could you test this instead?
-
-Thanks!
+Applied to next, thanks.
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
+Embedded Linux, Kernel and Android engineering
 http://free-electrons.com
