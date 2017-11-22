@@ -1,76 +1,64 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 Nov 2017 21:30:15 +0100
-Subject: [Buildroot] [git commit branch/next] gst1-imx: fix v4l2 plugins
- disable options
-Message-ID: <20171122202254.1BABC8113D@busybox.osuosl.org>
+Date: Wed, 22 Nov 2017 21:30:35 +0100
+Subject: [Buildroot] [git commit] samba4: security bump to version 4.6.11
+Message-ID: <20171122202317.1B177814A3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=599b3af68aac15969b0909d99bf0ba23ba305ac2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+commit: https://git.buildroot.net/buildroot/commit/?id=df75c954bc5633045d5c06a87c53d71dad8ae6e1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Latest bump to v0.13.0 didn't take care of the following upstream
-commit:
+Fixes the following security issues:
 
-  7bfbf71 v4l2: Rename to v4l2video and add switches to enable/disable sink/source
+ - CVE-2017-14746:
+   All versions of Samba from 4.0.0 onwards are vulnerable to a use after
+   free vulnerability, where a malicious SMB1 request can be used to
+   control the contents of heap memory via a deallocated heap pointer. It
+   is possible this may be used to compromise the SMB server.
 
-To address that, this commit:
+ - CVE-2017-15275:
+   All versions of Samba from 3.6.0 onwards are vulnerable to a heap
+   memory information leak, where server allocated heap memory may be
+   returned to the client without being cleared.
 
- - Uses the new name of the v4l2 source configure script option
+   There is no known vulnerability associated with this error, but
+   uncleared heap memory may contain previously used data that may help
+   an attacker compromise the server via other methods. Uncleared heap
+   memory may potentially contain password hashes or other high-value
+   data.
 
- - Introduce a new Config.in option to control the build of the v4l2
-   sink support
+For more details, see the release notes:
+https://www.samba.org/samba/history/samba-4.6.11.html
 
-Fixes:
-
-  http://autobuild.buildroot.net/results/5c404a2a28a4052056e5c9a7edda40641fe55f9e
-
-Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gstreamer1/gst1-imx/Config.in   |  6 ++++++
- package/gstreamer1/gst1-imx/gst1-imx.mk | 11 +++++++++--
- 2 files changed, 15 insertions(+), 2 deletions(-)
+ package/samba4/samba4.hash | 2 +-
+ package/samba4/samba4.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-imx/Config.in b/package/gstreamer1/gst1-imx/Config.in
-index 9f792d1..9b977bd 100644
---- a/package/gstreamer1/gst1-imx/Config.in
-+++ b/package/gstreamer1/gst1-imx/Config.in
-@@ -84,4 +84,10 @@ config BR2_PACKAGE_GST1_IMX_V4L2VIDEOSRC
- 	help
- 	  Elements for V4L2 capture
+diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
+index 6821144..3bf46d3 100644
+--- a/package/samba4/samba4.hash
++++ b/package/samba4/samba4.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 5913a569b54c6bc261bc245d7326fabfcba42839d15a82db48c047de1eb19626  samba-4.6.10.tar.gz
++sha256 051b7ab0fa088d77dc0df039ff5d6b8fd998372f0c29ecb455b149457c20ed1d  samba-4.6.11.tar.gz
+ sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index 40436ca..7836df5 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+config BR2_PACKAGE_GST1_IMX_V4L2VIDEOSINK
-+	bool "imxv4l2videosink"
-+	select BR2_PACKAGE_GST1_PLUGINS_BAD
-+	help
-+	  Elements for V4L2 output
-+
- endif
-diff --git a/package/gstreamer1/gst1-imx/gst1-imx.mk b/package/gstreamer1/gst1-imx/gst1-imx.mk
-index c621c36..a8fe6fe 100644
---- a/package/gstreamer1/gst1-imx/gst1-imx.mk
-+++ b/package/gstreamer1/gst1-imx/gst1-imx.mk
-@@ -83,10 +83,17 @@ GST1_IMX_CONF_OPTS += --disable-vpu
- endif
- 
- ifeq ($(BR2_PACKAGE_GST1_IMX_V4L2VIDEOSRC),y)
--# There's no --enable-v4l2src option
-+# There's no --enable-imxv4l2videosrc option
- GST1_IMX_DEPENDENCIES += gst1-plugins-bad
- else
--GST1_IMX_CONF_OPTS += --disable-v4l2src
-+GST1_IMX_CONF_OPTS += --disable-imxv4l2videosrc
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_IMX_V4L2VIDEOSINK),y)
-+# There's no --enable-imxv4l2videosink option
-+GST1_IMX_DEPENDENCIES += gst1-plugins-bad
-+else
-+GST1_IMX_CONF_OPTS += --disable-imxv4l2videosink
- endif
- 
- $(eval $(waf-package))
+-SAMBA4_VERSION = 4.6.10
++SAMBA4_VERSION = 4.6.11
+ SAMBA4_SITE = https://download.samba.org/pub/samba/stable
+ SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+ SAMBA4_INSTALL_STAGING = YES
