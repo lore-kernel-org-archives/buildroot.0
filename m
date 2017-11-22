@@ -1,96 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 25 Nov 2017 13:21:29 +0100
-Subject: [Buildroot] [git commit] package/nano: bump version to 2.9.0
-Message-ID: <20171201205337.77A427FF6F@busybox.osuosl.org>
+Date: Wed, 22 Nov 2017 22:18:18 +0100
+Subject: [Buildroot] [git commit] audit: bump to 2.8.1
+Message-ID: <20171201205332.AE3BA7FC1A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cda7db8b869c89f0f4e7f668477ebfc9f5d897ba
+commit: https://git.buildroot.net/buildroot/commit/?id=64d3c35d98c5d59c014afc65ce8a3a5a5bf818cf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Removed patch applied upstream, added license hash.
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...pilation-when-configured-with-enable-tiny.patch | 43 ----------------------
- package/nano/nano.hash                             |  3 +-
- package/nano/nano.mk                               |  4 +-
- 3 files changed, 4 insertions(+), 46 deletions(-)
+ package/audit/audit.hash | 2 +-
+ package/audit/audit.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/nano/0001-fix-compilation-when-configured-with-enable-tiny.patch b/package/nano/0001-fix-compilation-when-configured-with-enable-tiny.patch
-deleted file mode 100644
-index db684f9..0000000
---- a/package/nano/0001-fix-compilation-when-configured-with-enable-tiny.patch
-+++ /dev/null
-@@ -1,43 +0,0 @@
--From 28cfab7580c42a6d6c9c5d787ce736094fd51a0c Mon Sep 17 00:00:00 2001
--From: Benno Schulenberg <bensberg@telfort.nl>
--Date: Tue, 29 Aug 2017 19:28:44 +0200
--Subject: tweaks: fix compilation when configured with --enable-tiny
--
--When moving the cursor to the top-left corner, it is not necessary
--to compute leftedge because firstcolumn IS the relevant leftedge.
--
--Reported-by: Jordi Mallach <jordi@debian.org>
--
--Downloaded from upstream master branch:
--http://git.savannah.gnu.org/cgit/nano.git/commit/?id=28cfab7580c42a6d6c9c5d787ce736094fd51a0c
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-----
-- src/move.c | 4 ++--
-- 1 file changed, 2 insertions(+), 2 deletions(-)
--
--diff --git a/src/move.c b/src/move.c
--index d138356..ce276e4 100644
----- a/src/move.c
--+++ b/src/move.c
--@@ -121,7 +121,7 @@ void do_page_up(void)
-- 	openfile->current = openfile->edittop;
-- 	openfile->current_y = 0;
-- 
---	leftedge = leftedge_for(openfile->firstcolumn, openfile->edittop);
--+	leftedge = openfile->firstcolumn;
-- 	target_column = 0;
--     } else
-- 	get_edge_and_target(&leftedge, &target_column);
--@@ -152,7 +152,7 @@ void do_page_down(void)
-- 	openfile->current = openfile->edittop;
-- 	openfile->current_y = 0;
-- 
---	leftedge = leftedge_for(openfile->firstcolumn, openfile->edittop);
--+	leftedge = openfile->firstcolumn;
-- 	target_column = 0;
--     } else
-- 	get_edge_and_target(&leftedge, &target_column);
---- 
--cgit v1.0-41-gc330
--
-diff --git a/package/nano/nano.hash b/package/nano/nano.hash
-index 4e0abc4..c09f031 100644
---- a/package/nano/nano.hash
-+++ b/package/nano/nano.hash
-@@ -1,2 +1,3 @@
- # Locally calculated after checking pgp signature
--sha256 fbe31746958698d73c6726ee48ad8b0612697157961a2e9aaa83b4aa53d1165a  nano-2.8.7.tar.xz
-+sha256 d2d30c39caef53aba1ec1b4baff4186d4496f35d2411b0848242a5f2e27e129e  nano-2.9.0.tar.xz
-+sha256 fc82ca8b6fdb18d4e3e85cfd8ab58d1bcd3f1b29abe782895abd91d64763f8e7  COPYING
-diff --git a/package/nano/nano.mk b/package/nano/nano.mk
-index f1c172f..458174a 100644
---- a/package/nano/nano.mk
-+++ b/package/nano/nano.mk
-@@ -4,8 +4,8 @@
+diff --git a/package/audit/audit.hash b/package/audit/audit.hash
+index 32cedc5..742f94a 100644
+--- a/package/audit/audit.hash
++++ b/package/audit/audit.hash
+@@ -1,4 +1,4 @@
+ #Locally computed
+-sha256 57b5ae5697f288b8e53286eacd1c6c2e88bd65db18df3d855332fc63b302fdae audit-2.7.8.tar.gz
++sha256 1becde92ff6e81798fa8878820ab2497d867036a6596f55109504b37c8b33b6c audit-2.8.1.tar.gz
+ sha256 32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670 COPYING
+ sha256 f18a0811fa0e220ccbc42f661545e77f0388631e209585ed582a1c693029c6aa COPYING.LIB
+diff --git a/package/audit/audit.mk b/package/audit/audit.mk
+index 6c09477..8778e98 100644
+--- a/package/audit/audit.mk
++++ b/package/audit/audit.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--NANO_VERSION_MAJOR = 2.8
--NANO_VERSION = $(NANO_VERSION_MAJOR).7
-+NANO_VERSION_MAJOR = 2.9
-+NANO_VERSION = $(NANO_VERSION_MAJOR).0
- NANO_SITE = https://www.nano-editor.org/dist/v$(NANO_VERSION_MAJOR)
- NANO_SOURCE = nano-$(NANO_VERSION).tar.xz
- NANO_LICENSE = GPL-3.0+
+-AUDIT_VERSION = 2.7.8
++AUDIT_VERSION = 2.8.1
+ AUDIT_SITE = http://people.redhat.com/sgrubb/audit
+ AUDIT_LICENSE = GPL-2.0+ (programs), LGPL-2.1+ (libraries)
+ AUDIT_LICENSE_FILES = COPYING COPYING.LIB
