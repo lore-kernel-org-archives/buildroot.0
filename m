@@ -1,55 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 Nov 2017 22:29:59 +0100
-Subject: [Buildroot] [git commit] freetype: bump to 2.8.1
-Message-ID: <20171201205333.64B4E7FAAC@busybox.osuosl.org>
+Date: Wed, 22 Nov 2017 22:46:06 +0100
+Subject: [Buildroot] [git commit] util-linux: explicitly use /usr/{bin, sbin,
+ lib}, with merged usr
+Message-ID: <20171201205333.833F37FAAC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=223e5867eda125ae10b0e2b963ff9ce3ed6eaa30
+commit: https://git.buildroot.net/buildroot/commit/?id=099c2ceaa8adfcdcbbaf039000e1fe26a33a6165
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-In addition, add hashes for all three license files.
+Prevent the installation from attempting to move shared libraries from
+${usrlib_execdir} to ${libdir} if both paths are the same, which leads
+to error messages like this:
 
-Signed-off-by: Adam Duskett <aduskett@gmail.com>
+  mv: '$(TARGET_DIR)/usr/lib/libfoo.so.1' and '$(TARGET_DIR)/lib/libfoo.so.1' are the same file
+
+That error is not fatal but let's avoid possible future problems.
+
+Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/freetype/freetype.hash | 15 ++++++++++-----
- package/freetype/freetype.mk   |  2 +-
- 2 files changed, 11 insertions(+), 6 deletions(-)
+ package/util-linux/util-linux.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/freetype/freetype.hash b/package/freetype/freetype.hash
-index beff858..3997e81 100644
---- a/package/freetype/freetype.hash
-+++ b/package/freetype/freetype.hash
-@@ -1,5 +1,10 @@
--# From https://sourceforge.net/projects/freetype/files/freetype2/2.8/
--md5 2413ac3eaf508ada019c63959ea81a92  freetype-2.8.tar.bz2
--sha1 42c6b1f733fe13a3eba135f5025b22cb68450f91  freetype-2.8.tar.bz2
--# Locally calculated after checking pgp signature
--sha256 a3c603ed84c3c2495f9c9331fe6bba3bb0ee65e06ec331e0a0fb52158291b40b  freetype-2.8.tar.bz2
-+# From https://sourceforge.net/projects/freetype/files/freetype2/2.8.1/
-+md5	bf0a210b6fe781228fa0e4a80691a521		freetype-2.8.1.tar.bz2
-+sha1	417bb3747c4ac95b6f2652024a53fad45581fa1c	freetype-2.8.1.tar.bz2
-+
-+# Locally calculated
-+sha256	e5435f02e02d2b87bb8e4efdcaa14b1f78c9cf3ab1ed80f94b6382fb6acc7d78	freetype-2.8.1.tar.bz2
-+sha256	fd056de4196903a676208ef58cfddafc7d583d1f28fa2e44c309cf84a59e62fb	docs/LICENSE.TXT
-+sha256	4a9a548027a2c1d37788519dea833294c9c81f1ebc280e817f41f50d0c642d78	docs/FTL.TXT
-+sha256	c4120c6752c910c299e3bd9cb3a46ff262c268303ca2069b61f92f10a5656c18	docs/GPLv2.TXT
-+
-diff --git a/package/freetype/freetype.mk b/package/freetype/freetype.mk
-index 9a98b40..1028664 100644
---- a/package/freetype/freetype.mk
-+++ b/package/freetype/freetype.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+index 8464288..31a3fe4 100644
+--- a/package/util-linux/util-linux.mk
++++ b/package/util-linux/util-linux.mk
+@@ -41,6 +41,13 @@ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+ UTIL_LINUX_DEPENDENCIES += busybox
+ endif
  
--FREETYPE_VERSION = 2.8
-+FREETYPE_VERSION = 2.8.1
- FREETYPE_SOURCE = freetype-$(FREETYPE_VERSION).tar.bz2
- FREETYPE_SITE = http://download.savannah.gnu.org/releases/freetype
- FREETYPE_INSTALL_STAGING = YES
++# Prevent the installation from attempting to move shared libraries from
++# ${usrlib_execdir} (/usr/lib) to ${libdir} (/lib), since both paths are
++# the same when merged usr is in use.
++ifeq ($(BR2_ROOTFS_MERGED_USR),y)
++UTIL_LINUX_CONF_OPTS += --bindir=/usr/bin --sbindir=/usr/sbin --libdir=/usr/lib
++endif
++
+ ifeq ($(BR2_PACKAGE_NCURSES),y)
+ UTIL_LINUX_DEPENDENCIES += ncurses
+ ifeq ($(BR2_PACKAGE_NCURSES_WCHAR),y)
