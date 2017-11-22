@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 Nov 2017 21:38:22 +0100
-Subject: [Buildroot] [PATCH v2] configs/imx6slevk: Add new defconfig
-In-Reply-To: <1510665491-10279-1-git-send-email-fabio.estevam@nxp.com>
-References: <1510665491-10279-1-git-send-email-fabio.estevam@nxp.com>
-Message-ID: <20171122213822.2934d6e0@windsurf.lan>
+Date: Wed, 22 Nov 2017 21:38:25 +0100
+Subject: [Buildroot] [PATCH] configs/imx6sx-sdb: Add new defconfig
+In-Reply-To: <1511356872-8417-1-git-send-email-festevam@gmail.com>
+References: <1511356872-8417-1-git-send-email-festevam@gmail.com>
+Message-ID: <20171122213825.1747ad00@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,14 +12,21 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 14 Nov 2017 11:18:11 -0200, Fabio Estevam wrote:
-> Add support for imx6slevk_defconfig that allows booting a mainline
+On Wed, 22 Nov 2017 11:21:12 -0200, Fabio Estevam wrote:
+> From: Fabio Estevam <fabio.estevam@nxp.com>
+> 
+> Add support for imx6sx-sdb_defconfig that allows booting a mainline
 > kernel and mainline U-Boot.
 > 
 > Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
 > ---
-> Changes since v1:
-> - Use U-Boot 2017.11 and kernel 4.14
+>  .gitlab-ci.yml                       |  1 +
+>  DEVELOPERS                           |  1 +
+>  board/freescale/imx6sxsdb/readme.txt | 14 ++++++++++++++
+>  configs/imx6sx-sdb_defconfig         | 26 ++++++++++++++++++++++++++
+>  4 files changed, 42 insertions(+)
+>  create mode 100644 board/freescale/imx6sxsdb/readme.txt
+>  create mode 100644 configs/imx6sx-sdb_defconfig
 
 Applied to next, thanks.
 
