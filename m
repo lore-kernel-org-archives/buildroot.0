@@ -1,47 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 Nov 2017 22:29:39 +0100
-Subject: [Buildroot] [git commit] harfbuzz: bump to 1.7.1
-Message-ID: <20171201205333.31AC37FAAC@busybox.osuosl.org>
+Date: Wed, 22 Nov 2017 22:25:20 +0100
+Subject: [Buildroot] [git commit] time: bump to 1.8
+Message-ID: <20171201205333.05E9F7F8C5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=40d26ab924ab5db3bfa31c126c7a8c37f300faeb
+commit: https://git.buildroot.net/buildroot/commit/?id=b7e574146f9088f6f7a484308756c188b431fe3e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-In addition, add a hash for the license file.
+In addition:
+- Update license to GPL-3.0+
+- Add a shash for the license file.
+
+See: https://lists.gnu.org/archive/html/info-gnu/2017-11/msg00002.html for
+more information.
 
 Signed-off-by: Adam Duskett <aduskett@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/harfbuzz/harfbuzz.hash | 7 +++++--
- package/harfbuzz/harfbuzz.mk   | 2 +-
- 2 files changed, 6 insertions(+), 3 deletions(-)
+ package/time/time.hash | 3 ++-
+ package/time/time.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/harfbuzz/harfbuzz.hash b/package/harfbuzz/harfbuzz.hash
-index d44bd56..5f786dc 100644
---- a/package/harfbuzz/harfbuzz.hash
-+++ b/package/harfbuzz/harfbuzz.hash
-@@ -1,2 +1,5 @@
--# From https://www.freedesktop.org/software/harfbuzz/release/harfbuzz-1.5.0.tar.bz2.sha256
--sha256 c088ec363be8d03f7708feb76dd22d5f102678e67d6ce63b02496ca0beb64ac1  harfbuzz-1.5.0.tar.bz2
-+# From https://www.freedesktop.org/software/harfbuzz/release/harfbuzz-1.7.1.tar.bz2.sha256
-+sha256	9645a6e83313b690602017f18d4eb2adf81f2e54c6fc4471e19331304965154e	harfbuzz-1.7.1.tar.bz2
-+
-+# Locally computed
-+sha256	2a886915de4f296cdae5ed67064f86dba01d0c55286d86e8487f2a5caaf40216	COPYING
-diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
-index 0ee6a6b..5708745 100644
---- a/package/harfbuzz/harfbuzz.mk
-+++ b/package/harfbuzz/harfbuzz.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/time/time.hash b/package/time/time.hash
+index 6ad8c24..7d395bf 100644
+--- a/package/time/time.hash
++++ b/package/time/time.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+-sha256	e37ea79a253bf85a85ada2f7c632c14e481a5fd262a362f6f4fd58e68601496d	time-1.7.tar.gz
++sha256	8a2f540155961a35ba9b84aec5e77e3ae36c74cecb4484db455960601b7a2e1b	time-1.8.tar.gz
++sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	COPYING
+diff --git a/package/time/time.mk b/package/time/time.mk
+index 8092ea9..c238ee6 100644
+--- a/package/time/time.mk
++++ b/package/time/time.mk
+@@ -4,10 +4,10 @@
  #
  ################################################################################
  
--HARFBUZZ_VERSION = 1.5.0
-+HARFBUZZ_VERSION = 1.7.1
- HARFBUZZ_SITE = https://www.freedesktop.org/software/harfbuzz/release
- HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.bz2
- HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
+-TIME_VERSION = 1.7
++TIME_VERSION = 1.8
+ TIME_SITE = $(BR2_GNU_MIRROR)/time
+ TIME_CONF_ENV = ac_cv_func_wait3=yes
+-TIME_LICENSE = GPL-2.0+
++TIME_LICENSE = GPL-3.0+
+ TIME_LICENSE_FILES = COPYING
+ 
+ # time uses an old version of automake that does not support
