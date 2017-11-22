@@ -1,43 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 Nov 2017 22:25:02 +0100
-Subject: [Buildroot] [git commit branch/next] nginx: bump to 1.12.2
-Message-ID: <20171122211741.0D62681110@busybox.osuosl.org>
+Date: Wed, 22 Nov 2017 22:24:53 +0100
+Subject: [Buildroot] [NEXT 1/1] fftw: bump to 3.3.7
+In-Reply-To: <20171120141645.5445-1-aduskett@gmail.com>
+References: <20171120141645.5445-1-aduskett@gmail.com>
+Message-ID: <20171122222453.221598ff@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1d91238af83f5eecb98410a1864ce1ab1958c4fc
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hello,
 
-Signed-off-by: Adam Duskett <aduskett@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/nginx/nginx.hash | 2 +-
- package/nginx/nginx.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On Mon, 20 Nov 2017 09:16:45 -0500, Adam Duskett wrote:
+> In addition, add a hash for the license file
+> 
+> Signed-off-by: Adam Duskett <aduskett@gmail.com>
+> ---
+>  package/fftw/fftw.hash | 7 ++++---
+>  package/fftw/fftw.mk   | 2 +-
+>  2 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/package/nginx/nginx.hash b/package/nginx/nginx.hash
-index 6eef1db..9936ca1 100644
---- a/package/nginx/nginx.hash
-+++ b/package/nginx/nginx.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--sha256	8793bf426485a30f91021b6b945a9fd8a84d87d17b566562c3797aba8fac76fb	nginx-1.12.1.tar.gz
-+sha256	305f379da1d5fb5aefa79e45c829852ca6983c7cd2a79328f8e084a324cf0416	nginx-1.12.2.tar.gz
- # License files, locally calculated
- sha256	75820469c890db641e54078df018e497fde0542211aa704e15320316a2175780	LICENSE
-diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
-index ceb8022..e5652af 100644
---- a/package/nginx/nginx.mk
-+++ b/package/nginx/nginx.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--NGINX_VERSION = 1.12.1
-+NGINX_VERSION = 1.12.2
- NGINX_SITE = http://nginx.org/download
- NGINX_LICENSE = BSD-2-Clause
- NGINX_LICENSE_FILES = LICENSE
+Applied to next, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
