@@ -1,57 +1,67 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 Nov 2017 22:20:00 +0100
-Subject: [Buildroot] [NEXT 1/1] bash: bump to 4.4.12
-In-Reply-To: <20171120140546.23268-1-aduskett@gmail.com>
-References: <20171120140546.23268-1-aduskett@gmail.com>
-Message-ID: <20171122222000.5a7ada7d@windsurf.lan>
+From: Andrey Yurovsky <yurovsky@gmail.com>
+Date: Wed, 22 Nov 2017 13:23:35 -0800
+Subject: [Buildroot] [PATCH v2] rauc: bump to version 0.2
+In-Reply-To: <20171122213336.52a3e196@windsurf.lan>
+References: <20171114043141.8245-1-ayurovsky@impinj.com>
+ <20171122041747.11363-1-yurovsky@gmail.com>
+ <20171122213336.52a3e196@windsurf.lan>
+Message-ID: <CAAkeqgXEXtnppmJVrfRgf_uC3CeX4TunJS-CQ+=sRG+ZBR+-Ag@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Wed, Nov 22, 2017 at 12:33 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
+>
+> On Tue, 21 Nov 2017 20:17:47 -0800, Andrey Yurovsky wrote:
+>
+>> -RAUC_VERSION = 0.1.1
+>> +RAUC_VERSION = 0.2
+>>  RAUC_SITE = https://github.com/rauc/rauc/releases/download/v$(RAUC_VERSION)
+>>  RAUC_SOURCE = rauc-$(RAUC_VERSION).tar.xz
+>>  RAUC_LICENSE = LGPL-2.1
+>> @@ -29,7 +29,7 @@ ifeq ($(BR2_PACKAGE_SYSTEMD),y)
+>>  RAUC_DEPENDENCIES += systemd
+>>  endif
+>>
+>> -HOST_RAUC_DEPENDENCIES = host-pkgconf host-openssl host-libglib2
+>> +HOST_RAUC_DEPENDENCIES = host-pkgconf host-openssl host-libglib2 host-squashfs
+>>  HOST_RAUC_CONF_OPTS += --disable-network --disable-json --disable-service
+>
+> Another question about this dependency: how is it possible that
+> host-squashfs is a runtime dependency of the host variant of rauc, but
+> that squashfs is not a runtime dependency of the target variant of
+> rauc ?
+>
+> I can imagine that host-mksquashfs is needed by host-rauc to prepare
+> some filesystem image. But how does the target build of RAUC know that
+> it doesn't need mksquashfs ?
+>
+> Is host-mksquashfs always needed by host-rauc, or only under certain
+> conditions/configurations ?
 
-On Mon, 20 Nov 2017 09:05:46 -0500, Adam Duskett wrote:
-> In addition, remove upstreamed patches and add a hash for the license file.
-> 
-> Signed-off-by: Adam Duskett <aduskett@gmail.com>
-> ---
->  package/bash/bash.hash        |   3 +-
->  package/bash/bash.mk          |   2 +-
->  package/bash/bash44-001.patch |  64 ----------------
->  package/bash/bash44-002.patch |  73 -------------------
->  package/bash/bash44-003.patch |  62 ----------------
->  package/bash/bash44-004.patch |  88 ----------------------
->  package/bash/bash44-005.patch |  51 -------------
->  package/bash/bash44-006.patch |  63 ----------------
->  package/bash/bash44-007.patch | 155 ---------------------------------------
->  package/bash/bash44-008.patch |  88 ----------------------
->  package/bash/bash44-009.patch | 111 ----------------------------
->  package/bash/bash44-010.patch |  53 --------------
->  package/bash/bash44-011.patch |  54 --------------
->  package/bash/bash44-012.patch | 165 ------------------------------------------
->  14 files changed, 3 insertions(+), 1029 deletions(-)
->  delete mode 100644 package/bash/bash44-001.patch
->  delete mode 100644 package/bash/bash44-002.patch
->  delete mode 100644 package/bash/bash44-003.patch
->  delete mode 100644 package/bash/bash44-004.patch
->  delete mode 100644 package/bash/bash44-005.patch
->  delete mode 100644 package/bash/bash44-006.patch
->  delete mode 100644 package/bash/bash44-007.patch
->  delete mode 100644 package/bash/bash44-008.patch
->  delete mode 100644 package/bash/bash44-009.patch
->  delete mode 100644 package/bash/bash44-010.patch
->  delete mode 100644 package/bash/bash44-011.patch
->  delete mode 100644 package/bash/bash44-012.patch
+On the host side we use rauc to make a software update bundle. It does
+this by shelling out to mksquashfs in order to turn a directory of
+files (including a manifest) into a signed squashfs image. On the
+device side bundles are not created (so mksquashfs isn't needed),
+however the Linux kernel must have squashfs file system support
+enabled and loop mount enabled. rauc loop mounts the bundle and then
+deals with the contents. As such mksquashfs is a run-time host
+dependency because we assume on the host rauc is used only to generate
+bundles. While it could theoretically generate bundles on the target,
+I don't think anyone would use it that way. There are some more subtle
+dependencies for example on the target rauc may shell out to mkfs.vfat
+if a vfat partition must be made (but that depends on the system slot
+configuration and manifest) or it could shell out to mkfs.ext4 for
+similar reasons.
 
-Applied to next, thanks. I've added a link to the PGP signature file,
-as suggested by Baruch.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux and Kernel engineering
+> http://free-electrons.com
