@@ -1,67 +1,48 @@
-From: Andrey Yurovsky <yurovsky@gmail.com>
-Date: Wed, 22 Nov 2017 13:23:35 -0800
-Subject: [Buildroot] [PATCH v2] rauc: bump to version 0.2
-In-Reply-To: <20171122213336.52a3e196@windsurf.lan>
-References: <20171114043141.8245-1-ayurovsky@impinj.com>
- <20171122041747.11363-1-yurovsky@gmail.com>
- <20171122213336.52a3e196@windsurf.lan>
-Message-ID: <CAAkeqgXEXtnppmJVrfRgf_uC3CeX4TunJS-CQ+=sRG+ZBR+-Ag@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 22 Nov 2017 22:20:17 +0100
+Subject: [Buildroot] [git commit branch/next] fftw: bump to 3.3.7
+Message-ID: <20171122211717.CB6CB81301@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Nov 22, 2017 at 12:33 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
->
-> On Tue, 21 Nov 2017 20:17:47 -0800, Andrey Yurovsky wrote:
->
->> -RAUC_VERSION = 0.1.1
->> +RAUC_VERSION = 0.2
->>  RAUC_SITE = https://github.com/rauc/rauc/releases/download/v$(RAUC_VERSION)
->>  RAUC_SOURCE = rauc-$(RAUC_VERSION).tar.xz
->>  RAUC_LICENSE = LGPL-2.1
->> @@ -29,7 +29,7 @@ ifeq ($(BR2_PACKAGE_SYSTEMD),y)
->>  RAUC_DEPENDENCIES += systemd
->>  endif
->>
->> -HOST_RAUC_DEPENDENCIES = host-pkgconf host-openssl host-libglib2
->> +HOST_RAUC_DEPENDENCIES = host-pkgconf host-openssl host-libglib2 host-squashfs
->>  HOST_RAUC_CONF_OPTS += --disable-network --disable-json --disable-service
->
-> Another question about this dependency: how is it possible that
-> host-squashfs is a runtime dependency of the host variant of rauc, but
-> that squashfs is not a runtime dependency of the target variant of
-> rauc ?
->
-> I can imagine that host-mksquashfs is needed by host-rauc to prepare
-> some filesystem image. But how does the target build of RAUC know that
-> it doesn't need mksquashfs ?
->
-> Is host-mksquashfs always needed by host-rauc, or only under certain
-> conditions/configurations ?
+commit: https://git.buildroot.net/buildroot/commit/?id=f961d630208f14f808e4f2143cda7f4d1401a36a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On the host side we use rauc to make a software update bundle. It does
-this by shelling out to mksquashfs in order to turn a directory of
-files (including a manifest) into a signed squashfs image. On the
-device side bundles are not created (so mksquashfs isn't needed),
-however the Linux kernel must have squashfs file system support
-enabled and loop mount enabled. rauc loop mounts the bundle and then
-deals with the contents. As such mksquashfs is a run-time host
-dependency because we assume on the host rauc is used only to generate
-bundles. While it could theoretically generate bundles on the target,
-I don't think anyone would use it that way. There are some more subtle
-dependencies for example on the target rauc may shell out to mkfs.vfat
-if a vfat partition must be made (but that depends on the system slot
-configuration and manifest) or it could shell out to mkfs.ext4 for
-similar reasons.
+In addition, add a hash for the license file
 
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux and Kernel engineering
-> http://free-electrons.com
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/fftw/fftw.hash | 7 ++++---
+ package/fftw/fftw.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 4 deletions(-)
+
+diff --git a/package/fftw/fftw.hash b/package/fftw/fftw.hash
+index b00f447..faf4b90 100644
+--- a/package/fftw/fftw.hash
++++ b/package/fftw/fftw.hash
+@@ -1,4 +1,5 @@
+-# From http://www.fftw.org/fftw-3.3.6-pl2.tar.gz.md5sum
+-md5 927e481edbb32575397eb3d62535a856  fftw-3.3.6-pl2.tar.gz
++# From http://www.fftw.org/fftw-3.3.7.tar.gz.md5sum
++md5 0d5915d7d39b3253c1cc05030d79ac47  fftw-3.3.7.tar.gz
+ # Locally computed
+-sha256 a5de35c5c824a78a058ca54278c706cdf3d4abba1c56b63531c2cb05f5d57da2  fftw-3.3.6-pl2.tar.gz
++sha256 3b609b7feba5230e8f6dd8d245ddbefac324c5a6ae4186947670d9ac2cd25573	fftw-3.3.7.tar.gz
++sha256 231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c	COPYING
+diff --git a/package/fftw/fftw.mk b/package/fftw/fftw.mk
+index 0f32f79..b3aa4b6 100644
+--- a/package/fftw/fftw.mk
++++ b/package/fftw/fftw.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FFTW_VERSION = 3.3.6-pl2
++FFTW_VERSION = 3.3.7
+ FFTW_SITE = http://www.fftw.org
+ FFTW_INSTALL_STAGING = YES
+ FFTW_LICENSE = GPL-2.0+
