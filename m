@@ -1,53 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 Nov 2017 21:51:08 +0100
-Subject: [Buildroot] [git commit] webp: add an option to enable webpmux
-Message-ID: <20171201205332.6AB627FC1A@busybox.osuosl.org>
+Date: Wed, 22 Nov 2017 22:17:12 +0100
+Subject: [Buildroot] [git commit] luasec: bump to version 0.6
+Message-ID: <20171201205332.9C8897FC1A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e55d61fb976168f9d9bb9402f4262f03f8f1fcfc
+commit: https://git.buildroot.net/buildroot/commit/?id=fa1f589c411df04d6dff0cb27d5abf4465605c73
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/webp/Config.in | 7 +++++++
- package/webp/webp.mk   | 6 ++++++
- 2 files changed, 13 insertions(+)
+ package/luasec/luasec.hash | 2 +-
+ package/luasec/luasec.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/webp/Config.in b/package/webp/Config.in
-index 646eb9e..e8263a9 100644
---- a/package/webp/Config.in
-+++ b/package/webp/Config.in
-@@ -15,4 +15,11 @@ config BR2_PACKAGE_WEBP_DEMUX
- 	  of an extended format WebP file, which can have features
- 	  like color profile, metadata and animation.
+diff --git a/package/luasec/luasec.hash b/package/luasec/luasec.hash
+index 1e9f70a..9d721ed 100644
+--- a/package/luasec/luasec.hash
++++ b/package/luasec/luasec.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	d2198cc39b3fa55bd5020046742b34093b6efcb619cf4032948b8c8556202a32  luasec-0.5-2.src.rock
++sha256	1d04e2f70bc055348dda3cc3566d27d8408094bc944aa5c6a4ae18bffe5c0007  luasec-0.6-1.src.rock
+diff --git a/package/luasec/luasec.mk b/package/luasec/luasec.mk
+index b059e1c..28c4b2c 100644
+--- a/package/luasec/luasec.mk
++++ b/package/luasec/luasec.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+config BR2_PACKAGE_WEBP_MUX
-+	bool "webpmux"
-+	help
-+	  Mux is a part of WebPMux for creation and manipulation
-+	  of an extended format WebP file, which can have features
-+	  like color profile, metadata and animation.
-+
- endif
-diff --git a/package/webp/webp.mk b/package/webp/webp.mk
-index 8213027..2f3a78c 100644
---- a/package/webp/webp.mk
-+++ b/package/webp/webp.mk
-@@ -23,6 +23,12 @@ else
- WEBP_CONF_OPTS += --disable-libwebpdemux
- endif
- 
-+ifeq ($(BR2_PACKAGE_WEBP_MUX),y)
-+WEBP_CONF_OPTS += --enable-libwebpmux
-+else
-+WEBP_CONF_OPTS += --disable-libwebpmux
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBPNG),y)
- WEBP_DEPENDENCIES += libpng
- WEBP_CONF_ENV += ac_cv_path_LIBPNG_CONFIG=$(STAGING_DIR)/usr/bin/libpng-config
+-LUASEC_VERSION = 0.5-2
++LUASEC_VERSION = 0.6-1
+ LUASEC_SUBDIR = luasec
+ LUASEC_LICENSE = MIT
+ LUASEC_LICENSE_FILES = $(LUASEC_SUBDIR)/LICENSE
