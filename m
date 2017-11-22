@@ -1,33 +1,62 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 Nov 2017 22:55:40 +0100
-Subject: [Buildroot] [PATCH 1/1] ntp: implicitly enable openssl-random
-In-Reply-To: <20171111233506.04e40d0a@windsurf.home>
-References: <20171108131839.27491-1-aduskett@gmail.com>
- <20171111233506.04e40d0a@windsurf.home>
-Message-ID: <20171122225540.35acf7a2@windsurf.lan>
+Date: Wed, 22 Nov 2017 22:57:07 +0100
+Subject: [Buildroot] [git commit branch/next] openntpd: add optional
+ dependency on LibreSSL
+Message-ID: <20171122220228.7E4CA80FB4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=8c817edd7c207b658f5e6d93005b80c9c31f9d06
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Sat, 11 Nov 2017 23:35:06 +0100, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Wed,  8 Nov 2017 08:18:39 -0500, Adam Duskett wrote:
-> > If OpenSSL is selected, --enable-openssl-random should be implicitly
-> > set as well.  
-> 
-> So you meant "explicitly", right ?
+OpenNTPD looks for a crypto library with tls_config_set_ca_mem, which
+is available in LibreSSL but not OpenSSL. If tls_config_set_ca_mem is
+found, crypto support is added to the build.
 
-Ping ?
+Because this is not currently checked, crypto support might not be
+added due to the order of the build. Add a small check to see if
+BR2_PACKAGE_LIBRESSL is selected, and if so, add a dependency for it.
 
-Thanks,
+Also add a note about this in the Config.in help section.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/openntpd/Config.in   | 3 +++
+ package/openntpd/openntpd.mk | 6 ++++++
+ 2 files changed, 9 insertions(+)
+
+diff --git a/package/openntpd/Config.in b/package/openntpd/Config.in
+index 1b856c0..c84d0ba 100644
+--- a/package/openntpd/Config.in
++++ b/package/openntpd/Config.in
+@@ -9,6 +9,9 @@ config BR2_PACKAGE_OPENNTPD
+ 	  to remote NTP servers and can act as NTP server itself,
+ 	  redistributing the local clock. It just works.
+ 
++	  Crypto support is available if the LibreSSL library is
++	  enabled.
++
+ 	  http://www.openntpd.org/
+ 
+ comment "openntpd needs a toolchain w/ NPTL"
+diff --git a/package/openntpd/openntpd.mk b/package/openntpd/openntpd.mk
+index 96d3881..f5a5690 100644
+--- a/package/openntpd/openntpd.mk
++++ b/package/openntpd/openntpd.mk
+@@ -11,6 +11,12 @@ OPENNTPD_LICENSE_FILES = COPYING
+ # Need to autoreconf for our libtool patch to apply properly
+ OPENNTPD_AUTORECONF = YES
+ 
++# Openntpd searches for tls_config_set_ca_mem which is only available
++# in LibreSSL
++ifeq ($(BR2_PACKAGE_LIBRESSL),y)
++OPENNTPD_DEPENDENCIES += openssl
++endif
++
+ # openntpd uses pthread functions for arc4random emulation but forgets
+ # to use -pthread
+ OPENNTPD_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -pthread"
