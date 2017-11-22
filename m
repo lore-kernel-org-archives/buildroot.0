@@ -1,26 +1,39 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Wed, 22 Nov 2017 11:22:07 -0200
-Subject: [Buildroot] [PATCH v2] configs/imx6slevk: Add new defconfig
-In-Reply-To: <1510665491-10279-1-git-send-email-fabio.estevam@nxp.com>
-References: <1510665491-10279-1-git-send-email-fabio.estevam@nxp.com>
-Message-ID: <CAOMZO5CLm+mkjSUx1N9novQAPRn+qqMsWzd9Gw90n_J83Ek8GQ@mail.gmail.com>
+From: Jagan Teki <jagan@amarulasolutions.com>
+Date: Wed, 22 Nov 2017 23:32:11 +0530
+Subject: [Buildroot] [PATCH v4 2/3] board: Add Vyasa RK388 board support
+In-Reply-To: <1510997329-4111-2-git-send-email-jagan@amarulasolutions.com>
+References: <1510997329-4111-1-git-send-email-jagan@amarulasolutions.com>
+ <1510997329-4111-2-git-send-email-jagan@amarulasolutions.com>
+Message-ID: <CAMty3ZD6y5Vz-chm3GM_WV30cTN=RB9ojouqMP=wWsGtUkHX=w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Nov 14, 2017 at 11:18 AM, Fabio Estevam <fabio.estevam@nxp.com> wrote:
-> Add support for imx6slevk_defconfig that allows booting a mainline
-> kernel and mainline U-Boot.
+On Sat, Nov 18, 2017 at 2:58 PM, Jagan Teki <jagannadh.teki@gmail.com> wrote:
+> Add Vyasa board, from rk3288 family SOC.
 >
-> Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
+> Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
 > ---
-> Changes since v1:
-> - Use U-Boot 2017.11 and kernel 4.14
+> Changes for v4:
+> - Use liux-next
+> - Add linux_gmac.fragment, rockchip gmac as module
+> - Add evetest command
+> - enable BR2_LINUX_KERNEL_INSTALL_TARGET
+> Changes for v3:
+> - Fix ascending order in DEVELOPERS
+> - Fix u-boot-dtb.img offset
+> - Fix extlinux.conf label
+> Changes for v2:
+> - Bump to U-Boot v2017.11
+> - Bump to linux-next
 
-A gentle ping.
+Any further comments?
 
-Could this one be applied to the 'next' branch?
-
-Thanks
+thanks!
+-- 
+Jagan Teki
+Senior Linux Kernel Engineer | Amarula Solutions
+U-Boot, Linux | Upstream Maintainer
+Hyderabad, India.
