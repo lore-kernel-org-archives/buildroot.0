@@ -1,30 +1,75 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 Nov 2017 21:25:28 +0100
-Subject: [Buildroot] [PATCH 0/2] pdbg updates
-In-Reply-To: <20171122012416.25862-1-joel@jms.id.au>
-References: <20171122012416.25862-1-joel@jms.id.au>
-Message-ID: <20171122212528.146de27a@windsurf.lan>
+Date: Wed, 22 Nov 2017 21:27:01 +0100
+Subject: [Buildroot] [git commit] gst1-imx: fix v4l2 plugins disable options
+Message-ID: <20171122202056.1DA3F810A9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=56b611a972218e33e9fc4b48399138889a688a8e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 22 Nov 2017 11:54:14 +1030, Joel Stanley wrote:
+Latest bump to v0.13.0 didn't take care of the following upstream
+commit:
 
-> Joel Stanley (2):
->   pdbg: update help text
->   pdbg: Bump to latest upstream version
+  7bfbf71 v4l2: Rename to v4l2video and add switches to enable/disable sink/source
 
-Both applied to master. However, on the second patch, you had forgotten
-to include references to the autobuilder failures, so I've done that.
+To address that, this commit:
 
-Thanks!
+ - Uses the new name of the v4l2 source configure script option
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+ - Introduce a new Config.in option to control the build of the v4l2
+   sink support
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/5c404a2a28a4052056e5c9a7edda40641fe55f9e
+
+Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/gstreamer1/gst1-imx/Config.in   |  6 ++++++
+ package/gstreamer1/gst1-imx/gst1-imx.mk | 11 +++++++++--
+ 2 files changed, 15 insertions(+), 2 deletions(-)
+
+diff --git a/package/gstreamer1/gst1-imx/Config.in b/package/gstreamer1/gst1-imx/Config.in
+index 9f792d1..9b977bd 100644
+--- a/package/gstreamer1/gst1-imx/Config.in
++++ b/package/gstreamer1/gst1-imx/Config.in
+@@ -84,4 +84,10 @@ config BR2_PACKAGE_GST1_IMX_V4L2VIDEOSRC
+ 	help
+ 	  Elements for V4L2 capture
+ 
++config BR2_PACKAGE_GST1_IMX_V4L2VIDEOSINK
++	bool "imxv4l2videosink"
++	select BR2_PACKAGE_GST1_PLUGINS_BAD
++	help
++	  Elements for V4L2 output
++
+ endif
+diff --git a/package/gstreamer1/gst1-imx/gst1-imx.mk b/package/gstreamer1/gst1-imx/gst1-imx.mk
+index a21e282..080fce5 100644
+--- a/package/gstreamer1/gst1-imx/gst1-imx.mk
++++ b/package/gstreamer1/gst1-imx/gst1-imx.mk
+@@ -83,10 +83,17 @@ GST1_IMX_CONF_OPTS += --disable-vpu
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_GST1_IMX_V4L2VIDEOSRC),y)
+-# There's no --enable-v4l2src option
++# There's no --enable-imxv4l2videosrc option
+ GST1_IMX_DEPENDENCIES += gst1-plugins-bad
+ else
+-GST1_IMX_CONF_OPTS += --disable-v4l2src
++GST1_IMX_CONF_OPTS += --disable-imxv4l2videosrc
++endif
++
++ifeq ($(BR2_PACKAGE_GST1_IMX_V4L2VIDEOSINK),y)
++# There's no --enable-imxv4l2videosink option
++GST1_IMX_DEPENDENCIES += gst1-plugins-bad
++else
++GST1_IMX_CONF_OPTS += --disable-imxv4l2videosink
+ endif
+ 
+ $(eval $(waf-package))
