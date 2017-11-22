@@ -1,75 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 Nov 2017 21:30:15 +0100
-Subject: [Buildroot] [git commit] gst1-imx: fix v4l2 plugins disable options
-Message-ID: <20171201205331.DABB47FC1A@busybox.osuosl.org>
+Date: Wed, 22 Nov 2017 21:34:06 +0100
+Subject: [Buildroot] [git commit] kexec-lite: Bump version
+Message-ID: <20171201205332.094A67FC1A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=599b3af68aac15969b0909d99bf0ba23ba305ac2
+commit: https://git.buildroot.net/buildroot/commit/?id=39640c94a8f266d620fc25df83b6a6392eedee17
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Latest bump to v0.13.0 didn't take care of the following upstream
-commit:
+From this version kexec-lite gained support for FreeBSD kernel
+loading.
 
-  7bfbf71 v4l2: Rename to v4l2video and add switches to enable/disable sink/source
-
-To address that, this commit:
-
- - Uses the new name of the v4l2 source configure script option
-
- - Introduce a new Config.in option to control the build of the v4l2
-   sink support
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/5c404a2a28a4052056e5c9a7edda40641fe55f9e
-
-Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+Signed-off-by: Patryk Duda <pdk@semihalf.com>
+Signed-off-by: Joel Stanley <joel@jms.id.au>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gstreamer1/gst1-imx/Config.in   |  6 ++++++
- package/gstreamer1/gst1-imx/gst1-imx.mk | 11 +++++++++--
- 2 files changed, 15 insertions(+), 2 deletions(-)
+ package/kexec-lite/kexec-lite.hash | 2 +-
+ package/kexec-lite/kexec-lite.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-imx/Config.in b/package/gstreamer1/gst1-imx/Config.in
-index 9f792d1..9b977bd 100644
---- a/package/gstreamer1/gst1-imx/Config.in
-+++ b/package/gstreamer1/gst1-imx/Config.in
-@@ -84,4 +84,10 @@ config BR2_PACKAGE_GST1_IMX_V4L2VIDEOSRC
- 	help
- 	  Elements for V4L2 capture
+diff --git a/package/kexec-lite/kexec-lite.hash b/package/kexec-lite/kexec-lite.hash
+index 0f21224..d71e8d0 100644
+--- a/package/kexec-lite/kexec-lite.hash
++++ b/package/kexec-lite/kexec-lite.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 5786ddc0c94ead4fd4a1fded44bb1da0c9bc91af08049fed373ea161603e1e1f  kexec-lite-86e45a47e8cc1f598ccfa9b873a23067f4ecc36f.tar.gz
++sha256 2e9b131324cec9d27840179daa35e3159a4032ff78b74e301850faa007567d0e kexec-lite-87d044a895b1c004320a2676099a54a5a2a74f2e.tar.gz
+diff --git a/package/kexec-lite/kexec-lite.mk b/package/kexec-lite/kexec-lite.mk
+index 76b6819..8e1ad8d 100644
+--- a/package/kexec-lite/kexec-lite.mk
++++ b/package/kexec-lite/kexec-lite.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+config BR2_PACKAGE_GST1_IMX_V4L2VIDEOSINK
-+	bool "imxv4l2videosink"
-+	select BR2_PACKAGE_GST1_PLUGINS_BAD
-+	help
-+	  Elements for V4L2 output
-+
- endif
-diff --git a/package/gstreamer1/gst1-imx/gst1-imx.mk b/package/gstreamer1/gst1-imx/gst1-imx.mk
-index c621c36..a8fe6fe 100644
---- a/package/gstreamer1/gst1-imx/gst1-imx.mk
-+++ b/package/gstreamer1/gst1-imx/gst1-imx.mk
-@@ -83,10 +83,17 @@ GST1_IMX_CONF_OPTS += --disable-vpu
- endif
- 
- ifeq ($(BR2_PACKAGE_GST1_IMX_V4L2VIDEOSRC),y)
--# There's no --enable-v4l2src option
-+# There's no --enable-imxv4l2videosrc option
- GST1_IMX_DEPENDENCIES += gst1-plugins-bad
- else
--GST1_IMX_CONF_OPTS += --disable-v4l2src
-+GST1_IMX_CONF_OPTS += --disable-imxv4l2videosrc
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_IMX_V4L2VIDEOSINK),y)
-+# There's no --enable-imxv4l2videosink option
-+GST1_IMX_DEPENDENCIES += gst1-plugins-bad
-+else
-+GST1_IMX_CONF_OPTS += --disable-imxv4l2videosink
- endif
- 
- $(eval $(waf-package))
+-KEXEC_LITE_VERSION = 86e45a47e8cc1f598ccfa9b873a23067f4ecc36f
++KEXEC_LITE_VERSION = 87d044a895b1c004320a2676099a54a5a2a74f2e
+ KEXEC_LITE_SITE = $(call github,antonblanchard,kexec-lite,$(KEXEC_LITE_VERSION))
+ KEXEC_LITE_LICENSE = GPL-2.0+
+ KEXEC_LITE_LICENSE_FILES = COPYING
