@@ -1,50 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 Nov 2017 22:29:49 +0100
-Subject: [Buildroot] [git commit branch/next] expat: bump to 2.2.5
-Message-ID: <20171122212320.901B0814B3@busybox.osuosl.org>
+Date: Wed, 22 Nov 2017 22:29:27 +0100
+Subject: [Buildroot] [git commit branch/next] pango: bump to 1.140.14
+Message-ID: <20171122212320.585C1805AA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=78e964bc22a8ecab1b8b11b23b30824737da218d
+commit: https://git.buildroot.net/buildroot/commit/?id=5eb9f431fa29b3572971f28e687d96c15ecd8519
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+
+In addition, add a hash for the license file.
 
 Signed-off-by: Adam Duskett <aduskett@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/expat/expat.hash | 10 +++++-----
- package/expat/expat.mk   |  2 +-
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ package/pango/pango.hash | 5 +++--
+ package/pango/pango.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/expat/expat.hash b/package/expat/expat.hash
-index ef01ec9..945e102 100644
---- a/package/expat/expat.hash
-+++ b/package/expat/expat.hash
-@@ -1,7 +1,7 @@
--# From https://sourceforge.net/projects/expat/files/expat/2.2.4/
--md5	6e3980aba29a224a9f478d88ac7ec207	expat-2.2.4.tar.bz2
--sha1	3394d6390c041a8f5dec1d5fe7c4af0a23ae4504	expat-2.2.4.tar.bz2
--# Calculated based on the hashes above
--sha256	03ad85db965f8ab2d27328abcf0bc5571af6ec0a414874b2066ee3fdd372019e	expat-2.2.4.tar.bz2
-+# From https://sourceforge.net/projects/expat/files/expat/2.2.5/
-+md5	789e297f547980fc9ecc036f9a070d49		expat-2.2.5.tar.bz2
-+sha1	490659abd7d6c6d4cb4e60c945a15fbf081564f6	expat-2.2.5.tar.bz2
-+
- # Locally calculated
-+sha256	d9dc32efba7e74f788fcc4f212a43216fc37cf5f23f4c2339664d473353aedf6	expat-2.2.5.tar.bz2
- sha256	46336ab2fec900803e2f1a4253e325ac01d998efb09bc6906651f7259e636f76	COPYING
-diff --git a/package/expat/expat.mk b/package/expat/expat.mk
-index ef196ec..69c457d 100644
---- a/package/expat/expat.mk
-+++ b/package/expat/expat.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/pango/pango.hash b/package/pango/pango.hash
+index 1b6da7d..6df08e9 100644
+--- a/package/pango/pango.hash
++++ b/package/pango/pango.hash
+@@ -1,2 +1,3 @@
+-# From http://ftp.gnome.org/pub/GNOME/sources/pango/1.40/pango-1.40.12.sha256sum
+-sha256	75f1a9a8e4e2b28cbc078b50c1fa927ee4ded994d1ade97c5603e2d1f3161cfc	pango-1.40.12.tar.xz
++# From http://ftp.gnome.org/pub/GNOME/sources/pango/1.40/pango-1.40.14.sha256sum
++sha256	90af1beaa7bf9e4c52db29ec251ec4fd0a8f2cc185d521ad1f88d01b3a6a17e3	pango-1.40.14.tar.xz
++sha256	d245807f90032872d1438d741ed21e2490e1175dc8aa3afa5ddb6c8e529b58e5	COPYING
+diff --git a/package/pango/pango.mk b/package/pango/pango.mk
+index 79283e8..805d35e 100644
+--- a/package/pango/pango.mk
++++ b/package/pango/pango.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--EXPAT_VERSION = 2.2.4
-+EXPAT_VERSION = 2.2.5
- EXPAT_SITE = http://downloads.sourceforge.net/project/expat/expat/$(EXPAT_VERSION)
- EXPAT_SOURCE = expat-$(EXPAT_VERSION).tar.bz2
- EXPAT_INSTALL_STAGING = YES
+ PANGO_VERSION_MAJOR = 1.40
+-PANGO_VERSION = $(PANGO_VERSION_MAJOR).12
++PANGO_VERSION = $(PANGO_VERSION_MAJOR).14
+ PANGO_SOURCE = pango-$(PANGO_VERSION).tar.xz
+ PANGO_SITE = http://ftp.gnome.org/pub/GNOME/sources/pango/$(PANGO_VERSION_MAJOR)
+ PANGO_AUTORECONF = YES
