@@ -1,9 +1,13 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 23 Nov 2017 21:43:18 +0100
-Subject: [Buildroot] [PATCH 1/1] libupnp18: new package
-In-Reply-To: <20171118202440.28645-1-fontaine.fabrice@gmail.com>
-References: <20171118202440.28645-1-fontaine.fabrice@gmail.com>
-Message-ID: <20171123214318.72a8901d@windsurf.lan>
+Date: Thu, 23 Nov 2017 21:45:46 +0100
+Subject: [Buildroot] [PATCH 1/1] qt5cinex: depends also on
+ qt5quickcontrols
+In-Reply-To: <32a0057b-1840-ef45-c199-9da6b14ae09c@micronovasrl.com>
+References: <1510677027-24076-1-git-send-email-giulio.benetti@micronovasrl.com>
+ <e8c172b8-f2ec-ced1-dda8-236d0d945b12@micronovasrl.com>
+ <20171114165808.akqens5j5obw2n5c@tarshish>
+ <32a0057b-1840-ef45-c199-9da6b14ae09c@micronovasrl.com>
+Message-ID: <20171123214546.7e982b20@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,46 +16,32 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 18 Nov 2017 21:24:40 +0100, Fabrice Fontaine wrote:
-> Branch 1.8.x of libupnp is not compatible with branch 1.6.x so add a
-> dedicated package and make it depends on !BR2_PACKAGE_LIBUPNP as
-> suggested by Thomas Petazzoni and Arnout Vandecappelle during review
-> of "libupnp: add 1.8.3 version" patch.
+On Tue, 14 Nov 2017 18:03:53 +0100, Giulio Benetti wrote:
+> Sorry, my mistake.
+> It installed correctly on STAGING_DIR, but not in TARGET_DIR.
+> This why it compiled fine, but on target it didn't find that 
+> libQtQuick.so library.
+> This is a problem on building Qt5 I've noticed.
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> If I build first time Qt5 with few features,
+> than select other more features,
+> those can be built partially and installed partially too.
+> 
+> To reproduce you can build qt5base.
+> After that, select qt5cinex,
+> then you should find that libraries are in STAGING_DIR but not in 
+> TARGET_DIR.
+> 
+> So to have it working properly you have to rm and rebuild qt5base and 
+> qt5declarative from beginning.
+> 
+> Did someone else noticed this?
 
-Thanks, I've applied to next, with one minor tweak.
+So in the end, is your patch needed ?
 
-> diff --git a/package/libupnp18/Config.in b/package/libupnp18/Config.in
-> new file mode 100644
-> index 000000000..80ac59542
-> --- /dev/null
-> +++ b/package/libupnp18/Config.in
-> @@ -0,0 +1,15 @@
-> +config BR2_PACKAGE_LIBUPNP18
-> +	bool "libupnp18"
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS
-> +	depends on !BR2_PACKAGE_LIBUPNP
-> +	help
-> +	  The portable SDK for UPnP(tm) Devices (libupnp) provides
-> +	  developers with an API and open source code for building
-> +	  control points, devices, and bridges that are compliant with
-> +	  Version 1.0 of the Universal Plug and Play Device Architecture
-> +	  Specification
-> +
-> +	  http://pupnp.sourceforge.net/
-> +
-> +comment "libupnp18 needs a toolchain w/ threads"
-> +	depends on !BR2_TOOLCHAIN_HAS_THREADS
+Peter (Seiderer), could you review this Qt5 related patch ? Thanks!
 
-I've added:
-
-	depends on !BR2_PACKAGE_LIBUPNP
-
-otherwise the Config.in comment would appear even if libupnp18 is not
-selectable.
-
-Thanks!
+Best regards,
 
 Thomas
 -- 
