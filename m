@@ -1,81 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 30 Nov 2017 11:52:50 +0100
-Subject: [Buildroot] [git commit] fs/common: get rid of post-target rules
-Message-ID: <20171201205341.B1BA280FC6@busybox.osuosl.org>
+Date: Thu, 23 Nov 2017 21:45:59 +0100
+Subject: [Buildroot] [git commit] configs/mx53loco: Bump U-Boot and kernel
+ versions
+Message-ID: <20171201205334.204677FC1A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=207c596ad7669c6f09bebf83450e20bdba191631
+commit: https://git.buildroot.net/buildroot/commit/?id=8d641674bffb3e824991247b9f2458d28fc03c1c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The only users of post-target rules were ext2, cpio and initramfs.
-
-Of those, ext2 and cpio were changed to use post-gen hooks, while
-initramfs was not even using the generic rootfs infra and was fixed
-to no longer reference post-target rules.
-
-Besides, the comment in the infra was really misleading: it referenced
-initramfs implying it was the sole user of that feature, even though
-initramfs was not using the fs infra.
-
-Furthermore, using post-target rules was inherently broken for top-level
-parallel builds, because filesystems had to ensure the ordering by
-themselves. Of the two real users of post-target rules (cpio and ext2),
-one did enforce rules ordering (apparently correctly), while the other
-forgot to do so.
-
-We can get rid of post-target rules altogether, now.
-
-Add a legacy check, to catch out-of-tree (e.g. br2-external) users of
-post-target rules, and instruct them to switch to post-gen hooks instead.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Reviewed-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- fs/common.mk | 13 ++++++++-----
- 1 file changed, 8 insertions(+), 5 deletions(-)
+ configs/mx53loco_defconfig | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/fs/common.mk b/fs/common.mk
-index 5b612a3..378907e 100644
---- a/fs/common.mk
-+++ b/fs/common.mk
-@@ -19,10 +19,6 @@
- #  ROOTFS_$(FSTYPE)_POST_GEN_HOOKS, a list of hooks to call after
- #  generating the filesystem image
- #
--#  ROOTFS_$(FSTYPE)_POST_TARGETS, the list of targets that should be
--#  run after running the main filesystem target. This is useful for
--#  initramfs, to rebuild the kernel once the initramfs is generated.
--#
- # In terms of configuration option, this macro assumes that the
- # BR2_TARGET_ROOTFS_$(FSTYPE) config option allows to enable/disable
- # the generation of a filesystem image of a particular type. If
-@@ -115,7 +111,7 @@ endif
- rootfs-$(1)-show-depends:
- 	@echo $$(ROOTFS_$(2)_DEPENDENCIES)
+diff --git a/configs/mx53loco_defconfig b/configs/mx53loco_defconfig
+index 0f94aa7..1b10518 100644
+--- a/configs/mx53loco_defconfig
++++ b/configs/mx53loco_defconfig
+@@ -2,8 +2,8 @@
+ BR2_arm=y
+ BR2_cortex_a8=y
  
--rootfs-$(1): $$(BINARIES_DIR)/rootfs.$(1) $$(ROOTFS_$(2)_POST_TARGETS)
-+rootfs-$(1): $$(BINARIES_DIR)/rootfs.$(1)
+-# Linux headers same as kernel, a 4.12 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_12=y
++# Linux headers same as kernel, a 4.14 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
  
- .PHONY: rootfs-$(1) rootfs-$(1)-show-depends
+ # System
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+@@ -22,13 +22,13 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="mx53loco"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.09"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.11"
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
  
-@@ -123,6 +119,13 @@ ifeq ($$(BR2_TARGET_ROOTFS_$(2)),y)
- TARGETS_ROOTFS += rootfs-$(1)
- PACKAGES += $$(filter-out rootfs-%,$$(ROOTFS_$(2)_DEPENDENCIES))
- endif
-+
-+# Check for legacy POST_TARGETS rules
-+ifneq ($$(ROOTFS_$(2)_POST_TARGETS),)
-+$$(error Filesystem $(1) uses post-target rules, which are no longer supported.\
-+	Update $(1) to use post-gen hooks instead)
-+endif
-+
- endef
- 
- define ROOTFS_TARGET
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.12.12"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.14"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx53-qsb imx53-qsrb"
