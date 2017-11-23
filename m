@@ -1,50 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 23 Nov 2017 21:45:46 +0100
-Subject: [Buildroot] [PATCH 1/1] qt5cinex: depends also on
- qt5quickcontrols
-In-Reply-To: <32a0057b-1840-ef45-c199-9da6b14ae09c@micronovasrl.com>
-References: <1510677027-24076-1-git-send-email-giulio.benetti@micronovasrl.com>
- <e8c172b8-f2ec-ced1-dda8-236d0d945b12@micronovasrl.com>
- <20171114165808.akqens5j5obw2n5c@tarshish>
- <32a0057b-1840-ef45-c199-9da6b14ae09c@micronovasrl.com>
-Message-ID: <20171123214546.7e982b20@windsurf.lan>
+Date: Thu, 23 Nov 2017 21:45:59 +0100
+Subject: [Buildroot] [git commit branch/next] configs/mx53loco: Bump U-Boot
+ and kernel versions
+Message-ID: <20171123203838.E8D5B8125C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=8d641674bffb3e824991247b9f2458d28fc03c1c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Tue, 14 Nov 2017 18:03:53 +0100, Giulio Benetti wrote:
-> Sorry, my mistake.
-> It installed correctly on STAGING_DIR, but not in TARGET_DIR.
-> This why it compiled fine, but on target it didn't find that 
-> libQtQuick.so library.
-> This is a problem on building Qt5 I've noticed.
-> 
-> If I build first time Qt5 with few features,
-> than select other more features,
-> those can be built partially and installed partially too.
-> 
-> To reproduce you can build qt5base.
-> After that, select qt5cinex,
-> then you should find that libraries are in STAGING_DIR but not in 
-> TARGET_DIR.
-> 
-> So to have it working properly you have to rm and rebuild qt5base and 
-> qt5declarative from beginning.
-> 
-> Did someone else noticed this?
+Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ configs/mx53loco_defconfig | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-So in the end, is your patch needed ?
-
-Peter (Seiderer), could you review this Qt5 related patch ? Thanks!
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/configs/mx53loco_defconfig b/configs/mx53loco_defconfig
+index 0f94aa7..1b10518 100644
+--- a/configs/mx53loco_defconfig
++++ b/configs/mx53loco_defconfig
+@@ -2,8 +2,8 @@
+ BR2_arm=y
+ BR2_cortex_a8=y
+ 
+-# Linux headers same as kernel, a 4.12 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_12=y
++# Linux headers same as kernel, a 4.14 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
+ 
+ # System
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+@@ -22,13 +22,13 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="mx53loco"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.09"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.11"
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.12.12"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.14"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx53-qsb imx53-qsrb"
