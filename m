@@ -1,74 +1,53 @@
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Date: Thu, 23 Nov 2017 21:39:14 +0300
-Subject: [Buildroot] [PATCH v1] busybox: Fix rtcwake to use /dev/rtc0
- properly
-Message-ID: <20171123183914.71769-1-andriy.shevchenko@linux.intel.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Thu, 23 Nov 2017 19:47:11 +0100
+Subject: [Buildroot] [PATCH v1] qt5connectivity: fix examples compile
+ without Qt gui module
+In-Reply-To: <20171122221248.45984b74@windsurf.lan>
+References: <20171118204057.1143-1-ps.report@gmx.net>
+ <20171122221248.45984b74@windsurf.lan>
+Message-ID: <20171123194711.39475fd9@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-rtcwake from busybox has failed in case the /dev/rtc is a symlink
-(which is default case for udev enabled systems) due to wrong pathname
-used for a sysfs wakeup attribute.
+Hello Thomas,
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- ...bb-Try-dev-rtc0-first-followed-by-dev-rtc.patch | 45 ++++++++++++++++++++++
- 1 file changed, 45 insertions(+)
- create mode 100644 package/busybox/0006-libbb-Try-dev-rtc0-first-followed-by-dev-rtc.patch
+On Wed, 22 Nov 2017 22:12:48 +0100, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
 
-diff --git a/package/busybox/0006-libbb-Try-dev-rtc0-first-followed-by-dev-rtc.patch b/package/busybox/0006-libbb-Try-dev-rtc0-first-followed-by-dev-rtc.patch
-new file mode 100644
-index 0000000000..0702c3c065
---- /dev/null
-+++ b/package/busybox/0006-libbb-Try-dev-rtc0-first-followed-by-dev-rtc.patch
-@@ -0,0 +1,45 @@
-+From b59088ab14fb9c336414e2c9b27a9f5b7447ce5b Mon Sep 17 00:00:00 2001
-+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-+Date: Thu, 23 Nov 2017 19:33:08 +0200
-+Subject: [PATCH v1] libbb: Try /dev/rtc0 first followed by /dev/rtc
-+
-+In case we run
-+
-+% rtcwake -s5 -mmem
-+
-+in udev environment we will get an error:
-+
-+rtcwake: /dev/rtc not enabled for wakeup events
-+
-+because /dev/rtc is a symlink to /dev/rtc0 in Buildroot and other Linux
-+distributions (like Fedora) and make_wakeup() obviously fails.
-+
-+As a quick fix just reorder probe of device nodes to try /dev/rtc0
-+first.
-+
-+The proper solution, of course much expensive by code footprint,
-+is to resolve /dev/rtc to a proper device node and then
-+to follow sysfs attributes.
-+
-+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-+---
-+ libbb/rtc.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/libbb/rtc.c b/libbb/rtc.c
-+index c4117ba34..e087a8fd6 100644
-+--- a/libbb/rtc.c
-++++ b/libbb/rtc.c
-+@@ -64,8 +64,8 @@ int FAST_FUNC rtc_xopen(const char **default_rtc, int flags)
-+ {
-+ 	int rtc;
-+ 	const char *name =
-+-		"/dev/rtc""\0"
-+ 		"/dev/rtc0""\0"
-++		"/dev/rtc""\0"
-+ 		"/dev/misc/rtc""\0";
-+ 
-+ 	if (!*default_rtc)
-+-- 
-+2.15.0
-+
--- 
-2.15.0
+> Hello,
+> 
+> On Sat, 18 Nov 2017 21:40:57 +0100, Peter Seiderer wrote:
+> > Add upstream suggested patch to fix heartrate-server (needs only
+> > core and bluetooth modules).
+> > 
+> > Fixes [1]:
+> > 
+> >   make[3]: Entering directory `.../build/qt5connectivity-5.9.2/examples/bluetooth'
+> >   cd heartrate-server/ && ( test -e Makefile || .../output/host/bin/qmake -o Makefile .../build/qt5connectivity-5.9.2/examples/bluetooth/heartrate-server/heartrate-server.pro ) && /usr/bin/make -f Makefile
+> >   Project ERROR: Unknown module(s) in QT: gui
+> >   make[3]: *** [sub-heartrate-server-make_first] Error 3
+> >   make[3]: Leaving directory `.../build/qt5connectivity-5.9.2/examples/bluetooth'
+> > 
+> > [1] http://autobuild.buildroot.net/results/387a21fe7fc672e5668b0afddc138cbb7197d234
+> > 
+> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> > ---
+> >  ...rtrate-server-needs-only-core-and-bluetoo.patch | 32 ++++++++++++++++++++++
+> >  1 file changed, 32 insertions(+)
+> >  create mode 100644 package/qt5/qt5connectivity/0001-Example-heartrate-server-needs-only-core-and-bluetoo.patch  
+> 
+> I've applied to master, but after moving the patch to a 5.9.2
+> subfolder. Indeed, the build issue, and therefore the patch, only apply
+> to Qt 5.9 and not Qt 5.6.
+
+Arg, sorry for messing it up, thanks for fixing it...
+
+Regards,
+Peter
+
+> 
+> Thanks!
+> 
+> Thomas
