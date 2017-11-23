@@ -1,45 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 23 Nov 2017 22:01:08 +0100
-Subject: [Buildroot] [git commit branch/next] package/dovecot-pigeonhole:
- bump version to 0.4.21
-Message-ID: <20171123205351.66D0D80FD7@busybox.osuosl.org>
+Date: Thu, 23 Nov 2017 22:01:25 +0100
+Subject: [Buildroot] [PATCH/next 1/2] package/dovecot: bump version to
+ 2.2.33.2
+In-Reply-To: <20171114065151.24659-1-bernd.kuhls@t-online.de>
+References: <20171114065151.24659-1-bernd.kuhls@t-online.de>
+Message-ID: <20171123220125.18070f13@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=59e59a0b660241e57000df34cdbc2a1304a4d7a4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hello,
 
-Added license hash.
+On Tue, 14 Nov 2017 07:51:50 +0100, Bernd Kuhls wrote:
+> Added license hashes.
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  .../0001-byteorder.h-fix-uclibc-build.patch        | 32 ++++++++++++++++++++++
+>  package/dovecot/dovecot.hash                       |  5 +++-
+>  package/dovecot/dovecot.mk                         |  2 +-
+>  3 files changed, 37 insertions(+), 2 deletions(-)
+>  create mode 100644 package/dovecot/0001-byteorder.h-fix-uclibc-build.patch
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/dovecot-pigeonhole/dovecot-pigeonhole.hash | 3 ++-
- package/dovecot-pigeonhole/dovecot-pigeonhole.mk   | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+Both applied to next. Thanks!
 
-diff --git a/package/dovecot-pigeonhole/dovecot-pigeonhole.hash b/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
-index 137870f..a2b7eba 100644
---- a/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
-+++ b/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
-@@ -1,2 +1,3 @@
- # Locally computed after checking signature
--sha256 629204bfbdcd3480e1ebcdc246da438323c3ea5fea57480ab859e8b201ad8793  dovecot-2.2-pigeonhole-0.4.19.tar.gz
-+sha256 4ae09cb788c5334d167f5a89ee70b0616c3231e5904ad258ce408e4953cfdd6a  dovecot-2.2-pigeonhole-0.4.21.tar.gz
-+sha256 fc9e9522216f2a9a28b31300e3c73c1df56acc27dfae951bf516e7995366b51a  COPYING
-diff --git a/package/dovecot-pigeonhole/dovecot-pigeonhole.mk b/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
-index 6b835d3..ea8b007 100644
---- a/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
-+++ b/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DOVECOT_PIGEONHOLE_VERSION = 0.4.19
-+DOVECOT_PIGEONHOLE_VERSION = 0.4.21
- DOVECOT_PIGEONHOLE_SOURCE = dovecot-2.2-pigeonhole-$(DOVECOT_PIGEONHOLE_VERSION).tar.gz
- DOVECOT_PIGEONHOLE_SITE = http://pigeonhole.dovecot.org/releases/2.2
- DOVECOT_PIGEONHOLE_LICENSE = LGPL-2.1
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
