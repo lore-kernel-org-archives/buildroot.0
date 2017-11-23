@@ -1,78 +1,63 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 23 Nov 2017 22:02:04 +0100
-Subject: [Buildroot] [git commit branch/next] python-jaraco-classes: new
- package
-Message-ID: <20171123205553.D244F81510@busybox.osuosl.org>
+Date: Thu, 23 Nov 2017 22:02:16 +0100
+Subject: [Buildroot] [git commit branch/next] python-cherrypy: bump version
+ to 12.0.1
+Message-ID: <20171123205554.095B4810D7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cf51842fcb6d8f9ce44536b46d7341a3b6cb5db9
+commit: https://git.buildroot.net/buildroot/commit/?id=c36f636393df8bb7278022acfe523b9e4adc9bcd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+
+Add licence file checksum and new runtime dependencies.
 
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in                                        |  1 +
- package/python-jaraco-classes/Config.in                  |  7 +++++++
- package/python-jaraco-classes/python-jaraco-classes.hash |  4 ++++
- package/python-jaraco-classes/python-jaraco-classes.mk   | 14 ++++++++++++++
- 4 files changed, 26 insertions(+)
+ package/python-cherrypy/Config.in            | 1 +
+ package/python-cherrypy/python-cherrypy.hash | 5 +++--
+ package/python-cherrypy/python-cherrypy.mk   | 4 ++--
+ 3 files changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 4a7327c..54f6f57 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -789,6 +789,7 @@ menu "External python modules"
- 	source "package/python-ipython-genutils/Config.in"
- 	source "package/python-iso8601/Config.in"
- 	source "package/python-itsdangerous/Config.in"
-+	source "package/python-jaraco-classes/Config.in"
- 	source "package/python-jinja2/Config.in"
- 	source "package/python-jsonschema/Config.in"
- 	source "package/python-json-schema-validator/Config.in"
-diff --git a/package/python-jaraco-classes/Config.in b/package/python-jaraco-classes/Config.in
-new file mode 100644
-index 0000000..05c1123
---- /dev/null
-+++ b/package/python-jaraco-classes/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_JARACO_CLASSES
-+	bool "python-jaraco-classes"
-+	select BR2_PACKAGE_PYTHON_SIX # runtime
-+	help
-+	  Utility functions for Python class constructs.
-+
-+	  https://github.com/jaraco/jaraco.classes
-diff --git a/package/python-jaraco-classes/python-jaraco-classes.hash b/package/python-jaraco-classes/python-jaraco-classes.hash
-new file mode 100644
-index 0000000..bc30c5f
---- /dev/null
-+++ b/package/python-jaraco-classes/python-jaraco-classes.hash
-@@ -0,0 +1,4 @@
-+# md5 from https://pypi.python.org/pypi/jaraco.classes/json, sha256 locally computed
-+md5     c0cb1a0ce529e3cdbca9d99742071a04  jaraco.classes-1.4.3.tar.gz
-+sha256  e347f2b502521bfc35c57ab4695e8b6d7371625c392a0ca0d46742ee93359d3e  jaraco.classes-1.4.3.tar.gz
-+sha256  a55e2ffe9b44998e621d51d8c094bed09acc4b5236ee73d7df395a33ba3c18fd  LICENSE
-diff --git a/package/python-jaraco-classes/python-jaraco-classes.mk b/package/python-jaraco-classes/python-jaraco-classes.mk
-new file mode 100644
-index 0000000..4251452
---- /dev/null
-+++ b/package/python-jaraco-classes/python-jaraco-classes.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-jaraco-classes
-+#
-+################################################################################
-+
-+PYTHON_JARACO_CLASSES_VERSION = 1.4.3
-+PYTHON_JARACO_CLASSES_SOURCE = jaraco.classes-$(PYTHON_JARACO_CLASSES_VERSION).tar.gz
-+PYTHON_JARACO_CLASSES_SITE = https://pypi.python.org/packages/b3/ce/031a6004619c2a3744b977b4a8414d7e8087afe6247110efcac797fee7f1
-+PYTHON_JARACO_CLASSES_LICENSE = MIT
-+PYTHON_JARACO_CLASSES_LICENSE_FILES = LICENSE
-+PYTHON_JARACO_CLASSES_SETUP_TYPE = setuptools
-+
-+$(eval $(python-package))
+diff --git a/package/python-cherrypy/Config.in b/package/python-cherrypy/Config.in
+index c049972..622dd1f 100644
+--- a/package/python-cherrypy/Config.in
++++ b/package/python-cherrypy/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_PYTHON_CHERRYPY
+ 	bool "python-cherrypy"
+ 	select BR2_PACKAGE_PYTHON_CHEROOT # runtime
++	select BR2_PACKAGE_PYTHON_JARACO_CLASSES # runtime
+ 	select BR2_PACKAGE_PYTHON_PORTEND # runtime
+ 	select BR2_PACKAGE_PYTHON_PYEXPAT if BR2_PACKAGE_PYTHON # runtime
+ 	select BR2_PACKAGE_PYTHON3_PYEXPAT if BR2_PACKAGE_PYTHON3 # runtime
+diff --git a/package/python-cherrypy/python-cherrypy.hash b/package/python-cherrypy/python-cherrypy.hash
+index ac3b982..d8f97af 100644
+--- a/package/python-cherrypy/python-cherrypy.hash
++++ b/package/python-cherrypy/python-cherrypy.hash
+@@ -1,3 +1,4 @@
+ # md5 from https://pypi.python.org/pypi/CherryPy/json, sha256 locally computed
+-md5	105cbcd4f7cd139ab4107f1b0e39afe3  CherryPy-10.2.2.tar.gz
+-sha256	32d93334df765c7fd5d22815ab643333e850f0cc4f6d51fee62a68f23eea8ff8  CherryPy-10.2.2.tar.gz
++md5	e21fd0c5706504a8f26c46d808a14255  CherryPy-12.0.1.tar.gz
++sha256	6a3a90a43b1e05bd4634c60acfdcf34efe74f9f8746aca14dbe95a9b69db30ea  CherryPy-12.0.1.tar.gz
++sha256  02f4efe6e7dcd218c33cfa065c0552de983b5ad563b053e97697c5abd2ef14f9  LICENSE.md
+diff --git a/package/python-cherrypy/python-cherrypy.mk b/package/python-cherrypy/python-cherrypy.mk
+index 2820b69..72b17bc 100644
+--- a/package/python-cherrypy/python-cherrypy.mk
++++ b/package/python-cherrypy/python-cherrypy.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_CHERRYPY_VERSION = 10.2.2
++PYTHON_CHERRYPY_VERSION = 12.0.1
+ PYTHON_CHERRYPY_SOURCE = CherryPy-$(PYTHON_CHERRYPY_VERSION).tar.gz
+-PYTHON_CHERRYPY_SITE = https://pypi.python.org/packages/a2/de/dddea0c4d4be436724bfc2d1486c99368541d93c269bfa2a7fa3d132021e
++PYTHON_CHERRYPY_SITE = https://pypi.python.org/packages/be/d8/a8ef56bfe1c39d466b8d55b496b64459cc43dec71361d88edf904901637f
+ PYTHON_CHERRYPY_LICENSE = BSD-3-Clause
+ PYTHON_CHERRYPY_LICENSE_FILES = LICENSE.md
+ PYTHON_CHERRYPY_SETUP_TYPE = setuptools
