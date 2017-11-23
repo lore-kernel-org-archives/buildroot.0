@@ -1,62 +1,86 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 23 Nov 2017 22:00:55 +0100
-Subject: [Buildroot] [PATCH/next 1/2] package/dovecot: bump version to
- 2.2.33.2
-In-Reply-To: <20171114072203.yznumdrkiad5xtwj@tarshish>
-References: <20171114065151.24659-1-bernd.kuhls@t-online.de>
- <20171114072203.yznumdrkiad5xtwj@tarshish>
-Message-ID: <20171123220055.3be02c93@windsurf.lan>
+Date: Thu, 23 Nov 2017 21:53:51 +0100
+Subject: [Buildroot] [git commit branch/next] package/dovecot: bump version
+ to 2.2.33.2
+Message-ID: <20171123205351.5CEA981073@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=746f94c282fcc2c0728b53e24d96e7553fcaa46a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Tue, 14 Nov 2017 09:22:03 +0200, Baruch Siach wrote:
+Added license hashes.
 
-> >  DOVECOT_VERSION_MAJOR = 2.2
-> > -DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).31
-> > +DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).33.2
-> >  DOVECOT_SITE = http://www.dovecot.org/releases/$(DOVECOT_VERSION_MAJOR)
-> >  DOVECOT_INSTALL_STAGING = YES
-> >  DOVECOT_LICENSE = LGPL-2.1  
-> 
-> Unrelated to this patch, but since COPYING.MIT is one of the license files, 
-> why isn't the MIT license mentioned here?
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../0001-byteorder.h-fix-uclibc-build.patch        | 32 ++++++++++++++++++++++
+ package/dovecot/dovecot.hash                       |  5 +++-
+ package/dovecot/dovecot.mk                         |  2 +-
+ 3 files changed, 37 insertions(+), 2 deletions(-)
 
-Good catch. The COPYING file explains pretty well was going on here. It
-says:
-
-"""
-Everything in src/lib/, src/auth/, src/lib-sql/ and src/lib-ntlm/ is under
-MIT license (see COPYING.MIT) unless otherwise mentioned at the beginning
-of the file.
-
-Everything else is LGPLv2.1 (see COPYING.LGPL) unless otherwise mentioned
-at the beginning of the file.
-
-Current exceptions are:
-
-src/lib/md5.c : Public Domain
-
-src/lib/sha1.c and sha2.c:
-[... here the next of BSD-3c]
-
-src/lib/UnicodeData.txt:
-[... something that looks very similar to
-https://spdx.org/licenses/Unicode-DFS-2015.html, but isn't exactly the
-same ...]
-
-So perhaps:
-
-DOVECOT_LICENSE = LGPL-2.1, MIT, Public Domain, Unicode-DFS-2015
-
-something like that ?
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/dovecot/0001-byteorder.h-fix-uclibc-build.patch b/package/dovecot/0001-byteorder.h-fix-uclibc-build.patch
+new file mode 100644
+index 0000000..b6d3ed3
+--- /dev/null
++++ b/package/dovecot/0001-byteorder.h-fix-uclibc-build.patch
+@@ -0,0 +1,32 @@
++From 902917880ca29f1007750a70cf46e7246b2d0a2a Mon Sep 17 00:00:00 2001
++From: Josef 'Jeff' Sipek <jeff.sipek@dovecot.fi>
++Date: Tue, 14 Nov 2017 06:01:21 +0100
++Subject: [PATCH] byteorder.h: fix uclibc build
++
++Patch suggested on upstream mailinglist:
++https://www.dovecot.org/pipermail/dovecot/2017-November/110019.html
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ src/lib/byteorder.h | 5 +++++
++ 1 file changed, 5 insertions(+)
++
++diff --git a/src/lib/byteorder.h b/src/lib/byteorder.h
++index 2f5dc7c17..4ffe8da21 100644
++--- a/src/lib/byteorder.h
+++++ b/src/lib/byteorder.h
++@@ -23,6 +23,11 @@
++ #ifndef BYTEORDER_H
++ #define BYTEORDER_H
++ 
+++#undef bswap_8
+++#undef bswap_16
+++#undef bswap_32
+++#undef bswap_64
+++
++ /*
++  * These prototypes exist to catch bugs in the code generating macros below.
++  */
++-- 
++2.11.0
++
+diff --git a/package/dovecot/dovecot.hash b/package/dovecot/dovecot.hash
+index 184745b..33163d6 100644
+--- a/package/dovecot/dovecot.hash
++++ b/package/dovecot/dovecot.hash
+@@ -1,2 +1,5 @@
+ # Locally computed after checking signature
+-sha256 034be40907748128d65088a4f59789b2f99ae7b33a88974eae0b6a68ece376a1  dovecot-2.2.31.tar.gz
++sha256 fe1e3b78609a56ee22fc209077e4b75348fa1bbd54c46f52bde2472a4c4cee84  dovecot-2.2.33.2.tar.gz
++sha256 a363b132e494f662d98c820d1481297e6ae72f194c2c91b6c39e1518b86240a8  COPYING
++sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
++sha256 52b8c95fabb19575281874b661ef7968ea47e8f5d74ba0dd40ce512e52b3fc97  COPYING.MIT
+diff --git a/package/dovecot/dovecot.mk b/package/dovecot/dovecot.mk
+index 4cc6ae4..25a78b9 100644
+--- a/package/dovecot/dovecot.mk
++++ b/package/dovecot/dovecot.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ DOVECOT_VERSION_MAJOR = 2.2
+-DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).31
++DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).33.2
+ DOVECOT_SITE = http://www.dovecot.org/releases/$(DOVECOT_VERSION_MAJOR)
+ DOVECOT_INSTALL_STAGING = YES
+ DOVECOT_LICENSE = LGPL-2.1
