@@ -1,241 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 23 Nov 2017 20:58:58 +0100
-Subject: [Buildroot] [git commit] configs/armadeus_apf28: bump kernel
- version to latest 4.9 LTS
-Message-ID: <20171201205333.BBC8B7F90C@busybox.osuosl.org>
+Date: Thu, 23 Nov 2017 22:02:10 +0100
+Subject: [Buildroot] [git commit] python-cheroot: bump version to 5.9.0
+Message-ID: <20171201205334.6638A7F90C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f56422d7a08a819539b375f4187e9d50f0204678
+commit: https://git.buildroot.net/buildroot/commit/?id=4874efd6ffbb5360d29aa1a9525ed8ebe3a45397
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-As there is now a defconfig inside kernel sources for mxs platforms, use it.
+Omit 5.9.1 as is has broken Python files.
 
-Signed-off-by: Julien BOIBESSOT <julien.boibessot@armadeus.com>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- board/armadeus/apf28/linux-4.4.config | 185 ----------------------------------
- configs/armadeus_apf28_defconfig      |   9 +-
- 2 files changed, 4 insertions(+), 190 deletions(-)
+ package/python-cheroot/python-cheroot.hash | 6 +++---
+ package/python-cheroot/python-cheroot.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/board/armadeus/apf28/linux-4.4.config b/board/armadeus/apf28/linux-4.4.config
-deleted file mode 100644
-index cf389d8..0000000
---- a/board/armadeus/apf28/linux-4.4.config
-+++ /dev/null
-@@ -1,185 +0,0 @@
--# CONFIG_LOCALVERSION_AUTO is not set
--# CONFIG_SWAP is not set
--CONFIG_SYSVIPC=y
--CONFIG_POSIX_MQUEUE=y
--CONFIG_LOG_BUF_SHIFT=14
--CONFIG_EMBEDDED=y
--# CONFIG_COMPAT_BRK is not set
--CONFIG_SLAB=y
--CONFIG_PROFILING=y
--CONFIG_OPROFILE=y
--CONFIG_MODULES=y
--CONFIG_MODULE_UNLOAD=y
--# CONFIG_BLK_DEV_BSG is not set
--CONFIG_PARTITION_ADVANCED=y
--CONFIG_BSD_DISKLABEL=y
--# CONFIG_IOSCHED_CFQ is not set
--# CONFIG_ARCH_MULTI_V7 is not set
--CONFIG_ARCH_MXS=y
--CONFIG_PREEMPT=y
--CONFIG_AEABI=y
--# CONFIG_OABI_COMPAT is not set
--CONFIG_ZBOOT_ROM_TEXT=0x0
--CONFIG_ZBOOT_ROM_BSS=0x0
--CONFIG_CPU_IDLE=y
--# CONFIG_CORE_DUMP_DEFAULT_ELF_HEADERS is not set
--CONFIG_NET=y
--CONFIG_PACKET=y
--CONFIG_UNIX=y
--CONFIG_INET=y
--CONFIG_IP_MULTICAST=y
--CONFIG_IP_PNP=y
--# CONFIG_INET_XFRM_MODE_TRANSPORT is not set
--# CONFIG_INET_XFRM_MODE_TUNNEL is not set
--# CONFIG_INET_XFRM_MODE_BEET is not set
--# CONFIG_INET_LRO is not set
--# CONFIG_INET_DIAG is not set
--CONFIG_IPV6=y
--CONFIG_CAN=m
--CONFIG_CAN_VCAN=m
--CONFIG_CAN_FLEXCAN=m
--CONFIG_BT=m
--CONFIG_BT_RFCOMM=m
--CONFIG_BT_RFCOMM_TTY=y
--CONFIG_BT_BNEP=m
--CONFIG_BT_BNEP_MC_FILTER=y
--CONFIG_BT_BNEP_PROTO_FILTER=y
--CONFIG_BT_HIDP=m
--CONFIG_BT_HCIBTUSB=m
--CONFIG_CFG80211=m
--CONFIG_MAC80211=m
--CONFIG_MAC80211_RC_PID=y
--CONFIG_UEVENT_HELPER_PATH="/sbin/hotplug"
--CONFIG_DEVTMPFS=y
--CONFIG_DEVTMPFS_MOUNT=y
--CONFIG_FW_LOADER=m
--CONFIG_MTD=y
--CONFIG_MTD_CMDLINE_PARTS=y
--CONFIG_MTD_BLOCK=y
--CONFIG_MTD_DATAFLASH=y
--CONFIG_MTD_M25P80=y
--# CONFIG_M25PXX_USE_FAST_READ is not set
--CONFIG_MTD_SST25L=y
--CONFIG_MTD_NAND=y
--CONFIG_MTD_NAND_GPMI_NAND=y
--CONFIG_MTD_UBI=y
--CONFIG_EEPROM_AT24=y
--CONFIG_EEPROM_AT25=y
--CONFIG_SCSI=y
--CONFIG_BLK_DEV_SD=y
--CONFIG_CHR_DEV_ST=y
--CONFIG_BLK_DEV_SR=y
--CONFIG_CHR_DEV_SG=y
--CONFIG_CHR_DEV_SCH=y
--CONFIG_SCSI_MULTI_LUN=y
--CONFIG_SCSI_LOGGING=y
--CONFIG_SCSI_SCAN_ASYNC=y
--CONFIG_NETDEVICES=y
--CONFIG_RTL8187=m
--CONFIG_RT2X00=m
--CONFIG_RT73USB=m
--CONFIG_ZD1211RW=m
--CONFIG_INPUT_JOYDEV=y
--CONFIG_INPUT_EVDEV=y
--CONFIG_INPUT_TOUCHSCREEN=y
--CONFIG_INPUT_MISC=y
--CONFIG_INPUT_UINPUT=m
--# CONFIG_SERIO_SERPORT is not set
--CONFIG_VT_HW_CONSOLE_BINDING=y
--CONFIG_DEVPTS_MULTIPLE_INSTANCES=y
--# CONFIG_LEGACY_PTYS is not set
--# CONFIG_DEVKMEM is not set
--CONFIG_SERIAL_AMBA_PL011=y
--CONFIG_SERIAL_AMBA_PL011_CONSOLE=y
--CONFIG_SERIAL_MXS_AUART=y
--CONFIG_TTY_PRINTK=y
--# CONFIG_HW_RANDOM is not set
--CONFIG_I2C=y
--CONFIG_I2C_CHARDEV=y
--CONFIG_I2C_MXS=y
--CONFIG_SPI=y
--CONFIG_SPI_BITBANG=m
--CONFIG_SPI_MXS=y
--CONFIG_SPI_SPIDEV=m
--CONFIG_GPIO_SYSFS=y
--CONFIG_HWMON=m
--CONFIG_WATCHDOG=y
--CONFIG_STMP3XXX_RTC_WATCHDOG=y
--CONFIG_REGULATOR=y
--CONFIG_REGULATOR_FIXED_VOLTAGE=y
--CONFIG_MEDIA_SUPPORT=m
--CONFIG_MEDIA_CAMERA_SUPPORT=y
--CONFIG_FB=y
--CONFIG_FB_MXS=y
--CONFIG_BACKLIGHT_LCD_SUPPORT=y
--CONFIG_LCD_CLASS_DEVICE=y
--CONFIG_BACKLIGHT_CLASS_DEVICE=y
--# CONFIG_BACKLIGHT_GENERIC is not set
--CONFIG_BACKLIGHT_PWM=y
--CONFIG_FRAMEBUFFER_CONSOLE=y
--CONFIG_LOGO=y
--# CONFIG_LOGO_LINUX_MONO is not set
--# CONFIG_LOGO_LINUX_VGA16 is not set
--CONFIG_USB=y
--CONFIG_USB_DEBUG=y
--CONFIG_USB_ANNOUNCE_NEW_DEVICES=y
--CONFIG_USB_MON=y
--CONFIG_USB_EHCI_HCD=y
--CONFIG_USB_ACM=y
--CONFIG_USB_PRINTER=y
--CONFIG_USB_WDM=y
--CONFIG_USB_STORAGE=y
--CONFIG_USB_CHIPIDEA=y
--CONFIG_USB_CHIPIDEA_UDC=y
--CONFIG_USB_CHIPIDEA_HOST=y
--CONFIG_USB_MXS_PHY=y
--CONFIG_USB_GADGET=y
--CONFIG_USB_GADGET_DEBUG_FILES=y
--CONFIG_USB_ETH=m
--CONFIG_MMC=y
--CONFIG_MMC_MXS=y
--CONFIG_NEW_LEDS=y
--CONFIG_LEDS_CLASS=y
--CONFIG_LEDS_GPIO=y
--CONFIG_LEDS_TRIGGERS=y
--CONFIG_LEDS_TRIGGER_TIMER=y
--CONFIG_LEDS_TRIGGER_ONESHOT=y
--CONFIG_LEDS_TRIGGER_HEARTBEAT=y
--CONFIG_LEDS_TRIGGER_BACKLIGHT=y
--CONFIG_LEDS_TRIGGER_DEFAULT_ON=y
--CONFIG_RTC_CLASS=y
--CONFIG_RTC_DRV_STMP=y
--CONFIG_DMADEVICES=y
--CONFIG_MXS_DMA=y
--CONFIG_STAGING=y
--CONFIG_MXS_LRADC=y
--CONFIG_IIO=y
--CONFIG_PWM=y
--CONFIG_PWM_MXS=y
--CONFIG_EXT2_FS=y
--CONFIG_EXT2_FS_XATTR=y
--CONFIG_EXT2_FS_POSIX_ACL=y
--CONFIG_EXT2_FS_SECURITY=y
--CONFIG_EXT2_FS_XIP=y
--CONFIG_EXT3_FS=y
--CONFIG_EXT3_FS_POSIX_ACL=y
--CONFIG_EXT3_FS_SECURITY=y
--CONFIG_AUTOFS4_FS=y
--CONFIG_ISO9660_FS=y
--CONFIG_JOLIET=y
--CONFIG_ZISOFS=y
--CONFIG_MSDOS_FS=y
--CONFIG_VFAT_FS=y
--CONFIG_TMPFS=y
--CONFIG_UBIFS_FS=y
--CONFIG_NFS_FS=y
--CONFIG_NFS_V4=y
--CONFIG_ROOT_NFS=y
--CONFIG_NLS_CODEPAGE_437=y
--CONFIG_NLS_CODEPAGE_850=y
--CONFIG_NLS_ISO8859_1=y
--CONFIG_DEBUG_FS=y
--# CONFIG_CRYPTO_ANSI_CPRNG is not set
--# CONFIG_CRYPTO_HW is not set
--CONFIG_FONTS=y
--CONFIG_FONT_8x8=y
-diff --git a/configs/armadeus_apf28_defconfig b/configs/armadeus_apf28_defconfig
-index 31fb528..51e05f5 100644
---- a/configs/armadeus_apf28_defconfig
-+++ b/configs/armadeus_apf28_defconfig
-@@ -2,8 +2,8 @@
- BR2_arm=y
- BR2_arm926t=y
+diff --git a/package/python-cheroot/python-cheroot.hash b/package/python-cheroot/python-cheroot.hash
+index 348b82d..7b309a9 100644
+--- a/package/python-cheroot/python-cheroot.hash
++++ b/package/python-cheroot/python-cheroot.hash
+@@ -1,3 +1,3 @@
+-# md5 from https://pypi.python.org/pypi/cheroot/json, sha256 locally computed
+-md5	e5503b0e67bdba29c6585965e7f42099  cheroot-5.5.0.tar.gz
+-sha256	59e349f91b9230930f7078646bb92b3a5b0f9cf19a6ff949777409fd289a1eba  cheroot-5.5.0.tar.gz
++# md5 from https://pypi.python.org/pypi/Cheroot/json, sha256 locally computed
++md5	288eb3a6df4964ba0435493d2914da3d  cheroot-5.9.0.tar.gz
++sha256	d8ec06b6e907b911ac5bb626876ee498c289d21f1a638cb2510fc57290567ef5  cheroot-5.9.0.tar.gz
+diff --git a/package/python-cheroot/python-cheroot.mk b/package/python-cheroot/python-cheroot.mk
+index 3f4b689..d3e056b 100644
+--- a/package/python-cheroot/python-cheroot.mk
++++ b/package/python-cheroot/python-cheroot.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
--# Linux headers same as kernel, a 4.4 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y
-+# Linux headers same as kernel, a 4.9 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
- 
- # System
- BR2_TARGET_GENERIC_HOSTNAME="apf28"
-@@ -13,9 +13,8 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.4.30"
--BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
--BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/armadeus/apf28/linux-4.4.config"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.9.64"
-+BR2_LINUX_KERNEL_DEFCONFIG="mxs"
- BR2_LINUX_KERNEL_UIMAGE=y
- BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x40008000"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-PYTHON_CHEROOT_VERSION = 5.5.0
++PYTHON_CHEROOT_VERSION = 5.9.0
+ PYTHON_CHEROOT_SOURCE = cheroot-$(PYTHON_CHEROOT_VERSION).tar.gz
+-PYTHON_CHEROOT_SITE = https://pypi.python.org/packages/a5/43/f8a461762dc62e9f273d4944fb8c140757c11a29c91c91d3fbd5fafb1570
++PYTHON_CHEROOT_SITE = https://pypi.python.org/packages/df/63/5c5265feb7e02e43d2f3a3c19dbb2d78742b0a2ff237c9e473c77bc23500
+ PYTHON_CHEROOT_LICENSE = BSD-3-Clause
+ PYTHON_CHEROOT_LICENSE_FILES = LICENSE.md
+ PYTHON_CHEROOT_SETUP_TYPE = setuptools
