@@ -1,35 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 23 Nov 2017 22:03:40 +0100
-Subject: [Buildroot] [PATCH 1/3] python-jaraco-classes: new package
-In-Reply-To: <20171123105501.14505-1-yegorslists@googlemail.com>
-References: <20171123105501.14505-1-yegorslists@googlemail.com>
-Message-ID: <20171123220340.61870b28@windsurf.lan>
+From: =?iso-8859-1?Q?Ga=EBl?= PORTAY <gael.portay@savoirfairelinux.com>
+Date: Thu, 23 Nov 2017 16:07:34 -0500
+Subject: [Buildroot] [PATCH] netcat-openbsd: add source and license
+ hashes
+In-Reply-To: <20171123213242.417dbb47@windsurf.lan>
+References: <20171119015458.6725-1-gael.portay@savoirfairelinux.com>
+ <20171123213242.417dbb47@windsurf.lan>
+Message-ID: <20171123210734.z2n7xeretrwy2tdu@archlinux>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Thomas,
 
-On Thu, 23 Nov 2017 11:54:59 +0100, yegorslists at googlemail.com wrote:
-> From: Yegor Yefremov <yegorslists@googlemail.com>
+On Thu, Nov 23, 2017 at 09:32:42PM +0100, Thomas Petazzoni wrote:
+> Hello,
 > 
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> ---
->  package/Config.in                                        |  1 +
->  package/python-jaraco-classes/Config.in                  |  7 +++++++
->  package/python-jaraco-classes/python-jaraco-classes.hash |  4 ++++
->  package/python-jaraco-classes/python-jaraco-classes.mk   | 14 ++++++++++++++
->  4 files changed, 26 insertions(+)
->  create mode 100644 package/python-jaraco-classes/Config.in
->  create mode 100644 package/python-jaraco-classes/python-jaraco-classes.hash
->  create mode 100644 package/python-jaraco-classes/python-jaraco-classes.mk
+> On Sat, 18 Nov 2017 20:54:58 -0500, Ga?l PORTAY wrote:
+> > Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
+> > ---
+> > Hi,
+> 
+> Applied to next, thanks.
+> 
+> Thomas
+> -- 
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
 
-Series applied to next. Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Thanks,
+Gael
