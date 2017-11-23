@@ -1,51 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 23 Nov 2017 21:10:21 +0100
-Subject: [Buildroot] [PATCH v2 3/4] lttng-tools: fix build errors and
- warnings for musl/uClibc-ng
-In-Reply-To: <20171122225637.26521-3-eeppeliteloop@gmail.com>
-References: <20171122225637.26521-1-eeppeliteloop@gmail.com>
- <20171122225637.26521-3-eeppeliteloop@gmail.com>
-Message-ID: <20171123211021.0a06bee2@windsurf.lan>
+Date: Thu, 23 Nov 2017 21:10:53 +0100
+Subject: [Buildroot] [git commit] shairport-sync: security bump to version
+ 3.1.4
+Message-ID: <20171123200331.9D7CC8100A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=23c5f9c65485c15cf78f0e20c12c1749e24808f7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 22 Nov 2017 17:56:36 -0500, Philippe Proulx wrote:
-> Add 0001-Fix-detect-dlmopen-and-disable-corresponding-tests-i.patch to
-> detect if dlmopen() exists and disable parts of the build accordingly if
-> not. This fixes a bug when building with musl or uClibc-ng.
-> 
-> Add 0002-Fix-src-common-pipe.h-include-sys-types.h-for-ssize_.patch to
-> fix an #include bug when building with musl.
-> 
-> Add 0003-Fix-warning-src-bin-lttng-utils.c-cast-incompatible-.patch to
-> remove compilation warnings.
-> 
-> All three new patches are in upstream's master branch as of this date
-> and will be part of an eventual release.
-> 
-> Signed-off-by: Philippe Proulx <eeppeliteloop@gmail.com>
-> ---
-> Changes v1 -> v2:
->   - New patch in v2, which was part of a single patch which also
->     bumped the package's version. Now this patch only includes the fixes
->     and another patch bumps the version.
+The bundled tinysvcmdns library is affected by CVE-2017-12087 [1]:
 
-Why was this patch 3/4 in the series? It should have been the first
-patch: it's the one fixing a build issue, and the one we want to apply
-on master. So I've applied just this patch to master.
+> An exploitable heap overflow vulnerability exists in the tinysvcmdns library
+> version 2016-07-18. A specially crafted packet can make the library overwrite
+> an arbitrary amount of data on the heap with attacker controlled values. An
+> attacker needs send a dns packet to trigger this vulnerability.
 
-Also, there was no reference to the autobuilder failure being fixed, so
-I've added that as well.
+shairport-sync has incorparated upstreams fixes in [2].
 
-Thanks a lot!
+[1] https://bugs.launchpad.net/bugs/cve/2017-12087
+[2] https://github.com/mikebrady/shairport-sync/commit/1dbdf94811b8315705dbac5ba9199d417231c5d3
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/shairport-sync/shairport-sync.hash | 2 +-
+ package/shairport-sync/shairport-sync.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/shairport-sync/shairport-sync.hash b/package/shairport-sync/shairport-sync.hash
+index eac3913..08f22a0 100644
+--- a/package/shairport-sync/shairport-sync.hash
++++ b/package/shairport-sync/shairport-sync.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  dd0484d7e8ee7631aee78c78b3762abbdba7ec3f2ee8cd6c1e361544c1414da3  shairport-sync-3.1.3.tar.gz
++sha256  4c5a2ab40ef49896f5b6e59b20df4f621ebce47ee64d8571336f59820ae66379  shairport-sync-3.1.4.tar.gz
+diff --git a/package/shairport-sync/shairport-sync.mk b/package/shairport-sync/shairport-sync.mk
+index acca45c..63289d4 100644
+--- a/package/shairport-sync/shairport-sync.mk
++++ b/package/shairport-sync/shairport-sync.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SHAIRPORT_SYNC_VERSION = 3.1.3
++SHAIRPORT_SYNC_VERSION = 3.1.4
+ SHAIRPORT_SYNC_SITE = $(call github,mikebrady,shairport-sync,$(SHAIRPORT_SYNC_VERSION))
+ 
+ SHAIRPORT_SYNC_LICENSE = MIT, BSD-3-Clause
