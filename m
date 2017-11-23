@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 23 Nov 2017 23:24:30 +0100
-Subject: [Buildroot] [PATCHv2] toolchain: Bump ARC tools to arc-2017.09
- release
-In-Reply-To: <20171101140431.33365-1-didin@synopsys.com>
-References: <20171101140431.33365-1-didin@synopsys.com>
-Message-ID: <20171123232430.627ddac7@windsurf.lan>
+Date: Thu, 23 Nov 2017 23:26:20 +0100
+Subject: [Buildroot] [PATCH] lttng-tools: needs glibc
+In-Reply-To: <80f0f99699bcdacbed2aa551ef3051ab5dd45280.1505468019.git.baruch@tkos.co.il>
+References: <80f0f99699bcdacbed2aa551ef3051ab5dd45280.1505468019.git.baruch@tkos.co.il>
+Message-ID: <20171123232620.2e1f3257@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,54 +12,29 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed,  1 Nov 2017 17:04:31 +0300, Evgeniy Didin wrote:
-> This commit finally bumps ARC tools to the most recent arc-2017.09 release version.
+On Fri, 15 Sep 2017 12:33:39 +0300, Baruch Siach wrote:
+> This commit partially reverts commit a6bb295642919 (lttng-tools: update
+> to 2.9.5) that enabled lttng-tools for uClibc and musl. Upstream code
+> does not detect dlmopen() specifically. configure only checks which
+> library defines dlopen(), and fails the configuration when none is
+> found. The code of the prog.c test still relies on dlmopen() GNU
+> extension that uClibc and musl do not implement currently.
 > 
-> ARC GNU tools of version arc-2017.09 bring some quite significant changes like:
->  * Binutils v2.29 with additonal ARC patches
->  * GCC 7.1.1 with additional ARC patches
->  * glibc 2.26 with additional ARC patches
+> Fixes:
+> http://autobuild.buildroot.net/results/add/add97b4b3f45841249f239367452205c38d4e4df/
+> http://autobuild.buildroot.net/results/382/3825c88bb8a23708e4c2fed99f2417555078c65a/
+> http://autobuild.buildroot.net/results/4ae/4aef36977f039a1533b409a7c172f0ceaa2c6088/
 > 
-> More information on this release could be found here:
-> https://github.com/foss-for-synopsys-dwc-arc-processors/toolchain/releases/tag/arc-2017.09-release
-> 
-> Signed-off-by: Evgeniy Didin <didin@synopsys.com>
-> Cc: Alexey Brodkin <abrodkin@synopsys.com>
-> Cc: arc-buildroot at synopsys.com
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> 
+> Cc: Waldemar Brodkorb <wbx@openadk.org>
+> Cc: Philippe Proulx <eeppeliteloop@gmail.com>
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 > ---
->  package/binutils/Config.in.host                    |  2 +-
->  .../0002-ld-makefile.patch                         |  0
->  .../0003-check-ldrunpath-length.patch              |  0
->  .../0004-add-sysroot-fix-from-bug-3049.patch       |  0
->  .../0005-poison-system-directories.patch           |  0
->  package/binutils/binutils.hash                     |  2 +-
->  package/binutils/binutils.mk                       |  2 +-
->  package/gcc/Config.in.host                         |  2 +-
->  .../0910-Update-uses-for-hw-loop-labels.patch      | 63 ----------------------
->  .../0100-uclibc-conf.patch                         |  0
->  .../0860-cilk-fix-build-without-wchar.patch        |  0
->  .../0900-remove-selftests.patch                    |  0
->  package/gcc/gcc.hash                               |  2 +-
->  package/gdb/Config.in.host                         |  2 +-
->  package/gdb/gdb.hash                               |  2 +-
->  package/glibc/glibc.hash                           |  2 +-
->  package/glibc/glibc.mk                             |  2 +-
->  17 files changed, 9 insertions(+), 72 deletions(-)
->  rename package/binutils/{arc-2017.09-rc1 => arc-2017.09-release}/0002-ld-makefile.patch (100%)
->  rename package/binutils/{arc-2017.09-rc1 => arc-2017.09-release}/0003-check-ldrunpath-length.patch (100%)
->  rename package/binutils/{arc-2017.09-rc1 => arc-2017.09-release}/0004-add-sysroot-fix-from-bug-3049.patch (100%)
->  rename package/binutils/{arc-2017.09-rc1 => arc-2017.09-release}/0005-poison-system-directories.patch (100%)
->  delete mode 100644 package/gcc/arc-2017.09-rc1/0910-Update-uses-for-hw-loop-labels.patch
->  rename package/gcc/{arc-2017.09-rc1 => arc-2017.09-release}/0100-uclibc-conf.patch (100%)
->  rename package/gcc/{arc-2017.09-rc1 => arc-2017.09-release}/0860-cilk-fix-build-without-wchar.patch (100%)
->  rename package/gcc/{arc-2017.09-rc1 => arc-2017.09-release}/0900-remove-selftests.patch (100%)
+>  package/lttng-tools/Config.in | 7 +++++--
+>  1 file changed, 5 insertions(+), 2 deletions(-)
 
-It seems like I have forgotten to say that this patch has been applied.
-It was applied on November 3rd.
-
-Thanks!
+This patch is no longer needed, thanks to
+https://git.buildroot.org/buildroot/commit/?id=9dd25fe977867a2e7ef1ba40c3cbd12953ecaf51,
+so I've marked your patch as Rejected. Thanks!
 
 Thomas
 -- 
