@@ -1,14 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 23 Nov 2017 09:21:52 +0100
-Subject: [Buildroot] [PATCH v2] rauc: bump to version 0.2
-In-Reply-To: <CAAkeqgVVYW4BZ6tUH20Guxdgz3qay6D4nj+Jz9F5eT6Kn-Ygjg@mail.gmail.com>
-References: <20171114043141.8245-1-ayurovsky@impinj.com>
- <20171122041747.11363-1-yurovsky@gmail.com>
- <20171122213336.52a3e196@windsurf.lan>
- <CAAkeqgXEXtnppmJVrfRgf_uC3CeX4TunJS-CQ+=sRG+ZBR+-Ag@mail.gmail.com>
- <20171122224412.1543e00d@windsurf.lan>
- <CAAkeqgVVYW4BZ6tUH20Guxdgz3qay6D4nj+Jz9F5eT6Kn-Ygjg@mail.gmail.com>
-Message-ID: <20171123092152.0f0fac4a@windsurf.lan>
+Date: Thu, 23 Nov 2017 09:58:57 +0100
+Subject: [Buildroot] [PATCH 1/1] motion: bump to version 4.1
+In-Reply-To: <20171119142641.1867-1-fontaine.fabrice@gmail.com>
+References: <20171119142641.1867-1-fontaine.fabrice@gmail.com>
+Message-ID: <20171123095857.2cf74814@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,22 +12,19 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 22 Nov 2017 18:11:12 -0800, Andrey Yurovsky wrote:
-
-> > Isn't that specific to your RAUC use case? I assume other people can
-> > use RAUC without using signed squashfs images.
-> >
-> > So perhaps we shouldn't make host-mksquashfs a mandatory dependency
-> > like your patch does?  
+On Sun, 19 Nov 2017 15:26:41 +0100, Fabrice Fontaine wrote:
+> - Remove 0001-configure.ac-use-given-CFLAGS-LIBS-for-mysqlclient-l.patch,
+> it does not have been sent upstream but issue has been fixed by
+> https://github.com/Motion-Project/motion/commit/3b7164f7f9c2b123f850f8cd1bc0a860ca51c0fe#diff-67e997bcfdac55191033d57a16d1408a
+> - 0002-Rename-base64_encode.patch has been integrated into this version
+> - --without-jpeg-turbo has been deleted from configure.ac
+> - libsdl dependency has been removed
 > 
-> No, that's just how rauc works, there's no other use case. That is, it
-> always make a signed squashfs image (there's no option to make
-> unsigned images or any other format). If mksquashfs isn't present, the
-> host tool is effectively useless since it can't make bundles, that's
-> why I feel that it's a run-time dependency and needs to be selected.
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-OK, thanks for the explanation! Is this dependency new in 0.2, or it
-was already needed for the current 0.1.1 version of RAUC ?
+This already caused a build failure:
+
+  http://autobuild.buildroot.net/results/655/65534775c5977e2424c5f5c63c46f9d0f39d7e1b/build-end.log
 
 Best regards,
 
