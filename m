@@ -1,77 +1,73 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 23 Nov 2017 22:02:04 +0100
-Subject: [Buildroot] [git commit] python-jaraco-classes: new package
-Message-ID: <20171201205334.5746C7FC1A@busybox.osuosl.org>
+Date: Thu, 23 Nov 2017 23:04:44 +0100
+Subject: [Buildroot] [git commit] package/python-networkmanager: Bump to
+ version 2.0.1
+Message-ID: <20171201205335.70E7E7FC1A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cf51842fcb6d8f9ce44536b46d7341a3b6cb5db9
+commit: https://git.buildroot.net/buildroot/commit/?id=56b0ed5de28677a2a7aad026bb0e795d9837fa74
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Added new runtime dependency on python-six.
+
+Dropped dbus-python as build time dependency (it's only runtime
+dependency).
+
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in                                        |  1 +
- package/python-jaraco-classes/Config.in                  |  7 +++++++
- package/python-jaraco-classes/python-jaraco-classes.hash |  4 ++++
- package/python-jaraco-classes/python-jaraco-classes.mk   | 14 ++++++++++++++
- 4 files changed, 26 insertions(+)
+ package/python-networkmanager/Config.in                  |  3 ++-
+ package/python-networkmanager/python-networkmanager.hash |  6 +++---
+ package/python-networkmanager/python-networkmanager.mk   | 10 +++++-----
+ 3 files changed, 10 insertions(+), 9 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 4a7327c..54f6f57 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -789,6 +789,7 @@ menu "External python modules"
- 	source "package/python-ipython-genutils/Config.in"
- 	source "package/python-iso8601/Config.in"
- 	source "package/python-itsdangerous/Config.in"
-+	source "package/python-jaraco-classes/Config.in"
- 	source "package/python-jinja2/Config.in"
- 	source "package/python-jsonschema/Config.in"
- 	source "package/python-json-schema-validator/Config.in"
-diff --git a/package/python-jaraco-classes/Config.in b/package/python-jaraco-classes/Config.in
-new file mode 100644
-index 0000000..05c1123
---- /dev/null
-+++ b/package/python-jaraco-classes/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_JARACO_CLASSES
-+	bool "python-jaraco-classes"
+diff --git a/package/python-networkmanager/Config.in b/package/python-networkmanager/Config.in
+index fcbce57..9b2b474 100644
+--- a/package/python-networkmanager/Config.in
++++ b/package/python-networkmanager/Config.in
+@@ -4,7 +4,8 @@ config BR2_PACKAGE_PYTHON_NETWORKMANAGER
+ 	depends on BR2_USE_WCHAR # dbus-python
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus-python
+ 	depends on BR2_PACKAGE_DBUS # dbus-python
+-	select BR2_PACKAGE_DBUS_PYTHON
++	select BR2_PACKAGE_DBUS_PYTHON # runtime
 +	select BR2_PACKAGE_PYTHON_SIX # runtime
-+	help
-+	  Utility functions for Python class constructs.
-+
-+	  https://github.com/jaraco/jaraco.classes
-diff --git a/package/python-jaraco-classes/python-jaraco-classes.hash b/package/python-jaraco-classes/python-jaraco-classes.hash
-new file mode 100644
-index 0000000..bc30c5f
---- /dev/null
-+++ b/package/python-jaraco-classes/python-jaraco-classes.hash
-@@ -0,0 +1,4 @@
-+# md5 from https://pypi.python.org/pypi/jaraco.classes/json, sha256 locally computed
-+md5     c0cb1a0ce529e3cdbca9d99742071a04  jaraco.classes-1.4.3.tar.gz
-+sha256  e347f2b502521bfc35c57ab4695e8b6d7371625c392a0ca0d46742ee93359d3e  jaraco.classes-1.4.3.tar.gz
-+sha256  a55e2ffe9b44998e621d51d8c094bed09acc4b5236ee73d7df395a33ba3c18fd  LICENSE
-diff --git a/package/python-jaraco-classes/python-jaraco-classes.mk b/package/python-jaraco-classes/python-jaraco-classes.mk
-new file mode 100644
-index 0000000..4251452
---- /dev/null
-+++ b/package/python-jaraco-classes/python-jaraco-classes.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-jaraco-classes
-+#
-+################################################################################
-+
-+PYTHON_JARACO_CLASSES_VERSION = 1.4.3
-+PYTHON_JARACO_CLASSES_SOURCE = jaraco.classes-$(PYTHON_JARACO_CLASSES_VERSION).tar.gz
-+PYTHON_JARACO_CLASSES_SITE = https://pypi.python.org/packages/b3/ce/031a6004619c2a3744b977b4a8414d7e8087afe6247110efcac797fee7f1
-+PYTHON_JARACO_CLASSES_LICENSE = MIT
-+PYTHON_JARACO_CLASSES_LICENSE_FILES = LICENSE
-+PYTHON_JARACO_CLASSES_SETUP_TYPE = setuptools
-+
-+$(eval $(python-package))
+ 	help
+ 	  python-networkmanager wraps NetworkManagers D-Bus interface
+ 	  so you can be less verbose when talking to NetworkManager
+diff --git a/package/python-networkmanager/python-networkmanager.hash b/package/python-networkmanager/python-networkmanager.hash
+index cbd6feb..1fed4be 100644
+--- a/package/python-networkmanager/python-networkmanager.hash
++++ b/package/python-networkmanager/python-networkmanager.hash
+@@ -1,3 +1,3 @@
+-# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=97c84c19b84b1124903a06379b107f77, sha256 locally computed
+-md5	97c84c19b84b1124903a06379b107f77  python-networkmanager-1.2.1.tar.gz
+-sha256	7107c07383f8077cfac33fdbb3c4cda4de40be20a6b20d30840055eb519a0e89  python-networkmanager-1.2.1.tar.gz
++# md5 from https://pypi.python.org/pypi/python-networkmanager/json, sha256 locally computed
++md5	5fc644a65463031295c6b7dd51a0f1bd  python-networkmanager-2.0.1.tar.gz
++sha256	bc36507506ad29bfdac941b0987ebd1cc9633c9a9291d7378e229e4515a0a517  python-networkmanager-2.0.1.tar.gz
+diff --git a/package/python-networkmanager/python-networkmanager.mk b/package/python-networkmanager/python-networkmanager.mk
+index d0e4011..7401396 100644
+--- a/package/python-networkmanager/python-networkmanager.mk
++++ b/package/python-networkmanager/python-networkmanager.mk
+@@ -4,11 +4,11 @@
+ #
+ ################################################################################
+ 
+-PYTHON_NETWORKMANAGER_VERSION = 1.2.1
+-PYTHON_NETWORKMANAGER_SITE = https://pypi.python.org/packages/e7/b1/09993250ceea9e03bc65fbabcd5286540200292c011b22237b2963c11471
+-PYTHON_NETWORKMANAGER_SETUP_TYPE = distutils
+-PYTHON_NETWORKMANAGER_LICENSE = GPL-3.0+
++PYTHON_NETWORKMANAGER_VERSION = 2.0.1
++PYTHON_NETWORKMANAGER_SOURCE = python-networkmanager-$(PYTHON_NETWORKMANAGER_VERSION).tar.gz
++PYTHON_NETWORKMANAGER_SITE = https://pypi.python.org/packages/d7/f9/5cbd99fd24a072875ce048e48d1754285f137aab447de8fee63b6cba990a
++PYTHON_NETWORKMANAGER_SETUP_TYPE = setuptools
++PYTHON_NETWORKMANAGER_LICENSE = Zlib
+ PYTHON_NETWORKMANAGER_LICENSE_FILES = COPYING
+-PYTHON_NETWORKMANAGER_DEPENDENCIES = dbus-python
+ 
+ $(eval $(python-package))
