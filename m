@@ -1,36 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 23 Nov 2017 23:16:58 +0100
-Subject: [Buildroot] [PATCH v5] qt5: remove Qt Quick dependency on opengl
-In-Reply-To: <1509667284-13771-1-git-send-email-joshua.henderson@microchip.com>
-References: <1509667284-13771-1-git-send-email-joshua.henderson@microchip.com>
-Message-ID: <20171123231658.0c461b68@windsurf.lan>
+Date: Thu, 23 Nov 2017 23:20:05 +0100
+Subject: [Buildroot] [git commit branch/next] package/git: add optional
+ support for pcre2
+Message-ID: <20171123221459.19AC38157C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter (Seiderer),
+commit: https://git.buildroot.net/buildroot/commit/?id=9c2a54a542d703609fa851195d6984b765d21314
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Could you review/ack/test this Qt 5 related patch? Your
-opinion/feedback on Qt5 patches is always very valuable. Thanks!
+Renamed --with-libpcre to --with-libpcre1. Currently --with-libpcre
+activates pcre1 support but this can change in the future to pcre2:
+https://github.com/git/git/blob/df7fd961a9d9ba60840ffc0868d36cc3db2aec74/configure.ac#L258
 
-On Thu, 2 Nov 2017 17:01:24 -0700, Joshua Henderson wrote:
-> Qt Quick should no longer depend on opengl, and instead fallback to the limited
-> functionality software renderer as a replacement [1] when not available. This
-> also pulls in an upstream qt5declarative 5.10 patch [2], replacing an existing
-> one, to qt5 5.9.2 to fix no-opengl builds.
-> 
-> [1] http://blog.qt.io/blog/2016/08/15/the-qt-quick-graphics-stack-in-qt-5-8/
-> [2] http://code.qt.io/cgit/qt/qtdeclarative.git/commit/?id=fa52bb665d6b
-> 
-> Cc: Peter Seiderer <ps.report@gmx.net>
-> Cc: Julien Corjon <corjon.j@ecagroup.com>
-> Signed-off-by: Joshua Henderson <joshua.henderson@microchip.com>
-> Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
+Please note that we cannot use --with-/--without because it will lead
+to an error reported by configure, for example
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+    --with-libpcre1 --without-libpcre2
+
+will produce
+
+configure: error: Only supply one of --with-libpcre1 or --with-libpcre2!
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/git/git.mk | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/package/git/git.mk b/package/git/git.mk
+index 181e742..6269dc5 100644
+--- a/package/git/git.mk
++++ b/package/git/git.mk
+@@ -19,9 +19,12 @@ else
+ GIT_CONF_OPTS += --without-openssl
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_PCRE),y)
++ifeq ($(BR2_PACKAGE_PCRE2),y)
++GIT_DEPENDENCIES += pcre2
++GIT_CONF_OPTS += --with-libpcre2
++else ifeq ($(BR2_PACKAGE_PCRE),y)
+ GIT_DEPENDENCIES += pcre
+-GIT_CONF_OPTS += --with-libpcre
++GIT_CONF_OPTS += --with-libpcre1
+ GIT_MAKE_OPTS += NO_LIBPCRE1_JIT=1
+ else
+ GIT_CONF_OPTS += --without-libpcre
