@@ -1,19 +1,52 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Thu, 23 Nov 2017 13:13:06 -0200
-Subject: [Buildroot] [PATCH] configs/imx6ulevk: Add new defconfig
-In-Reply-To: <1511447922-12017-1-git-send-email-fabio.estevam@nxp.com>
-References: <1511447922-12017-1-git-send-email-fabio.estevam@nxp.com>
-Message-ID: <CAOMZO5CaAyeq52J9LHC+R8Tdn9aZZJ63ikjJsujiyaZOn_CrRA@mail.gmail.com>
+From: Jagan Teki <jagan@amarulasolutions.com>
+Date: Thu, 23 Nov 2017 21:57:43 +0530
+Subject: [Buildroot] [PATCH v5 00/11] board: Add Allwinner A64/H5 boards
+In-Reply-To: <CAD6G_RRbFzgqtGv9Rd-dSQtO33ADV3G91nqgG51YHdiXE1U=jA@mail.gmail.com>
+References: <1509559553-26544-1-git-send-email-jagan@amarulasolutions.com>
+ <CAD6G_RRovKuVcVzreKh=K7HSzOddSBg+jau3CYdhwd-fBM_bVg@mail.gmail.com>
+ <20171106104826.0300f412@windsurf.home>
+ <CAD6G_RRbFzgqtGv9Rd-dSQtO33ADV3G91nqgG51YHdiXE1U=jA@mail.gmail.com>
+Message-ID: <CAMty3ZCBfNT0e==WLvTvG4jD7Pra1r0QOAH+VTC1j-ZLAo=YMA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Nov 23, 2017 at 12:38 PM, Fabio Estevam <fabio.estevam@nxp.com> wrote:
-> Add support for imx6ulevk_defconfig that allows booting a mainline
-> kernel and mainline U-Boot.
->
-> Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
+Hi Thomas,
 
-Sorry for the resend. It was done by mistake.
+On Fri, Nov 10, 2017 at 11:36 AM, Jagan Teki <jagannadh.teki@gmail.com> wrote:
+> On Mon, Nov 6, 2017 at 3:18 PM, Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com> wrote:
+>> Hello,
+>>
+>> On Mon, 6 Nov 2017 15:09:14 +0530, Jagan Teki wrote:
+>>
+>>> > Jagan Teki (11):
+>>> >   arm-trusted-firmware: Build FIP for BL33
+>>> >   uboot: Add U-Boot-bundles-ATF support
+>>> >   board: Add Bananapi M64 support
+>>> >   board: Add Pine64 support
+>>> >   board: Add SoPine support
+>>> >   board: Add FriendlyARM Nanopi A64 support
+>>> >   board: Add FriendlyARM Nanopi NEO2 support
+>>> >   board: Add Olimex A64-OLinuXino support
+>>> >   board: Add Orangepi Win/Win Plus support
+>>> >   board: Add Orangepi Prime support
+>>> >   board: Add Orangepi Zero Plus2 support
+>>>
+>>> Any comments?
+>>
+>> I intend to review this series (since I commented on the previous
+>> iterations), but haven't gotten to it yet.
+>
+> OK, thanks.
+
+Can this possible to merge?
+
+thanks!
+-- 
+Jagan Teki
+Senior Linux Kernel Engineer | Amarula Solutions
+U-Boot, Linux | Upstream Maintainer
+Hyderabad, India.
