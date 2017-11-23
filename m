@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 23 Nov 2017 23:13:04 +0100
-Subject: [Buildroot] [PATCH] schedtop: new package
-In-Reply-To: <1509822714-17178-1-git-send-email-sergio.prado@e-labworks.com>
-References: <1509822714-17178-1-git-send-email-sergio.prado@e-labworks.com>
-Message-ID: <20171123231304.397647bc@windsurf.lan>
+Date: Thu, 23 Nov 2017 23:15:38 +0100
+Subject: [Buildroot] [PATCH 1/1] janus-gateway: add option for libcurl
+ support
+In-Reply-To: <1509704639-20360-1-git-send-email-olivier.maignial@smile.fr>
+References: <1509704639-20360-1-git-send-email-olivier.maignial@smile.fr>
+Message-ID: <20171123231538.415040b7@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,68 +13,32 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat,  4 Nov 2017 17:11:54 -0200, Sergio Prado wrote:
-> Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+On Fri,  3 Nov 2017 11:23:59 +0100, Olivier Maignial wrote:
+> libcurl is not mandatory to compile Janus, but Janus use it in several way:
+>     - RTSP stream support in plugin streaming
+>     - TURN REST API support
+>     - HTTP backend for text room plugin
+>     - ...
+> This commit add an option "libcurl support" to add dependency on libcurl.
+> 
+> Signed-off-by: Olivier Maignial <olivier.maignial@smile.fr>
+> ---
+>  package/janus-gateway/Config.in        | 18 ++++++++++++++++++
+>  package/janus-gateway/janus-gateway.mk |  4 ++++
+>  2 files changed, 22 insertions(+)
 
-Thanks for this contribution! See a few comments/suggestions below.
+You received some comments from Adam Duskett on this patch. Do you
+think you will be able to send an updated version of this patch that
+takes into account the comments?
 
-> diff --git a/package/schedtop/0001-Fix-build-with-Boost-Filesystem-library-V3.patch b/package/schedtop/0001-Fix-build-with-Boost-Filesystem-library-V3.patch
-> new file mode 100644
-> index 000000000000..d0dc278dfb70
-> --- /dev/null
-> +++ b/package/schedtop/0001-Fix-build-with-Boost-Filesystem-library-V3.patch
-> @@ -0,0 +1,54 @@
-> +From 845e74ffc0d280163b66d81df963b4c3738f9666 Mon Sep 17 00:00:00 2001
-> +From: Sergio Prado <sergio.prado@e-labworks.com>
-> +Date: Sun, 29 Oct 2017 13:20:10 -0200
-> +Subject: [PATCH] Fix build with Boost Filesystem library V3
-> +
-> +In version 3 of the boost filesystem library, string() is a member of
-> +path(), not directory_entry.
-> +
-> +Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
-
-What about using
-https://github.com/ghaskins/schedtop/pull/1/commits/19d9d3d16e4731c97f1395ba2127fe48a46bb765
-which does pretty much the same thing, but with additional fixes ?
-
-> diff --git a/package/schedtop/schedtop.mk b/package/schedtop/schedtop.mk
-> new file mode 100644
-> index 000000000000..656e3716f26b
-> --- /dev/null
-> +++ b/package/schedtop/schedtop.mk
-> @@ -0,0 +1,30 @@
-> +################################################################################
-> +#
-> +# schedtop
-> +#
-> +################################################################################
-> +
-> +SCHEDTOP_VERSION = 68dee649f96b3bf6db883de67f68ccc0b45cbc6e
-> +SCHEDTOP_SITE = $(call github,ghaskins,schedtop,$(SCHEDTOP_VERSION))
-> +SCHEDTOP_LICENSE = GPL-2.0
-> +SCHEDTOP_LICENSE_FILES = COPYING
-> +
-> +SCHEDTOP_DEPENDENCIES = boost ncurses
-> +
-> +SCHEDTOP_MAKE_ENV = $(TARGET_MAKE_ENV) OBJDIR="$(@D)/obj" LIBRARIES="-lboost_system"
-
-Why do you need to customize OBJDIR ?
-
-The LIBRARIES change would be taken care of if a patch like
-https://github.com/ghaskins/schedtop/pull/1/commits/19d9d3d16e4731c97f1395ba2127fe48a46bb765
-is used.
-
-> +# uses __atomic_fetch_add_4
-> +ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-> +SCHEDTOP_MAKE_ENV += LIBRARIES+=" -latomic"
-
-Are you sure += in shell as the expected result ?
+I will mark your patch as Changes Requested in our patch tracking
+system, which means that if you don't resend a new version, we will
+forget about your patch.
 
 Thanks!
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
+Embedded Linux, Kernel and Android engineering
 http://free-electrons.com
