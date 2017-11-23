@@ -1,49 +1,74 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 23 Nov 2017 17:39:12 +0100
-Subject: [Buildroot] [PATCH v2] rauc: bump to version 0.2
-In-Reply-To: <CAAkeqgUcbovvL_UdE998gZw2OtpTVywB4BerE=qOUXswc6+1mQ@mail.gmail.com>
-References: <20171114043141.8245-1-ayurovsky@impinj.com>
- <20171122041747.11363-1-yurovsky@gmail.com>
- <20171122213336.52a3e196@windsurf.lan>
- <CAAkeqgXEXtnppmJVrfRgf_uC3CeX4TunJS-CQ+=sRG+ZBR+-Ag@mail.gmail.com>
- <20171122224412.1543e00d@windsurf.lan>
- <CAAkeqgVVYW4BZ6tUH20Guxdgz3qay6D4nj+Jz9F5eT6Kn-Ygjg@mail.gmail.com>
- <20171123092152.0f0fac4a@windsurf.lan>
- <CAAkeqgUcbovvL_UdE998gZw2OtpTVywB4BerE=qOUXswc6+1mQ@mail.gmail.com>
-Message-ID: <20171123173912.5476a17c@windsurf.lan>
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Date: Thu, 23 Nov 2017 21:39:14 +0300
+Subject: [Buildroot] [PATCH v1] busybox: Fix rtcwake to use /dev/rtc0
+ properly
+Message-ID: <20171123183914.71769-1-andriy.shevchenko@linux.intel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+rtcwake from busybox has failed in case the /dev/rtc is a symlink
+(which is default case for udev enabled systems) due to wrong pathname
+used for a sysfs wakeup attribute.
 
-On Thu, 23 Nov 2017 08:33:40 -0800, Andrey Yurovsky wrote:
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ ...bb-Try-dev-rtc0-first-followed-by-dev-rtc.patch | 45 ++++++++++++++++++++++
+ 1 file changed, 45 insertions(+)
+ create mode 100644 package/busybox/0006-libbb-Try-dev-rtc0-first-followed-by-dev-rtc.patch
 
-> > OK, thanks for the explanation! Is this dependency new in 0.2, or it
-> > was already needed for the current 0.1.1 version of RAUC ?  
-> 
-> It was there in 0.1.1 as well, unfortunately I missed it when I sent
-> the original patch because my systems had mksquashfs available and I
-> didn't catch this until later so I was hoping to correct it now. The
-> 0.2 changes are described here:
-> https://github.com/rauc/rauc/blob/master/CHANGES and are mainly bug
-> fixes and minor (though certainly worthwhile) improvements.
-
-OK. Then we need two separate patches:
-
- - One that adds the host-mksquashfs dependency, which we will push to
-   the master branch (it is a fix)
-
- - One that bumps rauc to 0.2, which we will push to the next branch
-   (we're approaching the release, so we only accept fixes for the
-   master branch).
-
-Thanks!
-
-Thomas
+diff --git a/package/busybox/0006-libbb-Try-dev-rtc0-first-followed-by-dev-rtc.patch b/package/busybox/0006-libbb-Try-dev-rtc0-first-followed-by-dev-rtc.patch
+new file mode 100644
+index 0000000000..0702c3c065
+--- /dev/null
++++ b/package/busybox/0006-libbb-Try-dev-rtc0-first-followed-by-dev-rtc.patch
+@@ -0,0 +1,45 @@
++From b59088ab14fb9c336414e2c9b27a9f5b7447ce5b Mon Sep 17 00:00:00 2001
++From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
++Date: Thu, 23 Nov 2017 19:33:08 +0200
++Subject: [PATCH v1] libbb: Try /dev/rtc0 first followed by /dev/rtc
++
++In case we run
++
++% rtcwake -s5 -mmem
++
++in udev environment we will get an error:
++
++rtcwake: /dev/rtc not enabled for wakeup events
++
++because /dev/rtc is a symlink to /dev/rtc0 in Buildroot and other Linux
++distributions (like Fedora) and make_wakeup() obviously fails.
++
++As a quick fix just reorder probe of device nodes to try /dev/rtc0
++first.
++
++The proper solution, of course much expensive by code footprint,
++is to resolve /dev/rtc to a proper device node and then
++to follow sysfs attributes.
++
++Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
++---
++ libbb/rtc.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/libbb/rtc.c b/libbb/rtc.c
++index c4117ba34..e087a8fd6 100644
++--- a/libbb/rtc.c
+++++ b/libbb/rtc.c
++@@ -64,8 +64,8 @@ int FAST_FUNC rtc_xopen(const char **default_rtc, int flags)
++ {
++ 	int rtc;
++ 	const char *name =
++-		"/dev/rtc""\0"
++ 		"/dev/rtc0""\0"
+++		"/dev/rtc""\0"
++ 		"/dev/misc/rtc""\0";
++ 
++ 	if (!*default_rtc)
++-- 
++2.15.0
++
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.15.0
