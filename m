@@ -1,7 +1,9 @@
 From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Thu, 23 Nov 2017 11:54:59 +0100
-Subject: [Buildroot] [PATCH 1/3] python-jaraco-classes: new package
-Message-ID: <20171123105501.14505-1-yegorslists@googlemail.com>
+Date: Thu, 23 Nov 2017 11:55:00 +0100
+Subject: [Buildroot] [PATCH 2/3] python-cheroot: bump version to 5.9.0
+In-Reply-To: <20171123105501.14505-1-yegorslists@googlemail.com>
+References: <20171123105501.14505-1-yegorslists@googlemail.com>
+Message-ID: <20171123105501.14505-2-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,71 +12,40 @@ To: buildroot@busybox.net
 
 From: Yegor Yefremov <yegorslists@googlemail.com>
 
+Omit 5.9.1 as is has broken Python files.
+
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- package/Config.in                                        |  1 +
- package/python-jaraco-classes/Config.in                  |  7 +++++++
- package/python-jaraco-classes/python-jaraco-classes.hash |  4 ++++
- package/python-jaraco-classes/python-jaraco-classes.mk   | 14 ++++++++++++++
- 4 files changed, 26 insertions(+)
- create mode 100644 package/python-jaraco-classes/Config.in
- create mode 100644 package/python-jaraco-classes/python-jaraco-classes.hash
- create mode 100644 package/python-jaraco-classes/python-jaraco-classes.mk
+ package/python-cheroot/python-cheroot.hash | 6 +++---
+ package/python-cheroot/python-cheroot.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index a207de8cc4..f40faf9a8d 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -789,6 +789,7 @@ menu "External python modules"
- 	source "package/python-ipython-genutils/Config.in"
- 	source "package/python-iso8601/Config.in"
- 	source "package/python-itsdangerous/Config.in"
-+	source "package/python-jaraco-classes/Config.in"
- 	source "package/python-jinja2/Config.in"
- 	source "package/python-jsonschema/Config.in"
- 	source "package/python-json-schema-validator/Config.in"
-diff --git a/package/python-jaraco-classes/Config.in b/package/python-jaraco-classes/Config.in
-new file mode 100644
-index 0000000000..05c11237ab
---- /dev/null
-+++ b/package/python-jaraco-classes/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_JARACO_CLASSES
-+	bool "python-jaraco-classes"
-+	select BR2_PACKAGE_PYTHON_SIX # runtime
-+	help
-+	  Utility functions for Python class constructs.
-+
-+	  https://github.com/jaraco/jaraco.classes
-diff --git a/package/python-jaraco-classes/python-jaraco-classes.hash b/package/python-jaraco-classes/python-jaraco-classes.hash
-new file mode 100644
-index 0000000000..bc30c5f79b
---- /dev/null
-+++ b/package/python-jaraco-classes/python-jaraco-classes.hash
-@@ -0,0 +1,4 @@
-+# md5 from https://pypi.python.org/pypi/jaraco.classes/json, sha256 locally computed
-+md5     c0cb1a0ce529e3cdbca9d99742071a04  jaraco.classes-1.4.3.tar.gz
-+sha256  e347f2b502521bfc35c57ab4695e8b6d7371625c392a0ca0d46742ee93359d3e  jaraco.classes-1.4.3.tar.gz
-+sha256  a55e2ffe9b44998e621d51d8c094bed09acc4b5236ee73d7df395a33ba3c18fd  LICENSE
-diff --git a/package/python-jaraco-classes/python-jaraco-classes.mk b/package/python-jaraco-classes/python-jaraco-classes.mk
-new file mode 100644
-index 0000000000..4251452293
---- /dev/null
-+++ b/package/python-jaraco-classes/python-jaraco-classes.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-jaraco-classes
-+#
-+################################################################################
-+
-+PYTHON_JARACO_CLASSES_VERSION = 1.4.3
-+PYTHON_JARACO_CLASSES_SOURCE = jaraco.classes-$(PYTHON_JARACO_CLASSES_VERSION).tar.gz
-+PYTHON_JARACO_CLASSES_SITE = https://pypi.python.org/packages/b3/ce/031a6004619c2a3744b977b4a8414d7e8087afe6247110efcac797fee7f1
-+PYTHON_JARACO_CLASSES_LICENSE = MIT
-+PYTHON_JARACO_CLASSES_LICENSE_FILES = LICENSE
-+PYTHON_JARACO_CLASSES_SETUP_TYPE = setuptools
-+
-+$(eval $(python-package))
+diff --git a/package/python-cheroot/python-cheroot.hash b/package/python-cheroot/python-cheroot.hash
+index 348b82d1ca..7b309a9399 100644
+--- a/package/python-cheroot/python-cheroot.hash
++++ b/package/python-cheroot/python-cheroot.hash
+@@ -1,3 +1,3 @@
+-# md5 from https://pypi.python.org/pypi/cheroot/json, sha256 locally computed
+-md5	e5503b0e67bdba29c6585965e7f42099  cheroot-5.5.0.tar.gz
+-sha256	59e349f91b9230930f7078646bb92b3a5b0f9cf19a6ff949777409fd289a1eba  cheroot-5.5.0.tar.gz
++# md5 from https://pypi.python.org/pypi/Cheroot/json, sha256 locally computed
++md5	288eb3a6df4964ba0435493d2914da3d  cheroot-5.9.0.tar.gz
++sha256	d8ec06b6e907b911ac5bb626876ee498c289d21f1a638cb2510fc57290567ef5  cheroot-5.9.0.tar.gz
+diff --git a/package/python-cheroot/python-cheroot.mk b/package/python-cheroot/python-cheroot.mk
+index 3f4b6893d5..d3e056be36 100644
+--- a/package/python-cheroot/python-cheroot.mk
++++ b/package/python-cheroot/python-cheroot.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_CHEROOT_VERSION = 5.5.0
++PYTHON_CHEROOT_VERSION = 5.9.0
+ PYTHON_CHEROOT_SOURCE = cheroot-$(PYTHON_CHEROOT_VERSION).tar.gz
+-PYTHON_CHEROOT_SITE = https://pypi.python.org/packages/a5/43/f8a461762dc62e9f273d4944fb8c140757c11a29c91c91d3fbd5fafb1570
++PYTHON_CHEROOT_SITE = https://pypi.python.org/packages/df/63/5c5265feb7e02e43d2f3a3c19dbb2d78742b0a2ff237c9e473c77bc23500
+ PYTHON_CHEROOT_LICENSE = BSD-3-Clause
+ PYTHON_CHEROOT_LICENSE_FILES = LICENSE.md
+ PYTHON_CHEROOT_SETUP_TYPE = setuptools
 -- 
 2.11.0
