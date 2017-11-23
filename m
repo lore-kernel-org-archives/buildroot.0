@@ -1,41 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 23 Nov 2017 23:15:38 +0100
-Subject: [Buildroot] [PATCH 1/1] janus-gateway: add option for libcurl
- support
-In-Reply-To: <1509704639-20360-1-git-send-email-olivier.maignial@smile.fr>
-References: <1509704639-20360-1-git-send-email-olivier.maignial@smile.fr>
-Message-ID: <20171123231538.415040b7@windsurf.lan>
+Date: Thu, 23 Nov 2017 23:16:58 +0100
+Subject: [Buildroot] [PATCH v5] qt5: remove Qt Quick dependency on opengl
+In-Reply-To: <1509667284-13771-1-git-send-email-joshua.henderson@microchip.com>
+References: <1509667284-13771-1-git-send-email-joshua.henderson@microchip.com>
+Message-ID: <20171123231658.0c461b68@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Peter (Seiderer),
 
-On Fri,  3 Nov 2017 11:23:59 +0100, Olivier Maignial wrote:
-> libcurl is not mandatory to compile Janus, but Janus use it in several way:
->     - RTSP stream support in plugin streaming
->     - TURN REST API support
->     - HTTP backend for text room plugin
->     - ...
-> This commit add an option "libcurl support" to add dependency on libcurl.
+Could you review/ack/test this Qt 5 related patch? Your
+opinion/feedback on Qt5 patches is always very valuable. Thanks!
+
+On Thu, 2 Nov 2017 17:01:24 -0700, Joshua Henderson wrote:
+> Qt Quick should no longer depend on opengl, and instead fallback to the limited
+> functionality software renderer as a replacement [1] when not available. This
+> also pulls in an upstream qt5declarative 5.10 patch [2], replacing an existing
+> one, to qt5 5.9.2 to fix no-opengl builds.
 > 
-> Signed-off-by: Olivier Maignial <olivier.maignial@smile.fr>
-> ---
->  package/janus-gateway/Config.in        | 18 ++++++++++++++++++
->  package/janus-gateway/janus-gateway.mk |  4 ++++
->  2 files changed, 22 insertions(+)
-
-You received some comments from Adam Duskett on this patch. Do you
-think you will be able to send an updated version of this patch that
-takes into account the comments?
-
-I will mark your patch as Changes Requested in our patch tracking
-system, which means that if you don't resend a new version, we will
-forget about your patch.
-
-Thanks!
+> [1] http://blog.qt.io/blog/2016/08/15/the-qt-quick-graphics-stack-in-qt-5-8/
+> [2] http://code.qt.io/cgit/qt/qtdeclarative.git/commit/?id=fa52bb665d6b
+> 
+> Cc: Peter Seiderer <ps.report@gmx.net>
+> Cc: Julien Corjon <corjon.j@ecagroup.com>
+> Signed-off-by: Joshua Henderson <joshua.henderson@microchip.com>
+> Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
 
 Thomas
 -- 
