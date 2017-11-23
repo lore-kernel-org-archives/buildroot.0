@@ -1,62 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 23 Nov 2017 22:02:16 +0100
-Subject: [Buildroot] [git commit] python-cherrypy: bump version to 12.0.1
-Message-ID: <20171201205334.724047FF6F@busybox.osuosl.org>
+Date: Thu, 23 Nov 2017 22:39:55 +0100
+Subject: [Buildroot] [git commit] uboot: Use BR2_TARGET_UBOOT_SPL_NAME for
+ TPL name
+Message-ID: <20171201205334.8DDF07FF6F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c36f636393df8bb7278022acfe523b9e4adc9bcd
+commit: https://git.buildroot.net/buildroot/commit/?id=357322107859d50230721604faca00940451c359
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add licence file checksum and new runtime dependencies.
+Since the BR2_TARGET_UBOOT_SPL_NAME option accepts a space-separated
+list of binaries, the same option can be reuses for TPL binaries as
+well. This commit updates the string and help text to indicate that
+the same option can be used for SPL and TPL.
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python-cherrypy/Config.in            | 1 +
- package/python-cherrypy/python-cherrypy.hash | 5 +++--
- package/python-cherrypy/python-cherrypy.mk   | 4 ++--
- 3 files changed, 6 insertions(+), 4 deletions(-)
+ boot/uboot/Config.in | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-cherrypy/Config.in b/package/python-cherrypy/Config.in
-index c049972..622dd1f 100644
---- a/package/python-cherrypy/Config.in
-+++ b/package/python-cherrypy/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_PYTHON_CHERRYPY
- 	bool "python-cherrypy"
- 	select BR2_PACKAGE_PYTHON_CHEROOT # runtime
-+	select BR2_PACKAGE_PYTHON_JARACO_CLASSES # runtime
- 	select BR2_PACKAGE_PYTHON_PORTEND # runtime
- 	select BR2_PACKAGE_PYTHON_PYEXPAT if BR2_PACKAGE_PYTHON # runtime
- 	select BR2_PACKAGE_PYTHON3_PYEXPAT if BR2_PACKAGE_PYTHON3 # runtime
-diff --git a/package/python-cherrypy/python-cherrypy.hash b/package/python-cherrypy/python-cherrypy.hash
-index ac3b982..d8f97af 100644
---- a/package/python-cherrypy/python-cherrypy.hash
-+++ b/package/python-cherrypy/python-cherrypy.hash
-@@ -1,3 +1,4 @@
- # md5 from https://pypi.python.org/pypi/CherryPy/json, sha256 locally computed
--md5	105cbcd4f7cd139ab4107f1b0e39afe3  CherryPy-10.2.2.tar.gz
--sha256	32d93334df765c7fd5d22815ab643333e850f0cc4f6d51fee62a68f23eea8ff8  CherryPy-10.2.2.tar.gz
-+md5	e21fd0c5706504a8f26c46d808a14255  CherryPy-12.0.1.tar.gz
-+sha256	6a3a90a43b1e05bd4634c60acfdcf34efe74f9f8746aca14dbe95a9b69db30ea  CherryPy-12.0.1.tar.gz
-+sha256  02f4efe6e7dcd218c33cfa065c0552de983b5ad563b053e97697c5abd2ef14f9  LICENSE.md
-diff --git a/package/python-cherrypy/python-cherrypy.mk b/package/python-cherrypy/python-cherrypy.mk
-index 2820b69..72b17bc 100644
---- a/package/python-cherrypy/python-cherrypy.mk
-+++ b/package/python-cherrypy/python-cherrypy.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index 14caafa..0e109d0 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -334,13 +334,14 @@ config BR2_TARGET_UBOOT_SPL
+ 	  into DDR.
  
--PYTHON_CHERRYPY_VERSION = 10.2.2
-+PYTHON_CHERRYPY_VERSION = 12.0.1
- PYTHON_CHERRYPY_SOURCE = CherryPy-$(PYTHON_CHERRYPY_VERSION).tar.gz
--PYTHON_CHERRYPY_SITE = https://pypi.python.org/packages/a2/de/dddea0c4d4be436724bfc2d1486c99368541d93c269bfa2a7fa3d132021e
-+PYTHON_CHERRYPY_SITE = https://pypi.python.org/packages/be/d8/a8ef56bfe1c39d466b8d55b496b64459cc43dec71361d88edf904901637f
- PYTHON_CHERRYPY_LICENSE = BSD-3-Clause
- PYTHON_CHERRYPY_LICENSE_FILES = LICENSE.md
- PYTHON_CHERRYPY_SETUP_TYPE = setuptools
+ config BR2_TARGET_UBOOT_SPL_NAME
+-	string "U-Boot SPL binary image name"
++	string "U-Boot SPL/TPL binary image name(s)"
+ 	default "spl/u-boot-spl.bin"
+ 	depends on BR2_TARGET_UBOOT_SPL
+ 	help
+-	  A space-separated list of SPL binaries, generated during
+-	  u-boot build. For most platform it is spl/u-boot-spl.bin but
+-	  not always. It is MLO on OMAP and SPL on i.MX6 for example.
++	  A space-separated list of SPL/TPL binaries, generated during
++	  u-boot build. For most platform SPL name is spl/u-boot-spl.bin
++	  and TPL name is tpl/u-boot-tpl.bin but not always. SPL name is
++	  MLO on OMAP and SPL on i.MX6 for example.
+ 
+ config BR2_TARGET_UBOOT_ZYNQ_IMAGE
+ 	bool "Generate image for Xilinx Zynq"
