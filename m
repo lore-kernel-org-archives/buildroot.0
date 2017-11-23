@@ -1,110 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 Nov 2017 22:33:39 +0100
-Subject: [Buildroot] [git commit] python-raven: new package
-Message-ID: <20171201205333.7449B7FAAC@busybox.osuosl.org>
+Date: Thu, 23 Nov 2017 21:12:50 +0100
+Subject: [Buildroot] [git commit] configs/imx6-sabreauto: Bump kernel and
+ U-Boot versions
+Message-ID: <20171201205333.DF6C47FAAC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=273aad9e507eedf5245a004be8f7372a7c4d5ca7
+commit: https://git.buildroot.net/buildroot/commit/?id=85739a08046fdc708d42378f2f79532e2382101c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changes since v2:
-- remove newlines from Config.in
-- add LICENSE hash
+Bump kernel to version 4.14 and U-Boot to 2017.11.
 
-Changes since v1:
-- reword commit to match upstream style
-- fold the DEVELOPERS modifications into the same commit
-- add Config selections for required python core modules
-- bump version to 6.3.0
-
-Tested in a clean chroot, events are generated for exceptions, and
-reported to the server configured for the client.
-
-Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
-Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- DEVELOPERS                             |  1 +
- package/Config.in                      |  1 +
- package/python-raven/Config.in         | 12 ++++++++++++
- package/python-raven/python-raven.hash |  5 +++++
- package/python-raven/python-raven.mk   | 14 ++++++++++++++
- 5 files changed, 33 insertions(+)
+ configs/imx6-sabreauto_defconfig | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index df61a01..966a30b 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -796,6 +796,7 @@ F:	board/qemu/ppc64le-pseries/
- F:	configs/qemu_ppc64le_pseries_defconfig
+diff --git a/configs/imx6-sabreauto_defconfig b/configs/imx6-sabreauto_defconfig
+index f81964c..d9a08bb 100644
+--- a/configs/imx6-sabreauto_defconfig
++++ b/configs/imx6-sabreauto_defconfig
+@@ -4,8 +4,8 @@ BR2_ARM_ENABLE_NEON=y
+ BR2_ARM_ENABLE_VFP=y
+ BR2_ARM_FPU_VFPV3=y
  
- N:	Joseph Kogut <joseph.kogut@gmail.com>
-+F:	package/python-raven/
- F:	package/python-websockets/
+-# Linux headers same as kernel, a 4.13 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_13=y
++# Linux headers same as kernel, a 4.14 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
  
- N:	Johan Derycke <johanderycke@gmail.com>
-diff --git a/package/Config.in b/package/Config.in
-index 23526b4..a207de8 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -875,6 +875,7 @@ menu "External python modules"
- 	source "package/python-pyxb/Config.in"
- 	source "package/python-pyyaml/Config.in"
- 	source "package/python-pyzmq/Config.in"
-+	source "package/python-raven/Config.in"
- 	source "package/python-requests/Config.in"
- 	source "package/python-requests-toolbelt/Config.in"
- 	source "package/python-rpi-gpio/Config.in"
-diff --git a/package/python-raven/Config.in b/package/python-raven/Config.in
-new file mode 100644
-index 0000000..0d4b26c
---- /dev/null
-+++ b/package/python-raven/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_PYTHON_RAVEN
-+	bool "python-raven"
-+	select BR2_PACKAGE_PYTHON_ZLIB if BR2_PACKAGE_PYTHON
-+	select BR2_PACKAGE_PYTHON3_ZLIB if BR2_PACKAGE_PYTHON3
-+	select BR2_PACKAGE_PYTHON_SSL if BR2_PACKAGE_PYTHON
-+	select BR2_PACKAGE_PYTHON3_SSL if BR2_PACKAGE_PYTHON3
-+	select BR2_PACKAGE_PYTHON_UNICODEDATA if BR2_PACKAGE_PYTHON
-+	select BR2_PACKAGE_PYTHON3_UNICODEDATA if BR2_PACKAGE_PYTHON3
-+	help
-+	  Raven is a client for Sentry (https://getsentry.com).
-+
-+	  https://github.com/getsentry/raven-python
-diff --git a/package/python-raven/python-raven.hash b/package/python-raven/python-raven.hash
-new file mode 100644
-index 0000000..3ed1239
---- /dev/null
-+++ b/package/python-raven/python-raven.hash
-@@ -0,0 +1,5 @@
-+# md5 from https://pypi.python.org/pypi/raven/json, sha256 locally computed
-+md5	2efce7acbabe1a0f32d168736a654789  raven-6.3.0.tar.gz
-+sha256	f3e465a545dcdb6a387d1fcb199d08f786ba3732d7ce6aa681718b04da6aedf1  raven-6.3.0.tar.gz
-+# License file, locally calculated
-+sha256	5ce9459bc19ced99cc9eb135d4f559ed01e336354bdf16dd998be85aa688c233  LICENSE
-diff --git a/package/python-raven/python-raven.mk b/package/python-raven/python-raven.mk
-new file mode 100644
-index 0000000..c17aac4
---- /dev/null
-+++ b/package/python-raven/python-raven.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-raven
-+#
-+################################################################################
-+
-+PYTHON_RAVEN_VERSION = 6.3.0
-+PYTHON_RAVEN_SOURCE = raven-$(PYTHON_RAVEN_VERSION).tar.gz
-+PYTHON_RAVEN_SITE = https://pypi.python.org/packages/e8/b0/27886f69cdb4d9f6265bba1c4973bb5371b060272a5795c511d8839a6028
-+PYTHON_RAVEN_SETUP_TYPE = setuptools
-+PYTHON_RAVEN_LICENSE = BSD-3-Clause
-+PYTHON_RAVEN_LICENSE_FILES = LICENSE
-+
-+$(eval $(python-package))
+ # System
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc3"
+@@ -24,7 +24,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="mx6sabreauto"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.09"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.11"
+ BR2_TARGET_UBOOT_FORMAT_IMG=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="SPL"
+@@ -32,7 +32,7 @@ BR2_TARGET_UBOOT_SPL_NAME="SPL"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.13.3"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.14"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-sabreauto imx6dl-sabreauto imx6qp-sabreauto"
