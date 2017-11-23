@@ -1,9 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 23 Nov 2017 21:50:28 +0100
-Subject: [Buildroot] [PATCH 1/2] package/i2c-tools: bump to version 4.0
-In-Reply-To: <1510656704-11153-1-git-send-email-angelo@amarulasolutions.com>
-References: <1510656704-11153-1-git-send-email-angelo@amarulasolutions.com>
-Message-ID: <20171123215028.1baeb519@windsurf.lan>
+Date: Thu, 23 Nov 2017 22:00:55 +0100
+Subject: [Buildroot] [PATCH/next 1/2] package/dovecot: bump version to
+ 2.2.33.2
+In-Reply-To: <20171114072203.yznumdrkiad5xtwj@tarshish>
+References: <20171114065151.24659-1-bernd.kuhls@t-online.de>
+ <20171114072203.yznumdrkiad5xtwj@tarshish>
+Message-ID: <20171123220055.3be02c93@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,43 +14,46 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 14 Nov 2017 11:51:43 +0100, Angelo Compagnucci wrote:
-> This patch bumps i2c-tools to version 4.0 and adds a new command
-> named i2ctransfer.
+On Tue, 14 Nov 2017 09:22:03 +0200, Baruch Siach wrote:
+
+> >  DOVECOT_VERSION_MAJOR = 2.2
+> > -DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).31
+> > +DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).33.2
+> >  DOVECOT_SITE = http://www.dovecot.org/releases/$(DOVECOT_VERSION_MAJOR)
+> >  DOVECOT_INSTALL_STAGING = YES
+> >  DOVECOT_LICENSE = LGPL-2.1  
 > 
-> Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+> Unrelated to this patch, but since COPYING.MIT is one of the license files, 
+> why isn't the MIT license mentioned here?
 
-This patch breaks the build on Cortex-M4 ARM noMMU configuration:
+Good catch. The COPYING file explains pretty well was going on here. It
+says:
 
-/home/thomas/projets/buildroot/output/host/bin/arm-linux-gcc -shared -Wl,-elf2flt -static -Wl,--version-script=lib/libi2c.map -Wl,-soname,libi2c.so.0 -o lib/libi2c.so.0.1.0 lib/smbus.o -lc
-ld (ld-elf2flt): -shared used without passing a shared library ID
+"""
+Everything in src/lib/, src/auth/, src/lib-sql/ and src/lib-ntlm/ is under
+MIT license (see COPYING.MIT) unless otherwise mentioned at the beginning
+of the file.
 
-It is trying to unconditionally build a shared library, even when there
-is no support for shared libraries.
+Everything else is LGPLv2.1 (see COPYING.LGPL) unless otherwise mentioned
+at the beginning of the file.
 
-You can reproduce using the following defconfig:
+Current exceptions are:
 
-BR2_arm=y
-BR2_cortex_m4=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-cortex-m4-full-2017.11-rc1.tar.bz2"
-BR2_TOOLCHAIN_EXTERNAL_GCC_6=y
-BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_13=y
-BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
-# BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
-# BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_NPTL is not set
-BR2_TOOLCHAIN_EXTERNAL_CXX=y
-BR2_INIT_NONE=y
-# BR2_PACKAGE_BUSYBOX is not set
-BR2_PACKAGE_I2C_TOOLS=y
-# BR2_TARGET_ROOTFS_TAR is not set
+src/lib/md5.c : Public Domain
 
-Could you look into this, and submit an updated version? It would be
-preferably to support building without shared library support, because
-i2c-tools are very basic, and potentially useful on noMMU systems.
+src/lib/sha1.c and sha2.c:
+[... here the next of BSD-3c]
 
-Thanks!
+src/lib/UnicodeData.txt:
+[... something that looks very similar to
+https://spdx.org/licenses/Unicode-DFS-2015.html, but isn't exactly the
+same ...]
+
+So perhaps:
+
+DOVECOT_LICENSE = LGPL-2.1, MIT, Public Domain, Unicode-DFS-2015
+
+something like that ?
 
 Thomas
 -- 
