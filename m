@@ -1,98 +1,217 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 24 Nov 2017 00:23:00 +0100
-Subject: [Buildroot] [PATCH v1] Fix makefile include order by using
- sort/wildcard.
-In-Reply-To: <20171121191330.5621-1-ps.report@gmx.net>
-References: <20171121191330.5621-1-ps.report@gmx.net>
-Message-ID: <a3441ea0-b5da-d5ab-ff93-af09b1dd151d@mind.be>
+From: =?UTF-8?q?Ga=C3=ABl=20PORTAY?= <gael.portay@savoirfairelinux.com>
+Date: Thu, 23 Nov 2017 18:26:19 -0500
+Subject: [Buildroot] [PATCH v2 1/1] qt5webengine: enable build for 5.6.3
+Message-ID: <20171123232619.29849-1-gael.portay@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+The build was broken in 5.6.2 and was disabled.
 
+It compiles fine since 5.6.3.
 
-On 21-11-17 20:13, Peter Seiderer wrote:
-> Use ordered 'include $(sort $(wildcard ...))' instead of unordered
-> direct 'include */*.mk'.
-> 
-> Fixes [1] reported by Petr Vorel:
-> 
->   make: *** No rule to make target 'toolchain-external-custom', needed by '.../build/toolchain-external/.stamp_configured'.  Stop.
-> 
-> [1] http://lists.busybox.net/pipermail/buildroot/2017-November/206969.html
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+The two additional patches are useful at run-time.
 
- There was one more include that wasn't sorted:
+The first one avoid the need to specify the path to the SSL certificate
+directory (using an additional environment variable).
 
--include $(foreach dir,$(BR2_EXTERNAL_DIRS),$(dir)/docs/*/*.mk)
+The second one is the same used in 5.9.x (plus resolved conflicts). It uses the
+process's context to get handles on EGL and GLESv2 libraries. Those libraries
+are linked to Qt WebEngine at compile time.
 
-I've fixed that one as well, I've extended the commit log a little, and applied
-to master, thanks.
+The patch is particularly usefull for RPI boards since the raspberrypi userland
+package does not provide the libEGLv2.so.2 and libGLES.so.1 symlinks. Both
+library paths are hardcoded in Qt WebEngine.
 
- Regards,
- Arnout
+Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
+---
 
-> ---
->  Makefile                                           | 6 +++---
->  package/gstreamer/gstreamer.mk                     | 2 +-
->  package/gstreamer1/gstreamer1.mk                   | 2 +-
->  toolchain/toolchain-external/toolchain-external.mk | 2 +-
->  4 files changed, 6 insertions(+), 6 deletions(-)
-> 
-> diff --git a/Makefile b/Makefile
-> index 55409b99af..9d9737332d 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -483,13 +483,13 @@ include system/system.mk
->  include package/Makefile.in
->  # arch/arch.mk.* must be after package/Makefile.in because it may need to
->  # complement variables defined therein, like BR_NO_CHECK_HASH_FOR.
-> --include $(wildcard arch/arch.mk.*)
-> +-include $(sort $(wildcard arch/arch.mk.*))
->  include support/dependencies/dependencies.mk
->  
->  PACKAGES += $(DEPENDENCIES_HOST_PREREQ)
->  
-> -include toolchain/*.mk
-> -include toolchain/*/*.mk
-> +include $(sort $(wildcard toolchain/*.mk))
-> +include $(sort $(wildcard toolchain/*/*.mk))
->  
->  # Include the package override file if one has been provided in the
->  # configuration.
-> diff --git a/package/gstreamer/gstreamer.mk b/package/gstreamer/gstreamer.mk
-> index bc886c78a2..22240bceea 100644
-> --- a/package/gstreamer/gstreamer.mk
-> +++ b/package/gstreamer/gstreamer.mk
-> @@ -1 +1 @@
-> -include package/gstreamer/*/*.mk
-> +include $(sort $(wildcard package/gstreamer/*/*.mk))
-> diff --git a/package/gstreamer1/gstreamer1.mk b/package/gstreamer1/gstreamer1.mk
-> index 5b748e33fb..8530ff027a 100644
-> --- a/package/gstreamer1/gstreamer1.mk
-> +++ b/package/gstreamer1/gstreamer1.mk
-> @@ -1 +1 @@
-> -include package/gstreamer1/*/*.mk
-> +include $(sort $(wildcard package/gstreamer1/*/*.mk))
-> diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-> index 48de1e71f2..dd07884c7e 100644
-> --- a/toolchain/toolchain-external/toolchain-external.mk
-> +++ b/toolchain/toolchain-external/toolchain-external.mk
-> @@ -25,4 +25,4 @@ $(error No prefix selected for external toolchain package $(BR2_PACKAGE_PROVIDES
->  endif
->  endif
->  
-> -include toolchain/toolchain-external/*/*.mk
-> +include $(sort $(wildcard toolchain/toolchain-external/*/*.mk))
-> 
+Changes since v1:
+ - reword commit message to include comments from cover-letter
+ - format the first patch using git; and add my signed-off-by
 
+ .../5.6.3/0001-Change-default-SSL-directory.patch  | 35 ++++++++
+ ...ad-libEGL-and-libGLES2-symbols-implicitly.patch | 93 ++++++++++++++++++++++
+ package/qt5/qt5webengine/Config.in                 |  5 --
+ package/qt5/qt5webengine/qt5webengine.hash         |  3 +
+ 4 files changed, 131 insertions(+), 5 deletions(-)
+ create mode 100644 package/qt5/qt5webengine/5.6.3/0001-Change-default-SSL-directory.patch
+ create mode 100644 package/qt5/qt5webengine/5.6.3/0002-Load-libEGL-and-libGLES2-symbols-implicitly.patch
+
+diff --git a/package/qt5/qt5webengine/5.6.3/0001-Change-default-SSL-directory.patch b/package/qt5/qt5webengine/5.6.3/0001-Change-default-SSL-directory.patch
+new file mode 100644
+index 0000000000..15cd9f87bb
+--- /dev/null
++++ b/package/qt5/qt5webengine/5.6.3/0001-Change-default-SSL-directory.patch
+@@ -0,0 +1,35 @@
++From fc41c0f572ff347142cca4bf5d82b87782bb5906 Mon Sep 17 00:00:00 2001
++From: =?utf-8?q?Ga=C3=ABl=20PORTAY?= <gael.portay@savoirfairelinux.com>
++Date: Thu, 23 Nov 2017 16:18:06 -0500
++Subject: [PATCH] Change default SSL directory
++MIME-Version: 1.0
++Content-Type: text/plain; charset=utf-8
++Content-Transfer-Encoding: 8bit
++
++Change the default SSL directory, as buildroot ca-cert package is
++installed at /etc/ssl. That way, we don't have to use the SSL_CERT_DIR
++environment at runtime.
++
++Upstream-Status: Inappropriate
++Signed-off-by: Damien Riegel <damien.riegel@savoirfairelinux.com>
++Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
++---
++ src/core/qtwebengine_extras.gypi | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/core/qtwebengine_extras.gypi b/src/core/qtwebengine_extras.gypi
++index 229421ef..3b2386c0 100644
++--- a/src/core/qtwebengine_extras.gypi
+++++ b/src/core/qtwebengine_extras.gypi
++@@ -96,7 +96,7 @@
++             'GL_GLEXT_PROTOTYPES',
++             'EGL_EGLEXT_PROTOTYPES',
++             # At runtime the env variable SSL_CERT_DIR can be used to override this
++-            'OPENSSLDIR="/usr/lib/ssl"',
+++            'OPENSSLDIR="/etc/ssl"',
++             'OPENSSL_LOAD_CONF',
++             'EGL_API_FB=1',
++             'LINUX=1',
++-- 
++2.15.0
++
+diff --git a/package/qt5/qt5webengine/5.6.3/0002-Load-libEGL-and-libGLES2-symbols-implicitly.patch b/package/qt5/qt5webengine/5.6.3/0002-Load-libEGL-and-libGLES2-symbols-implicitly.patch
+new file mode 100644
+index 0000000000..05ed2956d2
+--- /dev/null
++++ b/package/qt5/qt5webengine/5.6.3/0002-Load-libEGL-and-libGLES2-symbols-implicitly.patch
+@@ -0,0 +1,93 @@
++From bdfd084296681bcead17c42f1e5cf0e24ee04f65 Mon Sep 17 00:00:00 2001
++From: Viktor Engelmann <viktor.engelmann@qt.io>
++Date: Fri, 7 Jul 2017 12:56:19 +0200
++Subject: [PATCH] Load libEGL and libGLES2 symbols implicitly
++MIME-Version: 1.0
++Content-Type: text/plain; charset=utf-8
++Content-Transfer-Encoding: 8bit
++
++Instead of explicitly loading libraries from hard-coded locations,
++we now just call dlopen(NULL, RTLD_LAZY). This returns a handle to
++the host process'es context, which already contains the symbols of
++both these libraries, because we link against them.
++It was necessary to bypass LoadLibrary, because that expects a non-NULL
++file path, so we couldn't pass NULL through that interface.
++
++Upstream-Status: Merged
++Task-number: QTBUG-57761
++Change-Id: I29f037dfe542222b5188a33c7727c81a464a87bb
++Reviewed-by: Allan Sandfeld Jensen <allan.jensen@qt.io>
++Reviewed-by: Michal Klocek <michal.klocek@qt.io>
++Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
++[gportay: backport from 5.9 and merge conflicts]
++---
++ src/core/surface_factory_qt.cpp | 40 ++++++++--------------------------------
++ 1 file changed, 8 insertions(+), 32 deletions(-)
++
++diff --git a/src/core/surface_factory_qt.cpp b/src/core/surface_factory_qt.cpp
++index 48c91bfc..c6059b67 100644
++--- a/src/core/surface_factory_qt.cpp
+++++ b/src/core/surface_factory_qt.cpp
++@@ -51,51 +51,27 @@
++ #if defined(USE_OZONE)
++ 
++ #include <EGL/egl.h>
++-
++-#ifndef QT_LIBDIR_EGL
++-#define QT_LIBDIR_EGL "/usr/lib"
++-#endif
++-#ifndef QT_LIBDIR_GLES2
++-#define QT_LIBDIR_GLES2 QT_LIBDIR_EGL
++-#endif
+++#include <dlfcn.h>
++ 
++ namespace QtWebEngineCore {
++ 
++-base::NativeLibrary LoadLibrary(const base::FilePath& filename) {
++-    base::NativeLibraryLoadError error;
++-    base::NativeLibrary library = base::LoadNativeLibrary(filename, &error);
++-    if (!library) {
++-        LOG(ERROR) << "Failed to load " << filename.MaybeAsASCII() << ": " << error.ToString();
++-        return NULL;
++-    }
++-    return library;
++-}
++-
++ bool SurfaceFactoryQt::LoadEGLGLES2Bindings(AddGLLibraryCallback add_gl_library, SetGLGetProcAddressProcCallback set_gl_get_proc_address)
++ {
++-    base::FilePath libEGLPath = QtWebEngineCore::toFilePath(QT_LIBDIR_EGL);
++-    libEGLPath = libEGLPath.Append("libEGL.so.1");
++-    base::NativeLibrary eglLibrary = LoadLibrary(libEGLPath);
++-    if (!eglLibrary)
++-        return false;
++-
++-    base::FilePath libGLES2Path = QtWebEngineCore::toFilePath(QT_LIBDIR_GLES2);
++-    libGLES2Path = libGLES2Path.Append("libGLESv2.so.2");
++-    base::NativeLibrary gles2Library = LoadLibrary(libGLES2Path);
++-    if (!gles2Library)
+++    base::NativeLibrary eglgles2Library = dlopen(NULL, RTLD_LAZY);
+++    if (!eglgles2Library) {
+++        LOG(ERROR) << "Failed to open EGL/GLES2 context " << dlerror();
++         return false;
+++    }
++ 
++-    gfx::GLGetProcAddressProc get_proc_address = reinterpret_cast<gfx::GLGetProcAddressProc>(base::GetFunctionPointerFromNativeLibrary(eglLibrary, "eglGetProcAddress"));
+++    gfx::GLGetProcAddressProc get_proc_address = reinterpret_cast<gfx::GLGetProcAddressProc>(base::GetFunctionPointerFromNativeLibrary(eglgles2Library, "eglGetProcAddress"));
++     if (!get_proc_address) {
++         LOG(ERROR) << "eglGetProcAddress not found.";
++-        base::UnloadNativeLibrary(eglLibrary);
++-        base::UnloadNativeLibrary(gles2Library);
+++        base::UnloadNativeLibrary(eglgles2Library);
++         return false;
++     }
++ 
++     gfx::SetGLGetProcAddressProc(get_proc_address);
++-    gfx::AddGLNativeLibrary(eglLibrary);
++-    gfx::AddGLNativeLibrary(gles2Library);
+++    gfx::AddGLNativeLibrary(eglgles2Library);
++     return true;
++ }
++ 
++-- 
++2.15.0
++
+diff --git a/package/qt5/qt5webengine/Config.in b/package/qt5/qt5webengine/Config.in
+index d40b58062e..d0c8d18210 100644
+--- a/package/qt5/qt5webengine/Config.in
++++ b/package/qt5/qt5webengine/Config.in
+@@ -20,10 +20,6 @@ comment "qt5webengine needs an OpenGL and EGL-capable backend"
+ 	depends on BR2_PACKAGE_QT5WEBENGINE_ARCH_SUPPORTS
+ 	depends on !BR2_PACKAGE_QT5_GL_AVAILABLE || !BR2_PACKAGE_HAS_LIBEGL
+ 
+-comment "qt5webengine is not available with Qt 5.6"
+-	depends on BR2_PACKAGE_QT5WEBENGINE_ARCH_SUPPORTS
+-	depends on BR2_PACKAGE_QT5_VERSION_5_6
+-
+ config BR2_PACKAGE_QT5WEBENGINE
+ 	bool "qt5webengine"
+ 	depends on BR2_PACKAGE_QT5WEBENGINE_ARCH_SUPPORTS
+@@ -35,7 +31,6 @@ config BR2_PACKAGE_QT5WEBENGINE
+ 	depends on BR2_PACKAGE_QT5_GL_AVAILABLE # qt5declarative, qt5base-eglfs
+ 	depends on BR2_PACKAGE_HAS_LIBEGL # qt5base-eglfs
+ 	depends on BR2_PACKAGE_HAS_UDEV
+-	depends on !BR2_PACKAGE_QT5_VERSION_5_6
+ 	# v8 (a chromium 3rd-party) compiles its internal host-tools with the
+ 	# same word size as the target. For 32-bits targets, it adds the -m32
+ 	# flag (for 64-bits, it adds the -m64 flag).
+diff --git a/package/qt5/qt5webengine/qt5webengine.hash b/package/qt5/qt5webengine/qt5webengine.hash
+index 918f7edb3a..f71889e251 100644
+--- a/package/qt5/qt5webengine/qt5webengine.hash
++++ b/package/qt5/qt5webengine/qt5webengine.hash
+@@ -1,2 +1,5 @@
++# Hash from https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qtwebengine-opensource-src-5.6.3.tar.xz.mirrorlist
++sha256 009d69fb39f6c0e2b0cd89a7e9302cd0ae1872d02c787d3a37f2cacca5ddb7a7 qtwebengine-opensource-src-5.6.3.tar.xz
++
+ # Hash from: https://download.qt.io/official_releases/qt/5.9/5.9.2/submodules/qtwebengine-opensource-src-5.9.2.tar.xz.mirrorlist
+ sha256 cab069e4589f806640bebe4077c70e5cd5ffeb146c6e8caca6c4454fc0c4a108 qtwebengine-opensource-src-5.9.2.tar.xz
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.15.0
