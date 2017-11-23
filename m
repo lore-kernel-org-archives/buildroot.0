@@ -1,7 +1,7 @@
 From: Fabio Estevam <fabio.estevam@nxp.com>
-Date: Thu, 23 Nov 2017 11:16:37 -0200
+Date: Thu, 23 Nov 2017 12:38:42 -0200
 Subject: [Buildroot] [PATCH] configs/imx6ulevk: Add new defconfig
-Message-ID: <1511442997-18392-1-git-send-email-fabio.estevam@nxp.com>
+Message-ID: <1511447922-12017-1-git-send-email-fabio.estevam@nxp.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
