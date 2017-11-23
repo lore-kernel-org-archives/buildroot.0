@@ -1,54 +1,93 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 23 Nov 2017 23:39:57 +0100
-Subject: [Buildroot] [PATCH 1/1] ntp: add patch to support for libressl
-In-Reply-To: <20171123232952.3defa400@windsurf.lan>
-References: <20171108121143.5411-1-aduskett@gmail.com>
- <20171123225155.73a4da45@windsurf.lan>
- <9d7c2e3e-7bad-128b-a915-d0f73f3c126c@mind.be>
- <20171123232952.3defa400@windsurf.lan>
-Message-ID: <ddefae5d-0639-ac78-10c2-bca79dd136a0@mind.be>
+Date: Thu, 23 Nov 2017 23:46:54 +0100
+Subject: [Buildroot] [PATCH v1] busybox: Fix rtcwake to use /dev/rtc0
+ properly
+In-Reply-To: <20171123183914.71769-1-andriy.shevchenko@linux.intel.com>
+References: <20171123183914.71769-1-andriy.shevchenko@linux.intel.com>
+Message-ID: <b2f0d3bf-b8a1-c948-2013-35dc605c2cbd@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+ Hi Andy,
 
+On 23-11-17 19:39, Andy Shevchenko wrote:
+> rtcwake from busybox has failed in case the /dev/rtc is a symlink
+> (which is default case for udev enabled systems) due to wrong pathname
+> used for a sysfs wakeup attribute.
 
-On 23-11-17 23:29, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Thu, 23 Nov 2017 23:27:18 +0100, Arnout Vandecappelle wrote:
-> 
->>> Arnout, Peter, Yann, I think we discussed this topic during the
->>> Buildroot meeting, and concluded we didn't want patches in Buildroot to
->>> enable LibreSSL compatibility with a package. Do we stand on this
->>> position, and reject Adam's contribution on ntp?  
->>
->>  I don't think the conclusion was that we would reject patches to enable
->> LibreSSL compatibility outright, only:
->>
->>>   
->>>> + #ifndef OPENSSL_VERSION_NUMBER
->>>> ++#ifndef LIBRESSL_VERSION_NUMBER  
->>>
->>> In addition, this continue to use the LIBRESSL_VERSION_NUMBER approach,
->>> which will fail when libressl gains support for new APIs.  
->>
->>  we would reject this approach because I believe it is not upstreamable.
->>
->>  I think upstreamable patches are acceptable. And maybe even the
->> LIBRESSL_VERSION_NUMBER approach is OK - but then I first want to see a reliable
->> upstream accept it.
-> 
-> The issue here is that Adam has submitted the patch upstream a while
-> ago (see bugs.ntp.org/show_bug.cgi?id=3401#c3), and upstream has
-> reacted.
+ In Buildroot, we don't accept "feature patches" for packages. We try to limit
+to patches that fix the build or complete breakage, sometimes also to make it
+work together with other packages. I think this patch doesn't fall in that category.
 
- Maybe I missed something, but I don't see the reaction?
+ For sure, you should first send the patch upstream. Particularly in the case of
+busybox, Denys often proposes improved patches. If it gets accepted upstream,
+then we can consider including it in Buildroot as well.
 
  Regards,
  Arnout
+
+> 
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>  ...bb-Try-dev-rtc0-first-followed-by-dev-rtc.patch | 45 ++++++++++++++++++++++
+>  1 file changed, 45 insertions(+)
+>  create mode 100644 package/busybox/0006-libbb-Try-dev-rtc0-first-followed-by-dev-rtc.patch
+> 
+> diff --git a/package/busybox/0006-libbb-Try-dev-rtc0-first-followed-by-dev-rtc.patch b/package/busybox/0006-libbb-Try-dev-rtc0-first-followed-by-dev-rtc.patch
+> new file mode 100644
+> index 0000000000..0702c3c065
+> --- /dev/null
+> +++ b/package/busybox/0006-libbb-Try-dev-rtc0-first-followed-by-dev-rtc.patch
+> @@ -0,0 +1,45 @@
+> +From b59088ab14fb9c336414e2c9b27a9f5b7447ce5b Mon Sep 17 00:00:00 2001
+> +From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> +Date: Thu, 23 Nov 2017 19:33:08 +0200
+> +Subject: [PATCH v1] libbb: Try /dev/rtc0 first followed by /dev/rtc
+> +
+> +In case we run
+> +
+> +% rtcwake -s5 -mmem
+> +
+> +in udev environment we will get an error:
+> +
+> +rtcwake: /dev/rtc not enabled for wakeup events
+> +
+> +because /dev/rtc is a symlink to /dev/rtc0 in Buildroot and other Linux
+> +distributions (like Fedora) and make_wakeup() obviously fails.
+> +
+> +As a quick fix just reorder probe of device nodes to try /dev/rtc0
+> +first.
+> +
+> +The proper solution, of course much expensive by code footprint,
+> +is to resolve /dev/rtc to a proper device node and then
+> +to follow sysfs attributes.
+> +
+> +Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> +---
+> + libbb/rtc.c | 2 +-
+> + 1 file changed, 1 insertion(+), 1 deletion(-)
+> +
+> +diff --git a/libbb/rtc.c b/libbb/rtc.c
+> +index c4117ba34..e087a8fd6 100644
+> +--- a/libbb/rtc.c
+> ++++ b/libbb/rtc.c
+> +@@ -64,8 +64,8 @@ int FAST_FUNC rtc_xopen(const char **default_rtc, int flags)
+> + {
+> + 	int rtc;
+> + 	const char *name =
+> +-		"/dev/rtc""\0"
+> + 		"/dev/rtc0""\0"
+> ++		"/dev/rtc""\0"
+> + 		"/dev/misc/rtc""\0";
+> + 
+> + 	if (!*default_rtc)
+> +-- 
+> +2.15.0
+> +
+> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
