@@ -1,146 +1,60 @@
-From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Thu, 23 Nov 2017 22:47:49 +0100
-Subject: [Buildroot] [PATCH 1/1] qt5cinex: depends also on
- qt5quickcontrols
-In-Reply-To: <20171123222831.7849a0eb@gmx.net>
-References: <1510677027-24076-1-git-send-email-giulio.benetti@micronovasrl.com>
- <e8c172b8-f2ec-ced1-dda8-236d0d945b12@micronovasrl.com>
- <20171114165808.akqens5j5obw2n5c@tarshish>
- <32a0057b-1840-ef45-c199-9da6b14ae09c@micronovasrl.com>
- <20171123214546.7e982b20@windsurf.lan> <20171123222831.7849a0eb@gmx.net>
-Message-ID: <aa2bd54f-fd9b-b3ed-0d77-cd6415a4bfb1@micronovasrl.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 23 Nov 2017 22:48:33 +0100
+Subject: [Buildroot] [PATCH] netcat-openbsd: add source and license
+ hashes
+In-Reply-To: <20171123210734.z2n7xeretrwy2tdu@archlinux>
+References: <20171119015458.6725-1-gael.portay@savoirfairelinux.com>
+ <20171123213242.417dbb47@windsurf.lan>
+ <20171123210734.z2n7xeretrwy2tdu@archlinux>
+Message-ID: <20171123224833.562c69d3@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello everybody,
+Hello,
 
-Il 23/11/2017 22:28, Peter Seiderer ha scritto:
-> Hello *,
-> 
-> On Thu, 23 Nov 2017 21:45:46 +0100, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
-> 
->> Hello,
->>
->> On Tue, 14 Nov 2017 18:03:53 +0100, Giulio Benetti wrote:
->>> Sorry, my mistake.
->>> It installed correctly on STAGING_DIR, but not in TARGET_DIR.
->>> This why it compiled fine, but on target it didn't find that
->>> libQtQuick.so library.
->>> This is a problem on building Qt5 I've noticed.
->>>
->>> If I build first time Qt5 with few features,
->>> than select other more features,
->>> those can be built partially and installed partially too.
->>>
->>> To reproduce you can build qt5base.
->>> After that, select qt5cinex,
->>> then you should find that libraries are in STAGING_DIR but not in
->>> TARGET_DIR.
->>>
->>> So to have it working properly you have to rm and rebuild qt5base and
->>> qt5declarative from beginning.
->>>
->>> Did someone else noticed this?
->>
->> So in the end, is your patch needed ?
->>
->> Peter (Seiderer), could you review this Qt5 related patch ? Thanks!
-> 
-> No qml expert, but a quick search for 'import QtQuick.Controls' (needed for usage of qt5quickcontrols) did
-> not yield any results:
-> 
-> 	$ wget http://quitcoding.com/download/Qt5_CinematicExperience_rpi_1.0.tgz
-> 	$ wget http://quitcoding.com/download/Qt5_CinematicExperience_1.0.tgz
-> 	$ tar -xvzf Qt5_CinematicExperience_1.0.tgz
-> 	$ tar -xvzf Qt5_CinematicExperience_rpi_1.0.tgz
-> 	$ find . -name "*.qml" | xargs grep import
-> 
-> ./Qt5_CinematicExperience_1.0/content/CurtainEffect.qml:import QtQuick 2.0
-> ./Qt5_CinematicExperience_1.0/content/InfoView.qml:import QtQuick 2.0
-> ./Qt5_CinematicExperience_1.0/content/Switch.qml:import QtQuick 2.0
-> ./Qt5_CinematicExperience_1.0/content/Switch.qml:import QtQuick.Particles 2.0
-> ./Qt5_CinematicExperience_1.0/content/DetailsView.qml:import QtQuick 2.0
-> ./Qt5_CinematicExperience_1.0/content/InfoViewItem.qml:import QtQuick 2.0
-> ./Qt5_CinematicExperience_1.0/content/Background.qml:import QtQuick 2.0
-> ./Qt5_CinematicExperience_1.0/content/Background.qml:import QtQuick.Particles 2.0
-> ./Qt5_CinematicExperience_1.0/content/RatingsItem.qml:import QtQuick 2.0
-> ./Qt5_CinematicExperience_1.0/content/DelegateItem.qml:import QtQuick 2.0
-> ./Qt5_CinematicExperience_1.0/content/MoviesModel.qml:import QtQuick 2.0
-> ./Qt5_CinematicExperience_1.0/content/SettingsView.qml:import QtQuick 2.0
-> ./Qt5_CinematicExperience_1.0/content/MainView.qml:import QtQuick 2.0
-> ./Qt5_CinematicExperience_1.0/content/MainView.qml:import QtQuick.Particles 2.0
-> ./Qt5_CinematicExperience_1.0/content/MainView.qml:import QtGraphicalEffects 1.0
-> ./Qt5_CinematicExperience_1.0/content/Button.qml:import QtQuick 2.0
-> ./Qt5_CinematicExperience_1.0/content/Button.qml:import QtQuick.Particles 2.0
-> ./Qt5_CinematicExperience_1.0/Qt5_CinematicExperience.qml:import QtQuick 2.0
-> ./Qt5_CinematicExperience_1.0/Qt5_CinematicExperience.qml:import "content"
-> ./Qt5_CinematicExperience_rpi_1.0/content/CurtainEffect.qml:import QtQuick 2.0
-> ./Qt5_CinematicExperience_rpi_1.0/content/InfoView.qml:import QtQuick 2.0
-> ./Qt5_CinematicExperience_rpi_1.0/content/Switch.qml:import QtQuick 2.0
-> ./Qt5_CinematicExperience_rpi_1.0/content/Switch.qml:import QtQuick.Particles 2.0
-> ./Qt5_CinematicExperience_rpi_1.0/content/DetailsView.qml:import QtQuick 2.0
-> ./Qt5_CinematicExperience_rpi_1.0/content/InfoViewItem.qml:import QtQuick 2.0
-> ./Qt5_CinematicExperience_rpi_1.0/content/Background.qml:import QtQuick 2.0
-> ./Qt5_CinematicExperience_rpi_1.0/content/Background.qml:import QtQuick.Particles 2.0
-> ./Qt5_CinematicExperience_rpi_1.0/content/RatingsItem.qml:import QtQuick 2.0
-> ./Qt5_CinematicExperience_rpi_1.0/content/FpsItem.qml:import QtQuick 2.0
-> ./Qt5_CinematicExperience_rpi_1.0/content/DelegateItem.qml:import QtQuick 2.0
-> ./Qt5_CinematicExperience_rpi_1.0/content/MoviesModel.qml:import QtQuick 2.0
-> ./Qt5_CinematicExperience_rpi_1.0/content/SettingsView.qml:import QtQuick 2.0
-> ./Qt5_CinematicExperience_rpi_1.0/content/MainView.qml:import QtQuick 2.0
-> ./Qt5_CinematicExperience_rpi_1.0/content/MainView.qml:import QtQuick.Particles 2.0
-> ./Qt5_CinematicExperience_rpi_1.0/content/MainView.qml:import QtGraphicalEffects 1.0
-> ./Qt5_CinematicExperience_rpi_1.0/content/Button.qml:import QtQuick 2.0
-> ./Qt5_CinematicExperience_rpi_1.0/content/Button.qml:import QtQuick.Particles 2.0
-> ./Qt5_CinematicExperience_rpi_1.0/Qt5_CinematicExperience.qml:import QtQuick 2.0
-> ./Qt5_CinematicExperience_rpi_1.0/Qt5_CinematicExperience.qml:import "content"
-> 
+On Thu, 23 Nov 2017 16:07:34 -0500, Ga?l PORTAY wrote:
 
-Peter you're right.
-My mistake was:
-- building all buildroot with only qt5base
-- modifying .config enabling qt5cinex which selects qt5declarative
-- giving another make(not building from scratch)
-
-So I ended up having qt5base not aware of qt5declarative when installing 
-qml modules.
-
-At this point I rebuilt from scratch adding qt5quickcontrols to 
-.config(mistake, don't why I thought it),
-and it worked.
-
-So I thought qt5quickcontrols was missing.
-Instead qt5quickcontrols is not necessary,
-and selecting qt5cinex did its job selecting correctly qt5declarative.
-
-This is all the story about this useless patch.
-
->>>> qt5cinex fail to execute on runtime if qt5quickcontrols is not selected
+> On Thu, Nov 23, 2017 at 09:32:42PM +0100, Thomas Petazzoni wrote:
+> > Hello,
+> > 
+> > On Sat, 18 Nov 2017 20:54:58 -0500, Ga?l PORTAY wrote:  
+> > > Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
+> > > ---
+> > > Hi,  
+> > 
+> > Applied to next, thanks.
+> > 
+> > Thomas
+> > -- 
+> > Thomas Petazzoni, CTO, Free Electrons
+> > Embedded Linux, Kernel and Android engineering
+> > http://free-electrons.com  
 > 
-> Did not do a runtime test, but what is the error message (if any)?
-> 
-> Regards,
-> Peter
-> 
->>
->> Best regards,
->>
->> Thomas
-> 
+> Thanks,
 
+Thanks a lot for your "thanks", but it's not really needed to thank
+back the maintainers when they merge a patch. We already have three
+e-mails per patches on the list:
 
+ - One with the patch itself
+
+ - One sent by Git when the commit is merged/pushed
+
+ - One sent by the maintainer to notify the author that the patch was
+   merged.
+
+I don't think it's really useful to add a fourth patch with the
+contributor thanking the maintainer.
+
+Just pay a beer to one of the maintainers the next time you see him :-)
+
+Thanks!
+
+Thomas
 -- 
-Giulio Benetti
-R&D Manager &
-Advanced Research
-
-MICRONOVA SRL
-Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
-Tel. 049/8931563 - Fax 049/8931346
-Cod.Fiscale - P.IVA 02663420285
-Capitale Sociale ? 26.000 i.v.
-Iscritta al Reg. Imprese di Padova N. 02663420285
-Numero R.E.A. 258642
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
