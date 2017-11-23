@@ -1,28 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 23 Nov 2017 21:46:09 +0100
-Subject: [Buildroot] [PATCH] configs/mx53loco: Bump U-Boot and kernel
- versions
-In-Reply-To: <1510664217-18286-1-git-send-email-fabio.estevam@nxp.com>
-References: <1510664217-18286-1-git-send-email-fabio.estevam@nxp.com>
-Message-ID: <20171123214609.383ce5da@windsurf.lan>
+Date: Thu, 23 Nov 2017 21:47:09 +0100
+Subject: [Buildroot] [git commit] DEVELOPERS: Add i2c-tools to Angelo
+ Compagnucci
+Message-ID: <20171123203952.B919180FD4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=7b9d6be34f10e662834b51b794ac28ac814239be
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 14 Nov 2017 10:56:57 -0200, Fabio Estevam wrote:
-> Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
-> ---
->  configs/mx53loco_defconfig | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ DEVELOPERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-Applied to next, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/DEVELOPERS b/DEVELOPERS
+index c076415..7621f96 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -125,6 +125,7 @@ N:	Andy Kennedy <andy.kennedy@adtran.com>
+ F:	package/libunwind/
+ 
+ N:	Angelo Compagnucci <angelo.compagnucci@gmail.com>
++F:	package/i2c-tools/
+ F:	package/mono/
+ F:	package/mono-gtksharp3/
+ F:	package/monolite/
