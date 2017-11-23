@@ -1,162 +1,241 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 Nov 2017 22:51:58 +0100
-Subject: [Buildroot] [git commit] openntpd: update to 6.2p3
-Message-ID: <20171201205333.947F07FAAC@busybox.osuosl.org>
+Date: Thu, 23 Nov 2017 20:58:58 +0100
+Subject: [Buildroot] [git commit] configs/armadeus_apf28: bump kernel
+ version to latest 4.9 LTS
+Message-ID: <20171201205333.BBC8B7F90C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6e22ed19e1a0e8367f15b10c7727cce5363fe236
+commit: https://git.buildroot.net/buildroot/commit/?id=f56422d7a08a819539b375f4187e9d50f0204678
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Other changes:
+As there is now a defconfig inside kernel sources for mxs platforms, use it.
 
-  - Remove upstream patch.
-  - Change locally computed hash to hash from the SHA256 URL.
-  - Add sha256sum for license file.
-
-Note that we need to keep <pkg>_AUTORECONF = YES even though the patch
-touching the Makefile.am has been removed, because our libtool patch
-doesn't apply on the bundled ltmain.sh.
-
-Signed-off-by: Adam Duskett <aduskett@gmail.com>
+Signed-off-by: Julien BOIBESSOT <julien.boibessot@armadeus.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...-Revert-use-__dead-macro-from-sys-cdefs.h.patch | 91 ----------------------
- .../{0002-fix-musl.patch => 0001-fix-musl.patch}   |  0
- package/openntpd/openntpd.hash                     |  5 +-
- package/openntpd/openntpd.mk                       |  4 +-
- 4 files changed, 6 insertions(+), 94 deletions(-)
+ board/armadeus/apf28/linux-4.4.config | 185 ----------------------------------
+ configs/armadeus_apf28_defconfig      |   9 +-
+ 2 files changed, 4 insertions(+), 190 deletions(-)
 
-diff --git a/package/openntpd/0001-Revert-use-__dead-macro-from-sys-cdefs.h.patch b/package/openntpd/0001-Revert-use-__dead-macro-from-sys-cdefs.h.patch
+diff --git a/board/armadeus/apf28/linux-4.4.config b/board/armadeus/apf28/linux-4.4.config
 deleted file mode 100644
-index 418f7a2..0000000
---- a/package/openntpd/0001-Revert-use-__dead-macro-from-sys-cdefs.h.patch
+index cf389d8..0000000
+--- a/board/armadeus/apf28/linux-4.4.config
 +++ /dev/null
-@@ -1,91 +0,0 @@
--From 17aa5d98191c4dc85d0645443fc97a12601ae8da Mon Sep 17 00:00:00 2001
--From: Baruch Siach <baruch@tkos.co.il>
--Date: Tue, 26 Sep 2017 14:55:31 +0300
--Subject: [PATCH] Revert "use __dead macro from sys/cdefs.h"
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
--
--This partially reverts commit a7577667d673f49800e15461fe384817a1572eae.
--
--The musl C library does not use an internal cdefs.h header. As a result,
--the definitions in sys/cdefs.h have no effect. This breads the build as
--follows:
--
--In file included from adjfreq_linux.c:23:0:
--../src/ntpd.h:448:8: error: expected ???=???, ???,???, ???;???, ???asm??? or ???__attribute__??? before ???void???
-- __dead void fatal(const char *, ...)
--        ^~~~
--../src/ntpd.h:450:8: error: expected ???=???, ???,???, ???;???, ???asm??? or ???__attribute__??? before ???void???
-- __dead void fatalx(const char *, ...)
--        ^~~~
--
--Refer the related musl FAQ about cdefs.h:
--
--  http://wiki.musl-libc.org/wiki/FAQ#Q:_I.27m_trying_to_compile_something_against_musl_and_I_get_error_messages_about_sys.2Fcdefs.h
--
--Keep the compiler attribute definition.
--
--Remove also from noinst_HEADERS.
--
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-----
--Upstream status: https://github.com/openntpd-portable/openntpd-portable/pull/45
--
-- include/Makefile.am |  1 -
-- include/sys/cdefs.h | 16 ----------------
-- include/sys/types.h |  4 ++++
-- 3 files changed, 4 insertions(+), 17 deletions(-)
-- delete mode 100644 include/sys/cdefs.h
--
--diff --git a/include/Makefile.am b/include/Makefile.am
--index a552026e8f25..3a5a01620d82 100644
----- a/include/Makefile.am
--+++ b/include/Makefile.am
--@@ -1,6 +1,5 @@
-- noinst_HEADERS =
-- noinst_HEADERS += machine/endian.h
---noinst_HEADERS += sys/cdefs.h
-- noinst_HEADERS += sys/queue.h
-- noinst_HEADERS += sys/socket.h
-- noinst_HEADERS += sys/types.h
--diff --git a/include/sys/cdefs.h b/include/sys/cdefs.h
--deleted file mode 100644
--index 3dec43deec28..000000000000
----- a/include/sys/cdefs.h
--+++ /dev/null
--@@ -1,16 +0,0 @@
---/*
--- * Public domain
--- * sys/cdefs.h compatibility shim
--- */
---
---#include_next <sys/cdefs.h>
---
---#ifndef LIBCOMPAT_SYS_CDEFS_H
---#define LIBCOMPAT_SYS_CDEFS_H
---
---#if !defined(HAVE_ATTRIBUTE__DEAD) && !defined(__dead)
---#define __dead          __attribute__((__noreturn__))
---#define __pure          __attribute__((__const__))
---#endif
---
---#endif
--diff --git a/include/sys/types.h b/include/sys/types.h
--index 56aef0b61af8..86821c732ec3 100644
----- a/include/sys/types.h
--+++ b/include/sys/types.h
--@@ -14,6 +14,10 @@
-- #include <_bsd_types.h>
-- #endif
-- 
--+#if !defined(HAVE_ATTRIBUTE__DEAD) && !defined(__dead)
--+#define __dead		__attribute__((__noreturn__))
--+#endif
--+
-- #if !defined(HAVE_ATTRIBUTE__BOUNDED__) && !defined(__bounded__)
-- # define __bounded__(x, y, z)
-- #endif
---- 
--2.14.1
--
-diff --git a/package/openntpd/0002-fix-musl.patch b/package/openntpd/0001-fix-musl.patch
-similarity index 100%
-rename from package/openntpd/0002-fix-musl.patch
-rename to package/openntpd/0001-fix-musl.patch
-diff --git a/package/openntpd/openntpd.hash b/package/openntpd/openntpd.hash
-index 1a73e8d..4d00b7b 100644
---- a/package/openntpd/openntpd.hash
-+++ b/package/openntpd/openntpd.hash
-@@ -1,2 +1,5 @@
-+# from http://ftp.openbsd.org/pub/OpenBSD/OpenNTPD/SHA256
-+sha256 7b02691524197e01ba6b1b4b7595b33956e657ba6d5c4cf2fc20ea3f4914c13a	openntpd-6.2p3.tar.gz
-+
- # Locally computed
--sha256 5808a4137b008a4db20907e1a482f474734b120f254e3c5feb90db15e0820fb2  openntpd-6.2p2.tar.gz
-+sha256 6c1822ee950652c12bb3773849db18794f62c63452a70d018edf23e8cba71839 COPYING
-diff --git a/package/openntpd/openntpd.mk b/package/openntpd/openntpd.mk
-index 308a1b1..96d3881 100644
---- a/package/openntpd/openntpd.mk
-+++ b/package/openntpd/openntpd.mk
-@@ -4,11 +4,11 @@
- #
- ################################################################################
+@@ -1,185 +0,0 @@
+-# CONFIG_LOCALVERSION_AUTO is not set
+-# CONFIG_SWAP is not set
+-CONFIG_SYSVIPC=y
+-CONFIG_POSIX_MQUEUE=y
+-CONFIG_LOG_BUF_SHIFT=14
+-CONFIG_EMBEDDED=y
+-# CONFIG_COMPAT_BRK is not set
+-CONFIG_SLAB=y
+-CONFIG_PROFILING=y
+-CONFIG_OPROFILE=y
+-CONFIG_MODULES=y
+-CONFIG_MODULE_UNLOAD=y
+-# CONFIG_BLK_DEV_BSG is not set
+-CONFIG_PARTITION_ADVANCED=y
+-CONFIG_BSD_DISKLABEL=y
+-# CONFIG_IOSCHED_CFQ is not set
+-# CONFIG_ARCH_MULTI_V7 is not set
+-CONFIG_ARCH_MXS=y
+-CONFIG_PREEMPT=y
+-CONFIG_AEABI=y
+-# CONFIG_OABI_COMPAT is not set
+-CONFIG_ZBOOT_ROM_TEXT=0x0
+-CONFIG_ZBOOT_ROM_BSS=0x0
+-CONFIG_CPU_IDLE=y
+-# CONFIG_CORE_DUMP_DEFAULT_ELF_HEADERS is not set
+-CONFIG_NET=y
+-CONFIG_PACKET=y
+-CONFIG_UNIX=y
+-CONFIG_INET=y
+-CONFIG_IP_MULTICAST=y
+-CONFIG_IP_PNP=y
+-# CONFIG_INET_XFRM_MODE_TRANSPORT is not set
+-# CONFIG_INET_XFRM_MODE_TUNNEL is not set
+-# CONFIG_INET_XFRM_MODE_BEET is not set
+-# CONFIG_INET_LRO is not set
+-# CONFIG_INET_DIAG is not set
+-CONFIG_IPV6=y
+-CONFIG_CAN=m
+-CONFIG_CAN_VCAN=m
+-CONFIG_CAN_FLEXCAN=m
+-CONFIG_BT=m
+-CONFIG_BT_RFCOMM=m
+-CONFIG_BT_RFCOMM_TTY=y
+-CONFIG_BT_BNEP=m
+-CONFIG_BT_BNEP_MC_FILTER=y
+-CONFIG_BT_BNEP_PROTO_FILTER=y
+-CONFIG_BT_HIDP=m
+-CONFIG_BT_HCIBTUSB=m
+-CONFIG_CFG80211=m
+-CONFIG_MAC80211=m
+-CONFIG_MAC80211_RC_PID=y
+-CONFIG_UEVENT_HELPER_PATH="/sbin/hotplug"
+-CONFIG_DEVTMPFS=y
+-CONFIG_DEVTMPFS_MOUNT=y
+-CONFIG_FW_LOADER=m
+-CONFIG_MTD=y
+-CONFIG_MTD_CMDLINE_PARTS=y
+-CONFIG_MTD_BLOCK=y
+-CONFIG_MTD_DATAFLASH=y
+-CONFIG_MTD_M25P80=y
+-# CONFIG_M25PXX_USE_FAST_READ is not set
+-CONFIG_MTD_SST25L=y
+-CONFIG_MTD_NAND=y
+-CONFIG_MTD_NAND_GPMI_NAND=y
+-CONFIG_MTD_UBI=y
+-CONFIG_EEPROM_AT24=y
+-CONFIG_EEPROM_AT25=y
+-CONFIG_SCSI=y
+-CONFIG_BLK_DEV_SD=y
+-CONFIG_CHR_DEV_ST=y
+-CONFIG_BLK_DEV_SR=y
+-CONFIG_CHR_DEV_SG=y
+-CONFIG_CHR_DEV_SCH=y
+-CONFIG_SCSI_MULTI_LUN=y
+-CONFIG_SCSI_LOGGING=y
+-CONFIG_SCSI_SCAN_ASYNC=y
+-CONFIG_NETDEVICES=y
+-CONFIG_RTL8187=m
+-CONFIG_RT2X00=m
+-CONFIG_RT73USB=m
+-CONFIG_ZD1211RW=m
+-CONFIG_INPUT_JOYDEV=y
+-CONFIG_INPUT_EVDEV=y
+-CONFIG_INPUT_TOUCHSCREEN=y
+-CONFIG_INPUT_MISC=y
+-CONFIG_INPUT_UINPUT=m
+-# CONFIG_SERIO_SERPORT is not set
+-CONFIG_VT_HW_CONSOLE_BINDING=y
+-CONFIG_DEVPTS_MULTIPLE_INSTANCES=y
+-# CONFIG_LEGACY_PTYS is not set
+-# CONFIG_DEVKMEM is not set
+-CONFIG_SERIAL_AMBA_PL011=y
+-CONFIG_SERIAL_AMBA_PL011_CONSOLE=y
+-CONFIG_SERIAL_MXS_AUART=y
+-CONFIG_TTY_PRINTK=y
+-# CONFIG_HW_RANDOM is not set
+-CONFIG_I2C=y
+-CONFIG_I2C_CHARDEV=y
+-CONFIG_I2C_MXS=y
+-CONFIG_SPI=y
+-CONFIG_SPI_BITBANG=m
+-CONFIG_SPI_MXS=y
+-CONFIG_SPI_SPIDEV=m
+-CONFIG_GPIO_SYSFS=y
+-CONFIG_HWMON=m
+-CONFIG_WATCHDOG=y
+-CONFIG_STMP3XXX_RTC_WATCHDOG=y
+-CONFIG_REGULATOR=y
+-CONFIG_REGULATOR_FIXED_VOLTAGE=y
+-CONFIG_MEDIA_SUPPORT=m
+-CONFIG_MEDIA_CAMERA_SUPPORT=y
+-CONFIG_FB=y
+-CONFIG_FB_MXS=y
+-CONFIG_BACKLIGHT_LCD_SUPPORT=y
+-CONFIG_LCD_CLASS_DEVICE=y
+-CONFIG_BACKLIGHT_CLASS_DEVICE=y
+-# CONFIG_BACKLIGHT_GENERIC is not set
+-CONFIG_BACKLIGHT_PWM=y
+-CONFIG_FRAMEBUFFER_CONSOLE=y
+-CONFIG_LOGO=y
+-# CONFIG_LOGO_LINUX_MONO is not set
+-# CONFIG_LOGO_LINUX_VGA16 is not set
+-CONFIG_USB=y
+-CONFIG_USB_DEBUG=y
+-CONFIG_USB_ANNOUNCE_NEW_DEVICES=y
+-CONFIG_USB_MON=y
+-CONFIG_USB_EHCI_HCD=y
+-CONFIG_USB_ACM=y
+-CONFIG_USB_PRINTER=y
+-CONFIG_USB_WDM=y
+-CONFIG_USB_STORAGE=y
+-CONFIG_USB_CHIPIDEA=y
+-CONFIG_USB_CHIPIDEA_UDC=y
+-CONFIG_USB_CHIPIDEA_HOST=y
+-CONFIG_USB_MXS_PHY=y
+-CONFIG_USB_GADGET=y
+-CONFIG_USB_GADGET_DEBUG_FILES=y
+-CONFIG_USB_ETH=m
+-CONFIG_MMC=y
+-CONFIG_MMC_MXS=y
+-CONFIG_NEW_LEDS=y
+-CONFIG_LEDS_CLASS=y
+-CONFIG_LEDS_GPIO=y
+-CONFIG_LEDS_TRIGGERS=y
+-CONFIG_LEDS_TRIGGER_TIMER=y
+-CONFIG_LEDS_TRIGGER_ONESHOT=y
+-CONFIG_LEDS_TRIGGER_HEARTBEAT=y
+-CONFIG_LEDS_TRIGGER_BACKLIGHT=y
+-CONFIG_LEDS_TRIGGER_DEFAULT_ON=y
+-CONFIG_RTC_CLASS=y
+-CONFIG_RTC_DRV_STMP=y
+-CONFIG_DMADEVICES=y
+-CONFIG_MXS_DMA=y
+-CONFIG_STAGING=y
+-CONFIG_MXS_LRADC=y
+-CONFIG_IIO=y
+-CONFIG_PWM=y
+-CONFIG_PWM_MXS=y
+-CONFIG_EXT2_FS=y
+-CONFIG_EXT2_FS_XATTR=y
+-CONFIG_EXT2_FS_POSIX_ACL=y
+-CONFIG_EXT2_FS_SECURITY=y
+-CONFIG_EXT2_FS_XIP=y
+-CONFIG_EXT3_FS=y
+-CONFIG_EXT3_FS_POSIX_ACL=y
+-CONFIG_EXT3_FS_SECURITY=y
+-CONFIG_AUTOFS4_FS=y
+-CONFIG_ISO9660_FS=y
+-CONFIG_JOLIET=y
+-CONFIG_ZISOFS=y
+-CONFIG_MSDOS_FS=y
+-CONFIG_VFAT_FS=y
+-CONFIG_TMPFS=y
+-CONFIG_UBIFS_FS=y
+-CONFIG_NFS_FS=y
+-CONFIG_NFS_V4=y
+-CONFIG_ROOT_NFS=y
+-CONFIG_NLS_CODEPAGE_437=y
+-CONFIG_NLS_CODEPAGE_850=y
+-CONFIG_NLS_ISO8859_1=y
+-CONFIG_DEBUG_FS=y
+-# CONFIG_CRYPTO_ANSI_CPRNG is not set
+-# CONFIG_CRYPTO_HW is not set
+-CONFIG_FONTS=y
+-CONFIG_FONT_8x8=y
+diff --git a/configs/armadeus_apf28_defconfig b/configs/armadeus_apf28_defconfig
+index 31fb528..51e05f5 100644
+--- a/configs/armadeus_apf28_defconfig
++++ b/configs/armadeus_apf28_defconfig
+@@ -2,8 +2,8 @@
+ BR2_arm=y
+ BR2_arm926t=y
  
--OPENNTPD_VERSION = 6.2p2
-+OPENNTPD_VERSION = 6.2p3
- OPENNTPD_SITE = http://ftp.openbsd.org/pub/OpenBSD/OpenNTPD
- OPENNTPD_LICENSE = MIT-like, BSD-2-Clause, BSD-3-Clause
- OPENNTPD_LICENSE_FILES = COPYING
--# Patching include/Makefile.am
-+# Need to autoreconf for our libtool patch to apply properly
- OPENNTPD_AUTORECONF = YES
+-# Linux headers same as kernel, a 4.4 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y
++# Linux headers same as kernel, a 4.9 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
  
- # openntpd uses pthread functions for arc4random emulation but forgets
+ # System
+ BR2_TARGET_GENERIC_HOSTNAME="apf28"
+@@ -13,9 +13,8 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.4.30"
+-BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/armadeus/apf28/linux-4.4.config"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.9.64"
++BR2_LINUX_KERNEL_DEFCONFIG="mxs"
+ BR2_LINUX_KERNEL_UIMAGE=y
+ BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x40008000"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
