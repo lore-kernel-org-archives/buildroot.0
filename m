@@ -1,55 +1,93 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 24 Nov 2017 21:36:19 +0100
-Subject: [Buildroot] [git commit] python-cheroot: bump version to 5.10.0
-Message-ID: <20171201205336.075617F90C@busybox.osuosl.org>
+Date: Thu, 23 Nov 2017 22:52:14 +0100
+Subject: [Buildroot] [git commit] package/python-oauthlib: new package
+Message-ID: <20171201205334.9E9587F90C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=43f76947ac2a05f24c3129db1bb690aad65e9474
+commit: https://git.buildroot.net/buildroot/commit/?id=18d54431b3fe3319d67359df916a4e59b82b3c04
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix licence file name and add checksum.
+Needed for python-mwclient version bump to 0.8.6.
 
-Fixes:
-http://autobuild.buildroot.net/results/94d/94dee5b01e0f7693d4e6e05074e7d93e92236e2c
-
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python-cheroot/python-cheroot.hash | 5 +++--
- package/python-cheroot/python-cheroot.mk   | 6 +++---
- 2 files changed, 6 insertions(+), 5 deletions(-)
+ DEVELOPERS                                   |  1 +
+ package/Config.in                            |  1 +
+ package/python-oauthlib/Config.in            |  7 +++++++
+ package/python-oauthlib/python-oauthlib.hash |  4 ++++
+ package/python-oauthlib/python-oauthlib.mk   | 14 ++++++++++++++
+ 5 files changed, 27 insertions(+)
 
-diff --git a/package/python-cheroot/python-cheroot.hash b/package/python-cheroot/python-cheroot.hash
-index 7b309a9..664ad10 100644
---- a/package/python-cheroot/python-cheroot.hash
-+++ b/package/python-cheroot/python-cheroot.hash
-@@ -1,3 +1,4 @@
- # md5 from https://pypi.python.org/pypi/Cheroot/json, sha256 locally computed
--md5	288eb3a6df4964ba0435493d2914da3d  cheroot-5.9.0.tar.gz
--sha256	d8ec06b6e907b911ac5bb626876ee498c289d21f1a638cb2510fc57290567ef5  cheroot-5.9.0.tar.gz
-+md5	d256a0ccd28c3426a7764868e98a9020  cheroot-5.10.0.tar.gz
-+sha256	a408f1b80a3f93a3b49fc330f68eea40d8d30b9b07084f374607d1a5cc2e824f  cheroot-5.10.0.tar.gz
-+sha256  02f4efe6e7dcd218c33cfa065c0552de983b5ad563b053e97697c5abd2ef14f9  LICENSE
-diff --git a/package/python-cheroot/python-cheroot.mk b/package/python-cheroot/python-cheroot.mk
-index d3e056b..07775e5 100644
---- a/package/python-cheroot/python-cheroot.mk
-+++ b/package/python-cheroot/python-cheroot.mk
-@@ -4,11 +4,11 @@
- #
- ################################################################################
- 
--PYTHON_CHEROOT_VERSION = 5.9.0
-+PYTHON_CHEROOT_VERSION = 5.10.0
- PYTHON_CHEROOT_SOURCE = cheroot-$(PYTHON_CHEROOT_VERSION).tar.gz
--PYTHON_CHEROOT_SITE = https://pypi.python.org/packages/df/63/5c5265feb7e02e43d2f3a3c19dbb2d78742b0a2ff237c9e473c77bc23500
-+PYTHON_CHEROOT_SITE = https://pypi.python.org/packages/14/dc/afc41e7f7e797973808d8520e6aef21c4efd00550aa32f5b726327d36be0
- PYTHON_CHEROOT_LICENSE = BSD-3-Clause
--PYTHON_CHEROOT_LICENSE_FILES = LICENSE.md
-+PYTHON_CHEROOT_LICENSE_FILES = LICENSE
- PYTHON_CHEROOT_SETUP_TYPE = setuptools
- PYTHON_CHEROOT_DEPENDENCIES = host-python-setuptools-scm
- 
+diff --git a/DEVELOPERS b/DEVELOPERS
+index fe943d3..2ff00c8 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -322,6 +322,7 @@ F:	package/python-mwclient/
+ F:	package/python-mwscrape/
+ F:	package/python-mwscrape2slob/
+ F:	package/python-mako/
++F:	package/python-oauthlib/
+ F:	package/python-pyicu/
+ F:	package/python-pylru/
+ F:	package/python-slob/
+diff --git a/package/Config.in b/package/Config.in
+index 0f5b7df..66a490d 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -817,6 +817,7 @@ menu "External python modules"
+ 	source "package/python-networkmanager/Config.in"
+ 	source "package/python-nfc/Config.in"
+ 	source "package/python-numpy/Config.in"
++	source "package/python-oauthlib/Config.in"
+ 	source "package/python-paho-mqtt/Config.in"
+ 	source "package/python-pam/Config.in"
+ 	source "package/python-paramiko/Config.in"
+diff --git a/package/python-oauthlib/Config.in b/package/python-oauthlib/Config.in
+new file mode 100644
+index 0000000..982272c
+--- /dev/null
++++ b/package/python-oauthlib/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PYTHON_OAUTHLIB
++	bool "python-oauthlib"
++	help
++	  A generic, spec-compliant, thorough implementation of the OAuth
++	  request-signing logic.
++
++	  https://github.com/idan/oauthlib
+diff --git a/package/python-oauthlib/python-oauthlib.hash b/package/python-oauthlib/python-oauthlib.hash
+new file mode 100644
+index 0000000..f8e1324
+--- /dev/null
++++ b/package/python-oauthlib/python-oauthlib.hash
+@@ -0,0 +1,4 @@
++# md5 from https://pypi.python.org/pypi/oauthlib/json, sha256 locally computed
++md5	277a9a966cc8c72e492b4eeb41332445  oauthlib-2.0.6.tar.gz
++sha256	ce57b501e906ff4f614e71c36a3ab9eacbb96d35c24d1970d2539bbc3ec70ce1  oauthlib-2.0.6.tar.gz
++sha256	9e1ae8725f5815738dadb6cbb09f450453d94e07c7b5efaee864f546a6209a95  LICENSE
+diff --git a/package/python-oauthlib/python-oauthlib.mk b/package/python-oauthlib/python-oauthlib.mk
+new file mode 100644
+index 0000000..ab39800
+--- /dev/null
++++ b/package/python-oauthlib/python-oauthlib.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-oauthlib
++#
++################################################################################
++
++PYTHON_OAUTHLIB_VERSION = 2.0.6
++PYTHON_OAUTHLIB_SOURCE = oauthlib-$(PYTHON_OAUTHLIB_VERSION).tar.gz
++PYTHON_OAUTHLIB_SITE = https://pypi.python.org/packages/a5/8a/212e9b47fb54be109f3ff0684165bb38c51117f34e175c379fce5c7df754
++PYTHON_OAUTHLIB_SETUP_TYPE = setuptools
++PYTHON_OAUTHLIB_LICENSE = BSD-3-Clause
++PYTHON_OAUTHLIB_LICENSE_FILES = LICENSE
++
++$(eval $(python-package))
