@@ -1,241 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 23 Nov 2017 20:58:58 +0100
-Subject: [Buildroot] [git commit branch/next] configs/armadeus_apf28: bump
- kernel version to latest 4.9 LTS
-Message-ID: <20171123195142.6BCB48082D@busybox.osuosl.org>
+Date: Thu, 23 Nov 2017 20:59:08 +0100
+Subject: [Buildroot] [PATCH] configs/armadeus_apf28: bump kernel version
+ to latest 4.9 LTS
+In-Reply-To: <1511430584-4670-1-git-send-email-julien.boibessot@free.fr>
+References: <1511430584-4670-1-git-send-email-julien.boibessot@free.fr>
+Message-ID: <20171123205908.1e9449e5@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f56422d7a08a819539b375f4187e9d50f0204678
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hello,
 
-As there is now a defconfig inside kernel sources for mxs platforms, use it.
+On Thu, 23 Nov 2017 10:49:44 +0100, julien.boibessot at free.fr wrote:
+> From: Julien BOIBESSOT <julien.boibessot@armadeus.com>
+> 
+> As there is now a defconfig inside kernel sources for mxs platforms, use it.
+> 
+> Signed-off-by: Julien BOIBESSOT <julien.boibessot@armadeus.com>
+> ---
+>  board/armadeus/apf28/linux-4.4.config | 185 ----------------------------------
+>  configs/armadeus_apf28_defconfig      |   9 +-
+>  2 files changed, 4 insertions(+), 190 deletions(-)
+>  delete mode 100644 board/armadeus/apf28/linux-4.4.config
 
-Signed-off-by: Julien BOIBESSOT <julien.boibessot@armadeus.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- board/armadeus/apf28/linux-4.4.config | 185 ----------------------------------
- configs/armadeus_apf28_defconfig      |   9 +-
- 2 files changed, 4 insertions(+), 190 deletions(-)
+Applied to next, thanks.
 
-diff --git a/board/armadeus/apf28/linux-4.4.config b/board/armadeus/apf28/linux-4.4.config
-deleted file mode 100644
-index cf389d8..0000000
---- a/board/armadeus/apf28/linux-4.4.config
-+++ /dev/null
-@@ -1,185 +0,0 @@
--# CONFIG_LOCALVERSION_AUTO is not set
--# CONFIG_SWAP is not set
--CONFIG_SYSVIPC=y
--CONFIG_POSIX_MQUEUE=y
--CONFIG_LOG_BUF_SHIFT=14
--CONFIG_EMBEDDED=y
--# CONFIG_COMPAT_BRK is not set
--CONFIG_SLAB=y
--CONFIG_PROFILING=y
--CONFIG_OPROFILE=y
--CONFIG_MODULES=y
--CONFIG_MODULE_UNLOAD=y
--# CONFIG_BLK_DEV_BSG is not set
--CONFIG_PARTITION_ADVANCED=y
--CONFIG_BSD_DISKLABEL=y
--# CONFIG_IOSCHED_CFQ is not set
--# CONFIG_ARCH_MULTI_V7 is not set
--CONFIG_ARCH_MXS=y
--CONFIG_PREEMPT=y
--CONFIG_AEABI=y
--# CONFIG_OABI_COMPAT is not set
--CONFIG_ZBOOT_ROM_TEXT=0x0
--CONFIG_ZBOOT_ROM_BSS=0x0
--CONFIG_CPU_IDLE=y
--# CONFIG_CORE_DUMP_DEFAULT_ELF_HEADERS is not set
--CONFIG_NET=y
--CONFIG_PACKET=y
--CONFIG_UNIX=y
--CONFIG_INET=y
--CONFIG_IP_MULTICAST=y
--CONFIG_IP_PNP=y
--# CONFIG_INET_XFRM_MODE_TRANSPORT is not set
--# CONFIG_INET_XFRM_MODE_TUNNEL is not set
--# CONFIG_INET_XFRM_MODE_BEET is not set
--# CONFIG_INET_LRO is not set
--# CONFIG_INET_DIAG is not set
--CONFIG_IPV6=y
--CONFIG_CAN=m
--CONFIG_CAN_VCAN=m
--CONFIG_CAN_FLEXCAN=m
--CONFIG_BT=m
--CONFIG_BT_RFCOMM=m
--CONFIG_BT_RFCOMM_TTY=y
--CONFIG_BT_BNEP=m
--CONFIG_BT_BNEP_MC_FILTER=y
--CONFIG_BT_BNEP_PROTO_FILTER=y
--CONFIG_BT_HIDP=m
--CONFIG_BT_HCIBTUSB=m
--CONFIG_CFG80211=m
--CONFIG_MAC80211=m
--CONFIG_MAC80211_RC_PID=y
--CONFIG_UEVENT_HELPER_PATH="/sbin/hotplug"
--CONFIG_DEVTMPFS=y
--CONFIG_DEVTMPFS_MOUNT=y
--CONFIG_FW_LOADER=m
--CONFIG_MTD=y
--CONFIG_MTD_CMDLINE_PARTS=y
--CONFIG_MTD_BLOCK=y
--CONFIG_MTD_DATAFLASH=y
--CONFIG_MTD_M25P80=y
--# CONFIG_M25PXX_USE_FAST_READ is not set
--CONFIG_MTD_SST25L=y
--CONFIG_MTD_NAND=y
--CONFIG_MTD_NAND_GPMI_NAND=y
--CONFIG_MTD_UBI=y
--CONFIG_EEPROM_AT24=y
--CONFIG_EEPROM_AT25=y
--CONFIG_SCSI=y
--CONFIG_BLK_DEV_SD=y
--CONFIG_CHR_DEV_ST=y
--CONFIG_BLK_DEV_SR=y
--CONFIG_CHR_DEV_SG=y
--CONFIG_CHR_DEV_SCH=y
--CONFIG_SCSI_MULTI_LUN=y
--CONFIG_SCSI_LOGGING=y
--CONFIG_SCSI_SCAN_ASYNC=y
--CONFIG_NETDEVICES=y
--CONFIG_RTL8187=m
--CONFIG_RT2X00=m
--CONFIG_RT73USB=m
--CONFIG_ZD1211RW=m
--CONFIG_INPUT_JOYDEV=y
--CONFIG_INPUT_EVDEV=y
--CONFIG_INPUT_TOUCHSCREEN=y
--CONFIG_INPUT_MISC=y
--CONFIG_INPUT_UINPUT=m
--# CONFIG_SERIO_SERPORT is not set
--CONFIG_VT_HW_CONSOLE_BINDING=y
--CONFIG_DEVPTS_MULTIPLE_INSTANCES=y
--# CONFIG_LEGACY_PTYS is not set
--# CONFIG_DEVKMEM is not set
--CONFIG_SERIAL_AMBA_PL011=y
--CONFIG_SERIAL_AMBA_PL011_CONSOLE=y
--CONFIG_SERIAL_MXS_AUART=y
--CONFIG_TTY_PRINTK=y
--# CONFIG_HW_RANDOM is not set
--CONFIG_I2C=y
--CONFIG_I2C_CHARDEV=y
--CONFIG_I2C_MXS=y
--CONFIG_SPI=y
--CONFIG_SPI_BITBANG=m
--CONFIG_SPI_MXS=y
--CONFIG_SPI_SPIDEV=m
--CONFIG_GPIO_SYSFS=y
--CONFIG_HWMON=m
--CONFIG_WATCHDOG=y
--CONFIG_STMP3XXX_RTC_WATCHDOG=y
--CONFIG_REGULATOR=y
--CONFIG_REGULATOR_FIXED_VOLTAGE=y
--CONFIG_MEDIA_SUPPORT=m
--CONFIG_MEDIA_CAMERA_SUPPORT=y
--CONFIG_FB=y
--CONFIG_FB_MXS=y
--CONFIG_BACKLIGHT_LCD_SUPPORT=y
--CONFIG_LCD_CLASS_DEVICE=y
--CONFIG_BACKLIGHT_CLASS_DEVICE=y
--# CONFIG_BACKLIGHT_GENERIC is not set
--CONFIG_BACKLIGHT_PWM=y
--CONFIG_FRAMEBUFFER_CONSOLE=y
--CONFIG_LOGO=y
--# CONFIG_LOGO_LINUX_MONO is not set
--# CONFIG_LOGO_LINUX_VGA16 is not set
--CONFIG_USB=y
--CONFIG_USB_DEBUG=y
--CONFIG_USB_ANNOUNCE_NEW_DEVICES=y
--CONFIG_USB_MON=y
--CONFIG_USB_EHCI_HCD=y
--CONFIG_USB_ACM=y
--CONFIG_USB_PRINTER=y
--CONFIG_USB_WDM=y
--CONFIG_USB_STORAGE=y
--CONFIG_USB_CHIPIDEA=y
--CONFIG_USB_CHIPIDEA_UDC=y
--CONFIG_USB_CHIPIDEA_HOST=y
--CONFIG_USB_MXS_PHY=y
--CONFIG_USB_GADGET=y
--CONFIG_USB_GADGET_DEBUG_FILES=y
--CONFIG_USB_ETH=m
--CONFIG_MMC=y
--CONFIG_MMC_MXS=y
--CONFIG_NEW_LEDS=y
--CONFIG_LEDS_CLASS=y
--CONFIG_LEDS_GPIO=y
--CONFIG_LEDS_TRIGGERS=y
--CONFIG_LEDS_TRIGGER_TIMER=y
--CONFIG_LEDS_TRIGGER_ONESHOT=y
--CONFIG_LEDS_TRIGGER_HEARTBEAT=y
--CONFIG_LEDS_TRIGGER_BACKLIGHT=y
--CONFIG_LEDS_TRIGGER_DEFAULT_ON=y
--CONFIG_RTC_CLASS=y
--CONFIG_RTC_DRV_STMP=y
--CONFIG_DMADEVICES=y
--CONFIG_MXS_DMA=y
--CONFIG_STAGING=y
--CONFIG_MXS_LRADC=y
--CONFIG_IIO=y
--CONFIG_PWM=y
--CONFIG_PWM_MXS=y
--CONFIG_EXT2_FS=y
--CONFIG_EXT2_FS_XATTR=y
--CONFIG_EXT2_FS_POSIX_ACL=y
--CONFIG_EXT2_FS_SECURITY=y
--CONFIG_EXT2_FS_XIP=y
--CONFIG_EXT3_FS=y
--CONFIG_EXT3_FS_POSIX_ACL=y
--CONFIG_EXT3_FS_SECURITY=y
--CONFIG_AUTOFS4_FS=y
--CONFIG_ISO9660_FS=y
--CONFIG_JOLIET=y
--CONFIG_ZISOFS=y
--CONFIG_MSDOS_FS=y
--CONFIG_VFAT_FS=y
--CONFIG_TMPFS=y
--CONFIG_UBIFS_FS=y
--CONFIG_NFS_FS=y
--CONFIG_NFS_V4=y
--CONFIG_ROOT_NFS=y
--CONFIG_NLS_CODEPAGE_437=y
--CONFIG_NLS_CODEPAGE_850=y
--CONFIG_NLS_ISO8859_1=y
--CONFIG_DEBUG_FS=y
--# CONFIG_CRYPTO_ANSI_CPRNG is not set
--# CONFIG_CRYPTO_HW is not set
--CONFIG_FONTS=y
--CONFIG_FONT_8x8=y
-diff --git a/configs/armadeus_apf28_defconfig b/configs/armadeus_apf28_defconfig
-index 31fb528..51e05f5 100644
---- a/configs/armadeus_apf28_defconfig
-+++ b/configs/armadeus_apf28_defconfig
-@@ -2,8 +2,8 @@
- BR2_arm=y
- BR2_arm926t=y
- 
--# Linux headers same as kernel, a 4.4 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y
-+# Linux headers same as kernel, a 4.9 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
- 
- # System
- BR2_TARGET_GENERIC_HOSTNAME="apf28"
-@@ -13,9 +13,8 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.4.30"
--BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
--BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/armadeus/apf28/linux-4.4.config"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.9.64"
-+BR2_LINUX_KERNEL_DEFCONFIG="mxs"
- BR2_LINUX_KERNEL_UIMAGE=y
- BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x40008000"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
