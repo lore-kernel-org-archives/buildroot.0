@@ -1,53 +1,51 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Thu, 23 Nov 2017 19:47:11 +0100
-Subject: [Buildroot] [PATCH v1] qt5connectivity: fix examples compile
- without Qt gui module
-In-Reply-To: <20171122221248.45984b74@windsurf.lan>
-References: <20171118204057.1143-1-ps.report@gmx.net>
- <20171122221248.45984b74@windsurf.lan>
-Message-ID: <20171123194711.39475fd9@gmx.net>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Thu, 23 Nov 2017 20:36:41 +0100
+Subject: [Buildroot] [PATCH] shairport-sync: security bump to version 3.1.4
+Message-ID: <20171123193641.6609-1-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+The bundled tinysvcmdns library is affected by CVE-2017-12087 [1]:
 
-On Wed, 22 Nov 2017 22:12:48 +0100, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
+> An exploitable heap overflow vulnerability exists in the tinysvcmdns library
+> version 2016-07-18. A specially crafted packet can make the library overwrite
+> an arbitrary amount of data on the heap with attacker controlled values. An
+> attacker needs send a dns packet to trigger this vulnerability.
 
-> Hello,
-> 
-> On Sat, 18 Nov 2017 21:40:57 +0100, Peter Seiderer wrote:
-> > Add upstream suggested patch to fix heartrate-server (needs only
-> > core and bluetooth modules).
-> > 
-> > Fixes [1]:
-> > 
-> >   make[3]: Entering directory `.../build/qt5connectivity-5.9.2/examples/bluetooth'
-> >   cd heartrate-server/ && ( test -e Makefile || .../output/host/bin/qmake -o Makefile .../build/qt5connectivity-5.9.2/examples/bluetooth/heartrate-server/heartrate-server.pro ) && /usr/bin/make -f Makefile
-> >   Project ERROR: Unknown module(s) in QT: gui
-> >   make[3]: *** [sub-heartrate-server-make_first] Error 3
-> >   make[3]: Leaving directory `.../build/qt5connectivity-5.9.2/examples/bluetooth'
-> > 
-> > [1] http://autobuild.buildroot.net/results/387a21fe7fc672e5668b0afddc138cbb7197d234
-> > 
-> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> > ---
-> >  ...rtrate-server-needs-only-core-and-bluetoo.patch | 32 ++++++++++++++++++++++
-> >  1 file changed, 32 insertions(+)
-> >  create mode 100644 package/qt5/qt5connectivity/0001-Example-heartrate-server-needs-only-core-and-bluetoo.patch  
-> 
-> I've applied to master, but after moving the patch to a 5.9.2
-> subfolder. Indeed, the build issue, and therefore the patch, only apply
-> to Qt 5.9 and not Qt 5.6.
+shairport-sync has incorparated upstreams fixes in [2].
 
-Arg, sorry for messing it up, thanks for fixing it...
+[1] https://bugs.launchpad.net/bugs/cve/2017-12087
+[2] https://github.com/mikebrady/shairport-sync/commit/1dbdf94811b8315705dbac5ba9199d417231c5d3
 
-Regards,
-Peter
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+---
+ package/shairport-sync/shairport-sync.hash | 2 +-
+ package/shairport-sync/shairport-sync.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> 
-> Thanks!
-> 
-> Thomas
+diff --git a/package/shairport-sync/shairport-sync.hash b/package/shairport-sync/shairport-sync.hash
+index eac39138db..08f22a0cf3 100644
+--- a/package/shairport-sync/shairport-sync.hash
++++ b/package/shairport-sync/shairport-sync.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  dd0484d7e8ee7631aee78c78b3762abbdba7ec3f2ee8cd6c1e361544c1414da3  shairport-sync-3.1.3.tar.gz
++sha256  4c5a2ab40ef49896f5b6e59b20df4f621ebce47ee64d8571336f59820ae66379  shairport-sync-3.1.4.tar.gz
+diff --git a/package/shairport-sync/shairport-sync.mk b/package/shairport-sync/shairport-sync.mk
+index acca45c121..63289d4398 100644
+--- a/package/shairport-sync/shairport-sync.mk
++++ b/package/shairport-sync/shairport-sync.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SHAIRPORT_SYNC_VERSION = 3.1.3
++SHAIRPORT_SYNC_VERSION = 3.1.4
+ SHAIRPORT_SYNC_SITE = $(call github,mikebrady,shairport-sync,$(SHAIRPORT_SYNC_VERSION))
+ 
+ SHAIRPORT_SYNC_LICENSE = MIT, BSD-3-Clause
+-- 
+2.15.0
