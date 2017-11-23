@@ -1,55 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 23 Nov 2017 21:12:50 +0100
-Subject: [Buildroot] [git commit] configs/imx6-sabreauto: Bump kernel and
- U-Boot versions
-Message-ID: <20171201205333.DF6C47FAAC@busybox.osuosl.org>
+Date: Thu, 23 Nov 2017 21:31:18 +0100
+Subject: [Buildroot] [git commit] netcat-openbsd: add source and license
+ hashes
+Message-ID: <20171201205333.F10E27FAAC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=85739a08046fdc708d42378f2f79532e2382101c
+commit: https://git.buildroot.net/buildroot/commit/?id=af9ef95fd9626118f111ffea8efb2a5853c9bcc6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Bump kernel to version 4.14 and U-Boot to 2017.11.
-
-Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
+Signed-off-by: Ga??l PORTAY <gael.portay@savoirfairelinux.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- configs/imx6-sabreauto_defconfig | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ package/netcat-openbsd/netcat-openbsd.hash | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/configs/imx6-sabreauto_defconfig b/configs/imx6-sabreauto_defconfig
-index f81964c..d9a08bb 100644
---- a/configs/imx6-sabreauto_defconfig
-+++ b/configs/imx6-sabreauto_defconfig
-@@ -4,8 +4,8 @@ BR2_ARM_ENABLE_NEON=y
- BR2_ARM_ENABLE_VFP=y
- BR2_ARM_FPU_VFPV3=y
- 
--# Linux headers same as kernel, a 4.13 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_13=y
-+# Linux headers same as kernel, a 4.14 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
- 
- # System
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc3"
-@@ -24,7 +24,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="mx6sabreauto"
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.09"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.11"
- BR2_TARGET_UBOOT_FORMAT_IMG=y
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="SPL"
-@@ -32,7 +32,7 @@ BR2_TARGET_UBOOT_SPL_NAME="SPL"
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.13.3"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.14"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-sabreauto imx6dl-sabreauto imx6qp-sabreauto"
+diff --git a/package/netcat-openbsd/netcat-openbsd.hash b/package/netcat-openbsd/netcat-openbsd.hash
+new file mode 100644
+index 0000000..e90a41a
+--- /dev/null
++++ b/package/netcat-openbsd/netcat-openbsd.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256 f587c02139aedb0bae12fdaef94f8c00649a0b4d603b5a22612e42cb317ba7cf netcat-openbsd-debian_1.178-3.tar.gz
++sha256 e2e86d58c38f044a49f51e45515747585db58a2305419c73323eaad88fcaef5c debian/copyright
