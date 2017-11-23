@@ -1,64 +1,50 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Thu, 23 Nov 2017 11:55:01 +0100
-Subject: [Buildroot] [PATCH 3/3] python-cherrypy: bump version to 12.0.1
-In-Reply-To: <20171123105501.14505-1-yegorslists@googlemail.com>
-References: <20171123105501.14505-1-yegorslists@googlemail.com>
-Message-ID: <20171123105501.14505-3-yegorslists@googlemail.com>
+From: John Keeping <john@metanate.com>
+Date: Thu, 23 Nov 2017 12:26:31 +0000
+Subject: [Buildroot] [PATCH] systemd: set time epoch for reproducible
+ builds
+In-Reply-To: <20171122221639.40f60340@windsurf.lan>
+References: <20171116170316.19081-1-john@metanate.com>
+ <20171122221639.40f60340@windsurf.lan>
+Message-ID: <20171123122631.52e7378f.john@metanate.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+On Wed, 22 Nov 2017 22:16:39 +0100, Thomas Petazzoni wrote:
 
-Add licence file checksum and new runtime dependencies.
+> On Thu, 16 Nov 2017 17:03:16 +0000, John Keeping wrote:
+> > Systemd embeds a timestamp which is used to impose a minimum bound on
+> > the system time during boot.  Normally this comes from stat'ing the NEWS
+> > file included with the systemd source, but this makes the build
+> > non-reproducible.  Pass in $SOURCE_DATE_EPOCH to use a deterministic
+> > timestamp when reproducible builds are enabled.
+> > 
+> > Signed-off-by: John Keeping <john@metanate.com>
+> > ---
+> >  package/systemd/systemd.mk | 5 +++++
+> >  1 file changed, 5 insertions(+)  
+> 
+> Following the feedback from Peter Korsgaard and myself, and the lack of
+> additional justification, I've marked this patch as "Rejected" in our
+> patch tracking system.
+> 
+> John: don't hesitate to get back to us with a more detailed explanation
+> of the issue if you have not been convinced by Peter's explantion and
+> mine.
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/python-cherrypy/Config.in            | 1 +
- package/python-cherrypy/python-cherrypy.hash | 5 +++--
- package/python-cherrypy/python-cherrypy.mk   | 4 ++--
- 3 files changed, 6 insertions(+), 4 deletions(-)
+I'm convinced!
 
-diff --git a/package/python-cherrypy/Config.in b/package/python-cherrypy/Config.in
-index c04997269b..622dd1f49b 100644
---- a/package/python-cherrypy/Config.in
-+++ b/package/python-cherrypy/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_PYTHON_CHERRYPY
- 	bool "python-cherrypy"
- 	select BR2_PACKAGE_PYTHON_CHEROOT # runtime
-+	select BR2_PACKAGE_PYTHON_JARACO_CLASSES # runtime
- 	select BR2_PACKAGE_PYTHON_PORTEND # runtime
- 	select BR2_PACKAGE_PYTHON_PYEXPAT if BR2_PACKAGE_PYTHON # runtime
- 	select BR2_PACKAGE_PYTHON3_PYEXPAT if BR2_PACKAGE_PYTHON3 # runtime
-diff --git a/package/python-cherrypy/python-cherrypy.hash b/package/python-cherrypy/python-cherrypy.hash
-index ac3b982ba8..d8f97af0f7 100644
---- a/package/python-cherrypy/python-cherrypy.hash
-+++ b/package/python-cherrypy/python-cherrypy.hash
-@@ -1,3 +1,4 @@
- # md5 from https://pypi.python.org/pypi/CherryPy/json, sha256 locally computed
--md5	105cbcd4f7cd139ab4107f1b0e39afe3  CherryPy-10.2.2.tar.gz
--sha256	32d93334df765c7fd5d22815ab643333e850f0cc4f6d51fee62a68f23eea8ff8  CherryPy-10.2.2.tar.gz
-+md5	e21fd0c5706504a8f26c46d808a14255  CherryPy-12.0.1.tar.gz
-+sha256	6a3a90a43b1e05bd4634c60acfdcf34efe74f9f8746aca14dbe95a9b69db30ea  CherryPy-12.0.1.tar.gz
-+sha256  02f4efe6e7dcd218c33cfa065c0552de983b5ad563b053e97697c5abd2ef14f9  LICENSE.md
-diff --git a/package/python-cherrypy/python-cherrypy.mk b/package/python-cherrypy/python-cherrypy.mk
-index 2820b69828..72b17bc876 100644
---- a/package/python-cherrypy/python-cherrypy.mk
-+++ b/package/python-cherrypy/python-cherrypy.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_CHERRYPY_VERSION = 10.2.2
-+PYTHON_CHERRYPY_VERSION = 12.0.1
- PYTHON_CHERRYPY_SOURCE = CherryPy-$(PYTHON_CHERRYPY_VERSION).tar.gz
--PYTHON_CHERRYPY_SITE = https://pypi.python.org/packages/a2/de/dddea0c4d4be436724bfc2d1486c99368541d93c269bfa2a7fa3d132021e
-+PYTHON_CHERRYPY_SITE = https://pypi.python.org/packages/be/d8/a8ef56bfe1c39d466b8d55b496b64459cc43dec71361d88edf904901637f
- PYTHON_CHERRYPY_LICENSE = BSD-3-Clause
- PYTHON_CHERRYPY_LICENSE_FILES = LICENSE.md
- PYTHON_CHERRYPY_SETUP_TYPE = setuptools
--- 
-2.11.0
+The original problem I was investigating wasn't actually reproducible
+builds, but was related to the time set by systemd when the hardware
+clock has an invalid time.  It seems that e2fsck will update the
+superblock timestamp when it is in the future, which means that
+programming an ext4 filesystem image will trigger
+systemd-fsck-root.service to attempt a reboot halfway through the first
+boot.
+
+I've solved this by setting options.broken_system_clock in e2fsck.conf,
+but not before going down the root of trying to get systemd and the
+rootfs to agree on a timestamp, which resulted in this patch to make the
+timestamp included in systemd consistent with the rest of buildroot.
