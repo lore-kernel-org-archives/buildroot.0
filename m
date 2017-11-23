@@ -1,34 +1,32 @@
-From: =?iso-8859-1?Q?Ga=EBl?= PORTAY <gael.portay@savoirfairelinux.com>
-Date: Thu, 23 Nov 2017 16:07:34 -0500
-Subject: [Buildroot] [PATCH] netcat-openbsd: add source and license
- hashes
-In-Reply-To: <20171123213242.417dbb47@windsurf.lan>
-References: <20171119015458.6725-1-gael.portay@savoirfairelinux.com>
- <20171123213242.417dbb47@windsurf.lan>
-Message-ID: <20171123210734.z2n7xeretrwy2tdu@archlinux>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Thu, 23 Nov 2017 22:10:48 +0100
+Subject: [Buildroot] [PATCH 2/2] linux: bump default to version 4.13.15
+In-Reply-To: <20171123211048.23370-1-bernd.kuhls@t-online.de>
+References: <20171123211048.23370-1-bernd.kuhls@t-online.de>
+Message-ID: <20171123211048.23370-2-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ linux/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On Thu, Nov 23, 2017 at 09:32:42PM +0100, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Sat, 18 Nov 2017 20:54:58 -0500, Ga?l PORTAY wrote:
-> > Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
-> > ---
-> > Hi,
-> 
-> Applied to next, thanks.
-> 
-> Thomas
-> -- 
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
-
-Thanks,
-Gael
+diff --git a/linux/Config.in b/linux/Config.in
+index 1e8a2cb79d..5c448f26bb 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -116,7 +116,7 @@ endif
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "4.13.13" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "4.13.15" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "v4.4.83-cip8" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+-- 
+2.11.0
