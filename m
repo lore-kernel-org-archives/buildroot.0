@@ -1,37 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 23 Nov 2017 22:46:04 +0100
-Subject: [Buildroot] [git commit] linux-headers: bump 4.{4, 9, 13}.x series
-Message-ID: <20171123213851.6E68F8018F@busybox.osuosl.org>
+Date: Thu, 23 Nov 2017 22:46:06 +0100
+Subject: [Buildroot] [git commit] linux: bump default to version 4.13.15
+Message-ID: <20171123213851.7D3C58012F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ee6840166fb6ce195547cc1f9a0417ac1d611b19
+commit: https://git.buildroot.net/buildroot/commit/?id=fe88e96e4671932dd9d3d7d98ed9995f08205ae2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/linux-headers/Config.in.host | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ linux/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 5cbcbfc..3091100 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -244,10 +244,10 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.10.107"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.12.74"	if BR2_KERNEL_HEADERS_3_12
- 	default "4.1.45"	if BR2_KERNEL_HEADERS_4_1
--	default "4.4.98"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.62"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.4.100"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.9.64"	if BR2_KERNEL_HEADERS_4_9
- 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
- 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
- 	default "4.12.14"	if BR2_KERNEL_HEADERS_4_12
--	default "4.13.13"	if BR2_KERNEL_HEADERS_4_13
-+	default "4.13.15"	if BR2_KERNEL_HEADERS_4_13
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/linux/Config.in b/linux/Config.in
+index 1e8a2cb..5c448f2 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -116,7 +116,7 @@ endif
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "4.13.13" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "4.13.15" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "v4.4.83-cip8" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
