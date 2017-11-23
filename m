@@ -1,32 +1,146 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 23 Nov 2017 22:46:06 +0100
-Subject: [Buildroot] [git commit] linux: bump default to version 4.13.15
-Message-ID: <20171123213851.7D3C58012F@busybox.osuosl.org>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Thu, 23 Nov 2017 22:47:49 +0100
+Subject: [Buildroot] [PATCH 1/1] qt5cinex: depends also on
+ qt5quickcontrols
+In-Reply-To: <20171123222831.7849a0eb@gmx.net>
+References: <1510677027-24076-1-git-send-email-giulio.benetti@micronovasrl.com>
+ <e8c172b8-f2ec-ced1-dda8-236d0d945b12@micronovasrl.com>
+ <20171114165808.akqens5j5obw2n5c@tarshish>
+ <32a0057b-1840-ef45-c199-9da6b14ae09c@micronovasrl.com>
+ <20171123214546.7e982b20@windsurf.lan> <20171123222831.7849a0eb@gmx.net>
+Message-ID: <aa2bd54f-fd9b-b3ed-0d77-cd6415a4bfb1@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fe88e96e4671932dd9d3d7d98ed9995f08205ae2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello everybody,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- linux/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Il 23/11/2017 22:28, Peter Seiderer ha scritto:
+> Hello *,
+> 
+> On Thu, 23 Nov 2017 21:45:46 +0100, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
+> 
+>> Hello,
+>>
+>> On Tue, 14 Nov 2017 18:03:53 +0100, Giulio Benetti wrote:
+>>> Sorry, my mistake.
+>>> It installed correctly on STAGING_DIR, but not in TARGET_DIR.
+>>> This why it compiled fine, but on target it didn't find that
+>>> libQtQuick.so library.
+>>> This is a problem on building Qt5 I've noticed.
+>>>
+>>> If I build first time Qt5 with few features,
+>>> than select other more features,
+>>> those can be built partially and installed partially too.
+>>>
+>>> To reproduce you can build qt5base.
+>>> After that, select qt5cinex,
+>>> then you should find that libraries are in STAGING_DIR but not in
+>>> TARGET_DIR.
+>>>
+>>> So to have it working properly you have to rm and rebuild qt5base and
+>>> qt5declarative from beginning.
+>>>
+>>> Did someone else noticed this?
+>>
+>> So in the end, is your patch needed ?
+>>
+>> Peter (Seiderer), could you review this Qt5 related patch ? Thanks!
+> 
+> No qml expert, but a quick search for 'import QtQuick.Controls' (needed for usage of qt5quickcontrols) did
+> not yield any results:
+> 
+> 	$ wget http://quitcoding.com/download/Qt5_CinematicExperience_rpi_1.0.tgz
+> 	$ wget http://quitcoding.com/download/Qt5_CinematicExperience_1.0.tgz
+> 	$ tar -xvzf Qt5_CinematicExperience_1.0.tgz
+> 	$ tar -xvzf Qt5_CinematicExperience_rpi_1.0.tgz
+> 	$ find . -name "*.qml" | xargs grep import
+> 
+> ./Qt5_CinematicExperience_1.0/content/CurtainEffect.qml:import QtQuick 2.0
+> ./Qt5_CinematicExperience_1.0/content/InfoView.qml:import QtQuick 2.0
+> ./Qt5_CinematicExperience_1.0/content/Switch.qml:import QtQuick 2.0
+> ./Qt5_CinematicExperience_1.0/content/Switch.qml:import QtQuick.Particles 2.0
+> ./Qt5_CinematicExperience_1.0/content/DetailsView.qml:import QtQuick 2.0
+> ./Qt5_CinematicExperience_1.0/content/InfoViewItem.qml:import QtQuick 2.0
+> ./Qt5_CinematicExperience_1.0/content/Background.qml:import QtQuick 2.0
+> ./Qt5_CinematicExperience_1.0/content/Background.qml:import QtQuick.Particles 2.0
+> ./Qt5_CinematicExperience_1.0/content/RatingsItem.qml:import QtQuick 2.0
+> ./Qt5_CinematicExperience_1.0/content/DelegateItem.qml:import QtQuick 2.0
+> ./Qt5_CinematicExperience_1.0/content/MoviesModel.qml:import QtQuick 2.0
+> ./Qt5_CinematicExperience_1.0/content/SettingsView.qml:import QtQuick 2.0
+> ./Qt5_CinematicExperience_1.0/content/MainView.qml:import QtQuick 2.0
+> ./Qt5_CinematicExperience_1.0/content/MainView.qml:import QtQuick.Particles 2.0
+> ./Qt5_CinematicExperience_1.0/content/MainView.qml:import QtGraphicalEffects 1.0
+> ./Qt5_CinematicExperience_1.0/content/Button.qml:import QtQuick 2.0
+> ./Qt5_CinematicExperience_1.0/content/Button.qml:import QtQuick.Particles 2.0
+> ./Qt5_CinematicExperience_1.0/Qt5_CinematicExperience.qml:import QtQuick 2.0
+> ./Qt5_CinematicExperience_1.0/Qt5_CinematicExperience.qml:import "content"
+> ./Qt5_CinematicExperience_rpi_1.0/content/CurtainEffect.qml:import QtQuick 2.0
+> ./Qt5_CinematicExperience_rpi_1.0/content/InfoView.qml:import QtQuick 2.0
+> ./Qt5_CinematicExperience_rpi_1.0/content/Switch.qml:import QtQuick 2.0
+> ./Qt5_CinematicExperience_rpi_1.0/content/Switch.qml:import QtQuick.Particles 2.0
+> ./Qt5_CinematicExperience_rpi_1.0/content/DetailsView.qml:import QtQuick 2.0
+> ./Qt5_CinematicExperience_rpi_1.0/content/InfoViewItem.qml:import QtQuick 2.0
+> ./Qt5_CinematicExperience_rpi_1.0/content/Background.qml:import QtQuick 2.0
+> ./Qt5_CinematicExperience_rpi_1.0/content/Background.qml:import QtQuick.Particles 2.0
+> ./Qt5_CinematicExperience_rpi_1.0/content/RatingsItem.qml:import QtQuick 2.0
+> ./Qt5_CinematicExperience_rpi_1.0/content/FpsItem.qml:import QtQuick 2.0
+> ./Qt5_CinematicExperience_rpi_1.0/content/DelegateItem.qml:import QtQuick 2.0
+> ./Qt5_CinematicExperience_rpi_1.0/content/MoviesModel.qml:import QtQuick 2.0
+> ./Qt5_CinematicExperience_rpi_1.0/content/SettingsView.qml:import QtQuick 2.0
+> ./Qt5_CinematicExperience_rpi_1.0/content/MainView.qml:import QtQuick 2.0
+> ./Qt5_CinematicExperience_rpi_1.0/content/MainView.qml:import QtQuick.Particles 2.0
+> ./Qt5_CinematicExperience_rpi_1.0/content/MainView.qml:import QtGraphicalEffects 1.0
+> ./Qt5_CinematicExperience_rpi_1.0/content/Button.qml:import QtQuick 2.0
+> ./Qt5_CinematicExperience_rpi_1.0/content/Button.qml:import QtQuick.Particles 2.0
+> ./Qt5_CinematicExperience_rpi_1.0/Qt5_CinematicExperience.qml:import QtQuick 2.0
+> ./Qt5_CinematicExperience_rpi_1.0/Qt5_CinematicExperience.qml:import "content"
+> 
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 1e8a2cb..5c448f2 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -116,7 +116,7 @@ endif
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "4.13.13" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "4.13.15" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "v4.4.83-cip8" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+Peter you're right.
+My mistake was:
+- building all buildroot with only qt5base
+- modifying .config enabling qt5cinex which selects qt5declarative
+- giving another make(not building from scratch)
+
+So I ended up having qt5base not aware of qt5declarative when installing 
+qml modules.
+
+At this point I rebuilt from scratch adding qt5quickcontrols to 
+.config(mistake, don't why I thought it),
+and it worked.
+
+So I thought qt5quickcontrols was missing.
+Instead qt5quickcontrols is not necessary,
+and selecting qt5cinex did its job selecting correctly qt5declarative.
+
+This is all the story about this useless patch.
+
+>>>> qt5cinex fail to execute on runtime if qt5quickcontrols is not selected
+> 
+> Did not do a runtime test, but what is the error message (if any)?
+> 
+> Regards,
+> Peter
+> 
+>>
+>> Best regards,
+>>
+>> Thomas
+> 
+
+
+-- 
+Giulio Benetti
+R&D Manager &
+Advanced Research
+
+MICRONOVA SRL
+Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
+Tel. 049/8931563 - Fax 049/8931346
+Cod.Fiscale - P.IVA 02663420285
+Capitale Sociale ? 26.000 i.v.
+Iscritta al Reg. Imprese di Padova N. 02663420285
+Numero R.E.A. 258642
