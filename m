@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 23 Nov 2017 22:49:39 +0100
-Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 4.{4, 9,
- 13}.x series
-In-Reply-To: <20171123211048.23370-1-bernd.kuhls@t-online.de>
-References: <20171123211048.23370-1-bernd.kuhls@t-online.de>
-Message-ID: <20171123224939.4e62e754@windsurf.lan>
+Date: Thu, 23 Nov 2017 22:51:55 +0100
+Subject: [Buildroot] [PATCH 1/1] ntp: add patch to support for libressl
+In-Reply-To: <20171108121143.5411-1-aduskett@gmail.com>
+References: <20171108121143.5411-1-aduskett@gmail.com>
+Message-ID: <20171123225155.73a4da45@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,16 +12,33 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 23 Nov 2017 22:10:47 +0100, Bernd Kuhls wrote:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/linux-headers/Config.in.host | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+On Wed,  8 Nov 2017 07:11:43 -0500, Adam Duskett wrote:
+> NTP currently fails to compile against LibreSSL because of checks used
+> to determine the SSL library version.
+> 
+> Upstream-Status: Pending
+> http://bugs.ntp.org/show_bug.cgi?id=3401#c3
+> 
+> Signed-off-by: Adam Duskett <aduskett@gmail.com>
 
-Both applied to master. Thanks!
+Arnout, Peter, Yann, I think we discussed this topic during the
+Buildroot meeting, and concluded we didn't want patches in Buildroot to
+enable LibreSSL compatibility with a package. Do we stand on this
+position, and reject Adam's contribution on ntp?
+
+> + #ifndef OPENSSL_VERSION_NUMBER
+> ++#ifndef LIBRESSL_VERSION_NUMBER
+
+In addition, this continue to use the LIBRESSL_VERSION_NUMBER approach,
+which will fail when libressl gains support for new APIs.
+
+Thanks in advance for giving your feedback on this patch. If nobody
+complains, I'll merge :-)
+
+Thanks!
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
