@@ -1,59 +1,58 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 24 Nov 2017 10:04:11 +0100
-Subject: [Buildroot] [PATCH v2 1/1] qt5webengine: enable build for 5.6.3
-In-Reply-To: <20171123232619.29849-1-gael.portay@savoirfairelinux.com>
-References: <20171123232619.29849-1-gael.portay@savoirfairelinux.com>
-Message-ID: <20171124100411.1a2adc9c@windsurf.lan>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Fri, 24 Nov 2017 11:54:40 +0100
+Subject: [Buildroot] [PATCH v4 0/2] Add support for Meson build
+In-Reply-To: <20171029131052.18850-1-eric.le.bihan.dev@free.fr>
+References: <20171029131052.18850-1-eric.le.bihan.dev@free.fr>
+Message-ID: <CAGm1_kuHHYibd7xmmiyMA8wLc=AOVwsxvBEAeiCkiPQHTfzrqQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Sun, Oct 29, 2017 at 2:10 PM, Eric Le Bihan
+<eric.le.bihan.dev@free.fr> wrote:
+> This small patch series provides a new build system: Meson.
+>
+> v4 -> v3:
+>
+> - update documentation with verbosity, configuration and staging installation
+>   details.
+> - update cross-compilation configuration creation to take into account
+>   $(TARGET_CFLAGS) and friends.
+> - add reference to release signature in hash file.
+> - re-use explicit tarball release instead of github helper.
+> - various stylistic changes (suggested by Arnout).
+>
+> v2 -> v3:
+>
+> - bump version to 0.43.0
+> - re-use github helper
+> - reword comments in cross-compilation.conf.in
+> - use $(FOO_CONF_OPTS) in package documentation
+>
+> v1 -> v2: (J?rg Krause)
+>
+> - bump to version 0.41.2
+> - use explicit tarball release instead of github helper
+> - use explicit sed
+> - pass BR2_GCC_TARGET_CPU to cross file
+>
+> Eric Le Bihan (2):
+>   meson: new package
+>   docs/manual: document meson-based packages
+>
+>  docs/manual/adding-packages-meson.txt   | 101 ++++++++++++++++++++++++++++++++
+>  docs/manual/adding-packages.txt         |   2 +
+>  package/meson/cross-compilation.conf.in |  23 ++++++++
+>  package/meson/meson.hash                |   3 +
+>  package/meson/meson.mk                  |  35 +++++++++++
+>  5 files changed, 164 insertions(+)
+>  create mode 100644 docs/manual/adding-packages-meson.txt
+>  create mode 100644 package/meson/cross-compilation.conf.in
+>  create mode 100644 package/meson/meson.hash
+>  create mode 100644 package/meson/meson.mk
 
-+Yann in Cc, since there is licensing stuff involved :)
+I could successfully test meson build system using libinput package.
 
-On Thu, 23 Nov 2017 18:26:19 -0500, Ga?l PORTAY wrote:
-
-> +Upstream-Status: Merged
-> +Task-number: QTBUG-57761
-> +Change-Id: I29f037dfe542222b5188a33c7727c81a464a87bb
-> +Reviewed-by: Allan Sandfeld Jensen <allan.jensen@qt.io>
-> +Reviewed-by: Michal Klocek <michal.klocek@qt.io>
-> +Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
-> +[gportay: backport from 5.9 and merge conflicts]
-
-Backporting from 5.9 to 5.6 raises a red flag: Qt changed its licensing
-terms between 5.6 and 5.9, and you can't backport things this way,
-because Qt 5.9 is under GPLv3, while Qt 5.6 is not.
-
-However I'm not sure about the specific status of qt5webengine. Also,
-its <pkg>_LICENSE variable says:
-
-include package/qt5/qt5webengine/chromium.inc
-QT5WEBENGINE_LICENSE = GPL-2.0 or LGPL-3.0 or GPL-3.0 or GPL-3.0 with exception
-QT5WEBENGINE_LICENSE_FILES = LICENSE.GPL2 LICENSE.GPL3 LICENSE.GPL3-EXCEPT \
-        LICENSE.GPLv3 LICENSE.LGPL3 $(CHROMIUM_LICENSE_FILES)
-
-which I'm not sure is correct for Qt 5.6. Indeed, many of the packages
-have something like this instead:
-
-ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
-QT5MULTIMEDIA_LICENSE = GPL-2.0+ or LGPL-3.0, GPL-3.0 with exception(tools), GFDL-1.3 (docs)
-QT5MULTIMEDIA_LICENSE_FILES = LICENSE.GPL2 LICENSE.GPL3 LICENSE.GPL3-EXCEPT LICENSE.LGPL3 LICENSE.FDL
-else
-QT5MULTIMEDIA_LICENSE = GPL-3.0 or LGPL-2.1 with exception or LGPL-3.0, GFDL-1.3 (docs)
-QT5MULTIMEDIA_LICENSE_FILES = LICENSE.GPLv3 LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3 LICENSE.FDL
-endif
-
-Could you double check the license status of qt5webengine, in Qt 5.6
-and Qt 5.9 respectively ?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Yegor
