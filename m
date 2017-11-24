@@ -1,49 +1,77 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 24 Nov 2017 21:58:28 +0100
-Subject: [Buildroot] [PATCH] hostapd: add support for Realtek driver
-In-Reply-To: <20170914110811.1670-1-alexander.i.mukhin@gmail.com>
-References: <874C29DC-F92F-46E8-9323-EF25658D8834@gmail.com>
- <20170914110811.1670-1-alexander.i.mukhin@gmail.com>
-Message-ID: <20171124215828.47855fdd@windsurf.lan>
+Date: Fri, 24 Nov 2017 22:03:31 +0100
+Subject: [Buildroot] [git commit branch/next] arch: introduce minimal
+ required gcc version
+Message-ID: <20171124211341.355FA801D9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=974d97bc267d4e529ec3619c6c71e59f8f51833d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Thu, 14 Sep 2017 14:08:11 +0300, Alexander Mukhin wrote:
-> Since kernel drivers for Realtek wireless chips use non-standard
-> interfaces, upstream hostapd does not support them. One have to apply
-> an external patch for hostapd to work with these chips. See:
-> https://github.com/pritambaral/hostapd-rtl871xdrv
-> 
-> A configuration option is added to enable support for Realtek chips,
-> and it's turned off by default.
-> 
-> Signed-off-by: Alexander Mukhin <alexander.i.mukhin@gmail.com>
-> ---
->  DEVELOPERS                   | 3 +++
->  package/hostapd/Config.in    | 5 +++++
->  package/hostapd/hostapd.hash | 1 +
->  package/hostapd/hostapd.mk   | 5 +++++
->  4 files changed, 14 insertions(+)
+Some CPU variants require that a recent-enough gcc be selected. For
+example, ARM's cortex-a35 requires gcc-5, while cortex-a73 requires
+gcc-7. Same goes for other architectures, of course.
 
-To be honest, I was about to reject your patch: it's basically adding a
-feature patch to a package, which we normally don't do, and the patch
-is very likely to break when we update to newer versions of hostapd.
+Currently, we hard-code every such conditions in the gcc version choice,
+as well as in the individual external toolchains.
 
-But I saw that both Peter and Arnout had a look at the problem, and the
-overall feeling is that there really isn't a better solution.
+However, as we add even more CPU variants, the conditions are getting
+more and more complex to write and maintain.
 
-So, I've applied to next. We'll see how often it breaks hostapd (or
-not).
+Introduce new symbols, that architectures can select if they have a
+specific requirement on the gcc version. gcc and external toolchains
+can then properly depend on those symbols.
 
-Thanks!
+The burden of maintaining the requirements on the gcc version now falls
+down to the architeture, instead of being split up in gcc and all the
+external toolchains.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+As the oldest gcc version to handle, we can either choose gcc-4.9, as
+the oldest version we support in our internal toolchain, or choose
+gcc-4.8, as the oldest external toolchain we support (except for the
+custom ones, but they'll be handled specifically in upcoming changes).
+We choose to go back up to gcc-4.8.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ arch/Config.in | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
+
+diff --git a/arch/Config.in b/arch/Config.in
+index c10bf16..607da36 100644
+--- a/arch/Config.in
++++ b/arch/Config.in
+@@ -261,6 +261,27 @@ config BR2_ARCH_HAS_TOOLCHAIN_BUILDROOT
+ 	bool
+ 	default y if !BR2_ARCH_HAS_NO_TOOLCHAIN_BUILDROOT
+ 
++# The following symbols are selected by the individual
++# Config.in.$ARCH files
++config BR2_ARCH_NEEDS_GCC_AT_LEAST_4_8
++	bool
++
++config BR2_ARCH_NEEDS_GCC_AT_LEAST_4_9
++	bool
++	select BR2_ARCH_NEEDS_GCC_AT_LEAST_4_8
++
++config BR2_ARCH_NEEDS_GCC_AT_LEAST_5
++	bool
++	select BR2_ARCH_NEEDS_GCC_AT_LEAST_4_9
++
++config BR2_ARCH_NEEDS_GCC_AT_LEAST_6
++	bool
++	select BR2_ARCH_NEEDS_GCC_AT_LEAST_5
++
++config BR2_ARCH_NEEDS_GCC_AT_LEAST_7
++	bool
++	select BR2_ARCH_NEEDS_GCC_AT_LEAST_6
++
+ # The following string values are defined by the individual
+ # Config.in.$ARCH files
+ config BR2_ARCH
