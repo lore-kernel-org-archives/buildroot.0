@@ -1,39 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 24 Nov 2017 21:37:18 +0100
-Subject: [Buildroot] [git commit] mtd: be explicit about config options for
- the host
-Message-ID: <20171201205336.190767FF6F@busybox.osuosl.org>
+Date: Fri, 24 Nov 2017 21:33:55 +0100
+Subject: [Buildroot] [git commit] libupnp: bump to version 1.6.24
+Message-ID: <20171201205335.B036A7FF6F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0d2e7522ed18a1bd06aa9bd22c46e71d90bcf0bd
+commit: https://git.buildroot.net/buildroot/commit/?id=c1c5703e84b83f00b01dea98467293b3033c1d74
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Instead of letting auto-detection do its job, be explicit about the
-fact that we want the JFFS2 and UBIFS utilities when building the host
-variant of mtd.
-
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/mtd/mtd.mk | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ package/libupnp/libupnp.hash | 2 +-
+ package/libupnp/libupnp.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
-index a69ef40..7094aad 100644
---- a/package/mtd/mtd.mk
-+++ b/package/mtd/mtd.mk
-@@ -45,7 +45,10 @@ MTD_CONF_OPTS += --without-xattr
- endif
+diff --git a/package/libupnp/libupnp.hash b/package/libupnp/libupnp.hash
+index 1012461..3b45d53 100644
+--- a/package/libupnp/libupnp.hash
++++ b/package/libupnp/libupnp.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256	0bdfacb7fa8d99b78343b550800ff193264f92c66ef67852f87f042fd1a1ebbc	libupnp-1.6.22.tar.bz2
++sha256	7d83d79af3bb4062e5c3a58bf2e90d2da5b8b99e2b2d57c23b5b6f766288cf96	libupnp-1.6.24.tar.bz2
+diff --git a/package/libupnp/libupnp.mk b/package/libupnp/libupnp.mk
+index bf01b4d..c7085c2 100644
+--- a/package/libupnp/libupnp.mk
++++ b/package/libupnp/libupnp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- HOST_MTD_DEPENDENCIES = host-zlib host-lzo host-util-linux
--HOST_MTD_CONF_OPTS = --disable-tests
-+HOST_MTD_CONF_OPTS = \
-+	--with-jffs \
-+	--with-ubifs \
-+	--disable-tests
- 
- MKFS_JFFS2 = $(HOST_DIR)/sbin/mkfs.jffs2
- SUMTOOL = $(HOST_DIR)/sbin/sumtool
+-LIBUPNP_VERSION = 1.6.22
++LIBUPNP_VERSION = 1.6.24
+ LIBUPNP_SOURCE = libupnp-$(LIBUPNP_VERSION).tar.bz2
+ LIBUPNP_SITE = http://downloads.sourceforge.net/project/pupnp/pupnp/libUPnP%20$(LIBUPNP_VERSION)
+ LIBUPNP_CONF_ENV = ac_cv_lib_compat_ftime=no
