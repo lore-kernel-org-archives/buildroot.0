@@ -1,77 +1,82 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 24 Nov 2017 22:45:48 +0100
-Subject: [Buildroot] [git commit] arch/mips: inverse the mfpxx logic
-Message-ID: <20171201205336.C52797FF6F@busybox.osuosl.org>
+Date: Fri, 24 Nov 2017 23:30:43 +0100
+Subject: [Buildroot] [git commit] arch/arm: add armv8.1a cores
+Message-ID: <20171201205337.47B0C7FB0F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e25d704e10230f7ea095b4bbb5660e73fbefdf29
+commit: https://git.buildroot.net/buildroot/commit/?id=6317a199ecb525309e8172237a15b46776fe3a72
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Currently, the possibility to choose the floating point mode (32, xx or
-64) is conditional on having a sufficiently recent gcc version.
+The armv8.1a generation is a cumulative extension to armv8a. It adds new
+extensions, and makes some previously optional ones now mandatory.
 
-Which means that the architecture selection depends on the gcc version.
+Since gcc correctly enables the appropriate extensions based on the core
+name, we don't really need to introduce a separate config for armv8.1a,
+and we can piggyback on armv8a.
 
-But that's opposite to what we've always done in Buildroot: the software
-versions are conditional to the architecture options. There is nothing
-we can do about the hardware: it is there, we can't change it, while we
-can restrict ourselves to using software that is working on said
-hardware.
-
-Thus, we inverse the logic, to move the condition onto the software
-side: whenever mfpxx is selected, we restrict the toolchain selection to
-at least a gcc-5.
-
-And now, the blind BR2_TOOLCHAIN_HAS_MFPXX_OPTION symbol is no longer
-needed, so we get rid of it.
+All those new cores are aarch64 only (gcc fails to build in arm mode).
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- arch/Config.in.mips           | 4 ++--
- toolchain/toolchain-common.in | 4 ----
- 2 files changed, 2 insertions(+), 6 deletions(-)
+ arch/Config.in.arm | 35 +++++++++++++++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
 
-diff --git a/arch/Config.in.mips b/arch/Config.in.mips
-index 13d1a47..f8e57ba 100644
---- a/arch/Config.in.mips
-+++ b/arch/Config.in.mips
-@@ -146,7 +146,7 @@ config BR2_MIPS_SOFT_FLOAT
- choice
- 	prompt "FP mode"
- 	depends on !BR2_ARCH_IS_64 && !BR2_MIPS_SOFT_FLOAT
--	default BR2_MIPS_FP32_MODE_XX if BR2_TOOLCHAIN_HAS_MFPXX_OPTION
-+	default BR2_MIPS_FP32_MODE_XX
- 	help
- 	  MIPS32 supports different FP modes (32,xx,64). Information about FP
- 	  modes can be found here:
-@@ -159,7 +159,7 @@ config BR2_MIPS_FP32_MODE_32
+diff --git a/arch/Config.in.arm b/arch/Config.in.arm
+index 2d6eb99..85070fb 100644
+--- a/arch/Config.in.arm
++++ b/arch/Config.in.arm
+@@ -400,6 +400,37 @@ config BR2_xgene1
+ 	select BR2_ARM_CPU_ARMV8A
+ 	select BR2_ARCH_HAS_MMU_OPTIONAL
+ 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_5
++
++if BR2_ARCH_IS_64
++comment "armv8.1a cores"
++config BR2_thunderx2t99
++	bool "thunderx2t99"
++	select BR2_ARM_CPU_HAS_ARM if !BR2_ARCH_IS_64
++	select BR2_ARM_CPU_HAS_NEON if !BR2_ARCH_IS_64
++	select BR2_ARM_CPU_HAS_THUMB2 if !BR2_ARCH_IS_64
++	select BR2_ARM_CPU_HAS_FP_ARMV8
++	select BR2_ARM_CPU_ARMV8A
++	select BR2_ARCH_HAS_MMU_OPTIONAL
++	select BR2_ARCH_NEEDS_GCC_AT_LEAST_7
++config BR2_thunderx2t99p1
++	bool "thunderx2t99p1"
++	select BR2_ARM_CPU_HAS_ARM if !BR2_ARCH_IS_64
++	select BR2_ARM_CPU_HAS_NEON if !BR2_ARCH_IS_64
++	select BR2_ARM_CPU_HAS_THUMB2 if !BR2_ARCH_IS_64
++	select BR2_ARM_CPU_HAS_FP_ARMV8
++	select BR2_ARM_CPU_ARMV8A
++	select BR2_ARCH_HAS_MMU_OPTIONAL
++	select BR2_ARCH_NEEDS_GCC_AT_LEAST_7
++config BR2_vulcan
++	bool "vulcan"
++	select BR2_ARM_CPU_HAS_ARM if !BR2_ARCH_IS_64
++	select BR2_ARM_CPU_HAS_NEON if !BR2_ARCH_IS_64
++	select BR2_ARM_CPU_HAS_THUMB2 if !BR2_ARCH_IS_64
++	select BR2_ARM_CPU_HAS_FP_ARMV8
++	select BR2_ARM_CPU_ARMV8A
++	select BR2_ARCH_HAS_MMU_OPTIONAL
++	select BR2_ARCH_NEEDS_GCC_AT_LEAST_7
++endif # BR2_ARCH_IS_64
+ endchoice
  
- config BR2_MIPS_FP32_MODE_XX
- 	bool "xx"
--	depends on BR2_TOOLCHAIN_HAS_MFPXX_OPTION
-+	select BR2_ARCH_NEEDS_GCC_AT_LEAST_5
+ config BR2_ARM_ENABLE_NEON
+@@ -704,6 +735,10 @@ config BR2_GCC_TARGET_CPU
+ 	default "thunderxt88"	if BR2_thunderxt88
+ 	default "thunderxt88p1"	if BR2_thunderxt88p1
+ 	default "xgene1"	if BR2_xgene1
++	# armv8.1a
++	default "thunderx2t99"	if BR2_thunderx2t99
++	default "thunderx2t99p1"	if BR2_thunderx2t99p1
++	default "vulcan"	if BR2_vulcan
  
- config BR2_MIPS_FP32_MODE_64
- 	bool "64"
-diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
-index 1555377..d743c63 100644
---- a/toolchain/toolchain-common.in
-+++ b/toolchain/toolchain-common.in
-@@ -356,10 +356,6 @@ config BR2_TOOLCHAIN_HAS_MNAN_OPTION
- 	bool
- 	default y if BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
- 
--config BR2_TOOLCHAIN_HAS_MFPXX_OPTION
--	bool
--	default y if BR2_TOOLCHAIN_GCC_AT_LEAST_5
--
- config BR2_TOOLCHAIN_HAS_SYNC_1
- 	bool
- 	default y
+ config BR2_GCC_TARGET_ABI
+ 	default "aapcs-linux"	if BR2_arm || BR2_armeb
