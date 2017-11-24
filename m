@@ -1,122 +1,65 @@
-From: Markus Mayer <code@mmayer.net>
-Date: Fri, 24 Nov 2017 14:05:54 -0800
-Subject: [Buildroot] [RFC] bzip2: introduce make variable LIBDIR
-Message-ID: <20171124220554.24261-1-code@mmayer.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 24 Nov 2017 23:08:57 +0100
+Subject: [Buildroot] [PATCH 4/9] arch/arm: do not allow soft-float for
+ armv8a
+In-Reply-To: <20170904172137.GB5223@scaer>
+References: <cover.1504444617.git.yann.morin.1998@free.fr>
+ <bd6e8e2eaf13ecc5e45e360875cfff3494b86a8c.1504444617.git.yann.morin.1998@free.fr>
+ <20170904172137.GB5223@scaer>
+Message-ID: <20171124230857.0b6e1648@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Markus Mayer <mmayer@broadcom.com>
+Hello,
 
-In order to allow us to install libz2 into a location other than
-/usr/lib, we introduce a variable called LIBDIR that can be set by
-the build system to an alternate location.
+On Mon, 4 Sep 2017 19:21:37 +0200, Yann E. MORIN wrote:
+> Thomas, All,
+> 
+> On 2017-09-03 15:17 +0200, Yann E. MORIN spake thusly:
+> > armv8a has made VFPv4 and NEON mandatory, so there is no point in
+> > allowing software floating point, even in 32-bit mode.  
+> 
+> In fact, even though I'm pretty sure that OK in 64-bit, we might still
+> have a reason to do soft-float in 32-bit mode, if only for legacy
+> binary-only applications that were built as soft-float way back in the
+> (not so) good old days...
+> 
+> In which case, we should instead depend on !BR2_ARCH_IS_64.
+> 
+> Thoughts?
 
-LIBDIR defaults to /usr/lib, so the behaviour doesn't change if
-LIBDIR is never set.
+I'm hesitating on this one. I believe the use-case you mention makes
+sense, however I believe that it can still be supported with your
+proposed patch.
 
-Signed-off-by: Markus Mayer <mmayer@broadcom.com>
----
+Indeed, even if you want to run a binary-only soft-float application,
+it doesn't prevent the rest of your system from using VFP, as long as
+you use EABI (and not EABIhf).
 
-Most package in buildroot seem to offer the flexibility to install
-libraries into directories specified by the user (build system) rather
-than hard-coding the destination in the way bzip2 does.
+The whole reason why EABI passes floating-point arguments into integer
+registers is precisely to allow compatibility between soft-float code
+and hard-float code. Thanks to that, a soft-float function can call a
+hard-float function, and vice-versa.
 
-I am looking for some feedback regarding this change.
+Therefore, even if you have a binary-only soft-float application, there
+is really no reason to build the entire system soft-float.
 
-Since the changes touch the makefiles that are part of the bzip2
-distribution, the changes have to be applied in the form of a patch.
-Also, patches 3 & 4 somewhat relate to the already existing patch 2.
+So, I think your original patch is OK as-is. However, I still see one
+inconsistent thing: if we disallow soft-float because ARMv8-A mandates
+VFPv4, why would we allow soft-float for ARMv7-A cores that have a
+VFP ? To be consistent, we should also disallow soft-float.
 
-My question is whether patches 2-4 should be combined into a single
-patch or if it is preferable to keep them separate.
+Another way to think about this is: is it possible to build an AArch64
+soft-float system? do we want to allow the user to select what is
+*possible* or what makes sense?
 
- package/bzip2/0003-add-libdir-to-makefile.patch    | 36 ++++++++++++++++++++++
- .../bzip2/0004-add-libdir-to-makefile-libbz2.patch | 31 +++++++++++++++++++
- 2 files changed, 67 insertions(+)
- create mode 100644 package/bzip2/0003-add-libdir-to-makefile.patch
- create mode 100644 package/bzip2/0004-add-libdir-to-makefile-libbz2.patch
+Best regards,
 
-diff --git a/package/bzip2/0003-add-libdir-to-makefile.patch b/package/bzip2/0003-add-libdir-to-makefile.patch
-new file mode 100644
-index 0000000..3172a3a
---- /dev/null
-+++ b/package/bzip2/0003-add-libdir-to-makefile.patch
-@@ -0,0 +1,36 @@
-+Introduce LIBDIR to Makefile
-+
-+The variable LIBDIR allows us to override where libbz2 is installed.
-+
-+Index: bzip2-1.0.6/Makefile
-+===================================================================
-+--- bzip2-1.0.6.orig/Makefile	2010-09-10 15:46:02.000000000 -0700
-++++ bzip2-1.0.6/Makefile	2017-11-23 12:51:53.318896836 -0800
-+@@ -19,6 +19,7 @@
-+ AR=ar
-+ RANLIB=ranlib
-+ LDFLAGS=
-++LIBDIR ?= lib
-+ 
-+ override CFLAGS += -Wall
-+ 
-+@@ -71,7 +73,7 @@
-+ 
-+ install: bzip2 bzip2recover
-+ 	if ( test ! -d $(PREFIX)/bin ) ; then mkdir -p $(PREFIX)/bin ; fi
-+-	if ( test ! -d $(PREFIX)/lib ) ; then mkdir -p $(PREFIX)/lib ; fi
-++	if ( test ! -d $(PREFIX)/$(LIBDIR) ) ; then mkdir -p $(PREFIX)/$(LIBDIR) ; fi
-+ 	if ( test ! -d $(PREFIX)/man ) ; then mkdir -p $(PREFIX)/man ; fi
-+ 	if ( test ! -d $(PREFIX)/man/man1 ) ; then mkdir -p $(PREFIX)/man/man1 ; fi
-+ 	if ( test ! -d $(PREFIX)/include ) ; then mkdir -p $(PREFIX)/include ; fi
-+@@ -87,8 +89,8 @@
-+ 	chmod a+r $(PREFIX)/man/man1/bzip2.1
-+ 	cp -f bzlib.h $(PREFIX)/include
-+ 	chmod a+r $(PREFIX)/include/bzlib.h
-+-	cp -f libbz2.a $(PREFIX)/lib
-+-	chmod a+r $(PREFIX)/lib/libbz2.a
-++	cp -f libbz2.a $(PREFIX)/$(LIBDIR)
-++	chmod a+r $(PREFIX)/$(LIBDIR)/libbz2.a
-+ 	cp -f bzgrep $(PREFIX)/bin/bzgrep
-+ 	ln -s -f $(PREFIX)/bin/bzgrep $(PREFIX)/bin/bzegrep
-+ 	ln -s -f $(PREFIX)/bin/bzgrep $(PREFIX)/bin/bzfgrep
-diff --git a/package/bzip2/0004-add-libdir-to-makefile-libbz2.patch b/package/bzip2/0004-add-libdir-to-makefile-libbz2.patch
-new file mode 100644
-index 0000000..22390d6
---- /dev/null
-+++ b/package/bzip2/0004-add-libdir-to-makefile-libbz2.patch
-@@ -0,0 +1,31 @@
-+Introduce LIBDIR to Makefile-libbz2_so
-+
-+The variable LIBDIR allows us to override where libbz2 is installed.
-+
-+Index: bzip2-1.0.6/Makefile
-+===================================================================
-+--- bzip2-1.0.6/Makefile-libbz2_so.orig	2017-11-23 11:08:33.067637637 -0800
-++++ bzip2-1.0.6/Makefile-libbz2_so	2017-11-23 12:51:38.694728036 -0800
-+@@ -23,6 +23,9 @@
-+ 
-+ SHELL=/bin/sh
-+ CC=gcc
-++
-++LIBDIR ?= lib
-++
-+ override CFLAGS += -fpic -fPIC -Wall
-+ 
-+ OBJS= blocksort.sho  \
-+@@ -38,9 +41,9 @@
-+ 	$(CC) $(CFLAGS) -o bzip2-shared bzip2.c libbz2.so.1.0.6
-+ 
-+ install:
-+-	install -m 0755 -D libbz2.so.1.0.6 $(PREFIX)/lib/libbz2.so.1.0.6
-+-	ln -sf libbz2.so.1.0.6 $(PREFIX)/lib/libbz2.so
-+-	ln -sf libbz2.so.1.0.6 $(PREFIX)/lib/libbz2.so.1.0
-++	install -m 0755 -D libbz2.so.1.0.6 $(PREFIX)/$(LIBDIR)/libbz2.so.1.0.6
-++	ln -sf libbz2.so.1.0.6 $(PREFIX)/$(LIBDIR)/libbz2.so
-++	ln -sf libbz2.so.1.0.6 $(PREFIX)/$(LIBDIR)/libbz2.so.1.0
-+ 
-+ clean: 
-+ 	rm -f $(OBJS) bzip2.o libbz2.so.1.0.6 libbz2.so.1.0 bzip2-shared
+Thomas
 -- 
-2.7.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
