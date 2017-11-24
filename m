@@ -1,65 +1,80 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 24 Nov 2017 23:08:57 +0100
-Subject: [Buildroot] [PATCH 4/9] arch/arm: do not allow soft-float for
- armv8a
-In-Reply-To: <20170904172137.GB5223@scaer>
-References: <cover.1504444617.git.yann.morin.1998@free.fr>
- <bd6e8e2eaf13ecc5e45e360875cfff3494b86a8c.1504444617.git.yann.morin.1998@free.fr>
- <20170904172137.GB5223@scaer>
-Message-ID: <20171124230857.0b6e1648@windsurf.lan>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Fri, 24 Nov 2017 23:09:01 +0100
+Subject: [Buildroot] [PATCH/next 1/1] package/python-mwclient: require
+ pytest-runner only when necessary
+In-Reply-To: <20171124194937.24243-1-bernd.kuhls@t-online.de>
+References: <20171124194937.24243-1-bernd.kuhls@t-online.de>
+Message-ID: <CAGm1_ksuj070R9EKKOxsuex=BEgb5GmpcGru2yF+s-52k+wQrg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Fri, Nov 24, 2017 at 8:49 PM, Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+> Fixes
+> http://autobuild.buildroot.net/results/09c/09c0e590448f1fc069d1d00564c202d2b009d59a/
+> http://autobuild.buildroot.net/results/79e/79ef04d2e8c91231028e23f4bb35df685efa55ca/
+> http://autobuild.buildroot.net/results/7a4/7a4a4aecbe6dd315062bafe97b291645d3d6ced1/
+>
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-On Mon, 4 Sep 2017 19:21:37 +0200, Yann E. MORIN wrote:
-> Thomas, All,
-> 
-> On 2017-09-03 15:17 +0200, Yann E. MORIN spake thusly:
-> > armv8a has made VFPv4 and NEON mandatory, so there is no point in
-> > allowing software floating point, even in 32-bit mode.  
-> 
-> In fact, even though I'm pretty sure that OK in 64-bit, we might still
-> have a reason to do soft-float in 32-bit mode, if only for legacy
-> binary-only applications that were built as soft-float way back in the
-> (not so) good old days...
-> 
-> In which case, we should instead depend on !BR2_ARCH_IS_64.
-> 
-> Thoughts?
+Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
 
-I'm hesitating on this one. I believe the use-case you mention makes
-sense, however I believe that it can still be supported with your
-proposed patch.
-
-Indeed, even if you want to run a binary-only soft-float application,
-it doesn't prevent the rest of your system from using VFP, as long as
-you use EABI (and not EABIhf).
-
-The whole reason why EABI passes floating-point arguments into integer
-registers is precisely to allow compatibility between soft-float code
-and hard-float code. Thanks to that, a soft-float function can call a
-hard-float function, and vice-versa.
-
-Therefore, even if you have a binary-only soft-float application, there
-is really no reason to build the entire system soft-float.
-
-So, I think your original patch is OK as-is. However, I still see one
-inconsistent thing: if we disallow soft-float because ARMv8-A mandates
-VFPv4, why would we allow soft-float for ARMv7-A cores that have a
-VFP ? To be consistent, we should also disallow soft-float.
-
-Another way to think about this is: is it possible to build an AArch64
-soft-float system? do we want to allow the user to select what is
-*possible* or what makes sense?
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+> ---
+>  ...require-pytest-runner-only-when-necessary.patch | 43 ++++++++++++++++++++++
+>  1 file changed, 43 insertions(+)
+>  create mode 100644 package/python-mwclient/0001-setup.py-require-pytest-runner-only-when-necessary.patch
+>
+> diff --git a/package/python-mwclient/0001-setup.py-require-pytest-runner-only-when-necessary.patch b/package/python-mwclient/0001-setup.py-require-pytest-runner-only-when-necessary.patch
+> new file mode 100644
+> index 0000000000..73fe84f8c9
+> --- /dev/null
+> +++ b/package/python-mwclient/0001-setup.py-require-pytest-runner-only-when-necessary.patch
+> @@ -0,0 +1,43 @@
+> +From a6ff9745f56b776f244c2c412685f5c10ff0f09d Mon Sep 17 00:00:00 2001
+> +From: Bernd Kuhls <bernd.kuhls@t-online.de>
+> +Date: Fri, 24 Nov 2017 20:44:53 +0100
+> +Subject: [PATCH] setup.py: require pytest-runner only when necessary
+> +
+> +This optimizes setup.py for cases when pytest-runner is not needed,
+> +using the approach that is suggested upstream:
+> +
+> +https://pypi.python.org/pypi/pytest-runner#conditional-requirement
+> +
+> +Patch sent upstream: https://github.com/mwclient/mwclient/pull/180
+> +
+> +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> +---
+> + setup.py | 5 ++++-
+> + 1 file changed, 4 insertions(+), 1 deletion(-)
+> +
+> +diff --git a/setup.py b/setup.py
+> +index a32cbde..660d93b 100644
+> +--- a/setup.py
+> ++++ b/setup.py
+> +@@ -8,6 +8,9 @@ from setuptools import setup
+> + here = os.path.abspath(os.path.dirname(__file__))
+> + README = open(os.path.join(here, 'README.rst')).read()
+> +
+> ++needs_pytest = set(['pytest', 'test', 'ptr']).intersection(sys.argv)
+> ++pytest_runner = ['pytest-runner'] if needs_pytest else []
+> ++
+> + setup(name='mwclient',
+> +       version='0.8.6',  # Use bumpversion to update
+> +       description='MediaWiki API client',
+> +@@ -27,7 +30,7 @@ setup(name='mwclient',
+> +       license='MIT',
+> +       packages=['mwclient'],
+> +       install_requires=['requests_oauthlib', 'six'],
+> +-      setup_requires=['pytest-runner'],
+> ++      setup_requires=pytest_runner,
+> +       tests_require=['pytest', 'pytest-pep8', 'pytest-cache', 'pytest-cov',
+> +                      'responses>=0.3.0', 'responses!=0.6.0', 'mock'],
+> +       zip_safe=True
+> +--
+> +2.11.0
+> +
+> --
+> 2.11.0
+>
