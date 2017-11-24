@@ -1,122 +1,75 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 24 Nov 2017 23:30:36 +0100
-Subject: [Buildroot] [git commit branch/next] arch/arm: add some non-cortex
- armv8a cores
-Message-ID: <20171124222554.3C067803DE@busybox.osuosl.org>
+Date: Fri, 24 Nov 2017 23:33:06 +0100
+Subject: [Buildroot] [git commit branch/next] package/python-mwclient:
+ require pytest-runner only when necessary
+Message-ID: <20171124222554.5E00C80253@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d632d9e5a984a8da01156f28a2180e344f6a07a7
+commit: https://git.buildroot.net/buildroot/commit/?id=c33c9ca62a1d34c59538b77e88d9e5f130527971
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Some need gcc-5, some gcc-6 and some gcc-7.
+Fixes
+http://autobuild.buildroot.net/results/09c/09c0e590448f1fc069d1d00564c202d2b009d59a/
+http://autobuild.buildroot.net/results/79e/79ef04d2e8c91231028e23f4bb35df685efa55ca/
+http://autobuild.buildroot.net/results/7a4/7a4a4aecbe6dd315062bafe97b291645d3d6ced1/
 
-The thunderx familly does not build in 32-bit mode (gcc complains
-that the CPU is unknown, and even gcc master only knows them as
-aarch64-only).
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- arch/Config.in.arm | 77 ++++++++++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 77 insertions(+)
+ ...require-pytest-runner-only-when-necessary.patch | 43 ++++++++++++++++++++++
+ 1 file changed, 43 insertions(+)
 
-diff --git a/arch/Config.in.arm b/arch/Config.in.arm
-index 6f189c6..2d6eb99 100644
---- a/arch/Config.in.arm
-+++ b/arch/Config.in.arm
-@@ -332,6 +332,74 @@ config BR2_cortex_a73_a53
- 	select BR2_ARM_CPU_ARMV8A
- 	select BR2_ARCH_HAS_MMU_OPTIONAL
- 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_7
-+config BR2_exynos_m1
-+	bool "exynos-m1"
-+	select BR2_ARM_CPU_HAS_ARM if !BR2_ARCH_IS_64
-+	select BR2_ARM_CPU_HAS_NEON if !BR2_ARCH_IS_64
-+	select BR2_ARM_CPU_HAS_THUMB2 if !BR2_ARCH_IS_64
-+	select BR2_ARM_CPU_HAS_FP_ARMV8
-+	select BR2_ARM_CPU_ARMV8A
-+	select BR2_ARCH_HAS_MMU_OPTIONAL
-+	select BR2_ARCH_NEEDS_GCC_AT_LEAST_5
-+config BR2_falkor
-+	bool "falkor"
-+	select BR2_ARM_CPU_HAS_ARM if !BR2_ARCH_IS_64
-+	select BR2_ARM_CPU_HAS_NEON if !BR2_ARCH_IS_64
-+	select BR2_ARM_CPU_HAS_THUMB2 if !BR2_ARCH_IS_64
-+	select BR2_ARM_CPU_HAS_FP_ARMV8
-+	select BR2_ARM_CPU_ARMV8A
-+	select BR2_ARCH_HAS_MMU_OPTIONAL
-+	select BR2_ARCH_NEEDS_GCC_AT_LEAST_7
-+config BR2_qdf24xx
-+	bool "qdf24xx"
-+	select BR2_ARM_CPU_HAS_ARM if !BR2_ARCH_IS_64
-+	select BR2_ARM_CPU_HAS_NEON if !BR2_ARCH_IS_64
-+	select BR2_ARM_CPU_HAS_THUMB2 if !BR2_ARCH_IS_64
-+	select BR2_ARM_CPU_HAS_FP_ARMV8
-+	select BR2_ARM_CPU_ARMV8A
-+	select BR2_ARCH_HAS_MMU_OPTIONAL
-+	select BR2_ARCH_NEEDS_GCC_AT_LEAST_6
-+if BR2_ARCH_IS_64
-+config BR2_thunderx
-+	bool "thunderx"
-+	select BR2_ARM_CPU_HAS_FP_ARMV8
-+	select BR2_ARM_CPU_ARMV8A
-+	select BR2_ARCH_HAS_MMU_OPTIONAL
-+	select BR2_ARCH_NEEDS_GCC_AT_LEAST_5
-+config BR2_thunderxt81
-+	bool "thunderxt81"
-+	select BR2_ARM_CPU_HAS_FP_ARMV8
-+	select BR2_ARM_CPU_ARMV8A
-+	select BR2_ARCH_HAS_MMU_OPTIONAL
-+	select BR2_ARCH_NEEDS_GCC_AT_LEAST_7
-+config BR2_thunderxt83
-+	bool "thunderxt83"
-+	select BR2_ARM_CPU_HAS_FP_ARMV8
-+	select BR2_ARM_CPU_ARMV8A
-+	select BR2_ARCH_HAS_MMU_OPTIONAL
-+	select BR2_ARCH_NEEDS_GCC_AT_LEAST_7
-+config BR2_thunderxt88
-+	bool "thunderxt88"
-+	select BR2_ARM_CPU_HAS_FP_ARMV8
-+	select BR2_ARM_CPU_ARMV8A
-+	select BR2_ARCH_HAS_MMU_OPTIONAL
-+	select BR2_ARCH_NEEDS_GCC_AT_LEAST_7
-+config BR2_thunderxt88p1
-+	bool "thunderxt88p1"
-+	select BR2_ARM_CPU_HAS_FP_ARMV8
-+	select BR2_ARM_CPU_ARMV8A
-+	select BR2_ARCH_HAS_MMU_OPTIONAL
-+	select BR2_ARCH_NEEDS_GCC_AT_LEAST_7
-+endif # BR2_ARCH_IS_64
-+config BR2_xgene1
-+	bool "xgene1"
-+	select BR2_ARM_CPU_HAS_ARM if !BR2_ARCH_IS_64
-+	select BR2_ARM_CPU_HAS_NEON if !BR2_ARCH_IS_64
-+	select BR2_ARM_CPU_HAS_THUMB2 if !BR2_ARCH_IS_64
-+	select BR2_ARM_CPU_HAS_FP_ARMV8
-+	select BR2_ARM_CPU_ARMV8A
-+	select BR2_ARCH_HAS_MMU_OPTIONAL
-+	select BR2_ARCH_NEEDS_GCC_AT_LEAST_5
- endchoice
- 
- config BR2_ARM_ENABLE_NEON
-@@ -627,6 +695,15 @@ config BR2_GCC_TARGET_CPU
- 	default "cortex-a73"	if BR2_cortex_a73
- 	default "cortex-a73.cortex-a35"	if BR2_cortex_a73_a35
- 	default "cortex-a73.cortex-a53"	if BR2_cortex_a73_a53
-+	default "exynos-m1"	if BR2_exynos_m1
-+	default "falkor"	if BR2_falkor
-+	default "qdf24xx"	if BR2_qdf24xx
-+	default "thunderx"	if BR2_thunderx
-+	default "thunderxt81"	if BR2_thunderxt81
-+	default "thunderxt83"	if BR2_thunderxt83
-+	default "thunderxt88"	if BR2_thunderxt88
-+	default "thunderxt88p1"	if BR2_thunderxt88p1
-+	default "xgene1"	if BR2_xgene1
- 
- config BR2_GCC_TARGET_ABI
- 	default "aapcs-linux"	if BR2_arm || BR2_armeb
+diff --git a/package/python-mwclient/0001-setup.py-require-pytest-runner-only-when-necessary.patch b/package/python-mwclient/0001-setup.py-require-pytest-runner-only-when-necessary.patch
+new file mode 100644
+index 0000000..124236c
+--- /dev/null
++++ b/package/python-mwclient/0001-setup.py-require-pytest-runner-only-when-necessary.patch
+@@ -0,0 +1,43 @@
++From a6ff9745f56b776f244c2c412685f5c10ff0f09d Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd.kuhls@t-online.de>
++Date: Fri, 24 Nov 2017 20:44:53 +0100
++Subject: [PATCH] setup.py: require pytest-runner only when necessary
++
++This optimizes setup.py for cases when pytest-runner is not needed,
++using the approach that is suggested upstream:
++
++https://pypi.python.org/pypi/pytest-runner#conditional-requirement
++
++Patch sent upstream: https://github.com/mwclient/mwclient/pull/180
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ setup.py | 5 ++++-
++ 1 file changed, 4 insertions(+), 1 deletion(-)
++
++diff --git a/setup.py b/setup.py
++index a32cbde..660d93b 100644
++--- a/setup.py
+++++ b/setup.py
++@@ -8,6 +8,9 @@ from setuptools import setup
++ here = os.path.abspath(os.path.dirname(__file__))
++ README = open(os.path.join(here, 'README.rst')).read()
++ 
+++needs_pytest = set(['pytest', 'test', 'ptr']).intersection(sys.argv)
+++pytest_runner = ['pytest-runner'] if needs_pytest else []
+++
++ setup(name='mwclient',
++       version='0.8.6',  # Use bumpversion to update
++       description='MediaWiki API client',
++@@ -27,7 +30,7 @@ setup(name='mwclient',
++       license='MIT',
++       packages=['mwclient'],
++       install_requires=['requests_oauthlib', 'six'],
++-      setup_requires=['pytest-runner'],
+++      setup_requires=pytest_runner,
++       tests_require=['pytest', 'pytest-pep8', 'pytest-cache', 'pytest-cov',
++                      'responses>=0.3.0', 'responses!=0.6.0', 'mock'],
++       zip_safe=True
++-- 
++2.11.0
++
