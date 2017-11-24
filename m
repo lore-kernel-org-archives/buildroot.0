@@ -1,48 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 24 Nov 2017 23:35:07 +0100
-Subject: [Buildroot] [RFC] bzip2: introduce make variable LIBDIR
-In-Reply-To: <20171124220554.24261-1-code@mmayer.net>
-References: <20171124220554.24261-1-code@mmayer.net>
-Message-ID: <20171124233507.4f398629@windsurf.lan>
+From: =?UTF-8?q?Ga=C3=ABl=20PORTAY?= <gael.portay@savoirfairelinux.com>
+Date: Fri, 24 Nov 2017 17:37:37 -0500
+Subject: [Buildroot] [PATCH 1/1] qt5webkit: fix URL for 5.6 download
+Message-ID: <20171124223737.14510-1-gael.portay@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+The Qt community releases are not stored under submodules path
+component.
 
-On Fri, 24 Nov 2017 14:05:54 -0800, Markus Mayer wrote:
-> From: Markus Mayer <mmayer@broadcom.com>
-> 
-> In order to allow us to install libz2 into a location other than
-> /usr/lib, we introduce a variable called LIBDIR that can be set by
-> the build system to an alternate location.
-> 
-> LIBDIR defaults to /usr/lib, so the behaviour doesn't change if
-> LIBDIR is never set.
-> 
-> Signed-off-by: Markus Mayer <mmayer@broadcom.com>
-> ---
-> 
-> Most package in buildroot seem to offer the flexibility to install
-> libraries into directories specified by the user (build system) rather
-> than hard-coding the destination in the way bzip2 does.
+Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
+---
+ package/qt5/qt5webkit/qt5webkit.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-We don't support customizing on a per-package basis, or even globally,
-where libraries are installed. Where have you seen that we offer the
-flexibility to choose where libraries are installed ?
-
-> My question is whether patches 2-4 should be combined into a single
-> patch or if it is preferable to keep them separate.
-
-The whole point of patch 2 is to allow cross-compilation, not to allow
-customizing the directory where libraries are installed.
-
-What are you trying to do?
-
-Thomas
+diff --git a/package/qt5/qt5webkit/qt5webkit.mk b/package/qt5/qt5webkit/qt5webkit.mk
+index 592eae908d..7925b114e6 100644
+--- a/package/qt5/qt5webkit/qt5webkit.mk
++++ b/package/qt5/qt5webkit/qt5webkit.mk
+@@ -10,7 +10,7 @@ QT5WEBKIT_VERSION = 5.9.1
+ QT5WEBKIT_SITE = http://download.qt.io/official_releases/qt/5.9/5.9.1/submodules
+ else
+ QT5WEBKIT_VERSION = $(QT5_VERSION)
+-QT5WEBKIT_SITE = http://download.qt.io/community_releases/5.6/$(QT5_VERSION)/submodules
++QT5WEBKIT_SITE = http://download.qt.io/community_releases/5.6/$(QT5_VERSION)
+ endif
+ 
+ QT5WEBKIT_SOURCE = qtwebkit-opensource-src-$(QT5WEBKIT_VERSION).tar.xz
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.11.0
