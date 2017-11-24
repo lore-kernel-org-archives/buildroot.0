@@ -1,9 +1,10 @@
 From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Fri, 24 Nov 2017 11:54:40 +0100
-Subject: [Buildroot] [PATCH v4 0/2] Add support for Meson build
-In-Reply-To: <20171029131052.18850-1-eric.le.bihan.dev@free.fr>
+Date: Fri, 24 Nov 2017 11:54:51 +0100
+Subject: [Buildroot] [PATCH v4 1/2] meson: new package
+In-Reply-To: <20171029131052.18850-2-eric.le.bihan.dev@free.fr>
 References: <20171029131052.18850-1-eric.le.bihan.dev@free.fr>
-Message-ID: <CAGm1_kuHHYibd7xmmiyMA8wLc=AOVwsxvBEAeiCkiPQHTfzrqQ@mail.gmail.com>
+ <20171029131052.18850-2-eric.le.bihan.dev@free.fr>
+Message-ID: <CAGm1_kvwM4buZJDA84O-Raq6G-csxxr=yicuk2Q+Y24gUK8t5A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,47 +13,114 @@ To: buildroot@busybox.net
 
 On Sun, Oct 29, 2017 at 2:10 PM, Eric Le Bihan
 <eric.le.bihan.dev@free.fr> wrote:
-> This small patch series provides a new build system: Meson.
+> This new package provides the host variant of the Meson Build System, an
+> open source build system meant to be both extremely fast, and as user
+> friendly as possible.
 >
-> v4 -> v3:
+> More precisely, Meson creates configuration files for the Ninja build
+> system.
 >
-> - update documentation with verbosity, configuration and staging installation
->   details.
-> - update cross-compilation configuration creation to take into account
->   $(TARGET_CFLAGS) and friends.
-> - add reference to release signature in hash file.
-> - re-use explicit tarball release instead of github helper.
-> - various stylistic changes (suggested by Arnout).
+> Besides building Meson, it generates a configuration file
+> ("$(HOST_DIR)/etc/meson/cross-compilation.conf") to be used when
+> cross-compiling a Meson-based project.
 >
-> v2 -> v3:
->
-> - bump version to 0.43.0
-> - re-use github helper
-> - reword comments in cross-compilation.conf.in
-> - use $(FOO_CONF_OPTS) in package documentation
->
-> v1 -> v2: (J?rg Krause)
->
-> - bump to version 0.41.2
-> - use explicit tarball release instead of github helper
-> - use explicit sed
-> - pass BR2_GCC_TARGET_CPU to cross file
->
-> Eric Le Bihan (2):
->   meson: new package
->   docs/manual: document meson-based packages
->
->  docs/manual/adding-packages-meson.txt   | 101 ++++++++++++++++++++++++++++++++
->  docs/manual/adding-packages.txt         |   2 +
->  package/meson/cross-compilation.conf.in |  23 ++++++++
->  package/meson/meson.hash                |   3 +
->  package/meson/meson.mk                  |  35 +++++++++++
->  5 files changed, 164 insertions(+)
->  create mode 100644 docs/manual/adding-packages-meson.txt
+> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+> Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+
+Tested-by: Yegor Yefremov <yegorslists@googlemail.com>
+
+> ---
+>  package/meson/cross-compilation.conf.in | 23 ++++++++++++++++++++++
+>  package/meson/meson.hash                |  3 +++
+>  package/meson/meson.mk                  | 35 +++++++++++++++++++++++++++++++++
+>  3 files changed, 61 insertions(+)
 >  create mode 100644 package/meson/cross-compilation.conf.in
 >  create mode 100644 package/meson/meson.hash
 >  create mode 100644 package/meson/meson.mk
-
-I could successfully test meson build system using libinput package.
-
-Yegor
+>
+> diff --git a/package/meson/cross-compilation.conf.in b/package/meson/cross-compilation.conf.in
+> new file mode 100644
+> index 0000000000..0eec74087b
+> --- /dev/null
+> +++ b/package/meson/cross-compilation.conf.in
+> @@ -0,0 +1,23 @@
+> +# Note: Buildroot's and Meson's terminologies differ about the meaning
+> +# of 'build', 'host' and 'target':
+> +# - Buildroot's 'host' is Meson's 'build'
+> +# - Buildroot's 'target' is Meson's 'host'
+> +
+> +[binaries]
+> +c = '@TARGET_CROSS at gcc'
+> +cpp = '@TARGET_CROSS at g++'
+> +ar = '@TARGET_CROSS at ar'
+> +strip = '@TARGET_CROSS at strip'
+> +pkgconfig = '@HOST_DIR@/usr/bin/pkg-config'
+> +
+> +[properties]
+> +c_args = [@TARGET_CFLAGS@]
+> +c_link_args = [@TARGET_LDFLAGS@]
+> +cpp_args = [@TARGET_CXXFLAGS@]
+> +cpp_link_args = [@TARGET_LDFLAGS@]
+> +
+> +[host_machine]
+> +system = 'linux'
+> +cpu_family ='@TARGET_ARCH@'
+> +cpu = '@TARGET_CPU@'
+> +endian = '@TARGET_ENDIAN@'
+> diff --git a/package/meson/meson.hash b/package/meson/meson.hash
+> new file mode 100644
+> index 0000000000..412c10eb2f
+> --- /dev/null
+> +++ b/package/meson/meson.hash
+> @@ -0,0 +1,3 @@
+> +# Locally calculated after checking pgp signature
+> +# https://github.com/mesonbuild/meson/releases/download/0.43.0/meson-0.43.0.tar.gz.asc
+> +sha256 c513eca90e0d70bf14cd1eaafea2fa91cf40a73326a7ff61f08a005048057340  meson-0.43.0.tar.gz
+> diff --git a/package/meson/meson.mk b/package/meson/meson.mk
+> new file mode 100644
+> index 0000000000..55ce84da07
+> --- /dev/null
+> +++ b/package/meson/meson.mk
+> @@ -0,0 +1,35 @@
+> +################################################################################
+> +#
+> +# meson
+> +#
+> +################################################################################
+> +
+> +MESON_VERSION = 0.43.0
+> +MESON_SITE = https://github.com/mesonbuild/meson/releases/download/$(MESON_VERSION)
+> +MESON_LICENSE = Apache-2.0
+> +MESON_LICENSE_FILES = COPYING
+> +MESON_SETUP_TYPE = setuptools
+> +
+> +HOST_MESON_DEPENDENCIES = host-ninja
+> +HOST_MESON_NEEDS_HOST_PYTHON = python3
+> +
+> +HOST_MESON_TARGET_ENDIAN = $(call LOWERCASE,$(BR2_ENDIAN))
+> +HOST_MESON_TARGET_CPU = $(call qstrip,$(BR2_GCC_TARGET_CPU))
+> +
+> +define HOST_MESON_INSTALL_CROSS_CONF
+> +       mkdir -p $(HOST_DIR)/etc/meson
+> +       sed -e "s%@TARGET_CROSS@%$(TARGET_CROSS)%g" \
+> +           -e "s%@TARGET_ARCH@%$(ARCH)%g" \
+> +           -e "s%@TARGET_CPU@%$(HOST_MESON_TARGET_CPU)%g" \
+> +           -e "s%@TARGET_ENDIAN@%$(HOST_MESON_TARGET_ENDIAN)%g" \
+> +           -e "s%@TARGET_CFLAGS@%`printf '"%s", ' $(TARGET_CFLAGS)`%g" \
+> +           -e "s%@TARGET_LDFLAGS@%`printf '"%s", ' $(TARGET_LDFLAGS)`%g" \
+> +           -e "s%@TARGET_CXXFLAGS@%`printf '"%s", ' $(TARGET_CXXFLAGS)`%g" \
+> +           -e "s%@HOST_DIR@%$(HOST_DIR)%g" \
+> +           $(HOST_MESON_PKGDIR)/cross-compilation.conf.in \
+> +           > $(HOST_DIR)/etc/meson/cross-compilation.conf
+> +endef
+> +
+> +HOST_MESON_POST_INSTALL_HOOKS += HOST_MESON_INSTALL_CROSS_CONF
+> +
+> +$(eval $(host-python-package))
+> --
+> 2.13.6
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
