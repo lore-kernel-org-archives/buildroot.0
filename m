@@ -1,43 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 24 Nov 2017 22:51:48 +0100
-Subject: [Buildroot] [git commit branch/next] toolchain/buildroot: glibc
- requires kernel headers >= 4.5 with NaN-2008
-Message-ID: <20171124215024.29D5B7FA3B@busybox.osuosl.org>
+Date: Fri, 24 Nov 2017 22:58:42 +0100
+Subject: [Buildroot] [PATCH 0/3] arch: fix MIPS NaN and floating-point
+ handling
+In-Reply-To: <cover.1504432422.git.yann.morin.1998@free.fr>
+References: <cover.1504431850.git.yann.morin.1998@free.fr>
+ <cover.1504432422.git.yann.morin.1998@free.fr>
+Message-ID: <20171124225842.5c1227d7@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4a5140ecffb75d1dc1f696e149a31744145ac63c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hello,
 
-From sysdeps/unix/sysv/linux/mips/configure.ac in glibc:
+On Sun,  3 Sep 2017 11:53:48 +0200, Yann E. MORIN wrote:
 
-if test -z "$arch_minimum_kernel"; then
-  if test x$libc_cv_mips_nan2008 = xyes; then
-    arch_minimum_kernel=4.5.0
-  fi
-fi
+> Yann E. MORIN (3):
+>       arch/mips: inverse the NaN logic
+>       arch/mips: inverse the mfpxx logic
+>       toolchain/buildroot: glibc requires header >= 4.5 with NaN-2008
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Romain Naour <romain.naour@openwide.fr>
-Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- toolchain/toolchain-buildroot/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+Series applied to next. Thanks!
 
-diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
-index 25ab667..cbe2038 100644
---- a/toolchain/toolchain-buildroot/Config.in
-+++ b/toolchain/toolchain-buildroot/Config.in
-@@ -52,6 +52,7 @@ config BR2_TOOLCHAIN_BUILDROOT_GLIBC
- 	depends on !BR2_STATIC_LIBS
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10 || !BR2_powerpc64le
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_5 || !BR2_MIPS_NAN_2008
- 	depends on !BR2_powerpc_SPE
- 	select BR2_TOOLCHAIN_USES_GLIBC
- 	# our glibc.mk enables RPC support
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
