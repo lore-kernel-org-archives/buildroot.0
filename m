@@ -1,52 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 24 Nov 2017 23:11:52 +0100
-Subject: [Buildroot] [git commit branch/next] arch/arm: add cortex-A32
-Message-ID: <20171124221933.D7B75814D7@busybox.osuosl.org>
+Date: Fri, 24 Nov 2017 23:32:56 +0100
+Subject: [Buildroot] [pull request] arch/arm: add some new armv8a cores
+In-Reply-To: <cover.1504444617.git.yann.morin.1998@free.fr>
+References: <cover.1504432422.git.yann.morin.1998@free.fr>
+ <cover.1504444617.git.yann.morin.1998@free.fr>
+Message-ID: <20171124233256.3c65efd2@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ffc9d6024312017a9fc7ecf6c112e60bd8288af4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hello,
 
-The cortex-A32 is an armv8a core, but it lacks the optional AArch64
-extensions, so can only work in 32-bit mode.
+On Sun,  3 Sep 2017 15:17:44 +0200, Yann E. MORIN wrote:
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- arch/Config.in.arm | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+> Yann E. MORIN (9):
+>       arch/arm: re-order cores choice
+>       arch/arm: simplify hiding non 64-bit cores
+>       arch/arm: armv8 is really armv8a
 
-diff --git a/arch/Config.in.arm b/arch/Config.in.arm
-index d110d52..061c0ea 100644
---- a/arch/Config.in.arm
-+++ b/arch/Config.in.arm
-@@ -243,6 +243,16 @@ config BR2_cortex_m4
- endif # !BR2_ARCH_IS_64
- 
- comment "armv8 cores"
-+config BR2_cortex_a32
-+	bool "cortex-A32"
-+	depends on !BR2_ARCH_IS_64
-+	select BR2_ARM_CPU_HAS_ARM
-+	select BR2_ARM_CPU_HAS_NEON
-+	select BR2_ARM_CPU_HAS_THUMB2
-+	select BR2_ARM_CPU_HAS_FP_ARMV8
-+	select BR2_ARM_CPU_ARMV8A
-+	select BR2_ARCH_HAS_MMU_OPTIONAL
-+	select BR2_ARCH_NEEDS_GCC_AT_LEAST_6
- config BR2_cortex_a53
- 	bool "cortex-A53"
- 	select BR2_ARM_CPU_HAS_ARM if !BR2_ARCH_IS_64
-@@ -571,6 +581,7 @@ config BR2_GCC_TARGET_CPU
- 	default "cortex-m3"	if BR2_cortex_m3
- 	default "cortex-m4"	if BR2_cortex_m4
- 	# armv8a
-+	default "cortex-a32"	if BR2_cortex_a32
- 	default "cortex-a53"	if BR2_cortex_a53
- 	default "cortex-a57"	if BR2_cortex_a57
- 	default "cortex-a57.cortex-a53"	if BR2_cortex_a57_a53
+Those patches applied to next.
+
+>       arch/arm: do not allow soft-float for armv8a
+
+This one not applied, see my reply to it. I've kept it as "New" in
+patchwork for now.
+
+>       arch/arm: add cortex-A32
+>       arch/arm: add some armv8a cortex variants
+>       arch/arm: add some non-cortex armv8a cores
+>       arch/arm: add armv8.1a cores
+
+I've applied those four patches to next as well. As I replied to one of
+them, I'm not super convinced exhaustively adding all cores is really
+useful, but since you did it, and build tested all of them, I applied
+the patches anyway.
+
+Thanks!
+
+Thomas Petazzoni
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
