@@ -1,75 +1,82 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 24 Nov 2017 23:33:06 +0100
-Subject: [Buildroot] [git commit branch/next] package/python-mwclient:
- require pytest-runner only when necessary
-Message-ID: <20171124222554.5E00C80253@busybox.osuosl.org>
+Date: Fri, 24 Nov 2017 23:30:43 +0100
+Subject: [Buildroot] [git commit branch/next] arch/arm: add armv8.1a cores
+Message-ID: <20171124222554.4E3AF80253@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c33c9ca62a1d34c59538b77e88d9e5f130527971
+commit: https://git.buildroot.net/buildroot/commit/?id=6317a199ecb525309e8172237a15b46776fe3a72
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fixes
-http://autobuild.buildroot.net/results/09c/09c0e590448f1fc069d1d00564c202d2b009d59a/
-http://autobuild.buildroot.net/results/79e/79ef04d2e8c91231028e23f4bb35df685efa55ca/
-http://autobuild.buildroot.net/results/7a4/7a4a4aecbe6dd315062bafe97b291645d3d6ced1/
+The armv8.1a generation is a cumulative extension to armv8a. It adds new
+extensions, and makes some previously optional ones now mandatory.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+Since gcc correctly enables the appropriate extensions based on the core
+name, we don't really need to introduce a separate config for armv8.1a,
+and we can piggyback on armv8a.
+
+All those new cores are aarch64 only (gcc fails to build in arm mode).
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...require-pytest-runner-only-when-necessary.patch | 43 ++++++++++++++++++++++
- 1 file changed, 43 insertions(+)
+ arch/Config.in.arm | 35 +++++++++++++++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
 
-diff --git a/package/python-mwclient/0001-setup.py-require-pytest-runner-only-when-necessary.patch b/package/python-mwclient/0001-setup.py-require-pytest-runner-only-when-necessary.patch
-new file mode 100644
-index 0000000..124236c
---- /dev/null
-+++ b/package/python-mwclient/0001-setup.py-require-pytest-runner-only-when-necessary.patch
-@@ -0,0 +1,43 @@
-+From a6ff9745f56b776f244c2c412685f5c10ff0f09d Mon Sep 17 00:00:00 2001
-+From: Bernd Kuhls <bernd.kuhls@t-online.de>
-+Date: Fri, 24 Nov 2017 20:44:53 +0100
-+Subject: [PATCH] setup.py: require pytest-runner only when necessary
+diff --git a/arch/Config.in.arm b/arch/Config.in.arm
+index 2d6eb99..85070fb 100644
+--- a/arch/Config.in.arm
++++ b/arch/Config.in.arm
+@@ -400,6 +400,37 @@ config BR2_xgene1
+ 	select BR2_ARM_CPU_ARMV8A
+ 	select BR2_ARCH_HAS_MMU_OPTIONAL
+ 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_5
 +
-+This optimizes setup.py for cases when pytest-runner is not needed,
-+using the approach that is suggested upstream:
-+
-+https://pypi.python.org/pypi/pytest-runner#conditional-requirement
-+
-+Patch sent upstream: https://github.com/mwclient/mwclient/pull/180
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ setup.py | 5 ++++-
-+ 1 file changed, 4 insertions(+), 1 deletion(-)
-+
-+diff --git a/setup.py b/setup.py
-+index a32cbde..660d93b 100644
-+--- a/setup.py
-++++ b/setup.py
-+@@ -8,6 +8,9 @@ from setuptools import setup
-+ here = os.path.abspath(os.path.dirname(__file__))
-+ README = open(os.path.join(here, 'README.rst')).read()
-+ 
-++needs_pytest = set(['pytest', 'test', 'ptr']).intersection(sys.argv)
-++pytest_runner = ['pytest-runner'] if needs_pytest else []
-++
-+ setup(name='mwclient',
-+       version='0.8.6',  # Use bumpversion to update
-+       description='MediaWiki API client',
-+@@ -27,7 +30,7 @@ setup(name='mwclient',
-+       license='MIT',
-+       packages=['mwclient'],
-+       install_requires=['requests_oauthlib', 'six'],
-+-      setup_requires=['pytest-runner'],
-++      setup_requires=pytest_runner,
-+       tests_require=['pytest', 'pytest-pep8', 'pytest-cache', 'pytest-cov',
-+                      'responses>=0.3.0', 'responses!=0.6.0', 'mock'],
-+       zip_safe=True
-+-- 
-+2.11.0
-+
++if BR2_ARCH_IS_64
++comment "armv8.1a cores"
++config BR2_thunderx2t99
++	bool "thunderx2t99"
++	select BR2_ARM_CPU_HAS_ARM if !BR2_ARCH_IS_64
++	select BR2_ARM_CPU_HAS_NEON if !BR2_ARCH_IS_64
++	select BR2_ARM_CPU_HAS_THUMB2 if !BR2_ARCH_IS_64
++	select BR2_ARM_CPU_HAS_FP_ARMV8
++	select BR2_ARM_CPU_ARMV8A
++	select BR2_ARCH_HAS_MMU_OPTIONAL
++	select BR2_ARCH_NEEDS_GCC_AT_LEAST_7
++config BR2_thunderx2t99p1
++	bool "thunderx2t99p1"
++	select BR2_ARM_CPU_HAS_ARM if !BR2_ARCH_IS_64
++	select BR2_ARM_CPU_HAS_NEON if !BR2_ARCH_IS_64
++	select BR2_ARM_CPU_HAS_THUMB2 if !BR2_ARCH_IS_64
++	select BR2_ARM_CPU_HAS_FP_ARMV8
++	select BR2_ARM_CPU_ARMV8A
++	select BR2_ARCH_HAS_MMU_OPTIONAL
++	select BR2_ARCH_NEEDS_GCC_AT_LEAST_7
++config BR2_vulcan
++	bool "vulcan"
++	select BR2_ARM_CPU_HAS_ARM if !BR2_ARCH_IS_64
++	select BR2_ARM_CPU_HAS_NEON if !BR2_ARCH_IS_64
++	select BR2_ARM_CPU_HAS_THUMB2 if !BR2_ARCH_IS_64
++	select BR2_ARM_CPU_HAS_FP_ARMV8
++	select BR2_ARM_CPU_ARMV8A
++	select BR2_ARCH_HAS_MMU_OPTIONAL
++	select BR2_ARCH_NEEDS_GCC_AT_LEAST_7
++endif # BR2_ARCH_IS_64
+ endchoice
+ 
+ config BR2_ARM_ENABLE_NEON
+@@ -704,6 +735,10 @@ config BR2_GCC_TARGET_CPU
+ 	default "thunderxt88"	if BR2_thunderxt88
+ 	default "thunderxt88p1"	if BR2_thunderxt88p1
+ 	default "xgene1"	if BR2_xgene1
++	# armv8.1a
++	default "thunderx2t99"	if BR2_thunderx2t99
++	default "thunderx2t99p1"	if BR2_thunderx2t99p1
++	default "vulcan"	if BR2_vulcan
+ 
+ config BR2_GCC_TARGET_ABI
+ 	default "aapcs-linux"	if BR2_arm || BR2_armeb
