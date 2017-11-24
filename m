@@ -1,284 +1,148 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 24 Nov 2017 17:46:03 +0100
-Subject: [Buildroot] [RFCv2 0/7] Per-package SDK and target directories
-Message-ID: <20171124164610.6431-1-thomas.petazzoni@free-electrons.com>
+Date: Fri, 24 Nov 2017 17:46:08 +0100
+Subject: [Buildroot] [RFCv2 5/7] pkg-generic: add .stamp_installed step
+In-Reply-To: <20171124164610.6431-1-thomas.petazzoni@free-electrons.com>
+References: <20171124164610.6431-1-thomas.petazzoni@free-electrons.com>
+Message-ID: <20171124164610.6431-6-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
-
-Here is a second iteration of the per-package SDK and target directory
-implementation. This is definitely not ready for merging, but it
-already works enough to give it some exposure. I'm sending it early so
-that:
-
- - Interested people can take the patches, try them on their
-   configurations, and report me the problems that they face.
-
- - Interested people start reviewing the patch series will it is still
-   small and simple, because I'm sure it will grow quite a bit before
-   it gets to a point where it can be merged.
-
-If you're interested in testing it, you can find the patch series at:
-
-  http://git.free-electrons.com/users/thomas-petazzoni/buildroot/log/?h=ppsh-v2
-
-Note: in the following discussion, we use the terminology "SDK" to
-refer to the combination of HOST_DIR and STAGING_DIR, i.e the
-cross-compiler and its sysroot with target libraries/headers, and a
-bunch of other native programs. Since STAGING_DIR is included inside
-HOST_DIR, the SDK directory is in essence just HOST_DIR.
-
-Changes since v1
-================
-
- - Rebased on the latest Buildroot next branch
-
- - The pkg-config changes are reworked according to Arnout's comments:
-   only @STAGING_SUBDIR@ is replaced in pkg-config.in to generate
-   pkg-config, the rest of the logic is internal to the script.
-
- - New patch to move the "host skeleton" logic into a proper
-   host-skeleton package.
-
- - New patch to have the CMake related files generated as part of the
-   toolchain package.
-
- - New patch to add a new "install" step that depends on the different
-   install steps (target, staging, images, host). This is needed to
-   later add some logic that is executed once all install steps of a
-   package have been done.
-
- - Fix the approach to solve the RPATH logic: instead of using
-   LD_LIBRARY_PATH, we actually fix with patchelf the RPATH of host
-   binaries right after their installation.
-
- - Misc other improvements in the per-package SDK implementation.
-
-What is per-package SDK and target?
-===================================
-
-Currently, output/host (SDK) and output/target are global directories:
-all packages use files installed by other packages in those global
-directories, and in turn into those global directories.
-
-The idea of per-package SDK and target is that instead of having such
-global directories, we would have one SDK directory and one target
-directory per-package, containing just what this package needs
-(dependencies), and in which the package installs its files.
-
-Why do we want per-package SDK and target?
-==========================================
-
-There are two main motivations for per-package SDK and target
-directories, which are related:
-
- 1. Since the SDK directory is global, a package can currently see
-    libraries/headers that it has not explicitly expressed a
-    dependency on. So package A may not have a dependency on package
-    B, but if package B happens to have been installed before, and
-    package A "configure" script automaticatically detects a library
-    installed by package B, it will use it. We have added tons of
-    conditional dependencies in Buildroot to make such situations less
-    problematic, but it is an endless fight, as upstream developers
-    constantly add more optional dependencies to their software.
-
-    Using per-package SDK, a given package uses as its SDK a directory
-    that only contains the libraries/headers from packages explicitly
-    listed in its dependencies. So it cannot mistakenly see a
-    library/header installed by another package.
-
- 2. Top-level parallel build (building multiple packages in parallel)
-    is currently not enabled because we have global SDK and target
-    directories.
-
-    Let's imagine package A configure script auto-detects a library
-    provided by package B, but Buildroot does not encode this
-    dependency in package A's .mk file. Package A and package B are
-    therefore totally independent from a build dependency point of
-    view.
-
-    Without top-level parallel build (current situation), you have a
-    guarantee on the build order: either A is always built before B,
-    or B is always built before A. So at least, every build gives the
-    same result: A is built with B's functionality or without it, but
-    it is consistent accross rebuilds.
-
-    If you enable top-level parallel build, because A and B are
-    totally independent, you can get A built before B or B built
-    before A depending on the build scheduling. This can change at
-    every build! This means that for a given configuration, A will
-    sometimes be built with B's functionality, sometimes not. Totally
-    unacceptable.
-
-    And of course, this extends to case where package B gets installed
-    while package A is being configured. So package A configure script
-    will see some parts of B being installed, other parts not
-    installed, causing all sort of weird and difficult to debug race
-    conditions.
-
-    By having per-package SDK directories, we ensure that package A
-    will only see the dependencies its has explicitly expressed, and
-    that no other package gets installed in parallel in the same SDK
-    directory.
-
-How is it implemented?
-======================
-
-The basic idea is pretty simple:
-
- - For each package, we have:
-
-   output/per-package/<package>/host, which is the specific SDK
-   directory for <package>.
-
-   output/per-package/<package>/target, which is the specific target
-   directory for <package>.
-
- - Before <package> is configured, we copy into its specific SDK and
-   target directories the SDK and target directories from its direct
-   dependencies. This basically populates its SDK with the
-   cross-compiler and all libraries that <package> needs. This copy is
-   done using rsync with hard links, so it is very fast and cheap from
-   a storage consumption point of view.
-
- - While <package> is being built, HOST_DIR, STAGING_DIR and
-   TARGET_DIR are tweaked to point to the current <package> specific
-   SDK and target directories. I.e, HOST_DIR no longer points to
-   output/host, but to output/per-package/<package>/host/.
-
-And this is basically enough to get things working!
-
-There are of course a few additional things to do:
-
- - At the end of the build, we still want a global target directory
-   (to generate the filesystem images) and a global SDK. Therefore, in
-   target-finalize, we assemble such global directories by copying the
-   per-package SDK and target directories from all packages listed in
-   the $(PACKAGES) variable.
-
- - We need to fix our pkg-config wrapper script so that it uses
-   relative path instead of absolute paths. This allows the wrapper
-   script to work regardless of which per-package SDK directory it is
-   installed in.
-
- - We need to move away from using absolute RPATH for host binaries,
-   and to achieve that we fix the RPATH to $ORIGIN/../lib in host
-   binaries right after the installation of each package.
-
-What remains to be done?
-========================
-
- - Completely get rid of the global HOST_DIR, TARGET_DIR and
-   STAGING_DIR definitions, so that nothing uses them, and they really
-   become per-package variables.
-
- - While the toolchain sysroot, pkg-config paths and host RPATHs are
-   properly handled, there are quite certainly a lot of other places
-   that have absolute paths that won't work well with per-package SDK,
-   and that need to be adjusted.
-
- - Perhaps use a temporary per-package SDK and target directory when
-   building a package, and rename it to the final name once the
-   package has finished building. This would allow to detect
-   situations where the per-package SDK directory of package A
-   contains absolute paths referring to the per-package SDK directory
-   of package B. Such absolute paths are wrong, but we currently don't
-   see them because the per-package SDK directory for package B still
-   exists.
-
- - Think about what needs to be done about the output/images/
-   folder. Should it also be per-package like we do for output/target?
-
- - Handle host-lzip, host-tar and host-ccache properly, as well as
-   PATCH_DEPENDENCIES.
-
- - Many other issues that I'm sure people will report.
-
-Comparison with Gustavo's patch series
-======================================
-
-Gustavo Zacarias did a previous implementation of this, available in
-http://repo.or.cz/buildroot-gz.git/shortlog/refs/heads/pps3-next. Compared
-to Gustavo's patch series, this patch series:
-
- - Implement per-package SDK and target directories, while Gustavo was
-   only doing per-package staging.
-
- - Gustavo had several patches to pass BR_TOOLCHAIN_SYSROOT to the
-   toolchain wrapper to pass the location of the current sysroot.
-
-   This is no longer needed, because 1/ we're doing a full per-package
-   SDK directory rather than per-package staging, which means the
-   sysroot is always at the same relative location compared to the
-   cross-compiler binary and 2/ the toolchain wrapper derives the
-   sysroot location relatively to the wrapper location. Thanks to
-   this, the following patches from Gustavo are (I believe) not
-   needed:
-
-   http://repo.or.cz/buildroot-gz.git/commitdiff/1ef6e798064649726d396bcb581ddbe4573c2460
-   http://repo.or.cz/buildroot-gz.git/commitdiff/d15f6c6917b555bbbbbf97c292fad4db9d4007d4
-   http://repo.or.cz/buildroot-gz.git/commitdiff/95900b65c29a010d85a769c9c6374cf3835f2169
-   http://repo.or.cz/buildroot-gz.git/commitdiff/7ed53a5437ab09b85bf6d1953f6ff6049dfcc114
-
- - Gustavo had a patch to make our pkg-config wrapper script look at
-   BR_TOOLCHAIN_SYSROOT, in order to find the
-   /usr/{lib,share}/pkgconfig folders of the current sysroot. Just
-   like for the toolchain-wrapper, such a change is no longer needed,
-   and a simple change to our pkg-config script to use relative paths
-   is sufficient.
-
- - I haven't integrated Gustavo patches that move from $(shell ...) to
-   using backticks to delay the evaluation of
-   STAGING_DIR/HOST_DIR/TARGET_DIR:
-
-   http://repo.or.cz/buildroot-gz.git/commitdiff/0c11c60865f1445830643bb404f92c20d563260c
-   http://repo.or.cz/buildroot-gz.git/commitdiff/207d2248ec8542293b6201b5c86f971021a3a591
-   http://repo.or.cz/buildroot-gz.git/commitdiff/7f6a69819fbb176e29a1c3a53b4a76efe87dad15
-   http://repo.or.cz/buildroot-gz.git/commitdiff/3328a9745eee555f5e5ef7df835afc26612ecd7b
-   http://repo.or.cz/buildroot-gz.git/commitdiff/45a9d8c2aa6f3c0d2d8ed989d843890025faa3e8
-
- - I haven't looked at Qt specific issues, such as the ones fixed by
-   Gustavo in:
-
-   http://repo.or.cz/buildroot-gz.git/commitdiff/643e982e635f4386ccefcda9da4b84536af84d04
-
- - I am not doing all the .la files, *-config, *.prl, etc. tweaks that
-   Gustavo is doing in:
-
-   http://repo.or.cz/buildroot-gz.git/commitdiff/3f7b227b4c8e4514df6e5d54f88fcfb3a3a4bae0
-
-   It is part of the "remaining absolute paths that need to be fixed"
-   item that I mentionned above.
-
-Best regards,
-
-Thomas
-
-Thomas Petazzoni (7):
-  pkgconf: use relative path to STAGING_DIR instead of absolute path
-  toolchain: post-pone evaluation of TOOLCHAIN_EXTERNAL_BIN
-  Makefile, skeleton: move the host skeleton logic to host-skeleton
-    package
-  pkg-cmake: install CMake files as part of a package
-  pkg-generic: add .stamp_installed step
-  core: change host RPATH handling
-  core: implement per-package SDK and target
-
- Makefile                                           | 34 +++++------
- package/Makefile.in                                |  2 +-
- package/pkg-cmake.mk                               | 12 ++--
- package/pkg-generic.mk                             | 71 ++++++++++++++--------
- package/pkgconf/pkg-config.in                      |  5 +-
- package/pkgconf/pkgconf.mk                         |  3 +-
- package/skeleton/skeleton.mk                       | 12 ++++
- support/scripts/fix-rpath                          | 31 ++++++----
- .../toolchain-external/pkg-toolchain-external.mk   |  2 +-
- toolchain/toolchain/toolchain.mk                   |  3 -
- 10 files changed, 108 insertions(+), 67 deletions(-)
-
+The installation to target, staging and images as well as the host
+installation are all done in 4 different make targets. We don't have
+any place currently to run something at the end of a package
+installation, i.e once all of target/staging/images (for target) or
+host (for host) installation have completed.
+
+We will need such a step to fix the RPATH of binaries in the host
+directory. Indeed, while normally only host packages should install
+things in $(HOST_DIR), in practice a number of target packages (ex:
+qt4, qt5base) do install things in $(HOST_DIR).
+
+Therefore, we want to run our RPATH fixing logic at the end of all
+installation steps. To achieve this, this commit introduces a new make
+target, .stamp_installed, which depends on
+.stamp_{target,staging,images}_installed for target packages and
+.stamp_host_installed for host packages.
+
+This new step currently doesn't do anything, but the actual logic is
+added in a follow-up commit.
+
+This change in fact makes the overall step sequencing more logical:
+for all steps the dependencies were done on the stamp file targets,
+except for the install step where we were using phony targets to make
+$(1)-install depends on $(1)-install-{target,staging,images,host}. So
+now, the phony targets $(1)-install-{target,staging,images,host} are
+only human-readable targets that are shortcuts to the corresponding
+stamp file targets, and not usded anymore for the step
+sequencing. This makes them more consistent with the other phony
+$(1)-{build,configure,patch,...} phony targets.
+
+It also makes $(1)-install-host more consistent with other phony
+targets: $(1)-install-target only existed if the package had
+<pkg>_INSTALL_TARGET = YES, but $(1)-install-host existed
+unconditionally. Now it only exists if it's a host package.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+Changes since v1:
+ - New patch.
+---
+ package/pkg-generic.mk | 44 +++++++++++++++++++++++++++-----------------
+ 1 file changed, 27 insertions(+), 17 deletions(-)
+
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 574a5861d0..28bd4ba6a8 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -327,6 +327,12 @@ $(BUILD_DIR)/%/.stamp_target_installed:
+ 	@$(call step_end,install-target)
+ 	$(Q)touch $@
+ 
++# Finalize installation
++$(BUILD_DIR)/%/.stamp_installed:
++	@$(call step_start,install)
++	@$(call step_end,install)
++	$(Q)touch $@
++
+ # Remove package sources
+ $(BUILD_DIR)/%/.stamp_dircleaned:
+ 	rm -Rf $(@D)
+@@ -582,6 +588,7 @@ $(2)_TARGET_INSTALL_TARGET =	$$($(2)_DIR)/.stamp_target_installed
+ $(2)_TARGET_INSTALL_STAGING =	$$($(2)_DIR)/.stamp_staging_installed
+ $(2)_TARGET_INSTALL_IMAGES =	$$($(2)_DIR)/.stamp_images_installed
+ $(2)_TARGET_INSTALL_HOST =      $$($(2)_DIR)/.stamp_host_installed
++$(2)_TARGET_INSTALL =      	$$($(2)_DIR)/.stamp_installed
+ $(2)_TARGET_BUILD =		$$($(2)_DIR)/.stamp_built
+ $(2)_TARGET_CONFIGURE =		$$($(2)_DIR)/.stamp_configured
+ $(2)_TARGET_RSYNC =	        $$($(2)_DIR)/.stamp_rsynced
+@@ -629,38 +636,40 @@ $(2)_ROOTFS_POST_CMD_HOOKS      ?=
+ # human-friendly targets and target sequencing
+ $(1):			$(1)-install
+ 
++$(1)-install:			$$($(2)_TARGET_INSTALL)
++
+ ifeq ($$($(2)_TYPE),host)
+-$(1)-install:	        $(1)-install-host
+-else
+-$(1)-install:		$(1)-install-staging $(1)-install-target $(1)-install-images
+-endif
++
++$(1)-install-host:		$$($(2)_TARGET_INSTALL_HOST)
++$$($(2)_TARGET_INSTALL):	$$($(2)_TARGET_INSTALL_HOST)
++
++else # host vs. target
+ 
+ ifeq ($$($(2)_INSTALL_TARGET),YES)
+ $(1)-install-target:		$$($(2)_TARGET_INSTALL_TARGET)
+-$$($(2)_TARGET_INSTALL_TARGET):	$$($(2)_TARGET_BUILD)
+-else
+-$(1)-install-target:
++$$($(2)_TARGET_INSTALL):	$$($(2)_TARGET_INSTALL_TARGET)
+ endif
+ 
+ ifeq ($$($(2)_INSTALL_STAGING),YES)
+-$(1)-install-staging:			$$($(2)_TARGET_INSTALL_STAGING)
+-$$($(2)_TARGET_INSTALL_STAGING):	$$($(2)_TARGET_BUILD)
+-# Some packages use install-staging stuff for install-target
+-$$($(2)_TARGET_INSTALL_TARGET):		$$($(2)_TARGET_INSTALL_STAGING)
+-else
+-$(1)-install-staging:
++$(1)-install-staging:		$$($(2)_TARGET_INSTALL_STAGING)
++$$($(2)_TARGET_INSTALL):	$$($(2)_TARGET_INSTALL_STAGING)
+ endif
+ 
+ ifeq ($$($(2)_INSTALL_IMAGES),YES)
+ $(1)-install-images:		$$($(2)_TARGET_INSTALL_IMAGES)
+-$$($(2)_TARGET_INSTALL_IMAGES):	$$($(2)_TARGET_BUILD)
+-else
+-$(1)-install-images:
++$$($(2)_TARGET_INSTALL):	$$($(2)_TARGET_INSTALL_IMAGES)
+ endif
+ 
+-$(1)-install-host:		$$($(2)_TARGET_INSTALL_HOST)
++endif # host vs.target
++
++$$($(2)_TARGET_INSTALL_TARGET):	$$($(2)_TARGET_BUILD)
++$$($(2)_TARGET_INSTALL_STAGING):$$($(2)_TARGET_BUILD)
++$$($(2)_TARGET_INSTALL_IMAGES):	$$($(2)_TARGET_BUILD)
+ $$($(2)_TARGET_INSTALL_HOST):	$$($(2)_TARGET_BUILD)
+ 
++# Some packages use install-staging stuff for install-target
++$$($(2)_TARGET_INSTALL_TARGET):		$$($(2)_TARGET_INSTALL_STAGING)
++
+ $(1)-build:		$$($(2)_TARGET_BUILD)
+ $$($(2)_TARGET_BUILD):	$$($(2)_TARGET_CONFIGURE)
+ 
+@@ -800,6 +809,7 @@ $(1)-reconfigure:	$(1)-clean-for-reconfigure $(1)
+ 
+ # define the PKG variable for all targets, containing the
+ # uppercase package variable prefix
++$$($(2)_TARGET_INSTALL):		PKG=$(2)
+ $$($(2)_TARGET_INSTALL_TARGET):		PKG=$(2)
+ $$($(2)_TARGET_INSTALL_STAGING):	PKG=$(2)
+ $$($(2)_TARGET_INSTALL_IMAGES):		PKG=$(2)
 -- 
 2.13.6
