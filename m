@@ -1,43 +1,225 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 27 Nov 2017 09:26:48 +0100
-Subject: [Buildroot] [git commit] linux-firmware: Bump to the latest version
-Message-ID: <20171201205337.E1BF080139@busybox.osuosl.org>
+Date: Fri, 24 Nov 2017 23:01:03 +0100
+Subject: [Buildroot] [git commit] arch/arm: simplify hiding non 64-bit cores
+Message-ID: <20171201205336.EE4A57FF6F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a8c1f02ecc40678e6eacfbdb34ea842840f5bee5
+commit: https://git.buildroot.net/buildroot/commit/?id=a9f95de2c0d81d40ef4b062447f1d7deba34788c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Update to commit 17e6288135d4.
+Now that the cores are all oredered correctly, we can just enclose all
+the non 64-bit cores inside a big if-block, rather than have each of
+them have the dependency.
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/linux-firmware/linux-firmware.hash | 2 +-
- package/linux-firmware/linux-firmware.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ arch/Config.in.arm | 31 ++-----------------------------
+ 1 file changed, 2 insertions(+), 29 deletions(-)
 
-diff --git a/package/linux-firmware/linux-firmware.hash b/package/linux-firmware/linux-firmware.hash
-index 9b8dfed..209ea26 100644
---- a/package/linux-firmware/linux-firmware.hash
-+++ b/package/linux-firmware/linux-firmware.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 ec58d9aaf3cf80f768c32ba22d925c0542436ef3ee4588acd3e49b12ca2ed9d9 linux-firmware-a3a26af24e29c818ef9b5661856018e21a5c49fb.tar.gz
-+sha256 28d359523a36c1cdc3e85a8e148bb2d68b036d28b10f0e80a192f3dc29f02c16 linux-firmware-17e6288135d4500f9fe60224dce2b46d850c346b.tar.gz
-diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index d238abe..fd0fa3d 100644
---- a/package/linux-firmware/linux-firmware.mk
-+++ b/package/linux-firmware/linux-firmware.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/arch/Config.in.arm b/arch/Config.in.arm
+index 66dce3a..c2b7931 100644
+--- a/arch/Config.in.arm
++++ b/arch/Config.in.arm
+@@ -68,37 +68,32 @@ choice
+ 	help
+ 	  Specific CPU variant to use
  
--LINUX_FIRMWARE_VERSION = a3a26af24e29c818ef9b5661856018e21a5c49fb
-+LINUX_FIRMWARE_VERSION = 17e6288135d4500f9fe60224dce2b46d850c346b
- LINUX_FIRMWARE_SITE = http://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git
- LINUX_FIRMWARE_SITE_METHOD = git
++if !BR2_ARCH_IS_64
+ comment "armv4 cores"
+-	depends on !BR2_ARCH_IS_64
+ config BR2_arm920t
+ 	bool "arm920t"
+ 	select BR2_ARM_CPU_HAS_ARM
+ 	select BR2_ARM_CPU_HAS_THUMB
+ 	select BR2_ARM_CPU_ARMV4
+ 	select BR2_ARCH_HAS_MMU_OPTIONAL
+-	depends on !BR2_ARCH_IS_64
+ config BR2_arm922t
+ 	bool "arm922t"
+ 	select BR2_ARM_CPU_HAS_ARM
+ 	select BR2_ARM_CPU_HAS_THUMB
+ 	select BR2_ARM_CPU_ARMV4
+ 	select BR2_ARCH_HAS_MMU_OPTIONAL
+-	depends on !BR2_ARCH_IS_64
+ config BR2_fa526
+ 	bool "fa526/626"
+ 	select BR2_ARM_CPU_HAS_ARM
+ 	select BR2_ARM_CPU_ARMV4
+ 	select BR2_ARCH_HAS_MMU_OPTIONAL
+-	depends on !BR2_ARCH_IS_64
+ config BR2_strongarm
+ 	bool "strongarm sa110/sa1100"
+ 	select BR2_ARM_CPU_HAS_ARM
+ 	select BR2_ARM_CPU_ARMV4
+ 	select BR2_ARCH_HAS_MMU_OPTIONAL
+-	depends on !BR2_ARCH_IS_64
  
+ comment "armv5 cores"
+-	depends on !BR2_ARCH_IS_64
+ config BR2_arm926t
+ 	bool "arm926t"
+ 	select BR2_ARM_CPU_HAS_ARM
+@@ -106,30 +101,25 @@ config BR2_arm926t
+ 	select BR2_ARM_CPU_HAS_THUMB
+ 	select BR2_ARM_CPU_ARMV5
+ 	select BR2_ARCH_HAS_MMU_OPTIONAL
+-	depends on !BR2_ARCH_IS_64
+ config BR2_iwmmxt
+ 	bool "iwmmxt"
+ 	select BR2_ARM_CPU_HAS_ARM
+ 	select BR2_ARM_CPU_ARMV5
+ 	select BR2_ARCH_HAS_MMU_OPTIONAL
+-	depends on !BR2_ARCH_IS_64
+ config BR2_xscale
+ 	bool "xscale"
+ 	select BR2_ARM_CPU_HAS_ARM
+ 	select BR2_ARM_CPU_HAS_THUMB
+ 	select BR2_ARM_CPU_ARMV5
+ 	select BR2_ARCH_HAS_MMU_OPTIONAL
+-	depends on !BR2_ARCH_IS_64
+ 
+ comment "armv6 cores"
+-	depends on !BR2_ARCH_IS_64
+ config BR2_arm1136j_s
+ 	bool "arm1136j-s"
+ 	select BR2_ARM_CPU_HAS_ARM
+ 	select BR2_ARM_CPU_HAS_THUMB
+ 	select BR2_ARM_CPU_ARMV6
+ 	select BR2_ARCH_HAS_MMU_OPTIONAL
+-	depends on !BR2_ARCH_IS_64
+ config BR2_arm1136jf_s
+ 	bool "arm1136jf-s"
+ 	select BR2_ARM_CPU_HAS_ARM
+@@ -137,14 +127,12 @@ config BR2_arm1136jf_s
+ 	select BR2_ARM_CPU_HAS_THUMB
+ 	select BR2_ARM_CPU_ARMV6
+ 	select BR2_ARCH_HAS_MMU_OPTIONAL
+-	depends on !BR2_ARCH_IS_64
+ config BR2_arm1176jz_s
+ 	bool "arm1176jz-s"
+ 	select BR2_ARM_CPU_HAS_ARM
+ 	select BR2_ARM_CPU_HAS_THUMB
+ 	select BR2_ARM_CPU_ARMV6
+ 	select BR2_ARCH_HAS_MMU_OPTIONAL
+-	depends on !BR2_ARCH_IS_64
+ config BR2_arm1176jzf_s
+ 	bool "arm1176jzf-s"
+ 	select BR2_ARM_CPU_HAS_ARM
+@@ -152,7 +140,6 @@ config BR2_arm1176jzf_s
+ 	select BR2_ARM_CPU_HAS_THUMB
+ 	select BR2_ARM_CPU_ARMV6
+ 	select BR2_ARCH_HAS_MMU_OPTIONAL
+-	depends on !BR2_ARCH_IS_64
+ config BR2_arm11mpcore
+ 	bool "mpcore"
+ 	select BR2_ARM_CPU_HAS_ARM
+@@ -160,10 +147,8 @@ config BR2_arm11mpcore
+ 	select BR2_ARM_CPU_HAS_THUMB
+ 	select BR2_ARM_CPU_ARMV6
+ 	select BR2_ARCH_HAS_MMU_OPTIONAL
+-	depends on !BR2_ARCH_IS_64
+ 
+ comment "armv7a cores"
+-	depends on !BR2_ARCH_IS_64
+ config BR2_cortex_a5
+ 	bool "cortex-A5"
+ 	select BR2_ARM_CPU_HAS_ARM
+@@ -172,7 +157,6 @@ config BR2_cortex_a5
+ 	select BR2_ARM_CPU_HAS_THUMB2
+ 	select BR2_ARM_CPU_ARMV7A
+ 	select BR2_ARCH_HAS_MMU_OPTIONAL
+-	depends on !BR2_ARCH_IS_64
+ config BR2_cortex_a7
+ 	bool "cortex-A7"
+ 	select BR2_ARM_CPU_HAS_ARM
+@@ -181,7 +165,6 @@ config BR2_cortex_a7
+ 	select BR2_ARM_CPU_HAS_THUMB2
+ 	select BR2_ARM_CPU_ARMV7A
+ 	select BR2_ARCH_HAS_MMU_OPTIONAL
+-	depends on !BR2_ARCH_IS_64
+ config BR2_cortex_a8
+ 	bool "cortex-A8"
+ 	select BR2_ARM_CPU_HAS_ARM
+@@ -190,7 +173,6 @@ config BR2_cortex_a8
+ 	select BR2_ARM_CPU_HAS_THUMB2
+ 	select BR2_ARM_CPU_ARMV7A
+ 	select BR2_ARCH_HAS_MMU_OPTIONAL
+-	depends on !BR2_ARCH_IS_64
+ config BR2_cortex_a9
+ 	bool "cortex-A9"
+ 	select BR2_ARM_CPU_HAS_ARM
+@@ -199,7 +181,6 @@ config BR2_cortex_a9
+ 	select BR2_ARM_CPU_HAS_THUMB2
+ 	select BR2_ARM_CPU_ARMV7A
+ 	select BR2_ARCH_HAS_MMU_OPTIONAL
+-	depends on !BR2_ARCH_IS_64
+ config BR2_cortex_a12
+ 	bool "cortex-A12"
+ 	select BR2_ARM_CPU_HAS_ARM
+@@ -208,7 +189,6 @@ config BR2_cortex_a12
+ 	select BR2_ARM_CPU_HAS_THUMB2
+ 	select BR2_ARM_CPU_ARMV7A
+ 	select BR2_ARCH_HAS_MMU_OPTIONAL
+-	depends on !BR2_ARCH_IS_64
+ config BR2_cortex_a15
+ 	bool "cortex-A15"
+ 	select BR2_ARM_CPU_HAS_ARM
+@@ -217,7 +197,6 @@ config BR2_cortex_a15
+ 	select BR2_ARM_CPU_HAS_THUMB2
+ 	select BR2_ARM_CPU_ARMV7A
+ 	select BR2_ARCH_HAS_MMU_OPTIONAL
+-	depends on !BR2_ARCH_IS_64
+ config BR2_cortex_a15_a7
+ 	bool "cortex-A15/A7 big.LITTLE"
+ 	select BR2_ARM_CPU_HAS_ARM
+@@ -227,7 +206,6 @@ config BR2_cortex_a15_a7
+ 	select BR2_ARM_CPU_ARMV7A
+ 	select BR2_ARCH_HAS_MMU_OPTIONAL
+ 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_4_9
+-	depends on !BR2_ARCH_IS_64
+ config BR2_cortex_a17
+ 	bool "cortex-A17"
+ 	select BR2_ARM_CPU_HAS_ARM
+@@ -237,7 +215,6 @@ config BR2_cortex_a17
+ 	select BR2_ARM_CPU_ARMV7A
+ 	select BR2_ARCH_HAS_MMU_OPTIONAL
+ 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_5
+-	depends on !BR2_ARCH_IS_64
+ config BR2_cortex_a17_a7
+ 	bool "cortex-A17/A7 big.LITTLE"
+ 	select BR2_ARM_CPU_HAS_ARM
+@@ -247,27 +224,23 @@ config BR2_cortex_a17_a7
+ 	select BR2_ARM_CPU_ARMV7A
+ 	select BR2_ARCH_HAS_MMU_OPTIONAL
+ 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_5
+-	depends on !BR2_ARCH_IS_64
+ config BR2_pj4
+ 	bool "pj4"
+ 	select BR2_ARM_CPU_HAS_ARM
+ 	select BR2_ARM_CPU_HAS_VFPV3
+ 	select BR2_ARM_CPU_ARMV7A
+ 	select BR2_ARCH_HAS_MMU_OPTIONAL
+-	depends on !BR2_ARCH_IS_64
+ 
+ comment "armv7m cores"
+-	depends on !BR2_ARCH_IS_64
+ config BR2_cortex_m3
+ 	bool "cortex-M3"
+ 	select BR2_ARM_CPU_HAS_THUMB2
+ 	select BR2_ARM_CPU_ARMV7M
+-	depends on !BR2_ARCH_IS_64
+ config BR2_cortex_m4
+ 	bool "cortex-M4"
+ 	select BR2_ARM_CPU_HAS_THUMB2
+ 	select BR2_ARM_CPU_ARMV7M
+-	depends on !BR2_ARCH_IS_64
++endif # !BR2_ARCH_IS_64
+ 
+ comment "armv8 cores"
+ config BR2_cortex_a53
