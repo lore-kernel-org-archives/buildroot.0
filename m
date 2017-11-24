@@ -1,55 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 24 Nov 2017 22:20:14 +0100
-Subject: [Buildroot] [git commit branch/next] package/gcc: slight cleanup
- and reorg in remaining arch depends
-Message-ID: <20171124211341.C06268148C@busybox.osuosl.org>
+Date: Fri, 24 Nov 2017 22:23:47 +0100
+Subject: [Buildroot] [PATCH 0/8] arch: some require a minimal gcc version
+In-Reply-To: <cover.1504431850.git.yann.morin.1998@free.fr>
+References: <cover.1504430497.git.yann.morin.1998@free.fr>
+ <cover.1504431850.git.yann.morin.1998@free.fr>
+Message-ID: <20171124222347.47e9c638@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5e6de23e45b2b39a39b00ff80ac6e884be89b62c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hello,
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/gcc/Config.in.host | 13 ++++++-------
- 1 file changed, 6 insertions(+), 7 deletions(-)
+On Sun,  3 Sep 2017 11:44:28 +0200, Yann E. MORIN wrote:
 
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index 780ee73..74c1b2f 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -24,12 +24,11 @@ config BR2_GCC_VERSION_4_9_X
- 	bool "gcc 4.9.x"
- 	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_5
- 	# Broken or unsupported architectures
--	depends on !BR2_arc && !BR2_or1k
--	# musl microblaze unsupported
-+	depends on !BR2_arc
-+	depends on !BR2_or1k
-+	# musl on microblaze, ppc64 and mips64 unsupported
- 	depends on !(BR2_TOOLCHAIN_USES_MUSL && (BR2_microblazeel || BR2_microblazebe))
--	# musl ppc64 unsupported
- 	depends on !(BR2_TOOLCHAIN_USES_MUSL && (BR2_powerpc64 || BR2_powerpc64le))
--	# musl mips64 unsupported
- 	depends on !(BR2_TOOLCHAIN_USES_MUSL && (BR2_mips64 || BR2_mips64el))
- 	# glibc >= 2.26 needs gcc >= 6.2
- 	depends on !(BR2_TOOLCHAIN_USES_GLIBC && BR2_powerpc64le)
-@@ -39,10 +38,10 @@ config BR2_GCC_VERSION_5_X
- 	bool "gcc 5.x"
- 	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_6
- 	# Broken or unsupported architectures
--	depends on !BR2_arc && !BR2_or1k
--	# musl ppc64 unsupported
-+	depends on !BR2_arc
-+	depends on !BR2_or1k
-+	# musl on ppc64 and mips64 unsupported
- 	depends on !(BR2_TOOLCHAIN_USES_MUSL && (BR2_powerpc64 || BR2_powerpc64le))
--	# musl mips64 unsupported
- 	depends on !(BR2_TOOLCHAIN_USES_MUSL && (BR2_mips64 || BR2_mips64el))
- 	# glibc >= 2.26 needs gcc >= 6.2
- 	depends on !(BR2_TOOLCHAIN_USES_GLIBC && BR2_powerpc64le)
+> Yann E. MORIN (8):
+>       arch: introduce minimal required gcc version
+>       package/gcc: hide versions too old for the current arch
+>       toolchain/external-custom: hide versions too old for the current arch
+>       toolchain/external: hide versions too old for the current arch
+>       arch/bfin: needs gcc >= 6
+>       arch/mips: some variants need different gcc versions
+>       arch/arm: some variants need different gcc versions
+>       package/gcc: slight cleanup and reorg in remaining arch depends
+
+Series applied to next, after fixing the minor conflicts that were
+caused by other changes being merged in between, and fixing a few typos
+in the commit log.
+
+I'm still a bit worried about external toolchains that have gcc
+versions containing backports that support for an architecture or
+architecture variant that would normally require a more recent gcc
+version.
+
+For example, gcc support for ARC was added in gcc 7.x, so we will be
+adding the statement that ARC needs gcc >= 7.x. However, the current
+Synopsys external toolchain for ARC uses gcc 6.x, so it wouldn't be
+selectable anymore.
+
+I can imagine that Synopsys will rebuild their toolchain with gcc 7.x
+soonish, so perhaps the problem will just disappear by itself.
+
+But it might still be an issue in other situations. Let's see what
+happens in the future! :-)
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
