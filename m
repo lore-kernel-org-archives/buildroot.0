@@ -1,74 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 24 Nov 2017 22:39:56 +0100
-Subject: [Buildroot] [git commit branch/next] arch/mips: inverse the NaN
- logic
-Message-ID: <20171124215024.1F41B8151C@busybox.osuosl.org>
+Date: Fri, 24 Nov 2017 22:51:48 +0100
+Subject: [Buildroot] [git commit branch/next] toolchain/buildroot: glibc
+ requires kernel headers >= 4.5 with NaN-2008
+Message-ID: <20171124215024.29D5B7FA3B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=31b134a64537b1f6f38cd9378f4ddf0f43b22b43
+commit: https://git.buildroot.net/buildroot/commit/?id=4a5140ecffb75d1dc1f696e149a31744145ac63c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Currently the possibility to choose the NaN encoding is conditional to
-having a sufficiently recent gcc version.
+From sysdeps/unix/sysv/linux/mips/configure.ac in glibc:
 
-Which means that the architecture selection depends on the gcc version.
-
-But that's opposite to what we've always done in Buildroot: the software
-versions are conditional to the architecture options. There is nothing
-we can do about the hardware: it is there, we can't change it, while we
-can restrict ourselves to using software that is working on said
-hardware.
-
-Thus, we inverse the logic, to move the condition onto the software
-side: whenever NaN-2008 are selected, we restrict the toolchain
-selection to at least a gcc-4.9.
-
-But now, the option with the NaN type is always set, so we must enclose
-the code in gcc.mk inside a HAS_NAN_OPTION condition, as is already done
-for the external toolchain case.
+if test -z "$arch_minimum_kernel"; then
+  if test x$libc_cv_mips_nan2008 = xyes; then
+    arch_minimum_kernel=4.5.0
+  fi
+fi
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Romain Naour <romain.naour@openwide.fr>
 Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- arch/Config.in.mips | 2 +-
- package/gcc/gcc.mk  | 2 ++
- 2 files changed, 3 insertions(+), 1 deletion(-)
+ toolchain/toolchain-buildroot/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/Config.in.mips b/arch/Config.in.mips
-index c08b2a2..13d1a47 100644
---- a/arch/Config.in.mips
-+++ b/arch/Config.in.mips
-@@ -176,10 +176,10 @@ config BR2_MIPS_NAN_LEGACY
- 
- config BR2_MIPS_NAN_2008
- 	bool
-+	select BR2_ARCH_NEEDS_GCC_AT_LEAST_4_9
- 
- choice
- 	prompt "Target NaN"
--	depends on BR2_TOOLCHAIN_HAS_MNAN_OPTION
- 	depends on BR2_mips_32r5 || BR2_mips_64r5
- 	default BR2_MIPS_ENABLE_NAN_2008
- 	help
-diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-index 6bdd6c8..1112003 100644
---- a/package/gcc/gcc.mk
-+++ b/package/gcc/gcc.mk
-@@ -207,9 +207,11 @@ endif
- ifneq ($(call qstrip,$(BR2_GCC_TARGET_ABI)),)
- HOST_GCC_COMMON_CONF_OPTS += --with-abi=$(BR2_GCC_TARGET_ABI)
- endif
-+ifeq ($(BR2_TOOLCHAIN_HAS_MNAN_OPTION),y)
- ifneq ($(call qstrip,$(BR2_GCC_TARGET_NAN)),)
- HOST_GCC_COMMON_CONF_OPTS += --with-nan=$(BR2_GCC_TARGET_NAN)
- endif
-+endif
- ifneq ($(call qstrip,$(BR2_GCC_TARGET_FP32_MODE)),)
- HOST_GCC_COMMON_CONF_OPTS += --with-fp-32=$(BR2_GCC_TARGET_FP32_MODE)
- endif
+diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
+index 25ab667..cbe2038 100644
+--- a/toolchain/toolchain-buildroot/Config.in
++++ b/toolchain/toolchain-buildroot/Config.in
+@@ -52,6 +52,7 @@ config BR2_TOOLCHAIN_BUILDROOT_GLIBC
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10 || !BR2_powerpc64le
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_5 || !BR2_MIPS_NAN_2008
+ 	depends on !BR2_powerpc_SPE
+ 	select BR2_TOOLCHAIN_USES_GLIBC
+ 	# our glibc.mk enables RPC support
