@@ -1,41 +1,106 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 24 Nov 2017 21:33:55 +0100
-Subject: [Buildroot] [git commit] libupnp: bump to version 1.6.24
-Message-ID: <20171201205335.B036A7FF6F@busybox.osuosl.org>
+Date: Fri, 24 Nov 2017 22:10:46 +0100
+Subject: [Buildroot] [git commit] toolchain/external-custom: hide versions
+ too old for the current arch
+Message-ID: <20171201205336.4C49F8007A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c1c5703e84b83f00b01dea98467293b3033c1d74
+commit: https://git.buildroot.net/buildroot/commit/?id=3ae7f68b59e97af86bd43b0e2d454705e8feaa31
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+When an architecture expresses a requirement on the gcc version, limit
+the version choice in the custom external toolchain.
+
+The rationale being that there is no point in offering that version to
+the user if we know before-hand that the gcc version will not work for
+that architecture.
+
+All versions below the minimum we support is just made conditional to
+that minimum as well, including the "older" entry.
+
+However, this means that the "older" entry is no longer available when
+the architecture requires a minimum gcc version. A user who wants to use
+a toolchain with a gcc older than the minimum will have no choice but to
+realise the toolchain is not suitable (or lie and we would catch that
+when checking the gcc version anyway).
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libupnp/libupnp.hash | 2 +-
- package/libupnp/libupnp.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .../toolchain-external-custom/Config.in.options           | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
-diff --git a/package/libupnp/libupnp.hash b/package/libupnp/libupnp.hash
-index 1012461..3b45d53 100644
---- a/package/libupnp/libupnp.hash
-+++ b/package/libupnp/libupnp.hash
-@@ -1,2 +1,2 @@
- # Locally computed:
--sha256	0bdfacb7fa8d99b78343b550800ff193264f92c66ef67852f87f042fd1a1ebbc	libupnp-1.6.22.tar.bz2
-+sha256	7d83d79af3bb4062e5c3a58bf2e90d2da5b8b99e2b2d57c23b5b6f766288cf96	libupnp-1.6.24.tar.bz2
-diff --git a/package/libupnp/libupnp.mk b/package/libupnp/libupnp.mk
-index bf01b4d..c7085c2 100644
---- a/package/libupnp/libupnp.mk
-+++ b/package/libupnp/libupnp.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+index b9e7c20..e35ef87 100644
+--- a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
++++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+@@ -18,6 +18,11 @@ config BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX
  
--LIBUPNP_VERSION = 1.6.22
-+LIBUPNP_VERSION = 1.6.24
- LIBUPNP_SOURCE = libupnp-$(LIBUPNP_VERSION).tar.bz2
- LIBUPNP_SITE = http://downloads.sourceforge.net/project/pupnp/pupnp/libUPnP%20$(LIBUPNP_VERSION)
- LIBUPNP_CONF_ENV = ac_cv_lib_compat_ftime=no
+ choice
+ 	bool "External toolchain gcc version"
++	default BR2_TOOLCHAIN_EXTERNAL_GCC_7   if BR2_ARCH_NEEDS_GCC_AT_LEAST_7
++	default BR2_TOOLCHAIN_EXTERNAL_GCC_6   if BR2_ARCH_NEEDS_GCC_AT_LEAST_6
++	default BR2_TOOLCHAIN_EXTERNAL_GCC_5   if BR2_ARCH_NEEDS_GCC_AT_LEAST_5
++	default BR2_TOOLCHAIN_EXTERNAL_GCC_4_9 if BR2_ARCH_NEEDS_GCC_AT_LEAST_4_9
++	default BR2_TOOLCHAIN_EXTERNAL_GCC_4_8 if BR2_ARCH_NEEDS_GCC_AT_LEAST_4_8
+ 	default BR2_TOOLCHAIN_EXTERNAL_GCC_4_3
+ 	help
+ 	  Set to the gcc version that is used by your external
+@@ -29,42 +34,52 @@ config BR2_TOOLCHAIN_EXTERNAL_GCC_7
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_GCC_6
+ 	bool "6.x"
++	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_7
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_6
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_GCC_5
+ 	bool "5.x"
++	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_6
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_5
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_GCC_4_9
+ 	bool "4.9.x"
++	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_5
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_GCC_4_8
+ 	bool "4.8.x"
++	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_4_9
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_GCC_4_7
+ 	bool "4.7.x"
++	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_4_8
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_GCC_4_6
+ 	bool "4.6.x"
++	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_4_8
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_6
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_GCC_4_5
+ 	bool "4.5.x"
++	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_4_8
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_GCC_4_4
+ 	bool "4.4.x"
++	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_4_8
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_4
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_GCC_4_3
+ 	bool "4.3.x"
++	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_4_8
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_3
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_GCC_OLD
+ 	bool "older"
++	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_4_8
+ 	help
+ 	  Use this option if your GCC version is older than any of the
+ 	  above.
