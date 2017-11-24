@@ -1,106 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 24 Nov 2017 22:10:46 +0100
-Subject: [Buildroot] [git commit] toolchain/external-custom: hide versions
- too old for the current arch
-Message-ID: <20171201205336.4C49F8007A@busybox.osuosl.org>
+Date: Fri, 24 Nov 2017 22:17:03 +0100
+Subject: [Buildroot] [git commit] arch/bfin: needs gcc >= 6
+Message-ID: <20171201205336.71AE77F90C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3ae7f68b59e97af86bd43b0e2d454705e8feaa31
+commit: https://git.buildroot.net/buildroot/commit/?id=6df07bc58e089be6d3820099c0fbb1b8ac7e8eb2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-When an architecture expresses a requirement on the gcc version, limit
-the version choice in the custom external toolchain.
-
-The rationale being that there is no point in offering that version to
-the user if we know before-hand that the gcc version will not work for
-that architecture.
-
-All versions below the minimum we support is just made conditional to
-that minimum as well, including the "older" entry.
-
-However, this means that the "older" entry is no longer available when
-the architecture requires a minimum gcc version. A user who wants to use
-a toolchain with a gcc older than the minimum will have no choice but to
-realise the toolchain is not suitable (or lie and we would catch that
-when checking the gcc version anyway).
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../toolchain-external-custom/Config.in.options           | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+ arch/Config.in             | 1 +
+ package/gcc/Config.in.host | 4 ++--
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-index b9e7c20..e35ef87 100644
---- a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-+++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-@@ -18,6 +18,11 @@ config BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX
- 
- choice
- 	bool "External toolchain gcc version"
-+	default BR2_TOOLCHAIN_EXTERNAL_GCC_7   if BR2_ARCH_NEEDS_GCC_AT_LEAST_7
-+	default BR2_TOOLCHAIN_EXTERNAL_GCC_6   if BR2_ARCH_NEEDS_GCC_AT_LEAST_6
-+	default BR2_TOOLCHAIN_EXTERNAL_GCC_5   if BR2_ARCH_NEEDS_GCC_AT_LEAST_5
-+	default BR2_TOOLCHAIN_EXTERNAL_GCC_4_9 if BR2_ARCH_NEEDS_GCC_AT_LEAST_4_9
-+	default BR2_TOOLCHAIN_EXTERNAL_GCC_4_8 if BR2_ARCH_NEEDS_GCC_AT_LEAST_4_8
- 	default BR2_TOOLCHAIN_EXTERNAL_GCC_4_3
+diff --git a/arch/Config.in b/arch/Config.in
+index 607da36..d3f63da 100644
+--- a/arch/Config.in
++++ b/arch/Config.in
+@@ -79,6 +79,7 @@ config BR2_aarch64_be
+ config BR2_bfin
+ 	bool "Blackfin"
+ 	select BR2_ARCH_HAS_FDPIC_SUPPORT
++	select BR2_ARCH_NEEDS_GCC_AT_LEAST_6
  	help
- 	  Set to the gcc version that is used by your external
-@@ -29,42 +34,52 @@ config BR2_TOOLCHAIN_EXTERNAL_GCC_7
- 
- config BR2_TOOLCHAIN_EXTERNAL_GCC_6
- 	bool "6.x"
-+	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_7
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_6
- 
- config BR2_TOOLCHAIN_EXTERNAL_GCC_5
- 	bool "5.x"
-+	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_6
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_5
- 
- config BR2_TOOLCHAIN_EXTERNAL_GCC_4_9
- 	bool "4.9.x"
-+	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_5
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
- 
- config BR2_TOOLCHAIN_EXTERNAL_GCC_4_8
- 	bool "4.8.x"
-+	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_4_9
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
- 
- config BR2_TOOLCHAIN_EXTERNAL_GCC_4_7
- 	bool "4.7.x"
-+	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_4_8
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
- 
- config BR2_TOOLCHAIN_EXTERNAL_GCC_4_6
- 	bool "4.6.x"
-+	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_4_8
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_6
- 
- config BR2_TOOLCHAIN_EXTERNAL_GCC_4_5
- 	bool "4.5.x"
-+	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_4_8
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
- 
- config BR2_TOOLCHAIN_EXTERNAL_GCC_4_4
- 	bool "4.4.x"
-+	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_4_8
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_4
- 
- config BR2_TOOLCHAIN_EXTERNAL_GCC_4_3
- 	bool "4.3.x"
-+	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_4_8
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_3
- 
- config BR2_TOOLCHAIN_EXTERNAL_GCC_OLD
- 	bool "older"
-+	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_4_8
- 	help
- 	  Use this option if your GCC version is older than any of the
- 	  above.
+ 	  The Blackfin is a family of 16 or 32-bit microprocessors developed,
+ 	  manufactured and marketed by Analog Devices.
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index c470b43..582a409 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -24,7 +24,7 @@ config BR2_GCC_VERSION_4_9_X
+ 	bool "gcc 4.9.x"
+ 	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_5
+ 	# Broken or unsupported architectures
+-	depends on !BR2_arc && !BR2_bfin && !BR2_or1k
++	depends on !BR2_arc && !BR2_or1k
+ 	# Broken or unsupported ARM cores
+ 	depends on !BR2_cortex_a17 && !BR2_cortex_a17_a7
+ 	depends on !BR2_cortex_a72 && !BR2_cortex_a72_a53
+@@ -48,7 +48,7 @@ config BR2_GCC_VERSION_5_X
+ 	bool "gcc 5.x"
+ 	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_6
+ 	# Broken or unsupported architectures
+-	depends on !BR2_arc && !BR2_bfin && !BR2_or1k
++	depends on !BR2_arc && !BR2_or1k
+ 	# Broken or unsupported ARM cores
+ 	depends on !BR2_cortex_a57_a53 && !BR2_cortex_a72_a53
+ 	# musl ppc64 unsupported
