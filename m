@@ -1,87 +1,77 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 24 Nov 2017 21:45:17 +0100
-Subject: [Buildroot] [git commit] hostapd: add support for Realtek driver
-Message-ID: <20171201205336.2CDB57FF6F@busybox.osuosl.org>
+Date: Fri, 24 Nov 2017 22:03:31 +0100
+Subject: [Buildroot] [git commit] arch: introduce minimal required gcc
+ version
+Message-ID: <20171201205336.37C467FF6F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5a0cfbded075dea4a0416ffcfe7407b8db91d0a4
+commit: https://git.buildroot.net/buildroot/commit/?id=974d97bc267d4e529ec3619c6c71e59f8f51833d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Since kernel drivers for Realtek wireless chips use non-standard
-interfaces, upstream hostapd does not support them. One have to apply
-an external patch for hostapd to work with these chips. See:
-https://github.com/pritambaral/hostapd-rtl871xdrv
+Some CPU variants require that a recent-enough gcc be selected. For
+example, ARM's cortex-a35 requires gcc-5, while cortex-a73 requires
+gcc-7. Same goes for other architectures, of course.
 
-A configuration option is added to enable support for Realtek chips,
-and it's turned off by default.
+Currently, we hard-code every such conditions in the gcc version choice,
+as well as in the individual external toolchains.
 
-Signed-off-by: Alexander Mukhin <alexander.i.mukhin@gmail.com>
-Tested-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+However, as we add even more CPU variants, the conditions are getting
+more and more complex to write and maintain.
+
+Introduce new symbols, that architectures can select if they have a
+specific requirement on the gcc version. gcc and external toolchains
+can then properly depend on those symbols.
+
+The burden of maintaining the requirements on the gcc version now falls
+down to the architeture, instead of being split up in gcc and all the
+external toolchains.
+
+As the oldest gcc version to handle, we can either choose gcc-4.9, as
+the oldest version we support in our internal toolchain, or choose
+gcc-4.8, as the oldest external toolchain we support (except for the
+custom ones, but they'll be handled specifically in upcoming changes).
+We choose to go back up to gcc-4.8.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- DEVELOPERS                   | 3 +++
- package/hostapd/Config.in    | 5 +++++
- package/hostapd/hostapd.hash | 1 +
- package/hostapd/hostapd.mk   | 5 +++++
- 4 files changed, 14 insertions(+)
+ arch/Config.in | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index e4aeae6..8a44e04 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -78,6 +78,9 @@ F:	package/putty/
- N:	Alexander Lukichev <alexander.lukichev@espotel.com>
- F:	package/openpgm/
+diff --git a/arch/Config.in b/arch/Config.in
+index c10bf16..607da36 100644
+--- a/arch/Config.in
++++ b/arch/Config.in
+@@ -261,6 +261,27 @@ config BR2_ARCH_HAS_TOOLCHAIN_BUILDROOT
+ 	bool
+ 	default y if !BR2_ARCH_HAS_NO_TOOLCHAIN_BUILDROOT
  
-+N:	Alexander Mukhin <alexander.i.mukhin@gmail.com>
-+F:	package/hostapd/
++# The following symbols are selected by the individual
++# Config.in.$ARCH files
++config BR2_ARCH_NEEDS_GCC_AT_LEAST_4_8
++	bool
 +
- N:	Alexander Varnin <fenixk19@mail.ru>
- F:	package/liblog4c-localtime/
- 
-diff --git a/package/hostapd/Config.in b/package/hostapd/Config.in
-index 1609d0d..40c7015 100644
---- a/package/hostapd/Config.in
-+++ b/package/hostapd/Config.in
-@@ -14,6 +14,11 @@ config BR2_PACKAGE_HOSTAPD
- 
- if BR2_PACKAGE_HOSTAPD
- 
-+config BR2_PACKAGE_HOSTAPD_DRIVER_RTW
-+	bool "Enable rtl871xdrv driver"
-+	help
-+	  Enable support for Realtek wireless chips.
++config BR2_ARCH_NEEDS_GCC_AT_LEAST_4_9
++	bool
++	select BR2_ARCH_NEEDS_GCC_AT_LEAST_4_8
 +
- config BR2_PACKAGE_HOSTAPD_ACS
- 	bool "Enable ACS"
- 	default y
-diff --git a/package/hostapd/hostapd.hash b/package/hostapd/hostapd.hash
-index b20c89b..588879f 100644
---- a/package/hostapd/hostapd.hash
-+++ b/package/hostapd/hostapd.hash
-@@ -1,4 +1,5 @@
- # Locally calculated
- sha256  01526b90c1d23bec4b0f052039cc4456c2fd19347b4d830d1d58a0a6aea7117d  hostapd-2.6.tar.gz
-+sha256  e204da659d0583c71af23cb9b55536fe99598ee26a44104344f456e4d17350c6  rtlxdrv.patch
- sha256  529113cc81256c6178f3c1cf25dd8d3f33e6d770e4a180bd31c6ab7e4917f40b  rebased-v2.6-0001-hostapd-Avoid-key-reinstallation-in-FT-handshake.patch
- sha256  147c8abe07606905d16404fb2d2c8849796ca7c85ed8673c09bb50038bcdeb9e  rebased-v2.6-0005-Fix-PTK-rekeying-to-generate-a-new-ANonce.patch
-diff --git a/package/hostapd/hostapd.mk b/package/hostapd/hostapd.mk
-index 3f94c8c..bb3919e 100644
---- a/package/hostapd/hostapd.mk
-+++ b/package/hostapd/hostapd.mk
-@@ -47,6 +47,11 @@ HOSTAPD_CONFIG_DISABLE += CONFIG_EAP_PWD
- HOSTAPD_CONFIG_EDITS += 's/\#\(CONFIG_TLS=\).*/\1internal/'
- endif
- 
-+ifeq ($(BR2_PACKAGE_HOSTAPD_DRIVER_RTW),y)
-+HOSTAPD_PATCH = https://github.com/pritambaral/hostapd-rtl871xdrv/raw/master/rtlxdrv.patch
-+HOSTAPD_CONFIG_SET += CONFIG_DRIVER_RTW
-+endif
++config BR2_ARCH_NEEDS_GCC_AT_LEAST_5
++	bool
++	select BR2_ARCH_NEEDS_GCC_AT_LEAST_4_9
 +
- ifeq ($(BR2_PACKAGE_HOSTAPD_ACS),y)
- HOSTAPD_CONFIG_ENABLE += CONFIG_ACS
- endif
++config BR2_ARCH_NEEDS_GCC_AT_LEAST_6
++	bool
++	select BR2_ARCH_NEEDS_GCC_AT_LEAST_5
++
++config BR2_ARCH_NEEDS_GCC_AT_LEAST_7
++	bool
++	select BR2_ARCH_NEEDS_GCC_AT_LEAST_6
++
+ # The following string values are defined by the individual
+ # Config.in.$ARCH files
+ config BR2_ARCH
