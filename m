@@ -1,35 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 24 Nov 2017 21:36:35 +0100
-Subject: [Buildroot] [PATCH] python-cheroot: bump version to 5.10.0
-In-Reply-To: <20171124144459.7723-1-yegorslists@googlemail.com>
-References: <20171124144459.7723-1-yegorslists@googlemail.com>
-Message-ID: <20171124213635.5be6b088@windsurf.lan>
+Date: Fri, 24 Nov 2017 21:37:18 +0100
+Subject: [Buildroot] [git commit branch/next] mtd: be explicit about config
+ options for the host
+Message-ID: <20171124203245.3A38D81454@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=0d2e7522ed18a1bd06aa9bd22c46e71d90bcf0bd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Fri, 24 Nov 2017 15:44:59 +0100, yegorslists at googlemail.com wrote:
-> From: Yegor Yefremov <yegorslists@googlemail.com>
-> 
-> Fix licence file name and add checksum.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/94d/94dee5b01e0f7693d4e6e05074e7d93e92236e2c
-> 
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> ---
->  package/python-cheroot/python-cheroot.hash | 5 +++--
->  package/python-cheroot/python-cheroot.mk   | 6 +++---
->  2 files changed, 6 insertions(+), 5 deletions(-)
+Instead of letting auto-detection do its job, be explicit about the
+fact that we want the JFFS2 and UBIFS utilities when building the host
+variant of mtd.
 
-Applied to next, thanks.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/mtd/mtd.mk | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
+index a69ef40..7094aad 100644
+--- a/package/mtd/mtd.mk
++++ b/package/mtd/mtd.mk
+@@ -45,7 +45,10 @@ MTD_CONF_OPTS += --without-xattr
+ endif
+ 
+ HOST_MTD_DEPENDENCIES = host-zlib host-lzo host-util-linux
+-HOST_MTD_CONF_OPTS = --disable-tests
++HOST_MTD_CONF_OPTS = \
++	--with-jffs \
++	--with-ubifs \
++	--disable-tests
+ 
+ MKFS_JFFS2 = $(HOST_DIR)/sbin/mkfs.jffs2
+ SUMTOOL = $(HOST_DIR)/sbin/sumtool
