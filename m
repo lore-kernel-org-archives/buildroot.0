@@ -1,126 +1,58 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Fri, 24 Nov 2017 11:54:51 +0100
-Subject: [Buildroot] [PATCH v4 1/2] meson: new package
-In-Reply-To: <20171029131052.18850-2-eric.le.bihan.dev@free.fr>
-References: <20171029131052.18850-1-eric.le.bihan.dev@free.fr>
- <20171029131052.18850-2-eric.le.bihan.dev@free.fr>
-Message-ID: <CAGm1_kvwM4buZJDA84O-Raq6G-csxxr=yicuk2Q+Y24gUK8t5A@mail.gmail.com>
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Date: Fri, 24 Nov 2017 15:27:33 +0200
+Subject: [Buildroot] [PATCH v1] busybox: Fix rtcwake to use /dev/rtc0
+ properly
+In-Reply-To: <b2f0d3bf-b8a1-c948-2013-35dc605c2cbd@mind.be>
+References: <20171123183914.71769-1-andriy.shevchenko@linux.intel.com>
+ <b2f0d3bf-b8a1-c948-2013-35dc605c2cbd@mind.be>
+Message-ID: <1511530053.25007.435.camel@linux.intel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Oct 29, 2017 at 2:10 PM, Eric Le Bihan
-<eric.le.bihan.dev@free.fr> wrote:
-> This new package provides the host variant of the Meson Build System, an
-> open source build system meant to be both extremely fast, and as user
-> friendly as possible.
->
-> More precisely, Meson creates configuration files for the Ninja build
-> system.
->
-> Besides building Meson, it generates a configuration file
-> ("$(HOST_DIR)/etc/meson/cross-compilation.conf") to be used when
-> cross-compiling a Meson-based project.
->
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+On Thu, 2017-11-23 at 23:46 +0100, Arnout Vandecappelle wrote:
+>  Hi Andy,
+> 
+> On 23-11-17 19:39, Andy Shevchenko wrote:
+> > rtcwake from busybox has failed in case the /dev/rtc is a symlink
+> > (which is default case for udev enabled systems) due to wrong
+> > pathname
+> > used for a sysfs wakeup attribute.
+> 
+>  In Buildroot, we don't accept "feature patches" for packages.
 
-Tested-by: Yegor Yefremov <yegorslists@googlemail.com>
+To be honest it's not a feature patch at all. It fixes (okay,
+workarounds) obvious bug in rtcwake logic. Easy to reproduce. 100%
+reproducible.
 
-> ---
->  package/meson/cross-compilation.conf.in | 23 ++++++++++++++++++++++
->  package/meson/meson.hash                |  3 +++
->  package/meson/meson.mk                  | 35 +++++++++++++++++++++++++++++++++
->  3 files changed, 61 insertions(+)
->  create mode 100644 package/meson/cross-compilation.conf.in
->  create mode 100644 package/meson/meson.hash
->  create mode 100644 package/meson/meson.mk
->
-> diff --git a/package/meson/cross-compilation.conf.in b/package/meson/cross-compilation.conf.in
-> new file mode 100644
-> index 0000000000..0eec74087b
-> --- /dev/null
-> +++ b/package/meson/cross-compilation.conf.in
-> @@ -0,0 +1,23 @@
-> +# Note: Buildroot's and Meson's terminologies differ about the meaning
-> +# of 'build', 'host' and 'target':
-> +# - Buildroot's 'host' is Meson's 'build'
-> +# - Buildroot's 'target' is Meson's 'host'
-> +
-> +[binaries]
-> +c = '@TARGET_CROSS at gcc'
-> +cpp = '@TARGET_CROSS at g++'
-> +ar = '@TARGET_CROSS at ar'
-> +strip = '@TARGET_CROSS at strip'
-> +pkgconfig = '@HOST_DIR@/usr/bin/pkg-config'
-> +
-> +[properties]
-> +c_args = [@TARGET_CFLAGS@]
-> +c_link_args = [@TARGET_LDFLAGS@]
-> +cpp_args = [@TARGET_CXXFLAGS@]
-> +cpp_link_args = [@TARGET_LDFLAGS@]
-> +
-> +[host_machine]
-> +system = 'linux'
-> +cpu_family ='@TARGET_ARCH@'
-> +cpu = '@TARGET_CPU@'
-> +endian = '@TARGET_ENDIAN@'
-> diff --git a/package/meson/meson.hash b/package/meson/meson.hash
-> new file mode 100644
-> index 0000000000..412c10eb2f
-> --- /dev/null
-> +++ b/package/meson/meson.hash
-> @@ -0,0 +1,3 @@
-> +# Locally calculated after checking pgp signature
-> +# https://github.com/mesonbuild/meson/releases/download/0.43.0/meson-0.43.0.tar.gz.asc
-> +sha256 c513eca90e0d70bf14cd1eaafea2fa91cf40a73326a7ff61f08a005048057340  meson-0.43.0.tar.gz
-> diff --git a/package/meson/meson.mk b/package/meson/meson.mk
-> new file mode 100644
-> index 0000000000..55ce84da07
-> --- /dev/null
-> +++ b/package/meson/meson.mk
-> @@ -0,0 +1,35 @@
-> +################################################################################
-> +#
-> +# meson
-> +#
-> +################################################################################
-> +
-> +MESON_VERSION = 0.43.0
-> +MESON_SITE = https://github.com/mesonbuild/meson/releases/download/$(MESON_VERSION)
-> +MESON_LICENSE = Apache-2.0
-> +MESON_LICENSE_FILES = COPYING
-> +MESON_SETUP_TYPE = setuptools
-> +
-> +HOST_MESON_DEPENDENCIES = host-ninja
-> +HOST_MESON_NEEDS_HOST_PYTHON = python3
-> +
-> +HOST_MESON_TARGET_ENDIAN = $(call LOWERCASE,$(BR2_ENDIAN))
-> +HOST_MESON_TARGET_CPU = $(call qstrip,$(BR2_GCC_TARGET_CPU))
-> +
-> +define HOST_MESON_INSTALL_CROSS_CONF
-> +       mkdir -p $(HOST_DIR)/etc/meson
-> +       sed -e "s%@TARGET_CROSS@%$(TARGET_CROSS)%g" \
-> +           -e "s%@TARGET_ARCH@%$(ARCH)%g" \
-> +           -e "s%@TARGET_CPU@%$(HOST_MESON_TARGET_CPU)%g" \
-> +           -e "s%@TARGET_ENDIAN@%$(HOST_MESON_TARGET_ENDIAN)%g" \
-> +           -e "s%@TARGET_CFLAGS@%`printf '"%s", ' $(TARGET_CFLAGS)`%g" \
-> +           -e "s%@TARGET_LDFLAGS@%`printf '"%s", ' $(TARGET_LDFLAGS)`%g" \
-> +           -e "s%@TARGET_CXXFLAGS@%`printf '"%s", ' $(TARGET_CXXFLAGS)`%g" \
-> +           -e "s%@HOST_DIR@%$(HOST_DIR)%g" \
-> +           $(HOST_MESON_PKGDIR)/cross-compilation.conf.in \
-> +           > $(HOST_DIR)/etc/meson/cross-compilation.conf
-> +endef
-> +
-> +HOST_MESON_POST_INSTALL_HOOKS += HOST_MESON_INSTALL_CROSS_CONF
-> +
-> +$(eval $(host-python-package))
-> --
-> 2.13.6
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+>  We try to limit
+> to patches that fix the build or complete breakage, sometimes also to
+> make it
+> work together with other packages. I think this patch doesn't fall in
+> that category.
+
+Whatever, your choice at the end.
+
+> 
+>  For sure, you should first send the patch upstream.
+
+Are you sure I didn't?
+The policy of Busybox mailing list is to reject (I'm not subscriber and
+after a such policy would not like to be one). Happy contribution!
+
+>  Particularly in the case of
+> busybox, Denys often proposes improved patches. If it gets accepted
+> upstream,
+> then we can consider including it in Buildroot as well.
+
+Good luck!
+
+I'm done with it. If Denys is caring about project he will take the
+series (there are more patches than just one) from his private mailbox
+(Cc was there as well).
+
+-- 
+Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Intel Finland Oy
