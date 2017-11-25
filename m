@@ -1,97 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 25 Nov 2017 13:21:29 +0100
-Subject: [Buildroot] [git commit branch/next] package/nano: bump version to
- 2.9.0
-Message-ID: <20171125121431.CC1CC8102B@busybox.osuosl.org>
+Date: Sat, 25 Nov 2017 13:21:30 +0100
+Subject: [Buildroot] [git commit branch/next] package/php: bump version to
+ 7.1.12
+Message-ID: <20171125121431.EA77D81487@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cda7db8b869c89f0f4e7f668477ebfc9f5d897ba
+commit: https://git.buildroot.net/buildroot/commit/?id=ab01a1279c4990d201e6a560dbe9cc5b25a20fae
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
-
-Removed patch applied upstream, added license hash.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...pilation-when-configured-with-enable-tiny.patch | 43 ----------------------
- package/nano/nano.hash                             |  3 +-
- package/nano/nano.mk                               |  4 +-
- 3 files changed, 4 insertions(+), 46 deletions(-)
+ package/php/php.hash | 2 +-
+ package/php/php.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/nano/0001-fix-compilation-when-configured-with-enable-tiny.patch b/package/nano/0001-fix-compilation-when-configured-with-enable-tiny.patch
-deleted file mode 100644
-index db684f9..0000000
---- a/package/nano/0001-fix-compilation-when-configured-with-enable-tiny.patch
-+++ /dev/null
-@@ -1,43 +0,0 @@
--From 28cfab7580c42a6d6c9c5d787ce736094fd51a0c Mon Sep 17 00:00:00 2001
--From: Benno Schulenberg <bensberg@telfort.nl>
--Date: Tue, 29 Aug 2017 19:28:44 +0200
--Subject: tweaks: fix compilation when configured with --enable-tiny
--
--When moving the cursor to the top-left corner, it is not necessary
--to compute leftedge because firstcolumn IS the relevant leftedge.
--
--Reported-by: Jordi Mallach <jordi@debian.org>
--
--Downloaded from upstream master branch:
--http://git.savannah.gnu.org/cgit/nano.git/commit/?id=28cfab7580c42a6d6c9c5d787ce736094fd51a0c
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-----
-- src/move.c | 4 ++--
-- 1 file changed, 2 insertions(+), 2 deletions(-)
--
--diff --git a/src/move.c b/src/move.c
--index d138356..ce276e4 100644
----- a/src/move.c
--+++ b/src/move.c
--@@ -121,7 +121,7 @@ void do_page_up(void)
-- 	openfile->current = openfile->edittop;
-- 	openfile->current_y = 0;
-- 
---	leftedge = leftedge_for(openfile->firstcolumn, openfile->edittop);
--+	leftedge = openfile->firstcolumn;
-- 	target_column = 0;
--     } else
-- 	get_edge_and_target(&leftedge, &target_column);
--@@ -152,7 +152,7 @@ void do_page_down(void)
-- 	openfile->current = openfile->edittop;
-- 	openfile->current_y = 0;
-- 
---	leftedge = leftedge_for(openfile->firstcolumn, openfile->edittop);
--+	leftedge = openfile->firstcolumn;
-- 	target_column = 0;
--     } else
-- 	get_edge_and_target(&leftedge, &target_column);
---- 
--cgit v1.0-41-gc330
--
-diff --git a/package/nano/nano.hash b/package/nano/nano.hash
-index 4e0abc4..c09f031 100644
---- a/package/nano/nano.hash
-+++ b/package/nano/nano.hash
-@@ -1,2 +1,3 @@
- # Locally calculated after checking pgp signature
--sha256 fbe31746958698d73c6726ee48ad8b0612697157961a2e9aaa83b4aa53d1165a  nano-2.8.7.tar.xz
-+sha256 d2d30c39caef53aba1ec1b4baff4186d4496f35d2411b0848242a5f2e27e129e  nano-2.9.0.tar.xz
-+sha256 fc82ca8b6fdb18d4e3e85cfd8ab58d1bcd3f1b29abe782895abd91d64763f8e7  COPYING
-diff --git a/package/nano/nano.mk b/package/nano/nano.mk
-index f1c172f..458174a 100644
---- a/package/nano/nano.mk
-+++ b/package/nano/nano.mk
-@@ -4,8 +4,8 @@
+diff --git a/package/php/php.hash b/package/php/php.hash
+index d1f36f2..cdec308 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
+@@ -1,5 +1,5 @@
+ # From http://php.net/downloads.php
+-sha256 074093e9d7d21afedc5106904218a80a47b854abe368d2728ed22184c884893e  php-7.1.11.tar.xz
++sha256 a0118850774571b1f2d4e30b4fe7a4b958ca66f07d07d65ebdc789c54ba6eeb3  php-7.1.12.tar.xz
+ 
+ # License file
+ sha256 a44951f93b10c87c3f7cd9f311d95999c57c95ed950eec32b14c1c7ea6baf25e  LICENSE
+diff --git a/package/php/php.mk b/package/php/php.mk
+index aaeacde..72d5ea8 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--NANO_VERSION_MAJOR = 2.8
--NANO_VERSION = $(NANO_VERSION_MAJOR).7
-+NANO_VERSION_MAJOR = 2.9
-+NANO_VERSION = $(NANO_VERSION_MAJOR).0
- NANO_SITE = https://www.nano-editor.org/dist/v$(NANO_VERSION_MAJOR)
- NANO_SOURCE = nano-$(NANO_VERSION).tar.xz
- NANO_LICENSE = GPL-3.0+
+-PHP_VERSION = 7.1.11
++PHP_VERSION = 7.1.12
+ PHP_SITE = http://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
