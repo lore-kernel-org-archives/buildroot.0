@@ -1,159 +1,74 @@
-From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Sat, 25 Nov 2017 17:42:24 +0100
-Subject: [Buildroot] [PATCH v5 1/1] sunxi-mali-driver-mainline: new
- package
-In-Reply-To: <20171125155023.kjtzljcyw2k4c67a@flea.lan>
-References: <1511302072-9290-1-git-send-email-giulio.benetti@micronovasrl.com>
- <20171125155023.kjtzljcyw2k4c67a@flea.lan>
-Message-ID: <fed5e416-7f57-0ede-705f-4c340a473730@micronovasrl.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 25 Nov 2017 17:45:35 +0100
+Subject: [Buildroot] [PATCH] utils/diffconfig: add diffconfig utility
+In-Reply-To: <20171125135047.503d4fda@windsurf.lan>
+References: <20171104203644.4045-1-marcus.folkesson@gmail.com>
+ <20171125135047.503d4fda@windsurf.lan>
+Message-ID: <474413fe-d7c5-0759-b17b-0456e14c3b18@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Maxime,
 
-Il 25/11/2017 16:50, Maxime Ripard ha scritto:
-> On Tue, Nov 21, 2017 at 11:07:52PM +0100, Giulio Benetti wrote:
->> Added kernel allwinner mali driver package.
->> Used combined with userspace Allwinner openGL blob,
->> it gives possibility to use 3D openGL SoC acceleration.
+
+On 25-11-17 13:50, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Sat,  4 Nov 2017 21:36:44 +0100, Marcus Folkesson wrote:
+>> Diffconfig is a simple utility for comparing two configuration files.
+>> See usage in the script for more info.
 >>
->> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+>> Borrowed from the Linux kernel source code and adapted to Buildroot.
+>>
+>> Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
 >> ---
->> Changes v4 -> v5:
->> * prevent build twice
->>
->>   DEVELOPERS                                         |  3 +++
->>   package/Config.in                                  |  1 +
->>   package/sunxi-mali-driver-mainline/Config.in       | 22 ++++++++++++++++++
->>   .../sunxi-mali-driver-mainline.mk                  | 26 ++++++++++++++++++++++
->>   4 files changed, 52 insertions(+)
->>   create mode 100644 package/sunxi-mali-driver-mainline/Config.in
->>   create mode 100644 package/sunxi-mali-driver-mainline/sunxi-mali-driver-mainline.mk
->>
->> diff --git a/DEVELOPERS b/DEVELOPERS
->> index bb81a19..3fdb28b 100644
->> --- a/DEVELOPERS
->> +++ b/DEVELOPERS
->> @@ -695,6 +695,9 @@ F:	package/ocrad/
->>   F:	package/tesseract-ocr/
->>   F:	package/webp/
->>   
->> +N:	Giulio Benetti <giulio.benetti@micronovasrl.com>
->> +F:	package/sunxi-mali-driver-mainline/
->> +
->>   N:	Gregory Dymarek <gregd72002@gmail.com>
->>   F:	package/ding-libs/
->>   F:	package/gengetopt/
->> diff --git a/package/Config.in b/package/Config.in
->> index fe5ccc4..8de2227 100644
->> --- a/package/Config.in
->> +++ b/package/Config.in
->> @@ -496,6 +496,7 @@ endmenu
->>   	source "package/statserial/Config.in"
->>   	source "package/stm32flash/Config.in"
->>   	source "package/sunxi-cedarx/Config.in"
->> +	source "package/sunxi-mali-driver-mainline/Config.in"
->>   	source "package/sunxi-mali/Config.in"
->>   	source "package/sysstat/Config.in"
->>   	source "package/targetcli-fb/Config.in"
->> diff --git a/package/sunxi-mali-driver-mainline/Config.in b/package/sunxi-mali-driver-mainline/Config.in
->> new file mode 100644
->> index 0000000..5b7b2ba
->> --- /dev/null
->> +++ b/package/sunxi-mali-driver-mainline/Config.in
->> @@ -0,0 +1,22 @@
->> +comment "sunxi-mali-driver-mainline needs a Linux kernel to be built"
->> +	depends on !BR2_LINUX_KERNEL
->> +
->> +config BR2_PACKAGE_SUNXI_MALI_DRIVER_MAINLINE
->> +	bool "sunxi-mali-driver-mainline"
->> +	depends on BR2_LINUX_KERNEL
->> +	select BR2_LINUX_NEEDS_MODULES # not using kernel-module infra
->> +	help
->> +	  This package builds and installs the Linux kernel driver for
->> +	  the Mali GPU on Allwinner platforms, compatible with recent
->> +	  Linux kernels (>= 4.4). Note that it should be installed
->> +	  together with the corresponding userspace binary blobs to
->> +	  provide complete OpenGL functionality.
->> +
->> +	  sunxi-mali-driver-mainline requires a Linux kernel >= 4.4 with the
->> +	  following options enabled:
->> +
->> +	  - CONFIG_CMA
->> +	  - CONFIG_DMA_CMA
->> +	  - CONFIG_DRM_FBDEV_OVERALLOC >= 200 for double buffer or more
->> +
->> +	  https://github.com/mripard/sunxi-mali/blob/master/README.md
->> diff --git a/package/sunxi-mali-driver-mainline/sunxi-mali-driver-mainline.mk b/package/sunxi-mali-driver-mainline/sunxi-mali-driver-mainline.mk
->> new file mode 100644
->> index 0000000..1692646
->> --- /dev/null
->> +++ b/package/sunxi-mali-driver-mainline/sunxi-mali-driver-mainline.mk
->> @@ -0,0 +1,26 @@
->> +################################################################################
->> +#
->> +# sunxi-mali-driver-mainline
->> +#
->> +################################################################################
->> +
->> +SUNXI_MALI_DRIVER_MAINLINE_VERSION = 5b7b3c0b6e1736676c90928816d271debbb09d95
->> +SUNXI_MALI_DRIVER_MAINLINE_SITE = $(call github,mripard,sunxi-mali,$(SUNXI_MALI_DRIVER_MAINLINE_VERSION))
->> +SUNXI_MALI_DRIVER_MAINLINE_DEPENDENCIES = linux
->> +
->> +SUNXI_MALI_DRIVER_MAINLINE_MAKE_OPTS = \
->> +	KDIR=$(LINUX_DIR) \
->> +	CROSS_COMPILE=$(TARGET_CROSS) \
->> +	INSTALL_MOD_PATH=$(TARGET_DIR)
->> +
->> +define SUNXI_MALI_DRIVER_MAINLINE_BUILD_CMDS
->> +	cd $(@D) && $(SUNXI_MALI_DRIVER_MAINLINE_MAKE_OPTS) \
->> +		$(SHELL) ./build.sh -r r6p2 -a
->> +endef
+>>  DEVELOPERS       |   3 ++
+>>  utils/diffconfig | 136 +++++++++++++++++++++++++++++++++++++++++++++++++++++++
+>>  2 files changed, 139 insertions(+)
+>>  create mode 100755 utils/diffconfig
 > 
-> This doesn't build anything, this will just apply the patches, you
-> should use -b.
-
-You're right, I've tried it as a workaround to avoid compiling twice.
-But it's not here the problem.
-I've just sent you a PR on github:
-https://github.com/mripard/sunxi-mali/pull/6
-This will fix the problem.
-
-On "[PATCH v4 1/1] sunxi-mali-driver-mainline: new package" I did it right:
-+define SUNXI_MALI_DRIVER_MAINLINE_BUILD_CMDS
-+	cd $(@D) && $(SUNXI_MALI_DRIVER_MAINLINE_MAKE_OPTS) \
-+	$(SHELL) ./build.sh -r r6p2 -b
-+endef
-+
-+define SUNXI_MALI_DRIVER_MAINLINE_INSTALL_TARGET_CMDS
-+	cd $(@D) && $(SUNXI_MALI_DRIVER_MAINLINE_MAKE_OPTS) \
-+	$(SHELL) ./build.sh -r r6p2 -i
-+endef
-
-So v5 patch doesn't make sense if you accept my Pull Request on Github.
-How can I proceed?
-Do I submit v6 equal to v4 with changes respect v5?
-
-Thank you
-Regards
-
+> I've applied to next. However, I must say I've personally not be very
+> convinced by the output of this tool. If you generate the .config
+> corresponding to an empty defconfig on one side, and the following
+> defconfig on the other side:
 > 
-> Maxime
+> BR2_arm=y
+> BR2_TOOLCHAIN_EXTERNAL=y
+> BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+> BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+> BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2017.11-rc1.tar.bz2"
+> BR2_TOOLCHAIN_EXTERNAL_GCC_4_9=y
+> BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_10=y
+> BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
+> # BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
+> BR2_TOOLCHAIN_EXTERNAL_CXX=y
+> BR2_INIT_NONE=y
+> BR2_SYSTEM_BIN_SH_NONE=y
+> # BR2_PACKAGE_BUSYBOX is not set
+> BR2_PACKAGE_BELLAGIO=y
+> BR2_PACKAGE_FFMPEG=y
+> # BR2_TARGET_ROOTFS_TAR is not set
 > 
+> You will get a very, very, very noisy output with "diffconfig". And
+> comparately, the diff between the defconfigs is a lot more readable.
 
+ Well, it's not really meant for that kind of situation. It's meant for a
+situation where you would normally diff the full configs because you want to see
+which packages have been implicitly added or removed (due to select or depends).
+You'd normally do a diff .config.old .config, but then you get a lot of changes
+that are due to packages that have become available but are not selected - not
+very interesting. So in this case, diffconfig gives more compact and readable
+results.
+
+ Regards,
+ Arnout
 
 -- 
-Giulio Benetti
-R&D Manager &
-Advanced Research
-
-MICRONOVA SRL
-Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
-Tel. 049/8931563 - Fax 049/8931346
-Cod.Fiscale - P.IVA 02663420285
-Capitale Sociale ? 26.000 i.v.
-Iscritta al Reg. Imprese di Padova N. 02663420285
-Numero R.E.A. 258642
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
