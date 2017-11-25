@@ -1,107 +1,158 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Sat, 25 Nov 2017 12:16:16 -0500
-Subject: [Buildroot] [PATCH 1/1] freerdp: fix wayland client dependency
- chain failure
-In-Reply-To: <20171120211445.GA2867@scaer>
-References: <20171119214852.27459-1-Adamduskett@outlook.com>
- <20171120084757.04cf0411@windsurf> <20171120211445.GA2867@scaer>
-Message-ID: <CAFSsvmrOvdYUSTOMMFPc8ytQC4WPAv0feuvyqR+F=KuUugPjsQ@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 25 Nov 2017 18:30:26 +0100
+Subject: [Buildroot] [RFCv1 4/4] core: implement per-package SDK and
+ target
+In-Reply-To: <20171124154323.0895cadc@windsurf.lan>
+References: <20171103160627.6468-1-thomas.petazzoni@free-electrons.com>
+ <20171103160627.6468-5-thomas.petazzoni@free-electrons.com>
+ <ab34a9ea-90a0-fc39-273d-0bd08a2c72b0@mind.be>
+ <20171124154323.0895cadc@windsurf.lan>
+Message-ID: <18ade4e8-449c-01e2-0aaa-6fd5382ffad1@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann;
 
-On Mon, Nov 20, 2017 at 4:14 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> Thomas, Adam, All,
->
-> On 2017-11-20 08:47 +0100, Thomas Petazzoni spake thusly:
->> On Sun, 19 Nov 2017 16:48:52 -0500, Adam Duskett wrote:
->> > If the wayland client is selected, freerdp depends on libxkbcommon without
->> > depending on it in the mk file.
->> >
->> > Fixes:
->> > http://autobuild.buildroot.net/results/dc3/dc3e11f7076a8355f3d2f9cb49c6325dcf7084bd
->> > Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
->> > ---
->> >  package/freerdp/freerdp.mk | 4 ++++
->> >  1 file changed, 4 insertions(+)
->> >
->> > diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
->> > index 69a89a190c..29c35164c3 100644
->> > --- a/package/freerdp/freerdp.mk
->> > +++ b/package/freerdp/freerdp.mk
->> > @@ -207,6 +207,10 @@ else
->> >  FREERDP_CONF_OPTS += -DWITH_WAYLAND=OFF
->> >  endif
->> >
->> > +ifeq ($(BR2_PACKAGE_FREERDP_CLIENT_WL),y)
->> > +FREERDP_DEPENDENCIES += libxkbcommon
->> > +endif
+
+On 24-11-17 15:43, Thomas Petazzoni wrote:
+> Hello,
+> 
+> A few more answers/topics I wanted to discuss.
+> 
+> On Tue, 7 Nov 2017 23:50:52 +0100, Arnout Vandecappelle wrote:
+> 
+>>  Given the possible host-tar and host-lzip dependencies, the rsync
+>> should be done here already, not in the configure step. Ouch, that's
+>> not good, because the dependencies are only evaluated for the
+>> configure step... There are PATCH_DEPENDENCIES, but those are only
+>> before patch. Well, I guess that's a reason to keep host-tar and
+>> host-lzip as DEPENDENCIES_HOST_PREREQ :-)
+> 
+> Here is how I'm thinking of solving the problem:
+> 
+>  - Next to <pkg>_PATCH_DEPENDENCIES, introduce the concept of
+>    <pkg>_EXTRACT_DEPENDENCIES.
+
+ _PATCH_DEPENDENCIES is different: it introduces a dependency between foo-patch
+and bar-patch. Here you want a dependency between foo-extract and tar.
+
+> 
+>  - If there is no suitable tar in the system, then host-tar would be
+>    added to <pkg>_EXTRACT_DEPENDENCIES of all packages, except host-tar
+>    itself.
+
+ So you need an additional NO_EXTRACT_DEPENDENCIES or something to exclude it
+for tar...
+
+
+>  - If the package needs lzip and there is no lzip available on the
+>    system, host-lzip is added to <pkg>_EXTRACT_DEPENDENCIES.
+> 
+>  - If ccache support is enabled, host-ccache is added to
+>    <pkg>_DEPENDENCIES of all packages, except host-tar, which is built
+>    with HOSTCC_NOCCACHE.
+> 
+>  - At the beginning of the extract step of a package, we rsync to its
+>    per-package target/host directories the per-package target/host dirs
+>    of the packages listed in its <pkg>_EXTRACT_DEPENDENCIES variable.
+> 
+>  - At the beginning of the patch step of a package, we rsync to its
+>    per-package target/host directories the per-package target/host dirs
+>    of the packages listed in its <pkg>_PATCH_DEPENDENCIES variable.
+
+ So this bit doesn't make sense: _PATCH_DEPENDENCIES are not (necessarily) built
+before foo-patch. So to be reproducible, it should *not* be rsynced yet.
+
+> 
+> Thoughts?
+
+ I'm not at all happy with this approach. It adds generic-package stuff that is
+used for only one package, and it spreads the logic out over different places.
+
+ I'd rather make the logic explicit in dependencies.mk. Something like
+
+ifneq ($(filter host-tar,$(DEPENDENCIES_HOST_PREREQ)),)
+$(filter-out host-tar,$(DEPENDENCIES_HOST_PREREQ)): host-tar
+endif
+
+ifneq ($(filter host-ccache,$(DEPENDENCIES_HOST_PREREQ)),)
+$(filter-out host-tar host-ccache,$(DEPENDENCIES_HOST_PREREQ)): host-ccache
+endif
+
+etc. You'll probably want to introduce a variable to collect the filter-out
+things, though.
+
+
+ Regards,
+ Arnout
+
+
+> 
+>>> +$(2)_HOST_DIR		= $$(PER_PACKAGE_DIR)/$(1)/host/
+>>> +$(2)_STAGING_DIR	= $$(PER_PACKAGE_DIR)/$(1)/host/$(STAGING_SUBDIR)  
 >>
->> https://git.buildroot.org/buildroot/commit/?id=c2824fba2f2f4df6c1e0273fa546a203d1e6d5ac
->> already makes libxkbcommon a dependency of freerdp when wayland is
->> enabled. Isn't this sufficient ?
->
-> I think the current code might indeed not be correct, but that the patch
-> is not correct either...
->
-> The issue with FreeRDP, as much as I can remember, is the way it builds
-> the clients: either clients are enabled ot they are not. But once you
-> enable clients, it will look for dependencies of each client, and build
-> those whose dependencies are met.
->
-> So, if you have X11 and wayland libs around, then FreeRDP will biuld
-> both clients, even if you are only interested in one and not both.
->
-> The situation where you want only (say) the wayland client and not the
-> X11 one is if you are running a wayland system, with XWayland to run
-> legacy X11 apps ontop of this, and only want to use FreeRDP as a wayland
-> client.
->
-> So we have code in freerdp.mk to get rid of the unneeded client(s).
->
-> But now, the select and dependency on libxbcommon are under two slightly
-> different conditions:
->
->   - the select is only when the wayland client is enabled,
->   - the dependency is when the wayland package is enabled.
->
-> Now, if the wayland client is disabled, but the walyand package is
-> enabled, then nothing from FreeRDP selects libxbkcommon, but it ends up
-> in the dependency chain of FreeRDP nonetheless.
->
-> I think a better patch would be something like:
->
-> diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
-> index 69a89a190c..0ceef576a8 100644
-> --- a/package/freerdp/freerdp.mk
-> +++ b/package/freerdp/freerdp.mk
-> @@ -198,7 +198,7 @@ else
->  FREERDP_CONF_OPTS += -DWITH_XV=OFF
->  endif
->
-> -ifeq ($(BR2_PACKAGE_WAYLAND),y)
-> +ifeq ($(BR2_PACKAGE_FREERDP_CLIENT_WL),y)
->  FREERDP_DEPENDENCIES += wayland libxkbcommon
->  FREERDP_CONF_OPTS += \
->         -DWITH_WAYLAND=ON \
->
-> TBH, I'm a bit under the weather those days, so Adam, I'd be gratefull
-> if you were to check the above, please.
->
-Can do! Sorry I didn't see the message earlier, I will resubmit.
-Hope you feel better!
-> Regards,
-> Yann E. MORIN.
->
-> --
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
-Adam
+>>  I hate adding more per-package variables. Can't you use the expanded values,
+>> substituting $($(PKG)_NAME) for $(1)? Or maybe even better, change the
+>> definition of TARGET_DIR etc:
+>>
+>> TARGET_DIR = $(if
+>> $(PKG),$(PER_PACKAGE_DIR)/$($(PKG)_RAWNAME)/target,$(BASE_DIR)/target)
+>>
+>>  That way you also don't need to pass those variables to each individual stamp rule.
+> 
+> I've changed this in my new iteration. The only drawback is that since
+> we no longer have those shortcut variables, the foreach loops building
+> the per-package directories, and building the final global directories
+> are a bit less readable:
+> 
+> Per-package host/target creation:
+> 
+> 	$(foreach pkg,$($(PKG)_FINAL_DEPENDENCIES),\
+> 		rsync -a --link-dest=$(PER_PACKAGE_DIR)/$(pkg)/host/ \
+> 		$(PER_PACKAGE_DIR)/$(pkg)/host/ \
+> 		$(HOST_DIR)$(sep))
+> 	$(foreach pkg,$($(PKG)_FINAL_DEPENDENCIES),\
+> 		rsync -a --link-dest=$(PER_PACKAGE_DIR)/$(pkg)/target/ \
+> 		$(PER_PACKAGE_DIR)/$(pkg)/target/ \
+> 		$(TARGET_DIR)$(sep))
+> 
+> Global host/target creation in target-finalize:
+> 
+> 	$(foreach pkg,$(PACKAGES),\
+> 		rsync -a --link-dest=$(PER_PACKAGE_DIR)/$(pkg)/target/ \
+> 		$(PER_PACKAGE_DIR)/$(pkg)/target/ \
+> 		$(TARGET_DIR)$(sep))
+> 	@$(call MESSAGE,"Creating global host directory")
+> 	$(foreach pkg,$(PACKAGES),\
+> 		rsync -a --link-dest=$(PER_PACKAGE_DIR)/$(pkg)/host/ \
+> 		$(PER_PACKAGE_DIR)/$(pkg)/host/ \
+> 		$(HOST_DIR)$(sep))
+> 
+> But I guess that's OK. If we find that too weird, I can always
+> introduce some some make helpers:
+> 
+> per-package-target-dir = $(PER_PACKAGE_DIR)/$(1)/target
+> per-package-host-dir = $(PER_PACKAGE_DIR)/$(1)/host
+> 
+> But:
+> 
+>   $(call per-package-target-dir,$(pkg))
+> 
+> is not really shorter than
+> 
+>   $(PER_PACKAGE_DIR)/$(1)/target
+> 
+> It is actually longer :-)
+> 
+> Thomas
+> 
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
