@@ -1,11 +1,11 @@
-From: Alexander Mukhin <alexander.i.mukhin@gmail.com>
-Date: Sat, 25 Nov 2017 13:32:52 +0300
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 25 Nov 2017 11:46:43 +0100
 Subject: [Buildroot] [PATCH] hostapd: add support for Realtek driver
-In-Reply-To: <20171124215828.47855fdd@windsurf.lan>
+In-Reply-To: <20171125103252.GA1248@hpx>
 References: <874C29DC-F92F-46E8-9323-EF25658D8834@gmail.com>
  <20170914110811.1670-1-alexander.i.mukhin@gmail.com>
- <20171124215828.47855fdd@windsurf.lan>
-Message-ID: <20171125103252.GA1248@hpx>
+ <20171124215828.47855fdd@windsurf.lan> <20171125103252.GA1248@hpx>
+Message-ID: <20171125114643.5b290738@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,28 +14,37 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, Nov 24, 2017 at 09:58:28PM +0100, Thomas Petazzoni wrote:
-> To be honest, I was about to reject your patch: it's basically adding a
-> feature patch to a package, which we normally don't do, and the patch
-> is very likely to break when we update to newer versions of hostapd.
+On Sat, 25 Nov 2017 13:32:52 +0300, Alexander Mukhin wrote:
+
+> > So, I've applied to next. We'll see how often it breaks hostapd (or
+> > not).  
 > 
-> But I saw that both Peter and Arnout had a look at the problem, and the
-> overall feeling is that there really isn't a better solution.
+> My patch as it was submitted two months ago will not apply to the
+> current buildroot tree because of the other patches applied to hostapd
+> since then. I'll send the updated version.
+
+I have already applied your patch. So if any fix is needed, please base
+your new patch on top of the "next" branch.
+
+But I did test the build of hostapd with the realtek driver support
+applied, and it built fine for me. So I'm not sure why you say it
+doesn't apply.
+
+> There's no problem in rejecting the patch. One can easily get by without
+> it by adding local changes to external.mk:
 > 
-> So, I've applied to next. We'll see how often it breaks hostapd (or
-> not).
+> HOSTAPD_PATCH += https://github.com/pritambaral/hostapd-rtl871xdrv/raw/master/rtlxdrv.patch
+> BR_NO_CHECK_HASH_FOR += rtlxdrv.patch
+> HOSTAPD_CONFIG_SET += CONFIG_DRIVER_RTW
 
-My patch as it was submitted two months ago will not apply to the
-current buildroot tree because of the other patches applied to hostapd
-since then. I'll send the updated version.
+If things turn out to be too annoying because it breaks too often, we
+might end up doing that. But it's obviously nicer for users if the
+feature is integrated in Buildroot itself.
 
-There's no problem in rejecting the patch. One can easily get by without
-it by adding local changes to external.mk:
-
-HOSTAPD_PATCH += https://github.com/pritambaral/hostapd-rtl871xdrv/raw/master/rtlxdrv.patch
-BR_NO_CHECK_HASH_FOR += rtlxdrv.patch
-HOSTAPD_CONFIG_SET += CONFIG_DRIVER_RTW
-
--- 
 Best regards,
-Alexander.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
