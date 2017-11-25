@@ -1,45 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 27 Nov 2017 09:33:31 +0100
-Subject: [Buildroot] [git commit] dbus: bump to version 1.12.2
-Message-ID: <20171201205338.362B08035D@busybox.osuosl.org>
+Date: Sat, 25 Nov 2017 13:21:32 +0100
+Subject: [Buildroot] [git commit] package/eudev: bump version to 3.2.5
+Message-ID: <20171201205337.961D17FF6F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=84e3bbcac89b59ee64ab4d92adc18badf86a9ed7
+commit: https://git.buildroot.net/buildroot/commit/?id=ee967f28cd2da7865425822afb919afe72a5cff9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Added license hash.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/dbus/dbus.hash | 4 ++--
- package/dbus/dbus.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/eudev/eudev.hash | 5 +++--
+ package/eudev/eudev.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/dbus/dbus.hash b/package/dbus/dbus.hash
-index df1891b..1aa5aa4 100644
---- a/package/dbus/dbus.hash
-+++ b/package/dbus/dbus.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--# https://dbus.freedesktop.org/releases/dbus/dbus-1.12.0.tar.gz.asc
--sha256	39af0d9267391434b549c5c4adc001b735518c96f7630c3fe7162af1d13ef3c0  dbus-1.12.0.tar.gz
-+# https://dbus.freedesktop.org/releases/dbus/dbus-1.12.2.tar.gz.asc
-+sha256	272bb5091770b047c8188b926d5e6038fa4fe6745488b2add96b23e2d9a83d88  dbus-1.12.2.tar.gz
+diff --git a/package/eudev/eudev.hash b/package/eudev/eudev.hash
+index 75f2cc1..3fa4798 100644
+--- a/package/eudev/eudev.hash
++++ b/package/eudev/eudev.hash
+@@ -1,4 +1,5 @@
+ # From http://dev.gentoo.org/~blueness/eudev/
+-md5 66acef4c6094aab4aced7ae83b74b0d2  eudev-3.2.4.tar.gz
++md5 6ca08c0e14380f87df8e8aceac123671  eudev-3.2.5.tar.gz
  # Locally calculated
- sha256	0e46f54efb12d04ab5c33713bacd0e140c9a35b57ae29e03c853203266e8f3a1  COPYING
-diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
-index 56a54e3..22ba22e 100644
---- a/package/dbus/dbus.mk
-+++ b/package/dbus/dbus.mk
+-sha256 dddcf4c89b21f5f3210f7e4d3888c92cbfc657ff734ac21b6bdd3f5bcb146fed  eudev-3.2.4.tar.gz
++sha256 49c2d04105cad2526302627e040fa24b1916a9a3e059539bc8bb919b973890af  eudev-3.2.5.tar.gz
++sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/eudev/eudev.mk b/package/eudev/eudev.mk
+index b712475..d08b9bb 100644
+--- a/package/eudev/eudev.mk
++++ b/package/eudev/eudev.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DBUS_VERSION = 1.12.0
-+DBUS_VERSION = 1.12.2
- DBUS_SITE = https://dbus.freedesktop.org/releases/dbus
- DBUS_LICENSE = AFL-2.1 or GPL-2.0+ (library, tools), GPL-2.0+ (tools)
- DBUS_LICENSE_FILES = COPYING
+-EUDEV_VERSION = 3.2.4
++EUDEV_VERSION = 3.2.5
+ EUDEV_SITE = http://dev.gentoo.org/~blueness/eudev
+ EUDEV_LICENSE = GPL-2.0+ (programs), LGPL-2.1+ (libraries)
+ EUDEV_LICENSE_FILES = COPYING
