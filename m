@@ -1,70 +1,43 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sat, 25 Nov 2017 22:54:25 +0100
-Subject: [Buildroot] [PATCH v1] qt5quickcontrols2: fix examples compile
- without Qt widgets module
-Message-ID: <20171125215425.21880-1-ps.report@gmx.net>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 25 Nov 2017 23:17:18 +0100
+Subject: [Buildroot] [PATCH-2017.02.x] ffmpeg: bump version to 3.2.9
+Message-ID: <20171125221718.6914-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add upstream suggested patch to fix flatstyle example configure
-(needs widgets module).
+Fixes a number of bugs, including integer/buffer overflows:
 
-Fixes:
+https://git.ffmpeg.org/gitweb/ffmpeg.git/shortlog/n3.2.9
 
-  cd flatstyle/ && ( test -e Makefile || .../host/bin/qmake -o Makefile .../build/qt5quickcontrols2-5.9.2/examples/quickcontrols2/flatstyle/flatstyle.pro ) && make -f Makefile
-  Project ERROR: Unknown module(s) in QT: widgets
-  make[1]: *** [Makefile:202: sub-flatstyle-make_first] Error 3
-  make[1]: Leaving directory '.../build/qt5quickcontrols2-5.9.2/examples/quickcontrols2'
-  make: *** [Makefile:45: sub-quickcontrols2-make_first] Error 2
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
-Note: tested with patch '[PATCH v5] qt5: remove Qt Quick dependency on opengl'
-applied.
----
- ...01-Example-flatstyle-needs-widgets-module.patch | 31 ++++++++++++++++++++++
- 1 file changed, 31 insertions(+)
- create mode 100644 package/qt5/qt5quickcontrols2/5.9.2/0001-Example-flatstyle-needs-widgets-module.patch
+ package/ffmpeg/ffmpeg.hash | 2 +-
+ package/ffmpeg/ffmpeg.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/qt5/qt5quickcontrols2/5.9.2/0001-Example-flatstyle-needs-widgets-module.patch b/package/qt5/qt5quickcontrols2/5.9.2/0001-Example-flatstyle-needs-widgets-module.patch
-new file mode 100644
-index 0000000000..17e3b3610e
---- /dev/null
-+++ b/package/qt5/qt5quickcontrols2/5.9.2/0001-Example-flatstyle-needs-widgets-module.patch
-@@ -0,0 +1,31 @@
-+From 10d92524cd6736c767c9ce55a1d9b9f1a2a69a9f Mon Sep 17 00:00:00 2001
-+From: Peter Seiderer <ps.report@gmx.net>
-+Date: Sat, 25 Nov 2017 22:26:58 +0100
-+Subject: [PATCH] Example flatstyle needs widgets module
-+
-+Fixes compile with disabled widgets module.
-+
-+Task-number: QTBUG-64761
-+Change-Id: I743884d77d51e89061d87cab006bab0cafc9ddb7
-+
-+Upstream: https://codereview.qt-project.org/212583
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+---
-+ examples/quickcontrols2/quickcontrols2.pro | 3 ++-
-+ 1 file changed, 2 insertions(+), 1 deletion(-)
-+
-+diff --git a/examples/quickcontrols2/quickcontrols2.pro b/examples/quickcontrols2/quickcontrols2.pro
-+index 858759f..8310e9b 100644
-+--- a/examples/quickcontrols2/quickcontrols2.pro
-++++ b/examples/quickcontrols2/quickcontrols2.pro
-+@@ -6,5 +6,6 @@ SUBDIRS += \
-+     contactlist \
-+     sidepanel \
-+     swipetoremove \
-+-    flatstyle \
-+     wearable
-++
-++qtHaveModule(widgets): SUBDIRS += flatstyle
-+-- 
-+2.7.4
-+
+diff --git a/package/ffmpeg/ffmpeg.hash b/package/ffmpeg/ffmpeg.hash
+index dcfc8aa8c6..cf41f39eee 100644
+--- a/package/ffmpeg/ffmpeg.hash
++++ b/package/ffmpeg/ffmpeg.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 42e7362692318afc666f14378dd445effa9a1b09787504a6ab5811fe442674cd  ffmpeg-3.2.8.tar.xz
++sha256 1131d37890ed3dcbc3970452b200a56ceb36b73eaa51d1c23c770c90f928537f  ffmpeg-3.2.9.tar.xz
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index 9b287c7aaa..f914f4e438 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FFMPEG_VERSION = 3.2.8
++FFMPEG_VERSION = 3.2.9
+ FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.xz
+ FFMPEG_SITE = http://ffmpeg.org/releases
+ FFMPEG_INSTALL_STAGING = YES
 -- 
-2.15.0
+2.11.0
