@@ -1,77 +1,45 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 25 Nov 2017 16:11:49 +0100
-Subject: [Buildroot] [PATCH 1/1] support/download: svn non-interactive
- in BR2_SVN
-In-Reply-To: <1510944634-3374-1-git-send-email-sam.voss@rockwellcollins.com>
-References: <1510944634-3374-1-git-send-email-sam.voss@rockwellcollins.com>
-Message-ID: <20171125151149.GD2798@scaer>
+Date: Sat, 25 Nov 2017 16:19:02 +0100
+Subject: [Buildroot] [PATCH next] toolchain/buildroot: add comment for glibc
+ NaN-2008 headers requirement
+Message-ID: <20171125151902.502-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sam, All,
+Commit 4a5140ecf (toolchain/buildroot: glibc requires kernel headers >=
+4.5 with NaN-2008) added a restriction on kernel hjeaders for glibc when
+the architecture is using naN-2008.
 
-On 2017-11-17 12:50 -0600, Sam Voss spake thusly:
-> Instead of overriding the _svn command and injecting --non-interactive,
-> change the default value of BR2_SVN to include this flag so the end user
-> can choose not to use the flag.
-> 
-> This change helps users behind corporate system rules which may not
-> allow them to locally cache credentials and require interactive mode.
-> 
-> Signed-off-by: Sam Voss <sam.voss@rockwellcollins.com>
-> 
-> [Originally implemented by]
-> CC: "Yann E. MORIN" <yann.morin.1998@free.fr>
+However, such a restriction is usually associated to a comment explaining
+the restiction, so the user knows what is happening.
 
-Thomas, since this is my code: ;-)
+That comment was forgotten in 4a5140ecf. Add it now.
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Romain Naour <romain.naour@openwide.fr>
+---
+ toolchain/toolchain-buildroot/Config.in | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  Config.in            | 2 +-
->  support/download/svn | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/Config.in b/Config.in
-> index 90f793a..d192995 100644
-> --- a/Config.in
-> +++ b/Config.in
-> @@ -106,7 +106,7 @@ config BR2_WGET
->  
->  config BR2_SVN
->  	string "Subversion (svn) command"
-> -	default "svn"
-> +	default "svn --non-interactive"
->  
->  config BR2_BZR
->  	string "Bazaar (bzr) command"
-> diff --git a/support/download/svn b/support/download/svn
-> index ee799f4..ad84a39 100755
-> --- a/support/download/svn
-> +++ b/support/download/svn
-> @@ -33,7 +33,7 @@ _svn() {
->      eval ${SVN} "${@}"
->  }
->  
-> -_svn --non-interactive export ${verbose} "${@}" "'${repo}@${rev}'" "'${basename}'"
-> +_svn export ${verbose} "${@}" "'${repo}@${rev}'" "'${basename}'"
->  
->  # If this is a HEAD revision, export the exact version
->  # that was checked out.
-> -- 
-> 1.9.1
-> 
-
+diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
+index cbe2038a77..c624350cac 100644
+--- a/toolchain/toolchain-buildroot/Config.in
++++ b/toolchain/toolchain-buildroot/Config.in
+@@ -72,6 +72,11 @@ comment "glibc on powerpc64le needs a toolchain w/ headers >= 3.10"
+ 	depends on BR2_powerpc64le
+ 	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
+ 
++# Support for MIPS NAN2008 needs headers >= 4.5
++comment "glibc on MIPS w/ NAN2008 needs a toolchain w/ headers >= 4.5"
++	depends on BR2_MIPS_NAN_2008
++	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_5
++
+ config BR2_TOOLCHAIN_BUILDROOT_MUSL
+ 	bool "musl"
+ 	depends on BR2_aarch64	  || BR2_arm     || BR2_armeb     || BR2_i386 || \
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.11.0
