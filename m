@@ -1,102 +1,97 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 25 Nov 2017 13:21:27 +0100
-Subject: [Buildroot] [git commit branch/next] axel: bump to version 2.16
-Message-ID: <20171125121431.6E6AC81492@busybox.osuosl.org>
+Date: Sat, 25 Nov 2017 13:21:29 +0100
+Subject: [Buildroot] [git commit branch/next] package/nano: bump version to
+ 2.9.0
+Message-ID: <20171125121431.CC1CC8102B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=921014df873fbdeac63eb72164d40316721bb417
+commit: https://git.buildroot.net/buildroot/commit/?id=cda7db8b869c89f0f4e7f668477ebfc9f5d897ba
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-- Change upstream URL.
-- Add optional dependency on libressl/openssl.
-- Switch to autotools-package.
+Removed patch applied upstream, added license hash.
 
-Signed-off-by: Ismael Luceno <ismael@iodev.co.uk>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/axel/Config.in |  2 +-
- package/axel/axel.hash |  3 +--
- package/axel/axel.mk   | 42 ++++++++++++++++++------------------------
- 3 files changed, 20 insertions(+), 27 deletions(-)
+ ...pilation-when-configured-with-enable-tiny.patch | 43 ----------------------
+ package/nano/nano.hash                             |  3 +-
+ package/nano/nano.mk                               |  4 +-
+ 3 files changed, 4 insertions(+), 46 deletions(-)
 
-diff --git a/package/axel/Config.in b/package/axel/Config.in
-index 6e709cf..4507855 100644
---- a/package/axel/Config.in
-+++ b/package/axel/Config.in
-@@ -4,7 +4,7 @@ config BR2_PACKAGE_AXEL
- 	help
- 	  HTTP/FTP download accelerator.
- 
--	  http://axel.alioth.debian.org/
-+	  https://github.com/axel-download-accelerator/axel/
- 
- comment "axel needs a toolchain w/ threads"
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/axel/axel.hash b/package/axel/axel.hash
-index 8957670..1fc1c55 100644
---- a/package/axel/axel.hash
-+++ b/package/axel/axel.hash
-@@ -1,2 +1 @@
--# Locally calculated
--sha256	359a57ab4e354bcb6075430d977c59d33eb3e2f1415a811948fa8ae657ca8036  axel-2.4.tar.gz
-+sha256 bd65f8d8add34ab61ce1fb9e1c7b1c3449b1cfd981ce48aeee218e755ba0d6fb  axel-2.16.tar.xz
-diff --git a/package/axel/axel.mk b/package/axel/axel.mk
-index 60bf5e4..dcc8afd 100644
---- a/package/axel/axel.mk
-+++ b/package/axel/axel.mk
-@@ -4,33 +4,27 @@
+diff --git a/package/nano/0001-fix-compilation-when-configured-with-enable-tiny.patch b/package/nano/0001-fix-compilation-when-configured-with-enable-tiny.patch
+deleted file mode 100644
+index db684f9..0000000
+--- a/package/nano/0001-fix-compilation-when-configured-with-enable-tiny.patch
++++ /dev/null
+@@ -1,43 +0,0 @@
+-From 28cfab7580c42a6d6c9c5d787ce736094fd51a0c Mon Sep 17 00:00:00 2001
+-From: Benno Schulenberg <bensberg@telfort.nl>
+-Date: Tue, 29 Aug 2017 19:28:44 +0200
+-Subject: tweaks: fix compilation when configured with --enable-tiny
+-
+-When moving the cursor to the top-left corner, it is not necessary
+-to compute leftedge because firstcolumn IS the relevant leftedge.
+-
+-Reported-by: Jordi Mallach <jordi@debian.org>
+-
+-Downloaded from upstream master branch:
+-http://git.savannah.gnu.org/cgit/nano.git/commit/?id=28cfab7580c42a6d6c9c5d787ce736094fd51a0c
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+----
+- src/move.c | 4 ++--
+- 1 file changed, 2 insertions(+), 2 deletions(-)
+-
+-diff --git a/src/move.c b/src/move.c
+-index d138356..ce276e4 100644
+---- a/src/move.c
+-+++ b/src/move.c
+-@@ -121,7 +121,7 @@ void do_page_up(void)
+- 	openfile->current = openfile->edittop;
+- 	openfile->current_y = 0;
+- 
+--	leftedge = leftedge_for(openfile->firstcolumn, openfile->edittop);
+-+	leftedge = openfile->firstcolumn;
+- 	target_column = 0;
+-     } else
+- 	get_edge_and_target(&leftedge, &target_column);
+-@@ -152,7 +152,7 @@ void do_page_down(void)
+- 	openfile->current = openfile->edittop;
+- 	openfile->current_y = 0;
+- 
+--	leftedge = leftedge_for(openfile->firstcolumn, openfile->edittop);
+-+	leftedge = openfile->firstcolumn;
+- 	target_column = 0;
+-     } else
+- 	get_edge_and_target(&leftedge, &target_column);
+--- 
+-cgit v1.0-41-gc330
+-
+diff --git a/package/nano/nano.hash b/package/nano/nano.hash
+index 4e0abc4..c09f031 100644
+--- a/package/nano/nano.hash
++++ b/package/nano/nano.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated after checking pgp signature
+-sha256 fbe31746958698d73c6726ee48ad8b0612697157961a2e9aaa83b4aa53d1165a  nano-2.8.7.tar.xz
++sha256 d2d30c39caef53aba1ec1b4baff4186d4496f35d2411b0848242a5f2e27e129e  nano-2.9.0.tar.xz
++sha256 fc82ca8b6fdb18d4e3e85cfd8ab58d1bcd3f1b29abe782895abd91d64763f8e7  COPYING
+diff --git a/package/nano/nano.mk b/package/nano/nano.mk
+index f1c172f..458174a 100644
+--- a/package/nano/nano.mk
++++ b/package/nano/nano.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--AXEL_VERSION = 2.4
--AXEL_SITE = http://sources.buildroot.net
-+AXEL_VERSION = 2.16
-+AXEL_SITE = https://github.com/axel-download-accelerator/axel/releases/download/v$(AXEL_VERSION)
-+AXEL_SOURCE = axel-$(AXEL_VERSION).tar.xz
- AXEL_LICENSE = GPL-2.0+
- AXEL_LICENSE_FILES = COPYING
- AXEL_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
--AXEL_LDFLAGS = -lpthread $(TARGET_NLS_LIBS)
- 
--ifeq ($(BR2_SYSTEM_ENABLE_NLS),)
--AXEL_DISABLE_I18N = --i18n=0
--endif
--
--define AXEL_CONFIGURE_CMDS
--	(cd $(@D); \
--		./configure \
--			--prefix=/usr \
--			--debug=1 \
--			$(AXEL_DISABLE_I18N) \
--	)
--endef
-+# ac_cv_prog_cc_c99 is required for BR2_USE_WCHAR=n because the C99 test
-+# provided by autoconf relies on wchar_t.
-+AXEL_CONF_OPTS = \
-+	ac_cv_prog_cc_c99=-std=c99 \
-+	CFLAGS="$(TARGET_CFLAGS)"
- 
--define AXEL_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" \
--	LFLAGS="$(TARGET_LDFLAGS) $(AXEL_LDFLAGS)" -C $(@D)
--endef
--
--define AXEL_INSTALL_TARGET_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) DESTDIR=$(TARGET_DIR) -C $(@D) install
--endef
-+ifeq ($(BR2_PACKAGE_LIBRESSL),y)
-+AXEL_CONF_OPTS += --with-ssl
-+AXEL_DEPENDENCIES += libressl
-+else ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+AXEL_CONF_OPTS += --with-ssl
-+AXEL_DEPENDENCIES += openssl
-+else
-+AXEL_CONF_OPTS += --without-ssl
-+endif
- 
--$(eval $(generic-package))
-+$(eval $(autotools-package))
+-NANO_VERSION_MAJOR = 2.8
+-NANO_VERSION = $(NANO_VERSION_MAJOR).7
++NANO_VERSION_MAJOR = 2.9
++NANO_VERSION = $(NANO_VERSION_MAJOR).0
+ NANO_SITE = https://www.nano-editor.org/dist/v$(NANO_VERSION_MAJOR)
+ NANO_SOURCE = nano-$(NANO_VERSION).tar.xz
+ NANO_LICENSE = GPL-3.0+
