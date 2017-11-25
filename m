@@ -1,91 +1,159 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 25 Nov 2017 17:34:11 +0100
-Subject: [Buildroot] Cannot rebuild autobuild
-In-Reply-To: <20171125150144.GC2798@scaer>
-References: <20171113144231.gddccsqlelrhrokw@dell5510>
- <20171114234409.114f002f@gmx.net> <20171115125857.dcy6j7qvjt32ww43@dell5510>
- <61134b08-bb0a-4665-4b68-3ea2e4063563@mind.be>
- <20171116001919.67e98b4b@gmx.net>
- <58b8ef53-75b6-fc8b-8d37-e21570ae4e3b@mind.be>
- <20171116072948.smctbcvxwkxgqoah@x230>
- <d13312cf-ae70-92fd-8819-a86c79d1723b@mind.be>
- <20171118223206.069b771a@gmx.net> <20171121201605.tzmasudql66iruxa@dell5510>
- <20171125150144.GC2798@scaer>
-Message-ID: <d76cd131-a5ec-631d-4c8b-4bb3d09fd2ca@mind.be>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Sat, 25 Nov 2017 17:42:24 +0100
+Subject: [Buildroot] [PATCH v5 1/1] sunxi-mali-driver-mainline: new
+ package
+In-Reply-To: <20171125155023.kjtzljcyw2k4c67a@flea.lan>
+References: <1511302072-9290-1-git-send-email-giulio.benetti@micronovasrl.com>
+ <20171125155023.kjtzljcyw2k4c67a@flea.lan>
+Message-ID: <fed5e416-7f57-0ede-705f-4c340a473730@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi Maxime,
 
-
-On 25-11-17 16:01, Yann E. MORIN wrote:
-> Petr, All,
+Il 25/11/2017 16:50, Maxime Ripard ha scritto:
+> On Tue, Nov 21, 2017 at 11:07:52PM +0100, Giulio Benetti wrote:
+>> Added kernel allwinner mali driver package.
+>> Used combined with userspace Allwinner openGL blob,
+>> it gives possibility to use 3D openGL SoC acceleration.
+>>
+>> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+>> ---
+>> Changes v4 -> v5:
+>> * prevent build twice
+>>
+>>   DEVELOPERS                                         |  3 +++
+>>   package/Config.in                                  |  1 +
+>>   package/sunxi-mali-driver-mainline/Config.in       | 22 ++++++++++++++++++
+>>   .../sunxi-mali-driver-mainline.mk                  | 26 ++++++++++++++++++++++
+>>   4 files changed, 52 insertions(+)
+>>   create mode 100644 package/sunxi-mali-driver-mainline/Config.in
+>>   create mode 100644 package/sunxi-mali-driver-mainline/sunxi-mali-driver-mainline.mk
+>>
+>> diff --git a/DEVELOPERS b/DEVELOPERS
+>> index bb81a19..3fdb28b 100644
+>> --- a/DEVELOPERS
+>> +++ b/DEVELOPERS
+>> @@ -695,6 +695,9 @@ F:	package/ocrad/
+>>   F:	package/tesseract-ocr/
+>>   F:	package/webp/
+>>   
+>> +N:	Giulio Benetti <giulio.benetti@micronovasrl.com>
+>> +F:	package/sunxi-mali-driver-mainline/
+>> +
+>>   N:	Gregory Dymarek <gregd72002@gmail.com>
+>>   F:	package/ding-libs/
+>>   F:	package/gengetopt/
+>> diff --git a/package/Config.in b/package/Config.in
+>> index fe5ccc4..8de2227 100644
+>> --- a/package/Config.in
+>> +++ b/package/Config.in
+>> @@ -496,6 +496,7 @@ endmenu
+>>   	source "package/statserial/Config.in"
+>>   	source "package/stm32flash/Config.in"
+>>   	source "package/sunxi-cedarx/Config.in"
+>> +	source "package/sunxi-mali-driver-mainline/Config.in"
+>>   	source "package/sunxi-mali/Config.in"
+>>   	source "package/sysstat/Config.in"
+>>   	source "package/targetcli-fb/Config.in"
+>> diff --git a/package/sunxi-mali-driver-mainline/Config.in b/package/sunxi-mali-driver-mainline/Config.in
+>> new file mode 100644
+>> index 0000000..5b7b2ba
+>> --- /dev/null
+>> +++ b/package/sunxi-mali-driver-mainline/Config.in
+>> @@ -0,0 +1,22 @@
+>> +comment "sunxi-mali-driver-mainline needs a Linux kernel to be built"
+>> +	depends on !BR2_LINUX_KERNEL
+>> +
+>> +config BR2_PACKAGE_SUNXI_MALI_DRIVER_MAINLINE
+>> +	bool "sunxi-mali-driver-mainline"
+>> +	depends on BR2_LINUX_KERNEL
+>> +	select BR2_LINUX_NEEDS_MODULES # not using kernel-module infra
+>> +	help
+>> +	  This package builds and installs the Linux kernel driver for
+>> +	  the Mali GPU on Allwinner platforms, compatible with recent
+>> +	  Linux kernels (>= 4.4). Note that it should be installed
+>> +	  together with the corresponding userspace binary blobs to
+>> +	  provide complete OpenGL functionality.
+>> +
+>> +	  sunxi-mali-driver-mainline requires a Linux kernel >= 4.4 with the
+>> +	  following options enabled:
+>> +
+>> +	  - CONFIG_CMA
+>> +	  - CONFIG_DMA_CMA
+>> +	  - CONFIG_DRM_FBDEV_OVERALLOC >= 200 for double buffer or more
+>> +
+>> +	  https://github.com/mripard/sunxi-mali/blob/master/README.md
+>> diff --git a/package/sunxi-mali-driver-mainline/sunxi-mali-driver-mainline.mk b/package/sunxi-mali-driver-mainline/sunxi-mali-driver-mainline.mk
+>> new file mode 100644
+>> index 0000000..1692646
+>> --- /dev/null
+>> +++ b/package/sunxi-mali-driver-mainline/sunxi-mali-driver-mainline.mk
+>> @@ -0,0 +1,26 @@
+>> +################################################################################
+>> +#
+>> +# sunxi-mali-driver-mainline
+>> +#
+>> +################################################################################
+>> +
+>> +SUNXI_MALI_DRIVER_MAINLINE_VERSION = 5b7b3c0b6e1736676c90928816d271debbb09d95
+>> +SUNXI_MALI_DRIVER_MAINLINE_SITE = $(call github,mripard,sunxi-mali,$(SUNXI_MALI_DRIVER_MAINLINE_VERSION))
+>> +SUNXI_MALI_DRIVER_MAINLINE_DEPENDENCIES = linux
+>> +
+>> +SUNXI_MALI_DRIVER_MAINLINE_MAKE_OPTS = \
+>> +	KDIR=$(LINUX_DIR) \
+>> +	CROSS_COMPILE=$(TARGET_CROSS) \
+>> +	INSTALL_MOD_PATH=$(TARGET_DIR)
+>> +
+>> +define SUNXI_MALI_DRIVER_MAINLINE_BUILD_CMDS
+>> +	cd $(@D) && $(SUNXI_MALI_DRIVER_MAINLINE_MAKE_OPTS) \
+>> +		$(SHELL) ./build.sh -r r6p2 -a
+>> +endef
 > 
-> On 2017-11-21 21:16 +0100, Petr Vorel spake thusly:
->>>>  If the *.mk is expanded in alphabetical order, pkg-toolchain-external.mk will
->>>> always come before toolchain-external.mk. Otherwise it is possible (depending on
->>>> the state of hash tables or inode numbers or whatever) that
->>>> toolchain-external-custom.mk gets included first.
-> [--SNIP--]
->> I found by bisecting that our bug is caused by this change in make:
->> 4fd5672 ("Use Jenkins hash.")
->> https://git.savannah.gnu.org/cgit/make.git/commit/?id=4fd56724ad281498d3c8b27a4b25b4070f6e4e65
+> This doesn't build anything, this will just apply the patches, you
+> should use -b.
+
+You're right, I've tried it as a workaround to avoid compiling twice.
+But it's not here the problem.
+I've just sent you a PR on github:
+https://github.com/mripard/sunxi-mali/pull/6
+This will fix the problem.
+
+On "[PATCH v4 1/1] sunxi-mali-driver-mainline: new package" I did it right:
++define SUNXI_MALI_DRIVER_MAINLINE_BUILD_CMDS
++	cd $(@D) && $(SUNXI_MALI_DRIVER_MAINLINE_MAKE_OPTS) \
++	$(SHELL) ./build.sh -r r6p2 -b
++endef
++
++define SUNXI_MALI_DRIVER_MAINLINE_INSTALL_TARGET_CMDS
++	cd $(@D) && $(SUNXI_MALI_DRIVER_MAINLINE_MAKE_OPTS) \
++	$(SHELL) ./build.sh -r r6p2 -i
++endef
+
+So v5 patch doesn't make sense if you accept my Pull Request on Github.
+How can I proceed?
+Do I submit v6 equal to v4 with changes respect v5?
+
+Thank you
+Regards
+
 > 
-> Good work at bisecting it! :-)
+> Maxime
 > 
->> It's a version after last release (4.2.1).
->> I wonder whether it's a bug in make (I guess so) and whether we should report it
->> (probably).
-> 
-> This is indeed a change in behaviour. However, as make ever documented
-> a guranteed/non-guaranteed ordering of wildcards to begin with?
-> 
-> The manual for the current make version says nothing about the ordering,
-> and neither do the manual for older versions (I've checked only a few of
-> them).
-> 
-> So, this is a change in behaviour, and should be reported upstream as a
-> bug. Will you do so?
-
- As I explained in the extended commit message when I applied the patch fixing
-this (b9d2d4cb4eb: "Fix makefile include order by using sort/wildcard.") make
-actually has had this behaviour "forever" (since make 3.82). It calls glob with
-GLOB_NOSORT. Note that in most of the cases where we didn't already do $(sort
-$(wildcard ...)), the order actually doesn't (or shouldn't) matter. For example,
-package/*/*.mk hopefully does not depend on the order. In other words, it's very
-likely that nobody notices if things get included in the "wrong" order.
-
- As far as I could see, only the external-toolchain-package really could cause
-any problems.
-
- So my guess is that the bisected commit really has nothing to do with it, it
-just happens to trigger the random ordering issue.
-
- Now that I look at it again, however, it looks like we haven't been able to
-adequately explain why this issue suddenly occurred... First of all,
-external-toolchain-package has existed for a year now, so if it is truly random
-we'd expect someone to have noticed before. Also, the change in Tumbleweed that
-Petr pointed to [1] should actually *fix* the issue, because it removes the
-NOSORT. Debian and Ubuntu, conversely, have no such patch so the autobuilders
-should see this issue (they use external toolchains a lot)...
-
- /me is confused again...
-
-
- Regards,
- Arnout
-
-
-[1]
-https://build.opensuse.org/package/view_file/Base:System/make/make-sorted-glob.patch?expand=1
 
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Giulio Benetti
+R&D Manager &
+Advanced Research
+
+MICRONOVA SRL
+Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
+Tel. 049/8931563 - Fax 049/8931346
+Cod.Fiscale - P.IVA 02663420285
+Capitale Sociale ? 26.000 i.v.
+Iscritta al Reg. Imprese di Padova N. 02663420285
+Numero R.E.A. 258642
