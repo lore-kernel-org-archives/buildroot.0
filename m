@@ -1,70 +1,107 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Sat, 25 Nov 2017 12:12:14 -0500
-Subject: [Buildroot] [PATCH 1/1] postgresql: bump to 10.1
-Message-ID: <20171125171214.11641-1-Adamduskett@outlook.com>
+Date: Sat, 25 Nov 2017 12:16:16 -0500
+Subject: [Buildroot] [PATCH 1/1] freerdp: fix wayland client dependency
+ chain failure
+In-Reply-To: <20171120211445.GA2867@scaer>
+References: <20171119214852.27459-1-Adamduskett@outlook.com>
+ <20171120084757.04cf0411@windsurf> <20171120211445.GA2867@scaer>
+Message-ID: <CAFSsvmrOvdYUSTOMMFPc8ytQC4WPAv0feuvyqR+F=KuUugPjsQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-changes:
+Yann;
 
-- Add a hash for the license file.
-
-- PostgreSQL 10.0 and above will default to checking for /dev/urandom if an
-  SSL library is not found, which will fail when cross compiling.
-  Since /dev/urandom is guaranteed to be provided on Linux systems,
-  add ac_cv_file__dev_urandom=yes to the configure environment if a SSL library
-  is not selected.
-
-Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
----
-Changes v1 -> v2:
-  - Remove --disable-strong-random in place of ac_cv_file__dev_urandom=yes
-    in the case of a SSL library not being selected. (Thomas)
-
- package/postgresql/postgresql.hash | 7 ++++---
- package/postgresql/postgresql.mk   | 7 ++++++-
- 2 files changed, 10 insertions(+), 4 deletions(-)
-
-diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
-index e62838911e..e2347701c1 100644
---- a/package/postgresql/postgresql.hash
-+++ b/package/postgresql/postgresql.hash
-@@ -1,4 +1,5 @@
--# From https://ftp.postgresql.org/pub/source/v9.6.6/postgresql-9.6.6.tar.bz2.sha256
--sha256 399cdffcb872f785ba67e25d275463d74521566318cfef8fe219050d063c8154  postgresql-9.6.6.tar.bz2
-+# From https://ftp.postgresql.org/pub/source/v10.1/postgresql-10.1.tar.bz2.sha256
-+sha256	3ccb4e25fe7a7ea6308dea103cac202963e6b746697366d72ec2900449a5e713	postgresql-10.1.tar.bz2
-+
- # License file, Locally calculated
--sha256 7dc8de32741ad1b03e21710771b55a1b9d460671d47f28a8840f917e38c66676  COPYRIGHT
-+sha256	7dc8de32741ad1b03e21710771b55a1b9d460671d47f28a8840f917e38c66676	COPYRIGHT
-diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
-index 50ce212c1c..b5d8e3e236 100644
---- a/package/postgresql/postgresql.mk
-+++ b/package/postgresql/postgresql.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--POSTGRESQL_VERSION = 9.6.6
-+POSTGRESQL_VERSION = 10.1
- POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
- POSTGRESQL_SITE = http://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
- POSTGRESQL_LICENSE = PostgreSQL
-@@ -56,6 +56,11 @@ endif
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- POSTGRESQL_DEPENDENCIES += openssl
- POSTGRESQL_CONF_OPTS += --with-openssl
-+else
-+# PostgreSQL checks for /dev/urandom and fails if it's being cross-compiled and
-+# an SSL library isn't found. Since /dev/urandom is guaranteed to be provided
-+# on Linux systems, explicitly enable urandom, even if OpenSSL isn't selected.
-+POSTGRESQL_CONF_ENV += ac_cv_file__dev_urandom=yes
- endif
- 
- ifeq ($(BR2_PACKAGE_OPENLDAP),y)
--- 
-2.14.3
+On Mon, Nov 20, 2017 at 4:14 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> Thomas, Adam, All,
+>
+> On 2017-11-20 08:47 +0100, Thomas Petazzoni spake thusly:
+>> On Sun, 19 Nov 2017 16:48:52 -0500, Adam Duskett wrote:
+>> > If the wayland client is selected, freerdp depends on libxkbcommon without
+>> > depending on it in the mk file.
+>> >
+>> > Fixes:
+>> > http://autobuild.buildroot.net/results/dc3/dc3e11f7076a8355f3d2f9cb49c6325dcf7084bd
+>> > Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
+>> > ---
+>> >  package/freerdp/freerdp.mk | 4 ++++
+>> >  1 file changed, 4 insertions(+)
+>> >
+>> > diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
+>> > index 69a89a190c..29c35164c3 100644
+>> > --- a/package/freerdp/freerdp.mk
+>> > +++ b/package/freerdp/freerdp.mk
+>> > @@ -207,6 +207,10 @@ else
+>> >  FREERDP_CONF_OPTS += -DWITH_WAYLAND=OFF
+>> >  endif
+>> >
+>> > +ifeq ($(BR2_PACKAGE_FREERDP_CLIENT_WL),y)
+>> > +FREERDP_DEPENDENCIES += libxkbcommon
+>> > +endif
+>>
+>> https://git.buildroot.org/buildroot/commit/?id=c2824fba2f2f4df6c1e0273fa546a203d1e6d5ac
+>> already makes libxkbcommon a dependency of freerdp when wayland is
+>> enabled. Isn't this sufficient ?
+>
+> I think the current code might indeed not be correct, but that the patch
+> is not correct either...
+>
+> The issue with FreeRDP, as much as I can remember, is the way it builds
+> the clients: either clients are enabled ot they are not. But once you
+> enable clients, it will look for dependencies of each client, and build
+> those whose dependencies are met.
+>
+> So, if you have X11 and wayland libs around, then FreeRDP will biuld
+> both clients, even if you are only interested in one and not both.
+>
+> The situation where you want only (say) the wayland client and not the
+> X11 one is if you are running a wayland system, with XWayland to run
+> legacy X11 apps ontop of this, and only want to use FreeRDP as a wayland
+> client.
+>
+> So we have code in freerdp.mk to get rid of the unneeded client(s).
+>
+> But now, the select and dependency on libxbcommon are under two slightly
+> different conditions:
+>
+>   - the select is only when the wayland client is enabled,
+>   - the dependency is when the wayland package is enabled.
+>
+> Now, if the wayland client is disabled, but the walyand package is
+> enabled, then nothing from FreeRDP selects libxbkcommon, but it ends up
+> in the dependency chain of FreeRDP nonetheless.
+>
+> I think a better patch would be something like:
+>
+> diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
+> index 69a89a190c..0ceef576a8 100644
+> --- a/package/freerdp/freerdp.mk
+> +++ b/package/freerdp/freerdp.mk
+> @@ -198,7 +198,7 @@ else
+>  FREERDP_CONF_OPTS += -DWITH_XV=OFF
+>  endif
+>
+> -ifeq ($(BR2_PACKAGE_WAYLAND),y)
+> +ifeq ($(BR2_PACKAGE_FREERDP_CLIENT_WL),y)
+>  FREERDP_DEPENDENCIES += wayland libxkbcommon
+>  FREERDP_CONF_OPTS += \
+>         -DWITH_WAYLAND=ON \
+>
+> TBH, I'm a bit under the weather those days, so Adam, I'd be gratefull
+> if you were to check the above, please.
+>
+Can do! Sorry I didn't see the message earlier, I will resubmit.
+Hope you feel better!
+> Regards,
+> Yann E. MORIN.
+>
+> --
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
+Adam
