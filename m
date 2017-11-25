@@ -1,63 +1,44 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 25 Nov 2017 13:43:48 +0100
-Subject: [Buildroot] [PATCH 1/1] ntp: add patch to support for libressl
-In-Reply-To: <20171123225155.73a4da45@windsurf.lan>
-References: <20171108121143.5411-1-aduskett@gmail.com>
- <20171123225155.73a4da45@windsurf.lan>
-Message-ID: <20171125124348.GA2798@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 25 Nov 2017 13:45:11 +0100
+Subject: [Buildroot] [PATCH 1/1] python-cython: new package
+In-Reply-To: <20171106203539.26391-1-joseph.kogut@gmail.com>
+References: <20171106203539.26391-1-joseph.kogut@gmail.com>
+Message-ID: <20171125134511.25ea518f@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Hello,
 
-On 2017-11-23 22:51 +0100, Thomas Petazzoni spake thusly:
-> On Wed,  8 Nov 2017 07:11:43 -0500, Adam Duskett wrote:
-> > NTP currently fails to compile against LibreSSL because of checks used
-> > to determine the SSL library version.
-> > 
-> > Upstream-Status: Pending
-> > http://bugs.ntp.org/show_bug.cgi?id=3401#c3
-> > 
-> > Signed-off-by: Adam Duskett <aduskett@gmail.com>
-> 
-> Arnout, Peter, Yann, I think we discussed this topic during the
-> Buildroot meeting, and concluded we didn't want patches in Buildroot to
-> enable LibreSSL compatibility with a package. Do we stand on this
-> position, and reject Adam's contribution on ntp?
+On Mon,  6 Nov 2017 12:35:39 -0800, Joseph Kogut wrote:
 
-My position is to avoid feature patches. Adding libresl support in a
-package is adding a new feature IMHO.
 
-As such, we should not accept it, unless it has *already* been accepted
-*and* merged upstream.
+> diff --git a/package/python-cython/Config.in.host b/package/python-cython/Config.in.host
+> new file mode 100644
+> index 0000000000..69d32d5ab3
+> --- /dev/null
+> +++ b/package/python-cython/Config.in.host
+> @@ -0,0 +1,7 @@
+> +config BR2_PACKAGE_HOST_PYTHON_CYTHON
+> +	bool "host python-cython"
+> +	help
+> +	  The Cython compiler for writing C extensions for the Python
+> +	  language.
+> +
+> +	  http://cython.org/
 
-Regards,
-Yann E. MORIN.
+Could you briefly explain the use-case for Cython, in the context of
+Buildroot? How are you using it? To achieve what?
 
-> > + #ifndef OPENSSL_VERSION_NUMBER
-> > ++#ifndef LIBRESSL_VERSION_NUMBER
-> 
-> In addition, this continue to use the LIBRESSL_VERSION_NUMBER approach,
-> which will fail when libressl gains support for new APIs.
-> 
-> Thanks in advance for giving your feedback on this patch. If nobody
-> complains, I'll merge :-)
-> 
-> Thanks!
-> 
-> Thomas
-> -- 
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux and Kernel engineering
-> http://free-electrons.com
+I'm just trying to understand whether it makes sense to have a visible
+option in menuconfig for this package (or not).
 
+Thanks!
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
