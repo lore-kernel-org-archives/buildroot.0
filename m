@@ -1,94 +1,118 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 25 Nov 2017 18:40:03 +0100
-Subject: [Buildroot] [PATCH v1] busybox: Fix rtcwake to use /dev/rtc0
- properly
-In-Reply-To: <1511530053.25007.435.camel@linux.intel.com>
-References: <20171123183914.71769-1-andriy.shevchenko@linux.intel.com>
- <b2f0d3bf-b8a1-c948-2013-35dc605c2cbd@mind.be>
- <1511530053.25007.435.camel@linux.intel.com>
-Message-ID: <f5531efb-4352-d8af-5c2a-5ba38bab94c4@mind.be>
+Date: Sat, 25 Nov 2017 18:59:41 +0100
+Subject: [Buildroot] [PATCH v5 1/1] sunxi-mali-driver-mainline: new
+ package
+In-Reply-To: <1511302072-9290-1-git-send-email-giulio.benetti@micronovasrl.com>
+References: <1511302072-9290-1-git-send-email-giulio.benetti@micronovasrl.com>
+Message-ID: <b4816831-bd4a-d923-9860-85c190148cf5@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Andy,
+ Hi Giulio,
 
- Sorry, I should have started my mail with:
+On 21-11-17 23:07, Giulio Benetti wrote:
+> Added kernel allwinner mali driver package.
+> Used combined with userspace Allwinner openGL blob,
+> it gives possibility to use 3D openGL SoC acceleration.
 
- Thank you very much for your contributation. I'm afraid, however, we will not
-accept it as is in Buildroot.
+ I should have asked before, but: where do those binaries come from? Are they
+from the mali-sunxi package? Or not yet packaged in Buildroot?
 
 
-On 24-11-17 14:27, Andy Shevchenko wrote:
-> On Thu, 2017-11-23 at 23:46 +0100, Arnout Vandecappelle wrote:
->>  Hi Andy,
->>
->> On 23-11-17 19:39, Andy Shevchenko wrote:
->>> rtcwake from busybox has failed in case the /dev/rtc is a symlink
->>> (which is default case for udev enabled systems) due to wrong
->>> pathname
->>> used for a sysfs wakeup attribute.
->>
->>  In Buildroot, we don't accept "feature patches" for packages.
-> 
-> To be honest it's not a feature patch at all. It fixes (okay,
-> workarounds) obvious bug in rtcwake logic. Easy to reproduce. 100%
-> reproducible
+[snip]
+> index fe5ccc4..8de2227 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -496,6 +496,7 @@ endmenu
+>  	source "package/statserial/Config.in"
+>  	source "package/stm32flash/Config.in"
+>  	source "package/sunxi-cedarx/Config.in"
+> +	source "package/sunxi-mali-driver-mainline/Config.in"
+>  	source "package/sunxi-mali/Config.in"
 
- Yes, that's why I continued with:
+ foo-bar sorts after foo, so swap these two lines.
 
->>  We try to limit
->> to patches that fix the build or complete breakage, sometimes also to
-              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  	source "package/sysstat/Config.in"
+>  	source "package/targetcli-fb/Config.in"
+> diff --git a/package/sunxi-mali-driver-mainline/Config.in b/package/sunxi-mali-driver-mainline/Config.in
+> new file mode 100644
+> index 0000000..5b7b2ba
+> --- /dev/null
+> +++ b/package/sunxi-mali-driver-mainline/Config.in
+> @@ -0,0 +1,22 @@
+> +comment "sunxi-mali-driver-mainline needs a Linux kernel to be built"
+> +	depends on !BR2_LINUX_KERNEL
+> +
+> +config BR2_PACKAGE_SUNXI_MALI_DRIVER_MAINLINE
+> +	bool "sunxi-mali-driver-mainline"
+> +	depends on BR2_LINUX_KERNEL
+> +	select BR2_LINUX_NEEDS_MODULES # not using kernel-module infra
+> +	help
+> +	  This package builds and installs the Linux kernel driver for
+> +	  the Mali GPU on Allwinner platforms, compatible with recent
+> +	  Linux kernels (>= 4.4). Note that it should be installed
+> +	  together with the corresponding userspace binary blobs to
 
- For other bugs, we will happily include upstream patches. But patches that are
-not yet upstream are dangerous: how can we be sure that it doesn't break things?
-In this particular case, you patch *will* actually break things for a who does
-have a working /dev/rtc but it is something different than /dev/rtc0. We want
-upstream to take the responsibility for that.
+ I guess with 'binary blobs' you mean the OpenGL libraries, which are only
+provided as binaries? 'binary blobs' to me sounds like something like firmware
+blobs: is put in your rootfs but doesn't run on the target processor. So I'd
+rephrase as: ... together with the corresponding userspace OpenGL libraries,
+which are provided as binaries only.
 
->> make it
->> work together with other packages. I think this patch doesn't fall in
->> that category.
-> 
-> Whatever, your choice at the end.
-> 
->>
->>  For sure, you should first send the patch upstream.
-> 
-> Are you sure I didn't?
+ And preferably also explain where you can get those.
 
- I checked the mailing list, it wasn't there. I checked google, and found nothing.
+> +	  provide complete OpenGL functionality.
+> +
+> +	  sunxi-mali-driver-mainline requires a Linux kernel >= 4.4 with the
+> +	  following options enabled:
+> +
+> +	  - CONFIG_CMA
+> +	  - CONFIG_DMA_CMA
+> +	  - CONFIG_DRM_FBDEV_OVERALLOC >= 200 for double buffer or more
+> +
+> +	  https://github.com/mripard/sunxi-mali/blob/master/README.md
+> diff --git a/package/sunxi-mali-driver-mainline/sunxi-mali-driver-mainline.mk b/package/sunxi-mali-driver-mainline/sunxi-mali-driver-mainline.mk
+> new file mode 100644
+> index 0000000..1692646
+> --- /dev/null
+> +++ b/package/sunxi-mali-driver-mainline/sunxi-mali-driver-mainline.mk
+> @@ -0,0 +1,26 @@
+> +################################################################################
+> +#
+> +# sunxi-mali-driver-mainline
+> +#
+> +################################################################################
+> +
+> +SUNXI_MALI_DRIVER_MAINLINE_VERSION = 5b7b3c0b6e1736676c90928816d271debbb09d95
+> +SUNXI_MALI_DRIVER_MAINLINE_SITE = $(call github,mripard,sunxi-mali,$(SUNXI_MALI_DRIVER_MAINLINE_VERSION))
+> +SUNXI_MALI_DRIVER_MAINLINE_DEPENDENCIES = linux
+> +
+> +SUNXI_MALI_DRIVER_MAINLINE_MAKE_OPTS = \
+> +	KDIR=$(LINUX_DIR) \
+> +	CROSS_COMPILE=$(TARGET_CROSS) \
+> +	INSTALL_MOD_PATH=$(TARGET_DIR)
+> +
+> +define SUNXI_MALI_DRIVER_MAINLINE_BUILD_CMDS
+> +	cd $(@D) && $(SUNXI_MALI_DRIVER_MAINLINE_MAKE_OPTS) \
+> +		$(SHELL) ./build.sh -r r6p2 -a
 
-> The policy of Busybox mailing list is to reject (I'm not subscriber and
-
- Buildroot mailing list has the same policy (well, it goes into a moderation
-queue but that is filled up with so much spam that it's unlikely it ever makes
-it to the list). If you have a solution to bar spam from mailing lists, please
-share it!
-
-> after a such policy would not like to be one). Happy contribution!
-> 
->>  Particularly in the case of
->> busybox, Denys often proposes improved patches. If it gets accepted
->> upstream,
->> then we can consider including it in Buildroot as well.
-> 
-> Good luck!
-> 
-> I'm done with it. If Denys is caring about project he will take the
-> series (there are more patches than just one) from his private mailbox
-> (Cc was there as well).
-
- If/when he does, feel free to resubmit with a reference to the upstream commit.
-
- Thanks!
+ Shouldn't the r6p2 be configurable? That can be done in a later patch, though.
 
  Regards,
  Arnout
 
+> +endef
+> +
+> +define SUNXI_MALI_DRIVER_MAINLINE_INSTALL_TARGET_CMDS
+> +	cd $(@D) && $(SUNXI_MALI_DRIVER_MAINLINE_MAKE_OPTS) \
+> +		$(SHELL) ./build.sh -r r6p2 -i
+> +endef
+> +
+> +$(eval $(generic-package))
+> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
