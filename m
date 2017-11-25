@@ -1,48 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 25 Nov 2017 13:21:32 +0100
-Subject: [Buildroot] [git commit branch/next] package/eudev: bump version to
- 3.2.5
-Message-ID: <20171125121432.088148149F@busybox.osuosl.org>
+Date: Sat, 25 Nov 2017 13:23:57 +0100
+Subject: [Buildroot] [PATCH] axel: bump to version 2.16
+In-Reply-To: <20171125044447.7188-1-ismael@iodev.co.uk>
+References: <20171125044447.7188-1-ismael@iodev.co.uk>
+Message-ID: <20171125132357.7431e5c1@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ee967f28cd2da7865425822afb919afe72a5cff9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hello,
 
-Added license hash.
+On Sat, 25 Nov 2017 01:44:47 -0300, Ismael Luceno wrote:
+> - Change upstream URL.
+> - Add optional dependency on libressl/openssl.
+> - Switch to autotools-package.
+> 
+> Signed-off-by: Ismael Luceno <ismael@iodev.co.uk>
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/eudev/eudev.hash | 5 +++--
- package/eudev/eudev.mk   | 2 +-
- 2 files changed, 4 insertions(+), 3 deletions(-)
+I've applied to next, but now that I review the patch again, I see a
+problem, see below.
 
-diff --git a/package/eudev/eudev.hash b/package/eudev/eudev.hash
-index 75f2cc1..3fa4798 100644
---- a/package/eudev/eudev.hash
-+++ b/package/eudev/eudev.hash
-@@ -1,4 +1,5 @@
- # From http://dev.gentoo.org/~blueness/eudev/
--md5 66acef4c6094aab4aced7ae83b74b0d2  eudev-3.2.4.tar.gz
-+md5 6ca08c0e14380f87df8e8aceac123671  eudev-3.2.5.tar.gz
- # Locally calculated
--sha256 dddcf4c89b21f5f3210f7e4d3888c92cbfc657ff734ac21b6bdd3f5bcb146fed  eudev-3.2.4.tar.gz
-+sha256 49c2d04105cad2526302627e040fa24b1916a9a3e059539bc8bb919b973890af  eudev-3.2.5.tar.gz
-+sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/eudev/eudev.mk b/package/eudev/eudev.mk
-index b712475..d08b9bb 100644
---- a/package/eudev/eudev.mk
-+++ b/package/eudev/eudev.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--EUDEV_VERSION = 3.2.4
-+EUDEV_VERSION = 3.2.5
- EUDEV_SITE = http://dev.gentoo.org/~blueness/eudev
- EUDEV_LICENSE = GPL-2.0+ (programs), LGPL-2.1+ (libraries)
- EUDEV_LICENSE_FILES = COPYING
+> +ifeq ($(BR2_PACKAGE_LIBRESSL),y)
+> +AXEL_CONF_OPTS += --with-ssl
+> +AXEL_DEPENDENCIES += libressl
+
+This is not needed, because the below case with BR2_PACKAGE_OPENSSL is
+sufficient. Indeed openssl is not a virtual package, that depends
+either on libopenssl or libressl depending on which implementation is
+selected.
+
+> +else ifeq ($(BR2_PACKAGE_OPENSSL),y)
+> +AXEL_CONF_OPTS += --with-ssl
+> +AXEL_DEPENDENCIES += openssl
+
+Could you send a follow-up patch (based on the next branch) that fixes
+this?
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
