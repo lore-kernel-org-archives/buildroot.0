@@ -1,118 +1,52 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sat, 25 Nov 2017 21:46:50 +0200
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 25 Nov 2017 20:54:23 +0100
 Subject: [Buildroot] [RFCv2 3/7] Makefile,
  skeleton: move the host skeleton logic to host-skeleton package
-In-Reply-To: <20171124164610.6431-4-thomas.petazzoni@free-electrons.com>
+In-Reply-To: <20171125194650.3psruf7s2mhzjtgd@tarshish>
 References: <20171124164610.6431-1-thomas.petazzoni@free-electrons.com>
  <20171124164610.6431-4-thomas.petazzoni@free-electrons.com>
-Message-ID: <20171125194650.3psruf7s2mhzjtgd@tarshish>
+ <20171125194650.3psruf7s2mhzjtgd@tarshish>
+Message-ID: <20171125205423.45d27e1e@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hello,
 
-On Fri, Nov 24, 2017 at 05:46:06PM +0100, Thomas Petazzoni wrote:
-> As part of the per-package SDK work, we want to avoid having logic
-> that installs files to the global HOST_DIR, and instead do it inside
-> packages. One thing that gets installed to the global HOST_DIR is the
-> minimal "skeleton" that we create in host:
+On Sat, 25 Nov 2017 21:46:50 +0200, Baruch Siach wrote:
+> Hi Thomas,
 > 
->  - the "usr" symbolic link for backward compatibility
+> On Fri, Nov 24, 2017 at 05:46:06PM +0100, Thomas Petazzoni wrote:
+> > As part of the per-package SDK work, we want to avoid having logic
+> > that installs files to the global HOST_DIR, and instead do it inside
+> > packages. One thing that gets installed to the global HOST_DIR is the
+> > minimal "skeleton" that we create in host:
+> > 
+> >  - the "usr" symbolic link for backward compatibility
+> > 
+> >  - the "lib" directory, and its lib64 or lib32 symbolic links
+> > 
+> > This commit moves this logic to a new host-skeleton package, and makes
+> > all packages (except itself) depend on it. We also make sure that this
+> > host-skeleton package doesn't depend on host-patchelf, because
+> > host-patchelf depends on host-skeleton.  
 > 
->  - the "lib" directory, and its lib64 or lib32 symbolic links
-> 
-> This commit moves this logic to a new host-skeleton package, and makes
-> all packages (except itself) depend on it. We also make sure that this
-> host-skeleton package doesn't depend on host-patchelf, because
-> host-patchelf depends on host-skeleton.
+> AFAICS, host-patchelf becomes a dependency of all packages only in patch #6. 
+> Maybe this last sentence should move there.
 
-AFAICS, host-patchelf becomes a dependency of all packages only in patch #6. 
-Maybe this last sentence should move there.
+True. This patch originally was *after* the change of the RPATH
+strategy, and I decided to move it earlier in t he patch series, hoping
+that it could be merged earlier than the bigger/more controversial
+changes.
 
-baruch
+I'll fix that in v3.
 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
-> Changes since v1:
->  - New patch
-> ---
->  Makefile                     | 13 +------------
->  package/pkg-generic.mk       |  4 ++++
->  package/skeleton/skeleton.mk | 12 ++++++++++++
->  3 files changed, 17 insertions(+), 12 deletions(-)
-> 
-> diff --git a/Makefile b/Makefile
-> index 55409b99af..193864a0df 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -544,7 +544,7 @@ endif
->  
->  .PHONY: dirs
->  dirs: $(BUILD_DIR) $(STAGING_DIR) $(TARGET_DIR) \
-> -	$(HOST_DIR) $(HOST_DIR)/usr $(HOST_DIR)/lib $(BINARIES_DIR)
-> +	$(HOST_DIR) $(BINARIES_DIR)
->  
->  $(BUILD_DIR)/buildroot-config/auto.conf: $(BR2_CONFIG)
->  	$(MAKE1) $(EXTRAMAKEARGS) HOSTCC="$(HOSTCC_NOCCACHE)" HOSTCXX="$(HOSTCXX_NOCCACHE)" silentoldconfig
-> @@ -563,17 +563,6 @@ sdk: world
->  	$(INSTALL) -m 755 $(TOPDIR)/support/misc/relocate-sdk.sh $(HOST_DIR)/relocate-sdk.sh
->  	echo $(HOST_DIR) > $(HOST_DIR)/share/buildroot/sdk-location
->  
-> -# Compatibility symlink in case a post-build script still uses $(HOST_DIR)/usr
-> -$(HOST_DIR)/usr: $(HOST_DIR)
-> -	@ln -snf . $@
-> -
-> -$(HOST_DIR)/lib: $(HOST_DIR)
-> -	@mkdir -p $@
-> -	@case $(HOSTARCH) in \
-> -		(*64) ln -snf lib $(@D)/lib64;; \
-> -		(*)   ln -snf lib $(@D)/lib32;; \
-> -	esac
-> -
->  # Populating the staging with the base directories is handled by the skeleton package
->  $(STAGING_DIR):
->  	@mkdir -p $(STAGING_DIR)
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index 0e28675fbe..574a5861d0 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -564,6 +564,10 @@ $(2)_DEPENDENCIES += toolchain
->  endif
->  endif
->  
-> +ifneq ($(1),host-skeleton)
-> +$(2)_DEPENDENCIES += host-skeleton
-> +endif
-> +
->  # Eliminate duplicates in dependencies
->  $(2)_FINAL_DEPENDENCIES = $$(sort $$($(2)_DEPENDENCIES))
->  $(2)_FINAL_PATCH_DEPENDENCIES = $$(sort $$($(2)_PATCH_DEPENDENCIES))
-> diff --git a/package/skeleton/skeleton.mk b/package/skeleton/skeleton.mk
-> index d380f41649..a32bacd0b3 100644
-> --- a/package/skeleton/skeleton.mk
-> +++ b/package/skeleton/skeleton.mk
-> @@ -11,4 +11,16 @@
->  SKELETON_ADD_TOOLCHAIN_DEPENDENCY = NO
->  SKELETON_ADD_SKELETON_DEPENDENCY = NO
->  
-> +# We create a compatibility symlink in case a post-build script still
-> +# uses $(HOST_DIR)/usr
-> +define HOST_SKELETON_INSTALL_CMDS
-> +	@ln -snf . $(HOST_DIR)/usr
-> +	@mkdir -p $(HOST_DIR)/lib
-> +	@case $(HOSTARCH) in \
-> +		(*64) ln -snf lib $(HOST_DIR)/lib64;; \
-> +		(*)   ln -snf lib $(HOST_DIR)/lib32;; \
-> +	esac
-> +endef
-> +
->  $(eval $(virtual-package))
-> +$(eval $(host-generic-package))
+Thanks for the review!
 
+Thomas
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
