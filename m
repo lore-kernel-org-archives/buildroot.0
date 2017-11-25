@@ -1,153 +1,94 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 25 Nov 2017 18:30:26 +0100
-Subject: [Buildroot] [RFCv1 4/4] core: implement per-package SDK and
- target
-In-Reply-To: <20171124154323.0895cadc@windsurf.lan>
-References: <20171103160627.6468-1-thomas.petazzoni@free-electrons.com>
- <20171103160627.6468-5-thomas.petazzoni@free-electrons.com>
- <ab34a9ea-90a0-fc39-273d-0bd08a2c72b0@mind.be>
- <20171124154323.0895cadc@windsurf.lan>
-Message-ID: <18ade4e8-449c-01e2-0aaa-6fd5382ffad1@mind.be>
+Date: Sat, 25 Nov 2017 18:40:03 +0100
+Subject: [Buildroot] [PATCH v1] busybox: Fix rtcwake to use /dev/rtc0
+ properly
+In-Reply-To: <1511530053.25007.435.camel@linux.intel.com>
+References: <20171123183914.71769-1-andriy.shevchenko@linux.intel.com>
+ <b2f0d3bf-b8a1-c948-2013-35dc605c2cbd@mind.be>
+ <1511530053.25007.435.camel@linux.intel.com>
+Message-ID: <f5531efb-4352-d8af-5c2a-5ba38bab94c4@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+ Hi Andy,
+
+ Sorry, I should have started my mail with:
+
+ Thank you very much for your contributation. I'm afraid, however, we will not
+accept it as is in Buildroot.
 
 
-On 24-11-17 15:43, Thomas Petazzoni wrote:
-> Hello,
+On 24-11-17 14:27, Andy Shevchenko wrote:
+> On Thu, 2017-11-23 at 23:46 +0100, Arnout Vandecappelle wrote:
+>>  Hi Andy,
+>>
+>> On 23-11-17 19:39, Andy Shevchenko wrote:
+>>> rtcwake from busybox has failed in case the /dev/rtc is a symlink
+>>> (which is default case for udev enabled systems) due to wrong
+>>> pathname
+>>> used for a sysfs wakeup attribute.
+>>
+>>  In Buildroot, we don't accept "feature patches" for packages.
 > 
-> A few more answers/topics I wanted to discuss.
+> To be honest it's not a feature patch at all. It fixes (okay,
+> workarounds) obvious bug in rtcwake logic. Easy to reproduce. 100%
+> reproducible
+
+ Yes, that's why I continued with:
+
+>>  We try to limit
+>> to patches that fix the build or complete breakage, sometimes also to
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+ For other bugs, we will happily include upstream patches. But patches that are
+not yet upstream are dangerous: how can we be sure that it doesn't break things?
+In this particular case, you patch *will* actually break things for a who does
+have a working /dev/rtc but it is something different than /dev/rtc0. We want
+upstream to take the responsibility for that.
+
+>> make it
+>> work together with other packages. I think this patch doesn't fall in
+>> that category.
 > 
-> On Tue, 7 Nov 2017 23:50:52 +0100, Arnout Vandecappelle wrote:
+> Whatever, your choice at the end.
 > 
->>  Given the possible host-tar and host-lzip dependencies, the rsync
->> should be done here already, not in the configure step. Ouch, that's
->> not good, because the dependencies are only evaluated for the
->> configure step... There are PATCH_DEPENDENCIES, but those are only
->> before patch. Well, I guess that's a reason to keep host-tar and
->> host-lzip as DEPENDENCIES_HOST_PREREQ :-)
+>>
+>>  For sure, you should first send the patch upstream.
 > 
-> Here is how I'm thinking of solving the problem:
+> Are you sure I didn't?
+
+ I checked the mailing list, it wasn't there. I checked google, and found nothing.
+
+> The policy of Busybox mailing list is to reject (I'm not subscriber and
+
+ Buildroot mailing list has the same policy (well, it goes into a moderation
+queue but that is filled up with so much spam that it's unlikely it ever makes
+it to the list). If you have a solution to bar spam from mailing lists, please
+share it!
+
+> after a such policy would not like to be one). Happy contribution!
 > 
->  - Next to <pkg>_PATCH_DEPENDENCIES, introduce the concept of
->    <pkg>_EXTRACT_DEPENDENCIES.
-
- _PATCH_DEPENDENCIES is different: it introduces a dependency between foo-patch
-and bar-patch. Here you want a dependency between foo-extract and tar.
-
+>>  Particularly in the case of
+>> busybox, Denys often proposes improved patches. If it gets accepted
+>> upstream,
+>> then we can consider including it in Buildroot as well.
 > 
->  - If there is no suitable tar in the system, then host-tar would be
->    added to <pkg>_EXTRACT_DEPENDENCIES of all packages, except host-tar
->    itself.
-
- So you need an additional NO_EXTRACT_DEPENDENCIES or something to exclude it
-for tar...
-
-
->  - If the package needs lzip and there is no lzip available on the
->    system, host-lzip is added to <pkg>_EXTRACT_DEPENDENCIES.
+> Good luck!
 > 
->  - If ccache support is enabled, host-ccache is added to
->    <pkg>_DEPENDENCIES of all packages, except host-tar, which is built
->    with HOSTCC_NOCCACHE.
-> 
->  - At the beginning of the extract step of a package, we rsync to its
->    per-package target/host directories the per-package target/host dirs
->    of the packages listed in its <pkg>_EXTRACT_DEPENDENCIES variable.
-> 
->  - At the beginning of the patch step of a package, we rsync to its
->    per-package target/host directories the per-package target/host dirs
->    of the packages listed in its <pkg>_PATCH_DEPENDENCIES variable.
+> I'm done with it. If Denys is caring about project he will take the
+> series (there are more patches than just one) from his private mailbox
+> (Cc was there as well).
 
- So this bit doesn't make sense: _PATCH_DEPENDENCIES are not (necessarily) built
-before foo-patch. So to be reproducible, it should *not* be rsynced yet.
+ If/when he does, feel free to resubmit with a reference to the upstream commit.
 
-> 
-> Thoughts?
-
- I'm not at all happy with this approach. It adds generic-package stuff that is
-used for only one package, and it spreads the logic out over different places.
-
- I'd rather make the logic explicit in dependencies.mk. Something like
-
-ifneq ($(filter host-tar,$(DEPENDENCIES_HOST_PREREQ)),)
-$(filter-out host-tar,$(DEPENDENCIES_HOST_PREREQ)): host-tar
-endif
-
-ifneq ($(filter host-ccache,$(DEPENDENCIES_HOST_PREREQ)),)
-$(filter-out host-tar host-ccache,$(DEPENDENCIES_HOST_PREREQ)): host-ccache
-endif
-
-etc. You'll probably want to introduce a variable to collect the filter-out
-things, though.
-
+ Thanks!
 
  Regards,
  Arnout
 
-
-> 
->>> +$(2)_HOST_DIR		= $$(PER_PACKAGE_DIR)/$(1)/host/
->>> +$(2)_STAGING_DIR	= $$(PER_PACKAGE_DIR)/$(1)/host/$(STAGING_SUBDIR)  
->>
->>  I hate adding more per-package variables. Can't you use the expanded values,
->> substituting $($(PKG)_NAME) for $(1)? Or maybe even better, change the
->> definition of TARGET_DIR etc:
->>
->> TARGET_DIR = $(if
->> $(PKG),$(PER_PACKAGE_DIR)/$($(PKG)_RAWNAME)/target,$(BASE_DIR)/target)
->>
->>  That way you also don't need to pass those variables to each individual stamp rule.
-> 
-> I've changed this in my new iteration. The only drawback is that since
-> we no longer have those shortcut variables, the foreach loops building
-> the per-package directories, and building the final global directories
-> are a bit less readable:
-> 
-> Per-package host/target creation:
-> 
-> 	$(foreach pkg,$($(PKG)_FINAL_DEPENDENCIES),\
-> 		rsync -a --link-dest=$(PER_PACKAGE_DIR)/$(pkg)/host/ \
-> 		$(PER_PACKAGE_DIR)/$(pkg)/host/ \
-> 		$(HOST_DIR)$(sep))
-> 	$(foreach pkg,$($(PKG)_FINAL_DEPENDENCIES),\
-> 		rsync -a --link-dest=$(PER_PACKAGE_DIR)/$(pkg)/target/ \
-> 		$(PER_PACKAGE_DIR)/$(pkg)/target/ \
-> 		$(TARGET_DIR)$(sep))
-> 
-> Global host/target creation in target-finalize:
-> 
-> 	$(foreach pkg,$(PACKAGES),\
-> 		rsync -a --link-dest=$(PER_PACKAGE_DIR)/$(pkg)/target/ \
-> 		$(PER_PACKAGE_DIR)/$(pkg)/target/ \
-> 		$(TARGET_DIR)$(sep))
-> 	@$(call MESSAGE,"Creating global host directory")
-> 	$(foreach pkg,$(PACKAGES),\
-> 		rsync -a --link-dest=$(PER_PACKAGE_DIR)/$(pkg)/host/ \
-> 		$(PER_PACKAGE_DIR)/$(pkg)/host/ \
-> 		$(HOST_DIR)$(sep))
-> 
-> But I guess that's OK. If we find that too weird, I can always
-> introduce some some make helpers:
-> 
-> per-package-target-dir = $(PER_PACKAGE_DIR)/$(1)/target
-> per-package-host-dir = $(PER_PACKAGE_DIR)/$(1)/host
-> 
-> But:
-> 
->   $(call per-package-target-dir,$(pkg))
-> 
-> is not really shorter than
-> 
->   $(PER_PACKAGE_DIR)/$(1)/target
-> 
-> It is actually longer :-)
-> 
-> Thomas
-> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
