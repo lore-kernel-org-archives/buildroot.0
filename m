@@ -1,199 +1,97 @@
-From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Sat, 25 Nov 2017 23:25:35 +0100
-Subject: [Buildroot] [PATCH v5 1/1] sunxi-mali-driver-mainline: new
- package
-In-Reply-To: <95dbe3cc-01a0-d822-9c33-21033e0b6b34@micronovasrl.com>
-References: <1511302072-9290-1-git-send-email-giulio.benetti@micronovasrl.com>
- <b4816831-bd4a-d923-9860-85c190148cf5@mind.be>
- <24ba0102-a4e9-cf2f-178d-aef7e334ef61@micronovasrl.com>
- <95dbe3cc-01a0-d822-9c33-21033e0b6b34@micronovasrl.com>
-Message-ID: <c8cada21-a110-f2b3-de48-a8d839406ee2@micronovasrl.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 25 Nov 2017 23:34:13 +0100
+Subject: [Buildroot] [PATCH v2 1/1] freerdp: fix wayland client
+ dependency chain failure
+In-Reply-To: <20171125193305.9655-1-Adamduskett@outlook.com>
+References: <20171125193305.9655-1-Adamduskett@outlook.com>
+Message-ID: <20171125223413.GA30353@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I've sent a patchset as described below.
-Those packaged are bound together.
-In this way there's no problem on applying patches.
-Hope I did it well.
-I was not able to keep version for each patch,
-but as I know it's not possible,
-because version refer to other patches.
+Adam, All,
 
-Let me know if I have to change something.
+On 2017-11-25 14:33 -0500, Adam Duskett spake thusly:
+> If the wayland client is selected, freerdp depends on libxkbcommon without
+> depending on it in the mk file.
 
-Kind regards
+The explanations above are wrong. When the wayland client is enabled,
+then libxkbcommon is correctly enabled.
 
-Il 25/11/2017 22:45, Giulio Benetti ha scritto:
-> Hello Everybody,
-> 
-> I was thinking about doing a unique patchset for:
-> sunxi-mali-driver-mainline
-> and
-> sunxi-mali-mainline
-> 
-> They're very connected each other.
-> What do you think?
-> 
-> Il 25/11/2017 21:33, Giulio Benetti ha scritto:
->> Hi Arnout,
->>
->> Il 25/11/2017 18:59, Arnout Vandecappelle ha scritto:
->>> ? Hi Giulio,
->>>
->>> On 21-11-17 23:07, Giulio Benetti wrote:
->>>> Added kernel allwinner mali driver package.
->>>> Used combined with userspace Allwinner openGL blob,
->>>> it gives possibility to use 3D openGL SoC acceleration.
->>>
->>> ? I should have asked before, but: where do those binaries come from? 
->>> Are they
->>> from the mali-sunxi package? Or not yet packaged in Buildroot?
->>
->> It will be combined with sunxi-mali-mainline,
->> I've submitted a patch still pending:
->> [PATCH v4 1/1] sunxi-mali-mainline: new package
->> http://buildroot-busybox.2317881.n4.nabble.com/PATCH-v4-1-1-sunxi-mali-mainline-new-package-td180182.html 
->>
->>
->>>
->>>
->>> [snip]
->>>> index fe5ccc4..8de2227 100644
->>>> --- a/package/Config.in
->>>> +++ b/package/Config.in
->>>> @@ -496,6 +496,7 @@ endmenu
->>>> ????? source "package/statserial/Config.in"
->>>> ????? source "package/stm32flash/Config.in"
->>>> ????? source "package/sunxi-cedarx/Config.in"
->>>> +??? source "package/sunxi-mali-driver-mainline/Config.in"
->>>> ????? source "package/sunxi-mali/Config.in"
->>>
->>> ? foo-bar sorts after foo, so swap these two lines.
->>
->> Ok, on next patch I will correct it
->>
->>>
->>>> ????? source "package/sysstat/Config.in"
->>>> ????? source "package/targetcli-fb/Config.in"
->>>> diff --git a/package/sunxi-mali-driver-mainline/Config.in 
->>>> b/package/sunxi-mali-driver-mainline/Config.in
->>>> new file mode 100644
->>>> index 0000000..5b7b2ba
->>>> --- /dev/null
->>>> +++ b/package/sunxi-mali-driver-mainline/Config.in
->>>> @@ -0,0 +1,22 @@
->>>> +comment "sunxi-mali-driver-mainline needs a Linux kernel to be built"
->>>> +??? depends on !BR2_LINUX_KERNEL
->>>> +
->>>> +config BR2_PACKAGE_SUNXI_MALI_DRIVER_MAINLINE
->>>> +??? bool "sunxi-mali-driver-mainline"
->>>> +??? depends on BR2_LINUX_KERNEL
->>>> +??? select BR2_LINUX_NEEDS_MODULES # not using kernel-module infra
->>>> +??? help
->>>> +????? This package builds and installs the Linux kernel driver for
->>>> +????? the Mali GPU on Allwinner platforms, compatible with recent
->>>> +????? Linux kernels (>= 4.4). Note that it should be installed
->>>> +????? together with the corresponding userspace binary blobs to
->>>
->>> ? I guess with 'binary blobs' you mean the OpenGL libraries, which 
->>> are only
->>> provided as binaries? 'binary blobs' to me sounds like something like 
->>> firmware
->>> blobs: is put in your rootfs but doesn't run on the target processor. 
->>> So I'd
->>> rephrase as: ... together with the corresponding userspace OpenGL 
->>> libraries,
->>> which are provided as binaries only.
->>
->> Ok
->>
->>>
->>> ? And preferably also explain where you can get those.
->>
->> Ok, I will add github sunxi-mali by mripard
->>
->>>
->>>> +????? provide complete OpenGL functionality.
->>>> +
->>>> +????? sunxi-mali-driver-mainline requires a Linux kernel >= 4.4 
->>>> with the
->>>> +????? following options enabled:
->>>> +
->>>> +????? - CONFIG_CMA
->>>> +????? - CONFIG_DMA_CMA
->>>> +????? - CONFIG_DRM_FBDEV_OVERALLOC >= 200 for double buffer or more
->>>> +
->>>> +????? https://github.com/mripard/sunxi-mali/blob/master/README.md
->>>> diff --git 
->>>> a/package/sunxi-mali-driver-mainline/sunxi-mali-driver-mainline.mk 
->>>> b/package/sunxi-mali-driver-mainline/sunxi-mali-driver-mainline.mk
->>>> new file mode 100644
->>>> index 0000000..1692646
->>>> --- /dev/null
->>>> +++ b/package/sunxi-mali-driver-mainline/sunxi-mali-driver-mainline.mk
->>>> @@ -0,0 +1,26 @@
->>>> +################################################################################ 
->>>>
->>>> +#
->>>> +# sunxi-mali-driver-mainline
->>>> +#
->>>> +################################################################################ 
->>>>
->>>> +
->>>> +SUNXI_MALI_DRIVER_MAINLINE_VERSION = 
->>>> 5b7b3c0b6e1736676c90928816d271debbb09d95
->>>> +SUNXI_MALI_DRIVER_MAINLINE_SITE = $(call 
->>>> github,mripard,sunxi-mali,$(SUNXI_MALI_DRIVER_MAINLINE_VERSION))
->>>> +SUNXI_MALI_DRIVER_MAINLINE_DEPENDENCIES = linux
->>>> +
->>>> +SUNXI_MALI_DRIVER_MAINLINE_MAKE_OPTS = \
->>>> +??? KDIR=$(LINUX_DIR) \
->>>> +??? CROSS_COMPILE=$(TARGET_CROSS) \
->>>> +??? INSTALL_MOD_PATH=$(TARGET_DIR)
->>>> +
->>>> +define SUNXI_MALI_DRIVER_MAINLINE_BUILD_CMDS
->>>> +??? cd $(@D) && $(SUNXI_MALI_DRIVER_MAINLINE_MAKE_OPTS) \
->>>> +??????? $(SHELL) ./build.sh -r r6p2 -a
->>>
->>> ? Shouldn't the r6p2 be configurable? That can be done in a later 
->>> patch, though.
->>
->> You're right, but at this time there's only r6p2 available.
->> Anyway I can add it parametric, so it will be ready for any next 
->> versions.
->>
->>>
->>> ? Regards,
->>> ? Arnout
->>>
->>>> +endef
->>>> +
->>>> +define SUNXI_MALI_DRIVER_MAINLINE_INSTALL_TARGET_CMDS
->>>> +??? cd $(@D) && $(SUNXI_MALI_DRIVER_MAINLINE_MAKE_OPTS) \
->>>> +??????? $(SHELL) ./build.sh -r r6p2 -i
->>>> +endef
->>>> +
->>>> +$(eval $(generic-package))
->>>>
->>>
->>
->>
-> 
-> 
+What fails is when the wayland client is disabled, but the wayland
+package is enabled. In that case, nothing selects libxkbcommon.
 
+So, a good commit log would be:
+
+    package/freerdp: fix dependency on walyand
+
+    Currently, wayland support is enabled when the wayland package is
+    enabled, not when the FreeRDP wayland client is enabled.
+
+    But the dependency on libxkbcomon is only enforced from Config.in
+    when the FreeRDP wayland client is enabled., but is added to build
+    dependencies when the wayland package is enabled.
+
+    As such, we can end up in a situation where the FreeRDP wayland
+    client is disabled, the wayland package is enabled, and the
+    libxkbcommon package is also disabled, which casues the build to
+    fail with:
+
+        Makefile:539: *** libxkbcommon is in the dependency chain of
+        freerdp that has added it to its _DEPENDENCIES variable without
+        selecting it or depending on it from Config.in.  Stop.
+
+    Change the build dependency to actually be on the FreeRDP client
+    being enabled.
+
+    Fixes;
+        http://autobuild.buildroot.net/results/dc3/dc3e11f7076a8355f3d2f9cb49c6325dcf7084bd
+
+Otherwise:
+
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Regards,
+Yann E. MORIN.
+
+> Fixes:
+> http://autobuild.buildroot.net/results/dc3/dc3e11f7076a8355f3d2f9cb49c6325dcf7084bd
+> Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
+> ---
+> Changes v1 -> v2:
+>   - Changed dependency logic (Yann)
+> 
+>  package/freerdp/freerdp.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
+> index 29c35164c3..7415b8a299 100644
+> --- a/package/freerdp/freerdp.mk
+> +++ b/package/freerdp/freerdp.mk
+> @@ -198,7 +198,7 @@ else
+>  FREERDP_CONF_OPTS += -DWITH_XV=OFF
+>  endif
+>  
+> -ifeq ($(BR2_PACKAGE_WAYLAND),y)
+> +ifeq ($(BR2_PACKAGE_FREERDP_CLIENT_WL),y)
+>  FREERDP_DEPENDENCIES += wayland libxkbcommon
+>  FREERDP_CONF_OPTS += \
+>  	-DWITH_WAYLAND=ON \
+> -- 
+> 2.14.3
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
-Giulio Benetti
-R&D Manager &
-Advanced Research
-
-MICRONOVA SRL
-Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
-Tel. 049/8931563 - Fax 049/8931346
-Cod.Fiscale - P.IVA 02663420285
-Capitale Sociale ? 26.000 i.v.
-Iscritta al Reg. Imprese di Padova N. 02663420285
-Numero R.E.A. 258642
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
