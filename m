@@ -1,59 +1,182 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 25 Nov 2017 13:50:47 +0100
-Subject: [Buildroot] [PATCH] utils/diffconfig: add diffconfig utility
-In-Reply-To: <20171104203644.4045-1-marcus.folkesson@gmail.com>
-References: <20171104203644.4045-1-marcus.folkesson@gmail.com>
-Message-ID: <20171125135047.503d4fda@windsurf.lan>
+Date: Sat, 25 Nov 2017 13:46:41 +0100
+Subject: [Buildroot] [git commit branch/next] utils/diffconfig: add
+ diffconfig utility
+Message-ID: <20171125124333.75A97811B2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=e5b2fc8c7d8614fc3a62abbc3fa6fb2c841146d4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Sat,  4 Nov 2017 21:36:44 +0100, Marcus Folkesson wrote:
-> Diffconfig is a simple utility for comparing two configuration files.
-> See usage in the script for more info.
-> 
-> Borrowed from the Linux kernel source code and adapted to Buildroot.
-> 
-> Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
-> ---
->  DEVELOPERS       |   3 ++
->  utils/diffconfig | 136 +++++++++++++++++++++++++++++++++++++++++++++++++++++++
->  2 files changed, 139 insertions(+)
->  create mode 100755 utils/diffconfig
+Diffconfig is a simple utility for comparing two configuration files.
+See usage in the script for more info.
 
-I've applied to next. However, I must say I've personally not be very
-convinced by the output of this tool. If you generate the .config
-corresponding to an empty defconfig on one side, and the following
-defconfig on the other side:
+Borrowed from the Linux kernel source code and adapted to Buildroot.
 
-BR2_arm=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2017.11-rc1.tar.bz2"
-BR2_TOOLCHAIN_EXTERNAL_GCC_4_9=y
-BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_10=y
-BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
-# BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
-BR2_TOOLCHAIN_EXTERNAL_CXX=y
-BR2_INIT_NONE=y
-BR2_SYSTEM_BIN_SH_NONE=y
-# BR2_PACKAGE_BUSYBOX is not set
-BR2_PACKAGE_BELLAGIO=y
-BR2_PACKAGE_FFMPEG=y
-# BR2_TARGET_ROOTFS_TAR is not set
+Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ DEVELOPERS       |   3 ++
+ utils/diffconfig | 136 +++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 139 insertions(+)
 
-You will get a very, very, very noisy output with "diffconfig". And
-comparately, the diff between the defconfigs is a lot more readable.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 7dcc95b..1a6a31f 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1014,6 +1014,9 @@ F:	package/turbolua/
+ N:	Marcin Nowakowski <marcin.nowakowski@imgtec.com>
+ F:	package/libkcapi/
+ 
++N:	Marcus Folkesson <marcus.folkesson@gmail.com>
++F:	utils/diffconfig
++
+ N:	Marek Belisko <marek.belisko@open-nandra.com>
+ F:	package/libatasmart/
+ F:	package/polkit/
+diff --git a/utils/diffconfig b/utils/diffconfig
+new file mode 100755
+index 0000000..5862a62
+--- /dev/null
++++ b/utils/diffconfig
+@@ -0,0 +1,136 @@
++#!/usr/bin/python
++#
++# diffconfig - a tool to compare .config files.
++#
++# originally written in 2006 by Matt Mackall
++#  (at least, this was in his bloatwatch source code)
++# last worked on 2008 by Tim Bird for the Linux kernel
++# Adapted to Buildroot 2017 by Marcus Folkesson
++#
++
++import sys, os
++
++def usage():
++    print("""Usage: diffconfig [-h] [-m] [<config1> <config2>]
++
++Diffconfig is a simple utility for comparing two .config files.
++Using standard diff to compare .config files often includes extraneous and
++distracting information.  This utility produces sorted output with only the
++changes in configuration values between the two files.
++
++Added and removed items are shown with a leading plus or minus, respectively.
++Changed items show the old and new values on a single line.
++
++If -m is specified, then output will be in "merge" style, which has the
++changed and new values in kernel config option format.
++
++If no config files are specified, .config and .config.old are used.
++
++Example usage:
++ $ diffconfig .config config-with-some-changes
++-LINUX_KERNEL_INTREE_DTS_NAME "vexpress-v2p-ca9"
++ LINUX_KERNEL_DTS_SUPPORT y -> n
++ LINUX_KERNEL_USE_INTREE_DTS y -> n
++ PACKAGE_DFU_UTIL n -> y
++ PACKAGE_LIBUSB n -> y
++ TARGET_GENERIC_HOSTNAME "buildroot" -> "Tuxie"
++ TARGET_GENERIC_ISSUE "Welcome to Buildroot" -> "Welcome to CustomBoard"
+++PACKAGE_LIBUSB_COMPAT n
++
++""")
++    sys.exit(0)
++
++# returns a dictionary of name/value pairs for config items in the file
++def readconfig(config_file):
++    d = {}
++    for line in config_file:
++        line = line[:-1]
++        if line[:4] == "BR2_":
++            name, val = line[4:].split("=", 1)
++            d[name] = val
++        if line[-11:] == " is not set":
++            d[line[6:-11]] = "n"
++    return d
++
++def print_config(op, config, value, new_value):
++    global merge_style
++
++    if merge_style:
++        if new_value:
++            if new_value=="n":
++                print("# BR2_%s is not set" % config)
++            else:
++                print("BR2_%s=%s" % (config, new_value))
++    else:
++        if op=="-":
++            print("-%s %s" % (config, value))
++        elif op=="+":
++            print("+%s %s" % (config, new_value))
++        else:
++            print(" %s %s -> %s" % (config, value, new_value))
++
++def main():
++    global merge_style
++
++    # parse command line args
++    if ("-h" in sys.argv or "--help" in sys.argv):
++        usage()
++
++    merge_style = 0
++    if "-m" in sys.argv:
++        merge_style = 1
++        sys.argv.remove("-m")
++
++    argc = len(sys.argv)
++    if not (argc==1 or argc == 3):
++        print("Error: incorrect number of arguments or unrecognized option")
++        usage()
++
++    if argc == 1:
++        # if no filenames given, assume .config and .config.old
++        build_dir=""
++        if "KBUILD_OUTPUT" in os.environ:
++            build_dir = os.environ["KBUILD_OUTPUT"]+"/"
++        configa_filename = build_dir + ".config.old"
++        configb_filename = build_dir + ".config"
++    else:
++        configa_filename = sys.argv[1]
++        configb_filename = sys.argv[2]
++
++    try:
++        a = readconfig(open(configa_filename))
++        b = readconfig(open(configb_filename))
++    except (IOError):
++        e = sys.exc_info()[1]
++        print("I/O error[%s]: %s\n" % (e.args[0],e.args[1]))
++        usage()
++
++    # print items in a but not b (accumulate, sort and print)
++    old = []
++    for config in a:
++        if config not in b:
++            old.append(config)
++    old.sort()
++    for config in old:
++        print_config("-", config, a[config], None)
++        del a[config]
++
++    # print items that changed (accumulate, sort, and print)
++    changed = []
++    for config in a:
++        if a[config] != b[config]:
++            changed.append(config)
++        else:
++            del b[config]
++    changed.sort()
++    for config in changed:
++        print_config("->", config, a[config], b[config])
++        del b[config]
++
++    # now print items in b but not in a
++    # (items from b that were in a were removed above)
++    new = sorted(b.keys())
++    for config in new:
++        print_config("+", config, None, b[config])
++
++main()
