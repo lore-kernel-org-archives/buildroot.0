@@ -1,45 +1,41 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 25 Nov 2017 10:18:40 +0100
-Subject: [Buildroot] [PATCH/next 1/1] package/eudev: bump version to 3.2.5
-Message-ID: <20171125091840.17239-1-bernd.kuhls@t-online.de>
+From: Alexander Mukhin <alexander.i.mukhin@gmail.com>
+Date: Sat, 25 Nov 2017 13:32:52 +0300
+Subject: [Buildroot] [PATCH] hostapd: add support for Realtek driver
+In-Reply-To: <20171124215828.47855fdd@windsurf.lan>
+References: <874C29DC-F92F-46E8-9323-EF25658D8834@gmail.com>
+ <20170914110811.1670-1-alexander.i.mukhin@gmail.com>
+ <20171124215828.47855fdd@windsurf.lan>
+Message-ID: <20171125103252.GA1248@hpx>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Added license hash.
+Hello,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/eudev/eudev.hash | 5 +++--
- package/eudev/eudev.mk   | 2 +-
- 2 files changed, 4 insertions(+), 3 deletions(-)
+On Fri, Nov 24, 2017 at 09:58:28PM +0100, Thomas Petazzoni wrote:
+> To be honest, I was about to reject your patch: it's basically adding a
+> feature patch to a package, which we normally don't do, and the patch
+> is very likely to break when we update to newer versions of hostapd.
+> 
+> But I saw that both Peter and Arnout had a look at the problem, and the
+> overall feeling is that there really isn't a better solution.
+> 
+> So, I've applied to next. We'll see how often it breaks hostapd (or
+> not).
 
-diff --git a/package/eudev/eudev.hash b/package/eudev/eudev.hash
-index 75f2cc1c48..3fa47980ec 100644
---- a/package/eudev/eudev.hash
-+++ b/package/eudev/eudev.hash
-@@ -1,4 +1,5 @@
- # From http://dev.gentoo.org/~blueness/eudev/
--md5 66acef4c6094aab4aced7ae83b74b0d2  eudev-3.2.4.tar.gz
-+md5 6ca08c0e14380f87df8e8aceac123671  eudev-3.2.5.tar.gz
- # Locally calculated
--sha256 dddcf4c89b21f5f3210f7e4d3888c92cbfc657ff734ac21b6bdd3f5bcb146fed  eudev-3.2.4.tar.gz
-+sha256 49c2d04105cad2526302627e040fa24b1916a9a3e059539bc8bb919b973890af  eudev-3.2.5.tar.gz
-+sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/eudev/eudev.mk b/package/eudev/eudev.mk
-index b712475861..d08b9bb0c9 100644
---- a/package/eudev/eudev.mk
-+++ b/package/eudev/eudev.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--EUDEV_VERSION = 3.2.4
-+EUDEV_VERSION = 3.2.5
- EUDEV_SITE = http://dev.gentoo.org/~blueness/eudev
- EUDEV_LICENSE = GPL-2.0+ (programs), LGPL-2.1+ (libraries)
- EUDEV_LICENSE_FILES = COPYING
+My patch as it was submitted two months ago will not apply to the
+current buildroot tree because of the other patches applied to hostapd
+since then. I'll send the updated version.
+
+There's no problem in rejecting the patch. One can easily get by without
+it by adding local changes to external.mk:
+
+HOSTAPD_PATCH += https://github.com/pritambaral/hostapd-rtl871xdrv/raw/master/rtlxdrv.patch
+BR_NO_CHECK_HASH_FOR += rtlxdrv.patch
+HOSTAPD_CONFIG_SET += CONFIG_DRIVER_RTW
+
 -- 
-2.11.0
+Best regards,
+Alexander.
