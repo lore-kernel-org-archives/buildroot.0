@@ -1,97 +1,62 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 25 Nov 2017 23:34:13 +0100
-Subject: [Buildroot] [PATCH v2 1/1] freerdp: fix wayland client
- dependency chain failure
-In-Reply-To: <20171125193305.9655-1-Adamduskett@outlook.com>
-References: <20171125193305.9655-1-Adamduskett@outlook.com>
-Message-ID: <20171125223413.GA30353@scaer>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 26 Nov 2017 00:30:09 +0100
+Subject: [Buildroot] [PATCH-2017.02.x] samba4: security bump to version
+ 4.5.15
+Message-ID: <20171125233009.21805-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Adam, All,
+Fixes the following security issues:
 
-On 2017-11-25 14:33 -0500, Adam Duskett spake thusly:
-> If the wayland client is selected, freerdp depends on libxkbcommon without
-> depending on it in the mk file.
+- CVE-2017-14746:
+  All versions of Samba from 4.0.0 onwards are vulnerable to a use after
+  free vulnerability, where a malicious SMB1 request can be used to
+  control the contents of heap memory via a deallocated heap pointer. It
+  is possible this may be used to compromise the SMB server.
 
-The explanations above are wrong. When the wayland client is enabled,
-then libxkbcommon is correctly enabled.
+- CVE-2017-15275:
+  All versions of Samba from 3.6.0 onwards are vulnerable to a heap
+  memory information leak, where server allocated heap memory may be
+  returned to the client without being cleared.
 
-What fails is when the wayland client is disabled, but the wayland
-package is enabled. In that case, nothing selects libxkbcommon.
+  There is no known vulnerability associated with this error, but
+  uncleared heap memory may contain previously used data that may help
+  an attacker compromise the server via other methods. Uncleared heap
+  memory may potentially contain password hashes or other high-value
+  data.
 
-So, a good commit log would be:
+For more details, see the release notes:
+https://www.samba.org/samba/history/samba-4.5.15.html
 
-    package/freerdp: fix dependency on walyand
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/samba4/samba4.hash | 2 +-
+ package/samba4/samba4.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-    Currently, wayland support is enabled when the wayland package is
-    enabled, not when the FreeRDP wayland client is enabled.
-
-    But the dependency on libxkbcomon is only enforced from Config.in
-    when the FreeRDP wayland client is enabled., but is added to build
-    dependencies when the wayland package is enabled.
-
-    As such, we can end up in a situation where the FreeRDP wayland
-    client is disabled, the wayland package is enabled, and the
-    libxkbcommon package is also disabled, which casues the build to
-    fail with:
-
-        Makefile:539: *** libxkbcommon is in the dependency chain of
-        freerdp that has added it to its _DEPENDENCIES variable without
-        selecting it or depending on it from Config.in.  Stop.
-
-    Change the build dependency to actually be on the FreeRDP client
-    being enabled.
-
-    Fixes;
-        http://autobuild.buildroot.net/results/dc3/dc3e11f7076a8355f3d2f9cb49c6325dcf7084bd
-
-Otherwise:
-
-Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Regards,
-Yann E. MORIN.
-
-> Fixes:
-> http://autobuild.buildroot.net/results/dc3/dc3e11f7076a8355f3d2f9cb49c6325dcf7084bd
-> Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
-> ---
-> Changes v1 -> v2:
->   - Changed dependency logic (Yann)
-> 
->  package/freerdp/freerdp.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
-> index 29c35164c3..7415b8a299 100644
-> --- a/package/freerdp/freerdp.mk
-> +++ b/package/freerdp/freerdp.mk
-> @@ -198,7 +198,7 @@ else
->  FREERDP_CONF_OPTS += -DWITH_XV=OFF
->  endif
->  
-> -ifeq ($(BR2_PACKAGE_WAYLAND),y)
-> +ifeq ($(BR2_PACKAGE_FREERDP_CLIENT_WL),y)
->  FREERDP_DEPENDENCIES += wayland libxkbcommon
->  FREERDP_CONF_OPTS += \
->  	-DWITH_WAYLAND=ON \
-> -- 
-> 2.14.3
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
+index 847be87c1c..cddecd9f48 100644
+--- a/package/samba4/samba4.hash
++++ b/package/samba4/samba4.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  15dc04fd2b19081daf1118318f43f88ef7260b3fc6e4f86ee7c7913bb7c92ed9 samba-4.5.14.tar.gz
++sha256  811bf727892a1e1e3d170eb72eb39c43d06ed8ff557e5e036a41aabc19008e94 samba-4.5.15.tar.gz
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index e4778d0a5d..c8b1e5add4 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SAMBA4_VERSION = 4.5.14
++SAMBA4_VERSION = 4.5.15
+ SAMBA4_SITE = https://download.samba.org/pub/samba/stable
+ SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+ SAMBA4_INSTALL_STAGING = YES
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.11.0
