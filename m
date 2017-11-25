@@ -1,82 +1,70 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 25 Nov 2017 18:10:17 +0100
-Subject: [Buildroot] [PATCH 4/9] arch/arm: do not allow soft-float for
- armv8a
-In-Reply-To: <20171124230857.0b6e1648@windsurf.lan>
-References: <cover.1504444617.git.yann.morin.1998@free.fr>
- <bd6e8e2eaf13ecc5e45e360875cfff3494b86a8c.1504444617.git.yann.morin.1998@free.fr>
- <20170904172137.GB5223@scaer> <20171124230857.0b6e1648@windsurf.lan>
-Message-ID: <5508245a-3f6a-80b9-a7ad-b3b6bc5d5f9e@mind.be>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Sat, 25 Nov 2017 12:12:14 -0500
+Subject: [Buildroot] [PATCH 1/1] postgresql: bump to 10.1
+Message-ID: <20171125171214.11641-1-Adamduskett@outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+changes:
 
+- Add a hash for the license file.
 
-On 24-11-17 23:08, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Mon, 4 Sep 2017 19:21:37 +0200, Yann E. MORIN wrote:
->> Thomas, All,
->>
->> On 2017-09-03 15:17 +0200, Yann E. MORIN spake thusly:
->>> armv8a has made VFPv4 and NEON mandatory, so there is no point in
->>> allowing software floating point, even in 32-bit mode.  
->>
->> In fact, even though I'm pretty sure that OK in 64-bit, we might still
->> have a reason to do soft-float in 32-bit mode, if only for legacy
->> binary-only applications that were built as soft-float way back in the
->> (not so) good old days...
->>
->> In which case, we should instead depend on !BR2_ARCH_IS_64.
->>
->> Thoughts?
-> 
-> I'm hesitating on this one. I believe the use-case you mention makes
-> sense, however I believe that it can still be supported with your
-> proposed patch.
-> 
-> Indeed, even if you want to run a binary-only soft-float application,
-> it doesn't prevent the rest of your system from using VFP, as long as
-> you use EABI (and not EABIhf).
-> 
-> The whole reason why EABI passes floating-point arguments into integer
-> registers is precisely to allow compatibility between soft-float code
-> and hard-float code. Thanks to that, a soft-float function can call a
-> hard-float function, and vice-versa.
-> 
-> Therefore, even if you have a binary-only soft-float application, there
-> is really no reason to build the entire system soft-float.
-> 
-> So, I think your original patch is OK as-is. However, I still see one
-> inconsistent thing: if we disallow soft-float because ARMv8-A mandates
-> VFPv4, why would we allow soft-float for ARMv7-A cores that have a
-> VFP ? To be consistent, we should also disallow soft-float.
-> 
-> Another way to think about this is: is it possible to build an AArch64
-> soft-float system? do we want to allow the user to select what is
-> *possible* or what makes sense?
+- PostgreSQL 10.0 and above will default to checking for /dev/urandom if an
+  SSL library is not found, which will fail when cross compiling.
+  Since /dev/urandom is guaranteed to be provided on Linux systems,
+  add ac_cv_file__dev_urandom=yes to the configure environment if a SSL library
+  is not selected.
 
- gcc aarch64 doesn't have a float-abi option, so no it's not possible to build
-with soft-float. So the depends on BR2_ARM_EABI is certainly needed.
+Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
+---
+Changes v1 -> v2:
+  - Remove --disable-strong-random in place of ac_cv_file__dev_urandom=yes
+    in the case of a SSL library not being selected. (Thomas)
 
- That said, I don't think it makes a lot of sense to add extra 'depends on'
-lines just to avoid that the user would select an option that probably doesn't
-make sense. We already make sure that the default is appropriate. Let's not make
-our life more difficult.
+ package/postgresql/postgresql.hash | 7 ++++---
+ package/postgresql/postgresql.mk   | 7 ++++++-
+ 2 files changed, 10 insertions(+), 4 deletions(-)
 
- So I'd say: reject this patch.
-
- Regards,
- Arnout
-
-
+diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
+index e62838911e..e2347701c1 100644
+--- a/package/postgresql/postgresql.hash
++++ b/package/postgresql/postgresql.hash
+@@ -1,4 +1,5 @@
+-# From https://ftp.postgresql.org/pub/source/v9.6.6/postgresql-9.6.6.tar.bz2.sha256
+-sha256 399cdffcb872f785ba67e25d275463d74521566318cfef8fe219050d063c8154  postgresql-9.6.6.tar.bz2
++# From https://ftp.postgresql.org/pub/source/v10.1/postgresql-10.1.tar.bz2.sha256
++sha256	3ccb4e25fe7a7ea6308dea103cac202963e6b746697366d72ec2900449a5e713	postgresql-10.1.tar.bz2
++
+ # License file, Locally calculated
+-sha256 7dc8de32741ad1b03e21710771b55a1b9d460671d47f28a8840f917e38c66676  COPYRIGHT
++sha256	7dc8de32741ad1b03e21710771b55a1b9d460671d47f28a8840f917e38c66676	COPYRIGHT
+diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+index 50ce212c1c..b5d8e3e236 100644
+--- a/package/postgresql/postgresql.mk
++++ b/package/postgresql/postgresql.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-POSTGRESQL_VERSION = 9.6.6
++POSTGRESQL_VERSION = 10.1
+ POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
+ POSTGRESQL_SITE = http://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
+ POSTGRESQL_LICENSE = PostgreSQL
+@@ -56,6 +56,11 @@ endif
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ POSTGRESQL_DEPENDENCIES += openssl
+ POSTGRESQL_CONF_OPTS += --with-openssl
++else
++# PostgreSQL checks for /dev/urandom and fails if it's being cross-compiled and
++# an SSL library isn't found. Since /dev/urandom is guaranteed to be provided
++# on Linux systems, explicitly enable urandom, even if OpenSSL isn't selected.
++POSTGRESQL_CONF_ENV += ac_cv_file__dev_urandom=yes
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_OPENLDAP),y)
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.14.3
