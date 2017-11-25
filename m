@@ -1,127 +1,50 @@
-From: Maxime Ripard <maxime.ripard@free-electrons.com>
-Date: Sat, 25 Nov 2017 16:50:23 +0100
-Subject: [Buildroot] [PATCH v5 1/1] sunxi-mali-driver-mainline: new
- package
-In-Reply-To: <1511302072-9290-1-git-send-email-giulio.benetti@micronovasrl.com>
-References: <1511302072-9290-1-git-send-email-giulio.benetti@micronovasrl.com>
-Message-ID: <20171125155023.kjtzljcyw2k4c67a@flea.lan>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 25 Nov 2017 17:10:31 +0100
+Subject: [Buildroot] [PATCH/next 1/1] package/avahi: bump version to 0.7
+Message-ID: <20171125161031.24150-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Nov 21, 2017 at 11:07:52PM +0100, Giulio Benetti wrote:
-> Added kernel allwinner mali driver package.
-> Used combined with userspace Allwinner openGL blob,
-> it gives possibility to use 3D openGL SoC acceleration.
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
-> ---
-> Changes v4 -> v5:
-> * prevent build twice
-> 
->  DEVELOPERS                                         |  3 +++
->  package/Config.in                                  |  1 +
->  package/sunxi-mali-driver-mainline/Config.in       | 22 ++++++++++++++++++
->  .../sunxi-mali-driver-mainline.mk                  | 26 ++++++++++++++++++++++
->  4 files changed, 52 insertions(+)
->  create mode 100644 package/sunxi-mali-driver-mainline/Config.in
->  create mode 100644 package/sunxi-mali-driver-mainline/sunxi-mali-driver-mainline.mk
-> 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index bb81a19..3fdb28b 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -695,6 +695,9 @@ F:	package/ocrad/
->  F:	package/tesseract-ocr/
->  F:	package/webp/
->  
-> +N:	Giulio Benetti <giulio.benetti@micronovasrl.com>
-> +F:	package/sunxi-mali-driver-mainline/
-> +
->  N:	Gregory Dymarek <gregd72002@gmail.com>
->  F:	package/ding-libs/
->  F:	package/gengetopt/
-> diff --git a/package/Config.in b/package/Config.in
-> index fe5ccc4..8de2227 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -496,6 +496,7 @@ endmenu
->  	source "package/statserial/Config.in"
->  	source "package/stm32flash/Config.in"
->  	source "package/sunxi-cedarx/Config.in"
-> +	source "package/sunxi-mali-driver-mainline/Config.in"
->  	source "package/sunxi-mali/Config.in"
->  	source "package/sysstat/Config.in"
->  	source "package/targetcli-fb/Config.in"
-> diff --git a/package/sunxi-mali-driver-mainline/Config.in b/package/sunxi-mali-driver-mainline/Config.in
-> new file mode 100644
-> index 0000000..5b7b2ba
-> --- /dev/null
-> +++ b/package/sunxi-mali-driver-mainline/Config.in
-> @@ -0,0 +1,22 @@
-> +comment "sunxi-mali-driver-mainline needs a Linux kernel to be built"
-> +	depends on !BR2_LINUX_KERNEL
-> +
-> +config BR2_PACKAGE_SUNXI_MALI_DRIVER_MAINLINE
-> +	bool "sunxi-mali-driver-mainline"
-> +	depends on BR2_LINUX_KERNEL
-> +	select BR2_LINUX_NEEDS_MODULES # not using kernel-module infra
-> +	help
-> +	  This package builds and installs the Linux kernel driver for
-> +	  the Mali GPU on Allwinner platforms, compatible with recent
-> +	  Linux kernels (>= 4.4). Note that it should be installed
-> +	  together with the corresponding userspace binary blobs to
-> +	  provide complete OpenGL functionality.
-> +
-> +	  sunxi-mali-driver-mainline requires a Linux kernel >= 4.4 with the
-> +	  following options enabled:
-> +
-> +	  - CONFIG_CMA
-> +	  - CONFIG_DMA_CMA
-> +	  - CONFIG_DRM_FBDEV_OVERALLOC >= 200 for double buffer or more
-> +
-> +	  https://github.com/mripard/sunxi-mali/blob/master/README.md
-> diff --git a/package/sunxi-mali-driver-mainline/sunxi-mali-driver-mainline.mk b/package/sunxi-mali-driver-mainline/sunxi-mali-driver-mainline.mk
-> new file mode 100644
-> index 0000000..1692646
-> --- /dev/null
-> +++ b/package/sunxi-mali-driver-mainline/sunxi-mali-driver-mainline.mk
-> @@ -0,0 +1,26 @@
-> +################################################################################
-> +#
-> +# sunxi-mali-driver-mainline
-> +#
-> +################################################################################
-> +
-> +SUNXI_MALI_DRIVER_MAINLINE_VERSION = 5b7b3c0b6e1736676c90928816d271debbb09d95
-> +SUNXI_MALI_DRIVER_MAINLINE_SITE = $(call github,mripard,sunxi-mali,$(SUNXI_MALI_DRIVER_MAINLINE_VERSION))
-> +SUNXI_MALI_DRIVER_MAINLINE_DEPENDENCIES = linux
-> +
-> +SUNXI_MALI_DRIVER_MAINLINE_MAKE_OPTS = \
-> +	KDIR=$(LINUX_DIR) \
-> +	CROSS_COMPILE=$(TARGET_CROSS) \
-> +	INSTALL_MOD_PATH=$(TARGET_DIR)
-> +
-> +define SUNXI_MALI_DRIVER_MAINLINE_BUILD_CMDS
-> +	cd $(@D) && $(SUNXI_MALI_DRIVER_MAINLINE_MAKE_OPTS) \
-> +		$(SHELL) ./build.sh -r r6p2 -a
-> +endef
+Added license hash, removed license text in avahi.mk added in 2006:
+https://git.buildroot.net/buildroot/commit/package/avahi?id=21e97d3e155f4d9604f729698cdfff3c40eefbe7
 
-This doesn't build anything, this will just apply the patches, you
-should use -b.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/avahi/avahi.hash | 3 ++-
+ package/avahi/avahi.mk   | 9 +--------
+ 2 files changed, 3 insertions(+), 9 deletions(-)
 
-Maxime
-
+diff --git a/package/avahi/avahi.hash b/package/avahi/avahi.hash
+index 09c5d42433..b4d36ffe50 100644
+--- a/package/avahi/avahi.hash
++++ b/package/avahi/avahi.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+-sha256  d54991185d514a0aba54ebeb408d7575b60f5818a772e28fa0e18b98bc1db454	avahi-0.6.32.tar.gz
++sha256 57a99b5dfe7fdae794e3d1ee7a62973a368e91e414bd0dfa5d84434de5b14804  avahi-0.7.tar.gz
++sha256 a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  LICENSE
+diff --git a/package/avahi/avahi.mk b/package/avahi/avahi.mk
+index 94b6292b5d..b89887b4c7 100644
+--- a/package/avahi/avahi.mk
++++ b/package/avahi/avahi.mk
+@@ -4,14 +4,7 @@
+ #
+ ################################################################################
+ 
+-#
+-# This program is free software; you can redistribute it
+-# and/or modify it under the terms of the GNU Lesser General
+-# Public License as published by the Free Software Foundation
+-# either version 2.1 of the License, or (at your option) any
+-# later version.
+-
+-AVAHI_VERSION = 0.6.32
++AVAHI_VERSION = 0.7
+ AVAHI_SITE = https://github.com/lathiat/avahi/releases/download/v$(AVAHI_VERSION)
+ AVAHI_LICENSE = LGPL-2.1+
+ AVAHI_LICENSE_FILES = LICENSE
 -- 
-Maxime Ripard, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 833 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20171125/21ffe270/attachment.asc>
+2.11.0
