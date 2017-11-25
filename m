@@ -1,54 +1,72 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 25 Nov 2017 16:01:44 +0100
-Subject: [Buildroot] Cannot rebuild autobuild
-In-Reply-To: <20171121201605.tzmasudql66iruxa@dell5510>
-References: <20171113144231.gddccsqlelrhrokw@dell5510>
- <20171114234409.114f002f@gmx.net>
- <20171115125857.dcy6j7qvjt32ww43@dell5510>
- <61134b08-bb0a-4665-4b68-3ea2e4063563@mind.be>
- <20171116001919.67e98b4b@gmx.net>
- <58b8ef53-75b6-fc8b-8d37-e21570ae4e3b@mind.be>
- <20171116072948.smctbcvxwkxgqoah@x230>
- <d13312cf-ae70-92fd-8819-a86c79d1723b@mind.be>
- <20171118223206.069b771a@gmx.net>
- <20171121201605.tzmasudql66iruxa@dell5510>
-Message-ID: <20171125150144.GC2798@scaer>
+Date: Sat, 25 Nov 2017 16:11:49 +0100
+Subject: [Buildroot] [PATCH 1/1] support/download: svn non-interactive
+ in BR2_SVN
+In-Reply-To: <1510944634-3374-1-git-send-email-sam.voss@rockwellcollins.com>
+References: <1510944634-3374-1-git-send-email-sam.voss@rockwellcollins.com>
+Message-ID: <20171125151149.GD2798@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Petr, All,
+Sam, All,
 
-On 2017-11-21 21:16 +0100, Petr Vorel spake thusly:
-> > >  If the *.mk is expanded in alphabetical order, pkg-toolchain-external.mk will
-> > > always come before toolchain-external.mk. Otherwise it is possible (depending on
-> > > the state of hash tables or inode numbers or whatever) that
-> > > toolchain-external-custom.mk gets included first.
-[--SNIP--]
-> I found by bisecting that our bug is caused by this change in make:
-> 4fd5672 ("Use Jenkins hash.")
-> https://git.savannah.gnu.org/cgit/make.git/commit/?id=4fd56724ad281498d3c8b27a4b25b4070f6e4e65
+On 2017-11-17 12:50 -0600, Sam Voss spake thusly:
+> Instead of overriding the _svn command and injecting --non-interactive,
+> change the default value of BR2_SVN to include this flag so the end user
+> can choose not to use the flag.
+> 
+> This change helps users behind corporate system rules which may not
+> allow them to locally cache credentials and require interactive mode.
+> 
+> Signed-off-by: Sam Voss <sam.voss@rockwellcollins.com>
+> 
+> [Originally implemented by]
+> CC: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Good work at bisecting it! :-)
+Thomas, since this is my code: ;-)
 
-> It's a version after last release (4.2.1).
-> I wonder whether it's a bug in make (I guess so) and whether we should report it
-> (probably).
-
-This is indeed a change in behaviour. However, as make ever documented
-a guranteed/non-guaranteed ordering of wildcards to begin with?
-
-The manual for the current make version says nothing about the ordering,
-and neither do the manual for older versions (I've checked only a few of
-them).
-
-So, this is a change in behaviour, and should be reported upstream as a
-bug. Will you do so?
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
+
+> ---
+>  Config.in            | 2 +-
+>  support/download/svn | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/Config.in b/Config.in
+> index 90f793a..d192995 100644
+> --- a/Config.in
+> +++ b/Config.in
+> @@ -106,7 +106,7 @@ config BR2_WGET
+>  
+>  config BR2_SVN
+>  	string "Subversion (svn) command"
+> -	default "svn"
+> +	default "svn --non-interactive"
+>  
+>  config BR2_BZR
+>  	string "Bazaar (bzr) command"
+> diff --git a/support/download/svn b/support/download/svn
+> index ee799f4..ad84a39 100755
+> --- a/support/download/svn
+> +++ b/support/download/svn
+> @@ -33,7 +33,7 @@ _svn() {
+>      eval ${SVN} "${@}"
+>  }
+>  
+> -_svn --non-interactive export ${verbose} "${@}" "'${repo}@${rev}'" "'${basename}'"
+> +_svn export ${verbose} "${@}" "'${repo}@${rev}'" "'${basename}'"
+>  
+>  # If this is a HEAD revision, export the exact version
+>  # that was checked out.
+> -- 
+> 1.9.1
+> 
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
