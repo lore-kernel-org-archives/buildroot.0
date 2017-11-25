@@ -1,36 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 25 Nov 2017 13:21:50 +0100
-Subject: [Buildroot] [git commit] hostapd: keep previous patches when
- DRIVER_RTW set
-Message-ID: <20171201205337.A6C1A7FF82@busybox.osuosl.org>
+Date: Sat, 25 Nov 2017 13:21:30 +0100
+Subject: [Buildroot] [git commit] package/php: bump version to 7.1.12
+Message-ID: <20171201205337.88C997FF6F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9e252c9575fbdc82ac2800fbe99edfe7621596a9
+commit: https://git.buildroot.net/buildroot/commit/?id=ab01a1279c4990d201e6a560dbe9cc5b25a20fae
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changed HOSTAPD_PATCH= to HOSTAPD_PATCH+= to keep previously added
-patches.
-
-Signed-off-by: Alexander Mukhin <alexander.i.mukhin@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/hostapd/hostapd.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/php/php.hash | 2 +-
+ package/php/php.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/hostapd/hostapd.mk b/package/hostapd/hostapd.mk
-index bb3919e..0ed1631 100644
---- a/package/hostapd/hostapd.mk
-+++ b/package/hostapd/hostapd.mk
-@@ -48,7 +48,7 @@ HOSTAPD_CONFIG_EDITS += 's/\#\(CONFIG_TLS=\).*/\1internal/'
- endif
+diff --git a/package/php/php.hash b/package/php/php.hash
+index d1f36f2..cdec308 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
+@@ -1,5 +1,5 @@
+ # From http://php.net/downloads.php
+-sha256 074093e9d7d21afedc5106904218a80a47b854abe368d2728ed22184c884893e  php-7.1.11.tar.xz
++sha256 a0118850774571b1f2d4e30b4fe7a4b958ca66f07d07d65ebdc789c54ba6eeb3  php-7.1.12.tar.xz
  
- ifeq ($(BR2_PACKAGE_HOSTAPD_DRIVER_RTW),y)
--HOSTAPD_PATCH = https://github.com/pritambaral/hostapd-rtl871xdrv/raw/master/rtlxdrv.patch
-+HOSTAPD_PATCH += https://github.com/pritambaral/hostapd-rtl871xdrv/raw/master/rtlxdrv.patch
- HOSTAPD_CONFIG_SET += CONFIG_DRIVER_RTW
- endif
+ # License file
+ sha256 a44951f93b10c87c3f7cd9f311d95999c57c95ed950eec32b14c1c7ea6baf25e  LICENSE
+diff --git a/package/php/php.mk b/package/php/php.mk
+index aaeacde..72d5ea8 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
+-PHP_VERSION = 7.1.11
++PHP_VERSION = 7.1.12
+ PHP_SITE = http://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
