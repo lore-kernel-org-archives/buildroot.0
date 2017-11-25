@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 25 Nov 2017 13:24:03 +0100
-Subject: [Buildroot] [PATCH/next 1/1] package/nano: bump version to 2.9.0
-In-Reply-To: <20171125091142.1774-1-bernd.kuhls@t-online.de>
-References: <20171125091142.1774-1-bernd.kuhls@t-online.de>
-Message-ID: <20171125132403.3e1c4951@windsurf.lan>
+Date: Sat, 25 Nov 2017 13:24:06 +0100
+Subject: [Buildroot] [PATCH/next 1/1] package/php: bump version to 7.1.12
+In-Reply-To: <20171125091457.5316-1-bernd.kuhls@t-online.de>
+References: <20171125091457.5316-1-bernd.kuhls@t-online.de>
+Message-ID: <20171125132406.7b97f5e8@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,16 +12,12 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 25 Nov 2017 10:11:42 +0100, Bernd Kuhls wrote:
-> Removed patch applied upstream, added license hash.
-> 
+On Sat, 25 Nov 2017 10:14:57 +0100, Bernd Kuhls wrote:
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  ...pilation-when-configured-with-enable-tiny.patch | 43 ----------------------
->  package/nano/nano.hash                             |  3 +-
->  package/nano/nano.mk                               |  4 +-
->  3 files changed, 4 insertions(+), 46 deletions(-)
->  delete mode 100644 package/nano/0001-fix-compilation-when-configured-with-enable-tiny.patch
+>  package/php/php.hash | 2 +-
+>  package/php/php.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
 Applied to next, thanks.
 
