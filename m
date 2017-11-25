@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 25 Nov 2017 13:23:57 +0100
-Subject: [Buildroot] [PATCH] axel: bump to version 2.16
-In-Reply-To: <20171125044447.7188-1-ismael@iodev.co.uk>
-References: <20171125044447.7188-1-ismael@iodev.co.uk>
-Message-ID: <20171125132357.7431e5c1@windsurf.lan>
+Date: Sat, 25 Nov 2017 13:24:03 +0100
+Subject: [Buildroot] [PATCH/next 1/1] package/nano: bump version to 2.9.0
+In-Reply-To: <20171125091142.1774-1-bernd.kuhls@t-online.de>
+References: <20171125091142.1774-1-bernd.kuhls@t-online.de>
+Message-ID: <20171125132403.3e1c4951@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,36 +12,21 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 25 Nov 2017 01:44:47 -0300, Ismael Luceno wrote:
-> - Change upstream URL.
-> - Add optional dependency on libressl/openssl.
-> - Switch to autotools-package.
+On Sat, 25 Nov 2017 10:11:42 +0100, Bernd Kuhls wrote:
+> Removed patch applied upstream, added license hash.
 > 
-> Signed-off-by: Ismael Luceno <ismael@iodev.co.uk>
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  ...pilation-when-configured-with-enable-tiny.patch | 43 ----------------------
+>  package/nano/nano.hash                             |  3 +-
+>  package/nano/nano.mk                               |  4 +-
+>  3 files changed, 4 insertions(+), 46 deletions(-)
+>  delete mode 100644 package/nano/0001-fix-compilation-when-configured-with-enable-tiny.patch
 
-I've applied to next, but now that I review the patch again, I see a
-problem, see below.
-
-> +ifeq ($(BR2_PACKAGE_LIBRESSL),y)
-> +AXEL_CONF_OPTS += --with-ssl
-> +AXEL_DEPENDENCIES += libressl
-
-This is not needed, because the below case with BR2_PACKAGE_OPENSSL is
-sufficient. Indeed openssl is not a virtual package, that depends
-either on libopenssl or libressl depending on which implementation is
-selected.
-
-> +else ifeq ($(BR2_PACKAGE_OPENSSL),y)
-> +AXEL_CONF_OPTS += --with-ssl
-> +AXEL_DEPENDENCIES += openssl
-
-Could you send a follow-up patch (based on the next branch) that fixes
-this?
-
-Thanks!
+Applied to next, thanks.
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
+Embedded Linux, Kernel and Android engineering
 http://free-electrons.com
