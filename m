@@ -1,9 +1,12 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 25 Nov 2017 18:00:57 +0100
-Subject: [Buildroot] [RPC] package/libtirpc: fix compilation error
-In-Reply-To: <20171125135438.22385-1-daggs@gmx.com>
-References: <20171125135438.22385-1-daggs@gmx.com>
-Message-ID: <1f3d5149-c8a4-d77f-340b-b64a2f66f350@mind.be>
+Date: Sat, 25 Nov 2017 18:10:17 +0100
+Subject: [Buildroot] [PATCH 4/9] arch/arm: do not allow soft-float for
+ armv8a
+In-Reply-To: <20171124230857.0b6e1648@windsurf.lan>
+References: <cover.1504444617.git.yann.morin.1998@free.fr>
+ <bd6e8e2eaf13ecc5e45e360875cfff3494b86a8c.1504444617.git.yann.morin.1998@free.fr>
+ <20170904172137.GB5223@scaer> <20171124230857.0b6e1648@windsurf.lan>
+Message-ID: <5508245a-3f6a-80b9-a7ad-b3b6bc5d5f9e@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,44 +15,63 @@ To: buildroot@busybox.net
 
 
 
-On 25-11-17 14:54, Dagg Stompler wrote:
-> fix rpc_parse.c's compilation failure
+On 24-11-17 23:08, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Mon, 4 Sep 2017 19:21:37 +0200, Yann E. MORIN wrote:
+>> Thomas, All,
+>>
+>> On 2017-09-03 15:17 +0200, Yann E. MORIN spake thusly:
+>>> armv8a has made VFPv4 and NEON mandatory, so there is no point in
+>>> allowing software floating point, even in 32-bit mode.  
+>>
+>> In fact, even though I'm pretty sure that OK in 64-bit, we might still
+>> have a reason to do soft-float in 32-bit mode, if only for legacy
+>> binary-only applications that were built as soft-float way back in the
+>> (not so) good old days...
+>>
+>> In which case, we should instead depend on !BR2_ARCH_IS_64.
+>>
+>> Thoughts?
+> 
+> I'm hesitating on this one. I believe the use-case you mention makes
+> sense, however I believe that it can still be supported with your
+> proposed patch.
+> 
+> Indeed, even if you want to run a binary-only soft-float application,
+> it doesn't prevent the rest of your system from using VFP, as long as
+> you use EABI (and not EABIhf).
+> 
+> The whole reason why EABI passes floating-point arguments into integer
+> registers is precisely to allow compatibility between soft-float code
+> and hard-float code. Thanks to that, a soft-float function can call a
+> hard-float function, and vice-versa.
+> 
+> Therefore, even if you have a binary-only soft-float application, there
+> is really no reason to build the entire system soft-float.
+> 
+> So, I think your original patch is OK as-is. However, I still see one
+> inconsistent thing: if we disallow soft-float because ARMv8-A mandates
+> VFPv4, why would we allow soft-float for ARMv7-A cores that have a
+> VFP ? To be consistent, we should also disallow soft-float.
+> 
+> Another way to think about this is: is it possible to build an AArch64
+> soft-float system? do we want to allow the user to select what is
+> *possible* or what makes sense?
 
- When sending a fix like this which is not visible in the autobuilders, make
-sure to also send a defconfig that reproduces it, as well as the build error itself.
+ gcc aarch64 doesn't have a float-abi option, so no it's not possible to build
+with soft-float. So the depends on BR2_ARM_EABI is certainly needed.
 
- I took a look and I think this is about rpc_parse.c which include rpc/types.h.
-I believe the tirpc code is correct however. rpcgen is a host tool, so it makes
-sense to me that it uses the host's headers, not its own headers.
+ That said, I don't think it makes a lot of sense to add extra 'depends on'
+lines just to avoid that the user would select an option that probably doesn't
+make sense. We already make sure that the default is appropriate. Let's not make
+our life more difficult.
 
- rpc/types.h should be part of your system's libc, so how do you get a
-compilation failure?
+ So I'd say: reject this patch.
 
  Regards,
  Arnout
 
-> 
-> Signed-off-by: Dagg Stompler <daggs@gmx.com>
-> ---
->  package/libtirpc/0003-Add-rpcgen-program-from-nfs-utils-sources.patch | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/libtirpc/0003-Add-rpcgen-program-from-nfs-utils-sources.patch b/package/libtirpc/0003-Add-rpcgen-program-from-nfs-utils-sources.patch
-> index 1cf861417c..fee91d4adc 100644
-> --- a/package/libtirpc/0003-Add-rpcgen-program-from-nfs-utils-sources.patch
-> +++ b/package/libtirpc/0003-Add-rpcgen-program-from-nfs-utils-sources.patch
-> @@ -83,8 +83,8 @@ index 0000000..2277b6f
->  --- /dev/null
->  +++ b/rpcgen/Makefile.am
->  @@ -0,0 +1,22 @@
-> -+COMPILE = $(CC_FOR_BUILD) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
-> -+	$(CPPFLAGS_FOR_BUILD) $(AM_CFLAGS) $(CFLAGS_FOR_BUILD)
-> ++COMPILE = $(CC_FOR_BUILD) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) -I$(top_builddir)/tirpc \
-> ++	$(AM_CPPFLAGS) $(CPPFLAGS_FOR_BUILD) $(AM_CFLAGS) $(CFLAGS_FOR_BUILD)
->  +LINK = $(CC_FOR_BUILD) $(AM_CFLAGS) $(CFLAGS_FOR_BUILD) $(AM_LDFLAGS) $(LDFLAGS_FOR_BUILD) -o $@
->  +
->  +noinst_PROGRAMS = rpcgen
-> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
