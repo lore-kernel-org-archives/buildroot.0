@@ -1,70 +1,90 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 29 Nov 2017 22:19:04 +0100
-Subject: [Buildroot] [git commit] package/x11r7/xapp_xfs: bump version to
- 1.2.0
-Message-ID: <20171201205340.8D37D80E11@busybox.osuosl.org>
+Date: Sat, 25 Nov 2017 13:33:55 +0100
+Subject: [Buildroot] [git commit] python-schedule: new package
+Message-ID: <20171201205337.BE3CE7FF82@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d9e2135a71056ff16243bde1c892ec8118a11fb6
+commit: https://git.buildroot.net/buildroot/commit/?id=0954a0372ba8c690f34d9c99e923a013304f751c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-xfs was ported to use libXfont 2.x instead of 1.x:
-https://cgit.freedesktop.org/xorg/app/xfs/diff/configure.ac?id=fedc90e8e3f6c36204de5562bfb726270064a4f1
-
-Added all hashes provided by upstream.
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/x11r7/xapp_xfs/Config.in     | 2 +-
- package/x11r7/xapp_xfs/xapp_xfs.hash | 7 +++++--
- package/x11r7/xapp_xfs/xapp_xfs.mk   | 4 ++--
- 3 files changed, 8 insertions(+), 5 deletions(-)
+ DEVELOPERS                                   |  1 +
+ package/Config.in                            |  1 +
+ package/python-schedule/Config.in            |  6 ++++++
+ package/python-schedule/python-schedule.hash |  5 +++++
+ package/python-schedule/python-schedule.mk   | 14 ++++++++++++++
+ 5 files changed, 27 insertions(+)
 
-diff --git a/package/x11r7/xapp_xfs/Config.in b/package/x11r7/xapp_xfs/Config.in
-index 0a5d711..b708af8 100644
---- a/package/x11r7/xapp_xfs/Config.in
-+++ b/package/x11r7/xapp_xfs/Config.in
-@@ -2,7 +2,7 @@ config BR2_PACKAGE_XAPP_XFS
- 	bool "xfs"
- 	depends on BR2_USE_MMU # fork()
- 	select BR2_PACKAGE_XLIB_LIBFS
--	select BR2_PACKAGE_XLIB_LIBXFONT
-+	select BR2_PACKAGE_XLIB_LIBXFONT2
- 	select BR2_PACKAGE_XPROTO_FONTSPROTO
- 	help
- 	  X font server
-diff --git a/package/x11r7/xapp_xfs/xapp_xfs.hash b/package/x11r7/xapp_xfs/xapp_xfs.hash
-index 6782374..27577ba 100644
---- a/package/x11r7/xapp_xfs/xapp_xfs.hash
-+++ b/package/x11r7/xapp_xfs/xapp_xfs.hash
-@@ -1,2 +1,5 @@
--# From http://lists.x.org/archives/xorg-announce/2014-August/002472.html
--sha256	a40b75e674c091464f85739292b6bf24e2d153f4a2ac456d3ea6b8a64e269ffa	xfs-1.1.4.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2017-November/002826.html
-+md5  b4d2e644bfb35cae8858d2411501b07e  xfs-1.2.0.tar.bz2
-+sha1 00848fcc2915ed8b00e75ac311c4727327324f57  xfs-1.2.0.tar.bz2
-+sha256 db2212115783498f8eeaaee1349461d6c4e9d2005e142bacd3a984fe57269860  xfs-1.2.0.tar.bz2
-+sha512 557b08aa07919239ce345d60b288b886640200bb1a59649fc890c3ccaa8559cc6745189614e696ab1b390ec024b393be5493787b7b0d2b3545b342d743c2e0ef  xfs-1.2.0.tar.bz2
-diff --git a/package/x11r7/xapp_xfs/xapp_xfs.mk b/package/x11r7/xapp_xfs/xapp_xfs.mk
-index 3e70455..f4fe35d 100644
---- a/package/x11r7/xapp_xfs/xapp_xfs.mk
-+++ b/package/x11r7/xapp_xfs/xapp_xfs.mk
-@@ -4,11 +4,11 @@
- #
- ################################################################################
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 8a44e04..7dcc95b 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -805,6 +805,7 @@ F:	configs/qemu_ppc64le_pseries_defconfig
  
--XAPP_XFS_VERSION = 1.1.4
-+XAPP_XFS_VERSION = 1.2.0
- XAPP_XFS_SOURCE = xfs-$(XAPP_XFS_VERSION).tar.bz2
- XAPP_XFS_SITE = http://xorg.freedesktop.org/releases/individual/app
- XAPP_XFS_LICENSE = MIT
- XAPP_XFS_LICENSE_FILES = COPYING
--XAPP_XFS_DEPENDENCIES = xlib_libFS xlib_libXfont xproto_fontsproto
-+XAPP_XFS_DEPENDENCIES = xlib_libFS xlib_libXfont2 xproto_fontsproto
+ N:	Joseph Kogut <joseph.kogut@gmail.com>
+ F:	package/python-raven/
++F:	package/python-schedule/
+ F:	package/python-websockets/
  
- $(eval $(autotools-package))
+ N:	Johan Derycke <johanderycke@gmail.com>
+diff --git a/package/Config.in b/package/Config.in
+index a8f3f7c..86acab6 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -885,6 +885,7 @@ menu "External python modules"
+ 	source "package/python-rtslib-fb/Config.in"
+ 	source "package/python-scandir/Config.in"
+ 	source "package/python-scapy3k/Config.in"
++	source "package/python-schedule/Config.in"
+ 	source "package/python-sdnotify/Config.in"
+ 	source "package/python-serial/Config.in"
+ 	source "package/python-service-identity/Config.in"
+diff --git a/package/python-schedule/Config.in b/package/python-schedule/Config.in
+new file mode 100644
+index 0000000..d00c245
+--- /dev/null
++++ b/package/python-schedule/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PYTHON_SCHEDULE
++	bool "python-schedule"
++	help
++	  Job scheduling for humans.
++
++	  https://github.com/dbader/schedule
+diff --git a/package/python-schedule/python-schedule.hash b/package/python-schedule/python-schedule.hash
+new file mode 100644
+index 0000000..9f64cc4
+--- /dev/null
++++ b/package/python-schedule/python-schedule.hash
+@@ -0,0 +1,5 @@
++# md5 from https://pypi.python.org/pypi/schedule/json, sha256 locally computed
++md5	ab135a73458547d2b836beddd168528b  schedule-0.4.3.tar.gz
++sha256	31a160546a17838842199c792ba267575cf41339ca730aaf060567b798f4f46e  schedule-0.4.3.tar.gz
++# License file, locally calculated
++30a8352c318ce1b645acde0299697342d4380ed2637d7ca18a8ad25661e3b41b  LICENSE.txt
+diff --git a/package/python-schedule/python-schedule.mk b/package/python-schedule/python-schedule.mk
+new file mode 100644
+index 0000000..26a3f5b
+--- /dev/null
++++ b/package/python-schedule/python-schedule.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-schedule
++#
++################################################################################
++
++PYTHON_SCHEDULE_VERSION = 0.4.3
++PYTHON_SCHEDULE_SOURCE = schedule-$(PYTHON_SCHEDULE_VERSION).tar.gz
++PYTHON_SCHEDULE_SITE = https://pypi.python.org/packages/ee/68/ba6b0bb69b2be13b32983971bca6c5adf22df6321945232e1419bc34a82f
++PYTHON_SCHEDULE_SETUP_TYPE = setuptools
++PYTHON_SCHEDULE_LICENSE = MIT
++PYTHON_SCHEDULE_LICENSE_FILES = LICENSE.txt
++
++$(eval $(python-package))
