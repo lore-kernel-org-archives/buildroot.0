@@ -1,182 +1,107 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 25 Nov 2017 13:46:41 +0100
-Subject: [Buildroot] [git commit branch/next] utils/diffconfig: add
- diffconfig utility
-Message-ID: <20171125124333.75A97811B2@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 25 Nov 2017 14:02:04 +0100
+Subject: [Buildroot] [PATCH v2 1/1] qt5webengine: enable build for 5.6.3
+In-Reply-To: <20171124100411.1a2adc9c@windsurf.lan>
+References: <20171123232619.29849-1-gael.portay@savoirfairelinux.com>
+ <20171124100411.1a2adc9c@windsurf.lan>
+Message-ID: <20171125130204.GB2798@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e5b2fc8c7d8614fc3a62abbc3fa6fb2c841146d4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Thomas, All,
 
-Diffconfig is a simple utility for comparing two configuration files.
-See usage in the script for more info.
+On 2017-11-24 10:04 +0100, Thomas Petazzoni spake thusly:
+> +Yann in Cc, since there is licensing stuff involved :)
+> 
+> On Thu, 23 Nov 2017 18:26:19 -0500, Ga?l PORTAY wrote:
+> 
+> > +Upstream-Status: Merged
+> > +Task-number: QTBUG-57761
+> > +Change-Id: I29f037dfe542222b5188a33c7727c81a464a87bb
+> > +Reviewed-by: Allan Sandfeld Jensen <allan.jensen@qt.io>
+> > +Reviewed-by: Michal Klocek <michal.klocek@qt.io>
+> > +Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
+> > +[gportay: backport from 5.9 and merge conflicts]
+> 
+> Backporting from 5.9 to 5.6 raises a red flag: Qt changed its licensing
+> terms between 5.6 and 5.9, and you can't backport things this way,
+> because Qt 5.9 is under GPLv3, while Qt 5.6 is not.
 
-Borrowed from the Linux kernel source code and adapted to Buildroot.
+Three things:
 
-Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- DEVELOPERS       |   3 ++
- utils/diffconfig | 136 +++++++++++++++++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 139 insertions(+)
+0- IANAL, this is not legal advice, blablabla...
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 7dcc95b..1a6a31f 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1014,6 +1014,9 @@ F:	package/turbolua/
- N:	Marcin Nowakowski <marcin.nowakowski@imgtec.com>
- F:	package/libkcapi/
- 
-+N:	Marcus Folkesson <marcus.folkesson@gmail.com>
-+F:	utils/diffconfig
-+
- N:	Marek Belisko <marek.belisko@open-nandra.com>
- F:	package/libatasmart/
- F:	package/polkit/
-diff --git a/utils/diffconfig b/utils/diffconfig
-new file mode 100755
-index 0000000..5862a62
---- /dev/null
-+++ b/utils/diffconfig
-@@ -0,0 +1,136 @@
-+#!/usr/bin/python
-+#
-+# diffconfig - a tool to compare .config files.
-+#
-+# originally written in 2006 by Matt Mackall
-+#  (at least, this was in his bloatwatch source code)
-+# last worked on 2008 by Tim Bird for the Linux kernel
-+# Adapted to Buildroot 2017 by Marcus Folkesson
-+#
-+
-+import sys, os
-+
-+def usage():
-+    print("""Usage: diffconfig [-h] [-m] [<config1> <config2>]
-+
-+Diffconfig is a simple utility for comparing two .config files.
-+Using standard diff to compare .config files often includes extraneous and
-+distracting information.  This utility produces sorted output with only the
-+changes in configuration values between the two files.
-+
-+Added and removed items are shown with a leading plus or minus, respectively.
-+Changed items show the old and new values on a single line.
-+
-+If -m is specified, then output will be in "merge" style, which has the
-+changed and new values in kernel config option format.
-+
-+If no config files are specified, .config and .config.old are used.
-+
-+Example usage:
-+ $ diffconfig .config config-with-some-changes
-+-LINUX_KERNEL_INTREE_DTS_NAME "vexpress-v2p-ca9"
-+ LINUX_KERNEL_DTS_SUPPORT y -> n
-+ LINUX_KERNEL_USE_INTREE_DTS y -> n
-+ PACKAGE_DFU_UTIL n -> y
-+ PACKAGE_LIBUSB n -> y
-+ TARGET_GENERIC_HOSTNAME "buildroot" -> "Tuxie"
-+ TARGET_GENERIC_ISSUE "Welcome to Buildroot" -> "Welcome to CustomBoard"
-++PACKAGE_LIBUSB_COMPAT n
-+
-+""")
-+    sys.exit(0)
-+
-+# returns a dictionary of name/value pairs for config items in the file
-+def readconfig(config_file):
-+    d = {}
-+    for line in config_file:
-+        line = line[:-1]
-+        if line[:4] == "BR2_":
-+            name, val = line[4:].split("=", 1)
-+            d[name] = val
-+        if line[-11:] == " is not set":
-+            d[line[6:-11]] = "n"
-+    return d
-+
-+def print_config(op, config, value, new_value):
-+    global merge_style
-+
-+    if merge_style:
-+        if new_value:
-+            if new_value=="n":
-+                print("# BR2_%s is not set" % config)
-+            else:
-+                print("BR2_%s=%s" % (config, new_value))
-+    else:
-+        if op=="-":
-+            print("-%s %s" % (config, value))
-+        elif op=="+":
-+            print("+%s %s" % (config, new_value))
-+        else:
-+            print(" %s %s -> %s" % (config, value, new_value))
-+
-+def main():
-+    global merge_style
-+
-+    # parse command line args
-+    if ("-h" in sys.argv or "--help" in sys.argv):
-+        usage()
-+
-+    merge_style = 0
-+    if "-m" in sys.argv:
-+        merge_style = 1
-+        sys.argv.remove("-m")
-+
-+    argc = len(sys.argv)
-+    if not (argc==1 or argc == 3):
-+        print("Error: incorrect number of arguments or unrecognized option")
-+        usage()
-+
-+    if argc == 1:
-+        # if no filenames given, assume .config and .config.old
-+        build_dir=""
-+        if "KBUILD_OUTPUT" in os.environ:
-+            build_dir = os.environ["KBUILD_OUTPUT"]+"/"
-+        configa_filename = build_dir + ".config.old"
-+        configb_filename = build_dir + ".config"
-+    else:
-+        configa_filename = sys.argv[1]
-+        configb_filename = sys.argv[2]
-+
-+    try:
-+        a = readconfig(open(configa_filename))
-+        b = readconfig(open(configb_filename))
-+    except (IOError):
-+        e = sys.exc_info()[1]
-+        print("I/O error[%s]: %s\n" % (e.args[0],e.args[1]))
-+        usage()
-+
-+    # print items in a but not b (accumulate, sort and print)
-+    old = []
-+    for config in a:
-+        if config not in b:
-+            old.append(config)
-+    old.sort()
-+    for config in old:
-+        print_config("-", config, a[config], None)
-+        del a[config]
-+
-+    # print items that changed (accumulate, sort, and print)
-+    changed = []
-+    for config in a:
-+        if a[config] != b[config]:
-+            changed.append(config)
-+        else:
-+            del b[config]
-+    changed.sort()
-+    for config in changed:
-+        print_config("->", config, a[config], b[config])
-+        del b[config]
-+
-+    # now print items in b but not in a
-+    # (items from b that were in a were removed above)
-+    new = sorted(b.keys())
-+    for config in new:
-+        print_config("+", config, None, b[config])
-+
-+main()
+1- the real licensing terms are:  LGPL-3.0 or GPL-2.0 or GPL-3.0 or proprietary
+
+Note that this is LGPL-3.0 and not '+', because the source states:
+
+    [...] this file may be used under the terms of the GNU Lesser
+    General Public License version 3 as published by [...]
+
+Note that it is not GPL-2.0+, because the source code explicitly says:
+
+    [...] this file may be used under the terms of the GNU General Public
+    License version 2.0 or (at your option) the GNU General Public license
+    version 3 or any later version approved by the KDE Free Qt Foundation.
+
+Note that the terms are ambiguous, because we don't know what "approved
+by the Free Qt Foundation" applies to. We should just assume nothing about
+this, hence GPL-3.0 and not '+'.
+
+2- AFAICS, those were already the licensing terms for qtwebengine 5.6, so
+it looks like we can indeed backport. But then this should be clearly
+stated in the backported patch itself, so we don't come later and worry
+again about this issue.
+
+Note that in qt-5.6, some Qt modules were already using the new
+licensing terms: new modules that were introduced in Qt-5.6 (and even
+those new in Qt-5.5?) have been using the LGPL-3.0/GPL2.0/GPL-3.0 from
+the onset.
+
+> However I'm not sure about the specific status of qt5webengine. Also,
+> its <pkg>_LICENSE variable says:
+> 
+> include package/qt5/qt5webengine/chromium.inc
+> QT5WEBENGINE_LICENSE = GPL-2.0 or LGPL-3.0 or GPL-3.0 or GPL-3.0 with exception
+
+The exception only applies to some filers in the tests/ and tools/
+directories.
+
+So I wonder if that is something that is applicable in the end.
+
+> QT5WEBENGINE_LICENSE_FILES = LICENSE.GPL2 LICENSE.GPL3 LICENSE.GPL3-EXCEPT \
+>         LICENSE.GPLv3 LICENSE.LGPL3 $(CHROMIUM_LICENSE_FILES)
+> 
+> which I'm not sure is correct for Qt 5.6. Indeed, many of the packages
+> have something like this instead:
+
+As explained above, it is valid already for Qt-5.6, becasue qtwebengine
+was a new module at that time, so it never had the non-v3 licenses.
+
+> ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
+> QT5MULTIMEDIA_LICENSE = GPL-2.0+ or LGPL-3.0, GPL-3.0 with exception(tools), GFDL-1.3 (docs)
+> QT5MULTIMEDIA_LICENSE_FILES = LICENSE.GPL2 LICENSE.GPL3 LICENSE.GPL3-EXCEPT LICENSE.LGPL3 LICENSE.FDL
+> else
+> QT5MULTIMEDIA_LICENSE = GPL-3.0 or LGPL-2.1 with exception or LGPL-3.0, GFDL-1.3 (docs)
+> QT5MULTIMEDIA_LICENSE_FILES = LICENSE.GPLv3 LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3 LICENSE.FDL
+> endif
+> 
+> Could you double check the license status of qt5webengine, in Qt 5.6
+> and Qt 5.9 respectively ?
+
+Yes, a second review of my statements above would be very much
+appreciated, please.
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
