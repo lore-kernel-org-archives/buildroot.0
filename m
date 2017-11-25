@@ -1,73 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 25 Nov 2017 21:01:52 +0100
-Subject: [Buildroot] [RFCv1 4/4] core: implement per-package SDK and
- target
-In-Reply-To: <18ade4e8-449c-01e2-0aaa-6fd5382ffad1@mind.be>
-References: <20171103160627.6468-1-thomas.petazzoni@free-electrons.com>
- <20171103160627.6468-5-thomas.petazzoni@free-electrons.com>
- <ab34a9ea-90a0-fc39-273d-0bd08a2c72b0@mind.be>
- <20171124154323.0895cadc@windsurf.lan>
- <18ade4e8-449c-01e2-0aaa-6fd5382ffad1@mind.be>
-Message-ID: <20171125210152.75418592@windsurf.home>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sat, 25 Nov 2017 22:12:18 +0200
+Subject: [Buildroot] [PATCH] dbus: bump to version 1.12.2
+Message-ID: <063c44bda11568a4b3ea2fdcc8341fff30766734.1511640738.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+This is a bug fixes release, so it might be good for master.
 
-On Sat, 25 Nov 2017 18:30:26 +0100, Arnout Vandecappelle wrote:
+https://cgit.freedesktop.org/dbus/dbus/tree/NEWS?h=dbus-1.12
+---
+ package/dbus/dbus.hash | 4 ++--
+ package/dbus/dbus.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-> > Here is how I'm thinking of solving the problem:
-> > 
-> >  - Next to <pkg>_PATCH_DEPENDENCIES, introduce the concept of
-> >    <pkg>_EXTRACT_DEPENDENCIES.  
-> 
->  _PATCH_DEPENDENCIES is different: it introduces a dependency between foo-patch
-> and bar-patch. Here you want a dependency between foo-extract and tar.
-
-True.
-
->  So this bit doesn't make sense: _PATCH_DEPENDENCIES are not (necessarily) built
-> before foo-patch. So to be reproducible, it should *not* be rsynced yet.
-> 
-> > 
-> > Thoughts?  
-> 
->  I'm not at all happy with this approach. It adds generic-package stuff that is
-> used for only one package, and it spreads the logic out over different places.
-> 
->  I'd rather make the logic explicit in dependencies.mk. Something like
-> 
-> ifneq ($(filter host-tar,$(DEPENDENCIES_HOST_PREREQ)),)
-> $(filter-out host-tar,$(DEPENDENCIES_HOST_PREREQ)): host-tar
-> endif
-> 
-> ifneq ($(filter host-ccache,$(DEPENDENCIES_HOST_PREREQ)),)
-> $(filter-out host-tar host-ccache,$(DEPENDENCIES_HOST_PREREQ)): host-ccache
-> endif
-
-I don't understand how this can work.
-
-The big thing to remember is that when I'm building a package, it only
-sees in its per-package host/staging directory the dependencies
-explicitly listed in this package <pkg>_DEPENDENCIES variable.
-
-With your approach, neither host-tar nor host-ccache are listed in any
-package <pkg>_DEPENDENCIES variable, so the per-package host directory
-of host-ccache and host-tar will never be rsync'ed into the per-package
-host directories of other packages.
-
-Due to this, the package infrastructure _will_ have to know about the
-fact that all packages depend on host-tar/host-ccache, for the simple
-reason that we need to know that we have to rsync host-tar/host-ccache
-when populating the per-package host directory in the configure step.
-
-Best regards,
-
-Thomas
+diff --git a/package/dbus/dbus.hash b/package/dbus/dbus.hash
+index df1891b6d8b4..1aa5aa445d8d 100644
+--- a/package/dbus/dbus.hash
++++ b/package/dbus/dbus.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-# https://dbus.freedesktop.org/releases/dbus/dbus-1.12.0.tar.gz.asc
+-sha256	39af0d9267391434b549c5c4adc001b735518c96f7630c3fe7162af1d13ef3c0  dbus-1.12.0.tar.gz
++# https://dbus.freedesktop.org/releases/dbus/dbus-1.12.2.tar.gz.asc
++sha256	272bb5091770b047c8188b926d5e6038fa4fe6745488b2add96b23e2d9a83d88  dbus-1.12.2.tar.gz
+ # Locally calculated
+ sha256	0e46f54efb12d04ab5c33713bacd0e140c9a35b57ae29e03c853203266e8f3a1  COPYING
+diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
+index 56a54e309c8c..22ba22e17ef8 100644
+--- a/package/dbus/dbus.mk
++++ b/package/dbus/dbus.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DBUS_VERSION = 1.12.0
++DBUS_VERSION = 1.12.2
+ DBUS_SITE = https://dbus.freedesktop.org/releases/dbus
+ DBUS_LICENSE = AFL-2.1 or GPL-2.0+ (library, tools), GPL-2.0+ (tools)
+ DBUS_LICENSE_FILES = COPYING
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.15.0
