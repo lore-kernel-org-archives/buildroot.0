@@ -1,30 +1,36 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 25 Nov 2017 12:01:30 +0100
-Subject: [Buildroot] [PATCH 1/1] qt5webkit: fix URL for 5.6 download
-In-Reply-To: <20171124223737.14510-1-gael.portay@savoirfairelinux.com>
-References: <20171124223737.14510-1-gael.portay@savoirfairelinux.com>
-Message-ID: <20171125120130.4db40b18@windsurf.lan>
+From: Alexander Mukhin <alexander.i.mukhin@gmail.com>
+Date: Sat, 25 Nov 2017 14:08:51 +0300
+Subject: [Buildroot] [PATCH] hostapd: keep previous patches when DRIVER_RTW
+ set
+In-Reply-To: <20171125114643.5b290738@windsurf.lan>
+References: <20171125114643.5b290738@windsurf.lan>
+Message-ID: <20171125110851.1395-1-alexander.i.mukhin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Changed HOSTAPD_PATCH= to HOSTAPD_PATCH+= to keep previously added
+patches.
 
-On Fri, 24 Nov 2017 17:37:37 -0500, Ga?l PORTAY wrote:
-> The Qt community releases are not stored under submodules path
-> component.
-> 
-> Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
-> ---
->  package/qt5/qt5webkit/qt5webkit.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Signed-off-by: Alexander Mukhin <alexander.i.mukhin@gmail.com>
+---
+ package/hostapd/hostapd.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Applied to master, thanks.
-
-Thomas
+diff --git a/package/hostapd/hostapd.mk b/package/hostapd/hostapd.mk
+index bb3919e988..0ed1631421 100644
+--- a/package/hostapd/hostapd.mk
++++ b/package/hostapd/hostapd.mk
+@@ -48,7 +48,7 @@ HOSTAPD_CONFIG_EDITS += 's/\#\(CONFIG_TLS=\).*/\1internal/'
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_HOSTAPD_DRIVER_RTW),y)
+-HOSTAPD_PATCH = https://github.com/pritambaral/hostapd-rtl871xdrv/raw/master/rtlxdrv.patch
++HOSTAPD_PATCH += https://github.com/pritambaral/hostapd-rtl871xdrv/raw/master/rtlxdrv.patch
+ HOSTAPD_CONFIG_SET += CONFIG_DRIVER_RTW
+ endif
+ 
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.11.0
