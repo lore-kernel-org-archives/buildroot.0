@@ -1,123 +1,55 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 25 Nov 2017 18:59:41 +0100
-Subject: [Buildroot] [PATCH v5 1/1] sunxi-mali-driver-mainline: new
- package
-In-Reply-To: <1511302072-9290-1-git-send-email-giulio.benetti@micronovasrl.com>
-References: <1511302072-9290-1-git-send-email-giulio.benetti@micronovasrl.com>
-Message-ID: <b4816831-bd4a-d923-9860-85c190148cf5@mind.be>
+From: Joseph Kogut <joseph.kogut@gmail.com>
+Date: Sat, 25 Nov 2017 10:34:10 -0800
+Subject: [Buildroot] [PATCH 1/1] python-cython: new package
+In-Reply-To: <20171125134511.25ea518f@windsurf.lan>
+References: <20171106203539.26391-1-joseph.kogut@gmail.com>
+ <20171125134511.25ea518f@windsurf.lan>
+Message-ID: <CAMWSM7hvCB=xm+ShA8orvbbbN+d1o=nwBDvjvF_aGMyXByWGsQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Giulio,
+Hi Thomas,
 
-On 21-11-17 23:07, Giulio Benetti wrote:
-> Added kernel allwinner mali driver package.
-> Used combined with userspace Allwinner openGL blob,
-> it gives possibility to use 3D openGL SoC acceleration.
+On Sat, Nov 25, 2017 at 4:45 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
+>
+> On Mon,  6 Nov 2017 12:35:39 -0800, Joseph Kogut wrote:
+>
+>
+>> diff --git a/package/python-cython/Config.in.host b/package/python-cython/Config.in.host
+>> new file mode 100644
+>> index 0000000000..69d32d5ab3
+>> --- /dev/null
+>> +++ b/package/python-cython/Config.in.host
+>> @@ -0,0 +1,7 @@
+>> +config BR2_PACKAGE_HOST_PYTHON_CYTHON
+>> +     bool "host python-cython"
+>> +     help
+>> +       The Cython compiler for writing C extensions for the Python
+>> +       language.
+>> +
+>> +       http://cython.org/
+>
+> Could you briefly explain the use-case for Cython, in the context of
+> Buildroot? How are you using it? To achieve what?
 
- I should have asked before, but: where do those binaries come from? Are they
-from the mali-sunxi package? Or not yet packaged in Buildroot?
+Cython is a dependency of certain Python packages, where it's used in
+setup.py to convert Python modules with modified syntax to C, at
+which point they're compiled into C extensions. Specifically, I'm
+looking to introduce a package for Kivy (https://kivy.org), which
+makes use of Cython heavily.
 
+> I'm just trying to understand whether it makes sense to have a visible
+> option in menuconfig for this package (or not).
 
-[snip]
-> index fe5ccc4..8de2227 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -496,6 +496,7 @@ endmenu
->  	source "package/statserial/Config.in"
->  	source "package/stm32flash/Config.in"
->  	source "package/sunxi-cedarx/Config.in"
-> +	source "package/sunxi-mali-driver-mainline/Config.in"
->  	source "package/sunxi-mali/Config.in"
+That's a great question, and the answer at this point is that it
+probably doesn't. Cython requires a compiler to work, and only the
+binaries it generates belong in the target. It might make more sense
+for packages that require it to specify it as a dependency in their
+makefile.
 
- foo-bar sorts after foo, so swap these two lines.
-
->  	source "package/sysstat/Config.in"
->  	source "package/targetcli-fb/Config.in"
-> diff --git a/package/sunxi-mali-driver-mainline/Config.in b/package/sunxi-mali-driver-mainline/Config.in
-> new file mode 100644
-> index 0000000..5b7b2ba
-> --- /dev/null
-> +++ b/package/sunxi-mali-driver-mainline/Config.in
-> @@ -0,0 +1,22 @@
-> +comment "sunxi-mali-driver-mainline needs a Linux kernel to be built"
-> +	depends on !BR2_LINUX_KERNEL
-> +
-> +config BR2_PACKAGE_SUNXI_MALI_DRIVER_MAINLINE
-> +	bool "sunxi-mali-driver-mainline"
-> +	depends on BR2_LINUX_KERNEL
-> +	select BR2_LINUX_NEEDS_MODULES # not using kernel-module infra
-> +	help
-> +	  This package builds and installs the Linux kernel driver for
-> +	  the Mali GPU on Allwinner platforms, compatible with recent
-> +	  Linux kernels (>= 4.4). Note that it should be installed
-> +	  together with the corresponding userspace binary blobs to
-
- I guess with 'binary blobs' you mean the OpenGL libraries, which are only
-provided as binaries? 'binary blobs' to me sounds like something like firmware
-blobs: is put in your rootfs but doesn't run on the target processor. So I'd
-rephrase as: ... together with the corresponding userspace OpenGL libraries,
-which are provided as binaries only.
-
- And preferably also explain where you can get those.
-
-> +	  provide complete OpenGL functionality.
-> +
-> +	  sunxi-mali-driver-mainline requires a Linux kernel >= 4.4 with the
-> +	  following options enabled:
-> +
-> +	  - CONFIG_CMA
-> +	  - CONFIG_DMA_CMA
-> +	  - CONFIG_DRM_FBDEV_OVERALLOC >= 200 for double buffer or more
-> +
-> +	  https://github.com/mripard/sunxi-mali/blob/master/README.md
-> diff --git a/package/sunxi-mali-driver-mainline/sunxi-mali-driver-mainline.mk b/package/sunxi-mali-driver-mainline/sunxi-mali-driver-mainline.mk
-> new file mode 100644
-> index 0000000..1692646
-> --- /dev/null
-> +++ b/package/sunxi-mali-driver-mainline/sunxi-mali-driver-mainline.mk
-> @@ -0,0 +1,26 @@
-> +################################################################################
-> +#
-> +# sunxi-mali-driver-mainline
-> +#
-> +################################################################################
-> +
-> +SUNXI_MALI_DRIVER_MAINLINE_VERSION = 5b7b3c0b6e1736676c90928816d271debbb09d95
-> +SUNXI_MALI_DRIVER_MAINLINE_SITE = $(call github,mripard,sunxi-mali,$(SUNXI_MALI_DRIVER_MAINLINE_VERSION))
-> +SUNXI_MALI_DRIVER_MAINLINE_DEPENDENCIES = linux
-> +
-> +SUNXI_MALI_DRIVER_MAINLINE_MAKE_OPTS = \
-> +	KDIR=$(LINUX_DIR) \
-> +	CROSS_COMPILE=$(TARGET_CROSS) \
-> +	INSTALL_MOD_PATH=$(TARGET_DIR)
-> +
-> +define SUNXI_MALI_DRIVER_MAINLINE_BUILD_CMDS
-> +	cd $(@D) && $(SUNXI_MALI_DRIVER_MAINLINE_MAKE_OPTS) \
-> +		$(SHELL) ./build.sh -r r6p2 -a
-
- Shouldn't the r6p2 be configurable? That can be done in a later patch, though.
-
- Regards,
- Arnout
-
-> +endef
-> +
-> +define SUNXI_MALI_DRIVER_MAINLINE_INSTALL_TARGET_CMDS
-> +	cd $(@D) && $(SUNXI_MALI_DRIVER_MAINLINE_MAKE_OPTS) \
-> +		$(SHELL) ./build.sh -r r6p2 -i
-> +endef
-> +
-> +$(eval $(generic-package))
-> 
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Would you like me to make that change?
