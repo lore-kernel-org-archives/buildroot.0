@@ -1,48 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 26 Nov 2017 22:20:13 +0100
-Subject: [Buildroot] [git commit branch/2017.08.x] libpjsip: bump to 2.7
-Message-ID: <20171126213856.3AC3C81D43@busybox.osuosl.org>
+Date: Sun, 26 Nov 2017 22:00:53 +0100
+Subject: [Buildroot] [git commit branch/2017.08.x] suport/download: force
+ svn to be non-interactive
+Message-ID: <20171126213855.BF6BD81D4C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b7c16e3e117a6bfb8804de6ff0b9441a140ea20b
+commit: https://git.buildroot.net/buildroot/commit/?id=4db7d0af294cc51b83d4db482646097574b0e311
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.08.x
 
-Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 0f6dacb37a4e97c7acea59ea7ccda932512e3ff9)
+Fixes:
+    http://autobuild.buildroot.org/results/2af/2af7412846c576089f8596857ab8c81ac31c1bed/
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Andr?? Hentschel <nerv@dawncrow.de>
+Reviewed-by: Andr?? Hentschel <nerv@dawncrow.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 4013f11a5b71f238b36f45dcdeb46b7f7a01e600)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libpjsip/libpjsip.hash | 6 +++---
- package/libpjsip/libpjsip.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ support/download/svn | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/libpjsip/libpjsip.hash b/package/libpjsip/libpjsip.hash
-index ec636a8..b35fed3 100644
---- a/package/libpjsip/libpjsip.hash
-+++ b/package/libpjsip/libpjsip.hash
-@@ -1,5 +1,5 @@
--# From http://www.pjsip.org/release/2.6/MD5SUM.TXT
--md5	c347a672679e7875ce572e18517884b2  pjproject-2.6.tar.bz2
-+# From http://www.pjsip.org/release/2.7/MD5SUM.TXT
-+md5	c0d322261e526cafecc176facbb0bab7  pjproject-2.7.tar.bz2
+diff --git a/support/download/svn b/support/download/svn
+index 77abf3d..9f27d71 100755
+--- a/support/download/svn
++++ b/support/download/svn
+@@ -33,6 +33,6 @@ _svn() {
+     eval ${SVN} "${@}"
+ }
  
- # Locally computed
--sha256	2f5a1da1c174d845871c758bd80fbb580fca7799d3cfaa0d3c4e082b5161c7b4	pjproject-2.6.tar.bz2
-+sha256	1c80621a11c39151b3c2511f06abc8ef031fc712bb2f9e9923b5301b04b28f6b	pjproject-2.7.tar.bz2
-diff --git a/package/libpjsip/libpjsip.mk b/package/libpjsip/libpjsip.mk
-index 4e2da7d..a7fbd21 100644
---- a/package/libpjsip/libpjsip.mk
-+++ b/package/libpjsip/libpjsip.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+-_svn export ${verbose} "${@}" "'${repo}@${rev}'" "'${basename}'"
++_svn --non-interactive export ${verbose} "${@}" "'${repo}@${rev}'" "'${basename}'"
  
--LIBPJSIP_VERSION = 2.6
-+LIBPJSIP_VERSION = 2.7
- LIBPJSIP_SOURCE = pjproject-$(LIBPJSIP_VERSION).tar.bz2
- LIBPJSIP_SITE = http://www.pjsip.org/release/$(LIBPJSIP_VERSION)
- LIBPJSIP_DEPENDENCIES = libsrtp
+ tar czf "${output}" "${basename}"
