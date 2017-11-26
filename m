@@ -1,33 +1,29 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 26 Nov 2017 22:20:38 +0100
-Subject: [Buildroot] [PATCH 1/1] libpjsip: bump to 2.7.1
-In-Reply-To: <87h8u29hoc.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
- "Fri, 10 Nov 2017 18:17:55 +0100")
-References: <20171109215147.7361-1-Adamduskett@outlook.com>
- <87h8u29hoc.fsf@dell.be.48ers.dk>
-Message-ID: <878tesg2jd.fsf@dell.be.48ers.dk>
+Date: Sun, 26 Nov 2017 22:21:54 +0100
+Subject: [Buildroot] [PATCH 1/1] webkitgtk: security bump to version
+ 2.18.3
+In-Reply-To: <20171110140304.12234-1-aperez@igalia.com> (Adrian Perez de
+ Castro's message of "Fri, 10 Nov 2017 16:03:04 +0200")
+References: <20171110140304.12234-1-aperez@igalia.com>
+Message-ID: <874lpgg2h9.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Adrian" == Adrian Perez de Castro <aperez@igalia.com> writes:
 
->>>>> "Adam" == Adam Duskett <aduskett@gmail.com> writes:
- >> Also add hash for license file
- >> Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
+ > This is a maintenance release of the current stable WebKitGTK+ version,
+ > which contains a minor rendering fix, another for the WebDriver
+ > implementation, and security fixes for CVE-2017-13798, CVE-2017-13788,
+ > and CVE-2017-13803.
 
- > Please state clearly if these version bumps are for master or next. I
- > was going to apply to next until I checked the website:
+ > Release notes:
 
- > https://trac.pjsip.org/repos/milestone/release-2.7.1
+ >     https://webkitgtk.org/2017/11/10/webkitgtk2.18.3-released.html
 
- > Security update. This version is recommended for all users to improve
- > the security of applications using PJSIP.
-
- > So I've updated the commit message to make this clear and applied to
- > master, thanks.
+ > Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 
 Committed to 2017.02.x and 2017.08.x, thanks.
 
