@@ -1,49 +1,57 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 26 Nov 2017 22:31:25 +0100
-Subject: [Buildroot] [git commit branch/2017.02.x] package/imagemagick:
- security bump to version 7.0.7-10
-Message-ID: <20171126213911.D585A802D0@busybox.osuosl.org>
+Date: Sun, 26 Nov 2017 22:28:17 +0100
+Subject: [Buildroot] [git commit branch/2017.02.x] vboot-utils: fix ARCH
+ detection
+Message-ID: <20171126213911.BD68D802D0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=331edb02ba21cfde85294d1b950e6d2ce5e2c2e5
+commit: https://git.buildroot.net/buildroot/commit/?id=720c192ae39223981f21dbaba6c2c493d894a02c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Version 7.0.7-3 fixes CVE-2017-15218:
-Stop potential leaks in the JNG decoder
+The package includes some target-specific code that is irrelevant
+in a host package but gets built anyway. The target for this code
+must be one of the supported ChromeOS targets.
 
-Changelog: https://www.imagemagick.org/script/changelog.php
+Supplied Makefile apparently relies on the environment to provide
+a valid target, with a simple fallback to host arch. This breaks
+the build if no value is provided and the host arch is not among
+the supported ones.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 3c8dc542936484cf94efd06d96161c8a04fb17a5)
+Should fix
+http://autobuild.buildroot.net/results/d118a83b6c4f7f910d0d44c279f36251d7ba29e8/
+and similar failures.
+
+Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+(cherry picked from commit bbb25c3ad7b66e6882508e49028d1739732bca34)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/imagemagick/imagemagick.hash | 2 +-
- package/imagemagick/imagemagick.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/vboot-utils/vboot-utils.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
-index 92880a9..2468bdb 100644
---- a/package/imagemagick/imagemagick.hash
-+++ b/package/imagemagick/imagemagick.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 5a45e29509dbb23793a9c8db5c47ef1114c1ee82c9ca60053eaf06b3fc243e2c  7.0.7-1.tar.gz
-+sha256 924d1161ed2399bcb72f98419072b3130a466e07d9a6fce43d27458ffa907ffa  7.0.7-10.tar.gz
-diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
-index 9043ce8..c2171a7 100644
---- a/package/imagemagick/imagemagick.mk
-+++ b/package/imagemagick/imagemagick.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/vboot-utils/vboot-utils.mk b/package/vboot-utils/vboot-utils.mk
+index a7592d6..a64e1d5 100644
+--- a/package/vboot-utils/vboot-utils.mk
++++ b/package/vboot-utils/vboot-utils.mk
+@@ -21,12 +21,17 @@ HOST_VBOOT_UTILS_DEPENDENCIES = host-openssl host-util-linux host-pkgconf
+ # media partitioning.
  #
- ################################################################################
+ # make target for futility is "futil".
++#
++# The value of ARCH is only relevant for crossystem (a target tool) and
++# does not affect futil or cgpt in any way as long as it is one of the
++# supported targets.
  
--IMAGEMAGICK_VERSION = 7.0.7-1
-+IMAGEMAGICK_VERSION = 7.0.7-10
- IMAGEMAGICK_SOURCE = $(IMAGEMAGICK_VERSION).tar.gz
- IMAGEMAGICK_SITE = https://github.com/ImageMagick/ImageMagick/archive
- IMAGEMAGICK_LICENSE = Apache-2.0
+ define HOST_VBOOT_UTILS_BUILD_CMDS
+ 	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) \
+ 		CC="$(HOSTCC)" \
+ 		CFLAGS="$(HOST_CFLAGS) -D_LARGEFILE64_SOURCE -D_GNU_SOURCE" \
+ 		LDFLAGS="$(HOST_LDFLAGS)" \
++		ARCH=arm \
+ 		futil cgpt
+ endef
+ 
