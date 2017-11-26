@@ -1,67 +1,55 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 26 Nov 2017 22:35:25 +0100
-Subject: [Buildroot] [git commit branch/2017.08.x] libpjsip: fix static
- build failures due to name clash
-Message-ID: <20171126213856.F3A077FAAF@busybox.osuosl.org>
+Date: Sun, 26 Nov 2017 22:20:18 +0100
+Subject: [Buildroot] [git commit branch/2017.08.x] libpjsip: security bump
+ to 2.7.1
+Message-ID: <20171126213856.4883F81D43@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e3e99fb1d3ec9b218bf575d1de6cca44e7b67511
+commit: https://git.buildroot.net/buildroot/commit/?id=1413c5ac278d89b63caf1abbf1195a54601ff6d0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.08.x
 
-Several packages have a similar md5.c file, and each has a function
-named byteReverse(). This generates link errors when building
-statically ("multiple definition of `byteReverse'").
+Also add hash for license file
 
-Fix by applying a patch from upstream:
-  https://trac.pjsip.org/repos/changeset/5688
+See release notes for details:
+https://trac.pjsip.org/repos/milestone/release-2.7.1
 
-Fixes:
-  http://autobuild.buildroot.org/results/5d7/5d72e0f8517a555399978d5a0e9f7efd0a278189/
-  http://autobuild.buildroot.org/results/c47/c47ccbb9b40011cf0d79c7040bed061ddefd9629/
-  http://autobuild.buildroot.org/results/419/419ab2c0e034cc68991281c51caa8271b0fadbab/
-
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-Cc: Adam Duskett <aduskett@gmail.com>
+Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 8d44fb66085723b87efd8d111db50fdba7fa63ea)
+(cherry picked from commit 4bdc4e492ba75d34d859ca15f0c21ec8078785fc)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0001-Fixed-possible-function-name-clash.patch  | 26 ++++++++++++++++++++++
- 1 file changed, 26 insertions(+)
+ package/libpjsip/libpjsip.hash | 7 ++++---
+ package/libpjsip/libpjsip.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/package/libpjsip/0001-Fixed-possible-function-name-clash.patch b/package/libpjsip/0001-Fixed-possible-function-name-clash.patch
-new file mode 100644
-index 0000000..435b0ea
---- /dev/null
-+++ b/package/libpjsip/0001-Fixed-possible-function-name-clash.patch
-@@ -0,0 +1,26 @@
-+Re #2059 (misc): Fixed possible function name clash with md5 due to non-static function.
-+
-+Backported from: https://trac.pjsip.org/repos/changeset/5688
-+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-+
-+Index: pjlib-util/src/pjlib-util/md5.c
-+===================================================================
-+diff --git a/pjproject/pjlib-util/src/pjlib-util/md5.c b/pjproject/pjlib-util/src/pjlib-util/md5.c
-+--- a/pjlib-util/src/pjlib-util/md5.c	(revision 5687)
-++++ b/pjlib-util/src/pjlib-util/md5.c	(revision 5688)
-+@@ -29,13 +29,13 @@
-+ #ifndef HIGHFIRST
-+ #define byteReverse(buf, len)	/* Nothing */
-+ #else
-+-void byteReverse(unsigned char *buf, unsigned longs);
-++static void byteReverse(unsigned char *buf, unsigned longs);
-+ 
-+ #ifndef ASM_MD5
-+ /*
-+  * Note: this code is harmless on little-endian machines.
-+  */
-+-void byteReverse(unsigned char *buf, unsigned longs)
-++static void byteReverse(unsigned char *buf, unsigned longs)
-+ {
-+     pj_uint32_t t;
-+     do {
+diff --git a/package/libpjsip/libpjsip.hash b/package/libpjsip/libpjsip.hash
+index b35fed3..edac3d5 100644
+--- a/package/libpjsip/libpjsip.hash
++++ b/package/libpjsip/libpjsip.hash
+@@ -1,5 +1,6 @@
+-# From http://www.pjsip.org/release/2.7/MD5SUM.TXT
+-md5	c0d322261e526cafecc176facbb0bab7  pjproject-2.7.tar.bz2
++# From http://www.pjsip.org/release/2.7.1/MD5SUM.TXT
++md5	99a64110fa5c2debff40e0e8d4676380  pjproject-2.7.1.tar.bz2
+ 
+ # Locally computed
+-sha256	1c80621a11c39151b3c2511f06abc8ef031fc712bb2f9e9923b5301b04b28f6b	pjproject-2.7.tar.bz2
++sha256	59fabc62a02b2b80857297cfb10e2c68c473f4a0acc6e848cfefe8421f2c3126	pjproject-2.7.1.tar.bz2
++sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYING
+diff --git a/package/libpjsip/libpjsip.mk b/package/libpjsip/libpjsip.mk
+index a7fbd21..6f3f9e3 100644
+--- a/package/libpjsip/libpjsip.mk
++++ b/package/libpjsip/libpjsip.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBPJSIP_VERSION = 2.7
++LIBPJSIP_VERSION = 2.7.1
+ LIBPJSIP_SOURCE = pjproject-$(LIBPJSIP_VERSION).tar.bz2
+ LIBPJSIP_SITE = http://www.pjsip.org/release/$(LIBPJSIP_VERSION)
+ LIBPJSIP_DEPENDENCIES = libsrtp
