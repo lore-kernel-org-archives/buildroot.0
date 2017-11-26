@@ -1,54 +1,76 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 26 Nov 2017 10:04:42 +0100
-Subject: [Buildroot] [git commit branch/2017.08.x] apr: security bump to
- version 1.6.3
-Message-ID: <20171126184640.4823E7FFA2@busybox.osuosl.org>
+Date: Sun, 26 Nov 2017 10:16:23 +0100
+Subject: [Buildroot] [git commit branch/2017.08.x] argp-standalone: fix
+ build with gcc 7.x
+Message-ID: <20171126184640.87B39814A3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=080fb1e2e7b3d77a93dfcc7ee9d0684323f1ba59
+commit: https://git.buildroot.net/buildroot/commit/?id=3e4634157ffa7fac20f64b2ad3a2480a187ba547
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.08.x
 
-Fixes CVE-2017-12613: Out-of-bounds array deref in apr_time_exp*()
-functions.
+Back in commit a662ff7e79630ca0875dd8529fe54db27a275007
+("package/argp-standalone: Fix build with c99 compilers"), we fixed
+the build of argp-standalone with compilers defaulting to C99 inline
+semantics, i.e starting from gcc 5.x.
 
-Use upstream provided SHA256 hash.
+This was done as part of a patch that used "inline" instead of "extern
+inline". However, using "inline" once again broke the build with gcc
+7.x. To fix this, revert back to using just "extern inline" (hence
+removing a patch of patch 0003-fix_build_with_c99_compilers.patch) and
+instead use -fgnu89-inline in the CFLAGS.
 
-Add license has.
+See https://gcc.gnu.org/gcc-5/porting_to.html for more details.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Fixes:
+
+  http://autobuild.buildroot.net/results/a9cedc54829b7bd2dd7ae6ff2bd6c6db242f1c35/
+
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+[Thomas: also drop the patch of
+0003-fix_build_with_c99_compilers.patch that is no longer needed.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit c91981a985108a83bfeca1a61a4457b5ac785574)
+
+(cherry picked from commit f0b65bd90ce4429d6b7e952ce7de2d5f92a2dd26)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/apr/apr.hash | 6 ++++--
- package/apr/apr.mk   | 2 +-
- 2 files changed, 5 insertions(+), 3 deletions(-)
+ .../argp-standalone/0003-fix_build_with_c99_compilers.patch  | 12 ------------
+ package/argp-standalone/argp-standalone.mk                   |  2 +-
+ 2 files changed, 1 insertion(+), 13 deletions(-)
 
-diff --git a/package/apr/apr.hash b/package/apr/apr.hash
-index 7a5969e..be130a5 100644
---- a/package/apr/apr.hash
-+++ b/package/apr/apr.hash
-@@ -1,2 +1,4 @@
--# From http://archive.apache.org/dist/apr/apr-1.6.2.tar.bz2.sha1
--sha1 01b0d4faa0194825e8e525b9ac7ccfb832471d50  apr-1.6.2.tar.bz2
-+# From http://www.apache.org/dist/apr/apr-1.6.3.tar.bz2.sha256
-+sha256 131f06d16d7aabd097fa992a33eec2b6af3962f93e6d570a9bd4d85e95993172  apr-1.6.3.tar.bz2
-+# Locally calculated
-+sha256 f854aeef66ecd55a126226e82b3f26793fc3b1c584647f6a0edc5639974c38ad  LICENSE
-diff --git a/package/apr/apr.mk b/package/apr/apr.mk
-index ffb3099..58b1d86 100644
---- a/package/apr/apr.mk
-+++ b/package/apr/apr.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/argp-standalone/0003-fix_build_with_c99_compilers.patch b/package/argp-standalone/0003-fix_build_with_c99_compilers.patch
+index bfa0bb5..56b753b 100644
+--- a/package/argp-standalone/0003-fix_build_with_c99_compilers.patch
++++ b/package/argp-standalone/0003-fix_build_with_c99_compilers.patch
+@@ -66,15 +66,3 @@ index e797b11..828f435 100644
+  
+  /* Internal routines.  */
+  extern void _argp_fmtstream_update (argp_fmtstream_t __fs);
+-@@ -216,7 +220,11 @@
+- #endif
+- 
+- #ifndef ARGP_FS_EI
+-+#if defined(__GNUC__) && !defined(__GNUC_STDC_INLINE__)
+- #define ARGP_FS_EI extern inline
+-+#else
+-+#define ARGP_FS_EI inline
+-+#endif
+- #endif
+- 
+- ARGP_FS_EI size_t
+diff --git a/package/argp-standalone/argp-standalone.mk b/package/argp-standalone/argp-standalone.mk
+index 7a7028c..977b954 100644
+--- a/package/argp-standalone/argp-standalone.mk
++++ b/package/argp-standalone/argp-standalone.mk
+@@ -10,7 +10,7 @@ ARGP_STANDALONE_INSTALL_STAGING = YES
+ ARGP_STANDALONE_LICENSE = LGPL-2.0+
  
--APR_VERSION = 1.6.2
-+APR_VERSION = 1.6.3
- APR_SOURCE = apr-$(APR_VERSION).tar.bz2
- APR_SITE = http://archive.apache.org/dist/apr
- APR_LICENSE = Apache-2.0
+ ARGP_STANDALONE_CONF_ENV = \
+-	CFLAGS="$(TARGET_CFLAGS) -fPIC"
++	CFLAGS="$(TARGET_CFLAGS) -fPIC -fgnu89-inline"
+ 
+ define ARGP_STANDALONE_INSTALL_STAGING_CMDS
+ 	$(INSTALL) -D $(@D)/libargp.a $(STAGING_DIR)/usr/lib/libargp.a
