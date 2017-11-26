@@ -1,38 +1,29 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 26 Nov 2017 22:36:24 +0100
-Subject: [Buildroot] [PATCH v2] libpjsip: fix static build failures due
- to name clash
-In-Reply-To: <1510441591-10698-1-git-send-email-luca@lucaceresoli.net> (Luca
- Ceresoli's message of "Sun, 12 Nov 2017 00:06:31 +0100")
-References: <1510441591-10698-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <87609wen8n.fsf@dell.be.48ers.dk>
+Date: Sun, 26 Nov 2017 22:37:49 +0100
+Subject: [Buildroot] [PATCH 1/1] package/x11r7/xapp_xdriinfo: fix libgl
+ dependency
+In-Reply-To: <20171113192349.32543-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Mon, 13 Nov 2017 20:23:49 +0100")
+References: <20171113192349.32543-1-bernd.kuhls@t-online.de>
+Message-ID: <871skken6a.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Luca" == Luca Ceresoli <luca@lucaceresoli.net> writes:
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
- > Several packages have a similar md5.c file, and each has a function
- > named byteReverse(). This generates link errors when building
- > statically ("multiple definition of `byteReverse'").
+ > Fixes
+ > "mesa3d is in the dependency chain of xapp_xdriinfo that has added it
+ >  to its _DEPENDENCIES variable without selecting it or depending on it
+ >  from Config.in."
+ > http://autobuild.buildroot.net/results/d8a/d8aeed2f64e21a277eb0bc5dc08d2339a14c682e/
 
- > Fix by applying a patch from upstream:
- >   https://trac.pjsip.org/repos/changeset/5688
-
- > Fixes:
- >   http://autobuild.buildroot.org/results/5d7/5d72e0f8517a555399978d5a0e9f7efd0a278189/
- >   http://autobuild.buildroot.org/results/c47/c47ccbb9b40011cf0d79c7040bed061ddefd9629/
- >   http://autobuild.buildroot.org/results/419/419ab2c0e034cc68991281c51caa8271b0fadbab/
-
- > Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
- > Cc: Adam Duskett <aduskett@gmail.com>
-
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
  > ---
-
- > Changes v1 -> v2:
- >  - Add commit message and SoB line to patch file (Arnout)
+ > Bug was introduced in 2014:
+ > https://git.buildroot.net/buildroot/commit/package/x11r7/xapp_xdriinfo/Config.in?id=e49a0c656a1a27b80bca730f40101f6ff37d42af
 
 Committed to 2017.02.x and 2017.08.x, thanks.
 
