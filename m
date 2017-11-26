@@ -1,49 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 26 Nov 2017 22:26:55 +0100
-Subject: [Buildroot] [git commit branch/2017.02.x] snmp++: security bump to
- v3.3.10
-Message-ID: <20171126213911.B0B4E7FC9E@busybox.osuosl.org>
+Date: Sun, 26 Nov 2017 20:03:54 +0100
+Subject: [Buildroot] [git commit branch/2017.02.x] package/openssl: bump
+ verstion to 1.0.2l
+Message-ID: <20171126213910.7C4508148F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a680850a74c314fae7a5e412573ccbee5d4f6933
+commit: https://git.buildroot.net/buildroot/commit/?id=88454ec6e24edd030e9fe1bd09ef199e03767e99
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-From the changelong:
-Set the FD_CLOEXEC flag on sockets, so they are not "leaked" to
-spawned processes
+According to https://www.openssl.org/news/newslog.html this release
+does not contain security fixes.
 
-Signed-off-by: Adam Duskett <aduskett@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 6be1631bf27cb0d2aa6ddcbad835d614f33698e6)
+(cherry picked from commit 0b4f96335b9597ec68c4e560d5eae8ae605cf9ef)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/snmppp/snmppp.hash | 3 ++-
- package/snmppp/snmppp.mk   | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ package/openssl/openssl.hash | 4 ++--
+ package/openssl/openssl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/snmppp/snmppp.hash b/package/snmppp/snmppp.hash
-index 75ecdda..5c8feee 100644
---- a/package/snmppp/snmppp.hash
-+++ b/package/snmppp/snmppp.hash
-@@ -1,2 +1,3 @@
- # Locally computed:
--sha256 2ef0cb20658c1eb9e053f8a7a9d5c8f5ebf2f734d37b692fdbf7163ea17dde6f  snmp++-3.3.9.tar.gz
-+sha256 6827adb6a6a68a7f32c41fa12bdfd0aa48f4825b8773f63fc4d5c8482d4ed481	snmp++-3.3.10.tar.gz
-+sha256 d00d5deb9ce44fa01ddf6f882de3ea8b9e8402f776b546dd982d55367ebbd392	src/v3.cpp
-diff --git a/package/snmppp/snmppp.mk b/package/snmppp/snmppp.mk
-index 67410d9..4ceb61c 100644
---- a/package/snmppp/snmppp.mk
-+++ b/package/snmppp/snmppp.mk
+diff --git a/package/openssl/openssl.hash b/package/openssl/openssl.hash
+index 064eeca..da911c5 100644
+--- a/package/openssl/openssl.hash
++++ b/package/openssl/openssl.hash
+@@ -1,5 +1,5 @@
+-# From https://www.openssl.org/source/openssl-1.0.2k.tar.gz.sha256
+-sha256	6b3977c61f2aedf0f96367dcfb5c6e578cf37e7b8d913b4ecb6643c3cb88d8c0	openssl-1.0.2k.tar.gz
++# From https://www.openssl.org/source/openssl-1.0.2l.tar.gz.sha256
++sha256	ce07195b659e75f4e1db43552860070061f156a98bb37b672b101ba6e3ddf30c	openssl-1.0.2l.tar.gz
+ # Locally computed
+ sha256	eddd8a5123748052c598214487ac178e4bfa4e31ba2ec520c70d59c8c5bfa2e9	openssl-1.0.2a-parallel-install-dirs.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d
+ sha256	147c3eeaad614c044749ea527cb433eae5e2d5cad34a78c6ba61cd967bfbe01f	openssl-1.0.2a-parallel-obj-headers.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d
+diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
+index 1536982..5f56b44 100644
+--- a/package/openssl/openssl.mk
++++ b/package/openssl/openssl.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SNMPPP_VERSION = 3.3.9
-+SNMPPP_VERSION = 3.3.10
- SNMPPP_SOURCE = snmp++-$(SNMPPP_VERSION).tar.gz
- SNMPPP_SITE = http://www.agentpp.com/download
- SNMPPP_DEPENDENCIES = host-pkgconf
+-OPENSSL_VERSION = 1.0.2k
++OPENSSL_VERSION = 1.0.2l
+ OPENSSL_SITE = http://www.openssl.org/source
+ OPENSSL_LICENSE = OpenSSL or SSLeay
+ OPENSSL_LICENSE_FILES = LICENSE
