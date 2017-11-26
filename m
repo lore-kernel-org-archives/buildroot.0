@@ -1,44 +1,69 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 26 Nov 2017 09:18:37 +0100
-Subject: [Buildroot] [git commit branch/2017.02.x] apr: bump version to 1.6.2
-Message-ID: <20171126184721.7AA878110A@busybox.osuosl.org>
+Date: Sun, 26 Nov 2017 10:12:54 +0100
+Subject: [Buildroot] [git commit branch/2017.02.x] quagga: add upstream
+ security fix for CVE-2017-16227
+Message-ID: <20171126184721.9EDEF8110A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4f0eeb2dddf7d92695c859c04a26a336e2d36faf
+commit: https://git.buildroot.net/buildroot/commit/?id=f47ba2194602607bf1d131b144c9c6bc5901cf74
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Signed-off-by: Adam Duskett <aduskett@codeblue.com>
+From the advisory:
+http://www.openwall.com/lists/oss-security/2017/10/30/4
+
+It was discovered that the bgpd daemon in the Quagga routing suite does
+not properly calculate the length of multi-segment AS_PATH UPDATE
+messages, causing bgpd to drop a session and potentially resulting in
+loss of network connectivity.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit d56868011b521df802cd171b4f39e56120585396)
+(cherry picked from commit d77d7220a7ced8daa89e3e0aa0090a4e60074001)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/apr/apr.hash | 4 ++--
- package/apr/apr.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ ...x-AS_PATH-size-calculation-for-long-paths.patch | 33 ++++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
 
-diff --git a/package/apr/apr.hash b/package/apr/apr.hash
-index 917ce56..7a5969e 100644
---- a/package/apr/apr.hash
-+++ b/package/apr/apr.hash
-@@ -1,2 +1,2 @@
--# From http://archive.apache.org/dist/apr/apr-1.5.2.tar.bz2.sha1
--sha1 6d757fcf7c687fc300c1066076f2e8380ff8cbc0  apr-1.5.2.tar.bz2
-+# From http://archive.apache.org/dist/apr/apr-1.6.2.tar.bz2.sha1
-+sha1 01b0d4faa0194825e8e525b9ac7ccfb832471d50  apr-1.6.2.tar.bz2
-diff --git a/package/apr/apr.mk b/package/apr/apr.mk
-index 4a97f7e..ffb3099 100644
---- a/package/apr/apr.mk
-+++ b/package/apr/apr.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--APR_VERSION = 1.5.2
-+APR_VERSION = 1.6.2
- APR_SOURCE = apr-$(APR_VERSION).tar.bz2
- APR_SITE = http://archive.apache.org/dist/apr
- APR_LICENSE = Apache-2.0
+diff --git a/package/quagga/0004-bgpd-Fix-AS_PATH-size-calculation-for-long-paths.patch b/package/quagga/0004-bgpd-Fix-AS_PATH-size-calculation-for-long-paths.patch
+new file mode 100644
+index 0000000..1425cf0
+--- /dev/null
++++ b/package/quagga/0004-bgpd-Fix-AS_PATH-size-calculation-for-long-paths.patch
+@@ -0,0 +1,33 @@
++From 7a42b78be9a4108d98833069a88e6fddb9285008 Mon Sep 17 00:00:00 2001
++From: Andreas Jaggi <aj@open.ch>
++Date: Mon, 2 Oct 2017 19:38:43 +0530
++Subject: [PATCH] bgpd: Fix AS_PATH size calculation for long paths
++
++If you have an AS_PATH with more entries than
++what can be written into a single AS_SEGMENT_MAX
++it needs to be broken up.  The code that noticed
++that the AS_PATH needs to be broken up was not
++correctly calculating the size of the resulting
++message.  This patch addresses this issue.
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ bgpd/bgp_aspath.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/bgpd/bgp_aspath.c b/bgpd/bgp_aspath.c
++index b7af5e88..d813bfba 100644
++--- a/bgpd/bgp_aspath.c
+++++ b/bgpd/bgp_aspath.c
++@@ -903,7 +903,7 @@ aspath_put (struct stream *s, struct aspath *as, int use32bit )
++               assegment_header_put (s, seg->type, AS_SEGMENT_MAX);
++               assegment_data_put (s, seg->as, AS_SEGMENT_MAX, use32bit);
++               written += AS_SEGMENT_MAX;
++-              bytes += ASSEGMENT_SIZE (written, use32bit);
+++              bytes += ASSEGMENT_SIZE (AS_SEGMENT_MAX, use32bit);
++             }
++           
++           /* write the final segment, probably is also the first */
++-- 
++2.11.0
++
