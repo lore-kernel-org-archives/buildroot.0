@@ -1,57 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 26 Nov 2017 22:28:02 +0100
-Subject: [Buildroot] [git commit branch/2017.08.x] vboot-utils: fix ARCH
- detection
-Message-ID: <20171126213856.B6BBF802C8@busybox.osuosl.org>
+Date: Sun, 26 Nov 2017 22:43:10 +0100
+Subject: [Buildroot] [git commit branch/2017.08.x] linux-headers: bump 4.{4,
+ 9, 13}.x series
+Message-ID: <20171126213857.4F3A8802C8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=01aef13b4bdd16c61a8bcc64efc9f2bf1bb0769e
+commit: https://git.buildroot.net/buildroot/commit/?id=a77ec2da596969732ca838518a6cac50e9f636bc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.08.x
 
-The package includes some target-specific code that is irrelevant
-in a host package but gets built anyway. The target for this code
-must be one of the supported ChromeOS targets.
-
-Supplied Makefile apparently relies on the environment to provide
-a valid target, with a simple fallback to host arch. This breaks
-the build if no value is provided and the host arch is not among
-the supported ones.
-
-Should fix
-http://autobuild.buildroot.net/results/d118a83b6c4f7f910d0d44c279f36251d7ba29e8/
-and similar failures.
-
-Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
+[Peter: drop 4.13.x bump]
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit bbb25c3ad7b66e6882508e49028d1739732bca34)
+(cherry picked from commit 5962717eb46f39214693d1b45c3cac2b330fca12)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/vboot-utils/vboot-utils.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/linux-headers/Config.in.host | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/vboot-utils/vboot-utils.mk b/package/vboot-utils/vboot-utils.mk
-index a6a67ad..3f63f45 100644
---- a/package/vboot-utils/vboot-utils.mk
-+++ b/package/vboot-utils/vboot-utils.mk
-@@ -21,12 +21,17 @@ HOST_VBOOT_UTILS_DEPENDENCIES = host-openssl host-util-linux host-pkgconf
- # media partitioning.
- #
- # make target for futility is "futil".
-+#
-+# The value of ARCH is only relevant for crossystem (a target tool) and
-+# does not affect futil or cgpt in any way as long as it is one of the
-+# supported targets.
- 
- define HOST_VBOOT_UTILS_BUILD_CMDS
- 	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) \
- 		CC="$(HOSTCC)" \
- 		CFLAGS="$(HOST_CFLAGS) -D_LARGEFILE64_SOURCE -D_GNU_SOURCE" \
- 		LDFLAGS="$(HOST_LDFLAGS)" \
-+		ARCH=arm \
- 		futil cgpt
- endef
- 
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 02a3d8a..599388d 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -236,8 +236,8 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.10.107"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.12.74"	if BR2_KERNEL_HEADERS_3_12
+ 	default "4.1.45"	if BR2_KERNEL_HEADERS_4_1
+-	default "4.4.97"	if BR2_KERNEL_HEADERS_4_4
+-	default "4.9.61"	if BR2_KERNEL_HEADERS_4_9
++	default "4.4.98"	if BR2_KERNEL_HEADERS_4_4
++	default "4.9.62"	if BR2_KERNEL_HEADERS_4_9
+ 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
+ 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
+ 	default "4.12.14"	if BR2_KERNEL_HEADERS_4_12
