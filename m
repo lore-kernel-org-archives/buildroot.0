@@ -1,99 +1,158 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Nov 2017 16:29:47 +0100
-Subject: [Buildroot] [PATCH] pdbg: add patch fixing the build on Blackfin
-Message-ID: <20171126152947.20153-1-thomas.petazzoni@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 26 Nov 2017 16:35:50 +0100
+Subject: [Buildroot] [PATCHv2] package/hackrf: new package
+Message-ID: <20171126153550.13871-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit adds a patch to pdbg that fixes the build on the Blackfin
-architecture. The build failure was due to the recently introduced
-assembly code to embed the DTB into an object file. This code was not
-taking into account the fact that Blackfin has a non-empty
-__USER_LABEL_PREFIX__.
+From: Jason Pruitt <jrspruitt@gmail.com>
 
-The patch has been submitted upstream.
+This patch adds hackrf/host tools and lib for the HackRF SDR.
 
-Fixes:
+Signed-off-by: Jason Pruitt <jrspruitt@gmail.com>
+[yann.morin.1998 at free.fr:
+  - rename hackrf-host -> hackrf
+  - update to recent git sha1
+  - add dependency on !static lib because shared lib always built
+  - add dependency on host-pkgconf
+  - add dependency on fftx single precision
+  - add patch to fix detection of fftw
+  - remove feature patch to disable tools, always build them
+  - remove feature patch to disable build of shared lib
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 
-  http://autobuild.buildroot.net/results/2bf6f56303453fd2ba7e86882168d406ded4cc80/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...fix-to-build-on-architecture-with-non-emp.patch | 63 ++++++++++++++++++++++
- 1 file changed, 63 insertions(+)
- create mode 100644 package/pdbg/0001-template.S-fix-to-build-on-architecture-with-non-emp.patch
+Jason: I've had your patch pending in my tree for quite a while now, and
+I finally had a look. I took the liberty of updating it and fixing it
+since you initially sent it in:
+http://lists.busybox.net/pipermail/buildroot/2015-October/142686.html
+---
+ package/Config.in                                  |  1 +
+ ...01-host-tools-use-pkg-cnfig-to-find-fftwf.patch | 45 ++++++++++++++++++++++
+ package/hackrf/Config.in                           | 17 ++++++++
+ package/hackrf/hackrf.mk                           | 22 +++++++++++
+ 4 files changed, 85 insertions(+)
+ create mode 100644 package/hackrf/0001-host-tools-use-pkg-cnfig-to-find-fftwf.patch
+ create mode 100644 package/hackrf/Config.in
+ create mode 100644 package/hackrf/hackrf.mk
 
-diff --git a/package/pdbg/0001-template.S-fix-to-build-on-architecture-with-non-emp.patch b/package/pdbg/0001-template.S-fix-to-build-on-architecture-with-non-emp.patch
+diff --git a/package/Config.in b/package/Config.in
+index 207b4b4c4d..9e59045cf0 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -420,6 +420,7 @@ endmenu
+ 	source "package/gpsd/Config.in"
+ 	source "package/gptfdisk/Config.in"
+ 	source "package/gvfs/Config.in"
++	source "package/hackrf/Config.in"
+ 	source "package/hdparm/Config.in"
+ 	source "package/hwdata/Config.in"
+ 	source "package/hwloc/Config.in"
+diff --git a/package/hackrf/0001-host-tools-use-pkg-cnfig-to-find-fftwf.patch b/package/hackrf/0001-host-tools-use-pkg-cnfig-to-find-fftwf.patch
 new file mode 100644
-index 0000000000..15c0eef611
+index 0000000000..b676fd8568
 --- /dev/null
-+++ b/package/pdbg/0001-template.S-fix-to-build-on-architecture-with-non-emp.patch
-@@ -0,0 +1,63 @@
-+From 50ae93273376ede704012030009c29bd58d6a569 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Date: Sun, 26 Nov 2017 16:22:25 +0100
-+Subject: [PATCH] template.S: fix to build on architecture with non-empty
-+ __USER_LABEL_PREFIX__
++++ b/package/hackrf/0001-host-tools-use-pkg-cnfig-to-find-fftwf.patch
+@@ -0,0 +1,45 @@
++From ebaacaed5c72aea8af28e22135e6b550bd731826 Mon Sep 17 00:00:00 2001
++From: "Yann E. MORIN" <yann.morin.1998@free.fr>
++Date: Sun, 26 Nov 2017 16:20:54 +0100
++Subject: [PATCH] host/tools: use pkg-cnfig to find fftwf
 +
-+Blackfin has a non-empty __USER_LABEL_PREFIX__, which means that a
-+symbol called "foo" in C must be named "_foo" in assembler.
++The fftw package is named fftw3. Since we're using the fftwf_*
++functions, we need to look for fftw3f, i.e. the single-precision
++variant of fftw3.
 +
-+Interestingly, it seems like "$(CC) -xassembler - -c" doesn't pass the
-+input source file through the C preprocessor, so we do this
-+explicitly.
-+
-+Submitted-upstream: https://github.com/open-power/pdbg/pull/26
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 +---
-+ Makefile.am |  2 +-
-+ template.S  | 22 +++++++++++++++-------
-+ 2 files changed, 16 insertions(+), 8 deletions(-)
++ host/cmake/modules/FindFFTW.cmake    | 3 ++-
++ host/hackrf-tools/src/CMakeLists.txt | 2 +-
++ 2 files changed, 3 insertions(+), 2 deletions(-)
 +
-+diff --git a/Makefile.am b/Makefile.am
-+index 9d34bff..82e0856 100644
-+--- a/Makefile.am
-++++ b/Makefile.am
-+@@ -62,4 +62,4 @@ p9z-fsi.dtb.o: p9z-fsi.dts p9-fsi.dtsi
-+ %.dtb.o: %.dts
-+ 	dtc -i$(dir $@) -I dts $< -O dtb > $@.tmp
-+ 	symbol_prefix=`echo $@ | tr '.-' '_'` ; \
-+-	sed "s%SYMBOL_PREFIX%$${symbol_prefix}%g; s%FILENAME%$@.tmp%g" $(top_srcdir)/template.S | $(CC) -xassembler - -c -o $@
-++	sed "s%SYMBOL_PREFIX%$${symbol_prefix}%g; s%FILENAME%$@.tmp%g" $(top_srcdir)/template.S | $(CPP) - | $(CC) -xassembler - -c -o $@
-+diff --git a/template.S b/template.S
-+index 2e6cbdb..1407a7c 100644
-+--- a/template.S
-++++ b/template.S
-+@@ -1,10 +1,18 @@
-++#ifdef __USER_LABEL_PREFIX__
-++#define CONCAT1(a, b) CONCAT2(a, b)
-++#define CONCAT2(a, b) a ## b
-++#define SYM(x) CONCAT1 (__USER_LABEL_PREFIX__, x)
-++#else
-++#define SYM(x) x
-++#endif
-++
-+ .section .data
-+-_binary_SYMBOL_PREFIX_start:
-++SYM(_binary_SYMBOL_PREFIX_start):
-+ .incbin "FILENAME"
-+ .align 4
-+-_binary_SYMBOL_PREFIX_end:
-+-_binary_SYMBOL_PREFIX_size:
-+-	.long	_binary_SYMBOL_PREFIX_end - _binary_SYMBOL_PREFIX_start
-+-.globl _binary_SYMBOL_PREFIX_start
-+-.globl _binary_SYMBOL_PREFIX_end
-+-.globl _binary_SYMBOL_PREFIX_size
-++SYM(_binary_SYMBOL_PREFIX_end):
-++SYM(_binary_SYMBOL_PREFIX_size):
-++	.long	SYM(_binary_SYMBOL_PREFIX_end) - SYM(_binary_SYMBOL_PREFIX_start)
-++.globl SYM(_binary_SYMBOL_PREFIX_start)
-++.globl SYM(_binary_SYMBOL_PREFIX_end)
-++.globl SYM(_binary_SYMBOL_PREFIX_size)
++diff --git a/host/cmake/modules/FindFFTW.cmake b/host/cmake/modules/FindFFTW.cmake
++index b9f3bfb..20e26b2 100644
++--- a/host/cmake/modules/FindFFTW.cmake
+++++ b/host/cmake/modules/FindFFTW.cmake
++@@ -16,7 +16,8 @@ IF (WIN32)
++ include_directories(${FFTW_INCLUDES})
++ find_library (FFTW_LIBRARIES NAMES ${FFTW_LIBRARIES})
++ ELSE(WIN32)
++-find_library (FFTW_LIBRARIES NAMES fftw3)
+++    find_package(PkgConfig)
+++    pkg_check_modules(FFTW fftw3f)
++ ENDIF(WIN32)
++ 
++ 
++diff --git a/host/hackrf-tools/src/CMakeLists.txt b/host/hackrf-tools/src/CMakeLists.txt
++index 40f11dc..ada3a0f 100644
++--- a/host/hackrf-tools/src/CMakeLists.txt
+++++ b/host/hackrf-tools/src/CMakeLists.txt
++@@ -42,7 +42,7 @@ if(MSVC)
++ 	)
++ 	LIST(APPEND TOOLS_LINK_LIBS ${FFTW_LIBRARIES})
++ else()
++-    LIST(APPEND TOOLS_LINK_LIBS m fftw3f)
+++    LIST(APPEND TOOLS_LINK_LIBS m ${FFTW_LIBRARIES})
++ endif()
++ 
++ if(NOT libhackrf_SOURCE_DIR)
 +-- 
-+2.13.6
++2.11.0
 +
+diff --git a/package/hackrf/Config.in b/package/hackrf/Config.in
+new file mode 100644
+index 0000000000..e4d2f2308a
+--- /dev/null
++++ b/package/hackrf/Config.in
+@@ -0,0 +1,17 @@
++comment "hackrf needs a toolchain w/ threads, dynamic library"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
++
++comment "hackrf needs fftw w/ single precision"
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_STATIC_LIBS
++	depends on !BR2_PACKAGE_FFTW_PRECISION_SINGLE
++
++config BR2_PACKAGE_HACKRF
++	bool "hackrf"
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_STATIC_LIBS
++	depends on BR2_PACKAGE_FFTW_PRECISION_SINGLE
++	help
++	  Library and tools for accessing HackRF SDR boards.
++
++	  https://github.com/mossmann/hackrf/wiki
+diff --git a/package/hackrf/hackrf.mk b/package/hackrf/hackrf.mk
+new file mode 100644
+index 0000000000..af5d9c08f2
+--- /dev/null
++++ b/package/hackrf/hackrf.mk
+@@ -0,0 +1,22 @@
++################################################################################
++#
++# hackrf
++#
++################################################################################
++
++HACKRF_VERSION = fb83ad64953bf7f8707bc209968f9e49f894369e
++HACKRF_SITE = $(call github,mossmann,hackrf,$(HACKRF_VERSION))
++HACKRF_LICENSE = GPLv2 GPLv2+ BSD-3c
++HACKRF_LICENSE_FILES = COPYING
++HACKRF_DEPENDENCIES = host-pkgconf libusb fftw
++HACKRF_INSTALL_STAGING = YES
++HACKRF_SUBDIR = host
++HACKRF_SUPPORTS_IN_SOURCE_BUILD = NO
++
++ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
++HACKRF_CONF_OPTS += -DINSTALL_UDEV_RULES=ON
++else
++HACKRF_CONF_OPTS += -DINSTALL_UDEV_RULES=OFF
++endif
++
++$(eval $(cmake-package))
 -- 
-2.13.6
+2.11.0
