@@ -1,48 +1,100 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 26 Nov 2017 22:19:48 +0100
-Subject: [Buildroot] [git commit branch/2017.02.x] libpjsip: bump to 2.7
-Message-ID: <20171126213911.67BB681539@busybox.osuosl.org>
+Date: Sun, 26 Nov 2017 22:00:17 +0100
+Subject: [Buildroot] [git commit branch/2017.02.x] gstreamer: needs dynamic
+ libraries
+Message-ID: <20171126213911.30BED8157F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6031a0634b578835851e27e06f9159632540fcbd
+commit: https://git.buildroot.net/buildroot/commit/?id=db87bb911f02777baf816059b43e573d2d69feb3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 0f6dacb37a4e97c7acea59ea7ccda932512e3ff9)
+Fixes:
+http://autobuild.buildroot.net/results/49d/49dcec0bd2f3bb78c18675a9fa5c9c53cc183fd2/
+
+g_cclosure_marshal_VOID__VOID is defined both in libgobject.a and
+libgstreamer.a. It is probably possible to fix this, but gstreamer0.10
+has been deprecated for a long time now and is anyway unlikely to be
+used in static-only situations, so let's just require dynamic linking.
+
+Propagate to the reverse dependencies. opencv3 already did depend on
+dynamic libs.
+
+[Peter: add autobuild reference]
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 0eee5465e51229c4c17d7930ca2095caace4f8d2)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libpjsip/libpjsip.hash | 6 +++---
- package/libpjsip/libpjsip.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/gstreamer/gstreamer/Config.in | 6 ++++--
+ package/libplayer/Config.in           | 6 ++++--
+ package/opencv/Config.in              | 7 +++++--
+ 3 files changed, 13 insertions(+), 6 deletions(-)
 
-diff --git a/package/libpjsip/libpjsip.hash b/package/libpjsip/libpjsip.hash
-index ec636a8..b35fed3 100644
---- a/package/libpjsip/libpjsip.hash
-+++ b/package/libpjsip/libpjsip.hash
-@@ -1,5 +1,5 @@
--# From http://www.pjsip.org/release/2.6/MD5SUM.TXT
--md5	c347a672679e7875ce572e18517884b2  pjproject-2.6.tar.bz2
-+# From http://www.pjsip.org/release/2.7/MD5SUM.TXT
-+md5	c0d322261e526cafecc176facbb0bab7  pjproject-2.7.tar.bz2
+diff --git a/package/gstreamer/gstreamer/Config.in b/package/gstreamer/gstreamer/Config.in
+index eb1249a..99c90f1 100644
+--- a/package/gstreamer/gstreamer/Config.in
++++ b/package/gstreamer/gstreamer/Config.in
+@@ -1,12 +1,14 @@
+-comment "gstreamer 0.10 needs a toolchain w/ wchar, threads"
++comment "gstreamer 0.10 needs a toolchain w/ wchar, threads, dynamic library"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
++		BR2_STATIC_LIBS
  
- # Locally computed
--sha256	2f5a1da1c174d845871c758bd80fbb580fca7799d3cfaa0d3c4e082b5161c7b4	pjproject-2.6.tar.bz2
-+sha256	1c80621a11c39151b3c2511f06abc8ef031fc712bb2f9e9923b5301b04b28f6b	pjproject-2.7.tar.bz2
-diff --git a/package/libpjsip/libpjsip.mk b/package/libpjsip/libpjsip.mk
-index b0d0609..ed7761e 100644
---- a/package/libpjsip/libpjsip.mk
-+++ b/package/libpjsip/libpjsip.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ config BR2_PACKAGE_GSTREAMER
+ 	bool "gstreamer 0.10"
+ 	depends on BR2_USE_WCHAR # glib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
+ 	depends on BR2_USE_MMU # glib2
++	depends on !BR2_STATIC_LIBS
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	help
+ 	  GStreamer is an open source multimedia framework.
+diff --git a/package/libplayer/Config.in b/package/libplayer/Config.in
+index 37fbb26..82293c0 100644
+--- a/package/libplayer/Config.in
++++ b/package/libplayer/Config.in
+@@ -20,11 +20,13 @@ config BR2_PACKAGE_LIBPLAYER_GSTREAMER
+ 	depends on BR2_USE_WCHAR # glib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
+ 	depends on BR2_USE_MMU # glib2
++	depends on !BR2_STATIC_LIBS # gstreamer
+ 	select BR2_PACKAGE_GSTREAMER
  
--LIBPJSIP_VERSION = 2.6
-+LIBPJSIP_VERSION = 2.7
- LIBPJSIP_SOURCE = pjproject-$(LIBPJSIP_VERSION).tar.bz2
- LIBPJSIP_SITE = http://www.pjsip.org/release/$(LIBPJSIP_VERSION)
- LIBPJSIP_DEPENDENCIES = libsrtp
+-comment "gstreamer backend needs a toolchain w/ wchar, threads"
++comment "gstreamer backend needs a toolchain w/ wchar, threads, dynamic library"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
++		BR2_STATIC_LIBS
+ 
+ config BR2_PACKAGE_LIBPLAYER_PYTHON
+ 	depends on BR2_PACKAGE_PYTHON
+diff --git a/package/opencv/Config.in b/package/opencv/Config.in
+index c046baa..5de4cf7 100644
+--- a/package/opencv/Config.in
++++ b/package/opencv/Config.in
+@@ -211,13 +211,16 @@ config BR2_PACKAGE_OPENCV_WITH_GSTREAMER
+ 	depends on BR2_USE_MMU # gstreamer -> libglib2
+ 	depends on BR2_USE_WCHAR # gstreamer -> libglib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # gstreamer -> libglib2
++	depends on !BR2_STATIC_LIBS # gstreamer
+ 	select BR2_PACKAGE_GSTREAMER
+ 	select BR2_PACKAGE_GST_PLUGINS_BASE
+ 	select BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_APP
+ 
+-comment "gstreamer-0.10 support needs a toolchain w/ wchar, threads"
++comment "gstreamer-0.10 support needs a toolchain w/ wchar, threads, dynamic library"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
++		BR2_STATIC_LIBS
++
+ 
+ config BR2_PACKAGE_OPENCV_WITH_GSTREAMER1
+ 	bool "gstreamer-1.x"
