@@ -1,44 +1,67 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 26 Nov 2017 22:29:12 +0100
-Subject: [Buildroot] [git commit branch/2017.02.x] mesa3d: fix build with
- BR2_SHARED_STATIC_LIBS
-Message-ID: <20171126213911.CA6A1802D0@busybox.osuosl.org>
+Date: Sun, 26 Nov 2017 22:35:47 +0100
+Subject: [Buildroot] [git commit branch/2017.02.x] libpjsip: fix static
+ build failures due to name clash
+Message-ID: <20171126213911.F1E6B802D0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=63c9553a2ff67feef53f0ceb7343d53f08cb0a0f
+commit: https://git.buildroot.net/buildroot/commit/?id=a706b10c7b8fe3bb6c75e732d45a24407069739d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-mesa3d does not allow to enable both static and shared libraries so if
-BR2_SHARED_STATIC_LIBS is set, disable static
+Several packages have a similar md5.c file, and each has a function
+named byteReverse(). This generates link errors when building
+statically ("multiple definition of `byteReverse'").
 
-Fixes https://bugs.busybox.net/show_bug.cgi?id=10326
+Fix by applying a patch from upstream:
+  https://trac.pjsip.org/repos/changeset/5688
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit dd09d500aa6972808b2549e4b8c7fa4e396ca91f)
+Fixes:
+  http://autobuild.buildroot.org/results/5d7/5d72e0f8517a555399978d5a0e9f7efd0a278189/
+  http://autobuild.buildroot.org/results/c47/c47ccbb9b40011cf0d79c7040bed061ddefd9629/
+  http://autobuild.buildroot.org/results/419/419ab2c0e034cc68991281c51caa8271b0fadbab/
+
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Cc: Adam Duskett <aduskett@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 8d44fb66085723b87efd8d111db50fdba7fa63ea)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mesa3d/mesa3d.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+ .../0001-Fixed-possible-function-name-clash.patch  | 26 ++++++++++++++++++++++
+ 1 file changed, 26 insertions(+)
 
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index bf2ab6e..bed3115 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -22,6 +22,12 @@ MESA3D_DEPENDENCIES = \
- 	expat \
- 	libdrm
- 
-+# Disable static, otherwise configure will fail with: "Cannot enable both static
-+# and shared."
-+ifeq ($(BR2_SHARED_STATIC_LIBS),y)
-+MESA3D_CONF_OPTS += --disable-static
-+endif
+diff --git a/package/libpjsip/0001-Fixed-possible-function-name-clash.patch b/package/libpjsip/0001-Fixed-possible-function-name-clash.patch
+new file mode 100644
+index 0000000..435b0ea
+--- /dev/null
++++ b/package/libpjsip/0001-Fixed-possible-function-name-clash.patch
+@@ -0,0 +1,26 @@
++Re #2059 (misc): Fixed possible function name clash with md5 due to non-static function.
 +
- # The Sourcery MIPS toolchain has a special (non-upstream) feature to
- # have "compact exception handling", which unfortunately breaks with
- # mesa3d, so we disable it here by passing -mno-compact-eh.
++Backported from: https://trac.pjsip.org/repos/changeset/5688
++Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
++
++Index: pjlib-util/src/pjlib-util/md5.c
++===================================================================
++diff --git a/pjproject/pjlib-util/src/pjlib-util/md5.c b/pjproject/pjlib-util/src/pjlib-util/md5.c
++--- a/pjlib-util/src/pjlib-util/md5.c	(revision 5687)
+++++ b/pjlib-util/src/pjlib-util/md5.c	(revision 5688)
++@@ -29,13 +29,13 @@
++ #ifndef HIGHFIRST
++ #define byteReverse(buf, len)	/* Nothing */
++ #else
++-void byteReverse(unsigned char *buf, unsigned longs);
+++static void byteReverse(unsigned char *buf, unsigned longs);
++ 
++ #ifndef ASM_MD5
++ /*
++  * Note: this code is harmless on little-endian machines.
++  */
++-void byteReverse(unsigned char *buf, unsigned longs)
+++static void byteReverse(unsigned char *buf, unsigned longs)
++ {
++     pj_uint32_t t;
++     do {
