@@ -1,52 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 26 Nov 2017 21:23:34 +0100
-Subject: [Buildroot] [git commit branch/2017.08.x] fs: add missing $$(sep)
- to pre- and post-command hooks code
-Message-ID: <20171126213855.4956F804EF@busybox.osuosl.org>
+Date: Sun, 26 Nov 2017 21:31:03 +0100
+Subject: [Buildroot] [git commit branch/2017.08.x] kvm-unit-test: x86-64
+ variant only available on x86-64 hosts
+Message-ID: <20171126213855.A373480304@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=36ff040f8a4e55615117d45f7f09713aa8542b26
+commit: https://git.buildroot.net/buildroot/commit/?id=32ea3609e49868d213b1affd5f3973b3b67c94ad
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.08.x
 
-When multiple hooks are registred, both pre-a and post-command hooks'
-foreach loops need to have a separator at the end in order for the
-code to work as intended. Without the separator all hooks end up as a
-one single line command thus making all but the first hook into
-no-ops.
+We use the host compiler for x86-64 builds, so ensure it is only available
+on x86-64 hosts.
 
-Fixes: 4628b6f3b4 ("fs: add pre- and post-command hooks")
-Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Romain Naour <romain.naour@gmail.com>
-Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 3f9476df07200fd86d59fb19b4183dafed5934f8)
+(cherry picked from commit a13029996f25c1fb60ee68a67344b963dee374c1)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- fs/common.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/kvm-unit-tests/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/fs/common.mk b/fs/common.mk
-index 9a7758f..5b612a3 100644
---- a/fs/common.mk
-+++ b/fs/common.mk
-@@ -96,13 +96,13 @@ endif
- 		echo "echo '$$(TERM_BOLD)>>>   Executing fakeroot script $$(s)$$(TERM_RESET)'" >> $$(FAKEROOT_SCRIPT); \
- 		echo $$(s) $$(TARGET_DIR) $$(BR2_ROOTFS_POST_SCRIPT_ARGS) >> $$(FAKEROOT_SCRIPT)$$(sep))
- 	$$(foreach hook,$$(ROOTFS_PRE_CMD_HOOKS),\
--		$$(call PRINTF,$$($$(hook))) >> $$(FAKEROOT_SCRIPT))
-+		$$(call PRINTF,$$($$(hook))) >> $$(FAKEROOT_SCRIPT)$$(sep))
- ifeq ($$(BR2_REPRODUCIBLE),y)
- 	echo "find $$(TARGET_DIR) -print0 | xargs -0 -r touch -hd @$$(SOURCE_DATE_EPOCH)" >> $$(FAKEROOT_SCRIPT)
- endif
- 	$$(call PRINTF,$$(ROOTFS_$(2)_CMD)) >> $$(FAKEROOT_SCRIPT)
- 	$$(foreach hook,$$(ROOTFS_POST_CMD_HOOKS),\
--		$$(call PRINTF,$$($$(hook))) >> $$(FAKEROOT_SCRIPT))
-+		$$(call PRINTF,$$($$(hook))) >> $$(FAKEROOT_SCRIPT)$$(sep))
- 	chmod a+x $$(FAKEROOT_SCRIPT)
- 	PATH=$$(BR_PATH) $$(HOST_DIR)/bin/fakeroot -- $$(FAKEROOT_SCRIPT)
- 	$$(INSTALL) -m 0644 support/misc/target-dir-warning.txt $$(TARGET_DIR_WARNING_FILE)
+diff --git a/package/kvm-unit-tests/Config.in b/package/kvm-unit-tests/Config.in
+index d0d9e2e..8b7908e 100644
+--- a/package/kvm-unit-tests/Config.in
++++ b/package/kvm-unit-tests/Config.in
+@@ -15,6 +15,7 @@ config BR2_PACKAGE_KVM_UNIT_TESTS
+ 	# x86-64 we use the host gcc (see .mk file for details)
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_5 || !BR2_i386
+ 	depends on BR2_HOST_GCC_AT_LEAST_4_5 || !BR2_x86_64
++	depends on BR2_HOSTARCH = "x86_64" || !BR2_x86_64
+ 	select BR2_HOSTARCH_NEEDS_IA32_COMPILER if BR2_x86_64=y
+ 	help
+ 	  kvm-unit-tests is a project as old as KVM. As its name
