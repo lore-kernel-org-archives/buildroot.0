@@ -1,55 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 26 Nov 2017 22:20:18 +0100
-Subject: [Buildroot] [git commit branch/2017.08.x] libpjsip: security bump
- to 2.7.1
-Message-ID: <20171126213856.4883F81D43@busybox.osuosl.org>
+Date: Sun, 26 Nov 2017 22:31:30 +0100
+Subject: [Buildroot] [git commit branch/2017.08.x] package/imagemagick:
+ security bump to version 7.0.7-10
+Message-ID: <20171126213856.D2203802C8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1413c5ac278d89b63caf1abbf1195a54601ff6d0
+commit: https://git.buildroot.net/buildroot/commit/?id=2c640f48dfab99d331ea39be81d4b0fbee3b564b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.08.x
 
-Also add hash for license file
+Version 7.0.7-3 fixes CVE-2017-15218:
+Stop potential leaks in the JNG decoder
 
-See release notes for details:
-https://trac.pjsip.org/repos/milestone/release-2.7.1
+Changelog: https://www.imagemagick.org/script/changelog.php
 
-Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 4bdc4e492ba75d34d859ca15f0c21ec8078785fc)
+(cherry picked from commit 3c8dc542936484cf94efd06d96161c8a04fb17a5)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libpjsip/libpjsip.hash | 7 ++++---
- package/libpjsip/libpjsip.mk   | 2 +-
- 2 files changed, 5 insertions(+), 4 deletions(-)
+ package/imagemagick/imagemagick.hash | 2 +-
+ package/imagemagick/imagemagick.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libpjsip/libpjsip.hash b/package/libpjsip/libpjsip.hash
-index b35fed3..edac3d5 100644
---- a/package/libpjsip/libpjsip.hash
-+++ b/package/libpjsip/libpjsip.hash
-@@ -1,5 +1,6 @@
--# From http://www.pjsip.org/release/2.7/MD5SUM.TXT
--md5	c0d322261e526cafecc176facbb0bab7  pjproject-2.7.tar.bz2
-+# From http://www.pjsip.org/release/2.7.1/MD5SUM.TXT
-+md5	99a64110fa5c2debff40e0e8d4676380  pjproject-2.7.1.tar.bz2
- 
+diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
+index 92880a9..2468bdb 100644
+--- a/package/imagemagick/imagemagick.hash
++++ b/package/imagemagick/imagemagick.hash
+@@ -1,2 +1,2 @@
  # Locally computed
--sha256	1c80621a11c39151b3c2511f06abc8ef031fc712bb2f9e9923b5301b04b28f6b	pjproject-2.7.tar.bz2
-+sha256	59fabc62a02b2b80857297cfb10e2c68c473f4a0acc6e848cfefe8421f2c3126	pjproject-2.7.1.tar.bz2
-+sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYING
-diff --git a/package/libpjsip/libpjsip.mk b/package/libpjsip/libpjsip.mk
-index a7fbd21..6f3f9e3 100644
---- a/package/libpjsip/libpjsip.mk
-+++ b/package/libpjsip/libpjsip.mk
+-sha256 5a45e29509dbb23793a9c8db5c47ef1114c1ee82c9ca60053eaf06b3fc243e2c  7.0.7-1.tar.gz
++sha256 924d1161ed2399bcb72f98419072b3130a466e07d9a6fce43d27458ffa907ffa  7.0.7-10.tar.gz
+diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+index 9043ce8..c2171a7 100644
+--- a/package/imagemagick/imagemagick.mk
++++ b/package/imagemagick/imagemagick.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBPJSIP_VERSION = 2.7
-+LIBPJSIP_VERSION = 2.7.1
- LIBPJSIP_SOURCE = pjproject-$(LIBPJSIP_VERSION).tar.bz2
- LIBPJSIP_SITE = http://www.pjsip.org/release/$(LIBPJSIP_VERSION)
- LIBPJSIP_DEPENDENCIES = libsrtp
+-IMAGEMAGICK_VERSION = 7.0.7-1
++IMAGEMAGICK_VERSION = 7.0.7-10
+ IMAGEMAGICK_SOURCE = $(IMAGEMAGICK_VERSION).tar.gz
+ IMAGEMAGICK_SITE = https://github.com/ImageMagick/ImageMagick/archive
+ IMAGEMAGICK_LICENSE = Apache-2.0
