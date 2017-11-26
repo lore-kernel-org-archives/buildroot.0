@@ -1,54 +1,94 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 26 Nov 2017 22:24:06 +0100
-Subject: [Buildroot] [git commit branch/2017.08.x] postgresql: security bump
- to version 9.6.5
-Message-ID: <20171126213856.738578125D@busybox.osuosl.org>
+Date: Sun, 26 Nov 2017 22:07:46 +0100
+Subject: [Buildroot] [git commit branch/2017.08.x] wireshark: bump version
+ to 2.2.10 (security)
+Message-ID: <20171126213855.DC99F81D43@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=aa66d51954126b6471ad9e3b34083ebd76233ba3
+commit: https://git.buildroot.net/buildroot/commit/?id=6436feaabe1db9f7a4d1b8c05dace511077b711e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.08.x
 
-Fixes the following security issues (9.6.4):
+Security fixes since 2.2.7:
 
-CVE-2017-7546: Empty password accepted in some authentication methods
-CVE-2017-7547: The "pg_user_mappings" catalog view discloses passwords to users lacking server privileges
-CVE-2017-7548: lo_put() function ignores ACLs
+- wnpa-sec-2017-22
+  Bazaar dissector infinite loop (Bug 13599) CVE-2017-9352
+- wnpa-sec-2017-23
+  DOF dissector read overflow (Bug 13608) CVE-2017-9348
+- wnpa-sec-2017-24
+  DHCP dissector read overflow (Bug 13609, Bug 13628) CVE-2017-9351
+- wnpa-sec-2017-25
+  SoulSeek dissector infinite loop (Bug 13631) CVE-2017-9346
+- wnpa-sec-2017-26
+  DNS dissector infinite loop (Bug 13633) CVE-2017-9345
+- wnpa-sec-2017-27
+  DICOM dissector infinite loop (Bug 13685) CVE-2017-9349
+- wnpa-sec-2017-28
+  openSAFETY dissector memory exhaustion (Bug 13649) CVE-2017-9350
+- wnpa-sec-2017-29
+  BT L2CAP dissector divide by zero (Bug 13701) CVE-2017-9344
+- wnpa-sec-2017-30
+  MSNIP dissector crash (Bug 13725) CVE-2017-9343
+- wnpa-sec-2017-31
+  ROS dissector crash (Bug 13637) CVE-2017-9347
+- wnpa-sec-2017-32
+  RGMP dissector crash (Bug 13646) CVE-2017-9354
+- wnpa-sec-2017-33
+  IPv6 dissector crash (Bug 13675) CVE-2017-9353
+- wnpa-sec-2017-13
+  WBMXL dissector infinite loop (Bug 13477, Bug 13796) CVE-2017-7702, CVE-2017-11410
+  Note: This is an update for a fix in Wireshark 2.2.6 and 2.0.12.
+- wnpa-sec-2017-28
+  openSAFETY dissector memory exhaustion (Bug 13649, Bug 13755) CVE-2017-9350, CVE-2017-11411
+  Note: This is an update for a fix in Wireshark 2.2.7.
+- wnpa-sec-2017-34
+  AMQP dissector crash. (Bug 13780) CVE-2017-11408
+- wnpa-sec-2017-35
+  MQ dissector crash. (Bug 13792) CVE-2017-11407
+- wnpa-sec-2017-36
+  DOCSIS infinite loop. (Bug 13797) CVE-2017-11406
+- wnpa-sec-2017-38
+  MSDP dissector infinite loop (Bug 13933)
+- wnpa-sec-2017-39
+  Profinet I/O buffer overrun (Bug 13847)
+- wnpa-sec-2017-41
+  IrCOMM dissector buffer overrun (Bug 13929)
 
-For more info, see https://www.postgresql.org/about/news/1772/
+Full release notes:
 
-[Peter: extend commit message with security fixes info]
-Signed-off-by: Adam Duskett <aduskett@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 95e284bd2732390eb34cb72c798032fd7ac8920c)
+  https://www.wireshark.org/docs/relnotes/wireshark-2.2.10.html
+
+Signed-off-by: Andr?? Hentschel <nerv@dawncrow.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 708316f49fd08170e75d9c9eab61a4b3b1280bc9)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/postgresql/postgresql.hash | 4 ++--
- package/postgresql/postgresql.mk   | 2 +-
+ package/wireshark/wireshark.hash | 4 ++--
+ package/wireshark/wireshark.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
-index c65edf7..62ce9a7 100644
---- a/package/postgresql/postgresql.hash
-+++ b/package/postgresql/postgresql.hash
+diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
+index c61c520..3494f2e 100644
+--- a/package/wireshark/wireshark.hash
++++ b/package/wireshark/wireshark.hash
 @@ -1,2 +1,2 @@
--# From https://ftp.postgresql.org/pub/source/v9.6.3/postgresql-9.6.3.tar.bz2.sha256
--sha256 1645b3736901f6d854e695a937389e68ff2066ce0cde9d73919d6ab7c995b9c6  postgresql-9.6.3.tar.bz2
-+# From https://ftp.postgresql.org/pub/source/v9.6.5/postgresql-9.6.5.tar.bz2.sha256
-+sha256 06da12a7e3dddeb803962af8309fa06da9d6989f49e22865335f0a14bad0744c  postgresql-9.6.5.tar.bz2
-diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
-index 62b41cb..7adb957 100644
---- a/package/postgresql/postgresql.mk
-+++ b/package/postgresql/postgresql.mk
+-# From: https://www.wireshark.org/download/src/all-versions/SIGNATURES-2.2.7.txt
+-sha256 689ddf62221b152779d8846ab5b2063cc7fd41ec1a9f04eefab09b5d5486dbb5  wireshark-2.2.7.tar.bz2
++# From: https://www.wireshark.org/download/src/all-versions/SIGNATURES-2.2.10.txt
++sha256 8574a5e1fdec7affae640924bd46c1aed1bd866e02632fa5625e1450e4a50707  wireshark-2.2.10.tar.bz2
+diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
+index 58292f7..34ee563 100644
+--- a/package/wireshark/wireshark.mk
++++ b/package/wireshark/wireshark.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--POSTGRESQL_VERSION = 9.6.3
-+POSTGRESQL_VERSION = 9.6.5
- POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
- POSTGRESQL_SITE = http://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
- POSTGRESQL_LICENSE = PostgreSQL
+-WIRESHARK_VERSION = 2.2.7
++WIRESHARK_VERSION = 2.2.10
+ WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.bz2
+ WIRESHARK_SITE = https://www.wireshark.org/download/src/all-versions
+ WIRESHARK_LICENSE = wireshark license
