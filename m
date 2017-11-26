@@ -1,100 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 26 Nov 2017 22:00:17 +0100
-Subject: [Buildroot] [git commit branch/2017.02.x] gstreamer: needs dynamic
- libraries
-Message-ID: <20171126213911.30BED8157F@busybox.osuosl.org>
+Date: Sun, 26 Nov 2017 21:57:21 +0100
+Subject: [Buildroot] [git commit branch/2017.02.x] suport/download: force
+ svn to be non-interactive
+Message-ID: <20171126213911.216578157F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=db87bb911f02777baf816059b43e573d2d69feb3
+commit: https://git.buildroot.net/buildroot/commit/?id=cf7e1c1e9e1f48e39e1c055ce75caafad98fd550
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
 Fixes:
-http://autobuild.buildroot.net/results/49d/49dcec0bd2f3bb78c18675a9fa5c9c53cc183fd2/
+    http://autobuild.buildroot.org/results/2af/2af7412846c576089f8596857ab8c81ac31c1bed/
 
-g_cclosure_marshal_VOID__VOID is defined both in libgobject.a and
-libgstreamer.a. It is probably possible to fix this, but gstreamer0.10
-has been deprecated for a long time now and is anyway unlikely to be
-used in static-only situations, so let's just require dynamic linking.
-
-Propagate to the reverse dependencies. opencv3 already did depend on
-dynamic libs.
-
-[Peter: add autobuild reference]
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Andr?? Hentschel <nerv@dawncrow.de>
+Reviewed-by: Andr?? Hentschel <nerv@dawncrow.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 0eee5465e51229c4c17d7930ca2095caace4f8d2)
+(cherry picked from commit 4013f11a5b71f238b36f45dcdeb46b7f7a01e600)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gstreamer/gstreamer/Config.in | 6 ++++--
- package/libplayer/Config.in           | 6 ++++--
- package/opencv/Config.in              | 7 +++++--
- 3 files changed, 13 insertions(+), 6 deletions(-)
+ support/download/svn | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/gstreamer/gstreamer/Config.in b/package/gstreamer/gstreamer/Config.in
-index eb1249a..99c90f1 100644
---- a/package/gstreamer/gstreamer/Config.in
-+++ b/package/gstreamer/gstreamer/Config.in
-@@ -1,12 +1,14 @@
--comment "gstreamer 0.10 needs a toolchain w/ wchar, threads"
-+comment "gstreamer 0.10 needs a toolchain w/ wchar, threads, dynamic library"
- 	depends on BR2_USE_MMU
--	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
-+		BR2_STATIC_LIBS
+diff --git a/support/download/svn b/support/download/svn
+index 77abf3d..9f27d71 100755
+--- a/support/download/svn
++++ b/support/download/svn
+@@ -33,6 +33,6 @@ _svn() {
+     eval ${SVN} "${@}"
+ }
  
- config BR2_PACKAGE_GSTREAMER
- 	bool "gstreamer 0.10"
- 	depends on BR2_USE_WCHAR # glib2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
- 	depends on BR2_USE_MMU # glib2
-+	depends on !BR2_STATIC_LIBS
- 	select BR2_PACKAGE_LIBGLIB2
- 	help
- 	  GStreamer is an open source multimedia framework.
-diff --git a/package/libplayer/Config.in b/package/libplayer/Config.in
-index 37fbb26..82293c0 100644
---- a/package/libplayer/Config.in
-+++ b/package/libplayer/Config.in
-@@ -20,11 +20,13 @@ config BR2_PACKAGE_LIBPLAYER_GSTREAMER
- 	depends on BR2_USE_WCHAR # glib2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
- 	depends on BR2_USE_MMU # glib2
-+	depends on !BR2_STATIC_LIBS # gstreamer
- 	select BR2_PACKAGE_GSTREAMER
+-_svn export ${verbose} "${@}" "'${repo}@${rev}'" "'${basename}'"
++_svn --non-interactive export ${verbose} "${@}" "'${repo}@${rev}'" "'${basename}'"
  
--comment "gstreamer backend needs a toolchain w/ wchar, threads"
-+comment "gstreamer backend needs a toolchain w/ wchar, threads, dynamic library"
- 	depends on BR2_USE_MMU
--	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
-+		BR2_STATIC_LIBS
- 
- config BR2_PACKAGE_LIBPLAYER_PYTHON
- 	depends on BR2_PACKAGE_PYTHON
-diff --git a/package/opencv/Config.in b/package/opencv/Config.in
-index c046baa..5de4cf7 100644
---- a/package/opencv/Config.in
-+++ b/package/opencv/Config.in
-@@ -211,13 +211,16 @@ config BR2_PACKAGE_OPENCV_WITH_GSTREAMER
- 	depends on BR2_USE_MMU # gstreamer -> libglib2
- 	depends on BR2_USE_WCHAR # gstreamer -> libglib2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # gstreamer -> libglib2
-+	depends on !BR2_STATIC_LIBS # gstreamer
- 	select BR2_PACKAGE_GSTREAMER
- 	select BR2_PACKAGE_GST_PLUGINS_BASE
- 	select BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_APP
- 
--comment "gstreamer-0.10 support needs a toolchain w/ wchar, threads"
-+comment "gstreamer-0.10 support needs a toolchain w/ wchar, threads, dynamic library"
- 	depends on BR2_USE_MMU
--	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
-+		BR2_STATIC_LIBS
-+
- 
- config BR2_PACKAGE_OPENCV_WITH_GSTREAMER1
- 	bool "gstreamer-1.x"
+ tar czf "${output}" "${basename}"
