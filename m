@@ -1,76 +1,154 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 26 Nov 2017 10:16:23 +0100
-Subject: [Buildroot] [git commit branch/2017.08.x] argp-standalone: fix
- build with gcc 7.x
-Message-ID: <20171126184640.87B39814A3@busybox.osuosl.org>
+Date: Sun, 26 Nov 2017 10:06:09 +0100
+Subject: [Buildroot] [git commit branch/2017.08.x] swupdate: Fix SHA256 hash
+ verification
+Message-ID: <20171126184640.5FC5E802DA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3e4634157ffa7fac20f64b2ad3a2480a187ba547
+commit: https://git.buildroot.net/buildroot/commit/?id=51936fb29193eaff5f959936111b1cfb28022e89
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.08.x
 
-Back in commit a662ff7e79630ca0875dd8529fe54db27a275007
-("package/argp-standalone: Fix build with c99 compilers"), we fixed
-the build of argp-standalone with compilers defaulting to C99 inline
-semantics, i.e starting from gcc 5.x.
+swupdate 2017.07 has a bug which makes hash verification faulty.
+The commit adds a patch to fix the issue. The fix has already been
+pushed to upstream and is a copy of the commit
+dba95dcd3739c604a81ffa2df2545e7a4cd430cf in the swupdate repo [1].
 
-This was done as part of a patch that used "inline" instead of "extern
-inline". However, using "inline" once again broke the build with gcc
-7.x. To fix this, revert back to using just "extern inline" (hence
-removing a patch of patch 0003-fix_build_with_c99_compilers.patch) and
-instead use -fgnu89-inline in the CFLAGS.
+[1] https://github.com/sbabic/swupdate
 
-See https://gcc.gnu.org/gcc-5/porting_to.html for more details.
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/a9cedc54829b7bd2dd7ae6ff2bd6c6db242f1c35/
-
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-[Thomas: also drop the patch of
-0003-fix_build_with_c99_compilers.patch that is no longer needed.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-(cherry picked from commit f0b65bd90ce4429d6b7e952ce7de2d5f92a2dd26)
+Signed-off-by: Maksim Salau <msalau@iotecha.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 7386925e2d8776e8adb2982050ad21f0eafd119e)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../argp-standalone/0003-fix_build_with_c99_compilers.patch  | 12 ------------
- package/argp-standalone/argp-standalone.mk                   |  2 +-
- 2 files changed, 1 insertion(+), 13 deletions(-)
+ .../0001-Fix-SHA256-hash-verification.patch        | 119 +++++++++++++++++++++
+ 1 file changed, 119 insertions(+)
 
-diff --git a/package/argp-standalone/0003-fix_build_with_c99_compilers.patch b/package/argp-standalone/0003-fix_build_with_c99_compilers.patch
-index bfa0bb5..56b753b 100644
---- a/package/argp-standalone/0003-fix_build_with_c99_compilers.patch
-+++ b/package/argp-standalone/0003-fix_build_with_c99_compilers.patch
-@@ -66,15 +66,3 @@ index e797b11..828f435 100644
-  
-  /* Internal routines.  */
-  extern void _argp_fmtstream_update (argp_fmtstream_t __fs);
--@@ -216,7 +220,11 @@
-- #endif
-- 
-- #ifndef ARGP_FS_EI
--+#if defined(__GNUC__) && !defined(__GNUC_STDC_INLINE__)
-- #define ARGP_FS_EI extern inline
--+#else
--+#define ARGP_FS_EI inline
--+#endif
-- #endif
-- 
-- ARGP_FS_EI size_t
-diff --git a/package/argp-standalone/argp-standalone.mk b/package/argp-standalone/argp-standalone.mk
-index 7a7028c..977b954 100644
---- a/package/argp-standalone/argp-standalone.mk
-+++ b/package/argp-standalone/argp-standalone.mk
-@@ -10,7 +10,7 @@ ARGP_STANDALONE_INSTALL_STAGING = YES
- ARGP_STANDALONE_LICENSE = LGPL-2.0+
- 
- ARGP_STANDALONE_CONF_ENV = \
--	CFLAGS="$(TARGET_CFLAGS) -fPIC"
-+	CFLAGS="$(TARGET_CFLAGS) -fPIC -fgnu89-inline"
- 
- define ARGP_STANDALONE_INSTALL_STAGING_CMDS
- 	$(INSTALL) -D $(@D)/libargp.a $(STAGING_DIR)/usr/lib/libargp.a
+diff --git a/package/swupdate/0001-Fix-SHA256-hash-verification.patch b/package/swupdate/0001-Fix-SHA256-hash-verification.patch
+new file mode 100644
+index 0000000..b7bd9d3
+--- /dev/null
++++ b/package/swupdate/0001-Fix-SHA256-hash-verification.patch
+@@ -0,0 +1,119 @@
++From dba95dcd3739c604a81ffa2df2545e7a4cd430cf Mon Sep 17 00:00:00 2001
++From: Maksim Salau <msalau@iotecha.com>
++Date: Wed, 25 Oct 2017 16:17:14 +0300
++Subject: [PATCH] Fix SHA256 hash verification
++
++If a CPIO archive is not valid or copying fails due to any reason,
++an error message is printed, but update process continues.
++The change makes the utility fail in case of read errors or
++hash verification errors.
++
++Signed-off-by: Maksim Salau <msalau@iotecha.com>
++Acked-by: Stefano Babic <sbabic@denx.de>
++---
++ core/cpio_utils.c   | 28 +++++++++++++++++++++-------
++ corelib/installer.c | 11 +++++++++--
++ 2 files changed, 30 insertions(+), 9 deletions(-)
++
++diff --git a/core/cpio_utils.c b/core/cpio_utils.c
++index e962fae..de674ec 100644
++--- a/core/cpio_utils.c
+++++ b/core/cpio_utils.c
++@@ -414,24 +414,34 @@ int extract_img_from_cpio(int fd, unsigned long offset, struct filehdr *fdh)
++ off_t extract_next_file(int fd, int fdout, off_t start, int compressed,
++ 		int encrypted, unsigned char *hash)
++ {
+++	int ret;
++ 	struct filehdr fdh;
++ 	uint32_t checksum = 0;
++ 	unsigned long offset = start;
++ 
++-	if (lseek(fd, offset, SEEK_SET) < 0) {
+++	ret = lseek(fd, offset, SEEK_SET);
+++	if (ret < 0) {
++ 		ERROR("CPIO file corrupted : %s\n",
++ 		strerror(errno));
++-		return -1;
+++		return ret;
++ 	}
++ 
++-	if (extract_cpio_header(fd, &fdh, &offset)) {
+++	ret = extract_cpio_header(fd, &fdh, &offset);
+++	if (ret) {
++ 		ERROR("CPIO Header wrong\n");
+++		return ret;
++ 	}
++ 
++-	if (lseek(fd, offset, SEEK_SET) < 0)
+++	ret = lseek(fd, offset, SEEK_SET);
+++	if (ret < 0) {
++ 		ERROR("CPIO file corrupted : %s\n", strerror(errno));
++-	if (copyfile(fd, &fdout, fdh.size, &offset, 0, 0, compressed, &checksum, hash, encrypted, NULL) < 0) {
+++		return ret;
+++	}
+++
+++	ret = copyfile(fd, &fdout, fdh.size, &offset, 0, 0, compressed, &checksum, hash, encrypted, NULL);
+++	if (ret < 0) {
++ 		ERROR("Error copying extracted file\n");
+++		return ret;
++ 	}
++ 
++ 	TRACE("Copied file:\n\tfilename %s\n\tsize %u\n\tchecksum 0x%lx %s\n",
++@@ -440,9 +450,11 @@ off_t extract_next_file(int fd, int fdout, off_t start, int compressed,
++ 		(unsigned long)checksum,
++ 		(checksum == fdh.chksum) ? "VERIFIED" : "WRONG");
++ 
++-	if (checksum != fdh.chksum)
+++	if (checksum != fdh.chksum) {
++ 		ERROR("Checksum WRONG ! Computed 0x%lx, it should be 0x%lx\n",
++ 			(unsigned long)checksum, fdh.chksum);
+++		return -EINVAL;
+++	}
++ 
++ 	return offset;
++ }
++@@ -492,8 +504,10 @@ int cpio_scan(int fd, struct swupdate_cfg *cfg, off_t start)
++ 
++ 		/* Next header must be 4-bytes aligned */
++ 		offset += NPAD_BYTES(offset);
++-		if (lseek(fd, offset, SEEK_SET) < 0)
+++		if (lseek(fd, offset, SEEK_SET) < 0) {
++ 			ERROR("CPIO file corrupted : %s\n", strerror(errno));
+++			return -1;
+++		}
++ 	}
++ 
++ 	return 0;
++diff --git a/corelib/installer.c b/corelib/installer.c
++index 592ada8..d2dee28 100644
++--- a/corelib/installer.c
+++++ b/corelib/installer.c
++@@ -154,6 +154,7 @@ static int extract_script(int fd, struct imglist *head, const char *dest)
++ {
++ 	struct img_type *script;
++ 	int fdout;
+++	int ret = 0;
++ 
++ 	LIST_FOREACH(script, head, next) {
++ 		if (script->provided == 0) {
++@@ -166,9 +167,15 @@ static int extract_script(int fd, struct imglist *head, const char *dest)
++ 				dest, script->fname);
++ 
++ 		fdout = openfileoutput(script->extract_file);
++-		extract_next_file(fd, fdout, script->offset, 0,
++-					script->is_encrypted, script->sha256);
+++		if (fdout < 0)
+++			return fdout;
+++
+++		ret = extract_next_file(fd, fdout, script->offset, 0,
+++								script->is_encrypted, script->sha256);
++ 		close(fdout);
+++
+++		if (ret < 0)
+++			return ret;
++ 	}
++ 	return 0;
++ }
++-- 
++2.7.4
++
