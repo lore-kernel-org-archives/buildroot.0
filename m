@@ -1,55 +1,101 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 26 Nov 2017 22:40:59 +0100
-Subject: [Buildroot] [git commit branch/2017.08.x] package/samba4: bump
- version to 4.6.10
-Message-ID: <20171126213857.415E6802C8@busybox.osuosl.org>
+Date: Sun, 26 Nov 2017 20:56:36 +0100
+Subject: [Buildroot] [git commit branch/2017.02.x] python-config.sh: don't
+ reassign ${prefix}
+Message-ID: <20171126213910.A71BF81539@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cd4890d82175bab157d41bde438fdc5812f5270b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=3431ca2cd482d41d7a03bbe31dfcc0229fc76cdb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Quoting release notes
-https://www.samba.org/samba/history/samba-4.6.10.html
+When prefix is set to a path like /usr during crossbuild
+the sed operations end up executing twice, once for the prefix
+reassignment and another for includedir if it is set as a string
+including the ${prefix} variable.  This results in an issue
+when the build directory is under /usr.
 
-"This is an additional bugfix release to address a possible data
- corruption issue. Please update immediately! For details, please see
+This patch updates the remaining location which uses the prefix
+variable to also sed and update to use the real path.
 
-  https://bugzilla.samba.org/show_bug.cgi?id=13130
+Upstream bug report:
+https://bugs.python.org/issue31713
 
- Samba 4.6.0 and newer is affected by this issue."
+Buildroot bug:
+https://bugs.busybox.net/show_bug.cgi?id=10361
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 806e6becb76649ecfc1104d0c284bb3f6a9245dd)
+Fixes failures like the following:
+dbus-python-1.2.4 | NOK | http://autobuild.buildroot.net/results/758858efa97b6273c1b470513f5492258a6d8853
+
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+[Arnout: refer to autobuild failures that still exist]
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+(cherry picked from commit 04d1699ba4cecaa77f688b4effbcac5e84419b15)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/samba4/samba4.hash | 2 +-
- package/samba4/samba4.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...29-python-config.sh-don-t-reassign-prefix.patch | 53 ++++++++++++++++++++++
+ 1 file changed, 53 insertions(+)
 
-diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
-index 7446b1b..6821144 100644
---- a/package/samba4/samba4.hash
-+++ b/package/samba4/samba4.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 c31db4aad82f0b9588ef6c4b4dab5dce3fa1787bd298e62d953c2628bb1af21a  samba-4.6.9.tar.gz
-+sha256 5913a569b54c6bc261bc245d7326fabfcba42839d15a82db48c047de1eb19626  samba-4.6.10.tar.gz
- sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index 7502fa6..40436ca 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SAMBA4_VERSION = 4.6.9
-+SAMBA4_VERSION = 4.6.10
- SAMBA4_SITE = https://download.samba.org/pub/samba/stable
- SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
- SAMBA4_INSTALL_STAGING = YES
+diff --git a/package/python3/0029-python-config.sh-don-t-reassign-prefix.patch b/package/python3/0029-python-config.sh-don-t-reassign-prefix.patch
+new file mode 100644
+index 0000000..49137f2
+--- /dev/null
++++ b/package/python3/0029-python-config.sh-don-t-reassign-prefix.patch
+@@ -0,0 +1,53 @@
++From 21f787cb9bf0c1440981262f03bc881c5b77c0d8 Mon Sep 17 00:00:00 2001
++From: Matt Weber <matthew.weber@rockwellcollins.com>
++Date: Fri, 6 Oct 2017 09:54:15 -0500
++Subject: [PATCH] python-config.sh: don't reassign ${prefix}
++
++When prefix is set to a path like /usr during crossbuild
++the sed operations end up executing twice, once for the prefix
++reassignment and another for includedir if it is set as a string
++including the ${prefix} variable.  This results in an issue
++when the build directory is under /usr.
++
++This patch updates the remaining location which uses the prefix
++variable to also sed and update to use the real path.
++
++Upstream bug report:
++https://bugs.python.org/issue31713
++
++Buildroot bug:
++https://bugs.busybox.net/show_bug.cgi?id=10361
++
++Fixes failures like the following:
++dbus-python-1.2.4 | NOK | http://autobuild.buildroot.net/results/758858efa97b6273c1b470513f5492258a6d8853
++
++Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
++---
++ Misc/python-config.sh.in | 3 +--
++ 1 file changed, 1 insertion(+), 2 deletions(-)
++
++diff --git a/Misc/python-config.sh.in b/Misc/python-config.sh.in
++index f905a71..e06be0f 100644
++--- a/Misc/python-config.sh.in
+++++ b/Misc/python-config.sh.in
++@@ -29,7 +29,7 @@ prefix_real=$(installed_prefix "$0")
++ 
++ # Use sed to fix paths from their built-to locations to their installed-to
++ # locations.
++-prefix=$(echo "$prefix_build" | sed "s#^$prefix_build#$prefix_real#")
+++prefix=$prefix_build
++ exec_prefix_build="@exec_prefix@"
++ exec_prefix=$(echo "$exec_prefix_build" | sed "s#^$exec_prefix_build#$prefix_real#")
++ includedir=$(echo "@includedir@" | sed "s#^$prefix_build#$prefix_real#")
++@@ -47,7 +46,7 @@ LINKFORSHARED="@LINKFORSHARED@"
++ OPT="@OPT@"
++ PY_ENABLE_SHARED="@PY_ENABLE_SHARED@"
++ LDVERSION="@LDVERSION@"
++-LIBDEST=${prefix}/lib/python${VERSION}
+++LIBDEST=$( echo "${prefix}/lib/python${VERSION}" | sed "s#^$prefix_build#$prefix_real#")
++ LIBPL=$(echo "@LIBPL@" | sed "s#^$prefix_build#$prefix_real#")
++ SO="@EXT_SUFFIX@"
++ PYTHONFRAMEWORK="@PYTHONFRAMEWORK@"
++-- 
++1.8.3.1
++
