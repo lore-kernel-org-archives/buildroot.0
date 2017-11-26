@@ -1,57 +1,58 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 26 Nov 2017 22:28:17 +0100
-Subject: [Buildroot] [git commit branch/2017.02.x] vboot-utils: fix ARCH
- detection
-Message-ID: <20171126213911.BD68D802D0@busybox.osuosl.org>
+Date: Sun, 26 Nov 2017 22:21:40 +0100
+Subject: [Buildroot] [git commit branch/2017.02.x] webkitgtk: security bump
+ to version 2.18.3
+Message-ID: <20171126213911.828A8802D0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=720c192ae39223981f21dbaba6c2c493d894a02c
+commit: https://git.buildroot.net/buildroot/commit/?id=18ee901e2f49ea004f1f4e17c0e31def32a10599
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-The package includes some target-specific code that is irrelevant
-in a host package but gets built anyway. The target for this code
-must be one of the supported ChromeOS targets.
+This is a maintenance release of the current stable WebKitGTK+ version,
+which contains a minor rendering fix, another for the WebDriver
+implementation, and security fixes for CVE-2017-13798, CVE-2017-13788,
+and CVE-2017-13803.
 
-Supplied Makefile apparently relies on the environment to provide
-a valid target, with a simple fallback to host arch. This breaks
-the build if no value is provided and the host arch is not among
-the supported ones.
+Release notes:
 
-Should fix
-http://autobuild.buildroot.net/results/d118a83b6c4f7f910d0d44c279f36251d7ba29e8/
-and similar failures.
+    https://webkitgtk.org/2017/11/10/webkitgtk2.18.3-released.html
 
-Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit bbb25c3ad7b66e6882508e49028d1739732bca34)
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 5ff18880e9647e446a3d720b7c6c74eed97ef0b4)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/vboot-utils/vboot-utils.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/webkitgtk/webkitgtk.hash | 8 ++++----
+ package/webkitgtk/webkitgtk.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/vboot-utils/vboot-utils.mk b/package/vboot-utils/vboot-utils.mk
-index a7592d6..a64e1d5 100644
---- a/package/vboot-utils/vboot-utils.mk
-+++ b/package/vboot-utils/vboot-utils.mk
-@@ -21,12 +21,17 @@ HOST_VBOOT_UTILS_DEPENDENCIES = host-openssl host-util-linux host-pkgconf
- # media partitioning.
+diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
+index b116115..669bb1c 100644
+--- a/package/webkitgtk/webkitgtk.hash
++++ b/package/webkitgtk/webkitgtk.hash
+@@ -1,4 +1,4 @@
+-# From https://webkitgtk.org/releases/webkitgtk-2.18.2.tar.xz.sums
+-md5 f63b3897d6fbf660bf72dfaca1fdea16 webkitgtk-2.18.2.tar.xz
+-sha1 75571807a1f8c9efdf62f1c37e9fadf52b73d367 webkitgtk-2.18.2.tar.xz
+-sha256 b14cb3f1b5321b1dc50abcc0445a97f8e2f8813562bca7ce4d2f8069f6fec8e7 webkitgtk-2.18.2.tar.xz
++# From https://webkitgtk.org/releases/webkitgtk-2.18.3.tar.xz.sums
++md5 264a22d7467deae606e42b6eb5dd65af webkitgtk-2.18.3.tar.xz
++sha1 164cad34281ef597a3d4ad214e8037c3ddef4d17 webkitgtk-2.18.3.tar.xz
++sha256 e15420e1616a6f70f321541d467af5ca285bff66b1e0fa68a01df3ccf1b18f9e webkitgtk-2.18.3.tar.xz
+diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
+index 092c24e..43e9aa0 100644
+--- a/package/webkitgtk/webkitgtk.mk
++++ b/package/webkitgtk/webkitgtk.mk
+@@ -4,7 +4,7 @@
  #
- # make target for futility is "futil".
-+#
-+# The value of ARCH is only relevant for crossystem (a target tool) and
-+# does not affect futil or cgpt in any way as long as it is one of the
-+# supported targets.
+ ################################################################################
  
- define HOST_VBOOT_UTILS_BUILD_CMDS
- 	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) \
- 		CC="$(HOSTCC)" \
- 		CFLAGS="$(HOST_CFLAGS) -D_LARGEFILE64_SOURCE -D_GNU_SOURCE" \
- 		LDFLAGS="$(HOST_LDFLAGS)" \
-+		ARCH=arm \
- 		futil cgpt
- endef
- 
+-WEBKITGTK_VERSION = 2.18.2
++WEBKITGTK_VERSION = 2.18.3
+ WEBKITGTK_SITE = http://www.webkitgtk.org/releases
+ WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
+ WEBKITGTK_INSTALL_STAGING = YES
