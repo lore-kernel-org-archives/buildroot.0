@@ -1,31 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 26 Nov 2017 22:21:54 +0100
-Subject: [Buildroot] [PATCH 1/1] webkitgtk: security bump to version
- 2.18.3
-In-Reply-To: <20171110140304.12234-1-aperez@igalia.com> (Adrian Perez de
- Castro's message of "Fri, 10 Nov 2017 16:03:04 +0200")
-References: <20171110140304.12234-1-aperez@igalia.com>
-Message-ID: <874lpgg2h9.fsf@dell.be.48ers.dk>
+Date: Sun, 26 Nov 2017 22:24:44 +0100
+Subject: [Buildroot] [PATCH] postgresql: security bump to version 9.6.6
+In-Reply-To: <20171111104456.30603-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Sat, 11 Nov 2017 11:44:56 +0100")
+References: <20171111104456.30603-1-peter@korsgaard.com>
+Message-ID: <87zi78ens3.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Adrian" == Adrian Perez de Castro <aperez@igalia.com> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > This is a maintenance release of the current stable WebKitGTK+ version,
- > which contains a minor rendering fix, another for the WebDriver
- > implementation, and security fixes for CVE-2017-13798, CVE-2017-13788,
- > and CVE-2017-13803.
+ > Fixes the following security issues:
+ > CVE-2017-12172: Start scripts permit database administrator to modify
+ > root-owned files.
 
- > Release notes:
+ > CVE-2017-15098: Memory disclosure in JSON functions.
 
- >     https://webkitgtk.org/2017/11/10/webkitgtk2.18.3-released.html
+ > CVE-2017-15099: INSERT ... ON CONFLICT DO UPDATE fails to enforce SELECT
+ > privileges.
 
- > Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+ > See the announcement for more details:
+ > https://www.postgresql.org/about/news/1801/
 
-Committed to 2017.02.x and 2017.08.x, thanks.
+ > While we're at it, also add a hash for the license file.
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+Committed to 2017.02.x and 2017.02.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
