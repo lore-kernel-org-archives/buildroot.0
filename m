@@ -1,37 +1,76 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 26 Nov 2017 10:33:20 +0100
-Subject: [Buildroot] [git commit branch/2017.02.x] linux-headers: bump 4.{4,
- 9, 13}.x series
-Message-ID: <20171126184721.B6F758110A@busybox.osuosl.org>
+Date: Sun, 26 Nov 2017 10:11:48 +0100
+Subject: [Buildroot] [git commit branch/2017.02.x] openssh: fix
+ getpagesize() related static linking issue
+Message-ID: <20171126184721.9589A8110A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=65c4e391c797eb90b2c69a3007e4843898637c30
+commit: https://git.buildroot.net/buildroot/commit/?id=254bcfee18aa5fa543a8d901b6a12a54e60d1fb0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-[Peter: drop 4.13.x bump]
-Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
+Fixes:
+http://autobuild.buildroot.net/results/8cc/8cc30818a400c7a392a3de787cabc9cd8425495f/
+
+The configure script checks for getpagesize() and sets HAVE_GETPAGESIZE in
+config.h, but bsd-getpagesize.c forgot to include includes.h (which
+indirectly includes config.h) so the checks always fails, causing linker
+issues when linking statically on systems with getpagesize().
+
+Fix it by including includes.h.
+
+Patch submitted upstream:
+https://lists.mindrot.org/pipermail/openssh-unix-dev/2017-October/036413.html
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 64b0cd16dcd509249da2f80dcad3ed0975251672)
+(cherry picked from commit cc856401e8ac6a2c7a8767737b73dde933a5798a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-headers/Config.in.host | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ ...pat-bsd-getpagesize.c-include-includes.h-.patch | 35 ++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index ed02cb5..9098218 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -222,7 +222,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
- 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
- 	default "4.1.45"	if BR2_KERNEL_HEADERS_4_1
--	default "4.4.95"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.4.96"	if BR2_KERNEL_HEADERS_4_4
- 	default "4.8.17"	if BR2_KERNEL_HEADERS_4_8
--	default "4.9.59"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.9.60"	if BR2_KERNEL_HEADERS_4_9
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/package/openssh/0005-openbsd-compat-bsd-getpagesize.c-include-includes.h-.patch b/package/openssh/0005-openbsd-compat-bsd-getpagesize.c-include-includes.h-.patch
+new file mode 100644
+index 0000000..ce60072
+--- /dev/null
++++ b/package/openssh/0005-openbsd-compat-bsd-getpagesize.c-include-includes.h-.patch
+@@ -0,0 +1,35 @@
++From 9a43657a3dcb868b4f36ade3aba5dcf0871fb412 Mon Sep 17 00:00:00 2001
++From: Peter Korsgaard <peter@korsgaard.com>
++Date: Mon, 30 Oct 2017 23:36:56 +0100
++Subject: [PATCH] openbsd-compat/bsd-getpagesize.c: include includes.h for
++ config.h defines
++
++The configure script checks for getpagesize() and sets HAVE_GETPAGESIZE in
++config.h, but bsd-getpagesize.c forgot to include includes.h (which
++indirectly includes config.h) so the checks always fails, causing linker
++issues when linking statically on systems with getpagesize():
++
++http://autobuild.buildroot.net/results/8cc/8cc30818a400c7a392a3de787cabc9cd8425495f/build-end.log
++
++Fix it by including includes.h
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ openbsd-compat/bsd-getpagesize.c | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/openbsd-compat/bsd-getpagesize.c b/openbsd-compat/bsd-getpagesize.c
++index 9daddfbd..416a8d4c 100644
++--- a/openbsd-compat/bsd-getpagesize.c
+++++ b/openbsd-compat/bsd-getpagesize.c
++@@ -1,5 +1,7 @@
++ /* Placed in the public domain */
++ 
+++#include "includes.h"
+++
++ #ifndef HAVE_GETPAGESIZE
++ 
++ #include <unistd.h>
++-- 
++2.11.0
++
