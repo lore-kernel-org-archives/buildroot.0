@@ -1,69 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 26 Nov 2017 10:13:02 +0100
-Subject: [Buildroot] [git commit branch/2017.08.x] quagga: add upstream
- security fix for CVE-2017-16227
-Message-ID: <20171126184640.739D0807CF@busybox.osuosl.org>
+Date: Sun, 26 Nov 2017 10:30:02 +0100
+Subject: [Buildroot] [git commit branch/2017.08.x] azure-iot-sdk-c: use
+ github for homepage
+Message-ID: <20171126184640.99DD5802DA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=76625912e021d8e3180476d486dc9b62882804ca
+commit: https://git.buildroot.net/buildroot/commit/?id=fee92f4f9e0cd662430e3687911baa7e61891650
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.08.x
 
-From the advisory:
-http://www.openwall.com/lists/oss-security/2017/10/30/4
+Many Buildroot users can not read Dutch. Although there is an English
+version of this page, the github page looks more suitable as a link for
+the software package itself, and the readme.md file is pretty
+informative.
 
-It was discovered that the bgpd daemon in the Quagga routing suite does
-not properly calculate the length of multi-segment AS_PATH UPDATE
-messages, causing bgpd to drop a session and potentially resulting in
-loss of network connectivity.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Cc: Andr?? Hentschel <nerv@dawncrow.de>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit d77d7220a7ced8daa89e3e0aa0090a4e60074001)
+(cherry picked from commit 5a001b3e6ca8ccdaa7d801afb55cf31f6881433e)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...x-AS_PATH-size-calculation-for-long-paths.patch | 33 ++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
+ package/azure-iot-sdk-c/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/quagga/0004-bgpd-Fix-AS_PATH-size-calculation-for-long-paths.patch b/package/quagga/0004-bgpd-Fix-AS_PATH-size-calculation-for-long-paths.patch
-new file mode 100644
-index 0000000..1425cf0
---- /dev/null
-+++ b/package/quagga/0004-bgpd-Fix-AS_PATH-size-calculation-for-long-paths.patch
-@@ -0,0 +1,33 @@
-+From 7a42b78be9a4108d98833069a88e6fddb9285008 Mon Sep 17 00:00:00 2001
-+From: Andreas Jaggi <aj@open.ch>
-+Date: Mon, 2 Oct 2017 19:38:43 +0530
-+Subject: [PATCH] bgpd: Fix AS_PATH size calculation for long paths
-+
-+If you have an AS_PATH with more entries than
-+what can be written into a single AS_SEGMENT_MAX
-+it needs to be broken up.  The code that noticed
-+that the AS_PATH needs to be broken up was not
-+correctly calculating the size of the resulting
-+message.  This patch addresses this issue.
-+
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ bgpd/bgp_aspath.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/bgpd/bgp_aspath.c b/bgpd/bgp_aspath.c
-+index b7af5e88..d813bfba 100644
-+--- a/bgpd/bgp_aspath.c
-++++ b/bgpd/bgp_aspath.c
-+@@ -903,7 +903,7 @@ aspath_put (struct stream *s, struct aspath *as, int use32bit )
-+               assegment_header_put (s, seg->type, AS_SEGMENT_MAX);
-+               assegment_data_put (s, seg->as, AS_SEGMENT_MAX, use32bit);
-+               written += AS_SEGMENT_MAX;
-+-              bytes += ASSEGMENT_SIZE (written, use32bit);
-++              bytes += ASSEGMENT_SIZE (AS_SEGMENT_MAX, use32bit);
-+             }
-+           
-+           /* write the final segment, probably is also the first */
-+-- 
-+2.11.0
-+
+diff --git a/package/azure-iot-sdk-c/Config.in b/package/azure-iot-sdk-c/Config.in
+index 366dc91..c554d2f 100644
+--- a/package/azure-iot-sdk-c/Config.in
++++ b/package/azure-iot-sdk-c/Config.in
+@@ -11,7 +11,7 @@ config BR2_PACKAGE_AZURE_IOT_SDK_C
+ 	  Microsoft Azure IoT Hub device SDK for C is used
+ 	  to connect devices running C code to Azure IoT Hub.
+ 
+-	  https://docs.microsoft.com/nl-nl/azure/iot-hub/iot-hub-device-sdk-c-intro
++	  https://github.com/Azure/azure-iot-sdk-c
+ 
+ comment "azure-iot-sdk-c needs a toolchain w/ C++ and NPTL"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS_NPTL
