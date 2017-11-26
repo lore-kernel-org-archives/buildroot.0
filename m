@@ -1,90 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 26 Nov 2017 21:25:39 +0100
-Subject: [Buildroot] [git commit branch/2017.08.x] package/libplist:
- security bump to version 2.0.0
-Message-ID: <20171126213855.571AB7FAD0@busybox.osuosl.org>
+Date: Sun, 26 Nov 2017 21:23:34 +0100
+Subject: [Buildroot] [git commit branch/2017.08.x] fs: add missing $$(sep)
+ to pre- and post-command hooks code
+Message-ID: <20171126213855.4956F804EF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=16a8fa922f3292b52e1bfde124bf03ebecd66b7d
+commit: https://git.buildroot.net/buildroot/commit/?id=36ff040f8a4e55615117d45f7f09713aa8542b26
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.08.x
 
-Release notes:
-https://github.com/libimobiledevice/libplist/blob/master/NEWS
+When multiple hooks are registred, both pre-a and post-command hooks'
+foreach loops need to have a separator at the end in order for the
+code to work as intended. Without the separator all hooks end up as a
+one single line command thus making all but the first hook into
+no-ops.
 
-This version bump fixes
-  * CVE-2017-6440
-  * CVE-2017-6439
-  * CVE-2017-6438
-  * CVE-2017-6437
-  * CVE-2017-6436
-  * CVE-2017-6435
-  * CVE-2017-5836
-  * CVE-2017-5835
-  * CVE-2017-5834
-  * CVE-2017-5545
-  * CVE-2017-5209
-... and several others that didn't receive any CVE (yet).
-
-The dependency to libxml2 was removed.
-Autoreconf is not needed anymore, the upstream tarball includes a
-configure script.
-
-[Peter: also drop host-pkgconf dependency, only used for cython]
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-(cherry picked from commit 4c3820248761c279e3c8f9839e5b24c8b39891fd)
+Fixes: 4628b6f3b4 ("fs: add pre- and post-command hooks")
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit 3f9476df07200fd86d59fb19b4183dafed5934f8)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libplist/Config.in     | 1 -
- package/libplist/libplist.hash | 2 +-
- package/libplist/libplist.mk   | 6 +-----
- 3 files changed, 2 insertions(+), 7 deletions(-)
+ fs/common.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libplist/Config.in b/package/libplist/Config.in
-index 5f96746..4a9575f 100644
---- a/package/libplist/Config.in
-+++ b/package/libplist/Config.in
-@@ -1,7 +1,6 @@
- config BR2_PACKAGE_LIBPLIST
- 	bool "libplist"
- 	depends on BR2_INSTALL_LIBSTDCPP
--	select BR2_PACKAGE_LIBXML2
- 	help
- 	  libplist is a client for manipulating Apple Property List
- 	  (.plist) files
-diff --git a/package/libplist/libplist.hash b/package/libplist/libplist.hash
-index 06d1b16..63c2515 100644
---- a/package/libplist/libplist.hash
-+++ b/package/libplist/libplist.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 0effdedcb3de128c4930d8c03a3854c74c426c16728b8ab5f0a5b6bdc0b644be  libplist-1.12.tar.bz2
-+sha256 3a7e9694c2d9a85174ba1fa92417cfabaea7f6d19631e544948dc7e17e82f602  libplist-2.0.0.tar.bz2
-diff --git a/package/libplist/libplist.mk b/package/libplist/libplist.mk
-index 0d3e417..09fc816 100644
---- a/package/libplist/libplist.mk
-+++ b/package/libplist/libplist.mk
-@@ -4,17 +4,13 @@
- #
- ################################################################################
- 
--LIBPLIST_VERSION = 1.12
-+LIBPLIST_VERSION = 2.0.0
- LIBPLIST_SOURCE = libplist-$(LIBPLIST_VERSION).tar.bz2
- LIBPLIST_SITE = http://www.libimobiledevice.org/downloads
--LIBPLIST_DEPENDENCIES = libxml2 host-pkgconf
- LIBPLIST_INSTALL_STAGING = YES
- LIBPLIST_LICENSE = LGPL-2.1+
- LIBPLIST_LICENSE_FILES = COPYING
- 
--# Straight out of the git tree:
--LIBPLIST_AUTORECONF = YES
--
- # Disable building Python bindings, because it requires host-cython, which
- # is not packaged in Buildroot at all.
- LIBPLIST_CONF_OPTS = --without-cython
+diff --git a/fs/common.mk b/fs/common.mk
+index 9a7758f..5b612a3 100644
+--- a/fs/common.mk
++++ b/fs/common.mk
+@@ -96,13 +96,13 @@ endif
+ 		echo "echo '$$(TERM_BOLD)>>>   Executing fakeroot script $$(s)$$(TERM_RESET)'" >> $$(FAKEROOT_SCRIPT); \
+ 		echo $$(s) $$(TARGET_DIR) $$(BR2_ROOTFS_POST_SCRIPT_ARGS) >> $$(FAKEROOT_SCRIPT)$$(sep))
+ 	$$(foreach hook,$$(ROOTFS_PRE_CMD_HOOKS),\
+-		$$(call PRINTF,$$($$(hook))) >> $$(FAKEROOT_SCRIPT))
++		$$(call PRINTF,$$($$(hook))) >> $$(FAKEROOT_SCRIPT)$$(sep))
+ ifeq ($$(BR2_REPRODUCIBLE),y)
+ 	echo "find $$(TARGET_DIR) -print0 | xargs -0 -r touch -hd @$$(SOURCE_DATE_EPOCH)" >> $$(FAKEROOT_SCRIPT)
+ endif
+ 	$$(call PRINTF,$$(ROOTFS_$(2)_CMD)) >> $$(FAKEROOT_SCRIPT)
+ 	$$(foreach hook,$$(ROOTFS_POST_CMD_HOOKS),\
+-		$$(call PRINTF,$$($$(hook))) >> $$(FAKEROOT_SCRIPT))
++		$$(call PRINTF,$$($$(hook))) >> $$(FAKEROOT_SCRIPT)$$(sep))
+ 	chmod a+x $$(FAKEROOT_SCRIPT)
+ 	PATH=$$(BR_PATH) $$(HOST_DIR)/bin/fakeroot -- $$(FAKEROOT_SCRIPT)
+ 	$$(INSTALL) -m 0644 support/misc/target-dir-warning.txt $$(TARGET_DIR_WARNING_FILE)
