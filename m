@@ -1,38 +1,55 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 26 Nov 2017 22:43:10 +0100
-Subject: [Buildroot] [git commit branch/2017.08.x] linux-headers: bump 4.{4,
- 9, 13}.x series
-Message-ID: <20171126213857.4F3A8802C8@busybox.osuosl.org>
+Date: Sun, 26 Nov 2017 22:40:59 +0100
+Subject: [Buildroot] [git commit branch/2017.08.x] package/samba4: bump
+ version to 4.6.10
+Message-ID: <20171126213857.415E6802C8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a77ec2da596969732ca838518a6cac50e9f636bc
+commit: https://git.buildroot.net/buildroot/commit/?id=cd4890d82175bab157d41bde438fdc5812f5270b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.08.x
 
-[Peter: drop 4.13.x bump]
+Quoting release notes
+https://www.samba.org/samba/history/samba-4.6.10.html
+
+"This is an additional bugfix release to address a possible data
+ corruption issue. Please update immediately! For details, please see
+
+  https://bugzilla.samba.org/show_bug.cgi?id=13130
+
+ Samba 4.6.0 and newer is affected by this issue."
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 5962717eb46f39214693d1b45c3cac2b330fca12)
+(cherry picked from commit 806e6becb76649ecfc1104d0c284bb3f6a9245dd)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-headers/Config.in.host | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/samba4/samba4.hash | 2 +-
+ package/samba4/samba4.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 02a3d8a..599388d 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -236,8 +236,8 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.10.107"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.12.74"	if BR2_KERNEL_HEADERS_3_12
- 	default "4.1.45"	if BR2_KERNEL_HEADERS_4_1
--	default "4.4.97"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.61"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.4.98"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.9.62"	if BR2_KERNEL_HEADERS_4_9
- 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
- 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
- 	default "4.12.14"	if BR2_KERNEL_HEADERS_4_12
+diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
+index 7446b1b..6821144 100644
+--- a/package/samba4/samba4.hash
++++ b/package/samba4/samba4.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 c31db4aad82f0b9588ef6c4b4dab5dce3fa1787bd298e62d953c2628bb1af21a  samba-4.6.9.tar.gz
++sha256 5913a569b54c6bc261bc245d7326fabfcba42839d15a82db48c047de1eb19626  samba-4.6.10.tar.gz
+ sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index 7502fa6..40436ca 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SAMBA4_VERSION = 4.6.9
++SAMBA4_VERSION = 4.6.10
+ SAMBA4_SITE = https://download.samba.org/pub/samba/stable
+ SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+ SAMBA4_INSTALL_STAGING = YES
