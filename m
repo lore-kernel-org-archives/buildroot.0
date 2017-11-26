@@ -1,46 +1,58 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 26 Nov 2017 22:13:44 +0100
-Subject: [Buildroot] [git commit branch/2017.08.x] usb_modeswitch: update
- config.guess / config.sub
-Message-ID: <20171126213856.17FC8803EC@busybox.osuosl.org>
+Date: Sun, 26 Nov 2017 22:21:09 +0100
+Subject: [Buildroot] [git commit branch/2017.08.x] webkitgtk: security bump
+ to version 2.18.3
+Message-ID: <20171126213856.6227581D43@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=560bb7b4090bb23f6265f841fb3b6c11ac6f4014
+commit: https://git.buildroot.net/buildroot/commit/?id=8aadf3fdabe37ee00d900e5f0654ad44d57bf535
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.08.x
 
-Fixes:
-http://autobuild.buildroot.net/results/fbe/fbe21bd173e6566dd93dddd58d4a848de8a3465e/
+This is a maintenance release of the current stable WebKitGTK+ version,
+which contains a minor rendering fix, another for the WebDriver
+implementation, and security fixes for CVE-2017-13798, CVE-2017-13788,
+and CVE-2017-13803.
 
-The build system of the embedded jimtcl copy doesn't use autotools, but does
-use an old version of gnuconfig which doesn't know all the architectures
-supported by Buildroot, so update config.guess / config.sub like we do in
-pkg-autotools.mk
+Release notes:
 
+    https://webkitgtk.org/2017/11/10/webkitgtk2.18.3-released.html
+
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 90d86994f86fec8578772a8a7465bf912c69e1ca)
+(cherry picked from commit 5ff18880e9647e446a3d720b7c6c74eed97ef0b4)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/usb_modeswitch/usb_modeswitch.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+ package/webkitgtk/webkitgtk.hash | 8 ++++----
+ package/webkitgtk/webkitgtk.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/usb_modeswitch/usb_modeswitch.mk b/package/usb_modeswitch/usb_modeswitch.mk
-index ea08de2..c67d4cd 100644
---- a/package/usb_modeswitch/usb_modeswitch.mk
-+++ b/package/usb_modeswitch/usb_modeswitch.mk
-@@ -20,6 +20,12 @@ USB_MODESWITCH_BUILD_TARGETS = script
- USB_MODESWITCH_INSTALL_TARGETS = install-script
- endif
+diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
+index b116115..669bb1c 100644
+--- a/package/webkitgtk/webkitgtk.hash
++++ b/package/webkitgtk/webkitgtk.hash
+@@ -1,4 +1,4 @@
+-# From https://webkitgtk.org/releases/webkitgtk-2.18.2.tar.xz.sums
+-md5 f63b3897d6fbf660bf72dfaca1fdea16 webkitgtk-2.18.2.tar.xz
+-sha1 75571807a1f8c9efdf62f1c37e9fadf52b73d367 webkitgtk-2.18.2.tar.xz
+-sha256 b14cb3f1b5321b1dc50abcc0445a97f8e2f8813562bca7ce4d2f8069f6fec8e7 webkitgtk-2.18.2.tar.xz
++# From https://webkitgtk.org/releases/webkitgtk-2.18.3.tar.xz.sums
++md5 264a22d7467deae606e42b6eb5dd65af webkitgtk-2.18.3.tar.xz
++sha1 164cad34281ef597a3d4ad214e8037c3ddef4d17 webkitgtk-2.18.3.tar.xz
++sha256 e15420e1616a6f70f321541d467af5ca285bff66b1e0fa68a01df3ccf1b18f9e webkitgtk-2.18.3.tar.xz
+diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
+index fefe751..b92995e 100644
+--- a/package/webkitgtk/webkitgtk.mk
++++ b/package/webkitgtk/webkitgtk.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+# build system of embedded jimtcl doesn't use autotools, but does use
-+# an old version of gnuconfig which doesn't know all the architectures
-+# supported by Buildroot, so update config.guess / config.sub like we
-+# do in pkg-autotools.mk
-+USB_MODESWITCH_POST_PATCH_HOOKS += UPDATE_CONFIG_HOOK
-+
- define USB_MODESWITCH_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
- 		CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE -Wall -I." \
+-WEBKITGTK_VERSION = 2.18.2
++WEBKITGTK_VERSION = 2.18.3
+ WEBKITGTK_SITE = http://www.webkitgtk.org/releases
+ WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
+ WEBKITGTK_INSTALL_STAGING = YES
