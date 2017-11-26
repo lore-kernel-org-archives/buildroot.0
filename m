@@ -1,58 +1,61 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 26 Nov 2017 22:21:09 +0100
-Subject: [Buildroot] [git commit branch/2017.08.x] webkitgtk: security bump
- to version 2.18.3
-Message-ID: <20171126213856.6227581D43@busybox.osuosl.org>
+Date: Sun, 26 Nov 2017 22:25:23 +0100
+Subject: [Buildroot] [git commit branch/2017.08.x] package/collectd: Specify
+ FP layout based on endianness
+Message-ID: <20171126213856.912AD802C8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8aadf3fdabe37ee00d900e5f0654ad44d57bf535
+commit: https://git.buildroot.net/buildroot/commit/?id=922497b4b9a667ff254ccbd9de23c8e18d88e4ef
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.08.x
 
-This is a maintenance release of the current stable WebKitGTK+ version,
-which contains a minor rendering fix, another for the WebDriver
-implementation, and security fixes for CVE-2017-13798, CVE-2017-13788,
-and CVE-2017-13803.
+Big-endian CPUs store floating point as big endian (at lest majority
+of them do), so, in order for 'network' plugin to work correctly (and
+potentially any user of htond() in collectd's codebase),
+--with-fp-layout=endianflip as opposed to --with-fp-layout=nothing
+needs to be specified during configuration phase.
 
-Release notes:
-
-    https://webkitgtk.org/2017/11/10/webkitgtk2.18.3-released.html
-
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 5ff18880e9647e446a3d720b7c6c74eed97ef0b4)
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
+Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+(cherry picked from commit bdd8475b90fa46644149d34bf852b213ec60ce71)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/webkitgtk/webkitgtk.hash | 8 ++++----
- package/webkitgtk/webkitgtk.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/collectd/collectd.mk | 16 +++++++++++++++-
+ 1 file changed, 15 insertions(+), 1 deletion(-)
 
-diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
-index b116115..669bb1c 100644
---- a/package/webkitgtk/webkitgtk.hash
-+++ b/package/webkitgtk/webkitgtk.hash
-@@ -1,4 +1,4 @@
--# From https://webkitgtk.org/releases/webkitgtk-2.18.2.tar.xz.sums
--md5 f63b3897d6fbf660bf72dfaca1fdea16 webkitgtk-2.18.2.tar.xz
--sha1 75571807a1f8c9efdf62f1c37e9fadf52b73d367 webkitgtk-2.18.2.tar.xz
--sha256 b14cb3f1b5321b1dc50abcc0445a97f8e2f8813562bca7ce4d2f8069f6fec8e7 webkitgtk-2.18.2.tar.xz
-+# From https://webkitgtk.org/releases/webkitgtk-2.18.3.tar.xz.sums
-+md5 264a22d7467deae606e42b6eb5dd65af webkitgtk-2.18.3.tar.xz
-+sha1 164cad34281ef597a3d4ad214e8037c3ddef4d17 webkitgtk-2.18.3.tar.xz
-+sha256 e15420e1616a6f70f321541d467af5ca285bff66b1e0fa68a01df3ccf1b18f9e webkitgtk-2.18.3.tar.xz
-diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-index fefe751..b92995e 100644
---- a/package/webkitgtk/webkitgtk.mk
-+++ b/package/webkitgtk/webkitgtk.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
+index 626fba8..6c987b2 100644
+--- a/package/collectd/collectd.mk
++++ b/package/collectd/collectd.mk
+@@ -24,9 +24,23 @@ COLLECTD_PLUGINS_DISABLE = \
  
--WEBKITGTK_VERSION = 2.18.2
-+WEBKITGTK_VERSION = 2.18.3
- WEBKITGTK_SITE = http://www.webkitgtk.org/releases
- WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
- WEBKITGTK_INSTALL_STAGING = YES
+ COLLECTD_CONF_ENV += LIBS="-lm"
+ 
++#
++# NOTE: There's also a third availible setting "intswap", which might
++# be needed on some old ARM hardware (see [2]), but is not being
++# accounted for as per discussion [1]
++#
++# [1] http://lists.busybox.net/pipermail/buildroot/2017-November/206100.html
++# [2] http://lists.busybox.net/pipermail/buildroot/2017-November/206251.html
++#
++ifeq ($(BR2_ENDIAN),"BIG")
++COLLECTD_FP_LAYOUT=endianflip
++else
++COLLECTD_FP_LAYOUT=nothing
++endif
++
+ COLLECTD_CONF_OPTS += \
+ 	--with-nan-emulation \
+-	--with-fp-layout=nothing \
++	--with-fp-layout=$(COLLECTD_FP_LAYOUT) \
+ 	--with-perl-bindings=no \
+ 	$(foreach p, $(COLLECTD_PLUGINS_DISABLE), --disable-$(p)) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_AGGREGATION),--enable-aggregation,--disable-aggregation) \
