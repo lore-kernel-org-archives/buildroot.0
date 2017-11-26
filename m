@@ -1,49 +1,101 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 26 Nov 2017 22:31:30 +0100
-Subject: [Buildroot] [git commit branch/2017.08.x] package/imagemagick:
- security bump to version 7.0.7-10
-Message-ID: <20171126213856.D2203802C8@busybox.osuosl.org>
+Date: Sun, 26 Nov 2017 22:01:03 +0100
+Subject: [Buildroot] [git commit branch/2017.08.x] gstreamer: needs dynamic
+ libraries
+Message-ID: <20171126213855.CC6C981D43@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2c640f48dfab99d331ea39be81d4b0fbee3b564b
+commit: https://git.buildroot.net/buildroot/commit/?id=bb0c2b5e20dc8ea3a70afdce7f96a4b39a19dc4a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.08.x
 
-Version 7.0.7-3 fixes CVE-2017-15218:
-Stop potential leaks in the JNG decoder
+Fixes:
+http://autobuild.buildroot.net/results/49d/49dcec0bd2f3bb78c18675a9fa5c9c53cc183fd2/
 
-Changelog: https://www.imagemagick.org/script/changelog.php
+g_cclosure_marshal_VOID__VOID is defined both in libgobject.a and
+libgstreamer.a. It is probably possible to fix this, but gstreamer0.10
+has been deprecated for a long time now and is anyway unlikely to be
+used in static-only situations, so let's just require dynamic linking.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Propagate to the reverse dependencies. opencv3 already did depend on
+dynamic libs.
+
+[Peter: add autobuild reference]
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 3c8dc542936484cf94efd06d96161c8a04fb17a5)
+
+(cherry picked from commit 0eee5465e51229c4c17d7930ca2095caace4f8d2)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/imagemagick/imagemagick.hash | 2 +-
- package/imagemagick/imagemagick.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/gstreamer/gstreamer/Config.in | 6 ++++--
+ package/libplayer/Config.in           | 6 ++++--
+ package/opencv/Config.in              | 7 +++++--
+ 3 files changed, 13 insertions(+), 6 deletions(-)
 
-diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
-index 92880a9..2468bdb 100644
---- a/package/imagemagick/imagemagick.hash
-+++ b/package/imagemagick/imagemagick.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 5a45e29509dbb23793a9c8db5c47ef1114c1ee82c9ca60053eaf06b3fc243e2c  7.0.7-1.tar.gz
-+sha256 924d1161ed2399bcb72f98419072b3130a466e07d9a6fce43d27458ffa907ffa  7.0.7-10.tar.gz
-diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
-index 9043ce8..c2171a7 100644
---- a/package/imagemagick/imagemagick.mk
-+++ b/package/imagemagick/imagemagick.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/gstreamer/gstreamer/Config.in b/package/gstreamer/gstreamer/Config.in
+index eb1249a..99c90f1 100644
+--- a/package/gstreamer/gstreamer/Config.in
++++ b/package/gstreamer/gstreamer/Config.in
+@@ -1,12 +1,14 @@
+-comment "gstreamer 0.10 needs a toolchain w/ wchar, threads"
++comment "gstreamer 0.10 needs a toolchain w/ wchar, threads, dynamic library"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
++		BR2_STATIC_LIBS
  
--IMAGEMAGICK_VERSION = 7.0.7-1
-+IMAGEMAGICK_VERSION = 7.0.7-10
- IMAGEMAGICK_SOURCE = $(IMAGEMAGICK_VERSION).tar.gz
- IMAGEMAGICK_SITE = https://github.com/ImageMagick/ImageMagick/archive
- IMAGEMAGICK_LICENSE = Apache-2.0
+ config BR2_PACKAGE_GSTREAMER
+ 	bool "gstreamer 0.10"
+ 	depends on BR2_USE_WCHAR # glib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
+ 	depends on BR2_USE_MMU # glib2
++	depends on !BR2_STATIC_LIBS
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	help
+ 	  GStreamer is an open source multimedia framework.
+diff --git a/package/libplayer/Config.in b/package/libplayer/Config.in
+index 0ae558d..82083a0 100644
+--- a/package/libplayer/Config.in
++++ b/package/libplayer/Config.in
+@@ -20,11 +20,13 @@ config BR2_PACKAGE_LIBPLAYER_GSTREAMER
+ 	depends on BR2_USE_WCHAR # glib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
+ 	depends on BR2_USE_MMU # glib2
++	depends on !BR2_STATIC_LIBS # gstreamer
+ 	select BR2_PACKAGE_GSTREAMER
+ 
+-comment "gstreamer backend needs a toolchain w/ wchar, threads"
++comment "gstreamer backend needs a toolchain w/ wchar, threads, dynamic library"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
++		BR2_STATIC_LIBS
+ endif
+ 
+ comment "libplayer needs a toolchain w/ threads"
+diff --git a/package/opencv/Config.in b/package/opencv/Config.in
+index 742ae3e..26109a7 100644
+--- a/package/opencv/Config.in
++++ b/package/opencv/Config.in
+@@ -208,13 +208,16 @@ config BR2_PACKAGE_OPENCV_WITH_GSTREAMER
+ 	depends on BR2_USE_MMU # gstreamer -> libglib2
+ 	depends on BR2_USE_WCHAR # gstreamer -> libglib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # gstreamer -> libglib2
++	depends on !BR2_STATIC_LIBS # gstreamer
+ 	select BR2_PACKAGE_GSTREAMER
+ 	select BR2_PACKAGE_GST_PLUGINS_BASE
+ 	select BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_APP
+ 
+-comment "gstreamer-0.10 support needs a toolchain w/ wchar, threads"
++comment "gstreamer-0.10 support needs a toolchain w/ wchar, threads, dynamic library"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
++		BR2_STATIC_LIBS
++
+ 
+ config BR2_PACKAGE_OPENCV_WITH_GSTREAMER1
+ 	bool "gstreamer-1.x"
