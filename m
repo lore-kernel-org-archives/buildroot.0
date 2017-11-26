@@ -1,37 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 26 Nov 2017 21:31:03 +0100
-Subject: [Buildroot] [git commit branch/2017.08.x] kvm-unit-test: x86-64
- variant only available on x86-64 hosts
-Message-ID: <20171126213855.A373480304@busybox.osuosl.org>
+Date: Sun, 26 Nov 2017 21:37:17 +0100
+Subject: [Buildroot] [git commit branch/2017.08.x] libglib2: needs autoreconf
+Message-ID: <20171126213855.B4D57804EF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=32ea3609e49868d213b1affd5f3973b3b67c94ad
+commit: https://git.buildroot.net/buildroot/commit/?id=a226597189f70beb4cc849954edeec902ef32bd8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.08.x
 
-We use the host compiler for x86-64 builds, so ensure it is only available
-on x86-64 hosts.
+Patch 0002-disable-tests.patch modifies Makefile.am, so we have to
+autoreconf. It hasn't been seen until now, but becomes very clear
+since the bump of automake to 1.15.1, as we're seeing build failures
+such as:
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit a13029996f25c1fb60ee68a67344b963dee374c1)
+configure.ac:66: error: version mismatch.  This is Automake 1.15.1,
+configure.ac:66: but the definition used by this AM_INIT_AUTOMAKE
+configure.ac:66: comes from Automake 1.15.  You should recreate
+configure.ac:66: aclocal.m4 with aclocal and run automake again.
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/3402357d8e90f1866dfeaee7bb61119d80dc8bcb/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+(cherry picked from commit 45fbec12e79dfd8416b20afa4c2590aecd3ddc5d)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/kvm-unit-tests/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ package/libglib2/libglib2.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/kvm-unit-tests/Config.in b/package/kvm-unit-tests/Config.in
-index d0d9e2e..8b7908e 100644
---- a/package/kvm-unit-tests/Config.in
-+++ b/package/kvm-unit-tests/Config.in
-@@ -15,6 +15,7 @@ config BR2_PACKAGE_KVM_UNIT_TESTS
- 	# x86-64 we use the host gcc (see .mk file for details)
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_5 || !BR2_i386
- 	depends on BR2_HOST_GCC_AT_LEAST_4_5 || !BR2_x86_64
-+	depends on BR2_HOSTARCH = "x86_64" || !BR2_x86_64
- 	select BR2_HOSTARCH_NEEDS_IA32_COMPILER if BR2_x86_64=y
- 	help
- 	  kvm-unit-tests is a project as old as KVM. As its name
+diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
+index 6ccff44..d93a1de 100644
+--- a/package/libglib2/libglib2.mk
++++ b/package/libglib2/libglib2.mk
+@@ -10,6 +10,8 @@ LIBGLIB2_SOURCE = glib-$(LIBGLIB2_VERSION).tar.xz
+ LIBGLIB2_SITE = http://ftp.gnome.org/pub/gnome/sources/glib/$(LIBGLIB2_VERSION_MAJOR)
+ LIBGLIB2_LICENSE = LGPL-2.0+
+ LIBGLIB2_LICENSE_FILES = COPYING
++# 0002-disable-tests.patch
++LIBGLIB2_AUTORECONF = YES
+ 
+ LIBGLIB2_INSTALL_STAGING = YES
+ LIBGLIB2_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) LDFLAGS=-L$(STAGING_DIR)/usr/lib install
