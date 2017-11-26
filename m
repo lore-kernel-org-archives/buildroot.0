@@ -1,54 +1,101 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 26 Nov 2017 20:12:18 +0100
-Subject: [Buildroot] [git commit branch/2017.08.x] package/openssl: security
- bump to version 1.0.2m
-Message-ID: <20171126213854.CE78B81D43@busybox.osuosl.org>
+Date: Sun, 26 Nov 2017 20:57:06 +0100
+Subject: [Buildroot] [git commit branch/2017.08.x] python-config.sh: don't
+ reassign ${prefix}
+Message-ID: <20171126213855.113807FAD0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cdad5c529e038dab63c4eec6f0ea105f3e6a0ef8
+commit: https://git.buildroot.net/buildroot/commit/?id=fb2f02ebaf76dfc4405deb9b5983d601392faafa
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.08.x
 
-Fixes the following CVEs:
-bn_sqrx8x_internal carry bug on x86_64 (CVE-2017-3736)
-Malformed X.509 IPAddressFamily could cause OOB read (CVE-2017-3735)
+When prefix is set to a path like /usr during crossbuild
+the sed operations end up executing twice, once for the prefix
+reassignment and another for includedir if it is set as a string
+including the ${prefix} variable.  This results in an issue
+when the build directory is under /usr.
 
-Release notes: https://www.openssl.org/news/secadv/20171102.txt
+This patch updates the remaining location which uses the prefix
+variable to also sed and update to use the real path.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 63023c407fe601d7c349fbff1ef1fbb246b1e288)
+Upstream bug report:
+https://bugs.python.org/issue31713
+
+Buildroot bug:
+https://bugs.busybox.net/show_bug.cgi?id=10361
+
+Fixes failures like the following:
+dbus-python-1.2.4 | NOK | http://autobuild.buildroot.net/results/758858efa97b6273c1b470513f5492258a6d8853
+
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+[Arnout: refer to autobuild failures that still exist]
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+(cherry picked from commit 04d1699ba4cecaa77f688b4effbcac5e84419b15)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/openssl/openssl.hash | 4 ++--
- package/openssl/openssl.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ ...29-python-config.sh-don-t-reassign-prefix.patch | 53 ++++++++++++++++++++++
+ 1 file changed, 53 insertions(+)
 
-diff --git a/package/openssl/openssl.hash b/package/openssl/openssl.hash
-index da911c5..c6226c3 100644
---- a/package/openssl/openssl.hash
-+++ b/package/openssl/openssl.hash
-@@ -1,5 +1,5 @@
--# From https://www.openssl.org/source/openssl-1.0.2l.tar.gz.sha256
--sha256	ce07195b659e75f4e1db43552860070061f156a98bb37b672b101ba6e3ddf30c	openssl-1.0.2l.tar.gz
-+# From https://www.openssl.org/source/openssl-1.0.2m.tar.gz.sha256
-+sha256	8c6ff15ec6b319b50788f42c7abc2890c08ba5a1cdcd3810eb9092deada37b0f	openssl-1.0.2m.tar.gz
- # Locally computed
- sha256	eddd8a5123748052c598214487ac178e4bfa4e31ba2ec520c70d59c8c5bfa2e9	openssl-1.0.2a-parallel-install-dirs.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d
- sha256	147c3eeaad614c044749ea527cb433eae5e2d5cad34a78c6ba61cd967bfbe01f	openssl-1.0.2a-parallel-obj-headers.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d
-diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
-index ec8e6f2..a123989 100644
---- a/package/openssl/openssl.mk
-+++ b/package/openssl/openssl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--OPENSSL_VERSION = 1.0.2l
-+OPENSSL_VERSION = 1.0.2m
- OPENSSL_SITE = http://www.openssl.org/source
- OPENSSL_LICENSE = OpenSSL or SSLeay
- OPENSSL_LICENSE_FILES = LICENSE
+diff --git a/package/python3/0029-python-config.sh-don-t-reassign-prefix.patch b/package/python3/0029-python-config.sh-don-t-reassign-prefix.patch
+new file mode 100644
+index 0000000..49137f2
+--- /dev/null
++++ b/package/python3/0029-python-config.sh-don-t-reassign-prefix.patch
+@@ -0,0 +1,53 @@
++From 21f787cb9bf0c1440981262f03bc881c5b77c0d8 Mon Sep 17 00:00:00 2001
++From: Matt Weber <matthew.weber@rockwellcollins.com>
++Date: Fri, 6 Oct 2017 09:54:15 -0500
++Subject: [PATCH] python-config.sh: don't reassign ${prefix}
++
++When prefix is set to a path like /usr during crossbuild
++the sed operations end up executing twice, once for the prefix
++reassignment and another for includedir if it is set as a string
++including the ${prefix} variable.  This results in an issue
++when the build directory is under /usr.
++
++This patch updates the remaining location which uses the prefix
++variable to also sed and update to use the real path.
++
++Upstream bug report:
++https://bugs.python.org/issue31713
++
++Buildroot bug:
++https://bugs.busybox.net/show_bug.cgi?id=10361
++
++Fixes failures like the following:
++dbus-python-1.2.4 | NOK | http://autobuild.buildroot.net/results/758858efa97b6273c1b470513f5492258a6d8853
++
++Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
++---
++ Misc/python-config.sh.in | 3 +--
++ 1 file changed, 1 insertion(+), 2 deletions(-)
++
++diff --git a/Misc/python-config.sh.in b/Misc/python-config.sh.in
++index f905a71..e06be0f 100644
++--- a/Misc/python-config.sh.in
+++++ b/Misc/python-config.sh.in
++@@ -29,7 +29,7 @@ prefix_real=$(installed_prefix "$0")
++ 
++ # Use sed to fix paths from their built-to locations to their installed-to
++ # locations.
++-prefix=$(echo "$prefix_build" | sed "s#^$prefix_build#$prefix_real#")
+++prefix=$prefix_build
++ exec_prefix_build="@exec_prefix@"
++ exec_prefix=$(echo "$exec_prefix_build" | sed "s#^$exec_prefix_build#$prefix_real#")
++ includedir=$(echo "@includedir@" | sed "s#^$prefix_build#$prefix_real#")
++@@ -47,7 +46,7 @@ LINKFORSHARED="@LINKFORSHARED@"
++ OPT="@OPT@"
++ PY_ENABLE_SHARED="@PY_ENABLE_SHARED@"
++ LDVERSION="@LDVERSION@"
++-LIBDEST=${prefix}/lib/python${VERSION}
+++LIBDEST=$( echo "${prefix}/lib/python${VERSION}" | sed "s#^$prefix_build#$prefix_real#")
++ LIBPL=$(echo "@LIBPL@" | sed "s#^$prefix_build#$prefix_real#")
++ SO="@EXT_SUFFIX@"
++ PYTHONFRAMEWORK="@PYTHONFRAMEWORK@"
++-- 
++1.8.3.1
++
