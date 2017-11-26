@@ -1,94 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 26 Nov 2017 22:07:46 +0100
-Subject: [Buildroot] [git commit branch/2017.08.x] wireshark: bump version
- to 2.2.10 (security)
-Message-ID: <20171126213855.DC99F81D43@busybox.osuosl.org>
+Date: Sun, 26 Nov 2017 22:13:31 +0100
+Subject: [Buildroot] [git commit branch/2017.08.x] jimtcl: update
+ config.guess / config.sub
+Message-ID: <20171126213856.09DF981D43@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6436feaabe1db9f7a4d1b8c05dace511077b711e
+commit: https://git.buildroot.net/buildroot/commit/?id=df449e6c3b387fb83cda640fb3f2046ef140bcaa
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.08.x
 
-Security fixes since 2.2.7:
+Fixes:
+http://autobuild.buildroot.net/results/284/284876bd649cab26e5ecd696c03c71c077ea7411/
 
-- wnpa-sec-2017-22
-  Bazaar dissector infinite loop (Bug 13599) CVE-2017-9352
-- wnpa-sec-2017-23
-  DOF dissector read overflow (Bug 13608) CVE-2017-9348
-- wnpa-sec-2017-24
-  DHCP dissector read overflow (Bug 13609, Bug 13628) CVE-2017-9351
-- wnpa-sec-2017-25
-  SoulSeek dissector infinite loop (Bug 13631) CVE-2017-9346
-- wnpa-sec-2017-26
-  DNS dissector infinite loop (Bug 13633) CVE-2017-9345
-- wnpa-sec-2017-27
-  DICOM dissector infinite loop (Bug 13685) CVE-2017-9349
-- wnpa-sec-2017-28
-  openSAFETY dissector memory exhaustion (Bug 13649) CVE-2017-9350
-- wnpa-sec-2017-29
-  BT L2CAP dissector divide by zero (Bug 13701) CVE-2017-9344
-- wnpa-sec-2017-30
-  MSNIP dissector crash (Bug 13725) CVE-2017-9343
-- wnpa-sec-2017-31
-  ROS dissector crash (Bug 13637) CVE-2017-9347
-- wnpa-sec-2017-32
-  RGMP dissector crash (Bug 13646) CVE-2017-9354
-- wnpa-sec-2017-33
-  IPv6 dissector crash (Bug 13675) CVE-2017-9353
-- wnpa-sec-2017-13
-  WBMXL dissector infinite loop (Bug 13477, Bug 13796) CVE-2017-7702, CVE-2017-11410
-  Note: This is an update for a fix in Wireshark 2.2.6 and 2.0.12.
-- wnpa-sec-2017-28
-  openSAFETY dissector memory exhaustion (Bug 13649, Bug 13755) CVE-2017-9350, CVE-2017-11411
-  Note: This is an update for a fix in Wireshark 2.2.7.
-- wnpa-sec-2017-34
-  AMQP dissector crash. (Bug 13780) CVE-2017-11408
-- wnpa-sec-2017-35
-  MQ dissector crash. (Bug 13792) CVE-2017-11407
-- wnpa-sec-2017-36
-  DOCSIS infinite loop. (Bug 13797) CVE-2017-11406
-- wnpa-sec-2017-38
-  MSDP dissector infinite loop (Bug 13933)
-- wnpa-sec-2017-39
-  Profinet I/O buffer overrun (Bug 13847)
-- wnpa-sec-2017-41
-  IrCOMM dissector buffer overrun (Bug 13929)
+The build system doesn't use autotools, but does use an old version of
+gnuconfig which doesn't know all the architectures supported by Buildroot,
+so update config.guess / config.sub like we do in pkg-autotools.mk
 
-Full release notes:
-
-  https://www.wireshark.org/docs/relnotes/wireshark-2.2.10.html
-
-Signed-off-by: Andr?? Hentschel <nerv@dawncrow.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 708316f49fd08170e75d9c9eab61a4b3b1280bc9)
+(cherry picked from commit bca1d4af9bf6b60b37bf5d39e9e3e1b827854f52)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wireshark/wireshark.hash | 4 ++--
- package/wireshark/wireshark.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/jimtcl/jimtcl.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
-index c61c520..3494f2e 100644
---- a/package/wireshark/wireshark.hash
-+++ b/package/wireshark/wireshark.hash
-@@ -1,2 +1,2 @@
--# From: https://www.wireshark.org/download/src/all-versions/SIGNATURES-2.2.7.txt
--sha256 689ddf62221b152779d8846ab5b2063cc7fd41ec1a9f04eefab09b5d5486dbb5  wireshark-2.2.7.tar.bz2
-+# From: https://www.wireshark.org/download/src/all-versions/SIGNATURES-2.2.10.txt
-+sha256 8574a5e1fdec7affae640924bd46c1aed1bd866e02632fa5625e1450e4a50707  wireshark-2.2.10.tar.bz2
-diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
-index 58292f7..34ee563 100644
---- a/package/wireshark/wireshark.mk
-+++ b/package/wireshark/wireshark.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/jimtcl/jimtcl.mk b/package/jimtcl/jimtcl.mk
+index 313970d..68c8a91 100644
+--- a/package/jimtcl/jimtcl.mk
++++ b/package/jimtcl/jimtcl.mk
+@@ -38,6 +38,12 @@ define JIMTCL_INSTALL_LIB
+ endef
+ endif
  
--WIRESHARK_VERSION = 2.2.7
-+WIRESHARK_VERSION = 2.2.10
- WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.bz2
- WIRESHARK_SITE = https://www.wireshark.org/download/src/all-versions
- WIRESHARK_LICENSE = wireshark license
++# build system doesn't use autotools, but does use an old version of
++# gnuconfig which doesn't know all the architectures supported by
++# Buildroot, so update config.guess / config.sub like we do in
++# pkg-autotools.mk
++JIMTCL_POST_PATCH_HOOKS += UPDATE_CONFIG_HOOK
++
+ define JIMTCL_CONFIGURE_CMDS
+ 	(cd $(@D); \
+ 		$(TARGET_CONFIGURE_OPTS) CCACHE=none \
