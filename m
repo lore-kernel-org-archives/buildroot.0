@@ -1,95 +1,99 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Nov 2017 15:40:19 +0100
-Subject: [Buildroot] [PATCH] google-breakpad: take into account host
- architecture dependencies
-Message-ID: <20171126144019.11989-1-thomas.petazzoni@free-electrons.com>
+Date: Sun, 26 Nov 2017 16:29:47 +0100
+Subject: [Buildroot] [PATCH] pdbg: add patch fixing the build on Blackfin
+Message-ID: <20171126152947.20153-1-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Building the target google-breakpad requires building the host variant
-of google-breakpad. Just like the target google-breakpad only supports
-a limited number of architectures, it is the same for the host
-google-breakpad.
+This commit adds a patch to pdbg that fixes the build on the Blackfin
+architecture. The build failure was due to the recently introduced
+assembly code to embed the DTB into an object file. This code was not
+taking into account the fact that Blackfin has a non-empty
+__USER_LABEL_PREFIX__.
 
-We therefore introduce a
-BR2_PACKAGE_HOST_GOOGLE_BREAKPAD_ARCH_SUPPORTS option that is used
-where necessary to prevent the user from choosing Google Breakpad when
-building on unsupported host platforms.
+The patch has been submitted upstream.
 
 Fixes:
 
-  http://autobuild.buildroot.net/results/c7c04483508f9e4d629efa54571afeb1feaa5f73/
-  (build on a powerpc64le machine)
+  http://autobuild.buildroot.net/results/2bf6f56303453fd2ba7e86882168d406ded4cc80/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- Config.in                              | 1 +
- package/Config.in.host                 | 1 +
- package/google-breakpad/Config.in      | 2 ++
- package/google-breakpad/Config.in.host | 8 ++++++++
- 4 files changed, 12 insertions(+)
- create mode 100644 package/google-breakpad/Config.in.host
+ ...fix-to-build-on-architecture-with-non-emp.patch | 63 ++++++++++++++++++++++
+ 1 file changed, 63 insertions(+)
+ create mode 100644 package/pdbg/0001-template.S-fix-to-build-on-architecture-with-non-emp.patch
 
-diff --git a/Config.in b/Config.in
-index 75e5604831..62d67ce957 100644
---- a/Config.in
-+++ b/Config.in
-@@ -539,6 +539,7 @@ config BR2_GOOGLE_BREAKPAD_ENABLE
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on (BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_UCLIBC)
- 	depends on BR2_PACKAGE_GOOGLE_BREAKPAD_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_HOST_GOOGLE_BREAKPAD_ARCH_SUPPORTS
- 	help
- 	  This option will enable the use of google breakpad, a library
- 	  and tool suite that allows you to distribute an application to
-diff --git a/package/Config.in.host b/package/Config.in.host
-index 59be666143..48b6f8c7a8 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -20,6 +20,7 @@ menu "Host utilities"
- 	source "package/genpart/Config.in.host"
- 	source "package/go/Config.in.host"
- 	source "package/go-bootstrap/Config.in.host"
-+	source "package/google-breakpad/Config.in.host"
- 	source "package/gptfdisk/Config.in.host"
- 	source "package/imx-usb-loader/Config.in.host"
- 	source "package/jq/Config.in.host"
-diff --git a/package/google-breakpad/Config.in b/package/google-breakpad/Config.in
-index e0e91068be..91ec9ce309 100644
---- a/package/google-breakpad/Config.in
-+++ b/package/google-breakpad/Config.in
-@@ -12,6 +12,7 @@ config BR2_PACKAGE_GOOGLE_BREAKPAD
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on (BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_UCLIBC)
- 	depends on BR2_PACKAGE_GOOGLE_BREAKPAD_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_HOST_GOOGLE_BREAKPAD_ARCH_SUPPORTS
- 	select BR2_PACKAGE_LINUX_SYSCALL_SUPPORT
- 	help
- 	  Google-Breakpad is a library and tool suite that allows you
-@@ -36,6 +37,7 @@ config BR2_PACKAGE_GOOGLE_BREAKPAD
- 
- comment "google-breakpad requires a glibc or uClibc toolchain w/ wchar, thread, C++, gcc >= 4.8"
- 	depends on BR2_PACKAGE_GOOGLE_BREAKPAD_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_HOST_GOOGLE_BREAKPAD_ARCH_SUPPORTS
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
- 		!BR2_TOOLCHAIN_HAS_THREADS || \
- 		!(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_UCLIBC) || \
-diff --git a/package/google-breakpad/Config.in.host b/package/google-breakpad/Config.in.host
+diff --git a/package/pdbg/0001-template.S-fix-to-build-on-architecture-with-non-emp.patch b/package/pdbg/0001-template.S-fix-to-build-on-architecture-with-non-emp.patch
 new file mode 100644
-index 0000000000..28d304766a
+index 0000000000..15c0eef611
 --- /dev/null
-+++ b/package/google-breakpad/Config.in.host
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_HOST_GOOGLE_BREAKPAD_ARCH_SUPPORTS
-+	bool
-+	default y if BR2_HOSTARCH = "x86_64"
-+	default y if BR2_HOSTARCH = "x86"
-+	default y if BR2_HOSTARCH = "arm"
-+	default y if BR2_HOSTARCH = "aarch64"
-+	default y if BR2_HOSTARCH = "mips"
-+	default y if BR2_HOSTARCH = "mipsel"
++++ b/package/pdbg/0001-template.S-fix-to-build-on-architecture-with-non-emp.patch
+@@ -0,0 +1,63 @@
++From 50ae93273376ede704012030009c29bd58d6a569 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Date: Sun, 26 Nov 2017 16:22:25 +0100
++Subject: [PATCH] template.S: fix to build on architecture with non-empty
++ __USER_LABEL_PREFIX__
++
++Blackfin has a non-empty __USER_LABEL_PREFIX__, which means that a
++symbol called "foo" in C must be named "_foo" in assembler.
++
++Interestingly, it seems like "$(CC) -xassembler - -c" doesn't pass the
++input source file through the C preprocessor, so we do this
++explicitly.
++
++Submitted-upstream: https://github.com/open-power/pdbg/pull/26
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ Makefile.am |  2 +-
++ template.S  | 22 +++++++++++++++-------
++ 2 files changed, 16 insertions(+), 8 deletions(-)
++
++diff --git a/Makefile.am b/Makefile.am
++index 9d34bff..82e0856 100644
++--- a/Makefile.am
+++++ b/Makefile.am
++@@ -62,4 +62,4 @@ p9z-fsi.dtb.o: p9z-fsi.dts p9-fsi.dtsi
++ %.dtb.o: %.dts
++ 	dtc -i$(dir $@) -I dts $< -O dtb > $@.tmp
++ 	symbol_prefix=`echo $@ | tr '.-' '_'` ; \
++-	sed "s%SYMBOL_PREFIX%$${symbol_prefix}%g; s%FILENAME%$@.tmp%g" $(top_srcdir)/template.S | $(CC) -xassembler - -c -o $@
+++	sed "s%SYMBOL_PREFIX%$${symbol_prefix}%g; s%FILENAME%$@.tmp%g" $(top_srcdir)/template.S | $(CPP) - | $(CC) -xassembler - -c -o $@
++diff --git a/template.S b/template.S
++index 2e6cbdb..1407a7c 100644
++--- a/template.S
+++++ b/template.S
++@@ -1,10 +1,18 @@
+++#ifdef __USER_LABEL_PREFIX__
+++#define CONCAT1(a, b) CONCAT2(a, b)
+++#define CONCAT2(a, b) a ## b
+++#define SYM(x) CONCAT1 (__USER_LABEL_PREFIX__, x)
+++#else
+++#define SYM(x) x
+++#endif
+++
++ .section .data
++-_binary_SYMBOL_PREFIX_start:
+++SYM(_binary_SYMBOL_PREFIX_start):
++ .incbin "FILENAME"
++ .align 4
++-_binary_SYMBOL_PREFIX_end:
++-_binary_SYMBOL_PREFIX_size:
++-	.long	_binary_SYMBOL_PREFIX_end - _binary_SYMBOL_PREFIX_start
++-.globl _binary_SYMBOL_PREFIX_start
++-.globl _binary_SYMBOL_PREFIX_end
++-.globl _binary_SYMBOL_PREFIX_size
+++SYM(_binary_SYMBOL_PREFIX_end):
+++SYM(_binary_SYMBOL_PREFIX_size):
+++	.long	SYM(_binary_SYMBOL_PREFIX_end) - SYM(_binary_SYMBOL_PREFIX_start)
+++.globl SYM(_binary_SYMBOL_PREFIX_start)
+++.globl SYM(_binary_SYMBOL_PREFIX_end)
+++.globl SYM(_binary_SYMBOL_PREFIX_size)
++-- 
++2.13.6
++
 -- 
 2.13.6
