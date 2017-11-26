@@ -1,11 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 26 Nov 2017 09:12:07 +0100
+Date: Sun, 26 Nov 2017 09:13:24 +0100
 Subject: [Buildroot] [PATCH] package/python-pyqt5: fix build with Qt
  5.6.3'
 In-Reply-To: <1509264949-15907-1-git-send-email-scott@jumpnowtek.com> (Scott
  Ellis's message of "Sun, 29 Oct 2017 04:15:49 -0400")
 References: <1509264949-15907-1-git-send-email-scott@jumpnowtek.com>
-Message-ID: <87vahxjw6g.fsf@dell.be.48ers.dk>
+Message-ID: <87tvxhjw4b.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
