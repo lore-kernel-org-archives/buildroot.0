@@ -1,35 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 26 Nov 2017 22:24:44 +0100
-Subject: [Buildroot] [PATCH] postgresql: security bump to version 9.6.6
-In-Reply-To: <20171111104456.30603-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Sat, 11 Nov 2017 11:44:56 +0100")
-References: <20171111104456.30603-1-peter@korsgaard.com>
-Message-ID: <87zi78ens3.fsf@dell.be.48ers.dk>
+Date: Sun, 26 Nov 2017 22:26:07 +0100
+Subject: [Buildroot] [PATCH v2] package/collectd: Specify FP layout
+ based on endianness
+In-Reply-To: <20171107200442.23067-1-andrew.smirnov@gmail.com> (Andrey
+ Smirnov's message of "Tue, 7 Nov 2017 12:04:42 -0800")
+References: <20171107200442.23067-1-andrew.smirnov@gmail.com>
+Message-ID: <87vahwenps.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Andrey" == Andrey Smirnov <andrew.smirnov@gmail.com> writes:
 
- > Fixes the following security issues:
- > CVE-2017-12172: Start scripts permit database administrator to modify
- > root-owned files.
+ > Big-endian CPUs store floating point as big endian (at lest majority
+ > of them do), so, in order for 'network' plugin to work correctly (and
+ > potentially any user of htond() in collectd's codebase),
+ > --with-fp-layout=endianflip as opposed to --with-fp-layout=nothing
+ > needs to be specified during configuration phase.
 
- > CVE-2017-15098: Memory disclosure in JSON functions.
+ > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ > Cc: Arnout Vandecappelle <arnout@mind.be>
+ > Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ > Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
+ > ---
 
- > CVE-2017-15099: INSERT ... ON CONFLICT DO UPDATE fails to enforce SELECT
- > privileges.
+ > Changes in [v2]:
 
- > See the announcement for more details:
- > https://www.postgresql.org/about/news/1801/
+ >  - Patch converted to use target's endianness as opposed to CPU
+ >    architecture
+ 
+ >  - Added a notes about the discussion around "intswap"
 
- > While we're at it, also add a hash for the license file.
+ > [v2] http://lists.busybox.net/pipermail/buildroot/2017-October/205773.html
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-Committed to 2017.02.x and 2017.02.x, thanks.
+Committed to 2017.02.x and 2017.08.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
