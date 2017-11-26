@@ -1,47 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 26 Nov 2017 21:26:08 +0100
-Subject: [Buildroot] [git commit branch/2017.08.x] package/libplist: needs
- threads
-Message-ID: <20171126213855.65DB87FAD0@busybox.osuosl.org>
+Date: Sun, 26 Nov 2017 21:20:17 +0100
+Subject: [Buildroot] [git commit branch/2017.08.x] luajit: only available on
+ x86(-64) hosts
+Message-ID: <20171126213855.3AC3E7FAD0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c467f422b7c3e717a3878b132865d47bec76eed0
+commit: https://git.buildroot.net/buildroot/commit/?id=df0447944c911eac68b4eafa4082a0866fdb1047
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.08.x
 
-Upstream added a mandatory pthread check:
-https://github.com/libimobiledevice/libplist/commit/eec2e855b4f192cb1808d1f02b6bc8935a979025
+The -m32 compiler flag is used for 32bit builds and host-luajit has
+limited architecture support. Building for a 32-bit target on a 32-bit
+host should always work, but we haven't tested that and it's very
+unlikely that someone needs it. So just limit to x86(-64) hosts.
 
-Fixes
-http://autobuild.buildroot.net/results/863/863bb43db222f8e63d60b1fc4a53299575727de1/
+Fixes:
+http://autobuild.buildroot.net/results/5f5b5edb058efe976c003678e21bcc28a87cc828/
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit dbd9915caa884073e4a644086a5783fb687d76f0)
+[Arnout: clarify that it might work on 32-bit hosts for a 32-bit target]
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+(cherry picked from commit 9b9347ee9f8e531dd177b437e8ea5387e29fc35e)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libplist/Config.in | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ package/luajit/Config.in | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/libplist/Config.in b/package/libplist/Config.in
-index 4a9575f..5a246b4 100644
---- a/package/libplist/Config.in
-+++ b/package/libplist/Config.in
-@@ -1,11 +1,12 @@
- config BR2_PACKAGE_LIBPLIST
- 	bool "libplist"
- 	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	help
- 	  libplist is a client for manipulating Apple Property List
- 	  (.plist) files
- 
- 	  http://www.libimobiledevice.org/
- 
--comment "libplist needs a toolchain w/ C++"
--	depends on !BR2_INSTALL_LIBSTDCPP
-+comment "libplist needs a toolchain w/ C++, threads"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/luajit/Config.in b/package/luajit/Config.in
+index 1a27c43..6b9c6e6 100644
+--- a/package/luajit/Config.in
++++ b/package/luajit/Config.in
+@@ -1,5 +1,8 @@
+ config BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
+ 	bool
++	# -m32 flag is used for 32bit builds and host-luajit has
++	# limited architecture support
++	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+ 	default y if BR2_i386 || \
+ 		(BR2_x86_64 && BR2_HOSTARCH='x86_64') || \
+ 		BR2_powerpc || BR2_arm || BR2_armeb || \
