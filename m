@@ -1,32 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 26 Nov 2017 20:53:06 +0100
-Subject: [Buildroot] [PATCH] core/reproducible: do not override
- SOURCE_DATE_EPOCH
-In-Reply-To: <20171105091456.5277-1-yann.morin.1998@free.fr> (Yann E. MORIN's
- message of "Sun, 5 Nov 2017 10:14:56 +0100")
-References: <20171105091456.5277-1-yann.morin.1998@free.fr>
-Message-ID: <87efokizq5.fsf@dell.be.48ers.dk>
+Date: Sun, 26 Nov 2017 21:14:25 +0100
+Subject: [Buildroot] [PATCH] python-config.sh: don't reassign ${prefix}
+In-Reply-To: <20171018165523.13145-1-matthew.weber@rockwellcollins.com> (Matt
+ Weber's message of "Wed, 18 Oct 2017 11:55:23 -0500")
+References: <20171018165523.13145-1-matthew.weber@rockwellcollins.com>
+Message-ID: <87a7z8iyqm.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>>>>> "Matt" == Matt Weber <matthew.weber@rockwellcollins.com> writes:
 
- > SOURCE_DATE_EPOCH is currently forcibly set (to either the git commit
- > date, or the last release date).
+ > When prefix is set to a path like /usr during crossbuild
+ > the sed operations end up executing twice, once for the prefix
+ > reassignment and another for includedir if it is set as a string
+ > including the ${prefix} variable.  This results in an issue
+ > when building on a machine that mounts local storage under /usr.
 
- > However, the spec mandates that it should not be modified if already
- > set: https://reproducible-builds.org/specs/source-date-epoch/
+ > This patch updates the remaining location which uses the prefix
+ > variable to also sed and update to use the real path.
 
- >     Build systems MUST NOT overwrite this variable for child
- >     processes to consume if it is already present.
+ > Upstream bug report:
+ > https://bugs.python.org/issue31713
 
- > Abide by the rule, and only set it if not already set.
+ > Buildroot bug:
+ > https://bugs.busybox.net/show_bug.cgi?id=10361
 
- > This will allow users to pass it from an upper-layer buildsystem (e.g. a
- > jenkins or gitlab-ci job, for example), when they have a reson to do so.
+ > Fixes failures like the following:
+ > python-gobject-2.28.6 | NOK |
+ > http://autobuild.buildroot.net/results/ac6cf59125ba57402f926e6c65ffe19e065001b5
+ > dbus-python-1.2.4 | NOK |
+ > http://autobuild.buildroot.net/results/0d1459155ab6ad2e126e0845ecf6ba2f9381ec8b
 
 Committed to 2017.02.x and 2017.08.x, thanks.
 
