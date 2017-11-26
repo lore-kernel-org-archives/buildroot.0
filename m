@@ -1,29 +1,61 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Nov 2017 17:50:12 +0100
-Subject: [Buildroot] [PATCHv2] package/hackrf: new package
-In-Reply-To: <20171126153550.13871-1-yann.morin.1998@free.fr>
-References: <20171126153550.13871-1-yann.morin.1998@free.fr>
-Message-ID: <20171126175012.3e950dae@windsurf.home>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 26 Nov 2017 09:10:28 +0100
+Subject: [Buildroot] [git commit branch/2017.08.x] package/python-pyqt5: fix
+ build with Qt 5.6.3
+Message-ID: <20171126184640.3B0E2814A3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=122f8540740fb7f85a501dd31e1dce6eb98a5863
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.08.x
 
-On Sun, 26 Nov 2017 16:35:50 +0100, Yann E. MORIN wrote:
+This commit adds 5_6_3 to the Timeline patch that fixed the build with
+Qt 5.6.2.
 
->  package/Config.in                                  |  1 +
->  ...01-host-tools-use-pkg-cnfig-to-find-fftwf.patch | 45 ++++++++++++++++++++++
->  package/hackrf/Config.in                           | 17 ++++++++
->  package/hackrf/hackrf.mk                           | 22 +++++++++++
->  4 files changed, 85 insertions(+)
+Signed-off-by: Scott Ellis <scott@jumpnowtek.com>
+[Thomas: adjust patch existing patch description.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-Update to the DEVELOPERS file is missing.
+(cherry picked from commit 063b2a8121530d72389ca5a3aad7c9647f5a5c5b)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/python-pyqt5/0002-fix-qt-5.6.2.patch | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/python-pyqt5/0002-fix-qt-5.6.2.patch b/package/python-pyqt5/0002-fix-qt-5.6.2.patch
+index a56af09..fd2f9d9 100644
+--- a/package/python-pyqt5/0002-fix-qt-5.6.2.patch
++++ b/package/python-pyqt5/0002-fix-qt-5.6.2.patch
+@@ -1,15 +1,15 @@
+-Fix the build with Qt 5.6.2
++Fix the build with Qt 5.6.{2,3}
+ 
+ Building PyQt 5.7 with versions of Qt older than Qt 5.7 is supposed to
+ work, but currently fails in practice. In fact, this is due to the
+ fact that the %Timeline variable in QtCoremod.sip didn't contain the
+-5.6.2 Qt version, so if this version was used, PyQt was assuming it
++5.6.{2,3} Qt versions, so if this version was used, PyQt was assuming it
+ was the later version 5.7, and therefore started enabling APIs only
+ available in Qt 5.7, causing build failures when building against Qt
+-5.6.2.
++5.6.{2,3}.
+ 
+-Adding Qt_5_6_2 to the timeline fixes this problem. This fix was
+-suggested by Phil Thompson <phil@riverbankcomputing.com>.
++Adding Qt_5_6_2 and Qt_5_6_3 to the timeline fixes this problem. This
++fix was suggested by Phil Thompson <phil@riverbankcomputing.com>.
+ 
+ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ 
+@@ -22,7 +22,7 @@ Index: PyQt5_gpl-5.7/sip/QtCore/QtCoremod.sip
+  %Module(name=PyQt5.QtCore, call_super_init=True, default_VirtualErrorHandler=PyQt5, keyword_arguments="Optional", version=1)
+  
+ -%Timeline {Qt_5_0_0 Qt_5_0_1 Qt_5_0_2 Qt_5_1_0 Qt_5_1_1 Qt_5_2_0 Qt_5_2_1 Qt_5_3_0 Qt_5_3_1 Qt_5_3_2 Qt_5_4_0 Qt_5_4_1 Qt_5_4_2 Qt_5_5_0 Qt_5_5_1 Qt_5_6_0 Qt_5_6_1 Qt_5_7_0}
+-+%Timeline {Qt_5_0_0 Qt_5_0_1 Qt_5_0_2 Qt_5_1_0 Qt_5_1_1 Qt_5_2_0 Qt_5_2_1 Qt_5_3_0 Qt_5_3_1 Qt_5_3_2 Qt_5_4_0 Qt_5_4_1 Qt_5_4_2 Qt_5_5_0 Qt_5_5_1 Qt_5_6_0 Qt_5_6_1 Qt_5_6_2 Qt_5_7_0}
+++%Timeline {Qt_5_0_0 Qt_5_0_1 Qt_5_0_2 Qt_5_1_0 Qt_5_1_1 Qt_5_2_0 Qt_5_2_1 Qt_5_3_0 Qt_5_3_1 Qt_5_3_2 Qt_5_4_0 Qt_5_4_1 Qt_5_4_2 Qt_5_5_0 Qt_5_5_1 Qt_5_6_0 Qt_5_6_1 Qt_5_6_2 Qt_5_6_3 Qt_5_7_0}
+  
+  %Platforms {WS_X11 WS_WIN WS_MACX}
+  
