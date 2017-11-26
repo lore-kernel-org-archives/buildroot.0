@@ -1,101 +1,78 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 26 Nov 2017 22:01:03 +0100
-Subject: [Buildroot] [git commit branch/2017.08.x] gstreamer: needs dynamic
- libraries
-Message-ID: <20171126213855.CC6C981D43@busybox.osuosl.org>
+Date: Sun, 26 Nov 2017 22:14:26 +0100
+Subject: [Buildroot] [git commit branch/2017.08.x] go-bootstrap: add
+ BR2_PACKAGE_HOST_GO_BOOTSTRAP_ARCH_SUPPORTS
+Message-ID: <20171126213856.2AEA681D43@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bb0c2b5e20dc8ea3a70afdce7f96a4b39a19dc4a
+commit: https://git.buildroot.net/buildroot/commit/?id=56ca7ab66068f88b2ca5b5896f02860db314e535
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.08.x
 
+go-bootstrap is a host package that builds a first stage Go compiler,
+later used to build the final Go compiler. However, this first stage
+compiler only supports building on x86, x86-64 and arm as host
+architectures, so we need to add the relevant architecture
+dependencies to avoid having go-bootstrap built on other unsupported
+platforms.
+
+We do this by introducing BR2_PACKAGE_HOST_GO_BOOTSTRAP_ARCH_SUPPORTS
+in a new package/go-bootstrap/Config.in.host file. This option is then
+used by BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS to make sure we can't enable
+Go packages when the host architecture doesn't allow building the Go
+compiler.
+
 Fixes:
-http://autobuild.buildroot.net/results/49d/49dcec0bd2f3bb78c18675a9fa5c9c53cc183fd2/
 
-g_cclosure_marshal_VOID__VOID is defined both in libgobject.a and
-libgstreamer.a. It is probably possible to fix this, but gstreamer0.10
-has been deprecated for a long time now and is anyway unlikely to be
-used in static-only situations, so let's just require dynamic linking.
+  http://autobuild.buildroot.net/results/cbd419c6ab6fa8a6d18dc137c91f895867e53b8a/
 
-Propagate to the reverse dependencies. opencv3 already did depend on
-dynamic libs.
-
-[Peter: add autobuild reference]
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-(cherry picked from commit 0eee5465e51229c4c17d7930ca2095caace4f8d2)
+(cherry picked from commit a3fda8e292c4b5b98482b5b75f551476c570a034)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gstreamer/gstreamer/Config.in | 6 ++++--
- package/libplayer/Config.in           | 6 ++++--
- package/opencv/Config.in              | 7 +++++--
- 3 files changed, 13 insertions(+), 6 deletions(-)
+ package/Config.in.host              | 1 +
+ package/go-bootstrap/Config.in.host | 7 +++++++
+ package/go/Config.in.host           | 1 +
+ 3 files changed, 9 insertions(+)
 
-diff --git a/package/gstreamer/gstreamer/Config.in b/package/gstreamer/gstreamer/Config.in
-index eb1249a..99c90f1 100644
---- a/package/gstreamer/gstreamer/Config.in
-+++ b/package/gstreamer/gstreamer/Config.in
-@@ -1,12 +1,14 @@
--comment "gstreamer 0.10 needs a toolchain w/ wchar, threads"
-+comment "gstreamer 0.10 needs a toolchain w/ wchar, threads, dynamic library"
- 	depends on BR2_USE_MMU
--	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
-+		BR2_STATIC_LIBS
- 
- config BR2_PACKAGE_GSTREAMER
- 	bool "gstreamer 0.10"
- 	depends on BR2_USE_WCHAR # glib2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
- 	depends on BR2_USE_MMU # glib2
-+	depends on !BR2_STATIC_LIBS
- 	select BR2_PACKAGE_LIBGLIB2
- 	help
- 	  GStreamer is an open source multimedia framework.
-diff --git a/package/libplayer/Config.in b/package/libplayer/Config.in
-index 0ae558d..82083a0 100644
---- a/package/libplayer/Config.in
-+++ b/package/libplayer/Config.in
-@@ -20,11 +20,13 @@ config BR2_PACKAGE_LIBPLAYER_GSTREAMER
- 	depends on BR2_USE_WCHAR # glib2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
- 	depends on BR2_USE_MMU # glib2
-+	depends on !BR2_STATIC_LIBS # gstreamer
- 	select BR2_PACKAGE_GSTREAMER
- 
--comment "gstreamer backend needs a toolchain w/ wchar, threads"
-+comment "gstreamer backend needs a toolchain w/ wchar, threads, dynamic library"
- 	depends on BR2_USE_MMU
--	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
-+		BR2_STATIC_LIBS
- endif
- 
- comment "libplayer needs a toolchain w/ threads"
-diff --git a/package/opencv/Config.in b/package/opencv/Config.in
-index 742ae3e..26109a7 100644
---- a/package/opencv/Config.in
-+++ b/package/opencv/Config.in
-@@ -208,13 +208,16 @@ config BR2_PACKAGE_OPENCV_WITH_GSTREAMER
- 	depends on BR2_USE_MMU # gstreamer -> libglib2
- 	depends on BR2_USE_WCHAR # gstreamer -> libglib2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # gstreamer -> libglib2
-+	depends on !BR2_STATIC_LIBS # gstreamer
- 	select BR2_PACKAGE_GSTREAMER
- 	select BR2_PACKAGE_GST_PLUGINS_BASE
- 	select BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_APP
- 
--comment "gstreamer-0.10 support needs a toolchain w/ wchar, threads"
-+comment "gstreamer-0.10 support needs a toolchain w/ wchar, threads, dynamic library"
- 	depends on BR2_USE_MMU
--	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
-+		BR2_STATIC_LIBS
-+
- 
- config BR2_PACKAGE_OPENCV_WITH_GSTREAMER1
- 	bool "gstreamer-1.x"
+diff --git a/package/Config.in.host b/package/Config.in.host
+index c5a852b..973b682 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -17,6 +17,7 @@ menu "Host utilities"
+ 	source "package/genimage/Config.in.host"
+ 	source "package/genpart/Config.in.host"
+ 	source "package/go/Config.in.host"
++	source "package/go-bootstrap/Config.in.host"
+ 	source "package/gptfdisk/Config.in.host"
+ 	source "package/imx-usb-loader/Config.in.host"
+ 	source "package/jq/Config.in.host"
+diff --git a/package/go-bootstrap/Config.in.host b/package/go-bootstrap/Config.in.host
+new file mode 100644
+index 0000000..fab80d2
+--- /dev/null
++++ b/package/go-bootstrap/Config.in.host
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_HOST_GO_BOOTSTRAP_ARCH_SUPPORTS
++	bool
++	# See src/cmd/dist/unix.c for the list of support
++	# architectures
++	default y if BR2_HOSTARCH = "x86"
++	default y if BR2_HOSTARCH = "x86_64"
++	default y if BR2_HOSTARCH = "arm"
+diff --git a/package/go/Config.in.host b/package/go/Config.in.host
+index a210033..c871ac4 100644
+--- a/package/go/Config.in.host
++++ b/package/go/Config.in.host
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
+ 	bool
+ 	default y
++	depends on BR2_PACKAGE_HOST_GO_BOOTSTRAP_ARCH_SUPPORTS
+ 	depends on (BR2_arm && BR2_TOOLCHAIN_SUPPORTS_PIE) || BR2_aarch64 \
+ 		|| BR2_i386 || BR2_x86_64 || BR2_powerpc64le \
+ 		|| BR2_mips64 || BR2_mips64el
