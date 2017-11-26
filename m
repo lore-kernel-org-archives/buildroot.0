@@ -1,32 +1,100 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 27 Nov 2017 09:25:46 +0100
-Subject: [Buildroot] [git commit] linux-headers: bump 3.2.x series
-Message-ID: <20171127081832.1429880DB6@busybox.osuosl.org>
+Date: Sun, 26 Nov 2017 16:25:09 +0100
+Subject: [Buildroot] [git commit] pdbg: add patch fixing the build on
+ Blackfin
+Message-ID: <20171127081831.EDC24814A7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c8f0a823efdb3f195c475194dc7b3341502819c0
+commit: https://git.buildroot.net/buildroot/commit/?id=3950f5412ed77ce4ae52760767bf8e60b5c1bf53
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+This commit adds a patch to pdbg that fixes the build on the Blackfin
+architecture. The build failure was due to the recently introduced
+assembly code to embed the DTB into an object file. This code was not
+taking into account the fact that Blackfin has a non-empty
+__USER_LABEL_PREFIX__.
+
+The patch has been submitted upstream.
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/2bf6f56303453fd2ba7e86882168d406ded4cc80/
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/linux-headers/Config.in.host | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ ...fix-to-build-on-architecture-with-non-emp.patch | 63 ++++++++++++++++++++++
+ 1 file changed, 63 insertions(+)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 61a9414..cff856e 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -239,7 +239,7 @@ endchoice
- 
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
--	default "3.2.95"	if BR2_KERNEL_HEADERS_3_2
-+	default "3.2.96"	if BR2_KERNEL_HEADERS_3_2
- 	default "3.4.113"	if BR2_KERNEL_HEADERS_3_4
- 	default "3.10.108"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.12.74"	if BR2_KERNEL_HEADERS_3_12
+diff --git a/package/pdbg/0001-template.S-fix-to-build-on-architecture-with-non-emp.patch b/package/pdbg/0001-template.S-fix-to-build-on-architecture-with-non-emp.patch
+new file mode 100644
+index 0000000..15c0eef
+--- /dev/null
++++ b/package/pdbg/0001-template.S-fix-to-build-on-architecture-with-non-emp.patch
+@@ -0,0 +1,63 @@
++From 50ae93273376ede704012030009c29bd58d6a569 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Date: Sun, 26 Nov 2017 16:22:25 +0100
++Subject: [PATCH] template.S: fix to build on architecture with non-empty
++ __USER_LABEL_PREFIX__
++
++Blackfin has a non-empty __USER_LABEL_PREFIX__, which means that a
++symbol called "foo" in C must be named "_foo" in assembler.
++
++Interestingly, it seems like "$(CC) -xassembler - -c" doesn't pass the
++input source file through the C preprocessor, so we do this
++explicitly.
++
++Submitted-upstream: https://github.com/open-power/pdbg/pull/26
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ Makefile.am |  2 +-
++ template.S  | 22 +++++++++++++++-------
++ 2 files changed, 16 insertions(+), 8 deletions(-)
++
++diff --git a/Makefile.am b/Makefile.am
++index 9d34bff..82e0856 100644
++--- a/Makefile.am
+++++ b/Makefile.am
++@@ -62,4 +62,4 @@ p9z-fsi.dtb.o: p9z-fsi.dts p9-fsi.dtsi
++ %.dtb.o: %.dts
++ 	dtc -i$(dir $@) -I dts $< -O dtb > $@.tmp
++ 	symbol_prefix=`echo $@ | tr '.-' '_'` ; \
++-	sed "s%SYMBOL_PREFIX%$${symbol_prefix}%g; s%FILENAME%$@.tmp%g" $(top_srcdir)/template.S | $(CC) -xassembler - -c -o $@
+++	sed "s%SYMBOL_PREFIX%$${symbol_prefix}%g; s%FILENAME%$@.tmp%g" $(top_srcdir)/template.S | $(CPP) - | $(CC) -xassembler - -c -o $@
++diff --git a/template.S b/template.S
++index 2e6cbdb..1407a7c 100644
++--- a/template.S
+++++ b/template.S
++@@ -1,10 +1,18 @@
+++#ifdef __USER_LABEL_PREFIX__
+++#define CONCAT1(a, b) CONCAT2(a, b)
+++#define CONCAT2(a, b) a ## b
+++#define SYM(x) CONCAT1 (__USER_LABEL_PREFIX__, x)
+++#else
+++#define SYM(x) x
+++#endif
+++
++ .section .data
++-_binary_SYMBOL_PREFIX_start:
+++SYM(_binary_SYMBOL_PREFIX_start):
++ .incbin "FILENAME"
++ .align 4
++-_binary_SYMBOL_PREFIX_end:
++-_binary_SYMBOL_PREFIX_size:
++-	.long	_binary_SYMBOL_PREFIX_end - _binary_SYMBOL_PREFIX_start
++-.globl _binary_SYMBOL_PREFIX_start
++-.globl _binary_SYMBOL_PREFIX_end
++-.globl _binary_SYMBOL_PREFIX_size
+++SYM(_binary_SYMBOL_PREFIX_end):
+++SYM(_binary_SYMBOL_PREFIX_size):
+++	.long	SYM(_binary_SYMBOL_PREFIX_end) - SYM(_binary_SYMBOL_PREFIX_start)
+++.globl SYM(_binary_SYMBOL_PREFIX_start)
+++.globl SYM(_binary_SYMBOL_PREFIX_end)
+++.globl SYM(_binary_SYMBOL_PREFIX_size)
++-- 
++2.13.6
++
