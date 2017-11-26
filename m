@@ -1,101 +1,56 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 26 Nov 2017 12:18:46 +0100
-Subject: [Buildroot] [PATCH 4/9] arch/arm: do not allow soft-float for
- armv8a
-In-Reply-To: <20171126111257.GA3101@scaer>
-References: <cover.1504444617.git.yann.morin.1998@free.fr>
- <bd6e8e2eaf13ecc5e45e360875cfff3494b86a8c.1504444617.git.yann.morin.1998@free.fr>
- <20170904172137.GB5223@scaer>
- <20171124230857.0b6e1648@windsurf.lan>
- <5508245a-3f6a-80b9-a7ad-b3b6bc5d5f9e@mind.be>
- <20171126111257.GA3101@scaer>
-Message-ID: <20171126111846.GB3101@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 26 Nov 2017 14:04:05 +0100
+Subject: [Buildroot] [git commit] package/freerdp: fix dependency on walyand
+Message-ID: <20171126125820.2620880FD6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, Thomas, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=f79cc7dc157e885b879637d428971ce89777f85c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2017-11-26 12:12 +0100, Yann E. MORIN spake thusly:
-> On 2017-11-25 18:10 +0100, Arnout Vandecappelle spake thusly:
-> > On 24-11-17 23:08, Thomas Petazzoni wrote:
-> > > On Mon, 4 Sep 2017 19:21:37 +0200, Yann E. MORIN wrote:
-> > >> Thomas, All,
-> > >>
-> > >> On 2017-09-03 15:17 +0200, Yann E. MORIN spake thusly:
-> > >>> armv8a has made VFPv4 and NEON mandatory, so there is no point in
-> > >>> allowing software floating point, even in 32-bit mode.  
-> > >>
-> > >> In fact, even though I'm pretty sure that OK in 64-bit, we might still
-> > >> have a reason to do soft-float in 32-bit mode, if only for legacy
-> > >> binary-only applications that were built as soft-float way back in the
-> > >> (not so) good old days...
-> > >>
-> > >> In which case, we should instead depend on !BR2_ARCH_IS_64.
-> > >>
-> > >> Thoughts?
-> > > 
-> > > I'm hesitating on this one. I believe the use-case you mention makes
-> > > sense, however I believe that it can still be supported with your
-> > > proposed patch.
-> > > 
-> > > Indeed, even if you want to run a binary-only soft-float application,
-> > > it doesn't prevent the rest of your system from using VFP, as long as
-> > > you use EABI (and not EABIhf).
-> > > 
-> > > The whole reason why EABI passes floating-point arguments into integer
-> > > registers is precisely to allow compatibility between soft-float code
-> > > and hard-float code. Thanks to that, a soft-float function can call a
-> > > hard-float function, and vice-versa.
-> > > 
-> > > Therefore, even if you have a binary-only soft-float application, there
-> > > is really no reason to build the entire system soft-float.
-> > > 
-> > > So, I think your original patch is OK as-is. However, I still see one
-> > > inconsistent thing: if we disallow soft-float because ARMv8-A mandates
-> > > VFPv4, why would we allow soft-float for ARMv7-A cores that have a
-> > > VFP ? To be consistent, we should also disallow soft-float.
-> > > 
-> > > Another way to think about this is: is it possible to build an AArch64
-> > > soft-float system? do we want to allow the user to select what is
-> > > *possible* or what makes sense?
-> > 
-> >  gcc aarch64
-> 
-> It's not about aarch64, it's about aarch32, i.e. an armv8a core running
-> in 32-bit mode.
-> 
-> > doesn't have a float-abi option, so no it's not possible to build
-> > with soft-float. So the depends on BR2_ARM_EABI is certainly needed.
-> > 
-> >  That said, I don't think it makes a lot of sense to add extra 'depends on'
-> > lines just to avoid that the user would select an option that probably doesn't
-> > make sense. We already make sure that the default is appropriate. Let's not make
-> > our life more difficult.
-> 
-> It's not about making *our* lives more dificult or easier. It's about
-> making the user's lives easier.
-> 
-> If there is a prompt that offers an option, but that has no impact on
-> the resulting output, then that prompt should not exist. Otherwise, it
-> is very confusing.
+Currently, wayland support is enabled when the wayland package is
+enabled, not when the FreeRDP wayland client is enabled.
 
-Damned, I hadn't finished my mail...
+But the dependency on libxkbcomon is only enforced from Config.in
+when the FreeRDP wayland client is enabled., but is added to build
+dependencies when the wayland package is enabled.
 
-> >  So I'd say: reject this patch.
+As such, we can end up in a situation where the FreeRDP wayland
+client is disabled, the wayland package is enabled, and the
+libxkbcommon package is also disabled, which casues the build to
+fail with:
 
-But seeing the argument from Thomas, yes it does not make sense to hide
-soft-float anyway.
+    Makefile:539: *** libxkbcommon is in the dependency chain of
+    freerdp that has added it to its _DEPENDENCIES variable without
+    selecting it or depending on it from Config.in.  Stop.
 
-Regards,
-Yann E. MORIN.
+Change the build dependency to actually be on the FreeRDP client
+being enabled.
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Fixes;
+    http://autobuild.buildroot.net/results/dc3e11f7076a8355f3d2f9cb49c6325dcf7084bd
+
+Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/freerdp/freerdp.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
+index 69a89a1..0ceef57 100644
+--- a/package/freerdp/freerdp.mk
++++ b/package/freerdp/freerdp.mk
+@@ -198,7 +198,7 @@ else
+ FREERDP_CONF_OPTS += -DWITH_XV=OFF
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_WAYLAND),y)
++ifeq ($(BR2_PACKAGE_FREERDP_CLIENT_WL),y)
+ FREERDP_DEPENDENCIES += wayland libxkbcommon
+ FREERDP_CONF_OPTS += \
+ 	-DWITH_WAYLAND=ON \
