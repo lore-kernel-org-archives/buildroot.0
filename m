@@ -1,41 +1,39 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 26 Nov 2017 22:26:07 +0100
-Subject: [Buildroot] [PATCH v2] package/collectd: Specify FP layout
- based on endianness
-In-Reply-To: <20171107200442.23067-1-andrew.smirnov@gmail.com> (Andrey
- Smirnov's message of "Tue, 7 Nov 2017 12:04:42 -0800")
-References: <20171107200442.23067-1-andrew.smirnov@gmail.com>
-Message-ID: <87vahwenps.fsf@dell.be.48ers.dk>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 26 Nov 2017 22:26:40 +0100
+Subject: [Buildroot] [PATCH 1/1] linphone: add libupnp dependency
+Message-ID: <20171126212640.23519-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Andrey" == Andrey Smirnov <andrew.smirnov@gmail.com> writes:
+linphone is compatible with libupnp but not with libupnp18 so disable
+upnp if libupnp is not enabled
 
- > Big-endian CPUs store floating point as big endian (at lest majority
- > of them do), so, in order for 'network' plugin to work correctly (and
- > potentially any user of htond() in collectd's codebase),
- > --with-fp-layout=endianflip as opposed to --with-fp-layout=nothing
- > needs to be specified during configuration phase.
+Fixes:
+ - http://autobuild.buildroot.net/results/473c686f9bc5335d25b720cf1b0c45389138a7b4
 
- > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- > Cc: Arnout Vandecappelle <arnout@mind.be>
- > Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
- > Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
- > ---
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/linphone/linphone.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
- > Changes in [v2]:
-
- >  - Patch converted to use target's endianness as opposed to CPU
- >    architecture
+diff --git a/package/linphone/linphone.mk b/package/linphone/linphone.mk
+index fb5e18db6..a10d6bb20 100644
+--- a/package/linphone/linphone.mk
++++ b/package/linphone/linphone.mk
+@@ -50,4 +50,11 @@ else
+ LINPHONE_CONF_OPTS += --disable-libv4l1 --disable-libv4l2
+ endif
  
- >  - Added a notes about the discussion around "intswap"
-
- > [v2] http://lists.busybox.net/pipermail/buildroot/2017-October/205773.html
-
-Committed to 2017.02.x and 2017.08.x, thanks.
-
++ifeq ($(BR2_PACKAGE_LIBUPNP),y)
++LINPHONE_DEPENDENCIES += libupnp
++LINPHONE_CONF_OPTS += --enable-upnp
++else
++LINPHONE_CONF_OPTS += --disable-upnp
++endif
++
+ $(eval $(autotools-package))
 -- 
-Bye, Peter Korsgaard
+2.14.1
