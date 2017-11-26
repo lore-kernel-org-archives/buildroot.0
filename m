@@ -1,39 +1,25 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 26 Nov 2017 22:26:40 +0100
-Subject: [Buildroot] [PATCH 1/1] linphone: add libupnp dependency
-Message-ID: <20171126212640.23519-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 26 Nov 2017 22:27:15 +0100
+Subject: [Buildroot] [PATCH 1/1] snmp++: security bump to v3.3.10
+In-Reply-To: <20171108120033.26045-1-aduskett@gmail.com> (Adam Duskett's
+ message of "Wed, 8 Nov 2017 07:00:33 -0500")
+References: <20171108120033.26045-1-aduskett@gmail.com>
+Message-ID: <87r2skennw.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-linphone is compatible with libupnp but not with libupnp18 so disable
-upnp if libupnp is not enabled
+>>>>> "Adam" == Adam Duskett <aduskett@gmail.com> writes:
 
-Fixes:
- - http://autobuild.buildroot.net/results/473c686f9bc5335d25b720cf1b0c45389138a7b4
+ > From the changelong:
+ > Set the FD_CLOEXEC flag on sockets, so they are not "leaked" to
+ > spawned processes
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/linphone/linphone.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ > Signed-off-by: Adam Duskett <aduskett@gmail.com>
 
-diff --git a/package/linphone/linphone.mk b/package/linphone/linphone.mk
-index fb5e18db6..a10d6bb20 100644
---- a/package/linphone/linphone.mk
-+++ b/package/linphone/linphone.mk
-@@ -50,4 +50,11 @@ else
- LINPHONE_CONF_OPTS += --disable-libv4l1 --disable-libv4l2
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBUPNP),y)
-+LINPHONE_DEPENDENCIES += libupnp
-+LINPHONE_CONF_OPTS += --enable-upnp
-+else
-+LINPHONE_CONF_OPTS += --disable-upnp
-+endif
-+
- $(eval $(autotools-package))
+Committed to 2017.02.x and 2017.08.x, thanks.
+
 -- 
-2.14.1
+Bye, Peter Korsgaard
