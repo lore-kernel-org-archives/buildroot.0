@@ -1,44 +1,74 @@
-From: =?UTF-8?Q?Stefan_Fr=c3=b6berg?= <stefan.froberg@petroprogram.com>
-Date: Sun, 26 Nov 2017 21:32:59 +0200
-Subject: [Buildroot] [PATCH v2 1/1] zlib-ng: new package
-In-Reply-To: <20171125133140.68d1bd5a@windsurf.lan>
-References: <1509858069-12976-1-git-send-email-stefan.froberg@petroprogram.com>
- <20171125133140.68d1bd5a@windsurf.lan>
-Message-ID: <94829f04-2fa2-ae68-feef-845ffcce0b6d@petroprogram.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sun, 26 Nov 2017 21:38:11 +0200
+Subject: [Buildroot] Static IP
+In-Reply-To: <CAM27=5ijTMYOyBmy1r7k9ByGQ6_tZhGkGWyfd4jG98ijhAffxQ@mail.gmail.com>
+References: <CAM27=5g_TOTu__LdjWcUKaMUiLtBxXD-t2g2N9VEx5JN69ZYUA@mail.gmail.com>
+ <20171124063855.rtkwmk5fadw3rlsd@tarshish>
+ <CAM27=5ijTMYOyBmy1r7k9ByGQ6_tZhGkGWyfd4jG98ijhAffxQ@mail.gmail.com>
+Message-ID: <20171126193811.64fkhpxhc3of6cwj@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi
+Hi Roy,
 
-Sure. No problem at all, just have to quickly lookup howto make virutal
-pacakge (never done that before)
+Please keep the list on Cc so that everyone can benefit from your experience.
 
--S-
+On Sun, Nov 26, 2017 at 02:22:44PM +0200, Roy Arav wrote:
+> I enabled BR2_PACKAGE_IFUPDOWN_SCRIPTS as you suggested,
+> and now I get this warning: 34.193270] NetworkManager[272]: <warn>
+> [1478193422.9602] settings: could not load plugin 'ifupdown' from file
+> '/usr/lib/NetworkManager/libnm-settings-plugin-ifupdown.so': No such file
+> or directory
+> 
+> Any ideas how to solve this thing? (sorry if I seem clue-less, I am new to
+> buildroot...)
 
+This is most likely because we currently pass --disable-ifupdown to the 
+configure script unconditionally. This has been so since commit 52c7f43fdefbe7 
+(network-manager: bump to 0.9.8.0). Maybe Thomas, the author of said commit, 
+can explain the reason for that.
 
-Thomas Petazzoni kirjoitti 25.11.2017 klo 14:31:
-> Hello,
->
-> On Sun,  5 Nov 2017 05:01:09 +0000, Stefan Fr?berg wrote:
->
->>  package/Config.in            |  1 +
->>  package/zlib-ng/Config.in    |  7 +++++++
->>  package/zlib-ng/zlib-ng.hash | 10 ++++++++++
->>  package/zlib-ng/zlib-ng.mk   | 13 +++++++++++++
->>  4 files changed, 31 insertions(+)
-> You forgot to update the DEVELOPERS file.
->
-> However, there is a bigger problem: zlib-ng overwrites zlib. I.e, both
-> install the same libz.so and libz.so.1 libraries.
->
-> So installing both packages at the same time does not make sense. So,
-> we need to do something like jpeg/libjpeg/jpeg-turbo.
->
-> Could you look into doing this ?
->
-> Thanks!
->
-> Thomas
+In case --enable-ifupdown does not increase the target size significantly 
+(relatively speaking), then a patch enable ifupdown would probably be 
+accepted.
+
+> Please see the entire.config.
+
+[skipped config fragments containing potentially sensitive information]
+
+Do you use all these fragments to generate a unified .config?
+
+Please send the minimal .config that exhibits your issue. Minimizing the 
+.config further with 'make savedefconfig' would be nice as well.
+
+baruch
+
+> On Fri, Nov 24, 2017 at 8:38 AM, Baruch Siach <baruch@tkos.co.il> wrote:
+> >
+> > On Fri, Nov 24, 2017 at 07:05:48AM +0200, Roy Arav wrote:
+> > > I am trying to set static IP on a raspberry pi3 device running buildroot.
+> > >
+> > > I edited /etc/network/interfaces, using rootfs overlay.
+> > >
+> > > auto eth0
+> > > allow-hotplug eth0
+> > > iface eth0 inet static
+> > > address 192.168.0.1
+> > > netmask 255.255.255.0
+> > >
+> > > And still IP address is provided using DHCP/
+> > >
+> > > Is there anything else to so that I am missing?
+> > > Perhaps a BR2 flag or package that I need to enable?
+> >
+> > What is your .config?
+> > Do you have BR2_PACKAGE_IFUPDOWN_SCRIPTS enabled?
+> > What about BR2_PACKAGE_SYSTEMD_NETWORKD?
+
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
