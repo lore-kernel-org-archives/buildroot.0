@@ -1,67 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 26 Nov 2017 22:35:47 +0100
-Subject: [Buildroot] [git commit branch/2017.02.x] libpjsip: fix static
- build failures due to name clash
-Message-ID: <20171126213911.F1E6B802D0@busybox.osuosl.org>
+Date: Sun, 26 Nov 2017 22:26:55 +0100
+Subject: [Buildroot] [git commit branch/2017.02.x] snmp++: security bump to
+ v3.3.10
+Message-ID: <20171126213911.B0B4E7FC9E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a706b10c7b8fe3bb6c75e732d45a24407069739d
+commit: https://git.buildroot.net/buildroot/commit/?id=a680850a74c314fae7a5e412573ccbee5d4f6933
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Several packages have a similar md5.c file, and each has a function
-named byteReverse(). This generates link errors when building
-statically ("multiple definition of `byteReverse'").
+From the changelong:
+Set the FD_CLOEXEC flag on sockets, so they are not "leaked" to
+spawned processes
 
-Fix by applying a patch from upstream:
-  https://trac.pjsip.org/repos/changeset/5688
-
-Fixes:
-  http://autobuild.buildroot.org/results/5d7/5d72e0f8517a555399978d5a0e9f7efd0a278189/
-  http://autobuild.buildroot.org/results/c47/c47ccbb9b40011cf0d79c7040bed061ddefd9629/
-  http://autobuild.buildroot.org/results/419/419ab2c0e034cc68991281c51caa8271b0fadbab/
-
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-Cc: Adam Duskett <aduskett@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 8d44fb66085723b87efd8d111db50fdba7fa63ea)
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+(cherry picked from commit 6be1631bf27cb0d2aa6ddcbad835d614f33698e6)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0001-Fixed-possible-function-name-clash.patch  | 26 ++++++++++++++++++++++
- 1 file changed, 26 insertions(+)
+ package/snmppp/snmppp.hash | 3 ++-
+ package/snmppp/snmppp.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/libpjsip/0001-Fixed-possible-function-name-clash.patch b/package/libpjsip/0001-Fixed-possible-function-name-clash.patch
-new file mode 100644
-index 0000000..435b0ea
---- /dev/null
-+++ b/package/libpjsip/0001-Fixed-possible-function-name-clash.patch
-@@ -0,0 +1,26 @@
-+Re #2059 (misc): Fixed possible function name clash with md5 due to non-static function.
-+
-+Backported from: https://trac.pjsip.org/repos/changeset/5688
-+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-+
-+Index: pjlib-util/src/pjlib-util/md5.c
-+===================================================================
-+diff --git a/pjproject/pjlib-util/src/pjlib-util/md5.c b/pjproject/pjlib-util/src/pjlib-util/md5.c
-+--- a/pjlib-util/src/pjlib-util/md5.c	(revision 5687)
-++++ b/pjlib-util/src/pjlib-util/md5.c	(revision 5688)
-+@@ -29,13 +29,13 @@
-+ #ifndef HIGHFIRST
-+ #define byteReverse(buf, len)	/* Nothing */
-+ #else
-+-void byteReverse(unsigned char *buf, unsigned longs);
-++static void byteReverse(unsigned char *buf, unsigned longs);
-+ 
-+ #ifndef ASM_MD5
-+ /*
-+  * Note: this code is harmless on little-endian machines.
-+  */
-+-void byteReverse(unsigned char *buf, unsigned longs)
-++static void byteReverse(unsigned char *buf, unsigned longs)
-+ {
-+     pj_uint32_t t;
-+     do {
+diff --git a/package/snmppp/snmppp.hash b/package/snmppp/snmppp.hash
+index 75ecdda..5c8feee 100644
+--- a/package/snmppp/snmppp.hash
++++ b/package/snmppp/snmppp.hash
+@@ -1,2 +1,3 @@
+ # Locally computed:
+-sha256 2ef0cb20658c1eb9e053f8a7a9d5c8f5ebf2f734d37b692fdbf7163ea17dde6f  snmp++-3.3.9.tar.gz
++sha256 6827adb6a6a68a7f32c41fa12bdfd0aa48f4825b8773f63fc4d5c8482d4ed481	snmp++-3.3.10.tar.gz
++sha256 d00d5deb9ce44fa01ddf6f882de3ea8b9e8402f776b546dd982d55367ebbd392	src/v3.cpp
+diff --git a/package/snmppp/snmppp.mk b/package/snmppp/snmppp.mk
+index 67410d9..4ceb61c 100644
+--- a/package/snmppp/snmppp.mk
++++ b/package/snmppp/snmppp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SNMPPP_VERSION = 3.3.9
++SNMPPP_VERSION = 3.3.10
+ SNMPPP_SOURCE = snmp++-$(SNMPPP_VERSION).tar.gz
+ SNMPPP_SITE = http://www.agentpp.com/download
+ SNMPPP_DEPENDENCIES = host-pkgconf
