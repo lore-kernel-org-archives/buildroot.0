@@ -1,54 +1,28 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 26 Nov 2017 09:18:49 +0100
-Subject: [Buildroot] [git commit branch/2017.02.x] apr: security bump to
- version 1.6.3
-Message-ID: <20171126184721.837AB8110A@busybox.osuosl.org>
+Date: Sun, 26 Nov 2017 20:22:52 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libopenssl: security bump to
+ version 1.0.2m
+In-Reply-To: <20171103183359.7598-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Fri, 3 Nov 2017 19:33:59 +0100")
+References: <20171103183359.7598-1-bernd.kuhls@t-online.de>
+Message-ID: <87mv38j14j.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2da6c49e0b4982ec65529a0671b3d8b8f69508fb
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-Fixes CVE-2017-12613: Out-of-bounds array deref in apr_time_exp*()
-functions.
+ > Fixes the following CVEs:
+ > bn_sqrx8x_internal carry bug on x86_64 (CVE-2017-3736)
+ > Malformed X.509 IPAddressFamily could cause OOB read (CVE-2017-3735)
 
-Use upstream provided SHA256 hash.
+ > Release notes: https://www.openssl.org/news/secadv/20171102.txt
 
-Add license has.
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit c91981a985108a83bfeca1a61a4457b5ac785574)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/apr/apr.hash | 6 ++++--
- package/apr/apr.mk   | 2 +-
- 2 files changed, 5 insertions(+), 3 deletions(-)
+Committed to 2017.02.x and 2017.08.x after s/libopenssl/openssl/, thanks.
 
-diff --git a/package/apr/apr.hash b/package/apr/apr.hash
-index 7a5969e..be130a5 100644
---- a/package/apr/apr.hash
-+++ b/package/apr/apr.hash
-@@ -1,2 +1,4 @@
--# From http://archive.apache.org/dist/apr/apr-1.6.2.tar.bz2.sha1
--sha1 01b0d4faa0194825e8e525b9ac7ccfb832471d50  apr-1.6.2.tar.bz2
-+# From http://www.apache.org/dist/apr/apr-1.6.3.tar.bz2.sha256
-+sha256 131f06d16d7aabd097fa992a33eec2b6af3962f93e6d570a9bd4d85e95993172  apr-1.6.3.tar.bz2
-+# Locally calculated
-+sha256 f854aeef66ecd55a126226e82b3f26793fc3b1c584647f6a0edc5639974c38ad  LICENSE
-diff --git a/package/apr/apr.mk b/package/apr/apr.mk
-index ffb3099..58b1d86 100644
---- a/package/apr/apr.mk
-+++ b/package/apr/apr.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--APR_VERSION = 1.6.2
-+APR_VERSION = 1.6.3
- APR_SOURCE = apr-$(APR_VERSION).tar.bz2
- APR_SITE = http://archive.apache.org/dist/apr
- APR_LICENSE = Apache-2.0
+-- 
+Bye, Peter Korsgaard
