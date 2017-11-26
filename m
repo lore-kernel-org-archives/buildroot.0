@@ -1,32 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 26 Nov 2017 22:32:57 +0100
-Subject: [Buildroot] [PATCH] ruby: security bump to version 2.4.2
-In-Reply-To: <20171112134311.8475-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Sun, 12 Nov 2017 14:43:11 +0100")
-References: <20171112134311.8475-1-peter@korsgaard.com>
-Message-ID: <87a7z8enee.fsf@dell.be.48ers.dk>
+Date: Sun, 26 Nov 2017 22:36:24 +0100
+Subject: [Buildroot] [PATCH v2] libpjsip: fix static build failures due
+ to name clash
+In-Reply-To: <1510441591-10698-1-git-send-email-luca@lucaceresoli.net> (Luca
+ Ceresoli's message of "Sun, 12 Nov 2017 00:06:31 +0100")
+References: <1510441591-10698-1-git-send-email-luca@lucaceresoli.net>
+Message-ID: <87609wen8n.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Luca" == Luca Ceresoli <luca@lucaceresoli.net> writes:
 
- > Fixed the following security issues:
- > CVE-2017-0898: Buffer underrun vulnerability in Kernel.sprintf
- > CVE-2017-10784: Escape sequence injection vulnerability in the Basic
- > authentication of WEBrick
- > CVE-2017-14033: Buffer underrun vulnerability in OpenSSL ASN1 decode
- > CVE-2017-14064: Heap exposure in generating JSON
+ > Several packages have a similar md5.c file, and each has a function
+ > named byteReverse(). This generates link errors when building
+ > statically ("multiple definition of `byteReverse'").
 
- > For more details, see the release notes:
- > https://www.ruby-lang.org/en/news/2017/09/14/ruby-2-4-2-released/
+ > Fix by applying a patch from upstream:
+ >   https://trac.pjsip.org/repos/changeset/5688
 
- > Drop now upstreamed rubygems patches and add hashes for the license files
- > while we're at it.
+ > Fixes:
+ >   http://autobuild.buildroot.org/results/5d7/5d72e0f8517a555399978d5a0e9f7efd0a278189/
+ >   http://autobuild.buildroot.org/results/c47/c47ccbb9b40011cf0d79c7040bed061ddefd9629/
+ >   http://autobuild.buildroot.org/results/419/419ab2c0e034cc68991281c51caa8271b0fadbab/
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+ > Cc: Adam Duskett <aduskett@gmail.com>
+
+ > ---
+
+ > Changes v1 -> v2:
+ >  - Add commit message and SoB line to patch file (Arnout)
 
 Committed to 2017.02.x and 2017.08.x, thanks.
 
