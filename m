@@ -1,67 +1,124 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 27 Nov 2017 10:46:21 +0100
-Subject: [Buildroot] [git commit branch/2017.08.x] samba4: security bump to
- version 4.6.11
-Message-ID: <20171127093934.6DB9C81D82@busybox.osuosl.org>
+Date: Mon, 27 Nov 2017 10:32:30 +0100
+Subject: [Buildroot] [git commit branch/2017.08.x] qt5webkit: backport
+ upstream icu-59 fix from 5.9 branch to 5.6.3
+Message-ID: <20171127093934.1567280DB7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=773ba3870fdfe65de883e01fd511cb6ed6d5aacb
+commit: https://git.buildroot.net/buildroot/commit/?id=b622ceef864ea25286cde871d65649432659eceb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.08.x
 
-Fixes the following security issues:
+icu-59.x slightly changed the API, breaking qt5webkit builds. For details, see:
 
- - CVE-2017-14746:
-   All versions of Samba from 4.0.0 onwards are vulnerable to a use after
-   free vulnerability, where a malicious SMB1 request can be used to
-   control the contents of heap memory via a deallocated heap pointer. It
-   is possible this may be used to compromise the SMB server.
-
- - CVE-2017-15275:
-   All versions of Samba from 3.6.0 onwards are vulnerable to a heap
-   memory information leak, where server allocated heap memory may be
-   returned to the client without being cleared.
-
-   There is no known vulnerability associated with this error, but
-   uncleared heap memory may contain previously used data that may help
-   an attacker compromise the server via other methods. Uncleared heap
-   memory may potentially contain password hashes or other high-value
-   data.
-
-For more details, see the release notes:
-https://www.samba.org/samba/history/samba-4.6.11.html
+https://bugreports.qt.io/browse/QTBUG-60532
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit df75c954bc5633045d5c06a87c53d71dad8ae6e1)
+(cherry picked from commit cab0d0a8acc920c6d240e9d503816b9ffb0508d2)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/samba4/samba4.hash | 2 +-
- package/samba4/samba4.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .../5.6.3/0004-Fix-compilation-with-ICU-59.patch   | 93 ++++++++++++++++++++++
+ 1 file changed, 93 insertions(+)
 
-diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
-index 6821144..3bf46d3 100644
---- a/package/samba4/samba4.hash
-+++ b/package/samba4/samba4.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 5913a569b54c6bc261bc245d7326fabfcba42839d15a82db48c047de1eb19626  samba-4.6.10.tar.gz
-+sha256 051b7ab0fa088d77dc0df039ff5d6b8fd998372f0c29ecb455b149457c20ed1d  samba-4.6.11.tar.gz
- sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index 40436ca..7836df5 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SAMBA4_VERSION = 4.6.10
-+SAMBA4_VERSION = 4.6.11
- SAMBA4_SITE = https://download.samba.org/pub/samba/stable
- SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
- SAMBA4_INSTALL_STAGING = YES
+diff --git a/package/qt5/qt5webkit/5.6.3/0004-Fix-compilation-with-ICU-59.patch b/package/qt5/qt5webkit/5.6.3/0004-Fix-compilation-with-ICU-59.patch
+new file mode 100644
+index 0000000..f3b590e
+--- /dev/null
++++ b/package/qt5/qt5webkit/5.6.3/0004-Fix-compilation-with-ICU-59.patch
+@@ -0,0 +1,93 @@
++From bf172ae289a1348842005a9421797970f9b72060 Mon Sep 17 00:00:00 2001
++From: Konstantin Tokarev <annulen@yandex.ru>
++Date: Thu, 4 May 2017 15:12:37 +0300
++Subject: [PATCH] Fix compilation with ICU 59
++
++Upstream fix: https://bugs.webkit.org/show_bug.cgi?id=171612
++
++Task-number: QTBUG-60532
++Change-Id: I6014feea213aa70ebe40b09d9d1a03fd1ed3c843
++Reviewed-by: Allan Sandfeld Jensen <allan.jensen@qt.io>
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ Source/JavaScriptCore/API/JSStringRef.cpp        | 6 +++---
++ Source/JavaScriptCore/runtime/DateConversion.cpp | 3 ++-
++ Source/WTF/wtf/TypeTraits.h                      | 3 +++
++ Source/WebKit2/Shared/API/c/WKString.cpp         | 2 +-
++ 4 files changed, 9 insertions(+), 5 deletions(-)
++
++diff --git a/Source/JavaScriptCore/API/JSStringRef.cpp b/Source/JavaScriptCore/API/JSStringRef.cpp
++index 812f3d413..77a3fd0f4 100644
++--- a/Source/JavaScriptCore/API/JSStringRef.cpp
+++++ b/Source/JavaScriptCore/API/JSStringRef.cpp
++@@ -37,7 +37,7 @@ using namespace WTF::Unicode;
++ JSStringRef JSStringCreateWithCharacters(const JSChar* chars, size_t numChars)
++ {
++     initializeThreading();
++-    return OpaqueJSString::create(chars, numChars).leakRef();
+++    return OpaqueJSString::create(reinterpret_cast<const UChar*>(chars), numChars).leakRef();
++ }
++ 
++ JSStringRef JSStringCreateWithUTF8CString(const char* string)
++@@ -62,7 +62,7 @@ JSStringRef JSStringCreateWithUTF8CString(const char* string)
++ JSStringRef JSStringCreateWithCharactersNoCopy(const JSChar* chars, size_t numChars)
++ {
++     initializeThreading();
++-    return OpaqueJSString::create(StringImpl::createWithoutCopying(chars, numChars, WTF::DoesNotHaveTerminatingNullCharacter)).leakRef();
+++    return OpaqueJSString::create(StringImpl::createWithoutCopying(reinterpret_cast<const UChar*>(chars), numChars, WTF::DoesNotHaveTerminatingNullCharacter)).leakRef();
++ }
++ 
++ JSStringRef JSStringRetain(JSStringRef string)
++@@ -83,7 +83,7 @@ size_t JSStringGetLength(JSStringRef string)
++ 
++ const JSChar* JSStringGetCharactersPtr(JSStringRef string)
++ {
++-    return string->characters();
+++    return reinterpret_cast<const JSChar*>(string->characters());
++ }
++ 
++ size_t JSStringGetMaximumUTF8CStringSize(JSStringRef string)
++diff --git a/Source/JavaScriptCore/runtime/DateConversion.cpp b/Source/JavaScriptCore/runtime/DateConversion.cpp
++index 0b57f012d..05e27338b 100644
++--- a/Source/JavaScriptCore/runtime/DateConversion.cpp
+++++ b/Source/JavaScriptCore/runtime/DateConversion.cpp
++@@ -107,7 +107,8 @@ String formatDateTime(const GregorianDateTime& t, DateTimeFormat format, bool as
++ #if OS(WINDOWS)
++             TIME_ZONE_INFORMATION timeZoneInformation;
++             GetTimeZoneInformation(&timeZoneInformation);
++-            const WCHAR* timeZoneName = t.isDST() ? timeZoneInformation.DaylightName : timeZoneInformation.StandardName;
+++            const WCHAR* winTimeZoneName = t.isDST() ? timeZoneInformation.DaylightName : timeZoneInformation.StandardName;
+++            String timeZoneName(reinterpret_cast<const UChar*>(winTimeZoneName));
++ #else
++             struct tm gtm = t;
++             char timeZoneName[70];
++diff --git a/Source/WTF/wtf/TypeTraits.h b/Source/WTF/wtf/TypeTraits.h
++index 9df2c95cf..f5d6121fd 100644
++--- a/Source/WTF/wtf/TypeTraits.h
+++++ b/Source/WTF/wtf/TypeTraits.h
++@@ -72,6 +72,9 @@ namespace WTF {
++     template<> struct IsInteger<unsigned long>      { static const bool value = true; };
++     template<> struct IsInteger<long long>          { static const bool value = true; };
++     template<> struct IsInteger<unsigned long long> { static const bool value = true; };
+++#if __cplusplus >= 201103L || defined(__GXX_EXPERIMENTAL_CXX0X__) || (defined(_HAS_CHAR16_T_LANGUAGE_SUPPORT) && _HAS_CHAR16_T_LANGUAGE_SUPPORT)
+++    template<> struct IsInteger<char16_t>           { static const bool value = true; };
+++#endif
++ #if !COMPILER(MSVC) || defined(_NATIVE_WCHAR_T_DEFINED)
++     template<> struct IsInteger<wchar_t>            { static const bool value = true; };
++ #endif
++diff --git a/Source/WebKit2/Shared/API/c/WKString.cpp b/Source/WebKit2/Shared/API/c/WKString.cpp
++index cbac67dd8..23400a64e 100644
++--- a/Source/WebKit2/Shared/API/c/WKString.cpp
+++++ b/Source/WebKit2/Shared/API/c/WKString.cpp
++@@ -55,7 +55,7 @@ size_t WKStringGetLength(WKStringRef stringRef)
++ size_t WKStringGetCharacters(WKStringRef stringRef, WKChar* buffer, size_t bufferLength)
++ {
++     COMPILE_ASSERT(sizeof(WKChar) == sizeof(UChar), WKStringGetCharacters_sizeof_WKChar_matches_UChar);
++-    return (toImpl(stringRef)->getCharacters(static_cast<UChar*>(buffer), bufferLength));
+++    return (toImpl(stringRef)->getCharacters(reinterpret_cast<UChar*>(buffer), bufferLength));
++ }
++ 
++ size_t WKStringGetMaximumUTF8CStringSize(WKStringRef stringRef)
++-- 
++2.11.0
++
