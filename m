@@ -1,52 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 27 Nov 2017 22:37:15 +0100
-Subject: [Buildroot] [PATCH v3,2/2] rygel: new package
-In-Reply-To: <20171031083933.19956-2-fontaine.fabrice@gmail.com>
-References: <20171031083933.19956-1-fontaine.fabrice@gmail.com>
- <20171031083933.19956-2-fontaine.fabrice@gmail.com>
-Message-ID: <20171127223715.1d45e1e6@windsurf.home>
+Date: Mon, 27 Nov 2017 22:37:34 +0100
+Subject: [Buildroot] [git commit] board/qemu/x86*: use quotes around -append
+ Qemu option value
+Message-ID: <20171127213014.1BE9B7FB10@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=c191e24c33f3faf208527f523935d891b00cf282
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 31 Oct 2017 09:39:33 +0100, Fabrice Fontaine wrote:
-> Rygel is a home media solution (UPnP AV MediaServer) that allows you to
-> easily share audio, video and pictures to other devices.
-> 
-> Additionally, media player software may use Rygel to become a
-> MediaRenderer that may be controlled remotely by a UPnP or DLNA
-> Controller.
-> 
-> Rygel achieves interoperability with other devices in the market by
-> trying to conform to the very strict requirements of DLNA and by
-> converting media on-the-fly to formats that client devices can handle.
-> 
-> Most Rygel functionality is implemented through a plug-in mechanism.
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
-> Changes v2 -> v3 (after review of Romain Naour and Thomas Petazzoni):
->  - Update version from 0.34 to 0.36
->  - Remove comment on missing COPYING.logo and add it to LICENSE_FILES
->  - Add entry in DEVELOPERS
->  - Fix static build by patching gupnp-av
+This helps the toolchains.free-electrons.com build logic re-use
+directly the Qemu command lines from this readme.txt file, by having a
+-append option similar to the ones used in other readme.txt files.
 
-Applied to next with the following changes:
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ board/qemu/x86/readme.txt    | 2 +-
+ board/qemu/x86_64/readme.txt | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-    [Thomas:
-     - use SPDX license codes
-     - add hashes for license files
-     - move Config.in comment at the end of the Config.in file to not
-       break the indentation of the sub-options.]
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/board/qemu/x86/readme.txt b/board/qemu/x86/readme.txt
+index 1750096..b003ad5 100644
+--- a/board/qemu/x86/readme.txt
++++ b/board/qemu/x86/readme.txt
+@@ -1,6 +1,6 @@
+ Run the emulation with:
+ 
+-  qemu-system-i386 -M pc -kernel output/images/bzImage -drive file=output/images/rootfs.ext2,if=virtio,format=raw -append root=/dev/vda -net nic,model=virtio -net user
++  qemu-system-i386 -M pc -kernel output/images/bzImage -drive file=output/images/rootfs.ext2,if=virtio,format=raw -append "root=/dev/vda" -net nic,model=virtio -net user
+ 
+ Optionally add -smp N to emulate a SMP system with N CPUs.
+ 
+diff --git a/board/qemu/x86_64/readme.txt b/board/qemu/x86_64/readme.txt
+index ecd7813..ed7b5f5 100644
+--- a/board/qemu/x86_64/readme.txt
++++ b/board/qemu/x86_64/readme.txt
+@@ -1,6 +1,6 @@
+ Run the emulation with:
+ 
+-  qemu-system-x86_64 -M pc -kernel output/images/bzImage -drive file=output/images/rootfs.ext2,if=virtio,format=raw -append root=/dev/vda -net nic,model=virtio -net user
++  qemu-system-x86_64 -M pc -kernel output/images/bzImage -drive file=output/images/rootfs.ext2,if=virtio,format=raw -append "root=/dev/vda" -net nic,model=virtio -net user
+ 
+ Optionally add -smp N to emulate a SMP system with N CPUs.
+ 
