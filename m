@@ -1,124 +1,77 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 27 Nov 2017 10:32:30 +0100
-Subject: [Buildroot] [git commit branch/2017.08.x] qt5webkit: backport
- upstream icu-59 fix from 5.9 branch to 5.6.3
-Message-ID: <20171127093934.1567280DB7@busybox.osuosl.org>
+Date: Mon, 27 Nov 2017 10:40:41 +0100
+Subject: [Buildroot] [git commit branch/2017.08.x] oracle-mysql: fix build
+ with gcc 7.x
+Message-ID: <20171127093934.66AF980DB7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b622ceef864ea25286cde871d65649432659eceb
+commit: https://git.buildroot.net/buildroot/commit/?id=b7a9f3301eff5329e682c6375c16705498e6fe14
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.08.x
 
-icu-59.x slightly changed the API, breaking qt5webkit builds. For details, see:
+This adjusts an existing patch to also fix gcc 7.x build issues on the
+server side of MySQL.
 
-https://bugreports.qt.io/browse/QTBUG-60532
+Fixes:
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit cab0d0a8acc920c6d240e9d503816b9ffb0508d2)
+  http://autobuild.buildroot.net/results/9e3a0b5b8f2506fb2ce2fcc3d5d3a494a14439cb
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+(cherry picked from commit 317b72f469867bd3e1765418e325515d6065d45f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../5.6.3/0004-Fix-compilation-with-ICU-59.patch   | 93 ++++++++++++++++++++++
- 1 file changed, 93 insertions(+)
+ package/oracle-mysql/0008-gcc7.patch | 29 +++++++++++++++++++++++++----
+ 1 file changed, 25 insertions(+), 4 deletions(-)
 
-diff --git a/package/qt5/qt5webkit/5.6.3/0004-Fix-compilation-with-ICU-59.patch b/package/qt5/qt5webkit/5.6.3/0004-Fix-compilation-with-ICU-59.patch
-new file mode 100644
-index 0000000..f3b590e
---- /dev/null
-+++ b/package/qt5/qt5webkit/5.6.3/0004-Fix-compilation-with-ICU-59.patch
-@@ -0,0 +1,93 @@
-+From bf172ae289a1348842005a9421797970f9b72060 Mon Sep 17 00:00:00 2001
-+From: Konstantin Tokarev <annulen@yandex.ru>
-+Date: Thu, 4 May 2017 15:12:37 +0300
-+Subject: [PATCH] Fix compilation with ICU 59
-+
-+Upstream fix: https://bugs.webkit.org/show_bug.cgi?id=171612
-+
-+Task-number: QTBUG-60532
-+Change-Id: I6014feea213aa70ebe40b09d9d1a03fd1ed3c843
-+Reviewed-by: Allan Sandfeld Jensen <allan.jensen@qt.io>
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ Source/JavaScriptCore/API/JSStringRef.cpp        | 6 +++---
-+ Source/JavaScriptCore/runtime/DateConversion.cpp | 3 ++-
-+ Source/WTF/wtf/TypeTraits.h                      | 3 +++
-+ Source/WebKit2/Shared/API/c/WKString.cpp         | 2 +-
-+ 4 files changed, 9 insertions(+), 5 deletions(-)
-+
-+diff --git a/Source/JavaScriptCore/API/JSStringRef.cpp b/Source/JavaScriptCore/API/JSStringRef.cpp
-+index 812f3d413..77a3fd0f4 100644
-+--- a/Source/JavaScriptCore/API/JSStringRef.cpp
-++++ b/Source/JavaScriptCore/API/JSStringRef.cpp
-+@@ -37,7 +37,7 @@ using namespace WTF::Unicode;
-+ JSStringRef JSStringCreateWithCharacters(const JSChar* chars, size_t numChars)
-+ {
-+     initializeThreading();
-+-    return OpaqueJSString::create(chars, numChars).leakRef();
-++    return OpaqueJSString::create(reinterpret_cast<const UChar*>(chars), numChars).leakRef();
-+ }
+diff --git a/package/oracle-mysql/0008-gcc7.patch b/package/oracle-mysql/0008-gcc7.patch
+index 2cf6d26..321112d 100644
+--- a/package/oracle-mysql/0008-gcc7.patch
++++ b/package/oracle-mysql/0008-gcc7.patch
+@@ -4,15 +4,17 @@ mysql.cc: In function 'void build_completion_hash(bool, bool)':
+ mysql.cc:2687:37: error: invalid conversion from 'char' to 'char*' [-fpermissive]
+        field_names[i][num_fields*2]= '\0';
+                                      ^~~~
+-
+ Patch was partly backported from upstream commit:
+ https://github.com/mysql/mysql-server/commit/ae21683d980d5fe9e39bd0193827ea3604256eb9
+ 
+ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++[Thomas: add more gcc 7.x fixes in instance_map.cc.]
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ 
+-diff -uNr mysql-5.1.73.org/client/mysql.cc mysql-5.1.73/client/mysql.cc
+---- mysql-5.1.73.org/client/mysql.cc	2013-11-04 19:52:27.000000000 +0100
+-+++ mysql-5.1.73/client/mysql.cc	2017-05-13 19:52:10.125101101 +0200
++Index: b/client/mysql.cc
++===================================================================
++--- a/client/mysql.cc
+++++ b/client/mysql.cc
+ @@ -2684,7 +2684,7 @@
+          mysql_free_result(fields);
+          break;
+@@ -22,3 +24,22 @@ diff -uNr mysql-5.1.73.org/client/mysql.cc mysql-5.1.73/client/mysql.cc
+        j=0;
+        while ((sql_field=mysql_fetch_field(fields)))
+        {
++Index: b/server-tools/instance-manager/instance_map.cc
++===================================================================
++--- a/server-tools/instance-manager/instance_map.cc
+++++ b/server-tools/instance-manager/instance_map.cc
++@@ -526,12 +526,12 @@
++              Options::Main::config_file);
 + 
-+ JSStringRef JSStringCreateWithUTF8CString(const char* string)
-+@@ -62,7 +62,7 @@ JSStringRef JSStringCreateWithUTF8CString(const char* string)
-+ JSStringRef JSStringCreateWithCharactersNoCopy(const JSChar* chars, size_t numChars)
-+ {
-+     initializeThreading();
-+-    return OpaqueJSString::create(StringImpl::createWithoutCopying(chars, numChars, WTF::DoesNotHaveTerminatingNullCharacter)).leakRef();
-++    return OpaqueJSString::create(StringImpl::createWithoutCopying(reinterpret_cast<const UChar*>(chars), numChars, WTF::DoesNotHaveTerminatingNullCharacter)).leakRef();
-+ }
++     argv_options[1]= defaults_file_arg;
++-    argv_options[2]= '\0';
+++    argv_options[2]= NULL;
 + 
-+ JSStringRef JSStringRetain(JSStringRef string)
-+@@ -83,7 +83,7 @@ size_t JSStringGetLength(JSStringRef string)
++     argc= 2;
++   }
++   else
++-    argv_options[1]= '\0';
+++    argv_options[1]= NULL;
 + 
-+ const JSChar* JSStringGetCharactersPtr(JSStringRef string)
-+ {
-+-    return string->characters();
-++    return reinterpret_cast<const JSChar*>(string->characters());
-+ }
-+ 
-+ size_t JSStringGetMaximumUTF8CStringSize(JSStringRef string)
-+diff --git a/Source/JavaScriptCore/runtime/DateConversion.cpp b/Source/JavaScriptCore/runtime/DateConversion.cpp
-+index 0b57f012d..05e27338b 100644
-+--- a/Source/JavaScriptCore/runtime/DateConversion.cpp
-++++ b/Source/JavaScriptCore/runtime/DateConversion.cpp
-+@@ -107,7 +107,8 @@ String formatDateTime(const GregorianDateTime& t, DateTimeFormat format, bool as
-+ #if OS(WINDOWS)
-+             TIME_ZONE_INFORMATION timeZoneInformation;
-+             GetTimeZoneInformation(&timeZoneInformation);
-+-            const WCHAR* timeZoneName = t.isDST() ? timeZoneInformation.DaylightName : timeZoneInformation.StandardName;
-++            const WCHAR* winTimeZoneName = t.isDST() ? timeZoneInformation.DaylightName : timeZoneInformation.StandardName;
-++            String timeZoneName(reinterpret_cast<const UChar*>(winTimeZoneName));
-+ #else
-+             struct tm gtm = t;
-+             char timeZoneName[70];
-+diff --git a/Source/WTF/wtf/TypeTraits.h b/Source/WTF/wtf/TypeTraits.h
-+index 9df2c95cf..f5d6121fd 100644
-+--- a/Source/WTF/wtf/TypeTraits.h
-++++ b/Source/WTF/wtf/TypeTraits.h
-+@@ -72,6 +72,9 @@ namespace WTF {
-+     template<> struct IsInteger<unsigned long>      { static const bool value = true; };
-+     template<> struct IsInteger<long long>          { static const bool value = true; };
-+     template<> struct IsInteger<unsigned long long> { static const bool value = true; };
-++#if __cplusplus >= 201103L || defined(__GXX_EXPERIMENTAL_CXX0X__) || (defined(_HAS_CHAR16_T_LANGUAGE_SUPPORT) && _HAS_CHAR16_T_LANGUAGE_SUPPORT)
-++    template<> struct IsInteger<char16_t>           { static const bool value = true; };
-++#endif
-+ #if !COMPILER(MSVC) || defined(_NATIVE_WCHAR_T_DEFINED)
-+     template<> struct IsInteger<wchar_t>            { static const bool value = true; };
-+ #endif
-+diff --git a/Source/WebKit2/Shared/API/c/WKString.cpp b/Source/WebKit2/Shared/API/c/WKString.cpp
-+index cbac67dd8..23400a64e 100644
-+--- a/Source/WebKit2/Shared/API/c/WKString.cpp
-++++ b/Source/WebKit2/Shared/API/c/WKString.cpp
-+@@ -55,7 +55,7 @@ size_t WKStringGetLength(WKStringRef stringRef)
-+ size_t WKStringGetCharacters(WKStringRef stringRef, WKChar* buffer, size_t bufferLength)
-+ {
-+     COMPILE_ASSERT(sizeof(WKChar) == sizeof(UChar), WKStringGetCharacters_sizeof_WKChar_matches_UChar);
-+-    return (toImpl(stringRef)->getCharacters(static_cast<UChar*>(buffer), bufferLength));
-++    return (toImpl(stringRef)->getCharacters(reinterpret_cast<UChar*>(buffer), bufferLength));
-+ }
-+ 
-+ size_t WKStringGetMaximumUTF8CStringSize(WKStringRef stringRef)
-+-- 
-+2.11.0
-+
++   /*
++     If the routine failed, we'll simply fallback to defaults in
