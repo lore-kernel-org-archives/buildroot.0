@@ -1,40 +1,41 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 26 Nov 2017 23:14:29 +0100
-Subject: [Buildroot] [git commit branch/2017.08.x] libpjsip: fix ssl support
-Message-ID: <20171126222416.9796180F56@busybox.osuosl.org>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Sun, 26 Nov 2017 22:07:35 -0200
+Subject: [Buildroot] [PATCH] linux-firmware: Bump to the latest version
+Message-ID: <1511741255-9710-1-git-send-email-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dec223b0174348d880b8a32012671cd039541288
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.08.x
+Update to commit 17e6288135d4.
 
-Currently, ssl support is implicitely disabled in the initial configure
-options. This overrides the check for openssl below.
-
-libpjsip is also currently only compatible with libopenssl. Change
-the check to LIBOPENSSL instead of openssl, and depend on libopenssl.
-
-[Peter: drop libopenssl change]
-Signed-off-by: Adam Duskett <aduskett@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 9e479e65dcf1582b20433ca1b120efb66e806a04)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
 ---
- package/libpjsip/libpjsip.mk | 1 -
- 1 file changed, 1 deletion(-)
+ package/linux-firmware/linux-firmware.hash | 2 +-
+ package/linux-firmware/linux-firmware.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libpjsip/libpjsip.mk b/package/libpjsip/libpjsip.mk
-index 6f3f9e3..73d0f47 100644
---- a/package/libpjsip/libpjsip.mk
-+++ b/package/libpjsip/libpjsip.mk
-@@ -50,7 +50,6 @@ LIBPJSIP_CONF_OPTS = \
- 	--disable-openh264 \
- 	--disable-libyuv \
- 	--disable-ipp \
--	--disable-ssl \
- 	--disable-silk \
- 	--with-external-srtp
+diff --git a/package/linux-firmware/linux-firmware.hash b/package/linux-firmware/linux-firmware.hash
+index 9b8dfed..209ea26 100644
+--- a/package/linux-firmware/linux-firmware.hash
++++ b/package/linux-firmware/linux-firmware.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 ec58d9aaf3cf80f768c32ba22d925c0542436ef3ee4588acd3e49b12ca2ed9d9 linux-firmware-a3a26af24e29c818ef9b5661856018e21a5c49fb.tar.gz
++sha256 28d359523a36c1cdc3e85a8e148bb2d68b036d28b10f0e80a192f3dc29f02c16 linux-firmware-17e6288135d4500f9fe60224dce2b46d850c346b.tar.gz
+diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+index d238abe..fd0fa3d 100644
+--- a/package/linux-firmware/linux-firmware.mk
++++ b/package/linux-firmware/linux-firmware.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
+-LINUX_FIRMWARE_VERSION = a3a26af24e29c818ef9b5661856018e21a5c49fb
++LINUX_FIRMWARE_VERSION = 17e6288135d4500f9fe60224dce2b46d850c346b
+ LINUX_FIRMWARE_SITE = http://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git
+ LINUX_FIRMWARE_SITE_METHOD = git
+ 
+-- 
+2.7.4
