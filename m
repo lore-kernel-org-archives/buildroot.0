@@ -1,1160 +1,386 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 Nov 2017 22:19:09 +0100
-Subject: [Buildroot] [git commit] bash: bump to 4.4.12
-Message-ID: <20171201205332.C430A7FC1A@busybox.osuosl.org>
+Date: Mon, 27 Nov 2017 22:10:37 +0100
+Subject: [Buildroot] [git commit] gupnp-av: fix static library linking with
+ gupnp
+Message-ID: <20171201205338.C54AF80160@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0a219430d797cc25c4f4b1f952831adf4dbb64b0
+commit: https://git.buildroot.net/buildroot/commit/?id=d682569f5dca884a23d5810a89388e6174687bfd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-In addition, remove upstreamed patches and add a hash for the license
-file.
+gupnp and gupnp-av defines two internal functions with the same name:
+xml_util_get_element and xml_util_get_child_element_content, as a result
+an application such as rygel can't be build statically.
+To fix this issue, rename both functions as
+xml_util_get_element2 and xml_util_get_child_element_content2
 
-Signed-off-by: Adam Duskett <aduskett@gmail.com>
-[Thomas: indicate pgp signature file address in hash file, as
-suggested by Baruch.]
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/bash/bash.hash        |   6 +-
- package/bash/bash.mk          |   2 +-
- package/bash/bash44-001.patch |  64 ----------------
- package/bash/bash44-002.patch |  73 -------------------
- package/bash/bash44-003.patch |  62 ----------------
- package/bash/bash44-004.patch |  88 ----------------------
- package/bash/bash44-005.patch |  51 -------------
- package/bash/bash44-006.patch |  63 ----------------
- package/bash/bash44-007.patch | 155 ---------------------------------------
- package/bash/bash44-008.patch |  88 ----------------------
- package/bash/bash44-009.patch | 111 ----------------------------
- package/bash/bash44-010.patch |  53 --------------
- package/bash/bash44-011.patch |  54 --------------
- package/bash/bash44-012.patch | 165 ------------------------------------------
- 14 files changed, 5 insertions(+), 1030 deletions(-)
+ ...001-Fix-static-library-linking-with-gupnp.patch | 354 +++++++++++++++++++++
+ 1 file changed, 354 insertions(+)
 
-diff --git a/package/bash/bash.hash b/package/bash/bash.hash
-index adbd608..4e2e48f 100644
---- a/package/bash/bash.hash
-+++ b/package/bash/bash.hash
-@@ -1,2 +1,4 @@
--# Locally calculated after checking pgp signature
--sha256 d86b3392c1202e8ff5a423b302e6284db7f8f435ea9f39b5b1b20fd3ac36dfcb  bash-4.4.tar.gz
-+# Locally calculated after checking pgp signature from
-+# http://ftp.gnu.org/gnu/bash/bash-4.4.12.tar.gz.sig
-+sha256 57d8432be54541531a496fd4904fdc08c12542f43605a9202594fa5d5f9f2331	bash-4.4.12.tar.gz
-+sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	COPYING
-diff --git a/package/bash/bash.mk b/package/bash/bash.mk
-index dd7c26f..089d062 100644
---- a/package/bash/bash.mk
-+++ b/package/bash/bash.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--BASH_VERSION = 4.4
-+BASH_VERSION = 4.4.12
- BASH_SITE = $(BR2_GNU_MIRROR)/bash
- # Build after since bash is better than busybox shells
- BASH_DEPENDENCIES = ncurses readline host-bison \
-diff --git a/package/bash/bash44-001.patch b/package/bash/bash44-001.patch
-deleted file mode 100644
-index 842aea4..0000000
---- a/package/bash/bash44-001.patch
-+++ /dev/null
-@@ -1,64 +0,0 @@
--From https://ftp.gnu.org/gnu/bash/bash-4.4-patches/bash44-001
--
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
--
--			     BASH PATCH REPORT
--			     =================
--
--Bash-Release:	4.4
--Patch-ID:	bash44-001
--
--Bug-Reported-by:	Sean Zha <freeman_cha@hotmail.com>
--Bug-Reference-ID:	<BN3PR01MB13657D9303EB94BF6E54216E8CCA0@BN3PR01MB1365.prod.exchangelabs.com>
--Bug-Reference-URL:	http://lists.gnu.org/archive/html/bug-bash/2016-09/msg00107.html
--
--Bug-Description:
--
--Bash-4.4 changed the way the history list is initially allocated to reduce
--the number of reallocations and copies.  Users who set HISTSIZE to a very
--large number to essentially unlimit the size of the history list will get
--memory allocation errors 
--
--Patch (apply with `patch -p0'):
--
--*** a/bash-4.4/lib/readline/history.c	2015-12-28 13:50:31.000000000 -0500
----- b/lib/readline/history.c	2016-09-30 14:28:40.000000000 -0400
--***************
--*** 58,61 ****
----- 58,63 ----
--  #define DEFAULT_HISTORY_INITIAL_SIZE	502
--  
--+ #define MAX_HISTORY_INITIAL_SIZE	8192
--+ 
--  /* The number of slots to increase the_history by. */
--  #define DEFAULT_HISTORY_GROW_SIZE 50
--***************
--*** 308,312 ****
--  	{
--  	  if (history_stifled && history_max_entries > 0)
--! 	    history_size = history_max_entries + 2;
--  	  else
--  	    history_size = DEFAULT_HISTORY_INITIAL_SIZE;
----- 310,316 ----
--  	{
--  	  if (history_stifled && history_max_entries > 0)
--! 	    history_size = (history_max_entries > MAX_HISTORY_INITIAL_SIZE)
--! 				? MAX_HISTORY_INITIAL_SIZE
--! 				: history_max_entries + 2;
--  	  else
--  	    history_size = DEFAULT_HISTORY_INITIAL_SIZE;
--*** a/bash-4.4/patchlevel.h	2016-06-22 14:51:03.000000000 -0400
----- b/patchlevel.h	2016-10-01 11:01:28.000000000 -0400
--***************
--*** 26,30 ****
--     looks for to find the patch level (for the sccs version string). */
--  
--! #define PATCHLEVEL 0
--  
--  #endif /* _PATCHLEVEL_H_ */
----- 26,30 ----
--     looks for to find the patch level (for the sccs version string). */
--  
--! #define PATCHLEVEL 1
--  
--  #endif /* _PATCHLEVEL_H_ */
-diff --git a/package/bash/bash44-002.patch b/package/bash/bash44-002.patch
-deleted file mode 100644
-index 6f4a809..0000000
---- a/package/bash/bash44-002.patch
-+++ /dev/null
-@@ -1,73 +0,0 @@
--From https://ftp.gnu.org/gnu/bash/bash-4.4-patches/bash44-002
--
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
--
--			     BASH PATCH REPORT
--			     =================
--
--Bash-Release:	4.4
--Patch-ID:	bash44-002
--
--Bug-Reported-by:	Eric Pruitt <eric.pruitt@gmail.com>
--Bug-Reference-ID:	<20160916055120.GA28272@sinister.codevat.com>
--Bug-Reference-URL:	http://lists.gnu.org/archive/html/bug-bash/2016-09/msg00015.html
--
--Bug-Description:
--
--Bash-4.4 warns when discarding NUL bytes in command substitution output
--instead of silently dropping them.  This patch changes the warnings from
--one per NUL byte encountered to one warning per command substitution.
--
--Patch (apply with `patch -p0'):
--
--*** a/bash-4.4/subst.c	2016-08-30 16:46:38.000000000 -0400
----- b/subst.c	2016-09-26 10:20:19.000000000 -0400
--***************
--*** 5932,5935 ****
----- 5933,5937 ----
--    int istring_index, istring_size, c, tflag, skip_ctlesc, skip_ctlnul;
--    ssize_t bufn;
--+   int nullbyte;
--  
--    istring = (char *)NULL;
--***************
--*** 5939,5942 ****
----- 5941,5946 ----
--      skip_ctlesc |= *s == CTLESC, skip_ctlnul |= *s == CTLNUL;
--  
--+   nullbyte = 0;
--+ 
--    /* Read the output of the command through the pipe.  This may need to be
--       changed to understand multibyte characters in the future. */
--***************
--*** 5957,5961 ****
--  	{
--  #if 1
--! 	  internal_warning ("%s", _("command substitution: ignored null byte in input"));
--  #endif
--  	  continue;
----- 5961,5969 ----
--  	{
--  #if 1
--! 	  if (nullbyte == 0)
--! 	    {
--! 	      internal_warning ("%s", _("command substitution: ignored null byte in input"));
--! 	      nullbyte = 1;
--! 	    }
--  #endif
--  	  continue;
--*** a/bash-4.4/patchlevel.h	2016-06-22 14:51:03.000000000 -0400
----- b/patchlevel.h	2016-10-01 11:01:28.000000000 -0400
--***************
--*** 26,30 ****
--     looks for to find the patch level (for the sccs version string). */
--  
--! #define PATCHLEVEL 1
--  
--  #endif /* _PATCHLEVEL_H_ */
----- 26,30 ----
--     looks for to find the patch level (for the sccs version string). */
--  
--! #define PATCHLEVEL 2
--  
--  #endif /* _PATCHLEVEL_H_ */
-diff --git a/package/bash/bash44-003.patch b/package/bash/bash44-003.patch
-deleted file mode 100644
-index cdfc206..0000000
---- a/package/bash/bash44-003.patch
-+++ /dev/null
-@@ -1,62 +0,0 @@
--From https://ftp.gnu.org/gnu/bash/bash-4.4-patches/bash44-003
--
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
--
--			     BASH PATCH REPORT
--			     =================
--
--Bash-Release:	4.4
--Patch-ID:	bash44-003
--
--Bug-Reported-by:	op7ic \x00 <op7ica@gmail.com>
--Bug-Reference-ID:	<CAFHyJTopWC5Jx+U7WcvxSZKu+KrqSf+_3sHPiRWo=VzXSiPq=w@mail.gmail.com>
--Bug-Reference-URL:	http://lists.gnu.org/archive/html/bug-bash/2016-11/msg00005.html
--
--Bug-Description:
--
--Specially-crafted input, in this case an incomplete pathname expansion
--bracket expression containing an invalid collating symbol, can cause the
--shell to crash.
--
--Patch (apply with `patch -p0'):
--
--*** a/bash-4.4/lib/glob/sm_loop.c	2016-04-10 11:23:21.000000000 -0400
----- b/lib/glob/sm_loop.c	2016-11-02 14:03:34.000000000 -0400
--***************
--*** 331,334 ****
----- 331,340 ----
--      if (p[pc] == L('.') && p[pc+1] == L(']'))
--        break;
--+    if (p[pc] == 0)
--+     {
--+       if (vp)
--+ 	*vp = INVALID;
--+       return (p + pc);
--+     }
--     val = COLLSYM (p, pc);
--     if (vp)
--***************
--*** 484,487 ****
----- 490,496 ----
--        c = FOLD (c);
--  
--+       if (c == L('\0'))
--+ 	return ((test == L('[')) ? savep : (CHAR *)0);
--+ 
--        if ((flags & FNM_PATHNAME) && c == L('/'))
--  	/* [/] can never match when matching a pathname.  */
--*** a/bash-4.4/patchlevel.h	2016-06-22 14:51:03.000000000 -0400
----- b/patchlevel.h	2016-10-01 11:01:28.000000000 -0400
--***************
--*** 26,30 ****
--     looks for to find the patch level (for the sccs version string). */
--  
--! #define PATCHLEVEL 2
--  
--  #endif /* _PATCHLEVEL_H_ */
----- 26,30 ----
--     looks for to find the patch level (for the sccs version string). */
--  
--! #define PATCHLEVEL 3
--  
--  #endif /* _PATCHLEVEL_H_ */
-diff --git a/package/bash/bash44-004.patch b/package/bash/bash44-004.patch
-deleted file mode 100644
-index ba6ff62..0000000
---- a/package/bash/bash44-004.patch
-+++ /dev/null
-@@ -1,88 +0,0 @@
--From https://ftp.gnu.org/gnu/bash/bash-4.4-patches/bash44-004
--
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
--
--			     BASH PATCH REPORT
--			     =================
--
--Bash-Release:	4.4
--Patch-ID:	bash44-004
--
--Bug-Reported-by:	Christian Weisgerber <naddy@mips.inka.de>
--Bug-Reference-ID:	<20161101160302.GB54856@lorvorc.mips.inka.de>
--Bug-Reference-URL:	http://lists.gnu.org/archive/html/bug-bash/2016-11/msg00004.html
--
--Bug-Description:
--
--There is a race condition that can result in bash referencing freed memory
--when freeing data associated with the last process substitution.
--
--Patch (apply with `patch -p0'):
--
--*** a/bash-4.4/jobs.c	2016-08-23 16:38:44.000000000 -0400
----- b/jobs.c	2016-11-02 18:24:45.000000000 -0400
--***************
--*** 454,457 ****
----- 454,472 ----
--  }
--  
--+ void
--+ discard_last_procsub_child ()
--+ {
--+   PROCESS *disposer;
--+   sigset_t set, oset;
--+ 
--+   BLOCK_CHILD (set, oset);
--+   disposer = last_procsub_child;
--+   last_procsub_child = (PROCESS *)NULL;
--+   UNBLOCK_CHILD (oset);
--+ 
--+   if (disposer)
--+     discard_pipeline (disposer);
--+ }
--+ 
--  struct pipeline_saver *
--  alloc_pipeline_saver ()
--*** a/bash-4.4/jobs.h	2016-04-27 10:35:51.000000000 -0400
----- b/jobs.h	2016-11-02 18:25:08.000000000 -0400
--***************
--*** 191,194 ****
----- 191,195 ----
--  extern void stop_making_children __P((void));
--  extern void cleanup_the_pipeline __P((void));
--+ extern void discard_last_procsub_child __P((void));
--  extern void save_pipeline __P((int));
--  extern PROCESS *restore_pipeline __P((int));
--*** a/bash-4.4/subst.c	2016-08-30 16:46:38.000000000 -0400
----- b/subst.c	2016-11-02 18:23:24.000000000 -0400
--***************
--*** 5809,5816 ****
--  #if defined (JOB_CONTROL)
--        if (last_procsub_child)
--! 	{
--! 	  discard_pipeline (last_procsub_child);
--! 	  last_procsub_child = (PROCESS *)NULL;
--! 	}
--        last_procsub_child = restore_pipeline (0);
--  #endif
----- 5834,5838 ----
--  #if defined (JOB_CONTROL)
--        if (last_procsub_child)
--! 	discard_last_procsub_child ();
--        last_procsub_child = restore_pipeline (0);
--  #endif
--*** a/bash-4.4/patchlevel.h	2016-06-22 14:51:03.000000000 -0400
----- b/patchlevel.h	2016-10-01 11:01:28.000000000 -0400
--***************
--*** 26,30 ****
--     looks for to find the patch level (for the sccs version string). */
--  
--! #define PATCHLEVEL 3
--  
--  #endif /* _PATCHLEVEL_H_ */
----- 26,30 ----
--     looks for to find the patch level (for the sccs version string). */
--  
--! #define PATCHLEVEL 4
--  
--  #endif /* _PATCHLEVEL_H_ */
-diff --git a/package/bash/bash44-005.patch b/package/bash/bash44-005.patch
-deleted file mode 100644
-index 0278e31..0000000
---- a/package/bash/bash44-005.patch
-+++ /dev/null
-@@ -1,51 +0,0 @@
--From https://ftp.gnu.org/gnu/bash/bash-4.4-patches/bash44-005
--
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
--
--			     BASH PATCH REPORT
--			     =================
--
--Bash-Release:	4.4
--Patch-ID:	bash44-005
--
--Bug-Reported-by:	Dr. Werner Fink <werner@suse.de>
--Bug-Reference-ID:	<20161107100936.ajnojd7dspirdflf@noether.suse.de>
--Bug-Reference-URL:	http://lists.gnu.org/archive/html/bug-bash/2016-11/msg00054.html
--
--Bug-Description:
--
--Under certain circumstances, a simple command is optimized to eliminate a
--fork, resulting in an EXIT trap not being executed.
--
--Patch (apply with `patch -p0'):
--
--*** a/bash-4.4/builtins/evalstring.c	2016-08-11 14:18:51.000000000 -0400
----- b/builtins/evalstring.c	2016-11-08 15:05:07.000000000 -0500
--***************
--*** 105,114 ****
--  	  *bash_input.location.string == '\0' &&
--  	  command->type == cm_simple &&
--- #if 0
--  	  signal_is_trapped (EXIT_TRAP) == 0 &&
--  	  signal_is_trapped (ERROR_TRAP) == 0 &&
--- #else
--  	  any_signals_trapped () < 0 &&
--- #endif
--  	  command->redirects == 0 && command->value.Simple->redirects == 0 &&
--  	  ((command->flags & CMD_TIME_PIPELINE) == 0) &&
----- 105,111 ----
--*** a/bash-4.4/patchlevel.h	2016-06-22 14:51:03.000000000 -0400
----- b/patchlevel.h	2016-10-01 11:01:28.000000000 -0400
--***************
--*** 26,30 ****
--     looks for to find the patch level (for the sccs version string). */
--  
--! #define PATCHLEVEL 4
--  
--  #endif /* _PATCHLEVEL_H_ */
----- 26,30 ----
--     looks for to find the patch level (for the sccs version string). */
--  
--! #define PATCHLEVEL 5
--  
--  #endif /* _PATCHLEVEL_H_ */
-diff --git a/package/bash/bash44-006.patch b/package/bash/bash44-006.patch
-deleted file mode 100644
-index ba58ed4..0000000
---- a/package/bash/bash44-006.patch
-+++ /dev/null
-@@ -1,63 +0,0 @@
--From https://ftp.gnu.org/gnu/bash/bash-4.4-patches/bash44-006
--
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
--
--			     BASH PATCH REPORT
--			     =================
--
--Bash-Release:	4.4
--Patch-ID:	bash44-006
--
--Bug-Reported-by:	<fernando@null-life.com>
--Bug-Reference-ID:	<CAEr-gPFPvqheiAeENmMkEwWRd4U=1iqCsYmR3sLdULOqL++_tQ@mail.gmail.com>
--Bug-Reference-URL:	
--
--Bug-Description:
--
--Out-of-range negative offsets to popd can cause the shell to crash attempting
--to free an invalid memory block.
--
--Patch (apply with `patch -p0'):
--
--*** bash-4.4-patched/builtins/pushd.def	2016-01-25 13:31:49.000000000 -0500
----- b/builtins/pushd.def	2016-10-28 10:46:49.000000000 -0400
--***************
--*** 366,370 ****
--      }
--  
--!   if (which > directory_list_offset || (directory_list_offset == 0 && which == 0))
--      {
--        pushd_error (directory_list_offset, which_word ? which_word : "");
----- b/366,370 ----
--      }
--  
--!   if (which > directory_list_offset || (which < -directory_list_offset) || (directory_list_offset == 0 && which == 0))
--      {
--        pushd_error (directory_list_offset, which_word ? which_word : "");
--***************
--*** 388,391 ****
----- b/388,396 ----
--  	 of the list into place. */
--        i = (direction == '+') ? directory_list_offset - which : which;
--+       if (i < 0 || i > directory_list_offset)
--+ 	{
--+ 	  pushd_error (directory_list_offset, which_word ? which_word : "");
--+ 	  return (EXECUTION_FAILURE);
--+ 	}
--        free (pushd_directory_list[i]);
--        directory_list_offset--;
--*** bash-4.4/patchlevel.h	2016-06-22 14:51:03.000000000 -0400
----- b/patchlevel.h	2016-10-01 11:01:28.000000000 -0400
--***************
--*** 26,30 ****
--     looks for to find the patch level (for the sccs version string). */
--  
--! #define PATCHLEVEL 5
--  
--  #endif /* _PATCHLEVEL_H_ */
----- b/26,30 ----
--     looks for to find the patch level (for the sccs version string). */
--  
--! #define PATCHLEVEL 6
--  
--  #endif /* _PATCHLEVEL_H_ */
-diff --git a/package/bash/bash44-007.patch b/package/bash/bash44-007.patch
-deleted file mode 100644
-index 71e771d..0000000
---- a/package/bash/bash44-007.patch
-+++ /dev/null
-@@ -1,155 +0,0 @@
--From https://ftp.gnu.org/gnu/bash/bash-4.4-patches/bash44-007
--
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
--
--			     BASH PATCH REPORT
--			     =================
--
--Bash-Release:	4.4
--Patch-ID:	bash44-007
--
--Bug-Reported-by:	Jens Heyens <jens.heyens@cispa.saarland>
--Bug-Reference-ID:	
--Bug-Reference-URL:	https://savannah.gnu.org/support/?109224
--
--Bug-Description:
--
--When performing filename completion, bash dequotes the directory name being
--completed, which can result in match failures and potential unwanted
--expansion.
--
--Patch (apply with `patch -p0'):
--
--*** bash-4.4-patched/bashline.c	2016-08-05 21:44:05.000000000 -0400
----- b/bashline.c	2017-01-19 13:15:51.000000000 -0500
--***************
--*** 143,147 ****
--  static void restore_directory_hook __P((rl_icppfunc_t));
--  
--! static int directory_exists __P((const char *));
--  
--  static void cleanup_expansion_error __P((void));
----- b/144,148 ----
--  static void restore_directory_hook __P((rl_icppfunc_t));
--  
--! static int directory_exists __P((const char *, int));
--  
--  static void cleanup_expansion_error __P((void));
--***************
--*** 3103,3111 ****
--  }
--  
--! /* Check whether not the (dequoted) version of DIRNAME, with any trailing slash
--!    removed, exists. */
--  static int
--! directory_exists (dirname)
--       const char *dirname;
--  {
--    char *new_dirname;
----- b/3107,3116 ----
--  }
--  
--! /* Check whether not DIRNAME, with any trailing slash removed, exists.  If
--!    SHOULD_DEQUOTE is non-zero, we dequote the directory name first. */
--  static int
--! directory_exists (dirname, should_dequote)
--       const char *dirname;
--+      int should_dequote;
--  {
--    char *new_dirname;
--***************
--*** 3113,3118 ****
--    struct stat sb;
--  
--!   /* First, dequote the directory name */
--!   new_dirname = bash_dequote_filename ((char *)dirname, rl_completion_quote_character);
--    dirlen = STRLEN (new_dirname);
--    if (new_dirname[dirlen - 1] == '/')
----- b/3118,3124 ----
--    struct stat sb;
--  
--!   /* We save the string and chop the trailing slash because stat/lstat behave
--!      inconsistently if one is present. */
--!   new_dirname = should_dequote ? bash_dequote_filename ((char *)dirname, rl_completion_quote_character) : savestring (dirname);
--    dirlen = STRLEN (new_dirname);
--    if (new_dirname[dirlen - 1] == '/')
--***************
--*** 3146,3150 ****
--      should_expand_dirname = '`';
--  
--!   if (should_expand_dirname && directory_exists (local_dirname))
--      should_expand_dirname = 0;
--    
----- b/3152,3156 ----
--      should_expand_dirname = '`';
--  
--!   if (should_expand_dirname && directory_exists (local_dirname, 0))
--      should_expand_dirname = 0;
--    
--***************
--*** 3156,3160 ****
--        global_nounset = unbound_vars_is_error;
--        unbound_vars_is_error = 0;
--!       wl = expand_prompt_string (new_dirname, 0, W_NOCOMSUB|W_COMPLETE);	/* does the right thing */
--        unbound_vars_is_error = global_nounset;
--        if (wl)
----- b/3162,3166 ----
--        global_nounset = unbound_vars_is_error;
--        unbound_vars_is_error = 0;
--!       wl = expand_prompt_string (new_dirname, 0, W_NOCOMSUB|W_NOPROCSUB|W_COMPLETE);	/* does the right thing */
--        unbound_vars_is_error = global_nounset;
--        if (wl)
--***************
--*** 3245,3249 ****
--      }
--  
--!   if (should_expand_dirname && directory_exists (local_dirname))
--      should_expand_dirname = 0;
--  
----- b/3262,3266 ----
--      }
--  
--!   if (should_expand_dirname && directory_exists (local_dirname, 1))
--      should_expand_dirname = 0;
--  
--***************
--*** 3251,3255 ****
--      {
--        new_dirname = savestring (local_dirname);
--!       wl = expand_prompt_string (new_dirname, 0, W_NOCOMSUB|W_COMPLETE);	/* does the right thing */
--        if (wl)
--  	{
----- b/3268,3272 ----
--      {
--        new_dirname = savestring (local_dirname);
--!       wl = expand_prompt_string (new_dirname, 0, W_NOCOMSUB|W_NOPROCSUB|W_COMPLETE);	/* does the right thing */
--        if (wl)
--  	{
--*** bash-4.4/subst.c	2016-08-30 16:46:38.000000000 -0400
----- b/subst.c	2017-01-19 07:09:57.000000000 -0500
--***************
--*** 9459,9462 ****
----- b/9459,9466 ----
--  	      if (word->flags & W_COMPLETE)
--  		tword->flags |= W_COMPLETE;	/* for command substitutions */
--+ 	      if (word->flags & W_NOCOMSUB)
--+ 		tword->flags |= W_NOCOMSUB;
--+ 	      if (word->flags & W_NOPROCSUB)
--+ 		tword->flags |= W_NOPROCSUB;
--  
--  	      temp = (char *)NULL;
--*** bash-4.4/patchlevel.h	2016-06-22 14:51:03.000000000 -0400
----- b/patchlevel.h	2016-10-01 11:01:28.000000000 -0400
--***************
--*** 26,30 ****
--     looks for to find the patch level (for the sccs version string). */
--  
--! #define PATCHLEVEL 6
--  
--  #endif /* _PATCHLEVEL_H_ */
----- b/26,30 ----
--     looks for to find the patch level (for the sccs version string). */
--  
--! #define PATCHLEVEL 7
--  
--  #endif /* _PATCHLEVEL_H_ */
-diff --git a/package/bash/bash44-008.patch b/package/bash/bash44-008.patch
-deleted file mode 100644
-index 931033c..0000000
---- a/package/bash/bash44-008.patch
-+++ /dev/null
-@@ -1,88 +0,0 @@
--From https://ftp.gnu.org/gnu/bash/bash-4.4-patches/bash44-008
--
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
--
--			     BASH PATCH REPORT
--			     =================
--
--Bash-Release:	4.4
--Patch-ID:	bash44-008
--
--Bug-Reported-by:	Koichi MURASE <myoga.murase@gmail.com>
--Bug-Reference-ID:	<CAFLRLk-V+1AeQ2k=pY7ih6V+MfQ_w8EF3YWL2E+wmLfgKBtzXA@mail.gmail.com>
--Bug-Reference-URL:	http://lists.gnu.org/archive/html/bug-bash/2016-11/msg00050.html
--
--Bug-Description:
--
--Under certain circumstances, bash will evaluate arithmetic expressions as
--part of reading an expression token even when evaluation is suppressed. This
--happens while evaluating a conditional expression and skipping over the
--failed branch of the expression.
--
--Patch (apply with `patch -p0'):
--
--*** bash-4.4-patched/expr.c	2015-10-11 14:46:36.000000000 -0400
----- b/expr.c	2016-11-08 11:55:46.000000000 -0500
--***************
--*** 579,585 ****
--    if (curtok == QUES)		/* found conditional expr */
--      {
---       readtok ();
---       if (curtok == 0 || curtok == COL)
--- 	evalerror (_("expression expected"));
--        if (cval == 0)
--  	{
----- b/579,582 ----
--***************
--*** 588,591 ****
----- b/585,592 ----
--  	}
--  
--+       readtok ();
--+       if (curtok == 0 || curtok == COL)
--+ 	evalerror (_("expression expected"));
--+ 
--        val1 = EXP_HIGHEST ();
--  
--***************
--*** 594,600 ****
--        if (curtok != COL)
--  	evalerror (_("`:' expected for conditional expression"));
--!       readtok ();
--!       if (curtok == 0)
--! 	evalerror (_("expression expected"));
--        set_noeval = 0;
--        if (cval)
----- b/595,599 ----
--        if (curtok != COL)
--  	evalerror (_("`:' expected for conditional expression"));
--! 
--        set_noeval = 0;
--        if (cval)
--***************
--*** 604,608 ****
----- b/603,611 ----
--   	}
--  
--+       readtok ();
--+       if (curtok == 0)
--+ 	evalerror (_("expression expected"));
--        val2 = expcond ();
--+ 
--        if (set_noeval)
--  	noeval--;
--*** bash-4.4/patchlevel.h	2016-06-22 14:51:03.000000000 -0400
----- b/patchlevel.h	2016-10-01 11:01:28.000000000 -0400
--***************
--*** 26,30 ****
--     looks for to find the patch level (for the sccs version string). */
--  
--! #define PATCHLEVEL 7
--  
--  #endif /* _PATCHLEVEL_H_ */
----- b/26,30 ----
--     looks for to find the patch level (for the sccs version string). */
--  
--! #define PATCHLEVEL 8
--  
--  #endif /* _PATCHLEVEL_H_ */
-diff --git a/package/bash/bash44-009.patch b/package/bash/bash44-009.patch
-deleted file mode 100644
-index 3ba1b3f..0000000
---- a/package/bash/bash44-009.patch
-+++ /dev/null
-@@ -1,111 +0,0 @@
--From https://ftp.gnu.org/gnu/bash/bash-4.4-patches/bash44-009
--
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
--
--			     BASH PATCH REPORT
--			     =================
--
--Bash-Release:	4.4
--Patch-ID:	bash44-009
--
--Bug-Reported-by:	Hong Cho <hong.cho@citrix.com>
--Bug-Reference-ID:	<c30b5fe62b2543af8297e47ca487c29c@SJCPEX02CL02.citrite.net>
--Bug-Reference-URL:	http://lists.gnu.org/archive/html/bug-bash/2016-12/msg00043.html
--
--Bug-Description:
--
--There is a race condition in add_history() that can be triggered by a fatal
--signal arriving between the time the history length is updated and the time
--the history list update is completed. A later attempt to reference an
--invalid history entry can cause a crash.
--
--Patch (apply with `patch -p0'):
--
--*** bash-4.4-patched/lib/readline/history.c	2016-11-11 13:42:49.000000000 -0500
----- b/lib/readline/history.c	2016-12-05 10:37:51.000000000 -0500
--***************
--*** 280,283 ****
----- b/280,284 ----
--  {
--    HIST_ENTRY *temp;
--+   int new_length;
--  
--    if (history_stifled && (history_length == history_max_entries))
--***************
--*** 296,306 ****
--        /* Copy the rest of the entries, moving down one slot.  Copy includes
--  	 trailing NULL.  */
--- #if 0
---       for (i = 0; i < history_length; i++)
--- 	the_history[i] = the_history[i + 1];
--- #else
--        memmove (the_history, the_history + 1, history_length * sizeof (HIST_ENTRY *));
--- #endif
--  
--        history_base++;
--      }
----- b/297,303 ----
--        /* Copy the rest of the entries, moving down one slot.  Copy includes
--  	 trailing NULL.  */
--        memmove (the_history, the_history + 1, history_length * sizeof (HIST_ENTRY *));
--  
--+       new_length = history_length;
--        history_base++;
--      }
--***************
--*** 316,320 ****
--  	    history_size = DEFAULT_HISTORY_INITIAL_SIZE;
--  	  the_history = (HIST_ENTRY **)xmalloc (history_size * sizeof (HIST_ENTRY *));
--! 	  history_length = 1;
--  	}
--        else
----- b/313,317 ----
--  	    history_size = DEFAULT_HISTORY_INITIAL_SIZE;
--  	  the_history = (HIST_ENTRY **)xmalloc (history_size * sizeof (HIST_ENTRY *));
--! 	  new_length = 1;
--  	}
--        else
--***************
--*** 326,330 ****
--  		xrealloc (the_history, history_size * sizeof (HIST_ENTRY *));
--  	    }
--! 	  history_length++;
--  	}
--      }
----- b/323,327 ----
--  		xrealloc (the_history, history_size * sizeof (HIST_ENTRY *));
--  	    }
--! 	  new_length = history_length + 1;
--  	}
--      }
--***************
--*** 332,337 ****
--    temp = alloc_history_entry ((char *)string, hist_inittime ());
--  
--!   the_history[history_length] = (HIST_ENTRY *)NULL;
--!   the_history[history_length - 1] = temp;
--  }
--  
----- b/329,335 ----
--    temp = alloc_history_entry ((char *)string, hist_inittime ());
--  
--!   the_history[new_length] = (HIST_ENTRY *)NULL;
--!   the_history[new_length - 1] = temp;
--!   history_length = new_length;
--  }
--  
--*** bash-4.4/patchlevel.h	2016-06-22 14:51:03.000000000 -0400
----- b/patchlevel.h	2016-10-01 11:01:28.000000000 -0400
--***************
--*** 26,30 ****
--     looks for to find the patch level (for the sccs version string). */
--  
--! #define PATCHLEVEL 8
--  
--  #endif /* _PATCHLEVEL_H_ */
----- b/26,30 ----
--     looks for to find the patch level (for the sccs version string). */
--  
--! #define PATCHLEVEL 9
--  
--  #endif /* _PATCHLEVEL_H_ */
-diff --git a/package/bash/bash44-010.patch b/package/bash/bash44-010.patch
-deleted file mode 100644
-index 8da1ec5..0000000
---- a/package/bash/bash44-010.patch
-+++ /dev/null
-@@ -1,53 +0,0 @@
--From https://ftp.gnu.org/gnu/bash/bash-4.4-patches/bash44-010
--
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
--
--			     BASH PATCH REPORT
--			     =================
--
--Bash-Release:	4.4
--Patch-ID:	bash44-010
--
--Bug-Reported-by:	Clark Wang <dearvoid@gmail.com>
--Bug-Reference-ID:	<CADv8-og092RvvUUHy46=BPKChCXw5g=GOOqgN0V3f4a3TpLebQ@mail.gmail.com>
--Bug-Reference-URL:	http://lists.gnu.org/archive/html/bug-bash/2016-11/msg00104.html
--
--Bug-Description:
--
--Depending on compiler optimizations and behavior, the `read' builtin may not
--save partial input when a timeout occurs.
--
--Patch (apply with `patch -p0'):
--
--*** bash-4.4-patched/builtins/read.def	2016-05-16 14:24:56.000000000 -0400
----- b/builtins/read.def	2016-11-25 12:37:56.000000000 -0500
--***************
--*** 182,186 ****
--  {
--    register char *varname;
--!   int size, i, nr, pass_next, saw_escape, eof, opt, retval, code, print_ps2;
--    int input_is_tty, input_is_pipe, unbuffered_read, skip_ctlesc, skip_ctlnul;
--    int raw, edit, nchars, silent, have_timeout, ignore_delim, fd, lastsig, t_errno;
----- b/182,187 ----
--  {
--    register char *varname;
--!   int size, nr, pass_next, saw_escape, eof, opt, retval, code, print_ps2;
--!   volatile int i;
--    int input_is_tty, input_is_pipe, unbuffered_read, skip_ctlesc, skip_ctlnul;
--    int raw, edit, nchars, silent, have_timeout, ignore_delim, fd, lastsig, t_errno;
--
--*** bash-4.4/patchlevel.h	2016-06-22 14:51:03.000000000 -0400
----- b/patchlevel.h	2016-10-01 11:01:28.000000000 -0400
--***************
--*** 26,30 ****
--     looks for to find the patch level (for the sccs version string). */
--  
--! #define PATCHLEVEL 9
--  
--  #endif /* _PATCHLEVEL_H_ */
----- b/26,30 ----
--     looks for to find the patch level (for the sccs version string). */
--  
--! #define PATCHLEVEL 10
--  
--  #endif /* _PATCHLEVEL_H_ */
-diff --git a/package/bash/bash44-011.patch b/package/bash/bash44-011.patch
-deleted file mode 100644
-index cca66aa..0000000
---- a/package/bash/bash44-011.patch
-+++ /dev/null
-@@ -1,54 +0,0 @@
--From https://ftp.gnu.org/gnu/bash/bash-4.4-patches/bash44-011
--
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
--
--			     BASH PATCH REPORT
--			     =================
--
--Bash-Release:	4.4
--Patch-ID:	bash44-011
--
--Bug-Reported-by:	Russell King <rmk@armlinux.org.uk>
--Bug-Reference-ID:	<E1cNnFx-0007G2-S2@flint.armlinux.org.uk>
--Bug-Reference-URL:	http://lists.gnu.org/archive/html/bug-bash/2017-01/msg00000.html
--
--Bug-Description:
--
--Subshells begun to run command and process substitutions may attempt to
--set the terminal's process group to an incorrect value if they receive
--a fatal signal.  This depends on the behavior of the process that starts
--the shell.
--
--Patch (apply with `patch -p0'):
--
--*** bash-4.4-patched/sig.c	2016-02-11 15:02:45.000000000 -0500
----- b/sig.c	2017-01-04 09:09:47.000000000 -0500
--***************
--*** 586,590 ****
--    if (sig == SIGHUP && (interactive || (subshell_environment & (SUBSHELL_COMSUB|SUBSHELL_PROCSUB))))
--      hangup_all_jobs ();
--!   end_job_control ();
--  #endif /* JOB_CONTROL */
--  
----- b/571,576 ----
--    if (sig == SIGHUP && (interactive || (subshell_environment & (SUBSHELL_COMSUB|SUBSHELL_PROCSUB))))
--      hangup_all_jobs ();
--!   if ((subshell_environment & (SUBSHELL_COMSUB|SUBSHELL_PROCSUB)) == 0)
--!     end_job_control ();
--  #endif /* JOB_CONTROL */
--  
--*** bash-4.4/patchlevel.h	2016-06-22 14:51:03.000000000 -0400
----- b/patchlevel.h	2016-10-01 11:01:28.000000000 -0400
--***************
--*** 26,30 ****
--     looks for to find the patch level (for the sccs version string). */
--  
--! #define PATCHLEVEL 10
--  
--  #endif /* _PATCHLEVEL_H_ */
----- b/26,30 ----
--     looks for to find the patch level (for the sccs version string). */
--  
--! #define PATCHLEVEL 11
--  
--  #endif /* _PATCHLEVEL_H_ */
-diff --git a/package/bash/bash44-012.patch b/package/bash/bash44-012.patch
-deleted file mode 100644
-index ef081f9..0000000
---- a/package/bash/bash44-012.patch
-+++ /dev/null
-@@ -1,165 +0,0 @@
--From https://ftp.gnu.org/gnu/bash/bash-4.4-patches/bash44-012
--
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
--
--			     BASH PATCH REPORT
--			     =================
--
--Bash-Release:	4.4
--Patch-ID:	bash44-012
--
--Bug-Reported-by:	Clark Wang <dearvoid@gmail.com>
--Bug-Reference-ID:	<CADv8-ojttPUFOZXqbjsvy83LfaJtQKZ5qejGdF6j0VJ3vtrYOA@mail.gmail.com>
--Bug-Reference-URL:	http://lists.gnu.org/archive/html/bug-bash/2016-11/msg00106.html
--
--Bug-Description:
--
--When -N is used, the input is not supposed to be split using $IFS, but
--leading and trailing IFS whitespace was still removed.
--
--Patch (apply with `patch -p0'):
--
--*** bash-4.4-patched/subst.c	2017-01-20 14:22:01.000000000 -0500
----- b/subst.c	2017-01-25 13:43:22.000000000 -0500
--***************
--*** 2826,2834 ****
--  /* Parse a single word from STRING, using SEPARATORS to separate fields.
--     ENDPTR is set to the first character after the word.  This is used by
--!    the `read' builtin.  This is never called with SEPARATORS != $IFS;
--!    it should be simplified.
--  
--     XXX - this function is very similar to list_string; they should be
--  	 combined - XXX */
--  char *
--  get_word_from_string (stringp, separators, endptr)
----- b/2826,2838 ----
--  /* Parse a single word from STRING, using SEPARATORS to separate fields.
--     ENDPTR is set to the first character after the word.  This is used by
--!    the `read' builtin.
--!    
--!    This is never called with SEPARATORS != $IFS, and takes advantage of that.
--  
--     XXX - this function is very similar to list_string; they should be
--  	 combined - XXX */
--+ 
--+ #define islocalsep(c)	(local_cmap[(unsigned char)(c)] != 0)
--+ 
--  char *
--  get_word_from_string (stringp, separators, endptr)
--***************
--*** 2838,2841 ****
----- b/2842,2846 ----
--    char *current_word;
--    int sindex, sh_style_split, whitesep, xflags;
--+   unsigned char local_cmap[UCHAR_MAX+1];	/* really only need single-byte chars here */
--    size_t slen;
--  
--***************
--*** 2847,2854 ****
--  				 separators[2] == '\n' &&
--  				 separators[3] == '\0';
--!   for (xflags = 0, s = ifs_value; s && *s; s++)
--      {
--        if (*s == CTLESC) xflags |= SX_NOCTLESC;
--        if (*s == CTLNUL) xflags |= SX_NOESCCTLNUL;
--      }
--  
----- b/2852,2861 ----
--  				 separators[2] == '\n' &&
--  				 separators[3] == '\0';
--!   memset (local_cmap, '\0', sizeof (local_cmap));
--!   for (xflags = 0, s = separators; s && *s; s++)
--      {
--        if (*s == CTLESC) xflags |= SX_NOCTLESC;
--        if (*s == CTLNUL) xflags |= SX_NOESCCTLNUL;
--+       local_cmap[(unsigned char)*s] = 1;	/* local charmap of separators */
--      }
--  
--***************
--*** 2857,2864 ****
--  
--    /* Remove sequences of whitespace at the beginning of STRING, as
--!      long as those characters appear in IFS. */
--!   if (sh_style_split || !separators || !*separators)
--      {
--!       for (; *s && spctabnl (*s) && isifs (*s); s++);
--  
--        /* If the string is nothing but whitespace, update it and return. */
----- b/2864,2872 ----
--  
--    /* Remove sequences of whitespace at the beginning of STRING, as
--!      long as those characters appear in SEPARATORS.  This happens if
--!      SEPARATORS == $' \t\n' or if IFS is unset. */
--!   if (sh_style_split || separators == 0)
--      {
--!       for (; *s && spctabnl (*s) && islocalsep (*s); s++);
--  
--        /* If the string is nothing but whitespace, update it and return. */
--***************
--*** 2879,2885 ****
--       This obeys the field splitting rules in Posix.2. */
--    sindex = 0;
--!   /* Don't need string length in ADVANCE_CHAR or string_extract_verbatim
--!      unless multibyte chars are possible. */
--!   slen = (MB_CUR_MAX > 1) ? STRLEN (s) : 1;
--    current_word = string_extract_verbatim (s, slen, &sindex, separators, xflags);
--  
----- b/2887,2893 ----
--       This obeys the field splitting rules in Posix.2. */
--    sindex = 0;
--!   /* Don't need string length in ADVANCE_CHAR unless multibyte chars are
--!      possible, but need it in string_extract_verbatim for bounds checking */
--!   slen = STRLEN (s);
--    current_word = string_extract_verbatim (s, slen, &sindex, separators, xflags);
--  
--***************
--*** 2900,2904 ****
--    /* Now skip sequences of space, tab, or newline characters if they are
--       in the list of separators. */
--!   while (s[sindex] && spctabnl (s[sindex]) && isifs (s[sindex]))
--      sindex++;
--  
----- b/2908,2912 ----
--    /* Now skip sequences of space, tab, or newline characters if they are
--       in the list of separators. */
--!   while (s[sindex] && spctabnl (s[sindex]) && islocalsep (s[sindex]))
--      sindex++;
--  
--***************
--*** 2907,2916 ****
--       delimiter, not a separate delimiter that would result in an empty field.
--       Look at POSIX.2, 3.6.5, (3)(b). */
--!   if (s[sindex] && whitesep && isifs (s[sindex]) && !spctabnl (s[sindex]))
--      {
--        sindex++;
--        /* An IFS character that is not IFS white space, along with any adjacent
--  	 IFS white space, shall delimit a field. */
--!       while (s[sindex] && spctabnl (s[sindex]) && isifs (s[sindex]))
--  	sindex++;
--      }
----- b/2915,2924 ----
--       delimiter, not a separate delimiter that would result in an empty field.
--       Look at POSIX.2, 3.6.5, (3)(b). */
--!   if (s[sindex] && whitesep && islocalsep (s[sindex]) && !spctabnl (s[sindex]))
--      {
--        sindex++;
--        /* An IFS character that is not IFS white space, along with any adjacent
--  	 IFS white space, shall delimit a field. */
--!       while (s[sindex] && spctabnl (s[sindex]) && islocalsep(s[sindex]))
--  	sindex++;
--      }
--*** bash-4.4/patchlevel.h	2016-06-22 14:51:03.000000000 -0400
----- b/patchlevel.h	2016-10-01 11:01:28.000000000 -0400
--***************
--*** 26,30 ****
--     looks for to find the patch level (for the sccs version string). */
--  
--! #define PATCHLEVEL 11
--  
--  #endif /* _PATCHLEVEL_H_ */
----- b/26,30 ----
--     looks for to find the patch level (for the sccs version string). */
--  
--! #define PATCHLEVEL 12
--  
--  #endif /* _PATCHLEVEL_H_ */
+diff --git a/package/gupnp-av/0001-Fix-static-library-linking-with-gupnp.patch b/package/gupnp-av/0001-Fix-static-library-linking-with-gupnp.patch
+new file mode 100644
+index 0000000..eba99da
+--- /dev/null
++++ b/package/gupnp-av/0001-Fix-static-library-linking-with-gupnp.patch
+@@ -0,0 +1,354 @@
++From 268ec01e448ed7cedf90b37fbc27f01806637825 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Mon, 30 Oct 2017 22:10:23 +0100
++Subject: [PATCH 1/1] Fix static library linking with gupnp
++
++gupnp and gupnp-av defines two internal functions with the same name:
++xml_util_get_element and xml_util_get_child_element_content, as a result
++an application such as rygel can't be build statically.
++To fix this issue, rename both functions as
++xml_util_get_element2 and xml_util_get_child_element_content2
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ libgupnp-av/gupnp-cds-last-change-parser.c |  2 +-
++ libgupnp-av/gupnp-didl-lite-container.c    |  4 ++--
++ libgupnp-av/gupnp-didl-lite-item.c         |  2 +-
++ libgupnp-av/gupnp-didl-lite-object.c       | 26 +++++++++++++-------------
++ libgupnp-av/gupnp-didl-lite-parser.c       |  4 ++--
++ libgupnp-av/gupnp-didl-lite-writer.c       |  2 +-
++ libgupnp-av/gupnp-feature-list-parser.c    |  2 +-
++ libgupnp-av/gupnp-last-change-parser.c     |  2 +-
++ libgupnp-av/xml-util.c                     | 16 ++++++++--------
++ libgupnp-av/xml-util.h                     |  4 ++--
++ 10 files changed, 32 insertions(+), 32 deletions(-)
++
++diff --git a/libgupnp-av/gupnp-cds-last-change-parser.c b/libgupnp-av/gupnp-cds-last-change-parser.c
++index cff5f0b..36f6b0a 100644
++--- a/libgupnp-av/gupnp-cds-last-change-parser.c
+++++ b/libgupnp-av/gupnp-cds-last-change-parser.c
++@@ -119,7 +119,7 @@ gupnp_cds_last_change_parser_parse (GUPnPCDSLastChangeParser *parser,
++                 goto out;
++         }
++ 
++-        state_event = xml_util_get_element ((xmlNode *) doc,
+++        state_event = xml_util_get_element2 ((xmlNode *) doc,
++                                             "StateEvent",
++                                             NULL);
++         if (state_event == NULL) {
++diff --git a/libgupnp-av/gupnp-didl-lite-container.c b/libgupnp-av/gupnp-didl-lite-container.c
++index d7ac578..c0e7395 100644
++--- a/libgupnp-av/gupnp-didl-lite-container.c
+++++ b/libgupnp-av/gupnp-didl-lite-container.c
++@@ -340,7 +340,7 @@ gupnp_didl_lite_container_container_update_id_is_set
++ 
++         xml_node = gupnp_didl_lite_object_get_xml_node
++                                         (GUPNP_DIDL_LITE_OBJECT (container));
++-        content = xml_util_get_child_element_content (xml_node,
+++        content = xml_util_get_child_element_content2 (xml_node,
++                                                       "containerUpdateID");
++         return content != NULL;
++ }
++@@ -390,7 +390,7 @@ gupnp_didl_lite_container_total_deleted_child_count_is_set
++ 
++         xml_node = gupnp_didl_lite_object_get_xml_node
++                                         (GUPNP_DIDL_LITE_OBJECT (container));
++-        content = xml_util_get_child_element_content (xml_node,
+++        content = xml_util_get_child_element_content2 (xml_node,
++                                                       "totalDeletedChildCount");
++         return content != NULL;
++ }
++diff --git a/libgupnp-av/gupnp-didl-lite-item.c b/libgupnp-av/gupnp-didl-lite-item.c
++index 3588052..3d6d4d0 100644
++--- a/libgupnp-av/gupnp-didl-lite-item.c
+++++ b/libgupnp-av/gupnp-didl-lite-item.c
++@@ -254,7 +254,7 @@ gupnp_didl_lite_item_get_lifetime (GUPnPDIDLLiteItem *item)
++         object = GUPNP_DIDL_LITE_OBJECT (item);
++         node = gupnp_didl_lite_object_get_xml_node (object);
++ 
++-        lifetime_str = xml_util_get_child_element_content (node, "lifetime");
+++        lifetime_str = xml_util_get_child_element_content2 (node, "lifetime");
++         lifetime = seconds_from_time (lifetime_str);
++ 
++         return lifetime;
++diff --git a/libgupnp-av/gupnp-didl-lite-object.c b/libgupnp-av/gupnp-didl-lite-object.c
++index 68156dc..cab2359 100644
++--- a/libgupnp-av/gupnp-didl-lite-object.c
+++++ b/libgupnp-av/gupnp-didl-lite-object.c
++@@ -1065,7 +1065,7 @@ gupnp_didl_lite_object_get_upnp_class (GUPnPDIDLLiteObject *object)
++ {
++         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
++ 
++-        return xml_util_get_child_element_content (object->priv->xml_node,
+++        return xml_util_get_child_element_content2 (object->priv->xml_node,
++                                                    "class");
++ }
++ 
++@@ -1211,7 +1211,7 @@ gupnp_didl_lite_object_get_title (GUPnPDIDLLiteObject *object)
++ {
++         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
++ 
++-        return xml_util_get_child_element_content (object->priv->xml_node,
+++        return xml_util_get_child_element_content2 (object->priv->xml_node,
++                                                    "title");
++ }
++ 
++@@ -1228,7 +1228,7 @@ gupnp_didl_lite_object_get_creator (GUPnPDIDLLiteObject *object)
++ {
++         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
++ 
++-        return xml_util_get_child_element_content (object->priv->xml_node,
+++        return xml_util_get_child_element_content2 (object->priv->xml_node,
++                                                    "creator");
++ }
++ 
++@@ -1266,7 +1266,7 @@ gupnp_didl_lite_object_get_artist (GUPnPDIDLLiteObject *object)
++ {
++         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
++ 
++-        return xml_util_get_child_element_content (object->priv->xml_node,
+++        return xml_util_get_child_element_content2 (object->priv->xml_node,
++                                                    "artist");
++ }
++ 
++@@ -1303,7 +1303,7 @@ gupnp_didl_lite_object_get_author (GUPnPDIDLLiteObject *object)
++ {
++         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
++ 
++-        return xml_util_get_child_element_content (object->priv->xml_node,
+++        return xml_util_get_child_element_content2 (object->priv->xml_node,
++                                                    "author");
++ }
++ 
++@@ -1377,7 +1377,7 @@ gupnp_didl_lite_object_get_genre (GUPnPDIDLLiteObject *object)
++ {
++         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
++ 
++-        return xml_util_get_child_element_content (object->priv->xml_node,
+++        return xml_util_get_child_element_content2 (object->priv->xml_node,
++                                                    "genre");
++ }
++ 
++@@ -1394,7 +1394,7 @@ gupnp_didl_lite_object_get_write_status (GUPnPDIDLLiteObject *object)
++ {
++         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
++ 
++-        return xml_util_get_child_element_content (object->priv->xml_node,
+++        return xml_util_get_child_element_content2 (object->priv->xml_node,
++                                                    "writeStatus");
++ }
++ 
++@@ -1411,7 +1411,7 @@ gupnp_didl_lite_object_get_album (GUPnPDIDLLiteObject *object)
++ {
++         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
++ 
++-        return xml_util_get_child_element_content (object->priv->xml_node,
+++        return xml_util_get_child_element_content2 (object->priv->xml_node,
++                                                    "album");
++ }
++ 
++@@ -1428,7 +1428,7 @@ gupnp_didl_lite_object_get_album_art (GUPnPDIDLLiteObject *object)
++ {
++         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
++ 
++-        return xml_util_get_child_element_content (object->priv->xml_node,
+++        return xml_util_get_child_element_content2 (object->priv->xml_node,
++                                                    "albumArtURI");
++ }
++ 
++@@ -1445,7 +1445,7 @@ gupnp_didl_lite_object_get_description (GUPnPDIDLLiteObject *object)
++ {
++         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
++ 
++-        return xml_util_get_child_element_content (object->priv->xml_node,
+++        return xml_util_get_child_element_content2 (object->priv->xml_node,
++                                                    "description");
++ }
++ 
++@@ -1462,7 +1462,7 @@ gupnp_didl_lite_object_get_date (GUPnPDIDLLiteObject *object)
++ {
++         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), NULL);
++ 
++-        return xml_util_get_child_element_content (object->priv->xml_node,
+++        return xml_util_get_child_element_content2 (object->priv->xml_node,
++                                                    "date");
++ }
++ 
++@@ -1481,7 +1481,7 @@ gupnp_didl_lite_object_get_track_number (GUPnPDIDLLiteObject *object)
++ 
++         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), -1);
++ 
++-        str = xml_util_get_child_element_content (object->priv->xml_node,
+++        str = xml_util_get_child_element_content2 (object->priv->xml_node,
++                                                   "originalTrackNumber");
++         if (str == NULL)
++                 return -1;
++@@ -1552,7 +1552,7 @@ gupnp_didl_lite_object_update_id_is_set (GUPnPDIDLLiteObject *object)
++         g_return_val_if_fail (object != NULL, FALSE);
++         g_return_val_if_fail (GUPNP_IS_DIDL_LITE_OBJECT (object), FALSE);
++ 
++-        content = xml_util_get_child_element_content (object->priv->xml_node,
+++        content = xml_util_get_child_element_content2 (object->priv->xml_node,
++                                                       "objectUpdateID");
++         return content != NULL;
++ }
++diff --git a/libgupnp-av/gupnp-didl-lite-parser.c b/libgupnp-av/gupnp-didl-lite-parser.c
++index 59255ef..93d03c0 100644
++--- a/libgupnp-av/gupnp-didl-lite-parser.c
+++++ b/libgupnp-av/gupnp-didl-lite-parser.c
++@@ -52,7 +52,7 @@ verify_didl_attributes (xmlNode *node)
++ {
++         const char *content;
++ 
++-        content = xml_util_get_child_element_content (node, "date");
+++        content = xml_util_get_child_element_content2 (node, "date");
++         if (content) {
++                 /* try to roughly verify the passed date with ^\d{4}-\d{2}-\d{2} */
++                 char *ptr = (char *) content;
++@@ -251,7 +251,7 @@ gupnp_didl_lite_parser_parse_didl_recursive (GUPnPDIDLLiteParser *parser,
++         }
++ 
++         /* Get a pointer to root element */
++-        element = xml_util_get_element ((xmlNode *) doc,
+++        element = xml_util_get_element2 ((xmlNode *) doc,
++                                         "DIDL-Lite",
++                                         NULL);
++         if (element == NULL) {
++diff --git a/libgupnp-av/gupnp-didl-lite-writer.c b/libgupnp-av/gupnp-didl-lite-writer.c
++index fb37c0b..e61739a 100644
++--- a/libgupnp-av/gupnp-didl-lite-writer.c
+++++ b/libgupnp-av/gupnp-didl-lite-writer.c
++@@ -223,7 +223,7 @@ filter_node (xmlNode             *node,
++ 
++         if (strcmp ((const char *) node->name, "container") == 0) {
++                 is_container = TRUE;
++-                container_class = xml_util_get_child_element_content (node,
+++                container_class = xml_util_get_child_element_content2 (node,
++                                                                       "class");
++         }
++ 
++diff --git a/libgupnp-av/gupnp-feature-list-parser.c b/libgupnp-av/gupnp-feature-list-parser.c
++index 85fb232..dcaad6b 100644
++--- a/libgupnp-av/gupnp-feature-list-parser.c
+++++ b/libgupnp-av/gupnp-feature-list-parser.c
++@@ -138,7 +138,7 @@ gupnp_feature_list_parser_parse_text
++         }
++ 
++         /* Get a pointer to root element */
++-        element = xml_util_get_element ((xmlNode *) doc, "Features", NULL);
+++        element = xml_util_get_element2 ((xmlNode *) doc, "Features", NULL);
++         if (element == NULL) {
++                 g_set_error (error,
++                              G_MARKUP_ERROR,
++diff --git a/libgupnp-av/gupnp-last-change-parser.c b/libgupnp-av/gupnp-last-change-parser.c
++index a98aecf..7078713 100644
++--- a/libgupnp-av/gupnp-last-change-parser.c
+++++ b/libgupnp-av/gupnp-last-change-parser.c
++@@ -75,7 +75,7 @@ read_state_variable (const char *variable_name,
++         xmlNode    *variable_node;
++         const char *val_str;
++ 
++-        variable_node = xml_util_get_element (instance_node,
+++        variable_node = xml_util_get_element2 (instance_node,
++                                               variable_name,
++                                               NULL);
++         if (!variable_node)
++diff --git a/libgupnp-av/xml-util.c b/libgupnp-av/xml-util.c
++index da718b2..8c937e0 100644
++--- a/libgupnp-av/xml-util.c
+++++ b/libgupnp-av/xml-util.c
++@@ -81,7 +81,7 @@ xml_doc_unref (GUPnPAVXMLDoc *doc)
++ }
++ 
++ xmlNode *
++-xml_util_get_element (xmlNode *node,
+++xml_util_get_element2 (xmlNode *node,
++                       ...)
++ {
++         va_list var_args;
++@@ -130,13 +130,13 @@ xml_util_get_child_elements_by_name (xmlNode *node, const char *name)
++ }
++ 
++ const char *
++-xml_util_get_child_element_content (xmlNode    *node,
+++xml_util_get_child_element_content2 (xmlNode    *node,
++                                     const char *child_name)
++ {
++         xmlNode *child_node;
++         const char *content;
++ 
++-        child_node = xml_util_get_element (node, child_name, NULL);
+++        child_node = xml_util_get_element2 (node, child_name, NULL);
++         if (!child_node || !(child_node->children))
++                 return NULL;
++ 
++@@ -154,7 +154,7 @@ xml_util_get_uint_child_element (xmlNode    *node,
++ {
++         const char *content;
++ 
++-        content = xml_util_get_child_element_content (node, child_name);
+++        content = xml_util_get_child_element_content2 (node, child_name);
++         if (!content)
++                 return default_value;
++ 
++@@ -168,7 +168,7 @@ xml_util_get_uint64_child_element (xmlNode    *node,
++ {
++         const char *content;
++ 
++-        content = xml_util_get_child_element_content (node, child_name);
+++        content = xml_util_get_child_element_content2 (node, child_name);
++         if (!content)
++                 return default_value;
++ 
++@@ -281,7 +281,7 @@ xml_util_set_child (xmlNode    *parent_node,
++         xmlNode *node;
++         xmlChar *escaped;
++ 
++-        node = xml_util_get_element (parent_node, name, NULL);
+++        node = xml_util_get_element2 (parent_node, name, NULL);
++         if (node == NULL) {
++                 xmlNsPtr ns_ptr = NULL;
++ 
++@@ -305,7 +305,7 @@ xml_util_unset_child (xmlNode    *parent_node,
++ {
++         xmlNode *node;
++ 
++-        node = xml_util_get_element (parent_node, name, NULL);
+++        node = xml_util_get_element2 (parent_node, name, NULL);
++         if (node != NULL) {
++                 xmlUnlinkNode (node);
++                 xmlFreeNode (node);
++@@ -342,7 +342,7 @@ xml_util_get_child_string (xmlNode    *parent_node,
++         char      *ret;
++         xmlNode   *node;
++ 
++-        node = xml_util_get_element (parent_node, name, NULL);
+++        node = xml_util_get_element2 (parent_node, name, NULL);
++         if (!node)
++                 return NULL;
++ 
++diff --git a/libgupnp-av/xml-util.h b/libgupnp-av/xml-util.h
++index 9ae5b19..5ff2020 100644
++--- a/libgupnp-av/xml-util.h
+++++ b/libgupnp-av/xml-util.h
++@@ -63,7 +63,7 @@ xml_doc_get_type                        (void) G_GNUC_CONST;
++ 
++ /* Misc utilities for inspecting xmlNodes */
++ G_GNUC_INTERNAL xmlNode *
++-xml_util_get_element                    (xmlNode    *node,
+++xml_util_get_element2                   (xmlNode    *node,
++                                          ...) G_GNUC_NULL_TERMINATED;
++ 
++ G_GNUC_INTERNAL GList *
++@@ -71,7 +71,7 @@ xml_util_get_child_elements_by_name     (xmlNode *node,
++                                          const char *name);
++ 
++ G_GNUC_INTERNAL const char *
++-xml_util_get_child_element_content      (xmlNode    *node,
+++xml_util_get_child_element_content2     (xmlNode    *node,
++                                          const char *child_name);
++ 
++ G_GNUC_INTERNAL guint
++-- 
++2.14.1
++
