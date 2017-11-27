@@ -1,61 +1,29 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 27 Nov 2017 14:30:50 +0100
-Subject: [Buildroot] [PATCH 2/2] package/asterisk: fix parallel build/install
-In-Reply-To: <cover.1511789437.git.yann.morin.1998@free.fr>
-References: <cover.1511789437.git.yann.morin.1998@free.fr>
-Message-ID: <77a465b5afe27dd09b5b3ec5a4e9069b24f00a5e.1511789437.git.yann.morin.1998@free.fr>
+From: =?iso-8859-1?Q?Ga=EBl?= PORTAY <gael.portay@savoirfairelinux.com>
+Date: Mon, 27 Nov 2017 08:58:10 -0500
+Subject: [Buildroot] Analysis of build results for 2017-11-25
+In-Reply-To: <20171126152140.0fd3902b@windsurf.home>
+References: <20171126070006.676FA209DE@mail.free-electrons.com>
+ <20171126152140.0fd3902b@windsurf.home>
+Message-ID: <20171127135810.4tdzrguynfo4eokj@archlinux.local>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-    http://autobuild.buildroot.org/results/7c9892b9425aff6e54b8c8942dbdcb0b26e58572
+Hi,
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- ...nsure-target-directory-for-modules-exists.patch | 32 ++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
- create mode 100644 package/asterisk/0005-build-ensure-target-directory-for-modules-exists.patch
+On Sun, Nov 26, 2017 at 03:21:40PM +0100, Thomas Petazzoni wrote:
+> >       x86_64 |  netcat-openbsd-debian_1.178-3 | NOK | http://autobuild.buildroot.net/results/3c42c1eadcbfc084a1e55bf1df0450aaf1f2139c |     
+> >     mips64el |  netcat-openbsd-debian_1.178-3 | NOK | http://autobuild.buildroot.net/results/de0dd8983243ee5d1fb189add8ce445177fb87c2 |     
+> 
+> /home/buildroot/build/instance-0/output/host/x86_64-buildroot-linux-gnu/sysroot/usr/include/linux/in6.h:30:8: error: redefinition of 'struct in6_addr'
+>  struct in6_addr {
+> 
+> Ga?l, you recently bumped this package, could you have a look?
+>
 
-diff --git a/package/asterisk/0005-build-ensure-target-directory-for-modules-exists.patch b/package/asterisk/0005-build-ensure-target-directory-for-modules-exists.patch
-new file mode 100644
-index 0000000000..92ff296a38
---- /dev/null
-+++ b/package/asterisk/0005-build-ensure-target-directory-for-modules-exists.patch
-@@ -0,0 +1,32 @@
-+From 933b2554a40f932571bdbdbb5217cda3e35fd61f Mon Sep 17 00:00:00 2001
-+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+Date: Mon, 27 Nov 2017 12:52:52 +0100
-+Subject: [PATCH] build: ensure target directory for modules exists
-+
-+Currently, in highly-parallel builds, it is possible that installing
-+modules fails because the target direcotry does not exist yet.
-+
-+We fix that by instructing $(INSTALL) to create the destination directory
-+first.
-+
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+---
-+ Makefile.moddir_rules | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/Makefile.moddir_rules b/Makefile.moddir_rules
-+index 59190bece9..b73153a9a5 100644
-+--- a/Makefile.moddir_rules
-++++ b/Makefile.moddir_rules
-+@@ -110,7 +110,7 @@ clean::
-+ 
-+ install:: all
-+ 	@echo "Installing modules from `basename $(CURDIR)`..."
-+-	@for x in $(LOADABLE_MODS:%=%.so); do $(INSTALL) -m 755 $$x "$(DESTDIR)$(ASTMODDIR)" ; done
-++	@for x in $(LOADABLE_MODS:%=%.so); do $(INSTALL) -D -m 755 $$x "$(DESTDIR)$(ASTMODDIR)" ; done
-+ ifneq ($(findstring :,$(XMLSTARLET)$(BASH)),:)
-+ 	@if [ -f .moduleinfo ] ; then \
-+ 		declare -A DISABLED_MODS ;\
-+-- 
-+2.11.0
-+
--- 
-2.11.0
+After a quick look, the issue comes from the toolchain that uses glibc
+2.18. I assume the package builds fine with glibc > 2.18.
+
+I am on it.
