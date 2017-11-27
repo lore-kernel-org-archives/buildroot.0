@@ -1,24 +1,63 @@
-From: Ismael Luceno <ismael@iodev.co.uk>
-Date: Mon, 27 Nov 2017 17:08:53 -0300
-Subject: [Buildroot] Analysis of build results for 2017-11-25
-In-Reply-To: <20171126152140.0fd3902b@windsurf.home>
-References: <20171126070006.676FA209DE@mail.free-electrons.com>
- <20171126152140.0fd3902b@windsurf.home>
-Message-ID: <20171127200851.GA330@pirotess.bf.iodev.co.uk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 27 Nov 2017 21:25:27 +0100
+Subject: [Buildroot] [git commit] package/systemd-bootchart: fix build w/
+ glibc 2.26
+Message-ID: <20171127201812.25416815E0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 26/Nov/2017 15:21, Thomas Petazzoni wrote:
-<...> 
-> checking for library containing SSL_new... no
-> configure: error: libssl not found
-> make: *** [/home/test/autobuild/run/instance-3/output/build/axel-2.16/.stamp_configured] Error 1
-> 
-> Ismael, you bumped this package recently, could you look into this
-> build failure? Also, this package is currently orphan, could you send a
-> patch to add yourself for this package in the DEVELOPERS file?
+commit: https://git.buildroot.net/buildroot/commit/?id=f42cbb084fe25fe0f7bdf32671ff82456577f4b4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Roger.
+Fixes:
+    http://autobuild.buildroot.org/results/7f7af0d41120626edbbca839c9fdbb5c6bd259c2/
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Cc: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../0001-parse-util-Don-t-use-xlocale.h-35.patch   | 32 ++++++++++++++++++++++
+ 1 file changed, 32 insertions(+)
+
+diff --git a/package/systemd-bootchart/0001-parse-util-Don-t-use-xlocale.h-35.patch b/package/systemd-bootchart/0001-parse-util-Don-t-use-xlocale.h-35.patch
+new file mode 100644
+index 0000000..4eae7e6
+--- /dev/null
++++ b/package/systemd-bootchart/0001-parse-util-Don-t-use-xlocale.h-35.patch
+@@ -0,0 +1,32 @@
++From 15062a4501a1dffccd7cb6374b415693fa4435bf Mon Sep 17 00:00:00 2001
++From: Jussi Kukkonen <jussi.kukkonen@intel.com>
++Date: Tue, 18 Jul 2017 22:55:50 +0300
++Subject: [PATCH] parse-util: Don't use xlocale.h (#35)
++
++glibc 2.26 no longer contains the non-standard xlocale.h
++(http://sourceware.org/glibc/wiki/Release/2.26#Removal_of_.27xlocale.h.27)
++
++This change shouldn't break anything as xlocale.h was a subset of
++locale.h.
++
++[yann.morin.1998 at free.fr: backported from upstream]
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++---
++ src/parse-util.c | 1 -
++ 1 file changed, 1 deletion(-)
++
++diff --git a/src/parse-util.c b/src/parse-util.c
++index 5635a68..1b2169c 100644
++--- a/src/parse-util.c
+++++ b/src/parse-util.c
++@@ -21,7 +21,6 @@
++ #include <locale.h>
++ #include <stdlib.h>
++ #include <string.h>
++-#include <xlocale.h>
++ 
++ #include "macro.h"
++ #include "parse-util.h"
++-- 
++2.11.0
++
