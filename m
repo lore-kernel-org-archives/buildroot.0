@@ -1,60 +1,67 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 27 Nov 2017 10:30:43 +0100
-Subject: [Buildroot] [git commit branch/2017.08.x] qt5webkit: correct
- download URL and hash for 5.6 variant
-Message-ID: <20171127093934.0A8C781D82@busybox.osuosl.org>
+Date: Mon, 27 Nov 2017 10:46:21 +0100
+Subject: [Buildroot] [git commit branch/2017.08.x] samba4: security bump to
+ version 4.6.11
+Message-ID: <20171127093934.6DB9C81D82@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e8f6ccced4a40ffd5168e15b57cb1e9bb42bcf02
+commit: https://git.buildroot.net/buildroot/commit/?id=773ba3870fdfe65de883e01fd511cb6ed6d5aacb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.08.x
 
-Commit 06a4975d4bd03 (qt5: bump LTS version to 5.6.3) added an empty hash
-for the 5.6.3 variant of qt5webkit, causing failures.
+Fixes the following security issues:
 
-It also forgot to adjust the download URL as the qt5webkit tarballs are no
-longer available under official_releases/ like the other submodules, but only
-under community_releases/.
+ - CVE-2017-14746:
+   All versions of Samba from 4.0.0 onwards are vulnerable to a use after
+   free vulnerability, where a malicious SMB1 request can be used to
+   control the contents of heap memory via a deallocated heap pointer. It
+   is possible this may be used to compromise the SMB server.
 
-Fix both issues.
+ - CVE-2017-15275:
+   All versions of Samba from 3.6.0 onwards are vulnerable to a heap
+   memory information leak, where server allocated heap memory may be
+   returned to the client without being cleared.
+
+   There is no known vulnerability associated with this error, but
+   uncleared heap memory may contain previously used data that may help
+   an attacker compromise the server via other methods. Uncleared heap
+   memory may potentially contain password hashes or other high-value
+   data.
+
+For more details, see the release notes:
+https://www.samba.org/samba/history/samba-4.6.11.html
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit d4a119ccc42f5b93a2e33f99438a86cc5ee1fb00)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+(cherry picked from commit df75c954bc5633045d5c06a87c53d71dad8ae6e1)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/qt5/qt5webkit/qt5webkit.hash | 4 ++--
- package/qt5/qt5webkit/qt5webkit.mk   | 5 +++++
- 2 files changed, 7 insertions(+), 2 deletions(-)
+ package/samba4/samba4.hash | 2 +-
+ package/samba4/samba4.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/qt5/qt5webkit/qt5webkit.hash b/package/qt5/qt5webkit/qt5webkit.hash
-index 860d4e4..604df37 100644
---- a/package/qt5/qt5webkit/qt5webkit.hash
-+++ b/package/qt5/qt5webkit/qt5webkit.hash
-@@ -1,5 +1,5 @@
--# Hash from: http://download.qt.io/snapshots/qt/5.6/5.6.3/latest_src/submodules/qtwebkit-opensource-src-5.6.3.tar.xz.mirrorlist
--sha256  qtwebkit-opensource-src-5.6.3.tar.xz
-+# Hash from: http://download.qt.io/community_releases/5.6/5.6.3/qtwebkit-opensource-src-5.6.3.tar.xz.mirrorlist
-+sha256  098c6bb25798fbf1b619b540621287787064efc9b586d76ac0ce7e39b87a3896  qtwebkit-opensource-src-5.6.3.tar.xz
- 
- # hash from: http://download.qt.io/official_releases/qt/5.9/5.9.1/submodules/qtwebkit-opensource-src-5.9.1.tar.xz.mirrorlist
- sha256  28a560becd800a4229bfac317c2e5407cd3cc95308bc4c3ca90dba2577b052cf  qtwebkit-opensource-src-5.9.1.tar.xz
-diff --git a/package/qt5/qt5webkit/qt5webkit.mk b/package/qt5/qt5webkit/qt5webkit.mk
-index 7e9db76..77075f6 100644
---- a/package/qt5/qt5webkit/qt5webkit.mk
-+++ b/package/qt5/qt5webkit/qt5webkit.mk
-@@ -5,7 +5,12 @@
+diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
+index 6821144..3bf46d3 100644
+--- a/package/samba4/samba4.hash
++++ b/package/samba4/samba4.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 5913a569b54c6bc261bc245d7326fabfcba42839d15a82db48c047de1eb19626  samba-4.6.10.tar.gz
++sha256 051b7ab0fa088d77dc0df039ff5d6b8fd998372f0c29ecb455b149457c20ed1d  samba-4.6.11.tar.gz
+ sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index 40436ca..7836df5 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- QT5WEBKIT_VERSION = $(QT5_VERSION)
-+ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
- QT5WEBKIT_SITE = $(QT5_SITE)
-+else
-+QT5WEBKIT_SITE = http://download.qt.io/community_releases/5.6/$(QT5_VERSION)/submodules
-+endif
-+
- QT5WEBKIT_SOURCE = qtwebkit-opensource-src-$(QT5WEBKIT_VERSION).tar.xz
- QT5WEBKIT_DEPENDENCIES = \
- 	host-bison host-flex host-gperf host-python host-ruby \
+-SAMBA4_VERSION = 4.6.10
++SAMBA4_VERSION = 4.6.11
+ SAMBA4_SITE = https://download.samba.org/pub/samba/stable
+ SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+ SAMBA4_INSTALL_STAGING = YES
