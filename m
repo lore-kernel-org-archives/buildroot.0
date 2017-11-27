@@ -1,91 +1,99 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 27 Nov 2017 10:50:28 +0100
-Subject: [Buildroot] [git commit branch/2017.08.x] localedef: fix xlocale.h
- related compile failure
-Message-ID: <20171127101635.0E20D7FB71@busybox.osuosl.org>
+Date: Mon, 27 Nov 2017 11:05:51 +0100
+Subject: [Buildroot] [git commit branch/2017.08.x] Fix makefile include
+ order by using sort/wildcard.
+Message-ID: <20171127101635.534AD80FE4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=beb6eab5027e55e6373d10569c39bbbd8b4dff84
+commit: https://git.buildroot.net/buildroot/commit/?id=8bb4b9c8dff6783557a8cda6507e2b4e613e5d8d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.08.x
 
-Add upstream patch 'Don't include <xlocale.h>'.
+The 'include' directive in GNU make supports wildcards, but their
+expansion has no defined sort order (GLOB_NOSORT is passed to glob()).
+Usually this doesn't matter. However, there is at least one case where
+it does make a difference: toolchain/*/*.mk includes both the
+definitions of the external toolchain packages and
+pkg-toolchain-external.mk, but pkg-toolchain-external.mk must be
+included first.
 
-Fixes Bug-10501 ([1]):
+For predictability, use ordered 'include $(sort $(wildcard ...))'
+instead of unordered direct 'include */*.mk' everywhere.
 
-In file included from ./include/locale.h:1:0,
-                 from /usr/include/libintl.h:103,
-                 from ./include/libintl.h:2,
-                 from glibc/locale/programs/charmap.c:25:
-glibc/locale/locale.h:146:11: fatal error: xlocale.h: No such file or directory
- # include <xlocale.h>
+Fixes [1] reported by Petr Vorel:
 
-[1] https://bugs.busybox.net/show_bug.cgi?id=10501
+  make: *** No rule to make target 'toolchain-external-custom', needed by '.../build/toolchain-external/.stamp_configured'.  Stop.
+
+[1] http://lists.busybox.net/pipermail/buildroot/2017-November/206969.html
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit d5cc76c5314f58fa18001e9abce196c1ac4a28d1)
+Tested-by: Petr Vorel <petr.vorel@gmail.com>
+[Arnout: also sort the one remaining include, of the external docs]
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+(cherry picked from commit b9d2d4cb4ebc7a2290c4683dd9667b8f0a9e3cdf)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../localedef/0001-Don-t-include-xlocale.h.patch   | 50 ++++++++++++++++++++++
- 1 file changed, 50 insertions(+)
+ Makefile                                           | 8 ++++----
+ package/gstreamer/gstreamer.mk                     | 2 +-
+ package/gstreamer1/gstreamer1.mk                   | 2 +-
+ toolchain/toolchain-external/toolchain-external.mk | 2 +-
+ 4 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/package/localedef/0001-Don-t-include-xlocale.h.patch b/package/localedef/0001-Don-t-include-xlocale.h.patch
-new file mode 100644
-index 0000000..9a6c2f8
---- /dev/null
-+++ b/package/localedef/0001-Don-t-include-xlocale.h.patch
-@@ -0,0 +1,50 @@
-+From: Bernhard Walle <bernhard@bwalle.de>
-+Date: Mon, 2 Oct 2017 16:55:23 +0200
-+Subject: [PATCH] Don't include <xlocale.h>
-+
-+This header has been removed in glibc 2.26:
-+
-+https://abi-laboratory.pro/tracker/changelog/glibc/2.26/log.html
-+
-+------------------------ >8 ------------------------
-+* The nonstandard header <xlocale.h> has been removed.  Most programs should
-+  use <locale.h> instead.  If you have a specific need for the definition of
-+  locale_t with no other declarations, please contact
-+  libc-alpha at sourceware.org and explain.
-+------------------------ 8< ------------------------
-+
-+Signed-off-by: Bernhard Walle <bernhard@bwalle.de>
-+
-+Upstream: https://git.pengutronix.de/cgit/ptxdist/tree/patches/localedef-eglibc-2.14.1-r17443-ptx1/0003-Don-t-include-xlocale.h.patch
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+---
-+ eglibc/locale/langinfo.h | 2 +-
-+ eglibc/locale/locale.h   | 2 +-
-+ 2 files changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/eglibc/locale/langinfo.h b/eglibc/locale/langinfo.h
-+index 0a5336507196..76707a4584c1 100644
-+--- a/eglibc/locale/langinfo.h
-++++ b/eglibc/locale/langinfo.h
-+@@ -589,7 +589,7 @@ extern char *nl_langinfo (nl_item __item) __THROW;
-+    more information.  */
-+ 
-+ /* Get locale datatype definition.  */
-+-# include <xlocale.h>
-++# include <locale.h>
-+ 
-+ /* Just like nl_langinfo but get the information from the locale object L.  */
-+ extern char *nl_langinfo_l (nl_item __item, __locale_t __l);
-+diff --git a/eglibc/locale/locale.h b/eglibc/locale/locale.h
-+index 2aa19e76acb2..18be711a2d40 100644
-+--- a/eglibc/locale/locale.h
-++++ b/eglibc/locale/locale.h
-+@@ -143,7 +143,7 @@ __END_NAMESPACE_STD
-+    This is a proof-of-concept implementation.  */
-+ 
-+ /* Get locale datatype definition.  */
-+-# include <xlocale.h>
-++# include_next <locale.h>
-+ 
-+ /* Return a reference to a data structure representing a set of locale
-+    datasets.  Unlike for the CATEGORY parameter for `setlocale' the
+diff --git a/Makefile b/Makefile
+index 39db0c1..f2afe80 100644
+--- a/Makefile
++++ b/Makefile
+@@ -483,13 +483,13 @@ include system/system.mk
+ include package/Makefile.in
+ # arch/arch.mk.* must be after package/Makefile.in because it may need to
+ # complement variables defined therein, like BR_NO_CHECK_HASH_FOR.
+--include $(wildcard arch/arch.mk.*)
++-include $(sort $(wildcard arch/arch.mk.*))
+ include support/dependencies/dependencies.mk
+ 
+ PACKAGES += $(DEPENDENCIES_HOST_PREREQ)
+ 
+-include toolchain/*.mk
+-include toolchain/*/*.mk
++include $(sort $(wildcard toolchain/*.mk))
++include $(sort $(wildcard toolchain/*/*.mk))
+ 
+ # Include the package override file if one has been provided in the
+ # configuration.
+@@ -1109,7 +1109,7 @@ print-version:
+ 	./support/testing/run-tests -l 2>&1 | sed -r -e '/^test_run \((.*)\).*/!d; s//\1: *runtime_test/' | LC_ALL=C sort >> $@
+ 
+ include docs/manual/manual.mk
+--include $(foreach dir,$(BR2_EXTERNAL_DIRS),$(dir)/docs/*/*.mk)
++-include $(foreach dir,$(BR2_EXTERNAL_DIRS),$(sort $(wildcard $(dir)/docs/*/*.mk)))
+ 
+ .PHONY: $(noconfig_targets)
+ 
+diff --git a/package/gstreamer/gstreamer.mk b/package/gstreamer/gstreamer.mk
+index bc886c7..22240bc 100644
+--- a/package/gstreamer/gstreamer.mk
++++ b/package/gstreamer/gstreamer.mk
+@@ -1 +1 @@
+-include package/gstreamer/*/*.mk
++include $(sort $(wildcard package/gstreamer/*/*.mk))
+diff --git a/package/gstreamer1/gstreamer1.mk b/package/gstreamer1/gstreamer1.mk
+index 5b748e3..8530ff0 100644
+--- a/package/gstreamer1/gstreamer1.mk
++++ b/package/gstreamer1/gstreamer1.mk
+@@ -1 +1 @@
+-include package/gstreamer1/*/*.mk
++include $(sort $(wildcard package/gstreamer1/*/*.mk))
+diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+index 48de1e7..dd07884 100644
+--- a/toolchain/toolchain-external/toolchain-external.mk
++++ b/toolchain/toolchain-external/toolchain-external.mk
+@@ -25,4 +25,4 @@ $(error No prefix selected for external toolchain package $(BR2_PACKAGE_PROVIDES
+ endif
+ endif
+ 
+-include toolchain/toolchain-external/*/*.mk
++include $(sort $(wildcard toolchain/toolchain-external/*/*.mk))
