@@ -1,46 +1,62 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 27 Nov 2017 21:25:59 +0100
-Subject: [Buildroot] [git commit] DEVELOPERS: adopt the packages I recently
- added
-Message-ID: <20171127202227.2DC058079A@busybox.osuosl.org>
+Date: Mon, 27 Nov 2017 21:29:36 +0100
+Subject: [Buildroot] [git commit] package/asterisk: fix parallel
+ build/install
+Message-ID: <20171127202227.44FEE806CE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=95157daa8465312b70e1c633798bba8db5be5342
+commit: https://git.buildroot.net/buildroot/commit/?id=eda25adcf86e50d35e9aa962531e8299c5b5401d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Fixes:
+
+    http://autobuild.buildroot.org/results/7c9892b9425aff6e54b8c8942dbdcb0b26e58572
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- DEVELOPERS | 5 +++++
- 1 file changed, 5 insertions(+)
+ ...nsure-target-directory-for-modules-exists.patch | 32 ++++++++++++++++++++++
+ 1 file changed, 32 insertions(+)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 7621f96..20fe702 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1743,8 +1743,11 @@ F:	package/fwup/
- 
- N:	Yann E. MORIN <yann.morin.1998@free.fr>
- F:	fs/squashfs/
-+F:	package/asterisk/
- F:	package/cegui06/
- F:	package/celt051/
-+F:	package/dahdi-linux/
-+F:	package/dahdi-tools/
- F:	package/dtc/
- F:	package/dtv-scan-tables/
- F:	package/dvb-apps/
-@@ -1755,7 +1758,9 @@ F:	package/libedit/
- F:	package/libgsm/
- F:	package/libinput/
- F:	package/libiscsi/
-+F:	package/libpri/
- F:	package/libseccomp/
-+F:	package/libss7/
- F:	package/linux-tools/
- F:	package/mesa3d-headers/
- F:	package/nbd/
+diff --git a/package/asterisk/0005-build-ensure-target-directory-for-modules-exists.patch b/package/asterisk/0005-build-ensure-target-directory-for-modules-exists.patch
+new file mode 100644
+index 0000000..20cfc93
+--- /dev/null
++++ b/package/asterisk/0005-build-ensure-target-directory-for-modules-exists.patch
+@@ -0,0 +1,32 @@
++From 933b2554a40f932571bdbdbb5217cda3e35fd61f Mon Sep 17 00:00:00 2001
++From: "Yann E. MORIN" <yann.morin.1998@free.fr>
++Date: Mon, 27 Nov 2017 12:52:52 +0100
++Subject: [PATCH] build: ensure target directory for modules exists
++
++Currently, in highly-parallel builds, it is possible that installing
++modules fails because the target directory does not exist yet.
++
++We fix that by instructing $(INSTALL) to create the destination directory
++first.
++
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++---
++ Makefile.moddir_rules | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/Makefile.moddir_rules b/Makefile.moddir_rules
++index 59190bece9..b73153a9a5 100644
++--- a/Makefile.moddir_rules
+++++ b/Makefile.moddir_rules
++@@ -110,7 +110,7 @@ clean::
++ 
++ install:: all
++ 	@echo "Installing modules from `basename $(CURDIR)`..."
++-	@for x in $(LOADABLE_MODS:%=%.so); do $(INSTALL) -m 755 $$x "$(DESTDIR)$(ASTMODDIR)" ; done
+++	@for x in $(LOADABLE_MODS:%=%.so); do $(INSTALL) -D -m 755 $$x "$(DESTDIR)$(ASTMODDIR)" ; done
++ ifneq ($(findstring :,$(XMLSTARLET)$(BASH)),:)
++ 	@if [ -f .moduleinfo ] ; then \
++ 		declare -A DISABLED_MODS ;\
++-- 
++2.11.0
++
