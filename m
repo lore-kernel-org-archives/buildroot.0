@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 27 Nov 2017 09:48:28 +0100
-Subject: [Buildroot] [PATCH] pdbg: add patch fixing the build on Blackfin
-In-Reply-To: <20171126152947.20153-1-thomas.petazzoni@free-electrons.com>
-References: <20171126152947.20153-1-thomas.petazzoni@free-electrons.com>
-Message-ID: <20171127094828.09316a00@windsurf.lan>
+Date: Mon, 27 Nov 2017 09:48:45 +0100
+Subject: [Buildroot] [PATCH 1/1] postgresql: bump to 10.1
+In-Reply-To: <20171125171214.11641-1-Adamduskett@outlook.com>
+References: <20171125171214.11641-1-Adamduskett@outlook.com>
+Message-ID: <20171127094845.570ce5e2@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,26 +12,24 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 26 Nov 2017 16:29:47 +0100, Thomas Petazzoni wrote:
-> This commit adds a patch to pdbg that fixes the build on the Blackfin
-> architecture. The build failure was due to the recently introduced
-> assembly code to embed the DTB into an object file. This code was not
-> taking into account the fact that Blackfin has a non-empty
-> __USER_LABEL_PREFIX__.
+On Sat, 25 Nov 2017 12:12:14 -0500, Adam Duskett wrote:
+> changes:
 > 
-> The patch has been submitted upstream.
+> - Add a hash for the license file.
 > 
-> Fixes:
+> - PostgreSQL 10.0 and above will default to checking for /dev/urandom if an
+>   SSL library is not found, which will fail when cross compiling.
+>   Since /dev/urandom is guaranteed to be provided on Linux systems,
+>   add ac_cv_file__dev_urandom=yes to the configure environment if a SSL library
+>   is not selected.
 > 
->   http://autobuild.buildroot.net/results/2bf6f56303453fd2ba7e86882168d406ded4cc80/
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
 > ---
->  ...fix-to-build-on-architecture-with-non-emp.patch | 63 ++++++++++++++++++++++
->  1 file changed, 63 insertions(+)
->  create mode 100644 package/pdbg/0001-template.S-fix-to-build-on-architecture-with-non-emp.patch
+> Changes v1 -> v2:
+>   - Remove --disable-strong-random in place of ac_cv_file__dev_urandom=yes
+>     in the case of a SSL library not being selected. (Thomas)
 
-Applied to master, thanks.
+Applied to next, thanks.
 
 Thomas
 -- 
