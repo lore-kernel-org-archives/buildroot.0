@@ -1,26 +1,55 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 27 Nov 2017 10:33:44 +0100
-Subject: [Buildroot] [PATCH 2/2] qt5webkit: backport upstream icu-59 fix
- from 5.9 branch to 5.6.3
-In-Reply-To: <20171116142305.29500-2-peter@korsgaard.com> (Peter Korsgaard's
- message of "Thu, 16 Nov 2017 15:23:05 +0100")
-References: <20171116142305.29500-1-peter@korsgaard.com>
- <20171116142305.29500-2-peter@korsgaard.com>
-Message-ID: <87fu90cbgn.fsf@dell.be.48ers.dk>
+Date: Mon, 27 Nov 2017 10:35:11 +0100
+Subject: [Buildroot] [PATCH] libfastjson: indicate explicitly which gcc
+ -std option to use
+In-Reply-To: <20171117151416.26736-1-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Fri, 17 Nov 2017 16:14:16 +0100")
+References: <20171117151416.26736-1-thomas.petazzoni@free-electrons.com>
+Message-ID: <87bmjocbe8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- > icu-59.x slightly changed the API, breaking qt5webkit builds. For details, see:
- > https://bugreports.qt.io/browse/QTBUG-60532
+ > This commit fixes the following build issue of libfastjson with old
+ > enough compilers (4.8) and wchar disabled:
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > json_object.c: In function 'fjson_object_object_delete':
+ > json_object.c:385:3: error: 'for' loop initial declarations are only allowed in C99 mode
+ >    for (int i = 0 ; i < FJSON_OBJECT_CHLD_PG_SIZE ; ++i) {
+ >    ^
 
-Committed to 2017.08.x, thanks.
+ > The code of libfastjson requires C99. If your compiler is recent
+ > enough (gcc 5.x), then no problem, it is C99 by default, no additional
+ > flags are needed.
+
+ > If your compiler is older (for example gcc 4.8), then -std=c99 or
+ > -std=gnu99 is explicitly needed to tell the compiler to accept C99
+ > constructs. Testing the compiler for the availability of such flags is
+ > done by libfastjson configure script. However, the test program used
+ > by the configure script uses some wchar_t types, and therefore the
+ > test checking for C99 availability fails on toolchains with wchar
+ > disabled. From config.log:
+
+ > configure:3928: checking for /home/test/buildroot/output/host/usr/bin/i586-buildroot-linux-uclibc-gcc option to accept ISO C99
+ > [...]
+ > configure:4077: /home/test/buildroot/output/host/usr/bin/i586-buildroot-linux-uclibc-gcc -std=gnu99 -c -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 conftest.c >&5
+ > conftest.c:54:3: error: unknown type name 'wchar_t'
+ >    const wchar_t *name;
+ >    ^
+
+ > So, just like we did in libv4l in commit
+ > f01396a158f14c53b781c35f7ff29da0bea8c8d6 ("libv4l: fix uclibc-ng
+ > configure/compile"), let's hint directly the configure script that it
+ > should use -std=gnu99. This fixes the build of libfastjson with old
+ > compilers and wchar disabled.
+
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+Committed to 2017.02.x and 2017.08.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
