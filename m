@@ -1,31 +1,24 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 27 Nov 2017 10:41:28 +0100
-Subject: [Buildroot] [git commit] oracle-mysql: fix build with gcc 7.x
-In-Reply-To: <20171120213453.CA0B280DF1@busybox.osuosl.org> (Thomas
- Petazzoni's message of "Mon, 20 Nov 2017 22:41:41 +0100")
-References: <20171120213453.CA0B280DF1@busybox.osuosl.org>
-Message-ID: <873750cb3r.fsf@dell.be.48ers.dk>
+From: Jeroen Roovers <jer@airfi.aero>
+Date: Mon, 27 Nov 2017 10:35:27 +0100
+Subject: [Buildroot] [PATCH v2] rtl8723bu: new package
+In-Reply-To: <20171127090119.32215-1-mylene.josserand@free-electrons.com>
+References: <20171127090119.32215-1-mylene.josserand@free-electrons.com>
+Message-ID: <CANCHnQqx-cQM-qW8_aFkCGB0yi=b32M8RC6rpeXXR73_NhTC_A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+On 27 November 2017 at 10:01, Myl?ne Josserand
+<mylene.josserand@free-electrons.com> wrote:
+> Add RTL8723BU package to compile the Realtek RTL8723BU Wifi driver.
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=317b72f469867bd3e1765418e325515d6065d45f
- > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+I believe recent versions of the in-kernel rtlwifi driver cover the
+RTL8723BU as well. Is there any reason to prefer Realtek's driver? If
+there are important differences, then it may be useful to record the
+advantages of this driver in the Config.in help section.
 
- > This adjusts an existing patch to also fix gcc 7.x build issues on the
- > server side of MySQL.
 
- > Fixes:
-
- >   http://autobuild.buildroot.net/results/9e3a0b5b8f2506fb2ce2fcc3d5d3a494a14439cb
-
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-Committed to 2017.08.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+Kind regards,
+     jer
