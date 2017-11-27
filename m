@@ -1,48 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 27 Nov 2017 21:56:49 +0100
-Subject: [Buildroot] [git commit branch/next] gnupg2: bump to version 2.2.2
-Message-ID: <20171127205352.7448C7FE82@busybox.osuosl.org>
+Date: Mon, 27 Nov 2017 22:03:06 +0100
+Subject: [Buildroot] [PATCH next v2 1/2] gnupg2: don't preserve the old
+ gpg2 executable name
+In-Reply-To: <4f74cc073562f0ae1d00bdb8b49fb13151a6cf20.1510660959.git.baruch@tkos.co.il>
+References: <4f74cc073562f0ae1d00bdb8b49fb13151a6cf20.1510660959.git.baruch@tkos.co.il>
+Message-ID: <20171127220306.74e7a1b2@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3587d29eae6086c1006526c054df2d0fce6fe687
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hello,
 
-Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/gnupg2/gnupg2.hash | 8 ++++----
- package/gnupg2/gnupg2.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+On Tue, 14 Nov 2017 14:02:38 +0200, Baruch Siach wrote:
+> Commit e82fadab236a (gnupg2: bump to version 2.2.0) added a configure
+> option to keep the old 'gpg2' executable name to avoid conflict with the
+> gnupg package. It turns out that gnupg depends on !BR2_PACKAGE_GNUPG2
+> since commit 2cadb26e6d4 (gnupg: make gnupg and gnupg2 mutually
+> exclusive). Drop this configure option.
+> 
+> Rename the config option that controls the removal of gpgv2, now gpgv,
+> to match the new name. Add legacy config symbol handling.
+> 
+> Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> ---
+> v2: move legacy entry to 2018.02
+> ---
+>  Config.in.legacy         | 11 +++++++++++
+>  package/gnupg2/Config.in |  6 +++---
+>  package/gnupg2/gnupg2.mk | 10 ++++------
+>  3 files changed, 18 insertions(+), 9 deletions(-)
 
-diff --git a/package/gnupg2/gnupg2.hash b/package/gnupg2/gnupg2.hash
-index 84152ee..43ce3c6 100644
---- a/package/gnupg2/gnupg2.hash
-+++ b/package/gnupg2/gnupg2.hash
-@@ -1,5 +1,5 @@
--# From https://lists.gnupg.org/pipermail/gnupg-announce/2017q3/000413.html
--sha1 36ee693d0b2ec529ecf53dd6d397cc38ba71c0a7  gnupg-2.2.0.tar.bz2
-+# From https://lists.gnupg.org/pipermail/gnupg-announce/2017q4/000416.html
-+sha1 efa00fc20295b1cafe467359107ea170258870e2  gnupg-2.2.2.tar.bz2
- # Calculated based on the hash above and signature
--# https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.2.0.tar.bz2.sig
--sha256 d4514a0be0f7a1ff263193330019eb4b53c82f0f5e230af3c14df371271a45e6  gnupg-2.2.0.tar.bz2
-+# https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.2.2.tar.bz2.sig
-+sha256 bfb62c7412ceb3b9422c6c7134a34ff01a560f98eb981c2d96829c1517c08197  gnupg-2.2.2.tar.bz2
-diff --git a/package/gnupg2/gnupg2.mk b/package/gnupg2/gnupg2.mk
-index f5fcb15..baf85e7 100644
---- a/package/gnupg2/gnupg2.mk
-+++ b/package/gnupg2/gnupg2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GNUPG2_VERSION = 2.2.0
-+GNUPG2_VERSION = 2.2.2
- GNUPG2_SOURCE = gnupg-$(GNUPG2_VERSION).tar.bz2
- GNUPG2_SITE = https://gnupg.org/ftp/gcrypt/gnupg
- GNUPG2_LICENSE = GPL-3.0+
+Both applied to next. Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
