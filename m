@@ -1,37 +1,48 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 27 Nov 2017 12:12:46 +0100
-Subject: [Buildroot] [PATCHv2] package/hackrf: new package
-In-Reply-To: <20171126175012.3e950dae@windsurf.home>
-References: <20171126153550.13871-1-yann.morin.1998@free.fr>
- <20171126175012.3e950dae@windsurf.home>
-Message-ID: <20171127111246.GC2950@scaer>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon, 27 Nov 2017 13:22:43 +0200
+Subject: [Buildroot] [PATCH next] musl: bump to 1.1.18
+In-Reply-To: <20171127101732.14622-1-thomas.petazzoni@free-electrons.com>
+References: <20171127101732.14622-1-thomas.petazzoni@free-electrons.com>
+Message-ID: <20171127112243.76qgr57fupq3uer3@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Hi Thomas,
 
-On 2017-11-26 17:50 +0100, Thomas Petazzoni spake thusly:
-> On Sun, 26 Nov 2017 16:35:50 +0100, Yann E. MORIN wrote:
-> >  package/Config.in                                  |  1 +
-> >  ...01-host-tools-use-pkg-cnfig-to-find-fftwf.patch | 45 ++++++++++++++++++++++
-> >  package/hackrf/Config.in                           | 17 ++++++++
-> >  package/hackrf/hackrf.mk                           | 22 +++++++++++
-> >  4 files changed, 85 insertions(+)
-> 
-> Update to the DEVELOPERS file is missing.
+On Mon, Nov 27, 2017 at 11:17:32AM +0100, Thomas Petazzoni wrote:
+> diff --git a/package/musl/musl.hash b/package/musl/musl.hash
+> index f3f3741092..db89a72c45 100644
+> --- a/package/musl/musl.hash
+> +++ b/package/musl/musl.hash
+> @@ -1,2 +1,2 @@
+>  # Locally calculated after checking pgp signature
 
-Fixed, thanks! :-)
+Having a link to the signature here would be nice:
 
-Regards,
-Yann E. MORIN.
+   http://www.musl-libc.org/releases/musl-1.1.18.tar.gz.asc
+
+> -sha256	937185a5e5d721050306cf106507a006c3f1f86d86cd550024ea7be909071011  musl-1.1.16.tar.gz
+> +sha256	d017ee5d01aec0c522a1330fdff06b1e428cb409e1db819cc4935d5da4a5a118  musl-1.1.18.tar.gz
+> diff --git a/package/musl/musl.mk b/package/musl/musl.mk
+> index 6d5603398b..b1aace0400 100644
+> --- a/package/musl/musl.mk
+> +++ b/package/musl/musl.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -MUSL_VERSION = 1.1.16
+> +MUSL_VERSION = 1.1.18
+>  MUSL_SITE = http://www.musl-libc.org/releases
+>  MUSL_LICENSE = MIT
+>  MUSL_LICENSE_FILES = COPYRIGHT
+
+baruch
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
