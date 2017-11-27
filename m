@@ -1,31 +1,65 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 27 Nov 2017 12:10:50 +0100
-Subject: [Buildroot] Analysis of build results for 2017-11-25
-In-Reply-To: <20171126152140.0fd3902b@windsurf.home>
-References: <20171126070006.676FA209DE@mail.free-electrons.com>
- <20171126152140.0fd3902b@windsurf.home>
-Message-ID: <20171127111050.GA2950@scaer>
+Date: Mon, 27 Nov 2017 12:12:15 +0100
+Subject: [Buildroot] [PATCHv2] package/hackrf: new package
+In-Reply-To: <20171126161600.n4lm7urhkwnzshm3@sapphire.tkos.co.il>
+References: <20171126153550.13871-1-yann.morin.1998@free.fr>
+ <20171126161600.n4lm7urhkwnzshm3@sapphire.tkos.co.il>
+Message-ID: <20171127111215.GB2950@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Baruch, All,
 
-On 2017-11-26 15:21 +0100, Thomas Petazzoni spake thusly:
-[--SNIP--]
-> >          arm |                asterisk-14.5.0 | NOK | http://autobuild.buildroot.net/results/7c9892b9425aff6e54b8c8942dbdcb0b26e58572 | ORPH
-> /usr/bin/install: cannot create regular file `/home/peko/autobuild/instance-1/output/target/usr/lib/asterisk/modules': No such file or directory
+On 2017-11-26 18:16 +0200, Baruch Siach spake thusly:
+> Hi Yann,
 > 
-> Why is Asterisk orphan? Yann, you introduced this package recently, so
-> it shouldn't be orphan. Is there anybody else interested in the
-> Asterisk package ?
+> On Sun, Nov 26, 2017 at 04:35:50PM +0100, Yann E. MORIN wrote:
+> > diff --git a/package/hackrf/hackrf.mk b/package/hackrf/hackrf.mk
+> > new file mode 100644
+> > index 0000000000..af5d9c08f2
+> > --- /dev/null
+> > +++ b/package/hackrf/hackrf.mk
+> > @@ -0,0 +1,22 @@
+> > +################################################################################
+> > +#
+> > +# hackrf
+> > +#
+> > +################################################################################
+> > +
+> > +HACKRF_VERSION = fb83ad64953bf7f8707bc209968f9e49f894369e
+> > +HACKRF_SITE = $(call github,mossmann,hackrf,$(HACKRF_VERSION))
+> > +HACKRF_LICENSE = GPLv2 GPLv2+ BSD-3c
+> 
+> _LICENSE should use SPDX identifiers: GPL-2.0, GPL-2.0+, BSD-3-Clause.
 
-I'm taking it. I'll investigate the issue too...
+Fixed, thanks! :-)
 
 Regards,
 Yann E. MORIN.
+
+> baruch
+> 
+> > +HACKRF_LICENSE_FILES = COPYING
+> > +HACKRF_DEPENDENCIES = host-pkgconf libusb fftw
+> > +HACKRF_INSTALL_STAGING = YES
+> > +HACKRF_SUBDIR = host
+> > +HACKRF_SUPPORTS_IN_SOURCE_BUILD = NO
+> > +
+> > +ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
+> > +HACKRF_CONF_OPTS += -DINSTALL_UDEV_RULES=ON
+> > +else
+> > +HACKRF_CONF_OPTS += -DINSTALL_UDEV_RULES=OFF
+> > +endif
+> > +
+> > +$(eval $(cmake-package))
+> 
+> -- 
+>      http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+> =}------------------------------------------------ooO--U--Ooo------------{=
+>    - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
