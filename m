@@ -1,7 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 27 Nov 2017 08:00:14 +0100 (CET)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2017-11-26
-Message-ID: <20171127070014.3C90B2055D@mail.free-electrons.com>
+Date: Mon, 27 Nov 2017 09:08:11 +0100
+Subject: [Buildroot] [PATCH] rtl8723bu: new package
+In-Reply-To: <20171126215913.28767-1-mylene.josserand@free-electrons.com>
+References: <20171126215913.28767-1-mylene.josserand@free-electrons.com>
+Message-ID: <20171127090811.22628218@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,87 +12,70 @@ To: buildroot@busybox.net
 
 Hello,
 
-Build statistics for 2017-11-26
-===============================
+On Sun, 26 Nov 2017 22:59:13 +0100, Myl?ne Josserand wrote:
+> Add RTL8723BU package to compile the Realtek RTL8723BU Wifi driver.
+> 
+> Signed-off-by: Myl?ne Josserand <mylene.josserand@free-electrons.com>
 
-      branch |  OK | NOK | TIM | TOT |
-   2017.08.x |  20 |   1 |   0 |  21 |
-      master | 204 |  14 |   0 | 218 |
-        next |  55 |   6 |   0 |  61 |
+Thanks for this contribution!
 
-Results for branch '2017.08.x'
-==============================
+>  package/Config.in                |  1 +
+>  package/rtl8723bu/Config.in      | 10 ++++++++++
+>  package/rtl8723bu/rtl8723bu.hash |  2 ++
+>  package/rtl8723bu/rtl8723bu.mk   | 25 +++++++++++++++++++++++++
+>  4 files changed, 38 insertions(+)
 
-Classification of failures by reason
-------------------------------------
+Could you add yourself to the DEVELOPERS file for this package?
 
-             dbus-python-1.2.4 | 1 
+> diff --git a/package/rtl8723bu/rtl8723bu.mk b/package/rtl8723bu/rtl8723bu.mk
+> new file mode 100644
+> index 0000000000..774caa02f9
+> --- /dev/null
+> +++ b/package/rtl8723bu/rtl8723bu.mk
+> @@ -0,0 +1,25 @@
+> +################################################################################
+> +#
+> +# rtl8723bu
+> +#
+> +################################################################################
+> +
+> +RTL8723BU_VERSION = b922079a090dcaad58179d478442ff97f18521c9
+> +RTL8723BU_SITE = $(call github,lwfinger,rtl8723bu,$(RTL8723BU_VERSION))
+> +RTL8723BU_LICENSE = GPL-2.0, proprietary (*.bin firmware blobs)
+> +
+> +RTL8723BU_MODULE_MAKE_OPTS = \
+> +	KVER=$(LINUX_VERSION_PROBED) \
+> +	KSRC=$(LINUX_DIR)
+> +
+> +RTL8723BU_BINS = rtl8723b_fw.bin
+> +
+> +define RTL8723BU_INSTALL_FIRMWARE
+> +	$(foreach bin, $(RTL8723BU_BINS), \
+> +		$(INSTALL) -D -m 644 $(@D)/$(bin) $(TARGET_DIR)/lib/firmware/rtlwifi/$(bin)
+> +	)
 
+The loop is not needed, since you have a single firmware file, so this
+can be simplified as:
 
-Detail of failures
-------------------
+	$(INSTALL) -D -m 0644 $(@D)/rtl8723b_fw.bin $(TARGET_DIR)/lib/firmware/rtlwifi/rtl8723b_fw.bin
 
-        i586 |              dbus-python-1.2.4 | NOK | http://autobuild.buildroot.net/results/adf4f26ef904f3a5614c5096a84eaf1d845b9f11 | ORPH
+> +endef
+> +RTL8723BU_POST_INSTALL_TARGET_HOOKS += RTL8723BU_INSTALL_FIRMWARE
 
-Results for branch 'master'
-===========================
+I know the rtl8723bs package that you probably used as an example does
+this, but in fact there is no need to use a post install target hook
+here. You can just do:
 
-Classification of failures by reason
-------------------------------------
+define RTL8723BU_INSTALL_TARGET_CMDS
+	$(INSTALL) -D ...
+endef
 
-                       unknown | 3 
-pdbg-527fe54e1c95e031efd3db... | 2 
-                      qt-4.8.7 | 2 
-              host-erlang-19.3 | 1 
-host-google-breakpad-7515ab... | 1 
-                 libdrm-2.4.88 | 1 
-            lttng-libust-2.9.0 | 1 
-             lttng-tools-2.9.5 | 1 
-                    mpv-0.27.0 | 1 
-                     xen-4.9.0 | 1 
+Could you fix those minor details, and submit an updated version?
 
+Thanks!
 
-Detail of failures
-------------------
-
-         arm |               host-erlang-19.3 | NOK | http://autobuild.buildroot.net/results/445c770d4ec91042851616835ddca2b371ca399f |     
-         arm | host-google-breakpad-7515ab... | NOK | http://autobuild.buildroot.net/results/37d257cc4fea14e3304364990a55a24d4bd7e9bd |     
-       sparc |                  libdrm-2.4.88 | NOK | http://autobuild.buildroot.net/results/a886f0d8f75cc1ff291e0c43e57962b28980f253 |     
-         arm |             lttng-libust-2.9.0 | NOK | http://autobuild.buildroot.net/results/439905ef3babf6233ffc0cfbee2e7eca6d965f77 |     
-         arm |              lttng-tools-2.9.5 | NOK | http://autobuild.buildroot.net/results/b84a6e39fcca70c56bfe49d54c385dfe6da82422 |     
-         arm |                     mpv-0.27.0 | NOK | http://autobuild.buildroot.net/results/d24e6ad58832af08bb84398c48a73b5560f8ea19 | ORPH
-        bfin | pdbg-527fe54e1c95e031efd3db... | NOK | http://autobuild.buildroot.net/results/2bf6f56303453fd2ba7e86882168d406ded4cc80 |     
-        bfin | pdbg-527fe54e1c95e031efd3db... | NOK | http://autobuild.buildroot.net/results/9271a2c86bfd204edc8da680cb170d7d7a4d6586 |     
-     powerpc |                       qt-4.8.7 | NOK | http://autobuild.buildroot.net/results/c060af040e373ce0dc7f8e57827f57055a5c07a5 | ORPH
-     powerpc |                       qt-4.8.7 | NOK | http://autobuild.buildroot.net/results/23010393abe482cf6deb734ff886e1e22f7fdb6f | ORPH
-     aarch64 |                        unknown | NOK | http://autobuild.buildroot.net/results/ffbee3ceb0f5409af73dfa4173d1db80f926f150 |     
-    mips64el |                        unknown | NOK | http://autobuild.buildroot.net/results/e4a711050a4f62aacdfc5093f2ef498c00fd7bbb |     
-        i686 |                        unknown | NOK | http://autobuild.buildroot.net/results/76ee8a86ca70062e8511c4a9755396edbd4a2c07 |     
-         arm |                      xen-4.9.0 | NOK | http://autobuild.buildroot.net/results/dc3e05398a34f410d7a03ccf4295e9e60533befe |     
-
-Results for branch 'next'
-=========================
-
-Classification of failures by reason
-------------------------------------
-
-              alsa-lib-1.1.4.1 | 2 
-dvb-apps-3d43b280298c39a67d... | 1 
- netcat-openbsd-debian_1.178-3 | 1 
-pdbg-77158819158d1d7053a737... | 1 
-           qt5multimedia-5.9.2 | 1 
-
-
-Detail of failures
-------------------
-
-         arc |               alsa-lib-1.1.4.1 | NOK | http://autobuild.buildroot.net/results/acfc26aa544a91d280db260ad82c0e9aedba83cf |     
-         arc |               alsa-lib-1.1.4.1 | NOK | http://autobuild.buildroot.net/results/c193327b3433a3029867d75a730948b1d3d97fa4 |     
-         arc | dvb-apps-3d43b280298c39a67d... | NOK | http://autobuild.buildroot.net/results/1dbffbde01e22953a2ed625e73840c9527388222 |     
-    mips64el |  netcat-openbsd-debian_1.178-3 | NOK | http://autobuild.buildroot.net/results/0a0aa739cf2b0769ef729c40d056ebfdf121fe8e |     
-    mips64el | pdbg-77158819158d1d7053a737... | NOK | http://autobuild.buildroot.net/results/d6cc3379650bc31922a546790199b3e19b9b8d45 |     
-      x86_64 |            qt5multimedia-5.9.2 | NOK | http://autobuild.buildroot.net/results/293db359a10e492af3bc97f68dba60e198643e20 |     
-
-
+Thomas
 -- 
-http://autobuild.buildroot.net
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
