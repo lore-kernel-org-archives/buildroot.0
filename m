@@ -1,39 +1,124 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 27 Nov 2017 21:27:00 +0100
-Subject: [Buildroot] [PATCH/next 1/1] package/avahi: configure option pygtk
- was renamed to pygobject
-Message-ID: <20171127202700.28697-1-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 27 Nov 2017 21:28:54 +0100
+Subject: [Buildroot] [PATCH/next 1/1] package/samba4: enable musl support
+In-Reply-To: <20171127191541.8149-1-bernd.kuhls@t-online.de>
+References: <20171127191541.8149-1-bernd.kuhls@t-online.de>
+Message-ID: <20171127212854.2f106d1d@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-See corresponding commit:
-https://github.com/lathiat/avahi/commit/142124dae6f043085aba59fca4657c56b2b23b65
+Hello,
 
-Fixes
-http://autobuild.buildroot.net/results/1e9/1e974c814ae4236077a869339be1143a9af7e5cd/
-http://autobuild.buildroot.net/results/010/0101b1205aec5a0c9c6509edf3d302aeaa3bd0ca/
-http://autobuild.buildroot.net/results/572/5721634ffa2a4544a82dda08c1fcea331ecdadaf/
+On Mon, 27 Nov 2017 20:15:41 +0100, Bernd Kuhls wrote:
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/samba4/0002-musl-getpwent_r.patch      | 79 ++++++++++++++++++++++++++
+>  package/samba4/0003-musl-netdb-defines.patch   | 26 +++++++++
+>  package/samba4/0004-musl-pthread_mutex_t.patch | 26 +++++++++
+>  package/samba4/Config.in                       |  7 +--
+>  4 files changed, 134 insertions(+), 4 deletions(-)
+>  create mode 100644 package/samba4/0002-musl-getpwent_r.patch
+>  create mode 100644 package/samba4/0003-musl-netdb-defines.patch
+>  create mode 100644 package/samba4/0004-musl-pthread_mutex_t.patch
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/avahi/avahi.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thanks for this. However, since Samba is using Git as a version control
+system, we want to use Git formatted patches.
 
-diff --git a/package/avahi/avahi.mk b/package/avahi/avahi.mk
-index b89887b4c7..c8f1af9a9d 100644
---- a/package/avahi/avahi.mk
-+++ b/package/avahi/avahi.mk
-@@ -77,7 +77,7 @@ AVAHI_CONF_OPTS = \
- 	--disable-gtk \
- 	--disable-gtk3 \
- 	--disable-gdbm \
--	--disable-pygtk \
-+	--disable-pygobject \
- 	--disable-mono \
- 	--disable-monodoc \
- 	--disable-stack-protector \
+Also, could you submit upstream those patches ?
+
+See below for other comments/questions.
+
+> diff --git a/package/samba4/0002-musl-getpwent_r.patch b/package/samba4/0002-musl-getpwent_r.patch
+> new file mode 100644
+> index 0000000000..e3cc734388
+> --- /dev/null
+> +++ b/package/samba4/0002-musl-getpwent_r.patch
+> @@ -0,0 +1,79 @@
+> +Musl fix for getpwent_r
+> +
+> +Downloaded from
+> +https://git.alpinelinux.org/cgit/aports/tree/main/samba/getpwent_r.patch
+> +
+> +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> +
+> +diff --git a/source4/torture/local/nss_tests.c b/source4/torture/local/nss_tests.c
+> +index 2cd6122..04f13c6 100644
+> +--- a/source4/torture/local/nss_tests.c
+> ++++ b/source4/torture/local/nss_tests.c
+> +@@ -333,6 +332,7 @@ static bool test_enum_passwd(struct torture_context *tctx,
+> + 	return true;
+> + }
+> + 
+> ++#if HAVE_GETPWENT_R
+> + static bool test_enum_r_passwd(struct torture_context *tctx,
+> + 			       struct passwd **pwd_array_p,
+> + 			       size_t *num_pwd_p)
+> +@@ -381,6 +381,7 @@ static bool test_enum_r_passwd(struct torture_context *tctx,
+> + 
+> + 	return true;
+> + }
+> ++#endif
+> + 
+> + static bool torture_assert_passwd_equal(struct torture_context *tctx,
+> + 					const struct passwd *p1,
+> +@@ -432,7 +433,7 @@ static bool test_passwd_r(struct torture_context *tctx)
+> + 	struct passwd *pwd, pwd1, pwd2;
+> + 	size_t num_pwd;
+> + 
+> +-	torture_assert(tctx, test_enum_r_passwd(tctx, &pwd, &num_pwd),
+> ++	torture_assert(tctx, test_enum_passwd(tctx, &pwd, &num_pwd),
+> + 						"failed to enumerate passwd");
+
+This patch looks bogus, because is uses test_enum_passwd()
+unconditionally, even if test_enum_r_passwd() is available.
+
+Also, if Samba is using getpwent_r() instead of getpwent(), perhaps
+there's a reason?
+
+
+> diff --git a/package/samba4/0004-musl-pthread_mutex_t.patch b/package/samba4/0004-musl-pthread_mutex_t.patch
+> new file mode 100644
+> index 0000000000..eba05aac2a
+> --- /dev/null
+> +++ b/package/samba4/0004-musl-pthread_mutex_t.patch
+> @@ -0,0 +1,26 @@
+> +Fixes musl build error
+> +
+> +../ctdb/tests/src/test_mutex_raw.c: In function 'main':
+> +../ctdb/tests/src/test_mutex_raw.c:170:28: error: 'pthread_mutex_t {aka struct <anonymous>}' has no member named '__data'
+> +    printf("pid=%u\n", mutex->__data.__owner);
+> +
+> +Downloaded from
+> +https://github.com/openembedded/meta-openembedded/blob/master/meta-networking/recipes-connectivity/samba/samba/glibc_only.patch
+> +
+> +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> +
+> +Index: samba-4.6.2/ctdb/tests/src/test_mutex_raw.c
+> +===================================================================
+> +--- samba-4.6.2.orig/ctdb/tests/src/test_mutex_raw.c
+> ++++ samba-4.6.2/ctdb/tests/src/test_mutex_raw.c
+> +@@ -166,8 +166,10 @@ int main(int argc, const char **argv)
+> + 			if (ret == 0) {
+> + 				pthread_mutex_unlock(mutex);
+> + 			}
+> ++#ifdef __GLIBC__
+> + 		} else if (ret == EBUSY) {
+> + 			printf("pid=%u\n", mutex->__data.__owner);
+> ++#endif
+
+So how is the ret == EBUSY case being handled ?
+
+> + 		} else if (ret == 0) {
+> + 			pthread_mutex_unlock(mutex);
+> + 		}
+
+Thanks!
+
+Thomas Petazzoni
 -- 
-2.11.0
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
