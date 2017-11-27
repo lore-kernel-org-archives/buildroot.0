@@ -1,32 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 27 Nov 2017 22:38:02 +0100
-Subject: [Buildroot] [PATCH 1/2] board/qemu/ppc64-pseries: adjust Qemu
- command line
-In-Reply-To: <20171121080815.31347-1-thomas.petazzoni@free-electrons.com>
-References: <20171121080815.31347-1-thomas.petazzoni@free-electrons.com>
-Message-ID: <20171127223802.1e1200e6@windsurf.home>
+Date: Mon, 27 Nov 2017 22:56:55 +0100
+Subject: [Buildroot] [git commit branch/next] core/pkg-generic: redirect
+ only when listing package's installed files
+Message-ID: <20171127220553.61F0C81EC3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=d63670009b42462a9c685b574af107e71ab1ab45
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Tue, 21 Nov 2017 09:08:14 +0100, Thomas Petazzoni wrote:
-> This helps the toolchains.free-electrons.com build logic re-use
-> directly the Qemu command lines from this readme.txt file, by having a
-> -append option similar to the ones used in other readme.txt files.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  board/qemu/ppc64-pseries/readme.txt | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+There is no need to redirect again and again for each new file added to
+the list; we can just redirect once and for all.
 
-Both applied to master. Thanks Yann for the review :-)
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/pkg-generic.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index d4cb42d..ad10a8c 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -83,8 +83,8 @@ define step_pkg_size_end
+ 	$(call _step_pkg_size_get_file_list,$($(PKG)_DIR)/.br_filelist_after)
+ 	comm -13 $($(PKG)_DIR)/.br_filelist_before $($(PKG)_DIR)/.br_filelist_after | \
+ 		while read hash file ; do \
+-			echo "$(1),$${file}" >> $(BUILD_DIR)/packages-file-list.txt ; \
+-		done
++			echo "$(1),$${file}" ; \
++		done >> $(BUILD_DIR)/packages-file-list.txt
+ 	rm -f $($(PKG)_DIR)/.br_filelist_before $($(PKG)_DIR)/.br_filelist_after
+ endef
+ 
