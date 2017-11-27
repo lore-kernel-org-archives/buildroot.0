@@ -1,35 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 30 Nov 2017 11:37:36 +0100
-Subject: [Buildroot] [git commit] uclibc: enable NPTL for or1k
-Message-ID: <20171201205340.EF66580F78@busybox.osuosl.org>
+Date: Mon, 27 Nov 2017 09:32:04 +0100
+Subject: [Buildroot] [git commit] python-jaraco-classes: add missing
+ dependency
+Message-ID: <20171201205338.12C8F8035D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c0a1ad9d6b7e2e23f9e29c607276491a7ede108b
+commit: https://git.buildroot.net/buildroot/commit/?id=d7500b615ff4b8d0669252acff61421763d6c4fe
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-With 1.0.27 NPTL for or1k is improved and can be used
-by default.
+python-jaraco-classes needs host-python-setuptools-scm.
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Fixes:
+http://autobuild.buildroot.net/results/3a7000002b86663a56c0341d192f131a4a8f4936
+http://autobuild.buildroot.net/results/553d6fdeb6ea5359b1c7d4eeb844da7a588f02e7
+
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/uclibc/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/python-jaraco-classes/python-jaraco-classes.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
-index 3b4f91d..47f25b5 100644
---- a/package/uclibc/Config.in
-+++ b/package/uclibc/Config.in
-@@ -48,7 +48,7 @@ choice
- config BR2_PTHREADS_NATIVE
- 	bool "Native POSIX Threading (NPTL)"
- 	depends on BR2_USE_MMU
--	depends on !BR2_m68k && !BR2_microblaze && !BR2_or1k
-+	depends on !BR2_m68k && !BR2_microblaze
- 	select BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+diff --git a/package/python-jaraco-classes/python-jaraco-classes.mk b/package/python-jaraco-classes/python-jaraco-classes.mk
+index 4251452..c361e97 100644
+--- a/package/python-jaraco-classes/python-jaraco-classes.mk
++++ b/package/python-jaraco-classes/python-jaraco-classes.mk
+@@ -10,5 +10,6 @@ PYTHON_JARACO_CLASSES_SITE = https://pypi.python.org/packages/b3/ce/031a6004619c
+ PYTHON_JARACO_CLASSES_LICENSE = MIT
+ PYTHON_JARACO_CLASSES_LICENSE_FILES = LICENSE
+ PYTHON_JARACO_CLASSES_SETUP_TYPE = setuptools
++PYTHON_JARACO_CLASSES_DEPENDENCIES = host-python-setuptools-scm
  
+ $(eval $(python-package))
