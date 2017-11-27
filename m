@@ -1,39 +1,97 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 27 Nov 2017 23:53:48 +0100
-Subject: [Buildroot] [git commit branch/2017.08.x] package/dvb-apps: fix
- build with some perl version
-Message-ID: <20171127225002.005A381F5F@busybox.osuosl.org>
+Date: Mon, 27 Nov 2017 23:51:27 +0100
+Subject: [Buildroot] [git commit branch/2017.08.x] google-breakpad: take
+ into account host architecture dependencies
+Message-ID: <20171127225001.E13007FDFB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d7c7c1a2c70202534e61c7fb9324111bd757e76c
+commit: https://git.buildroot.net/buildroot/commit/?id=57b3dc4375f27e5d3e822d450d08e70bbb1b56e6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.08.x
 
-perl can't find a module that is located in the current directory,
-so help it locate it.
+Building the target google-breakpad requires building the host variant
+of google-breakpad. Just like the target google-breakpad only supports
+a limited number of architectures, it is the same for the host
+google-breakpad.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Francois Perrad <francois.perrad@gadz.org>
+We therefore introduce a
+BR2_PACKAGE_HOST_GOOGLE_BREAKPAD_ARCH_SUPPORTS option that is used
+where necessary to prevent the user from choosing Google Breakpad when
+building on unsupported host platforms.
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/c7c04483508f9e4d629efa54571afeb1feaa5f73/
+  (build on a powerpc64le machine)
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit d8234d440024719e4df61f583b26302162dc363f)
+(cherry picked from commit fadc438393841eced94aa6decfd04c5bf448b255)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/dvb-apps/dvb-apps.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ Config.in                              | 1 +
+ package/Config.in.host                 | 1 +
+ package/google-breakpad/Config.in      | 2 ++
+ package/google-breakpad/Config.in.host | 8 ++++++++
+ 4 files changed, 12 insertions(+)
 
-diff --git a/package/dvb-apps/dvb-apps.mk b/package/dvb-apps/dvb-apps.mk
-index 95af87f..ffab0db 100644
---- a/package/dvb-apps/dvb-apps.mk
-+++ b/package/dvb-apps/dvb-apps.mk
-@@ -15,6 +15,8 @@ DVB_APPS_DEPENDENCIES = libiconv
- DVB_APPS_LDLIBS += -liconv
- endif
+diff --git a/Config.in b/Config.in
+index 0b5a6bf..e995399 100644
+--- a/Config.in
++++ b/Config.in
+@@ -539,6 +539,7 @@ config BR2_GOOGLE_BREAKPAD_ENABLE
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on (BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_UCLIBC)
+ 	depends on BR2_PACKAGE_GOOGLE_BREAKPAD_ARCH_SUPPORTS
++	depends on BR2_PACKAGE_HOST_GOOGLE_BREAKPAD_ARCH_SUPPORTS
+ 	help
+ 	  This option will enable the use of google breakpad, a library
+ 	  and tool suite that allows you to distribute an application to
+diff --git a/package/Config.in.host b/package/Config.in.host
+index 973b682..11db8f2 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -18,6 +18,7 @@ menu "Host utilities"
+ 	source "package/genpart/Config.in.host"
+ 	source "package/go/Config.in.host"
+ 	source "package/go-bootstrap/Config.in.host"
++	source "package/google-breakpad/Config.in.host"
+ 	source "package/gptfdisk/Config.in.host"
+ 	source "package/imx-usb-loader/Config.in.host"
+ 	source "package/jq/Config.in.host"
+diff --git a/package/google-breakpad/Config.in b/package/google-breakpad/Config.in
+index e0e9106..91ec9ce 100644
+--- a/package/google-breakpad/Config.in
++++ b/package/google-breakpad/Config.in
+@@ -12,6 +12,7 @@ config BR2_PACKAGE_GOOGLE_BREAKPAD
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on (BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_UCLIBC)
+ 	depends on BR2_PACKAGE_GOOGLE_BREAKPAD_ARCH_SUPPORTS
++	depends on BR2_PACKAGE_HOST_GOOGLE_BREAKPAD_ARCH_SUPPORTS
+ 	select BR2_PACKAGE_LINUX_SYSCALL_SUPPORT
+ 	help
+ 	  Google-Breakpad is a library and tool suite that allows you
+@@ -36,6 +37,7 @@ config BR2_PACKAGE_GOOGLE_BREAKPAD
  
-+DVB_APPS_MAKE_OPTS = PERL5LIB=$(@D)/util/scan
-+
- ifeq ($(BR2_STATIC_LIBS),y)
- DVB_APPS_MAKE_OPTS += enable_shared=no
- else ifeq ($(BR2_SHARED_LIBS),y)
+ comment "google-breakpad requires a glibc or uClibc toolchain w/ wchar, thread, C++, gcc >= 4.8"
+ 	depends on BR2_PACKAGE_GOOGLE_BREAKPAD_ARCH_SUPPORTS
++	depends on BR2_PACKAGE_HOST_GOOGLE_BREAKPAD_ARCH_SUPPORTS
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS || \
+ 		!(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_UCLIBC) || \
+diff --git a/package/google-breakpad/Config.in.host b/package/google-breakpad/Config.in.host
+new file mode 100644
+index 0000000..28d3047
+--- /dev/null
++++ b/package/google-breakpad/Config.in.host
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_HOST_GOOGLE_BREAKPAD_ARCH_SUPPORTS
++	bool
++	default y if BR2_HOSTARCH = "x86_64"
++	default y if BR2_HOSTARCH = "x86"
++	default y if BR2_HOSTARCH = "arm"
++	default y if BR2_HOSTARCH = "aarch64"
++	default y if BR2_HOSTARCH = "mips"
++	default y if BR2_HOSTARCH = "mipsel"
