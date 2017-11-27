@@ -1,48 +1,55 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 27 Nov 2017 13:29:25 +0200
-Subject: [Buildroot] [PATCH v1] Fix makefile include order by using
- sort/wildcard.
-In-Reply-To: <878tesavbb.fsf@dell.be.48ers.dk>
-References: <20171121191330.5621-1-ps.report@gmx.net>
- <a3441ea0-b5da-d5ab-ff93-af09b1dd151d@mind.be>
- <878tesavbb.fsf@dell.be.48ers.dk>
-Message-ID: <20171127112925.srj7s3n62nt3u2cf@sapphire.tkos.co.il>
+Date: Mon, 27 Nov 2017 13:39:46 +0200
+Subject: [Buildroot] [PATCH 1/3] package/dvb-apps: fix build with some
+ perl version
+In-Reply-To: <3756298044e002e93aa851a58b8337e6f676c91a.1511779719.git.yann.morin.1998@free.fr>
+References: <cover.1511779719.git.yann.morin.1998@free.fr>
+ <3756298044e002e93aa851a58b8337e6f676c91a.1511779719.git.yann.morin.1998@free.fr>
+Message-ID: <20171127113946.63vjfrc6p5iabz7k@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+Hi Yann,
 
-On Mon, Nov 27, 2017 at 11:07:52AM +0100, Peter Korsgaard wrote:
-> >>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+On Mon, Nov 27, 2017 at 11:48:54AM +0100, Yann E. MORIN wrote:
+> perl can't find a module that is located in the current directory,
+> so help it locate it.
 > 
->  > On 21-11-17 20:13, Peter Seiderer wrote:
->  >> Use ordered 'include $(sort $(wildcard ...))' instead of unordered
->  >> direct 'include */*.mk'.
->  >> 
->  >> Fixes [1] reported by Petr Vorel:
->  >> 
->  >> make: *** No rule to make target 'toolchain-external-custom',
->  >> needed by '.../build/toolchain-external/.stamp_configured'.  Stop.
->  >> 
->  >> [1] http://lists.busybox.net/pipermail/buildroot/2017-November/206969.html
->  >> 
->  >> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Francois Perrad <francois.perrad@gadz.org>
 > 
->  >  There was one more include that wasn't sorted:
-> 
->  > -include $(foreach dir,$(BR2_EXTERNAL_DIRS),$(dir)/docs/*/*.mk)
-> 
->  > I've fixed that one as well, I've extended the commit log a little, and applied
->  > to master, thanks.
-> 
-> Committed to 2017.02.x and 2017.08.x, thanks.
+> ---
+> Note: I have no idea why perl on my machine does not find that file,
+> while it does on all the autobuilders so far... I just assume that this
+> is a perl version issue, but I may very well be wrong. Fran?ois ?
 
-Not in 2017.02.x as of commit 22b996fef069fe (ffmpeg: bump version to 3.2.9).
+This might have something to do with the removal of current directory from 
+@INC in Debian:
+
+  https://lists.debian.org/debian-devel-announce/2016/08/msg00013.html
 
 baruch
+
+> ---
+>  package/dvb-apps/dvb-apps.mk | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/package/dvb-apps/dvb-apps.mk b/package/dvb-apps/dvb-apps.mk
+> index 8ba1501d5c..8aa4a29307 100644
+> --- a/package/dvb-apps/dvb-apps.mk
+> +++ b/package/dvb-apps/dvb-apps.mk
+> @@ -15,6 +15,8 @@ DVB_APPS_DEPENDENCIES = libiconv
+>  DVB_APPS_LDLIBS += -liconv
+>  endif
+>  
+> +DVB_APPS_MAKE_OPTS = PERL5LIB=$(@D)/util/scan
+> +
+>  ifeq ($(BR2_STATIC_LIBS),y)
+>  DVB_APPS_MAKE_OPTS += enable_shared=no
+>  else ifeq ($(BR2_SHARED_LIBS),y)
 
 -- 
      http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
