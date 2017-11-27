@@ -1,74 +1,103 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 27 Nov 2017 12:51:46 +0100
-Subject: [Buildroot] [PATCH 1/3] package/dvb-apps: fix build with some
- perl version
-In-Reply-To: <20171127113946.63vjfrc6p5iabz7k@sapphire.tkos.co.il>
-References: <cover.1511779719.git.yann.morin.1998@free.fr>
- <3756298044e002e93aa851a58b8337e6f676c91a.1511779719.git.yann.morin.1998@free.fr>
- <20171127113946.63vjfrc6p5iabz7k@sapphire.tkos.co.il>
-Message-ID: <20171127115146.GF2950@scaer>
+From: Roy Arav <roy.arav@shieldiot.io>
+Date: Mon, 27 Nov 2017 14:50:30 +0200
+Subject: [Buildroot] Static IP
+In-Reply-To: <20171126193811.64fkhpxhc3of6cwj@tarshish>
+References: <CAM27=5g_TOTu__LdjWcUKaMUiLtBxXD-t2g2N9VEx5JN69ZYUA@mail.gmail.com>
+ <20171124063855.rtkwmk5fadw3rlsd@tarshish>
+ <CAM27=5ijTMYOyBmy1r7k9ByGQ6_tZhGkGWyfd4jG98ijhAffxQ@mail.gmail.com>
+ <20171126193811.64fkhpxhc3of6cwj@tarshish>
+Message-ID: <CAM27=5gEznPh9FTg1Y4vdEYPNAhXR-cZV5gw9KSFZwF6iLwhHA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Baruch, All,
+Thanks Baruch,
 
-On 2017-11-27 13:39 +0200, Baruch Siach spake thusly:
-> On Mon, Nov 27, 2017 at 11:48:54AM +0100, Yann E. MORIN wrote:
-> > perl can't find a module that is located in the current directory,
-> > so help it locate it.
-> > 
-> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> > Cc: Francois Perrad <francois.perrad@gadz.org>
-> > 
-> > ---
-> > Note: I have no idea why perl on my machine does not find that file,
-> > while it does on all the autobuilders so far... I just assume that this
-> > is a perl version issue, but I may very well be wrong. Fran?ois ?
-> 
-> This might have something to do with the removal of current directory from 
-> @INC in Debian:
-> 
->   https://lists.debian.org/debian-devel-announce/2016/08/msg00013.html
+As you suggested - I removed the attribute "--disable-ifupdown" from
+network-manager.mk.
+Still same results:
+[   32.982121] NetworkManager[286]: <warn>  [1478193422.8681] settings:
+could not load plugin 'ifupdown' from file
+'/usr/lib/NetworkManager/libnm-settings-plugin-ifupdown.so': No such file
+or directory
 
-Wee! So I was not so insane after all! ;-)
 
-Thanks! :-)
+Thanks
 
-Regards,
-Yann E. MORIN.
 
+On Sun, Nov 26, 2017 at 9:38 PM, Baruch Siach <baruch@tkos.co.il> wrote:
+
+> Hi Roy,
+>
+> Please keep the list on Cc so that everyone can benefit from your
+> experience.
+>
+> On Sun, Nov 26, 2017 at 02:22:44PM +0200, Roy Arav wrote:
+> > I enabled BR2_PACKAGE_IFUPDOWN_SCRIPTS as you suggested,
+> > and now I get this warning: 34.193270] NetworkManager[272]: <warn>
+> > [1478193422.9602] settings: could not load plugin 'ifupdown' from file
+> > '/usr/lib/NetworkManager/libnm-settings-plugin-ifupdown.so': No such
+> file
+> > or directory
+> >
+> > Any ideas how to solve this thing? (sorry if I seem clue-less, I am new
+> to
+> > buildroot...)
+>
+> This is most likely because we currently pass --disable-ifupdown to the
+> configure script unconditionally. This has been so since commit
+> 52c7f43fdefbe7
+> (network-manager: bump to 0.9.8.0). Maybe Thomas, the author of said
+> commit,
+> can explain the reason for that.
+>
+> In case --enable-ifupdown does not increase the target size significantly
+> (relatively speaking), then a patch enable ifupdown would probably be
+> accepted.
+>
+> > Please see the entire.config.
+>
+> [skipped config fragments containing potentially sensitive information]
+>
+> Do you use all these fragments to generate a unified .config?
+>
+> Please send the minimal .config that exhibits your issue. Minimizing the
+> .config further with 'make savedefconfig' would be nice as well.
+>
 > baruch
-> 
-> > ---
-> >  package/dvb-apps/dvb-apps.mk | 2 ++
-> >  1 file changed, 2 insertions(+)
-> > 
-> > diff --git a/package/dvb-apps/dvb-apps.mk b/package/dvb-apps/dvb-apps.mk
-> > index 8ba1501d5c..8aa4a29307 100644
-> > --- a/package/dvb-apps/dvb-apps.mk
-> > +++ b/package/dvb-apps/dvb-apps.mk
-> > @@ -15,6 +15,8 @@ DVB_APPS_DEPENDENCIES = libiconv
-> >  DVB_APPS_LDLIBS += -liconv
-> >  endif
-> >  
-> > +DVB_APPS_MAKE_OPTS = PERL5LIB=$(@D)/util/scan
-> > +
-> >  ifeq ($(BR2_STATIC_LIBS),y)
-> >  DVB_APPS_MAKE_OPTS += enable_shared=no
-> >  else ifeq ($(BR2_SHARED_LIBS),y)
-> 
-> -- 
->      http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-> =}------------------------------------------------ooO--U--Ooo------------{=
->    - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+>
+> > On Fri, Nov 24, 2017 at 8:38 AM, Baruch Siach <baruch@tkos.co.il> wrote:
+> > >
+> > > On Fri, Nov 24, 2017 at 07:05:48AM +0200, Roy Arav wrote:
+> > > > I am trying to set static IP on a raspberry pi3 device running
+> buildroot.
+> > > >
+> > > > I edited /etc/network/interfaces, using rootfs overlay.
+> > > >
+> > > > auto eth0
+> > > > allow-hotplug eth0
+> > > > iface eth0 inet static
+> > > > address 192.168.0.1
+> > > > netmask 255.255.255.0
+> > > >
+> > > > And still IP address is provided using DHCP/
+> > > >
+> > > > Is there anything else to so that I am missing?
+> > > > Perhaps a BR2 flag or package that I need to enable?
+> > >
+> > > What is your .config?
+> > > Do you have BR2_PACKAGE_IFUPDOWN_SCRIPTS enabled?
+> > > What about BR2_PACKAGE_SYSTEMD_NETWORKD?
+>
+> --
+>      http://baruch.siach.name/blog/                  ~. .~   Tk Open
+> Systems
+> =}------------------------------------------------ooO--U--
+> Ooo------------{=
+>    - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20171127/2a0a1950/attachment.html>
