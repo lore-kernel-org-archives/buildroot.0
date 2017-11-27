@@ -1,13 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 27 Nov 2017 11:05:28 +0100
-Subject: [Buildroot] [PATCH] package/google-breakpad: replace references
- to 'struct ucontext' with 'ucontext_t'
-In-Reply-To: <04e7418d-735d-c9b3-3087-dbe78529cc48@mind.be> (Arnout
- Vandecappelle's message of "Thu, 23 Nov 2017 23:59:42 +0100")
-References: <20171122210828.19311-1-romain.naour@gmail.com>
- <20171122224529.5190424d@windsurf.lan>
- <04e7418d-735d-c9b3-3087-dbe78529cc48@mind.be>
-Message-ID: <87d144avfb.fsf@dell.be.48ers.dk>
+Date: Mon, 27 Nov 2017 11:07:52 +0100
+Subject: [Buildroot] [PATCH v1] Fix makefile include order by using
+ sort/wildcard.
+In-Reply-To: <a3441ea0-b5da-d5ab-ff93-af09b1dd151d@mind.be> (Arnout
+ Vandecappelle's message of "Fri, 24 Nov 2017 00:23:00 +0100")
+References: <20171121191330.5621-1-ps.report@gmx.net>
+ <a3441ea0-b5da-d5ab-ff93-af09b1dd151d@mind.be>
+Message-ID: <878tesavbb.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,25 +15,25 @@ To: buildroot@busybox.net
 
 >>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
- > On 22-11-17 22:45, Thomas Petazzoni wrote:
- >> Hello,
+ > On 21-11-17 20:13, Peter Seiderer wrote:
+ >> Use ordered 'include $(sort $(wildcard ...))' instead of unordered
+ >> direct 'include */*.mk'.
  >> 
- >> Thanks for working on this topic!
+ >> Fixes [1] reported by Petr Vorel:
  >> 
- >> On Wed, 22 Nov 2017 22:08:28 +0100, Romain Naour wrote:
- >>> Glibc change:
- >>> https://sourceware.org/git/?p=glibc.git;h=251287734e89a52da3db682a8241eb6bccc050c9
+ >> make: *** No rule to make target 'toolchain-external-custom',
+ >> needed by '.../build/toolchain-external/.stamp_configured'.  Stop.
  >> 
- >> This commit log is very, very terse. Could you explain in more details
- >> what's going on?
+ >> [1] http://lists.busybox.net/pipermail/buildroot/2017-November/206969.html
  >> 
- >> Also, what is the effect if you use an older glibc version than 2.26 ?
+ >> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 
- >  The ucontext_t type name is POSIX and has existed in glibc since 1997, in
- > uClibc and musl forever.
+ >  There was one more include that wasn't sorted:
 
- >  I've extended the commit log with this and more explanation, and applied to
- > master, thanks.
+ > -include $(foreach dir,$(BR2_EXTERNAL_DIRS),$(dir)/docs/*/*.mk)
+
+ > I've fixed that one as well, I've extended the commit log a little, and applied
+ > to master, thanks.
 
 Committed to 2017.02.x and 2017.08.x, thanks.
 
