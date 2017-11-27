@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 27 Nov 2017 23:17:36 +0100
-Subject: [Buildroot] [PATCH 3/4 v3] core/pkg-generic: store
- file->package list for staging and host too
-In-Reply-To: <31dc17f2b1318c61f33d73e86fea48f38698360f.1509204637.git.yann.morin.1998@free.fr>
+Date: Mon, 27 Nov 2017 23:19:31 +0100
+Subject: [Buildroot] [PATCH 4/4 v3] core: check files are not touched by
+ more than one package
+In-Reply-To: <cd4d3c26158a9dc124b3ac584da2c61e004cbc8b.1509204637.git.yann.morin.1998@free.fr>
 References: <cover.1509204637.git.yann.morin.1998@free.fr>
- <31dc17f2b1318c61f33d73e86fea48f38698360f.1509204637.git.yann.morin.1998@free.fr>
-Message-ID: <20171127231736.1f97c3f3@windsurf.home>
+ <cd4d3c26158a9dc124b3ac584da2c61e004cbc8b.1509204637.git.yann.morin.1998@free.fr>
+Message-ID: <20171127231931.155952f6@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,22 +14,50 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 28 Oct 2017 17:30:58 +0200, Yann E. MORIN wrote:
+On Sat, 28 Oct 2017 17:30:59 +0200, Yann E. MORIN wrote:
+> Currently, we do nothing about packages that touch the same file: given
+> a specific configuration, the result is reproducible (even though it
+> might not be what the user expected) because the build order is
+> guaranteed.
+> 
+> However, when we later introduce top-level parallel build, we will no
+> longer be able to guarantee a build order, by the mere way of it being
+> parallel. Reconcialliting all those modified files will be impossible to
 
-> -# This hook will be called after the target installation of a
-> -# package. We store in a file named .br_filelist_after the list of
-> -# files (and their MD5) currently installed in the target. We then do
-> -# a diff with the .br_filelist_before to compute the list of files
-> -# installed by this package.
-> +# This hook will be called after the installation of a package. We store in
-> +# a file named .br_filelist_after the list of files (and their MD5) currently
-> +# installed. We then do a diff with the .br_filelist_before to compute the
-> +# list of files installed by this package.
-> +# The suffix is typically for the target variant, for legacy backward
+Reconciliating
 
-The suffix is typically *empty*
+>  Makefile                            |  4 ++++
+>  support/scripts/check-uniq-files.py | 40 +++++++++++++++++++++++++++++++++++++
 
-Applied to next with this fixed!
+I dropped the .py extension for this script. Most (but not all of
+course) of our scripts don't have an extension.
+
+> diff --git a/support/scripts/check-uniq-files.py b/support/scripts/check-uniq-files.py
+> new file mode 100755
+> index 0000000000..615c309491
+> --- /dev/null
+> +++ b/support/scripts/check-uniq-files.py
+> @@ -0,0 +1,40 @@
+> +#!/usr/bin/env python
+> +
+> +import sys
+> +import csv
+> +import argparse
+> +from collections import defaultdict
+> +
+> +warn = 'Warnng: {}s file "{}" is touched by more than one package: {}\n'
+
+Warnng -> Warning
+
+also the "s" at the end of {}s didn't make much sense to me "targets
+file", "stagings file", "hosts file" ?
+
+"target file", "staging file", "host file" made more sense, so I
+dropped the s in {}s.
+
+Applied to next with those changes.
+
+Thanks!
 
 Thomas
 -- 
