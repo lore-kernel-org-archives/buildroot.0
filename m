@@ -1,42 +1,67 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 27 Nov 2017 10:46:35 +0100
-Subject: [Buildroot] [PATCH] samba4: security bump to version 4.6.11
-In-Reply-To: <20171121224313.26215-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Tue, 21 Nov 2017 23:43:13 +0100")
-References: <20171121224313.26215-1-peter@korsgaard.com>
-Message-ID: <87y3msawas.fsf@dell.be.48ers.dk>
+Date: Mon, 27 Nov 2017 10:34:25 +0100
+Subject: [Buildroot] [git commit branch/2017.08.x] libfastjson: indicate
+ explicitly which gcc -std option to use
+Message-ID: <20171127093934.22B8981E59@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=47764b0be40fdc1d55a0c531519c17d8d96952d7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.08.x
 
- > Fixes the following security issues:
- >  - CVE-2017-14746:
- >    All versions of Samba from 4.0.0 onwards are vulnerable to a use after
- >    free vulnerability, where a malicious SMB1 request can be used to
- >    control the contents of heap memory via a deallocated heap pointer. It
- >    is possible this may be used to compromise the SMB server.
+This commit fixes the following build issue of libfastjson with old
+enough compilers (4.8) and wchar disabled:
 
- >  - CVE-2017-15275:
- >    All versions of Samba from 3.6.0 onwards are vulnerable to a heap
- >    memory information leak, where server allocated heap memory may be
- >    returned to the client without being cleared.
+json_object.c: In function 'fjson_object_object_delete':
+json_object.c:385:3: error: 'for' loop initial declarations are only allowed in C99 mode
+   for (int i = 0 ; i < FJSON_OBJECT_CHLD_PG_SIZE ; ++i) {
+   ^
 
- >    There is no known vulnerability associated with this error, but
- >    uncleared heap memory may contain previously used data that may help
- >    an attacker compromise the server via other methods. Uncleared heap
- >    memory may potentially contain password hashes or other high-value
- >    data.
+The code of libfastjson requires C99. If your compiler is recent
+enough (gcc 5.x), then no problem, it is C99 by default, no additional
+flags are needed.
 
- > For more details, see the release notes:
- > https://www.samba.org/samba/history/samba-4.6.11.html
+If your compiler is older (for example gcc 4.8), then -std=c99 or
+-std=gnu99 is explicitly needed to tell the compiler to accept C99
+constructs. Testing the compiler for the availability of such flags is
+done by libfastjson configure script. However, the test program used
+by the configure script uses some wchar_t types, and therefore the
+test checking for C99 availability fails on toolchains with wchar
+disabled. From config.log:
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+configure:3928: checking for /home/test/buildroot/output/host/usr/bin/i586-buildroot-linux-uclibc-gcc option to accept ISO C99
+[...]
+configure:4077: /home/test/buildroot/output/host/usr/bin/i586-buildroot-linux-uclibc-gcc -std=gnu99 -c -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 conftest.c >&5
+conftest.c:54:3: error: unknown type name 'wchar_t'
+   const wchar_t *name;
+   ^
 
-Committed to 2017.08.x, thanks.
+So, just like we did in libv4l in commit
+f01396a158f14c53b781c35f7ff29da0bea8c8d6 ("libv4l: fix uclibc-ng
+configure/compile"), let's hint directly the configure script that it
+should use -std=gnu99. This fixes the build of libfastjson with old
+compilers and wchar disabled.
 
--- 
-Bye, Peter Korsgaard
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 90430237ccdcc369d3e206fdd24266c0cad0dcb6)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libfastjson/libfastjson.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/libfastjson/libfastjson.mk b/package/libfastjson/libfastjson.mk
+index b1cdd6a..06da0d8 100644
+--- a/package/libfastjson/libfastjson.mk
++++ b/package/libfastjson/libfastjson.mk
+@@ -7,6 +7,7 @@
+ LIBFASTJSON_VERSION = v0.99.4
+ LIBFASTJSON_SITE = $(call github,rsyslog,libfastjson,$(LIBFASTJSON_VERSION))
+ LIBFASTJSON_INSTALL_STAGING = YES
++LIBFASTJSON_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
+ # From git
+ LIBFASTJSON_AUTORECONF = YES
+ LIBFASTJSON_LICENSE = MIT
