@@ -1,43 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 27 Nov 2017 10:48:05 +0100
-Subject: [Buildroot] [PATCH-2017.02.x] samba4: security bump to version
- 4.5.15
-In-Reply-To: <20171125233009.21805-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Sun, 26 Nov 2017 00:30:09 +0100")
-References: <20171125233009.21805-1-peter@korsgaard.com>
-Message-ID: <87tvxgaw8a.fsf@dell.be.48ers.dk>
+Date: Mon, 27 Nov 2017 10:50:52 +0100
+Subject: [Buildroot] [PATCH v1] localedef: fix xlocale.h related compile
+ failure
+In-Reply-To: <20171120183658.3851-1-ps.report@gmx.net> (Peter Seiderer's
+ message of "Mon, 20 Nov 2017 19:36:58 +0100")
+References: <20171120183658.3851-1-ps.report@gmx.net>
+Message-ID: <87po84aw3n.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
 
- > Fixes the following security issues:
- > - CVE-2017-14746:
- >   All versions of Samba from 4.0.0 onwards are vulnerable to a use after
- >   free vulnerability, where a malicious SMB1 request can be used to
- >   control the contents of heap memory via a deallocated heap pointer. It
- >   is possible this may be used to compromise the SMB server.
+ > Add upstream patch 'Don't include <xlocale.h>'.
+ > Fixes Bug-10501 ([1]):
 
- > - CVE-2017-15275:
- >   All versions of Samba from 3.6.0 onwards are vulnerable to a heap
- >   memory information leak, where server allocated heap memory may be
- >   returned to the client without being cleared.
+ > In file included from ./include/locale.h:1:0,
+ >                  from /usr/include/libintl.h:103,
+ >                  from ./include/libintl.h:2,
+ >                  from glibc/locale/programs/charmap.c:25:
+ > glibc/locale/locale.h:146:11: fatal error: xlocale.h: No such file or directory
+ >  # include <xlocale.h>
 
- >   There is no known vulnerability associated with this error, but
- >   uncleared heap memory may contain previously used data that may help
- >   an attacker compromise the server via other methods. Uncleared heap
- >   memory may potentially contain password hashes or other high-value
- >   data.
+ > [1] https://bugs.busybox.net/show_bug.cgi?id=10501
 
- > For more details, see the release notes:
- > https://www.samba.org/samba/history/samba-4.5.15.html
+ > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-Committed to 2017.02.x, thanks.
+Committed to 2017.02.x and 2017.08.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
