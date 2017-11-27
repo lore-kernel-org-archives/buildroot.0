@@ -1,33 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 27 Nov 2017 23:30:19 +0100
-Subject: [Buildroot] [PATCH 2/5] test-pkg: filter empty lines and
- comments in CSV file
-In-Reply-To: <20171029171440.8095-3-thomas.petazzoni@free-electrons.com>
-References: <20171029171440.8095-1-thomas.petazzoni@free-electrons.com>
- <20171029171440.8095-3-thomas.petazzoni@free-electrons.com>
-Message-ID: <20171127233019.3929fef9@windsurf.home>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 27 Nov 2017 23:52:18 +0100
+Subject: [Buildroot] [PATCH 2/3] package/dvb-apps: is not parallel-safe
+In-Reply-To: <a5cb242853434b99a016d430dc3030ba10602d09.1511779719.git.yann.morin.1998@free.fr>
+ (Yann E. MORIN's message of "Mon, 27 Nov 2017 11:48:55 +0100")
+References: <cover.1511779719.git.yann.morin.1998@free.fr>
+ <a5cb242853434b99a016d430dc3030ba10602d09.1511779719.git.yann.morin.1998@free.fr>
+Message-ID: <87r2sj9vx9.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-On Sun, 29 Oct 2017 18:14:37 +0100, Thomas Petazzoni wrote:
-> In preparation for the addition of comments in the CSV file listing
-> toolchain configurations, we filter out such lines when reading the
-> CSV file in utils/test-pkg.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  utils/test-pkg | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+ > This is invisible because the timings make it excessively difficult to
+ > hit, but the Makefile is inherently flawed for parallel build, as it
+ > contains:
 
-Applied to next, thanks.
+ >     $(objects): atsc_psip_section.c atsc_psip_section.h
 
-Thomas
+ >     atsc_psip_section.c atsc_psip_section.h:
+ >         perl section_generate.pl atsc_psip_section.pl
+
+ > and the perl script section_generate.pl will create both the .c and .h
+ > files in one go, but given the construct above, there can be two such
+ > script that run in parallel, which can clobber the generated .c and/or
+ > .h files.
+
+ > So, make dvb-apps a MAKE1 package.
+
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+ > ---
+ > The time to build increased by one third, from ~7.5s to ~10s, on a
+ > core-i7 quad-core, which is not much in the end, and totally acceptable.
+
+Committed to 2017.02.x and 2017.08.x, thanks.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
