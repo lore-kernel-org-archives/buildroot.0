@@ -1,10 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 27 Nov 2017 21:56:22 +0100
-Subject: [Buildroot] [PATCH 1/2] board/qemu/ppc64-pseries: adjust Qemu
- command line
-In-Reply-To: <20171121080815.31347-1-thomas.petazzoni@free-electrons.com>
+Date: Mon, 27 Nov 2017 21:56:37 +0100
+Subject: [Buildroot] [PATCH 2/2] board/qemu/x86*: use quotes around
+ -append Qemu option value
+In-Reply-To: <20171121080815.31347-2-thomas.petazzoni@free-electrons.com>
 References: <20171121080815.31347-1-thomas.petazzoni@free-electrons.com>
-Message-ID: <20171127205622.GI2950@scaer>
+ <20171121080815.31347-2-thomas.petazzoni@free-electrons.com>
+Message-ID: <20171127205637.GJ2950@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -26,20 +27,33 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  board/qemu/ppc64-pseries/readme.txt | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  board/qemu/x86/readme.txt    | 2 +-
+>  board/qemu/x86_64/readme.txt | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/board/qemu/ppc64-pseries/readme.txt b/board/qemu/ppc64-pseries/readme.txt
-> index 7cc0c67d61..9de13779d0 100644
-> --- a/board/qemu/ppc64-pseries/readme.txt
-> +++ b/board/qemu/ppc64-pseries/readme.txt
+> diff --git a/board/qemu/x86/readme.txt b/board/qemu/x86/readme.txt
+> index 17500961d3..b003ad5373 100644
+> --- a/board/qemu/x86/readme.txt
+> +++ b/board/qemu/x86/readme.txt
 > @@ -1,6 +1,6 @@
 >  Run the emulation with:
 >  
-> - qemu-system-ppc64 -M pseries -cpu POWER7 -m 256 -kernel output/images/vmlinux -append 'console=hvc0 root=/dev/sda' -drive file=output/images/rootfs.ext2,if=scsi,index=0,format=raw -serial stdio -display curses
-> + qemu-system-ppc64 -M pseries -cpu POWER7 -m 256 -kernel output/images/vmlinux -append "console=hvc0 root=/dev/sda" -drive file=output/images/rootfs.ext2,if=scsi,index=0,format=raw -serial stdio -display curses
+> -  qemu-system-i386 -M pc -kernel output/images/bzImage -drive file=output/images/rootfs.ext2,if=virtio,format=raw -append root=/dev/vda -net nic,model=virtio -net user
+> +  qemu-system-i386 -M pc -kernel output/images/bzImage -drive file=output/images/rootfs.ext2,if=virtio,format=raw -append "root=/dev/vda" -net nic,model=virtio -net user
 >  
->  The login prompt will appear in the terminal that started Qemu.
+>  Optionally add -smp N to emulate a SMP system with N CPUs.
+>  
+> diff --git a/board/qemu/x86_64/readme.txt b/board/qemu/x86_64/readme.txt
+> index ecd7813a1e..ed7b5f5532 100644
+> --- a/board/qemu/x86_64/readme.txt
+> +++ b/board/qemu/x86_64/readme.txt
+> @@ -1,6 +1,6 @@
+>  Run the emulation with:
+>  
+> -  qemu-system-x86_64 -M pc -kernel output/images/bzImage -drive file=output/images/rootfs.ext2,if=virtio,format=raw -append root=/dev/vda -net nic,model=virtio -net user
+> +  qemu-system-x86_64 -M pc -kernel output/images/bzImage -drive file=output/images/rootfs.ext2,if=virtio,format=raw -append "root=/dev/vda" -net nic,model=virtio -net user
+>  
+>  Optionally add -smp N to emulate a SMP system with N CPUs.
 >  
 > -- 
 > 2.13.6
