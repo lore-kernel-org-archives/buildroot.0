@@ -1,66 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 27 Nov 2017 23:19:31 +0100
-Subject: [Buildroot] [PATCH 4/4 v3] core: check files are not touched by
- more than one package
-In-Reply-To: <cd4d3c26158a9dc124b3ac584da2c61e004cbc8b.1509204637.git.yann.morin.1998@free.fr>
-References: <cover.1509204637.git.yann.morin.1998@free.fr>
- <cd4d3c26158a9dc124b3ac584da2c61e004cbc8b.1509204637.git.yann.morin.1998@free.fr>
-Message-ID: <20171127231931.155952f6@windsurf.home>
+Date: Mon, 27 Nov 2017 23:20:04 +0100
+Subject: [Buildroot] [git commit branch/next] utils/genrandconfig: filter
+ empty lines and comments in CSV file
+Message-ID: <20171127221251.2160F8113D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=c7abd1ddfbdbd7b4e4e426dce7c9d1c82fde1582
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Sat, 28 Oct 2017 17:30:59 +0200, Yann E. MORIN wrote:
-> Currently, we do nothing about packages that touch the same file: given
-> a specific configuration, the result is reproducible (even though it
-> might not be what the user expected) because the build order is
-> guaranteed.
-> 
-> However, when we later introduce top-level parallel build, we will no
-> longer be able to guarantee a build order, by the mere way of it being
-> parallel. Reconcialliting all those modified files will be impossible to
+In preparation for the addition of comments in the CSV file listing
+toolchain configurations, we filter out such lines when reading the
+CSV file in utils/genrandconfig.
 
-Reconciliating
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ utils/genrandconfig | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
->  Makefile                            |  4 ++++
->  support/scripts/check-uniq-files.py | 40 +++++++++++++++++++++++++++++++++++++
-
-I dropped the .py extension for this script. Most (but not all of
-course) of our scripts don't have an extension.
-
-> diff --git a/support/scripts/check-uniq-files.py b/support/scripts/check-uniq-files.py
-> new file mode 100755
-> index 0000000000..615c309491
-> --- /dev/null
-> +++ b/support/scripts/check-uniq-files.py
-> @@ -0,0 +1,40 @@
-> +#!/usr/bin/env python
-> +
-> +import sys
-> +import csv
-> +import argparse
-> +from collections import defaultdict
-> +
-> +warn = 'Warnng: {}s file "{}" is touched by more than one package: {}\n'
-
-Warnng -> Warning
-
-also the "s" at the end of {}s didn't make much sense to me "targets
-file", "stagings file", "hosts file" ?
-
-"target file", "staging file", "host file" made more sense, so I
-dropped the s in {}s.
-
-Applied to next with those changes.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/utils/genrandconfig b/utils/genrandconfig
+index a67d46f..8833225 100755
+--- a/utils/genrandconfig
++++ b/utils/genrandconfig
+@@ -126,7 +126,9 @@ def get_toolchain_configs(toolchains_csv, buildrootdir):
+     """
+ 
+     with open(toolchains_csv) as r:
+-        toolchains = decode_byte_list(r.readlines())
++        # filter empty lines and comments
++        lines = [ t for t in r.readlines() if len(t.strip()) > 0 and t[0] != '#' ]
++        toolchains = decode_byte_list(lines)
+     configs = []
+ 
+     (_, _, _, _, hostarch) = os.uname()
