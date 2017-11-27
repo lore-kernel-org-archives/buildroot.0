@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 27 Nov 2017 22:03:06 +0100
-Subject: [Buildroot] [PATCH next v2 1/2] gnupg2: don't preserve the old
- gpg2 executable name
-In-Reply-To: <4f74cc073562f0ae1d00bdb8b49fb13151a6cf20.1510660959.git.baruch@tkos.co.il>
-References: <4f74cc073562f0ae1d00bdb8b49fb13151a6cf20.1510660959.git.baruch@tkos.co.il>
-Message-ID: <20171127220306.74e7a1b2@windsurf.home>
+Date: Mon, 27 Nov 2017 22:08:49 +0100
+Subject: [Buildroot] potential divide by zero in
+ support/scripts/size-stats
+In-Reply-To: <CAAkeqgUXF5eVOjQEUkM0OARw+cvMxGG-REv2rw-3BRu9y-yz0A@mail.gmail.com>
+References: <CAAkeqgUXF5eVOjQEUkM0OARw+cvMxGG-REv2rw-3BRu9y-yz0A@mail.gmail.com>
+Message-ID: <20171127220849.5f62e6fc@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,30 +13,57 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 14 Nov 2017 14:02:38 +0200, Baruch Siach wrote:
-> Commit e82fadab236a (gnupg2: bump to version 2.2.0) added a configure
-> option to keep the old 'gpg2' executable name to avoid conflict with the
-> gnupg package. It turns out that gnupg depends on !BR2_PACKAGE_GNUPG2
-> since commit 2cadb26e6d4 (gnupg: make gnupg and gnupg2 mutually
-> exclusive). Drop this configure option.
-> 
-> Rename the config option that controls the removal of gpgv2, now gpgv,
-> to match the new name. Add legacy config symbol handling.
-> 
-> Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
-> v2: move legacy entry to 2018.02
-> ---
->  Config.in.legacy         | 11 +++++++++++
->  package/gnupg2/Config.in |  6 +++---
->  package/gnupg2/gnupg2.mk | 10 ++++------
->  3 files changed, 18 insertions(+), 9 deletions(-)
+On Sat, 11 Nov 2017 18:17:36 -0800, Andrey Yurovsky wrote:
+> I see a divide by zero exception in support/scripts/size-stats when I
+> use the graph-size target, the package of size zero causing this is
+> skeleton-init-systemd which I worked out by catching the exception. Is
+> this package erroneously of size zero or should that be OK?
 
-Both applied to next. Thanks!
+Thanks for reporting this bug and proposing a fix! I have some comments
+on the implementation, but first about the format: the commit log
+should contain a Signed-off-by line with your name and e-mail, and the
+commit log should not be formatted as a personal message, but rather as
+a description of what is being changed/fixed. Also the first line
+should look like: "support/scripts/size-stats: ..."
 
-Thomas
+> diff --git a/support/scripts/size-stats b/support/scripts/size-stats
+> index af45000..3cd6838 100755
+> --- a/support/scripts/size-stats
+> +++ b/support/scripts/size-stats
+> @@ -178,9 +178,12 @@ def gen_files_csv(filesdict, pkgsizes, outputf):
+>                       "File size in system (%)"])
+>          for f, (pkgname, filesize) in filesdict.items():
+>              pkgsize = pkgsizes[pkgname]
+> -            wr.writerow([f, pkgname, filesize, pkgsize,
+> -                         "%.1f" % (float(filesize) / pkgsize * 100),
+> -                         "%.1f" % (float(filesize) / total * 100)])
+> +            try:
+> +                wr.writerow([f, pkgname, filesize, pkgsize,
+> +                        "%.1f" % (float(filesize) / pkgsize * 100),
+> +                        "%.1f" % (float(filesize) / total * 100)])
+> +            except ZeroDivisionError:
+> +                print('WARNING: \"%s\" is size 0!' % pkgname)
+
+I don't think we want to skip files from zero-sized packages: we want
+to see them in the CSV. So perhaps something like:
+
+		if pkgsize != 0:
+			percent_pkg = float(filesize) / pkgsize * 100
+		else:
+			percent_pkg = 0
+
+		percent_total = float(filesize) / total * 100
+
+		wr.writerow([f, pkgname, filesize, pkgsize,
+			     "%.1f" % percent_pkg,
+			     "%.1f" % percent_total])
+
+Could you test it, and resubmit as a new patch, with your Signed-off-by?
+
+Thanks a lot!
+
+Thomas Petazzoni
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
