@@ -1,11 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 27 Nov 2017 10:38:13 +0100
-Subject: [Buildroot] [PATCH] qt: add patch to fix build on non-x86
- platforms
-In-Reply-To: <20171117230225.14153-1-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Sat, 18 Nov 2017 00:02:25 +0100")
-References: <20171117230225.14153-1-thomas.petazzoni@free-electrons.com>
-Message-ID: <877euccb96.fsf@dell.be.48ers.dk>
+Date: Mon, 27 Nov 2017 10:41:28 +0100
+Subject: [Buildroot] [git commit] oracle-mysql: fix build with gcc 7.x
+In-Reply-To: <20171120213453.CA0B280DF1@busybox.osuosl.org> (Thomas
+ Petazzoni's message of "Mon, 20 Nov 2017 22:41:41 +0100")
+References: <20171120213453.CA0B280DF1@busybox.osuosl.org>
+Message-ID: <873750cb3r.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,21 +13,15 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- > This commit adds a patch to Qt that adjusts its build system to
- > properly support building on non-x86 platforms. The problem was due to
- > the PLATFORM and XPLATFORM variables having the same value when
- > building on a ppc64le system targetting an uncommon architecture
- > (Xtensa or ARC for example). We fix this problem by making sure
- > PLATFORM and XPLATFORM will always be different.
+ > commit: https://git.buildroot.net/buildroot/commit/?id=317b72f469867bd3e1765418e325515d6065d45f
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Fixes the following build failures occuring on gcc112 (a ppc64le
- > autobuilder machine):
+ > This adjusts an existing patch to also fix gcc 7.x build issues on the
+ > server side of MySQL.
 
- >   http://autobuild.buildroot.net/results/527747a2fbb31195bb6fdb37cfdaa624e69b7d68/
- >   (qt on xtensa)
+ > Fixes:
 
- >   http://autobuild.buildroot.net/results/7db1265f6f34be3a498881564292517a8fc0e44e/
- >   (qt on ARC)
+ >   http://autobuild.buildroot.net/results/9e3a0b5b8f2506fb2ce2fcc3d5d3a494a14439cb
 
  > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
