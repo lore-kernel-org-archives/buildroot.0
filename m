@@ -1,100 +1,130 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 28 Nov 2017 00:24:20 +0100
-Subject: [Buildroot] [git commit] docs/website: update for 2017.02.8
-Message-ID: <20171127232059.BFDD480FED@busybox.osuosl.org>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Tue, 28 Nov 2017 00:34:15 +0100
+Subject: [Buildroot] [PATCH 1/2] sunxi-mali-driver-mainline: new package
+In-Reply-To: <3741cc81-7597-ef36-8e8e-d2254bf68519@micronovasrl.com>
+References: <1511648569-18855-1-git-send-email-giulio.benetti@micronovasrl.com>
+ <20171127142850.brtfcvts6syjukdb@flea.home>
+ <3741cc81-7597-ef36-8e8e-d2254bf68519@micronovasrl.com>
+Message-ID: <07b0553f-4358-8e9b-ae74-974018e5df56@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f5e11d3dab2b949ffb353fe7f713833aa7d0fd10
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello everybody,
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- docs/website/download.html | 18 +++++++++---------
- docs/website/news.html     | 19 +++++++++++++++++++
- 2 files changed, 28 insertions(+), 9 deletions(-)
+Il 27/11/2017 16:23, Giulio Benetti ha scritto:
+> Hi Maxime,
+> 
+> Il 27/11/2017 15:28, Maxime Ripard ha scritto:
+>> Hi,
+>>
+>> On Sat, Nov 25, 2017 at 11:22:48PM +0100, Giulio Benetti wrote:
+>>> Added kernel allwinner mali driver package.
+>>> Used combined with userspace Allwinner openGL libraries,
+>>> it gives possibility to use 3D openGL SoC acceleration.
+>>>
+>>> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+>>> ---
+>>> ? DEVELOPERS???????????????????????????????????????? |? 3 ++
+>>> ? package/Config.in????????????????????????????????? |? 1 +
+>>> ? package/sunxi-mali-driver-mainline/Config.in?????? | 38 
+>>> ++++++++++++++++++++++
+>>> ? .../sunxi-mali-driver-mainline.mk????????????????? | 30 
+>>> +++++++++++++++++
+>>> ? 4 files changed, 72 insertions(+)
+>>> ? create mode 100644 package/sunxi-mali-driver-mainline/Config.in
+>>> ? create mode 100644 
+>>> package/sunxi-mali-driver-mainline/sunxi-mali-driver-mainline.mk
+>>>
+>>> diff --git a/DEVELOPERS b/DEVELOPERS
+>>> index 7621f96..60a934e 100644
+>>> --- a/DEVELOPERS
+>>> +++ b/DEVELOPERS
+>>> @@ -698,6 +698,9 @@ F:??? package/ocrad/
+>>> ? F:??? package/tesseract-ocr/
+>>> ? F:??? package/webp/
+>>> +N:??? Giulio Benetti <giulio.benetti@micronovasrl.com>
+>>> +F:??? package/sunxi-mali-driver-mainline/
+>>> +
+>>> ? N:??? Gregory Dymarek <gregd72002@gmail.com>
+>>> ? F:??? package/ding-libs/
+>>> ? F:??? package/gengetopt/
+>>> diff --git a/package/Config.in b/package/Config.in
+>>> index fe5ccc4..e619992 100644
+>>> --- a/package/Config.in
+>>> +++ b/package/Config.in
+>>> @@ -497,6 +497,7 @@ endmenu
+>>> ????? source "package/stm32flash/Config.in"
+>>> ????? source "package/sunxi-cedarx/Config.in"
+>>> ????? source "package/sunxi-mali/Config.in"
+>>> +??? source "package/sunxi-mali-driver-mainline/Config.in"
+>>> ????? source "package/sysstat/Config.in"
+>>> ????? source "package/targetcli-fb/Config.in"
+>>> ????? source "package/ti-gfx/Config.in"
+>>> diff --git a/package/sunxi-mali-driver-mainline/Config.in 
+>>> b/package/sunxi-mali-driver-mainline/Config.in
+>>> new file mode 100644
+>>> index 0000000..1f9ef59
+>>> --- /dev/null
+>>> +++ b/package/sunxi-mali-driver-mainline/Config.in
+>>> @@ -0,0 +1,38 @@
+>>> +comment "sunxi-mali-driver-mainline needs a Linux kernel to be built"
+>>> +??? depends on !BR2_LINUX_KERNEL
+>>> +
+>>> +config BR2_PACKAGE_SUNXI_MALI_DRIVER_MAINLINE
+>>> +??? bool "sunxi-mali-driver-mainline"
+>>> +??? depends on BR2_LINUX_KERNEL
+>>> +??? select BR2_LINUX_NEEDS_MODULES # not using kernel-module infra
+>>> +??? help
+>>> +????? This package builds and installs the Linux kernel driver for
+>>> +????? the Mali GPU on Allwinner platforms, compatible with recent
+>>> +????? Linux kernels (>= 4.4). Note that it should be installed
+>>> +????? together with the corresponding userspace OpenGL libraries,
+>>> +????? which are provided as binaries only at:
+>>> +????? https://github.com/free-electrons/mali-blobs
+>>> +
+>>> +????? sunxi-mali-driver-mainline requires a Linux kernel >= 4.4 with 
+>>> the
+>>> +????? following options enabled:
+>>> +
+>>> +????? - CONFIG_CMA
+>>> +????? - CONFIG_DMA_CMA
+>>> +????? - CONFIG_DRM_FBDEV_OVERALLOC >= 200 for double buffer or more
+>>
+>> Sorry for missing that out earlier, but that one is not true. You can
+>> achieve the same result using the drm_fbdev_overalloc kernel paremeter.
+> 
+> Ok, I add it on Help.
 
-diff --git a/docs/website/download.html b/docs/website/download.html
-index a7842b4..f14f33c 100644
---- a/docs/website/download.html
-+++ b/docs/website/download.html
-@@ -8,37 +8,37 @@
-     <div class="panel-heading">Download</div>
-     <div class="panel-body">
- 
--      <h3 style="text-align: center;">Latest long term support release: <b>2017.02.7</b></h3>
-+      <h3 style="text-align: center;">Latest long term support release: <b>2017.02.8</b></h3>
- 
-       <div class="row mt centered">
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2017.02.7.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2017.02.8.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2017.02.7.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2017.02.8.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
--	  <h3><a href="/downloads/buildroot-2017.02.7.tar.gz">buildroot-2017.02.7.tar.gz</a></h3>
--	  <p><a href="/downloads/buildroot-2017.02.7.tar.gz.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2017.02.8.tar.gz">buildroot-2017.02.8.tar.gz</a></h3>
-+	  <p><a href="/downloads/buildroot-2017.02.8.tar.gz.sign">PGP signature</a></p>
- 	</div>
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2017.02.7.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2017.02.8.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2017.02.7.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2017.02.8.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
- 
--	  <h3><a href="/downloads/buildroot-2017.02.7.tar.bz2">buildroot-2017.02.7.tar.bz2</a></h3>
--	  <p><a href="/downloads/buildroot-2017.02.7.tar.bz2.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2017.02.8.tar.bz2">buildroot-2017.02.8.tar.bz2</a></h3>
-+	  <p><a href="/downloads/buildroot-2017.02.8.tar.bz2.sign">PGP signature</a></p>
- 	</div>
-       </div>
- 
-diff --git a/docs/website/news.html b/docs/website/news.html
-index f2186f2..b2d474f 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -9,6 +9,25 @@
- <h2>News</h2>
- <ul class="timeline">
- 
-+  <li>
-+    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-+    <div class="timeline-panel">
-+      <div class="timeline-heading">
-+	<h4 class="timeline-title">2017.02.8 released</h4>
-+	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>27 November 2017</small></p>
-+      </div>
-+      <div class="timeline-body">
-+	<p>The 2017.02.8 bugfix release is out, fixing a number of important /
-+	  security related issues discovered since the 2017.02.7 release. See the
-+	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2017.02.8">CHANGES</a>
-+	  file for more details, read the
-+	  <a href="http://lists.busybox.net/pipermail/buildroot/2017-November/208113.html">announcement</a>
-+	  and go to the <a href="/downloads/">downloads page</a> to pick up the
-+	  <a href="/downloads/buildroot-2017.02.8.tar.bz2">2017.02.8 release</a>.</p>
-+      </div>
-+    </div>
-+  </li>
-+
-   <li class="timeline-inverted">
-     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-     <div class="timeline-panel">
+y_morin on #buildroot irc told me that maybe this missing Help phrase 
+can be added by the one who will commit the patch.
+Is it ok, or do I have to submit a new patch?
+
+Kind regards
+
+> 
+> Thanks
+> 
+>>
+>> The rest looks good.
+>>
+>> Maxime
+>>
+> 
+> 
+
+
+-- 
+Giulio Benetti
+R&D Manager &
+Advanced Research
+
+MICRONOVA SRL
+Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
+Tel. 049/8931563 - Fax 049/8931346
+Cod.Fiscale - P.IVA 02663420285
+Capitale Sociale ? 26.000 i.v.
+Iscritta al Reg. Imprese di Padova N. 02663420285
+Numero R.E.A. 258642
