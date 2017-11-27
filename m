@@ -1,48 +1,91 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 27 Nov 2017 11:09:41 +0100
-Subject: [Buildroot] [git commit branch/2017.02.x] linux-headers: bump 3.{2,
- 10}.x and 4.{1, 4, 9, 13}.x series
-Message-ID: <20171127101629.A721C812FF@busybox.osuosl.org>
+Date: Mon, 27 Nov 2017 10:50:23 +0100
+Subject: [Buildroot] [git commit branch/2017.02.x] localedef: fix xlocale.h
+ related compile failure
+Message-ID: <20171127101629.708B5812FF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bf28669487dc889016456b7d217036350b6aa6f8
+commit: https://git.buildroot.net/buildroot/commit/?id=2183dc94631c621a6e0a94dc065652300af9c095
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-[Peter: drop 4.13.x bump]
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Add upstream patch 'Don't include <xlocale.h>'.
+
+Fixes Bug-10501 ([1]):
+
+In file included from ./include/locale.h:1:0,
+                 from /usr/include/libintl.h:103,
+                 from ./include/libintl.h:2,
+                 from glibc/locale/programs/charmap.c:25:
+glibc/locale/locale.h:146:11: fatal error: xlocale.h: No such file or directory
+ # include <xlocale.h>
+
+[1] https://bugs.busybox.net/show_bug.cgi?id=10501
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 1b7b0053131d42e7f502920eae4283f1f4f6c430)
+(cherry picked from commit d5cc76c5314f58fa18001e9abce196c1ac4a28d1)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-headers/Config.in.host | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ .../localedef/0001-Don-t-include-xlocale.h.patch   | 50 ++++++++++++++++++++++
+ 1 file changed, 50 insertions(+)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 5b10d9b..ac6de27 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -214,15 +214,15 @@ endchoice
- 
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
--	default "3.2.94"	if BR2_KERNEL_HEADERS_3_2
-+	default "3.2.95"	if BR2_KERNEL_HEADERS_3_2
- 	default "3.4.113"	if BR2_KERNEL_HEADERS_3_4
--	default "3.10.107"	if BR2_KERNEL_HEADERS_3_10
-+	default "3.10.108"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.12.74"	if BR2_KERNEL_HEADERS_3_12
- 	default "3.18.72"	if BR2_KERNEL_HEADERS_3_18
- 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
- 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
--	default "4.1.45"	if BR2_KERNEL_HEADERS_4_1
--	default "4.4.100"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.1.46"	if BR2_KERNEL_HEADERS_4_1
-+	default "4.4.102"	if BR2_KERNEL_HEADERS_4_4
- 	default "4.8.17"	if BR2_KERNEL_HEADERS_4_8
--	default "4.9.64"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.9.65"	if BR2_KERNEL_HEADERS_4_9
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/package/localedef/0001-Don-t-include-xlocale.h.patch b/package/localedef/0001-Don-t-include-xlocale.h.patch
+new file mode 100644
+index 0000000..9a6c2f8
+--- /dev/null
++++ b/package/localedef/0001-Don-t-include-xlocale.h.patch
+@@ -0,0 +1,50 @@
++From: Bernhard Walle <bernhard@bwalle.de>
++Date: Mon, 2 Oct 2017 16:55:23 +0200
++Subject: [PATCH] Don't include <xlocale.h>
++
++This header has been removed in glibc 2.26:
++
++https://abi-laboratory.pro/tracker/changelog/glibc/2.26/log.html
++
++------------------------ >8 ------------------------
++* The nonstandard header <xlocale.h> has been removed.  Most programs should
++  use <locale.h> instead.  If you have a specific need for the definition of
++  locale_t with no other declarations, please contact
++  libc-alpha at sourceware.org and explain.
++------------------------ 8< ------------------------
++
++Signed-off-by: Bernhard Walle <bernhard@bwalle.de>
++
++Upstream: https://git.pengutronix.de/cgit/ptxdist/tree/patches/localedef-eglibc-2.14.1-r17443-ptx1/0003-Don-t-include-xlocale.h.patch
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++---
++ eglibc/locale/langinfo.h | 2 +-
++ eglibc/locale/locale.h   | 2 +-
++ 2 files changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/eglibc/locale/langinfo.h b/eglibc/locale/langinfo.h
++index 0a5336507196..76707a4584c1 100644
++--- a/eglibc/locale/langinfo.h
+++++ b/eglibc/locale/langinfo.h
++@@ -589,7 +589,7 @@ extern char *nl_langinfo (nl_item __item) __THROW;
++    more information.  */
++ 
++ /* Get locale datatype definition.  */
++-# include <xlocale.h>
+++# include <locale.h>
++ 
++ /* Just like nl_langinfo but get the information from the locale object L.  */
++ extern char *nl_langinfo_l (nl_item __item, __locale_t __l);
++diff --git a/eglibc/locale/locale.h b/eglibc/locale/locale.h
++index 2aa19e76acb2..18be711a2d40 100644
++--- a/eglibc/locale/locale.h
+++++ b/eglibc/locale/locale.h
++@@ -143,7 +143,7 @@ __END_NAMESPACE_STD
++    This is a proof-of-concept implementation.  */
++ 
++ /* Get locale datatype definition.  */
++-# include <xlocale.h>
+++# include_next <locale.h>
++ 
++ /* Return a reference to a data structure representing a set of locale
++    datasets.  Unlike for the CATEGORY parameter for `setlocale' the
