@@ -1,37 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 27 Nov 2017 09:31:45 +0100
-Subject: [Buildroot] [PATCH 1/1] linphone: add libupnp dependency
-In-Reply-To: <20171126212640.23519-1-fontaine.fabrice@gmail.com>
-References: <20171126212640.23519-1-fontaine.fabrice@gmail.com>
-Message-ID: <20171127093145.48bfa192@windsurf.lan>
+Date: Mon, 27 Nov 2017 09:32:04 +0100
+Subject: [Buildroot] [git commit branch/next] python-jaraco-classes: add
+ missing dependency
+Message-ID: <20171127082443.834B4811D5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=d7500b615ff4b8d0669252acff61421763d6c4fe
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Sun, 26 Nov 2017 22:26:40 +0100, Fabrice Fontaine wrote:
-> linphone is compatible with libupnp but not with libupnp18 so disable
-> upnp if libupnp is not enabled
-> 
-> Fixes:
->  - http://autobuild.buildroot.net/results/473c686f9bc5335d25b720cf1b0c45389138a7b4
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/linphone/linphone.mk | 7 +++++++
->  1 file changed, 7 insertions(+)
+python-jaraco-classes needs host-python-setuptools-scm.
 
-Even though it fixes a build failure that happens only in next, I've
-pushed this patch to the master branch, because we generally consider
-adding such optional dependencies patches to be bug fixes.
+Fixes:
+http://autobuild.buildroot.net/results/3a7000002b86663a56c0341d192f131a4a8f4936
+http://autobuild.buildroot.net/results/553d6fdeb6ea5359b1c7d4eeb844da7a588f02e7
 
-So: applied to master with a reworked commit log. Thanks!
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/python-jaraco-classes/python-jaraco-classes.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/python-jaraco-classes/python-jaraco-classes.mk b/package/python-jaraco-classes/python-jaraco-classes.mk
+index 4251452..c361e97 100644
+--- a/package/python-jaraco-classes/python-jaraco-classes.mk
++++ b/package/python-jaraco-classes/python-jaraco-classes.mk
+@@ -10,5 +10,6 @@ PYTHON_JARACO_CLASSES_SITE = https://pypi.python.org/packages/b3/ce/031a6004619c
+ PYTHON_JARACO_CLASSES_LICENSE = MIT
+ PYTHON_JARACO_CLASSES_LICENSE_FILES = LICENSE
+ PYTHON_JARACO_CLASSES_SETUP_TYPE = setuptools
++PYTHON_JARACO_CLASSES_DEPENDENCIES = host-python-setuptools-scm
+ 
+ $(eval $(python-package))
