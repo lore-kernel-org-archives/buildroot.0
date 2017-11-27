@@ -1,60 +1,67 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 27 Nov 2017 10:31:55 +0100
-Subject: [Buildroot] [git commit branch/2017.02.x] qt5webkit: correct
- download URL and hash for 5.6 variant
-Message-ID: <20171127093952.7CBCA80F6B@busybox.osuosl.org>
+Date: Mon, 27 Nov 2017 10:34:58 +0100
+Subject: [Buildroot] [git commit branch/2017.02.x] libfastjson: indicate
+ explicitly which gcc -std option to use
+Message-ID: <20171127093952.8DB6E80F6B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=86fc36173fdfb233a412067181646a25630f6dc1
+commit: https://git.buildroot.net/buildroot/commit/?id=7fd4596d393d317a2b9aea20c67faa667492d7e6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Commit 06a4975d4bd03 (qt5: bump LTS version to 5.6.3) added an empty hash
-for the 5.6.3 variant of qt5webkit, causing failures.
+This commit fixes the following build issue of libfastjson with old
+enough compilers (4.8) and wchar disabled:
 
-It also forgot to adjust the download URL as the qt5webkit tarballs are no
-longer available under official_releases/ like the other submodules, but only
-under community_releases/.
+json_object.c: In function 'fjson_object_object_delete':
+json_object.c:385:3: error: 'for' loop initial declarations are only allowed in C99 mode
+   for (int i = 0 ; i < FJSON_OBJECT_CHLD_PG_SIZE ; ++i) {
+   ^
 
-Fix both issues.
+The code of libfastjson requires C99. If your compiler is recent
+enough (gcc 5.x), then no problem, it is C99 by default, no additional
+flags are needed.
 
+If your compiler is older (for example gcc 4.8), then -std=c99 or
+-std=gnu99 is explicitly needed to tell the compiler to accept C99
+constructs. Testing the compiler for the availability of such flags is
+done by libfastjson configure script. However, the test program used
+by the configure script uses some wchar_t types, and therefore the
+test checking for C99 availability fails on toolchains with wchar
+disabled. From config.log:
+
+configure:3928: checking for /home/test/buildroot/output/host/usr/bin/i586-buildroot-linux-uclibc-gcc option to accept ISO C99
+[...]
+configure:4077: /home/test/buildroot/output/host/usr/bin/i586-buildroot-linux-uclibc-gcc -std=gnu99 -c -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 conftest.c >&5
+conftest.c:54:3: error: unknown type name 'wchar_t'
+   const wchar_t *name;
+   ^
+
+So, just like we did in libv4l in commit
+f01396a158f14c53b781c35f7ff29da0bea8c8d6 ("libv4l: fix uclibc-ng
+configure/compile"), let's hint directly the configure script that it
+should use -std=gnu99. This fixes the build of libfastjson with old
+compilers and wchar disabled.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit d4a119ccc42f5b93a2e33f99438a86cc5ee1fb00)
+(cherry picked from commit 90430237ccdcc369d3e206fdd24266c0cad0dcb6)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/qt5/qt5webkit/qt5webkit.hash | 4 ++--
- package/qt5/qt5webkit/qt5webkit.mk   | 5 +++++
- 2 files changed, 7 insertions(+), 2 deletions(-)
+ package/libfastjson/libfastjson.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/qt5/qt5webkit/qt5webkit.hash b/package/qt5/qt5webkit/qt5webkit.hash
-index 293aef5..d4e772c 100644
---- a/package/qt5/qt5webkit/qt5webkit.hash
-+++ b/package/qt5/qt5webkit/qt5webkit.hash
-@@ -1,5 +1,5 @@
--# Hash from: http://download.qt.io/snapshots/qt/5.6/5.6.3/latest_src/submodules/qtwebkit-opensource-src-5.6.3.tar.xz.mirrorlist
--sha256  qtwebkit-opensource-src-5.6.3.tar.xz
-+# Hash from: http://download.qt.io/community_releases/5.6/5.6.3/qtwebkit-opensource-src-5.6.3.tar.xz.mirrorlist
-+sha256  098c6bb25798fbf1b619b540621287787064efc9b586d76ac0ce7e39b87a3896  qtwebkit-opensource-src-5.6.3.tar.xz
- 
- # Hash from: http://download.qt.io/official_releases/qt/5.8/5.8.0/submodules/qtwebkit-opensource-src-5.8.0.tar.xz
- sha256 79ae8660086bf92ffb0008b17566270e6477c8fa0daf9bb3ac29404fb5911bec  qtwebkit-opensource-src-5.8.0.tar.xz
-diff --git a/package/qt5/qt5webkit/qt5webkit.mk b/package/qt5/qt5webkit/qt5webkit.mk
-index 980d2af..ba8e613 100644
---- a/package/qt5/qt5webkit/qt5webkit.mk
-+++ b/package/qt5/qt5webkit/qt5webkit.mk
-@@ -5,7 +5,12 @@
- ################################################################################
- 
- QT5WEBKIT_VERSION = $(QT5_VERSION)
-+ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
- QT5WEBKIT_SITE = $(QT5_SNAPSHOTS_SITE)
-+else
-+QT5WEBKIT_SITE = http://download.qt.io/community_releases/5.6/$(QT5_VERSION)/submodules
-+endif
-+
- QT5WEBKIT_SOURCE = qtwebkit-opensource-src-$(QT5WEBKIT_VERSION).tar.xz
- QT5WEBKIT_DEPENDENCIES = \
- 	host-bison host-flex host-gperf host-python host-ruby \
+diff --git a/package/libfastjson/libfastjson.mk b/package/libfastjson/libfastjson.mk
+index b1cdd6a..06da0d8 100644
+--- a/package/libfastjson/libfastjson.mk
++++ b/package/libfastjson/libfastjson.mk
+@@ -7,6 +7,7 @@
+ LIBFASTJSON_VERSION = v0.99.4
+ LIBFASTJSON_SITE = $(call github,rsyslog,libfastjson,$(LIBFASTJSON_VERSION))
+ LIBFASTJSON_INSTALL_STAGING = YES
++LIBFASTJSON_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
+ # From git
+ LIBFASTJSON_AUTORECONF = YES
+ LIBFASTJSON_LICENSE = MIT
