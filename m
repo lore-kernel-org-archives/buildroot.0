@@ -1,55 +1,83 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 27 Nov 2017 13:39:46 +0200
-Subject: [Buildroot] [PATCH 1/3] package/dvb-apps: fix build with some
- perl version
-In-Reply-To: <3756298044e002e93aa851a58b8337e6f676c91a.1511779719.git.yann.morin.1998@free.fr>
-References: <cover.1511779719.git.yann.morin.1998@free.fr>
- <3756298044e002e93aa851a58b8337e6f676c91a.1511779719.git.yann.morin.1998@free.fr>
-Message-ID: <20171127113946.63vjfrc6p5iabz7k@sapphire.tkos.co.il>
+Date: Mon, 27 Nov 2017 13:47:09 +0200
+Subject: [Buildroot] [PATCH 3/3] libvirt: new package
+In-Reply-To: <20171127104131.27975-4-casantos@datacom.ind.br>
+References: <20171127104131.27975-1-casantos@datacom.ind.br>
+ <20171127104131.27975-4-casantos@datacom.ind.br>
+Message-ID: <20171127114709.x4jo7de3qo5q2g4q@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+Hi Carlos,
 
-On Mon, Nov 27, 2017 at 11:48:54AM +0100, Yann E. MORIN wrote:
-> perl can't find a module that is located in the current directory,
-> so help it locate it.
+On Mon, Nov 27, 2017 at 08:41:31AM -0200, Carlos Santos wrote:
+> Libvirt is collection of software that provides a convenient way to
+> manage virtual machines and other virtualization functionality, such as
+> storage and network interface management. These software pieces include
+> an API library, a daemon (libvirtd), and a command line utility (virsh).
 > 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Francois Perrad <francois.perrad@gadz.org>
+> http://libvirt.org/
 > 
+> Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
 > ---
-> Note: I have no idea why perl on my machine does not find that file,
-> while it does on all the autobuilders so far... I just assume that this
-> is a perl version issue, but I may very well be wrong. Fran?ois ?
+> diff --git a/package/libvirt/Config.in b/package/libvirt/Config.in
+> new file mode 100644
+> index 0000000000..8e64c85188
+> --- /dev/null
+> +++ b/package/libvirt/Config.in
+> @@ -0,0 +1,44 @@
+> +config BR2_PACKAGE_LIBVIRT
+> +	bool "libvirt"
+> +	depends on !BR2_PACKAGE_NETCAT
+> +	depends on !BR2_STATIC_LIBS # libnl, lvm2
 
-This might have something to do with the removal of current directory from 
-@INC in Debian:
-
-  https://lists.debian.org/debian-devel-announce/2016/08/msg00013.html
+libnl does not depend on !BR2_STATIC_LIBS.
 
 baruch
 
-> ---
->  package/dvb-apps/dvb-apps.mk | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/package/dvb-apps/dvb-apps.mk b/package/dvb-apps/dvb-apps.mk
-> index 8ba1501d5c..8aa4a29307 100644
-> --- a/package/dvb-apps/dvb-apps.mk
-> +++ b/package/dvb-apps/dvb-apps.mk
-> @@ -15,6 +15,8 @@ DVB_APPS_DEPENDENCIES = libiconv
->  DVB_APPS_LDLIBS += -liconv
->  endif
->  
-> +DVB_APPS_MAKE_OPTS = PERL5LIB=$(@D)/util/scan
+> +	depends on !BR2_TOOLCHAIN_USES_MUSL # lvm2
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS # libnl, libtirpc
+> +	depends on BR2_USE_MMU # fork()
+> +	select BR2_PACKAGE_LIBNL
+> +	select BR2_PACKAGE_LIBTIRPC if !BR2_TOOLCHAIN_HAS_NATIVE_RPC
+> +	# configure: You must install the pciaccess module to build with udev
+> +	select BR2_PACKAGE_LIBPCIACCESS if BR2_PACKAGE_HAS_UDEV
+> +	select BR2_PACKAGE_LIBXML2
+> +	select BR2_PACKAGE_LVM2
+> +	# use netcf, if possible, when udev is not available
+> +	select BR2_PACKAGE_NETCF if !BR2_PACKAGE_HAS_UDEV && !BR2_arc && BR2_USE_WCHAR
+> +	select BR2_PACKAGE_YAJL
+> +	# run-time dependencies
+> +	select BR2_PACKAGE_CGROUPFS_MOUNT if !BR2_INIT_SYSTEMD
+> +	select BR2_PACKAGE_DMIDECODE
+> +	select BR2_PACKAGE_DNSMASQ
+> +	select BR2_PACKAGE_IPTABLES
+> +	select BR2_PACKAGE_IPROUTE2
+> +	select BR2_PACKAGE_RADVD
+> +	# These are required because there is no way to unequivocally select a modern netcat
+> +	select BR2_PACKAGE_NMAP      if !BR2_PACKAGE_NETCAT_OPENBSD
+> +	select BR2_PACKAGE_NMAP_NCAT if !BR2_PACKAGE_NETCAT_OPENBSD
+> +	help
+> +	  Libvirt is collection of software that provides a convenient
+> +	  way to manage virtual machines and other virtualization
+> +	  functionality, such as storage and network interface
+> +	  management. These software pieces include an API library, a
+> +	  daemon (libvirtd), and a command line utility (virsh).
 > +
->  ifeq ($(BR2_STATIC_LIBS),y)
->  DVB_APPS_MAKE_OPTS += enable_shared=no
->  else ifeq ($(BR2_SHARED_LIBS),y)
+> +	  http://libvirt.org/
+> +
+> +comment "libvirt needs 'nmap-ncat' or 'netcat-openbsd' but netcat is selected"
+> +	depends on BR2_PACKAGE_NETCAT
+> +	depends on !BR2_STATIC_LIBS
+> +	depends on !BR2_TOOLCHAIN_USES_MUSL
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS
+> +	depends on BR2_USE_MMU
+> +
+> +comment "libvirt needs a glibc or uClibc toolchain w/ threads, dynamic library"
+> +        depends on BR2_STATIC_LIBS || BR2_TOOLCHAIN_USES_MUSL || !BR2_USE_MMU || !BR2_TOOLCHAIN_HAS_THREADS
 
 -- 
      http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
