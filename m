@@ -1,52 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 27 Nov 2017 09:35:01 +0100
-Subject: [Buildroot] [PATCH] dbus: bump to version 1.12.2
-In-Reply-To: <063c44bda11568a4b3ea2fdcc8341fff30766734.1511640738.git.baruch@tkos.co.il>
-References: <063c44bda11568a4b3ea2fdcc8341fff30766734.1511640738.git.baruch@tkos.co.il>
-Message-ID: <20171127093501.272c3e8b@windsurf.lan>
+Date: Mon, 27 Nov 2017 09:37:38 +0100
+Subject: [Buildroot] [git commit branch/next] package/avahi: bump version to
+ 0.7
+Message-ID: <20171127083017.EA46C81069@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=0f2450477132e002a445708b78fd173275458300
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Sat, 25 Nov 2017 22:12:18 +0200, Baruch Siach wrote:
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
-> This is a bug fixes release, so it might be good for master.
-> 
-> https://cgit.freedesktop.org/dbus/dbus/tree/NEWS?h=dbus-1.12
+Added license hash, removed license text in avahi.mk added in 2006:
+https://git.buildroot.net/buildroot/commit/package/avahi?id=21e97d3e155f4d9604f729698cdfff3c40eefbe7
 
-None of the bug fixes seemed to apply to us:
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/avahi/avahi.hash | 3 ++-
+ package/avahi/avahi.mk   | 9 +--------
+ 2 files changed, 3 insertions(+), 9 deletions(-)
 
-
-? Make use of $(MKDIR_P) compatible with install-sh, fixing build when a
-  GNU-compatible `mkdir -p` is not available (fd.o #103521, ilovezfs)
-
- => We always have a GNU-compatible mkdir
-
-? When building for Windows with Autotools, avoid `echo -e`, fixing
-  cross-compilation on non-GNU platforms like macOS
-  (fd.o #103493, Tony Theodore)
-
- => We don't build for Windows
-
-? Fix crashes in the server side of the nonce-tcp: transport under
-  various error conditions. This transport should normally only be used
-  on Windows, where AF_UNIX sockets are unavailable; the unix: transport
-  is the only one recommended for production use on Unix platforms.
-  (fd.o #103597, Simon McVittie)
-
- => We don't build for Windows, AF_UNIX sockets are available
-
-So I've erred on the safe side and applied to next.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/avahi/avahi.hash b/package/avahi/avahi.hash
+index 09c5d42..b4d36ff 100644
+--- a/package/avahi/avahi.hash
++++ b/package/avahi/avahi.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+-sha256  d54991185d514a0aba54ebeb408d7575b60f5818a772e28fa0e18b98bc1db454	avahi-0.6.32.tar.gz
++sha256 57a99b5dfe7fdae794e3d1ee7a62973a368e91e414bd0dfa5d84434de5b14804  avahi-0.7.tar.gz
++sha256 a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  LICENSE
+diff --git a/package/avahi/avahi.mk b/package/avahi/avahi.mk
+index 94b6292..b89887b 100644
+--- a/package/avahi/avahi.mk
++++ b/package/avahi/avahi.mk
+@@ -4,14 +4,7 @@
+ #
+ ################################################################################
+ 
+-#
+-# This program is free software; you can redistribute it
+-# and/or modify it under the terms of the GNU Lesser General
+-# Public License as published by the Free Software Foundation
+-# either version 2.1 of the License, or (at your option) any
+-# later version.
+-
+-AVAHI_VERSION = 0.6.32
++AVAHI_VERSION = 0.7
+ AVAHI_SITE = https://github.com/lathiat/avahi/releases/download/v$(AVAHI_VERSION)
+ AVAHI_LICENSE = LGPL-2.1+
+ AVAHI_LICENSE_FILES = LICENSE
