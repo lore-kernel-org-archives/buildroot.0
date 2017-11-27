@@ -1,39 +1,79 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 27 Nov 2017 23:53:37 +0100
-Subject: [Buildroot] [git commit branch/2017.02.x] package/dvb-apps: fix
- build with some perl version
-Message-ID: <20171127225537.C6F5E81061@busybox.osuosl.org>
+Date: Tue, 28 Nov 2017 00:14:44 +0100
+Subject: [Buildroot] Buildroot 2017.02.8 released
+Message-ID: <87efoj9uvv.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=750a0504ea47f64f7c1b0b92f1a0a4670b550c1e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-perl can't find a module that is located in the current directory,
-so help it locate it.
+Hi,
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit d8234d440024719e4df61f583b26302162dc363f)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/dvb-apps/dvb-apps.mk | 2 ++
- 1 file changed, 2 insertions(+)
+Buildroot is a simple tool for creating complete embedded Linux systems
+(http://buildroot.org).
 
-diff --git a/package/dvb-apps/dvb-apps.mk b/package/dvb-apps/dvb-apps.mk
-index 367178e..fdd2643 100644
---- a/package/dvb-apps/dvb-apps.mk
-+++ b/package/dvb-apps/dvb-apps.mk
-@@ -15,6 +15,8 @@ DVB_APPS_DEPENDENCIES = libiconv
- DVB_APPS_LDLIBS += -liconv
- endif
- 
-+DVB_APPS_MAKE_OPTS = PERL5LIB=$(@D)/util/scan
-+
- ifeq ($(BR2_STATIC_LIBS),y)
- DVB_APPS_MAKE_OPTS += enable_shared=no
- else ifeq ($(BR2_SHARED_LIBS),y)
+Buildroot 2017.02.8 is released - Go download it at:
+
+http://buildroot.org/downloads/buildroot-2017.02.8.tar.gz
+
+or
+
+http://buildroot.org/downloads/buildroot-2017.02.8.tar.bz2
+
+Or get it from Git:
+
+git://git.buildroot.org/buildroot
+
+Buildroot 2017.02.8 is the 8th bugfix release on the current long term
+release, fixing a number of important / security related issues
+discovered since the 2017.02.7 release.
+
+- Security fixes for apr, apr-util, imagemagick, libpjsip, libplist,
+  openssl, postgresql, quagga, ruby, samba4, snmp++, webkitgtk,
+  wireshark
+
+- Fixes for download/compilation/runtime issues in argp-standalone,
+  collectd, dvb-apps, ffmpeg, google-breakpad, gstreamer, libfastjson,
+  libglib2, localedef, mesa3d, openssh, python3, vboot-utils,
+  xapp_xdriinfo.
+
+- Qt 5.6 series updated to 5.6.3
+
+- Reproducible: Do not override SOURCE_DATE_EPOCH if already set
+  in the environment.
+
+For more details, see the CHANGES file:
+
+https://git.buildroot.net/buildroot/plain/CHANGES?id=2017.02.8
+
+Users of the affected packages are strongly encouraged to upgrade.
+
+Many thanks to all the people contributing to this release:
+
+git shortlog -sn 2017.02.7..
+
+    11  Bernd Kuhls
+    10  Peter Korsgaard
+     5  Adam Duskett
+     4  Yann E. MORIN
+     2  Baruch Siach
+     2  Fabio Estevam
+     2  Matt Weber
+     2  Peter Seiderer
+     2  Thomas Petazzoni
+     1  Adrian Perez de Castro
+     1  Alex Suykov
+     1  Andrey Smirnov
+     1  Andr? Hentschel
+     1  Arnout Vandecappelle (Essensium/Mind)
+     1  Fabrice Fontaine
+     1  Ga?l PORTAY
+     1  Luca Ceresoli
+     1  Romain Naour
+     1  Scott Ellis
+     1  Vicente Olivert Riera
+
+-- 
+Bye, Peter Korsgaard
