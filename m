@@ -1,77 +1,190 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 27 Nov 2017 10:40:41 +0100
-Subject: [Buildroot] [git commit branch/2017.08.x] oracle-mysql: fix build
- with gcc 7.x
-Message-ID: <20171127093934.66AF980DB7@busybox.osuosl.org>
+Date: Mon, 27 Nov 2017 10:35:57 +0100
+Subject: [Buildroot] [git commit branch/2017.08.x] qt: add patch to fix
+ build on non-x86 platforms
+Message-ID: <20171127093934.4F09D81D82@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b7a9f3301eff5329e682c6375c16705498e6fe14
+commit: https://git.buildroot.net/buildroot/commit/?id=1d05a6dcac4eac24ce9fbf09eb4a0d59b616da23
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.08.x
 
-This adjusts an existing patch to also fix gcc 7.x build issues on the
-server side of MySQL.
+This commit adds a patch to Qt that adjusts its build system to
+properly support building on non-x86 platforms. The problem was due to
+the PLATFORM and XPLATFORM variables having the same value when
+building on a ppc64le system targetting an uncommon architecture
+(Xtensa or ARC for example). We fix this problem by making sure
+PLATFORM and XPLATFORM will always be different.
 
-Fixes:
+Fixes the following build failures occuring on gcc112 (a ppc64le
+autobuilder machine):
 
-  http://autobuild.buildroot.net/results/9e3a0b5b8f2506fb2ce2fcc3d5d3a494a14439cb
+  http://autobuild.buildroot.net/results/527747a2fbb31195bb6fdb37cfdaa624e69b7d68/
+  (qt on xtensa)
+
+  http://autobuild.buildroot.net/results/7db1265f6f34be3a498881564292517a8fc0e44e/
+  (qt on ARC)
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 317b72f469867bd3e1765418e325515d6065d45f)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit e86b74333e740516b6472dab5fa8f7822ae82840)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/oracle-mysql/0008-gcc7.patch | 29 +++++++++++++++++++++++++----
- 1 file changed, 25 insertions(+), 4 deletions(-)
+ ...-configure-fix-build-on-non-x86-platforms.patch | 146 +++++++++++++++++++++
+ 1 file changed, 146 insertions(+)
 
-diff --git a/package/oracle-mysql/0008-gcc7.patch b/package/oracle-mysql/0008-gcc7.patch
-index 2cf6d26..321112d 100644
---- a/package/oracle-mysql/0008-gcc7.patch
-+++ b/package/oracle-mysql/0008-gcc7.patch
-@@ -4,15 +4,17 @@ mysql.cc: In function 'void build_completion_hash(bool, bool)':
- mysql.cc:2687:37: error: invalid conversion from 'char' to 'char*' [-fpermissive]
-        field_names[i][num_fields*2]= '\0';
-                                      ^~~~
--
- Patch was partly backported from upstream commit:
- https://github.com/mysql/mysql-server/commit/ae21683d980d5fe9e39bd0193827ea3604256eb9
- 
- Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+[Thomas: add more gcc 7.x fixes in instance_map.cc.]
+diff --git a/package/qt/0015-configure-fix-build-on-non-x86-platforms.patch b/package/qt/0015-configure-fix-build-on-non-x86-platforms.patch
+new file mode 100644
+index 0000000..a599548
+--- /dev/null
++++ b/package/qt/0015-configure-fix-build-on-non-x86-platforms.patch
+@@ -0,0 +1,146 @@
++From 02e9698c96ca78342b82fa7239e93bab4aa45db2 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Date: Fri, 17 Nov 2017 22:20:06 +0100
++Subject: [PATCH] configure: fix build on non-x86 platforms
++
++When building for an uncommon platform on a ppc64le machine, Qt build
++fails because it builds qmake with the target compiler instead of
++using the host compiler. This is due to the fact that Qt configure
++script believes that both the host and target platforms are "powerpc",
++even though the target really is Xtensa or ARC for example.
++
++Qt's configure script defines a variable called PLATFORM that points to
++the mkspecs describing the host machine. For x86, its value is
++qws/linux-x86-g++ and for x86-64, its value is
++qws/linux-x86_64-g++. For any other host architecture, its value is
++qws/linux-generic-g++.
++
++In parallel to this, Qt's configure script defines a variable called
++XPLATFORM that points to the mkspecs describing the target machine. It
++points to qws/linux-${CFG_EMBEDDED}-g++, where CFG_EMBEDDED is
++simply "generic" for most uncommon architectures.
++
++Therefore, when we're building for an uncommon architecture, on a
++ppc64le machine, we have:
++
++  PLATFORM = qws/linux-generic-g++
++  XPLATFORM = qws/linux-generic-g++
++
++i.e, both values are equal. Due to this, the following condition is
++false:
++
++if [ "$PLATFORM" != "$XPLATFORM" -a "$CFG_EMBEDDED" != "no" ]; then
++
++which causes Qt's configure script to fallback to:
++
++elif [ "$PLATFORM_MAC" = "yes" ] || [ -z "$CFG_ARCH" ]; then
++    CFG_ARCH=$CFG_HOST_ARCH
++fi
++
++because CFG_ARCH is not defined, and therefore gets defined to
++CFG_HOST_ARCH. So we have CFG_ARCH == CFG_HOST_ARCH, and Qt believes
++we're doing a native build.
++
++Therefore, we need to ensure that PLATFORM and XPLATFORM always have a
++different value. To achieve this, we create a
++qws/linux-host-generic-g++ mkspecs, which is always used as
++PLATFORM. It is identical to qws/linux-x86-g++. Compared to
++qws/linux-x86_64-g++, the only difference is that we're not passing
++the -m64 flag, but that isn't needed when building host tools.
++
 +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- 
--diff -uNr mysql-5.1.73.org/client/mysql.cc mysql-5.1.73/client/mysql.cc
----- mysql-5.1.73.org/client/mysql.cc	2013-11-04 19:52:27.000000000 +0100
--+++ mysql-5.1.73/client/mysql.cc	2017-05-13 19:52:10.125101101 +0200
-+Index: b/client/mysql.cc
-+===================================================================
-+--- a/client/mysql.cc
-++++ b/client/mysql.cc
- @@ -2684,7 +2684,7 @@
-          mysql_free_result(fields);
-          break;
-@@ -22,3 +24,22 @@ diff -uNr mysql-5.1.73.org/client/mysql.cc mysql-5.1.73/client/mysql.cc
-        j=0;
-        while ((sql_field=mysql_fetch_field(fields)))
-        {
-+Index: b/server-tools/instance-manager/instance_map.cc
-+===================================================================
-+--- a/server-tools/instance-manager/instance_map.cc
-++++ b/server-tools/instance-manager/instance_map.cc
-+@@ -526,12 +526,12 @@
-+              Options::Main::config_file);
-+ 
-+     argv_options[1]= defaults_file_arg;
-+-    argv_options[2]= '\0';
-++    argv_options[2]= NULL;
-+ 
-+     argc= 2;
-+   }
-+   else
-+-    argv_options[1]= '\0';
-++    argv_options[1]= NULL;
-+ 
-+   /*
-+     If the routine failed, we'll simply fallback to defaults in
++---
++ configure                                          |  8 +----
++ mkspecs/qws/linux-host-generic-g++/qmake.conf      | 10 ++++++
++ mkspecs/qws/linux-host-generic-g++/qplatformdefs.h | 42 ++++++++++++++++++++++
++ 3 files changed, 53 insertions(+), 7 deletions(-)
++ create mode 100644 mkspecs/qws/linux-host-generic-g++/qmake.conf
++ create mode 100644 mkspecs/qws/linux-host-generic-g++/qplatformdefs.h
++
++diff --git a/configure b/configure
++index 10ad7ca0b0..d25f90be1e 100755
++--- a/configure
+++++ b/configure
++@@ -2806,14 +2806,8 @@ if [ "$CFG_EMBEDDED" != "no" ]; then
++     Linux:*)
++         if [ -z "$PLATFORM" ]; then
++             case "$UNAME_MACHINE" in
++-            *86)
++-                PLATFORM=qws/linux-x86-g++
++-                ;;
++-            *86_64)
++-                PLATFORM=qws/linux-x86_64-g++
++-                ;;
++             *)
++-                PLATFORM=qws/linux-generic-g++
+++                PLATFORM=qws/linux-host-generic-g++
++                 ;;
++             esac
++         fi
++diff --git a/mkspecs/qws/linux-host-generic-g++/qmake.conf b/mkspecs/qws/linux-host-generic-g++/qmake.conf
++new file mode 100644
++index 0000000000..55011ec52b
++--- /dev/null
+++++ b/mkspecs/qws/linux-host-generic-g++/qmake.conf
++@@ -0,0 +1,10 @@
+++#
+++# qmake configuration for building with linux-g++
+++#
+++
+++include(../../common/linux.conf)
+++include(../../common/gcc-base-unix.conf)
+++include(../../common/g++-unix.conf)
+++include(../../common/qws.conf)
+++
+++load(qt_config)
++diff --git a/mkspecs/qws/linux-host-generic-g++/qplatformdefs.h b/mkspecs/qws/linux-host-generic-g++/qplatformdefs.h
++new file mode 100644
++index 0000000000..a654aa78a2
++--- /dev/null
+++++ b/mkspecs/qws/linux-host-generic-g++/qplatformdefs.h
++@@ -0,0 +1,42 @@
+++/****************************************************************************
+++**
+++** Copyright (C) 2015 The Qt Company Ltd.
+++** Contact: http://www.qt.io/licensing/
+++**
+++** This file is part of the qmake spec of the Qt Toolkit.
+++**
+++** $QT_BEGIN_LICENSE:LGPL$
+++** Commercial License Usage
+++** Licensees holding valid commercial Qt licenses may use this file in
+++** accordance with the commercial license agreement provided with the
+++** Software or, alternatively, in accordance with the terms contained in
+++** a written agreement between you and The Qt Company. For licensing terms
+++** and conditions see http://www.qt.io/terms-conditions. For further
+++** information use the contact form at http://www.qt.io/contact-us.
+++**
+++** GNU Lesser General Public License Usage
+++** Alternatively, this file may be used under the terms of the GNU Lesser
+++** General Public License version 2.1 or version 3 as published by the Free
+++** Software Foundation and appearing in the file LICENSE.LGPLv21 and
+++** LICENSE.LGPLv3 included in the packaging of this file. Please review the
+++** following information to ensure the GNU Lesser General Public License
+++** requirements will be met: https://www.gnu.org/licenses/lgpl.html and
+++** http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
+++**
+++** As a special exception, The Qt Company gives you certain additional
+++** rights. These rights are described in The Qt Company LGPL Exception
+++** version 1.1, included in the file LGPL_EXCEPTION.txt in this package.
+++**
+++** GNU General Public License Usage
+++** Alternatively, this file may be used under the terms of the GNU
+++** General Public License version 3.0 as published by the Free Software
+++** Foundation and appearing in the file LICENSE.GPL included in the
+++** packaging of this file.  Please review the following information to
+++** ensure the GNU General Public License version 3.0 requirements will be
+++** met: http://www.gnu.org/copyleft/gpl.html.
+++**
+++** $QT_END_LICENSE$
+++**
+++****************************************************************************/
+++
+++#include "../../linux-g++/qplatformdefs.h"
++-- 
++2.13.6
++
