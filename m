@@ -1,45 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 27 Nov 2017 09:33:31 +0100
-Subject: [Buildroot] [git commit branch/next] dbus: bump to version 1.12.2
-Message-ID: <20171127082613.53A898023A@busybox.osuosl.org>
+Date: Mon, 27 Nov 2017 09:35:01 +0100
+Subject: [Buildroot] [PATCH] dbus: bump to version 1.12.2
+In-Reply-To: <063c44bda11568a4b3ea2fdcc8341fff30766734.1511640738.git.baruch@tkos.co.il>
+References: <063c44bda11568a4b3ea2fdcc8341fff30766734.1511640738.git.baruch@tkos.co.il>
+Message-ID: <20171127093501.272c3e8b@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=84e3bbcac89b59ee64ab4d92adc18badf86a9ed7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hello,
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/dbus/dbus.hash | 4 ++--
- package/dbus/dbus.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+On Sat, 25 Nov 2017 22:12:18 +0200, Baruch Siach wrote:
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> ---
+> This is a bug fixes release, so it might be good for master.
+> 
+> https://cgit.freedesktop.org/dbus/dbus/tree/NEWS?h=dbus-1.12
 
-diff --git a/package/dbus/dbus.hash b/package/dbus/dbus.hash
-index df1891b..1aa5aa4 100644
---- a/package/dbus/dbus.hash
-+++ b/package/dbus/dbus.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--# https://dbus.freedesktop.org/releases/dbus/dbus-1.12.0.tar.gz.asc
--sha256	39af0d9267391434b549c5c4adc001b735518c96f7630c3fe7162af1d13ef3c0  dbus-1.12.0.tar.gz
-+# https://dbus.freedesktop.org/releases/dbus/dbus-1.12.2.tar.gz.asc
-+sha256	272bb5091770b047c8188b926d5e6038fa4fe6745488b2add96b23e2d9a83d88  dbus-1.12.2.tar.gz
- # Locally calculated
- sha256	0e46f54efb12d04ab5c33713bacd0e140c9a35b57ae29e03c853203266e8f3a1  COPYING
-diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
-index 56a54e3..22ba22e 100644
---- a/package/dbus/dbus.mk
-+++ b/package/dbus/dbus.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DBUS_VERSION = 1.12.0
-+DBUS_VERSION = 1.12.2
- DBUS_SITE = https://dbus.freedesktop.org/releases/dbus
- DBUS_LICENSE = AFL-2.1 or GPL-2.0+ (library, tools), GPL-2.0+ (tools)
- DBUS_LICENSE_FILES = COPYING
+None of the bug fixes seemed to apply to us:
+
+
+? Make use of $(MKDIR_P) compatible with install-sh, fixing build when a
+  GNU-compatible `mkdir -p` is not available (fd.o #103521, ilovezfs)
+
+ => We always have a GNU-compatible mkdir
+
+? When building for Windows with Autotools, avoid `echo -e`, fixing
+  cross-compilation on non-GNU platforms like macOS
+  (fd.o #103493, Tony Theodore)
+
+ => We don't build for Windows
+
+? Fix crashes in the server side of the nonce-tcp: transport under
+  various error conditions. This transport should normally only be used
+  on Windows, where AF_UNIX sockets are unavailable; the unix: transport
+  is the only one recommended for production use on Unix platforms.
+  (fd.o #103597, Simon McVittie)
+
+ => We don't build for Windows, AF_UNIX sockets are available
+
+So I've erred on the safe side and applied to next.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
