@@ -1,54 +1,46 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 27 Nov 2017 14:30:45 +0100
-Subject: [Buildroot] [PATCH 0/2] package/asterisk: fix parallel build/install
-Message-ID: <cover.1511789437.git.yann.morin.1998@free.fr>
+Date: Mon, 27 Nov 2017 14:30:49 +0100
+Subject: [Buildroot] [PATCH 1/2] DEVELOPERS: adopt the packages I recently
+ added
+In-Reply-To: <cover.1511789437.git.yann.morin.1998@free.fr>
+References: <cover.1511789437.git.yann.morin.1998@free.fr>
+Message-ID: <09a4ad4329a8cef00f113036b131162cc10cb9a8.1511789437.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ DEVELOPERS | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-This series adds a patch to asterisk to fix an autobuild issue in
-highly-parallel install.
-
-It also adds me to DEVELOPPERS for the recent packages I've introduced
-to support asterisk.
-
-
-Regards,
-Yann E. MORIN.
-
-
-The following changes since commit c8f0a823efdb3f195c475194dc7b3341502819c0
-
-  linux-headers: bump 3.2.x series (2017-11-27 09:25:46 +0100)
-
-
-are available in the git repository at:
-
-  git://git.buildroot.org/~ymorin/git/buildroot.git
-
-for you to fetch changes up to 77a465b5afe27dd09b5b3ec5a4e9069b24f00a5e
-
-  package/asterisk: fix parallel build/install (2017-11-27 13:09:42 +0100)
-
-
-----------------------------------------------------------------
-Yann E. MORIN (2):
-      DEVELOPERS: adopt the packages I recently added
-      package/asterisk: fix parallel build/install
-
- DEVELOPERS                                         |  5 ++++
- ...nsure-target-directory-for-modules-exists.patch | 32 ++++++++++++++++++++++
- 2 files changed, 37 insertions(+)
- create mode 100644 package/asterisk/0005-build-ensure-target-directory-for-modules-exists.patch
-
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 7621f969a0..20fe70253d 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1743,8 +1743,11 @@ F:	package/fwup/
+ 
+ N:	Yann E. MORIN <yann.morin.1998@free.fr>
+ F:	fs/squashfs/
++F:	package/asterisk/
+ F:	package/cegui06/
+ F:	package/celt051/
++F:	package/dahdi-linux/
++F:	package/dahdi-tools/
+ F:	package/dtc/
+ F:	package/dtv-scan-tables/
+ F:	package/dvb-apps/
+@@ -1755,7 +1758,9 @@ F:	package/libedit/
+ F:	package/libgsm/
+ F:	package/libinput/
+ F:	package/libiscsi/
++F:	package/libpri/
+ F:	package/libseccomp/
++F:	package/libss7/
+ F:	package/linux-tools/
+ F:	package/mesa3d-headers/
+ F:	package/nbd/
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.11.0
