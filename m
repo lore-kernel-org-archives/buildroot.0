@@ -1,301 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 27 Nov 2017 11:03:59 +0100
-Subject: [Buildroot] [git commit branch/2017.02.x] package/google-breakpad:
- replace references to 'struct ucontext' with 'ucontext_t'
-Message-ID: <20171127101629.975FC7FB8B@busybox.osuosl.org>
+Date: Mon, 27 Nov 2017 10:58:21 +0100
+Subject: [Buildroot] [git commit branch/2017.08.x] linux-headers: bump 4.{4,
+ 9, 13}.x series
+Message-ID: <20171127101635.33D018103C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d01f300db31d2ee247e2ed92532bfb23ab970cc3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=98566da5663c6eff2ba0ebc9d267e6ef83db5350
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.08.x
 
-In glibc, since
-https://sourceware.org/git/?p=glibc.git;h=251287734e89a52da3db682a8241eb6bccc050c9
-the 'struct ucontext' tag has been replaced with 'struct ucontext_t'.
-The tag itself is anyway not POSIX - only the 'ucontext_t' typedef is
-specified. And that type has existed since at least 1997 in glibc.
-
-Therefore, replace references to 'struct ucontext' with 'ucontext_t',
-which works in all versions of glibc, uClibc and musl.
-
-Fixes:
-[arm]     http://autobuild.buildroot.net/results/6380341dbb6c114e4452c5cda37da6b44b80d178
-[aarch64] http://autobuild.buildroot.net/results/4ecf770df7c984a62082d59f8fab632d3efbe06b
-[mipsel]  http://autobuild.buildroot.net/results/e1473a12cf38ccf4dd3ed0f26a8ff9e6b57f0810
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-[Arnout: improve commit message]
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
-(cherry picked from commit ca4009fc24e3a283fc44327dbd20579bde6cc323)
+[Peter: drop 4.13.x bump]
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+(cherry picked from commit ee6840166fb6ce195547cc1f9a0417ac1d611b19)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...aining-references-to-struct-ucontext-with.patch | 257 +++++++++++++++++++++
- 1 file changed, 257 insertions(+)
+ package/linux-headers/Config.in.host | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/google-breakpad/0002-Replace-remaining-references-to-struct-ucontext-with.patch b/package/google-breakpad/0002-Replace-remaining-references-to-struct-ucontext-with.patch
-new file mode 100644
-index 0000000..e02ae26
---- /dev/null
-+++ b/package/google-breakpad/0002-Replace-remaining-references-to-struct-ucontext-with.patch
-@@ -0,0 +1,257 @@
-+From 7975a962e1d6dbad5a46792a54e647abd7caf5f1 Mon Sep 17 00:00:00 2001
-+From: Mark Mentovai <mark@chromium.org>
-+Date: Tue, 19 Sep 2017 22:48:30 -0400
-+Subject: [PATCH] Replace remaining references to 'struct ucontext' with
-+ 'ucontext_t'
-+
-+This relands
-+https://chromium.googlesource.com/breakpad/breakpad/src/+/e3035bc406cee8a4d765e59ad46eb828705f17f4,
-+which was accidentally committed to breakpad/breakpad/src, the read-only
-+mirror of src in breakpad/breakpad. (Well, it should have been
-+read-only.) See https://crbug.com/766164.
-+
-+This fixes issues with glibc-2.26.
-+
-+See https://bugs.gentoo.org/show_bug.cgi?id=628782 ,
-+https://sourceware.org/git/?p=glibc.git;h=251287734e89a52da3db682a8241eb6bccc050c9 , and
-+https://sourceware.org/ml/libc-alpha/2017-08/msg00010.html for context.
-+Change-Id: Id66f474d636dd2afa450bab925c5514a800fdd6f
-+Reviewed-on: https://chromium-review.googlesource.com/674304
-+Reviewed-by: Mark Mentovai <mark@chromium.org>
-+
-+(cherry picked from commit bddcc58860f522a0d4cbaa7e9d04058caee0db9d)
-+[Romain: backport from upstream]
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
-+---
-+ .../linux/dump_writer_common/ucontext_reader.cc    | 32 +++++++++++-----------
-+ .../linux/dump_writer_common/ucontext_reader.h     | 14 +++++-----
-+ src/client/linux/handler/exception_handler.cc      | 10 +++----
-+ src/client/linux/handler/exception_handler.h       |  6 ++--
-+ .../linux/microdump_writer/microdump_writer.cc     |  2 +-
-+ .../linux/minidump_writer/minidump_writer.cc       |  2 +-
-+ 6 files changed, 33 insertions(+), 33 deletions(-)
-+
-+diff --git a/src/client/linux/dump_writer_common/ucontext_reader.cc b/src/client/linux/dump_writer_common/ucontext_reader.cc
-+index c80724d..052ce37 100644
-+--- a/src/client/linux/dump_writer_common/ucontext_reader.cc
-++++ b/src/client/linux/dump_writer_common/ucontext_reader.cc
-+@@ -36,19 +36,19 @@ namespace google_breakpad {
-+ 
-+ // Minidump defines register structures which are different from the raw
-+ // structures which we get from the kernel. These are platform specific
-+-// functions to juggle the ucontext and user structures into minidump format.
-++// functions to juggle the ucontext_t and user structures into minidump format.
-+ 
-+ #if defined(__i386__)
-+ 
-+-uintptr_t UContextReader::GetStackPointer(const struct ucontext* uc) {
-++uintptr_t UContextReader::GetStackPointer(const ucontext_t* uc) {
-+   return uc->uc_mcontext.gregs[REG_ESP];
-+ }
-+ 
-+-uintptr_t UContextReader::GetInstructionPointer(const struct ucontext* uc) {
-++uintptr_t UContextReader::GetInstructionPointer(const ucontext_t* uc) {
-+   return uc->uc_mcontext.gregs[REG_EIP];
-+ }
-+ 
-+-void UContextReader::FillCPUContext(RawContextCPU *out, const ucontext *uc,
-++void UContextReader::FillCPUContext(RawContextCPU *out, const ucontext_t *uc,
-+                                     const struct _libc_fpstate* fp) {
-+   const greg_t* regs = uc->uc_mcontext.gregs;
-+ 
-+@@ -88,15 +88,15 @@ void UContextReader::FillCPUContext(RawContextCPU *out, const ucontext *uc,
-+ 
-+ #elif defined(__x86_64)
-+ 
-+-uintptr_t UContextReader::GetStackPointer(const struct ucontext* uc) {
-++uintptr_t UContextReader::GetStackPointer(const ucontext_t* uc) {
-+   return uc->uc_mcontext.gregs[REG_RSP];
-+ }
-+ 
-+-uintptr_t UContextReader::GetInstructionPointer(const struct ucontext* uc) {
-++uintptr_t UContextReader::GetInstructionPointer(const ucontext_t* uc) {
-+   return uc->uc_mcontext.gregs[REG_RIP];
-+ }
-+ 
-+-void UContextReader::FillCPUContext(RawContextCPU *out, const ucontext *uc,
-++void UContextReader::FillCPUContext(RawContextCPU *out, const ucontext_t *uc,
-+                                     const struct _libc_fpstate* fpregs) {
-+   const greg_t* regs = uc->uc_mcontext.gregs;
-+ 
-+@@ -145,15 +145,15 @@ void UContextReader::FillCPUContext(RawContextCPU *out, const ucontext *uc,
-+ 
-+ #elif defined(__ARM_EABI__)
-+ 
-+-uintptr_t UContextReader::GetStackPointer(const struct ucontext* uc) {
-++uintptr_t UContextReader::GetStackPointer(const ucontext_t* uc) {
-+   return uc->uc_mcontext.arm_sp;
-+ }
-+ 
-+-uintptr_t UContextReader::GetInstructionPointer(const struct ucontext* uc) {
-++uintptr_t UContextReader::GetInstructionPointer(const ucontext_t* uc) {
-+   return uc->uc_mcontext.arm_pc;
-+ }
-+ 
-+-void UContextReader::FillCPUContext(RawContextCPU *out, const ucontext *uc) {
-++void UContextReader::FillCPUContext(RawContextCPU *out, const ucontext_t *uc) {
-+   out->context_flags = MD_CONTEXT_ARM_FULL;
-+ 
-+   out->iregs[0] = uc->uc_mcontext.arm_r0;
-+@@ -184,15 +184,15 @@ void UContextReader::FillCPUContext(RawContextCPU *out, const ucontext *uc) {
-+ 
-+ #elif defined(__aarch64__)
-+ 
-+-uintptr_t UContextReader::GetStackPointer(const struct ucontext* uc) {
-++uintptr_t UContextReader::GetStackPointer(const ucontext_t* uc) {
-+   return uc->uc_mcontext.sp;
-+ }
-+ 
-+-uintptr_t UContextReader::GetInstructionPointer(const struct ucontext* uc) {
-++uintptr_t UContextReader::GetInstructionPointer(const ucontext_t* uc) {
-+   return uc->uc_mcontext.pc;
-+ }
-+ 
-+-void UContextReader::FillCPUContext(RawContextCPU *out, const ucontext *uc,
-++void UContextReader::FillCPUContext(RawContextCPU *out, const ucontext_t *uc,
-+                                     const struct fpsimd_context* fpregs) {
-+   out->context_flags = MD_CONTEXT_ARM64_FULL;
-+ 
-+@@ -210,15 +210,15 @@ void UContextReader::FillCPUContext(RawContextCPU *out, const ucontext *uc,
-+ 
-+ #elif defined(__mips__)
-+ 
-+-uintptr_t UContextReader::GetStackPointer(const struct ucontext* uc) {
-++uintptr_t UContextReader::GetStackPointer(const ucontext_t* uc) {
-+   return uc->uc_mcontext.gregs[MD_CONTEXT_MIPS_REG_SP];
-+ }
-+ 
-+-uintptr_t UContextReader::GetInstructionPointer(const struct ucontext* uc) {
-++uintptr_t UContextReader::GetInstructionPointer(const ucontext_t* uc) {
-+   return uc->uc_mcontext.pc;
-+ }
-+ 
-+-void UContextReader::FillCPUContext(RawContextCPU *out, const ucontext *uc) {
-++void UContextReader::FillCPUContext(RawContextCPU *out, const ucontext_t *uc) {
-+ #if _MIPS_SIM == _ABI64
-+   out->context_flags = MD_CONTEXT_MIPS64_FULL;
-+ #elif _MIPS_SIM == _ABIO32
-+diff --git a/src/client/linux/dump_writer_common/ucontext_reader.h b/src/client/linux/dump_writer_common/ucontext_reader.h
-+index b6e77b4..2de80b7 100644
-+--- a/src/client/linux/dump_writer_common/ucontext_reader.h
-++++ b/src/client/linux/dump_writer_common/ucontext_reader.h
-+@@ -39,23 +39,23 @@
-+ 
-+ namespace google_breakpad {
-+ 
-+-// Wraps platform-dependent implementations of accessors to ucontext structs.
-++// Wraps platform-dependent implementations of accessors to ucontext_t structs.
-+ struct UContextReader {
-+-  static uintptr_t GetStackPointer(const struct ucontext* uc);
-++  static uintptr_t GetStackPointer(const ucontext_t* uc);
-+ 
-+-  static uintptr_t GetInstructionPointer(const struct ucontext* uc);
-++  static uintptr_t GetInstructionPointer(const ucontext_t* uc);
-+ 
-+-  // Juggle a arch-specific ucontext into a minidump format
-++  // Juggle a arch-specific ucontext_t into a minidump format
-+   //   out: the minidump structure
-+   //   info: the collection of register structures.
-+ #if defined(__i386__) || defined(__x86_64)
-+-  static void FillCPUContext(RawContextCPU *out, const ucontext *uc,
-++  static void FillCPUContext(RawContextCPU *out, const ucontext_t *uc,
-+                              const struct _libc_fpstate* fp);
-+ #elif defined(__aarch64__)
-+-  static void FillCPUContext(RawContextCPU *out, const ucontext *uc,
-++  static void FillCPUContext(RawContextCPU *out, const ucontext_t *uc,
-+                              const struct fpsimd_context* fpregs);
-+ #else
-+-  static void FillCPUContext(RawContextCPU *out, const ucontext *uc);
-++  static void FillCPUContext(RawContextCPU *out, const ucontext_t *uc);
-+ #endif
-+ };
-+ 
-+diff --git a/src/client/linux/handler/exception_handler.cc b/src/client/linux/handler/exception_handler.cc
-+index b63f973..3d809b8 100644
-+--- a/src/client/linux/handler/exception_handler.cc
-++++ b/src/client/linux/handler/exception_handler.cc
-+@@ -439,9 +439,9 @@ bool ExceptionHandler::HandleSignal(int sig, siginfo_t* info, void* uc) {
-+   // Fill in all the holes in the struct to make Valgrind happy.
-+   memset(&g_crash_context_, 0, sizeof(g_crash_context_));
-+   memcpy(&g_crash_context_.siginfo, info, sizeof(siginfo_t));
-+-  memcpy(&g_crash_context_.context, uc, sizeof(struct ucontext));
-++  memcpy(&g_crash_context_.context, uc, sizeof(ucontext_t));
-+ #if defined(__aarch64__)
-+-  struct ucontext* uc_ptr = (struct ucontext*)uc;
-++  ucontext_t* uc_ptr = (ucontext_t*)uc;
-+   struct fpsimd_context* fp_ptr =
-+       (struct fpsimd_context*)&uc_ptr->uc_mcontext.__reserved;
-+   if (fp_ptr->head.magic == FPSIMD_MAGIC) {
-+@@ -450,9 +450,9 @@ bool ExceptionHandler::HandleSignal(int sig, siginfo_t* info, void* uc) {
-+   }
-+ #elif !defined(__ARM_EABI__) && !defined(__mips__)
-+   // FP state is not part of user ABI on ARM Linux.
-+-  // In case of MIPS Linux FP state is already part of struct ucontext
-++  // In case of MIPS Linux FP state is already part of ucontext_t
-+   // and 'float_state' is not a member of CrashContext.
-+-  struct ucontext* uc_ptr = (struct ucontext*)uc;
-++  ucontext_t* uc_ptr = (ucontext_t*)uc;
-+   if (uc_ptr->uc_mcontext.fpregs) {
-+     memcpy(&g_crash_context_.float_state, uc_ptr->uc_mcontext.fpregs,
-+            sizeof(g_crash_context_.float_state));
-+@@ -476,7 +476,7 @@ bool ExceptionHandler::SimulateSignalDelivery(int sig) {
-+   // ExceptionHandler::HandleSignal().
-+   siginfo.si_code = SI_USER;
-+   siginfo.si_pid = getpid();
-+-  struct ucontext context;
-++  ucontext_t context;
-+   getcontext(&context);
-+   return HandleSignal(sig, &siginfo, &context);
-+ }
-+diff --git a/src/client/linux/handler/exception_handler.h b/src/client/linux/handler/exception_handler.h
-+index 591c310..42f4055 100644
-+--- a/src/client/linux/handler/exception_handler.h
-++++ b/src/client/linux/handler/exception_handler.h
-+@@ -191,11 +191,11 @@ class ExceptionHandler {
-+   struct CrashContext {
-+     siginfo_t siginfo;
-+     pid_t tid;  // the crashing thread.
-+-    struct ucontext context;
-++    ucontext_t context;
-+ #if !defined(__ARM_EABI__) && !defined(__mips__)
-+     // #ifdef this out because FP state is not part of user ABI for Linux ARM.
-+-    // In case of MIPS Linux FP state is already part of struct
-+-    // ucontext so 'float_state' is not required.
-++    // In case of MIPS Linux FP state is already part of ucontext_t so
-++    // 'float_state' is not required.
-+     fpstate_t float_state;
-+ #endif
-+   };
-+diff --git a/src/client/linux/microdump_writer/microdump_writer.cc b/src/client/linux/microdump_writer/microdump_writer.cc
-+index 6f5b435..a508667 100644
-+--- a/src/client/linux/microdump_writer/microdump_writer.cc
-++++ b/src/client/linux/microdump_writer/microdump_writer.cc
-+@@ -571,7 +571,7 @@ class MicrodumpWriter {
-+ 
-+   void* Alloc(unsigned bytes) { return dumper_->allocator()->Alloc(bytes); }
-+ 
-+-  const struct ucontext* const ucontext_;
-++  const ucontext_t* const ucontext_;
-+ #if !defined(__ARM_EABI__) && !defined(__mips__)
-+   const google_breakpad::fpstate_t* const float_state_;
-+ #endif
-+diff --git a/src/client/linux/minidump_writer/minidump_writer.cc b/src/client/linux/minidump_writer/minidump_writer.cc
-+index 86009b9..f2aec73 100644
-+--- a/src/client/linux/minidump_writer/minidump_writer.cc
-++++ b/src/client/linux/minidump_writer/minidump_writer.cc
-+@@ -1248,7 +1248,7 @@ class MinidumpWriter {
-+   const int fd_;  // File descriptor where the minidum should be written.
-+   const char* path_;  // Path to the file where the minidum should be written.
-+ 
-+-  const struct ucontext* const ucontext_;  // also from the signal handler
-++  const ucontext_t* const ucontext_;  // also from the signal handler
-+ #if !defined(__ARM_EABI__) && !defined(__mips__)
-+   const google_breakpad::fpstate_t* const float_state_;  // ditto
-+ #endif
-+-- 
-+2.9.5
-+
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 599388d..ff32522 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -236,8 +236,8 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.10.107"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.12.74"	if BR2_KERNEL_HEADERS_3_12
+ 	default "4.1.45"	if BR2_KERNEL_HEADERS_4_1
+-	default "4.4.98"	if BR2_KERNEL_HEADERS_4_4
+-	default "4.9.62"	if BR2_KERNEL_HEADERS_4_9
++	default "4.4.100"	if BR2_KERNEL_HEADERS_4_4
++	default "4.9.64"	if BR2_KERNEL_HEADERS_4_9
+ 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
+ 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
+ 	default "4.12.14"	if BR2_KERNEL_HEADERS_4_12
