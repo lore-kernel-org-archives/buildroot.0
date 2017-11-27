@@ -1,46 +1,42 @@
-From: Mylene JOSSERAND <mylene.josserand@free-electrons.com>
-Date: Mon, 27 Nov 2017 11:04:53 +0100
-Subject: [Buildroot] [PATCH v2] rtl8723bu: new package
-In-Reply-To: <CANCHnQqx-cQM-qW8_aFkCGB0yi=b32M8RC6rpeXXR73_NhTC_A@mail.gmail.com>
-References: <20171127090119.32215-1-mylene.josserand@free-electrons.com>
- <CANCHnQqx-cQM-qW8_aFkCGB0yi=b32M8RC6rpeXXR73_NhTC_A@mail.gmail.com>
-Message-ID: <20171127110453.75713138@dell-desktop.home>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 27 Nov 2017 11:05:28 +0100
+Subject: [Buildroot] [PATCH] package/google-breakpad: replace references
+ to 'struct ucontext' with 'ucontext_t'
+In-Reply-To: <04e7418d-735d-c9b3-3087-dbe78529cc48@mind.be> (Arnout
+ Vandecappelle's message of "Thu, 23 Nov 2017 23:59:42 +0100")
+References: <20171122210828.19311-1-romain.naour@gmail.com>
+ <20171122224529.5190424d@windsurf.lan>
+ <04e7418d-735d-c9b3-3087-dbe78529cc48@mind.be>
+Message-ID: <87d144avfb.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-Le Mon, 27 Nov 2017 10:35:27 +0100,
-Jeroen Roovers <jer@airfi.aero> a ?crit :
+ > On 22-11-17 22:45, Thomas Petazzoni wrote:
+ >> Hello,
+ >> 
+ >> Thanks for working on this topic!
+ >> 
+ >> On Wed, 22 Nov 2017 22:08:28 +0100, Romain Naour wrote:
+ >>> Glibc change:
+ >>> https://sourceware.org/git/?p=glibc.git;h=251287734e89a52da3db682a8241eb6bccc050c9
+ >> 
+ >> This commit log is very, very terse. Could you explain in more details
+ >> what's going on?
+ >> 
+ >> Also, what is the effect if you use an older glibc version than 2.26 ?
 
-> On 27 November 2017 at 10:01, Myl?ne Josserand
-> <mylene.josserand@free-electrons.com> wrote:
-> > Add RTL8723BU package to compile the Realtek RTL8723BU Wifi
-> > driver.  
-> 
-> I believe recent versions of the in-kernel rtlwifi driver cover the
-> RTL8723BU as well. Is there any reason to prefer Realtek's driver? If
-> there are important differences, then it may be useful to record the
-> advantages of this driver in the Config.in help section.
+ >  The ucontext_t type name is POSIX and has existed in glibc since 1997, in
+ > uClibc and musl forever.
 
-Yes, I tried this driver and I did not succeed to make it work. I sent
-an email on the mailing list "linux-wireless" about that[1]. I still do
-not have an answer. It would be nice if it can work with mainline's 
-driver.
+ >  I've extended the commit log with this and more explanation, and applied to
+ > master, thanks.
 
-I tested Realtek's driver and it is working just fine so I thought
-to contribute the package, in case it could help others.
+Committed to 2017.02.x and 2017.08.x, thanks.
 
-I can add it in the help section but maybe, the status of the mainline
-driver will change so I do not know.
-
-[1]:
-https://www.mail-archive.com/linux-wireless at vger.kernel.org/msg40501.html
-
-Thanks, 
-Best regards,
-
-Myl?ne Josserand
+-- 
+Bye, Peter Korsgaard
