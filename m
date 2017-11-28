@@ -1,87 +1,91 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 28 Nov 2017 14:37:12 +0100
-Subject: [Buildroot] [PATCH/next 1/1] package/avahi: configure option
- pygtk was renamed to pygobject
-In-Reply-To: <20171128131715.cfuxo2ehjtpkvswy@tarshish>
-References: <20171127202700.28697-1-bernd.kuhls@t-online.de>
- <20171128130615.GG2889@scaer>
- <20171128131715.cfuxo2ehjtpkvswy@tarshish>
-Message-ID: <20171128133712.GH2889@scaer>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 28 Nov 2017 15:54:52 +0200
+Subject: [Buildroot] [PATCH] libmicrohttpd: bump to version 0.9.57
+Message-ID: <b4ba276730ebca078748a2a3d6ce79a7eabc8e22.1511877292.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Baruch, All,
+Drop libgcrypt dependency for SSL support; with newer version of gnutls
+libgcrypt is not needed.
 
-On 2017-11-28 15:17 +0200, Baruch Siach spake thusly:
-> On Tue, Nov 28, 2017 at 02:06:15PM +0100, Yann E. MORIN wrote:
-> > On 2017-11-27 21:27 +0100, Bernd Kuhls spake thusly:
-> > > See corresponding commit:
-> > > https://github.com/lathiat/avahi/commit/142124dae6f043085aba59fca4657c56b2b23b65
-> > > 
-> > > Fixes
-> > > http://autobuild.buildroot.net/results/1e9/1e974c814ae4236077a869339be1143a9af7e5cd/
-> > > http://autobuild.buildroot.net/results/010/0101b1205aec5a0c9c6509edf3d302aeaa3bd0ca/
-> > > http://autobuild.buildroot.net/results/572/5721634ffa2a4544a82dda08c1fcea331ecdadaf/
-> > > 
-> > > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> > > ---
-> > >  package/avahi/avahi.mk | 2 +-
-> > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > > 
-> > > diff --git a/package/avahi/avahi.mk b/package/avahi/avahi.mk
-> > > index b89887b4c7..c8f1af9a9d 100644
-> > > --- a/package/avahi/avahi.mk
-> > > +++ b/package/avahi/avahi.mk
-> > > @@ -77,7 +77,7 @@ AVAHI_CONF_OPTS = \
-> > >  	--disable-gtk \
-> > >  	--disable-gtk3 \
-> > >  	--disable-gdbm \
-> > > -	--disable-pygtk \
-> > > +	--disable-pygobject \
-> > 
-> > This is incorrect, because then this disables the full python support.
-> > 
-> > So, either we do without python-gobject and we remove all the python
-> > handling in avahi.mk, or we bump python-gobject and fix the dependency
-> > chain.
-> 
-> Newer versions of python-gobject depend on GObject introspection. Buildroot 
-> does not currently support introspection.
-> 
->   http://lists.busybox.net/pipermail/buildroot/2017-February/184645.html
+Drop the LIBS fix for static linking with gnutls that has been
+introduced in commit 2d3d6d258bb (libmicrohttpd: fix static linking with
+gnutls). gnutls does not support static linking anymore.
 
-So, we'll have to do without python support in avahi... :-/
+Fix a comment typo.
 
-However, coming back to the original problem. Disabliong pygobject does
-disable building of avahi-python:
+Add license hash.
 
-    Building avahi-python: no (You need python, pygobject and python-dbus!)
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/libmicrohttpd/Config.in          |  2 --
+ package/libmicrohttpd/libmicrohttpd.hash |  3 ++-
+ package/libmicrohttpd/libmicrohttpd.mk   | 10 ++++------
+ 3 files changed, 6 insertions(+), 9 deletions(-)
 
-But it seems that python support might still be enabled:
-
-    Enable Python: yes
-
-But none of the ELF files installed by avahi depend on libpython.
-
-That's weird...
-
-Bernd, the commit log should explain all this...
-
-> Cross compiling introspection is a painful exercise:
->   http://patchwork.ozlabs.org/patch/828791/
-
-Yep, I'm aware of that effort. This gobject introspection is a real PITA...
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/libmicrohttpd/Config.in b/package/libmicrohttpd/Config.in
+index 2a685ca408d7..7f3c9bb8fda0 100644
+--- a/package/libmicrohttpd/Config.in
++++ b/package/libmicrohttpd/Config.in
+@@ -11,11 +11,9 @@ if BR2_PACKAGE_LIBMICROHTTPD
+ 
+ config BR2_PACKAGE_LIBMICROHTTPD_SSL
+ 	bool "https support"
+-	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgcrypt
+ 	depends on !BR2_STATIC_LIBS # gnutls
+ 	depends on BR2_USE_WCHAR
+ 	select BR2_PACKAGE_GNUTLS
+-	select BR2_PACKAGE_LIBGCRYPT
+ 	help
+ 	  Enable HTTPS (SSL) support.
+ 
+diff --git a/package/libmicrohttpd/libmicrohttpd.hash b/package/libmicrohttpd/libmicrohttpd.hash
+index a1460fd72439..e628cb2c6cd0 100644
+--- a/package/libmicrohttpd/libmicrohttpd.hash
++++ b/package/libmicrohttpd/libmicrohttpd.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+-sha256 0c1cab8dc9f2588bd3076a28f77a7f8de9560cbf2d80e53f9a8696ada80ed0f8  libmicrohttpd-0.9.55.tar.gz
++sha256 dec1a76487d7e48ad74b468a888bfda1c05731f185ff950f1e363ca9d39caf4e  libmicrohttpd-0.9.57.tar.gz
++sha256 70e12e2a60151b9ed1a4c94a5ffeb99cd086fa94542b5a92fec581506e8d3121  COPYING
+diff --git a/package/libmicrohttpd/libmicrohttpd.mk b/package/libmicrohttpd/libmicrohttpd.mk
+index a87c93b3ae66..62fb7fc2378c 100644
+--- a/package/libmicrohttpd/libmicrohttpd.mk
++++ b/package/libmicrohttpd/libmicrohttpd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBMICROHTTPD_VERSION = 0.9.55
++LIBMICROHTTPD_VERSION = 0.9.57
+ LIBMICROHTTPD_SITE = $(BR2_GNU_MIRROR)/libmicrohttpd
+ LIBMICROHTTPD_LICENSE_FILES = COPYING
+ LIBMICROHTTPD_INSTALL_STAGING = YES
+@@ -12,7 +12,7 @@ LIBMICROHTTPD_CONF_OPTS = --disable-curl --disable-examples
+ LIBMICROHTTPD_CFLAGS = $(TARGET_CFLAGS) -std=c99
+ 
+ # gcc on arc and bfin doesn't define _REENTRANT when -pthread is
+-# passed while it should. Compensate this defiency here otherwise
++# passed while it should. Compensate this deficiency here otherwise
+ # libmicrohttpd configure script doesn't find that thread support is
+ # enabled.
+ ifeq ($(BR2_arc)$(BR2_bfin),y)
+@@ -23,10 +23,8 @@ LIBMICROHTTPD_CONF_ENV += CFLAGS="$(LIBMICROHTTPD_CFLAGS)"
+ 
+ ifeq ($(BR2_PACKAGE_LIBMICROHTTPD_SSL),y)
+ LIBMICROHTTPD_LICENSE = LGPL-2.1+
+-LIBMICROHTTPD_DEPENDENCIES += host-pkgconf gnutls libgcrypt
+-LIBMICROHTTPD_CONF_ENV += LIBS="`$(PKG_CONFIG_HOST_BINARY) --libs gnutls`"
+-LIBMICROHTTPD_CONF_OPTS += --enable-https --with-gnutls=$(STAGING_DIR)/usr \
+-	--with-libgcrypt-prefix=$(STAGING_DIR)/usr
++LIBMICROHTTPD_DEPENDENCIES += host-pkgconf gnutls
++LIBMICROHTTPD_CONF_OPTS += --enable-https --with-gnutls=$(STAGING_DIR)/usr
+ else
+ LIBMICROHTTPD_LICENSE = LGPL-2.1+ or eCos
+ LIBMICROHTTPD_CONF_OPTS += --disable-https
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.15.0
