@@ -1,49 +1,62 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 28 Nov 2017 14:04:19 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2017-11-27
-In-Reply-To: <20171128135921.0e2cdb53@windsurf.home>
-References: <20171128070012.4EDDD20746@mail.free-electrons.com>
- <20171128110825.GE2889@scaer>
- <20171128135921.0e2cdb53@windsurf.home>
-Message-ID: <20171128130419.GF2889@scaer>
+Date: Tue, 28 Nov 2017 14:06:15 +0100
+Subject: [Buildroot] [PATCH/next 1/1] package/avahi: configure option
+ pygtk was renamed to pygobject
+In-Reply-To: <20171127202700.28697-1-bernd.kuhls@t-online.de>
+References: <20171127202700.28697-1-bernd.kuhls@t-online.de>
+Message-ID: <20171128130615.GG2889@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, Bernd, All,
+Bernd, All,
 
-On 2017-11-28 13:59 +0100, Thomas Petazzoni spake thusly:
-> On Tue, 28 Nov 2017 12:08:25 +0100, Yann E. MORIN wrote:
-> > On 2017-11-28 08:00 +0100, Thomas Petazzoni spake thusly:
-> > > Results for branch 'next'
-> > >      aarch64 |                      avahi-0.7 | NOK | http://autobuild.buildroot.net/results/1e974c814ae4236077a869339be1143a9af7e5cd | ORPH
-> > >       x86_64 |                      avahi-0.7 | NOK | http://autobuild.buildroot.net/results/1b4b37381d78e41dcf87e3494181cfdacb452d8e | ORPH
-> > >       x86_64 |                      avahi-0.7 | NOK | http://autobuild.buildroot.net/results/0256f5be80314b00c02881ce7aa1dec35c8afc83 | ORPH
-> > >          arm |                      avahi-0.7 | NOK | http://autobuild.buildroot.net/results/17044c2d88c291265daeb9302af8b8f1ac56aae9 | ORPH
-> > >       x86_64 |                      avahi-0.7 | NOK | http://autobuild.buildroot.net/results/5721634ffa2a4544a82dda08c1fcea331ecdadaf | ORPH
-> > >       x86_64 |                      avahi-0.7 | NOK | http://autobuild.buildroot.net/results/0101b1205aec5a0c9c6509edf3d302aeaa3bd0ca | ORPH  
-> > 
-> > For python support, avahi now requires python-gobject >= 3.0, but:
-> > 
-> >   - we only have python-gobject 2.28;
-> > 
-> >   - we do not enforce the dependency anyway.
-> > 
-> > Bernd, you bumped avahi. Would you care fixing this, please?
+On 2017-11-27 21:27 +0100, Bernd Kuhls spake thusly:
+> See corresponding commit:
+> https://github.com/lathiat/avahi/commit/142124dae6f043085aba59fca4657c56b2b23b65
 > 
-> Bernd already submitted a patch to fix this:
-> http://lists.busybox.net/pipermail/buildroot/2017-November/208063.html.
-> Unfortunately, it was never recorded in patchwork :-/
+> Fixes
+> http://autobuild.buildroot.net/results/1e9/1e974c814ae4236077a869339be1143a9af7e5cd/
+> http://autobuild.buildroot.net/results/010/0101b1205aec5a0c9c6509edf3d302aeaa3bd0ca/
+> http://autobuild.buildroot.net/results/572/5721634ffa2a4544a82dda08c1fcea331ecdadaf/
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/avahi/avahi.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/package/avahi/avahi.mk b/package/avahi/avahi.mk
+> index b89887b4c7..c8f1af9a9d 100644
+> --- a/package/avahi/avahi.mk
+> +++ b/package/avahi/avahi.mk
+> @@ -77,7 +77,7 @@ AVAHI_CONF_OPTS = \
+>  	--disable-gtk \
+>  	--disable-gtk3 \
+>  	--disable-gdbm \
+> -	--disable-pygtk \
+> +	--disable-pygobject \
 
-Ah, that's why I did not see it.
+This is incorrect, because then this disables the full python support.
 
-I'll reply to that patch, then. Thanks!
+So, either we do without python-gobject and we remove all the python
+handling in avahi.mk, or we bump python-gobject and fix the dependency
+chain.
 
 Regards,
 Yann E. MORIN.
+
+>  	--disable-mono \
+>  	--disable-monodoc \
+>  	--disable-stack-protector \
+> -- 
+> 2.11.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
