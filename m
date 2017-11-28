@@ -1,46 +1,46 @@
 From: Andrey Yurovsky <yurovsky@gmail.com>
-Date: Mon, 27 Nov 2017 19:27:22 -0800
-Subject: [Buildroot] [PATCH 1/2] rauc: select host-squashfs as a host
- dependency
-Message-ID: <20171128032723.14081-1-yurovsky@gmail.com>
+Date: Mon, 27 Nov 2017 19:27:23 -0800
+Subject: [Buildroot] [PATCH 2/2] rauc: bump to version 0.2
+In-Reply-To: <20171128032723.14081-1-yurovsky@gmail.com>
+References: <20171128032723.14081-1-yurovsky@gmail.com>
+Message-ID: <20171128032723.14081-2-yurovsky@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The rauc host tool (used to generate update bundles) runs mksquashfs so
-host-squashfs is required for it to work at runtime.
+Version 0.2 of rauc provides several bug fixes and minor feature
+enhancements.
 
 Signed-off-by: Andrey Yurovsky <yurovsky@gmail.com>
 ---
- package/rauc/Config.in.host | 1 +
- package/rauc/rauc.mk        | 2 +-
- 2 files changed, 2 insertions(+), 1 deletion(-)
+ package/rauc/rauc.hash | 4 ++--
+ package/rauc/rauc.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/rauc/Config.in.host b/package/rauc/Config.in.host
-index a58685a2e6..1bd9a7935a 100644
---- a/package/rauc/Config.in.host
-+++ b/package/rauc/Config.in.host
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_HOST_RAUC
- 	bool "host rauc"
-+	select BR2_PACKAGE_HOST_SQUASHFS # run-time dependency
- 	help
- 	  RAUC is the Robust Auto-Update Controller developed by
- 	  Pengutronix. Enable this option to build the rauc
+diff --git a/package/rauc/rauc.hash b/package/rauc/rauc.hash
+index 78c3e279d6..649d19571e 100644
+--- a/package/rauc/rauc.hash
++++ b/package/rauc/rauc.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated, after verifying against
+-# https://github.com/rauc/rauc/releases/download/v0.1.1/rauc-0.1.1.tar.xz.asc
+-sha256 d2901d493f1d3210aef6411e83b02edac3a678d6d825d71a1c61b5b6afc7e478 rauc-0.1.1.tar.xz
++# https://github.com/rauc/rauc/releases/download/v0.2/rauc-0.2.tar.xz.asc
++sha256 83aa3ac3716e1c29315162e3cbf5d4db79f26dd95efe1bc634bbce364b95491a rauc-0.2.tar.xz
 diff --git a/package/rauc/rauc.mk b/package/rauc/rauc.mk
-index 479a583206..67ef1556e7 100644
+index 67ef1556e7..4909062cf5 100644
 --- a/package/rauc/rauc.mk
 +++ b/package/rauc/rauc.mk
-@@ -29,7 +29,7 @@ ifeq ($(BR2_PACKAGE_SYSTEMD),y)
- RAUC_DEPENDENCIES += systemd
- endif
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--HOST_RAUC_DEPENDENCIES = host-pkgconf host-openssl host-libglib2
-+HOST_RAUC_DEPENDENCIES = host-pkgconf host-openssl host-libglib2 host-squashfs
- HOST_RAUC_CONF_OPTS += --disable-network --disable-json --disable-service
- 
- $(eval $(autotools-package))
+-RAUC_VERSION = 0.1.1
++RAUC_VERSION = 0.2
+ RAUC_SITE = https://github.com/rauc/rauc/releases/download/v$(RAUC_VERSION)
+ RAUC_SOURCE = rauc-$(RAUC_VERSION).tar.xz
+ RAUC_LICENSE = LGPL-2.1
 -- 
 2.14.3
