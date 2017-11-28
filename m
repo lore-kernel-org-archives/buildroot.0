@@ -1,33 +1,36 @@
-From: =?iso-8859-1?Q?Ga=EBl?= PORTAY <gael.portay@savoirfairelinux.com>
-Date: Tue, 28 Nov 2017 07:06:38 -0500
-Subject: [Buildroot] [PATCH v2 1/1] package/qt5: simplify and cleanup
- _SITE variables
-In-Reply-To: <20171128115930.10887-1-gael.portay@savoirfairelinux.com>
-References: <20171128115930.10887-1-gael.portay@savoirfairelinux.com>
-Message-ID: <20171128120638.kihab5miok4mhnzl@archlinux.local>
+From: Mario Lang <mlang@blind.guru>
+Date: Tue, 28 Nov 2017 13:10:12 +0100
+Subject: [Buildroot] [PATCH 1/1] package/lftp: Add optional support for
+ libidn
+Message-ID: <20171128121012.27857-1-mlang@blind.guru>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-With the missing changelog.
+Signed-off-by: Mario Lang <mlang@blind.guru>
+---
+ package/lftp/lftp.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-On Tue, Nov 28, 2017 at 06:59:30AM -0500, Ga?l PORTAY wrote:
-> The variable QT5_SNAPSHOTS_SITE was introduced in commit 9d5ac9698 to
-> fetch sources of obsolete modules. It was used to download qt5webkit
-> tarballs.
-> 
-> The variable is not referenced anymore since the qt5webkit tarballs are
-> downloaded from the Qt community release site.
-> 
-> Since the introduction of qt-5.9 in aa1c40ba3, the QT5_SITE variable
-> was duplicates for no good reason.
-> 
-> Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
-> Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> ---
-
-Changes since v1:
- * reword asked by Yann to complete the commit message.
- * add the acked-by of Yann.
+diff --git a/package/lftp/lftp.mk b/package/lftp/lftp.mk
+index de4ebb8521..b174057f03 100644
+--- a/package/lftp/lftp.mk
++++ b/package/lftp/lftp.mk
+@@ -41,6 +41,13 @@ else
+ LFTP_CONF_OPTS += --without-openssl
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBIDN),y)
++LFTP_DEPENDENCIES += libidn
++LFTP_CONF_OPTS += --with-libidn=$(STAGING_DIR)/usr
++else
++LFTP_CONF_OPTS += --without-libidn
++endif
++
+ # Remove /usr/share/lftp
+ define LFTP_REMOVE_DATA
+ 	$(RM) -fr $(TARGET_DIR)/usr/share/lftp
+-- 
+2.15.0
