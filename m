@@ -1,52 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 Nov 2017 15:47:11 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2017-11-27
-In-Reply-To: <CANQCQpZZzurPy3cJCYpg5z67+hogAnN=syKtGui4fEr4B6GyFw@mail.gmail.com>
-References: <20171128070012.4EDDD20746@mail.free-electrons.com>
- <CANQCQpZZzurPy3cJCYpg5z67+hogAnN=syKtGui4fEr4B6GyFw@mail.gmail.com>
-Message-ID: <20171128154711.3836b5e5@windsurf.home>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 28 Nov 2017 17:23:21 +0200
+Subject: [Buildroot] [PATCH] libevent: disable openssl for host
+Message-ID: <ee53e592d9f9bab35454d044fdcdae3ac67a9b45.1511882601.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+As host-libevent does not depend on host-openssl, it might attempt to
+build against the host installed openssl. This does not work very well
+on various hosts. Since we don't really need encryption support in
+host-libevent just disable openssl support.
 
-On Tue, 28 Nov 2017 08:25:21 -0600, Matthew Weber wrote:
+Disable build of example code as we already do for the target libevent.
 
-> On Tue, Nov 28, 2017 at 1:00 AM, Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com> wrote:
-> > Hello,
-> >  
-> [snip]
-> >  powerpc64le | make[1]: *** [qfsfileengine... | TIM | http://autobuild.buildroot.net/results/fde2ab8aeb2f5f3b91d80c47d7177adfb778f883 |  
-> 
-> I've noticed the size of the builds are getting much larger as the
-> number of failures is going down.  Has there been any previous
-> discussion about having the timeout conditional on if the build is
-> still progressing vs just a blink duration?  I was thinking we could
-> do a check for file modifications or something periodically vs a hard
-> timeout.
+Should fix:
+http://autobuild.buildroot.net/results/403/403886e3afc6d5d18a138f4b0651f3c5a50ed064/
+http://autobuild.buildroot.net/results/a2a/a2a84692049b0fb8038f1ad4b06554ecdac32e3c/
+http://autobuild.buildroot.net/results/a36/a36abb1ac556a8b50e140ea1851955744b152608/
 
-There's been some discussion a long time ago about this. Back then, we
-didn't had much detail on what was going on with the build. However,
-now, we could more easily check the build-time.log file and see if the
-last line has been appended sufficiently recently to consider the build
-to still be "alive".
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/libevent/libevent.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-However, from an implementation point of view, we currently use
-"timeout XYZ make", so the autobuild-run script doesn't have to bother
-with the timeout problem. If we want to check build-time.log, we have
-to have a thread or timer in the autobuild-run script that periodically
-checks the last line and decides if we've reached the timeout condition
-or not.
-
-Interested ? :-)
-
-Thomas
+diff --git a/package/libevent/libevent.mk b/package/libevent/libevent.mk
+index fc4108f6fd08..65bf1c2b7b9f 100644
+--- a/package/libevent/libevent.mk
++++ b/package/libevent/libevent.mk
+@@ -12,6 +12,7 @@ LIBEVENT_LICENSE_FILES = LICENSE
+ # For 0001-Disable-building-test-programs.patch
+ LIBEVENT_AUTORECONF = YES
+ LIBEVENT_CONF_OPTS = --disable-samples
++HOST_LIBEVENT_CONF_OPTS = --disable-samples --disable-openssl
+ 
+ define LIBEVENT_REMOVE_PYSCRIPT
+ 	rm $(TARGET_DIR)/usr/bin/event_rpcgen.py
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.15.0
