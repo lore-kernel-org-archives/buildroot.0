@@ -1,46 +1,42 @@
-From: Carlos Santos <casantos@datacom.ind.br>
-Date: Tue, 28 Nov 2017 08:48:17 -0200
-Subject: [Buildroot] [PATCH] mtools: do not link to libbsd
-Message-ID: <20171128104817.15073-1-casantos@datacom.ind.br>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 28 Nov 2017 12:08:25 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2017-11-27
+In-Reply-To: <20171128070012.4EDDD20746@mail.free-electrons.com>
+References: <20171128070012.4EDDD20746@mail.free-electrons.com>
+Message-ID: <20171128110825.GE2889@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-mtools is unneccessarily linked to libbsd if this library is found by
-the configuration script. The same may happen to host-mtools if some
-libbsd-devel package is installed on the host machine. Prevent this by
-forcing configure to ignore the existence o libbsd.
+Bernd, All,
 
-I stumbled on this when I built host-mtools and removed libbsd-devel to
-upgrade to Fedora 27, due to Bug 1504831*. The previously built
-host/bin/mtools started to fail due to the missing libbsd.x.y.so
+On 2017-11-28 08:00 +0100, Thomas Petazzoni spake thusly:
+> Results for branch 'next'
+>      aarch64 |                      avahi-0.7 | NOK | http://autobuild.buildroot.net/results/1e974c814ae4236077a869339be1143a9af7e5cd | ORPH
+>       x86_64 |                      avahi-0.7 | NOK | http://autobuild.buildroot.net/results/1b4b37381d78e41dcf87e3494181cfdacb452d8e | ORPH
+>       x86_64 |                      avahi-0.7 | NOK | http://autobuild.buildroot.net/results/0256f5be80314b00c02881ce7aa1dec35c8afc83 | ORPH
+>          arm |                      avahi-0.7 | NOK | http://autobuild.buildroot.net/results/17044c2d88c291265daeb9302af8b8f1ac56aae9 | ORPH
+>       x86_64 |                      avahi-0.7 | NOK | http://autobuild.buildroot.net/results/5721634ffa2a4544a82dda08c1fcea331ecdadaf | ORPH
+>       x86_64 |                      avahi-0.7 | NOK | http://autobuild.buildroot.net/results/0101b1205aec5a0c9c6509edf3d302aeaa3bd0ca | ORPH
 
-* https://bugzilla.redhat.com/show_bug.cgi?id=1504831
+For python support, avahi now requires python-gobject >= 3.0, but:
 
-Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
----
- package/mtools/mtools.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+  - we only have python-gobject 2.28;
 
-diff --git a/package/mtools/mtools.mk b/package/mtools/mtools.mk
-index 5db548fad9..1a6218831e 100644
---- a/package/mtools/mtools.mk
-+++ b/package/mtools/mtools.mk
-@@ -13,9 +13,13 @@ MTOOLS_CONF_OPTS = --without-x
- # info documentation not needed
- MTOOLS_CONF_ENV = \
- 	ac_cv_func_setpgrp_void=yes \
-+	ac_cv_lib_bsd_gethostbyname=no \
-+	ac_cv_lib_bsd_main=no \
- 	ac_cv_path_INSTALL_INFO=
- 
- HOST_MTOOLS_CONF_ENV = \
-+	ac_cv_lib_bsd_gethostbyname=no \
-+	ac_cv_lib_bsd_main=no \
- 	ac_cv_path_INSTALL_INFO=
- 
- # link with iconv if enabled
+  - we do not enforce the dependency anyway.
+
+Bernd, you bumped avahi. Would you care fixing this, please?
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.14.3
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
