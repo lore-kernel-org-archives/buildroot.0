@@ -1,42 +1,48 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 28 Nov 2017 12:08:25 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2017-11-27
-In-Reply-To: <20171128070012.4EDDD20746@mail.free-electrons.com>
-References: <20171128070012.4EDDD20746@mail.free-electrons.com>
-Message-ID: <20171128110825.GE2889@scaer>
+From: =?UTF-8?q?Ga=C3=ABl=20PORTAY?= <gael.portay@savoirfairelinux.com>
+Date: Tue, 28 Nov 2017 06:59:30 -0500
+Subject: [Buildroot] [PATCH v2 1/1] package/qt5: simplify and cleanup _SITE
+ variables
+Message-ID: <20171128115930.10887-1-gael.portay@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, All,
+The variable QT5_SNAPSHOTS_SITE was introduced in commit 9d5ac9698 to
+fetch sources of obsolete modules. It was used to download qt5webkit
+tarballs.
 
-On 2017-11-28 08:00 +0100, Thomas Petazzoni spake thusly:
-> Results for branch 'next'
->      aarch64 |                      avahi-0.7 | NOK | http://autobuild.buildroot.net/results/1e974c814ae4236077a869339be1143a9af7e5cd | ORPH
->       x86_64 |                      avahi-0.7 | NOK | http://autobuild.buildroot.net/results/1b4b37381d78e41dcf87e3494181cfdacb452d8e | ORPH
->       x86_64 |                      avahi-0.7 | NOK | http://autobuild.buildroot.net/results/0256f5be80314b00c02881ce7aa1dec35c8afc83 | ORPH
->          arm |                      avahi-0.7 | NOK | http://autobuild.buildroot.net/results/17044c2d88c291265daeb9302af8b8f1ac56aae9 | ORPH
->       x86_64 |                      avahi-0.7 | NOK | http://autobuild.buildroot.net/results/5721634ffa2a4544a82dda08c1fcea331ecdadaf | ORPH
->       x86_64 |                      avahi-0.7 | NOK | http://autobuild.buildroot.net/results/0101b1205aec5a0c9c6509edf3d302aeaa3bd0ca | ORPH
+The variable is not referenced anymore since the qt5webkit tarballs are
+downloaded from the Qt community release site.
 
-For python support, avahi now requires python-gobject >= 3.0, but:
+Since the introduction of qt-5.9 in aa1c40ba3, the QT5_SITE variable
+was duplicates for no good reason.
 
-  - we only have python-gobject 2.28;
+Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ package/qt5/qt5.mk | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-  - we do not enforce the dependency anyway.
-
-Bernd, you bumped avahi. Would you care fixing this, please?
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/qt5/qt5.mk b/package/qt5/qt5.mk
+index 0e49c6b58b..5d63433666 100644
+--- a/package/qt5/qt5.mk
++++ b/package/qt5/qt5.mk
+@@ -7,13 +7,11 @@
+ ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
+ QT5_VERSION_MAJOR = 5.9
+ QT5_VERSION = $(QT5_VERSION_MAJOR).2
+-QT5_SITE = http://download.qt.io/official_releases/qt/$(QT5_VERSION_MAJOR)/$(QT5_VERSION)/submodules
+ else
+ QT5_VERSION_MAJOR = 5.6
+ QT5_VERSION = $(QT5_VERSION_MAJOR).3
+-QT5_SITE = http://download.qt.io/official_releases/qt/$(QT5_VERSION_MAJOR)/$(QT5_VERSION)/submodules
+-QT5_SNAPSHOTS_SITE = http://download.qt.io/snapshots/qt/$(QT5_VERSION_MAJOR)/$(QT5_VERSION)/latest_src/submodules
+ endif
++QT5_SITE = http://download.qt.io/official_releases/qt/$(QT5_VERSION_MAJOR)/$(QT5_VERSION)/submodules
+ 
+ include $(sort $(wildcard package/qt5/*/*.mk))
+ 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.15.0
