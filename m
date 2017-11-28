@@ -1,41 +1,78 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 28 Nov 2017 17:23:21 +0200
-Subject: [Buildroot] [PATCH] libevent: disable openssl for host
-Message-ID: <ee53e592d9f9bab35454d044fdcdae3ac67a9b45.1511882601.git.baruch@tkos.co.il>
+From: =?UTF-8?q?Ga=C3=ABl=20PORTAY?= <gael.portay@savoirfairelinux.com>
+Date: Tue, 28 Nov 2017 10:44:37 -0500
+Subject: [Buildroot] [PATCH 1/1] netcat-openbsd: depends on linux-headers >=
+ 3.12
+Message-ID: <20171128154437.1631-1-gael.portay@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As host-libevent does not depend on host-openssl, it might attempt to
-build against the host installed openssl. This does not work very well
-on various hosts. Since we don't really need encryption support in
-host-libevent just disable openssl support.
+This debian fork of netcat includes the kernel UAPI inet6 header. This
+header conflicts with the existing libc inet header and causes
+redefinition of structures when they are both included.
 
-Disable build of example code as we already do for the target libevent.
+The compiler raises the following error:
 
-Should fix:
-http://autobuild.buildroot.net/results/403/403886e3afc6d5d18a138f4b0651f3c5a50ed064/
-http://autobuild.buildroot.net/results/a2a/a2a84692049b0fb8038f1ad4b06554ecdac32e3c/
-http://autobuild.buildroot.net/results/a36/a36abb1ac556a8b50e140ea1851955744b152608/
+	/home/buildroot/build/instance-0/output/host/x86_64-buildroot-linux-gnu/sysroot/usr/include/linux/in6.h:30:8: error: redefinition of 'struct in6_addr' struct in6_addr {
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+From version 3.12 of linux, the kernel UAPI header has mechanisms in
+libc-compat.h to prevent such situations (see __UAPI_DEF_SOCKADDR_IN6
+macros).
+
+Unfortunately the build is broken when toolchains do not satisfy at least
+the linux headers condition (>= 3.12).
+
+The package now depends on the toolchain headers at least 3.12.
+
+Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
 ---
- package/libevent/libevent.mk | 1 +
+
+Hi all,
+
+This patch fixes the build issue[1] of the netcat-openbsd package for
+x86_64[2] on branch next. I assume it also fixes the mips64el issue[3].
+
+It fixes the issue from a configuration point of view. I believe the
+issue cannot be solved. As explain in the commit message, the build is
+broken because the linux-headers must be at least 3.12.
+  
+I need your help to make sure my understanding of the issue is right.
+
+This fork of netcat uses some linux features, and the linux uapi header
+must be included. It uses macros that are defined in the linux uapi
+header which are not defined in the libc header.
+
+I have tested by installing a new version of the kernel header using the
+commands below.
+
+	$ make BR2_DEFAULT_KERNEL_HEADERS=3.12 linux-headers 
+	$ make netcat-openbsd-rebuild
+
+And it worked.
+
+Regards,
+Gael
+
+[1]: http://lists.busybox.net/pipermail/buildroot/2017-November/207809.html
+[2]: http://autobuild.buildroot.net/results/3c42c1eadcbfc084a1e55bf1df0450aaf1f2139c/
+[3]: http://autobuild.buildroot.net/results/de0dd8983243ee5d1fb189add8ce445177fb87c2/
+
+ package/netcat-openbsd/Config.in | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/libevent/libevent.mk b/package/libevent/libevent.mk
-index fc4108f6fd08..65bf1c2b7b9f 100644
---- a/package/libevent/libevent.mk
-+++ b/package/libevent/libevent.mk
-@@ -12,6 +12,7 @@ LIBEVENT_LICENSE_FILES = LICENSE
- # For 0001-Disable-building-test-programs.patch
- LIBEVENT_AUTORECONF = YES
- LIBEVENT_CONF_OPTS = --disable-samples
-+HOST_LIBEVENT_CONF_OPTS = --disable-samples --disable-openssl
- 
- define LIBEVENT_REMOVE_PYSCRIPT
- 	rm $(TARGET_DIR)/usr/bin/event_rpcgen.py
+diff --git a/package/netcat-openbsd/Config.in b/package/netcat-openbsd/Config.in
+index 6df87ec688..5c8823c2ef 100644
+--- a/package/netcat-openbsd/Config.in
++++ b/package/netcat-openbsd/Config.in
+@@ -4,6 +4,7 @@ config BR2_PACKAGE_NETCAT_OPENBSD
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC
+ 	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
+ 	select BR2_PACKAGE_LIBBSD
+ 	help
+ 	  A simple Unix utility which reads and writes data across network
 -- 
 2.15.0
