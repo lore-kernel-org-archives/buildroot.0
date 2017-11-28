@@ -1,33 +1,37 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 28 Nov 2017 23:44:41 +0100
-Subject: [Buildroot] Analysis of build results for 2017-11-25
-In-Reply-To: <20171126152140.0fd3902b@windsurf.home>
-References: <20171126070006.676FA209DE@mail.free-electrons.com>
- <20171126152140.0fd3902b@windsurf.home>
-Message-ID: <452b6c58-7fc9-e753-6436-ed305e4d62e9@mind.be>
+From: Sam Voss <sam.voss@rockwellcollins.com>
+Date: Tue, 28 Nov 2017 16:55:48 -0600
+Subject: [Buildroot] [V2 1/1] package/strongswan: Install libraries to
+ /usr/lib
+In-Reply-To: <20171021095108.0ea87545@windsurf>
+References: <1504192688-56951-1-git-send-email-sam.voss@rockwellcollins.com>
+ <20171021095108.0ea87545@windsurf>
+Message-ID: <CAH=K+6khy3cY1KUdJc6X=jYLoDus-1u2Tjk6CyGTenSb_zQGhQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Thomas, All,
 
+On Sat, Oct 21, 2017 at 2:51 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> However, I did a test build, and I do see /usr/lib/ipsec kept in the
+> RPATH:
+>
+>  0x0000001d (RUNPATH)                    Library runpath: [/usr/lib/ipsec]
 
-On 26-11-17 15:21, Thomas Petazzoni wrote:
->> microblazeel |                 libxslt-1.1.29 | TIM | http://autobuild.buildroot.net/results/2000c1282f66303a0e4ced19307b91ff931868a7 |     
-> I don't see anything wrong there, perhaps just the build really was too
-> long.
+My tests seem to be showing the same. I'm going to have to see if it
+is something we injected ourselves causing the issue.
 
- The build of gst-ffmpeg took almost 7 hours, that's not normal... Perhaps
-Matt's autobuilder got stuck somehow around that time?
+> So, even though installing the libraries in /usr/lib is indeed better
+> for consistency, I'd like to understand why you had an issue running
+> the Strongswan program.
 
- Regards,
- Arnout
+I can fix the commit message if you'd still like the patch, else I'll
+leave it as is until I get some more explanation on why we had this
+issue in the first place.
 
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Thanks!
+
+Sam
