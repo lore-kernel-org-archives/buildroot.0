@@ -1,70 +1,61 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 28 Nov 2017 10:42:22 +0100
-Subject: [Buildroot] [PATCH 1/1] qt5: remove unused QT5_SNAPSHOTS_SITE
-In-Reply-To: <20171128010517.26420-1-gael.portay@savoirfairelinux.com>
-References: <20171128010517.26420-1-gael.portay@savoirfairelinux.com>
-Message-ID: <20171128094222.GB2889@scaer>
+Date: Tue, 28 Nov 2017 11:09:59 +0100
+Subject: [Buildroot] [PATCH] support/scripts/size-stats: avoid
+ divide-by-zero
+In-Reply-To: <20171128033707.15072-1-yurovsky@gmail.com>
+References: <20171127220849.5f62e6fc@windsurf.home>
+ <20171128033707.15072-1-yurovsky@gmail.com>
+Message-ID: <20171128100959.GD2889@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ga?l, All,
+Andrey, Thomas, All,
 
-On 2017-11-27 20:05 -0500, Ga?l PORTAY spake thusly:
-> The variable QT5_SNAPSHOTS_SITE was introduced in commit 9d5ac9698 to
-> fetch sources of obsolete modules. It was used to download qt5webkit
-> tarballs.
+On 2017-11-27 19:37 -0800, Andrey Yurovsky spake thusly:
+> Some packages (ex: skeleton-init-systemd) have a zero size so we cannot
+> divide by the package size. In that case make their percent zero
+> explicitly and avoid a ZeroDivisionError exception.
 > 
-> The variable is not referenced anymore since the qt5webkit tarballs are
-> downloaded from the Qt community release site.
-
-This commit not only gets rid of the variable, but also de-duplicates
-the _SITE variable. This should have been mentioned as well.
-
-    package/qt5: simplify and cleanup _SITE variables
-
-    [your commit log]
-
-    Since the introduction of qt-5.9 in aa1c40ba3, the QT5_SITE variable
-    was duplicates for no good reason.
-
-    Signed-off-by: You
-
-With the above fixed:
+> Signed-off-by: Andrey Yurovsky <yurovsky@gmail.com>
 
 Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
 
-> Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
 > ---
->  package/qt5/qt5.mk | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
+>  support/scripts/size-stats | 12 ++++++++++--
+>  1 file changed, 10 insertions(+), 2 deletions(-)
 > 
-> diff --git a/package/qt5/qt5.mk b/package/qt5/qt5.mk
-> index 0e49c6b58b..5d63433666 100644
-> --- a/package/qt5/qt5.mk
-> +++ b/package/qt5/qt5.mk
-> @@ -7,13 +7,11 @@
->  ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
->  QT5_VERSION_MAJOR = 5.9
->  QT5_VERSION = $(QT5_VERSION_MAJOR).2
-> -QT5_SITE = http://download.qt.io/official_releases/qt/$(QT5_VERSION_MAJOR)/$(QT5_VERSION)/submodules
->  else
->  QT5_VERSION_MAJOR = 5.6
->  QT5_VERSION = $(QT5_VERSION_MAJOR).3
-> -QT5_SITE = http://download.qt.io/official_releases/qt/$(QT5_VERSION_MAJOR)/$(QT5_VERSION)/submodules
-> -QT5_SNAPSHOTS_SITE = http://download.qt.io/snapshots/qt/$(QT5_VERSION_MAJOR)/$(QT5_VERSION)/latest_src/submodules
->  endif
-> +QT5_SITE = http://download.qt.io/official_releases/qt/$(QT5_VERSION_MAJOR)/$(QT5_VERSION)/submodules
+> diff --git a/support/scripts/size-stats b/support/scripts/size-stats
+> index af45000359..3ff2a1ce18 100755
+> --- a/support/scripts/size-stats
+> +++ b/support/scripts/size-stats
+> @@ -178,9 +178,17 @@ def gen_files_csv(filesdict, pkgsizes, outputf):
+>                       "File size in system (%)"])
+>          for f, (pkgname, filesize) in filesdict.items():
+>              pkgsize = pkgsizes[pkgname]
+> +
+> +            if pkgsize == 0:
+> +                percent_pkg = 0
+> +            else:
+> +                percent_pkg = float(filesize) / pkgsize * 100
+> +
+> +            percent_total = float(filesize) / total * 100
+> +
+>              wr.writerow([f, pkgname, filesize, pkgsize,
+> -                         "%.1f" % (float(filesize) / pkgsize * 100),
+> -                         "%.1f" % (float(filesize) / total * 100)])
+> +                         "%.1f" % percent_pkg,
+> +                         "%.1f" % percent_total])
 >  
->  include $(sort $(wildcard package/qt5/*/*.mk))
 >  
+>  #
 > -- 
-> 2.15.0
+> 2.14.3
 > 
 > _______________________________________________
 > buildroot mailing list
