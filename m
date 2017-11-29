@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 29 Nov 2017 21:40:32 +0100
+Date: Wed, 29 Nov 2017 21:40:57 +0100
 Subject: [Buildroot] [PATCH next] musl: bump to 1.1.18
-In-Reply-To: <20171127112243.76qgr57fupq3uer3@sapphire.tkos.co.il>
+In-Reply-To: <20171127101732.14622-1-thomas.petazzoni@free-electrons.com>
 References: <20171127101732.14622-1-thomas.petazzoni@free-electrons.com>
- <20171127112243.76qgr57fupq3uer3@sapphire.tkos.co.il>
-Message-ID: <20171129214032.0555cebd@windsurf.home>
+Message-ID: <20171129214057.46ee53fa@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,25 +12,27 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 27 Nov 2017 13:22:43 +0200, Baruch Siach wrote:
-> Hi Thomas,
+On Mon, 27 Nov 2017 11:17:32 +0100, Thomas Petazzoni wrote:
+> Patch 0002-arm-atomics-asm-with-new-binutils.patch is upstream as of
+> commit b261a24256792177a5f0531dbb25cc6267220ca5.
 > 
-> On Mon, Nov 27, 2017 at 11:17:32AM +0100, Thomas Petazzoni wrote:
-> > diff --git a/package/musl/musl.hash b/package/musl/musl.hash
-> > index f3f3741092..db89a72c45 100644
-> > --- a/package/musl/musl.hash
-> > +++ b/package/musl/musl.hash
-> > @@ -1,2 +1,2 @@
-> >  # Locally calculated after checking pgp signature  
+> Patch 0003-Makefile-include-per-arch-Makefile-before-Makefile is
+> upstream as of commit 45ca5d3fcb6f874bf5ba55d0e9651cef68515395.
 > 
-> Having a link to the signature here would be nice:
-> 
->    http://www.musl-libc.org/releases/musl-1.1.18.tar.gz.asc
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  .../0002-arm-atomics-asm-with-new-binutils.patch   | 43 ----------------------
+>  ...ing-callback-enforce-MAXADDRS-to-preclude.patch | 35 ------------------
+>  package/musl/musl.hash                             |  2 +-
+>  package/musl/musl.mk                               |  2 +-
+>  4 files changed, 2 insertions(+), 80 deletions(-)
+>  delete mode 100644 package/musl/0002-arm-atomics-asm-with-new-binutils.patch
+>  delete mode 100644 package/musl/0003-in-dns-parsing-callback-enforce-MAXADDRS-to-preclude.patch
 
-Good point, I fixed that when applying. Thanks!
+Applied to next, thanks.
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
+Embedded Linux, Kernel and Android engineering
 http://free-electrons.com
