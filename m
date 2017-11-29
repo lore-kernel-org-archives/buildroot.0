@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 29 Nov 2017 17:36:10 +0100
-Subject: [Buildroot] [PATCH] libmicrohttpd: bump to version 0.9.57
-In-Reply-To: <b4ba276730ebca078748a2a3d6ce79a7eabc8e22.1511877292.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Tue, 28 Nov 2017 15:54:52 +0200")
-References: <b4ba276730ebca078748a2a3d6ce79a7eabc8e22.1511877292.git.baruch@tkos.co.il>
-Message-ID: <87wp29kpol.fsf@dell.be.48ers.dk>
+Date: Wed, 29 Nov 2017 17:36:38 +0100
+Subject: [Buildroot] [PATCH] gnutls: bump to version 3.5.16
+In-Reply-To: <355fab3fe05f52569a485e86bcc50e5e5a0ec13a.1511878230.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Tue, 28 Nov 2017 16:10:30 +0200")
+References: <355fab3fe05f52569a485e86bcc50e5e5a0ec13a.1511878230.git.baruch@tkos.co.il>
+Message-ID: <87shcxkpnt.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,18 +13,10 @@ To: buildroot@busybox.net
 
 >>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > Drop libgcrypt dependency for SSL support; with newer version of gnutls
- > libgcrypt is not needed.
+ > Add link to tarball signature.
+ > Add license hashes.
 
- > Drop the LIBS fix for static linking with gnutls that has been
- > introduced in commit 2d3d6d258bb (libmicrohttpd: fix static linking with
- > gnutls). gnutls does not support static linking anymore.
-
- > Fix a comment typo.
-
- > Add license hash.
-
- > Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > Cc: Matt Weber <matthew.weber@rockwellcollins.com>
  > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
 Committed to next, thanks.
