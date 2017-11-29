@@ -1,52 +1,42 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 30 Nov 2017 00:08:45 +0100
-Subject: [Buildroot] [PATCH 8/8] gitlab-ci: run check-package
-In-Reply-To: <cover.1511996903.git.yann.morin.1998@free.fr>
-References: <cover.1511996903.git.yann.morin.1998@free.fr>
-Message-ID: <b9a9596c19817cf5a70c17acaa23657ed3597f01.1511996903.git.yann.morin.1998@free.fr>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Thu, 30 Nov 2017 00:33:34 +0100
+Subject: [Buildroot] [for-next] package/efl: bump to 1.20.6
+Message-ID: <20171129233334.6895-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
----
- .gitlab-ci.yml    | 4 ++++
- .gitlab-ci.yml.in | 4 ++++
- 2 files changed, 8 insertions(+)
+https://www.enlightenment.org/news/efl-1.20.6
 
-diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index 0dddb22f12..c80a6b129b 100644
---- a/.gitlab-ci.yml
-+++ b/.gitlab-ci.yml
-@@ -30,6 +30,10 @@ check-DEVELOPERS:
-     script:
-         - "! utils/get-developers | grep -v 'No action specified'"
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+---
+ package/efl/efl.hash | 4 ++--
+ package/efl/efl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/efl/efl.hash b/package/efl/efl.hash
+index edc72c2..8b05430 100644
+--- a/package/efl/efl.hash
++++ b/package/efl/efl.hash
+@@ -1,2 +1,2 @@
+-# From https://download.enlightenment.org/rel/libs/efl/efl-1.20.5.tar.xz.sha256
+-sha256	da5e69b81c94b79f4e31cfc312413c36acb7429e1cb6fd4397a1251a0e23c21c 	efl-1.20.5.tar.xz
++# From https://download.enlightenment.org/rel/libs/efl/efl-1.20.6.tar.xz.sha256
++sha256	56c67ea77435753a4f324a0a13488ba58f4ed7eb35a97c1a354fdc79c39a32c1	efl-1.20.6.tar.xz
+diff --git a/package/efl/efl.mk b/package/efl/efl.mk
+index e0748d2..5a82479 100644
+--- a/package/efl/efl.mk
++++ b/package/efl/efl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+check-package:
-+    script:
-+        - find . -type f -name '*.mk' -exec ./utils/check-package {} +
-+
- .defconfig: &defconfig
-     # Running the defconfigs for every push is too much, so limit to
-     # explicit triggers through the API.
-diff --git a/.gitlab-ci.yml.in b/.gitlab-ci.yml.in
-index 33c7b13725..0d2e239414 100644
---- a/.gitlab-ci.yml.in
-+++ b/.gitlab-ci.yml.in
-@@ -30,6 +30,10 @@ check-DEVELOPERS:
-     script:
-         - "! utils/get-developers | grep -v 'No action specified'"
- 
-+check-package:
-+    script:
-+        - find . -type f -name '*.mk' -exec ./utils/check-package {} +
-+
- .defconfig: &defconfig
-     # Running the defconfigs for every push is too much, so limit to
-     # explicit triggers through the API.
+-EFL_VERSION = 1.20.5
++EFL_VERSION = 1.20.6
+ EFL_SOURCE = efl-$(EFL_VERSION).tar.xz
+ EFL_SITE = http://download.enlightenment.org/rel/libs/efl
+ EFL_LICENSE = BSD-2-Clause, LGPL-2.1+, GPL-2.0+
 -- 
-2.11.0
+2.9.5
