@@ -1,29 +1,33 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 29 Nov 2017 16:12:13 +0000
-Subject: [Buildroot] [Bug 10531] QtWebengine doesn't build if the host
- hasn't a 32 bits C++ compiler working
-In-Reply-To: <bug-10531-163@https.bugs.busybox.net/>
-References: <bug-10531-163@https.bugs.busybox.net/>
-Message-ID: <bug-10531-163-OrXTupm64G@https.bugs.busybox.net/>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 29 Nov 2017 17:36:10 +0100
+Subject: [Buildroot] [PATCH] libmicrohttpd: bump to version 0.9.57
+In-Reply-To: <b4ba276730ebca078748a2a3d6ce79a7eabc8e22.1511877292.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Tue, 28 Nov 2017 15:54:52 +0200")
+References: <b4ba276730ebca078748a2a3d6ce79a7eabc8e22.1511877292.git.baruch@tkos.co.il>
+Message-ID: <87wp29kpol.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=10531
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-Yann E. MORIN <yann.morin.1998@free.fr> changed:
+ > Drop libgcrypt dependency for SSL support; with newer version of gnutls
+ > libgcrypt is not needed.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |yann.morin.1998 at free.fr
+ > Drop the LIBS fix for static linking with gnutls that has been
+ > introduced in commit 2d3d6d258bb (libmicrohttpd: fix static linking with
+ > gnutls). gnutls does not support static linking anymore.
 
---- Comment #2 from Yann E. MORIN <yann.morin.1998@free.fr> ---
-More globally: qt5webengine will build host tools that are the
-same bitness as the target, so it is not possible to build for
-a 64-bit target on a 32-bit host.
+ > Fix a comment typo.
+
+ > Add license hash.
+
+ > Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+
+Committed to next, thanks.
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
