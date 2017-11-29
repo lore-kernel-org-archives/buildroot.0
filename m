@@ -1,56 +1,100 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 29 Nov 2017 10:44:01 +0100
-Subject: [Buildroot] [PATCH 1/3 v3] zlib-ng: new package
-In-Reply-To: <20171128232936.23067-1-stefan.froberg@petroprogram.com>
-References: <20171128232936.23067-1-stefan.froberg@petroprogram.com>
-Message-ID: <20171129104401.49254392@windsurf.home>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 29 Nov 2017 10:50:06 +0100
+Subject: [Buildroot] [git commit] docs/website: update for 2017.08.2
+Message-ID: <20171129094312.A857782223@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=d699f92bef5fce621f64a00cc91cdb0558688dd8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thanks for this new iteration!
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ docs/website/download.html | 18 +++++++++---------
+ docs/website/news.html     | 19 +++++++++++++++++++
+ 2 files changed, 28 insertions(+), 9 deletions(-)
 
-On Wed, 29 Nov 2017 01:29:34 +0200, Stefan Fr?berg wrote:
-> Signed-off-by: Stefan Fr?berg <stefan.froberg@petroprogram.com>
-> 
-> Changes v2 -> v3:
-> 
-> - Add myself to DEVELOPERS files (by Thomas).
-> - Update github download url.
-> - Keep only sha256 of the locally computed hashes.
-> - Add few cmake switches and also check for ARM support.
-> - Convert to use virtual package infrastructure (by Thomas).
-
-Changes should go after the --- mark, i.e...
-
-> 
-> ---
-
-... here.
-
-However, there's a bigger problem with your series: it's not bisectable.
-
-If I apply just PATCH 1/3, then zlib-ng is available, but will
-conflict/overwrite files installs by zlib. Not good.
-
-If I apply just PATCH 1/3 and PATCH 2/3, then all packages that use
-zlib are broken because it's now called libzlib.
-
-So basically, you need to squash PATCH 2/3 and 3/3 into a single patch,
-and make that the first patch of the series (of course removing the
-zlib-ng support in it).
-
-And then as a second patch, introduce the zlib-ng package, as a new
-provider for zlib.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/docs/website/download.html b/docs/website/download.html
+index f14f33c..2ea8890 100644
+--- a/docs/website/download.html
++++ b/docs/website/download.html
+@@ -42,37 +42,37 @@
+ 	</div>
+       </div>
+ 
+-      <h3 style="text-align: center;">Latest stable release: <b>2017.08.1</b></h3>
++      <h3 style="text-align: center;">Latest stable release: <b>2017.08.2</b></h3>
+ 
+       <div class="row mt centered">
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2017.08.1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2017.08.2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2017.08.1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2017.08.2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+-	  <h3><a href="/downloads/buildroot-2017.08.1.tar.gz">buildroot-2017.08.1.tar.gz</a></h3>
+-	  <p><a href="/downloads/buildroot-2017.08.1.tar.gz.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2017.08.2.tar.gz">buildroot-2017.08.2.tar.gz</a></h3>
++	  <p><a href="/downloads/buildroot-2017.08.2.tar.gz.sign">PGP signature</a></p>
+ 	</div>
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2017.08.1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2017.08.2.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2017.08.1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2017.08.2.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+ 
+-	  <h3><a href="/downloads/buildroot-2017.08.1.tar.bz2">buildroot-2017.08.1.tar.bz2</a></h3>
+-	  <p><a href="/downloads/buildroot-2017.08.1.tar.bz2.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2017.08.2.tar.bz2">buildroot-2017.08.2.tar.bz2</a></h3>
++	  <p><a href="/downloads/buildroot-2017.08.2.tar.bz2.sign">PGP signature</a></p>
+ 	</div>
+       </div>
+ 
+diff --git a/docs/website/news.html b/docs/website/news.html
+index b2d474f..e5b108a 100644
+--- a/docs/website/news.html
++++ b/docs/website/news.html
+@@ -9,6 +9,25 @@
+ <h2>News</h2>
+ <ul class="timeline">
+ 
++  <li class="timeline-inverted">
++    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
++    <div class="timeline-panel">
++      <div class="timeline-heading">
++	<h4 class="timeline-title">2017.08.2 released</h4>
++	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>29 November 2017</small></p>
++      </div>
++      <div class="timeline-body">
++	<p>The 2017.08.2 bugfix release is out, fixing a number of important /
++	  security related issues discovered since the 2017.08.1 release. See the
++	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2017.08.2">CHANGES</a>
++	  file for more details, read the
++	  <a href="http://lists.busybox.net/pipermail/buildroot/2017-November/208174.html">announcement</a>
++	  and go to the <a href="/downloads/">downloads page</a> to pick up the
++	  <a href="/downloads/buildroot-2017.08.2.tar.bz2">2017.08.2 release</a>.</p>
++      </div>
++    </div>
++  </li>
++
+   <li>
+     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
+     <div class="timeline-panel">
