@@ -1,81 +1,56 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 29 Nov 2017 09:26:32 +0100
-Subject: [Buildroot] Buildroot 2017.08.2 released
-Message-ID: <87a7z5a3t3.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 29 Nov 2017 10:44:01 +0100
+Subject: [Buildroot] [PATCH 1/3 v3] zlib-ng: new package
+In-Reply-To: <20171128232936.23067-1-stefan.froberg@petroprogram.com>
+References: <20171128232936.23067-1-stefan.froberg@petroprogram.com>
+Message-ID: <20171129104401.49254392@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hello,
 
-Buildroot is a simple tool for creating complete embedded Linux systems
-(http://buildroot.org).
+Thanks for this new iteration!
 
-Buildroot 2017.08.2 is released - Go download it at:
+On Wed, 29 Nov 2017 01:29:34 +0200, Stefan Fr?berg wrote:
+> Signed-off-by: Stefan Fr?berg <stefan.froberg@petroprogram.com>
+> 
+> Changes v2 -> v3:
+> 
+> - Add myself to DEVELOPERS files (by Thomas).
+> - Update github download url.
+> - Keep only sha256 of the locally computed hashes.
+> - Add few cmake switches and also check for ARM support.
+> - Convert to use virtual package infrastructure (by Thomas).
 
-http://buildroot.org/downloads/buildroot-2017.08.2.tar.gz
+Changes should go after the --- mark, i.e...
 
-or
+> 
+> ---
 
-http://buildroot.org/downloads/buildroot-2017.08.2.tar.bz2
+... here.
 
-Or get it from Git:
+However, there's a bigger problem with your series: it's not bisectable.
 
-git://git.buildroot.org/buildroot
+If I apply just PATCH 1/3, then zlib-ng is available, but will
+conflict/overwrite files installs by zlib. Not good.
 
-Buildroot 2017.08.2 is a bugfix release, fixing a number of important /
-security related issues discovered since the 2017.08.1 release.
+If I apply just PATCH 1/3 and PATCH 2/3, then all packages that use
+zlib are broken because it's now called libzlib.
 
-- Security fixes for apr, apr-util, imagemagick, irssi, libcurl,
-  libpjsip, libplist, openssh, openssl, postgresql, quagga, redis, ruby,
-  samba4, sdl2, snmp++, webkitgtk, wget, wireshark
+So basically, you need to squash PATCH 2/3 and 3/3 into a single patch,
+and make that the first patch of the series (of course removing the
+zlib-ng support in it).
 
-- Fixes for download/compilation/runtime issues in argp-standalone,
-  collectd, dvb-apps, ffmpeg, go-bootstrap, google-breakpad, gstreamer,
-  jimtcl, kvm-unit-test, libfastjson, libglib2, libidn, localedef,
-  lttng-tools, luajit, mesa3d, moarvm, mp4v2, openssh, oracle-mysql,
-  python3, qt, sdl2, swupdate, ti-gfx, uboot-tools, usb_modeswitch,
-  vboot-utils, xapp_xdriinfo.
+And then as a second patch, introduce the zlib-ng package, as a new
+provider for zlib.
 
-- Qt 5.6 series updated to 5.6.3
+Thanks!
 
-- Reproducible: Do not override SOURCE_DATE_EPOCH if already set
-  in the environment.
-
-- Makefiles: Workaround include order issues for certain make
-  versions by explicitly sorting the result of wildcard where it
-  matters.
-
-Users of the affected packages are strongly encouraged to upgrade.
-
-Many thanks to all the people contributing to this release:
-
-git shortlog -sn 2017.08.1..
-
-    25  Peter Korsgaard
-    12  Bernd Kuhls
-     9  Thomas Petazzoni
-     5  Adam Duskett
-     4  Yann E. MORIN
-     3  Baruch Siach
-     3  Matt Weber
-     3  Peter Seiderer
-     2  Adrian Perez de Castro
-     2  Andrey Smirnov
-     2  Fabio Estevam
-     1  Alex Suykov
-     1  Andr? Hentschel
-     1  Arnout Vandecappelle (Essensium/Mind)
-     1  Fabrice Fontaine
-     1  Ga?l PORTAY
-     1  Luca Ceresoli
-     1  Maksim Salau
-     1  Olivier Schonken
-     1  Philippe Proulx
-     1  Romain Naour
-     1  Scott Ellis
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
