@@ -1,70 +1,103 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 29 Nov 2017 08:00:09 +0100 (CET)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2017-11-28
-Message-ID: <20171129070009.BC0F72037D@mail.free-electrons.com>
+From: Jagan Teki <jagan@amarulasolutions.com>
+Date: Wed, 29 Nov 2017 12:37:05 +0530
+Subject: [Buildroot] [PATCH v4 2/3] board: Add Vyasa RK388 board support
+In-Reply-To: <20171123224321.447ed853@windsurf.lan>
+References: <1510997329-4111-1-git-send-email-jagan@amarulasolutions.com>
+ <1510997329-4111-2-git-send-email-jagan@amarulasolutions.com>
+ <20171123224321.447ed853@windsurf.lan>
+Message-ID: <CAMty3ZBNPnaDxCN+0fmB_VLbNXxovXSyE618LB_5KA7kXt74Lw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Thomas,
 
-Build statistics for 2017-11-28
-===============================
+On Fri, Nov 24, 2017 at 3:13 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
+>
+> Title is wrong I believe, it shoul dbe RK3288 I guess.
+>
+> On Sat, 18 Nov 2017 10:28:48 +0100, Jagan Teki wrote:
+>
+>> diff --git a/board/amarula/vyasa/linux_gmac.fragment b/board/amarula/vyasa/linux_gmac.fragment
+>> new file mode 100644
+>> index 0000000..dd458c7
+>> --- /dev/null
+>> +++ b/board/amarula/vyasa/linux_gmac.fragment
+>> @@ -0,0 +1,3 @@
+>> +# Currently kernel mainline exhibits issues when running rockchip gmac
+>> +# on the board, so enable it as loadable module and insert it later
+>> +CONFIG_DWMAC_ROCKCHIP=m
+>> diff --git a/board/amarula/vyasa/post-build.sh b/board/amarula/vyasa/post-build.sh
+>> new file mode 100755
+>> index 0000000..ffbbcde
+>> --- /dev/null
+>> +++ b/board/amarula/vyasa/post-build.sh
+>> @@ -0,0 +1,9 @@
+>> +#!/bin/sh
+>> +
+>> +MKIMAGE=$HOST_DIR/bin/mkimage
+>
+> So you need host-uboot-tools, but it is not enabled in your defconfig.
+>
+>
+>> diff --git a/configs/amarula_vyasa_rk3288_defconfig b/configs/amarula_vyasa_rk3288_defconfig
+>> new file mode 100644
+>> index 0000000..5e62ac0
+>> --- /dev/null
+>> +++ b/configs/amarula_vyasa_rk3288_defconfig
+>> @@ -0,0 +1,59 @@
+>> +# Architecture
+>> +BR2_arm=y
+>> +BR2_cortex_a17=y
+>> +BR2_ARM_FPU_NEON_VFPV4=y
+>> +
+>> +# Linux headers same as kernel, a 4.13 series
+>> +BR2_KERNEL_HEADERS_4_13=y
+>> +
+>> +# Toolchain
+>> +BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
+>> +BR2_TOOLCHAIN_BUILDROOT_CXX=y
+>
+> Please keep the default toolchain configuration.
+>
+>> +
+>> +# Bootloader
+>> +BR2_TARGET_UBOOT=y
+>> +BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+>> +BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+>> +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.11"
+>> +BR2_TARGET_UBOOT_BOARD_DEFCONFIG="vyasa-rk3288"
+>> +BR2_TARGET_UBOOT_NEEDS_DTC=y
+>> +BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+>> +BR2_TARGET_UBOOT_FORMAT_DTB_IMG=y
+>> +BR2_TARGET_UBOOT_SPL=y
+>> +BR2_TARGET_UBOOT_SPL_NAME="spl/u-boot-spl-dtb.bin tpl/u-boot-tpl.bin"
+>> +
+>> +# Kernel
+>> +BR2_LINUX_KERNEL=y
+>> +BR2_LINUX_KERNEL_CUSTOM_GIT=y
+>> +BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git"
+>> +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="7e8a1fd62911a59f1f95d4620e89603230fdd6f9"
+>
+> Using linux-next doesn't work, as it gets rebased constantly. The
+> commit 7e8a1fd62911a59f1f95d4620e89603230fdd6f9 no longer exists. You
+> have to wait for the support for this board to land into the mainline
+> kernel, or point to a vendor-specific Git tree.
 
-      branch |  OK | NOK | TIM | TOT |
-   2017.08.x |  11 |   0 |   0 |  11 |
-      master | 176 |   4 |   0 | 180 |
-        next |  43 |   8 |   0 |  51 |
+Can't we use linux-next at all? you are with head commits which were
+always changes during rebase, but I've used the board specific commit
+in v5 and that will always unchanged.
 
-Results for branch 'master'
-===========================
+If you remember I've asked during ELCE, Prague about using linux-next
+on BR and we discussed the same scenario.
 
-Classification of failures by reason
-------------------------------------
-
-               asterisk-14.5.0 | 1 
-                   jamvm-2.0.0 | 1 
-             lttng-tools-2.9.5 | 1 
-                   zmqpp-4.1.2 | 1 
-
-
-Detail of failures
-------------------
-
-    mips64el |                asterisk-14.5.0 | NOK | http://autobuild.buildroot.net/results/2b8c810bd8775413fd4567b2f8495be70b7bb808 |     
-      mipsel |                    jamvm-2.0.0 | NOK | http://autobuild.buildroot.net/results/ed88a03eda6bf40634534578e6e870a25ed66261 | ORPH
-         arm |              lttng-tools-2.9.5 | NOK | http://autobuild.buildroot.net/results/624f2db9baad4f1d6c41ff74dc6310a4228679f2 |     
-        or1k |                    zmqpp-4.1.2 | NOK | http://autobuild.buildroot.net/results/e09731abe257ee187e20aa0e75beee22004bd3e2 |     
-
-Results for branch 'next'
-=========================
-
-Classification of failures by reason
-------------------------------------
-
-dvb-apps-3d43b280298c39a67d... | 2 
-                     avahi-0.7 | 1 
-                  fwup-v0.15.4 | 1 
-             lttng-tools-2.9.5 | 1 
-                   mp4v2-2.0.0 | 1 
-           oracle-mysql-5.1.73 | 1 
-pdbg-77158819158d1d7053a737... | 1 
-
-
-Detail of failures
-------------------
-
-     aarch64 |                      avahi-0.7 | NOK | http://autobuild.buildroot.net/results/8d9e1e6f2ff38666471be74445b2c6dcdfcb20f6 | ORPH
-         arc | dvb-apps-3d43b280298c39a67d... | NOK | http://autobuild.buildroot.net/results/38e89e51fffe5693a12f6338e269faf7d9468081 |     
-      xtensa | dvb-apps-3d43b280298c39a67d... | NOK | http://autobuild.buildroot.net/results/e496e4ca3c6062f9e88e4e7ddf271635a2bff71c |     
-         arc |                   fwup-v0.15.4 | NOK | http://autobuild.buildroot.net/results/14dc3e9de265923f3dda65164b72fe91b47a0c09 |     
-      x86_64 |              lttng-tools-2.9.5 | NOK | http://autobuild.buildroot.net/results/8b24616e21f54e6cc73c1c4fecaa49db49ed2aa0 |     
-         arc |                    mp4v2-2.0.0 | NOK | http://autobuild.buildroot.net/results/6e7c0487d4463d616ce227973eaec30562e71e0d |     
-         arc |            oracle-mysql-5.1.73 | NOK | http://autobuild.buildroot.net/results/6269f39fa73d2e1f83b20b4e3cfdca106ee22a27 | ORPH
-        bfin | pdbg-77158819158d1d7053a737... | NOK | http://autobuild.buildroot.net/results/e03281e1d929745c1799324c6f750c7449719b26 |     
-
-
+thanks!
 -- 
-http://autobuild.buildroot.net
+Jagan Teki
+Senior Linux Kernel Engineer | Amarula Solutions
+U-Boot, Linux | Upstream Maintainer
+Hyderabad, India.
