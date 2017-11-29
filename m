@@ -1,49 +1,39 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 30 Nov 2017 00:08:43 +0100
-Subject: [Buildroot] [PATCH 6/8] packages: fix trailing spaces and slash
+Date: Thu, 30 Nov 2017 00:08:44 +0100
+Subject: [Buildroot] [PATCH 7/8] package/asterisk: add comment about a
+ check-package false positive
 In-Reply-To: <cover.1511996903.git.yann.morin.1998@free.fr>
 References: <cover.1511996903.git.yann.morin.1998@free.fr>
-Message-ID: <aefa5c8ef3aac130f3a536e692e520affede8e4e.1511996903.git.yann.morin.1998@free.fr>
+Message-ID: <d2844704851e4e8ff93c3007e9e67e2a339e11c7.1511996903.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-... as reported by utils/check-package.
+This variable is inherited from the target variant, which is
+autoreconfed. But the host variant is only the menucselect
+sub-directory, which we do not want to autoreconf, so the explcit
+NO is required.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Adam Duskett <aduskett@gmail.com>
+Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/busybox/busybox.mk | 2 +-
- package/ntp/ntp.mk         | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/asterisk/asterisk.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index 1aeeeef4bf..8b720b30b8 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -65,7 +65,7 @@ define BUSYBOX_PERMISSIONS
- # Set permissions on all applets with BB_SUID_REQUIRE and BB_SUID_MAYBE.
- # 12 Applets are pulled from applets.h using grep command :
- #  grep -r -e "APPLET.*BB_SUID_REQUIRE\|APPLET.*BB_SUID_MAYBE" \
--#  $(@D)/include/applets.h 
-+#  $(@D)/include/applets.h
- # These applets are added to the device table and the makedev file
- # ignores the files with type 'F' ( optional files).
- 	/usr/bin/wall 			 F 4755 0  0 - - - - -
-diff --git a/package/ntp/ntp.mk b/package/ntp/ntp.mk
-index 6605c3b85b..05619aef7c 100644
---- a/package/ntp/ntp.mk
-+++ b/package/ntp/ntp.mk
-@@ -17,7 +17,7 @@ NTP_CONF_OPTS = \
- 	--disable-tickadj \
- 	--disable-debugging \
- 	--with-yielding-select=yes \
--	--disable-local-libevent \
-+	--disable-local-libevent
+diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
+index 50512c0b3a..21dca549a0 100644
+--- a/package/asterisk/asterisk.mk
++++ b/package/asterisk/asterisk.mk
+@@ -285,6 +285,7 @@ HOST_ASTERISK_LICENSE_FILES = COPYING
  
- # 0002-ntp-syscalls-fallback.patch
- # 0003-ntpq-fpic.patch
+ # No need to autoreconf for the host variant,
+ # so do not inherit the target setup.
++# check-package reports an issue here, but that's a false positive. Ignore.
+ HOST_ASTERISK_AUTORECONF = NO
+ 
+ HOST_ASTERISK_CONF_ENV = CONFIG_LIBXML2=$(HOST_DIR)/usr/bin/xml2-config
 -- 
 2.11.0
