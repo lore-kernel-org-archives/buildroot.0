@@ -1,11 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 29 Nov 2017 21:36:51 +0100
-Subject: [Buildroot] [PATCH] support/scripts/size-stats: avoid
- divide-by-zero
-In-Reply-To: <20171128033707.15072-1-yurovsky@gmail.com>
-References: <20171127220849.5f62e6fc@windsurf.home>
- <20171128033707.15072-1-yurovsky@gmail.com>
-Message-ID: <20171129213651.6811d377@windsurf.home>
+Date: Wed, 29 Nov 2017 21:37:20 +0100
+Subject: [Buildroot] [PATCH next] uclibc: update to 1.0.27
+In-Reply-To: <20171128064757.GA27901@waldemar-brodkorb.de>
+References: <20171128064757.GA27901@waldemar-brodkorb.de>
+Message-ID: <20171129213720.56c5d87c@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,17 +12,23 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 27 Nov 2017 19:37:07 -0800, Andrey Yurovsky wrote:
-> Some packages (ex: skeleton-init-systemd) have a zero size so we cannot
-> divide by the package size. In that case make their percent zero
-> explicitly and avoid a ZeroDivisionError exception.
+On Tue, 28 Nov 2017 07:47:57 +0100, Waldemar Brodkorb wrote:
+> All patches are upstream.
+> C-sky support added. Lot of or1k NPTL bugfixes.
 > 
-> Signed-off-by: Andrey Yurovsky <yurovsky@gmail.com>
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 > ---
->  support/scripts/size-stats | 12 ++++++++++--
->  1 file changed, 10 insertions(+), 2 deletions(-)
+>  package/uclibc/0001-fix-issues-with-gdb-8.0.patch  |  72 ---------------
+>  ...handle-R_MICROBLAZE_NONE-for-ld.so-bootst.patch |  42 ---------
+>  ...03-convert-accept4-to-use-cancel.h-macros.patch | 102 ---------------------
+>  package/uclibc/uclibc.hash                         |   2 +-
+>  package/uclibc/uclibc.mk                           |   2 +-
+>  5 files changed, 2 insertions(+), 218 deletions(-)
+>  delete mode 100644 package/uclibc/0001-fix-issues-with-gdb-8.0.patch
+>  delete mode 100644 package/uclibc/0002-microblaze-handle-R_MICROBLAZE_NONE-for-ld.so-bootst.patch
+>  delete mode 100644 package/uclibc/0003-convert-accept4-to-use-cancel.h-macros.patch
 
-Applied to master, thanks.
+Applied to next, thanks.
 
 Thomas
 -- 
