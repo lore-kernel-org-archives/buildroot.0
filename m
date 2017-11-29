@@ -1,52 +1,50 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 29 Nov 2017 21:45:58 +0100
-Subject: [Buildroot] [PATCH 3/3] package/x11r7/xlib_libXfont: security bump
- to version 1.5.4
-In-Reply-To: <20171129204558.3547-1-bernd.kuhls@t-online.de>
-References: <20171129204558.3547-1-bernd.kuhls@t-online.de>
-Message-ID: <20171129204558.3547-3-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 29 Nov 2017 21:46:29 +0100
+Subject: [Buildroot] [git commit branch/next] package/qt5: simplify and
+ cleanup _SITE variables
+Message-ID: <20171129203922.2763781E7D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes CVE-2017-16611:
-https://lists.x.org/archives/xorg-announce/2017-November/002825.html
+commit: https://git.buildroot.net/buildroot/commit/?id=b865c38ea627ae59e46a67efe805b4bce101fecb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+The variable QT5_SNAPSHOTS_SITE was introduced in commit 9d5ac9698 to
+fetch sources of obsolete modules. It was used to download qt5webkit
+tarballs.
+
+The variable is not referenced anymore since the qt5webkit tarballs are
+downloaded from the Qt community release site.
+
+Since the introduction of qt-5.9 in aa1c40ba3, the QT5_SITE variable
+was duplicated for no good reason.
+
+Signed-off-by: Ga??l PORTAY <gael.portay@savoirfairelinux.com>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/x11r7/xlib_libXfont/xlib_libXfont.hash | 10 +++++-----
- package/x11r7/xlib_libXfont/xlib_libXfont.mk   |  2 +-
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ package/qt5/qt5.mk | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/package/x11r7/xlib_libXfont/xlib_libXfont.hash b/package/x11r7/xlib_libXfont/xlib_libXfont.hash
-index 78700d3657..ea04348719 100644
---- a/package/x11r7/xlib_libXfont/xlib_libXfont.hash
-+++ b/package/x11r7/xlib_libXfont/xlib_libXfont.hash
-@@ -1,5 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2017-October/002816.html
--md5 9ba75bf38ba62a6ad52550ab716da9b3  libXfont-1.5.3.tar.bz2
--sha1 628b8ca2207f09324b8926084318a2fa2edb16d1  libXfont-1.5.3.tar.bz2
--sha256 ab85c10fd2683481dfef672a77fe60e6a2039558cbc0e9bf56b5e1df471c93d0  libXfont-1.5.3.tar.bz2
--sha512 e7c8a09c4d174129e5d550194d3c3dc2b4abf797e52fe588c6002920727c52cf33b7db8d07fc69c2987e766d3af2d6ddda72f0c70eb21b135c691c97656a81b4  libXfont-1.5.3.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2017-November/002825.html
-+md5  16eaf156edd79b68038b6a7c44aa9e9b  libXfont-1.5.4.tar.bz2
-+sha1 9db050f63b9c4cb19e0dbb40575558ccb95719ca  libXfont-1.5.4.tar.bz2
-+sha256 1a7f7490774c87f2052d146d1e0e64518d32e6848184a18654e8d0bb57883242  libXfont-1.5.4.tar.bz2
-+sha512 864edbaff45c44bd92bc4b06275c73fdf584a9b88bc523a297d4c75c01ca253f438463e929af70d753ddecfa648bb0b9bcf0ec72267db9f2b1704f7afa906cb3  libXfont-1.5.4.tar.bz2
-diff --git a/package/x11r7/xlib_libXfont/xlib_libXfont.mk b/package/x11r7/xlib_libXfont/xlib_libXfont.mk
-index 13e3b211f3..30163eec6f 100644
---- a/package/x11r7/xlib_libXfont/xlib_libXfont.mk
-+++ b/package/x11r7/xlib_libXfont/xlib_libXfont.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/qt5/qt5.mk b/package/qt5/qt5.mk
+index 0e49c6b..5d63433 100644
+--- a/package/qt5/qt5.mk
++++ b/package/qt5/qt5.mk
+@@ -7,13 +7,11 @@
+ ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
+ QT5_VERSION_MAJOR = 5.9
+ QT5_VERSION = $(QT5_VERSION_MAJOR).2
+-QT5_SITE = http://download.qt.io/official_releases/qt/$(QT5_VERSION_MAJOR)/$(QT5_VERSION)/submodules
+ else
+ QT5_VERSION_MAJOR = 5.6
+ QT5_VERSION = $(QT5_VERSION_MAJOR).3
+-QT5_SITE = http://download.qt.io/official_releases/qt/$(QT5_VERSION_MAJOR)/$(QT5_VERSION)/submodules
+-QT5_SNAPSHOTS_SITE = http://download.qt.io/snapshots/qt/$(QT5_VERSION_MAJOR)/$(QT5_VERSION)/latest_src/submodules
+ endif
++QT5_SITE = http://download.qt.io/official_releases/qt/$(QT5_VERSION_MAJOR)/$(QT5_VERSION)/submodules
  
--XLIB_LIBXFONT_VERSION = 1.5.3
-+XLIB_LIBXFONT_VERSION = 1.5.4
- XLIB_LIBXFONT_SOURCE = libXfont-$(XLIB_LIBXFONT_VERSION).tar.bz2
- XLIB_LIBXFONT_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBXFONT_LICENSE = MIT
--- 
-2.11.0
+ include $(sort $(wildcard package/qt5/*/*.mk))
+ 
