@@ -1,47 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 29 Nov 2017 22:16:46 +0100
-Subject: [Buildroot] [git commit] toolchain/buildroot: add comment for glibc
- NaN-2008 headers requirement
-Message-ID: <20171201205340.5DA9880E11@busybox.osuosl.org>
+Date: Wed, 29 Nov 2017 21:46:29 +0100
+Subject: [Buildroot] [git commit] package/qt5: simplify and cleanup _SITE
+ variables
+Message-ID: <20171201205340.4F2D980AC7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9ab3058e096f4f4d53d8071fe5b248b234cc437b
+commit: https://git.buildroot.net/buildroot/commit/?id=b865c38ea627ae59e46a67efe805b4bce101fecb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Commit 4a5140ecf (toolchain/buildroot: glibc requires kernel headers >=
-4.5 with NaN-2008) added a restriction on kernel headers for glibc when
-the architecture is using naN-2008.
+The variable QT5_SNAPSHOTS_SITE was introduced in commit 9d5ac9698 to
+fetch sources of obsolete modules. It was used to download qt5webkit
+tarballs.
 
-However, such a restriction is usually associated to a comment explaining
-the restriction, so the user knows what is happening.
+The variable is not referenced anymore since the qt5webkit tarballs are
+downloaded from the Qt community release site.
 
-That comment was forgotten in 4a5140ecf. Add it now.
+Since the introduction of qt-5.9 in aa1c40ba3, the QT5_SITE variable
+was duplicated for no good reason.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Romain Naour <romain.naour@openwide.fr>
+Signed-off-by: Ga??l PORTAY <gael.portay@savoirfairelinux.com>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/toolchain-buildroot/Config.in | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/qt5/qt5.mk | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
-index cbe2038..c624350 100644
---- a/toolchain/toolchain-buildroot/Config.in
-+++ b/toolchain/toolchain-buildroot/Config.in
-@@ -72,6 +72,11 @@ comment "glibc on powerpc64le needs a toolchain w/ headers >= 3.10"
- 	depends on BR2_powerpc64le
- 	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
+diff --git a/package/qt5/qt5.mk b/package/qt5/qt5.mk
+index 0e49c6b..5d63433 100644
+--- a/package/qt5/qt5.mk
++++ b/package/qt5/qt5.mk
+@@ -7,13 +7,11 @@
+ ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
+ QT5_VERSION_MAJOR = 5.9
+ QT5_VERSION = $(QT5_VERSION_MAJOR).2
+-QT5_SITE = http://download.qt.io/official_releases/qt/$(QT5_VERSION_MAJOR)/$(QT5_VERSION)/submodules
+ else
+ QT5_VERSION_MAJOR = 5.6
+ QT5_VERSION = $(QT5_VERSION_MAJOR).3
+-QT5_SITE = http://download.qt.io/official_releases/qt/$(QT5_VERSION_MAJOR)/$(QT5_VERSION)/submodules
+-QT5_SNAPSHOTS_SITE = http://download.qt.io/snapshots/qt/$(QT5_VERSION_MAJOR)/$(QT5_VERSION)/latest_src/submodules
+ endif
++QT5_SITE = http://download.qt.io/official_releases/qt/$(QT5_VERSION_MAJOR)/$(QT5_VERSION)/submodules
  
-+# Support for MIPS NAN2008 needs headers >= 4.5
-+comment "glibc on MIPS w/ NAN2008 needs a toolchain w/ headers >= 4.5"
-+	depends on BR2_MIPS_NAN_2008
-+	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_5
-+
- config BR2_TOOLCHAIN_BUILDROOT_MUSL
- 	bool "musl"
- 	depends on BR2_aarch64	  || BR2_arm     || BR2_armeb     || BR2_i386 || \
+ include $(sort $(wildcard package/qt5/*/*.mk))
+ 
