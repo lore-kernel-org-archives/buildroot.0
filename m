@@ -1,11 +1,12 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 29 Nov 2017 08:53:34 +0100
-Subject: [Buildroot] [PATCH v5 1/3] board: Add Vyasa RK3288 board support
-In-Reply-To: <CAMty3ZCb0upojszgdTBXtMHSG++z4bJDXvFvNFVzBorChNSoKQ@mail.gmail.com>
-References: <1511893761-8292-1-git-send-email-jagan@amarulasolutions.com>
- <20171129064514.mc4iobd4roajjdtj@speedy.hunter>
- <CAMty3ZCb0upojszgdTBXtMHSG++z4bJDXvFvNFVzBorChNSoKQ@mail.gmail.com>
-Message-ID: <20171129085334.074c7489@windsurf.home>
+Date: Wed, 29 Nov 2017 08:55:32 +0100
+Subject: [Buildroot] [V2 1/1] package/strongswan: Install libraries to
+ /usr/lib
+In-Reply-To: <CAH=K+6khy3cY1KUdJc6X=jYLoDus-1u2Tjk6CyGTenSb_zQGhQ@mail.gmail.com>
+References: <1504192688-56951-1-git-send-email-sam.voss@rockwellcollins.com>
+ <20171021095108.0ea87545@windsurf>
+ <CAH=K+6khy3cY1KUdJc6X=jYLoDus-1u2Tjk6CyGTenSb_zQGhQ@mail.gmail.com>
+Message-ID: <20171129085532.47506c55@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,33 +15,31 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 29 Nov 2017 12:21:24 +0530, Jagan Teki wrote:
+On Tue, 28 Nov 2017 16:55:48 -0600, Sam Voss wrote:
 
-> > As Thomas mentioned in his review for v4, no way to use linux-next git tree.
-> > It is being rebased all the time. So changing commit ID is not going to help:
-> > it will be changed over and over again.  
+> On Sat, Oct 21, 2017 at 2:51 AM, Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com> wrote:
+> > However, I did a test build, and I do see /usr/lib/ipsec kept in the
+> > RPATH:
+> >
+> >  0x0000001d (RUNPATH)                    Library runpath: [/usr/lib/ipsec]  
 > 
-> Thomas never said to use the linux-next, but instead he mentioned to
-> not use the last sha1 which always changed during rebase. So the sha1
-> I have used here specific to this board which shouldn't change even
-> linux-next rebased.
+> My tests seem to be showing the same. I'm going to have to see if it
+> is something we injected ourselves causing the issue.
+> 
+> > So, even though installing the libraries in /usr/lib is indeed better
+> > for consistency, I'd like to understand why you had an issue running
+> > the Strongswan program.  
+> 
+> I can fix the commit message if you'd still like the patch, else I'll
+> leave it as is until I get some more explanation on why we had this
+> issue in the first place.
 
-What you're saying here doesn't make sense.
+I think the change does make sense (we try to have all libraries
+in /usr/lib, except dlopen'ed ones). So if you could resend the patch,
+but with a modified commit message, it would be nice.
 
-Either the commit you're referring to is part of Linus tree (and
-therefore is stable and will never change), but in this case, there is
-no reason to use linux-next at all.
-
-Or the commit you're referring to is not part of Linus tree, but is
-really on top of it, part of linux-next, and in this case, the commit
-is not stable and it will disappear every day, as linux-next is rebased
-every day.
-
-So let's be clear: using linux-next is *not* possible as it simply
-doesn't work. Remove your download directory, and try again to build
-your defconfig: you will see that it fails.
-
-Best regards,
+Thanks!
 
 Thomas
 -- 
