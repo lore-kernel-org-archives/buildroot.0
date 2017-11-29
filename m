@@ -1,49 +1,52 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 29 Nov 2017 21:45:56 +0100
-Subject: [Buildroot] [PATCH 1/3] package/x11r7/xlib_libXcursor: security
- bump to version 1.1.15
-Message-ID: <20171129204558.3547-1-bernd.kuhls@t-online.de>
+Date: Wed, 29 Nov 2017 21:45:57 +0100
+Subject: [Buildroot] [PATCH 2/3] package/x11r7/xlib_libXfont2: security bump
+ to version 2.0.3
+In-Reply-To: <20171129204558.3547-1-bernd.kuhls@t-online.de>
+References: <20171129204558.3547-1-bernd.kuhls@t-online.de>
+Message-ID: <20171129204558.3547-2-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes CVE-2017-16612:
-https://lists.x.org/archives/xorg-announce/2017-November/002823.html
-
-Added all hashed provided by upstream.
+Fixes CVE-2017-16611:
+https://lists.x.org/archives/xorg-announce/2017-November/002824.html
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/x11r7/xlib_libXcursor/xlib_libXcursor.hash | 7 +++++--
- package/x11r7/xlib_libXcursor/xlib_libXcursor.mk   | 2 +-
- 2 files changed, 6 insertions(+), 3 deletions(-)
+ package/x11r7/xlib_libXfont2/xlib_libXfont2.hash | 10 +++++-----
+ package/x11r7/xlib_libXfont2/xlib_libXfont2.mk   |  2 +-
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/x11r7/xlib_libXcursor/xlib_libXcursor.hash b/package/x11r7/xlib_libXcursor/xlib_libXcursor.hash
-index 0135ac9dd0..7da9eb8c4f 100644
---- a/package/x11r7/xlib_libXcursor/xlib_libXcursor.hash
-+++ b/package/x11r7/xlib_libXcursor/xlib_libXcursor.hash
-@@ -1,2 +1,5 @@
--# From http://lists.x.org/archives/xorg-announce/2013-May/002229.html
--sha256	9bc6acb21ca14da51bda5bc912c8955bc6e5e433f0ab00c5e8bef842596c33df	libXcursor-1.1.14.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2017-November/002823.html
-+md5  58fe3514e1e7135cf364101e714d1a14  libXcursor-1.1.15.tar.bz2
-+sha1 3e19f991f244b7fa31566adce7ead078424296cf  libXcursor-1.1.15.tar.bz2
-+sha256 294e670dd37cd23995e69aae626629d4a2dfe5708851bbc13d032401b7a3df6b  libXcursor-1.1.15.tar.bz2
-+sha512 53ad0fa2afd7b4cf1108b560e44ea71abdf5c55a18df243d7123942513589c927f5c105395f790d8769959e0129db54264e6aac7efd51a5f1aec270379b1f2f5  libXcursor-1.1.15.tar.bz2
-diff --git a/package/x11r7/xlib_libXcursor/xlib_libXcursor.mk b/package/x11r7/xlib_libXcursor/xlib_libXcursor.mk
-index c59c01a51f..b27aa653e9 100644
---- a/package/x11r7/xlib_libXcursor/xlib_libXcursor.mk
-+++ b/package/x11r7/xlib_libXcursor/xlib_libXcursor.mk
+diff --git a/package/x11r7/xlib_libXfont2/xlib_libXfont2.hash b/package/x11r7/xlib_libXfont2/xlib_libXfont2.hash
+index 3e763b268f..1816b4bf6e 100644
+--- a/package/x11r7/xlib_libXfont2/xlib_libXfont2.hash
++++ b/package/x11r7/xlib_libXfont2/xlib_libXfont2.hash
+@@ -1,5 +1,5 @@
+-# From https://lists.x.org/archives/xorg-announce/2017-October/002813.html
+-md5 d39e6446e46f939486d1a8b856e8b67b  libXfont2-2.0.2.tar.bz2
+-sha1 d5117914a026b3fd47123cb1c2a22daaae3b63e4  libXfont2-2.0.2.tar.bz2
+-sha256 94088d3b87f7d42c7116d9adaad155859e93330c6e47f5989f2de600b9a6c111  libXfont2-2.0.2.tar.bz2
+-sha512 d62b0c3d663a2c668796cca8c6c2a90f83feeae1253b7d946668d33502cd8099c963285b88db4f745efb0d4ff783c118eb3d84cb8e6e1724586e1ef2be23e593  libXfont2-2.0.2.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2017-November/002824.html
++md5  b7ca87dfafeb5205b28a1e91ac3efe85  libXfont2-2.0.3.tar.bz2
++sha1 1110f1ad4061d9e8131ecb941757480e3e32bca0  libXfont2-2.0.3.tar.bz2
++sha256 0e8ab7fd737ccdfe87e1f02b55f221f0bd4503a1c5f28be4ed6a54586bac9c4e  libXfont2-2.0.3.tar.bz2
++sha512 648b664e2aa58cbc7366a1b05873aa06bd4a38060f64085783043388244af8ceced77b29a22c3ac8b6d34cd226e093bbbcc785ea1748ea65720fe7ea05b4b44b  libXfont2-2.0.3.tar.bz2
+diff --git a/package/x11r7/xlib_libXfont2/xlib_libXfont2.mk b/package/x11r7/xlib_libXfont2/xlib_libXfont2.mk
+index 696c605a36..3f1bdee435 100644
+--- a/package/x11r7/xlib_libXfont2/xlib_libXfont2.mk
++++ b/package/x11r7/xlib_libXfont2/xlib_libXfont2.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XLIB_LIBXCURSOR_VERSION = 1.1.14
-+XLIB_LIBXCURSOR_VERSION = 1.1.15
- XLIB_LIBXCURSOR_SOURCE = libXcursor-$(XLIB_LIBXCURSOR_VERSION).tar.bz2
- XLIB_LIBXCURSOR_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBXCURSOR_LICENSE = MIT
+-XLIB_LIBXFONT2_VERSION = 2.0.2
++XLIB_LIBXFONT2_VERSION = 2.0.3
+ XLIB_LIBXFONT2_SOURCE = libXfont2-$(XLIB_LIBXFONT2_VERSION).tar.bz2
+ XLIB_LIBXFONT2_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBXFONT2_LICENSE = MIT
 -- 
 2.11.0
