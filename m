@@ -1,50 +1,46 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 29 Nov 2017 17:36:28 +0100
-Subject: [Buildroot] [git commit] gnutls: bump to version 3.5.16
-Message-ID: <20171201205339.C09C280AC7@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 29 Nov 2017 22:17:36 +0100
+Subject: [Buildroot] [git commit] rauc: bump to version 0.2
+Message-ID: <20171201205340.7266F80F78@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a34d965af7d9e0799dc4227226ee2741e98ea483
+commit: https://git.buildroot.net/buildroot/commit/?id=91ffb23f9e8f9a1ab26441821f0d19954c2ec111
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add link to tarball signature.
+Version 0.2 of rauc provides several bug fixes and minor feature
+enhancements.
 
-Add license hashes.
-
-Cc: Matt Weber <matthew.weber@rockwellcollins.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Andrey Yurovsky <yurovsky@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gnutls/gnutls.hash | 6 +++++-
- package/gnutls/gnutls.mk   | 2 +-
- 2 files changed, 6 insertions(+), 2 deletions(-)
+ package/rauc/rauc.hash | 4 ++--
+ package/rauc/rauc.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gnutls/gnutls.hash b/package/gnutls/gnutls.hash
-index 608ccf8..9ec366f 100644
---- a/package/gnutls/gnutls.hash
-+++ b/package/gnutls/gnutls.hash
-@@ -1,2 +1,6 @@
- # Locally calculated after checking pgp signature
--sha256	4aa12dec92f42a0434df794aca3d02f6f2a35b47b48c01252de65f355c051bda	gnutls-3.5.14.tar.xz
-+# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.5/gnutls-3.5.16.tar.xz.sig
-+sha256	0924dec90c37c05f49fec966eba3672dab4d336d879e5c06e06e13325cbfec25	gnutls-3.5.16.tar.xz
-+# Locally calculated
-+sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	doc/COPYING
-+sha256	6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3	doc/COPYING.LESSER
-diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
-index b00bd13..3559086 100644
---- a/package/gnutls/gnutls.mk
-+++ b/package/gnutls/gnutls.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/rauc/rauc.hash b/package/rauc/rauc.hash
+index 78c3e27..649d195 100644
+--- a/package/rauc/rauc.hash
++++ b/package/rauc/rauc.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated, after verifying against
+-# https://github.com/rauc/rauc/releases/download/v0.1.1/rauc-0.1.1.tar.xz.asc
+-sha256 d2901d493f1d3210aef6411e83b02edac3a678d6d825d71a1c61b5b6afc7e478 rauc-0.1.1.tar.xz
++# https://github.com/rauc/rauc/releases/download/v0.2/rauc-0.2.tar.xz.asc
++sha256 83aa3ac3716e1c29315162e3cbf5d4db79f26dd95efe1bc634bbce364b95491a rauc-0.2.tar.xz
+diff --git a/package/rauc/rauc.mk b/package/rauc/rauc.mk
+index 479a583..11991ed 100644
+--- a/package/rauc/rauc.mk
++++ b/package/rauc/rauc.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- GNUTLS_VERSION_MAJOR = 3.5
--GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).14
-+GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).16
- GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
- GNUTLS_SITE = https://www.gnupg.org/ftp/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
- GNUTLS_LICENSE = LGPL-2.1+ (core library), GPL-3.0+ (gnutls-openssl library)
+-RAUC_VERSION = 0.1.1
++RAUC_VERSION = 0.2
+ RAUC_SITE = https://github.com/rauc/rauc/releases/download/v$(RAUC_VERSION)
+ RAUC_SOURCE = rauc-$(RAUC_VERSION).tar.xz
+ RAUC_LICENSE = LGPL-2.1
