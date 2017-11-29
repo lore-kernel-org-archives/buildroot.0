@@ -1,73 +1,232 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Wed, 29 Nov 2017 22:19:27 +0100
-Subject: [Buildroot] Cannot rebuild autobuild
-In-Reply-To: <d76cd131-a5ec-631d-4c8b-4bb3d09fd2ca@mind.be>
-References: <20171115125857.dcy6j7qvjt32ww43@dell5510>
- <61134b08-bb0a-4665-4b68-3ea2e4063563@mind.be>
- <20171116001919.67e98b4b@gmx.net>
- <58b8ef53-75b6-fc8b-8d37-e21570ae4e3b@mind.be>
- <20171116072948.smctbcvxwkxgqoah@x230>
- <d13312cf-ae70-92fd-8819-a86c79d1723b@mind.be>
- <20171118223206.069b771a@gmx.net>
- <20171121201605.tzmasudql66iruxa@dell5510>
- <20171125150144.GC2798@scaer>
- <d76cd131-a5ec-631d-4c8b-4bb3d09fd2ca@mind.be>
-Message-ID: <20171129211926.GA16373@x230>
+From: =?UTF-8?q?Stefan=20Fr=C3=B6berg?= <stefan.froberg@petroprogram.com>
+Date: Wed, 29 Nov 2017 23:17:13 +0200
+Subject: [Buildroot] [PATCH v5 1/2] zlib-ng: rename zlib to libzlib
+Message-ID: <20171129211714.1326-1-stefan.froberg@petroprogram.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Signed-off-by: Stefan Fr?berg <stefan.froberg@petroprogram.com>
+---
+Changes v4 -> v5:
 
-> > So, this is a change in behaviour, and should be reported upstream as a
-> > bug. Will you do so?
+- Added host-zlib support to virtual zlib package
 
->  As I explained in the extended commit message when I applied the patch fixing
-> this (b9d2d4cb4eb: "Fix makefile include order by using sort/wildcard.") make
-> actually has had this behaviour "forever" (since make 3.82). It calls glob with
-> GLOB_NOSORT. Note that in most of the cases where we didn't already do $(sort
-> $(wildcard ...)), the order actually doesn't (or shouldn't) matter. For example,
-> package/*/*.mk hopefully does not depend on the order. In other words, it's very
-> likely that nobody notices if things get included in the "wrong" order.
-Even though I understand that the change in 3.82 you pointed out *should* change the
-behavior, it's different: 3.82 is working.
+ package/{zlib/zlib.hash => libzlib/libzlib.hash} |  0
+ package/libzlib/libzlib.mk                       | 78 ++++++++++++++++++++++++
+ package/zlib/Config.in                           | 25 ++++++++
+ package/zlib/zlib.mk                             | 73 +---------------------
+ 4 files changed, 105 insertions(+), 71 deletions(-)
+ rename package/{zlib/zlib.hash => libzlib/libzlib.hash} (100%)
+ create mode 100644 package/libzlib/libzlib.mk
 
->  As far as I could see, only the external-toolchain-package really could cause
-> any problems.
-
->  So my guess is that the bisected commit really has nothing to do with it, it
-> just happens to trigger the random ordering issue.
-I don't understand changes in 4fd5672 ("Use Jenkins hash.") [2], but it does it
-permanently (I tested it several times). That's why I thought it would be good to notify
-upstream. Now I'm not sure (I haven't reported it yet).
-
->  Now that I look at it again, however, it looks like we haven't been able to
-> adequately explain why this issue suddenly occurred... First of all,
-> external-toolchain-package has existed for a year now, so if it is truly random
-> we'd expect someone to have noticed before. Also, the change in Tumbleweed that
-> Petr pointed to [1] should actually *fix* the issue, because it removes the
-> NOSORT. Debian and Ubuntu, conversely, have no such patch so the autobuilders
-> should see this issue (they use external toolchains a lot)...
-I've been testing buildroot in Debian unstable for few years and in openSUSE Tumbleweed
-for about one year. I never noticed this, until now. You can see from [3], that the only
-thing that changed in openSUSE's make is glob-lstat.patch [4]. It actually changes glob,
-so it can be relevant. I can test it with and without it this week.
-In Debian I've been testing it probably on 3.81, 4.0 and 4.1.
-
->  /me is confused again...
-
-
->  Regards,
->  Arnout
-
-
-Kind regards,
-Petr
-
-
-[1] https://build.opensuse.org/package/view_file/Base:System/make/make-sorted-glob.patch?expand=1
-[2] https://git.savannah.gnu.org/cgit/make.git/commit/?id=4fd56724ad281498d3c8b27a4b25b4070f6e4e65
-[3] https://build.opensuse.org/package/view_file/Base:System/make/make.changes?expand=1
-[4] https://build.opensuse.org/package/view_file/Base:System/make/glob-lstat.patch?expand=1
+diff --git a/package/zlib/zlib.hash b/package/libzlib/libzlib.hash
+similarity index 100%
+rename from package/zlib/zlib.hash
+rename to package/libzlib/libzlib.hash
+diff --git a/package/libzlib/libzlib.mk b/package/libzlib/libzlib.mk
+new file mode 100644
+index 0000000000..eea0c12f22
+--- /dev/null
++++ b/package/libzlib/libzlib.mk
+@@ -0,0 +1,78 @@
++################################################################################
++#
++# libzlib
++#
++################################################################################
++
++LIBZLIB_VERSION = 1.2.11
++LIBZLIB_SOURCE = zlib-$(LIBZLIB_VERSION).tar.xz
++LIBZLIB_SITE = http://www.zlib.net
++LIBZLIB_LICENSE = Zlib
++LIBZLIB_LICENSE_FILES = README
++LIBZLIB_INSTALL_STAGING = YES
++LIBZLIB_PROVIDES = zlib
++
++# It is not possible to build only a shared version of zlib, so we build both
++# shared and static, unless we only want the static libs, and we eventually
++# selectively remove what we do not want
++ifeq ($(BR2_STATIC_LIBS),y)
++LIBZLIB_PIC =
++LIBZLIB_SHARED = --static
++else
++LIBZLIB_PIC = -fPIC
++LIBZLIB_SHARED = --shared
++endif
++
++define LIBZLIB_CONFIGURE_CMDS
++	(cd $(@D); rm -rf config.cache; \
++		$(TARGET_CONFIGURE_ARGS) \
++		$(TARGET_CONFIGURE_OPTS) \
++		CFLAGS="$(TARGET_CFLAGS) $(LIBZLIB_PIC)" \
++		./configure \
++		$(LIBZLIB_SHARED) \
++		--prefix=/usr \
++	)
++endef
++
++define HOST_LIBZLIB_CONFIGURE_CMDS
++	(cd $(@D); rm -rf config.cache; \
++		$(HOST_CONFIGURE_ARGS) \
++		$(HOST_CONFIGURE_OPTS) \
++		./configure \
++		--prefix="$(HOST_DIR)" \
++		--sysconfdir="$(HOST_DIR)/etc" \
++	)
++endef
++
++define LIBZLIB_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE1) -C $(@D)
++endef
++
++define HOST_LIBZLIB_BUILD_CMDS
++	$(HOST_MAKE_ENV) $(MAKE1) -C $(@D)
++endef
++
++define LIBZLIB_INSTALL_STAGING_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE1) -C $(@D) DESTDIR=$(STAGING_DIR) LDCONFIG=true install
++endef
++
++define LIBZLIB_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE1) -C $(@D) DESTDIR=$(TARGET_DIR) LDCONFIG=true install
++endef
++
++# We don't care removing the .a from target, since it not used at link
++# time to build other packages, and it is anyway removed later before
++# assembling the filesystem images anyway.
++ifeq ($(BR2_SHARED_LIBS),y)
++define LIBZLIB_RM_STATIC_STAGING
++	rm -f $(STAGING_DIR)/usr/lib/libz.a
++endef
++LIBZLIB_POST_INSTALL_STAGING_HOOKS += LIBZLIB_RM_STATIC_STAGING
++endif
++
++define HOST_LIBZLIB_INSTALL_CMDS
++	$(HOST_MAKE_ENV) $(MAKE1) -C $(@D) LDCONFIG=true install
++endef
++
++$(eval $(generic-package))
++$(eval $(host-generic-package))
+diff --git a/package/zlib/Config.in b/package/zlib/Config.in
+index 6201aba142..043c3cefa4 100644
+--- a/package/zlib/Config.in
++++ b/package/zlib/Config.in
+@@ -1,7 +1,32 @@
+ config BR2_PACKAGE_ZLIB
++	bool "zlib support"
++	help
++	  Select the desired Zlib library provider.
++
++if BR2_PACKAGE_ZLIB
++
++choice
++	prompt "zlib variant"
++	default BR2_PACKAGE_LIBZLIB
++	help
++	  Select the desired Zlib library provider.
++
++config BR2_PACKAGE_LIBZLIB
+ 	bool "zlib"
++	select BR2_PACKAGE_HAS_ZLIB
+ 	help
+ 	  Standard (de)compression library. Used by things like
+ 	  gzip and libpng.
+ 
+ 	  http://www.zlib.net
++
++endchoice
++
++config BR2_PACKAGE_HAS_ZLIB
++	bool
++
++config BR2_PACKAGE_PROVIDES_ZLIB
++	string
++	default "libzlib" if BR2_PACKAGE_LIBZLIB
++
++endif
+diff --git a/package/zlib/zlib.mk b/package/zlib/zlib.mk
+index 9b5f52e807..78f48ff059 100644
+--- a/package/zlib/zlib.mk
++++ b/package/zlib/zlib.mk
+@@ -4,74 +4,5 @@
+ #
+ ################################################################################
+ 
+-ZLIB_VERSION = 1.2.11
+-ZLIB_SOURCE = zlib-$(ZLIB_VERSION).tar.xz
+-ZLIB_SITE = http://www.zlib.net
+-ZLIB_LICENSE = Zlib
+-ZLIB_LICENSE_FILES = README
+-ZLIB_INSTALL_STAGING = YES
+-
+-# It is not possible to build only a shared version of zlib, so we build both
+-# shared and static, unless we only want the static libs, and we eventually
+-# selectively remove what we do not want
+-ifeq ($(BR2_STATIC_LIBS),y)
+-ZLIB_PIC =
+-ZLIB_SHARED = --static
+-else
+-ZLIB_PIC = -fPIC
+-ZLIB_SHARED = --shared
+-endif
+-
+-define ZLIB_CONFIGURE_CMDS
+-	(cd $(@D); rm -rf config.cache; \
+-		$(TARGET_CONFIGURE_ARGS) \
+-		$(TARGET_CONFIGURE_OPTS) \
+-		CFLAGS="$(TARGET_CFLAGS) $(ZLIB_PIC)" \
+-		./configure \
+-		$(ZLIB_SHARED) \
+-		--prefix=/usr \
+-	)
+-endef
+-
+-define HOST_ZLIB_CONFIGURE_CMDS
+-	(cd $(@D); rm -rf config.cache; \
+-		$(HOST_CONFIGURE_ARGS) \
+-		$(HOST_CONFIGURE_OPTS) \
+-		./configure \
+-		--prefix="$(HOST_DIR)" \
+-		--sysconfdir="$(HOST_DIR)/etc" \
+-	)
+-endef
+-
+-define ZLIB_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE1) -C $(@D)
+-endef
+-
+-define HOST_ZLIB_BUILD_CMDS
+-	$(HOST_MAKE_ENV) $(MAKE1) -C $(@D)
+-endef
+-
+-define ZLIB_INSTALL_STAGING_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE1) -C $(@D) DESTDIR=$(STAGING_DIR) LDCONFIG=true install
+-endef
+-
+-define ZLIB_INSTALL_TARGET_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE1) -C $(@D) DESTDIR=$(TARGET_DIR) LDCONFIG=true install
+-endef
+-
+-# We don't care removing the .a from target, since it not used at link
+-# time to build other packages, and it is anyway removed later before
+-# assembling the filesystem images anyway.
+-ifeq ($(BR2_SHARED_LIBS),y)
+-define ZLIB_RM_STATIC_STAGING
+-	rm -f $(STAGING_DIR)/usr/lib/libz.a
+-endef
+-ZLIB_POST_INSTALL_STAGING_HOOKS += ZLIB_RM_STATIC_STAGING
+-endif
+-
+-define HOST_ZLIB_INSTALL_CMDS
+-	$(HOST_MAKE_ENV) $(MAKE1) -C $(@D) LDCONFIG=true install
+-endef
+-
+-$(eval $(generic-package))
+-$(eval $(host-generic-package))
++$(eval $(virtual-package))
++$(eval $(host-virtual-package))
+-- 
+2.13.6
