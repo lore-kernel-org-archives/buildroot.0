@@ -1,58 +1,49 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 30 Nov 2017 00:08:42 +0100
-Subject: [Buildroot] [PATCH 5/8] packages: remove "consecutive empty lines"
+Date: Thu, 30 Nov 2017 00:08:43 +0100
+Subject: [Buildroot] [PATCH 6/8] packages: fix trailing spaces and slash
 In-Reply-To: <cover.1511996903.git.yann.morin.1998@free.fr>
 References: <cover.1511996903.git.yann.morin.1998@free.fr>
-Message-ID: <65d3b7e00fb26f0f0228431f055e19227dfa55b1.1511996903.git.yann.morin.1998@free.fr>
+Message-ID: <aefa5c8ef3aac130f3a536e692e520affede8e4e.1511996903.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-... as reported by utils/check-package
+... as reported by utils/check-package.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Adam Duskett <aduskett@gmail.com>
-Cc: Yegor Yefremov<yegorslists@googlemail.com>
-Cc: Matt Weber <matthew.weber@rockwellcollins.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python3/python3.mk | 2 --
- package/setools/setools.mk | 1 -
- 2 files changed, 3 deletions(-)
+ package/busybox/busybox.mk | 2 +-
+ package/ntp/ntp.mk         | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-index 1d2201eec7..6e61108661 100644
---- a/package/python3/python3.mk
-+++ b/package/python3/python3.mk
-@@ -159,7 +159,6 @@ PYTHON3_CONF_OPTS += \
- 	--disable-idle3 \
- 	--disable-pyc-build
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index 1aeeeef4bf..8b720b30b8 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -65,7 +65,7 @@ define BUSYBOX_PERMISSIONS
+ # Set permissions on all applets with BB_SUID_REQUIRE and BB_SUID_MAYBE.
+ # 12 Applets are pulled from applets.h using grep command :
+ #  grep -r -e "APPLET.*BB_SUID_REQUIRE\|APPLET.*BB_SUID_MAYBE" \
+-#  $(@D)/include/applets.h 
++#  $(@D)/include/applets.h
+ # These applets are added to the device table and the makedev file
+ # ignores the files with type 'F' ( optional files).
+ 	/usr/bin/wall 			 F 4755 0  0 - - - - -
+diff --git a/package/ntp/ntp.mk b/package/ntp/ntp.mk
+index 6605c3b85b..05619aef7c 100644
+--- a/package/ntp/ntp.mk
++++ b/package/ntp/ntp.mk
+@@ -17,7 +17,7 @@ NTP_CONF_OPTS = \
+ 	--disable-tickadj \
+ 	--disable-debugging \
+ 	--with-yielding-select=yes \
+-	--disable-local-libevent \
++	--disable-local-libevent
  
--
- #
- # Some of CPython's source code is generated using Python interpreter
- # and some helper tools such as "Programs/_freeze_importlib" or
-@@ -201,7 +200,6 @@ endef
- 
- PYTHON3_PRE_BUILD_HOOKS += PYTHON3_MAKE_REGEN_IMPORTLIB
- 
--
- #
- # Remove useless files. In the config/ directory, only the Makefile
- # and the pyconfig.h files are needed at runtime.
-diff --git a/package/setools/setools.mk b/package/setools/setools.mk
-index 8b93ccf45e..6748c95c23 100644
---- a/package/setools/setools.mk
-+++ b/package/setools/setools.mk
-@@ -13,7 +13,6 @@ SETOOLS_LICENSE_FILES = COPYING COPYING.GPL COPYING.LGPL
- SETOOLS_SETUP_TYPE = setuptools
- HOST_SETOOLS_DEPENDENCIES = host-libselinux host-libsepol
- 
--
- ifeq ($(BR2_PACKAGE_PYTHON3),y)
- SETOOLS_PYLIBVER = python$(PYTHON3_VERSION_MAJOR)
- else
+ # 0002-ntp-syscalls-fallback.patch
+ # 0003-ntpq-fpic.patch
 -- 
 2.11.0
