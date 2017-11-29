@@ -1,68 +1,86 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 29 Nov 2017 14:34:27 +0100
-Subject: [Buildroot] Analysis of build results for 2017-11-25
-In-Reply-To: <CAJtjsKbTBDN8zaOOR5FLfC-rXq7WDskvVu-M6Y1sgZzcTTSBog@mail.gmail.com>
-References: <20171126070006.676FA209DE@mail.free-electrons.com>
- <20171126152140.0fd3902b@windsurf.home>
- <CAJtjsKZjOxXO=Gu475a+6gP9TR4RrEptaS1MfuHYpdzjbF5Aig@mail.gmail.com>
- <OF3CB5EEB3.059011A8-ON002581E5.004E2384@notes.na.collabserv.com>
- <20171128233028.a7dqd7nmj6q5hf6r@tungsten.ozlabs.ibm.com>
- <CAJtjsKbTBDN8zaOOR5FLfC-rXq7WDskvVu-M6Y1sgZzcTTSBog@mail.gmail.com>
-Message-ID: <20171129143427.576f713e@windsurf.home>
+From: Adrian Perez de Castro <aperez@igalia.com>
+Date: Wed, 29 Nov 2017 16:17:51 +0200
+Subject: [Buildroot] [PATCH 1/1] webkitgtk: Add upstream patch to ensure
+ CMAKE_BUILD_TYPE is honored
+Message-ID: <20171129141751.9325-1-aperez@igalia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Make WebKitGTK+ honor the value of CMAKE_BUILD_TYPE defined in the CMake
+toolchain file by backporting the following upstream WebKit patch:
 
-On Wed, 29 Nov 2017 14:28:55 +0100, Johan Oudinet wrote:
+    https://trac.webkit.org/changeset/225168
 
-> > I don't have much time at the moment but I'll take a look at this when I
-> > can (in a previous life I was an Erlang programmer, it's great to see it
-> > as part of buildroot!). It would be sad to disable HiPE so I'll see if
-> > we can just bump the version up to 20.
-> >
-> > Or Johan if you get to it first, I'll certainly test it :-)  
-> 
-> I haven't had the time to do it yet, however, it seems OTP 20 has
-> simply applied the patch I mentioned:
-> https://github.com/erlang/otp/pull/1394/commits/024e438101c010f17e3a374117c3b376d48483f3
-> 
-> If I understand correctly this configure, there is a test in the
-> configure to automatically enable HiPE for a list of architectures.
-> ppc64 is present in this list but not ppc64le. So, I think HiPE would
-> be disabled on ppc64le architectures even if we bump to OTP 20.
+This reduces the generated binary sizes when building in "Release" mode
+(BR2_ENABLE_DEBUG=n), for example when targeting ARMv8 the size reduction
+is ~17 MiB.
 
-Well, if this commit made it to OTP 20, then there is no need to
-disable HiPE explicitly: my understanding is that this commit makes
-sure ppc64le is not mistaken as ppc64, in particular to avoid having
-HiPE being enabled. See https://github.com/erlang/otp/blob/master/erts/configure.in:
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+---
+ ...s-of-CMAKE_BUILD_TYPE-from-toolchain-file.patch | 52 ++++++++++++++++++++++
+ 1 file changed, 52 insertions(+)
+ create mode 100644 package/webkitgtk/0001-CMake-Values-of-CMAKE_BUILD_TYPE-from-toolchain-file.patch
 
-if test "$cross_compiling" != "yes" && test X${enable_hipe} != Xno; then
-  if test -z "$M4"; then
-	enable_hipe=no
-   	AC_MSG_NOTICE([HiPE disabled as no valid m4 is found in PATH])
-  else
-  	case "$ARCH-$OPSYS" in
-	    x86-linux|amd64-linux|x86-darwin*|amd64-darwin*|ppc-linux|ppc64-linux|ppc-darwin|arm-linux|amd64-freebsd|x86-freebsd|x86-sol2|amd64-sol2|ultrasparc-linux)
-      		enable_hipe=yes
-      		;;	
-  	esac
-  fi
-fi
-
-ppc64le used to be handled as ppc64, so it was matching the case
-"$ARCH-$OPSYS", and enable_hipe was set to yes.
-
-With ARCH=ppc64le, this will no longer match, and enable_hipe will no
-longer be set to yes.
-
-Best regards,
-
-Thomas
+diff --git a/package/webkitgtk/0001-CMake-Values-of-CMAKE_BUILD_TYPE-from-toolchain-file.patch b/package/webkitgtk/0001-CMake-Values-of-CMAKE_BUILD_TYPE-from-toolchain-file.patch
+new file mode 100644
+index 0000000000..6ac1258626
+--- /dev/null
++++ b/package/webkitgtk/0001-CMake-Values-of-CMAKE_BUILD_TYPE-from-toolchain-file.patch
+@@ -0,0 +1,52 @@
++From 3b13b1ec9985e72132ec6a3ba13cf60b34848817 Mon Sep 17 00:00:00 2001
++From: "aperez at igalia.com"
++ <aperez@igalia.com@268f45cc-cd09-0410-ab3c-d52691b4dbfc>
++Date: Mon, 27 Nov 2017 15:34:49 +0000
++Subject: [PATCH] [CMake] Values of CMAKE_BUILD_TYPE from toolchain file are
++ ignored https://bugs.webkit.org/show_bug.cgi?id=179971
++
++Reviewed by Carlos Alberto Lopez Perez.
++
++* CMakeLists.txt: Call project() first, as it loads the toolchain
++file, so that's done before checking CMAKE_BUILD_TYPE.
++
++
++git-svn-id: http://svn.webkit.org/repository/webkit/trunk at 225168 268f45cc-cd09-0410-ab3c-d52691b4dbfc
++
++Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
++Backported from: 75986e1807b
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index d80c37b950a..0a9bd17b981 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -1,8 +1,17 @@
++ # -----------------------------------------------------------------------------
++ # Determine CMake version and build type.
++ # -----------------------------------------------------------------------------
+++#
+++# NOTE: cmake_minimum_required() and project() *MUST* be the two fist commands
+++# used, see https://cmake.org/cmake/help/v3.3/command/project.html -- the
+++# latter in particular handles loading a bunch of shared CMake definitions
+++# and loading the cross-compilation settings from CMAKE_TOOLCHAIN_FILE.
+++#
+++
++ cmake_minimum_required(VERSION 3.3)
++ 
+++project(WebKit)
+++
++ if (NOT CMAKE_BUILD_TYPE)
++     message(WARNING "No CMAKE_BUILD_TYPE value specified, defaulting to RelWithDebInfo.")
++     set(CMAKE_BUILD_TYPE "RelWithDebInfo" CACHE STRING "Choose the type of build." FORCE)
++@@ -10,8 +19,6 @@ else ()
++     message(STATUS "The CMake build type is: ${CMAKE_BUILD_TYPE}")
++ endif ()
++ 
++-project(WebKit)
++-
++ set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/Source/cmake")
++ 
++ set(ENABLE_WEBCORE ON)
++-- 
++2.15.1
++
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.15.1
