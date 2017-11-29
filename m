@@ -1,281 +1,140 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 29 Nov 2017 21:37:08 +0100
-Subject: [Buildroot] [git commit] uclibc: update to 1.0.27
-Message-ID: <20171201205340.199DD80AC7@busybox.osuosl.org>
+Date: Wed, 29 Nov 2017 21:39:05 +0100
+Subject: [Buildroot] [git commit] musl: bump to 1.1.18
+Message-ID: <20171201205340.3737E80AC7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c26b1bf1a4a055006110b9f38f9082c01c0db1ab
+commit: https://git.buildroot.net/buildroot/commit/?id=0af9010d81f1e2172086d6122e9a45be118d8c2f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-All patches are upstream.
-C-sky support added. Lot of or1k NPTL bugfixes.
+Patch 0002-arm-atomics-asm-with-new-binutils.patch is upstream as of
+commit b261a24256792177a5f0531dbb25cc6267220ca5.
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Patch 0003-Makefile-include-per-arch-Makefile-before-Makefile is
+upstream as of commit 45ca5d3fcb6f874bf5ba55d0e9651cef68515395.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/uclibc/0001-fix-issues-with-gdb-8.0.patch  |  72 ---------------
- ...handle-R_MICROBLAZE_NONE-for-ld.so-bootst.patch |  42 ---------
- ...03-convert-accept4-to-use-cancel.h-macros.patch | 102 ---------------------
- package/uclibc/uclibc.hash                         |   2 +-
- package/uclibc/uclibc.mk                           |   2 +-
- 5 files changed, 2 insertions(+), 218 deletions(-)
+ .../0002-arm-atomics-asm-with-new-binutils.patch   | 43 ----------------------
+ ...ing-callback-enforce-MAXADDRS-to-preclude.patch | 35 ------------------
+ package/musl/musl.hash                             |  5 ++-
+ package/musl/musl.mk                               |  2 +-
+ 4 files changed, 4 insertions(+), 81 deletions(-)
 
-diff --git a/package/uclibc/0001-fix-issues-with-gdb-8.0.patch b/package/uclibc/0001-fix-issues-with-gdb-8.0.patch
+diff --git a/package/musl/0002-arm-atomics-asm-with-new-binutils.patch b/package/musl/0002-arm-atomics-asm-with-new-binutils.patch
 deleted file mode 100644
-index 20567e6..0000000
---- a/package/uclibc/0001-fix-issues-with-gdb-8.0.patch
+index 3790889..0000000
+--- a/package/musl/0002-arm-atomics-asm-with-new-binutils.patch
 +++ /dev/null
-@@ -1,72 +0,0 @@
--From 111f01d432d542a153c1cad83def3a6ab57df7af Mon Sep 17 00:00:00 2001
--From: Waldemar Brodkorb <wbx@uclibc-ng.org>
--Date: Sat, 5 Aug 2017 11:28:07 +0200
--Subject: [PATCH] fix issues with gdb 8.0
+@@ -1,43 +0,0 @@
+-From b261a24256792177a5f0531dbb25cc6267220ca5 Mon Sep 17 00:00:00 2001
+-From: Rich Felker <dalias@aerifal.cx>
+-Date: Wed, 15 Feb 2017 17:05:50 -0500
+-Subject: fix build regression in arm atomics asm with new binutils
 -
--GDB 8.0 is compiled and linked with g++, but the
--linking of static targets (f.e. coldfire) fails,
--without declaring the functions in thread_db.h
--extern C.
+-binutils commit bada43421274615d0d5f629a61a60b7daa71bc15 tightened
+-immediate fixup handling in gas in such a way that the final .arch of
+-an object file must be compatible with the fixups used when the
+-instruction was assembled; this in turn broke assembling of atomics.s,
+-at least in thumb mode.
 -
--The compilation of gdb errors out with:
--thread-db.o: In function `thread_db_init()':
--thread-db.c:(.text+0x5b6): undefined reference to `td_ta_new(ps_prochandle*, td_thragent**)'
--thread-db.c:(.text+0x61e): undefined reference to `td_thr_get_info(td_thrhandle const*, td_thrinfo*)'
--thread-db.c:(.text+0x632): undefined reference to `td_symbol_list()'
--..
+-it's not clear whether this should be considered a bug in gas, but
+-.object_arch is preferable anyway for our purpose here of controlling
+-the ISA level tag on the object file being produced, and it's the
+-intended directive for use in object files with runtime code
+-selection. research by Szabolcs Nagy confirmed that .object_arch is
+-supported in all relevant versions of binutils and clang's integrated
+-assembler.
 -
--Signed-off-by: Waldemar Brodkorb <wbx@uclibc-ng.org>
+-patch by Reiner Herrmann.
+-
+-Signed-off-by: Timothy Lee <timothy.ty.lee@gmail.com>
+-[Backport from upstream https://git.musl-libc.org/cgit/musl/commit/?id=b261a24256792177a5f0531dbb25cc6267220ca5.]
 ----
-- libpthread/linuxthreads_db/thread_db.h | 7 +++++++
-- libpthread/nptl_db/thread_db.h         | 7 +++++++
-- 2 files changed, 14 insertions(+)
+- src/thread/arm/atomics.s | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
 -
--diff --git a/libpthread/linuxthreads_db/thread_db.h b/libpthread/linuxthreads_db/thread_db.h
--index 13c30af..ec79f60 100644
----- a/libpthread/linuxthreads_db/thread_db.h
--+++ b/libpthread/linuxthreads_db/thread_db.h
--@@ -27,6 +27,9 @@
-- #include <sys/types.h>
-- #include <sys/procfs.h>
+-diff --git a/src/thread/arm/atomics.s b/src/thread/arm/atomics.s
+-index 202faa4..101ad39 100644
+---- a/src/thread/arm/atomics.s
+-+++ b/src/thread/arm/atomics.s
+-@@ -84,7 +84,7 @@ __a_gettp_cp15:
+- 	bx lr
 - 
--+#ifdef __cplusplus
--+extern "C" {
--+#endif
+- /* Tag this file with minimum ISA level so as not to affect linking. */
+--.arch armv4t
+-+.object_arch armv4t
+- .eabi_attribute 6,2
 - 
-- /* Error codes of the library.  */
-- typedef enum
--@@ -455,4 +458,8 @@ extern td_err_e td_thr_dbsuspend (const td_thrhandle_t *__th);
-- /* Resume execution of thread TH.  */
-- extern td_err_e td_thr_dbresume (const td_thrhandle_t *__th);
-- 
--+#ifdef __cplusplus
--+}
--+#endif
--+
-- #endif	/* thread_db.h */
--diff --git a/libpthread/nptl_db/thread_db.h b/libpthread/nptl_db/thread_db.h
--index 27ea69a..993842f 100644
----- a/libpthread/nptl_db/thread_db.h
--+++ b/libpthread/nptl_db/thread_db.h
--@@ -27,6 +27,9 @@
-- #include <sys/types.h>
-- #include <sys/procfs.h>
-- 
--+#ifdef __cplusplus
--+extern "C" {
--+#endif
-- 
-- /* Error codes of the library.  */
-- typedef enum
--@@ -455,4 +458,8 @@ extern td_err_e td_thr_dbsuspend (const td_thrhandle_t *__th);
-- /* Resume execution of thread TH.  */
-- extern td_err_e td_thr_dbresume (const td_thrhandle_t *__th);
-- 
--+#ifdef __cplusplus
--+}
--+#endif
--+
-- #endif	/* thread_db.h */
+- .data
 --- 
--2.1.4
+-cgit v0.11.2
 -
-diff --git a/package/uclibc/0002-microblaze-handle-R_MICROBLAZE_NONE-for-ld.so-bootst.patch b/package/uclibc/0002-microblaze-handle-R_MICROBLAZE_NONE-for-ld.so-bootst.patch
+diff --git a/package/musl/0003-in-dns-parsing-callback-enforce-MAXADDRS-to-preclude.patch b/package/musl/0003-in-dns-parsing-callback-enforce-MAXADDRS-to-preclude.patch
 deleted file mode 100644
-index 9886efd..0000000
---- a/package/uclibc/0002-microblaze-handle-R_MICROBLAZE_NONE-for-ld.so-bootst.patch
+index c6b5ef2..0000000
+--- a/package/musl/0003-in-dns-parsing-callback-enforce-MAXADDRS-to-preclude.patch
 +++ /dev/null
-@@ -1,42 +0,0 @@
--From 9db18d93811153fc9a70c9844fadc6fdf7cbbb64 Mon Sep 17 00:00:00 2001
--From: Waldemar Brodkorb <wbx@uclibc-ng.org>
--Date: Sun, 6 Aug 2017 21:15:50 +0200
--Subject: [PATCH] microblaze: handle R_MICROBLAZE_NONE for ld.so bootstrap
+@@ -1,35 +0,0 @@
+-From 45ca5d3fcb6f874bf5ba55d0e9651cef68515395 Mon Sep 17 00:00:00 2001
+-From: Rich Felker <dalias@aerifal.cx>
+-Date: Wed, 18 Oct 2017 14:50:03 -0400
+-Subject: [PATCH] in dns parsing callback, enforce MAXADDRS to preclude
+- overflow
 -
--Latest binutils 2.29 release emits a R_MICROBLAZE_NONE
--relocation, which breaks shared library loader bootstrap
--relocation.
+-MAXADDRS was chosen not to need enforcement, but the logic used to
+-compute it assumes the answers received match the RR types of the
+-queries. specifically, it assumes that only one replu contains A
+-record answers. if the replies to both the A and the AAAA query have
+-their answer sections filled with A records, MAXADDRS can be exceeded
+-and clobber the stack of the calling function.
 -
--Signed-off-by: Waldemar Brodkorb <wbx@uclibc-ng.org>
+-this bug was found and reported by Felix Wilhelm.
+-
+-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ----
-- ldso/ldso/microblaze/dl-startup.h | 7 ++-----
-- 1 file changed, 2 insertions(+), 5 deletions(-)
+- src/network/lookup_name.c | 1 +
+- 1 file changed, 1 insertion(+)
 -
--diff --git a/ldso/ldso/microblaze/dl-startup.h b/ldso/ldso/microblaze/dl-startup.h
--index 720c53a..16d5762 100644
----- a/ldso/ldso/microblaze/dl-startup.h
--+++ b/ldso/ldso/microblaze/dl-startup.h
--@@ -82,18 +82,15 @@ static __always_inline
-- void PERFORM_BOOTSTRAP_RELOC(ELF_RELOC *rpnt, unsigned long *reloc_addr,
-- 	unsigned long symbol_addr, unsigned long load_addr, attribute_unused Elf32_Sym *symtab)
+-diff --git a/src/network/lookup_name.c b/src/network/lookup_name.c
+-index 066be4d5..209c20f0 100644
+---- a/src/network/lookup_name.c
+-+++ b/src/network/lookup_name.c
+-@@ -111,6 +111,7 @@ static int dns_parse_callback(void *c, int rr, const void *data, int len, const
 - {
---
-- 	switch (ELF_R_TYPE(rpnt->r_info))
-- 	{
-- 		case R_MICROBLAZE_REL:
---
-- 			*reloc_addr = load_addr + rpnt->r_addend;
-- 			break;
---
--+		case R_MICROBLAZE_NONE:
--+			break;
-- 		default:
-- 			_dl_exit(1);
-- 			break;
---
-- 	}
---
-- }
---- 
--2.1.4
--
-diff --git a/package/uclibc/0003-convert-accept4-to-use-cancel.h-macros.patch b/package/uclibc/0003-convert-accept4-to-use-cancel.h-macros.patch
-deleted file mode 100644
-index 178dcde..0000000
---- a/package/uclibc/0003-convert-accept4-to-use-cancel.h-macros.patch
-+++ /dev/null
-@@ -1,102 +0,0 @@
--From c7e82668bd23fbdd02ebe1e83ff2bb6877812423 Mon Sep 17 00:00:00 2001
--From: Waldemar Brodkorb <wbx@uclibc-ng.org>
--Date: Thu, 2 Nov 2017 02:40:43 +0100
--Subject: [PATCH] convert accept4() to use cancel.h macros
--
--Signed-off-by: Waldemar Brodkorb <wbx@uclibc-ng.org>
-----
-- include/sys/socket.h                  |  1 +
-- libc/inet/socketcalls.c               | 37 +++++++++--------------------------
-- libpthread/linuxthreads/wrapsyscall.c |  7 +++++++
-- 3 files changed, 17 insertions(+), 28 deletions(-)
--
--diff --git a/include/sys/socket.h b/include/sys/socket.h
--index 63dc4b953..83e1fcaa2 100644
----- a/include/sys/socket.h
--+++ b/include/sys/socket.h
--@@ -269,6 +269,7 @@ libc_hidden_proto(accept)
--    __THROW.  */
-- extern int accept4 (int __fd, __SOCKADDR_ARG __addr,
-- 		    socklen_t *__restrict __addr_len, int __flags);
--+libc_hidden_proto(accept4)
-- #endif
-- 
-- /* Shut down all or part of the connection open on socket FD.
--diff --git a/libc/inet/socketcalls.c b/libc/inet/socketcalls.c
--index e33d69344..1b92609d0 100644
----- a/libc/inet/socketcalls.c
--+++ b/libc/inet/socketcalls.c
--@@ -76,43 +76,24 @@ lt_libc_hidden(accept)
-- #endif
-- 
-- #ifdef L_accept4
---#ifdef __NR_accept4
---# define __NR___sys_accept4  __NR_accept4
---static _syscall4(int, __sys_accept4, int, fd, struct sockaddr *, addr, socklen_t *, addrlen, int, flags)
---int accept4(int fd, struct sockaddr *addr, socklen_t * addrlen, int flags)
---{
---	if (SINGLE_THREAD_P)
---		return __sys_accept4(fd, addr, addrlen, flags);
---#ifdef __UCLIBC_HAS_THREADS_NATIVE__
---	else {
---		int oldtype = LIBC_CANCEL_ASYNC ();
---		int result = __sys_accept4(fd, addr, addrlen, flags);
---		LIBC_CANCEL_RESET (oldtype);
---		return result;
---	}
---#endif
---}
---#elif defined(__NR_socketcall)
---int accept4(int fd, struct sockaddr *addr, socklen_t *addrlen, int flags)
--+static int __NC(accept4)(int fd, struct sockaddr *addr, socklen_t *addrlen, int flags)
-- {
--+# ifdef __NR_accept4
--+	return INLINE_SYSCALL(accept4, 4, fd, addr, addrlen, flags);
--+# elif defined(__NR_socketcall)
-- 	unsigned long args[4];
-- 
-- 	args[0] = fd;
-- 	args[1] = (unsigned long) addr;
-- 	args[2] = (unsigned long) addrlen;
-- 	args[3] = flags;
---	if (SINGLE_THREAD_P)
---		return __socketcall(SYS_ACCEPT4, args);
---#ifdef __UCLIBC_HAS_THREADS_NATIVE__
---	else {
---		int oldtype = LIBC_CANCEL_ASYNC ();
---		int result = __socketcall(SYS_ACCEPT4, args);
---		LIBC_CANCEL_RESET (oldtype);
---		return result;
---	}
--+
--+	return __socketcall(SYS_ACCEPT4, args);
-- #endif
-- }
---#endif
--+CANCELLABLE_SYSCALL(int, accept4, (int fd, struct sockaddr *addr, socklen_t *addrlen, int flags),
--+		    (fd, addr, addrlen, flags))
--+lt_libc_hidden(accept4)
-- #endif
-- 
-- #ifdef L_bind
--diff --git a/libpthread/linuxthreads/wrapsyscall.c b/libpthread/linuxthreads/wrapsyscall.c
--index ca046a442..2386bfdef 100644
----- a/libpthread/linuxthreads/wrapsyscall.c
--+++ b/libpthread/linuxthreads/wrapsyscall.c
--@@ -192,6 +192,13 @@ CANCELABLE_SYSCALL (int, accept, (int fd, __SOCKADDR_ARG addr,
-- 				  socklen_t *addr_len),
-- 		    (fd, addr, addr_len))
-- 
--+#if defined __UCLIBC_LINUX_SPECIFIC__
--+/* accept4(2).  */
--+CANCELABLE_SYSCALL (int, accept4, (int fd, __SOCKADDR_ARG addr,
--+				  socklen_t *addr_len, int flags),
--+		    (fd, addr, addr_len, flags))
--+#endif
--+
-- /* connect(2).  */
-- CANCELABLE_SYSCALL (int, connect, (int fd, __CONST_SOCKADDR_ARG addr,
-- 				     socklen_t len),
+- 	char tmp[256];
+- 	struct dpc_ctx *ctx = c;
+-+	if (ctx->cnt >= MAXADDRS) return -1;
+- 	switch (rr) {
+- 	case RR_A:
+- 		if (len != 4) return -1;
 --- 
 -2.11.0
 -
-diff --git a/package/uclibc/uclibc.hash b/package/uclibc/uclibc.hash
-index fcba474..df25a7e 100644
---- a/package/uclibc/uclibc.hash
-+++ b/package/uclibc/uclibc.hash
-@@ -1,2 +1,2 @@
- # From https://uclibc-ng.org/
--sha256  d88470775192b01d278633953ccc9fecacd090e52f401d506a71add3e47d4694        uClibc-ng-1.0.26.tar.xz
-+sha256  9452b0e92f76db19d8ff30b2d6d10a80e1ed01e4c504a36fef34cfc9de490b24        uClibc-ng-1.0.27.tar.xz
-diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-index f235070..1741421 100644
---- a/package/uclibc/uclibc.mk
-+++ b/package/uclibc/uclibc.mk
+diff --git a/package/musl/musl.hash b/package/musl/musl.hash
+index f3f3741..68e6aab 100644
+--- a/package/musl/musl.hash
++++ b/package/musl/musl.hash
+@@ -1,2 +1,3 @@
+-# Locally calculated after checking pgp signature
+-sha256	937185a5e5d721050306cf106507a006c3f1f86d86cd550024ea7be909071011  musl-1.1.16.tar.gz
++# Locally calculated after checking pgp signature from
++# http://www.musl-libc.org/releases/musl-1.1.18.tar.gz.asc
++sha256	d017ee5d01aec0c522a1330fdff06b1e428cb409e1db819cc4935d5da4a5a118  musl-1.1.18.tar.gz
+diff --git a/package/musl/musl.mk b/package/musl/musl.mk
+index 6d56033..b1aace0 100644
+--- a/package/musl/musl.mk
++++ b/package/musl/musl.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--UCLIBC_VERSION = 1.0.26
-+UCLIBC_VERSION = 1.0.27
- UCLIBC_SOURCE = uClibc-ng-$(UCLIBC_VERSION).tar.xz
- UCLIBC_SITE = http://downloads.uclibc-ng.org/releases/$(UCLIBC_VERSION)
- UCLIBC_LICENSE = LGPL-2.1+
+-MUSL_VERSION = 1.1.16
++MUSL_VERSION = 1.1.18
+ MUSL_SITE = http://www.musl-libc.org/releases
+ MUSL_LICENSE = MIT
+ MUSL_LICENSE_FILES = COPYRIGHT
