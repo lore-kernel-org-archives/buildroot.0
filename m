@@ -1,103 +1,78 @@
-From: Jagan Teki <jagan@amarulasolutions.com>
-Date: Wed, 29 Nov 2017 12:37:05 +0530
-Subject: [Buildroot] [PATCH v4 2/3] board: Add Vyasa RK388 board support
-In-Reply-To: <20171123224321.447ed853@windsurf.lan>
-References: <1510997329-4111-1-git-send-email-jagan@amarulasolutions.com>
- <1510997329-4111-2-git-send-email-jagan@amarulasolutions.com>
- <20171123224321.447ed853@windsurf.lan>
-Message-ID: <CAMty3ZBNPnaDxCN+0fmB_VLbNXxovXSyE618LB_5KA7kXt74Lw@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 29 Nov 2017 08:37:49 +0100
+Subject: [Buildroot] [git commit branch/2017.08.x] Update for 2017.08.2
+Message-ID: <20171129073333.760E281D82@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+commit: https://git.buildroot.net/buildroot/commit/?id=1d02d0be586bfdaff926a7c6c8930d186cdd92b2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.08.x
 
-On Fri, Nov 24, 2017 at 3:13 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
->
-> Title is wrong I believe, it shoul dbe RK3288 I guess.
->
-> On Sat, 18 Nov 2017 10:28:48 +0100, Jagan Teki wrote:
->
->> diff --git a/board/amarula/vyasa/linux_gmac.fragment b/board/amarula/vyasa/linux_gmac.fragment
->> new file mode 100644
->> index 0000000..dd458c7
->> --- /dev/null
->> +++ b/board/amarula/vyasa/linux_gmac.fragment
->> @@ -0,0 +1,3 @@
->> +# Currently kernel mainline exhibits issues when running rockchip gmac
->> +# on the board, so enable it as loadable module and insert it later
->> +CONFIG_DWMAC_ROCKCHIP=m
->> diff --git a/board/amarula/vyasa/post-build.sh b/board/amarula/vyasa/post-build.sh
->> new file mode 100755
->> index 0000000..ffbbcde
->> --- /dev/null
->> +++ b/board/amarula/vyasa/post-build.sh
->> @@ -0,0 +1,9 @@
->> +#!/bin/sh
->> +
->> +MKIMAGE=$HOST_DIR/bin/mkimage
->
-> So you need host-uboot-tools, but it is not enabled in your defconfig.
->
->
->> diff --git a/configs/amarula_vyasa_rk3288_defconfig b/configs/amarula_vyasa_rk3288_defconfig
->> new file mode 100644
->> index 0000000..5e62ac0
->> --- /dev/null
->> +++ b/configs/amarula_vyasa_rk3288_defconfig
->> @@ -0,0 +1,59 @@
->> +# Architecture
->> +BR2_arm=y
->> +BR2_cortex_a17=y
->> +BR2_ARM_FPU_NEON_VFPV4=y
->> +
->> +# Linux headers same as kernel, a 4.13 series
->> +BR2_KERNEL_HEADERS_4_13=y
->> +
->> +# Toolchain
->> +BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
->> +BR2_TOOLCHAIN_BUILDROOT_CXX=y
->
-> Please keep the default toolchain configuration.
->
->> +
->> +# Bootloader
->> +BR2_TARGET_UBOOT=y
->> +BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
->> +BR2_TARGET_UBOOT_CUSTOM_VERSION=y
->> +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.11"
->> +BR2_TARGET_UBOOT_BOARD_DEFCONFIG="vyasa-rk3288"
->> +BR2_TARGET_UBOOT_NEEDS_DTC=y
->> +BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
->> +BR2_TARGET_UBOOT_FORMAT_DTB_IMG=y
->> +BR2_TARGET_UBOOT_SPL=y
->> +BR2_TARGET_UBOOT_SPL_NAME="spl/u-boot-spl-dtb.bin tpl/u-boot-tpl.bin"
->> +
->> +# Kernel
->> +BR2_LINUX_KERNEL=y
->> +BR2_LINUX_KERNEL_CUSTOM_GIT=y
->> +BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git"
->> +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="7e8a1fd62911a59f1f95d4620e89603230fdd6f9"
->
-> Using linux-next doesn't work, as it gets rebased constantly. The
-> commit 7e8a1fd62911a59f1f95d4620e89603230fdd6f9 no longer exists. You
-> have to wait for the support for this board to land into the mainline
-> kernel, or point to a vendor-specific Git tree.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ CHANGES  | 35 +++++++++++++++++++++++++++++++++++
+ Makefile |  4 ++--
+ 2 files changed, 37 insertions(+), 2 deletions(-)
 
-Can't we use linux-next at all? you are with head commits which were
-always changes during rebase, but I've used the board specific commit
-in v5 and that will always unchanged.
-
-If you remember I've asked during ELCE, Prague about using linux-next
-on BR and we discussed the same scenario.
-
-thanks!
--- 
-Jagan Teki
-Senior Linux Kernel Engineer | Amarula Solutions
-U-Boot, Linux | Upstream Maintainer
-Hyderabad, India.
+diff --git a/CHANGES b/CHANGES
+index cfe4894..cf04f02 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,38 @@
++2017.08.2, Released November 28th, 2017
++
++	Important / security related fixes.
++
++	Qt: 5.6 version updated to 5.6.3.
++
++	Reproducible: Do not override SOURCE_DATE_EPOCH if already set
++	in the environment.
++
++	Makefiles: Workaround include order issues for certain make
++	versions by explicitly sorting the result of wildcard where it
++	matters.
++
++	Updated/fixed packages: apr, apr-util, arqp-standalone,
++	azure-iot-sdk-c, collectd, dvb-apps, ffmpeg, go-bootstrap,
++	google-breakpad, gstreamer, imagemagick, irssi, jimtcl,
++	kvm-unit-test, libcurl, libfastjson, libglib2, libidn,
++	libpjsip, libplist, localedef, lttng-tools, luajit, mesa3d,
++	moarvm, mp4v2, openssh, openssl, oracle-mysql, postgresql,
++	python3, python-pyqt5, qt, qt5base, qt5canvas3d,
++	qt5connectivity, qt5declarative, qt5engineio,
++	qt5graphicaleffects, qt5imageformats, qt5location,
++	qt5multimedia, qt5quickcontrols, qt5quickcontrols2, qt5script,
++	qt5sensors, qt5serialbus, qt5serialport, qt5svg, qt5tools,
++	qt5webchannel, qt5webkit, qt5websockets, qt5x11extras,
++	qt5xmlpatterns, quagga, redis, ruby, samba4, sdl2, snmppp,
++	swupdate, ti-gfx, uboot-tools, usb_modeswitch, vboot-utils,
++	webkitgtk, wget, wireshark, xapp_xdriinfo.
++
++	Issues resolved (http://bugs.buildroot.org):
++
++	10326: mesa3d package fails to build when BR2_SHARED_STATIC_LIBS=y
++	10361: python3 python-config script generates invalid includes
++	10501: host-localedef fails to compile on Ubuntu 17.10
++
+ 2017.08.1, Released October 23rd, 2017
+ 
+ 	Important / security related fixes.
+diff --git a/Makefile b/Makefile
+index f2afe80..4a07516 100644
+--- a/Makefile
++++ b/Makefile
+@@ -87,9 +87,9 @@ all:
+ .PHONY: all
+ 
+ # Set and export the version string
+-export BR2_VERSION := 2017.08.1
++export BR2_VERSION := 2017.08.2
+ # Actual time the release is cut (for reproducible builds)
+-BR2_VERSION_EPOCH = 1508790000
++BR2_VERSION_EPOCH = 1511938000
+ 
+ # Save running make version since it's clobbered by the make package
+ RUNNING_MAKE_VERSION := $(MAKE_VERSION)
