@@ -1,48 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 29 Nov 2017 22:11:53 +0100
-Subject: [Buildroot] [git commit] rauc: select host-squashfs as a host
+Date: Wed, 29 Nov 2017 22:16:31 +0100
+Subject: [Buildroot] [PATCH 1/2] rauc: select host-squashfs as a host
  dependency
-Message-ID: <20171129210644.C2457803E2@busybox.osuosl.org>
+In-Reply-To: <20171128032723.14081-1-yurovsky@gmail.com>
+References: <20171128032723.14081-1-yurovsky@gmail.com>
+Message-ID: <20171129221631.51e0fc70@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9e8e3e0fd556aeb62a5426506262fb1f9fe8a5fd
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-The rauc host tool (used to generate update bundles) runs mksquashfs so
-host-squashfs is required for it to work at runtime.
+On Mon, 27 Nov 2017 19:27:22 -0800, Andrey Yurovsky wrote:
+> The rauc host tool (used to generate update bundles) runs mksquashfs so
+> host-squashfs is required for it to work at runtime.
+> 
+> Signed-off-by: Andrey Yurovsky <yurovsky@gmail.com>
+> ---
+>  package/rauc/Config.in.host | 1 +
+>  package/rauc/rauc.mk        | 2 +-
+>  2 files changed, 2 insertions(+), 1 deletion(-)
 
-Signed-off-by: Andrey Yurovsky <yurovsky@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/rauc/Config.in.host | 1 +
- package/rauc/rauc.mk        | 2 +-
- 2 files changed, 2 insertions(+), 1 deletion(-)
+I've applied to master. Note however that it in fact doesn't really
+solve the problem entirely, because $(HOST_DIR)/bin is not in the PATH,
+so rauc still doesn't find mksquashfs:
 
-diff --git a/package/rauc/Config.in.host b/package/rauc/Config.in.host
-index a58685a..1bd9a79 100644
---- a/package/rauc/Config.in.host
-+++ b/package/rauc/Config.in.host
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_HOST_RAUC
- 	bool "host rauc"
-+	select BR2_PACKAGE_HOST_SQUASHFS # run-time dependency
- 	help
- 	  RAUC is the Robust Auto-Update Controller developed by
- 	  Pengutronix. Enable this option to build the rauc
-diff --git a/package/rauc/rauc.mk b/package/rauc/rauc.mk
-index 479a583..67ef155 100644
---- a/package/rauc/rauc.mk
-+++ b/package/rauc/rauc.mk
-@@ -29,7 +29,7 @@ ifeq ($(BR2_PACKAGE_SYSTEMD),y)
- RAUC_DEPENDENCIES += systemd
- endif
- 
--HOST_RAUC_DEPENDENCIES = host-pkgconf host-openssl host-libglib2
-+HOST_RAUC_DEPENDENCIES = host-pkgconf host-openssl host-libglib2 host-squashfs
- HOST_RAUC_CONF_OPTS += --disable-network --disable-json --disable-service
- 
- $(eval $(autotools-package))
+$ ./output/host/bin/rauc --cert demo.cert.pem --key demo.key.pem bundle output/images/t/ test.raucb
+input directory: output/images/t/
+output bundle: test.raucb
+
+(rauc:17776): rauc-WARNING **: failed to create bundle: Failed to start mksquashfs: Failed to execute child process ?mksquashfs? (No such file or directory)
+
+But mksquashfs is in output/host/bin. Perhaps rauc should also try to
+find mksquashfs from the same directory as rauc, before trying a
+system-wide installed one?
+
+Or we expect people to run "rauc bundle" from a post-image script, in
+which case $(HOST_DIR)/bin is in the PATH ?
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
