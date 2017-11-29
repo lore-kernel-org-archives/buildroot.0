@@ -1,70 +1,73 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 29 Nov 2017 22:19:04 +0100
-Subject: [Buildroot] [git commit branch/next] package/x11r7/xapp_xfs: bump
- version to 1.2.0
-Message-ID: <20171129211143.6594581D65@busybox.osuosl.org>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Wed, 29 Nov 2017 22:19:27 +0100
+Subject: [Buildroot] Cannot rebuild autobuild
+In-Reply-To: <d76cd131-a5ec-631d-4c8b-4bb3d09fd2ca@mind.be>
+References: <20171115125857.dcy6j7qvjt32ww43@dell5510>
+ <61134b08-bb0a-4665-4b68-3ea2e4063563@mind.be>
+ <20171116001919.67e98b4b@gmx.net>
+ <58b8ef53-75b6-fc8b-8d37-e21570ae4e3b@mind.be>
+ <20171116072948.smctbcvxwkxgqoah@x230>
+ <d13312cf-ae70-92fd-8819-a86c79d1723b@mind.be>
+ <20171118223206.069b771a@gmx.net>
+ <20171121201605.tzmasudql66iruxa@dell5510>
+ <20171125150144.GC2798@scaer>
+ <d76cd131-a5ec-631d-4c8b-4bb3d09fd2ca@mind.be>
+Message-ID: <20171129211926.GA16373@x230>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d9e2135a71056ff16243bde1c892ec8118a11fb6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hi,
 
-xfs was ported to use libXfont 2.x instead of 1.x:
-https://cgit.freedesktop.org/xorg/app/xfs/diff/configure.ac?id=fedc90e8e3f6c36204de5562bfb726270064a4f1
+> > So, this is a change in behaviour, and should be reported upstream as a
+> > bug. Will you do so?
 
-Added all hashes provided by upstream.
+>  As I explained in the extended commit message when I applied the patch fixing
+> this (b9d2d4cb4eb: "Fix makefile include order by using sort/wildcard.") make
+> actually has had this behaviour "forever" (since make 3.82). It calls glob with
+> GLOB_NOSORT. Note that in most of the cases where we didn't already do $(sort
+> $(wildcard ...)), the order actually doesn't (or shouldn't) matter. For example,
+> package/*/*.mk hopefully does not depend on the order. In other words, it's very
+> likely that nobody notices if things get included in the "wrong" order.
+Even though I understand that the change in 3.82 you pointed out *should* change the
+behavior, it's different: 3.82 is working.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/x11r7/xapp_xfs/Config.in     | 2 +-
- package/x11r7/xapp_xfs/xapp_xfs.hash | 7 +++++--
- package/x11r7/xapp_xfs/xapp_xfs.mk   | 4 ++--
- 3 files changed, 8 insertions(+), 5 deletions(-)
+>  As far as I could see, only the external-toolchain-package really could cause
+> any problems.
 
-diff --git a/package/x11r7/xapp_xfs/Config.in b/package/x11r7/xapp_xfs/Config.in
-index 0a5d711..b708af8 100644
---- a/package/x11r7/xapp_xfs/Config.in
-+++ b/package/x11r7/xapp_xfs/Config.in
-@@ -2,7 +2,7 @@ config BR2_PACKAGE_XAPP_XFS
- 	bool "xfs"
- 	depends on BR2_USE_MMU # fork()
- 	select BR2_PACKAGE_XLIB_LIBFS
--	select BR2_PACKAGE_XLIB_LIBXFONT
-+	select BR2_PACKAGE_XLIB_LIBXFONT2
- 	select BR2_PACKAGE_XPROTO_FONTSPROTO
- 	help
- 	  X font server
-diff --git a/package/x11r7/xapp_xfs/xapp_xfs.hash b/package/x11r7/xapp_xfs/xapp_xfs.hash
-index 6782374..27577ba 100644
---- a/package/x11r7/xapp_xfs/xapp_xfs.hash
-+++ b/package/x11r7/xapp_xfs/xapp_xfs.hash
-@@ -1,2 +1,5 @@
--# From http://lists.x.org/archives/xorg-announce/2014-August/002472.html
--sha256	a40b75e674c091464f85739292b6bf24e2d153f4a2ac456d3ea6b8a64e269ffa	xfs-1.1.4.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2017-November/002826.html
-+md5  b4d2e644bfb35cae8858d2411501b07e  xfs-1.2.0.tar.bz2
-+sha1 00848fcc2915ed8b00e75ac311c4727327324f57  xfs-1.2.0.tar.bz2
-+sha256 db2212115783498f8eeaaee1349461d6c4e9d2005e142bacd3a984fe57269860  xfs-1.2.0.tar.bz2
-+sha512 557b08aa07919239ce345d60b288b886640200bb1a59649fc890c3ccaa8559cc6745189614e696ab1b390ec024b393be5493787b7b0d2b3545b342d743c2e0ef  xfs-1.2.0.tar.bz2
-diff --git a/package/x11r7/xapp_xfs/xapp_xfs.mk b/package/x11r7/xapp_xfs/xapp_xfs.mk
-index 3e70455..f4fe35d 100644
---- a/package/x11r7/xapp_xfs/xapp_xfs.mk
-+++ b/package/x11r7/xapp_xfs/xapp_xfs.mk
-@@ -4,11 +4,11 @@
- #
- ################################################################################
- 
--XAPP_XFS_VERSION = 1.1.4
-+XAPP_XFS_VERSION = 1.2.0
- XAPP_XFS_SOURCE = xfs-$(XAPP_XFS_VERSION).tar.bz2
- XAPP_XFS_SITE = http://xorg.freedesktop.org/releases/individual/app
- XAPP_XFS_LICENSE = MIT
- XAPP_XFS_LICENSE_FILES = COPYING
--XAPP_XFS_DEPENDENCIES = xlib_libFS xlib_libXfont xproto_fontsproto
-+XAPP_XFS_DEPENDENCIES = xlib_libFS xlib_libXfont2 xproto_fontsproto
- 
- $(eval $(autotools-package))
+>  So my guess is that the bisected commit really has nothing to do with it, it
+> just happens to trigger the random ordering issue.
+I don't understand changes in 4fd5672 ("Use Jenkins hash.") [2], but it does it
+permanently (I tested it several times). That's why I thought it would be good to notify
+upstream. Now I'm not sure (I haven't reported it yet).
+
+>  Now that I look at it again, however, it looks like we haven't been able to
+> adequately explain why this issue suddenly occurred... First of all,
+> external-toolchain-package has existed for a year now, so if it is truly random
+> we'd expect someone to have noticed before. Also, the change in Tumbleweed that
+> Petr pointed to [1] should actually *fix* the issue, because it removes the
+> NOSORT. Debian and Ubuntu, conversely, have no such patch so the autobuilders
+> should see this issue (they use external toolchains a lot)...
+I've been testing buildroot in Debian unstable for few years and in openSUSE Tumbleweed
+for about one year. I never noticed this, until now. You can see from [3], that the only
+thing that changed in openSUSE's make is glob-lstat.patch [4]. It actually changes glob,
+so it can be relevant. I can test it with and without it this week.
+In Debian I've been testing it probably on 3.81, 4.0 and 4.1.
+
+>  /me is confused again...
+
+
+>  Regards,
+>  Arnout
+
+
+Kind regards,
+Petr
+
+
+[1] https://build.opensuse.org/package/view_file/Base:System/make/make-sorted-glob.patch?expand=1
+[2] https://git.savannah.gnu.org/cgit/make.git/commit/?id=4fd56724ad281498d3c8b27a4b25b4070f6e4e65
+[3] https://build.opensuse.org/package/view_file/Base:System/make/make.changes?expand=1
+[4] https://build.opensuse.org/package/view_file/Base:System/make/glob-lstat.patch?expand=1
