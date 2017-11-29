@@ -1,50 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 29 Nov 2017 21:46:29 +0100
-Subject: [Buildroot] [git commit branch/next] package/qt5: simplify and
- cleanup _SITE variables
-Message-ID: <20171129203922.2763781E7D@busybox.osuosl.org>
+Date: Wed, 29 Nov 2017 21:47:08 +0100
+Subject: [Buildroot] [PATCH v2 1/1] package/qt5: simplify and cleanup
+ _SITE variables
+In-Reply-To: <20171128115930.10887-1-gael.portay@savoirfairelinux.com>
+References: <20171128115930.10887-1-gael.portay@savoirfairelinux.com>
+Message-ID: <20171129214708.27741f53@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b865c38ea627ae59e46a67efe805b4bce101fecb
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hello,
 
-The variable QT5_SNAPSHOTS_SITE was introduced in commit 9d5ac9698 to
-fetch sources of obsolete modules. It was used to download qt5webkit
-tarballs.
+On Tue, 28 Nov 2017 06:59:30 -0500, Ga?l PORTAY wrote:
+> The variable QT5_SNAPSHOTS_SITE was introduced in commit 9d5ac9698 to
+> fetch sources of obsolete modules. It was used to download qt5webkit
+> tarballs.
+> 
+> The variable is not referenced anymore since the qt5webkit tarballs are
+> downloaded from the Qt community release site.
+> 
+> Since the introduction of qt-5.9 in aa1c40ba3, the QT5_SITE variable
+> was duplicates for no good reason.
+> 
+> Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
+> Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> ---
+>  package/qt5/qt5.mk | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
 
-The variable is not referenced anymore since the qt5webkit tarballs are
-downloaded from the Qt community release site.
+Applied to next, thanks.
 
-Since the introduction of qt-5.9 in aa1c40ba3, the QT5_SITE variable
-was duplicated for no good reason.
-
-Signed-off-by: Ga??l PORTAY <gael.portay@savoirfairelinux.com>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/qt5/qt5.mk | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
-
-diff --git a/package/qt5/qt5.mk b/package/qt5/qt5.mk
-index 0e49c6b..5d63433 100644
---- a/package/qt5/qt5.mk
-+++ b/package/qt5/qt5.mk
-@@ -7,13 +7,11 @@
- ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
- QT5_VERSION_MAJOR = 5.9
- QT5_VERSION = $(QT5_VERSION_MAJOR).2
--QT5_SITE = http://download.qt.io/official_releases/qt/$(QT5_VERSION_MAJOR)/$(QT5_VERSION)/submodules
- else
- QT5_VERSION_MAJOR = 5.6
- QT5_VERSION = $(QT5_VERSION_MAJOR).3
--QT5_SITE = http://download.qt.io/official_releases/qt/$(QT5_VERSION_MAJOR)/$(QT5_VERSION)/submodules
--QT5_SNAPSHOTS_SITE = http://download.qt.io/snapshots/qt/$(QT5_VERSION_MAJOR)/$(QT5_VERSION)/latest_src/submodules
- endif
-+QT5_SITE = http://download.qt.io/official_releases/qt/$(QT5_VERSION_MAJOR)/$(QT5_VERSION)/submodules
- 
- include $(sort $(wildcard package/qt5/*/*.mk))
- 
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
