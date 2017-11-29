@@ -1,54 +1,81 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 29 Nov 2017 10:23:28 +0200
-Subject: [Buildroot] [PATCH v5 1/3] board: Add Vyasa RK3288 board support
-In-Reply-To: <20171129085334.074c7489@windsurf.home>
-References: <1511893761-8292-1-git-send-email-jagan@amarulasolutions.com>
- <20171129064514.mc4iobd4roajjdtj@speedy.hunter>
- <CAMty3ZCb0upojszgdTBXtMHSG++z4bJDXvFvNFVzBorChNSoKQ@mail.gmail.com>
- <20171129085334.074c7489@windsurf.home>
-Message-ID: <20171129082328.zptb4ai3i65sisgx@sapphire.tkos.co.il>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 29 Nov 2017 09:26:32 +0100
+Subject: [Buildroot] Buildroot 2017.08.2 released
+Message-ID: <87a7z5a3t3.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hi,
 
-On Wed, Nov 29, 2017 at 08:53:34AM +0100, Thomas Petazzoni wrote:
-> On Wed, 29 Nov 2017 12:21:24 +0530, Jagan Teki wrote:
-> 
-> > > As Thomas mentioned in his review for v4, no way to use linux-next git tree.
-> > > It is being rebased all the time. So changing commit ID is not going to help:
-> > > it will be changed over and over again.  
-> > 
-> > Thomas never said to use the linux-next, but instead he mentioned to
-> > not use the last sha1 which always changed during rebase. So the sha1
-> > I have used here specific to this board which shouldn't change even
-> > linux-next rebased.
-> 
-> What you're saying here doesn't make sense.
-> 
-> Either the commit you're referring to is part of Linus tree (and
-> therefore is stable and will never change), but in this case, there is
-> no reason to use linux-next at all.
-> 
-> Or the commit you're referring to is not part of Linus tree, but is
-> really on top of it, part of linux-next, and in this case, the commit
-> is not stable and it will disappear every day, as linux-next is rebased
-> every day.
+Buildroot is a simple tool for creating complete embedded Linux systems
+(http://buildroot.org).
 
-I seems that linux-next preserves older next-[date] tags. It currently goes 
-back to next-20170831. The linux-next-history.git tree carries even older 
-tags, back to next-20160118. So a specific commit in linux-next{-history} 
-should not disappear overnight.
+Buildroot 2017.08.2 is released - Go download it at:
 
-I do agree, though, that having a board/platform specific git tree, or a set 
-of patches is easier to work with.
+http://buildroot.org/downloads/buildroot-2017.08.2.tar.gz
 
-baruch
+or
+
+http://buildroot.org/downloads/buildroot-2017.08.2.tar.bz2
+
+Or get it from Git:
+
+git://git.buildroot.org/buildroot
+
+Buildroot 2017.08.2 is a bugfix release, fixing a number of important /
+security related issues discovered since the 2017.08.1 release.
+
+- Security fixes for apr, apr-util, imagemagick, irssi, libcurl,
+  libpjsip, libplist, openssh, openssl, postgresql, quagga, redis, ruby,
+  samba4, sdl2, snmp++, webkitgtk, wget, wireshark
+
+- Fixes for download/compilation/runtime issues in argp-standalone,
+  collectd, dvb-apps, ffmpeg, go-bootstrap, google-breakpad, gstreamer,
+  jimtcl, kvm-unit-test, libfastjson, libglib2, libidn, localedef,
+  lttng-tools, luajit, mesa3d, moarvm, mp4v2, openssh, oracle-mysql,
+  python3, qt, sdl2, swupdate, ti-gfx, uboot-tools, usb_modeswitch,
+  vboot-utils, xapp_xdriinfo.
+
+- Qt 5.6 series updated to 5.6.3
+
+- Reproducible: Do not override SOURCE_DATE_EPOCH if already set
+  in the environment.
+
+- Makefiles: Workaround include order issues for certain make
+  versions by explicitly sorting the result of wildcard where it
+  matters.
+
+Users of the affected packages are strongly encouraged to upgrade.
+
+Many thanks to all the people contributing to this release:
+
+git shortlog -sn 2017.08.1..
+
+    25  Peter Korsgaard
+    12  Bernd Kuhls
+     9  Thomas Petazzoni
+     5  Adam Duskett
+     4  Yann E. MORIN
+     3  Baruch Siach
+     3  Matt Weber
+     3  Peter Seiderer
+     2  Adrian Perez de Castro
+     2  Andrey Smirnov
+     2  Fabio Estevam
+     1  Alex Suykov
+     1  Andr? Hentschel
+     1  Arnout Vandecappelle (Essensium/Mind)
+     1  Fabrice Fontaine
+     1  Ga?l PORTAY
+     1  Luca Ceresoli
+     1  Maksim Salau
+     1  Olivier Schonken
+     1  Philippe Proulx
+     1  Romain Naour
+     1  Scott Ellis
 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Bye, Peter Korsgaard
