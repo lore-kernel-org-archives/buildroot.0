@@ -1,43 +1,39 @@
-From: Philippe Proulx <eeppeliteloop@gmail.com>
-Date: Wed, 29 Nov 2017 11:42:56 -0500
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2017-11-28
-In-Reply-To: <20171129133649.57832b1c@windsurf.home>
-References: <20171129070009.BC0F72037D@mail.free-electrons.com>
- <20171129102201.GI2889@scaer> <20171129133649.57832b1c@windsurf.home>
-Message-ID: <CAB4xu_1zxQTDYJwfj33iPPgbB=TiczgfNuqNLpES8AEmmySz+w@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 29 Nov 2017 17:48:51 +0100
+Subject: [Buildroot] [PATCH v2] mtools: do not link to libbsd
+In-Reply-To: <20171128160651.20880-1-casantos@datacom.ind.br> (Carlos Santos's
+ message of "Tue, 28 Nov 2017 14:06:51 -0200")
+References: <0171128125226.32n343bxgzhcrfvp@tarshish>
+ <20171128160651.20880-1-casantos@datacom.ind.br>
+Message-ID: <87k1y9kp3g.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Nov 29, 2017 at 7:36 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
->
-> On Wed, 29 Nov 2017 11:22:01 +0100, Yann E. MORIN wrote:
->> >          arm |              lttng-tools-2.9.5 | NOK | http://autobuild.buildroot.net/results/624f2db9baad4f1d6c41ff74dc6310a4228679f2 |
->>
->>   CCLD     prog
->> OBJCOPY prog.debug
->> objcopy: Unable to recognise the format of the input file `prog'
->>
->> This is for an armv4.
->
-> It also happened targetting ARMv5, see
-> http://autobuild.buildroot.net/results/8a0/8a0e970b8adb6770ff9b1d18c4544654d511aadf/build-end.log.
-> And targetting ARMv7, see
-> http://autobuild.buildroot.net/results/b84/b84a6e39fcca70c56bfe49d54c385dfe6da82422/build-end.log.
->
+>>>>> "Carlos" == Carlos Santos <casantos@datacom.ind.br> writes:
 
-Is there any way to get more details in those logs? Like the
-output of `make V=1`.
+ > If libbsd is found by the configuration process, mtools unnecessarily
+ > adds a NEEDED field with libbsd to its dynamic section, but it does not
+ > actually use anything from libbsd under Linux. The same may happen to
+ > host-mtools if some libbsd package is installed on the host machine.
 
-Phil
+ > Prevent this by forcing configure to bypass the checking for the
+ > existence of a gethostbyname function in libbsd.
 
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux and Kernel engineering
-> http://free-electrons.com
+ > I stumbled on this problem when I built host-mtools and later removed
+ > libbsd to upgrade to Fedora 27, due to Bug 1504831[1]. The previously
+ > built host/bin/mtools started to fail due to the missing libbsd.so.0.
+
+ > 1. https://bugzilla.redhat.com/show_bug.cgi?id=1504831
+
+ > Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+ > ---
+ > Changes v1->v2
+ >   - Improved the commit message, as requested by Baruch Siach.
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
