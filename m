@@ -1,50 +1,94 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 29 Nov 2017 17:36:28 +0100
-Subject: [Buildroot] [git commit branch/next] gnutls: bump to version 3.5.16
-Message-ID: <20171129163023.4352A8110F@busybox.osuosl.org>
+Date: Wed, 29 Nov 2017 17:35:49 +0100
+Subject: [Buildroot] [git commit branch/next] libmicrohttpd: bump to version
+ 0.9.57
+Message-ID: <20171129163023.25BAA81D43@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a34d965af7d9e0799dc4227226ee2741e98ea483
+commit: https://git.buildroot.net/buildroot/commit/?id=48b4ad9451cb9a6c5dabc6028e1e6c01a6411177
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Add link to tarball signature.
+Drop libgcrypt dependency for SSL support; with newer version of gnutls
+libgcrypt is not needed.
 
-Add license hashes.
+Drop the LIBS fix for static linking with gnutls that has been
+introduced in commit 2d3d6d258bb (libmicrohttpd: fix static linking with
+gnutls). gnutls does not support static linking anymore.
 
-Cc: Matt Weber <matthew.weber@rockwellcollins.com>
+Fix a comment typo.
+
+Add license hash.
+
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gnutls/gnutls.hash | 6 +++++-
- package/gnutls/gnutls.mk   | 2 +-
- 2 files changed, 6 insertions(+), 2 deletions(-)
+ package/libmicrohttpd/Config.in          |  2 --
+ package/libmicrohttpd/libmicrohttpd.hash |  3 ++-
+ package/libmicrohttpd/libmicrohttpd.mk   | 10 ++++------
+ 3 files changed, 6 insertions(+), 9 deletions(-)
 
-diff --git a/package/gnutls/gnutls.hash b/package/gnutls/gnutls.hash
-index 608ccf8..9ec366f 100644
---- a/package/gnutls/gnutls.hash
-+++ b/package/gnutls/gnutls.hash
-@@ -1,2 +1,6 @@
- # Locally calculated after checking pgp signature
--sha256	4aa12dec92f42a0434df794aca3d02f6f2a35b47b48c01252de65f355c051bda	gnutls-3.5.14.tar.xz
-+# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.5/gnutls-3.5.16.tar.xz.sig
-+sha256	0924dec90c37c05f49fec966eba3672dab4d336d879e5c06e06e13325cbfec25	gnutls-3.5.16.tar.xz
-+# Locally calculated
-+sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	doc/COPYING
-+sha256	6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3	doc/COPYING.LESSER
-diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
-index b00bd13..3559086 100644
---- a/package/gnutls/gnutls.mk
-+++ b/package/gnutls/gnutls.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/libmicrohttpd/Config.in b/package/libmicrohttpd/Config.in
+index 2a685ca..7f3c9bb 100644
+--- a/package/libmicrohttpd/Config.in
++++ b/package/libmicrohttpd/Config.in
+@@ -11,11 +11,9 @@ if BR2_PACKAGE_LIBMICROHTTPD
+ 
+ config BR2_PACKAGE_LIBMICROHTTPD_SSL
+ 	bool "https support"
+-	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgcrypt
+ 	depends on !BR2_STATIC_LIBS # gnutls
+ 	depends on BR2_USE_WCHAR
+ 	select BR2_PACKAGE_GNUTLS
+-	select BR2_PACKAGE_LIBGCRYPT
+ 	help
+ 	  Enable HTTPS (SSL) support.
+ 
+diff --git a/package/libmicrohttpd/libmicrohttpd.hash b/package/libmicrohttpd/libmicrohttpd.hash
+index a1460fd..e628cb2 100644
+--- a/package/libmicrohttpd/libmicrohttpd.hash
++++ b/package/libmicrohttpd/libmicrohttpd.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+-sha256 0c1cab8dc9f2588bd3076a28f77a7f8de9560cbf2d80e53f9a8696ada80ed0f8  libmicrohttpd-0.9.55.tar.gz
++sha256 dec1a76487d7e48ad74b468a888bfda1c05731f185ff950f1e363ca9d39caf4e  libmicrohttpd-0.9.57.tar.gz
++sha256 70e12e2a60151b9ed1a4c94a5ffeb99cd086fa94542b5a92fec581506e8d3121  COPYING
+diff --git a/package/libmicrohttpd/libmicrohttpd.mk b/package/libmicrohttpd/libmicrohttpd.mk
+index a87c93b..62fb7fc 100644
+--- a/package/libmicrohttpd/libmicrohttpd.mk
++++ b/package/libmicrohttpd/libmicrohttpd.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- GNUTLS_VERSION_MAJOR = 3.5
--GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).14
-+GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).16
- GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
- GNUTLS_SITE = https://www.gnupg.org/ftp/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
- GNUTLS_LICENSE = LGPL-2.1+ (core library), GPL-3.0+ (gnutls-openssl library)
+-LIBMICROHTTPD_VERSION = 0.9.55
++LIBMICROHTTPD_VERSION = 0.9.57
+ LIBMICROHTTPD_SITE = $(BR2_GNU_MIRROR)/libmicrohttpd
+ LIBMICROHTTPD_LICENSE_FILES = COPYING
+ LIBMICROHTTPD_INSTALL_STAGING = YES
+@@ -12,7 +12,7 @@ LIBMICROHTTPD_CONF_OPTS = --disable-curl --disable-examples
+ LIBMICROHTTPD_CFLAGS = $(TARGET_CFLAGS) -std=c99
+ 
+ # gcc on arc and bfin doesn't define _REENTRANT when -pthread is
+-# passed while it should. Compensate this defiency here otherwise
++# passed while it should. Compensate this deficiency here otherwise
+ # libmicrohttpd configure script doesn't find that thread support is
+ # enabled.
+ ifeq ($(BR2_arc)$(BR2_bfin),y)
+@@ -23,10 +23,8 @@ LIBMICROHTTPD_CONF_ENV += CFLAGS="$(LIBMICROHTTPD_CFLAGS)"
+ 
+ ifeq ($(BR2_PACKAGE_LIBMICROHTTPD_SSL),y)
+ LIBMICROHTTPD_LICENSE = LGPL-2.1+
+-LIBMICROHTTPD_DEPENDENCIES += host-pkgconf gnutls libgcrypt
+-LIBMICROHTTPD_CONF_ENV += LIBS="`$(PKG_CONFIG_HOST_BINARY) --libs gnutls`"
+-LIBMICROHTTPD_CONF_OPTS += --enable-https --with-gnutls=$(STAGING_DIR)/usr \
+-	--with-libgcrypt-prefix=$(STAGING_DIR)/usr
++LIBMICROHTTPD_DEPENDENCIES += host-pkgconf gnutls
++LIBMICROHTTPD_CONF_OPTS += --enable-https --with-gnutls=$(STAGING_DIR)/usr
+ else
+ LIBMICROHTTPD_LICENSE = LGPL-2.1+ or eCos
+ LIBMICROHTTPD_CONF_OPTS += --disable-https
