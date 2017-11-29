@@ -1,95 +1,175 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 29 Nov 2017 22:24:35 +0100
-Subject: [Buildroot] [PATCH 1/1] netcat-openbsd: depends on
- linux-headers >= 3.12
-In-Reply-To: <20171128154437.1631-1-gael.portay@savoirfairelinux.com>
-References: <20171128154437.1631-1-gael.portay@savoirfairelinux.com>
-Message-ID: <20171129222435.557776c3@windsurf.home>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 29 Nov 2017 22:27:20 +0100
+Subject: [Buildroot] [PATCH v5 1/2] zlib-ng: rename zlib to libzlib
+In-Reply-To: <20171129211714.1326-1-stefan.froberg@petroprogram.com>
+References: <20171129211714.1326-1-stefan.froberg@petroprogram.com>
+Message-ID: <20171129212720.GA4091@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Baruch,
+Stfean, All,
 
-Since you have looked at a lot of different kernel headers related
-issues, what do you think about this one below?
-
-Thanks!
-
-Thomas
-
-On Tue, 28 Nov 2017 10:44:37 -0500, Ga?l PORTAY wrote:
-> This debian fork of netcat includes the kernel UAPI inet6 header. This
-> header conflicts with the existing libc inet header and causes
-> redefinition of structures when they are both included.
-> 
-> The compiler raises the following error:
-> 
-> 	/home/buildroot/build/instance-0/output/host/x86_64-buildroot-linux-gnu/sysroot/usr/include/linux/in6.h:30:8: error: redefinition of 'struct in6_addr' struct in6_addr {
-> 
-> From version 3.12 of linux, the kernel UAPI header has mechanisms in
-> libc-compat.h to prevent such situations (see __UAPI_DEF_SOCKADDR_IN6
-> macros).
-> 
-> Unfortunately the build is broken when toolchains do not satisfy at least
-> the linux headers condition (>= 3.12).
-> 
-> The package now depends on the toolchain headers at least 3.12.
-> 
-> Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
+On 2017-11-29 23:17 +0200, Stefan Fr?berg spake thusly:
+> Signed-off-by: Stefan Fr?berg <stefan.froberg@petroprogram.com>
 > ---
+> Changes v4 -> v5:
 > 
-> Hi all,
-> 
-> This patch fixes the build issue[1] of the netcat-openbsd package for
-> x86_64[2] on branch next. I assume it also fixes the mips64el issue[3].
-> 
-> It fixes the issue from a configuration point of view. I believe the
-> issue cannot be solved. As explain in the commit message, the build is
-> broken because the linux-headers must be at least 3.12.
->   
-> I need your help to make sure my understanding of the issue is right.
-> 
-> This fork of netcat uses some linux features, and the linux uapi header
-> must be included. It uses macros that are defined in the linux uapi
-> header which are not defined in the libc header.
-> 
-> I have tested by installing a new version of the kernel header using the
-> commands below.
-> 
-> 	$ make BR2_DEFAULT_KERNEL_HEADERS=3.12 linux-headers 
-> 	$ make netcat-openbsd-rebuild
-> 
-> And it worked.
-> 
-> Regards,
-> Gael
-> 
-> [1]: http://lists.busybox.net/pipermail/buildroot/2017-November/207809.html
-> [2]: http://autobuild.buildroot.net/results/3c42c1eadcbfc084a1e55bf1df0450aaf1f2139c/
-> [3]: http://autobuild.buildroot.net/results/de0dd8983243ee5d1fb189add8ce445177fb87c2/
-> 
->  package/netcat-openbsd/Config.in | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/netcat-openbsd/Config.in b/package/netcat-openbsd/Config.in
-> index 6df87ec688..5c8823c2ef 100644
-> --- a/package/netcat-openbsd/Config.in
-> +++ b/package/netcat-openbsd/Config.in
-> @@ -4,6 +4,7 @@ config BR2_PACKAGE_NETCAT_OPENBSD
->  	depends on BR2_TOOLCHAIN_HAS_THREADS
->  	depends on BR2_TOOLCHAIN_USES_GLIBC
->  	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
-> +	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
->  	select BR2_PACKAGE_LIBBSD
+> - Added host-zlib support to virtual zlib package
+
+Indeed. ;-)  But see below...
+
+[--SNIP--]
+> diff --git a/package/zlib/Config.in b/package/zlib/Config.in
+> index 6201aba142..043c3cefa4 100644
+> --- a/package/zlib/Config.in
+> +++ b/package/zlib/Config.in
+> @@ -1,7 +1,32 @@
+>  config BR2_PACKAGE_ZLIB
+> +	bool "zlib support"
+> +	help
+> +	  Select the desired Zlib library provider.
+> +
+> +if BR2_PACKAGE_ZLIB
+> +
+> +choice
+> +	prompt "zlib variant"
+> +	default BR2_PACKAGE_LIBZLIB
+> +	help
+> +	  Select the desired Zlib library provider.
+> +
+> +config BR2_PACKAGE_LIBZLIB
+>  	bool "zlib"
+> +	select BR2_PACKAGE_HAS_ZLIB
 >  	help
->  	  A simple Unix utility which reads and writes data across network
+>  	  Standard (de)compression library. Used by things like
+>  	  gzip and libpng.
+>  
+>  	  http://www.zlib.net
+> +
+> +endchoice
+> +
+> +config BR2_PACKAGE_HAS_ZLIB
+> +	bool
+> +
+> +config BR2_PACKAGE_PROVIDES_ZLIB
+> +	string
+> +	default "libzlib" if BR2_PACKAGE_LIBZLIB
+> +
+> +endif
 
+So far, only zlib is a target provider, so a host provider.
 
+But when you add zlib-ng, selecting zlib-ng for the target will imply
+zlib-ng for the host.
+
+It sounds weird that the choice of a target package has an impact on the
+host package.
+
+Besides, if zlib is not enabled in the configuration, then there will be
+no host variant either.
+
+So, we want to do something similar to what was done for openssl: always
+use one variant for the host (and I think we want it to be zlib, not
+zlib-ng).
+
+See for reference: 915a627f (openssl: unconditionally define
+BR2_PACKAGE_PROVIDES_HOST_OPENSSL)
+
+Regards,
+Yann E. MORIN.
+
+> diff --git a/package/zlib/zlib.mk b/package/zlib/zlib.mk
+> index 9b5f52e807..78f48ff059 100644
+> --- a/package/zlib/zlib.mk
+> +++ b/package/zlib/zlib.mk
+> @@ -4,74 +4,5 @@
+>  #
+>  ################################################################################
+>  
+> -ZLIB_VERSION = 1.2.11
+> -ZLIB_SOURCE = zlib-$(ZLIB_VERSION).tar.xz
+> -ZLIB_SITE = http://www.zlib.net
+> -ZLIB_LICENSE = Zlib
+> -ZLIB_LICENSE_FILES = README
+> -ZLIB_INSTALL_STAGING = YES
+> -
+> -# It is not possible to build only a shared version of zlib, so we build both
+> -# shared and static, unless we only want the static libs, and we eventually
+> -# selectively remove what we do not want
+> -ifeq ($(BR2_STATIC_LIBS),y)
+> -ZLIB_PIC =
+> -ZLIB_SHARED = --static
+> -else
+> -ZLIB_PIC = -fPIC
+> -ZLIB_SHARED = --shared
+> -endif
+> -
+> -define ZLIB_CONFIGURE_CMDS
+> -	(cd $(@D); rm -rf config.cache; \
+> -		$(TARGET_CONFIGURE_ARGS) \
+> -		$(TARGET_CONFIGURE_OPTS) \
+> -		CFLAGS="$(TARGET_CFLAGS) $(ZLIB_PIC)" \
+> -		./configure \
+> -		$(ZLIB_SHARED) \
+> -		--prefix=/usr \
+> -	)
+> -endef
+> -
+> -define HOST_ZLIB_CONFIGURE_CMDS
+> -	(cd $(@D); rm -rf config.cache; \
+> -		$(HOST_CONFIGURE_ARGS) \
+> -		$(HOST_CONFIGURE_OPTS) \
+> -		./configure \
+> -		--prefix="$(HOST_DIR)" \
+> -		--sysconfdir="$(HOST_DIR)/etc" \
+> -	)
+> -endef
+> -
+> -define ZLIB_BUILD_CMDS
+> -	$(TARGET_MAKE_ENV) $(MAKE1) -C $(@D)
+> -endef
+> -
+> -define HOST_ZLIB_BUILD_CMDS
+> -	$(HOST_MAKE_ENV) $(MAKE1) -C $(@D)
+> -endef
+> -
+> -define ZLIB_INSTALL_STAGING_CMDS
+> -	$(TARGET_MAKE_ENV) $(MAKE1) -C $(@D) DESTDIR=$(STAGING_DIR) LDCONFIG=true install
+> -endef
+> -
+> -define ZLIB_INSTALL_TARGET_CMDS
+> -	$(TARGET_MAKE_ENV) $(MAKE1) -C $(@D) DESTDIR=$(TARGET_DIR) LDCONFIG=true install
+> -endef
+> -
+> -# We don't care removing the .a from target, since it not used at link
+> -# time to build other packages, and it is anyway removed later before
+> -# assembling the filesystem images anyway.
+> -ifeq ($(BR2_SHARED_LIBS),y)
+> -define ZLIB_RM_STATIC_STAGING
+> -	rm -f $(STAGING_DIR)/usr/lib/libz.a
+> -endef
+> -ZLIB_POST_INSTALL_STAGING_HOOKS += ZLIB_RM_STATIC_STAGING
+> -endif
+> -
+> -define HOST_ZLIB_INSTALL_CMDS
+> -	$(HOST_MAKE_ENV) $(MAKE1) -C $(@D) LDCONFIG=true install
+> -endef
+> -
+> -$(eval $(generic-package))
+> -$(eval $(host-generic-package))
+> +$(eval $(virtual-package))
+> +$(eval $(host-virtual-package))
+> -- 
+> 2.13.6
+> 
 
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
