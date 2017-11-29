@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 29 Nov 2017 23:44:49 +0100
-Subject: [Buildroot] [PATCH 1/2] DEVELOPERS: add me for supertuxkart
- package
-In-Reply-To: <20171129222931.17511-1-romain.naour@gmail.com>
+Date: Wed, 29 Nov 2017 23:45:09 +0100
+Subject: [Buildroot] [PATCH 2/2] package/supertuxkart: bump to 0.9.3
+In-Reply-To: <20171129222931.17511-2-romain.naour@gmail.com>
 References: <20171129222931.17511-1-romain.naour@gmail.com>
-Message-ID: <20171129234449.2ea78a30@windsurf.home>
+ <20171129222931.17511-2-romain.naour@gmail.com>
+Message-ID: <20171129234509.1f37baa9@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,13 +13,25 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 29 Nov 2017 23:29:30 +0100, Romain Naour wrote:
+On Wed, 29 Nov 2017 23:29:31 +0100, Romain Naour wrote:
+> Remove upstream patches.
+> 
+> See: http://blog.supertuxkart.net/2017/11/supertuxkart-093-released.html
+> 
 > Signed-off-by: Romain Naour <romain.naour@gmail.com>
 > ---
->  DEVELOPERS | 1 +
->  1 file changed, 1 insertion(+)
+>  ...001-irrlicht-Get-rid-of-unprefixed-cflags.patch | 34 -------------------
+>  ...x-boolean-return-type-for-jpeglib-s-callb.patch | 39 ----------------------
+>  package/supertuxkart/supertuxkart.hash             |  8 ++---
+>  package/supertuxkart/supertuxkart.mk               |  6 ++--
+>  4 files changed, 8 insertions(+), 79 deletions(-)
+>  delete mode 100644 package/supertuxkart/0001-irrlicht-Get-rid-of-unprefixed-cflags.patch
+>  delete mode 100644 package/supertuxkart/0002-irrlicht-Fix-boolean-return-type-for-jpeglib-s-callb.patch
 
-Applied to master, thanks.
+This doesn't apply to the next branch. Could you look why, and resend
+rebased on the next branch?
+
+Thanks!
 
 Thomas
 -- 
