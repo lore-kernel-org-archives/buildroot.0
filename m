@@ -1,46 +1,68 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 29 Nov 2017 21:53:24 +0100
-Subject: [Buildroot] [PATCH v1] qt5: bump latest version to 5.9.3
-In-Reply-To: <20171128223744.28422-1-ps.report@gmx.net>
-References: <20171128223744.28422-1-ps.report@gmx.net>
-Message-ID: <20171129215324.434e0b67@windsurf.home>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Wed, 29 Nov 2017 21:55:54 +0100
+Subject: [Buildroot] [PATCH/next 1/1] package/x11r7/xapp_xfs: bump version
+ to 1.2.0
+Message-ID: <20171129205554.3853-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+xfs was ported to use libXfont 2.x instead of 1.x:
+https://cgit.freedesktop.org/xorg/app/xfs/diff/configure.ac?id=fedc90e8e3f6c36204de5562bfb726270064a4f1
 
-On Tue, 28 Nov 2017 23:37:44 +0100, Peter Seiderer wrote:
-> qt5connectivity:
->  - moved 0001-Example-heartrate-server-needs-only-core-and-bluetoo.patch
->    to 5.9.3
-> 
-> qt5declarative:
->  - removed 0001-Fix-no-opengl-builds.patch to 5.9.3 (upstream committed,
->    see [1])
-> 
-> qt5webengine:
->  - keep 0002-Load-libEGL-and-libGLES2-symbols-implicitly.patch
->    (upstream committed, see [2], but reverted afterwards, see [3])
-> 
-> [1] https://code.qt.io/cgit/qt/qtdeclarative.git/commit/?id=fa52bb665d6beb77a951c14c8edcba3541850afc
-> [2] https://code.qt.io/cgit/qt/qtwebengine.git/commit/?id=d4c621f6a6b87f2a86069fa393b9f7c4f9e7b9ad
-> [3] https://code.qt.io/cgit/qt/qtwebengine.git/commit/?id=c11c2c8981e647c1eb2c6753ce77d436b92fff87
+Added all hashes provided by upstream.
 
-This patch currently doesn't apply on next. There is a trivial conflict
-with the QT5_SITE variable cleanup from Ga?l, and there is an issue
-with the qt5connectivity patch, which doesn't exist in the next branch
-at this point.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/x11r7/xapp_xfs/Config.in     | 2 +-
+ package/x11r7/xapp_xfs/xapp_xfs.hash | 7 +++++--
+ package/x11r7/xapp_xfs/xapp_xfs.mk   | 4 ++--
+ 3 files changed, 8 insertions(+), 5 deletions(-)
 
-Since 2017.11 is about to be released, I'll merge this patch once next
-is merged back in the master branch.
-
-Thanks!
-
-Thomas
+diff --git a/package/x11r7/xapp_xfs/Config.in b/package/x11r7/xapp_xfs/Config.in
+index 0a5d711524..b708af8c0c 100644
+--- a/package/x11r7/xapp_xfs/Config.in
++++ b/package/x11r7/xapp_xfs/Config.in
+@@ -2,7 +2,7 @@ config BR2_PACKAGE_XAPP_XFS
+ 	bool "xfs"
+ 	depends on BR2_USE_MMU # fork()
+ 	select BR2_PACKAGE_XLIB_LIBFS
+-	select BR2_PACKAGE_XLIB_LIBXFONT
++	select BR2_PACKAGE_XLIB_LIBXFONT2
+ 	select BR2_PACKAGE_XPROTO_FONTSPROTO
+ 	help
+ 	  X font server
+diff --git a/package/x11r7/xapp_xfs/xapp_xfs.hash b/package/x11r7/xapp_xfs/xapp_xfs.hash
+index 67823742b5..27577ba2bd 100644
+--- a/package/x11r7/xapp_xfs/xapp_xfs.hash
++++ b/package/x11r7/xapp_xfs/xapp_xfs.hash
+@@ -1,2 +1,5 @@
+-# From http://lists.x.org/archives/xorg-announce/2014-August/002472.html
+-sha256	a40b75e674c091464f85739292b6bf24e2d153f4a2ac456d3ea6b8a64e269ffa	xfs-1.1.4.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2017-November/002826.html
++md5  b4d2e644bfb35cae8858d2411501b07e  xfs-1.2.0.tar.bz2
++sha1 00848fcc2915ed8b00e75ac311c4727327324f57  xfs-1.2.0.tar.bz2
++sha256 db2212115783498f8eeaaee1349461d6c4e9d2005e142bacd3a984fe57269860  xfs-1.2.0.tar.bz2
++sha512 557b08aa07919239ce345d60b288b886640200bb1a59649fc890c3ccaa8559cc6745189614e696ab1b390ec024b393be5493787b7b0d2b3545b342d743c2e0ef  xfs-1.2.0.tar.bz2
+diff --git a/package/x11r7/xapp_xfs/xapp_xfs.mk b/package/x11r7/xapp_xfs/xapp_xfs.mk
+index 3e704554b2..f4fe35dfb7 100644
+--- a/package/x11r7/xapp_xfs/xapp_xfs.mk
++++ b/package/x11r7/xapp_xfs/xapp_xfs.mk
+@@ -4,11 +4,11 @@
+ #
+ ################################################################################
+ 
+-XAPP_XFS_VERSION = 1.1.4
++XAPP_XFS_VERSION = 1.2.0
+ XAPP_XFS_SOURCE = xfs-$(XAPP_XFS_VERSION).tar.bz2
+ XAPP_XFS_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_XFS_LICENSE = MIT
+ XAPP_XFS_LICENSE_FILES = COPYING
+-XAPP_XFS_DEPENDENCIES = xlib_libFS xlib_libXfont xproto_fontsproto
++XAPP_XFS_DEPENDENCIES = xlib_libFS xlib_libXfont2 xproto_fontsproto
+ 
+ $(eval $(autotools-package))
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.11.0
