@@ -1,67 +1,74 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 29 Nov 2017 10:50:06 +0100
-Subject: [Buildroot] [git commit] Update for 2017.08.2
-Message-ID: <20171129094312.D329B7FBB3@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 29 Nov 2017 11:22:01 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2017-11-28
+In-Reply-To: <20171129070009.BC0F72037D@mail.free-electrons.com>
+References: <20171129070009.BC0F72037D@mail.free-electrons.com>
+Message-ID: <20171129102201.GI2889@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=951685e860776052a270a74d93ac80123ae0950f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Thomas, All,
 
-[Peter: drop Makefile changes]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 1d02d0be586bfdaff926a7c6c8930d186cdd92b2)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- CHANGES | 35 +++++++++++++++++++++++++++++++++++
- 1 file changed, 35 insertions(+)
+On 2017-11-29 08:00 +0100, Thomas Petazzoni spake thusly:
+> Build statistics for 2017-11-28
+> ===============================
+> 
+>       branch |  OK | NOK | TIM | TOT |
+>    2017.08.x |  11 |   0 |   0 |  11 |
+>       master | 176 |   4 |   0 | 180 |
 
-diff --git a/CHANGES b/CHANGES
-index 66d76d3..cdd9481 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -68,6 +68,41 @@
- 	#10426: uboot-tools' fw_setenv does not update the redundant...
- 	#10451: libpcap 1.8.x and 1.7x does not compile on PPC
- 
-+2017.08.2, Released November 28th, 2017
-+
-+	Important / security related fixes.
-+
-+	Qt: 5.6 version updated to 5.6.3.
-+
-+	Reproducible: Do not override SOURCE_DATE_EPOCH if already set
-+	in the environment.
-+
-+	Makefiles: Workaround include order issues for certain make
-+	versions by explicitly sorting the result of wildcard where it
-+	matters.
-+
-+	Updated/fixed packages: apr, apr-util, arqp-standalone,
-+	azure-iot-sdk-c, collectd, dvb-apps, ffmpeg, go-bootstrap,
-+	google-breakpad, gstreamer, imagemagick, irssi, jimtcl,
-+	kvm-unit-test, libcurl, libfastjson, libglib2, libidn,
-+	libpjsip, libplist, localedef, lttng-tools, luajit, mesa3d,
-+	moarvm, mp4v2, openssh, openssl, oracle-mysql, postgresql,
-+	python3, python-pyqt5, qt, qt5base, qt5canvas3d,
-+	qt5connectivity, qt5declarative, qt5engineio,
-+	qt5graphicaleffects, qt5imageformats, qt5location,
-+	qt5multimedia, qt5quickcontrols, qt5quickcontrols2, qt5script,
-+	qt5sensors, qt5serialbus, qt5serialport, qt5svg, qt5tools,
-+	qt5webchannel, qt5webkit, qt5websockets, qt5x11extras,
-+	qt5xmlpatterns, quagga, redis, ruby, samba4, sdl2, snmppp,
-+	swupdate, ti-gfx, uboot-tools, usb_modeswitch, vboot-utils,
-+	webkitgtk, wget, wireshark, xapp_xdriinfo.
-+
-+	Issues resolved (http://bugs.buildroot.org):
-+
-+	10326: mesa3d package fails to build when BR2_SHARED_STATIC_LIBS=y
-+	10361: python3 python-config script generates invalid includes
-+	10501: host-localedef fails to compile on Ubuntu 17.10
-+
- 2017.08.1, Released October 23rd, 2017
- 
- 	Important / security related fixes.
+Woot! :-)
+
+This is a pretty good state for the upcoming release. :-)
+
+> Results for branch 'master'
+>     mips64el |                asterisk-14.5.0 | NOK | http://autobuild.buildroot.net/results/2b8c810bd8775413fd4567b2f8495be70b7bb808 |     
+
+Parallel install issue. I'm on it...
+
+>       mipsel |                    jamvm-2.0.0 | NOK | http://autobuild.buildroot.net/results/ed88a03eda6bf40634534578e6e870a25ed66261 | ORPH
+
+callNative.S: Assembler messages:
+callNative.S:161: Error: float register should be even, was 1
+
+This is for a mipsr6.
+
+Vicente, should we disable jamvm for mipsr6?
+
+>          arm |              lttng-tools-2.9.5 | NOK | http://autobuild.buildroot.net/results/624f2db9baad4f1d6c41ff74dc6310a4228679f2 |     
+
+  CCLD     prog
+OBJCOPY prog.debug
+objcopy: Unable to recognise the format of the input file `prog'
+
+This is for an armv4.
+
+I've looked, but the dependency chain looks good.
+
+Philippe?
+
+>         or1k |                    zmqpp-4.1.2 | NOK | http://autobuild.buildroot.net/results/e09731abe257ee187e20aa0e75beee22004bd3e2 |     
+
+src/client/options.cpp: In function 'client_options
+process_command_line(int, const char**)':
+src/client/options.cpp:139:1: internal compiler error: in
+merge_overlapping_regs, at regrename.c:304
+ }
+ ^
+
+Waldemar? Should we disable it for or1k?
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
