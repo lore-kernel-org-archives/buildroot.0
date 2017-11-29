@@ -1,40 +1,52 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 29 Nov 2017 23:48:18 +0100
-Subject: [Buildroot] [PATCH v1] gdb: prevent installation of libbfd.so
-In-Reply-To: <20171028154033.4196bf6a@windsurf>
-References: <20171027180214.12657-1-ps.report@gmx.net>
- <20171028154033.4196bf6a@windsurf>
-Message-ID: <20171129234818.42fc759f@windsurf.home>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Wed, 29 Nov 2017 23:54:55 +0100
+Subject: [Buildroot] [PATCH 2/2] package/supertuxkart: bump to 0.9.3
+In-Reply-To: <20171129234509.1f37baa9@windsurf.home>
+References: <20171129222931.17511-1-romain.naour@gmail.com>
+ <20171129222931.17511-2-romain.naour@gmail.com>
+ <20171129234509.1f37baa9@windsurf.home>
+Message-ID: <49b1af5a-3a78-1f86-2c3c-200212b7064b@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Peter,
+Hi Thomas,
 
-On Sat, 28 Oct 2017 15:40:33 +0200, Thomas Petazzoni wrote:
-> On Fri, 27 Oct 2017 20:02:14 +0200, Peter Seiderer wrote:
-> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>  
+Le 29/11/2017 ? 23:45, Thomas Petazzoni a ?crit?:
+> Hello,
 > 
-> We really want a more detailed commit log for such a change that isn't
-> obvious.
+> On Wed, 29 Nov 2017 23:29:31 +0100, Romain Naour wrote:
+>> Remove upstream patches.
+>>
+>> See: http://blog.supertuxkart.net/2017/11/supertuxkart-093-released.html
+>>
+>> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+>> ---
+>>  ...001-irrlicht-Get-rid-of-unprefixed-cflags.patch | 34 -------------------
+>>  ...x-boolean-return-type-for-jpeglib-s-callb.patch | 39 ----------------------
+>>  package/supertuxkart/supertuxkart.hash             |  8 ++---
+>>  package/supertuxkart/supertuxkart.mk               |  6 ++--
+>>  4 files changed, 8 insertions(+), 79 deletions(-)
+>>  delete mode 100644 package/supertuxkart/0001-irrlicht-Get-rid-of-unprefixed-cflags.patch
+>>  delete mode 100644 package/supertuxkart/0002-irrlicht-Fix-boolean-return-type-for-jpeglib-s-callb.patch
 > 
-> > For a previous discussion on this topic see [1].
-> > 
-> > [1] http://lists.busybox.net/pipermail/buildroot/2017-September/202337.html  
+> This doesn't apply to the next branch. Could you look why, and resend
+> rebased on the next branch?
+
+This patch is based on the next branch, I think it's a patchwork issue (line ending)
+
+http://code.bulix.org/j236x2-233444?raw
+
+Sorry, I can't do anything.
+The patch must be fixed while applying :-/
+
+Best regards,
+Romain
+
 > 
-> I know this link provides some details, but they should be in the
-> commit log.
-
-Ping ? :-)
-
-I'll mark this patch as Changes Requested.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+> Thanks!
+> 
+> Thomas
+> 
