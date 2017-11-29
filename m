@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 29 Nov 2017 21:45:57 +0100
-Subject: [Buildroot] [PATCH 2/3] package/x11r7/xlib_libXfont2: security bump
- to version 2.0.3
+Date: Wed, 29 Nov 2017 21:45:58 +0100
+Subject: [Buildroot] [PATCH 3/3] package/x11r7/xlib_libXfont: security bump
+ to version 1.5.4
 In-Reply-To: <20171129204558.3547-1-bernd.kuhls@t-online.de>
 References: <20171129204558.3547-1-bernd.kuhls@t-online.de>
-Message-ID: <20171129204558.3547-2-bernd.kuhls@t-online.de>
+Message-ID: <20171129204558.3547-3-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,41 +12,41 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Fixes CVE-2017-16611:
-https://lists.x.org/archives/xorg-announce/2017-November/002824.html
+https://lists.x.org/archives/xorg-announce/2017-November/002825.html
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/x11r7/xlib_libXfont2/xlib_libXfont2.hash | 10 +++++-----
- package/x11r7/xlib_libXfont2/xlib_libXfont2.mk   |  2 +-
+ package/x11r7/xlib_libXfont/xlib_libXfont.hash | 10 +++++-----
+ package/x11r7/xlib_libXfont/xlib_libXfont.mk   |  2 +-
  2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/x11r7/xlib_libXfont2/xlib_libXfont2.hash b/package/x11r7/xlib_libXfont2/xlib_libXfont2.hash
-index 3e763b268f..1816b4bf6e 100644
---- a/package/x11r7/xlib_libXfont2/xlib_libXfont2.hash
-+++ b/package/x11r7/xlib_libXfont2/xlib_libXfont2.hash
+diff --git a/package/x11r7/xlib_libXfont/xlib_libXfont.hash b/package/x11r7/xlib_libXfont/xlib_libXfont.hash
+index 78700d3657..ea04348719 100644
+--- a/package/x11r7/xlib_libXfont/xlib_libXfont.hash
++++ b/package/x11r7/xlib_libXfont/xlib_libXfont.hash
 @@ -1,5 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2017-October/002813.html
--md5 d39e6446e46f939486d1a8b856e8b67b  libXfont2-2.0.2.tar.bz2
--sha1 d5117914a026b3fd47123cb1c2a22daaae3b63e4  libXfont2-2.0.2.tar.bz2
--sha256 94088d3b87f7d42c7116d9adaad155859e93330c6e47f5989f2de600b9a6c111  libXfont2-2.0.2.tar.bz2
--sha512 d62b0c3d663a2c668796cca8c6c2a90f83feeae1253b7d946668d33502cd8099c963285b88db4f745efb0d4ff783c118eb3d84cb8e6e1724586e1ef2be23e593  libXfont2-2.0.2.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2017-November/002824.html
-+md5  b7ca87dfafeb5205b28a1e91ac3efe85  libXfont2-2.0.3.tar.bz2
-+sha1 1110f1ad4061d9e8131ecb941757480e3e32bca0  libXfont2-2.0.3.tar.bz2
-+sha256 0e8ab7fd737ccdfe87e1f02b55f221f0bd4503a1c5f28be4ed6a54586bac9c4e  libXfont2-2.0.3.tar.bz2
-+sha512 648b664e2aa58cbc7366a1b05873aa06bd4a38060f64085783043388244af8ceced77b29a22c3ac8b6d34cd226e093bbbcc785ea1748ea65720fe7ea05b4b44b  libXfont2-2.0.3.tar.bz2
-diff --git a/package/x11r7/xlib_libXfont2/xlib_libXfont2.mk b/package/x11r7/xlib_libXfont2/xlib_libXfont2.mk
-index 696c605a36..3f1bdee435 100644
---- a/package/x11r7/xlib_libXfont2/xlib_libXfont2.mk
-+++ b/package/x11r7/xlib_libXfont2/xlib_libXfont2.mk
+-# From https://lists.x.org/archives/xorg-announce/2017-October/002816.html
+-md5 9ba75bf38ba62a6ad52550ab716da9b3  libXfont-1.5.3.tar.bz2
+-sha1 628b8ca2207f09324b8926084318a2fa2edb16d1  libXfont-1.5.3.tar.bz2
+-sha256 ab85c10fd2683481dfef672a77fe60e6a2039558cbc0e9bf56b5e1df471c93d0  libXfont-1.5.3.tar.bz2
+-sha512 e7c8a09c4d174129e5d550194d3c3dc2b4abf797e52fe588c6002920727c52cf33b7db8d07fc69c2987e766d3af2d6ddda72f0c70eb21b135c691c97656a81b4  libXfont-1.5.3.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2017-November/002825.html
++md5  16eaf156edd79b68038b6a7c44aa9e9b  libXfont-1.5.4.tar.bz2
++sha1 9db050f63b9c4cb19e0dbb40575558ccb95719ca  libXfont-1.5.4.tar.bz2
++sha256 1a7f7490774c87f2052d146d1e0e64518d32e6848184a18654e8d0bb57883242  libXfont-1.5.4.tar.bz2
++sha512 864edbaff45c44bd92bc4b06275c73fdf584a9b88bc523a297d4c75c01ca253f438463e929af70d753ddecfa648bb0b9bcf0ec72267db9f2b1704f7afa906cb3  libXfont-1.5.4.tar.bz2
+diff --git a/package/x11r7/xlib_libXfont/xlib_libXfont.mk b/package/x11r7/xlib_libXfont/xlib_libXfont.mk
+index 13e3b211f3..30163eec6f 100644
+--- a/package/x11r7/xlib_libXfont/xlib_libXfont.mk
++++ b/package/x11r7/xlib_libXfont/xlib_libXfont.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XLIB_LIBXFONT2_VERSION = 2.0.2
-+XLIB_LIBXFONT2_VERSION = 2.0.3
- XLIB_LIBXFONT2_SOURCE = libXfont2-$(XLIB_LIBXFONT2_VERSION).tar.bz2
- XLIB_LIBXFONT2_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBXFONT2_LICENSE = MIT
+-XLIB_LIBXFONT_VERSION = 1.5.3
++XLIB_LIBXFONT_VERSION = 1.5.4
+ XLIB_LIBXFONT_SOURCE = libXfont-$(XLIB_LIBXFONT_VERSION).tar.bz2
+ XLIB_LIBXFONT_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBXFONT_LICENSE = MIT
 -- 
 2.11.0
