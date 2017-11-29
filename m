@@ -1,69 +1,155 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 29 Nov 2017 22:50:15 +0100
-Subject: [Buildroot] [git commit] rauc: select host-squashfs as a host
- dependency
-In-Reply-To: <1511991010.9792.41.camel@impinj.com>
-References: <20171129210644.C2457803E2@busybox.osuosl.org>
- <1511991010.9792.41.camel@impinj.com>
-Message-ID: <20171129225015.577113ed@windsurf.home>
+Date: Wed, 29 Nov 2017 23:04:42 +0100
+Subject: [Buildroot] [git commit branch/next] libostree: new package
+Message-ID: <20171129215750.7E0F0815FC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=d42a19990f1c8d1c60f19990ee9709d6b3d3317f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Wed, 29 Nov 2017 21:30:10 +0000, Trent Piepho wrote:
+OSTree is an upgrade system for Linux-based operating systems
 
-> > +	select BR2_PACKAGE_HOST_SQUASHFS # run-time dependency
-> >  	help
-> >  	  RAUC is the Robust Auto-Update Controller developed by
-> >  	  Pengutronix. Enable this option to build the rauc
-> > diff --git a/package/rauc/rauc.mk b/package/rauc/rauc.mk
-> > index 479a583..67ef155 100644
-> > --- a/package/rauc/rauc.mk
-> > +++ b/package/rauc/rauc.mk
-> > @@ -29,7 +29,7 @@ ifeq ($(BR2_PACKAGE_SYSTEMD),y)
-> >  RAUC_DEPENDENCIES += systemd
-> >  endif
-> >  
-> > -HOST_RAUC_DEPENDENCIES = host-pkgconf host-openssl host-libglib2
-> > +HOST_RAUC_DEPENDENCIES = host-pkgconf host-openssl host-libglib2 host-squashfs  
-> 
-> Would it work to not include the build dependency on host-sqaushfs? 
-> Since squashfs is a command invoked at run time, rauc doesn't actually
-> need to be present when building.  Minimize the dependency info, allow
-> greater parallelism if packages were built in parallel, etc.  Or
-> perhaps it's easier to always match the config dep with a build dep
-> even if the latter isn't necessary in some cases?
+Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
+[Thomas: use SPDX license code, fix license, it's GPL-2.0+ not GPL-2.0.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ DEVELOPERS                       |  1 +
+ package/Config.in                |  1 +
+ package/libostree/Config.in      | 25 +++++++++++++++++
+ package/libostree/libostree.hash |  3 ++
+ package/libostree/libostree.mk   | 59 ++++++++++++++++++++++++++++++++++++++++
+ 5 files changed, 89 insertions(+)
 
-I already pointed out this during the review, and Baruch made a useful
-comment: if a package A has host-foo in its dependencies, it expects
-host-foo to be fully ready and working by the time package A's
-configure step starts.
-
-So, what you say about runtime dependencies is completely correct for
-*target* packages, and we do that everywhere in Buildroot: select the
-package at the Config.in level, but not depend on it at the
-<pkg>_DEPENDENCIES level. All what matters for target packages is that
-all runtime dependencies are part of the final root filesystem image.
-
-However, for host packages, we expect them to be ready and operational
-as soon as their build completes. Hence, runtime dependencies need to
-be considered as runtime dependencies.
-
-Technically, we wouldn't need host-rauc-configure to depend on
-host-squashfs. Having host-rauc depend on host-squashfs would be
-sufficient (some kind of "install dependency"). But we don't have this
-concept in Buildroot, and for just the few cases of runtime
-dependencies of host packages, I'm not sure it's worth adding such a
-feature.
-
-Does that make sense?
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 8bd7d85..35507de 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1017,6 +1017,7 @@ N:	Marcin Nowakowski <marcin.nowakowski@imgtec.com>
+ F:	package/libkcapi/
+ 
+ N:	Marcus Folkesson <marcus.folkesson@gmail.com>
++F:	package/libostree/
+ F:	utils/diffconfig
+ 
+ N:	Marek Belisko <marek.belisko@open-nandra.com>
+diff --git a/package/Config.in b/package/Config.in
+index e2f71b4..877cbf2 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1926,6 +1926,7 @@ menu "System tools"
+ 	source "package/keyutils/Config.in"
+ 	source "package/kmod/Config.in"
+ 	source "package/kvmtool/Config.in"
++	source "package/libostree/Config.in"
+ 	source "package/lxc/Config.in"
+ 	source "package/monit/Config.in"
+ 	source "package/ncdu/Config.in"
+diff --git a/package/libostree/Config.in b/package/libostree/Config.in
+new file mode 100644
+index 0000000..b62f4ea
+--- /dev/null
++++ b/package/libostree/Config.in
+@@ -0,0 +1,25 @@
++config BR2_PACKAGE_LIBOSTREE
++	bool "libostree"
++	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgpgme
++	depends on !BR2_STATIC_LIBS # libfuse
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
++	depends on BR2_USE_WCHAR # libglib2
++	depends on BR2_USE_MMU # e2fsprogs, libfuse,libglib2, libgpgme
++	# doesn't build with musl due to lack of TEMP_FAILURE_RETRY()
++	depends on !BR2_TOOLCHAIN_USES_MUSL
++	select BR2_PACKAGE_E2FSPROGS
++	select BR2_PACKAGE_LIBFUSE
++	select BR2_PACKAGE_LIBGLIB2
++	select BR2_PACKAGE_LIBGPGME
++	select BR2_PACKAGE_XZ
++	help
++	  OSTree is an upgrade system for Linux-based operating
++	  systems.
++
++	  https://ostree.readthedocs.io/en/latest/
++
++comment "libostree needs a uClibc or glibc toolchain w/ threads, dynamic library, wchar"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS \
++		|| !BR2_USE_WCHAR || BR2_TOOLCHAIN_USES_MUSL
++	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS
++	depends on BR2_USE_MMU
+diff --git a/package/libostree/libostree.hash b/package/libostree/libostree.hash
+new file mode 100644
+index 0000000..7acc04e
+--- /dev/null
++++ b/package/libostree/libostree.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256 fc409f04c9fd440b83b4fa324f3b912cbf61145389378d44254b8b191c9fef08  libostree-2017.12.tar.xz
++sha256 b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
+diff --git a/package/libostree/libostree.mk b/package/libostree/libostree.mk
+new file mode 100644
+index 0000000..bac44dd
+--- /dev/null
++++ b/package/libostree/libostree.mk
+@@ -0,0 +1,59 @@
++################################################################################
++#
++# libostree
++#
++################################################################################
++
++LIBOSTREE_VERSION = 2017.12
++LIBOSTREE_SOURCE = libostree-$(LIBOSTREE_VERSION).tar.xz
++LIBOSTREE_SITE = https://github.com/ostreedev/ostree/releases/download/v$(LIBOSTREE_VERSION)
++
++LIBOSTREE_LICENSE = GPL-2.0+
++LIBOSTREE_LICENSE_FILES = COPYING
++LIBOSTREE_DEPENDENCIES = e2fsprogs host-pkgconf libfuse libglib2 libgpgme xz
++
++LIBOSTREE_CONF_OPTS += --with-gpgme-prefix=$(STAGING_DIR)/usr
++
++ifeq ($(BR2_PACKAGE_OPENSSL),y)
++LIBOSTREE_CONF_OPTS += --with-openssl
++LIBOSTREE_DEPENDENCIES += openssl
++else
++LIBOSTREE_CONF_OPTS += --without-openssl
++endif
++
++ifeq ($(BR2_PACKAGE_AVAHI),y)
++LIBOSTREE_CONF_OPTS += --with-avahi
++LIBOSTREE_DEPENDENCIES += avahi
++else
++LIBOSTREE_CONF_OPTS += --without-avahi
++endif
++
++#cURL support depends on libsoup
++ifeq ($(BR2_PACKAGE_LIBSOUP),y)
++LIBOSTREE_CONF_OPTS += --with-libsoup
++LIBOSTREE_DEPENDENCIES += libsoup
++ifeq ($(BR2_PACKAGE_LIBCURL),y)
++LIBOSTREE_CONF_OPTS += --with-curl
++LIBOSTREE_DEPENDENCIES += libcurl
++else
++LIBOSTREE_CONF_OPTS += --without-curl
++endif
++else
++LIBOSTREE_CONF_OPTS += --without-libsoup --without-curl
++endif
++
++ifeq ($(BR2_PACKAGE_LIBARCHIVE),y)
++LIBOSTREE_CONF_OPTS += --with-libarchive
++LIBOSTREE_DEPENDENCIES += libarchive
++else
++LIBOSTREE_CONF_OPTS += --without-libarchive
++endif
++
++ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
++LIBOSTREE_CONF_OPTS += --with-selinux
++LIBOSTREE_DEPENDENCIES += libselinux
++else
++LIBOSTREE_CONF_OPTS += --without-selinux
++endif
++
++$(eval $(autotools-package))
