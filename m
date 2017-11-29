@@ -1,32 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 29 Nov 2017 21:42:17 +0100
-Subject: [Buildroot] [PATCH 1/1] package/exim: security bump to version
- 4.89.1
-In-Reply-To: <20171129203827.10872-1-bernd.kuhls@t-online.de>
-References: <20171129203827.10872-1-bernd.kuhls@t-online.de>
-Message-ID: <20171129214217.2e775f46@windsurf.home>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Wed, 29 Nov 2017 21:45:56 +0100
+Subject: [Buildroot] [PATCH 1/3] package/x11r7/xlib_libXcursor: security
+ bump to version 1.1.15
+Message-ID: <20171129204558.3547-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Fixes CVE-2017-16612:
+https://lists.x.org/archives/xorg-announce/2017-November/002823.html
 
-On Wed, 29 Nov 2017 21:38:27 +0100, Bernd Kuhls wrote:
-> Fixes CVE-2017-16943 & CVE-2017-16944:
-> https://lists.exim.org/lurker/message/20171128.215505.79ea8efa.en.html
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/exim/exim.hash | 2 +-
->  package/exim/exim.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Added all hashed provided by upstream.
 
-Applied to master, thanks.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/x11r7/xlib_libXcursor/xlib_libXcursor.hash | 7 +++++--
+ package/x11r7/xlib_libXcursor/xlib_libXcursor.mk   | 2 +-
+ 2 files changed, 6 insertions(+), 3 deletions(-)
 
-Thomas
+diff --git a/package/x11r7/xlib_libXcursor/xlib_libXcursor.hash b/package/x11r7/xlib_libXcursor/xlib_libXcursor.hash
+index 0135ac9dd0..7da9eb8c4f 100644
+--- a/package/x11r7/xlib_libXcursor/xlib_libXcursor.hash
++++ b/package/x11r7/xlib_libXcursor/xlib_libXcursor.hash
+@@ -1,2 +1,5 @@
+-# From http://lists.x.org/archives/xorg-announce/2013-May/002229.html
+-sha256	9bc6acb21ca14da51bda5bc912c8955bc6e5e433f0ab00c5e8bef842596c33df	libXcursor-1.1.14.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2017-November/002823.html
++md5  58fe3514e1e7135cf364101e714d1a14  libXcursor-1.1.15.tar.bz2
++sha1 3e19f991f244b7fa31566adce7ead078424296cf  libXcursor-1.1.15.tar.bz2
++sha256 294e670dd37cd23995e69aae626629d4a2dfe5708851bbc13d032401b7a3df6b  libXcursor-1.1.15.tar.bz2
++sha512 53ad0fa2afd7b4cf1108b560e44ea71abdf5c55a18df243d7123942513589c927f5c105395f790d8769959e0129db54264e6aac7efd51a5f1aec270379b1f2f5  libXcursor-1.1.15.tar.bz2
+diff --git a/package/x11r7/xlib_libXcursor/xlib_libXcursor.mk b/package/x11r7/xlib_libXcursor/xlib_libXcursor.mk
+index c59c01a51f..b27aa653e9 100644
+--- a/package/x11r7/xlib_libXcursor/xlib_libXcursor.mk
++++ b/package/x11r7/xlib_libXcursor/xlib_libXcursor.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XLIB_LIBXCURSOR_VERSION = 1.1.14
++XLIB_LIBXCURSOR_VERSION = 1.1.15
+ XLIB_LIBXCURSOR_SOURCE = libXcursor-$(XLIB_LIBXCURSOR_VERSION).tar.bz2
+ XLIB_LIBXCURSOR_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBXCURSOR_LICENSE = MIT
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.11.0
