@@ -1,52 +1,78 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Wed, 29 Nov 2017 23:54:55 +0100
-Subject: [Buildroot] [PATCH 2/2] package/supertuxkart: bump to 0.9.3
-In-Reply-To: <20171129234509.1f37baa9@windsurf.home>
-References: <20171129222931.17511-1-romain.naour@gmail.com>
- <20171129222931.17511-2-romain.naour@gmail.com>
- <20171129234509.1f37baa9@windsurf.home>
-Message-ID: <49b1af5a-3a78-1f86-2c3c-200212b7064b@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 30 Nov 2017 00:08:40 +0100
+Subject: [Buildroot] [PATCH 0/8] Fix warnings reported by check-package
+Message-ID: <cover.1511996903.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hello All!
 
-Le 29/11/2017 ? 23:45, Thomas Petazzoni a ?crit?:
-> Hello,
-> 
-> On Wed, 29 Nov 2017 23:29:31 +0100, Romain Naour wrote:
->> Remove upstream patches.
->>
->> See: http://blog.supertuxkart.net/2017/11/supertuxkart-093-released.html
->>
->> Signed-off-by: Romain Naour <romain.naour@gmail.com>
->> ---
->>  ...001-irrlicht-Get-rid-of-unprefixed-cflags.patch | 34 -------------------
->>  ...x-boolean-return-type-for-jpeglib-s-callb.patch | 39 ----------------------
->>  package/supertuxkart/supertuxkart.hash             |  8 ++---
->>  package/supertuxkart/supertuxkart.mk               |  6 ++--
->>  4 files changed, 8 insertions(+), 79 deletions(-)
->>  delete mode 100644 package/supertuxkart/0001-irrlicht-Get-rid-of-unprefixed-cflags.patch
->>  delete mode 100644 package/supertuxkart/0002-irrlicht-Fix-boolean-return-type-for-jpeglib-s-callb.patch
-> 
-> This doesn't apply to the next branch. Could you look why, and resend
-> rebased on the next branch?
+This series fixes variables names as reported by check-package, to apply
+our porr-man's namespace in packages.
 
-This patch is based on the next branch, I think it's a patchwork issue (line ending)
+Also fix extra lines and trailing white-spaces.
 
-http://code.bulix.org/j236x2-233444?raw
+It eventually adds a gitlab-ci job to automatically run check-package,
+but I suggest it is not applied because there is one false-positive
+reported by check-package, on the asterisk package:
 
-Sorry, I can't do anything.
-The patch must be fixed while applying :-/
+    package/asterisk/asterisk.mk:289: useless default value
+    (http://nightly.buildroot.org/#_infrastructure_for_autotools_based_packages)
 
-Best regards,
-Romain
+However, this one is about _AUTORECONF, which is inherited from target
+to host variants, but for asterisk, we explcitly do not want to
+autoreconf the host variant (not the same _SUBDIR tree!).
 
-> 
-> Thanks!
-> 
-> Thomas
-> 
+
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit 15d1962cf8b70ebcf52614301f0db242894e28a2
+
+  ndisc6: fix bogus <pkg>_DEPENDENCIES names (2017-11-29 23:16:22 +0100)
+
+
+are available in the git repository at:
+
+  git://git.buildroot.org/~ymorin/git/buildroot.git
+
+for you to fetch changes up to b9a9596c19817cf5a70c17acaa23657ed3597f01
+
+  gitlab-ci: run check-package (2017-11-30 00:07:50 +0100)
+
+
+----------------------------------------------------------------
+Yann E. MORIN (8):
+      package/lttng-tools: fix typo in variable name
+      package/checkpolicy: rename variable
+      package/am335x-pru-package: rename variable
+      package/lockfile-progs: rename variable
+      packages: remove "consecutive empty lines"
+      packages: fix trailing spaces and slash
+      package/asterisk: add comment about a check-package false positive
+      gitlab-ci: run check-package
+
+ .gitlab-ci.yml                                   | 4 ++++
+ .gitlab-ci.yml.in                                | 4 ++++
+ package/am335x-pru-package/am335x-pru-package.mk | 6 +++---
+ package/asterisk/asterisk.mk                     | 1 +
+ package/busybox/busybox.mk                       | 2 +-
+ package/checkpolicy/checkpolicy.mk               | 8 ++++----
+ package/lockfile-progs/lockfile-progs.mk         | 4 ++--
+ package/lttng-tools/lttng-tools.mk               | 2 +-
+ package/ntp/ntp.mk                               | 2 +-
+ package/python3/python3.mk                       | 2 --
+ package/setools/setools.mk                       | 1 -
+ 11 files changed, 21 insertions(+), 15 deletions(-)
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
