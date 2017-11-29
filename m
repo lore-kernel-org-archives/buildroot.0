@@ -1,74 +1,105 @@
-From: =?UTF-8?q?Ga=C3=ABl=20PORTAY?= <gael.portay@savoirfairelinux.com>
-Date: Wed, 29 Nov 2017 12:10:24 -0500
-Subject: [Buildroot] [PATCH 1/1] support/dependencies: add check for c++
- multilib
-Message-ID: <20171129171024.26931-1-gael.portay@savoirfairelinux.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Wed, 29 Nov 2017 21:04:51 +0100
+Subject: [Buildroot] [for-next: v4: 1/2] package/physfs: bump to 3.0.1
+Message-ID: <20171129200452.16614-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Some packages build C++ 32bits host-tools and need the g++-multilib to
-be installed on the build machine. As example, qt5webengine builds a C++
-host-tool when target is 32bits.
+Remove upstream patch.
 
-Add the check for g++-multilib to the dependencies script; and update
-the Dockerfile to install g++-multilib package.
+Use the official archive and add a hash file.
+Also add a license file hash.
 
-Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
+Remove LGPL.txt license file since src/lzma directory has been removed
+from the sources.
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Julien BOIBESSOT <julien.boibessot@armadeus.com>
 ---
+ .../physfs/0001-Fix-builds-with-modern-GCC.patch   | 38 ----------------------
+ package/physfs/physfs.hash                         |  3 ++
+ package/physfs/physfs.mk                           | 10 +++---
+ 3 files changed, 8 insertions(+), 43 deletions(-)
+ delete mode 100644 package/physfs/0001-Fix-builds-with-modern-GCC.patch
+ create mode 100644 package/physfs/physfs.hash
 
-There are two solutions to solve this issue:
-
-The first one consists in checking for g++-multilib when the config
-option BR2_HOSTARCH_NEEDS_IA32_COMPILER is set; even if it is not
-required. The implementation is simple (see patch below).
-
-The second solution consists in creating a new config option for
-packages that needs g++-multilib to be installed. As example:
-BR2_HOSTARCH_NEEDS_IA32_CXX_COMPILER is a good candidate. [For a matter
-of consistency, I would also rename BR2_HOSTARCH_NEEDS_COMPILER into
-BR2_HOSTARCH_NEEDS_IA32_C_COMPILER (adding C_); but I do not want to do
-that to not break existing configurations that are no in-tree].
-
-Which solution do you prefer?
-
- support/dependencies/dependencies.sh | 8 ++++++++
- support/docker/Dockerfile            | 2 +-
- 2 files changed, 9 insertions(+), 1 deletion(-)
-
-diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
-index a195c62c8c..f75ffb96c1 100755
---- a/support/dependencies/dependencies.sh
-+++ b/support/dependencies/dependencies.sh
-@@ -249,6 +249,14 @@ if grep -q ^BR2_HOSTARCH_NEEDS_IA32_COMPILER=y $BR2_CONFIG ; then
- 		echo "For other distributions, refer to their documentation."
- 		exit 1
- 	fi
-+
-+	if ! echo "int main(void) {}" | gcc -m32 -x cpp - -o /dev/null 2>/dev/null; then
-+		echo
-+		echo "Your Buildroot configuration needs a compiler capable of building 32 bits binaries."
-+		echo "If you're running a Debian/Ubuntu distribution, install the g++-multilib package."
-+		echo "For other distributions, refer to their documentation."
-+		exit 1
-+	fi
- fi
+diff --git a/package/physfs/0001-Fix-builds-with-modern-GCC.patch b/package/physfs/0001-Fix-builds-with-modern-GCC.patch
+deleted file mode 100644
+index 710b4ff..0000000
+--- a/package/physfs/0001-Fix-builds-with-modern-GCC.patch
++++ /dev/null
+@@ -1,38 +0,0 @@
+-From 61d3b63abcba8e9615dcb8a3d1fc026bf7f8d5f8 Mon Sep 17 00:00:00 2001
+-From: Jacob Burroughs <jburroughs@trustwave.com>
+-Date: Thu, 23 Jun 2016 13:03:47 -0500
+-Subject: [PATCH] Fix builds with modern GCC
+-
+-From SuperTux project:
+-https://github.com/SuperTux/physfs/commit/61d3b63abcba8e9615dcb8a3d1fc026bf7f8d5f8
+-
+-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+----
+- CMakeLists.txt | 4 ++--
+- 1 file changed, 2 insertions(+), 2 deletions(-)
+-
+-diff --git a/CMakeLists.txt b/CMakeLists.txt
+-index 2a371af..94c4844 100644
+---- a/CMakeLists.txt
+-+++ b/CMakeLists.txt
+-@@ -50,7 +50,7 @@ endif()
+- # Add some gcc-specific command lines.
+- if(CMAKE_COMPILER_IS_GNUCC)
+-     # Always build with debug symbols...you can strip it later.
+--    add_definitions(-g -pipe -Werror -fsigned-char)
+-+    add_definitions(-g -pipe -fsigned-char)
+- 
+-     # Stupid BeOS generates warnings in the system headers.
+-     if(NOT BEOS)
+-@@ -304,7 +304,7 @@ if(PHYSFS_BUILD_TEST)
+-         if(READLINE_LIBRARY)
+-             set(HAVE_SYSTEM_READLINE TRUE)
+-             set(TEST_PHYSFS_LIBS ${TEST_PHYSFS_LIBS} ${READLINE_LIBRARY} ${CURSES_LIBRARY})
+--            include_directories(${READLINE_H} ${HISTORY_H})
+-+            include_directories(SYSTEM ${READLINE_H} ${HISTORY_H})
+-             add_definitions(-DPHYSFS_HAVE_READLINE=1)
+-         endif()
+-     endif()
+--- 
+-2.9.3
+-
+diff --git a/package/physfs/physfs.hash b/package/physfs/physfs.hash
+new file mode 100644
+index 0000000..3d97fe0
+--- /dev/null
++++ b/package/physfs/physfs.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256 b77b9f853168d9636a44f75fca372b363106f52d789d18a2f776397bf117f2f1  physfs-3.0.1.tar.bz2
++sha256 7ce475991f6cc09958ef0d57312522eba78e36d984307c95f9a3965adf7e4e2b  LICENSE.txt
+diff --git a/package/physfs/physfs.mk b/package/physfs/physfs.mk
+index 9193ad5..78176be 100644
+--- a/package/physfs/physfs.mk
++++ b/package/physfs/physfs.mk
+@@ -4,12 +4,12 @@
+ #
+ ################################################################################
  
- # Check that the Perl installation is complete enough for Buildroot.
-diff --git a/support/docker/Dockerfile b/support/docker/Dockerfile
-index d45b23dc23..e975e66eb2 100644
---- a/support/docker/Dockerfile
-+++ b/support/docker/Dockerfile
-@@ -15,7 +15,7 @@ RUN dpkg --add-architecture i386
- # The container has no package lists, so need to update first
- RUN apt-get update -y -qq
- RUN apt-get install -y -qq --no-install-recommends \
--    build-essential cmake libc6:i386 gcc-multilib \
-+    build-essential cmake libc6:i386 g++-multilib \
-     bc ca-certificates file locales rsync \
-     cvs bzr git mercurial subversion wget \
-     cpio unzip \
+-PHYSFS_VERSION = be27dfd07d97336145e7f49d3fd200a6e902f85e
+-PHYSFS_SITE = https://hg.icculus.org/icculus/physfs
+-PHYSFS_SITE_METHOD = hg
++PHYSFS_VERSION = 3.0.1
++PHYSFS_SOURCE = physfs-$(PHYSFS_VERSION).tar.bz2
++PHYSFS_SITE = https://icculus.org/physfs/downloads
+ 
+-PHYSFS_LICENSE = Zlib (physfs), LGPL with exceptions (lzma)
+-PHYSFS_LICENSE_FILES = LICENSE.txt src/lzma/LGPL.txt
++PHYSFS_LICENSE = Zlib
++PHYSFS_LICENSE_FILES = LICENSE.txt
+ 
+ PHYSFS_INSTALL_STAGING = YES
+ 
 -- 
-2.15.0
+2.9.5
