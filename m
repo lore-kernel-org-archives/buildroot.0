@@ -1,12 +1,12 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 29 Nov 2017 08:55:32 +0100
-Subject: [Buildroot] [V2 1/1] package/strongswan: Install libraries to
- /usr/lib
-In-Reply-To: <CAH=K+6khy3cY1KUdJc6X=jYLoDus-1u2Tjk6CyGTenSb_zQGhQ@mail.gmail.com>
-References: <1504192688-56951-1-git-send-email-sam.voss@rockwellcollins.com>
- <20171021095108.0ea87545@windsurf>
- <CAH=K+6khy3cY1KUdJc6X=jYLoDus-1u2Tjk6CyGTenSb_zQGhQ@mail.gmail.com>
-Message-ID: <20171129085532.47506c55@windsurf.home>
+Date: Wed, 29 Nov 2017 09:20:47 +0100
+Subject: [Buildroot] [PATCH v4 2/3] board: Add Vyasa RK388 board support
+In-Reply-To: <CAMty3ZBNPnaDxCN+0fmB_VLbNXxovXSyE618LB_5KA7kXt74Lw@mail.gmail.com>
+References: <1510997329-4111-1-git-send-email-jagan@amarulasolutions.com>
+ <1510997329-4111-2-git-send-email-jagan@amarulasolutions.com>
+ <20171123224321.447ed853@windsurf.lan>
+ <CAMty3ZBNPnaDxCN+0fmB_VLbNXxovXSyE618LB_5KA7kXt74Lw@mail.gmail.com>
+Message-ID: <20171129092047.33e30f9c@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,31 +15,27 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 28 Nov 2017 16:55:48 -0600, Sam Voss wrote:
+On Wed, 29 Nov 2017 12:37:05 +0530, Jagan Teki wrote:
 
-> On Sat, Oct 21, 2017 at 2:51 AM, Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com> wrote:
-> > However, I did a test build, and I do see /usr/lib/ipsec kept in the
-> > RPATH:
-> >
-> >  0x0000001d (RUNPATH)                    Library runpath: [/usr/lib/ipsec]  
+> > Using linux-next doesn't work, as it gets rebased constantly. The
+> > commit 7e8a1fd62911a59f1f95d4620e89603230fdd6f9 no longer exists. You
+> > have to wait for the support for this board to land into the mainline
+> > kernel, or point to a vendor-specific Git tree.  
 > 
-> My tests seem to be showing the same. I'm going to have to see if it
-> is something we injected ourselves causing the issue.
-> 
-> > So, even though installing the libraries in /usr/lib is indeed better
-> > for consistency, I'd like to understand why you had an issue running
-> > the Strongswan program.  
-> 
-> I can fix the commit message if you'd still like the patch, else I'll
-> leave it as is until I get some more explanation on why we had this
-> issue in the first place.
+> Can't we use linux-next at all? you are with head commits which were
+> always changes during rebase, but I've used the board specific commit
+> in v5 and that will always unchanged.
 
-I think the change does make sense (we try to have all libraries
-in /usr/lib, except dlopen'ed ones). So if you could resend the patch,
-but with a modified commit message, it would be nice.
+No, you can't use linux-next, as commits are not stable.
 
-Thanks!
+Please try yourself: wait a few days, delete your Buildroot download
+folder entirely, and try to build your defconfig: it will fail, because
+the git commit no longer exists on the linux-next Git repository.
+
+If the commit still exists, then it means that it's a commit that is
+part of Linus tree, in which case there is no point in using linux-next.
+
+Best regards,
 
 Thomas
 -- 
