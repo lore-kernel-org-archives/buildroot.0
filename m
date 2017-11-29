@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 30 Nov 2017 00:08:40 +0100
-Subject: [Buildroot] [PATCH 3/8] package/am335x-pru-package: rename variable
+Date: Thu, 30 Nov 2017 00:08:41 +0100
+Subject: [Buildroot] [PATCH 4/8] package/lockfile-progs: rename variable
 In-Reply-To: <cover.1511996903.git.yann.morin.1998@free.fr>
 References: <cover.1511996903.git.yann.morin.1998@free.fr>
-Message-ID: <4ccdb1415ac3d1eff99f8e4af326b3ca9d807684.1511996903.git.yann.morin.1998@free.fr>
+Message-ID: <8c0d3284088b1915e10387d4808b18b75d2343e5.1511996903.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,32 +15,31 @@ We use package names as poor-man's namespace, so fix that.
 Reported by utils/check-package.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Frank Hunleth <fhunleth@troodon-software.com>
 ---
- package/am335x-pru-package/am335x-pru-package.mk | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/lockfile-progs/lockfile-progs.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/am335x-pru-package/am335x-pru-package.mk b/package/am335x-pru-package/am335x-pru-package.mk
-index b2e89d3710..24a5df4815 100644
---- a/package/am335x-pru-package/am335x-pru-package.mk
-+++ b/package/am335x-pru-package/am335x-pru-package.mk
-@@ -13,14 +13,14 @@ AM335X_PRU_PACKAGE_INSTALL_STAGING = YES
+diff --git a/package/lockfile-progs/lockfile-progs.mk b/package/lockfile-progs/lockfile-progs.mk
+index 57df573d4a..ed192f1028 100644
+--- a/package/lockfile-progs/lockfile-progs.mk
++++ b/package/lockfile-progs/lockfile-progs.mk
+@@ -11,7 +11,7 @@ LOCKFILE_PROGS_DEPENDENCIES = liblockfile
+ LOCKFILE_PROGS_LICENSE = GPL-2.0
+ LOCKFILE_PROGS_LICENSE_FILES = COPYING
  
- # The default 'all' rule builds everything, when we just need the library
- ifeq ($(BR2_ENABLE_DEBUG),y)
--AM335X_MAKE_TARGET = debug $(if $(BR2_STATIC_LIBS),,sodebug)
-+AM335X_PRU_PACKAGE_MAKE_TARGET = debug $(if $(BR2_STATIC_LIBS),,sodebug)
- else
--AM335X_MAKE_TARGET = release $(if $(BR2_STATIC_LIBS),,sorelease)
-+AM335X_PRU_PACKAGE_MAKE_TARGET = release $(if $(BR2_STATIC_LIBS),,sorelease)
- endif
+-LOCKFILE_BINS = \
++LOCKFILE_PROGS_BINS = \
+ 	$(addprefix lockfile-,check create remove touch) \
+ 	$(addprefix mail-,lock touchlock unlock)
  
- define AM335X_PRU_PACKAGE_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) CROSS_COMPILE="$(TARGET_CROSS)" \
--		-C $(@D)/pru_sw/app_loader/interface $(AM335X_MAKE_TARGET)
-+		-C $(@D)/pru_sw/app_loader/interface $(AM335X_PRU_PACKAGE_MAKE_TARGET)
+@@ -20,7 +20,7 @@ define LOCKFILE_PROGS_BUILD_CMDS
  endef
  
- # 'install' installs whatever was built, and our patch removes the dependency
+ define LOCKFILE_PROGS_INSTALL_TARGET_CMDS
+-	for i in $(LOCKFILE_BINS); do \
++	for i in $(LOCKFILE_PROGS_BINS); do \
+ 		$(INSTALL) -D -m 755 $(@D)/bin/$$i $(TARGET_DIR)/usr/bin/$$i || exit 1; \
+ 	done
+ endef
 -- 
 2.11.0
