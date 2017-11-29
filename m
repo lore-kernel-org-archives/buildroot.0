@@ -1,49 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 29 Nov 2017 22:16:31 +0100
-Subject: [Buildroot] [PATCH 1/2] rauc: select host-squashfs as a host
- dependency
-In-Reply-To: <20171128032723.14081-1-yurovsky@gmail.com>
-References: <20171128032723.14081-1-yurovsky@gmail.com>
-Message-ID: <20171129221631.51e0fc70@windsurf.home>
+Date: Wed, 29 Nov 2017 22:16:46 +0100
+Subject: [Buildroot] [git commit branch/next] toolchain/buildroot: add
+ comment for glibc NaN-2008 headers requirement
+Message-ID: <20171129210940.8A2E980794@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=9ab3058e096f4f4d53d8071fe5b248b234cc437b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Mon, 27 Nov 2017 19:27:22 -0800, Andrey Yurovsky wrote:
-> The rauc host tool (used to generate update bundles) runs mksquashfs so
-> host-squashfs is required for it to work at runtime.
-> 
-> Signed-off-by: Andrey Yurovsky <yurovsky@gmail.com>
-> ---
->  package/rauc/Config.in.host | 1 +
->  package/rauc/rauc.mk        | 2 +-
->  2 files changed, 2 insertions(+), 1 deletion(-)
+Commit 4a5140ecf (toolchain/buildroot: glibc requires kernel headers >=
+4.5 with NaN-2008) added a restriction on kernel headers for glibc when
+the architecture is using naN-2008.
 
-I've applied to master. Note however that it in fact doesn't really
-solve the problem entirely, because $(HOST_DIR)/bin is not in the PATH,
-so rauc still doesn't find mksquashfs:
+However, such a restriction is usually associated to a comment explaining
+the restriction, so the user knows what is happening.
 
-$ ./output/host/bin/rauc --cert demo.cert.pem --key demo.key.pem bundle output/images/t/ test.raucb
-input directory: output/images/t/
-output bundle: test.raucb
+That comment was forgotten in 4a5140ecf. Add it now.
 
-(rauc:17776): rauc-WARNING **: failed to create bundle: Failed to start mksquashfs: Failed to execute child process ?mksquashfs? (No such file or directory)
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Romain Naour <romain.naour@openwide.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ toolchain/toolchain-buildroot/Config.in | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-But mksquashfs is in output/host/bin. Perhaps rauc should also try to
-find mksquashfs from the same directory as rauc, before trying a
-system-wide installed one?
-
-Or we expect people to run "rauc bundle" from a post-image script, in
-which case $(HOST_DIR)/bin is in the PATH ?
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
+index cbe2038..c624350 100644
+--- a/toolchain/toolchain-buildroot/Config.in
++++ b/toolchain/toolchain-buildroot/Config.in
+@@ -72,6 +72,11 @@ comment "glibc on powerpc64le needs a toolchain w/ headers >= 3.10"
+ 	depends on BR2_powerpc64le
+ 	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
+ 
++# Support for MIPS NAN2008 needs headers >= 4.5
++comment "glibc on MIPS w/ NAN2008 needs a toolchain w/ headers >= 4.5"
++	depends on BR2_MIPS_NAN_2008
++	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_5
++
+ config BR2_TOOLCHAIN_BUILDROOT_MUSL
+ 	bool "musl"
+ 	depends on BR2_aarch64	  || BR2_arm     || BR2_armeb     || BR2_i386 || \
