@@ -1,50 +1,95 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 29 Nov 2017 22:23:20 +0100
-Subject: [Buildroot] [PATCH 1/1] Revert "package/qt5webkit-examples:
- remove obsolete package"
-In-Reply-To: <20171129045038.26578-1-gael.portay@savoirfairelinux.com>
-References: <20171129045038.26578-1-gael.portay@savoirfairelinux.com>
-Message-ID: <20171129222320.586bf581@windsurf.home>
+Date: Wed, 29 Nov 2017 22:24:35 +0100
+Subject: [Buildroot] [PATCH 1/1] netcat-openbsd: depends on
+ linux-headers >= 3.12
+In-Reply-To: <20171128154437.1631-1-gael.portay@savoirfairelinux.com>
+References: <20171128154437.1631-1-gael.portay@savoirfairelinux.com>
+Message-ID: <20171129222435.557776c3@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Baruch,
 
-On Tue, 28 Nov 2017 23:50:38 -0500, Ga?l PORTAY wrote:
-> This reverts commit 940bfe2f4336a3fea1ec6805db1f90ce83bd4a78 with the
-> following changes:
-> 
-> 	- new hashes for 5.6.3 and 5.9.1 (there is no 5.9.2).
-> 	- BR2_PACKAGE_QT5BASE_LICENSE_APPROVED has been removed
-> 	- add GPL-3 to licences
-> 	- uses SPDX identifier for licences
-> 	- add missing dependencies (qt5base, qt5webkit, qt5declarative)
-> 	- removes /usr when qmake host-tools is invoked at configure
-> 
-> Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
-> ---
->  Config.in.legacy                                   |  7 ---
->  package/qt5/Config.in                              |  1 +
->  .../qt5webkit-examples/0001-Build-examples.patch   | 52 +++++++++++++++++++++
->  package/qt5/qt5webkit-examples/Config.in           | 10 ++++
->  .../qt5/qt5webkit-examples/qt5webkit-examples.hash |  5 ++
->  .../qt5/qt5webkit-examples/qt5webkit-examples.mk   | 54 ++++++++++++++++++++++
->  6 files changed, 122 insertions(+), 7 deletions(-)
->  create mode 100644 package/qt5/qt5webkit-examples/0001-Build-examples.patch
->  create mode 100644 package/qt5/qt5webkit-examples/Config.in
->  create mode 100644 package/qt5/qt5webkit-examples/qt5webkit-examples.hash
->  create mode 100644 package/qt5/qt5webkit-examples/qt5webkit-examples.mk
-
-Applied to next, after adding an entry in the DEVELOPERS file to
-reference you as a developer for qt5webkit-examples.
+Since you have looked at a lot of different kernel headers related
+issues, what do you think about this one below?
 
 Thanks!
 
 Thomas
+
+On Tue, 28 Nov 2017 10:44:37 -0500, Ga?l PORTAY wrote:
+> This debian fork of netcat includes the kernel UAPI inet6 header. This
+> header conflicts with the existing libc inet header and causes
+> redefinition of structures when they are both included.
+> 
+> The compiler raises the following error:
+> 
+> 	/home/buildroot/build/instance-0/output/host/x86_64-buildroot-linux-gnu/sysroot/usr/include/linux/in6.h:30:8: error: redefinition of 'struct in6_addr' struct in6_addr {
+> 
+> From version 3.12 of linux, the kernel UAPI header has mechanisms in
+> libc-compat.h to prevent such situations (see __UAPI_DEF_SOCKADDR_IN6
+> macros).
+> 
+> Unfortunately the build is broken when toolchains do not satisfy at least
+> the linux headers condition (>= 3.12).
+> 
+> The package now depends on the toolchain headers at least 3.12.
+> 
+> Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
+> ---
+> 
+> Hi all,
+> 
+> This patch fixes the build issue[1] of the netcat-openbsd package for
+> x86_64[2] on branch next. I assume it also fixes the mips64el issue[3].
+> 
+> It fixes the issue from a configuration point of view. I believe the
+> issue cannot be solved. As explain in the commit message, the build is
+> broken because the linux-headers must be at least 3.12.
+>   
+> I need your help to make sure my understanding of the issue is right.
+> 
+> This fork of netcat uses some linux features, and the linux uapi header
+> must be included. It uses macros that are defined in the linux uapi
+> header which are not defined in the libc header.
+> 
+> I have tested by installing a new version of the kernel header using the
+> commands below.
+> 
+> 	$ make BR2_DEFAULT_KERNEL_HEADERS=3.12 linux-headers 
+> 	$ make netcat-openbsd-rebuild
+> 
+> And it worked.
+> 
+> Regards,
+> Gael
+> 
+> [1]: http://lists.busybox.net/pipermail/buildroot/2017-November/207809.html
+> [2]: http://autobuild.buildroot.net/results/3c42c1eadcbfc084a1e55bf1df0450aaf1f2139c/
+> [3]: http://autobuild.buildroot.net/results/de0dd8983243ee5d1fb189add8ce445177fb87c2/
+> 
+>  package/netcat-openbsd/Config.in | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/netcat-openbsd/Config.in b/package/netcat-openbsd/Config.in
+> index 6df87ec688..5c8823c2ef 100644
+> --- a/package/netcat-openbsd/Config.in
+> +++ b/package/netcat-openbsd/Config.in
+> @@ -4,6 +4,7 @@ config BR2_PACKAGE_NETCAT_OPENBSD
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS
+>  	depends on BR2_TOOLCHAIN_USES_GLIBC
+>  	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+> +	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
+>  	select BR2_PACKAGE_LIBBSD
+>  	help
+>  	  A simple Unix utility which reads and writes data across network
+
+
+
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
