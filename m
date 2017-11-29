@@ -1,39 +1,52 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 30 Nov 2017 00:08:44 +0100
-Subject: [Buildroot] [PATCH 7/8] package/asterisk: add comment about a
- check-package false positive
+Date: Thu, 30 Nov 2017 00:08:45 +0100
+Subject: [Buildroot] [PATCH 8/8] gitlab-ci: run check-package
 In-Reply-To: <cover.1511996903.git.yann.morin.1998@free.fr>
 References: <cover.1511996903.git.yann.morin.1998@free.fr>
-Message-ID: <d2844704851e4e8ff93c3007e9e67e2a339e11c7.1511996903.git.yann.morin.1998@free.fr>
+Message-ID: <b9a9596c19817cf5a70c17acaa23657ed3597f01.1511996903.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This variable is inherited from the target variant, which is
-autoreconfed. But the host variant is only the menucselect
-sub-directory, which we do not want to autoreconf, so the explcit
-NO is required.
-
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
 ---
- package/asterisk/asterisk.mk | 1 +
- 1 file changed, 1 insertion(+)
+ .gitlab-ci.yml    | 4 ++++
+ .gitlab-ci.yml.in | 4 ++++
+ 2 files changed, 8 insertions(+)
 
-diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
-index 50512c0b3a..21dca549a0 100644
---- a/package/asterisk/asterisk.mk
-+++ b/package/asterisk/asterisk.mk
-@@ -285,6 +285,7 @@ HOST_ASTERISK_LICENSE_FILES = COPYING
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index 0dddb22f12..c80a6b129b 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -30,6 +30,10 @@ check-DEVELOPERS:
+     script:
+         - "! utils/get-developers | grep -v 'No action specified'"
  
- # No need to autoreconf for the host variant,
- # so do not inherit the target setup.
-+# check-package reports an issue here, but that's a false positive. Ignore.
- HOST_ASTERISK_AUTORECONF = NO
++check-package:
++    script:
++        - find . -type f -name '*.mk' -exec ./utils/check-package {} +
++
+ .defconfig: &defconfig
+     # Running the defconfigs for every push is too much, so limit to
+     # explicit triggers through the API.
+diff --git a/.gitlab-ci.yml.in b/.gitlab-ci.yml.in
+index 33c7b13725..0d2e239414 100644
+--- a/.gitlab-ci.yml.in
++++ b/.gitlab-ci.yml.in
+@@ -30,6 +30,10 @@ check-DEVELOPERS:
+     script:
+         - "! utils/get-developers | grep -v 'No action specified'"
  
- HOST_ASTERISK_CONF_ENV = CONFIG_LIBXML2=$(HOST_DIR)/usr/bin/xml2-config
++check-package:
++    script:
++        - find . -type f -name '*.mk' -exec ./utils/check-package {} +
++
+ .defconfig: &defconfig
+     # Running the defconfigs for every push is too much, so limit to
+     # explicit triggers through the API.
 -- 
 2.11.0
