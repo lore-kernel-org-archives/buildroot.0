@@ -1,52 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 29 Nov 2017 22:02:53 +0100
-Subject: [Buildroot] [git commit] package/x11r7/xlib_libXfont: security bump
- to version 1.5.4
-Message-ID: <20171129205550.E1C7581221@busybox.osuosl.org>
+Date: Wed, 29 Nov 2017 22:04:05 +0100
+Subject: [Buildroot] [PATCH 1/3] package/x11r7/xlib_libXcursor: security
+ bump to version 1.1.15
+In-Reply-To: <20171129204558.3547-1-bernd.kuhls@t-online.de>
+References: <20171129204558.3547-1-bernd.kuhls@t-online.de>
+Message-ID: <20171129220405.1de3bf31@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eae85b620d8ae49e98dc5dfc4b1a11eed7946c26
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Fixes CVE-2017-16611:
-https://lists.x.org/archives/xorg-announce/2017-November/002825.html
+On Wed, 29 Nov 2017 21:45:56 +0100, Bernd Kuhls wrote:
+> Fixes CVE-2017-16612:
+> https://lists.x.org/archives/xorg-announce/2017-November/002823.html
+> 
+> Added all hashed provided by upstream.
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/x11r7/xlib_libXcursor/xlib_libXcursor.hash | 7 +++++--
+>  package/x11r7/xlib_libXcursor/xlib_libXcursor.mk   | 2 +-
+>  2 files changed, 6 insertions(+), 3 deletions(-)
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/x11r7/xlib_libXfont/xlib_libXfont.hash | 10 +++++-----
- package/x11r7/xlib_libXfont/xlib_libXfont.mk   |  2 +-
- 2 files changed, 6 insertions(+), 6 deletions(-)
+All three patches applied to master. Thanks!
 
-diff --git a/package/x11r7/xlib_libXfont/xlib_libXfont.hash b/package/x11r7/xlib_libXfont/xlib_libXfont.hash
-index 78700d3..ea04348 100644
---- a/package/x11r7/xlib_libXfont/xlib_libXfont.hash
-+++ b/package/x11r7/xlib_libXfont/xlib_libXfont.hash
-@@ -1,5 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2017-October/002816.html
--md5 9ba75bf38ba62a6ad52550ab716da9b3  libXfont-1.5.3.tar.bz2
--sha1 628b8ca2207f09324b8926084318a2fa2edb16d1  libXfont-1.5.3.tar.bz2
--sha256 ab85c10fd2683481dfef672a77fe60e6a2039558cbc0e9bf56b5e1df471c93d0  libXfont-1.5.3.tar.bz2
--sha512 e7c8a09c4d174129e5d550194d3c3dc2b4abf797e52fe588c6002920727c52cf33b7db8d07fc69c2987e766d3af2d6ddda72f0c70eb21b135c691c97656a81b4  libXfont-1.5.3.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2017-November/002825.html
-+md5  16eaf156edd79b68038b6a7c44aa9e9b  libXfont-1.5.4.tar.bz2
-+sha1 9db050f63b9c4cb19e0dbb40575558ccb95719ca  libXfont-1.5.4.tar.bz2
-+sha256 1a7f7490774c87f2052d146d1e0e64518d32e6848184a18654e8d0bb57883242  libXfont-1.5.4.tar.bz2
-+sha512 864edbaff45c44bd92bc4b06275c73fdf584a9b88bc523a297d4c75c01ca253f438463e929af70d753ddecfa648bb0b9bcf0ec72267db9f2b1704f7afa906cb3  libXfont-1.5.4.tar.bz2
-diff --git a/package/x11r7/xlib_libXfont/xlib_libXfont.mk b/package/x11r7/xlib_libXfont/xlib_libXfont.mk
-index 13e3b21..30163ee 100644
---- a/package/x11r7/xlib_libXfont/xlib_libXfont.mk
-+++ b/package/x11r7/xlib_libXfont/xlib_libXfont.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XLIB_LIBXFONT_VERSION = 1.5.3
-+XLIB_LIBXFONT_VERSION = 1.5.4
- XLIB_LIBXFONT_SOURCE = libXfont-$(XLIB_LIBXFONT_VERSION).tar.bz2
- XLIB_LIBXFONT_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBXFONT_LICENSE = MIT
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
