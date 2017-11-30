@@ -1,50 +1,70 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 Nov 2017 22:29:49 +0100
-Subject: [Buildroot] [git commit] expat: bump to 2.2.5
-Message-ID: <20171201205333.536447FAAC@busybox.osuosl.org>
+Date: Thu, 30 Nov 2017 11:49:07 +0100
+Subject: [Buildroot] [git commit] linux: meddle not in the internals of
+ filesystems
+Message-ID: <20171201205341.69AAF80FC6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=78e964bc22a8ecab1b8b11b23b30824737da218d
+commit: https://git.buildroot.net/buildroot/commit/?id=cef77a6cf5c1982d22e899f046d5e345c0271e7a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Adam Duskett <aduskett@gmail.com>
+Currently, the rule to rebuild the Linux kernel with an initramfs
+directly depends on the path of the file of the intermediate cpio image.
+
+This is inherently "bad" from a purity point of view; linux.mk should
+not have to delve into the fs internals.
+
+Rather, make it directly depend on the "frontal" rule that generates the
+cpio image.
+
+Drop the comment for linux-rebuild-with-initramfs, it was misleading
+(talking about generating "the initramfs list of files", which is not
+what was done, since we use a cpio as source of initramfs, not a list of
+files).
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Romain Naour <romain.naour@openwide.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/expat/expat.hash | 10 +++++-----
- package/expat/expat.mk   |  2 +-
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ linux/linux.mk | 18 +++++++-----------
+ 1 file changed, 7 insertions(+), 11 deletions(-)
 
-diff --git a/package/expat/expat.hash b/package/expat/expat.hash
-index ef01ec9..945e102 100644
---- a/package/expat/expat.hash
-+++ b/package/expat/expat.hash
-@@ -1,7 +1,7 @@
--# From https://sourceforge.net/projects/expat/files/expat/2.2.4/
--md5	6e3980aba29a224a9f478d88ac7ec207	expat-2.2.4.tar.bz2
--sha1	3394d6390c041a8f5dec1d5fe7c4af0a23ae4504	expat-2.2.4.tar.bz2
--# Calculated based on the hashes above
--sha256	03ad85db965f8ab2d27328abcf0bc5571af6ec0a414874b2066ee3fdd372019e	expat-2.2.4.tar.bz2
-+# From https://sourceforge.net/projects/expat/files/expat/2.2.5/
-+md5	789e297f547980fc9ecc036f9a070d49		expat-2.2.5.tar.bz2
-+sha1	490659abd7d6c6d4cb4e60c945a15fbf081564f6	expat-2.2.5.tar.bz2
-+
- # Locally calculated
-+sha256	d9dc32efba7e74f788fcc4f212a43216fc37cf5f23f4c2339664d473353aedf6	expat-2.2.5.tar.bz2
- sha256	46336ab2fec900803e2f1a4253e325ac01d998efb09bc6906651f7259e636f76	COPYING
-diff --git a/package/expat/expat.mk b/package/expat/expat.mk
-index ef196ec..69c457d 100644
---- a/package/expat/expat.mk
-+++ b/package/expat/expat.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 1c5631f..5300b9c 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -484,21 +484,17 @@ endif # BR_BUILDING
+ $(eval $(kconfig-package))
  
--EXPAT_VERSION = 2.2.4
-+EXPAT_VERSION = 2.2.5
- EXPAT_SITE = http://downloads.sourceforge.net/project/expat/expat/$(EXPAT_VERSION)
- EXPAT_SOURCE = expat-$(EXPAT_VERSION).tar.bz2
- EXPAT_INSTALL_STAGING = YES
+ # Support for rebuilding the kernel after the cpio archive has
+-# been generated in $(BINARIES_DIR)/rootfs.cpio.
+-$(LINUX_DIR)/.stamp_initramfs_rebuilt: $(LINUX_DIR)/.stamp_target_installed
+-$(LINUX_DIR)/.stamp_initramfs_rebuilt: $(LINUX_DIR)/.stamp_images_installed
+-$(LINUX_DIR)/.stamp_initramfs_rebuilt: $(BINARIES_DIR)/rootfs.cpio
+-$(LINUX_DIR)/.stamp_initramfs_rebuilt:
++# been generated.
++.PHONY: linux-rebuild-with-initramfs
++linux-rebuild-with-initramfs: $(LINUX_DIR)/.stamp_target_installed
++linux-rebuild-with-initramfs: $(LINUX_DIR)/.stamp_images_installed
++linux-rebuild-with-initramfs: rootfs-cpio
++linux-rebuild-with-initramfs:
+ 	@$(call MESSAGE,"Rebuilding kernel with initramfs")
+ 	# Build the kernel.
+-	$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_TARGET_NAME)
++	$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) $(LINUX_TARGET_NAME)
+ 	$(LINUX_APPEND_DTB)
+ 	# Copy the kernel image(s) to its(their) final destination
+ 	$(call LINUX_INSTALL_IMAGE,$(BINARIES_DIR))
+ 	# If there is a .ub file copy it to the final destination
+ 	test ! -f $(LINUX_IMAGE_PATH).ub || cp $(LINUX_IMAGE_PATH).ub $(BINARIES_DIR)
+-	$(Q)touch $@
+-
+-# The initramfs building code must make sure this target gets called
+-# after it generated the initramfs list of files.
+-linux-rebuild-with-initramfs: $(LINUX_DIR)/.stamp_initramfs_rebuilt
