@@ -1,76 +1,76 @@
-From: Johan Oudinet <johan.oudinet@gmail.com>
-Date: Thu, 30 Nov 2017 16:00:55 +0100
-Subject: [Buildroot] Analysis of build results for 2017-11-25
-In-Reply-To: <20171129143427.576f713e@windsurf.home>
-References: <20171126070006.676FA209DE@mail.free-electrons.com>
- <20171126152140.0fd3902b@windsurf.home>
- <CAJtjsKZjOxXO=Gu475a+6gP9TR4RrEptaS1MfuHYpdzjbF5Aig@mail.gmail.com>
- <OF3CB5EEB3.059011A8-ON002581E5.004E2384@notes.na.collabserv.com>
- <20171128233028.a7dqd7nmj6q5hf6r@tungsten.ozlabs.ibm.com>
- <CAJtjsKbTBDN8zaOOR5FLfC-rXq7WDskvVu-M6Y1sgZzcTTSBog@mail.gmail.com>
- <20171129143427.576f713e@windsurf.home>
-Message-ID: <CAJtjsKbP1vNf4sGuqrQr+O+hcEb_dAJLGb9pfGPBtNCd9xkafw@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 30 Nov 2017 16:34:58 +0100
+Subject: [Buildroot] [PATCH 8/8] gitlab-ci: run check-package
+In-Reply-To: <20171130085950.0dc9a144@windsurf.home>
+References: <cover.1511996903.git.yann.morin.1998@free.fr>
+ <b9a9596c19817cf5a70c17acaa23657ed3597f01.1511996903.git.yann.morin.1998@free.fr>
+ <20171130085950.0dc9a144@windsurf.home>
+Message-ID: <20171130153458.GA3519@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Thomas, All,
 
-On Wed, Nov 29, 2017 at 2:34 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
->
-> On Wed, 29 Nov 2017 14:28:55 +0100, Johan Oudinet wrote:
->
->> > I don't have much time at the moment but I'll take a look at this when I
->> > can (in a previous life I was an Erlang programmer, it's great to see it
->> > as part of buildroot!). It would be sad to disable HiPE so I'll see if
->> > we can just bump the version up to 20.
->> >
->> > Or Johan if you get to it first, I'll certainly test it :-)
->>
->> I haven't had the time to do it yet, however, it seems OTP 20 has
->> simply applied the patch I mentioned:
->> https://github.com/erlang/otp/pull/1394/commits/024e438101c010f17e3a374117c3b376d48483f3
->>
->> If I understand correctly this configure, there is a test in the
->> configure to automatically enable HiPE for a list of architectures.
->> ppc64 is present in this list but not ppc64le. So, I think HiPE would
->> be disabled on ppc64le architectures even if we bump to OTP 20.
->
-> Well, if this commit made it to OTP 20, then there is no need to
-> disable HiPE explicitly: my understanding is that this commit makes
-> sure ppc64le is not mistaken as ppc64, in particular to avoid having
-> HiPE being enabled. See https://github.com/erlang/otp/blob/master/erts/configure.in:
->
-> if test "$cross_compiling" != "yes" && test X${enable_hipe} != Xno; then
->   if test -z "$M4"; then
->         enable_hipe=no
->         AC_MSG_NOTICE([HiPE disabled as no valid m4 is found in PATH])
->   else
->         case "$ARCH-$OPSYS" in
->             x86-linux|amd64-linux|x86-darwin*|amd64-darwin*|ppc-linux|ppc64-linux|ppc-darwin|arm-linux|amd64-freebsd|x86-freebsd|x86-sol2|amd64-sol2|ultrasparc-linux)
->                 enable_hipe=yes
->                 ;;
->         esac
->   fi
-> fi
->
-> ppc64le used to be handled as ppc64, so it was matching the case
-> "$ARCH-$OPSYS", and enable_hipe was set to yes.
->
-> With ARCH=ppc64le, this will no longer match, and enable_hipe will no
-> longer be set to yes.
->
+On 2017-11-30 08:59 +0100, Thomas Petazzoni spake thusly:
+> On Thu, 30 Nov 2017 00:08:45 +0100, Yann E. MORIN wrote:
+> > +check-package:
+> > +    script:
+> > +        - find . -type f -name '*.mk' -exec ./utils/check-package {} +
+> 
+> Does it run without warning on all .mk files?
 
-I had issues with some Erlang packages when testing Erlang OTP 20.1:
-https://github.com/processone/xmpp/issues/18
-However, everything looks good with OTP 20.0.
-Since Christophe warned me about issues with OTP 20.1, I'm going to
-send a patch to bump to version 20.0 only, which should be enough to
-fix the ppc64le error reported here.
+As I explained in thecover letter, no. There is a false-positive in
+asterisk.
 
-Best,
+That's why I suggested in the cover-letter not to applu it for now,
+until check-pacakge learns about that case.
+
+> In fact, I think we shouldn't limit it to .mk files, because
+> check-package can also verify Config.in files and .hash files.
+
+This can be refined later on, probably?
+
+> Perhaps:
+>   find package/ boot/ linux/ -type f -exec ./utils/check-package {}
+
+But then it would also catch the patches, the init scripts, and any
+other data file that is present in packages directories.
+
+For now, this catches 305+539+264 = 1108 warnings...
+
+So I would at least limit it to Config.in, .mk, .hash, .patch files.
+
+And even that generates 305+566+230 = 1101 warnings.
+
+Regards,
+Yann E. MORIN.
+
+PS. Not sure what the split in three numbers is:
+
+  $ find package/ boot/ linux/ -type f \
+        \( -name '*.mk' -o -name '*.hash' \
+           -o -name '*.patch' -o -name Config.in \
+        \) -exec ./utils/check-package {} + 2>&1 \
+    |grep 'warnings generated'
+    305 warnings generated
+    566 warnings generated
+    230 warnings generated
+
+> Best regards,
+> 
+> Thomas
+> -- 
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux and Kernel engineering
+> http://free-electrons.com
+
 -- 
-Johan
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
