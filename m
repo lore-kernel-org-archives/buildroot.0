@@ -1,35 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 30 Nov 2017 11:37:36 +0100
-Subject: [Buildroot] [git commit branch/next] uclibc: enable NPTL for or1k
-Message-ID: <20171130103101.1A79482122@busybox.osuosl.org>
+Date: Thu, 30 Nov 2017 11:38:45 +0100
+Subject: [Buildroot] [git commit branch/next] package/efl: bump to 1.20.6
+Message-ID: <20171130103123.F120D81D5C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c0a1ad9d6b7e2e23f9e29c607276491a7ede108b
+commit: https://git.buildroot.net/buildroot/commit/?id=b0dc300b73124b42ea3465973e20b962f064a870
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-With 1.0.27 NPTL for or1k is improved and can be used
-by default.
+https://www.enlightenment.org/news/efl-1.20.6
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/uclibc/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/efl/efl.hash | 4 ++--
+ package/efl/efl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
-index 3b4f91d..47f25b5 100644
---- a/package/uclibc/Config.in
-+++ b/package/uclibc/Config.in
-@@ -48,7 +48,7 @@ choice
- config BR2_PTHREADS_NATIVE
- 	bool "Native POSIX Threading (NPTL)"
- 	depends on BR2_USE_MMU
--	depends on !BR2_m68k && !BR2_microblaze && !BR2_or1k
-+	depends on !BR2_m68k && !BR2_microblaze
- 	select BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+diff --git a/package/efl/efl.hash b/package/efl/efl.hash
+index edc72c2..8b05430 100644
+--- a/package/efl/efl.hash
++++ b/package/efl/efl.hash
+@@ -1,2 +1,2 @@
+-# From https://download.enlightenment.org/rel/libs/efl/efl-1.20.5.tar.xz.sha256
+-sha256	da5e69b81c94b79f4e31cfc312413c36acb7429e1cb6fd4397a1251a0e23c21c 	efl-1.20.5.tar.xz
++# From https://download.enlightenment.org/rel/libs/efl/efl-1.20.6.tar.xz.sha256
++sha256	56c67ea77435753a4f324a0a13488ba58f4ed7eb35a97c1a354fdc79c39a32c1	efl-1.20.6.tar.xz
+diff --git a/package/efl/efl.mk b/package/efl/efl.mk
+index e0748d2..5a82479 100644
+--- a/package/efl/efl.mk
++++ b/package/efl/efl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
+-EFL_VERSION = 1.20.5
++EFL_VERSION = 1.20.6
+ EFL_SOURCE = efl-$(EFL_VERSION).tar.xz
+ EFL_SITE = http://download.enlightenment.org/rel/libs/efl
+ EFL_LICENSE = BSD-2-Clause, LGPL-2.1+, GPL-2.0+
