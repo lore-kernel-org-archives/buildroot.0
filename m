@@ -1,29 +1,43 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 30 Nov 2017 10:30:10 +0100
-Subject: [Buildroot] [PATCH] libcurl: security bump to version 7.57.0
-In-Reply-To: <20171130000701.4648-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Thu, 30 Nov 2017 01:07:01 +0100")
-References: <20171130000701.4648-1-peter@korsgaard.com>
-Message-ID: <87bmjkktb1.fsf@dell.be.48ers.dk>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Thu, 30 Nov 2017 11:15:05 +0100
+Subject: [Buildroot] [PATCH 3/3] musl: enable or1k architecture
+In-Reply-To: <20171130085753.3391e458@windsurf.home>
+References: <20171130060027.GA25417@waldemar-brodkorb.de>
+ <20171130085753.3391e458@windsurf.home>
+Message-ID: <B37F3F41-3ABB-459F-8E4C-A4FB53BC68D1@openadk.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+Hi,
 
- > Fixes the following security issues:
- > - CVE-2017-8816: NTLM buffer overflow via integer overflow
- > - CVE-2017-8817: FTP wildcard out of bounds read
- > - CVE-2017-8818: SSL out of buffer access
+> Am 30.11.2017 um 08:57 schrieb Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
+> 
+> Hello,
+> 
+>> On Thu, 30 Nov 2017 07:00:28 +0100, Waldemar Brodkorb wrote:
+>> With Linux kernel >= 4.13.x musl or1k can be used
+>> with Qemu.
+>> 
+>> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+> 
+> Could you clarify why it was not possible to use musl on or1k with
+> kernels < 4.13 ?
+> 
+> Was it just a limitation of the or1k support causing runtime issues ? A
+> build problem ?
+> 
+> I.e, I'm wondering if we should just enable or1k like you did, or if we
+> should make it conditional on the kernel headers being >= 4.13.
 
- > For more details, see the changelog:
- > https://curl.haxx.se/changes.html#7_57_0
+It was a runtime issue, panic of init.
+Not sure which commit fixed it. I think 
+it was a qemu specific problem, that means it might have worked on real hardware with older kernels.
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Or nobody ever tested musl or1k on real hardware ?.
+I know that Rich only tested the musl port with qemu-user, not with qemu-system.
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+best regards
+ Waldemar 
