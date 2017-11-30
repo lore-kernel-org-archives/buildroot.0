@@ -1,137 +1,64 @@
-From: Keith Mok <ek9852@gmail.com>
-Date: Thu, 30 Nov 2017 12:56:31 -0800
-Subject: [Buildroot] [PATCH 2/2] android-tools: upport char, block, fifo,
- socket devices
-In-Reply-To: <20171130205631.93251-1-ek9852@gmail.com>
-References: <20171130205631.93251-1-ek9852@gmail.com>
-Message-ID: <20171130205631.93251-2-ek9852@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 30 Nov 2017 22:24:24 +0100
+Subject: [Buildroot] [PATCH 1/1] Add TCF Agent package
+In-Reply-To: <20171130135004.54a455c9@windsurf.home>
+References: <20171114145442.16734-1-norbert.lange@andritz.com>
+ <20171129224524.1f8022b4@windsurf.home>
+ <CADYdroOSHBypUB1gDLZxDptrvmKG1QeqBRuQTFcg_ZwqJC9zhg@mail.gmail.com>
+ <20171130135004.54a455c9@windsurf.home>
+Message-ID: <20171130212424.GA2759@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Pick changes from openwrt to enable support of special
-device for make_ext4fs
----
- ...ment-support-for-block-and-char-dev-nodes.patch | 109 +++++++++++++++++++++
- 1 file changed, 109 insertions(+)
- create mode 100644 package/android-tools/0009-PATCH-Implement-support-for-block-and-char-dev-nodes.patch
+Norbert, Thomas, All,
 
-diff --git a/package/android-tools/0009-PATCH-Implement-support-for-block-and-char-dev-nodes.patch b/package/android-tools/0009-PATCH-Implement-support-for-block-and-char-dev-nodes.patch
-new file mode 100644
-index 0000000..e86d9c6
---- /dev/null
-+++ b/package/android-tools/0009-PATCH-Implement-support-for-block-and-char-dev-nodes.patch
-@@ -0,0 +1,109 @@
-+From 3258b175c3ea1f76823c6b69b5036ac7efb5599d Mon Sep 17 00:00:00 2001
-+From: Jo-Philipp Wich <jow@openwrt.org>
-+Date: Thu, 30 Nov 2017 10:10:24 -0800
-+Subject: [PATCH] [PATCH] Implement support for block and char dev nodes, fifos
-+ and sockets.
-+
-+Signed-off-by: Jo-Philipp Wich <jow@openwrt.org>
-+Signed-off-by: Keith Mok <ek9852@gmail.com>
-+---
-+ extras/ext4_utils/contents.c    | 45 +++++++++++++++++++++++++++++++++++++++++
-+ extras/ext4_utils/contents.h    |  1 +
-+ extras/ext4_utils/make_ext4fs.c |  6 +++++-
-+ 3 files changed, 51 insertions(+), 1 deletion(-)
-+
-+diff --git a/extras/ext4_utils/contents.c b/extras/ext4_utils/contents.c
-+index 6300680..b11ecba 100644
-+--- a/extras/ext4_utils/contents.c
-++++ b/extras/ext4_utils/contents.c
-+@@ -225,6 +225,51 @@ u32 make_link(const char *filename, const char *link)
-+ 	return inode_num;
-+ }
-+ 
-++/* Creates a special file on disk.  Returns the inode number of the new file */
-++u32 make_special(const char *path)
-++{
-++	struct ext4_inode *inode;
-++	struct stat s;
-++	u32 inode_num;
-++	u32 devmajor;
-++	u32 devminor;
-++
-++	if (stat(path, &s)) {
-++		error("failed to stat file\n");
-++		return EXT4_ALLOCATE_FAILED;
-++	}
-++
-++	inode_num = allocate_inode(info);
-++	if (inode_num == EXT4_ALLOCATE_FAILED) {
-++		error("failed to allocate inode\n");
-++		return EXT4_ALLOCATE_FAILED;
-++	}
-++
-++	inode = get_inode(inode_num);
-++	if (inode == NULL) {
-++		error("failed to get inode %u", inode_num);
-++		return EXT4_ALLOCATE_FAILED;
-++	}
-++
-++	inode->i_mode = s.st_mode & S_IFMT;
-++	inode->i_links_count = 1;
-++	inode->i_flags |= aux_info.default_i_flags;
-++
-++	devmajor = major(s.st_rdev);
-++	devminor = minor(s.st_rdev);
-++
-++	if ((devmajor < 256) && (devminor < 256)) {
-++		inode->i_block[0] = devmajor * 256 + devminor;
-++		inode->i_block[1] = 0;
-++	} else {
-++		inode->i_block[0] = 0;
-++		inode->i_block[1] = (devminor & 0xff) | (devmajor << 8) |
-++			((devminor & ~0xff) << 12);
-++	}
-++
-++	return inode_num;
-++}
-++
-+ int inode_set_permissions(u32 inode_num, u16 mode, u16 uid, u16 gid, u32 mtime)
-+ {
-+ 	struct ext4_inode *inode = get_inode(inode_num);
-+diff --git a/extras/ext4_utils/contents.h b/extras/ext4_utils/contents.h
-+index 35867fd..b155429 100644
-+--- a/extras/ext4_utils/contents.h
-++++ b/extras/ext4_utils/contents.h
-+@@ -36,6 +36,7 @@ u32 make_directory(u32 dir_inode_num, u32 entries, struct dentry *dentries,
-+ 	u32 dirs);
-+ u32 make_file(const char *filename, u64 len);
-+ u32 make_link(const char *filename, const char *link);
-++u32 make_special(const char *path);
-+ int inode_set_permissions(u32 inode_num, u16 mode, u16 uid, u16 gid, u32 mtime);
-+ int inode_set_selinux(u32 inode_num, const char *secon);
-+ #endif
-+diff --git a/extras/ext4_utils/make_ext4fs.c b/extras/ext4_utils/make_ext4fs.c
-+index b2d1426..70c4284 100644
-+--- a/extras/ext4_utils/make_ext4fs.c
-++++ b/extras/ext4_utils/make_ext4fs.c
-+@@ -70,7 +70,6 @@
-+ /* TODO: Not implemented:
-+    Allocating blocks in the same block group as the file inode
-+    Hash or binary tree directories
-+-   Special files: sockets, devices, fifos
-+  */
-+ 
-+ static int filter_dot(const struct dirent *d)
-+@@ -259,6 +258,11 @@ static u32 build_directory_structure(const char *full_path, const char *dir_path
-+ 			free(subdir_dir_path);
-+ 		} else if (dentries[i].file_type == EXT4_FT_SYMLINK) {
-+ 			entry_inode = make_link(dentries[i].full_path, dentries[i].link);
-++		} else if (dentries[i].file_type == EXT4_FT_CHRDEV ||
-++		           dentries[i].file_type == EXT4_FT_BLKDEV ||
-++		           dentries[i].file_type == EXT4_FT_SOCK ||
-++		           dentries[i].file_type == EXT4_FT_FIFO) {
-++			entry_inode = make_special(dentries[i].full_path);
-+ 		} else {
-+ 			error("unknown file type on %s", dentries[i].path);
-+ 			entry_inode = 0;
-+-- 
-+2.13.6 (Apple Git-96)
-+
+On 2017-11-30 13:50 +0100, Thomas Petazzoni spake thusly:
+> On Thu, 30 Nov 2017 12:08:17 +0100, Norbert Lange wrote:
+> > -   [ ! -r /etc/default/$DAEMON_NAME ] || . /etc/default/$DAEMON_NAME
+> > This scheme is used to be able to execute that script with 'sh -e'
+> > [ -r /etc/default/$DAEMON_NAME ] && . /etc/default/$DAEMON_NAME would
+> > fail if there is no such file (which is no error)
+> > 
+> > Please tell me if I should still use the later line.
+> 
+> Interesting reason. Please keep your original proposal then. The
+> ejabberd package is already using this construct. However, all other
+> packages are using the && construct.
+> 
+> Unless Yann has a better suggestion for this ?
+
+I think we should write down those rules about startup scripts and their
+configuration files.
+
+But back on topic for Norbert's use-case. I usually do like he did, but
+I find it hackish nonetheless. I really prefer positive logic anyway,
+like so:
+
+    if [ -r /etc/default/foo.config ]; then
+        . /etc/default/foo.config
+    fi
+
+Yes, that's three lines instead of one, but who cares, really?
+
+However, Norbert's excuse only stands for script that are 'set -e' (i.e.
+they exit as soon as a command exits with a non-zero return code.
+
+But this is not the case of the startup script. So if we would really
+want to make it a single line, then positive logic would still to be
+preferred:
+
+    [ -r /etc/default/foo.config ] && . /etc/default/foo.config
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.7.4
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
