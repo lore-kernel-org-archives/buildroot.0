@@ -1,44 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 30 Nov 2017 11:38:45 +0100
-Subject: [Buildroot] [git commit] package/efl: bump to 1.20.6
-Message-ID: <20171201205341.2DC5680FC6@busybox.osuosl.org>
+Date: Thu, 30 Nov 2017 11:37:53 +0100
+Subject: [Buildroot] [git commit] musl: enable or1k architecture
+Message-ID: <20171201205341.1E22A80FC6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b0dc300b73124b42ea3465973e20b962f064a870
+commit: https://git.buildroot.net/buildroot/commit/?id=fc6a562c04be41d9e869c644dd6691fc5d5aa3ab
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://www.enlightenment.org/news/efl-1.20.6
+With Linux kernel >= 4.13.x musl or1k can be used
+with Qemu.
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/efl/efl.hash | 4 ++--
- package/efl/efl.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ toolchain/toolchain-buildroot/Config.in | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/efl/efl.hash b/package/efl/efl.hash
-index edc72c2..8b05430 100644
---- a/package/efl/efl.hash
-+++ b/package/efl/efl.hash
-@@ -1,2 +1,2 @@
--# From https://download.enlightenment.org/rel/libs/efl/efl-1.20.5.tar.xz.sha256
--sha256	da5e69b81c94b79f4e31cfc312413c36acb7429e1cb6fd4397a1251a0e23c21c 	efl-1.20.5.tar.xz
-+# From https://download.enlightenment.org/rel/libs/efl/efl-1.20.6.tar.xz.sha256
-+sha256	56c67ea77435753a4f324a0a13488ba58f4ed7eb35a97c1a354fdc79c39a32c1	efl-1.20.6.tar.xz
-diff --git a/package/efl/efl.mk b/package/efl/efl.mk
-index e0748d2..5a82479 100644
---- a/package/efl/efl.mk
-+++ b/package/efl/efl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
+index c624350..9668f8d 100644
+--- a/toolchain/toolchain-buildroot/Config.in
++++ b/toolchain/toolchain-buildroot/Config.in
+@@ -79,10 +79,10 @@ comment "glibc on MIPS w/ NAN2008 needs a toolchain w/ headers >= 4.5"
  
--EFL_VERSION = 1.20.5
-+EFL_VERSION = 1.20.6
- EFL_SOURCE = efl-$(EFL_VERSION).tar.xz
- EFL_SITE = http://download.enlightenment.org/rel/libs/efl
- EFL_LICENSE = BSD-2-Clause, LGPL-2.1+, GPL-2.0+
+ config BR2_TOOLCHAIN_BUILDROOT_MUSL
+ 	bool "musl"
+-	depends on BR2_aarch64	  || BR2_arm     || BR2_armeb     || BR2_i386 || \
+-		   BR2_microblaze || BR2_mips    || BR2_mipsel    || BR2_mips64 || \
+-		   BR2_mips64el   || BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le || \
+-		   BR2_sh         || BR2_x86_64
++	depends on BR2_aarch64	   || BR2_arm   || BR2_armeb   || BR2_i386 || \
++		   BR2_microblaze  || BR2_mips  || BR2_mipsel  || BR2_mips64 || \
++		   BR2_mips64el    || BR2_or1k  || BR2_powerpc || BR2_powerpc64 || \
++		   BR2_powerpc64le || BR2_sh    || BR2_x86_64
+ 	depends on !BR2_powerpc_SPE # not supported, build breaks
+ 	# sh2 nommu is supported by musl, but we don't have support
+ 	# for it in Buildroot.
