@@ -1,39 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 30 Nov 2017 11:40:59 +0100
-Subject: [Buildroot] [git commit] linux: split overly-long dependency line
- for readability
-Message-ID: <20171201205341.57B2280FC6@busybox.osuosl.org>
+Date: Thu, 30 Nov 2017 11:37:41 +0100
+Subject: [Buildroot] [git commit] qemu-or1k: update to 4.14.x
+Message-ID: <20171201205341.0EE9580F78@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6426f64176ea33660a05c8bccd2b8c5e38220a63
+commit: https://git.buildroot.net/buildroot/commit/?id=913c822e01d184c6a867cb68c7fda8de8724aac6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Reviewed-by: Romain Naour <romain.naour@gmail.com>
+Or1k support improved, f.e. musl can be tested inside qemu.
+
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- linux/linux.mk | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ board/qemu/or1k/{linux-4.11.config => linux.config} | 0
+ configs/qemu_or1k_defconfig                         | 8 ++++----
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index bd5589b..1c5631f 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -485,7 +485,10 @@ $(eval $(kconfig-package))
+diff --git a/board/qemu/or1k/linux-4.11.config b/board/qemu/or1k/linux.config
+similarity index 100%
+rename from board/qemu/or1k/linux-4.11.config
+rename to board/qemu/or1k/linux.config
+diff --git a/configs/qemu_or1k_defconfig b/configs/qemu_or1k_defconfig
+index 0eb1916..c667142 100644
+--- a/configs/qemu_or1k_defconfig
++++ b/configs/qemu_or1k_defconfig
+@@ -5,12 +5,12 @@ BR2_or1k=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_TARGET_ROOTFS_INITRAMFS=y
  
- # Support for rebuilding the kernel after the cpio archive has
- # been generated in $(BINARIES_DIR)/rootfs.cpio.
--$(LINUX_DIR)/.stamp_initramfs_rebuilt: $(LINUX_DIR)/.stamp_target_installed $(LINUX_DIR)/.stamp_images_installed $(BINARIES_DIR)/rootfs.cpio
-+$(LINUX_DIR)/.stamp_initramfs_rebuilt: $(LINUX_DIR)/.stamp_target_installed
-+$(LINUX_DIR)/.stamp_initramfs_rebuilt: $(LINUX_DIR)/.stamp_images_installed
-+$(LINUX_DIR)/.stamp_initramfs_rebuilt: $(BINARIES_DIR)/rootfs.cpio
-+$(LINUX_DIR)/.stamp_initramfs_rebuilt:
- 	@$(call MESSAGE,"Rebuilding kernel with initramfs")
- 	# Build the kernel.
- 	$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_TARGET_NAME)
+-# Linux headers same as kernel, a 4,11 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_11=y
++# Linux headers same as kernel, a 4,14 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.11.3"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.14.2"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/or1k/linux-4.11.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/or1k/linux.config"
