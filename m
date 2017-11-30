@@ -1,5 +1,5 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 30 Nov 2017 21:53:37 +0200
+From: =?iso-8859-1?Q?Ga=EBl?= PORTAY <gael.portay@savoirfairelinux.com>
+Date: Thu, 30 Nov 2017 14:57:02 -0500
 Subject: [Buildroot] [PATCH 1/1] netcat-openbsd: depends on
  linux-headers >= 3.12
 In-Reply-To: <20171130203625.28575e36@windsurf.lan>
@@ -7,16 +7,18 @@ References: <20171128154437.1631-1-gael.portay@savoirfairelinux.com>
  <20171129222435.557776c3@windsurf.home>
  <20171130171049.v2sidfmz3ybnpnwo@tarshish>
  <20171130203625.28575e36@windsurf.lan>
-Message-ID: <20171130195337.jxfucho6k3ox77gh@tarshish>
+Message-ID: <20171130195702.va3cwfbz5zhe2scp@archlinux>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Thomas,
 
 On Thu, Nov 30, 2017 at 08:36:25PM +0100, Thomas Petazzoni wrote:
+> Hello,
+> 
 > On Thu, 30 Nov 2017 19:10:49 +0200, Baruch Siach wrote:
 > 
 > > On Wed, Nov 29, 2017 at 10:24:35PM +0100, Thomas Petazzoni wrote:
@@ -32,17 +34,12 @@ On Thu, Nov 30, 2017 at 08:36:25PM +0100, Thomas Petazzoni wrote:
 > 
 > Well, what bothers me is that netcat is a fairly simple tool, so I find
 > it odd that we restrict it to >= 3.12.
+>
 
-These header collisions are frequent in networking related packages. The 
-awkward duplication of networking libc/kernel headers make it too easy to hit 
-a collision. It is only since 3.12 that we have kind of solution, though far 
-from ideal. As development is usually done on newer kernels, developers don't 
-see hit these collisoins anymore. So we end up with code that only compiles 
-with headers 3.12 or newer.
+If you prefer, I can update debian patch to not include the kernel UAPI
+header.
 
-baruch
+It will compile, but this version of netcat will be "amputated" from
+ipv6 feature.
 
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+Gael
