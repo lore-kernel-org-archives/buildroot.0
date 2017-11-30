@@ -1,70 +1,83 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 30 Nov 2017 11:49:07 +0100
-Subject: [Buildroot] [git commit branch/next] linux: meddle not in the
- internals of filesystems
-Message-ID: <20171201162321.680268151C@busybox.osuosl.org>
+Date: Thu, 30 Nov 2017 11:50:42 +0100
+Subject: [Buildroot] [git commit branch/next] fs/initramfs: cleanups,
+ enhance comments
+Message-ID: <20171201162321.76B708151C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cef77a6cf5c1982d22e899f046d5e345c0271e7a
+commit: https://git.buildroot.net/buildroot/commit/?id=0a49b49e0a7df15347ccf9fa03c618639e9947b9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Currently, the rule to rebuild the Linux kernel with an initramfs
-directly depends on the path of the file of the intermediate cpio image.
+rootfs-initramfs is not using the generic fs infrastructure, because
+there is virtually nothing to do to build the initramfs image: there is
+no actual image to be built to begin with.
 
-This is inherently "bad" from a purity point of view; linux.mk should
-not have to delve into the fs internals.
+The only purpose of rootfs-initramfs is to ensure the rootfs.cpio image
+is built and then that the Linux kernel is rebuilt with that rootfs.cpio
+as initramfs source.
 
-Rather, make it directly depend on the "frontal" rule that generates the
-cpio image.
+Using variables of the fs infra like if it were used is misleading. It
+looked nice as long as there was the possibility that rootfs-initramfs
+would one day use the fs infra. But there's no way that will happen any
+time soon.
 
-Drop the comment for linux-rebuild-with-initramfs, it was misleading
-(talking about generating "the initramfs list of files", which is not
-what was done, since we use a cpio as source of initramfs, not a list of
-files).
+Furthermore, the linux' rule linux-rebuild-with-initramfs now already
+depends on rootfs-cpio by itself, so we need not duplicate this
+dependency in rootfs-initramfs.
+
+Still, we want to advertise that the dependency is on rootfs-cpio, so
+we get nice dependency graphs (and not expose the internal
+linux-rebuild-with-initramfs rule to the users).
+
+So, remove the variables and directly define the rules.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
 Cc: Romain Naour <romain.naour@openwide.fr>
+Reviewed-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- linux/linux.mk | 18 +++++++-----------
- 1 file changed, 7 insertions(+), 11 deletions(-)
+ fs/initramfs/initramfs.mk | 22 +++++++++++++++-------
+ 1 file changed, 15 insertions(+), 7 deletions(-)
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 1c5631f..5300b9c 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -484,21 +484,17 @@ endif # BR_BUILDING
- $(eval $(kconfig-package))
+diff --git a/fs/initramfs/initramfs.mk b/fs/initramfs/initramfs.mk
+index db50812..b8dee18 100644
+--- a/fs/initramfs/initramfs.mk
++++ b/fs/initramfs/initramfs.mk
+@@ -5,17 +5,25 @@
+ #
+ ################################################################################
  
- # Support for rebuilding the kernel after the cpio archive has
--# been generated in $(BINARIES_DIR)/rootfs.cpio.
--$(LINUX_DIR)/.stamp_initramfs_rebuilt: $(LINUX_DIR)/.stamp_target_installed
--$(LINUX_DIR)/.stamp_initramfs_rebuilt: $(LINUX_DIR)/.stamp_images_installed
--$(LINUX_DIR)/.stamp_initramfs_rebuilt: $(BINARIES_DIR)/rootfs.cpio
--$(LINUX_DIR)/.stamp_initramfs_rebuilt:
-+# been generated.
-+.PHONY: linux-rebuild-with-initramfs
-+linux-rebuild-with-initramfs: $(LINUX_DIR)/.stamp_target_installed
-+linux-rebuild-with-initramfs: $(LINUX_DIR)/.stamp_images_installed
-+linux-rebuild-with-initramfs: rootfs-cpio
-+linux-rebuild-with-initramfs:
- 	@$(call MESSAGE,"Rebuilding kernel with initramfs")
- 	# Build the kernel.
--	$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_TARGET_NAME)
-+	$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) $(LINUX_TARGET_NAME)
- 	$(LINUX_APPEND_DTB)
- 	# Copy the kernel image(s) to its(their) final destination
- 	$(call LINUX_INSTALL_IMAGE,$(BINARIES_DIR))
- 	# If there is a .ub file copy it to the final destination
- 	test ! -f $(LINUX_IMAGE_PATH).ub || cp $(LINUX_IMAGE_PATH).ub $(BINARIES_DIR)
--	$(Q)touch $@
+-ROOTFS_INITRAMFS_DEPENDENCIES += rootfs-cpio
 -
--# The initramfs building code must make sure this target gets called
--# after it generated the initramfs list of files.
--linux-rebuild-with-initramfs: $(LINUX_DIR)/.stamp_initramfs_rebuilt
+-ROOTFS_INITRAMFS_POST_TARGETS += linux-rebuild-with-initramfs
+-
+-
+ # The generic fs infrastructure isn't very useful here.
++#
++# The initramfs image does not actually build an image; its only purpose is:
++# 1- to ensure rootfs.cpio is generated,
++# 2- to then rebuild the kernel with rootfs.cpio as initramfs
++#
++# Note: ordering of the dependencies is not guaranteed here, but in
++# linux/linux.mk, via the linux-rebuild-with-initramfs rule, which depends
++# on the rootfs-cpio filesystem rule.
++#
++# Note: the trick here is that we directly depend on rebuilding the Linux
++# kernel image (which itself depends on the rootfs-cpio rule), while we
++# advertise that our dependency is on the rootfs-cpio rule, which is
++# cleaner in the dependency graph.
+ 
+-rootfs-initramfs: $(ROOTFS_INITRAMFS_DEPENDENCIES) $(ROOTFS_INITRAMFS_POST_TARGETS)
++rootfs-initramfs: linux-rebuild-with-initramfs
+ 
+ rootfs-initramfs-show-depends:
+-	@echo $(ROOTFS_INITRAMFS_DEPENDENCIES)
++	@echo rootfs-cpio
+ 
+ .PHONY: rootfs-initramfs rootfs-initramfs-show-depends
+ 
