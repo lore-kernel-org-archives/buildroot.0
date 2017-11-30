@@ -1,36 +1,33 @@
 From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Thu, 30 Nov 2017 05:53:17 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2017-11-28
-In-Reply-To: <20171129102201.GI2889@scaer>
-References: <20171129070009.BC0F72037D@mail.free-electrons.com>
- <20171129102201.GI2889@scaer>
-Message-ID: <20171130045316.GS27558@waldemar-brodkorb.de>
+Date: Thu, 30 Nov 2017 06:58:54 +0100
+Subject: [Buildroot] [PATCH next 1/3] uclibc: enable NPTL for or1k
+Message-ID: <20171130055853.GA24600@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
-Yann E. MORIN wrote,
+With 1.0.27 NPTL for or1k is improved and can be used
+by default.
 
-> >         or1k |                    zmqpp-4.1.2 | NOK | http://autobuild.buildroot.net/results/e09731abe257ee187e20aa0e75beee22004bd3e2 |     
-> 
-> src/client/options.cpp: In function 'client_options
-> process_command_line(int, const char**)':
-> src/client/options.cpp:139:1: internal compiler error: in
-> merge_overlapping_regs, at regrename.c:304
->  }
->  ^
-> 
-> Waldemar? Should we disable it for or1k?
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+---
+ package/uclibc/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Yes and maybe report it to the or1k people, gcc support
-isn't upstream.
-
-I verified the problem exist even with uClibc-ng 1.0.27 and
-NPTL enabled.
-
-best regards
- Waldemar
+diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
+index 3b4f91da91..47f25b5c1b 100644
+--- a/package/uclibc/Config.in
++++ b/package/uclibc/Config.in
+@@ -48,7 +48,7 @@ choice
+ config BR2_PTHREADS_NATIVE
+ 	bool "Native POSIX Threading (NPTL)"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_m68k && !BR2_microblaze && !BR2_or1k
++	depends on !BR2_m68k && !BR2_microblaze
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 
+-- 
+2.11.0
