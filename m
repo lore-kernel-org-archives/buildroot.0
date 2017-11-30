@@ -1,25 +1,16 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 30 Nov 2017 11:51:42 +0100
-Subject: [Buildroot] [git commit branch/next] fs/cpio: use a post-gen hook
- rather than a post-target rule
-Message-ID: <20171201162321.93D8C82225@busybox.osuosl.org>
+Date: Thu, 30 Nov 2017 11:40:59 +0100
+Subject: [Buildroot] [git commit branch/next] linux: split overly-long
+ dependency line for readability
+Message-ID: <20171201162321.59D9C8151C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9f2ca35998447a8107488925f5f60d371b46f047
+commit: https://git.buildroot.net/buildroot/commit/?id=6426f64176ea33660a05c8bccd2b8c5e38220a63
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
-
-We already have a mechanism for running stuff after the filesystem is
-generated, and that's called post-gen hooks.
-
-Use those hooks.
-
-Note: for cpio (and unlike ext2 previously), the dependency chain was
-correct, in that the post-target rule correctly depended on the image
-rule. Nonetheless, we still want to fix it for consistency.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
@@ -27,29 +18,22 @@ Cc: Arnout Vandecappelle <arnout@mind.be>
 Reviewed-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- fs/cpio/cpio.mk | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+ linux/linux.mk | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/fs/cpio/cpio.mk b/fs/cpio/cpio.mk
-index e82167e..c68e0bf 100644
---- a/fs/cpio/cpio.mk
-+++ b/fs/cpio/cpio.mk
-@@ -31,12 +31,13 @@ define ROOTFS_CPIO_CMD
- 	cd $(TARGET_DIR) && find . | cpio --quiet -o -H newc > $@
- endef
+diff --git a/linux/linux.mk b/linux/linux.mk
+index bd5589b..1c5631f 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -485,7 +485,10 @@ $(eval $(kconfig-package))
  
--$(BINARIES_DIR)/rootfs.cpio.uboot: $(BINARIES_DIR)/rootfs.cpio host-uboot-tools
--	$(MKIMAGE) -A $(MKIMAGE_ARCH) -T ramdisk \
--		-C none -d $<$(ROOTFS_CPIO_COMPRESS_EXT) $@
--
- ifeq ($(BR2_TARGET_ROOTFS_CPIO_UIMAGE),y)
--ROOTFS_CPIO_POST_TARGETS += $(BINARIES_DIR)/rootfs.cpio.uboot
-+ROOTFS_CPIO_DEPENDENCIES += host-uboot-tools
-+define ROOTFS_CPIO_UBOOT_MKIMAGE
-+	$(MKIMAGE) -A $(MKIMAGE_ARCH) -T ramdisk \
-+		-C none -d $@$(ROOTFS_CPIO_COMPRESS_EXT) $@.uboot
-+endef
-+ROOTFS_CPIO_POST_GEN_HOOKS += ROOTFS_CPIO_UBOOT_MKIMAGE
- endif
- 
- $(eval $(call ROOTFS_TARGET,cpio))
+ # Support for rebuilding the kernel after the cpio archive has
+ # been generated in $(BINARIES_DIR)/rootfs.cpio.
+-$(LINUX_DIR)/.stamp_initramfs_rebuilt: $(LINUX_DIR)/.stamp_target_installed $(LINUX_DIR)/.stamp_images_installed $(BINARIES_DIR)/rootfs.cpio
++$(LINUX_DIR)/.stamp_initramfs_rebuilt: $(LINUX_DIR)/.stamp_target_installed
++$(LINUX_DIR)/.stamp_initramfs_rebuilt: $(LINUX_DIR)/.stamp_images_installed
++$(LINUX_DIR)/.stamp_initramfs_rebuilt: $(BINARIES_DIR)/rootfs.cpio
++$(LINUX_DIR)/.stamp_initramfs_rebuilt:
+ 	@$(call MESSAGE,"Rebuilding kernel with initramfs")
+ 	# Build the kernel.
+ 	$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_TARGET_NAME)
