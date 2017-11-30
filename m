@@ -1,51 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 30 Nov 2017 11:40:43 +0100
-Subject: [Buildroot] [git commit branch/next] core: sort packages and
- eliminate duplicates in show-targets
-Message-ID: <20171201162321.49D6E825DF@busybox.osuosl.org>
+Date: Thu, 30 Nov 2017 15:50:53 +0100
+Subject: [Buildroot] [git commit branch/next] fs: don't remove intermediate
+ files
+Message-ID: <20171201162321.DB9508151C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=203219ca93947bbf5d43edba89380ff41ef5a8a8
+commit: https://git.buildroot.net/buildroot/commit/?id=787a31fed42f98a8e2e6a0bd2079376c861436f2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Currently, enabling more than one filesystem image will make
-'show-targets' list a few host packages more than once.
+Now that they are in their own directory and no longer pollute the build
+dir, there is no point in removing them.
 
-This is because all filesystem images add the same set of
-host-packages to their dependencies, which are then added as-is
-to the package list.
-
-Thus, host-fakeroot, host-makedevs and, if needed, host-mkpasswd will
-appear as many times as there are filesystem images enabled.
-
-Fix that by sorting the package list, thus eliminating duplicates from
-that list. Also sort the rootfs list for good measure. Sort the two
-separately, so that rootfses are last.
+Furthermore, a follow-up patch will require that those files survive
+when more than one filesystem image is generated.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Peter Korsgaard <jacmet@uclibc.org>
-Reviewed-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ fs/common.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/Makefile b/Makefile
-index ef10c90..d528521 100644
---- a/Makefile
-+++ b/Makefile
-@@ -793,7 +793,7 @@ legal-info: dirs legal-info-clean legal-info-prepare $(foreach p,$(PACKAGES),$(p
- 
- .PHONY: show-targets
- show-targets:
--	@echo $(PACKAGES) $(TARGETS_ROOTFS)
-+	@echo $(sort $(PACKAGES)) $(sort $(TARGETS_ROOTFS))
- 
- .PHONY: show-build-order
- show-build-order: $(patsubst %,%-show-build-order,$(PACKAGES))
+diff --git a/fs/common.mk b/fs/common.mk
+index 7bbc143..c17c458 100644
+--- a/fs/common.mk
++++ b/fs/common.mk
+@@ -103,7 +103,6 @@ endif
+ 	rm -f $$(TARGET_DIR_WARNING_FILE)
+ 	PATH=$$(BR_PATH) $$(HOST_DIR)/bin/fakeroot -- $$(FAKEROOT_SCRIPT)
+ 	$$(INSTALL) -m 0644 support/misc/target-dir-warning.txt $$(TARGET_DIR_WARNING_FILE)
+-	- at rm -f $$(FAKEROOT_SCRIPT) $$(FULL_DEVICE_TABLE)
+ ifneq ($$(ROOTFS_$(2)_COMPRESS_CMD),)
+ 	PATH=$$(BR_PATH) $$(ROOTFS_$(2)_COMPRESS_CMD) $$@ > $$@$$(ROOTFS_$(2)_COMPRESS_EXT)
+ endif
