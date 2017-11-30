@@ -1,11 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 30 Nov 2017 08:58:31 +0100
-Subject: [Buildroot] [PATCH 1/8] package/lttng-tools: fix typo in
- variable name
-In-Reply-To: <e23ade0d8a644cbe3967628f9b1b907a9cde3dde.1511996903.git.yann.morin.1998@free.fr>
+Date: Thu, 30 Nov 2017 08:59:50 +0100
+Subject: [Buildroot] [PATCH 8/8] gitlab-ci: run check-package
+In-Reply-To: <b9a9596c19817cf5a70c17acaa23657ed3597f01.1511996903.git.yann.morin.1998@free.fr>
 References: <cover.1511996903.git.yann.morin.1998@free.fr>
- <e23ade0d8a644cbe3967628f9b1b907a9cde3dde.1511996903.git.yann.morin.1998@free.fr>
-Message-ID: <20171130085831.02fa4e40@windsurf.home>
+ <b9a9596c19817cf5a70c17acaa23657ed3597f01.1511996903.git.yann.morin.1998@free.fr>
+Message-ID: <20171130085950.0dc9a144@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,20 +13,22 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 30 Nov 2017 00:08:38 +0100, Yann E. MORIN wrote:
-> It's lttng-tools, not lttng-libust. ;-)
-> 
-> Fixes numerous build failures caused by a late autoreconf:
->     http://autobuild.buildroot.org/results/b84/b84a6e39fcca70c56bfe49d54c385dfe6da82422/
->     etc...
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Philippe Proulx <eeppeliteloop@gmail.com>
+On Thu, 30 Nov 2017 00:08:45 +0100, Yann E. MORIN wrote:
 
-You had already sent this one, and I already merged it. So I'll mark
-that one as Rejected in patchwork.
+> +check-package:
+> +    script:
+> +        - find . -type f -name '*.mk' -exec ./utils/check-package {} +
 
-Thanks!
+Does it run without warning on all .mk files?
+
+In fact, I think we shouldn't limit it to .mk files, because
+check-package can also verify Config.in files and .hash files.
+
+Perhaps:
+
+  find package/ boot/ linux/ -type f -exec ./utils/check-package {}
+
+Best regards,
 
 Thomas
 -- 
