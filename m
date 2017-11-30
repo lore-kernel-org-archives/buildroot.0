@@ -1,9 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 30 Nov 2017 08:57:53 +0100
-Subject: [Buildroot] [PATCH 3/3] musl: enable or1k architecture
-In-Reply-To: <20171130060027.GA25417@waldemar-brodkorb.de>
-References: <20171130060027.GA25417@waldemar-brodkorb.de>
-Message-ID: <20171130085753.3391e458@windsurf.home>
+Date: Thu, 30 Nov 2017 08:58:31 +0100
+Subject: [Buildroot] [PATCH 1/8] package/lttng-tools: fix typo in
+ variable name
+In-Reply-To: <e23ade0d8a644cbe3967628f9b1b907a9cde3dde.1511996903.git.yann.morin.1998@free.fr>
+References: <cover.1511996903.git.yann.morin.1998@free.fr>
+ <e23ade0d8a644cbe3967628f9b1b907a9cde3dde.1511996903.git.yann.morin.1998@free.fr>
+Message-ID: <20171130085831.02fa4e40@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,22 +14,20 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 30 Nov 2017 07:00:28 +0100, Waldemar Brodkorb wrote:
-> With Linux kernel >= 4.13.x musl or1k can be used
-> with Qemu.
+On Thu, 30 Nov 2017 00:08:38 +0100, Yann E. MORIN wrote:
+> It's lttng-tools, not lttng-libust. ;-)
 > 
-> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+> Fixes numerous build failures caused by a late autoreconf:
+>     http://autobuild.buildroot.org/results/b84/b84a6e39fcca70c56bfe49d54c385dfe6da82422/
+>     etc...
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Philippe Proulx <eeppeliteloop@gmail.com>
 
-Could you clarify why it was not possible to use musl on or1k with
-kernels < 4.13 ?
+You had already sent this one, and I already merged it. So I'll mark
+that one as Rejected in patchwork.
 
-Was it just a limitation of the or1k support causing runtime issues ? A
-build problem ?
-
-I.e, I'm wondering if we should just enable or1k like you did, or if we
-should make it conditional on the kernel headers being >= 4.13.
-
-Thanks,
+Thanks!
 
 Thomas
 -- 
