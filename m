@@ -1,51 +1,39 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 30 Nov 2017 01:07:01 +0100
-Subject: [Buildroot] [PATCH] libcurl: security bump to version 7.57.0
-Message-ID: <20171130000701.4648-1-peter@korsgaard.com>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Wed, 29 Nov 2017 18:35:43 -0600
+Subject: [Buildroot] Analysis of build results for 2017-11-25
+In-Reply-To: <452b6c58-7fc9-e753-6436-ed305e4d62e9@mind.be>
+References: <20171126070006.676FA209DE@mail.free-electrons.com>
+ <20171126152140.0fd3902b@windsurf.home>
+ <452b6c58-7fc9-e753-6436-ed305e4d62e9@mind.be>
+Message-ID: <CANQCQpYSHhX6OxEH5f4PfraP7sAfn2Nr2Ou1MORmnRFZQ_91Qw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes the following security issues:
+Arnout,
 
-- CVE-2017-8816: NTLM buffer overflow via integer overflow
-- CVE-2017-8817: FTP wildcard out of bounds read
-- CVE-2017-8818: SSL out of buffer access
+On Nov 28, 2017 4:45 PM, "Arnout Vandecappelle" <arnout@mind.be> wrote:
 
-For more details, see the changelog:
-https://curl.haxx.se/changes.html#7_57_0
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libcurl/libcurl.hash | 4 ++--
- package/libcurl/libcurl.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
-index 49292dfb9e..275a5a373f 100644
---- a/package/libcurl/libcurl.hash
-+++ b/package/libcurl/libcurl.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--# https://curl.haxx.se/download/curl-7.56.1.tar.xz.asc
--sha256 8eed282cf3a0158d567a0feaa3c4619e8e847970597b5a2c81879e8f0d1a39d1  curl-7.56.1.tar.xz
-+# https://curl.haxx.se/download/curl-7.57.0.tar.xz.asc
-+sha256 f5f6fd3c72b7b8389969f4fb671ed8532fa9b5bb7a5cae7ca89bc1cea45c7878  curl-7.57.0.tar.xz
- sha256 cbcf511f5702f7baf5424193a792bc9c18fab22bcbec2e6a587598389dc632c2  COPYING
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index 57b9c2cbca..0aab58a7de 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBCURL_VERSION = 7.56.1
-+LIBCURL_VERSION = 7.57.0
- LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
- LIBCURL_SITE = https://curl.haxx.se/download
- LIBCURL_DEPENDENCIES = host-pkgconf \
--- 
-2.11.0
+On 26-11-17 15:21, Thomas Petazzoni wrote:
+>> microblazeel |                 libxslt-1.1.29 | TIM |
+http://autobuild.buildroot.net/results/2000c1282f66303a0e4ced19307b91
+ff931868a7 |
+> I don't see anything wrong there, perhaps just the build really was too
+> long.
+
+ The build of gst-ffmpeg took almost 7 hours, that's not normal... Perhaps
+Matt's autobuilder got stuck somehow around thatAbout,
+
+
+Looks like Peter's had a similar issue today with ffmpeg,  weird....
+http://autobuild.buildroot.net/results/9f1/9f1de83c904f68dc2fb70d521d5269b286d28d5a//
+(Pardon the rich text,  just have my tablet at the moment)
+
+Matt
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20171129/450982ea/attachment-0001.html>
