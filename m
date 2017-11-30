@@ -1,45 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 30 Nov 2017 11:53:11 +0100
-Subject: [Buildroot] [git commit branch/next] fs: remove
- TARGET_DIR_WARNING_FILE late
-Message-ID: <20171201162321.B012B82225@busybox.osuosl.org>
+Date: Thu, 30 Nov 2017 11:51:42 +0100
+Subject: [Buildroot] [git commit branch/next] fs/cpio: use a post-gen hook
+ rather than a post-target rule
+Message-ID: <20171201162321.93D8C82225@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b282f33cf83a18cc73365b897a912a16021d5475
+commit: https://git.buildroot.net/buildroot/commit/?id=9f2ca35998447a8107488925f5f60d371b46f047
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Remove it just before generating the filesystem image.
+We already have a mechanism for running stuff after the filesystem is
+generated, and that's called post-gen hooks.
 
-This way, removing-and-recreating the file encloses the actual
-image generation as tightly as possible.
+Use those hooks.
+
+Note: for cpio (and unlike ext2 previously), the dependency chain was
+correct, in that the post-target rule correctly depended on the image
+rule. Nonetheless, we still want to fix it for consistency.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Reviewed-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- fs/common.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ fs/cpio/cpio.mk | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/fs/common.mk b/fs/common.mk
-index 378907e..d4d5c18 100644
---- a/fs/common.mk
-+++ b/fs/common.mk
-@@ -70,7 +70,6 @@ $$(BINARIES_DIR)/rootfs.$(1): target-finalize $$(ROOTFS_$(2)_DEPENDENCIES)
- 	@$$(call MESSAGE,"Generating root filesystem image rootfs.$(1)")
- 	$$(foreach hook,$$(ROOTFS_$(2)_PRE_GEN_HOOKS),$$(call $$(hook))$$(sep))
- 	rm -f $$(FAKEROOT_SCRIPT)
--	rm -f $$(TARGET_DIR_WARNING_FILE)
- 	rm -f $$(USERS_TABLE)
- 	echo '#!/bin/sh' > $$(FAKEROOT_SCRIPT)
- 	echo "set -e" >> $$(FAKEROOT_SCRIPT)
-@@ -100,6 +99,7 @@ endif
- 	$$(foreach hook,$$(ROOTFS_POST_CMD_HOOKS),\
- 		$$(call PRINTF,$$($$(hook))) >> $$(FAKEROOT_SCRIPT)$$(sep))
- 	chmod a+x $$(FAKEROOT_SCRIPT)
-+	rm -f $$(TARGET_DIR_WARNING_FILE)
- 	PATH=$$(BR_PATH) $$(HOST_DIR)/bin/fakeroot -- $$(FAKEROOT_SCRIPT)
- 	$$(INSTALL) -m 0644 support/misc/target-dir-warning.txt $$(TARGET_DIR_WARNING_FILE)
- 	- at rm -f $$(FAKEROOT_SCRIPT) $$(FULL_DEVICE_TABLE)
+diff --git a/fs/cpio/cpio.mk b/fs/cpio/cpio.mk
+index e82167e..c68e0bf 100644
+--- a/fs/cpio/cpio.mk
++++ b/fs/cpio/cpio.mk
+@@ -31,12 +31,13 @@ define ROOTFS_CPIO_CMD
+ 	cd $(TARGET_DIR) && find . | cpio --quiet -o -H newc > $@
+ endef
+ 
+-$(BINARIES_DIR)/rootfs.cpio.uboot: $(BINARIES_DIR)/rootfs.cpio host-uboot-tools
+-	$(MKIMAGE) -A $(MKIMAGE_ARCH) -T ramdisk \
+-		-C none -d $<$(ROOTFS_CPIO_COMPRESS_EXT) $@
+-
+ ifeq ($(BR2_TARGET_ROOTFS_CPIO_UIMAGE),y)
+-ROOTFS_CPIO_POST_TARGETS += $(BINARIES_DIR)/rootfs.cpio.uboot
++ROOTFS_CPIO_DEPENDENCIES += host-uboot-tools
++define ROOTFS_CPIO_UBOOT_MKIMAGE
++	$(MKIMAGE) -A $(MKIMAGE_ARCH) -T ramdisk \
++		-C none -d $@$(ROOTFS_CPIO_COMPRESS_EXT) $@.uboot
++endef
++ROOTFS_CPIO_POST_GEN_HOOKS += ROOTFS_CPIO_UBOOT_MKIMAGE
+ endif
+ 
+ $(eval $(call ROOTFS_TARGET,cpio))
