@@ -1,43 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 Nov 2017 22:29:32 +0100
-Subject: [Buildroot] [git commit] libxml2: bump to 2.9.7
-Message-ID: <20171201205333.249B37FAAC@busybox.osuosl.org>
+Date: Thu, 30 Nov 2017 11:53:11 +0100
+Subject: [Buildroot] [git commit] fs: remove TARGET_DIR_WARNING_FILE late
+Message-ID: <20171201205341.C63D68100E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a54794e6525444f1031d468e2d16889df334b626
+commit: https://git.buildroot.net/buildroot/commit/?id=b282f33cf83a18cc73365b897a912a16021d5475
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Adam Duskett <aduskett@gmail.com>
+Remove it just before generating the filesystem image.
+
+This way, removing-and-recreating the file encloses the actual
+image generation as tightly as possible.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libxml2/libxml2.hash | 2 +-
- package/libxml2/libxml2.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ fs/common.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/libxml2/libxml2.hash b/package/libxml2/libxml2.hash
-index 217a51f..f7e046b 100644
---- a/package/libxml2/libxml2.hash
-+++ b/package/libxml2/libxml2.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--sha256	4031c1ecee9ce7ba4f313e91ef6284164885cdb69937a123f6a83bb6a72dcd38	libxml2-2.9.5.tar.gz
-+sha256	f63c5e7d30362ed28b38bfa1ac6313f9a80230720b7fb6c80575eeab3ff5900c	libxml2-2.9.7.tar.gz
- # License files, locally calculated
- sha256	c5c63674f8a83c4d2e385d96d1c670a03cb871ba2927755467017317878574bd	COPYING
-diff --git a/package/libxml2/libxml2.mk b/package/libxml2/libxml2.mk
-index 1b870c4..a6285a6 100644
---- a/package/libxml2/libxml2.mk
-+++ b/package/libxml2/libxml2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBXML2_VERSION = 2.9.5
-+LIBXML2_VERSION = 2.9.7
- LIBXML2_SITE = ftp://xmlsoft.org/libxml2
- LIBXML2_INSTALL_STAGING = YES
- LIBXML2_LICENSE = MIT
+diff --git a/fs/common.mk b/fs/common.mk
+index 378907e..d4d5c18 100644
+--- a/fs/common.mk
++++ b/fs/common.mk
+@@ -70,7 +70,6 @@ $$(BINARIES_DIR)/rootfs.$(1): target-finalize $$(ROOTFS_$(2)_DEPENDENCIES)
+ 	@$$(call MESSAGE,"Generating root filesystem image rootfs.$(1)")
+ 	$$(foreach hook,$$(ROOTFS_$(2)_PRE_GEN_HOOKS),$$(call $$(hook))$$(sep))
+ 	rm -f $$(FAKEROOT_SCRIPT)
+-	rm -f $$(TARGET_DIR_WARNING_FILE)
+ 	rm -f $$(USERS_TABLE)
+ 	echo '#!/bin/sh' > $$(FAKEROOT_SCRIPT)
+ 	echo "set -e" >> $$(FAKEROOT_SCRIPT)
+@@ -100,6 +99,7 @@ endif
+ 	$$(foreach hook,$$(ROOTFS_POST_CMD_HOOKS),\
+ 		$$(call PRINTF,$$($$(hook))) >> $$(FAKEROOT_SCRIPT)$$(sep))
+ 	chmod a+x $$(FAKEROOT_SCRIPT)
++	rm -f $$(TARGET_DIR_WARNING_FILE)
+ 	PATH=$$(BR_PATH) $$(HOST_DIR)/bin/fakeroot -- $$(FAKEROOT_SCRIPT)
+ 	$$(INSTALL) -m 0644 support/misc/target-dir-warning.txt $$(TARGET_DIR_WARNING_FILE)
+ 	- at rm -f $$(FAKEROOT_SCRIPT) $$(FULL_DEVICE_TABLE)
