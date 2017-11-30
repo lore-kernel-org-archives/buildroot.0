@@ -1,95 +1,51 @@
-From: =?UTF-8?Q?Stefan_Fr=c3=b6berg?= <stefan.froberg@petroprogram.com>
-Date: Thu, 30 Nov 2017 01:49:28 +0200
-Subject: [Buildroot] Putting qtwebkit on a diet
-In-Reply-To: <7f8d2d60-b870-61f1-df5e-ed83f9923c39@petroprogram.com>
-References: <7f8d2d60-b870-61f1-df5e-ed83f9923c39@petroprogram.com>
-Message-ID: <56abbedc-c97e-46e6-5458-7b6c2b18ba18@petroprogram.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 30 Nov 2017 01:07:01 +0100
+Subject: [Buildroot] [PATCH] libcurl: security bump to version 7.57.0
+Message-ID: <20171130000701.4648-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update: I just tried it and the results are these:
+Fixes the following security issues:
 
-Stock, uclibc qt5webkit size on target:
-32MB
+- CVE-2017-8816: NTLM buffer overflow via integer overflow
+- CVE-2017-8817: FTP wildcard out of bounds read
+- CVE-2017-8818: SSL out of buffer access
 
-Modified uclibc qt5webkit build with "minimal" and
-"use_cross_platform_context_menus" (needed for successfull build)
-settings, size on target:
-22 MB
+For more details, see the changelog:
+https://curl.haxx.se/changes.html#7_57_0
 
-So it would save about 10 MB
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libcurl/libcurl.hash | 4 ++--
+ package/libcurl/libcurl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
--S-
-
-Stefan Fr?berg kirjoitti 30.11.2017 klo 00:12:
-> Hello
->
-> Would there be interest for slimming down the fat from QtWebkit ?
->
-> I mean, when one builds the QtWebkit manually with the
-> Tools/Scripts/build-webkit --release --qt --minimal
-> I see a bunch of features disabled like the following:
->
-> -DENABLE_3D_RENDERING=0 -DENABLE_ACCELERATED_2D_CANVAS=0
-> -DENABLE_BATTERY_STATUS=0 -DENABLE_BLOB=0 -DENABLE_CANVAS_PATH=0
-> -DENABLE_CANVAS_PROXY=0 -DENABLE_CHANNEL_MESSAGING=0 -DENABLE_CSP_NEXT=0
-> -DENABLE_CSS_BOX_DECORATION_BREAK=0 -DENABLE_CSS_COMPOSITING=0
-> -DENABLE_CSS_EXCLUSIONS=0 -DENABLE_CSS_FILTERS=0
-> -DENABLE_CSS_GRID_LAYOUT=0 -DENABLE_CSS_HIERARCHIES=0
-> -DENABLE_CSS_IMAGE_ORIENTATION=0 -DENABLE_CSS_IMAGE_RESOLUTION=0
-> -DENABLE_CSS_IMAGE_SET=0 -DENABLE_CSS_REGIONS=0 -DENABLE_CSS_SHADERS=0
-> -DENABLE_CSS_SHAPES=0 -DENABLE_CSS_STICKY_POSITION=0
-> -DENABLE_CSS_TRANSFORMS_ANIMATIONS_UNPREFIXED=0 -DENABLE_CSS_VARIABLES=0
-> -DENABLE_CSS3_CONDITIONAL_RULES=0 -DENABLE_CSS3_TEXT=0
-> -DENABLE_CSS3_TEXT_LINE_BREAK=0 -DENABLE_DASHBOARD_SUPPORT=0
-> -DENABLE_DATAGRID=0 -DENABLE_DATALIST_ELEMENT=0
-> -DENABLE_DATA_TRANSFER_ITEMS=0 -DENABLE_DETAILS_ELEMENT=0
-> -DENABLE_DEVICE_ORIENTATION=0 -DENABLE_DIRECTORY_UPLOAD=0
-> -DENABLE_DOWNLOAD_ATTRIBUTE=0 -DENABLE_FILE_SYSTEM=0 -DENABLE_FILTERS=0
-> -DENABLE_FONT_LOAD_EVENTS=0 -DENABLE_FTPDIR=0 -DENABLE_FULLSCREEN_API=0
-> -DENABLE_GAMEPAD=0 -DENABLE_GEOLOCATION=0 -DENABLE_HIGH_DPI_CANVAS=0
-> -DENABLE_ICONDATABASE=0 -DENABLE_IFRAME_SEAMLESS=0
-> -DENABLE_INDEXED_DATABASE=0 -DENABLE_INPUT_SPEECH=0
-> -DENABLE_INPUT_TYPE_COLOR=0 -DENABLE_INPUT_TYPE_DATE=0
-> -DENABLE_INPUT_TYPE_DATETIME_INCOMPLETE=0
-> -DENABLE_INPUT_TYPE_DATETIMELOCAL=0 -DENABLE_INPUT_TYPE_MONTH=0
-> -DENABLE_INPUT_TYPE_TIME=0 -DENABLE_INPUT_TYPE_WEEK=0
-> -DENABLE_INSPECTOR=0 -DENABLE_INSPECTOR_SERVER=0
-> -DENABLE_JAVASCRIPT_DEBUGGER=0 -DENABLE_LEGACY_CSS_VENDOR_PREFIXES=0
-> -DENABLE_LEGACY_NOTIFICATIONS=0 -DENABLE_LEGACY_VENDOR_PREFIXES=0
-> -DENABLE_LEGACY_WEB_AUDIO=0 -DENABLE_LINK_PREFETCH=0 -DENABLE_MATHML=0
-> -DENABLE_MEDIA_SOURCE=0 -DENABLE_MEDIA_STATISTICS=0
-> -DENABLE_MEDIA_STREAM=0 -DENABLE_METER_ELEMENT=0 -DENABLE_MHTML=0
-> -DENABLE_MICRODATA=0 -DENABLE_MOUSE_CURSOR_SCALE=0
-> -DENABLE_NAVIGATOR_CONTENT_UTILS=0 -DENABLE_NETSCAPE_PLUGIN_API=0
-> -DENABLE_NETWORK_INFO=0 -DENABLE_NOSNIFF=0 -DENABLE_NOTIFICATIONS=0
-> -DENABLE_ORIENTATION_EVENTS=0 -DENABLE_PAGE_VISIBILITY_API=0
-> -DENABLE_PROGRESS_ELEMENT=0 -DENABLE_PROXIMITY_EVENTS=0 -DENABLE_QUOTA=0
-> -DENABLE_RESOLUTION_MEDIA_QUERY=0 -DENABLE_RESOURCE_TIMING=0
-> -DENABLE_REQUEST_ANIMATION_FRAME=0 -DENABLE_SCRIPTED_SPEECH=0
-> -DENABLE_SECCOMP_FILTERS=0 -DENABLE_SHADOW_DOM=0
-> -DENABLE_SHARED_WORKERS=0 -DENABLE_SMOOTH_SCROLLING=0
-> -DENABLE_SQL_DATABASE=0 -DENABLE_STYLE_SCOPED=0 -DENABLE_SVG=0
-> -DENABLE_SVG_FONTS=0 -DENABLE_TEMPLATE_ELEMENT=0
-> -DENABLE_TEXT_AUTOSIZING=0 -DENABLE_THREADED_HTML_PARSER=0
-> -DENABLE_TOUCH_EVENTS=0 -DENABLE_TOUCH_ICON_LOADING=0
-> -DENABLE_TOUCH_SLIDER=0 -DENABLE_USER_TIMING=0 -DENABLE_VIBRATION=0
-> -DENABLE_VIDEO=0 -DENABLE_VIDEO_TRACK=0 -DENABLE_WEBGL=0
-> -DENABLE_WEB_AUDIO=0 -DENABLE_WEB_SOCKETS=0 -DENABLE_WEB_TIMING=0
-> -DENABLE_WORKERS=0 -DENABLE_XHR_TIMEOUT=0 -DENABLE_XSLT=0
->
-> Maybe there could be submenu under qt5webkit where all those features
-> are listed and enabled by default and users of buildroot could just
-> disable things they don't like/need ?
-> For example, I really don't have use for gamepad (ENABLE_GAMEPAD) or
-> geolocation (ENABLE_GEOLOCATION) on my qt5webkit build.
->
-> -S-
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
+index 49292dfb9e..275a5a373f 100644
+--- a/package/libcurl/libcurl.hash
++++ b/package/libcurl/libcurl.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# https://curl.haxx.se/download/curl-7.56.1.tar.xz.asc
+-sha256 8eed282cf3a0158d567a0feaa3c4619e8e847970597b5a2c81879e8f0d1a39d1  curl-7.56.1.tar.xz
++# https://curl.haxx.se/download/curl-7.57.0.tar.xz.asc
++sha256 f5f6fd3c72b7b8389969f4fb671ed8532fa9b5bb7a5cae7ca89bc1cea45c7878  curl-7.57.0.tar.xz
+ sha256 cbcf511f5702f7baf5424193a792bc9c18fab22bcbec2e6a587598389dc632c2  COPYING
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index 57b9c2cbca..0aab58a7de 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBCURL_VERSION = 7.56.1
++LIBCURL_VERSION = 7.57.0
+ LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
+ LIBCURL_SITE = https://curl.haxx.se/download
+ LIBCURL_DEPENDENCIES = host-pkgconf \
+-- 
+2.11.0
