@@ -1,11 +1,13 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 30 Nov 2017 13:50:04 +0100
-Subject: [Buildroot] [PATCH 1/1] Add TCF Agent package
-In-Reply-To: <CADYdroOSHBypUB1gDLZxDptrvmKG1QeqBRuQTFcg_ZwqJC9zhg@mail.gmail.com>
-References: <20171114145442.16734-1-norbert.lange@andritz.com>
- <20171129224524.1f8022b4@windsurf.home>
- <CADYdroOSHBypUB1gDLZxDptrvmKG1QeqBRuQTFcg_ZwqJC9zhg@mail.gmail.com>
-Message-ID: <20171130135004.54a455c9@windsurf.home>
+Date: Thu, 30 Nov 2017 13:57:21 +0100
+Subject: [Buildroot] [PATCH 7/8] package/asterisk: add comment about a
+ check-package false positive
+In-Reply-To: <1054252197.2705387.1512040781069.JavaMail.zimbra@datacom.ind.br>
+References: <cover.1511996903.git.yann.morin.1998@free.fr>
+ <d2844704851e4e8ff93c3007e9e67e2a339e11c7.1511996903.git.yann.morin.1998@free.fr>
+ <20171130090057.2d034d10@windsurf.home>
+ <1054252197.2705387.1512040781069.JavaMail.zimbra@datacom.ind.br>
+Message-ID: <20171130135721.6e923d32@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,85 +16,32 @@ To: buildroot@busybox.net
 
 Hello,
 
-It would be nice if you could avoid top-posting. Replying below each
-part of the e-mail you're answering is much more readable, and is the
-common practice on the mailing lists of open-source projects.
+Thanks for looking into it so quickly!
 
-On Thu, 30 Nov 2017 12:08:17 +0100, Norbert Lange wrote:
-> Hi,
+On Thu, 30 Nov 2017 09:19:41 -0200 (BRST), Ricardo Martincoski wrote:
+
+> We can use something like this (not fully tested yet!):
 > 
-> -   [ ! -r /etc/default/$DAEMON_NAME ] || . /etc/default/$DAEMON_NAME
-> This scheme is used to be able to execute that script with 'sh -e'
-> [ -r /etc/default/$DAEMON_NAME ] && . /etc/default/$DAEMON_NAME would
-> fail if there is no such file (which is no error)
+> +++ utils/checkpackagelib/lib_mk.py
+> @@ -219 +219 @@ class UselessFlag(_CheckFunction):
+> -        if self.DEFAULT_AUTOTOOLS_FLAG.search(text):
+> +        if self.DEFAULT_AUTOTOOLS_FLAG.search(text) and not text.lstrip().startswith("HOST_"):
 > 
-> Please tell me if I should still use the later line.
+> Avoiding false warnings is more important than testing for all corner
+> cases IMO. Using the code above we don't issue a valid warning for
+> rare cases, we stop issuing a false warning and we also keep O(n).
 
-Interesting reason. Please keep your original proposal then. The
-ejabberd package is already using this construct. However, all other
-packages are using the && construct.
+Yeah, if you want to test this properly, it's more difficult. Just
+AUTORECONF = NO is redundant. Just HOST_AUTORECONF = NO is redundant.
+But the combination of AUTORECONF = YES + HOST_AUTORECONF = NO is valid.
 
-Unless Yann has a better suggestion for this ?
+So basically for all variables that have inheritance between target
+and host, having the host variant of the variable set the variable
+value back to its default is correct if the target variable is set.
 
-> -   sysv init file
-> I am using HUP because TERM does not end the process, and their own
-> init script (agent/tcf/main/tcf-agent.init) uses HUP.
+So, your approach at least works, and will not generate false warnings.
 
-OK. A comment in the shell script about why you're sending the HUP
-signal would be nice.
-
-> Fetching the PID this way is also taken from that file, the daemon
-> does do a fork. I tried running in foreground but that had some other
-> issues which I dont recall right now (will test this some more).
-> Would be cleanest to patch in creating a pid file I think.
-
-Yes, if you could test some more running the daemon in the background,
-it would be nice.
-
-> -   systemd unit file
-> Sorry, I really should've tested this, copied some boilerplate code
-> with placeholders.
-
-No problem :)
-
-> -   GNUInstallDirs
-> allows common variable overrides for installation dirs, which is often
-> important for Windows/Mac to allow derivation from the unix-sheme
-> 
-> -   DBUILD_SHARED_LIBS=Off
-> Without this, a seperate library will installed, which has no use
-> other than the tcf-agent binary.
-> This library is an example implementation, its unlikely you would use
-> it unmodified, if it gets stable at some time I would create a
-> separate package libtcfagent
-> including the headers needed for development.
-> (Its also what you get when you use the plain Makefile)
-
-Please add a comment in the .mk file about this, like:
-
-# tcf-agent builds a shared library, but it really isn't useful for
-# anything but tcf-agent itself, so don't bother building it as a
-# shared library
-
-> -   drop CMake....
-> I am considering dropping the use of CMake (there s alot deduced
-> automatically, by changing the name you got to redo all of that
-> manually)
-> and using the plain Makefile, this seems like less hassle in the end,
-> but that means some additional stuff will be installed.
-
-Hum, I don't think I suggested dropping CMake. I'm all in favor of
-using standardized build systems such as CMake. What about just
-patching the CMakeLists.txt to build a binary named tcf-agent instead
-of agent? With a proper explanation, this should be acceptable by the
-upstream tcf-agent developers.
-
-> It there any common way to do this install step in an temp dir and
-> then (re)moving files before copying this into the final target fs?
-
-Nope, we don't have such a possibility currently I'm afraid.
-
-Best regards,
+Thanks!
 
 Thomas
 -- 
