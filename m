@@ -1,45 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 Nov 2017 22:29:27 +0100
-Subject: [Buildroot] [git commit] pango: bump to 1.140.14
-Message-ID: <20171201205333.11F877FAAC@busybox.osuosl.org>
+Date: Thu, 30 Nov 2017 11:40:43 +0100
+Subject: [Buildroot] [git commit] core: sort packages and eliminate
+ duplicates in show-targets
+Message-ID: <20171201205341.3EA0780FC6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5eb9f431fa29b3572971f28e687d96c15ecd8519
+commit: https://git.buildroot.net/buildroot/commit/?id=203219ca93947bbf5d43edba89380ff41ef5a8a8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-In addition, add a hash for the license file.
+Currently, enabling more than one filesystem image will make
+'show-targets' list a few host packages more than once.
 
-Signed-off-by: Adam Duskett <aduskett@gmail.com>
+This is because all filesystem images add the same set of
+host-packages to their dependencies, which are then added as-is
+to the package list.
+
+Thus, host-fakeroot, host-makedevs and, if needed, host-mkpasswd will
+appear as many times as there are filesystem images enabled.
+
+Fix that by sorting the package list, thus eliminating duplicates from
+that list. Also sort the rootfs list for good measure. Sort the two
+separately, so that rootfses are last.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Peter Korsgaard <jacmet@uclibc.org>
+Reviewed-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/pango/pango.hash | 5 +++--
- package/pango/pango.mk   | 2 +-
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/pango/pango.hash b/package/pango/pango.hash
-index 1b6da7d..6df08e9 100644
---- a/package/pango/pango.hash
-+++ b/package/pango/pango.hash
-@@ -1,2 +1,3 @@
--# From http://ftp.gnome.org/pub/GNOME/sources/pango/1.40/pango-1.40.12.sha256sum
--sha256	75f1a9a8e4e2b28cbc078b50c1fa927ee4ded994d1ade97c5603e2d1f3161cfc	pango-1.40.12.tar.xz
-+# From http://ftp.gnome.org/pub/GNOME/sources/pango/1.40/pango-1.40.14.sha256sum
-+sha256	90af1beaa7bf9e4c52db29ec251ec4fd0a8f2cc185d521ad1f88d01b3a6a17e3	pango-1.40.14.tar.xz
-+sha256	d245807f90032872d1438d741ed21e2490e1175dc8aa3afa5ddb6c8e529b58e5	COPYING
-diff --git a/package/pango/pango.mk b/package/pango/pango.mk
-index 79283e8..805d35e 100644
---- a/package/pango/pango.mk
-+++ b/package/pango/pango.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/Makefile b/Makefile
+index ef10c90..d528521 100644
+--- a/Makefile
++++ b/Makefile
+@@ -793,7 +793,7 @@ legal-info: dirs legal-info-clean legal-info-prepare $(foreach p,$(PACKAGES),$(p
  
- PANGO_VERSION_MAJOR = 1.40
--PANGO_VERSION = $(PANGO_VERSION_MAJOR).12
-+PANGO_VERSION = $(PANGO_VERSION_MAJOR).14
- PANGO_SOURCE = pango-$(PANGO_VERSION).tar.xz
- PANGO_SITE = http://ftp.gnome.org/pub/GNOME/sources/pango/$(PANGO_VERSION_MAJOR)
- PANGO_AUTORECONF = YES
+ .PHONY: show-targets
+ show-targets:
+-	@echo $(PACKAGES) $(TARGETS_ROOTFS)
++	@echo $(sort $(PACKAGES)) $(sort $(TARGETS_ROOTFS))
+ 
+ .PHONY: show-build-order
+ show-build-order: $(patsubst %,%-show-build-order,$(PACKAGES))
