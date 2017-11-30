@@ -1,57 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 30 Nov 2017 11:56:08 +0100
-Subject: [Buildroot] [git commit branch/next] fs: don't pollute $(BUILD_DIR)
- with temp files
-Message-ID: <20171201162321.BDAA282225@busybox.osuosl.org>
+Date: Thu, 30 Nov 2017 11:40:43 +0100
+Subject: [Buildroot] [git commit branch/next] core: sort packages and
+ eliminate duplicates in show-targets
+Message-ID: <20171201162321.49D6E825DF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=917508e6bc2012103bf2ecaacdb892b8afbe8bb6
+commit: https://git.buildroot.net/buildroot/commit/?id=203219ca93947bbf5d43edba89380ff41ef5a8a8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Currently, we create a bunch of temporary files in $(BUILD_DIR), while
-assembling the filesystem images.
+Currently, enabling more than one filesystem image will make
+'show-targets' list a few host packages more than once.
 
-Move those files to their own sub-directory.
+This is because all filesystem images add the same set of
+host-packages to their dependencies, which are then added as-is
+to the package list.
+
+Thus, host-fakeroot, host-makedevs and, if needed, host-mkpasswd will
+appear as many times as there are filesystem images enabled.
+
+Fix that by sorting the package list, thus eliminating duplicates from
+that list. Also sort the rootfs list for good measure. Sort the two
+separately, so that rootfses are last.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Peter Korsgaard <jacmet@uclibc.org>
+Reviewed-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- fs/common.mk | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+ Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/fs/common.mk b/fs/common.mk
-index d4d5c18..7bbc143 100644
---- a/fs/common.mk
-+++ b/fs/common.mk
-@@ -27,11 +27,12 @@
- # BR2_TARGET_ROOTFS_$(FSTYPE)_LZMA exist and are enabled, then the
- # macro will automatically generate a compressed filesystem image.
+diff --git a/Makefile b/Makefile
+index ef10c90..d528521 100644
+--- a/Makefile
++++ b/Makefile
+@@ -793,7 +793,7 @@ legal-info: dirs legal-info-clean legal-info-prepare $(foreach p,$(PACKAGES),$(p
  
--FAKEROOT_SCRIPT = $(BUILD_DIR)/_fakeroot.fs
--FULL_DEVICE_TABLE = $(BUILD_DIR)/_device_table.txt
-+FS_DIR = $(BUILD_DIR)/buildroot-fs
-+FAKEROOT_SCRIPT = $(FS_DIR)/fakeroot.fs
-+FULL_DEVICE_TABLE = $(FS_DIR)/device_table.txt
- ROOTFS_DEVICE_TABLES = $(call qstrip,$(BR2_ROOTFS_DEVICE_TABLE) \
- 	$(BR2_ROOTFS_STATIC_DEVICE_TABLE))
--USERS_TABLE = $(BUILD_DIR)/_users_table.txt
-+USERS_TABLE = $(FS_DIR)/users_table.txt
- ROOTFS_USERS_TABLES = $(call qstrip,$(BR2_ROOTFS_USERS_TABLES))
+ .PHONY: show-targets
+ show-targets:
+-	@echo $(PACKAGES) $(TARGETS_ROOTFS)
++	@echo $(sort $(PACKAGES)) $(sort $(TARGETS_ROOTFS))
  
- # Since this function will be called from within an $(eval ...)
-@@ -69,8 +70,8 @@ endif
- $$(BINARIES_DIR)/rootfs.$(1): target-finalize $$(ROOTFS_$(2)_DEPENDENCIES)
- 	@$$(call MESSAGE,"Generating root filesystem image rootfs.$(1)")
- 	$$(foreach hook,$$(ROOTFS_$(2)_PRE_GEN_HOOKS),$$(call $$(hook))$$(sep))
--	rm -f $$(FAKEROOT_SCRIPT)
--	rm -f $$(USERS_TABLE)
-+	rm -rf $(FS_DIR)
-+	mkdir -p $(FS_DIR)
- 	echo '#!/bin/sh' > $$(FAKEROOT_SCRIPT)
- 	echo "set -e" >> $$(FAKEROOT_SCRIPT)
- 	echo "chown -h -R 0:0 $$(TARGET_DIR)" >> $$(FAKEROOT_SCRIPT)
+ .PHONY: show-build-order
+ show-build-order: $(patsubst %,%-show-build-order,$(PACKAGES))
