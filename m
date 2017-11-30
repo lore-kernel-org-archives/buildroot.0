@@ -1,39 +1,45 @@
 From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Thu, 30 Nov 2017 15:05:30 +0100
-Subject: [Buildroot] [PATCH][NEXT] gst1-imx: add missing dependency for
+Date: Thu, 30 Nov 2017 15:07:36 +0100
+Subject: [Buildroot] [PATCH][NEXT v2] gst1-imx: add missing dependency for
  imxv4l2videosink plugin
-In-Reply-To: <20171130145738.52f660a9@windsurf.lan>
-References: <20171130111122.7774-1-gary.bisson@boundarydevices.com>
- <20171130134154.75c9d523@windsurf.home>
- <20171130134705.hh3vk4vfgvidl7l2@t450s.lan>
- <20171130145738.52f660a9@windsurf.lan>
-Message-ID: <20171130140530.o6j7hndgryajqnoa@t450s.lan>
+Message-ID: <20171130140736.921-1-gary.bisson@boundarydevices.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+The plugin source code uses V4L2_COLORSPACE_DEFAULT macro which was
+defined in kernel 4.2, so make sure the toolchain headers match this
+requirement.
 
-On Thu, Nov 30, 2017 at 02:57:38PM +0100, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Thu, 30 Nov 2017 14:47:05 +0100, Gary Bisson wrote:
-> 
-> > > Thanks! However you need to add the corresponding Config.in comment.  
-> > 
-> > Is a simple mention of the macro sufficient?
-> > 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_2 # V4L2_COLORSPACE_DEFAULT
-> > 
-> > Or would rather have a full sentence above the 'depends'?
-> 
-> I'm talking about a Config.in comment, i.e
-> 
-> comment "feature foobaz needs kernel headers >= 4.2"
-> 	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_2
+Fixes:
+http://autobuild.buildroot.net/results/48dd782161fa5e8860b5ea00a5d60207cb623108/
+http://autobuild.buildroot.net/results/f970c782b5bfbcf66ff3ba200b060d3653ff2630/
 
-Right, completely forgot about that. I'll submit a v2 in no time.
+Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+---
+Changelog v2:
+- Added missing comment in Config.in
+---
+ package/gstreamer1/gst1-imx/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Thanks,
-Gary
+diff --git a/package/gstreamer1/gst1-imx/Config.in b/package/gstreamer1/gst1-imx/Config.in
+index 9b977bdde8..e23b1933e9 100644
+--- a/package/gstreamer1/gst1-imx/Config.in
++++ b/package/gstreamer1/gst1-imx/Config.in
+@@ -87,7 +87,11 @@ config BR2_PACKAGE_GST1_IMX_V4L2VIDEOSRC
+ config BR2_PACKAGE_GST1_IMX_V4L2VIDEOSINK
+ 	bool "imxv4l2videosink"
+ 	select BR2_PACKAGE_GST1_PLUGINS_BAD
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_2 # V4L2_COLORSPACE_DEFAULT
+ 	help
+ 	  Elements for V4L2 output
+ 
++comment "imxv4l2videosink needs a toolchain w/ headers >= 4.2"
++	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_2
++
+ endif
+-- 
+2.15.0
