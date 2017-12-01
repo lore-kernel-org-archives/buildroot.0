@@ -1,32 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 1 Dec 2017 22:43:03 +0100
-Subject: [Buildroot] [PATCH] mc: bump version to 4.8.20
-In-Reply-To: <20171201072929.23021-1-yegorslists@googlemail.com>
-References: <20171201072929.23021-1-yegorslists@googlemail.com>
-Message-ID: <20171201224303.6bd268e9@windsurf.lan>
+Date: Fri, 1 Dec 2017 22:43:41 +0100
+Subject: [Buildroot] [git commit] linux: bump default to version 4.14.3
+Message-ID: <20171201213705.CF8FE7FD2E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=edd1034aaa58f2728933501ecf637685dab7365c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri,  1 Dec 2017 08:29:29 +0100, yegorslists at googlemail.com wrote:
-> From: Yegor Yefremov <yegorslists@googlemail.com>
-> 
-> Add licence checksum.
-> 
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> ---
->  package/mc/mc.hash | 6 ++++--
->  package/mc/mc.mk   | 2 +-
->  2 files changed, 5 insertions(+), 3 deletions(-)
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ linux/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/linux/Config.in b/linux/Config.in
+index a4977d1..85841e6 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -116,7 +116,7 @@ endif
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "4.14" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "4.14.3" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "v4.4.83-cip8" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
