@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 1 Dec 2017 23:09:40 +0100
-Subject: [Buildroot] [PATCH 1/1] package/kodi-inputstream-adaptive: not
- available on powerpc/powerpc64
-In-Reply-To: <20171201220645.26132-1-bernd.kuhls@t-online.de>
-References: <20171201220645.26132-1-bernd.kuhls@t-online.de>
-Message-ID: <20171201230940.3ed04cb6@windsurf.lan>
+Date: Fri, 1 Dec 2017 23:09:53 +0100
+Subject: [Buildroot] [PATCH v2] rtl8723bu: new package
+In-Reply-To: <20171127090119.32215-1-mylene.josserand@free-electrons.com>
+References: <20171127090119.32215-1-mylene.josserand@free-electrons.com>
+Message-ID: <20171201230953.165bcae9@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,24 +12,32 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri,  1 Dec 2017 23:06:45 +0100, Bernd Kuhls wrote:
+On Mon, 27 Nov 2017 10:01:19 +0100, Myl?ne Josserand wrote:
+> Add RTL8723BU package to compile the Realtek RTL8723BU Wifi driver.
+> 
+> Signed-off-by: Myl?ne Josserand <mylene.josserand@free-electrons.com>
+> 
+> ---
+> Changes since v1:
+> 	- Added myself into DEVELOPERS file
+> 	- Removed the loop to install the firmware (not necessary)
+> 	- Updated the installation to remove the hook and use standard
+> 	INSTALL_TARGET_CMDS
+> ---
+>  DEVELOPERS                       |  3 +++
+>  package/Config.in                |  1 +
+>  package/rtl8723bu/Config.in      | 10 ++++++++++
+>  package/rtl8723bu/rtl8723bu.hash |  2 ++
+>  package/rtl8723bu/rtl8723bu.mk   | 20 ++++++++++++++++++++
+>  5 files changed, 36 insertions(+)
+>  create mode 100644 package/rtl8723bu/Config.in
+>  create mode 100644 package/rtl8723bu/rtl8723bu.hash
+>  create mode 100644 package/rtl8723bu/rtl8723bu.mk
 
-> diff --git a/package/kodi-inputstream-adaptive/Config.in b/package/kodi-inputstream-adaptive/Config.in
-> index d5fe5e61cc..0ad7903bef 100644
-> --- a/package/kodi-inputstream-adaptive/Config.in
-> +++ b/package/kodi-inputstream-adaptive/Config.in
-> @@ -1,5 +1,6 @@
->  config BR2_PACKAGE_KODI_INPUTSTREAM_ADAPTIVE
->  	bool "kodi-inputstream-adaptive"
-> +	depends on !BR2_powerpc && !BR2_powerpc64 && !BR2_powerpc64le
-
-Could we do the opposite here, and add the list of supported
-architectures instead ?
-
-Thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
+Embedded Linux, Kernel and Android engineering
 http://free-electrons.com
