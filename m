@@ -1,71 +1,57 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 1 Dec 2017 23:03:55 +0100
-Subject: [Buildroot] [PATCH v1] qt5: bump latest version to 5.9.3
-In-Reply-To: <20171128223744.28422-1-ps.report@gmx.net>
-References: <20171128223744.28422-1-ps.report@gmx.net>
-Message-ID: <20171201230355.56986fd9@windsurf.lan>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Fri,  1 Dec 2017 23:06:45 +0100
+Subject: [Buildroot] [PATCH 1/1] package/kodi-inputstream-adaptive: not
+ available on powerpc/powerpc64
+Message-ID: <20171201220645.26132-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Powerpc is not supported by upstream:
+https://github.com/peak3d/inputstream.adaptive/blob/Krypton/wvdecrypter/cdm/build/build_config.h#L97
 
-On Tue, 28 Nov 2017 23:37:44 +0100, Peter Seiderer wrote:
-> qt5connectivity:
->  - moved 0001-Example-heartrate-server-needs-only-core-and-bluetoo.patch
->    to 5.9.3
-> 
-> qt5declarative:
->  - removed 0001-Fix-no-opengl-builds.patch to 5.9.3 (upstream committed,
->    see [1])
-> 
-> qt5webengine:
->  - keep 0002-Load-libEGL-and-libGLES2-symbols-implicitly.patch
->    (upstream committed, see [2], but reverted afterwards, see [3])
-> 
-> [1] https://code.qt.io/cgit/qt/qtdeclarative.git/commit/?id=fa52bb665d6beb77a951c14c8edcba3541850afc
-> [2] https://code.qt.io/cgit/qt/qtwebengine.git/commit/?id=d4c621f6a6b87f2a86069fa393b9f7c4f9e7b9ad
-> [3] https://code.qt.io/cgit/qt/qtwebengine.git/commit/?id=c11c2c8981e647c1eb2c6753ce77d436b92fff87
-> ---
->  package/qt5/qt5.mk                                 |  2 +-
->  package/qt5/qt53d/qt53d.hash                       |  4 +--
->  package/qt5/qt5base/qt5base.hash                   |  4 +--
->  package/qt5/qt5canvas3d/qt5canvas3d.hash           |  4 +--
->  ...rtrate-server-needs-only-core-and-bluetoo.patch |  0
->  package/qt5/qt5connectivity/qt5connectivity.hash   |  4 +--
->  .../5.9.2/0001-Fix-no-opengl-builds.patch          | 32 ----------------------
->  package/qt5/qt5declarative/qt5declarative.hash     |  4 +--
->  .../qt5graphicaleffects/qt5graphicaleffects.hash   |  4 +--
->  package/qt5/qt5imageformats/qt5imageformats.hash   |  4 +--
->  package/qt5/qt5location/qt5location.hash           |  4 +--
->  package/qt5/qt5multimedia/qt5multimedia.hash       |  4 +--
->  package/qt5/qt5quickcontrols/qt5quickcontrols.hash |  4 +--
->  .../qt5/qt5quickcontrols2/qt5quickcontrols2.hash   |  4 +--
->  package/qt5/qt5script/qt5script.hash               |  4 +--
->  package/qt5/qt5sensors/qt5sensors.hash             |  4 +--
->  package/qt5/qt5serialbus/qt5serialbus.hash         |  4 +--
->  package/qt5/qt5serialport/qt5serialport.hash       |  4 +--
->  package/qt5/qt5svg/qt5svg.hash                     |  4 +--
->  package/qt5/qt5tools/qt5tools.hash                 |  4 +--
->  .../qt5/qt5virtualkeyboard/qt5virtualkeyboard.hash |  4 +--
->  package/qt5/qt5wayland/qt5wayland.hash             |  4 +--
->  package/qt5/qt5webchannel/qt5webchannel.hash       |  4 +--
->  ...ad-libEGL-and-libGLES2-symbols-implicitly.patch |  0
->  package/qt5/qt5webengine/qt5webengine.hash         |  4 +--
->  package/qt5/qt5websockets/qt5websockets.hash       |  4 +--
->  package/qt5/qt5x11extras/qt5x11extras.hash         |  4 +--
->  package/qt5/qt5xmlpatterns/qt5xmlpatterns.hash     |  4 +--
->  28 files changed, 49 insertions(+), 81 deletions(-)
->  rename package/qt5/qt5connectivity/{5.9.2 => 5.9.3}/0001-Example-heartrate-server-needs-only-core-and-bluetoo.patch (100%)
->  delete mode 100644 package/qt5/qt5declarative/5.9.2/0001-Fix-no-opengl-builds.patch
->  rename package/qt5/qt5webengine/{5.9.2 => 5.9.3}/0002-Load-libEGL-and-libGLES2-symbols-implicitly.patch (100%)
+Fixes build error
 
-Applied to master, thanks.
+/home/buildroot/br8/output/build/kodi-inputstream-adaptive-9af21218a87572bd4ab8d8d660c11f6295144f97/wvdecrypter/cdm/media/cdm/../../base/../base/../build/build_config.h:137:2: error: #error Please add support for your architecture in build/build_config.h
+ #error Please add support for your architecture in build/build_config.h
 
-Thomas
+using this defconfig:
+
+BR2_powerpc64le=y
+BR2_powerpc_power8=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.net/toolchains/tarballs/br-powerpc64le-power8-glibc-2017.05-1078-g95b1dae.tar.bz2"
+BR2_TOOLCHAIN_EXTERNAL_GCC_6=y
+BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_12=y
+BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
+BR2_TOOLCHAIN_EXTERNAL_CXX=y
+BR2_PACKAGE_KODI=y
+BR2_PACKAGE_KODI_INPUTSTREAM_ADAPTIVE=y
+BR2_PACKAGE_MESA3D=y
+BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST=y
+BR2_PACKAGE_MESA3D_OPENGL_EGL=y
+BR2_PACKAGE_XORG7=y
+BR2_PACKAGE_PYTHON=y
+BR2_PACKAGE_PYTHON_PY_ONLY=y
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/kodi-inputstream-adaptive/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/kodi-inputstream-adaptive/Config.in b/package/kodi-inputstream-adaptive/Config.in
+index d5fe5e61cc..0ad7903bef 100644
+--- a/package/kodi-inputstream-adaptive/Config.in
++++ b/package/kodi-inputstream-adaptive/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_KODI_INPUTSTREAM_ADAPTIVE
+ 	bool "kodi-inputstream-adaptive"
++	depends on !BR2_powerpc && !BR2_powerpc64 && !BR2_powerpc64le
+ 	select BR2_PACKAGE_LIBPLATFORM
+ 	select BR2_PACKAGE_KODI_PLATFORM
+ 	help
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.11.0
