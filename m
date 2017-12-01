@@ -1,59 +1,65 @@
-From: Johan Oudinet <johan.oudinet@gmail.com>
-Date: Fri, 1 Dec 2017 16:16:05 +0100
-Subject: [Buildroot] [PATCH 1/1] erlang: bump to version 20.0
-In-Reply-To: <CA+-urNSgFcRjQz1pce9iG-7dxw0_BLC5M1Jt6cvLamqfarstGw@mail.gmail.com>
-References: <20171130154202.437-1-johan.oudinet@gmail.com>
- <CA+-urNSgFcRjQz1pce9iG-7dxw0_BLC5M1Jt6cvLamqfarstGw@mail.gmail.com>
-Message-ID: <CAJtjsKZ3pesoXori66O93Dnw2_QrkwD0J=9Jnen4ORxbzuYZPA@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 1 Dec 2017 16:23:44 +0100
+Subject: [Buildroot] [PATCH 8/8] gitlab-ci: run check-package
+In-Reply-To: <20171201105453.2d415b5a@windsurf.lan>
+References: <cover.1511996903.git.yann.morin.1998@free.fr>
+ <b9a9596c19817cf5a70c17acaa23657ed3597f01.1511996903.git.yann.morin.1998@free.fr>
+ <20171130085950.0dc9a144@windsurf.home>
+ <20171130153458.GA3519@scaer>
+ <20171201105453.2d415b5a@windsurf.lan>
+Message-ID: <20171201152344.GB2885@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Frank, All,
+Thomas, All,
 
-On Thu, Nov 30, 2017 at 5:31 PM, Frank Hunleth
-<fhunleth@troodon-software.com> wrote:
->
-> On Thu, Nov 30, 2017 at 10:42 AM, Johan Oudinet <johan.oudinet@gmail.com> wrote:
->>
->> This change bumps the Erlang version from 19.3 to 20.0. As a new major
->> release, there are a few incompatibilities. Details are here:
->> http://www.erlang.org/news/114
->
-> Thanks for doing this. I had been holding on to a nearly identical
-> patch, but it breaks several erlang packages currently in Buildroot.
-> It didn't look easy to fix, and then I got busy. As I'm sure that
-> you're aware, ejabberd builds fine. I don't think there are many of us
-> Erlang/Buildroot users, so if this still breaks erlang packages that
-> you don't use, I'm fine with removing them.
->
-> Two comments:
->
-> 1. Do you want to bump to Erlang 20.1 since that's the latest?
+On 2017-12-01 10:54 +0100, Thomas Petazzoni spake thusly:
+> On Thu, 30 Nov 2017 16:34:58 +0100, Yann E. MORIN wrote:
+> > On 2017-11-30 08:59 +0100, Thomas Petazzoni spake thusly:
+> > > On Thu, 30 Nov 2017 00:08:45 +0100, Yann E. MORIN wrote:  
+> > > > +check-package:
+> > > > +    script:
+> > > > +        - find . -type f -name '*.mk' -exec ./utils/check-package {} +  
+> > > 
+> > > Does it run without warning on all .mk files?  
+[--SNIP--]
+> > So I would at least limit it to Config.in, .mk, .hash, .patch files.
+> > And even that generates 305+566+230 = 1101 warnings.
+> 
+> That's indeed a lot. In addition, I want the thing to "fail" if there
+> are some warnings, otherwise Gitlab CI will not report the job as
+> failed.
 
-No, I tried it but it has a compiler bug that breaks some Erlang
-packages in Buildroot.
-For example, I got the following error in erlang-p1-xmpp package:
-https://bugs.erlang.org/browse/ERL-493
+Agreed.
 
-I think it's better to skip OTP 20.1 for now.
+> So, let's do this:
+> 
+>  1. Fix check-package to avoid the false warning on asterisk
 
-I'm not aware of Erlang packages that are broken by OTP 20.0. So same
-question as Thomas's one, what are those packages?
+Waiting for Ricardo's change to trickle in. Ricardo, can you send an
+official patch, please?
 
-> 2. Should we remove support for non-SMP builds now that it's
-> deprecated? I've actually never used the option due to it disabling
-> NIF features used by some libraries.
+>  2. Add the Gitlab CI job testing only .mk files, but making sure that
+>     if there is a single warning, it returns with a non-zero error code
+>     so that the job is considered as failed if we have a warning
 
-Excellent question. I haven't thought about it and I've never used
-this option neither.
-Since it is now deprecated, I guess we can remove it.
-Should I remove it in another patch or revise this patch in a v2 that
-does both a bump to version 20.0 and a commit to remove the option to
-disable compilation of the SMP emulator?
+Then this series is ready as it is, minus the comment in asterisk.mk.
 
-Best,
+>  3. Over time, fix warnings in Config.in and .hash files, until the
+>     point where we can enable checking them in Gitlab CI as well.
+
+Agreed.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-Johan
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
