@@ -1,80 +1,88 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri,  1 Dec 2017 21:53:49 +0100
-Subject: [Buildroot] [RFCv3 12/15] core: kill DEPENDENCIES_HOST_PREREQ
+Date: Fri,  1 Dec 2017 21:53:48 +0100
+Subject: [Buildroot] [RFCv3 11/15] package/pkg-generic: handle host-fakedate
+ as a regular dependency
 In-Reply-To: <20171201205352.24287-1-thomas.petazzoni@free-electrons.com>
 References: <20171201205352.24287-1-thomas.petazzoni@free-electrons.com>
-Message-ID: <20171201205352.24287-13-thomas.petazzoni@free-electrons.com>
+Message-ID: <20171201205352.24287-12-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Now that DEPENDENCIES_HOST_PREREQ is no longer used anywhere, we can
-kill it.
+This commit moves the host-fakedate dependency handling from
+DEPENDENCIES_HOST_PREREQ to a proper regular dependency handled by the
+package infrastructure.
+
+host-fakedate is added as dependency to all packages, except
+host-skeleton, because we depend on it.
+
+In addition, we make sure that host-fakedate does not grow a
+dependency on host-{tar,xz,lzip,ccache} to avoid circular
+dependencies. host-fakedate does not need any extraction tool and does
+not need to build C/C++ code (the source code is just a shell script
+available in Buildroot).
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
 Changes since v2:
  - New patch
 ---
- Makefile                             |  2 --
- package/pkg-generic.mk               |  2 --
- support/dependencies/dependencies.mk | 10 +++-------
- 3 files changed, 3 insertions(+), 11 deletions(-)
+ Makefile               |  1 -
+ package/pkg-generic.mk | 14 ++++++++++----
+ 2 files changed, 10 insertions(+), 5 deletions(-)
 
 diff --git a/Makefile b/Makefile
-index f31834682c..090b3ba191 100644
+index 56bf083098..f31834682c 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -485,8 +485,6 @@ include package/Makefile.in
- -include $(wildcard arch/arch.mk.*)
- include support/dependencies/dependencies.mk
+@@ -255,7 +255,6 @@ export LC_ALL = C
+ export GZIP = -n
+ BR2_VERSION_GIT_EPOCH = $(shell GIT_DIR=$(TOPDIR)/.git $(GIT) log -1 --format=%at)
+ export SOURCE_DATE_EPOCH ?= $(if $(wildcard $(TOPDIR)/.git),$(BR2_VERSION_GIT_EPOCH),$(BR2_VERSION_EPOCH))
+-DEPENDENCIES_HOST_PREREQ += host-fakedate
+ endif
  
--PACKAGES += $(DEPENDENCIES_HOST_PREREQ)
--
- include toolchain/*.mk
- include toolchain/*/*.mk
- 
+ # To put more focus on warnings, be less verbose as default
 diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 7c5d951af9..8c6e34cc9f 100644
+index cb5889c9ef..7c5d951af9 100644
 --- a/package/pkg-generic.mk
 +++ b/package/pkg-generic.mk
-@@ -725,9 +725,7 @@ $(1)-configure:			$$($(2)_TARGET_CONFIGURE)
- $$($(2)_TARGET_CONFIGURE):	| $$($(2)_FINAL_DEPENDENCIES)
+@@ -587,24 +587,30 @@ ifneq ($(1),host-skeleton)
+ $(2)_DEPENDENCIES += host-skeleton
+ endif
  
- $$($(2)_TARGET_SOURCE) $$($(2)_TARGET_RSYNC): | dirs prepare
--ifeq ($$(filter $(1),$$(DEPENDENCIES_HOST_PREREQ)),)
- $$($(2)_TARGET_SOURCE) $$($(2)_TARGET_RSYNC): | dependencies
--endif
+-ifeq ($(filter host-tar host-skeleton,$(1)),)
++ifeq ($(filter host-tar host-skeleton host-fakedate,$(1)),)
+ $(2)_EXTRACT_DEPENDENCIES += $(BR2_TAR_HOST_DEPENDENCY)
+ endif
  
- ifeq ($$($(2)_OVERRIDE_SRCDIR),)
- # In the normal case (no package override), the sequence of steps is
-diff --git a/support/dependencies/dependencies.mk b/support/dependencies/dependencies.mk
-index 1a4b5df9f2..d8ec137b12 100644
---- a/support/dependencies/dependencies.mk
-+++ b/support/dependencies/dependencies.mk
-@@ -14,18 +14,14 @@ $(shell support/dependencies/check-host-$(1).sh $(2))
- endef
- -include $(sort $(wildcard support/dependencies/check-host-*.mk))
+-ifeq ($(filter host-tar host-skeleton host-xz host-lzip,$(1)),)
++ifeq ($(filter host-tar host-skeleton host-xz host-lzip host-fakedate,$(1)),)
+ $(2)_EXTRACT_DEPENDENCIES += $(BR2_XZCAT_HOST_DEPENDENCY)
+ endif
  
--core-dependencies:
--	@HOSTCC="$(firstword $(HOSTCC))" MAKE="$(MAKE)" \
-+dependencies:
-+	@HOSTCC="$(firstword $(HOSTCC_NOCCACHE))" MAKE="$(MAKE)" \
- 		DL_TOOLS="$(sort $(DL_TOOLS_DEPENDENCIES))" \
- 		$(TOPDIR)/support/dependencies/dependencies.sh
+-ifeq ($(filter host-tar host-skeleton host-xz host-lzip,$(1)),)
++ifeq ($(filter host-tar host-skeleton host-xz host-lzip host-fakedate,$(1)),)
+ $(2)_EXTRACT_DEPENDENCIES += $(BR2_LZIP_HOST_DEPENDENCY)
+ endif
  
--core-dependencies $(DEPENDENCIES_HOST_PREREQ): HOSTCC=$(HOSTCC_NOCCACHE)
--core-dependencies $(DEPENDENCIES_HOST_PREREQ): HOSTCXX=$(HOSTCXX_NOCCACHE)
--dependencies: core-dependencies $(DEPENDENCIES_HOST_PREREQ)
--
- ################################################################################
- #
- # Toplevel Makefile options
- #
- ################################################################################
--.PHONY: dependencies core-dependencies
-+.PHONY: dependencies
+ ifeq ($(BR2_CCACHE),y)
+-ifeq ($(filter host-tar host-skeleton host-xz host-lzip,$(1)),)
++ifeq ($(filter host-tar host-skeleton host-xz host-lzip host-fakedate,$(1)),)
+ $(2)_DEPENDENCIES += host-ccache
+ endif
+ endif
+ 
++ifeq ($(BR2_REPRODUCIBLE),y)
++ifeq ($(filter host-skeleton,$(1)),)
++$(2)_DEPENDENCIES += host-fakedate
++endif
++endif
++
+ # Eliminate duplicates in dependencies
+ $(2)_FINAL_DEPENDENCIES = $$(sort $$($(2)_DEPENDENCIES))
+ $(2)_FINAL_EXTRACT_DEPENDENCIES = $$(sort $$($(2)_EXTRACT_DEPENDENCIES))
 -- 
 2.13.6
