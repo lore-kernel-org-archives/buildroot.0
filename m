@@ -1,91 +1,66 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 1 Dec 2017 21:11:15 +0100
-Subject: [Buildroot] [PATCH] omxplayer: bump to version 2ee17b2
-In-Reply-To: <20171201172755.9968-1-julius@kriukas.lt>
-References: <20171201172755.9968-1-julius@kriukas.lt>
-Message-ID: <20171201201115.GB5966@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri,  1 Dec 2017 21:53:38 +0100
+Subject: [Buildroot] [RFCv3 01/15] pkgconf: use relative path to STAGING_DIR
+ instead of absolute path
+In-Reply-To: <20171201205352.24287-1-thomas.petazzoni@free-electrons.com>
+References: <20171201205352.24287-1-thomas.petazzoni@free-electrons.com>
+Message-ID: <20171201205352.24287-2-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Julius, All,
+The pkg-config wrapper script is currently generated with absolute
+paths to $(STAGING_DIR). However, this will not work properly with
+per-package SDK, and each package will be built with a different
+STAGING_DIR value.
 
-On 2017-12-01 19:27 +0200, Julius Kriukas spake thusly:
-> This patch updates omxplayer package to the latest commit on master as
-> of 2017-12-01.
-> 
-> Latest omxplayer version no longer have partial buildroot support and
-> Makefile.include file, but still contains some hardcoded include paths
-> that needs to be removed before building.
-> 
-> Signed-off-by: Julius Kriukas <julius@kriukas.lt>
+In order to fix this, we adjust how the pkg-config wrapper script is
+generated, so that it uses a relative path to itself: the sysroot (i.e
+STAGING_DIR) is always located in $(path of
+pkg-config)/../$(STAGING_SUBDIR).
 
-Pretty good, I'm happy with that second iteration, so:
+This change is independent from the per-package SDK work, and could be
+applied independently from it.
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+Changes since v2:
+ - None
+Changes since v1:
+ - As suggested by Arnout, simplify the generation of the pkg-config
+   script by doing only a replacement on @STAGING_SUBDIR@, the rest
+   being encoded inside the pkg-config script.
+---
+ package/pkgconf/pkg-config.in | 5 ++++-
+ package/pkgconf/pkgconf.mk    | 3 +--
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
-Yet, a small nit, below...
-
-[--SNIP--]
-> diff --git a/package/omxplayer/omxplayer.hash b/package/omxplayer/omxplayer.hash
-> index 4ee215b767..3715e48488 100644
-> --- a/package/omxplayer/omxplayer.hash
-> +++ b/package/omxplayer/omxplayer.hash
-> @@ -1,3 +1,3 @@
->  # Locally computed
-> -sha1    23eb444757e445c127a7114ae233569cac64f984                          omxplayer-6c90c7503ba4658221774759edf7f2ae816711de.tar.gz
-> -sha256  93ebfd654314231749936e4fc09f5ec4a361806cdb640d7579a5106921e00299  omxplayer-6c90c7503ba4658221774759edf7f2ae816711de.tar.gz
-> +sha1    258316ff94a1f1e5e47a5bb1a28d324ab08871a9                          omxplayer-2ee17b22a6149a043a2e402580504f282c615373.tar.gz
-> +sha256  c16498258ee78c59f9705b621e4b5b7b0673e1687d94681f9dc52451b1ceba48  omxplayer-2ee17b22a6149a043a2e402580504f282c615373.tar.gz
-
-Could also add a sha256 for the COPYING file, please?
-
-See:
-    https://buildroot.org/downloads/manual/manual.html#adding-packages-hash
-
-Yes, this is a relatively new requirement.
-
-Regards,
-Yann E. MORIN.
-
-> diff --git a/package/omxplayer/omxplayer.mk b/package/omxplayer/omxplayer.mk
-> index 9bb58778c2..6e92250438 100644
-> --- a/package/omxplayer/omxplayer.mk
-> +++ b/package/omxplayer/omxplayer.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -OMXPLAYER_VERSION = 6c90c7503ba4658221774759edf7f2ae816711de
-> +OMXPLAYER_VERSION = 2ee17b22a6149a043a2e402580504f282c615373
->  OMXPLAYER_SITE = $(call github,popcornmix,omxplayer,$(OMXPLAYER_VERSION))
->  OMXPLAYER_LICENSE = GPL-2.0+
->  OMXPLAYER_LICENSE_FILES = COPYING
-> @@ -23,14 +23,7 @@ OMXPLAYER_EXTRA_CFLAGS = \
->  # procedure is, well, tainted. Fix this by forcing the real,
->  # correct values.
->  OMXPLAYER_MAKE_ENV = \
-> -	USE_BUILDROOT=1 \
-> -	BUILDROOT=$(TOP_DIR) \
->  	SDKSTAGE=$(STAGING_DIR) \
-> -	TARGETFS=$(TARGET_DIR) \
-> -	TOOLCHAIN=$(HOST_DIR) \
-> -	HOST=$(GNU_TARGET_NAME) \
-> -	SYSROOT=$(STAGING_DIR) \
-> -	JOBS=$(PARALLEL_JOBS) \
->  	$(TARGET_CONFIGURE_OPTS) \
->  	STRIP=true \
->  	CFLAGS="$(TARGET_CFLAGS) $(OMXPLAYER_EXTRA_CFLAGS)"
-> -- 
-> 2.11.0
-> 
-
+diff --git a/package/pkgconf/pkg-config.in b/package/pkgconf/pkg-config.in
+index 4dec48789a..b9ce0935cc 100644
+--- a/package/pkgconf/pkg-config.in
++++ b/package/pkgconf/pkg-config.in
+@@ -1,2 +1,5 @@
+ #!/bin/sh
+-PKG_CONFIG_LIBDIR=${PKG_CONFIG_LIBDIR:- at PKG_CONFIG_LIBDIR@} PKG_CONFIG_SYSROOT_DIR=${PKG_CONFIG_SYSROOT_DIR:- at STAGING_DIR@} $(dirname $0)/pkgconf @STATIC@ $@
++PKGCONFDIR=$(dirname $0)
++DEFAULT_PKG_CONFIG_LIBDIR=${PKGCONFDIR}/../@STAGING_SUBDIR@/usr/lib/pkgconfig:${PKGCONFDIR}/../@STAGING_SUBDIR@/usr/share/pkgconfig
++DEFAULT_PKG_CONFIG_SYSROOT_DIR=${PKGCONFDIR}/../@STAGING_SUBDIR@
++PKG_CONFIG_LIBDIR=${PKG_CONFIG_LIBDIR:-${DEFAULT_PKG_CONFIG_LIBDIR}} PKG_CONFIG_SYSROOT_DIR=${PKG_CONFIG_SYSROOT_DIR:-${DEFAULT_PKG_CONFIG_SYSROOT_DIR}} ${PKGCONFDIR}/pkgconf @STATIC@ $@
+diff --git a/package/pkgconf/pkgconf.mk b/package/pkgconf/pkgconf.mk
+index cc190d26da..00b2d017ee 100644
+--- a/package/pkgconf/pkgconf.mk
++++ b/package/pkgconf/pkgconf.mk
+@@ -19,8 +19,7 @@ endef
+ define HOST_PKGCONF_INSTALL_WRAPPER
+ 	$(INSTALL) -m 0755 -D package/pkgconf/pkg-config.in \
+ 		$(HOST_DIR)/bin/pkg-config
+-	$(SED) 's, at PKG_CONFIG_LIBDIR@,$(STAGING_DIR)/usr/lib/pkgconfig:$(STAGING_DIR)/usr/share/pkgconfig,' \
+-		-e 's, at STAGING_DIR@,$(STAGING_DIR),' \
++	$(SED) 's, at STAGING_SUBDIR@,$(STAGING_SUBDIR),g' \
+ 		$(HOST_DIR)/bin/pkg-config
+ endef
+ 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.13.6
