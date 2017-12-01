@@ -1,70 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 1 Dec 2017 23:24:54 +0100
-Subject: [Buildroot] [git commit] qt5quickcontrols2: fix examples compile
- without Qt widgets module
-Message-ID: <20171201221830.870D081D38@busybox.osuosl.org>
+Date: Fri, 1 Dec 2017 23:29:36 +0100
+Subject: [Buildroot] [PATCH v5] qt5: remove Qt Quick dependency on opengl
+In-Reply-To: <1509667284-13771-1-git-send-email-joshua.henderson@microchip.com>
+References: <1509667284-13771-1-git-send-email-joshua.henderson@microchip.com>
+Message-ID: <20171201232936.06e6055b@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=573a4a0bc8b14291255e06ac709566220fd3cdf9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Add upstream suggested patch to fix flatstyle example configure
-(needs widgets module).
+On Thu, 2 Nov 2017 17:01:24 -0700, Joshua Henderson wrote:
+> Qt Quick should no longer depend on opengl, and instead fallback to the limited
+> functionality software renderer as a replacement [1] when not available. This
+> also pulls in an upstream qt5declarative 5.10 patch [2], replacing an existing
+> one, to qt5 5.9.2 to fix no-opengl builds.
+> 
+> [1] http://blog.qt.io/blog/2016/08/15/the-qt-quick-graphics-stack-in-qt-5-8/
+> [2] http://code.qt.io/cgit/qt/qtdeclarative.git/commit/?id=fa52bb665d6b
+> 
+> Cc: Peter Seiderer <ps.report@gmx.net>
+> Cc: Julien Corjon <corjon.j@ecagroup.com>
+> Signed-off-by: Joshua Henderson <joshua.henderson@microchip.com>
+> Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
+> 
+> ---
 
-Fixes:
+I've applied to master, after dropping
+package/qt5/qt5declarative/5.9.2/0001-Fix-no-opengl-builds.patch
+because Peter has bumped Qt to 5.9.3 since then, and qt5declarative
+5.9.3 already includes this fix for non-OpenGL builds.
 
-  cd flatstyle/ && ( test -e Makefile || .../host/bin/qmake -o Makefile .../build/qt5quickcontrols2-5.9.2/examples/quickcontrols2/flatstyle/flatstyle.pro ) && make -f Makefile
-  Project ERROR: Unknown module(s) in QT: widgets
-  make[1]: *** [Makefile:202: sub-flatstyle-make_first] Error 3
-  make[1]: Leaving directory '.../build/qt5quickcontrols2-5.9.2/examples/quickcontrols2'
-  make: *** [Makefile:45: sub-quickcontrols2-make_first] Error 2
+Thanks!
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-[Thomas: move patch to 5.9.3 directory, since we've bumped
-qtquickcontrols2 since then.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- ...01-Example-flatstyle-needs-widgets-module.patch | 31 ++++++++++++++++++++++
- 1 file changed, 31 insertions(+)
-
-diff --git a/package/qt5/qt5quickcontrols2/5.9.3/0001-Example-flatstyle-needs-widgets-module.patch b/package/qt5/qt5quickcontrols2/5.9.3/0001-Example-flatstyle-needs-widgets-module.patch
-new file mode 100644
-index 0000000..17e3b36
---- /dev/null
-+++ b/package/qt5/qt5quickcontrols2/5.9.3/0001-Example-flatstyle-needs-widgets-module.patch
-@@ -0,0 +1,31 @@
-+From 10d92524cd6736c767c9ce55a1d9b9f1a2a69a9f Mon Sep 17 00:00:00 2001
-+From: Peter Seiderer <ps.report@gmx.net>
-+Date: Sat, 25 Nov 2017 22:26:58 +0100
-+Subject: [PATCH] Example flatstyle needs widgets module
-+
-+Fixes compile with disabled widgets module.
-+
-+Task-number: QTBUG-64761
-+Change-Id: I743884d77d51e89061d87cab006bab0cafc9ddb7
-+
-+Upstream: https://codereview.qt-project.org/212583
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+---
-+ examples/quickcontrols2/quickcontrols2.pro | 3 ++-
-+ 1 file changed, 2 insertions(+), 1 deletion(-)
-+
-+diff --git a/examples/quickcontrols2/quickcontrols2.pro b/examples/quickcontrols2/quickcontrols2.pro
-+index 858759f..8310e9b 100644
-+--- a/examples/quickcontrols2/quickcontrols2.pro
-++++ b/examples/quickcontrols2/quickcontrols2.pro
-+@@ -6,5 +6,6 @@ SUBDIRS += \
-+     contactlist \
-+     sidepanel \
-+     swipetoremove \
-+-    flatstyle \
-+     wearable
-++
-++qtHaveModule(widgets): SUBDIRS += flatstyle
-+-- 
-+2.7.4
-+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
