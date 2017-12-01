@@ -1,33 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 1 Dec 2017 22:10:18 +0100
-Subject: [Buildroot] [PATCH] package/asterisk: fix parallel install
-In-Reply-To: <20171201101805.8226-1-yann.morin.1998@free.fr>
-References: <20171201101805.8226-1-yann.morin.1998@free.fr>
-Message-ID: <20171201221018.259bcdfd@windsurf.lan>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Fri,  1 Dec 2017 19:10:14 -0200
+Subject: [Buildroot] [PATCH 1/2] linux: bump default to version 4.14.3
+Message-ID: <1512162615-23829-1-git-send-email-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+---
+ linux/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On Fri,  1 Dec 2017 11:18:05 +0100, Yann E. MORIN wrote:
-> Fixes:
->     http://autobuild.buildroot.org/results/7c92fb71d0aee211c8e0ef9d646da477fd97fb4c/
->     http://autobuild.buildroot.org/results/2b8c810bd8775413fd4567b2f8495be70b7bb808/
->     ...
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> ---
->  .../0006-install-samples-need-the-data-files.patch | 35 ++++++++++++++++++++++
->  1 file changed, 35 insertions(+)
->  create mode 100644 package/asterisk/0006-install-samples-need-the-data-files.patch
-
-Applied to master, thanks! Please don't forget to submit upstream.
-
-Thomas
+diff --git a/linux/Config.in b/linux/Config.in
+index a4977d1..85841e6 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -116,7 +116,7 @@ endif
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "4.14" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "4.14.3" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "v4.4.83-cip8" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.7.4
