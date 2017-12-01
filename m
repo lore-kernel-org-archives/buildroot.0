@@ -1,54 +1,59 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri,  1 Dec 2017 16:09:46 +0100
-Subject: [Buildroot] [PATCH 3/3] infra/pkg-kconfig: do not
- update-(def)config to a directory
-In-Reply-To: <cover.1512140974.git.yann.morin.1998@free.fr>
-References: <cover.1512140974.git.yann.morin.1998@free.fr>
-Message-ID: <d2b584aa49a8597e975fcc4dfe4b568011798318.1512140974.git.yann.morin.1998@free.fr>
+From: Johan Oudinet <johan.oudinet@gmail.com>
+Date: Fri, 1 Dec 2017 16:16:05 +0100
+Subject: [Buildroot] [PATCH 1/1] erlang: bump to version 20.0
+In-Reply-To: <CA+-urNSgFcRjQz1pce9iG-7dxw0_BLC5M1Jt6cvLamqfarstGw@mail.gmail.com>
+References: <20171130154202.437-1-johan.oudinet@gmail.com>
+ <CA+-urNSgFcRjQz1pce9iG-7dxw0_BLC5M1Jt6cvLamqfarstGw@mail.gmail.com>
+Message-ID: <CAJtjsKZ3pesoXori66O93Dnw2_QrkwD0J=9Jnen4ORxbzuYZPA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, if the user specifies the path to an existing directory as
-the path to the custom (def)config file (FOO_KCONFIG_FILE), then we
-happily create a file in there, either 'defconfig' or '.config' (or
-whatever the .config is named for that package), depending on whether
-we're saving a defconfig or a full config.
+Frank, All,
 
-So, we could save the file, but then the Buildroot defconfig file that
-contains that path would no longer be reusable as-is, because we
-interpret that path as a path to a file.
+On Thu, Nov 30, 2017 at 5:31 PM, Frank Hunleth
+<fhunleth@troodon-software.com> wrote:
+>
+> On Thu, Nov 30, 2017 at 10:42 AM, Johan Oudinet <johan.oudinet@gmail.com> wrote:
+>>
+>> This change bumps the Erlang version from 19.3 to 20.0. As a new major
+>> release, there are a few incompatibilities. Details are here:
+>> http://www.erlang.org/news/114
+>
+> Thanks for doing this. I had been holding on to a nearly identical
+> patch, but it breaks several erlang packages currently in Buildroot.
+> It didn't look easy to fix, and then I got busy. As I'm sure that
+> you're aware, ejabberd builds fine. I don't think there are many of us
+> Erlang/Buildroot users, so if this still breaks erlang packages that
+> you don't use, I'm fine with removing them.
+>
+> Two comments:
+>
+> 1. Do you want to bump to Erlang 20.1 since that's the latest?
 
-Furthermore, if the directory-portion of FOO_KCONFIG_FILE does not
-exist yet, the update would fail, because cp does not create missing
-directory components.
+No, I tried it but it has a compiler bug that breaks some Erlang
+packages in Buildroot.
+For example, I got the following error in erlang-p1-xmpp package:
+https://bugs.erlang.org/browse/ERL-493
 
-So we fix that by adding an explicit test for the directory-ness of the
-target file, and then an explicit mkdir to create missing directory
-components.
+I think it's better to skip OTP 20.1 for now.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- package/pkg-kconfig.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+I'm not aware of Erlang packages that are broken by OTP 20.0. So same
+question as Thomas's one, what are those packages?
 
-diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
-index 0da6d0ab4e..81bba5220c 100644
---- a/package/pkg-kconfig.mk
-+++ b/package/pkg-kconfig.mk
-@@ -18,6 +18,11 @@ define kconfig-package-update-config
- 		echo "Unable to perform $(@) when fragment files are set"; exit 1)
- 	@$(if $($(PKG)_KCONFIG_DEFCONFIG), \
- 		echo "Unable to perform $(@) when using a defconfig rule"; exit 1)
-+	$(Q)if [ -d $($(PKG)_KCONFIG_FILE) ]; then \
-+		echo "Unable to perform $(@) when $($(PKG)_KCONFIG_FILE) is a directory"; \
-+		exit 1; \
-+	fi
-+	$(Q)mkdir -p $(dir $($(PKG)_KCONFIG_FILE))
- 	cp -f $($(PKG)_DIR)/$(1) $($(PKG)_KCONFIG_FILE)
- 	$(Q)touch --reference $($(PKG)_DIR)/$($(PKG)_KCONFIG_DOTCONFIG) $($(PKG)_KCONFIG_FILE)
- endef
+> 2. Should we remove support for non-SMP builds now that it's
+> deprecated? I've actually never used the option due to it disabling
+> NIF features used by some libraries.
+
+Excellent question. I haven't thought about it and I've never used
+this option neither.
+Since it is now deprecated, I guess we can remove it.
+Should I remove it in another patch or revise this patch in a v2 that
+does both a bump to version 20.0 and a commit to remove the option to
+disable compilation of the SMP emulator?
+
+Best,
 -- 
-2.11.0
+Johan
