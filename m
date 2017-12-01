@@ -1,212 +1,61 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
 Date: Fri, 01 Dec 2017 21:00:40 -0000
-Subject: [Buildroot] [git commit] configs/atmel: refactor to use genimage.sh
-Message-ID: <20171201205314.6A3687FFA2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] orange-pi-zero: add xr819 firmware
+Message-ID: <20171201205313.997977FFA2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9957d2c89decd6ad63b144df2fb10837eb43250f
+commit: https://git.buildroot.net/buildroot/commit/?id=ce957ccd36e9bef8137c24fa8d62bdc123d78545
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Prefer the commom genimage.sh instead of a custom post-image.sh script.
+Make WiFi work out of the box on orange-pi-zero:
+- add xr819 firmware to image
+- add mdev for module autoloading
 
-Cc: Ludovic Desroches <ludovic.desroches@atmel.com>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Joshua Henderson <joshua.henderson@microchip.com>
-Acked-by: Ludovic Desroches <ludovic.desroches@microchip.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- board/atmel/sama5d27_som1_ek_mmc/post-image.sh   | 14 --------------
- board/atmel/sama5d2_xplained_mmc/post-image.sh   | 14 --------------
- board/atmel/sama5d3_xplained_mmc/post-image.sh   | 14 --------------
- board/atmel/sama5d4_xplained_mmc/post-image.sh   | 14 --------------
- configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig |  3 ++-
- configs/atmel_sama5d2_xplained_mmc_defconfig     |  3 ++-
- configs/atmel_sama5d2_xplained_mmc_dev_defconfig |  3 ++-
- configs/atmel_sama5d3_xplained_mmc_defconfig     |  3 ++-
- configs/atmel_sama5d3_xplained_mmc_dev_defconfig |  3 ++-
- configs/atmel_sama5d4_xplained_mmc_defconfig     |  3 ++-
- configs/atmel_sama5d4_xplained_mmc_dev_defconfig |  3 ++-
- 11 files changed, 14 insertions(+), 63 deletions(-)
+ DEVELOPERS                      | 2 ++
+ configs/orangepi_zero_defconfig | 5 ++++-
+ 2 files changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/board/atmel/sama5d27_som1_ek_mmc/post-image.sh b/board/atmel/sama5d27_som1_ek_mmc/post-image.sh
-deleted file mode 100755
-index 359b4c9..0000000
---- a/board/atmel/sama5d27_som1_ek_mmc/post-image.sh
-+++ /dev/null
-@@ -1,14 +0,0 @@
--#!/bin/sh
--
--BOARD_DIR="$(dirname $0)"
--GENIMAGE_CFG="${BOARD_DIR}/genimage.cfg"
--GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
--
--rm -rf "${GENIMAGE_TMP}"
--
--genimage                               \
--	--rootpath "${TARGET_DIR}"     \
--	--tmppath "${GENIMAGE_TMP}"    \
--	--inputpath "${BINARIES_DIR}"  \
--	--outputpath "${BINARIES_DIR}" \
--	--config "${GENIMAGE_CFG}"
-diff --git a/board/atmel/sama5d2_xplained_mmc/post-image.sh b/board/atmel/sama5d2_xplained_mmc/post-image.sh
-deleted file mode 100755
-index 359b4c9..0000000
---- a/board/atmel/sama5d2_xplained_mmc/post-image.sh
-+++ /dev/null
-@@ -1,14 +0,0 @@
--#!/bin/sh
--
--BOARD_DIR="$(dirname $0)"
--GENIMAGE_CFG="${BOARD_DIR}/genimage.cfg"
--GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
--
--rm -rf "${GENIMAGE_TMP}"
--
--genimage                               \
--	--rootpath "${TARGET_DIR}"     \
--	--tmppath "${GENIMAGE_TMP}"    \
--	--inputpath "${BINARIES_DIR}"  \
--	--outputpath "${BINARIES_DIR}" \
--	--config "${GENIMAGE_CFG}"
-diff --git a/board/atmel/sama5d3_xplained_mmc/post-image.sh b/board/atmel/sama5d3_xplained_mmc/post-image.sh
-deleted file mode 100755
-index 359b4c9..0000000
---- a/board/atmel/sama5d3_xplained_mmc/post-image.sh
-+++ /dev/null
-@@ -1,14 +0,0 @@
--#!/bin/sh
--
--BOARD_DIR="$(dirname $0)"
--GENIMAGE_CFG="${BOARD_DIR}/genimage.cfg"
--GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
--
--rm -rf "${GENIMAGE_TMP}"
--
--genimage                               \
--	--rootpath "${TARGET_DIR}"     \
--	--tmppath "${GENIMAGE_TMP}"    \
--	--inputpath "${BINARIES_DIR}"  \
--	--outputpath "${BINARIES_DIR}" \
--	--config "${GENIMAGE_CFG}"
-diff --git a/board/atmel/sama5d4_xplained_mmc/post-image.sh b/board/atmel/sama5d4_xplained_mmc/post-image.sh
-deleted file mode 100755
-index 359b4c9..0000000
---- a/board/atmel/sama5d4_xplained_mmc/post-image.sh
-+++ /dev/null
-@@ -1,14 +0,0 @@
--#!/bin/sh
--
--BOARD_DIR="$(dirname $0)"
--GENIMAGE_CFG="${BOARD_DIR}/genimage.cfg"
--GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
--
--rm -rf "${GENIMAGE_TMP}"
--
--genimage                               \
--	--rootpath "${TARGET_DIR}"     \
--	--tmppath "${GENIMAGE_TMP}"    \
--	--inputpath "${BINARIES_DIR}"  \
--	--outputpath "${BINARIES_DIR}" \
--	--config "${GENIMAGE_CFG}"
-diff --git a/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig b/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig
-index 0dddaf5..3752129 100644
---- a/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig
-+++ b/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig
-@@ -8,7 +8,8 @@ BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
- BR2_PTHREAD_DEBUG=y
- BR2_TOOLCHAIN_BUILDROOT_CXX=y
- BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
--BR2_ROOTFS_POST_IMAGE_SCRIPT="board/atmel/sama5d27_som1_ek_mmc/post-image.sh"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/atmel/sama5d27_som1_ek_mmc/genimage.cfg"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/linux4sam/linux-at91.git"
-diff --git a/configs/atmel_sama5d2_xplained_mmc_defconfig b/configs/atmel_sama5d2_xplained_mmc_defconfig
-index 9b65a56..8889978 100644
---- a/configs/atmel_sama5d2_xplained_mmc_defconfig
-+++ b/configs/atmel_sama5d2_xplained_mmc_defconfig
-@@ -4,7 +4,8 @@ BR2_ARM_ENABLE_NEON=y
- BR2_ARM_ENABLE_VFP=y
- BR2_ARM_INSTRUCTIONS_THUMB2=y
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
--BR2_ROOTFS_POST_IMAGE_SCRIPT="board/atmel/sama5d2_xplained_mmc/post-image.sh"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/atmel/sama5d2_xplained_mmc/genimage.cfg"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/linux4sam/linux-at91.git"
-diff --git a/configs/atmel_sama5d2_xplained_mmc_dev_defconfig b/configs/atmel_sama5d2_xplained_mmc_dev_defconfig
-index 8745bf4..23a2582 100644
---- a/configs/atmel_sama5d2_xplained_mmc_dev_defconfig
-+++ b/configs/atmel_sama5d2_xplained_mmc_dev_defconfig
-@@ -18,7 +18,8 @@ BR2_TOOLCHAIN_BUILDROOT_CXX=y
- # Needed for usb-utils
- BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
- # Creation of the SD card image
--BR2_ROOTFS_POST_IMAGE_SCRIPT="board/atmel/sama5d2_xplained_mmc/post-image.sh"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/atmel/sama5d2_xplained_mmc/genimage.cfg"
+diff --git a/DEVELOPERS b/DEVELOPERS
+index d27d55f..45e2282 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1433,6 +1433,8 @@ F:	package/mpir/
+ N:	Sergey Matyukevich <geomatsi@gmail.com>
+ F:	package/xr819-xradio/
+ F:	package/armbian-firmware/
++F:	board/orangepi/orangepi-zero
++F:	configs/orangepi_zero_defconfig
  
- # Kernel
- BR2_LINUX_KERNEL=y
-diff --git a/configs/atmel_sama5d3_xplained_mmc_defconfig b/configs/atmel_sama5d3_xplained_mmc_defconfig
-index 798c655..4ddb171 100644
---- a/configs/atmel_sama5d3_xplained_mmc_defconfig
-+++ b/configs/atmel_sama5d3_xplained_mmc_defconfig
-@@ -3,7 +3,8 @@ BR2_cortex_a5=y
- BR2_ARM_ENABLE_VFP=y
- BR2_ARM_INSTRUCTIONS_THUMB2=y
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
--BR2_ROOTFS_POST_IMAGE_SCRIPT="board/atmel/sama5d3_xplained_mmc/post-image.sh"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/atmel/sama5d3_xplained_mmc/genimage.cfg"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/linux4sam/linux-at91.git"
-diff --git a/configs/atmel_sama5d3_xplained_mmc_dev_defconfig b/configs/atmel_sama5d3_xplained_mmc_dev_defconfig
-index eca8664..a335148 100644
---- a/configs/atmel_sama5d3_xplained_mmc_dev_defconfig
-+++ b/configs/atmel_sama5d3_xplained_mmc_dev_defconfig
-@@ -17,7 +17,8 @@ BR2_TOOLCHAIN_BUILDROOT_CXX=y
- # Needed for usb-utils
- BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
- # Creation of the SD card image
--BR2_ROOTFS_POST_IMAGE_SCRIPT="board/atmel/sama5d3_xplained_mmc/post-image.sh"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/atmel/sama5d3_xplained_mmc/genimage.cfg"
+ N:	Sergio Prado <sergio.prado@e-labworks.com>
+ F:	package/libgdiplus/
+diff --git a/configs/orangepi_zero_defconfig b/configs/orangepi_zero_defconfig
+index bd3862c..142b648 100644
+--- a/configs/orangepi_zero_defconfig
++++ b/configs/orangepi_zero_defconfig
+@@ -2,6 +2,7 @@ BR2_arm=y
+ BR2_cortex_a7=y
+ BR2_ARM_FPU_VFPV4=y
+ BR2_GLOBAL_PATCH_DIR="board/orangepi/orangepi-zero/patches"
++BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_13=y
+ BR2_TARGET_GENERIC_HOSTNAME="OrangePi_Zero"
+ BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for the Orange Pi Zero"
+@@ -30,8 +31,10 @@ BR2_PACKAGE_HOST_GENIMAGE=y
+ BR2_PACKAGE_HOST_MTOOLS=y
+ BR2_PACKAGE_HOST_UBOOT_TOOLS=y
  
- # Kernel
- BR2_LINUX_KERNEL=y
-diff --git a/configs/atmel_sama5d4_xplained_mmc_defconfig b/configs/atmel_sama5d4_xplained_mmc_defconfig
-index 073489f..b8b21e7 100644
---- a/configs/atmel_sama5d4_xplained_mmc_defconfig
-+++ b/configs/atmel_sama5d4_xplained_mmc_defconfig
-@@ -4,7 +4,8 @@ BR2_ARM_ENABLE_NEON=y
- BR2_ARM_ENABLE_VFP=y
- BR2_ARM_INSTRUCTIONS_THUMB2=y
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
--BR2_ROOTFS_POST_IMAGE_SCRIPT="board/atmel/sama5d4_xplained_mmc/post-image.sh"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/atmel/sama5d4_xplained_mmc/genimage.cfg"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/linux4sam/linux-at91.git"
-diff --git a/configs/atmel_sama5d4_xplained_mmc_dev_defconfig b/configs/atmel_sama5d4_xplained_mmc_dev_defconfig
-index 69893c3..c31f15a 100644
---- a/configs/atmel_sama5d4_xplained_mmc_dev_defconfig
-+++ b/configs/atmel_sama5d4_xplained_mmc_dev_defconfig
-@@ -18,7 +18,8 @@ BR2_TOOLCHAIN_BUILDROOT_CXX=y
- # Needed for usb-utils
- BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
- # Creation of the SD card image
--BR2_ROOTFS_POST_IMAGE_SCRIPT="board/atmel/sama5d4_xplained_mmc/post-image.sh"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/atmel/sama5d4_xplained_mmc/genimage.cfg"
+-# wireless driver
++# wireless driver and firmware
+ BR2_PACKAGE_XR819_XRADIO=y
++BR2_PACKAGE_ARMBIAN_FIRMWARE=y
++BR2_PACKAGE_ARMBIAN_FIRMWARE_XR819=y
  
- # Kernel
- BR2_LINUX_KERNEL=y
+ # wireless support
+ BR2_PACKAGE_IW=y
