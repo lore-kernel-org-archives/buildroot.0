@@ -1,61 +1,43 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri,  1 Dec 2017 23:19:35 +0100
-Subject: [Buildroot] [PATCH v2 1/1] package/kodi-inputstream-adaptive: add
- dependencies for supported archs
-Message-ID: <20171201221935.9737-1-bernd.kuhls@t-online.de>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri,  1 Dec 2017 23:23:48 +0100
+Subject: [Buildroot] [PATCH 1/1] gupnp: bump to version 1.0.2
+Message-ID: <20171201222348.10245-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-kodi-inputstream-adaptive is available on a limited list of archs:
-https://github.com/peak3d/inputstream.adaptive/blob/Krypton/wvdecrypter/cdm/build/build_config.h#L97
-
-Fixes build error
-
-/home/buildroot/br8/output/build/kodi-inputstream-adaptive-9af21218a87572bd4ab8d8d660c11f6295144f97/wvdecrypter/cdm/media/cdm/../../base/../base/../build/build_config.h:137:2: error: #error Please add support for your architecture in build/build_config.h
- #error Please add support for your architecture in build/build_config.h
-
-for example with this defconfig:
-
-BR2_powerpc64le=y
-BR2_powerpc_power8=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.net/toolchains/tarballs/br-powerpc64le-power8-glibc-2017.05-1078-g95b1dae.tar.bz2"
-BR2_TOOLCHAIN_EXTERNAL_GCC_6=y
-BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_12=y
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
-BR2_TOOLCHAIN_EXTERNAL_CXX=y
-BR2_PACKAGE_KODI=y
-BR2_PACKAGE_KODI_INPUTSTREAM_ADAPTIVE=y
-BR2_PACKAGE_MESA3D=y
-BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST=y
-BR2_PACKAGE_MESA3D_OPENGL_EGL=y
-BR2_PACKAGE_XORG7=y
-BR2_PACKAGE_PYTHON=y
-BR2_PACKAGE_PYTHON_PY_ONLY=y
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
-v2: use positive arch list (Thomas)
+ package/gupnp/gupnp.hash | 4 ++--
+ package/gupnp/gupnp.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
- package/kodi-inputstream-adaptive/Config.in | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/package/kodi-inputstream-adaptive/Config.in b/package/kodi-inputstream-adaptive/Config.in
-index d5fe5e61cc..cb5127363a 100644
---- a/package/kodi-inputstream-adaptive/Config.in
-+++ b/package/kodi-inputstream-adaptive/Config.in
-@@ -1,5 +1,8 @@
- config BR2_PACKAGE_KODI_INPUTSTREAM_ADAPTIVE
- 	bool "kodi-inputstream-adaptive"
-+	# wvdecrypter/cdm/build/build_config.h
-+	depends on BR2_aarch64 || BR2_arm || BR2_i386 || BR2_mipsel \
-+		|| BR2_mips64el || BR2_x86_64
- 	select BR2_PACKAGE_LIBPLATFORM
- 	select BR2_PACKAGE_KODI_PLATFORM
- 	help
+diff --git a/package/gupnp/gupnp.hash b/package/gupnp/gupnp.hash
+index 7fb44ffe1..7f6086474 100644
+--- a/package/gupnp/gupnp.hash
++++ b/package/gupnp/gupnp.hash
+@@ -1,5 +1,5 @@
+-# Hash from: http://ftp.gnome.org/pub/gnome/sources/gupnp/1.0/gupnp-1.0.1.sha256sum:
+-sha256	934584cc1b361bf251a5ac271ffb1995a3c6426ce44cb64f9c6d779f2af9a6d9	gupnp-1.0.1.tar.xz
++# Hash from: http://ftp.gnome.org/pub/gnome/sources/gupnp/1.0/gupnp-1.0.2.sha256sum:
++sha256	5173fda779111c6b01cd4a5e41b594322be9d04f8c74d3361f0a0c2069c77610  	gupnp-1.0.2.tar.xz
+ 
+ # Hash for license file:
+ sha256 d245807f90032872d1438d741ed21e2490e1175dc8aa3afa5ddb6c8e529b58e5  COPYING
+diff --git a/package/gupnp/gupnp.mk b/package/gupnp/gupnp.mk
+index 0636632d5..de08f28ad 100644
+--- a/package/gupnp/gupnp.mk
++++ b/package/gupnp/gupnp.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ GUPNP_VERSION_MAJOR = 1.0
+-GUPNP_VERSION = $(GUPNP_VERSION_MAJOR).1
++GUPNP_VERSION = $(GUPNP_VERSION_MAJOR).2
+ GUPNP_SOURCE = gupnp-$(GUPNP_VERSION).tar.xz
+ GUPNP_SITE = http://ftp.gnome.org/pub/gnome/sources/gupnp/$(GUPNP_VERSION_MAJOR)
+ GUPNP_LICENSE = LGPL-2.0+
 -- 
-2.11.0
+2.14.1
