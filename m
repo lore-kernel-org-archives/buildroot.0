@@ -1,40 +1,81 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Fri, 1 Dec 2017 10:44:16 +0100
-Subject: [Buildroot] [PATCH] uboot-tools: fix dtc invocation
-In-Reply-To: <20171201095257.0db57c88@windsurf.lan>
-References: <20171201073027.23072-1-yegorslists@googlemail.com>
- <20171201095257.0db57c88@windsurf.lan>
-Message-ID: <CAGm1_ktQJXpwFGttU_UQ0XJyjFwBRPDaCyqZVf7_q1gHvHZ5PA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 1 Dec 2017 10:54:53 +0100
+Subject: [Buildroot] [PATCH 8/8] gitlab-ci: run check-package
+In-Reply-To: <20171130153458.GA3519@scaer>
+References: <cover.1511996903.git.yann.morin.1998@free.fr>
+ <b9a9596c19817cf5a70c17acaa23657ed3597f01.1511996903.git.yann.morin.1998@free.fr>
+ <20171130085950.0dc9a144@windsurf.home>
+ <20171130153458.GA3519@scaer>
+Message-ID: <20171201105453.2d415b5a@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hello,
 
-On Fri, Dec 1, 2017 at 9:52 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
->
-> On Fri,  1 Dec 2017 08:30:27 +0100, yegorslists at googlemail.com wrote:
->> From: Yegor Yefremov <yegorslists@googlemail.com>
->>
->> In Buildroot we don't perform Kconfig configuration for
->> u-boot-tools, hence CONFIG_MKIMAGE_DTC_PATH is empty.
->
-> Should we do a Kconfig configuration ?
->
-> Or alternatively, can we pass CONFIG_MKIMAGE_DTC_PATH=dtc on the build
-> command line ?
+On Thu, 30 Nov 2017 16:34:58 +0100, Yann E. MORIN wrote:
 
-I'll try this :-)
+> On 2017-11-30 08:59 +0100, Thomas Petazzoni spake thusly:
+> > On Thu, 30 Nov 2017 00:08:45 +0100, Yann E. MORIN wrote:  
+> > > +check-package:
+> > > +    script:
+> > > +        - find . -type f -name '*.mk' -exec ./utils/check-package {} +  
+> > 
+> > Does it run without warning on all .mk files?  
+> 
+> As I explained in thecover letter, no. There is a false-positive in
+> asterisk.
+> 
+> That's why I suggested in the cover-letter not to applu it for now,
+> until check-pacakge learns about that case.
 
-> Also: is this broken in master ? In next ? What is this fixing ? (Note:
-> I know all of this because we discussed it on IRC, but it should be in
-> the commit log).
+Ricardo already proposed a fix for check-package to avoid the asterisk
+case :-)
 
-Got. it. I'll send v2 as soon as big merge is completed.
+> > In fact, I think we shouldn't limit it to .mk files, because
+> > check-package can also verify Config.in files and .hash files.  
+> 
+> This can be refined later on, probably?
 
-Regards,
-Yegor
+True.
+
+> > Perhaps:
+> >   find package/ boot/ linux/ -type f -exec ./utils/check-package {}  
+> 
+> But then it would also catch the patches, the init scripts, and any
+> other data file that is present in packages directories.
+> 
+> For now, this catches 305+539+264 = 1108 warnings...
+
+Doh.
+
+> So I would at least limit it to Config.in, .mk, .hash, .patch files.
+> 
+> And even that generates 305+566+230 = 1101 warnings.
+
+That's indeed a lot. In addition, I want the thing to "fail" if there
+are some warnings, otherwise Gitlab CI will not report the job as
+failed.
+
+So, let's do this:
+
+ 1. Fix check-package to avoid the false warning on asterisk
+
+ 2. Add the Gitlab CI job testing only .mk files, but making sure that
+    if there is a single warning, it returns with a non-zero error code
+    so that the job is considered as failed if we have a warning
+
+ 3. Over time, fix warnings in Config.in and .hash files, until the
+    point where we can enable checking them in Gitlab CI as well.
+
+Thoughts?
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
