@@ -1,84 +1,92 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri,  1 Dec 2017 21:53:44 +0100
-Subject: [Buildroot] [RFCv3 07/15] package/pkg-generic: handle host-tar as
- an extract dependency
+Date: Fri,  1 Dec 2017 21:53:45 +0100
+Subject: [Buildroot] [RFCv3 08/15] package/pkg-generic: handle host-xz as an
+ extract dependency
 In-Reply-To: <20171201205352.24287-1-thomas.petazzoni@free-electrons.com>
 References: <20171201205352.24287-1-thomas.petazzoni@free-electrons.com>
-Message-ID: <20171201205352.24287-8-thomas.petazzoni@free-electrons.com>
+Message-ID: <20171201205352.24287-9-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This moves the host-tar dependency handling from
+This moves the host-xz dependency handling from
 DEPENDENCY_HOST_PREREQ to an extract dependency.
 
-To achieve that, check-host-tar.mk fills in the
-BR2_TAR_HOST_DEPENDENCY with host-tar if building a host-tar is
-needed. The name BR2_TAR_HOST_DEPENDENCY has been chosen because it
+To achieve that, check-host-xz.mk fills in the
+BR2_XZ_HOST_DEPENDENCY with host-tar if building a host-tar is
+needed. The name BR2_XZ_HOST_DEPENDENCY has been chosen because it
 matches the name BR2_CMAKE_HOST_DEPENDENCY already used in
 check-host-cmake.mk.
 
-The BR2_TAR_HOST_DEPENDENCY is added to all packages, except host-tar
-itself (obviously) and host-skeleton, because we depend on
-host-skeleton to install host-tar properly in HOST_DIR.
+The BR2_XZ_HOST_DEPENDENCY is added to all packages, except:
 
-In addition, we modify tar.mk to explicitly build host-tar without
-ccache: since ccache source code is available as a tarball, ccache
-will obviously depend on host-tar if the system tar is insufficient.
+ - host-xz, because we would otherwise depend on ourself.
+
+ - host-tar, because xz itself is delivered as a tarball, so we need
+   to have host-xz depend on host-tar, and not host-tar depend on
+   host-xz
+
+ - host-skeleton, because we need to have host-xz depend on
+   host-skeleton, and not the opposite.
+
+In addition, we modify xz.mk to explicitly build host-xz without
+ccache. We generally took the approach of building host-ccache *after*
+all the extractors have been built.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
 Changes since v2:
  - New patch
 ---
- package/pkg-generic.mk                 | 4 ++++
- package/tar/tar.mk                     | 6 ++++++
- support/dependencies/check-host-tar.mk | 2 +-
- 3 files changed, 11 insertions(+), 1 deletion(-)
+ package/pkg-generic.mk                   | 4 ++++
+ package/xz/xz.mk                         | 5 +++++
+ support/dependencies/check-host-xzcat.mk | 2 +-
+ 3 files changed, 10 insertions(+), 1 deletion(-)
 
 diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 824c34bec9..86dd2561d4 100644
+index 86dd2561d4..dfd4719d29 100644
 --- a/package/pkg-generic.mk
 +++ b/package/pkg-generic.mk
-@@ -587,6 +587,10 @@ ifneq ($(1),host-skeleton)
- $(2)_DEPENDENCIES += host-skeleton
+@@ -591,6 +591,10 @@ ifeq ($(filter host-tar host-skeleton,$(1)),)
+ $(2)_EXTRACT_DEPENDENCIES += $(BR2_TAR_HOST_DEPENDENCY)
  endif
  
-+ifeq ($(filter host-tar host-skeleton,$(1)),)
-+$(2)_EXTRACT_DEPENDENCIES += $(BR2_TAR_HOST_DEPENDENCY)
++ifeq ($(filter host-tar host-skeleton host-xz,$(1)),)
++$(2)_EXTRACT_DEPENDENCIES += $(BR2_XZCAT_HOST_DEPENDENCY)
 +endif
 +
  # Eliminate duplicates in dependencies
  $(2)_FINAL_DEPENDENCIES = $$(sort $$($(2)_DEPENDENCIES))
  $(2)_FINAL_EXTRACT_DEPENDENCIES = $$(sort $$($(2)_EXTRACT_DEPENDENCIES))
-diff --git a/package/tar/tar.mk b/package/tar/tar.mk
-index cb2ddc0eca..813eabed14 100644
---- a/package/tar/tar.mk
-+++ b/package/tar/tar.mk
-@@ -44,4 +44,10 @@ define HOST_TAR_EXTRACT_CMDS
- 	mv $(@D)/tar-$(TAR_VERSION)/* $(@D)
- 	rmdir $(@D)/tar-$(TAR_VERSION)
- endef
-+
+diff --git a/package/xz/xz.mk b/package/xz/xz.mk
+index e8116f24ae..bcdac13ee3 100644
+--- a/package/xz/xz.mk
++++ b/package/xz/xz.mk
+@@ -18,5 +18,10 @@ else
+ XZ_CONF_OPTS = --disable-threads
+ endif
+ 
 +# we are built before ccache
-+HOST_TAR_CONF_ENV = \
++HOST_XZ_CONF_ENV = \
 +	CC="$(HOSTCC_NOCCACHE)" \
 +	CXX="$(HOSTCXX_NOCCACHE)"
 +
+ $(eval $(autotools-package))
  $(eval $(host-autotools-package))
-diff --git a/support/dependencies/check-host-tar.mk b/support/dependencies/check-host-tar.mk
-index ad0b32e277..d07f727c4c 100644
---- a/support/dependencies/check-host-tar.mk
-+++ b/support/dependencies/check-host-tar.mk
-@@ -1,6 +1,6 @@
- TAR ?= tar
+diff --git a/support/dependencies/check-host-xzcat.mk b/support/dependencies/check-host-xzcat.mk
+index 9be75c7311..e5d72f95dd 100644
+--- a/support/dependencies/check-host-xzcat.mk
++++ b/support/dependencies/check-host-xzcat.mk
+@@ -2,7 +2,7 @@
+ # If it is not present, build our own host-xzcat
  
- ifeq (,$(call suitable-host-package,tar,$(TAR)))
--DEPENDENCIES_HOST_PREREQ += host-tar
- TAR = $(HOST_DIR)/bin/tar
-+BR2_TAR_HOST_DEPENDENCY += host-tar
+ ifeq (,$(call suitable-host-package,xzcat,$(XZCAT)))
+-DEPENDENCIES_HOST_PREREQ += host-xz
++BR2_XZCAT_HOST_DEPENDENCY = host-xz
+ EXTRACTOR_DEPENDENCY_PRECHECKED_EXTENSIONS += .xz .lzma
+ XZCAT = $(HOST_DIR)/bin/xzcat
  endif
 -- 
 2.13.6
