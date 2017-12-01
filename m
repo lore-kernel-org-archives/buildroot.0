@@ -1,39 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 1 Dec 2017 22:59:43 +0100
-Subject: [Buildroot] [git commit] armbian-firmware: fix check-package
- warnings
-Message-ID: <20171201215250.1604C80F6B@busybox.osuosl.org>
+Date: Fri, 1 Dec 2017 23:00:20 +0100
+Subject: [Buildroot] [PATCH 7/8] package/asterisk: add comment about a
+ check-package false positive
+In-Reply-To: <d2844704851e4e8ff93c3007e9e67e2a339e11c7.1511996903.git.yann.morin.1998@free.fr>
+References: <cover.1511996903.git.yann.morin.1998@free.fr>
+ <d2844704851e4e8ff93c3007e9e67e2a339e11c7.1511996903.git.yann.morin.1998@free.fr>
+Message-ID: <20171201230020.6c06eb9a@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d55a3eb0e1b431cf495aa67bbd6aa7fee0697f10
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Fixes:
+On Thu, 30 Nov 2017 00:08:44 +0100, Yann E. MORIN wrote:
+> This variable is inherited from the target variant, which is
+> autoreconfed. But the host variant is only the menucselect
+> sub-directory, which we do not want to autoreconf, so the explcit
+> NO is required.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  package/asterisk/asterisk.mk | 1 +
+>  1 file changed, 1 insertion(+)
 
-./package/armbian-firmware/armbian-firmware.mk:14: use only one space before backslash
-./package/armbian-firmware/armbian-firmware.mk:15: use only one space before backslash
+As we discussed, I marked this one as Rejected in patchwork. Thanks!
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/armbian-firmware/armbian-firmware.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/armbian-firmware/armbian-firmware.mk b/package/armbian-firmware/armbian-firmware.mk
-index e77d516..48b0372 100644
---- a/package/armbian-firmware/armbian-firmware.mk
-+++ b/package/armbian-firmware/armbian-firmware.mk
-@@ -11,8 +11,8 @@ ARMBIAN_FIRMWARE_SITE_METHOD = git
- # XR819 WiFi firmware
- ifeq ($(BR2_PACKAGE_ARMBIAN_FIRMWARE_XR819),y)
- ARMBIAN_FIRMWARE_FILES += \
--	xr819/boot_xr819.bin  \
--	xr819/fw_xr819.bin  \
-+	xr819/boot_xr819.bin \
-+	xr819/fw_xr819.bin \
- 	xr819/sdd_xr819.bin
- endif
- 
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
