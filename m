@@ -1,55 +1,79 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri,  1 Dec 2017 16:09:41 +0100
-Subject: [Buildroot] [PATCH 0/3] infra/pkg-config: fix updating back
- (def)config files
-Message-ID: <cover.1512140974.git.yann.morin.1998@free.fr>
+Date: Fri,  1 Dec 2017 16:09:44 +0100
+Subject: [Buildroot] [PATCH 1/3] infra/pkg-kconfig: comonalise
+ update-(def)config code
+In-Reply-To: <cover.1512140974.git.yann.morin.1998@free.fr>
+References: <cover.1512140974.git.yann.morin.1998@free.fr>
+Message-ID: <e1fb049c0df0318e8bd452d9f6abf3146cb8cc6b.1512140974.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+Except for the nice human-friendly reminder of the command that the user
+was just running, and the name of the file to copu from, those two rules
+are exactly the same.
 
-As reported by a newbie or IRC, saving back the (def)config files is
-buggy when the path provided by the user points to a diurectory instead
-of a (existing or not) file.
+Make that a common macro that is shared, so that it's easier to add more
+checks, and to simplify maintenance.
 
-This small series, after comonalising the updateing code, fixes that
-bug.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ package/pkg-kconfig.mk | 27 +++++++++++++++------------
+ 1 file changed, 15 insertions(+), 12 deletions(-)
 
-
-Regards,
-Yann E. MORIN.
-
-
-The following changes since commit 57dcad243e6daefefbe21109e1fc97272053a7a0
-
-  Kickoff 2018.02 cycle (2017-12-01 10:31:43 +0100)
-
-
-are available in the git repository at:
-
-  git://git.buildroot.org/~ymorin/git/buildroot.git
-
-for you to fetch changes up to d2b584aa49a8597e975fcc4dfe4b568011798318
-
-  infra/pkg-kconfig: do not update-(def)config to a directory (2017-12-01 15:38:56 +0100)
-
-
-----------------------------------------------------------------
-Yann E. MORIN (3):
-      infra/pkg-kconfig: comonalise update-(def)config code
-      infra/pkg-config: hide away non-critical commands
-      infra/pkg-kconfig: do not update-(def)config to a directory
-
- package/pkg-kconfig.mk | 32 ++++++++++++++++++++------------
- 1 file changed, 20 insertions(+), 12 deletions(-)
-
+diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
+index 0402f81ffe..4bd7161b1a 100644
+--- a/package/pkg-kconfig.mk
++++ b/package/pkg-kconfig.mk
+@@ -11,6 +11,17 @@
+ #
+ ################################################################################
+ 
++# Macro to update back the custom (def)config file
++# $(1): file to copy from
++define kconfig-package-update-config
++	@$(if $($(PKG)_KCONFIG_FRAGMENT_FILES), \
++		echo "Unable to perform $(@) when fragment files are set"; exit 1)
++	@$(if $($(PKG)_KCONFIG_DEFCONFIG), \
++		echo "Unable to perform $(@) when using a defconfig rule"; exit 1)
++	cp -f $($(PKG)_DIR)/$(1) $($(PKG)_KCONFIG_FILE)
++	touch --reference $($(PKG)_DIR)/$($(PKG)_KCONFIG_DOTCONFIG) $($(PKG)_KCONFIG_FILE)
++endef
++
+ ################################################################################
+ # inner-kconfig-package -- generates the make targets needed to support a
+ # kconfig package
+@@ -204,25 +215,17 @@ $(1)-savedefconfig: $(1)-check-configuration-done
+ # Target to copy back the configuration to the source configuration file
+ # Even though we could use 'cp --preserve-timestamps' here, the separate
+ # cp and 'touch --reference' is used for symmetry with $(1)-update-defconfig.
++$(1)-update-config: PKG=$(2)
+ $(1)-update-config: $(1)-check-configuration-done
+-	@$$(if $$($(2)_KCONFIG_FRAGMENT_FILES), \
+-		echo "Unable to perform $(1)-update-config when fragment files are set"; exit 1)
+-	@$$(if $$($(2)_KCONFIG_DEFCONFIG), \
+-		echo "Unable to perform $(1)-update-config when using a defconfig rule"; exit 1)
+-	cp -f $$($(2)_DIR)/$$($(2)_KCONFIG_DOTCONFIG) $$($(2)_KCONFIG_FILE)
+-	touch --reference $$($(2)_DIR)/$$($(2)_KCONFIG_DOTCONFIG) $$($(2)_KCONFIG_FILE)
++	$$(call kconfig-package-update-config,$$($(2)_KCONFIG_DOTCONFIG))
+ 
+ # Note: make sure the timestamp of the stored configuration is not newer than
+ # the .config to avoid a useless rebuild. Note that, contrary to
+ # $(1)-update-config, the reference for 'touch' is _not_ the file from which
+ # we copy.
++$(1)-update-defconfig: PKG=$(2)
+ $(1)-update-defconfig: $(1)-savedefconfig
+-	@$$(if $$($(2)_KCONFIG_FRAGMENT_FILES), \
+-		echo "Unable to perform $(1)-update-defconfig when fragment files are set"; exit 1)
+-	@$$(if $$($(2)_KCONFIG_DEFCONFIG), \
+-		echo "Unable to perform $(1)-update-defconfig when using a defconfig rule"; exit 1)
+-	cp -f $$($(2)_DIR)/defconfig $$($(2)_KCONFIG_FILE)
+-	touch --reference $$($(2)_DIR)/$$($(2)_KCONFIG_DOTCONFIG) $$($(2)_KCONFIG_FILE)
++	$$(call kconfig-package-update-config,defconfig)
+ 
+ endif # package enabled
+ 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.11.0
