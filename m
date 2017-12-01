@@ -1,42 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 1 Dec 2017 23:29:36 +0100
-Subject: [Buildroot] [PATCH v5] qt5: remove Qt Quick dependency on opengl
-In-Reply-To: <1509667284-13771-1-git-send-email-joshua.henderson@microchip.com>
-References: <1509667284-13771-1-git-send-email-joshua.henderson@microchip.com>
-Message-ID: <20171201232936.06e6055b@windsurf.lan>
+Date: Fri, 1 Dec 2017 23:30:34 +0100
+Subject: [Buildroot] [git commit] gupnp: bump to version 1.0.2
+Message-ID: <20171201222312.7B94B8255B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=cf1b178333fb13cf3ef019db28cdd368cc7fd01a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 2 Nov 2017 17:01:24 -0700, Joshua Henderson wrote:
-> Qt Quick should no longer depend on opengl, and instead fallback to the limited
-> functionality software renderer as a replacement [1] when not available. This
-> also pulls in an upstream qt5declarative 5.10 patch [2], replacing an existing
-> one, to qt5 5.9.2 to fix no-opengl builds.
-> 
-> [1] http://blog.qt.io/blog/2016/08/15/the-qt-quick-graphics-stack-in-qt-5-8/
-> [2] http://code.qt.io/cgit/qt/qtdeclarative.git/commit/?id=fa52bb665d6b
-> 
-> Cc: Peter Seiderer <ps.report@gmx.net>
-> Cc: Julien Corjon <corjon.j@ecagroup.com>
-> Signed-off-by: Joshua Henderson <joshua.henderson@microchip.com>
-> Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
-> 
-> ---
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/gupnp/gupnp.hash | 4 ++--
+ package/gupnp/gupnp.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-I've applied to master, after dropping
-package/qt5/qt5declarative/5.9.2/0001-Fix-no-opengl-builds.patch
-because Peter has bumped Qt to 5.9.3 since then, and qt5declarative
-5.9.3 already includes this fix for non-OpenGL builds.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/gupnp/gupnp.hash b/package/gupnp/gupnp.hash
+index 7fb44ff..7f60864 100644
+--- a/package/gupnp/gupnp.hash
++++ b/package/gupnp/gupnp.hash
+@@ -1,5 +1,5 @@
+-# Hash from: http://ftp.gnome.org/pub/gnome/sources/gupnp/1.0/gupnp-1.0.1.sha256sum:
+-sha256	934584cc1b361bf251a5ac271ffb1995a3c6426ce44cb64f9c6d779f2af9a6d9	gupnp-1.0.1.tar.xz
++# Hash from: http://ftp.gnome.org/pub/gnome/sources/gupnp/1.0/gupnp-1.0.2.sha256sum:
++sha256	5173fda779111c6b01cd4a5e41b594322be9d04f8c74d3361f0a0c2069c77610  	gupnp-1.0.2.tar.xz
+ 
+ # Hash for license file:
+ sha256 d245807f90032872d1438d741ed21e2490e1175dc8aa3afa5ddb6c8e529b58e5  COPYING
+diff --git a/package/gupnp/gupnp.mk b/package/gupnp/gupnp.mk
+index 0636632..de08f28 100644
+--- a/package/gupnp/gupnp.mk
++++ b/package/gupnp/gupnp.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ GUPNP_VERSION_MAJOR = 1.0
+-GUPNP_VERSION = $(GUPNP_VERSION_MAJOR).1
++GUPNP_VERSION = $(GUPNP_VERSION_MAJOR).2
+ GUPNP_SOURCE = gupnp-$(GUPNP_VERSION).tar.xz
+ GUPNP_SITE = http://ftp.gnome.org/pub/gnome/sources/gupnp/$(GUPNP_VERSION_MAJOR)
+ GUPNP_LICENSE = LGPL-2.0+
