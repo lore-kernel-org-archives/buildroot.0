@@ -1,36 +1,55 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 1 Dec 2017 16:06:30 +0100
-Subject: [Buildroot] Putting qtwebkit on a diet
-In-Reply-To: <7264cc95-a3cd-a416-de49-cf06fe865ef1@petroprogram.com>
-References: <7f8d2d60-b870-61f1-df5e-ed83f9923c39@petroprogram.com>
- <56abbedc-c97e-46e6-5458-7b6c2b18ba18@petroprogram.com>
- <20171130090230.79cedfe7@windsurf.home>
- <f7391a80-8158-7b15-b1ef-d6386982f426@petroprogram.com>
- <20171201151034.44c460b3@windsurf.lan>
- <7264cc95-a3cd-a416-de49-cf06fe865ef1@petroprogram.com>
-Message-ID: <20171201160630.392cc220@windsurf.lan>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri,  1 Dec 2017 16:09:41 +0100
+Subject: [Buildroot] [PATCH 0/3] infra/pkg-config: fix updating back
+ (def)config files
+Message-ID: <cover.1512140974.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello All!
 
-On Fri, 1 Dec 2017 16:51:37 +0200, Stefan Fr?berg wrote:
+As reported by a newbie or IRC, saving back the (def)config files is
+buggy when the path provided by the user points to a diurectory instead
+of a (existing or not) file.
 
-> I guess on non-ARM the optimize for size feature is doing just? -Os but
-> on ARM it also needs thumb enabled.
-> Otherwise it nags "Not supported ARM architecture" (this while building
-> for raspberry pi3)
+This small series, after comonalising the updateing code, fixes that
+bug.
 
-Then we don't want additional options for this, because we already have
-top-level options to select Thumb2 and -Os.
 
-Best regards,
+Regards,
+Yann E. MORIN.
 
-Thomas
+
+The following changes since commit 57dcad243e6daefefbe21109e1fc97272053a7a0
+
+  Kickoff 2018.02 cycle (2017-12-01 10:31:43 +0100)
+
+
+are available in the git repository at:
+
+  git://git.buildroot.org/~ymorin/git/buildroot.git
+
+for you to fetch changes up to d2b584aa49a8597e975fcc4dfe4b568011798318
+
+  infra/pkg-kconfig: do not update-(def)config to a directory (2017-12-01 15:38:56 +0100)
+
+
+----------------------------------------------------------------
+Yann E. MORIN (3):
+      infra/pkg-kconfig: comonalise update-(def)config code
+      infra/pkg-config: hide away non-critical commands
+      infra/pkg-kconfig: do not update-(def)config to a directory
+
+ package/pkg-kconfig.mk | 32 ++++++++++++++++++++------------
+ 1 file changed, 20 insertions(+), 12 deletions(-)
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
