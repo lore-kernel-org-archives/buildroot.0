@@ -1,32 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 1 Dec 2017 22:57:03 +0100
-Subject: [Buildroot] [PATCH 6/8] packages: fix trailing spaces and slash
-In-Reply-To: <aefa5c8ef3aac130f3a536e692e520affede8e4e.1511996903.git.yann.morin.1998@free.fr>
-References: <cover.1511996903.git.yann.morin.1998@free.fr>
- <aefa5c8ef3aac130f3a536e692e520affede8e4e.1511996903.git.yann.morin.1998@free.fr>
-Message-ID: <20171201225703.3fc390c6@windsurf.lan>
+Date: Fri, 1 Dec 2017 22:58:13 +0100
+Subject: [Buildroot] [git commit] qt5webkit: fix typo in the
+ <pkg>_DEPENDENCIES declaration
+Message-ID: <20171201215250.0235A7FA69@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=99809a0ae8a8fc6e9034a577bac158cc89e8ac44
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 30 Nov 2017 00:08:43 +0100, Yann E. MORIN wrote:
-> ... as reported by utils/check-package.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Adam Duskett <aduskett@gmail.com>
-> ---
->  package/busybox/busybox.mk | 2 +-
->  package/ntp/ntp.mk         | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+This commit fixes a typo introduced in commit
+43e1d099b4fca37ce7cbbf3dd41fe4330610b723 ("Revert
+"package/qt5webkit-examples: remove obsolete package""), which caused
+qt5declarative to not be added as a dependency for the correct
+package.
 
-Applied to master, thanks.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/qt5/qt5webkit-examples/qt5webkit-examples.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/qt5/qt5webkit-examples/qt5webkit-examples.mk b/package/qt5/qt5webkit-examples/qt5webkit-examples.mk
+index 59e9248..f81e994 100644
+--- a/package/qt5/qt5webkit-examples/qt5webkit-examples.mk
++++ b/package/qt5/qt5webkit-examples/qt5webkit-examples.mk
+@@ -39,7 +39,7 @@ define QT5WEBKIT_EXAMPLES_INSTALL_STAGING_CMDS
+ endef
+ 
+ ifeq ($(BR2_PACKAGE_QT5DECLARATIVE),y)
+-QT5WEBKIT_DEPENDENCIES += qt5declarative
++QT5WEBKIT_EXAMPLES_DEPENDENCIES += qt5declarative
+ define QT5WEBKIT_EXAMPLES_INSTALL_QML
+ 	cp -dpfr $(@D)/examples/webkitqml $(TARGET_DIR)/usr/lib/qt/examples
+ endef
