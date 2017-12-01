@@ -1,61 +1,80 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 1 Dec 2017 13:55:28 +0100
-Subject: [Buildroot] [PATCH 2/2] android-tools: upport char, block, fifo,
- socket devices
-In-Reply-To: <20171130205631.93251-2-ek9852@gmail.com>
-References: <20171130205631.93251-1-ek9852@gmail.com>
- <20171130205631.93251-2-ek9852@gmail.com>
-Message-ID: <20171201135528.16e0c342@windsurf.lan>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 1 Dec 2017 14:21:04 +0100
+Subject: [Buildroot] [PATCH] omxplayer: bump to version 2ee17b2
+In-Reply-To: <fad21345-7cfa-4f09-e1b2-f147bc6e2e1a@fln.lt>
+References: <fad21345-7cfa-4f09-e1b2-f147bc6e2e1a@fln.lt>
+Message-ID: <20171201132104.GA2885@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Julius, All,
 
-Thanks for your contributions! See below for a few comments/questions.
+On 2017-12-01 02:02 +0200, buildroot.org at fln.lt spake thusly:
+> This patch updates omxplayer package to the latest commit on master.
+> 
+> Latest omxplayer version no longer have broken cross-compile support in
+> Makefile.include file, but still contains some hard-coded include paths
+> that needs to be replaced before building.
+> 
+> Signed-off-by: Julius Kriukas <julius@kriukas.lt>
 
-On Thu, 30 Nov 2017 12:56:31 -0800, Keith Mok wrote:
-> Pick changes from openwrt to enable support of special
-> device for make_ext4fs
+Your From adress does not match your SoB line, above. Please use your
+real name as the From field when sending patches to Buildroot.
 
-Missing Signed-off-by line.
+Also, we have a script utils/get-developer which returns the list of
+person interested in specific packages. You can use that script to see
+who to add in Cc of your patch:
+
+With committed changes:
+
+    $ git show |./utils/get-developers -
+    git send-email --to buildroot at buildroot.org --cc "Yann E. MORIN <yann.morin.1998@free.fr>"
+
+Or manually:
+
+    $ ./utils/get-developers -p omxplayer
+    Yann E. MORIN <yann.morin.1998@free.fr>
+
+;-)
 
 > ---
->  ...ment-support-for-block-and-char-dev-nodes.patch | 109 +++++++++++++++++++++
->  1 file changed, 109 insertions(+)
->  create mode 100644 package/android-tools/0009-PATCH-Implement-support-for-block-and-char-dev-nodes.patch
+>  .../0001-Makefiles-clean-up-the-cruft.patch        | 67 ----------------------
+>  package/omxplayer/0001-cleanup-Makefile.patch      | 18 ++++++
+>  package/omxplayer/omxplayer.hash                   |  4 +-
+>  package/omxplayer/omxplayer.mk                     |  9 +--
+>  4 files changed, 21 insertions(+), 77 deletions(-)
+>  delete mode 100644 package/omxplayer/0001-Makefiles-clean-up-the-cruft.patch
+>  create mode 100644 package/omxplayer/0001-cleanup-Makefile.patch
 > 
-> diff --git a/package/android-tools/0009-PATCH-Implement-support-for-block-and-char-dev-nodes.patch b/package/android-tools/0009-PATCH-Implement-support-for-block-and-char-dev-nodes.patch
+> diff --git a/package/omxplayer/0001-Makefiles-clean-up-the-cruft.patch b/package/omxplayer/0001-Makefiles-clean-up-the-cruft.patch
+> deleted file mode 100644
+
+I like it 100% when my patches get dropped. :-)
+
+> diff --git a/package/omxplayer/0001-cleanup-Makefile.patch b/package/omxplayer/0001-cleanup-Makefile.patch
 > new file mode 100644
-> index 0000000..e86d9c6
+> index 0000000000..d91e2e4fe9
 > --- /dev/null
-> +++ b/package/android-tools/0009-PATCH-Implement-support-for-block-and-char-dev-nodes.patch
-> @@ -0,0 +1,109 @@
-> +From 3258b175c3ea1f76823c6b69b5036ac7efb5599d Mon Sep 17 00:00:00 2001
-> +From: Jo-Philipp Wich <jow@openwrt.org>
-> +Date: Thu, 30 Nov 2017 10:10:24 -0800
-> +Subject: [PATCH] [PATCH] Implement support for block and char dev nodes, fifos
-> + and sockets.
-> +
-> +Signed-off-by: Jo-Philipp Wich <jow@openwrt.org>
-> +Signed-off-by: Keith Mok <ek9852@gmail.com>
+> +++ b/package/omxplayer/0001-cleanup-Makefile.patch
 
-This really is a feature patch, and we don't like to take features
-patches in Buildroot (unlike OpenWRT). Indeed, those are often a pain
-to maintain over time.
+However, I like it much less when new patches are added, which do not
+have a commit log and a SoB line for themselves.
 
-Do you see any possibility of this being merged upstream? I do realize
-that the upstream for android-tools is somewhat unusual, and that
-getting contributions accepted might be more challenging than with
-other open source projects. But still I'd like to hear about what has
-been tried to push this upstream.
+Also, since omxplayer is using git, we want to use git-fiormatted
+patches.
 
-Best regards,
+Please see how the patch you are removing was formatted.
 
-Thomas
+Regards,
+Yann E. MORIN.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
