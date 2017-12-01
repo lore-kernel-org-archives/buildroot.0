@@ -1,38 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 1 Dec 2017 22:58:13 +0100
-Subject: [Buildroot] [git commit] qt5webkit: fix typo in the
- <pkg>_DEPENDENCIES declaration
-Message-ID: <20171201215250.0235A7FA69@busybox.osuosl.org>
+Date: Fri, 1 Dec 2017 23:00:02 +0100
+Subject: [Buildroot] [git commit] gitlab-ci: run check-package
+Message-ID: <20171201215250.251AD7F9DD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=99809a0ae8a8fc6e9034a577bac158cc89e8ac44
+commit: https://git.buildroot.net/buildroot/commit/?id=b58059ad98984382934320235ce89faf0549062f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This commit fixes a typo introduced in commit
-43e1d099b4fca37ce7cbbf3dd41fe4330610b723 ("Revert
-"package/qt5webkit-examples: remove obsolete package""), which caused
-qt5declarative to not be added as a dependency for the correct
-package.
-
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/qt5/qt5webkit-examples/qt5webkit-examples.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .gitlab-ci.yml    | 4 ++++
+ .gitlab-ci.yml.in | 4 ++++
+ 2 files changed, 8 insertions(+)
 
-diff --git a/package/qt5/qt5webkit-examples/qt5webkit-examples.mk b/package/qt5/qt5webkit-examples/qt5webkit-examples.mk
-index 59e9248..f81e994 100644
---- a/package/qt5/qt5webkit-examples/qt5webkit-examples.mk
-+++ b/package/qt5/qt5webkit-examples/qt5webkit-examples.mk
-@@ -39,7 +39,7 @@ define QT5WEBKIT_EXAMPLES_INSTALL_STAGING_CMDS
- endef
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index c34d2f7..a6540d1 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -30,6 +30,10 @@ check-DEVELOPERS:
+     script:
+         - "! utils/get-developers | grep -v 'No action specified'"
  
- ifeq ($(BR2_PACKAGE_QT5DECLARATIVE),y)
--QT5WEBKIT_DEPENDENCIES += qt5declarative
-+QT5WEBKIT_EXAMPLES_DEPENDENCIES += qt5declarative
- define QT5WEBKIT_EXAMPLES_INSTALL_QML
- 	cp -dpfr $(@D)/examples/webkitqml $(TARGET_DIR)/usr/lib/qt/examples
- endef
++check-package:
++    script:
++        - find . -type f -name '*.mk' -exec ./utils/check-package {} +
++
+ .defconfig: &defconfig
+     # Running the defconfigs for every push is too much, so limit to
+     # explicit triggers through the API.
+diff --git a/.gitlab-ci.yml.in b/.gitlab-ci.yml.in
+index 33c7b13..0d2e239 100644
+--- a/.gitlab-ci.yml.in
++++ b/.gitlab-ci.yml.in
+@@ -30,6 +30,10 @@ check-DEVELOPERS:
+     script:
+         - "! utils/get-developers | grep -v 'No action specified'"
+ 
++check-package:
++    script:
++        - find . -type f -name '*.mk' -exec ./utils/check-package {} +
++
+ .defconfig: &defconfig
+     # Running the defconfigs for every push is too much, so limit to
+     # explicit triggers through the API.
