@@ -1,250 +1,200 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri,  1 Dec 2017 21:53:50 +0100
-Subject: [Buildroot] [RFCv3 13/15] core: change host RPATH handling
+Date: Fri,  1 Dec 2017 21:53:52 +0100
+Subject: [Buildroot] [RFCv3 15/15] core: implement per-package SDK and target
 In-Reply-To: <20171201205352.24287-1-thomas.petazzoni@free-electrons.com>
 References: <20171201205352.24287-1-thomas.petazzoni@free-electrons.com>
-Message-ID: <20171201205352.24287-14-thomas.petazzoni@free-electrons.com>
+Message-ID: <20171201205352.24287-16-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, our strategy for the RPATH of host binaries is as follows:
+This commit implemnts the core of the move to per-package SDK and
+target directories. The main idea is that instead of having a global
+output/host and output/target in which all packages install files, we
+switch to per-package host and target folders, that only contain their
+explicit dependencies.
 
- - During the build, we force an absolute RPATH to be encoded into
-   binaries, by passing -Wl,-rpath,$(HOST_DIR)/lib. This ensures that
-   host binaries will find their libraries.
+There are two main benefits:
 
- - In the "make sdk" target, when preparing the SDK to be relocatable,
-   we use patchelf to replace those absolute RPATHs by relative RPATHs
-   that use $ORIGIN.
+ - Packages will no longer discover dependencies that they do not
+   explicitly indicate in their <pkg>_DEPENDENCIES variable.
 
-Unfortunately, the use of absolute RPATH during the build is not
-compatible with the move to per-package SDK, where a different host
-directory is used for the build of each package. Therefore, we need to
-move to a different strategy for RPATH handling.
+ - We can support top-level parallel build properly, because a package
+   only "sees" its own host directory and target directory, isolated
+   from the build of other packages that can happen in parallel.
 
-The new strategy is as follows:
+It works as follows:
 
- - We no longer pass -Wl,-rpath,$(HOST_DIR)/lib when building
-   packages, so the host binaries no longer have any rpath encoded.
+ - A new output/per-package/ folder is created, which will contain one
+   sub-folder per package, and inside it, a "host" folder and a
+   "target" folder:
 
- - At the end of the installation of every package, we just the
-   fix-rpath logic on the host binaries, so that all host binaries
-   that don't already have $ORIGIN/../lib as their RPATH are updated
-   to have such a RPATH.
+   output/per-package/busybox/target
+   output/per-package/busybox/host
+   output/per-package/host-fakeroot/target
+   output/per-package/host-fakeroot/host
 
-In order to achieve this, the following changes are made:
+   This output/per-package/ folder is PER_PACKAGE_DIR.
 
- - HOST_LDFLAGS no longer contains -Wl,-rpath,$(HOST_DIR)
+ - The global TARGET_DIR and HOST_DIR variable now automatically point
+   to the per-package directory when PKG is defined. So whenever a
+   package references $(HOST_DIR) or $(TARGET_DIR) in its build
+   process, it effectively references the per-package host/target
+   directories. Note that STAGING_DIR is a sub-dir of HOST_DIR, so it
+   is handled as well.
 
- - The hook that ran at the end of every package installation
-   (check_host_rpath) to verify that our hardcoded RPATH is indeed
-   present in all binaries is removed, as it is no longer needed: we
-   will force $ORIGIN/../LIB as an RPATH in all binaries.
+ - Of course, packages have dependencies, so those dependencies must
+   be installed in the per-package host and target folders. To do so,
+   we simply rsync (using hard links to save space and time) the host
+   and target folders of the direct dependencies of the package to the
+   current package host and target folders.
 
- - host-patchelf is added as a dependency of all packages, except
-   itself. This is necessary as all packages now need to run patchelf
-   at the end of their installation process.
+   We only need to take care of direct dependencies (and not
+   recursively all dependencies), because we accumulate into those
+   per-package host and target folders the files installed by the
+   dependencies. Note that this only works because we make the
+   assumption that one package does *not* overwrite files installed by
+   another package.
 
-   TODO: things like host-tar, host-lzip and host-ccache will have to
-   be handled properly.
+   This is done for "extract dependencies" at the beginning of the
+   extract step, and for "normal dependencies" at the beginning of the
+   configure step.
 
- - "fix-rpath host" is called at the end of the package installation,
-   in the recently introduced .stamp_installed, which guarantees to be
-   executed after all of target, staging, images and host
-   installations have completed. Indeed, while in theory only host
-   packages install files into $(HOST_DIR), in practice a number of
-   target packages also install host binaries. So to be reliable, we
-   do the "fix-rpath host" logic at the end of the installation of
-   every package.
+This is basically enough to make per-package SDK and target work. The
+only gotcha is that at the end of the build, output/target and
+output/host are empty, which means that:
 
- - The fix-rpath script is modified:
+ - The filesystem image creation code cannot work.
 
-   * The "host" target now simply hardcodes setting $ORIGIN/../lib as
-     an RPATH, instead of using --relative-to-file
+ - We don't have a SDK to build code outside of Buildroot.
 
-   * We simply exclude the patchelf program instead of making a copy
-     of it: since patchelf depends only on the C/C++ libraries, it
-     doesn't need to have a RPATH set to $ORIGIN/../lib
-
-   * Also, in order to avoid re-writing host binaries over and over
-     again, we only set the RPATH if it is not already set.
-
-This change is independent from the per-package SDK functionality, and
-could be applied separately.
+In order to fix this, this commit extends the target-finalize step so
+that it starts by populating output/target and output/host by
+rsync-ing into them the target and host directories of all packages
+listed in the $(PACKAGES) variable. It is necessary to do this
+sequentially in the target-finalize step and not in each
+package. Doing it in package installation means that it can be done in
+parallel. In that case, there is a chance that two rsyncs are creating
+the same hardlink or directory at the same time, which makes one of
+them fail.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
-NOTE: an alternative to running "fix-rpath host" at the end of every
-package installation would be to run it only for host packages
-(unconditionally) and have a special flag that target packages can use
-to indicate that they have installed things to $(HOST_DIR). Not sure
-if this is worth the complexity, though.
-
-NOTE2: is it OK to force $ORIGIN/../lib as the RPATH of all host
-binaries? This is OK for binaries in host/{bin,sbin} of course, but do
-we have host binaries in other places, for which this $ORIGIN/../lib
-RPATH wouldn't be appropriate?
-
 Changes since v2:
- - No changes
+ - Account for <pkg>_EXTRACT_DEPENDENCIES in the extract step of the
+   package, by rsync'ing their host and target directories to the
+   current package host/target directory.
 
 Changes since v1:
- - Following the feedback from Yann and Arnout, the approach in v2 was
-   completely changed: instead of using LD_LIBRARY_PATH, we now run
-   patchelf at the end of each package installation to fix the RPATH.
+ - Remove the LD_LIBRARY_PATH change since we're now longer relying on
+   LD_LIBRARY_PATH to allow host programs to find their libraries.
+ - Improve commit log according to Arnout suggestions
+ - Remove -u option from rsync calls in the main Makefile, suggested
+   by Arnout
+ - Drop entirely the definitions of <pkg>_TARGET_DIR,
+   <pkg>_STAGING_DIR and <pkg>_HOST_DIR, and instead make the global
+   TARGET_DIR, HOST_DIR variables point to the per-package directories
+   when PKG is defined. Suggested by Arnout.
 ---
- Makefile                  |  1 -
- package/Makefile.in       |  2 +-
- package/pkg-generic.mk    | 14 ++++++--------
- support/scripts/fix-rpath | 31 +++++++++++++++++++------------
- 4 files changed, 26 insertions(+), 22 deletions(-)
+ Makefile               | 20 ++++++++++++++++----
+ package/pkg-generic.mk | 17 +++++++++++++++++
+ 2 files changed, 33 insertions(+), 4 deletions(-)
 
 diff --git a/Makefile b/Makefile
-index 090b3ba191..d8fa91120b 100644
+index e05a1ec09a..978177fc83 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -555,7 +555,6 @@ world: target-post-image
- .PHONY: sdk
- sdk: world
- 	@$(call MESSAGE,"Rendering the SDK relocatable")
--	$(TOPDIR)/support/scripts/fix-rpath host
- 	$(TOPDIR)/support/scripts/fix-rpath staging
- 	$(INSTALL) -m 755 $(TOPDIR)/support/misc/relocate-sdk.sh $(HOST_DIR)/relocate-sdk.sh
- 	echo $(HOST_DIR) > $(HOST_DIR)/share/buildroot/sdk-location
-diff --git a/package/Makefile.in b/package/Makefile.in
-index a1a5316051..e94a75c230 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -220,7 +220,7 @@ HOST_CPPFLAGS  = -I$(HOST_DIR)/include
- HOST_CFLAGS   ?= -O2
- HOST_CFLAGS   += $(HOST_CPPFLAGS)
- HOST_CXXFLAGS += $(HOST_CFLAGS)
--HOST_LDFLAGS  += -L$(HOST_DIR)/lib -Wl,-rpath,$(HOST_DIR)/lib
-+HOST_LDFLAGS  += -L$(HOST_DIR)/lib
+@@ -215,7 +215,9 @@ BR_GRAPH_OUT := $(or $(BR2_GRAPH_OUT),pdf)
  
- # The macros below are taken from linux 4.11 and adapted slightly.
- # Copy more when needed.
+ BUILD_DIR := $(BASE_DIR)/build
+ BINARIES_DIR := $(BASE_DIR)/images
+-TARGET_DIR := $(BASE_DIR)/target
++PER_PACKAGE_DIR := $(BASE_DIR)/per-package
++TARGET_DIR = $(if $(PKG),$(PER_PACKAGE_DIR)/$($(PKG)_NAME)/target,$(BASE_DIR)/target)
++
+ # initial definition so that 'make clean' works for most users, even without
+ # .config. HOST_DIR will be overwritten later when .config is included.
+ HOST_DIR := $(BASE_DIR)/host
+@@ -237,7 +239,7 @@ LEGAL_REPORT = $(LEGAL_INFO_DIR)/README
+ # dependencies anywhere else
+ #
+ ################################################################################
+-$(BUILD_DIR) $(TARGET_DIR) $(HOST_DIR) $(BINARIES_DIR) $(LEGAL_INFO_DIR) $(REDIST_SOURCES_DIR_TARGET) $(REDIST_SOURCES_DIR_HOST):
++$(BUILD_DIR) $(TARGET_DIR) $(HOST_DIR) $(BINARIES_DIR) $(LEGAL_INFO_DIR) $(REDIST_SOURCES_DIR_TARGET) $(REDIST_SOURCES_DIR_HOST) $(PER_PACKAGE_DIR):
+ 	@mkdir -p $@
+ 
+ BR2_CONFIG = $(CONFIG_DIR)/.config
+@@ -436,7 +438,7 @@ LZCAT := $(call qstrip,$(BR2_LZCAT))
+ TAR_OPTIONS = $(call qstrip,$(BR2_TAR_OPTIONS)) -xf
+ 
+ # packages compiled for the host go here
+-HOST_DIR := $(call qstrip,$(BR2_HOST_DIR))
++HOST_DIR = $(if $(PKG),$(PER_PACKAGE_DIR)/$($(PKG)_NAME)/host,$(call qstrip,$(BR2_HOST_DIR)))
+ 
+ # Quotes are needed for spaces and all in the original PATH content.
+ BR_PATH = "$(HOST_DIR)/bin:$(HOST_DIR)/sbin:$(PATH)"
+@@ -663,6 +665,16 @@ $(TARGETS_ROOTFS): target-finalize
+ 
+ .PHONY: target-finalize
+ target-finalize: $(PACKAGES)
++	@$(call MESSAGE,"Creating global target directory")
++	$(foreach pkg,$(PACKAGES),\
++		rsync -a --link-dest=$(PER_PACKAGE_DIR)/$(pkg)/target/ \
++		$(PER_PACKAGE_DIR)/$(pkg)/target/ \
++		$(TARGET_DIR)$(sep))
++	@$(call MESSAGE,"Creating global host directory")
++	$(foreach pkg,$(PACKAGES),\
++		rsync -a --link-dest=$(PER_PACKAGE_DIR)/$(pkg)/host/ \
++		$(PER_PACKAGE_DIR)/$(pkg)/host/ \
++		$(HOST_DIR)$(sep))
+ 	@$(call MESSAGE,"Finalizing target directory")
+ 	# Check files that are touched by more than one package
+ 	./support/scripts/check-uniq-files -t target $(BUILD_DIR)/packages-file-list.txt
+@@ -959,7 +971,7 @@ printvars:
+ clean:
+ 	rm -rf $(TARGET_DIR) $(BINARIES_DIR) $(HOST_DIR) \
+ 		$(BUILD_DIR) $(BASE_DIR)/staging \
+-		$(LEGAL_INFO_DIR) $(GRAPHS_DIR)
++		$(LEGAL_INFO_DIR) $(GRAPHS_DIR) $(PER_PACKAGE_DIR)
+ 
+ .PHONY: distclean
+ distclean: clean
 diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 8c6e34cc9f..f4a943e3ce 100644
+index f4a943e3ce..f659248416 100644
 --- a/package/pkg-generic.mk
 +++ b/package/pkg-generic.mk
-@@ -118,14 +118,6 @@ endef
- 
- GLOBAL_INSTRUMENTATION_HOOKS += check_bin_arch
- 
--# This hook checks that host packages that need libraries that we build
--# have a proper DT_RPATH or DT_RUNPATH tag
--define check_host_rpath
--	$(if $(filter install-host,$(2)),\
--		$(if $(filter end,$(1)),support/scripts/check-host-rpath $(3) $(HOST_DIR)))
--endef
--GLOBAL_INSTRUMENTATION_HOOKS += check_host_rpath
--
- define step_check_build_dir_one
- 	if [ -d $(2) ]; then \
- 		printf "%s: installs files in %s\n" $(1) $(2) >&2; \
-@@ -343,6 +335,8 @@ $(BUILD_DIR)/%/.stamp_target_installed:
- # Finalize installation
- $(BUILD_DIR)/%/.stamp_installed:
- 	@$(call step_start,install)
-+	$(if $(filter host-patchelf,$($(PKG)_FINAL_DEPENDENCIES)), \
-+		$(TOPDIR)/support/scripts/fix-rpath host)
- 	@$(call step_end,install)
- 	$(Q)touch $@
- 
-@@ -587,6 +581,10 @@ ifneq ($(1),host-skeleton)
- $(2)_DEPENDENCIES += host-skeleton
- endif
- 
-+ifeq ($(filter host-patchelf host-skeleton host-tar host-xz host-lzip host-ccache host-fakedate,$(1)),)
-+$(2)_DEPENDENCIES += host-patchelf
-+endif
-+
- ifeq ($(filter host-tar host-skeleton host-fakedate,$(1)),)
- $(2)_EXTRACT_DEPENDENCIES += $(BR2_TAR_HOST_DEPENDENCY)
- endif
-diff --git a/support/scripts/fix-rpath b/support/scripts/fix-rpath
-index 15705a3b0d..5b2f24ed32 100755
---- a/support/scripts/fix-rpath
-+++ b/support/scripts/fix-rpath
-@@ -61,7 +61,7 @@ main() {
-     local rootdir
-     local tree="${1}"
-     local find_args=( )
--    local sanitize_extra_args=( )
-+    local sanitize_args=( )
- 
-     if ! "${PATCHELF}" --version > /dev/null 2>&1; then
- 	echo "Error: can't execute patchelf utility '${PATCHELF}'"
-@@ -84,12 +84,14 @@ main() {
-                 find_args+=( "-path" "${HOST_DIR}""${excludepath}" "-prune" "-o" )
-             done
- 
--            # do not process the patchelf binary but a copy to work-around "file in use"
-+            # do not process the patchelf binary, as it is ourselves
-+            # (and it doesn't need a rpath as it doesn't use libraries
-+            # from HOST_DIR)
-             find_args+=( "-path" "${PATCHELF}" "-prune" "-o" )
--            cp "${PATCHELF}" "${PATCHELF}.__to_be_patched"
- 
-             # we always want $ORIGIN-based rpaths to make it relocatable.
--            sanitize_extra_args+=( "--relative-to-file" )
-+            sanitize_args+=( "--set-rpath" )
-+            sanitize_args+=( "\$ORIGIN/../lib" )
-             ;;
- 
-         staging)
-@@ -101,14 +103,18 @@ main() {
-             done
- 
-             # should be like for the target tree below
--            sanitize_extra_args+=( "--no-standard-lib-dirs" )
-+            sanitize_args+=( "--no-standard-lib-dirs" )
-+            sanitize_args+=( "--make-rpath-relative" )
-+            sanitize_args+=( "${rootdir}" )
-             ;;
- 
-         target)
-             rootdir="${TARGET_DIR}"
-             # we don't want $ORIGIN-based rpaths but absolute paths without rootdir.
-             # we also want to remove rpaths pointing to /lib or /usr/lib.
--            sanitize_extra_args+=( "--no-standard-lib-dirs" )
-+            sanitize_args+=( "--no-standard-lib-dirs" )
-+            sanitize_args+=( "--make-rpath-relative" )
-+            sanitize_args+=( "${rootdir}" )
-             ;;
- 
-         *)
-@@ -120,20 +126,21 @@ main() {
-     find_args+=( "-type" "f" "-print" )
- 
-     while read file ; do
--        # check if it's an ELF file
--        if ${PATCHELF} --print-rpath "${file}" > /dev/null 2>&1; then
-+        rpath=$(${PATCHELF} --print-rpath "${file}" 2>/dev/null)
-+        if test $? -eq 0; then
-+            # For host binaries, if the rpath is already correct, skip
-+            if test "${tree}" = "host" -a "${rpath}" = "\$ORIGIN/../lib" ; then
-+                continue
-+            fi
-             # make files writable if necessary
-             changed=$(chmod -c u+w "${file}")
-             # call patchelf to sanitize the rpath
--            ${PATCHELF} --make-rpath-relative "${rootdir}" ${sanitize_extra_args[@]} "${file}"
-+            ${PATCHELF} ${sanitize_args[@]} "${file}"
-             # restore the original permission
-             test "${changed}" != "" && chmod u-w "${file}"
-         fi
-     done < <(find "${rootdir}" ${find_args[@]})
- 
--    # Restore patched patchelf utility
--    test "${tree}" = "host" && mv "${PATCHELF}.__to_be_patched" "${PATCHELF}"
--
-     # ignore errors
-     return 0
- }
+@@ -171,6 +171,15 @@ $(BUILD_DIR)/%/.stamp_actual_downloaded:
+ $(BUILD_DIR)/%/.stamp_extracted:
+ 	@$(call step_start,extract)
+ 	@$(call MESSAGE,"Extracting")
++	@mkdir -p $(HOST_DIR) $(TARGET_DIR) $(STAGING_DIR)
++	$(foreach pkg,$($(PKG)_FINAL_EXTRACT_DEPENDENCIES),\
++		rsync -a --link-dest=$(PER_PACKAGE_DIR)/$(pkg)/host/ \
++		$(PER_PACKAGE_DIR)/$(pkg)/host/ \
++		$(HOST_DIR)$(sep))
++	$(foreach pkg,$($(PKG)_FINAL_EXTRACT_DEPENDENCIES),\
++		rsync -a --link-dest=$(PER_PACKAGE_DIR)/$(pkg)/target/ \
++		$(PER_PACKAGE_DIR)/$(pkg)/target/ \
++		$(TARGET_DIR)$(sep))
+ 	$(foreach hook,$($(PKG)_PRE_EXTRACT_HOOKS),$(call $(hook))$(sep))
+ 	$(Q)mkdir -p $(@D)
+ 	$($(PKG)_EXTRACT_CMDS)
+@@ -228,6 +237,14 @@ $(foreach dir,$(call qstrip,$(BR2_GLOBAL_PATCH_DIR)),\
+ $(BUILD_DIR)/%/.stamp_configured:
+ 	@$(call step_start,configure)
+ 	@$(call MESSAGE,"Configuring")
++	$(foreach pkg,$($(PKG)_FINAL_DEPENDENCIES),\
++		rsync -a --link-dest=$(PER_PACKAGE_DIR)/$(pkg)/host/ \
++		$(PER_PACKAGE_DIR)/$(pkg)/host/ \
++		$(HOST_DIR)$(sep))
++	$(foreach pkg,$($(PKG)_FINAL_DEPENDENCIES),\
++		rsync -a --link-dest=$(PER_PACKAGE_DIR)/$(pkg)/target/ \
++		$(PER_PACKAGE_DIR)/$(pkg)/target/ \
++		$(TARGET_DIR)$(sep))
+ 	$(foreach hook,$($(PKG)_PRE_CONFIGURE_HOOKS),$(call $(hook))$(sep))
+ 	$($(PKG)_CONFIGURE_CMDS)
+ 	$(foreach hook,$($(PKG)_POST_CONFIGURE_HOOKS),$(call $(hook))$(sep))
 -- 
 2.13.6
