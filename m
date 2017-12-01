@@ -1,44 +1,47 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 01 Dec 2017 21:00:49 -0000
-Subject: [Buildroot] [git commit] configs/imx6-sabresd_qt5: Bump to kernel
- 4.14
-Message-ID: <20171201205322.3DACB7FE76@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 01 Dec 2017 21:00:53 -0000
+Subject: [Buildroot] [git commit] genimage: change upstream URL
+Message-ID: <20171201205317.14D9D7FCE9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=75ec86e7a196423201f7bf8ffe6790a4d1cf616f
+commit: https://git.buildroot.net/buildroot/commit/?id=325e60767da45efe507ea13fc304866257421334
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- configs/imx6-sabresd_qt5_defconfig | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Pengutronix is now hosting the official genimage repository and release
+tarballs on Github. This patch updates the official URL from the package
+description and its download website described in GENIMAGE_SITE.
 
-diff --git a/configs/imx6-sabresd_qt5_defconfig b/configs/imx6-sabresd_qt5_defconfig
-index e20266e..d805456 100644
---- a/configs/imx6-sabresd_qt5_defconfig
-+++ b/configs/imx6-sabresd_qt5_defconfig
-@@ -4,8 +4,8 @@ BR2_ARM_ENABLE_NEON=y
- BR2_ARM_ENABLE_VFP=y
- BR2_ARM_FPU_VFPV3=y
+Signed-off-by: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/genimage/Config.in.host | 2 +-
+ package/genimage/genimage.mk    | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/genimage/Config.in.host b/package/genimage/Config.in.host
+index 5c5a8a8..cf831a1 100644
+--- a/package/genimage/Config.in.host
++++ b/package/genimage/Config.in.host
+@@ -10,4 +10,4 @@ config BR2_PACKAGE_HOST_GENIMAGE
+ 	  environment variables, the config file or commandline
+ 	  switches.
  
--# Linux headers same as kernel, a 4.13 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_13=y
-+# Linux headers same as kernel, a 4.14 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
+-	  http://www.pengutronix.de/software/genimage/
++	  https://github.com/pengutronix/genimage
+diff --git a/package/genimage/genimage.mk b/package/genimage/genimage.mk
+index 2e7aad2..8d11c66 100644
+--- a/package/genimage/genimage.mk
++++ b/package/genimage/genimage.mk
+@@ -6,7 +6,7 @@
  
- # Additional features needed for packages
- BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
-@@ -38,7 +38,7 @@ BR2_TARGET_UBOOT_SPL_NAME="SPL"
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.13.3"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.14"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-sabresd imx6dl-sabresd imx6qp-sabresd"
+ GENIMAGE_VERSION = 9
+ GENIMAGE_SOURCE = genimage-$(GENIMAGE_VERSION).tar.xz
+-GENIMAGE_SITE = http://www.pengutronix.de/software/genimage/download
++GENIMAGE_SITE = https://github.com/pengutronix/genimage/releases/download/v$(GENIMAGE_VERSION)
+ HOST_GENIMAGE_DEPENDENCIES = host-pkgconf host-libconfuse
+ GENIMAGE_LICENSE = GPL-2.0
+ GENIMAGE_LICENSE_FILES = COPYING
