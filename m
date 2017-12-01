@@ -1,44 +1,43 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri,  1 Dec 2017 20:09:57 +0100
-Subject: [Buildroot] [PATCH 1/1] package/linknx: add lua as optional
- dependency
-Message-ID: <20171201190957.25699-1-bernd.kuhls@t-online.de>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri,  1 Dec 2017 20:20:50 +0100
+Subject: [Buildroot] [PATCH 1/1] boinc: bump to version 7.8.4
+Message-ID: <20171201192050.27152-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/linknx/linknx.mk | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+Add hash for COPYING and COPYING.LESSER
 
-diff --git a/package/linknx/linknx.mk b/package/linknx/linknx.mk
-index 7965ce4e16..dfabef550e 100644
---- a/package/linknx/linknx.mk
-+++ b/package/linknx/linknx.mk
-@@ -9,7 +9,6 @@ LINKNX_SITE = $(call github,linknx,linknx,$(LINKNX_VERSION))
- LINKNX_LICENSE = GPL-2.0+
- LINKNX_INSTALL_STAGING = YES
- LINKNX_CONF_OPTS = \
--	--without-lua \
- 	--without-log4cpp \
- 	--without-pth-test \
- 	--with-pth=$(STAGING_DIR)/usr \
-@@ -25,6 +24,13 @@ else
- LINKNX_CONF_OPTS += --without-libcurl
- endif
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/boinc/boinc.hash | 4 +++-
+ package/boinc/boinc.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/package/boinc/boinc.hash b/package/boinc/boinc.hash
+index 292c32750..3f31ee758 100644
+--- a/package/boinc/boinc.hash
++++ b/package/boinc/boinc.hash
+@@ -1,2 +1,4 @@
+ # Locally computed:
+-sha256 e3d5b190ec6cdc3512005469fab90203af110cd9a7880654c5d0b4d4e55f3c17  boinc-7.8.3.tar.gz
++sha256 0038044916749687455d0f5ca33e79f14e2d1d5451ddfd04b33446b2d9d467ab  boinc-7.8.4.tar.gz
++sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
++sha256 a853c2ffec17057872340eee242ae4d96cbf2b520ae27d903e1b2fef1a5f9d1c  COPYING.LESSER
+diff --git a/package/boinc/boinc.mk b/package/boinc/boinc.mk
+index 901f1ee98..a04aadffa 100644
+--- a/package/boinc/boinc.mk
++++ b/package/boinc/boinc.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
-+ifeq ($(BR2_PACKAGE_LUA),y)
-+LINKNX_CONF_OPTS += --with-lua
-+LINKNX_DEPENDENCIES += lua
-+else
-+LINKNX_CONF_OPTS += --without-lua
-+endif
-+
- ifeq ($(BR2_PACKAGE_MYSQL),y)
- LINKNX_CONF_OPTS += --with-mysql=$(STAGING_DIR)/usr
- LINKNX_DEPENDENCIES += mysql
+ BOINC_VERSION_MAJOR = 7.8
+-BOINC_VERSION = $(BOINC_VERSION_MAJOR).3
++BOINC_VERSION = $(BOINC_VERSION_MAJOR).4
+ # client_release can be used to build the Client and Manager but not the Server
+ # part. The Server currently has no versioning (see
+ # https://github.com/BOINC/boinc/pull/1798).
 -- 
-2.11.0
+2.14.1
