@@ -1,42 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 1 Dec 2017 22:40:58 +0100
-Subject: [Buildroot] [PATCH] omxplayer: bump to version 2ee17b2
-In-Reply-To: <20171201172755.9968-1-julius@kriukas.lt>
-References: <20171201172755.9968-1-julius@kriukas.lt>
-Message-ID: <20171201224058.2a3eebca@windsurf.lan>
+Date: Fri, 1 Dec 2017 22:42:09 +0100
+Subject: [Buildroot] [git commit] uboot-tools: fix dtc invocation
+Message-ID: <20171201213515.AA8A082707@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=21ab88c4171ff9efa8a364bd8015c7d46628f9ec
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri,  1 Dec 2017 19:27:55 +0200, Julius Kriukas wrote:
-> This patch updates omxplayer package to the latest commit on master as
-> of 2017-12-01.
-> 
-> Latest omxplayer version no longer have partial buildroot support and
-> Makefile.include file, but still contains some hardcoded include paths
-> that needs to be removed before building.
-> 
-> Signed-off-by: Julius Kriukas <julius@kriukas.lt>
-> ---
->  .../0001-Makefiles-clean-up-the-cruft.patch        | 67 ----------------------
->  ...-Makefile-to-be-compatible-with-buildroot.patch | 39 +++++++++++++
->  package/omxplayer/omxplayer.hash                   |  4 +-
->  package/omxplayer/omxplayer.mk                     |  9 +--
->  4 files changed, 42 insertions(+), 77 deletions(-)
->  delete mode 100644 package/omxplayer/0001-Makefiles-clean-up-the-cruft.patch
->  create mode 100644 package/omxplayer/0001-Update-Makefile-to-be-compatible-with-buildroot.patch
+Since uboot 2017.09 path to dtc will be configured via Kconfig. As BR
+skips this step for uboot-tools building one has to provide
+CONFIG_MKIMAGE_DTC_PATH=dtc on the build command line. Otherwise
+mkimage will not be able to create FIT images, i.e.:
 
-Applied to master, thanks. You can submit a follow-up patch adding a
-hash for the license file, as suggested by Yann.
+mkimage -f kernel-fit.its kernel-fit.itb
 
-Thanks!
+will fail with very weird errors.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/uboot-tools/uboot-tools.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/uboot-tools/uboot-tools.mk b/package/uboot-tools/uboot-tools.mk
+index 04b5268..4c55918 100644
+--- a/package/uboot-tools/uboot-tools.mk
++++ b/package/uboot-tools/uboot-tools.mk
+@@ -22,7 +22,7 @@ UBOOT_TOOLS_MAKE_OPTS = CROSS_COMPILE="$(TARGET_CROSS)" \
+ 	STRIP=$(TARGET_STRIP)
+ 
+ ifeq ($(BR2_PACKAGE_UBOOT_TOOLS_FIT_SUPPORT),y)
+-UBOOT_TOOLS_MAKE_OPTS += CONFIG_FIT=y
++UBOOT_TOOLS_MAKE_OPTS += CONFIG_FIT=y CONFIG_MKIMAGE_DTC_PATH=dtc
+ UBOOT_TOOLS_DEPENDENCIES += dtc
+ endif
+ 
+@@ -85,7 +85,7 @@ HOST_UBOOT_TOOLS_MAKE_OPTS = HOSTCC="$(HOSTCC)" \
+ 	HOSTLDFLAGS="$(HOST_LDFLAGS)"
+ 
+ ifeq ($(BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT),y)
+-HOST_UBOOT_TOOLS_MAKE_OPTS += CONFIG_FIT=y
++HOST_UBOOT_TOOLS_MAKE_OPTS += CONFIG_FIT=y CONFIG_MKIMAGE_DTC_PATH=dtc
+ HOST_UBOOT_TOOLS_DEPENDENCIES += host-dtc
+ endif
+ 
