@@ -1,44 +1,81 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 01 Dec 2017 21:00:40 -0000
-Subject: [Buildroot] [git commit] package/kodi-inputstream-adaptive: bump
- version
-Message-ID: <20171201205314.405897F8A4@busybox.osuosl.org>
+Date: Fri, 01 Dec 2017 21:00:41 -0000
+Subject: [Buildroot] [git commit] olimex_a20_olinuxino_lime2: bump versions
+Message-ID: <20171201205314.5710E7F8A4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3fac7499d6654038d0d4312bbb88f785044b5887
+commit: https://git.buildroot.net/buildroot/commit/?id=f723fa7f5302df8a71254ea9db09ac310420bf34
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The git hash translates into version 2.0.19.
+(aligned with olimex_a20_olinuxino_lime)
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash | 2 +-
- package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ configs/olimex_a20_olinuxino_lime2_defconfig | 27 ++++++++++++++++++++-------
+ 1 file changed, 20 insertions(+), 7 deletions(-)
 
-diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
-index 0d8f39f..78b48c1 100644
---- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
-+++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 a214b6f47d4fcd0ceb78819447eb9ff3c5b4519233a46a245c9b558ecda0725f  kodi-inputstream-adaptive-f2904b547e940c724dce7412a26744c2698cab66.tar.gz
-+sha256 572b2e898484a5ada74c4095539cebf43c198a3147f0f24fe350bc79db053695  kodi-inputstream-adaptive-9af21218a87572bd4ab8d8d660c11f6295144f97.tar.gz
-diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-index cc09503..f7a4c66 100644
---- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-+++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-@@ -6,7 +6,7 @@
- 
- # This cset is on the branch 'Krypton'
- # When Kodi is updated, then this should be updated to the corresponding branch
--KODI_INPUTSTREAM_ADAPTIVE_VERSION = f2904b547e940c724dce7412a26744c2698cab66
-+KODI_INPUTSTREAM_ADAPTIVE_VERSION = 9af21218a87572bd4ab8d8d660c11f6295144f97
- KODI_INPUTSTREAM_ADAPTIVE_SITE = $(call github,peak3d,inputstream.adaptive,$(KODI_INPUTSTREAM_ADAPTIVE_VERSION))
- KODI_INPUTSTREAM_ADAPTIVE_LICENSE = GPL-2.0+
- KODI_INPUTSTREAM_ADAPTIVE_LICENSE_FILES = src/main.cpp
+diff --git a/configs/olimex_a20_olinuxino_lime2_defconfig b/configs/olimex_a20_olinuxino_lime2_defconfig
+index 611c082..228160d 100644
+--- a/configs/olimex_a20_olinuxino_lime2_defconfig
++++ b/configs/olimex_a20_olinuxino_lime2_defconfig
+@@ -1,35 +1,48 @@
++# Architecture
+ BR2_arm=y
+ BR2_cortex_a7=y
+ BR2_ARM_EABIHF=y
+-# Linux headers same as kernel, a 4.1 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
++
++# Linux headers same as kernel, a 4.9 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
++
++# System configuration
+ BR2_TARGET_GENERIC_HOSTNAME="a20-olinuxino"
+ BR2_TARGET_GENERIC_ISSUE="Welcome to OLinuXino!"
++BR2_TARGET_GENERIC_GETTY=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/olimex/a20_olinuxino/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/olimex/a20_olinuxino/genimage.cfg"
++
++# Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.1.4"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.9.49"
++BR2_LINUX_KERNEL_USE_DEFCONFIG=y
+ BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun7i-a20-olinuxino-lime2"
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
+-BR2_PACKAGE_SUNXI_TOOLS=y
+-BR2_PACKAGE_SUNXI_BOARDS=y
+-BR2_PACKAGE_SUNXI_BOARDS_FEX_FILE="a20/a20-olinuxino_lime.fex"
++
++# Filesystem
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+ # BR2_TARGET_ROOTFS_TAR is not set
++
++# Bootloaders
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.05"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.09"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="A20-OLinuXino-Lime2"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
++BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
++BR2_TARGET_UBOOT_FORMAT_BIN=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
+ BR2_TARGET_UBOOT_BOOT_SCRIPT=y
+ BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE="board/olimex/a20_olinuxino/boot.cmd"
++
++# Additional tools
+ BR2_PACKAGE_HOST_GENIMAGE=y
