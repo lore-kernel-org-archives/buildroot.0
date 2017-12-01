@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 1 Dec 2017 22:44:46 +0100
-Subject: [Buildroot] [PATCH 1/1] linux-headers: bump 4.{4, 9}.x series
-In-Reply-To: <20171201060759.2461-1-bernd.kuhls@t-online.de>
-References: <20171201060759.2461-1-bernd.kuhls@t-online.de>
-Message-ID: <20171201224446.34ba21da@windsurf.lan>
+Date: Fri, 1 Dec 2017 22:45:13 +0100
+Subject: [Buildroot] [PATCH 1/2] linux: bump default to version 4.14.3
+In-Reply-To: <1512162615-23829-1-git-send-email-festevam@gmail.com>
+References: <1512162615-23829-1-git-send-email-festevam@gmail.com>
+Message-ID: <20171201224513.720ff749@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,13 +12,17 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri,  1 Dec 2017 07:07:59 +0100, Bernd Kuhls wrote:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+On Fri,  1 Dec 2017 19:10:14 -0200, Fabio Estevam wrote:
+> Signed-off-by: Fabio Estevam <festevam@gmail.com>
 > ---
->  package/linux-headers/Config.in.host | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  linux/Config.in | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Applied to master, thanks.
+Thanks, I've applied both. I changed the second patch to only bump the
+4.14.x headers, because 4.4.x and 4.9.x was already done by a patch
+that Bernd submitted earlier.
+
+Thanks!
 
 Thomas
 -- 
