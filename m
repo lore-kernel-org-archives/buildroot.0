@@ -1,62 +1,55 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 01 Dec 2017 21:00:41 -0000
-Subject: [Buildroot] [git commit] tslib: update to 1.14
-Message-ID: <20171201205315.41A717FFA2@busybox.osuosl.org>
+Date: Fri, 01 Dec 2017 21:00:42 -0000
+Subject: [Buildroot] [git commit] toolchain: add 4.14.x choice for headers
+Message-ID: <20171201205315.E2BEB7FF55@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8624afbb83984cdcb0b0179e9b4a4711c1e56f07
+commit: https://git.buildroot.net/buildroot/commit/?id=bf91e4bd77280fa1b24c15b51a79ef6a8917baf2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-As usual, https://github.com/kergoth/tslib/releases has the changelog
-summary.
-
-This release includes a new plugin "lowpass" that is being built by
-default; so we add that to the list of statically compiled in plugins
-for static builds.
-
-Signed-off-by: Martin Kepplinger <martink@posteo.de>
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/tslib/tslib.hash | 4 ++--
- package/tslib/tslib.mk   | 5 +++--
- 2 files changed, 5 insertions(+), 4 deletions(-)
+ toolchain/toolchain-common.in                                        | 5 +++++
+ .../toolchain-external/toolchain-external-custom/Config.in.options   | 4 ++++
+ 2 files changed, 9 insertions(+)
 
-diff --git a/package/tslib/tslib.hash b/package/tslib/tslib.hash
-index cca74fc..8184143 100644
---- a/package/tslib/tslib.hash
-+++ b/package/tslib/tslib.hash
-@@ -1,5 +1,5 @@
--# https://github.com/kergoth/tslib/releases/download/1.13/tslib-1.13.tar.xz.sha256
--sha256  b381279f2d6ad6acb80cfc4852860853b7bcd1a9440821e9fe920c33f4e4f8da  tslib-1.13.tar.xz
-+# https://github.com/kergoth/tslib/releases/download/1.14/tslib-1.14.tar.xz.sha256
-+sha256  56ce7adfb896442001938470a7f946cc029bfb03ed74e7f62db92d9c9ba83df4  tslib-1.14.tar.xz
+diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
+index d87d4d7..1555377 100644
+--- a/toolchain/toolchain-common.in
++++ b/toolchain/toolchain-common.in
+@@ -253,10 +253,15 @@ config BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_13
+ 	bool
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12
  
- # Locally computed
- sha256  9b872a8a070b8ad329c4bd380fb1bf0000f564c75023ec8e1e6803f15364b9e9  COPYING
-diff --git a/package/tslib/tslib.mk b/package/tslib/tslib.mk
-index 06f887a..7a6379c 100644
---- a/package/tslib/tslib.mk
-+++ b/package/tslib/tslib.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
++config BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_14
++	bool
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_13
++
+ # This order guarantees that the highest version is set, as kconfig
+ # stops affecting a value on the first matching default.
+ config BR2_TOOLCHAIN_HEADERS_AT_LEAST
+ 	string
++	default "4.14" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_14
+ 	default "4.13" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_13
+ 	default "4.12" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12
+ 	default "4.11" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_11
+diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+index a285340..b9e7c20 100644
+--- a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
++++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+@@ -93,6 +93,10 @@ choice
+ 	    m = ( LINUX_VERSION_CODE >> 8  ) & 0xFF
+ 	    p = ( LINUX_VERSION_CODE >> 0  ) & 0xFF
  
--TSLIB_VERSION = 1.13
-+TSLIB_VERSION = 1.14
- TSLIB_SITE = https://github.com/kergoth/tslib/releases/download/$(TSLIB_VERSION)
- TSLIB_SOURCE = tslib-$(TSLIB_VERSION).tar.xz
- TSLIB_LICENSE = GPL-2.0+ (programs), LGPL-2.1+ (libraries)
-@@ -26,7 +26,8 @@ TSLIB_CONF_OPTS += \
- 	--enable-iir=static \
- 	--enable-dejitter=static \
- 	--enable-debounce=static \
--	--enable-skip=static
-+	--enable-skip=static \
-+	--enable-lowpass=static
- endif
- 
- $(eval $(autotools-package))
++config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_14
++	bool "4.14.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_14
++
+ config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_13
+ 	bool "4.13.x"
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_13
