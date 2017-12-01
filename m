@@ -1,102 +1,106 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 01 Dec 2017 21:01:00 -0000
-Subject: [Buildroot] [git commit] libgdiplus: bump to version 5.4
-Message-ID: <20171201205331.310437FC1A@busybox.osuosl.org>
+Date: Fri, 01 Dec 2017 21:01:04 -0000
+Subject: [Buildroot] [git commit] uboot-tools: bump to version 2017.11
+Message-ID: <20171201205331.957A97FBCD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=60b616a1a7f45c8c40fa46a0b43e1778a3cb2824
+commit: https://git.buildroot.net/buildroot/commit/?id=1a515b56c725654b166f0940d9ea61a8b5b23508
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Also, enable giflib if selected by the user and remove patch already
-applied upstream.
+Drop patch 0005 as it has already been applied upstream.
 
-Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...01-Fix-compile-error-when-cross-compiling.patch | 35 ----------------------
- package/libgdiplus/libgdiplus.hash                 |  2 +-
- package/libgdiplus/libgdiplus.mk                   | 11 ++++---
- 3 files changed, 8 insertions(+), 40 deletions(-)
+ ...-not-attempt-to-use-the-systemwide-libfdt.patch | 56 ----------------------
+ package/uboot-tools/uboot-tools.hash               |  2 +-
+ package/uboot-tools/uboot-tools.mk                 |  2 +-
+ 3 files changed, 2 insertions(+), 58 deletions(-)
 
-diff --git a/package/libgdiplus/0001-Fix-compile-error-when-cross-compiling.patch b/package/libgdiplus/0001-Fix-compile-error-when-cross-compiling.patch
+diff --git a/package/uboot-tools/0005-Do-not-attempt-to-use-the-systemwide-libfdt.patch b/package/uboot-tools/0005-Do-not-attempt-to-use-the-systemwide-libfdt.patch
 deleted file mode 100644
-index db67d46..0000000
---- a/package/libgdiplus/0001-Fix-compile-error-when-cross-compiling.patch
+index abeef65..0000000
+--- a/package/uboot-tools/0005-Do-not-attempt-to-use-the-systemwide-libfdt.patch
 +++ /dev/null
-@@ -1,35 +0,0 @@
--From daf96b07c02734dceaf3c3b78c10e4e758b74d9e Mon Sep 17 00:00:00 2001
--From: Sergio Prado <sergio.prado@e-labworks.com>
--Date: Fri, 18 Dec 2015 15:08:58 -0200
--Subject: [PATCH 1/1] Fix compile error when cross-compiling.
+@@ -1,56 +0,0 @@
+-From 477ecb8d9ffa7b90d8bec0d8317b7e464e906f7c Mon Sep 17 00:00:00 2001
+-From: =?UTF-8?q?Jan=20Kundr=C3=A1t?= <jan.kundrat@cesnet.cz>
+-Date: Fri, 3 Nov 2017 03:06:35 +0100
+-Subject: [PATCH] Do not attempt to use the systemwide libfdt
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
 -
--When cross-compiling with libjpeg enabled, we can get errors like the
--following when linking:
+-U-Boot bundles a patched copy of libfdt, so it's wrong to attempt to
+-include it <like/this>. This breaks the build for me when I have dtc
+-fully installed in my host -- as happened earlier tonight with
+-Buildroot, for example.
 -
--sh-linux-gnu-gcc: ERROR: unsafe header/library path used in
--cross-compilation: '/lib'
+-There are several other occurrences throughout the code where '<libfdt'
+-matches. I'm not modifying these because I have no clue why the
+-<systemwide> include style is being used -- IMHO wrongly.
 -
--That's because there is an error in the configure script that are not
--generating ldflags correctly, and are trying to link with -L/lib.
--
--Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+-Signed-off-by: Jan Kundr??t <jan.kundrat@cesnet.cz>
 ----
-- configure.ac | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
+- include/fdt.h    | 2 +-
+- include/libfdt.h | 2 +-
+- tools/fdtgrep.c  | 4 ++--
+- 3 files changed, 4 insertions(+), 4 deletions(-)
 -
--diff --git a/configure.ac b/configure.ac
--index 772d5fc9d87a..58d55ade48e3 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -223,7 +223,7 @@ AC_ARG_WITH([libjpeg],
--         jpeg_ok=no)
--       AC_MSG_RESULT($jpeg_ok)
--       if test "$jpeg_ok" = yes; then
---        JPEG='jpeg'; LIBJPEG='-L${libjpeg_prefix}/lib -ljpeg'
--+        JPEG='jpeg'; LIBJPEG="-L${libjpeg_prefix}/lib -ljpeg"
--       else
--         AC_MSG_WARN(*** JPEG loader will not be built (JPEG header file not found) ***)
--       fi
----
--1.9.1
+-diff --git a/include/fdt.h b/include/fdt.h
+-index 7ead62e..f40b56c 100644
+---- a/include/fdt.h
+-+++ b/include/fdt.h
+-@@ -1 +1 @@
+--#include <../lib/libfdt/fdt.h>
+-+#include "../lib/libfdt/fdt.h"
+-diff --git a/include/libfdt.h b/include/libfdt.h
+-index 10296a2..7ba13e6 100644
+---- a/include/libfdt.h
+-+++ b/include/libfdt.h
+-@@ -1 +1 @@
+--#include <../lib/libfdt/libfdt.h>
+-+#include "../lib/libfdt/libfdt.h"
+-diff --git a/tools/fdtgrep.c b/tools/fdtgrep.c
+-index f51f5f1..5897b6d 100644
+---- a/tools/fdtgrep.c
+-+++ b/tools/fdtgrep.c
+-@@ -16,8 +16,8 @@
+- #include <string.h>
+- #include <unistd.h>
+- 
+--#include <../include/libfdt.h>
+--#include <libfdt_internal.h>
+-+#include "../include/libfdt.h"
+-+#include "libfdt_internal.h"
+- 
+- /* Define DEBUG to get some debugging output on stderr */
+- #ifdef DEBUG
+--- 
+-2.14.2
 -
-diff --git a/package/libgdiplus/libgdiplus.hash b/package/libgdiplus/libgdiplus.hash
-index f7fdcb5..740fefd 100644
---- a/package/libgdiplus/libgdiplus.hash
-+++ b/package/libgdiplus/libgdiplus.hash
+diff --git a/package/uboot-tools/uboot-tools.hash b/package/uboot-tools/uboot-tools.hash
+index 82efc79..db15efb 100644
+--- a/package/uboot-tools/uboot-tools.hash
++++ b/package/uboot-tools/uboot-tools.hash
 @@ -1,2 +1,2 @@
  # Locally computed:
--sha256 98f8a8e58ed22e136c4ac6eaafbc860757f5a97901ecc0ea357e2b6e4cfa2be5 libgdiplus-4.2.tar.gz
-+sha256 ce31da0c6952c8fd160813dfa9bf4a9a871bfe7284e9e3abff9a8ee689acfe58 libgdiplus-5.4.tar.gz
-diff --git a/package/libgdiplus/libgdiplus.mk b/package/libgdiplus/libgdiplus.mk
-index 7d564b6..eb18585 100644
---- a/package/libgdiplus/libgdiplus.mk
-+++ b/package/libgdiplus/libgdiplus.mk
+-sha256  b2d15f2cf5f72e706025cde73d67247c6da8cd35f7e10891eefe7d9095089744  u-boot-2017.09.tar.bz2
++sha256  6a018fd3caf58f3dcfa23ee989a82bd35df03af71872b9dca8c6d758a0d26c05  u-boot-2017.11.tar.bz2
+diff --git a/package/uboot-tools/uboot-tools.mk b/package/uboot-tools/uboot-tools.mk
+index c936575..04b5268 100644
+--- a/package/uboot-tools/uboot-tools.mk
++++ b/package/uboot-tools/uboot-tools.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBGDIPLUS_VERSION = 4.2
-+LIBGDIPLUS_VERSION = 5.4
- LIBGDIPLUS_SITE = $(call github,mono,libgdiplus,$(LIBGDIPLUS_VERSION))
- 
- # Although there is a LICENSE file thas specifies LGPL or MPL-1.1,
-@@ -21,9 +21,12 @@ LIBGDIPLUS_AUTORECONF = YES
- 
- LIBGDIPLUS_DEPENDENCIES = xlib_libXft libglib2 cairo libpng host-pkgconf
- 
--# API changes in recent versions of libgif makes it incompatible with
--# this version of libgdiplus, so we are disabling it for now.
--LIBGDIPLUS_CONF_OPTS = --without-libgif
-+ifeq ($(BR2_PACKAGE_GIFLIB),y)
-+LIBGDIPLUS_CONF_OPTS += --with-libgif
-+LIBGDIPLUS_DEPENDENCIES += giflib
-+else
-+LIBGDIPLUS_CONF_OPTS += --without-libgif
-+endif
- 
- # there is a bug in the configure script that enables pango support
- # when passing --without-pango, so let's just not use it
+-UBOOT_TOOLS_VERSION = 2017.09
++UBOOT_TOOLS_VERSION = 2017.11
+ UBOOT_TOOLS_SOURCE = u-boot-$(UBOOT_TOOLS_VERSION).tar.bz2
+ UBOOT_TOOLS_SITE = ftp://ftp.denx.de/pub/u-boot
+ UBOOT_TOOLS_LICENSE = GPL-2.0+
