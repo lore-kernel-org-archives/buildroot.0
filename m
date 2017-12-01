@@ -1,36 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 1 Dec 2017 22:56:46 +0100
-Subject: [Buildroot] [PATCH 5/8] packages: remove "consecutive empty
- lines"
-In-Reply-To: <65d3b7e00fb26f0f0228431f055e19227dfa55b1.1511996903.git.yann.morin.1998@free.fr>
-References: <cover.1511996903.git.yann.morin.1998@free.fr>
- <65d3b7e00fb26f0f0228431f055e19227dfa55b1.1511996903.git.yann.morin.1998@free.fr>
-Message-ID: <20171201225646.0b50e5aa@windsurf.lan>
+Date: Fri, 1 Dec 2017 22:55:47 +0100
+Subject: [Buildroot] [git commit] package/am335x-pru-package: rename variable
+Message-ID: <20171201214934.D2FE27FF20@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=276ab13654bc4609ec0a119b63ab263430812770
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 30 Nov 2017 00:08:42 +0100, Yann E. MORIN wrote:
-> ... as reported by utils/check-package
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Adam Duskett <aduskett@gmail.com>
-> Cc: Yegor Yefremov<yegorslists@googlemail.com>
-> Cc: Matt Weber <matthew.weber@rockwellcollins.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  package/python3/python3.mk | 2 --
->  package/setools/setools.mk | 1 -
->  2 files changed, 3 deletions(-)
+We use package names as poor-man's namespace, so fix that.
 
-Applied to master, thanks.
+Reported by utils/check-package.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Frank Hunleth <fhunleth@troodon-software.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/am335x-pru-package/am335x-pru-package.mk | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/am335x-pru-package/am335x-pru-package.mk b/package/am335x-pru-package/am335x-pru-package.mk
+index b2e89d3..24a5df4 100644
+--- a/package/am335x-pru-package/am335x-pru-package.mk
++++ b/package/am335x-pru-package/am335x-pru-package.mk
+@@ -13,14 +13,14 @@ AM335X_PRU_PACKAGE_INSTALL_STAGING = YES
+ 
+ # The default 'all' rule builds everything, when we just need the library
+ ifeq ($(BR2_ENABLE_DEBUG),y)
+-AM335X_MAKE_TARGET = debug $(if $(BR2_STATIC_LIBS),,sodebug)
++AM335X_PRU_PACKAGE_MAKE_TARGET = debug $(if $(BR2_STATIC_LIBS),,sodebug)
+ else
+-AM335X_MAKE_TARGET = release $(if $(BR2_STATIC_LIBS),,sorelease)
++AM335X_PRU_PACKAGE_MAKE_TARGET = release $(if $(BR2_STATIC_LIBS),,sorelease)
+ endif
+ 
+ define AM335X_PRU_PACKAGE_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) CROSS_COMPILE="$(TARGET_CROSS)" \
+-		-C $(@D)/pru_sw/app_loader/interface $(AM335X_MAKE_TARGET)
++		-C $(@D)/pru_sw/app_loader/interface $(AM335X_PRU_PACKAGE_MAKE_TARGET)
+ endef
+ 
+ # 'install' installs whatever was built, and our patch removes the dependency
