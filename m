@@ -1,55 +1,29 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 1 Dec 2017 23:32:02 +0100
-Subject: [Buildroot] [PATCH v2 1/1] package/kodi-inputstream-adaptive:
- add dependencies for supported archs
-In-Reply-To: <20171201221935.9737-1-bernd.kuhls@t-online.de>
-References: <20171201221935.9737-1-bernd.kuhls@t-online.de>
-Message-ID: <20171201233202.566b7505@windsurf.lan>
+From: Julius Kriukas <julius@kriukas.lt>
+Date: Sat,  2 Dec 2017 00:30:20 +0200
+Subject: [Buildroot] [PATCH] omxplayer: add hash for license file
+Message-ID: <20171201223020.14573-1-julius@kriukas.lt>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Julius Kriukas <julius@kriukas.lt>
+---
+ package/omxplayer/omxplayer.hash | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-On Fri,  1 Dec 2017 23:19:35 +0100, Bernd Kuhls wrote:
-> kodi-inputstream-adaptive is available on a limited list of archs:
-> https://github.com/peak3d/inputstream.adaptive/blob/Krypton/wvdecrypter/cdm/build/build_config.h#L97
-> 
-> Fixes build error
-> 
-> /home/buildroot/br8/output/build/kodi-inputstream-adaptive-9af21218a87572bd4ab8d8d660c11f6295144f97/wvdecrypter/cdm/media/cdm/../../base/../base/../build/build_config.h:137:2: error: #error Please add support for your architecture in build/build_config.h
->  #error Please add support for your architecture in build/build_config.h
-> 
-> for example with this defconfig:
-> 
-> BR2_powerpc64le=y
-> BR2_powerpc_power8=y
-> BR2_TOOLCHAIN_EXTERNAL=y
-> BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-> BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.net/toolchains/tarballs/br-powerpc64le-power8-glibc-2017.05-1078-g95b1dae.tar.bz2"
-> BR2_TOOLCHAIN_EXTERNAL_GCC_6=y
-> BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_12=y
-> BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
-> BR2_TOOLCHAIN_EXTERNAL_CXX=y
-> BR2_PACKAGE_KODI=y
-> BR2_PACKAGE_KODI_INPUTSTREAM_ADAPTIVE=y
-> BR2_PACKAGE_MESA3D=y
-> BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST=y
-> BR2_PACKAGE_MESA3D_OPENGL_EGL=y
-> BR2_PACKAGE_XORG7=y
-> BR2_PACKAGE_PYTHON=y
-> BR2_PACKAGE_PYTHON_PY_ONLY=y
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
-> v2: use positive arch list (Thomas)
-
-Applied to master, thanks.
-
-Thomas
+diff --git a/package/omxplayer/omxplayer.hash b/package/omxplayer/omxplayer.hash
+index 3715e48488..ad084e2643 100644
+--- a/package/omxplayer/omxplayer.hash
++++ b/package/omxplayer/omxplayer.hash
+@@ -1,3 +1,6 @@
+-# Locally computed
++# Locally computed:
+ sha1    258316ff94a1f1e5e47a5bb1a28d324ab08871a9                          omxplayer-2ee17b22a6149a043a2e402580504f282c615373.tar.gz
+ sha256  c16498258ee78c59f9705b621e4b5b7b0673e1687d94681f9dc52451b1ceba48  omxplayer-2ee17b22a6149a043a2e402580504f282c615373.tar.gz
++
++# Hash for license file:
++sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.11.0
