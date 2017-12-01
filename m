@@ -1,59 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 1 Dec 2017 22:38:52 +0100
-Subject: [Buildroot] [PATCH 1/1] package/linknx: add optional dependency
- to libcurl again
-In-Reply-To: <20171201190523.4997-1-bernd.kuhls@t-online.de>
-References: <20171201190523.4997-1-bernd.kuhls@t-online.de>
-Message-ID: <20171201223852.736b8246@windsurf.lan>
+Date: Fri, 1 Dec 2017 22:39:07 +0100
+Subject: [Buildroot] [git commit] package/linknx: add lua as optional
+ dependency
+Message-ID: <20171201213207.D8453815FB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=c32968def5a09bf318a28a025690ed5719994a9a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri,  1 Dec 2017 20:05:23 +0100, Bernd Kuhls wrote:
-> https://git.buildroot.net/buildroot/commit/package/linknx?id=e1c9a2349006e657e76dff35706a774376921fb7
-> made libcurl a hard dependency to fix autoreconf.
-> 
-> https://git.buildroot.net/buildroot/commit/package/linknx?id=b56083099f113817edc6811e2cdd820df1c80450
-> removed autoreconf but did not re-add libcurl as optional dependency by
-> mistakenly assuming that libcurl is needed only for autoreconf.
-> 
-> Tested using this defconfig:
-> 
-> BR2_TOOLCHAIN_BUILDROOT_CXX=y
-> BR2_PACKAGE_LIBCURL=y
-> BR2_PACKAGE_LINKNX=y
-> 
-> Configure log of linknx without this patch
-> 
-> checking for curl-config... /usr/bin/curl-config
-> checking for the version of libcurl... 7.52.1
-> checking for libcurl >= version 7.14.0... yes
-> checking whether libcurl is usable... no
-> 
-> and with this patch
-> 
-> checking for curl-config... /home/buildroot/br4/output/host/i586-buildroot-linux-uclibc/sysroot/usr/bin/curl-config
-> checking for the version of libcurl... 7.57.0
-> checking for libcurl >= version 7.14.0... yes
-> checking whether libcurl is usable... yes
-> checking for curl_free... yes
-> 
-> Inspired by the fli4l project
-> https://web.nettworks.org/repo/changelog/fli4l?cs=49347
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/linknx/linknx.mk | 7 +++++++
->  1 file changed, 7 insertions(+)
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/linknx/linknx.mk | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/linknx/linknx.mk b/package/linknx/linknx.mk
+index 7965ce4..dfabef5 100644
+--- a/package/linknx/linknx.mk
++++ b/package/linknx/linknx.mk
+@@ -9,7 +9,6 @@ LINKNX_SITE = $(call github,linknx,linknx,$(LINKNX_VERSION))
+ LINKNX_LICENSE = GPL-2.0+
+ LINKNX_INSTALL_STAGING = YES
+ LINKNX_CONF_OPTS = \
+-	--without-lua \
+ 	--without-log4cpp \
+ 	--without-pth-test \
+ 	--with-pth=$(STAGING_DIR)/usr \
+@@ -25,6 +24,13 @@ else
+ LINKNX_CONF_OPTS += --without-libcurl
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LUA),y)
++LINKNX_CONF_OPTS += --with-lua
++LINKNX_DEPENDENCIES += lua
++else
++LINKNX_CONF_OPTS += --without-lua
++endif
++
+ ifeq ($(BR2_PACKAGE_MYSQL),y)
+ LINKNX_CONF_OPTS += --with-mysql=$(STAGING_DIR)/usr
+ LINKNX_DEPENDENCIES += mysql
