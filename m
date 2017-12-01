@@ -1,72 +1,73 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Fri, 01 Dec 2017 21:00:57 -0000
-Subject: [Buildroot] [git commit] package/kodi: bump version to 17.6
-Message-ID: <20171201205331.234A27FF82@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] python-treq: bump version to 17.8.0
+Message-ID: <20171201205331.3A16C7FBCD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=99dac7545f81204bad57e9ccf86a8c3c8af56cfc
+commit: https://git.buildroot.net/buildroot/commit/?id=3fa1087587f67db10b7351c4c0c94b9809e9892d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Add new runtime dependencies and add licence file checksum.
+
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk | 2 +-
- package/kodi-texturepacker/kodi-texturepacker.mk         | 2 +-
- package/kodi/kodi.hash                                   | 2 +-
- package/kodi/kodi.mk                                     | 2 +-
- 4 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-treq/Config.in        | 6 ++++--
+ package/python-treq/python-treq.hash | 5 +++--
+ package/python-treq/python-treq.mk   | 4 ++--
+ 3 files changed, 9 insertions(+), 6 deletions(-)
 
-diff --git a/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk b/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
-index 3bb67d8..fcf4888 100644
---- a/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
-+++ b/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
-@@ -6,7 +6,7 @@
+diff --git a/package/python-treq/Config.in b/package/python-treq/Config.in
+index 2047cc0..3a121ea 100644
+--- a/package/python-treq/Config.in
++++ b/package/python-treq/Config.in
+@@ -1,14 +1,16 @@
+ config BR2_PACKAGE_PYTHON_TREQ
+ 	bool "python-treq"
+ 	depends on BR2_INSTALL_LIBSTDCPP # python-pyopenssl
++	select BR2_PACKAGE_PYTHON_ATTRS # runtime
++	select BR2_PACKAGE_PYTHON_IDNA # runtime
++	select BR2_PACKAGE_PYTHON_PYOPENSSL # runtime
+ 	select BR2_PACKAGE_PYTHON_REQUESTS # runtime
+ 	select BR2_PACKAGE_PYTHON_SERVICE_IDENTITY # runtime
+ 	select BR2_PACKAGE_PYTHON_SIX # runtime
+ 	select BR2_PACKAGE_PYTHON_TWISTED # runtime
+-	select BR2_PACKAGE_PYTHON_PYOPENSSL # runtime
+ 	help
+ 	  treq is an HTTP library inspired by requests but written on
+-	  top of Twisted's Agents.  It provides a simple, higher level
++	  top of Twisted's Agents. It provides a simple, higher level
+ 	  API for making HTTP requests when using Twisted.
  
- # Not possible to directly refer to kodi variables, because of
- # first/second expansion trickery...
--KODI_JSONSCHEMABUILDER_VERSION = 17.5-Krypton
-+KODI_JSONSCHEMABUILDER_VERSION = 17.6-Krypton
- KODI_JSONSCHEMABUILDER_SITE = $(call github,xbmc,xbmc,$(KODI_JSONSCHEMABUILDER_VERSION))
- KODI_JSONSCHEMABUILDER_SOURCE = kodi-$(KODI_JSONSCHEMABUILDER_VERSION).tar.gz
- KODI_JSONSCHEMABUILDER_LICENSE = GPL-2.0
-diff --git a/package/kodi-texturepacker/kodi-texturepacker.mk b/package/kodi-texturepacker/kodi-texturepacker.mk
-index 77a9e3b..31e3580 100644
---- a/package/kodi-texturepacker/kodi-texturepacker.mk
-+++ b/package/kodi-texturepacker/kodi-texturepacker.mk
-@@ -6,7 +6,7 @@
+ 	  https://github.com/twisted/treq
+diff --git a/package/python-treq/python-treq.hash b/package/python-treq/python-treq.hash
+index a961b80..14f3946 100644
+--- a/package/python-treq/python-treq.hash
++++ b/package/python-treq/python-treq.hash
+@@ -1,3 +1,4 @@
+ # md5 from https://pypi.python.org/pypi/treq/json, sha256 locally computed
+-md5 421dea5bc8294c14aa24d64628a2eaea treq-16.12.0.tar.gz
+-sha256 b008edc81157969ad2bf23bece083adedb0adf249368a3896bb5ac9a871b91a9 treq-16.12.0.tar.gz
++md5	7e1f5079b85ec104d4759fc0fb89071e  treq-17.8.0.tar.gz
++sha256	ef72d2d5e0b24bdf29267b608fa33df0ac401743af8524438b073e1fb2b66f16  treq-17.8.0.tar.gz
++sha256  7cc1b65e1937b1cc07052bb864ec96d8e5fd413400c0842e5b89a8201a600293  LICENSE
+diff --git a/package/python-treq/python-treq.mk b/package/python-treq/python-treq.mk
+index 051b8ff..73c4715 100644
+--- a/package/python-treq/python-treq.mk
++++ b/package/python-treq/python-treq.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
- # Not possible to directly refer to kodi variables, because of
- # first/second expansion trickery...
--KODI_TEXTUREPACKER_VERSION = 17.5-Krypton
-+KODI_TEXTUREPACKER_VERSION = 17.6-Krypton
- KODI_TEXTUREPACKER_SITE = $(call github,xbmc,xbmc,$(KODI_TEXTUREPACKER_VERSION))
- KODI_TEXTUREPACKER_SOURCE = kodi-$(KODI_TEXTUREPACKER_VERSION).tar.gz
- KODI_TEXTUREPACKER_LICENSE = GPL-2.0
-diff --git a/package/kodi/kodi.hash b/package/kodi/kodi.hash
-index ed3aea0..23a11ca 100644
---- a/package/kodi/kodi.hash
-+++ b/package/kodi/kodi.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256 84c64acc270b9e845a67fbbe481ae5ddeb9b4568d76e42f2d5f9160fe0ce2de2  kodi-17.5-Krypton.tar.gz
-+sha256 c8312fe92e5bab1cdac1da93d60baed88fa1574146c50c44e3c86d01671c2b1d  kodi-17.6-Krypton.tar.gz
- # Locally computed - libdvdcss
- sha256 b6eb2d929ff56cb051152c32010afc5e7cf5fe8c5ae32dca412a2b46b6b57e34  2f12236.tar.gz
- # Locally computed - libdvdnav
-diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
-index da11839..93f4dd4 100644
---- a/package/kodi/kodi.mk
-+++ b/package/kodi/kodi.mk
-@@ -6,7 +6,7 @@
- 
- # When updating the version, please also update kodi-jsonschemabuilder
- # and kodi-texturepacker
--KODI_VERSION = 17.5-Krypton
-+KODI_VERSION = 17.6-Krypton
- KODI_SITE = $(call github,xbmc,xbmc,$(KODI_VERSION))
- KODI_LICENSE = GPL-2.0
- KODI_LICENSE_FILES = LICENSE.GPL
+-PYTHON_TREQ_VERSION = 16.12.0
++PYTHON_TREQ_VERSION = 17.8.0
+ PYTHON_TREQ_SOURCE = treq-$(PYTHON_TREQ_VERSION).tar.gz
+-PYTHON_TREQ_SITE = https://pypi.python.org/packages/26/4b/303880fb5bab1111654df2df0f201f4ba038221bdc52f5a395f0abfc0cb1
++PYTHON_TREQ_SITE = https://pypi.python.org/packages/11/3e/1014f26bfd4d07db015ad48384446b3bdc4de4bbdd2eba3be7fbb149cc44
+ PYTHON_TREQ_LICENSE = MIT
+ PYTHON_TREQ_LICENSE_FILES = LICENSE
+ PYTHON_TREQ_SETUP_TYPE = setuptools
