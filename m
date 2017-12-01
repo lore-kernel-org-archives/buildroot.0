@@ -1,62 +1,43 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Fri,  1 Dec 2017 08:30:27 +0100
-Subject: [Buildroot] [PATCH] uboot-tools: fix dtc invocation
-Message-ID: <20171201073027.23072-1-yegorslists@googlemail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 1 Dec 2017 09:20:28 +0100
+Subject: [Buildroot] [PATCH 1/1] erlang: bump to version 20.0
+In-Reply-To: <CA+-urNSgFcRjQz1pce9iG-7dxw0_BLC5M1Jt6cvLamqfarstGw@mail.gmail.com>
+References: <20171130154202.437-1-johan.oudinet@gmail.com>
+ <CA+-urNSgFcRjQz1pce9iG-7dxw0_BLC5M1Jt6cvLamqfarstGw@mail.gmail.com>
+Message-ID: <20171201092028.6ebf91b6@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+Hello,
 
-In Buildroot we don't perform Kconfig configuration for
-u-boot-tools, hence CONFIG_MKIMAGE_DTC_PATH is empty.
+On Thu, 30 Nov 2017 11:31:53 -0500, Frank Hunleth wrote:
 
-Specify MKIMAGE_DTC as "dtc" to restore previous behavior.
+> On Thu, Nov 30, 2017 at 10:42 AM, Johan Oudinet <johan.oudinet@gmail.com> wrote:
+> >
+> > This change bumps the Erlang version from 19.3 to 20.0. As a new major
+> > release, there are a few incompatibilities. Details are here:
+> > http://www.erlang.org/news/114  
+> 
+> Thanks for doing this. I had been holding on to a nearly identical
+> patch, but it breaks several erlang packages currently in Buildroot.
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- .../0005-Specify-dtc-binary-statically.patch       | 31 ++++++++++++++++++++++
- 1 file changed, 31 insertions(+)
- create mode 100644 package/uboot-tools/0005-Specify-dtc-binary-statically.patch
+What are those packages ?
 
-diff --git a/package/uboot-tools/0005-Specify-dtc-binary-statically.patch b/package/uboot-tools/0005-Specify-dtc-binary-statically.patch
-new file mode 100644
-index 0000000000..75e81ccc85
---- /dev/null
-+++ b/package/uboot-tools/0005-Specify-dtc-binary-statically.patch
-@@ -0,0 +1,31 @@
-+From ef8afdfd4701c3a7f416efcc173dfb7907ab355b Mon Sep 17 00:00:00 2001
-+From: Yegor Yefremov <yegorslists@googlemail.com>
-+Date: Fri, 1 Dec 2017 07:53:40 +0100
-+Subject: [PATCH 5/5] Specify dtc binary statically
-+
-+In Buildroot we don't perform Kconfig configuration for
-+u-boot-tools, hence CONFIG_MKIMAGE_DTC_PATH is empty.
-+
-+Specify MKIMAGE_DTC as "dtc" to restore previous behavior.
-+
-+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-+---
-+ tools/Makefile | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/tools/Makefile b/tools/Makefile
-+index 9c58a01..8f32db9 100644
-+--- a/tools/Makefile
-++++ b/tools/Makefile
-+@@ -172,7 +172,7 @@ HOSTCFLAGS_rsa-sign.o += -Wno-deprecated-declarations
-+ endif
-+ endif
-+ 
-+-HOSTCFLAGS_fit_image.o += -DMKIMAGE_DTC=\"$(CONFIG_MKIMAGE_DTC_PATH)\"
-++HOSTCFLAGS_fit_image.o += -DMKIMAGE_DTC=\"dtc\"
-+ 
-+ HOSTLOADLIBES_dumpimage := $(HOSTLOADLIBES_mkimage)
-+ HOSTLOADLIBES_fit_info := $(HOSTLOADLIBES_mkimage)
-+-- 
-+2.1.4
-+
+> It didn't look easy to fix, and then I got busy. As I'm sure that
+> you're aware, ejabberd builds fine. I don't think there are many of us
+> Erlang/Buildroot users, so if this still breaks erlang packages that
+> you don't use, I'm fine with removing them.
+
+We definitely need to at least identify those packages. Is this a build
+time breakage ? Run-time breakage ?
+
+Best regards,
+
+Thomas
 -- 
-2.11.0
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
