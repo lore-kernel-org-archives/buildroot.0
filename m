@@ -1,224 +1,163 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 29 Nov 2017 22:22:14 +0100
-Subject: [Buildroot] [git commit] Revert "package/qt5webkit-examples: remove
- obsolete package"
-Message-ID: <20171201205340.A5F8C80E11@busybox.osuosl.org>
+From: buildroot.org at fln.lt <buildroot.org@fln.lt>
+Date: Fri, 1 Dec 2017 02:02:30 +0200
+Subject: [Buildroot] [PATCH] omxplayer: bump to version 2ee17b2
+Message-ID: <fad21345-7cfa-4f09-e1b2-f147bc6e2e1a@fln.lt>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=43e1d099b4fca37ce7cbbf3dd41fe4330610b723
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+This patch updates omxplayer package to the latest commit on master.
 
-This reverts commit 940bfe2f4336a3fea1ec6805db1f90ce83bd4a78 with the
-following changes:
+Latest omxplayer version no longer have broken cross-compile support in
+Makefile.include file, but still contains some hard-coded include paths
+that needs to be replaced before building.
 
- - new hashes for 5.6.3 and 5.9.1 (there is no 5.9.2).
- - BR2_PACKAGE_QT5BASE_LICENSE_APPROVED has been removed
- - add GPL-3 to licences
- - uses SPDX identifier for licences
- - add missing dependencies (qt5base, qt5webkit, qt5declarative)
- - removes /usr when qmake host-tools is invoked at configure
-
-Signed-off-by: Ga??l PORTAY <gael.portay@savoirfairelinux.com>
-[Thomas: add entry in the DEVELOPERS file.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Julius Kriukas <julius@kriukas.lt>
 ---
- Config.in.legacy                                   |  7 ---
- DEVELOPERS                                         |  1 +
- package/qt5/Config.in                              |  1 +
- .../qt5webkit-examples/0001-Build-examples.patch   | 52 +++++++++++++++++++++
- package/qt5/qt5webkit-examples/Config.in           | 10 ++++
- .../qt5/qt5webkit-examples/qt5webkit-examples.hash |  5 ++
- .../qt5/qt5webkit-examples/qt5webkit-examples.mk   | 54 ++++++++++++++++++++++
- 7 files changed, 123 insertions(+), 7 deletions(-)
+ .../0001-Makefiles-clean-up-the-cruft.patch        | 67 ----------------------
+ package/omxplayer/0001-cleanup-Makefile.patch      | 18 ++++++
+ package/omxplayer/omxplayer.hash                   |  4 +-
+ package/omxplayer/omxplayer.mk                     |  9 +--
+ 4 files changed, 21 insertions(+), 77 deletions(-)
+ delete mode 100644 package/omxplayer/0001-Makefiles-clean-up-the-cruft.patch
+ create mode 100644 package/omxplayer/0001-cleanup-Makefile.patch
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index c8db9fa..decbace 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -1154,13 +1154,6 @@ config BR2_x86_i386
- 	  The support for the i386 processors of the x86 architecture
- 	  has been removed.
- 
--config BR2_PACKAGE_QT5WEBKIT_EXAMPLES
--	bool "qt5webkit-examples package removed"
--	select BR2_LEGACY
--	help
--	  The qt5webkit-examples package has been removed, since it
--	  was removed from upstream starting from Qt 5.6.
+diff --git a/package/omxplayer/0001-Makefiles-clean-up-the-cruft.patch b/package/omxplayer/0001-Makefiles-clean-up-the-cruft.patch
+deleted file mode 100644
+index 2dc6166975..0000000000
+--- a/package/omxplayer/0001-Makefiles-clean-up-the-cruft.patch
++++ /dev/null
+@@ -1,67 +0,0 @@
+-From 563dafc1129848419482b540d149d0b8687cac1e Mon Sep 17 00:00:00 2001
+-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+-Date: Sun, 10 Apr 2016 16:22:53 +0200
+-Subject: [PATCH] Makefiles: clean up the cruft
 -
- config BR2_PACKAGE_QT5QUICK1
- 	bool "qt5quick1 package removed"
- 	select BR2_LEGACY
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 4057438..8bd7d85 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -679,6 +679,7 @@ F:	package/zxing-cpp/
- N:	Ga??l Portay <gael.portay@savoirfairelinux.com>
- F:	package/qt5/qt5virtualkeyboard/
- F:	package/qt5/qt5webengine/
-+F:	package/qt5/qt5webkit-examples/
- 
- N:	Gary Bisson <gary.bisson@boundarydevices.com>
- F:	board/boundarydevices/
-diff --git a/package/qt5/Config.in b/package/qt5/Config.in
-index 8513c36..0136e11 100644
---- a/package/qt5/Config.in
-+++ b/package/qt5/Config.in
-@@ -80,6 +80,7 @@ source "package/qt5/qt5virtualkeyboard/Config.in"
- source "package/qt5/qt5wayland/Config.in"
- source "package/qt5/qt5webchannel/Config.in"
- source "package/qt5/qt5webkit/Config.in"
-+source "package/qt5/qt5webkit-examples/Config.in"
- source "package/qt5/qt5webengine/Config.in"
- source "package/qt5/qt5websockets/Config.in"
- source "package/qt5/qt5x11extras/Config.in"
-diff --git a/package/qt5/qt5webkit-examples/0001-Build-examples.patch b/package/qt5/qt5webkit-examples/0001-Build-examples.patch
+-Most of the variables that Makefile.include tries (but fails) to set,
+-are already available from Buildroot's variables:
+-  - AR, AS, CC, CXX, OBJDUMP...
+-  - CFLAGS, CXXFLAGS, CPPFLAGS...
+-
+-This leaves us with a few select variables that define include and
+-library paths local to the omxplayer package, plus a few optimisations.
+-
+-Finally, also remove hard-coded, absolute paths pointing to the host
+-system (won't work for cross-compilation, so our paranoid wrapper would
+-catch those paths).
+-
+-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+----
+- Makefile         |  2 +-
+- Makefile.include | 20 ++------------------
+- 2 files changed, 3 insertions(+), 19 deletions(-)
+-
+-diff --git a/Makefile b/Makefile
+-index bcfadfb..3dc1a03 100644
+---- a/Makefile
+-+++ b/Makefile
+-@@ -4,7 +4,7 @@ CFLAGS+=-std=c++0x -D__STDC_CONSTANT_MACROS -D__STDC_LIMIT_MACROS -DTARGET_POSIX
+- 
+- LDFLAGS+=-L./ -Lffmpeg_compiled/usr/local/lib/ -lc -lWFC -lGLESv2 -lEGL -lbcm_host -lopenmaxil -lfreetype -lz
+- 
+--INCLUDES+=-I./ -Ilinux -Iffmpeg_compiled/usr/local/include/ -I /usr/include/dbus-1.0 -I /usr/lib/arm-linux-gnueabihf/dbus-1.0/include
+-+INCLUDES+=-I./ -Ilinux -Iffmpeg_compiled/usr/local/include/
+- 
+- DIST ?= omxplayer-dist
+- 
+-diff --git a/Makefile.include b/Makefile.include
+-index 58e9560..79ca277 100644
+---- a/Makefile.include
+-+++ b/Makefile.include
+-@@ -20,21 +20,5 @@ endif
+- 
+- JOBS=7
+- 
+--CFLAGS			:= -isystem$(PREFIX)/include
+--CXXFLAGS		:= $(CFLAGS)
+--CPPFLAGS		:= $(CFLAGS)
+--LDFLAGS			:= -L$(BUILDROOT)/lib
+--LD					:= $(TOOLCHAIN)/bin/$(HOST)-ld --sysroot=$(SYSROOT)
+--CC					:= $(TOOLCHAIN)/bin/$(HOST)-gcc --sysroot=$(SYSROOT)
+--CXX         := $(TOOLCHAIN)/bin/$(HOST)-g++ --sysroot=$(SYSROOT)
+--OBJDUMP			:= $(TOOLCHAIN)/bin/$(HOST)-objdump
+--RANLIB			:= $(TOOLCHAIN)/bin/$(HOST)-ranlib
+--STRIP				:= $(TOOLCHAIN)/bin/$(HOST)-strip
+--AR 					:= $(TOOLCHAIN)/bin/$(HOST)-ar
+--CXXCP 			:= $(CXX) -E
+--PATH 				:= $(PREFIX)/bin:$(BUILDROOT)/output/host/usr/bin:$(PATH)
+--
+--CFLAGS			+= -pipe -mfloat-abi=$(FLOAT) -mcpu=arm1176jzf-s -fomit-frame-pointer -mabi=aapcs-linux -mtune=arm1176jzf-s -mfpu=vfp -Wno-psabi -mno-apcs-stack-check -g -mstructure-size-boundary=32 -mno-sched-prolog
+--LDFLAGS			+= -L$(SDKSTAGE)/lib -L$(SDKSTAGE)/usr/lib -L$(SDKSTAGE)/opt/vc/lib/ -Lpcre/build
+--#INCLUDES		+= -isystem$(SDKSTAGE)/usr/include -isystem$(SDKSTAGE)/opt/vc/include -isystem$(SYSROOT)/usr/include -isystem$(SDKSTAGE)/opt/vc/include/interface/vcos/pthreads -isystem$(SDKSTAGE)/usr/include/freetype2
+--INCLUDES		+= -isystem$(SDKSTAGE)/opt/vc/include -isystem$(SYSROOT)/usr/include -isystem$(SDKSTAGE)/opt/vc/include/interface/vcos/pthreads -Ipcre/build -Iboost-trunk -Ifreetype2/include
+-+CFLAGS			+= -fomit-frame-pointer -Wno-psabi -mno-apcs-stack-check    \
+-+			   -mstructure-size-boundary=32 -mno-sched-prolog
+--- 
+-1.9.1
+-
+diff --git a/package/omxplayer/0001-cleanup-Makefile.patch b/package/omxplayer/0001-cleanup-Makefile.patch
 new file mode 100644
-index 0000000..6303006
+index 0000000000..d91e2e4fe9
 --- /dev/null
-+++ b/package/qt5/qt5webkit-examples/0001-Build-examples.patch
-@@ -0,0 +1,52 @@
-+From 78f558df35860484711a600d155ae7a13ebf44b2 Mon Sep 17 00:00:00 2001
-+From: =?utf-8?q?Ga=C3=ABl=20PORTAY?= <gael.portay@savoirfairelinux.com>
-+Date: Tue, 28 Nov 2017 23:14:42 -0500
-+Subject: [PATCH 1/1] Build examples
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=utf-8
-+Content-Transfer-Encoding: 8bit
-+
-+This patch improves the qt5webkit examples build for 2 aspects:
-+
-+	- Allows to build even if qt5base examples are not enabled
-+	- Builds xmlpatterns example only if the qt5xmlpattern package
-+	has been built
-+
-+Signed-off-by: Massimo Callegari <massimocallegari@yahoo.it>
-+Signed-off-by: Ga??l PORTAY <gael.portay@savoirfairelinux.com>
-+[gportay: build imageanalyzer example if concurrent module is built]
-+---
-+ examples/webkitwidgets/webkitwidgets.pro | 7 ++++---
-+ qtwebkit-examples.pro                    | 1 +
-+ 2 files changed, 5 insertions(+), 3 deletions(-)
-+
-+diff --git a/examples/webkitwidgets/webkitwidgets.pro b/examples/webkitwidgets/webkitwidgets.pro
-+index ab20df4..67f6785 100644
-+--- a/examples/webkitwidgets/webkitwidgets.pro
-++++ b/examples/webkitwidgets/webkitwidgets.pro
-+@@ -4,9 +4,10 @@ SUBDIRS +=  domtraversal \
-+             previewer \
-+             fancybrowser \
-+             simpleselector \
-+-            imageanalyzer \
-+             framecapture \
-+             browser \
-+             embedded \
-+-            scroller \
-+-            xmlpatterns
-++            scroller
-++
-++qtHaveModule(xmlpatterns): SUBDIRS += xmlpatterns
-++qtHaveModule(concurrent): SUBDIRS += imageanalyzer
-+diff --git a/qtwebkit-examples.pro b/qtwebkit-examples.pro
-+index 3fcecf1..2ade7ff 100644
-+--- a/qtwebkit-examples.pro
-++++ b/qtwebkit-examples.pro
-+@@ -3,3 +3,4 @@ requires(qtHaveModule(webkit))
-+ load(qt_parts)
++++ b/package/omxplayer/0001-cleanup-Makefile.patch
+@@ -0,0 +1,18 @@
++diff --git a/Makefile b/Makefile
++index 5f4e414..53fa1bc 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -1,10 +1,10 @@
++-CFLAGS=-pipe -mfloat-abi=hard -mcpu=arm1176jzf-s -fomit-frame-pointer -mabi=aapcs-linux -mtune=arm1176jzf-s -mfpu=vfp -Wno-psabi -mno-apcs-stack-check -g -mstructure-size-boundary=32 -mno-sched-prolog
+++CFLAGS+=-fomit-frame-pointer -Wno-psabi -mno-apcs-stack-check -g -mstructure-size-boundary=32 -mno-sched-prolog
++ CFLAGS+=-std=c++0x -D__STDC_CONSTANT_MACROS -D__STDC_LIMIT_MACROS -DTARGET_POSIX -DTARGET_LINUX -fPIC -DPIC -D_REENTRANT -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -DHAVE_CMAKE_CONFIG -D__VIDEOCORE4__ -U_FORTIFY_SOURCE -Wall -DHAVE_OMXLIB -DUSE_EXTERNAL_FFMPEG  -DHAVE_LIBAVCODEC_AVCODEC_H -DHAVE_LIBAVUTIL_OPT_H -DHAVE_LIBAVUTIL_MEM_H -DHAVE_LIBAVUTIL_AVUTIL_H -DHAVE_LIBAVFORMAT_AVFORMAT_H -DHAVE_LIBAVFILTER_AVFILTER_H -DHAVE_LIBSWRESAMPLE_SWRESAMPLE_H -DOMX -DOMX_SKIP64BIT -ftree-vectorize -DUSE_EXTERNAL_OMX -DTARGET_RASPBERRY_PI -DUSE_EXTERNAL_LIBBCM_HOST
 + 
-+ SUBDIRS += doc
-++SUBDIRS += examples
-+-- 
-+2.15.0
-+
-diff --git a/package/qt5/qt5webkit-examples/Config.in b/package/qt5/qt5webkit-examples/Config.in
-new file mode 100644
-index 0000000..47bbcba
---- /dev/null
-+++ b/package/qt5/qt5webkit-examples/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_QT5WEBKIT_EXAMPLES
-+	bool "qt5webkit-examples"
-+	depends on BR2_PACKAGE_QT5WEBKIT
-+	help
-+	  Qt is a cross-platform application and UI framework for
-+	  developers using C++.
-+
-+	  This package contains examples for the qt5webkit module.
-+
-+	  http://qt.io
-diff --git a/package/qt5/qt5webkit-examples/qt5webkit-examples.hash b/package/qt5/qt5webkit-examples/qt5webkit-examples.hash
-new file mode 100644
-index 0000000..2af1efb
---- /dev/null
-+++ b/package/qt5/qt5webkit-examples/qt5webkit-examples.hash
-@@ -0,0 +1,5 @@
-+# Hash from: http://download.qt.io/community_releases/5.6/5.6.3/qtwebkit-examples-opensource-src-5.6.3.tar.xz.mirrorlist
-+sha256 2d6ce7146298d03b443cca4390bbfee17c4c0b08a31efcbf9fe0732291a6169e qtwebkit-examples-opensource-src-5.6.3.tar.xz
-+
-+# Hash from: http://download.qt.io/official_releases/qt/5.9/5.9.1/submodules/qtwebkit-examples-opensource-src-5.9.1.tar.xz.mirrorlist
-+sha256 e4ce4de6b468243abad2baabbe8ddfb05d25b186529bfe88cb8662fc983f54d0 qtwebkit-examples-opensource-src-5.9.1.tar.xz
-diff --git a/package/qt5/qt5webkit-examples/qt5webkit-examples.mk b/package/qt5/qt5webkit-examples/qt5webkit-examples.mk
-new file mode 100644
-index 0000000..59e9248
---- /dev/null
-+++ b/package/qt5/qt5webkit-examples/qt5webkit-examples.mk
-@@ -0,0 +1,54 @@
-+################################################################################
-+#
-+# qt5webkit-examples
-+#
-+################################################################################
-+
-+# no 5.9.2 package available, fall back to 5.9.1 version
-+ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
-+QT5WEBKIT_EXAMPLES_VERSION = 5.9.1
-+QT5WEBKIT_EXAMPLES_SITE = http://download.qt.io/official_releases/qt/5.9/5.9.1/submodules
-+else
-+QT5WEBKIT_EXAMPLES_VERSION = $(QT5_VERSION)
-+QT5WEBKIT_EXAMPLES_SITE = http://download.qt.io/community_releases/5.6/$(QT5_VERSION)
-+endif
-+
-+QT5WEBKIT_EXAMPLES_SOURCE = qtwebkit-examples-opensource-src-$(QT5WEBKIT_VERSION).tar.xz
-+QT5WEBKIT_EXAMPLES_DEPENDENCIES = qt5base qt5webkit
-+
-+QT5WEBKIT_EXAMPLES_LICENSE_FILES = LICENSE.LGPLv21 LICENSE.LGPLv3 LICENSE.GPLv2 LICENSE.GPLv3
-+
-+QT5WEBKIT_EXAMPLES_LICENSE = LGPL-2.1 with exception or LGPL-3 or GPL-2 or GPL-3
-+# Source files contain references to LGPL_EXCEPTION.txt but it is not included
-+# in the archive.
-+
-+ifeq ($(BR2_PACKAGE_QT5XMLPATTERNS),y)
-+QT5WEBKIT_EXAMPLES_DEPENDENCIES += qt5xmlpatterns
-+endif
-+
-+define QT5WEBKIT_EXAMPLES_CONFIGURE_CMDS
-+	(cd $(@D); $(TARGET_MAKE_ENV) $(HOST_DIR)/bin/qmake)
-+endef
-+
-+define QT5WEBKIT_EXAMPLES_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
-+endef
-+
-+define QT5WEBKIT_EXAMPLES_INSTALL_STAGING_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install
-+endef
-+
-+ifeq ($(BR2_PACKAGE_QT5DECLARATIVE),y)
-+QT5WEBKIT_DEPENDENCIES += qt5declarative
-+define QT5WEBKIT_EXAMPLES_INSTALL_QML
-+	cp -dpfr $(@D)/examples/webkitqml $(TARGET_DIR)/usr/lib/qt/examples
-+endef
-+endif
-+
-+define QT5WEBKIT_EXAMPLES_INSTALL_TARGET_CMDS
-+	mkdir -p $(TARGET_DIR)/usr/lib/qt/examples
-+	cp -dpfr $(@D)/examples/webkitwidgets $(TARGET_DIR)/usr/lib/qt/examples
-+	$(QT5WEBKIT_EXAMPLES_INSTALL_QML)
-+endef
-+
-+$(eval $(generic-package))
++ LDFLAGS=-L$(SDKSTAGE)/opt/vc/lib/
++-LDFLAGS+=-L./ -Lffmpeg_compiled/usr/local/lib/ -lc -lbrcmGLESv2 -lbrcmEGL -lbcm_host -lopenmaxil -lfreetype -lz -lasound
+++LDFLAGS+=-L./ -lc -lbrcmGLESv2 -lbrcmEGL -lbcm_host -lopenmaxil -lfreetype -lz -lasound
++ 
++-INCLUDES+=-I./ -Ilinux -Iffmpeg_compiled/usr/local/include/ -I /usr/include/dbus-1.0 -I /usr/lib/arm-linux-gnueabihf/dbus-1.0/include -I/usr/include/freetype2 -isystem$(SDKSTAGE)/opt/vc/include -isystem$(SDKSTAGE)/opt/vc/include/interface/vcos/pthreads
+++INCLUDES+=-I./ -Ilinux
++ 
++ DIST ?= omxplayer-dist
++ STRIP ?= strip
+diff --git a/package/omxplayer/omxplayer.hash b/package/omxplayer/omxplayer.hash
+index 4ee215b767..3715e48488 100644
+--- a/package/omxplayer/omxplayer.hash
++++ b/package/omxplayer/omxplayer.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha1    23eb444757e445c127a7114ae233569cac64f984                          omxplayer-6c90c7503ba4658221774759edf7f2ae816711de.tar.gz
+-sha256  93ebfd654314231749936e4fc09f5ec4a361806cdb640d7579a5106921e00299  omxplayer-6c90c7503ba4658221774759edf7f2ae816711de.tar.gz
++sha1    258316ff94a1f1e5e47a5bb1a28d324ab08871a9                          omxplayer-2ee17b22a6149a043a2e402580504f282c615373.tar.gz
++sha256  c16498258ee78c59f9705b621e4b5b7b0673e1687d94681f9dc52451b1ceba48  omxplayer-2ee17b22a6149a043a2e402580504f282c615373.tar.gz
+diff --git a/package/omxplayer/omxplayer.mk b/package/omxplayer/omxplayer.mk
+index 9bb58778c2..6e92250438 100644
+--- a/package/omxplayer/omxplayer.mk
++++ b/package/omxplayer/omxplayer.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-OMXPLAYER_VERSION = 6c90c7503ba4658221774759edf7f2ae816711de
++OMXPLAYER_VERSION = 2ee17b22a6149a043a2e402580504f282c615373
+ OMXPLAYER_SITE = $(call github,popcornmix,omxplayer,$(OMXPLAYER_VERSION))
+ OMXPLAYER_LICENSE = GPL-2.0+
+ OMXPLAYER_LICENSE_FILES = COPYING
+@@ -23,14 +23,7 @@ OMXPLAYER_EXTRA_CFLAGS = \
+ # procedure is, well, tainted. Fix this by forcing the real,
+ # correct values.
+ OMXPLAYER_MAKE_ENV = \
+-	USE_BUILDROOT=1 \
+-	BUILDROOT=$(TOP_DIR) \
+ 	SDKSTAGE=$(STAGING_DIR) \
+-	TARGETFS=$(TARGET_DIR) \
+-	TOOLCHAIN=$(HOST_DIR) \
+-	HOST=$(GNU_TARGET_NAME) \
+-	SYSROOT=$(STAGING_DIR) \
+-	JOBS=$(PARALLEL_JOBS) \
+ 	$(TARGET_CONFIGURE_OPTS) \
+ 	STRIP=true \
+ 	CFLAGS="$(TARGET_CFLAGS) $(OMXPLAYER_EXTRA_CFLAGS)"
+-- 
+2.11.0
