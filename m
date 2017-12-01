@@ -1,144 +1,70 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 1 Dec 2017 23:12:01 +0100
-Subject: [Buildroot] [git commit] qt5: remove Qt Quick dependency on opengl
-Message-ID: <20171201221830.7BA2580FBE@busybox.osuosl.org>
+Date: Fri, 1 Dec 2017 23:24:54 +0100
+Subject: [Buildroot] [git commit] qt5quickcontrols2: fix examples compile
+ without Qt widgets module
+Message-ID: <20171201221830.870D081D38@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5eb43c83c10aa9cd5cdf2302af0682b3d9978ecc
+commit: https://git.buildroot.net/buildroot/commit/?id=573a4a0bc8b14291255e06ac709566220fd3cdf9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Qt Quick should no longer depend on opengl, and instead fallback to
-the limited functionality software renderer as a replacement [1] when
-not available.
+Add upstream suggested patch to fix flatstyle example configure
+(needs widgets module).
 
-[1] http://blog.qt.io/blog/2016/08/15/the-qt-quick-graphics-stack-in-qt-5-8/
+Fixes:
 
-Cc: Peter Seiderer <ps.report@gmx.net>
-Cc: Julien Corjon <corjon.j@ecagroup.com>
-Signed-off-by: Joshua Henderson <joshua.henderson@microchip.com>
-Signed-off-by: S??bastien Szymanski <sebastien.szymanski@armadeus.com>
-Tested-by: Peter Seiderer <ps.report@gmx.net>
-[Thomas: drop qt5declarative patch, since we have bumped to 5.9.3,
-which contains the patch.]
+  cd flatstyle/ && ( test -e Makefile || .../host/bin/qmake -o Makefile .../build/qt5quickcontrols2-5.9.2/examples/quickcontrols2/flatstyle/flatstyle.pro ) && make -f Makefile
+  Project ERROR: Unknown module(s) in QT: widgets
+  make[1]: *** [Makefile:202: sub-flatstyle-make_first] Error 3
+  make[1]: Leaving directory '.../build/qt5quickcontrols2-5.9.2/examples/quickcontrols2'
+  make: *** [Makefile:45: sub-quickcontrols2-make_first] Error 2
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+[Thomas: move patch to 5.9.3 directory, since we've bumped
+qtquickcontrols2 since then.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../0002-examples-qquickviewcomparison-and-quickwidget-needs-.patch | 6 ++++++
- package/qt5/qt5declarative/Config.in                                | 6 +++---
- package/qt5/qt5multimedia/qt5multimedia.mk                          | 3 ++-
- package/qt5/qt5quickcontrols/Config.in                              | 4 ++--
- package/qt5/qt5quickcontrols2/Config.in                             | 4 ++--
- package/qt5/qt5virtualkeyboard/Config.in                            | 4 ++--
- 6 files changed, 17 insertions(+), 10 deletions(-)
+ ...01-Example-flatstyle-needs-widgets-module.patch | 31 ++++++++++++++++++++++
+ 1 file changed, 31 insertions(+)
 
-diff --git a/package/qt5/qt5declarative/5.6.3/0002-examples-qquickviewcomparison-and-quickwidget-needs-.patch b/package/qt5/qt5declarative/5.6.3/0002-examples-qquickviewcomparison-and-quickwidget-needs-.patch
-index 875634f..7959d38 100644
---- a/package/qt5/qt5declarative/5.6.3/0002-examples-qquickviewcomparison-and-quickwidget-needs-.patch
-+++ b/package/qt5/qt5declarative/5.6.3/0002-examples-qquickviewcomparison-and-quickwidget-needs-.patch
-@@ -34,6 +34,12 @@ Fixes:
- 
- Signed-off-by: Peter Seiderer <ps.report@gmx.net>
- ---
+diff --git a/package/qt5/qt5quickcontrols2/5.9.3/0001-Example-flatstyle-needs-widgets-module.patch b/package/qt5/qt5quickcontrols2/5.9.3/0001-Example-flatstyle-needs-widgets-module.patch
+new file mode 100644
+index 0000000..17e3b36
+--- /dev/null
++++ b/package/qt5/qt5quickcontrols2/5.9.3/0001-Example-flatstyle-needs-widgets-module.patch
+@@ -0,0 +1,31 @@
++From 10d92524cd6736c767c9ce55a1d9b9f1a2a69a9f Mon Sep 17 00:00:00 2001
++From: Peter Seiderer <ps.report@gmx.net>
++Date: Sat, 25 Nov 2017 22:26:58 +0100
++Subject: [PATCH] Example flatstyle needs widgets module
 +
-+Note:
-+An equivalent patch is upstream for qt5declarative 5.10, but it is not suitable for
-+backporting to this version due to license differences.
++Fixes compile with disabled widgets module.
 +
++Task-number: QTBUG-64761
++Change-Id: I743884d77d51e89061d87cab006bab0cafc9ddb7
++
++Upstream: https://codereview.qt-project.org/212583
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 +---
-  examples/quick/quick.pro | 5 ++++-
-  1 file changed, 4 insertions(+), 1 deletion(-)
- 
-diff --git a/package/qt5/qt5declarative/Config.in b/package/qt5/qt5declarative/Config.in
-index 5384b5f..3a353a8 100644
---- a/package/qt5/qt5declarative/Config.in
-+++ b/package/qt5/qt5declarative/Config.in
-@@ -17,11 +17,11 @@ config BR2_PACKAGE_QT5DECLARATIVE
- if BR2_PACKAGE_QT5DECLARATIVE
- 
- comment "quick module needs an OpenGL-capable backend"
--	depends on !BR2_PACKAGE_QT5_GL_AVAILABLE
-+	depends on !BR2_PACKAGE_QT5_GL_AVAILABLE && !BR2_PACKAGE_QT5_VERSION_LATEST
- 
- config BR2_PACKAGE_QT5DECLARATIVE_QUICK
- 	bool "quick module"
--	depends on BR2_PACKAGE_QT5_GL_AVAILABLE
--	select BR2_PACKAGE_QT5BASE_OPENGL
-+	depends on BR2_PACKAGE_QT5_GL_AVAILABLE || BR2_PACKAGE_QT5_VERSION_LATEST
-+	select BR2_PACKAGE_QT5BASE_OPENGL if BR2_PACKAGE_QT5_GL_AVAILABLE
- 
- endif
-diff --git a/package/qt5/qt5multimedia/qt5multimedia.mk b/package/qt5/qt5multimedia/qt5multimedia.mk
-index 835142e..6df96bc 100644
---- a/package/qt5/qt5multimedia/qt5multimedia.mk
-+++ b/package/qt5/qt5multimedia/qt5multimedia.mk
-@@ -61,7 +61,8 @@ define QT5MULTIMEDIA_INSTALL_TARGET_LIBS
- endef
- endif
- 
--ifeq ($(BR2_PACKAGE_QT5DECLARATIVE_QUICK),y)
-+# this is only built with quick/opengl support enabled
-+ifeq ($(BR2_PACKAGE_QT5DECLARATIVE_QUICK)$(BR2_PACKAGE_QT5_GL_AVAILABLE),yy)
- define QT5MULTIMEDIA_INSTALL_TARGET_QMLS
- 	cp -dpfr $(STAGING_DIR)/usr/qml/QtMultimedia $(TARGET_DIR)/usr/qml/
- endef
-diff --git a/package/qt5/qt5quickcontrols/Config.in b/package/qt5/qt5quickcontrols/Config.in
-index 3cc5821..59f6ca4 100644
---- a/package/qt5/qt5quickcontrols/Config.in
-+++ b/package/qt5/qt5quickcontrols/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_QT5QUICKCONTROLS
- 	bool "qt5quickcontrols"
--	depends on BR2_PACKAGE_QT5_GL_AVAILABLE
-+	depends on BR2_PACKAGE_QT5_GL_AVAILABLE || BR2_PACKAGE_QT5_VERSION_LATEST
- 	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
- 	select BR2_PACKAGE_QT5DECLARATIVE
- 	select BR2_PACKAGE_QT5DECLARATIVE_QUICK
-@@ -14,5 +14,5 @@ config BR2_PACKAGE_QT5QUICKCONTROLS
- 	  http://doc.qt.io/qt-5/qtquickcontrols-index.html
- 
- comment "qt5quickcontrols needs an OpenGL-capable backend"
--	depends on !BR2_PACKAGE_QT5_GL_AVAILABLE
-+	depends on !BR2_PACKAGE_QT5_GL_AVAILABLE && !BR2_PACKAGE_QT5_VERSION_LATEST
- 	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
-diff --git a/package/qt5/qt5quickcontrols2/Config.in b/package/qt5/qt5quickcontrols2/Config.in
-index 1066b17..d036f74 100644
---- a/package/qt5/qt5quickcontrols2/Config.in
-+++ b/package/qt5/qt5quickcontrols2/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_QT5QUICKCONTROLS2
- 	bool "qt5quickcontrols2"
--	depends on BR2_PACKAGE_QT5_GL_AVAILABLE # qt5declarative/quick
-+	depends on BR2_PACKAGE_QT5_GL_AVAILABLE || BR2_PACKAGE_QT5_VERSION_LATEST # qt5declarative/quick
- 	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE # qt5declarative/quick
- 	select BR2_PACKAGE_QT5DECLARATIVE
- 	select BR2_PACKAGE_QT5DECLARATIVE_QUICK
-@@ -16,5 +16,5 @@ config BR2_PACKAGE_QT5QUICKCONTROLS2
- 	  https://doc.qt.io/qt-5/qtquickcontrols2-index.html
- 
- comment "qt5quickcontrols2 needs an OpenGL-capable backend"
--	depends on !BR2_PACKAGE_QT5_GL_AVAILABLE
-+	depends on !BR2_PACKAGE_QT5_GL_AVAILABLE && !BR2_PACKAGE_QT5_VERSION_LATEST
- 	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
-diff --git a/package/qt5/qt5virtualkeyboard/Config.in b/package/qt5/qt5virtualkeyboard/Config.in
-index a685815..f0e4f03 100644
---- a/package/qt5/qt5virtualkeyboard/Config.in
-+++ b/package/qt5/qt5virtualkeyboard/Config.in
-@@ -1,13 +1,13 @@
- comment "qt5virtualkeyboard needs at least qt-5.7 and an OpenGL backend"
- 	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
--	depends on !BR2_PACKAGE_QT5_VERSION_LATEST || !BR2_PACKAGE_QT5_GL_AVAILABLE
-+	depends on !BR2_PACKAGE_QT5_GL_AVAILABLE && !BR2_PACKAGE_QT5_VERSION_LATEST
- 
- config BR2_PACKAGE_QT5VIRTUALKEYBOARD
- 	bool "qt5virtualkeyboard"
- 	# needs at least Qt 5.7
- 	depends on BR2_PACKAGE_QT5_VERSION_LATEST
- 	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE # qt5declarative
--	depends on BR2_PACKAGE_QT5_GL_AVAILABLE # qt5declarative quick
-+	depends on BR2_PACKAGE_QT5_GL_AVAILABLE || BR2_PACKAGE_QT5_VERSION_LATEST # qt5declarative/quick
- 	select BR2_PACKAGE_QT5DECLARATIVE
- 	select BR2_PACKAGE_QT5DECLARATIVE_QUICK
- 	select BR2_PACKAGE_QT5SVG
++ examples/quickcontrols2/quickcontrols2.pro | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/examples/quickcontrols2/quickcontrols2.pro b/examples/quickcontrols2/quickcontrols2.pro
++index 858759f..8310e9b 100644
++--- a/examples/quickcontrols2/quickcontrols2.pro
+++++ b/examples/quickcontrols2/quickcontrols2.pro
++@@ -6,5 +6,6 @@ SUBDIRS += \
++     contactlist \
++     sidepanel \
++     swipetoremove \
++-    flatstyle \
++     wearable
+++
+++qtHaveModule(widgets): SUBDIRS += flatstyle
++-- 
++2.7.4
++
