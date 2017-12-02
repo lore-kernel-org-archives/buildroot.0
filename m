@@ -1,30 +1,25 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 2 Dec 2017 15:25:09 +0100
-Subject: [Buildroot] [git commit] openzwave: add hash for license files
-Message-ID: <20171202142238.53ADF82225@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat,  2 Dec 2017 15:30:00 +0100
+Subject: [Buildroot] [PATCH 1/1] domoticz: add hash for license file
+Message-ID: <20171202143000.17119-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3c214cf6ccd98be64a9fc71f5145c7d9a038407e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/openzwave/openzwave.hash | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/domoticz/domoticz.hash | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/openzwave/openzwave.hash b/package/openzwave/openzwave.hash
-index cd1231f..f3a677b 100644
---- a/package/openzwave/openzwave.hash
-+++ b/package/openzwave/openzwave.hash
-@@ -1,2 +1,6 @@
+diff --git a/package/domoticz/domoticz.hash b/package/domoticz/domoticz.hash
+index 103618d5a..00dcf713b 100644
+--- a/package/domoticz/domoticz.hash
++++ b/package/domoticz/domoticz.hash
+@@ -1,2 +1,3 @@
  # Locally computed:
- sha256	abfb4c7e7728e86ba374c2e0ef7de912594eb24a8c44935457352df844530238	openzwave-V1.5.tar.gz
-+sha256	c8db08727d03bea1213cdb29459b4b489b0d68a0866765df40ff205c6cd7224b	license/license.txt
-+sha256	4da452226e9064b597020ad404e1c78d8175bc31ad7c1908485a92c0a4d70284	license/lgpl.txt
-+sha256	33ffdead480674d5f33e2934822a3b93c93e3f8c894667a3bf30bd1195b38f83	license/gpl.txt
-+sha256	6f50ebf9af9b6658c7936ffcc6fedd99254df984c0fec2e6ffb9f3aa1c4ef3e1	license/Apache-License-2.0.txt
+ sha256	5ea8f37f2ef900e9bd17b1b5375e75bfdec4f09001e3e2e0b647a260989d014c	domoticz-3.8153.tar.gz
++sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	License.txt
+-- 
+2.14.1
