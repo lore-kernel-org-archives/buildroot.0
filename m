@@ -1,37 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 2 Dec 2017 14:43:41 +0100
-Subject: [Buildroot] [git commit] webp: add giflib optional dependency
-Message-ID: <20171202133623.A19908151C@busybox.osuosl.org>
+Date: Sat, 2 Dec 2017 14:44:24 +0100
+Subject: [Buildroot] [PATCH] libostree: disable manpages/documentation
+ generation
+In-Reply-To: <20171202075849.4439-1-marcus.folkesson@gmail.com>
+References: <20171202075849.4439-1-marcus.folkesson@gmail.com>
+Message-ID: <20171202144424.3f82a045@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8833ab4d6ef0b68fdab43aa76b797529f38f0765
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/webp/webp.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+On Sat,  2 Dec 2017 08:58:49 +0100, Marcus Folkesson wrote:
+> --enable-man is set to `auto` as default, which may break builds.
+> 
+> Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
+> ---
+>  package/libostree/libostree.mk | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/package/webp/webp.mk b/package/webp/webp.mk
-index 2f3a78c..8999720 100644
---- a/package/webp/webp.mk
-+++ b/package/webp/webp.mk
-@@ -29,6 +29,13 @@ else
- WEBP_CONF_OPTS += --disable-libwebpmux
- endif
- 
-+ifeq ($(BR2_PACKAGE_GIFLIB),y)
-+WEBP_DEPENDENCIES += giflib
-+WEBP_CONF_OPTS += --enable-gif
-+else
-+WEBP_CONF_OPTS += --disable-gif
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBPNG),y)
- WEBP_DEPENDENCIES += libpng
- WEBP_CONF_ENV += ac_cv_path_LIBPNG_CONFIG=$(STAGING_DIR)/usr/bin/libpng-config
+Applied to master, thanks. I've added a reference to an autobuilder
+failure that should be fixed by this. It would be good if you could add
+such references yourself in the future when you submit a patch that
+fixes a build failures.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
