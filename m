@@ -1,51 +1,44 @@
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Sat,  2 Dec 2017 02:28:24 -0200
-Subject: [Buildroot] [PATCH 1/1] check-package: avoid false warning of
- useless flag
-In-Reply-To: <d2844704851e4e8ff93c3007e9e67e2a339e11c7.1511996903.git.yann.morin.1998@free.fr>
-References: <d2844704851e4e8ff93c3007e9e67e2a339e11c7.1511996903.git.yann.morin.1998@free.fr>
-Message-ID: <1512188904-31366-1-git-send-email-ricardo.martincoski@datacom.ind.br>
+Date: Sat, 02 Dec 2017 02:33:23 -0200
+Subject: [Buildroot] [PATCH 8/8] gitlab-ci: run check-package
+References: <20171130153458.GA3519@scaer>
+Message-ID: <5a222d13e66e2_7f6c199f5601649f@ultri3.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Just AUTORECONF = NO is redundant.
-Just HOST_AUTORECONF = NO is redundant.
-But the combination of AUTORECONF = YES + HOST_AUTORECONF = NO is valid.
+Hello,
 
-So basically for all variables that have inheritance between target and
-host, having the host variant of the variable set the variable value
-back to its default is correct if the target variable is set.
+On Thu, Nov 30, 2017 at 01:34 PM, Yann E. MORIN wrote:
+[snip]
+> And even that generates 305+566+230 = 1101 warnings.
+> 
+> Regards,
+> Yann E. MORIN.
+> 
+> PS. Not sure what the split in three numbers is:
+> 
+>   $ find package/ boot/ linux/ -type f \
+>         \( -name '*.mk' -o -name '*.hash' \
+>            -o -name '*.patch' -o -name Config.in \
+>         \) -exec ./utils/check-package {} + 2>&1 \
+>     |grep 'warnings generated'
+>     305 warnings generated
+>     566 warnings generated
+>     230 warnings generated
 
-Instead of increasing complexity of the script to fully detect this
-case, ignore the host flag set to its default value as it can be
-overriding a non-default value inherited from the equivalent target
-flag.
+find -exec splits it into 3 lines:
+  $ find package/ boot/ linux/ -type f \
+        \( -name '*.mk' -o -name '*.hash' \
+           -o -name '*.patch' -o -name Config.in \
+        \) -exec echo {} + | wc -l
+  3
+Each one of the first two lines is 128KiB long.
+  $ xargs --show-limits
+  ...
+  Size of command buffer we are actually using: 131072
 
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-Reported-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Signed-off-by: Ricardo Martincoski <ricardo.martincoski@datacom.ind.br>
----
-Part of commit log copied from Thomas' e-mail. I hope you don't mind.
----
- utils/checkpackagelib/lib_mk.py | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/utils/checkpackagelib/lib_mk.py b/utils/checkpackagelib/lib_mk.py
-index 6ed6011..817e809 100644
---- a/utils/checkpackagelib/lib_mk.py
-+++ b/utils/checkpackagelib/lib_mk.py
-@@ -216,7 +216,7 @@ class UselessFlag(_CheckFunction):
-                     .format(self.filename, lineno, self.url_to_manual),
-                     text]
- 
--        if self.DEFAULT_AUTOTOOLS_FLAG.search(text):
-+        if self.DEFAULT_AUTOTOOLS_FLAG.search(text) and not text.lstrip().startswith("HOST_"):
-             return ["{}:{}: useless default value "
-                     "({}#_infrastructure_for_autotools_based_packages)"
-                     .format(self.filename, lineno, self.url_to_manual),
--- 
-2.7.4
+Regards,
+Ricardo
