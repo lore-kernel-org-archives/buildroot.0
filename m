@@ -1,44 +1,50 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 1 Dec 2017 23:44:14 +0100
-Subject: [Buildroot] [git commit] gst1-imx: add missing dependency for
- imxv4l2videosink plugin
-Message-ID: <20171201225030.B493582629@busybox.osuosl.org>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Fri,  1 Dec 2017 22:43:55 -0200
+Subject: [Buildroot] [PATCH] configs/mx51evk: Bump U-Boot and kernel versions
+Message-ID: <1512175435-1544-1-git-send-email-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=120e9ce4e550e9efaab24705081d2167ac1a075b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Bump U-Boot to version 2017.11 and kernel to 4.14.3.
 
-The plugin source code uses V4L2_COLORSPACE_DEFAULT macro which was
-defined in kernel 4.2, so make sure the toolchain headers match this
-requirement.
-
-Fixes:
-http://autobuild.buildroot.net/results/48dd782161fa5e8860b5ea00a5d60207cb623108/
-http://autobuild.buildroot.net/results/f970c782b5bfbcf66ff3ba200b060d3653ff2630/
-
-Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
 ---
- package/gstreamer1/gst1-imx/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+ configs/mx51evk_defconfig | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-imx/Config.in b/package/gstreamer1/gst1-imx/Config.in
-index 9b977bd..e23b193 100644
---- a/package/gstreamer1/gst1-imx/Config.in
-+++ b/package/gstreamer1/gst1-imx/Config.in
-@@ -87,7 +87,11 @@ config BR2_PACKAGE_GST1_IMX_V4L2VIDEOSRC
- config BR2_PACKAGE_GST1_IMX_V4L2VIDEOSINK
- 	bool "imxv4l2videosink"
- 	select BR2_PACKAGE_GST1_PLUGINS_BAD
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_2 # V4L2_COLORSPACE_DEFAULT
- 	help
- 	  Elements for V4L2 output
+diff --git a/configs/mx51evk_defconfig b/configs/mx51evk_defconfig
+index 479eac3..368e9be 100644
+--- a/configs/mx51evk_defconfig
++++ b/configs/mx51evk_defconfig
+@@ -2,8 +2,8 @@
+ BR2_arm=y
+ BR2_cortex_a8=y
  
-+comment "imxv4l2videosink needs a toolchain w/ headers >= 4.2"
-+	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_2
-+
- endif
+-# Linux headers same as kernel, a 4.9 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
++# Linux headers same as kernel, a 4.14 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
+ 
+ # System
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+@@ -22,13 +22,13 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="mx51evk"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.01"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.11"
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.9.13"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.14.3"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx51-babbage"
+-- 
+2.7.4
