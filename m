@@ -1,31 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 3 Dec 2017 00:01:00 +0100
-Subject: [Buildroot] [git commit] DEVELOPERS: Add myself to utils/config
-Message-ID: <20171202230429.969207FD67@busybox.osuosl.org>
+Date: Sun, 3 Dec 2017 00:12:47 +0100
+Subject: [Buildroot] [PATCH 1/1] domoticz: add hash for license file
+In-Reply-To: <20171202143000.17119-1-fontaine.fabrice@gmail.com>
+References: <20171202143000.17119-1-fontaine.fabrice@gmail.com>
+Message-ID: <20171203001247.411c279a@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3da2ce11b7124e160c272c1dbcc9a561e8e9447c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- DEVELOPERS | 1 +
- 1 file changed, 1 insertion(+)
+On Sat,  2 Dec 2017 15:30:00 +0100, Fabrice Fontaine wrote:
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/domoticz/domoticz.hash | 1 +
+>  1 file changed, 1 insertion(+)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 27b22f4..1b2736c 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1021,6 +1021,7 @@ F:	package/libkcapi/
- 
- N:	Marcus Folkesson <marcus.folkesson@gmail.com>
- F:	package/libostree/
-+F:	utils/config
- F:	utils/diffconfig
- 
- N:	Marek Belisko <marek.belisko@open-nandra.com>
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
