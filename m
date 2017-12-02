@@ -1,65 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 2 Dec 2017 14:10:59 +0100
-Subject: [Buildroot] [PATCH 1/1] check-package: avoid false warning of
- useless flag
-In-Reply-To: <20171202110320.GA2988@scaer>
-References: <d2844704851e4e8ff93c3007e9e67e2a339e11c7.1511996903.git.yann.morin.1998@free.fr>
- <1512188904-31366-1-git-send-email-ricardo.martincoski@datacom.ind.br>
- <20171202110320.GA2988@scaer>
-Message-ID: <20171202141059.391df6c0@windsurf.lan>
+Date: Sat, 2 Dec 2017 14:04:55 +0100
+Subject: [Buildroot] [git commit] python-schedule: add missing hash type
+Message-ID: <20171202131022.746F1801B8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=05ba727c6eebdd0eec919bd396fb73dd79a1b749
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 2 Dec 2017 12:03:20 +0100, Yann E. MORIN wrote:
+Fixes the following check-package warning:
 
-> > Instead of increasing complexity of the script to fully detect this
-> > case, ignore the host flag set to its default value as it can be
-> > overriding a non-default value inherited from the equivalent target
-> > flag.  
-> 
-> But then we miss the cases where:
->   - both are set to their default values,
->   - the target one is not set and the host one is set to the default
->     value.
-> 
-> But as you said, detecting the real false-positive would require
-> maintaining some state, which is currently not possible in the script.
-> 
-> Yet, htere is one issue I see: the script currently names issues mere
-> 'warnings' but exits with a non-zero error code as soon as at least one
-> such 'warning' is seen.
-> 
-> However, what we so far detected were really 'errors', not 'warnings',
-> while the case we are speaking about now really is a warning: it should
-> be reported, biut should not exit in error.
+./package/python-schedule/python-schedule.hash:5: expected three fields (http://nightly.buildroot.org/#adding-packages-hash)
+./package/python-schedule/python-schedule.hash:5: unexpected type of hash (http://nightly.buildroot.org/#adding-packages-hash)
 
-I'm not sure we want to go down this road, and distinguish warnings and
-errors. Either something is correct, or it's not. I prefer to have a
-clean and readable check-package output, with only things that really
-need to be fixed.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/python-schedule/python-schedule.hash | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> Also I noticed that the comments do match the regexps:
-> 
->     288: # We need HOST_ASTERISK_AUTORECONF = NO because the
->     289: # target variant has _AUTORECONF = YES
->     290: HOST_ASTERISK_AUTORECONF = NO
-> 
-> will report the issue twice (man URL removed):
-> 
->     package/asterisk/asterisk.mk:288: useless default value [...]
->     package/asterisk/asterisk.mk:290: useless default value [...]
-> 
-> Since this is the .mk parser, it could ignore the comments, I believe...
-
-Agreed, but that's a separate issue :)
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/python-schedule/python-schedule.hash b/package/python-schedule/python-schedule.hash
+index 9f64cc4..2b2f048 100644
+--- a/package/python-schedule/python-schedule.hash
++++ b/package/python-schedule/python-schedule.hash
+@@ -2,4 +2,4 @@
+ md5	ab135a73458547d2b836beddd168528b  schedule-0.4.3.tar.gz
+ sha256	31a160546a17838842199c792ba267575cf41339ca730aaf060567b798f4f46e  schedule-0.4.3.tar.gz
+ # License file, locally calculated
+-30a8352c318ce1b645acde0299697342d4380ed2637d7ca18a8ad25661e3b41b  LICENSE.txt
++sha256	30a8352c318ce1b645acde0299697342d4380ed2637d7ca18a8ad25661e3b41b  LICENSE.txt
