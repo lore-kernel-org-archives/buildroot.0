@@ -1,117 +1,84 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 2 Dec 2017 16:12:24 +0100
-Subject: [Buildroot] [RFCv3 09/15] package/pkg-generic: handle host-lzip
- as an extract dependency
-In-Reply-To: <20171201205352.24287-10-thomas.petazzoni@free-electrons.com>
-References: <20171201205352.24287-1-thomas.petazzoni@free-electrons.com>
- <20171201205352.24287-10-thomas.petazzoni@free-electrons.com>
-Message-ID: <20171202151224.GE2988@scaer>
+From: Marcus Folkesson <marcus.folkesson@gmail.com>
+Date: Sat, 2 Dec 2017 16:15:01 +0100
+Subject: [Buildroot] [PATCH 2/3] netcf: new package
+In-Reply-To: <20171127104131.27975-3-casantos@datacom.ind.br>
+References: <20171127104131.27975-1-casantos@datacom.ind.br>
+ <20171127104131.27975-3-casantos@datacom.ind.br>
+Message-ID: <20171202151501.GB31247@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Hello,
 
-On 2017-12-01 21:53 +0100, Thomas Petazzoni spake thusly:
-> This moves the host-xz dependency handling from
-> DEPENDENCY_HOST_PREREQ to an extract dependency.
-> 
-> To achieve that, check-host-xz.mk fills in the
-> BR2_LZIP_HOST_DEPENDENCY with host-tar if building a host-tar is
-> needed. The name BR2_LZIP_HOST_DEPENDENCY has been chosen because it
-> matches the name BR2_CMAKE_HOST_DEPENDENCY already used in
-> check-host-cmake.mk.
-> 
-> The BR2_LZIP_HOST_DEPENDENCY is added to all packages, except:
+Just a few remarks;
 
-So even when no package compresed with lzip is enabled?
+On Mon, Nov 27, 2017 at 08:41:30AM -0200, Carlos Santos wrote:
+> 
+> diff --git a/package/Config.in b/package/Config.in
+> index 86acab6427..cdfb90151a 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -1710,6 +1710,7 @@ menu "Networking applications"
+>  	source "package/nbd/Config.in"
+>  	source "package/ncftp/Config.in"
+>  	source "package/ndisc6/Config.in"
+> +	source "package/netcf/Config.in"
+>  	source "package/netatalk/Config.in"
+>  	source "package/netcat/Config.in"
+>  	source "package/netcat-openbsd/Config.in"
 
-That was a gripe of yours, that host-lzip was always built even when not
-needed...
+This does not follow the chronological order.
 
-Regards,
-Yann E. MORIN.
-
->  - host-lzip, because we would otherwise depend on ourself.
-> 
->  - host-tar, because lzip itself is delivered as a tarball, so we need
->    to have host-lzip depend on host-tar, and not host-tar depend on
->    host-lzip
-> 
->  - host-skeleton, because we need to have host-lzip depend on
->    host-skeleton, and not the opposite.
-> 
-> We also mutually exclude host-lzip and host-xz from dependending on
-> each other, to avoid a circular dependency.
-> 
-> In addition, we modify lzip.mk to explicitly build host-lzip without
-> ccache. We generally took the approach of building host-ccache *after*
-> all the extractors have been built.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
-> Changes since v2:
->  - New patch
-> ---
->  package/lzip/lzip.mk                    | 2 +-
->  package/pkg-generic.mk                  | 6 +++++-
->  support/dependencies/check-host-lzip.mk | 2 +-
->  3 files changed, 7 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/lzip/lzip.mk b/package/lzip/lzip.mk
-> index b7ba5dd21d..a16a22214c 100644
-> --- a/package/lzip/lzip.mk
-> +++ b/package/lzip/lzip.mk
-> @@ -16,7 +16,7 @@ endef
->  
->  define HOST_LZIP_CONFIGURE_CMDS
->  	(cd $(@D); $(HOST_MAKE_ENV) ./configure --prefix=$(HOST_DIR) \
-> -		$(HOST_CONFIGURE_OPTS) )
-> +		$(HOST_CONFIGURE_OPTS) CC="$(HOSTCC_NOCCACHE)" CXX="$(HOSTCXX_NOCCACHE)")
->  endef
->  
->  define LZIP_BUILD_CMDS
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index dfd4719d29..e623afe7bc 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -591,10 +591,14 @@ ifeq ($(filter host-tar host-skeleton,$(1)),)
->  $(2)_EXTRACT_DEPENDENCIES += $(BR2_TAR_HOST_DEPENDENCY)
->  endif
->  
-> -ifeq ($(filter host-tar host-skeleton host-xz,$(1)),)
-> +ifeq ($(filter host-tar host-skeleton host-xz host-lzip,$(1)),)
->  $(2)_EXTRACT_DEPENDENCIES += $(BR2_XZCAT_HOST_DEPENDENCY)
->  endif
->  
-> +ifeq ($(filter host-tar host-skeleton host-xz host-lzip,$(1)),)
-> +$(2)_EXTRACT_DEPENDENCIES += $(BR2_LZIP_HOST_DEPENDENCY)
-> +endif
+> diff --git a/package/netcf/Config.in b/package/netcf/Config.in
+> new file mode 100644
+> index 0000000000..d38c2dcef0
+> --- /dev/null
+> +++ b/package/netcf/Config.in
+> @@ -0,0 +1,24 @@
+> +config BR2_PACKAGE_NETCF
+> +	bool "netcf"
+> +	depends on !BR2_arc # augeas
+> +	depends on !BR2_STATIC_LIBS # libnl
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS # libnl
+> +	depends on BR2_USE_MMU # fork()
+> +	depends on BR2_USE_WCHAR # augeas
+> +	select BR2_PACKAGE_AUGEAS
+> +	select BR2_PACKAGE_LIBNL
+> +	select BR2_PACKAGE_LIBXML2
+> +	select BR2_PACKAGE_LIBXSLT
+> +	select BR2_PACKAGE_READLINE
+> +	help
+> +	  netcf is a cross-platform network configuration library.
 > +
->  # Eliminate duplicates in dependencies
->  $(2)_FINAL_DEPENDENCIES = $$(sort $$($(2)_DEPENDENCIES))
->  $(2)_FINAL_EXTRACT_DEPENDENCIES = $$(sort $$($(2)_EXTRACT_DEPENDENCIES))
-> diff --git a/support/dependencies/check-host-lzip.mk b/support/dependencies/check-host-lzip.mk
-> index 00cdd0a236..cdd784058c 100644
-> --- a/support/dependencies/check-host-lzip.mk
-> +++ b/support/dependencies/check-host-lzip.mk
-> @@ -1,5 +1,5 @@
->  ifeq (,$(call suitable-host-package,lzip,$(LZCAT)))
-> -DEPENDENCIES_HOST_PREREQ += host-lzip
-> +BR2_LZIP_HOST_DEPENDENCY = host-lzip
->  EXTRACTOR_DEPENDENCY_PRECHECKED_EXTENSIONS += .lz
->  LZCAT = $(HOST_DIR)/bin/lzip -d -c
->  endif
-> -- 
-> 2.13.6
-> 
+> +	  It takes the description of a network interface in its own
+> +	  platform-independent format and adapts the local system's
+> +	  network configuration to provide that interface.
+> +
+> +	  Both the ncftool utility and libnetcf are installed.
+> +
+> +comment "netcf needs a toolchain w/ wchar"
+> +	depends on !BR2_arc
+> +	depends on !BR2_USE_WCHAR
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+	depends on !BR2_TOOLCHAIN_HAS_THREADS
+	depends on BR2_STATIC_LIBS
+	depends on BR2_USE_MMU
+
+I think these could be good to include as well.k
+
+> diff --git a/package/netcf/netcf.hash b/package/netcf/netcf.hash
+> new file mode 100644
+> index 0000000000..2ba2a5c204
+> --- /dev/null
+> +++ b/package/netcf/netcf.hash
+> @@ -0,0 +1,2 @@
+> +# Locally computed:
+> +sha256 fd81d607795547807150dfdb82bd164ab2569369ab48a30cb6b0d010d17b127c  netcf_0.2.8.orig.tar.gz
+
+Please calculate hash for licence file as well.
+
+Best regards
+Marcus Folkesson
