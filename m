@@ -1,47 +1,35 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat,  2 Dec 2017 12:55:05 +0100
-Subject: [Buildroot] [PATCH] fs: prepare temp directory before running
- PRE_GEN hooks
-Message-ID: <20171202115505.30997-1-yann.morin.1998@free.fr>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat,  2 Dec 2017 13:08:49 +0100
+Subject: [Buildroot] [PATCH 1/1] motion: add webp support
+Message-ID: <20171202120849.28407-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Some filesystems have PRE_GEN hooks that create a directory structure
-under the temporary directory.
-
-For example, iso9660 will create a sub-directory where it stores the
-kernel (in case of initramfs or initrd).
-
-So, we must run the PRE_GEN hooks after we cleanup/create the temporary
-directory.
-
-Fixes:
-    https://gitlab.com/buildroot.org/buildroot/-/jobs/42835965
-    https://gitlab.com/buildroot.org/buildroot/-/jobs/42835967
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- fs/common.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/motion/motion.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/fs/common.mk b/fs/common.mk
-index c17c4585ff..b06e9b5597 100644
---- a/fs/common.mk
-+++ b/fs/common.mk
-@@ -69,9 +69,9 @@ endif
+diff --git a/package/motion/motion.mk b/package/motion/motion.mk
+index dfbb70d64..03144065c 100644
+--- a/package/motion/motion.mk
++++ b/package/motion/motion.mk
+@@ -48,6 +48,13 @@ else
+ MOTION_CONF_OPTS += --without-sqlite3
+ endif
  
- $$(BINARIES_DIR)/rootfs.$(1): target-finalize $$(ROOTFS_$(2)_DEPENDENCIES)
- 	@$$(call MESSAGE,"Generating root filesystem image rootfs.$(1)")
--	$$(foreach hook,$$(ROOTFS_$(2)_PRE_GEN_HOOKS),$$(call $$(hook))$$(sep))
- 	rm -rf $(FS_DIR)
- 	mkdir -p $(FS_DIR)
-+	$$(foreach hook,$$(ROOTFS_$(2)_PRE_GEN_HOOKS),$$(call $$(hook))$$(sep))
- 	echo '#!/bin/sh' > $$(FAKEROOT_SCRIPT)
- 	echo "set -e" >> $$(FAKEROOT_SCRIPT)
- 	echo "chown -h -R 0:0 $$(TARGET_DIR)" >> $$(FAKEROOT_SCRIPT)
++ifeq ($(BR2_PACKAGE_WEBP_MUX),y)
++MOTION_DEPENDENCIES += webp
++MOTION_CONF_OPTS += --with-webp
++else
++MOTION_CONF_OPTS += --without-webp
++endif
++
+ # Do not use default install target as it installs many unneeded files and
+ # directories: docs, examples and init scripts
+ define MOTION_INSTALL_TARGET_CMDS
 -- 
-2.11.0
+2.14.1
