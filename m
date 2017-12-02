@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 3 Dec 2017 00:19:01 +0100
-Subject: [Buildroot] [PATCH] pimd: new package
-In-Reply-To: <1512228242-23822-1-git-send-email-sergio.prado@e-labworks.com>
-References: <1512228242-23822-1-git-send-email-sergio.prado@e-labworks.com>
-Message-ID: <20171203001901.62499b79@windsurf.lan>
+Date: Sun, 3 Dec 2017 00:19:18 +0100
+Subject: [Buildroot] [PATCH 1/1] gtksourceview: bump to version 3.24.5
+In-Reply-To: <20171202152803.25492-1-fontaine.fabrice@gmail.com>
+References: <20171202152803.25492-1-fontaine.fabrice@gmail.com>
+Message-ID: <20171203001918.36fa8141@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,60 +12,19 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat,  2 Dec 2017 13:24:02 -0200, Sergio Prado wrote:
+On Sat,  2 Dec 2017 16:28:03 +0100, Fabrice Fontaine wrote:
+> Add hash for license file
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/gtksourceview/gtksourceview.hash | 7 +++++--
+>  package/gtksourceview/gtksourceview.mk   | 4 ++--
+>  2 files changed, 7 insertions(+), 4 deletions(-)
 
-> diff --git a/package/pimd/pimd.mk b/package/pimd/pimd.mk
-> new file mode 100644
-> index 000000000000..cd9427094a61
-> --- /dev/null
-> +++ b/package/pimd/pimd.mk
-> @@ -0,0 +1,20 @@
-> +################################################################################
-> +#
-> +# pimd
-> +#
-> +################################################################################
-> +
-> +PIMD_VERSION = 2.3.2
-> +PIMD_SOURCE = pimd-$(PIMD_VERSION).tar.gz
-> +PIMD_SITE = https://github.com/troglobit/pimd/releases/download/$(PIMD_VERSION)
-> +
-> +PIMD_LICENSE = BSD-3-Clause
-> +PIMD_LICENSE_FILES = LICENSE
-> +
-> +PIMD_MAKE_OPTS = CROSS=$(TARGET_CROSS) CC=$(TARGET_CC)
-> +
-> +ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC)$(BR2_TOOLCHAIN_USES_MUSL),y)
-> +PIMD_CONF_OPTS = --embedded-libc
-> +endif
-> +
-> +$(eval $(autotools-package))
-
-I was a bit confused at first, because when I looked at the code in
-http://troglobit.com/project/pimd/, it was using a traditional
-configure.ac and Makefile.am, which surely shouldn't require passing
-CROSS and CC at build time, and which also doesn't have any
---embedded-libc option.
-
-The reason is that 2.3.2, which was released in March 2016, predates
-the introduction of autotools as the build system.
-
-Therefore, I see two possibilities here:
-
- - You stick with 2.3.2. In this case, you should use generic-package
-   and not autotools-package, because at 2.3.2, pimd is clearly not an
-   autotools-package. It's not because it works by chance with the
-   current autotools-package infrastructure that a future subtle change
-   in the autotools-package infrastructure, which is valid for real
-   autotools package, will break this non-autotools package.
-
- - You move to the latest Git commit, which really uses an autotools
-   based build system.
-
-Thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
+Embedded Linux, Kernel and Android engineering
 http://free-electrons.com
