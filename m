@@ -1,99 +1,47 @@
-From: Sergio Prado <sergio.prado@e-labworks.com>
-Date: Sat,  2 Dec 2017 13:24:02 -0200
-Subject: [Buildroot] [PATCH] pimd: new package
-Message-ID: <1512228242-23822-1-git-send-email-sergio.prado@e-labworks.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat,  2 Dec 2017 16:28:03 +0100
+Subject: [Buildroot] [PATCH 1/1] gtksourceview: bump to version 3.24.5
+Message-ID: <20171202152803.25492-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-pimd is a lightweight stand-alone PIM-SM v2 multicast routing daemon.
+Add hash for license file
 
-Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- DEVELOPERS             |  1 +
- package/Config.in      |  1 +
- package/pimd/Config.in |  8 ++++++++
- package/pimd/pimd.hash |  3 +++
- package/pimd/pimd.mk   | 20 ++++++++++++++++++++
- 5 files changed, 33 insertions(+)
- create mode 100644 package/pimd/Config.in
- create mode 100644 package/pimd/pimd.hash
- create mode 100644 package/pimd/pimd.mk
+ package/gtksourceview/gtksourceview.hash | 7 +++++--
+ package/gtksourceview/gtksourceview.mk   | 4 ++--
+ 2 files changed, 7 insertions(+), 4 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 27b22f4f0fed..1a998f3dfc12 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1518,6 +1518,7 @@ F:	configs/linksprite_pcduino_defconfig
- N:	Sergio Prado <sergio.prado@e-labworks.com>
- F:	package/libgdiplus/
- F:	package/mongodb/
-+F:	package/pimd/
- F:	package/stella/
- F:	package/tunctl/
- F:	package/ubus/
-diff --git a/package/Config.in b/package/Config.in
-index aa111e48e6fb..104859fcd1c1 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1410,6 +1410,7 @@ menu "Networking"
- 	source "package/openzwave/Config.in"
- 	source "package/ortp/Config.in"
- 	source "package/paho-mqtt-c/Config.in"
-+	source "package/pimd/Config.in"
- 	source "package/qdecoder/Config.in"
- 	source "package/qpid-proton/Config.in"
- 	source "package/rabbitmq-c/Config.in"
-diff --git a/package/pimd/Config.in b/package/pimd/Config.in
-new file mode 100644
-index 000000000000..d6a579bda258
---- /dev/null
-+++ b/package/pimd/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_PIMD
-+	bool "pimd"
-+	depends on BR2_USE_MMU # fork()
-+	help
-+	  pimd is a lightweight stand-alone PIM-SM v2 multicast routing
-+	  daemon.
+diff --git a/package/gtksourceview/gtksourceview.hash b/package/gtksourceview/gtksourceview.hash
+index f57fadc4e..c6052531b 100644
+--- a/package/gtksourceview/gtksourceview.hash
++++ b/package/gtksourceview/gtksourceview.hash
+@@ -1,2 +1,5 @@
+-# Hash from: http://ftp.gnome.org/pub/gnome/sources/gtksourceview/3.22/gtksourceview-3.22.2.sha256sum:
+-sha256	6ce84231dd0931cc747708434ca2f344c65a092dd6e1a800283fe0748773af5e	gtksourceview-3.22.2.tar.xz
++# Hash from: http://ftp.gnome.org/pub/gnome/sources/gtksourceview/3.24/gtksourceview-3.24.5.sha256sum:
++sha256	0246185fcc20c4734d01419a83f58f251a82e2a902fe60bb0335187fcf658181	gtksourceview-3.24.5.tar.xz
 +
-+	  http://troglobit.com/project/pimd/
-diff --git a/package/pimd/pimd.hash b/package/pimd/pimd.hash
-new file mode 100644
-index 000000000000..20252a6d4ed7
---- /dev/null
-+++ b/package/pimd/pimd.hash
-@@ -0,0 +1,3 @@
 +# Locally computed:
-+sha256 c77a9812751f114490a28a6839b16aac8b020c8d9fd6aa22bf3880c054e19f1d  pimd-2.3.2.tar.gz
-+sha256 3379436c16caccdef9b40a49fbdfdbb45aad8ecb05870834490b8fb080126009  LICENSE
-diff --git a/package/pimd/pimd.mk b/package/pimd/pimd.mk
-new file mode 100644
-index 000000000000..cd9427094a61
---- /dev/null
-+++ b/package/pimd/pimd.mk
-@@ -0,0 +1,20 @@
-+################################################################################
-+#
-+# pimd
-+#
-+################################################################################
-+
-+PIMD_VERSION = 2.3.2
-+PIMD_SOURCE = pimd-$(PIMD_VERSION).tar.gz
-+PIMD_SITE = https://github.com/troglobit/pimd/releases/download/$(PIMD_VERSION)
-+
-+PIMD_LICENSE = BSD-3-Clause
-+PIMD_LICENSE_FILES = LICENSE
-+
-+PIMD_MAKE_OPTS = CROSS=$(TARGET_CROSS) CC=$(TARGET_CC)
-+
-+ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC)$(BR2_TOOLCHAIN_USES_MUSL),y)
-+PIMD_CONF_OPTS = --embedded-libc
-+endif
-+
-+$(eval $(autotools-package))
++sha256	5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a	COPYING
+diff --git a/package/gtksourceview/gtksourceview.mk b/package/gtksourceview/gtksourceview.mk
+index 290effb99..b9bf4a374 100644
+--- a/package/gtksourceview/gtksourceview.mk
++++ b/package/gtksourceview/gtksourceview.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-GTKSOURCEVIEW_VERSION_MAJOR = 3.22
+-GTKSOURCEVIEW_VERSION = $(GTKSOURCEVIEW_VERSION_MAJOR).2
++GTKSOURCEVIEW_VERSION_MAJOR = 3.24
++GTKSOURCEVIEW_VERSION = $(GTKSOURCEVIEW_VERSION_MAJOR).5
+ GTKSOURCEVIEW_SOURCE = gtksourceview-$(GTKSOURCEVIEW_VERSION).tar.xz
+ GTKSOURCEVIEW_SITE = \
+ 	http://ftp.gnome.org/pub/gnome/sources/gtksourceview/$(GTKSOURCEVIEW_VERSION_MAJOR)
 -- 
-1.9.1
+2.14.1
