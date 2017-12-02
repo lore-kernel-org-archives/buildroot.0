@@ -1,11 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 2 Dec 2017 15:56:24 +0100
-Subject: [Buildroot] [PATCH/next v2 0/4] Add support for MacchiatoBin
- board
-In-Reply-To: <20171129065551.pjtdz67sxjakoqze@speedy.hunter>
-References: <20171118083549.9108-1-geomatsi@gmail.com>
- <20171129065551.pjtdz67sxjakoqze@speedy.hunter>
-Message-ID: <20171202155624.0b69d60f@windsurf.lan>
+Date: Sat, 2 Dec 2017 15:58:18 +0100
+Subject: [Buildroot] [PATCH v5 03/11] board: Add Bananapi M64 support
+In-Reply-To: <1509559553-26544-4-git-send-email-jagan@amarulasolutions.com>
+References: <1509559553-26544-1-git-send-email-jagan@amarulasolutions.com>
+ <1509559553-26544-4-git-send-email-jagan@amarulasolutions.com>
+Message-ID: <20171202155818.0d04f798@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,25 +13,24 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 29 Nov 2017 09:55:51 +0300, Sergey Matyukevich wrote:
+On Wed,  1 Nov 2017 19:05:45 +0100, Jagan Teki wrote:
 
-> > This is the second revision of the patchset adding support for MacchiatoBin
-> > board. The most part of changes address review comments provided by
-> > Baruch Siach and Arnout Vandecappelle. Besides, dts kernel patches by
-> > Antoine T?nart has been added in order to enable networking on mainline
-> > kernel and make the board more usable from the start.  
-> 
-> I noticed today that this patch series was not properly handled by
-> buildroot patchwork. I can see only two patches there. I don't
-> know exactly why it happened, probably because of the wrong order of
-> version and patch number in subject.
-> 
-> Let me know if I should resend the whole series.
+> +# Firmware
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/apritzel/arm-trusted-firmware.git"
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="sun50iw1p1"
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="aa75c8da415158a94b82a430b2b40000778e851f"
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="bl31"
 
-There were some mail delivery issues, and other series were affected as
-well. If you could resend the series, it would be nice.
+What is this "bl31" additional variable doing?
 
-Thanks!
+Aren't you hijacking the ADDITIONAL_VARIABLES thing to call the bl31
+make target ?
+
+I understand it works, but it's a hack.
+
+Best regards,
 
 Thomas
 -- 
