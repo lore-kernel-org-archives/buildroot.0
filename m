@@ -1,56 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 2 Dec 2017 15:01:23 +0100
-Subject: [Buildroot] [PATCH 1/1] package/weston: fix build with OpenGL
- ES disabled
-In-Reply-To: <20171022180521.25751-1-bernd.kuhls@t-online.de>
-References: <20171022180521.25751-1-bernd.kuhls@t-online.de>
-Message-ID: <20171202150123.66aabccb@windsurf.lan>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat,  2 Dec 2017 15:03:07 +0100
+Subject: [Buildroot] [PATCH 1/1] webp: add libfreeglut optional dependency
+Message-ID: <20171202140307.12348-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/webp/webp.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-On Sun, 22 Oct 2017 20:05:21 +0200, Bernd Kuhls wrote:
-> Building this defconfig
-> 
-> BR2_TOOLCHAIN_BUILDROOT_LOCALE=y
-> BR2_TOOLCHAIN_BUILDROOT_CXX=y
-> BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
-> BR2_PACKAGE_MESA3D=y
-> BR2_PACKAGE_MESA3D_DRI_DRIVER_I965=y
-> BR2_PACKAGE_MESA3D_OPENGL_EGL=y
-> BR2_PACKAGE_WESTON=y
-> BR2_PACKAGE_XORG7=y
-> 
-> is broken:
-> 
->   CC       clients/weston_simple_dmabuf_drm-simple-dmabuf-drm.o
-> clients/simple-dmabuf-drm.c: In function 'create_display':
-> clients/simple-dmabuf-drm.c:758:15: warning: implicit declaration of function 'eglQueryString' [-Wimplicit-function-declaration]
->   extensions = eglQueryString(EGL_NO_DISPLAY, EGL_EXTENSIONS);
->                ^~~~~~~~~~~~~~
-> clients/simple-dmabuf-drm.c:758:30: error: 'EGL_NO_DISPLAY' undeclared (first use in this function)
->   extensions = eglQueryString(EGL_NO_DISPLAY, EGL_EXTENSIONS);
->                               ^~~~~~~~~~~~~~
-> clients/simple-dmabuf-drm.c:758:30: note: each undeclared identifier is reported only once for each function it appears in
-> clients/simple-dmabuf-drm.c:758:46: error: 'EGL_EXTENSIONS' undeclared (first use in this function)
->   extensions = eglQueryString(EGL_NO_DISPLAY, EGL_EXTENSIONS);
->                                               ^~~~~~~~~~~~~~
-> clients/simple-dmabuf-drm.c:759:21: warning: implicit declaration of function 'weston_check_egl_extension' [-Wimplicit-function-declaration]
->   if (extensions && !weston_check_egl_extension(extensions,
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/weston/weston.mk | 1 +
->  1 file changed, 1 insertion(+)
-
-Applied to master, thanks.
-
-Thomas
+diff --git a/package/webp/webp.mk b/package/webp/webp.mk
+index 899972039..e86e798d9 100644
+--- a/package/webp/webp.mk
++++ b/package/webp/webp.mk
+@@ -36,6 +36,13 @@ else
+ WEBP_CONF_OPTS += --disable-gif
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBFREEGLUT),y)
++WEBP_DEPENDENCIES += libfreeglut
++WEBP_CONF_OPTS += --enable-gl
++else
++WEBP_CONF_OPTS += --disable-gl
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBPNG),y)
+ WEBP_DEPENDENCIES += libpng
+ WEBP_CONF_ENV += ac_cv_path_LIBPNG_CONFIG=$(STAGING_DIR)/usr/bin/libpng-config
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.14.1
