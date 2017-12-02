@@ -1,7 +1,7 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat,  2 Dec 2017 16:36:20 +0100
-Subject: [Buildroot] [PATCH 1/1] hiredis: add hash for license file
-Message-ID: <20171202153620.27513-1-fontaine.fabrice@gmail.com>
+Date: Sat,  2 Dec 2017 16:41:00 +0100
+Subject: [Buildroot] [PATCH 1/1] igd2-for-linux: add hash for license file
+Message-ID: <20171202154100.28376-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,16 +10,16 @@ To: buildroot@busybox.net
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/hiredis/hiredis.hash | 1 +
+ package/igd2-for-linux/igd2-for-linux.hash | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/hiredis/hiredis.hash b/package/hiredis/hiredis.hash
-index 2c788a677..682ec6d2b 100644
---- a/package/hiredis/hiredis.hash
-+++ b/package/hiredis/hiredis.hash
+diff --git a/package/igd2-for-linux/igd2-for-linux.hash b/package/igd2-for-linux/igd2-for-linux.hash
+index f1c9a7bd3..042539950 100644
+--- a/package/igd2-for-linux/igd2-for-linux.hash
++++ b/package/igd2-for-linux/igd2-for-linux.hash
 @@ -1,2 +1,3 @@
  # Locally computed:
- sha256	717e6fc8dc2819bef522deaca516de9e51b9dfa68fe393b7db5c3b6079196f78	hiredis-v0.13.3.tar.gz
-+sha256	dca05ce8fc87a8261783b4aed0deef8becc9350b6aa770bc714d0c1833b896eb	COPYING
+ sha256	523545a26b0d662e9f6913bec2518df6e70f4d497935d88983d994336a1b0ea9	igd2-for-linux-v1.2.tar.gz
++sha256	204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994	linuxigd2/doc/LICENSE
 -- 
 2.14.1
