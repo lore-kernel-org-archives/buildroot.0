@@ -1,35 +1,65 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat,  2 Dec 2017 13:31:57 +0100
-Subject: [Buildroot] [PATCH 1/1] webp: add giflib optional dependency
-Message-ID: <20171202123157.16860-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 2 Dec 2017 14:10:59 +0100
+Subject: [Buildroot] [PATCH 1/1] check-package: avoid false warning of
+ useless flag
+In-Reply-To: <20171202110320.GA2988@scaer>
+References: <d2844704851e4e8ff93c3007e9e67e2a339e11c7.1511996903.git.yann.morin.1998@free.fr>
+ <1512188904-31366-1-git-send-email-ricardo.martincoski@datacom.ind.br>
+ <20171202110320.GA2988@scaer>
+Message-ID: <20171202141059.391df6c0@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/webp/webp.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+Hello,
 
-diff --git a/package/webp/webp.mk b/package/webp/webp.mk
-index 2f3a78c1c..899972039 100644
---- a/package/webp/webp.mk
-+++ b/package/webp/webp.mk
-@@ -29,6 +29,13 @@ else
- WEBP_CONF_OPTS += --disable-libwebpmux
- endif
- 
-+ifeq ($(BR2_PACKAGE_GIFLIB),y)
-+WEBP_DEPENDENCIES += giflib
-+WEBP_CONF_OPTS += --enable-gif
-+else
-+WEBP_CONF_OPTS += --disable-gif
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBPNG),y)
- WEBP_DEPENDENCIES += libpng
- WEBP_CONF_ENV += ac_cv_path_LIBPNG_CONFIG=$(STAGING_DIR)/usr/bin/libpng-config
+On Sat, 2 Dec 2017 12:03:20 +0100, Yann E. MORIN wrote:
+
+> > Instead of increasing complexity of the script to fully detect this
+> > case, ignore the host flag set to its default value as it can be
+> > overriding a non-default value inherited from the equivalent target
+> > flag.  
+> 
+> But then we miss the cases where:
+>   - both are set to their default values,
+>   - the target one is not set and the host one is set to the default
+>     value.
+> 
+> But as you said, detecting the real false-positive would require
+> maintaining some state, which is currently not possible in the script.
+> 
+> Yet, htere is one issue I see: the script currently names issues mere
+> 'warnings' but exits with a non-zero error code as soon as at least one
+> such 'warning' is seen.
+> 
+> However, what we so far detected were really 'errors', not 'warnings',
+> while the case we are speaking about now really is a warning: it should
+> be reported, biut should not exit in error.
+
+I'm not sure we want to go down this road, and distinguish warnings and
+errors. Either something is correct, or it's not. I prefer to have a
+clean and readable check-package output, with only things that really
+need to be fixed.
+
+> Also I noticed that the comments do match the regexps:
+> 
+>     288: # We need HOST_ASTERISK_AUTORECONF = NO because the
+>     289: # target variant has _AUTORECONF = YES
+>     290: HOST_ASTERISK_AUTORECONF = NO
+> 
+> will report the issue twice (man URL removed):
+> 
+>     package/asterisk/asterisk.mk:288: useless default value [...]
+>     package/asterisk/asterisk.mk:290: useless default value [...]
+> 
+> Since this is the .mk parser, it could ignore the comments, I believe...
+
+Agreed, but that's a separate issue :)
+
+Thomas
 -- 
-2.14.1
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
