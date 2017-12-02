@@ -1,47 +1,25 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 2 Dec 2017 16:49:22 +0100
-Subject: [Buildroot] [PATCH 1/1] webp: add mandatory host-pkgconf
- dependency
-In-Reply-To: <20171202152442.6beda8c1@windsurf.lan>
-References: <20171202141157.12840-1-fontaine.fabrice@gmail.com>
- <20171202152442.6beda8c1@windsurf.lan>
-Message-ID: <CAPi7W81B2iRSEvD_DF2=nFt9J_e-yz=7SE6vgvB9sHx0hgCE1w@mail.gmail.com>
+Date: Sat,  2 Dec 2017 16:53:15 +0100
+Subject: [Buildroot] [PATCH 1/1] minissdpd: add hash for license file
+Message-ID: <20171202155315.29539-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/minissdpd/minissdpd.hash | 1 +
+ 1 file changed, 1 insertion(+)
 
-2017-12-02 15:24 GMT+01:00 Thomas Petazzoni <
-thomas.petazzoni@free-electrons.com>:
-
-> Hello,
->
-> On Sat,  2 Dec 2017 15:11:57 +0100, Fabrice Fontaine wrote:
-> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
->
-> Could you give a few more details here? From a quick grep in the webp
-> code, I don't see PKG_CHECK_MODULES() used anywhere, not pkg-config
-> used. I quite probably missed it, but if it's not obvious, a slightly
-> more verbose commit log would be nice.
->
-My bad, this is a mistake, I saw that there was a pkgconfigdir option but
-it is not used to find packages but to install webp files.
-
->
-> Thanks!
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux and Kernel engineering
-> http://free-electrons.com
->
-Best Regards,
-
-Fabrice
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20171202/8af32676/attachment.html>
+diff --git a/package/minissdpd/minissdpd.hash b/package/minissdpd/minissdpd.hash
+index 8d670f3e8..dd166775b 100644
+--- a/package/minissdpd/minissdpd.hash
++++ b/package/minissdpd/minissdpd.hash
+@@ -1,2 +1,3 @@
+ # Locally computed:
+ sha256	dfd637b185731e1acb412a86faa9718eb93c04ca08280541a6d22d14d1fb890f	minissdpd-1.5.tar.gz
++sha256	c432d6ee83deb6a0c105a2c3ebd11e3855ab91498b0847a8657e68ce8e4491a5	LICENSE
+-- 
+2.14.1
