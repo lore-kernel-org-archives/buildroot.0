@@ -1,45 +1,47 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat,  2 Dec 2017 12:19:02 +0100
-Subject: [Buildroot] [PATCH 1/1] gupnp-tools: bump to version 0.8.14
-Message-ID: <20171202111902.27917-1-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat,  2 Dec 2017 12:55:05 +0100
+Subject: [Buildroot] [PATCH] fs: prepare temp directory before running
+ PRE_GEN hooks
+Message-ID: <20171202115505.30997-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add hash for COPYING
+Some filesystems have PRE_GEN hooks that create a directory structure
+under the temporary directory.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+For example, iso9660 will create a sub-directory where it stores the
+kernel (in case of initramfs or initrd).
+
+So, we must run the PRE_GEN hooks after we cleanup/create the temporary
+directory.
+
+Fixes:
+    https://gitlab.com/buildroot.org/buildroot/-/jobs/42835965
+    https://gitlab.com/buildroot.org/buildroot/-/jobs/42835967
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gupnp-tools/gupnp-tools.hash | 7 +++++--
- package/gupnp-tools/gupnp-tools.mk   | 2 +-
- 2 files changed, 6 insertions(+), 3 deletions(-)
+ fs/common.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/gupnp-tools/gupnp-tools.hash b/package/gupnp-tools/gupnp-tools.hash
-index f08b4f5e0..d80d83263 100644
---- a/package/gupnp-tools/gupnp-tools.hash
-+++ b/package/gupnp-tools/gupnp-tools.hash
-@@ -1,2 +1,5 @@
--# Hash from: http://ftp.gnome.org/pub/gnome/sources/gupnp-tools/0.8/gupnp-tools-0.8.13.sha256sum:
--sha256	aa3decb9d532c0e2e505adc592f431fd81c0231ded2981129e87da13712479ed	gupnp-tools-0.8.13.tar.xz
-+# Hash from: http://ftp.gnome.org/pub/gnome/sources/gupnp-tools/0.8/gupnp-tools-0.8.14.sha256sum:
-+sha256	682b952b3cf43818c7d27549c152ea52e43320500820ab3392cf5a29a95e7efa	gupnp-tools-0.8.14.tar.xz
-+
-+# Locally computed:
-+sha256	ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6	COPYING
-diff --git a/package/gupnp-tools/gupnp-tools.mk b/package/gupnp-tools/gupnp-tools.mk
-index b64a138ac..8f95e04f9 100644
---- a/package/gupnp-tools/gupnp-tools.mk
-+++ b/package/gupnp-tools/gupnp-tools.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/fs/common.mk b/fs/common.mk
+index c17c4585ff..b06e9b5597 100644
+--- a/fs/common.mk
++++ b/fs/common.mk
+@@ -69,9 +69,9 @@ endif
  
- GUPNP_TOOLS_VERSION_MAJOR = 0.8
--GUPNP_TOOLS_VERSION = $(GUPNP_TOOLS_VERSION_MAJOR).13
-+GUPNP_TOOLS_VERSION = $(GUPNP_TOOLS_VERSION_MAJOR).14
- GUPNP_TOOLS_SOURCE = gupnp-tools-$(GUPNP_TOOLS_VERSION).tar.xz
- GUPNP_TOOLS_SITE = \
- 	http://ftp.gnome.org/pub/gnome/sources/gupnp-tools/$(GUPNP_TOOLS_VERSION_MAJOR)
+ $$(BINARIES_DIR)/rootfs.$(1): target-finalize $$(ROOTFS_$(2)_DEPENDENCIES)
+ 	@$$(call MESSAGE,"Generating root filesystem image rootfs.$(1)")
+-	$$(foreach hook,$$(ROOTFS_$(2)_PRE_GEN_HOOKS),$$(call $$(hook))$$(sep))
+ 	rm -rf $(FS_DIR)
+ 	mkdir -p $(FS_DIR)
++	$$(foreach hook,$$(ROOTFS_$(2)_PRE_GEN_HOOKS),$$(call $$(hook))$$(sep))
+ 	echo '#!/bin/sh' > $$(FAKEROOT_SCRIPT)
+ 	echo "set -e" >> $$(FAKEROOT_SCRIPT)
+ 	echo "chown -h -R 0:0 $$(TARGET_DIR)" >> $$(FAKEROOT_SCRIPT)
 -- 
-2.14.1
+2.11.0
