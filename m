@@ -1,66 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 2 Dec 2017 21:19:10 +0100
-Subject: [Buildroot] [RFCv3 07/15] package/pkg-generic: handle host-tar
- as an extract dependency
-In-Reply-To: <20171202150606.GC2988@scaer>
-References: <20171201205352.24287-1-thomas.petazzoni@free-electrons.com>
- <20171201205352.24287-8-thomas.petazzoni@free-electrons.com>
- <20171202150606.GC2988@scaer>
-Message-ID: <20171202211910.7f2a7b96@windsurf.lan>
+Date: Sun, 3 Dec 2017 00:00:41 +0100
+Subject: [Buildroot] [git commit] domoticz: add hash for license file
+Message-ID: <20171202230428.247D982723@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=5f96b80fb425796adcfa713561ebb4515687584c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 2 Dec 2017 16:06:06 +0100, Yann E. MORIN wrote:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/domoticz/domoticz.hash | 1 +
+ 1 file changed, 1 insertion(+)
 
-> > To achieve that, check-host-tar.mk fills in the  
-> 
-> s/$/ variable/
-
-ACK, will fix.
-
-> > The BR2_TAR_HOST_DEPENDENCY is added to all packages, except host-tar
-> > itself (obviously) and host-skeleton, because we depend on
-> > host-skeleton to install host-tar properly in HOST_DIR.  
-> 
-> As we discussed on IRC, there is also the case for the tar filesystem,
-> which may require host-tar.
-> 
-> Granted, it is very very unlikely that we end up with no package that
-> require host-tar, but still...
-
-Yes, I agree, the tar filesystem should depend on
-$(BR2_TAR_HOST_DEPENDENCY) as well. I'll fix that.
-
-> > +ifeq ($(filter host-tar host-skeleton,$(1)),)
-> > +$(2)_EXTRACT_DEPENDENCIES += $(BR2_TAR_HOST_DEPENDENCY)
-> > +endif  
-> 
-> So, even packages that are available as a zip file will get the
-> dependency on host-tar?
-
-Yes. Like host-xz/host-lzip, my series does not attempt to switch to
-more fine-grained dependencies, it only intends to move to proper
-package dependencies. Using more fine-grained dependencies is left for
-future work.
-
-> >  ifeq (,$(call suitable-host-package,tar,$(TAR)))
-> > -DEPENDENCIES_HOST_PREREQ += host-tar
-> >  TAR = $(HOST_DIR)/bin/tar
-> > +BR2_TAR_HOST_DEPENDENCY += host-tar  
-> 
-> Why assign-append here, instead of simply assign?
-
-Good point, will fix.
-
-Thanks for the review!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/domoticz/domoticz.hash b/package/domoticz/domoticz.hash
+index 103618d..00dcf71 100644
+--- a/package/domoticz/domoticz.hash
++++ b/package/domoticz/domoticz.hash
+@@ -1,2 +1,3 @@
+ # Locally computed:
+ sha256	5ea8f37f2ef900e9bd17b1b5375e75bfdec4f09001e3e2e0b647a260989d014c	domoticz-3.8153.tar.gz
++sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	License.txt
