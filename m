@@ -1,144 +1,40 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 3 Dec 2017 21:10:43 +0200
-Subject: [Buildroot] Static IP
-In-Reply-To: <CAM27=5gFqWB4TRTVJnOpuEDVtc2wyiWPr1aA21u4unH0VP50Mw@mail.gmail.com>
-References: <CAM27=5g_TOTu__LdjWcUKaMUiLtBxXD-t2g2N9VEx5JN69ZYUA@mail.gmail.com>
- <20171124063855.rtkwmk5fadw3rlsd@tarshish>
- <CAM27=5ijTMYOyBmy1r7k9ByGQ6_tZhGkGWyfd4jG98ijhAffxQ@mail.gmail.com>
- <20171126193811.64fkhpxhc3of6cwj@tarshish>
- <CAM27=5gEznPh9FTg1Y4vdEYPNAhXR-cZV5gw9KSFZwF6iLwhHA@mail.gmail.com>
- <20171127130422.ww62i7vsooccu4px@sapphire.tkos.co.il>
- <CAM27=5hA1mZAurmjfpXxN_8F8iMFdUW9pvPPSCXSiDbvmZEedA@mail.gmail.com>
- <CAM27=5gFqWB4TRTVJnOpuEDVtc2wyiWPr1aA21u4unH0VP50Mw@mail.gmail.com>
-Message-ID: <20171203191043.vf4xpv2w44gd54c4@tarshish.tkos.co.il>
+Date: Sun,  3 Dec 2017 21:34:39 +0200
+Subject: [Buildroot] [PATCH 2/2] Revert "trinity: add optional dependency on
+ btrfs-progs"
+In-Reply-To: <6ad09d50510868507c76a49ae5b0df26dc24f46e.1512329679.git.baruch@tkos.co.il>
+References: <6ad09d50510868507c76a49ae5b0df26dc24f46e.1512329679.git.baruch@tkos.co.il>
+Message-ID: <56865396f4479cc462155a8662fcbadc0caaa17e.1512329679.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Roy,
+This reverts commit a81782a3f5dc08bb8d740acb1e6d361022f62f96.
 
-On Sun, Dec 03, 2017 at 01:29:12PM +0200, Roy Arav wrote:
-> One thing though -
-> I am working on Raspberry Pi3 and it seems like when if-updown is enabled,
-> there is no wifi,
-> Neither via WPA supplicant nor directly via nmcli. (both work fine when
-> ff-updown is disabled).
-> 
-> I really don't understand the connection...
+The trinity package does not use btrfs-progs, only btrfs kernel headers.
 
-Is there anything specific to Buildroot in this behaviour? Maybe the ifupdown 
-plugin expects all controlled network interfaces to appear in the interfaces 
-file. I'm only guessing.
+Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/trinity/trinity.mk | 4 ----
+ 1 file changed, 4 deletions(-)
 
-baruch
-
-> On Sun, Dec 3, 2017 at 9:35 AM, Roy Arav <roy.arav@shieldiot.io> wrote:
-> >
-> > Thank you very much!
-> > It did the trick and now it works well.
-> >
-> > Regards
-> > Roy
-> >
-> > On Mon, Nov 27, 2017 at 3:04 PM, Baruch Siach <baruch@tkos.co.il> wrote:
-> >
-> >> Hi Roy,
-> >>
-> >> On Mon, Nov 27, 2017 at 02:50:30PM +0200, Roy Arav wrote:
-> >> > Thanks Baruch,
-> >> >
-> >> > As you suggested - I removed the attribute "--disable-ifupdown" from
-> >> > network-manager.mk.
-> >> > Still same results:
-> >> > [   32.982121] NetworkManager[286]: <warn>  [1478193422.8681] settings:
-> >> > could not load plugin 'ifupdown' from file
-> >> > '/usr/lib/NetworkManager/libnm-settings-plugin-ifupdown.so': No such
-> >> file
-> >> > or directory
-> >>
-> >> You should pass --enable-ifupdown to force NetworkManager to build that
-> >> plugin. Otherwise, NetworkManager enables ifupdown only when your host is
-> >> Debian/Ubuntu.
-> >>
-> >> You need to restart the build from scratch (make clean all) for your
-> >> change to
-> >> take effect. See http://nightly.buildroot.org/manual.html#full-rebuild.
-> >>
-> >> baruch
-> >>
-> >> > On Sun, Nov 26, 2017 at 9:38 PM, Baruch Siach <baruch@tkos.co.il>
-> >> wrote:
-> >> > > Please keep the list on Cc so that everyone can benefit from your
-> >> > > experience.
-> >> > >
-> >> > > On Sun, Nov 26, 2017 at 02:22:44PM +0200, Roy Arav wrote:
-> >> > > > I enabled BR2_PACKAGE_IFUPDOWN_SCRIPTS as you suggested,
-> >> > > > and now I get this warning: 34.193270] NetworkManager[272]: <warn>
-> >> > > > [1478193422.9602] settings: could not load plugin 'ifupdown' from
-> >> file
-> >> > > > '/usr/lib/NetworkManager/libnm-settings-plugin-ifupdown.so': No
-> >> such
-> >> > > file
-> >> > > > or directory
-> >> > > >
-> >> > > > Any ideas how to solve this thing? (sorry if I seem clue-less, I am
-> >> new
-> >> > > to
-> >> > > > buildroot...)
-> >> > >
-> >> > > This is most likely because we currently pass --disable-ifupdown to
-> >> the
-> >> > > configure script unconditionally. This has been so since commit
-> >> > > 52c7f43fdefbe7
-> >> > > (network-manager: bump to 0.9.8.0). Maybe Thomas, the author of said
-> >> > > commit,
-> >> > > can explain the reason for that.
-> >> > >
-> >> > > In case --enable-ifupdown does not increase the target size
-> >> significantly
-> >> > > (relatively speaking), then a patch enable ifupdown would probably be
-> >> > > accepted.
-> >> > >
-> >> > > > Please see the entire.config.
-> >> > >
-> >> > > [skipped config fragments containing potentially sensitive
-> >> information]
-> >> > >
-> >> > > Do you use all these fragments to generate a unified .config?
-> >> > >
-> >> > > Please send the minimal .config that exhibits your issue. Minimizing
-> >> the
-> >> > > .config further with 'make savedefconfig' would be nice as well.
-> >> > >
-> >> > > baruch
-> >> > >
-> >> > > > On Fri, Nov 24, 2017 at 8:38 AM, Baruch Siach <baruch@tkos.co.il>
-> >> wrote:
-> >> > > > >
-> >> > > > > On Fri, Nov 24, 2017 at 07:05:48AM +0200, Roy Arav wrote:
-> >> > > > > > I am trying to set static IP on a raspberry pi3 device running
-> >> > > buildroot.
-> >> > > > > >
-> >> > > > > > I edited /etc/network/interfaces, using rootfs overlay.
-> >> > > > > >
-> >> > > > > > auto eth0
-> >> > > > > > allow-hotplug eth0
-> >> > > > > > iface eth0 inet static
-> >> > > > > > address 192.168.0.1
-> >> > > > > > netmask 255.255.255.0
-> >> > > > > >
-> >> > > > > > And still IP address is provided using DHCP/
-> >> > > > > >
-> >> > > > > > Is there anything else to so that I am missing?
-> >> > > > > > Perhaps a BR2 flag or package that I need to enable?
-> >> > > > >
-> >> > > > > What is your .config?
-> >> > > > > Do you have BR2_PACKAGE_IFUPDOWN_SCRIPTS enabled?
-> >> > > > > What about BR2_PACKAGE_SYSTEMD_NETWORKD?
-
+diff --git a/package/trinity/trinity.mk b/package/trinity/trinity.mk
+index 61565d073d1a..b75c46943efe 100644
+--- a/package/trinity/trinity.mk
++++ b/package/trinity/trinity.mk
+@@ -10,10 +10,6 @@ TRINITY_SOURCE = trinity-$(TRINITY_VERSION).tar.xz
+ TRINITY_LICENSE = GPL-2.0
+ TRINITY_LICENSE_FILES = COPYING
+ 
+-ifeq ($(BR2_PACKAGE_BTRFS_PROGS),y)
+-TRINITY_DEPENDENCIES += btrfs-progs
+-endif
+-
+ define TRINITY_CONFIGURE_CMDS
+ 	(cd $(@D); $(TARGET_CONFIGURE_OPTS) ./configure)
+ endef
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+2.15.0
