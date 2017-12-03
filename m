@@ -1,79 +1,114 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun,  3 Dec 2017 22:48:07 +0100
-Subject: [Buildroot] [PATCH 4/8] uboot: add support for bundling ATF BL31
- into U-Boot
+Date: Sun,  3 Dec 2017 22:48:11 +0100
+Subject: [Buildroot] [PATCH 8/8] support/testing: add tests for ATF
 In-Reply-To: <20171203214811.3124-1-thomas.petazzoni@free-electrons.com>
 References: <20171203214811.3124-1-thomas.petazzoni@free-electrons.com>
-Message-ID: <20171203214811.3124-5-thomas.petazzoni@free-electrons.com>
+Message-ID: <20171203214811.3124-9-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Jagan Teki <jagannadh.teki@gmail.com>
+These new tests only do build tests, but allow to quickly verify that
+the ATF/U-Boot combinations for vexpress, Allwinner and Marvell
+platforms all continue to build properly.
 
-Some ARM64 platforms (such as Allwinner A64/H5) have a boot process
-where U-Boot encapsulates the BL31 part of the ARM trusted
-firmware. For such platforms, we need to build ATF before U-Boot, and
-pass a BL31 variable pointing to ATF bl31.bin to the U-Boot build
-process.
-
-This commit introduces a BR2_TARGET_UBOOT_NEEDS_ATF_BL31 variable to
-achieve this.
-
-Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
-[Thomas:
- - Rename option to BR2_TARGET_UBOOT_NEEDS_ATF_BL31
- - Drop changes to arm-trusted-firmware.mk, they are taken care of by
-   previous commits.
- - Improve Config.in help text
- - Add missing dependency on arm-trusted-firmware when
-   BR2_TARGET_UBOOT_NEEDS_ATF_BL31 is enabled.
- - Use bl31.bin from $(BINARIES_DIR) instead of taking it from ATF's
-   build dir.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- boot/uboot/Config.in | 10 ++++++++++
- boot/uboot/uboot.mk  |  5 +++++
- 2 files changed, 15 insertions(+)
+ support/testing/tests/boot/__init__.py |  0
+ support/testing/tests/boot/test_atf.py | 79 ++++++++++++++++++++++++++++++++++
+ 2 files changed, 79 insertions(+)
+ create mode 100644 support/testing/tests/boot/__init__.py
+ create mode 100644 support/testing/tests/boot/test_atf.py
 
-diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-index 0e109d0977..8fa189f410 100644
---- a/boot/uboot/Config.in
-+++ b/boot/uboot/Config.in
-@@ -158,6 +158,16 @@ config BR2_TARGET_UBOOT_NEEDS_OPENSSL
- 	  typically the case when the board configuration has
- 	  CONFIG_FIT_SIGNATURE enabled.
- 
-+config BR2_TARGET_UBOOT_NEEDS_ATF_BL31
-+	bool "U-Boot needs ATF BL31"
-+	depends on BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31
-+	help
-+	  Some specific platforms (such as Allwinner A64/H5)
-+	  encapsulate the BL31 part of ATF inside U-Boot. This option
-+	  makes sure ATF gets built prior to U-Boot, and that the BL31
-+	  variable pointing to ATF's BL31 binary, is passed during the
-+	  Buildroot build.
+diff --git a/support/testing/tests/boot/__init__.py b/support/testing/tests/boot/__init__.py
+new file mode 100644
+index 0000000000..e69de29bb2
+diff --git a/support/testing/tests/boot/test_atf.py b/support/testing/tests/boot/test_atf.py
+new file mode 100644
+index 0000000000..02f93b9201
+--- /dev/null
++++ b/support/testing/tests/boot/test_atf.py
+@@ -0,0 +1,79 @@
++import os
++import infra.basetest
 +
- menu "U-Boot binary format"
- 
- config BR2_TARGET_UBOOT_FORMAT_AIS
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index a1fac7dcae..39175999ec 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -134,6 +134,11 @@ UBOOT_MAKE_OPTS += \
- 	HOSTCC="$(HOSTCC) $(HOST_CFLAGS)" \
- 	HOSTLDFLAGS="$(HOST_LDFLAGS)"
- 
-+ifeq ($(BR2_TARGET_UBOOT_NEEDS_ATF_BL31),y)
-+UBOOT_DEPENDENCIES += arm-trusted-firmware
-+UBOOT_MAKE_OPTS += BL31=$(BINARIES_DIR)/bl31.bin
-+endif
++class TestATFVexpress(infra.basetest.BRTest):
++    config = \
++    """
++    BR2_aarch64=y
++    BR2_TOOLCHAIN_EXTERNAL=y
++    BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64=y
++    BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
++    BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
++    BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/ARM-software/arm-trusted-firmware.git"
++    BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="v1.2"
++    BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="juno"
++    BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP=y
++    BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33=y
++    BR2_TARGET_UBOOT=y
++    BR2_TARGET_UBOOT_BOARDNAME="vexpress_aemv8a_juno"
++    BR2_TARGET_UBOOT_CUSTOM_VERSION=y
++    BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.03"
++    BR2_TARGET_VEXPRESS_FIRMWARE=y
++    """
 +
- ifeq ($(BR2_TARGET_UBOOT_NEEDS_DTC),y)
- UBOOT_DEPENDENCIES += host-dtc
- endif
++    def test_run(self):
++        pass
++
++class TestATFAllwinner(infra.basetest.BRTest):
++    config = \
++    """
++    BR2_aarch64=y
++    BR2_TOOLCHAIN_EXTERNAL=y
++    BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64=y
++    BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
++    BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
++    BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/apritzel/arm-trusted-firmware.git"
++    BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="sun50iw1p1"
++    BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="aa75c8da415158a94b82a430b2b40000778e851f"
++    BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
++    BR2_TARGET_UBOOT=y
++    BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
++    BR2_TARGET_UBOOT_CUSTOM_VERSION=y
++    BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.09"
++    BR2_TARGET_UBOOT_BOARD_DEFCONFIG="bananapi_m64"
++    BR2_TARGET_UBOOT_NEEDS_DTC=y
++    BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
++    BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
++    BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.itb"
++    BR2_TARGET_UBOOT_SPL=y
++    BR2_TARGET_UBOOT_SPL_NAME="spl/sunxi-spl.bin"
++    """
++
++    def test_run(self):
++        pass
++
++class TestATFMarvell(infra.basetest.BRTest):
++    config = \
++    """
++    BR2_aarch64=y
++    BR2_TOOLCHAIN_EXTERNAL=y
++    BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64=y
++    BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
++    BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
++    BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/MarvellEmbeddedProcessors/atf-marvell.git"
++    BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="atf-v1.3-armada-17.10"
++    BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="a80x0_mcbin"
++    BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP=y
++    BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33=y
++    BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="USE_COHERENT_MEM=0"
++    BR2_TARGET_BINARIES_MARVELL=y
++    BR2_TARGET_BINARIES_MARVELL_8040=y
++    BR2_TARGET_MV_DDR_MARVELL=y
++    BR2_TARGET_UBOOT=y
++    BR2_TARGET_UBOOT_BOARDNAME="mvebu_mcbin-88f8040"
++    BR2_TARGET_UBOOT_CUSTOM_VERSION=y
++    BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.09"
++    """
++
++    def test_run(self):
++        pass
 -- 
 2.13.6
