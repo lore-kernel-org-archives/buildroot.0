@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun,  3 Dec 2017 22:48:09 +0100
-Subject: [Buildroot] [PATCH 6/8] binaries-marvell: new package
+Date: Sun,  3 Dec 2017 22:48:08 +0100
+Subject: [Buildroot] [PATCH 5/8] mv-ddr-marvell: new package
 In-Reply-To: <20171203214811.3124-1-thomas.petazzoni@free-electrons.com>
 References: <20171203214811.3124-1-thomas.petazzoni@free-electrons.com>
-Message-ID: <20171203214811.3124-7-thomas.petazzoni@free-electrons.com>
+Message-ID: <20171203214811.3124-6-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,128 +12,94 @@ To: buildroot@busybox.net
 
 From: Sergey Matyukevich <geomatsi@gmail.com>
 
-Some systems, including Marvell Armada 7k/8k SoCs, have a separate
-System Control Processor (SCP) for power management, clocks, reset
-and system control. ATF Boot Loader stage 2 (BL2) loads optional
-SCP_BL2 image into a platform-specific region of secure memory.
-
-This package adds SCP_BL2 firmware for Marvell Armada 7040 and 8040 SoCs.
+This package adds Marvell Armada SoC DDR training algorithms.
+This code is not built separately, it is needed as dependency
+to build ATF firmware for Marvell Armada SoCs.
 
 Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
 [Thomas:
- - Use "binaries-marvell" in the Config.in prompt and in the .mk file
-   header.
- - Change the license information.
- - Adjust license information: it is GPL-2.0 with the FreeRTOS
-   exception, and therefore can be redistributed.]
+ - Remove MV_DDR_MARVELL_SRC_SYMLINK, ATF will directly pick up the
+   mv-ddr-marvell code from where it is.
+ - Use "mv-ddr-marvell" as the Config.in prompt, and in the comment
+   header of the .mk file.
+ - Add upstream URL in Config.in help text
+ - Adjust license information.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- DEVELOPERS                                  |  1 +
- boot/Config.in                              |  1 +
- boot/binaries-marvell/Config.in             | 32 +++++++++++++++++++++++++++++
- boot/binaries-marvell/binaries-marvell.hash |  2 ++
- boot/binaries-marvell/binaries-marvell.mk   | 22 ++++++++++++++++++++
- 5 files changed, 58 insertions(+)
- create mode 100644 boot/binaries-marvell/Config.in
- create mode 100644 boot/binaries-marvell/binaries-marvell.hash
- create mode 100644 boot/binaries-marvell/binaries-marvell.mk
+ DEVELOPERS                              |  1 +
+ boot/Config.in                          |  1 +
+ boot/mv-ddr-marvell/Config.in           | 10 ++++++++++
+ boot/mv-ddr-marvell/mv-ddr-marvell.hash |  2 ++
+ boot/mv-ddr-marvell/mv-ddr-marvell.mk   | 12 ++++++++++++
+ 5 files changed, 26 insertions(+)
+ create mode 100644 boot/mv-ddr-marvell/Config.in
+ create mode 100644 boot/mv-ddr-marvell/mv-ddr-marvell.hash
+ create mode 100644 boot/mv-ddr-marvell/mv-ddr-marvell.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 9d114b5a29..9115892d5c 100644
+index c44e8aee50..9d114b5a29 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
 @@ -1508,6 +1508,7 @@ F:	package/lua-resty-http/
  F:	package/mpir/
  
  N:	Sergey Matyukevich <geomatsi@gmail.com>
-+F:	boot/binaries-marvell/
- F:	boot/mv-ddr-marvell/
++F:	boot/mv-ddr-marvell/
  F:	board/linksprite/pcduino
  F:	board/orangepi/orangepi-zero
+ F:	board/orangepi/orangepi-one
 diff --git a/boot/Config.in b/boot/Config.in
-index 3950c49524..3687c41a2c 100644
+index 2f46c8546e..3950c49524 100644
 --- a/boot/Config.in
 +++ b/boot/Config.in
-@@ -6,6 +6,7 @@ source "boot/at91bootstrap3/Config.in"
- source "boot/at91dataflashboot/Config.in"
- source "boot/arm-trusted-firmware/Config.in"
- source "boot/barebox/Config.in"
-+source "boot/binaries-marvell/Config.in"
- source "boot/boot-wrapper-aarch64/Config.in"
+@@ -10,6 +10,7 @@ source "boot/boot-wrapper-aarch64/Config.in"
  source "boot/grub2/Config.in"
  source "boot/gummiboot/Config.in"
-diff --git a/boot/binaries-marvell/Config.in b/boot/binaries-marvell/Config.in
+ source "boot/lpc32xxcdl/Config.in"
++source "boot/mv-ddr-marvell/Config.in"
+ source "boot/mxs-bootlets/Config.in"
+ source "boot/s500-bootloader/Config.in"
+ source "boot/syslinux/Config.in"
+diff --git a/boot/mv-ddr-marvell/Config.in b/boot/mv-ddr-marvell/Config.in
 new file mode 100644
-index 0000000000..d565e4dbfd
+index 0000000000..6cf6eec9ae
 --- /dev/null
-+++ b/boot/binaries-marvell/Config.in
-@@ -0,0 +1,32 @@
-+config BR2_TARGET_BINARIES_MARVELL
-+	bool "binaries-marvell"
++++ b/boot/mv-ddr-marvell/Config.in
+@@ -0,0 +1,10 @@
++config BR2_TARGET_MV_DDR_MARVELL
++	bool "mv-ddr-marvell"
 +	depends on BR2_aarch64
 +	help
-+	  Some systems, including Marvell Armada SoC, have a separate
-+	  System Control Processor (SCP) for power management, clocks,
-+	  reset and system control. ATF Boot Loader stage 2 (BL2) loads
-+	  optional SCP_BL2 image into a platform-specific region
-+	  of secure memory. This package downloads and installs such
-+	  firmwares, which are needed to build ATF.
++	  Marvell keeps algorithms for DDR training in a separate
++	  repository. This code is not built separately, it is needed
++	  as dependency to build ATF firmware for Marvell Armada 7040
++	  and 8040 SoCs.
 +
-+	  https://github.com/MarvellEmbeddedProcessors/binaries-marvell/
-+
-+if BR2_TARGET_BINARIES_MARVELL
-+
-+choice
-+	prompt "Marvell Armada platform"
-+
-+config BR2_TARGET_BINARIES_MARVELL_7040
-+	bool "7040"
-+
-+config BR2_TARGET_BINARIES_MARVELL_8040
-+	bool "8040"
-+
-+endchoice
-+
-+config BR2_TARGET_BINARIES_MARVELL_IMAGE
-+	string
-+	default "mrvl_scp_bl2_8040.img" if BR2_TARGET_BINARIES_MARVELL_8040
-+	default "mrvl_scp_bl2_7040.img" if BR2_TARGET_BINARIES_MARVELL_7040
-+
-+endif
-diff --git a/boot/binaries-marvell/binaries-marvell.hash b/boot/binaries-marvell/binaries-marvell.hash
++	  https://github.com/MarvellEmbeddedProcessors/mv-ddr-marvell/
+diff --git a/boot/mv-ddr-marvell/mv-ddr-marvell.hash b/boot/mv-ddr-marvell/mv-ddr-marvell.hash
 new file mode 100644
-index 0000000000..401584dacd
+index 0000000000..b96d4d2bc8
 --- /dev/null
-+++ b/boot/binaries-marvell/binaries-marvell.hash
++++ b/boot/mv-ddr-marvell/mv-ddr-marvell.hash
 @@ -0,0 +1,2 @@
 +# Locally calculated
-+sha256 22a201542d8f93cf88623065db5f3377822b59cbfdf98a8e60cdee629273d3a0 binaries-marvell-0dabe23b956420b0928d337d635f0cd5646c33d0.tar.gz
-diff --git a/boot/binaries-marvell/binaries-marvell.mk b/boot/binaries-marvell/binaries-marvell.mk
++sha256 d413546367ffa3b5f4373a777b9efeb32dcc74d6106897c248935ecb79afc454 mv-ddr-marvell-656440a9690f3d07be9e3d2c39d7cf56fd96eb7b.tar.gz
+diff --git a/boot/mv-ddr-marvell/mv-ddr-marvell.mk b/boot/mv-ddr-marvell/mv-ddr-marvell.mk
 new file mode 100644
-index 0000000000..e2bd4f2499
+index 0000000000..0f98fc2cef
 --- /dev/null
-+++ b/boot/binaries-marvell/binaries-marvell.mk
-@@ -0,0 +1,22 @@
++++ b/boot/mv-ddr-marvell/mv-ddr-marvell.mk
+@@ -0,0 +1,12 @@
 +################################################################################
 +#
-+# binaries-marvell
++# mv-ddr-marvell
 +#
 +################################################################################
 +
-+BINARIES_MARVELL_VERSION = 0dabe23b956420b0928d337d635f0cd5646c33d0
-+BINARIES_MARVELL_SITE = $(call github,MarvellEmbeddedProcessors,binaries-marvell,$(BINARIES_MARVELL_VERSION))
-+
-+# The license text is only available in the master branch, which is
-+# not used in this package. See
-+# https://raw.githubusercontent.com/MarvellEmbeddedProcessors/binaries-marvell/master/README.md.
-+BINARIES_MARVELL_LICENSE = GPL-2.0 with freertos-exception-2.0
-+
-+BINARIES_MARVELL_IMAGE = $(call qstrip,$(BR2_TARGET_BINARIES_MARVELL_IMAGE))
-+BINARIES_MARVELL_INSTALL_IMAGES  = YES
-+
-+define BINARIES_MARVELL_INSTALL_IMAGES_CMDS
-+	$(INSTALL) -D -m 0644 $(@D)/$(BINARIES_MARVELL_IMAGE) $(BINARIES_DIR)/scp-fw.bin
-+endef
++MV_DDR_MARVELL_VERSION = 656440a9690f3d07be9e3d2c39d7cf56fd96eb7b
++MV_DDR_MARVELL_SITE = $(call github,MarvellEmbeddedProcessors,mv-ddr-marvell,$(MV_DDR_MARVELL_VERSION))
++MV_DDR_MARVELL_LICENSE = GPL-2.0+ or LGPL-2.1 with freertos-exception-2.0, BSD-3-Clause, Marvell Commercial
++MV_DDR_MARVELL_LICENSE_FILES = ddr3_init.c
 +
 +$(eval $(generic-package))
 -- 
