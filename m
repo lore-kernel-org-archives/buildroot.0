@@ -1,34 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 3 Dec 2017 15:15:07 +0100
-Subject: [Buildroot] [PATCH 2/2] kvmtool: bump to f77d646ba0
-In-Reply-To: <CANQCQpaQzSj_4cKDAnGViSySBFgWmywc2mjdWgEiG2WfW7eLXg@mail.gmail.com>
-References: <20171203033321.13460-1-matthew.weber@rockwellcollins.com>
- <20171203033321.13460-2-matthew.weber@rockwellcollins.com>
- <20171203145407.78bab7c2@windsurf.home>
- <CANQCQpaQzSj_4cKDAnGViSySBFgWmywc2mjdWgEiG2WfW7eLXg@mail.gmail.com>
-Message-ID: <20171203151507.0964bc86@windsurf.home>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 3 Dec 2017 16:11:19 +0100
+Subject: [Buildroot] [PATCH] omxplayer: bump to version 2ee17b2
+In-Reply-To: <20171201224058.2a3eebca@windsurf.lan>
+References: <20171201172755.9968-1-julius@kriukas.lt>
+ <20171201224058.2a3eebca@windsurf.lan>
+Message-ID: <20171203151119.GA2765@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Julius, All,
 
-On Sun, 3 Dec 2017 08:05:00 -0600, Matthew Weber wrote:
-
-> (Pardon the rich text, just have my tablet this morning)
+On 2017-12-01 22:40 +0100, Thomas Petazzoni spake thusly:
+> Hello,
 > 
-> I forgot to run both of the kvm updates through testpkg, so I'll do that
-> and take a look at this one.
+> On Fri,  1 Dec 2017 19:27:55 +0200, Julius Kriukas wrote:
+> > This patch updates omxplayer package to the latest commit on master as
+> > of 2017-12-01.
+[--SNIP--]
+> Applied to master, thanks.
 
-No problem. I don't always do a test build before pushing version
-bumps, because I rely on the autobuilders to do such testing. But
-sometimes I do a quick build test, which was the case here, and it
-found an issue :-)
+This is causing some build failures, probably because of a missing
+dependency on alsa-lib:
 
-Thomas
+    http://autobuild.buildroot.org/results/652/65212c59a37398681b341263bd76ba8a65ff7828/
+
+    linux/OMXAlsa.cpp:21:28: fatal error: alsa/asoundlib.h: No such file
+    or directory
+     #include <alsa/asoundlib.h>
+                            ^
+    compilation terminated.
+
+Can you have a look, please?
+
+Regards,
+Yann E. MORIN.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
