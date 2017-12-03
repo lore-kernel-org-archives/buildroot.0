@@ -1,11 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 3 Dec 2017 23:04:01 +0100
-Subject: [Buildroot] [PATCH v3 3/4] atf: add support for Marvell Armada
- SoCs
-In-Reply-To: <20171203181818.10087-4-geomatsi@gmail.com>
-References: <20171203181818.10087-1-geomatsi@gmail.com>
- <20171203181818.10087-4-geomatsi@gmail.com>
-Message-ID: <20171203230401.57bc589c@windsurf.home>
+Date: Sun, 3 Dec 2017 23:06:13 +0100
+Subject: [Buildroot] [PATCH/next 1/1] package/avahi: configure option
+ pygtk was renamed to pygobject
+In-Reply-To: <20171127202700.28697-1-bernd.kuhls@t-online.de>
+References: <20171127202700.28697-1-bernd.kuhls@t-online.de>
+Message-ID: <20171203230613.71608b7c@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,36 +13,24 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun,  3 Dec 2017 21:18:17 +0300, Sergey Matyukevich wrote:
+On Mon, 27 Nov 2017 21:27:00 +0100, Bernd Kuhls wrote:
+> See corresponding commit:
+> https://github.com/lathiat/avahi/commit/142124dae6f043085aba59fca4657c56b2b23b65
+> 
+> Fixes
+> http://autobuild.buildroot.net/results/1e9/1e974c814ae4236077a869339be1143a9af7e5cd/
+> http://autobuild.buildroot.net/results/010/0101b1205aec5a0c9c6509edf3d302aeaa3bd0ca/
+> http://autobuild.buildroot.net/results/572/5721634ffa2a4544a82dda08c1fcea331ecdadaf/
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/avahi/avahi.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-> diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-> index 7b1cc6ebb6..035f7de189 100644
-> --- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-> +++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-> @@ -39,6 +39,17 @@ ARM_TRUSTED_FIRMWARE_MAKE_OPTS += SCP_BL2=$(BINARIES_DIR)/scp-fw.bin
->  ARM_TRUSTED_FIRMWARE_DEPENDENCIES += vexpress-firmware
->  endif
->  
-> +ifeq ($(BR2_TARGET_BINARIES_MARVELL),y)
-> +ARM_TRUSTED_FIRMWARE_MAKE_OPTS += SCP_BL2=$(BINARIES_DIR)/scp-fw.bin
-> +ARM_TRUSTED_FIRMWARE_DEPENDENCIES += binaries-marvell
-> +endif
-> +
-> +ifeq ($(BR2_TARGET_MV_DDR_MARVELL),y)
-> +ARM_TRUSTED_FIRMWARE_MAKE_OPTS += \
-> +	MV_DDR_PATH=$(BUILD_DIR)/mv-ddr-marvell
-
-I've changed that to:
-
-	MV_DDR_PATH=$(MV_DDR_MARVELL_DIR)
-
-which avoids the need for the symlink you were creating in
-mv-ddr-marvell.
-
-Best regards,
+Applied to master, thanks.
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
+Embedded Linux, Kernel and Android engineering
 http://free-electrons.com
