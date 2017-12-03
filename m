@@ -1,44 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 3 Dec 2017 10:59:05 +0100
-Subject: [Buildroot] [PATCH 1/1] erlang: bump to version 20.0
-In-Reply-To: <20171130154202.437-1-johan.oudinet@gmail.com>
-References: <20171130154202.437-1-johan.oudinet@gmail.com>
-Message-ID: <20171203105905.3bdd1dc9@windsurf.lan>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Sun,  3 Dec 2017 12:13:44 +0100
+Subject: [Buildroot] [PATCH] package/avahi: fix build failures
+Message-ID: <20171203111344.8661-1-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Since [1], avahi uses/checks for pygobject instead of pygtk, so update
+the configure options accordingly.
 
-On Thu, 30 Nov 2017 16:42:02 +0100, Johan Oudinet wrote:
-> This change bumps the Erlang version from 19.3 to 20.0. As a new major
-> release, there are a few incompatibilities. Details are here:
-> http://www.erlang.org/news/114
-> 
-> This should fix builds on ppc64le host machines:
-> http://autobuild.buildroot.net/results/407af9800313d4540643d7625e85acc0c2366892
-> http://autobuild.buildroot.net/results/2aca54ad48ecfd72242d97499e21a46c1b384b10
-> 
-> Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
-> ---
->  package/erlang/erlang.hash | 4 ++--
->  package/erlang/erlang.mk   | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
+Fixes:
+  http://autobuild.buildroot.net/results/ffea97dc13d379d32f9e33ae6f9e986b2c435ea9
+  and many others
 
-This causes a bunch of build failures:
+[1] https://github.com/lathiat/avahi/commit/142124dae6f043085aba59fca4657c56b2b23b65
 
-  http://autobuild.buildroot.net/?reason=host-erlang-20.0
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+---
+ package/avahi/avahi.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Seems like host-zlib is needed.
-
-Could you have a look ?
-
-Thanks!
-
-Thomas
+diff --git a/package/avahi/avahi.mk b/package/avahi/avahi.mk
+index b89887b4c7..c8f1af9a9d 100644
+--- a/package/avahi/avahi.mk
++++ b/package/avahi/avahi.mk
+@@ -77,7 +77,7 @@ AVAHI_CONF_OPTS = \
+ 	--disable-gtk \
+ 	--disable-gtk3 \
+ 	--disable-gdbm \
+-	--disable-pygtk \
++	--disable-pygobject \
+ 	--disable-mono \
+ 	--disable-monodoc \
+ 	--disable-stack-protector \
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.15.1
