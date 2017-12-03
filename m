@@ -1,42 +1,61 @@
-From: Tony Lindgren <tony@atomide.com>
-Date: Sun,  3 Dec 2017 14:39:42 -0800
-Subject: [Buildroot] [PATCH] kexec: bump to 2.0.16
-Message-ID: <20171203223942.6380-1-tony@atomide.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 3 Dec 2017 23:42:33 +0100
+Subject: [Buildroot] [PATCH 1/1] duktape: new package
+In-Reply-To: <20171103195343.29670-1-fontaine.fabrice@gmail.com>
+References: <20171103195343.29670-1-fontaine.fabrice@gmail.com>
+Message-ID: <20171203234233.1393250e@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In 2.0.16 we now have uncompressed kernel size available
-for ARM starting v4.14 and later kernels.
+Hello,
 
-Let's also remove the extra space after the checksum while at it.
+On Fri,  3 Nov 2017 20:53:43 +0100, Fabrice Fontaine wrote:
+> Duktape is an embeddable Javascript engine, with a focus on
+> portability and compact footprint.
+> 
+> Duktape is easy to integrate into a C/C++ project: add duktape.c,
+> duktape.h, and duk_config.h to your build, and use the Duktape API
+> to call Ecmascript functions from C code and vice versa.
+> 
+> http://www.duktape.org
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Signed-off-by: Tony Lindgren <tony@atomide.com>
----
- package/kexec/kexec.hash | 2 +-
- package/kexec/kexec.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+In addition to the comments already made by Peter and me, I have one
+more comment below.
 
-diff --git a/package/kexec/kexec.hash b/package/kexec/kexec.hash
---- a/package/kexec/kexec.hash
-+++ b/package/kexec/kexec.hash
-@@ -1,2 +1,2 @@
- # From https://www.kernel.org/pub/linux/utils/kernel/kexec/sha256sums.asc
--sha256 899b7b861431eb51886d0c12866e91b036228244d35a5fb04762dd1a3c0194e7  kexec-tools-2.0.15.tar.xz
-+sha256 5b103351ad752c9badd1d65b00eb6de4bce579f944f4df4e3ef3a755ba567010 kexec-tools-2.0.16.tar.xz
-diff --git a/package/kexec/kexec.mk b/package/kexec/kexec.mk
---- a/package/kexec/kexec.mk
-+++ b/package/kexec/kexec.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KEXEC_VERSION = 2.0.15
-+KEXEC_VERSION = 2.0.16
- KEXEC_SOURCE = kexec-tools-$(KEXEC_VERSION).tar.xz
- KEXEC_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kernel/kexec
- KEXEC_LICENSE = GPL-2.0
+
+> +# For static library, nothing is provided by duktape so build and install it
+> +ifeq ($(BR2_STATIC_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
+> +define DUKTAPE_BUILD_STATIC
+> +	$(TARGET_CC) $(TARGET_CFLAGS) -c $(@D)/src/duktape.c \
+> +		-o $(@D)/libduktape.a
+> +	$(TARGET_CC) $(TARGET_CFLAGS) -g -c $(@D)/src/duktape.c \
+> +		-o $(@D)/libduktaped.a
+> +endef
+> +
+> +define DUKTAPE_INSTALL_STATIC
+> +	$(INSTALL) -m 0644 -D $(@D)/libduktape.a \
+> +		$(STAGING_DIR)/usr/lib/libduktape.a
+> +	$(INSTALL) -m 0644 -D $(@D)/libduktaped.a \
+> +		$(STAGING_DIR)/usr/lib/libduktaped.a
+> +endef
+> +endif
+
+Is duktape build system doesn't support building/installing a static
+library, then just don't support it (or submit a patch upstream to add
+that support). In the mean time, make the package depends
+on !BR2_STATIC_LIBS and just don't support static library building.
+
+I'll mark your patch as Changes Requested in patchwork.
+
+Best regards,
+
+Thomas
 -- 
-2.15.0
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
