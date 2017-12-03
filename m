@@ -1,10 +1,12 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 3 Dec 2017 23:51:10 +0100
-Subject: [Buildroot] [PATCH v2 1/2] gstreamer1: add config option for
- building unit test libraries
-In-Reply-To: <20171027171622.16050-1-ps.report@gmx.net>
-References: <20171027171622.16050-1-ps.report@gmx.net>
-Message-ID: <20171203235110.5415337f@windsurf.home>
+Date: Sun, 3 Dec 2017 23:55:40 +0100
+Subject: [Buildroot] [RFCv3 04/15] pkg-cmake: install CMake files as
+ part of a package
+In-Reply-To: <20171203223454.GB4164@scaer>
+References: <20171201205352.24287-1-thomas.petazzoni@free-electrons.com>
+ <20171201205352.24287-5-thomas.petazzoni@free-electrons.com>
+ <20171203223454.GB4164@scaer>
+Message-ID: <20171203235540.395d4714@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,41 +15,48 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 27 Oct 2017 19:16:21 +0200, Peter Seiderer wrote:
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+On Sun, 3 Dec 2017 23:34:54 +0100, Yann E. MORIN wrote:
 
-I've applied, with some small changes. See below.
+> On 2017-12-01 21:53 +0100, Thomas Petazzoni spake thusly:
+> > Currently, the toolchainfile.cmake and Buildroot.cmake files are
+> > installed outside of any package, just triggered by the toolchain
+> > target.
+> > 
+> > As part of the per-package SDK effort, we are trying to avoid anything
+> > that installs to the global $(HOST_DIR), and this is one of the
+> > remaining files installed in $(HOST_DIR) outside of any package. We
+> > fix this by installing such files as part of the toolchain package
+> > post-install staging hooks.
+> > 
+> > Yes, a post-install staging hook to install things to $(HOST_DIR) is a
+> > bit weird, but the toolchain infrastructure is made of target packages
+> > only, and they all install a lot of stuff to $(HOST_DIR) already.  
+> 
+> What I am more concerned about, is that the cmake package is registering
+> a hook for another package, toolchain.
 
-> diff --git a/package/gstreamer1/gstreamer1/Config.in b/package/gstreamer1/gstreamer1/Config.in
-> index 274171b639..c5839f546d 100644
-> --- a/package/gstreamer1/gstreamer1/Config.in
-> +++ b/package/gstreamer1/gstreamer1/Config.in
-> @@ -16,6 +16,12 @@ config BR2_PACKAGE_GSTREAMER1
->  
->  if BR2_PACKAGE_GSTREAMER1
->  
-> +config BR2_PACKAGE_GSTREAMER1_CHECK
-> +	bool "enable building unit test libraries"
+Do we want to introduce a toolchain-cmake package, that all CMake
+packages would depend on, just for the sake of installing those files ?
 
-"building" is not very useful, and is not used in the other options in
-that package, so I've removed this word.
+If we would do this, then a normal toolchain build (i.e without
+building any CMake package) would no longer generate the
+toolchainfile.cmake file, which is quite useful for SDKs. People could
+indeed enable that package explicitly when they are building a SDK.
 
-> +	default n
+But all in all, I'm not sure it's really worth the hassle. But I'm open
+to comments on that.
 
-Being disabled is the default, so "default n" is not needed. I dropped
-it.
+Or perhaps you had other suggestions in mind?
 
-> +	$(if $(BR2_PACKAGE_GSTREAMER1_CHECK),,--disable-check) \
->  	$(if $(BR2_PACKAGE_GSTREAMER1_TRACE),,--disable-trace) \
->  	$(if $(BR2_PACKAGE_GSTREAMER1_PARSE),,--disable-parse) \
+> Have you tried to run check-package on that?
 
-Side note: I'm wondering why we're not explicitly doing --enable-<foo>
-for all those options. We're doing this for all other packages in
-Buildroot. But since what you've done is consistent with other options
-from the gstreamer1 package, I've applied as-is for now. Changing that
-is topic for a separate patch.
+Nope, I did not, but it does not complain:
 
-Thanks!
+$ ./utils/check-package package/pkg-cmake.mk 
+0 lines processed
+0 warnings generated
+
+Thanks for the review!
 
 Thomas
 -- 
