@@ -1,51 +1,56 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 3 Dec 2017 23:49:25 +0100
-Subject: [Buildroot] [git commit] gstreamer1: add config option for building
- unit test libraries
-Message-ID: <20171203224212.8A3178282C@busybox.osuosl.org>
+Date: Sun, 3 Dec 2017 23:51:10 +0100
+Subject: [Buildroot] [PATCH v2 1/2] gstreamer1: add config option for
+ building unit test libraries
+In-Reply-To: <20171027171622.16050-1-ps.report@gmx.net>
+References: <20171027171622.16050-1-ps.report@gmx.net>
+Message-ID: <20171203235110.5415337f@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=29458dca787106112ad66f8e6178ed530241b999
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-[Thomas: remove "default n", simplify option prompt.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/gstreamer1/gstreamer1/Config.in     | 5 +++++
- package/gstreamer1/gstreamer1/gstreamer1.mk | 2 +-
- 2 files changed, 6 insertions(+), 1 deletion(-)
+On Fri, 27 Oct 2017 19:16:21 +0200, Peter Seiderer wrote:
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 
-diff --git a/package/gstreamer1/gstreamer1/Config.in b/package/gstreamer1/gstreamer1/Config.in
-index 274171b..3d6b1b9 100644
---- a/package/gstreamer1/gstreamer1/Config.in
-+++ b/package/gstreamer1/gstreamer1/Config.in
-@@ -16,6 +16,11 @@ config BR2_PACKAGE_GSTREAMER1
- 
- if BR2_PACKAGE_GSTREAMER1
- 
-+config BR2_PACKAGE_GSTREAMER1_CHECK
-+	bool "enable unit test libraries"
-+	help
-+	  Enable building unit test libraries for gstreamer.
-+
- config BR2_PACKAGE_GSTREAMER1_PARSE
- 	bool "enable command-line parser"
- 	default y
-diff --git a/package/gstreamer1/gstreamer1/gstreamer1.mk b/package/gstreamer1/gstreamer1/gstreamer1.mk
-index 723e59b..c2da601 100644
---- a/package/gstreamer1/gstreamer1/gstreamer1.mk
-+++ b/package/gstreamer1/gstreamer1/gstreamer1.mk
-@@ -17,7 +17,7 @@ GSTREAMER1_CONF_OPTS = \
- 	--disable-failing-tests \
- 	--disable-valgrind \
- 	--disable-benchmarks \
--	--disable-check \
-+	$(if $(BR2_PACKAGE_GSTREAMER1_CHECK),,--disable-check) \
- 	$(if $(BR2_PACKAGE_GSTREAMER1_TRACE),,--disable-trace) \
- 	$(if $(BR2_PACKAGE_GSTREAMER1_PARSE),,--disable-parse) \
- 	$(if $(BR2_PACKAGE_GSTREAMER1_GST_DEBUG),,--disable-gst-debug) \
+I've applied, with some small changes. See below.
+
+> diff --git a/package/gstreamer1/gstreamer1/Config.in b/package/gstreamer1/gstreamer1/Config.in
+> index 274171b639..c5839f546d 100644
+> --- a/package/gstreamer1/gstreamer1/Config.in
+> +++ b/package/gstreamer1/gstreamer1/Config.in
+> @@ -16,6 +16,12 @@ config BR2_PACKAGE_GSTREAMER1
+>  
+>  if BR2_PACKAGE_GSTREAMER1
+>  
+> +config BR2_PACKAGE_GSTREAMER1_CHECK
+> +	bool "enable building unit test libraries"
+
+"building" is not very useful, and is not used in the other options in
+that package, so I've removed this word.
+
+> +	default n
+
+Being disabled is the default, so "default n" is not needed. I dropped
+it.
+
+> +	$(if $(BR2_PACKAGE_GSTREAMER1_CHECK),,--disable-check) \
+>  	$(if $(BR2_PACKAGE_GSTREAMER1_TRACE),,--disable-trace) \
+>  	$(if $(BR2_PACKAGE_GSTREAMER1_PARSE),,--disable-parse) \
+
+Side note: I'm wondering why we're not explicitly doing --enable-<foo>
+for all those options. We're doing this for all other packages in
+Buildroot. But since what you've done is consistent with other options
+from the gstreamer1 package, I've applied as-is for now. Changing that
+is topic for a separate patch.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
