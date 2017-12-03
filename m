@@ -1,355 +1,105 @@
-From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Sat,  2 Dec 2017 21:33:21 -0600
-Subject: [Buildroot] [PATCH 2/2] kvmtool: bump to f77d646ba0
-In-Reply-To: <20171203033321.13460-1-matthew.weber@rockwellcollins.com>
-References: <20171203033321.13460-1-matthew.weber@rockwellcollins.com>
-Message-ID: <20171203033321.13460-2-matthew.weber@rockwellcollins.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun,  3 Dec 2017 08:00:39 +0100 (CET)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2017-12-02
+Message-ID: <20171203070039.52C7D206D9@mail.free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit used:
-2017-11-03 16:19:58 +0000
-irq.h: fix compilation error due to missing bool type
+Hello,
 
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
----
- DEVELOPERS                                         |  1 +
- .../kvmtool/0001-avoid-redefining-PAGE_SIZE.patch  | 42 ----------
- ...6-kvm-cpu.c-don-t-include-asm-msr-index.h.patch | 58 --------------
- .../0003-use-poll.h-instead-of-sys-poll.h.patch    | 33 --------
- ...nd-use-C-library-provided-strlcpy-and-str.patch | 90 ----------------------
- package/kvmtool/0005-Fix-call-to-connect.patch     | 34 --------
- package/kvmtool/kvmtool.hash                       |  2 +-
- package/kvmtool/kvmtool.mk                         |  2 +-
- 8 files changed, 3 insertions(+), 259 deletions(-)
- delete mode 100644 package/kvmtool/0001-avoid-redefining-PAGE_SIZE.patch
- delete mode 100644 package/kvmtool/0002-x86-kvm-cpu.c-don-t-include-asm-msr-index.h.patch
- delete mode 100644 package/kvmtool/0003-use-poll.h-instead-of-sys-poll.h.patch
- delete mode 100644 package/kvmtool/0004-check-for-and-use-C-library-provided-strlcpy-and-str.patch
- delete mode 100644 package/kvmtool/0005-Fix-call-to-connect.patch
+Build statistics for 2017-12-02
+===============================
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index b6504210d3..5bb8fbe19b 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1085,6 +1085,7 @@ F:	package/iperf3/
- F:	package/iputils/
- F:	package/iw/
- F:	package/kvm-unit-tests/
-+F:	package/kvmtool/
- F:	package/libcsv/
- F:	package/libcurl/
- F:	package/libfcgi/
-diff --git a/package/kvmtool/0001-avoid-redefining-PAGE_SIZE.patch b/package/kvmtool/0001-avoid-redefining-PAGE_SIZE.patch
-deleted file mode 100644
-index ed3370cfc8..0000000000
---- a/package/kvmtool/0001-avoid-redefining-PAGE_SIZE.patch
-+++ /dev/null
-@@ -1,42 +0,0 @@
--From bec1b0ced72dc0d49825d6b69d09296d13fd0af3 Mon Sep 17 00:00:00 2001
--From: Andre Przywara <andre.przywara@arm.com>
--Date: Tue, 21 Jul 2015 10:58:46 +0100
--Subject: [PATCH] avoid redefining PAGE_SIZE
--
--PAGE_SIZE may have been defined by the C libary (musl-libc does that).
--So avoid redefining it here unconditionally, instead only use our
--definition if none has been provided by the libc.
--
--Signed-off-by: Andre Przywara <andre.przywara@arm.com>
--Signed-off-by: Will Deacon <will.deacon@arm.com>
--[backport from upstream commit 4095fac878f618ae5e7384a1dc65ee34b6e05217.]
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-----
-- include/kvm/kvm.h | 3 +++
-- 1 file changed, 3 insertions(+)
--
--diff --git a/include/kvm/kvm.h b/include/kvm/kvm.h
--index 754e029..37155db 100644
----- a/include/kvm/kvm.h
--+++ b/include/kvm/kvm.h
--@@ -11,6 +11,7 @@
-- #include <time.h>
-- #include <signal.h>
-- #include <sys/prctl.h>
--+#include <limits.h>
-- 
-- #define SIGKVMEXIT		(SIGRTMIN + 0)
-- #define SIGKVMPAUSE		(SIGRTMIN + 1)
--@@ -19,7 +20,9 @@
-- #define HOME_DIR		getenv("HOME")
-- #define KVM_BINARY_NAME		"lkvm"
-- 
--+#ifndef PAGE_SIZE
-- #define PAGE_SIZE (sysconf(_SC_PAGE_SIZE))
--+#endif
-- 
-- #define DEFINE_KVM_EXT(ext)		\
-- 	.name = #ext,			\
---- 
--2.9.4
--
-diff --git a/package/kvmtool/0002-x86-kvm-cpu.c-don-t-include-asm-msr-index.h.patch b/package/kvmtool/0002-x86-kvm-cpu.c-don-t-include-asm-msr-index.h.patch
-deleted file mode 100644
-index 842c131dc5..0000000000
---- a/package/kvmtool/0002-x86-kvm-cpu.c-don-t-include-asm-msr-index.h.patch
-+++ /dev/null
-@@ -1,58 +0,0 @@
--From ce9abb649165aca728e4645ce09e7bb77e684b06 Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Date: Sat, 19 Aug 2017 16:35:59 +0200
--Subject: [PATCH] x86/kvm-cpu.c: don't include <asm/msr-index.h>
--
--Since kernel commit 25dc1d6cc3082aab293e5dad47623b550f7ddd2a ("x86:
--stop exporting msr-index.h to userland"), <asm/msr-index.h> is no
--longer exported to userspace. Therefore, any toolchain built with
--kernel headers >= 4.12 will no longer have this header file, causing a
--build failure in kvmtool.
--
--As a replacement, this patch includes inside x86/kvm-cpu.c the
--necessary MSR_* definitions.
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Submitted-upstream: https://patchwork.kernel.org/patch/9910687/
-----
-- x86/kvm-cpu.c | 17 ++++++++++++++++-
-- 1 file changed, 16 insertions(+), 1 deletion(-)
--
--diff --git a/x86/kvm-cpu.c b/x86/kvm-cpu.c
--index 5cc4e1e..b02ff65 100644
----- a/x86/kvm-cpu.c
--+++ b/x86/kvm-cpu.c
--@@ -4,7 +4,6 @@
-- #include "kvm/util.h"
-- #include "kvm/kvm.h"
-- 
---#include <asm/msr-index.h>
-- #include <asm/apicdef.h>
-- #include <linux/err.h>
-- #include <sys/ioctl.h>
--@@ -136,6 +135,22 @@ static struct kvm_msrs *kvm_msrs__new(size_t nmsrs)
-- 	return vcpu;
-- }
-- 
--+#define MSR_IA32_SYSENTER_CS            0x00000174
--+#define MSR_IA32_SYSENTER_ESP           0x00000175
--+#define MSR_IA32_SYSENTER_EIP           0x00000176
--+
--+#define MSR_STAR                0xc0000081 /* legacy mode SYSCALL target */
--+#define MSR_LSTAR               0xc0000082 /* long mode SYSCALL target */
--+#define MSR_CSTAR               0xc0000083 /* compat mode SYSCALL target */
--+#define MSR_SYSCALL_MASK        0xc0000084 /* EFLAGS mask for syscall */
--+#define MSR_KERNEL_GS_BASE      0xc0000102 /* SwapGS GS shadow */
--+
--+#define MSR_IA32_TSC                    0x00000010
--+#define MSR_IA32_MISC_ENABLE            0x000001a0
--+
--+#define MSR_IA32_MISC_ENABLE_FAST_STRING_BIT            0
--+#define MSR_IA32_MISC_ENABLE_FAST_STRING                (1ULL << MSR_IA32_MISC_ENABLE_FAST_STRING_BIT)
--+
-- #define KVM_MSR_ENTRY(_index, _data)	\
-- 	(struct kvm_msr_entry) { .index = _index, .data = _data }
-- 
---- 
--2.9.4
--
-diff --git a/package/kvmtool/0003-use-poll.h-instead-of-sys-poll.h.patch b/package/kvmtool/0003-use-poll.h-instead-of-sys-poll.h.patch
-deleted file mode 100644
-index a358569b67..0000000000
---- a/package/kvmtool/0003-use-poll.h-instead-of-sys-poll.h.patch
-+++ /dev/null
-@@ -1,33 +0,0 @@
--From 19490e24895df95253e43a7aacf3ef408b830bd5 Mon Sep 17 00:00:00 2001
--From: Andre Przywara <andre.przywara@arm.com>
--Date: Fri, 17 Jul 2015 17:02:15 +0100
--Subject: [PATCH] use <poll.h> instead of <sys/poll.h>
--
--The manpage of poll(2) states that the prototype of poll is defined
--in <poll.h>. Use that header file instead of <sys/poll.h> to allow
--compilation against musl-libc.
--
--Signed-off-by: Andre Przywara <andre.przywara@arm.com>
--Signed-off-by: Will Deacon <will.deacon@arm.com>
--[backport from upstream commit 52c22e6e64a94cc701d86587d32cd3822ac5c293.]
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-----
-- disk/core.c | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/disk/core.c b/disk/core.c
--index 309e16c..dd2f258 100644
----- a/disk/core.c
--+++ b/disk/core.c
--@@ -5,7 +5,7 @@
-- 
-- #include <linux/err.h>
-- #include <sys/eventfd.h>
---#include <sys/poll.h>
--+#include <poll.h>
-- 
-- #define AIO_MAX 256
-- 
---- 
--2.9.4
--
-diff --git a/package/kvmtool/0004-check-for-and-use-C-library-provided-strlcpy-and-str.patch b/package/kvmtool/0004-check-for-and-use-C-library-provided-strlcpy-and-str.patch
-deleted file mode 100644
-index d0591b9e4d..0000000000
---- a/package/kvmtool/0004-check-for-and-use-C-library-provided-strlcpy-and-str.patch
-+++ /dev/null
-@@ -1,90 +0,0 @@
--From 7a9c16dcf58ff4c8154f3a9dfa1f02ec3daa1662 Mon Sep 17 00:00:00 2001
--From: Andre Przywara <andre.przywara@arm.com>
--Date: Fri, 17 Jul 2015 17:02:16 +0100
--Subject: [PATCH] check for and use C library provided strlcpy and strlcat
--
--The musl-libc library provides implementations of strlcpy and strlcat,
--so introduce a feature check for it and only use the kvmtool
--implementation if there is no library support for it.
--This avoids clashes with the public definition.
--
--Signed-off-by: Andre Przywara <andre.przywara@arm.com>
--Signed-off-by: Will Deacon <will.deacon@arm.com>
--[backport from upstream commit 8f22adc4230f07980a318ad1662fba5af0c131c1.]
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-----
-- Makefile                 |  5 +++++
-- config/feature-tests.mak | 10 ++++++++++
-- include/kvm/strbuf.h     |  2 ++
-- util/strbuf.c            |  2 ++
-- 4 files changed, 19 insertions(+)
--
--diff --git a/Makefile b/Makefile
--index 151fa9d..bf71db4 100644
----- a/Makefile
--+++ b/Makefile
--@@ -199,6 +199,11 @@ endif
-- # On a given system, some libs may link statically, some may not; so, check
-- # both and only build those that link!
-- 
--+ifeq ($(call try-build,$(SOURCE_STRLCPY),$(CFLAGS),),y)
--+	CFLAGS_DYNOPT	+= -DHAVE_STRLCPY
--+	CFLAGS_STATOPT	+= -DHAVE_STRLCPY
--+endif
--+
-- ifeq ($(call try-build,$(SOURCE_BFD),$(CFLAGS),-lbfd -static),y)
-- 	CFLAGS_STATOPT	+= -DCONFIG_HAS_BFD
-- 	OBJS_STATOPT	+= symbol.o
--diff --git a/config/feature-tests.mak b/config/feature-tests.mak
--index 6bee6c2..03cdb42 100644
----- a/config/feature-tests.mak
--+++ b/config/feature-tests.mak
--@@ -196,3 +196,13 @@ int main(void)
-- 	return 0;
-- }
-- endef
--+
--+define SOURCE_STRLCPY
--+#include <string.h>
--+
--+int main(void)
--+{
--+	strlcpy(NULL, NULL, 0);
--+	return 0;
--+}
--+endef
--diff --git a/include/kvm/strbuf.h b/include/kvm/strbuf.h
--index 2beefbc..7657339 100644
----- a/include/kvm/strbuf.h
--+++ b/include/kvm/strbuf.h
--@@ -6,8 +6,10 @@
-- 
-- int prefixcmp(const char *str, const char *prefix);
-- 
--+#ifndef HAVE_STRLCPY
-- extern size_t strlcat(char *dest, const char *src, size_t count);
-- extern size_t strlcpy(char *dest, const char *src, size_t size);
--+#endif
-- 
-- /* some inline functions */
-- 
--diff --git a/util/strbuf.c b/util/strbuf.c
--index 99d6b0c..2c6e8ad 100644
----- a/util/strbuf.c
--+++ b/util/strbuf.c
--@@ -13,6 +13,7 @@ int prefixcmp(const char *str, const char *prefix)
-- 	}
-- }
-- 
--+#ifndef HAVE_STRLCPY
-- /**
--  * strlcat - Append a length-limited, %NUL-terminated string to another
--  * @dest: The string to be appended to
--@@ -60,3 +61,4 @@ size_t strlcpy(char *dest, const char *src, size_t size)
-- 	}
-- 	return ret;
-- }
--+#endif
---- 
--2.9.4
--
-diff --git a/package/kvmtool/0005-Fix-call-to-connect.patch b/package/kvmtool/0005-Fix-call-to-connect.patch
-deleted file mode 100644
-index 434ca34b2f..0000000000
---- a/package/kvmtool/0005-Fix-call-to-connect.patch
-+++ /dev/null
-@@ -1,34 +0,0 @@
--From d375235f49184371026791ae8f6f9dc307de8a61 Mon Sep 17 00:00:00 2001
--From: Andre Przywara <andre.przywara@arm.com>
--Date: Fri, 17 Jul 2015 17:02:14 +0100
--Subject: [PATCH] Fix call to connect()
--
--According to the manpage and the prototype the second argument to
--connect(2) is a "const struct sockaddr*", so cast our protocol
--specific type back to the super type.
--This fixes compilation on musl-libc.
--
--Signed-off-by: Andre Przywara <andre.przywara@arm.com>
--Signed-off-by: Will Deacon <will.deacon@arm.com>
--[backport from upstream commit d77bd4f466f341d4b35fe8b91176ef8a37160e19.]
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-----
-- kvm-ipc.c | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/kvm-ipc.c b/kvm-ipc.c
--index b1c43dd..5a0b6e0 100644
----- a/kvm-ipc.c
--+++ b/kvm-ipc.c
--@@ -99,7 +99,7 @@ int kvm__get_sock_by_instance(const char *name)
-- 	strlcpy(local.sun_path, sock_file, sizeof(local.sun_path));
-- 	len = strlen(local.sun_path) + sizeof(local.sun_family);
-- 
---	r = connect(s, &local, len);
--+	r = connect(s, (struct sockaddr *)&local, len);
-- 	if (r < 0 && errno == ECONNREFUSED) {
-- 		/* Tell the user clean ghost socket file */
-- 		pr_err("\"%s\" could be a ghost socket file, please remove it",
---- 
--2.9.4
--
-diff --git a/package/kvmtool/kvmtool.hash b/package/kvmtool/kvmtool.hash
-index 657fdb315e..428277354d 100644
---- a/package/kvmtool/kvmtool.hash
-+++ b/package/kvmtool/kvmtool.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 5633d8dd1542996108bf9b75c9f2cf6bf13fb27bfd453ec250b3e5405e85f6ac  kvmtool-bed2bd9e1fbef5819090feeada7b86eed97ca5e2.tar.gz
-+sha256 2d55e4521ac040b870db015e1f075d69b89f940242d7ce5708f7d7060d62c0cc  kvmtool-f77d646ba01d04be5aad9449ac00719c043fe36e.tar.gz
-diff --git a/package/kvmtool/kvmtool.mk b/package/kvmtool/kvmtool.mk
-index 2789a6e308..9384002d58 100644
---- a/package/kvmtool/kvmtool.mk
-+++ b/package/kvmtool/kvmtool.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KVMTOOL_VERSION = bed2bd9e1fbef5819090feeada7b86eed97ca5e2
-+KVMTOOL_VERSION = f77d646ba01d04be5aad9449ac00719c043fe36e
- KVMTOOL_SITE = $(BR2_KERNEL_MIRROR)/scm/linux/kernel/git/will/kvmtool.git
- KVMTOOL_SITE_METHOD = git
- KVMTOOL_DEPENDENCIES = \
+      branch |  OK | NOK | TIM | TOT |
+      master | 197 |  46 |   1 | 244 |
+   2017.08.x |  22 |   1 |   0 |  23 |
+
+Results for branch 'master'
+===========================
+
+Classification of failures by reason
+------------------------------------
+
+                     avahi-0.7 | 26
+             libostree-2017.12 | 7 
+              host-erlang-20.0 | 6 
+                     axel-2.16 | 2 
+                 mesa3d-17.2.6 | 1 
+ netcat-openbsd-debian_1.178-3 | 1 
+omxplayer-2ee17b22a6149a043... | 1 
+                    php-7.1.12 | 1 
+                setserial-2.17 | 1 
+                   trinity-1.7 | 1 
+
+
+Detail of failures
+------------------
+
+        i586 |                      avahi-0.7 | NOK | http://autobuild.buildroot.net/results/ffea97dc13d379d32f9e33ae6f9e986b2c435ea9 | ORPH
+        i686 |                      avahi-0.7 | NOK | http://autobuild.buildroot.net/results/e35211945c6c7530f0e56fec3e3bb1d8637d75de | ORPH
+     sparc64 |                      avahi-0.7 | NOK | http://autobuild.buildroot.net/results/1ab4dcd7bfebb8bd90bdbb4abf138a9df8ecd13b | ORPH
+       sparc |                      avahi-0.7 | NOK | http://autobuild.buildroot.net/results/5ae4859440ef738401d0efa2b8c3ea46f1c05767 | ORPH
+         arc |                      avahi-0.7 | NOK | http://autobuild.buildroot.net/results/eb9e7f0a69596e5cb1fc1be1d262d1d58a6d7616 | ORPH
+ powerpc64le |                      avahi-0.7 | NOK | http://autobuild.buildroot.net/results/1f651912f5245cb66f0d5cb8801080c72c7d076a | ORPH
+        or1k |                      avahi-0.7 | NOK | http://autobuild.buildroot.net/results/7b48838fc2dab0c160ae57ca90ae25bc7e208737 | ORPH
+       sparc |                      avahi-0.7 | NOK | http://autobuild.buildroot.net/results/2c007557612a95121005473cf53347442da668cf | ORPH
+         arm |                      avahi-0.7 | NOK | http://autobuild.buildroot.net/results/1fb4c33c9536356f03aa5d532dbe3ca57c9392a9 | ORPH
+       nios2 |                      avahi-0.7 | NOK | http://autobuild.buildroot.net/results/f8ecd724a6aaadec381ba4f6d691fa9b90a79e38 | ORPH
+       nios2 |                      avahi-0.7 | NOK | http://autobuild.buildroot.net/results/d7d48235404bc364b2801eb3be5ff020f3b7dc20 | ORPH
+         arm |                      avahi-0.7 | NOK | http://autobuild.buildroot.net/results/9a30f5be8f4339a7769f81340e54bf6ddd2d489b | ORPH
+    mips64el |                      avahi-0.7 | NOK | http://autobuild.buildroot.net/results/097ac324f2718bbffe3945e662ff8937691e1ddd | ORPH
+      mipsel |                      avahi-0.7 | NOK | http://autobuild.buildroot.net/results/9d021276002e8a7b80b06b324137803f387116d9 | ORPH
+    mips64el |                      avahi-0.7 | NOK | http://autobuild.buildroot.net/results/f0002e896de37e10025b613f354f563d164bf3e9 | ORPH
+        i686 |                      avahi-0.7 | NOK | http://autobuild.buildroot.net/results/ff2879e0a8fd4e6bd0ca8f940b907cf228446c5c | ORPH
+         arc |                      avahi-0.7 | NOK | http://autobuild.buildroot.net/results/b5b003ce2d3228e75b3d03fbaa267469cee2f1f1 | ORPH
+        i686 |                      avahi-0.7 | NOK | http://autobuild.buildroot.net/results/01c95b6cfa85497a29ae574f2b2eead9fd8ee060 | ORPH
+    mips64el |                      avahi-0.7 | NOK | http://autobuild.buildroot.net/results/9f0934225edbb65cfb2c43e4b3ebabd15331ae65 | ORPH
+     aarch64 |                      avahi-0.7 | NOK | http://autobuild.buildroot.net/results/64dad57824bb5f9930a539926627a37f2330b8be | ORPH
+         arm |                      avahi-0.7 | NOK | http://autobuild.buildroot.net/results/1953468bc67ff9f68f9d0824ed1d876611bb367f | ORPH
+        i686 |                      avahi-0.7 | NOK | http://autobuild.buildroot.net/results/c1cfa928abcacd58b8035e38e1e2e1daa34b9b7a | ORPH
+      xtensa |                      avahi-0.7 | NOK | http://autobuild.buildroot.net/results/9013692001863a948cadba258ab7419e59035c11 | ORPH
+    mips64el |                      avahi-0.7 | NOK | http://autobuild.buildroot.net/results/04c5fff26b290ecc9a499cf9233eae588482bd85 | ORPH
+         arm |                      avahi-0.7 | NOK | http://autobuild.buildroot.net/results/b291d2fa9809da52f1e23fa143f90aa28cb017d1 | ORPH
+         arm |                      avahi-0.7 | NOK | http://autobuild.buildroot.net/results/4025ab311f2bb051bca5255c1ef32dc1872fa7da | ORPH
+        m68k |                      axel-2.16 | NOK | http://autobuild.buildroot.net/results/7e5314a265d8cac212eed969b79b15cf9a09d9fc | ORPH
+         arc |                      axel-2.16 | NOK | http://autobuild.buildroot.net/results/14834a3a5be134029486081ca935f2beb1b71829 | ORPH
+        i686 |               host-erlang-20.0 | NOK | http://autobuild.buildroot.net/results/5a63b34b82af75a8307b285c1b96c251c5987533 |     
+      mipsel |               host-erlang-20.0 | NOK | http://autobuild.buildroot.net/results/3a3b9a4568c706bd6caad3c63d356680c8405ac5 |     
+         arm |               host-erlang-20.0 | NOK | http://autobuild.buildroot.net/results/80b774266d68c6cb01a4be6801a3983ee1f0bc72 |     
+     aarch64 |               host-erlang-20.0 | NOK | http://autobuild.buildroot.net/results/24b460c38a4d27b2b78373edcf6a18e96ba77548 |     
+        i686 |               host-erlang-20.0 | NOK | http://autobuild.buildroot.net/results/fd69bffe3c0dc7551ab634f275b7f9ae2b557d3d |     
+         arm |               host-erlang-20.0 | NOK | http://autobuild.buildroot.net/results/92a7208ffc6068f03f9cd618e744df2d7a0c08a3 |     
+         arm |              libostree-2017.12 | NOK | http://autobuild.buildroot.net/results/1bf41b0284fa1303fd2cba5a03c58636b101ba02 |     
+    mips64el |              libostree-2017.12 | NOK | http://autobuild.buildroot.net/results/f07d777ff2e2052b22298a235c0e627450055910 |     
+    mips64el |              libostree-2017.12 | NOK | http://autobuild.buildroot.net/results/d3f37c0fa473a86e72e0966602154fd69b652125 |     
+         arm |              libostree-2017.12 | NOK | http://autobuild.buildroot.net/results/87b4e4b31f59d2aa82e8ecd610f1506818112a47 |     
+       sparc |              libostree-2017.12 | NOK | http://autobuild.buildroot.net/results/9fe60ba5b702aa95dd14799c9116cc6665678c78 |     
+         arm |              libostree-2017.12 | NOK | http://autobuild.buildroot.net/results/43c298afcea20d17bfd9638c8bbee2a912c643be |     
+       nios2 |              libostree-2017.12 | NOK | http://autobuild.buildroot.net/results/59e6d09cc9e73af4f92ea1ef6e925b534eb7418e |     
+     powerpc |                  mesa3d-17.2.6 | NOK | http://autobuild.buildroot.net/results/e4f94c217ded12f81a9b7e6f311d52efc14930d9 |     
+    mips64el |  netcat-openbsd-debian_1.178-3 | NOK | http://autobuild.buildroot.net/results/5753d5d99127017706fc84b66077f2fef3ca0595 |     
+         arm | omxplayer-2ee17b22a6149a043... | NOK | http://autobuild.buildroot.net/results/65212c59a37398681b341263bd76ba8a65ff7828 |     
+         arm |                     php-7.1.12 | NOK | http://autobuild.buildroot.net/results/d08475d49369438ddf3d21220924b10250af402f | ORPH
+   powerpc64 |                 setserial-2.17 | TIM | http://autobuild.buildroot.net/results/7e97dc59432004fe20c2e397417689cb548a9d73 |     
+         arm |                    trinity-1.7 | NOK | http://autobuild.buildroot.net/results/f22cb03a4ec1eafb89ca5e81a2864f928117b54d |     
+
+Results for branch '2017.08.x'
+==============================
+
+Classification of failures by reason
+------------------------------------
+
+                 mplayer-1.3.0 | 1 
+
+
+Detail of failures
+------------------
+
+    mips64el |                  mplayer-1.3.0 | NOK | http://autobuild.buildroot.net/results/cbb38d4ae8d3a5c065eda916133e0fd6b42b3db5 |     
+
+
 -- 
-2.14.2
+http://autobuild.buildroot.net
