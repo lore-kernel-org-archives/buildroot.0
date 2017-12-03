@@ -1,106 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun,  3 Dec 2017 22:48:08 +0100
-Subject: [Buildroot] [PATCH 5/8] mv-ddr-marvell: new package
-In-Reply-To: <20171203214811.3124-1-thomas.petazzoni@free-electrons.com>
-References: <20171203214811.3124-1-thomas.petazzoni@free-electrons.com>
-Message-ID: <20171203214811.3124-6-thomas.petazzoni@free-electrons.com>
+Date: Sun, 3 Dec 2017 22:51:10 +0100
+Subject: [Buildroot] [PATCH v5 00/11] board: Add Allwinner A64/H5 boards
+In-Reply-To: <1509559553-26544-1-git-send-email-jagan@amarulasolutions.com>
+References: <1509559553-26544-1-git-send-email-jagan@amarulasolutions.com>
+Message-ID: <20171203225110.319cc00e@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Sergey Matyukevich <geomatsi@gmail.com>
+Hello,
 
-This package adds Marvell Armada SoC DDR training algorithms.
-This code is not built separately, it is needed as dependency
-to build ATF firmware for Marvell Armada SoCs.
+On Wed,  1 Nov 2017 19:05:42 +0100, Jagan Teki wrote:
 
-Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
-[Thomas:
- - Remove MV_DDR_MARVELL_SRC_SYMLINK, ATF will directly pick up the
-   mv-ddr-marvell code from where it is.
- - Use "mv-ddr-marvell" as the Config.in prompt, and in the comment
-   header of the .mk file.
- - Add upstream URL in Config.in help text
- - Adjust license information.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- DEVELOPERS                              |  1 +
- boot/Config.in                          |  1 +
- boot/mv-ddr-marvell/Config.in           | 10 ++++++++++
- boot/mv-ddr-marvell/mv-ddr-marvell.hash |  2 ++
- boot/mv-ddr-marvell/mv-ddr-marvell.mk   | 12 ++++++++++++
- 5 files changed, 26 insertions(+)
- create mode 100644 boot/mv-ddr-marvell/Config.in
- create mode 100644 boot/mv-ddr-marvell/mv-ddr-marvell.hash
- create mode 100644 boot/mv-ddr-marvell/mv-ddr-marvell.mk
+> Jagan Teki (11):
+>   arm-trusted-firmware: Build FIP for BL33
+>   uboot: Add U-Boot-bundles-ATF support
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index c44e8aee50..9d114b5a29 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1508,6 +1508,7 @@ F:	package/lua-resty-http/
- F:	package/mpir/
- 
- N:	Sergey Matyukevich <geomatsi@gmail.com>
-+F:	boot/mv-ddr-marvell/
- F:	board/linksprite/pcduino
- F:	board/orangepi/orangepi-zero
- F:	board/orangepi/orangepi-one
-diff --git a/boot/Config.in b/boot/Config.in
-index 2f46c8546e..3950c49524 100644
---- a/boot/Config.in
-+++ b/boot/Config.in
-@@ -10,6 +10,7 @@ source "boot/boot-wrapper-aarch64/Config.in"
- source "boot/grub2/Config.in"
- source "boot/gummiboot/Config.in"
- source "boot/lpc32xxcdl/Config.in"
-+source "boot/mv-ddr-marvell/Config.in"
- source "boot/mxs-bootlets/Config.in"
- source "boot/s500-bootloader/Config.in"
- source "boot/syslinux/Config.in"
-diff --git a/boot/mv-ddr-marvell/Config.in b/boot/mv-ddr-marvell/Config.in
-new file mode 100644
-index 0000000000..6cf6eec9ae
---- /dev/null
-+++ b/boot/mv-ddr-marvell/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_TARGET_MV_DDR_MARVELL
-+	bool "mv-ddr-marvell"
-+	depends on BR2_aarch64
-+	help
-+	  Marvell keeps algorithms for DDR training in a separate
-+	  repository. This code is not built separately, it is needed
-+	  as dependency to build ATF firmware for Marvell Armada 7040
-+	  and 8040 SoCs.
-+
-+	  https://github.com/MarvellEmbeddedProcessors/mv-ddr-marvell/
-diff --git a/boot/mv-ddr-marvell/mv-ddr-marvell.hash b/boot/mv-ddr-marvell/mv-ddr-marvell.hash
-new file mode 100644
-index 0000000000..b96d4d2bc8
---- /dev/null
-+++ b/boot/mv-ddr-marvell/mv-ddr-marvell.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256 d413546367ffa3b5f4373a777b9efeb32dcc74d6106897c248935ecb79afc454 mv-ddr-marvell-656440a9690f3d07be9e3d2c39d7cf56fd96eb7b.tar.gz
-diff --git a/boot/mv-ddr-marvell/mv-ddr-marvell.mk b/boot/mv-ddr-marvell/mv-ddr-marvell.mk
-new file mode 100644
-index 0000000000..0f98fc2cef
---- /dev/null
-+++ b/boot/mv-ddr-marvell/mv-ddr-marvell.mk
-@@ -0,0 +1,12 @@
-+################################################################################
-+#
-+# mv-ddr-marvell
-+#
-+################################################################################
-+
-+MV_DDR_MARVELL_VERSION = 656440a9690f3d07be9e3d2c39d7cf56fd96eb7b
-+MV_DDR_MARVELL_SITE = $(call github,MarvellEmbeddedProcessors,mv-ddr-marvell,$(MV_DDR_MARVELL_VERSION))
-+MV_DDR_MARVELL_LICENSE = GPL-2.0+ or LGPL-2.1 with freertos-exception-2.0, BSD-3-Clause, Marvell Commercial
-+MV_DDR_MARVELL_LICENSE_FILES = ddr3_init.c
-+
-+$(eval $(generic-package))
+Since I was not super happy with this proposal to solve the ATF/U-Boot
+building problem for Allwinner A64/H5, I just submitted a different
+patch series (which re-uses some of your work, authorship preserved).
+Could you see what you think about my proposal ?
+
+See:
+
+ http://lists.busybox.net/pipermail/buildroot/2017-December/208788.html
+
+>   board: Add Bananapi M64 support
+>   board: Add Pine64 support
+>   board: Add SoPine support
+>   board: Add FriendlyARM Nanopi A64 support
+>   board: Add FriendlyARM Nanopi NEO2 support
+>   board: Add Olimex A64-OLinuXino support
+>   board: Add Orangepi Win/Win Plus support
+>   board: Add Orangepi Prime support
+>   board: Add Orangepi Zero Plus2 support
+
+If my proposal gets merged, then it would be nice if you could rebase
+your defconfig patches on top of it. It's mainly a matter of adding a
+few more ATF options and tweaking U-Boot options.
+
+Thanks a lot!
+
+Thomas
 -- 
-2.13.6
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
