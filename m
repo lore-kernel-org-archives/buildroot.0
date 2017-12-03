@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 3 Dec 2017 22:51:10 +0100
-Subject: [Buildroot] [PATCH v5 00/11] board: Add Allwinner A64/H5 boards
-In-Reply-To: <1509559553-26544-1-git-send-email-jagan@amarulasolutions.com>
-References: <1509559553-26544-1-git-send-email-jagan@amarulasolutions.com>
-Message-ID: <20171203225110.319cc00e@windsurf.home>
+Date: Sun, 3 Dec 2017 22:53:13 +0100
+Subject: [Buildroot] [PATCH v3 0/4] Add support for MacchiatoBin board
+In-Reply-To: <20171203181818.10087-1-geomatsi@gmail.com>
+References: <20171203181818.10087-1-geomatsi@gmail.com>
+Message-ID: <20171203225313.762c507c@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,34 +12,29 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed,  1 Nov 2017 19:05:42 +0100, Jagan Teki wrote:
+On Sun,  3 Dec 2017 21:18:14 +0300, Sergey Matyukevich wrote:
 
-> Jagan Teki (11):
->   arm-trusted-firmware: Build FIP for BL33
->   uboot: Add U-Boot-bundles-ATF support
+> Sergey Matyukevich (4):
+>   mv-ddr-marvell: new package
+>   binaries-marvell: new package
+>   atf: add support for Marvell Armada
 
-Since I was not super happy with this proposal to solve the ATF/U-Boot
-building problem for Allwinner A64/H5, I just submitted a different
-patch series (which re-uses some of your work, authorship preserved).
-Could you see what you think about my proposal ?
+Since these changes conflicted with changes proposed by Jagan Teki to
+support Allwinner A64/H5, and because I was not entirely happy with
+Jagan's proposal, I made a different proposal that solves both Jagan's
+use case and your use case. So I've taken those 3 patches and adapted
+them, fixing some issues along the way. Of course, I've preserved your
+authorship on the patches.
 
-See:
+Could you check my proposal at
+http://lists.busybox.net/pipermail/buildroot/2017-December/208788.html ?
 
- http://lists.busybox.net/pipermail/buildroot/2017-December/208788.html
+>   solidrun/macchiatobin: add new board
 
->   board: Add Bananapi M64 support
->   board: Add Pine64 support
->   board: Add SoPine support
->   board: Add FriendlyARM Nanopi A64 support
->   board: Add FriendlyARM Nanopi NEO2 support
->   board: Add Olimex A64-OLinuXino support
->   board: Add Orangepi Win/Win Plus support
->   board: Add Orangepi Prime support
->   board: Add Orangepi Zero Plus2 support
-
-If my proposal gets merged, then it would be nice if you could rebase
-your defconfig patches on top of it. It's mainly a matter of adding a
-few more ATF options and tweaking U-Boot options.
+I have replied separately to this patch, which I have not taken in my
+patch series. If Jagan and you are happy with my patches, it would be
+nice if you could resubmit your defconfig on top of it (and after
+fixing the other comments I made).
 
 Thanks a lot!
 
