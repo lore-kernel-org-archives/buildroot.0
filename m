@@ -1,51 +1,46 @@
-From: Roy Arav <roy.arav@shieldiot.io>
-Date: Sun, 3 Dec 2017 14:45:11 +0200
-Subject: [Buildroot] Enabling AUDIT
-Message-ID: <CAM27=5h9qxaXos3sTUOOxFr3MTQUwayK_eEciJkz7C=U1aBmWQ@mail.gmail.com>
+From: Dagg Stompler <daggs@gmx.com>
+Date: Sun,  3 Dec 2017 14:56:14 +0200
+Subject: [Buildroot] [PATCH 3/8] odroidc2: add post build script.
+In-Reply-To: <20171203125619.30919-1-daggs@gmx.com>
+References: <20171203125619.30919-1-daggs@gmx.com>
+Message-ID: <20171203125619.30919-3-daggs@gmx.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+add post-build script to generate uboot's scr file and the kernel's
+uImage file.
 
-I am trying to enable AUDIT on my system - buildroot image on Raspberry PI3.
-The following packages are enabled: (attached the full .config)
+Signed-off-by: Dagg Stompler <daggs@gmx.com>
+---
+ board/hardkernel/odroidc2/post-build.sh | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
+ create mode 100755 board/hardkernel/odroidc2/post-build.sh
 
-BR2_PACKAGE_AUDIT
-BR2_PACKAGE_AUDIT_ARCH_SUPPORTS
-BR2_PACKAGE_LIBCAP_NG
-
-And yet I get the following output:
-
-...
-         Starting Security Auditing Service...
-[   28.205145] auditd[241]: Error - audit support not in kernel
-[   28.262083] augenrules[242]: /sbin/augenrules: No rules directory -
-/etc/audit/rules.d
-[   28.301784] auditd[241]: Cannot open netlink audit socket
-[   28.342545] auditd[241]: The audit daemon is exiting.
-[   28.382227] auditctl[246]: Error - audit support not in kernel
-[   28.411173] auditctl[246]: file /etc/audit/audit.rules doesn't exist,
-skipping
-[FAILED] Failed to start Security Auditing Service.
-See 'systemctl status auditd.service' for details.
-...
-
-Looking at netlink.c - I am not really sure that NETLINK_AUDIT is defined.
-which is quite strange..
-
-
-Thanks
-Roy
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20171203/8d9bfffb/attachment.html>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: buildroot
-Type: application/octet-stream
-Size: 80969 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20171203/8d9bfffb/attachment.obj>
+diff --git a/board/hardkernel/odroidc2/post-build.sh b/board/hardkernel/odroidc2/post-build.sh
+new file mode 100755
+index 0000000000..6e2e71e501
+--- /dev/null
++++ b/board/hardkernel/odroidc2/post-build.sh
+@@ -0,0 +1,17 @@
++#!/bin/sh
++# post-build.sh for Odroid C2 taken from CubieBoard's post-build.sh
++# 2013, Carlo Caione <carlo.caione@gmail.com>
++
++BOARD_DIR="$(dirname $0)"
++MKIMAGE=$HOST_DIR/bin/mkimage
++BOOT_CMD=$BOARD_DIR/boot.cmd
++BOOT_CMD_H=$BINARIES_DIR/boot.scr
++
++# U-Boot script
++${MKIMAGE} -C none -A arm -T script -d ${BOOT_CMD} ${BOOT_CMD_H}
++
++# vendor u-boot uses uImage
++if [ -f "${BINARIES_DIR}/Image" ]; then
++    ${MKIMAGE} -A arm64 -O linux -T kernel -C none -a 0x1080000 -e 0x1080000 \
++	     -n linux -d ${BINARIES_DIR}/Image ${BINARIES_DIR}/uImage
++fi
+-- 
+2.15.1
