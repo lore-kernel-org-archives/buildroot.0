@@ -1,42 +1,79 @@
-From: Mario Lang <mlang@blind.guru>
-Date: Sun, 03 Dec 2017 23:01:23 +0100
-Subject: [Buildroot] [PATCH 1/1] package/icu: bump version to 60.1
-In-Reply-To: <20171203210012.0cb2bc4c@windsurf.home> (Thomas Petazzoni's
- message of "Sun, 3 Dec 2017 21:00:12 +0100")
-References: <20171203194140.8138-1-bernd.kuhls@t-online.de>
- <20171203210012.0cb2bc4c@windsurf.home>
-Message-ID: <87mv2zv5cc.fsf@home.blind.guru>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 3 Dec 2017 23:03:13 +0100
+Subject: [Buildroot] [PATCH v3 2/4] binaries-marvell: new package
+In-Reply-To: <20171203181818.10087-3-geomatsi@gmail.com>
+References: <20171203181818.10087-1-geomatsi@gmail.com>
+ <20171203181818.10087-3-geomatsi@gmail.com>
+Message-ID: <20171203230313.2cde5811@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Hello,
 
-> Hello,
->
-> On Sun,  3 Dec 2017 20:41:40 +0100, Bernd Kuhls wrote:
->> Removed 0006-i18n-Drop-include-xlocale.h.patch, problem was fixed
->> upstream with a different solution:
->> http://bugs.icu-project.org/trac/changeset/40603
->> 
->> Added upstream sha512 hash and license hash.
->> 
->> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
->
-> Curious: how many packages that depend on ICU did you build?
+On Sun,  3 Dec 2017 21:18:16 +0300, Sergey Matyukevich wrote:
 
-Just gave this a whirl.  The following packages
-at least build successfully with icu 60.1:
+> diff --git a/boot/binaries-marvell/Config.in b/boot/binaries-marvell/Config.in
+> new file mode 100644
+> index 0000000000..0a0717cd26
+> --- /dev/null
+> +++ b/boot/binaries-marvell/Config.in
+> @@ -0,0 +1,29 @@
+> +config BR2_TARGET_BINARIES_MARVELL
+> +	bool "Marvell Armada SCP_BL2 image for ATF"
 
-boost (locale), brltty (from patch-queue), dovecot, harfbuzz, xerces
+I've used the package name here as well.
 
-> From past experience, each major ICU bump very often causes a number
-> of build failures in other packages.
+> +	depends on BR2_aarch64
+> +	help
+> +	  Some systems, including Marvell Armada SoC, have a separate
+> +	  System Control Processor (SCP) for power management, clocks,
+> +	  reset and system control. ATF Boot Loader stage 2 (BL2) loads
+> +	  optional SCP_BL2 image into a platform-specific region
+> +	  of secure memory.
 
-None spotted so far.
+Added an upstream URL here.
 
+> diff --git a/boot/binaries-marvell/binaries-marvell.mk b/boot/binaries-marvell/binaries-marvell.mk
+> new file mode 100644
+> index 0000000000..7bb5071aed
+> --- /dev/null
+> +++ b/boot/binaries-marvell/binaries-marvell.mk
+> @@ -0,0 +1,19 @@
+> +################################################################################
+> +#
+> +# Marvell Armada SCP_BL2 firmware images
+> +#
+> +################################################################################
+> +
+> +BINARIES_MARVELL_VERSION = 0dabe23b956420b0928d337d635f0cd5646c33d0
+> +BINARIES_MARVELL_SITE = $(call github,MarvellEmbeddedProcessors,binaries-marvell,$(BINARIES_MARVELL_VERSION))
+> +BINARIES_MARVELL_LICENSE = PROPRIETARY
+> +BINARIES_MARVELL_REDISTRIBUTE = NO
+
+Well, if you can't distribute it... it's a bit problematic no?
+
+In fact, there is a license on the master branch, i.e at
+https://raw.githubusercontent.com/MarvellEmbeddedProcessors/binaries-marvell/master/README.md.
+And to me, this is GPL-2.0 with the FreeRTOS exception, so I've changed
+the BINARIES_MARVELL_LICENSE variable to that, and dropped
+BINARIES_MARVELL_REDISTRIBUTE. Let me know what you think.
+
+> +BINARIES_MARVELL_IMAGE = $(call qstrip,$(BR2_TARGET_BINARIES_MARVELL_IMAGE))
+> +BINARIES_MARVELL_INSTALL_IMAGES  = YES
+> +
+> +define BINARIES_MARVELL_INSTALL_IMAGES_CMDS
+> +	$(INSTALL) -D -m 0644 $(@D)/$(BINARIES_MARVELL_IMAGE) $(BINARIES_DIR)/scp-fw.bin
+> +endef
+> +
+> +$(eval $(generic-package))
+
+Best regards,
+
+Thomas
 -- 
-CYa,
-  ?????
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
