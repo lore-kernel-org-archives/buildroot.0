@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 3 Dec 2017 14:50:41 +0100
-Subject: [Buildroot] [PATCH 1/2] kvm-unit-tests: bump to
- kvm-unit-tests-20171020
-In-Reply-To: <20171203033321.13460-1-matthew.weber@rockwellcollins.com>
+Date: Sun, 3 Dec 2017 14:54:07 +0100
+Subject: [Buildroot] [PATCH 2/2] kvmtool: bump to f77d646ba0
+In-Reply-To: <20171203033321.13460-2-matthew.weber@rockwellcollins.com>
 References: <20171203033321.13460-1-matthew.weber@rockwellcollins.com>
-Message-ID: <20171203145041.7792e3ac@windsurf.lan>
+ <20171203033321.13460-2-matthew.weber@rockwellcollins.com>
+Message-ID: <20171203145407.78bab7c2@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,62 +13,36 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat,  2 Dec 2017 21:33:20 -0600, Matt Weber wrote:
+On Sat,  2 Dec 2017 21:33:21 -0600, Matt Weber wrote:
+> Commit used:
+> 2017-11-03 16:19:58 +0000
+> irq.h: fix compilation error due to missing bool type
+> 
 > Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 
-A better commit log would have been:
+This breaks the build:
 
-    kvm-unit-tests: bump to kvm-unit-tests-20171020
-    
-    - 0001-Makefile-remove-Werror-to-avoid-build-failures.patch is
-      adjusted to apply to the new version of kvm-unit-tests
-    
-    - 0001-x86-hyperv_clock-be-explicit-about-mul-instruction-d.patch is
-      removed, as it has been merged upstream as of commit
-      45276b5860522921c77fb3ccc1458ff5f223c3c6.
-    
-    Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-    Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+  LINK     lkvm
+x86_64-amd-linux-gnu-gcc: error: elf_x86_64: No such file or directory
+x86_64-amd-linux-gnu-gcc: error: unrecognized command line option '-m'
+make[2]: *** [Makefile:384: lkvm] Error 1
+make[1]: *** [package/pkg-generic.mk:250: /home/thomas/projets/buildroot/output/build/kvmtool-f77d646ba01d04be5aad9449ac00719c043fe36e/.stamp_built] Error 2
+make: *** [Makefile:79: _all] Error 2
 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 27b22f4f0f..b6504210d3 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -443,7 +443,7 @@ F:	package/znc/
->  
->  N:	Cyril Bur <cyrilbur@gmail.com>
->  F:	arch/Config.in.powerpc
-> -F:	package/kvm-unit-tests
-> +F:	package/kvm-unit-tests/
+With the following defconfig:
 
-Change is not related, should have been in a separate patch, so I've
-removed it before applying.
+BR2_x86_64=y
+BR2_x86_steamroller=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_INIT_NONE=y
+BR2_SYSTEM_BIN_SH_NONE=y
+# BR2_PACKAGE_BUSYBOX is not set
+BR2_PACKAGE_KVMTOOL=y
+# BR2_TARGET_ROOTFS_TAR is not set
 
-> diff --git a/package/kvm-unit-tests/0001-Makefile-remove-Werror-to-avoid-build-failures.patch b/package/kvm-unit-tests/0001-Makefile-remove-Werror-to-avoid-build-failures.patch
-> index b1ea09272e..699be171d0 100644
-> --- a/package/kvm-unit-tests/0001-Makefile-remove-Werror-to-avoid-build-failures.patch
-> +++ b/package/kvm-unit-tests/0001-Makefile-remove-Werror-to-avoid-build-failures.patch
-> @@ -1,26 +1,27 @@
-> -From 08e14a662b9e75daec29722e49150869952ba1b6 Mon Sep 17 00:00:00 2001
-> -From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> -Date: Mon, 20 Nov 2017 22:09:39 +0100
-> +From e9490197169d146060a26e96eca2901375d5cd5e Mon Sep 17 00:00:00 2001
-> +From: Matt Weber <matthew.weber@rockwellcollins.com>
-> +Date: Sat, 2 Dec 2017 21:24:30 -0600
+Best regards,
 
-No reason to change the author of the patch here...
-
->  Subject: [PATCH] Makefile: remove -Werror to avoid build failures
->  
-> -Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-... and to drop the SoB.
-
-I've applied to master after fixing those issues.
-
-Thanks!
-
-Thomas
+Thomas Petazzoni
 -- 
 Thomas Petazzoni, CTO, Free Electrons
 Embedded Linux and Kernel engineering
