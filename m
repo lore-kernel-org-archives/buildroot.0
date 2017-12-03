@@ -1,58 +1,44 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 3 Dec 2017 10:34:09 +0100
-Subject: [Buildroot] [RFCv3 08/15] package/pkg-generic: handle host-xz
- as an extract dependency
-In-Reply-To: <20171203102929.7962bc0a@windsurf.lan>
-References: <20171201205352.24287-1-thomas.petazzoni@free-electrons.com>
- <20171201205352.24287-9-thomas.petazzoni@free-electrons.com>
- <20171202150843.GD2988@scaer>
- <20171202211627.6d664875@windsurf.lan>
- <20171203083256.GF2988@scaer>
- <20171203102929.7962bc0a@windsurf.lan>
-Message-ID: <20171203093409.GG2988@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 3 Dec 2017 10:59:05 +0100
+Subject: [Buildroot] [PATCH 1/1] erlang: bump to version 20.0
+In-Reply-To: <20171130154202.437-1-johan.oudinet@gmail.com>
+References: <20171130154202.437-1-johan.oudinet@gmail.com>
+Message-ID: <20171203105905.3bdd1dc9@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Hello,
 
-On 2017-12-03 10:29 +0100, Thomas Petazzoni spake thusly:
-[--SNIP--]
-> > > > Currently, filesystems that want to compress with xz all depend on
-> > > > host-xz unconditioanlly. Do we want to change that as well, so they only
-> > > > depend on it if needed?  
-> > > 
-> > > I don't understand this part, because filesystems do not depend on
-> > > host-xz unconditionally. They only depend on it if xz compression of
-> > > the filesystem image is requested. From fs/common.mk:
-> > > 
-> > > ifeq ($$(BR2_TARGET_ROOTFS_$(2)_XZ),y)
-> > > ROOTFS_$(2)_DEPENDENCIES += host-xz
-> > > ROOTFS_$(2)_COMPRESS_EXT = .xz
-> > > ROOTFS_$(2)_COMPRESS_CMD = xz -9 -C crc32 -c
-> > > endif  
-[--SNIP--]
-> > What I mean is that, probably, we will want to make it:
-> > 
-> >     ROOTFS_$(2)_DEPENDENCIES += $$(BR2_XZCAT_HOST_DEPENDENCY)
+On Thu, 30 Nov 2017 16:42:02 +0100, Johan Oudinet wrote:
+> This change bumps the Erlang version from 19.3 to 20.0. As a new major
+> release, there are a few incompatibilities. Details are here:
+> http://www.erlang.org/news/114
 > 
-> Yes, I thought about this too. But again, it's a separate issue: the
-> filesystem code already depends on host-xz, regardless of whether xz is
-> already available on the system.
+> This should fix builds on ppc64le host machines:
+> http://autobuild.buildroot.net/results/407af9800313d4540643d7625e85acc0c2366892
+> http://autobuild.buildroot.net/results/2aca54ad48ecfd72242d97499e21a46c1b384b10
+> 
+> Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
+> ---
+>  package/erlang/erlang.hash | 4 ++--
+>  package/erlang/erlang.mk   | 4 ++--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 
-Yes, sure. I was just merely saying that when you eventually make those
-dependencies really when-needed, you should also have a look at the
-filesystem stuff. ;-)
+This causes a bunch of build failures:
 
-Regards,
-Yann E. MORIN.
+  http://autobuild.buildroot.net/?reason=host-erlang-20.0
 
+Seems like host-zlib is needed.
+
+Could you have a look ?
+
+Thanks!
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
