@@ -1,34 +1,54 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 3 Dec 2017 17:44:35 +0100
-Subject: [Buildroot] [PATCH 6/8] odoridc2: add mainline post image
- script.
-In-Reply-To: <trinity-ad333bae-0cfc-4733-89ea-5e4eba0cecae-1512316455334@3c-app-mailcom-bs06>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 3 Dec 2017 18:19:47 +0100
+Subject: [Buildroot] [PATCH 4/8] odroidc2: add mainline kernel config
+In-Reply-To: <trinity-d023ef5f-6e34-4dc5-ad35-135e3de53cb7-1512316552992@3c-app-mailcom-bs06>
 References: <20171203125619.30919-1-daggs@gmx.com>
- <20171203125619.30919-6-daggs@gmx.com>
- <20171203143102.2e05f11b@windsurf.lan>
- <trinity-ad333bae-0cfc-4733-89ea-5e4eba0cecae-1512316455334@3c-app-mailcom-bs06>
-Message-ID: <20171203174435.4c1f643f@windsurf.home>
+ <20171203125619.30919-4-daggs@gmx.com> <20171203142824.08aec6c8@windsurf.lan>
+ <trinity-d023ef5f-6e34-4dc5-ad35-135e3de53cb7-1512316552992@3c-app-mailcom-bs06>
+Message-ID: <33e0695f-4b54-b9a1-5d6f-2d57bc58c30f@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
 
-On Sun, 3 Dec 2017 16:54:15 +0100, daggs wrote:
 
-> > Downloading and building stuff in the post-image script is clearly not
-> > good. It works around the download and legal-info mechanisms of
-> > Buildroot.  
-> the fw is part of the vendor's uboot branch, I'm not sure it is a wise idea to add the vendor's uboot as pkg and rename it to something else.
-> I'm open for suggestions.
+On 03-12-17 16:55, daggs wrote:
+> Greetings Thomas ,
+> 
+>> Sent: Sunday, December 03, 2017 at 3:28 PM
+>> From: "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>
+>> To: "Dagg Stompler" <daggs@gmx.com>
+>> Cc: buildroot at buildroot.org
+>> Subject: Re: [Buildroot] [PATCH 4/8] odroidc2: add mainline kernel config
+>>
+>> Hello,
+>>
+>> On Sun,  3 Dec 2017 14:56:15 +0200, Dagg Stompler wrote:
+>>> mainline odroidc2 uses a different kernel config than arm64 defconfig
+>>>
+>>> Signed-off-by: Dagg Stompler <daggs@gmx.com>
+>>> ---
+>>>  .../odroidc2/odroidc2_mainline_defconfig           | 5657 ++++++++++++++++++++
+>>>  1 file changed, 5657 insertions(+)
+>>>  create mode 100644 board/hardkernel/odroidc2/odroidc2_mainline_defconfig
+>>
+>> Please use a defconfig, not a full .config file. I.e, generate it with
+>> "make savedefconfig" in the kernel.
+>>
+> sure, will do.
 
-You could add a package like odroid-boot-firmware (or a more
-appropriate name), that only installs those firmware files.
+ Even better (if possible): use the in-tree defconfig and a kconfig fragment to
+make the changes for odroidc2.
 
-Thomas
+ Regards,
+ Arnout
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
