@@ -1,9 +1,13 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 3 Dec 2017 18:33:43 +0100
-Subject: [Buildroot] Enabling AUDIT
-In-Reply-To: <CAM27=5h9qxaXos3sTUOOxFr3MTQUwayK_eEciJkz7C=U1aBmWQ@mail.gmail.com>
-References: <CAM27=5h9qxaXos3sTUOOxFr3MTQUwayK_eEciJkz7C=U1aBmWQ@mail.gmail.com>
-Message-ID: <b0b53c2e-32ec-bf5b-42d0-b85426ee80a3@mind.be>
+Date: Sun, 3 Dec 2017 18:48:47 +0100
+Subject: [Buildroot] [PATCH 1/1] check-package: avoid false warning of
+ useless flag
+In-Reply-To: <20171202150809.1140da1b@windsurf.lan>
+References: <d2844704851e4e8ff93c3007e9e67e2a339e11c7.1511996903.git.yann.morin.1998@free.fr>
+ <1512188904-31366-1-git-send-email-ricardo.martincoski@datacom.ind.br>
+ <20171202110320.GA2988@scaer> <20171202141059.391df6c0@windsurf.lan>
+ <20171202135443.GB2988@scaer> <20171202150809.1140da1b@windsurf.lan>
+Message-ID: <cb7f50ed-713d-1565-8f34-928b6eeb0224@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,51 +16,45 @@ To: buildroot@busybox.net
 
 
 
-On 03-12-17 13:45, Roy Arav wrote:
-> Hi,
+On 02-12-17 15:08, Thomas Petazzoni wrote:
+> Hello,
 > 
-> I am trying to enable AUDIT on my system - buildroot image on Raspberry PI3.
-> The following packages are enabled: (attached the full .config)
+> On Sat, 2 Dec 2017 14:54:43 +0100, Yann E. MORIN wrote:
 > 
-> BR2_PACKAGE_AUDIT
-> BR2_PACKAGE_AUDIT_ARCH_SUPPORTS
-> BR2_PACKAGE_LIBCAP_NG
+>> OK, but then with this change, we will now be missing actual errors,
+>> e.g.:
+>>
+>>     FOO_AUTORECONF = NO
+>>     HOST_FOO_AUTORECONF = NO
+>>
+>> Will not report the host vairant as bogus, even after the target variant
+>> gets removed.
+>>
+>> So we lose a false positive for a false negative.
 > 
-> And yet I get the following output:
+> Yes, it was already mentioned by Ricardo in the discussion.
 > 
-> ...
-> ? ? ? ? ?Starting Security Auditing Service...
-> [? ?28.205145] auditd[241]: Error - audit support not in kernel
+>> I have to admit I am not sure which is worse/best...
+> 
+> Checking tools that have false positives are unusable, because they
+> create some noise that always make you think "gaah, it must be the tool
+> again complaining about something that doesn't make sense".
+> 
+> So I very much prefer a tool that doesn't report false positives, and
+> for which the results can be trusted. This way, we are much more likely
+> to pay attention to the tool results, and keep in a good shape what the
+> tool is checking today.
 
- Just to be sure: do you have AUDIT enabled in your kernel config?
+ +1 to that.
 
  Regards,
  Arnout
 
-> [? ?28.262083] augenrules[242]: /sbin/augenrules: No rules directory -
-> /etc/audit/rules.d
-> [? ?28.301784] auditd[241]: Cannot open netlink audit socket
-> [? ?28.342545] auditd[241]: The audit daemon is exiting.
-> [? ?28.382227] auditctl[246]: Error - audit support not in kernel
-> [? ?28.411173] auditctl[246]: file /etc/audit/audit.rules doesn't exist, skipping
-> [FAILED] Failed to start Security Auditing Service.
-> See 'systemctl status auditd.service' for details.
-> ...
 > 
-> Looking at netlink.c - I am not really sure that?NETLINK_AUDIT is defined.
-> which is quite strange..
+> And that doesn't prevent, in parallel, from improving the tool to
+> detect other problems.
 > 
-> 
-> Thanks
-> Roy
-> 
-> 
-> 
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> Thomas
 > 
 
 -- 
