@@ -1,39 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 3 Dec 2017 23:06:59 +0100
-Subject: [Buildroot] [PATCH] package/avahi: fix build failures
-In-Reply-To: <20171203111344.8661-1-s.martin49@gmail.com>
-References: <20171203111344.8661-1-s.martin49@gmail.com>
-Message-ID: <20171203230659.19b71d46@windsurf.home>
+Date: Sun, 3 Dec 2017 23:07:37 +0100
+Subject: [Buildroot] [git commit] package/kodi-pvr-stalker: needs libxml2
+Message-ID: <20171203220028.2C4CC81337@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=7be5653b865938af3fdbcbd1553145a8e90426a1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun,  3 Dec 2017 12:13:44 +0100, Samuel Martin wrote:
-> Since [1], avahi uses/checks for pygobject instead of pygtk, so update
-> the configure options accordingly.
-> 
-> Fixes:
->   http://autobuild.buildroot.net/results/ffea97dc13d379d32f9e33ae6f9e986b2c435ea9
->   and many others
-> 
-> [1] https://github.com/lathiat/avahi/commit/142124dae6f043085aba59fca4657c56b2b23b65
-> 
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-> ---
->  package/avahi/avahi.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Since
+https://git.buildroot.net/buildroot/commit/package/kodi?id=bf9bfd065ba3fab328fd041ca040f2bf134fecf2
+kodi itself does not depend on libxml2 anymore which previously
+provided libxml2 still needed by kodi-pvr-stalker:
+https://github.com/kodi-pvr/pvr.stalker/blob/Krypton/CMakeLists.txt#L12
 
-Bernd had already sent the same patch on Monday 27, so I've applied his
-patch instead.
+Fixes a build error not caught by autobuilders because they do not have
+host jdk installed:
+CMake Error at /usr/share/cmake-3.7/Modules/FindPackageHandleStandardArgs.cmake:138 (message):
+  Could NOT find LibXml2 (missing: LIBXML2_LIBRARIES LIBXML2_INCLUDE_DIR)
 
-Thanks!
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/kodi-pvr-stalker/Config.in           | 1 +
+ package/kodi-pvr-stalker/kodi-pvr-stalker.mk | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/kodi-pvr-stalker/Config.in b/package/kodi-pvr-stalker/Config.in
+index 3ec530c..d334d0c 100644
+--- a/package/kodi-pvr-stalker/Config.in
++++ b/package/kodi-pvr-stalker/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_KODI_PVR_STALKER
+ 	bool "kodi-pvr-stalker"
+ 	select BR2_PACKAGE_JSONCPP
+ 	select BR2_PACKAGE_KODI_PLATFORM
++	select BR2_PACKAGE_LIBXML2
+ 	help
+ 	  A PVR Client that connects Kodi to Stalker Middleware
+ 
+diff --git a/package/kodi-pvr-stalker/kodi-pvr-stalker.mk b/package/kodi-pvr-stalker/kodi-pvr-stalker.mk
+index ee61171..32ac2ca 100644
+--- a/package/kodi-pvr-stalker/kodi-pvr-stalker.mk
++++ b/package/kodi-pvr-stalker/kodi-pvr-stalker.mk
+@@ -10,6 +10,6 @@ KODI_PVR_STALKER_VERSION = 2.8.6-Krypton
+ KODI_PVR_STALKER_SITE = $(call github,kodi-pvr,pvr.stalker,$(KODI_PVR_STALKER_VERSION))
+ KODI_PVR_STALKER_LICENSE = GPL-2.0+
+ KODI_PVR_STALKER_LICENSE_FILES = src/client.h
+-KODI_PVR_STALKER_DEPENDENCIES = jsoncpp kodi-platform
++KODI_PVR_STALKER_DEPENDENCIES = jsoncpp kodi-platform libxml2
+ 
+ $(eval $(cmake-package))
