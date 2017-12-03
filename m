@@ -1,123 +1,142 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 3 Dec 2017 21:06:03 +0200
-Subject: [Buildroot] [PATCH 1/8] meson-tools: New Package
-In-Reply-To: <20171203125619.30919-1-daggs@gmx.com>
-References: <20171203125619.30919-1-daggs@gmx.com>
-Message-ID: <20171203190603.gkai3rkdr52vxiny@tarshish.tkos.co.il>
+Date: Sun, 3 Dec 2017 21:10:43 +0200
+Subject: [Buildroot] Static IP
+In-Reply-To: <CAM27=5gFqWB4TRTVJnOpuEDVtc2wyiWPr1aA21u4unH0VP50Mw@mail.gmail.com>
+References: <CAM27=5g_TOTu__LdjWcUKaMUiLtBxXD-t2g2N9VEx5JN69ZYUA@mail.gmail.com>
+ <20171124063855.rtkwmk5fadw3rlsd@tarshish>
+ <CAM27=5ijTMYOyBmy1r7k9ByGQ6_tZhGkGWyfd4jG98ijhAffxQ@mail.gmail.com>
+ <20171126193811.64fkhpxhc3of6cwj@tarshish>
+ <CAM27=5gEznPh9FTg1Y4vdEYPNAhXR-cZV5gw9KSFZwF6iLwhHA@mail.gmail.com>
+ <20171127130422.ww62i7vsooccu4px@sapphire.tkos.co.il>
+ <CAM27=5hA1mZAurmjfpXxN_8F8iMFdUW9pvPPSCXSiDbvmZEedA@mail.gmail.com>
+ <CAM27=5gFqWB4TRTVJnOpuEDVtc2wyiWPr1aA21u4unH0VP50Mw@mail.gmail.com>
+Message-ID: <20171203191043.vf4xpv2w44gd54c4@tarshish.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Dagg,
+Hi Roy,
 
-On Sun, Dec 03, 2017 at 02:56:12PM +0200, Dagg Stompler wrote:
-> all amlogic's meson based soc require a signed firmware to boot, this
-> package provides a binary to do so.
+On Sun, Dec 03, 2017 at 01:29:12PM +0200, Roy Arav wrote:
+> One thing though -
+> I am working on Raspberry Pi3 and it seems like when if-updown is enabled,
+> there is no wifi,
+> Neither via WPA supplicant nor directly via nmcli. (both work fine when
+> ff-updown is disabled).
 > 
-> Signed-off-by: Dagg Stompler <daggs@gmx.com>
-> ---
->  package/Config.in.host                             |  2 +-
->  .../meson-tools/0001-support_crosscompile.patch    | 12 +++++++++
->  package/meson-tools/Config.in.host                 |  9 +++++++
->  package/meson-tools/meson-tools.hash               |  2 ++
->  package/meson-tools/meson-tools.mk                 | 31 ++++++++++++++++++++++
->  5 files changed, 55 insertions(+), 1 deletion(-)
->  create mode 100644 package/meson-tools/0001-support_crosscompile.patch
->  create mode 100644 package/meson-tools/Config.in.host
->  create mode 100644 package/meson-tools/meson-tools.hash
->  create mode 100644 package/meson-tools/meson-tools.mk
-> 
-> diff --git a/package/Config.in.host b/package/Config.in.host
-> index 48b6f8c7a8..78d085d44d 100644
-> --- a/package/Config.in.host
-> +++ b/package/Config.in.host
-> @@ -20,13 +20,13 @@ menu "Host utilities"
->  	source "package/genpart/Config.in.host"
->  	source "package/go/Config.in.host"
->  	source "package/go-bootstrap/Config.in.host"
-> -	source "package/google-breakpad/Config.in.host"
+> I really don't understand the connection...
 
-Is this change intentional?
-
->  	source "package/gptfdisk/Config.in.host"
->  	source "package/imx-usb-loader/Config.in.host"
->  	source "package/jq/Config.in.host"
->  	source "package/jsmin/Config.in.host"
->  	source "package/lpc3250loader/Config.in.host"
->  	source "package/lttng-babeltrace/Config.in.host"
-> +	source "package/meson-tools/Config.in.host"
->  	source "package/mfgtools/Config.in.host"
->  	source "package/mkpasswd/Config.in.host"
->  	source "package/mtd/Config.in.host"
-> diff --git a/package/meson-tools/0001-support_crosscompile.patch b/package/meson-tools/0001-support_crosscompile.patch
-> new file mode 100644
-> index 0000000000..ef937f78ab
-> --- /dev/null
-> +++ b/package/meson-tools/0001-support_crosscompile.patch
-
-Since you are only adding a host package this patch should be named something 
-else. But ...
-
-> @@ -0,0 +1,12 @@
-> +--- a/Makefile	2017-07-22 15:51:00.000000000 +0300
-> ++++ b/Makefile	2017-07-22 15:51:26.000000000 +0300
-> +@@ -1,7 +1,7 @@
-> + all: amlbootsig unamlbootsig amlinfo
-> + 
-> +-CFLAGS = -g
-> +-LDFLAGS = -lcrypto
-> ++override CFLAGS += -g
-> ++override LDFLAGS += -lssl -lcrypto
-
-... you do not actually use this override capability as far as I can see ...
-
-[snip]
-
-> diff --git a/package/meson-tools/meson-tools.mk b/package/meson-tools/meson-tools.mk
-> new file mode 100644
-> index 0000000000..19f5bf543b
-> --- /dev/null
-> +++ b/package/meson-tools/meson-tools.mk
-> @@ -0,0 +1,31 @@
-> +################################################################################
-> +#
-> +# meson-tools
-> +#
-> +################################################################################
-> +
-> +HOST_MESON_TOOLS_VERSION = 5e01cbadc6f6f21ad88a63492a83182fc4b19d37
-> +HOST_MESON_TOOLS_SITE = $(call github,afaerber,meson-tools,$(HOST_MESON_TOOLS_VERSION))
-> +HOST_MESON_TOOLS_LICENSE = GPL-2.0+
-> +HOST_MESON_TOOLS_LICENSE_FILES = COPYING README.md
-> +HOST_MESON_TOOLS_DEPENDENCIES += host-openssl
-> +
-> +HOST_MESON_TOOLS_MAKE_OPTS = CC="$(HOSTCC)" \
-> +        CFLAGS="$(HOST_CFLAGS)" \
-> +        LDFLAGS="$(HOST_LDFLAGS)"
-> +
-> +define HOST_MESON_TOOLS_BUILD_CMDS
-> +        $(MAKE) -C $(@D) $(HOST_MESON_TOOLS_MAKE_OPTS)
-
-... because you pass the make variables as options, thus forcing their value. 
-So the patch might not be needed.
-
-> +endef
-> +
-> +define HOST_MESON_TOOLS_INSTALL_BIN
-> +	$(INSTALL) -m 0755 $(@D)/$(1) $(HOST_DIR)/bin
-> +endef
-> +
-> +define HOST_MESON_TOOLS_INSTALL_CMDS
-> +	$(call HOST_MESON_TOOLS_INSTALL_BIN,amlbootsig)
-> +	$(call HOST_MESON_TOOLS_INSTALL_BIN,unamlbootsig)
-> +	$(call HOST_MESON_TOOLS_INSTALL_BIN,amlinfo)
-> +endef
-> +
-> +$(eval $(host-generic-package))
+Is there anything specific to Buildroot in this behaviour? Maybe the ifupdown 
+plugin expects all controlled network interfaces to appear in the interfaces 
+file. I'm only guessing.
 
 baruch
+
+> On Sun, Dec 3, 2017 at 9:35 AM, Roy Arav <roy.arav@shieldiot.io> wrote:
+> >
+> > Thank you very much!
+> > It did the trick and now it works well.
+> >
+> > Regards
+> > Roy
+> >
+> > On Mon, Nov 27, 2017 at 3:04 PM, Baruch Siach <baruch@tkos.co.il> wrote:
+> >
+> >> Hi Roy,
+> >>
+> >> On Mon, Nov 27, 2017 at 02:50:30PM +0200, Roy Arav wrote:
+> >> > Thanks Baruch,
+> >> >
+> >> > As you suggested - I removed the attribute "--disable-ifupdown" from
+> >> > network-manager.mk.
+> >> > Still same results:
+> >> > [   32.982121] NetworkManager[286]: <warn>  [1478193422.8681] settings:
+> >> > could not load plugin 'ifupdown' from file
+> >> > '/usr/lib/NetworkManager/libnm-settings-plugin-ifupdown.so': No such
+> >> file
+> >> > or directory
+> >>
+> >> You should pass --enable-ifupdown to force NetworkManager to build that
+> >> plugin. Otherwise, NetworkManager enables ifupdown only when your host is
+> >> Debian/Ubuntu.
+> >>
+> >> You need to restart the build from scratch (make clean all) for your
+> >> change to
+> >> take effect. See http://nightly.buildroot.org/manual.html#full-rebuild.
+> >>
+> >> baruch
+> >>
+> >> > On Sun, Nov 26, 2017 at 9:38 PM, Baruch Siach <baruch@tkos.co.il>
+> >> wrote:
+> >> > > Please keep the list on Cc so that everyone can benefit from your
+> >> > > experience.
+> >> > >
+> >> > > On Sun, Nov 26, 2017 at 02:22:44PM +0200, Roy Arav wrote:
+> >> > > > I enabled BR2_PACKAGE_IFUPDOWN_SCRIPTS as you suggested,
+> >> > > > and now I get this warning: 34.193270] NetworkManager[272]: <warn>
+> >> > > > [1478193422.9602] settings: could not load plugin 'ifupdown' from
+> >> file
+> >> > > > '/usr/lib/NetworkManager/libnm-settings-plugin-ifupdown.so': No
+> >> such
+> >> > > file
+> >> > > > or directory
+> >> > > >
+> >> > > > Any ideas how to solve this thing? (sorry if I seem clue-less, I am
+> >> new
+> >> > > to
+> >> > > > buildroot...)
+> >> > >
+> >> > > This is most likely because we currently pass --disable-ifupdown to
+> >> the
+> >> > > configure script unconditionally. This has been so since commit
+> >> > > 52c7f43fdefbe7
+> >> > > (network-manager: bump to 0.9.8.0). Maybe Thomas, the author of said
+> >> > > commit,
+> >> > > can explain the reason for that.
+> >> > >
+> >> > > In case --enable-ifupdown does not increase the target size
+> >> significantly
+> >> > > (relatively speaking), then a patch enable ifupdown would probably be
+> >> > > accepted.
+> >> > >
+> >> > > > Please see the entire.config.
+> >> > >
+> >> > > [skipped config fragments containing potentially sensitive
+> >> information]
+> >> > >
+> >> > > Do you use all these fragments to generate a unified .config?
+> >> > >
+> >> > > Please send the minimal .config that exhibits your issue. Minimizing
+> >> the
+> >> > > .config further with 'make savedefconfig' would be nice as well.
+> >> > >
+> >> > > baruch
+> >> > >
+> >> > > > On Fri, Nov 24, 2017 at 8:38 AM, Baruch Siach <baruch@tkos.co.il>
+> >> wrote:
+> >> > > > >
+> >> > > > > On Fri, Nov 24, 2017 at 07:05:48AM +0200, Roy Arav wrote:
+> >> > > > > > I am trying to set static IP on a raspberry pi3 device running
+> >> > > buildroot.
+> >> > > > > >
+> >> > > > > > I edited /etc/network/interfaces, using rootfs overlay.
+> >> > > > > >
+> >> > > > > > auto eth0
+> >> > > > > > allow-hotplug eth0
+> >> > > > > > iface eth0 inet static
+> >> > > > > > address 192.168.0.1
+> >> > > > > > netmask 255.255.255.0
+> >> > > > > >
+> >> > > > > > And still IP address is provided using DHCP/
+> >> > > > > >
+> >> > > > > > Is there anything else to so that I am missing?
+> >> > > > > > Perhaps a BR2 flag or package that I need to enable?
+> >> > > > >
+> >> > > > > What is your .config?
+> >> > > > > Do you have BR2_PACKAGE_IFUPDOWN_SCRIPTS enabled?
+> >> > > > > What about BR2_PACKAGE_SYSTEMD_NETWORKD?
 
 -- 
      http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
