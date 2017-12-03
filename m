@@ -1,74 +1,71 @@
 From: Dagg Stompler <daggs@gmx.com>
-Date: Sun,  3 Dec 2017 14:56:19 +0200
-Subject: [Buildroot] [PATCH 8/8] odroidc2: update readme file
+Date: Sun,  3 Dec 2017 14:56:17 +0200
+Subject: [Buildroot] [PATCH 6/8] odoridc2: add mainline post image script.
 In-Reply-To: <20171203125619.30919-1-daggs@gmx.com>
 References: <20171203125619.30919-1-daggs@gmx.com>
-Message-ID: <20171203125619.30919-8-daggs@gmx.com>
+Message-ID: <20171203125619.30919-6-daggs@gmx.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+the mainline image doesn't have the signed firmwarfe bundled in the
+uboot images.
+to address this issue, the needed files are required to be retrieved
+from the vendor's site, prepared and embbeded into the final image.
+
 Signed-off-by: Dagg Stompler <daggs@gmx.com>
 ---
- board/hardkernel/odroidc2/readme.txt | 29 +++++++++++++++++++++++++++--
- 1 file changed, 27 insertions(+), 2 deletions(-)
+ board/hardkernel/odroidc2/post-image-mailine.sh | 40 +++++++++++++++++++++++++
+ 1 file changed, 40 insertions(+)
+ create mode 100755 board/hardkernel/odroidc2/post-image-mailine.sh
 
-diff --git a/board/hardkernel/odroidc2/readme.txt b/board/hardkernel/odroidc2/readme.txt
-index b44aa67f5a..5f6c1c5a64 100644
---- a/board/hardkernel/odroidc2/readme.txt
-+++ b/board/hardkernel/odroidc2/readme.txt
-@@ -10,7 +10,11 @@ How to build it
- 
-   $ make odroidc2_defconfig
- 
--Then you can edit the build options using
-+For vendor based configuration or
+diff --git a/board/hardkernel/odroidc2/post-image-mailine.sh b/board/hardkernel/odroidc2/post-image-mailine.sh
+new file mode 100755
+index 0000000000..42e3c324b6
+--- /dev/null
++++ b/board/hardkernel/odroidc2/post-image-mailine.sh
+@@ -0,0 +1,40 @@
++#!/bin/sh
 +
-+  $ make odroidc2_mainline_defconfig
++BOARD_DIR="$(dirname $0)"
++GENIMAGE_CFG="${BOARD_DIR}/genimage-mainline.cfg"
++GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
++WORK_DIR="${BUILD_DIR}/hk-uboot-signing"
++FINAL_IMG_PATH="${BINARIES_DIR}/sdcard.img"
++SIGNED_UBOOT_IMG="${BINARIES_DIR}/uboot-odc2.img"
++SIGNED_FILES_URL="https://github.com/hardkernel/u-boot/archive/odroidc2-v2015.01.tar.gz"
++SIGNED_FILES_PATH_PREFIX="$(basename $(echo ${SIGNED_FILES_URL} | sed 's/\.tar.*$//g'))"
 +
-+For community based configuration, then you can edit the build options using
- 
-   $ make menuconfig
- 
-@@ -24,7 +28,9 @@ download the packages' sources.
- Result of the build
- -------------------
- 
--After building, you should obtain this tree:
-+After building, you should obtain one of the following trees:
++rm -rf "${WORK_DIR}" "${GENIMAGE_TMP}"
 +
-+For vendor based configuration:
- 
-     output/images/
-     +-- Image
-@@ -37,7 +43,26 @@ After building, you should obtain this tree:
-     +-- sdcard.img
-     `-- u-boot.bin
- 
-+For community based configuration:
++echo "Retrieving vendor files for signing"
++mkdir -p ${WORK_DIR}
++wget -qO- ${SIGNED_FILES_URL} | tar -C ${WORK_DIR} --strip-components=1 -zxf - u-boot-${SIGNED_FILES_PATH_PREFIX}/{tools/fip_create,fip/gxb,sd_fuse/bl1.bin.hardkernel} 
 +
-+    output/images/
-+    +-- Image
-+    +-- uImage			   [2]
-+    +-- boot.scr                   [1]
-+    +-- boot.vfat
-+    +-- meson-gxbb-odroidc2.dtb
-+    +-- rootfs.ext2
-+    +-- rootfs.ext4
-+    +-- rootfs.tar
-+    +-- sdcard.img
-+    +-- bl1.bin.hardkernel	   [4]
-+    +-- uboot-odc2.img		   [3]
-+    `-- u-boot.bin
++echo "Building nessesary tools"
++CC="${HOSTCC}" make -C ${WORK_DIR}/tools/fip_create
 +
- [1] This is the ODROID-C2 configuration file used in u-boot.
-+[2] This is the ODROID-C2 kernel image file which will be booted.
-+[3] This is the ODROID-C2 signed u-boot image which will be used.
-+[4] This is the vendor's firmware which is needed for the board to boot.
- 
- How to write the SD card or eMMC
- ================================
++echo "Prepering files"
++${WORK_DIR}/tools/fip_create/fip_create --bl30 ${WORK_DIR}/fip/gxb/bl30.bin --bl301 ${WORK_DIR}/fip/gxb/bl301.bin --bl31 ${WORK_DIR}/fip/gxb/bl31.bin --bl33 ${BINARIES_DIR}/u-boot.bin ${WORK_DIR}/fip.bin
++${WORK_DIR}/tools/fip_create/fip_create --dump ${WORK_DIR}/fip.bin
++cat ${WORK_DIR}/fip/gxb/bl2.package ${WORK_DIR}/fip.bin > ${WORK_DIR}/boot_new.bin
++${HOST_DIR}/bin/amlbootsig ${WORK_DIR}/boot_new.bin ${WORK_DIR}/u-boot.img
++cp ${WORK_DIR}/sd_fuse/bl1.bin.hardkernel ${BINARIES_DIR} 
++
++echo "Genrating new uboot img file"
++dd if=${WORK_DIR}/u-boot.img of=${SIGNED_UBOOT_IMG} bs=512 skip=96
++
++genimage                           \
++	--rootpath "${TARGET_DIR}"     \
++	--tmppath "${GENIMAGE_TMP}"    \
++	--inputpath "${BINARIES_DIR}"  \
++	--outputpath "${BINARIES_DIR}" \
++	--config "${GENIMAGE_CFG}"
++
++echo "Signing image"
++dd if=${BINARIES_DIR}/bl1.bin.hardkernel of=${FINAL_IMG_PATH} conv=fsync,notrunc bs=1 count=442
++dd if=${BINARIES_DIR}/bl1.bin.hardkernel of=${FINAL_IMG_PATH} conv=fsync,notrunc bs=512 skip=1 seek=1
 -- 
 2.15.1
