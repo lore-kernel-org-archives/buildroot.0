@@ -1,55 +1,51 @@
-From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Sun, 3 Dec 2017 13:40:59 +0200
-Subject: [Buildroot] [PATCH] package/avahi: fix build failures
-In-Reply-To: <20171203111344.8661-1-s.martin49@gmail.com>
-References: <20171203111344.8661-1-s.martin49@gmail.com>
-Message-ID: <20171203134059.GC19380@momiji>
+From: Roy Arav <roy.arav@shieldiot.io>
+Date: Sun, 3 Dec 2017 14:45:11 +0200
+Subject: [Buildroot] Enabling AUDIT
+Message-ID: <CAM27=5h9qxaXos3sTUOOxFr3MTQUwayK_eEciJkz7C=U1aBmWQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun,  3 Dec 2017 12:13:44 +0100, Samuel Martin <s.martin49@gmail.com> wrote:
-> Since [1], avahi uses/checks for pygobject instead of pygtk, so update
-> the configure options accordingly.
-> 
-> Fixes:
->   http://autobuild.buildroot.net/results/ffea97dc13d379d32f9e33ae6f9e986b2c435ea9
->   and many others
-> 
-> [1] https://github.com/lathiat/avahi/commit/142124dae6f043085aba59fca4657c56b2b23b65
-> 
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-> ---
->  package/avahi/avahi.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/avahi/avahi.mk b/package/avahi/avahi.mk
-> index b89887b4c7..c8f1af9a9d 100644
-> --- a/package/avahi/avahi.mk
-> +++ b/package/avahi/avahi.mk
-> @@ -77,7 +77,7 @@ AVAHI_CONF_OPTS = \
->  	--disable-gtk \
->  	--disable-gtk3 \
->  	--disable-gdbm \
-> -	--disable-pygtk \
-> +	--disable-pygobject \
->  	--disable-mono \
->  	--disable-monodoc \
->  	--disable-stack-protector \
-> -- 
-> 2.15.1
+Hi,
 
-Reviewed-by: Adrian Perez de Castro <aperez@igalia.com>
+I am trying to enable AUDIT on my system - buildroot image on Raspberry PI3.
+The following packages are enabled: (attached the full .config)
+
+BR2_PACKAGE_AUDIT
+BR2_PACKAGE_AUDIT_ARCH_SUPPORTS
+BR2_PACKAGE_LIBCAP_NG
+
+And yet I get the following output:
+
+...
+         Starting Security Auditing Service...
+[   28.205145] auditd[241]: Error - audit support not in kernel
+[   28.262083] augenrules[242]: /sbin/augenrules: No rules directory -
+/etc/audit/rules.d
+[   28.301784] auditd[241]: Cannot open netlink audit socket
+[   28.342545] auditd[241]: The audit daemon is exiting.
+[   28.382227] auditctl[246]: Error - audit support not in kernel
+[   28.411173] auditctl[246]: file /etc/audit/audit.rules doesn't exist,
+skipping
+[FAILED] Failed to start Security Auditing Service.
+See 'systemctl status auditd.service' for details.
+...
+
+Looking at netlink.c - I am not really sure that NETLINK_AUDIT is defined.
+which is quite strange..
 
 
---
- Adri?n ?
+Thanks
+Roy
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20171203/8d9bfffb/attachment.html>
 -------------- next part --------------
 A non-text attachment was scrubbed...
-Name: not available
-Type: application/pgp-signature
-Size: 195 bytes
+Name: buildroot
+Type: application/octet-stream
+Size: 80969 bytes
 Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20171203/4f48a9ab/attachment.asc>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20171203/8d9bfffb/attachment.obj>
