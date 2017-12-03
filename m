@@ -1,11 +1,9 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 3 Dec 2017 18:19:47 +0100
-Subject: [Buildroot] [PATCH 4/8] odroidc2: add mainline kernel config
-In-Reply-To: <trinity-d023ef5f-6e34-4dc5-ad35-135e3de53cb7-1512316552992@3c-app-mailcom-bs06>
-References: <20171203125619.30919-1-daggs@gmx.com>
- <20171203125619.30919-4-daggs@gmx.com> <20171203142824.08aec6c8@windsurf.lan>
- <trinity-d023ef5f-6e34-4dc5-ad35-135e3de53cb7-1512316552992@3c-app-mailcom-bs06>
-Message-ID: <33e0695f-4b54-b9a1-5d6f-2d57bc58c30f@mind.be>
+Date: Sun, 3 Dec 2017 18:33:43 +0100
+Subject: [Buildroot] Enabling AUDIT
+In-Reply-To: <CAM27=5h9qxaXos3sTUOOxFr3MTQUwayK_eEciJkz7C=U1aBmWQ@mail.gmail.com>
+References: <CAM27=5h9qxaXos3sTUOOxFr3MTQUwayK_eEciJkz7C=U1aBmWQ@mail.gmail.com>
+Message-ID: <b0b53c2e-32ec-bf5b-42d0-b85426ee80a3@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,36 +12,52 @@ To: buildroot@busybox.net
 
 
 
-On 03-12-17 16:55, daggs wrote:
-> Greetings Thomas ,
+On 03-12-17 13:45, Roy Arav wrote:
+> Hi,
 > 
->> Sent: Sunday, December 03, 2017 at 3:28 PM
->> From: "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>
->> To: "Dagg Stompler" <daggs@gmx.com>
->> Cc: buildroot at buildroot.org
->> Subject: Re: [Buildroot] [PATCH 4/8] odroidc2: add mainline kernel config
->>
->> Hello,
->>
->> On Sun,  3 Dec 2017 14:56:15 +0200, Dagg Stompler wrote:
->>> mainline odroidc2 uses a different kernel config than arm64 defconfig
->>>
->>> Signed-off-by: Dagg Stompler <daggs@gmx.com>
->>> ---
->>>  .../odroidc2/odroidc2_mainline_defconfig           | 5657 ++++++++++++++++++++
->>>  1 file changed, 5657 insertions(+)
->>>  create mode 100644 board/hardkernel/odroidc2/odroidc2_mainline_defconfig
->>
->> Please use a defconfig, not a full .config file. I.e, generate it with
->> "make savedefconfig" in the kernel.
->>
-> sure, will do.
+> I am trying to enable AUDIT on my system - buildroot image on Raspberry PI3.
+> The following packages are enabled: (attached the full .config)
+> 
+> BR2_PACKAGE_AUDIT
+> BR2_PACKAGE_AUDIT_ARCH_SUPPORTS
+> BR2_PACKAGE_LIBCAP_NG
+> 
+> And yet I get the following output:
+> 
+> ...
+> ? ? ? ? ?Starting Security Auditing Service...
+> [? ?28.205145] auditd[241]: Error - audit support not in kernel
 
- Even better (if possible): use the in-tree defconfig and a kconfig fragment to
-make the changes for odroidc2.
+ Just to be sure: do you have AUDIT enabled in your kernel config?
 
  Regards,
  Arnout
+
+> [? ?28.262083] augenrules[242]: /sbin/augenrules: No rules directory -
+> /etc/audit/rules.d
+> [? ?28.301784] auditd[241]: Cannot open netlink audit socket
+> [? ?28.342545] auditd[241]: The audit daemon is exiting.
+> [? ?28.382227] auditctl[246]: Error - audit support not in kernel
+> [? ?28.411173] auditctl[246]: file /etc/audit/audit.rules doesn't exist, skipping
+> [FAILED] Failed to start Security Auditing Service.
+> See 'systemctl status auditd.service' for details.
+> ...
+> 
+> Looking at netlink.c - I am not really sure that?NETLINK_AUDIT is defined.
+> which is quite strange..
+> 
+> 
+> Thanks
+> Roy
+> 
+> 
+> 
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
