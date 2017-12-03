@@ -1,47 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 3 Dec 2017 23:25:28 +0100
-Subject: [Buildroot] [PATCH 1/3] board/orangepi: add support for
- orangepi-pc-plus board
-In-Reply-To: <20171108194334.10031-2-geomatsi@gmail.com>
-References: <20171108194334.10031-1-geomatsi@gmail.com>
- <20171108194334.10031-2-geomatsi@gmail.com>
-Message-ID: <20171203232528.237e3ec3@windsurf.home>
+Date: Sun, 3 Dec 2017 23:25:42 +0100
+Subject: [Buildroot] [git commit] .gitlab-ci.yml: regenerate with
+ orangepi_pc_plus_defconfig
+Message-ID: <20171203221850.344138222F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=f02b7df5a25db91f3fa1722e797def9e6c51bfad
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed,  8 Nov 2017 22:43:32 +0300, Sergey Matyukevich wrote:
-> This board is a variant of orangepi-pc board. It adds 8GB eMMC and Realtek
-> RTL8189FTV SDIO WiFi chip. This variant has a separate support in U-Boot
-> and kernel. So it makes sense to create a separate entry
-> for this board in buildroot.
-> 
-> Board support package includes the following components:
->  - mainline u-boot 2017.09
->  - mainline kernel 4.13.11
-> 
-> Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .gitlab-ci.yml | 1 +
+ 1 file changed, 1 insertion(+)
 
-I've applied, after adding an entry to the DEVELOPERS file. One
-comment, though.
-
->  board/orangepi/orangepi-pc-plus/boot.cmd           |  8 +++++
->  board/orangepi/orangepi-pc-plus/genimage.cfg       | 36 ++++++++++++++++++++
->  .../orangepi/orangepi-pc-plus/linux-extras.config  |  8 +++++
->  board/orangepi/orangepi-pc-plus/post-build.sh      |  1 +
-
-This common post-build script only generates the U-Boot script. Could
-you move the boards that use this post-build script to instead use
-BR2_TARGET_UBOOT_BOOT_SCRIPT ?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index dc7fd84..7e3279d 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -162,6 +162,7 @@ olimex_imx233_olinuxino_defconfig: *defconfig
+ openblocks_a6_defconfig: *defconfig
+ orangepi_one_defconfig: *defconfig
+ orangepi_pc_defconfig: *defconfig
++orangepi_pc_plus_defconfig: *defconfig
+ orangepi_plus_defconfig: *defconfig
+ orangepi_zero_defconfig: *defconfig
+ pandaboard_defconfig: *defconfig
