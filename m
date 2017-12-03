@@ -1,41 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 3 Dec 2017 23:06:32 +0100
-Subject: [Buildroot] [git commit] package/avahi: configure option pygtk was
- renamed to pygobject
-Message-ID: <20171203215915.C52A181338@busybox.osuosl.org>
+Date: Sun, 3 Dec 2017 23:06:59 +0100
+Subject: [Buildroot] [PATCH] package/avahi: fix build failures
+In-Reply-To: <20171203111344.8661-1-s.martin49@gmail.com>
+References: <20171203111344.8661-1-s.martin49@gmail.com>
+Message-ID: <20171203230659.19b71d46@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4770baed4fa69e531b495286c7c1f2746e742fa4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-See corresponding commit:
-https://github.com/lathiat/avahi/commit/142124dae6f043085aba59fca4657c56b2b23b65
+On Sun,  3 Dec 2017 12:13:44 +0100, Samuel Martin wrote:
+> Since [1], avahi uses/checks for pygobject instead of pygtk, so update
+> the configure options accordingly.
+> 
+> Fixes:
+>   http://autobuild.buildroot.net/results/ffea97dc13d379d32f9e33ae6f9e986b2c435ea9
+>   and many others
+> 
+> [1] https://github.com/lathiat/avahi/commit/142124dae6f043085aba59fca4657c56b2b23b65
+> 
+> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+> ---
+>  package/avahi/avahi.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Fixes
-http://autobuild.buildroot.net/results/1e9/1e974c814ae4236077a869339be1143a9af7e5cd/
-http://autobuild.buildroot.net/results/010/0101b1205aec5a0c9c6509edf3d302aeaa3bd0ca/
-http://autobuild.buildroot.net/results/572/5721634ffa2a4544a82dda08c1fcea331ecdadaf/
+Bernd had already sent the same patch on Monday 27, so I've applied his
+patch instead.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/avahi/avahi.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thanks!
 
-diff --git a/package/avahi/avahi.mk b/package/avahi/avahi.mk
-index b89887b..c8f1af9 100644
---- a/package/avahi/avahi.mk
-+++ b/package/avahi/avahi.mk
-@@ -77,7 +77,7 @@ AVAHI_CONF_OPTS = \
- 	--disable-gtk \
- 	--disable-gtk3 \
- 	--disable-gdbm \
--	--disable-pygtk \
-+	--disable-pygobject \
- 	--disable-mono \
- 	--disable-monodoc \
- 	--disable-stack-protector \
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
