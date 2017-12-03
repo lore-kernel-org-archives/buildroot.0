@@ -1,9 +1,9 @@
 From: Dagg Stompler <daggs@gmx.com>
-Date: Sun,  3 Dec 2017 14:56:18 +0200
-Subject: [Buildroot] [PATCH 7/8] odoridc2: add defconfig for mainline image
+Date: Sun,  3 Dec 2017 14:56:19 +0200
+Subject: [Buildroot] [PATCH 8/8] odroidc2: update readme file
 In-Reply-To: <20171203125619.30919-1-daggs@gmx.com>
 References: <20171203125619.30919-1-daggs@gmx.com>
-Message-ID: <20171203125619.30919-7-daggs@gmx.com>
+Message-ID: <20171203125619.30919-8-daggs@gmx.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,44 +12,63 @@ To: buildroot@busybox.net
 
 Signed-off-by: Dagg Stompler <daggs@gmx.com>
 ---
- configs/odroidc2_mainline_defconfig | 29 +++++++++++++++++++++++++++++
- 1 file changed, 29 insertions(+)
- create mode 100644 configs/odroidc2_mainline_defconfig
+ board/hardkernel/odroidc2/readme.txt | 29 +++++++++++++++++++++++++++--
+ 1 file changed, 27 insertions(+), 2 deletions(-)
 
-diff --git a/configs/odroidc2_mainline_defconfig b/configs/odroidc2_mainline_defconfig
-new file mode 100644
-index 0000000000..37f0623a70
---- /dev/null
-+++ b/configs/odroidc2_mainline_defconfig
-@@ -0,0 +1,29 @@
-+# Architecture
-+BR2_aarch64=y
+diff --git a/board/hardkernel/odroidc2/readme.txt b/board/hardkernel/odroidc2/readme.txt
+index b44aa67f5a..5f6c1c5a64 100644
+--- a/board/hardkernel/odroidc2/readme.txt
++++ b/board/hardkernel/odroidc2/readme.txt
+@@ -10,7 +10,11 @@ How to build it
+ 
+   $ make odroidc2_defconfig
+ 
+-Then you can edit the build options using
++For vendor based configuration or
 +
-+# System
-+BR2_TARGET_GENERIC_HOSTNAME="odroidc2"
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/hardkernel/odroidc2/post-image-mailine.sh"
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/hardkernel/odroidc2/post-build.sh"
++  $ make odroidc2_mainline_defconfig
 +
-+# Kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/hardkernel//odroidc2/odroidc2_mainline_defconfig"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="amlogic/meson-gxbb-odroidc2"
-+BR2_LINUX_KERNEL_IMAGE=y
++For community based configuration, then you can edit the build options using
+ 
+   $ make menuconfig
+ 
+@@ -24,7 +28,9 @@ download the packages' sources.
+ Result of the build
+ -------------------
+ 
+-After building, you should obtain this tree:
++After building, you should obtain one of the following trees:
 +
-+# U-Boot
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BOARDNAME="odroid-c2"
-+BR2_TARGET_UBOOT_NEEDS_DTC=y
++For vendor based configuration:
+ 
+     output/images/
+     +-- Image
+@@ -37,7 +43,26 @@ After building, you should obtain this tree:
+     +-- sdcard.img
+     `-- u-boot.bin
+ 
++For community based configuration:
 +
-+# Required tools to create the SD image
-+BR2_PACKAGE_HOST_DOSFSTOOLS=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_MESON_TOOLS=y
-+BR2_PACKAGE_HOST_MTOOLS=y
-+BR2_PACKAGE_HOST_UBOOT_TOOLS=y
++    output/images/
++    +-- Image
++    +-- uImage			   [2]
++    +-- boot.scr                   [1]
++    +-- boot.vfat
++    +-- meson-gxbb-odroidc2.dtb
++    +-- rootfs.ext2
++    +-- rootfs.ext4
++    +-- rootfs.tar
++    +-- sdcard.img
++    +-- bl1.bin.hardkernel	   [4]
++    +-- uboot-odc2.img		   [3]
++    `-- u-boot.bin
++
+ [1] This is the ODROID-C2 configuration file used in u-boot.
++[2] This is the ODROID-C2 kernel image file which will be booted.
++[3] This is the ODROID-C2 signed u-boot image which will be used.
++[4] This is the vendor's firmware which is needed for the board to boot.
+ 
+ How to write the SD card or eMMC
+ ================================
 -- 
 2.15.1
