@@ -1,152 +1,355 @@
 From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Sat,  2 Dec 2017 21:33:20 -0600
-Subject: [Buildroot] [PATCH 1/2] kvm-unit-tests: bump to
- kvm-unit-tests-20171020
-Message-ID: <20171203033321.13460-1-matthew.weber@rockwellcollins.com>
+Date: Sat,  2 Dec 2017 21:33:21 -0600
+Subject: [Buildroot] [PATCH 2/2] kvmtool: bump to f77d646ba0
+In-Reply-To: <20171203033321.13460-1-matthew.weber@rockwellcollins.com>
+References: <20171203033321.13460-1-matthew.weber@rockwellcollins.com>
+Message-ID: <20171203033321.13460-2-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Commit used:
+2017-11-03 16:19:58 +0000
+irq.h: fix compilation error due to missing bool type
+
 Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 ---
- DEVELOPERS                                         |  3 +-
- ...ile-remove-Werror-to-avoid-build-failures.patch | 29 +++++++++---------
- ...clock-be-explicit-about-mul-instruction-d.patch | 35 ----------------------
- package/kvm-unit-tests/kvm-unit-tests.hash         |  2 +-
- package/kvm-unit-tests/kvm-unit-tests.mk           |  2 +-
- 5 files changed, 19 insertions(+), 52 deletions(-)
- delete mode 100644 package/kvm-unit-tests/0001-x86-hyperv_clock-be-explicit-about-mul-instruction-d.patch
+ DEVELOPERS                                         |  1 +
+ .../kvmtool/0001-avoid-redefining-PAGE_SIZE.patch  | 42 ----------
+ ...6-kvm-cpu.c-don-t-include-asm-msr-index.h.patch | 58 --------------
+ .../0003-use-poll.h-instead-of-sys-poll.h.patch    | 33 --------
+ ...nd-use-C-library-provided-strlcpy-and-str.patch | 90 ----------------------
+ package/kvmtool/0005-Fix-call-to-connect.patch     | 34 --------
+ package/kvmtool/kvmtool.hash                       |  2 +-
+ package/kvmtool/kvmtool.mk                         |  2 +-
+ 8 files changed, 3 insertions(+), 259 deletions(-)
+ delete mode 100644 package/kvmtool/0001-avoid-redefining-PAGE_SIZE.patch
+ delete mode 100644 package/kvmtool/0002-x86-kvm-cpu.c-don-t-include-asm-msr-index.h.patch
+ delete mode 100644 package/kvmtool/0003-use-poll.h-instead-of-sys-poll.h.patch
+ delete mode 100644 package/kvmtool/0004-check-for-and-use-C-library-provided-strlcpy-and-str.patch
+ delete mode 100644 package/kvmtool/0005-Fix-call-to-connect.patch
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 27b22f4f0f..b6504210d3 100644
+index b6504210d3..5bb8fbe19b 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -443,7 +443,7 @@ F:	package/znc/
- 
- N:	Cyril Bur <cyrilbur@gmail.com>
- F:	arch/Config.in.powerpc
--F:	package/kvm-unit-tests
-+F:	package/kvm-unit-tests/
- 
- N:	Dagg Stompler <daggs@gmx.com>
- F:	package/libamcodec/
-@@ -1084,6 +1084,7 @@ F:	package/iperf/
- F:	package/iperf3/
+@@ -1085,6 +1085,7 @@ F:	package/iperf3/
  F:	package/iputils/
  F:	package/iw/
-+F:	package/kvm-unit-tests/
+ F:	package/kvm-unit-tests/
++F:	package/kvmtool/
  F:	package/libcsv/
  F:	package/libcurl/
  F:	package/libfcgi/
-diff --git a/package/kvm-unit-tests/0001-Makefile-remove-Werror-to-avoid-build-failures.patch b/package/kvm-unit-tests/0001-Makefile-remove-Werror-to-avoid-build-failures.patch
-index b1ea09272e..699be171d0 100644
---- a/package/kvm-unit-tests/0001-Makefile-remove-Werror-to-avoid-build-failures.patch
-+++ b/package/kvm-unit-tests/0001-Makefile-remove-Werror-to-avoid-build-failures.patch
-@@ -1,26 +1,27 @@
--From 08e14a662b9e75daec29722e49150869952ba1b6 Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Date: Mon, 20 Nov 2017 22:09:39 +0100
-+From e9490197169d146060a26e96eca2901375d5cd5e Mon Sep 17 00:00:00 2001
-+From: Matt Weber <matthew.weber@rockwellcollins.com>
-+Date: Sat, 2 Dec 2017 21:24:30 -0600
- Subject: [PATCH] Makefile: remove -Werror to avoid build failures
- 
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Refactoring of Thomas Petazzoni's original.
-+
-+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
- ---
-- Makefile | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
-+ Makefile | 1 -
-+ 1 file changed, 1 deletion(-)
- 
- diff --git a/Makefile b/Makefile
--index 16ce297..909498e 100644
-+index 7231334..d9ad42b 100644
- --- a/Makefile
- +++ b/Makefile
--@@ -45,7 +45,7 @@ cc-option = $(shell if $(CC) $(1) -S -o /dev/null -xc /dev/null \
--               > /dev/null 2>&1; then echo "$(1)"; else echo "$(2)"; fi ;)
-- 
-- CFLAGS += -g
---CFLAGS += $(autodepend-flags) -Wall -Werror
--+CFLAGS += $(autodepend-flags) -Wall
-+@@ -53,7 +53,6 @@ cc-option = $(shell if $(CC) $(1) -S -o /dev/null -xc /dev/null \
-+ COMMON_CFLAGS += -g $(autodepend-flags)
-+ COMMON_CFLAGS += -Wall -Wwrite-strings -Wclobbered -Wempty-body -Wuninitialized
-+ COMMON_CFLAGS += -Wignored-qualifiers -Wunused-but-set-parameter
-+-COMMON_CFLAGS += -Werror
-  frame-pointer-flag=-f$(if $(KEEP_FRAME_POINTER),no-,)omit-frame-pointer
-  fomit_frame_pointer := $(call cc-option, $(frame-pointer-flag), "")
-  fnostack_protector := $(call cc-option, -fno-stack-protector, "")
- -- 
--2.13.6
-+2.14.2
- 
-diff --git a/package/kvm-unit-tests/0001-x86-hyperv_clock-be-explicit-about-mul-instruction-d.patch b/package/kvm-unit-tests/0001-x86-hyperv_clock-be-explicit-about-mul-instruction-d.patch
+diff --git a/package/kvmtool/0001-avoid-redefining-PAGE_SIZE.patch b/package/kvmtool/0001-avoid-redefining-PAGE_SIZE.patch
 deleted file mode 100644
-index c8ee6b1ac4..0000000000
---- a/package/kvm-unit-tests/0001-x86-hyperv_clock-be-explicit-about-mul-instruction-d.patch
+index ed3370cfc8..0000000000
+--- a/package/kvmtool/0001-avoid-redefining-PAGE_SIZE.patch
 +++ /dev/null
-@@ -1,35 +0,0 @@
--From 022ae220d6e7b5bd064bc8698c271dca4dac7d8c Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Date: Mon, 8 May 2017 22:27:25 +0200
--Subject: [PATCH] x86/hyperv_clock: be explicit about mul instruction data size
+@@ -1,42 +0,0 @@
+-From bec1b0ced72dc0d49825d6b69d09296d13fd0af3 Mon Sep 17 00:00:00 2001
+-From: Andre Przywara <andre.przywara@arm.com>
+-Date: Tue, 21 Jul 2015 10:58:46 +0100
+-Subject: [PATCH] avoid redefining PAGE_SIZE
 -
--With gcc 4.7.2, the build fails with:
+-PAGE_SIZE may have been defined by the C libary (musl-libc does that).
+-So avoid redefining it here unconditionally, instead only use our
+-definition if none has been provided by the libc.
 -
--x86/hyperv_clock.c: Assembler messages:
--x86/hyperv_clock.c:21: Error: no instruction mnemonic suffix given and no register operands; can't size instruction
--
--In order to avoid this, make the mul instruction data size explicit by
--adding the appropriate suffix. It operates on 64-bit data, so use
--"mulq".
--
+-Signed-off-by: Andre Przywara <andre.przywara@arm.com>
+-Signed-off-by: Will Deacon <will.deacon@arm.com>
+-[backport from upstream commit 4095fac878f618ae5e7384a1dc65ee34b6e05217.]
 -Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ----
-- x86/hyperv_clock.c | 2 +-
+- include/kvm/kvm.h | 3 +++
+- 1 file changed, 3 insertions(+)
+-
+-diff --git a/include/kvm/kvm.h b/include/kvm/kvm.h
+-index 754e029..37155db 100644
+---- a/include/kvm/kvm.h
+-+++ b/include/kvm/kvm.h
+-@@ -11,6 +11,7 @@
+- #include <time.h>
+- #include <signal.h>
+- #include <sys/prctl.h>
+-+#include <limits.h>
+- 
+- #define SIGKVMEXIT		(SIGRTMIN + 0)
+- #define SIGKVMPAUSE		(SIGRTMIN + 1)
+-@@ -19,7 +20,9 @@
+- #define HOME_DIR		getenv("HOME")
+- #define KVM_BINARY_NAME		"lkvm"
+- 
+-+#ifndef PAGE_SIZE
+- #define PAGE_SIZE (sysconf(_SC_PAGE_SIZE))
+-+#endif
+- 
+- #define DEFINE_KVM_EXT(ext)		\
+- 	.name = #ext,			\
+--- 
+-2.9.4
+-
+diff --git a/package/kvmtool/0002-x86-kvm-cpu.c-don-t-include-asm-msr-index.h.patch b/package/kvmtool/0002-x86-kvm-cpu.c-don-t-include-asm-msr-index.h.patch
+deleted file mode 100644
+index 842c131dc5..0000000000
+--- a/package/kvmtool/0002-x86-kvm-cpu.c-don-t-include-asm-msr-index.h.patch
++++ /dev/null
+@@ -1,58 +0,0 @@
+-From ce9abb649165aca728e4645ce09e7bb77e684b06 Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Date: Sat, 19 Aug 2017 16:35:59 +0200
+-Subject: [PATCH] x86/kvm-cpu.c: don't include <asm/msr-index.h>
+-
+-Since kernel commit 25dc1d6cc3082aab293e5dad47623b550f7ddd2a ("x86:
+-stop exporting msr-index.h to userland"), <asm/msr-index.h> is no
+-longer exported to userspace. Therefore, any toolchain built with
+-kernel headers >= 4.12 will no longer have this header file, causing a
+-build failure in kvmtool.
+-
+-As a replacement, this patch includes inside x86/kvm-cpu.c the
+-necessary MSR_* definitions.
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Submitted-upstream: https://patchwork.kernel.org/patch/9910687/
+----
+- x86/kvm-cpu.c | 17 ++++++++++++++++-
+- 1 file changed, 16 insertions(+), 1 deletion(-)
+-
+-diff --git a/x86/kvm-cpu.c b/x86/kvm-cpu.c
+-index 5cc4e1e..b02ff65 100644
+---- a/x86/kvm-cpu.c
+-+++ b/x86/kvm-cpu.c
+-@@ -4,7 +4,6 @@
+- #include "kvm/util.h"
+- #include "kvm/kvm.h"
+- 
+--#include <asm/msr-index.h>
+- #include <asm/apicdef.h>
+- #include <linux/err.h>
+- #include <sys/ioctl.h>
+-@@ -136,6 +135,22 @@ static struct kvm_msrs *kvm_msrs__new(size_t nmsrs)
+- 	return vcpu;
+- }
+- 
+-+#define MSR_IA32_SYSENTER_CS            0x00000174
+-+#define MSR_IA32_SYSENTER_ESP           0x00000175
+-+#define MSR_IA32_SYSENTER_EIP           0x00000176
+-+
+-+#define MSR_STAR                0xc0000081 /* legacy mode SYSCALL target */
+-+#define MSR_LSTAR               0xc0000082 /* long mode SYSCALL target */
+-+#define MSR_CSTAR               0xc0000083 /* compat mode SYSCALL target */
+-+#define MSR_SYSCALL_MASK        0xc0000084 /* EFLAGS mask for syscall */
+-+#define MSR_KERNEL_GS_BASE      0xc0000102 /* SwapGS GS shadow */
+-+
+-+#define MSR_IA32_TSC                    0x00000010
+-+#define MSR_IA32_MISC_ENABLE            0x000001a0
+-+
+-+#define MSR_IA32_MISC_ENABLE_FAST_STRING_BIT            0
+-+#define MSR_IA32_MISC_ENABLE_FAST_STRING                (1ULL << MSR_IA32_MISC_ENABLE_FAST_STRING_BIT)
+-+
+- #define KVM_MSR_ENTRY(_index, _data)	\
+- 	(struct kvm_msr_entry) { .index = _index, .data = _data }
+- 
+--- 
+-2.9.4
+-
+diff --git a/package/kvmtool/0003-use-poll.h-instead-of-sys-poll.h.patch b/package/kvmtool/0003-use-poll.h-instead-of-sys-poll.h.patch
+deleted file mode 100644
+index a358569b67..0000000000
+--- a/package/kvmtool/0003-use-poll.h-instead-of-sys-poll.h.patch
++++ /dev/null
+@@ -1,33 +0,0 @@
+-From 19490e24895df95253e43a7aacf3ef408b830bd5 Mon Sep 17 00:00:00 2001
+-From: Andre Przywara <andre.przywara@arm.com>
+-Date: Fri, 17 Jul 2015 17:02:15 +0100
+-Subject: [PATCH] use <poll.h> instead of <sys/poll.h>
+-
+-The manpage of poll(2) states that the prototype of poll is defined
+-in <poll.h>. Use that header file instead of <sys/poll.h> to allow
+-compilation against musl-libc.
+-
+-Signed-off-by: Andre Przywara <andre.przywara@arm.com>
+-Signed-off-by: Will Deacon <will.deacon@arm.com>
+-[backport from upstream commit 52c22e6e64a94cc701d86587d32cd3822ac5c293.]
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+----
+- disk/core.c | 2 +-
 - 1 file changed, 1 insertion(+), 1 deletion(-)
 -
--diff --git a/x86/hyperv_clock.c b/x86/hyperv_clock.c
--index 8b1deba..6c4dd56 100644
----- a/x86/hyperv_clock.c
--+++ b/x86/hyperv_clock.c
--@@ -19,7 +19,7 @@ static inline u64 scale_delta(u64 delta, u64 mul_frac)
-- 	u64 product, unused;
+-diff --git a/disk/core.c b/disk/core.c
+-index 309e16c..dd2f258 100644
+---- a/disk/core.c
+-+++ b/disk/core.c
+-@@ -5,7 +5,7 @@
 - 
-- 	__asm__ (
---		"mul %3"
--+		"mulq %3"
-- 		: "=d" (product), "=a" (unused) : "1" (delta), "rm" ((u64)mul_frac) );
+- #include <linux/err.h>
+- #include <sys/eventfd.h>
+--#include <sys/poll.h>
+-+#include <poll.h>
 - 
-- 	return product;
+- #define AIO_MAX 256
+- 
 --- 
--2.7.4
+-2.9.4
 -
-diff --git a/package/kvm-unit-tests/kvm-unit-tests.hash b/package/kvm-unit-tests/kvm-unit-tests.hash
-index 2a4cfe021a..bb827de939 100644
---- a/package/kvm-unit-tests/kvm-unit-tests.hash
-+++ b/package/kvm-unit-tests/kvm-unit-tests.hash
+diff --git a/package/kvmtool/0004-check-for-and-use-C-library-provided-strlcpy-and-str.patch b/package/kvmtool/0004-check-for-and-use-C-library-provided-strlcpy-and-str.patch
+deleted file mode 100644
+index d0591b9e4d..0000000000
+--- a/package/kvmtool/0004-check-for-and-use-C-library-provided-strlcpy-and-str.patch
++++ /dev/null
+@@ -1,90 +0,0 @@
+-From 7a9c16dcf58ff4c8154f3a9dfa1f02ec3daa1662 Mon Sep 17 00:00:00 2001
+-From: Andre Przywara <andre.przywara@arm.com>
+-Date: Fri, 17 Jul 2015 17:02:16 +0100
+-Subject: [PATCH] check for and use C library provided strlcpy and strlcat
+-
+-The musl-libc library provides implementations of strlcpy and strlcat,
+-so introduce a feature check for it and only use the kvmtool
+-implementation if there is no library support for it.
+-This avoids clashes with the public definition.
+-
+-Signed-off-by: Andre Przywara <andre.przywara@arm.com>
+-Signed-off-by: Will Deacon <will.deacon@arm.com>
+-[backport from upstream commit 8f22adc4230f07980a318ad1662fba5af0c131c1.]
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+----
+- Makefile                 |  5 +++++
+- config/feature-tests.mak | 10 ++++++++++
+- include/kvm/strbuf.h     |  2 ++
+- util/strbuf.c            |  2 ++
+- 4 files changed, 19 insertions(+)
+-
+-diff --git a/Makefile b/Makefile
+-index 151fa9d..bf71db4 100644
+---- a/Makefile
+-+++ b/Makefile
+-@@ -199,6 +199,11 @@ endif
+- # On a given system, some libs may link statically, some may not; so, check
+- # both and only build those that link!
+- 
+-+ifeq ($(call try-build,$(SOURCE_STRLCPY),$(CFLAGS),),y)
+-+	CFLAGS_DYNOPT	+= -DHAVE_STRLCPY
+-+	CFLAGS_STATOPT	+= -DHAVE_STRLCPY
+-+endif
+-+
+- ifeq ($(call try-build,$(SOURCE_BFD),$(CFLAGS),-lbfd -static),y)
+- 	CFLAGS_STATOPT	+= -DCONFIG_HAS_BFD
+- 	OBJS_STATOPT	+= symbol.o
+-diff --git a/config/feature-tests.mak b/config/feature-tests.mak
+-index 6bee6c2..03cdb42 100644
+---- a/config/feature-tests.mak
+-+++ b/config/feature-tests.mak
+-@@ -196,3 +196,13 @@ int main(void)
+- 	return 0;
+- }
+- endef
+-+
+-+define SOURCE_STRLCPY
+-+#include <string.h>
+-+
+-+int main(void)
+-+{
+-+	strlcpy(NULL, NULL, 0);
+-+	return 0;
+-+}
+-+endef
+-diff --git a/include/kvm/strbuf.h b/include/kvm/strbuf.h
+-index 2beefbc..7657339 100644
+---- a/include/kvm/strbuf.h
+-+++ b/include/kvm/strbuf.h
+-@@ -6,8 +6,10 @@
+- 
+- int prefixcmp(const char *str, const char *prefix);
+- 
+-+#ifndef HAVE_STRLCPY
+- extern size_t strlcat(char *dest, const char *src, size_t count);
+- extern size_t strlcpy(char *dest, const char *src, size_t size);
+-+#endif
+- 
+- /* some inline functions */
+- 
+-diff --git a/util/strbuf.c b/util/strbuf.c
+-index 99d6b0c..2c6e8ad 100644
+---- a/util/strbuf.c
+-+++ b/util/strbuf.c
+-@@ -13,6 +13,7 @@ int prefixcmp(const char *str, const char *prefix)
+- 	}
+- }
+- 
+-+#ifndef HAVE_STRLCPY
+- /**
+-  * strlcat - Append a length-limited, %NUL-terminated string to another
+-  * @dest: The string to be appended to
+-@@ -60,3 +61,4 @@ size_t strlcpy(char *dest, const char *src, size_t size)
+- 	}
+- 	return ret;
+- }
+-+#endif
+--- 
+-2.9.4
+-
+diff --git a/package/kvmtool/0005-Fix-call-to-connect.patch b/package/kvmtool/0005-Fix-call-to-connect.patch
+deleted file mode 100644
+index 434ca34b2f..0000000000
+--- a/package/kvmtool/0005-Fix-call-to-connect.patch
++++ /dev/null
+@@ -1,34 +0,0 @@
+-From d375235f49184371026791ae8f6f9dc307de8a61 Mon Sep 17 00:00:00 2001
+-From: Andre Przywara <andre.przywara@arm.com>
+-Date: Fri, 17 Jul 2015 17:02:14 +0100
+-Subject: [PATCH] Fix call to connect()
+-
+-According to the manpage and the prototype the second argument to
+-connect(2) is a "const struct sockaddr*", so cast our protocol
+-specific type back to the super type.
+-This fixes compilation on musl-libc.
+-
+-Signed-off-by: Andre Przywara <andre.przywara@arm.com>
+-Signed-off-by: Will Deacon <will.deacon@arm.com>
+-[backport from upstream commit d77bd4f466f341d4b35fe8b91176ef8a37160e19.]
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+----
+- kvm-ipc.c | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/kvm-ipc.c b/kvm-ipc.c
+-index b1c43dd..5a0b6e0 100644
+---- a/kvm-ipc.c
+-+++ b/kvm-ipc.c
+-@@ -99,7 +99,7 @@ int kvm__get_sock_by_instance(const char *name)
+- 	strlcpy(local.sun_path, sock_file, sizeof(local.sun_path));
+- 	len = strlen(local.sun_path) + sizeof(local.sun_family);
+- 
+--	r = connect(s, &local, len);
+-+	r = connect(s, (struct sockaddr *)&local, len);
+- 	if (r < 0 && errno == ECONNREFUSED) {
+- 		/* Tell the user clean ghost socket file */
+- 		pr_err("\"%s\" could be a ghost socket file, please remove it",
+--- 
+-2.9.4
+-
+diff --git a/package/kvmtool/kvmtool.hash b/package/kvmtool/kvmtool.hash
+index 657fdb315e..428277354d 100644
+--- a/package/kvmtool/kvmtool.hash
++++ b/package/kvmtool/kvmtool.hash
 @@ -1,2 +1,2 @@
  # Locally computed
--sha256 ccb9ff17a2c7d6c7d50b4b71b87381181b45484187100ae5b1ac54d9d61e8666  kvm-unit-tests-95062c20790d82713bfa7475b61a4adef3f3645a.tar.gz
-+sha256 346c543de9e953db283072e1c591cab9d0eb775f7fb1fff3d7560f38bdf6bdf2  kvm-unit-tests-kvm-unit-tests-20171020.tar.gz
-diff --git a/package/kvm-unit-tests/kvm-unit-tests.mk b/package/kvm-unit-tests/kvm-unit-tests.mk
-index c630ec6270..54614e2643 100644
---- a/package/kvm-unit-tests/kvm-unit-tests.mk
-+++ b/package/kvm-unit-tests/kvm-unit-tests.mk
+-sha256 5633d8dd1542996108bf9b75c9f2cf6bf13fb27bfd453ec250b3e5405e85f6ac  kvmtool-bed2bd9e1fbef5819090feeada7b86eed97ca5e2.tar.gz
++sha256 2d55e4521ac040b870db015e1f075d69b89f940242d7ce5708f7d7060d62c0cc  kvmtool-f77d646ba01d04be5aad9449ac00719c043fe36e.tar.gz
+diff --git a/package/kvmtool/kvmtool.mk b/package/kvmtool/kvmtool.mk
+index 2789a6e308..9384002d58 100644
+--- a/package/kvmtool/kvmtool.mk
++++ b/package/kvmtool/kvmtool.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--KVM_UNIT_TESTS_VERSION = 95062c20790d82713bfa7475b61a4adef3f3645a
-+KVM_UNIT_TESTS_VERSION = kvm-unit-tests-20171020
- KVM_UNIT_TESTS_SITE = $(BR2_KERNEL_MIRROR)/scm/virt/kvm/kvm-unit-tests.git
- KVM_UNIT_TESTS_SITE_METHOD = git
- KVM_UNIT_TESTS_LICENSE = LGPL-2.0
+-KVMTOOL_VERSION = bed2bd9e1fbef5819090feeada7b86eed97ca5e2
++KVMTOOL_VERSION = f77d646ba01d04be5aad9449ac00719c043fe36e
+ KVMTOOL_SITE = $(BR2_KERNEL_MIRROR)/scm/linux/kernel/git/will/kvmtool.git
+ KVMTOOL_SITE_METHOD = git
+ KVMTOOL_DEPENDENCIES = \
 -- 
 2.14.2
