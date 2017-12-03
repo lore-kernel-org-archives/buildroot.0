@@ -1,53 +1,41 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  3 Dec 2017 19:23:10 +0100
-Subject: [Buildroot] [PATCH 1/1] package/kodi-pvr-stalker: needs libxml2
-Message-ID: <20171203182310.23780-1-bernd.kuhls@t-online.de>
+From: daggs <daggs@gmx.com>
+Date: Sun, 3 Dec 2017 19:56:00 +0100
+Subject: [Buildroot] [PATCH 6/8] odoridc2: add mainline post image
+ script.
+In-Reply-To: <20171203174435.4c1f643f@windsurf.home>
+References: <20171203125619.30919-1-daggs@gmx.com>
+ <20171203125619.30919-6-daggs@gmx.com>
+ <20171203143102.2e05f11b@windsurf.lan>
+ <trinity-ad333bae-0cfc-4733-89ea-5e4eba0cecae-1512316455334@3c-app-mailcom-bs06>
+ <20171203174435.4c1f643f@windsurf.home>
+Message-ID: <trinity-932caa2f-35ff-44af-9c26-11390ac31712-1512327360076@3c-app-mailcom-bs06>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since
-https://git.buildroot.net/buildroot/commit/package/kodi?id=bf9bfd065ba3fab328fd041ca040f2bf134fecf2
-kodi itself does not depend on libxml2 anymore which previously
-provided libxml2 still needed by kodi-pvr-stalker:
-https://github.com/kodi-pvr/pvr.stalker/blob/Krypton/CMakeLists.txt#L12
+Greetings Thomas,
 
-Fixes a build error not caught by autobuilders because they do not have
-host jdk installed:
-CMake Error at /usr/share/cmake-3.7/Modules/FindPackageHandleStandardArgs.cmake:138 (message):
-  Could NOT find LibXml2 (missing: LIBXML2_LIBRARIES LIBXML2_INCLUDE_DIR)
+> Sent: Sunday, December 03, 2017 at 6:44 PM
+> From: "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>
+> To: daggs <daggs@gmx.com>
+> Cc: buildroot at buildroot.org
+> Subject: Re: [Buildroot] [PATCH 6/8] odoridc2: add mainline post image script.
+>
+> Hello,
+> 
+> On Sun, 3 Dec 2017 16:54:15 +0100, daggs wrote:
+> 
+> > > Downloading and building stuff in the post-image script is clearly not
+> > > good. It works around the download and legal-info mechanisms of
+> > > Buildroot.  
+> > the fw is part of the vendor's uboot branch, I'm not sure it is a wise idea to add the vendor's uboot as pkg and rename it to something else.
+> > I'm open for suggestions.
+> 
+> You could add a package like odroid-boot-firmware (or a more
+> appropriate name), that only installs those firmware files.
+> 
+> Thomas
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/kodi-pvr-stalker/Config.in           | 1 +
- package/kodi-pvr-stalker/kodi-pvr-stalker.mk | 2 +-
- 2 files changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/package/kodi-pvr-stalker/Config.in b/package/kodi-pvr-stalker/Config.in
-index 3ec530cd39..d334d0c2cb 100644
---- a/package/kodi-pvr-stalker/Config.in
-+++ b/package/kodi-pvr-stalker/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_KODI_PVR_STALKER
- 	bool "kodi-pvr-stalker"
- 	select BR2_PACKAGE_JSONCPP
- 	select BR2_PACKAGE_KODI_PLATFORM
-+	select BR2_PACKAGE_LIBXML2
- 	help
- 	  A PVR Client that connects Kodi to Stalker Middleware
- 
-diff --git a/package/kodi-pvr-stalker/kodi-pvr-stalker.mk b/package/kodi-pvr-stalker/kodi-pvr-stalker.mk
-index ee61171d78..32ac2cad0e 100644
---- a/package/kodi-pvr-stalker/kodi-pvr-stalker.mk
-+++ b/package/kodi-pvr-stalker/kodi-pvr-stalker.mk
-@@ -10,6 +10,6 @@ KODI_PVR_STALKER_VERSION = 2.8.6-Krypton
- KODI_PVR_STALKER_SITE = $(call github,kodi-pvr,pvr.stalker,$(KODI_PVR_STALKER_VERSION))
- KODI_PVR_STALKER_LICENSE = GPL-2.0+
- KODI_PVR_STALKER_LICENSE_FILES = src/client.h
--KODI_PVR_STALKER_DEPENDENCIES = jsoncpp kodi-platform
-+KODI_PVR_STALKER_DEPENDENCIES = jsoncpp kodi-platform libxml2
- 
- $(eval $(cmake-package))
--- 
-2.11.0
+I'd hoped I'd won't have to do it... well... will check it out.
