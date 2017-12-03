@@ -1,59 +1,125 @@
-From: daggs <daggs@gmx.com>
-Date: Sun, 3 Dec 2017 19:57:12 +0100
-Subject: [Buildroot] [PATCH 4/8] odroidc2: add mainline kernel config
-In-Reply-To: <33e0695f-4b54-b9a1-5d6f-2d57bc58c30f@mind.be>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sun, 3 Dec 2017 21:06:03 +0200
+Subject: [Buildroot] [PATCH 1/8] meson-tools: New Package
+In-Reply-To: <20171203125619.30919-1-daggs@gmx.com>
 References: <20171203125619.30919-1-daggs@gmx.com>
- <20171203125619.30919-4-daggs@gmx.com>
- <20171203142824.08aec6c8@windsurf.lan>
- <trinity-d023ef5f-6e34-4dc5-ad35-135e3de53cb7-1512316552992@3c-app-mailcom-bs06>
- <33e0695f-4b54-b9a1-5d6f-2d57bc58c30f@mind.be>
-Message-ID: <trinity-45d3df7c-7c58-4ce6-b836-dea570e58fba-1512327432508@3c-app-mailcom-bs06>
+Message-ID: <20171203190603.gkai3rkdr52vxiny@tarshish.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Greetings Arnout ,
+Hi Dagg,
 
-> Sent: Sunday, December 03, 2017 at 7:19 PM
-> From: "Arnout Vandecappelle" <arnout@mind.be>
-> To: daggs <daggs@gmx.com>, "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>
-> Cc: buildroot at buildroot.org
-> Subject: Re: [Buildroot] [PATCH 4/8] odroidc2: add mainline kernel config
->
+On Sun, Dec 03, 2017 at 02:56:12PM +0200, Dagg Stompler wrote:
+> all amlogic's meson based soc require a signed firmware to boot, this
+> package provides a binary to do so.
 > 
+> Signed-off-by: Dagg Stompler <daggs@gmx.com>
+> ---
+>  package/Config.in.host                             |  2 +-
+>  .../meson-tools/0001-support_crosscompile.patch    | 12 +++++++++
+>  package/meson-tools/Config.in.host                 |  9 +++++++
+>  package/meson-tools/meson-tools.hash               |  2 ++
+>  package/meson-tools/meson-tools.mk                 | 31 ++++++++++++++++++++++
+>  5 files changed, 55 insertions(+), 1 deletion(-)
+>  create mode 100644 package/meson-tools/0001-support_crosscompile.patch
+>  create mode 100644 package/meson-tools/Config.in.host
+>  create mode 100644 package/meson-tools/meson-tools.hash
+>  create mode 100644 package/meson-tools/meson-tools.mk
 > 
-> On 03-12-17 16:55, daggs wrote:
-> > Greetings Thomas ,
-> > 
-> >> Sent: Sunday, December 03, 2017 at 3:28 PM
-> >> From: "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>
-> >> To: "Dagg Stompler" <daggs@gmx.com>
-> >> Cc: buildroot at buildroot.org
-> >> Subject: Re: [Buildroot] [PATCH 4/8] odroidc2: add mainline kernel config
-> >>
-> >> Hello,
-> >>
-> >> On Sun,  3 Dec 2017 14:56:15 +0200, Dagg Stompler wrote:
-> >>> mainline odroidc2 uses a different kernel config than arm64 defconfig
-> >>>
-> >>> Signed-off-by: Dagg Stompler <daggs@gmx.com>
-> >>> ---
-> >>>  .../odroidc2/odroidc2_mainline_defconfig           | 5657 ++++++++++++++++++++
-> >>>  1 file changed, 5657 insertions(+)
-> >>>  create mode 100644 board/hardkernel/odroidc2/odroidc2_mainline_defconfig
-> >>
-> >> Please use a defconfig, not a full .config file. I.e, generate it with
-> >> "make savedefconfig" in the kernel.
-> >>
-> > sure, will do.
-> 
->  Even better (if possible): use the in-tree defconfig and a kconfig fragment to
-> make the changes for odroidc2.
-> 
->  Regards,
->  Arnout
-> 
+> diff --git a/package/Config.in.host b/package/Config.in.host
+> index 48b6f8c7a8..78d085d44d 100644
+> --- a/package/Config.in.host
+> +++ b/package/Config.in.host
+> @@ -20,13 +20,13 @@ menu "Host utilities"
+>  	source "package/genpart/Config.in.host"
+>  	source "package/go/Config.in.host"
+>  	source "package/go-bootstrap/Config.in.host"
+> -	source "package/google-breakpad/Config.in.host"
 
-you mean add a patch that modifies the kernel arm64 defconfig? 
+Is this change intentional?
+
+>  	source "package/gptfdisk/Config.in.host"
+>  	source "package/imx-usb-loader/Config.in.host"
+>  	source "package/jq/Config.in.host"
+>  	source "package/jsmin/Config.in.host"
+>  	source "package/lpc3250loader/Config.in.host"
+>  	source "package/lttng-babeltrace/Config.in.host"
+> +	source "package/meson-tools/Config.in.host"
+>  	source "package/mfgtools/Config.in.host"
+>  	source "package/mkpasswd/Config.in.host"
+>  	source "package/mtd/Config.in.host"
+> diff --git a/package/meson-tools/0001-support_crosscompile.patch b/package/meson-tools/0001-support_crosscompile.patch
+> new file mode 100644
+> index 0000000000..ef937f78ab
+> --- /dev/null
+> +++ b/package/meson-tools/0001-support_crosscompile.patch
+
+Since you are only adding a host package this patch should be named something 
+else. But ...
+
+> @@ -0,0 +1,12 @@
+> +--- a/Makefile	2017-07-22 15:51:00.000000000 +0300
+> ++++ b/Makefile	2017-07-22 15:51:26.000000000 +0300
+> +@@ -1,7 +1,7 @@
+> + all: amlbootsig unamlbootsig amlinfo
+> + 
+> +-CFLAGS = -g
+> +-LDFLAGS = -lcrypto
+> ++override CFLAGS += -g
+> ++override LDFLAGS += -lssl -lcrypto
+
+... you do not actually use this override capability as far as I can see ...
+
+[snip]
+
+> diff --git a/package/meson-tools/meson-tools.mk b/package/meson-tools/meson-tools.mk
+> new file mode 100644
+> index 0000000000..19f5bf543b
+> --- /dev/null
+> +++ b/package/meson-tools/meson-tools.mk
+> @@ -0,0 +1,31 @@
+> +################################################################################
+> +#
+> +# meson-tools
+> +#
+> +################################################################################
+> +
+> +HOST_MESON_TOOLS_VERSION = 5e01cbadc6f6f21ad88a63492a83182fc4b19d37
+> +HOST_MESON_TOOLS_SITE = $(call github,afaerber,meson-tools,$(HOST_MESON_TOOLS_VERSION))
+> +HOST_MESON_TOOLS_LICENSE = GPL-2.0+
+> +HOST_MESON_TOOLS_LICENSE_FILES = COPYING README.md
+> +HOST_MESON_TOOLS_DEPENDENCIES += host-openssl
+> +
+> +HOST_MESON_TOOLS_MAKE_OPTS = CC="$(HOSTCC)" \
+> +        CFLAGS="$(HOST_CFLAGS)" \
+> +        LDFLAGS="$(HOST_LDFLAGS)"
+> +
+> +define HOST_MESON_TOOLS_BUILD_CMDS
+> +        $(MAKE) -C $(@D) $(HOST_MESON_TOOLS_MAKE_OPTS)
+
+... because you pass the make variables as options, thus forcing their value. 
+So the patch might not be needed.
+
+> +endef
+> +
+> +define HOST_MESON_TOOLS_INSTALL_BIN
+> +	$(INSTALL) -m 0755 $(@D)/$(1) $(HOST_DIR)/bin
+> +endef
+> +
+> +define HOST_MESON_TOOLS_INSTALL_CMDS
+> +	$(call HOST_MESON_TOOLS_INSTALL_BIN,amlbootsig)
+> +	$(call HOST_MESON_TOOLS_INSTALL_BIN,unamlbootsig)
+> +	$(call HOST_MESON_TOOLS_INSTALL_BIN,amlinfo)
+> +endef
+> +
+> +$(eval $(host-generic-package))
+
+baruch
+
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
