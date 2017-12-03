@@ -1,114 +1,140 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun,  3 Dec 2017 22:48:11 +0100
-Subject: [Buildroot] [PATCH 8/8] support/testing: add tests for ATF
+Date: Sun,  3 Dec 2017 22:48:09 +0100
+Subject: [Buildroot] [PATCH 6/8] binaries-marvell: new package
 In-Reply-To: <20171203214811.3124-1-thomas.petazzoni@free-electrons.com>
 References: <20171203214811.3124-1-thomas.petazzoni@free-electrons.com>
-Message-ID: <20171203214811.3124-9-thomas.petazzoni@free-electrons.com>
+Message-ID: <20171203214811.3124-7-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-These new tests only do build tests, but allow to quickly verify that
-the ATF/U-Boot combinations for vexpress, Allwinner and Marvell
-platforms all continue to build properly.
+From: Sergey Matyukevich <geomatsi@gmail.com>
 
+Some systems, including Marvell Armada 7k/8k SoCs, have a separate
+System Control Processor (SCP) for power management, clocks, reset
+and system control. ATF Boot Loader stage 2 (BL2) loads optional
+SCP_BL2 image into a platform-specific region of secure memory.
+
+This package adds SCP_BL2 firmware for Marvell Armada 7040 and 8040 SoCs.
+
+Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
+[Thomas:
+ - Use "binaries-marvell" in the Config.in prompt and in the .mk file
+   header.
+ - Change the license information.
+ - Adjust license information: it is GPL-2.0 with the FreeRTOS
+   exception, and therefore can be redistributed.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- support/testing/tests/boot/__init__.py |  0
- support/testing/tests/boot/test_atf.py | 79 ++++++++++++++++++++++++++++++++++
- 2 files changed, 79 insertions(+)
- create mode 100644 support/testing/tests/boot/__init__.py
- create mode 100644 support/testing/tests/boot/test_atf.py
+ DEVELOPERS                                  |  1 +
+ boot/Config.in                              |  1 +
+ boot/binaries-marvell/Config.in             | 32 +++++++++++++++++++++++++++++
+ boot/binaries-marvell/binaries-marvell.hash |  2 ++
+ boot/binaries-marvell/binaries-marvell.mk   | 22 ++++++++++++++++++++
+ 5 files changed, 58 insertions(+)
+ create mode 100644 boot/binaries-marvell/Config.in
+ create mode 100644 boot/binaries-marvell/binaries-marvell.hash
+ create mode 100644 boot/binaries-marvell/binaries-marvell.mk
 
-diff --git a/support/testing/tests/boot/__init__.py b/support/testing/tests/boot/__init__.py
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 9d114b5a29..9115892d5c 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1508,6 +1508,7 @@ F:	package/lua-resty-http/
+ F:	package/mpir/
+ 
+ N:	Sergey Matyukevich <geomatsi@gmail.com>
++F:	boot/binaries-marvell/
+ F:	boot/mv-ddr-marvell/
+ F:	board/linksprite/pcduino
+ F:	board/orangepi/orangepi-zero
+diff --git a/boot/Config.in b/boot/Config.in
+index 3950c49524..3687c41a2c 100644
+--- a/boot/Config.in
++++ b/boot/Config.in
+@@ -6,6 +6,7 @@ source "boot/at91bootstrap3/Config.in"
+ source "boot/at91dataflashboot/Config.in"
+ source "boot/arm-trusted-firmware/Config.in"
+ source "boot/barebox/Config.in"
++source "boot/binaries-marvell/Config.in"
+ source "boot/boot-wrapper-aarch64/Config.in"
+ source "boot/grub2/Config.in"
+ source "boot/gummiboot/Config.in"
+diff --git a/boot/binaries-marvell/Config.in b/boot/binaries-marvell/Config.in
 new file mode 100644
-index 0000000000..e69de29bb2
-diff --git a/support/testing/tests/boot/test_atf.py b/support/testing/tests/boot/test_atf.py
-new file mode 100644
-index 0000000000..02f93b9201
+index 0000000000..d565e4dbfd
 --- /dev/null
-+++ b/support/testing/tests/boot/test_atf.py
-@@ -0,0 +1,79 @@
-+import os
-+import infra.basetest
++++ b/boot/binaries-marvell/Config.in
+@@ -0,0 +1,32 @@
++config BR2_TARGET_BINARIES_MARVELL
++	bool "binaries-marvell"
++	depends on BR2_aarch64
++	help
++	  Some systems, including Marvell Armada SoC, have a separate
++	  System Control Processor (SCP) for power management, clocks,
++	  reset and system control. ATF Boot Loader stage 2 (BL2) loads
++	  optional SCP_BL2 image into a platform-specific region
++	  of secure memory. This package downloads and installs such
++	  firmwares, which are needed to build ATF.
 +
-+class TestATFVexpress(infra.basetest.BRTest):
-+    config = \
-+    """
-+    BR2_aarch64=y
-+    BR2_TOOLCHAIN_EXTERNAL=y
-+    BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64=y
-+    BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
-+    BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
-+    BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/ARM-software/arm-trusted-firmware.git"
-+    BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="v1.2"
-+    BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="juno"
-+    BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP=y
-+    BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33=y
-+    BR2_TARGET_UBOOT=y
-+    BR2_TARGET_UBOOT_BOARDNAME="vexpress_aemv8a_juno"
-+    BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-+    BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.03"
-+    BR2_TARGET_VEXPRESS_FIRMWARE=y
-+    """
++	  https://github.com/MarvellEmbeddedProcessors/binaries-marvell/
 +
-+    def test_run(self):
-+        pass
++if BR2_TARGET_BINARIES_MARVELL
 +
-+class TestATFAllwinner(infra.basetest.BRTest):
-+    config = \
-+    """
-+    BR2_aarch64=y
-+    BR2_TOOLCHAIN_EXTERNAL=y
-+    BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64=y
-+    BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
-+    BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
-+    BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/apritzel/arm-trusted-firmware.git"
-+    BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="sun50iw1p1"
-+    BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="aa75c8da415158a94b82a430b2b40000778e851f"
-+    BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
-+    BR2_TARGET_UBOOT=y
-+    BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-+    BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-+    BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.09"
-+    BR2_TARGET_UBOOT_BOARD_DEFCONFIG="bananapi_m64"
-+    BR2_TARGET_UBOOT_NEEDS_DTC=y
-+    BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
-+    BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
-+    BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.itb"
-+    BR2_TARGET_UBOOT_SPL=y
-+    BR2_TARGET_UBOOT_SPL_NAME="spl/sunxi-spl.bin"
-+    """
++choice
++	prompt "Marvell Armada platform"
 +
-+    def test_run(self):
-+        pass
++config BR2_TARGET_BINARIES_MARVELL_7040
++	bool "7040"
 +
-+class TestATFMarvell(infra.basetest.BRTest):
-+    config = \
-+    """
-+    BR2_aarch64=y
-+    BR2_TOOLCHAIN_EXTERNAL=y
-+    BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64=y
-+    BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
-+    BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
-+    BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/MarvellEmbeddedProcessors/atf-marvell.git"
-+    BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="atf-v1.3-armada-17.10"
-+    BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="a80x0_mcbin"
-+    BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP=y
-+    BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33=y
-+    BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="USE_COHERENT_MEM=0"
-+    BR2_TARGET_BINARIES_MARVELL=y
-+    BR2_TARGET_BINARIES_MARVELL_8040=y
-+    BR2_TARGET_MV_DDR_MARVELL=y
-+    BR2_TARGET_UBOOT=y
-+    BR2_TARGET_UBOOT_BOARDNAME="mvebu_mcbin-88f8040"
-+    BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-+    BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.09"
-+    """
++config BR2_TARGET_BINARIES_MARVELL_8040
++	bool "8040"
 +
-+    def test_run(self):
-+        pass
++endchoice
++
++config BR2_TARGET_BINARIES_MARVELL_IMAGE
++	string
++	default "mrvl_scp_bl2_8040.img" if BR2_TARGET_BINARIES_MARVELL_8040
++	default "mrvl_scp_bl2_7040.img" if BR2_TARGET_BINARIES_MARVELL_7040
++
++endif
+diff --git a/boot/binaries-marvell/binaries-marvell.hash b/boot/binaries-marvell/binaries-marvell.hash
+new file mode 100644
+index 0000000000..401584dacd
+--- /dev/null
++++ b/boot/binaries-marvell/binaries-marvell.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256 22a201542d8f93cf88623065db5f3377822b59cbfdf98a8e60cdee629273d3a0 binaries-marvell-0dabe23b956420b0928d337d635f0cd5646c33d0.tar.gz
+diff --git a/boot/binaries-marvell/binaries-marvell.mk b/boot/binaries-marvell/binaries-marvell.mk
+new file mode 100644
+index 0000000000..e2bd4f2499
+--- /dev/null
++++ b/boot/binaries-marvell/binaries-marvell.mk
+@@ -0,0 +1,22 @@
++################################################################################
++#
++# binaries-marvell
++#
++################################################################################
++
++BINARIES_MARVELL_VERSION = 0dabe23b956420b0928d337d635f0cd5646c33d0
++BINARIES_MARVELL_SITE = $(call github,MarvellEmbeddedProcessors,binaries-marvell,$(BINARIES_MARVELL_VERSION))
++
++# The license text is only available in the master branch, which is
++# not used in this package. See
++# https://raw.githubusercontent.com/MarvellEmbeddedProcessors/binaries-marvell/master/README.md.
++BINARIES_MARVELL_LICENSE = GPL-2.0 with freertos-exception-2.0
++
++BINARIES_MARVELL_IMAGE = $(call qstrip,$(BR2_TARGET_BINARIES_MARVELL_IMAGE))
++BINARIES_MARVELL_INSTALL_IMAGES  = YES
++
++define BINARIES_MARVELL_INSTALL_IMAGES_CMDS
++	$(INSTALL) -D -m 0644 $(@D)/$(BINARIES_MARVELL_IMAGE) $(BINARIES_DIR)/scp-fw.bin
++endef
++
++$(eval $(generic-package))
 -- 
 2.13.6
