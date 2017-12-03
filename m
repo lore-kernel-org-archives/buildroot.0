@@ -1,46 +1,62 @@
 From: Dagg Stompler <daggs@gmx.com>
-Date: Sun,  3 Dec 2017 14:56:14 +0200
-Subject: [Buildroot] [PATCH 3/8] odroidc2: add post build script.
+Date: Sun,  3 Dec 2017 14:56:16 +0200
+Subject: [Buildroot] [PATCH 5/8] odroidc2: add mainline genimage
 In-Reply-To: <20171203125619.30919-1-daggs@gmx.com>
 References: <20171203125619.30919-1-daggs@gmx.com>
-Message-ID: <20171203125619.30919-3-daggs@gmx.com>
+Message-ID: <20171203125619.30919-5-daggs@gmx.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-add post-build script to generate uboot's scr file and the kernel's
-uImage file.
+add mainline's image layout as it differs from the vendor's one because it doesn't
+have the signed firmware bundled in the uboot image.
 
 Signed-off-by: Dagg Stompler <daggs@gmx.com>
 ---
- board/hardkernel/odroidc2/post-build.sh | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
- create mode 100755 board/hardkernel/odroidc2/post-build.sh
+ board/hardkernel/odroidc2/genimage-mainline.cfg | 33 +++++++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
+ create mode 100644 board/hardkernel/odroidc2/genimage-mainline.cfg
 
-diff --git a/board/hardkernel/odroidc2/post-build.sh b/board/hardkernel/odroidc2/post-build.sh
-new file mode 100755
-index 0000000000..6e2e71e501
+diff --git a/board/hardkernel/odroidc2/genimage-mainline.cfg b/board/hardkernel/odroidc2/genimage-mainline.cfg
+new file mode 100644
+index 0000000000..77e4d6dd2f
 --- /dev/null
-+++ b/board/hardkernel/odroidc2/post-build.sh
-@@ -0,0 +1,17 @@
-+#!/bin/sh
-+# post-build.sh for Odroid C2 taken from CubieBoard's post-build.sh
-+# 2013, Carlo Caione <carlo.caione@gmail.com>
++++ b/board/hardkernel/odroidc2/genimage-mainline.cfg
+@@ -0,0 +1,33 @@
++image boot.vfat {
++	vfat {
++		files = {
++			"uImage",
++			"meson-gxbb-odroidc2.dtb",
++			"boot.scr"
++		}
++	}
++	size = 64M
++}
 +
-+BOARD_DIR="$(dirname $0)"
-+MKIMAGE=$HOST_DIR/bin/mkimage
-+BOOT_CMD=$BOARD_DIR/boot.cmd
-+BOOT_CMD_H=$BINARIES_DIR/boot.scr
++image sdcard.img {
++	hdimage {
++	}
 +
-+# U-Boot script
-+${MKIMAGE} -C none -A arm -T script -d ${BOOT_CMD} ${BOOT_CMD_H}
++	partition u-boot {
++		in-partition-table = "no"
++		image = "uboot-odc2.img"
++		offset = 49664
++	}
 +
-+# vendor u-boot uses uImage
-+if [ -f "${BINARIES_DIR}/Image" ]; then
-+    ${MKIMAGE} -A arm64 -O linux -T kernel -C none -a 0x1080000 -e 0x1080000 \
-+	     -n linux -d ${BINARIES_DIR}/Image ${BINARIES_DIR}/uImage
-+fi
++	partition boot {
++		partition-type = 0xC
++		bootable = "true"
++		image = "boot.vfat"
++	}
++
++	partition rootfs {
++		partition-type = 0x83
++		image = "rootfs.ext4"
++		size = 512M
++	}
++}
 -- 
 2.15.1
