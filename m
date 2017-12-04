@@ -1,39 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 4 Dec 2017 16:18:40 +0100
-Subject: [Buildroot] [PATCH v5 03/11] board: Add Bananapi M64 support
-In-Reply-To: <3669564e-b1ff-1ad3-80bd-3d0f021c7735@arm.com>
-References: <1509559553-26544-1-git-send-email-jagan@amarulasolutions.com>
- <1509559553-26544-4-git-send-email-jagan@amarulasolutions.com>
- <20171202155818.0d04f798@windsurf.lan>
- <CAMty3ZDAHW7OKSfrJXgLLncpOj8H_XCVDeBFSWaXtVqh5tGEWQ@mail.gmail.com>
- <3669564e-b1ff-1ad3-80bd-3d0f021c7735@arm.com>
-Message-ID: <20171204161840.4e84f146@windsurf.lan>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Mon,  4 Dec 2017 10:22:50 -0500
+Subject: [Buildroot] [PATCH 1/1] nginx-dav-ext: bump to v0.1.0
+Message-ID: <20171204152250.24787-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Also update the license file location and add a hash for the license file.
 
-On Mon, 4 Dec 2017 15:03:38 +0000, Andre Przywara wrote:
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
+---
+ package/nginx-dav-ext/nginx-dav-ext.hash | 3 ++-
+ package/nginx-dav-ext/nginx-dav-ext.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-> > Since ADDITIONAL_VARIABLES resembles to use additional parameters for
-> > ATF build, I've treated bl31 as additional variable for this ATF  
-> 
-> I have the same feeling as Thomas: bl31 is just a make target (instead
-> of "all" and/or "fip"). So it should be treated like this. Using
-> ADDITIONAL_VARIABLES sounds like a hack.
-
-See the series I have posted at
-http://lists.busybox.net/pipermail/buildroot/2017-December/208788.html
-for a proposal that (among other things) supports bl31 as a proper make
-target.
-
-Best regards,
-
-Thomas
+diff --git a/package/nginx-dav-ext/nginx-dav-ext.hash b/package/nginx-dav-ext/nginx-dav-ext.hash
+index ea7eb8632e..a711f8c6ff 100644
+--- a/package/nginx-dav-ext/nginx-dav-ext.hash
++++ b/package/nginx-dav-ext/nginx-dav-ext.hash
+@@ -1,2 +1,3 @@
+ # Locally computed
+-sha256 d428a0236c933779cb40ac8c91afb19d5c25a376dc3caab825bfd543e1ee530d  nginx-dav-ext-v0.0.3.tar.gz
++sha256 6b004eed8ea16ad8de4d304027bf0413cc323a95914e58625a7dc066481aae3a  nginx-dav-ext-v0.1.0.tar.gz
++sha256 40581cf424621965adaf1461e97129520ff4fcfb62ed9965ec6fd50b7f4ddfca  LICENSE
+diff --git a/package/nginx-dav-ext/nginx-dav-ext.mk b/package/nginx-dav-ext/nginx-dav-ext.mk
+index 1ba6e10a3f..436bc295ad 100644
+--- a/package/nginx-dav-ext/nginx-dav-ext.mk
++++ b/package/nginx-dav-ext/nginx-dav-ext.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
+ 
+-NGINX_DAV_EXT_VERSION = v0.0.3
++NGINX_DAV_EXT_VERSION = v0.1.0
+ NGINX_DAV_EXT_SITE = $(call github,arut,nginx-dav-ext-module,$(NGINX_DAV_EXT_VERSION))
+ NGINX_DAV_EXT_LICENSE = BSD-2-Clause
+-NGINX_DAV_EXT_LICENSE_FILES = ngx_http_dav_ext_module.c
++NGINX_DAV_EXT_LICENSE_FILES = LICENSE
+ NGINX_DAV_EXT_DEPENDENCIES = expat
+ 
+ $(eval $(generic-package))
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.14.3
