@@ -1,55 +1,56 @@
 From: Jagan Teki <jagan@amarulasolutions.com>
-Date: Mon, 4 Dec 2017 09:55:53 +0530
-Subject: [Buildroot] [PATCH 3/3] orangepi-pc-plus: enable WiFi support
-In-Reply-To: <20171108194334.10031-4-geomatsi@gmail.com>
-References: <20171108194334.10031-1-geomatsi@gmail.com>
- <20171108194334.10031-4-geomatsi@gmail.com>
-Message-ID: <CAMty3ZApVQOY6TbyD3-p=teHpB1TKZWzQymB4-B0owVEzwBD+w@mail.gmail.com>
+Date: Mon, 4 Dec 2017 10:13:39 +0530
+Subject: [Buildroot] [PATCH v5 00/11] board: Add Allwinner A64/H5 boards
+In-Reply-To: <20171203225110.319cc00e@windsurf.home>
+References: <1509559553-26544-1-git-send-email-jagan@amarulasolutions.com>
+ <20171203225110.319cc00e@windsurf.home>
+Message-ID: <CAMty3ZDHvYQsnR4gJhZ2XWPdcexZ0DV_f36pEW9Z7d9kcufLug@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Nov 9, 2017 at 1:13 AM, Sergey Matyukevich <geomatsi@gmail.com> wrote:
-> Make WiFi work out of the box on orangepi-pc-plus:
->   - add rtl8xx firmware
->   - add rtl8189fs driver
->   - add mdev for module autoloading
+On Mon, Dec 4, 2017 at 3:21 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
 >
-> Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
-> ---
->  configs/orangepi_pc_plus_defconfig | 6 ++++++
->  1 file changed, 6 insertions(+)
+> On Wed,  1 Nov 2017 19:05:42 +0100, Jagan Teki wrote:
 >
-> diff --git a/configs/orangepi_pc_plus_defconfig b/configs/orangepi_pc_plus_defconfig
-> index ec177286cc..b06b9b1005 100644
-> --- a/configs/orangepi_pc_plus_defconfig
-> +++ b/configs/orangepi_pc_plus_defconfig
-> @@ -1,6 +1,7 @@
->  BR2_arm=y
->  BR2_cortex_a7=y
->  BR2_ARM_FPU_VFPV4=y
-> +BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
->  BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_13=y
->  BR2_TARGET_GENERIC_HOSTNAME="OrangePi_PC_Plus"
->  BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for the Orange Pi PC Plus"
-> @@ -29,6 +30,11 @@ BR2_PACKAGE_HOST_GENIMAGE=y
->  BR2_PACKAGE_HOST_MTOOLS=y
->  BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+>> Jagan Teki (11):
+>>   arm-trusted-firmware: Build FIP for BL33
+>>   uboot: Add U-Boot-bundles-ATF support
 >
-> +# wireless driver and firmware
-> +BR2_PACKAGE_RTL8189FS=y
-> +BR2_PACKAGE_LINUX_FIRMWARE=y
-> +BR2_PACKAGE_LINUX_FIRMWARE_RTL_81XX=y
-> +
+> Since I was not super happy with this proposal to solve the ATF/U-Boot
+> building problem for Allwinner A64/H5, I just submitted a different
+> patch series (which re-uses some of your work, authorship preserved).
+> Could you see what you think about my proposal ?
 
-I'm trying to understand here about minimal defconfig vs custom
-selection of packages, like adding qt5 on this patch[1]. Does wifi
-here not considered as custom config? if ie true if should be
-orangepi_pc_plus_wif_defconfig?
+Yes, this is what I proposed in previous versions[1], unfortunately ie
+not moving further. Happy that now it has better shape to move.
 
-[1] https://patchwork.ozlabs.org/patch/839237/
+>
+> See:
+>
+>  http://lists.busybox.net/pipermail/buildroot/2017-December/208788.html
+>
+>>   board: Add Bananapi M64 support
+>>   board: Add Pine64 support
+>>   board: Add SoPine support
+>>   board: Add FriendlyARM Nanopi A64 support
+>>   board: Add FriendlyARM Nanopi NEO2 support
+>>   board: Add Olimex A64-OLinuXino support
+>>   board: Add Orangepi Win/Win Plus support
+>>   board: Add Orangepi Prime support
+>>   board: Add Orangepi Zero Plus2 support
+>
+> If my proposal gets merged, then it would be nice if you could rebase
+> your defconfig patches on top of it. It's mainly a matter of adding a
+> few more ATF options and tweaking U-Boot options.
+
+Yes, will do.
+
+[1] http://patchwork.ozlabs.org/cover/833068/
 
 thanks!
 -- 
