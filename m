@@ -1,55 +1,53 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon,  4 Dec 2017 22:31:03 +0100
-Subject: [Buildroot] [PATCH] package/omxplayer: add missing dependency to
- alsa-lib
-Message-ID: <20171204213103.26812-1-yann.morin.1998@free.fr>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 04 Dec 2017 22:49:39 +0000
+Subject: [Buildroot] [Bug 10541] New: QT5 package leaves out aarch64 in
+ BR2_PACKAGE_QT5_JSCORE_AVAILABLE
+Message-ID: <bug-10541-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since the bump in 58a00a13 (omxplayer: bump to version 2ee17b2),
-omxplayer gained a dependency to alsa-lib.
+https://bugs.busybox.net/show_bug.cgi?id=10541
 
-Fixes:
-    http://autobuild.buildroot.org/results/652/65212c59a37398681b341263bd76ba8a65ff7828/
+            Bug ID: 10541
+           Summary: QT5 package leaves out aarch64 in
+                    BR2_PACKAGE_QT5_JSCORE_AVAILABLE
+           Product: buildroot
+           Version: unspecified
+          Hardware: PC
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Outdated package
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: jd.conley at gmail.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Julius Kriukas <julius@kriukas.lt>
----
- package/omxplayer/Config.in    | 3 ++-
- package/omxplayer/omxplayer.mk | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+I have been successfully building a QT5 application for aarch64 using the
+Linaro toolchain, including QT5Declarative, which uses JSCore.
 
-diff --git a/package/omxplayer/Config.in b/package/omxplayer/Config.in
-index b417aa3b0b..bdb3f4054d 100644
---- a/package/omxplayer/Config.in
-+++ b/package/omxplayer/Config.in
-@@ -4,9 +4,10 @@ config BR2_PACKAGE_OMXPLAYER
- 	depends on BR2_USE_MMU # dbus
- 	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS # ffmpeg
- 	depends on BR2_INSTALL_LIBSTDCPP # boost
--	depends on BR2_TOOLCHAIN_HAS_THREADS # boost, libusb
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # alsa-lib, boost, libusb
- 	depends on BR2_USE_WCHAR # boost
- 	depends on BR2_PACKAGE_RPI_USERLAND
-+	select BR2_PACKAGE_ALSA_LIB
- 	select BR2_PACKAGE_BOOST
- 	select BR2_PACKAGE_DBUS
- 	select BR2_PACKAGE_FFMPEG
-diff --git a/package/omxplayer/omxplayer.mk b/package/omxplayer/omxplayer.mk
-index 6e92250438..6999269161 100644
---- a/package/omxplayer/omxplayer.mk
-+++ b/package/omxplayer/omxplayer.mk
-@@ -10,7 +10,7 @@ OMXPLAYER_LICENSE = GPL-2.0+
- OMXPLAYER_LICENSE_FILES = COPYING
- 
- OMXPLAYER_DEPENDENCIES = \
--	host-pkgconf boost dbus ffmpeg freetype libidn libusb pcre \
-+	host-pkgconf alsa-lib boost dbus ffmpeg freetype libidn libusb pcre \
- 	rpi-userland zlib
- 
- OMXPLAYER_EXTRA_CFLAGS = \
+But I had to modify the qt5 package Config.in file.
+
+Is this just an oversight or am I missing something and JSCore has some major
+issues on aarch64? Looking at your git repo, architecture support for JSCore
+appears to have not been updated for four years.
+
+--- a/package/qt5/Config.in
++++ b/package/qt5/Config.in
+@@ -7,7 +7,7 @@ config BR2_PACKAGE_QT5_JSCORE_AVAILABLE
+        bool
+        default y
+        # Javascript engine is only available on certain architectures
+-       depends on BR2_arm || BR2_i386 || BR2_x86_64 || BR2_mipsel
++       depends on BR2_arm || BR2_i386 || BR2_x86_64 || BR2_mipsel ||
+BR2_aarch64
+        # ARM needs BLX, so v5t+
+        depends on !BR2_ARM_CPU_ARMV4
+
 -- 
-2.11.0
+You are receiving this mail because:
+You are on the CC list for the bug.
