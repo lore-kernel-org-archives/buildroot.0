@@ -1,36 +1,55 @@
-From: Sergey Matyukevich <geomatsi@gmail.com>
-Date: Tue, 5 Dec 2017 00:10:44 +0300
-Subject: [Buildroot] [PATCH 1/8] arm-trusted-firmware: add option to
- enable/disable building FIP image
-In-Reply-To: <20171203214811.3124-2-thomas.petazzoni@free-electrons.com>
-References: <20171203214811.3124-1-thomas.petazzoni@free-electrons.com>
- <20171203214811.3124-2-thomas.petazzoni@free-electrons.com>
-Message-ID: <20171204211044.opwbfgafjgwd2men@speedy.hunter>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon,  4 Dec 2017 22:31:03 +0100
+Subject: [Buildroot] [PATCH] package/omxplayer: add missing dependency to
+ alsa-lib
+Message-ID: <20171204213103.26812-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Dec 03, 2017 at 10:48:04PM +0100, Thomas Petazzoni wrote:
-> Currently, our arm-trusted-firmware unconditionally builds a FIP
-> (Firmware Image Package). While this is often needed on platforms
-> where ATF encapsulates U-Boot, it is not the case on some other
-> platforms where it's U-Boot that encapsulates parts of ATF.
-> 
-> In order to prepare the support for the later platforms, we make
-> building the FIP image optional, and update the only defconfig we have
-> that uses ARM Trusted Firmware.
-> 
-> Note: we considered adding a "default y" here to preserve backward
-> compatibility, but there really isn't any default that is sane:
-> whether a FIP image needs to be built or not is purely platform
-> specific.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Since the bump in 58a00a13 (omxplayer: bump to version 2ee17b2),
+omxplayer gained a dependency to alsa-lib.
 
-For the whole patchset:
-Reviewed-by: Sergey Matyukevich <geomatsi@gmail.com>
+Fixes:
+    http://autobuild.buildroot.org/results/652/65212c59a37398681b341263bd76ba8a65ff7828/
 
-Regards,
-Sergey
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Julius Kriukas <julius@kriukas.lt>
+---
+ package/omxplayer/Config.in    | 3 ++-
+ package/omxplayer/omxplayer.mk | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/package/omxplayer/Config.in b/package/omxplayer/Config.in
+index b417aa3b0b..bdb3f4054d 100644
+--- a/package/omxplayer/Config.in
++++ b/package/omxplayer/Config.in
+@@ -4,9 +4,10 @@ config BR2_PACKAGE_OMXPLAYER
+ 	depends on BR2_USE_MMU # dbus
+ 	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS # ffmpeg
+ 	depends on BR2_INSTALL_LIBSTDCPP # boost
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # boost, libusb
++	depends on BR2_TOOLCHAIN_HAS_THREADS # alsa-lib, boost, libusb
+ 	depends on BR2_USE_WCHAR # boost
+ 	depends on BR2_PACKAGE_RPI_USERLAND
++	select BR2_PACKAGE_ALSA_LIB
+ 	select BR2_PACKAGE_BOOST
+ 	select BR2_PACKAGE_DBUS
+ 	select BR2_PACKAGE_FFMPEG
+diff --git a/package/omxplayer/omxplayer.mk b/package/omxplayer/omxplayer.mk
+index 6e92250438..6999269161 100644
+--- a/package/omxplayer/omxplayer.mk
++++ b/package/omxplayer/omxplayer.mk
+@@ -10,7 +10,7 @@ OMXPLAYER_LICENSE = GPL-2.0+
+ OMXPLAYER_LICENSE_FILES = COPYING
+ 
+ OMXPLAYER_DEPENDENCIES = \
+-	host-pkgconf boost dbus ffmpeg freetype libidn libusb pcre \
++	host-pkgconf alsa-lib boost dbus ffmpeg freetype libidn libusb pcre \
+ 	rpi-userland zlib
+ 
+ OMXPLAYER_EXTRA_CFLAGS = \
+-- 
+2.11.0
