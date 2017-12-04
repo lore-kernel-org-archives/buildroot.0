@@ -1,12 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 4 Dec 2017 09:01:43 +0100
-Subject: [Buildroot] [PATCH v3 2/4] binaries-marvell: new package
-In-Reply-To: <20171204054510.oui3vvag34655pka@sapphire.tkos.co.il>
-References: <20171203181818.10087-1-geomatsi@gmail.com>
- <20171203181818.10087-3-geomatsi@gmail.com>
- <20171203230313.2cde5811@windsurf.home>
- <20171204054510.oui3vvag34655pka@sapphire.tkos.co.il>
-Message-ID: <20171204090143.00298c53@windsurf.home>
+Date: Mon, 4 Dec 2017 09:04:50 +0100
+Subject: [Buildroot] [PATCH v5 00/11] board: Add Allwinner A64/H5 boards
+In-Reply-To: <CAMty3ZDHvYQsnR4gJhZ2XWPdcexZ0DV_f36pEW9Z7d9kcufLug@mail.gmail.com>
+References: <1509559553-26544-1-git-send-email-jagan@amarulasolutions.com>
+ <20171203225110.319cc00e@windsurf.home>
+ <CAMty3ZDHvYQsnR4gJhZ2XWPdcexZ0DV_f36pEW9Z7d9kcufLug@mail.gmail.com>
+Message-ID: <20171204090450.04fa4466@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,44 +14,29 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 4 Dec 2017 07:45:10 +0200, Baruch Siach wrote:
+On Mon, 4 Dec 2017 10:13:39 +0530, Jagan Teki wrote:
 
-> > > +BINARIES_MARVELL_VERSION = 0dabe23b956420b0928d337d635f0cd5646c33d0
-> > > +BINARIES_MARVELL_SITE = $(call github,MarvellEmbeddedProcessors,binaries-marvell,$(BINARIES_MARVELL_VERSION))
-> > > +BINARIES_MARVELL_LICENSE = PROPRIETARY
-> > > +BINARIES_MARVELL_REDISTRIBUTE = NO  
-> > 
-> > Well, if you can't distribute it... it's a bit problematic no?
-> > 
-> > In fact, there is a license on the master branch, i.e at
-> > https://raw.githubusercontent.com/MarvellEmbeddedProcessors/binaries-marvell/master/README.md.
-> > And to me, this is GPL-2.0 with the FreeRTOS exception, so I've changed
-> > the BINARIES_MARVELL_LICENSE variable to that, and dropped
-> > BINARIES_MARVELL_REDISTRIBUTE. Let me know what you think.  
+> > Since I was not super happy with this proposal to solve the ATF/U-Boot
+> > building problem for Allwinner A64/H5, I just submitted a different
+> > patch series (which re-uses some of your work, authorship preserved).
+> > Could you see what you think about my proposal ?  
 > 
-> IANAL, but as this text does not appear in the branch we are using, this might 
-> indicate that it does not apply there. Moreover, the text in README.md refers 
-> to sources that we do not have. AFAICS, it says nothing about the binaries 
-> license, and there is no indication that the binaries were generated from GPL 
-> code.
+> Yes, this is what I proposed in previous versions[1], unfortunately ie
+> not moving further. Happy that now it has better shape to move.
 
-True.
+It is not trivial to solve this problem in a nice and pretty fashion,
+especially due to the ATF->U-Boot and U-Boot->ATF possible dependencies.
 
-> I believe that this is just an oversight of Marvell, but having an explicit 
-> assurance would be better.
+So my proposal is a proposal I find better, but I don't pretend it's
+the perfection either.
 
-Agreed. Perhaps in the mean time, what Sergey originally did is the
-safest, i.e assuming is proprietary.
+> > If my proposal gets merged, then it would be nice if you could rebase
+> > your defconfig patches on top of it. It's mainly a matter of adding a
+> > few more ATF options and tweaking U-Boot options.  
+> 
+> Yes, will do.
 
-And in fact, my statement about <pkg>_REDISTRIBUTE = NO was incorrect.
-In the context of Buildroot <pkg>_REDISTRIBUTE = NO does not mean that
-you're not allowed to redistribute the software, it means that it
-shouldn't be shipped as part of legal-info. But still, I don't see why
-binaries-marvell shouldn't be listed as part of legal-info.
-
-I'll go and ask Marvell about the license of those blobs.
-
-Best regards,
+Thanks!
 
 Thomas
 -- 
