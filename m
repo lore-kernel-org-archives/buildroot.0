@@ -1,38 +1,43 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon,  4 Dec 2017 21:43:31 +0100
-Subject: [Buildroot] [PATCH] arch/arm: default to Cortex-A53 for AArch64
-Message-ID: <20171204204331.2007-1-yann.morin.1998@free.fr>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon,  4 Dec 2017 22:02:54 +0100
+Subject: [Buildroot] [PATCH 2/2] package/waylandpp: bump version to 0.1.6
+In-Reply-To: <20171204210254.7852-1-bernd.kuhls@t-online.de>
+References: <20171204210254.7852-1-bernd.kuhls@t-online.de>
+Message-ID: <20171204210254.7852-2-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since we re-organised the list of cores (in 52d500aa35) and introduced
-some new cores (in e9960da6ec, d632d9e5a9, 6317a199ec), the default for
-AArch64 has changed from A53 to A35.
-
-So, restore the default to A53 for AArch64.
-
-Reported-by: daggs <daggs@gmx.com>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: daggs <daggs@gmx.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- arch/Config.in.arm | 1 +
- 1 file changed, 1 insertion(+)
+ package/waylandpp/waylandpp.hash | 2 +-
+ package/waylandpp/waylandpp.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/Config.in.arm b/arch/Config.in.arm
-index 85070fbfc9..b05e83e33c 100644
---- a/arch/Config.in.arm
-+++ b/arch/Config.in.arm
-@@ -64,6 +64,7 @@ config BR2_ARM_CPU_ARMV8A
+diff --git a/package/waylandpp/waylandpp.hash b/package/waylandpp/waylandpp.hash
+index 7e793cc866..070cf7c73a 100644
+--- a/package/waylandpp/waylandpp.hash
++++ b/package/waylandpp/waylandpp.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256 3d6d07a6fa4164c092608cdc53172af11138fbe7b7a9894090ca6502d8153448  waylandpp-0.1.5.tar.gz
++sha256 33d3ec385704c5545fb50d2283aabf4ef26aaaf3e416b292e650fea67c430d23  waylandpp-0.1.6.tar.gz
+ sha256 49aa6d728fd13226952c9e3a5a9cae46379b2a501010064760172b5ce7cd94bb  LICENSE
+ sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  scanner/gpl-3.0.txt
+diff --git a/package/waylandpp/waylandpp.mk b/package/waylandpp/waylandpp.mk
+index 0054838876..f192a1286f 100644
+--- a/package/waylandpp/waylandpp.mk
++++ b/package/waylandpp/waylandpp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- choice
- 	prompt "Target Architecture Variant"
-+	default BR2_cortex_a53 if BR2_ARCH_IS_64
- 	default BR2_arm926t
- 	help
- 	  Specific CPU variant to use
+-WAYLANDPP_VERSION = 0.1.5
++WAYLANDPP_VERSION = 0.1.6
+ WAYLANDPP_SITE = $(call github,NilsBrause,waylandpp,$(WAYLANDPP_VERSION))
+ WAYLANDPP_LICENSE = MIT, GPL-3.0+ (wayland_scanner)
+ WAYLANDPP_LICENSE_FILES = LICENSE scanner/gpl-3.0.txt
 -- 
 2.11.0
