@@ -1,27 +1,44 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 04 Dec 2017 18:49:55 +0100
-Subject: [Buildroot] [PATCH 1/1] erlang: bump to version 20.0
-References: <20171130154202.437-1-johan.oudinet@gmail.com>
- <20171203105905.3bdd1dc9@windsurf.lan>
-Message-ID: <3fegfexqs4.ln2@ID-313208.user.individual.net>
+From: Norbert Lange <nolange79@gmail.com>
+Date: Mon,  4 Dec 2017 18:59:08 +0100
+Subject: [Buildroot] [PATCH] xenomai: bump to 3.0.6
+Message-ID: <20171204175909.21596-1-nolange79@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Sun, 03 Dec 2017 10:59:05 +0100 schrieb Thomas Petazzoni:
+From: Norbert Lange <norbert.lange@andritz.com>
 
-> Seems like host-zlib is needed.
+this includes a fix to allow compilation with compilers
+defaulting to -fpie (gcc 6+)
 
-Hi,
+Signed-off-by: Norbert Lange <nolange79@gmail.com>
+---
+ package/xenomai/xenomai.hash | 2 +-
+ package/xenomai/xenomai.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-host-erlang depends on host-openssl which depends on host-zlib so this 
-should not be the problem. Anyway I could reproduce the build error on a 
-minimal Debian system which lacks a zlib-dev package, host-zlib was built 
-by buildroot.
-
-More investigation is needed on my part, but for today I have no time 
-left for this, sorry.
-
-Regards, Bernd
+diff --git a/package/xenomai/xenomai.hash b/package/xenomai/xenomai.hash
+index 1290ca54fb..c36badb6bf 100644
+--- a/package/xenomai/xenomai.hash
++++ b/package/xenomai/xenomai.hash
+@@ -1,2 +1,2 @@
+ # Locally computed;
+-sha256 84836a43b6a996dcdcb42b0b1653a3271cc201df2a2d42c1b4b3bafb2cca7c63  xenomai-3.0.5.tar.bz2
++sha256 2c0dd3f0e36e4a10f97e0028989bb873e80f4d1ce212ac55fd3b28857c464f94  xenomai-3.0.6.tar.bz2
+diff --git a/package/xenomai/xenomai.mk b/package/xenomai/xenomai.mk
+index c53d5148f0..6bf08edfbc 100644
+--- a/package/xenomai/xenomai.mk
++++ b/package/xenomai/xenomai.mk
+@@ -6,7 +6,7 @@
+ 
+ XENOMAI_VERSION = $(call qstrip,$(BR2_PACKAGE_XENOMAI_VERSION))
+ ifeq ($(XENOMAI_VERSION),)
+-XENOMAI_VERSION = 3.0.5
++XENOMAI_VERSION = 3.0.6
+ else
+ BR_NO_CHECK_HASH_FOR += $(XENOMAI_SOURCE)
+ endif
+-- 
+2.15.0
