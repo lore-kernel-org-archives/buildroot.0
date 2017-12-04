@@ -1,11 +1,12 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 4 Dec 2017 08:59:16 +0100
-Subject: [Buildroot] [PATCH 3/3] orangepi-pc-plus: enable WiFi support
-In-Reply-To: <CAMty3ZApVQOY6TbyD3-p=teHpB1TKZWzQymB4-B0owVEzwBD+w@mail.gmail.com>
-References: <20171108194334.10031-1-geomatsi@gmail.com>
- <20171108194334.10031-4-geomatsi@gmail.com>
- <CAMty3ZApVQOY6TbyD3-p=teHpB1TKZWzQymB4-B0owVEzwBD+w@mail.gmail.com>
-Message-ID: <20171204085916.6c91c973@windsurf.home>
+Date: Mon, 4 Dec 2017 09:01:43 +0100
+Subject: [Buildroot] [PATCH v3 2/4] binaries-marvell: new package
+In-Reply-To: <20171204054510.oui3vvag34655pka@sapphire.tkos.co.il>
+References: <20171203181818.10087-1-geomatsi@gmail.com>
+ <20171203181818.10087-3-geomatsi@gmail.com>
+ <20171203230313.2cde5811@windsurf.home>
+ <20171204054510.oui3vvag34655pka@sapphire.tkos.co.il>
+Message-ID: <20171204090143.00298c53@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,32 +15,42 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 4 Dec 2017 09:55:53 +0530, Jagan Teki wrote:
+On Mon, 4 Dec 2017 07:45:10 +0200, Baruch Siach wrote:
 
-> > +# wireless driver and firmware
-> > +BR2_PACKAGE_RTL8189FS=y
-> > +BR2_PACKAGE_LINUX_FIRMWARE=y
-> > +BR2_PACKAGE_LINUX_FIRMWARE_RTL_81XX=y
-> > +  
+> > > +BINARIES_MARVELL_VERSION = 0dabe23b956420b0928d337d635f0cd5646c33d0
+> > > +BINARIES_MARVELL_SITE = $(call github,MarvellEmbeddedProcessors,binaries-marvell,$(BINARIES_MARVELL_VERSION))
+> > > +BINARIES_MARVELL_LICENSE = PROPRIETARY
+> > > +BINARIES_MARVELL_REDISTRIBUTE = NO  
+> > 
+> > Well, if you can't distribute it... it's a bit problematic no?
+> > 
+> > In fact, there is a license on the master branch, i.e at
+> > https://raw.githubusercontent.com/MarvellEmbeddedProcessors/binaries-marvell/master/README.md.
+> > And to me, this is GPL-2.0 with the FreeRTOS exception, so I've changed
+> > the BINARIES_MARVELL_LICENSE variable to that, and dropped
+> > BINARIES_MARVELL_REDISTRIBUTE. Let me know what you think.  
 > 
-> I'm trying to understand here about minimal defconfig vs custom
-> selection of packages, like adding qt5 on this patch[1]. Does wifi
-> here not considered as custom config? if ie true if should be
-> orangepi_pc_plus_wif_defconfig?
+> IANAL, but as this text does not appear in the branch we are using, this might 
+> indicate that it does not apply there. Moreover, the text in README.md refers 
+> to sources that we do not have. AFAICS, it says nothing about the binaries 
+> license, and there is no indication that the binaries were generated from GPL 
+> code.
 
-As usual, the boundaries are not 100% strict and fixed. However, we
-have considered for a number of boards that have WiFi support that it
-makes sense to enable the relevant driver and firmware to enable WiFi.
+True.
 
-This is quite different from Qt5: for WiFi, there is basically no other
-option than using this firmware and this driver. For graphics, you may
-want to use Qt5. But you may also want to use X11, or Wayland/Weston,
-or, etc. So Qt5 is a lot less "the obvious thing that everybody will
-obviously want to use on this board".
+> I believe that this is just an oversight of Marvell, but having an explicit 
+> assurance would be better.
 
-Also, installing this firmware file and building this driver probably
-adds 20 seconds to the build time of the defconfig. It's not exactly
-the same for Qt5 :-)
+Agreed. Perhaps in the mean time, what Sergey originally did is the
+safest, i.e assuming is proprietary.
+
+And in fact, my statement about <pkg>_REDISTRIBUTE = NO was incorrect.
+In the context of Buildroot <pkg>_REDISTRIBUTE = NO does not mean that
+you're not allowed to redistribute the software, it means that it
+shouldn't be shipped as part of legal-info. But still, I don't see why
+binaries-marvell shouldn't be listed as part of legal-info.
+
+I'll go and ask Marvell about the license of those blobs.
 
 Best regards,
 
