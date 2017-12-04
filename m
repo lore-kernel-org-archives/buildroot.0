@@ -1,53 +1,65 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 04 Dec 2017 22:49:39 +0000
-Subject: [Buildroot] [Bug 10541] New: QT5 package leaves out aarch64 in
- BR2_PACKAGE_QT5_JSCORE_AVAILABLE
-Message-ID: <bug-10541-163@https.bugs.busybox.net/>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Tue, 5 Dec 2017 00:24:57 +0100
+Subject: [Buildroot] [PATCH] xenomai: bump to 3.0.6
+In-Reply-To: <20171204175909.21596-1-nolange79@gmail.com>
+References: <20171204175909.21596-1-nolange79@gmail.com>
+Message-ID: <439d0424-166d-4579-633c-771aa3d43fb0@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=10541
+Hi Norbert,
 
-            Bug ID: 10541
-           Summary: QT5 package leaves out aarch64 in
-                    BR2_PACKAGE_QT5_JSCORE_AVAILABLE
-           Product: buildroot
-           Version: unspecified
-          Hardware: PC
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Outdated package
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: jd.conley at gmail.com
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+Le 04/12/2017 ? 18:59, Norbert Lange a ?crit?:
+> From: Norbert Lange <norbert.lange@andritz.com>
+> 
+> this includes a fix to allow compilation with compilers
+> defaulting to -fpie (gcc 6+)
 
-I have been successfully building a QT5 application for aarch64 using the
-Linaro toolchain, including QT5Declarative, which uses JSCore.
+Maybe you can add this link about a critical bug in Cobalt:
 
-But I had to modify the qt5 package Config.in file.
+http://xenomai.org/pipermail/xenomai/2017-November/037923.html
 
-Is this just an oversight or am I missing something and JSCore has some major
-issues on aarch64? Looking at your git repo, architecture support for JSCore
-appears to have not been updated for four years.
+This bug affect all previous version of Xenomai.
 
---- a/package/qt5/Config.in
-+++ b/package/qt5/Config.in
-@@ -7,7 +7,7 @@ config BR2_PACKAGE_QT5_JSCORE_AVAILABLE
-        bool
-        default y
-        # Javascript engine is only available on certain architectures
--       depends on BR2_arm || BR2_i386 || BR2_x86_64 || BR2_mipsel
-+       depends on BR2_arm || BR2_i386 || BR2_x86_64 || BR2_mipsel ||
-BR2_aarch64
-        # ARM needs BLX, so v5t+
-        depends on !BR2_ARM_CPU_ARMV4
+Otherwise:
+Reviewed-by: Romain Naour <romain.naour@gmail.com>
 
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Also, Xenomai contains several license files, can you add a license hash for
+each of them in a followup patch?
+
+Thanks!
+
+Best regards,
+Romain
+> 
+> Signed-off-by: Norbert Lange <nolange79@gmail.com>
+> ---
+>  package/xenomai/xenomai.hash | 2 +-
+>  package/xenomai/xenomai.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/xenomai/xenomai.hash b/package/xenomai/xenomai.hash
+> index 1290ca54fb..c36badb6bf 100644
+> --- a/package/xenomai/xenomai.hash
+> +++ b/package/xenomai/xenomai.hash
+> @@ -1,2 +1,2 @@
+>  # Locally computed;
+> -sha256 84836a43b6a996dcdcb42b0b1653a3271cc201df2a2d42c1b4b3bafb2cca7c63  xenomai-3.0.5.tar.bz2
+> +sha256 2c0dd3f0e36e4a10f97e0028989bb873e80f4d1ce212ac55fd3b28857c464f94  xenomai-3.0.6.tar.bz2
+> diff --git a/package/xenomai/xenomai.mk b/package/xenomai/xenomai.mk
+> index c53d5148f0..6bf08edfbc 100644
+> --- a/package/xenomai/xenomai.mk
+> +++ b/package/xenomai/xenomai.mk
+> @@ -6,7 +6,7 @@
+>  
+>  XENOMAI_VERSION = $(call qstrip,$(BR2_PACKAGE_XENOMAI_VERSION))
+>  ifeq ($(XENOMAI_VERSION),)
+> -XENOMAI_VERSION = 3.0.5
+> +XENOMAI_VERSION = 3.0.6
+>  else
+>  BR_NO_CHECK_HASH_FOR += $(XENOMAI_SOURCE)
+>  endif
+> 
