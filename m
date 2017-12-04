@@ -1,7 +1,9 @@
 From: Norbert Lange <nolange79@gmail.com>
-Date: Mon,  4 Dec 2017 12:43:06 +0100
-Subject: [Buildroot] [PATCH v2] tcfagent: new package
-Message-ID: <20171204114306.28242-1-nolange79@gmail.com>
+Date: Mon,  4 Dec 2017 13:09:12 +0100
+Subject: [Buildroot] [PATCH v3] tcfagent: new package
+In-Reply-To: <20171204114306.28242-1-nolange79@gmail.com>
+References: <20171204114306.28242-1-nolange79@gmail.com>
+Message-ID: <20171204120912.9850-1-nolange79@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,9 +14,12 @@ From: Norbert Lange <norbert.lange@andritz.com>
 
 Add tcfpackage which contains a service "tcf-agent"
 
-Signed-off-by: Norbert Lange <norbert.lange@andritz.com>
-
+Signed-off-by: Norbert Lange <nolange79@gmail.com>
 ---
+Changes v2 -> v3:
+  - fix: init file still started the tool daemonized
+  - use same email for all signatures
+
 Changes v1 -> v2:
   - added myself to DEVELOPERS
   - fixes to the init service, now uses common sheme to
@@ -284,7 +289,7 @@ index 0000000000..81affce6c1
 +		|| BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le
 diff --git a/package/tcfagent/S55tcfagent b/package/tcfagent/S55tcfagent
 new file mode 100755
-index 0000000000..d139dcc9f2
+index 0000000000..2243b5a4c7
 --- /dev/null
 +++ b/package/tcfagent/S55tcfagent
 @@ -0,0 +1,40 @@
@@ -292,7 +297,7 @@ index 0000000000..d139dcc9f2
 +
 +DAEMON_PATH=/usr/sbin/tcf-agent
 +DAEMON_NAME=tcf-agent
-+DAEMON_ARGS="-d -L- -l0"
++DAEMON_ARGS="-L- -l0"
 +
 +PIDFILE=/var/run/$DAEMON_NAME.pid
 +[ -r /etc/default/$DAEMON_NAME ] && . /etc/default/$DAEMON_NAME
