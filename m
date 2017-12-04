@@ -1,44 +1,63 @@
-From: Norbert Lange <nolange79@gmail.com>
-Date: Mon,  4 Dec 2017 18:59:08 +0100
-Subject: [Buildroot] [PATCH] xenomai: bump to 3.0.6
-Message-ID: <20171204175909.21596-1-nolange79@gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 04 Dec 2017 18:04:35 +0000
+Subject: [Buildroot] [Bug 10536] New: Finding non-relative paths in the
+ ccache
+Message-ID: <bug-10536-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Norbert Lange <norbert.lange@andritz.com>
+https://bugs.busybox.net/show_bug.cgi?id=10536
 
-this includes a fix to allow compilation with compilers
-defaulting to -fpie (gcc 6+)
+            Bug ID: 10536
+           Summary: Finding non-relative paths in the ccache
+           Product: buildroot
+           Version: unspecified
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: mhirota at impinj.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-Signed-off-by: Norbert Lange <nolange79@gmail.com>
----
- package/xenomai/xenomai.hash | 2 +-
- package/xenomai/xenomai.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+It appears that non-relative paths are leaking into the buildroot ccache
+despite the default BR2_CCACHE_USE_BASEDIR=y.
 
-diff --git a/package/xenomai/xenomai.hash b/package/xenomai/xenomai.hash
-index 1290ca54fb..c36badb6bf 100644
---- a/package/xenomai/xenomai.hash
-+++ b/package/xenomai/xenomai.hash
-@@ -1,2 +1,2 @@
- # Locally computed;
--sha256 84836a43b6a996dcdcb42b0b1653a3271cc201df2a2d42c1b4b3bafb2cca7c63  xenomai-3.0.5.tar.bz2
-+sha256 2c0dd3f0e36e4a10f97e0028989bb873e80f4d1ce212ac55fd3b28857c464f94  xenomai-3.0.6.tar.bz2
-diff --git a/package/xenomai/xenomai.mk b/package/xenomai/xenomai.mk
-index c53d5148f0..6bf08edfbc 100644
---- a/package/xenomai/xenomai.mk
-+++ b/package/xenomai/xenomai.mk
-@@ -6,7 +6,7 @@
- 
- XENOMAI_VERSION = $(call qstrip,$(BR2_PACKAGE_XENOMAI_VERSION))
- ifeq ($(XENOMAI_VERSION),)
--XENOMAI_VERSION = 3.0.5
-+XENOMAI_VERSION = 3.0.6
- else
- BR_NO_CHECK_HASH_FOR += $(XENOMAI_SOURCE)
- endif
+Here are my steps to demonstrate this:
+
+    $ git clone git://git.buildroot.net/buildroot
+    $ cd buildroot
+    $ make zynq_zybo_defconfig
+    $ make menuconfig
+    $ # Build options -->
+    $ #   [*] Enable compiler cache
+    $ #   < Save > and < Exit > back to prompt
+    $ make
+
+At this point, I grep the ccache for anything that starts with "/home":
+
+    $ grep -r --include "*.d" "^\/home" $HOME/.buildroot-ccache/ | wc -l
+    647
+
+I was expecting this to be zero.
+
+Just to confirm some assumptions:
+
+    $ grep -r --include "*.d" "^\.\." $HOME/.buildroot-ccache/ | wc -l
+    60840
+    $ grep CCACHE .config
+    BR2_CCACHE=y
+    BR2_CCACHE_DIR="$(HOME)/.buildroot-ccache"
+    BR2_CCACHE_INITIAL_SETUP=""
+    BR2_CCACHE_USE_BASEDIR=y
+    # BR2_PACKAGE_CCACHE is not set
+
 -- 
-2.15.0
+You are receiving this mail because:
+You are on the CC list for the bug.
