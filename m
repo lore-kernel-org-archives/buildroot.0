@@ -1,65 +1,48 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Tue, 5 Dec 2017 00:24:57 +0100
-Subject: [Buildroot] [PATCH] xenomai: bump to 3.0.6
-In-Reply-To: <20171204175909.21596-1-nolange79@gmail.com>
-References: <20171204175909.21596-1-nolange79@gmail.com>
-Message-ID: <439d0424-166d-4579-633c-771aa3d43fb0@gmail.com>
+From: Julius Kriukas <julius@kriukas.lt>
+Date: Tue,  5 Dec 2017 01:30:35 +0200
+Subject: [Buildroot] [PATCH 1/1] omxplayer: add missing dependency on
+ alsa-lib
+Message-ID: <20171204233035.2183-1-julius@kriukas.lt>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Norbert,
+Omxplayer depends on alsa-lib. This patch fixes:
 
-Le 04/12/2017 ? 18:59, Norbert Lange a ?crit?:
-> From: Norbert Lange <norbert.lange@andritz.com>
-> 
-> this includes a fix to allow compilation with compilers
-> defaulting to -fpie (gcc 6+)
+http://autobuild.buildroot.net/results/652/65212c59a37398681b341263bd76ba8a65ff7828
 
-Maybe you can add this link about a critical bug in Cobalt:
+Signed-off-by: Julius Kriukas <julius@kriukas.lt>
+---
+ package/omxplayer/Config.in    | 1 +
+ package/omxplayer/omxplayer.mk | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
-http://xenomai.org/pipermail/xenomai/2017-November/037923.html
-
-This bug affect all previous version of Xenomai.
-
-Otherwise:
-Reviewed-by: Romain Naour <romain.naour@gmail.com>
-
-Also, Xenomai contains several license files, can you add a license hash for
-each of them in a followup patch?
-
-Thanks!
-
-Best regards,
-Romain
-> 
-> Signed-off-by: Norbert Lange <nolange79@gmail.com>
-> ---
->  package/xenomai/xenomai.hash | 2 +-
->  package/xenomai/xenomai.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/xenomai/xenomai.hash b/package/xenomai/xenomai.hash
-> index 1290ca54fb..c36badb6bf 100644
-> --- a/package/xenomai/xenomai.hash
-> +++ b/package/xenomai/xenomai.hash
-> @@ -1,2 +1,2 @@
->  # Locally computed;
-> -sha256 84836a43b6a996dcdcb42b0b1653a3271cc201df2a2d42c1b4b3bafb2cca7c63  xenomai-3.0.5.tar.bz2
-> +sha256 2c0dd3f0e36e4a10f97e0028989bb873e80f4d1ce212ac55fd3b28857c464f94  xenomai-3.0.6.tar.bz2
-> diff --git a/package/xenomai/xenomai.mk b/package/xenomai/xenomai.mk
-> index c53d5148f0..6bf08edfbc 100644
-> --- a/package/xenomai/xenomai.mk
-> +++ b/package/xenomai/xenomai.mk
-> @@ -6,7 +6,7 @@
->  
->  XENOMAI_VERSION = $(call qstrip,$(BR2_PACKAGE_XENOMAI_VERSION))
->  ifeq ($(XENOMAI_VERSION),)
-> -XENOMAI_VERSION = 3.0.5
-> +XENOMAI_VERSION = 3.0.6
->  else
->  BR_NO_CHECK_HASH_FOR += $(XENOMAI_SOURCE)
->  endif
-> 
+diff --git a/package/omxplayer/Config.in b/package/omxplayer/Config.in
+index b417aa3b0b..67367cf123 100644
+--- a/package/omxplayer/Config.in
++++ b/package/omxplayer/Config.in
+@@ -7,6 +7,7 @@ config BR2_PACKAGE_OMXPLAYER
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # boost, libusb
+ 	depends on BR2_USE_WCHAR # boost
+ 	depends on BR2_PACKAGE_RPI_USERLAND
++	select BR2_PACKAGE_ALSA_LIB
+ 	select BR2_PACKAGE_BOOST
+ 	select BR2_PACKAGE_DBUS
+ 	select BR2_PACKAGE_FFMPEG
+diff --git a/package/omxplayer/omxplayer.mk b/package/omxplayer/omxplayer.mk
+index 6e92250438..6999269161 100644
+--- a/package/omxplayer/omxplayer.mk
++++ b/package/omxplayer/omxplayer.mk
+@@ -10,7 +10,7 @@ OMXPLAYER_LICENSE = GPL-2.0+
+ OMXPLAYER_LICENSE_FILES = COPYING
+ 
+ OMXPLAYER_DEPENDENCIES = \
+-	host-pkgconf boost dbus ffmpeg freetype libidn libusb pcre \
++	host-pkgconf alsa-lib boost dbus ffmpeg freetype libidn libusb pcre \
+ 	rpi-userland zlib
+ 
+ OMXPLAYER_EXTRA_CFLAGS = \
+-- 
+2.11.0
