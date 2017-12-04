@@ -1,52 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 4 Dec 2017 11:24:21 +0100
-Subject: [Buildroot] status of odroidc2's support?
-In-Reply-To: <trinity-c7b00df8-109a-4988-8762-2b7898dda327-1512376040564@3c-app-mailcom-bs15>
-References: <trinity-8c598823-c6de-4b88-91b4-43ba7c4de257-1512369327653@3c-app-mailcom-bs14>
- <20171204091310.5295266f@windsurf.home>
- <trinity-c7b00df8-109a-4988-8762-2b7898dda327-1512376040564@3c-app-mailcom-bs15>
-Message-ID: <20171204112421.275a5e06@windsurf.lan>
+Date: Mon, 4 Dec 2017 11:25:41 +0100
+Subject: [Buildroot] [git commit] kexec: bump to 2.0.16
+Message-ID: <20171204102104.C10F7803D5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=5764dc89385a7ab08ccef214c45dc73bb9b93836
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 4 Dec 2017 09:27:20 +0100, daggs wrote:
+In 2.0.16 we now have uncompressed kernel size available
+for ARM starting v4.14 and later kernels.
 
-> strange, when running menuconfig, I see only gcc 6 and gcc 7 in the version selection menu. what am I missing?
-> I think the branch already supports gcc5
+Let's also remove the extra space after the checksum while at it.
 
-Meh, it's the recent introduction of Cortex-A35 (commit
-e9960da6ec84d0fc4f3d7ef8d9db5b1e29d79358 from Yann, added in Cc) that
-broke this.
+Signed-off-by: Tony Lindgren <tony@atomide.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/kexec/kexec.hash | 2 +-
+ package/kexec/kexec.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Due to this commit, Cortex-A35 is now the first AArch64 core, and
-therefore the one selected by default instead of Cortex-A53.
-
-So, a defconfig that has just
-
-BR2_aarch64=y
-
-will now build for Cortex-A35 instead of Cortex-A53. However,
-Cortex-A35 support was only added in gcc 6.x, so only gcc 6.x/7.x are
-allowed.
-
-Dagg, you can for now fix that by selecting Cortex-A53 explicitly in
-your defconfig:
-
-BR2_aarch64=y
-BR2_cortex_a53=y
-
-Yann, do you think we should add a "default BR2_cortex_a53 if
-BR2_aarch64 || BR2_aarch64eb" in the choice ?
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/kexec/kexec.hash b/package/kexec/kexec.hash
+index 0e39e7c..eaa9d7b 100644
+--- a/package/kexec/kexec.hash
++++ b/package/kexec/kexec.hash
+@@ -1,2 +1,2 @@
+ # From https://www.kernel.org/pub/linux/utils/kernel/kexec/sha256sums.asc
+-sha256 899b7b861431eb51886d0c12866e91b036228244d35a5fb04762dd1a3c0194e7  kexec-tools-2.0.15.tar.xz
++sha256 5b103351ad752c9badd1d65b00eb6de4bce579f944f4df4e3ef3a755ba567010 kexec-tools-2.0.16.tar.xz
+diff --git a/package/kexec/kexec.mk b/package/kexec/kexec.mk
+index 79c4b73..3ce1ed2 100644
+--- a/package/kexec/kexec.mk
++++ b/package/kexec/kexec.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KEXEC_VERSION = 2.0.15
++KEXEC_VERSION = 2.0.16
+ KEXEC_SOURCE = kexec-tools-$(KEXEC_VERSION).tar.xz
+ KEXEC_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kernel/kexec
+ KEXEC_LICENSE = GPL-2.0
