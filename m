@@ -1,11 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 4 Dec 2017 09:04:50 +0100
-Subject: [Buildroot] [PATCH v5 00/11] board: Add Allwinner A64/H5 boards
-In-Reply-To: <CAMty3ZDHvYQsnR4gJhZ2XWPdcexZ0DV_f36pEW9Z7d9kcufLug@mail.gmail.com>
-References: <1509559553-26544-1-git-send-email-jagan@amarulasolutions.com>
- <20171203225110.319cc00e@windsurf.home>
- <CAMty3ZDHvYQsnR4gJhZ2XWPdcexZ0DV_f36pEW9Z7d9kcufLug@mail.gmail.com>
-Message-ID: <20171204090450.04fa4466@windsurf.home>
+Date: Mon, 4 Dec 2017 09:13:10 +0100
+Subject: [Buildroot] status of odroidc2's support?
+In-Reply-To: <trinity-8c598823-c6de-4b88-91b4-43ba7c4de257-1512369327653@3c-app-mailcom-bs14>
+References: <trinity-8c598823-c6de-4b88-91b4-43ba7c4de257-1512369327653@3c-app-mailcom-bs14>
+Message-ID: <20171204091310.5295266f@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,27 +12,31 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 4 Dec 2017 10:13:39 +0530, Jagan Teki wrote:
+On Mon, 4 Dec 2017 07:35:27 +0100, daggs wrote:
 
-> > Since I was not super happy with this proposal to solve the ATF/U-Boot
-> > building problem for Allwinner A64/H5, I just submitted a different
-> > patch series (which re-uses some of your work, authorship preserved).
-> > Could you see what you think about my proposal ?  
+> now that gcc 4.9.x was dropped from buildroot,
+
+Gcc 4.9 is not dropped from Buildroot, it's still there in the current
+Git master.
+
+> is it impossible to build the vendor's version of odroidc2. (uboot
+> doesn't compile)
+> so the is no way to build a workable image for this board. I think
+> there support for gcc5 was added but not for gcc6. I've tried to add
+> support for gcc6 but it won't boot the kernel.
 > 
-> Yes, this is what I proposed in previous versions[1], unfortunately ie
-> not moving further. Happy that now it has better shape to move.
+> unfortunately, I don't have any time to handle both vendor and
+> mainline support. I wonder if it worthwhile to continue my support
+> for it. I know that soon to be mainline kernel 4.15 has hdmi support
+> but I don't know for what extent (still trying to figure it out), one
+> thing is sure, there will be no hw decoding support. is there a way
+> to restore support for the vendor's flavor? maybe and external
+> toolchain?
 
-It is not trivial to solve this problem in a nice and pretty fashion,
-especially due to the ATF->U-Boot and U-Boot->ATF possible dependencies.
-
-So my proposal is a proposal I find better, but I don't pretend it's
-the perfection either.
-
-> > If my proposal gets merged, then it would be nice if you could rebase
-> > your defconfig patches on top of it. It's mainly a matter of adding a
-> > few more ATF options and tweaking U-Boot options.  
-> 
-> Yes, will do.
+Getting U-Boot to build with gcc 5.x should just be a matter of
+backporting a U-Boot patch. Can you try applying something
+like ./roseapplepi/patches/uboot/0001-compiler-.h-sync-include-linux-compiler-.h-with-Linu.patch
+to your U-Boot and see if it works ?
 
 Thanks!
 
