@@ -1,12 +1,10 @@
 From: Sergey Matyukevich <geomatsi@gmail.com>
-Date: Mon, 4 Dec 2017 08:58:22 +0300
-Subject: [Buildroot] [PATCH 1/3] board/orangepi: add support for
- orangepi-pc-plus board
-In-Reply-To: <20171203232528.237e3ec3@windsurf.home>
-References: <20171108194334.10031-1-geomatsi@gmail.com>
- <20171108194334.10031-2-geomatsi@gmail.com>
- <20171203232528.237e3ec3@windsurf.home>
-Message-ID: <20171204055822.hvwjezi2djv7jj34@speedy.hunter>
+Date: Mon, 4 Dec 2017 09:10:50 +0300
+Subject: [Buildroot] [PATCH v3 0/4] Add support for MacchiatoBin board
+In-Reply-To: <20171203225313.762c507c@windsurf.home>
+References: <20171203181818.10087-1-geomatsi@gmail.com>
+ <20171203225313.762c507c@windsurf.home>
+Message-ID: <20171204061050.soif6cijxrsvhzbd@speedy.hunter>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,32 +13,32 @@ To: buildroot@busybox.net
 
 Hello Thomas,
 
-> On Wed,  8 Nov 2017 22:43:32 +0300, Sergey Matyukevich wrote:
-> > This board is a variant of orangepi-pc board. It adds 8GB eMMC and Realtek
-> > RTL8189FTV SDIO WiFi chip. This variant has a separate support in U-Boot
-> > and kernel. So it makes sense to create a separate entry
-> > for this board in buildroot.
-> > 
-> > Board support package includes the following components:
-> >  - mainline u-boot 2017.09
-> >  - mainline kernel 4.13.11
-> > 
-> > Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
+> On Sun,  3 Dec 2017 21:18:14 +0300, Sergey Matyukevich wrote:
 > 
-> I've applied, after adding an entry to the DEVELOPERS file. One
-> comment, though.
+> > Sergey Matyukevich (4):
+> >   mv-ddr-marvell: new package
+> >   binaries-marvell: new package
+> >   atf: add support for Marvell Armada
 > 
-> >  board/orangepi/orangepi-pc-plus/boot.cmd           |  8 +++++
-> >  board/orangepi/orangepi-pc-plus/genimage.cfg       | 36 ++++++++++++++++++++
-> >  .../orangepi/orangepi-pc-plus/linux-extras.config  |  8 +++++
-> >  board/orangepi/orangepi-pc-plus/post-build.sh      |  1 +
+> Since these changes conflicted with changes proposed by Jagan Teki to
+> support Allwinner A64/H5, and because I was not entirely happy with
+> Jagan's proposal, I made a different proposal that solves both Jagan's
+> use case and your use case. So I've taken those 3 patches and adapted
+> them, fixing some issues along the way. Of course, I've preserved your
+> authorship on the patches.
 > 
-> This common post-build script only generates the U-Boot script. Could
-> you move the boards that use this post-build script to instead use
-> BR2_TARGET_UBOOT_BOOT_SCRIPT ?
+> Could you check my proposal at
+> http://lists.busybox.net/pipermail/buildroot/2017-December/208788.html ?
+> 
+> >   solidrun/macchiatobin: add new board
+> 
+> I have replied separately to this patch, which I have not taken in my
+> patch series. If Jagan and you are happy with my patches, it would be
+> nice if you could resubmit your defconfig on top of it (and after
+> fixing the other comments I made).
 
-Sure, will do this cleanup with orangepi/pcduino boards as soon as
-I complete MacchiatoBin pieces.
+Sure, I will take part in review of your ATF patchset. Then I will resubmit
+MacchiatoBin support as soon as the common base for arm64 boards is settled.
 
 Regards,
 Sergey
