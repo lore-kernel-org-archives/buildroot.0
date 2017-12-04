@@ -1,41 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 4 Dec 2017 11:33:51 +0100
-Subject: [Buildroot] [PATCH 1/1] package/icu: bump version to 60.1
-In-Reply-To: <20171203194140.8138-1-bernd.kuhls@t-online.de>
-References: <20171203194140.8138-1-bernd.kuhls@t-online.de>
-Message-ID: <20171204113351.56a1c2f8@windsurf.lan>
+Date: Mon, 4 Dec 2017 11:35:42 +0100
+Subject: [Buildroot] [PATCH 6/6] package/linphone: fix URL of Debian
+ patches
+In-Reply-To: <20170829215219.3024113c@windsurf.lan>
+References: <20170829191005.19697-1-bernd.kuhls@t-online.de>
+ <20170829191005.19697-6-bernd.kuhls@t-online.de>
+ <20170829215219.3024113c@windsurf.lan>
+Message-ID: <20171204113542.5c8fb604@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Bernd,
 
-On Sun,  3 Dec 2017 20:41:40 +0100, Bernd Kuhls wrote:
-> Removed 0006-i18n-Drop-include-xlocale.h.patch, problem was fixed
-> upstream with a different solution:
-> http://bugs.icu-project.org/trac/changeset/40603
+On Tue, 29 Aug 2017 21:52:19 +0200, Thomas Petazzoni wrote:
+
+> On Tue, 29 Aug 2017 21:10:05 +0200, Bernd Kuhls wrote:
 > 
-> Added upstream sha512 hash and license hash.
+> > -	https://sources.debian.net/data/main/l/linphone/3.6.1-2.5/debian/patches/libav9.patch \
+> > -	https://sources.debian.net/data/main/l/linphone/3.6.1-2.5/debian/patches/libav10.patch \
+> > -	https://sources.debian.net/data/main/l/linphone/3.6.1-2.5/debian/patches/libav11.patch \
+> > -	https://sources.debian.net/data/main/l/linphone/3.6.1-2.5/debian/patches/ffmpeg_2.9.patch
+> > +	https://sources.debian.net/data/main/l/linphone/3.6.1-3/debian/patches/libav9.patch \
+> > +	https://sources.debian.net/data/main/l/linphone/3.6.1-3/debian/patches/libav10.patch \
+> > +	https://sources.debian.net/data/main/l/linphone/3.6.1-3/debian/patches/libav11.patch \
+> > +	https://sources.debian.net/data/main/l/linphone/3.6.1-3/debian/patches/ffmpeg_2.9.patch  
 > 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/icu/0006-i18n-Drop-include-xlocale.h.patch | 39 ----------------------
->  package/icu/icu.hash                               |  7 ++--
->  package/icu/icu.mk                                 |  2 +-
->  3 files changed, 4 insertions(+), 44 deletions(-)
->  delete mode 100644 package/icu/0006-i18n-Drop-include-xlocale.h.patch
+> We will have to constantly update those, because sources.debian.net
+> doesn't keep all versions of a package, only the most recent ones.
+> 
+> Can we use
+> http://snapshot.debian.org/archive/debian/20161118T211932Z/pool/main/l/linphone/linphone_3.6.1-3.debian.tar.xz
+> instead ? This URL is guaranteed to not change.
 
-Thanks a lot Mario and Bernd for your feedback confirming that ICU 60.1
-still works fine with its reverse dependencies.
+Kind ping on this comment. We still have your patch pending in
+patchwork. I believe the change requested here is quite reasonable.
+Could you submit an updated version ?
 
-I've applied the version bump to master, thanks!
-
-Best regards,
+Thanks!
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
