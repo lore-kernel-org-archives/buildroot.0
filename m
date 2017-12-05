@@ -1,74 +1,87 @@
-From: =?UTF-8?q?Adrien=20Gallou=C3=ABt?= <adrien@gallouet.fr>
-Date: Tue,  5 Dec 2017 16:22:59 +0000
-Subject: [Buildroot] [PATCH v3 1/1] glorytun: new package
-Message-ID: <20171205162259.13708-1-adrien@gallouet.fr>
+From: Johan Oudinet <johan.oudinet@gmail.com>
+Date: Tue, 5 Dec 2017 17:52:34 +0100
+Subject: [Buildroot] [PATCH 1/1] erlang: bump to version 20.0
+In-Reply-To: <3fegfexqs4.ln2@ID-313208.user.individual.net>
+References: <20171130154202.437-1-johan.oudinet@gmail.com>
+ <20171203105905.3bdd1dc9@windsurf.lan>
+ <3fegfexqs4.ln2@ID-313208.user.individual.net>
+Message-ID: <CAJtjsKbdPj+39gq+bK2trs86Os-osz72N_h4zbW0o+4nwBVdZg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Adrien Gallou?t <adrien@gallouet.fr>
----
- package/Config.in              |  1 +
- package/glorytun/Config.in     |  6 ++++++
- package/glorytun/glorytun.hash |  2 ++
- package/glorytun/glorytun.mk   | 13 +++++++++++++
- 4 files changed, 22 insertions(+)
- create mode 100644 package/glorytun/Config.in
- create mode 100644 package/glorytun/glorytun.hash
- create mode 100644 package/glorytun/glorytun.mk
+Hi,
 
-diff --git a/package/Config.in b/package/Config.in
-index 433224c3a4..b1442c8916 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1653,6 +1653,7 @@ menu "Networking applications"
- 	source "package/freeswitch/Config.in"
- 	source "package/freeswitch-mod-bcg729/Config.in"
- 	source "package/gesftpserver/Config.in"
-+	source "package/glorytun/Config.in"
- 	source "package/gupnp-tools/Config.in"
- 	source "package/gutenprint/Config.in"
- 	source "package/hans/Config.in"
-diff --git a/package/glorytun/Config.in b/package/glorytun/Config.in
-new file mode 100644
-index 0000000000..93c1afd8cd
---- /dev/null
-+++ b/package/glorytun/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_GLORYTUN
-+	bool "glorytun"
-+	select BR2_PACKAGE_LIBSODIUM
-+	help
-+	  A small, simple and secure VPN.
-+	  https://github.com/angt/glorytun
-diff --git a/package/glorytun/glorytun.hash b/package/glorytun/glorytun.hash
-new file mode 100644
-index 0000000000..891af2079e
---- /dev/null
-+++ b/package/glorytun/glorytun.hash
-@@ -0,0 +1,2 @@
-+sha256 76849b1568119cf0834749db56d4882966863d31351c21c1b22f373f0c97a498  glorytun-0.0.93-mud.tar.gz
-+sha256 bd418f8ef7d62f2c89e3aa1e5dc41c7d7a6212eb1cdb4d39a26a5bd333e1b4a3  LICENSE
-diff --git a/package/glorytun/glorytun.mk b/package/glorytun/glorytun.mk
-new file mode 100644
-index 0000000000..81b45c4da8
---- /dev/null
-+++ b/package/glorytun/glorytun.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# glorytun
-+#
-+################################################################################
-+
-+GLORYTUN_VERSION = 0.0.93-mud
-+GLORYTUN_SITE = https://github.com/angt/glorytun/releases/download/v$(GLORYTUN_VERSION)
-+GLORYTUN_DEPENDENCIES = libsodium
-+GLORYTUN_LICENSE = BSD-2-clause
-+GLORYTUN_LICENSE_FILES = LICENSE
-+
-+$(eval $(autotools-package))
+On Mon, Dec 4, 2017 at 6:49 PM, Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+> Am Sun, 03 Dec 2017 10:59:05 +0100 schrieb Thomas Petazzoni:
+>
+>> Seems like host-zlib is needed.
+>
+> host-erlang depends on host-openssl which depends on host-zlib so this
+> should not be the problem. Anyway I could reproduce the build error on a
+> minimal Debian system which lacks a zlib-dev package, host-zlib was built
+> by buildroot.
+>
+> More investigation is needed on my part, but for today I have no time
+> left for this, sorry.
+>
+
+Thanks, I did the same (i.e., run it from a fresh debian-testing-amd64
+chroot) and manage to reproduce the -lz error:
+/usr/bin/gcc -c -o ../priv/obj/x86_64-pc-linux-gnu/trace_ip_drv.o
+-DHAVE_CONFIG_H -Werror=undef -Werror=implicit -Werror=return-type
+-Wall -Wstrict-prototypes -Wmissing-prototypes
+-Wdeclaration-after-statement  -DUSE_THREADS -D_THREAD_SAFE
+-D_REENTRANT -DPOSIX_THREADS -D_POSIX_THREAD_SAFE_FUNCTIONS -O2
+-I/path/to/host/include
+-I/path/to/build/host-erlang-20.0/erts/x86_64-pc-linux-gnu
+-fno-tree-copyrename -I/path/to/host/include -D_GNU_SOURCE -fPIC -I./
+-I/path/to/build/host-erlang-20.0/erts/emulator/beam
+-I/path/to/build/host-erlang-20.0/erts/include
+-I/path/to/build/host-erlang-20.0/erts/include/x86_64-pc-linux-gnu
+-I/path/to/build/host-erlang-20.0/erts/include/internal
+-I/path/to/build/host-erlang-20.0/erts/include/internal/x86_64-pc-linux-gnu
+-I/path/to/build/host-erlang-20.0/erts/emulator/sys/unix
+-I/path/to/build/host-erlang-20.0/erts/emulator/sys/common
+-I../priv/obj/x86_64-pc-linux-gnu
+-I/path/to/build/host-erlang-20.0/erts/emulator/x86_64-pc-linux-gnu
+trace_ip_drv.c
+/usr/bin/gcc -shared -Wl,-Bsymbolic -o
+../priv/lib/x86_64-pc-linux-gnu/dyntrace.so
+../priv/obj/x86_64-pc-linux-gnu/dyntrace.o -lz -lutil -ldl -lm
+/usr/bin/ld: cannot find -lz
+collect2: error: ld returned 1 exit status
+
+It does have libz.so in the host so I think the issue is in one of
+Erlang's makefiles. Their build architecture is a real mess and I'm
+not sure how to fix it properly, but it clearly miss the HOST_LDFLAGS
+when linking lib/runtime_tools/c_src/dyntrace.c
+
+I try to add LDFLAGS="$(HOST_LDFLAGS)" to HOST_ERLANG_MAKE_OPTS and it
+does solve this issue but fails later on:
+/usr/bin/gcc  -fno-PIE  -Werror=undef -Werror=implicit
+-Werror=return-type  -O3 -I/path/to/host/include
+-I/path/to/build/host-erlang-20.0/erts/x86_64-pc-linux-gnu
+-fno-tree-copyrename -I/path/to/host/include -D_GNU_SOURCE -DERTS_SMP
+-DHAVE_CONFIG_H -Wall -Wstrict-prototypes -Wmissing-prototypes
+-Wdeclaration-after-statement -DUSE_THREADS -D_THREAD_SAFE
+-D_REENTRANT -DPOSIX_THREADS -D_POSIX_THREAD_SAFE_FUNCTIONS
+-DERTS_DIRTY_SCHEDULERS   -Ix86_64-pc-linux-gnu/opt/smp -Ibeam
+-Isys/unix -Isys/common -Ix86_64-pc-linux-gnu -Ipcre -Ihipe
+-I../include -I../include/x86_64-pc-linux-gnu -I../include/internal
+-I../include/internal/x86_64-pc-linux-gnu -c hipe/hipe_mkliterals.c -o
+obj/x86_64-pc-linux-gnu/opt/smp/hipe_mkliterals.o
+/usr/bin/gcc -L/path/to/host/lib -Wl,-rpath,/path/to/host/lib -o
+/path/to/build/host-erlang-20.0/bin/x86_64-pc-linux-gnu/hipe_mkliterals.smp
+obj/x86_64-pc-linux-gnu/opt/smp/hipe_mkliterals.o -lz -lutil -ldl -lm
+/usr/bin/ld: obj/x86_64-pc-linux-gnu/opt/smp/hipe_mkliterals.o:
+relocation R_X86_64_32 against `.rodata.str1.8' can not be used when
+making a shared object; recompile with -fPIC
+/usr/bin/ld: final link failed: Nonrepresentable section on output
+collect2: error: ld returned 1 exit status
+
+I stop here for today.
 -- 
-2.15.1
+Johan
