@@ -1,62 +1,51 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Tue,  5 Dec 2017 08:10:05 -0500
-Subject: [Buildroot] [PATCH 1/1] janus-gateway: add RTSP streaming support.
-Message-ID: <20171205131005.31537-1-aduskett@gmail.com>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Tue,  5 Dec 2017 17:06:57 +0300
+Subject: [Buildroot] [PATCH] linux-firmware: Add RedPine RS9113 firmware
+Message-ID: <20171205140657.35940-1-abrodkin@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The streaming protocol works without libcurl via RTP, but if a user wishes to
-stream via RTSP, libcurl must be built first.
-
-Signed-off-by: Adam Duskett <aduskett@gmail.com>
+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
 ---
- package/janus-gateway/Config.in        | 8 +++++++-
- package/janus-gateway/janus-gateway.mk | 4 ++++
- 2 files changed, 11 insertions(+), 1 deletion(-)
+ package/linux-firmware/Config.in         | 5 +++++
+ package/linux-firmware/linux-firmware.mk | 6 ++++++
+ 2 files changed, 11 insertions(+)
 
-diff --git a/package/janus-gateway/Config.in b/package/janus-gateway/Config.in
-index 5bd4e9586b..ed68e270d6 100644
---- a/package/janus-gateway/Config.in
-+++ b/package/janus-gateway/Config.in
-@@ -38,6 +38,12 @@ config  BR2_PACKAGE_JANUS_STREAMING
- 	# SO_REUSEPORT
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_9
+diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
+index ad750e82ff..905b32a6a4 100644
+--- a/package/linux-firmware/Config.in
++++ b/package/linux-firmware/Config.in
+@@ -246,6 +246,11 @@ config BR2_PACKAGE_LINUX_FIRMWARE_RTL_88XX
+ 	help
+ 	  Realtek rtl8821ae
  
-+if BR2_PACKAGE_JANUS_STREAMING
-+config BR2_PACKAGE_JANUS_STREAMING_RTSP
-+	bool "RTSP streaming"
-+	select BR2_PACKAGE_LIBCURL
-+endif
++config BR2_PACKAGE_LINUX_FIRMWARE_REDPINE_RS9113
++	bool "Redpine rs9113"
++	help
++	  Firmware files for WLAN and Bluetooth modules rs9113
 +
- comment "streaming plugin needs a toolchain w/ headers >= 3.9"
- 	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_9
- 
-@@ -90,7 +96,7 @@ config BR2_PACKAGE_JANUS_WEBSOCKETS
- 	depends on BR2_USE_MMU
- 	select BR2_PACKAGE_LIBWEBSOCKETS
- 
--endif
-+endif #BR2_PACKAGE_JANUS_GATEWAY
- 
- comment "janus-gateway needs a toolchain w/ dynamic library, threads, wchar"
- 	depends on BR2_USE_MMU
-diff --git a/package/janus-gateway/janus-gateway.mk b/package/janus-gateway/janus-gateway.mk
-index bf3e590ac5..be31c465f8 100644
---- a/package/janus-gateway/janus-gateway.mk
-+++ b/package/janus-gateway/janus-gateway.mk
-@@ -58,6 +58,10 @@ else
- JANUS_GATEWAY_CONF_OPTS += --disable-plugin-streaming
+ config BR2_PACKAGE_LINUX_FIRMWARE_TI_WL127X
+ 	bool "TI wl127x"
+ 	help
+diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+index d238abe9ea..a08c7a761f 100644
+--- a/package/linux-firmware/linux-firmware.mk
++++ b/package/linux-firmware/linux-firmware.mk
+@@ -422,6 +422,12 @@ LINUX_FIRMWARE_FILES += \
+ LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.qla2xxx
  endif
  
-+ifeq ($(BR2_PACKAGE_JANUS_STREAMING_RTSP),y)
-+JANUS_GATEWAY_DEPENDENCIES += libcurl
++ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_REDPINE_RS9113),y)
++LINUX_FIRMWARE_FILES += rsi/rs9113_wlan_qspi.rps
++# No license file; the license is in the file WHENCE
++# which is installed unconditionally
 +endif
 +
- ifeq ($(BR2_PACKAGE_JANUS_TEXT_ROOM),y)
- JANUS_GATEWAY_CONF_OPTS += --enable-plugin-textroom
- else
+ ifneq ($(LINUX_FIRMWARE_FILES),)
+ define LINUX_FIRMWARE_INSTALL_FILES
+ 	cd $(@D) ; \
 -- 
-2.14.3
+2.11.0
