@@ -1,87 +1,72 @@
-From: Johan Oudinet <johan.oudinet@gmail.com>
-Date: Tue, 5 Dec 2017 17:52:34 +0100
-Subject: [Buildroot] [PATCH 1/1] erlang: bump to version 20.0
-In-Reply-To: <3fegfexqs4.ln2@ID-313208.user.individual.net>
-References: <20171130154202.437-1-johan.oudinet@gmail.com>
- <20171203105905.3bdd1dc9@windsurf.lan>
- <3fegfexqs4.ln2@ID-313208.user.individual.net>
-Message-ID: <CAJtjsKbdPj+39gq+bK2trs86Os-osz72N_h4zbW0o+4nwBVdZg@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 5 Dec 2017 18:17:55 +0100
+Subject: [Buildroot] [PATCH 1/1] omxplayer: add missing dependency on
+ alsa-lib
+In-Reply-To: <20171204233035.2183-1-julius@kriukas.lt>
+References: <20171204233035.2183-1-julius@kriukas.lt>
+Message-ID: <20171205171755.GA3993@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+On 2017-12-05 01:30 +0200, Julius Kriukas spake thusly:
+> Omxplayer depends on alsa-lib. This patch fixes:
+> 
+> http://autobuild.buildroot.net/results/652/65212c59a37398681b341263bd76ba8a65ff7828
+> 
+> Signed-off-by: Julius Kriukas <julius@kriukas.lt>
 
-On Mon, Dec 4, 2017 at 6:49 PM, Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
-> Am Sun, 03 Dec 2017 10:59:05 +0100 schrieb Thomas Petazzoni:
->
->> Seems like host-zlib is needed.
->
-> host-erlang depends on host-openssl which depends on host-zlib so this
-> should not be the problem. Anyway I could reproduce the build error on a
-> minimal Debian system which lacks a zlib-dev package, host-zlib was built
-> by buildroot.
->
-> More investigation is needed on my part, but for today I have no time
-> left for this, sorry.
->
+We sent about the same patch at about the same time, so I would not care
+which is applied.
 
-Thanks, I did the same (i.e., run it from a fresh debian-testing-amd64
-chroot) and manage to reproduce the -lz error:
-/usr/bin/gcc -c -o ../priv/obj/x86_64-pc-linux-gnu/trace_ip_drv.o
--DHAVE_CONFIG_H -Werror=undef -Werror=implicit -Werror=return-type
--Wall -Wstrict-prototypes -Wmissing-prototypes
--Wdeclaration-after-statement  -DUSE_THREADS -D_THREAD_SAFE
--D_REENTRANT -DPOSIX_THREADS -D_POSIX_THREAD_SAFE_FUNCTIONS -O2
--I/path/to/host/include
--I/path/to/build/host-erlang-20.0/erts/x86_64-pc-linux-gnu
--fno-tree-copyrename -I/path/to/host/include -D_GNU_SOURCE -fPIC -I./
--I/path/to/build/host-erlang-20.0/erts/emulator/beam
--I/path/to/build/host-erlang-20.0/erts/include
--I/path/to/build/host-erlang-20.0/erts/include/x86_64-pc-linux-gnu
--I/path/to/build/host-erlang-20.0/erts/include/internal
--I/path/to/build/host-erlang-20.0/erts/include/internal/x86_64-pc-linux-gnu
--I/path/to/build/host-erlang-20.0/erts/emulator/sys/unix
--I/path/to/build/host-erlang-20.0/erts/emulator/sys/common
--I../priv/obj/x86_64-pc-linux-gnu
--I/path/to/build/host-erlang-20.0/erts/emulator/x86_64-pc-linux-gnu
-trace_ip_drv.c
-/usr/bin/gcc -shared -Wl,-Bsymbolic -o
-../priv/lib/x86_64-pc-linux-gnu/dyntrace.so
-../priv/obj/x86_64-pc-linux-gnu/dyntrace.o -lz -lutil -ldl -lm
-/usr/bin/ld: cannot find -lz
-collect2: error: ld returned 1 exit status
+Yet, as you may have noticed, my patch also fixes the comment-dependency
+on threads, so I believe mine is a little bit better in that respect.
 
-It does have libz.so in the host so I think the issue is in one of
-Erlang's makefiles. Their build architecture is a real mess and I'm
-not sure how to fix it properly, but it clearly miss the HOST_LDFLAGS
-when linking lib/runtime_tools/c_src/dyntrace.c
+Thanks! :-)
 
-I try to add LDFLAGS="$(HOST_LDFLAGS)" to HOST_ERLANG_MAKE_OPTS and it
-does solve this issue but fails later on:
-/usr/bin/gcc  -fno-PIE  -Werror=undef -Werror=implicit
--Werror=return-type  -O3 -I/path/to/host/include
--I/path/to/build/host-erlang-20.0/erts/x86_64-pc-linux-gnu
--fno-tree-copyrename -I/path/to/host/include -D_GNU_SOURCE -DERTS_SMP
--DHAVE_CONFIG_H -Wall -Wstrict-prototypes -Wmissing-prototypes
--Wdeclaration-after-statement -DUSE_THREADS -D_THREAD_SAFE
--D_REENTRANT -DPOSIX_THREADS -D_POSIX_THREAD_SAFE_FUNCTIONS
--DERTS_DIRTY_SCHEDULERS   -Ix86_64-pc-linux-gnu/opt/smp -Ibeam
--Isys/unix -Isys/common -Ix86_64-pc-linux-gnu -Ipcre -Ihipe
--I../include -I../include/x86_64-pc-linux-gnu -I../include/internal
--I../include/internal/x86_64-pc-linux-gnu -c hipe/hipe_mkliterals.c -o
-obj/x86_64-pc-linux-gnu/opt/smp/hipe_mkliterals.o
-/usr/bin/gcc -L/path/to/host/lib -Wl,-rpath,/path/to/host/lib -o
-/path/to/build/host-erlang-20.0/bin/x86_64-pc-linux-gnu/hipe_mkliterals.smp
-obj/x86_64-pc-linux-gnu/opt/smp/hipe_mkliterals.o -lz -lutil -ldl -lm
-/usr/bin/ld: obj/x86_64-pc-linux-gnu/opt/smp/hipe_mkliterals.o:
-relocation R_X86_64_32 against `.rodata.str1.8' can not be used when
-making a shared object; recompile with -fPIC
-/usr/bin/ld: final link failed: Nonrepresentable section on output
-collect2: error: ld returned 1 exit status
+Regards,
+Yann E. MORIN.
 
-I stop here for today.
+> ---
+>  package/omxplayer/Config.in    | 1 +
+>  package/omxplayer/omxplayer.mk | 2 +-
+>  2 files changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/omxplayer/Config.in b/package/omxplayer/Config.in
+> index b417aa3b0b..67367cf123 100644
+> --- a/package/omxplayer/Config.in
+> +++ b/package/omxplayer/Config.in
+> @@ -7,6 +7,7 @@ config BR2_PACKAGE_OMXPLAYER
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS # boost, libusb
+>  	depends on BR2_USE_WCHAR # boost
+>  	depends on BR2_PACKAGE_RPI_USERLAND
+> +	select BR2_PACKAGE_ALSA_LIB
+>  	select BR2_PACKAGE_BOOST
+>  	select BR2_PACKAGE_DBUS
+>  	select BR2_PACKAGE_FFMPEG
+> diff --git a/package/omxplayer/omxplayer.mk b/package/omxplayer/omxplayer.mk
+> index 6e92250438..6999269161 100644
+> --- a/package/omxplayer/omxplayer.mk
+> +++ b/package/omxplayer/omxplayer.mk
+> @@ -10,7 +10,7 @@ OMXPLAYER_LICENSE = GPL-2.0+
+>  OMXPLAYER_LICENSE_FILES = COPYING
+>  
+>  OMXPLAYER_DEPENDENCIES = \
+> -	host-pkgconf boost dbus ffmpeg freetype libidn libusb pcre \
+> +	host-pkgconf alsa-lib boost dbus ffmpeg freetype libidn libusb pcre \
+>  	rpi-userland zlib
+>  
+>  OMXPLAYER_EXTRA_CFLAGS = \
+> -- 
+> 2.11.0
+> 
+
 -- 
-Johan
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
