@@ -1,39 +1,73 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue,  5 Dec 2017 20:36:52 +0200
-Subject: [Buildroot] [PATCH] usbutils: bump to version 009
-Message-ID: <18a8b28aa2354258b8330aaa7541f0f5a8e60e0e.1512499012.git.baruch@tkos.co.il>
+Date: Tue, 5 Dec 2017 20:40:50 +0200
+Subject: [Buildroot] [PATCH 1/1] janus-gateway: add RTSP streaming
+ support.
+In-Reply-To: <20171205131005.31537-1-aduskett@gmail.com>
+References: <20171205131005.31537-1-aduskett@gmail.com>
+Message-ID: <20171205184050.7oifghyqfbrhehdr@tarshish.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/usbutils/usbutils.hash | 2 +-
- package/usbutils/usbutils.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Hi Adam,
 
-diff --git a/package/usbutils/usbutils.hash b/package/usbutils/usbutils.hash
-index 37c829a1ae41..4e55c9b10144 100644
---- a/package/usbutils/usbutils.hash
-+++ b/package/usbutils/usbutils.hash
-@@ -1,2 +1,2 @@
- # From https://www.kernel.org/pub/linux/utils/usb/usbutils/sha256sums.asc
--sha256	44741af0bae9d402a0ef160a29b2fa700bb656ab5e0a4b3343d51249c2a44c8c	usbutils-008.tar.xz
-+sha256	8bbff0e54cb5f65a52be4feb9162fc0b022a97eb841b44784f7a89a9ea567160	usbutils-009.tar.xz
-diff --git a/package/usbutils/usbutils.mk b/package/usbutils/usbutils.mk
-index c397d0adc73b..84702ebc1f91 100644
---- a/package/usbutils/usbutils.mk
-+++ b/package/usbutils/usbutils.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--USBUTILS_VERSION = 008
-+USBUTILS_VERSION = 009
- USBUTILS_SOURCE = usbutils-$(USBUTILS_VERSION).tar.xz
- USBUTILS_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/usb/usbutils
- USBUTILS_DEPENDENCIES = host-pkgconf libusb udev
+On Tue, Dec 05, 2017 at 08:10:05AM -0500, Adam Duskett wrote:
+> The streaming protocol works without libcurl via RTP, but if a user wishes to
+> stream via RTSP, libcurl must be built first.
+> 
+> Signed-off-by: Adam Duskett <aduskett@gmail.com>
+> ---
+>  package/janus-gateway/Config.in        | 8 +++++++-
+>  package/janus-gateway/janus-gateway.mk | 4 ++++
+>  2 files changed, 11 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/janus-gateway/Config.in b/package/janus-gateway/Config.in
+> index 5bd4e9586b..ed68e270d6 100644
+> --- a/package/janus-gateway/Config.in
+> +++ b/package/janus-gateway/Config.in
+> @@ -38,6 +38,12 @@ config  BR2_PACKAGE_JANUS_STREAMING
+>  	# SO_REUSEPORT
+>  	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_9
+>  
+> +if BR2_PACKAGE_JANUS_STREAMING
+> +config BR2_PACKAGE_JANUS_STREAMING_RTSP
+> +	bool "RTSP streaming"
+> +	select BR2_PACKAGE_LIBCURL
+> +endif
+> +
+>  comment "streaming plugin needs a toolchain w/ headers >= 3.9"
+>  	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_9
+>  
+> @@ -90,7 +96,7 @@ config BR2_PACKAGE_JANUS_WEBSOCKETS
+>  	depends on BR2_USE_MMU
+>  	select BR2_PACKAGE_LIBWEBSOCKETS
+>  
+> -endif
+> +endif #BR2_PACKAGE_JANUS_GATEWAY
+>  
+>  comment "janus-gateway needs a toolchain w/ dynamic library, threads, wchar"
+>  	depends on BR2_USE_MMU
+> diff --git a/package/janus-gateway/janus-gateway.mk b/package/janus-gateway/janus-gateway.mk
+> index bf3e590ac5..be31c465f8 100644
+> --- a/package/janus-gateway/janus-gateway.mk
+> +++ b/package/janus-gateway/janus-gateway.mk
+> @@ -58,6 +58,10 @@ else
+>  JANUS_GATEWAY_CONF_OPTS += --disable-plugin-streaming
+>  endif
+>  
+> +ifeq ($(BR2_PACKAGE_JANUS_STREAMING_RTSP),y)
+> +JANUS_GATEWAY_DEPENDENCIES += libcurl
+> +endif
+
+Is there a way to disable RTSP? If not, RTSP will be enabled whenever libcurl 
+happens to build before janus-gateway, right? So maybe having libcurl as a 
+usual optional dependency would be better.
+
+baruch
+
 -- 
-2.15.0
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
