@@ -1,207 +1,67 @@
-From: Roy Arav <roy.arav@shieldiot.io>
-Date: Tue, 5 Dec 2017 13:06:46 +0200
-Subject: [Buildroot] Static IP
-In-Reply-To: <20171203191043.vf4xpv2w44gd54c4@tarshish.tkos.co.il>
-References: <CAM27=5g_TOTu__LdjWcUKaMUiLtBxXD-t2g2N9VEx5JN69ZYUA@mail.gmail.com>
- <20171124063855.rtkwmk5fadw3rlsd@tarshish>
- <CAM27=5ijTMYOyBmy1r7k9ByGQ6_tZhGkGWyfd4jG98ijhAffxQ@mail.gmail.com>
- <20171126193811.64fkhpxhc3of6cwj@tarshish>
- <CAM27=5gEznPh9FTg1Y4vdEYPNAhXR-cZV5gw9KSFZwF6iLwhHA@mail.gmail.com>
- <20171127130422.ww62i7vsooccu4px@sapphire.tkos.co.il>
- <CAM27=5hA1mZAurmjfpXxN_8F8iMFdUW9pvPPSCXSiDbvmZEedA@mail.gmail.com>
- <CAM27=5gFqWB4TRTVJnOpuEDVtc2wyiWPr1aA21u4unH0VP50Mw@mail.gmail.com>
- <20171203191043.vf4xpv2w44gd54c4@tarshish.tkos.co.il>
-Message-ID: <CAM27=5gqCUTDH7t-ym+77OjrtQtmhJLJtnZo5DcPjXKosf56Ng@mail.gmail.com>
+From: =?UTF-8?q?Adrien=20Gallou=C3=ABt?= <adrien@gallouet.fr>
+Date: Tue,  5 Dec 2017 11:44:55 +0000
+Subject: [Buildroot] [PATCH 1/1] glorytun: new package
+Message-ID: <20171205114455.21602-1-adrien@gallouet.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Baruch,
+Signed-off-by: Adrien Gallou?t <adrien@gallouet.fr>
+---
+ package/Config.in              | 1 +
+ package/glorytun/Config.in     | 6 ++++++
+ package/glorytun/glorytun.hash | 1 +
+ package/glorytun/glorytun.mk   | 7 +++++++
+ 4 files changed, 15 insertions(+)
+ create mode 100644 package/glorytun/Config.in
+ create mode 100644 package/glorytun/glorytun.hash
+ create mode 100644 package/glorytun/glorytun.mk
 
-It looks like a Buildroot behavior.
-
-my interfaces file is:
-
-# Configure Loopback
-auto lo
-iface lo inet loopback
-
-# Configure eth0 with static IP
-auto eth0
-iface eth0 inet static
-        address 1.1.1.10
-        network 1.1.1.1
-        netmask 255.255.255.0
-
-auto wlan0
-iface wlan0 inet dhcp
-        wireless-essid "roy"
-        wireless-key "royarav1"
-        wireless-mode Ad-Hoc
-        pre-up wpa_supplicant -i wlan0 -c /etc/wpa_supplicant.conf -B
-        post-down killall -q wpa_supplicant
-
-When ifupdown is disabled it works perfectly.
-When it's enabled - I get the following warning:
-
-[   33.974445] NetworkManager[273]: <warn>  [1478193423.8785]
-nm-ifupdown-connection.c.52 - invalid connection read from
-/etc/network/interfaces: 802-11-wireless-security.key-mgmt: property is
-missing
-
-Thanks
-Roy
-
-On Sun, Dec 3, 2017 at 9:10 PM, Baruch Siach <baruch@tkos.co.il> wrote:
-
-> Hi Roy,
->
-> On Sun, Dec 03, 2017 at 01:29:12PM +0200, Roy Arav wrote:
-> > One thing though -
-> > I am working on Raspberry Pi3 and it seems like when if-updown is
-> enabled,
-> > there is no wifi,
-> > Neither via WPA supplicant nor directly via nmcli. (both work fine when
-> > ff-updown is disabled).
-> >
-> > I really don't understand the connection...
->
-> Is there anything specific to Buildroot in this behaviour? Maybe the
-> ifupdown
-> plugin expects all controlled network interfaces to appear in the
-> interfaces
-> file. I'm only guessing.
->
-> baruch
->
-> > On Sun, Dec 3, 2017 at 9:35 AM, Roy Arav <roy.arav@shieldiot.io> wrote:
-> > >
-> > > Thank you very much!
-> > > It did the trick and now it works well.
-> > >
-> > > Regards
-> > > Roy
-> > >
-> > > On Mon, Nov 27, 2017 at 3:04 PM, Baruch Siach <baruch@tkos.co.il>
-> wrote:
-> > >
-> > >> Hi Roy,
-> > >>
-> > >> On Mon, Nov 27, 2017 at 02:50:30PM +0200, Roy Arav wrote:
-> > >> > Thanks Baruch,
-> > >> >
-> > >> > As you suggested - I removed the attribute "--disable-ifupdown" from
-> > >> > network-manager.mk.
-> > >> > Still same results:
-> > >> > [   32.982121] NetworkManager[286]: <warn>  [1478193422.8681]
-> settings:
-> > >> > could not load plugin 'ifupdown' from file
-> > >> > '/usr/lib/NetworkManager/libnm-settings-plugin-ifupdown.so': No
-> such
-> > >> file
-> > >> > or directory
-> > >>
-> > >> You should pass --enable-ifupdown to force NetworkManager to build
-> that
-> > >> plugin. Otherwise, NetworkManager enables ifupdown only when your
-> host is
-> > >> Debian/Ubuntu.
-> > >>
-> > >> You need to restart the build from scratch (make clean all) for your
-> > >> change to
-> > >> take effect. See http://nightly.buildroot.org/
-> manual.html#full-rebuild.
-> > >>
-> > >> baruch
-> > >>
-> > >> > On Sun, Nov 26, 2017 at 9:38 PM, Baruch Siach <baruch@tkos.co.il>
-> > >> wrote:
-> > >> > > Please keep the list on Cc so that everyone can benefit from your
-> > >> > > experience.
-> > >> > >
-> > >> > > On Sun, Nov 26, 2017 at 02:22:44PM +0200, Roy Arav wrote:
-> > >> > > > I enabled BR2_PACKAGE_IFUPDOWN_SCRIPTS as you suggested,
-> > >> > > > and now I get this warning: 34.193270] NetworkManager[272]:
-> <warn>
-> > >> > > > [1478193422.9602] settings: could not load plugin 'ifupdown'
-> from
-> > >> file
-> > >> > > > '/usr/lib/NetworkManager/libnm-settings-plugin-ifupdown.so': No
-> > >> such
-> > >> > > file
-> > >> > > > or directory
-> > >> > > >
-> > >> > > > Any ideas how to solve this thing? (sorry if I seem clue-less,
-> I am
-> > >> new
-> > >> > > to
-> > >> > > > buildroot...)
-> > >> > >
-> > >> > > This is most likely because we currently pass --disable-ifupdown
-> to
-> > >> the
-> > >> > > configure script unconditionally. This has been so since commit
-> > >> > > 52c7f43fdefbe7
-> > >> > > (network-manager: bump to 0.9.8.0). Maybe Thomas, the author of
-> said
-> > >> > > commit,
-> > >> > > can explain the reason for that.
-> > >> > >
-> > >> > > In case --enable-ifupdown does not increase the target size
-> > >> significantly
-> > >> > > (relatively speaking), then a patch enable ifupdown would
-> probably be
-> > >> > > accepted.
-> > >> > >
-> > >> > > > Please see the entire.config.
-> > >> > >
-> > >> > > [skipped config fragments containing potentially sensitive
-> > >> information]
-> > >> > >
-> > >> > > Do you use all these fragments to generate a unified .config?
-> > >> > >
-> > >> > > Please send the minimal .config that exhibits your issue.
-> Minimizing
-> > >> the
-> > >> > > .config further with 'make savedefconfig' would be nice as well.
-> > >> > >
-> > >> > > baruch
-> > >> > >
-> > >> > > > On Fri, Nov 24, 2017 at 8:38 AM, Baruch Siach <
-> baruch at tkos.co.il>
-> > >> wrote:
-> > >> > > > >
-> > >> > > > > On Fri, Nov 24, 2017 at 07:05:48AM +0200, Roy Arav wrote:
-> > >> > > > > > I am trying to set static IP on a raspberry pi3 device
-> running
-> > >> > > buildroot.
-> > >> > > > > >
-> > >> > > > > > I edited /etc/network/interfaces, using rootfs overlay.
-> > >> > > > > >
-> > >> > > > > > auto eth0
-> > >> > > > > > allow-hotplug eth0
-> > >> > > > > > iface eth0 inet static
-> > >> > > > > > address 192.168.0.1
-> > >> > > > > > netmask 255.255.255.0
-> > >> > > > > >
-> > >> > > > > > And still IP address is provided using DHCP/
-> > >> > > > > >
-> > >> > > > > > Is there anything else to so that I am missing?
-> > >> > > > > > Perhaps a BR2 flag or package that I need to enable?
-> > >> > > > >
-> > >> > > > > What is your .config?
-> > >> > > > > Do you have BR2_PACKAGE_IFUPDOWN_SCRIPTS enabled?
-> > >> > > > > What about BR2_PACKAGE_SYSTEMD_NETWORKD?
->
-> --
->      http://baruch.siach.name/blog/                  ~. .~   Tk Open
-> Systems
-> =}------------------------------------------------ooO--U--
-> Ooo------------{=
->    - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20171205/e9194db3/attachment.html>
+diff --git a/package/Config.in b/package/Config.in
+index 433224c3a4..b3c1471dc5 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1655,6 +1655,7 @@ menu "Networking applications"
+ 	source "package/gesftpserver/Config.in"
+ 	source "package/gupnp-tools/Config.in"
+ 	source "package/gutenprint/Config.in"
++	source "package/glorytun/Config.in"
+ 	source "package/hans/Config.in"
+ 	source "package/hiawatha/Config.in"
+ 	source "package/hostapd/Config.in"
+diff --git a/package/glorytun/Config.in b/package/glorytun/Config.in
+new file mode 100644
+index 0000000000..93c1afd8cd
+--- /dev/null
++++ b/package/glorytun/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_GLORYTUN
++	bool "glorytun"
++	select BR2_PACKAGE_LIBSODIUM
++	help
++	  A small, simple and secure VPN.
++	  https://github.com/angt/glorytun
+diff --git a/package/glorytun/glorytun.hash b/package/glorytun/glorytun.hash
+new file mode 100644
+index 0000000000..099dcef6d0
+--- /dev/null
++++ b/package/glorytun/glorytun.hash
+@@ -0,0 +1 @@
++sha256	76849b1568119cf0834749db56d4882966863d31351c21c1b22f373f0c97a498  glorytun-0.0.93-mud.tar.gz
+diff --git a/package/glorytun/glorytun.mk b/package/glorytun/glorytun.mk
+new file mode 100644
+index 0000000000..eadeda9540
+--- /dev/null
++++ b/package/glorytun/glorytun.mk
+@@ -0,0 +1,7 @@
++GLORYTUN_VERSION = 0.0.93-mud
++GLORYTUN_SITE = https://github.com/angt/glorytun/releases/download/v$(GLORYTUN_VERSION)
++GLORYTUN_DEPENDENCIES = libsodium
++GLORYTUN_LICENSE = BSD-2-clause
++GLORYTUN_LICENSE_FILES = LICENSE
++
++$(eval $(autotools-package))
+-- 
+2.15.1
