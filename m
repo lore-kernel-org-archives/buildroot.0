@@ -1,53 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue,  5 Dec 2017 08:00:32 +0100 (CET)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2017-12-04
-Message-ID: <20171205070032.3907420741@mail.free-electrons.com>
+From: Marcus Folkesson <marcus.folkesson@gmail.com>
+Date: Tue, 5 Dec 2017 10:41:43 +0100
+Subject: [Buildroot] [PATCH v3] tcfagent: new package
+In-Reply-To: <20171204120912.9850-1-nolange79@gmail.com>
+References: <20171204114306.28242-1-nolange79@gmail.com>
+ <20171204120912.9850-1-nolange79@gmail.com>
+Message-ID: <20171205094143.GA4275@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Norbert,
 
-Build statistics for 2017-12-04
-===============================
+On Mon, Dec 04, 2017 at 01:09:12PM +0100, Norbert Lange wrote:
+> From: Norbert Lange <norbert.lange@andritz.com>
+> 
+> Add tcfpackage which contains a service "tcf-agent"
+> 
+> Signed-off-by: Norbert Lange <nolange79@gmail.com>
+> ---
+> Changes v2 -> v3:
+>   - fix: init file still started the tool daemonized
+>   - use same email for all signatures
+> 
+> Changes v1 -> v2:
+>   - added myself to DEVELOPERS
+>   - fixes to the init service, now uses common sheme to
+>     generate PID files
+>   - fixed systemd unit
+>   - renamed target executable directly in CMakeList
+>   - allow cmake build without existing C++ compiler
+>   - add patches to make sources compile with musl
+>   - allow compilation with other architectures than x86_64
+>   - some more small details suggested by Thomas Petazzoni
+> 
 
-      branch |  OK | NOK | TIM | TOT |
-      master | 206 |   9 |   1 | 216 |
-   2017.08.x |  14 |   0 |   0 |  14 |
+It would be nice if you can create an account on
+patchwork and mark the former version as Superseded when submitting a
+new version.
 
-Results for branch 'master'
-===========================
+Thanks,
 
-Classification of failures by reason
-------------------------------------
-
-              host-erlang-20.0 | 2 
-                     avahi-0.7 | 1 
-                     axel-2.16 | 1 
-        host-xlib_libX11-1.6.5 | 1 
-                 mesa3d-17.2.6 | 1 
-                    mpv-0.27.0 | 1 
- netcat-openbsd-debian_1.178-3 | 1 
-                      qt-4.8.7 | 1 
-             qt5location-5.9.3 | 1 
-
-
-Detail of failures
-------------------
-
-     powerpc |                      avahi-0.7 | NOK | http://autobuild.buildroot.net/results/15909e1f7b5b6d68e8478dde1e4e11c4c146c3c4 | ORPH
-         arm |                      axel-2.16 | NOK | http://autobuild.buildroot.net/results/7edb3756a07bbac27f852332b81677feb6156a48 | ORPH
-         arm |               host-erlang-20.0 | NOK | http://autobuild.buildroot.net/results/9a0ee2382c243527a0be914ebfa206973f2bea3b |     
-      mipsel |               host-erlang-20.0 | NOK | http://autobuild.buildroot.net/results/94d297c45d211c20302757be1ee3d182c10f73dc |     
-        mips |         host-xlib_libX11-1.6.5 | TIM | http://autobuild.buildroot.net/results/1f89e3b822d4e8c563a637fa72a490bf4f40e5e3 |     
-     powerpc |                  mesa3d-17.2.6 | NOK | http://autobuild.buildroot.net/results/173107075a3a8a67d5b4c422fdeb910f5da5f324 |     
-         arm |                     mpv-0.27.0 | NOK | http://autobuild.buildroot.net/results/ce7035757ca934e687aca9b2f040369c9372fbd2 | ORPH
-        i686 |  netcat-openbsd-debian_1.178-3 | NOK | http://autobuild.buildroot.net/results/598782dc78c770961f1fea185e089fcc4c7cf0e9 |     
-     powerpc |                       qt-4.8.7 | NOK | http://autobuild.buildroot.net/results/171c5421e7ee0edc977ae5a3c69c1741b1c975cc | ORPH
-         arm |              qt5location-5.9.3 | NOK | http://autobuild.buildroot.net/results/bd42c543b1e60ff62089291dc3558c912b69a753 |     
-
-
--- 
-http://autobuild.buildroot.net
+Best regards
+Marcus Folkesson
