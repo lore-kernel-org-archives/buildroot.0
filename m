@@ -1,56 +1,39 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 05 Dec 2017 18:20:12 +0000
-Subject: [Buildroot] [Bug 10551] New: PowerPC SPE and Musl
-Message-ID: <bug-10551-163@https.bugs.busybox.net/>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue,  5 Dec 2017 20:36:52 +0200
+Subject: [Buildroot] [PATCH] usbutils: bump to version 009
+Message-ID: <18a8b28aa2354258b8330aaa7541f0f5a8e60e0e.1512499012.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=10551
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/usbutils/usbutils.hash | 2 +-
+ package/usbutils/usbutils.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-            Bug ID: 10551
-           Summary: PowerPC SPE and Musl
-           Product: buildroot
-           Version: 2017.08
-          Hardware: PC
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: sigurd.segtnan at kongsberg.com
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
-
-Created attachment 7411
-  --> https://bugs.busybox.net/attachment.cgi?id=7411&action=edit
-diff for package/gcc/gcc.mk (and Config.in in toolchain)
-
-Musl is not supported for PowerPC SPE according to
-toolchain/toolchain-buildroot/Config.in line 74: "depens on !BR2_powerpc_SPE #
-not supported, build breaks". This breakage may be due the
-"--with-long-double-128" in package/gcc/gcc.mk, since we have not experienced
-any build breakage when we changed lines 241-245 to
-
-ifeq ($(BR2_powerpc_SPE),y)
-ifeq ($(BR2_TOOLCHAIN_USES_MUSL),n)
-HOST_GCC_COMMON_CONF_OPTS += \
-        --enable-e500_double \
-        --with-long-double-128
-endif
-else
-HOST_GCC_COMMON_CONF_OPTS += \
-        --enable-e500_double \
-        --with-long-double-64 \
-        --enable-secureplt
-endif
-
-We have used this without problems since buildroot 2016.05 (tested with gcc 6.x
-and gcc 7.x).
-
+diff --git a/package/usbutils/usbutils.hash b/package/usbutils/usbutils.hash
+index 37c829a1ae41..4e55c9b10144 100644
+--- a/package/usbutils/usbutils.hash
++++ b/package/usbutils/usbutils.hash
+@@ -1,2 +1,2 @@
+ # From https://www.kernel.org/pub/linux/utils/usb/usbutils/sha256sums.asc
+-sha256	44741af0bae9d402a0ef160a29b2fa700bb656ab5e0a4b3343d51249c2a44c8c	usbutils-008.tar.xz
++sha256	8bbff0e54cb5f65a52be4feb9162fc0b022a97eb841b44784f7a89a9ea567160	usbutils-009.tar.xz
+diff --git a/package/usbutils/usbutils.mk b/package/usbutils/usbutils.mk
+index c397d0adc73b..84702ebc1f91 100644
+--- a/package/usbutils/usbutils.mk
++++ b/package/usbutils/usbutils.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-USBUTILS_VERSION = 008
++USBUTILS_VERSION = 009
+ USBUTILS_SOURCE = usbutils-$(USBUTILS_VERSION).tar.xz
+ USBUTILS_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/usb/usbutils
+ USBUTILS_DEPENDENCIES = host-pkgconf libusb udev
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.15.0
