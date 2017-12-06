@@ -1,31 +1,24 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Wed, 6 Dec 2017 19:20:00 +0100
-Subject: [Buildroot] or1k system calls appear broken
-In-Reply-To: <20171206125530.GB2890@lianli.shorne-pla.net>
-References: <CACPK8Xfjvb565q5xtsN+i3VmAqnx0EH6mxBcg5CRXpsC1_urRw@mail.gmail.com>
- <20171128064921.GA27558@waldemar-brodkorb.de>
- <20171206004159.GA2890@lianli.shorne-pla.net>
- <CACPK8XcCua5m5HgaTP97=ccg8RTgFuRcwGAepRx6+_ocWc5mRw@mail.gmail.com>
- <20171206125530.GB2890@lianli.shorne-pla.net>
-Message-ID: <20171206182000.GE27558@waldemar-brodkorb.de>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Wed, 06 Dec 2017 19:50:00 +0100
+Subject: [Buildroot] [PATCH 1/1] erlang: Add a patch for hosts without
+ libz
+References: <20171206144006.3282-1-johan.oudinet@gmail.com>
+Message-ID: <onqlfext4h.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Stafford,
-Stafford Horne wrote,
+Am Wed, 06 Dec 2017 15:40:06 +0100 schrieb Johan Oudinet:
 
-> I was thinking we can just update : libc/sysdeps/linux/common/syscall.c
+> Since commit 640c988fd4, erts/configure adds -lz to LIBS but this
+> variable is also used in some Dynamic Erlang drivers. Fix Makefiles in
+> such drivers to use the LDLIBS variable instead.
 > 
-> There is not much openrisc specific about this.  But it's up to Waldemar.
+> This patch has been reported upstream (see ERL-529) and should fix
+> http://autobuild.buildroot.net/
+results/3a3/3a3b9a4568c706bd6caad3c63d356680c8405ac5/
 
-What are the advantages or disadvantages using it in
-common/syscall.c?
-
-Does it might break support for existing architectures using no
-special syscall.c/syscall.S?
-
-best regards
- Waldemar
+Tested-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+(tested building erlang on minimal Debian stretch system)
