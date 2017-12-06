@@ -1,10 +1,10 @@
 From: Angelo Compagnucci <angelo@amarulasolutions.com>
-Date: Wed,  6 Dec 2017 11:56:56 +0100
-Subject: [Buildroot] [PATCH 4/5] package/runc: converting to golang
- infrastructure
+Date: Wed,  6 Dec 2017 11:56:57 +0100
+Subject: [Buildroot] [PATCH 5/5] package/docker-containerd: converting to
+ golang infrastructure
 In-Reply-To: <1512557817-431-1-git-send-email-angelo@amarulasolutions.com>
 References: <1512557817-431-1-git-send-email-angelo@amarulasolutions.com>
-Message-ID: <1512557817-431-5-git-send-email-angelo@amarulasolutions.com>
+Message-ID: <1512557817-431-6-git-send-email-angelo@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,64 +13,71 @@ To: buildroot@busybox.net
 
 From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 
-This patch converts the runc package to the new golang
+This patch converts the docker-containerd package to the new golang
 infrastructure.
 
 Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 ---
- package/runc/runc.mk | 37 +++++--------------------------------
- 1 file changed, 5 insertions(+), 32 deletions(-)
+ package/docker-containerd/docker-containerd.mk | 37 +++++++++++---------------
+ 1 file changed, 15 insertions(+), 22 deletions(-)
 
-diff --git a/package/runc/runc.mk b/package/runc/runc.mk
-index fb3fec2..f497b6d 100644
---- a/package/runc/runc.mk
-+++ b/package/runc/runc.mk
-@@ -9,42 +9,15 @@ RUNC_SITE = $(call github,opencontainers,runc,$(RUNC_VERSION))
- RUNC_LICENSE = Apache-2.0
- RUNC_LICENSE_FILES = LICENSE
+diff --git a/package/docker-containerd/docker-containerd.mk b/package/docker-containerd/docker-containerd.mk
+index ffbadb0..34e7674 100644
+--- a/package/docker-containerd/docker-containerd.mk
++++ b/package/docker-containerd/docker-containerd.mk
+@@ -9,39 +9,32 @@ DOCKER_CONTAINERD_SITE = $(call github,docker,containerd,$(DOCKER_CONTAINERD_VER
+ DOCKER_CONTAINERD_LICENSE = Apache-2.0
+ DOCKER_CONTAINERD_LICENSE_FILES = LICENSE.code
  
--RUNC_DEPENDENCIES = host-go
-+RUNC_GOPATH = Godeps/_workspace
+-DOCKER_CONTAINERD_DEPENDENCIES = host-go
++DOCKER_CONTAINERD_GOPATH = vendor
  
--RUNC_GOPATH = "$(@D)/Godeps/_workspace"
--RUNC_MAKE_ENV = $(HOST_GO_TARGET_ENV) \
+-DOCKER_CONTAINERD_GOPATH = "$(@D)/vendor"
+-DOCKER_CONTAINERD_MAKE_ENV = $(HOST_GO_TARGET_ENV) \
 -	CGO_ENABLED=1 \
 -	GOBIN="$(@D)/bin" \
--	GOPATH="$(RUNC_GOPATH)" \
--	PATH=$(BR_PATH)
-+RUNC_GO_LDFLAGS = -X main.gitCommit=$(RUNC_VERSION)
- 
--RUNC_GLDFLAGS = \
--	-X main.gitCommit=$(RUNC_VERSION)
+-	GOPATH="$(DOCKER_CONTAINERD_GOPATH)"
 -
+-DOCKER_CONTAINERD_GLDFLAGS = \
++DOCKER_CONTAINERD_GO_LDFLAGS = \
+ 	-X github.com/docker/containerd.GitCommit=$(DOCKER_CONTAINERD_VERSION)
+ 
 -ifeq ($(BR2_STATIC_LIBS),y)
--RUNC_GLDFLAGS += -extldflags '-static'
+-DOCKER_CONTAINERD_GLDFLAGS += -extldflags '-static'
 -endif
 -
--RUNC_GOTAGS = cgo static_build
-+RUNC_GO_TAGS = cgo static_build
+-define DOCKER_CONTAINERD_CONFIGURE_CMDS
+-	mkdir -p $(DOCKER_CONTAINERD_GOPATH)/src/github.com/docker
+-	ln -s $(@D) $(DOCKER_CONTAINERD_GOPATH)/src/github.com/docker/containerd
+-	mkdir -p $(DOCKER_CONTAINERD_GOPATH)/src/github.com/opencontainers
+-	ln -s $(RUNC_SRCDIR) $(DOCKER_CONTAINERD_GOPATH)/src/github.com/opencontainers/runc
++define DOCKER_CONTAINERD_LINK_DIR
++	ln -sf $(@D) $(@D)/$(DOCKER_CONTAINERD_GOPATH)/src/github.com/docker/containerd
++	mkdir -p $(@D)/$(DOCKER_CONTAINERD_GOPATH)/src/github.com/opencontainers
++	ln -s $(RUNC_SRCDIR) $(@D)/$(DOCKER_CONTAINERD_GOPATH)/src/github.com/opencontainers/runc
+ endef
  
- ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
--RUNC_GOTAGS += seccomp
-+RUNC_GO_TAGS += seccomp
- RUNC_DEPENDENCIES += libseccomp host-pkgconf
- endif
++DOCKER_CONTAINERD_POST_CONFIGURE_HOOKS += DOCKER_CONTAINERD_LINK_DIR
++
+ define DOCKER_CONTAINERD_BUILD_CMDS
+ 	$(foreach d,ctr containerd containerd-shim,\
+-		cd $(@D); $(DOCKER_CONTAINERD_MAKE_ENV) $(HOST_DIR)/bin/go build \
+-			-v -o $(@D)/bin/$(d) -ldflags "$(DOCKER_CONTAINERD_GLDFLAGS)" ./$(d)$(sep))
++		cd $(@D)/$(DOCKER_CONTAINERD_GOPATH)/src/github.com/docker/containerd; \
++		$(DOCKER_CONTAINERD_GO_ENV) \
++		$(DOCKER_CONTAINERD_GO) \
++		$(DOCKER_CONTAINERD_BUILD_OPTS) ./$(d)$(sep))
+ endef
  
--define RUNC_CONFIGURE_CMDS
--	mkdir -p $(RUNC_GOPATH)/src/github.com/opencontainers
--	ln -s $(@D) $(RUNC_GOPATH)/src/github.com/opencontainers/runc
--endef
--
--define RUNC_BUILD_CMDS
--	cd $(@D) && $(RUNC_MAKE_ENV) $(HOST_DIR)/bin/go \
--		build -v -o $(@D)/bin/runc \
--		-tags "$(RUNC_GOTAGS)" -ldflags "$(RUNC_GLDFLAGS)" .
--endef
--
--define RUNC_INSTALL_TARGET_CMDS
--	$(INSTALL) -D -m 0755 $(@D)/bin/runc $(TARGET_DIR)/usr/bin/runc
--endef
--
+ define DOCKER_CONTAINERD_INSTALL_TARGET_CMDS
+ 	ln -fs runc $(TARGET_DIR)/usr/bin/docker-runc
+-	$(INSTALL) -D -m 0755 $(@D)/bin/containerd $(TARGET_DIR)/usr/bin/docker-containerd
+-	$(INSTALL) -D -m 0755 $(@D)/bin/containerd-shim $(TARGET_DIR)/usr/bin/containerd-shim
++	$(INSTALL) -D -m 0755 $(@D)/$(DOCKER_CONTAINERD_BINDIR)/containerd $(TARGET_DIR)/usr/bin/docker-containerd
++	$(INSTALL) -D -m 0755 $(@D)/$(DOCKER_CONTAINERD_BINDIR)/containerd-shim $(TARGET_DIR)/usr/bin/containerd-shim
+ 	ln -fs containerd-shim $(TARGET_DIR)/usr/bin/docker-containerd-shim
+ endef
+ 
 -$(eval $(generic-package))
 +$(eval $(golang-package))
 -- 
