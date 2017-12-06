@@ -1,73 +1,37 @@
-From: Stafford Horne <shorne@gmail.com>
-Date: Thu, 7 Dec 2017 07:44:19 +0900
-Subject: [Buildroot] or1k system calls appear broken
-In-Reply-To: <20171206182000.GE27558@waldemar-brodkorb.de>
-References: <CACPK8Xfjvb565q5xtsN+i3VmAqnx0EH6mxBcg5CRXpsC1_urRw@mail.gmail.com>
- <20171128064921.GA27558@waldemar-brodkorb.de>
- <20171206004159.GA2890@lianli.shorne-pla.net>
- <CACPK8XcCua5m5HgaTP97=ccg8RTgFuRcwGAepRx6+_ocWc5mRw@mail.gmail.com>
- <20171206125530.GB2890@lianli.shorne-pla.net>
- <20171206182000.GE27558@waldemar-brodkorb.de>
-Message-ID: <20171206224419.GC2890@lianli.shorne-pla.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 6 Dec 2017 23:46:44 +0100
+Subject: [Buildroot] [git commit] flann: Disable find package for HDF5
+Message-ID: <20171206224054.85C6481EC3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Dec 06, 2017 at 07:20:00PM +0100, Waldemar Brodkorb wrote:
-> Hi Stafford,
-> Stafford Horne wrote,
-> 
-> > I was thinking we can just update : libc/sysdeps/linux/common/syscall.c
-> > 
-> > There is not much openrisc specific about this.  But it's up to Waldemar.
-> 
-> What are the advantages or disadvantages using it in
-> common/syscall.c?
+commit: https://git.buildroot.net/buildroot/commit/?id=f6ee339e92360fc43ebe17928656c06634b09c97
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The advantages would be that the code is generic enough to work for any
-architecture, reducing code needed for porting.  Also the implementation
-arguments will match the header delared arguments.
+The HDF5 package is used by flann for testing purpose only and is
+not part of buildroot packages. However, if present in the host, it will
+be used and trigger the unsafe header/library path used in
+cross-compilation error.
 
-> Does it might break support for existing architectures using no
-> special syscall.c/syscall.S?
+Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/flann/flann.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-I dont think so, but some possible downsides:
-  - if those architectures have buggy handling of vargs it will have issues
-  - the varargs code might be sub optimal compared to the regular args code
-
-I did a quick audit of some of the other syscall.c implementation so see if any
-other architectures use generic c code.
-
-    ./libc/sysdeps/linux/common/syscall.c   COMMON generic implementation
-    ./libc/sysdeps/linux/arc/syscall.c      Same as COMMON
-    ./libc/sysdeps/linux/hppa/syscall.c     varargs + asm
-    ./libc/sysdeps/linux/frv/syscall.c      asm
-    ./libc/sysdeps/linux/c6x/syscall.c      varargs + asm
-    ./libc/sysdeps/linux/nds32/syscall.c    GENERIC varargs (7 args?)
-    ./libc/sysdeps/linux/arm/syscall.c      asm
-    ./libc/sysdeps/linux/metag/syscall.c    asm
-
-So it looks like we could remove the arc and nds32 syscall.c files as they are
-generic.
-
-The architectures using the common syscall.c are:
-
-  bfin
-  h8300
-  lm32
-  m68k
-  microblaze
-  nios2
-  or1k
-  sh
-
-If we feel we dont have good test coverage for these then maybe its best we just
-add this as a OR1K only file as per Joel's patch.
-
-To reiterate my thoughts for doing this are:
- - Reduce code needed for porting
- - Have a implementation which matches the unistd.h definition
-
--Stafford
+diff --git a/package/flann/flann.mk b/package/flann/flann.mk
+index e777fd8..ef61815 100644
+--- a/package/flann/flann.mk
++++ b/package/flann/flann.mk
+@@ -15,6 +15,7 @@ FLANN_CONF_OPTS = \
+ 	-DBUILD_MATLAB_BINDINGS=OFF \
+ 	-DBUILD_EXAMPLES=$(if $(BR2_PACKAGE_FLANN_EXAMPLES),ON,OFF) \
+ 	-DUSE_OPENMP=$(if $(BR2_GCC_ENABLE_OPENMP),ON,OFF) \
+-	-DPYTHON_EXECUTABLE=OFF
++	-DPYTHON_EXECUTABLE=OFF \
++	-DCMAKE_DISABLE_FIND_PACKAGE_HDF5=TRUE
+ 
+ $(eval $(cmake-package))
