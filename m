@@ -1,78 +1,48 @@
-From: Angelo Compagnucci <angelo@amarulasolutions.com>
-Date: Wed, 6 Dec 2017 22:59:02 +0100
-Subject: [Buildroot] [PATCH 0/5] New infrastructure for golang packages
-In-Reply-To: <c95b3881-69a4-6cef-0bad-bb0a2c94fa69@mind.be>
-References: <1512557817-431-1-git-send-email-angelo@amarulasolutions.com>
- <c95b3881-69a4-6cef-0bad-bb0a2c94fa69@mind.be>
-Message-ID: <CA+_SqVappjdtOmpAWoLUquGJ-fVbUaz0LN-uiPLSJGqGu5vHLQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 6 Dec 2017 22:57:55 +0100
+Subject: [Buildroot] [git commit] nginx-dav-ext: bump to v0.1.0
+Message-ID: <20171206215458.86B6C82876@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout,
+commit: https://git.buildroot.net/buildroot/commit/?id=3c9e70bbe9cae56e5ee0bb969f65e4c96885238d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Il 06 dic 2017 10:39 PM, "Arnout Vandecappelle" <arnout@mind.be> ha scritto:
+Also update the license file location and add a hash for the license file.
 
- Hi Angelo,
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/nginx-dav-ext/nginx-dav-ext.hash | 3 ++-
+ package/nginx-dav-ext/nginx-dav-ext.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
- I unfortunately probably won't have time to look at your patches tonight,
-however:
-
-On 06-12-17 11:56, Angelo Compagnucci wrote:
-> This series add a new pkg-golang infrastructure and converts some of the
-> packages based on go.
-> I'll resend as an official patch series after receiving some comments in
-> RFC trying to reignite the discussion.
-
- Is there any difference with v5?
-
-
-No differences, I just sent this patch series as anon RFC cause I think
-it's in shape to be accepted.
-
-There doesn't seem to be a patch revision log
-in any of the patches...
-
-
-Right, not good. I'll do in this series if needed.
-
-Thanks!
-
-
- Regards,
- Arnout
-
->
-> Angelo Compagnucci (5):
->   package/pkg-golang: new package infrastructure
->   docs/manual: adding documentation for the golang infrastructure
->   package/flannel: converting to golang infrastructure
->   package/runc: converting to golang infrastructure
->   package/docker-containerd: converting to golang infrastructure
->
->  docs/manual/adding-packages-golang.txt         | 114
-+++++++++++++++++++++++
->  docs/manual/adding-packages.txt                |   2 +
->  package/Makefile.in                            |   1 +
->  package/docker-containerd/docker-containerd.mk |  37 +++-----
->  package/flannel/flannel.mk                     |  32 +------
->  package/pkg-golang.mk                          | 121
-+++++++++++++++++++++++++
->  package/runc/runc.mk                           |  37 +-------
->  7 files changed, 262 insertions(+), 82 deletions(-)
->  create mode 100644 docs/manual/adding-packages-golang.txt
->  create mode 100644 package/pkg-golang.mk
->
-
---
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20171206/8ff0f6f2/attachment.html>
+diff --git a/package/nginx-dav-ext/nginx-dav-ext.hash b/package/nginx-dav-ext/nginx-dav-ext.hash
+index ea7eb86..a711f8c 100644
+--- a/package/nginx-dav-ext/nginx-dav-ext.hash
++++ b/package/nginx-dav-ext/nginx-dav-ext.hash
+@@ -1,2 +1,3 @@
+ # Locally computed
+-sha256 d428a0236c933779cb40ac8c91afb19d5c25a376dc3caab825bfd543e1ee530d  nginx-dav-ext-v0.0.3.tar.gz
++sha256 6b004eed8ea16ad8de4d304027bf0413cc323a95914e58625a7dc066481aae3a  nginx-dav-ext-v0.1.0.tar.gz
++sha256 40581cf424621965adaf1461e97129520ff4fcfb62ed9965ec6fd50b7f4ddfca  LICENSE
+diff --git a/package/nginx-dav-ext/nginx-dav-ext.mk b/package/nginx-dav-ext/nginx-dav-ext.mk
+index 1ba6e10..436bc29 100644
+--- a/package/nginx-dav-ext/nginx-dav-ext.mk
++++ b/package/nginx-dav-ext/nginx-dav-ext.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
+ 
+-NGINX_DAV_EXT_VERSION = v0.0.3
++NGINX_DAV_EXT_VERSION = v0.1.0
+ NGINX_DAV_EXT_SITE = $(call github,arut,nginx-dav-ext-module,$(NGINX_DAV_EXT_VERSION))
+ NGINX_DAV_EXT_LICENSE = BSD-2-Clause
+-NGINX_DAV_EXT_LICENSE_FILES = ngx_http_dav_ext_module.c
++NGINX_DAV_EXT_LICENSE_FILES = LICENSE
+ NGINX_DAV_EXT_DEPENDENCIES = expat
+ 
+ $(eval $(generic-package))
