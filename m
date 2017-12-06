@@ -1,54 +1,73 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Wed, 6 Dec 2017 08:29:32 -0600
-Subject: [Buildroot] [PATCH 2/2] kvmtool: bump to f77d646ba0
-In-Reply-To: <CANQCQpZZCcsSgn-Gz2ErsM9jcu--wJTb9QeK_KveGSV9kx8s1w@mail.gmail.com>
-References: <20171203033321.13460-1-matthew.weber@rockwellcollins.com>
- <20171203033321.13460-2-matthew.weber@rockwellcollins.com>
- <20171203145407.78bab7c2@windsurf.home>
- <CANQCQpaQzSj_4cKDAnGViSySBFgWmywc2mjdWgEiG2WfW7eLXg@mail.gmail.com>
- <CANQCQpZF8+b7PyYLmw6ZZCX=CTv=rQQmtkJj0ogF3wdPF+unTw@mail.gmail.com>
- <20171206085958.3671c8a1@windsurf.lan>
- <CANQCQpZZCcsSgn-Gz2ErsM9jcu--wJTb9QeK_KveGSV9kx8s1w@mail.gmail.com>
-Message-ID: <CANQCQpbvA=w0Wc2nWna9M+HNM5hJpC6ZLBAnzV18zzQejUaP2w@mail.gmail.com>
+From: Johan Oudinet <johan.oudinet@gmail.com>
+Date: Wed,  6 Dec 2017 15:40:06 +0100
+Subject: [Buildroot] [PATCH 1/1] erlang: Add a patch for hosts without libz
+Message-ID: <20171206144006.3282-1-johan.oudinet@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+Since commit 640c988fd4, erts/configure adds -lz to LIBS but
+this variable is also used in some Dynamic Erlang drivers. Fix
+Makefiles in such drivers to use the LDLIBS variable instead.
 
-On Wed, Dec 6, 2017 at 7:46 AM, Matthew Weber
-<matthew.weber@rockwellcollins.com> wrote:
-> Thomas,
->
-> On Wed, Dec 6, 2017 at 1:59 AM, Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com> wrote:
->>
->> Hello,
->>
->> On Tue, 5 Dec 2017 20:05:42 -0600, Matthew Weber wrote:
->>
->> > Gustavo, the latest kvmtool switched to doing the final link with gcc
->> > vs originally ld.  I believe this is the right fix.
->> >
->> >       3 --- a/package/kvmtool/kvmtool.mk
->> >       4 +++ b/package/kvmtool/kvmtool.mk
->> >       5 @@ -33,7 +33,7 @@ KVMTOOL_LICENSE_FILES = COPYING
->> >       6  # If more packages need this (unlikely) an ld wrapper might be a better
->> >       7  # solution, using gcc -dumpspecs information.
->> >       8  KVMTOOL_EXTRA_LDFLAGS = \
->> >       9 -       $(if $(BR2_x86_64),-m elf_x86_64)
->> >      10 +       $(if $(BR2_x86_64),-m64)
->>
->> If kvmtool is now building with gcc, do we need -m64 at all ?
->>
->
-> That's true, gcc would already be assuming m64 based on the target's
-> arch vs the linker wouldn't have been able to infer that.  I'll remove
-> and kickoff a test.
->
+This patch has been reported upstream (see ERL-529) and should fix
+http://autobuild.buildroot.net/results/3a3/3a3b9a4568c706bd6caad3c63d356680c8405ac5/
 
-Verified, test-pkg now passes and so does your test config.  Will send a v2.
+Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
+---
+ ...-Link-with-LDLIBS-instead-of-LIBS-for-DED.patch | 42 ++++++++++++++++++++++
+ 1 file changed, 42 insertions(+)
+ create mode 100644 package/erlang/0004-Link-with-LDLIBS-instead-of-LIBS-for-DED.patch
 
-Matt
+diff --git a/package/erlang/0004-Link-with-LDLIBS-instead-of-LIBS-for-DED.patch b/package/erlang/0004-Link-with-LDLIBS-instead-of-LIBS-for-DED.patch
+new file mode 100644
+index 0000000000..ad0bb6b453
+--- /dev/null
++++ b/package/erlang/0004-Link-with-LDLIBS-instead-of-LIBS-for-DED.patch
+@@ -0,0 +1,42 @@
++From 011752ec7b31e3dde376270fc65c7ee70644f6e7 Mon Sep 17 00:00:00 2001
++From: Johan Oudinet <johan.oudinet@gmail.com>
++Date: Wed, 6 Dec 2017 15:01:17 +0100
++Subject: [PATCH] Link with LDLIBS instead of LIBS for DED
++
++Fix ERL-529 by avoiding to link with libz for no reason.
++
++Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
++---
++ lib/asn1/c_src/Makefile             | 2 +-
++ lib/runtime_tools/c_src/Makefile.in | 2 +-
++ 2 files changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/lib/asn1/c_src/Makefile b/lib/asn1/c_src/Makefile
++index 1f714df357..f7c6b8b9bc 100644
++--- a/lib/asn1/c_src/Makefile
+++++ b/lib/asn1/c_src/Makefile
++@@ -126,7 +126,7 @@ $(NIF_LIB_FILE): $(NIF_STATIC_OBJ_FILES)
++ 	$(V_RANLIB) $@
++ 
++ $(NIF_SHARED_OBJ_FILE): $(NIF_OBJ_FILES)
++-	$(V_LD) $(LDFLAGS) -o $(NIF_SHARED_OBJ_FILE) $(NIF_OBJ_FILES) $(CLIB_FLAGS) $(LIBS)
+++	$(V_LD) $(LDFLAGS) -o $(NIF_SHARED_OBJ_FILE) $(NIF_OBJ_FILES) $(CLIB_FLAGS) $(LDLIBS)
++ 
++ # ----------------------------------------------------
++ # Release Target
++diff --git a/lib/runtime_tools/c_src/Makefile.in b/lib/runtime_tools/c_src/Makefile.in
++index 4530a83aee..4e13e0d789 100644
++--- a/lib/runtime_tools/c_src/Makefile.in
+++++ b/lib/runtime_tools/c_src/Makefile.in
++@@ -95,7 +95,7 @@ $(OBJDIR)/%$(TYPEMARKER).o: %.c dyntrace_lttng.h
++ 	$(V_CC) -c -o $@ $(ALL_CFLAGS) $<
++ 
++ $(LIBDIR)/%$(TYPEMARKER).@DED_EXT@: $(OBJDIR)/%$(TYPEMARKER).o
++-	$(V_LD) $(LDFLAGS) -o $@ $^ $(LIBS)
+++	$(V_LD) $(LDFLAGS) -o $@ $^ $(LDLIBS)
++ 
++ clean:
++ 	rm -f $(TRACE_LIBS)
++-- 
++2.14.1
++
+-- 
+2.14.1
