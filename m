@@ -1,32 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 6 Dec 2017 23:02:54 +0100
-Subject: [Buildroot] [PATCH 1/2] poco: bump to version 1.8.0.1
-In-Reply-To: <1512386168-16704-1-git-send-email-yegorslists@googlemail.com>
-References: <1512386168-16704-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <20171206230254.2baec187@windsurf.lan>
+Date: Wed, 6 Dec 2017 23:05:18 +0100
+Subject: [Buildroot] [git commit] package/tor: Install default config and
+ systemd .service file
+Message-ID: <20171206215804.03E6E8286B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=398859e815eae1a90fcc3f35599ad452495d985f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon,  4 Dec 2017 12:16:07 +0100, yegorslists at googlemail.com wrote:
-> From: Yegor Yefremov <yegorslists@googlemail.com>
-> 
-> Add licence checksum.
-> 
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> ---
->  package/poco/poco.hash | 3 ++-
->  package/poco/poco.mk   | 2 +-
->  2 files changed, 3 insertions(+), 2 deletions(-)
+Signed-off-by: Mario Lang <mlang@blind.guru>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/tor/tor.mk | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-Both applied. Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/tor/tor.mk b/package/tor/tor.mk
+index 6a42dbc..925e4d8 100644
+--- a/package/tor/tor.mk
++++ b/package/tor/tor.mk
+@@ -47,4 +47,16 @@ endif
+ # uses gnu extensions
+ TOR_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
+ 
++define TOR_INSTALL_CONF
++	$(INSTALL) -D -m 644 $(@D)/src/config/torrc.minimal \
++		$(TARGET_DIR)/etc/tor/torrc
++endef
++
++TOR_POST_INSTALL_TARGET_HOOKS += TOR_INSTALL_CONF
++
++define TOR_INSTALL_INIT_SYSTEMD
++	$(INSTALL) -D -m 644 $(@D)/contrib/dist/tor.service \
++		$(TARGET_DIR)/usr/lib/systemd/system/tor.service
++endef
++
+ $(eval $(autotools-package))
