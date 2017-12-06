@@ -1,33 +1,49 @@
-From: Angelo Compagnucci <angelo@amarulasolutions.com>
-Date: Wed, 6 Dec 2017 12:34:27 +0100
-Subject: [Buildroot] [PATCH v2] package/i2c-tools: bump to version 4.0
-In-Reply-To: <20171206112903.injmxvpsq4nsfiox@sapphire.tkos.co.il>
-References: <1512559166-5399-1-git-send-email-angelo@amarulasolutions.com>
- <20171206112903.injmxvpsq4nsfiox@sapphire.tkos.co.il>
-Message-ID: <CA+_SqVZRu6ksDUD6+FbM_WD8v8V7UDDpe9cNs9e6extvM6r6rg@mail.gmail.com>
+From: Joel Stanley <joel@jms.id.au>
+Date: Wed, 6 Dec 2017 23:08:41 +1030
+Subject: [Buildroot] or1k system calls appear broken
+In-Reply-To: <20171206004159.GA2890@lianli.shorne-pla.net>
+References: <CACPK8Xfjvb565q5xtsN+i3VmAqnx0EH6mxBcg5CRXpsC1_urRw@mail.gmail.com>
+ <20171128064921.GA27558@waldemar-brodkorb.de>
+ <20171206004159.GA2890@lianli.shorne-pla.net>
+Message-ID: <CACPK8XcCua5m5HgaTP97=ccg8RTgFuRcwGAepRx6+_ocWc5mRw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Wed, Dec 6, 2017 at 11:11 AM, Stafford Horne <shorne@gmail.com> wrote:
+> I tested with this I am still getting the same error.  I think I figured
+> out the issue though.  The issue is busybox internally calls syscall(2).
 >
->> +ifeq ($(BR2_STATIC_LIBS),y)
->> +ifeq ($(BR2_SHARED_STATIC_LIBS),)
+>  - in unistd.h defined something like
+>    int syscall(nr, ....)
 >
-> BR2_STATIC_LIBS and BR2_SHARED_STATIC_LIBS are mutually exclusive choice
-> options. You only need to test for BR2_STATIC_LIBS.
+>  - in syscall.c (common) implemented as
+>    int syscall(nr, arg1, arg3, arg3, arg4, arg5, arg6)
+>
+> This will not work, busybox thinks syscall should have varargs calling
+> conventions.  But it doesnt in the uclibc implementation so no args go through.
+>
+> Most architectures this will work.  But on openrisc varargs are all sent on the
+> stack.  Regular args are passed in registers.
+>
+> For openrisc I think we need a custom implementation of syscall(2).
 
-Doh, right! Will resend!
+Great find! I hacked up an implementation up and did a buildroot
+build, and it passed my testcase (`strace ping 127.0.0.1`).
 
->
->> +I2C_TOOLS_MAKE_OPTS += BUILD_DYNAMIC_LIB=0 USE_STATIC_LIB=1
->> +endif
->> +endif
->
-> baruch
->
-> --
->      http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-> =}------------------------------------------------ooO--U--Ooo------------{=
->    - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+The patch is attached. It might be a better idea to load the varargs
+directly into registers like the cx6 port does. Let me know what you
+think, and I can post it to the uclibc-ng list.
+
+Cheers,
+
+Joel
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: 0001-or1k-syscall-Pass-arguments-on-the-stack.patch
+Type: text/x-patch
+Size: 2557 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20171206/0e6b6207/attachment.bin>
