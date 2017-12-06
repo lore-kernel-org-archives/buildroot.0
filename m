@@ -1,30 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 6 Dec 2017 23:02:28 +0100
-Subject: [Buildroot] [PATCH 1/1] nginx-dav-ext: bump to v0.1.0
-In-Reply-To: <20171204152250.24787-1-aduskett@gmail.com>
-References: <20171204152250.24787-1-aduskett@gmail.com>
-Message-ID: <20171206230228.577bcec0@windsurf.lan>
+Date: Wed, 6 Dec 2017 23:02:43 +0100
+Subject: [Buildroot] [git commit] DEVELOPERS: Add myself to packages/poco/
+Message-ID: <20171206215524.5C79180FD6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=0284c82eb589d86decd5e0bdd15e04ccd4e4426f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon,  4 Dec 2017 10:22:50 -0500, Adam Duskett wrote:
-> Also update the license file location and add a hash for the license file.
-> 
-> Signed-off-by: Adam Duskett <aduskett@gmail.com>
-> ---
->  package/nginx-dav-ext/nginx-dav-ext.hash | 3 ++-
->  package/nginx-dav-ext/nginx-dav-ext.mk   | 4 ++--
->  2 files changed, 4 insertions(+), 3 deletions(-)
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ DEVELOPERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 199bb92..0bbee2c 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1852,6 +1852,7 @@ F:	package/modem-manager/
+ F:	package/nuttcp/
+ F:	package/parted/
+ F:	package/phytool/
++F:	package/poco/
+ F:	package/python*
+ F:	package/ser2net/
+ F:	package/socketcand/
