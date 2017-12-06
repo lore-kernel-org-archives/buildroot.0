@@ -1,51 +1,54 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 6 Dec 2017 23:06:03 +0100
-Subject: [Buildroot] [PATCH 1/1] package/tor: Install default config and
- systemd .service file
-In-Reply-To: <20171206110906.18712-1-mlang@blind.guru>
-References: <20171206110906.18712-1-mlang@blind.guru>
-Message-ID: <20171206230603.1761a8b8@windsurf.lan>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed,  6 Dec 2017 23:25:58 +0100
+Subject: [Buildroot] [PATCH] package/uboot: detect missing user-supplied
+ environment source files
+Message-ID: <20171206222558.30529-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Since 0542bb79e8 (uboot: Support multiple environment source files),
+a missing user-supplied environment source files is no longer detected.
 
-On Wed,  6 Dec 2017 12:09:06 +0100, Mario Lang wrote:
-> Signed-off-by: Mario Lang <mlang@blind.guru>
-> ---
->  package/tor/tor.mk | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
-> 
-> diff --git a/package/tor/tor.mk b/package/tor/tor.mk
-> index 6a42dbce53..690772f5c0 100644
-> --- a/package/tor/tor.mk
-> +++ b/package/tor/tor.mk
-> @@ -47,4 +47,16 @@ endif
->  # uses gnu extensions
->  TOR_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
->  
-> +define TOR_INSTALL_CONF
-> +	$(INSTALL) -D -m 644 $(@D)/src/config/torrc.minimal \
-> +		$(TARGET_DIR)/etc/tor/torrc
-> +endef
-> +
-> +TOR_POST_INSTALL_TARGET_HOOKS += TOR_INSTALL_CONF
-> +
-> +define TOR_INSTALL_INIT_SYSTEMD
-> +	$(INSTALL) -D -m 664 $(@D)/contrib/dist/tor.service \
+This is because we cat them all, and feed the concatenation to the stdin
+of mkenvimage. So, if one source file is missing, the cat exits in error,
+but the compound command exits with the exit code of the last command,
+which is that of mkenvimage, which happens to be happy with whatever it
+is fed on its stdin, even is empty.
 
-This 664 mode didn't make much sense to me, we're using 644 everywhere
-else to install systemd .service files.
+We fix that by creating a temporary file, that we even leave afterward
+for the user to inspect.
 
-So I've fixed that to use 644 instead and applied.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Cam Hutchison <camh@xdna.net>
+---
+ boot/uboot/uboot.mk | 12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
 
-Thanks a lot!
-
-Thomas
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index a1fac7dcae..518433796f 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -250,11 +250,13 @@ define UBOOT_INSTALL_IMAGES_CMDS
+ 		)
+ 	)
+ 	$(if $(BR2_TARGET_UBOOT_ENVIMAGE),
+-		cat $(call qstrip,$(BR2_TARGET_UBOOT_ENVIMAGE_SOURCE)) | \
+-			$(HOST_DIR)/bin/mkenvimage -s $(BR2_TARGET_UBOOT_ENVIMAGE_SIZE) \
+-			$(if $(BR2_TARGET_UBOOT_ENVIMAGE_REDUNDANT),-r) \
+-			$(if $(filter BIG,$(BR2_ENDIAN)),-b) \
+-			-o $(BINARIES_DIR)/uboot-env.bin -)
++		cat $(call qstrip,$(BR2_TARGET_UBOOT_ENVIMAGE_SOURCE)) \
++			>$(BINARIES_DIR)/uboot-env.txt && \
++		$(HOST_DIR)/bin/mkenvimage -s $(BR2_TARGET_UBOOT_ENVIMAGE_SIZE) \
++		$(if $(BR2_TARGET_UBOOT_ENVIMAGE_REDUNDANT),-r) \
++		$(if $(filter BIG,$(BR2_ENDIAN)),-b) \
++		-o $(BINARIES_DIR)/uboot-env.bin \
++		$(BINARIES_DIR)/uboot-env.txt)
+ 	$(if $(BR2_TARGET_UBOOT_BOOT_SCRIPT),
+ 		$(HOST_DIR)/bin/mkimage -C none -A $(MKIMAGE_ARCH) -T script \
+ 			-d $(call qstrip,$(BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE)) \
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.11.0
