@@ -1,84 +1,39 @@
-From: Angelo Compagnucci <angelo@amarulasolutions.com>
-Date: Wed,  6 Dec 2017 11:56:57 +0100
-Subject: [Buildroot] [PATCH 5/5] package/docker-containerd: converting to
- golang infrastructure
-In-Reply-To: <1512557817-431-1-git-send-email-angelo@amarulasolutions.com>
-References: <1512557817-431-1-git-send-email-angelo@amarulasolutions.com>
-Message-ID: <1512557817-431-6-git-send-email-angelo@amarulasolutions.com>
+From: Mario Lang <mlang@blind.guru>
+Date: Wed,  6 Dec 2017 12:09:06 +0100
+Subject: [Buildroot] [PATCH 1/1] package/tor: Install default config and
+ systemd .service file
+Message-ID: <20171206110906.18712-1-mlang@blind.guru>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-
-This patch converts the docker-containerd package to the new golang
-infrastructure.
-
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+Signed-off-by: Mario Lang <mlang@blind.guru>
 ---
- package/docker-containerd/docker-containerd.mk | 37 +++++++++++---------------
- 1 file changed, 15 insertions(+), 22 deletions(-)
+ package/tor/tor.mk | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-diff --git a/package/docker-containerd/docker-containerd.mk b/package/docker-containerd/docker-containerd.mk
-index ffbadb0..34e7674 100644
---- a/package/docker-containerd/docker-containerd.mk
-+++ b/package/docker-containerd/docker-containerd.mk
-@@ -9,39 +9,32 @@ DOCKER_CONTAINERD_SITE = $(call github,docker,containerd,$(DOCKER_CONTAINERD_VER
- DOCKER_CONTAINERD_LICENSE = Apache-2.0
- DOCKER_CONTAINERD_LICENSE_FILES = LICENSE.code
+diff --git a/package/tor/tor.mk b/package/tor/tor.mk
+index 6a42dbce53..690772f5c0 100644
+--- a/package/tor/tor.mk
++++ b/package/tor/tor.mk
+@@ -47,4 +47,16 @@ endif
+ # uses gnu extensions
+ TOR_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
  
--DOCKER_CONTAINERD_DEPENDENCIES = host-go
-+DOCKER_CONTAINERD_GOPATH = vendor
- 
--DOCKER_CONTAINERD_GOPATH = "$(@D)/vendor"
--DOCKER_CONTAINERD_MAKE_ENV = $(HOST_GO_TARGET_ENV) \
--	CGO_ENABLED=1 \
--	GOBIN="$(@D)/bin" \
--	GOPATH="$(DOCKER_CONTAINERD_GOPATH)"
--
--DOCKER_CONTAINERD_GLDFLAGS = \
-+DOCKER_CONTAINERD_GO_LDFLAGS = \
- 	-X github.com/docker/containerd.GitCommit=$(DOCKER_CONTAINERD_VERSION)
- 
--ifeq ($(BR2_STATIC_LIBS),y)
--DOCKER_CONTAINERD_GLDFLAGS += -extldflags '-static'
--endif
--
--define DOCKER_CONTAINERD_CONFIGURE_CMDS
--	mkdir -p $(DOCKER_CONTAINERD_GOPATH)/src/github.com/docker
--	ln -s $(@D) $(DOCKER_CONTAINERD_GOPATH)/src/github.com/docker/containerd
--	mkdir -p $(DOCKER_CONTAINERD_GOPATH)/src/github.com/opencontainers
--	ln -s $(RUNC_SRCDIR) $(DOCKER_CONTAINERD_GOPATH)/src/github.com/opencontainers/runc
-+define DOCKER_CONTAINERD_LINK_DIR
-+	ln -sf $(@D) $(@D)/$(DOCKER_CONTAINERD_GOPATH)/src/github.com/docker/containerd
-+	mkdir -p $(@D)/$(DOCKER_CONTAINERD_GOPATH)/src/github.com/opencontainers
-+	ln -s $(RUNC_SRCDIR) $(@D)/$(DOCKER_CONTAINERD_GOPATH)/src/github.com/opencontainers/runc
- endef
- 
-+DOCKER_CONTAINERD_POST_CONFIGURE_HOOKS += DOCKER_CONTAINERD_LINK_DIR
++define TOR_INSTALL_CONF
++	$(INSTALL) -D -m 644 $(@D)/src/config/torrc.minimal \
++		$(TARGET_DIR)/etc/tor/torrc
++endef
 +
- define DOCKER_CONTAINERD_BUILD_CMDS
- 	$(foreach d,ctr containerd containerd-shim,\
--		cd $(@D); $(DOCKER_CONTAINERD_MAKE_ENV) $(HOST_DIR)/bin/go build \
--			-v -o $(@D)/bin/$(d) -ldflags "$(DOCKER_CONTAINERD_GLDFLAGS)" ./$(d)$(sep))
-+		cd $(@D)/$(DOCKER_CONTAINERD_GOPATH)/src/github.com/docker/containerd; \
-+		$(DOCKER_CONTAINERD_GO_ENV) \
-+		$(DOCKER_CONTAINERD_GO) \
-+		$(DOCKER_CONTAINERD_BUILD_OPTS) ./$(d)$(sep))
- endef
- 
- define DOCKER_CONTAINERD_INSTALL_TARGET_CMDS
- 	ln -fs runc $(TARGET_DIR)/usr/bin/docker-runc
--	$(INSTALL) -D -m 0755 $(@D)/bin/containerd $(TARGET_DIR)/usr/bin/docker-containerd
--	$(INSTALL) -D -m 0755 $(@D)/bin/containerd-shim $(TARGET_DIR)/usr/bin/containerd-shim
-+	$(INSTALL) -D -m 0755 $(@D)/$(DOCKER_CONTAINERD_BINDIR)/containerd $(TARGET_DIR)/usr/bin/docker-containerd
-+	$(INSTALL) -D -m 0755 $(@D)/$(DOCKER_CONTAINERD_BINDIR)/containerd-shim $(TARGET_DIR)/usr/bin/containerd-shim
- 	ln -fs containerd-shim $(TARGET_DIR)/usr/bin/docker-containerd-shim
- endef
- 
--$(eval $(generic-package))
-+$(eval $(golang-package))
++TOR_POST_INSTALL_TARGET_HOOKS += TOR_INSTALL_CONF
++
++define TOR_INSTALL_INIT_SYSTEMD
++	$(INSTALL) -D -m 664 $(@D)/contrib/dist/tor.service \
++		$(TARGET_DIR)/usr/lib/systemd/system/tor.service
++endef
++
+ $(eval $(autotools-package))
 -- 
-2.7.4
+2.15.0
