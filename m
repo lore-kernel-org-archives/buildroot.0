@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 6 Dec 2017 22:26:04 +0100
-Subject: [Buildroot] [PATCH 1/3] DEVELOPERS: Add myself to axel package
-In-Reply-To: <20171205054237.2150-1-ismael@iodev.co.uk>
+Date: Wed, 6 Dec 2017 22:26:39 +0100
+Subject: [Buildroot] [PATCH 2/3] axel: Fix OpenSSL dependency
+In-Reply-To: <20171205054237.2150-2-ismael@iodev.co.uk>
 References: <20171205054237.2150-1-ismael@iodev.co.uk>
-Message-ID: <20171206222604.0f6ca2e3@windsurf.lan>
+ <20171205054237.2150-2-ismael@iodev.co.uk>
+Message-ID: <20171206222639.4b7dedf7@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,16 +13,19 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue,  5 Dec 2017 02:42:35 -0300, Ismael Luceno wrote:
-> Signed-off-by: Ismael Luceno <ismael@iodev.co.uk>
-> ---
->  DEVELOPERS | 3 +++
->  1 file changed, 3 insertions(+)
+On Tue,  5 Dec 2017 02:42:36 -0300, Ismael Luceno wrote:
+> I got it wrong the first time, openssl is a virtual package.
 
-Applied to master, thanks.
+Using 1st person sentences is not really the typical practice in commit
+logs. So I've replaced this with:
+
+    openssl is a virtual package, that can be provided by either libressl
+    or libopenssl, so there's no need to check for libressl separately.
+
+Applied with this change. Thanks!
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
