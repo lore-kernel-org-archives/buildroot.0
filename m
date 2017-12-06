@@ -1,55 +1,48 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 6 Dec 2017 22:39:19 +0100
-Subject: [Buildroot] [PATCH 0/5] New infrastructure for golang packages
-In-Reply-To: <1512557817-431-1-git-send-email-angelo@amarulasolutions.com>
-References: <1512557817-431-1-git-send-email-angelo@amarulasolutions.com>
-Message-ID: <c95b3881-69a4-6cef-0bad-bb0a2c94fa69@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 6 Dec 2017 22:44:05 +0100
+Subject: [Buildroot] [git commit] xenomai: bump to 3.0.6
+Message-ID: <20171206214816.5671A81181@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Angelo,
+commit: https://git.buildroot.net/buildroot/commit/?id=34d20f0b878c4f18ee5f5af0276894499d3f9bf8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- I unfortunately probably won't have time to look at your patches tonight, however:
+This new version includes a fix to allow compilation with compilers
+defaulting to -fpie (gcc 6+). It also a fix for a critical bug in
+Cobalt:
 
-On 06-12-17 11:56, Angelo Compagnucci wrote:
-> This series add a new pkg-golang infrastructure and converts some of the
-> packages based on go.
-> I'll resend as an official patch series after receiving some comments in
-> RFC trying to reignite the discussion.
+http://xenomai.org/pipermail/xenomai/2017-November/037923.html
 
- Is there any difference with v5? There doesn't seem to be a patch revision log
-in any of the patches...
+Signed-off-by: Norbert Lange <nolange79@gmail.com>
+Reviewed-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/xenomai/xenomai.hash | 2 +-
+ package/xenomai/xenomai.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- Regards,
- Arnout
-
-> 
-> Angelo Compagnucci (5):
->   package/pkg-golang: new package infrastructure
->   docs/manual: adding documentation for the golang infrastructure
->   package/flannel: converting to golang infrastructure
->   package/runc: converting to golang infrastructure
->   package/docker-containerd: converting to golang infrastructure
-> 
->  docs/manual/adding-packages-golang.txt         | 114 +++++++++++++++++++++++
->  docs/manual/adding-packages.txt                |   2 +
->  package/Makefile.in                            |   1 +
->  package/docker-containerd/docker-containerd.mk |  37 +++-----
->  package/flannel/flannel.mk                     |  32 +------
->  package/pkg-golang.mk                          | 121 +++++++++++++++++++++++++
->  package/runc/runc.mk                           |  37 +-------
->  7 files changed, 262 insertions(+), 82 deletions(-)
->  create mode 100644 docs/manual/adding-packages-golang.txt
->  create mode 100644 package/pkg-golang.mk
-> 
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+diff --git a/package/xenomai/xenomai.hash b/package/xenomai/xenomai.hash
+index 1290ca5..c36badb 100644
+--- a/package/xenomai/xenomai.hash
++++ b/package/xenomai/xenomai.hash
+@@ -1,2 +1,2 @@
+ # Locally computed;
+-sha256 84836a43b6a996dcdcb42b0b1653a3271cc201df2a2d42c1b4b3bafb2cca7c63  xenomai-3.0.5.tar.bz2
++sha256 2c0dd3f0e36e4a10f97e0028989bb873e80f4d1ce212ac55fd3b28857c464f94  xenomai-3.0.6.tar.bz2
+diff --git a/package/xenomai/xenomai.mk b/package/xenomai/xenomai.mk
+index c53d514..6bf08ed 100644
+--- a/package/xenomai/xenomai.mk
++++ b/package/xenomai/xenomai.mk
+@@ -6,7 +6,7 @@
+ 
+ XENOMAI_VERSION = $(call qstrip,$(BR2_PACKAGE_XENOMAI_VERSION))
+ ifeq ($(XENOMAI_VERSION),)
+-XENOMAI_VERSION = 3.0.5
++XENOMAI_VERSION = 3.0.6
+ else
+ BR_NO_CHECK_HASH_FOR += $(XENOMAI_SOURCE)
+ endif
