@@ -1,33 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 6 Dec 2017 22:04:06 +0100
-Subject: [Buildroot] [git commit] DEVELOPERS: Add myself to axel package
-Message-ID: <20171206211714.5B49C82210@busybox.osuosl.org>
+Date: Wed, 6 Dec 2017 22:26:04 +0100
+Subject: [Buildroot] [PATCH 1/3] DEVELOPERS: Add myself to axel package
+In-Reply-To: <20171205054237.2150-1-ismael@iodev.co.uk>
+References: <20171205054237.2150-1-ismael@iodev.co.uk>
+Message-ID: <20171206222604.0f6ca2e3@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2c3d7cce2df92eeed1cf95073a1364423b01689e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Ismael Luceno <ismael@iodev.co.uk>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- DEVELOPERS | 3 +++
- 1 file changed, 3 insertions(+)
+On Tue,  5 Dec 2017 02:42:35 -0300, Ismael Luceno wrote:
+> Signed-off-by: Ismael Luceno <ismael@iodev.co.uk>
+> ---
+>  DEVELOPERS | 3 +++
+>  1 file changed, 3 insertions(+)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 3e52d7c..199bb92 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -759,6 +759,9 @@ F:	package/angularjs/
- N:	Ilias Apalodimas <apalos@gmail.com>
- F:	package/keepalived/
- 
-+N:	Ismael Luceno <ismael@iodev.co.uk>
-+F:	package/axel/
-+
- N:	Jagan Teki <jagan@amarulasolutions.com>
- F:	board/bananapi/
- F:	board/engicam/
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
