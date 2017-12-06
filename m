@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 6 Dec 2017 23:37:06 +0100
-Subject: [Buildroot] [PATCH] package/uboot: detect missing user-supplied
- environment source files
-In-Reply-To: <20171206222558.30529-1-yann.morin.1998@free.fr>
-References: <20171206222558.30529-1-yann.morin.1998@free.fr>
-Message-ID: <20171206233706.78dff67c@windsurf.lan>
+Date: Wed, 6 Dec 2017 23:38:50 +0100
+Subject: [Buildroot] [PATCH v3] package/i2c-tools: bump to version 4.0
+In-Reply-To: <1512569963-7256-1-git-send-email-angelo@amarulasolutions.com>
+References: <1512569963-7256-1-git-send-email-angelo@amarulasolutions.com>
+Message-ID: <20171206233850.2a0dae63@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,64 +12,47 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed,  6 Dec 2017 23:25:58 +0100, Yann E. MORIN wrote:
-> Since 0542bb79e8 (uboot: Support multiple environment source files),
-> a missing user-supplied environment source files is no longer detected.
+On Wed,  6 Dec 2017 15:19:23 +0100, Angelo Compagnucci wrote:
+> This patch bumps i2c-tools to version 4.0 and adds a couple of
+> new commands named i2ctransfer and eeprog.
+> It adds also an upstream commit not included in the release
+> that fixing a static compilation issue.
 > 
-> This is because we cat them all, and feed the concatenation to the stdin
-> of mkenvimage. So, if one source file is missing, the cat exits in error,
-> but the compound command exits with the exit code of the last command,
-> which is that of mkenvimage, which happens to be happy with whatever it
-> is fed on its stdin, even is empty.
-> 
-> We fix that by creating a temporary file, that we even leave afterward
-> for the user to inspect.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Cam Hutchison <camh@xdna.net>
+> Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 
-Thanks for this.
+I have a minor nit below, but most importantly, there is a parallel
+build issue with this update. I built i2c-tools about 10 times, and it
+failed 3 times, with errors like this:
 
-> diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-> index a1fac7dcae..518433796f 100644
-> --- a/boot/uboot/uboot.mk
-> +++ b/boot/uboot/uboot.mk
-> @@ -250,11 +250,13 @@ define UBOOT_INSTALL_IMAGES_CMDS
->  		)
->  	)
->  	$(if $(BR2_TARGET_UBOOT_ENVIMAGE),
-> -		cat $(call qstrip,$(BR2_TARGET_UBOOT_ENVIMAGE_SOURCE)) | \
-> -			$(HOST_DIR)/bin/mkenvimage -s $(BR2_TARGET_UBOOT_ENVIMAGE_SIZE) \
-> -			$(if $(BR2_TARGET_UBOOT_ENVIMAGE_REDUNDANT),-r) \
-> -			$(if $(filter BIG,$(BR2_ENDIAN)),-b) \
-> -			-o $(BINARIES_DIR)/uboot-env.bin -)
-> +		cat $(call qstrip,$(BR2_TARGET_UBOOT_ENVIMAGE_SOURCE)) \
-> +			>$(BINARIES_DIR)/uboot-env.txt && \
-> +		$(HOST_DIR)/bin/mkenvimage -s $(BR2_TARGET_UBOOT_ENVIMAGE_SIZE) \
-> +		$(if $(BR2_TARGET_UBOOT_ENVIMAGE_REDUNDANT),-r) \
-> +		$(if $(filter BIG,$(BR2_ENDIAN)),-b) \
-> +		-o $(BINARIES_DIR)/uboot-env.bin \
-> +		$(BINARIES_DIR)/uboot-env.txt)
+/home/thomas/projets/buildroot/output/host/bin/arm-linux-gcc -shared  -Wl,--version-script=lib/libi2c.map -Wl,-soname,libi2c.so.0 -o lib/libi2c.so.0.1.0 lib/smbus.o -lc
+/home/thomas/projets/buildroot/output/host/bin/arm-linux-gcc  -o tools/i2cdetect tools/i2cdetect.o tools/i2cbusses.o -Llib -li2c
+lib/libi2c.so: file not recognized: File truncated
+collect2: error: ld returned 1 exit status
+make[2]: *** [tools/Module.mk:28: tools/i2cdetect] Error 1
+make[2]: *** Waiting for unfinished jobs....
+make[1]: *** [package/pkg-generic.mk:250: /home/thomas/projets/buildroot/output/build/i2c-tools-4.0/.stamp_built] Error 2
+make: *** [Makefile:79: _all] Error 2
 
-I'm not a big fan of the && here. Perhaps it's time to move to:
+/home/thomas/projets/buildroot/output/host/bin/arm-linux-gcc  -o tools/i2cdetect tools/i2cdetect.o tools/i2cbusses.o -Llib -li2c
+/home/thomas/projets/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/4.9.4/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: cannot find -li2c
+collect2: error: ld returned 1 exit status
+make[2]: *** [tools/Module.mk:28: tools/i2cdetect] Error 1
+make[2]: *** Waiting for unfinished jobs....
+make[1]: *** [package/pkg-generic.mk:250: /home/thomas/projets/buildroot/output/build/i2c-tools-4.0/.stamp_built] Error 2
+make: *** [Makefile:79: _all] Error 2
 
-ifeq ($(BR2_TARGET_UBOOT_ENVIMAGE),y)
-define UBOOT_GENERATE_ENVIMAGE
-	cat $(call qstrip,$(BR2_TARGET_UBOOT_ENVIMAGE_SOURCE)) \
-		>$(BINARIES_DIR)/uboot-env.txt
-	$(HOST_DIR)/bin/mkenvimage -s $(BR2_TARGET_UBOOT_ENVIMAGE_SIZE) \
-		$(if $(BR2_TARGET_UBOOT_ENVIMAGE_REDUNDANT),-r) \
-		$(if $(filter BIG,$(BR2_ENDIAN)),-b) \
-		-o $(BINARIES_DIR)/uboot-env.bin \
-		$(BINARIES_DIR)/uboot-env.txt
-endef
-endif
+So it seems like the dependency chain in the i2c-tools Makefile is not correct.
 
-define UBOOT_INSTALL_IMAGES_CMDS
-	...
-	$(UBOOT_GENERATE_ENVIMAGE)
-	...
-endef
+
+> +Subject: [PATCH 1/2] Makefile: Add flag to disable dynamic library
+
+Subject should be [PATCH] instead of [PATCH 1/2]. Note that I had fixed
+this locally, because it's a very minor nit. But I refrained from
+applying due to the parallel build problem.
+
+Could you have a look at the parallel build problem ?
+
+Thanks a lot!
 
 Thomas
 -- 
