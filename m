@@ -1,51 +1,54 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 6 Dec 2017 15:23:20 +0100
-Subject: [Buildroot] [PATCH 1/1] erlang: bump to version 20.0
-In-Reply-To: <CAJtjsKYbRp-NcBxLfc-Xner7TUQuA8i3EjuR0QXgq908+Nwt6w@mail.gmail.com>
-References: <20171130154202.437-1-johan.oudinet@gmail.com>
- <20171203105905.3bdd1dc9@windsurf.lan>
- <CAJtjsKYbRp-NcBxLfc-Xner7TUQuA8i3EjuR0QXgq908+Nwt6w@mail.gmail.com>
-Message-ID: <20171206152320.1cee91c8@windsurf.lan>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Wed, 6 Dec 2017 08:29:32 -0600
+Subject: [Buildroot] [PATCH 2/2] kvmtool: bump to f77d646ba0
+In-Reply-To: <CANQCQpZZCcsSgn-Gz2ErsM9jcu--wJTb9QeK_KveGSV9kx8s1w@mail.gmail.com>
+References: <20171203033321.13460-1-matthew.weber@rockwellcollins.com>
+ <20171203033321.13460-2-matthew.weber@rockwellcollins.com>
+ <20171203145407.78bab7c2@windsurf.home>
+ <CANQCQpaQzSj_4cKDAnGViSySBFgWmywc2mjdWgEiG2WfW7eLXg@mail.gmail.com>
+ <CANQCQpZF8+b7PyYLmw6ZZCX=CTv=rQQmtkJj0ogF3wdPF+unTw@mail.gmail.com>
+ <20171206085958.3671c8a1@windsurf.lan>
+ <CANQCQpZZCcsSgn-Gz2ErsM9jcu--wJTb9QeK_KveGSV9kx8s1w@mail.gmail.com>
+Message-ID: <CANQCQpbvA=w0Wc2nWna9M+HNM5hJpC6ZLBAnzV18zzQejUaP2w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Thomas,
 
-On Mon, 4 Dec 2017 17:32:31 +0100, Johan Oudinet wrote:
+On Wed, Dec 6, 2017 at 7:46 AM, Matthew Weber
+<matthew.weber@rockwellcollins.com> wrote:
+> Thomas,
+>
+> On Wed, Dec 6, 2017 at 1:59 AM, Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com> wrote:
+>>
+>> Hello,
+>>
+>> On Tue, 5 Dec 2017 20:05:42 -0600, Matthew Weber wrote:
+>>
+>> > Gustavo, the latest kvmtool switched to doing the final link with gcc
+>> > vs originally ld.  I believe this is the right fix.
+>> >
+>> >       3 --- a/package/kvmtool/kvmtool.mk
+>> >       4 +++ b/package/kvmtool/kvmtool.mk
+>> >       5 @@ -33,7 +33,7 @@ KVMTOOL_LICENSE_FILES = COPYING
+>> >       6  # If more packages need this (unlikely) an ld wrapper might be a better
+>> >       7  # solution, using gcc -dumpspecs information.
+>> >       8  KVMTOOL_EXTRA_LDFLAGS = \
+>> >       9 -       $(if $(BR2_x86_64),-m elf_x86_64)
+>> >      10 +       $(if $(BR2_x86_64),-m64)
+>>
+>> If kvmtool is now building with gcc, do we need -m64 at all ?
+>>
+>
+> That's true, gcc would already be assuming m64 based on the target's
+> arch vs the linker wouldn't have been able to infer that.  I'll remove
+> and kickoff a test.
+>
 
-> When trying to reproduce this build failure on my machine, I
-> discovered an unrelated error in flann package:
-> ERROR: unsafe header/library path used in cross-compilation
-> '/usr/include/hdf5/serial'
-> 
-> I skipped this error by adding this to FLANN_CONF_OPTS:
-> -DCMAKE_DISABLE_FIND_PACKAGE_HDF5=TRUE
-> 
-> As far as I understand it, this HDF5 dependency from flann is only
-> here for testing purpose and can be disabled in buildroot build.
-> Should I send a patch?
+Verified, test-pkg now passes and so does your test config.  Will send a v2.
 
-Yes, please :)
-
-> Unfortunately, I failed to reproduce the build failure on erlang but
-> when looking at the log, it indeed failed to find libz even though the
-> configure above seems to find it:
-> checking for zlib 1.2.5 or higher... yes
-> checking for zlib inflateGetDictionary presence... checking for
-> library containing inflateGetDictionary... -lz
-
-Perhaps it's testing with the 64-bit version of the library, but then
-using the 32-bit version or the opposite. Can you build with V=1 (or
-whatever is needed in Erlang to get verbose details), and see what is
-the exact command that fails to link with zlib ?
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Matt
