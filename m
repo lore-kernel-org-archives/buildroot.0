@@ -1,48 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 6 Dec 2017 22:44:05 +0100
-Subject: [Buildroot] [git commit] xenomai: bump to 3.0.6
-Message-ID: <20171206214816.5671A81181@busybox.osuosl.org>
+Date: Wed, 6 Dec 2017 22:56:37 +0100
+Subject: [Buildroot] [PATCH] xenomai: bump to 3.0.6
+In-Reply-To: <20171204175909.21596-1-nolange79@gmail.com>
+References: <20171204175909.21596-1-nolange79@gmail.com>
+Message-ID: <20171206225637.26654f55@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=34d20f0b878c4f18ee5f5af0276894499d3f9bf8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-This new version includes a fix to allow compilation with compilers
-defaulting to -fpie (gcc 6+). It also a fix for a critical bug in
-Cobalt:
+On Mon,  4 Dec 2017 18:59:08 +0100, Norbert Lange wrote:
+> From: Norbert Lange <norbert.lange@andritz.com>
+> 
+> this includes a fix to allow compilation with compilers
+> defaulting to -fpie (gcc 6+)
+> 
+> Signed-off-by: Norbert Lange <nolange79@gmail.com>
+> ---
+>  package/xenomai/xenomai.hash | 2 +-
+>  package/xenomai/xenomai.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-http://xenomai.org/pipermail/xenomai/2017-November/037923.html
+Applied to master after adding some comment in the commit log about the
+critical bug that has been fixed in this version, as reported by Romain.
 
-Signed-off-by: Norbert Lange <nolange79@gmail.com>
-Reviewed-by: Romain Naour <romain.naour@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/xenomai/xenomai.hash | 2 +-
- package/xenomai/xenomai.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Speaking of Xenomai, it would be really nice to have a test case for it
+in our runtime test infrastructure, see support/testing/. If you're
+interested feel free to contribute :-)
 
-diff --git a/package/xenomai/xenomai.hash b/package/xenomai/xenomai.hash
-index 1290ca5..c36badb 100644
---- a/package/xenomai/xenomai.hash
-+++ b/package/xenomai/xenomai.hash
-@@ -1,2 +1,2 @@
- # Locally computed;
--sha256 84836a43b6a996dcdcb42b0b1653a3271cc201df2a2d42c1b4b3bafb2cca7c63  xenomai-3.0.5.tar.bz2
-+sha256 2c0dd3f0e36e4a10f97e0028989bb873e80f4d1ce212ac55fd3b28857c464f94  xenomai-3.0.6.tar.bz2
-diff --git a/package/xenomai/xenomai.mk b/package/xenomai/xenomai.mk
-index c53d514..6bf08ed 100644
---- a/package/xenomai/xenomai.mk
-+++ b/package/xenomai/xenomai.mk
-@@ -6,7 +6,7 @@
- 
- XENOMAI_VERSION = $(call qstrip,$(BR2_PACKAGE_XENOMAI_VERSION))
- ifeq ($(XENOMAI_VERSION),)
--XENOMAI_VERSION = 3.0.5
-+XENOMAI_VERSION = 3.0.6
- else
- BR_NO_CHECK_HASH_FOR += $(XENOMAI_SOURCE)
- endif
+Thanks a lot!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
