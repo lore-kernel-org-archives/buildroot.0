@@ -1,36 +1,79 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 6 Dec 2017 23:33:22 +0100
-Subject: [Buildroot] [PATCH 0/5] New infrastructure for golang packages
-In-Reply-To: <CA+_SqVappjdtOmpAWoLUquGJ-fVbUaz0LN-uiPLSJGqGu5vHLQ@mail.gmail.com>
-References: <1512557817-431-1-git-send-email-angelo@amarulasolutions.com>
- <c95b3881-69a4-6cef-0bad-bb0a2c94fa69@mind.be>
- <CA+_SqVappjdtOmpAWoLUquGJ-fVbUaz0LN-uiPLSJGqGu5vHLQ@mail.gmail.com>
-Message-ID: <2ef6b2fc-124b-6115-3760-a8cca6c8e75b@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 6 Dec 2017 23:37:06 +0100
+Subject: [Buildroot] [PATCH] package/uboot: detect missing user-supplied
+ environment source files
+In-Reply-To: <20171206222558.30529-1-yann.morin.1998@free.fr>
+References: <20171206222558.30529-1-yann.morin.1998@free.fr>
+Message-ID: <20171206233706.78dff67c@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello,
 
-
-On 06-12-17 22:59, Angelo Compagnucci wrote:
->     There doesn't seem to be a patch revision log
->     in any of the patches...
+On Wed,  6 Dec 2017 23:25:58 +0100, Yann E. MORIN wrote:
+> Since 0542bb79e8 (uboot: Support multiple environment source files),
+> a missing user-supplied environment source files is no longer detected.
 > 
+> This is because we cat them all, and feed the concatenation to the stdin
+> of mkenvimage. So, if one source file is missing, the cat exits in error,
+> but the compound command exits with the exit code of the last command,
+> which is that of mkenvimage, which happens to be happy with whatever it
+> is fed on its stdin, even is empty.
 > 
-> Right, not good. I'll do in this series if needed.
+> We fix that by creating a temporary file, that we even leave afterward
+> for the user to inspect.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Cam Hutchison <camh@xdna.net>
 
- Don't bother - it's generally pretty difficult to reconstruct history after the
-fact. Just do it for your future submissions.
+Thanks for this.
 
- Regards,
- Arnout
+> diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+> index a1fac7dcae..518433796f 100644
+> --- a/boot/uboot/uboot.mk
+> +++ b/boot/uboot/uboot.mk
+> @@ -250,11 +250,13 @@ define UBOOT_INSTALL_IMAGES_CMDS
+>  		)
+>  	)
+>  	$(if $(BR2_TARGET_UBOOT_ENVIMAGE),
+> -		cat $(call qstrip,$(BR2_TARGET_UBOOT_ENVIMAGE_SOURCE)) | \
+> -			$(HOST_DIR)/bin/mkenvimage -s $(BR2_TARGET_UBOOT_ENVIMAGE_SIZE) \
+> -			$(if $(BR2_TARGET_UBOOT_ENVIMAGE_REDUNDANT),-r) \
+> -			$(if $(filter BIG,$(BR2_ENDIAN)),-b) \
+> -			-o $(BINARIES_DIR)/uboot-env.bin -)
+> +		cat $(call qstrip,$(BR2_TARGET_UBOOT_ENVIMAGE_SOURCE)) \
+> +			>$(BINARIES_DIR)/uboot-env.txt && \
+> +		$(HOST_DIR)/bin/mkenvimage -s $(BR2_TARGET_UBOOT_ENVIMAGE_SIZE) \
+> +		$(if $(BR2_TARGET_UBOOT_ENVIMAGE_REDUNDANT),-r) \
+> +		$(if $(filter BIG,$(BR2_ENDIAN)),-b) \
+> +		-o $(BINARIES_DIR)/uboot-env.bin \
+> +		$(BINARIES_DIR)/uboot-env.txt)
 
+I'm not a big fan of the && here. Perhaps it's time to move to:
+
+ifeq ($(BR2_TARGET_UBOOT_ENVIMAGE),y)
+define UBOOT_GENERATE_ENVIMAGE
+	cat $(call qstrip,$(BR2_TARGET_UBOOT_ENVIMAGE_SOURCE)) \
+		>$(BINARIES_DIR)/uboot-env.txt
+	$(HOST_DIR)/bin/mkenvimage -s $(BR2_TARGET_UBOOT_ENVIMAGE_SIZE) \
+		$(if $(BR2_TARGET_UBOOT_ENVIMAGE_REDUNDANT),-r) \
+		$(if $(filter BIG,$(BR2_ENDIAN)),-b) \
+		-o $(BINARIES_DIR)/uboot-env.bin \
+		$(BINARIES_DIR)/uboot-env.txt
+endef
+endif
+
+define UBOOT_INSTALL_IMAGES_CMDS
+	...
+	$(UBOOT_GENERATE_ENVIMAGE)
+	...
+endef
+
+Thomas
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
