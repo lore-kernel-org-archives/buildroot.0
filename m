@@ -1,47 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 7 Dec 2017 22:14:44 +0100
-Subject: [Buildroot] [git commit] stunnel: bump to version 5.44
-Message-ID: <20171207213317.C7C118295C@busybox.osuosl.org>
+Date: Thu, 7 Dec 2017 22:16:40 +0100
+Subject: [Buildroot] [git commit] libmaxminddb: bump to version 1.3.1
+Message-ID: <20171207213318.1B6C4801F5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=682f0673df09d960fb531048b1505fb68f237d50
+commit: https://git.buildroot.net/buildroot/commit/?id=c75439d10cfc5100fb2716c2614eee9ca511d762
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add license files hashes.
-
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/stunnel/stunnel.hash | 7 +++++--
- package/stunnel/stunnel.mk   | 2 +-
- 2 files changed, 6 insertions(+), 3 deletions(-)
+ package/libmaxminddb/libmaxminddb.hash | 2 +-
+ package/libmaxminddb/libmaxminddb.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/stunnel/stunnel.hash b/package/stunnel/stunnel.hash
-index c4e70a7..d3b9451 100644
---- a/package/stunnel/stunnel.hash
-+++ b/package/stunnel/stunnel.hash
-@@ -1,2 +1,5 @@
--# From http://www.stunnel.org/pipermail/stunnel-announce/2016-September/000125.html
--sha256	eb8952fcfdfcdf5056a1f1a78e1ec5014b819c5f5f7599b924dc4490ffe4b5ea	stunnel-5.36.tar.gz
-+# From https://www.stunnel.org/downloads/stunnel-5.44.tar.gz.sha256
-+sha256	990a325dbb47d77d88772dd02fbbd27d91b1fea3ece76c9ff4461eca93f12299	stunnel-5.44.tar.gz
-+# Locally calculated
-+sha256	c43821865591e4d893906e2801b5ec4de58e51978f5563a61475cd0adc0bec4d	COPYING
-+sha256	1ee2b290e92c211b08df10e9fcaf32596cdb22b8eae731b18c2c074a4a83eebe	COPYRIGHT.GPL
-diff --git a/package/stunnel/stunnel.mk b/package/stunnel/stunnel.mk
-index 99e5381..4a5d2a0 100644
---- a/package/stunnel/stunnel.mk
-+++ b/package/stunnel/stunnel.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/libmaxminddb/libmaxminddb.hash b/package/libmaxminddb/libmaxminddb.hash
+index b8e52b8..55a0ed6 100644
+--- a/package/libmaxminddb/libmaxminddb.hash
++++ b/package/libmaxminddb/libmaxminddb.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256	a8c7e245241cd427a41edb7eb40246ba125957510af2f88b93446fe7c2143705	libmaxminddb-1.3.0.tar.gz
++sha256	7dcb04daf3c760464d32101c728986bf1b544e17104af81c5b0e2544c771664e	libmaxminddb-1.3.1.tar.gz
+ sha256	cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30	LICENSE
+diff --git a/package/libmaxminddb/libmaxminddb.mk b/package/libmaxminddb/libmaxminddb.mk
+index ccb5b35..d035e27 100644
+--- a/package/libmaxminddb/libmaxminddb.mk
++++ b/package/libmaxminddb/libmaxminddb.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- STUNNEL_VERSION_MAJOR = 5
--STUNNEL_VERSION = $(STUNNEL_VERSION_MAJOR).36
-+STUNNEL_VERSION = $(STUNNEL_VERSION_MAJOR).44
- STUNNEL_SITE = http://www.usenix.org.uk/mirrors/stunnel/archive/$(STUNNEL_VERSION_MAJOR).x
- STUNNEL_DEPENDENCIES = openssl
- STUNNEL_CONF_OPTS = --with-ssl=$(STAGING_DIR)/usr --with-threads=fork \
+-LIBMAXMINDDB_VERSION = 1.3.0
++LIBMAXMINDDB_VERSION = 1.3.1
+ LIBMAXMINDDB_SITE = $(call github,maxmind,libmaxminddb,$(LIBMAXMINDDB_VERSION))
+ LIBMAXMINDDB_INSTALL_STAGING = YES
+ LIBMAXMINDDB_LICENSE = Apache-2.0
