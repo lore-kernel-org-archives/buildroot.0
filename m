@@ -1,33 +1,97 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 7 Dec 2017 22:32:30 +0100
-Subject: [Buildroot] [git commit] libostree: install to staging
-Message-ID: <20171207213318.B9EAD810D1@busybox.osuosl.org>
+Date: Thu, 7 Dec 2017 22:16:03 +0100
+Subject: [Buildroot] [git commit] axfsutils: bump version
+Message-ID: <20171207213317.E86B18295D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=10ddb4b1dd6d01d0f1f918feefe9a6bca83c9a66
+commit: https://git.buildroot.net/buildroot/commit/?id=5384bd0a7656a4505fd63fa16a21ff930efab494
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Install the libraries to staging to be usable by other packages.
+The patches are no longer needed because they have been pushed back into
+the upstream axfs repository.
 
-Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
+Signed-off-by: Chris Brandt <chris.brandt@renesas.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libostree/libostree.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/axfsutils/0001-fix-cflags.patch  | 19 -------------------
+ package/axfsutils/0002-use-ldflags.patch | 20 --------------------
+ package/axfsutils/axfsutils.hash         |  2 +-
+ package/axfsutils/axfsutils.mk           |  2 +-
+ 4 files changed, 2 insertions(+), 41 deletions(-)
 
-diff --git a/package/libostree/libostree.mk b/package/libostree/libostree.mk
-index b0bcf01..113ed42 100644
---- a/package/libostree/libostree.mk
-+++ b/package/libostree/libostree.mk
-@@ -11,6 +11,7 @@ LIBOSTREE_SITE = https://github.com/ostreedev/ostree/releases/download/v$(LIBOST
- LIBOSTREE_LICENSE = GPL-2.0+
- LIBOSTREE_LICENSE_FILES = COPYING
- LIBOSTREE_DEPENDENCIES = e2fsprogs host-pkgconf libfuse libglib2 libgpgme xz
-+LIBOSTREE_INSTALL_STAGING = YES
+diff --git a/package/axfsutils/0001-fix-cflags.patch b/package/axfsutils/0001-fix-cflags.patch
+deleted file mode 100644
+index 0415d82..0000000
+--- a/package/axfsutils/0001-fix-cflags.patch
++++ /dev/null
+@@ -1,19 +0,0 @@
+-Makefile: complement CFLAGS provided by the user
+-
+-In some circumstances, the user may want to pass its own CFLAGS,
+-like for when the zlib headers are not located in the standard gcc
+-search paths.
+-
+-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+-
+-diff -durN a/mkfs.axfs-legacy/Makefile b/mkfs.axfs-legacy/Makefile
+---- a/mkfs.axfs-legacy/Makefile
+-+++ b/mkfs.axfs-legacy/Makefile
+-@@ -1,5 +1,5 @@
+--INC = -I./
+--CFLAGS = -g $(INC) -O0
+-+INC += -I./
+-+CFLAGS += -g $(INC) -O0
+- 
+- MKFSOBJS = mkfs.axfs.o
+- 
+diff --git a/package/axfsutils/0002-use-ldflags.patch b/package/axfsutils/0002-use-ldflags.patch
+deleted file mode 100644
+index 20e03a9..0000000
+--- a/package/axfsutils/0002-use-ldflags.patch
++++ /dev/null
+@@ -1,20 +0,0 @@
+-Makefile: use LDFLAGS as provided by the user
+-
+-In some circumstances, the user may want to pass some LDFLAGS, like
+--L flags to point to the zlib location if it was not installed in a
+-standard location.
+-
+-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+-
+-diff -durN a/mkfs.axfs-legacy/Makefile b/mkfs.axfs-legacy/Makefile
+---- a/mkfs.axfs-legacy/Makefile
+-+++ b/mkfs.axfs-legacy/Makefile
+-@@ -6,7 +6,7 @@
+- all:   mkfs.axfs
+- 
+- mkfs.axfs: $(MKFSOBJS)
+--	$(CC) $(CFLAGS) -o mkfs.axfs $(MKFSOBJS) -lz
+-+	$(CC) $(CFLAGS) $(LDFLAGS) -o mkfs.axfs $(MKFSOBJS) -lz
+- 
+- clean_mkfs.axfs:
+- 	rm -rf $(MKFSOBJS) mkfs.axfs
+diff --git a/package/axfsutils/axfsutils.hash b/package/axfsutils/axfsutils.hash
+index bde94a0..f7fc659 100644
+--- a/package/axfsutils/axfsutils.hash
++++ b/package/axfsutils/axfsutils.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 80dd97305b005262643e9fad04ec03b860430ea2c58666ce5b007897afbc9693 axfsutils-64886703fdff6cfc64eb20fbe7d7295bbeec867b.tar.gz
++sha256 2f3bb1ebc0eda1a8d09e927dd8db271fb7ceade06a331cd2369b27c3fd8d5f2f axfsutils-719ab26ca3e61200adc1d643dc89d494a75ee59f.tar.gz
+diff --git a/package/axfsutils/axfsutils.mk b/package/axfsutils/axfsutils.mk
+index 00d3a3a..de6d849 100644
+--- a/package/axfsutils/axfsutils.mk
++++ b/package/axfsutils/axfsutils.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- LIBOSTREE_CONF_OPTS += \
- 	--with-gpgme-prefix=$(STAGING_DIR)/usr \
+-AXFSUTILS_VERSION = 64886703fdff6cfc64eb20fbe7d7295bbeec867b
++AXFSUTILS_VERSION = 719ab26ca3e61200adc1d643dc89d494a75ee59f
+ AXFSUTILS_SITE = $(call github,jaredeh,axfs,$(AXFSUTILS_VERSION))
+ AXFSUTILS_LICENSE = GPL-2.0
+ AXFSUTILS_LICENSE_FILES = mkfs.axfs-legacy/COPYING
