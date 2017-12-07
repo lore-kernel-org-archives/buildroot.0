@@ -1,14 +1,14 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 7 Dec 2017 22:32:52 +0100
-Subject: [Buildroot] [git commit] python-pytz: bump to version 2017.3
-Message-ID: <20171207213318.CFDC1810D1@busybox.osuosl.org>
+Date: Thu, 7 Dec 2017 22:33:09 +0100
+Subject: [Buildroot] [git commit] python-dataproperty: bump to version 0.29.1
+Message-ID: <20171207213318.E3082810D1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a855461cd89f18c611363fba9065786d8bdcbe36
+commit: https://git.buildroot.net/buildroot/commit/?id=2b17849195926ca20b384e848c480b1eab033584
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Add licence checksum.
@@ -16,43 +16,51 @@ Add licence checksum.
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-pytz/python-pytz.hash |  5 +++--
- package/python-pytz/python-pytz.mk   | 12 +++++++++---
- 2 files changed, 12 insertions(+), 5 deletions(-)
+ package/python-dataproperty/Config.in                | 6 ++----
+ package/python-dataproperty/python-dataproperty.hash | 5 +++--
+ package/python-dataproperty/python-dataproperty.mk   | 4 ++--
+ 3 files changed, 7 insertions(+), 8 deletions(-)
 
-diff --git a/package/python-pytz/python-pytz.hash b/package/python-pytz/python-pytz.hash
-index fbccc52..dd3ff2c 100644
---- a/package/python-pytz/python-pytz.hash
-+++ b/package/python-pytz/python-pytz.hash
+diff --git a/package/python-dataproperty/Config.in b/package/python-dataproperty/Config.in
+index 7ef7f08..1868709 100644
+--- a/package/python-dataproperty/Config.in
++++ b/package/python-dataproperty/Config.in
+@@ -1,9 +1,7 @@
+ config BR2_PACKAGE_PYTHON_DATAPROPERTY
+ 	bool "python-dataproperty"
+-	select BR2_PACKAGE_PYTHON_MBSTRDECODER # runtime
+-	select BR2_PACKAGE_PYTHON_DATEUTIL # runtime
+-	select BR2_PACKAGE_PYTHON_PYTZ # runtime
+-	select BR2_PACKAGE_PYTHON_SIX # runtime
++	select BR2_PACKAGE_PYTHON_LOGBOOK # runtime
++	select BR2_PACKAGE_PYTHON_TYPEPY # runtime
+ 	help
+ 	  Python library for extract property from data.
+ 
+diff --git a/package/python-dataproperty/python-dataproperty.hash b/package/python-dataproperty/python-dataproperty.hash
+index be7eecb..0e74aca 100644
+--- a/package/python-dataproperty/python-dataproperty.hash
++++ b/package/python-dataproperty/python-dataproperty.hash
 @@ -1,3 +1,4 @@
- # md5 from https://pypi.python.org/pypi/pytz/json, sha256 locally computed
--md5	88b1d6c50c764579292edce3493c8a3a  pytz-2016.10.tar.bz2
--sha256  7016b2c4fa075c564b81c37a252a5fccf60d8964aa31b7f5eae59aeb594ae02b  pytz-2016.10.tar.bz2
-+md5	7006b56c0d68a162d9fe57d4249c3171  pytz-2017.3.zip
-+sha256  fae4cffc040921b8a2d60c6cf0b5d662c1190fe54d718271db4eb17d44a185b7  pytz-2017.3.zip
-+sha256  a1c7102a51ef9ed37766f7388c71fd41bae2a7a95c30673c419ab84e1acc5f02  LICENSE.txt
-diff --git a/package/python-pytz/python-pytz.mk b/package/python-pytz/python-pytz.mk
-index 9a8bd07..6e130a6 100644
---- a/package/python-pytz/python-pytz.mk
-+++ b/package/python-pytz/python-pytz.mk
-@@ -4,11 +4,17 @@
+ # md5 from https://pypi.python.org/pypi/DataProperty/json, sha256 locally computed
+-md5	6e757aa2537721681b437cfeacd7c599  DataProperty-0.25.6.tar.gz
+-sha256	07c36a290311102fd10552a7855baf5c94e9f60506afa37e0dfb88db5b3f5406  DataProperty-0.25.6.tar.gz
++md5	66ecca45ae5e00b2a88799a2795a0cf8  DataProperty-0.29.1.tar.gz
++sha256	3e547003b1af16126ff48b1c284241bc8a46d1e38e334ecd3a5ba87955446806  DataProperty-0.29.1.tar.gz
++sha256  a93d75bcb0774e2990106380cadad6dcb2de193c55d435ffc56ba345a08b1dc2  LICENSE
+diff --git a/package/python-dataproperty/python-dataproperty.mk b/package/python-dataproperty/python-dataproperty.mk
+index 96a7739..900cd04 100644
+--- a/package/python-dataproperty/python-dataproperty.mk
++++ b/package/python-dataproperty/python-dataproperty.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYTZ_VERSION = 2016.10
--PYTHON_PYTZ_SOURCE = pytz-$(PYTHON_PYTZ_VERSION).tar.bz2
--PYTHON_PYTZ_SITE = https://pypi.python.org/packages/d0/e1/aca6ef73a7bd322a7fc73fd99631ee3454d4fc67dc2bee463e2adf6bb3d3
-+PYTHON_PYTZ_VERSION = 2017.3
-+PYTHON_PYTZ_SOURCE = pytz-$(PYTHON_PYTZ_VERSION).zip
-+PYTHON_PYTZ_SITE = https://pypi.python.org/packages/60/88/d3152c234da4b2a1f7a989f89609ea488225eaea015bc16fbde2b3fdfefa
- PYTHON_PYTZ_SETUP_TYPE = setuptools
- PYTHON_PYTZ_LICENSE = MIT
- PYTHON_PYTZ_LICENSE_FILES = LICENSE.txt
- 
-+define PYTHON_PYTZ_EXTRACT_CMDS
-+	unzip $(DL_DIR)/$(PYTHON_PYTZ_SOURCE) -d $(@D)
-+	mv $(@D)/pytz-$(PYTHON_PYTZ_VERSION)/* $(@D)
-+	rmdir $(@D)/pytz-$(PYTHON_PYTZ_VERSION)
-+endef
-+
- $(eval $(python-package))
+-PYTHON_DATAPROPERTY_VERSION = 0.25.6
++PYTHON_DATAPROPERTY_VERSION = 0.29.1
+ PYTHON_DATAPROPERTY_SOURCE = DataProperty-$(PYTHON_DATAPROPERTY_VERSION).tar.gz
+-PYTHON_DATAPROPERTY_SITE = https://pypi.python.org/packages/bb/4b/d9a8d24aa27bd2827d70e68f1f389cdd824e5bea7541993fac8cb35100ed
++PYTHON_DATAPROPERTY_SITE = https://pypi.python.org/packages/38/6f/bf65cf1398ca34c709bf14ca9bc33821588498abe50c4652b0d345b9c08c
+ PYTHON_DATAPROPERTY_SETUP_TYPE = setuptools
+ PYTHON_DATAPROPERTY_LICENSE = MIT
+ PYTHON_DATAPROPERTY_LICENSE_FILES = LICENSE
