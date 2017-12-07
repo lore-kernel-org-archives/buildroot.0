@@ -1,71 +1,88 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu,  7 Dec 2017 08:00:30 +0100 (CET)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2017-12-06
-Message-ID: <20171207070030.2885920C3A@mail.free-electrons.com>
+From: Angelo Compagnucci <angelo@amarulasolutions.com>
+Date: Thu, 7 Dec 2017 08:43:34 +0100
+Subject: [Buildroot] [PATCH v3] package/i2c-tools: bump to version 4.0
+In-Reply-To: <20171206233850.2a0dae63@windsurf.lan>
+References: <1512569963-7256-1-git-send-email-angelo@amarulasolutions.com>
+ <20171206233850.2a0dae63@windsurf.lan>
+Message-ID: <CA+_SqVY_OY8mRaxGs=SUTvtC-3P=auUfNtcz9aHA5+2S7ZKkMA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Dear Thomas,
+
+Il 06 dic 2017 11:39 PM, "Thomas Petazzoni" <
+thomas.petazzoni@free-electrons.com> ha scritto:
+
 Hello,
 
-Build statistics for 2017-12-06
-===============================
+On Wed,  6 Dec 2017 15:19:23 +0100, Angelo Compagnucci wrote:
+> This patch bumps i2c-tools to version 4.0 and adds a couple of
+> new commands named i2ctransfer and eeprog.
+> It adds also an upstream commit not included in the release
+> that fixing a static compilation issue.
+>
+> Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 
-      branch |  OK | NOK | TIM | TOT |
-      master | 205 |  20 |   1 | 226 |
-   2017.08.x |  20 |   0 |   0 |  20 |
+I have a minor nit below, but most importantly, there is a parallel
+build issue with this update. I built i2c-tools about 10 times, and it
+failed 3 times, with errors like this:
 
-Results for branch 'master'
-===========================
+/home/thomas/projets/buildroot/output/host/bin/arm-linux-gcc -shared
+-Wl,--version-script=lib/libi2c.map -Wl,-soname,libi2c.so.0 -o
+lib/libi2c.so.0.1.0 lib/smbus.o -lc
+/home/thomas/projets/buildroot/output/host/bin/arm-linux-gcc  -o
+tools/i2cdetect tools/i2cdetect.o tools/i2cbusses.o -Llib -li2c
+lib/libi2c.so: file not recognized: File truncated
+collect2: error: ld returned 1 exit status
+make[2]: *** [tools/Module.mk:28: tools/i2cdetect] Error 1
+make[2]: *** Waiting for unfinished jobs....
+make[1]: *** [package/pkg-generic.mk:250: /home/thomas/projets/
+buildroot/output/build/i2c-tools-4.0/.stamp_built] Error 2
+make: *** [Makefile:79: _all] Error 2
 
-Classification of failures by reason
-------------------------------------
+/home/thomas/projets/buildroot/output/host/bin/arm-linux-gcc  -o
+tools/i2cdetect tools/i2cdetect.o tools/i2cbusses.o -Llib -li2c
+/home/thomas/projets/buildroot/output/host/opt/ext-
+toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/
+4.9.4/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: cannot find
+-li2c
+collect2: error: ld returned 1 exit status
+make[2]: *** [tools/Module.mk:28: tools/i2cdetect] Error 1
+make[2]: *** Waiting for unfinished jobs....
+make[1]: *** [package/pkg-generic.mk:250: /home/thomas/projets/
+buildroot/output/build/i2c-tools-4.0/.stamp_built] Error 2
+make: *** [Makefile:79: _all] Error 2
 
-              host-erlang-20.0 | 4 
-kvm-unit-tests-kvm-unit-tes... | 2 
-                  physfs-3.0.1 | 2 
-                busybox-1.27.2 | 1 
-                      fastd-18 | 1 
-           host-mono-5.4.0.201 | 1 
-                 libdrm-2.4.88 | 1 
-        ltp-testsuite-20170929 | 1 
-        luasql-sqlite3-2.3.0-1 | 1 
-                 mesa3d-17.2.6 | 1 
-                    mpv-0.27.0 | 1 
-                    php-7.1.12 | 1 
-                 qt5base-5.9.3 | 1 
-               tinycbor-v0.4.2 | 1 
-                     xen-4.9.0 | 1 
-        xlib_libXxf86dga-1.1.4 | 1 
-
-
-Detail of failures
-------------------
-
-         arm |                 busybox-1.27.2 | NOK | http://autobuild.buildroot.net/results/72c30feb3bc3deb5a8d6d465652d789454353b75 |     
-      x86_64 |                       fastd-18 | NOK | http://autobuild.buildroot.net/results/33cb32120e8e8553f6f7118107bd1f911fd981f6 |     
-         arm |               host-erlang-20.0 | NOK | http://autobuild.buildroot.net/results/a7e846b92ed304828d6db07d1a502b5e9268ad58 |     
-     aarch64 |               host-erlang-20.0 | NOK | http://autobuild.buildroot.net/results/67eda9d82753b48c20981b4250f8ad2af2c070e0 |     
-      mipsel |               host-erlang-20.0 | NOK | http://autobuild.buildroot.net/results/62e8f5040b2b31edfdb472384366d12444a8a826 |     
-         arm |               host-erlang-20.0 | NOK | http://autobuild.buildroot.net/results/8a56cb837e3d96bba72c7875253b367d32d17df0 |     
-         arm |            host-mono-5.4.0.201 | NOK | http://autobuild.buildroot.net/results/9578185b07103ea6cb1ca48e652377a5f53989fd |     
-      x86_64 | kvm-unit-tests-kvm-unit-tes... | NOK | http://autobuild.buildroot.net/results/c3987a3cbd2960b0ff50f872636bdfd8d1a9c820 |     
-      x86_64 | kvm-unit-tests-kvm-unit-tes... | NOK | http://autobuild.buildroot.net/results/3a601bd5c511908bcc0e55bc4b6673aa242aa273 |     
-       sparc |                  libdrm-2.4.88 | NOK | http://autobuild.buildroot.net/results/3bdeac06fa334dfaedfb9051506c6cbf10e5e44b |     
-         arc |         ltp-testsuite-20170929 | NOK | http://autobuild.buildroot.net/results/6c0506423c76b61018da26c2549570e3d9eb5763 |     
-      x86_64 |         luasql-sqlite3-2.3.0-1 | NOK | http://autobuild.buildroot.net/results/9d0b6242242e0eef64853db58bca444d170f3752 |     
-     powerpc |                  mesa3d-17.2.6 | NOK | http://autobuild.buildroot.net/results/a766474ec62f39158b3780e0b5a8115c3bc70bce |     
-     aarch64 |                     mpv-0.27.0 | NOK | http://autobuild.buildroot.net/results/199dc7d793ab18bc821bd458db73145098f14d8a | ORPH
-         arm |                     php-7.1.12 | NOK | http://autobuild.buildroot.net/results/c386524442cc37dbf192389fac61e2eed720f6e8 | ORPH
-         arm |                   physfs-3.0.1 | NOK | http://autobuild.buildroot.net/results/3a640850f19d8ac643d3540242e19ed57d6122e8 |     
-         arm |                   physfs-3.0.1 | NOK | http://autobuild.buildroot.net/results/35c42c6110787c37701fcdd3b6cf131db7f143d5 |     
-         arm |                  qt5base-5.9.3 | NOK | http://autobuild.buildroot.net/results/583ae5851507aae959d0de2d2fb0a1a06ba9fd75 |     
-         arc |                tinycbor-v0.4.2 | NOK | http://autobuild.buildroot.net/results/12c6d901321e946c4b4a65026592f5cfea2b04b9 |     
-         arm |                      xen-4.9.0 | NOK | http://autobuild.buildroot.net/results/2c9ab142a0907ca35bbf5e615bfeb43e20c5da0f |     
-    mips64el |         xlib_libXxf86dga-1.1.4 | TIM | http://autobuild.buildroot.net/results/2a8c036b64732e0b7c9f1c9d94c31520e126d8d1 |     
+So it seems like the dependency chain in the i2c-tools Makefile is not
+correct.
 
 
--- 
-http://autobuild.buildroot.net
+> +Subject: [PATCH 1/2] Makefile: Add flag to disable dynamic library
+
+Subject should be [PATCH] instead of [PATCH 1/2]. Note that I had fixed
+this locally, because it's a very minor nit. But I refrained from
+applying due to the parallel build problem.
+
+Could you have a look at the parallel build problem ?
+
+
+I remember to have seen a patch about this problem passing on the mailing
+list.
+I'll try it as soon as possible!
+
+Sincerely, Angelo
+
+
+Thanks a lot!
+
+Thomas
+--
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20171207/69353270/attachment.html>
