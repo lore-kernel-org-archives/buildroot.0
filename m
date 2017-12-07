@@ -1,170 +1,215 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu,  7 Dec 2017 19:48:06 +0200
-Subject: [Buildroot] [PATCH] fastd: fix build with newer libsodium
-Message-ID: <c807b9a816f86998b946f7508e1adbcc42aaa3b1.1512668886.git.baruch@tkos.co.il>
+From: Jan Kraval <jan.kraval@gmail.com>
+Date: Thu,  7 Dec 2017 18:59:26 +0100
+Subject: [Buildroot] [PATCH 1/1] board/orangepi: add support for
+ orangepi-lite board
+Message-ID: <20171207175926.8533-1-jan.kraval@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add upstream patch removing aes128-ctr support that libsodium no longer
-provides.
+    This board is quite similar to orangepi-one board. Instead of ethernet, it
+    has RTL8189FTV SDIO WiFi chip.
 
-Fixes:
-http://autobuild.buildroot.net/results/90c/90c526491a9eb6b5ceb38a0218fd480c03208217/
-http://autobuild.buildroot.net/results/f81/f815dbfee7099f3b8fea7036e1fd10385f8c6a80/
-http://autobuild.buildroot.net/results/329/3299d413ee98963e62c0df4087604c9872fcad68/
+    Board support package includes the following components:
+     - mainline u-boot 2017.09
+     - mainline kernel 4.13.11
 
-Cc: Alexander Dahl <post@lespocky.de>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Jan Kraval <jan.kraval@gmail.com>
 ---
- ...her-remove-aes128-ctr-NaCl-implementation.patch | 137 +++++++++++++++++++++
- 1 file changed, 137 insertions(+)
- create mode 100644 package/fastd/0001-cipher-remove-aes128-ctr-NaCl-implementation.patch
+ DEVELOPERS                                       |  4 +++
+ board/orangepi/orangepi-lite/boot.cmd            |  8 ++++++
+ board/orangepi/orangepi-lite/genimage.cfg        | 36 ++++++++++++++++++++++++
+ board/orangepi/orangepi-lite/linux-extras.config |  8 ++++++
+ board/orangepi/orangepi-lite/post-build.sh       |  1 +
+ board/orangepi/orangepi-lite/post-image.sh       |  1 +
+ board/orangepi/orangepi-lite/readme.txt          | 29 +++++++++++++++++++
+ configs/orangepi_lite_defconfig                  | 34 ++++++++++++++++++++++
+ 8 files changed, 121 insertions(+)
+ create mode 100644 board/orangepi/orangepi-lite/boot.cmd
+ create mode 100644 board/orangepi/orangepi-lite/genimage.cfg
+ create mode 100644 board/orangepi/orangepi-lite/linux-extras.config
+ create mode 120000 board/orangepi/orangepi-lite/post-build.sh
+ create mode 120000 board/orangepi/orangepi-lite/post-image.sh
+ create mode 100644 board/orangepi/orangepi-lite/readme.txt
+ create mode 100644 configs/orangepi_lite_defconfig
 
-diff --git a/package/fastd/0001-cipher-remove-aes128-ctr-NaCl-implementation.patch b/package/fastd/0001-cipher-remove-aes128-ctr-NaCl-implementation.patch
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 0bbee2c369..afa32ae5eb 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -783,6 +783,10 @@ F:	package/pangomm/
+ F:	package/rpm/
+ F:	package/yad/
+ 
++N:	Jan Kraval <jan.kraval@gmail.com>
++F:	board/orangepi/orangepi-lite
++F:	configs/orangepi_lite_defconfig
++
+ N:	Jan Pedersen <jp@jp-embedded.com>
+ F:	package/zip/
+ 
+diff --git a/board/orangepi/orangepi-lite/boot.cmd b/board/orangepi/orangepi-lite/boot.cmd
 new file mode 100644
-index 000000000000..854b3e74cbf6
+index 0000000000..5c29dabfe8
 --- /dev/null
-+++ b/package/fastd/0001-cipher-remove-aes128-ctr-NaCl-implementation.patch
-@@ -0,0 +1,137 @@
-+From 4b8c4f54bbd70849fc91679bea44b4e1dfb0526d Mon Sep 17 00:00:00 2001
-+From: Matthias Schiffer <mschiffer@universe-factory.net>
-+Date: Wed, 18 Oct 2017 20:11:30 +0200
-+Subject: [PATCH] cipher: remove aes128-ctr NaCl implementation
++++ b/board/orangepi/orangepi-lite/boot.cmd
+@@ -0,0 +1,8 @@
++setenv fdt_high ffffffff
 +
-+New versions of libsodium have dropped support for aes128-ctr. AES support
-+is only available with OpenSSL now.
++setenv bootargs console=ttyS0,115200 earlyprintk root=/dev/mmcblk0p2 rootwait
 +
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Patch status: upstream commit 4b8c4f54bb
++fatload mmc 0 $kernel_addr_r zImage
++fatload mmc 0 $fdt_addr_r sun8i-h3-orangepi-lite.dtb
 +
-+ doc/source/manual/config.rst                       |  1 -
-+ src/crypto/cipher/aes128_ctr/CMakeLists.txt        |  1 -
-+ src/crypto/cipher/aes128_ctr/nacl/CMakeLists.txt   |  6 --
-+ .../aes128_ctr/nacl/cipher_aes128_ctr_nacl.c       | 76 ----------------------
-+ 4 files changed, 84 deletions(-)
-+ delete mode 100644 src/crypto/cipher/aes128_ctr/nacl/CMakeLists.txt
-+ delete mode 100644 src/crypto/cipher/aes128_ctr/nacl/cipher_aes128_ctr_nacl.c
++bootz $kernel_addr_r - $fdt_addr_r
+diff --git a/board/orangepi/orangepi-lite/genimage.cfg b/board/orangepi/orangepi-lite/genimage.cfg
+new file mode 100644
+index 0000000000..cd81f986b2
+--- /dev/null
++++ b/board/orangepi/orangepi-lite/genimage.cfg
+@@ -0,0 +1,36 @@
++# Minimal SD card image for the OrangePi Lite
++#
++image boot.vfat {
++	vfat {
++		files = {
++			"zImage",
++			"sun8i-h3-orangepi-lite.dtb",
++			"boot.scr"
++		}
++	}
++	size = 10M
++}
 +
-+diff --git a/doc/source/manual/config.rst b/doc/source/manual/config.rst
-+index 0abebeb4c245..94d7a9495ef0 100644
-+--- a/doc/source/manual/config.rst
-++++ b/doc/source/manual/config.rst
-+@@ -70,7 +70,6 @@ Example config:
-+   * ``aes128-ctr``: AES128 in counter mode
-+ 
-+     - ``openssl``: Use implementation from OpenSSL's libcrypto
-+-    - ``nacl``: Use implementation from NaCl or libsodium
-+ 
-+   * ``null``: No encryption (for authenticated-only methods using composed_gmac)
-+ 
-+diff --git a/src/crypto/cipher/aes128_ctr/CMakeLists.txt b/src/crypto/cipher/aes128_ctr/CMakeLists.txt
-+index 0588fed798e2..58e8c6b3371c 100644
-+--- a/src/crypto/cipher/aes128_ctr/CMakeLists.txt
-++++ b/src/crypto/cipher/aes128_ctr/CMakeLists.txt
-+@@ -1,3 +1,2 @@
-+ fastd_cipher(aes128-ctr aes128_ctr.c)
-+ add_subdirectory(openssl)
-+-add_subdirectory(nacl)
-+diff --git a/src/crypto/cipher/aes128_ctr/nacl/CMakeLists.txt b/src/crypto/cipher/aes128_ctr/nacl/CMakeLists.txt
-+deleted file mode 100644
-+index 676aa5d48ec4..000000000000
-+--- a/src/crypto/cipher/aes128_ctr/nacl/CMakeLists.txt
-++++ /dev/null
-+@@ -1,6 +0,0 @@
-+-fastd_cipher_impl(aes128-ctr nacl
-+-  cipher_aes128_ctr_nacl.c
-+-)
-+-fastd_cipher_impl_include_directories(aes128-ctr nacl ${NACL_INCLUDE_DIRS})
-+-fastd_cipher_impl_link_libraries(aes128-ctr nacl ${NACL_LIBRARIES})
-+-fastd_cipher_impl_require(aes128-ctr nacl NACL)
-+diff --git a/src/crypto/cipher/aes128_ctr/nacl/cipher_aes128_ctr_nacl.c b/src/crypto/cipher/aes128_ctr/nacl/cipher_aes128_ctr_nacl.c
-+deleted file mode 100644
-+index ead632640414..000000000000
-+--- a/src/crypto/cipher/aes128_ctr/nacl/cipher_aes128_ctr_nacl.c
-++++ /dev/null
-+@@ -1,76 +0,0 @@
-+-/*
-+-  Copyright (c) 2012-2016, Matthias Schiffer <mschiffer@universe-factory.net>
-+-  All rights reserved.
-+-
-+-  Redistribution and use in source and binary forms, with or without
-+-  modification, are permitted provided that the following conditions are met:
-+-
-+-    1. Redistributions of source code must retain the above copyright notice,
-+-       this list of conditions and the following disclaimer.
-+-    2. Redistributions in binary form must reproduce the above copyright notice,
-+-       this list of conditions and the following disclaimer in the documentation
-+-       and/or other materials provided with the distribution.
-+-
-+-  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-+-  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-+-  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-+-  DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-+-  FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-+-  DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-+-  SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-+-  CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-+-  OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-+-  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-+-*/
-+-
-+-/**
-+-   \file
-+-
-+-   The aes128-ctr implementation from NaCl
-+-*/
-+-
-+-
-+-#include "../../../../crypto.h"
-+-#include "../../../../alloc.h"
-+-
-+-#include <crypto_stream_aes128ctr.h>
-+-
-+-
-+-/** The cipher state */
-+-struct __attribute__((aligned(16))) fastd_cipher_state {
-+-	uint8_t d[crypto_stream_aes128ctr_BEFORENMBYTES] __attribute__((aligned(16))); /**< The unpacked AES key */
-+-};
-+-
-+-
-+-/** Initializes the cipher state */
-+-static fastd_cipher_state_t * aes128_ctr_init(const uint8_t *key) {
-+-	fastd_block128_t k;
-+-	memcpy(k.b, key, sizeof(fastd_block128_t));
-+-
-+-	fastd_cipher_state_t *state = fastd_new_aligned(fastd_cipher_state_t, 16);
-+-	crypto_stream_aes128ctr_beforenm(state->d, k.b);
-+-
-+-	return state;
-+-}
-+-
-+-/** XORs data with the aes128-ctr cipher stream */
-+-static bool aes128_ctr_crypt(const fastd_cipher_state_t *state, fastd_block128_t *out, const fastd_block128_t *in, size_t len, const uint8_t *iv) {
-+-	crypto_stream_aes128ctr_xor_afternm(out->b, in->b, len, iv, state->d);
-+-	return true;
-+-}
-+-
-+-/** Frees the cipher state */
-+-static void aes128_ctr_free(fastd_cipher_state_t *state) {
-+-	if (state) {
-+-		secure_memzero(state, sizeof(*state));
-+-		free(state);
-+-	}
-+-}
-+-
-+-
-+-/** The nacl aes128-ctr implementation */
-+-const fastd_cipher_t fastd_cipher_aes128_ctr_nacl = {
-+-	.init = aes128_ctr_init,
-+-	.crypt = aes128_ctr_crypt,
-+-	.free = aes128_ctr_free,
-+-};
-+-- 
-+2.15.0
++image sdcard.img {
++	hdimage {
++	}
 +
++	partition u-boot {
++		in-partition-table = "no"
++		image = "u-boot-sunxi-with-spl.bin"
++		offset = 8192
++		size = 1040384 # 1MB - 8192
++	}
++
++	partition boot {
++		partition-type = 0xC
++		bootable = "true"
++		image = "boot.vfat"
++	}
++
++	partition rootfs {
++		partition-type = 0x83
++		image = "rootfs.ext4"
++		size = 512M
++	}
++}
+diff --git a/board/orangepi/orangepi-lite/linux-extras.config b/board/orangepi/orangepi-lite/linux-extras.config
+new file mode 100644
+index 0000000000..5e3af2b831
+--- /dev/null
++++ b/board/orangepi/orangepi-lite/linux-extras.config
+@@ -0,0 +1,8 @@
++# wireless core
++CONFIG_WIRELESS=y
++CONFIG_CFG80211=y
++CONFIG_MAC80211=y
++CONFIG_CFG80211_WEXT=y
++
++# wireless drivers
++CONFIG_WLAN=y
+diff --git a/board/orangepi/orangepi-lite/post-build.sh b/board/orangepi/orangepi-lite/post-build.sh
+new file mode 120000
+index 0000000000..cd7f11645b
+--- /dev/null
++++ b/board/orangepi/orangepi-lite/post-build.sh
+@@ -0,0 +1 @@
++../post-build.sh
+\ No newline at end of file
+diff --git a/board/orangepi/orangepi-lite/post-image.sh b/board/orangepi/orangepi-lite/post-image.sh
+new file mode 120000
+index 0000000000..ae6294fa38
+--- /dev/null
++++ b/board/orangepi/orangepi-lite/post-image.sh
+@@ -0,0 +1 @@
++../post-image.sh
+\ No newline at end of file
+diff --git a/board/orangepi/orangepi-lite/readme.txt b/board/orangepi/orangepi-lite/readme.txt
+new file mode 100644
+index 0000000000..5f402bf207
+--- /dev/null
++++ b/board/orangepi/orangepi-lite/readme.txt
+@@ -0,0 +1,29 @@
++OrangePi Lite
++
++Intro
++=====
++
++This default configuration will allow you to start experimenting with the
++buildroot environment for the OrangePi Lite. With the current configuration
++it will bring-up the board, and allow access through the serial console.
++
++How to build it
++===============
++
++Configure Buildroot:
++
++    $ make orangepi_lite_defconfig
++
++Compile everything and build the SD card image:
++
++    $ make
++
++How to write the SD card
++========================
++
++Once the build process is finished you will have an image called "sdcard.img"
++in the output/images/ directory.
++
++Copy the bootable "sdcard.img" onto an SD card with "dd":
++
++  $ sudo dd if=output/images/sdcard.img of=/dev/sdX
+diff --git a/configs/orangepi_lite_defconfig b/configs/orangepi_lite_defconfig
+new file mode 100644
+index 0000000000..3222275201
+--- /dev/null
++++ b/configs/orangepi_lite_defconfig
+@@ -0,0 +1,34 @@
++BR2_arm=y
++BR2_cortex_a7=y
++BR2_ARM_FPU_VFPV4=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_13=y
++BR2_TARGET_GENERIC_HOSTNAME="OrangePi_Lite"
++BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for the Orange Pi Lite"
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/orangepi/orangepi-lite/post-build.sh"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/orangepi/orangepi-lite/post-image.sh"
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.13.11"
++BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
++BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/orangepi/orangepi-lite/linux-extras.config"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-h3-orangepi-lite"
++BR2_PACKAGE_RTL8189FS=y
++BR2_PACKAGE_WIRELESS_TOOLS=y
++BR2_PACKAGE_WPA_SUPPLICANT=y
++BR2_PACKAGE_WPA_SUPPLICANT_CLI=y
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++# BR2_TARGET_ROOTFS_TAR is not set
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.09"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="orangepi_lite"
++BR2_TARGET_UBOOT_NEEDS_DTC=y
++BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
++BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-sunxi-with-spl.bin"
++BR2_PACKAGE_HOST_DOSFSTOOLS=y
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_MTOOLS=y
++BR2_PACKAGE_HOST_UBOOT_TOOLS=y
 -- 
-2.15.0
+2.11.0
