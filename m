@@ -1,20 +1,22 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 07 Dec 2017 22:15:18 +0100
-Subject: [Buildroot] [PATCH] stunnel: bump to version 5.44
-In-Reply-To: <cf7fd7b1d0f8fcaf984f9905b19cfb9d2fe5ec4c.1512678832.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Thu, 7 Dec 2017 22:33:52 +0200")
-References: <cf7fd7b1d0f8fcaf984f9905b19cfb9d2fe5ec4c.1512678832.git.baruch@tkos.co.il>
-Message-ID: <87indi44ux.fsf@dell.be.48ers.dk>
+Date: Thu, 07 Dec 2017 22:16:20 +0100
+Subject: [Buildroot] [PATCH] axfsutils: bump version
+In-Reply-To: <20171207184605.15915-1-chris.brandt@renesas.com> (Chris Brandt's
+ message of "Thu, 7 Dec 2017 13:46:05 -0500")
+References: <20171207184605.15915-1-chris.brandt@renesas.com>
+Message-ID: <87efo644t7.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+>>>>> "Chris" == Chris Brandt <chris.brandt@renesas.com> writes:
 
- > Add license files hashes.
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+ > The patches are no longer needed because they have been pushed back into
+ > the upstream axfs repository.
+
+ > Signed-off-by: Chris Brandt <chris.brandt@renesas.com>
 
 Committed, thanks.
 
