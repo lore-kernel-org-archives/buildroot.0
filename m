@@ -1,155 +1,180 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu,  7 Dec 2017 18:52:23 +0200
-Subject: [Buildroot] [PATCH] rsync: add security fix patches
-Message-ID: <17fb44f01e897a5d27a57582bd5b21d3cea030a2.1512665543.git.baruch@tkos.co.il>
+From: Evgeniy Didin <Evgeniy.Didin@synopsys.com>
+Date: Thu,  7 Dec 2017 20:06:28 +0300
+Subject: [Buildroot] [PATCH] board: add support for ARC HS Development Kit
+ (HSDK)
+Message-ID: <20171207170628.2806-1-didin@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes CVE-2017-17433 and CVE-2017-17434: remote bypass of security
-restrictions.
+Synopsys DesignWare HSDK (which stands for ARC HS
+Development Kit) is the latest and greatest development
+platform that sports quad-core ARC HS38 in real silicon.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Most noticeable features of the board are:
+ * Quad-core ARC HS38 CPU running at 1GHz
+ * 4Gb of DDR
+ * Built-in Vivante GPU (well supported via open source
+   Etnaviv drivers)
+ * Built-in Wi-Fi/Bluetooth module (RedPine RS-9113)
+
+And as usual we have:
+ * [micro] SD-card slot
+ * 2 USB 2.0 ports
+ * 1Gbit Ethernet port
+ * Built-in Digilent JTAG probe
+ * Serial port accessible via micro-USB port
+
+Writing sdcard.img on SDcard creates two partitions:
+ * FAT32 with uImage and uboot.env
+ * EXT4 with root filesystem
+
+We modify kernel config because in default hsdk kernel config
+CONFIG_INITRAMFS_SOURCE parameter is set and when we build
+rootfs separately (BR2_TARGET_ROOTFS_INITRAMFS is not set)
+error appears. Also we set up CONFIG_ARC_UBOOT_SUPPORT which
+enables usage of uboot variables in the boot process.
+
+Signed-off-by: Evgeniy Didin <didin@synopsys.com>
+Cc: Alexey Brodkin <abrodkin@synopsys.com>
+Cc: arc-buildroot at synopsys.com
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
 ---
- .../0001-Check-fname-in-recv_files-sooner.patch    | 45 ++++++++++++++++++++++
- ...0002-Sanitize-xname-in-read_ndx_and_attrs.patch | 39 +++++++++++++++++++
- ...mon-filter-against-fnamecmp-in-recv_files.patch | 28 ++++++++++++++
- 3 files changed, 112 insertions(+)
- create mode 100644 package/rsync/0001-Check-fname-in-recv_files-sooner.patch
- create mode 100644 package/rsync/0002-Sanitize-xname-in-read_ndx_and_attrs.patch
- create mode 100644 package/rsync/0003-Check-daemon-filter-against-fnamecmp-in-recv_files.patch
+ board/synopsys/hsdk/genimage-hsdk.cfg | 26 +++++++++++++++++++++++++
+ board/synopsys/hsdk/linux.fragment    |  2 ++
+ board/synopsys/hsdk/post-image.sh     | 18 ++++++++++++++++++
+ board/synopsys/hsdk/uboot.env.txt     |  9 +++++++++
+ configs/snps_hsdk_defconfig           | 36 +++++++++++++++++++++++++++++++++++
+ 5 files changed, 91 insertions(+)
+ create mode 100644 board/synopsys/hsdk/genimage-hsdk.cfg
+ create mode 100644 board/synopsys/hsdk/linux.fragment
+ create mode 100755 board/synopsys/hsdk/post-image.sh
+ create mode 100644 board/synopsys/hsdk/uboot.env.txt
+ create mode 100644 configs/snps_hsdk_defconfig
 
-diff --git a/package/rsync/0001-Check-fname-in-recv_files-sooner.patch b/package/rsync/0001-Check-fname-in-recv_files-sooner.patch
+diff --git a/board/synopsys/hsdk/genimage-hsdk.cfg b/board/synopsys/hsdk/genimage-hsdk.cfg
 new file mode 100644
-index 000000000000..361696030600
+index 0000000000..8928f704a2
 --- /dev/null
-+++ b/package/rsync/0001-Check-fname-in-recv_files-sooner.patch
-@@ -0,0 +1,45 @@
-+From 3e06d40029cfdce9d0f73d87cfd4edaf54be9c51 Mon Sep 17 00:00:00 2001
-+From: Jeriko One <jeriko.one@gmx.us>
-+Date: Thu, 2 Nov 2017 23:44:19 -0700
-+Subject: [PATCH] Check fname in recv_files sooner.
++++ b/board/synopsys/hsdk/genimage-hsdk.cfg
+@@ -0,0 +1,26 @@
++image boot.vfat {
++  vfat {
++    files = {
++      "uboot.env",
++      "uImage"
++    }
++  }
++  size = 100M
++}
 +
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Patch status: upstream commit 3e06d40029c
++image sdcard.img {
++  hdimage {
++  }
 +
-+ receiver.c | 12 ++++++------
-+ 1 file changed, 6 insertions(+), 6 deletions(-)
++  partition boot {
++    partition-type = 0xC
++    bootable = "true"
++    image = "boot.vfat"
++  }
 +
-+diff --git a/receiver.c b/receiver.c
-+index baae3a919cdd..9fdafa152cb3 100644
-+--- a/receiver.c
-++++ b/receiver.c
-+@@ -574,6 +574,12 @@ int recv_files(int f_in, int f_out, char *local_name)
-+ 			file = dir_flist->files[cur_flist->parent_ndx];
-+ 		fname = local_name ? local_name : f_name(file, fbuf);
-+ 
-++		if (daemon_filter_list.head
-++		    && check_filter(&daemon_filter_list, FLOG, fname, 0) < 0) {
-++			rprintf(FERROR, "attempt to hack rsync failed.\n");
-++			exit_cleanup(RERR_PROTOCOL);
-++		}
-++
-+ 		if (DEBUG_GTE(RECV, 1))
-+ 			rprintf(FINFO, "recv_files(%s)\n", fname);
-+ 
-+@@ -645,12 +651,6 @@ int recv_files(int f_in, int f_out, char *local_name)
-+ 
-+ 		cleanup_got_literal = 0;
-+ 
-+-		if (daemon_filter_list.head
-+-		    && check_filter(&daemon_filter_list, FLOG, fname, 0) < 0) {
-+-			rprintf(FERROR, "attempt to hack rsync failed.\n");
-+-			exit_cleanup(RERR_PROTOCOL);
-+-		}
-+-
-+ 		if (read_batch) {
-+ 			int wanted = redoing
-+ 				   ? we_want_redo(ndx)
-+-- 
-+2.15.0
-+
-diff --git a/package/rsync/0002-Sanitize-xname-in-read_ndx_and_attrs.patch b/package/rsync/0002-Sanitize-xname-in-read_ndx_and_attrs.patch
++  partition rootfs {
++    partition-type = 0x83
++    image = "rootfs.ext4"
++    size = 1G
++  }
++}
+diff --git a/board/synopsys/hsdk/linux.fragment b/board/synopsys/hsdk/linux.fragment
 new file mode 100644
-index 000000000000..1e5d3717c454
+index 0000000000..53b9305e09
 --- /dev/null
-+++ b/package/rsync/0002-Sanitize-xname-in-read_ndx_and_attrs.patch
-@@ -0,0 +1,39 @@
-+From 70aeb5fddd1b2f8e143276f8d5a085db16c593b9 Mon Sep 17 00:00:00 2001
-+From: Jeriko One <jeriko.one@gmx.us>
-+Date: Thu, 16 Nov 2017 17:05:42 -0800
-+Subject: [PATCH] Sanitize xname in read_ndx_and_attrs.
++++ b/board/synopsys/hsdk/linux.fragment
+@@ -0,0 +1,2 @@
++CONFIG_INITRAMFS_SOURCE=
++CONFIG_ARC_UBOOT_SUPPORT=y
+diff --git a/board/synopsys/hsdk/post-image.sh b/board/synopsys/hsdk/post-image.sh
+new file mode 100755
+index 0000000000..5871a410a5
+--- /dev/null
++++ b/board/synopsys/hsdk/post-image.sh
+@@ -0,0 +1,18 @@
++#!/bin/bash
 +
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Patch status: upstream commit 70aeb5fddd
++BOARD_DIR="$(dirname $0)"
++BOARD_NAME="$(basename ${BOARD_DIR})"
++GENIMAGE_CFG="${BOARD_DIR}/genimage-${BOARD_NAME}.cfg"
++GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
++rm -rf "${GENIMAGE_TMP}"
 +
-+ rsync.c | 6 ++++++
-+ 1 file changed, 6 insertions(+)
++mkenvimage -s 0x4000 -o output/images/uboot.env ${BOARD_DIR}/uboot.env.txt
 +
-+diff --git a/rsync.c b/rsync.c
-+index b82e59881018..a0945ba4e7f5 100644
-+--- a/rsync.c
-++++ b/rsync.c
-+@@ -49,6 +49,7 @@ extern int flist_eof;
-+ extern int file_old_total;
-+ extern int keep_dirlinks;
-+ extern int make_backups;
-++extern int sanitize_paths;
-+ extern struct file_list *cur_flist, *first_flist, *dir_flist;
-+ extern struct chmod_mode_struct *daemon_chmod_modes;
-+ #ifdef ICONV_OPTION
-+@@ -396,6 +397,11 @@ int read_ndx_and_attrs(int f_in, int f_out, int *iflag_ptr, uchar *type_ptr,
-+ 	if (iflags & ITEM_XNAME_FOLLOWS) {
-+ 		if ((len = read_vstring(f_in, buf, MAXPATHLEN)) < 0)
-+ 			exit_cleanup(RERR_PROTOCOL);
-++
-++		if (sanitize_paths) {
-++			sanitize_path(buf, buf, "", 0, SP_DEFAULT);
-++			len = strlen(buf);
-++		}
-+ 	} else {
-+ 		*buf = '\0';
-+ 		len = -1;
-+-- 
-+2.15.0
-+
-diff --git a/package/rsync/0003-Check-daemon-filter-against-fnamecmp-in-recv_files.patch b/package/rsync/0003-Check-daemon-filter-against-fnamecmp-in-recv_files.patch
++genimage                           \
++        --rootpath "${TARGET_DIR}"     \
++        --tmppath "${GENIMAGE_TMP}"    \
++        --inputpath "${BINARIES_DIR}"  \
++        --outputpath "${BINARIES_DIR}" \
++        --config "${GENIMAGE_CFG}"
++tar czf output/images/sdcard.img.tar.gz --directory="./output/images"  sdcard.img
++exit $?
+diff --git a/board/synopsys/hsdk/uboot.env.txt b/board/synopsys/hsdk/uboot.env.txt
 new file mode 100644
-index 000000000000..b19921c3ebdd
+index 0000000000..6bcfb56a77
 --- /dev/null
-+++ b/package/rsync/0003-Check-daemon-filter-against-fnamecmp-in-recv_files.patch
-@@ -0,0 +1,28 @@
-+From 5509597decdbd7b91994210f700329d8a35e70a1 Mon Sep 17 00:00:00 2001
-+From: Jeriko One <jeriko.one@gmx.us>
-+Date: Thu, 16 Nov 2017 17:26:03 -0800
-+Subject: [PATCH] Check daemon filter against fnamecmp in recv_files().
++++ b/board/synopsys/hsdk/uboot.env.txt
+@@ -0,0 +1,9 @@
++baudrate=115200
++bootargs=console=ttyS3,115200n8 root=/dev/mmcblk0p2 rootwait
++bootcmd=fatload mmc 0:1; bootm
++bootdelay=2
++bootfile=uImage
++loadaddr=0x82000000
++stderr=serial0 at f0005000
++stdin=serial0 at f0005000
++stdout=serial0 at f0005000
+diff --git a/configs/snps_hsdk_defconfig b/configs/snps_hsdk_defconfig
+new file mode 100644
+index 0000000000..8c67b0ec0d
+--- /dev/null
++++ b/configs/snps_hsdk_defconfig
+@@ -0,0 +1,36 @@
++#Architecture
++BR2_arcle=y
++BR2_archs38=y
 +
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Patch status: upstream commit 5509597dec
++#Linux headers
++BR2_KERNEL_HEADERS_4_14=y
 +
-+ receiver.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
++#System
++BR2_TARGET_GENERIC_HOSTNAME="hsdk"
++BR2_TARGET_GENERIC_ISSUE="Welcome to the HSDK Platform"
++BR2_SYSTEM_DHCP="eth0"
 +
-+diff --git a/receiver.c b/receiver.c
-+index 9fdafa152cb3..9c46242e013c 100644
-+--- a/receiver.c
-++++ b/receiver.c
-+@@ -722,7 +722,7 @@ int recv_files(int f_in, int f_out, char *local_name)
-+ 				break;
-+ 			}
-+ 			if (!fnamecmp || (daemon_filter_list.head
-+-			  && check_filter(&daemon_filter_list, FLOG, fname, 0) < 0)) {
-++			  && check_filter(&daemon_filter_list, FLOG, fnamecmp, 0) < 0)) {
-+ 				fnamecmp = fname;
-+ 				fnamecmp_type = FNAMECMP_FNAME;
-+ 			}
-+-- 
-+2.15.0
++#Kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.14.4"
++BR2_LINUX_KERNEL_DEFCONFIG="hsdk"
++BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/synopsys/hsdk/linux.fragment"
 +
++#Filesystem / image
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++# BR2_TARGET_ROOTFS_TAR is not set
++BR2_PACKAGE_HOST_DOSFSTOOLS=y
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_MTOOLS=y
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/synopsys/hsdk/post-image.sh"
++
++#Bootloader
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.11"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="hsdk"
++BR2_TARGET_UBOOT_NEEDS_DTC=y
++BR2_TARGET_UBOOT_FORMAT_ELF=y
 -- 
-2.15.0
+2.11.0
