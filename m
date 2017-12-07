@@ -1,89 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 7 Dec 2017 22:33:32 +0100
-Subject: [Buildroot] [git commit] python-tabledata: new package
-Message-ID: <20171207213319.074C5810D1@busybox.osuosl.org>
+Date: Thu, 7 Dec 2017 22:39:44 +0100
+Subject: [Buildroot] [git commit] arch/arm: default to Cortex-A53 for AArch64
+Message-ID: <20171207213319.48CE5810D1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7ac8ffead45eddb015c3c7d0b322eb0fa9adc7b7
+commit: https://git.buildroot.net/buildroot/commit/?id=ae2ec0ed74207bb6264e9b90bafdb2d8125c3472
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Since we re-organised the list of cores (in 52d500aa35) and introduced
+some new cores (in e9960da6ec, d632d9e5a9, 6317a199ec), the default for
+AArch64 was accidently changed from A53 to A35.
+
+So, restore the default to A53 for AArch64.
+
+Reported-by: daggs <daggs@gmx.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: daggs <daggs@gmx.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/Config.in                              |  1 +
- package/python-tabledata/Config.in             | 12 ++++++++++++
- package/python-tabledata/python-tabledata.hash |  4 ++++
- package/python-tabledata/python-tabledata.mk   | 21 +++++++++++++++++++++
- 4 files changed, 38 insertions(+)
+ arch/Config.in.arm | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/Config.in b/package/Config.in
-index 433224c..9c9a4a7 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -909,6 +909,7 @@ menu "External python modules"
- 	source "package/python-sortedcontainers//Config.in"
- 	source "package/python-spidev/Config.in"
- 	source "package/python-systemd/Config.in"
-+	source "package/python-tabledata/Config.in"
- 	source "package/python-tempora/Config.in"
- 	source "package/python-typepy/Config.in"
- 	source "package/python-thrift/Config.in"
-diff --git a/package/python-tabledata/Config.in b/package/python-tabledata/Config.in
-new file mode 100644
-index 0000000..9e8ca9c
---- /dev/null
-+++ b/package/python-tabledata/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_PYTHON_TABLEDATA
-+	bool "python-tabledata"
-+	select BR2_PACKAGE_PYTHON_DATAPROPERTY # runtime
-+	select BR2_PACKAGE_PYTHON_LOGBOOK # runtime
-+	select BR2_PACKAGE_PYTHON_PATHVALIDATE # runtime
-+	select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
-+	select BR2_PACKAGE_PYTHON_TYPEPY # runtime
-+	help
-+	  A Python library to represent tabular data for
-+	  pytablewriter/pytablereader/SimpleSQLite.
-+
-+	  https://github.com/thombashi/tabledata
-diff --git a/package/python-tabledata/python-tabledata.hash b/package/python-tabledata/python-tabledata.hash
-new file mode 100644
-index 0000000..efc6d6a
---- /dev/null
-+++ b/package/python-tabledata/python-tabledata.hash
-@@ -0,0 +1,4 @@
-+# md5 from https://pypi.python.org/pypi/tabledata/json, sha256 locally computed
-+md5	4ff69d8855a835890944591721d0c129  tabledata-0.0.5.tar.gz
-+sha256	e16490e4c15f06ee258015431ec247a5b301aec4ebca3297cf6451efb9eb3cfb  tabledata-0.0.5.tar.gz
-+sha256  cbce2ac14dd81b6a1155029034512a304505692cc63b625538916cf93bee8ca2  LICENSE
-diff --git a/package/python-tabledata/python-tabledata.mk b/package/python-tabledata/python-tabledata.mk
-new file mode 100644
-index 0000000..1305909
---- /dev/null
-+++ b/package/python-tabledata/python-tabledata.mk
-@@ -0,0 +1,21 @@
-+################################################################################
-+#
-+# python-tabledata
-+#
-+################################################################################
-+
-+PYTHON_TABLEDATA_VERSION = 0.0.5
-+PYTHON_TABLEDATA_SOURCE = tabledata-$(PYTHON_TABLEDATA_VERSION).tar.gz
-+PYTHON_TABLEDATA_SITE = https://pypi.python.org/packages/9d/03/2e96d18f2bd4b76611fc6aa3881c7e15c857eea99debea9b80ec689354ba
-+PYTHON_TABLEDATA_SETUP_TYPE = setuptools
-+PYTHON_TABLEDATA_LICENSE = MIT
-+PYTHON_TABLEDATA_LICENSE_FILES = LICENSE
-+
-+# remove setup.cfg as it tries to create a wheel file and hence
-+# breaks the build process
-+define PYTHON_TABLEDATA_REMOVE_SETUP_CFG
-+	rm $(@D)/setup.cfg
-+endef
-+PYTHON_TABLEDATA_POST_EXTRACT_HOOKS = PYTHON_TABLEDATA_REMOVE_SETUP_CFG
-+
-+$(eval $(python-package))
+diff --git a/arch/Config.in.arm b/arch/Config.in.arm
+index 85070fb..b05e83e 100644
+--- a/arch/Config.in.arm
++++ b/arch/Config.in.arm
+@@ -64,6 +64,7 @@ config BR2_ARM_CPU_ARMV8A
+ 
+ choice
+ 	prompt "Target Architecture Variant"
++	default BR2_cortex_a53 if BR2_ARCH_IS_64
+ 	default BR2_arm926t
+ 	help
+ 	  Specific CPU variant to use
