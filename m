@@ -1,24 +1,23 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 07 Dec 2017 22:24:02 +0100
-Subject: [Buildroot] [PATCH] rsync: add security fix patches
-In-Reply-To: <17fb44f01e897a5d27a57582bd5b21d3cea030a2.1512665543.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Thu, 7 Dec 2017 18:52:23 +0200")
-References: <17fb44f01e897a5d27a57582bd5b21d3cea030a2.1512665543.git.baruch@tkos.co.il>
-Message-ID: <87shcm2pvx.fsf@dell.be.48ers.dk>
+From: Jan Kraval <jan.kraval@gmail.com>
+Date: Thu, 7 Dec 2017 22:31:23 +0100
+Subject: [Buildroot] [PATCH 1/1] board/orangepi: add support for
+ orangepi-lite board
+In-Reply-To: <87609i44k3.fsf@dell.be.48ers.dk>
+References: <20171207175926.8533-1-jan.kraval@gmail.com>
+ <87609i44k3.fsf@dell.be.48ers.dk>
+Message-ID: <CAAOct53R0Z99TxM9C1-QRRy=am913jFwcH6=_gh-46OcjbkP-g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+Hi,
 
- > Fixes CVE-2017-17433 and CVE-2017-17434: remote bypass of security
- > restrictions.
-
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+thanks for commiting the patch.
+Currentl revision of rtl8189fs used by buildroot doesn't compile with
+kernel 4.14. I'll test newer wifi driver and u-boot revisions during the
+weekend.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20171207/b679ae60/attachment.html>
