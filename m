@@ -1,66 +1,89 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 7 Dec 2017 22:33:09 +0100
-Subject: [Buildroot] [git commit] python-dataproperty: bump to version 0.29.1
-Message-ID: <20171207213318.E3082810D1@busybox.osuosl.org>
+Date: Thu, 7 Dec 2017 22:33:32 +0100
+Subject: [Buildroot] [git commit] python-tabledata: new package
+Message-ID: <20171207213319.074C5810D1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2b17849195926ca20b384e848c480b1eab033584
+commit: https://git.buildroot.net/buildroot/commit/?id=7ac8ffead45eddb015c3c7d0b322eb0fa9adc7b7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Add licence checksum.
 
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-dataproperty/Config.in                | 6 ++----
- package/python-dataproperty/python-dataproperty.hash | 5 +++--
- package/python-dataproperty/python-dataproperty.mk   | 4 ++--
- 3 files changed, 7 insertions(+), 8 deletions(-)
+ package/Config.in                              |  1 +
+ package/python-tabledata/Config.in             | 12 ++++++++++++
+ package/python-tabledata/python-tabledata.hash |  4 ++++
+ package/python-tabledata/python-tabledata.mk   | 21 +++++++++++++++++++++
+ 4 files changed, 38 insertions(+)
 
-diff --git a/package/python-dataproperty/Config.in b/package/python-dataproperty/Config.in
-index 7ef7f08..1868709 100644
---- a/package/python-dataproperty/Config.in
-+++ b/package/python-dataproperty/Config.in
-@@ -1,9 +1,7 @@
- config BR2_PACKAGE_PYTHON_DATAPROPERTY
- 	bool "python-dataproperty"
--	select BR2_PACKAGE_PYTHON_MBSTRDECODER # runtime
--	select BR2_PACKAGE_PYTHON_DATEUTIL # runtime
--	select BR2_PACKAGE_PYTHON_PYTZ # runtime
--	select BR2_PACKAGE_PYTHON_SIX # runtime
+diff --git a/package/Config.in b/package/Config.in
+index 433224c..9c9a4a7 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -909,6 +909,7 @@ menu "External python modules"
+ 	source "package/python-sortedcontainers//Config.in"
+ 	source "package/python-spidev/Config.in"
+ 	source "package/python-systemd/Config.in"
++	source "package/python-tabledata/Config.in"
+ 	source "package/python-tempora/Config.in"
+ 	source "package/python-typepy/Config.in"
+ 	source "package/python-thrift/Config.in"
+diff --git a/package/python-tabledata/Config.in b/package/python-tabledata/Config.in
+new file mode 100644
+index 0000000..9e8ca9c
+--- /dev/null
++++ b/package/python-tabledata/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_PYTHON_TABLEDATA
++	bool "python-tabledata"
++	select BR2_PACKAGE_PYTHON_DATAPROPERTY # runtime
 +	select BR2_PACKAGE_PYTHON_LOGBOOK # runtime
++	select BR2_PACKAGE_PYTHON_PATHVALIDATE # runtime
++	select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
 +	select BR2_PACKAGE_PYTHON_TYPEPY # runtime
- 	help
- 	  Python library for extract property from data.
- 
-diff --git a/package/python-dataproperty/python-dataproperty.hash b/package/python-dataproperty/python-dataproperty.hash
-index be7eecb..0e74aca 100644
---- a/package/python-dataproperty/python-dataproperty.hash
-+++ b/package/python-dataproperty/python-dataproperty.hash
-@@ -1,3 +1,4 @@
- # md5 from https://pypi.python.org/pypi/DataProperty/json, sha256 locally computed
--md5	6e757aa2537721681b437cfeacd7c599  DataProperty-0.25.6.tar.gz
--sha256	07c36a290311102fd10552a7855baf5c94e9f60506afa37e0dfb88db5b3f5406  DataProperty-0.25.6.tar.gz
-+md5	66ecca45ae5e00b2a88799a2795a0cf8  DataProperty-0.29.1.tar.gz
-+sha256	3e547003b1af16126ff48b1c284241bc8a46d1e38e334ecd3a5ba87955446806  DataProperty-0.29.1.tar.gz
-+sha256  a93d75bcb0774e2990106380cadad6dcb2de193c55d435ffc56ba345a08b1dc2  LICENSE
-diff --git a/package/python-dataproperty/python-dataproperty.mk b/package/python-dataproperty/python-dataproperty.mk
-index 96a7739..900cd04 100644
---- a/package/python-dataproperty/python-dataproperty.mk
-+++ b/package/python-dataproperty/python-dataproperty.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_DATAPROPERTY_VERSION = 0.25.6
-+PYTHON_DATAPROPERTY_VERSION = 0.29.1
- PYTHON_DATAPROPERTY_SOURCE = DataProperty-$(PYTHON_DATAPROPERTY_VERSION).tar.gz
--PYTHON_DATAPROPERTY_SITE = https://pypi.python.org/packages/bb/4b/d9a8d24aa27bd2827d70e68f1f389cdd824e5bea7541993fac8cb35100ed
-+PYTHON_DATAPROPERTY_SITE = https://pypi.python.org/packages/38/6f/bf65cf1398ca34c709bf14ca9bc33821588498abe50c4652b0d345b9c08c
- PYTHON_DATAPROPERTY_SETUP_TYPE = setuptools
- PYTHON_DATAPROPERTY_LICENSE = MIT
- PYTHON_DATAPROPERTY_LICENSE_FILES = LICENSE
++	help
++	  A Python library to represent tabular data for
++	  pytablewriter/pytablereader/SimpleSQLite.
++
++	  https://github.com/thombashi/tabledata
+diff --git a/package/python-tabledata/python-tabledata.hash b/package/python-tabledata/python-tabledata.hash
+new file mode 100644
+index 0000000..efc6d6a
+--- /dev/null
++++ b/package/python-tabledata/python-tabledata.hash
+@@ -0,0 +1,4 @@
++# md5 from https://pypi.python.org/pypi/tabledata/json, sha256 locally computed
++md5	4ff69d8855a835890944591721d0c129  tabledata-0.0.5.tar.gz
++sha256	e16490e4c15f06ee258015431ec247a5b301aec4ebca3297cf6451efb9eb3cfb  tabledata-0.0.5.tar.gz
++sha256  cbce2ac14dd81b6a1155029034512a304505692cc63b625538916cf93bee8ca2  LICENSE
+diff --git a/package/python-tabledata/python-tabledata.mk b/package/python-tabledata/python-tabledata.mk
+new file mode 100644
+index 0000000..1305909
+--- /dev/null
++++ b/package/python-tabledata/python-tabledata.mk
+@@ -0,0 +1,21 @@
++################################################################################
++#
++# python-tabledata
++#
++################################################################################
++
++PYTHON_TABLEDATA_VERSION = 0.0.5
++PYTHON_TABLEDATA_SOURCE = tabledata-$(PYTHON_TABLEDATA_VERSION).tar.gz
++PYTHON_TABLEDATA_SITE = https://pypi.python.org/packages/9d/03/2e96d18f2bd4b76611fc6aa3881c7e15c857eea99debea9b80ec689354ba
++PYTHON_TABLEDATA_SETUP_TYPE = setuptools
++PYTHON_TABLEDATA_LICENSE = MIT
++PYTHON_TABLEDATA_LICENSE_FILES = LICENSE
++
++# remove setup.cfg as it tries to create a wheel file and hence
++# breaks the build process
++define PYTHON_TABLEDATA_REMOVE_SETUP_CFG
++	rm $(@D)/setup.cfg
++endef
++PYTHON_TABLEDATA_POST_EXTRACT_HOOKS = PYTHON_TABLEDATA_REMOVE_SETUP_CFG
++
++$(eval $(python-package))
