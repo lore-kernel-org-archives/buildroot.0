@@ -1,128 +1,134 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 7 Dec 2017 10:13:49 +0100
-Subject: [Buildroot] [PATCHv2] package/uboot: detect missing
- user-supplied environment source files
-In-Reply-To: <CABa6e=qk9jq2_3cpSy9U-WUe2ff6f3Dpbzhg3j4eWmwPWiPS7w@mail.gmail.com>
-References: <20171206225818.7784-1-yann.morin.1998@free.fr>
- <CABa6e=qk9jq2_3cpSy9U-WUe2ff6f3Dpbzhg3j4eWmwPWiPS7w@mail.gmail.com>
-Message-ID: <20171207091349.GA3509@scaer>
+From: Bartosz Bilas <b.bilas@grinn-global.com>
+Date: Thu,  7 Dec 2017 12:45:13 +0100
+Subject: [Buildroot] [PATCH v2] package/qt5scxml: new package
+Message-ID: <1512647113-10412-1-git-send-email-b.bilas@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Cam, All,
+Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
+---
 
-On 2017-12-07 19:18 +1100, Cam Hutchison spake thusly:
-> On 7 December 2017 at 09:58, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> > Since 0542bb79e8 (uboot: Support multiple environment source files),
-> > a missing user-supplied environment source files is no longer detected.
-> >
-> > This is because we cat them all, and feed the concatenation to the stdin
-> > of mkenvimage. So, if one source file is missing, the cat exits in error,
-> > but the compound command exits with the exit code of the last command,
-> > which is that of mkenvimage, which happens to be happy with whatever it
-> > is fed on its stdin, even is empty.
-> >
-> > We fix that by creating a temporary file, that we even leave afterward
-> > for the user to inspect.
-> >
-> > We also move it out of the _CMDS block and into a macro of its own, so
-> > that it is easier to write and maintain.
-> >
-> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> > Cc: Cam Hutchison <camh@xdna.net>
-> > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> >
-> > ---
-> > Changes v1 -> v2:
-> >   - move into its own macro  (Thomas)
-> > ---
-> >  boot/uboot/uboot.mk | 19 +++++++++++++------
-> >  1 file changed, 13 insertions(+), 6 deletions(-)
-> >
-> > diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-> > index a1fac7dcae..abb89da69b 100644
-> > --- a/boot/uboot/uboot.mk
-> > +++ b/boot/uboot/uboot.mk
-> > @@ -238,6 +238,18 @@ define UBOOT_BUILD_OMAP_IFT
-> >                 -c $(call qstrip,$(BR2_TARGET_UBOOT_OMAP_IFT_CONFIG))
-> >  endef
-> >
-> > +ifneq ($(BR2_TARGET_UBOOT_ENVIMAGE),)
-> > +define UBOOT_GENERATE_ENV_IMAGE
-> > +       cat $(call qstrip,$(BR2_TARGET_UBOOT_ENVIMAGE_SOURCE)) \
-> > +               >$(BINARIES_DIR)/uboot-env.txt
-> 
-> One (very minor) concern is using the name "uboot-env.txt". It is
-> possible that someone has
-> a post-image script that creates a file of that name in BINARIES_DIR,
-> so this will clobber
-> that file. As a tmp file, perhaps it should have a tmp file name?
-> 
-> I have a post-image script that creates a file of this name, but it
-> goes at a higher-level in
-> a binaries-type dir - I have a multi-layered build script, and the
-> higher-level directory that
-> aggregates the layers protects my file from being clobbered, but I can
-> imagine that if I
-> made different decisions when writing my front-end script, I could
-> have easily placed
-> my uboot-env.txt file in buildroot's BINARIES_DIR.
-> 
-> Perhaps _uboot-env.txt? Or go all the way and use mktemp?
+Changes v1 -> v2:
+	* Add hash for 5.9.1v
+	* Fix license files in makefile
 
-Or just generate uboot-env.txt in $(@D)/uboot-env.buildroot like so:
+ package/qt5/Config.in              |  1 +
+ package/qt5/qt5scxml/Config.in     | 11 ++++++++
+ package/qt5/qt5scxml/qt5scxml.hash | 11 ++++++++
+ package/qt5/qt5scxml/qt5scxml.mk   | 54 ++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 77 insertions(+)
+ create mode 100644 package/qt5/qt5scxml/Config.in
+ create mode 100644 package/qt5/qt5scxml/qt5scxml.hash
+ create mode 100644 package/qt5/qt5scxml/qt5scxml.mk
 
-    define UBOOT_GENERATE_ENV_IMAGE
-        cat $(call qstrip,$(BR2_TARGET_UBOOT_ENVIMAGE_SOURCE)) \
-            >$(@D)/uboot-env.buildroot
-        $(HOST_DIR)/bin/mkenvimage -s $(BR2_TARGET_UBOOT_ENVIMAGE_SIZE) \
-            $(if $(BR2_TARGET_UBOOT_ENVIMAGE_REDUNDANT),-r) \
-            $(if $(filter BIG,$(BR2_ENDIAN)),-b) \
-            -o $(BINARIES_DIR)/uboot-env.bin \
-            $(@D)/uboot-env.buildroot
-    endef
-
-Thoughts?
-
-Regards,
-Yann E. MORIN.
-
-> > +       $(HOST_DIR)/bin/mkenvimage -s $(BR2_TARGET_UBOOT_ENVIMAGE_SIZE) \
-> > +               $(if $(BR2_TARGET_UBOOT_ENVIMAGE_REDUNDANT),-r) \
-> > +               $(if $(filter BIG,$(BR2_ENDIAN)),-b) \
-> > +               -o $(BINARIES_DIR)/uboot-env.bin \
-> > +               $(BINARIES_DIR)/uboot-env.txt
-> > +endef
-> > +endif
-> > +
-> >  define UBOOT_INSTALL_IMAGES_CMDS
-> >         $(foreach f,$(UBOOT_BINS), \
-> >                         cp -dpf $(@D)/$(f) $(BINARIES_DIR)/
-> > @@ -249,12 +261,7 @@ define UBOOT_INSTALL_IMAGES_CMDS
-> >                         cp -dpf $(@D)/$(f) $(BINARIES_DIR)/
-> >                 )
-> >         )
-> > -       $(if $(BR2_TARGET_UBOOT_ENVIMAGE),
-> > -               cat $(call qstrip,$(BR2_TARGET_UBOOT_ENVIMAGE_SOURCE)) | \
-> > -                       $(HOST_DIR)/bin/mkenvimage -s $(BR2_TARGET_UBOOT_ENVIMAGE_SIZE) \
-> > -                       $(if $(BR2_TARGET_UBOOT_ENVIMAGE_REDUNDANT),-r) \
-> > -                       $(if $(filter BIG,$(BR2_ENDIAN)),-b) \
-> > -                       -o $(BINARIES_DIR)/uboot-env.bin -)
-> > +       $(UBOOT_GENERATE_ENV_IMAGE)
-> >         $(if $(BR2_TARGET_UBOOT_BOOT_SCRIPT),
-> >                 $(HOST_DIR)/bin/mkimage -C none -A $(MKIMAGE_ARCH) -T script \
-> >                         -d $(call qstrip,$(BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE)) \
-> > --
-> > 2.11.0
-> >
-
+diff --git a/package/qt5/Config.in b/package/qt5/Config.in
+index 69f36e2..8eb00ca 100644
+--- a/package/qt5/Config.in
++++ b/package/qt5/Config.in
+@@ -72,6 +72,7 @@ source "package/qt5/qt5multimedia/Config.in"
+ source "package/qt5/qt5quickcontrols/Config.in"
+ source "package/qt5/qt5quickcontrols2/Config.in"
+ source "package/qt5/qt5script/Config.in"
++source "package/qt5/qt5scxml/Config.in"
+ source "package/qt5/qt5sensors/Config.in"
+ source "package/qt5/qt5serialbus/Config.in"
+ source "package/qt5/qt5serialport/Config.in"
+diff --git a/package/qt5/qt5scxml/Config.in b/package/qt5/qt5scxml/Config.in
+new file mode 100644
+index 0000000..fec58d9
+--- /dev/null
++++ b/package/qt5/qt5scxml/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_QT5SCXML
++	bool "qt5scxml"
++	select BR2_PACKAGE_QT5BASE
++	help
++	  Qt is a cross-platform application and UI framework for
++	  developers using C++.
++
++	  The Qt SCXML module provides functionality
++	  to create state machines from SCXML files.
++
++	  https://doc.qt.io/qt-5/qtscxml-index.html
+diff --git a/package/qt5/qt5scxml/qt5scxml.hash b/package/qt5/qt5scxml/qt5scxml.hash
+new file mode 100644
+index 0000000..0e3f027
+--- /dev/null
++++ b/package/qt5/qt5scxml/qt5scxml.hash
+@@ -0,0 +1,11 @@
++# Hash from: https://download.qt.io/official_releases/qt/5.9/5.9.3/submodules/qtscxml-opensource-src-5.9.3.tar.xz.mirrorlist
++sha256 d8f51fa8eddd09fef29d8fad6e570e9ca9403469543ab10cb5cfad738786a81b qtscxml-opensource-src-5.9.3.tar.xz
++
++# Hash from: https://download.qt.io/official_releases/qt/5.9/5.9.1/submodules/qtscxml-opensource-src-5.9.1.tar.xz.mirrorlist
++sha256 409758206d1381f262e879d8bde72c147f36f04af2be58986b5a61581e376bd4 qtscxml-opensource-src-5.9.1.tar.xz
++
++# Hashes for license files:
++
++sha256 c544b8ffa98141cccfdbd2f5201c926e78d17b7b942b9ebeab6790c673486f0b LICENSE.GPL3-EXCEPT
++sha256 2b8d6989667fd811c762feb6597c61e98bef82758ccee1ff3a727c224c770ab5 LICENSE.FDL
++sha256 ea7d049c7705dc13afc202dd18e1827f3484f8212fd3fa7b82fc4a0c363432c9 LICENSE.LGPL3
+diff --git a/package/qt5/qt5scxml/qt5scxml.mk b/package/qt5/qt5scxml/qt5scxml.mk
+new file mode 100644
+index 0000000..039dc67
+--- /dev/null
++++ b/package/qt5/qt5scxml/qt5scxml.mk
+@@ -0,0 +1,54 @@
++################################################################################
++#
++# qt5scxml
++#
++################################################################################
++
++QT5SCXML_VERSION = $(QT5_VERSION)
++QT5SCXML_SITE = $(QT5_SITE)
++QT5SCXML_SOURCE = qtscxml-opensource-src-$(QT5SCXML_VERSION).tar.xz
++QT5SCXML_DEPENDENCIES = qt5base
++QT5SCXML_INSTALL_STAGING = YES
++
++ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
++QT5SCXML_LICENSE = GPL-2.0+ or LGPL-3.0, GPL-3.0 with exception(tools), GFDL-1.3 (docs)
++QT5SCXML_LICENSE_FILES = LICENSE.GPL3-EXCEPT LICENSE.LGPL3 LICENSE.FDL
++else
++QT5SCXML_LICENSE = GPL-3.0 or LGPL-2.1 with exception or LGPL-3.0, GFDL-1.3 (docs)
++QT5SCXML_LICENSE_FILES = LICENSE.LGPL3 LICENSE.FDL
++endif
++ifeq ($(BR2_PACKAGE_QT5BASE_EXAMPLES),y)
++QT5SCXML_LICENSE := $(QT5SCXML_LICENSE), BSD-3-Clause (examples)
++endif
++
++define QT5SCXML_CONFIGURE_CMDS
++	(cd $(@D); $(TARGET_MAKE_ENV) $(HOST_DIR)/bin/qmake)
++endef
++
++define QT5SCXML_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
++endef
++
++define QT5SCXML_INSTALL_STAGING_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install
++	$(QT5_LA_PRL_FILES_FIXUP)
++endef
++
++ifeq ($(BR2_STATIC_LIBS),)
++define QT5SCXML_INSTALL_TARGET_LIBS
++	cp -dpf $(STAGING_DIR)/usr/lib/libQt5Scxml*.so.* $(TARGET_DIR)/usr/lib
++endef
++endif
++
++ifeq ($(BR2_PACKAGE_QT5BASE_EXAMPLES),y)
++define QT5SCXML_INSTALL_TARGET_EXAMPLES
++	cp -dpfr $(STAGING_DIR)/usr/lib/qt/examples/scxml $(TARGET_DIR)/usr/lib/qt/examples/
++endef
++endif
++
++define QT5SCXML_INSTALL_TARGET_CMDS
++	$(QT5SCXML_INSTALL_TARGET_LIBS)
++	$(QT5SCXML_INSTALL_TARGET_EXAMPLES)
++endef
++
++$(eval $(generic-package))
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.7.4
