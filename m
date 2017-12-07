@@ -1,64 +1,99 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Thu,  7 Dec 2017 09:20:21 +0100
-Subject: [Buildroot] [PATCH 5/5] python-pytablewriter: bump to version 0.27.1
-In-Reply-To: <20171207082021.4605-1-yegorslists@googlemail.com>
-References: <20171207082021.4605-1-yegorslists@googlemail.com>
-Message-ID: <20171207082021.4605-5-yegorslists@googlemail.com>
+From: Cam Hutchison <camh@xdna.net>
+Date: Thu, 7 Dec 2017 19:18:23 +1100
+Subject: [Buildroot] [PATCHv2] package/uboot: detect missing
+ user-supplied environment source files
+In-Reply-To: <20171206225818.7784-1-yann.morin.1998@free.fr>
+References: <20171206225818.7784-1-yann.morin.1998@free.fr>
+Message-ID: <CABa6e=qk9jq2_3cpSy9U-WUe2ff6f3Dpbzhg3j4eWmwPWiPS7w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+On 7 December 2017 at 09:58, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> Since 0542bb79e8 (uboot: Support multiple environment source files),
+> a missing user-supplied environment source files is no longer detected.
+>
+> This is because we cat them all, and feed the concatenation to the stdin
+> of mkenvimage. So, if one source file is missing, the cat exits in error,
+> but the compound command exits with the exit code of the last command,
+> which is that of mkenvimage, which happens to be happy with whatever it
+> is fed on its stdin, even is empty.
+>
+> We fix that by creating a temporary file, that we even leave afterward
+> for the user to inspect.
+>
+> We also move it out of the _CMDS block and into a macro of its own, so
+> that it is easier to write and maintain.
+>
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Cam Hutchison <camh@xdna.net>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+>
+> ---
+> Changes v1 -> v2:
+>   - move into its own macro  (Thomas)
+> ---
+>  boot/uboot/uboot.mk | 19 +++++++++++++------
+>  1 file changed, 13 insertions(+), 6 deletions(-)
+>
+> diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+> index a1fac7dcae..abb89da69b 100644
+> --- a/boot/uboot/uboot.mk
+> +++ b/boot/uboot/uboot.mk
+> @@ -238,6 +238,18 @@ define UBOOT_BUILD_OMAP_IFT
+>                 -c $(call qstrip,$(BR2_TARGET_UBOOT_OMAP_IFT_CONFIG))
+>  endef
+>
+> +ifneq ($(BR2_TARGET_UBOOT_ENVIMAGE),)
+> +define UBOOT_GENERATE_ENV_IMAGE
+> +       cat $(call qstrip,$(BR2_TARGET_UBOOT_ENVIMAGE_SOURCE)) \
+> +               >$(BINARIES_DIR)/uboot-env.txt
 
-Add licence checksum.
+One (very minor) concern is using the name "uboot-env.txt". It is
+possible that someone has
+a post-image script that creates a file of that name in BINARIES_DIR,
+so this will clobber
+that file. As a tmp file, perhaps it should have a tmp file name?
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/python-pytablewriter/Config.in                 | 1 +
- package/python-pytablewriter/python-pytablewriter.hash | 5 +++--
- package/python-pytablewriter/python-pytablewriter.mk   | 4 ++--
- 3 files changed, 6 insertions(+), 4 deletions(-)
+I have a post-image script that creates a file of this name, but it
+goes at a higher-level in
+a binaries-type dir - I have a multi-layered build script, and the
+higher-level directory that
+aggregates the layers protects my file from being clobbered, but I can
+imagine that if I
+made different decisions when writing my front-end script, I could
+have easily placed
+my uboot-env.txt file in buildroot's BINARIES_DIR.
 
-diff --git a/package/python-pytablewriter/Config.in b/package/python-pytablewriter/Config.in
-index 1ef27be18a..10672dc467 100644
---- a/package/python-pytablewriter/Config.in
-+++ b/package/python-pytablewriter/Config.in
-@@ -8,6 +8,7 @@ config BR2_PACKAGE_PYTHON_PYTABLEWRITER
- 	select BR2_PACKAGE_PYTHON_PYTABLEREADER # runtime
- 	select BR2_PACKAGE_PYTHON_SIMPLESQLITE # runtime
- 	select BR2_PACKAGE_PYTHON_SIX # runtime
-+	select BR2_PACKAGE_PYTHON_TABLEDATA # runtime
- 	select BR2_PACKAGE_PYTHON_TOML # runtime
- 	select BR2_PACKAGE_PYTHON_TYPEPY # runtime
- 	select BR2_PACKAGE_PYTHON_XLSXWRITER # runtime
-diff --git a/package/python-pytablewriter/python-pytablewriter.hash b/package/python-pytablewriter/python-pytablewriter.hash
-index abe5ad0d4e..36e1453920 100644
---- a/package/python-pytablewriter/python-pytablewriter.hash
-+++ b/package/python-pytablewriter/python-pytablewriter.hash
-@@ -1,3 +1,4 @@
- # md5 from https://pypi.python.org/pypi/pytablewriter/json, sha256 locally computed
--md5	f7655aaf8d3b2496e08a36bce4c38b91  pytablewriter-0.24.0.tar.gz
--sha256	94741a1837502fb8172bf6b2f4410a42804efaeffdf34660c375ed0a9424df4e  pytablewriter-0.24.0.tar.gz
-+md5	7d7eff9665b1d9e0c0189c34f8c562c3  pytablewriter-0.27.1.tar.gz
-+sha256	89e43bffc60ea93f0ed0cc8d8ddbf34ac0b74f8cf781c6c39f4c8bc3a7e4c436  pytablewriter-0.27.1.tar.gz
-+sha256  a93d75bcb0774e2990106380cadad6dcb2de193c55d435ffc56ba345a08b1dc2  LICENSE
-diff --git a/package/python-pytablewriter/python-pytablewriter.mk b/package/python-pytablewriter/python-pytablewriter.mk
-index ac1480c003..dd87213e2c 100644
---- a/package/python-pytablewriter/python-pytablewriter.mk
-+++ b/package/python-pytablewriter/python-pytablewriter.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_PYTABLEWRITER_VERSION = 0.24.0
-+PYTHON_PYTABLEWRITER_VERSION = 0.27.1
- PYTHON_PYTABLEWRITER_SOURCE = pytablewriter-$(PYTHON_PYTABLEWRITER_VERSION).tar.gz
--PYTHON_PYTABLEWRITER_SITE = https://pypi.python.org/packages/65/b0/efafdd9e4d5b08069371530e46acde684ac7fb18bffa09b635e2af091d82
-+PYTHON_PYTABLEWRITER_SITE = https://pypi.python.org/packages/c2/88/6a9f6cbdabd773ba6de6c41d7a0af58eed37ca97b1d666b04819d0bf9b54
- PYTHON_PYTABLEWRITER_SETUP_TYPE = setuptools
- PYTHON_PYTABLEWRITER_LICENSE = MIT
- PYTHON_PYTABLEWRITER_LICENSE_FILES = LICENSE
--- 
-2.11.0
+Perhaps _uboot-env.txt? Or go all the way and use mktemp?
+
+> +       $(HOST_DIR)/bin/mkenvimage -s $(BR2_TARGET_UBOOT_ENVIMAGE_SIZE) \
+> +               $(if $(BR2_TARGET_UBOOT_ENVIMAGE_REDUNDANT),-r) \
+> +               $(if $(filter BIG,$(BR2_ENDIAN)),-b) \
+> +               -o $(BINARIES_DIR)/uboot-env.bin \
+> +               $(BINARIES_DIR)/uboot-env.txt
+> +endef
+> +endif
+> +
+>  define UBOOT_INSTALL_IMAGES_CMDS
+>         $(foreach f,$(UBOOT_BINS), \
+>                         cp -dpf $(@D)/$(f) $(BINARIES_DIR)/
+> @@ -249,12 +261,7 @@ define UBOOT_INSTALL_IMAGES_CMDS
+>                         cp -dpf $(@D)/$(f) $(BINARIES_DIR)/
+>                 )
+>         )
+> -       $(if $(BR2_TARGET_UBOOT_ENVIMAGE),
+> -               cat $(call qstrip,$(BR2_TARGET_UBOOT_ENVIMAGE_SOURCE)) | \
+> -                       $(HOST_DIR)/bin/mkenvimage -s $(BR2_TARGET_UBOOT_ENVIMAGE_SIZE) \
+> -                       $(if $(BR2_TARGET_UBOOT_ENVIMAGE_REDUNDANT),-r) \
+> -                       $(if $(filter BIG,$(BR2_ENDIAN)),-b) \
+> -                       -o $(BINARIES_DIR)/uboot-env.bin -)
+> +       $(UBOOT_GENERATE_ENV_IMAGE)
+>         $(if $(BR2_TARGET_UBOOT_BOOT_SCRIPT),
+>                 $(HOST_DIR)/bin/mkimage -C none -A $(MKIMAGE_ARCH) -T script \
+>                         -d $(call qstrip,$(BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE)) \
+> --
+> 2.11.0
+>
