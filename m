@@ -1,180 +1,46 @@
-From: Evgeniy Didin <Evgeniy.Didin@synopsys.com>
-Date: Thu,  7 Dec 2017 20:06:28 +0300
-Subject: [Buildroot] [PATCH] board: add support for ARC HS Development Kit
- (HSDK)
-Message-ID: <20171207170628.2806-1-didin@synopsys.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu,  7 Dec 2017 19:07:12 +0200
+Subject: [Buildroot] [PATCH] msmtp: bump to version 1.6.6
+Message-ID: <5e29aeddb4da540cd2aa6eb13b966f74ca448f49.1512666432.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Synopsys DesignWare HSDK (which stands for ARC HS
-Development Kit) is the latest and greatest development
-platform that sports quad-core ARC HS38 in real silicon.
-
-Most noticeable features of the board are:
- * Quad-core ARC HS38 CPU running at 1GHz
- * 4Gb of DDR
- * Built-in Vivante GPU (well supported via open source
-   Etnaviv drivers)
- * Built-in Wi-Fi/Bluetooth module (RedPine RS-9113)
-
-And as usual we have:
- * [micro] SD-card slot
- * 2 USB 2.0 ports
- * 1Gbit Ethernet port
- * Built-in Digilent JTAG probe
- * Serial port accessible via micro-USB port
-
-Writing sdcard.img on SDcard creates two partitions:
- * FAT32 with uImage and uboot.env
- * EXT4 with root filesystem
-
-We modify kernel config because in default hsdk kernel config
-CONFIG_INITRAMFS_SOURCE parameter is set and when we build
-rootfs separately (BR2_TARGET_ROOTFS_INITRAMFS is not set)
-error appears. Also we set up CONFIG_ARC_UBOOT_SUPPORT which
-enables usage of uboot variables in the boot process.
-
-Signed-off-by: Evgeniy Didin <didin@synopsys.com>
-Cc: Alexey Brodkin <abrodkin@synopsys.com>
-Cc: arc-buildroot at synopsys.com
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- board/synopsys/hsdk/genimage-hsdk.cfg | 26 +++++++++++++++++++++++++
- board/synopsys/hsdk/linux.fragment    |  2 ++
- board/synopsys/hsdk/post-image.sh     | 18 ++++++++++++++++++
- board/synopsys/hsdk/uboot.env.txt     |  9 +++++++++
- configs/snps_hsdk_defconfig           | 36 +++++++++++++++++++++++++++++++++++
- 5 files changed, 91 insertions(+)
- create mode 100644 board/synopsys/hsdk/genimage-hsdk.cfg
- create mode 100644 board/synopsys/hsdk/linux.fragment
- create mode 100755 board/synopsys/hsdk/post-image.sh
- create mode 100644 board/synopsys/hsdk/uboot.env.txt
- create mode 100644 configs/snps_hsdk_defconfig
+ package/msmtp/msmtp.hash | 9 ++++++---
+ package/msmtp/msmtp.mk   | 2 +-
+ 2 files changed, 7 insertions(+), 4 deletions(-)
 
-diff --git a/board/synopsys/hsdk/genimage-hsdk.cfg b/board/synopsys/hsdk/genimage-hsdk.cfg
-new file mode 100644
-index 0000000000..8928f704a2
---- /dev/null
-+++ b/board/synopsys/hsdk/genimage-hsdk.cfg
-@@ -0,0 +1,26 @@
-+image boot.vfat {
-+  vfat {
-+    files = {
-+      "uboot.env",
-+      "uImage"
-+    }
-+  }
-+  size = 100M
-+}
-+
-+image sdcard.img {
-+  hdimage {
-+  }
-+
-+  partition boot {
-+    partition-type = 0xC
-+    bootable = "true"
-+    image = "boot.vfat"
-+  }
-+
-+  partition rootfs {
-+    partition-type = 0x83
-+    image = "rootfs.ext4"
-+    size = 1G
-+  }
-+}
-diff --git a/board/synopsys/hsdk/linux.fragment b/board/synopsys/hsdk/linux.fragment
-new file mode 100644
-index 0000000000..53b9305e09
---- /dev/null
-+++ b/board/synopsys/hsdk/linux.fragment
-@@ -0,0 +1,2 @@
-+CONFIG_INITRAMFS_SOURCE=
-+CONFIG_ARC_UBOOT_SUPPORT=y
-diff --git a/board/synopsys/hsdk/post-image.sh b/board/synopsys/hsdk/post-image.sh
-new file mode 100755
-index 0000000000..5871a410a5
---- /dev/null
-+++ b/board/synopsys/hsdk/post-image.sh
-@@ -0,0 +1,18 @@
-+#!/bin/bash
-+
-+BOARD_DIR="$(dirname $0)"
-+BOARD_NAME="$(basename ${BOARD_DIR})"
-+GENIMAGE_CFG="${BOARD_DIR}/genimage-${BOARD_NAME}.cfg"
-+GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
-+rm -rf "${GENIMAGE_TMP}"
-+
-+mkenvimage -s 0x4000 -o output/images/uboot.env ${BOARD_DIR}/uboot.env.txt
-+
-+genimage                           \
-+        --rootpath "${TARGET_DIR}"     \
-+        --tmppath "${GENIMAGE_TMP}"    \
-+        --inputpath "${BINARIES_DIR}"  \
-+        --outputpath "${BINARIES_DIR}" \
-+        --config "${GENIMAGE_CFG}"
-+tar czf output/images/sdcard.img.tar.gz --directory="./output/images"  sdcard.img
-+exit $?
-diff --git a/board/synopsys/hsdk/uboot.env.txt b/board/synopsys/hsdk/uboot.env.txt
-new file mode 100644
-index 0000000000..6bcfb56a77
---- /dev/null
-+++ b/board/synopsys/hsdk/uboot.env.txt
-@@ -0,0 +1,9 @@
-+baudrate=115200
-+bootargs=console=ttyS3,115200n8 root=/dev/mmcblk0p2 rootwait
-+bootcmd=fatload mmc 0:1; bootm
-+bootdelay=2
-+bootfile=uImage
-+loadaddr=0x82000000
-+stderr=serial0 at f0005000
-+stdin=serial0 at f0005000
-+stdout=serial0 at f0005000
-diff --git a/configs/snps_hsdk_defconfig b/configs/snps_hsdk_defconfig
-new file mode 100644
-index 0000000000..8c67b0ec0d
---- /dev/null
-+++ b/configs/snps_hsdk_defconfig
-@@ -0,0 +1,36 @@
-+#Architecture
-+BR2_arcle=y
-+BR2_archs38=y
-+
-+#Linux headers
-+BR2_KERNEL_HEADERS_4_14=y
-+
-+#System
-+BR2_TARGET_GENERIC_HOSTNAME="hsdk"
-+BR2_TARGET_GENERIC_ISSUE="Welcome to the HSDK Platform"
-+BR2_SYSTEM_DHCP="eth0"
-+
-+#Kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.14.4"
-+BR2_LINUX_KERNEL_DEFCONFIG="hsdk"
-+BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/synopsys/hsdk/linux.fragment"
-+
-+#Filesystem / image
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+# BR2_TARGET_ROOTFS_TAR is not set
-+BR2_PACKAGE_HOST_DOSFSTOOLS=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_MTOOLS=y
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/synopsys/hsdk/post-image.sh"
-+
-+#Bootloader
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.11"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="hsdk"
-+BR2_TARGET_UBOOT_NEEDS_DTC=y
-+BR2_TARGET_UBOOT_FORMAT_ELF=y
+diff --git a/package/msmtp/msmtp.hash b/package/msmtp/msmtp.hash
+index d0de8e04fd56..10d6cea6ad42 100644
+--- a/package/msmtp/msmtp.hash
++++ b/package/msmtp/msmtp.hash
+@@ -1,3 +1,6 @@
+-# From http://sourceforge.net/projects/msmtp/files/msmtp/1.6.5/
+-md5	50a8c9bb72f8222779db6b4aae2965e0	msmtp-1.6.5.tar.xz
+-sha1	27d1fc609cd453a7e4c55c4ec55d455949bc53f1	msmtp-1.6.5.tar.xz
++# From http://sourceforge.net/projects/msmtp/files/msmtp/1.6.6/
++md5	82b0520b57db4b2cf05333d11fb5974d	msmtp-1.6.6.tar.xz
++sha1	f997f40dfb3f882df837cfd9a63bd4d271dcdc41	msmtp-1.6.6.tar.xz
++# Locally calculated after checking signature
++# http://downloads.sourceforge.net/project/msmtp/msmtp/1.6.6/msmtp-1.6.6.tar.xz.sig
++sha256	da15db1f62bd0201fce5310adb89c86188be91cd745b7cb3b62b81a501e7fb5e	msmtp-1.6.6.tar.xz
+diff --git a/package/msmtp/msmtp.mk b/package/msmtp/msmtp.mk
+index 1821d39ed267..a1bd9e1437c2 100644
+--- a/package/msmtp/msmtp.mk
++++ b/package/msmtp/msmtp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MSMTP_VERSION = 1.6.5
++MSMTP_VERSION = 1.6.6
+ MSMTP_SITE = http://downloads.sourceforge.net/project/msmtp/msmtp/$(MSMTP_VERSION)
+ MSMTP_SOURCE = msmtp-$(MSMTP_VERSION).tar.xz
+ MSMTP_DEPENDENCIES = host-pkgconf
 -- 
-2.11.0
+2.15.0
