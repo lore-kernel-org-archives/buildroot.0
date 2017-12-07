@@ -1,28 +1,25 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 07 Dec 2017 22:40:50 +0100
-Subject: [Buildroot] [PATCH 1/1] board/orangepi: add support for
- orangepi-lite board
-In-Reply-To: <CAAOct53R0Z99TxM9C1-QRRy=am913jFwcH6=_gh-46OcjbkP-g@mail.gmail.com>
- (Jan Kraval's message of "Thu, 7 Dec 2017 22:31:23 +0100")
-References: <20171207175926.8533-1-jan.kraval@gmail.com>
- <87609i44k3.fsf@dell.be.48ers.dk>
- <CAAOct53R0Z99TxM9C1-QRRy=am913jFwcH6=_gh-46OcjbkP-g@mail.gmail.com>
-Message-ID: <87y3me1ajh.fsf@dell.be.48ers.dk>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Thu, 7 Dec 2017 22:56:35 +0100
+Subject: [Buildroot] [PATCH 1/1] package/ltp-testsuite: Fix build on
+ uClibc-ng
+In-Reply-To: <877ety2p9x.fsf@dell.be.48ers.dk>
+References: <20171207172900.4758-1-petr.vorel@gmail.com>
+ <877ety2p9x.fsf@dell.be.48ers.dk>
+Message-ID: <20171207215634.GA29273@x230>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Jan" == Jan Kraval <jan.kraval@gmail.com> writes:
+Hi Peter,
 
- > Hi,
- > thanks for commiting the patch.
- > Currentl revision of rtl8189fs used by buildroot doesn't compile with
- > kernel 4.14. I'll test newer wifi driver and u-boot revisions during the
- > weekend.
+> Committed after slightly extending the commit message, thanks.
+Better commit message, indeed. Thanks!
 
-Ok, great - Thanks!
+Kind regards,
+Petr
 
--- 
-Bye, Peter Korsgaard
+> 
+> -- 
+> Bye, Peter Korsgaard
