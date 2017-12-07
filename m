@@ -1,32 +1,31 @@
 From: Marcus Folkesson <marcus.folkesson@gmail.com>
-Date: Thu,  7 Dec 2017 13:03:13 +0100
-Subject: [Buildroot] [PATCH] libostree: change license to LGPL-2.0+
-Message-ID: <20171207120313.25510-1-marcus.folkesson@gmail.com>
+Date: Thu,  7 Dec 2017 13:03:42 +0100
+Subject: [Buildroot] [PATCH] libostree: install to staging
+Message-ID: <20171207120342.25585-1-marcus.folkesson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The license is actually GNU LIBRARY GENERAL PUBLIC LICENSE
+Install the libraries to staging to be usable by other packages.
 
 Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
 ---
- package/libostree/libostree.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/libostree/libostree.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/package/libostree/libostree.mk b/package/libostree/libostree.mk
-index b43c228068..3ac8278a98 100644
+index 0e5eef717b..b43c228068 100644
 --- a/package/libostree/libostree.mk
 +++ b/package/libostree/libostree.mk
-@@ -8,7 +8,7 @@ LIBOSTREE_VERSION = 2017.14
- LIBOSTREE_SOURCE = libostree-$(LIBOSTREE_VERSION).tar.xz
- LIBOSTREE_SITE = https://github.com/ostreedev/ostree/releases/download/v$(LIBOSTREE_VERSION)
- 
--LIBOSTREE_LICENSE = GPL-2.0+
-+LIBOSTREE_LICENSE = LGPL-2.0+
+@@ -11,6 +11,7 @@ LIBOSTREE_SITE = https://github.com/ostreedev/ostree/releases/download/v$(LIBOST
+ LIBOSTREE_LICENSE = GPL-2.0+
  LIBOSTREE_LICENSE_FILES = COPYING
  LIBOSTREE_DEPENDENCIES = e2fsprogs host-pkgconf libfuse libglib2 libgpgme xz
- LIBOSTREE_INSTALL_STAGING = YES
++LIBOSTREE_INSTALL_STAGING = YES
+ 
+ LIBOSTREE_CONF_OPTS += \
+ 	--with-gpgme-prefix=$(STAGING_DIR)/usr \
 -- 
 2.15.0
