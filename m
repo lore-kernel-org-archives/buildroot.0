@@ -1,46 +1,58 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu,  7 Dec 2017 19:07:12 +0200
-Subject: [Buildroot] [PATCH] msmtp: bump to version 1.6.6
-Message-ID: <5e29aeddb4da540cd2aa6eb13b966f74ca448f49.1512666432.git.baruch@tkos.co.il>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Thu,  7 Dec 2017 18:29:00 +0100
+Subject: [Buildroot] [PATCH 1/1] package/ltp-testsuite: Fix build on
+ uClibc-ng
+Message-ID: <20171207172900.4758-1-petr.vorel@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/msmtp/msmtp.hash | 9 ++++++---
- package/msmtp/msmtp.mk   | 2 +-
- 2 files changed, 7 insertions(+), 4 deletions(-)
+Fixes: http://autobuild.buildroot.net/results/6c0506423c76b61018da26c2549570e3d9eb5763/
 
-diff --git a/package/msmtp/msmtp.hash b/package/msmtp/msmtp.hash
-index d0de8e04fd56..10d6cea6ad42 100644
---- a/package/msmtp/msmtp.hash
-+++ b/package/msmtp/msmtp.hash
-@@ -1,3 +1,6 @@
--# From http://sourceforge.net/projects/msmtp/files/msmtp/1.6.5/
--md5	50a8c9bb72f8222779db6b4aae2965e0	msmtp-1.6.5.tar.xz
--sha1	27d1fc609cd453a7e4c55c4ec55d455949bc53f1	msmtp-1.6.5.tar.xz
-+# From http://sourceforge.net/projects/msmtp/files/msmtp/1.6.6/
-+md5	82b0520b57db4b2cf05333d11fb5974d	msmtp-1.6.6.tar.xz
-+sha1	f997f40dfb3f882df837cfd9a63bd4d271dcdc41	msmtp-1.6.6.tar.xz
-+# Locally calculated after checking signature
-+# http://downloads.sourceforge.net/project/msmtp/msmtp/1.6.6/msmtp-1.6.6.tar.xz.sig
-+sha256	da15db1f62bd0201fce5310adb89c86188be91cd745b7cb3b62b81a501e7fb5e	msmtp-1.6.6.tar.xz
-diff --git a/package/msmtp/msmtp.mk b/package/msmtp/msmtp.mk
-index 1821d39ed267..a1bd9e1437c2 100644
---- a/package/msmtp/msmtp.mk
-+++ b/package/msmtp/msmtp.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MSMTP_VERSION = 1.6.5
-+MSMTP_VERSION = 1.6.6
- MSMTP_SITE = http://downloads.sourceforge.net/project/msmtp/msmtp/$(MSMTP_VERSION)
- MSMTP_SOURCE = msmtp-$(MSMTP_VERSION).tar.xz
- MSMTP_DEPENDENCIES = host-pkgconf
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+---
+Fix from upstream
+https://github.com/linux-test-project/ltp/commit/0ee59c66f4e4930d543395fb8617e26cf8b22025
+---
+ .../0004-syscalls-mknodat-Fix-missing-config.patch | 28 ++++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
+ create mode 100644 package/ltp-testsuite/0004-syscalls-mknodat-Fix-missing-config.patch
+
+diff --git a/package/ltp-testsuite/0004-syscalls-mknodat-Fix-missing-config.patch b/package/ltp-testsuite/0004-syscalls-mknodat-Fix-missing-config.patch
+new file mode 100644
+index 0000000000..d315a948a9
+--- /dev/null
++++ b/package/ltp-testsuite/0004-syscalls-mknodat-Fix-missing-config.patch
+@@ -0,0 +1,28 @@
++From 0ee59c66f4e4930d543395fb8617e26cf8b22025 Mon Sep 17 00:00:00 2001
++From: Petr Vorel <pvorel@suse.cz>
++Date: Thu, 7 Dec 2017 17:37:01 +0100
++Subject: [PATCH] syscalls/mknodat: Fix missing config
++
++Found by buildroot project, where this broke build on uClibc-ng, thanks!
++http://autobuild.buildroot.net/results/6c0506423c76b61018da26c2549570e3d9eb5763/build-end.log
++
++Signed-off-by: Petr Vorel <pvorel@suse.cz>
++---
++ testcases/kernel/syscalls/mknodat/mknodat.h | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/testcases/kernel/syscalls/mknodat/mknodat.h b/testcases/kernel/syscalls/mknodat/mknodat.h
++index 577d5ac9c..b4e828c5d 100644
++--- a/testcases/kernel/syscalls/mknodat/mknodat.h
+++++ b/testcases/kernel/syscalls/mknodat/mknodat.h
++@@ -22,6 +22,7 @@
++ #define MKNODAT_H
++ 
++ #include <sys/types.h>
+++#include "config.h"
++ #include "lapi/syscalls.h"
++ 
++ #if !defined(HAVE_MKNODAT)
++-- 
++2.15.0
++
 -- 
 2.15.0
