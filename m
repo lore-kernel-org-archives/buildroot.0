@@ -1,41 +1,47 @@
-From: Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com>
-Date: Fri,  8 Dec 2017 20:39:01 +0100
-Subject: [Buildroot] [PATCH 1/1] package/exim: change tarball compression to
- xz
-Message-ID: <1512761941-6815-1-git-send-email-jerzy.m.grzegorek@gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Fri,  8 Dec 2017 22:29:52 +0100
+Subject: [Buildroot] [PATCH v2] gdb: prevent installation of libbfd.so and
+ libopcode.so
+Message-ID: <20171208212952.20366-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com>
----
- package/exim/exim.hash | 4 ++--
- package/exim/exim.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+The gdb install target installs dynamic versions of libbfd and
+libopcode, accidentally overwriting the binutils provided versions
+(gdb itself links against the bundled static ones to avoid
+version problems, so the dynamic ones are un-needed).
 
-diff --git a/package/exim/exim.hash b/package/exim/exim.hash
-index d961083..41f51b1 100644
---- a/package/exim/exim.hash
-+++ b/package/exim/exim.hash
-@@ -1,2 +1,2 @@
--# Locally calculated
--sha256 1c853bc960dff0a0e51e3e28bc4a4a8165b58b41bb64ea3abb90f254d9947a8c  exim-4.89.1.tar.bz2
-+# Locally calculated after checking pgp signature
-+sha256 1a21322a10e2da9c0bd6a2a483b6e7ef8fa7f16efcab4c450fd73e7188f5fa94  exim-4.89.1.tar.xz
-diff --git a/package/exim/exim.mk b/package/exim/exim.mk
-index 612eaf4..37eab50 100644
---- a/package/exim/exim.mk
-+++ b/package/exim/exim.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+Prevent the installation by using the '--disable-install-libbfd'
+configure option.
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+Changes v1 -> v2:
+  - enhance commit log (suggested by Thomas Petazzoni)
+  - use --disable-install-libbfd instead of --disable-shared
+---
+ package/gdb/gdb.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
+index 7e86ba0c7e..0f3846687e 100644
+--- a/package/gdb/gdb.mk
++++ b/package/gdb/gdb.mk
+@@ -55,9 +55,11 @@ endif
  
- EXIM_VERSION = 4.89.1
--EXIM_SOURCE = exim-$(EXIM_VERSION).tar.bz2
-+EXIM_SOURCE = exim-$(EXIM_VERSION).tar.xz
- EXIM_SITE = ftp://ftp.exim.org/pub/exim/exim4
- EXIM_LICENSE = GPL-2.0+
- EXIM_LICENSE_FILES = LICENCE
+ # When gdb sources are fetched from the binutils-gdb repository, they
+ # also contain the binutils sources, but binutils shouldn't be built,
+-# so we disable it.
++# so we disable it (additional the option --disable-install-libbfd
++# prevents the un-wanted installation of libobcodes.so and libbfd.so).
+ GDB_DISABLE_BINUTILS_CONF_OPTS = \
+ 	--disable-binutils \
++	--disable-install-libbfd \
+ 	--disable-ld \
+ 	--disable-gas
+ 
 -- 
-1.9.1
+2.15.0
