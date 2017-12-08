@@ -1,49 +1,43 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 08 Dec 2017 10:59:39 +0000
-Subject: [Buildroot] [Bug 10561] New: OpenZwave generates
- libopenzwave.so.1.4 instead of libopenzwave.so.1.5
-Message-ID: <bug-10561-163@https.bugs.busybox.net/>
+From: julien.boibessot at free.fr <julien.boibessot@free.fr>
+Date: Fri,  8 Dec 2017 12:52:18 +0100
+Subject: [Buildroot] [PATCH] package/linux-tools: fixes build of iio with
+ 4.14+ kernels
+Message-ID: <1512733938-29854-1-git-send-email-julien.boibessot@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=10561
+From: Julien BOIBESSOT <julien.boibessot@armadeus.com>
 
-            Bug ID: 10561
-           Summary: OpenZwave generates libopenzwave.so.1.4 instead of
-                    libopenzwave.so.1.5
-           Product: buildroot
-           Version: 2017.02
-          Hardware: PC
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Outdated package
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: laibulle at gmail.com
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+Since this commit [1], iio build has been moved to other linux-tools build
+system. Installation dir is now given by DESTDIR, like for all other linux-tools.
+I kept INSTALL_DIR env and 'install' target to be compatible with oldest
+kernels.
 
-Hello, 
+[1]: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git/commit/tools/iio/Makefile?h=v4.14.4&id=18956cf2d78a8d4a5959e20240f04ce8d5a6c121
 
-I am a new user of BuildRoot. I am trying to use OpenZwave 1.5 on raspberry Pi
-3, I have fetched buildroot-2017.02.8.tar.gz but the generated lib is version
-1.4 but the content of is package/openzwave/openzwave.mk is
+Signed-off-by: Julien BOIBESSOT <julien.boibessot@armadeus.com>
+---
+ package/linux-tools/linux-tool-iio.mk.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-OPENZWAVE_VERSION = V1.5
-OPENZWAVE_SITE = $(call github,OpenZWave,open-zwave,$(OPENZWAVE_VERSION))
-OPENZWAVE_LICENSE = LGPLv3+, GPLv3 (examples), Apache-2.0 (sh2ju.sh)
-OPENZWAVE_LICENSE_FILES = license/license.txt license/lgpl.txt \
-        license/gpl.txt license/Apache-License-2.0.txt
-
-
-Am doing something wrong ?
-
-Best regards
-
+diff --git a/package/linux-tools/linux-tool-iio.mk.in b/package/linux-tools/linux-tool-iio.mk.in
+index 60d6249..a8cc89e 100644
+--- a/package/linux-tools/linux-tool-iio.mk.in
++++ b/package/linux-tools/linux-tool-iio.mk.in
+@@ -19,9 +19,11 @@ define IIO_BUILD_CMDS
+ 		$(IIO_MAKE_OPTS)
+ endef
+ 
++# DESTDIR used since kernel version 4.14
+ define IIO_INSTALL_TARGET_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(LINUX_DIR)/tools/iio \
+ 		$(IIO_MAKE_OPTS) \
+ 		INSTALL_ROOT=$(TARGET_DIR) \
++		DESTDIR=$(TARGET_DIR) \
+ 		install
+ endef
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.1.4
