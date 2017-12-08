@@ -1,11 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 08 Dec 2017 18:59:11 +0100
-Subject: [Buildroot] [PATCH] binaries-marvell: bump version,
- add license file and hash
-In-Reply-To: <20171208162230.16647-1-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Fri, 8 Dec 2017 17:22:30 +0100")
-References: <20171208162230.16647-1-thomas.petazzoni@free-electrons.com>
-Message-ID: <87wp1xyuc0.fsf@dell.be.48ers.dk>
+Date: Fri, 08 Dec 2017 18:59:57 +0100
+Subject: [Buildroot] [PATCH 7/8] atf: add support for Marvell Armada SoCs
+In-Reply-To: <20171203214811.3124-8-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Sun, 3 Dec 2017 22:48:10 +0100")
+References: <20171203214811.3124-1-thomas.petazzoni@free-electrons.com>
+ <20171203214811.3124-8-thomas.petazzoni@free-electrons.com>
+Message-ID: <87shclyuaq.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,13 +14,13 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- > Following our feedback, Marvell has added a README.md file into the
- > branch that contains the firmware. Thereore, this commit bumps the
- > version to the commit that includes the README.md file (it's the only
- > change, the firmware files are unmodified), updates
- > <pkg>_LICENSE_FILES to point to README.md, and adds the hash for this
- > license files.
+ > From: Sergey Matyukevich <geomatsi@gmail.com>
+ > Add Marvell Armada 7k/8k SoCs support to arm-trusted-firmware package.
+ > Marvell ATF needs two additional dependencies:
+ > DDR training code and SCP_BL2 image.
 
+ > Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
+ > [Thomas: adjust to previous ATF changes.]
  > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
 Committed, thanks.
