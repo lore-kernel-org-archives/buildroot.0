@@ -1,55 +1,172 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri,  8 Dec 2017 17:22:30 +0100
-Subject: [Buildroot] [PATCH] binaries-marvell: bump version,
- add license file and hash
-Message-ID: <20171208162230.16647-1-thomas.petazzoni@free-electrons.com>
+Date: Fri, 8 Dec 2017 17:44:21 +0100
+Subject: [Buildroot] [git commit] fastd: fix build with newer libsodium
+Message-ID: <20171208163720.AD17C81447@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Following our feedback, Marvell has added a README.md file into the
-branch that contains the firmware. Thereore, this commit bumps the
-version to the commit that includes the README.md file (it's the only
-change, the firmware files are unmodified), updates
-<pkg>_LICENSE_FILES to point to README.md, and adds the hash for this
-license files.
+commit: https://git.buildroot.net/buildroot/commit/?id=e0b9052cf0ec4198b95cebc97f0fa65209510bad
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Add upstream patch removing aes128-ctr support that libsodium no longer
+provides.
+
+Fixes:
+http://autobuild.buildroot.net/results/90c/90c526491a9eb6b5ceb38a0218fd480c03208217/
+http://autobuild.buildroot.net/results/f81/f815dbfee7099f3b8fea7036e1fd10385f8c6a80/
+http://autobuild.buildroot.net/results/329/3299d413ee98963e62c0df4087604c9872fcad68/
+
+Cc: Alexander Dahl <post@lespocky.de>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+[Thomas: fix patch numbering, as noticed by Alexander Dahl.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- boot/binaries-marvell/binaries-marvell.hash | 3 ++-
- boot/binaries-marvell/binaries-marvell.mk   | 6 ++----
- 2 files changed, 4 insertions(+), 5 deletions(-)
+ ...her-remove-aes128-ctr-NaCl-implementation.patch | 137 +++++++++++++++++++++
+ 1 file changed, 137 insertions(+)
 
-diff --git a/boot/binaries-marvell/binaries-marvell.hash b/boot/binaries-marvell/binaries-marvell.hash
-index 401584dacd..94c66039c9 100644
---- a/boot/binaries-marvell/binaries-marvell.hash
-+++ b/boot/binaries-marvell/binaries-marvell.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256 22a201542d8f93cf88623065db5f3377822b59cbfdf98a8e60cdee629273d3a0 binaries-marvell-0dabe23b956420b0928d337d635f0cd5646c33d0.tar.gz
-+sha256 7c41cddc2ce46038b630b59d2e9e50e903d27032bcfbf38019eaed14fcfdbe40 binaries-marvell-a8ac27b7884ed2c1efcf9f3326de3e0ed7b94e91.tar.gz
-+sha256 d8560ab4ea4042a55eee6857ded1d7e4bca2d9120b8c7a86d2a7fdc4ba4994e0	README.md
-diff --git a/boot/binaries-marvell/binaries-marvell.mk b/boot/binaries-marvell/binaries-marvell.mk
-index e2bd4f2499..152c9cd97a 100644
---- a/boot/binaries-marvell/binaries-marvell.mk
-+++ b/boot/binaries-marvell/binaries-marvell.mk
-@@ -4,13 +4,11 @@
- #
- ################################################################################
- 
--BINARIES_MARVELL_VERSION = 0dabe23b956420b0928d337d635f0cd5646c33d0
-+BINARIES_MARVELL_VERSION = a8ac27b7884ed2c1efcf9f3326de3e0ed7b94e91
- BINARIES_MARVELL_SITE = $(call github,MarvellEmbeddedProcessors,binaries-marvell,$(BINARIES_MARVELL_VERSION))
- 
--# The license text is only available in the master branch, which is
--# not used in this package. See
--# https://raw.githubusercontent.com/MarvellEmbeddedProcessors/binaries-marvell/master/README.md.
- BINARIES_MARVELL_LICENSE = GPL-2.0 with freertos-exception-2.0
-+BINARIES_MARVELL_LICENSE_FILES = README.md
- 
- BINARIES_MARVELL_IMAGE = $(call qstrip,$(BR2_TARGET_BINARIES_MARVELL_IMAGE))
- BINARIES_MARVELL_INSTALL_IMAGES  = YES
--- 
-2.14.3
+diff --git a/package/fastd/0003-cipher-remove-aes128-ctr-NaCl-implementation.patch b/package/fastd/0003-cipher-remove-aes128-ctr-NaCl-implementation.patch
+new file mode 100644
+index 0000000..854b3e7
+--- /dev/null
++++ b/package/fastd/0003-cipher-remove-aes128-ctr-NaCl-implementation.patch
+@@ -0,0 +1,137 @@
++From 4b8c4f54bbd70849fc91679bea44b4e1dfb0526d Mon Sep 17 00:00:00 2001
++From: Matthias Schiffer <mschiffer@universe-factory.net>
++Date: Wed, 18 Oct 2017 20:11:30 +0200
++Subject: [PATCH] cipher: remove aes128-ctr NaCl implementation
++
++New versions of libsodium have dropped support for aes128-ctr. AES support
++is only available with OpenSSL now.
++
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Patch status: upstream commit 4b8c4f54bb
++
++ doc/source/manual/config.rst                       |  1 -
++ src/crypto/cipher/aes128_ctr/CMakeLists.txt        |  1 -
++ src/crypto/cipher/aes128_ctr/nacl/CMakeLists.txt   |  6 --
++ .../aes128_ctr/nacl/cipher_aes128_ctr_nacl.c       | 76 ----------------------
++ 4 files changed, 84 deletions(-)
++ delete mode 100644 src/crypto/cipher/aes128_ctr/nacl/CMakeLists.txt
++ delete mode 100644 src/crypto/cipher/aes128_ctr/nacl/cipher_aes128_ctr_nacl.c
++
++diff --git a/doc/source/manual/config.rst b/doc/source/manual/config.rst
++index 0abebeb4c245..94d7a9495ef0 100644
++--- a/doc/source/manual/config.rst
+++++ b/doc/source/manual/config.rst
++@@ -70,7 +70,6 @@ Example config:
++   * ``aes128-ctr``: AES128 in counter mode
++ 
++     - ``openssl``: Use implementation from OpenSSL's libcrypto
++-    - ``nacl``: Use implementation from NaCl or libsodium
++ 
++   * ``null``: No encryption (for authenticated-only methods using composed_gmac)
++ 
++diff --git a/src/crypto/cipher/aes128_ctr/CMakeLists.txt b/src/crypto/cipher/aes128_ctr/CMakeLists.txt
++index 0588fed798e2..58e8c6b3371c 100644
++--- a/src/crypto/cipher/aes128_ctr/CMakeLists.txt
+++++ b/src/crypto/cipher/aes128_ctr/CMakeLists.txt
++@@ -1,3 +1,2 @@
++ fastd_cipher(aes128-ctr aes128_ctr.c)
++ add_subdirectory(openssl)
++-add_subdirectory(nacl)
++diff --git a/src/crypto/cipher/aes128_ctr/nacl/CMakeLists.txt b/src/crypto/cipher/aes128_ctr/nacl/CMakeLists.txt
++deleted file mode 100644
++index 676aa5d48ec4..000000000000
++--- a/src/crypto/cipher/aes128_ctr/nacl/CMakeLists.txt
+++++ /dev/null
++@@ -1,6 +0,0 @@
++-fastd_cipher_impl(aes128-ctr nacl
++-  cipher_aes128_ctr_nacl.c
++-)
++-fastd_cipher_impl_include_directories(aes128-ctr nacl ${NACL_INCLUDE_DIRS})
++-fastd_cipher_impl_link_libraries(aes128-ctr nacl ${NACL_LIBRARIES})
++-fastd_cipher_impl_require(aes128-ctr nacl NACL)
++diff --git a/src/crypto/cipher/aes128_ctr/nacl/cipher_aes128_ctr_nacl.c b/src/crypto/cipher/aes128_ctr/nacl/cipher_aes128_ctr_nacl.c
++deleted file mode 100644
++index ead632640414..000000000000
++--- a/src/crypto/cipher/aes128_ctr/nacl/cipher_aes128_ctr_nacl.c
+++++ /dev/null
++@@ -1,76 +0,0 @@
++-/*
++-  Copyright (c) 2012-2016, Matthias Schiffer <mschiffer@universe-factory.net>
++-  All rights reserved.
++-
++-  Redistribution and use in source and binary forms, with or without
++-  modification, are permitted provided that the following conditions are met:
++-
++-    1. Redistributions of source code must retain the above copyright notice,
++-       this list of conditions and the following disclaimer.
++-    2. Redistributions in binary form must reproduce the above copyright notice,
++-       this list of conditions and the following disclaimer in the documentation
++-       and/or other materials provided with the distribution.
++-
++-  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
++-  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
++-  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
++-  DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
++-  FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
++-  DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
++-  SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
++-  CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
++-  OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
++-  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
++-*/
++-
++-/**
++-   \file
++-
++-   The aes128-ctr implementation from NaCl
++-*/
++-
++-
++-#include "../../../../crypto.h"
++-#include "../../../../alloc.h"
++-
++-#include <crypto_stream_aes128ctr.h>
++-
++-
++-/** The cipher state */
++-struct __attribute__((aligned(16))) fastd_cipher_state {
++-	uint8_t d[crypto_stream_aes128ctr_BEFORENMBYTES] __attribute__((aligned(16))); /**< The unpacked AES key */
++-};
++-
++-
++-/** Initializes the cipher state */
++-static fastd_cipher_state_t * aes128_ctr_init(const uint8_t *key) {
++-	fastd_block128_t k;
++-	memcpy(k.b, key, sizeof(fastd_block128_t));
++-
++-	fastd_cipher_state_t *state = fastd_new_aligned(fastd_cipher_state_t, 16);
++-	crypto_stream_aes128ctr_beforenm(state->d, k.b);
++-
++-	return state;
++-}
++-
++-/** XORs data with the aes128-ctr cipher stream */
++-static bool aes128_ctr_crypt(const fastd_cipher_state_t *state, fastd_block128_t *out, const fastd_block128_t *in, size_t len, const uint8_t *iv) {
++-	crypto_stream_aes128ctr_xor_afternm(out->b, in->b, len, iv, state->d);
++-	return true;
++-}
++-
++-/** Frees the cipher state */
++-static void aes128_ctr_free(fastd_cipher_state_t *state) {
++-	if (state) {
++-		secure_memzero(state, sizeof(*state));
++-		free(state);
++-	}
++-}
++-
++-
++-/** The nacl aes128-ctr implementation */
++-const fastd_cipher_t fastd_cipher_aes128_ctr_nacl = {
++-	.init = aes128_ctr_init,
++-	.crypt = aes128_ctr_crypt,
++-	.free = aes128_ctr_free,
++-};
++-- 
++2.15.0
++
