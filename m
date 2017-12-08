@@ -1,136 +1,55 @@
-From: Bartosz Bilas <b.bilas@grinn-global.com>
-Date: Fri,  8 Dec 2017 14:59:27 +0100
-Subject: [Buildroot] [PATCH v4] package/qt5scxml: new package
-Message-ID: <1512741567-4632-1-git-send-email-b.bilas@grinn-global.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri,  8 Dec 2017 17:22:30 +0100
+Subject: [Buildroot] [PATCH] binaries-marvell: bump version,
+ add license file and hash
+Message-ID: <20171208162230.16647-1-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
+Following our feedback, Marvell has added a README.md file into the
+branch that contains the firmware. Thereore, this commit bumps the
+version to the commit that includes the README.md file (it's the only
+change, the firmware files are unmodified), updates
+<pkg>_LICENSE_FILES to point to README.md, and adds the hash for this
+license files.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
+ boot/binaries-marvell/binaries-marvell.hash | 3 ++-
+ boot/binaries-marvell/binaries-marvell.mk   | 6 ++----
+ 2 files changed, 4 insertions(+), 5 deletions(-)
 
-Changes v3 -> v4:
-	* Remove license files for older version than latest (suggested by Baruch)
-Changes v2 -> v3:
-	* Calculate correct hashes for licence files
-	* Remove unnecessary hash for 5.9.1v (suggested by Arnout)
-	* Add dependencies on qt5 latest version (suggested by Arnout)
-Changes v1 -> v2:
-	* Add hash for 5.9.1v
-	* Fix license files in makefile
-
- package/qt5/Config.in              |  1 +
- package/qt5/qt5scxml/Config.in     | 15 ++++++++++++
- package/qt5/qt5scxml/qt5scxml.hash |  8 +++++++
- package/qt5/qt5scxml/qt5scxml.mk   | 49 ++++++++++++++++++++++++++++++++++++++
- 4 files changed, 73 insertions(+)
- create mode 100644 package/qt5/qt5scxml/Config.in
- create mode 100644 package/qt5/qt5scxml/qt5scxml.hash
- create mode 100644 package/qt5/qt5scxml/qt5scxml.mk
-
-diff --git a/package/qt5/Config.in b/package/qt5/Config.in
-index 69f36e2..8eb00ca 100644
---- a/package/qt5/Config.in
-+++ b/package/qt5/Config.in
-@@ -72,6 +72,7 @@ source "package/qt5/qt5multimedia/Config.in"
- source "package/qt5/qt5quickcontrols/Config.in"
- source "package/qt5/qt5quickcontrols2/Config.in"
- source "package/qt5/qt5script/Config.in"
-+source "package/qt5/qt5scxml/Config.in"
- source "package/qt5/qt5sensors/Config.in"
- source "package/qt5/qt5serialbus/Config.in"
- source "package/qt5/qt5serialport/Config.in"
-diff --git a/package/qt5/qt5scxml/Config.in b/package/qt5/qt5scxml/Config.in
-new file mode 100644
-index 0000000..8a582ca
---- /dev/null
-+++ b/package/qt5/qt5scxml/Config.in
-@@ -0,0 +1,15 @@
-+config BR2_PACKAGE_QT5SCXML
-+	bool "qt5scxml"
-+	depends on BR2_PACKAGE_QT5_VERSION_LATEST
-+	select BR2_PACKAGE_QT5BASE
-+	help
-+	  Qt is a cross-platform application and UI framework for
-+	  developers using C++.
-+
-+	  The Qt SCXML module provides functionality
-+	  to create state machines from SCXML files.
-+
-+	  https://doc.qt.io/qt-5/qtscxml-index.html
-+
-+comment "qt5scxml needs at least qt-5.9"
-+	depends on !BR2_PACKAGE_QT5_VERSION_LATEST
-diff --git a/package/qt5/qt5scxml/qt5scxml.hash b/package/qt5/qt5scxml/qt5scxml.hash
-new file mode 100644
-index 0000000..b0d8615
---- /dev/null
-+++ b/package/qt5/qt5scxml/qt5scxml.hash
-@@ -0,0 +1,8 @@
-+# Hash from: https://download.qt.io/official_releases/qt/5.9/5.9.3/submodules/qtscxml-opensource-src-5.9.3.tar.xz.mirrorlist
-+sha256 d8f51fa8eddd09fef29d8fad6e570e9ca9403469543ab10cb5cfad738786a81b qtscxml-opensource-src-5.9.3.tar.xz
-+
-+# Hashes for license files:
-+
-+sha256 0dbe024961f6ab5c52689cbd036c977975d0d0f6a67ff97762d96cb819dd5652 LICENSE.GPL3-EXCEPT
-+sha256 ed8742a95cb9db653a09b050e27ccff5e67ba69c14aa2c3137f2a4e1892f6c0d LICENSE.FDL
-+sha256 da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768 LICENSE.LGPL3
-diff --git a/package/qt5/qt5scxml/qt5scxml.mk b/package/qt5/qt5scxml/qt5scxml.mk
-new file mode 100644
-index 0000000..4b1f979
---- /dev/null
-+++ b/package/qt5/qt5scxml/qt5scxml.mk
-@@ -0,0 +1,49 @@
-+################################################################################
-+#
-+# qt5scxml
-+#
-+################################################################################
-+
-+QT5SCXML_VERSION = $(QT5_VERSION)
-+QT5SCXML_SITE = $(QT5_SITE)
-+QT5SCXML_SOURCE = qtscxml-opensource-src-$(QT5SCXML_VERSION).tar.xz
-+QT5SCXML_DEPENDENCIES = qt5base
-+QT5SCXML_INSTALL_STAGING = YES
-+
-+QT5SCXML_LICENSE = GPL-2.0+ or LGPL-3.0, GPL-3.0 with exception(tools), GFDL-1.3 (docs)
-+QT5SCXML_LICENSE_FILES = LICENSE.GPL3-EXCEPT LICENSE.LGPL3 LICENSE.FDL
-+ifeq ($(BR2_PACKAGE_QT5BASE_EXAMPLES),y)
-+QT5SCXML_LICENSE := $(QT5SCXML_LICENSE), BSD-3-Clause (examples)
-+endif
-+
-+define QT5SCXML_CONFIGURE_CMDS
-+	(cd $(@D); $(TARGET_MAKE_ENV) $(HOST_DIR)/bin/qmake)
-+endef
-+
-+define QT5SCXML_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
-+endef
-+
-+define QT5SCXML_INSTALL_STAGING_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install
-+	$(QT5_LA_PRL_FILES_FIXUP)
-+endef
-+
-+ifeq ($(BR2_STATIC_LIBS),)
-+define QT5SCXML_INSTALL_TARGET_LIBS
-+	cp -dpf $(STAGING_DIR)/usr/lib/libQt5Scxml*.so.* $(TARGET_DIR)/usr/lib
-+endef
-+endif
-+
-+ifeq ($(BR2_PACKAGE_QT5BASE_EXAMPLES),y)
-+define QT5SCXML_INSTALL_TARGET_EXAMPLES
-+	cp -dpfr $(STAGING_DIR)/usr/lib/qt/examples/scxml $(TARGET_DIR)/usr/lib/qt/examples/
-+endef
-+endif
-+
-+define QT5SCXML_INSTALL_TARGET_CMDS
-+	$(QT5SCXML_INSTALL_TARGET_LIBS)
-+	$(QT5SCXML_INSTALL_TARGET_EXAMPLES)
-+endef
-+
-+$(eval $(generic-package))
+diff --git a/boot/binaries-marvell/binaries-marvell.hash b/boot/binaries-marvell/binaries-marvell.hash
+index 401584dacd..94c66039c9 100644
+--- a/boot/binaries-marvell/binaries-marvell.hash
++++ b/boot/binaries-marvell/binaries-marvell.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+-sha256 22a201542d8f93cf88623065db5f3377822b59cbfdf98a8e60cdee629273d3a0 binaries-marvell-0dabe23b956420b0928d337d635f0cd5646c33d0.tar.gz
++sha256 7c41cddc2ce46038b630b59d2e9e50e903d27032bcfbf38019eaed14fcfdbe40 binaries-marvell-a8ac27b7884ed2c1efcf9f3326de3e0ed7b94e91.tar.gz
++sha256 d8560ab4ea4042a55eee6857ded1d7e4bca2d9120b8c7a86d2a7fdc4ba4994e0	README.md
+diff --git a/boot/binaries-marvell/binaries-marvell.mk b/boot/binaries-marvell/binaries-marvell.mk
+index e2bd4f2499..152c9cd97a 100644
+--- a/boot/binaries-marvell/binaries-marvell.mk
++++ b/boot/binaries-marvell/binaries-marvell.mk
+@@ -4,13 +4,11 @@
+ #
+ ################################################################################
+ 
+-BINARIES_MARVELL_VERSION = 0dabe23b956420b0928d337d635f0cd5646c33d0
++BINARIES_MARVELL_VERSION = a8ac27b7884ed2c1efcf9f3326de3e0ed7b94e91
+ BINARIES_MARVELL_SITE = $(call github,MarvellEmbeddedProcessors,binaries-marvell,$(BINARIES_MARVELL_VERSION))
+ 
+-# The license text is only available in the master branch, which is
+-# not used in this package. See
+-# https://raw.githubusercontent.com/MarvellEmbeddedProcessors/binaries-marvell/master/README.md.
+ BINARIES_MARVELL_LICENSE = GPL-2.0 with freertos-exception-2.0
++BINARIES_MARVELL_LICENSE_FILES = README.md
+ 
+ BINARIES_MARVELL_IMAGE = $(call qstrip,$(BR2_TARGET_BINARIES_MARVELL_IMAGE))
+ BINARIES_MARVELL_INSTALL_IMAGES  = YES
 -- 
-2.7.4
+2.14.3
