@@ -1,52 +1,49 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Fri,  8 Dec 2017 11:54:39 +0100
-Subject: [Buildroot] [PATCH 4/4] python-pyftpdlib: bump to version 1.5.3
-In-Reply-To: <20171208105439.1967-1-yegorslists@googlemail.com>
-References: <20171208105439.1967-1-yegorslists@googlemail.com>
-Message-ID: <20171208105439.1967-4-yegorslists@googlemail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 08 Dec 2017 10:59:39 +0000
+Subject: [Buildroot] [Bug 10561] New: OpenZwave generates
+ libopenzwave.so.1.4 instead of libopenzwave.so.1.5
+Message-ID: <bug-10561-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+https://bugs.busybox.net/show_bug.cgi?id=10561
 
-Add licence checksum.
+            Bug ID: 10561
+           Summary: OpenZwave generates libopenzwave.so.1.4 instead of
+                    libopenzwave.so.1.5
+           Product: buildroot
+           Version: 2017.02
+          Hardware: PC
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Outdated package
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: laibulle at gmail.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/python-pyftpdlib/python-pyftpdlib.hash | 7 ++++---
- package/python-pyftpdlib/python-pyftpdlib.mk   | 4 ++--
- 2 files changed, 6 insertions(+), 5 deletions(-)
+Hello, 
 
-diff --git a/package/python-pyftpdlib/python-pyftpdlib.hash b/package/python-pyftpdlib/python-pyftpdlib.hash
-index 9726f9f723..3ed16018df 100644
---- a/package/python-pyftpdlib/python-pyftpdlib.hash
-+++ b/package/python-pyftpdlib/python-pyftpdlib.hash
-@@ -1,3 +1,4 @@
--# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=61b23e2362df23d0dfa5fe76f6e2ab55, sha256 locally computed
--md5  61b23e2362df23d0dfa5fe76f6e2ab55  pyftpdlib-1.5.1.tar.gz
--sha256  7bcd7fc825123414a157718c6dcdcb0978208d3c865d4650564acef4acce3354  pyftpdlib-1.5.1.tar.gz
-+# md5 from https://pypi.python.org/pypi/pyftpdlib/json, sha256 locally computed
-+md5	f1c7e7f859b3310769149dea4ac26916  pyftpdlib-1.5.3.tar.gz
-+sha256	7b9ea701f91bee280c5a930a9c4ceaea91b6d4aaf82b8b8ede82fb84a32081a7  pyftpdlib-1.5.3.tar.gz
-+sha256  18a4ff1ddf890838e36504b307581e3eb42c890a7272ce28b18b3ce1205b7ea8  LICENSE
-diff --git a/package/python-pyftpdlib/python-pyftpdlib.mk b/package/python-pyftpdlib/python-pyftpdlib.mk
-index 85d0b56adf..a34b563cb7 100644
---- a/package/python-pyftpdlib/python-pyftpdlib.mk
-+++ b/package/python-pyftpdlib/python-pyftpdlib.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_PYFTPDLIB_VERSION = 1.5.1
-+PYTHON_PYFTPDLIB_VERSION = 1.5.3
- PYTHON_PYFTPDLIB_SOURCE = pyftpdlib-$(PYTHON_PYFTPDLIB_VERSION).tar.gz
--PYTHON_PYFTPDLIB_SITE = https://pypi.python.org/packages/a8/f8/0f6db156898616dbcbd7bf865660295c81479071ab0fcd1898fe1b3a4fc4
-+PYTHON_PYFTPDLIB_SITE = https://pypi.python.org/packages/c5/fb/74f6425fbb7f2a87969e1aa01bb9684601de431a3488b95f64509bf985ef
- PYTHON_PYFTPDLIB_SETUP_TYPE = setuptools
- PYTHON_PYFTPDLIB_LICENSE = MIT
- PYTHON_PYFTPDLIB_LICENSE_FILES = LICENSE
+I am a new user of BuildRoot. I am trying to use OpenZwave 1.5 on raspberry Pi
+3, I have fetched buildroot-2017.02.8.tar.gz but the generated lib is version
+1.4 but the content of is package/openzwave/openzwave.mk is
+
+OPENZWAVE_VERSION = V1.5
+OPENZWAVE_SITE = $(call github,OpenZWave,open-zwave,$(OPENZWAVE_VERSION))
+OPENZWAVE_LICENSE = LGPLv3+, GPLv3 (examples), Apache-2.0 (sh2ju.sh)
+OPENZWAVE_LICENSE_FILES = license/license.txt license/lgpl.txt \
+        license/gpl.txt license/Apache-License-2.0.txt
+
+
+Am doing something wrong ?
+
+Best regards
+
 -- 
-2.11.0
+You are receiving this mail because:
+You are on the CC list for the bug.
