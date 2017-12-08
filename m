@@ -1,42 +1,63 @@
-From: Alexander Dahl <post@lespocky.de>
-Date: Fri, 8 Dec 2017 08:06:52 +0100
-Subject: [Buildroot] [PATCH] fastd: fix build with newer libsodium
-In-Reply-To: <c807b9a816f86998b946f7508e1adbcc42aaa3b1.1512668886.git.baruch@tkos.co.il>
-References: <c807b9a816f86998b946f7508e1adbcc42aaa3b1.1512668886.git.baruch@tkos.co.il>
-Message-ID: <20171208070652.zgnl7xptchvlx5oa@falbala.home.lespocky.de>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Fri,  8 Dec 2017 09:12:56 +0200
+Subject: [Buildroot] [PATCH] glibc: security bump to the latest 2.26 branch
+Message-ID: <4f77d70e07b0ed078d79e0358ec3ff3d49ccb093.1512717176.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hei hei,
+List of fixes from the 2.26 branch NEWS files:
 
-On Thu, Dec 07, 2017 at 07:48:06PM +0200, Baruch Siach wrote:
-> Add upstream patch removing aes128-ctr support that libsodium no longer
-> provides.
+  CVE-2017-15670: The glob function, when invoked with GLOB_TILDE,
+  suffered from a one-byte overflow during ~ operator processing (either
+  on the stack or the heap, depending on the length of the user name).
+  Reported by Tim R?hsen.
 
-You didn't notice there are already two patches for fastd, now there
-are:
+  CVE-2017-15671: The glob function, when invoked with GLOB_TILDE,
+  would sometimes fail to free memory allocated during ~ operator
+  processing, leading to a memory leak and, potentially, to a denial
+  of service.
 
-* 0001-cipher-remove-aes128-ctr-NaCl-implementation.patch
-* 0001-cmake-use-INTERPROCEDURAL_OPTIMIZATION-target-proper.patch
-* 0002-CMakeList-do-not-overwrite-module-path.patch
+  CVE-2017-15804: The glob function, when invoked with GLOB_TILDE and
+  without GLOB_NOESCAPE, could write past the end of a buffer while
+  unescaping user names.  Reported by Tim R?hsen.
 
-The new patch should be 0003.
+  CVE-2017-17426: The malloc function, when called with an object size near
+  the value SIZE_MAX, would return a pointer to a buffer which is too small,
+  instead of NULL.  This was a regression introduced with the new malloc
+  thread cache in glibc 2.26.  Reported by Iain Buclaw.
 
-Greets
-Alex
+Cc: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/glibc/glibc.hash | 2 +-
+ package/glibc/glibc.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
+diff --git a/package/glibc/glibc.hash b/package/glibc/glibc.hash
+index 4e5bc7f7bcbc..f3a6577d2a42 100644
+--- a/package/glibc/glibc.hash
++++ b/package/glibc/glibc.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated (fetched from Github)
+-sha256  d66b3702961c846ead2bacf17a9b5239cc1e8a43ca6e322f3637e99f276efec1     glibc-glibc-2.26-73-g4b692dffb95ac4812b161eb6a16113d7e824982e.tar.gz
++sha256  0766875391224153502c5542a71b6e46db53b44691078b3130e1a0df41586430     glibc-glibc-2.26-107-g73a92363619e52c458146e903dfb9b1ba823aa40.tar.gz
+ # Locally calculated (fetched from Github)
+ sha256  5aa9adeac09727db0b8a52794186563771e74d70410e9fd86431e339953fd4bb     glibc-arc-2017.09-release.tar.gz
+diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+index d99b524ef9fa..cb3a84a9a779 100644
+--- a/package/glibc/glibc.mk
++++ b/package/glibc/glibc.mk
+@@ -11,7 +11,7 @@ GLIBC_SOURCE = glibc-$(GLIBC_VERSION).tar.gz
+ else
+ # Generate version string using:
+ #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master
+-GLIBC_VERSION = glibc-2.26-73-g4b692dffb95ac4812b161eb6a16113d7e824982e
++GLIBC_VERSION = glibc-2.26-107-g73a92363619e52c458146e903dfb9b1ba823aa40
+ # Upstream doesn't officially provide an https download link.
+ # There is one (https://sourceware.org/git/glibc.git) but it's not reliable,
+ # sometimes the connection times out. So use an unofficial github mirror.
 -- 
-?With the first link, the chain is forged. The first speech censured, 
-the first thought forbidden, the first freedom denied, chains us all 
-irrevocably.? (Jean-Luc Picard, quoting Judge Aaron Satie)
-*** GnuPG-FP: C28E E6B9 0263 95CF 8FAF  08FA 34AD CD00 7221 5CC6 ***
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 833 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20171208/ca54b8d8/attachment.asc>
+2.15.0
