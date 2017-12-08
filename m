@@ -1,73 +1,35 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 08 Dec 2017 10:14:53 +0100
-Subject: [Buildroot] [PATCH 1/8] arm-trusted-firmware: add option to
- enable/disable building FIP image
-In-Reply-To: <20171203214811.3124-2-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Sun, 3 Dec 2017 22:48:04 +0100")
-References: <20171203214811.3124-1-thomas.petazzoni@free-electrons.com>
- <20171203214811.3124-2-thomas.petazzoni@free-electrons.com>
-Message-ID: <87h8t11sz6.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 8 Dec 2017 10:39:20 +0100
+Subject: [Buildroot] [git commit] .gitlab-ci.yml: refresh following the
+ addition of orangepi_lite_defconfig
+Message-ID: <20171208093255.0266A81D5D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=ae2a68936fcea83e8eb8f6dc641f3f1b34571af1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Currently, our arm-trusted-firmware unconditionally builds a FIP
- > (Firmware Image Package). While this is often needed on platforms
- > where ATF encapsulates U-Boot, it is not the case on some other
- > platforms where it's U-Boot that encapsulates parts of ATF.
+Fixes:
 
- > In order to prepare the support for the later platforms, we make
- > building the FIP image optional, and update the only defconfig we have
- > that uses ARM Trusted Firmware.
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/43702501
 
- > Note: we considered adding a "default y" here to preserve backward
- > compatibility, but there really isn't any default that is sane:
- > whether a FIP image needs to be built or not is purely platform
- > specific.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .gitlab-ci.yml | 1 +
+ 1 file changed, 1 insertion(+)
 
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- > ---
- >  boot/arm-trusted-firmware/Config.in               | 8 ++++++++
- >  boot/arm-trusted-firmware/arm-trusted-firmware.mk | 8 +++++++-
- >  configs/arm_juno_defconfig                        | 1 +
- >  3 files changed, 16 insertions(+), 1 deletion(-)
-
- > diff --git a/boot/arm-trusted-firmware/Config.in b/boot/arm-trusted-firmware/Config.in
- > index 799370cd51..05600461a5 100644
- > --- a/boot/arm-trusted-firmware/Config.in
- > +++ b/boot/arm-trusted-firmware/Config.in
- > @@ -56,6 +56,14 @@ config BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM
- >  	help
- >  	  Target plaform to build for.
- 
- > +config BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP
- > +	bool "Build FIP image"
- > +	help
- > +	  This option enables building the FIP image (Firmware Image
- > +	  Package). This is typically the image format used by
- > +	  platforms were ATF encapsulates the second stage bootloader
- > +	  (such as U-Boot).
- > +
- >  config BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES
- >  	string "Additional ATF build variables"
- >  	help
- > diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
- > index 7b1cc6ebb6..bdffb1dbe4 100644
- > --- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
- > +++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
- > @@ -39,10 +39,16 @@ ARM_TRUSTED_FIRMWARE_MAKE_OPTS += SCP_BL2=$(BINARIES_DIR)/scp-fw.bin
- >  ARM_TRUSTED_FIRMWARE_DEPENDENCIES += vexpress-firmware
- >  endif
- 
- > +ARM_TRUSTED_FIRMWARE_MAKE_TARGETS = all
- > +
-
-Minor nit: I believe the 'all' target builds unneeded stuff for the
-platforms using only bl31.bin.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index 7e3279d..f9a7f78 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -160,6 +160,7 @@ olimex_a20_olinuxino_lime_mali_defconfig: *defconfig
+ olimex_a20_olinuxino_micro_defconfig: *defconfig
+ olimex_imx233_olinuxino_defconfig: *defconfig
+ openblocks_a6_defconfig: *defconfig
++orangepi_lite_defconfig: *defconfig
+ orangepi_one_defconfig: *defconfig
+ orangepi_pc_defconfig: *defconfig
+ orangepi_pc_plus_defconfig: *defconfig
