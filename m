@@ -1,43 +1,135 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 8 Dec 2017 23:49:18 +0100
-Subject: [Buildroot] [git commit] package/exim: change tarball compression
- to xz
-Message-ID: <20171208224514.6659A7FAC0@busybox.osuosl.org>
+From: Cam Hutchison <camh@xdna.net>
+Date: Sat, 9 Dec 2017 10:35:31 +1100
+Subject: [Buildroot] [PATCHv2] package/uboot: detect missing
+ user-supplied environment source files
+In-Reply-To: <20171207091349.GA3509@scaer>
+References: <20171206225818.7784-1-yann.morin.1998@free.fr>
+ <CABa6e=qk9jq2_3cpSy9U-WUe2ff6f3Dpbzhg3j4eWmwPWiPS7w@mail.gmail.com>
+ <20171207091349.GA3509@scaer>
+Message-ID: <CABa6e=r0cb9ZajV_rBn0HGgQ9qSxngTUV1LNPTStU7BsA7cmyQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7c42b5f38131ef19843301410e6e649c6173565d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 7 December 2017 at 20:13, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> Cam, All,
+>
+> On 2017-12-07 19:18 +1100, Cam Hutchison spake thusly:
+>> On 7 December 2017 at 09:58, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+>> > Since 0542bb79e8 (uboot: Support multiple environment source files),
+>> > a missing user-supplied environment source files is no longer detected.
+>> >
+>> > This is because we cat them all, and feed the concatenation to the stdin
+>> > of mkenvimage. So, if one source file is missing, the cat exits in error,
+>> > but the compound command exits with the exit code of the last command,
+>> > which is that of mkenvimage, which happens to be happy with whatever it
+>> > is fed on its stdin, even is empty.
+>> >
+>> > We fix that by creating a temporary file, that we even leave afterward
+>> > for the user to inspect.
+>> >
+>> > We also move it out of the _CMDS block and into a macro of its own, so
+>> > that it is easier to write and maintain.
+>> >
+>> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>> > Cc: Cam Hutchison <camh@xdna.net>
+>> > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+>> >
+>> > ---
+>> > Changes v1 -> v2:
+>> >   - move into its own macro  (Thomas)
+>> > ---
+>> >  boot/uboot/uboot.mk | 19 +++++++++++++------
+>> >  1 file changed, 13 insertions(+), 6 deletions(-)
+>> >
+>> > diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+>> > index a1fac7dcae..abb89da69b 100644
+>> > --- a/boot/uboot/uboot.mk
+>> > +++ b/boot/uboot/uboot.mk
+>> > @@ -238,6 +238,18 @@ define UBOOT_BUILD_OMAP_IFT
+>> >                 -c $(call qstrip,$(BR2_TARGET_UBOOT_OMAP_IFT_CONFIG))
+>> >  endef
+>> >
+>> > +ifneq ($(BR2_TARGET_UBOOT_ENVIMAGE),)
+>> > +define UBOOT_GENERATE_ENV_IMAGE
+>> > +       cat $(call qstrip,$(BR2_TARGET_UBOOT_ENVIMAGE_SOURCE)) \
+>> > +               >$(BINARIES_DIR)/uboot-env.txt
+>>
+>> One (very minor) concern is using the name "uboot-env.txt". It is
+>> possible that someone has
+>> a post-image script that creates a file of that name in BINARIES_DIR,
+>> so this will clobber
+>> that file. As a tmp file, perhaps it should have a tmp file name?
+>>
+>> I have a post-image script that creates a file of this name, but it
+>> goes at a higher-level in
+>> a binaries-type dir - I have a multi-layered build script, and the
+>> higher-level directory that
+>> aggregates the layers protects my file from being clobbered, but I can
+>> imagine that if I
+>> made different decisions when writing my front-end script, I could
+>> have easily placed
+>> my uboot-env.txt file in buildroot's BINARIES_DIR.
+>>
+>> Perhaps _uboot-env.txt? Or go all the way and use mktemp?
+>
+> Or just generate uboot-env.txt in $(@D)/uboot-env.buildroot like so:
+>
+>     define UBOOT_GENERATE_ENV_IMAGE
+>         cat $(call qstrip,$(BR2_TARGET_UBOOT_ENVIMAGE_SOURCE)) \
+>             >$(@D)/uboot-env.buildroot
+>         $(HOST_DIR)/bin/mkenvimage -s $(BR2_TARGET_UBOOT_ENVIMAGE_SIZE) \
+>             $(if $(BR2_TARGET_UBOOT_ENVIMAGE_REDUNDANT),-r) \
+>             $(if $(filter BIG,$(BR2_ENDIAN)),-b) \
+>             -o $(BINARIES_DIR)/uboot-env.bin \
+>             $(@D)/uboot-env.buildroot
+>     endef
+>
+> Thoughts?
 
-Signed-off-by: Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/exim/exim.hash | 4 ++--
- package/exim/exim.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+I like this better.
 
-diff --git a/package/exim/exim.hash b/package/exim/exim.hash
-index d961083..41f51b1 100644
---- a/package/exim/exim.hash
-+++ b/package/exim/exim.hash
-@@ -1,2 +1,2 @@
--# Locally calculated
--sha256 1c853bc960dff0a0e51e3e28bc4a4a8165b58b41bb64ea3abb90f254d9947a8c  exim-4.89.1.tar.bz2
-+# Locally calculated after checking pgp signature
-+sha256 1a21322a10e2da9c0bd6a2a483b6e7ef8fa7f16efcab4c450fd73e7188f5fa94  exim-4.89.1.tar.xz
-diff --git a/package/exim/exim.mk b/package/exim/exim.mk
-index 612eaf4..37eab50 100644
---- a/package/exim/exim.mk
-+++ b/package/exim/exim.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- EXIM_VERSION = 4.89.1
--EXIM_SOURCE = exim-$(EXIM_VERSION).tar.bz2
-+EXIM_SOURCE = exim-$(EXIM_VERSION).tar.xz
- EXIM_SITE = ftp://ftp.exim.org/pub/exim/exim4
- EXIM_LICENSE = GPL-2.0+
- EXIM_LICENSE_FILES = LICENCE
+LGTM
+
+
+> Regards,
+> Yann E. MORIN.
+>
+>> > +       $(HOST_DIR)/bin/mkenvimage -s $(BR2_TARGET_UBOOT_ENVIMAGE_SIZE) \
+>> > +               $(if $(BR2_TARGET_UBOOT_ENVIMAGE_REDUNDANT),-r) \
+>> > +               $(if $(filter BIG,$(BR2_ENDIAN)),-b) \
+>> > +               -o $(BINARIES_DIR)/uboot-env.bin \
+>> > +               $(BINARIES_DIR)/uboot-env.txt
+>> > +endef
+>> > +endif
+>> > +
+>> >  define UBOOT_INSTALL_IMAGES_CMDS
+>> >         $(foreach f,$(UBOOT_BINS), \
+>> >                         cp -dpf $(@D)/$(f) $(BINARIES_DIR)/
+>> > @@ -249,12 +261,7 @@ define UBOOT_INSTALL_IMAGES_CMDS
+>> >                         cp -dpf $(@D)/$(f) $(BINARIES_DIR)/
+>> >                 )
+>> >         )
+>> > -       $(if $(BR2_TARGET_UBOOT_ENVIMAGE),
+>> > -               cat $(call qstrip,$(BR2_TARGET_UBOOT_ENVIMAGE_SOURCE)) | \
+>> > -                       $(HOST_DIR)/bin/mkenvimage -s $(BR2_TARGET_UBOOT_ENVIMAGE_SIZE) \
+>> > -                       $(if $(BR2_TARGET_UBOOT_ENVIMAGE_REDUNDANT),-r) \
+>> > -                       $(if $(filter BIG,$(BR2_ENDIAN)),-b) \
+>> > -                       -o $(BINARIES_DIR)/uboot-env.bin -)
+>> > +       $(UBOOT_GENERATE_ENV_IMAGE)
+>> >         $(if $(BR2_TARGET_UBOOT_BOOT_SCRIPT),
+>> >                 $(HOST_DIR)/bin/mkimage -C none -A $(MKIMAGE_ARCH) -T script \
+>> >                         -d $(call qstrip,$(BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE)) \
+>> > --
+>> > 2.11.0
+>> >
+>
+> --
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
