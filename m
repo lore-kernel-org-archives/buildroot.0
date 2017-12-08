@@ -1,49 +1,39 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Fri, 8 Dec 2017 22:32:15 +0100
-Subject: [Buildroot] [PATCH v1] gdb: prevent installation of libbfd.so
-In-Reply-To: <20171129234818.42fc759f@windsurf.home>
-References: <20171027180214.12657-1-ps.report@gmx.net>
- <20171028154033.4196bf6a@windsurf>
- <20171129234818.42fc759f@windsurf.home>
-Message-ID: <20171208223215.7f19bc02@gmx.net>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 08 Dec 2017 23:48:19 +0100
+Subject: [Buildroot] [PATCH 1/1] configs/orangepi-lite: bump Linux to
+ 4.14.4
+In-Reply-To: <20171208182904.29434-1-jan.kraval@gmail.com> (Jan Kraval's
+ message of "Fri, 8 Dec 2017 19:29:04 +0100")
+References: <20171208182904.29434-1-jan.kraval@gmail.com>
+Message-ID: <87bmj8zvik.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+>>>>> "Jan" == Jan Kraval <jan.kraval@gmail.com> writes:
 
-On Wed, 29 Nov 2017 23:48:18 +0100, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
+ > Signed-off-by: Jan Kraval <jan.kraval@gmail.com>
+ > ---
+ >  configs/orangepi_lite_defconfig | 3 +--
+ >  1 file changed, 1 insertion(+), 2 deletions(-)
 
-> Hello Peter,
-> 
-> On Sat, 28 Oct 2017 15:40:33 +0200, Thomas Petazzoni wrote:
-> > On Fri, 27 Oct 2017 20:02:14 +0200, Peter Seiderer wrote:  
-> > > Signed-off-by: Peter Seiderer <ps.report@gmx.net>    
-> > 
-> > We really want a more detailed commit log for such a change that isn't
-> > obvious.
-> >   
-> > > For a previous discussion on this topic see [1].
-> > > 
-> > > [1] http://lists.busybox.net/pipermail/buildroot/2017-September/202337.html    
-> > 
-> > I know this link provides some details, but they should be in the
-> > commit log.  
-> 
-> Ping ? :-)
+ > diff --git a/configs/orangepi_lite_defconfig b/configs/orangepi_lite_defconfig
+ > index b1f6598ccc..28fb57ab98 100644
+ > --- a/configs/orangepi_lite_defconfig
+ > +++ b/configs/orangepi_lite_defconfig
+ > @@ -1,14 +1,13 @@
+ >  BR2_arm=y
+ >  BR2_cortex_a7=y
+ >  BR2_ARM_FPU_VFPV4=y
+ > -BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_13=y
 
-Sorry, for the delay (not enough spare time for buildroot stuff at the moment)...
+I've added an explicit
 
-Just sent a new version of the patch...
+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
 
-Regards,
-Peter
+To ensure this doesn't break when we add 4.15 and committed, thanks.
 
-> 
-> I'll mark this patch as Changes Requested.
-> 
-> Thanks!
-> 
-> Thomas
+-- 
+Bye, Peter Korsgaard
