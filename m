@@ -1,30 +1,25 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 8 Dec 2017 14:18:27 +0100
-Subject: [Buildroot] [PATCH 5/8] mv-ddr-marvell: new package
-In-Reply-To: <87r2s5z8zj.fsf@dell.be.48ers.dk>
-References: <20171203214811.3124-1-thomas.petazzoni@free-electrons.com>
- <20171203214811.3124-6-thomas.petazzoni@free-electrons.com>
- <87r2s5z8zj.fsf@dell.be.48ers.dk>
-Message-ID: <20171208141827.093390e6@windsurf.lan>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 08 Dec 2017 14:32:07 +0100
+Subject: [Buildroot] [PATCH] boot: uboot: fix typo
+In-Reply-To: <20171208131338.11603-1-yegorslists@googlemail.com>
+ (yegorslists@googlemail.com's message of "Fri, 8 Dec 2017 14:13:38
+ +0100")
+References: <20171208131338.11603-1-yegorslists@googlemail.com>
+Message-ID: <87mv2tz6p4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "yegorslists" == yegorslists  <yegorslists@googlemail.com> writes:
 
-On Fri, 08 Dec 2017 13:42:40 +0100, Peter Korsgaard wrote:
+ > From: Yegor Yefremov <yegorslists@googlemail.com>
+ > Replace "depend" with "depends".
 
-> I wonder if it would make sense to  depend or / select atf, but I've
-> left it as is for now and committed, thanks.
+ > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 
-I don't really have a strong opinion here (though I'm leaning towards
-the depends on). However, if you change this, then we should also change
-the vexpress-firmware package.
+Ups - Committed, thanks.
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
