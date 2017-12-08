@@ -1,57 +1,112 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 8 Dec 2017 18:58:49 +0100
-Subject: [Buildroot] [git commit] binaries-marvell: bump version,
- add license file and hash
-Message-ID: <20171208181255.5B6D882867@busybox.osuosl.org>
+Date: Fri, 8 Dec 2017 19:00:59 +0100
+Subject: [Buildroot] [git commit] support/testing: add tests for ATF
+Message-ID: <20171208181255.7511482867@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a82882ae10e9b80635d0d5e884b6f291df2b4949
+commit: https://git.buildroot.net/buildroot/commit/?id=8cf3ce04e9c4a4c4685b80edd9e8e873fe44d8e8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Following our feedback, Marvell has added a README.md file into the
-branch that contains the firmware. Thereore, this commit bumps the
-version to the commit that includes the README.md file (it's the only
-change, the firmware files are unmodified), updates
-<pkg>_LICENSE_FILES to point to README.md, and adds the hash for this
-license files.
+These new tests only do build tests, but allow to quickly verify that
+the ATF/U-Boot combinations for vexpress, Allwinner and Marvell
+platforms all continue to build properly.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- boot/binaries-marvell/binaries-marvell.hash | 3 ++-
- boot/binaries-marvell/binaries-marvell.mk   | 6 ++----
- 2 files changed, 4 insertions(+), 5 deletions(-)
+ support/testing/tests/boot/__init__.py |  0
+ support/testing/tests/boot/test_atf.py | 79 ++++++++++++++++++++++++++++++++++
+ 2 files changed, 79 insertions(+)
 
-diff --git a/boot/binaries-marvell/binaries-marvell.hash b/boot/binaries-marvell/binaries-marvell.hash
-index 401584d..94c6603 100644
---- a/boot/binaries-marvell/binaries-marvell.hash
-+++ b/boot/binaries-marvell/binaries-marvell.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256 22a201542d8f93cf88623065db5f3377822b59cbfdf98a8e60cdee629273d3a0 binaries-marvell-0dabe23b956420b0928d337d635f0cd5646c33d0.tar.gz
-+sha256 7c41cddc2ce46038b630b59d2e9e50e903d27032bcfbf38019eaed14fcfdbe40 binaries-marvell-a8ac27b7884ed2c1efcf9f3326de3e0ed7b94e91.tar.gz
-+sha256 d8560ab4ea4042a55eee6857ded1d7e4bca2d9120b8c7a86d2a7fdc4ba4994e0	README.md
-diff --git a/boot/binaries-marvell/binaries-marvell.mk b/boot/binaries-marvell/binaries-marvell.mk
-index e2bd4f2..152c9cd 100644
---- a/boot/binaries-marvell/binaries-marvell.mk
-+++ b/boot/binaries-marvell/binaries-marvell.mk
-@@ -4,13 +4,11 @@
- #
- ################################################################################
- 
--BINARIES_MARVELL_VERSION = 0dabe23b956420b0928d337d635f0cd5646c33d0
-+BINARIES_MARVELL_VERSION = a8ac27b7884ed2c1efcf9f3326de3e0ed7b94e91
- BINARIES_MARVELL_SITE = $(call github,MarvellEmbeddedProcessors,binaries-marvell,$(BINARIES_MARVELL_VERSION))
- 
--# The license text is only available in the master branch, which is
--# not used in this package. See
--# https://raw.githubusercontent.com/MarvellEmbeddedProcessors/binaries-marvell/master/README.md.
- BINARIES_MARVELL_LICENSE = GPL-2.0 with freertos-exception-2.0
-+BINARIES_MARVELL_LICENSE_FILES = README.md
- 
- BINARIES_MARVELL_IMAGE = $(call qstrip,$(BR2_TARGET_BINARIES_MARVELL_IMAGE))
- BINARIES_MARVELL_INSTALL_IMAGES  = YES
+diff --git a/support/testing/tests/boot/__init__.py b/support/testing/tests/boot/__init__.py
+new file mode 100644
+index 0000000..e69de29
+diff --git a/support/testing/tests/boot/test_atf.py b/support/testing/tests/boot/test_atf.py
+new file mode 100644
+index 0000000..02f93b9
+--- /dev/null
++++ b/support/testing/tests/boot/test_atf.py
+@@ -0,0 +1,79 @@
++import os
++import infra.basetest
++
++class TestATFVexpress(infra.basetest.BRTest):
++    config = \
++    """
++    BR2_aarch64=y
++    BR2_TOOLCHAIN_EXTERNAL=y
++    BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64=y
++    BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
++    BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
++    BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/ARM-software/arm-trusted-firmware.git"
++    BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="v1.2"
++    BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="juno"
++    BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP=y
++    BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33=y
++    BR2_TARGET_UBOOT=y
++    BR2_TARGET_UBOOT_BOARDNAME="vexpress_aemv8a_juno"
++    BR2_TARGET_UBOOT_CUSTOM_VERSION=y
++    BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.03"
++    BR2_TARGET_VEXPRESS_FIRMWARE=y
++    """
++
++    def test_run(self):
++        pass
++
++class TestATFAllwinner(infra.basetest.BRTest):
++    config = \
++    """
++    BR2_aarch64=y
++    BR2_TOOLCHAIN_EXTERNAL=y
++    BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64=y
++    BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
++    BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
++    BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/apritzel/arm-trusted-firmware.git"
++    BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="sun50iw1p1"
++    BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="aa75c8da415158a94b82a430b2b40000778e851f"
++    BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
++    BR2_TARGET_UBOOT=y
++    BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
++    BR2_TARGET_UBOOT_CUSTOM_VERSION=y
++    BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.09"
++    BR2_TARGET_UBOOT_BOARD_DEFCONFIG="bananapi_m64"
++    BR2_TARGET_UBOOT_NEEDS_DTC=y
++    BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
++    BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
++    BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.itb"
++    BR2_TARGET_UBOOT_SPL=y
++    BR2_TARGET_UBOOT_SPL_NAME="spl/sunxi-spl.bin"
++    """
++
++    def test_run(self):
++        pass
++
++class TestATFMarvell(infra.basetest.BRTest):
++    config = \
++    """
++    BR2_aarch64=y
++    BR2_TOOLCHAIN_EXTERNAL=y
++    BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64=y
++    BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
++    BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
++    BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/MarvellEmbeddedProcessors/atf-marvell.git"
++    BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="atf-v1.3-armada-17.10"
++    BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="a80x0_mcbin"
++    BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP=y
++    BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33=y
++    BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="USE_COHERENT_MEM=0"
++    BR2_TARGET_BINARIES_MARVELL=y
++    BR2_TARGET_BINARIES_MARVELL_8040=y
++    BR2_TARGET_MV_DDR_MARVELL=y
++    BR2_TARGET_UBOOT=y
++    BR2_TARGET_UBOOT_BOARDNAME="mvebu_mcbin-88f8040"
++    BR2_TARGET_UBOOT_CUSTOM_VERSION=y
++    BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.09"
++    """
++
++    def test_run(self):
++        pass
