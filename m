@@ -1,54 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 8 Dec 2017 17:48:55 +0100
-Subject: [Buildroot] [PATCH v2] kvmtool: bump to f77d646ba0
-In-Reply-To: <20171207041956.8124-1-matthew.weber@rockwellcollins.com>
-References: <20171207041956.8124-1-matthew.weber@rockwellcollins.com>
-Message-ID: <20171208174855.3a8428a9@windsurf.lan>
+Date: Fri, 8 Dec 2017 17:49:29 +0100
+Subject: [Buildroot] [git commit] libostree: bump to version 2017.14
+Message-ID: <20171208164209.2155781132@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=86e46797cad96ba4f9b37406dd0a343f6941de4f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed,  6 Dec 2017 22:19:56 -0600, Matt Weber wrote:
-> Upstream Commit:
-> 2017-11-03 16:19:58 +0000
-> irq.h: fix compilation error due to missing bool type
-> 
-> The following patches were updated/removed.
-> 
-> - 0001-avoid-redefining-PAGE_SIZE.patch is removed, as
->   it has been merged upstream as of commit 4095fac8
-> 
-> - 0002-x86-kvm-cpu.c-don-t-include-asm-msr-index.h.patch is
->   removed, as it has been merged upstream as of commit
->   1cc05b24
-> 
-> - 0003-use-poll.h-instead-of-sys-poll.h.patch is removed,
->   as it has been merged upstream as of commit 52c22e6e
-> 
-> - 0004-check-for-and-use-C-library-provided-strlcpy-and-str.patch
->   is removed, as it has been merged upstream as of commit
->   8f22adc4
-> 
-> - 0005-Fix-call-to-connect.patch is removed, as it has been
->   merged upstream as of commit d77bd4f4
-> 
-> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-> 
-> ---
-> v1 -> v2
-> [Thomas P.
->  - Resolved build issue on x86_64 related to gcc being used
->    for linking vs the previous version directly calling ld.
->    This removed the need to explicitly define the elf format.
+Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libostree/libostree.hash | 2 +-
+ package/libostree/libostree.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/libostree/libostree.hash b/package/libostree/libostree.hash
+index 162af31..b0a5580 100644
+--- a/package/libostree/libostree.hash
++++ b/package/libostree/libostree.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 a8b06cd81b40072b127e9a8aa5d8c7a61bb44d8bc0e7f7b73dee2ce4d9b3e752  libostree-2017.13.tar.xz
++sha256 cab4782a7ab1c4d7ab8e390372788b73a7f83d9284418ba36a42b60cbc67851e  libostree-2017.14.tar.xz
+ sha256 b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
+diff --git a/package/libostree/libostree.mk b/package/libostree/libostree.mk
+index 1d5936a..3ac8278 100644
+--- a/package/libostree/libostree.mk
++++ b/package/libostree/libostree.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBOSTREE_VERSION = 2017.13
++LIBOSTREE_VERSION = 2017.14
+ LIBOSTREE_SOURCE = libostree-$(LIBOSTREE_VERSION).tar.xz
+ LIBOSTREE_SITE = https://github.com/ostreedev/ostree/releases/download/v$(LIBOSTREE_VERSION)
+ 
