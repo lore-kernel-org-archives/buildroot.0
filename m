@@ -1,37 +1,39 @@
-From: Jan Kraval <jan.kraval@gmail.com>
-Date: Fri,  8 Dec 2017 19:29:04 +0100
-Subject: [Buildroot] [PATCH 1/1] configs/orangepi-lite: bump Linux to 4.14.4
-Message-ID: <20171208182904.29434-1-jan.kraval@gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 08 Dec 2017 19:13:37 +0000
+Subject: [Buildroot] [Bug 10566] New: php.mk is missing option --with-pgsql
+Message-ID: <bug-10566-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Jan Kraval <jan.kraval@gmail.com>
----
- configs/orangepi_lite_defconfig | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+https://bugs.busybox.net/show_bug.cgi?id=10566
 
-diff --git a/configs/orangepi_lite_defconfig b/configs/orangepi_lite_defconfig
-index b1f6598ccc..28fb57ab98 100644
---- a/configs/orangepi_lite_defconfig
-+++ b/configs/orangepi_lite_defconfig
-@@ -1,14 +1,13 @@
- BR2_arm=y
- BR2_cortex_a7=y
- BR2_ARM_FPU_VFPV4=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_13=y
- BR2_TARGET_GENERIC_HOSTNAME="OrangePi_Lite"
- BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for the Orange Pi Lite"
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/orangepi/orangepi-lite/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/orangepi/orangepi-lite/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.13.11"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.14.4"
- BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/orangepi/orangepi-lite/linux-extras.config"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
+            Bug ID: 10566
+           Summary: php.mk is missing option --with-pgsql
+           Product: buildroot
+           Version: 2017.02.5
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: Peter.Pashkov at utas.utc.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
+
+When tried to install zabbix server using PostgreSQL database the setup page
+gave an error message "At least one of MySQL, PostgreSQL, Oracle or IBM DB2
+should be supported."
+This pointed out to that php was configured without "--with-pgsql". The php.mk
+file that is in charge of setting different configuration options to
+"configure" script doesn't have the option at all.
+
+The version of buildroot in use is: buildroot-2017.02.6
+
 -- 
-2.11.0
+You are receiving this mail because:
+You are on the CC list for the bug.
