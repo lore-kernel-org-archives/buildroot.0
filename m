@@ -1,35 +1,43 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri, 8 Dec 2017 06:50:25 +0200
-Subject: [Buildroot] [PATCH 1/5] python-pytz: bump to version 2017.3
-In-Reply-To: <87fu8m2pem.fsf@dell.be.48ers.dk>
-References: <20171207082021.4605-1-yegorslists@googlemail.com>
- <87fu8m2pem.fsf@dell.be.48ers.dk>
-Message-ID: <20171208045025.gnpcgfmt723hdoex@tarshish.tkos.co.il>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Fri,  8 Dec 2017 06:21:31 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libbluray: bump version to 1.0.2
+Message-ID: <20171208052131.14008-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+Added license hash.
 
-On Thu, Dec 07, 2017 at 10:34:25PM +0100, Peter Korsgaard wrote:
-> >>>>> "yegorslists" == yegorslists  <yegorslists@googlemail.com> writes:
-> 
->  > From: Yegor Yefremov <yegorslists@googlemail.com>
->  > Add licence checksum.
-> 
->  > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> 
-> Committed all 5, thanks.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/libbluray/libbluray.hash | 5 +++--
+ package/libbluray/libbluray.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-The python-pytablewriter bump (http://patchwork.ozlabs.org/patch/845459/) is 
-not in master as of ae2ec0ed7420 (arch/arm: default to Cortex-A53 for 
-AArch64).
-
-baruch
-
+diff --git a/package/libbluray/libbluray.hash b/package/libbluray/libbluray.hash
+index 1cb9d8d3c8..9a35c5dafb 100644
+--- a/package/libbluray/libbluray.hash
++++ b/package/libbluray/libbluray.hash
+@@ -1,2 +1,3 @@
+-# From http://get.videolan.org/libbluray/1.0.1/libbluray-1.0.1.tar.bz2.sha512
+-sha512 798d38cc95af87599af5838e5c288f2536a73b33191db8ff3774cf7eb5b835006bea83693f016d47dff551001b98527d8b1f14051f673fb3b28073b820e325d7  libbluray-1.0.1.tar.bz2
++# From http://get.videolan.org/libbluray/1.0.2/libbluray-1.0.2.tar.bz2.sha512
++sha512 e1360ad08aa6cc67a80efa81a09004faebbe31105f1961494f82f655e3e7378b198ee3bc534b0d0c2bfec726939b11b545cc8bbfa30794fc647432dadf71089b  libbluray-1.0.2.tar.bz2
++sha256 b3aa400aca6d2ba1f0bd03bd98d03d1fe7489a3bbb26969d72016360af8a5c9d  COPYING
+diff --git a/package/libbluray/libbluray.mk b/package/libbluray/libbluray.mk
+index 4928f8acb8..3d7ce351c1 100644
+--- a/package/libbluray/libbluray.mk
++++ b/package/libbluray/libbluray.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBBLURAY_VERSION = 1.0.1
++LIBBLURAY_VERSION = 1.0.2
+ LIBBLURAY_SITE = http://get.videolan.org/libbluray/$(LIBBLURAY_VERSION)
+ LIBBLURAY_SOURCE = libbluray-$(LIBBLURAY_VERSION).tar.bz2
+ LIBBLURAY_INSTALL_STAGING = YES
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+2.11.0
