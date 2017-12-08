@@ -1,52 +1,73 @@
-From: =?UTF-8?Q?Bartosz_Bi=c5=82as?= <b.bilas@grinn-global.com>
-Date: Fri, 8 Dec 2017 10:05:51 +0100
-Subject: [Buildroot] [PATCH v3] package/qt5scxml: new package
-In-Reply-To: <20171208081400.273kki5lj7r6arte@tarshish.tkos.co.il>
-References: <1512719549-30117-1-git-send-email-b.bilas@grinn-global.com>
- <20171208081400.273kki5lj7r6arte@tarshish.tkos.co.il>
-Message-ID: <a3d841d3-3205-c7a2-8ee0-9562c0f5dd40@grinn-global.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 08 Dec 2017 10:14:53 +0100
+Subject: [Buildroot] [PATCH 1/8] arm-trusted-firmware: add option to
+ enable/disable building FIP image
+In-Reply-To: <20171203214811.3124-2-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Sun, 3 Dec 2017 22:48:04 +0100")
+References: <20171203214811.3124-1-thomas.petazzoni@free-electrons.com>
+ <20171203214811.3124-2-thomas.petazzoni@free-electrons.com>
+Message-ID: <87h8t11sz6.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Baruch,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
+ > Currently, our arm-trusted-firmware unconditionally builds a FIP
+ > (Firmware Image Package). While this is often needed on platforms
+ > where ATF encapsulates U-Boot, it is not the case on some other
+ > platforms where it's U-Boot that encapsulates parts of ATF.
 
-On 08.12.2017 o?09:14, Baruch Siach wrote:
-> Hi Bartosz,
-> On Fri, Dec 08, 2017 at 08:52:29AM +0100, Bartosz Bilas wrote:
->> Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
-> [...]
->> diff --git a/package/qt5/qt5scxml/Config.in b/package/qt5/qt5scxml/Config.in
->> new file mode 100644
->> index 0000000..8a582ca
->> --- /dev/null
->> +++ b/package/qt5/qt5scxml/Config.in
->> @@ -0,0 +1,15 @@
->> +config BR2_PACKAGE_QT5SCXML
->> +	bool "qt5scxml"
->> +	depends on BR2_PACKAGE_QT5_VERSION_LATEST
-> Since qt5scxml depends on BR2_PACKAGE_QT5_VERSION_LATEST ...
->> +	select BR2_PACKAGE_QT5BASE
->> +	help
->> +	  Qt is a cross-platform application and UI framework for
->> +	  developers using C++.
->> +
->> +	  The Qt SCXML module provides functionality
->> +	  to create state machines from SCXML files.
->> +
->> +	  https://doc.qt.io/qt-5/qtscxml-index.html
-> [...]
->> +ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
->> +QT5SCXML_LICENSE = GPL-2.0+ or LGPL-3.0, GPL-3.0 with exception(tools), GFDL-1.3 (docs)
->> +QT5SCXML_LICENSE_FILES = LICENSE.GPL3-EXCEPT LICENSE.LGPL3 LICENSE.FDL
->> +else
-> ... this is dead code.
->> +QT5SCXML_LICENSE = GPL-3.0 or LGPL-2.1 with exception or LGPL-3.0, GFDL-1.3 (docs)
->> +QT5SCXML_LICENSE_FILES = LICENSE.LGPL3 LICENSE.FDL
->> +endif
-You are absolutely right, I have forgotten about it. I will send a new 
-patch.
+ > In order to prepare the support for the later platforms, we make
+ > building the FIP image optional, and update the only defconfig we have
+ > that uses ARM Trusted Firmware.
+
+ > Note: we considered adding a "default y" here to preserve backward
+ > compatibility, but there really isn't any default that is sane:
+ > whether a FIP image needs to be built or not is purely platform
+ > specific.
+
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ > ---
+ >  boot/arm-trusted-firmware/Config.in               | 8 ++++++++
+ >  boot/arm-trusted-firmware/arm-trusted-firmware.mk | 8 +++++++-
+ >  configs/arm_juno_defconfig                        | 1 +
+ >  3 files changed, 16 insertions(+), 1 deletion(-)
+
+ > diff --git a/boot/arm-trusted-firmware/Config.in b/boot/arm-trusted-firmware/Config.in
+ > index 799370cd51..05600461a5 100644
+ > --- a/boot/arm-trusted-firmware/Config.in
+ > +++ b/boot/arm-trusted-firmware/Config.in
+ > @@ -56,6 +56,14 @@ config BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM
+ >  	help
+ >  	  Target plaform to build for.
+ 
+ > +config BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP
+ > +	bool "Build FIP image"
+ > +	help
+ > +	  This option enables building the FIP image (Firmware Image
+ > +	  Package). This is typically the image format used by
+ > +	  platforms were ATF encapsulates the second stage bootloader
+ > +	  (such as U-Boot).
+ > +
+ >  config BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES
+ >  	string "Additional ATF build variables"
+ >  	help
+ > diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+ > index 7b1cc6ebb6..bdffb1dbe4 100644
+ > --- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+ > +++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+ > @@ -39,10 +39,16 @@ ARM_TRUSTED_FIRMWARE_MAKE_OPTS += SCP_BL2=$(BINARIES_DIR)/scp-fw.bin
+ >  ARM_TRUSTED_FIRMWARE_DEPENDENCIES += vexpress-firmware
+ >  endif
+ 
+ > +ARM_TRUSTED_FIRMWARE_MAKE_TARGETS = all
+ > +
+
+Minor nit: I believe the 'all' target builds unneeded stuff for the
+platforms using only bl31.bin.
+
 -- 
+Bye, Peter Korsgaard
