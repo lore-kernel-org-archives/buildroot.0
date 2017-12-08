@@ -1,34 +1,30 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Fri,  8 Dec 2017 14:13:38 +0100
-Subject: [Buildroot] [PATCH] boot: uboot: fix typo
-Message-ID: <20171208131338.11603-1-yegorslists@googlemail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 8 Dec 2017 14:18:27 +0100
+Subject: [Buildroot] [PATCH 5/8] mv-ddr-marvell: new package
+In-Reply-To: <87r2s5z8zj.fsf@dell.be.48ers.dk>
+References: <20171203214811.3124-1-thomas.petazzoni@free-electrons.com>
+ <20171203214811.3124-6-thomas.petazzoni@free-electrons.com>
+ <87r2s5z8zj.fsf@dell.be.48ers.dk>
+Message-ID: <20171208141827.093390e6@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+Hello,
 
-Replace "depend" with "depends".
+On Fri, 08 Dec 2017 13:42:40 +0100, Peter Korsgaard wrote:
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- boot/uboot/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> I wonder if it would make sense to  depend or / select atf, but I've
+> left it as is for now and committed, thanks.
 
-diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-index 6331bcde08..2829d2ca5e 100644
---- a/boot/uboot/Config.in
-+++ b/boot/uboot/Config.in
-@@ -161,7 +161,7 @@ config BR2_TARGET_UBOOT_NEEDS_OPENSSL
- config BR2_TARGET_UBOOT_NEEDS_ATF_BL31
- 	bool "U-Boot needs ATF BL31"
- 	depends on BR2_TARGET_ARM_TRUSTED_FIRMWARE
--	depend on !BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33
-+	depends on !BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33
- 	select BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31
- 	help
- 	  Some specific platforms (such as Allwinner A64/H5)
+I don't really have a strong opinion here (though I'm leaning towards
+the depends on). However, if you change this, then we should also change
+the vexpress-firmware package.
+
+Thomas
 -- 
-2.11.0
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
