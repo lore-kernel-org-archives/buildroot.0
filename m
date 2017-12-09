@@ -1,47 +1,99 @@
 From: Dagg Stompler <daggs@gmx.com>
-Date: Sat,  9 Dec 2017 09:52:18 +0200
-Subject: [Buildroot] [PATCH v2 3/4] odroidc2: prepare post-image.sh for
- multi config support
+Date: Sat,  9 Dec 2017 09:52:17 +0200
+Subject: [Buildroot] [PATCH v2 2/4] odroidc2-ATF: new Package
 In-Reply-To: <20171209075219.23240-1-daggs@gmx.com>
 References: <20171209075219.23240-1-daggs@gmx.com>
-Message-ID: <20171209075219.23240-3-daggs@gmx.com>
+Message-ID: <20171209075219.23240-2-daggs@gmx.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-prepare post-image.sh for support addition of multiple buildroot configs
+the odroidc2 board requires a ATF (ARM Trusted Firmware) to boot u-boot.
+the ATF can be found only in the vendor's u-boot repository.
+this package will retrieve the needed files to sign the mainline u-boot
+image.
 
 Signed-off-by: Dagg Stompler <daggs@gmx.com>
 ---
- board/hardkernel/odroidc2/post-image.sh | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+Changes v1 -> v2:
+ - refractor mainline post image script by moving the ATF part to a seperate package.
+ - handle general mail patch rejects (Thomas)
 
-diff --git a/board/hardkernel/odroidc2/post-image.sh b/board/hardkernel/odroidc2/post-image.sh
-index aaf12c1e79..a53f87ec11 100755
---- a/board/hardkernel/odroidc2/post-image.sh
-+++ b/board/hardkernel/odroidc2/post-image.sh
-@@ -1,8 +1,11 @@
- #!/bin/sh
- 
- BOARD_DIR="$(dirname $0)"
--GENIMAGE_CFG="${BOARD_DIR}/genimage.cfg"
- GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
-+IM_FILE=""
+ package/Config.in.host                 |  1 +
+ package/odroidc2-ATF/Config.in.host    |  7 +++++++
+ package/odroidc2-ATF/odroidc2-ATF.hash |  2 ++
+ package/odroidc2-ATF/odroidc2-ATF.mk   | 26 ++++++++++++++++++++++++++
+ 4 files changed, 36 insertions(+)
+ create mode 100644 package/odroidc2-ATF/Config.in.host
+ create mode 100644 package/odroidc2-ATF/odroidc2-ATF.hash
+ create mode 100644 package/odroidc2-ATF/odroidc2-ATF.mk
+
+diff --git a/package/Config.in.host b/package/Config.in.host
+index b064c94fc2..aec0582232 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -33,6 +33,7 @@ menu "Host utilities"
+ 	source "package/mtd/Config.in.host"
+ 	source "package/mtools/Config.in.host"
+ 	source "package/mxsldr/Config.in.host"
++	source "package/odroidc2-ATF/Config.in.host"
+ 	source "package/omap-u-boot-utils/Config.in.host"
+ 	source "package/openocd/Config.in.host"
+ 	source "package/opkg-utils/Config.in.host"
+diff --git a/package/odroidc2-ATF/Config.in.host b/package/odroidc2-ATF/Config.in.host
+new file mode 100644
+index 0000000000..7af3bf79fe
+--- /dev/null
++++ b/package/odroidc2-ATF/Config.in.host
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_HOST_ODROIDC2_ATF
++	bool "host odroidc2-ATF"
++	help
++	  odroidc2-ATF is a package that extracts the ATF (ARM Trusted Firmware) from hardkernel's
++	  uboot repository and uses it to allow safe boot of mainline u-boot kernels.
 +
-+GENIMAGE_CFG="${BOARD_DIR}/genimage.cfg"
-+IM_FILE="${BINARIES_DIR}/u-boot.bin"
- 
- cp ${BOARD_DIR}/boot.ini ${BINARIES_DIR}/
- 
-@@ -15,5 +18,5 @@ genimage                           \
- 	--outputpath "${BINARIES_DIR}" \
- 	--config "${GENIMAGE_CFG}"
- 
--dd if=${BINARIES_DIR}/u-boot.bin of=${BINARIES_DIR}/sdcard.img bs=1 count=442 conv=sync,notrunc
--dd if=${BINARIES_DIR}/u-boot.bin of=${BINARIES_DIR}/sdcard.img bs=512 skip=1 seek=1 conv=fsync,notrunc
-+dd if=${IM_FILE} of=${BINARIES_DIR}/sdcard.img bs=1 count=442 conv=sync,notrunc
-+dd if=${IM_FILE} of=${BINARIES_DIR}/sdcard.img bs=512 skip=1 seek=1 conv=fsync,notrunc
++	  https://github.com/hardkernel/u-boot/tree/odroidc2-v2015.01
+diff --git a/package/odroidc2-ATF/odroidc2-ATF.hash b/package/odroidc2-ATF/odroidc2-ATF.hash
+new file mode 100644
+index 0000000000..5481ddcde2
+--- /dev/null
++++ b/package/odroidc2-ATF/odroidc2-ATF.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256	7e436e83e21819605480938dda6e366a4ccd01acbb8402997a3633e25ff2d383  odroidc2-ATF-1dad487200543c2c1d116e8b2f070fe491070432.tar.gz
+diff --git a/package/odroidc2-ATF/odroidc2-ATF.mk b/package/odroidc2-ATF/odroidc2-ATF.mk
+new file mode 100644
+index 0000000000..6eb42b72bc
+--- /dev/null
++++ b/package/odroidc2-ATF/odroidc2-ATF.mk
+@@ -0,0 +1,26 @@
++################################################################################
++#
++# odroidc2-ATF
++#
++################################################################################
++
++HOST_ODROIDC2_ATF_VERSION = 1dad487200543c2c1d116e8b2f070fe491070432
++HOST_ODROIDC2_ATF_SITE = $(call github,hardkernel,u-boot,$(HOST_ODROIDC2_ATF_VERSION))
++HOST_ODROIDC2_ATF_LICENSE = GPL-2.0
++HOST_ODROIDC2_ATF_LICENSE_FILES = COPYING COPYING.txt README
++HOST_ODROIDC2_ATF_FIRMWARE_FOLDER = $(HOST_DIR)/usr/share/odroidc2_atf
++HOST_ODROIDC2_ATF_FIRMWARE_FILES = sd_fuse/bl1.bin.hardkernel fip/gxb/bl30.bin fip/gxb/bl301.bin fip/gxb/bl31.bin fip/gxb/bl2.package
++
++define HOST_ODROIDC2_ATF_BUILD_CMDS
++	$(MAKE) -C $(@D)/tools/fip_create CC="$(HOSTCC)" CFLAGS="$(HOST_CFLAGS)" LDFLAGS="$(HOST_LDFLAGS)"
++endef
++
++define HOST_ODROIDC2_ATF_INSTALL_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/tools/fip_create/fip_create $(HOST_DIR)/bin
++	mkdir -p $(HOST_ODROIDC2_ATF_FIRMWARE_FOLDER)
++	$(foreach f,$(HOST_ODROIDC2_ATF_FIRMWARE_FILES),
++		$(INSTALL) -D -m 0644 $(@D)/$(f) $(HOST_ODROIDC2_ATF_FIRMWARE_FOLDER)/
++	)
++endef
++
++$(eval $(host-generic-package))
 -- 
 2.15.1
