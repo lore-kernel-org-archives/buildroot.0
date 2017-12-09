@@ -1,135 +1,96 @@
-From: Cam Hutchison <camh@xdna.net>
-Date: Sat, 9 Dec 2017 10:35:31 +1100
-Subject: [Buildroot] [PATCHv2] package/uboot: detect missing
- user-supplied environment source files
-In-Reply-To: <20171207091349.GA3509@scaer>
-References: <20171206225818.7784-1-yann.morin.1998@free.fr>
- <CABa6e=qk9jq2_3cpSy9U-WUe2ff6f3Dpbzhg3j4eWmwPWiPS7w@mail.gmail.com>
- <20171207091349.GA3509@scaer>
-Message-ID: <CABa6e=r0cb9ZajV_rBn0HGgQ9qSxngTUV1LNPTStU7BsA7cmyQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat,  9 Dec 2017 08:00:09 +0100 (CET)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2017-12-08
+Message-ID: <20171209070009.217D3209F2@mail.free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 7 December 2017 at 20:13, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> Cam, All,
->
-> On 2017-12-07 19:18 +1100, Cam Hutchison spake thusly:
->> On 7 December 2017 at 09:58, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
->> > Since 0542bb79e8 (uboot: Support multiple environment source files),
->> > a missing user-supplied environment source files is no longer detected.
->> >
->> > This is because we cat them all, and feed the concatenation to the stdin
->> > of mkenvimage. So, if one source file is missing, the cat exits in error,
->> > but the compound command exits with the exit code of the last command,
->> > which is that of mkenvimage, which happens to be happy with whatever it
->> > is fed on its stdin, even is empty.
->> >
->> > We fix that by creating a temporary file, that we even leave afterward
->> > for the user to inspect.
->> >
->> > We also move it out of the _CMDS block and into a macro of its own, so
->> > that it is easier to write and maintain.
->> >
->> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
->> > Cc: Cam Hutchison <camh@xdna.net>
->> > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
->> >
->> > ---
->> > Changes v1 -> v2:
->> >   - move into its own macro  (Thomas)
->> > ---
->> >  boot/uboot/uboot.mk | 19 +++++++++++++------
->> >  1 file changed, 13 insertions(+), 6 deletions(-)
->> >
->> > diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
->> > index a1fac7dcae..abb89da69b 100644
->> > --- a/boot/uboot/uboot.mk
->> > +++ b/boot/uboot/uboot.mk
->> > @@ -238,6 +238,18 @@ define UBOOT_BUILD_OMAP_IFT
->> >                 -c $(call qstrip,$(BR2_TARGET_UBOOT_OMAP_IFT_CONFIG))
->> >  endef
->> >
->> > +ifneq ($(BR2_TARGET_UBOOT_ENVIMAGE),)
->> > +define UBOOT_GENERATE_ENV_IMAGE
->> > +       cat $(call qstrip,$(BR2_TARGET_UBOOT_ENVIMAGE_SOURCE)) \
->> > +               >$(BINARIES_DIR)/uboot-env.txt
->>
->> One (very minor) concern is using the name "uboot-env.txt". It is
->> possible that someone has
->> a post-image script that creates a file of that name in BINARIES_DIR,
->> so this will clobber
->> that file. As a tmp file, perhaps it should have a tmp file name?
->>
->> I have a post-image script that creates a file of this name, but it
->> goes at a higher-level in
->> a binaries-type dir - I have a multi-layered build script, and the
->> higher-level directory that
->> aggregates the layers protects my file from being clobbered, but I can
->> imagine that if I
->> made different decisions when writing my front-end script, I could
->> have easily placed
->> my uboot-env.txt file in buildroot's BINARIES_DIR.
->>
->> Perhaps _uboot-env.txt? Or go all the way and use mktemp?
->
-> Or just generate uboot-env.txt in $(@D)/uboot-env.buildroot like so:
->
->     define UBOOT_GENERATE_ENV_IMAGE
->         cat $(call qstrip,$(BR2_TARGET_UBOOT_ENVIMAGE_SOURCE)) \
->             >$(@D)/uboot-env.buildroot
->         $(HOST_DIR)/bin/mkenvimage -s $(BR2_TARGET_UBOOT_ENVIMAGE_SIZE) \
->             $(if $(BR2_TARGET_UBOOT_ENVIMAGE_REDUNDANT),-r) \
->             $(if $(filter BIG,$(BR2_ENDIAN)),-b) \
->             -o $(BINARIES_DIR)/uboot-env.bin \
->             $(@D)/uboot-env.buildroot
->     endef
->
-> Thoughts?
+Hello,
 
-I like this better.
+Build statistics for 2017-12-08
+===============================
 
-LGTM
+      branch |  OK | NOK | TIM | TOT |
+      master | 221 |  34 |   1 | 256 |
+   2017.08.x |  19 |   2 |   1 |  22 |
+
+Results for branch 'master'
+===========================
+
+Classification of failures by reason
+------------------------------------
+
+                      fastd-18 | 23
+                   mpd-0.20.12 | 3 
+                  boost-1.65.1 | 2 
+              host-erlang-20.0 | 2 
+              dovecot-2.2.33.2 | 1 
+                 ibrdtnd-1.0.1 | 1 
+                  physfs-3.0.1 | 1 
+                  prboom-2.5.0 | 1 
+              wireshark-2.2.10 | 1 
 
 
-> Regards,
-> Yann E. MORIN.
->
->> > +       $(HOST_DIR)/bin/mkenvimage -s $(BR2_TARGET_UBOOT_ENVIMAGE_SIZE) \
->> > +               $(if $(BR2_TARGET_UBOOT_ENVIMAGE_REDUNDANT),-r) \
->> > +               $(if $(filter BIG,$(BR2_ENDIAN)),-b) \
->> > +               -o $(BINARIES_DIR)/uboot-env.bin \
->> > +               $(BINARIES_DIR)/uboot-env.txt
->> > +endef
->> > +endif
->> > +
->> >  define UBOOT_INSTALL_IMAGES_CMDS
->> >         $(foreach f,$(UBOOT_BINS), \
->> >                         cp -dpf $(@D)/$(f) $(BINARIES_DIR)/
->> > @@ -249,12 +261,7 @@ define UBOOT_INSTALL_IMAGES_CMDS
->> >                         cp -dpf $(@D)/$(f) $(BINARIES_DIR)/
->> >                 )
->> >         )
->> > -       $(if $(BR2_TARGET_UBOOT_ENVIMAGE),
->> > -               cat $(call qstrip,$(BR2_TARGET_UBOOT_ENVIMAGE_SOURCE)) | \
->> > -                       $(HOST_DIR)/bin/mkenvimage -s $(BR2_TARGET_UBOOT_ENVIMAGE_SIZE) \
->> > -                       $(if $(BR2_TARGET_UBOOT_ENVIMAGE_REDUNDANT),-r) \
->> > -                       $(if $(filter BIG,$(BR2_ENDIAN)),-b) \
->> > -                       -o $(BINARIES_DIR)/uboot-env.bin -)
->> > +       $(UBOOT_GENERATE_ENV_IMAGE)
->> >         $(if $(BR2_TARGET_UBOOT_BOOT_SCRIPT),
->> >                 $(HOST_DIR)/bin/mkimage -C none -A $(MKIMAGE_ARCH) -T script \
->> >                         -d $(call qstrip,$(BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE)) \
->> > --
->> > 2.11.0
->> >
->
-> --
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
+Detail of failures
+------------------
+
+     powerpc |                   boost-1.65.1 | NOK | http://autobuild.buildroot.net/results/8f7af43245701d5f78473aa6b69306d6977e911b |     
+     powerpc |                   boost-1.65.1 | NOK | http://autobuild.buildroot.net/results/dc6e75b6c9de3f448bab9ad883fe896fba001a1f |     
+    mips64el |               dovecot-2.2.33.2 | NOK | http://autobuild.buildroot.net/results/eb82c9a430ceb4f8c84e508996523fc4ffd39621 |     
+         arm |                       fastd-18 | NOK | http://autobuild.buildroot.net/results/7f993404edec11c21c5697f5af4d7e12db4976f2 |     
+      xtensa |                       fastd-18 | NOK | http://autobuild.buildroot.net/results/c964923d63ca79887d29789f189d5afc3e18666d |     
+       sparc |                       fastd-18 | NOK | http://autobuild.buildroot.net/results/358285224e0e0f2e9bef933ab1c74f17b374e42b |     
+        or1k |                       fastd-18 | NOK | http://autobuild.buildroot.net/results/9639712d662f0da90451d832b92cab67b60091f0 |     
+       nios2 |                       fastd-18 | NOK | http://autobuild.buildroot.net/results/956455db1b3333241ea17321e87aa447739450a1 |     
+         arc |                       fastd-18 | NOK | http://autobuild.buildroot.net/results/3cc2bc4bc59bafa99844c47da3cb38b3b4c0d1a3 |     
+         arm |                       fastd-18 | NOK | http://autobuild.buildroot.net/results/317ece2163223136e06d169aa242ee541f0d8aa3 |     
+microblazeel |                       fastd-18 | NOK | http://autobuild.buildroot.net/results/41f2a73b620294ccd89c5f9678a0b6122ffa06e4 |     
+        m68k |                       fastd-18 | NOK | http://autobuild.buildroot.net/results/b790370cf20f7c339a0f7ea285ca781991cbf4f3 |     
+         arc |                       fastd-18 | NOK | http://autobuild.buildroot.net/results/0f5ae0871e9c3d3c5d23f30484d20a0c4578bf64 |     
+        i586 |                       fastd-18 | NOK | http://autobuild.buildroot.net/results/098edf2f8e205acfe3c0bcb7db630881ce2792d4 |     
+microblazeel |                       fastd-18 | NOK | http://autobuild.buildroot.net/results/23ecd13c71ebbc07147a2d9932b3f811c81fb31b |     
+         arc |                       fastd-18 | NOK | http://autobuild.buildroot.net/results/c32e3dd5ab9fdda682841044e2fa7a0fab2b9894 |     
+         arc |                       fastd-18 | NOK | http://autobuild.buildroot.net/results/0cd81881d21682c3d6c10923ac6bd878b739b695 |     
+         arc |                       fastd-18 | NOK | http://autobuild.buildroot.net/results/d3c0c196e972168657cd4440da67ce54ad865e2d |     
+microblazeel |                       fastd-18 | NOK | http://autobuild.buildroot.net/results/ab3c2fb4601a14006e449a8278dbbda30d368899 |     
+         arm |                       fastd-18 | NOK | http://autobuild.buildroot.net/results/f092c6692ee9700768bde415b57116615069dd3b |     
+microblazeel |                       fastd-18 | NOK | http://autobuild.buildroot.net/results/4f294525834cc6cea71a60f85d57e49e0fc9875f |     
+         arm |                       fastd-18 | NOK | http://autobuild.buildroot.net/results/14971a15990f2cc7b063d4960f7f47d20059bacd |     
+         arc |                       fastd-18 | NOK | http://autobuild.buildroot.net/results/d3103f5b0bd64cf7580d95e8c0f409d96374fe16 |     
+    mips64el |                       fastd-18 | NOK | http://autobuild.buildroot.net/results/e85404d019fe5e7731b189ca98a6406d4995d885 |     
+         arm |                       fastd-18 | NOK | http://autobuild.buildroot.net/results/86e058fd9d6e549ef71be68f91bdf967d2babeef |     
+      xtensa |                       fastd-18 | NOK | http://autobuild.buildroot.net/results/a16a4651b74477a2a962598294dab3319722eea0 |     
+         arm |               host-erlang-20.0 | NOK | http://autobuild.buildroot.net/results/54068328134398e091409f58f9231b50b1f4649d |     
+         arm |               host-erlang-20.0 | NOK | http://autobuild.buildroot.net/results/6675d72aacb9c3171dbf72c2cd494175a08382b7 |     
+        bfin |                  ibrdtnd-1.0.1 | NOK | http://autobuild.buildroot.net/results/26b0fcc917672a4c7d9c9edbf2fe5de816553e5f | ORPH
+     aarch64 |                    mpd-0.20.12 | NOK | http://autobuild.buildroot.net/results/d8eb98950ee108be9f6910b1450cd27d98d0948d |     
+      xtensa |                    mpd-0.20.12 | NOK | http://autobuild.buildroot.net/results/85e3977c9a9bd7b78189fcd1d0a4721d67b5bd02 |     
+         arc |                    mpd-0.20.12 | NOK | http://autobuild.buildroot.net/results/5312708df116d4be0d2c5642efa08ff17445b0ad |     
+         arm |                   physfs-3.0.1 | NOK | http://autobuild.buildroot.net/results/ec80fc96bd49f6c5e48a2ced871baa4b5fee9416 |     
+microblazeel |                   prboom-2.5.0 | TIM | http://autobuild.buildroot.net/results/36ed1f13b62b61fddf99d073189864c14be66f3f |     
+     aarch64 |               wireshark-2.2.10 | NOK | http://autobuild.buildroot.net/results/62cf9e260d1f86b8f898c6bddd9b628d3f9c633c | ORPH
+
+Results for branch '2017.08.x'
+==============================
+
+Classification of failures by reason
+------------------------------------
+
+             host-gauche-0.9.5 | 1 
+make[1]: *** wait: No child... | 1 
+               turbolua-v2.1.0 | 1 
+
+
+Detail of failures
+------------------
+
+     powerpc |              host-gauche-0.9.5 | NOK | http://autobuild.buildroot.net/results/38991fb5009142d2773faecaedd3153d16fd4aac |     
+microblazeel | make[1]: *** wait: No child... | TIM | http://autobuild.buildroot.net/results/b3a7163a53e2246866e49fb0e003afaa0c04caf0 |     
+         arm |                turbolua-v2.1.0 | NOK | http://autobuild.buildroot.net/results/d042d031544aafa7ce89c74e3e404253b2ee4eb5 |     
+
+
+-- 
+http://autobuild.buildroot.net
