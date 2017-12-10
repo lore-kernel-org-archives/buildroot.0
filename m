@@ -1,16 +1,16 @@
 From: Johannes Schmitz <johannes.schmitz1@gmail.com>
-Date: Sun, 10 Dec 2017 18:09:09 +0100
+Date: Sun, 10 Dec 2017 18:10:41 +0100
 Subject: [Buildroot] [PATCH 1/1] boot/uboot: add config option for uboot
  environment padding byte
-Message-ID: <1512925749-708-1-git-send-email-johannes.schmitz1@gmail.com>
+Message-ID: <1512925841-788-1-git-send-email-johannes.schmitz1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The size of the uboot environment (which is in bytes -> help text
-updated) as well as the padding bytes have to be exactly correct in
+The size of the uboot environment (which is provided in bytes -> help
+text updated) as well as the padding bytes have to be exactly correct in
 order to generate an image with the correct CRC checksum that can be
 read by the target during boot. Hence we add the option to specify the
 padding byte which is used by mkenvimage and updated the help texts to
