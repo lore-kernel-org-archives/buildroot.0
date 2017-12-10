@@ -1,71 +1,44 @@
-From: Johannes Schmitz <johannes.schmitz1@gmail.com>
-Date: Sun, 10 Dec 2017 18:10:41 +0100
-Subject: [Buildroot] [PATCH 1/1] boot/uboot: add config option for uboot
- environment padding byte
-Message-ID: <1512925841-788-1-git-send-email-johannes.schmitz1@gmail.com>
+From: Mario Lang <mlang@blind.guru>
+Date: Sun, 10 Dec 2017 18:54:57 +0100
+Subject: [Buildroot] [PATCH] package/fswebcam: change tarball compression to
+ xz
+Message-ID: <20171210175457.1456-1-mlang@blind.guru>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The size of the uboot environment (which is provided in bytes -> help
-text updated) as well as the padding bytes have to be exactly correct in
-order to generate an image with the correct CRC checksum that can be
-read by the target during boot. Hence we add the option to specify the
-padding byte which is used by mkenvimage and updated the help texts to
-inform the user about the importance of these parameters.
+Verified equality of underlying tarball with
 
-Also cleaned up and reindented all mkenvimage parameters.
+  tarname=http://www.firestorm.cx/fswebcam/files/fswebcam-20140113.tar
+  test "$(wget -qO- $tarname.gz|zcat|sha256sum -)" = "$(wget -qO- $tarname.xz|xzcat|sha256sum -)"
 
-Signed-off-by: Johannes Schmitz <johannes.schmitz1@gmail.com>
+Signed-off-by: Mario Lang <mlang@blind.guru>
 ---
- boot/uboot/Config.in | 11 +++++++++--
- boot/uboot/uboot.mk  | 10 ++++++----
- 2 files changed, 15 insertions(+), 6 deletions(-)
+ package/fswebcam/fswebcam.hash | 2 +-
+ package/fswebcam/fswebcam.mk   | 1 +
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-index 8215912..b52fb81 100644
---- a/boot/uboot/Config.in
-+++ b/boot/uboot/Config.in
-@@ -400,8 +400,15 @@ config BR2_TARGET_UBOOT_ENVIMAGE_SOURCE
- config BR2_TARGET_UBOOT_ENVIMAGE_SIZE
- 	string "Size of environment"
- 	help
--	  Size of envronment, can be prefixed with 0x for hexadecimal
--	  values.
-+	  Size of environment in bytes, can be prefixed with 0x for hexadecimal
-+	  values. Needs to match exactly for correct CRC checksum calculation.
-+
-+config BR2_TARGET_UBOOT_ENVIMAGE_PADDING_BYTE
-+	hex "Padding byte"
-+	default 0x00
-+	help
-+	  The byte used for padding at the end of the environment image.
-+	  Needs to be correct for correct CRC checksum calculation.
+diff --git a/package/fswebcam/fswebcam.hash b/package/fswebcam/fswebcam.hash
+index 3822a27377..1e75f237e7 100644
+--- a/package/fswebcam/fswebcam.hash
++++ b/package/fswebcam/fswebcam.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	3ee389f72a7737700d22e0c954720b1e3bbadc8a0daad6426c25489ba9dc3199	fswebcam-20140113.tar.gz
++sha256	444d6a8a82102e09e935540c64a731021de36db03e1e74181f41ca6f39aa6474	fswebcam-20140113.tar.xz
+diff --git a/package/fswebcam/fswebcam.mk b/package/fswebcam/fswebcam.mk
+index 4b47b3eb59..8f823f4d04 100644
+--- a/package/fswebcam/fswebcam.mk
++++ b/package/fswebcam/fswebcam.mk
+@@ -5,6 +5,7 @@
+ ################################################################################
  
- config BR2_TARGET_UBOOT_ENVIMAGE_REDUNDANT
- 	bool "Environment has two copies"
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index a1fac7d..8796e8d 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -251,10 +251,12 @@ define UBOOT_INSTALL_IMAGES_CMDS
- 	)
- 	$(if $(BR2_TARGET_UBOOT_ENVIMAGE),
- 		cat $(call qstrip,$(BR2_TARGET_UBOOT_ENVIMAGE_SOURCE)) | \
--			$(HOST_DIR)/bin/mkenvimage -s $(BR2_TARGET_UBOOT_ENVIMAGE_SIZE) \
--			$(if $(BR2_TARGET_UBOOT_ENVIMAGE_REDUNDANT),-r) \
--			$(if $(filter BIG,$(BR2_ENDIAN)),-b) \
--			-o $(BINARIES_DIR)/uboot-env.bin -)
-+			$(HOST_DIR)/bin/mkenvimage \
-+				$(if $(BR2_TARGET_UBOOT_ENVIMAGE_REDUNDANT),-r) \
-+				$(if $(filter BIG,$(BR2_ENDIAN)),-b) \
-+				-p $(BR2_TARGET_UBOOT_ENVIMAGE_PADDING_BYTE) \
-+				-s $(BR2_TARGET_UBOOT_ENVIMAGE_SIZE) \
-+				-o $(BINARIES_DIR)/uboot-env.bin -)
- 	$(if $(BR2_TARGET_UBOOT_BOOT_SCRIPT),
- 		$(HOST_DIR)/bin/mkimage -C none -A $(MKIMAGE_ARCH) -T script \
- 			-d $(call qstrip,$(BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE)) \
+ FSWEBCAM_VERSION = 20140113
++FSWEBCAM_SOURCE = fswebcam-$(FSWEBCAM_VERSION).tar.xz
+ FSWEBCAM_SITE = http://www.firestorm.cx/fswebcam/files
+ FSWEBCAM_LICENSE = GPL-2.0
+ FSWEBCAM_LICENSE_FILES = LICENSE
 -- 
-2.7.4
+2.15.0
