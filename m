@@ -1,54 +1,42 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 10 Dec 2017 20:56:15 +0100
-Subject: [Buildroot] [git commit] package/libopenssl: security bump to
- version 1.0.2n
-Message-ID: <20171210195454.1D84581493@busybox.osuosl.org>
+From: Mario Lang <mlang@blind.guru>
+Date: Sun, 10 Dec 2017 22:52:16 +0100
+Subject: [Buildroot] [PATCH] package/wpan-tools: change tarball compression
+ to xz
+Message-ID: <20171210215216.23371-1-mlang@blind.guru>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=09a756a5a740d38d835538401944b94025ef1b06
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Fixes CVE-2017-3737 & CVE-2017-3738:
-https://www.openssl.org/news/secadv/20171207.txt
-
-Added license hash.
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Mario Lang <mlang@blind.guru>
 ---
- package/libopenssl/libopenssl.hash | 5 +++--
- package/libopenssl/libopenssl.mk   | 2 +-
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ package/wpan-tools/wpan-tools.hash | 4 ++--
+ package/wpan-tools/wpan-tools.mk   | 1 +
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/libopenssl/libopenssl.hash b/package/libopenssl/libopenssl.hash
-index c6226c3..e3d3da7 100644
---- a/package/libopenssl/libopenssl.hash
-+++ b/package/libopenssl/libopenssl.hash
-@@ -1,7 +1,8 @@
--# From https://www.openssl.org/source/openssl-1.0.2m.tar.gz.sha256
--sha256	8c6ff15ec6b319b50788f42c7abc2890c08ba5a1cdcd3810eb9092deada37b0f	openssl-1.0.2m.tar.gz
-+# From https://www.openssl.org/source/openssl-1.0.2n.tar.gz.sha256
-+sha256	370babb75f278c39e0c50e8c4e7493bc0f18db6867478341a832a982fd15a8fe	openssl-1.0.2n.tar.gz
- # Locally computed
- sha256	eddd8a5123748052c598214487ac178e4bfa4e31ba2ec520c70d59c8c5bfa2e9	openssl-1.0.2a-parallel-install-dirs.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d
- sha256	147c3eeaad614c044749ea527cb433eae5e2d5cad34a78c6ba61cd967bfbe01f	openssl-1.0.2a-parallel-obj-headers.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d
- sha256	30cb49489de5041841a74da9155cd4fabfbce33237262ba7cd23974314ae2956	openssl-1.0.2a-parallel-symlinking.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d
- sha256	deaf6f3af41874ecc6d63841ea14b8e6c71cea81d4a511a754bc90c9a993147f	openssl-1.0.2d-parallel-build.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d
-+sha256	9ee37d72966bb4a841343f0606ce44d41b3eae4df4285200c5a8ddc2b935992a	LICENSE
-diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
-index 8cccb9c..5a78676 100644
---- a/package/libopenssl/libopenssl.mk
-+++ b/package/libopenssl/libopenssl.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/wpan-tools/wpan-tools.hash b/package/wpan-tools/wpan-tools.hash
+index 6a3b6d16e7..cfad89aa00 100644
+--- a/package/wpan-tools/wpan-tools.hash
++++ b/package/wpan-tools/wpan-tools.hash
+@@ -1,4 +1,4 @@
+ # From http://wpan.cakelab.org/releases/md5sum
+-md5	06608f69951088844196f79685318aa9	wpan-tools-0.7.tar.gz
++md5	91f0b640ff66910e977fab6525625624	wpan-tools-0.7.tar.xz
+ # Calculated based on the hash above
+-sha256	8b690ff0e71e08bece5ec541223fda7abd2d5552d97d3d25b4967609b58fef00	wpan-tools-0.7.tar.gz
++sha256	c16de9d7861c2d9b6a4436a0fac730f9f545ee290b92bc770c538ec6a3f22309	wpan-tools-0.7.tar.xz
+diff --git a/package/wpan-tools/wpan-tools.mk b/package/wpan-tools/wpan-tools.mk
+index a604dab870..d5e43a92c8 100644
+--- a/package/wpan-tools/wpan-tools.mk
++++ b/package/wpan-tools/wpan-tools.mk
+@@ -5,6 +5,7 @@
  ################################################################################
  
--LIBOPENSSL_VERSION = 1.0.2m
-+LIBOPENSSL_VERSION = 1.0.2n
- LIBOPENSSL_SITE = http://www.openssl.org/source
- LIBOPENSSL_SOURCE = openssl-$(LIBOPENSSL_VERSION).tar.gz
- LIBOPENSSL_LICENSE = OpenSSL or SSLeay
+ WPAN_TOOLS_VERSION = 0.7
++WPAN_TOOLS_SOURCE = wpan-tools-$(WPAN_TOOLS_VERSION).tar.xz
+ WPAN_TOOLS_SITE = http://wpan.cakelab.org/releases
+ WPAN_TOOLS_DEPENDENCIES = host-pkgconf libnl
+ WPAN_TOOLS_LICENSE = ISC
+-- 
+2.15.0
