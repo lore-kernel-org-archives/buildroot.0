@@ -1,46 +1,54 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 10 Dec 2017 20:59:34 +0100
-Subject: [Buildroot] [git commit] package/fswebcam: change tarball
- compression to xz
-Message-ID: <20171210195454.6E90A8284F@busybox.osuosl.org>
+Date: Sun, 10 Dec 2017 20:56:15 +0100
+Subject: [Buildroot] [git commit] package/libopenssl: security bump to
+ version 1.0.2n
+Message-ID: <20171210195454.1D84581493@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5fc7c61d0daa12509934fbe59a61c37dc98a39b4
+commit: https://git.buildroot.net/buildroot/commit/?id=09a756a5a740d38d835538401944b94025ef1b06
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Verified equality of underlying tarball with
+Fixes CVE-2017-3737 & CVE-2017-3738:
+https://www.openssl.org/news/secadv/20171207.txt
 
-  tarname=http://www.firestorm.cx/fswebcam/files/fswebcam-20140113.tar
-  test "$(wget -qO- $tarname.gz|zcat|sha256sum -)" = "$(wget -qO- $tarname.xz|xzcat|sha256sum -)"
+Added license hash.
 
-Signed-off-by: Mario Lang <mlang@blind.guru>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/fswebcam/fswebcam.hash | 2 +-
- package/fswebcam/fswebcam.mk   | 1 +
- 2 files changed, 2 insertions(+), 1 deletion(-)
+ package/libopenssl/libopenssl.hash | 5 +++--
+ package/libopenssl/libopenssl.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/fswebcam/fswebcam.hash b/package/fswebcam/fswebcam.hash
-index 3822a27..1e75f23 100644
---- a/package/fswebcam/fswebcam.hash
-+++ b/package/fswebcam/fswebcam.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	3ee389f72a7737700d22e0c954720b1e3bbadc8a0daad6426c25489ba9dc3199	fswebcam-20140113.tar.gz
-+sha256	444d6a8a82102e09e935540c64a731021de36db03e1e74181f41ca6f39aa6474	fswebcam-20140113.tar.xz
-diff --git a/package/fswebcam/fswebcam.mk b/package/fswebcam/fswebcam.mk
-index 4b47b3e..8f823f4 100644
---- a/package/fswebcam/fswebcam.mk
-+++ b/package/fswebcam/fswebcam.mk
-@@ -5,6 +5,7 @@
+diff --git a/package/libopenssl/libopenssl.hash b/package/libopenssl/libopenssl.hash
+index c6226c3..e3d3da7 100644
+--- a/package/libopenssl/libopenssl.hash
++++ b/package/libopenssl/libopenssl.hash
+@@ -1,7 +1,8 @@
+-# From https://www.openssl.org/source/openssl-1.0.2m.tar.gz.sha256
+-sha256	8c6ff15ec6b319b50788f42c7abc2890c08ba5a1cdcd3810eb9092deada37b0f	openssl-1.0.2m.tar.gz
++# From https://www.openssl.org/source/openssl-1.0.2n.tar.gz.sha256
++sha256	370babb75f278c39e0c50e8c4e7493bc0f18db6867478341a832a982fd15a8fe	openssl-1.0.2n.tar.gz
+ # Locally computed
+ sha256	eddd8a5123748052c598214487ac178e4bfa4e31ba2ec520c70d59c8c5bfa2e9	openssl-1.0.2a-parallel-install-dirs.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d
+ sha256	147c3eeaad614c044749ea527cb433eae5e2d5cad34a78c6ba61cd967bfbe01f	openssl-1.0.2a-parallel-obj-headers.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d
+ sha256	30cb49489de5041841a74da9155cd4fabfbce33237262ba7cd23974314ae2956	openssl-1.0.2a-parallel-symlinking.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d
+ sha256	deaf6f3af41874ecc6d63841ea14b8e6c71cea81d4a511a754bc90c9a993147f	openssl-1.0.2d-parallel-build.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d
++sha256	9ee37d72966bb4a841343f0606ce44d41b3eae4df4285200c5a8ddc2b935992a	LICENSE
+diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
+index 8cccb9c..5a78676 100644
+--- a/package/libopenssl/libopenssl.mk
++++ b/package/libopenssl/libopenssl.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- FSWEBCAM_VERSION = 20140113
-+FSWEBCAM_SOURCE = fswebcam-$(FSWEBCAM_VERSION).tar.xz
- FSWEBCAM_SITE = http://www.firestorm.cx/fswebcam/files
- FSWEBCAM_LICENSE = GPL-2.0
- FSWEBCAM_LICENSE_FILES = LICENSE
+-LIBOPENSSL_VERSION = 1.0.2m
++LIBOPENSSL_VERSION = 1.0.2n
+ LIBOPENSSL_SITE = http://www.openssl.org/source
+ LIBOPENSSL_SOURCE = openssl-$(LIBOPENSSL_VERSION).tar.gz
+ LIBOPENSSL_LICENSE = OpenSSL or SSLeay
