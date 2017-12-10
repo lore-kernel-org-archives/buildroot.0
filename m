@@ -1,52 +1,109 @@
-From: Stafford Horne <shorne@gmail.com>
-Date: Sun, 10 Dec 2017 20:10:40 +0900
-Subject: [Buildroot] or1k system calls appear broken
-In-Reply-To: <20171210101755.GH27558@waldemar-brodkorb.de>
-References: <CACPK8Xfjvb565q5xtsN+i3VmAqnx0EH6mxBcg5CRXpsC1_urRw@mail.gmail.com>
- <20171128064921.GA27558@waldemar-brodkorb.de>
- <20171206004159.GA2890@lianli.shorne-pla.net>
- <CACPK8XcCua5m5HgaTP97=ccg8RTgFuRcwGAepRx6+_ocWc5mRw@mail.gmail.com>
- <20171206125530.GB2890@lianli.shorne-pla.net>
- <20171206182000.GE27558@waldemar-brodkorb.de>
- <20171206224419.GC2890@lianli.shorne-pla.net>
- <20171207192839.GG27558@waldemar-brodkorb.de>
- <CAMo8BfLbTDTU+tZ2Qtp05borqYzwhpKgmLhMPgm_pqz-7T3ayQ@mail.gmail.com>
- <20171210101755.GH27558@waldemar-brodkorb.de>
-Message-ID: <20171210111040.GA3483@lianli.shorne-pla.net>
+From: Mario Lang <mlang@blind.guru>
+Date: Sun, 10 Dec 2017 15:34:04 +0100
+Subject: [Buildroot] [PATCH] lynx: new package
+Message-ID: <20171210143404.29210-1-mlang@blind.guru>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Dec 10, 2017 at 11:17:55AM +0100, Waldemar Brodkorb wrote:
-> Hi Max,
-> Max Filippov wrote,
-> 
-> > On Thu, Dec 7, 2017 at 11:28 AM, Waldemar Brodkorb <wbx@openadk.org> wrote:
-> > > I checked the test suite and no syscall() is used.
-> > > Would it be possible for you to suggest a test case for syscall()?
-> > >
-> > > Then I can run the tests for all architectures, where I can do
-> > > runtime testing.
-> > 
-> > LTP ( http://linux-test-project.github.io )?
-> 
-> The problem with LTP is that some of the automatic tests via
-> qemu in system mode are done in a small environment, which not much
-> RAM or any hard disk. I somtimes try to make more architectures and
-> targets to work with LTP, but for this small cleanup I would
-> prefer a simple test case included in uClibc-ng-test.
+Signed-off-by: Mario Lang <mlang@blind.guru>
+---
+ DEVELOPERS             |  3 +++
+ package/Config.in      |  1 +
+ package/lynx/Config.in |  7 +++++++
+ package/lynx/lynx.hash |  3 +++
+ package/lynx/lynx.mk   | 31 +++++++++++++++++++++++++++++++
+ 5 files changed, 45 insertions(+)
+ create mode 100644 package/lynx/Config.in
+ create mode 100644 package/lynx/lynx.hash
+ create mode 100644 package/lynx/lynx.mk
 
-I agree, we are trying to test a specific layer of uclibc, its not a linux issue
-as per my opinion.
-
-> Anyone?
-
-I have an idea to write simple tests to test syscall() with examples of 0-6
-args.  I havent had time the last few days for much coding though.
-
-Perhaps you can accept Joel's patch, and in the mean time I can work on the
-testing and cosolidation patch?
-
--Stafford
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 77e3344fa4..63809f1afb 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1040,6 +1040,9 @@ F:	package/polkit/
+ F:	package/sg3_utils/
+ F:	package/udisks/
+ 
++N:	Mario Lang <mlang@blind.guru>
++F:	package/lynx/
++
+ N:	Mario Rugiero <mrugiero@gmail.com>
+ F:	package/ratpoison/
+ 
+diff --git a/package/Config.in b/package/Config.in
+index cb2141b8f3..c3ebbfc8c4 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1699,6 +1699,7 @@ menu "Networking applications"
+ 	source "package/linuxptp/Config.in"
+ 	source "package/lldpd/Config.in"
+ 	source "package/lrzsz/Config.in"
++	source "package/lynx/Config.in"
+ 	source "package/macchanger/Config.in"
+ 	source "package/memcached/Config.in"
+ 	source "package/mii-diag/Config.in"
+diff --git a/package/lynx/Config.in b/package/lynx/Config.in
+new file mode 100644
+index 0000000000..2ccdad6f0b
+--- /dev/null
++++ b/package/lynx/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_LYNX
++	bool "lynx"
++	select BR2_PACKAGE_NCURSES
++	select BR2_PACKAGE_OPENSSL if !BR2_PACKAGE_GNUTLS
++	help
++	  Text mode web browser.
++
+diff --git a/package/lynx/lynx.hash b/package/lynx/lynx.hash
+new file mode 100644
+index 0000000000..c39475aa23
+--- /dev/null
++++ b/package/lynx/lynx.hash
+@@ -0,0 +1,3 @@
++# Locally calculated:
++sha256  04318a100b052d079d0018fa371aa28cfb41ab68db3a959f3b75c2170eea1bc8  lynx2.8.9dev.16.tar.bz2
++sha256  8406a30ff3134ec23cf752d1ceda92ddaabbe41b4f2dc07ea3cfa139de12d6d6  COPYING
+diff --git a/package/lynx/lynx.mk b/package/lynx/lynx.mk
+new file mode 100644
+index 0000000000..93f0b75982
+--- /dev/null
++++ b/package/lynx/lynx.mk
+@@ -0,0 +1,31 @@
++################################################################################
++#
++# lynx
++#
++################################################################################
++
++LYNX_VERSION = 2.8.9dev.16
++LYNX_SOURCE = lynx$(LYNX_VERSION).tar.bz2
++LYNX_SITE = ftp://ftp.invisible-island.net/lynx/tarballs
++LYNX_LICENSE = GPL-2.0
++LYNX_LICENSE_FILES = COPYING
++
++LYNX_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES) ncurses
++LYNX_CONF_OPTS = --with-screen=ncurses --with-curses-dir=$(TARGET_DIR)/usr
++
++ifeq ($(BR2_PACKAGE_OPENSSL),y)
++LYNX_DEPENDENCIES += openssl
++LYNX_CONF_OPTS += --with-ssl
++else ifeq ($(BR2_PACKAGE_GNUTLS),y)
++LYNX_DEPENDENCIES += gnutls
++LYNX_CONF_OPTS += --with-gnutls
++endif
++
++ifeq ($(BR2_PACKAGE_ZLIB),y)
++LYNX_DEPENDENCIES += zlib
++LYNX_CONF_OPTS += --with-zlib
++else
++LYNX_CONF_OPTS += --without-zlib
++endif
++
++$(eval $(autotools-package))
+-- 
+2.15.0
