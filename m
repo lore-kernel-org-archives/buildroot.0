@@ -1,42 +1,41 @@
-From: Mario Lang <mlang@blind.guru>
-Date: Sun, 10 Dec 2017 22:52:16 +0100
-Subject: [Buildroot] [PATCH] package/wpan-tools: change tarball compression
- to xz
-Message-ID: <20171210215216.23371-1-mlang@blind.guru>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sun, 10 Dec 2017 23:01:31 +0100
+Subject: [Buildroot] [PATCH v1] qt5charts: fix qt5base widgets/gui selection
+Message-ID: <20171210220131.29440-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Mario Lang <mlang@blind.guru>
----
- package/wpan-tools/wpan-tools.hash | 4 ++--
- package/wpan-tools/wpan-tools.mk   | 1 +
- 2 files changed, 3 insertions(+), 2 deletions(-)
+Selection of BR2_PACKAGE_QT5BASE_WIDGETS needs BR2_PACKAGE_QT5BASE_GUI too.
 
-diff --git a/package/wpan-tools/wpan-tools.hash b/package/wpan-tools/wpan-tools.hash
-index 6a3b6d16e7..cfad89aa00 100644
---- a/package/wpan-tools/wpan-tools.hash
-+++ b/package/wpan-tools/wpan-tools.hash
-@@ -1,4 +1,4 @@
- # From http://wpan.cakelab.org/releases/md5sum
--md5	06608f69951088844196f79685318aa9	wpan-tools-0.7.tar.gz
-+md5	91f0b640ff66910e977fab6525625624	wpan-tools-0.7.tar.xz
- # Calculated based on the hash above
--sha256	8b690ff0e71e08bece5ec541223fda7abd2d5552d97d3d25b4967609b58fef00	wpan-tools-0.7.tar.gz
-+sha256	c16de9d7861c2d9b6a4436a0fac730f9f545ee290b92bc770c538ec6a3f22309	wpan-tools-0.7.tar.xz
-diff --git a/package/wpan-tools/wpan-tools.mk b/package/wpan-tools/wpan-tools.mk
-index a604dab870..d5e43a92c8 100644
---- a/package/wpan-tools/wpan-tools.mk
-+++ b/package/wpan-tools/wpan-tools.mk
-@@ -5,6 +5,7 @@
- ################################################################################
- 
- WPAN_TOOLS_VERSION = 0.7
-+WPAN_TOOLS_SOURCE = wpan-tools-$(WPAN_TOOLS_VERSION).tar.xz
- WPAN_TOOLS_SITE = http://wpan.cakelab.org/releases
- WPAN_TOOLS_DEPENDENCIES = host-pkgconf libnl
- WPAN_TOOLS_LICENSE = ISC
+Fixes qt5base configure failure ([1]):
+
+  ERROR: Feature 'widgets' was enabled, but the pre-condition 'features.gui' failed.
+[1] http://autobuild.buildroot.net/results/69c4385b2fd484d16f749b4cde6967f5cabea8b2
+
+and buildroot warning:
+
+  warning: (... && BR2_PACKAGE_QT5CHARTS && ...) selects BR2_PACKAGE_QT5BASE_WIDGETS
+  which has unmet direct dependencies (BR2_PACKAGE_QT5 && BR2_PACKAGE_QT5BASE && BR2_PACKAGE_QT5BASE_GUI)
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+ package/qt5/qt5charts/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/qt5/qt5charts/Config.in b/package/qt5/qt5charts/Config.in
+index 993f4db4ce..0967f6a2df 100644
+--- a/package/qt5/qt5charts/Config.in
++++ b/package/qt5/qt5charts/Config.in
+@@ -4,6 +4,7 @@ comment "qt5charts needs at least qt-5.7"
+ config BR2_PACKAGE_QT5CHARTS
+ 	bool "qt5charts"
+ 	select BR2_PACKAGE_QT5BASE
++	select BR2_PACKAGE_QT5BASE_GUI
+ 	select BR2_PACKAGE_QT5BASE_WIDGETS
+ 	depends on BR2_PACKAGE_QT5_VERSION_LATEST
+ 	help
 -- 
 2.15.0
