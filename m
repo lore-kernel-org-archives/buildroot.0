@@ -1,58 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 10 Dec 2017 20:54:26 +0100
-Subject: [Buildroot] [git commit] wireshark: security bump to version 2.2.11
-Message-ID: <20171210195453.F3F7A80FCF@busybox.osuosl.org>
+Date: Sun, 10 Dec 2017 20:59:34 +0100
+Subject: [Buildroot] [git commit] package/fswebcam: change tarball
+ compression to xz
+Message-ID: <20171210195454.6E90A8284F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d2bc1e2bbbabc70f2e9436387b8a40ff96216372
+commit: https://git.buildroot.net/buildroot/commit/?id=5fc7c61d0daa12509934fbe59a61c37dc98a39b4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes the following security issues:
+Verified equality of underlying tarball with
 
-wnpa-sec-2017-47: The IWARP_MPA dissector could crash. (Bug 14236)
+  tarname=http://www.firestorm.cx/fswebcam/files/fswebcam-20140113.tar
+  test "$(wget -qO- $tarname.gz|zcat|sha256sum -)" = "$(wget -qO- $tarname.xz|xzcat|sha256sum -)"
 
-https://www.wireshark.org/security/wnpa-sec-2017-47.html
-
-wnpa-sec-2017-48: The NetBIOS dissector could crash. (Bug 14249)
-
-https://www.wireshark.org/security/wnpa-sec-2017-48.html
-
-wnpa-sec-2017-49: The CIP Safety dissector could crash. (Bug 14250)
-
-https://www.wireshark.org/security/wnpa-sec-2017-49.html
-
-For more information, see the release notes:
-https://www.wireshark.org/docs/relnotes/wireshark-2.2.11.html
-
+Signed-off-by: Mario Lang <mlang@blind.guru>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wireshark/wireshark.hash | 4 ++--
- package/wireshark/wireshark.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/fswebcam/fswebcam.hash | 2 +-
+ package/fswebcam/fswebcam.mk   | 1 +
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
-index 3494f2e..cffdab2 100644
---- a/package/wireshark/wireshark.hash
-+++ b/package/wireshark/wireshark.hash
+diff --git a/package/fswebcam/fswebcam.hash b/package/fswebcam/fswebcam.hash
+index 3822a27..1e75f23 100644
+--- a/package/fswebcam/fswebcam.hash
++++ b/package/fswebcam/fswebcam.hash
 @@ -1,2 +1,2 @@
--# From: https://www.wireshark.org/download/src/all-versions/SIGNATURES-2.2.10.txt
--sha256 8574a5e1fdec7affae640924bd46c1aed1bd866e02632fa5625e1450e4a50707  wireshark-2.2.10.tar.bz2
-+# From: https://www.wireshark.org/download/src/all-versions/SIGNATURES-2.2.11.txt
-+sha256 a9f11621e85d7e1d72259157edd94825e72af3fd72e184b8474459f92ad5fc40  wireshark-2.2.11.tar.bz2
-diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
-index 34ee563..535ed7a 100644
---- a/package/wireshark/wireshark.mk
-+++ b/package/wireshark/wireshark.mk
-@@ -4,7 +4,7 @@
- #
+ # Locally calculated
+-sha256	3ee389f72a7737700d22e0c954720b1e3bbadc8a0daad6426c25489ba9dc3199	fswebcam-20140113.tar.gz
++sha256	444d6a8a82102e09e935540c64a731021de36db03e1e74181f41ca6f39aa6474	fswebcam-20140113.tar.xz
+diff --git a/package/fswebcam/fswebcam.mk b/package/fswebcam/fswebcam.mk
+index 4b47b3e..8f823f4 100644
+--- a/package/fswebcam/fswebcam.mk
++++ b/package/fswebcam/fswebcam.mk
+@@ -5,6 +5,7 @@
  ################################################################################
  
--WIRESHARK_VERSION = 2.2.10
-+WIRESHARK_VERSION = 2.2.11
- WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.bz2
- WIRESHARK_SITE = https://www.wireshark.org/download/src/all-versions
- WIRESHARK_LICENSE = wireshark license
+ FSWEBCAM_VERSION = 20140113
++FSWEBCAM_SOURCE = fswebcam-$(FSWEBCAM_VERSION).tar.xz
+ FSWEBCAM_SITE = http://www.firestorm.cx/fswebcam/files
+ FSWEBCAM_LICENSE = GPL-2.0
+ FSWEBCAM_LICENSE_FILES = LICENSE
