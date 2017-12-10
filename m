@@ -1,109 +1,30 @@
-From: Mario Lang <mlang@blind.guru>
-Date: Sun, 10 Dec 2017 15:34:04 +0100
-Subject: [Buildroot] [PATCH] lynx: new package
-Message-ID: <20171210143404.29210-1-mlang@blind.guru>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Sun, 10 Dec 2017 12:44:27 -0200
+Subject: [Buildroot] [PATCH 1/2] linux: bump default to version 4.14.5
+Message-ID: <1512917068-7325-1-git-send-email-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Mario Lang <mlang@blind.guru>
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
 ---
- DEVELOPERS             |  3 +++
- package/Config.in      |  1 +
- package/lynx/Config.in |  7 +++++++
- package/lynx/lynx.hash |  3 +++
- package/lynx/lynx.mk   | 31 +++++++++++++++++++++++++++++++
- 5 files changed, 45 insertions(+)
- create mode 100644 package/lynx/Config.in
- create mode 100644 package/lynx/lynx.hash
- create mode 100644 package/lynx/lynx.mk
+ linux/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 77e3344fa4..63809f1afb 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1040,6 +1040,9 @@ F:	package/polkit/
- F:	package/sg3_utils/
- F:	package/udisks/
+diff --git a/linux/Config.in b/linux/Config.in
+index 5af5e4f..7a5f992 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -116,7 +116,7 @@ endif
  
-+N:	Mario Lang <mlang@blind.guru>
-+F:	package/lynx/
-+
- N:	Mario Rugiero <mrugiero@gmail.com>
- F:	package/ratpoison/
- 
-diff --git a/package/Config.in b/package/Config.in
-index cb2141b8f3..c3ebbfc8c4 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1699,6 +1699,7 @@ menu "Networking applications"
- 	source "package/linuxptp/Config.in"
- 	source "package/lldpd/Config.in"
- 	source "package/lrzsz/Config.in"
-+	source "package/lynx/Config.in"
- 	source "package/macchanger/Config.in"
- 	source "package/memcached/Config.in"
- 	source "package/mii-diag/Config.in"
-diff --git a/package/lynx/Config.in b/package/lynx/Config.in
-new file mode 100644
-index 0000000000..2ccdad6f0b
---- /dev/null
-+++ b/package/lynx/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_LYNX
-+	bool "lynx"
-+	select BR2_PACKAGE_NCURSES
-+	select BR2_PACKAGE_OPENSSL if !BR2_PACKAGE_GNUTLS
-+	help
-+	  Text mode web browser.
-+
-diff --git a/package/lynx/lynx.hash b/package/lynx/lynx.hash
-new file mode 100644
-index 0000000000..c39475aa23
---- /dev/null
-+++ b/package/lynx/lynx.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated:
-+sha256  04318a100b052d079d0018fa371aa28cfb41ab68db3a959f3b75c2170eea1bc8  lynx2.8.9dev.16.tar.bz2
-+sha256  8406a30ff3134ec23cf752d1ceda92ddaabbe41b4f2dc07ea3cfa139de12d6d6  COPYING
-diff --git a/package/lynx/lynx.mk b/package/lynx/lynx.mk
-new file mode 100644
-index 0000000000..93f0b75982
---- /dev/null
-+++ b/package/lynx/lynx.mk
-@@ -0,0 +1,31 @@
-+################################################################################
-+#
-+# lynx
-+#
-+################################################################################
-+
-+LYNX_VERSION = 2.8.9dev.16
-+LYNX_SOURCE = lynx$(LYNX_VERSION).tar.bz2
-+LYNX_SITE = ftp://ftp.invisible-island.net/lynx/tarballs
-+LYNX_LICENSE = GPL-2.0
-+LYNX_LICENSE_FILES = COPYING
-+
-+LYNX_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES) ncurses
-+LYNX_CONF_OPTS = --with-screen=ncurses --with-curses-dir=$(TARGET_DIR)/usr
-+
-+ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+LYNX_DEPENDENCIES += openssl
-+LYNX_CONF_OPTS += --with-ssl
-+else ifeq ($(BR2_PACKAGE_GNUTLS),y)
-+LYNX_DEPENDENCIES += gnutls
-+LYNX_CONF_OPTS += --with-gnutls
-+endif
-+
-+ifeq ($(BR2_PACKAGE_ZLIB),y)
-+LYNX_DEPENDENCIES += zlib
-+LYNX_CONF_OPTS += --with-zlib
-+else
-+LYNX_CONF_OPTS += --without-zlib
-+endif
-+
-+$(eval $(autotools-package))
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "4.14.4" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "4.14.5" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "v4.4.98-cip13" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
 -- 
-2.15.0
+2.7.4
