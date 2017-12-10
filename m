@@ -1,35 +1,21 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 10 Dec 2017 20:55:55 +0100
-Subject: [Buildroot] [PATCH] wireshark: security bump to version 2.2.11
-In-Reply-To: <20171209140837.3098-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Sat, 9 Dec 2017 15:08:37 +0100")
-References: <20171209140837.3098-1-peter@korsgaard.com>
-Message-ID: <87374iz7as.fsf@dell.be.48ers.dk>
+Date: Sun, 10 Dec 2017 20:56:00 +0100
+Subject: [Buildroot] [PATCH] package/weston: Remove redundant dependency
+In-Reply-To: <785b0693316e0980f8ec4be6490148c3e2920368.1512834692.git.jan.kundrat@cesnet.cz>
+ ("Jan =?utf-8?Q?Kundr=C3=A1t=22's?= message of "Sat, 9 Dec 2017 16:49:07
+ +0100")
+References: <785b0693316e0980f8ec4be6490148c3e2920368.1512834692.git.jan.kundrat@cesnet.cz>
+Message-ID: <87y3maxsq7.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Jan" == Jan Kundr?t <jan.kundrat@cesnet.cz> writes:
 
- > Fixes the following security issues:
- > wnpa-sec-2017-47: The IWARP_MPA dissector could crash. (Bug 14236)
-
- > https://www.wireshark.org/security/wnpa-sec-2017-47.html
-
- > wnpa-sec-2017-48: The NetBIOS dissector could crash. (Bug 14249)
-
- > https://www.wireshark.org/security/wnpa-sec-2017-48.html
-
- > wnpa-sec-2017-49: The CIP Safety dissector could crash. (Bug 14250)
-
- > https://www.wireshark.org/security/wnpa-sec-2017-49.html
-
- > For more information, see the release notes:
- > https://www.wireshark.org/docs/relnotes/wireshark-2.2.11.html
-
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > It's already there, unconditionally, in the list of main dependencies.
+ > Signed-off-by: Jan Kundr?t <jan.kundrat@cesnet.cz>
 
 Committed, thanks.
 
