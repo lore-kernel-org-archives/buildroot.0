@@ -1,21 +1,24 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 10 Dec 2017 20:58:52 +0100
-Subject: [Buildroot] [PATCH 2/2] linux-headers: bump 4.{4, 9,
- 14}.x series
-In-Reply-To: <1512917068-7325-2-git-send-email-festevam@gmail.com> (Fabio
- Estevam's message of "Sun, 10 Dec 2017 12:44:28 -0200")
-References: <1512917068-7325-1-git-send-email-festevam@gmail.com>
- <1512917068-7325-2-git-send-email-festevam@gmail.com>
-Message-ID: <878teaxslf.fsf@dell.be.48ers.dk>
+Date: Sun, 10 Dec 2017 20:59:52 +0100
+Subject: [Buildroot] [PATCH] package/fswebcam: change tarball
+ compression to xz
+In-Reply-To: <20171210175457.1456-1-mlang@blind.guru> (Mario Lang's message of
+ "Sun, 10 Dec 2017 18:54:57 +0100")
+References: <20171210175457.1456-1-mlang@blind.guru>
+Message-ID: <874loyxsjr.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabio" == Fabio Estevam <festevam@gmail.com> writes:
+>>>>> "Mario" == Mario Lang <mlang@blind.guru> writes:
 
- > Signed-off-by: Fabio Estevam <festevam@gmail.com>
+ > Verified equality of underlying tarball with
+ >   tarname=http://www.firestorm.cx/fswebcam/files/fswebcam-20140113.tar
+ >   test "$(wget -qO- $tarname.gz|zcat|sha256sum -)" = "$(wget -qO- $tarname.xz|xzcat|sha256sum -)"
+
+ > Signed-off-by: Mario Lang <mlang@blind.guru>
 
 Committed, thanks.
 
