@@ -1,32 +1,30 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 10 Dec 2017 20:58:26 +0100
-Subject: [Buildroot] [git commit] linux: bump default to version 4.14.5
-Message-ID: <20171210195454.516F881493@busybox.osuosl.org>
+Date: Sun, 10 Dec 2017 20:58:32 +0100
+Subject: [Buildroot] [git commit] linux-headers: bump 4.{4, 9, 14}.x series
+Message-ID: <20171210195454.5E3DE8110B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9eb5f213fb21fb56b0d10ff558533112dff0f395
+commit: https://git.buildroot.net/buildroot/commit/?id=4a4e86d4d2f9132b58b823a485eafe0ccd70743c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Fabio Estevam <festevam@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- linux/Config.in | 2 +-
+ package/linux-headers/Config.in.host | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 5af5e4f..7a5f992 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -116,7 +116,7 @@ endif
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "4.14.4" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "4.14.5" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "v4.4.98-cip13" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 30122b0..db08963 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -258,5 +258,5 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
+ 	default "4.12.14"	if BR2_KERNEL_HEADERS_4_12
+ 	default "4.13.16"	if BR2_KERNEL_HEADERS_4_13
+-	default "4.14.4"	if BR2_KERNEL_HEADERS_4_14
++	default "4.14.5"	if BR2_KERNEL_HEADERS_4_14
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
