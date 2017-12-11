@@ -1,20 +1,20 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 11 Dec 2017 20:00:25 +0100
-Subject: [Buildroot] [PATCH] package/wpan-tools: change tarball
- compression to xz
-In-Reply-To: <20171210215216.23371-1-mlang@blind.guru> (Mario Lang's message
- of "Sun, 10 Dec 2017 22:52:16 +0100")
-References: <20171210215216.23371-1-mlang@blind.guru>
-Message-ID: <87mv2pw0mu.fsf@dell.be.48ers.dk>
+Date: Mon, 11 Dec 2017 20:00:43 +0100
+Subject: [Buildroot] [PATCH] wireguard: bump version
+In-Reply-To: <20171211112014.15274-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Mon, 11 Dec 2017 12:20:14 +0100")
+References: <20171211112014.15274-1-peter@korsgaard.com>
+Message-ID: <87inddw0mc.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Mario" == Mario Lang <mlang@blind.guru> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > Signed-off-by: Mario Lang <mlang@blind.guru>
+ > Various bugfixes, including a compat fix for <= 3.10.
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
 Committed, thanks.
 
