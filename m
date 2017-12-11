@@ -1,126 +1,90 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 11 Dec 2017 22:39:19 +0100
-Subject: [Buildroot] [git commit] boards/zynq: use genimage to generate a
- bootable SD card image
-Message-ID: <20171211213330.97490804F9@busybox.osuosl.org>
+Date: Mon, 11 Dec 2017 22:35:12 +0100
+Subject: [Buildroot] [git commit] boards/zynq: rename the DTB to be loaded
+ by U-Boot
+Message-ID: <20171211213330.7CF9F804F9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d54123d29303850b96c58970b010308388ec898d
+commit: https://git.buildroot.net/buildroot/commit/?id=6465e4d34a4c1d94e73ec849297fc77b47b498a6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-[Run-time tested on ZedBoard, build-tested on the other boards]
-[Peter: also add host-dosfstools / host-mtools to make vfat images]
+We are about to introduce genimage support for the Zynq boards. For
+all of them U-Boot loads the DTB from a file named "devicetree.dtb" so
+we need to rename it on the SD card image.
+
+We could use genimage itself to rename files while creating the
+image. But this would require a different genimage.cfg for each board,
+leading to duplicate code.
+
+Instead let's create a "devicetree.dtb" symlink pointing to the dtb
+listed in the configuration. Currently all the Zynq-based boards have
+only one DTS configured, but if one had two or more of them, the
+symlink would point to the first one.
+
+[Peter: only create symlink if dtb option is available]
 Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- board/zynq/genimage.cfg         | 25 +++++++++++++++++++++++++
- board/zynq/post-image.sh        |  2 ++
- board/zynq/readme.txt           | 14 +++++++-------
- configs/zynq_microzed_defconfig |  3 +++
- configs/zynq_zc706_defconfig    |  3 +++
- configs/zynq_zed_defconfig      |  3 +++
- 6 files changed, 43 insertions(+), 7 deletions(-)
+ board/zynq/post-image.sh        | 11 +++++++++++
+ configs/zynq_microzed_defconfig |  1 +
+ configs/zynq_zc706_defconfig    |  1 +
+ configs/zynq_zed_defconfig      |  1 +
+ 4 files changed, 14 insertions(+)
 
-diff --git a/board/zynq/genimage.cfg b/board/zynq/genimage.cfg
-new file mode 100644
-index 0000000..76e61c3
---- /dev/null
-+++ b/board/zynq/genimage.cfg
-@@ -0,0 +1,25 @@
-+image boot.vfat {
-+	vfat {
-+		files = {
-+			"boot.bin",
-+			"u-boot.img",
-+			"devicetree.dtb",
-+			"uImage"
-+		}
-+		file uramdisk.image.gz {
-+			image = "rootfs.cpio.uboot"
-+		}
-+	}
-+	size = 32M
-+}
-+
-+image sdcard.img {
-+	hdimage {
-+	}
-+
-+	partition boot {
-+		partition-type = 0xC
-+		bootable = "true"
-+		image = "boot.vfat"
-+	}
-+}
 diff --git a/board/zynq/post-image.sh b/board/zynq/post-image.sh
-index 98b3306..0cf92e0 100755
---- a/board/zynq/post-image.sh
+new file mode 100755
+index 0000000..98b3306
+--- /dev/null
 +++ b/board/zynq/post-image.sh
-@@ -9,3 +9,5 @@ FIRST_DT=$(sed -n \
-            ${BR2_CONFIG})
- 
- [ -z "${FIRST_DT}" ] || ln -fs ${FIRST_DT}.dtb ${BINARIES_DIR}/devicetree.dtb
+@@ -0,0 +1,11 @@
++#!/bin/sh
 +
-+support/scripts/genimage.sh -c board/zynq/genimage.cfg
-diff --git a/board/zynq/readme.txt b/board/zynq/readme.txt
-index c5506fe..1627349 100644
---- a/board/zynq/readme.txt
-+++ b/board/zynq/readme.txt
-@@ -14,13 +14,13 @@ Steps to create a working system for a Zynq board:
-     make zynq_microzed_defconfig  (MicroZed)
- 2) make
- 3) All needed files will be available in the output/images directory.
--   Create a FAT32 partition at the beginning of your SD Card and copy files:
--     - boot.bin
--     - u-boot.img
--     - uImage
--     - uramdisk.image.gz (should be renamed from rootfs.cpio.uboot)
--     - devicetree.dtb (should be renamed from zynq-***.dtb)
--   into your SD card
-+   The sdcard.img file is a complete bootable image ready to be written
-+   on the boot medium. To install it, simply copy the image to an SD
-+   card:
++# By default U-Boot loads DTB from a file named "devicetree.dtb", so
++# let's use a symlink with that name that points to the *first*
++# devicetree listed in the config.
 +
-+       # dd if=output/images/sdcard.img of=/dev/sdX
++FIRST_DT=$(sed -n \
++           's/^BR2_LINUX_KERNEL_INTREE_DTS_NAME="\([a-z0-9\-]*\).*"$/\1/p' \
++           ${BR2_CONFIG})
 +
-+   Where 'sdX' is the device node of the uSD.
- 4) boot your board
- 
- You can alter the booting procedure by creating a file uEnv.txt
++[ -z "${FIRST_DT}" ] || ln -fs ${FIRST_DT}.dtb ${BINARIES_DIR}/devicetree.dtb
 diff --git a/configs/zynq_microzed_defconfig b/configs/zynq_microzed_defconfig
-index c6685a4..a6366ee 100644
+index acd2da5..c6685a4 100644
 --- a/configs/zynq_microzed_defconfig
 +++ b/configs/zynq_microzed_defconfig
-@@ -28,3 +28,6 @@ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
- BR2_TARGET_UBOOT_FORMAT_IMG=y
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="spl/boot.bin"
-+BR2_PACKAGE_HOST_DOSFSTOOLS=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_MTOOLS=y
+@@ -4,6 +4,7 @@ BR2_ARM_ENABLE_NEON=y
+ BR2_ARM_ENABLE_VFP=y
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttyPS0"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynq/post-image.sh"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+ BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/Xilinx/linux-xlnx.git"
 diff --git a/configs/zynq_zc706_defconfig b/configs/zynq_zc706_defconfig
-index 0bb8e3b..0690340 100644
+index 1dcccd5..0bb8e3b 100644
 --- a/configs/zynq_zc706_defconfig
 +++ b/configs/zynq_zc706_defconfig
-@@ -28,3 +28,6 @@ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
- BR2_TARGET_UBOOT_FORMAT_IMG=y
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="spl/boot.bin"
-+BR2_PACKAGE_HOST_DOSFSTOOLS=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_MTOOLS=y
+@@ -4,6 +4,7 @@ BR2_ARM_ENABLE_NEON=y
+ BR2_ARM_ENABLE_VFP=y
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttyPS0"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynq/post-image.sh"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+ BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/Xilinx/linux-xlnx.git"
 diff --git a/configs/zynq_zed_defconfig b/configs/zynq_zed_defconfig
-index cfcfdff..d08f83d 100644
+index cd81598..cfcfdff 100644
 --- a/configs/zynq_zed_defconfig
 +++ b/configs/zynq_zed_defconfig
-@@ -28,3 +28,6 @@ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
- BR2_TARGET_UBOOT_FORMAT_IMG=y
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="spl/boot.bin"
-+BR2_PACKAGE_HOST_DOSFSTOOLS=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_MTOOLS=y
+@@ -4,6 +4,7 @@ BR2_ARM_ENABLE_NEON=y
+ BR2_ARM_ENABLE_VFP=y
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttyPS0"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynq/post-image.sh"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+ BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/Xilinx/linux-xlnx.git"
