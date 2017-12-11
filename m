@@ -1,33 +1,37 @@
-From: Marcus Folkesson <marcus.folkesson@gmail.com>
-Date: Mon, 11 Dec 2017 08:34:54 +0100
-Subject: [Buildroot] [PATCH] libostree: depend on host-bison
-Message-ID: <20171211073454.27812-1-marcus.folkesson@gmail.com>
+From: d.lopes at tekin.fr <d.lopes@tekin.fr>
+Date: Mon, 11 Dec 2017 09:35:32 +0100
+Subject: [Buildroot] TR: web2py using buildroot
+Message-ID: <000b01d3725b$02cf5950$086e0bf0$@tekin.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/9179b65a5a90d53490d9e109c45341f1104406a3
+Hello,
 
-Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
----
- package/libostree/libostree.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I am using buildroot to create an embedded system with a raspberry pi3. I
+was able to install web2py on "menuconfig".
 
-diff --git a/package/libostree/libostree.mk b/package/libostree/libostree.mk
-index 3ac8278a98..cddde379df 100644
---- a/package/libostree/libostree.mk
-+++ b/package/libostree/libostree.mk
-@@ -10,7 +10,7 @@ LIBOSTREE_SITE = https://github.com/ostreedev/ostree/releases/download/v$(LIBOST
+So when I go to "IPadress:8000" I arrive on the web2py default welcome page.
+
  
- LIBOSTREE_LICENSE = LGPL-2.0+
- LIBOSTREE_LICENSE_FILES = COPYING
--LIBOSTREE_DEPENDENCIES = e2fsprogs host-pkgconf libfuse libglib2 libgpgme xz
-+LIBOSTREE_DEPENDENCIES = e2fsprogs host-bison host-pkgconf libfuse libglib2 libgpgme xz
- LIBOSTREE_INSTALL_STAGING = YES
+
+If I want to manage my sites, I have to use a secure connection,
+"https://IPadress:8000"
+
+But I have an error, Error code: SSL_ERROR_RX_RECORD_TOO_LONG.
+
  
- LIBOSTREE_CONF_OPTS += \
--- 
-2.15.0
+
+How can I go to the admin page using web2py buildroot?
+
+My web2py version is R-2.12.3
+
+ 
+
+thanks
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20171211/f8eaa8e4/attachment.html>
