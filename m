@@ -1,12 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 11 Dec 2017 20:16:28 +0100
-Subject: [Buildroot] [PATCH 2/9] zynq_zed: linux: bump to xilinx-v2017.3
- (based on 4.9)
-In-Reply-To: <1512855007-1834-3-git-send-email-luca@lucaceresoli.net> (Luca
- Ceresoli's message of "Sat, 9 Dec 2017 22:30:00 +0100")
+Date: Mon, 11 Dec 2017 20:17:13 +0100
+Subject: [Buildroot] [PATCH 3/9] zynq_zed: u-boot: bump to xilinx-v2017.3
+In-Reply-To: <1512855007-1834-4-git-send-email-luca@lucaceresoli.net> (Luca
+ Ceresoli's message of "Sat, 9 Dec 2017 22:30:01 +0100")
 References: <1512855007-1834-1-git-send-email-luca@lucaceresoli.net>
- <1512855007-1834-3-git-send-email-luca@lucaceresoli.net>
-Message-ID: <87a7ypvzw3.fsf@dell.be.48ers.dk>
+ <1512855007-1834-4-git-send-email-luca@lucaceresoli.net>
+Message-ID: <87609dvzuu.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
