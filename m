@@ -1,11 +1,11 @@
 From: Alistair Francis <alistair23@gmail.com>
-Date: Mon, 11 Dec 2017 09:20:20 -0800
-Subject: [Buildroot] [PATCH 6/9] zynq_zc706: linux: bump to
- xilinx-v2017.3 (based on 4.9)
-In-Reply-To: <1512855007-1834-7-git-send-email-luca@lucaceresoli.net>
+Date: Mon, 11 Dec 2017 09:20:34 -0800
+Subject: [Buildroot] [PATCH 7/9] zynq_zc706: u-boot: bump to
+ xilinx-v2017.3
+In-Reply-To: <1512855007-1834-8-git-send-email-luca@lucaceresoli.net>
 References: <1512855007-1834-1-git-send-email-luca@lucaceresoli.net>
- <1512855007-1834-7-git-send-email-luca@lucaceresoli.net>
-Message-ID: <CAKmqyKPAqZDimP6_o1n6hMOCdoMp+kfB6xvBUfu4UScC2vUriQ@mail.gmail.com>
+ <1512855007-1834-8-git-send-email-luca@lucaceresoli.net>
+Message-ID: <CAKmqyKN803EJDFLJ8mbzmp_v=F9XM2bWK=7qDjm6cCYGrGt1eg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -21,28 +21,22 @@ Acked-by: Alistair Francis <alistair.francis@xilinx.com>
 Alistair
 
 > ---
->  configs/zynq_zc706_defconfig | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  configs/zynq_zc706_defconfig | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
 > diff --git a/configs/zynq_zc706_defconfig b/configs/zynq_zc706_defconfig
-> index 86dea63e8356..378d19b2ac5f 100644
+> index 378d19b2ac5f..1dcccd5635ac 100644
 > --- a/configs/zynq_zc706_defconfig
 > +++ b/configs/zynq_zc706_defconfig
-> @@ -2,12 +2,12 @@ BR2_arm=y
->  BR2_cortex_a9=y
->  BR2_ARM_ENABLE_NEON=y
->  BR2_ARM_ENABLE_VFP=y
-> -BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y
-> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
->  BR2_TARGET_GENERIC_GETTY_PORT="ttyPS0"
->  BR2_LINUX_KERNEL=y
->  BR2_LINUX_KERNEL_CUSTOM_GIT=y
->  BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/Xilinx/linux-xlnx.git"
-> -BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="xilinx-v2016.2"
-> +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="xilinx-v2017.3"
->  BR2_LINUX_KERNEL_DEFCONFIG="xilinx_zynq"
->  BR2_LINUX_KERNEL_UIMAGE=y
->  BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x8000"
+> @@ -20,7 +20,7 @@ BR2_TARGET_UBOOT=y
+>  BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+>  BR2_TARGET_UBOOT_CUSTOM_GIT=y
+>  BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/Xilinx/u-boot-xlnx.git"
+> -BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="xilinx-v2017.1"
+> +BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="xilinx-v2017.3"
+>  BR2_TARGET_UBOOT_BOARD_DEFCONFIG="zynq_zc706"
+>  BR2_TARGET_UBOOT_NEEDS_DTC=y
+>  BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
 > --
 > 2.7.4
 >
