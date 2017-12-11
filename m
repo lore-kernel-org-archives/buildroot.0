@@ -1,24 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 11 Dec 2017 20:20:59 +0100
-Subject: [Buildroot] [PATCH 7/9] zynq_zc706: u-boot: bump to
- xilinx-v2017.3
-In-Reply-To: <1512855007-1834-8-git-send-email-luca@lucaceresoli.net> (Luca
- Ceresoli's message of "Sat, 9 Dec 2017 22:30:05 +0100")
-References: <1512855007-1834-1-git-send-email-luca@lucaceresoli.net>
- <1512855007-1834-8-git-send-email-luca@lucaceresoli.net>
-Message-ID: <87o9n5ul44.fsf@dell.be.48ers.dk>
+Date: Mon, 11 Dec 2017 20:14:39 +0100
+Subject: [Buildroot] [git commit] support/scripts/genimage.sh: show usage
+ when invoked incorrectly
+Message-ID: <20171211191702.2789A8220B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Luca" == Luca Ceresoli <luca@lucaceresoli.net> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=6887ad7003707743c9d5f3dbaffe3b2de3e3ba6b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > [Build-tested only]
- > Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+[Peter: use ${0}]
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ support/scripts/genimage.sh | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/support/scripts/genimage.sh b/support/scripts/genimage.sh
+index 625afc1..039b3fe 100755
+--- a/support/scripts/genimage.sh
++++ b/support/scripts/genimage.sh
+@@ -1,7 +1,11 @@
+ #!/usr/bin/env bash
+ 
+ die() {
+-  echo "Error: $@" >&2
++  cat <<EOF >&2
++Error: $@
++
++Usage: ${0} -c GENIMAGE_CONFIG_FILE
++EOF
+   exit 1
+ }
+ 
