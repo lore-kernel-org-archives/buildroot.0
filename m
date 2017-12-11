@@ -1,281 +1,73 @@
-From: Angelo Compagnucci <angelo@amarulasolutions.com>
-Date: Mon, 11 Dec 2017 18:38:42 +0100
-Subject: [Buildroot] [PATCH v4] package/i2c-tools: bump to version 4.0
-Message-ID: <1513013922-14269-1-git-send-email-angelo@amarulasolutions.com>
+From: Johannes Schmitz <johannes.schmitz1@gmail.com>
+Date: Mon, 11 Dec 2017 19:47:08 +0100
+Subject: [Buildroot] [PATCH 1/1] boot/uboot: add config option for uboot
+ environment padding byte
+Message-ID: <1513018028-18256-1-git-send-email-johannes.schmitz1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch bumps i2c-tools to version 4.0 and adds a couple of
-new commands named i2ctransfer and eeprog.
-It adds also several upstream commits not included in the release
-that fix static compilation issues and parallel build issues.
+Updated the help text for the size of the uboot environment. The size of
+the uboot environment, which is given in bytes, needs to be exactly
+correct in order to calculate the CRC checksum as expected and
+re-calculated by uboot during the target boot process. Otherwise the
+environment is ignored during boot due to CRC mismatch.
 
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+Additionally, add the missing option to specify the padding byte which
+is used by the mkenvimage -p parameter.
+
+Signed-off-by: Johannes Schmitz <johannes.schmitz1@gmail.com>
 ---
- ...01-lib-Module.mk-Add-missing-dependencies.patch | 34 ++++++++++++
- ...efile-Add-flag-to-disable-dynamic-library.patch | 64 ++++++++++++++++++++++
- ...odule.mk-Drop-unused-variable-LIB_OBJECTS.patch | 33 +++++++++++
- .../0004-lib-Module.mk-fixing-LIB_LINKS.patch      | 32 +++++++++++
- package/i2c-tools/i2c-tools.hash                   |  2 +-
- package/i2c-tools/i2c-tools.mk                     | 16 +++++-
- 6 files changed, 177 insertions(+), 4 deletions(-)
- create mode 100644 package/i2c-tools/0001-lib-Module.mk-Add-missing-dependencies.patch
- create mode 100644 package/i2c-tools/0002-Makefile-Add-flag-to-disable-dynamic-library.patch
- create mode 100644 package/i2c-tools/0003-lib-Module.mk-Drop-unused-variable-LIB_OBJECTS.patch
- create mode 100644 package/i2c-tools/0004-lib-Module.mk-fixing-LIB_LINKS.patch
+ boot/uboot/Config.in | 13 +++++++++++--
+ boot/uboot/uboot.mk  | 10 ++++++----
+ 2 files changed, 17 insertions(+), 6 deletions(-)
 
-diff --git a/package/i2c-tools/0001-lib-Module.mk-Add-missing-dependencies.patch b/package/i2c-tools/0001-lib-Module.mk-Add-missing-dependencies.patch
-new file mode 100644
-index 0000000..09a78da
---- /dev/null
-+++ b/package/i2c-tools/0001-lib-Module.mk-Add-missing-dependencies.patch
-@@ -0,0 +1,34 @@
-+From a6a59693066fd8da81f7107479df3e32a129247d Mon Sep 17 00:00:00 2001
-+From: Jean Delvare <jdelvare@suse.de>
-+Date: Wed, 6 Dec 2017 09:55:04 +0100
-+Subject: [PATCH] lib/Module.mk: Add missing dependencies
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index 2829d2c..32e283a 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -413,8 +413,17 @@ config BR2_TARGET_UBOOT_ENVIMAGE_SOURCE
+ config BR2_TARGET_UBOOT_ENVIMAGE_SIZE
+ 	string "Size of environment"
+ 	help
+-	  Size of envronment, can be prefixed with 0x for hexadecimal
+-	  values.
++	  Size of environment in bytes, can be prefixed with 0x for
++	  hexadecimal values. Needs to match exactly for correct CRC
++	  checksum calculation as re-calculated by uboot during each
++	  target boot. If a CRC mismatch occurs during boot the
++	  environment will be ignored.
 +
-+The lib symlinks lacked a dependency to the actual library file, so
-+parallel builds could run into a race and break.
-+
-+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
-+---
-+ lib/Module.mk | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/lib/Module.mk b/lib/Module.mk
-+index 432a051..fd2c8c4 100644
-+--- a/lib/Module.mk
-++++ b/lib/Module.mk
-+@@ -42,11 +42,11 @@ endif
-+ $(LIB_DIR)/$(LIB_SHLIBNAME): $(LIB_DIR)/smbus.o
-+ 	$(CC) -shared $(LDFLAGS) -Wl,--version-script=$(LIB_DIR)/libi2c.map -Wl,-soname,$(LIB_SHSONAME) -o $@ $^ -lc
-+ 
-+-$(LIB_DIR)/$(LIB_SHSONAME):
-++$(LIB_DIR)/$(LIB_SHSONAME): $(LIB_DIR)/$(LIB_SHLIBNAME)
-+ 	$(RM) $@
-+ 	$(LN) $(LIB_SHLIBNAME) $@
-+ 
-+-$(LIB_DIR)/$(LIB_SHBASENAME):
-++$(LIB_DIR)/$(LIB_SHBASENAME): $(LIB_DIR)/$(LIB_SHLIBNAME)
-+ 	$(RM) $@
-+ 	$(LN) $(LIB_SHLIBNAME) $@
-+ 
-+-- 
-+2.7.4
-+
-diff --git a/package/i2c-tools/0002-Makefile-Add-flag-to-disable-dynamic-library.patch b/package/i2c-tools/0002-Makefile-Add-flag-to-disable-dynamic-library.patch
-new file mode 100644
-index 0000000..a247116
---- /dev/null
-+++ b/package/i2c-tools/0002-Makefile-Add-flag-to-disable-dynamic-library.patch
-@@ -0,0 +1,64 @@
-+From 9906b2ecb6aec02d6348d6237b784135e6930d0b Mon Sep 17 00:00:00 2001
-+From: Angelo Compagnucci <angelo@amarulasolutions.com>
-+Date: Wed, 6 Dec 2017 10:12:07 +0100
-+Subject: [PATCH] Makefile: Add flag to disable dynamic library
-+
-+In such cases where you need to disable entirely the dynamic
-+library compilation, now you can use the BUILD_DYNAMIC_LIB=0
-+flag.
-+
-+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
-+Signed-off-by: Jean Delvare <jdelvare@suse.de>
-+---
-+ Makefile      | 10 +++++++++-
-+ lib/Module.mk |  6 +++++-
-+ 2 files changed, 14 insertions(+), 2 deletions(-)
-+
-+diff --git a/Makefile b/Makefile
-+index c85317c..1bb5572 100644
-+--- a/Makefile
-++++ b/Makefile
-+@@ -32,12 +32,20 @@ CFLAGS		?= -O2
-+ CFLAGS		+= -Wall
-+ SOCFLAGS	:= -fpic -D_REENTRANT $(CFLAGS)
-+ 
-+-USE_STATIC_LIB ?= 0
-++BUILD_DYNAMIC_LIB ?= 1
-+ BUILD_STATIC_LIB ?= 1
-++USE_STATIC_LIB ?= 0
-++
-+ ifeq ($(USE_STATIC_LIB),1)
-+ BUILD_STATIC_LIB := 1
-+ endif
-+ 
-++ifeq ($(BUILD_DYNAMIC_LIB),0)
-++ifeq ($(BUILD_STATIC_LIB),0)
-++$(error BUILD_DYNAMIC_LIB and BUILD_STATIC_LIB cannot be disabled at the same time)
-++endif
-++endif
-++
-+ KERNELVERSION	:= $(shell uname -r)
-+ 
-+ .PHONY: all strip clean install uninstall
-+diff --git a/lib/Module.mk b/lib/Module.mk
-+index fd2c8c4..44fa938 100644
-+--- a/lib/Module.mk
-++++ b/lib/Module.mk
-+@@ -27,9 +27,13 @@ LIB_SHSONAME	:= $(LIB_SHBASENAME).$(LIB_MAINVER)
-+ LIB_SHLIBNAME	:= $(LIB_SHBASENAME).$(LIB_VER)
-+ LIB_STLIBNAME	:= libi2c.a
-+ 
-+-LIB_TARGETS	:= $(LIB_SHLIBNAME)
-+ LIB_LINKS	:= $(LIB_SHSONAME) $(LIB_SHBASENAME)
-+ LIB_OBJECTS	:= smbus.o
-++
-++LIB_TARGETS	:=
-++ifeq ($(BUILD_DYNAMIC_LIB),1)
-++LIB_TARGETS	+= $(LIB_SHLIBNAME)
-++endif
-+ ifeq ($(BUILD_STATIC_LIB),1)
-+ LIB_TARGETS	+= $(LIB_STLIBNAME)
-+ LIB_OBJECTS	+= smbus.ao
-+-- 
-+2.7.4
-+
-diff --git a/package/i2c-tools/0003-lib-Module.mk-Drop-unused-variable-LIB_OBJECTS.patch b/package/i2c-tools/0003-lib-Module.mk-Drop-unused-variable-LIB_OBJECTS.patch
-new file mode 100644
-index 0000000..190224a
---- /dev/null
-+++ b/package/i2c-tools/0003-lib-Module.mk-Drop-unused-variable-LIB_OBJECTS.patch
-@@ -0,0 +1,33 @@
-+From 1831b618fbedf0bcf15b0465981d133d9e3c53ee Mon Sep 17 00:00:00 2001
-+From: Jean Delvare <jdelvare@suse.de>
-+Date: Wed, 6 Dec 2017 10:46:56 +0100
-+Subject: [PATCH] lib/Module.mk: Drop unused variable LIB_OBJECTS
-+
-+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
-+---
-+ lib/Module.mk | 2 --
-+ 1 file changed, 2 deletions(-)
-+
-+diff --git a/lib/Module.mk b/lib/Module.mk
-+index 44fa938..8a58f5b 100644
-+--- a/lib/Module.mk
-++++ b/lib/Module.mk
-+@@ -28,7 +28,6 @@ LIB_SHLIBNAME	:= $(LIB_SHBASENAME).$(LIB_VER)
-+ LIB_STLIBNAME	:= libi2c.a
-+ 
-+ LIB_LINKS	:= $(LIB_SHSONAME) $(LIB_SHBASENAME)
-+-LIB_OBJECTS	:= smbus.o
-+ 
-+ LIB_TARGETS	:=
-+ ifeq ($(BUILD_DYNAMIC_LIB),1)
-+@@ -36,7 +35,6 @@ LIB_TARGETS	+= $(LIB_SHLIBNAME)
-+ endif
-+ ifeq ($(BUILD_STATIC_LIB),1)
-+ LIB_TARGETS	+= $(LIB_STLIBNAME)
-+-LIB_OBJECTS	+= smbus.ao
-+ endif
-+ 
-+ #
-+-- 
-+2.7.4
-+
-diff --git a/package/i2c-tools/0004-lib-Module.mk-fixing-LIB_LINKS.patch b/package/i2c-tools/0004-lib-Module.mk-fixing-LIB_LINKS.patch
-new file mode 100644
-index 0000000..7afe705
---- /dev/null
-+++ b/package/i2c-tools/0004-lib-Module.mk-fixing-LIB_LINKS.patch
-@@ -0,0 +1,32 @@
-+From 026c0eb29059630b0c9133314e44eec8aca12c16 Mon Sep 17 00:00:00 2001
-+From: Angelo Compagnucci <angelo@amarulasolutions.com>
-+Date: Mon, 11 Dec 2017 17:57:47 +0100
-+Subject: [PATCH] i2c-tools: lib/Module.mk: fixing LIB_LINKS
-+
-+LIB_LINKS should be added as a dependency only when
-+BUILD_DYNAMIC_LIB is enabled
-+
-+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
-+---
-+ lib/Module.mk | 3 +--
-+ 1 file changed, 1 insertion(+), 2 deletions(-)
-+
-+diff --git a/lib/Module.mk b/lib/Module.mk
-+index 8a58f5b..de189a2 100644
-+--- a/lib/Module.mk
-++++ b/lib/Module.mk
-+@@ -27,10 +27,9 @@ LIB_SHSONAME	:= $(LIB_SHBASENAME).$(LIB_MAINVER)
-+ LIB_SHLIBNAME	:= $(LIB_SHBASENAME).$(LIB_VER)
-+ LIB_STLIBNAME	:= libi2c.a
-+ 
-+-LIB_LINKS	:= $(LIB_SHSONAME) $(LIB_SHBASENAME)
-+-
-+ LIB_TARGETS	:=
-+ ifeq ($(BUILD_DYNAMIC_LIB),1)
-++LIB_LINKS	:= $(LIB_SHSONAME) $(LIB_SHBASENAME)
-+ LIB_TARGETS	+= $(LIB_SHLIBNAME)
-+ endif
-+ ifeq ($(BUILD_STATIC_LIB),1)
-+-- 
-+2.7.4
-+
-diff --git a/package/i2c-tools/i2c-tools.hash b/package/i2c-tools/i2c-tools.hash
-index 464219d..3475d20 100644
---- a/package/i2c-tools/i2c-tools.hash
-+++ b/package/i2c-tools/i2c-tools.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256 6d6079153cd49a62d4addacef4c092db1a46ba60b2807070a3fbe050262aef87  i2c-tools-3.1.2.tar.xz
-+sha256 d900ca1c11c51ea20caa50b096f948008b8a7ad832311b23353e21baa7af28d6  i2c-tools-4.0.tar.xz
++config BR2_TARGET_UBOOT_ENVIMAGE_PADDING_BYTE
++	hex "Padding byte"
++	default 0x00
++	help
++	  The byte used for padding at the end of the environment image.
  
- # License file
- sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/i2c-tools/i2c-tools.mk b/package/i2c-tools/i2c-tools.mk
-index 3bbaf38..0f71fd4 100644
---- a/package/i2c-tools/i2c-tools.mk
-+++ b/package/i2c-tools/i2c-tools.mk
-@@ -4,11 +4,12 @@
- #
- ################################################################################
- 
--I2C_TOOLS_VERSION = 3.1.2
-+I2C_TOOLS_VERSION = 4.0
- I2C_TOOLS_SOURCE = i2c-tools-$(I2C_TOOLS_VERSION).tar.xz
- I2C_TOOLS_SITE = https://www.kernel.org/pub/software/utils/i2c-tools
- I2C_TOOLS_LICENSE = GPL-2.0+, GPL-2.0 (py-smbus)
- I2C_TOOLS_LICENSE_FILES = COPYING
-+I2C_TOOLS_MAKE_OPTS = EXTRA=eeprog
- 
- ifeq ($(BR2_PACKAGE_PYTHON),y)
- I2C_TOOLS_DEPENDENCIES += python
-@@ -22,6 +23,14 @@ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
- I2C_TOOLS_DEPENDENCIES += busybox
- endif
- 
-+ifeq ($(BR2_STATIC_LIBS),y)
-+I2C_TOOLS_MAKE_OPTS += BUILD_DYNAMIC_LIB=0 USE_STATIC_LIB=1
-+endif
-+
-+ifeq ($(BR2_SHARED_LIBS),y)
-+I2C_TOOLS_MAKE_OPTS += BUILD_STATIC_LIB=0
-+endif
-+
- # Build/install steps mirror the distutil python package type in the python package
- # infrastructure
- ifeq ($(BR2_PACKAGE_PYTHON)$(BR2_PACKAGE_PYTHON3),y)
-@@ -47,15 +56,16 @@ endef
- endif # BR2_PACKAGE_PYTHON
- 
- define I2C_TOOLS_BUILD_CMDS
--	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
-+	$(MAKE) $(TARGET_CONFIGURE_OPTS) $(I2C_TOOLS_MAKE_OPTS) -C $(@D)
- 	$(I2C_TOOLS_BUILD_PYSMBUS)
- endef
- 
- define I2C_TOOLS_INSTALL_TARGET_CMDS
--	for i in i2cdump i2cget i2cset i2cdetect; \
-+	for i in i2cdump i2cget i2cset i2cdetect i2ctransfer; \
- 	do \
- 		$(INSTALL) -m 755 -D $(@D)/tools/$$i $(TARGET_DIR)/usr/sbin/$$i; \
- 	done
-+	$(INSTALL) -m 755 -D $(@D)/eeprog/eeprog $(TARGET_DIR)/usr/bin/eeprog;
- 	$(I2C_TOOLS_INSTALL_PYSMBUS)
- endef
- 
+ config BR2_TARGET_UBOOT_ENVIMAGE_REDUNDANT
+ 	bool "Environment has two copies"
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index 3917599..43fdde4 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -256,10 +256,12 @@ define UBOOT_INSTALL_IMAGES_CMDS
+ 	)
+ 	$(if $(BR2_TARGET_UBOOT_ENVIMAGE),
+ 		cat $(call qstrip,$(BR2_TARGET_UBOOT_ENVIMAGE_SOURCE)) | \
+-			$(HOST_DIR)/bin/mkenvimage -s $(BR2_TARGET_UBOOT_ENVIMAGE_SIZE) \
+-			$(if $(BR2_TARGET_UBOOT_ENVIMAGE_REDUNDANT),-r) \
+-			$(if $(filter BIG,$(BR2_ENDIAN)),-b) \
+-			-o $(BINARIES_DIR)/uboot-env.bin -)
++			$(HOST_DIR)/bin/mkenvimage \
++				$(if $(BR2_TARGET_UBOOT_ENVIMAGE_REDUNDANT),-r) \
++				$(if $(filter BIG,$(BR2_ENDIAN)),-b) \
++				-p $(BR2_TARGET_UBOOT_ENVIMAGE_PADDING_BYTE) \
++				-s $(BR2_TARGET_UBOOT_ENVIMAGE_SIZE) \
++				-o $(BINARIES_DIR)/uboot-env.bin -)
+ 	$(if $(BR2_TARGET_UBOOT_BOOT_SCRIPT),
+ 		$(HOST_DIR)/bin/mkimage -C none -A $(MKIMAGE_ARCH) -T script \
+ 			-d $(call qstrip,$(BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE)) \
 -- 
 2.7.4
