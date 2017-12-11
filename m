@@ -1,41 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 11 Dec 2017 08:15:15 +0100
-Subject: [Buildroot] [PATCH 1/1] boot/uboot: add config option for uboot
- environment padding byte
-In-Reply-To: <CAMbDF3KT17vM0c4s_bAh2i=+5trPtgkdMbjgA6K8-w1o1-CbXg@mail.gmail.com>
-References: <1512925159-518-1-git-send-email-johannes.schmitz1@gmail.com>
- <20171211071826.6c12062b@windsurf.png.is.keysight.com>
- <CAMbDF3KT17vM0c4s_bAh2i=+5trPtgkdMbjgA6K8-w1o1-CbXg@mail.gmail.com>
-Message-ID: <20171211081515.191bb6b0@windsurf.png.is.keysight.com>
+From: Marcus Folkesson <marcus.folkesson@gmail.com>
+Date: Mon, 11 Dec 2017 08:34:54 +0100
+Subject: [Buildroot] [PATCH] libostree: depend on host-bison
+Message-ID: <20171211073454.27812-1-marcus.folkesson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Fixes:
+http://autobuild.buildroot.net/results/9179b65a5a90d53490d9e109c45341f1104406a3
 
-On Mon, 11 Dec 2017 07:48:06 +0100, Johannes Schmitz wrote:
+Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
+---
+ package/libostree/libostree.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> this is a good question. So far I just know that reading the environment
-> only worked for me with a 0x00 padding. Just to be sure it was not a
-> combined problem of size and padding I can try again with the mkenvimage
-> default of 0xFF and the correct size.
-
-Yes, it would be good to investigate some more. The fact that the CRC
-was not matching the original environment CRC is fine, because the
-padding was different. So the padding being different cannot on its own
-explain why it was not working for you.
-
-> In any case the padding option should be added to expose the full
-> mkenvimage capabilities, however if you're right I might have to edit the
-> help text again and remove the statement about the CRC calculation.
-
-Yes, that's my thought: the help text you're proposing is potentially
-wrong.
-
-Thomas
+diff --git a/package/libostree/libostree.mk b/package/libostree/libostree.mk
+index 3ac8278a98..cddde379df 100644
+--- a/package/libostree/libostree.mk
++++ b/package/libostree/libostree.mk
+@@ -10,7 +10,7 @@ LIBOSTREE_SITE = https://github.com/ostreedev/ostree/releases/download/v$(LIBOST
+ 
+ LIBOSTREE_LICENSE = LGPL-2.0+
+ LIBOSTREE_LICENSE_FILES = COPYING
+-LIBOSTREE_DEPENDENCIES = e2fsprogs host-pkgconf libfuse libglib2 libgpgme xz
++LIBOSTREE_DEPENDENCIES = e2fsprogs host-bison host-pkgconf libfuse libglib2 libgpgme xz
+ LIBOSTREE_INSTALL_STAGING = YES
+ 
+ LIBOSTREE_CONF_OPTS += \
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.15.0
