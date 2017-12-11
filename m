@@ -1,39 +1,57 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Mon, 11 Dec 2017 22:49:46 +0100
-Subject: [Buildroot] [PATCH] shairport-sync: bump to version 3.1.5
-Message-ID: <20171211214946.20596-1-joerg.krause@embedded.rocks>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 11 Dec 2017 23:03:09 +0100
+Subject: [Buildroot] [PATCH-2017.02.x] tor: security bump to version
+ 0.2.9.14
+In-Reply-To: <20171211091722.13814-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Mon, 11 Dec 2017 10:17:22 +0100")
+References: <20171211091722.13814-1-peter@korsgaard.com>
+Message-ID: <87bmj4vs6a.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
----
- package/shairport-sync/shairport-sync.hash | 2 +-
- package/shairport-sync/shairport-sync.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-diff --git a/package/shairport-sync/shairport-sync.hash b/package/shairport-sync/shairport-sync.hash
-index 08f22a0cf3..e8ebdd4202 100644
---- a/package/shairport-sync/shairport-sync.hash
-+++ b/package/shairport-sync/shairport-sync.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  4c5a2ab40ef49896f5b6e59b20df4f621ebce47ee64d8571336f59820ae66379  shairport-sync-3.1.4.tar.gz
-+sha256  262808b4ae1a897837384b519ab8736e3189d45f147a31bf8327d313ab6d8e7f  shairport-sync-3.1.5.tar.gz
-diff --git a/package/shairport-sync/shairport-sync.mk b/package/shairport-sync/shairport-sync.mk
-index 63289d4398..76b3a0034c 100644
---- a/package/shairport-sync/shairport-sync.mk
-+++ b/package/shairport-sync/shairport-sync.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SHAIRPORT_SYNC_VERSION = 3.1.4
-+SHAIRPORT_SYNC_VERSION = 3.1.5
- SHAIRPORT_SYNC_SITE = $(call github,mikebrady,shairport-sync,$(SHAIRPORT_SYNC_VERSION))
- 
- SHAIRPORT_SYNC_LICENSE = MIT, BSD-3-Clause
+ > Fixes the following securoty issues:
+ > - CVE-2017-8819: In Tor before 0.2.5.16, 0.2.6 through 0.2.8 before
+ >   0.2.8.17, 0.2.9 before 0.2.9.14, 0.3.0 before 0.3.0.13, and 0.3.1 before
+ >   0.3.1.9, the replay-cache protection mechanism is ineffective for v2 onion
+ >   services, aka TROVE-2017-009.  An attacker can send many INTRODUCE2 cells
+ >   to trigger this issue.
+
+ > - CVE-2017-8820: In Tor before 0.2.5.16, 0.2.6 through 0.2.8 before
+ >   0.2.8.17, 0.2.9 before 0.2.9.14, 0.3.0 before 0.3.0.13, and 0.3.1 before
+ >   0.3.1.9, remote attackers can cause a denial of service (NULL pointer
+ >   dereference and application crash) against directory authorities via a
+ >   malformed descriptor, aka TROVE-2017-010.
+
+ > - CVE-2017-8821: In Tor before 0.2.5.16, 0.2.6 through 0.2.8 before
+ >   0.2.8.17, 0.2.9 before 0.2.9.14, 0.3.0 before 0.3.0.13, and 0.3.1 before
+ >   0.3.1.9, an attacker can cause a denial of service (application hang) via
+ >   crafted PEM input that signifies a public key requiring a password, which
+ >   triggers an attempt by the OpenSSL library to ask the user for the
+ >   password, aka TROVE-2017-011.
+
+ > - CVE-2017-8822: In Tor before 0.2.5.16, 0.2.6 through 0.2.8 before
+ >   0.2.8.17, 0.2.9 before 0.2.9.14, 0.3.0 before 0.3.0.13, and 0.3.1 before
+ >   0.3.1.9, relays (that have incompletely downloaded descriptors) can pick
+ >   themselves in a circuit path, leading to a degradation of anonymity, aka
+ >   TROVE-2017-012.
+
+ > - CVE-2017-8823: In Tor before 0.2.5.16, 0.2.6 through 0.2.8 before
+ >   0.2.8.17, 0.2.9 before 0.2.9.14, 0.3.0 before 0.3.0.13, and 0.3.1 before
+ >   0.3.1.9, there is a use-after-free in onion service v2 during intro-point
+ >   expiration because the expiring list is mismanaged in certain error cases,
+ >   aka TROVE-2017-013.
+
+ > For more details, see the release notes:
+ > https://lists.torproject.org/pipermail/tor-announce/2017-December/000147.html
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+Committed to 2017.02.x, thanks.
+
 -- 
-2.15.1
+Bye, Peter Korsgaard
