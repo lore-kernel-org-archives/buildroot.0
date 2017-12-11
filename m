@@ -1,45 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 11 Dec 2017 20:00:51 +0100
-Subject: [Buildroot] [git commit] wireguard: bump version
-Message-ID: <20171211185347.5D61582599@busybox.osuosl.org>
+Date: Mon, 11 Dec 2017 19:57:55 +0100
+Subject: [Buildroot] [git commit] libostree: depend on host-bison
+Message-ID: <20171211185347.3B073800B7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6bfa6b2a046775abe90506930fd1a6aa13d02531
+commit: https://git.buildroot.net/buildroot/commit/?id=ce0511a892721b0af4d64115d6b53a00d527fd59
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Various bugfixes, including a compat fix for <= 3.10.
+Fixes:
+http://autobuild.buildroot.net/results/9179b65a5a90d53490d9e109c45341f1104406a3
 
+Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wireguard/wireguard.hash | 4 ++--
- package/wireguard/wireguard.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libostree/libostree.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/wireguard/wireguard.hash b/package/wireguard/wireguard.hash
-index 3749456..3e90603 100644
---- a/package/wireguard/wireguard.hash
-+++ b/package/wireguard/wireguard.hash
-@@ -1,4 +1,4 @@
--# From https://lists.zx2c4.com/pipermail/wireguard/2017-November/001935.html
--sha256 d9347786a9406ac276d86321ca64aadb1f0639cb0582c6e0519c634cf6e81157  WireGuard-0.0.20171111.tar.xz
-+# From https://lists.zx2c4.com/pipermail/wireguard/2017-December/002200.html
-+sha256 57d799d35e92c905e548d00adeb7ed1ead4d6560f084c99e5aae0a87b4eb09e4  WireGuard-0.0.20171211.tar.xz
- # Locally calculated
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/wireguard/wireguard.mk b/package/wireguard/wireguard.mk
-index 2eacb22..5f19cc7 100644
---- a/package/wireguard/wireguard.mk
-+++ b/package/wireguard/wireguard.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/libostree/libostree.mk b/package/libostree/libostree.mk
+index 3ac8278..cddde37 100644
+--- a/package/libostree/libostree.mk
++++ b/package/libostree/libostree.mk
+@@ -10,7 +10,7 @@ LIBOSTREE_SITE = https://github.com/ostreedev/ostree/releases/download/v$(LIBOST
  
--WIREGUARD_VERSION = 0.0.20171111
-+WIREGUARD_VERSION = 0.0.20171211
- WIREGUARD_SITE = https://git.zx2c4.com/WireGuard/snapshot
- WIREGUARD_SOURCE = WireGuard-$(WIREGUARD_VERSION).tar.xz
- WIREGUARD_LICENSE = GPL-2.0
+ LIBOSTREE_LICENSE = LGPL-2.0+
+ LIBOSTREE_LICENSE_FILES = COPYING
+-LIBOSTREE_DEPENDENCIES = e2fsprogs host-pkgconf libfuse libglib2 libgpgme xz
++LIBOSTREE_DEPENDENCIES = e2fsprogs host-bison host-pkgconf libfuse libglib2 libgpgme xz
+ LIBOSTREE_INSTALL_STAGING = YES
+ 
+ LIBOSTREE_CONF_OPTS += \
