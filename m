@@ -1,75 +1,116 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 11 Dec 2017 10:17:22 +0100
-Subject: [Buildroot] [PATCH-2017.02.x] tor: security bump to version 0.2.9.14
-Message-ID: <20171211091722.13814-1-peter@korsgaard.com>
+From: Joel Stanley <joel@jms.id.au>
+Date: Mon, 11 Dec 2017 21:22:30 +1030
+Subject: [Buildroot] [PATCH] pdbg: Bump version
+Message-ID: <20171211105230.11117-1-joel@jms.id.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes the following securoty issues:
+Contains the upstreamed build fix for Blackfin and various other bug
+fixes.
 
-- CVE-2017-8819: In Tor before 0.2.5.16, 0.2.6 through 0.2.8 before
-  0.2.8.17, 0.2.9 before 0.2.9.14, 0.3.0 before 0.3.0.13, and 0.3.1 before
-  0.3.1.9, the replay-cache protection mechanism is ineffective for v2 onion
-  services, aka TROVE-2017-009.  An attacker can send many INTRODUCE2 cells
-  to trigger this issue.
-
-- CVE-2017-8820: In Tor before 0.2.5.16, 0.2.6 through 0.2.8 before
-  0.2.8.17, 0.2.9 before 0.2.9.14, 0.3.0 before 0.3.0.13, and 0.3.1 before
-  0.3.1.9, remote attackers can cause a denial of service (NULL pointer
-  dereference and application crash) against directory authorities via a
-  malformed descriptor, aka TROVE-2017-010.
-
-- CVE-2017-8821: In Tor before 0.2.5.16, 0.2.6 through 0.2.8 before
-  0.2.8.17, 0.2.9 before 0.2.9.14, 0.3.0 before 0.3.0.13, and 0.3.1 before
-  0.3.1.9, an attacker can cause a denial of service (application hang) via
-  crafted PEM input that signifies a public key requiring a password, which
-  triggers an attempt by the OpenSSL library to ask the user for the
-  password, aka TROVE-2017-011.
-
-- CVE-2017-8822: In Tor before 0.2.5.16, 0.2.6 through 0.2.8 before
-  0.2.8.17, 0.2.9 before 0.2.9.14, 0.3.0 before 0.3.0.13, and 0.3.1 before
-  0.3.1.9, relays (that have incompletely downloaded descriptors) can pick
-  themselves in a circuit path, leading to a degradation of anonymity, aka
-  TROVE-2017-012.
-
-- CVE-2017-8823: In Tor before 0.2.5.16, 0.2.6 through 0.2.8 before
-  0.2.8.17, 0.2.9 before 0.2.9.14, 0.3.0 before 0.3.0.13, and 0.3.1 before
-  0.3.1.9, there is a use-after-free in onion service v2 during intro-point
-  expiration because the expiring list is mismanaged in certain error cases,
-  aka TROVE-2017-013.
-
-For more details, see the release notes:
-https://lists.torproject.org/pipermail/tor-announce/2017-December/000147.html
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Joel Stanley <joel@jms.id.au>
 ---
- package/tor/tor.hash | 2 +-
- package/tor/tor.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Thanks again Thomas for your work! I reworked your patch a bit and got
+it applied upstream.
 
-diff --git a/package/tor/tor.hash b/package/tor/tor.hash
-index ba0b47af15..8b5a3958a2 100644
---- a/package/tor/tor.hash
-+++ b/package/tor/tor.hash
+ ...fix-to-build-on-architecture-with-non-emp.patch | 63 ----------------------
+ package/pdbg/pdbg.hash                             |  2 +-
+ package/pdbg/pdbg.mk                               |  2 +-
+ 3 files changed, 2 insertions(+), 65 deletions(-)
+ delete mode 100644 package/pdbg/0001-template.S-fix-to-build-on-architecture-with-non-emp.patch
+
+diff --git a/package/pdbg/0001-template.S-fix-to-build-on-architecture-with-non-emp.patch b/package/pdbg/0001-template.S-fix-to-build-on-architecture-with-non-emp.patch
+deleted file mode 100644
+index 15c0eef61140..000000000000
+--- a/package/pdbg/0001-template.S-fix-to-build-on-architecture-with-non-emp.patch
++++ /dev/null
+@@ -1,63 +0,0 @@
+-From 50ae93273376ede704012030009c29bd58d6a569 Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Date: Sun, 26 Nov 2017 16:22:25 +0100
+-Subject: [PATCH] template.S: fix to build on architecture with non-empty
+- __USER_LABEL_PREFIX__
+-
+-Blackfin has a non-empty __USER_LABEL_PREFIX__, which means that a
+-symbol called "foo" in C must be named "_foo" in assembler.
+-
+-Interestingly, it seems like "$(CC) -xassembler - -c" doesn't pass the
+-input source file through the C preprocessor, so we do this
+-explicitly.
+-
+-Submitted-upstream: https://github.com/open-power/pdbg/pull/26
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+----
+- Makefile.am |  2 +-
+- template.S  | 22 +++++++++++++++-------
+- 2 files changed, 16 insertions(+), 8 deletions(-)
+-
+-diff --git a/Makefile.am b/Makefile.am
+-index 9d34bff..82e0856 100644
+---- a/Makefile.am
+-+++ b/Makefile.am
+-@@ -62,4 +62,4 @@ p9z-fsi.dtb.o: p9z-fsi.dts p9-fsi.dtsi
+- %.dtb.o: %.dts
+- 	dtc -i$(dir $@) -I dts $< -O dtb > $@.tmp
+- 	symbol_prefix=`echo $@ | tr '.-' '_'` ; \
+--	sed "s%SYMBOL_PREFIX%$${symbol_prefix}%g; s%FILENAME%$@.tmp%g" $(top_srcdir)/template.S | $(CC) -xassembler - -c -o $@
+-+	sed "s%SYMBOL_PREFIX%$${symbol_prefix}%g; s%FILENAME%$@.tmp%g" $(top_srcdir)/template.S | $(CPP) - | $(CC) -xassembler - -c -o $@
+-diff --git a/template.S b/template.S
+-index 2e6cbdb..1407a7c 100644
+---- a/template.S
+-+++ b/template.S
+-@@ -1,10 +1,18 @@
+-+#ifdef __USER_LABEL_PREFIX__
+-+#define CONCAT1(a, b) CONCAT2(a, b)
+-+#define CONCAT2(a, b) a ## b
+-+#define SYM(x) CONCAT1 (__USER_LABEL_PREFIX__, x)
+-+#else
+-+#define SYM(x) x
+-+#endif
+-+
+- .section .data
+--_binary_SYMBOL_PREFIX_start:
+-+SYM(_binary_SYMBOL_PREFIX_start):
+- .incbin "FILENAME"
+- .align 4
+--_binary_SYMBOL_PREFIX_end:
+--_binary_SYMBOL_PREFIX_size:
+--	.long	_binary_SYMBOL_PREFIX_end - _binary_SYMBOL_PREFIX_start
+--.globl _binary_SYMBOL_PREFIX_start
+--.globl _binary_SYMBOL_PREFIX_end
+--.globl _binary_SYMBOL_PREFIX_size
+-+SYM(_binary_SYMBOL_PREFIX_end):
+-+SYM(_binary_SYMBOL_PREFIX_size):
+-+	.long	SYM(_binary_SYMBOL_PREFIX_end) - SYM(_binary_SYMBOL_PREFIX_start)
+-+.globl SYM(_binary_SYMBOL_PREFIX_start)
+-+.globl SYM(_binary_SYMBOL_PREFIX_end)
+-+.globl SYM(_binary_SYMBOL_PREFIX_size)
+--- 
+-2.13.6
+-
+diff --git a/package/pdbg/pdbg.hash b/package/pdbg/pdbg.hash
+index 6fef1280847a..39aa33e12ce8 100644
+--- a/package/pdbg/pdbg.hash
++++ b/package/pdbg/pdbg.hash
 @@ -1,2 +1,2 @@
- # Locally computed
--sha256 6e7466625d53812f23c2ad60a873c5855f63f756fde0fc5cbeda8d32cee1086b  tor-0.2.9.12.tar.gz
-+sha256 44d9ddca1479f517b74067fe55e919d8d3643645618d5a1f6a5e033765781979  tor-0.2.9.14.tar.gz
-diff --git a/package/tor/tor.mk b/package/tor/tor.mk
-index 4cc5c48351..f87b10f314 100644
---- a/package/tor/tor.mk
-+++ b/package/tor/tor.mk
+ # Locally calculated
+-sha256 e9143607b0d15693ace9f50b27f931020127a9d605c45f8609f1fe8608be7949  pdbg-527fe54e1c95e031efd3db008c3f4e096cb3ea58.tar.gz
++sha256 2d6174d30b12cb46d24c260ecc0714a757c2cb899be3f5106c148d4c359bd319 pdbg-139ba071c222a5b0c20075f7c2265029ddd59449.tar.gz
+diff --git a/package/pdbg/pdbg.mk b/package/pdbg/pdbg.mk
+index f16a392aa6b1..ba9aa15d026e 100644
+--- a/package/pdbg/pdbg.mk
++++ b/package/pdbg/pdbg.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--TOR_VERSION = 0.2.9.12
-+TOR_VERSION = 0.2.9.14
- TOR_SITE = https://dist.torproject.org
- TOR_LICENSE = BSD-3c
- TOR_LICENSE_FILES = LICENSE
+-PDBG_VERSION = 527fe54e1c95e031efd3db008c3f4e096cb3ea58
++PDBG_VERSION = 139ba071c222a5b0c20075f7c2265029ddd59449
+ PDBG_SITE = $(call github,open-power,pdbg,$(PDBG_VERSION))
+ PDBG_LICENSE = Apache-2.0
+ PDBG_LICENSE_FILES = COPYING
 -- 
-2.11.0
+2.14.1
