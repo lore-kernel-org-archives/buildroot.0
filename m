@@ -1,15 +1,15 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 11 Dec 2017 20:20:42 +0100
-Subject: [Buildroot] [git commit] zynq_zc706: linux: bump to xilinx-v2017.3
- (based on 4.9)
-Message-ID: <20171211191702.6C3F88220B@busybox.osuosl.org>
+Date: Mon, 11 Dec 2017 20:17:24 +0100
+Subject: [Buildroot] [git commit] zynq_microzed: linux: bump to
+ xilinx-v2017.3 (based on 4.9)
+Message-ID: <20171211191702.519B080FE4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1fa982ec075388f15773872180afdea261421502
+commit: https://git.buildroot.net/buildroot/commit/?id=505f63dc09cfa0ae79ffd6ad1c1f130caed1a352
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 [Build-tested only]
@@ -17,13 +17,13 @@ Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 Acked-by: Alistair Francis <alistair.francis@xilinx.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/zynq_zc706_defconfig | 4 ++--
+ configs/zynq_microzed_defconfig | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/configs/zynq_zc706_defconfig b/configs/zynq_zc706_defconfig
-index 86dea63..378d19b 100644
---- a/configs/zynq_zc706_defconfig
-+++ b/configs/zynq_zc706_defconfig
+diff --git a/configs/zynq_microzed_defconfig b/configs/zynq_microzed_defconfig
+index f6e1599..a3c25f9 100644
+--- a/configs/zynq_microzed_defconfig
++++ b/configs/zynq_microzed_defconfig
 @@ -2,12 +2,12 @@ BR2_arm=y
  BR2_cortex_a9=y
  BR2_ARM_ENABLE_NEON=y
