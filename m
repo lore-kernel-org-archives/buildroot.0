@@ -1,56 +1,82 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 12 Dec 2017 12:21:51 +0100
-Subject: [Buildroot] [git commit] Revert "package/cmake: bump version to
- 3.10.0 and add license hash"
-Message-ID: <20171212111538.5AE387FFD8@busybox.osuosl.org>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Tue, 12 Dec 2017 06:30:42 -0500
+Subject: [Buildroot] [PATCH 1/1] janus-gateway: add RTSP streaming
+ support.
+In-Reply-To: <20171205184050.7oifghyqfbrhehdr@tarshish.tkos.co.il>
+References: <20171205131005.31537-1-aduskett@gmail.com>
+ <20171205184050.7oifghyqfbrhehdr@tarshish.tkos.co.il>
+Message-ID: <CAFSsvmogEO-eW655ScQ+j6u6w0JYzZWGaw_-Rn_mK3MZe0BV0g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5b57ae7ad197fd641c233f22d326c846b9ea2204
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Barauch;
 
-This reverts commit 65205c2425bccb7039ca0e2caffb7c64c26805f7, which
-causes too many build failures of host-cmake due to the use by CMake
-of the emplace_hint C++11 method.
+On Tue, Dec 5, 2017 at 1:40 PM, Baruch Siach <baruch@tkos.co.il> wrote:
+> Hi Adam,
+>
+> On Tue, Dec 05, 2017 at 08:10:05AM -0500, Adam Duskett wrote:
+>> The streaming protocol works without libcurl via RTP, but if a user wishes to
+>> stream via RTSP, libcurl must be built first.
+>>
+>> Signed-off-by: Adam Duskett <aduskett@gmail.com>
+>> ---
+>>  package/janus-gateway/Config.in        | 8 +++++++-
+>>  package/janus-gateway/janus-gateway.mk | 4 ++++
+>>  2 files changed, 11 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/package/janus-gateway/Config.in b/package/janus-gateway/Config.in
+>> index 5bd4e9586b..ed68e270d6 100644
+>> --- a/package/janus-gateway/Config.in
+>> +++ b/package/janus-gateway/Config.in
+>> @@ -38,6 +38,12 @@ config  BR2_PACKAGE_JANUS_STREAMING
+>>       # SO_REUSEPORT
+>>       depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_9
+>>
+>> +if BR2_PACKAGE_JANUS_STREAMING
+>> +config BR2_PACKAGE_JANUS_STREAMING_RTSP
+>> +     bool "RTSP streaming"
+>> +     select BR2_PACKAGE_LIBCURL
+>> +endif
+>> +
+>>  comment "streaming plugin needs a toolchain w/ headers >= 3.9"
+>>       depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_9
+>>
+>> @@ -90,7 +96,7 @@ config BR2_PACKAGE_JANUS_WEBSOCKETS
+>>       depends on BR2_USE_MMU
+>>       select BR2_PACKAGE_LIBWEBSOCKETS
+>>
+>> -endif
+>> +endif #BR2_PACKAGE_JANUS_GATEWAY
+>>
+>>  comment "janus-gateway needs a toolchain w/ dynamic library, threads, wchar"
+>>       depends on BR2_USE_MMU
+>> diff --git a/package/janus-gateway/janus-gateway.mk b/package/janus-gateway/janus-gateway.mk
+>> index bf3e590ac5..be31c465f8 100644
+>> --- a/package/janus-gateway/janus-gateway.mk
+>> +++ b/package/janus-gateway/janus-gateway.mk
+>> @@ -58,6 +58,10 @@ else
+>>  JANUS_GATEWAY_CONF_OPTS += --disable-plugin-streaming
+>>  endif
+>>
+>> +ifeq ($(BR2_PACKAGE_JANUS_STREAMING_RTSP),y)
+>> +JANUS_GATEWAY_DEPENDENCIES += libcurl
+>> +endif
+>
+> Is there a way to disable RTSP? If not, RTSP will be enabled whenever libcurl
+> happens to build before janus-gateway, right? So maybe having libcurl as a
+> usual optional dependency would be better.
+>
+> baruch
+>
+There isn't a way to disable RTSP, however, I am not sure the best way
+to go about this.
+I like being able to just select an option and have it select the dependency.
 
-Fixes:
-
-  http://autobuild.buildroot.net/results/90d38169b50c29842ecc1752c2abf66d4c2d9e63/
-
-This new dependency of host-cmake will have to be taken care of in a
-more complete patch.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/cmake/cmake.hash | 5 ++---
- package/cmake/cmake.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 5 deletions(-)
-
-diff --git a/package/cmake/cmake.hash b/package/cmake/cmake.hash
-index b095d72..f138ac7 100644
---- a/package/cmake/cmake.hash
-+++ b/package/cmake/cmake.hash
-@@ -1,3 +1,2 @@
--# From http://www.cmake.org/files/v3.10/cmake-3.10.0-SHA-256.txt
--sha256 b3345c17609ea0f039960ef470aa099de9942135990930a57c14575aae884987  cmake-3.10.0.tar.gz
--sha256 ccf2c6d4468919c8c26a764b9ed8fde349f0d298335524568b346b9bdcf56e1f  Copyright.txt
-+# From http://www.cmake.org/files/v3.8/cmake-3.8.2-SHA-256.txt
-+sha256 da3072794eb4c09f2d782fcee043847b99bb4cf8d4573978d9b2024214d6e92d  cmake-3.8.2.tar.gz
-diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
-index 601bb43..a00691a 100644
---- a/package/cmake/cmake.mk
-+++ b/package/cmake/cmake.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--CMAKE_VERSION_MAJOR = 3.10
--CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).0
-+CMAKE_VERSION_MAJOR = 3.8
-+CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).2
- CMAKE_SITE = https://cmake.org/files/v$(CMAKE_VERSION_MAJOR)
- CMAKE_LICENSE = BSD-3-Clause
- CMAKE_LICENSE_FILES = Copyright.txt
+What would you suggest? Just "if libcurl is selected depend on it" ?
+> --
+>      http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+> =}------------------------------------------------ooO--U--Ooo------------{=
+>    - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
