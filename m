@@ -1,47 +1,29 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Tue, 12 Dec 2017 09:24:01 +0100
-Subject: [Buildroot] [PATCH 9/9] boards/zynq: use genimage to generate a
- bootable SD card image
-In-Reply-To: <87fu8huend.fsf@dell.be.48ers.dk>
-References: <1512855007-1834-1-git-send-email-luca@lucaceresoli.net>
- <1512855007-1834-10-git-send-email-luca@lucaceresoli.net>
- <87fu8huend.fsf@dell.be.48ers.dk>
-Message-ID: <70e3ef4e-2fed-8e38-a542-c3d6ba57e371@lucaceresoli.net>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 12 Dec 2017 09:31:29 +0100
+Subject: [Buildroot] [PATCH] gnupg: add host package
+In-Reply-To: <20171211170429.25644-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Mon, 11 Dec 2017 18:04:29 +0100")
+References: <20171211170429.25644-1-peter@korsgaard.com>
+Message-ID: <877etsuz32.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-On 11/12/2017 22:40, Peter Korsgaard wrote:
->>>>>> "Luca" == Luca Ceresoli <luca@lucaceresoli.net> writes:
-[...]
->  > diff --git a/configs/zynq_microzed_defconfig b/configs/zynq_microzed_defconfig
->  > index c6685a4bc189..98879cada04d 100644
->  > --- a/configs/zynq_microzed_defconfig
->  > +++ b/configs/zynq_microzed_defconfig
->  > @@ -28,3 +28,4 @@ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
->  >  BR2_TARGET_UBOOT_FORMAT_IMG=y
->  >  BR2_TARGET_UBOOT_SPL=y
->  >  BR2_TARGET_UBOOT_SPL_NAME="spl/boot.bin"
->  > +BR2_PACKAGE_HOST_GENIMAGE=y
-> 
-> We also need
-> 
-> BR2_PACKAGE_HOST_DOSFSTOOLS=y
-> BR2_PACKAGE_HOST_MTOOLS=y
-> 
-> For creating / populating the vfat image. Committed with that fixed,
-> thanks.
+ > For E.G. post-build / post-image scripts as it generally cannot be expected
+ > to be available on the build host and/or there are some differences in
+ > behaviour between gnupg 1.x / 2.x.
 
-You're obviously right, sorry.
+ > Provide gnupg 1.x instead of 2.x, as it is simpler to build (less
+ > dependencies) and easier to use in post-build / post-image scripts (E.G. no
+ > gpg-agent that keeps running in the background).
 
-BTW, genimage is becoming quite an official tool in Buildroot. Shouldn't
-it be mentioned in the manual, along with the dosfstools and mtools
-dependencies?
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-Thanks,
+Committed, thanks.
+
 -- 
-Luca
+Bye, Peter Korsgaard
