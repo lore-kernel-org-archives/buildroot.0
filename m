@@ -1,144 +1,122 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 12 Dec 2017 18:54:14 +0100
-Subject: [Buildroot] [PATCH 1/1] package/vlc: security bump to version 2.2.8
-Message-ID: <20171212175414.28267-1-bernd.kuhls@t-online.de>
+From: Mario Lang <mlang@blind.guru>
+Date: Tue, 12 Dec 2017 19:41:28 +0100
+Subject: [Buildroot] [PATCH v2] lynx: new package
+Message-ID: <20171212184128.29536-1-mlang@blind.guru>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Version 2.2.7 fixes CVE-2017-10699
-http://git.videolan.org/?p=vlc/vlc-2.2.git;a=commitdiff;h=0de56d69ff06afceb5b16721ea5965a676b938b9
-
-Removed patches applied upstream:
-0013-codec-avcodec-check-avcodec-visible-sizes.patch
-http://git.videolan.org/?p=vlc/vlc-2.2.git;a=commitdiff;h=6cc73bcad19da2cd2e95671173f2e0d203a57e9b
-
-0014-decoder-check-visible-size-when-creating-buffer.patch
-http://git.videolan.org/?p=vlc/vlc-2.2.git;a=commitdiff;h=a38a85db58c569cc592d9380cc07096757ef3d49
-
-Added all hashes provided by upstream, added license hashes.
-
-Switched _SITE to https.
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Mario Lang <mlang@blind.guru>
 ---
- ...codec-avcodec-check-avcodec-visible-sizes.patch | 33 ----------------------
- ...r-check-visible-size-when-creating-buffer.patch | 33 ----------------------
- package/vlc/vlc.hash                               | 10 +++++--
- package/vlc/vlc.mk                                 |  4 +--
- 4 files changed, 10 insertions(+), 70 deletions(-)
- delete mode 100644 package/vlc/0013-codec-avcodec-check-avcodec-visible-sizes.patch
- delete mode 100644 package/vlc/0014-decoder-check-visible-size-when-creating-buffer.patch
+Changes in v2:
+ * Add optional support for BR2_PACKAGE_NCURSES_WCHAR
+ * Add optional dependency on slang
+ * Add homepage URL to config help
 
-diff --git a/package/vlc/0013-codec-avcodec-check-avcodec-visible-sizes.patch b/package/vlc/0013-codec-avcodec-check-avcodec-visible-sizes.patch
-deleted file mode 100644
-index 41a5e25d38..0000000000
---- a/package/vlc/0013-codec-avcodec-check-avcodec-visible-sizes.patch
-+++ /dev/null
-@@ -1,33 +0,0 @@
--From 6cc73bcad19da2cd2e95671173f2e0d203a57e9b Mon Sep 17 00:00:00 2001
--From: Francois Cartegnie <fcvlcdev@free.fr>
--Date: Thu, 29 Jun 2017 09:45:20 +0200
--Subject: [PATCH] codec: avcodec: check avcodec visible sizes
--
--refs #18467
--
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-----
-- modules/codec/avcodec/video.c | 6 ++++--
-- 1 file changed, 4 insertions(+), 2 deletions(-)
--
--diff --git a/modules/codec/avcodec/video.c b/modules/codec/avcodec/video.c
--index 1bcad21..ce52544 100644
----- a/modules/codec/avcodec/video.c
--+++ b/modules/codec/avcodec/video.c
--@@ -137,9 +137,11 @@ static inline picture_t *ffmpeg_NewPictBuf( decoder_t *p_dec,
--     }
-- 
-- 
---    if( width == 0 || height == 0 || width > 8192 || height > 8192 )
--+    if( width == 0 || height == 0 || width > 8192 || height > 8192 ||
--+        width < p_context->width || height < p_context->height )
--     {
---        msg_Err( p_dec, "Invalid frame size %dx%d.", width, height );
--+        msg_Err( p_dec, "Invalid frame size %dx%d. vsz %dx%d",
--+                 width, height, p_context->width, p_context->height );
--         return NULL; /* invalid display size */
--     }
--     p_dec->fmt_out.video.i_width = width;
---- 
--2.1.4
--
-diff --git a/package/vlc/0014-decoder-check-visible-size-when-creating-buffer.patch b/package/vlc/0014-decoder-check-visible-size-when-creating-buffer.patch
-deleted file mode 100644
-index a16dcf0e97..0000000000
---- a/package/vlc/0014-decoder-check-visible-size-when-creating-buffer.patch
-+++ /dev/null
-@@ -1,33 +0,0 @@
--From a38a85db58c569cc592d9380cc07096757ef3d49 Mon Sep 17 00:00:00 2001
--From: Francois Cartegnie <fcvlcdev@free.fr>
--Date: Thu, 29 Jun 2017 11:09:02 +0200
--Subject: [PATCH] decoder: check visible size when creating buffer
--
--early reject invalid visible size
--mishandled by filters.
--
--refs #18467
--
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-----
-- src/input/decoder.c | 4 +++-
-- 1 file changed, 3 insertions(+), 1 deletion(-)
--
--diff --git a/src/input/decoder.c b/src/input/decoder.c
--index 2c0823f..a216165 100644
----- a/src/input/decoder.c
--+++ b/src/input/decoder.c
--@@ -2060,7 +2060,9 @@ static picture_t *vout_new_buffer( decoder_t *p_dec )
--         vout_thread_t *p_vout;
-- 
--         if( !p_dec->fmt_out.video.i_width ||
---            !p_dec->fmt_out.video.i_height )
--+            !p_dec->fmt_out.video.i_height ||
--+            p_dec->fmt_out.video.i_width < p_dec->fmt_out.video.i_visible_width ||
--+            p_dec->fmt_out.video.i_height < p_dec->fmt_out.video.i_visible_height )
--         {
--             /* Can't create a new vout without display size */
--             return NULL;
---- 
--2.1.4
--
-diff --git a/package/vlc/vlc.hash b/package/vlc/vlc.hash
-index 628dad74d9..02b70ef943 100644
---- a/package/vlc/vlc.hash
-+++ b/package/vlc/vlc.hash
-@@ -1,2 +1,8 @@
--# From http://download.videolan.org/pub/videolan/vlc/2.2.6/vlc-2.2.6.tar.xz.sha256
--sha256 c403d3accd9a400eb2181c958f3e7bc5524fe5738425f4253d42883b425a42a8  vlc-2.2.6.tar.xz
-+# From http://download.videolan.org/pub/videolan/vlc/2.2.8/vlc-2.2.8.tar.xz.sha256
-+sha256 9bf046848fb56d93518881b39099b8288ee005d5ba0ddf705b6f6643b8d562ec vlc-2.2.8.tar.xz
-+# From http://download.videolan.org/pub/videolan/vlc/2.2.8/vlc-2.2.8.tar.xz.sha1
-+sha1 b960ec5bdb9a51da285430fc68962927ccc87187 vlc-2.2.8.tar.xz
-+# From http://download.videolan.org/pub/videolan/vlc/2.2.8/vlc-2.2.8.tar.xz.md5
-+md5 b721fddf65aaf64eeee5629aa9bf7c9e vlc-2.2.8.tar.xz
-+sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-+sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
-diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
-index 4602f92c4b..30520c3072 100644
---- a/package/vlc/vlc.mk
-+++ b/package/vlc/vlc.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
+ DEVELOPERS             |  3 +++
+ package/Config.in      |  1 +
+ package/lynx/Config.in |  8 ++++++++
+ package/lynx/lynx.hash |  3 +++
+ package/lynx/lynx.mk   | 38 ++++++++++++++++++++++++++++++++++++++
+ 5 files changed, 53 insertions(+)
+ create mode 100644 package/lynx/Config.in
+ create mode 100644 package/lynx/lynx.hash
+ create mode 100644 package/lynx/lynx.mk
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 77e3344fa4..63809f1afb 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1040,6 +1040,9 @@ F:	package/polkit/
+ F:	package/sg3_utils/
+ F:	package/udisks/
  
--VLC_VERSION = 2.2.6
--VLC_SITE = http://get.videolan.org/vlc/$(VLC_VERSION)
-+VLC_VERSION = 2.2.8
-+VLC_SITE = https://get.videolan.org/vlc/$(VLC_VERSION)
- VLC_SOURCE = vlc-$(VLC_VERSION).tar.xz
- VLC_LICENSE = GPL-2.0+, LGPL-2.1+
- VLC_LICENSE_FILES = COPYING COPYING.LIB
++N:	Mario Lang <mlang@blind.guru>
++F:	package/lynx/
++
+ N:	Mario Rugiero <mrugiero@gmail.com>
+ F:	package/ratpoison/
+ 
+diff --git a/package/Config.in b/package/Config.in
+index cb2141b8f3..c3ebbfc8c4 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1699,6 +1699,7 @@ menu "Networking applications"
+ 	source "package/linuxptp/Config.in"
+ 	source "package/lldpd/Config.in"
+ 	source "package/lrzsz/Config.in"
++	source "package/lynx/Config.in"
+ 	source "package/macchanger/Config.in"
+ 	source "package/memcached/Config.in"
+ 	source "package/mii-diag/Config.in"
+diff --git a/package/lynx/Config.in b/package/lynx/Config.in
+new file mode 100644
+index 0000000000..4a8674fd6d
+--- /dev/null
++++ b/package/lynx/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_LYNX
++	bool "lynx"
++	select BR2_PACKAGE_NCURSES if !BR2_PACKAGE_SLANG
++	select BR2_PACKAGE_OPENSSL if !BR2_PACKAGE_GNUTLS
++	help
++	  The Text Web-Browser.
++
++	  http://lynx.invisible-island.net/
+diff --git a/package/lynx/lynx.hash b/package/lynx/lynx.hash
+new file mode 100644
+index 0000000000..c39475aa23
+--- /dev/null
++++ b/package/lynx/lynx.hash
+@@ -0,0 +1,3 @@
++# Locally calculated:
++sha256  04318a100b052d079d0018fa371aa28cfb41ab68db3a959f3b75c2170eea1bc8  lynx2.8.9dev.16.tar.bz2
++sha256  8406a30ff3134ec23cf752d1ceda92ddaabbe41b4f2dc07ea3cfa139de12d6d6  COPYING
+diff --git a/package/lynx/lynx.mk b/package/lynx/lynx.mk
+new file mode 100644
+index 0000000000..a95326a14a
+--- /dev/null
++++ b/package/lynx/lynx.mk
+@@ -0,0 +1,38 @@
++################################################################################
++#
++# lynx
++#
++################################################################################
++
++LYNX_VERSION = 2.8.9dev.16
++LYNX_SOURCE = lynx$(LYNX_VERSION).tar.bz2
++LYNX_SITE = ftp://ftp.invisible-island.net/lynx/tarballs
++LYNX_LICENSE = GPL-2.0
++LYNX_LICENSE_FILES = COPYING
++
++LYNX_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
++
++ifeq ($(BR2_PACKAGE_NCURSES),y)
++LYNX_DEPENDENCIES += ncurses
++LYNX_CONF_OPTS += --with-screen=ncurses$(if $(BR2_PACKAGE_NCURSES_WCHAR),w)
++else ifeq ($(BR2_PACKAGE_SLANG),y)
++LYNX_DEPENDENCIES += slang
++LYNX_CONF_OPTS += --with-screen=slang
++endif
++
++ifeq ($(BR2_PACKAGE_OPENSSL),y)
++LYNX_DEPENDENCIES += openssl
++LYNX_CONF_OPTS += --with-ssl
++else ifeq ($(BR2_PACKAGE_GNUTLS),y)
++LYNX_DEPENDENCIES += gnutls
++LYNX_CONF_OPTS += --with-gnutls
++endif
++
++ifeq ($(BR2_PACKAGE_ZLIB),y)
++LYNX_DEPENDENCIES += zlib
++LYNX_CONF_OPTS += --with-zlib
++else
++LYNX_CONF_OPTS += --without-zlib
++endif
++
++$(eval $(autotools-package))
 -- 
-2.11.0
+2.15.0
