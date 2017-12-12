@@ -1,72 +1,46 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 12 Dec 2017 11:14:55 +0100
-Subject: [Buildroot] [git commit branch/2017.08.x] package/turbolua: Fix
- build with gcc7
-Message-ID: <20171212101021.3AD4282BC8@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 12 Dec 2017 11:40:02 +0100
+Subject: [Buildroot] [PATCH 1/1] boot/uboot: add config option for uboot
+ environment padding byte
+In-Reply-To: <CAMbDF3+bn0hyNGLz42r-kXXS+6BL2Wig-ZHxhG7fOFyEhTQS7g@mail.gmail.com>
+References: <1513018028-18256-1-git-send-email-johannes.schmitz1@gmail.com>
+ <20171212062751.3e1eb993@windsurf.png.is.keysight.com>
+ <CAMbDF3+bn0hyNGLz42r-kXXS+6BL2Wig-ZHxhG7fOFyEhTQS7g@mail.gmail.com>
+Message-ID: <20171212114002.6f48877f@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a2493cae0981867879af1c50ffee9ae01322986e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.08.x
+Hello,
 
-gcc7 has -Wimplicit-fallthrough enabled by default. Together with
--Werror in turbolua makefile it gives -Werror=implicit-fallthrough=
-build error.
+On Tue, 12 Dec 2017 10:04:38 +0100, Johannes Schmitz wrote:
 
-Add upstreamable patch [1], which fixes typo in FALLTHROUGH comment,
-so it makes the fallthrough explicit for gcc.
+> I find it definitely useful for debugging. I wouldn't have been able to
+> isolate the issue with the size and CRC without this option because if you
+> want to compare with hexdump you want everything to exactly match to see
+> what's wrong. Without this, the next person might go down the same way like
+> myself. The default of uboot when saving the environment is 0x00 and the
+> default of mkenvimage is 0xFF. My idea is to make it the same to (0x00) to
+> make the developers life easier. My experience is that any of these details
+> takes some amount of your time to sort out so a less confusing default can
+> safe time for everyone. On the other hand people might want to deliberately
+> set it to 0xFF to exactly check the boarders of the env partition on the SD
+> card, especially during development of genimage.cfg. Furthermore it makes
+> you understand quicker what happens during env image generation. If you
+> hide the option from the user/platform developer again makes life harder. I
+> am speaking from the point of view of a buildroot newcomer. Now of course I
+> now what's going on but would that option have been there it would have
+> saved me one afternoon.
 
-[1] https://github.com/kernelsauce/turbo/pull/323
+Hm, ok. I'm still not super convinced, but the code/complexity isn't
+big enough to really argue more than that :)
 
-Fixes:
-http://autobuild.buildroot.net/results/6f107b62f105508044185576b071323e5d73dd83
-http://autobuild.buildroot.net/results/d303929960c667a21181d0bbdab64ba8a8d56a4f
+Thanks!
 
-Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit d1839b7f0e7c6be2e90887b27dee58d9a0441771)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...er-Fix-typo-in-switch-FALLTHROUGH-comment.patch | 31 ++++++++++++++++++++++
- 1 file changed, 31 insertions(+)
-
-diff --git a/package/turbolua/0001-http-parser-Fix-typo-in-switch-FALLTHROUGH-comment.patch b/package/turbolua/0001-http-parser-Fix-typo-in-switch-FALLTHROUGH-comment.patch
-new file mode 100644
-index 0000000..bb27056
---- /dev/null
-+++ b/package/turbolua/0001-http-parser-Fix-typo-in-switch-FALLTHROUGH-comment.patch
-@@ -0,0 +1,31 @@
-+From 570db52d7fd3b4deffe785e60fb362e1496844ee Mon Sep 17 00:00:00 2001
-+From: Marcin Niestroj <m.niestroj@grinn-global.com>
-+Date: Tue, 26 Sep 2017 12:10:53 +0200
-+Subject: [PATCH] http-parser: Fix typo in switch FALLTHROUGH comment
-+
-+This also suppresses -Wimplicit-fallthrough warning, which is enabled
-+in gcc7 by default.
-+
-+PR for upstream: https://github.com/kernelsauce/turbo/pull/323
-+
-+Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
-+---
-+ deps/http-parser/http_parser.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/deps/http-parser/http_parser.c b/deps/http-parser/http_parser.c
-+index 8cf6fb0..2ff1073 100644
-+--- a/deps/http-parser/http_parser.c
-++++ b/deps/http-parser/http_parser.c
-+@@ -2095,7 +2095,7 @@ http_parser_parse_url(
-+       case s_req_server_with_at:
-+         found_at = 1;
-+ 
-+-      /* FALLTROUGH */
-++      /* FALLTHROUGH */
-+       case s_req_server:
-+         uf = UF_HOST;
-+         break;
-+-- 
-+2.14.1
-+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
