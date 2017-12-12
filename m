@@ -1,47 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 12 Dec 2017 06:27:51 +0100
-Subject: [Buildroot] [PATCH 1/1] boot/uboot: add config option for uboot
- environment padding byte
-In-Reply-To: <1513018028-18256-1-git-send-email-johannes.schmitz1@gmail.com>
-References: <1513018028-18256-1-git-send-email-johannes.schmitz1@gmail.com>
-Message-ID: <20171212062751.3e1eb993@windsurf.png.is.keysight.com>
+Date: Tue, 12 Dec 2017 06:47:13 +0100
+Subject: [Buildroot] [git commit] shairport-sync: bump to version 3.1.5
+Message-ID: <20171212053957.E9BDA82A9F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=7781d820f556994aa7c7e231242b2580c830cb20
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 11 Dec 2017 19:47:08 +0100, Johannes Schmitz wrote:
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/shairport-sync/shairport-sync.hash | 2 +-
+ package/shairport-sync/shairport-sync.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
->  config BR2_TARGET_UBOOT_ENVIMAGE_SIZE
->  	string "Size of environment"
->  	help
-> -	  Size of envronment, can be prefixed with 0x for hexadecimal
-> -	  values.
-> +	  Size of environment in bytes, can be prefixed with 0x for
-> +	  hexadecimal values. Needs to match exactly for correct CRC
-
-"Needs to match exactly" with what ?
-
-It needs to match with the size of the environment declared in the
-U-Boot configuration.
-
-> +config BR2_TARGET_UBOOT_ENVIMAGE_PADDING_BYTE
-> +	hex "Padding byte"
-> +	default 0x00
-> +	help
-> +	  The byte used for padding at the end of the environment image.
-
-I'm still not sure what is the point of customizing the padding byte.
-Does someone has a use-case for that ? If not, I'm not sure it makes
-sense to add a Buildroot option for it.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/shairport-sync/shairport-sync.hash b/package/shairport-sync/shairport-sync.hash
+index 08f22a0..e8ebdd4 100644
+--- a/package/shairport-sync/shairport-sync.hash
++++ b/package/shairport-sync/shairport-sync.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  4c5a2ab40ef49896f5b6e59b20df4f621ebce47ee64d8571336f59820ae66379  shairport-sync-3.1.4.tar.gz
++sha256  262808b4ae1a897837384b519ab8736e3189d45f147a31bf8327d313ab6d8e7f  shairport-sync-3.1.5.tar.gz
+diff --git a/package/shairport-sync/shairport-sync.mk b/package/shairport-sync/shairport-sync.mk
+index 63289d4..76b3a00 100644
+--- a/package/shairport-sync/shairport-sync.mk
++++ b/package/shairport-sync/shairport-sync.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SHAIRPORT_SYNC_VERSION = 3.1.4
++SHAIRPORT_SYNC_VERSION = 3.1.5
+ SHAIRPORT_SYNC_SITE = $(call github,mikebrady,shairport-sync,$(SHAIRPORT_SYNC_VERSION))
+ 
+ SHAIRPORT_SYNC_LICENSE = MIT, BSD-3-Clause
