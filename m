@@ -1,37 +1,38 @@
-From: Julien Boibessot <julien.boibessot@free.fr>
-Date: Tue, 12 Dec 2017 10:35:24 +0100
-Subject: [Buildroot] [PATCH] package/linux-tools: fixes build of iio
- with 4.14+ kernels
-In-Reply-To: <20171212073004.6f6d72e3@windsurf.png.is.keysight.com>
-References: <1512733938-29854-1-git-send-email-julien.boibessot@free.fr>
- <20171212073004.6f6d72e3@windsurf.png.is.keysight.com>
-Message-ID: <8efd7427-9096-bf58-0945-09e9fa3847a4@free.fr>
+From: Marcin Niestroj <m.niestroj@grinn-global.com>
+Date: Tue, 12 Dec 2017 09:59:42 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
+ 2017-12-08
+In-Reply-To: <20171209070008.CDCD1209E0@mail.free-electrons.com>
+References: <20171209070008.CDCD1209E0@mail.free-electrons.com>
+Message-ID: <6615b66f-2eec-d2f9-5284-20df852ca049@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 12/12/2017 07:30, Thomas Petazzoni wrote:
+Hi Thomas,
+
+Commit d1839b7f0e7c6be2e90887b27dee58d9a0441771
+("package/turbolua: Fix build with gcc7") already fixes that issue
+on Buildroot master branch.
+
+On 09.12.2017 08:00, Thomas Petazzoni wrote:
 > Hello,
->
-> On Fri,  8 Dec 2017 12:52:18 +0100, julien.boibessot at free.fr wrote:
->> From: Julien BOIBESSOT <julien.boibessot@armadeus.com>
->>
->> Since this commit [1], iio build has been moved to other linux-tools build
->> system. Installation dir is now given by DESTDIR, like for all other linux-tools.
->> I kept INSTALL_DIR env and 'install' target to be compatible with oldest
->> kernels.
->>
->> [1]: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git/commit/tools/iio/Makefile?h=v4.14.4&id=18956cf2d78a8d4a5959e20240f04ce8d5a6c121
->>
->> Signed-off-by: Julien BOIBESSOT <julien.boibessot@armadeus.com>
->> ---
->>  package/linux-tools/linux-tool-iio.mk.in | 2 ++
->>  1 file changed, 2 insertions(+)
-> Applied to master after improving the commit log. Thanks!
+> 
+> This is the list of Buildroot build failures that occured on
+> 2017-12-08, and for which you are a registered architecture developer
+> or package developer. Please help us improving the quality of
+> Buildroot by investigating those build failures and sending patches to
+> fix them. Thanks!
+> 
+> Results for the '2017.08.x' branch
+> ==================================
+> 
+> Build failures related to your packages:
+> 
+>           arm |                turbolua-v2.1.0 | http://autobuild.buildroot.net/results/d042d031544aafa7ce89c74e3e404253b2ee4eb5
+> 
 
-Thanks Thomas, should I send the same for 2017.02 ?
-
-Regards,
-Julien
+-- 
+Marcin Niestroj
