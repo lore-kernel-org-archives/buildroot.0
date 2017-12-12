@@ -1,150 +1,144 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 12 Dec 2017 19:32:06 +0200
-Subject: [Buildroot] [PATCH] wolfssl: new package
-In-Reply-To: <1513098237-18245-1-git-send-email-sergio.prado@e-labworks.com>
-References: <1513098237-18245-1-git-send-email-sergio.prado@e-labworks.com>
-Message-ID: <20171212173206.vablwxvwcpjfrffn@tarshish>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Tue, 12 Dec 2017 18:54:14 +0100
+Subject: [Buildroot] [PATCH 1/1] package/vlc: security bump to version 2.2.8
+Message-ID: <20171212175414.28267-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Sergio,
+Version 2.2.7 fixes CVE-2017-10699
+http://git.videolan.org/?p=vlc/vlc-2.2.git;a=commitdiff;h=0de56d69ff06afceb5b16721ea5965a676b938b9
 
-On Tue, Dec 12, 2017 at 03:03:57PM -0200, Sergio Prado wrote:
-> The wolfSSL embedded SSL library is a lightweight and portable
-> SSL/TLS library.
-> 
-> Tested on Beaglebone Black.
+Removed patches applied upstream:
+0013-codec-avcodec-check-avcodec-visible-sizes.patch
+http://git.videolan.org/?p=vlc/vlc-2.2.git;a=commitdiff;h=6cc73bcad19da2cd2e95671173f2e0d203a57e9b
 
-How have you tested this library?
+0014-decoder-check-visible-size-when-creating-buffer.patch
+http://git.videolan.org/?p=vlc/vlc-2.2.git;a=commitdiff;h=a38a85db58c569cc592d9380cc07096757ef3d49
 
-> Build-tested with test-pkg script.
-> 
-> Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
-> ---
->  DEVELOPERS                   |  1 +
->  package/Config.in            |  1 +
->  package/wolfssl/Config.in    |  9 +++++++++
->  package/wolfssl/wolfssl.hash |  6 ++++++
->  package/wolfssl/wolfssl.mk   | 44 ++++++++++++++++++++++++++++++++++++++++++++
->  5 files changed, 61 insertions(+)
->  create mode 100644 package/wolfssl/Config.in
->  create mode 100644 package/wolfssl/wolfssl.hash
->  create mode 100644 package/wolfssl/wolfssl.mk
-> 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 77e3344fa4dc..54ba8ceb2a64 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -1541,6 +1541,7 @@ F:	package/mongodb/
->  F:	package/stella/
->  F:	package/tunctl/
->  F:	package/ubus/
-> +F:	package/wolfssl/
->  
->  N:	Simon Dawson <spdawson@gmail.com>
->  F:	boot/at91bootstrap3/
-> diff --git a/package/Config.in b/package/Config.in
-> index cb2141b8f3c8..1455ca6ddc1a 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1046,6 +1046,7 @@ menu "Crypto"
->  	source "package/tinydtls/Config.in"
->  	source "package/trousers/Config.in"
->  	source "package/ustream-ssl/Config.in"
-> +	source "package/wolfssl/Config.in"
->  endmenu
->  
->  menu "Database"
-> diff --git a/package/wolfssl/Config.in b/package/wolfssl/Config.in
-> new file mode 100644
-> index 000000000000..3c62db13c57b
-> --- /dev/null
-> +++ b/package/wolfssl/Config.in
-> @@ -0,0 +1,9 @@
-> +config BR2_PACKAGE_WOLFSSL
-> +	bool "wolfssl"
-> +	help
-> +	  The wolfSSL embedded SSL library (formerly CyaSSL) is a
-> +	  lightweight, portable, C-language-based SSL/TLS library
-> +	  targeted at IoT, embedded, and RTOS environments primarily
-> +	  because of its size, speed, and feature set.
-> +
-> +	  https://www.wolfssl.com/
-> diff --git a/package/wolfssl/wolfssl.hash b/package/wolfssl/wolfssl.hash
-> new file mode 100644
-> index 000000000000..26534038f62d
-> --- /dev/null
-> +++ b/package/wolfssl/wolfssl.hash
-> @@ -0,0 +1,6 @@
-> +# Locally computed:
-> +sha256 0e0750705ceb0b42d83e609a1c35c3203734af50a92b15e2706bc06a6e50a439  v3.12.2-stable.tar.gz
-> +
-> +# Hash for license files:
-> +sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-> +sha256 74adaaef40b96c71378b6daa3feb8ccd4a1bfd9b76debf3f3f29cf3a0e86c9a0  LICENSING
-> diff --git a/package/wolfssl/wolfssl.mk b/package/wolfssl/wolfssl.mk
-> new file mode 100644
-> index 000000000000..9f3362bf6a42
-> --- /dev/null
-> +++ b/package/wolfssl/wolfssl.mk
-> @@ -0,0 +1,44 @@
-> +################################################################################
-> +#
-> +# wolfssl
-> +#
-> +################################################################################
-> +
-> +WOLFSSL_VERSION = 3.12.2
-> +WOLFSSL_SITE = https://github.com/wolfSSL/wolfssl/archive
-> +WOLFSSL_SOURCE = v$(WOLFSSL_VERSION)-stable.tar.gz
-> +
-> +WOLFSSL_LICENSE = GPL-2.0
-> +WOLFSSL_LICENSE_FILES = COPYING LICENSING
-> +
-> +WOLFSSL_DEPENDENCIES = host-pkgconf
-> +
-> +WOLFSSL_AUTORECONF = YES
+Added all hashes provided by upstream, added license hashes.
 
-Please add a comment explaining with autoreconf is needed.
+Switched _SITE to https.
 
-> +WOLFSSL_CONF_OPTS += --disable-examples
-> +
-> +ifeq ($(BR2_PACKAGE_NGINX),y)
-> +WOLFSSL_CONF_OPTS += --enable-nginx
-> +else
-> +WOLFSSL_CONF_OPTS += --disable-nginx
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_LIGHTTPD),y)
-> +WOLFSSL_CONF_OPTS += --enable-lighty
-> +else
-> +WOLFSSL_CONF_OPTS += --disable-lighty
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT),y)
-> +WOLFSSL_CONF_OPTS += --enable-wpas --enable-sha512
-> +else
-> +WOLFSSL_CONF_OPTS += --disable-wpas
-> +endif
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ ...codec-avcodec-check-avcodec-visible-sizes.patch | 33 ----------------------
+ ...r-check-visible-size-when-creating-buffer.patch | 33 ----------------------
+ package/vlc/vlc.hash                               | 10 +++++--
+ package/vlc/vlc.mk                                 |  4 +--
+ 4 files changed, 10 insertions(+), 70 deletions(-)
+ delete mode 100644 package/vlc/0013-codec-avcodec-check-avcodec-visible-sizes.patch
+ delete mode 100644 package/vlc/0014-decoder-check-visible-size-when-creating-buffer.patch
 
-This is strange. Usually a package using SSL/TLS library needs to be aware of 
-the library, not the other way around. Can you explain what is the effect of 
-these configure options?
-
-baruch
-
-> +ifeq ($(BR2_ARM_CPU_ARMV8A),y)
-> +WOLFSSL_CONF_OPTS += --enable-armasm
-> +else
-> +WOLFSSL_CONF_OPTS += --disable-armasm
-> +endif
-> +
-> +$(eval $(autotools-package))
-
+diff --git a/package/vlc/0013-codec-avcodec-check-avcodec-visible-sizes.patch b/package/vlc/0013-codec-avcodec-check-avcodec-visible-sizes.patch
+deleted file mode 100644
+index 41a5e25d38..0000000000
+--- a/package/vlc/0013-codec-avcodec-check-avcodec-visible-sizes.patch
++++ /dev/null
+@@ -1,33 +0,0 @@
+-From 6cc73bcad19da2cd2e95671173f2e0d203a57e9b Mon Sep 17 00:00:00 2001
+-From: Francois Cartegnie <fcvlcdev@free.fr>
+-Date: Thu, 29 Jun 2017 09:45:20 +0200
+-Subject: [PATCH] codec: avcodec: check avcodec visible sizes
+-
+-refs #18467
+-
+-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+----
+- modules/codec/avcodec/video.c | 6 ++++--
+- 1 file changed, 4 insertions(+), 2 deletions(-)
+-
+-diff --git a/modules/codec/avcodec/video.c b/modules/codec/avcodec/video.c
+-index 1bcad21..ce52544 100644
+---- a/modules/codec/avcodec/video.c
+-+++ b/modules/codec/avcodec/video.c
+-@@ -137,9 +137,11 @@ static inline picture_t *ffmpeg_NewPictBuf( decoder_t *p_dec,
+-     }
+- 
+- 
+--    if( width == 0 || height == 0 || width > 8192 || height > 8192 )
+-+    if( width == 0 || height == 0 || width > 8192 || height > 8192 ||
+-+        width < p_context->width || height < p_context->height )
+-     {
+--        msg_Err( p_dec, "Invalid frame size %dx%d.", width, height );
+-+        msg_Err( p_dec, "Invalid frame size %dx%d. vsz %dx%d",
+-+                 width, height, p_context->width, p_context->height );
+-         return NULL; /* invalid display size */
+-     }
+-     p_dec->fmt_out.video.i_width = width;
+--- 
+-2.1.4
+-
+diff --git a/package/vlc/0014-decoder-check-visible-size-when-creating-buffer.patch b/package/vlc/0014-decoder-check-visible-size-when-creating-buffer.patch
+deleted file mode 100644
+index a16dcf0e97..0000000000
+--- a/package/vlc/0014-decoder-check-visible-size-when-creating-buffer.patch
++++ /dev/null
+@@ -1,33 +0,0 @@
+-From a38a85db58c569cc592d9380cc07096757ef3d49 Mon Sep 17 00:00:00 2001
+-From: Francois Cartegnie <fcvlcdev@free.fr>
+-Date: Thu, 29 Jun 2017 11:09:02 +0200
+-Subject: [PATCH] decoder: check visible size when creating buffer
+-
+-early reject invalid visible size
+-mishandled by filters.
+-
+-refs #18467
+-
+-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+----
+- src/input/decoder.c | 4 +++-
+- 1 file changed, 3 insertions(+), 1 deletion(-)
+-
+-diff --git a/src/input/decoder.c b/src/input/decoder.c
+-index 2c0823f..a216165 100644
+---- a/src/input/decoder.c
+-+++ b/src/input/decoder.c
+-@@ -2060,7 +2060,9 @@ static picture_t *vout_new_buffer( decoder_t *p_dec )
+-         vout_thread_t *p_vout;
+- 
+-         if( !p_dec->fmt_out.video.i_width ||
+--            !p_dec->fmt_out.video.i_height )
+-+            !p_dec->fmt_out.video.i_height ||
+-+            p_dec->fmt_out.video.i_width < p_dec->fmt_out.video.i_visible_width ||
+-+            p_dec->fmt_out.video.i_height < p_dec->fmt_out.video.i_visible_height )
+-         {
+-             /* Can't create a new vout without display size */
+-             return NULL;
+--- 
+-2.1.4
+-
+diff --git a/package/vlc/vlc.hash b/package/vlc/vlc.hash
+index 628dad74d9..02b70ef943 100644
+--- a/package/vlc/vlc.hash
++++ b/package/vlc/vlc.hash
+@@ -1,2 +1,8 @@
+-# From http://download.videolan.org/pub/videolan/vlc/2.2.6/vlc-2.2.6.tar.xz.sha256
+-sha256 c403d3accd9a400eb2181c958f3e7bc5524fe5738425f4253d42883b425a42a8  vlc-2.2.6.tar.xz
++# From http://download.videolan.org/pub/videolan/vlc/2.2.8/vlc-2.2.8.tar.xz.sha256
++sha256 9bf046848fb56d93518881b39099b8288ee005d5ba0ddf705b6f6643b8d562ec vlc-2.2.8.tar.xz
++# From http://download.videolan.org/pub/videolan/vlc/2.2.8/vlc-2.2.8.tar.xz.sha1
++sha1 b960ec5bdb9a51da285430fc68962927ccc87187 vlc-2.2.8.tar.xz
++# From http://download.videolan.org/pub/videolan/vlc/2.2.8/vlc-2.2.8.tar.xz.md5
++md5 b721fddf65aaf64eeee5629aa9bf7c9e vlc-2.2.8.tar.xz
++sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
++sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
+diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
+index 4602f92c4b..30520c3072 100644
+--- a/package/vlc/vlc.mk
++++ b/package/vlc/vlc.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-VLC_VERSION = 2.2.6
+-VLC_SITE = http://get.videolan.org/vlc/$(VLC_VERSION)
++VLC_VERSION = 2.2.8
++VLC_SITE = https://get.videolan.org/vlc/$(VLC_VERSION)
+ VLC_SOURCE = vlc-$(VLC_VERSION).tar.xz
+ VLC_LICENSE = GPL-2.0+, LGPL-2.1+
+ VLC_LICENSE_FILES = COPYING COPYING.LIB
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+2.11.0
