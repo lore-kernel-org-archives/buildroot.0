@@ -1,64 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 12 Dec 2017 07:10:05 +0100
-Subject: [Buildroot] [PATCH] lynx: new package
-In-Reply-To: <20171210174901.GB9766@momiji>
-References: <20171210143404.29210-1-mlang@blind.guru>
- <20171210174901.GB9766@momiji>
-Message-ID: <20171212071005.2acc987b@windsurf.png.is.keysight.com>
+Date: Tue, 12 Dec 2017 07:12:38 +0100
+Subject: [Buildroot] [git commit] qt5charts: fix qt5base widgets/gui
+ selection
+Message-ID: <20171212060519.2E44182838@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=4b09fe60d9ca812b75f62b090853258fc5924ba9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 10 Dec 2017 17:49:01 +0200, Adrian Perez de Castro wrote:
+Selection of BR2_PACKAGE_QT5BASE_WIDGETS needs BR2_PACKAGE_QT5BASE_GUI too.
 
-> > +	select BR2_PACKAGE_NCURSES
-> > +	select BR2_PACKAGE_OPENSSL if !BR2_PACKAGE_GNUTLS
-> > +	help
-> > +	  Text mode web browser.
-> > +  
-> 
-> You could add one additional line in the "help" section with the project
-> URL (http://lynx.browser.org/)
+Fixes qt5base configure failure ([1]):
 
-Indeed.
+  ERROR: Feature 'widgets' was enabled, but the pre-condition 'features.gui' failed.
+[1] http://autobuild.buildroot.net/results/69c4385b2fd484d16f749b4cde6967f5cabea8b2
 
+and buildroot warning:
 
-> > +LYNX_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES) ncurses
-> > +LYNX_CONF_OPTS = --with-screen=ncurses --with-curses-dir=$(TARGET_DIR)/usr  
+  warning: (... && BR2_PACKAGE_QT5CHARTS && ...) selects BR2_PACKAGE_QT5BASE_WIDGETS
+  which has unmet direct dependencies (BR2_PACKAGE_QT5 && BR2_PACKAGE_QT5BASE && BR2_PACKAGE_QT5BASE_GUI)
 
-What is the curses-dir used for? It doesn't seem correct to point to
-$(TARGET_DIR)/usr:
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Acked-by: S??bastien Szymanski <sebastien.szymanski@armadeus.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/qt5/qt5charts/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
- - If it's used at build time, then you should use $(STAGING_DIR)/usr
-
- - If it's used at run time, then it's wrong, because $(TARGET_DIR)/usr
-   doesn't exist at runtime.
-
-
-> It is also possible to use "--with-screen=ncursesw", and AFAIU it should be
-> preferred when ncurses is being built with wide-character support (that is:
-> BR2_PACKAGE_NCURSES_WCHAR=y).
-> 
-> Lynx also supports being built with Slang instead of ncurses. There is a
-> "slang" package in Buildroot: You might want to consider doing a follow-up
-> patch which chooses slang when ncurses is not enabled (and slang is). I don't
-> see this is very important because most builds will have ncurses anyway, but
-> it could be a nice touch :-)
-
-If slang can be used as an alternative to ncurses, it would be indeed
-good to support that, like the OpenSSL/GnuTLS logic that Mario has
-already added.
-
-Mario, could you rework your patch according to Adrian's comments?
-
-Thanks a lot!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/qt5/qt5charts/Config.in b/package/qt5/qt5charts/Config.in
+index 993f4db..0967f6a 100644
+--- a/package/qt5/qt5charts/Config.in
++++ b/package/qt5/qt5charts/Config.in
+@@ -4,6 +4,7 @@ comment "qt5charts needs at least qt-5.7"
+ config BR2_PACKAGE_QT5CHARTS
+ 	bool "qt5charts"
+ 	select BR2_PACKAGE_QT5BASE
++	select BR2_PACKAGE_QT5BASE_GUI
+ 	select BR2_PACKAGE_QT5BASE_WIDGETS
+ 	depends on BR2_PACKAGE_QT5_VERSION_LATEST
+ 	help
