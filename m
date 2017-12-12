@@ -1,45 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 12 Dec 2017 07:29:34 +0100
-Subject: [Buildroot] [git commit] package/linux-tools: fixes build of iio
+Date: Tue, 12 Dec 2017 07:30:04 +0100
+Subject: [Buildroot] [PATCH] package/linux-tools: fixes build of iio
  with 4.14+ kernels
-Message-ID: <20171212062227.698368110C@busybox.osuosl.org>
+In-Reply-To: <1512733938-29854-1-git-send-email-julien.boibessot@free.fr>
+References: <1512733938-29854-1-git-send-email-julien.boibessot@free.fr>
+Message-ID: <20171212073004.6f6d72e3@windsurf.png.is.keysight.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e47741d1a349653c68c37842865f870604fe0c47
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Since Linux kernel commit [1], the build of the iio tool has been
-changed to use the common Linux tools build system. The installation
-directory is now given by DESTDIR, like for all other Linux tools.
+On Fri,  8 Dec 2017 12:52:18 +0100, julien.boibessot at free.fr wrote:
+> From: Julien BOIBESSOT <julien.boibessot@armadeus.com>
+> 
+> Since this commit [1], iio build has been moved to other linux-tools build
+> system. Installation dir is now given by DESTDIR, like for all other linux-tools.
+> I kept INSTALL_DIR env and 'install' target to be compatible with oldest
+> kernels.
+> 
+> [1]: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git/commit/tools/iio/Makefile?h=v4.14.4&id=18956cf2d78a8d4a5959e20240f04ce8d5a6c121
+> 
+> Signed-off-by: Julien BOIBESSOT <julien.boibessot@armadeus.com>
+> ---
+>  package/linux-tools/linux-tool-iio.mk.in | 2 ++
+>  1 file changed, 2 insertions(+)
 
-We keep the INSTALL_DIR environment in the 'install' target to be
-compatible with kernels older than 4.14.
+Applied to master after improving the commit log. Thanks!
 
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=18956cf2d78a8d4a5959e20240f04ce8d5a6c121
-
-Signed-off-by: Julien BOIBESSOT <julien.boibessot@armadeus.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/linux-tools/linux-tool-iio.mk.in | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/package/linux-tools/linux-tool-iio.mk.in b/package/linux-tools/linux-tool-iio.mk.in
-index 60d6249..a8cc89e 100644
---- a/package/linux-tools/linux-tool-iio.mk.in
-+++ b/package/linux-tools/linux-tool-iio.mk.in
-@@ -19,9 +19,11 @@ define IIO_BUILD_CMDS
- 		$(IIO_MAKE_OPTS)
- endef
- 
-+# DESTDIR used since kernel version 4.14
- define IIO_INSTALL_TARGET_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) -C $(LINUX_DIR)/tools/iio \
- 		$(IIO_MAKE_OPTS) \
- 		INSTALL_ROOT=$(TARGET_DIR) \
-+		DESTDIR=$(TARGET_DIR) \
- 		install
- endef
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
