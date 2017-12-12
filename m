@@ -1,52 +1,75 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 12 Dec 2017 21:51:34 +0200
-Subject: [Buildroot] [PATCH 1/2] dhcp: bump to version 4.3.6
-Message-ID: <b408b98eeb4a9479b974d3d98e84b5d1f279c5b2.1513108295.git.baruch@tkos.co.il>
+From: Sergio Prado <sergio.prado@e-labworks.com>
+Date: Tue, 12 Dec 2017 17:58:18 -0200
+Subject: [Buildroot] [PATCH] wolfssl: new package
+In-Reply-To: <20171212173206.vablwxvwcpjfrffn@tarshish>
+References: <1513098237-18245-1-git-send-email-sergio.prado@e-labworks.com>
+ <20171212173206.vablwxvwcpjfrffn@tarshish>
+Message-ID: <CANu7NGt3er0OfSdH-ujY6111fdywdixTpgVRTq7C79HzZXCWvw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Renumber the patch.
+Hi Baruch,
 
-Add license hash.
+> On Tue, Dec 12, 2017 at 03:03:57PM -0200, Sergio Prado wrote:
+> > The wolfSSL embedded SSL library is a lightweight and portable
+> > SSL/TLS library.
+> >
+> > Tested on Beaglebone Black.
+>
+> How have you tested this library?
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- ...{0002-bind-cross-compile.patch => 0001-bind-cross-compile.patch} | 0
- package/dhcp/dhcp.hash                                              | 6 ++++--
- package/dhcp/dhcp.mk                                                | 2 +-
- 3 files changed, 5 insertions(+), 3 deletions(-)
- rename package/dhcp/{0002-bind-cross-compile.patch => 0001-bind-cross-compile.patch} (100%)
+I have used a tool called testsuite that comes with wolfssl source code
+inside the testsuite/ directory. To build it, you have to
+pass --enable-examples in the configure, and then manually copy the binary
+to the rootfs. Also, to use this tool, you will probably need to copy the
+certs/* directory to the rootfs.
 
-diff --git a/package/dhcp/0002-bind-cross-compile.patch b/package/dhcp/0001-bind-cross-compile.patch
-similarity index 100%
-rename from package/dhcp/0002-bind-cross-compile.patch
-rename to package/dhcp/0001-bind-cross-compile.patch
-diff --git a/package/dhcp/dhcp.hash b/package/dhcp/dhcp.hash
-index 7898aa45d3b7..ce5f995a55bb 100644
---- a/package/dhcp/dhcp.hash
-+++ b/package/dhcp/dhcp.hash
-@@ -1,2 +1,4 @@
--# Verified from https://ftp.isc.org/isc/dhcp/4.3.5/dhcp-4.3.5.tar.gz.sha256.asc
--sha256 eb95936bf15d2393c55dd505bc527d1d4408289cec5a9fa8abb99f7577e7f954  dhcp-4.3.5.tar.gz
-+# Verified from https://ftp.isc.org/isc/dhcp/4.3.6/dhcp-4.3.6.tar.gz.sha256.asc
-+sha256 a41eaf6364f1377fe065d35671d9cf82bbbc8f21207819b2b9f33f652aec6f1b  dhcp-4.3.6.tar.gz
-+# Locally calculated
-+sha256 dd7ae2201c0c11c3c1e2510d731c67b2f4bc8ba735707d7348ddd65f7b598562  LICENSE
-diff --git a/package/dhcp/dhcp.mk b/package/dhcp/dhcp.mk
-index 45cae087aae0..4e1b24b7001c 100644
---- a/package/dhcp/dhcp.mk
-+++ b/package/dhcp/dhcp.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DHCP_VERSION = 4.3.5
-+DHCP_VERSION = 4.3.6
- DHCP_SITE = http://ftp.isc.org/isc/dhcp/$(DHCP_VERSION)
- DHCP_INSTALL_STAGING = YES
- DHCP_LICENSE = ISC
--- 
-2.15.1
+> > +WOLFSSL_AUTORECONF = YES
+>
+> Please add a comment explaining with autoreconf is needed.
+
+OK, I will.
+
+> > +WOLFSSL_CONF_OPTS += --disable-examples
+> > +
+> > +ifeq ($(BR2_PACKAGE_NGINX),y)
+> > +WOLFSSL_CONF_OPTS += --enable-nginx
+> > +else
+> > +WOLFSSL_CONF_OPTS += --disable-nginx
+> > +endif
+> > +
+> > +ifeq ($(BR2_PACKAGE_LIGHTTPD),y)
+> > +WOLFSSL_CONF_OPTS += --enable-lighty
+> > +else
+> > +WOLFSSL_CONF_OPTS += --disable-lighty
+> > +endif
+> > +
+> > +ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT),y)
+> > +WOLFSSL_CONF_OPTS += --enable-wpas --enable-sha512
+> > +else
+> > +WOLFSSL_CONF_OPTS += --disable-wpas
+> > +endif
+>
+> This is strange. Usually a package using SSL/TLS library needs to be
+aware of
+> the library, not the other way around. Can you explain what is the effect
+of
+> these configure options?
+
+It depends on the option, but in general enables some extra library
+features that could be used by the specific application.
+
+For example, if you pass --enable-nginx, it will define OPENSSL_EXTRA that
+will enable the wolfSSL OpenSSL compatibility layer to ease porting wolfSSL
+into existing applications which had been designed to work with OpenSSL.
+
+Best regards,
+
+Sergio Prado
+Embedded Labworks
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20171212/898aaffc/attachment.html>
