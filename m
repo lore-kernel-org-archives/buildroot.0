@@ -1,29 +1,46 @@
-From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Wed, 13 Dec 2017 00:13:24 +0200
-Subject: [Buildroot] [PATCH 1/1] webkitgtk: Add license hashes
-Message-ID: <20171212221324.8265-1-aperez@igalia.com>
+From: Sam Voss <sam.voss@rockwellcollins.com>
+Date: Tue, 12 Dec 2017 16:19:38 -0600
+Subject: [Buildroot] [PATCH v3] package/strongswan: Install libraries to
+ /usr/lib
+Message-ID: <1513117178-10061-1-git-send-email-sam.voss@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
----
- package/webkitgtk/webkitgtk.hash | 4 ++++
- 1 file changed, 4 insertions(+)
+Install strongswan ipsec libraries into /usr/lib instead of
+/usr/lib/ipsec to place them in preferred library common location.
 
-diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
-index 669bb1cc62..9e207c541b 100644
---- a/package/webkitgtk/webkitgtk.hash
-+++ b/package/webkitgtk/webkitgtk.hash
-@@ -2,3 +2,7 @@
- md5 264a22d7467deae606e42b6eb5dd65af webkitgtk-2.18.3.tar.xz
- sha1 164cad34281ef597a3d4ad214e8037c3ddef4d17 webkitgtk-2.18.3.tar.xz
- sha256 e15420e1616a6f70f321541d467af5ca285bff66b1e0fa68a01df3ccf1b18f9e webkitgtk-2.18.3.tar.xz
-+
-+# Hashes for license files:
-+sha256 0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4 Source/WebCore/LICENSE-APPLE
-+sha256 f2b3bd09663381deb99721109d22b47af1213bb43007a8b56a06c6375c8050ce Source/WebCore/LICENSE-LGPL-2.1
+Signed-off-by: Sam Voss <sam.voss@rockwellcollins.com>
+
+--
+
+v2->v3
+ - Update description to not include RPATH issue as it could not be
+    reproduced.
+v1->v2
+ - Specify plugindir and imcvdir to keep default values to avoid them
+    moving when ipseclibdir changes.
+---
+ package/strongswan/strongswan.mk | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/package/strongswan/strongswan.mk b/package/strongswan/strongswan.mk
+index 1070eea..9fccd99 100644
+--- a/package/strongswan/strongswan.mk
++++ b/package/strongswan/strongswan.mk
+@@ -36,7 +36,10 @@ STRONGSWAN_CONF_OPTS += \
+ 	--enable-scepclient=$(if $(BR2_PACKAGE_STRONGSWAN_SCEP),yes,no) \
+ 	--enable-scripts=$(if $(BR2_PACKAGE_STRONGSWAN_SCRIPTS),yes,no) \
+ 	--enable-vici=$(if $(BR2_PACKAGE_STRONGSWAN_VICI),yes,no) \
+-	--enable-swanctl=$(if $(BR2_PACKAGE_STRONGSWAN_VICI),yes,no)
++	--enable-swanctl=$(if $(BR2_PACKAGE_STRONGSWAN_VICI),yes,no) \
++	--with-ipseclibdir=/usr/lib \
++	--with-plugindir=/usr/lib/ipsec/plugins \
++	--with-imcvdir=/usr/lib/ipsec/imcvs
+ 
+ ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+ STRONGSWAN_CONF_ENV += LIBS='-latomic'
 -- 
-2.15.1
+1.9.1
