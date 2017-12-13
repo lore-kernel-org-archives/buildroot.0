@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 13 Dec 2017 08:10:40 +0100
-Subject: [Buildroot] [PATCH 00/11] Switch SITE to https for python
- packages
-In-Reply-To: <20171213053310.17578-1-bernd.kuhls@t-online.de>
-References: <20171213053310.17578-1-bernd.kuhls@t-online.de>
-Message-ID: <20171213081040.0908ce23@windsurf.png.is.keysight.com>
+Date: Wed, 13 Dec 2017 08:18:37 +0100
+Subject: [Buildroot] [PATCH 1/1] package/ffmpeg: bump version to 3.4.1
+In-Reply-To: <20171212171702.3287-1-bernd.kuhls@t-online.de>
+References: <20171212171702.3287-1-bernd.kuhls@t-online.de>
+Message-ID: <20171213081837.7f98c06a@windsurf.png.is.keysight.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,22 +12,12 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 13 Dec 2017 06:32:59 +0100, Bernd Kuhls wrote:
+On Tue, 12 Dec 2017 18:17:02 +0100, Bernd Kuhls wrote:
 
-> Bernd Kuhls (11):
->   package/python-keyring: switch SITE to https
->   package/python-characteristic: switch SITE to https
->   package/python-cheetah: switch SITE to https
->   package/python-ipaddr: switch SITE to https
->   package/python-pyasn-modules: switch SITE to https
->   package/python-pynacl: switch SITE to https
->   package/python-pytrie: switch SITE to https
->   package/python-shutilwhich: switch SITE to https
->   package/python-ujson: switch SITE to https
->   package/python-versiontools: switch SITE to https
->   package/python-wsaccel:switch SITE to https
+> -FFMPEG_VERSION = 3.4
+> +FFMPEG_VERSION = 3.4.1
 
-Thanks, all applied.
+This doesn't apply on master, we have 3.3.5 in master.
 
 Best regards,
 
