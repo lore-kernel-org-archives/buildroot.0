@@ -1,38 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 13 Dec 2017 08:07:43 +0100
-Subject: [Buildroot] [git commit] DEVELOPERS: re-assign libiio to Paul
- Cercueil's personal address
-Message-ID: <20171213070130.3A43C8104F@busybox.osuosl.org>
+Date: Wed, 13 Dec 2017 08:09:31 +0100
+Subject: [Buildroot] [git commit] package/python-keyring: switch SITE to
+ https
+Message-ID: <20171213070253.3E1E382BDC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cb6fbc86e8aa89f340887d63918d6d52c94d1de5
+commit: https://git.buildroot.net/buildroot/commit/?id=18529a4f29aa8c204fb54510af9cda9e9b992f9c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Paul Cercueil's address @analog.com is bouncing, so let's use his
-personal e-mail address instead for the libiio package.
+Fixes
+http://autobuild.buildroot.net/results/f73/f7322f19303daa3d403f2c0f13379d947431300d/
 
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- DEVELOPERS | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ package/python-keyring/python-keyring.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 77e3344..da38e2e 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1278,10 +1278,8 @@ F:	package/google-breakpad/
- N:	Patrick Gerber <kpa_info@yahoo.fr>
- F:	package/yavta/
+diff --git a/package/python-keyring/python-keyring.mk b/package/python-keyring/python-keyring.mk
+index ef8b8af..c1ac15f 100644
+--- a/package/python-keyring/python-keyring.mk
++++ b/package/python-keyring/python-keyring.mk
+@@ -6,7 +6,7 @@
  
--N:	Paul Cercueil <paul.cercueil@analog.com>
--F:	package/libiio/
--
- N:	Paul Cercueil <paul@crapouillou.net>
-+F:	package/libiio/
- F:	package/lightning/
+ PYTHON_KEYRING_VERSION = 3.0.5
+ PYTHON_KEYRING_SOURCE = keyring-$(PYTHON_KEYRING_VERSION).zip
+-PYTHON_KEYRING_SITE = http://pypi.python.org/packages/source/k/keyring
++PYTHON_KEYRING_SITE = https://pypi.python.org/packages/source/k/keyring
+ PYTHON_KEYRING_SETUP_TYPE = setuptools
+ PYTHON_KEYRING_LICENSE = python software foundation license
  
- N:	Pedro Aguilar <paguilar@paguilar.org>
