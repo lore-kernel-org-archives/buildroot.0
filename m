@@ -1,51 +1,33 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 13 Dec 2017 06:32:59 +0100
-Subject: [Buildroot] [PATCH 00/11] Switch SITE to https for python packages
-Message-ID: <20171213053310.17578-1-bernd.kuhls@t-online.de>
+Date: Wed, 13 Dec 2017 06:33:05 +0100
+Subject: [Buildroot] [PATCH 06/11] package/python-pynacl: switch SITE to
+ https
+In-Reply-To: <20171213053310.17578-1-bernd.kuhls@t-online.de>
+References: <20171213053310.17578-1-bernd.kuhls@t-online.de>
+Message-ID: <20171213053310.17578-7-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/python-pynacl/python-pynacl.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-while fixing
-http://autobuild.buildroot.net/results/f73/f7322f19303daa3d403f2c0f13379d947431300d/
-I noticed that more packages are using http://pypi.python.org.
-This series switches all of them to https://
-
-The initial version of scanpypi used https://
-https://git.buildroot.net/buildroot/commit/support/scripts/scanpypi?id=1008ac4406a5544ec87985db880e68377031bca9
-
-Regards, Bernd
-
-
-Bernd Kuhls (11):
-  package/python-keyring: switch SITE to https
-  package/python-characteristic: switch SITE to https
-  package/python-cheetah: switch SITE to https
-  package/python-ipaddr: switch SITE to https
-  package/python-pyasn-modules: switch SITE to https
-  package/python-pynacl: switch SITE to https
-  package/python-pytrie: switch SITE to https
-  package/python-shutilwhich: switch SITE to https
-  package/python-ujson: switch SITE to https
-  package/python-versiontools: switch SITE to https
-  package/python-wsaccel:switch SITE to https
-
- package/python-characteristic/python-characteristic.mk | 2 +-
- package/python-cheetah/python-cheetah.mk               | 2 +-
- package/python-ipaddr/python-ipaddr.mk                 | 2 +-
- package/python-keyring/python-keyring.mk               | 2 +-
- package/python-pyasn-modules/python-pyasn-modules.mk   | 2 +-
- package/python-pynacl/python-pynacl.mk                 | 2 +-
- package/python-pytrie/python-pytrie.mk                 | 2 +-
- package/python-shutilwhich/python-shutilwhich.mk       | 2 +-
- package/python-ujson/python-ujson.mk                   | 2 +-
- package/python-versiontools/python-versiontools.mk     | 2 +-
- package/python-wsaccel/python-wsaccel.mk               | 2 +-
- 11 files changed, 11 insertions(+), 11 deletions(-)
-
+diff --git a/package/python-pynacl/python-pynacl.mk b/package/python-pynacl/python-pynacl.mk
+index e1769b8f70..469ddda474 100644
+--- a/package/python-pynacl/python-pynacl.mk
++++ b/package/python-pynacl/python-pynacl.mk
+@@ -6,7 +6,7 @@
+ 
+ PYTHON_PYNACL_VERSION = 1.0.1
+ PYTHON_PYNACL_SOURCE = PyNaCl-$(PYTHON_PYNACL_VERSION).tar.gz
+-PYTHON_PYNACL_SITE = http://pypi.python.org/packages/source/P/PyNaCl
++PYTHON_PYNACL_SITE = https://pypi.python.org/packages/source/P/PyNaCl
+ PYTHON_PYNACL_LICENSE = Apache-2.0
+ PYTHON_PYNACL_LICENSE_FILES = LICENSE
+ PYTHON_PYNACL_SETUP_TYPE = setuptools
 -- 
 2.11.0
