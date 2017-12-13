@@ -1,35 +1,79 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 13 Dec 2017 20:39:24 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2017-12-10
-In-Reply-To: <20171211070006.B3DAC206E8@mail.free-electrons.com>
-References: <20171211070006.B3DAC206E8@mail.free-electrons.com>
-Message-ID: <20171213193924.GC7364@scaer>
+From: Johannes Schmitz <johannes.schmitz1@gmail.com>
+Date: Wed, 13 Dec 2017 20:57:43 +0100
+Subject: [Buildroot] [PATCH 1/1] boot/uboot: add config option for uboot
+ environment padding byte
+In-Reply-To: <20171213182332.GB7364@scaer>
+References: <1513018028-18256-1-git-send-email-johannes.schmitz1@gmail.com>
+ <20171212062751.3e1eb993@windsurf.png.is.keysight.com>
+ <20171213182332.GB7364@scaer>
+Message-ID: <CAMbDF3J902v+TZc2QftgzaU6UVRF2ipwxkySvs5+ojf2XwkR7A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+I slightly changed the help text in the last version of the patch. It seems
+to actually work with other padding bytes if the size is correct. The
+problem was a combination of those two things.
+It's really hard to compare with hexdump if not all the bytes are exactly
+identical. So setting the padding byte to the same value as uboot save
+command uses helped me to finally debug and understand the problem.
 
-On 2017-12-11 08:00 +0100, Thomas Petazzoni spake thusly:
->          arc |                      nut-2.7.4 | NOK | http://autobuild.buildroot.net/results/5231ff39a0839ec5e1962662004214d4b0773068 |     
+There was another suggestion to slightly extend the help text regarding the
+size a bit which I yet have to implement.
 
-I've tried to reproduce this a few times, and I was not able to. It looks
-like a parallel build issue (again).
+Regards
+Johannes
 
-I'll try to see if I can fix that upstream, but I have little hope,
-given that the Makefile provided by upstream already states that it is
-not correct... :-/
+
+Am 13.12.2017 7:23 nachm. schrieb "Yann E. MORIN" <yann.morin.1998@free.fr>:
+
+Thomas, Johannes, All,
+
+On 2017-12-12 06:27 +0100, Thomas Petazzoni spake thusly:
+> On Mon, 11 Dec 2017 19:47:08 +0100, Johannes Schmitz wrote:
+[--SNIP--]
+> > +config BR2_TARGET_UBOOT_ENVIMAGE_PADDING_BYTE
+> > +   hex "Padding byte"
+> > +   default 0x00
+> > +   help
+> > +     The byte used for padding at the end of the environment image.
+>
+> I'm still not sure what is the point of customizing the padding byte.
+> Does someone has a use-case for that ? If not, I'm not sure it makes
+> sense to add a Buildroot option for it.
+
+As far as I understand, this is because the U-Boot on Johannes' board
+would expect the padding byte to be 0x00 when the default for mkenvimage
+is 0xFF.
+
+I have no idea why U-Boot expects 0x00 in Johannes' case, though. The
+only thing I can think of is that the 'default' byte value on flash
+after a page-erase depends on the technology: for NOR, the value after
+erase ix 0x00, while for NAND, it is 0xFF. So maybe that's the reason...
+
+But any case, as you said in a further reply, adding that new option
+does not add much complexity.
+
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+--
+.-----------------.--------------------.------------------.-
+-------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics'
+conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___
+   |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is
+no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v
+ conspiracy.  |
+'------------------------------^-------^------------------^-
+-------------------'
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20171213/7e8dd683/attachment.html>
