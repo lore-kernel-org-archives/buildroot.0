@@ -1,79 +1,46 @@
-From: Johannes Schmitz <johannes.schmitz1@gmail.com>
-Date: Wed, 13 Dec 2017 20:57:43 +0100
-Subject: [Buildroot] [PATCH 1/1] boot/uboot: add config option for uboot
- environment padding byte
-In-Reply-To: <20171213182332.GB7364@scaer>
-References: <1513018028-18256-1-git-send-email-johannes.schmitz1@gmail.com>
- <20171212062751.3e1eb993@windsurf.png.is.keysight.com>
- <20171213182332.GB7364@scaer>
-Message-ID: <CAMbDF3J902v+TZc2QftgzaU6UVRF2ipwxkySvs5+ojf2XwkR7A@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 13 Dec 2017 22:02:14 +0200
+Subject: [Buildroot] [PATCH] gnupg2: bump to version 2.2.3
+Message-ID: <a81aa96be07d3bd48bf1d8f34b0dcc91a1cd32ba.1513195334.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I slightly changed the help text in the last version of the patch. It seems
-to actually work with other padding bytes if the size is correct. The
-problem was a combination of those two things.
-It's really hard to compare with hexdump if not all the bytes are exactly
-identical. So setting the padding byte to the same value as uboot save
-command uses helped me to finally debug and understand the problem.
+Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/gnupg2/gnupg2.hash | 8 ++++----
+ package/gnupg2/gnupg2.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-There was another suggestion to slightly extend the help text regarding the
-size a bit which I yet have to implement.
-
-Regards
-Johannes
-
-
-Am 13.12.2017 7:23 nachm. schrieb "Yann E. MORIN" <yann.morin.1998@free.fr>:
-
-Thomas, Johannes, All,
-
-On 2017-12-12 06:27 +0100, Thomas Petazzoni spake thusly:
-> On Mon, 11 Dec 2017 19:47:08 +0100, Johannes Schmitz wrote:
-[--SNIP--]
-> > +config BR2_TARGET_UBOOT_ENVIMAGE_PADDING_BYTE
-> > +   hex "Padding byte"
-> > +   default 0x00
-> > +   help
-> > +     The byte used for padding at the end of the environment image.
->
-> I'm still not sure what is the point of customizing the padding byte.
-> Does someone has a use-case for that ? If not, I'm not sure it makes
-> sense to add a Buildroot option for it.
-
-As far as I understand, this is because the U-Boot on Johannes' board
-would expect the padding byte to be 0x00 when the default for mkenvimage
-is 0xFF.
-
-I have no idea why U-Boot expects 0x00 in Johannes' case, though. The
-only thing I can think of is that the 'default' byte value on flash
-after a page-erase depends on the technology: for NOR, the value after
-erase ix 0x00, while for NAND, it is 0xFF. So maybe that's the reason...
-
-But any case, as you said in a further reply, adding that new option
-does not add much complexity.
-
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Regards,
-Yann E. MORIN.
-
---
-.-----------------.--------------------.------------------.-
--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics'
-conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___
-   |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is
-no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v
- conspiracy.  |
-'------------------------------^-------^------------------^-
--------------------'
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20171213/7e8dd683/attachment.html>
+diff --git a/package/gnupg2/gnupg2.hash b/package/gnupg2/gnupg2.hash
+index 43ce3c632876..e12f880b09d7 100644
+--- a/package/gnupg2/gnupg2.hash
++++ b/package/gnupg2/gnupg2.hash
+@@ -1,5 +1,5 @@
+-# From https://lists.gnupg.org/pipermail/gnupg-announce/2017q4/000416.html
+-sha1 efa00fc20295b1cafe467359107ea170258870e2  gnupg-2.2.2.tar.bz2
++# From https://lists.gnupg.org/pipermail/gnupg-announce/2017q4/000417.html
++sha1 68ed37d363166b5bd79971537484148eb8f2958c  gnupg-2.2.3.tar.bz2
+ # Calculated based on the hash above and signature
+-# https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.2.2.tar.bz2.sig
+-sha256 bfb62c7412ceb3b9422c6c7134a34ff01a560f98eb981c2d96829c1517c08197  gnupg-2.2.2.tar.bz2
++# https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.2.3.tar.bz2.sig
++sha256 cbd37105d139f7aa74f92b6f65d136658682094b0e308666b820ae4b984084b4  gnupg-2.2.3.tar.bz2
+diff --git a/package/gnupg2/gnupg2.mk b/package/gnupg2/gnupg2.mk
+index baf85e716370..83397e2bbf15 100644
+--- a/package/gnupg2/gnupg2.mk
++++ b/package/gnupg2/gnupg2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GNUPG2_VERSION = 2.2.2
++GNUPG2_VERSION = 2.2.3
+ GNUPG2_SOURCE = gnupg-$(GNUPG2_VERSION).tar.bz2
+ GNUPG2_SITE = https://gnupg.org/ftp/gcrypt/gnupg
+ GNUPG2_LICENSE = GPL-3.0+
+-- 
+2.15.1
