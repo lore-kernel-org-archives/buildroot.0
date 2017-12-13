@@ -1,50 +1,174 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 13 Dec 2017 08:20:32 +0100
-Subject: [Buildroot] [PATCH] mpd: add upstream patch to fix build with
- libupnp 1.6.24
-In-Reply-To: <20171212195109.29683-1-joerg.krause@embedded.rocks>
-References: <20171212195109.29683-1-joerg.krause@embedded.rocks>
-Message-ID: <20171213082032.42aa4d45@windsurf.png.is.keysight.com>
+Date: Wed, 13 Dec 2017 08:21:05 +0100
+Subject: [Buildroot] [git commit] motion: bump to version 4.1.1
+Message-ID: <20171213071346.131CD8055B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=19e74e94bf3f02534d657b310155e550e030f280
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 12 Dec 2017 20:51:09 +0100, J?rg Krause wrote:
-> Add an upstream patch to fix build with libupnp 1.6.24.
-> 
-> libupnp 1.6.24 added some compat helpers for programs making use of
-> libupnp to support 1.6.x and 1.8.x easier [1].
-> 
-> MPD added its own wrappers in version 0.20.12 [2] which are clashing with the
-> newly added compat helpers in libupnp 1.6.24.
-> 
-> The patch disables the MPD wrappers for libupnp version 1.6.24+.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/949bf9d42c82de34f3328a31bb122c81243e5418/
-> http://autobuild.buildroot.net/results/b12ca93cb3ad52e601cc99f54a867e21a28fd1c9/
-> http://autobuild.buildroot.net/results/7af8e96fdf823bbc427caa562d6d0a130a4875f0/
-> .. and many more.
-> 
-> Backported from: 78728138a04c2493c6bfadee98060043eca204bf
-> 
-> [1] https://sourceforge.net/p/pupnp/code/ci/8177a4195a4d4a5d6cb095eaf4ca5b65ac446381/
-> [2] https://github.com/MusicPlayerDaemon/MPD/commit/714011c81ed6053f7a35812071499356f337dd70
-> 
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> ---
->  package/mpd/0002-libupnp-1-6-24-compat.patch | 48 ++++++++++++++++++++++++++++
->  1 file changed, 48 insertions(+)
->  create mode 100644 package/mpd/0002-libupnp-1-6-24-compat.patch
+Remove both patches (merged in version)
 
-Applied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../0001-Fix-pthread_setname_np-detection.patch    | 50 ----------------
+ .../motion/0002-Check-for-pthread_getname_np.patch | 66 ----------------------
+ package/motion/motion.hash                         |  2 +-
+ package/motion/motion.mk                           |  2 +-
+ 4 files changed, 2 insertions(+), 118 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/motion/0001-Fix-pthread_setname_np-detection.patch b/package/motion/0001-Fix-pthread_setname_np-detection.patch
+deleted file mode 100644
+index dc14232..0000000
+--- a/package/motion/0001-Fix-pthread_setname_np-detection.patch
++++ /dev/null
+@@ -1,50 +0,0 @@
+-From 505be2201377fa347a34b6cb4164c856b55e7484 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Thu, 23 Nov 2017 22:47:39 +0100
+-Subject: [PATCH] Fix pthread_setname_np detection
+-
+-Commit 6617c6f2c8aad041d3428bea11206fd2e61763b1 replaced
+-AC_LINK_IFELSE with AC_COMPILE_IFELSE. This has broken the
+-pthread_setname_np detection as compilation will always succeed even if
+-pthread_setname_np is not available (if the function is not found, a
+-simple warning will be displayed in config.log).
+-
+-The correct fix is to put back AC_LINK_IFELSE with -pthread in LIBS
+-otherwise compilation will fail on toolchain without pthread_setname_np.
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- configure.ac | 9 ++++++---
+- 1 file changed, 6 insertions(+), 3 deletions(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index 1792b65..21efd2a 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -128,17 +128,20 @@ fi
+- if test x$THREADS = xyes; then
+-   TEMP_LIBS="$TEMP_LIBS -pthread"
+-   TEMP_CFLAGS="${TEMP_CFLAGS} -D_THREAD_SAFE"
+--fi
+- 
+- ##############################################################################
+- ###  Check for pthread_setname_np (nonstandard GNU extension)
+- ##############################################################################
+--AC_MSG_CHECKING([for pthread_setname_np])
+--AC_COMPILE_IFELSE(
+-+  AC_MSG_CHECKING([for pthread_setname_np])
+-+  HOLD_LIBS="$LIBS"
+-+  LIBS="$TEMP_LIBS"
+-+  AC_LINK_IFELSE(
+-     [AC_LANG_PROGRAM([#include <pthread.h>], [pthread_setname_np(pthread_self(), "name")])],
+-     [AC_DEFINE([HAVE_PTHREAD_SETNAME_NP], [1], [Define if you have pthread_setname_np function.])
+-     AC_MSG_RESULT([yes])],
+-     [AC_MSG_RESULT([no])] )
+-+  LIBS="$HOLD_LIBS"
+-+fi
+- 
+- ##############################################################################
+- ###  Check for JPG
+--- 
+-2.14.1
+-
+diff --git a/package/motion/0002-Check-for-pthread_getname_np.patch b/package/motion/0002-Check-for-pthread_getname_np.patch
+deleted file mode 100644
+index c6b5d6a..0000000
+--- a/package/motion/0002-Check-for-pthread_getname_np.patch
++++ /dev/null
+@@ -1,66 +0,0 @@
+-From 4067b793689f740e86b2f070c63cc72860347ab5 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Thu, 23 Nov 2017 22:53:03 +0100
+-Subject: [PATCH] Check for pthread_getname_np
+-
+-On some toolchains (like musl), pthread_setname_np is available but not
+-pthread_getname_np so add this check in configure.ac
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- configure.ac | 11 +++++++++++
+- logger.c     |  2 +-
+- motion.c     |  2 +-
+- 3 files changed, 13 insertions(+), 2 deletions(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index 21efd2a..06b2990 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -140,6 +140,17 @@ if test x$THREADS = xyes; then
+-     [AC_DEFINE([HAVE_PTHREAD_SETNAME_NP], [1], [Define if you have pthread_setname_np function.])
+-     AC_MSG_RESULT([yes])],
+-     [AC_MSG_RESULT([no])] )
+-+
+-+##############################################################################
+-+###  Check for pthread_getname_np (nonstandard GNU extension)
+-+##############################################################################
+-+  AC_MSG_CHECKING([for pthread_getname_np])
+-+  AC_LINK_IFELSE(
+-+    [AC_LANG_PROGRAM([#include <pthread.h>], [pthread_getname_np(pthread_self(), NULL, 0)])],
+-+    [AC_DEFINE([HAVE_PTHREAD_GETNAME_NP], [1], [Define if you have pthread_getname_np function.])
+-+    AC_MSG_RESULT([yes])],
+-+    [AC_MSG_RESULT([no])] )
+-+
+-   LIBS="$HOLD_LIBS"
+- fi
+- 
+-diff --git a/logger.c b/logger.c
+-index 01ea5a5..fd80d77 100644
+---- a/logger.c
+-+++ b/logger.c
+-@@ -207,7 +207,7 @@ void motion_log(int level, unsigned int type, int errno_flag, const char *fmt, .
+-     errno_save = errno;
+- 
+-     char threadname[32] = "unknown";
+--#if ((!defined(BSD) && HAVE_PTHREAD_SETNAME_NP) || defined(__APPLE__))
+-+#if ((!defined(BSD) && HAVE_PTHREAD_GETNAME_NP) || defined(__APPLE__))
+-     pthread_getname_np(pthread_self(), threadname, sizeof(threadname));
+- #endif
+- 
+-diff --git a/motion.c b/motion.c
+-index 8570896..985d4b2 100644
+---- a/motion.c
+-+++ b/motion.c
+-@@ -3772,7 +3772,7 @@ void util_threadname_set(const char *abbr, int threadnbr, const char *threadname
+- 
+- void util_threadname_get(char *threadname){
+- 
+--#if ((!defined(BSD) && HAVE_PTHREAD_SETNAME_NP) || defined(__APPLE__))
+-+#if ((!defined(BSD) && HAVE_PTHREAD_GETNAME_NP) || defined(__APPLE__))
+-     char currname[16];
+-     pthread_getname_np(pthread_self(), currname, sizeof(currname));
+-     snprintf(threadname, sizeof(currname), "%s",currname);
+--- 
+-2.14.1
+-
+diff --git a/package/motion/motion.hash b/package/motion/motion.hash
+index 40cb66b..5b67755 100644
+--- a/package/motion/motion.hash
++++ b/package/motion/motion.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256	277029c80df0d37deefbbea6d15c66a9067d9166fe8f76eb5f90aa6e97aa9741	motion-release-4.1.tar.gz
++sha256	2074b935bdfe28f84c2c3233274b06908336778f303bb13530d4299c3f8aa4e2	motion-release-4.1.1.tar.gz
+ sha256	91df39d1816bfb17a4dda2d3d2c83b1f6f2d38d53e53e41e8f97ad5ac46a0cad	COPYING
+diff --git a/package/motion/motion.mk b/package/motion/motion.mk
+index 0314406..2ba16fc 100644
+--- a/package/motion/motion.mk
++++ b/package/motion/motion.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MOTION_VERSION = release-4.1
++MOTION_VERSION = release-4.1.1
+ MOTION_SITE = $(call github,Motion-Project,motion,$(MOTION_VERSION))
+ MOTION_LICENSE = GPL-2.0
+ MOTION_LICENSE_FILES = COPYING
