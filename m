@@ -1,56 +1,47 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 13 Dec 2017 10:53:17 +0000
-Subject: [Buildroot] [Bug 10586] New: musl gcc has ifunc enabled when musl
- doesn't support it
-Message-ID: <bug-10586-163@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 13 Dec 2017 14:01:29 +0100
+Subject: [Buildroot] [RFC 0/2] Handle conflicting files with Busybox
+Message-ID: <20171213130131.15744-1-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=10586
+Hello,
 
-            Bug ID: 10586
-           Summary: musl gcc has ifunc enabled when musl doesn't support
-                    it
-           Product: buildroot
-           Version: unspecified
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: nathan.renniewaldock at gmail.com
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+As we discussed during the Prague Buildroot Developers meeting, in
+order to implement per-package SDK, we need to ensure that no package
+overwrites files installed by another package.
 
-musl doesn't support ifunc[1], so needs to be specifically disabled as it
-defaults to enabled.
+This RFC series is an attempt at solving this problem for Busybox. I
+have not fixed all packages yet: since it is a very boring task to do,
+I wanted to first get some feedback on whether the approach looks
+reasonable or not.
 
-Test case[2]:
+If the feedback is positive, I'll go ahead and submit proper patches
+that fix all packages that conflict with Busybox.
 
-$ cat >a.c <<EOD
-int main(){ return 0; }
-EOD
+Thanks for your feedback!
 
-$ gcc -o a a.c -latomic
+Thomas
 
-$ ./a
-Error relocating /lib/libatomic.so.1: __atomic_store_8: symbol not found
-Error relocating /lib/libatomic.so.1: __atomic_exchange_8: symbol not found
-Error relocating /lib/libatomic.so.1: __atomic_load_8: symbol not found
-Error relocating /lib/libatomic.so.1: __atomic_compare_exchange_8: symbol not
-found
+Thomas Petazzoni (2):
+  busybox: avoid conflict with other packages
+  packages: drop no longer needed busybox dependencies
 
-
-[1] http://www.openwall.com/lists/musl/2014/11/11/2
-[2] http://www.openwall.com/lists/musl/2015/11/17/9
-
-(tested buildroot 2017.11)
+ package/bc/bc.mk                   |  5 ----
+ package/binutils/binutils.mk       |  5 ----
+ package/busybox/busybox.mk         | 58 ++++++++++++++++++++++++++++++++++++++
+ package/coreutils/coreutils.mk     |  6 ----
+ package/cpio/cpio.mk               |  1 -
+ package/dcron/dcron.mk             |  5 ----
+ package/debianutils/debianutils.mk |  2 --
+ package/diffutils/diffutils.mk     |  4 ---
+ package/fbset/fbset.mk             |  5 ----
+ package/kmod/kmod.mk               |  3 --
+ package/util-linux/util-linux.mk   |  6 ----
+ 11 files changed, 58 insertions(+), 42 deletions(-)
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.14.3
