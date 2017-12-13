@@ -1,34 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 13 Dec 2017 08:21:16 +0100
-Subject: [Buildroot] [PATCH 1/1] motion: bump to version 4.1.1
-In-Reply-To: <20171212195250.29552-1-fontaine.fabrice@gmail.com>
-References: <20171212195250.29552-1-fontaine.fabrice@gmail.com>
-Message-ID: <20171213082116.0a6d7f1c@windsurf.png.is.keysight.com>
+Date: Wed, 13 Dec 2017 08:27:56 +0100
+Subject: [Buildroot] [git commit] webkitgtk: Add license hashes
+Message-ID: <20171213072044.2FD8880AEA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=e7f82694cfe98f659ff08b5834e32f8996ca55c5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 12 Dec 2017 20:52:50 +0100, Fabrice Fontaine wrote:
-> Remove both patches (merged in version)
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  .../0001-Fix-pthread_setname_np-detection.patch    | 50 ----------------
->  .../motion/0002-Check-for-pthread_getname_np.patch | 66 ----------------------
->  package/motion/motion.hash                         |  2 +-
->  package/motion/motion.mk                           |  2 +-
->  4 files changed, 2 insertions(+), 118 deletions(-)
->  delete mode 100644 package/motion/0001-Fix-pthread_setname_np-detection.patch
->  delete mode 100644 package/motion/0002-Check-for-pthread_getname_np.patch
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/webkitgtk/webkitgtk.hash | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
+index 669bb1c..9e207c5 100644
+--- a/package/webkitgtk/webkitgtk.hash
++++ b/package/webkitgtk/webkitgtk.hash
+@@ -2,3 +2,7 @@
+ md5 264a22d7467deae606e42b6eb5dd65af webkitgtk-2.18.3.tar.xz
+ sha1 164cad34281ef597a3d4ad214e8037c3ddef4d17 webkitgtk-2.18.3.tar.xz
+ sha256 e15420e1616a6f70f321541d467af5ca285bff66b1e0fa68a01df3ccf1b18f9e webkitgtk-2.18.3.tar.xz
++
++# Hashes for license files:
++sha256 0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4 Source/WebCore/LICENSE-APPLE
++sha256 f2b3bd09663381deb99721109d22b47af1213bb43007a8b56a06c6375c8050ce Source/WebCore/LICENSE-LGPL-2.1
