@@ -1,39 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 13 Dec 2017 14:06:43 +0100
-Subject: [Buildroot] [git commit] package/strongswan: Install libraries to
- /usr/lib
-Message-ID: <20171213131337.310E482B97@busybox.osuosl.org>
+Date: Wed, 13 Dec 2017 14:20:46 +0100
+Subject: [Buildroot] [PATCH 1/2] dhcp: bump to version 4.3.6
+In-Reply-To: <b408b98eeb4a9479b974d3d98e84b5d1f279c5b2.1513108295.git.baruch@tkos.co.il>
+References: <b408b98eeb4a9479b974d3d98e84b5d1f279c5b2.1513108295.git.baruch@tkos.co.il>
+Message-ID: <20171213142046.063f06f8@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=738435ad76f6cb4a21841d52612908feb4501b2d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Install strongswan ipsec libraries into /usr/lib instead of
-/usr/lib/ipsec to place them in preferred library common location.
+On Tue, 12 Dec 2017 21:51:34 +0200, Baruch Siach wrote:
+> Renumber the patch.
+> 
+> Add license hash.
+> 
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> ---
+>  ...{0002-bind-cross-compile.patch => 0001-bind-cross-compile.patch} | 0
+>  package/dhcp/dhcp.hash                                              | 6 ++++--
+>  package/dhcp/dhcp.mk                                                | 2 +-
+>  3 files changed, 5 insertions(+), 3 deletions(-)
+>  rename package/dhcp/{0002-bind-cross-compile.patch => 0001-bind-cross-compile.patch} (100%)
 
-Signed-off-by: Sam Voss <sam.voss@rockwellcollins.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/strongswan/strongswan.mk | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+Both applied. Thanks!
 
-diff --git a/package/strongswan/strongswan.mk b/package/strongswan/strongswan.mk
-index 30bbc6c..65618af 100644
---- a/package/strongswan/strongswan.mk
-+++ b/package/strongswan/strongswan.mk
-@@ -37,7 +37,10 @@ STRONGSWAN_CONF_OPTS += \
- 	--enable-scepclient=$(if $(BR2_PACKAGE_STRONGSWAN_SCEP),yes,no) \
- 	--enable-scripts=$(if $(BR2_PACKAGE_STRONGSWAN_SCRIPTS),yes,no) \
- 	--enable-vici=$(if $(BR2_PACKAGE_STRONGSWAN_VICI),yes,no) \
--	--enable-swanctl=$(if $(BR2_PACKAGE_STRONGSWAN_VICI),yes,no)
-+	--enable-swanctl=$(if $(BR2_PACKAGE_STRONGSWAN_VICI),yes,no) \
-+	--with-ipseclibdir=/usr/lib \
-+	--with-plugindir=/usr/lib/ipsec/plugins \
-+	--with-imcvdir=/usr/lib/ipsec/imcvs
- 
- ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
- STRONGSWAN_CONF_ENV += LIBS='-latomic'
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
