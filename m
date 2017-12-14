@@ -1,9 +1,9 @@
 From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Thu, 14 Dec 2017 23:25:57 +0100
-Subject: [Buildroot] [PATCH 3/4] s6: bump version to 2.6.2.0
+Date: Thu, 14 Dec 2017 23:25:58 +0100
+Subject: [Buildroot] [PATCH 4/4] s6-rc: bump version to 0.3.0.1
 In-Reply-To: <20171214222558.14148-1-eric.le.bihan.dev@free.fr>
 References: <20171214222558.14148-1-eric.le.bihan.dev@free.fr>
-Message-ID: <20171214222558.14148-4-eric.le.bihan.dev@free.fr>
+Message-ID: <20171214222558.14148-5-eric.le.bihan.dev@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,30 +12,30 @@ To: buildroot@busybox.net
 
 Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 ---
- package/s6/s6.hash | 2 +-
- package/s6/s6.mk   | 2 +-
+ package/s6-rc/s6-rc.hash | 2 +-
+ package/s6-rc/s6-rc.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/s6/s6.hash b/package/s6/s6.hash
-index 2f498b0d6a..d2d42f44ee 100644
---- a/package/s6/s6.hash
-+++ b/package/s6/s6.hash
+diff --git a/package/s6-rc/s6-rc.hash b/package/s6-rc/s6-rc.hash
+index 7ee13876f5..4c6e32a647 100644
+--- a/package/s6-rc/s6-rc.hash
++++ b/package/s6-rc/s6-rc.hash
 @@ -1,2 +1,2 @@
  # Locally generated
--sha256 0172b7293d4d5607ca3ca77382fee9b87c10bd58680720b29625cf35afc75c5c  s6-2.6.1.1.tar.gz
-+sha256 0313e4b55c11a3e12d2e9766971c9cc1eb0aef85ddbb5a4385923839e937acb0  s6-2.6.2.0.tar.gz
-diff --git a/package/s6/s6.mk b/package/s6/s6.mk
-index 3cf3885d5a..5ea68a7f7d 100644
---- a/package/s6/s6.mk
-+++ b/package/s6/s6.mk
+-sha256 78266a397330d35d5eac9e99d1436feba58e36f41bfe1db0fd16c4b6cc73c999  s6-rc-0.3.0.0.tar.gz
++sha256 ac0afe7adb3be24e3d0bd7ff1ed1011018751699669ce763a9562ab336fc7428  s6-rc-0.3.0.1.tar.gz
+diff --git a/package/s6-rc/s6-rc.mk b/package/s6-rc/s6-rc.mk
+index e651814a15..4a940ae0b6 100644
+--- a/package/s6-rc/s6-rc.mk
++++ b/package/s6-rc/s6-rc.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--S6_VERSION = 2.6.1.1
-+S6_VERSION = 2.6.2.0
- S6_SITE = http://skarnet.org/software/s6
- S6_LICENSE = ISC
- S6_LICENSE_FILES = COPYING
+-S6_RC_VERSION = 0.3.0.0
++S6_RC_VERSION = 0.3.0.1
+ S6_RC_SITE = http://skarnet.org/software/s6-rc
+ S6_RC_LICENSE = ISC
+ S6_RC_LICENSE_FILES = COPYING
 -- 
 2.14.3
