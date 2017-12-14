@@ -1,13 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 14 Dec 2017 06:43:59 +0100
-Subject: [Buildroot] [PATCH] wolfssl: new package
-In-Reply-To: <CANu7NGsei4G9mcvMxtRRoyp9C69Yab-n6sa5htL-+==30kLBEw@mail.gmail.com>
-References: <1513098237-18245-1-git-send-email-sergio.prado@e-labworks.com>
- <20171212173206.vablwxvwcpjfrffn@tarshish>
- <CANu7NGt3er0OfSdH-ujY6111fdywdixTpgVRTq7C79HzZXCWvw@mail.gmail.com>
- <20171213060308.gosvafozfwqsdw4p@sapphire.tkos.co.il>
- <CANu7NGsei4G9mcvMxtRRoyp9C69Yab-n6sa5htL-+==30kLBEw@mail.gmail.com>
-Message-ID: <20171214064359.282d0412@windsurf.png.is.keysight.com>
+Date: Thu, 14 Dec 2017 06:44:12 +0100
+Subject: [Buildroot] [PATCHv3] package/uboot: detect missing
+ user-supplied environment source files
+In-Reply-To: <20171209113549.1510-1-yann.morin.1998@free.fr>
+References: <20171209113549.1510-1-yann.morin.1998@free.fr>
+Message-ID: <20171214064412.1100a134@windsurf.png.is.keysight.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,26 +13,36 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 13 Dec 2017 15:21:37 -0200, Sergio Prado wrote:
-
-> I also discovered looking at wolfssl forums that they keep patches to be
-> applied in these applications, so they would work with wolfssl. And these
-> patches are not public [1].
+On Sat,  9 Dec 2017 12:35:49 +0100, Yann E. MORIN wrote:
+> Since 0542bb79e8 (uboot: Support multiple environment source files),
+> missing user-supplied environment source files is no longer detected.
 > 
-> So, from that point of view, it does not make sense to keep these options
-> in the package's makefile, since it is not useful with the upstream version
-> of nginx, lighttpd and wpa_supplicant. What do you think?
+> This is because we cat them all, and feed the concatenation to the stdin
+> of mkenvimage. So, if one source file is missing, the cat exits in error,
+> but the compound command exits with the exit code of the last command,
+> which is that of mkenvimage, which happens to be happy with whatever it
+> is fed on its stdin, even is empty.
 > 
-> [1] https://www.wolfssl.com/forums/topic1015-nginx-wolfssl.html
+> We fix that by creating a temporary file, that we even leave afterward
+> for the user to inspect.
+> 
+> We also move it out of the _CMDS block and into a macro of its own, so
+> that it is easier to write and maintain.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Cam Hutchison <camh@xdna.net>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> 
+> ---
+> Changes v2 -> v3:
+>   - generate inter;ediate file in $(@D) to avoid conflicts with
+>     user-generated files in $(O)/images/  (Cam)
+>   - typo
 
-Indeed, of you can't build wolfssl against nginx without out of tree
-patches that are not even public, I don't see the point of enabling
-"nginx support" in wolfssl.
-
-Best regards,
+Applied to master, thanks.
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
+Embedded Linux, Kernel and Android engineering
 http://free-electrons.com
