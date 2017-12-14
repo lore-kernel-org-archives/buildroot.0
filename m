@@ -1,36 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 14 Dec 2017 07:32:17 +0100
-Subject: [Buildroot] [PATCH 1/2] luadbi: new package
-In-Reply-To: <20171209091711.20226-1-francois.perrad@gadz.org>
-References: <20171209091711.20226-1-francois.perrad@gadz.org>
-Message-ID: <20171214073217.2f36cfb1@windsurf.png.is.keysight.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 14 Dec 2017 08:43:10 +0200
+Subject: [Buildroot] [PATCH] wolfssl: new package
+In-Reply-To: <20171214064359.282d0412@windsurf.png.is.keysight.com>
+References: <1513098237-18245-1-git-send-email-sergio.prado@e-labworks.com>
+ <20171212173206.vablwxvwcpjfrffn@tarshish>
+ <CANu7NGt3er0OfSdH-ujY6111fdywdixTpgVRTq7C79HzZXCWvw@mail.gmail.com>
+ <20171213060308.gosvafozfwqsdw4p@sapphire.tkos.co.il>
+ <CANu7NGsei4G9mcvMxtRRoyp9C69Yab-n6sa5htL-+==30kLBEw@mail.gmail.com>
+ <20171214064359.282d0412@windsurf.png.is.keysight.com>
+Message-ID: <20171214064310.zlgeattkdrphujem@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Thomas, Sergio,
 
-On Sat,  9 Dec 2017 10:17:10 +0100, Francois Perrad wrote:
+On Thu, Dec 14, 2017 at 06:43:59AM +0100, Thomas Petazzoni wrote:
+> On Wed, 13 Dec 2017 15:21:37 -0200, Sergio Prado wrote:
+> 
+> > I also discovered looking at wolfssl forums that they keep patches to be
+> > applied in these applications, so they would work with wolfssl. And these
+> > patches are not public [1].
+> > 
+> > So, from that point of view, it does not make sense to keep these options
+> > in the package's makefile, since it is not useful with the upstream version
+> > of nginx, lighttpd and wpa_supplicant. What do you think?
+> > 
+> > [1] https://www.wolfssl.com/forums/topic1015-nginx-wolfssl.html
+> 
+> Indeed, of you can't build wolfssl against nginx without out of tree
+> patches that are not even public, I don't see the point of enabling
+> "nginx support" in wolfssl.
 
-> diff --git a/package/luadbi/Config.in b/package/luadbi/Config.in
-> new file mode 100644
-> index 000000000..663c6f9fb
-> --- /dev/null
-> +++ b/package/luadbi/Config.in
-> @@ -0,0 +1,11 @@
-> +config BR2_PACKAGE_LUADBI
-> +	bool "luadbi"
-> +	depends on BR2_PACKAGE_HAS_LUAINTERPRETER
+While I agree with Thomas, I think that if there is a convenient way to 
+control the wolfssl configuration then we should expose it somehow. The list 
+of HAVE_* options indicates that many, maybe even most, users will need more 
+than the default minimal configuration.
 
-This dependency is not necessary, since the Config.in file inclusion is
-already enclosed in a BR2_PACKAGE_HAS_LUAINTERPRETER dependency.
+baruch
 
-Applied with this fixed. Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
