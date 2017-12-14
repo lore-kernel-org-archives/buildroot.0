@@ -1,95 +1,126 @@
-From: Arvid Picciani <aep@exys.org>
-Date: Thu, 14 Dec 2017 16:27:36 +0100
-Subject: [Buildroot] [PATCH 2/2] enable static linking for libfuse
-In-Reply-To: <20171214162102.25c6d252@windsurf>
-References: <20171214105706.4577-1-aep@exys.org>
- <20171214105706.4577-2-aep@exys.org>
- <20171214162102.25c6d252@windsurf>
-Message-ID: <CABukmmN-WtUiGpUGTWUhPhkFLOaLAgMNfXujMwMUkNB=P8PHQA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 14 Dec 2017 16:37:56 +0100
+Subject: [Buildroot] [git commit] gstreamer1-mm: new package
+Message-ID: <20171214154102.F01B482BD4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-thanks for checking.
-yes i did see the comment that's why i didnt submit a proper patch but more
-an RFC.
-It builds fine for me. maybe it doesn't try to use the dlopen stuff with
-musl?
+commit: https://git.buildroot.net/buildroot/commit/?id=f087d9f861b2d5df24dcacb861d4c075348ea39b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Gstreamermm provides C++ bindings for gstreamer.
 
-On Thu, Dec 14, 2017 at 4:21 PM, Thomas Petazzoni <
-thomas.petazzoni@free-electrons.com> wrote:
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ DEVELOPERS                                         |  1 +
+ package/gstreamer1/Config.in                       |  1 +
+ package/gstreamer1/gstreamer1-mm/Config.in         | 29 ++++++++++++++++++++++
+ .../gstreamer1/gstreamer1-mm/gstreamer1-mm.hash    |  6 +++++
+ package/gstreamer1/gstreamer1-mm/gstreamer1-mm.mk  | 24 ++++++++++++++++++
+ 5 files changed, 61 insertions(+)
 
-> Hello,
->
-> Thanks for your contribution. However...
->
-> On Thu, 14 Dec 2017 11:57:06 +0100, Arvid E. Picciani wrote:
-> > Signed-off-by: Arvid E. Picciani <aep@exys.org>
-> > ---
-> >  package/libfuse/Config.in  | 4 ----
-> >  package/libfuse/libfuse.mk | 3 ++-
-> >  2 files changed, 2 insertions(+), 5 deletions(-)
-> >
-> > diff --git a/package/libfuse/Config.in b/package/libfuse/Config.in
-> > index 2b0e31a991..62b18c2444 100644
-> > --- a/package/libfuse/Config.in
-> > +++ b/package/libfuse/Config.in
-> > @@ -1,7 +1,6 @@
-> >  config BR2_PACKAGE_LIBFUSE
-> >       bool "libfuse"
-> >       # Really doesn't like static, see fuse/lib/fuse.c
->
-> ...did you see this comment?
->
-> fuse.c uses dlopen(), this requires shared library support.
->
-> Apply your patch, and build the following configuration:
->
-> BR2_arm=y
-> BR2_STATIC_LIBS=y
-> BR2_TOOLCHAIN_EXTERNAL=y
-> BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-> BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/
-> toolchains/tarballs/br-arm-full-static-2017.11-rc1.tar.bz2"
-> BR2_TOOLCHAIN_EXTERNAL_GCC_6=y
-> BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_10=y
-> BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
-> # BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
-> BR2_TOOLCHAIN_EXTERNAL_CXX=y
-> BR2_INIT_NONE=y
-> BR2_SYSTEM_BIN_SH_NONE=y
-> # BR2_PACKAGE_BUSYBOX is not set
-> BR2_PACKAGE_LIBFUSE=y
-> # BR2_TARGET_ROOTFS_TAR is not set
->
-> You'll get the following build failure:
->
-> fuse.c:33:19: fatal error: dlfcn.h: No such file or directory
->  #include <dlfcn.h>
->                    ^
-> compilation terminated.
->
-> Also, passing --enable-static is not necessary, this is already done by
-> the autotools-package infrastructure when BR2_STATIC_LIBS=y.
->
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux and Kernel engineering
-> http://free-electrons.com
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20171214/0ba423a7/attachment.html>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: config
-Type: application/octet-stream
-Size: 77278 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20171214/0ba423a7/attachment.obj>
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 8f94175..b476f4e 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -35,6 +35,7 @@ F:	package/busybox/
+ F:	package/checkpolicy/
+ F:	package/cppdb/
+ F:	package/gstreamer1/gstreamer1/
++F:	package/gstreamer1/gstreamer1-mm/
+ F:	package/gstreamer1/gst1-plugins-bad/
+ F:	package/gstreamer1/gst1-plugins-base/
+ F:	package/gstreamer1/gst1-plugins-good/
+diff --git a/package/gstreamer1/Config.in b/package/gstreamer1/Config.in
+index aef75b5..76c32bc 100644
+--- a/package/gstreamer1/Config.in
++++ b/package/gstreamer1/Config.in
+@@ -2,6 +2,7 @@
+ source "package/gstreamer1/gstreamer1/Config.in"
+ 
+ if BR2_PACKAGE_GSTREAMER1
++source "package/gstreamer1/gstreamer1-mm/Config.in"
+ source "package/gstreamer1/gst1-plugins-base/Config.in"
+ source "package/gstreamer1/gst1-plugins-good/Config.in"
+ source "package/gstreamer1/gst1-plugins-bad/Config.in"
+diff --git a/package/gstreamer1/gstreamer1-mm/Config.in b/package/gstreamer1/gstreamer1-mm/Config.in
+new file mode 100644
+index 0000000..471c083
+--- /dev/null
++++ b/package/gstreamer1/gstreamer1-mm/Config.in
+@@ -0,0 +1,29 @@
++config BR2_PACKAGE_GSTREAMER1_MM
++	bool "gstreamer1-mm"
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # glibmm
++	depends on BR2_INSTALL_LIBSTDCPP # glibmm
++	depends on BR2_USE_WCHAR # glibmm -> libglib2
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
++	depends on BR2_USE_MMU # glibmm -> libglib2
++	select BR2_PACKAGE_GLIBMM
++	select BR2_PACKAGE_GSTREAMER1_CHECK
++	select BR2_PACKAGE_GST1_PLUGINS_BASE
++	help
++	  gstreamermm provides C++ bindings for the GStreamer streaming
++	  multimedia library (http://gstreamer.freedesktop.org). With
++	  gstreamermm it is possible to	develop applications that work
++	  with multimedia in C++.
++
++	  gstreamermm is developed over glibmm, libsigc++ and libxml++
++	  and the functionalities they provide. This means that, among
++	  other things, referencing and unreferencing of GObjects is
++	  handled automatically via glibmm's automatic pointer class,
++	  Glib::RefPtr, and libsigc++'s slots are used for callbacks and
++	  signals.
++
++	  https://gstreamer.freedesktop.org/bindings/cplusplus.html
++
++comment "gstreamer1-mm needs a toolchain w/ C++, wchar, threads, gcc >= 4.9"
++	depends on BR2_USE_MMU
++	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || !BR2_USE_WCHAR \
++		|| !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/gstreamer1/gstreamer1-mm/gstreamer1-mm.hash b/package/gstreamer1/gstreamer1-mm/gstreamer1-mm.hash
+new file mode 100644
+index 0000000..425cf05
+--- /dev/null
++++ b/package/gstreamer1/gstreamer1-mm/gstreamer1-mm.hash
+@@ -0,0 +1,6 @@
++# From http://ftp.gnome.org/pub/gnome/sources/gstreamermm/1.10/gstreamermm-1.10.0.sha256sum
++sha256 be58fe9ef7d7e392568ec85e80a84f4730adbf91fb0355ff7d7c616675ea8d60 gstreamermm-1.10.0.tar.xz
++
++# Locally computed
++sha256 7c78a8d7fc6781d51402d5a6036bedda9cffb0e5d28757e25d54d6eacbb1949f  COPYING
++sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING.examples
+diff --git a/package/gstreamer1/gstreamer1-mm/gstreamer1-mm.mk b/package/gstreamer1/gstreamer1-mm/gstreamer1-mm.mk
+new file mode 100644
+index 0000000..539c9df
+--- /dev/null
++++ b/package/gstreamer1/gstreamer1-mm/gstreamer1-mm.mk
+@@ -0,0 +1,24 @@
++################################################################################
++#
++# gstreamer1-mm
++#
++################################################################################
++
++GSTREAMER1_MM_VERSION_MAJOR = 1.10
++GSTREAMER1_MM_VERSION = $(GSTREAMER1_MM_VERSION_MAJOR).0
++GSTREAMER1_MM_SITE = http://ftp.gnome.org/pub/gnome/sources/gstreamermm/$(GSTREAMER1_MM_VERSION_MAJOR)
++GSTREAMER1_MM_SOURCE = gstreamermm-$(GSTREAMER1_MM_VERSION).tar.xz
++GSTREAMER1_MM_LICENSE = LGPL-2.1+ (library), GPL-2.0 (examples)
++GSTREAMER1_MM_LICENSE_FILES = COPYING COPYING.examples
++GSTREAMER1_MM_INSTALL_STAGING = YES
++GSTREAMER1_MM_DEPENDENCIES += \
++	glibmm \
++	gstreamer1 \
++	gst1-plugins-base
++
++GSTREAMER1_MM_CONF_OPTS += \
++	--disable-gl \
++	--enable-unittests=no \
++	--disable-deprecated-api
++
++$(eval $(autotools-package))
