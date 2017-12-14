@@ -1,41 +1,41 @@
-From: Angelo Compagnucci <angelo@amarulasolutions.com>
-Date: Thu, 14 Dec 2017 14:31:04 +0100
-Subject: [Buildroot] [PATCH] linux: bump CIP version to v4.4.105-cip15
-Message-ID: <1513258264-20239-1-git-send-email-angelo@amarulasolutions.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 14 Dec 2017 15:19:08 +0100
+Subject: [Buildroot] [PATCH 1/2] DTPMOD mod fix for musl's rcrt0
+In-Reply-To: <20171214105706.4577-1-aep@exys.org>
+References: <20171214105706.4577-1-aep@exys.org>
+Message-ID: <20171214151908.4468ba56@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch bumps the Linux CIP version to v4.4.105-cip15.
+Hello,
 
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
----
- linux/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Thanks for your contribution!
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 7a5f992..a4125ab 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -29,7 +29,7 @@ config BR2_LINUX_KERNEL_LATEST_VERSION
- 	bool "Latest version (4.14)"
- 
- config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
--	bool "Latest CIP SLTS version (v4.4.98-cip13)"
-+	bool "Latest CIP SLTS version (v4.4.105-cip15)"
- 	help
- 	  CIP launched in the spring of 2016 to address the needs of
- 	  organizations in industries such as power generation and
-@@ -117,7 +117,7 @@ endif
- config BR2_LINUX_KERNEL_VERSION
- 	string
- 	default "4.14.5" if BR2_LINUX_KERNEL_LATEST_VERSION
--	default "v4.4.98-cip13" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
-+	default "v4.4.105-cip15" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
+On Thu, 14 Dec 2017 11:57:05 +0100, Arvid E. Picciani wrote:
+> See https://github.com/rust-lang/rust/issues/46566
+> 
+> Signed-off-by: Arvid E. Picciani <aep@exys.org>
+> ---
+>  package/musl/0002-fix-rcrt1.o.patch | 26 ++++++++++++++++++++++++++
+>  1 file changed, 26 insertions(+)
+>  create mode 100644 package/musl/0002-fix-rcrt1.o.patch
+> 
+> diff --git a/package/musl/0002-fix-rcrt1.o.patch b/package/musl/0002-fix-rcrt1.o.patch
+> new file mode 100644
+> index 0000000000..3dae65569f
+> --- /dev/null
+> +++ b/package/musl/0002-fix-rcrt1.o.patch
+
+All patches need a description and a Signed-off-by. Also is this patch
+in upstream musl? Has it been submitted?
+
+Thanks!
+
+Thomas
 -- 
-2.7.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
