@@ -1,14 +1,15 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 14 Dec 2017 08:17:23 +0100
-Subject: [Buildroot] [RFC 1/2] busybox: avoid conflict with other
- packages
-In-Reply-To: <20171214065807.74cqtgpex5oldpx3@sapphire.tkos.co.il>
-References: <20171213130131.15744-1-thomas.petazzoni@free-electrons.com>
- <20171213130131.15744-2-thomas.petazzoni@free-electrons.com>
- <20171213144305.zs2iowvzy4n5xzqj@sapphire.tkos.co.il>
- <20171214061850.62bb4ae9@windsurf.png.is.keysight.com>
- <20171214065807.74cqtgpex5oldpx3@sapphire.tkos.co.il>
-Message-ID: <20171214081723.64855d25@windsurf.png.is.keysight.com>
+Date: Thu, 14 Dec 2017 08:21:44 +0100
+Subject: [Buildroot] [PATCH 1/1] boot/uboot: add config option for uboot
+ environment padding byte
+In-Reply-To: <CAMbDF3KyXg9jP+Mkix9zh5CPNe8e7303RUfLwR1KzKYVqscgYQ@mail.gmail.com>
+References: <1513018028-18256-1-git-send-email-johannes.schmitz1@gmail.com>
+ <20171212062751.3e1eb993@windsurf.png.is.keysight.com>
+ <20171213182332.GB7364@scaer>
+ <20171214071305.33920c54@windsurf.png.is.keysight.com>
+ <CAMbDF3J=j94Ze6LVJWnA7N453JMOP60-SzjLBdrB6n5s_aSkPw@mail.gmail.com>
+ <CAMbDF3KyXg9jP+Mkix9zh5CPNe8e7303RUfLwR1KzKYVqscgYQ@mail.gmail.com>
+Message-ID: <20171214082144.1eef0a4f@windsurf.png.is.keysight.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,48 +18,21 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 14 Dec 2017 08:58:07 +0200, Baruch Siach wrote:
+On Thu, 14 Dec 2017 08:06:13 +0100, Johannes Schmitz wrote:
 
-> Quoting busybox.mk:
-> 
-> # Enable "noclobber" in install.sh, to prevent BusyBox from overwriting any
-> # full-blown versions of apps installed by other packages with sym/hard links.
-> 
-> Unfortunately, the noclobber implementation is racy. So the alternative is to 
-> remove apps from the generated busybox.links file that install.sh uses as 
-> input.
+> I disagree with this but maybe it's my electrical engineering background, I
+> always want full control down to the physical layer.
+> And mostly there is a use case even if I don't know all of them myself.
 
-The problem is that this busybox.links file gets generated as part of
-the "install" target. So unless we explicitly call "make busybox.links"
-in a pre-install hook, and then tweak it to remove the applets we don't
-want, I don't see how it could work. Can be done, but it starts to be a
-bit tricky :)
+If Buildroot starts to support use cases that we don't even understand
+when they are needed, then we are going on a very, very slippery road.
 
-> >  2. The Busybox binary would contain lots of useless code, which simply
-> >     can't be reached, except by calling explicitly "busybox cmd".  
-> 
-> This is not different than the situation we have now. The added useless code 
-> size is in most cases negligible compared to any one of the full-blown 
-> version. In the end it's the responsibility of the user to fine tune the 
-> target image size.
+> I have a question though, is 32k the default uboot environment size? Then I
+> could also set this as a default. Otherwise again it is a good argument for
+> keeping the padding option in for debugging  purposes.
 
-I admit the size difference is minimal, and is clearly not the primary
-motivation for this. To me, it was merely a nice side effect. I
-measured a 70-80 KB reduction in the Busybox size when
-BR2_PACKAGE_COREUTILS=y, so it's clearly not much compared to how much
-disk space is consumed by the full-blown coreutils.
-
-Still, I find it weird that we build support in the binary for
-something that we don't expose in the target, while in terms of
-complexity, disabling them in the configuration is as simple (perhaps
-even more?) than preventing the symlinks from being created.
-
-But again, if it's the general consensus, I'm fine with it. As long as
-it helps things move forward towards per-package SDK and TLP support.
-
-It would be nice to hear from Peter, Arnout or Yann for example.
-
-Thanks for the feedback!
+No, there is nothing like a default environment size. Each board has
+its own value in its U-boot configuration file. 
 
 Thomas
 -- 
