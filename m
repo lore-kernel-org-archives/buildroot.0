@@ -1,53 +1,74 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 14 Dec 2017 06:33:12 +0100
-Subject: [Buildroot] [git commit] libgpgme: bump to version 1.10.0
-Message-ID: <20171214053330.6A08C7F9B4@busybox.osuosl.org>
+Date: Thu, 14 Dec 2017 06:37:13 +0100
+Subject: [Buildroot] [git commit] package/uboot: detect missing
+ user-supplied environment source files
+Message-ID: <20171214053718.76538811CA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8636a3cbefdfd03a39cfe1ccda024b95fb0ba7f1
+commit: https://git.buildroot.net/buildroot/commit/?id=c9b6604fa7871087120cd8a469452807d14a4c1c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Use https download site.
+Since 0542bb79e8 (uboot: Support multiple environment source files),
+missing user-supplied environment source files is no longer detected.
 
-Add license hash.
+This is because we cat them all, and feed the concatenation to the stdin
+of mkenvimage. So, if one source file is missing, the cat exits in error,
+but the compound command exits with the exit code of the last command,
+which is that of mkenvimage, which happens to be happy with whatever it
+is fed on its stdin, even is empty.
 
-Cc: Philipp Claves <claves@budelmann-elektronik.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+We fix that by creating a temporary file, that we even leave afterward
+for the user to inspect.
+
+We also move it out of the _CMDS block and into a macro of its own, so
+that it is easier to write and maintain.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Cam Hutchison <camh@xdna.net>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libgpgme/libgpgme.hash | 7 ++++++-
- package/libgpgme/libgpgme.mk   | 4 ++--
- 2 files changed, 8 insertions(+), 3 deletions(-)
+ boot/uboot/uboot.mk | 19 +++++++++++++------
+ 1 file changed, 13 insertions(+), 6 deletions(-)
 
-diff --git a/package/libgpgme/libgpgme.hash b/package/libgpgme/libgpgme.hash
-index cf7c505..6bd595c 100644
---- a/package/libgpgme/libgpgme.hash
-+++ b/package/libgpgme/libgpgme.hash
-@@ -1,2 +1,7 @@
-+# From https://lists.gnupg.org/pipermail/gnupg-announce/2017q4/000418.html
-+sha1 77d3390887da25ed70b7ac04392360efbdca501f  gpgme-1.10.0.tar.bz2
- # Locally calculated after checking pgp signature
--sha256 1b29fedb8bfad775e70eafac5b0590621683b2d9869db994568e6401f4034ceb  gpgme-1.9.0.tar.bz2
-+# https://gnupg.org/ftp/gcrypt/gpgme/gpgme-1.10.0.tar.bz2.sig
-+sha256 1a8fed1197c3b99c35f403066bb344a26224d292afc048cfdfc4ccd5690a0693  gpgme-1.10.0.tar.bz2
-+# Locally calculated
-+sha256 ca0061fc1381a3ab242310e4b3f56389f28e3d460eb2fd822ed7a21c6f030532  COPYING.LESSER
-diff --git a/package/libgpgme/libgpgme.mk b/package/libgpgme/libgpgme.mk
-index 5af2b5e..31f25b4 100644
---- a/package/libgpgme/libgpgme.mk
-+++ b/package/libgpgme/libgpgme.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index 3917599..d2f241c 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -243,6 +243,18 @@ define UBOOT_BUILD_OMAP_IFT
+ 		-c $(call qstrip,$(BR2_TARGET_UBOOT_OMAP_IFT_CONFIG))
+ endef
  
--LIBGPGME_VERSION = 1.9.0
--LIBGPGME_SITE = ftp://ftp.gnupg.org/gcrypt/gpgme
-+LIBGPGME_VERSION = 1.10.0
-+LIBGPGME_SITE = https://gnupg.org/ftp/gcrypt/gpgme
- LIBGPGME_SOURCE = gpgme-$(LIBGPGME_VERSION).tar.bz2
- LIBGPGME_LICENSE = LGPL-2.1+
- LIBGPGME_LICENSE_FILES = COPYING.LESSER
++ifneq ($(BR2_TARGET_UBOOT_ENVIMAGE),)
++define UBOOT_GENERATE_ENV_IMAGE
++	cat $(call qstrip,$(BR2_TARGET_UBOOT_ENVIMAGE_SOURCE)) \
++		>$(@D)/buildroot-env.txt
++	$(HOST_DIR)/bin/mkenvimage -s $(BR2_TARGET_UBOOT_ENVIMAGE_SIZE) \
++		$(if $(BR2_TARGET_UBOOT_ENVIMAGE_REDUNDANT),-r) \
++		$(if $(filter BIG,$(BR2_ENDIAN)),-b) \
++		-o $(BINARIES_DIR)/uboot-env.bin \
++		$(@D)/buildroot-env.txt
++endef
++endif
++
+ define UBOOT_INSTALL_IMAGES_CMDS
+ 	$(foreach f,$(UBOOT_BINS), \
+ 			cp -dpf $(@D)/$(f) $(BINARIES_DIR)/
+@@ -254,12 +266,7 @@ define UBOOT_INSTALL_IMAGES_CMDS
+ 			cp -dpf $(@D)/$(f) $(BINARIES_DIR)/
+ 		)
+ 	)
+-	$(if $(BR2_TARGET_UBOOT_ENVIMAGE),
+-		cat $(call qstrip,$(BR2_TARGET_UBOOT_ENVIMAGE_SOURCE)) | \
+-			$(HOST_DIR)/bin/mkenvimage -s $(BR2_TARGET_UBOOT_ENVIMAGE_SIZE) \
+-			$(if $(BR2_TARGET_UBOOT_ENVIMAGE_REDUNDANT),-r) \
+-			$(if $(filter BIG,$(BR2_ENDIAN)),-b) \
+-			-o $(BINARIES_DIR)/uboot-env.bin -)
++	$(UBOOT_GENERATE_ENV_IMAGE)
+ 	$(if $(BR2_TARGET_UBOOT_BOOT_SCRIPT),
+ 		$(HOST_DIR)/bin/mkimage -C none -A $(MKIMAGE_ARCH) -T script \
+ 			-d $(call qstrip,$(BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE)) \
