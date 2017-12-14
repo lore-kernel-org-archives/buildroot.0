@@ -1,76 +1,51 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 14 Dec 2017 08:58:07 +0200
-Subject: [Buildroot] [RFC 1/2] busybox: avoid conflict with other
- packages
-In-Reply-To: <20171214061850.62bb4ae9@windsurf.png.is.keysight.com>
-References: <20171213130131.15744-1-thomas.petazzoni@free-electrons.com>
- <20171213130131.15744-2-thomas.petazzoni@free-electrons.com>
- <20171213144305.zs2iowvzy4n5xzqj@sapphire.tkos.co.il>
- <20171214061850.62bb4ae9@windsurf.png.is.keysight.com>
-Message-ID: <20171214065807.74cqtgpex5oldpx3@sapphire.tkos.co.il>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 14 Dec 2017 08:00:26 +0100 (CET)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2017-12-13
+Message-ID: <20171214070026.CCB3B20999@mail.free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hello,
 
-On Thu, Dec 14, 2017 at 06:18:50AM +0100, Thomas Petazzoni wrote:
-> On Wed, 13 Dec 2017 16:43:05 +0200, Baruch Siach wrote:
-> > This means that a custom Busybox .config will automagically be transformed 
-> > to something quite different. This is a significant change in behaviour.
-> 
-> We already tweak the Busybox .config file quite significantly in
-> busybox.mk, so it's not really new. But I agree that the scale of the
-> change is very different.
-> 
-> > Can't we just move the symlink removal logic into busybox.mk instead?
-> > That would leave the busybox binary alone, and keep the magic .config
-> > transformations to minimum.
-> 
-> If I understand your proposal, we would not tweak the Busybox .config
-> file, but instead add a post install target hook that would remove the
-> symbolic links installed by Busybox "make install" when such symbolic
-> links are going to conflict with full-blown versions of the
-> corresponding applications, added by other packages. Is that correct ?
-> 
-> If so, then I see two drawbacks with this approach. They are not
-> unacceptable, but they are drawbacks:
-> 
->  1. We have to keep the optional dependency on Busybox in util-linux,
->     coreutils, fbset, and all those packages that conflict with Busybox.
->     Indeed, removing the symbolic link installed by Busybox only works
->     if Busybox is installed first. Unless Busybox "make install" is
->     careful enough to not install a given symlink if a file of the
->     same name already exists.
+Build statistics for 2017-12-13
+===============================
 
-Quoting busybox.mk:
+      branch |  OK | NOK | TIM | TOT |
+      master | 174 |   9 |   1 | 184 |
+   2017.08.x |  12 |   0 |   0 |  12 |
 
-# Enable "noclobber" in install.sh, to prevent BusyBox from overwriting any
-# full-blown versions of apps installed by other packages with sym/hard links.
+Results for branch 'master'
+===========================
 
-Unfortunately, the noclobber implementation is racy. So the alternative is to 
-remove apps from the generated busybox.links file that install.sh uses as 
-input.
+Classification of failures by reason
+------------------------------------
 
->  2. The Busybox binary would contain lots of useless code, which simply
->     can't be reached, except by calling explicitly "busybox cmd".
+                     vlc-2.2.8 | 4 
+                  cc-tool-0.26 | 1 
+                   mpd-0.20.12 | 1 
+                poppler-0.59.0 | 1 
+           python-numpy-1.13.3 | 1 
+qtuio-abe4973ff60654aad9df7... | 1 
+        ux500-firmware-1.1.3-6 | 1 
 
-This is not different than the situation we have now. The added useless code 
-size is in most cases negligible compared to any one of the full-blown 
-version. In the end it's the responsibility of the user to fine tune the 
-target image size.
 
-> So neither are unacceptable drawbacks, but they are drawbacks. If the
-> general opinion is that we should do what you propose, I'm fine with
-> implementing that.
-> 
-> What do others think ?
+Detail of failures
+------------------
 
-baruch
+        m68k |                   cc-tool-0.26 | NOK | http://autobuild.buildroot.net/results/5d8d4b8bdb4eeb8e4837cee34d347f38b448cf33 |     
+         arc |                    mpd-0.20.12 | NOK | http://autobuild.buildroot.net/results/e8adcca3b53a8ce495d8716c8f608c26d34aef26 |     
+         arm |                 poppler-0.59.0 | NOK | http://autobuild.buildroot.net/results/3a2d9519a8aae6d9fa14a773894c553443132749 |     
+     aarch64 |            python-numpy-1.13.3 | NOK | http://autobuild.buildroot.net/results/7fa0f54cd991b619a6bb847d89ac05cc186197cd |     
+        i586 | qtuio-abe4973ff60654aad9df7... | NOK | http://autobuild.buildroot.net/results/71c9be04a174c7ea7800c226af7ff2a20198607e |     
+         arc |         ux500-firmware-1.1.3-6 | TIM | http://autobuild.buildroot.net/results/6b0725fd29370b3261d4b4ec637bf79b53dc851b |     
+microblazeel |                      vlc-2.2.8 | NOK | http://autobuild.buildroot.net/results/6cda042b8dce17ed159946b068b32f7e0a96bc31 |     
+        or1k |                      vlc-2.2.8 | NOK | http://autobuild.buildroot.net/results/0f24e036a9aecfef179047ce77f28ffa643325ea |     
+      x86_64 |                      vlc-2.2.8 | NOK | http://autobuild.buildroot.net/results/d98bdcc745a2480d4664db2427f0ae1c9c5ea71e |     
+   powerpc64 |                      vlc-2.2.8 | NOK | http://autobuild.buildroot.net/results/1e7d86105a88aa5aabe4a73186c40474dddde43c |     
+
 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+http://autobuild.buildroot.net
