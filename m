@@ -1,9 +1,13 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 14 Dec 2017 06:42:15 +0100
-Subject: [Buildroot] [PATCH] libgpgme: bump to version 1.10.0
-In-Reply-To: <26007cf3f6aee22008eb1f8b292bc4459ad2d0b0.1513196629.git.baruch@tkos.co.il>
-References: <26007cf3f6aee22008eb1f8b292bc4459ad2d0b0.1513196629.git.baruch@tkos.co.il>
-Message-ID: <20171214064215.594dc3fa@windsurf.png.is.keysight.com>
+Date: Thu, 14 Dec 2017 06:43:59 +0100
+Subject: [Buildroot] [PATCH] wolfssl: new package
+In-Reply-To: <CANu7NGsei4G9mcvMxtRRoyp9C69Yab-n6sa5htL-+==30kLBEw@mail.gmail.com>
+References: <1513098237-18245-1-git-send-email-sergio.prado@e-labworks.com>
+ <20171212173206.vablwxvwcpjfrffn@tarshish>
+ <CANu7NGt3er0OfSdH-ujY6111fdywdixTpgVRTq7C79HzZXCWvw@mail.gmail.com>
+ <20171213060308.gosvafozfwqsdw4p@sapphire.tkos.co.il>
+ <CANu7NGsei4G9mcvMxtRRoyp9C69Yab-n6sa5htL-+==30kLBEw@mail.gmail.com>
+Message-ID: <20171214064359.282d0412@windsurf.png.is.keysight.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,22 +16,26 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 13 Dec 2017 22:23:49 +0200, Baruch Siach wrote:
-> Use https download site.
-> 
-> Add license hash.
-> 
-> Cc: Philipp Claves <claves@budelmann-elektronik.com>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  package/libgpgme/libgpgme.hash | 7 ++++++-
->  package/libgpgme/libgpgme.mk   | 4 ++--
->  2 files changed, 8 insertions(+), 3 deletions(-)
+On Wed, 13 Dec 2017 15:21:37 -0200, Sergio Prado wrote:
 
-Applied to master, thanks.
+> I also discovered looking at wolfssl forums that they keep patches to be
+> applied in these applications, so they would work with wolfssl. And these
+> patches are not public [1].
+> 
+> So, from that point of view, it does not make sense to keep these options
+> in the package's makefile, since it is not useful with the upstream version
+> of nginx, lighttpd and wpa_supplicant. What do you think?
+> 
+> [1] https://www.wolfssl.com/forums/topic1015-nginx-wolfssl.html
+
+Indeed, of you can't build wolfssl against nginx without out of tree
+patches that are not even public, I don't see the point of enabling
+"nginx support" in wolfssl.
+
+Best regards,
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
