@@ -1,36 +1,64 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Thu, 14 Dec 2017 15:28:34 -0200
-Subject: [Buildroot] [PATCH 2/2] linux-headers: bump 4.{9, 14}.x series
-In-Reply-To: <1513272514-3427-1-git-send-email-festevam@gmail.com>
-References: <1513272514-3427-1-git-send-email-festevam@gmail.com>
-Message-ID: <1513272514-3427-2-git-send-email-festevam@gmail.com>
+From: Ryan Coe <bluemrp9@gmail.com>
+Date: Thu, 14 Dec 2017 09:41:57 -0800
+Subject: [Buildroot] [PATCH 1/1] mariadb: security bump version to 10.1.29
+Message-ID: <20171214174157.3354-1-bluemrp9@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
----
- package/linux-headers/Config.in.host | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Release notes: https://mariadb.com/kb/en/mariadb-10129-release-notes/
+Changelog: https://mariadb.com/kb/en/mariadb-10129-changelog/
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index db08963..eec9635 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -253,10 +253,10 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.12.74"	if BR2_KERNEL_HEADERS_3_12
- 	default "4.1.47"	if BR2_KERNEL_HEADERS_4_1
- 	default "4.4.105"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.68"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.9.69"	if BR2_KERNEL_HEADERS_4_9
- 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
- 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
- 	default "4.12.14"	if BR2_KERNEL_HEADERS_4_12
- 	default "4.13.16"	if BR2_KERNEL_HEADERS_4_13
--	default "4.14.5"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.14.6"	if BR2_KERNEL_HEADERS_4_14
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+Fixes the following security vulnerabilities:
+
+CVE-2017-10378 - Vulnerability in the MySQL Server component of Oracle MySQL
+(subcomponent: Server: Optimizer). Supported versions that are affected are
+5.5.57 and earlier, 5.6.37 and earlier and 5.7.11 and earlier. Easily
+exploitable vulnerability allows low privileged attacker with network access
+via multiple protocols to compromise MySQL Server. Successful attacks of this
+vulnerability can result in unauthorized ability to cause a hang or frequently
+repeatable crash (complete DOS) of MySQL Server.
+
+CVE-2017-10268 - Vulnerability in the MySQL Server component of Oracle MySQL
+(subcomponent: Server: Replication). Supported versions that are affected are
+5.5.57 and earlier, 5.6.37 and earlier and 5.7.19 and earlier. Difficult to
+exploit vulnerability allows high privileged attacker with logon to the
+infrastructure where MySQL Server executes to compromise MySQL Server.
+Successful attacks of this vulnerability can result in unauthorized access to
+critical data or complete access to all MySQL Server accessible data.
+
+Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
+---
+ package/mariadb/mariadb.hash | 4 ++--
+ package/mariadb/mariadb.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/mariadb/mariadb.hash b/package/mariadb/mariadb.hash
+index 1483bf70da..fcca9be6e4 100644
+--- a/package/mariadb/mariadb.hash
++++ b/package/mariadb/mariadb.hash
+@@ -1,5 +1,5 @@
+-# From https://downloads.mariadb.org/mariadb/10.1.28/
+-sha256 292dc8fff420c4bdaf3a2c3381ec3c99292965db2b09de0d7fec414c00032bbd  mariadb-10.1.28.tar.gz
++# From https://downloads.mariadb.org/mariadb/10.1.29/
++sha256 73bbd5602f52ab5aa4d83f465134871b6c87bda25371d098f6da5a3d98517ed4  mariadb-10.1.29.tar.gz
+ 
+ # Hash for license files
+ sha256 69ce89a0cadbe35a858398c258be93c388715e84fc0ca04e5a1fd1aa9770dd3a  README
+diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
+index 9d30d8f207..a726032fcb 100644
+--- a/package/mariadb/mariadb.mk
++++ b/package/mariadb/mariadb.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MARIADB_VERSION = 10.1.28
++MARIADB_VERSION = 10.1.29
+ MARIADB_SITE = https://downloads.mariadb.org/interstitial/mariadb-$(MARIADB_VERSION)/source
+ MARIADB_LICENSE = GPL-2.0 (server), GPL-2.0 with FLOSS exception (GPL client library), LGPL-2.0 (LGPL client library)
+ # Tarball no longer contains LGPL license text
 -- 
-2.7.4
+2.15.1
