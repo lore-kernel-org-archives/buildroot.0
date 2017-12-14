@@ -1,51 +1,44 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 14 Dec 2017 08:00:26 +0100 (CET)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2017-12-13
-Message-ID: <20171214070026.CCB3B20999@mail.free-electrons.com>
+From: Johannes Schmitz <johannes.schmitz1@gmail.com>
+Date: Thu, 14 Dec 2017 08:06:13 +0100
+Subject: [Buildroot] [PATCH 1/1] boot/uboot: add config option for uboot
+ environment padding byte
+In-Reply-To: <CAMbDF3J=j94Ze6LVJWnA7N453JMOP60-SzjLBdrB6n5s_aSkPw@mail.gmail.com>
+References: <1513018028-18256-1-git-send-email-johannes.schmitz1@gmail.com>
+ <20171212062751.3e1eb993@windsurf.png.is.keysight.com>
+ <20171213182332.GB7364@scaer>
+ <20171214071305.33920c54@windsurf.png.is.keysight.com>
+ <CAMbDF3J=j94Ze6LVJWnA7N453JMOP60-SzjLBdrB6n5s_aSkPw@mail.gmail.com>
+Message-ID: <CAMbDF3KyXg9jP+Mkix9zh5CPNe8e7303RUfLwR1KzKYVqscgYQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Am 14.12.2017 7:13 vorm. schrieb "Thomas Petazzoni" <
+thomas.petazzoni@free-electrons.com>:
+
 Hello,
 
-Build statistics for 2017-12-13
-===============================
+On Wed, 13 Dec 2017 19:23:32 +0100, Yann E. MORIN wrote:
 
-      branch |  OK | NOK | TIM | TOT |
-      master | 174 |   9 |   1 | 184 |
-   2017.08.x |  12 |   0 |   0 |  12 |
+>
+> But any case, as you said in a further reply, adding that new option
+> does not add much complexity.
 
-Results for branch 'master'
-===========================
-
-Classification of failures by reason
-------------------------------------
-
-                     vlc-2.2.8 | 4 
-                  cc-tool-0.26 | 1 
-                   mpd-0.20.12 | 1 
-                poppler-0.59.0 | 1 
-           python-numpy-1.13.3 | 1 
-qtuio-abe4973ff60654aad9df7... | 1 
-        ux500-firmware-1.1.3-6 | 1 
+But it serves no purpose whatsoever :-)
 
 
-Detail of failures
-------------------
+I disagree with this but maybe it's my electrical engineering background, I
+always want full control down to the physical layer.
+And mostly there is a use case even if I don't know all of them myself.
 
-        m68k |                   cc-tool-0.26 | NOK | http://autobuild.buildroot.net/results/5d8d4b8bdb4eeb8e4837cee34d347f38b448cf33 |     
-         arc |                    mpd-0.20.12 | NOK | http://autobuild.buildroot.net/results/e8adcca3b53a8ce495d8716c8f608c26d34aef26 |     
-         arm |                 poppler-0.59.0 | NOK | http://autobuild.buildroot.net/results/3a2d9519a8aae6d9fa14a773894c553443132749 |     
-     aarch64 |            python-numpy-1.13.3 | NOK | http://autobuild.buildroot.net/results/7fa0f54cd991b619a6bb847d89ac05cc186197cd |     
-        i586 | qtuio-abe4973ff60654aad9df7... | NOK | http://autobuild.buildroot.net/results/71c9be04a174c7ea7800c226af7ff2a20198607e |     
-         arc |         ux500-firmware-1.1.3-6 | TIM | http://autobuild.buildroot.net/results/6b0725fd29370b3261d4b4ec637bf79b53dc851b |     
-microblazeel |                      vlc-2.2.8 | NOK | http://autobuild.buildroot.net/results/6cda042b8dce17ed159946b068b32f7e0a96bc31 |     
-        or1k |                      vlc-2.2.8 | NOK | http://autobuild.buildroot.net/results/0f24e036a9aecfef179047ce77f28ffa643325ea |     
-      x86_64 |                      vlc-2.2.8 | NOK | http://autobuild.buildroot.net/results/d98bdcc745a2480d4664db2427f0ae1c9c5ea71e |     
-   powerpc64 |                      vlc-2.2.8 | NOK | http://autobuild.buildroot.net/results/1e7d86105a88aa5aabe4a73186c40474dddde43c |     
+I have a question though, is 32k the default uboot environment size? Then I
+could also set this as a default. Otherwise again it is a good argument for
+keeping the padding option in for debugging  purposes.
 
-
--- 
-http://autobuild.buildroot.net
+Regards
+Johannes
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20171214/a3be6725/attachment.html>
