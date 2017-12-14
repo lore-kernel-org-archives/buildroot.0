@@ -1,59 +1,52 @@
 From: Arvid E. Picciani <aep@exys.org>
-Date: Thu, 14 Dec 2017 11:57:06 +0100
-Subject: [Buildroot] [PATCH 2/2] enable static linking for libfuse
-In-Reply-To: <20171214105706.4577-1-aep@exys.org>
-References: <20171214105706.4577-1-aep@exys.org>
-Message-ID: <20171214105706.4577-2-aep@exys.org>
+Date: Thu, 14 Dec 2017 11:57:05 +0100
+Subject: [Buildroot] [PATCH 1/2] DTPMOD mod fix for musl's rcrt0
+Message-ID: <20171214105706.4577-1-aep@exys.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+See https://github.com/rust-lang/rust/issues/46566
+
 Signed-off-by: Arvid E. Picciani <aep@exys.org>
 ---
- package/libfuse/Config.in  | 4 ----
- package/libfuse/libfuse.mk | 3 ++-
- 2 files changed, 2 insertions(+), 5 deletions(-)
+ package/musl/0002-fix-rcrt1.o.patch | 26 ++++++++++++++++++++++++++
+ 1 file changed, 26 insertions(+)
+ create mode 100644 package/musl/0002-fix-rcrt1.o.patch
 
-diff --git a/package/libfuse/Config.in b/package/libfuse/Config.in
-index 2b0e31a991..62b18c2444 100644
---- a/package/libfuse/Config.in
-+++ b/package/libfuse/Config.in
-@@ -1,7 +1,6 @@
- config BR2_PACKAGE_LIBFUSE
- 	bool "libfuse"
- 	# Really doesn't like static, see fuse/lib/fuse.c
--	depends on !BR2_STATIC_LIBS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_MMU # fork()
- 	help
-@@ -9,6 +8,3 @@ config BR2_PACKAGE_LIBFUSE
- 
- 	  https://github.com/libfuse/libfuse
- 
--comment "libfuse needs a toolchain w/ threads, dynamic library"
--	depends on BR2_USE_MMU
--	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-diff --git a/package/libfuse/libfuse.mk b/package/libfuse/libfuse.mk
-index dc177d03c1..570390ca76 100644
---- a/package/libfuse/libfuse.mk
-+++ b/package/libfuse/libfuse.mk
-@@ -12,13 +12,14 @@ LIBFUSE_LICENSE_FILES = COPYING COPYING.LIB
- LIBFUSE_INSTALL_STAGING = YES
- LIBFUSE_DEPENDENCIES = $(if $(BR2_PACKAGE_LIBICONV),libiconv)
- LIBFUSE_CONF_OPTS = \
-+	--enable-static \
- 	--disable-example \
- 	--enable-lib \
- 	--enable-util
- 
- define LIBFUSE_INSTALL_TARGET_CMDS
- 	cp -dpf $(STAGING_DIR)/usr/bin/fusermount $(TARGET_DIR)/usr/bin/
--	cp -dpf $(STAGING_DIR)/usr/lib/libfuse.so* $(TARGET_DIR)/usr/lib/
-+	cp -dpf $(STAGING_DIR)/usr/lib/libfuse.a* $(TARGET_DIR)/usr/lib/
- endef
- 
- $(eval $(autotools-package))
+diff --git a/package/musl/0002-fix-rcrt1.o.patch b/package/musl/0002-fix-rcrt1.o.patch
+new file mode 100644
+index 0000000000..3dae65569f
+--- /dev/null
++++ b/package/musl/0002-fix-rcrt1.o.patch
+@@ -0,0 +1,26 @@
++diff --git a/ldso/dlstart.c b/ldso/dlstart.c
++index 4dbe178..0dd1d5a 100644
++--- a/ldso/dlstart.c
+++++ b/ldso/dlstart.c
++@@ -128,16 +128,18 @@ void _dlstart_c(size_t *sp, size_t *dynv)
++ 	rel = (void *)(base+dyn[DT_REL]);
++ 	rel_size = dyn[DT_RELSZ];
++ 	for (; rel_size; rel+=2, rel_size-=2*sizeof(size_t)) {
++-		if (!IS_RELATIVE(rel[1], 0)) continue;
++ 		size_t *rel_addr = (void *)(base + rel[0]);
+++		if (rel[1] == REL_DTPMOD) *rel_addr = 1;
+++		if (!IS_RELATIVE(rel[1], 0)) continue;
++ 		*rel_addr += base;
++ 	}
++ 
++ 	rel = (void *)(base+dyn[DT_RELA]);
++ 	rel_size = dyn[DT_RELASZ];
++ 	for (; rel_size; rel+=3, rel_size-=3*sizeof(size_t)) {
++-		if (!IS_RELATIVE(rel[1], 0)) continue;
++ 		size_t *rel_addr = (void *)(base + rel[0]);
+++		if (rel[1] == REL_DTPMOD) *rel_addr = 1;
+++		if (!IS_RELATIVE(rel[1], 0)) continue;
++ 		*rel_addr = base + rel[2];
++ 	}
++ #endif
++
 -- 
 2.15.1
