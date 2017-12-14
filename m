@@ -1,51 +1,60 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 13 Dec 2017 22:23:49 +0200
-Subject: [Buildroot] [PATCH] libgpgme: bump to version 1.10.0
-Message-ID: <26007cf3f6aee22008eb1f8b292bc4459ad2d0b0.1513196629.git.baruch@tkos.co.il>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 14 Dec 2017 06:18:50 +0100
+Subject: [Buildroot] [RFC 1/2] busybox: avoid conflict with other
+ packages
+In-Reply-To: <20171213144305.zs2iowvzy4n5xzqj@sapphire.tkos.co.il>
+References: <20171213130131.15744-1-thomas.petazzoni@free-electrons.com>
+ <20171213130131.15744-2-thomas.petazzoni@free-electrons.com>
+ <20171213144305.zs2iowvzy4n5xzqj@sapphire.tkos.co.il>
+Message-ID: <20171214061850.62bb4ae9@windsurf.png.is.keysight.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Use https download site.
+Hello,
 
-Add license hash.
+On Wed, 13 Dec 2017 16:43:05 +0200, Baruch Siach wrote:
 
-Cc: Philipp Claves <claves@budelmann-elektronik.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/libgpgme/libgpgme.hash | 7 ++++++-
- package/libgpgme/libgpgme.mk   | 4 ++--
- 2 files changed, 8 insertions(+), 3 deletions(-)
+> This means that a custom Busybox .config will automagically be transformed to 
+> something quite different. This is a significant change in behaviour.
 
-diff --git a/package/libgpgme/libgpgme.hash b/package/libgpgme/libgpgme.hash
-index cf7c5050fe4a..6bd595c5acde 100644
---- a/package/libgpgme/libgpgme.hash
-+++ b/package/libgpgme/libgpgme.hash
-@@ -1,2 +1,7 @@
-+# From https://lists.gnupg.org/pipermail/gnupg-announce/2017q4/000418.html
-+sha1 77d3390887da25ed70b7ac04392360efbdca501f  gpgme-1.10.0.tar.bz2
- # Locally calculated after checking pgp signature
--sha256 1b29fedb8bfad775e70eafac5b0590621683b2d9869db994568e6401f4034ceb  gpgme-1.9.0.tar.bz2
-+# https://gnupg.org/ftp/gcrypt/gpgme/gpgme-1.10.0.tar.bz2.sig
-+sha256 1a8fed1197c3b99c35f403066bb344a26224d292afc048cfdfc4ccd5690a0693  gpgme-1.10.0.tar.bz2
-+# Locally calculated
-+sha256 ca0061fc1381a3ab242310e4b3f56389f28e3d460eb2fd822ed7a21c6f030532  COPYING.LESSER
-diff --git a/package/libgpgme/libgpgme.mk b/package/libgpgme/libgpgme.mk
-index 5af2b5ed91a6..31f25b4645b0 100644
---- a/package/libgpgme/libgpgme.mk
-+++ b/package/libgpgme/libgpgme.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--LIBGPGME_VERSION = 1.9.0
--LIBGPGME_SITE = ftp://ftp.gnupg.org/gcrypt/gpgme
-+LIBGPGME_VERSION = 1.10.0
-+LIBGPGME_SITE = https://gnupg.org/ftp/gcrypt/gpgme
- LIBGPGME_SOURCE = gpgme-$(LIBGPGME_VERSION).tar.bz2
- LIBGPGME_LICENSE = LGPL-2.1+
- LIBGPGME_LICENSE_FILES = COPYING.LESSER
+We already tweak the Busybox .config file quite significantly in
+busybox.mk, so it's not really new. But I agree that the scale of the
+change is very different.
+
+> Can't we just move the symlink removal logic into busybox.mk instead?
+> That would leave the busybox binary alone, and keep the magic .config
+> transformations to minimum.
+
+If I understand your proposal, we would not tweak the Busybox .config
+file, but instead add a post install target hook that would remove the
+symbolic links installed by Busybox "make install" when such symbolic
+links are going to conflict with full-blown versions of the
+corresponding applications, added by other packages. Is that correct ?
+
+If so, then I see two drawbacks with this approach. They are not
+unacceptable, but they are drawbacks:
+
+ 1. We have to keep the optional dependency on Busybox in util-linux,
+    coreutils, fbset, and all those packages that conflict with Busybox.
+    Indeed, removing the symbolic link installed by Busybox only works
+    if Busybox is installed first. Unless Busybox "make install" is
+    careful enough to not install a given symlink if a file of the
+    same name already exists.
+
+ 2. The Busybox binary would contain lots of useless code, which simply
+    can't be reached, except by calling explicitly "busybox cmd".
+
+So neither are unacceptable drawbacks, but they are drawbacks. If the
+general opinion is that we should do what you propose, I'm fine with
+implementing that.
+
+What do others think ?
+
+Thomas
 -- 
-2.15.1
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
