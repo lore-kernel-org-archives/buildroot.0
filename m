@@ -1,74 +1,84 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 14 Dec 2017 06:37:13 +0100
-Subject: [Buildroot] [git commit] package/uboot: detect missing
- user-supplied environment source files
-Message-ID: <20171214053718.76538811CA@busybox.osuosl.org>
+From: Andrey Yurovsky <yurovsky@gmail.com>
+Date: Wed, 13 Dec 2017 21:41:42 -0800
+Subject: [Buildroot] [PATCH] systemd-bootchart: bump to version 233
+Message-ID: <20171214054142.30141-1-yurovsky@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c9b6604fa7871087120cd8a469452807d14a4c1c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+This version includes minor fixes and improvements but is otherwise
+compatible.
 
-Since 0542bb79e8 (uboot: Support multiple environment source files),
-missing user-supplied environment source files is no longer detected.
+It does not rely on xlocale.h so we drop that patch (it was merged).
 
-This is because we cat them all, and feed the concatenation to the stdin
-of mkenvimage. So, if one source file is missing, the cat exits in error,
-but the compound command exits with the exit code of the last command,
-which is that of mkenvimage, which happens to be happy with whatever it
-is fed on its stdin, even is empty.
-
-We fix that by creating a temporary file, that we even leave afterward
-for the user to inspect.
-
-We also move it out of the _CMDS block and into a macro of its own, so
-that it is easier to write and maintain.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Cam Hutchison <camh@xdna.net>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Andrey Yurovsky <yurovsky@gmail.com>
 ---
- boot/uboot/uboot.mk | 19 +++++++++++++------
- 1 file changed, 13 insertions(+), 6 deletions(-)
+ .../0001-parse-util-Don-t-use-xlocale.h-35.patch   | 32 ----------------------
+ package/systemd-bootchart/systemd-bootchart.hash   |  2 +-
+ package/systemd-bootchart/systemd-bootchart.mk     |  2 +-
+ 3 files changed, 2 insertions(+), 34 deletions(-)
+ delete mode 100644 package/systemd-bootchart/0001-parse-util-Don-t-use-xlocale.h-35.patch
 
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index 3917599..d2f241c 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -243,6 +243,18 @@ define UBOOT_BUILD_OMAP_IFT
- 		-c $(call qstrip,$(BR2_TARGET_UBOOT_OMAP_IFT_CONFIG))
- endef
+diff --git a/package/systemd-bootchart/0001-parse-util-Don-t-use-xlocale.h-35.patch b/package/systemd-bootchart/0001-parse-util-Don-t-use-xlocale.h-35.patch
+deleted file mode 100644
+index 4eae7e65e4..0000000000
+--- a/package/systemd-bootchart/0001-parse-util-Don-t-use-xlocale.h-35.patch
++++ /dev/null
+@@ -1,32 +0,0 @@
+-From 15062a4501a1dffccd7cb6374b415693fa4435bf Mon Sep 17 00:00:00 2001
+-From: Jussi Kukkonen <jussi.kukkonen@intel.com>
+-Date: Tue, 18 Jul 2017 22:55:50 +0300
+-Subject: [PATCH] parse-util: Don't use xlocale.h (#35)
+-
+-glibc 2.26 no longer contains the non-standard xlocale.h
+-(http://sourceware.org/glibc/wiki/Release/2.26#Removal_of_.27xlocale.h.27)
+-
+-This change shouldn't break anything as xlocale.h was a subset of
+-locale.h.
+-
+-[yann.morin.1998 at free.fr: backported from upstream]
+-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+----
+- src/parse-util.c | 1 -
+- 1 file changed, 1 deletion(-)
+-
+-diff --git a/src/parse-util.c b/src/parse-util.c
+-index 5635a68..1b2169c 100644
+---- a/src/parse-util.c
+-+++ b/src/parse-util.c
+-@@ -21,7 +21,6 @@
+- #include <locale.h>
+- #include <stdlib.h>
+- #include <string.h>
+--#include <xlocale.h>
+- 
+- #include "macro.h"
+- #include "parse-util.h"
+--- 
+-2.11.0
+-
+diff --git a/package/systemd-bootchart/systemd-bootchart.hash b/package/systemd-bootchart/systemd-bootchart.hash
+index 2d2175a0b4..40643dbca0 100644
+--- a/package/systemd-bootchart/systemd-bootchart.hash
++++ b/package/systemd-bootchart/systemd-bootchart.hash
+@@ -1,2 +1,2 @@
+ # sha256 locally computed
+-sha256 1ef7b4f440bf53aced26979cf8153482840699c556700671eb5dadb4222c70bd systemd-bootchart-231.tar.xz
++sha256 f4cb17b21928e36ec27de5c5294dea6ec1de4acd7ee6c56d6ecc75319cbcaefa systemd-bootchart-233.tar.xz
+diff --git a/package/systemd-bootchart/systemd-bootchart.mk b/package/systemd-bootchart/systemd-bootchart.mk
+index 3be39183e6..bcc3dbe22a 100644
+--- a/package/systemd-bootchart/systemd-bootchart.mk
++++ b/package/systemd-bootchart/systemd-bootchart.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+ifneq ($(BR2_TARGET_UBOOT_ENVIMAGE),)
-+define UBOOT_GENERATE_ENV_IMAGE
-+	cat $(call qstrip,$(BR2_TARGET_UBOOT_ENVIMAGE_SOURCE)) \
-+		>$(@D)/buildroot-env.txt
-+	$(HOST_DIR)/bin/mkenvimage -s $(BR2_TARGET_UBOOT_ENVIMAGE_SIZE) \
-+		$(if $(BR2_TARGET_UBOOT_ENVIMAGE_REDUNDANT),-r) \
-+		$(if $(filter BIG,$(BR2_ENDIAN)),-b) \
-+		-o $(BINARIES_DIR)/uboot-env.bin \
-+		$(@D)/buildroot-env.txt
-+endef
-+endif
-+
- define UBOOT_INSTALL_IMAGES_CMDS
- 	$(foreach f,$(UBOOT_BINS), \
- 			cp -dpf $(@D)/$(f) $(BINARIES_DIR)/
-@@ -254,12 +266,7 @@ define UBOOT_INSTALL_IMAGES_CMDS
- 			cp -dpf $(@D)/$(f) $(BINARIES_DIR)/
- 		)
- 	)
--	$(if $(BR2_TARGET_UBOOT_ENVIMAGE),
--		cat $(call qstrip,$(BR2_TARGET_UBOOT_ENVIMAGE_SOURCE)) | \
--			$(HOST_DIR)/bin/mkenvimage -s $(BR2_TARGET_UBOOT_ENVIMAGE_SIZE) \
--			$(if $(BR2_TARGET_UBOOT_ENVIMAGE_REDUNDANT),-r) \
--			$(if $(filter BIG,$(BR2_ENDIAN)),-b) \
--			-o $(BINARIES_DIR)/uboot-env.bin -)
-+	$(UBOOT_GENERATE_ENV_IMAGE)
- 	$(if $(BR2_TARGET_UBOOT_BOOT_SCRIPT),
- 		$(HOST_DIR)/bin/mkimage -C none -A $(MKIMAGE_ARCH) -T script \
- 			-d $(call qstrip,$(BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE)) \
+-SYSTEMD_BOOTCHART_VERSION = 231
++SYSTEMD_BOOTCHART_VERSION = 233
+ SYSTEMD_BOOTCHART_SOURCE = systemd-bootchart-$(SYSTEMD_BOOTCHART_VERSION).tar.xz
+ # Do not use the github helper here: the uploaded release tarball already
+ # contains the generated autotools scripts. It also slightly differs with
+-- 
+2.14.3
