@@ -1,48 +1,76 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 14 Dec 2017 06:44:12 +0100
-Subject: [Buildroot] [PATCHv3] package/uboot: detect missing
- user-supplied environment source files
-In-Reply-To: <20171209113549.1510-1-yann.morin.1998@free.fr>
-References: <20171209113549.1510-1-yann.morin.1998@free.fr>
-Message-ID: <20171214064412.1100a134@windsurf.png.is.keysight.com>
+Date: Thu, 14 Dec 2017 06:49:57 +0100
+Subject: [Buildroot] [git commit] luadbi: new package
+Message-ID: <20171214055534.4FEB682DC2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=26937e1f7d43d98fb0778257c7893d0e3befad17
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat,  9 Dec 2017 12:35:49 +0100, Yann E. MORIN wrote:
-> Since 0542bb79e8 (uboot: Support multiple environment source files),
-> missing user-supplied environment source files is no longer detected.
-> 
-> This is because we cat them all, and feed the concatenation to the stdin
-> of mkenvimage. So, if one source file is missing, the cat exits in error,
-> but the compound command exits with the exit code of the last command,
-> which is that of mkenvimage, which happens to be happy with whatever it
-> is fed on its stdin, even is empty.
-> 
-> We fix that by creating a temporary file, that we even leave afterward
-> for the user to inspect.
-> 
-> We also move it out of the _CMDS block and into a macro of its own, so
-> that it is easier to write and maintain.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Cam Hutchison <camh@xdna.net>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> 
-> ---
-> Changes v2 -> v3:
->   - generate inter;ediate file in $(@D) to avoid conflicts with
->     user-generated files in $(O)/images/  (Cam)
->   - typo
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Config.in          |  1 +
+ package/luadbi/Config.in   | 10 ++++++++++
+ package/luadbi/luadbi.hash |  2 ++
+ package/luadbi/luadbi.mk   | 12 ++++++++++++
+ 4 files changed, 25 insertions(+)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/Config.in b/package/Config.in
+index c3ebbfc..91760ef 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -606,6 +606,7 @@ menu "Lua libraries/modules"
+ 	source "package/lua-testmore/Config.in"
+ 	source "package/luabitop/Config.in"
+ 	source "package/luacrypto/Config.in"
++	source "package/luadbi/Config.in"
+ 	source "package/luaexpat/Config.in"
+ 	source "package/luaexpatutils/Config.in"
+ 	source "package/luafilesystem/Config.in"
+diff --git a/package/luadbi/Config.in b/package/luadbi/Config.in
+new file mode 100644
+index 0000000..2e29058
+--- /dev/null
++++ b/package/luadbi/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_LUADBI
++	bool "luadbi"
++	help
++	  LuaDBI is a database interface library for Lua.
++	  It is designed to provide a RDBMS agnostic API for handling
++	  database operations. LuaDBI also provides support for
++	  prepared statement handles, placeholders and bind parameters
++	  for all database operations.
++
++	  https://github.com/mwild1/luadbi
+diff --git a/package/luadbi/luadbi.hash b/package/luadbi/luadbi.hash
+new file mode 100644
+index 0000000..e5c022b
+--- /dev/null
++++ b/package/luadbi/luadbi.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256 723f63b744b7367ddfd6bbf7a7e6f6867aa1eaabbbc2bab5dc8a90e80b0c34c2  luadbi-0.6-2.src.rock
+diff --git a/package/luadbi/luadbi.mk b/package/luadbi/luadbi.mk
+new file mode 100644
+index 0000000..268e0e6
+--- /dev/null
++++ b/package/luadbi/luadbi.mk
+@@ -0,0 +1,12 @@
++################################################################################
++#
++# luadbi
++#
++################################################################################
++
++LUADBI_VERSION = 0.6-2
++LUADBI_LICENSE = MIT
++LUADBI_SUBDIR = luadbi
++LUADBI_LICENSE_FILES = $(LUADBI_SUBDIR)/COPYING
++
++$(eval $(luarocks-package))
