@@ -1,49 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 14 Dec 2017 09:13:55 +0100
-Subject: [Buildroot] [PATCH 2/3] package/libupnp18: add optional
- dependency to openssl
-In-Reply-To: <20171214073134.28696-2-bernd.kuhls@t-online.de>
-References: <20171214073134.28696-1-bernd.kuhls@t-online.de>
- <20171214073134.28696-2-bernd.kuhls@t-online.de>
-Message-ID: <20171214091355.7243dc44@windsurf.png.is.keysight.com>
+Date: Thu, 14 Dec 2017 09:16:09 +0100
+Subject: [Buildroot] [git commit] package/libupnp18: added upstream sha1 hash
+Message-ID: <20171214081617.18159804F9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=efcf9ae9ffdb26b9ae5cac204a1f0d4f006757c3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 14 Dec 2017 08:31:33 +0100, Bernd Kuhls wrote:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/libupnp18/libupnp18.mk | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/package/libupnp18/libupnp18.mk b/package/libupnp18/libupnp18.mk
-> index a75558e92b..b5d1a264a9 100644
-> --- a/package/libupnp18/libupnp18.mk
-> +++ b/package/libupnp18/libupnp18.mk
-> @@ -12,4 +12,12 @@ LIBUPNP18_INSTALL_STAGING = YES
->  LIBUPNP18_LICENSE = BSD-3-Clause
->  LIBUPNP18_LICENSE_FILES = LICENSE
->  
-> +ifeq ($(BR2_PACKAGE_LIBOPENSSL),y)
-> +LIBUPNP18_CONF_OPTS += --enable-open-ssl
-> +LIBUPNP18_DEPENDENCIES += libopenssl
-> +LIBUPNP18_CONF_ENV += LIBS="`$(PKG_CONFIG_HOST_BINARY) --libs libssl libcrypto`"
-> +else
-> +LIBUPNP18_CONF_OPTS += --disable-open-ssl
-> +endif
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libupnp18/libupnp18.hash | 2 ++
+ 1 file changed, 2 insertions(+)
 
-So, I gather than it doesn't work with LibreSSL? If so, it would have
-been nice to indicate in the commit log, so we know it's intentional to
-use libopenssl and not the openssl virtual package.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/libupnp18/libupnp18.hash b/package/libupnp18/libupnp18.hash
+index a5b5b07..dd59034 100644
+--- a/package/libupnp18/libupnp18.hash
++++ b/package/libupnp18/libupnp18.hash
+@@ -1,3 +1,5 @@
++# From https://sourceforge.net/projects/pupnp/files/pupnp/libUPnP%201.8.3/libupnp-1.8.3.tar.bz2.sha1
++sha1 e7c28c24905ae972ff3277a7bdaa9b839f6c66b9  libupnp-1.8.3.tar.bz2
+ # Locally computed:
+ sha256	9afa0b09faa9ebd9e8a6425ddbfe8d1d856544c49b1f86fde221219e569a308d	libupnp-1.8.3.tar.bz2
+ sha256	0375955c8a79d6e8fa0792d45d00fc4e7710d7ac95bcbd27f9225a83f5c946fd	LICENSE
