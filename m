@@ -1,64 +1,42 @@
-From: Ryan Coe <bluemrp9@gmail.com>
-Date: Thu, 14 Dec 2017 09:41:57 -0800
-Subject: [Buildroot] [PATCH 1/1] mariadb: security bump version to 10.1.29
-Message-ID: <20171214174157.3354-1-bluemrp9@gmail.com>
+From: James Albert <sjr_ee@yahoo.ca>
+Date: Thu, 14 Dec 2017 17:34:05 +0000 (UTC)
+Subject: [Buildroot] Using PRU
+References: <1574223358.5559956.1513272846088.ref@mail.yahoo.com>
+Message-ID: <1574223358.5559956.1513272846088@mail.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Release notes: https://mariadb.com/kb/en/mariadb-10129-release-notes/
-Changelog: https://mariadb.com/kb/en/mariadb-10129-changelog/
+Hi,I'm trying to use buildroot 2017.11 with recent Linux 4.13.16 to use the PRUSS on a Beaglebone Black. I think I've turned on all of the PRU, RPMsg and remoteproc settings in buildroot and Linux configs. I also built a custom device tree with the PRUSS enabled. But the pieces aren't all there, and it doesn't look like TI's Hands On training (http://processors.wiki.ti.com/index.php/PRU_Training:_Hands-on_Labs). Is there somewhere I can find up-to-date instructions on getting the PRUSS running when I use buildroot? So much of what I've seen on the web is old (UIO-based) or starts with the Beagleboard or TI trees (I want an embedded environment, not a whole Debian). You people are doing a great job of simplifying, enhancing and refining buildroot, and I thank you. Still, I'm finding it a challenge to understand all of the knobs and buttons. If this is the wrong forum for asking, let me know.
+Buildroot and Linux defconfigs are attached. Some other console queries are below. I think the device tree error from dtc is due to some manual fdt changes I did in U-boot. The vi screen cap shows the segment of /sys/firmware/fdt that has the PRUSS.
+Regards,Steve.
+# ls /sys/bus/platform/devices/40300000.ocmcram? ? ? ?48048000.timer? ? ? ? ?53500000.aes44d00000.wkup_m3? ? ? ?4804a000.timer? ? ? ? ?Fixed MDIO bus.044e00000.prcm? ? ? ? ? 4804c000.gpio? ? ? ? ? alarmtimer44e07000.gpio? ? ? ? ? 48060000.mmc? ? ? ? ? ?cpufreq-dt44e09000.serial? ? ? ? 480c8000.mailbox? ? ? ?fixedregulator044e0b000.i2c? ? ? ? ? ?480ca000.spinlock? ? ? leds44e10000.scm? ? ? ? ? ?481a0000.spi? ? ? ? ? ?ocp44e10000.scm_conf? ? ? 481ac000.gpio? ? ? ? ? ocp:l4_wkup at 44c0000044e10650.cpsw-phy-sel? 481ae000.gpio? ? ? ? ? opp-table44e10800.pinmux? ? ? ? 481d8000.mmc? ? ? ? ? ?oprofile-perf.044e10f90.dma-router? ? 48310000.rng? ? ? ? ? ?pmu44e11324.wkup_m3_ipc? ?49000000.edma? ? ? ? ? reg-dummy44e35000.wdt? ? ? ? ? ?49800000.tptc? ? ? ? ? serial825044e3e000.rtc? ? ? ? ? ?49900000.tptc? ? ? ? ? soc47400000.usb? ? ? ? ? ?49a00000.tptc? ? ? ? ? soc:mpu4802a000.i2c? ? ? ? ? ?4a100000.ethernet? ? ? tps65217-bl48042000.timer? ? ? ? ?4a101000.mdio? ? ? ? ? tps65217-charger48044000.timer? ? ? ? ?4a300000.pruss? ? ? ? ?tps65217-pmic48046000.timer? ? ? ? ?53100000.sham? ? ? ? ? tps65217-pwrbutton# find /lib -name *pru*
+# find /lib -name *remote*/lib/modules/4.13.16/kernel/drivers/remoteproc/lib/modules/4.13.16/kernel/drivers/remoteproc/remoteproc.ko/lib/modules/4.13.16/kernel/drivers/remoteproc/omap_remoteproc.ko# find /lib -name *rpmsg*/lib/modules/4.13.16/kernel/drivers/rpmsg/lib/modules/4.13.16/kernel/drivers/rpmsg/rpmsg_core.ko/lib/modules/4.13.16/kernel/drivers/rpmsg/rpmsg_char.ko/lib/modules/4.13.16/kernel/drivers/rpmsg/virtio_rpmsg_bus.ko/lib/modules/4.13.16/kernel/samples/rpmsg/lib/modules/4.13.16/kernel/samples/rpmsg/rpmsg_client_sample.ko# find /lib -name *rproc*/lib/modules/4.13.16/kernel/drivers/remoteproc/wkup_m3_rproc.ko# modprobe remoteproc# lsmodModule? ? ? ? ? ? ? ? ? Size? Used by? ? Tainted: Gremoteproc? ? ? ? ? ? ?32768? 0virtio_ring? ? ? ? ? ? 24576? 1 remoteprocvirtio? ? ? ? ? ? ? ? ?16384? 1 remoteprocrpmsg_char? ? ? ? ? ? ?16384? 0rpmsg_core? ? ? ? ? ? ?16384? 1 rpmsg_char# ls /sys/class/remoteproc/# dtc -f /sys/firmware/fdt > fdt.txt<stdout>: ERROR (explicit_phandles): /ocp/l4_wkup at 44c00000/scm at 210000/pinmux at 800/spi1_pins has mismatching 'phandle' and 'linux,phandle' propertiesWarning: Input tree has errors, output forced# vi fdt.txt? ? ? ? ? ? ? ? ? ? ? ? interrupts = <0x6f>; ? ? ? ? ? ? ? ? ? ? ? ? reg = <0x48310000 0x2000>;? ? ? ? ? ? ? ? ? ? ? ? interrupts = <0x6f>;? ? ? ? ? ? ? ? };
+? ? ? ? ? ? ? ? pruss at 4a300000 {? ? ? ? ? ? ? ? ? ? ? ? status = "okay";? ? ? ? ? ? ? ? ? ? ? ? compatible = "ti,am3352-pruss";? ? ? ? ? ? ? ? ? ? ? ? ti,hwmods = "pruss";? ? ? ? ? ? ? ? ? ? ? ? reg = <0x4a300000 0x2000 0x4a302000 0x2000 0x4a310000 0x3000 0x4a326000 0x2000 0x4a? ? ? ? ? ? ? ? ? ? ? ? reg-names = "dram0", "dram1", "shrdram2", "cfg", "iep", "mii_rt";? ? ? ? ? ? ? ? ? ? ? ? #address-cells = <0x1>;? ? ? ? ? ? ? ? ? ? ? ? #size-cells = <0x1>;? ? ? ? ? ? ? ? ? ? ? ? ranges;
+? ? ? ? ? ? ? ? ? ? ? ? intc at 4a320000 {? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? compatible = "ti,am3352-pruss-intc";? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? reg = <0x4a320000 0x2000>;? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? reg-names = "intc";? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? interrupts = <0x14 0x15 0x16 0x17 0x18 0x19 0x1a 0x1b>;? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? interrupt-names = "host2", "host3", "host4", "host5", "host6", "host7", "ho? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? interrupt-controller;? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? #interrupt-cells = <0x1>;? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? linux,phandle = <0x4a>;? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? phandle = <0x4a>;? ? ? ? ? ? ? ? ? ? ? ? };
+? ? ? ? ? ? ? ? ? ? ? ? pru0 at 4a334000 {? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? compatible = "ti,am3352-pru";? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? reg = <0x4a334000 0x2000 0x4a322000 0x400 0x4a322400 0x100>;? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? reg-names = "iram", "control", "debug";? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? interrupt-parent = <0x4a>;? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? interrupts = <0x10 0x11>;? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? interrupt-names = "vring", "kick";? ? ? ? ? ? ? ? ? ? ? ? };
+? ? ? ? ? ? ? ? ? ? ? ? pru1 at 4a338000 {? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? compatible = "ti,am3352-pru";? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? reg = <0x4a338000 0x2000 0x4a324000 0x400 0x4a324400 0x100>;? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? reg-names = "iram", "control", "debug";? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? interrupt-parent = <0x4a>;? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? interrupts = <0x12 0x13>;? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? interrupt-names = "vring", "kick";? ? ? ? ? ? ? ? ? ? ? ? };
+? ? ? ? ? ? ? ? ? ? ? ? mdio at 4a332400 {? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? compatible = "ti,davinci_mdio";? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? reg = <0x4a332400 0x90>;? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? clocks = <0x10>;? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? clock-names = "fck";? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? bus_freq = <0xf4240>;? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? #address-cells = <0x1>;? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? #size-cells = <0x0>;? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? status = "disabled";? ? ? ? ? ? ? ? ? ? ? ? };? ? ? ? ? ? ? ? };? ? ? ? };
+? ? ? ? memory at 80000000 {- fdt.txt 1904/1937 98%
+End.
 
-Fixes the following security vulnerabilities:
 
-CVE-2017-10378 - Vulnerability in the MySQL Server component of Oracle MySQL
-(subcomponent: Server: Optimizer). Supported versions that are affected are
-5.5.57 and earlier, 5.6.37 and earlier and 5.7.11 and earlier. Easily
-exploitable vulnerability allows low privileged attacker with network access
-via multiple protocols to compromise MySQL Server. Successful attacks of this
-vulnerability can result in unauthorized ability to cause a hang or frequently
-repeatable crash (complete DOS) of MySQL Server.
-
-CVE-2017-10268 - Vulnerability in the MySQL Server component of Oracle MySQL
-(subcomponent: Server: Replication). Supported versions that are affected are
-5.5.57 and earlier, 5.6.37 and earlier and 5.7.19 and earlier. Difficult to
-exploit vulnerability allows high privileged attacker with logon to the
-infrastructure where MySQL Server executes to compromise MySQL Server.
-Successful attacks of this vulnerability can result in unauthorized access to
-critical data or complete access to all MySQL Server accessible data.
-
-Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
----
- package/mariadb/mariadb.hash | 4 ++--
- package/mariadb/mariadb.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/mariadb/mariadb.hash b/package/mariadb/mariadb.hash
-index 1483bf70da..fcca9be6e4 100644
---- a/package/mariadb/mariadb.hash
-+++ b/package/mariadb/mariadb.hash
-@@ -1,5 +1,5 @@
--# From https://downloads.mariadb.org/mariadb/10.1.28/
--sha256 292dc8fff420c4bdaf3a2c3381ec3c99292965db2b09de0d7fec414c00032bbd  mariadb-10.1.28.tar.gz
-+# From https://downloads.mariadb.org/mariadb/10.1.29/
-+sha256 73bbd5602f52ab5aa4d83f465134871b6c87bda25371d098f6da5a3d98517ed4  mariadb-10.1.29.tar.gz
- 
- # Hash for license files
- sha256 69ce89a0cadbe35a858398c258be93c388715e84fc0ca04e5a1fd1aa9770dd3a  README
-diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
-index 9d30d8f207..a726032fcb 100644
---- a/package/mariadb/mariadb.mk
-+++ b/package/mariadb/mariadb.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MARIADB_VERSION = 10.1.28
-+MARIADB_VERSION = 10.1.29
- MARIADB_SITE = https://downloads.mariadb.org/interstitial/mariadb-$(MARIADB_VERSION)/source
- MARIADB_LICENSE = GPL-2.0 (server), GPL-2.0 with FLOSS exception (GPL client library), LGPL-2.0 (LGPL client library)
- # Tarball no longer contains LGPL license text
--- 
-2.15.1
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20171214/81c5beff/attachment.html>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: defconfig
+Type: application/octet-stream
+Size: 1406 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20171214/81c5beff/attachment.obj>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: linux.defconfig
+Type: application/octet-stream
+Size: 10410 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20171214/81c5beff/attachment-0001.obj>
