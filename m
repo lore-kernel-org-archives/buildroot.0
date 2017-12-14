@@ -1,41 +1,27 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 14 Dec 2017 08:21:44 +0100
-Subject: [Buildroot] [PATCH 1/1] boot/uboot: add config option for uboot
- environment padding byte
-In-Reply-To: <CAMbDF3KyXg9jP+Mkix9zh5CPNe8e7303RUfLwR1KzKYVqscgYQ@mail.gmail.com>
-References: <1513018028-18256-1-git-send-email-johannes.schmitz1@gmail.com>
- <20171212062751.3e1eb993@windsurf.png.is.keysight.com>
- <20171213182332.GB7364@scaer>
- <20171214071305.33920c54@windsurf.png.is.keysight.com>
- <CAMbDF3J=j94Ze6LVJWnA7N453JMOP60-SzjLBdrB6n5s_aSkPw@mail.gmail.com>
- <CAMbDF3KyXg9jP+Mkix9zh5CPNe8e7303RUfLwR1KzKYVqscgYQ@mail.gmail.com>
-Message-ID: <20171214082144.1eef0a4f@windsurf.png.is.keysight.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Thu, 14 Dec 2017 08:31:32 +0100
+Subject: [Buildroot] [PATCH 1/3] package/libupnp18: added upstream sha1 hash
+Message-ID: <20171214073134.28696-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/libupnp18/libupnp18.hash | 2 ++
+ 1 file changed, 2 insertions(+)
 
-On Thu, 14 Dec 2017 08:06:13 +0100, Johannes Schmitz wrote:
-
-> I disagree with this but maybe it's my electrical engineering background, I
-> always want full control down to the physical layer.
-> And mostly there is a use case even if I don't know all of them myself.
-
-If Buildroot starts to support use cases that we don't even understand
-when they are needed, then we are going on a very, very slippery road.
-
-> I have a question though, is 32k the default uboot environment size? Then I
-> could also set this as a default. Otherwise again it is a good argument for
-> keeping the padding option in for debugging  purposes.
-
-No, there is nothing like a default environment size. Each board has
-its own value in its U-boot configuration file. 
-
-Thomas
+diff --git a/package/libupnp18/libupnp18.hash b/package/libupnp18/libupnp18.hash
+index a5b5b074c9..dd59034cd3 100644
+--- a/package/libupnp18/libupnp18.hash
++++ b/package/libupnp18/libupnp18.hash
+@@ -1,3 +1,5 @@
++# From https://sourceforge.net/projects/pupnp/files/pupnp/libUPnP%201.8.3/libupnp-1.8.3.tar.bz2.sha1
++sha1 e7c28c24905ae972ff3277a7bdaa9b839f6c66b9  libupnp-1.8.3.tar.bz2
+ # Locally computed:
+ sha256	9afa0b09faa9ebd9e8a6425ddbfe8d1d856544c49b1f86fde221219e569a308d	libupnp-1.8.3.tar.bz2
+ sha256	0375955c8a79d6e8fa0792d45d00fc4e7710d7ac95bcbd27f9225a83f5c946fd	LICENSE
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.11.0
