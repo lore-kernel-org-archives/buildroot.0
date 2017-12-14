@@ -1,37 +1,41 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 14 Dec 2017 08:31:33 +0100
-Subject: [Buildroot] [PATCH 2/3] package/libupnp18: add optional dependency
- to openssl
+Date: Thu, 14 Dec 2017 08:31:34 +0100
+Subject: [Buildroot] [PATCH 3/3] package/vlc: switch to libupnp-1.8
 In-Reply-To: <20171214073134.28696-1-bernd.kuhls@t-online.de>
 References: <20171214073134.28696-1-bernd.kuhls@t-online.de>
-Message-ID: <20171214073134.28696-2-bernd.kuhls@t-online.de>
+Message-ID: <20171214073134.28696-3-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Vlc now supports libupnp-1.8:
+http://git.videolan.org/?p=vlc/vlc-2.2.git;a=commitdiff;h=825dca78be3a81e2a1c5d04137aa01b1cb32dfd3
+
+Fixes
+http://autobuild.buildroot.net/results/d98/d98bdcc745a2480d4664db2427f0ae1c9c5ea71e/
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/libupnp18/libupnp18.mk | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ package/vlc/vlc.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libupnp18/libupnp18.mk b/package/libupnp18/libupnp18.mk
-index a75558e92b..b5d1a264a9 100644
---- a/package/libupnp18/libupnp18.mk
-+++ b/package/libupnp18/libupnp18.mk
-@@ -12,4 +12,12 @@ LIBUPNP18_INSTALL_STAGING = YES
- LIBUPNP18_LICENSE = BSD-3-Clause
- LIBUPNP18_LICENSE_FILES = LICENSE
+diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
+index 30520c3072..84693588fd 100644
+--- a/package/vlc/vlc.mk
++++ b/package/vlc/vlc.mk
+@@ -281,9 +281,9 @@ else
+ VLC_CONF_OPTS += --disable-theora
+ endif
  
-+ifeq ($(BR2_PACKAGE_LIBOPENSSL),y)
-+LIBUPNP18_CONF_OPTS += --enable-open-ssl
-+LIBUPNP18_DEPENDENCIES += libopenssl
-+LIBUPNP18_CONF_ENV += LIBS="`$(PKG_CONFIG_HOST_BINARY) --libs libssl libcrypto`"
-+else
-+LIBUPNP18_CONF_OPTS += --disable-open-ssl
-+endif
-+
- $(eval $(autotools-package))
+-ifeq ($(BR2_PACKAGE_LIBUPNP),y)
++ifeq ($(BR2_PACKAGE_LIBUPNP18),y)
+ VLC_CONF_OPTS += --enable-upnp
+-VLC_DEPENDENCIES += libupnp
++VLC_DEPENDENCIES += libupnp18
+ else
+ VLC_CONF_OPTS += --disable-upnp
+ endif
 -- 
 2.11.0
