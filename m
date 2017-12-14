@@ -1,43 +1,72 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 14 Dec 2017 08:43:10 +0200
-Subject: [Buildroot] [PATCH] wolfssl: new package
-In-Reply-To: <20171214064359.282d0412@windsurf.png.is.keysight.com>
-References: <1513098237-18245-1-git-send-email-sergio.prado@e-labworks.com>
- <20171212173206.vablwxvwcpjfrffn@tarshish>
- <CANu7NGt3er0OfSdH-ujY6111fdywdixTpgVRTq7C79HzZXCWvw@mail.gmail.com>
- <20171213060308.gosvafozfwqsdw4p@sapphire.tkos.co.il>
- <CANu7NGsei4G9mcvMxtRRoyp9C69Yab-n6sa5htL-+==30kLBEw@mail.gmail.com>
- <20171214064359.282d0412@windsurf.png.is.keysight.com>
-Message-ID: <20171214064310.zlgeattkdrphujem@sapphire.tkos.co.il>
+Date: Thu, 14 Dec 2017 08:58:07 +0200
+Subject: [Buildroot] [RFC 1/2] busybox: avoid conflict with other
+ packages
+In-Reply-To: <20171214061850.62bb4ae9@windsurf.png.is.keysight.com>
+References: <20171213130131.15744-1-thomas.petazzoni@free-electrons.com>
+ <20171213130131.15744-2-thomas.petazzoni@free-electrons.com>
+ <20171213144305.zs2iowvzy4n5xzqj@sapphire.tkos.co.il>
+ <20171214061850.62bb4ae9@windsurf.png.is.keysight.com>
+Message-ID: <20171214065807.74cqtgpex5oldpx3@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas, Sergio,
+Hi Thomas,
 
-On Thu, Dec 14, 2017 at 06:43:59AM +0100, Thomas Petazzoni wrote:
-> On Wed, 13 Dec 2017 15:21:37 -0200, Sergio Prado wrote:
+On Thu, Dec 14, 2017 at 06:18:50AM +0100, Thomas Petazzoni wrote:
+> On Wed, 13 Dec 2017 16:43:05 +0200, Baruch Siach wrote:
+> > This means that a custom Busybox .config will automagically be transformed 
+> > to something quite different. This is a significant change in behaviour.
 > 
-> > I also discovered looking at wolfssl forums that they keep patches to be
-> > applied in these applications, so they would work with wolfssl. And these
-> > patches are not public [1].
-> > 
-> > So, from that point of view, it does not make sense to keep these options
-> > in the package's makefile, since it is not useful with the upstream version
-> > of nginx, lighttpd and wpa_supplicant. What do you think?
-> > 
-> > [1] https://www.wolfssl.com/forums/topic1015-nginx-wolfssl.html
+> We already tweak the Busybox .config file quite significantly in
+> busybox.mk, so it's not really new. But I agree that the scale of the
+> change is very different.
 > 
-> Indeed, of you can't build wolfssl against nginx without out of tree
-> patches that are not even public, I don't see the point of enabling
-> "nginx support" in wolfssl.
+> > Can't we just move the symlink removal logic into busybox.mk instead?
+> > That would leave the busybox binary alone, and keep the magic .config
+> > transformations to minimum.
+> 
+> If I understand your proposal, we would not tweak the Busybox .config
+> file, but instead add a post install target hook that would remove the
+> symbolic links installed by Busybox "make install" when such symbolic
+> links are going to conflict with full-blown versions of the
+> corresponding applications, added by other packages. Is that correct ?
+> 
+> If so, then I see two drawbacks with this approach. They are not
+> unacceptable, but they are drawbacks:
+> 
+>  1. We have to keep the optional dependency on Busybox in util-linux,
+>     coreutils, fbset, and all those packages that conflict with Busybox.
+>     Indeed, removing the symbolic link installed by Busybox only works
+>     if Busybox is installed first. Unless Busybox "make install" is
+>     careful enough to not install a given symlink if a file of the
+>     same name already exists.
 
-While I agree with Thomas, I think that if there is a convenient way to 
-control the wolfssl configuration then we should expose it somehow. The list 
-of HAVE_* options indicates that many, maybe even most, users will need more 
-than the default minimal configuration.
+Quoting busybox.mk:
+
+# Enable "noclobber" in install.sh, to prevent BusyBox from overwriting any
+# full-blown versions of apps installed by other packages with sym/hard links.
+
+Unfortunately, the noclobber implementation is racy. So the alternative is to 
+remove apps from the generated busybox.links file that install.sh uses as 
+input.
+
+>  2. The Busybox binary would contain lots of useless code, which simply
+>     can't be reached, except by calling explicitly "busybox cmd".
+
+This is not different than the situation we have now. The added useless code 
+size is in most cases negligible compared to any one of the full-blown 
+version. In the end it's the responsibility of the user to fine tune the 
+target image size.
+
+> So neither are unacceptable drawbacks, but they are drawbacks. If the
+> general opinion is that we should do what you propose, I'm fine with
+> implementing that.
+> 
+> What do others think ?
 
 baruch
 
