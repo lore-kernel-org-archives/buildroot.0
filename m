@@ -1,83 +1,70 @@
-From: Kees van Unen <keesvanunen@hotmail.com>
-Date: Fri, 15 Dec 2017 20:23:03 +0000
-Subject: [Buildroot] FW:  Cannot rebuild autobuild
-In-Reply-To: <20171215202245.y74stbkfdaysy3hp@dell5510>
-References: <61134b08-bb0a-4665-4b68-3ea2e4063563@mind.be>
- <20171116001919.67e98b4b@gmx.net>
- <58b8ef53-75b6-fc8b-8d37-e21570ae4e3b@mind.be>
- <20171116072948.smctbcvxwkxgqoah@x230>
- <d13312cf-ae70-92fd-8819-a86c79d1723b@mind.be>
- <20171118223206.069b771a@gmx.net> <20171121201605.tzmasudql66iruxa@dell5510>
- <20171125150144.GC2798@scaer> <d76cd131-a5ec-631d-4c8b-4bb3d09fd2ca@mind.be>
- <20171129211926.GA16373@x230>,<20171215202245.y74stbkfdaysy3hp@dell5510>
-Message-ID: <585f4cc2e07f4bc9beeaac7a37df8032@AM5PR0801MB1394.eurprd08.prod.outlook.com>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Fri, 15 Dec 2017 14:41:05 -0600
+Subject: [Buildroot] [PATCH] kvm-unit-test: revert use of RDSEED and
+ RDRAND
+In-Reply-To: <20171214094459.4b383336@windsurf.png.is.keysight.com>
+References: <20171207043631.9312-1-matthew.weber@rockwellcollins.com>
+ <20171214094459.4b383336@windsurf.png.is.keysight.com>
+Message-ID: <CANQCQpaDCyJLRZRk5mwun3sGy1Ex7WVZO5E35YZM02m-Synv-g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Thomas,
 
+On Thu, Dec 14, 2017 at 2:44 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+>
+> Hello,
+>
+> On Wed,  6 Dec 2017 22:36:31 -0600, Matt Weber wrote:
+> > Removing this commit in buildroot as it causes
+> > build failures when the host binutils isn't
+> > at least 2.23 (2.22.x introduced RDSEED).
+> >
+> > The host toolchain is used for x86_64 target
+> > builds where we need to do a 32bit build.
+> >
+> > Fixes:
+> > http://autobuild.buildroot.net/results/c39/c3987a3cbd2960b0ff50f872636bdfd8d1a9c820/
+> >
+> > Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+>
+> What is the long term solution for this? Has the problem been reported
+> upstream?
 
+It isn't really a bug upstream.  I think the long term fix would be a
+check for a minimum binutils version.  Can you think of another case I
+could use as an example where a evolution in the binutils has required
+a minimum version?
 
-________________________________________
-Van: buildrootNamensPetr Vorel
-Verzonden: vrijdag 15 december 2017 21:22:46 (UTC+01:00) Amsterdam, Berlijn, Bern, Rome, Stockholm, Wenen
-Aan: Arnout Vandecappelle
-CC: Thomas Petazzoni; Peter Seiderer; Yann E. MORIN; buildroot at buildroot.org
-Onderwerp: Re: [Buildroot] Cannot rebuild autobuild
+>
+> > diff --git a/package/kvm-unit-tests/0002-Revert-x86-vmx-test-RDRAND-and-RDSEED.patch b/package/kvm-unit-tests/0002-Revert-x86-vmx-test-RDRAND-and-RDSEED.patch
+> > new file mode 100644
+> > index 0000000000..1d3fb1ca6a
+> > --- /dev/null
+> > +++ b/package/kvm-unit-tests/0002-Revert-x86-vmx-test-RDRAND-and-RDSEED.patch
+> > @@ -0,0 +1,66 @@
+> > +From ff6ee5c5345e5a55827d657d8d862237338b6edb Mon Sep 17 00:00:00 2001
+> > +From: Matt Weber <matthew.weber@rockwellcollins.com>
+> > +Date: Wed, 6 Dec 2017 22:30:04 -0600
+> > +Subject: [PATCH] Revert "x86: vmx: test RDRAND and RDSEED"
+> > +
+> > +Removing this commit in buildroot as it causes
+> > +build failures when the host binutils isn't
+> > +at least 2.23 (2.22.x introduced RDSEED).
+> > +The host toolchain is used for x86_64 target
+> > +builds where we need to do a 32bit build.
+> > +
+> > +Fixes:
+> > +http://autobuild.buildroot.net/results/c39/c3987a3cbd2960b0ff50f872636bdfd8d1a9c820/
+> > +
+> > +This reverts commit a88205d14320d2f681a6c220f1d08711b9ce3885.
+>
+> Missing SoB.
 
-Hi,
+Opps, noted.
 
-> > > So, this is a change in behaviour, and should be reported upstream as a
-> > > bug. Will you do so?
-
-TL;DR: No I don't, IMHO it's not a bug in make.
-
-4fd5672 [1] which broke buildroot unified behaviour on different os, which is good. Since
-this revision it behaves nearly the same as 3.81.  It's only coincidence that make from
-current openSUSE Tumbleweed with make-sorted-glob.patch patch [2] behaves the same (this
-patch is completely different from [1]).
-
-
-I did comparison of make of these git versions: 3.81, 3.82, 4.2.1, 0ca3108 (last working
-version on buildroot before fix b9d2d4cb4e), 4fd5672 (version which broke buildroot
-b9d2d4cb4e~), 48c8a11 (current master) with this simple "project":
-
-$ for i in a b c d; do touch $i.mk; sleep 1; done
-
-$ cat > Makefile << EOF
-$(info make: $(shell which make))
-$(info make -v: $(shell make -v))
-
-$(foreach i, $(sort $(wildcard *.mk)), $(info SORT $i))
-$(foreach i, $(wildcard *.mk), $(info NOSORT $i))
-include $(wildcard *.mk)
-EOF
-
-
-make version       | 3.81 | 3.82 | 4.2.1 | 4.2.1+[2] | 0ca3108 | 4fd5672
-------------------------------------------------------------------------
-wildcard the same  | yes  |  no  |  no   |    no     |   no    |   no
-as sorted wildchard|      |      |       |           |
-------------------------------------------------------------------------
-wildcard the same  | yes  |  no  |  no   |    yes    |   no    |   yes
-on different OS    |      |      |       |           |         |
-------------------------------------------------------------------------
-Breaks buildroot   |  no  |  no  |  no   |    yes    |   no    |   yes
-
-NOTES:
-wildcard changed in 3.82 and 4fd5672.
-Behaviour on 48c8a11 (current master) is the same as on 4fd5672.
-"4.2.1+[2]" is 4.2.1 + make-sorted-glob.patch patch [2].
-
-[2] https://build.opensuse.org/package/view_file/Base:System/make/make-sorted-glob.patch?expand=1
-[2] https://git.savannah.gnu.org/cgit/make.git/commit/?id=4fd56724ad281498d3c8b27a4b25b4070f6e4e65
-
-
-Kind regards,
-Petr
-_______________________________________________
-buildroot mailing list
-buildroot@busybox.net
-http://lists.busybox.net/mailman/listinfo/buildroot
+Matt
