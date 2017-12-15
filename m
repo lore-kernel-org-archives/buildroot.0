@@ -1,64 +1,76 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 15 Dec 2017 09:21:51 +0100
-Subject: [Buildroot] [PATCH v5] package/i2c-tools: bump to version 4.0
-In-Reply-To: <1513257825-9289-1-git-send-email-angelo@amarulasolutions.com>
-References: <1513257825-9289-1-git-send-email-angelo@amarulasolutions.com>
-Message-ID: <20171215092151.4a43e74c@windsurf.png.is.keysight.com>
+Date: Fri, 15 Dec 2017 09:22:49 +0100
+Subject: [Buildroot] [git commit] luadbi-sqlite3: new package
+Message-ID: <20171215082308.839CE80FD2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=569ef2e889c9d85d95c6bf3d4ea90a36a7b2f2d9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 14 Dec 2017 14:23:45 +0100, Angelo Compagnucci wrote:
-> This patch bumps i2c-tools to version 4.0 and adds a couple of
-> new commands named i2ctransfer and eeprog.
-> It adds also several upstream commits not included in the release
-> that fix static compilation issues and parallel build issues.
-> 
-> Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Config.in                          |  1 +
+ package/luadbi-sqlite3/Config.in           |  9 +++++++++
+ package/luadbi-sqlite3/luadbi-sqlite3.hash |  2 ++
+ package/luadbi-sqlite3/luadbi-sqlite3.mk   | 13 +++++++++++++
+ 4 files changed, 25 insertions(+)
 
-It still doesn't work here:
-
-/home/thomas/projets/buildroot/output/host/bin/arm-linux-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os  -Iinclude -c eeprog/eeprog.c -o eeprog/eeprog.o
-/home/thomas/projets/buildroot/output/host/bin/arm-linux-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os  -Iinclude -c eeprog/24cXX.c -o eeprog/24cXX.o
-/home/thomas/projets/buildroot/output/host/bin/arm-linux-gcc -shared  -Wl,--version-script=lib/libi2c.map -Wl,-soname,libi2c.so.0 -o lib/libi2c.so.0.1.0 lib/smbus.o -lc
-/home/thomas/projets/buildroot/output/host/bin/arm-linux-gcc  -o tools/i2cdetect tools/i2cdetect.o tools/i2cbusses.o lib/libi2c.so -Llib -li2c
-/home/thomas/projets/buildroot/output/host/bin/arm-linux-gcc  -o tools/i2cset tools/i2cset.o tools/i2cbusses.o tools/util.o lib/libi2c.so -Llib -li2c
-/home/thomas/projets/buildroot/output/host/bin/arm-linux-gcc  -o tools/i2cget tools/i2cget.o tools/i2cbusses.o tools/util.o lib/libi2c.so -Llib -li2c
-lib/libi2c.so: file not recognized: File truncated
-collect2: error: ld returned 1 exit status
-make[2]: *** [tools/Module.mk:28: tools/i2cdetect] Error 1
-make[2]: *** Waiting for unfinished jobs....
-lib/libi2c.so: file not recognized: File truncated
-collect2: error: ld returned 1 exit status
-make[2]: *** [tools/Module.mk:34: tools/i2cset] Error 1
-make[1]: *** [package/pkg-generic.mk:250: /home/thomas/projets/buildroot/output/build/i2c-tools-4.0/.stamp_built] Error 2
-make: *** [Makefile:79: _all] Error 2
-^Cmake: *** [Makefile:79: _all] Interrupt
-
-After 5 or 6 rebuilds of the i2c-tools package this happened.
-
-Without your patch, building the i2c-tools package survives this loop
-that builds it 100 times:
-
-for i in $(seq 1 100) ; do echo "=== $i ===" ; rm -rf output/build/i2c-tools* ; make i2c-tools || break ; done
-
-With your patch applied, I've never been able to reach more than 5 or 6
-iterations of the loop.
-
-Could you rework this, and test 100 iterations of building the i2c-tools package ?
-
-Of course, you need to have multiple cores on your machine to reproduce
-the issue, otherwise the package is built with make -j1, and you
-probably don't see the problem;
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/Config.in b/package/Config.in
+index 91760ef..a81408d 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -607,6 +607,7 @@ menu "Lua libraries/modules"
+ 	source "package/luabitop/Config.in"
+ 	source "package/luacrypto/Config.in"
+ 	source "package/luadbi/Config.in"
++	source "package/luadbi-sqlite3/Config.in"
+ 	source "package/luaexpat/Config.in"
+ 	source "package/luaexpatutils/Config.in"
+ 	source "package/luafilesystem/Config.in"
+diff --git a/package/luadbi-sqlite3/Config.in b/package/luadbi-sqlite3/Config.in
+new file mode 100644
+index 0000000..6ed32a2
+--- /dev/null
++++ b/package/luadbi-sqlite3/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_LUADBI_SQLITE3
++	bool "luadbi-sqlite3"
++	select BR2_PACKAGE_LUADBI # runtime dependency
++	select BR2_PACKAGE_SQLITE
++	help
++	  LuaDBI is a database interface library for Lua.
++	  And this is the SQLite3 backend.
++
++	  https://github.com/mwild1/luadbi
+diff --git a/package/luadbi-sqlite3/luadbi-sqlite3.hash b/package/luadbi-sqlite3/luadbi-sqlite3.hash
+new file mode 100644
+index 0000000..bd8b927
+--- /dev/null
++++ b/package/luadbi-sqlite3/luadbi-sqlite3.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256 2868dad4d189368fcf5cddd191965c8cb2efaa3a3ba83d50e6a88c30353f74ce  luadbi-sqlite3-0.6-2.src.rock
+diff --git a/package/luadbi-sqlite3/luadbi-sqlite3.mk b/package/luadbi-sqlite3/luadbi-sqlite3.mk
+new file mode 100644
+index 0000000..422fa1e
+--- /dev/null
++++ b/package/luadbi-sqlite3/luadbi-sqlite3.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# luadbi-sqlite3
++#
++################################################################################
++
++LUADBI_SQLITE3_VERSION = 0.6-2
++LUADBI_SQLITE3_LICENSE = MIT
++LUADBI_SQLITE3_SUBDIR = luadbi
++LUADBI_SQLITE3_LICENSE_FILES = $(LUADBI_SQLITE3_SUBDIR)/COPYING
++LUADBI_SQLITE3_DEPENDENCIES = sqlite
++
++$(eval $(luarocks-package))
