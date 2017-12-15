@@ -1,90 +1,122 @@
-From: Sergio Prado <sergio.prado@e-labworks.com>
-Date: Fri, 15 Dec 2017 08:32:31 -0200
-Subject: [Buildroot] [PATCH] wolfssl: new package
-In-Reply-To: <20171215082424.wz3vq5ysfzp436mk@tarshish>
-References: <1513098237-18245-1-git-send-email-sergio.prado@e-labworks.com>
- <20171212173206.vablwxvwcpjfrffn@tarshish>
- <CANu7NGt3er0OfSdH-ujY6111fdywdixTpgVRTq7C79HzZXCWvw@mail.gmail.com>
- <20171213060308.gosvafozfwqsdw4p@sapphire.tkos.co.il>
- <CANu7NGsei4G9mcvMxtRRoyp9C69Yab-n6sa5htL-+==30kLBEw@mail.gmail.com>
- <20171214064359.282d0412@windsurf.png.is.keysight.com>
- <20171214064310.zlgeattkdrphujem@sapphire.tkos.co.il>
- <CANu7NGu1FYMpNv=Jc0ZRUnwHzuY1Vgra=u==K2xw5=Jod8B2pg@mail.gmail.com>
- <87tvwt2rv0.fsf@dell.be.48ers.dk> <20171215082424.wz3vq5ysfzp436mk@tarshish>
-Message-ID: <CANu7NGu0P1JT4Y1YTJJcVasTfB8PouEfp1bMSFiUBYi4X+829Q@mail.gmail.com>
+From: =?UTF-8?Q?Stefan_Fr=c3=b6berg?= <stefan.froberg@petroprogram.com>
+Date: Fri, 15 Dec 2017 15:07:48 +0200
+Subject: [Buildroot] [PATCH 2/2] enable static linking for libfuse
+In-Reply-To: <CABukmmN-WtUiGpUGTWUhPhkFLOaLAgMNfXujMwMUkNB=P8PHQA@mail.gmail.com>
+References: <20171214105706.4577-1-aep@exys.org>
+ <20171214105706.4577-2-aep@exys.org> <20171214162102.25c6d252@windsurf>
+ <CABukmmN-WtUiGpUGTWUhPhkFLOaLAgMNfXujMwMUkNB=P8PHQA@mail.gmail.com>
+Message-ID: <041c4908-f28f-f553-9b82-b1b115fd1051@petroprogram.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter, Thomas, Baruch,
+Hi Arvid
 
-2017-12-15 6:24 GMT-02:00 Baruch Siach <baruch@tkos.co.il>:
+
+Arvid Picciani kirjoitti 14.12.2017 klo 17:27:
+> thanks for checking.
+> yes i did see the comment that's why i didnt submit a proper patch but
+> more an RFC.
+> It builds fine for me. maybe it doesn't try to use the dlopen stuff
+> with musl?
 >
-> Hi Peter, Sergio,
->
-> On Thu, Dec 14, 2017 at 05:31:47PM +0100, Peter Korsgaard wrote:
-> > >>>>> "Sergio" == Sergio Prado <sergio.prado@e-labworks.com> writes:
-> >  > So I see two possible options:
-> >
-> >  > 1. Completely remove these options.
-> >  > 2. Keep these options, documenting that to be useful, it needs out
-of tree
-> >  > patches that are not public and should be requested via wolfssl
-website
-> >  > contact page.
-> >
-> >  > I'm okay with both options, but I think option 2 is better because
-it will
-> >  > give Buildroot users the possibility to use wolfssl with
-> >  > nginx/lighttpd/wpa_supplicant in a way the wolfssl project intended.
-What
-> >  > do you think?
-> >
-> > If these options cannot be tested in upstream Buildroot then they imho
-> > shouldn't be there, so +1 for option 1.
->
-> I agree that these package specific options are not useful for Buildroot.
-But
-> judging from the list of HAVE_* defines and configure options in wolfssl
-build
-> documentation chapter[1] it looks like the default build will not be
-useful to
-> many users without customization. Is there a way to expose some of this
-> flexibility to Buildroot users without forcing them to manually edit the
-.mk
-> file?
 
-Most features that are enabled when we pass --enabled-nginx can be
-individually selected in the configure script with other options like
---enable-sessioncerts and --enable-opensslextra.
+Just out of interest:? do you also have the following static musl
+libraries with size 8 bytes and
+content just "!<arch>" and nothing more :
+libcrypt,a libdl.a libm.a libpthread.a libresolv.a librt.a libutil.a
+libxnet.a
 
-We could create additional menu options in Buildroot so the user could
-enable these features without changing the .mk file. The wolfssl configure
-script supports more then 150 individual --enable-* options, so we would
-have to selected the most common ones.
+Musl seems to stuff all their stuff into libc.a when using static linking?
 
-What do you think about this approach?
+I am asking this because I have dlopen problem with static linking
+Python on musl.
+(or actually, I can build Python completely statically against musl just
+fine if I disable the dlopen part but that will
+also disable pip and setuptools support)
 
-Best regards,
 
-Sergio Prado
-Embedded Labworks
-https://e-labworks.com/en
+-S-
+
 
 >
+> On Thu, Dec 14, 2017 at 4:21 PM, Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com
+> <mailto:thomas.petazzoni@free-electrons.com>> wrote:
 >
-> baruch
+>     Hello,
 >
-> [1] https://www.wolfssl.com/docs/wolfssl-manual/ch2/
+>     Thanks for your contribution. However...
 >
-> --
->      http://baruch.siach.name/blog/                  ~. .~   Tk Open
-Systems
+>     On Thu, 14 Dec 2017 11:57:06 +0100, Arvid E. Picciani wrote:
+>     > Signed-off-by: Arvid E. Picciani <aep@exys.org
+>     <mailto:aep@exys.org>>
+>     > ---
+>     >? package/libfuse/Config.in? | 4 ----
+>     >? package/libfuse/libfuse.mk <http://libfuse.mk> | 3 ++-
+>     >? 2 files changed, 2 insertions(+), 5 deletions(-)
+>     >
+>     > diff --git a/package/libfuse/Config.in b/package/libfuse/Config.in
+>     > index 2b0e31a991..62b18c2444 100644
+>     > --- a/package/libfuse/Config.in
+>     > +++ b/package/libfuse/Config.in
+>     > @@ -1,7 +1,6 @@
+>     >? config BR2_PACKAGE_LIBFUSE
+>     >? ? ? ?bool "libfuse"
+>     >? ? ? ?# Really doesn't like static, see fuse/lib/fuse.c
 >
-=}------------------------------------------------ooO--U--Ooo------------{=
->    - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+>     ...did you see this comment?
+>
+>     fuse.c uses dlopen(), this requires shared library support.
+>
+>     Apply your patch, and build the following configuration:
+>
+>     BR2_arm=y
+>     BR2_STATIC_LIBS=y
+>     BR2_TOOLCHAIN_EXTERNAL=y
+>     BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+>     BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-static-2017.11-rc1.tar.bz2
+>     <http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-static-2017.11-rc1.tar.bz2>"
+>     BR2_TOOLCHAIN_EXTERNAL_GCC_6=y
+>     BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_10=y
+>     BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
+>     # BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
+>     BR2_TOOLCHAIN_EXTERNAL_CXX=y
+>     BR2_INIT_NONE=y
+>     BR2_SYSTEM_BIN_SH_NONE=y
+>     # BR2_PACKAGE_BUSYBOX is not set
+>     BR2_PACKAGE_LIBFUSE=y
+>     # BR2_TARGET_ROOTFS_TAR is not set
+>
+>     You'll get the following build failure:
+>
+>     fuse.c:33:19: fatal error: dlfcn.h: No such file or directory
+>     ?#include <dlfcn.h>
+>     ? ? ? ? ? ? ? ? ? ?^
+>     compilation terminated.
+>
+>     Also, passing --enable-static is not necessary, this is already
+>     done by
+>     the autotools-package infrastructure when BR2_STATIC_LIBS=y.
+>
+>     Best regards,
+>
+>     Thomas
+>     --
+>     Thomas Petazzoni, CTO, Free Electrons
+>     Embedded Linux and Kernel engineering
+>     http://free-electrons.com
+>
+>
+>
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20171215/18562b03/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20171215/2f508195/attachment.html>
