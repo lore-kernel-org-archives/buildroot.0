@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 15 Dec 2017 08:58:14 +0100
-Subject: [Buildroot] [PATCH 1/3] toolchain-external: bump version of
- Linaro ARM toolchain to 2017.11
-In-Reply-To: <20171214225426.3654-1-romain.naour@gmail.com>
-References: <20171214225426.3654-1-romain.naour@gmail.com>
-Message-ID: <20171215085814.0b54abce@windsurf.png.is.keysight.com>
+Date: Fri, 15 Dec 2017 08:59:06 +0100
+Subject: [Buildroot] [PATCH 0/4] Bump skarnet.org packages to 2017.11
+In-Reply-To: <20171214222558.14148-1-eric.le.bihan.dev@free.fr>
+References: <20171214222558.14148-1-eric.le.bihan.dev@free.fr>
+Message-ID: <20171215085906.0de19669@windsurf.png.is.keysight.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,22 +12,21 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 14 Dec 2017 23:54:24 +0100, Romain Naour wrote:
-> https://releases.linaro.org/components/toolchain/binaries/6.4-2017.11
-> 
-> Tested with qemu_arm_vexpress_defconfig.
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> ---
->  .../toolchain-external/toolchain-external-linaro-arm/Config.in      | 6 +++---
->  .../toolchain-external-linaro-arm.hash                              | 4 ++--
->  .../toolchain-external-linaro-arm/toolchain-external-linaro-arm.mk  | 2 +-
->  3 files changed, 6 insertions(+), 6 deletions(-)
+On Thu, 14 Dec 2017 23:25:54 +0100, Eric Le Bihan wrote:
 
-Series applied. Thanks!
+> Eric Le Bihan (4):
+>   skalibs: bump version to 2.6.2.0
+>   execline: bump version to 2.3.0.4
+>   s6: bump version to 2.6.2.0
+>   s6-rc: bump version to 0.3.0.1
+
+Applied, thanks. If you have the time to add the hashes for the license
+files, that would be a nice addition.
+
+Thanks!
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
