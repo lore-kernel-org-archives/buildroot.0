@@ -1,100 +1,85 @@
 From: Carlos Santos <casantos@datacom.ind.br>
-Date: Fri, 15 Dec 2017 11:48:00 -0200
-Subject: [Buildroot] [PATCH 2/2] iqvlinux: add patch to support Linux kernel
- 4.12 and later
-In-Reply-To: <20171215134800.29328-1-casantos@datacom.ind.br>
-References: <20171215134800.29328-1-casantos@datacom.ind.br>
-Message-ID: <20171215134800.29328-2-casantos@datacom.ind.br>
+Date: Fri, 15 Dec 2017 11:47:59 -0200
+Subject: [Buildroot] [PATCH 1/2] iqvlinux: bump to version 1.2.0.3
+Message-ID: <20171215134800.29328-1-casantos@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Tested on machines with four NIC models:
-
-- Intel(R) Ethernet Connection X553 10 GbE SFP+
-- Intel(R) Ethernet Connection X553 1 GbE
-- Intel(R) Ethernet Connection I354
-- Intel(R) I210 Gigabit Network Connection
+Also add hashes for license files.
 
 Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
 ---
- .../0001-Support-Linux-kernel-4.12-and-later.patch | 66 ++++++++++++++++++++++
- 1 file changed, 66 insertions(+)
- create mode 100644 package/iqvlinux/0001-Support-Linux-kernel-4.12-and-later.patch
+ package/iqvlinux/Config.in     | 9 ++++++---
+ package/iqvlinux/iqvlinux.hash | 9 +++++----
+ package/iqvlinux/iqvlinux.mk   | 7 ++++---
+ 3 files changed, 15 insertions(+), 10 deletions(-)
 
-diff --git a/package/iqvlinux/0001-Support-Linux-kernel-4.12-and-later.patch b/package/iqvlinux/0001-Support-Linux-kernel-4.12-and-later.patch
-new file mode 100644
-index 0000000000..22ee03cdc9
---- /dev/null
-+++ b/package/iqvlinux/0001-Support-Linux-kernel-4.12-and-later.patch
-@@ -0,0 +1,66 @@
-+From 517d70780b903caa41ee93adbbb9bb985da23a29 Mon Sep 17 00:00:00 2001
-+From: Carlos Santos <casantos@datacom.ind.br>
-+Date: Tue, 12 Dec 2017 13:40:44 -0200
-+Subject: [PATCH] Support Linux kernel 4.12 and later
+diff --git a/package/iqvlinux/Config.in b/package/iqvlinux/Config.in
+index 8959955745..73804ac02a 100644
+--- a/package/iqvlinux/Config.in
++++ b/package/iqvlinux/Config.in
+@@ -2,8 +2,11 @@ config BR2_PACKAGE_IQVLINUX
+ 	bool "iqvlinux"
+ 	depends on BR2_LINUX_KERNEL
+ 	help
+-	  Intel Ethernet Adapter Debug Driver for Linux (iqvlinux),
+-	  which supports kernel versions 2.6.x up through 4.0.x.
++	  Intel Ethernet Adapter Debug Driver for Linux (iqvlinux).
 +
-+Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
-+---
-+ src/linux/driver/linuxdrivermemory_i.c | 5 +++++
-+ src/linux/driver/linuxdriveros_i.c     | 5 +++++
-+ src/linux/driver/linuxnaldriver.c      | 5 +++++
-+ 3 files changed, 15 insertions(+)
-+
-+diff --git a/src/linux/driver/linuxdrivermemory_i.c b/src/linux/driver/linuxdrivermemory_i.c
-+index bdf1d42..53366d7 100644
-+--- a/src/linux/driver/linuxdrivermemory_i.c
-++++ b/src/linux/driver/linuxdrivermemory_i.c
-+@@ -49,7 +49,12 @@
-+ #include <linux/errno.h>
-+ #include <linux/fs.h>
-+ #include <linux/mm.h>
-++#include <linux/version.h>
-++#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 12, 0)
-++#include <linux/uaccess.h>
-++#else
-+ #include <asm/uaccess.h>
-++#endif
-+ #include <linux/pci.h>
-+ #include <linux/delay.h>
-+ 
-+diff --git a/src/linux/driver/linuxdriveros_i.c b/src/linux/driver/linuxdriveros_i.c
-+index 653bec9..43df25e 100644
-+--- a/src/linux/driver/linuxdriveros_i.c
-++++ b/src/linux/driver/linuxdriveros_i.c
-+@@ -49,7 +49,12 @@
-+ #include <linux/errno.h>
-+ #include <linux/fs.h>
-+ #include <linux/mm.h>
-++#include <linux/version.h>
-++#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 12, 0)
-++#include <linux/uaccess.h>
-++#else
-+ #include <asm/uaccess.h>
-++#endif
-+ #include <linux/pci.h>
-+ #include <linux/delay.h>
-+ 
-+diff --git a/src/linux/driver/linuxnaldriver.c b/src/linux/driver/linuxnaldriver.c
-+index 93c2f80..c1ddbcf 100644
-+--- a/src/linux/driver/linuxnaldriver.c
-++++ b/src/linux/driver/linuxnaldriver.c
-+@@ -39,7 +39,12 @@
-+ #include <linux/fs.h>
-+ #include <linux/mm.h>
-+ #include <linux/version.h>
-++#include <linux/version.h>
-++#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 12, 0)
-++#include <linux/uaccess.h>
-++#else
-+ #include <asm/uaccess.h>
-++#endif
-+ #include "naltypes.h"
-+ #include "nalioctl.h"
-+ #include "linuxnaldriver.h"
-+-- 
-+2.14.3
-+
++	  Officially supports kernel versions 2.6.x up through 4.0.x but
++	  the Buildroot package contains a patch to allow it to be built
++	  on newer kernel versions.
+ 
+ 	  This debug driver supports all Intel's networking Tools based
+ 	  on the SDK version 2.19.36.0 or higher which support Intel
+@@ -12,7 +15,7 @@ config BR2_PACKAGE_IQVLINUX
+ 	  Note: This driver requires PCI support to be enabled
+ 	  (i.e. CONFIG_PCI).
+ 
+-	  http://sourceforge.net/projects/e1000/files/iqvlinux/
++	  https://sourceforge.net/projects/e1000/files/iqvlinux/
+ 
+ comment "iqvlinux needs a Linux kernel to be built"
+ 	depends on !BR2_LINUX_KERNEL
+diff --git a/package/iqvlinux/iqvlinux.hash b/package/iqvlinux/iqvlinux.hash
+index ddf57b712c..11195f1d71 100644
+--- a/package/iqvlinux/iqvlinux.hash
++++ b/package/iqvlinux/iqvlinux.hash
+@@ -1,5 +1,6 @@
+-# From http://sourceforge.net/projects/e1000/files/iqvlinux/1.1.5.3/
+-sha1	bd94416e4364015dbbd78a22e51080bf7ea81fac	iqvlinux.tar.gz
+-md5	fb6a2a4dc122d39070fcb06985c97a05	iqvlinux.tar.gz
+ # locally computed
+-sha256	8cb19f3bfe040100a13bb2d05cb2b54f2b259e55cef23f8cc5aa6f2f31e98bec	iqvlinux.tar.gz
++sha256	4020a661940ba6d50f24654b90a41280eb8eccf00061fe6d105c654d3d97d551  iqvlinux.tar.gz
++sha256	386086e232db4708770f717595d4f83188f776aa6e7313cd12fb039e869f494b  COPYING
++sha256	beded926a8f18aad5d911daf581759e2b25697588034d2b29033ae1a929506ff  src/linux/driver/files.txt
++sha256	ecf93b9b739fc82f7b87b34f8c6411dfdd271234af2fe45212293d9df2b654b3  inc/linux/files.txt
++sha256	0a309350c1b32be72479e8fe08f7f6bbbad2e8c3d9a1cbcad3d482ea48a236ad  inc/files.txt
+diff --git a/package/iqvlinux/iqvlinux.mk b/package/iqvlinux/iqvlinux.mk
+index 165c7c4687..abf061f13d 100644
+--- a/package/iqvlinux/iqvlinux.mk
++++ b/package/iqvlinux/iqvlinux.mk
+@@ -4,13 +4,14 @@
+ #
+ ################################################################################
+ 
+-IQVLINUX_VERSION = 1.1.5.3
+-IQVLINUX_SITE = http://sourceforge.net/projects/e1000/files/iqvlinux/$(IQVLINUX_VERSION)
++IQVLINUX_VERSION = 1.2.0.3
++IQVLINUX_SITE = https://downloads.sourceforge.net/project/e1000/iqvlinux/$(IQVLINUX_VERSION)
+ IQVLINUX_SOURCE = iqvlinux.tar.gz
+ 
+ IQVLINUX_LICENSE = GPL-2.0, BSD-3-Clause
+ IQVLINUX_LICENSE_FILES = \
+-	COPYING src/linux/driver/files.txt \
++	COPYING \
++	src/linux/driver/files.txt \
+ 	inc/linux/files.txt inc/files.txt
+ 
+ IQVLINUX_MODULE_MAKE_OPTS = NALDIR=$(@D) KSRC=$(LINUX_DIR) CC=$(TARGET_CC)
 -- 
 2.14.3
