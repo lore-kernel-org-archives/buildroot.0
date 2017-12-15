@@ -1,90 +1,92 @@
-From: Angelo Compagnucci <angelo@amarulasolutions.com>
-Date: Fri, 15 Dec 2017 10:02:27 +0100
-Subject: [Buildroot] [PATCH v5] package/i2c-tools: bump to version 4.0
-In-Reply-To: <20171215092151.4a43e74c@windsurf.png.is.keysight.com>
-References: <1513257825-9289-1-git-send-email-angelo@amarulasolutions.com>
- <20171215092151.4a43e74c@windsurf.png.is.keysight.com>
-Message-ID: <CA+_SqVYuSiM3_ZixwaMaowY1yaa525+Fj_Hpqup_Qk58ZpMMkQ@mail.gmail.com>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Fri, 15 Dec 2017 09:15:43 +0000
+Subject: [Buildroot] [PATCH] board: add support for ARC HS Development
+ Kit (HSDK)
+In-Reply-To: <20171214070831.4339bc22@windsurf.png.is.keysight.com>
+References: <20171207170628.2806-1-didin@synopsys.com>
+ <20171213083421.327551f7@windsurf.png.is.keysight.com>
+ <1513188243.3598.20.camel@synopsys.com>
+ <20171214070831.4339bc22@windsurf.png.is.keysight.com>
+Message-ID: <1513329342.29404.15.camel@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas,
+Hi Thomas,
 
-On Fri, Dec 15, 2017 at 9:21 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
+On Thu, 2017-12-14 at 07:08 +0100, Thomas Petazzoni wrote:
 > Hello,
->
-> On Thu, 14 Dec 2017 14:23:45 +0100, Angelo Compagnucci wrote:
->> This patch bumps i2c-tools to version 4.0 and adds a couple of
->> new commands named i2ctransfer and eeprog.
->> It adds also several upstream commits not included in the release
->> that fix static compilation issues and parallel build issues.
->>
->> Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
->
-> It still doesn't work here:
->
-> /home/thomas/projets/buildroot/output/host/bin/arm-linux-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os  -Iinclude -c eeprog/eeprog.c -o eeprog/eeprog.o
-> /home/thomas/projets/buildroot/output/host/bin/arm-linux-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os  -Iinclude -c eeprog/24cXX.c -o eeprog/24cXX.o
-> /home/thomas/projets/buildroot/output/host/bin/arm-linux-gcc -shared  -Wl,--version-script=lib/libi2c.map -Wl,-soname,libi2c.so.0 -o lib/libi2c.so.0.1.0 lib/smbus.o -lc
-> /home/thomas/projets/buildroot/output/host/bin/arm-linux-gcc  -o tools/i2cdetect tools/i2cdetect.o tools/i2cbusses.o lib/libi2c.so -Llib -li2c
-> /home/thomas/projets/buildroot/output/host/bin/arm-linux-gcc  -o tools/i2cset tools/i2cset.o tools/i2cbusses.o tools/util.o lib/libi2c.so -Llib -li2c
-> /home/thomas/projets/buildroot/output/host/bin/arm-linux-gcc  -o tools/i2cget tools/i2cget.o tools/i2cbusses.o tools/util.o lib/libi2c.so -Llib -li2c
-> lib/libi2c.so: file not recognized: File truncated
-> collect2: error: ld returned 1 exit status
-> make[2]: *** [tools/Module.mk:28: tools/i2cdetect] Error 1
-> make[2]: *** Waiting for unfinished jobs....
-> lib/libi2c.so: file not recognized: File truncated
-> collect2: error: ld returned 1 exit status
-> make[2]: *** [tools/Module.mk:34: tools/i2cset] Error 1
-> make[1]: *** [package/pkg-generic.mk:250: /home/thomas/projets/buildroot/output/build/i2c-tools-4.0/.stamp_built] Error 2
-> make: *** [Makefile:79: _all] Error 2
-> ^Cmake: *** [Makefile:79: _all] Interrupt
->
-> After 5 or 6 rebuilds of the i2c-tools package this happened.
->
-> Without your patch,
+> 
+> On Wed, 13 Dec 2017 18:04:04 +0000, Alexey Brodkin wrote:
 
-You mean before bumping to version 4?
+[snip]
 
-> building the i2c-tools package survives this loop
-> that builds it 100 times:
->
-> for i in $(seq 1 100) ; do echo "=== $i ===" ; rm -rf output/build/i2c-tools* ; make i2c-tools || break ; done
->
-> With your patch applied, I've never been able to reach more than 5 or 6
-> iterations of the loop.
->
-> Could you rework this, and test 100 iterations of building the i2c-tools package ?
+> > But in Buildroot for some reason "uboot-env.bin" is generated.
+> 
+> "some reason" = back then, there was no support in U-Boot for reading
+> the environment from a file, or at least we didn't know about this.
+> 
+> > So what we may do here:
+> >  1) We may switch to "uboot-env.bin" in our U-Boot.
+> >  2) We may keep using post build script... or
+> >  3) We may switch to more common U-Boot-wise "uboot.env" with:
 
-I built it now 3 times with my 8core machine with various -j settings,
-unfortunately I cannot reproduce:
+[snip]
 
-=== 100 ===
-umask 0022 && make -C /home/angelo/DEV/BUILDROOT/buildroot
-O=/home/angelo/DEV/BUILDROOT/br_qemu_arm/. i2c-tools
+> I think option (3) is the best. But it has a drawback: it breaks
+> backward compatibility for existing users that rely on the file being
+> named uboot-env.bin. So instead, you could add a new U-Boot option that
+> allows to customize the name of the generated image. By default it
+> would be uboot-env.bin to keep backward compatibility, but it could be
+> set to a different value in your defconfig.
+> 
+> Or we decide to break the backward compatibility :)
 
-ls build/i2c-tools-4.0/
-CHANGES  COPYING.LGPL  eeprom    include  Makefile  README  tools
-COPYING  eeprog        eepromer  lib      py-smbus  stub    version.h
+Well here again we're bumping to a situation that "something might be used
+by BR users and we don't know what and how" :)
 
-Could you give me more details?
+I mean in upstream Buildroot (as of today, i.e. without HSDK support) 
+"uboot-env.bin" is only used for dumping binary data into SD-card image,
+which essentially means file name makes no sense as long as genimage.cfg mentions
+it correctly and as it might be seen from my patch proposal it is already handled
+(proabably I should have left the patch above in place so you don't need to
+look-up my previous email).
 
-Thanks!
+So our only concern might be people use "uboot-env.bin" on their own.
 
+> > > This should instead use the generic support/scripts/genimage.sh
+> > >   
+> > > > +tar czf output/images/sdcard.img.tar.gz --directory="./output/images"  sdcard.img  
+> > > 
+> > > And this is not needed.  
+> > 
+> > Well IMHO compression of the image makes sense because that way we may generate images
+> > with larger FAT-partition without bumping size of the output image.
+> > 
+> > See we always allocate a bit more space for FAT partition (or it is applicable to any not-last
+> > partiotion - not sure about that) compared to what we need just to make sure it's enough space for our
+> > stuff. Moreover I'd like to have some more space so I may for example put 2 uImages side by side
+> > and switch between them later on and do it all without re-formatting of the SD-card.
+> > 
+> > And given how large SD-cards these days are I'm fine with allocating even 100Mb for first FAT partiotion.
+> > Now if we don't compress sdcard.img it will be of size 100+ Mb. But if we gzip it then we only have size
+> > of real payload, i.e. ~6-7 Mb while keeping a lot of flexibility for image user.
+> > 
+> > Not to mention a case of sharing built images.
+> > 
+> > That said I'd rather prefer to either compress images by default (does it really hurt?)
+> > or at least have it as an option.
+> 
+> I'm not sure we want to solve this in your specific post-image script,
+> it's a more generic problem. Though I agree we don't have a good way of
+> solving it right now.
+> 
+> Also, creating a tarball for just one file is a bit weird, you could
+> just gzip sdcard.img to produce sdcard.img.gz.
 
->
-> Of course, you need to have multiple cores on your machine to reproduce
-> the issue, otherwise the package is built with make -j1, and you
-> probably don't see the problem;
->
-> Thanks,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux and Kernel engineering
-> http://free-electrons.com
+That's exactly what we do: we compress only resulting "sdcard.img" into "sdcard.img.tar.gz".
+Please pardon myself if I expressed something not very clear :)
+
+-Alexey
