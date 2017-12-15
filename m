@@ -1,60 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 15 Dec 2017 08:58:07 +0100
-Subject: [Buildroot] [git commit] toolchain-external: bump version of Linaro
- AArch64 toolchain to 2017.11
-Message-ID: <20171215075846.DA139832C8@busybox.osuosl.org>
+Date: Fri, 15 Dec 2017 08:58:24 +0100
+Subject: [Buildroot] [git commit] skalibs: bump version to 2.6.2.0
+Message-ID: <20171215075846.E70C7832C6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2729ab792e81ef703fc95569cc8d9f5ea85a8338
+commit: https://git.buildroot.net/buildroot/commit/?id=fdfead7332bd0f44abd8a69fa7d7d6408144be83
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://releases.linaro.org/components/toolchain/binaries/6.4-2017.11
-
-Tested with qemu_aarch64_virt_defconfig.
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../toolchain-external/toolchain-external-linaro-aarch64/Config.in    | 2 +-
- .../toolchain-external-linaro-aarch64.hash                            | 4 ++--
- .../toolchain-external-linaro-aarch64.mk                              | 2 +-
- 3 files changed, 4 insertions(+), 4 deletions(-)
+ package/skalibs/skalibs.hash | 2 +-
+ package/skalibs/skalibs.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/toolchain/toolchain-external/toolchain-external-linaro-aarch64/Config.in b/toolchain/toolchain-external/toolchain-external-linaro-aarch64/Config.in
-index 0a9e60a..bcc1128 100644
---- a/toolchain/toolchain-external/toolchain-external-linaro-aarch64/Config.in
-+++ b/toolchain/toolchain-external/toolchain-external-linaro-aarch64/Config.in
-@@ -1,5 +1,5 @@
- config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64
--	bool "Linaro AArch64 2017.08"
-+	bool "Linaro AArch64 2017.11"
- 	depends on BR2_aarch64
- 	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_7
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-diff --git a/toolchain/toolchain-external/toolchain-external-linaro-aarch64/toolchain-external-linaro-aarch64.hash b/toolchain/toolchain-external/toolchain-external-linaro-aarch64/toolchain-external-linaro-aarch64.hash
-index 2360280..ecd4f31 100644
---- a/toolchain/toolchain-external/toolchain-external-linaro-aarch64/toolchain-external-linaro-aarch64.hash
-+++ b/toolchain/toolchain-external/toolchain-external-linaro-aarch64/toolchain-external-linaro-aarch64.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 6365480ab93e30185ffd33070b9332e0caa2c3c0813dd71bfbc83d300b76b4c9  gcc-linaro-6.4.1-2017.08-i686_aarch64-linux-gnu.tar.xz
--sha256 f507d071c6969665e26c595d6d952d7b18eb11609a71cb6debbafb55d700522a  gcc-linaro-6.4.1-2017.08-x86_64_aarch64-linux-gnu.tar.xz
-+sha256 7c5af17ab8c9b29367f839639f165db0e341f732553953f88a37d0721d3536a7  gcc-linaro-6.4.1-2017.11-i686_aarch64-linux-gnu.tar.xz
-+sha256 7929a58f2e461f614641ca3a90a64336bde2abe6925cf39d3846b50960249b15  gcc-linaro-6.4.1-2017.11-x86_64_aarch64-linux-gnu.tar.xz
-diff --git a/toolchain/toolchain-external/toolchain-external-linaro-aarch64/toolchain-external-linaro-aarch64.mk b/toolchain/toolchain-external/toolchain-external-linaro-aarch64/toolchain-external-linaro-aarch64.mk
-index 6053ea7..ed334fd 100644
---- a/toolchain/toolchain-external/toolchain-external-linaro-aarch64/toolchain-external-linaro-aarch64.mk
-+++ b/toolchain/toolchain-external/toolchain-external-linaro-aarch64/toolchain-external-linaro-aarch64.mk
+diff --git a/package/skalibs/skalibs.hash b/package/skalibs/skalibs.hash
+index 1e0625f..dc3bf13 100644
+--- a/package/skalibs/skalibs.hash
++++ b/package/skalibs/skalibs.hash
+@@ -1,2 +1,2 @@
+ # Locally generated
+-sha256 b11f515d29768497d648c7ae87e26f7441395a056ebbe3fe89596fe6454a557a  skalibs-2.6.0.1.tar.gz
++sha256 12f9706b412367c45310ab971d204d959441895d3fea6e5e41ab8ef8d24b71b2  skalibs-2.6.2.0.tar.gz
+diff --git a/package/skalibs/skalibs.mk b/package/skalibs/skalibs.mk
+index 2588d27..de257f7 100644
+--- a/package/skalibs/skalibs.mk
++++ b/package/skalibs/skalibs.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--TOOLCHAIN_EXTERNAL_LINARO_AARCH64_VERSION = 2017.08
-+TOOLCHAIN_EXTERNAL_LINARO_AARCH64_VERSION = 2017.11
- TOOLCHAIN_EXTERNAL_LINARO_AARCH64_SITE = https://releases.linaro.org/components/toolchain/binaries/6.4-$(TOOLCHAIN_EXTERNAL_LINARO_AARCH64_VERSION)/aarch64-linux-gnu
- 
- ifeq ($(HOSTARCH),x86)
+-SKALIBS_VERSION = 2.6.0.1
++SKALIBS_VERSION = 2.6.2.0
+ SKALIBS_SITE = http://skarnet.org/software/skalibs
+ SKALIBS_LICENSE = ISC
+ SKALIBS_LICENSE_FILES = COPYING
