@@ -1,23 +1,31 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Fri, 15 Dec 2017 21:22:46 +0100
-Subject: [Buildroot] Cannot rebuild autobuild
-In-Reply-To: <20171129211926.GA16373@x230>
+From: Kees van Unen <keesvanunen@hotmail.com>
+Date: Fri, 15 Dec 2017 20:23:03 +0000
+Subject: [Buildroot] FW:  Cannot rebuild autobuild
+In-Reply-To: <20171215202245.y74stbkfdaysy3hp@dell5510>
 References: <61134b08-bb0a-4665-4b68-3ea2e4063563@mind.be>
  <20171116001919.67e98b4b@gmx.net>
  <58b8ef53-75b6-fc8b-8d37-e21570ae4e3b@mind.be>
  <20171116072948.smctbcvxwkxgqoah@x230>
  <d13312cf-ae70-92fd-8819-a86c79d1723b@mind.be>
- <20171118223206.069b771a@gmx.net>
- <20171121201605.tzmasudql66iruxa@dell5510>
- <20171125150144.GC2798@scaer>
- <d76cd131-a5ec-631d-4c8b-4bb3d09fd2ca@mind.be>
- <20171129211926.GA16373@x230>
-Message-ID: <20171215202245.y74stbkfdaysy3hp@dell5510>
+ <20171118223206.069b771a@gmx.net> <20171121201605.tzmasudql66iruxa@dell5510>
+ <20171125150144.GC2798@scaer> <d76cd131-a5ec-631d-4c8b-4bb3d09fd2ca@mind.be>
+ <20171129211926.GA16373@x230>,<20171215202245.y74stbkfdaysy3hp@dell5510>
+Message-ID: <585f4cc2e07f4bc9beeaac7a37df8032@AM5PR0801MB1394.eurprd08.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+
+
+
+________________________________________
+Van: buildrootNamensPetr Vorel
+Verzonden: vrijdag 15 december 2017 21:22:46 (UTC+01:00) Amsterdam, Berlijn, Bern, Rome, Stockholm, Wenen
+Aan: Arnout Vandecappelle
+CC: Thomas Petazzoni; Peter Seiderer; Yann E. MORIN; buildroot at buildroot.org
+Onderwerp: Re: [Buildroot] Cannot rebuild autobuild
 
 Hi,
 
@@ -69,3 +77,7 @@ Behaviour on 48c8a11 (current master) is the same as on 4fd5672.
 
 Kind regards,
 Petr
+_______________________________________________
+buildroot mailing list
+buildroot@busybox.net
+http://lists.busybox.net/mailman/listinfo/buildroot
