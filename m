@@ -1,11 +1,12 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 15 Dec 2017 15:15:31 +0100
+From: Angelo Compagnucci <angelo@amarulasolutions.com>
+Date: Fri, 15 Dec 2017 16:21:10 +0100
 Subject: [Buildroot] [PATCH v5] package/i2c-tools: bump to version 4.0
-In-Reply-To: <CA+_SqVYuSiM3_ZixwaMaowY1yaa525+Fj_Hpqup_Qk58ZpMMkQ@mail.gmail.com>
+In-Reply-To: <20171215151531.1b5a0015@windsurf>
 References: <1513257825-9289-1-git-send-email-angelo@amarulasolutions.com>
  <20171215092151.4a43e74c@windsurf.png.is.keysight.com>
  <CA+_SqVYuSiM3_ZixwaMaowY1yaa525+Fj_Hpqup_Qk58ZpMMkQ@mail.gmail.com>
-Message-ID: <20171215151531.1b5a0015@windsurf>
+ <20171215151531.1b5a0015@windsurf>
+Message-ID: <CA+_SqVZd14XeQ8Quw_se8N12ePYSMffgMH0=QDuegnx4BausHg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,47 +15,69 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 15 Dec 2017 10:02:27 +0100, Angelo Compagnucci wrote:
+On Fri, Dec 15, 2017 at 3:15 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
+>
+> On Fri, 15 Dec 2017 10:02:27 +0100, Angelo Compagnucci wrote:
+>
+>> > After 5 or 6 rebuilds of the i2c-tools package this happened.
+>> >
+>> > Without your patch,
+>>
+>> You mean before bumping to version 4?
+>
+> Yes, without your patch, i.e with the current version of i2c-tools in
+> Buildroot.
 
-> > After 5 or 6 rebuilds of the i2c-tools package this happened.
-> >
-> > Without your patch,  
-> 
-> You mean before bumping to version 4?
+Looking at the git history, the makefile is not changed that much but,
+If I remember correctly, it had two bugs:
 
-Yes, without your patch, i.e with the current version of i2c-tools in
-Buildroot.
+The first one was with parallel builds and fixed here [1] by the upstream.
+The second one was with shared libraries when BR2_STATIC_LIBS is selected.
+Imho these bugs were present before version 4.
 
-> > for i in $(seq 1 100) ; do echo "=== $i ===" ; rm -rf output/build/i2c-tools* ; make i2c-tools || break ; done
-> >
-> > With your patch applied, I've never been able to reach more than 5 or 6
-> > iterations of the loop.
-> >
-> > Could you rework this, and test 100 iterations of building the i2c-tools package ?  
-> 
-> I built it now 3 times with my 8core machine with various -j settings,
-> unfortunately I cannot reproduce:
-> 
-> === 100 ===
-> umask 0022 && make -C /home/angelo/DEV/BUILDROOT/buildroot
-> O=/home/angelo/DEV/BUILDROOT/br_qemu_arm/. i2c-tools
+Want we to keep version 3.1.2?
 
-So you built it 3 times, or 3 times my loop of 100 builds ?
+>> > for i in $(seq 1 100) ; do echo "=== $i ===" ; rm -rf output/build/i2c-tools* ; make i2c-tools || break ; done
+>> >
+>> > With your patch applied, I've never been able to reach more than 5 or 6
+>> > iterations of the loop.
+>> >
+>> > Could you rework this, and test 100 iterations of building the i2c-tools package ?
+>>
+>> I built it now 3 times with my 8core machine with various -j settings,
+>> unfortunately I cannot reproduce:
+>>
+>> === 100 ===
+>> umask 0022 && make -C /home/angelo/DEV/BUILDROOT/buildroot
+>> O=/home/angelo/DEV/BUILDROOT/br_qemu_arm/. i2c-tools
+>
+> So you built it 3 times, or 3 times my loop of 100 builds ?
 
-> ls build/i2c-tools-4.0/
-> CHANGES  COPYING.LGPL  eeprom    include  Makefile  README  tools
-> COPYING  eeprog        eepromer  lib      py-smbus  stub    version.h
-> 
-> Could you give me more details?
+^^^ That "=== 100 ===" means the last row of the output from your loop.
+So I run at least 3 times your loop and something more meanwhile.
 
-Well, I don't have more details to provide: I just build i2c-tools, and
-it fails randomly.
+>> ls build/i2c-tools-4.0/
+>> CHANGES  COPYING.LGPL  eeprom    include  Makefile  README  tools
+>> COPYING  eeprog        eepromer  lib      py-smbus  stub    version.h
+>>
+>> Could you give me more details?
+>
+> Well, I don't have more details to provide: I just build i2c-tools, and
+> it fails randomly.
+>
+> Perhaps I should apply and see what the autobuilders have to say, i.e
+> if they agree with you (it builds) or with me (it fails randomly).
 
-Perhaps I should apply and see what the autobuilders have to say, i.e
-if they agree with you (it builds) or with me (it fails randomly).
+I hope it works!
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+>
+> Thomas
+
+[1] https://git.kernel.org/pub/scm/utils/i2c-tools/i2c-tools.git/commit/?id=a6a59693066fd8da81f7107479df3e32a129247d
+
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux and Kernel engineering
+> http://free-electrons.com
