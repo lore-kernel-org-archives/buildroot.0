@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 15 Dec 2017 09:00:31 +0100
-Subject: [Buildroot] [PATCH] package/openpowerlink: bump to v2.6.2
-In-Reply-To: <20171214220726.13262-1-romain.naour@gmail.com>
-References: <20171214220726.13262-1-romain.naour@gmail.com>
-Message-ID: <20171215090031.44167279@windsurf.png.is.keysight.com>
+Date: Fri, 15 Dec 2017 09:21:51 +0100
+Subject: [Buildroot] [PATCH v5] package/i2c-tools: bump to version 4.0
+In-Reply-To: <1513257825-9289-1-git-send-email-angelo@amarulasolutions.com>
+References: <1513257825-9289-1-git-send-email-angelo@amarulasolutions.com>
+Message-ID: <20171215092151.4a43e74c@windsurf.png.is.keysight.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,31 +12,53 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 14 Dec 2017 23:07:26 +0100, Romain Naour wrote:
-> This is the latest release of the v2.6.x release series.
+On Thu, 14 Dec 2017 14:23:45 +0100, Angelo Compagnucci wrote:
+> This patch bumps i2c-tools to version 4.0 and adds a couple of
+> new commands named i2ctransfer and eeprog.
+> It adds also several upstream commits not included in the release
+> that fix static compilation issues and parallel build issues.
 > 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> Cc: Corentin GUILLEVIC <corentin.guillevic@smile.fr>
-> ---
-> Note:
-> Currently the openpowerlink kernel driver doesn't build	with
-> a kernel >= 4.12 due API changes in the kernel.
-> But it's not really a problem since it's highly recommended to
-> use a preempt-rt kernel with openpowerlink.
-> The latest preempt-rt kernel version is curently 4.9.65.
-> ---
->  .../0004-use-contrib-getopt-only-on-Windows.patch  | 102 -------------
->  ...config-to-fix-static-linking-with-libpcap.patch | 166 ---------------------
->  package/openpowerlink/openpowerlink.hash           |   8 +-
->  package/openpowerlink/openpowerlink.mk             |   2 +-
->  4 files changed, 5 insertions(+), 273 deletions(-)
->  delete mode 100644 package/openpowerlink/0004-use-contrib-getopt-only-on-Windows.patch
->  delete mode 100644 package/openpowerlink/0005-use-pcap-config-to-fix-static-linking-with-libpcap.patch
+> Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 
-Applied to master, thanks.
+It still doesn't work here:
+
+/home/thomas/projets/buildroot/output/host/bin/arm-linux-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os  -Iinclude -c eeprog/eeprog.c -o eeprog/eeprog.o
+/home/thomas/projets/buildroot/output/host/bin/arm-linux-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os  -Iinclude -c eeprog/24cXX.c -o eeprog/24cXX.o
+/home/thomas/projets/buildroot/output/host/bin/arm-linux-gcc -shared  -Wl,--version-script=lib/libi2c.map -Wl,-soname,libi2c.so.0 -o lib/libi2c.so.0.1.0 lib/smbus.o -lc
+/home/thomas/projets/buildroot/output/host/bin/arm-linux-gcc  -o tools/i2cdetect tools/i2cdetect.o tools/i2cbusses.o lib/libi2c.so -Llib -li2c
+/home/thomas/projets/buildroot/output/host/bin/arm-linux-gcc  -o tools/i2cset tools/i2cset.o tools/i2cbusses.o tools/util.o lib/libi2c.so -Llib -li2c
+/home/thomas/projets/buildroot/output/host/bin/arm-linux-gcc  -o tools/i2cget tools/i2cget.o tools/i2cbusses.o tools/util.o lib/libi2c.so -Llib -li2c
+lib/libi2c.so: file not recognized: File truncated
+collect2: error: ld returned 1 exit status
+make[2]: *** [tools/Module.mk:28: tools/i2cdetect] Error 1
+make[2]: *** Waiting for unfinished jobs....
+lib/libi2c.so: file not recognized: File truncated
+collect2: error: ld returned 1 exit status
+make[2]: *** [tools/Module.mk:34: tools/i2cset] Error 1
+make[1]: *** [package/pkg-generic.mk:250: /home/thomas/projets/buildroot/output/build/i2c-tools-4.0/.stamp_built] Error 2
+make: *** [Makefile:79: _all] Error 2
+^Cmake: *** [Makefile:79: _all] Interrupt
+
+After 5 or 6 rebuilds of the i2c-tools package this happened.
+
+Without your patch, building the i2c-tools package survives this loop
+that builds it 100 times:
+
+for i in $(seq 1 100) ; do echo "=== $i ===" ; rm -rf output/build/i2c-tools* ; make i2c-tools || break ; done
+
+With your patch applied, I've never been able to reach more than 5 or 6
+iterations of the loop.
+
+Could you rework this, and test 100 iterations of building the i2c-tools package ?
+
+Of course, you need to have multiple cores on your machine to reproduce
+the issue, otherwise the package is built with make -j1, and you
+probably don't see the problem;
+
+Thanks,
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
