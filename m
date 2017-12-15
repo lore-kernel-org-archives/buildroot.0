@@ -1,122 +1,306 @@
-From: =?UTF-8?Q?Stefan_Fr=c3=b6berg?= <stefan.froberg@petroprogram.com>
-Date: Fri, 15 Dec 2017 15:07:48 +0200
-Subject: [Buildroot] [PATCH 2/2] enable static linking for libfuse
-In-Reply-To: <CABukmmN-WtUiGpUGTWUhPhkFLOaLAgMNfXujMwMUkNB=P8PHQA@mail.gmail.com>
-References: <20171214105706.4577-1-aep@exys.org>
- <20171214105706.4577-2-aep@exys.org> <20171214162102.25c6d252@windsurf>
- <CABukmmN-WtUiGpUGTWUhPhkFLOaLAgMNfXujMwMUkNB=P8PHQA@mail.gmail.com>
-Message-ID: <041c4908-f28f-f553-9b82-b1b115fd1051@petroprogram.com>
+From: Norbert Lange <nolange79@gmail.com>
+Date: Fri, 15 Dec 2017 14:11:34 +0100
+Subject: [Buildroot] [PATCH v3] tcfagent: new package
+In-Reply-To: <20171213144932.31025d0f@windsurf>
+References: <20171204114306.28242-1-nolange79@gmail.com>
+ <20171204120912.9850-1-nolange79@gmail.com>
+ <20171213144932.31025d0f@windsurf>
+Message-ID: <CADYdroO+HVzM8QDxu=XBG+ORYHwnBoiM=pGB62AQ7_RVQtf6hA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arvid
+2017-12-13 14:49 GMT+01:00 Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com>:
+> Hello,
+>
+> On Mon,  4 Dec 2017 13:09:12 +0100, Norbert Lange wrote:
+>> From: Norbert Lange <norbert.lange@andritz.com>
+>>
+>> Add tcfpackage which contains a service "tcf-agent"
+>>
+>> Signed-off-by: Norbert Lange <nolange79@gmail.com>
+>
+> This is getting really good. I was about to apply, but spotted a few
+> things that I really would like to be improved before applying. See
+> below.
+>
+>> +N:   Norbert Lange <nolange79@gmail.com>
+>> +F:   package/tcfagent
+>
+> Add a final / here, to be consistent with all other entries in that
+> file.
+>
+>> diff --git a/package/tcfagent/0001-agent-add-install-target-to-the-CMakeLists.patch b/package/tcfagent/0001-agent-add-install-target-to-the-CMakeLists.patch
+>> new file mode 100644
+>> index 0000000000..954c0d5fe3
+>> --- /dev/null
+>> +++ b/package/tcfagent/0001-agent-add-install-target-to-the-CMakeLists.patch
+>> @@ -0,0 +1,48 @@
+>> +From 4c5fb079bc06ef04d09955eebe0d93d5ebfd4cdf Mon Sep 17 00:00:00 2001
+>> +From: Norbert Lange <nolange79@gmail.com>
+>> +Date: Mon, 4 Dec 2017 10:56:45 +0100
+>> +Subject: [PATCH] agent: add install target to the CMakeLists
+>> +
+>> +It is common for CMake packages to make sure that 'make install'
+>> +works properly, and that's what most users expect.
+>> +
+>> +More specifically, build systems such as Buildroot also expect
+>> +'make install' to do the right thing for CMake-based packages
+>> +
+>> +Signed-off-by: Norbert Lange <nolange79@gmail.com>
+>
+> Did you submit this patch upstream ?
+
+Only a failed attempt so far, gonna try again
 
 
-Arvid Picciani kirjoitti 14.12.2017 klo 17:27:
-> thanks for checking.
-> yes i did see the comment that's why i didnt submit a proper patch but
-> more an RFC.
-> It builds fine for me. maybe it doesn't try to use the dlopen stuff
-> with musl?
+>> diff --git a/package/tcfagent/0002-linux-remove-explicit-uses-of-__ptrace_request.patch b/package/tcfagent/0002-linux-remove-explicit-uses-of-__ptrace_request.patch
+>> new file mode 100644
+>> index 0000000000..16b748926f
+>> --- /dev/null
+>> +++ b/package/tcfagent/0002-linux-remove-explicit-uses-of-__ptrace_request.patch
+>> @@ -0,0 +1,66 @@
+>> +From 6407e3961dba749c8e3a0ea4ae8991154520364f Mon Sep 17 00:00:00 2001
+>> +From: Norbert Lange <nolange79@gmail.com>
+>> +Date: Fri, 1 Dec 2017 13:15:50 +0100
+>> +Subject: [PATCH 1/2] linux: remove explicit uses of __ptrace_request
 >
+> Please generate patches with "git format-patch -N". Indeed the PATCH
+> 1/2 doesn't make much sense here, since it's patch 0002 :)
+>
+>
+>
+>> +
+>> +This type is not to be used directly, and with musl it wont build
+>> +
+>> +Signed-off-by: Norbert Lange <nolange79@gmail.com>
+>
+> Did you submit this upstream?
+>
+>
+>> diff --git a/package/tcfagent/0003-linux-provide-canonicalize_file_name-for-all-c-libs-.patch b/package/tcfagent/0003-linux-provide-canonicalize_file_name-for-all-c-libs-.patch
+>> new file mode 100644
+>> index 0000000000..86dc2f37a1
+>> --- /dev/null
+>> +++ b/package/tcfagent/0003-linux-provide-canonicalize_file_name-for-all-c-libs-.patch
+>> @@ -0,0 +1,46 @@
+>> +From 58cc4092495acdc0b4be8e23c3964d47989a59dd Mon Sep 17 00:00:00 2001
+>> +From: Norbert Lange <nolange79@gmail.com>
+>> +Date: Fri, 1 Dec 2017 13:34:08 +0100
+>> +Subject: [PATCH 2/2] linux: provide canonicalize_file_name for all c libs
+>> + except glibc
+>
+> Please use git format-patch -N.
+>
+>> +
+>> +musl was not covered so far, and this library does not define a
+>> +macro for detection.
+>> +unless glibc is detected, a canonicalize_file_name implementation
+>> +will be provided.
+>> +
+>> +Signed-off-by: Norbert Lange <nolange79@gmail.com>
+>> +---
+>> + agent/tcf/framework/mdep.c | 2 +-
+>> + agent/tcf/framework/mdep.h | 2 +-
+>> + 2 files changed, 2 insertions(+), 2 deletions(-)
+>> +
+>> +diff --git a/agent/tcf/framework/mdep.c b/agent/tcf/framework/mdep.c
+>> +index cf5771e5..530a8017 100644
+>> +--- a/agent/tcf/framework/mdep.c
+>> ++++ b/agent/tcf/framework/mdep.c
+>> +@@ -1086,7 +1086,7 @@ char * canonicalize_file_name(const char * path) {
+>> +     return strdup(res);
+>> + }
+>> +
+>> +-#elif defined(__UCLIBC__)
+>> ++#elif defined(__UCLIBC__) || !defined(__GLIBC_)
+>
+> This is really not the proper way to do that. Could you instead replace
+> all this mess by a CheckFunctionExists(canonicalize_file_name) check in
+> the CMakeLists.txt, and then use the result of this test in the code to
+> decide whether it should provide its own implementation of
+> canonicalize_file_name or not.
 
-Just out of interest:? do you also have the following static musl
-libraries with size 8 bytes and
-content just "!<arch>" and nothing more :
-libcrypt,a libdl.a libm.a libpthread.a libresolv.a librt.a libutil.a
-libxnet.a
-
-Musl seems to stuff all their stuff into libc.a when using static linking?
-
-I am asking this because I have dlopen problem with static linking
-Python on musl.
-(or actually, I can build Python completely statically against musl just
-fine if I disable the dlopen part but that will
-also disable pip and setuptools support)
-
-
--S-
-
+Yes this is a mess, but its not MY mess. I believe this to be the correct way
+for a patch in buildroot. Changing the multiple buildsystems is not something
+I want to do, there seems to be a consistency to not put any complex logic
+outside the source-files.
 
 >
-> On Thu, Dec 14, 2017 at 4:21 PM, Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com
-> <mailto:thomas.petazzoni@free-electrons.com>> wrote:
->
->     Hello,
->
->     Thanks for your contribution. However...
->
->     On Thu, 14 Dec 2017 11:57:06 +0100, Arvid E. Picciani wrote:
->     > Signed-off-by: Arvid E. Picciani <aep@exys.org
->     <mailto:aep@exys.org>>
->     > ---
->     >? package/libfuse/Config.in? | 4 ----
->     >? package/libfuse/libfuse.mk <http://libfuse.mk> | 3 ++-
->     >? 2 files changed, 2 insertions(+), 5 deletions(-)
->     >
->     > diff --git a/package/libfuse/Config.in b/package/libfuse/Config.in
->     > index 2b0e31a991..62b18c2444 100644
->     > --- a/package/libfuse/Config.in
->     > +++ b/package/libfuse/Config.in
->     > @@ -1,7 +1,6 @@
->     >? config BR2_PACKAGE_LIBFUSE
->     >? ? ? ?bool "libfuse"
->     >? ? ? ?# Really doesn't like static, see fuse/lib/fuse.c
->
->     ...did you see this comment?
->
->     fuse.c uses dlopen(), this requires shared library support.
->
->     Apply your patch, and build the following configuration:
->
->     BR2_arm=y
->     BR2_STATIC_LIBS=y
->     BR2_TOOLCHAIN_EXTERNAL=y
->     BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
->     BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-static-2017.11-rc1.tar.bz2
->     <http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-static-2017.11-rc1.tar.bz2>"
->     BR2_TOOLCHAIN_EXTERNAL_GCC_6=y
->     BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_10=y
->     BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
->     # BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
->     BR2_TOOLCHAIN_EXTERNAL_CXX=y
->     BR2_INIT_NONE=y
->     BR2_SYSTEM_BIN_SH_NONE=y
->     # BR2_PACKAGE_BUSYBOX is not set
->     BR2_PACKAGE_LIBFUSE=y
->     # BR2_TARGET_ROOTFS_TAR is not set
->
->     You'll get the following build failure:
->
->     fuse.c:33:19: fatal error: dlfcn.h: No such file or directory
->     ?#include <dlfcn.h>
->     ? ? ? ? ? ? ? ? ? ?^
->     compilation terminated.
->
->     Also, passing --enable-static is not necessary, this is already
->     done by
->     the autotools-package infrastructure when BR2_STATIC_LIBS=y.
->
->     Best regards,
->
->     Thomas
->     --
->     Thomas Petazzoni, CTO, Free Electrons
->     Embedded Linux and Kernel engineering
->     http://free-electrons.com
->
->
->
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> With such a change, the patch can be submitted upstream.
 
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20171215/2f508195/attachment.html>
+I will (and did try) to commit the patches upstream, but I don`t believe
+this to be an issue and a big overhaul of multiple buildsystems would take
+longer and has a bigger chance of being rejected.
+
+>
+>
+>> diff --git a/package/tcfagent/Config.in b/package/tcfagent/Config.in
+>> new file mode 100644
+>> index 0000000000..81affce6c1
+>> --- /dev/null
+>> +++ b/package/tcfagent/Config.in
+>> @@ -0,0 +1,25 @@
+>> +config BR2_PACKAGE_TCFAGENT
+>> +     bool "tcfagent"
+>> +     depends on BR2_TOOLCHAIN_HAS_THREADS
+>> +     depends on BR2_arm || BR2_armeb || BR2_aarch64 || BR2_aarch64_be \
+>> +                     || BR2_i386 || BR2_x86_64 \
+>> +                     || BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le
+>> +     select BR2_PACKAGE_UTIL_LINUX
+>> +     select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+>> +     help
+>> +       Target Communication Framework Agent is an example application
+>> +       using the Target Communication Framework Library.
+>> +
+>> +       Target Communication Framework is universal, extensible, simple,
+>> +       lightweight, vendor agnostic framework for tools and targets to
+>> +       communicate for purpose of debugging, profiling, code patching
+>> +       and other device software development needs.
+>> +
+>> +       tcf-agent is a daemon, which provides TCF services that can be
+>> +       used by local and remote clients.
+>> +
+>> +comment "tcfagent needs a toolchain w/ threads"
+>> +     depends on !BR2_TOOLCHAIN_HAS_THREADS
+>> +     depends on BR2_arm || BR2_armeb || BR2_aarch64 || BR2_aarch64_be \
+>> +             || BR2_i386 || BR2_x86_64 \
+>> +             || BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le
+>
+> For the architecture, I'd like to have something a bit better to:
+>
+>  1. Avoid duplicating the list of architectures between the main option
+>     and the Config.in comment
+>
+>  2. Avoid the matching on the architecture in the .mk file.
+>
+> So, something like this
+>
+> config BR2_PACKAGE_TCFAGENT_ARCH
+>         string
+>         default "arm" if BR2_arm || BR2_armeb
+>         default "a64" if BR2_aarch64 || BR2_aarch64be
+>         default "i386" if ...
+>         ...
+>
+> config BR2_PACKAGE_TCFAGENT_ARCH_SUPPORTS
+>         bool
+>         default y if BR2_PACKAGE_TCFAGENT_ARCH != ""
+>
+> config BR2_PACKAGE_TCFAGENT
+>         bool "tcfagent"
+>         depends on BR2_PACKAGE_TCFAGENT_ARCH_SUPPORTS
+>
+> comment "tcfagent needs ..."
+>         depends on BR2_PACKAGE_TCFAGENT_ARCH_SUPPORTS
+
+Ok, Config is not something I am deeply familiar with.
+
+>
+>
+>
+>> diff --git a/package/tcfagent/S55tcfagent b/package/tcfagent/S55tcfagent
+>> new file mode 100755
+>> index 0000000000..2243b5a4c7
+>> --- /dev/null
+>> +++ b/package/tcfagent/S55tcfagent
+>> @@ -0,0 +1,40 @@
+>> +#!/bin/sh
+>> +
+>> +DAEMON_PATH=/usr/sbin/tcf-agent
+>> +DAEMON_NAME=tcf-agent
+>> +DAEMON_ARGS="-L- -l0"
+>> +
+>> +PIDFILE=/var/run/$DAEMON_NAME.pid
+>> +[ -r /etc/default/$DAEMON_NAME ] && . /etc/default/$DAEMON_NAME
+>> +
+>> +start() {
+>> +      printf "Starting $DAEMON_NAME: "
+>> +      start-stop-daemon -S -o -q -p $PIDFILE -m -b \
+>> +      -x $DAEMON_PATH -- $DAEMON_ARGS
+>
+> Continuation line should be indented compared to the first line.
+>
+>> +
+>> +      [ $? = 0 ] && echo "OK" || echo "FAIL"
+>
+> You indent with 8 spaces here, it should be one tab.
+>
+>> +}
+>> +
+>> +stop() {
+>> +  printf "Stopping $DAEMON_NAME: "
+>> +  start-stop-daemon -K -o -q -p $PIDFILE \
+>> +        -x $DAEMON_PATH
+>> +
+>> +  [ $? = 0 ] && echo "OK" || echo "FAIL"
+>
+> You intend with two spaces here, not consitent with what is done above.
+>
+>> +}
+>> +
+>> +case "$1" in
+>> +    start)
+>> +  start
+>> +  ;;
+>> +    stop)
+>> +  stop
+>> +  ;;
+>> +    restart|reload)
+>> +  stop
+>> +  start
+>
+> Indentation is not good here.
+>
+>> +# supported arch strings: a64 arm i386 i686 powerpc ppc64 x86_64
+>> +_TCFAGENT_BRARCH = $(patsubst "%",%,$(BR2_ARCH))
+>> +ifneq ($(filter arm armeb,$(_TCFAGENT_BRARCH)),)
+>> +     TCFAGENT_CONF_OPTS += -DTCF_MACHINE=arm
+>> +else ifneq ($(filter aarch64 aarch64_be,$(_TCFAGENT_BRARCH)),)
+>> +     TCFAGENT_CONF_OPTS += -DTCF_MACHINE=a64
+>> +else ifneq ($(filter i386 i486 i586,$(_TCFAGENT_BRARCH)),)
+>> +     TCFAGENT_CONF_OPTS += -DTCF_MACHINE=i386
+>> +else ifneq ($(filter i686 x86_64 powerpc,$(_TCFAGENT_BRARCH)),)
+>> +     TCFAGENT_CONF_OPTS += -DTCF_MACHINE=$(_TCFAGENT_BRARCH)
+>> +else ifneq ($(filter powerpc64 powerpc64le,$(_TCFAGENT_BRARCH)),)
+>> +     TCFAGENT_CONF_OPTS += -DTCF_MACHINE=ppc64
+>> +# only supported in trunk as of 1.5_oxygen
+>> +# else ifneq ($(filter microblaze microblazeel,$(_TCFAGENT_BRARCH)),)
+>> +#    TCFAGENT_CONF_OPTS += -DTCF_MACHINE=microblaze
+>> +else
+>> +$(warning "Unsupported architecture $(_TCFAGENT_BRARCH)")
+>> +endif
+>
+> The warning is useless (the package cannot be selected on unsupported
+> architectures) and actually harmful because it will be printed on
+> configurations using unsupported architectures: all .mk files are
+> parsed, even when the package is not enabled, and the $(warning ...)
+> call is evaluated at the time of the .mk file parsing.
+>
+> Replace all this by:
+>
+> TCFAGENT_ARCH = $(call qstrip,$(BR2_PACKAGE_TCFAGENT_ARCH))
+>
+>> +
+>> +_TCFAGENT_BRARCH =
+>
+> Unneeded variable.
+>
+> Could you rework your submission according to this review, and submit
+> an updated version ?
+
+Sure, might take a while.
+
+>
+> Thanks a lot!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux and Kernel engineering
+> http://free-electrons.com
+
+Norbert LAnge
