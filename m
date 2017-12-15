@@ -1,17 +1,28 @@
-From: Angelo Compagnucci <angelo@amarulasolutions.com>
-Date: Fri, 15 Dec 2017 16:21:10 +0100
-Subject: [Buildroot] [PATCH v5] package/i2c-tools: bump to version 4.0
-In-Reply-To: <20171215151531.1b5a0015@windsurf>
+From: Kees van Unen <keesvanunen@hotmail.com>
+Date: Fri, 15 Dec 2017 15:22:01 +0000
+Subject: [Buildroot] FW: [PATCH v5] package/i2c-tools: bump to version 4.0
+In-Reply-To: <CA+_SqVZd14XeQ8Quw_se8N12ePYSMffgMH0=QDuegnx4BausHg@mail.gmail.com>
 References: <1513257825-9289-1-git-send-email-angelo@amarulasolutions.com>
  <20171215092151.4a43e74c@windsurf.png.is.keysight.com>
  <CA+_SqVYuSiM3_ZixwaMaowY1yaa525+Fj_Hpqup_Qk58ZpMMkQ@mail.gmail.com>
- <20171215151531.1b5a0015@windsurf>
-Message-ID: <CA+_SqVZd14XeQ8Quw_se8N12ePYSMffgMH0=QDuegnx4BausHg@mail.gmail.com>
+ <20171215151531.1b5a0015@windsurf>,
+ <CA+_SqVZd14XeQ8Quw_se8N12ePYSMffgMH0=QDuegnx4BausHg@mail.gmail.com>
+Message-ID: <dd04ac7ff52a47b09db62ae0df8b53ac@AM5PR0801MB1394.eurprd08.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+
+
+
+________________________________________
+Van: buildrootNamensAngelo Compagnucci
+Verzonden: vrijdag 15 december 2017 16:21:10 (UTC+01:00) Amsterdam, Berlijn, Bern, Rome, Stockholm, Wenen
+Aan: Thomas Petazzoni
+CC: buildroot at buildroot.org
+Onderwerp: Re: [Buildroot] [PATCH v5] package/i2c-tools: bump to version 4.0
 
 Hello,
 
@@ -81,3 +92,7 @@ I hope it works!
 > Thomas Petazzoni, CTO, Free Electrons
 > Embedded Linux and Kernel engineering
 > http://free-electrons.com
+_______________________________________________
+buildroot mailing list
+buildroot at busybox.net
+http://lists.busybox.net/mailman/listinfo/buildroot
