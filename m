@@ -1,39 +1,90 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Fri, 15 Dec 2017 09:41:31 +0000
-Subject: [Buildroot] [PATCH] glibc: ARC is now supported via patches
-In-Reply-To: <20171109215821.16615-1-abrodkin@synopsys.com>
-References: <20171109215821.16615-1-abrodkin@synopsys.com>
-Message-ID: <1513330890.29404.17.camel@synopsys.com>
+From: Sergio Prado <sergio.prado@e-labworks.com>
+Date: Fri, 15 Dec 2017 08:32:31 -0200
+Subject: [Buildroot] [PATCH] wolfssl: new package
+In-Reply-To: <20171215082424.wz3vq5ysfzp436mk@tarshish>
+References: <1513098237-18245-1-git-send-email-sergio.prado@e-labworks.com>
+ <20171212173206.vablwxvwcpjfrffn@tarshish>
+ <CANu7NGt3er0OfSdH-ujY6111fdywdixTpgVRTq7C79HzZXCWvw@mail.gmail.com>
+ <20171213060308.gosvafozfwqsdw4p@sapphire.tkos.co.il>
+ <CANu7NGsei4G9mcvMxtRRoyp9C69Yab-n6sa5htL-+==30kLBEw@mail.gmail.com>
+ <20171214064359.282d0412@windsurf.png.is.keysight.com>
+ <20171214064310.zlgeattkdrphujem@sapphire.tkos.co.il>
+ <CANu7NGu1FYMpNv=Jc0ZRUnwHzuY1Vgra=u==K2xw5=Jod8B2pg@mail.gmail.com>
+ <87tvwt2rv0.fsf@dell.be.48ers.dk> <20171215082424.wz3vq5ysfzp436mk@tarshish>
+Message-ID: <CANu7NGu0P1JT4Y1YTJJcVasTfB8PouEfp1bMSFiUBYi4X+829Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Peter, Thomas, Baruch,
 
-On Fri, 2017-11-10 at 00:58 +0300, Alexey Brodkin wrote:
-> Given ARC port is just a very few patches away from upstream
-> and if those are based on 2.29 everything works like a charm
-> let's forget about SNPS GitHub stuff and use vanilla glibc
-> plus patches.
-> 
-> This among other things solves a problem with stable fixes for glibc.
-> Now when Buildroot switched to the tip of glibc's stable branch instead of
-> applying cherry-picked patches ARC version would stay behind every time
-> glibc's "version" gets updated in Buildroot.
-> 
-> But if we just apply ARC patches then we're good with whatever commit
-> from upstream stable branch is taken.
-> 
-> Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-> Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Peter Korsgaard <peter@korsgaard.com>
+2017-12-15 6:24 GMT-02:00 Baruch Siach <baruch@tkos.co.il>:
+>
+> Hi Peter, Sergio,
+>
+> On Thu, Dec 14, 2017 at 05:31:47PM +0100, Peter Korsgaard wrote:
+> > >>>>> "Sergio" == Sergio Prado <sergio.prado@e-labworks.com> writes:
+> >  > So I see two possible options:
+> >
+> >  > 1. Completely remove these options.
+> >  > 2. Keep these options, documenting that to be useful, it needs out
+of tree
+> >  > patches that are not public and should be requested via wolfssl
+website
+> >  > contact page.
+> >
+> >  > I'm okay with both options, but I think option 2 is better because
+it will
+> >  > give Buildroot users the possibility to use wolfssl with
+> >  > nginx/lighttpd/wpa_supplicant in a way the wolfssl project intended.
+What
+> >  > do you think?
+> >
+> > If these options cannot be tested in upstream Buildroot then they imho
+> > shouldn't be there, so +1 for option 1.
+>
+> I agree that these package specific options are not useful for Buildroot.
+But
+> judging from the list of HAVE_* defines and configure options in wolfssl
+build
+> documentation chapter[1] it looks like the default build will not be
+useful to
+> many users without customization. Is there a way to expose some of this
+> flexibility to Buildroot users without forcing them to manually edit the
+.mk
+> file?
 
-Any comments on this one?
+Most features that are enabled when we pass --enabled-nginx can be
+individually selected in the configure script with other options like
+--enable-sessioncerts and --enable-opensslextra.
 
-Otherwise any chance to get it applied (not sure though if it
-gets applied now and then builds)?
+We could create additional menu options in Buildroot so the user could
+enable these features without changing the .mk file. The wolfssl configure
+script supports more then 150 individual --enable-* options, so we would
+have to selected the most common ones.
 
--Alexey
+What do you think about this approach?
+
+Best regards,
+
+Sergio Prado
+Embedded Labworks
+https://e-labworks.com/en
+
+>
+>
+> baruch
+>
+> [1] https://www.wolfssl.com/docs/wolfssl-manual/ch2/
+>
+> --
+>      http://baruch.siach.name/blog/                  ~. .~   Tk Open
+Systems
+>
+=}------------------------------------------------ooO--U--Ooo------------{=
+>    - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20171215/18562b03/attachment.html>
