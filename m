@@ -1,85 +1,80 @@
-From: Kees van Unen <keesvanunen@hotmail.com>
-Date: Fri, 15 Dec 2017 20:41:16 +0000
-Subject: [Buildroot] FW: [PATCH] kvm-unit-test: revert use of RDSEED and
- RDRAND
-In-Reply-To: <CANQCQpaDCyJLRZRk5mwun3sGy1Ex7WVZO5E35YZM02m-Synv-g@mail.gmail.com>
-References: <20171207043631.9312-1-matthew.weber@rockwellcollins.com>
- <20171214094459.4b383336@windsurf.png.is.keysight.com>,
- <CANQCQpaDCyJLRZRk5mwun3sGy1Ex7WVZO5E35YZM02m-Synv-g@mail.gmail.com>
-Message-ID: <a3a0c79e67a1401790816def9d2db5f9@AM5PR0801MB1394.eurprd08.prod.outlook.com>
+From: =?UTF-8?q?Stefan=20Fr=C3=B6berg?= <stefan.froberg@petroprogram.com>
+Date: Sat, 16 Dec 2017 01:25:30 +0200
+Subject: [Buildroot] [PATCH 1/1] gcc: Support configure option
+ --with-linker-hash-style
+Message-ID: <20171215232530.9388-1-stefan.froberg@petroprogram.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+This will set the default hash style that GCC will 
+always use during linking.
 
+Signed-off-by: Stefan Fr?berg <stefan.froberg@petroprogram.com>
+---
+ package/gcc/Config.in.host | 27 +++++++++++++++++++++++++++
+ package/gcc/gcc.mk         | 12 ++++++++++++
+ 2 files changed, 39 insertions(+)
 
-
-________________________________________
-Van: buildrootNamensMatthew Weber
-Verzonden: vrijdag 15 december 2017 21:41:05 (UTC+01:00) Amsterdam, Berlijn, Bern, Rome, Stockholm, Wenen
-Aan: Thomas Petazzoni
-CC: buildroot
-Onderwerp: Re: [Buildroot] [PATCH] kvm-unit-test: revert use of RDSEED and RDRAND
-
-Thomas,
-
-On Thu, Dec 14, 2017 at 2:44 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
->
-> Hello,
->
-> On Wed,  6 Dec 2017 22:36:31 -0600, Matt Weber wrote:
-> > Removing this commit in buildroot as it causes
-> > build failures when the host binutils isn't
-> > at least 2.23 (2.22.x introduced RDSEED).
-> >
-> > The host toolchain is used for x86_64 target
-> > builds where we need to do a 32bit build.
-> >
-> > Fixes:
-> > http://autobuild.buildroot.net/results/c39/c3987a3cbd2960b0ff50f872636bdfd8d1a9c820/
-> >
-> > Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
->
-> What is the long term solution for this? Has the problem been reported
-> upstream?
-
-It isn't really a bug upstream.  I think the long term fix would be a
-check for a minimum binutils version.  Can you think of another case I
-could use as an example where a evolution in the binutils has required
-a minimum version?
-
->
-> > diff --git a/package/kvm-unit-tests/0002-Revert-x86-vmx-test-RDRAND-and-RDSEED.patch b/package/kvm-unit-tests/0002-Revert-x86-vmx-test-RDRAND-and-RDSEED.patch
-> > new file mode 100644
-> > index 0000000000..1d3fb1ca6a
-> > --- /dev/null
-> > +++ b/package/kvm-unit-tests/0002-Revert-x86-vmx-test-RDRAND-and-RDSEED.patch
-> > @@ -0,0 +1,66 @@
-> > +From ff6ee5c5345e5a55827d657d8d862237338b6edb Mon Sep 17 00:00:00 2001
-> > +From: Matt Weber <matthew.weber@rockwellcollins.com>
-> > +Date: Wed, 6 Dec 2017 22:30:04 -0600
-> > +Subject: [PATCH] Revert "x86: vmx: test RDRAND and RDSEED"
-> > +
-> > +Removing this commit in buildroot as it causes
-> > +build failures when the host binutils isn't
-> > +at least 2.23 (2.22.x introduced RDSEED).
-> > +The host toolchain is used for x86_64 target
-> > +builds where we need to do a 32bit build.
-> > +
-> > +Fixes:
-> > +http://autobuild.buildroot.net/results/c39/c3987a3cbd2960b0ff50f872636bdfd8d1a9c820/
-> > +
-> > +This reverts commit a88205d14320d2f681a6c220f1d08711b9ce3885.
->
-> Missing SoB.
-
-Opps, noted.
-
-Matt
-_______________________________________________
-buildroot mailing list
-buildroot at busybox.net
-http://lists.busybox.net/mailman/listinfo/buildroot
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index 70cce0a5c5..b9391392e1 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -152,3 +152,30 @@ config BR2_GCC_ENABLE_GRAPHITE
+ 
+ comment "graphite support needs gcc >= 5.x"
+ 	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_5
++
++choice 
++	prompt "Hash style used during linking"
++	default BR2_GCC_HASH_STYLE_GNU
++	help
++	  This tells GCC to pass --hash-style=choice option to the
++	  linker for all final links where choice can be one of
++	  "gnu", "sysv" or "both".
++	  Using "gnu" should give best application startup time.
++
++config BR2_GCC_HASH_STYLE_GNU
++	bool "gnu"
++	help
++	  For new style GNU ".gnu.hash" section.
++
++config BR2_GCC_HASH_STYLE_SYSV
++	bool "sysv"
++	help
++	  For classic ELF ".hash" section.
++
++config BR2_GCC_HASH_STYLE_BOTH
++	bool "both"
++	help
++	  For both the classic ELF ".hash" and
++	  new style GNU ".gnu.hash".
++
++endchoice	  
+diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+index 27fc1e987c..51bb22d0e9 100644
+--- a/package/gcc/gcc.mk
++++ b/package/gcc/gcc.mk
+@@ -183,6 +183,18 @@ else
+ HOST_GCC_COMMON_CONF_OPTS += --without-isl --without-cloog
+ endif
+ 
++ifeq ((BR2_GCC_HASH_STYLE_GNU),y)
++HOST_GCC_COMMON_CONF_OPTS += --with-linker-hash-style=gnu
++endif
++
++ifeq ((BR2_GCC_HASH_STYLE_SYSV),y)
++HOST_GCC_COMMON_CONF_OPTS += --with-linker-hash-style=sysv
++endif
++
++ifeq ((BR2_GCC_HASH_STYLE_BOTH),y)
++HOST_GCC_COMMON_CONF_OPTS += --with-linker-hash-style=both
++endif
++
+ ifeq ($(BR2_arc)$(BR2_or1k),y)
+ HOST_GCC_COMMON_DEPENDENCIES += host-flex host-bison
+ endif
+-- 
+2.13.6
