@@ -1,55 +1,54 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 15 Dec 2017 09:24:08 +0100
-Subject: [Buildroot] [PATCH 2/2] luadbi-sqlite3: new package
-In-Reply-To: <20171209091711.20226-2-francois.perrad@gadz.org>
-References: <20171209091711.20226-1-francois.perrad@gadz.org>
- <20171209091711.20226-2-francois.perrad@gadz.org>
-Message-ID: <20171215092408.7f3b9489@windsurf.png.is.keysight.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Fri, 15 Dec 2017 10:24:24 +0200
+Subject: [Buildroot] [PATCH] wolfssl: new package
+In-Reply-To: <87tvwt2rv0.fsf@dell.be.48ers.dk>
+References: <1513098237-18245-1-git-send-email-sergio.prado@e-labworks.com>
+ <20171212173206.vablwxvwcpjfrffn@tarshish>
+ <CANu7NGt3er0OfSdH-ujY6111fdywdixTpgVRTq7C79HzZXCWvw@mail.gmail.com>
+ <20171213060308.gosvafozfwqsdw4p@sapphire.tkos.co.il>
+ <CANu7NGsei4G9mcvMxtRRoyp9C69Yab-n6sa5htL-+==30kLBEw@mail.gmail.com>
+ <20171214064359.282d0412@windsurf.png.is.keysight.com>
+ <20171214064310.zlgeattkdrphujem@sapphire.tkos.co.il>
+ <CANu7NGu1FYMpNv=Jc0ZRUnwHzuY1Vgra=u==K2xw5=Jod8B2pg@mail.gmail.com>
+ <87tvwt2rv0.fsf@dell.be.48ers.dk>
+Message-ID: <20171215082424.wz3vq5ysfzp436mk@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Peter, Sergio,
 
-On Sat,  9 Dec 2017 10:17:11 +0100, Francois Perrad wrote:
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  package/Config.in                          |  1 +
->  package/luadbi-sqlite3/Config.in           | 10 ++++++++++
->  package/luadbi-sqlite3/luadbi-sqlite3.hash |  2 ++
->  package/luadbi-sqlite3/luadbi-sqlite3.mk   | 13 +++++++++++++
->  4 files changed, 26 insertions(+)
->  create mode 100644 package/luadbi-sqlite3/Config.in
->  create mode 100644 package/luadbi-sqlite3/luadbi-sqlite3.hash
->  create mode 100644 package/luadbi-sqlite3/luadbi-sqlite3.mk
+On Thu, Dec 14, 2017 at 05:31:47PM +0100, Peter Korsgaard wrote:
+> >>>>> "Sergio" == Sergio Prado <sergio.prado@e-labworks.com> writes:
+>  > So I see two possible options:
+> 
+>  > 1. Completely remove these options.
+>  > 2. Keep these options, documenting that to be useful, it needs out of tree
+>  > patches that are not public and should be requested via wolfssl website
+>  > contact page.
+> 
+>  > I'm okay with both options, but I think option 2 is better because it will
+>  > give Buildroot users the possibility to use wolfssl with
+>  > nginx/lighttpd/wpa_supplicant in a way the wolfssl project intended. What
+>  > do you think?
+> 
+> If these options cannot be tested in upstream Buildroot then they imho
+> shouldn't be there, so +1 for option 1.
 
-I've applied, with some minor tweaks, see below.
+I agree that these package specific options are not useful for Buildroot. But 
+judging from the list of HAVE_* defines and configure options in wolfssl build 
+documentation chapter[1] it looks like the default build will not be useful to 
+many users without customization. Is there a way to expose some of this 
+flexibility to Buildroot users without forcing them to manually edit the .mk 
+file?
 
-> diff --git a/package/luadbi-sqlite3/Config.in b/package/luadbi-sqlite3/Config.in
-> new file mode 100644
-> index 000000000..7e21b95d5
-> --- /dev/null
-> +++ b/package/luadbi-sqlite3/Config.in
-> @@ -0,0 +1,10 @@
-> +config BR2_PACKAGE_LUADBI_SQLITE3
-> +	bool "luadbi-sqlite3"
-> +	depends on BR2_PACKAGE_HAS_LUAINTERPRETER
+baruch
 
-Dependency not needed, as it's already taken care of by
-package/Config.in.
+[1] https://www.wolfssl.com/docs/wolfssl-manual/ch2/
 
-> +	select BR2_PACKAGE_SQLITE
-> +	select BR2_PACKAGE_LUADBI       # runtime dependency
-
-No need for a tab before the comment + alphabetic ordering of
-dependencies.
-
-Applied with those fixes. Thanks a lot!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
