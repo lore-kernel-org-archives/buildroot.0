@@ -1,16 +1,27 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Fri, 15 Dec 2017 14:41:05 -0600
-Subject: [Buildroot] [PATCH] kvm-unit-test: revert use of RDSEED and
+From: Kees van Unen <keesvanunen@hotmail.com>
+Date: Fri, 15 Dec 2017 20:41:16 +0000
+Subject: [Buildroot] FW: [PATCH] kvm-unit-test: revert use of RDSEED and
  RDRAND
-In-Reply-To: <20171214094459.4b383336@windsurf.png.is.keysight.com>
+In-Reply-To: <CANQCQpaDCyJLRZRk5mwun3sGy1Ex7WVZO5E35YZM02m-Synv-g@mail.gmail.com>
 References: <20171207043631.9312-1-matthew.weber@rockwellcollins.com>
- <20171214094459.4b383336@windsurf.png.is.keysight.com>
-Message-ID: <CANQCQpaDCyJLRZRk5mwun3sGy1Ex7WVZO5E35YZM02m-Synv-g@mail.gmail.com>
+ <20171214094459.4b383336@windsurf.png.is.keysight.com>,
+ <CANQCQpaDCyJLRZRk5mwun3sGy1Ex7WVZO5E35YZM02m-Synv-g@mail.gmail.com>
+Message-ID: <a3a0c79e67a1401790816def9d2db5f9@AM5PR0801MB1394.eurprd08.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+
+
+
+________________________________________
+Van: buildrootNamensMatthew Weber
+Verzonden: vrijdag 15 december 2017 21:41:05 (UTC+01:00) Amsterdam, Berlijn, Bern, Rome, Stockholm, Wenen
+Aan: Thomas Petazzoni
+CC: buildroot
+Onderwerp: Re: [Buildroot] [PATCH] kvm-unit-test: revert use of RDSEED and RDRAND
 
 Thomas,
 
@@ -68,3 +79,7 @@ a minimum version?
 Opps, noted.
 
 Matt
+_______________________________________________
+buildroot mailing list
+buildroot at busybox.net
+http://lists.busybox.net/mailman/listinfo/buildroot
