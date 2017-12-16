@@ -1,16 +1,26 @@
-From: Carlos Santos <casantos@datacom.ind.br>
-Date: Fri, 15 Dec 2017 23:50:36 -0200 (BRST)
-Subject: [Buildroot] FW: [PATCH 1/1] gcc: Support configure option
+From: Kees van Unen <keesvanunen@hotmail.com>
+Date: Sat, 16 Dec 2017 01:51:11 +0000
+Subject: [Buildroot] FW: FW: [PATCH 1/1] gcc: Support configure option
  --with-linker-hash-style
-In-Reply-To: <8789d1d65c4a4931939f1b23e5727063@AM5PR0801MB1394.eurprd08.prod.outlook.com>
+In-Reply-To: <359946195.6247569.1513389036419.JavaMail.zimbra@datacom.ind.br>
 References: <20171215232530.9388-1-stefan.froberg@petroprogram.com>
- <8789d1d65c4a4931939f1b23e5727063@AM5PR0801MB1394.eurprd08.prod.outlook.com>
-Message-ID: <359946195.6247569.1513389036419.JavaMail.zimbra@datacom.ind.br>
+ <8789d1d65c4a4931939f1b23e5727063@AM5PR0801MB1394.eurprd08.prod.outlook.com>,
+ <359946195.6247569.1513389036419.JavaMail.zimbra@datacom.ind.br>
+Message-ID: <d1c70627a63b42b1a79a4103794299e1@AM5PR0801MB1394.eurprd08.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+
+
+
+________________________________________
+Van: buildrootNamensCarlos Santos
+Verzonden: zaterdag 16 december 2017 02:50:36 (UTC+01:00) Amsterdam, Berlijn, Bern, Rome, Stockholm, Wenen
+Aan: buildroot at buildroot.org
+Onderwerp: Re: [Buildroot] FW: [PATCH 1/1] gcc: Support configure option --with-linker-hash-style
 
 ----- Original Message -----
 > From: "Kees van Unen" <keesvanunen@hotmail.com>
@@ -33,8 +43,12 @@ Why the hell are these messages being sent to the list?
 
 Isn't it possible to block them?
 
--- 
+--
 Carlos Santos (Casantos) - DATACOM, P&D
-?The greatest triumph that modern PR can offer is the transcendent 
-success of having your words and actions judged by your reputation, 
+?The greatest triumph that modern PR can offer is the transcendent
+success of having your words and actions judged by your reputation,
 rather than the other way about.? ? Christopher Hitchens
+_______________________________________________
+buildroot mailing list
+buildroot at busybox.net
+http://lists.busybox.net/mailman/listinfo/buildroot
