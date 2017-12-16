@@ -1,33 +1,22 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 16 Dec 2017 22:47:08 +0100
-Subject: [Buildroot] [PATCH] traceroute: new package
-In-Reply-To: <20171216160636.028739fe@windsurf> (Thomas Petazzoni's message of
- "Sat, 16 Dec 2017 16:06:36 +0100")
-References: <1513429309-16761-1-git-send-email-sergio.prado@e-labworks.com>
- <20171216160636.028739fe@windsurf>
-Message-ID: <874loqgxb7.fsf@dell.be.48ers.dk>
+Date: Sat, 16 Dec 2017 22:54:11 +0100
+Subject: [Buildroot] [PATCH] linux-headers: bump 4.{9, 14}.x series
+In-Reply-To: <1513453087-7637-1-git-send-email-festevam@gmail.com> (Fabio
+ Estevam's message of "Sat, 16 Dec 2017 17:38:07 -0200")
+References: <1513453087-7637-1-git-send-email-festevam@gmail.com>
+Message-ID: <87zi6ifif0.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "Fabio" == Fabio Estevam <festevam@gmail.com> writes:
 
- > Hello,
- > On Sat, 16 Dec 2017 11:01:49 -0200, Sergio Prado wrote:
+ > Signed-off-by: Fabio Estevam <festevam@gmail.com>
 
- >> +define TRACEROUTE_INSTALL_TARGET_CMDS
- >> +	$(RM) -f $(TARGET_DIR)/usr/bin/traceroute
-
- > I didn't see why this is needed. The package does a simple "cp", so
- > reinstallation works fine. So I've dropped this.
-
-Yes, but plain cp follows symlinks, so it ends up overwriting the
-bin/busybox binary, breaking the build.
-
-So we either need this workaround or pass INSTALL=$(INSTALL) to make to
-get it to use install instead of cp.
+Committed after changing the subject as you are are updating 4.4 / 4.9
+and not 4.14.
 
 -- 
 Bye, Peter Korsgaard
