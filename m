@@ -1,40 +1,40 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sat, 16 Dec 2017 20:55:16 +0100
-Subject: [Buildroot] [PATCH v1] libdrm: fix libatomic_ops linking
-Message-ID: <20171216195516.27144-1-ps.report@gmx.net>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sat, 16 Dec 2017 22:42:41 +0200
+Subject: [Buildroot] [PATCH] libgpgme: fix build on MIPS with older kernel
+ headers
+Message-ID: <2e227ffb5d56b6d3b40306b14c32e1b6aaa4accc.1513456961.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add explicit libatomic_ops linking, fixes etnavid tests linking
+MIPS N64 ABI has been missing getdents64 wire up until kernel version
+3.10. Disable use of getdents on older kernels.
 
-Fixes [1]:
+Fixes:
+http://autobuild.buildroot.net/results/961/9619062ce6642ae4121d7debb3b4c632c88723d5/
 
-    CCLD     etnaviv_cmd_stream_test
-  ../../etnaviv/.libs/libdrm_etnaviv.so: undefined reference to `AO_store_full_emulation'
-  ../../etnaviv/.libs/libdrm_etnaviv.so: undefined reference to `AO_fetch_compare_and_swap_emulation'
-  collect2: error: ld returned 1 exit status
-
-[1] http://autobuild.buildroot.net/results/92e074c49417261843eef95872ff935a56077c98
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Cc: Philipp Claves <claves@budelmann-elektronik.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- package/libdrm/libdrm.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/libgpgme/libgpgme.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
-index 3d7b67122b..ecc525ca1e 100644
---- a/package/libdrm/libdrm.mk
-+++ b/package/libdrm/libdrm.mk
-@@ -21,6 +21,7 @@ LIBDRM_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
- 
- ifeq ($(BR2_PACKAGE_LIBATOMIC_OPS),y)
- LIBDRM_DEPENDENCIES += libatomic_ops
-+LIBDRM_CONF_ENV += LIBS="-latomic_ops"
- ifeq ($(BR2_sparc_v8)$(BR2_sparc_leon3),y)
- LIBDRM_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -DAO_NO_SPARC_V9"
+diff --git a/package/libgpgme/libgpgme.mk b/package/libgpgme/libgpgme.mk
+index 31f25b4645b0..5c46c7c561ac 100644
+--- a/package/libgpgme/libgpgme.mk
++++ b/package/libgpgme/libgpgme.mk
+@@ -35,4 +35,9 @@ LIBGPGME_CONF_ENV += LIBS="-largp" ac_cv_type_error_t=yes
+ LIBGPGME_DEPENDENCIES += argp-standalone
  endif
+ 
++# MIPS N64 (re)introduced getdents64 in kernel version 3.10
++ifeq ($(BR2_MIPS_NABI64)x$(BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10),yx)
++LIBGPGME_CONF_OPTS += --disable-linux-getdents
++endif
++
+ $(eval $(autotools-package))
 -- 
 2.15.1
