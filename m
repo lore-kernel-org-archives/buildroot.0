@@ -1,43 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 16 Dec 2017 15:49:50 +0100
-Subject: [Buildroot] [PATCH 1/1] janus-gateway: add libcurl check.
-In-Reply-To: <20171215133849.5650-1-aduskett@gmail.com>
-References: <20171215133849.5650-1-aduskett@gmail.com>
-Message-ID: <20171216154950.02ff4574@windsurf>
+Date: Sat, 16 Dec 2017 15:51:05 +0100
+Subject: [Buildroot] [git commit] shairport-sync: bump to version 3.1.6
+Message-ID: <20171216145134.B2D5D8274C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=1b023d86d4b38d6d4b6ade6869aab8df8747b62a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 15 Dec 2017 08:38:49 -0500, Adam Duskett wrote:
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/shairport-sync/shairport-sync.hash | 2 +-
+ package/shairport-sync/shairport-sync.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
->  config  BR2_PACKAGE_JANUS_STREAMING
->  	bool "streaming"
-> -	# SO_REUSEPORT
-
-Why is this removed ?
-
->  	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_9
-> +	help
-> +	  Enable streaming plugin.
-> +	  Note: For RTSP streaming support, libcurl must be selected.
->  
->  comment "streaming plugin needs a toolchain w/ headers >= 3.9"
->  	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_9
-> @@ -90,7 +92,7 @@ config BR2_PACKAGE_JANUS_WEBSOCKETS
->  	depends on BR2_USE_MMU
->  	select BR2_PACKAGE_LIBWEBSOCKETS
->  
-> -endif
-> +endif #BR2_PACKAGE_JANUS_GATEWAY
-
-This change is unrelated.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/shairport-sync/shairport-sync.hash b/package/shairport-sync/shairport-sync.hash
+index e8ebdd4..e0eea4c 100644
+--- a/package/shairport-sync/shairport-sync.hash
++++ b/package/shairport-sync/shairport-sync.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  262808b4ae1a897837384b519ab8736e3189d45f147a31bf8327d313ab6d8e7f  shairport-sync-3.1.5.tar.gz
++sha256  90555f1a5e05bd777741147d5c0104543d0f26d4f95b9bfd44143c818a6f50f1  shairport-sync-3.1.6.tar.gz
+diff --git a/package/shairport-sync/shairport-sync.mk b/package/shairport-sync/shairport-sync.mk
+index 76b3a00..53ebcc5 100644
+--- a/package/shairport-sync/shairport-sync.mk
++++ b/package/shairport-sync/shairport-sync.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SHAIRPORT_SYNC_VERSION = 3.1.5
++SHAIRPORT_SYNC_VERSION = 3.1.6
+ SHAIRPORT_SYNC_SITE = $(call github,mikebrady,shairport-sync,$(SHAIRPORT_SYNC_VERSION))
+ 
+ SHAIRPORT_SYNC_LICENSE = MIT, BSD-3-Clause
