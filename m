@@ -1,47 +1,40 @@
-From: Carlos Santos <casantos@datacom.ind.br>
-Date: Sat, 16 Dec 2017 17:53:12 -0200 (BRST)
-Subject: [Buildroot] [PATCH v2 1/2] iqvlinux: bump to version 1.2.0.3
-In-Reply-To: <367239421.6256025.1513450988190.JavaMail.zimbra@datacom.ind.br>
-References: <20171215153830.4864-1-casantos@datacom.ind.br>
- <20171216155053.2b40b409@windsurf>
- <367239421.6256025.1513450988190.JavaMail.zimbra@datacom.ind.br>
-Message-ID: <1833448217.6256112.1513453992880.JavaMail.zimbra@datacom.ind.br>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sat, 16 Dec 2017 20:55:16 +0100
+Subject: [Buildroot] [PATCH v1] libdrm: fix libatomic_ops linking
+Message-ID: <20171216195516.27144-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> From: "Carlos Santos" <casantos@datacom.ind.br>
-> To: "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>
-> Cc: "Romain Naour" <romain.naour@gmail.com>, buildroot at buildroot.org
-> Sent: Saturday, December 16, 2017 5:03:08 PM
-> Subject: Re: [Buildroot] [PATCH v2 1/2] iqvlinux: bump to version 1.2.0.3
+Add explicit libatomic_ops linking, fixes etnavid tests linking
 
->> From: "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>
->> To: "Carlos Santos" <casantos@datacom.ind.br>
->> Cc: buildroot at buildroot.org, "Romain Naour" <romain.naour@gmail.com>
->> Sent: Saturday, December 16, 2017 12:50:53 PM
->> Subject: Re: [Buildroot] [PATCH v2 1/2] iqvlinux: bump to version 1.2.0.3
-> 
->> Hello,
->> 
->> On Fri, 15 Dec 2017 13:38:29 -0200, Carlos Santos wrote:
->>> This package is really annoying since the archive name doesn't contain
->>> the version. Use a small trick to save it with a better name. Also add
->>> hashes for license files.
->> 
->> Have you tried contacting upstreaming to see if they would be willing
->> to use a more regular tarball naming scheme ?
-> 
-> I will try it. Meanwhile we need a temporary solution.
+Fixes [1]:
 
-BTW, I their current naming scheme is already reasonable, since each
-release use a separate path. Those who download the file can save it
-with a different name. That's not rocket science.
+    CCLD     etnaviv_cmd_stream_test
+  ../../etnaviv/.libs/libdrm_etnaviv.so: undefined reference to `AO_store_full_emulation'
+  ../../etnaviv/.libs/libdrm_etnaviv.so: undefined reference to `AO_fetch_compare_and_swap_emulation'
+  collect2: error: ld returned 1 exit status
 
+[1] http://autobuild.buildroot.net/results/92e074c49417261843eef95872ff935a56077c98
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+ package/libdrm/libdrm.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
+index 3d7b67122b..ecc525ca1e 100644
+--- a/package/libdrm/libdrm.mk
++++ b/package/libdrm/libdrm.mk
+@@ -21,6 +21,7 @@ LIBDRM_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
+ 
+ ifeq ($(BR2_PACKAGE_LIBATOMIC_OPS),y)
+ LIBDRM_DEPENDENCIES += libatomic_ops
++LIBDRM_CONF_ENV += LIBS="-latomic_ops"
+ ifeq ($(BR2_sparc_v8)$(BR2_sparc_leon3),y)
+ LIBDRM_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -DAO_NO_SPARC_V9"
+ endif
 -- 
-Carlos Santos (Casantos) - DATACOM, P&D
-?The greatest triumph that modern PR can offer is the transcendent 
-success of having your words and actions judged by your reputation, 
-rather than the other way about.? ? Christopher Hitchens
+2.15.1
