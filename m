@@ -1,12 +1,23 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Sat, 16 Dec 2017 09:25:27 +0100
-Subject: [Buildroot] [PATCH] shairport-sync: bump to version 3.1.6
-Message-ID: <20171216082527.14098-1-joerg.krause@embedded.rocks>
+From: Kees van Unen <keesvanunen@hotmail.com>
+Date: Sat, 16 Dec 2017 08:25:46 +0000
+Subject: [Buildroot] FW:  [PATCH] shairport-sync: bump to version 3.1.6
+In-Reply-To: <20171216082527.14098-1-joerg.krause@embedded.rocks>
+References: <20171216082527.14098-1-joerg.krause@embedded.rocks>
+Message-ID: <fdf1830be55d41d1bcb56d56549ee2c0@AM5PR0801MB1394.eurprd08.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+
+
+
+________________________________________
+Van: buildrootNamensJ?rg Krause
+Verzonden: zaterdag 16 december 2017 09:25:27 (UTC+01:00) Amsterdam, Berlijn, Bern, Rome, Stockholm, Wenen
+Aan: buildroot at buildroot.org
+Onderwerp: [Buildroot] [PATCH] shairport-sync: bump to version 3.1.6
 
 Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 ---
@@ -29,11 +40,16 @@ index 76b3a0034c..53ebcc581e 100644
 @@ -4,7 +4,7 @@
  #
  ################################################################################
- 
+
 -SHAIRPORT_SYNC_VERSION = 3.1.5
 +SHAIRPORT_SYNC_VERSION = 3.1.6
  SHAIRPORT_SYNC_SITE = $(call github,mikebrady,shairport-sync,$(SHAIRPORT_SYNC_VERSION))
- 
+
  SHAIRPORT_SYNC_LICENSE = MIT, BSD-3-Clause
--- 
+--
 2.15.1
+
+_______________________________________________
+buildroot mailing list
+buildroot at busybox.net
+http://lists.busybox.net/mailman/listinfo/buildroot
