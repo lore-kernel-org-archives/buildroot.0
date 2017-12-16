@@ -1,78 +1,114 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 16 Dec 2017 13:34:39 +0100
-Subject: [Buildroot] [PATCH] package/cmake: bump version to 3.10.0 and
- add license hash
-In-Reply-To: <877etnj677.fsf@home.blind.guru>
-References: <20171210233349.24682-1-mlang@blind.guru>
- <20171212070736.04953cff@windsurf.png.is.keysight.com>
- <20171212123040.35400bc4@windsurf> <877etnj677.fsf@home.blind.guru>
-Message-ID: <20171216133439.58247290@windsurf>
+From: Sergio Prado <sergio.prado@e-labworks.com>
+Date: Sat, 16 Dec 2017 11:01:49 -0200
+Subject: [Buildroot] [PATCH] traceroute: new package
+Message-ID: <1513429309-16761-1-git-send-email-sergio.prado@e-labworks.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Tested on Beaglebone Black.
 
-On Sat, 16 Dec 2017 11:52:12 +0100, Mario Lang wrote:
+Build-tested with test-pkg.
 
-> To move to C++11 was apparently intentional, and not an oversight.
-> Quoting the release notes of 3.10:
-> 
-> "
-> Deprecated and Removed Features?
-> 
->      * Support for building CMake itself with C++98 compilers was
->        dropped. CMake is now implemented using C++11.
-> "
-> 
-> 6 years after the standard was released, some projects are
-> starting to move to it.  LLVM comes to mind, which you also can't build
-> without C++11 anymore.
-> 
-> > Seems like emplace_hint() is adding a new element to a container, with
-> > a hint as to where it should be added. So I believe this is an
-> > optimization, so perhaps if emplace_hint() is not available, CMake
-> > could fallback on just inserting the element in the container.  
-> 
-> This particular case might be patchable, but the explicit notice quoted
-> above makes me think it might not be worthwhile to try and write a
-> backporting patch.
+Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+---
+ DEVELOPERS                         |  1 +
+ package/Config.in                  |  1 +
+ package/traceroute/Config.in       |  8 ++++++++
+ package/traceroute/traceroute.hash |  6 ++++++
+ package/traceroute/traceroute.mk   | 30 ++++++++++++++++++++++++++++++
+ 5 files changed, 46 insertions(+)
+ create mode 100644 package/traceroute/Config.in
+ create mode 100644 package/traceroute/traceroute.hash
+ create mode 100644 package/traceroute/traceroute.mk
 
-OK, thanks for the investigation.
-
-> > Mario, are you interested in looking into this ?  
-> 
-> Yes, actually, I am.  However, I am a bit to rooky to Buildroot to
-> understand enough about how you handle backwards compatibility in
-> general.  My gut feeling as a C++11 fan would be to just accept the fact
-> that C++11 is going to be required by projects in the future.  However,
-> I gather Buildroot has official minimal compiler requirements which are
-> likely dictated by toolchains provided by other vendors?
-
-We can already have dependencies on gcc versions, both for the host
-compiler and the target compiler, see BR2_HOST_GCC_AT_LEAST_ for the
-host compiler version dependencies and BR2_TOOLCHAIN_GCC_AT_LEAST_ for
-the target compiler version dependencies.
-
-However, the problem is that we would have to propagate this dependency
-to all packages using cmake, and all their reverse dependencies. It's
-definitely not impossible, but it's going to be quite a few packages.
-
-Also, it is complicated by the fact that we should not add this
-dependency if cmake is already installed system-wide, as we only build
-host-cmake if we can't find a suitable cmake version.
-
-Basically, it all boils down to have a Config.in option that tells us
-whether we need to build host-cmake or not, and whether we *can* build
-it, and add this dependency to all cmake packages and their reverse
-dependencies.
-
-Best regards,
-
-Thomas
+diff --git a/DEVELOPERS b/DEVELOPERS
+index de600f5276d0..af221bd8a375 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1547,6 +1547,7 @@ N:	Sergio Prado <sergio.prado@e-labworks.com>
+ F:	package/libgdiplus/
+ F:	package/mongodb/
+ F:	package/stella/
++F:	package/traceroute/
+ F:	package/tunctl/
+ F:	package/ubus/
+ 
+diff --git a/package/Config.in b/package/Config.in
+index a81408db68df..4fa5762ef476 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1805,6 +1805,7 @@ endif
+ 	source "package/tinyhttpd/Config.in"
+ 	source "package/tn5250/Config.in"
+ 	source "package/tor/Config.in"
++	source "package/traceroute/Config.in"
+ 	source "package/transmission/Config.in"
+ 	source "package/tunctl/Config.in"
+ 	source "package/tvheadend/Config.in"
+diff --git a/package/traceroute/Config.in b/package/traceroute/Config.in
+new file mode 100644
+index 000000000000..42ae5a3075d4
+--- /dev/null
++++ b/package/traceroute/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_TRACEROUTE
++	bool "traceroute"
++	help
++	  A new modern implementation of the traceroute(8) utility for
++	  Linux systems. It tracks the route packets taken from an IP
++	  network on their way to a given host.
++
++	  http://traceroute.sourceforge.net/
+diff --git a/package/traceroute/traceroute.hash b/package/traceroute/traceroute.hash
+new file mode 100644
+index 000000000000..b9525487417f
+--- /dev/null
++++ b/package/traceroute/traceroute.hash
+@@ -0,0 +1,6 @@
++# Locally computed:
++sha256 3669d22a34d3f38ed50caba18cd525ba55c5c00d5465f2d20d7472e5d81603b6  traceroute-2.1.0.tar.gz
++
++# Hash for license files:
++sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
++sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
+diff --git a/package/traceroute/traceroute.mk b/package/traceroute/traceroute.mk
+new file mode 100644
+index 000000000000..19d378d5b482
+--- /dev/null
++++ b/package/traceroute/traceroute.mk
+@@ -0,0 +1,30 @@
++################################################################################
++#
++# traceroute
++#
++################################################################################
++
++TRACEROUTE_VERSION = 2.1.0
++TRACEROUTE_SOURCE = traceroute-$(TRACEROUTE_VERSION).tar.gz
++TRACEROUTE_SITE = http://downloads.sourceforge.net/traceroute/traceroute/traceroute-$(TRACEROUTE_VERSION)
++
++TRACEROUTE_LICENSE = GPL-2.0+, LGPL-2.1+
++TRACEROUTE_LICENSE_FILES = COPYING COPYING.LIB
++
++# Prefer full-featured traceroute over busybox's version
++ifeq ($(BR2_PACKAGE_BUSYBOX),y)
++TRACEROUTE_DEPENDENCIES += busybox
++endif
++
++define TRACEROUTE_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
++		CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE" -C $(@D)
++endef
++
++define TRACEROUTE_INSTALL_TARGET_CMDS
++	$(RM) -f $(TARGET_DIR)/usr/bin/traceroute
++	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
++		prefix=$(TARGET_DIR)/usr install -C $(@D)
++endef
++
++$(eval $(generic-package))
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+1.9.1
