@@ -1,31 +1,42 @@
-From: Foxtrot Mike <fulcrummike@hotmail.com>
-Date: Sat, 16 Dec 2017 18:20:35 +0000
-Subject: [Buildroot] Getting started with embedded Linux on a router
-Message-ID: <PS1PR0401MB19616F5D660E5EEFD60CFCB3B3080@PS1PR0401MB1961.apcprd04.prod.outlook.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 16 Dec 2017 19:41:32 +0100
+Subject: [Buildroot] [PATCH 3/3] package/vlc: switch to libupnp-1.8
+In-Reply-To: <CAPi7W81zkH=n-1yXvuCri+99H7WGvQM5Gv9BbKa6Vj7Bt027rA@mail.gmail.com>
+References: <20171214073134.28696-1-bernd.kuhls@t-online.de>
+ <20171214073134.28696-3-bernd.kuhls@t-online.de>
+ <CAPi7W81zkH=n-1yXvuCri+99H7WGvQM5Gv9BbKa6Vj7Bt027rA@mail.gmail.com>
+Message-ID: <a91f21b1-8503-167f-11ce-83ab99b98498@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+Am 14.12.2017 um 09:13 schrieb Fabrice Fontaine:
+> Dear Bernd,
+> 
+> I don't think this is the right fix, vlc is compatible with both
+> versions of libupnp (1.6.x and 1.8.x).
+> However, libupnp 1.6.23 added its own compat code so I think we should
+> apply this commit (from mainstream) to fix the issue with 1.6.x:
+> https://github.com/videolan/vlc/commit/f9c5a343f1a8cad9c2c153f9c05e4e7201675a43#diff-99aaf215e619208a327a2e41f97c59c1.
+> 
+> Best regards,
+> 
+> Fabrice
 
-I have been using Linux for around 5 years. I also play around with RPI
-from time to time. I have developed on STM32 and 8051.
+Hi,
 
-I have a Broadcom ADSL router running a customized linux firmware
-developed with buildroot. I was able to clone the linux image from that
-router. After some analysis, I discovered that the firmware was built in
-2013. I was able to find info such as processor, wifi device, etc. I was
-wondering what I would need to know/have to compile my own firmware for
-this router using open source tools.
+backporting this patch does not fix the build of vlc-2.2.8 with
+libupnp-1.6.24 using this defconfig:
 
-There are so many things involved such as bootloader, perhaps
-proprietary code from broadcom, busybox, drivers for ADSL, wifi, USB
-mass storage, etc. I looked on the internet for a comprehensive guide on
-this topic, but didn't find anything very useful. I skimmed through the
-buildroot documentation but I didn't find it very helpful for a beginner.
+http://autobuild.buildroot.net/results/6bc/6bc47577819035e63a7acbfb6eee12af56966644/defconfig
 
-Any help would be appreciated!
+services_discovery/upnp.cpp: In function 'int Open(vlc_object_t*)':
+services_discovery/upnp.cpp:174:71: error: invalid conversion from 'int
+(*)(Upnp_EventType, UpnpEventPtr, void*) {aka int (*)(Upnp_EventType_e,
+const void*, void*)}' to 'Upnp_FunPtr {aka int (*)(Upnp_EventType_e,
+void*, void*)}' [-fpermissive]
+     i_res = UpnpRegisterClient( Callback, p_sd, &p_sys->client_handle );
 
-Regards,
+Regards, Bernd
