@@ -1,18 +1,27 @@
-From: Mario Lang <mlang@blind.guru>
-Date: Sat, 16 Dec 2017 11:52:12 +0100
-Subject: [Buildroot] [PATCH] package/cmake: bump version to 3.10.0 and
+From: Kees van Unen <keesvanunen@hotmail.com>
+Date: Sat, 16 Dec 2017 10:52:28 +0000
+Subject: [Buildroot] FW: [PATCH] package/cmake: bump version to 3.10.0 and
  add license hash
-In-Reply-To: <20171212123040.35400bc4@windsurf> (Thomas Petazzoni's message of
- "Tue, 12 Dec 2017 12:30:40 +0100")
+In-Reply-To: <877etnj677.fsf@home.blind.guru>
 References: <20171210233349.24682-1-mlang@blind.guru>
  <20171212070736.04953cff@windsurf.png.is.keysight.com>
- <20171212123040.35400bc4@windsurf>
-Message-ID: <877etnj677.fsf@home.blind.guru>
+ <20171212123040.35400bc4@windsurf>,<877etnj677.fsf@home.blind.guru>
+Message-ID: <c65619d0edef4b85bf8d0d78bd373e76@AM5PR0801MB1394.eurprd08.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+
+
+
+________________________________________
+Van: buildrootNamensMario Lang
+Verzonden: zaterdag 16 december 2017 11:52:12 (UTC+01:00) Amsterdam, Berlijn, Bern, Rome, Stockholm, Wenen
+Aan: Thomas Petazzoni
+CC: buildroot at buildroot.org
+Onderwerp: Re: [Buildroot] [PATCH] package/cmake: bump version to 3.10.0 and add license hash
 
 Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
@@ -78,6 +87,10 @@ likely dictated by toolchains provided by other vendors?
 In the meantime, since I found this notice in 3.10, we might consider
 moving cmake at least to 3.9?
 
--- 
+--
 CYa,
   ?????
+_______________________________________________
+buildroot mailing list
+buildroot at busybox.net
+http://lists.busybox.net/mailman/listinfo/buildroot
