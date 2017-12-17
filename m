@@ -1,107 +1,132 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 17 Dec 2017 18:39:11 +0100
-Subject: [Buildroot] [PATCH] package/cmake: bump version to 3.10.0 and
- add license hash
-In-Reply-To: <20171216133439.58247290@windsurf>
-References: <20171210233349.24682-1-mlang@blind.guru>
- <20171212070736.04953cff@windsurf.png.is.keysight.com>
- <20171212123040.35400bc4@windsurf> <877etnj677.fsf@home.blind.guru>
- <20171216133439.58247290@windsurf>
-Message-ID: <20171217173911.GA7491@scaer>
+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Sun, 17 Dec 2017 18:57:59 +0100
+Subject: [Buildroot] [PATCH v8 0/9] Add support for the Rust programming
+ language
+Message-ID: <20171217175808.31392-1-eric.le.bihan.dev@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, Mario, All,
+This series adds support for the Rust programming language by adding the
+following packages:
 
-On 2017-12-16 13:34 +0100, Thomas Petazzoni spake thusly:
-> On Sat, 16 Dec 2017 11:52:12 +0100, Mario Lang wrote:
-> > To move to C++11 was apparently intentional, and not an oversight.
-[--SNIP--]
-> > Yes, actually, I am.  However, I am a bit to rooky to Buildroot to
-> > understand enough about how you handle backwards compatibility in
-> > general.  My gut feeling as a C++11 fan would be to just accept the fact
-> > that C++11 is going to be required by projects in the future.  However,
-> > I gather Buildroot has official minimal compiler requirements which are
-> > likely dictated by toolchains provided by other vendors?
-> 
-> We can already have dependencies on gcc versions, both for the host
-> compiler and the target compiler, see BR2_HOST_GCC_AT_LEAST_ for the
-> host compiler version dependencies and BR2_TOOLCHAIN_GCC_AT_LEAST_ for
-> the target compiler version dependencies.
-> 
-> However, the problem is that we would have to propagate this dependency
-> to all packages using cmake, and all their reverse dependencies. It's
-> definitely not impossible, but it's going to be quite a few packages.
-> 
-> Also, it is complicated by the fact that we should not add this
-> dependency if cmake is already installed system-wide, as we only build
-> host-cmake if we can't find a suitable cmake version.
-> 
-> Basically, it all boils down to have a Config.in option that tells us
-> whether we need to build host-cmake or not, and whether we *can* build
-> it, and add this dependency to all cmake packages and their reverse
-> dependencies.
+ - rustc: a virtual package for the Rust compiler.
+ - rust-bin: provides a pre-built version of rustc.
+ - cargo-bin: provides a pre-built version of Rust package manager.
+ - rust: builds rustc from source.
+ - cargo: builds Rust package manager from source.
+ - rust-cargo: a virtual package for the Rust package manager.
 
-Alternatively, we could also consider bumping our own requirements now,
-requiring a newer base system.
+Only the host variants are provided.
 
-Yes, that would mean leaving out in the cold people stuck on *very
-ancient* enterprise-class distros (which IMHO would be a bit sad). But I
-would prefer that rather than springling a dependency in all packages...
+The rustc and rust-cargo virtual packages are inspired by the mysql one.
 
-Unless we also build our own host toolchain? ;-] Well, probably a host
-C/C++ compiler would be enough to build is needed, until we also need to
-build binutils and a C library and whatnot... This should be avoided if
-at all possible.
+v7 -> v8:
 
-emplace_hint() has been added in gcc-4.7 (listed as a defect in 4.6).
-However, some of the build failures are on a machine with gcc-4.7.2;
+ - replace cargo-bootstrap by cargo-bin
+ - drop rust-bootstrap and use rust-bin instead
+ - rust-bin and rust versions are the same
+ - cargo-bin and cargo versions are the same
+ - bump cargo to 0.23.0
+ - bump rust to 1.22.1
+ - add rust-cargo virtual package
 
-    http://autobuild.buildroot.org/results/ae8/ae88e2addefab8c7ccefa853c87313034ea241bc/build-end.log
-    [--SNIP--]
-    -- The C compiler identification is GNU 4.7.2
-    -- The CXX compiler identification is GNU 4.7.2
-    [--SNIP--]
-    cmGlobalNinjaGenerator.cxx:1077:40: error: 'class std::map<const
-    cmGeneratorTarget*, std::set<std::basic_string<char> > >' has no member
-    named 'emplace_hint'
+v6 -> v7:
 
-But all the failures occur on gcc-20...
+ - add cargo 0.20.0
+ - bump rust to 1.19.0
+ - bump rust-bootstrap to 1.18.0
+ - bump cargo-bootstrap to 0.19.0
+ - bump rust-bin to 1.19.0
+ - fix mips64 target name in rustc
 
-I looke at my autobuilder, and it uses gcc-4.8.2, and cmake builds fine
-with that...
+v5 -> v6:
 
-gcc-4.8 was released in March 2013, which will be almost 5 years ago
-when we tag LTS 2018.02. So maybe we can keep using cmake-3.9 up until
-2018.02, then update our requirements to require a host gcc >= 4.8m
-which will allow us to bump cmake to 3.10.
+ - bump rust to 1.18.0
+ - bump rust-bootstrap to 1.17.0
+ - bump rust-bin to 1.18.0
 
-I agree that, with time passing, more and more packages will require
-C++11, so it will make sense to require proper C++11 support for the
-host compiler.
+v4 -> v5:
 
-Regards,
-Yann E. MORIN.
+ - add rustc virtual package
+ - add rust-bin, provider for rustc
+ - rework rust to be a provider for rustc
+ - rework some commit messages
 
-> Best regards,
-> 
-> Thomas
-> -- 
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux and Kernel engineering
-> http://free-electrons.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+v3 -> v4:
+
+ - bump rust to 1.16.0
+ - bump rust-bootstrap to 1.15.1
+ - add cargo-bootstrap
+ - use built-in target specifications
+ - drop external Python script to generate target specifications
+ - enable support for PowerPC
+ - expose host variant in menuconfig
+
+v2 -> v3:
+
+ - bump rust to 1.10.0
+ - rework and bump rust-bootstrap to 1.9.0
+ - host-rust requires at least GCC 4.7 because of LLVM (suggested by R. Naour)
+ - rust requires a glibc-based cross-compiler
+ - rust requires GCC 5.x or above for Aarch64
+
+v1 -> v2:
+
+ - bump rust to version 1.9.0.
+ - drop patch for bzip2 support in host-python.
+ - add package for jemalloc.
+ - add dependency on host being a x86 machine.
+ - add dependency on toolchain.
+ - use dedicated package to provide bootstrapping binary: rust-bootstrap.
+ - let ./configure find out host/build on its own.
+ - remove entry from configuration menu.
+
+Eric Le Bihan (9):
+  rustc: new virtual package
+  rust-bin: new package
+  cargo-bin: new package
+  rust: new package
+  libssh2: add host variant
+  libhttpparser: add host variant
+  libcurl: add host variant
+  cargo: new package
+  rust-cargo: new virtual package
+
+ DEVELOPERS                                         |   4 +
+ package/Config.in.host                             |   2 +
+ package/cargo-bin/cargo-bin.hash                   |   4 +
+ package/cargo-bin/cargo-bin.mk                     |  18 +
+ package/cargo/cargo.hash                           |   4 +
+ package/cargo/cargo.mk                             |  96 +++
+ package/cargo/config.in                            |   2 +
+ package/libcurl/libcurl.mk                         |  13 +
+ package/libhttpparser/libhttpparser.mk             |   9 +
+ package/libssh2/libssh2.mk                         |   6 +
+ package/rust-bin/rust-bin.hash                     |  30 +
+ package/rust-bin/rust-bin.mk                       |  61 ++
+ package/rust-cargo/Config.in.host                  |  41 ++
+ .../rust/0001-vendor-remove-cargo-toml-orig.patch  | 650 +++++++++++++++++++++
+ package/rust/rust.hash                             |   2 +
+ package/rust/rust.mk                               |  66 +++
+ package/rustc/Config.in.host                       |  62 ++
+ package/rustc/rustc.mk                             |  31 +
+ 18 files changed, 1101 insertions(+)
+ create mode 100644 package/cargo-bin/cargo-bin.hash
+ create mode 100644 package/cargo-bin/cargo-bin.mk
+ create mode 100644 package/cargo/cargo.hash
+ create mode 100644 package/cargo/cargo.mk
+ create mode 100644 package/cargo/config.in
+ create mode 100644 package/rust-bin/rust-bin.hash
+ create mode 100644 package/rust-bin/rust-bin.mk
+ create mode 100644 package/rust-cargo/Config.in.host
+ create mode 100644 package/rust/0001-vendor-remove-cargo-toml-orig.patch
+ create mode 100644 package/rust/rust.hash
+ create mode 100644 package/rust/rust.mk
+ create mode 100644 package/rustc/Config.in.host
+ create mode 100644 package/rustc/rustc.mk
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.14.3
