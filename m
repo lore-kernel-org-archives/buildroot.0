@@ -1,50 +1,44 @@
-From: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
-Date: Sun, 17 Dec 2017 10:42:14 +0100
-Subject: [Buildroot] [PATCH 3/3] package/shapelib: version bump,
- use the new autotools build config and add new dependency on proj
-In-Reply-To: <20171217103244.0547496d@windsurf>
-References: <1513468381-8875-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
- <1513468381-8875-3-git-send-email-mr.zoltan.gyarmati@gmail.com>
- <20171217103244.0547496d@windsurf>
-Message-ID: <2f9c14a0-7bbe-9522-8b2c-b0b3545013d5@gmail.com>
+From: Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com>
+Date: Sun, 17 Dec 2017 11:13:50 +0100
+Subject: [Buildroot] [PATCH 1/1] package: remove the empty trailing
+ whitespaces
+Message-ID: <1513505630-12964-1-git-send-email-jerzy.m.grzegorek@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas&Baruch,
+Signed-off-by: Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com>
+---
+ package/aufs-util/Config.in | 2 +-
+ package/dash/Config.in      | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-great, thanks for the review and the tweaks!
-
-
-Regards,
-
-Zoltan Gyarmati
-https://zgyarmati.de
-
-On 12/17/2017 10:32 AM, Thomas Petazzoni wrote:
-> Hello,
->
-> On Sun, 17 Dec 2017 00:53:01 +0100, Zoltan Gyarmati wrote:
->> Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
->> ---
->>  package/shapelib/Config.in     |  5 +++++
->>  package/shapelib/shapelib.hash |  2 +-
->>  package/shapelib/shapelib.mk   | 17 +++--------------
->>  3 files changed, 9 insertions(+), 15 deletions(-)
-> I've applied, after adding the thread dependency (as noticed by Baruch)
-> and tweaking the commit log (your commit title was too long).
->
-> Thanks!
->
-> Thomas
-
-
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 473 bytes
-Desc: OpenPGP digital signature
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20171217/c3541d62/attachment.asc>
+diff --git a/package/aufs-util/Config.in b/package/aufs-util/Config.in
+index 89b1f42..a426343 100644
+--- a/package/aufs-util/Config.in
++++ b/package/aufs-util/Config.in
+@@ -28,7 +28,7 @@ config BR2_PACKAGE_AUFS_UTIL_VERSION
+ 	  Usually, the sha1 of the cset you want to use; avoid using a
+ 	  branch name as this yields non-reproducible builds.
+ 
+-	  See the following resources to see what versions are 
++	  See the following resources to see what versions are
+ 	  available:
+ 
+ 	  https://sourceforge.net/p/aufs/aufs-util/ci/master/tree/
+diff --git a/package/dash/Config.in b/package/dash/Config.in
+index 00cacf8..884b818 100644
+--- a/package/dash/Config.in
++++ b/package/dash/Config.in
+@@ -6,6 +6,6 @@ config BR2_PACKAGE_DASH
+ 	  DASH is a POSIX-compliant implementation of /bin/sh that aims to be
+ 	  as small as possible. It does this without sacrificing speed where
+ 	  possible. In fact, it is significantly faster than bash (the GNU
+-	  Bourne-Again SHell) for most tasks. 
++	  Bourne-Again SHell) for most tasks.
+ 
+ 	  http://gondor.apana.org.au/~herbert/dash
+-- 
+1.9.1
