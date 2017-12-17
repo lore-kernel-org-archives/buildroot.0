@@ -1,37 +1,56 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 17 Dec 2017 11:22:55 +0100
-Subject: [Buildroot] [PATCH v3 1/1] brltty: new package
-In-Reply-To: <20171127225645.26681-1-mlang@blind.guru>
-References: <20171127225645.26681-1-mlang@blind.guru>
-Message-ID: <20171217112255.0075f2af@windsurf>
+From: Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com>
+Date: Sun, 17 Dec 2017 11:24:52 +0100
+Subject: [Buildroot] [PATCH 1/1] package: remove the default value of the
+ $(PKG)_SOURCE variable
+Message-ID: <1513506292-27032-1-git-send-email-jerzy.m.grzegorek@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com>
+---
+ package/pimd/pimd.mk                                   | 1 -
+ package/proj/proj.mk                                   | 1 -
+ package/traceroute/traceroute.mk                       | 1 -
+ 3 files changed, 3 deletions(-)
 
-On Mon, 27 Nov 2017 23:56:45 +0100, Mario Lang wrote:
-> Signed-off-by: Mario Lang <mlang@blind.guru>
-> ---
-> v2 dealt with feedback from Baruch Siach (thanks).
-> v3: Adds optional dependencies on icu, ncurses and systemd.
->     Supports NLS.
->     Adds an option to configure default fallback text table.
-
-Applied to master with the following changes:
-
-    [Thomas:
-     - wrap too long CONF_OPTS line that disables all the language
-       bindings
-     - use an intermediate BRLTTY_TEXT_TABLE variable to store the
-       qstripped version of BR2_PACKAGE_BRLTTY_TEXT_TABLE.]
-
-Thanks!
-
-Thomas
+diff --git a/package/pimd/pimd.mk b/package/pimd/pimd.mk
+index 21b5e10..7a12f8f 100644
+--- a/package/pimd/pimd.mk
++++ b/package/pimd/pimd.mk
+@@ -5,7 +5,6 @@
+ ################################################################################
+ 
+ PIMD_VERSION = 2.3.2
+-PIMD_SOURCE = pimd-$(PIMD_VERSION).tar.gz
+ PIMD_SITE = https://github.com/troglobit/pimd/releases/download/$(PIMD_VERSION)
+ 
+ PIMD_LICENSE = BSD-3-Clause
+diff --git a/package/proj/proj.mk b/package/proj/proj.mk
+index 5607dc0..6d029bb 100644
+--- a/package/proj/proj.mk
++++ b/package/proj/proj.mk
+@@ -5,7 +5,6 @@
+ ################################################################################
+ 
+ PROJ_VERSION = 4.9.3
+-PROJ_SOURCE = proj-$(PROJ_VERSION).tar.gz
+ PROJ_SITE = http://download.osgeo.org/proj
+ PROJ_LICENSE = MIT
+ PROJ_LICENSE_FILES = COPYING
+diff --git a/package/traceroute/traceroute.mk b/package/traceroute/traceroute.mk
+index 9d74b8f..d01c62d 100644
+--- a/package/traceroute/traceroute.mk
++++ b/package/traceroute/traceroute.mk
+@@ -5,7 +5,6 @@
+ ################################################################################
+ 
+ TRACEROUTE_VERSION = 2.1.0
+-TRACEROUTE_SOURCE = traceroute-$(TRACEROUTE_VERSION).tar.gz
+ TRACEROUTE_SITE = http://downloads.sourceforge.net/traceroute/traceroute/traceroute-$(TRACEROUTE_VERSION)
+ 
+ TRACEROUTE_LICENSE = GPL-2.0+, LGPL-2.1+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.9.1
