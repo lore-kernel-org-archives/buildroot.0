@@ -1,132 +1,117 @@
 From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Sun, 17 Dec 2017 18:57:59 +0100
-Subject: [Buildroot] [PATCH v8 0/9] Add support for the Rust programming
- language
-Message-ID: <20171217175808.31392-1-eric.le.bihan.dev@free.fr>
+Date: Sun, 17 Dec 2017 18:58:00 +0100
+Subject: [Buildroot] [PATCH 1/9] rustc: new virtual package
+In-Reply-To: <20171217175808.31392-1-eric.le.bihan.dev@free.fr>
+References: <20171217175808.31392-1-eric.le.bihan.dev@free.fr>
+Message-ID: <20171217175808.31392-2-eric.le.bihan.dev@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This series adds support for the Rust programming language by adding the
-following packages:
+The compiler for the Rust programming language is called rustc.
 
- - rustc: a virtual package for the Rust compiler.
- - rust-bin: provides a pre-built version of rustc.
- - cargo-bin: provides a pre-built version of Rust package manager.
- - rust: builds rustc from source.
- - cargo: builds Rust package manager from source.
- - rust-cargo: a virtual package for the Rust package manager.
+There is only one reference implementation for it, based on LLVM, from
+the Rust project [1]. It can generate code for various architectures so
+it can be labeled as a cross-compiler. But, as for GCC, building it
+from source takes time.
 
-Only the host variants are provided.
+So it would be sensible to have at least one package which provides it
+as a pre-built version, fetched from the upstream project. Later another
+package can be added, to build it from source code.
 
-The rustc and rust-cargo virtual packages are inspired by the mysql one.
+In addition to the compiler, the standard library for the host and/or
+the target should also be fetched/built.
 
-v7 -> v8:
+So, add a virtual package named rustc to enable support for multiple
+providers.
 
- - replace cargo-bootstrap by cargo-bin
- - drop rust-bootstrap and use rust-bin instead
- - rust-bin and rust versions are the same
- - cargo-bin and cargo versions are the same
- - bump cargo to 0.23.0
- - bump rust to 1.22.1
- - add rust-cargo virtual package
+Currently, only the host variant will be available to allow the user to
+cross-compile Rust programs for the target.
 
-v6 -> v7:
+[1] http://rust-lang.org
 
- - add cargo 0.20.0
- - bump rust to 1.19.0
- - bump rust-bootstrap to 1.18.0
- - bump cargo-bootstrap to 0.19.0
- - bump rust-bin to 1.19.0
- - fix mips64 target name in rustc
-
-v5 -> v6:
-
- - bump rust to 1.18.0
- - bump rust-bootstrap to 1.17.0
- - bump rust-bin to 1.18.0
-
-v4 -> v5:
-
- - add rustc virtual package
- - add rust-bin, provider for rustc
- - rework rust to be a provider for rustc
- - rework some commit messages
-
-v3 -> v4:
-
- - bump rust to 1.16.0
- - bump rust-bootstrap to 1.15.1
- - add cargo-bootstrap
- - use built-in target specifications
- - drop external Python script to generate target specifications
- - enable support for PowerPC
- - expose host variant in menuconfig
-
-v2 -> v3:
-
- - bump rust to 1.10.0
- - rework and bump rust-bootstrap to 1.9.0
- - host-rust requires at least GCC 4.7 because of LLVM (suggested by R. Naour)
- - rust requires a glibc-based cross-compiler
- - rust requires GCC 5.x or above for Aarch64
-
-v1 -> v2:
-
- - bump rust to version 1.9.0.
- - drop patch for bzip2 support in host-python.
- - add package for jemalloc.
- - add dependency on host being a x86 machine.
- - add dependency on toolchain.
- - use dedicated package to provide bootstrapping binary: rust-bootstrap.
- - let ./configure find out host/build on its own.
- - remove entry from configuration menu.
-
-Eric Le Bihan (9):
-  rustc: new virtual package
-  rust-bin: new package
-  cargo-bin: new package
-  rust: new package
-  libssh2: add host variant
-  libhttpparser: add host variant
-  libcurl: add host variant
-  cargo: new package
-  rust-cargo: new virtual package
-
- DEVELOPERS                                         |   4 +
- package/Config.in.host                             |   2 +
- package/cargo-bin/cargo-bin.hash                   |   4 +
- package/cargo-bin/cargo-bin.mk                     |  18 +
- package/cargo/cargo.hash                           |   4 +
- package/cargo/cargo.mk                             |  96 +++
- package/cargo/config.in                            |   2 +
- package/libcurl/libcurl.mk                         |  13 +
- package/libhttpparser/libhttpparser.mk             |   9 +
- package/libssh2/libssh2.mk                         |   6 +
- package/rust-bin/rust-bin.hash                     |  30 +
- package/rust-bin/rust-bin.mk                       |  61 ++
- package/rust-cargo/Config.in.host                  |  41 ++
- .../rust/0001-vendor-remove-cargo-toml-orig.patch  | 650 +++++++++++++++++++++
- package/rust/rust.hash                             |   2 +
- package/rust/rust.mk                               |  66 +++
- package/rustc/Config.in.host                       |  62 ++
- package/rustc/rustc.mk                             |  31 +
- 18 files changed, 1101 insertions(+)
- create mode 100644 package/cargo-bin/cargo-bin.hash
- create mode 100644 package/cargo-bin/cargo-bin.mk
- create mode 100644 package/cargo/cargo.hash
- create mode 100644 package/cargo/cargo.mk
- create mode 100644 package/cargo/config.in
- create mode 100644 package/rust-bin/rust-bin.hash
- create mode 100644 package/rust-bin/rust-bin.mk
- create mode 100644 package/rust-cargo/Config.in.host
- create mode 100644 package/rust/0001-vendor-remove-cargo-toml-orig.patch
- create mode 100644 package/rust/rust.hash
- create mode 100644 package/rust/rust.mk
+Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+---
+ package/Config.in.host       |  1 +
+ package/rustc/Config.in.host | 17 +++++++++++++++++
+ package/rustc/rustc.mk       | 31 +++++++++++++++++++++++++++++++
+ 3 files changed, 49 insertions(+)
  create mode 100644 package/rustc/Config.in.host
  create mode 100644 package/rustc/rustc.mk
 
+diff --git a/package/Config.in.host b/package/Config.in.host
+index dd6415bba5..2f20dd0e48 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -46,6 +46,7 @@ menu "Host utilities"
+ 	source "package/qemu/Config.in.host"
+ 	source "package/raspberrypi-usbboot/Config.in.host"
+ 	source "package/rauc/Config.in.host"
++	source "package/rustc/Config.in.host"
+ 	source "package/s6-rc/Config.in.host"
+ 	source "package/sam-ba/Config.in.host"
+ 	source "package/squashfs/Config.in.host"
+diff --git a/package/rustc/Config.in.host b/package/rustc/Config.in.host
+new file mode 100644
+index 0000000000..16c95fa0b4
+--- /dev/null
++++ b/package/rustc/Config.in.host
+@@ -0,0 +1,17 @@
++config BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS
++	bool
++	default y
++	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
++	depends on BR2_i386 || BR2_x86_64 \
++		|| BR2_arm  || BR2_aarch64 \
++		|| BR2_powerpc  || BR2_powerpc64 \
++		|| BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
++	depends on !BR2_ARM_CPU_ARMV4 && !BR2_ARM_CPU_ARMV5
++	depends on !BR2_MIPS_NABI32
++	depends on BR2_TOOLCHAIN_USES_GLIBC
++
++config BR2_PACKAGE_HAS_HOST_RUSTC
++	bool
++
++config BR2_PACKAGE_PROVIDES_HOST_RUSTC
++	string
+diff --git a/package/rustc/rustc.mk b/package/rustc/rustc.mk
+new file mode 100644
+index 0000000000..4163a44bc1
+--- /dev/null
++++ b/package/rustc/rustc.mk
+@@ -0,0 +1,31 @@
++################################################################################
++#
++# rustc
++#
++################################################################################
++
++RUST_ARCH := $(call qstrip,$(BR2_ARCH))
++
++ifeq ($(BR2_ARM_CPU_ARMV7A),y)
++RUST_ARCH := armv7
++endif
++
++ifeq ($(BR2_ARM_EABI),y)
++RUST_ABI := eabi
++else ifeq ($(BR2_ARM_EABIHF),y)
++RUST_ABI := eabihf
++else ifeq ($(BR2_mips64)$(BR2_mips64el),y)
++RUST_ABI := abi64
++endif
++
++RUST_TARGET_NAME := $(RUST_ARCH)-unknown-linux-gnu$(RUST_ABI)
++
++ifeq ($(HOSTARCH),x86)
++RUST_HOST_ARCH = i686
++else
++RUST_HOST_ARCH = $(HOSTARCH)
++endif
++
++RUST_HOST_NAME = $(RUST_HOST_ARCH)-unknown-linux-gnu
++
++$(eval $(host-virtual-package))
 -- 
 2.14.3
