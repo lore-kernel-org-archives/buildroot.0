@@ -1,45 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 17 Dec 2017 10:08:13 +0100
-Subject: [Buildroot] [git commit] gdb: prevent installation of libbfd.so and
- libopcode.so
-Message-ID: <20171217090821.53FD182DD8@busybox.osuosl.org>
+Date: Sun, 17 Dec 2017 10:08:53 +0100
+Subject: [Buildroot] [PATCH] traceroute: new package
+In-Reply-To: <874loqgxb7.fsf@dell.be.48ers.dk>
+References: <1513429309-16761-1-git-send-email-sergio.prado@e-labworks.com>
+ <20171216160636.028739fe@windsurf>
+ <874loqgxb7.fsf@dell.be.48ers.dk>
+Message-ID: <20171217100853.4d3916bb@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b54c7931952874a814e48df75093e13ad955604f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-The gdb install target installs dynamic versions of libbfd and
-libopcode, accidentally overwriting the binutils provided versions
-(gdb itself links against the bundled static ones to avoid
-version problems, so the dynamic ones are un-needed).
+On Sat, 16 Dec 2017 22:47:08 +0100, Peter Korsgaard wrote:
 
-Prevent the installation by using the '--disable-install-libbfd'
-configure option.
+> Yes, but plain cp follows symlinks, so it ends up overwriting the
+> bin/busybox binary, breaking the build.
+> 
+> So we either need this workaround or pass INSTALL=$(INSTALL) to make to
+> get it to use install instead of cp.
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/gdb/gdb.mk | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+Good point. I've pushed a change that passes INSTALL=$(INSTALL), I've
+verified that it fixes the issue. Thanks for spotting this!
 
-diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
-index 7e86ba0..5ca464a 100644
---- a/package/gdb/gdb.mk
-+++ b/package/gdb/gdb.mk
-@@ -55,9 +55,11 @@ endif
- 
- # When gdb sources are fetched from the binutils-gdb repository, they
- # also contain the binutils sources, but binutils shouldn't be built,
--# so we disable it.
-+# so we disable it (additionally the option --disable-install-libbfd
-+# prevents the un-wanted installation of libobcodes.so and libbfd.so).
- GDB_DISABLE_BINUTILS_CONF_OPTS = \
- 	--disable-binutils \
-+	--disable-install-libbfd \
- 	--disable-ld \
- 	--disable-gas
- 
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
