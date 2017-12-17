@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 17 Dec 2017 12:03:31 +0100
-Subject: [Buildroot] [PATCH 1/1] package: remove the empty trailing
- whitespaces
-In-Reply-To: <1513505630-12964-1-git-send-email-jerzy.m.grzegorek@gmail.com>
-References: <1513505630-12964-1-git-send-email-jerzy.m.grzegorek@gmail.com>
-Message-ID: <20171217120331.5415ea9d@windsurf>
+Date: Sun, 17 Dec 2017 12:04:06 +0100
+Subject: [Buildroot] [PATCH 1/1] package: remove the default value of
+ the $(PKG)_SOURCE variable
+In-Reply-To: <1513506292-27032-1-git-send-email-jerzy.m.grzegorek@gmail.com>
+References: <1513506292-27032-1-git-send-email-jerzy.m.grzegorek@gmail.com>
+Message-ID: <20171217120406.3c63fe83@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,14 +13,20 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 17 Dec 2017 11:13:50 +0100, Jerzy Grzegorek wrote:
+On Sun, 17 Dec 2017 11:24:52 +0100, Jerzy Grzegorek wrote:
 > Signed-off-by: Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com>
 > ---
->  package/aufs-util/Config.in | 2 +-
->  package/dash/Config.in      | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/pimd/pimd.mk                                   | 1 -
+>  package/proj/proj.mk                                   | 1 -
+>  package/traceroute/traceroute.mk                       | 1 -
+>  3 files changed, 3 deletions(-)
 
-Applied to master, thanks.
+Applied to master, thanks. In order to avoid such mistakes in the
+future, would you be willing to contribute an addition to the
+check-package script that detects usage of the default <pkg>_SOURCE
+value ?
+
+Thanks!
 
 Thomas
 -- 
