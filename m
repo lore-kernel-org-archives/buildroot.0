@@ -1,36 +1,39 @@
 From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Sun, 17 Dec 2017 18:58:04 +0100
-Subject: [Buildroot] [PATCH 5/9] libssh2: add host variant
+Date: Sun, 17 Dec 2017 18:58:05 +0100
+Subject: [Buildroot] [PATCH 6/9] libhttpparser: add host variant
 In-Reply-To: <20171217175808.31392-1-eric.le.bihan.dev@free.fr>
 References: <20171217175808.31392-1-eric.le.bihan.dev@free.fr>
-Message-ID: <20171217175808.31392-6-eric.le.bihan.dev@free.fr>
+Message-ID: <20171217175808.31392-7-eric.le.bihan.dev@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Allow build of host variant of libssh2, which depends on host-openssl.
+Allow build of host variant of libhttpparser.
 
 Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 ---
- package/libssh2/libssh2.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+ package/libhttpparser/libhttpparser.mk | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/package/libssh2/libssh2.mk b/package/libssh2/libssh2.mk
-index 18e772c722..c5b0bd855e 100644
---- a/package/libssh2/libssh2.mk
-+++ b/package/libssh2/libssh2.mk
-@@ -40,4 +40,10 @@ else
- LIBSSH2_CONF_OPTS += --without-libz
- endif
+diff --git a/package/libhttpparser/libhttpparser.mk b/package/libhttpparser/libhttpparser.mk
+index 8ff0413322..1df26017e7 100644
+--- a/package/libhttpparser/libhttpparser.mk
++++ b/package/libhttpparser/libhttpparser.mk
+@@ -23,4 +23,13 @@ define LIBHTTPPARSER_INSTALL_TARGET_CMDS
+ 	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) PREFIX=$(TARGET_DIR)/usr install
+ endef
  
-+HOST_LIBSSH2_DEPENDENCIES += host-openssl
-+HOST_LIBSSH2_CONF_OPTS += --with-openssl \
-+	--with-libssl-prefix=$(HOST_DIR)/usr \
-+	--without-libgcrypt
++define HOST_LIBHTTPPARSER_BUILD_CMDS
++	$(MAKE) $(HOST_CONFIGURE_OPTS) -C $(@D) library package
++endef
 +
- $(eval $(autotools-package))
-+$(eval $(host-autotools-package))
++define HOST_LIBHTTPPARSER_INSTALL_CMDS
++	$(MAKE) $(HOST_CONFIGURE_OPTS) -C $(@D) PREFIX=$(HOST_DIR)/usr install
++endef
++
+ $(eval $(generic-package))
++$(eval $(host-generic-package))
 -- 
 2.14.3
