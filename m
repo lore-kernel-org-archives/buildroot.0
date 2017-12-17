@@ -1,29 +1,42 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 17 Dec 2017 13:12:08 +0100
-Subject: [Buildroot] [PATCH v1] libdrm: fix libatomic_ops linking
-References: <20171216195516.27144-1-ps.report@gmx.net>
-Message-ID: <oh3igexsnk.ln2@ID-313208.user.individual.net>
+Date: Sun, 17 Dec 2017 13:18:45 +0100
+Subject: [Buildroot] [PATCH v2 1/1] package/vlc: add optional dependency to
+ libupnp18
+Message-ID: <20171217121845.16351-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Sat, 16 Dec 2017 20:55:16 +0100 schrieb Peter Seiderer:
+Upstream added support for libupnp-1.8:
+http://git.videolan.org/?p=vlc/vlc-2.2.git;a=commit;h=825dca78be3a81e2a1c5d04137aa01b1cb32dfd3
 
-> Add explicit libatomic_ops linking, fixes etnavid tests linking
-> 
-> Fixes [1]:
-> 
->     CCLD     etnaviv_cmd_stream_test
->   ../../etnaviv/.libs/libdrm_etnaviv.so: undefined reference to
->   `AO_store_full_emulation' ../../etnaviv/.libs/libdrm_etnaviv.so:
->   undefined reference to `AO_fetch_compare_and_swap_emulation'
->   collect2: error: ld returned 1 exit status
-> 
-> [1]
-> http://autobuild.buildroot.net/
-results/92e074c49417261843eef95872ff935a56077c98
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+v2: vlc can be used both with libupnp-1.6 and libupnp-1.8 (Thomas)
+    For build-testing http://patchwork.ozlabs.org/patch/849606/ was used
 
-Tested-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-(build-tested using the defconfig mentioned here)
+ package/vlc/vlc.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
+index 30520c3072..febd9e0319 100644
+--- a/package/vlc/vlc.mk
++++ b/package/vlc/vlc.mk
+@@ -288,6 +288,13 @@ else
+ VLC_CONF_OPTS += --disable-upnp
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBUPNP18),y)
++VLC_CONF_OPTS += --enable-upnp
++VLC_DEPENDENCIES += libupnp18
++else
++VLC_CONF_OPTS += --disable-upnp
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBVNCSERVER),y)
+ VLC_CONF_OPTS += --enable-vnc
+ VLC_DEPENDENCIES += libvncserver
+-- 
+2.11.0
