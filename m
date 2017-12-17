@@ -1,19 +1,23 @@
-From: Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com>
-Date: Sun, 17 Dec 2017 11:24:52 +0100
-Subject: [Buildroot] [PATCH 1/1] package: remove the default value of the
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 17 Dec 2017 12:03:13 +0100
+Subject: [Buildroot] [git commit] package: remove the default value of the
  $(PKG)_SOURCE variable
-Message-ID: <1513506292-27032-1-git-send-email-jerzy.m.grzegorek@gmail.com>
+Message-ID: <20171217110326.773698119A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=20cdd433142e49a6c9e35085565e7f2c4ce97e44
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
 Signed-off-by: Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/pimd/pimd.mk                                   | 1 -
- package/proj/proj.mk                                   | 1 -
- package/traceroute/traceroute.mk                       | 1 -
+ package/pimd/pimd.mk             | 1 -
+ package/proj/proj.mk             | 1 -
+ package/traceroute/traceroute.mk | 1 -
  3 files changed, 3 deletions(-)
 
 diff --git a/package/pimd/pimd.mk b/package/pimd/pimd.mk
@@ -52,5 +56,3 @@ index 9d74b8f..d01c62d 100644
  TRACEROUTE_SITE = http://downloads.sourceforge.net/traceroute/traceroute/traceroute-$(TRACEROUTE_VERSION)
  
  TRACEROUTE_LICENSE = GPL-2.0+, LGPL-2.1+
--- 
-1.9.1
