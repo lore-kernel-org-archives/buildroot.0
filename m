@@ -1,24 +1,39 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Sun, 17 Dec 2017 23:00:52 +0100
-Subject: [Buildroot] [PATCH 2/2] iproute2: fix configure output file name
-In-Reply-To: <8ee7fc92d5c3a7a0b04202d7f4c8043cd32e3724.1513547304.git.baruch@tkos.co.il>
-References: <12bbbd716a1599907414d2a419430a7ad10e5520.1513547304.git.baruch@tkos.co.il>
- <8ee7fc92d5c3a7a0b04202d7f4c8043cd32e3724.1513547304.git.baruch@tkos.co.il>
-Message-ID: <20171217220051.GB31927@x230>
+From: Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com>
+Date: Mon, 18 Dec 2017 00:13:48 +0100
+Subject: [Buildroot] [PATCH 1/1] package: remove the default value of
+ the $(PKG)_SOURCE variable
+In-Reply-To: <20171217120406.3c63fe83@windsurf>
+References: <1513506292-27032-1-git-send-email-jerzy.m.grzegorek@gmail.com>
+ <20171217120406.3c63fe83@windsurf>
+Message-ID: <3130a2bd-3863-7cd7-6a53-f7b2fcc1eaa3@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> iproute2 renamed the configure script output file to config.mk. Update
-> the config tweaking code accordingly.
+Hi Thomas,
 
-> The configure script now detects xtables correctly, drop this part.
+> Hello,
+>
+> On Sun, 17 Dec 2017 11:24:52 +0100, Jerzy Grzegorek wrote:
+>> Signed-off-by: Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com>
+>> ---
+>>   package/pimd/pimd.mk                                   | 1 -
+>>   package/proj/proj.mk                                   | 1 -
+>>   package/traceroute/traceroute.mk                       | 1 -
+>>   3 files changed, 3 deletions(-)
+> Applied to master, thanks. In order to avoid such mistakes in the
+> future, would you be willing to contribute an addition to the
+> check-package script that detects usage of the default <pkg>_SOURCE
+> value ?
 
-> Add a comment to explain the TC_CONFIG_XT disable tweak.
+Sure, I'll try to do it.
 
-> Cc: Petr Vorel <petr.vorel@gmail.com>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
-Acked-by: Petr Vorel <petr.vorel@gmail.com>
+Regards,
+Jerzy
+
+>
+> Thanks!
+>
+> Thomas
