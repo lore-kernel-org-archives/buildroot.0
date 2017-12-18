@@ -1,42 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 18 Dec 2017 10:01:50 +0100
-Subject: [Buildroot] [git commit] iproute2: fix build with threads support
- disabled
-Message-ID: <20171218090428.79560834E3@busybox.osuosl.org>
+Date: Mon, 18 Dec 2017 10:01:53 +0100
+Subject: [Buildroot] [git commit] iproute2: fix configure output file name
+Message-ID: <20171218090428.85D058081A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a8a9c33d107af7923651945a1b276260bd84a0ef
+commit: https://git.buildroot.net/buildroot/commit/?id=f822cd793b07fff3db17b3898b858f003ead70d7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-iproute2 renamed the configure script generated file to config.mk.
-Update the berkeleydb disable code.
+iproute2 renamed the configure script output file to config.mk. Update
+the config tweaking code accordingly.
 
-Fixes:
-http://autobuild.buildroot.net/results/46d/46da1142806fb524326994585cec6de9f7f3f480/
-http://autobuild.buildroot.net/results/3aa/3aa028fe9e730335d2af00d5969b674a3d9f640b/
+The configure script now detects xtables correctly, drop this part.
+
+Add a comment to explain the TC_CONFIG_XT disable tweak.
 
 Cc: Petr Vorel <petr.vorel@gmail.com>
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Acked-by: Petr Vorel <petr.vorel@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/iproute2/iproute2.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/iproute2/iproute2.mk | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
 diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
-index b75349d..c01917d 100644
+index c01917d..15bb132 100644
 --- a/package/iproute2/iproute2.mk
 +++ b/package/iproute2/iproute2.mk
-@@ -42,7 +42,7 @@ ifeq ($(BR2_PACKAGE_BERKELEYDB_COMPAT185)$(BR2_TOOLCHAIN_HAS_THREADS),yy)
- IPROUTE2_DEPENDENCIES += berkeleydb
+@@ -31,9 +31,8 @@ define IPROUTE2_WITH_IPTABLES
+ endef
  else
- define IPROUTE2_DISABLE_ARPD
--	echo "HAVE_BERKELEY_DB:=n" >> $(@D)/Config
-+	echo "HAVE_BERKELEY_DB:=n" >> $(@D)/config.mk
+ define IPROUTE2_WITH_IPTABLES
+-	# em_ipset needs xtables, but configure misdetects it
+-	echo "TC_CONFIG_IPSET:=n" >>$(@D)/Config
+-	echo "TC_CONFIG_XT:=n" >>$(@D)/Config
++	# m_xt.so is built unconditionally
++	echo "TC_CONFIG_XT:=n" >>$(@D)/config.mk
  endef
  endif
  
