@@ -1,74 +1,62 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 18 Dec 2017 23:03:44 +0100
-Subject: [Buildroot] [PATCH] utils/checkpackagelib: exclude two files
- from Config.in indentation check
-In-Reply-To: <20171218084303.12472-1-thomas.petazzoni@free-electrons.com>
-References: <20171218084303.12472-1-thomas.petazzoni@free-electrons.com>
-Message-ID: <20171218220344.GC2903@scaer>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 18 Dec 2017 23:10:56 +0100
+Subject: [Buildroot] [PATCH] boot/arm-trusted-firmware: build fiptool
+ separately with dependency on host-openssl
+In-Reply-To: <20171217085553.27212-1-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Sun, 17 Dec 2017 09:55:53 +0100")
+References: <20171217085553.27212-1-thomas.petazzoni@free-electrons.com>
+Message-ID: <87mv2f7klr.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-On 2017-12-18 09:43 +0100, Thomas Petazzoni spake thusly:
-> package/x11r7/Config.in and package/kodi/Config.in do not comply with
-> the normal Config.in indentation rules. However, this violation of the
-> rule is legitimate, so let's skip them in check-package for this
-> specific indentation check.
+ > ATF >= 1.3 builds a host program called fiptool, which creates
 
-Can't we simply fix those two files to not have that unusual indentation
-in the first place?
+s/creates/uses/
 
-AFAICS, that special indentation is about the 'source' lines... Surely
-that does not bring much to have them indented, and they could simply be
-left-aligned...
+> OpenSSL, so we need to build host-openssl. We could have made it an
+ > optional dependency like U-Boot does, but since most ATF versions are
+ > going to be >= 1.3 in the near future, we simply make host-openssl a
+ > mandatory dependency.
 
-Regards,
-Yann E. MORIN.
+ > However, the ATF build system is not very good, and you can't easily
+ > pass flags that will affect the build of host programs. Therefore, we
+ > take the approach of building fiptool separately before triggering the
+ > real build process.
 
-> This removes the last 314 remaining warnings on Config.in files.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> 
-> ---
-> Note: I am not totally sure about this patch. Indeed package/Config.in
-> uses the same rule as package/{x11r7,kodi}/Config.in, but
-> check-package doesn't report warnings about it. Perhaps I'm missing
-> something in the check-package logic.
-> ---
->  utils/checkpackagelib/lib_config.py | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/utils/checkpackagelib/lib_config.py b/utils/checkpackagelib/lib_config.py
-> index 26ebb393d1..fb39182b91 100644
-> --- a/utils/checkpackagelib/lib_config.py
-> +++ b/utils/checkpackagelib/lib_config.py
-> @@ -133,6 +133,10 @@ class Indent(_CheckFunction):
->                          text]
->          elif entry in entries_that_should_not_be_indented:
->              if not text.startswith(entry):
-> +                # two Config.in files have a special but legitimate indentation rule
-> +                if self.filename in [ "./package/x11r7/Config.in",
-> +                                      "./package/kodi/Config.in" ]:
-> +                    return
->                  return ["{}:{}: should not be indented"
->                          .format(self.filename, lineno),
->                          text]
-> -- 
-> 2.14.3
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+ > It would obviously be better to fix ATF itself, but as usual with
+ > those bootloader packages, we fetch different versions depending on
+ > the platform/configuration, making it difficult to use patches.
+
+ > Fixes:
+
+ >   https://gitlab.com/buildroot.org/buildroot/-/jobs/44868961
+
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ > ---
+ >  boot/arm-trusted-firmware/arm-trusted-firmware.mk | 13 +++++++++++++
+ >  1 file changed, 13 insertions(+)
+
+ > diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+ > index e8d1c6205b..5085e6176b 100644
+ > --- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+ > +++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+ > @@ -55,6 +55,18 @@ ARM_TRUSTED_FIRMWARE_MAKE_TARGETS = all
+ 
+ >  ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP),y)
+ >  ARM_TRUSTED_FIRMWARE_MAKE_TARGETS += fip
+ > +ARM_TRUSTED_FIRMWARE_DEPENDENCIES += host-openssl
+ > +# fiptool only exists in newer (>= 1.3) versions of ATF, so we build
+ > +# it conditionally. We need to explicitly build it as it requires
+ > +# OpenSSL, and therefore proper variables to find the host OpenSSL.
+
+s/proper/needs to be passed proper/
+
+Committed with that fixed, thanks.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
