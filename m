@@ -1,38 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 18 Dec 2017 07:25:57 +0100
-Subject: [Buildroot] [PATCH 2/2] enable static linking for libfuse
-In-Reply-To: <CABukmmN5UjdWupf_8zuCkx13tuNVFxeD9AOE=cemfQ_Soe1AUQ@mail.gmail.com>
-References: <20171214105706.4577-1-aep@exys.org>
- <20171214105706.4577-2-aep@exys.org>
- <20171214162102.25c6d252@windsurf>
- <CABukmmN-WtUiGpUGTWUhPhkFLOaLAgMNfXujMwMUkNB=P8PHQA@mail.gmail.com>
- <041c4908-f28f-f553-9b82-b1b115fd1051@petroprogram.com>
- <CABukmmN5UjdWupf_8zuCkx13tuNVFxeD9AOE=cemfQ_Soe1AUQ@mail.gmail.com>
-Message-ID: <20171218072557.169c472e@windsurf>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon, 18 Dec 2017 07:29:11 +0100
+Subject: [Buildroot] [PATCH 2/2] package/ffmpeg: add optional support for
+ openjpeg
+In-Reply-To: <20171218062911.14366-1-bernd.kuhls@t-online.de>
+References: <20171218062911.14366-1-bernd.kuhls@t-online.de>
+Message-ID: <20171218062911.14366-2-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/ffmpeg/ffmpeg.mk | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-On Sun, 17 Dec 2017 17:42:36 +0100, A EP wrote:
-> yeah that's intentional. musl doesn't actually have separate libs. the
-> empty libraries are just for compatibility.
-> 
-> i don't think dlopen actually works in static musl, it might just return 0.
-> libfuse works fine for me, because it only uses dlopen for exotic modules
-> stuff.
-
-Then if you want to be able to have support for libfuse in static
-builds in Buildroot, libfuse should only conditionally use dlopen(), if
-available.
-
-Best regards,
-
-Thomas
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index 5bb5d1e30e..daa6daba1b 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
+@@ -53,7 +53,6 @@ FFMPEG_CONF_OPTS = \
+ 	--disable-libdc1394 \
+ 	--disable-libgsm \
+ 	--disable-libilbc \
+-	--disable-libopenjpeg \
+ 	--disable-libvo-amrwbenc \
+ 	--disable-symver \
+ 	--disable-doc
+@@ -369,6 +368,13 @@ else
+ FFMPEG_CONF_OPTS += --disable-fontconfig
+ endif
+ 
++ifeq ($(BR2_PACKAGE_OPENJPEG),y)
++FFMPEG_CONF_OPTS += --enable-libopenjpeg
++FFMPEG_DEPENDENCIES += openjpeg
++else
++FFMPEG_CONF_OPTS += --disable-libopenjpeg
++endif
++
+ ifeq ($(BR2_PACKAGE_X264)$(BR2_PACKAGE_FFMPEG_GPL),yy)
+ FFMPEG_CONF_OPTS += --enable-libx264
+ FFMPEG_DEPENDENCIES += x264
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.11.0
