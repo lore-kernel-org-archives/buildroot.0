@@ -1,8 +1,8 @@
 From: Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com>
-Date: Mon, 18 Dec 2017 13:13:01 +0100
+Date: Mon, 18 Dec 2017 13:14:26 +0100
 Subject: [Buildroot] [PATCH 1/1] utils/checkpackagelib: add function to
- check of
-Message-ID: <1513599181-6902-1-git-send-email-jerzy.m.grzegorek@gmail.com>
+ check of the default package source variable
+Message-ID: <1513599266-6954-1-git-send-email-jerzy.m.grzegorek@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
