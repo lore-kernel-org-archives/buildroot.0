@@ -1,74 +1,107 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 18 Dec 2017 14:07:02 +0100
-Subject: [Buildroot] [PATCH v1] libdrm: fix libatomic_ops linking
-In-Reply-To: <20171216195516.27144-1-ps.report@gmx.net>
-References: <20171216195516.27144-1-ps.report@gmx.net>
-Message-ID: <20171218140702.51454002@windsurf>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Mon, 18 Dec 2017 13:05:25 +0000
+Subject: [Buildroot] [PATCH] board: add support for ARC HS Development
+ Kit (HSDK)
+In-Reply-To: <20171218120618.4a8a9c83@windsurf>
+References: <20171207170628.2806-1-didin@synopsys.com>
+ <20171213083421.327551f7@windsurf.png.is.keysight.com>
+ <1513188243.3598.20.camel@synopsys.com>
+ <20171214070831.4339bc22@windsurf.png.is.keysight.com>
+ <1513329342.29404.15.camel@synopsys.com> <20171218120618.4a8a9c83@windsurf>
+Message-ID: <1513602324.3211.27.camel@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Thomas,
 
-On Sat, 16 Dec 2017 20:55:16 +0100, Peter Seiderer wrote:
-> Add explicit libatomic_ops linking, fixes etnavid tests linking
+On Mon, 2017-12-18 at 12:06 +0100, Thomas Petazzoni wrote:
+> Hello,
 > 
-> Fixes [1]:
+> On Fri, 15 Dec 2017 09:15:43 +0000, Alexey Brodkin wrote:
 > 
->     CCLD     etnaviv_cmd_stream_test
->   ../../etnaviv/.libs/libdrm_etnaviv.so: undefined reference to `AO_store_full_emulation'
->   ../../etnaviv/.libs/libdrm_etnaviv.so: undefined reference to `AO_fetch_compare_and_swap_emulation'
->   collect2: error: ld returned 1 exit status
+> > > I think option (3) is the best. But it has a drawback: it breaks
+> > > backward compatibility for existing users that rely on the file being
+> > > named uboot-env.bin. So instead, you could add a new U-Boot option that
+> > > allows to customize the name of the generated image. By default it
+> > > would be uboot-env.bin to keep backward compatibility, but it could be
+> > > set to a different value in your defconfig.
+> > > 
+> > > Or we decide to break the backward compatibility :)  
+> > 
+> > Well here again we're bumping to a situation that "something might be used
+> > by BR users and we don't know what and how" :)
+> > 
+> > I mean in upstream Buildroot (as of today, i.e. without HSDK support) 
+> > "uboot-env.bin" is only used for dumping binary data into SD-card image,
+> > which essentially means file name makes no sense as long as genimage.cfg mentions
+> > it correctly and as it might be seen from my patch proposal it is already handled
+> > (proabably I should have left the patch above in place so you don't need to
+> > look-up my previous email).
+> > 
+> > So our only concern might be people use "uboot-env.bin" on their own.
 > 
-> [1] http://autobuild.buildroot.net/results/92e074c49417261843eef95872ff935a56077c98
+> I think we should simply make the output file name configurable, which
+> solves your use case, and preserves backward compatibility. This should
+> all be explained in the commit log.
+
+Right, we're already working on the patch to that effect.
+
+> > > > > This should instead use the generic support/scripts/genimage.sh
+> > > > >     
+> > > > > > +tar czf output/images/sdcard.img.tar.gz --directory="./output/images"  sdcard.img    
+> > > > > 
+> > > > > And this is not needed.    
+> > > > 
+> > > > Well IMHO compression of the image makes sense because that way we may generate images
+> > > > with larger FAT-partition without bumping size of the output image.
+> > > > 
+> > > > See we always allocate a bit more space for FAT partition (or it is applicable to any not-last
+> > > > partiotion - not sure about that) compared to what we need just to make sure it's enough space for our
+> > > > stuff. Moreover I'd like to have some more space so I may for example put 2 uImages side by side
+> > > > and switch between them later on and do it all without re-formatting of the SD-card.
+> > > > 
+> > > > And given how large SD-cards these days are I'm fine with allocating even 100Mb for first FAT partiotion.
+> > > > Now if we don't compress sdcard.img it will be of size 100+ Mb. But if we gzip it then we only have size
+> > > > of real payload, i.e. ~6-7 Mb while keeping a lot of flexibility for image user.
+> > > > 
+> > > > Not to mention a case of sharing built images.
+> > > > 
+> > > > That said I'd rather prefer to either compress images by default (does it really hurt?)
+> > > > or at least have it as an option.  
+> > > 
+> > > I'm not sure we want to solve this in your specific post-image script,
+> > > it's a more generic problem. Though I agree we don't have a good way of
+> > > solving it right now.
+> > > 
+> > > Also, creating a tarball for just one file is a bit weird, you could
+> > > just gzip sdcard.img to produce sdcard.img.gz.  
+> > 
+> > That's exactly what we do: we compress only resulting "sdcard.img" into "sdcard.img.tar.gz".
 > 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
->  package/libdrm/libdrm.mk | 1 +
->  1 file changed, 1 insertion(+)
+> No, the code creates a tarball:
 > 
-> diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
-> index 3d7b67122b..ecc525ca1e 100644
-> --- a/package/libdrm/libdrm.mk
-> +++ b/package/libdrm/libdrm.mk
-> @@ -21,6 +21,7 @@ LIBDRM_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
->  
->  ifeq ($(BR2_PACKAGE_LIBATOMIC_OPS),y)
->  LIBDRM_DEPENDENCIES += libatomic_ops
-> +LIBDRM_CONF_ENV += LIBS="-latomic_ops"
->  ifeq ($(BR2_sparc_v8)$(BR2_sparc_leon3),y)
->  LIBDRM_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -DAO_NO_SPARC_V9"
->  endif
+> tar czf output/images/sdcard.img.tar.gz --directory="./output/images"  sdcard.img
+> 
+> Which is useless when compressing a single file. Just compress the file
+> with gzip, no need to create a tarball.
 
-I think this is not the correct fix, because you will link against
-atomic_ops as soon as libatomic_ops is available for the target, even
-when libdrm doesn't need it (like when it uses the atomic built-ins of
-the compiler).
+I spotted that as well in Eugeniy's patch :)
+Essentially there's no need for a tarball, plaingzip will be used.
 
-I think the right approach is to fix libdrm instead to use pkg-config
-to detect libatomic_ops and link against it when needed. See the
-attached libdrm patch that does this (tested successfully with the
-breaking SPARC configuration).
+> But again, I recommend against that, as none of our defconfigs do this
+> currently.
 
-You just need to modify libdrm.mk for autoreconf, which includes the
-need to add host-xutil_util-macros to the dependencies.
+As usual probably because people never had to share built images with others or
+keep many of them. In comparison OpenWrt guys do it for all images just because
+they build images for tons of boards and keep those images on FTPs.
 
-Could you have a look at this, and if it also works for you, submit it
-as a patch?
+> If you want to solve this problem, solve it separately,
+> otherwise your defconfig will wait for ages before being merged.
 
-Thanks a lot!
+Sure that makes perfect sense. But we'll keep working on that functionality so that
+we'll be able to use it once corresponding patches are merged.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: 0001-configure-Makefile.am-use-pkg-config-to-discover-lib.patch
-Type: text/x-patch
-Size: 5811 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20171218/ff16bd45/attachment.bin>
+-Alexey
