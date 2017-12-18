@@ -1,55 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 18 Dec 2017 11:31:22 +0100
-Subject: [Buildroot] [PATCH v8 0/9] Add support for the Rust programming
- language
-In-Reply-To: <706201859.95242518.1513592711039.JavaMail.root@zimbra32-e6>
-References: <20171218075439.7d3c37c8@windsurf>
- <706201859.95242518.1513592711039.JavaMail.root@zimbra32-e6>
-Message-ID: <20171218113122.76db1f02@windsurf>
+Date: Mon, 18 Dec 2017 11:33:29 +0100
+Subject: [Buildroot] [git commit] DEVELOPERS: merge duplicated entry for
+ Mario Lang
+Message-ID: <20171218103343.CE4648351F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=cfbcc7c2fd275df4e091506dc1954d6996d488cd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 18 Dec 2017 11:25:11 +0100 (CET), Eric Le Bihan wrote:
+Signed-off-by: Mario Lang <mlang@blind.guru>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ DEVELOPERS | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-> The patch which adds the package to build Rust from source provides a 
-> patch to fix a problem involving files ending with *.orig.
-> 
-> As the Rust compiler is built using Cargo, the tarball contains vendored
-> versions of the crates (e.g. src/vendor/backtrace-sys). Each crate 
-> contains a file named Cargo.toml.orig. An associated file named
-> .cargo-checksum.json will contain a checksum for Cargo.toml.orig (and
-> the other source files).
-> 
-> But support/scripts/apply-patches.sh will delete the Cargo.toml.orig 
-> files. This will cause the build to fail, as Cargo will not be able to 
-> find the file and verify the checksum.
-> 
-> So the patch included in the rust package removes all Cargo.toml.orig 
-> entries from the affected .cargo-checksum.json. As these files list all
-> the source files, this results in a huge patch.
-> 
-> Besides, as these are non-indented JSON files, some are one-lined and 
-> thus the 998 characters limit enforced by git-send-email is exceeded.
-> 
-> So, if there a way to stop support/scripts/apply-patches.sh from pruning
-> Cargo.toml.orig files, so this patch can be dropped?
-
-Do we really have a reason to remove *.orig files in
-apply-patches.sh ? .orig backup files are only produced if -b is passed
-to patch, which we are not using.
-
-Are there other cases where .orig files are produced by patch *and* we
-really need to remove them?
-
-Peter, Arnout, Yann?
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/DEVELOPERS b/DEVELOPERS
+index af800d8..fe989c0 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1045,10 +1045,8 @@ F:	package/sg3_utils/
+ F:	package/udisks/
+ 
+ N:	Mario Lang <mlang@blind.guru>
+-F:	package/lynx/
+-
+-N:	Mario Lang <mlang@blind.guru>
+ F:	package/brltty/
++F:	package/lynx/
+ 
+ N:	Mario Rugiero <mrugiero@gmail.com>
+ F:	package/ratpoison/
