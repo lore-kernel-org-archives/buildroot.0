@@ -1,55 +1,42 @@
-From: Alexey Roslyakov <alexey.roslyakov@gmail.com>
-Date: Tue, 19 Dec 2017 00:50:42 +0700
-Subject: [Buildroot] [PATCH 1/1] utils/scanpypi: increase error message
- verbosity
-In-Reply-To: <CAGm1_kuo+SaPA-ANChKrJfXS4EojV_PBVZkb20CumOxTNBHEEw@mail.gmail.com>
-References: <20171218140016.13774-1-alexey.roslyakov@gmail.com>
- <20171218151900.208b1725@windsurf>
- <CAGm1_kuo+SaPA-ANChKrJfXS4EojV_PBVZkb20CumOxTNBHEEw@mail.gmail.com>
-Message-ID: <CALFoz4bREtdy5zoOu7ZKWLh+m4pfHKv=GtNjuU5y4YV94_qjXQ@mail.gmail.com>
+From: Martin Bark <martin@barkynet.com>
+Date: Mon, 18 Dec 2017 18:17:34 +0000
+Subject: [Buildroot] [PATCH 1/1] package/nodejs: bump version to 8.9.3
+Message-ID: <1513621054-30022-1-git-send-email-martin@barkynet.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yegor,
-no, I don't have anything at the moment.
+See https://nodejs.org/en/blog/release/v8.9.3/
 
-All best.
+Signed-off-by: Martin Bark <martin@barkynet.com>
+---
+ package/nodejs/nodejs.hash | 4 ++--
+ package/nodejs/nodejs.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-On 18 December 2017 at 21:56, Yegor Yefremov <yegorslists@googlemail.com>
-wrote:
-
-> On Mon, Dec 18, 2017 at 3:19 PM, Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com> wrote:
-> > Hello,
-> >
-> > On Mon, 18 Dec 2017 21:00:16 +0700, Alexey Roslyakov wrote:
-> >> When package installation fails it is good to know what happened.
-> >>
-> >> Signed-off-by: Alexey Roslyakov <alexey.roslyakov@gmail.com>
-> >> ---
-> >>  utils/scanpypi | 6 +++---
-> >>  1 file changed, 3 insertions(+), 3 deletions(-)
-> >
-> > Applied to master, thanks.
->
-> @Alexey do you have more scanpypi patches in the queue? I've reworked
-> the license type detection [1]. I'd also like to add licence file
-> checksum to the *.hash file creation.
->
-> [1] http://patchwork.ozlabs.org/patch/837807/
->
-> Yegor
->
-
-
-
+diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
+index 658f80b..ae50faf 100644
+--- a/package/nodejs/nodejs.hash
++++ b/package/nodejs/nodejs.hash
+@@ -1,2 +1,2 @@
+-# From http://nodejs.org/dist/v8.9.1/SHASUMS256.txt
+-sha256 ef160c21f60f8aca64145985e01b4044435e381dc16e8f0640ed0223e84f17e0  node-v8.9.1.tar.xz
++# From http://nodejs.org/dist/v8.9.3/SHASUMS256.txt
++sha256 748ddb3baa6b85e6a56e38aacd066586e7581952f84a92bc8152248a9be6b2da  node-v8.9.3.tar.xz
+diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+index 9cf26da..4c1deb1 100644
+--- a/package/nodejs/nodejs.mk
++++ b/package/nodejs/nodejs.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-NODEJS_VERSION = 8.9.1
++NODEJS_VERSION = 8.9.3
+ NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.xz
+ NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
+ NODEJS_DEPENDENCIES = host-python host-nodejs c-ares \
 -- 
-With best regards,
-  Alexey Roslyakov
-Email: alexey.roslyakov at gmail.com
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20171219/6bb1d959/attachment.html>
+2.7.4
