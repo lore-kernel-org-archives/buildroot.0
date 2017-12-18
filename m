@@ -1,46 +1,47 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 18 Dec 2017 21:39:46 +0100
-Subject: [Buildroot] [git commit] package/nodejs: security bump to version
- 8.9.3
-Message-ID: <20171218204118.0CBA67FA1F@busybox.osuosl.org>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon, 18 Dec 2017 21:56:07 +0100
+Subject: [Buildroot] [PATCH 2/4] package/gstreamer1/gst1-vaapi: bump version
+ to 1.12.4
+In-Reply-To: <20171218205609.17653-1-bernd.kuhls@t-online.de>
+References: <20171218205609.17653-1-bernd.kuhls@t-online.de>
+Message-ID: <20171218205609.17653-2-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=380c3d5e4067fcd0d551890083dc83edd6b8a055
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Added license hash, this bump will fix build with libva 2.0.
 
-See https://nodejs.org/en/blog/release/v8.9.3/
-
-[Peter: mention that this fixes security issues]
-Signed-off-by: Martin Bark <martin@barkynet.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/nodejs/nodejs.hash | 4 ++--
- package/nodejs/nodejs.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/gstreamer1/gst1-vaapi/gst1-vaapi.hash | 6 ++++--
+ package/gstreamer1/gst1-vaapi/gst1-vaapi.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
-index 658f80b..ae50faf 100644
---- a/package/nodejs/nodejs.hash
-+++ b/package/nodejs/nodejs.hash
-@@ -1,2 +1,2 @@
--# From http://nodejs.org/dist/v8.9.1/SHASUMS256.txt
--sha256 ef160c21f60f8aca64145985e01b4044435e381dc16e8f0640ed0223e84f17e0  node-v8.9.1.tar.xz
-+# From http://nodejs.org/dist/v8.9.3/SHASUMS256.txt
-+sha256 748ddb3baa6b85e6a56e38aacd066586e7581952f84a92bc8152248a9be6b2da  node-v8.9.3.tar.xz
-diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-index 9cf26da..4c1deb1 100644
---- a/package/nodejs/nodejs.mk
-+++ b/package/nodejs/nodejs.mk
+diff --git a/package/gstreamer1/gst1-vaapi/gst1-vaapi.hash b/package/gstreamer1/gst1-vaapi/gst1-vaapi.hash
+index 97bebaba69..9a6f4bed93 100644
+--- a/package/gstreamer1/gst1-vaapi/gst1-vaapi.hash
++++ b/package/gstreamer1/gst1-vaapi/gst1-vaapi.hash
+@@ -1,2 +1,4 @@
+-# From https://gstreamer.freedesktop.org/src/gstreamer-vaapi/gstreamer-vaapi-1.12.3.tar.xz.sha256sum
+-sha256 f4cdafd8fd9606a490917c8b67336e835df1219580d55421c70480fd0913744d gstreamer-vaapi-1.12.3.tar.xz
++# From https://gstreamer.freedesktop.org/src/gstreamer-vaapi/gstreamer-vaapi-1.12.4.tar.xz.sha256sum
++sha256 1c2d77242e1f30c4d1394636cae9f6877228a017960fca96881e0080d8b6e9c9  gstreamer-vaapi-1.12.4.tar.xz
++# Locally computed
++sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
+diff --git a/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk b/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk
+index 9783c591aa..6b637416f5 100644
+--- a/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk
++++ b/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--NODEJS_VERSION = 8.9.1
-+NODEJS_VERSION = 8.9.3
- NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.xz
- NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
- NODEJS_DEPENDENCIES = host-python host-nodejs c-ares \
+-GST1_VAAPI_VERSION = 1.12.3
++GST1_VAAPI_VERSION = 1.12.4
+ GST1_VAAPI_SITE = https://gstreamer.freedesktop.org/src/gstreamer-vaapi
+ GST1_VAAPI_SOURCE = gstreamer-vaapi-$(GST1_VAAPI_VERSION).tar.xz
+ GST1_VAAPI_LICENSE = LGPL-2.1+
+-- 
+2.11.0
