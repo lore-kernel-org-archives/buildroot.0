@@ -1,71 +1,65 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 18 Dec 2017 23:09:39 +0100
-Subject: [Buildroot] [git commit] boot/arm-trusted-firmware: build fiptool
- separately with dependency on host-openssl
-Message-ID: <20171218221114.8730D81036@busybox.osuosl.org>
+Date: Mon, 18 Dec 2017 23:15:42 +0100
+Subject: [Buildroot] [PATCH] package/cmake: bump version to 3.10.0 and
+ add license hash
+In-Reply-To: <20171217173911.GA7491@scaer> (Yann E. MORIN's message of "Sun,
+ 17 Dec 2017 18:39:11 +0100")
+References: <20171210233349.24682-1-mlang@blind.guru>
+ <20171212070736.04953cff@windsurf.png.is.keysight.com>
+ <20171212123040.35400bc4@windsurf> <877etnj677.fsf@home.blind.guru>
+ <20171216133439.58247290@windsurf> <20171217173911.GA7491@scaer>
+Message-ID: <87ind37kdt.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a957d9a90ade4194dffe3eb2fc0136bc5d077c28
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-ATF >= 1.3 builds a host program called fiptool which uses
-OpenSSL, so we need to build host-openssl. We could have made it an
-optional dependency like U-Boot does, but since most ATF versions are
-going to be >= 1.3 in the near future, we simply make host-openssl a
-mandatory dependency.
+Hi,
 
-However, the ATF build system is not very good, and you can't easily
-pass flags that will affect the build of host programs. Therefore, we
-take the approach of building fiptool separately before triggering the
-real build process.
+ > Alternatively, we could also consider bumping our own requirements now,
+ > requiring a newer base system.
 
-It would obviously be better to fix ATF itself, but as usual with
-those bootloader packages, we fetch different versions depending on
-the platform/configuration, making it difficult to use patches.
+ > Yes, that would mean leaving out in the cold people stuck on *very
+ > ancient* enterprise-class distros (which IMHO would be a bit sad). But I
+ > would prefer that rather than springling a dependency in all packages...
 
-Fixes:
+ > Unless we also build our own host toolchain? ;-] Well, probably a host
+ > C/C++ compiler would be enough to build is needed, until we also need to
+ > build binutils and a C library and whatnot... This should be avoided if
+ > at all possible.
 
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/44868961
+Argh, let's not go there! ;)
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- boot/arm-trusted-firmware/arm-trusted-firmware.mk | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+ > emplace_hint() has been added in gcc-4.7 (listed as a defect in 4.6).
+ > However, some of the build failures are on a machine with gcc-4.7.2;
 
-diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-index e8d1c62..4bac916 100644
---- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-+++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-@@ -55,6 +55,19 @@ ARM_TRUSTED_FIRMWARE_MAKE_TARGETS = all
- 
- ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP),y)
- ARM_TRUSTED_FIRMWARE_MAKE_TARGETS += fip
-+ARM_TRUSTED_FIRMWARE_DEPENDENCIES += host-openssl
-+# fiptool only exists in newer (>= 1.3) versions of ATF, so we build
-+# it conditionally. We need to explicitly build it as it requires
-+# OpenSSL, and therefore needs to be passed proper variables to find
-+# the host OpenSSL.
-+define ARM_TRUSTED_FIRMWARE_BUILD_FIPTOOL
-+	if test -d $(@D)/tools/fiptool; then \
-+		$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)/tools/fiptool \
-+			$(ARM_TRUSTED_FIRMWARE_MAKE_OPTS) \
-+			CPPFLAGS="$(HOST_CPPFLAGS)" \
-+			LDLIBS="$(HOST_LDFLAGS) -lcrypto" ; \
-+	fi
-+endef
- endif
- 
- ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31),y)
-@@ -62,6 +75,7 @@ ARM_TRUSTED_FIRMWARE_MAKE_TARGETS += bl31
- endif
- 
- define ARM_TRUSTED_FIRMWARE_BUILD_CMDS
-+	$(ARM_TRUSTED_FIRMWARE_BUILD_FIPTOOL)
- 	$(TARGET_CONFIGURE_OPTS) \
- 		$(MAKE) -C $(@D) $(ARM_TRUSTED_FIRMWARE_MAKE_OPTS) \
- 			$(ARM_TRUSTED_FIRMWARE_MAKE_TARGETS)
+ >     http://autobuild.buildroot.org/results/ae8/ae88e2addefab8c7ccefa853c87313034ea241bc/build-end.log
+ >     [--SNIP--]
+ >     -- The C compiler identification is GNU 4.7.2
+ >     -- The CXX compiler identification is GNU 4.7.2
+ >     [--SNIP--]
+ >     cmGlobalNinjaGenerator.cxx:1077:40: error: 'class std::map<const
+ >     cmGeneratorTarget*, std::set<std::basic_string<char> > >' has no member
+ >     named 'emplace_hint'
+
+ > But all the failures occur on gcc-20...
+
+ > I looke at my autobuilder, and it uses gcc-4.8.2, and cmake builds fine
+ > with that...
+
+ > gcc-4.8 was released in March 2013, which will be almost 5 years ago
+ > when we tag LTS 2018.02. So maybe we can keep using cmake-3.9 up until
+ > 2018.02, then update our requirements to require a host gcc >= 4.8m
+ > which will allow us to bump cmake to 3.10.
+
+ > I agree that, with time passing, more and more packages will require
+ > C++11, so it will make sense to require proper C++11 support for the
+ > host compiler.
+
+Yes, maybe that is indeed the best way forward - Post 2018.02 that is.
+
+-- 
+Bye, Peter Korsgaard
