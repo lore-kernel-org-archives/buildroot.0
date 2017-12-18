@@ -1,27 +1,66 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 18 Dec 2017 09:57:56 +0100
-Subject: [Buildroot] [PATCH 1/2] linux: bump default to version 4.14.7
-In-Reply-To: <1513524266-32758-1-git-send-email-festevam@gmail.com>
-References: <1513524266-32758-1-git-send-email-festevam@gmail.com>
-Message-ID: <20171218095756.67ccd58f@windsurf>
+Date: Mon, 18 Dec 2017 09:59:29 +0100
+Subject: [Buildroot] [git commit] package/linphone: remove ffmpeg-related
+ patches
+Message-ID: <20171218090019.6A4FC8222F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=7470c21c863ea5ca39e2cd001d3effb09af2d9c3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 17 Dec 2017 13:24:25 -0200, Fabio Estevam wrote:
-> Signed-off-by: Fabio Estevam <festevam@gmail.com>
-> ---
->  linux/Config.in | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+The linphone package never provided video support.
 
-Both applied. Thanks.
+While this commit
+https://git.buildroot.net/buildroot/commit/package/linphone?id=dec04466549cd40e2696ae7725e90d6559bee640
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+added support for ffmpeg 3.0+ the next commit, which fixed the build of
+the bundled mediastreamer2 library, added --disable-video:
+https://git.buildroot.net/buildroot/commit/package/linphone?id=f3492b28d89c1f2448c9662a6f755cb48e8c0f0b
+
+At this point the ffmpeg 3.0 patches could have been removed because
+ffmpeg is only used if video support is enabled:
+
+https://github.com/BelledonneCommunications/mediastreamer2/blob/6c2a608800a221942f2a827e0abb60346e7d065f/acinclude.m4#L80
+https://github.com/BelledonneCommunications/mediastreamer2/blob/6c2a608800a221942f2a827e0abb60346e7d065f/acinclude.m4#L107
+
+This patch catches up on that to avoid changing the upstream URL for
+the patches which is broken.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/linphone/linphone.hash | 4 ----
+ package/linphone/linphone.mk   | 5 -----
+ 2 files changed, 9 deletions(-)
+
+diff --git a/package/linphone/linphone.hash b/package/linphone/linphone.hash
+index 2e202cf..9ed9d37 100644
+--- a/package/linphone/linphone.hash
++++ b/package/linphone/linphone.hash
+@@ -1,6 +1,2 @@
+ # Locally calculated after checking pgp signature
+ sha256	05ba81223e9378c3bce8d33080213b9925af49bd9623cd9004eb3dd22ca9d2a0	linphone-3.6.1.tar.gz
+-sha256	bc4ef670c0ecc1bb60bcb79374309b555c11d154bacfa363d809a26a58780933	libav9.patch
+-sha256	a50a8ac2caedb389c224f81393901a029fec055ec2ec83aa18d677e1bfe7fc73	libav10.patch
+-sha256	e384775c12ea93d3bc35dccfe4ea875c38b74be8af63fcb82e6b7f06e93d1593	libav11.patch
+-sha256	3367a26f65f49f4101787b1821402127d29cde9b02d3873112a5001a549cc7d9	ffmpeg_2.9.patch
+diff --git a/package/linphone/linphone.mk b/package/linphone/linphone.mk
+index a10d6bb..4129c2a 100644
+--- a/package/linphone/linphone.mk
++++ b/package/linphone/linphone.mk
+@@ -15,11 +15,6 @@ LINPHONE_INSTALL_STAGING = YES
+ LINPHONE_DEPENDENCIES = host-pkgconf libeXosip2 speex
+ LINPHONE_LICENSE = GPL-2.0+
+ LINPHONE_LICENSE_FILES = COPYING
+-LINPHONE_PATCH = \
+-	https://sources.debian.net/data/main/l/linphone/3.6.1-2.5/debian/patches/libav9.patch \
+-	https://sources.debian.net/data/main/l/linphone/3.6.1-2.5/debian/patches/libav10.patch \
+-	https://sources.debian.net/data/main/l/linphone/3.6.1-2.5/debian/patches/libav11.patch \
+-	https://sources.debian.net/data/main/l/linphone/3.6.1-2.5/debian/patches/ffmpeg_2.9.patch
+ 
+ ifeq ($(BR2_arc),y)
+ # toolchain __arc__ define conflicts with libosip2 source
