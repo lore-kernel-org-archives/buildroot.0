@@ -1,39 +1,56 @@
-From: Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com>
-Date: Mon, 18 Dec 2017 00:13:48 +0100
-Subject: [Buildroot] [PATCH 1/1] package: remove the default value of
- the $(PKG)_SOURCE variable
-In-Reply-To: <20171217120406.3c63fe83@windsurf>
-References: <1513506292-27032-1-git-send-email-jerzy.m.grzegorek@gmail.com>
- <20171217120406.3c63fe83@windsurf>
-Message-ID: <3130a2bd-3863-7cd7-6a53-f7b2fcc1eaa3@gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon, 18 Dec 2017 07:40:48 +0200
+Subject: [Buildroot] [PATCH 7/9] libcurl: add host variant
+In-Reply-To: <20171217175808.31392-8-eric.le.bihan.dev@free.fr>
+References: <20171217175808.31392-1-eric.le.bihan.dev@free.fr>
+ <20171217175808.31392-8-eric.le.bihan.dev@free.fr>
+Message-ID: <20171218054048.mfakm2dfbaybnlz3@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hi Eric,
 
-> Hello,
->
-> On Sun, 17 Dec 2017 11:24:52 +0100, Jerzy Grzegorek wrote:
->> Signed-off-by: Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com>
->> ---
->>   package/pimd/pimd.mk                                   | 1 -
->>   package/proj/proj.mk                                   | 1 -
->>   package/traceroute/traceroute.mk                       | 1 -
->>   3 files changed, 3 deletions(-)
-> Applied to master, thanks. In order to avoid such mistakes in the
-> future, would you be willing to contribute an addition to the
-> check-package script that detects usage of the default <pkg>_SOURCE
-> value ?
+On Sun, Dec 17, 2017 at 06:58:06PM +0100, Eric Le Bihan wrote:
+> Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+> ---
+>  package/libcurl/libcurl.mk | 13 +++++++++++++
+>  1 file changed, 13 insertions(+)
+> 
+> diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+> index 0aab58a7de..c95b0eea6b 100644
+> --- a/package/libcurl/libcurl.mk
+> +++ b/package/libcurl/libcurl.mk
+> @@ -88,4 +88,17 @@ endef
+>  LIBCURL_POST_INSTALL_TARGET_HOOKS += LIBCURL_TARGET_CLEANUP
+>  endif
+>  
+> +HOST_LIBCURL_DEPENDENCIES = host-openssl
+> +HOST_LIBCURL_CONF_OPTS = \
+> +	--disable-manual \
+> +	--disable-ntlm-wb \
+> +	--disable-curldebug \
+> +	--without-gnutls \
+> +	--without-mbedtls \
+> +	--without-polarssl \
+> +	--without-nss
 
-Sure, I'll try to do it.
+What about --with-ssl=...? Isn't that needed for the linking with 
+host-openssl?
 
-Regards,
-Jerzy
+baruch
 
->
-> Thanks!
->
-> Thomas
+> +
+> +HOST_LIBCURL_POST_PATCH_HOOKS += LIBCURL_FIX_DOT_PC
+> +
+>  $(eval $(autotools-package))
+> +$(eval $(host-autotools-package))
+
+baruch
+
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
