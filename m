@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 18 Dec 2017 11:10:29 +0100
-Subject: [Buildroot] [PATCH] libgpgme: fix build on MIPS with older
- kernel headers
-In-Reply-To: <2e227ffb5d56b6d3b40306b14c32e1b6aaa4accc.1513456961.git.baruch@tkos.co.il>
-References: <2e227ffb5d56b6d3b40306b14c32e1b6aaa4accc.1513456961.git.baruch@tkos.co.il>
-Message-ID: <20171218111029.73a55f79@windsurf>
+Date: Mon, 18 Dec 2017 11:17:38 +0100
+Subject: [Buildroot] [PATCH v2] lynx: new package
+In-Reply-To: <20171213084341.0cc77602@windsurf.png.is.keysight.com>
+References: <20171212184128.29536-1-mlang@blind.guru>
+ <20171213084341.0cc77602@windsurf.png.is.keysight.com>
+Message-ID: <20171218111738.17d223f2@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,24 +13,31 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 16 Dec 2017 22:42:41 +0200, Baruch Siach wrote:
-> MIPS N64 ABI has been missing getdents64 wire up until kernel version
-> 3.10. Disable use of getdents on older kernels.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/961/9619062ce6642ae4121d7debb3b4c632c88723d5/
-> 
-> Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> Cc: Philipp Claves <claves@budelmann-elektronik.com>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  package/libgpgme/libgpgme.mk | 5 +++++
->  1 file changed, 5 insertions(+)
+On Wed, 13 Dec 2017 08:43:41 +0100, Thomas Petazzoni wrote:
 
-Applied to master, thanks.
+> package/slang/Config.in:1:error: recursive dependency detected!
+> package/slang/Config.in:1:	symbol BR2_PACKAGE_SLANG is selected by BR2_PACKAGE_NCURSES
+> package/ncurses/Config.in:1:	symbol BR2_PACKAGE_NCURSES is selected by BR2_PACKAGE_SLANG
+> configuration written to /home/thomas/projets/buildroot/.config
+> 
+> It's not clear from the log, but I guess it's because the mc package
+> does it the other way around: select slang if !ncurses.
+> 
+> So, I've changed your lynx package to also do select slang if !ncurses.
+> I had to propagate the BR2_USE_MMU dependency of slang to lynx as a
+> consequence.
+
+We have some build failures on lynx:
+
+  http://autobuild.buildroot.net/?reason=lynx-2.8.9dev.16
+
+I'm adding Matt Weber in Cc since so far the 3 failures all occurred on
+his autobuilder, so it might be related to his setup.
+
+Best regards,
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
