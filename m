@@ -1,37 +1,44 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 18 Dec 2017 22:25:58 +0100
-Subject: [Buildroot] [PATCH] gitlab-ci: add .config to artefacts
-Message-ID: <20171218212558.22912-1-yann.morin.1998@free.fr>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 18 Dec 2017 22:49:47 +0100
+Subject: [Buildroot] [PATCH 9/9] vlc: set back upnp support
+Message-ID: <20171218214947.16142-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When a run-time test fails to build, it is interesting to get the
-corresponding .config file directly as an artifact, rather than
-reconstruct it manually from the various config snippets embedded
-in the many runtime-test scripts.
+Commit cb7aa25df8c3c4531354fd0f7d69208f89360c7b has disabled upnp support
+as --disable-upnp and --enable-upnp are both set if libupnp or libupnp18
+is enabled
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- .gitlab-ci.yml | 1 +
- 1 file changed, 1 insertion(+)
+ package/vlc/vlc.mk | 11 ++---------
+ 1 file changed, 2 insertions(+), 9 deletions(-)
 
-diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index 691669f7f1..32f6d7d224 100644
---- a/.gitlab-ci.yml
-+++ b/.gitlab-ci.yml
-@@ -61,6 +61,7 @@ check-package:
-         expire_in: 2 weeks
-         paths:
-             - test-output/*.log
-+            - test-output/*/.config
-             - test-output/*/images/*
- acmesystems_aria_g25_128mb_defconfig: *defconfig
- acmesystems_aria_g25_256mb_defconfig: *defconfig
+diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
+index febd9e0319..56bfdced53 100644
+--- a/package/vlc/vlc.mk
++++ b/package/vlc/vlc.mk
+@@ -281,16 +281,9 @@ else
+ VLC_CONF_OPTS += --disable-theora
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_LIBUPNP),y)
++ifeq ($(BR2_PACKAGE_LIBUPNP)$(BR2_PACKAGE_LIBUPNP18),y)
+ VLC_CONF_OPTS += --enable-upnp
+-VLC_DEPENDENCIES += libupnp
+-else
+-VLC_CONF_OPTS += --disable-upnp
+-endif
+-
+-ifeq ($(BR2_PACKAGE_LIBUPNP18),y)
+-VLC_CONF_OPTS += --enable-upnp
+-VLC_DEPENDENCIES += libupnp18
++VLC_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBUPNP),libupnp,libupnp18)
+ else
+ VLC_CONF_OPTS += --disable-upnp
+ endif
 -- 
-2.11.0
+2.14.1
