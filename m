@@ -1,46 +1,48 @@
-From: Mario Lang <mlang@blind.guru>
-Date: Mon, 18 Dec 2017 12:31:43 +0100
-Subject: [Buildroot] [PATCH] package/brltty: disable features and add
- optional dependencies
-In-Reply-To: <20171218110127.6df4ba7e@windsurf> (Thomas Petazzoni's message of
- "Mon, 18 Dec 2017 11:01:27 +0100")
-References: <20171218095143.15343-1-mlang@blind.guru>
- <20171218110127.6df4ba7e@windsurf>
-Message-ID: <871sjsclwg.fsf@home.blind.guru>
+From: Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com>
+Date: Mon, 18 Dec 2017 13:13:01 +0100
+Subject: [Buildroot] [PATCH 1/1] utils/checkpackagelib: add function to
+ check of
+Message-ID: <1513599181-6902-1-git-send-email-jerzy.m.grzegorek@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Signed-off-by: Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com>
+---
+ utils/checkpackagelib/lib_mk.py | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
 
-> On Mon, 18 Dec 2017 10:51:43 +0100, Mario Lang wrote:
->> * --without-midi-package should fix a number of autobuild failures.
->
-> Which ones? We like to have references to autobuilder failures.
-
-At least these two:
-http://autobuild.buildroot.net/results/0c4f557c2ad276b1ed065119532af37c0af5f014
-http://autobuild.buildroot.net/results/ea82b7c7732821368746ddddb5d529e97c9b6c16
-
->> * Disable a number of speech drivers to avoid build failures
->>   if they are installed on the host.
->> * Optional dependency on espeak and flite fixes builds where
->>   espeak or flite are installed on the host.
->
-> Autobuilder failure references ?
-
-These failures didn't show up on any autobuilder, as autobuilders
-typically don't have commercial speech synthesizers or espeak/flite
-installed on the host.  But these build failures showed up during builds
-of BRLTTY users.  In particular, espeak, flite and speechd were
-accidentally picked up from the host during configure.
-
+diff --git a/utils/checkpackagelib/lib_mk.py b/utils/checkpackagelib/lib_mk.py
+index 817e809..5ae565c 100644
+--- a/utils/checkpackagelib/lib_mk.py
++++ b/utils/checkpackagelib/lib_mk.py
+@@ -99,6 +99,25 @@ class PackageHeader(_CheckFunction):
+                         text]
+ 
+ 
++class RemoveDefaultPackageSourceVariable(_CheckFunction):
++    PACKAGE_NAME = re.compile("/([^/]+)\.mk")
++
++    def before(self):
++        package = self.PACKAGE_NAME.search(self.filename).group(1)
++        package_upper = package.replace("-", "_").upper()
++        self.package = package
++        self.package_upper = package_upper
++        self.FIND_SOURCE = re.compile(
++            "^{}_SOURCE\s*=\s*{}-\$\({}_VERSION\)\.tar\.gz"
++            .format(package_upper, package, package_upper))
++
++    def check_line(self, lineno, text):
++        if self.FIND_SOURCE.search(text):
++            return ["{}:{}: remove default value of _SOURCE variable ({}#writing-rules-mk)"
++                    .format(self.filename, lineno, self.url_to_manual),
++                    text]
++
++
+ class SpaceBeforeBackslash(_CheckFunction):
+     TAB_OR_MULTIPLE_SPACES_BEFORE_BACKSLASH = re.compile(r"^.*(  |\t)\\$")
+ 
 -- 
-CYa,
-  ????? | Blog: <https://blind.guru/>  GitHub: <https://github.com/mlang/>
-  .''`. | Twitter: @blindbird23        FaceBook: disyled
- : :' : | SoundCloud: <soundcloud.com/mario-lang>
- `. `'  | YouTube: <youtube.com/user/mlang23>
-   `-
+1.9.1
