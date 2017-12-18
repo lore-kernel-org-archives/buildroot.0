@@ -1,72 +1,37 @@
-From: Damien Riegel <damien.riegel@savoirfairelinux.com>
-Date: Mon, 18 Dec 2017 16:19:35 -0500
-Subject: [Buildroot] [PATCH] lldpd: remove check on CXX compiler
-Message-ID: <20171218211935.15149-1-damien.riegel@savoirfairelinux.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 18 Dec 2017 22:25:58 +0100
+Subject: [Buildroot] [PATCH] gitlab-ci: add .config to artefacts
+Message-ID: <20171218212558.22912-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-lldpd currently depends on a C++ compiler to configure properly, but
-the package doesn't select that option, so builds fail if
-BR2_TOOLCHAIN_BUILDROOT_CXX is not selected with following errors:
+When a run-time test fails to build, it is interesting to get the
+corresponding .config file directly as an artifact, rather than
+reconstruct it manually from the various config snippets embedded
+in the many runtime-test scripts.
 
-  checking how to run the C++ preprocessor... /lib/cpp
-  configure: error: in `/home/dkc/src/buildroot/build-zii/build/lldpd-0.9.4':
-  configure: error: C++ preprocessor "/lib/cpp" fails sanity check
-
-This package actually builds fine without C++, so drop this check in
-configure.ac. Attached patch has already been accepted upstream [1].
-
-[1] https://github.com/vincentbernat/lldpd/pull/261
-
-Signed-off-by: Damien Riegel <damien.riegel@savoirfairelinux.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
 ---
- ...03-configure-remove-check-on-CXX-compiler.patch | 35 ++++++++++++++++++++++
- 1 file changed, 35 insertions(+)
- create mode 100644 package/lldpd/0003-configure-remove-check-on-CXX-compiler.patch
+ .gitlab-ci.yml | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/lldpd/0003-configure-remove-check-on-CXX-compiler.patch b/package/lldpd/0003-configure-remove-check-on-CXX-compiler.patch
-new file mode 100644
-index 0000000000..880f603f71
---- /dev/null
-+++ b/package/lldpd/0003-configure-remove-check-on-CXX-compiler.patch
-@@ -0,0 +1,35 @@
-+From d28b3bfa1b224f7770004dddf4dfaf10ad7ad6c9 Mon Sep 17 00:00:00 2001
-+From: Damien Riegel <damien.riegel@savoirfairelinux.com>
-+Date: Mon, 18 Dec 2017 14:37:08 -0500
-+Subject: [PATCH] configure: remove check on CXX compiler
-+
-+lldpd fails to build if the toolchain doesn't have a C++ compiler
-+because configure fails with the following error:
-+
-+  checking how to run the C++ preprocessor... /lib/cpp
-+  configure: error: in `/home/dkc/src/buildroot/build-zii/build/lldpd-0.9.4':
-+  configure: error: C++ preprocessor "/lib/cpp" fails sanity check
-+
-+Since "8d92800b: build: cleaner way to not alter CFLAGS/CPPFLAGS/LDFLAGS",
-+it seems that the dependency on C++ is not required anymore, so there
-+is no reason to keep this restriction. Dropping AC_PROG_CXX allows to
-+build with a toolchain that doesn't have C++ just fine.
-+---
-+ configure.ac | 1 -
-+ 1 file changed, 1 deletion(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 0edceb1..5afe8f2 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -48,7 +48,6 @@ AC_PROG_CC_C99
-+ if test x"$ac_cv_prog_cc_c99" = x"no"; then
-+   AC_MSG_FAILURE([*** C99 support is mandatory])
-+ fi
-+-AC_PROG_CXX
-+ AM_PROG_CC_C_O
-+ AC_PROG_LIBTOOL
-+ AC_PROG_LN_S
-+-- 
-+2.15.1
-+
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index 691669f7f1..32f6d7d224 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -61,6 +61,7 @@ check-package:
+         expire_in: 2 weeks
+         paths:
+             - test-output/*.log
++            - test-output/*/.config
+             - test-output/*/images/*
+ acmesystems_aria_g25_128mb_defconfig: *defconfig
+ acmesystems_aria_g25_256mb_defconfig: *defconfig
 -- 
-2.15.1
+2.11.0
