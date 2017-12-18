@@ -1,46 +1,74 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 18 Dec 2017 22:52:06 +0100
-Subject: [Buildroot] [PATCH v2,1/1] vlc: set back upnp support
-Message-ID: <20171218215206.16368-1-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 18 Dec 2017 23:03:44 +0100
+Subject: [Buildroot] [PATCH] utils/checkpackagelib: exclude two files
+ from Config.in indentation check
+In-Reply-To: <20171218084303.12472-1-thomas.petazzoni@free-electrons.com>
+References: <20171218084303.12472-1-thomas.petazzoni@free-electrons.com>
+Message-ID: <20171218220344.GC2903@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit cb7aa25df8c3c4531354fd0f7d69208f89360c7b has disabled upnp support
-as --disable-upnp and --enable-upnp are both set if libupnp or libupnp18
-is enabled
+Thomas, All,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
-Changes v1 -> v2:
- - Fix patch number in title
- package/vlc/vlc.mk | 11 ++---------
- 1 file changed, 2 insertions(+), 9 deletions(-)
+On 2017-12-18 09:43 +0100, Thomas Petazzoni spake thusly:
+> package/x11r7/Config.in and package/kodi/Config.in do not comply with
+> the normal Config.in indentation rules. However, this violation of the
+> rule is legitimate, so let's skip them in check-package for this
+> specific indentation check.
 
-diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
-index febd9e0319..56bfdced53 100644
---- a/package/vlc/vlc.mk
-+++ b/package/vlc/vlc.mk
-@@ -281,16 +281,9 @@ else
- VLC_CONF_OPTS += --disable-theora
- endif
- 
--ifeq ($(BR2_PACKAGE_LIBUPNP),y)
-+ifeq ($(BR2_PACKAGE_LIBUPNP)$(BR2_PACKAGE_LIBUPNP18),y)
- VLC_CONF_OPTS += --enable-upnp
--VLC_DEPENDENCIES += libupnp
--else
--VLC_CONF_OPTS += --disable-upnp
--endif
--
--ifeq ($(BR2_PACKAGE_LIBUPNP18),y)
--VLC_CONF_OPTS += --enable-upnp
--VLC_DEPENDENCIES += libupnp18
-+VLC_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBUPNP),libupnp,libupnp18)
- else
- VLC_CONF_OPTS += --disable-upnp
- endif
+Can't we simply fix those two files to not have that unusual indentation
+in the first place?
+
+AFAICS, that special indentation is about the 'source' lines... Surely
+that does not bring much to have them indented, and they could simply be
+left-aligned...
+
+Regards,
+Yann E. MORIN.
+
+> This removes the last 314 remaining warnings on Config.in files.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> 
+> ---
+> Note: I am not totally sure about this patch. Indeed package/Config.in
+> uses the same rule as package/{x11r7,kodi}/Config.in, but
+> check-package doesn't report warnings about it. Perhaps I'm missing
+> something in the check-package logic.
+> ---
+>  utils/checkpackagelib/lib_config.py | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/utils/checkpackagelib/lib_config.py b/utils/checkpackagelib/lib_config.py
+> index 26ebb393d1..fb39182b91 100644
+> --- a/utils/checkpackagelib/lib_config.py
+> +++ b/utils/checkpackagelib/lib_config.py
+> @@ -133,6 +133,10 @@ class Indent(_CheckFunction):
+>                          text]
+>          elif entry in entries_that_should_not_be_indented:
+>              if not text.startswith(entry):
+> +                # two Config.in files have a special but legitimate indentation rule
+> +                if self.filename in [ "./package/x11r7/Config.in",
+> +                                      "./package/kodi/Config.in" ]:
+> +                    return
+>                  return ["{}:{}: should not be indented"
+>                          .format(self.filename, lineno),
+>                          text]
+> -- 
+> 2.14.3
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.14.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
