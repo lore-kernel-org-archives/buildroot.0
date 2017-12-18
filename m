@@ -1,262 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 18 Dec 2017 09:22:54 +0100
-Subject: [Buildroot] [git commit] package/*/Config.in: fix help text
- check-package warnings
-Message-ID: <20171218083058.5242F8215B@busybox.osuosl.org>
+Date: Mon, 18 Dec 2017 09:43:03 +0100
+Subject: [Buildroot] [PATCH] utils/checkpackagelib: exclude two files from
+ Config.in indentation check
+Message-ID: <20171218084303.12472-1-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2277fdeca8c94f8ea8fe8afebcdbb176c6b1531d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+package/x11r7/Config.in and package/kodi/Config.in do not comply with
+the normal Config.in indentation rules. However, this violation of the
+rule is legitimate, so let's skip them in check-package for this
+specific indentation check.
 
-This commit fixes the warnings reported by check-package on the help
-text of all package Config.in files, related to the formatting of the
-help text: should start with a tab, then 2 spaces, then at most 62
-characters.
-
-The vast majority of warnings fixed were caused by too long lines. A
-few warnings were related to spaces being used instead of a tab to
-indent the help text.
+This removes the last 314 remaining warnings on Config.in files.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/dash/Config.in                             |  9 +--
- package/freescale-imx/imx-lib/Config.in            |  6 +-
- package/freescale-imx/imx-vpuwrap/Config.in        |  3 +-
- .../kernel-module-imx-gpu-viv/Config.in            |  6 +-
- package/freescale-imx/libz160/Config.in            |  5 +-
- package/gstreamer/gst-ffmpeg/Config.in             | 10 +--
- package/gstreamer/gst-fsl-plugins/Config.in        | 15 +++--
- package/gstreamer/gst-plugin-x170/Config.in        |  4 +-
- package/gstreamer/gst-plugins-good/Config.in       |  4 +-
- package/gstreamer/gstreamer/Config.in              | 10 +--
- package/gstreamer1/gst1-imx/Config.in              |  5 +-
- package/gstreamer1/gst1-plugins-bad/Config.in      |  7 +-
- package/gstreamer1/gst1-plugins-good/Config.in     |  7 +-
- package/gstreamer1/gstreamer1/Config.in            | 26 ++++----
- package/macchanger/Config.in                       |  4 +-
- package/madplay/Config.in                          | 10 +--
- package/mali-t76x/Config.in                        |  6 +-
- package/matchbox/Config.in                         |  3 +-
- package/mbedtls/Config.in                          |  8 +--
- package/mc/Config.in                               |  8 +--
- package/mcelog/Config.in                           |  4 +-
- package/mcrypt/Config.in                           |  8 +--
- package/memcached/Config.in                        |  4 +-
- package/memtest86/Config.in                        |  7 +-
- package/memtester/Config.in                        |  3 +-
- package/mesa3d/Config.in                           | 14 ++--
- package/micropython/Config.in                      |  5 +-
- package/minidlna/Config.in                         |  4 +-
- package/moarvm/Config.in                           |  5 +-
- package/modplugtools/Config.in                     |  6 +-
- package/mongodb/Config.in                          |  9 +--
- package/monkey/Config.in                           |  3 +-
- package/mpg123/Config.in                           |  4 +-
- package/mplayer/Config.in                          |  4 +-
- package/mraa/Config.in                             |  6 +-
- package/msgpack/Config.in                          |  4 +-
- package/mtools/Config.in                           |  8 +--
- package/multicat/Config.in                         |  3 +-
- package/musepack/Config.in                         |  9 +--
- package/mysql/Config.in                            |  6 +-
- package/nanocom/Config.in                          | 13 ++--
- package/ncftp/Config.in                            |  5 +-
- package/ncurses/Config.in                          |  4 +-
- package/ndisc6/Config.in                           |  3 +-
- package/neard/Config.in                            |  5 +-
- package/netatalk/Config.in                         |  5 +-
- package/netcat-openbsd/Config.in                   | 17 ++---
- package/netcat/Config.in                           | 16 +++--
- package/netsnmp/Config.in                          |  6 +-
- package/nettle/Config.in                           |  7 +-
- package/network-manager/Config.in                  | 12 ++--
- package/newt/Config.in                             |  3 +-
- package/nftables/Config.in                         |  6 +-
- package/nginx/Config.in                            |  4 +-
- package/nodejs/Config.in                           | 30 +++++----
- package/ntp/Config.in                              | 27 ++++----
- package/nut/Config.in                              | 11 ++--
- .../nvidia-tegra23-binaries/Config.in              |  4 +-
- package/odhcp6c/Config.in                          |  4 +-
- package/omniorb/Config.in                          | 12 ++--
- package/omxplayer/Config.in                        |  6 +-
- package/on2-8170-modules/Config.in                 |  3 +-
- package/opencore-amr/Config.in                     |  5 +-
- package/opencv/Config.in                           | 11 ++--
- package/opencv3/Config.in                          | 76 ++++++++++++----------
- package/openldap/Config.in                         | 10 +--
- package/openssh/Config.in                          |  5 +-
- package/opentyrian-data/Config.in                  |  6 +-
- package/opentyrian/Config.in                       |  8 +--
- package/openvmtools/Config.in                      |  7 +-
- package/openzwave/Config.in                        |  8 +--
- package/opkg/Config.in                             | 15 +++--
- package/opusfile/Config.in                         |  4 +-
- package/orbit/Config.in                            |  4 +-
- package/owl-linux/Config.in                        |  6 +-
- package/p7zip/Config.in                            |  4 +-
- package/pango/Config.in                            | 11 ++--
- package/patch/Config.in                            |  4 +-
- package/pcmanfm/Config.in                          |  6 +-
- package/pcre2/Config.in                            | 10 ++-
- package/pdbg/Config.in                             |  3 +-
- package/perl-http-daemon/Config.in                 |  4 +-
- package/perl-http-date/Config.in                   |  4 +-
- package/perl-http-negotiate/Config.in              |  6 +-
- package/perl-io-html/Config.in                     |  3 +-
- package/perl-lwp-mediatypes/Config.in              |  4 +-
- package/perl-mime-base64/Config.in                 |  4 +-
- package/perl-www-robotrules/Config.in              |  4 +-
- package/perl/Config.in                             |  8 +--
- package/phidgetwebservice/Config.in                | 15 +++--
- package/picocom/Config.in                          |  5 +-
- package/pkgconf/Config.in                          |  9 +--
- package/poppler/Config.in                          |  3 +-
- package/powertop/Config.in                         |  3 +-
- package/pps-tools/Config.in                        |  3 +-
- package/prboom/Config.in                           |  7 +-
- package/proftpd/Config.in                          |  4 +-
- package/protobuf/Config.in                         |  5 +-
- package/proxychains-ng/Config.in                   |  3 +-
- package/psmisc/Config.in                           |  3 +-
- package/psplash/Config.in                          | 16 ++---
- package/pugixml/Config.in                          | 17 +++--
- package/pure-ftpd/Config.in                        | 22 ++++---
- package/putty/Config.in                            |  7 +-
- package/pwgen/Config.in                            |  4 +-
- package/python-asn1crypto/Config.in                |  6 +-
- package/python-bottle/Config.in                    |  7 +-
- package/python-can/Config.in                       |  3 +-
- package/python-cheetah/Config.in                   | 11 ++--
- package/python-cssselect/Config.in                 |  3 +-
- package/python-dicttoxml/Config.in                 |  4 +-
- package/python-django/Config.in                    | 10 +--
- package/python-oauthlib/Config.in                  |  4 +-
- package/python-protobuf/Config.in                  |  5 +-
- package/python-pygame/Config.in                    | 10 +--
- package/python-pynacl/Config.in                    |  3 +-
- package/python-pyparsing/Config.in                 | 10 +--
- package/python-pypcap/Config.in                    |  3 +-
- package/python-pyro/Config.in                      |  7 +-
- package/python-pysmb/Config.in                     |  8 +--
- package/python-pyudev/Config.in                    |  5 +-
- package/python-pyxb/Config.in                      |  5 +-
- package/python-setuptools/Config.in                |  3 +-
- package/python-simpleaudio/Config.in               |  5 +-
- package/python-thrift/Config.in                    |  3 +-
- package/python-twisted/Config.in                   |  3 +-
- package/python-typepy/Config.in                    |  4 +-
- package/python-u-msgpack/Config.in                 |  4 +-
- package/python-webpy/Config.in                     |  4 +-
- package/python-xlrd/Config.in                      |  4 +-
- package/python-zope-interface/Config.in            | 10 +--
- package/python/Config.in                           |  6 +-
- package/python3/Config.in                          |  6 +-
- package/qemu/Config.in                             | 42 +++++++-----
- package/qpdf/Config.in                             | 12 ++--
- package/qt/Config.in                               | 27 ++++----
- package/qt5/qt53d/Config.in                        |  3 +-
- package/qt5/qt5base/Config.in                      | 19 +++---
- package/qt5/qt5charts/Config.in                    |  3 +-
- package/qt5/qt5multimedia/Config.in                |  6 +-
- package/qt5/qt5webkit/Config.in                    |  9 +--
- package/qt5cinex/Config.in                         |  4 +-
- package/quagga/Config.in                           | 15 +++--
- package/rabbitmq-server/Config.in                  |  3 +-
- package/ramsmp/Config.in                           |  5 +-
- package/rapidjson/Config.in                        |  3 +-
- package/rp-pppoe/Config.in                         | 11 ++--
- package/rpcbind/Config.in                          |  4 +-
- package/rpi-firmware/Config.in                     | 29 +++++----
- package/rpi-userland/Config.in                     | 13 ++--
- package/rsh-redone/Config.in                       |  7 +-
- package/sane-backends/Config.in                    |  6 +-
- package/sconeserver/Config.in                      |  5 +-
- package/screen/Config.in                           | 13 ++--
- package/sdl_net/Config.in                          |  5 +-
- package/shairport-sync/Config.in                   | 21 +++---
- package/slirp/Config.in                            |  4 +-
- package/smack/Config.in                            | 22 +++----
- package/smcroute/Config.in                         | 10 +--
- package/smstools3/Config.in                        | 11 ++--
- package/snappy/Config.in                           |  8 +--
- package/softether/Config.in                        | 22 ++++---
- package/sox/Config.in                              | 12 ++--
- package/sqlcipher/Config.in                        | 13 ++--
- package/sqlite/Config.in                           | 56 ++++++++--------
- package/squid/Config.in                            |  3 +-
- package/sshfs/Config.in                            |  3 +-
- package/start-stop-daemon/Config.in                |  4 +-
- package/startup-notification/Config.in             |  3 +-
- package/strongswan/Config.in                       | 10 +--
- package/sunxi-mali/Config.in                       | 12 ++--
- package/sunxi-tools/Config.in                      |  6 +-
- package/swupdate/Config.in                         | 63 +++++++++---------
- package/sysdig/Config.in                           |  4 +-
- package/systemd/Config.in                          | 54 +++++++--------
- package/taglib/Config.in                           |  7 +-
- package/tar/Config.in                              |  5 +-
- package/tclap/Config.in                            | 15 +++--
- package/tcpreplay/Config.in                        |  4 +-
- package/tekui/Config.in                            |  9 +--
- package/thrift/Config.in                           | 12 ++--
- package/thttpd/Config.in                           |  3 +-
- package/ti-gfx/Config.in                           |  9 +--
- package/ti-utils/Config.in                         |  4 +-
- package/tinyalsa/Config.in                         |  4 +-
- package/tinyhttpd/Config.in                        |  5 +-
- package/tinyxml2/Config.in                         |  4 +-
- package/trace-cmd/Config.in                        |  8 +--
- package/trousers/Config.in                         |  6 +-
- package/ts4900-fpga/Config.in                      |  8 +--
- package/tstools/Config.in                          | 17 ++---
- package/tvheadend/Config.in                        | 11 ++--
- package/twolame/Config.in                          |  6 +-
- package/uboot-tools/Config.in                      |  4 +-
- package/ubus/Config.in                             | 11 ++--
- package/uclibc/Config.in                           | 15 +++--
- package/uhttpd/Config.in                           |  6 +-
- package/ulogd/Config.in                            |  3 +-
- package/unixodbc/Config.in                         |  5 +-
- package/upower/Config.in                           | 13 ++--
- package/usbmount/Config.in                         |  5 +-
- package/usbredir/Config.in                         | 17 ++---
- package/ushare/Config.in                           |  4 +-
- package/ux500-firmware/Config.in                   |  5 +-
- package/w_scan/Config.in                           |  8 +--
- package/wavemon/Config.in                          | 13 ++--
- package/webkitgtk/Config.in                        |  3 +-
- package/weston/Config.in                           |  6 +-
- package/wf111/Config.in                            |  4 +-
- package/wpa_supplicant/Config.in                   | 15 +++--
- package/wsapi-fcgi/Config.in                       |  3 +-
- package/x11r7/libxcb/Config.in                     |  5 +-
- package/x11r7/xapp_xcmsdb/Config.in                |  3 +-
- package/x11r7/xcb-proto/Config.in                  |  4 +-
- package/x11r7/xcb-util-image/Config.in             | 14 ++--
- package/x11r7/xcb-util-keysyms/Config.in           | 18 ++---
- package/x11r7/xcb-util-wm/Config.in                | 13 ++--
- package/x11r7/xcb-util/Config.in                   |  4 +-
- .../x11r7/xdriver_xf86-input-libinput/Config.in    |  6 +-
- package/x11r7/xdriver_xf86-video-imx-viv/Config.in | 13 ++--
- .../x11r7/xdriver_xf86-video-openchrome/Config.in  |  4 +-
- package/x11r7/xserver_xorg-server/Config.in        |  3 +-
- package/x265/Config.in                             |  9 +--
- package/xen/Config.in                              |  6 +-
- package/xenomai/Config.in                          |  4 +-
- package/xinetd/Config.in                           |  4 +-
- package/xscreensaver/Config.in                     | 11 ++--
- package/xtables-addons/Config.in                   |  4 +-
- package/xvisor/Config.in                           |  6 +-
- package/xz/Config.in                               | 15 +++--
- package/yad/Config.in                              |  4 +-
- package/zeromq/Config.in                           |  6 +-
- package/zmqpp/Config.in                            |  8 +--
- package/zsh/Config.in                              |  8 +--
- 234 files changed, 1107 insertions(+), 924 deletions(-)
 
-Patch is too large, so refusing to show it
+---
+Note: I am not totally sure about this patch. Indeed package/Config.in
+uses the same rule as package/{x11r7,kodi}/Config.in, but
+check-package doesn't report warnings about it. Perhaps I'm missing
+something in the check-package logic.
+---
+ utils/checkpackagelib/lib_config.py | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/utils/checkpackagelib/lib_config.py b/utils/checkpackagelib/lib_config.py
+index 26ebb393d1..fb39182b91 100644
+--- a/utils/checkpackagelib/lib_config.py
++++ b/utils/checkpackagelib/lib_config.py
+@@ -133,6 +133,10 @@ class Indent(_CheckFunction):
+                         text]
+         elif entry in entries_that_should_not_be_indented:
+             if not text.startswith(entry):
++                # two Config.in files have a special but legitimate indentation rule
++                if self.filename in [ "./package/x11r7/Config.in",
++                                      "./package/kodi/Config.in" ]:
++                    return
+                 return ["{}:{}: should not be indented"
+                         .format(self.filename, lineno),
+                         text]
+-- 
+2.14.3
