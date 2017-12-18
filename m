@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 18 Dec 2017 11:01:52 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libdrm: bump version to 2.4.89
-In-Reply-To: <20171218063036.3165-1-bernd.kuhls@t-online.de>
-References: <20171218063036.3165-1-bernd.kuhls@t-online.de>
-Message-ID: <20171218110152.23f8a19a@windsurf>
+Date: Mon, 18 Dec 2017 11:02:06 +0100
+Subject: [Buildroot] [PATCH v2 1/2] python-cffi: add missing runtime
+ dependency
+In-Reply-To: <20171218080705.3182-1-yegorslists@googlemail.com>
+References: <20171218080705.3182-1-yegorslists@googlemail.com>
+Message-ID: <20171218110206.31522e99@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,14 +13,21 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 18 Dec 2017 07:30:36 +0100, Bernd Kuhls wrote:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+On Mon, 18 Dec 2017 09:07:04 +0100, yegorslists at googlemail.com wrote:
+> From: Yegor Yefremov <yegorslists@googlemail.com>
+> 
+> python-pycparser is mentioned in setup.py as install_requires, so
+> select it in Config.in.
+> 
+> As python-cffi will be installed with python-crossbar's dependencies,
+> remove it from python-crossbar's Config.in.
+> 
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 > ---
->  package/libdrm/libdrm.hash | 10 +++++-----
->  package/libdrm/libdrm.mk   |  2 +-
->  2 files changed, 6 insertions(+), 6 deletions(-)
+> Changes v1 -> v2:
+> 	- rename patch to just indicate that we are adding missing runtime dependency
 
-Applied to master, thanks.
+Both applied; Thanks!
 
 Thomas
 -- 
