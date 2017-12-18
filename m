@@ -1,122 +1,72 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 18 Dec 2017 22:10:39 +0100
-Subject: [Buildroot] [PATCH v2,1/1] flatbuffers: new package
-Message-ID: <20171218211039.4450-1-fontaine.fabrice@gmail.com>
+From: Damien Riegel <damien.riegel@savoirfairelinux.com>
+Date: Mon, 18 Dec 2017 16:19:35 -0500
+Subject: [Buildroot] [PATCH] lldpd: remove check on CXX compiler
+Message-ID: <20171218211935.15149-1-damien.riegel@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-FlatBuffers is an efficient cross platform serialization
-library for C++, C#, C, Go, Java, JavaScript, PHP, and
-Python. It was originally created at Google for game
-development and other performance-critical applications.
+lldpd currently depends on a C++ compiler to configure properly, but
+the package doesn't select that option, so builds fail if
+BR2_TOOLCHAIN_BUILDROOT_CXX is not selected with following errors:
 
-http://google.github.io/flatbuffers/
+  checking how to run the C++ preprocessor... /lib/cpp
+  configure: error: in `/home/dkc/src/buildroot/build-zii/build/lldpd-0.9.4':
+  configure: error: C++ preprocessor "/lib/cpp" fails sanity check
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+This package actually builds fine without C++, so drop this check in
+configure.ac. Attached patch has already been accepted upstream [1].
+
+[1] https://github.com/vincentbernat/lldpd/pull/261
+
+Signed-off-by: Damien Riegel <damien.riegel@savoirfairelinux.com>
 ---
-Changes v1 -> v2 (after review of Thomas Petazzoni and reading of
-https://patchwork.ozlabs.org/patch/814900):
- - Fix DEVELOPERS entry
- - Add dependencies on BR2_INSTALL_LIBSTDCPP and
- BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
- - Set FLATBUFFERS_BUILD_SHAREDLIB depending on BR2_STATIC_LIBS instead
- of using BR2_SHARED_LIBS and BR2_SHARED_STATIC_LIBS
- - Add -DCMAKE_CXX_FLAGS="-std=c++11"
+ ...03-configure-remove-check-on-CXX-compiler.patch | 35 ++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
+ create mode 100644 package/lldpd/0003-configure-remove-check-on-CXX-compiler.patch
 
- DEVELOPERS                           |  1 +
- package/Config.in                    |  1 +
- package/flatbuffers/Config.in        | 14 ++++++++++++++
- package/flatbuffers/flatbuffers.hash |  3 +++
- package/flatbuffers/flatbuffers.mk   | 23 +++++++++++++++++++++++
- 5 files changed, 42 insertions(+)
- create mode 100644 package/flatbuffers/Config.in
- create mode 100644 package/flatbuffers/flatbuffers.hash
- create mode 100644 package/flatbuffers/flatbuffers.mk
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index fe989c0775..408f5d8e16 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -619,6 +619,7 @@ F:	package/alljoyn-base/
- F:	package/alljoyn-tcl/
- F:	package/alljoyn-tcl-base/
- F:	package/boinc/
-+F:	package/flatbuffers/
- F:	package/gtksourceview/
- F:	package/gssdp/
- F:	package/gupnp/
-diff --git a/package/Config.in b/package/Config.in
-index bd39a374f0..3301b1b0a0 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1450,6 +1450,7 @@ menu "Other"
- 	source "package/elfutils/Config.in"
- 	source "package/fftw/Config.in"
- 	source "package/flann/Config.in"
-+	source "package/flatbuffers/Config.in"
- 	source "package/gflags/Config.in"
- 	source "package/glibmm/Config.in"
- 	source "package/glm/Config.in"
-diff --git a/package/flatbuffers/Config.in b/package/flatbuffers/Config.in
+diff --git a/package/lldpd/0003-configure-remove-check-on-CXX-compiler.patch b/package/lldpd/0003-configure-remove-check-on-CXX-compiler.patch
 new file mode 100644
-index 0000000000..992738282f
+index 0000000000..880f603f71
 --- /dev/null
-+++ b/package/flatbuffers/Config.in
-@@ -0,0 +1,14 @@
-+config BR2_PACKAGE_FLATBUFFERS
-+	bool "flatbuffers"
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # C++11
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	help
-+	  FlatBuffers is an efficient cross platform serialization
-+	  library for C++, C#, C, Go, Java, JavaScript, PHP, and
-+	  Python. It was originally created at Google for game
-+	  development and other performance-critical applications.
++++ b/package/lldpd/0003-configure-remove-check-on-CXX-compiler.patch
+@@ -0,0 +1,35 @@
++From d28b3bfa1b224f7770004dddf4dfaf10ad7ad6c9 Mon Sep 17 00:00:00 2001
++From: Damien Riegel <damien.riegel@savoirfairelinux.com>
++Date: Mon, 18 Dec 2017 14:37:08 -0500
++Subject: [PATCH] configure: remove check on CXX compiler
 +
-+	  http://google.github.io/flatbuffers/
++lldpd fails to build if the toolchain doesn't have a C++ compiler
++because configure fails with the following error:
 +
-+comment "flatbuffers needs a toolchain w/ C++, gcc >= 4.7"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
-diff --git a/package/flatbuffers/flatbuffers.hash b/package/flatbuffers/flatbuffers.hash
-new file mode 100644
-index 0000000000..bd39ca385b
---- /dev/null
-+++ b/package/flatbuffers/flatbuffers.hash
-@@ -0,0 +1,3 @@
-+# Locally computed:
-+sha256	c45029c0a0f1a88d416af143e34de96b3091642722aa2d8c090916c6d1498c2e	flatbuffers-v1.8.0.tar.gz
-+sha256	7ec9661a8afafab1eee3523d6f1a193eff76314a5ab10b4ce96aefd87621b0c3	LICENSE.txt
-diff --git a/package/flatbuffers/flatbuffers.mk b/package/flatbuffers/flatbuffers.mk
-new file mode 100644
-index 0000000000..2b640ecc2a
---- /dev/null
-+++ b/package/flatbuffers/flatbuffers.mk
-@@ -0,0 +1,23 @@
-+################################################################################
-+#
-+# flatbuffers
-+#
-+################################################################################
++  checking how to run the C++ preprocessor... /lib/cpp
++  configure: error: in `/home/dkc/src/buildroot/build-zii/build/lldpd-0.9.4':
++  configure: error: C++ preprocessor "/lib/cpp" fails sanity check
 +
-+FLATBUFFERS_VERSION = v1.8.0
-+FLATBUFFERS_SITE = $(call github,google,flatbuffers,$(FLATBUFFERS_VERSION))
-+FLATBUFFERS_LICENSE = Apache-2.0
-+FLATBUFFERS_LICENSE_FILES = LICENSE.txt
-+FLATBUFFERS_INSTALL_STAGING = YES
++Since "8d92800b: build: cleaner way to not alter CFLAGS/CPPFLAGS/LDFLAGS",
++it seems that the dependency on C++ is not required anymore, so there
++is no reason to keep this restriction. Dropping AC_PROG_CXX allows to
++build with a toolchain that doesn't have C++ just fine.
++---
++ configure.ac | 1 -
++ 1 file changed, 1 deletion(-)
 +
-+FLATBUFFERS_CONF_OPTS += \
-+	-DCMAKE_CXX_FLAGS="-std=c++11" \
-+	-DFLATBUFFERS_BUILD_TESTS=OFF
++diff --git a/configure.ac b/configure.ac
++index 0edceb1..5afe8f2 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -48,7 +48,6 @@ AC_PROG_CC_C99
++ if test x"$ac_cv_prog_cc_c99" = x"no"; then
++   AC_MSG_FAILURE([*** C99 support is mandatory])
++ fi
++-AC_PROG_CXX
++ AM_PROG_CC_C_O
++ AC_PROG_LIBTOOL
++ AC_PROG_LN_S
++-- 
++2.15.1
 +
-+ifeq ($(BR2_STATIC_LIBS),y)
-+FLATBUFFERS_CONF_OPTS += -DFLATBUFFERS_BUILD_SHAREDLIB=OFF
-+else
-+FLATBUFFERS_CONF_OPTS += -DFLATBUFFERS_BUILD_SHAREDLIB=ON
-+endif
-+
-+$(eval $(cmake-package))
 -- 
-2.14.1
+2.15.1
