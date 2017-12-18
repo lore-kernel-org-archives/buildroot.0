@@ -1,7 +1,7 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 18 Dec 2017 22:49:47 +0100
-Subject: [Buildroot] [PATCH 9/9] vlc: set back upnp support
-Message-ID: <20171218214947.16142-1-fontaine.fabrice@gmail.com>
+Date: Mon, 18 Dec 2017 22:52:06 +0100
+Subject: [Buildroot] [PATCH v2,1/1] vlc: set back upnp support
+Message-ID: <20171218215206.16368-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,6 +14,8 @@ is enabled
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
+Changes v1 -> v2:
+ - Fix patch number in title
  package/vlc/vlc.mk | 11 ++---------
  1 file changed, 2 insertions(+), 9 deletions(-)
 
