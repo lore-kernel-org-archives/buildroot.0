@@ -1,40 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 18 Dec 2017 15:18:40 +0100
-Subject: [Buildroot] [git commit] utils/scanpypi: increase error message
+Date: Mon, 18 Dec 2017 15:19:00 +0100
+Subject: [Buildroot] [PATCH 1/1] utils/scanpypi: increase error message
  verbosity
-Message-ID: <20171218141845.806417FE93@busybox.osuosl.org>
+In-Reply-To: <20171218140016.13774-1-alexey.roslyakov@gmail.com>
+References: <20171218140016.13774-1-alexey.roslyakov@gmail.com>
+Message-ID: <20171218151900.208b1725@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5d2c69dad50a0b9d770c1a1898db8a65d34813c6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-When package installation fails it is good to know what happened.
+On Mon, 18 Dec 2017 21:00:16 +0700, Alexey Roslyakov wrote:
+> When package installation fails it is good to know what happened.
+> 
+> Signed-off-by: Alexey Roslyakov <alexey.roslyakov@gmail.com>
+> ---
+>  utils/scanpypi | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 
-Signed-off-by: Alexey Roslyakov <alexey.roslyakov@gmail.com>
-Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- utils/scanpypi | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Applied to master, thanks.
 
-diff --git a/utils/scanpypi b/utils/scanpypi
-index 02384f2..939c26a 100755
---- a/utils/scanpypi
-+++ b/utils/scanpypi
-@@ -608,9 +608,9 @@ def main():
-                 else:
-                     raise
-                 continue
--            except AttributeError:
--                print('Error: Could not install package {pkg}'.format(
--                    pkg=package.real_name))
-+            except AttributeError as error:
-+                print('Error: Could not install package {pkg}: {error}'.format(
-+                    pkg=package.real_name, error=error))
-                 continue
- 
-             # Package requirement are an argument of the setup function
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
