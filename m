@@ -1,44 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 18 Dec 2017 10:01:53 +0100
-Subject: [Buildroot] [git commit] iproute2: fix configure output file name
-Message-ID: <20171218090428.85D058081A@busybox.osuosl.org>
+Date: Mon, 18 Dec 2017 10:16:49 +0100
+Subject: [Buildroot] [PATCH 1/2] iproute2: fix build with threads
+ support disabled
+In-Reply-To: <12bbbd716a1599907414d2a419430a7ad10e5520.1513547304.git.baruch@tkos.co.il>
+References: <12bbbd716a1599907414d2a419430a7ad10e5520.1513547304.git.baruch@tkos.co.il>
+Message-ID: <20171218101649.58f8d2d9@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f822cd793b07fff3db17b3898b858f003ead70d7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-iproute2 renamed the configure script output file to config.mk. Update
-the config tweaking code accordingly.
+On Sun, 17 Dec 2017 23:48:23 +0200, Baruch Siach wrote:
+> iproute2 renamed the configure script generated file to config.mk.
+> Update the berkeleydb disable code.
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/46d/46da1142806fb524326994585cec6de9f7f3f480/
+> http://autobuild.buildroot.net/results/3aa/3aa028fe9e730335d2af00d5969b674a3d9f640b/
+> 
+> Cc: Petr Vorel <petr.vorel@gmail.com>
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> ---
+>  package/iproute2/iproute2.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-The configure script now detects xtables correctly, drop this part.
+Both patches applied. Thanks!
 
-Add a comment to explain the TC_CONFIG_XT disable tweak.
-
-Cc: Petr Vorel <petr.vorel@gmail.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Acked-by: Petr Vorel <petr.vorel@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/iproute2/iproute2.mk | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
-
-diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
-index c01917d..15bb132 100644
---- a/package/iproute2/iproute2.mk
-+++ b/package/iproute2/iproute2.mk
-@@ -31,9 +31,8 @@ define IPROUTE2_WITH_IPTABLES
- endef
- else
- define IPROUTE2_WITH_IPTABLES
--	# em_ipset needs xtables, but configure misdetects it
--	echo "TC_CONFIG_IPSET:=n" >>$(@D)/Config
--	echo "TC_CONFIG_XT:=n" >>$(@D)/Config
-+	# m_xt.so is built unconditionally
-+	echo "TC_CONFIG_XT:=n" >>$(@D)/config.mk
- endef
- endif
- 
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
