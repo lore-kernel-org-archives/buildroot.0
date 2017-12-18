@@ -1,61 +1,50 @@
-From: Mario Lang <mlang@blind.guru>
-Date: Mon, 18 Dec 2017 10:51:43 +0100
-Subject: [Buildroot] [PATCH] package/brltty: disable features and add
- optional dependencies
-Message-ID: <20171218095143.15343-1-mlang@blind.guru>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 18 Dec 2017 10:47:12 +0100
+Subject: [Buildroot] [git commit] python-cffi: add missing runtime dependency
+Message-ID: <20171218095730.22736827D6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-* --without-midi-package should fix a number of autobuild failures.
-* Disable a number of speech drivers to avoid build failures
-  if they are installed on the host.
-* Optional dependency on espeak and flite fixes builds where
-  espeak or flite are installed on the host.
+commit: https://git.buildroot.net/buildroot/commit/?id=a24153a73fc13fb580aa7fcf3c58745ad69e5f8e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Mario Lang <mlang@blind.guru>
+python-pycparser is mentioned in setup.py as install_requires, so
+select it in Config.in.
+
+As python-cffi will be installed with python-crossbar's dependencies,
+remove it from python-crossbar's Config.in.
+
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/brltty/brltty.mk | 19 ++++++++++++++++++-
- 1 file changed, 18 insertions(+), 1 deletion(-)
+ package/python-cffi/Config.in     | 1 +
+ package/python-crossbar/Config.in | 1 -
+ 2 files changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/brltty/brltty.mk b/package/brltty/brltty.mk
-index 5ce0684168..7214f10fa0 100644
---- a/package/brltty/brltty.mk
-+++ b/package/brltty/brltty.mk
-@@ -18,7 +18,10 @@ BRLTTY_CONF_OPTS = \
- 	--disable-lisp-bindings \
- 	--disable-ocaml-bindings \
- 	--disable-python-bindings \
--	--disable-tcl-bindings
-+	--disable-tcl-bindings \
-+	--without-midi-package \
-+	--without-mikropuhe --without-speechd --without-swift \
-+	--without-theta --without-viavoice
- 
- ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS),y)
- BRLTTY_DEPENDENCIES += bluez5_utils
-@@ -27,6 +30,20 @@ else
- BRLTTY_CONF_OPTS += --without-bluetooth-package
- endif
- 
-+ifeq ($(BR2_PACKAGE_ESPEAK),y)
-+BRLTTY_DEPENDENCIES += espeak
-+BRLTTY_CONF_OPTS += --with-espeak=$(TARGET_DIR)/usr
-+else
-+BRLTTY_CONF_OPTS += --without-espeak
-+endif
-+
-+ifeq ($(BR2_PACKAGE_FLITE),y)
-+BRLTTY_DEPENDENCIES += flite
-+BRLTTY_CONF_OPTS += --with-flite=$(STAGING_DIR)/usr
-+else
-+BRLTTY_CONF_OPTS += --without-flite
-+endif
-+
- ifeq ($(BR2_PACKAGE_ICU),y)
- BRLTTY_DEPENDENCIES += icu
- BRLTTY_CONF_OPTS += --enable-icu
--- 
-2.15.0
+diff --git a/package/python-cffi/Config.in b/package/python-cffi/Config.in
+index 3805d3d..bc9f6a2 100644
+--- a/package/python-cffi/Config.in
++++ b/package/python-cffi/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_PYTHON_CFFI
+ 	bool "python-cffi"
+ 	select BR2_PACKAGE_LIBFFI
++	select BR2_PACKAGE_PYTHON_PYCPARSER # runtime
+ 	help
+ 	  This is the Foreign Function Interface for Python calling C
+ 	  code. The aim of this project is to provide a convenient
+diff --git a/package/python-crossbar/Config.in b/package/python-crossbar/Config.in
+index faec922..2a98467 100644
+--- a/package/python-crossbar/Config.in
++++ b/package/python-crossbar/Config.in
+@@ -5,7 +5,6 @@ config BR2_PACKAGE_PYTHON_CROSSBAR
+ 	select BR2_PACKAGE_PYTHON_AUTOBAHN
+ 	select BR2_PACKAGE_PYTHON_CBOR
+ 	select BR2_PACKAGE_PYTHON_CLICK
+-	select BR2_PACKAGE_PYTHON_PYCPARSER
+ 	select BR2_PACKAGE_PYTHON_CRYPTOGRAPHY
+ 	select BR2_PACKAGE_PYTHON_JINJA2
+ 	select BR2_PACKAGE_PYTHON_LMDB
