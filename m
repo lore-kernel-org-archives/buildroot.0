@@ -1,46 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 18 Dec 2017 09:43:03 +0100
-Subject: [Buildroot] [PATCH] utils/checkpackagelib: exclude two files from
- Config.in indentation check
-Message-ID: <20171218084303.12472-1-thomas.petazzoni@free-electrons.com>
+Date: Mon, 18 Dec 2017 09:52:41 +0100
+Subject: [Buildroot] [git commit] shapelib: fix legal information
+Message-ID: <20171218085343.BD314834D0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-package/x11r7/Config.in and package/kodi/Config.in do not comply with
-the normal Config.in indentation rules. However, this violation of the
-rule is legitimate, so let's skip them in check-package for this
-specific indentation check.
+commit: https://git.buildroot.net/buildroot/commit/?id=85d6721e56971002aafbff2083537e24629eccf0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This removes the last 314 remaining warnings on Config.in files.
+Following the bump of shapelib in commit
+333f5605958283c58f21a990bb5e36067489b72b, the licensing information
+got broken, as the LICENSE.LGPL file is now named COPYING.
+
+While at it, let's add the hashes for the license files.
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/978db9ea9f04ad465252316e2f31085516a123bb/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
 ---
-Note: I am not totally sure about this patch. Indeed package/Config.in
-uses the same rule as package/{x11r7,kodi}/Config.in, but
-check-package doesn't report warnings about it. Perhaps I'm missing
-something in the check-package logic.
----
- utils/checkpackagelib/lib_config.py | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/shapelib/shapelib.hash | 2 ++
+ package/shapelib/shapelib.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/utils/checkpackagelib/lib_config.py b/utils/checkpackagelib/lib_config.py
-index 26ebb393d1..fb39182b91 100644
---- a/utils/checkpackagelib/lib_config.py
-+++ b/utils/checkpackagelib/lib_config.py
-@@ -133,6 +133,10 @@ class Indent(_CheckFunction):
-                         text]
-         elif entry in entries_that_should_not_be_indented:
-             if not text.startswith(entry):
-+                # two Config.in files have a special but legitimate indentation rule
-+                if self.filename in [ "./package/x11r7/Config.in",
-+                                      "./package/kodi/Config.in" ]:
-+                    return
-                 return ["{}:{}: should not be indented"
-                         .format(self.filename, lineno),
-                         text]
--- 
-2.14.3
+diff --git a/package/shapelib/shapelib.hash b/package/shapelib/shapelib.hash
+index 4f51392..6abddb2 100644
+--- a/package/shapelib/shapelib.hash
++++ b/package/shapelib/shapelib.hash
+@@ -1,2 +1,4 @@
+ # Locally computed
+ sha256 a4c94817365761a3a4c21bb3ca1c680a6bdfd3edd61df9fdd291d3e7645923b3  shapelib-1.4.1.tar.gz
++sha256 7eb803a70990017a1c4e38a8342d7413c5dfeec3ed1ac407e15ae2c274e560ff  COPYING
++sha256 a638278f7f1cb7d0cdc73b47a6c87261b882e356a8e79922e90d44d7ef1dd2c7  web/license.html
+diff --git a/package/shapelib/shapelib.mk b/package/shapelib/shapelib.mk
+index d6217ff..b76c3bb 100644
+--- a/package/shapelib/shapelib.mk
++++ b/package/shapelib/shapelib.mk
+@@ -7,7 +7,7 @@
+ SHAPELIB_VERSION = 1.4.1
+ SHAPELIB_SITE = http://download.osgeo.org/shapelib
+ SHAPELIB_LICENSE = MIT or LGPL-2.0
+-SHAPELIB_LICENSE_FILES = web/license.html LICENSE.LGPL
++SHAPELIB_LICENSE_FILES = web/license.html COPYING
+ SHAPELIB_INSTALL_STAGING = YES
+ SHAPELIB_DEPENDENCIES = proj
+ 
