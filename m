@@ -1,47 +1,117 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 18 Dec 2017 21:56:07 +0100
-Subject: [Buildroot] [PATCH 2/4] package/gstreamer1/gst1-vaapi: bump version
- to 1.12.4
-In-Reply-To: <20171218205609.17653-1-bernd.kuhls@t-online.de>
-References: <20171218205609.17653-1-bernd.kuhls@t-online.de>
-Message-ID: <20171218205609.17653-2-bernd.kuhls@t-online.de>
+Date: Mon, 18 Dec 2017 21:56:06 +0100
+Subject: [Buildroot] [PATCH 1/4] package/mpv: fix build with libva 2.0
+Message-ID: <20171218205609.17653-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Added license hash, this bump will fix build with libva 2.0.
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/gstreamer1/gst1-vaapi/gst1-vaapi.hash | 6 ++++--
- package/gstreamer1/gst1-vaapi/gst1-vaapi.mk   | 2 +-
- 2 files changed, 5 insertions(+), 3 deletions(-)
+ package/mpv/0003-libva20.patch | 93 ++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 93 insertions(+)
+ create mode 100644 package/mpv/0003-libva20.patch
 
-diff --git a/package/gstreamer1/gst1-vaapi/gst1-vaapi.hash b/package/gstreamer1/gst1-vaapi/gst1-vaapi.hash
-index 97bebaba69..9a6f4bed93 100644
---- a/package/gstreamer1/gst1-vaapi/gst1-vaapi.hash
-+++ b/package/gstreamer1/gst1-vaapi/gst1-vaapi.hash
-@@ -1,2 +1,4 @@
--# From https://gstreamer.freedesktop.org/src/gstreamer-vaapi/gstreamer-vaapi-1.12.3.tar.xz.sha256sum
--sha256 f4cdafd8fd9606a490917c8b67336e835df1219580d55421c70480fd0913744d gstreamer-vaapi-1.12.3.tar.xz
-+# From https://gstreamer.freedesktop.org/src/gstreamer-vaapi/gstreamer-vaapi-1.12.4.tar.xz.sha256sum
-+sha256 1c2d77242e1f30c4d1394636cae9f6877228a017960fca96881e0080d8b6e9c9  gstreamer-vaapi-1.12.4.tar.xz
-+# Locally computed
-+sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
-diff --git a/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk b/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk
-index 9783c591aa..6b637416f5 100644
---- a/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk
-+++ b/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GST1_VAAPI_VERSION = 1.12.3
-+GST1_VAAPI_VERSION = 1.12.4
- GST1_VAAPI_SITE = https://gstreamer.freedesktop.org/src/gstreamer-vaapi
- GST1_VAAPI_SOURCE = gstreamer-vaapi-$(GST1_VAAPI_VERSION).tar.xz
- GST1_VAAPI_LICENSE = LGPL-2.1+
+diff --git a/package/mpv/0003-libva20.patch b/package/mpv/0003-libva20.patch
+new file mode 100644
+index 0000000000..349dd3cb14
+--- /dev/null
++++ b/package/mpv/0003-libva20.patch
+@@ -0,0 +1,93 @@
++From 2ecf240b1cd20875991a5b18efafbe799864ff7f Mon Sep 17 00:00:00 2001
++From: Mark Thompson <sw@jkqxz.net>
++Date: Mon, 9 Oct 2017 20:10:26 +0100
++Subject: [PATCH] vaapi: Use libva2 message callbacks
++
++They are no longer global, so they work vaguely sensibly.
++
++Downloaded from upstream commit:
++https://github.com/mpv-player/mpv/commit/2ecf240b1cd20875991a5b18efafbe799864ff7f
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ video/vaapi.c | 32 +++++++++++++++++++++++++++++---
++ 1 file changed, 29 insertions(+), 3 deletions(-)
++
++diff --git a/video/vaapi.c b/video/vaapi.c
++index 6bedbbaa18..3b1cb9cc41 100644
++--- a/video/vaapi.c
+++++ b/video/vaapi.c
++@@ -40,9 +40,27 @@ int va_get_colorspace_flag(enum mp_csp csp)
++     return 0;
++ }
++ 
++-// VA message callbacks are global and do not have a context parameter, so it's
++-// impossible to know from which VADisplay they originate. Try to route them
++-// to existing mpv/libmpv instances within this process.
+++#if VA_CHECK_VERSION(1, 0, 0)
+++static void va_message_callback(void *context, const char *msg, int mp_level)
+++{
+++    struct mp_vaapi_ctx *res = context;
+++    mp_msg(res->log, mp_level, "libva: %s", msg);
+++}
+++
+++static void va_error_callback(void *context, const char *msg)
+++{
+++    va_message_callback(context, msg, MSGL_ERR);
+++}
+++
+++static void va_info_callback(void *context, const char *msg)
+++{
+++    va_message_callback(context, msg, MSGL_V);
+++}
+++#else
+++// Pre-libva2 VA message callbacks are global and do not have a context
+++// parameter, so it's impossible to know from which VADisplay they
+++// originate.  Try to route them to existing mpv/libmpv instances within
+++// this process.
++ static pthread_mutex_t va_log_mutex = PTHREAD_MUTEX_INITIALIZER;
++ static struct mp_vaapi_ctx **va_mpv_clients;
++ static int num_va_mpv_clients;
++@@ -77,6 +95,7 @@ static void va_info_callback(const char *msg)
++ {
++     va_message_callback(msg, MSGL_V);
++ }
+++#endif
++ 
++ static void open_lavu_vaapi_device(struct mp_vaapi_ctx *ctx)
++ {
++@@ -108,6 +127,10 @@ struct mp_vaapi_ctx *va_initialize(VADisplay *display, struct mp_log *plog,
++         },
++     };
++ 
+++#if VA_CHECK_VERSION(1, 0, 0)
+++    vaSetErrorCallback(display, va_error_callback, res);
+++    vaSetInfoCallback(display,  va_info_callback,  res);
+++#else
++     pthread_mutex_lock(&va_log_mutex);
++     MP_TARRAY_APPEND(NULL, va_mpv_clients, num_va_mpv_clients, res);
++     pthread_mutex_unlock(&va_log_mutex);
++@@ -118,6 +141,7 @@ struct mp_vaapi_ctx *va_initialize(VADisplay *display, struct mp_log *plog,
++     vaSetErrorCallback(va_error_callback);
++     vaSetInfoCallback(va_info_callback);
++ #endif
+++#endif
++ 
++     int major, minor;
++     int status = vaInitialize(display, &major, &minor);
++@@ -154,6 +178,7 @@ void va_destroy(struct mp_vaapi_ctx *ctx)
++         if (ctx->destroy_native_ctx)
++             ctx->destroy_native_ctx(ctx->native_ctx);
++ 
+++#if !VA_CHECK_VERSION(1, 0, 0)
++         pthread_mutex_lock(&va_log_mutex);
++         for (int n = 0; n < num_va_mpv_clients; n++) {
++             if (va_mpv_clients[n] == ctx) {
++@@ -164,6 +189,7 @@ void va_destroy(struct mp_vaapi_ctx *ctx)
++         if (num_va_mpv_clients == 0)
++             TA_FREEP(&va_mpv_clients); // avoid triggering leak detectors
++         pthread_mutex_unlock(&va_log_mutex);
+++#endif
++ 
++         talloc_free(ctx);
++     }
 -- 
 2.11.0
