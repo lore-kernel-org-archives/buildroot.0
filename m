@@ -1,25 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 19 Dec 2017 09:54:10 +0100
-Subject: [Buildroot] [PATCH v2,1/1] vlc: set back upnp support
-In-Reply-To: <20171218215206.16368-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Mon, 18 Dec 2017 22:52:06 +0100")
-References: <20171218215206.16368-1-fontaine.fabrice@gmail.com>
-Message-ID: <87efnr6qtp.fsf@dell.be.48ers.dk>
+Date: Tue, 19 Dec 2017 09:53:34 +0100
+Subject: [Buildroot] [git commit] vlc: set back upnp support
+Message-ID: <20171219085439.8049C8355D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=95d19955dddfb6c446a4eb9cce5813fe838f0b65
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Commit cb7aa25df8c3c4531354fd0f7d69208f89360c7b has disabled upnp support
- > as --disable-upnp and --enable-upnp are both set if libupnp or libupnp18
- > is enabled
+Commit cb7aa25df8c3c4531354fd0f7d69208f89360c7b has disabled upnp support
+as --disable-upnp and --enable-upnp are both set if libupnp or libupnp18
+is enabled
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/vlc/vlc.mk | 11 ++---------
+ 1 file changed, 2 insertions(+), 9 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
+index febd9e0..56bfdce 100644
+--- a/package/vlc/vlc.mk
++++ b/package/vlc/vlc.mk
+@@ -281,16 +281,9 @@ else
+ VLC_CONF_OPTS += --disable-theora
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_LIBUPNP),y)
++ifeq ($(BR2_PACKAGE_LIBUPNP)$(BR2_PACKAGE_LIBUPNP18),y)
+ VLC_CONF_OPTS += --enable-upnp
+-VLC_DEPENDENCIES += libupnp
+-else
+-VLC_CONF_OPTS += --disable-upnp
+-endif
+-
+-ifeq ($(BR2_PACKAGE_LIBUPNP18),y)
+-VLC_CONF_OPTS += --enable-upnp
+-VLC_DEPENDENCIES += libupnp18
++VLC_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBUPNP),libupnp,libupnp18)
+ else
+ VLC_CONF_OPTS += --disable-upnp
+ endif
