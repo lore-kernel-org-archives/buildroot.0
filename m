@@ -1,56 +1,42 @@
-From: Sergey Matyukevich <geomatsi@gmail.com>
-Date: Tue, 19 Dec 2017 23:48:07 +0300
-Subject: [Buildroot] [PATCH v5 00/11] board: Add Allwinner A64/H5 boards
-In-Reply-To: <1509559553-26544-1-git-send-email-jagan@amarulasolutions.com>
-References: <1509559553-26544-1-git-send-email-jagan@amarulasolutions.com>
-Message-ID: <20171219204807.io5y3giwu3bpptxg@speedy.hunter>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 19 Dec 2017 21:51:00 +0100
+Subject: [Buildroot] [git commit] webp: bump to version 0.6.1
+Message-ID: <20171219205131.21F60807B4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Jagan,
+commit: https://git.buildroot.net/buildroot/commit/?id=f21cbabb2f21e52686c42d41a35bc32f27143866
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> All boards now use Mainline U-Boot, Linux and Nanaopi A64, A64-olinuxino
-> used linux-next patches since 4.13.7 have not been merged.
-> 
-> Tested on rea hardware.
-> 
-> Changes for v5:
-> - Fixed wiki links
-> - Update dtb file for sopine
-> Changes for v4:
-> - Added "arm-trusted-firmware: Build FIP for BL33" patch
-> - Added "uboot: Add U-Boot-bundles-ATF support" patch
-> - Droped sunxi64-post-build.sh config and script file
-> Changes for v3:
-> - Fixed Bananapi M1 comment on config file
-> - Add sunxi64-post-build.sh
-> - Add all sunxi64 boards
-> Changes for v2:
-> - Rebase on master
-> 
-> [1] http://buildroot-busybox.2317881.n4.nabble.com/PATCH-v4-00-11-board-Add-Allwinner-A64-H5-boards-td178509.html
-> 
-> Jagan Teki (11):
->   arm-trusted-firmware: Build FIP for BL33
->   uboot: Add U-Boot-bundles-ATF support
->   board: Add Bananapi M64 support
->   board: Add Pine64 support
->   board: Add SoPine support
->   board: Add FriendlyARM Nanopi A64 support
->   board: Add FriendlyARM Nanopi NEO2 support
->   board: Add Olimex A64-OLinuXino support
->   board: Add Orangepi Win/Win Plus support
->   board: Add Orangepi Prime support
->   board: Add Orangepi Zero Plus2 support
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/webp/webp.hash | 2 +-
+ package/webp/webp.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-All the ATF changes has been submitted by Thomas. So it should be ok to submit
-support for all these boards. Do you plan to do so any time soon ? Let me know
-if you are busy with other tasks at the moment. Then I would re-submit a part
-of this patchset related to Orange Pi Zero Plus2 (keeping your authorship)
-and adding WiFi support on top.
-
-Regards,
-Sergey
+diff --git a/package/webp/webp.hash b/package/webp/webp.hash
+index 3023bc6..ffb63b8 100644
+--- a/package/webp/webp.hash
++++ b/package/webp/webp.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256	c928119229d4f8f35e20113ffb61f281eda267634a8dc2285af4b0ee27cf2b40	libwebp-0.6.0.tar.gz
++sha256	06503c782d9f151baa325591c3579c68ed700ffc62d4f5a32feead0ff017d8ab	libwebp-0.6.1.tar.gz
+ sha256	5aec868f669e384a22372a4e8a1a6cd7d44c64cd451f960ca69cc170d1e13acf	COPYING
+diff --git a/package/webp/webp.mk b/package/webp/webp.mk
+index e86e798..f5ca342 100644
+--- a/package/webp/webp.mk
++++ b/package/webp/webp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WEBP_VERSION = 0.6.0
++WEBP_VERSION = 0.6.1
+ WEBP_SOURCE = libwebp-$(WEBP_VERSION).tar.gz
+ WEBP_SITE = http://downloads.webmproject.org/releases/webp
+ WEBP_LICENSE = BSD-3-Clause
