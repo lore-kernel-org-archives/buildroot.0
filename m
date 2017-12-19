@@ -1,63 +1,64 @@
-From: Ignacy =?iso-8859-2?Q?Gaw=EAdzki?= <ignacy.gawedzki@green-communications.fr>
-Date: Mon, 18 Dec 2017 23:59:03 +0100
-Subject: [Buildroot] [PATCH 1/1] nginx: Harden patches for using pkg-config
-Message-ID: <20171218225903.ocsiikdxr4est2wr@zenon.in.qult.net>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Mon, 18 Dec 2017 23:56:29 -0200
+Subject: [Buildroot] [PATCH] utils/checkpackagelib: exclude two files
+ from Config.in indentation check
+References: <20171218084303.12472-1-thomas.petazzoni@free-electrons.com>
+Message-ID: <5a3871cd6f3a9_bd01603ab4851a3@ultri3.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Don't simply remove "-I" from the output of pkg-config --cflags-only-I
-but match the -I argument more generally.
+Hello,
 
-Signed-off-by: Ignacy Gaw?dzki <ignacy.gawedzki@green-communications.fr>
----
- package/nginx/0004-auto-lib-libxslt-conf-use-pkg-config.patch | 5 +++--
- package/nginx/0006-auto-lib-openssl-conf-use-pkg-config.patch | 5 +++--
- 2 files changed, 6 insertions(+), 4 deletions(-)
+On Mon, Dec 18, 2017 at 06:43 AM, Thomas Petazzoni wrote:
 
-diff --git a/package/nginx/0004-auto-lib-libxslt-conf-use-pkg-config.patch b/package/nginx/0004-auto-lib-libxslt-conf-use-pkg-config.patch
-index b315909c34..7022694714 100644
---- a/package/nginx/0004-auto-lib-libxslt-conf-use-pkg-config.patch
-+++ b/package/nginx/0004-auto-lib-libxslt-conf-use-pkg-config.patch
-@@ -15,13 +15,14 @@ diff --git a/auto/lib/libxslt/conf b/auto/lib/libxslt/conf
- index 3a0f37b..3c2a60e 100644
- --- a/auto/lib/libxslt/conf
- +++ b/auto/lib/libxslt/conf
--@@ -12,8 +12,8 @@
-+@@ -12,9 +12,9 @@
-                        #include <libxslt/xsltInternals.h>
-                        #include <libxslt/transform.h>
-                        #include <libxslt/xsltutils.h>"
- -    ngx_feature_path="/usr/include/libxml2"
- -    ngx_feature_libs="-lxml2 -lxslt"
--+    ngx_feature_path="$(${PKG_CONFIG:=pkg-config} --cflags-only-I libxslt|sed 's/-I//g')"
-++    ngx_feature_path="$(${PKG_CONFIG:=pkg-config} --cflags-only-I libxslt|
-++			 sed -re 's/(^|\s)-I\s*(\S+)/\1\2/g')"
- +    ngx_feature_libs="$(${PKG_CONFIG:=pkg-config} --libs libxslt)"
-      ngx_feature_test="xmlParserCtxtPtr    ctxt = NULL;
-                        xsltStylesheetPtr   sheet = NULL;
-diff --git a/package/nginx/0006-auto-lib-openssl-conf-use-pkg-config.patch b/package/nginx/0006-auto-lib-openssl-conf-use-pkg-config.patch
-index 0c94890625..04e103c444 100644
---- a/package/nginx/0006-auto-lib-openssl-conf-use-pkg-config.patch
-+++ b/package/nginx/0006-auto-lib-openssl-conf-use-pkg-config.patch
-@@ -15,13 +15,14 @@ diff --git a/auto/lib/openssl/conf b/auto/lib/openssl/conf
- index 39d9602..995c6f3 100644
- --- a/auto/lib/openssl/conf
- +++ b/auto/lib/openssl/conf
--@@ -58,8 +58,8 @@ else
-+@@ -58,9 +58,9 @@ else
-          ngx_feature_name="NGX_OPENSSL"
-          ngx_feature_run=no
-          ngx_feature_incs="#include <openssl/ssl.h>"
- -        ngx_feature_path=
- -        ngx_feature_libs="-lssl -lcrypto $NGX_LIBDL"
--+        ngx_feature_path="$(${PKG_CONFIG:=pkg-config} --cflags-only-I openssl|sed 's/-I//g')"
-++        ngx_feature_path="$(${PKG_CONFIG:=pkg-config} --cflags-only-I openssl|
-++			     sed -re 's/(^|\s)-I\s*(\S+)/\1\2/g')"
- +        ngx_feature_libs="$(${PKG_CONFIG:=pkg-config} --libs openssl)"
-          ngx_feature_test="SSL_CTX_set_options(NULL, 0)"
-          . auto/feature
--- 
-2.14.1
+> package/x11r7/Config.in and package/kodi/Config.in do not comply with
+> the normal Config.in indentation rules. However, this violation of the
+> rule is legitimate, so let's skip them in check-package for this
+> specific indentation check.
+> 
+> This removes the last 314 remaining warnings on Config.in files.
+
+There are also 7 warnings for Config.in.host
+They can obviously be fixed in another patch(es).
+
+After this/these we can add
+-o -name 'Config.in'
+or
+-o -name 'Config.*'
+to the check-package job in the gitlab yml, but I guess it is your plan already.
+
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> 
+> ---
+> Note: I am not totally sure about this patch. Indeed package/Config.in
+> uses the same rule as package/{x11r7,kodi}/Config.in, but
+> check-package doesn't report warnings about it. Perhaps I'm missing
+> something in the check-package logic.
+
+See FILE_IS_FROM_A_PACKAGE in the main script.
+I first limited the script to files in the package directory because there are
+a lot of false warnings from other directories, many of them for historical
+reasons. And... well... it also named check-"package".
+I planned to expand it first to boot, then to to linux and toolchain, but I
+didn't get to it yet.
+
+> ---
+[snip]
+> +                if self.filename in [ "./package/x11r7/Config.in",
+> +                                      "./package/kodi/Config.in" ]:
+
+The 4 warnings from flake8 already in the file I plan to fix in a series for
+all flake8 warnings in the tree (those 4 actually adding '# noqa' since
+check-package uses 'inspect' to know which check functions to run).
+
+But (in the case you stick to this solution, see the other e-mail) could you
+fix those 2 new warnings?
+utils/checkpackagelib/lib_config.py:137:38: E201 whitespace after '['
+utils/checkpackagelib/lib_config.py:138:65: E202 whitespace before ']'
+
+Regards,
+Ricardo
