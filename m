@@ -1,42 +1,62 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 19 Dec 2017 21:51:00 +0100
-Subject: [Buildroot] [git commit] webp: bump to version 0.6.1
-Message-ID: <20171219205131.21F60807B4@busybox.osuosl.org>
+Date: Tue, 19 Dec 2017 21:49:29 +0100
+Subject: [Buildroot] [git commit] package/linux-firmware: Add Atheros 10k
+ (QCA998X)
+Message-ID: <20171219205130.EB8DE807B4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f21cbabb2f21e52686c42d41a35bc32f27143866
+commit: https://git.buildroot.net/buildroot/commit/?id=d4e3441a1c61570be580724ec48132879e8c7dc8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Add drivers for Atheros 10k (QCA998X) chipset.
+
+Both firmware versions are imported, and unused should be pruned as
+required.
+
+[Peter: use upper case 'K' in symbol name]
+Signed-off-by: Sam Voss <sam.voss@rockwellcollins.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/webp/webp.hash | 2 +-
- package/webp/webp.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/linux-firmware/Config.in         | 5 +++++
+ package/linux-firmware/linux-firmware.mk | 8 ++++++++
+ 2 files changed, 13 insertions(+)
 
-diff --git a/package/webp/webp.hash b/package/webp/webp.hash
-index 3023bc6..ffb63b8 100644
---- a/package/webp/webp.hash
-+++ b/package/webp/webp.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256	c928119229d4f8f35e20113ffb61f281eda267634a8dc2285af4b0ee27cf2b40	libwebp-0.6.0.tar.gz
-+sha256	06503c782d9f151baa325591c3579c68ed700ffc62d4f5a32feead0ff017d8ab	libwebp-0.6.1.tar.gz
- sha256	5aec868f669e384a22372a4e8a1a6cd7d44c64cd451f960ca69cc170d1e13acf	COPYING
-diff --git a/package/webp/webp.mk b/package/webp/webp.mk
-index e86e798..f5ca342 100644
---- a/package/webp/webp.mk
-+++ b/package/webp/webp.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
+index 905b32a..339bb99 100644
+--- a/package/linux-firmware/Config.in
++++ b/package/linux-firmware/Config.in
+@@ -78,6 +78,11 @@ config BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_9271
+ 	help
+ 	  Firmware files for the Atheros 9271 module
  
--WEBP_VERSION = 0.6.0
-+WEBP_VERSION = 0.6.1
- WEBP_SOURCE = libwebp-$(WEBP_VERSION).tar.gz
- WEBP_SITE = http://downloads.webmproject.org/releases/webp
- WEBP_LICENSE = BSD-3-Clause
++config BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_10K_QCA998X
++	bool "Atheros 10k (QCA998X)"
++	help
++	  Firmware files for the Atheros QCA988X module
++
+ config BR2_PACKAGE_LINUX_FIRMWARE_BRCM_BCM43XX
+ 	bool "Broadcom BRCM bcm43xx"
+ 	help
+diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+index e999c64..2cfc5e6 100644
+--- a/package/linux-firmware/linux-firmware.mk
++++ b/package/linux-firmware/linux-firmware.mk
+@@ -126,6 +126,14 @@ LINUX_FIRMWARE_FILES += ar9271.fw htc_9271.fw ath9k_htc/htc_9271-1.4.0.fw
+ LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.atheros_firmware
+ endif
+ 
++# ath10k
++ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_10K_QCA998X),y)
++LINUX_FIRMWARE_FILES += ath10k/QCA988X/hw2.0/board.bin \
++			ath10k/QCA988X/hw2.0/firmware-4.bin \
++			ath10k/QCA988X/hw2.0/firmware-5.bin
++LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.atheros_firmware
++endif
++
+ # sd8686 v8
+ ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_LIBERTAS_SD8686_V8),y)
+ LINUX_FIRMWARE_FILES += libertas/sd8686_v8.bin libertas/sd8686_v8_helper.bin
