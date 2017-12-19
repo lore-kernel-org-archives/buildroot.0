@@ -1,53 +1,59 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 19 Dec 2017 15:44:18 +0100
-Subject: [Buildroot] [PATCH v2 1/1] tpm-tools: bump to version 1.3.9.1
-In-Reply-To: <alpine.DEB.2.20.1712191514250.3246@localhost>
-References: <1513679676-17188-1-git-send-email-yairba@tkos.co.il>
- <20171219134547.70fae97f@windsurf>
- <alpine.DEB.2.20.1712191514250.3246@localhost>
-Message-ID: <20171219154418.24a00bc9@windsurf>
+From: Sam Voss <sam.voss@rockwellcollins.com>
+Date: Tue, 19 Dec 2017 08:47:31 -0600
+Subject: [Buildroot] [PATCH v1] package/linux-firmware: Add Atheros 10k
+ (QCA998X)
+Message-ID: <1513694851-42024-1-git-send-email-sam.voss@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Add drivers for Atheros 10k (QCA998X) chipset.
 
-On Tue, 19 Dec 2017 16:20:08 +0200 (IST), Yair Ben Avraham wrote:
+Both firmware versions are imported, and unused should be pruned as
+required.
 
-> In commit 4ef0ef3 "tpm-tools: new package", the pkcs11 support explicitly 
-> disabled due to "... it is not handled by tpm-tools.mk currently."
-> 
-> The building of src/data_mgmt commands, which enable the pkcs11 support 
-> (see ./configure file), depends on the P11_SUPPORT flag (see 
-> src/Makefile.am) which in turn depends on opencryptoki/pkcs11.h header 
-> (see ./configure.ac file).
-> 
-> So the reason that pkcs11 is not supported it's not because that 
-> tpm-tools.mk not handle it, but because of the lack of 
-> opencryptoki/pkcs11.h header.
+Signed-off-by: Sam Voss <sam.voss@rockwellcollins.com>
+---
+ package/linux-firmware/Config.in         | 5 +++++
+ package/linux-firmware/linux-firmware.mk | 8 ++++++++
+ 2 files changed, 13 insertions(+)
 
-And so?
-
-The reason why tpm-tools.mk explicitly disables it is because we
-generally try to explicitly disable features that are not handled by
-Buildroot. I.e if package A needs package B to enable a given feature,
-then Buildroot passes --disable-B in order to be sure that the
-configure script will not mistakenly enable it (some configure scripts
-are for example confused by host-installed libraries and headers).
-
-So, I'm sorry, but your explanation doesn't make much sense to me. So
-either I still don't understand what you mean, or you did not
-understand why --disable-pkcs11-support was originally added.
-
-If nothing provides opencryptoki/pkcs11.h, then this option should
-continue to be explicitly disabled.
-
-Best regards,
-
-Thomas
+diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
+index 905b32a..230097f 100644
+--- a/package/linux-firmware/Config.in
++++ b/package/linux-firmware/Config.in
+@@ -78,6 +78,11 @@ config BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_9271
+ 	help
+ 	  Firmware files for the Atheros 9271 module
+ 
++config BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_10k_QCA998X
++	bool "Atheros 10k (QCA998X)"
++	help
++	  Firmware files for the Atheros QCA988X module
++
+ config BR2_PACKAGE_LINUX_FIRMWARE_BRCM_BCM43XX
+ 	bool "Broadcom BRCM bcm43xx"
+ 	help
+diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+index e999c64..192495b 100644
+--- a/package/linux-firmware/linux-firmware.mk
++++ b/package/linux-firmware/linux-firmware.mk
+@@ -126,6 +126,14 @@ LINUX_FIRMWARE_FILES += ar9271.fw htc_9271.fw ath9k_htc/htc_9271-1.4.0.fw
+ LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.atheros_firmware
+ endif
+ 
++# ath10k
++ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_10k_QCA998X),y)
++LINUX_FIRMWARE_FILES += ath10k/QCA988X/hw2.0/board.bin \
++			ath10k/QCA988X/hw2.0/firmware-4.bin \
++			ath10k/QCA988X/hw2.0/firmware-5.bin
++LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.atheros_firmware
++endif
++
+ # sd8686 v8
+ ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_LIBERTAS_SD8686_V8),y)
+ LINUX_FIRMWARE_FILES += libertas/sd8686_v8.bin libertas/sd8686_v8_helper.bin
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+1.9.1
