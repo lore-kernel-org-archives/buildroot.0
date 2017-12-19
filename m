@@ -1,48 +1,35 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 19 Dec 2017 21:46:10 +0100
-Subject: [Buildroot] [git commit] pulseaudio: remove the ConsoleKit module
-Message-ID: <20171219205130.DF01983577@busybox.osuosl.org>
+From: Mario Lang <mlang@blind.guru>
+Date: Tue, 19 Dec 2017 22:14:31 +0100
+Subject: [Buildroot] [PATCH] package/brltty: disable X11 support for now
+Message-ID: <20171219211431.22974-1-mlang@blind.guru>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=64dab3c67256e5373eaf4d5e5d6f3f29602b6587
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+This stops xbrlapi from building/installing, which is really not essential
+to almost all users.
 
-The ConsoleKit module is loaded by default from the default.pa
-configuration file, but its initialization fails because Buildroot has
-no ConsoleKit package yet. This breaks per-user pulseaudio daemon.
-The default.pa configuration load module-console-kit only when it
-exists. Remove module-console-kit to fix pulseaudio per-user startup.
-
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Fixes:
+  http://autobuild.buildroot.net/results/3fe2d053dcfdf5af791e9127f3e9f1dceaabfdc0
+  http://autobuild.buildroot.net/results/6cfa5e9d37ac1571dc58df538232bb9e1749e62a
+Signed-off-by: Mario Lang <mlang@blind.guru>
 ---
- package/pulseaudio/pulseaudio.mk | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ package/brltty/brltty.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/pulseaudio/pulseaudio.mk b/package/pulseaudio/pulseaudio.mk
-index b021fc9..a30d540 100644
---- a/package/pulseaudio/pulseaudio.mk
-+++ b/package/pulseaudio/pulseaudio.mk
-@@ -140,11 +140,17 @@ else
- PULSEAUDIO_CONF_OPTS += --disable-x11
- endif
- 
-+# ConsoleKit module init failure breaks user daemon startup
-+define PULSEAUDIO_REMOVE_CONSOLE_KIT
-+	rm -f $(TARGET_DIR)/usr/lib/pulse-$(PULSEAUDIO_VERSION)/modules/module-console-kit.so
-+endef
-+
- define PULSEAUDIO_REMOVE_VALA
- 	rm -rf $(TARGET_DIR)/usr/share/vala
- endef
- 
--PULSEAUDIO_POST_INSTALL_TARGET_HOOKS += PULSEAUDIO_REMOVE_VALA
-+PULSEAUDIO_POST_INSTALL_TARGET_HOOKS += PULSEAUDIO_REMOVE_VALA \
-+	PULSEAUDIO_REMOVE_CONSOLE_KIT
- 
- ifeq ($(BR2_PACKAGE_PULSEAUDIO_DAEMON),y)
- define PULSEAUDIO_USERS
+diff --git a/package/brltty/brltty.mk b/package/brltty/brltty.mk
+index 7214f10fa0..9621d4f9c1 100644
+--- a/package/brltty/brltty.mk
++++ b/package/brltty/brltty.mk
+@@ -19,6 +19,7 @@ BRLTTY_CONF_OPTS = \
+ 	--disable-ocaml-bindings \
+ 	--disable-python-bindings \
+ 	--disable-tcl-bindings \
++	--disable-x \
+ 	--without-midi-package \
+ 	--without-mikropuhe --without-speechd --without-swift \
+ 	--without-theta --without-viavoice
+-- 
+2.15.0
