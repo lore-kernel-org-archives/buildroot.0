@@ -1,9 +1,8 @@
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Mon, 18 Dec 2017 23:57:42 -0200
-Subject: [Buildroot] [PATCH] utils/checkpackagelib: exclude two files
- from Config.in indentation check
-References: <20171218220344.GC2903@scaer>
-Message-ID: <5a3872168413e_bd03fa7729df43c853dd@ultri3.mail>
+Date: Mon, 18 Dec 2017 23:59:29 -0200
+Subject: [Buildroot] [PATCH] gitlab-ci: add .config to artefacts
+References: <20171218212558.22912-1-yann.morin.1998@free.fr>
+Message-ID: <5a387281cf61_bd03fa772a46ee8855bb@ultri3.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,24 +11,26 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, Dec 18, 2017 at 08:03 PM, Yann E. MORIN wrote:
+On Mon, Dec 18, 2017 at 07:25 PM, Yann E. MORIN wrote:
 
-> On 2017-12-18 09:43 +0100, Thomas Petazzoni spake thusly:
->> package/x11r7/Config.in and package/kodi/Config.in do not comply with
->> the normal Config.in indentation rules. However, this violation of the
->> rule is legitimate, so let's skip them in check-package for this
->> specific indentation check.
-> 
-> Can't we simply fix those two files to not have that unusual indentation
-> in the first place?
-> 
-> AFAICS, that special indentation is about the 'source' lines... Surely
-> that does not bring much to have them indented, and they could simply be
-> left-aligned...
+s/artefacts/artifacts/g in the subject.
 
-Makes sense to me.
-Let's include the developers for those 2 files to see if they have arguments to
-keep or change.
+> When a run-time test fails to build, it is interesting to get the
+> corresponding .config file directly as an artifact, rather than
+> reconstruct it manually from the various config snippets embedded
+> in the many runtime-test scripts.
+
+The defconfig is already dumped to the beginning of the build log.
+
+But I agree that having also the .config can be handy (we have both in the
+autobuilder results).
+
+[snip]
+> ---
+>  .gitlab-ci.yml | 1 +
+>  1 file changed, 1 insertion(+)
+
+You forgot to duplicate the code to the .gitlab-ci.yml.in
 
 Regards,
 Ricardo
