@@ -1,35 +1,45 @@
-From: Mario Lang <mlang@blind.guru>
-Date: Tue, 19 Dec 2017 22:14:31 +0100
-Subject: [Buildroot] [PATCH] package/brltty: disable X11 support for now
-Message-ID: <20171219211431.22974-1-mlang@blind.guru>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 19 Dec 2017 22:56:29 +0100
+Subject: [Buildroot] [PATCH] nasm: bump to version 2.13.02
+Message-ID: <20171219215629.18183-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This stops xbrlapi from building/installing, which is really not essential
-to almost all users.
+And add a hash for the license file.
 
-Fixes:
-  http://autobuild.buildroot.net/results/3fe2d053dcfdf5af791e9127f3e9f1dceaabfdc0
-  http://autobuild.buildroot.net/results/6cfa5e9d37ac1571dc58df538232bb9e1749e62a
-Signed-off-by: Mario Lang <mlang@blind.guru>
+Release notes:
+http://www.nasm.us/doc/nasmdocc.html
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/brltty/brltty.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/nasm/nasm.hash | 3 ++-
+ package/nasm/nasm.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/brltty/brltty.mk b/package/brltty/brltty.mk
-index 7214f10fa0..9621d4f9c1 100644
---- a/package/brltty/brltty.mk
-+++ b/package/brltty/brltty.mk
-@@ -19,6 +19,7 @@ BRLTTY_CONF_OPTS = \
- 	--disable-ocaml-bindings \
- 	--disable-python-bindings \
- 	--disable-tcl-bindings \
-+	--disable-x \
- 	--without-midi-package \
- 	--without-mikropuhe --without-speechd --without-swift \
- 	--without-theta --without-viavoice
+diff --git a/package/nasm/nasm.hash b/package/nasm/nasm.hash
+index b88671c10a..260e5d7bc4 100644
+--- a/package/nasm/nasm.hash
++++ b/package/nasm/nasm.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+-sha256 aa0213008f0433ecbe07bb628506a5c4be8079be20fc3532a5031fd639db9a5e  nasm-2.13.01.tar.xz
++sha256 8ac3235f49a6838ff7a8d7ef7c19a4430d0deecc0c2d3e3e237b5e9f53291757  nasm-2.13.02.tar.xz
++sha256 1563996c52e220e15ef2418e67d39488255aa8c28c89e617074d3afe3ee329e0  LICENSE
+diff --git a/package/nasm/nasm.mk b/package/nasm/nasm.mk
+index 3e2515e2ee..ee3fd9c542 100644
+--- a/package/nasm/nasm.mk
++++ b/package/nasm/nasm.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-NASM_VERSION = 2.13.01
++NASM_VERSION = 2.13.02
+ NASM_SOURCE = nasm-$(NASM_VERSION).tar.xz
+ NASM_SITE = http://www.nasm.us/pub/nasm/releasebuilds/$(NASM_VERSION)
+ NASM_LICENSE = BSD-2-Clause
 -- 
-2.15.0
+2.11.0
