@@ -1,42 +1,27 @@
-From: Sergey Matyukevich <geomatsi@gmail.com>
-Date: Tue, 19 Dec 2017 23:36:43 +0300
-Subject: [Buildroot] [PATCH v3] odroidc2: add support for mainline
- kernel and u-boot
-In-Reply-To: <20171216135722.12562-1-daggs@gmx.com>
-References: <20171216135722.12562-1-daggs@gmx.com>
-Message-ID: <20171219203643.yaaec5u7vobq3ipf@speedy.hunter>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 19 Dec 2017 21:46:51 +0100
+Subject: [Buildroot] [PATCH] pulseaudio: remove the ConsoleKit module
+In-Reply-To: <b7568fe9d9659520356ec09c58908edd27656a03.1513696352.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Tue, 19 Dec 2017 17:12:32 +0200")
+References: <b7568fe9d9659520356ec09c58908edd27656a03.1513696352.git.baruch@tkos.co.il>
+Message-ID: <87609278ec.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> Changes v2 -> v3:
->  - board/hardkernel/odroidc2/odroidc2_mainline_defconfig is not needed because update_arm64_defconfig_with_meson_configs.patch is used.
-> 
-> Changes v1 -> v2:
->  - handle general mail patch rejects (Thomas)
->  - use BR2_TARGET_UBOOT_BOOT_SCRIPT and BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE instead of script's
->    boot.scr generation (Thomas)
->  - use defconfig in mainline kernel config (Thomas)
->  - add patch of mainline kernel diff instead of complete config and use arch default config (Arnout)
->  - move vendor's ATF handling to a separated patch (Thomas)
->  - add mainline config support for post image script (Thomas)
->  - fixed mainline defconfig rejects (Thomas)
->  - squashed all previous 2-8 patches into one patch (Thomas)
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-[...]
+ > The ConsoleKit module is loaded by default from the default.pa
+ > configuration file, but its initialization fails because Buildroot has
+ > no ConsoleKit package yet. This breaks per-user pulseaudio daemon.
+ > The default.pa configuration load module-console-kit only when it
+ > exists. Remove module-console-kit to fix pulseaudio per-user startup.
 
-> +# Required tools to create the SD image
-> +BR2_PACKAGE_HOST_DOSFSTOOLS=y
-> +BR2_PACKAGE_HOST_GENIMAGE=y
-> +BR2_PACKAGE_HOST_MESON_TOOLS=y
-> +BR2_PACKAGE_HOST_MTOOLS=y
-> +BR2_PACKAGE_HOST_UBOOT_TOOLS=y
-> +BR2_PACKAGE_HOST_ODROIDC2_ATF=y
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
-I don't see neither meson-tools nor odroid2-atf packages in v3.
-Am I missing something ?
+Committed, thanks.
 
-Regards,
-Sergey
+-- 
+Bye, Peter Korsgaard
