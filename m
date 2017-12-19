@@ -1,89 +1,161 @@
-From: Frank Hunleth <fhunleth@troodon-software.com>
-Date: Tue, 19 Dec 2017 13:45:44 -0500
-Subject: [Buildroot] [PATCH v2 1/1] erlang: remove non-SMP build option
-Message-ID: <1513709144-12840-1-git-send-email-fhunleth@troodon-software.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 19 Dec 2017 20:12:04 +0100
+Subject: [Buildroot] [PATCH v2,1/1] safeclib: new package
+Message-ID: <20171219191204.17680-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The non-SMP scheduler was deprecated with the Erlang/OTP 20.0 release and
-slated for removal with the next major Erlang release. Since the non-SMP
-scheduler isn't even built anymore, this option no longer has the
-intended effect of saving space or compile time. The SMP scheduler
-supports both SMP and non-SMP processors, so removing the option will
-not break any platforms.
+safec fork with all C11 Annex K functions
 
-Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
+This library implements the secure C11 Annex K functions on
+top of most libc implementations, which are missing from them.
+
+https://rurban.github.io/safeclib/
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
 Changes v1 -> v2:
-  - Added text to Config.in.legacy to explain the removal of the option
-    (suggested by Yann - I added to Config.in.legacy after thinking about
-     it, since anyone who previously selected this option may be surprised
-     to see the SMP scheduler in their process list.)
+ - Fix build when wchar is disabled (patch already merged upstream)
 
- Config.in.legacy         | 10 ++++++++++
- package/erlang/Config.in | 10 ----------
- package/erlang/erlang.mk |  4 ----
- 3 files changed, 10 insertions(+), 14 deletions(-)
+ DEVELOPERS                                         |  1 +
+ package/Config.in                                  |  1 +
+ ...0001-Fix-install-when-HAVE_WCHAR-is-unset.patch | 50 ++++++++++++++++++++++
+ package/safeclib/Config.in                         |  9 ++++
+ package/safeclib/safeclib.hash                     |  3 ++
+ package/safeclib/safeclib.mk                       | 15 +++++++
+ 6 files changed, 79 insertions(+)
+ create mode 100644 package/safeclib/0001-Fix-install-when-HAVE_WCHAR-is-unset.patch
+ create mode 100644 package/safeclib/Config.in
+ create mode 100644 package/safeclib/safeclib.hash
+ create mode 100644 package/safeclib/safeclib.mk
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index decbace..1607df6 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -153,6 +153,16 @@ config BR2_PACKAGE_GNUPG2_GPGV2
- 	  The gpgv2 executable is now named gpgv. The config option
- 	  has been renamed accordingly.
-
-+config BR2_PACKAGE_ERLANG_SMP
-+	bool "erlang smp option removed"
-+	select BR2_LEGACY
-+	help
-+	  This option used to disable Erlang's SMP scheduler to save
-+	  space. Since Erlang 20.0 deprecated the non-SMP scheduler and
-+	  no longer builds it, it is no longer relevant. See the Erlang
-+	  20.0 release notes for more information. Note that the SMP
-+	  scheduler runs on both SMP and non-SMP CPUs.
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 082d7e1740..a64a14e546 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -633,6 +633,7 @@ F:	package/libupnp18/
+ F:	package/minissdpd/
+ F:	package/motion/
+ F:	package/rygel/
++F:	package/safeclib/
+ F:	package/tinycbor/
+ F:	package/tinydtls/
+ 
+diff --git a/package/Config.in b/package/Config.in
+index 6847f8965c..24cd00254f 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1544,6 +1544,7 @@ menu "Security"
+ 	source "package/libselinux/Config.in"
+ 	source "package/libsemanage/Config.in"
+ 	source "package/libsepol/Config.in"
++	source "package/safeclib/Config.in"
+ endmenu
+ 
+ menu "Text and terminal handling"
+diff --git a/package/safeclib/0001-Fix-install-when-HAVE_WCHAR-is-unset.patch b/package/safeclib/0001-Fix-install-when-HAVE_WCHAR-is-unset.patch
+new file mode 100644
+index 0000000000..c34002d24e
+--- /dev/null
++++ b/package/safeclib/0001-Fix-install-when-HAVE_WCHAR-is-unset.patch
+@@ -0,0 +1,50 @@
++From 5991f0d4b86c02a3d7739509b96815ccfa734be7 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fabrice.fontaine@orange.com>
++Date: Mon, 18 Dec 2017 17:17:54 +0100
++Subject: [PATCH] Fix install when HAVE_WCHAR is unset
 +
- ###############################################################################
- comment "Legacy options removed in 2017.11"
-
-diff --git a/package/erlang/Config.in b/package/erlang/Config.in
-index 1cd93ca..96af551 100644
---- a/package/erlang/Config.in
-+++ b/package/erlang/Config.in
-@@ -27,16 +27,6 @@ config BR2_PACKAGE_ERLANG
-
- if BR2_PACKAGE_ERLANG
-
--config BR2_PACKAGE_ERLANG_SMP
--	bool "enable SMP support"
--	help
--	  Erlang provides both a UP and an SMP emulator. The UP
--	  emulator is always built, and this option enables
--	  compilation of the SMP emulator. The choice of which
--	  emulator to use is made at runtime. If you do not need SMP
--	  support, turning this option off reduces compile time and
--	  the size of the Erlang installation.
--
- config BR2_PACKAGE_ERLANG_MEGACO
- 	bool "install megaco application"
- 	help
-diff --git a/package/erlang/erlang.mk b/package/erlang/erlang.mk
-index 733c1d5..5705b98 100644
---- a/package/erlang/erlang.mk
-+++ b/package/erlang/erlang.mk
-@@ -74,10 +74,6 @@ ERLANG_CONF_OPTS += --enable-shared-zlib
- ERLANG_DEPENDENCIES += zlib
- endif
-
--ifeq ($(BR2_PACKAGE_ERLANG_SMP),)
--ERLANG_CONF_OPTS += --disable-smp-support
--endif
--
- # Remove source, example, gs and wx files from staging and target.
- ERLANG_REMOVE_PACKAGES = gs wx
-
---
-2.7.4
++Don't build WCSNORM_xxx man pages if HAVE_WHCAR is not set otherwise
++installation will fail as the wcsnorm_mode enum is not defined in
++safe_str_lib.h when SAFECLIB_DISABLE_WCHAR is set
++
++Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
++---
++ Makefile.am | 15 +++++++++------
++ 1 file changed, 9 insertions(+), 6 deletions(-)
++
++diff --git a/Makefile.am b/Makefile.am
++index 31398d1..b7e65a5 100644
++--- a/Makefile.am
+++++ b/Makefile.am
++@@ -142,12 +142,6 @@ dist_man_MANS += \
++ 	doc/man/man3/SAFE_STR_PASSWORD_MIN_LENGTH.3	\
++ 	doc/man/man3/STRTOK_DELIM_MAX_LEN.3	\
++ 	doc/man/man3/TMP_MAX_S.3	\
++-	doc/man/man3/WCSNORM_FCC.3	\
++-	doc/man/man3/WCSNORM_FCD.3	\
++-	doc/man/man3/WCSNORM_NFC.3	\
++-	doc/man/man3/WCSNORM_NFD.3	\
++-	doc/man/man3/WCSNORM_NFKC.3	\
++-	doc/man/man3/WCSNORM_NFKD.3	\
++ 	doc/man/man3/abort_handler_s.3	\
++ 	doc/man/man3/abort_handler_s.c.3	\
++ 	doc/man/man3/asctime_s.3	\
++@@ -461,6 +455,15 @@ dist_man_MANS += \
++ 	doc/man/man3/wprintf_s.c.3	\
++ 	doc/man/man3/wscanf_s.3	\
++ 	doc/man/man3/wscanf_s.c.3
+++if ENABLE_WCHAR
+++dist_man_MANS += \
+++	doc/man/man3/WCSNORM_FCC.3      \
+++	doc/man/man3/WCSNORM_FCD.3      \
+++	doc/man/man3/WCSNORM_NFC.3      \
+++	doc/man/man3/WCSNORM_NFD.3      \
+++	doc/man/man3/WCSNORM_NFKC.3     \
+++	doc/man/man3/WCSNORM_NFKD.3
+++endif
++ CLEANFILES += Doxyfile doc/footer README.md
++ 
++ # avoid parallel doxygen
++-- 
++2.7.4
++
+diff --git a/package/safeclib/Config.in b/package/safeclib/Config.in
+new file mode 100644
+index 0000000000..5117c49da7
+--- /dev/null
++++ b/package/safeclib/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_SAFECLIB
++	bool "safeclib"
++	help
++	  safec fork with all C11 Annex K functions
++
++	  This library implements the secure C11 Annex K functions on
++	  top of most libc implementations, which are missing from them.
++
++	  https://rurban.github.io/safeclib/
+diff --git a/package/safeclib/safeclib.hash b/package/safeclib/safeclib.hash
+new file mode 100644
+index 0000000000..95a862eef0
+--- /dev/null
++++ b/package/safeclib/safeclib.hash
+@@ -0,0 +1,3 @@
++# Locally computed:
++sha256	9c09c6e9fc95207c7d45944f8b669f2454056bef2bbaef70c94ba3f81be1cbb2	safeclib-v09102017.tar.gz
++sha256	c33e77efd5781e3d59a2bb648c82d2a615035ef0d24cf58880380e3af906510b	COPYING
+diff --git a/package/safeclib/safeclib.mk b/package/safeclib/safeclib.mk
+new file mode 100644
+index 0000000000..65c6621e0a
+--- /dev/null
++++ b/package/safeclib/safeclib.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# safeclib
++#
++################################################################################
++
++SAFECLIB_VERSION = v09102017
++SAFECLIB_SITE = $(call github,rurban,safeclib,$(SAFECLIB_VERSION))
++SAFECLIB_LICENSE = MIT 
++SAFECLIB_LICENSE_FILES = COPYING
++SAFECLIB_INSTALL_STAGING = YES
++# From git
++SAFECLIB_AUTORECONF = YES
++
++$(eval $(autotools-package))
+-- 
+2.14.1
