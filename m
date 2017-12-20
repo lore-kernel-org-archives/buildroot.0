@@ -1,67 +1,40 @@
-From: Trent Piepho <tpiepho@impinj.com>
-Date: Tue, 19 Dec 2017 18:06:24 -0800
-Subject: [Buildroot] [PATCH] ncurses: Install 256 color terminfo files
-Message-ID: <20171220020624.22252-1-tpiepho@impinj.com>
+From: Christian Stewart <christian@paral.in>
+Date: Tue, 19 Dec 2017 20:14:58 -0800
+Subject: [Buildroot] systemd: blkid support requested but libraries not found
+Message-ID: <874lom2fy5.fsf@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-There are three 256 color terminfo files that buildroot only installs if
-ncurses is configured with wide character support, which also enables
-ext-color.  There is a fourth 256 color terminfo file and does not depend
-on wchar suport and is always installed.
 
-This changes that to always install all four 256 color terminfo files.
+Hi all,
 
-When ncurses has ext-colors enabled,it allows 256 fg and bg colors at the
-same time.  Without ext-colors, it is still possible to use the 256 color
-terminfo files and one can get a combination of fb and bg colors that
-equals up to 256, e.g. 256 fg colors on one background or 16 fg and 16 bg
-colors.
+I came across this error while debugging something else.
 
-In short, the 256 color files work fine without wchar or ext-color support
-and support more colors than the normal xterm, etc.  terminfo files.  It's
-common today for the default terminal to use xterm-256color and it's nice
-if thinks like vim and top work out of the box.
+Defconfig:
 
-Signed-off-by: Trent Piepho <tpiepho@impinj.com>
----
- package/ncurses/ncurses.mk | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+BR2_arm=y
+BR2_cortex_a7=y
+BR2_CCACHE=y
+BR2_ARM_FPU_NEON_VFPV4=y
+BR2_OPTIMIZE_2=y
+BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
+BR2_BINUTILS_VERSION_2_27_X=y
+BR2_TOOLCHAIN_BUILDROOT_CXX=y
+BR2_GCC_ENABLE_LTO=y
+BR2_INIT_SYSTEMD=y
+BR2_SYSTEM_BIN_SH_BASH=y
 
-diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
-index 94c8c9ade3..e63b6e4aed 100644
---- a/package/ncurses/ncurses.mk
-+++ b/package/ncurses/ncurses.mk
-@@ -50,6 +50,7 @@ NCURSES_TERMINFO_FILES = \
- 	d/dumb \
- 	l/linux \
- 	p/putty \
-+	p/putty-256color \
- 	p/putty-vt100 \
- 	s/screen \
- 	s/screen-256color \
-@@ -59,6 +60,8 @@ NCURSES_TERMINFO_FILES = \
- 	v/vt200 \
- 	v/vt220 \
- 	x/xterm \
-+	x/xterm+256color \
-+	x/xterm-256color \
- 	x/xterm-color \
- 	x/xterm-xfree86
- 
-@@ -97,10 +100,6 @@ NCURSES_LINK_STAGING_LIBS = \
- NCURSES_LINK_STAGING_PC = $(call NCURSES_LINK_PC)
- 
- NCURSES_CONF_OPTS += --enable-ext-colors
--NCURSES_TERMINFO_FILES += \
--	p/putty-256color \
--	x/xterm+256color \
--	x/xterm-256color
- 
- NCURSES_POST_INSTALL_STAGING_HOOKS += NCURSES_LINK_STAGING_LIBS
- NCURSES_POST_INSTALL_STAGING_HOOKS += NCURSES_LINK_STAGING_PC
--- 
-2.14.3
+Error:
+
+checking for blkid... no
+configure: error: *** blkid support requested but libraries not found
+make: *** [package/pkg-generic.mk:227: /home/paralin/Documents/buildroot/output/build/systemd-234/.stamp_configured] Error 1
+
+Perhaps there is a missing dependency on blkid somewhere? Or is this
+indicative of a bigger problem?
+
+Thanks,
+Christian Stewart
