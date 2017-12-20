@@ -1,24 +1,27 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 20 Dec 2017 21:57:52 +0100
-Subject: [Buildroot] [PATCH 3/3] package/x11r7/xlib_libXfont: security
- bump to version 1.5.4
-In-Reply-To: <20171129204558.3547-3-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Wed, 29 Nov 2017 21:45:58 +0100")
-References: <20171129204558.3547-1-bernd.kuhls@t-online.de>
- <20171129204558.3547-3-bernd.kuhls@t-online.de>
-Message-ID: <877ethazhr.fsf@dell.be.48ers.dk>
+Date: Wed, 20 Dec 2017 22:00:14 +0100
+Subject: [Buildroot] [PATCH] libcurl: security bump to version 7.57.0
+In-Reply-To: <20171130000701.4648-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Thu, 30 Nov 2017 01:07:01 +0100")
+References: <20171130000701.4648-1-peter@korsgaard.com>
+Message-ID: <87zi6d9ktd.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > Fixes CVE-2017-16611:
- > https://lists.x.org/archives/xorg-announce/2017-November/002825.html
+ > Fixes the following security issues:
+ > - CVE-2017-8816: NTLM buffer overflow via integer overflow
+ > - CVE-2017-8817: FTP wildcard out of bounds read
+ > - CVE-2017-8818: SSL out of buffer access
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > For more details, see the changelog:
+ > https://curl.haxx.se/changes.html#7_57_0
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
 Committed to 2017.02.x, thanks.
 
