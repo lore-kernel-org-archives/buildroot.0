@@ -1,89 +1,91 @@
 From: Jagan Teki <jagannadh.teki@gmail.com>
-Date: Wed, 20 Dec 2017 10:53:35 +0100
-Subject: [Buildroot] [PATCH v6 06/10] board: Add Olimex A64-OLinuXino support
+Date: Wed, 20 Dec 2017 10:53:36 +0100
+Subject: [Buildroot] [PATCH v6 07/10] board: Add Orangepi Win/Win Plus
+ support
 In-Reply-To: <1513763619-15725-1-git-send-email-jagan@amarulasolutions.com>
 References: <1513763619-15725-1-git-send-email-jagan@amarulasolutions.com>
-Message-ID: <1513763619-15725-7-git-send-email-jagan@amarulasolutions.com>
+Message-ID: <1513763619-15725-8-git-send-email-jagan@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add initial support for Olimex A64-OLinuXino
+Add initial support for Orangepi Win/Win Plus
 board with below features:
 - U-Boot 2017.11
 - Linux 4.14
 - Default packages from buildroot
 
-Cc: Tsvetan Usunov <usunov@olimex.com>
+Cc: zhaoyifan <zhao_steven@263.net>
 Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
 ---
- .gitlab-ci.yml                          |  1 +
- DEVELOPERS                              |  2 ++
- board/olimex/a64-olinuxino/boot.cmd     |  6 +++++
- board/olimex/a64-olinuxino/genimage.cfg | 39 +++++++++++++++++++++++++++
- board/olimex/a64-olinuxino/readme.txt   | 37 ++++++++++++++++++++++++++
- configs/olimex_a64_olinuxino_defconfig  | 47 +++++++++++++++++++++++++++++++++
+ .gitlab-ci.yml                           |  1 +
+ DEVELOPERS                               |  2 ++
+ board/orangepi/orangepi-win/boot.cmd     |  6 ++++
+ board/orangepi/orangepi-win/genimage.cfg | 39 ++++++++++++++++++++++++++
+ board/orangepi/orangepi-win/readme.txt   | 37 +++++++++++++++++++++++++
+ configs/orangepi_win_defconfig           | 47 ++++++++++++++++++++++++++++++++
  6 files changed, 132 insertions(+)
- create mode 100644 board/olimex/a64-olinuxino/boot.cmd
- create mode 100644 board/olimex/a64-olinuxino/genimage.cfg
- create mode 100644 board/olimex/a64-olinuxino/readme.txt
- create mode 100644 configs/olimex_a64_olinuxino_defconfig
+ create mode 100644 board/orangepi/orangepi-win/boot.cmd
+ create mode 100644 board/orangepi/orangepi-win/genimage.cfg
+ create mode 100644 board/orangepi/orangepi-win/readme.txt
+ create mode 100644 configs/orangepi_win_defconfig
 
 diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index 5c9653b..4e82a19 100644
+index 4e82a19..722e6a3 100644
 --- a/.gitlab-ci.yml
 +++ b/.gitlab-ci.yml
-@@ -161,6 +161,7 @@ olimex_a20_olinuxino_lime2_defconfig: *defconfig
- olimex_a20_olinuxino_lime_defconfig: *defconfig
- olimex_a20_olinuxino_lime_mali_defconfig: *defconfig
- olimex_a20_olinuxino_micro_defconfig: *defconfig
-+olimex_a64_olinuxino_defconfig: *defconfig
- olimex_imx233_olinuxino_defconfig: *defconfig
- openblocks_a6_defconfig: *defconfig
- orangepi_lite_defconfig: *defconfig
+@@ -169,6 +169,7 @@ orangepi_one_defconfig: *defconfig
+ orangepi_pc_defconfig: *defconfig
+ orangepi_pc_plus_defconfig: *defconfig
+ orangepi_plus_defconfig: *defconfig
++orangepi_win_defconfig: *defconfig
+ orangepi_zero_defconfig: *defconfig
+ pandaboard_defconfig: *defconfig
+ pc_x86_64_bios_defconfig: *defconfig
 diff --git a/DEVELOPERS b/DEVELOPERS
-index b332976..54cb3aa 100644
+index 54cb3aa..99c598d 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -774,11 +774,13 @@ F:	board/bananapi/
- F:	board/engicam/
+@@ -775,12 +775,14 @@ F:	board/engicam/
  F:	board/friendlyarm/nanopi-a64/
  F:	board/friendlyarm/nanopi-neo2/
-+F:	board/olimex/a64-olinuxino/
+ F:	board/olimex/a64-olinuxino/
++F:	board/orangepi/orangepi-win/
  F:	board/pine64/
  F:	configs/bananapi_m1_defconfig
  F:	configs/bananapi_m64_defconfig
  F:	configs/friendlyarm_nanopi_a64_defconfig
  F:	configs/friendlyarm_nanopi_neo2_defconfig
-+F:	configs/olimex_a64_olinuxino_defconfig
+ F:	configs/olimex_a64_olinuxino_defconfig
++F:	configs/orangepi_win_defconfig
  F:	configs/pine64_defconfig
  F:	configs/pine64_sopine_defconfig
  F:	configs/engicam_imx6qdl_icore_defconfig
-diff --git a/board/olimex/a64-olinuxino/boot.cmd b/board/olimex/a64-olinuxino/boot.cmd
+diff --git a/board/orangepi/orangepi-win/boot.cmd b/board/orangepi/orangepi-win/boot.cmd
 new file mode 100644
-index 0000000..28ed6d9
+index 0000000..2ddb769
 --- /dev/null
-+++ b/board/olimex/a64-olinuxino/boot.cmd
++++ b/board/orangepi/orangepi-win/boot.cmd
 @@ -0,0 +1,6 @@
 +setenv bootargs console=ttyS0,115200 earlyprintk root=/dev/mmcblk0p2 rootwait
 +
 +fatload mmc 0 $kernel_addr_r Image
-+fatload mmc 0 $fdt_addr_r sun50i-a64-olinuxino.dtb
++fatload mmc 0 $fdt_addr_r sun50i-a64-orangepi-win.dtb
 +
 +booti $kernel_addr_r - $fdt_addr_r
-diff --git a/board/olimex/a64-olinuxino/genimage.cfg b/board/olimex/a64-olinuxino/genimage.cfg
+diff --git a/board/orangepi/orangepi-win/genimage.cfg b/board/orangepi/orangepi-win/genimage.cfg
 new file mode 100644
-index 0000000..328b68b
+index 0000000..db025d5
 --- /dev/null
-+++ b/board/olimex/a64-olinuxino/genimage.cfg
++++ b/board/orangepi/orangepi-win/genimage.cfg
 @@ -0,0 +1,39 @@
 +image boot.vfat {
 +	vfat {
 +		files = {
 +			"Image",
-+			"sun50i-a64-olinuxino.dtb",
++			"sun50i-a64-orangepi-win.dtb",
 +			"boot.scr"
 +		}
 +	}
@@ -118,31 +120,31 @@ index 0000000..328b68b
 +		image = "rootfs.ext4"
 +	}
 +}
-diff --git a/board/olimex/a64-olinuxino/readme.txt b/board/olimex/a64-olinuxino/readme.txt
+diff --git a/board/orangepi/orangepi-win/readme.txt b/board/orangepi/orangepi-win/readme.txt
 new file mode 100644
-index 0000000..342bdc7
+index 0000000..93adddd
 --- /dev/null
-+++ b/board/olimex/a64-olinuxino/readme.txt
++++ b/board/orangepi/orangepi-win/readme.txt
 @@ -0,0 +1,37 @@
 +Intro
 +=====
 +
 +This default configuration will allow you to start experimenting with the
-+buildroot environment for the A64-OLinuXino. With the current configuration
++buildroot environment for the Orangepi Win/Win Plus. With the current configuration
 +it will bring-up the board, and allow access through the serial console.
 +
-+A64-OLinuXino link:
-+https://www.olimex.com/Products/OLinuXino/A64/
++Orangepi Win/Win Plus link:
++http://www.orangepi.org/OrangePiWin_WinPlus/
 +
 +Wiki link:
-+https://openedev.amarulasolutions.com/display/ODWIKI/Olimex+A64-Olinuxino
++https://openedev.amarulasolutions.com/display/ODWIKI/Orangepi+Win
 +
 +This configuration uses U-Boot mainline and kernel mainline.
 +
 +How to build
 +============
 +
-+    $ make olimex_a64_olinuxino_defconfig
++    $ make orangepi_win_defconfig
 +    $ make
 +
 +Note: you will need access to the internet to download the required
@@ -159,13 +161,13 @@ index 0000000..342bdc7
 +  $ sudo dd if=output/images/sdcard.img of=/dev/sdX
 +  $ sudo sync
 +
-+Insert the micro SDcard in your A64-OLinuXino and power it up. The console
++Insert the micro SDcard in your Orangepi Win/Win Plus and power it up. The console
 +is on the serial line, 115200 8N1.
-diff --git a/configs/olimex_a64_olinuxino_defconfig b/configs/olimex_a64_olinuxino_defconfig
+diff --git a/configs/orangepi_win_defconfig b/configs/orangepi_win_defconfig
 new file mode 100644
-index 0000000..b12229f
+index 0000000..8aae602
 --- /dev/null
-+++ b/configs/olimex_a64_olinuxino_defconfig
++++ b/configs/orangepi_win_defconfig
 @@ -0,0 +1,47 @@
 +BR2_aarch64=y
 +BR2_cortex_a53=y
@@ -187,7 +189,7 @@ index 0000000..b12229f
 +BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
 +BR2_TARGET_UBOOT_CUSTOM_VERSION=y
 +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.11"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="a64-olinuxino"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="orangepi_win"
 +BR2_TARGET_UBOOT_NEEDS_DTC=y
 +BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
 +BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
@@ -195,7 +197,7 @@ index 0000000..b12229f
 +BR2_TARGET_UBOOT_SPL=y
 +BR2_TARGET_UBOOT_SPL_NAME="spl/sunxi-spl.bin"
 +BR2_TARGET_UBOOT_BOOT_SCRIPT=y
-+BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE="board/olimex/a64-olinuxino/boot.cmd"
++BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE="board/orangepi/orangepi-win/boot.cmd"
 +
 +# Kernel
 +BR2_LINUX_KERNEL=y
@@ -203,16 +205,16 @@ index 0000000..b12229f
 +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.14"
 +BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
 +BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun50i-a64-olinuxino"
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun50i-a64-orangepi-win"
 +
 +# Filesystem
-+BR2_TARGET_GENERIC_ISSUE="Welcome to Olimex A64-OLinuXino"
++BR2_TARGET_GENERIC_ISSUE="Welcome to Orangepi Win/Win Plus"
 +BR2_TARGET_ROOTFS_EXT2=y
 +BR2_TARGET_ROOTFS_EXT2_4=y
 +BR2_PACKAGE_HOST_DOSFSTOOLS=y
 +BR2_PACKAGE_HOST_GENIMAGE=y
 +BR2_PACKAGE_HOST_MTOOLS=y
 +BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/olimex/a64-olinuxino/genimage.cfg"
++BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/orangepi/orangepi-win/genimage.cfg"
 -- 
 1.9.1
