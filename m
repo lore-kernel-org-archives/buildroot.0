@@ -1,35 +1,51 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 20 Dec 2017 17:16:27 +0200
-Subject: [Buildroot] [PATCH] libsoxr: remove unicode dash from help text
-Message-ID: <aba1f1782c8833a67af16f2325a5fccf6cc2e689.1513782978.git.baruch@tkos.co.il>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 20 Dec 2017 16:23:54 +0100
+Subject: [Buildroot] [PATCH 1/2] libdrm-armada: new package
+In-Reply-To: <20171220150843.21154-2-didin@synopsys.com>
+References: <20171220150843.21154-1-didin@synopsys.com>
+ <20171220150843.21154-2-didin@synopsys.com>
+Message-ID: <20171220162354.21092f36@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This would make the unicode challenged menuconfig show something
-sensible.
+Hello,
 
-Split the sentence for the text to make sense.
+(In addition to the comments from Yann).
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/libsoxr/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Wed, 20 Dec 2017 18:08:42 +0300, Evgeniy Didin wrote:
 
-diff --git a/package/libsoxr/Config.in b/package/libsoxr/Config.in
-index a218ae99c89c..ae1ea1028030 100644
---- a/package/libsoxr/Config.in
-+++ b/package/libsoxr/Config.in
-@@ -2,7 +2,7 @@ config BR2_PACKAGE_LIBSOXR
- 	bool "libsoxr"
- 	help
- 	  The SoX Resampler library `libsoxr' performs one-dimensional
--	  sample-rate conversion?it may be used, for example, to
-+	  sample-rate conversion. It may be used, for example, to
- 	  resample PCM-encoded audio.
- 
- 	  It aims to give fast and high quality results for any constant
+>  package/Config.in                        |  1 +
+>  package/libdrm-armada/Config.in          |  7 +++++++
+>  package/libdrm-armada/libdrm-armada.hash |  2 ++
+>  package/libdrm-armada/libdrm-armada.mk   | 24 ++++++++++++++++++++++++
+
+Entry in DEVELOPERS file missing.
+
+
+> +LIBDRM_ARMADA_VERSION = 6b461c
+
+Please use a full Git hash.
+
+> +LIBDRM_ARMADA_SOURCE = libdrm-armada-$(LIBDRM_ARMADA_VERSION).tar.gz
+> +LIBDRM_ARMADA_SITE = http://git.arm.linux.org.uk/cgit/libdrm-armada.git
+> +LIBDRM_ARMADA_SITE_METHOD = git
+> +LIBDRM_ARMADA_DEPENDENCIES = libdrm
+> +LIBDRM_ARMADA_INSTALL_STAGING = YES
+
+It is a problem that this package has no license information
+whatsoever. No COPYING file, no LICENSE file, no header in the source
+file that indicates the license (except for
+http://git.arm.linux.org.uk/cgit/libdrm-armada.git/tree/libdrm_lists.h).
+
+Could you ask upstream to add appropriate licensing information ?
+
+Thanks!
+
+Thomas
 -- 
-2.15.1
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
