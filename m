@@ -1,137 +1,35 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 20 Dec 2017 16:16:28 +0100
-Subject: [Buildroot] [PATCH 1/2] libdrm-armada: new package
-In-Reply-To: <20171220150843.21154-2-didin@synopsys.com>
-References: <20171220150843.21154-1-didin@synopsys.com>
- <20171220150843.21154-2-didin@synopsys.com>
-Message-ID: <20171220151628.GE21413@scaer>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 20 Dec 2017 17:16:27 +0200
+Subject: [Buildroot] [PATCH] libsoxr: remove unicode dash from help text
+Message-ID: <aba1f1782c8833a67af16f2325a5fccf6cc2e689.1513782978.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Evgeniy, All,
+This would make the unicode challenged menuconfig show something
+sensible.
 
-On 2017-12-20 18:08 +0300, Evgeniy Didin spake thusly:
-> libdrm-armada is an Etnaviv libdrm buffer object management module.
-> It is used with xf86-driver-video-armada, which is Xorg driver for Etnaviv.
-> 
-> Signed-off-by: Evgeniy Didin <didin@synopsys.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Alexey Brodkin <abrodkin@synopsys.com>
-> Cc: arc-buildroot at synopsys.com
-> ---
->  package/Config.in                        |  1 +
->  package/libdrm-armada/Config.in          |  7 +++++++
->  package/libdrm-armada/libdrm-armada.hash |  2 ++
->  package/libdrm-armada/libdrm-armada.mk   | 24 ++++++++++++++++++++++++
->  4 files changed, 34 insertions(+)
->  create mode 100644 package/libdrm-armada/Config.in
->  create mode 100644 package/libdrm-armada/libdrm-armada.hash
->  create mode 100644 package/libdrm-armada/libdrm-armada.mk
-> 
-> diff --git a/package/Config.in b/package/Config.in
-> index bd39a374f0..54caf7ae41 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1116,6 +1116,7 @@ menu "Graphics"
->  	source "package/libdmtx/Config.in"
->  	source "package/libdri2/Config.in"
->  	source "package/libdrm/Config.in"
-> +        source "package/libdrm-armada/Config.in"
+Split the sentence for the text to make sense.
 
-Indentation with a TAB, not spaces:
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/libsoxr/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-    $ ./utils/check-package package/libdrm-armada/*
-    package/libdrm-armada/libdrm-armada.mk:19: expected indent with tabs
-    33 lines processed
-    1 warnings generated
-
-;-)
-
->  	source "package/libepoxy/Config.in"
->  	source "package/libexif/Config.in"
->  	source "package/libfm/Config.in"
-> diff --git a/package/libdrm-armada/Config.in b/package/libdrm-armada/Config.in
-> new file mode 100644
-> index 0000000000..5deabf35ae
-> --- /dev/null
-> +++ b/package/libdrm-armada/Config.in
-> @@ -0,0 +1,7 @@
-> +config BR2_PACKAGE_LIBDRM_ARMADA
-> +	bool "libdrm-armada"
-> +	select BR2_PACKAGE_LIBDRM
-
-libdrm depends on BR2_TOOLCHAIN_HAS_THREADS, so you need to propagate
-the dependency.
-
-> +	help
-> +	  Etnaviv libdrm buffer object management module
-> +
-> +	  http://git.arm.linux.org.uk/cgit/libdrm-armada.git/
-> diff --git a/package/libdrm-armada/libdrm-armada.hash b/package/libdrm-armada/libdrm-armada.hash
-> new file mode 100644
-> index 0000000000..40911ea8e4
-> --- /dev/null
-> +++ b/package/libdrm-armada/libdrm-armada.hash
-> @@ -0,0 +1,2 @@
-> +# Locally calculated
-> +sha256 0454ac8f55c7bfff548b75d7116c56fa125f5dfe118e630a85feb221de82fbb6  libdrm-armada-6b461c.tar.gz
-> diff --git a/package/libdrm-armada/libdrm-armada.mk b/package/libdrm-armada/libdrm-armada.mk
-> new file mode 100644
-> index 0000000000..fb96ad0b6e
-> --- /dev/null
-> +++ b/package/libdrm-armada/libdrm-armada.mk
-> @@ -0,0 +1,24 @@
-> +################################################################################
-> +#
-> +# libdrm-armada
-> +#
-> +################################################################################
-> +
-> +LIBDRM_ARMADA_VERSION = 6b461c
-> +LIBDRM_ARMADA_SOURCE = libdrm-armada-$(LIBDRM_ARMADA_VERSION).tar.gz
-
-This is the default value, so must not be specified.
-
-> +LIBDRM_ARMADA_SITE = http://git.arm.linux.org.uk/cgit/libdrm-armada.git
-> +LIBDRM_ARMADA_SITE_METHOD = git
-> +LIBDRM_ARMADA_DEPENDENCIES = libdrm
-> +LIBDRM_ARMADA_INSTALL_STAGING = YES
-> +
-> +# We're patching configure.ac
-
-I have not seen a patch that touches configure.ac. For that matter, I
-have even seen no patch at all. Did you forget to git-add them?
-
-Or is it needed just because it is straight from the git tree? ;-)
-
-Regards,
-Yann E. MORIN.
-
-> +LIBDRM_ARMADA_AUTORECONF = YES
-> +
-> +# Needed for autoreconf to work properly
-> +define LIBDRM_ARMADA_FIXUP_M4_DIR
-> +        mkdir $(@D)/m4
-> +endef
-> +
-> +LIBDRM_ARMADA_POST_PATCH_HOOKS += LIBDRM_ARMADA_FIXUP_M4_DIR
-> +
-> +$(eval $(autotools-package))
-> -- 
-> 2.11.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/libsoxr/Config.in b/package/libsoxr/Config.in
+index a218ae99c89c..ae1ea1028030 100644
+--- a/package/libsoxr/Config.in
++++ b/package/libsoxr/Config.in
+@@ -2,7 +2,7 @@ config BR2_PACKAGE_LIBSOXR
+ 	bool "libsoxr"
+ 	help
+ 	  The SoX Resampler library `libsoxr' performs one-dimensional
+-	  sample-rate conversion?it may be used, for example, to
++	  sample-rate conversion. It may be used, for example, to
+ 	  resample PCM-encoded audio.
+ 
+ 	  It aims to give fast and high quality results for any constant
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.15.1
