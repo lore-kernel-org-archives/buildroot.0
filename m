@@ -1,44 +1,89 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 20 Dec 2017 14:15:23 +0100
-Subject: [Buildroot] [PATCH] gitlab-ci: add .config to artefacts
-In-Reply-To: <5a387281cf61_bd03fa772a46ee8855bb@ultri3.mail>
-References: <20171218212558.22912-1-yann.morin.1998@free.fr>
- <5a387281cf61_bd03fa772a46ee8855bb@ultri3.mail>
-Message-ID: <20171220131523.GA21413@scaer>
+Date: Wed, 20 Dec 2017 14:28:12 +0100
+Subject: [Buildroot] [PATCH v2 1/1] erlang: remove non-SMP build option
+In-Reply-To: <20171220112604.6a560700@windsurf.lan>
+References: <1513709144-12840-1-git-send-email-fhunleth@troodon-software.com>
+ <20171220112604.6a560700@windsurf.lan>
+Message-ID: <20171220132812.GB21413@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ricardo, All,
+Thomas, Frank, All,
 
-On 2017-12-18 23:59 -0200, Ricardo Martincoski spake thusly:
-> On Mon, Dec 18, 2017 at 07:25 PM, Yann E. MORIN wrote:
-> > When a run-time test fails to build, it is interesting to get the
-> > corresponding .config file directly as an artifact, rather than
-> > reconstruct it manually from the various config snippets embedded
-> > in the many runtime-test scripts.
+On 2017-12-20 11:26 +0100, Thomas Petazzoni spake thusly:
+> On Tue, 19 Dec 2017 13:45:44 -0500, Frank Hunleth wrote:
+> > The non-SMP scheduler was deprecated with the Erlang/OTP 20.0 release and
+> > slated for removal with the next major Erlang release. Since the non-SMP
+> > scheduler isn't even built anymore, this option no longer has the
+> > intended effect of saving space or compile time. The SMP scheduler
+> > supports both SMP and non-SMP processors, so removing the option will
+> > not break any platforms.
+> > 
+> > Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
+> > ---
+> > Changes v1 -> v2:
+> >   - Added text to Config.in.legacy to explain the removal of the option
+> >     (suggested by Yann - I added to Config.in.legacy after thinking about
+> >      it, since anyone who previously selected this option may be surprised
+> >      to see the SMP scheduler in their process list.)
+> > 
+> >  Config.in.legacy         | 10 ++++++++++
+> >  package/erlang/Config.in | 10 ----------
+> >  package/erlang/erlang.mk |  4 ----
+> >  3 files changed, 10 insertions(+), 14 deletions(-)
+> > 
+> > diff --git a/Config.in.legacy b/Config.in.legacy
+> > index decbace..1607df6 100644
+> > --- a/Config.in.legacy
+> > +++ b/Config.in.legacy
+> > @@ -153,6 +153,16 @@ config BR2_PACKAGE_GNUPG2_GPGV2
+> >  	  The gpgv2 executable is now named gpgv. The config option
+> >  	  has been renamed accordingly.
+> > 
+> > +config BR2_PACKAGE_ERLANG_SMP
+> > +	bool "erlang smp option removed"
+> > +	select BR2_LEGACY
+> > +	help
+> > +	  This option used to disable Erlang's SMP scheduler to save
+> > +	  space. Since Erlang 20.0 deprecated the non-SMP scheduler and
+> > +	  no longer builds it, it is no longer relevant. See the Erlang
+> > +	  20.0 release notes for more information. Note that the SMP
+> > +	  scheduler runs on both SMP and non-SMP CPUs.
 > 
-> The defconfig is already dumped to the beginning of the build log.
+> As Yann explained, we do not want a Config.in.legacy option. Indeed,
+> the new behavior is identical to having the option enabled, so there is
+> no point in having a Config.in.legacy entry.
 
-Ah, right, that would have been enough for my use-case.
+Yes, indeed.
 
-> But I agree that having also the .config can be handy (we have both in the
-> autobuilder results).
+Frank, what I meant was  that, usually we have to add a legacy entry to
+tell users what is happenning. However, in this particular case, it is
+not needed because a build with this option enabled previously will now
+yield the same result as  build now with this option removed.
 
-Yes, because the content of .config is influenced by the host as well,
-like for the host gcc version, so it is interesting to have the resultig
-.config.
+But this it is usualy to add a legacy entry, for the reviewr's sake, it
+is important that the commit log explains why a legacy entry is not
+needed.
 
-> >  .gitlab-ci.yml | 1 +
-> >  1 file changed, 1 insertion(+)
-> You forgot to duplicate the code to the .gitlab-ci.yml.in
-
-Damned, indeed! :-)
+Sorry if I was not explicit enough about this...
 
 Regards,
 Yann E. MORIN.
+
+> Best regards,
+> 
+> Thomas
+> -- 
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux and Kernel engineering
+> http://free-electrons.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
