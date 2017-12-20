@@ -1,33 +1,38 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Wed, 20 Dec 2017 14:35:30 -0200
-Subject: [Buildroot] [PATCH 1/2] libdrm-armada: new package
-In-Reply-To: <20171220150843.21154-2-didin@synopsys.com>
-References: <20171220150843.21154-1-didin@synopsys.com>
- <20171220150843.21154-2-didin@synopsys.com>
-Message-ID: <CAOMZO5DQsAVETVxn1u443H8XBpxj+K8Nn+st3_1xXe4cfsuWfg@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 20 Dec 2017 17:45:47 +0100
+Subject: [Buildroot] [git commit] linux-headers: bump 4.{4, 9, 14}.x series
+Message-ID: <20171220164559.9B7BD8351F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Evgeniy,
+commit: https://git.buildroot.net/buildroot/commit/?id=8447f04c1c2ea596d69c3a90d73e25f6d937e511
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, Dec 20, 2017 at 1:08 PM, Evgeniy Didin
-<Evgeniy.Didin@synopsys.com> wrote:
-> libdrm-armada is an Etnaviv libdrm buffer object management module.
-> It is used with xf86-driver-video-armada, which is Xorg driver for Etnaviv.
->
-> Signed-off-by: Evgeniy Didin <didin@synopsys.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Alexey Brodkin <abrodkin@synopsys.com>
-> Cc: arc-buildroot at synopsys.com
+Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/linux-headers/Config.in.host | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Is this patch really needed?
-
-I was under the impression that it was only needed prior to Etnaviv
-being supported in the official libdrm package.
-
-Regards,
-
-Fabio Estevam
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 11cb6fb..b86f6c5 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -252,11 +252,11 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.10.108"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.12.74"	if BR2_KERNEL_HEADERS_3_12
+ 	default "4.1.47"	if BR2_KERNEL_HEADERS_4_1
+-	default "4.4.106"	if BR2_KERNEL_HEADERS_4_4
+-	default "4.9.70"	if BR2_KERNEL_HEADERS_4_9
++	default "4.4.107"	if BR2_KERNEL_HEADERS_4_4
++	default "4.9.71"	if BR2_KERNEL_HEADERS_4_9
+ 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
+ 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
+ 	default "4.12.14"	if BR2_KERNEL_HEADERS_4_12
+ 	default "4.13.16"	if BR2_KERNEL_HEADERS_4_13
+-	default "4.14.7"	if BR2_KERNEL_HEADERS_4_14
++	default "4.14.8"	if BR2_KERNEL_HEADERS_4_14
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
