@@ -1,58 +1,47 @@
-From: Jagan Teki <jagan@amarulasolutions.com>
-Date: Wed, 20 Dec 2017 14:35:27 +0530
-Subject: [Buildroot] [PATCH v5 00/11] board: Add Allwinner A64/H5 boards
-In-Reply-To: <20171219204807.io5y3giwu3bpptxg@speedy.hunter>
-References: <1509559553-26544-1-git-send-email-jagan@amarulasolutions.com>
- <20171219204807.io5y3giwu3bpptxg@speedy.hunter>
-Message-ID: <CAMty3ZCQq0-1CZV8fOEz1LnaXe2M9AfGwYTOvq3rsYUbHCMNKw@mail.gmail.com>
+From: daggs <daggs@gmx.com>
+Date: Wed, 20 Dec 2017 10:29:11 +0100
+Subject: [Buildroot] [PATCH v3] odroidc2: add support for mainline
+ kernel and u-boot
+In-Reply-To: <20171219203643.yaaec5u7vobq3ipf@speedy.hunter>
+References: <20171216135722.12562-1-daggs@gmx.com>
+ <20171219203643.yaaec5u7vobq3ipf@speedy.hunter>
+Message-ID: <trinity-496411d8-d831-4275-b0f2-f29f77afbe7c-1513762151849@3c-app-mailcom-bs02>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Dec 20, 2017 at 2:18 AM, Sergey Matyukevich <geomatsi@gmail.com> wrote:
-> Hello Jagan,
->
->> All boards now use Mainline U-Boot, Linux and Nanaopi A64, A64-olinuxino
->> used linux-next patches since 4.13.7 have not been merged.
->>
->> Tested on rea hardware.
->>
->> Changes for v5:
->> - Fixed wiki links
->> - Update dtb file for sopine
->> Changes for v4:
->> - Added "arm-trusted-firmware: Build FIP for BL33" patch
->> - Added "uboot: Add U-Boot-bundles-ATF support" patch
->> - Droped sunxi64-post-build.sh config and script file
->> Changes for v3:
->> - Fixed Bananapi M1 comment on config file
->> - Add sunxi64-post-build.sh
->> - Add all sunxi64 boards
->> Changes for v2:
->> - Rebase on master
->>
->> [1] http://buildroot-busybox.2317881.n4.nabble.com/PATCH-v4-00-11-board-Add-Allwinner-A64-H5-boards-td178509.html
->>
->> Jagan Teki (11):
->>   arm-trusted-firmware: Build FIP for BL33
->>   uboot: Add U-Boot-bundles-ATF support
->>   board: Add Bananapi M64 support
->>   board: Add Pine64 support
->>   board: Add SoPine support
->>   board: Add FriendlyARM Nanopi A64 support
->>   board: Add FriendlyARM Nanopi NEO2 support
->>   board: Add Olimex A64-OLinuXino support
->>   board: Add Orangepi Win/Win Plus support
->>   board: Add Orangepi Prime support
->>   board: Add Orangepi Zero Plus2 support
->
-> All the ATF changes has been submitted by Thomas. So it should be ok to submit
-> support for all these boards. Do you plan to do so any time soon ? Let me know
-> if you are busy with other tasks at the moment. Then I would re-submit a part
-> of this patchset related to Orange Pi Zero Plus2 (keeping your authorship)
-> and adding WiFi support on top.
+Greetings Sergey,
 
-I'm in between with rebase and respective changes, will send it soon
-and copy you as well, thanks!
+>
+> > Changes v2 -> v3:
+> >  - board/hardkernel/odroidc2/odroidc2_mainline_defconfig is not needed because update_arm64_defconfig_with_meson_configs.patch is used.
+> > 
+> > Changes v1 -> v2:
+> >  - handle general mail patch rejects (Thomas)
+> >  - use BR2_TARGET_UBOOT_BOOT_SCRIPT and BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE instead of script's
+> >    boot.scr generation (Thomas)
+> >  - use defconfig in mainline kernel config (Thomas)
+> >  - add patch of mainline kernel diff instead of complete config and use arch default config (Arnout)
+> >  - move vendor's ATF handling to a separated patch (Thomas)
+> >  - add mainline config support for post image script (Thomas)
+> >  - fixed mainline defconfig rejects (Thomas)
+> >  - squashed all previous 2-8 patches into one patch (Thomas)
+> 
+> [...]
+> 
+> > +# Required tools to create the SD image
+> > +BR2_PACKAGE_HOST_DOSFSTOOLS=y
+> > +BR2_PACKAGE_HOST_GENIMAGE=y
+> > +BR2_PACKAGE_HOST_MESON_TOOLS=y
+> > +BR2_PACKAGE_HOST_MTOOLS=y
+> > +BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+> > +BR2_PACKAGE_HOST_ODROIDC2_ATF=y
+> 
+> I don't see neither meson-tools nor odroid2-atf packages in v3.
+> Am I missing something ?
+
+the first 3 patches were not changed, so I saw no value to resend them.
+
+Dagg.
