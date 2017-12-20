@@ -1,46 +1,61 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 20 Dec 2017 21:22:38 +0100
-Subject: [Buildroot] [git commit] nasm: bump to version 2.13.02
-Message-ID: <20171220202309.5785A8015F@busybox.osuosl.org>
+Date: Wed, 20 Dec 2017 21:22:33 +0100
+Subject: [Buildroot] [git commit] qemu: security bump to version 2.10.2
+Message-ID: <20171220202309.4D7C28015F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=388a4bda6b542168f657f45689e5b756e842c416
+commit: https://git.buildroot.net/buildroot/commit/?id=eb2b3df62666b0e2dc3042efdfecd7f62513bc9a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-And add a hash for the license file.
+Fixes the following security issues:
 
-Release notes:
-http://www.nasm.us/doc/nasmdocc.html
+CVE-2017-13672: QEMU (aka Quick Emulator), when built with the VGA display
+emulator support, allows local guest OS privileged users to cause a denial
+of service (out-of-bounds read and QEMU process crash) via vectors involving
+display update.
+
+CVE-2017-15118: Stack buffer overflow in NBD server triggered via long
+export name
+
+CVE-2017-15119: DoS via large option request
+
+CVE-2017-15268: Qemu through 2.10.0 allows remote attackers to cause a
+memory leak by triggering slow data-channel read operations, related to
+io/channel-websock.c.
+
+For more details, see the release announcement:
+https://lists.nongnu.org/archive/html/qemu-devel/2017-12/msg03618.html
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/nasm/nasm.hash | 3 ++-
- package/nasm/nasm.mk   | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ package/qemu/qemu.hash | 2 +-
+ package/qemu/qemu.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/nasm/nasm.hash b/package/nasm/nasm.hash
-index b88671c..260e5d7 100644
---- a/package/nasm/nasm.hash
-+++ b/package/nasm/nasm.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256 aa0213008f0433ecbe07bb628506a5c4be8079be20fc3532a5031fd639db9a5e  nasm-2.13.01.tar.xz
-+sha256 8ac3235f49a6838ff7a8d7ef7c19a4430d0deecc0c2d3e3e237b5e9f53291757  nasm-2.13.02.tar.xz
-+sha256 1563996c52e220e15ef2418e67d39488255aa8c28c89e617074d3afe3ee329e0  LICENSE
-diff --git a/package/nasm/nasm.mk b/package/nasm/nasm.mk
-index 3e2515e..ee3fd9c 100644
---- a/package/nasm/nasm.mk
-+++ b/package/nasm/nasm.mk
+diff --git a/package/qemu/qemu.hash b/package/qemu/qemu.hash
+index db43c9a..1173c1b 100644
+--- a/package/qemu/qemu.hash
++++ b/package/qemu/qemu.hash
+@@ -1,4 +1,4 @@
+ # Locally computed, tarball verified with GPG signature
+-sha256 1dd51a908fc68c7d935b0b31fb184c5669bc23b5a1b081816e824714f2a11caa  qemu-2.10.1.tar.xz
++sha256 fcfdaa1ecdaac8aead616fe811bfb8fe4a8f2cd59796aa446c5175b5af0e829f  qemu-2.10.2.tar.xz
+ sha256 6f04ae8364d0079a192b14635f4b1da294ce18724c034c39a6a41d1b09df6100  COPYING
+ sha256 48ffe9fc7f1d5462dbd19340bc4dd1d8a9e37c61ed535813e614cbe4a5f0d4df  COPYING.LIB
+diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+index 402ad68..345ef52 100644
+--- a/package/qemu/qemu.mk
++++ b/package/qemu/qemu.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--NASM_VERSION = 2.13.01
-+NASM_VERSION = 2.13.02
- NASM_SOURCE = nasm-$(NASM_VERSION).tar.xz
- NASM_SITE = http://www.nasm.us/pub/nasm/releasebuilds/$(NASM_VERSION)
- NASM_LICENSE = BSD-2-Clause
+-QEMU_VERSION = 2.10.1
++QEMU_VERSION = 2.10.2
+ QEMU_SOURCE = qemu-$(QEMU_VERSION).tar.xz
+ QEMU_SITE = http://download.qemu.org
+ QEMU_LICENSE = GPL-2.0, LGPL-2.1, MIT, BSD-3-Clause, BSD-2-Clause, Others/BSD-1c
