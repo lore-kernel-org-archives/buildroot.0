@@ -1,47 +1,54 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 20 Dec 2017 21:54:23 +0100
-Subject: [Buildroot] [git commit branch/2017.02.x] package/exim: security
- bump to version 4.89.1
-Message-ID: <20171220210024.BFA5B835D9@busybox.osuosl.org>
+Date: Wed, 20 Dec 2017 21:56:50 +0100
+Subject: [Buildroot] [git commit branch/2017.02.x]
+ package/x11r7/xlib_libXfont2: security bump to version 2.0.3
+Message-ID: <20171220210024.F11E3835D9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=28b6850585e7538e8c83459170c21290e9858a30
+commit: https://git.buildroot.net/buildroot/commit/?id=e7dd1d72a829d375181a06f22748cf508e741517
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Fixes CVE-2017-16943 & CVE-2017-16944:
-https://lists.exim.org/lurker/message/20171128.215505.79ea8efa.en.html
+Fixes CVE-2017-16611:
+https://lists.x.org/archives/xorg-announce/2017-November/002824.html
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 06473084f4945eb254e589f7935228ae613ec540)
+(cherry picked from commit 35f6288a54bca343b180a4d210ffd6e1b5655ab1)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/exim/exim.hash | 2 +-
- package/exim/exim.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/x11r7/xlib_libXfont2/xlib_libXfont2.hash | 10 +++++-----
+ package/x11r7/xlib_libXfont2/xlib_libXfont2.mk   |  2 +-
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/exim/exim.hash b/package/exim/exim.hash
-index 29b9989..d961083 100644
---- a/package/exim/exim.hash
-+++ b/package/exim/exim.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 912f2ee03c8dba06a3a4c0ee40522d367e1b65dc59e38dfcc1f5d9eecff51ab0  exim-4.89.tar.bz2
-+sha256 1c853bc960dff0a0e51e3e28bc4a4a8165b58b41bb64ea3abb90f254d9947a8c  exim-4.89.1.tar.bz2
-diff --git a/package/exim/exim.mk b/package/exim/exim.mk
-index 8638388..1eeb182 100644
---- a/package/exim/exim.mk
-+++ b/package/exim/exim.mk
+diff --git a/package/x11r7/xlib_libXfont2/xlib_libXfont2.hash b/package/x11r7/xlib_libXfont2/xlib_libXfont2.hash
+index 3e763b2..1816b4b 100644
+--- a/package/x11r7/xlib_libXfont2/xlib_libXfont2.hash
++++ b/package/x11r7/xlib_libXfont2/xlib_libXfont2.hash
+@@ -1,5 +1,5 @@
+-# From https://lists.x.org/archives/xorg-announce/2017-October/002813.html
+-md5 d39e6446e46f939486d1a8b856e8b67b  libXfont2-2.0.2.tar.bz2
+-sha1 d5117914a026b3fd47123cb1c2a22daaae3b63e4  libXfont2-2.0.2.tar.bz2
+-sha256 94088d3b87f7d42c7116d9adaad155859e93330c6e47f5989f2de600b9a6c111  libXfont2-2.0.2.tar.bz2
+-sha512 d62b0c3d663a2c668796cca8c6c2a90f83feeae1253b7d946668d33502cd8099c963285b88db4f745efb0d4ff783c118eb3d84cb8e6e1724586e1ef2be23e593  libXfont2-2.0.2.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2017-November/002824.html
++md5  b7ca87dfafeb5205b28a1e91ac3efe85  libXfont2-2.0.3.tar.bz2
++sha1 1110f1ad4061d9e8131ecb941757480e3e32bca0  libXfont2-2.0.3.tar.bz2
++sha256 0e8ab7fd737ccdfe87e1f02b55f221f0bd4503a1c5f28be4ed6a54586bac9c4e  libXfont2-2.0.3.tar.bz2
++sha512 648b664e2aa58cbc7366a1b05873aa06bd4a38060f64085783043388244af8ceced77b29a22c3ac8b6d34cd226e093bbbcc785ea1748ea65720fe7ea05b4b44b  libXfont2-2.0.3.tar.bz2
+diff --git a/package/x11r7/xlib_libXfont2/xlib_libXfont2.mk b/package/x11r7/xlib_libXfont2/xlib_libXfont2.mk
+index 696c605..3f1bdee 100644
+--- a/package/x11r7/xlib_libXfont2/xlib_libXfont2.mk
++++ b/package/x11r7/xlib_libXfont2/xlib_libXfont2.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--EXIM_VERSION = 4.89
-+EXIM_VERSION = 4.89.1
- EXIM_SOURCE = exim-$(EXIM_VERSION).tar.bz2
- EXIM_SITE = ftp://ftp.exim.org/pub/exim/exim4
- EXIM_LICENSE = GPLv2+
+-XLIB_LIBXFONT2_VERSION = 2.0.2
++XLIB_LIBXFONT2_VERSION = 2.0.3
+ XLIB_LIBXFONT2_SOURCE = libXfont2-$(XLIB_LIBXFONT2_VERSION).tar.bz2
+ XLIB_LIBXFONT2_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBXFONT2_LICENSE = MIT
