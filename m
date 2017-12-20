@@ -1,85 +1,82 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 20 Dec 2017 18:46:23 +0100
-Subject: [Buildroot] [git commit] board: Add FriendlyARM Nanopi A64 support
-Message-ID: <20171220175918.59DF183545@busybox.osuosl.org>
+Date: Wed, 20 Dec 2017 17:48:07 +0100
+Subject: [Buildroot] [git commit] board: Add Bananapi M64 support
+Message-ID: <20171220175918.394FF83574@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=43b1dd944d7231ede53ffd32708e3abd2af37843
+commit: https://git.buildroot.net/buildroot/commit/?id=5b9ac80fef2581632d2e6a42c479822929e9ac10
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add initial support for FriendlyARM Nanopi A64
-board with below features:
+Add initial support for bananapi M64 board
+with below features:
 - U-Boot 2017.11
 - Linux 4.14
 - Default packages from buildroot
 
-Cc: Yuefei <yftan@friendlyarm.com>
+Cc: Jason <manager@sinovoip.com.cn>
+Cc: hailymei at banana-pi.com <hailymei@banana-pi.com>
 Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .gitlab-ci.yml                            |  1 +
- DEVELOPERS                                |  2 ++
- board/friendlyarm/nanopi-a64/boot.cmd     |  6 ++++
- board/friendlyarm/nanopi-a64/genimage.cfg | 39 +++++++++++++++++++++++++
- board/friendlyarm/nanopi-a64/readme.txt   | 37 ++++++++++++++++++++++++
- configs/friendlyarm_nanopi_a64_defconfig  | 47 +++++++++++++++++++++++++++++++
- 6 files changed, 132 insertions(+)
+ .gitlab-ci.yml                           |  1 +
+ DEVELOPERS                               |  1 +
+ board/bananapi/bananapi-m64/boot.cmd     |  6 ++++
+ board/bananapi/bananapi-m64/genimage.cfg | 39 ++++++++++++++++++++++++++
+ board/bananapi/bananapi-m64/readme.txt   | 37 +++++++++++++++++++++++++
+ configs/bananapi_m64_defconfig           | 47 ++++++++++++++++++++++++++++++++
+ 6 files changed, 131 insertions(+)
 
 diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index 820a070..15f98c0 100644
+index 691669f..a64a15b 100644
 --- a/.gitlab-ci.yml
 +++ b/.gitlab-ci.yml
-@@ -123,6 +123,7 @@ freescale_imx6ulevk_defconfig: *defconfig
- freescale_imx7dsabresd_defconfig: *defconfig
- freescale_mpc8315erdb_defconfig: *defconfig
- freescale_p1010rdb_pa_defconfig: *defconfig
-+friendlyarm_nanopi_a64_defconfig: *defconfig
- galileo_defconfig: *defconfig
- gdb_bfin_bf512_defconfig: *defconfig
- grinn_chiliboard_defconfig: *defconfig
+@@ -94,6 +94,7 @@ atmel_sama5d4_xplained_mmc_defconfig: *defconfig
+ atmel_sama5d4_xplained_mmc_dev_defconfig: *defconfig
+ bananapi_m1_defconfig: *defconfig
+ bananapi_m2_plus_defconfig: *defconfig
++bananapi_m64_defconfig: *defconfig
+ bananapro_defconfig: *defconfig
+ beagleboardx15_defconfig: *defconfig
+ beaglebone_defconfig: *defconfig
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 74dd62f..c8a885c 100644
+index fe989c0..54e75a5 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -772,9 +772,11 @@ F:	package/axel/
- N:	Jagan Teki <jagan@amarulasolutions.com>
+@@ -773,6 +773,7 @@ N:	Jagan Teki <jagan@amarulasolutions.com>
  F:	board/bananapi/
  F:	board/engicam/
-+F:	board/friendlyarm/nanopi-a64/
- F:	board/pine64/
  F:	configs/bananapi_m1_defconfig
- F:	configs/bananapi_m64_defconfig
-+F:	configs/friendlyarm_nanopi_a64_defconfig
- F:	configs/pine64_defconfig
- F:	configs/pine64_sopine_defconfig
++F:	configs/bananapi_m64_defconfig
  F:	configs/engicam_imx6qdl_icore_defconfig
-diff --git a/board/friendlyarm/nanopi-a64/boot.cmd b/board/friendlyarm/nanopi-a64/boot.cmd
+ F:	configs/engicam_imx6qdl_icore_qt5_defconfig
+ F:	configs/engicam_imx6qdl_icore_rqs_defconfig
+diff --git a/board/bananapi/bananapi-m64/boot.cmd b/board/bananapi/bananapi-m64/boot.cmd
 new file mode 100644
-index 0000000..446bd85
+index 0000000..d35c9b0
 --- /dev/null
-+++ b/board/friendlyarm/nanopi-a64/boot.cmd
++++ b/board/bananapi/bananapi-m64/boot.cmd
 @@ -0,0 +1,6 @@
 +setenv bootargs console=ttyS0,115200 earlyprintk root=/dev/mmcblk0p2 rootwait
 +
 +fatload mmc 0 $kernel_addr_r Image
-+fatload mmc 0 $fdt_addr_r sun50i-a64-nanopi-a64.dtb
++fatload mmc 0 $fdt_addr_r sun50i-a64-bananapi-m64.dtb
 +
 +booti $kernel_addr_r - $fdt_addr_r
-diff --git a/board/friendlyarm/nanopi-a64/genimage.cfg b/board/friendlyarm/nanopi-a64/genimage.cfg
+diff --git a/board/bananapi/bananapi-m64/genimage.cfg b/board/bananapi/bananapi-m64/genimage.cfg
 new file mode 100644
-index 0000000..66b6c5f
+index 0000000..9730d8f
 --- /dev/null
-+++ b/board/friendlyarm/nanopi-a64/genimage.cfg
++++ b/board/bananapi/bananapi-m64/genimage.cfg
 @@ -0,0 +1,39 @@
 +image boot.vfat {
 +	vfat {
 +		files = {
 +			"Image",
-+			"sun50i-a64-nanopi-a64.dtb",
++			"sun50i-a64-bananapi-m64.dtb",
 +			"boot.scr"
 +		}
 +	}
@@ -114,31 +111,31 @@ index 0000000..66b6c5f
 +		image = "rootfs.ext4"
 +	}
 +}
-diff --git a/board/friendlyarm/nanopi-a64/readme.txt b/board/friendlyarm/nanopi-a64/readme.txt
+diff --git a/board/bananapi/bananapi-m64/readme.txt b/board/bananapi/bananapi-m64/readme.txt
 new file mode 100644
-index 0000000..88c4e66
+index 0000000..0dec3e5
 --- /dev/null
-+++ b/board/friendlyarm/nanopi-a64/readme.txt
++++ b/board/bananapi/bananapi-m64/readme.txt
 @@ -0,0 +1,37 @@
 +Intro
 +=====
 +
 +This default configuration will allow you to start experimenting with the
-+buildroot environment for the Nanopi A64. With the current configuration
++buildroot environment for the Bananapi M64. With the current configuration
 +it will bring-up the board, and allow access through the serial console.
 +
-+Nanopi A64 link:
-+http://nanopi.io/nanopi-a64.html
++Bananapi M64 link:
++http://www.banana-pi.org/m64.html
 +
 +Wiki link:
-+https://openedev.amarulasolutions.com/display/ODWIKI/FriendlyARM+Nanopi+A64
++https://openedev.amarulasolutions.com/display/ODWIKI/Bananapi+M64
 +
 +This configuration uses U-Boot mainline and kernel mainline.
 +
 +How to build
 +============
 +
-+    $ make friendlyarm_nanopi_a64_defconfig
++    $ make bananapi_m64_defconfig
 +    $ make
 +
 +Note: you will need access to the internet to download the required
@@ -155,13 +152,13 @@ index 0000000..88c4e66
 +  $ sudo dd if=output/images/sdcard.img of=/dev/sdX
 +  $ sudo sync
 +
-+Insert the micro SDcard in your Nanopi A64 and power it up. The console
++Insert the micro SDcard in your Bananapi M64 and power it up. The console
 +is on the serial line, 115200 8N1.
-diff --git a/configs/friendlyarm_nanopi_a64_defconfig b/configs/friendlyarm_nanopi_a64_defconfig
+diff --git a/configs/bananapi_m64_defconfig b/configs/bananapi_m64_defconfig
 new file mode 100644
-index 0000000..1b668be
+index 0000000..7d1ed18
 --- /dev/null
-+++ b/configs/friendlyarm_nanopi_a64_defconfig
++++ b/configs/bananapi_m64_defconfig
 @@ -0,0 +1,47 @@
 +BR2_aarch64=y
 +BR2_cortex_a53=y
@@ -183,7 +180,7 @@ index 0000000..1b668be
 +BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
 +BR2_TARGET_UBOOT_CUSTOM_VERSION=y
 +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.11"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nanopi_a64"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="bananapi_m64"
 +BR2_TARGET_UBOOT_NEEDS_DTC=y
 +BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
 +BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
@@ -191,7 +188,7 @@ index 0000000..1b668be
 +BR2_TARGET_UBOOT_SPL=y
 +BR2_TARGET_UBOOT_SPL_NAME="spl/sunxi-spl.bin"
 +BR2_TARGET_UBOOT_BOOT_SCRIPT=y
-+BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE="board/friendlyarm/nanopi-a64/boot.cmd"
++BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE="board/bananapi/bananapi-m64/boot.cmd"
 +
 +# Kernel
 +BR2_LINUX_KERNEL=y
@@ -199,14 +196,14 @@ index 0000000..1b668be
 +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.14"
 +BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
 +BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun50i-a64-nanopi-a64"
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun50i-a64-bananapi-m64"
 +
 +# Filesystem
-+BR2_TARGET_GENERIC_ISSUE="Welcome to FriendlyARM Nanopi A64"
++BR2_TARGET_GENERIC_ISSUE="Welcome to Bananapi M64"
 +BR2_TARGET_ROOTFS_EXT2=y
 +BR2_TARGET_ROOTFS_EXT2_4=y
 +BR2_PACKAGE_HOST_DOSFSTOOLS=y
 +BR2_PACKAGE_HOST_GENIMAGE=y
 +BR2_PACKAGE_HOST_MTOOLS=y
 +BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/friendlyarm/nanopi-a64/genimage.cfg"
++BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/bananapi/bananapi-m64/genimage.cfg"
