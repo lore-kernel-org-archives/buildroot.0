@@ -1,52 +1,71 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 20 Dec 2017 22:27:38 +0100
-Subject: [Buildroot] [PATCH 0/2] fs/iso9660: add transparent compression
-Message-ID: <cover.1513805241.git.yann.morin.1998@free.fr>
+Date: Wed, 20 Dec 2017 22:27:42 +0100
+Subject: [Buildroot] [PATCH 1/2] fs/iso9660: add option for transparent
+ (de)compression
+In-Reply-To: <cover.1513805241.git.yann.morin.1998@free.fr>
+References: <cover.1513805241.git.yann.morin.1998@free.fr>
+Message-ID: <8590724ca7fd08819699645bbc05e7175196e2d2.1513805241.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ fs/iso9660/Config.in  |  9 +++++++++
+ fs/iso9660/iso9660.mk | 12 ++++++++++++
+ 2 files changed, 21 insertions(+)
 
-This two-patch series introduces support for generating iso9660 images
-with compressed files in them, using transparent (de)compression.
-
-
-Regards,
-Yann E. MORIN.
-
-
-The following changes since commit 5b85c6a038cc210355d8d5715cdf6fa73d18e8ac
-
-  pulseaudio: fix libsamplerate dependency (2017-12-20 21:37:18 +0100)
-
-
-are available in the git repository at:
-
-  git://git.buildroot.org/~ymorin/git/buildroot.git
-
-for you to fetch changes up to d9148095910e211f1b38a85f93a10ab88fa1af04
-
-  core/tests: add test for compressed iso9660 (2017-12-20 22:12:23 +0100)
-
-
-----------------------------------------------------------------
-Yann E. MORIN (2):
-      fs/iso9660: add option for transparent (de)compression
-      core/tests: add test for compressed iso9660
-
- .gitlab-ci.yml                           |  2 ++
- fs/iso9660/Config.in                     |  9 +++++++
- fs/iso9660/iso9660.mk                    | 12 ++++++++++
- support/testing/tests/fs/test_iso9660.py | 41 ++++++++++++++++++++++++++++++++
- 4 files changed, 64 insertions(+)
-
+diff --git a/fs/iso9660/Config.in b/fs/iso9660/Config.in
+index 842c987f21..1457c80569 100644
+--- a/fs/iso9660/Config.in
++++ b/fs/iso9660/Config.in
+@@ -63,6 +63,15 @@ config BR2_TARGET_ROOTFS_ISO9660_INITRD
+ 	  contain a kernel image, an initrd image (unless an initramfs
+ 	  linked into the kernel is used) and the bootloader.
+ 
++config BR2_TARGET_ROOTFS_ISO9660_TRANSP_COMPRESS
++	bool "transparent compression"
++	depends on !BR2_TARGET_ROOTFS_ISO9660_INITRD
++	depends on !BR2_TARGET_ROOTFS_INITRAMFS
++	help
++	  Say 'y' to enable use of transparent (de)compression. Files
++	  are stored compressed and will be decompressed on-the-fly
++	  upon access at runtime.
++
+ config BR2_TARGET_ROOTFS_ISO9660_HYBRID
+ 	bool "Build hybrid image"
+ 	depends on BR2_TARGET_ROOTFS_ISO9660_ISOLINUX
+diff --git a/fs/iso9660/iso9660.mk b/fs/iso9660/iso9660.mk
+index c2de27101a..771ad4eceb 100644
+--- a/fs/iso9660/iso9660.mk
++++ b/fs/iso9660/iso9660.mk
+@@ -41,6 +41,17 @@ define ROOTFS_ISO9660_CREATE_TEMPDIR
+ 	mkdir -p $(ROOTFS_ISO9660_TARGET_DIR)
+ endef
+ ROOTFS_ISO9660_PRE_GEN_HOOKS += ROOTFS_ISO9660_CREATE_TEMPDIR
++else ifeq ($(BR2_TARGET_ROOTFS_ISO9660_TRANSP_COMPRESS),y)
++ROOTFS_ISO9660_TARGET_DIR = $(FS_DIR)/rootfs.iso9660.tmp
++# This must be early, before we copy the bootloader files
++define ROOTFS_ISO9660_MKZFTREE
++	$(RM) -rf $(ROOTFS_ISO9660_TARGET_DIR)
++	mkzftree -X -z 9 -p $(PARALLEL_JOBS) \
++		$(TARGET_DIR) \
++		$(ROOTFS_ISO9660_TARGET_DIR)
++endef
++ROOTFS_ISO9660_PRE_GEN_HOOKS += ROOTFS_ISO9660_MKZFTREE
++ROOTFS_ISO9660_GENISOIMAGE_OPTS += -z
+ else
+ ROOTFS_ISO9660_TARGET_DIR = $(TARGET_DIR)
+ endif
+@@ -117,6 +128,7 @@ endif # ROOTFS_ISO9660_USE_INITRD
+ define ROOTFS_ISO9660_CMD
+ 	$(HOST_DIR)/bin/genisoimage -J -R -b $(ROOTFS_ISO9660_BOOT_IMAGE) \
+ 		-no-emul-boot -boot-load-size 4 -boot-info-table \
++		$(ROOTFS_ISO9660_GENISOIMAGE_OPTS) \
+ 		-o $@ $(ROOTFS_ISO9660_TARGET_DIR)
+ endef
+ 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.11.0
