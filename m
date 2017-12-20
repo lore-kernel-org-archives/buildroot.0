@@ -1,62 +1,61 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 20 Dec 2017 16:25:42 +0100
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 20 Dec 2017 17:36:15 +0200
 Subject: [Buildroot] [PATCH] libsoxr: remove unicode dash from help text
-In-Reply-To: <aba1f1782c8833a67af16f2325a5fccf6cc2e689.1513782978.git.baruch@tkos.co.il>
+In-Reply-To: <20171220152542.GF21413@scaer>
 References: <aba1f1782c8833a67af16f2325a5fccf6cc2e689.1513782978.git.baruch@tkos.co.il>
-Message-ID: <20171220152542.GF21413@scaer>
+ <20171220152542.GF21413@scaer>
+Message-ID: <20171220153615.3mceexnepxcmixuk@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Baruch, All,
+Hi Yann,
 
-On 2017-12-20 17:16 +0200, Baruch Siach spake thusly:
-> This would make the unicode challenged menuconfig show something
-> sensible.
-
-It works well for me... But mconf here is linked against libncursesw.so.5
-so I guess that's because the widechar ncurses is missing on your system.
-
-> Split the sentence for the text to make sense.
+On Wed, Dec 20, 2017 at 04:25:42PM +0100, Yann E. MORIN wrote:
+> On 2017-12-20 17:16 +0200, Baruch Siach spake thusly:
+> > This would make the unicode challenged menuconfig show something
+> > sensible.
 > 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> It works well for me... But mconf here is linked against libncursesw.so.5
+> so I guess that's because the widechar ncurses is missing on your system.
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Indeed. mconf is liked with libncurses.so.5, even though I have 
+libncursesw.so.5 installed here.
 
-Regards,
-Yann E. MORIN.
+baruch
 
-> ---
->  package/libsoxr/Config.in | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> > Split the sentence for the text to make sense.
+> > 
+> > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 > 
-> diff --git a/package/libsoxr/Config.in b/package/libsoxr/Config.in
-> index a218ae99c89c..ae1ea1028030 100644
-> --- a/package/libsoxr/Config.in
-> +++ b/package/libsoxr/Config.in
-> @@ -2,7 +2,7 @@ config BR2_PACKAGE_LIBSOXR
->  	bool "libsoxr"
->  	help
->  	  The SoX Resampler library `libsoxr' performs one-dimensional
-> -	  sample-rate conversion?it may be used, for example, to
-> +	  sample-rate conversion. It may be used, for example, to
->  	  resample PCM-encoded audio.
->  
->  	  It aims to give fast and high quality results for any constant
-> -- 
-> 2.15.1
+> Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> Regards,
+> Yann E. MORIN.
+> 
+> > ---
+> >  package/libsoxr/Config.in | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/package/libsoxr/Config.in b/package/libsoxr/Config.in
+> > index a218ae99c89c..ae1ea1028030 100644
+> > --- a/package/libsoxr/Config.in
+> > +++ b/package/libsoxr/Config.in
+> > @@ -2,7 +2,7 @@ config BR2_PACKAGE_LIBSOXR
+> >  	bool "libsoxr"
+> >  	help
+> >  	  The SoX Resampler library `libsoxr' performs one-dimensional
+> > -	  sample-rate conversion?it may be used, for example, to
+> > +	  sample-rate conversion. It may be used, for example, to
+> >  	  resample PCM-encoded audio.
+> >  
+> >  	  It aims to give fast and high quality results for any constant
+
+baruch
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
