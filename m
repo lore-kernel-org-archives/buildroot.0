@@ -1,25 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 20 Dec 2017 21:51:41 +0100
-Subject: [Buildroot] [PATCH 1/1] samba4: ensure that copied cache.txt is
- writable
-In-Reply-To: <1511924124-3938-1-git-send-email-danomimanchego123@gmail.com>
- (Danomi Manchego's message of "Tue, 28 Nov 2017 21:55:24 -0500")
-References: <1511924124-3938-1-git-send-email-danomimanchego123@gmail.com>
-Message-ID: <87wp1hazs2.fsf@dell.be.48ers.dk>
+Date: Wed, 20 Dec 2017 21:52:56 +0100
+Subject: [Buildroot] [PATCH] support/scripts/size-stats: avoid
+ divide-by-zero
+In-Reply-To: <20171128033707.15072-1-yurovsky@gmail.com> (Andrey Yurovsky's
+ message of "Mon, 27 Nov 2017 19:37:07 -0800")
+References: <20171127220849.5f62e6fc@windsurf.home>
+ <20171128033707.15072-1-yurovsky@gmail.com>
+Message-ID: <87shc5azpz.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Danomi" == Danomi Manchego <danomimanchego123@gmail.com> writes:
+>>>>> "Andrey" == Andrey Yurovsky <yurovsky@gmail.com> writes:
 
- > If the Buildroot tree is read-only, then cache.txt is copied read-only into
- > the build directory, and the configuration step fails.  Fix this in the
- > same way we do in other places, by opening permissions as we copy the file
- > using $(INSTALL).
+ > Some packages (ex: skeleton-init-systemd) have a zero size so we cannot
+ > divide by the package size. In that case make their percent zero
+ > explicitly and avoid a ZeroDivisionError exception.
 
- > Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+ > Signed-off-by: Andrey Yurovsky <yurovsky@gmail.com>
 
 Committed to 2017.02.x, thanks.
 
