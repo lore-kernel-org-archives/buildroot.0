@@ -1,64 +1,109 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 20 Dec 2017 11:26:04 +0100
-Subject: [Buildroot] [PATCH v2 1/1] erlang: remove non-SMP build option
-In-Reply-To: <1513709144-12840-1-git-send-email-fhunleth@troodon-software.com>
-References: <1513709144-12840-1-git-send-email-fhunleth@troodon-software.com>
-Message-ID: <20171220112604.6a560700@windsurf.lan>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 20 Dec 2017 12:06:06 +0100
+Subject: [Buildroot] [PATCH] utils/checkpackagelib: exclude two files
+ from Config.in indentation check
+In-Reply-To: <20171219092852.4930a601@windsurf>
+References: <20171218084303.12472-1-thomas.petazzoni@free-electrons.com>
+ <20171218220344.GC2903@scaer> <20171219092852.4930a601@windsurf>
+Message-ID: <20171220110606.GA10605@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Thomas, All,
 
-On Tue, 19 Dec 2017 13:45:44 -0500, Frank Hunleth wrote:
-> The non-SMP scheduler was deprecated with the Erlang/OTP 20.0 release and
-> slated for removal with the next major Erlang release. Since the non-SMP
-> scheduler isn't even built anymore, this option no longer has the
-> intended effect of saving space or compile time. The SMP scheduler
-> supports both SMP and non-SMP processors, so removing the option will
-> not break any platforms.
+On 2017-12-19 09:28 +0100, Thomas Petazzoni spake thusly:
+> On Mon, 18 Dec 2017 23:03:44 +0100, Yann E. MORIN wrote:
+> > Can't we simply fix those two files to not have that unusual indentation
+> > in the first place?
+> > 
+> > AFAICS, that special indentation is about the 'source' lines... Surely
+> > that does not bring much to have them indented, and they could simply be
+> > left-aligned...
 > 
-> Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
-> ---
-> Changes v1 -> v2:
->   - Added text to Config.in.legacy to explain the removal of the option
->     (suggested by Yann - I added to Config.in.legacy after thinking about
->      it, since anyone who previously selected this option may be surprised
->      to see the SMP scheduler in their process list.)
-> 
->  Config.in.legacy         | 10 ++++++++++
->  package/erlang/Config.in | 10 ----------
->  package/erlang/erlang.mk |  4 ----
->  3 files changed, 10 insertions(+), 14 deletions(-)
-> 
-> diff --git a/Config.in.legacy b/Config.in.legacy
-> index decbace..1607df6 100644
-> --- a/Config.in.legacy
-> +++ b/Config.in.legacy
-> @@ -153,6 +153,16 @@ config BR2_PACKAGE_GNUPG2_GPGV2
->  	  The gpgv2 executable is now named gpgv. The config option
->  	  has been renamed accordingly.
-> 
-> +config BR2_PACKAGE_ERLANG_SMP
-> +	bool "erlang smp option removed"
-> +	select BR2_LEGACY
-> +	help
-> +	  This option used to disable Erlang's SMP scheduler to save
-> +	  space. Since Erlang 20.0 deprecated the non-SMP scheduler and
-> +	  no longer builds it, it is no longer relevant. See the Erlang
-> +	  20.0 release notes for more information. Note that the SMP
-> +	  scheduler runs on both SMP and non-SMP CPUs.
+> package/Config.in is also indented in the same way, and there's a
+> reason: when you do a diff, diff will tell you in which section the
+> change is.
 
-As Yann explained, we do not want a Config.in.legacy option. Indeed,
-the new behavior is identical to having the option enabled, so there is
-no point in having a Config.in.legacy entry.
+I know very well why package/Config.in is indented, I even Acked the
+patch doing so, back in the day... ;-)
 
-Best regards,
+I'm just questioning if we could instead drop that indentation in the
+two other files, because I believe it does not bring much for them.
 
-Thomas
+> For example, if I do a change in the middle of "Audio and
+> video applications", I get:
+> 
+> diff --git a/package/Config.in b/package/Config.in
+> index bd39a374f0..dbcf53d1ce 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -31,7 +31,7 @@ menu "Audio and video applications"
+>         source "package/mimic/Config.in"
+>         source "package/miraclecast/Config.in"
+>         source "package/mjpegtools/Config.in"
+> -       source "package/modplugtools/Config.in"
+> +       source "package/foomodplugtools/Config.in"
+>         source "package/motion/Config.in"
+>         source "package/mpd/Config.in"
+>         source "package/mpd-mpc/Config.in"
+> 
+> See the @@ menu "Audio and video applications" ? You wouldn't get this
+> without the indentation.
+
+Thanks, I know how to read a diff... ;-)
+
+But it does not always work, see:
+
+diff --git a/package/Config.in b/package/Config.in
+index bd39a374f0..83bb126cb8 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -312,6 +312,7 @@ endif
+ 	source "package/tekui/Config.in"
+ 	source "package/weston/Config.in"
+ 	source "package/x11r7/Config.in"
++	source "package/blabla/Config.in"
+ 
+ comment "X applications"
+ 	depends on BR2_PACKAGE_XORG7
+@@ -375,6 +376,7 @@ endmenu
+ 	source "package/a10disp/Config.in"
+ 	source "package/acpica/Config.in"
+ 	source "package/acpid/Config.in"
++	source "package/foo/Config.in"
+ 	source "package/acpitool/Config.in"
+ 	source "package/aer-inject/Config.in"
+ 	source "package/am335x-pru-package/Config.in"
+
+> So the indentation does serve a purpose, and has been intentionally
+> added, at least to package/Config.in. I think the same
+> reason/motivation applies to package/kodi/Config.in and
+> package/x11r7/Config.in.
+
+Arguably, and that's what I'm sayging: at least for those last two
+files, we could well drop the idnentation because it is not so useful
+(although it works better for them than for package/Config.in).
+
+But oh well...
+
+Regards,
+Yann E. MORIN.
+
+> Best regards,
+> 
+> Thomas Petazzoni
+> -- 
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux and Kernel engineering
+> http://free-electrons.com
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
