@@ -1,29 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 20 Dec 2017 21:50:29 +0100
-Subject: [Buildroot] [PATCH 1/1] webkitgtk: Add upstream patch to ensure
- CMAKE_BUILD_TYPE is honored
-In-Reply-To: <20171129141751.9325-1-aperez@igalia.com> (Adrian Perez de
- Castro's message of "Wed, 29 Nov 2017 16:17:51 +0200")
-References: <20171129141751.9325-1-aperez@igalia.com>
-Message-ID: <871sjpceei.fsf@dell.be.48ers.dk>
+Date: Wed, 20 Dec 2017 21:51:41 +0100
+Subject: [Buildroot] [PATCH 1/1] samba4: ensure that copied cache.txt is
+ writable
+In-Reply-To: <1511924124-3938-1-git-send-email-danomimanchego123@gmail.com>
+ (Danomi Manchego's message of "Tue, 28 Nov 2017 21:55:24 -0500")
+References: <1511924124-3938-1-git-send-email-danomimanchego123@gmail.com>
+Message-ID: <87wp1hazs2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Adrian" == Adrian Perez de Castro <aperez@igalia.com> writes:
+>>>>> "Danomi" == Danomi Manchego <danomimanchego123@gmail.com> writes:
 
- > Make WebKitGTK+ honor the value of CMAKE_BUILD_TYPE defined in the CMake
- > toolchain file by backporting the following upstream WebKit patch:
+ > If the Buildroot tree is read-only, then cache.txt is copied read-only into
+ > the build directory, and the configuration step fails.  Fix this in the
+ > same way we do in other places, by opening permissions as we copy the file
+ > using $(INSTALL).
 
- >     https://trac.webkit.org/changeset/225168
-
- > This reduces the generated binary sizes when building in "Release" mode
- > (BR2_ENABLE_DEBUG=n), for example when targeting ARMv8 the size reduction
- > is ~17 MiB.
-
- > Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+ > Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
 
 Committed to 2017.02.x, thanks.
 
