@@ -1,125 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 20 Dec 2017 21:54:12 +0100
-Subject: [Buildroot] [git commit branch/2017.02.x] package/exim: bump
- version to 4.89
-Message-ID: <20171220210024.B3F8F835D9@busybox.osuosl.org>
+Date: Wed, 20 Dec 2017 21:54:23 +0100
+Subject: [Buildroot] [git commit branch/2017.02.x] package/exim: security
+ bump to version 4.89.1
+Message-ID: <20171220210024.BFA5B835D9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6c83ab28c3d45bc9ca20bc58e2a1eba03ddbdb33
+commit: https://git.buildroot.net/buildroot/commit/?id=28b6850585e7538e8c83459170c21290e9858a30
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Rebased patch #0003, added uClibc compatibility patch.
+Fixes CVE-2017-16943 & CVE-2017-16944:
+https://lists.exim.org/lurker/message/20171128.215505.79ea8efa.en.html
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit d791e9101cc7e202b396bb86a26cad81efd501e9)
+(cherry picked from commit 06473084f4945eb254e589f7935228ae613ec540)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...ip-version-check-and-symlink-installation.patch | 11 +++++----
- package/exim/0004-glibc.patch                      | 27 ++++++++++++++++++++++
- package/exim/exim.hash                             |  2 +-
- package/exim/exim.mk                               |  4 ++--
- 4 files changed, 36 insertions(+), 8 deletions(-)
+ package/exim/exim.hash | 2 +-
+ package/exim/exim.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/exim/0003-Skip-version-check-and-symlink-installation.patch b/package/exim/0003-Skip-version-check-and-symlink-installation.patch
-index 94d21ae..a342d6e 100644
---- a/package/exim/0003-Skip-version-check-and-symlink-installation.patch
-+++ b/package/exim/0003-Skip-version-check-and-symlink-installation.patch
-@@ -9,6 +9,8 @@ Inspired by:
- http://patch-tracker.debian.org/patch/series/view/exim4/4.76-2/35_install.dpatch
- 
- Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-+(rebased against exim 4.89)
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
- ---
-  scripts/exim_install |    7 +++++--
-  1 files changed, 5 insertions(+), 2 deletions(-)
-@@ -17,7 +19,7 @@ diff --git a/scripts/exim_install b/scripts/exim_install
- index e68e7d5..487a4e1 100755
- --- a/scripts/exim_install
- +++ b/scripts/exim_install
--@@ -59,6 +59,8 @@ while [ $# -gt 0 ] ; do
-+@@ -58,6 +58,8 @@
-    shift
-  done
-  
-@@ -26,15 +28,14 @@ index e68e7d5..487a4e1 100755
-  # Get the values of BIN_DIRECTORY, CONFIGURE_FILE, INFO_DIRECTORY, NO_SYMLINK,
-  # SYSTEM_ALIASES_FILE, and EXE from the global Makefile (in the build
-  # directory). EXE is empty except in the Cygwin environment. In each case, keep
--@@ -218,8 +220,9 @@ while [ $# -gt 0 ]; do
-+@@ -217,9 +219,7 @@
-    # The exim binary is handled specially
-  
-    if [ $name = exim${EXE} ]; then
---    version=exim-`./exim -bV -C /dev/null | \
-+-    exim="./exim -bV -C /dev/null"
-+-    version=exim-`$exim 2>/dev/null | \
- -      awk '/Exim version/ { OFS=""; print $3,"-",substr($4,2,length($4)-1) }'`${EXE}
- +    version=exim
--+#    version=exim-`./exim -bV -C /dev/null | \
--+#      awk '/Exim version/ { OFS=""; print $3,"-",substr($4,2,length($4)-1) }'`${EXE}
-  
-      if [ "${version}" = "exim-${EXE}" ]; then
-        echo $com ""
-diff --git a/package/exim/0004-glibc.patch b/package/exim/0004-glibc.patch
-new file mode 100644
-index 0000000..7ae2ef8
---- /dev/null
-+++ b/package/exim/0004-glibc.patch
-@@ -0,0 +1,27 @@
-+uClibc does not contain gnu/libc-version.h
-+
-+Patch sent upstream: https://bugs.exim.org/show_bug.cgi?id=2070
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+
-+diff -uNr exim-4.88.org/src/exim.c exim-4.88/src/exim.c
-+--- exim-4.88.org/src/exim.c	2016-12-18 15:02:28.000000000 +0100
-++++ exim-4.88/src/exim.c	2016-12-26 12:12:57.000000000 +0100
-+@@ -12,7 +12,7 @@
-+ 
-+ #include "exim.h"
-+ 
-+-#ifdef __GLIBC__
-++#if defined(__GLIBC__) && !defined(__UCLIBC__)
-+ # include <gnu/libc-version.h>
-+ #endif
-+ 
-+@@ -1044,7 +1044,7 @@
-+   fprintf(f, "Compiler: <unknown>\n");
-+ #endif
-+ 
-+-#ifdef __GLIBC__
-++#if defined(__GLIBC__) && !defined(__UCLIBC__)
-+   fprintf(f, "Library version: Glibc: Compile: %d.%d\n",
-+ 	       	__GLIBC__, __GLIBC_MINOR__);
-+   if (__GLIBC_PREREQ(2, 1))
 diff --git a/package/exim/exim.hash b/package/exim/exim.hash
-index ef2d03b..29b9989 100644
+index 29b9989..d961083 100644
 --- a/package/exim/exim.hash
 +++ b/package/exim/exim.hash
 @@ -1,2 +1,2 @@
  # Locally calculated
--sha256	d4b7994c89240d2f9a9fcd7a2dffa4b72f14379001a24266f4dbb0fbe5131514	exim-4.87.1.tar.bz2
-+sha256 912f2ee03c8dba06a3a4c0ee40522d367e1b65dc59e38dfcc1f5d9eecff51ab0  exim-4.89.tar.bz2
+-sha256 912f2ee03c8dba06a3a4c0ee40522d367e1b65dc59e38dfcc1f5d9eecff51ab0  exim-4.89.tar.bz2
++sha256 1c853bc960dff0a0e51e3e28bc4a4a8165b58b41bb64ea3abb90f254d9947a8c  exim-4.89.1.tar.bz2
 diff --git a/package/exim/exim.mk b/package/exim/exim.mk
-index a9f4685..8638388 100644
+index 8638388..1eeb182 100644
 --- a/package/exim/exim.mk
 +++ b/package/exim/exim.mk
-@@ -4,9 +4,9 @@
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--EXIM_VERSION = 4.87.1
-+EXIM_VERSION = 4.89
+-EXIM_VERSION = 4.89
++EXIM_VERSION = 4.89.1
  EXIM_SOURCE = exim-$(EXIM_VERSION).tar.bz2
--EXIM_SITE = ftp://ftp.exim.org/pub/exim/exim4/old
-+EXIM_SITE = ftp://ftp.exim.org/pub/exim/exim4
+ EXIM_SITE = ftp://ftp.exim.org/pub/exim/exim4
  EXIM_LICENSE = GPLv2+
- EXIM_LICENSE_FILES = LICENCE
- EXIM_DEPENDENCIES = pcre berkeleydb host-pkgconf
