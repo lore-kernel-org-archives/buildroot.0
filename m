@@ -1,20 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 20 Dec 2017 21:55:04 +0100
-Subject: [Buildroot] [PATCH 1/1] package/exim: change tarball
- compression to xz
-In-Reply-To: <1512761941-6815-1-git-send-email-jerzy.m.grzegorek@gmail.com>
- (Jerzy Grzegorek's message of "Fri, 8 Dec 2017 20:39:01 +0100")
-References: <1512761941-6815-1-git-send-email-jerzy.m.grzegorek@gmail.com>
-Message-ID: <87k1xhazmf.fsf@dell.be.48ers.dk>
+Date: Wed, 20 Dec 2017 21:57:08 +0100
+Subject: [Buildroot] [PATCH 1/3] package/x11r7/xlib_libXcursor: security
+ bump to version 1.1.15
+In-Reply-To: <20171129204558.3547-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Wed, 29 Nov 2017 21:45:56 +0100")
+References: <20171129204558.3547-1-bernd.kuhls@t-online.de>
+Message-ID: <87fu85aziz.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Jerzy" == Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com> writes:
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
- > Signed-off-by: Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com>
+ > Fixes CVE-2017-16612:
+ > https://lists.x.org/archives/xorg-announce/2017-November/002823.html
+
+ > Added all hashed provided by upstream.
+
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
 Committed to 2017.02.x, thanks.
 
