@@ -1,89 +1,53 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 20 Dec 2017 21:50:12 +0100
-Subject: [Buildroot] [git commit branch/2017.02.x] webkitgtk: Add upstream
- patch to ensure CMAKE_BUILD_TYPE is honored
-Message-ID: <20171220210024.8E53D835D9@busybox.osuosl.org>
+Date: Wed, 20 Dec 2017 21:55:40 +0100
+Subject: [Buildroot] [git commit branch/2017.02.x]
+ package/x11r7/xlib_libXcursor: security bump to version 1.1.15
+Message-ID: <20171220210024.D600E835DA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6fe30b8f5bba73416e36334fc51451b7746c5566
+commit: https://git.buildroot.net/buildroot/commit/?id=d9747311204aca19998b6c13a97892ee4b5681d6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Make WebKitGTK+ honor the value of CMAKE_BUILD_TYPE defined in the CMake
-toolchain file by backporting the following upstream WebKit patch:
+Fixes CVE-2017-16612:
+https://lists.x.org/archives/xorg-announce/2017-November/002823.html
 
-    https://trac.webkit.org/changeset/225168
+Added all hashed provided by upstream.
 
-This reduces the generated binary sizes when building in "Release" mode
-(BR2_ENABLE_DEBUG=n), for example when targeting ARMv8 the size reduction
-is ~17 MiB.
-
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit a49c69862a617617d05c23e5c64ddea1c665174f)
+(cherry picked from commit f781add88fedf86f2ea2fad5eabb6a8c72752c7a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...s-of-CMAKE_BUILD_TYPE-from-toolchain-file.patch | 52 ++++++++++++++++++++++
- 1 file changed, 52 insertions(+)
+ package/x11r7/xlib_libXcursor/xlib_libXcursor.hash | 7 +++++--
+ package/x11r7/xlib_libXcursor/xlib_libXcursor.mk   | 2 +-
+ 2 files changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/package/webkitgtk/0001-CMake-Values-of-CMAKE_BUILD_TYPE-from-toolchain-file.patch b/package/webkitgtk/0001-CMake-Values-of-CMAKE_BUILD_TYPE-from-toolchain-file.patch
-new file mode 100644
-index 0000000..6ac1258
---- /dev/null
-+++ b/package/webkitgtk/0001-CMake-Values-of-CMAKE_BUILD_TYPE-from-toolchain-file.patch
-@@ -0,0 +1,52 @@
-+From 3b13b1ec9985e72132ec6a3ba13cf60b34848817 Mon Sep 17 00:00:00 2001
-+From: "aperez at igalia.com"
-+ <aperez@igalia.com@268f45cc-cd09-0410-ab3c-d52691b4dbfc>
-+Date: Mon, 27 Nov 2017 15:34:49 +0000
-+Subject: [PATCH] [CMake] Values of CMAKE_BUILD_TYPE from toolchain file are
-+ ignored https://bugs.webkit.org/show_bug.cgi?id=179971
-+
-+Reviewed by Carlos Alberto Lopez Perez.
-+
-+* CMakeLists.txt: Call project() first, as it loads the toolchain
-+file, so that's done before checking CMAKE_BUILD_TYPE.
-+
-+
-+git-svn-id: http://svn.webkit.org/repository/webkit/trunk at 225168 268f45cc-cd09-0410-ab3c-d52691b4dbfc
-+
-+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-+Backported from: 75986e1807b
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index d80c37b950a..0a9bd17b981 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -1,8 +1,17 @@
-+ # -----------------------------------------------------------------------------
-+ # Determine CMake version and build type.
-+ # -----------------------------------------------------------------------------
-++#
-++# NOTE: cmake_minimum_required() and project() *MUST* be the two fist commands
-++# used, see https://cmake.org/cmake/help/v3.3/command/project.html -- the
-++# latter in particular handles loading a bunch of shared CMake definitions
-++# and loading the cross-compilation settings from CMAKE_TOOLCHAIN_FILE.
-++#
-++
-+ cmake_minimum_required(VERSION 3.3)
-+ 
-++project(WebKit)
-++
-+ if (NOT CMAKE_BUILD_TYPE)
-+     message(WARNING "No CMAKE_BUILD_TYPE value specified, defaulting to RelWithDebInfo.")
-+     set(CMAKE_BUILD_TYPE "RelWithDebInfo" CACHE STRING "Choose the type of build." FORCE)
-+@@ -10,8 +19,6 @@ else ()
-+     message(STATUS "The CMake build type is: ${CMAKE_BUILD_TYPE}")
-+ endif ()
-+ 
-+-project(WebKit)
-+-
-+ set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/Source/cmake")
-+ 
-+ set(ENABLE_WEBCORE ON)
-+-- 
-+2.15.1
-+
+diff --git a/package/x11r7/xlib_libXcursor/xlib_libXcursor.hash b/package/x11r7/xlib_libXcursor/xlib_libXcursor.hash
+index 0135ac9..7da9eb8 100644
+--- a/package/x11r7/xlib_libXcursor/xlib_libXcursor.hash
++++ b/package/x11r7/xlib_libXcursor/xlib_libXcursor.hash
+@@ -1,2 +1,5 @@
+-# From http://lists.x.org/archives/xorg-announce/2013-May/002229.html
+-sha256	9bc6acb21ca14da51bda5bc912c8955bc6e5e433f0ab00c5e8bef842596c33df	libXcursor-1.1.14.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2017-November/002823.html
++md5  58fe3514e1e7135cf364101e714d1a14  libXcursor-1.1.15.tar.bz2
++sha1 3e19f991f244b7fa31566adce7ead078424296cf  libXcursor-1.1.15.tar.bz2
++sha256 294e670dd37cd23995e69aae626629d4a2dfe5708851bbc13d032401b7a3df6b  libXcursor-1.1.15.tar.bz2
++sha512 53ad0fa2afd7b4cf1108b560e44ea71abdf5c55a18df243d7123942513589c927f5c105395f790d8769959e0129db54264e6aac7efd51a5f1aec270379b1f2f5  libXcursor-1.1.15.tar.bz2
+diff --git a/package/x11r7/xlib_libXcursor/xlib_libXcursor.mk b/package/x11r7/xlib_libXcursor/xlib_libXcursor.mk
+index c59c01a..b27aa65 100644
+--- a/package/x11r7/xlib_libXcursor/xlib_libXcursor.mk
++++ b/package/x11r7/xlib_libXcursor/xlib_libXcursor.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XLIB_LIBXCURSOR_VERSION = 1.1.14
++XLIB_LIBXCURSOR_VERSION = 1.1.15
+ XLIB_LIBXCURSOR_SOURCE = libXcursor-$(XLIB_LIBXCURSOR_VERSION).tar.bz2
+ XLIB_LIBXCURSOR_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBXCURSOR_LICENSE = MIT
