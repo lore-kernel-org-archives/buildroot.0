@@ -1,56 +1,47 @@
-From: Evgeniy Didin <Evgeniy.Didin@synopsys.com>
-Date: Wed, 20 Dec 2017 17:02:06 +0000
-Subject: [Buildroot] [PATCH 1/2] libdrm-armada: new package
-In-Reply-To: <CAOMZO5DQsAVETVxn1u443H8XBpxj+K8Nn+st3_1xXe4cfsuWfg@mail.gmail.com>
-References: <20171220150843.21154-1-didin@synopsys.com>
- <20171220150843.21154-2-didin@synopsys.com>
- <CAOMZO5DQsAVETVxn1u443H8XBpxj+K8Nn+st3_1xXe4cfsuWfg@mail.gmail.com>
-Message-ID: <1513789325.21982.16.camel@synopsys.com>
+From: Rob Kent <rob@gulon.co.uk>
+Date: Wed, 20 Dec 2017 16:50:34 +0000
+Subject: [Buildroot] Unable to boot ISO on target
+Message-ID: <2e461fd4955c6c4d165ee1e28be00ee6@gulon.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Fabio, Lucas,
+Hi All,
 
-On Wed, 2017-12-20 at 14:35 -0200, Fabio Estevam wrote:
-> Hi Evgeniy,
-> 
-> On Wed, Dec 20, 2017 at 1:08 PM, Evgeniy Didin
-> <Evgeniy.Didin@synopsys.com> wrote:
-> > libdrm-armada is an Etnaviv libdrm buffer object management module.
-> > It is used with xf86-driver-video-armada, which is Xorg driver for
-> > Etnaviv.
-> > 
-> > Signed-off-by: Evgeniy Didin <didin@synopsys.com>
-> > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> > Cc: Alexey Brodkin <abrodkin@synopsys.com>
-> > Cc: arc-buildroot at synopsys.com
-> 
-> Is this patch really needed?
-> 
-> I was under the impression that it was only needed prior to Etnaviv
-> being supported in the official libdrm package.
-> 
-Following this message:
-https://www.spinics.net/lists/dri-devel/msg158109.html
+I have created a build for an Atom N270 target (eeebox b202) and am now 
+trying to create a bootable USB drive to test on the target machine. My 
+configuration creates a kernel image (bzImage) and a filesystem 
+(rootfs.ext2) and then creates an ISO9660 hybrid image installing 
+syslinux/isolinux as a bootloader. I can run the output with qemu using 
+the following command:
 
-and README (lines 53-55):
-http://git.arm.linux.org.uk/cgit/xf86-video-armada.git/tree/README?h=un
-stable-devel#n55
+$ qemu-system-i386 -cpu n270 -hda output/images/rootfs.iso9660
 
-We built libdrm-armada + xf86-video-armada for Wandboard and it worked
-fine.
+This boots to the prompt (with a readonly filesystem).
 
-In yocto project this package also was added:
-https://lists.yoctoproject.org/pipermail/meta-freescale/2017-May/020566
-.html
+I copy this iso image to a USB stick as follows:
 
-Lucas, could you please comment on whether libdrm-armada is necessary
-for xf86-video-armada or not? Or just libdrm is enough.
+$ sudo dd if=rootfs.iso9660 of=/dev/sdg bs=4M && sync
 
+However, when I boot this on the target machine, it loads the kernel but 
+then panics as its unable to find the rootfs as follows:
 
-> Regards,
-> 
-> Fabio Estevam
+Kernel panic - not syncing: VFS: Unable to mount rootfs on 
+unknown-block(0,0)
+
+The output can be a bit inconsistent, but sometimes the message says its 
+not able to find "sda" and to set "root=" to something else giving a 
+blank list of available partitions.
+
+It seems to me that the kernel is unable to find any suitable/readable 
+partitions, but as this boots with qemu I am assuming this must be 
+something to do with the ISO config/setup?
+
+Can anyone shine any light on this? I've tried quite a lot of things 
+from Google and so far had no luck.
+
+Thanks very much,
+
+Rob
