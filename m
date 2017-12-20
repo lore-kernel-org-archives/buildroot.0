@@ -1,77 +1,111 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 20 Dec 2017 23:25:10 +0100
-Subject: [Buildroot] [PATCH 1/1] package/x11r7/xserver_xorg-server: bump
- version to 1.19.6
-Message-ID: <20171220222510.433-1-bernd.kuhls@t-online.de>
+From: Damien Riegel <damien.riegel@savoirfairelinux.com>
+Date: Wed, 20 Dec 2017 18:53:11 -0500
+Subject: [Buildroot] package "expat" fails to build without a C++
+ compiler
+In-Reply-To: <87vah19jcu.fsf@dell.be.48ers.dk>
+References: <20171219215831.4rlfcixr32ocr7tg@workotop.localdomain>
+ <87r2rpcf5n.fsf@dell.be.48ers.dk>
+ <20171220205345.lxrjqnwcpclvcwvi@workotop.localdomain>
+ <87vah19jcu.fsf@dell.be.48ers.dk>
+Message-ID: <20171220235311.h34bqw7kefkvwazn@workotop.localdomain>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- .../{1.19.5 => 1.19.6}/0001-modesettings-needs-dri2.patch      |  0
- .../0002-configure.ac-Fix-check-for-CLOCK_MONOTONIC.patch      |  0
- .../0003-Remove-check-for-useSIGIO-option.patch                |  0
- package/x11r7/xserver_xorg-server/Config.in                    |  4 ++--
- package/x11r7/xserver_xorg-server/xserver_xorg-server.hash     | 10 +++++-----
- 5 files changed, 7 insertions(+), 7 deletions(-)
- rename package/x11r7/xserver_xorg-server/{1.19.5 => 1.19.6}/0001-modesettings-needs-dri2.patch (100%)
- rename package/x11r7/xserver_xorg-server/{1.19.5 => 1.19.6}/0002-configure.ac-Fix-check-for-CLOCK_MONOTONIC.patch (100%)
- rename package/x11r7/xserver_xorg-server/{1.19.5 => 1.19.6}/0003-Remove-check-for-useSIGIO-option.patch (100%)
+On Wed, Dec 20, 2017 at 10:31:45PM +0100, Peter Korsgaard wrote:
+> >>>>> "Damien" == Damien Riegel <damien.riegel@savoirfairelinux.com> writes:
+> 
+>  > On Wed, Dec 20, 2017 at 09:34:12PM +0100, Peter Korsgaard wrote:
+>  >> >>>>> "Damien" == Damien Riegel <damien.riegel@savoirfairelinux.com> writes:
+>  >> 
+>  >> > Hi,
+>  >> > I tried to build an image with the "expat" package in it, using a
+>  >> > toolchain without a C++ compiler. It fails with the following error:
+>  >> 
+>  >> >   configure: error: in `/home/dkc/src/buildroot/build/build/expat-2.2.4':
+>  >> >   configure: error: C++ preprocessor "/lib/cpp" fails sanity check
+>  >> 
+>  >> > Enabling C++ support fixed that error.
+>  >> 
+>  >> Hmm, can you have a look in expat-2.2.4/config.log to see what exactly
+>  >> goes wrong?
+>  >> 
+>  >> /lib/cpp is from your host toolchain, so enabling or not enabling C++
+>  >> support shouldn't matter.
+> 
+>  > /lib/cpp is the default value for the C++ preprocessor when '$CXX -E'
+>  > fails. When activating C++ support, $CXX points to a program that is
+>  > actually there, and CXXCPP doesn't default to /lib/cpp. That's why it
+>  > builds successfully when I activate C++ support.
+> 
+> Ok. CXX actually also points to an available program when C++ support
+> isn't available (it points to 'false').
+> 
+>  > I guess you have /lib/cpp on your machine and I don't.
+> 
+> :/
+> 
+> Out of interest, what Distribution are you using?
 
-diff --git a/package/x11r7/xserver_xorg-server/1.19.5/0001-modesettings-needs-dri2.patch b/package/x11r7/xserver_xorg-server/1.19.6/0001-modesettings-needs-dri2.patch
-similarity index 100%
-rename from package/x11r7/xserver_xorg-server/1.19.5/0001-modesettings-needs-dri2.patch
-rename to package/x11r7/xserver_xorg-server/1.19.6/0001-modesettings-needs-dri2.patch
-diff --git a/package/x11r7/xserver_xorg-server/1.19.5/0002-configure.ac-Fix-check-for-CLOCK_MONOTONIC.patch b/package/x11r7/xserver_xorg-server/1.19.6/0002-configure.ac-Fix-check-for-CLOCK_MONOTONIC.patch
-similarity index 100%
-rename from package/x11r7/xserver_xorg-server/1.19.5/0002-configure.ac-Fix-check-for-CLOCK_MONOTONIC.patch
-rename to package/x11r7/xserver_xorg-server/1.19.6/0002-configure.ac-Fix-check-for-CLOCK_MONOTONIC.patch
-diff --git a/package/x11r7/xserver_xorg-server/1.19.5/0003-Remove-check-for-useSIGIO-option.patch b/package/x11r7/xserver_xorg-server/1.19.6/0003-Remove-check-for-useSIGIO-option.patch
-similarity index 100%
-rename from package/x11r7/xserver_xorg-server/1.19.5/0003-Remove-check-for-useSIGIO-option.patch
-rename to package/x11r7/xserver_xorg-server/1.19.6/0003-Remove-check-for-useSIGIO-option.patch
-diff --git a/package/x11r7/xserver_xorg-server/Config.in b/package/x11r7/xserver_xorg-server/Config.in
-index 416dc7b440..3107e2c1e5 100644
---- a/package/x11r7/xserver_xorg-server/Config.in
-+++ b/package/x11r7/xserver_xorg-server/Config.in
-@@ -79,7 +79,7 @@ choice
- 	bool "X Window System server version"
- 
- config BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_19
--	bool "1.19.5"
-+	bool "1.19.6"
- 	select BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_23
- 	select BR2_PACKAGE_XLIB_LIBXFONT2
- 	select BR2_PACKAGE_XPROTO_PRESENTPROTO
-@@ -99,7 +99,7 @@ endchoice
- 
- config BR2_PACKAGE_XSERVER_XORG_SERVER_VERSION
- 	string
--	default "1.19.5" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_19
-+	default "1.19.6" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_19
- 	default "1.17.4" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_17
- 	default "1.14.7" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_14
- 
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-index c0feb985d2..10285abf12 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-@@ -3,8 +3,8 @@ sha1   7a95765e56b124758fcd7b609589e65b8870880b                                x
- sha256 fcf66fa6ad86227613d2d3e8ae13ded297e2a1e947e9060a083eaf80d323451f        xorg-server-1.14.7.tar.bz2
- # From https://lists.x.org/archives/xorg-announce/2015-October/002650.html
- sha256 0c4b45c116a812a996eb432d8508cf26c2ec8c3916ff2a50781796882f8d6457        xorg-server-1.17.4.tar.bz2
--# From https://lists.x.org/archives/xorg-announce/2017-October/002814.html
--md5 4ac6feeae6790436ce9de879ca9a3bf8  xorg-server-1.19.5.tar.bz2
--sha1 307d3405f709f7e41966c850b37deefe7f83eb9b  xorg-server-1.19.5.tar.bz2
--sha256 18fffa8eb93d06d2800d06321fc0df4d357684d8d714315a66d8dfa7df251447  xorg-server-1.19.5.tar.bz2
--sha512 928dea5850b98cd815004cfa133eca23cfa9521920c934c68a92787f2cae13cca1534eee772a4fb74b8ae8cb92662b5d68b95b834c8aa8ec57cd57cb4e5dd45c  xorg-server-1.19.5.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2017-December/002830.html
-+md5 3e47777ff034a331aed2322b078694a8  xorg-server-1.19.6.tar.bz2
-+sha1 2dd560ac49bdbda7f67166546af43541fabf517f  xorg-server-1.19.6.tar.bz2
-+sha256 a732502f1db000cf36a376cd0c010ffdbf32ecdd7f1fa08ba7f5bdf9601cc197  xorg-server-1.19.6.tar.bz2
-+sha512 38519a8d0af9dd034045fc346959496dd718fa59b6188307974797a1cd9c349deb54987f6232ea8396baf810dcc710c0ff191f76ed2186cae4d44921b3680412  xorg-server-1.19.6.tar.bz2
+Arch Linux
+
+> 
+>  > I tried to remove the AC_PROG_CXX macro, but autoreconf complains that
+>  > there are C++ sources. They must be in a part of the program that isn't
+>  > built by Buildroot.
+> 
+> I guess that is from tests/runtestspp.cpp :/
+
+Indeed, when I only remove AC_PROG_CXX, it complains about
+tests/Makefile.am:
+
+  /usr/share/automake-1.15/am/depend2.am: error: am__fastdepCXX does not appear in AM_CONDITIONAL
+  /usr/share/automake-1.15/am/depend2.am:   The usual way to define 'am__fastdepCXX' is to add 'AC_PROG_CXX'
+  /usr/share/automake-1.15/am/depend2.am:   to 'configure.ac' and run 'aclocal' and 'autoconf' again
+  tests/Makefile.am: error: C++ source seen but 'CXX' is undefined
+  tests/Makefile.am:   The usual way to define 'CXX' is to add 'AC_PROG_CXX'
+  tests/Makefile.am:   to 'configure.ac' and run 'autoconf' again.
+  autoreconf: automake failed with exit status: 1
+
+
+With the following snippet (against upstream libexpat), I can run
+autoreconf and it seems to build just fine (not tested with Buildroot
+yet). Does that look like an acceptable solution to you? If so, I can
+provide a proper patch.
+
+I feel like this would be a one-package-only fix. Maybe the right
+solution would be to make Buildroot try to find the location of "cpp",
+and set CXXCPP accordingly? (As a quick proof of concept, adding
+EXPAT_CONF_ENV += CXXCPP=/usr/bin/cpp to expat.mk works)
+
+diff --git a/expat/configure.ac b/expat/configure.ac
+index 1dab0e7..d18ab3d 100644
+--- a/expat/configure.ac
++++ b/expat/configure.ac
+@@ -64,7 +64,6 @@ AC_SUBST(LIBAGE)
+
+ dnl Checks for programs.
+ AC_PROG_CC_C99
+-AC_PROG_CXX
+ AC_PROG_INSTALL
+
+ if test "$GCC" = yes ; then
+diff --git a/expat/tests/Makefile.am b/expat/tests/Makefile.am
+index 742ed43..987fdd8 100644
+--- a/expat/tests/Makefile.am
++++ b/expat/tests/Makefile.am
+@@ -49,9 +49,6 @@ libruntests_a_SOURCES = \
+ runtests_SOURCES = \
+     runtests.c
+
+-runtestspp_SOURCES = \
+-    runtestspp.cpp
+-
+ runtests_LDADD = libruntests.a ../lib/libexpat.la
+ runtestspp_LDADD = libruntests.a ../lib/libexpat.la
+
+
 -- 
-2.11.0
+Damien
