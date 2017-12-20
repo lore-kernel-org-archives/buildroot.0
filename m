@@ -1,37 +1,29 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 20 Dec 2017 21:49:35 +0100
-Subject: [Buildroot] [PATCH v2] mtools: do not link to libbsd
-In-Reply-To: <20171128160651.20880-1-casantos@datacom.ind.br> (Carlos Santos's
- message of "Tue, 28 Nov 2017 14:06:51 -0200")
-References: <0171128125226.32n343bxgzhcrfvp@tarshish>
- <20171128160651.20880-1-casantos@datacom.ind.br>
-Message-ID: <876091ceg0.fsf@dell.be.48ers.dk>
+Date: Wed, 20 Dec 2017 21:50:29 +0100
+Subject: [Buildroot] [PATCH 1/1] webkitgtk: Add upstream patch to ensure
+ CMAKE_BUILD_TYPE is honored
+In-Reply-To: <20171129141751.9325-1-aperez@igalia.com> (Adrian Perez de
+ Castro's message of "Wed, 29 Nov 2017 16:17:51 +0200")
+References: <20171129141751.9325-1-aperez@igalia.com>
+Message-ID: <871sjpceei.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Carlos" == Carlos Santos <casantos@datacom.ind.br> writes:
+>>>>> "Adrian" == Adrian Perez de Castro <aperez@igalia.com> writes:
 
- > If libbsd is found by the configuration process, mtools unnecessarily
- > adds a NEEDED field with libbsd to its dynamic section, but it does not
- > actually use anything from libbsd under Linux. The same may happen to
- > host-mtools if some libbsd package is installed on the host machine.
+ > Make WebKitGTK+ honor the value of CMAKE_BUILD_TYPE defined in the CMake
+ > toolchain file by backporting the following upstream WebKit patch:
 
- > Prevent this by forcing configure to bypass the checking for the
- > existence of a gethostbyname function in libbsd.
+ >     https://trac.webkit.org/changeset/225168
 
- > I stumbled on this problem when I built host-mtools and later removed
- > libbsd to upgrade to Fedora 27, due to Bug 1504831[1]. The previously
- > built host/bin/mtools started to fail due to the missing libbsd.so.0.
+ > This reduces the generated binary sizes when building in "Release" mode
+ > (BR2_ENABLE_DEBUG=n), for example when targeting ARMv8 the size reduction
+ > is ~17 MiB.
 
- > 1. https://bugzilla.redhat.com/show_bug.cgi?id=1504831
-
- > Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
- > ---
- > Changes v1->v2
- >   - Improved the commit message, as requested by Baruch Siach.
+ > Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 
 Committed to 2017.02.x, thanks.
 
