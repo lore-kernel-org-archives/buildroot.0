@@ -1,52 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 20 Dec 2017 21:44:36 +0100
-Subject: [Buildroot] [git commit branch/2017.02.x] linphone: add optional
- dependency on libupnp
-Message-ID: <20171220210024.663DF835D9@busybox.osuosl.org>
+Date: Wed, 20 Dec 2017 21:51:17 +0100
+Subject: [Buildroot] [git commit branch/2017.02.x] samba4: ensure that
+ copied cache.txt is writable
+Message-ID: <20171220210024.9C0EA835D9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=92581a7b70157d40a185768a0ef19831ddb32c1c
+commit: https://git.buildroot.net/buildroot/commit/?id=607852cf38c5a305598dfe131f3b3f5452ba8860
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-linphone can optionally use libupnp, so this dependency should be
-accounted for in linphone.mk. In addition, linphone is not compatible
-with libupnp18, but misdetects it as a a proper libupnp, causing a
-build failure.
+If the Buildroot tree is read-only, then cache.txt is copied read-only into
+the build directory, and the configuration step fails.  Fix this in the
+same way we do in other places, by opening permissions as we copy the file
+using $(INSTALL).
 
-The build failure with libupnp18 currently only happens on the next
-branch (because libupnp18 has only been added there), but adding the
-optional dependency on libupnp makes sense for the master branch
-anyway.
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/473c686f9bc5335d25b720cf1b0c45389138a7b4
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 9e5390a20bf7019d950da3849bb305f5edf692c6)
+(cherry picked from commit 832b2de3ba82d8b51c393f743ee86ad530829607)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linphone/linphone.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/samba4/samba4.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/linphone/linphone.mk b/package/linphone/linphone.mk
-index df80490..5c678d4 100644
---- a/package/linphone/linphone.mk
-+++ b/package/linphone/linphone.mk
-@@ -50,4 +50,11 @@ else
- LINPHONE_CONF_OPTS += --disable-libv4l1 --disable-libv4l2
- endif
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index c8b1e5a..4e7dc5b 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
+@@ -80,7 +80,7 @@ endef
+ SAMBA4_POST_INSTALL_TARGET_HOOKS += SAMBA4_REMOVE_CTDB_TESTS
  
-+ifeq ($(BR2_PACKAGE_LIBUPNP),y)
-+LINPHONE_DEPENDENCIES += libupnp
-+LINPHONE_CONF_OPTS += --enable-upnp
-+else
-+LINPHONE_CONF_OPTS += --disable-upnp
-+endif
-+
- $(eval $(autotools-package))
+ define SAMBA4_CONFIGURE_CMDS
+-	cp package/samba4/samba4-cache.txt $(@D)/cache.txt;
++	$(INSTALL) -m 0644 package/samba4/samba4-cache.txt $(@D)/cache.txt;
+ 	echo 'Checking uname machine type: $(BR2_ARCH)' >>$(@D)/cache.txt;
+ 	(cd $(@D); \
+ 		PYTHON_CONFIG="$(STAGING_DIR)/usr/bin/python-config" \
