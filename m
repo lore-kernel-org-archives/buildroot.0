@@ -1,46 +1,89 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 20 Dec 2017 21:48:13 +0100
-Subject: [Buildroot] [git commit branch/2017.02.x] libevent: disable openssl
- for host
-Message-ID: <20171220210024.729FE835D9@busybox.osuosl.org>
+Date: Wed, 20 Dec 2017 21:50:12 +0100
+Subject: [Buildroot] [git commit branch/2017.02.x] webkitgtk: Add upstream
+ patch to ensure CMAKE_BUILD_TYPE is honored
+Message-ID: <20171220210024.8E53D835D9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=679a6cf5e13de52ba30d5f266342e2a68b5b240e
+commit: https://git.buildroot.net/buildroot/commit/?id=6fe30b8f5bba73416e36334fc51451b7746c5566
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-As host-libevent does not depend on host-openssl, it might attempt to
-build against the host installed openssl. This does not work very well
-on various hosts. Since we don't really need encryption support in
-host-libevent just disable openssl support.
+Make WebKitGTK+ honor the value of CMAKE_BUILD_TYPE defined in the CMake
+toolchain file by backporting the following upstream WebKit patch:
 
-Disable build of example code as we already do for the target libevent.
+    https://trac.webkit.org/changeset/225168
 
-Should fix:
-http://autobuild.buildroot.net/results/403/403886e3afc6d5d18a138f4b0651f3c5a50ed064/
-http://autobuild.buildroot.net/results/a2a/a2a84692049b0fb8038f1ad4b06554ecdac32e3c/
-http://autobuild.buildroot.net/results/a36/a36abb1ac556a8b50e140ea1851955744b152608/
+This reduces the generated binary sizes when building in "Release" mode
+(BR2_ENABLE_DEBUG=n), for example when targeting ARMv8 the size reduction
+is ~17 MiB.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 66426bfbc8de807d779bc08e2a5b28566a5a4c68)
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+(cherry picked from commit a49c69862a617617d05c23e5c64ddea1c665174f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libevent/libevent.mk | 1 +
- 1 file changed, 1 insertion(+)
+ ...s-of-CMAKE_BUILD_TYPE-from-toolchain-file.patch | 52 ++++++++++++++++++++++
+ 1 file changed, 52 insertions(+)
 
-diff --git a/package/libevent/libevent.mk b/package/libevent/libevent.mk
-index 5458ce3..50e4891 100644
---- a/package/libevent/libevent.mk
-+++ b/package/libevent/libevent.mk
-@@ -12,6 +12,7 @@ LIBEVENT_LICENSE_FILES = LICENSE
- # For 0001-Disable-building-test-programs.patch
- LIBEVENT_AUTORECONF = YES
- LIBEVENT_CONF_OPTS = --disable-samples
-+HOST_LIBEVENT_CONF_OPTS = --disable-samples --disable-openssl
- 
- define LIBEVENT_REMOVE_PYSCRIPT
- 	rm $(TARGET_DIR)/usr/bin/event_rpcgen.py
+diff --git a/package/webkitgtk/0001-CMake-Values-of-CMAKE_BUILD_TYPE-from-toolchain-file.patch b/package/webkitgtk/0001-CMake-Values-of-CMAKE_BUILD_TYPE-from-toolchain-file.patch
+new file mode 100644
+index 0000000..6ac1258
+--- /dev/null
++++ b/package/webkitgtk/0001-CMake-Values-of-CMAKE_BUILD_TYPE-from-toolchain-file.patch
+@@ -0,0 +1,52 @@
++From 3b13b1ec9985e72132ec6a3ba13cf60b34848817 Mon Sep 17 00:00:00 2001
++From: "aperez at igalia.com"
++ <aperez@igalia.com@268f45cc-cd09-0410-ab3c-d52691b4dbfc>
++Date: Mon, 27 Nov 2017 15:34:49 +0000
++Subject: [PATCH] [CMake] Values of CMAKE_BUILD_TYPE from toolchain file are
++ ignored https://bugs.webkit.org/show_bug.cgi?id=179971
++
++Reviewed by Carlos Alberto Lopez Perez.
++
++* CMakeLists.txt: Call project() first, as it loads the toolchain
++file, so that's done before checking CMAKE_BUILD_TYPE.
++
++
++git-svn-id: http://svn.webkit.org/repository/webkit/trunk at 225168 268f45cc-cd09-0410-ab3c-d52691b4dbfc
++
++Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
++Backported from: 75986e1807b
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index d80c37b950a..0a9bd17b981 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -1,8 +1,17 @@
++ # -----------------------------------------------------------------------------
++ # Determine CMake version and build type.
++ # -----------------------------------------------------------------------------
+++#
+++# NOTE: cmake_minimum_required() and project() *MUST* be the two fist commands
+++# used, see https://cmake.org/cmake/help/v3.3/command/project.html -- the
+++# latter in particular handles loading a bunch of shared CMake definitions
+++# and loading the cross-compilation settings from CMAKE_TOOLCHAIN_FILE.
+++#
+++
++ cmake_minimum_required(VERSION 3.3)
++ 
+++project(WebKit)
+++
++ if (NOT CMAKE_BUILD_TYPE)
++     message(WARNING "No CMAKE_BUILD_TYPE value specified, defaulting to RelWithDebInfo.")
++     set(CMAKE_BUILD_TYPE "RelWithDebInfo" CACHE STRING "Choose the type of build." FORCE)
++@@ -10,8 +19,6 @@ else ()
++     message(STATUS "The CMake build type is: ${CMAKE_BUILD_TYPE}")
++ endif ()
++ 
++-project(WebKit)
++-
++ set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/Source/cmake")
++ 
++ set(ENABLE_WEBCORE ON)
++-- 
++2.15.1
++
