@@ -1,57 +1,46 @@
-From: Ash Charles <ashcharles@gmail.com>
-Date: Wed, 20 Dec 2017 23:35:45 -0500
-Subject: [Buildroot] Using PRU
-In-Reply-To: <1574223358.5559956.1513272846088@mail.yahoo.com>
-References: <1574223358.5559956.1513272846088.ref@mail.yahoo.com>
- <1574223358.5559956.1513272846088@mail.yahoo.com>
-Message-ID: <CAK8F28kZ91rXbUpHxnMonrh5KSitc5xAUyJZfv01snNzVdWjFw@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 21 Dec 2017 07:00:40 +0200
+Subject: [Buildroot] how to pass directory path to sed script
+In-Reply-To: <CAPi4xiV8JLmssUyBbFg3G+LKAwH1vaOrA8Wq5u=rQegY=3e7oQ@mail.gmail.com>
+References: <CAPi4xiV8JLmssUyBbFg3G+LKAwH1vaOrA8Wq5u=rQegY=3e7oQ@mail.gmail.com>
+Message-ID: <20171221050040.ee74zhh6xyljuyy5@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Sam,
 
-On Thu, Dec 14, 2017 at 12:34 PM, James Albert <sjr_ee@yahoo.ca> wrote:
-> Hi,
-> I'm trying to use buildroot 2017.11 with recent Linux 4.13.16 to use the
-> PRUSS on a Beaglebone Black. I think I've turned on all of the PRU, RPMsg
-> and remoteproc settings in buildroot and Linux configs. I also built a
-> custom device tree with the PRUSS enabled. But the pieces aren't all there,
-> and it doesn't look like TI's Hands On training
-> (http://processors.wiki.ti.com/index.php/PRU_Training:_Hands-on_Labs). Is
-> there somewhere I can find up-to-date instructions on getting the PRUSS
-> running when I use buildroot? So much of what I've seen on the web is old
-> (UIO-based) or starts with the Beagleboard or TI trees (I want an embedded
-> environment, not a whole Debian). You people are doing a great job of
-> simplifying, enhancing and refining buildroot, and I thank you. Still, I'm
-> finding it a challenge to understand all of the knobs and buttons. If this
-> is the wrong forum for asking, let me know.
+On Wed, Dec 20, 2017 at 02:19:42PM -0800, Sam wrote:
+> I'm using Buildroot to cross-compile Linux for RPi3. I'm trying to add a
+> new package called Netmap to my Buildroot packages. The problem is that
+> there's a configure file in netmap src directory which contained a variable
+> named BUILDDIR and its default value is $PWD. During the configuring
+> process, it'll be  automatically configured to my buildroot root directory.
+> So I wanna replace it with $(@D). The following is what was doing, I'm
+> sorry for no mk file attached because my host machine is on Gentoo text
+> mode console.
+> 
+> define NETMAP_BUILD_CMDS
+>      NETMAP_CURRENT_DIR=$(sed -e 's/\//\\\//g' <<< "$(@D)")  ---- empty
+>      NETMAP_CURRENT_DIR=$$(sed -e 's/\//\\\//g' <<< "$(@D)") ----
+> commandline itself
+>      sed -e 's/BUILDDIR=$$PWD/BUILDDIR=$(NETMAP_CURRENT_DIR)/g' -i
+> $(@D)/LINUX/configure
+>      ...
+> endef
 
-I was previously able to get the PRU hands-on lab examples working
-with a beaglebone.  Looking at your buildroot defconfig, you've got
-BR2_PACKAGE_PRU_SOFTWARE_SUPPORT enabled which should build the
-examples (though I'd expect BR2_PACKAGE_HOST_TI_CGT_PRU to be enabled
-also).  Note the step mentioned in
-package/pru-software-support/readme.txt regarding copying the firmware
-e.g.
- $ cp /usr/share/pru-software-support/am335x/PRU_gpioToggle/gen/PRU_gpioToggle.out
-/lib/firmware/am335x-pru0-fw
+You can't use '/' as s command expressions delimiter since the 
+$(NETMAP_CURRENT_DIR) make variable expansion includes '/'. Use some other 
+character, '%' is a common choice. 
 
-From my old notes, I enabled these items in the kernel config. though
-it looks like you've got the modules you'd need.
-CONFIG_PRUSS_REMOTEPROC=m
-CONFIG_RPMSG_PRU=m
+Consider also using $(SED). Grep for '\bSED\b' under package/ for many 
+examples.
 
-And, I needed to modprobe pru_rproc and rpmsg_pru as, for the 4.1
-kernel I was using, the remoteproc and rpmsg drivers weren't loaded
-automatically.
+baruch
 
-FWIW, I remember running into some kernel version problems [1]
-
-Also, by way of reference, have you seen [2]?
-[1] http://e2e.ti.com/support/arm/sitara_arm/f/791/p/552190/2018113#2018113
-[2] http://www.jumpnowtek.com/beaglebone/Working-with-the-BeagleBone-PRUs.html
-
---Ash
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
