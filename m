@@ -1,121 +1,42 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Thu, 21 Dec 2017 16:01:18 -0500
-Subject: [Buildroot] [PATCH 1/1] json for modern c++: new package
-Message-ID: <20171221210118.11957-1-Adamduskett@outlook.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 21 Dec 2017 22:46:58 +0100
+Subject: [Buildroot] [PATCH] wireguard: bump to version 0.0.20171221
+Message-ID: <20171221214658.24090-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-A json library that aims to make json feel like a first class data type
-using C++11, json for modern c++ is a easy to use, flexible, modern json
-library.
-
-Design goals include:
-
-- Intuitive syntax. In languages such as Python, JSON feels like a first
-  class data type. All the operator magic of modern C++ is used to achieve
-  the same feeling in c++.
-
-- Trivial integration. The whole code consists of a single header file
-  json.hpp. That's it. No library, no subproject, no dependencies, no
-  complex build system. The class is written in vanilla C++11.
-  All in all, everything should require no adjustment of compiler flags or
-  project settings.
-
-- Serious testing. The class is heavily unit-tested and covers 100% of the
-  code, including all exceptional behavior. Furthermore, it is checked with
-  Valgrind that there are no memory leaks. To maintain high quality,
-  the project is following the Core Infrastructure Initiative (CII) best
-  practices.
-
-Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/Config.in                                  |  1 +
- package/json-for-modern-cpp/Config.in              | 28 ++++++++++++++++++++++
- .../json-for-modern-cpp/json-for-modern-cpp.hash   |  3 +++
- package/json-for-modern-cpp/json-for-modern-cpp.mk | 15 ++++++++++++
- 4 files changed, 47 insertions(+)
- create mode 100644 package/json-for-modern-cpp/Config.in
- create mode 100644 package/json-for-modern-cpp/json-for-modern-cpp.hash
- create mode 100644 package/json-for-modern-cpp/json-for-modern-cpp.mk
+ package/wireguard/wireguard.hash | 4 ++--
+ package/wireguard/wireguard.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index bd39a374f0..06b8386299 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1255,6 +1255,7 @@ menu "JSON/XML"
- 	source "package/jose/Config.in"
- 	source "package/jsmn/Config.in"
- 	source "package/json-c/Config.in"
-+	source "package/json-for-modern-cpp/Config.in"
- 	source "package/json-glib/Config.in"
- 	source "package/jsoncpp/Config.in"
- 	source "package/libbson/Config.in"
-diff --git a/package/json-for-modern-cpp/Config.in b/package/json-for-modern-cpp/Config.in
-new file mode 100644
-index 0000000000..d3f2e869a1
---- /dev/null
-+++ b/package/json-for-modern-cpp/Config.in
-@@ -0,0 +1,28 @@
-+config BR2_PACKAGE_JSON_FOR_MODERN_CPP
-+	bool "json for modern c++"
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++11
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	help
-+	  Json for modern c++ has the following desing goals in mind:
-+
-+	  - Intuitive syntax. In languages such as Python, JSON feels
-+	    like a first class data type. All the operator magic of
-+	    modern C++ is used to achieve the same feeling in c++.
-+
-+	  - Trivial integration. The whole code consists of a single
-+	    header file json.hpp. That's it. No library, no subproject,
-+	    no dependencies, no complex build system. The class is
-+	    written in vanilla C++11. All in all, everything should
-+	    require no adjustment of compiler flags or project settings.
-+
-+	  - Serious testing. The class is heavily unit-tested and covers
-+	  	100% of the code, including all exceptional behavior.
-+	  	Furthermore, it is checked with Valgrind that there are no
-+	  	memory leaks. To maintain high quality, the project is
-+	  	following the Core Infrastructure Initiative (CII) best
-+	  	practices.
-+
-+	  https://github.com/nlohmann/json
-+
-+comment "json for modern c++ needs a toolchain w/ C++, gcc >= 4.9"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-diff --git a/package/json-for-modern-cpp/json-for-modern-cpp.hash b/package/json-for-modern-cpp/json-for-modern-cpp.hash
-new file mode 100644
-index 0000000000..50b6735ba1
---- /dev/null
-+++ b/package/json-for-modern-cpp/json-for-modern-cpp.hash
-@@ -0,0 +1,3 @@
-+# Locally computed
-+sha256	837fb7f6595b176774d0d90b83f4cb03c303e94a373fb7d34ae583ae3992812d	json-v3.0.0.tar.gz
-+sha256	6a6115fc4a7239a135f2dce8d33f94cb8a936b8f608ac0f6699fbac278b0dd5b	LICENSE.MIT
-diff --git a/package/json-for-modern-cpp/json-for-modern-cpp.mk b/package/json-for-modern-cpp/json-for-modern-cpp.mk
-new file mode 100644
-index 0000000000..fef6f5c758
---- /dev/null
-+++ b/package/json-for-modern-cpp/json-for-modern-cpp.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# json for modern c++
-+#
-+################################################################################
-+
-+JSON_FOR_MODERN_CPP_VERSION = v3.0.0
-+JSON_FOR_MODERN_CPP_SOURCE=json-${JSON_FOR_MODERN_CPP_VERSION}.tar.gz
-+JSON_FOR_MODERN_CPP_SITE = $(call github,nlohmann,json,$(JSON_FOR_MODERN_CPP_VERSION))
-+JSON_FOR_MODERN_CPP_LICENSE = MIT
-+JSON_FOR_MODERN_CPP_LICENSE_FILES = LICENSE.MIT
-+JSON_FOR_MODERN_CPP_INSTALL_STAGING = YES
-+JSON_FOR_MODERN_CPP_CONF_OPTS += -DJSON_BuildTests=OFF
-+
-+$(eval $(cmake-package))
+diff --git a/package/wireguard/wireguard.hash b/package/wireguard/wireguard.hash
+index 3e90603691..0044562a1d 100644
+--- a/package/wireguard/wireguard.hash
++++ b/package/wireguard/wireguard.hash
+@@ -1,4 +1,4 @@
+-# From https://lists.zx2c4.com/pipermail/wireguard/2017-December/002200.html
+-sha256 57d799d35e92c905e548d00adeb7ed1ead4d6560f084c99e5aae0a87b4eb09e4  WireGuard-0.0.20171211.tar.xz
++# From https://lists.zx2c4.com/pipermail/wireguard/2017-December/002231.html
++sha256 2b97697e9b271ba8836a04120a287b824648124f21d5309170ec51c1f86ac5ed  WireGuard-0.0.20171221.tar.xz
+ # Locally calculated
+ sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/wireguard/wireguard.mk b/package/wireguard/wireguard.mk
+index 5f19cc7bbf..96fd080c22 100644
+--- a/package/wireguard/wireguard.mk
++++ b/package/wireguard/wireguard.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WIREGUARD_VERSION = 0.0.20171211
++WIREGUARD_VERSION = 0.0.20171221
+ WIREGUARD_SITE = https://git.zx2c4.com/WireGuard/snapshot
+ WIREGUARD_SOURCE = WireGuard-$(WIREGUARD_VERSION).tar.xz
+ WIREGUARD_LICENSE = GPL-2.0
 -- 
-2.14.3
+2.11.0
