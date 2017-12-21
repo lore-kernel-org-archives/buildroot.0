@@ -1,38 +1,38 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 21 Dec 2017 16:30:16 +0100
-Subject: [Buildroot] [git commit] package/brltty: disable X11 support for now
-Message-ID: <20171221153031.D91307FCDB@busybox.osuosl.org>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Thu, 21 Dec 2017 17:48:17 +0100
+Subject: [Buildroot] [PATCH] package/libcue: is not parallel-safe
+Message-ID: <20171221164817.32302-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0af9bb7f1ad455a1afd84933701fc11d3ae4e6b2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+The last commit before the 1.4.0 release was to disable parallel build [1]
 
-This stops xbrlapi from building/installing, which is really not essential
-to almost all users.
+[1] https://github.com/lipnitsk/libcue/commit/bebbc18a8c00a0b8c26bc6191af68c6a83629b40
 
 Fixes:
-  http://autobuild.buildroot.net/results/3fe2d053dcfdf5af791e9127f3e9f1dceaabfdc0
-  http://autobuild.buildroot.net/results/6cfa5e9d37ac1571dc58df538232bb9e1749e62a
+http://autobuild.buildroot.net/results/f25/f256037ca3d49f96add8ca2e2f9c980f5f9d764e
+http://autobuild.buildroot.net/results/d84/d84c7d0cb9cf5fa9996c42149eda5295700516f5
 
-Signed-off-by: Mario Lang <mlang@blind.guru>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- package/brltty/brltty.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/libcue/libcue.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/brltty/brltty.mk b/package/brltty/brltty.mk
-index 7214f10..9621d4f 100644
---- a/package/brltty/brltty.mk
-+++ b/package/brltty/brltty.mk
-@@ -19,6 +19,7 @@ BRLTTY_CONF_OPTS = \
- 	--disable-ocaml-bindings \
- 	--disable-python-bindings \
- 	--disable-tcl-bindings \
-+	--disable-x \
- 	--without-midi-package \
- 	--without-mikropuhe --without-speechd --without-swift \
- 	--without-theta --without-viavoice
+diff --git a/package/libcue/libcue.mk b/package/libcue/libcue.mk
+index 3aa3b4815f..7f8e45ecec 100644
+--- a/package/libcue/libcue.mk
++++ b/package/libcue/libcue.mk
+@@ -12,6 +12,8 @@ LIBCUE_DEPENDENCIES = host-bison host-flex flex
+ LIBCUE_INSTALL_STAGING = YES
+ LIBCUE_AUTORECONF = YES
+ 
++LIBCUE_MAKE = $(MAKE1)
++
+ # Needed for autoreconf
+ define LIBCUE_MAKE_CONFIG_DIR
+ 	mkdir $(@D)/config
+-- 
+2.14.3
