@@ -1,26 +1,27 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 21 Dec 2017 16:29:24 +0100
-Subject: [Buildroot] [PATCH 1/1] webkitgtk: security bimp to version
- 2.18.4
-In-Reply-To: <20171221133630.29763-1-aperez@igalia.com> (Adrian Perez de
- Castro's message of "Thu, 21 Dec 2017 15:36:30 +0200")
-References: <20171221133630.29763-1-aperez@igalia.com>
-Message-ID: <87r2ro9k17.fsf@dell.be.48ers.dk>
+Date: Thu, 21 Dec 2017 16:30:06 +0100
+Subject: [Buildroot] [PATCH] package/brltty: disable X11 support for now
+In-Reply-To: <20171219211431.22974-1-mlang@blind.guru> (Mario Lang's message
+ of "Tue, 19 Dec 2017 22:14:31 +0100")
+References: <20171219211431.22974-1-mlang@blind.guru>
+Message-ID: <87mv2c9k01.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Adrian" == Adrian Perez de Castro <aperez@igalia.com> writes:
+>>>>> "Mario" == Mario Lang <mlang@blind.guru> writes:
 
- > This is a maintenance release of the current stable WebKitGTK+ version,
- > which contains for CVE-2017-13866, CVE-2017-13870, CVE-2017-7156, and
+ > This stops xbrlapi from building/installing, which is really not essential
+ > to almost all users.
 
-s/contains/contains fixes/
+ > Fixes:
+ >   http://autobuild.buildroot.net/results/3fe2d053dcfdf5af791e9127f3e9f1dceaabfdc0
+ >   http://autobuild.buildroot.net/results/6cfa5e9d37ac1571dc58df538232bb9e1749e62a
+ > Signed-off-by: Mario Lang <mlang@blind.guru>
 
-Committed, thanks - I already had it on my todo list, so thanks for
-taking care of it.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
