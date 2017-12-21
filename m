@@ -1,84 +1,86 @@
-From: heyleke at gmail.com <heyleke@gmail.com>
-Date: Thu, 21 Dec 2017 10:41:49 +0100
-Subject: [Buildroot] [PATCH] Opentracing: add opentracing-cpp v1.2.0 package
-In-Reply-To: <1513849309-550-1-git-send-email-heyleke@gmail.com>
-References: <1513849309-550-1-git-send-email-heyleke@gmail.com>
-Message-ID: <1513849309-550-2-git-send-email-heyleke@gmail.com>
+From: Angelo Compagnucci <angelo@amarulasolutions.com>
+Date: Thu, 21 Dec 2017 12:35:04 +0100
+Subject: [Buildroot] [PATCH v5] package/i2c-tools: bump to version 4.0
+In-Reply-To: <20171218115150.71216129@windsurf>
+References: <1513257825-9289-1-git-send-email-angelo@amarulasolutions.com>
+ <20171215092151.4a43e74c@windsurf.png.is.keysight.com>
+ <CA+_SqVYuSiM3_ZixwaMaowY1yaa525+Fj_Hpqup_Qk58ZpMMkQ@mail.gmail.com>
+ <20171215151531.1b5a0015@windsurf>
+ <CA+_SqVZd14XeQ8Quw_se8N12ePYSMffgMH0=QDuegnx4BausHg@mail.gmail.com>
+ <20171218115150.71216129@windsurf>
+Message-ID: <CA+_SqVaBU5BbuyFWZ3ZJvvwLTTS2nQ1BYc5MfvMuNwXoWLkRBw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Jan Heylen <jan.heylen@nokia.com>
+Hello,
 
----
- package/Config.in                            |  1 +
- package/opentracing-cpp/Config.in            | 11 +++++++++++
- package/opentracing-cpp/opentracing-cpp.hash |  2 ++
- package/opentracing-cpp/opentracing-cpp.mk   | 15 +++++++++++++++
- 4 files changed, 29 insertions(+)
- create mode 100644 package/opentracing-cpp/Config.in
- create mode 100644 package/opentracing-cpp/opentracing-cpp.hash
- create mode 100644 package/opentracing-cpp/opentracing-cpp.mk
+On Mon, Dec 18, 2017 at 11:51 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
+>
+> On Fri, 15 Dec 2017 16:21:10 +0100, Angelo Compagnucci wrote:
+>
+>> > Yes, without your patch, i.e with the current version of i2c-tools in
+>> > Buildroot.
+>>
+>> Looking at the git history, the makefile is not changed that much but,
+>> If I remember correctly, it had two bugs:
+>>
+>> The first one was with parallel builds and fixed here [1] by the upstream.
+>> The second one was with shared libraries when BR2_STATIC_LIBS is selected.
+>> Imho these bugs were present before version 4.
+>>
+>> Want we to keep version 3.1.2?
+>
+> No we want to bump, but not if that introduces regressions.
+>
+>> >> === 100 ===
+>> >> umask 0022 && make -C /home/angelo/DEV/BUILDROOT/buildroot
+>> >> O=/home/angelo/DEV/BUILDROOT/br_qemu_arm/. i2c-tools
+>> >
+>> > So you built it 3 times, or 3 times my loop of 100 builds ?
+>>
+>> ^^^ That "=== 100 ===" means the last row of the output from your loop.
+>> So I run at least 3 times your loop and something more meanwhile.
+>
+> OK. Weird.
+>
+>> >> ls build/i2c-tools-4.0/
+>> >> CHANGES  COPYING.LGPL  eeprom    include  Makefile  README  tools
+>> >> COPYING  eeprog        eepromer  lib      py-smbus  stub    version.h
+>> >>
+>> >> Could you give me more details?
+>> >
+>> > Well, I don't have more details to provide: I just build i2c-tools, and
+>> > it fails randomly.
+>> >
+>> > Perhaps I should apply and see what the autobuilders have to say, i.e
+>> > if they agree with you (it builds) or with me (it fails randomly).
+>>
+>> I hope it works!
+>
+> I'd like someone else in the Buildroot community to test your patch and
+> see if the parallel build problems are also reproducible. Anyone
+> available to test Angelo's patch?
 
-diff --git a/package/Config.in b/package/Config.in
-index bd39a37..044a7e8 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1288,6 +1288,7 @@ menu "Logging"
- 	source "package/log4cplus/Config.in"
- 	source "package/log4cpp/Config.in"
- 	source "package/log4cxx/Config.in"
-+    source "package/opentracing-cpp/Config.in"
- 	source "package/zlog/Config.in"
- endmenu
- 
-diff --git a/package/opentracing-cpp/Config.in b/package/opentracing-cpp/Config.in
-new file mode 100644
-index 0000000..3f6f1ad
---- /dev/null
-+++ b/package/opentracing-cpp/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_OPENTRACING_CPP
-+	bool "opentracing-cpp"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
-+	help
-+	  OpenTracing API for C++
-+
-+	  http://opentracing.io
-+
-+comment "opentracing-cpp needs a toolchain w/ C++"
-+	depends on !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/opentracing-cpp/opentracing-cpp.hash b/package/opentracing-cpp/opentracing-cpp.hash
-new file mode 100644
-index 0000000..a710d62
---- /dev/null
-+++ b/package/opentracing-cpp/opentracing-cpp.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256 c77041cb2f147ac81b2b0702abfced5565a9cebc318d045c060a4c3e074009ee opentracing-cpp-v1.2.0.tar.gz
-diff --git a/package/opentracing-cpp/opentracing-cpp.mk b/package/opentracing-cpp/opentracing-cpp.mk
-new file mode 100644
-index 0000000..e090be5
---- /dev/null
-+++ b/package/opentracing-cpp/opentracing-cpp.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# opentracing-cpp
-+#
-+################################################################################
-+
-+OPENTRACING_CPP_VERSION = v1.2.0
-+OPENTRACING_CPP_SITE = $(call github,opentracing,opentracing-cpp,$(OPENTRACING_CPP_VERSION))
-+OPENTRACING_CPP_LICENSE = MIT
-+OPENTRACING_CPP_LICENSE_FILES = COPYING
-+
-+OPENTRACING_CPP_INSTALL_STAGING = YES
-+OPENTRACING_CPP_INSTALL_TARGET = YES
-+
-+$(eval $(cmake-package))
--- 
-2.7.4
+I'm doing some other tests and now I'm hitting a parallel build issue,
+so you were right!
+Solving it as soon as possible!
+
+Thanks!
+
+>
+> Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux and Kernel engineering
+> http://free-electrons.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
