@@ -1,127 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 21 Dec 2017 16:28:22 +0100
-Subject: [Buildroot] [git commit] webkitgtk: security bimp to version 2.18.4
-Message-ID: <20171221153031.CAEBD8110E@busybox.osuosl.org>
+Date: Thu, 21 Dec 2017 16:30:16 +0100
+Subject: [Buildroot] [git commit] package/brltty: disable X11 support for now
+Message-ID: <20171221153031.D91307FCDB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fbf6a483e00a87fb561fa5fe9a423c4a14867f50
+commit: https://git.buildroot.net/buildroot/commit/?id=0af9bb7f1ad455a1afd84933701fc11d3ae4e6b2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This is a maintenance release of the current stable WebKitGTK+ version,
-which contains fixes for CVE-2017-13866, CVE-2017-13870, CVE-2017-7156, and
-CVE-2017-13856.  Additionally, this release brings improvements in the
-WebDriver spec-compliance, plugs several memory leaks in its GStreamer based
-multimedia backend, and fixes a bug when handling cookie removal.
+This stops xbrlapi from building/installing, which is really not essential
+to almost all users.
 
-Release notes can be found in the announcement:
+Fixes:
+  http://autobuild.buildroot.net/results/3fe2d053dcfdf5af791e9127f3e9f1dceaabfdc0
+  http://autobuild.buildroot.net/results/6cfa5e9d37ac1571dc58df538232bb9e1749e62a
 
-  https://webkitgtk.org/2017/12/19/webkitgtk2.18.4-released.html
-
-More details about the security fixes are provided in the following
-WebKitGTK+ Security Advisory report:
-
-  https://webkitgtk.org/security/WSA-2017-0010.html
-
-Last but not least, this new release includes the fix for honoring the
-CMAKE_BUILD_TYPE value from CMake toolchain files and the corresponding
-patch is removed.
-
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Mario Lang <mlang@blind.guru>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...s-of-CMAKE_BUILD_TYPE-from-toolchain-file.patch | 52 ----------------------
- package/webkitgtk/webkitgtk.hash                   |  8 ++--
- package/webkitgtk/webkitgtk.mk                     |  2 +-
- 3 files changed, 5 insertions(+), 57 deletions(-)
+ package/brltty/brltty.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/webkitgtk/0001-CMake-Values-of-CMAKE_BUILD_TYPE-from-toolchain-file.patch b/package/webkitgtk/0001-CMake-Values-of-CMAKE_BUILD_TYPE-from-toolchain-file.patch
-deleted file mode 100644
-index 6ac1258..0000000
---- a/package/webkitgtk/0001-CMake-Values-of-CMAKE_BUILD_TYPE-from-toolchain-file.patch
-+++ /dev/null
-@@ -1,52 +0,0 @@
--From 3b13b1ec9985e72132ec6a3ba13cf60b34848817 Mon Sep 17 00:00:00 2001
--From: "aperez at igalia.com"
-- <aperez@igalia.com@268f45cc-cd09-0410-ab3c-d52691b4dbfc>
--Date: Mon, 27 Nov 2017 15:34:49 +0000
--Subject: [PATCH] [CMake] Values of CMAKE_BUILD_TYPE from toolchain file are
-- ignored https://bugs.webkit.org/show_bug.cgi?id=179971
--
--Reviewed by Carlos Alberto Lopez Perez.
--
--* CMakeLists.txt: Call project() first, as it loads the toolchain
--file, so that's done before checking CMAKE_BUILD_TYPE.
--
--
--git-svn-id: http://svn.webkit.org/repository/webkit/trunk at 225168 268f45cc-cd09-0410-ab3c-d52691b4dbfc
--
--Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
--Backported from: 75986e1807b
--
--diff --git a/CMakeLists.txt b/CMakeLists.txt
--index d80c37b950a..0a9bd17b981 100644
----- a/CMakeLists.txt
--+++ b/CMakeLists.txt
--@@ -1,8 +1,17 @@
-- # -----------------------------------------------------------------------------
-- # Determine CMake version and build type.
-- # -----------------------------------------------------------------------------
--+#
--+# NOTE: cmake_minimum_required() and project() *MUST* be the two fist commands
--+# used, see https://cmake.org/cmake/help/v3.3/command/project.html -- the
--+# latter in particular handles loading a bunch of shared CMake definitions
--+# and loading the cross-compilation settings from CMAKE_TOOLCHAIN_FILE.
--+#
--+
-- cmake_minimum_required(VERSION 3.3)
-- 
--+project(WebKit)
--+
-- if (NOT CMAKE_BUILD_TYPE)
--     message(WARNING "No CMAKE_BUILD_TYPE value specified, defaulting to RelWithDebInfo.")
--     set(CMAKE_BUILD_TYPE "RelWithDebInfo" CACHE STRING "Choose the type of build." FORCE)
--@@ -10,8 +19,6 @@ else ()
--     message(STATUS "The CMake build type is: ${CMAKE_BUILD_TYPE}")
-- endif ()
-- 
---project(WebKit)
---
-- set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/Source/cmake")
-- 
-- set(ENABLE_WEBCORE ON)
---- 
--2.15.1
--
-diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
-index 9e207c5..3d64b6f5 100644
---- a/package/webkitgtk/webkitgtk.hash
-+++ b/package/webkitgtk/webkitgtk.hash
-@@ -1,7 +1,7 @@
--# From https://webkitgtk.org/releases/webkitgtk-2.18.3.tar.xz.sums
--md5 264a22d7467deae606e42b6eb5dd65af webkitgtk-2.18.3.tar.xz
--sha1 164cad34281ef597a3d4ad214e8037c3ddef4d17 webkitgtk-2.18.3.tar.xz
--sha256 e15420e1616a6f70f321541d467af5ca285bff66b1e0fa68a01df3ccf1b18f9e webkitgtk-2.18.3.tar.xz
-+# From https://webkitgtk.org/releases/webkitgtk-2.18.4.tar.xz.sums
-+md5 c4686971eac2760bab685e21ac8849be webkitgtk-2.18.4.tar.xz
-+sha1 709616b445158dc3163a64bb59e95aadbe58949c webkitgtk-2.18.4.tar.xz
-+sha256 87b6bb9a6065b949ecbe6191313c43e57ad28efdf1f2b5e763405093520632b8 webkitgtk-2.18.4.tar.xz
- 
- # Hashes for license files:
- sha256 0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4 Source/WebCore/LICENSE-APPLE
-diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-index c467546..142f976 100644
---- a/package/webkitgtk/webkitgtk.mk
-+++ b/package/webkitgtk/webkitgtk.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WEBKITGTK_VERSION = 2.18.3
-+WEBKITGTK_VERSION = 2.18.4
- WEBKITGTK_SITE = http://www.webkitgtk.org/releases
- WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
- WEBKITGTK_INSTALL_STAGING = YES
+diff --git a/package/brltty/brltty.mk b/package/brltty/brltty.mk
+index 7214f10..9621d4f 100644
+--- a/package/brltty/brltty.mk
++++ b/package/brltty/brltty.mk
+@@ -19,6 +19,7 @@ BRLTTY_CONF_OPTS = \
+ 	--disable-ocaml-bindings \
+ 	--disable-python-bindings \
+ 	--disable-tcl-bindings \
++	--disable-x \
+ 	--without-midi-package \
+ 	--without-mikropuhe --without-speechd --without-swift \
+ 	--without-theta --without-viavoice
