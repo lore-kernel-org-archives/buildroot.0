@@ -1,36 +1,29 @@
-From: Joel Stanley <joel@jms.id.au>
-Date: Thu, 21 Dec 2017 11:31:26 +1030
-Subject: [Buildroot] musl and linux-tool-gpio
-Message-ID: <CACPK8Xc7=f_p8Ws4u4yYn3yx_63AXP8XaWELiy49M2K459AaeA@mail.gmail.com>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Thu, 21 Dec 2017 00:26:00 -0200
+Subject: [Buildroot] [PATCHv2] gitlab-ci: add .config to artefacts
+References: <20171220141933.27736-1-yann.morin.1998@free.fr>
+Message-ID: <5a3b1bb869f54_7ead14889647216f@ultri3.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello buildroot,
+Hello,
 
-I was trying to create an ARM image that used a musl libc and contains
-the Linux gpio tools. It fails to build as tools/gpio/gpio-event-mon.c
-requires but does not directly include sys/types.h for the u_int32_t
-types.
+On Wed, Dec 20, 2017 at 12:19 PM, Yann E. MORIN wrote:
 
-On a glibc system sys/types.h appears to be included through unistd.h.
+> The defconfig is dumped at the very beginning of the build log, but the
+> resulting .config is still interesting to get, in case some settings did
+> not end up in there (e.g. because of the host gcc version, or because of
+> conflicting settings, or because the Config.in changed without the tests
+> being updated, or...).
+> 
+> So, add the .config to the list of artefacts to save.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-I've sent a patch to the kernel:
+Acked-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 
- https://patchwork.kernel.org/patch/10126851/
-
-How do I fix this for buildroot? We could disable the gpio tools for
-kernels that do not include this fix. Or we could disable the tools
-for musl builds.
-
-Better would be to patch the kernel build in buildroot, but it appears
-that patches can't be added to linux-tools in the same way as other
-packages.
-
-Which solution should we go with?
-
-Cheers,
-
-Joel
+Regards,
+Ricardo
