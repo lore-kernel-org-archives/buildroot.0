@@ -1,42 +1,48 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 21 Dec 2017 07:00:40 +0200
-Subject: [Buildroot] how to pass directory path to sed script
-In-Reply-To: <CAPi4xiV8JLmssUyBbFg3G+LKAwH1vaOrA8Wq5u=rQegY=3e7oQ@mail.gmail.com>
-References: <CAPi4xiV8JLmssUyBbFg3G+LKAwH1vaOrA8Wq5u=rQegY=3e7oQ@mail.gmail.com>
-Message-ID: <20171221050040.ee74zhh6xyljuyy5@tarshish>
+Date: Thu, 21 Dec 2017 08:17:06 +0200
+Subject: [Buildroot] musl and linux-tool-gpio
+In-Reply-To: <CACPK8Xc7=f_p8Ws4u4yYn3yx_63AXP8XaWELiy49M2K459AaeA@mail.gmail.com>
+References: <CACPK8Xc7=f_p8Ws4u4yYn3yx_63AXP8XaWELiy49M2K459AaeA@mail.gmail.com>
+Message-ID: <20171221061706.vpck4pcd764eezhx@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Sam,
+Hi Joel,
 
-On Wed, Dec 20, 2017 at 02:19:42PM -0800, Sam wrote:
-> I'm using Buildroot to cross-compile Linux for RPi3. I'm trying to add a
-> new package called Netmap to my Buildroot packages. The problem is that
-> there's a configure file in netmap src directory which contained a variable
-> named BUILDDIR and its default value is $PWD. During the configuring
-> process, it'll be  automatically configured to my buildroot root directory.
-> So I wanna replace it with $(@D). The following is what was doing, I'm
-> sorry for no mk file attached because my host machine is on Gentoo text
-> mode console.
+On Thu, Dec 21, 2017 at 11:31:26AM +1030, Joel Stanley wrote:
+> I was trying to create an ARM image that used a musl libc and contains
+> the Linux gpio tools. It fails to build as tools/gpio/gpio-event-mon.c
+> requires but does not directly include sys/types.h for the u_int32_t
+> types.
 > 
-> define NETMAP_BUILD_CMDS
->      NETMAP_CURRENT_DIR=$(sed -e 's/\//\\\//g' <<< "$(@D)")  ---- empty
->      NETMAP_CURRENT_DIR=$$(sed -e 's/\//\\\//g' <<< "$(@D)") ----
-> commandline itself
->      sed -e 's/BUILDDIR=$$PWD/BUILDDIR=$(NETMAP_CURRENT_DIR)/g' -i
-> $(@D)/LINUX/configure
->      ...
-> endef
+> On a glibc system sys/types.h appears to be included through unistd.h.
+> 
+> I've sent a patch to the kernel:
+> 
+>  https://patchwork.kernel.org/patch/10126851/
+> 
+> How do I fix this for buildroot? We could disable the gpio tools for
+> kernels that do not include this fix. Or we could disable the tools
+> for musl builds.
 
-You can't use '/' as s command expressions delimiter since the 
-$(NETMAP_CURRENT_DIR) make variable expansion includes '/'. Use some other 
-character, '%' is a common choice. 
+Or a combination of both. That is, disable the gpio tool for older kernel when 
+the libc is musl. That would be the best option, I think.
 
-Consider also using $(SED). Grep for '\bSED\b' under package/ for many 
-examples.
+> Better would be to patch the kernel build in buildroot, but it appears
+> that patches can't be added to linux-tools in the same way as other
+> packages.
+
+You can't easily do that because Buildroot is supposed to work with any kernel 
+version. A patch that applies to your version might not apply to another 
+kernel version.
+
+> Which solution should we go with?
+
+Another solution is to use sed to implant the missing header include at the 
+beginning of the file. This is ugly, and IMO not worth it.
 
 baruch
 
