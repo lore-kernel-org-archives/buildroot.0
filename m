@@ -1,88 +1,90 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 21 Dec 2017 18:05:21 +0100
-Subject: [Buildroot] [PATCH] package/libcue: is not parallel-safe
-In-Reply-To: <20171221170203.GA4458@scaer>
-References: <20171221164817.32302-1-romain.naour@gmail.com>
- <20171221170203.GA4458@scaer>
-Message-ID: <20171221170521.GB4458@scaer>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Thu, 21 Dec 2017 19:21:17 +0100
+Subject: [Buildroot] [PATCH 1/3] toolchain-external: bump version of Linaro
+ ARM toolchain to 7.2-2017.11
+Message-ID: <20171221182119.27682-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2017-12-21 18:02 +0100, Yann E. MORIN spake thusly:
-> Romain, All,
-> 
-> On 2017-12-21 17:48 +0100, Romain Naour spake thusly:
-> > The last commit before the 1.4.0 release was to disable parallel build [1]
-> > 
-> > [1] https://github.com/lipnitsk/libcue/commit/bebbc18a8c00a0b8c26bc6191af68c6a83629b40
-> > 
-> > Fixes:
-> > http://autobuild.buildroot.net/results/f25/f256037ca3d49f96add8ca2e2f9c980f5f9d764e
-> > http://autobuild.buildroot.net/results/d84/d84c7d0cb9cf5fa9996c42149eda5295700516f5
-> > 
-> > Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> 
-> Reviewed-by: ME
+https://releases.linaro.org/components/toolchain/binaries/7.2-2017.11
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Tested with qemu_arm_vexpress_defconfig.
 
-(It seems that I have a hard time with autocompletion, be it on IRC or
-in email bodies... Sigh...)
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+---
+ .../toolchain-external/toolchain-external-linaro-arm/Config.in | 10 ++++------
+ .../toolchain-external-linaro-arm.hash                         |  4 ++--
+ .../toolchain-external-linaro-arm.mk                           |  6 +++---
+ 3 files changed, 9 insertions(+), 11 deletions(-)
 
-Regards,
-Yann E. MORIN.
-
-> However, isn't it time to update? 1.4.0 was released in 2010, and there
-> have been new releases since then, the most recent, 2.2.0, in November
-> 2017, and they switched to cmake.
-> 
-> Regards,
-> Yann E. MORIN.
-> 
-> > ---
-> >  package/libcue/libcue.mk | 2 ++
-> >  1 file changed, 2 insertions(+)
-> > 
-> > diff --git a/package/libcue/libcue.mk b/package/libcue/libcue.mk
-> > index 3aa3b4815f..7f8e45ecec 100644
-> > --- a/package/libcue/libcue.mk
-> > +++ b/package/libcue/libcue.mk
-> > @@ -12,6 +12,8 @@ LIBCUE_DEPENDENCIES = host-bison host-flex flex
-> >  LIBCUE_INSTALL_STAGING = YES
-> >  LIBCUE_AUTORECONF = YES
-> >  
-> > +LIBCUE_MAKE = $(MAKE1)
-> > +
-> >  # Needed for autoreconf
-> >  define LIBCUE_MAKE_CONFIG_DIR
-> >  	mkdir $(@D)/config
-> > -- 
-> > 2.14.3
-> > 
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
-> 
-> -- 
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/toolchain/toolchain-external/toolchain-external-linaro-arm/Config.in b/toolchain/toolchain-external/toolchain-external-linaro-arm/Config.in
+index 3acc060131..d383273c1b 100644
+--- a/toolchain/toolchain-external/toolchain-external-linaro-arm/Config.in
++++ b/toolchain/toolchain-external/toolchain-external-linaro-arm/Config.in
+@@ -1,13 +1,11 @@
+ comment "Linaro toolchains available for Cortex-A + EABIhf"
+ 	depends on BR2_arm
+-	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_7
+ 	depends on !BR2_ARM_CPU_ARMV7A || !BR2_ARM_EABIHF
+ 	depends on !BR2_STATIC_LIBS
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM
+ 	bool "Linaro ARM 2017.11"
+ 	depends on BR2_arm
+-	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_7
+ 	depends on BR2_ARM_CPU_ARMV7A || BR2_ARM_CPU_ARMV8A
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+ 	depends on BR2_ARM_EABIHF
+@@ -16,13 +14,13 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM
+ 	select BR2_TOOLCHAIN_HAS_SSP
+ 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 	select BR2_INSTALL_LIBSTDCPP
+-	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_6
+-	select BR2_TOOLCHAIN_GCC_AT_LEAST_6
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_10
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_7
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	help
+ 	  Linaro toolchain for the ARM architecture. It uses Linaro
+-	  GCC 2017.11 (based on gcc 6.4.1), Linaro GDB 2017.11 (based on
+-	  GDB 8.0), glibc 2.23, Binutils 2017.11 (based on 2.27). It
++	  GCC 2017.11 (based on gcc 7.2.1), Linaro GDB 2017.11 (based on
++	  GDB 8.0), glibc 2.25, Binutils 2017.11 (based on 2.28). It
+ 	  generates code that runs on all Cortex-A profile devices,
+ 	  but tuned for the Cortex-A9. The code generated is Thumb 2,
+ 	  with the hard floating point calling convention, and uses
+diff --git a/toolchain/toolchain-external/toolchain-external-linaro-arm/toolchain-external-linaro-arm.hash b/toolchain/toolchain-external/toolchain-external-linaro-arm/toolchain-external-linaro-arm.hash
+index 42d6c3bf8f..352cbb25c5 100644
+--- a/toolchain/toolchain-external/toolchain-external-linaro-arm/toolchain-external-linaro-arm.hash
++++ b/toolchain/toolchain-external/toolchain-external-linaro-arm/toolchain-external-linaro-arm.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 e088c71a4207a36beca9f3e60340ff7c678af53634765fc70865df80320dbdc7  gcc-linaro-6.4.1-2017.11-i686_arm-linux-gnueabihf.tar.xz
+-sha256 1758d76daed9689e958668c3f2adef28c8c980b719d15594cbebfb5e5c4496f6  gcc-linaro-6.4.1-2017.11-x86_64_arm-linux-gnueabihf.tar.xz
++sha256 72919a3a99d4e28309bc8b0e615f44c65824ef012de50db3ffe9a34776e6f510  gcc-linaro-7.2.1-2017.11-i686_arm-linux-gnueabihf.tar.xz
++sha256 cee0087b1f1205b73996651b99acd3a926d136e71047048f1758ffcec69b1ca2  gcc-linaro-7.2.1-2017.11-x86_64_arm-linux-gnueabihf.tar.xz
+diff --git a/toolchain/toolchain-external/toolchain-external-linaro-arm/toolchain-external-linaro-arm.mk b/toolchain/toolchain-external/toolchain-external-linaro-arm/toolchain-external-linaro-arm.mk
+index 61ffd25a40..5437fe2d07 100644
+--- a/toolchain/toolchain-external/toolchain-external-linaro-arm/toolchain-external-linaro-arm.mk
++++ b/toolchain/toolchain-external/toolchain-external-linaro-arm/toolchain-external-linaro-arm.mk
+@@ -5,12 +5,12 @@
+ ################################################################################
+ 
+ TOOLCHAIN_EXTERNAL_LINARO_ARM_VERSION = 2017.11
+-TOOLCHAIN_EXTERNAL_LINARO_ARM_SITE = https://releases.linaro.org/components/toolchain/binaries/6.4-$(TOOLCHAIN_EXTERNAL_LINARO_ARM_VERSION)/arm-linux-gnueabihf
++TOOLCHAIN_EXTERNAL_LINARO_ARM_SITE = https://releases.linaro.org/components/toolchain/binaries/7.2-$(TOOLCHAIN_EXTERNAL_LINARO_ARM_VERSION)/arm-linux-gnueabihf
+ 
+ ifeq ($(HOSTARCH),x86)
+-TOOLCHAIN_EXTERNAL_LINARO_ARM_SOURCE = gcc-linaro-6.4.1-$(TOOLCHAIN_EXTERNAL_LINARO_ARM_VERSION)-i686_arm-linux-gnueabihf.tar.xz
++TOOLCHAIN_EXTERNAL_LINARO_ARM_SOURCE = gcc-linaro-7.2.1-$(TOOLCHAIN_EXTERNAL_LINARO_ARM_VERSION)-i686_arm-linux-gnueabihf.tar.xz
+ else
+-TOOLCHAIN_EXTERNAL_LINARO_ARM_SOURCE = gcc-linaro-6.4.1-$(TOOLCHAIN_EXTERNAL_LINARO_ARM_VERSION)-x86_64_arm-linux-gnueabihf.tar.xz
++TOOLCHAIN_EXTERNAL_LINARO_ARM_SOURCE = gcc-linaro-7.2.1-$(TOOLCHAIN_EXTERNAL_LINARO_ARM_VERSION)-x86_64_arm-linux-gnueabihf.tar.xz
+ endif
+ 
+ $(eval $(toolchain-external-package))
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.14.3
