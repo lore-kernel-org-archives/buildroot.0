@@ -1,86 +1,126 @@
-From: Angelo Compagnucci <angelo@amarulasolutions.com>
-Date: Thu, 21 Dec 2017 12:35:04 +0100
-Subject: [Buildroot] [PATCH v5] package/i2c-tools: bump to version 4.0
-In-Reply-To: <20171218115150.71216129@windsurf>
-References: <1513257825-9289-1-git-send-email-angelo@amarulasolutions.com>
- <20171215092151.4a43e74c@windsurf.png.is.keysight.com>
- <CA+_SqVYuSiM3_ZixwaMaowY1yaa525+Fj_Hpqup_Qk58ZpMMkQ@mail.gmail.com>
- <20171215151531.1b5a0015@windsurf>
- <CA+_SqVZd14XeQ8Quw_se8N12ePYSMffgMH0=QDuegnx4BausHg@mail.gmail.com>
- <20171218115150.71216129@windsurf>
-Message-ID: <CA+_SqVaBU5BbuyFWZ3ZJvvwLTTS2nQ1BYc5MfvMuNwXoWLkRBw@mail.gmail.com>
+From: Adrian Perez de Castro <aperez@igalia.com>
+Date: Thu, 21 Dec 2017 15:36:30 +0200
+Subject: [Buildroot] [PATCH 1/1] webkitgtk: security bimp to version 2.18.4
+Message-ID: <20171221133630.29763-1-aperez@igalia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+This is a maintenance release of the current stable WebKitGTK+ version,
+which contains for CVE-2017-13866, CVE-2017-13870, CVE-2017-7156, and
+CVE-2017-13856. Additionally, this release brings improvements in the
+WebDriver spec-compliance, plugs several memory leaks in its GStreamer
+based multimedia backend, and fixes a bug when handling cookie removal.
 
-On Mon, Dec 18, 2017 at 11:51 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
->
-> On Fri, 15 Dec 2017 16:21:10 +0100, Angelo Compagnucci wrote:
->
->> > Yes, without your patch, i.e with the current version of i2c-tools in
->> > Buildroot.
->>
->> Looking at the git history, the makefile is not changed that much but,
->> If I remember correctly, it had two bugs:
->>
->> The first one was with parallel builds and fixed here [1] by the upstream.
->> The second one was with shared libraries when BR2_STATIC_LIBS is selected.
->> Imho these bugs were present before version 4.
->>
->> Want we to keep version 3.1.2?
->
-> No we want to bump, but not if that introduces regressions.
->
->> >> === 100 ===
->> >> umask 0022 && make -C /home/angelo/DEV/BUILDROOT/buildroot
->> >> O=/home/angelo/DEV/BUILDROOT/br_qemu_arm/. i2c-tools
->> >
->> > So you built it 3 times, or 3 times my loop of 100 builds ?
->>
->> ^^^ That "=== 100 ===" means the last row of the output from your loop.
->> So I run at least 3 times your loop and something more meanwhile.
->
-> OK. Weird.
->
->> >> ls build/i2c-tools-4.0/
->> >> CHANGES  COPYING.LGPL  eeprom    include  Makefile  README  tools
->> >> COPYING  eeprog        eepromer  lib      py-smbus  stub    version.h
->> >>
->> >> Could you give me more details?
->> >
->> > Well, I don't have more details to provide: I just build i2c-tools, and
->> > it fails randomly.
->> >
->> > Perhaps I should apply and see what the autobuilders have to say, i.e
->> > if they agree with you (it builds) or with me (it fails randomly).
->>
->> I hope it works!
->
-> I'd like someone else in the Buildroot community to test your patch and
-> see if the parallel build problems are also reproducible. Anyone
-> available to test Angelo's patch?
+Release notes can be found in the announcement:
 
-I'm doing some other tests and now I'm hitting a parallel build issue,
-so you were right!
-Solving it as soon as possible!
+  https://webkitgtk.org/2017/12/19/webkitgtk2.18.4-released.html
 
-Thanks!
+More details about the security fixes are provided in the following
+WebKitGTK+ Security Advisory report:
 
->
-> Thanks!
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux and Kernel engineering
-> http://free-electrons.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+  https://webkitgtk.org/security/WSA-2017-0010.html
+
+Last but not least, this new release includes the fix for honoring the
+CMAKE_BUILD_TYPE value from CMake toolchain files and the corresponding
+patch is removed.
+
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+---
+ ...s-of-CMAKE_BUILD_TYPE-from-toolchain-file.patch | 52 ----------------------
+ package/webkitgtk/webkitgtk.hash                   |  8 ++--
+ package/webkitgtk/webkitgtk.mk                     |  2 +-
+ 3 files changed, 5 insertions(+), 57 deletions(-)
+ delete mode 100644 package/webkitgtk/0001-CMake-Values-of-CMAKE_BUILD_TYPE-from-toolchain-file.patch
+
+diff --git a/package/webkitgtk/0001-CMake-Values-of-CMAKE_BUILD_TYPE-from-toolchain-file.patch b/package/webkitgtk/0001-CMake-Values-of-CMAKE_BUILD_TYPE-from-toolchain-file.patch
+deleted file mode 100644
+index 6ac1258626..0000000000
+--- a/package/webkitgtk/0001-CMake-Values-of-CMAKE_BUILD_TYPE-from-toolchain-file.patch
++++ /dev/null
+@@ -1,52 +0,0 @@
+-From 3b13b1ec9985e72132ec6a3ba13cf60b34848817 Mon Sep 17 00:00:00 2001
+-From: "aperez at igalia.com"
+- <aperez@igalia.com@268f45cc-cd09-0410-ab3c-d52691b4dbfc>
+-Date: Mon, 27 Nov 2017 15:34:49 +0000
+-Subject: [PATCH] [CMake] Values of CMAKE_BUILD_TYPE from toolchain file are
+- ignored https://bugs.webkit.org/show_bug.cgi?id=179971
+-
+-Reviewed by Carlos Alberto Lopez Perez.
+-
+-* CMakeLists.txt: Call project() first, as it loads the toolchain
+-file, so that's done before checking CMAKE_BUILD_TYPE.
+-
+-
+-git-svn-id: http://svn.webkit.org/repository/webkit/trunk at 225168 268f45cc-cd09-0410-ab3c-d52691b4dbfc
+-
+-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+-Backported from: 75986e1807b
+-
+-diff --git a/CMakeLists.txt b/CMakeLists.txt
+-index d80c37b950a..0a9bd17b981 100644
+---- a/CMakeLists.txt
+-+++ b/CMakeLists.txt
+-@@ -1,8 +1,17 @@
+- # -----------------------------------------------------------------------------
+- # Determine CMake version and build type.
+- # -----------------------------------------------------------------------------
+-+#
+-+# NOTE: cmake_minimum_required() and project() *MUST* be the two fist commands
+-+# used, see https://cmake.org/cmake/help/v3.3/command/project.html -- the
+-+# latter in particular handles loading a bunch of shared CMake definitions
+-+# and loading the cross-compilation settings from CMAKE_TOOLCHAIN_FILE.
+-+#
+-+
+- cmake_minimum_required(VERSION 3.3)
+- 
+-+project(WebKit)
+-+
+- if (NOT CMAKE_BUILD_TYPE)
+-     message(WARNING "No CMAKE_BUILD_TYPE value specified, defaulting to RelWithDebInfo.")
+-     set(CMAKE_BUILD_TYPE "RelWithDebInfo" CACHE STRING "Choose the type of build." FORCE)
+-@@ -10,8 +19,6 @@ else ()
+-     message(STATUS "The CMake build type is: ${CMAKE_BUILD_TYPE}")
+- endif ()
+- 
+--project(WebKit)
+--
+- set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/Source/cmake")
+- 
+- set(ENABLE_WEBCORE ON)
+--- 
+-2.15.1
+-
+diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
+index 9e207c541b..3d64b6f5a9 100644
+--- a/package/webkitgtk/webkitgtk.hash
++++ b/package/webkitgtk/webkitgtk.hash
+@@ -1,7 +1,7 @@
+-# From https://webkitgtk.org/releases/webkitgtk-2.18.3.tar.xz.sums
+-md5 264a22d7467deae606e42b6eb5dd65af webkitgtk-2.18.3.tar.xz
+-sha1 164cad34281ef597a3d4ad214e8037c3ddef4d17 webkitgtk-2.18.3.tar.xz
+-sha256 e15420e1616a6f70f321541d467af5ca285bff66b1e0fa68a01df3ccf1b18f9e webkitgtk-2.18.3.tar.xz
++# From https://webkitgtk.org/releases/webkitgtk-2.18.4.tar.xz.sums
++md5 c4686971eac2760bab685e21ac8849be webkitgtk-2.18.4.tar.xz
++sha1 709616b445158dc3163a64bb59e95aadbe58949c webkitgtk-2.18.4.tar.xz
++sha256 87b6bb9a6065b949ecbe6191313c43e57ad28efdf1f2b5e763405093520632b8 webkitgtk-2.18.4.tar.xz
+ 
+ # Hashes for license files:
+ sha256 0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4 Source/WebCore/LICENSE-APPLE
+diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
+index c4675463fa..142f9766e7 100644
+--- a/package/webkitgtk/webkitgtk.mk
++++ b/package/webkitgtk/webkitgtk.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WEBKITGTK_VERSION = 2.18.3
++WEBKITGTK_VERSION = 2.18.4
+ WEBKITGTK_SITE = http://www.webkitgtk.org/releases
+ WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
+ WEBKITGTK_INSTALL_STAGING = YES
+-- 
+2.15.1
