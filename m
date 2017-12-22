@@ -1,35 +1,31 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri, 22 Dec 2017 13:15:27 +0200
-Subject: [Buildroot] [PATCH 2/2] xfsprogs: update homepage link
-In-Reply-To: <2e7d914e7b12cdac37de9790884642d6547a3752.1513941327.git.baruch@tkos.co.il>
-References: <2e7d914e7b12cdac37de9790884642d6547a3752.1513941327.git.baruch@tkos.co.il>
-Message-ID: <4690efda9cfb4bd4017f3769eae250fbb65b281a.1513941327.git.baruch@tkos.co.il>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Fri, 22 Dec 2017 12:37:22 +0100
+Subject: [Buildroot] [PATCH 2/2] DEVELOPERS: add myself to mesa3d
+In-Reply-To: <20171222113722.32603-1-romain.naour@gmail.com>
+References: <20171222113722.32603-1-romain.naour@gmail.com>
+Message-ID: <20171222113722.32603-2-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The old SGI site is not accessible anymore. Use the link from the README
-file.
-
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
-Actually, xfs.org is also down at the moment. But according to the
-google cache it has been online a few days ago. We'll see.
----
- package/xfsprogs/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ DEVELOPERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/xfsprogs/Config.in b/package/xfsprogs/Config.in
-index 9cd4aa3f9fad..024cde9fe64d 100644
---- a/package/xfsprogs/Config.in
-+++ b/package/xfsprogs/Config.in
-@@ -12,4 +12,4 @@ config BR2_PACKAGE_XFSPROGS
- 	help
- 	  The XFS file system utilities and libraries
- 
--	  http://oss.sgi.com/projects/xfs/
-+	  http://xfs.org
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 35cc7b00a5..9f4f282203 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1466,6 +1466,7 @@ F:	package/libspatialindex/
+ F:	package/linux-syscall-support/
+ F:	package/lugaru/
+ F:	package/mcelog/
++F:	package/mesa3d/
+ F:	package/minetest/
+ F:	package/minetest-game/
+ F:	package/openpowerlink/
 -- 
-2.15.1
+2.14.3
