@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 22 Dec 2017 15:33:19 +0100
-Subject: [Buildroot] [PATCH 1/2] alsa-lib: bump to version 1.1.5
-In-Reply-To: <75cacfeecb3050ab53925db150892c8034ab0303.1513938458.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Fri, 22 Dec 2017 12:27:37 +0200")
-References: <75cacfeecb3050ab53925db150892c8034ab0303.1513938458.git.baruch@tkos.co.il>
-Message-ID: <87vagyygr4.fsf@dell.be.48ers.dk>
+Date: Fri, 22 Dec 2017 15:33:24 +0100
+Subject: [Buildroot] [PATCH 1/2] xfsprogs: bump to version 4.14.0
+In-Reply-To: <2e7d914e7b12cdac37de9790884642d6547a3752.1513941327.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Fri, 22 Dec 2017 13:15:26 +0200")
+References: <2e7d914e7b12cdac37de9790884642d6547a3752.1513941327.git.baruch@tkos.co.il>
+Message-ID: <87r2rmygqz.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,13 +13,13 @@ To: buildroot@busybox.net
 
 >>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > Drop upstream patches; renumber the rest.
- > Add license files hashes.
+ > Add licenses and hashes for these licenses.
+ > Enabled build with musl; the non standard types have been removed
+ > upstream. Fixes bug #10581.
 
- > Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
  > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
-Committed both, thanks.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
