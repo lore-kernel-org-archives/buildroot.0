@@ -1,45 +1,52 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri, 22 Dec 2017 14:03:22 +0200
-Subject: [Buildroot] [PATCH 2/2] luksmeta: enabled build with musl
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 22 Dec 2017 14:38:06 +0100
+Subject: [Buildroot] [PATCH 1/2] cryptsetup: bump to version 2.0.0
 In-Reply-To: <81e71fbdb42aa4e00f16de0225eb5a0b6b17a79d.1513944202.git.baruch@tkos.co.il>
 References: <81e71fbdb42aa4e00f16de0225eb5a0b6b17a79d.1513944202.git.baruch@tkos.co.il>
-Message-ID: <5fe1c4218c426dc0854b9208744b1c4b5a02c6d4.1513944202.git.baruch@tkos.co.il>
+Message-ID: <20171222143806.0d98a845@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-cryptsetup is available under musl since commit f71507d41bcb00 (lvm2:
-make basic package available under musl). Enable luksmeta as well.
+Hello,
 
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/luksmeta/Config.in | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+On Fri, 22 Dec 2017 14:03:21 +0200, Baruch Siach wrote:
+> Add the now mandatory json-c depencecy. Propagate to reverse
 
-diff --git a/package/luksmeta/Config.in b/package/luksmeta/Config.in
-index dec132ddd3e0..9fa94f80716a 100644
---- a/package/luksmeta/Config.in
-+++ b/package/luksmeta/Config.in
-@@ -3,7 +3,6 @@ config BR2_PACKAGE_LUKSMETA
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # cryptsetup -> lvm2
- 	depends on BR2_USE_MMU # cryptsetup -> lvm2
- 	depends on !BR2_STATIC_LIBS # cryptsetup -> lvm2
--	depends on !BR2_TOOLCHAIN_USES_MUSL # cryptsetup -> lvm2
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # cryptsetup -> json-c
- 	select BR2_PACKAGE_CRYPTSETUP
- 	help
-@@ -12,7 +11,6 @@ config BR2_PACKAGE_LUKSMETA
- 
- 	  https://github.com/latchset/luksmeta
- 
--comment "luksmeta needs a glibc or uClibc toolchain w/ threads, dynamic library"
-+comment "luksmeta needs a toolchain w/ threads, dynamic library"
- 	depends on BR2_USE_MMU
--	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS \
--		|| BR2_TOOLCHAIN_USES_MUSL
-+	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
+dependency
+
+
+> diff --git a/package/cryptsetup/Config.in b/package/cryptsetup/Config.in
+> index d24f7b0af6c7..dcf56f1e405d 100644
+> --- a/package/cryptsetup/Config.in
+> +++ b/package/cryptsetup/Config.in
+> @@ -3,10 +3,12 @@ config BR2_PACKAGE_CRYPTSETUP
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS # lvm2
+>  	depends on BR2_USE_MMU # lvm2
+>  	depends on !BR2_STATIC_LIBS # lvm2
+> +	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # json-c
+
+You forgot to propagate to the Config.in comment.
+
+
+> diff --git a/package/luksmeta/Config.in b/package/luksmeta/Config.in
+> index 62e1f3e42f5b..dec132ddd3e0 100644
+> --- a/package/luksmeta/Config.in
+> +++ b/package/luksmeta/Config.in
+> @@ -4,6 +4,7 @@ config BR2_PACKAGE_LUKSMETA
+>  	depends on BR2_USE_MMU # cryptsetup -> lvm2
+>  	depends on !BR2_STATIC_LIBS # cryptsetup -> lvm2
+>  	depends on !BR2_TOOLCHAIN_USES_MUSL # cryptsetup -> lvm2
+> +	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # cryptsetup -> json-c
+
+Ditto.
+
+Best regards,
+
+Thomas
 -- 
-2.15.1
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
