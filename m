@@ -1,125 +1,83 @@
-From: Jan Heylen <heyleke@gmail.com>
-Date: Fri, 22 Dec 2017 16:20:46 +0100
-Subject: [Buildroot] [PATCH] Opentracing: add opentracing-cpp v1.2.0
- package
-In-Reply-To: <CAHXCMMJgbSncPfSNvxd9M=qb7B8NXi2rM1Rce8wpgQMT1COcFg@mail.gmail.com>
-References: <1513849309-550-1-git-send-email-heyleke@gmail.com>
- <1513849309-550-2-git-send-email-heyleke@gmail.com>
- <CAHXCMMJgbSncPfSNvxd9M=qb7B8NXi2rM1Rce8wpgQMT1COcFg@mail.gmail.com>
-Message-ID: <CAGszK3gr8t6ke1aoGFm1S2ZF-Lt=3vNw0qN4fam90FF4NBD4ow@mail.gmail.com>
+From: nimaim <nimaim@gmail.com>
+Date: Fri, 22 Dec 2017 13:53:38 -0700 (MST)
+Subject: [Buildroot] How to force mesa3d to use llvmpipe?
+Message-ID: <1513976018164-0.post@n4.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-HI Samuel,
+Using Buildroot 2017.11 and following defconfig:
 
-thx for the quick feedback, I'll have a look and come back with a V2,
+BR2_x86_i686=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+BR2_TOOLCHAIN_EXTERNAL_URL="http://toolchains.free-electrons.com/downloads/releases/toolchains/x86-i686/tarballs/x86-i686--glibc--bleeding-edge-2017.05-toolchains-1-2.tar.bz2"
+BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX="i686-buildroot-linux-gnu"
+BR2_TOOLCHAIN_EXTERNAL_GCC_6=y
+BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_9=y
+BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
+BR2_TOOLCHAIN_EXTERNAL_CXX=y
+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
+BR2_SYSTEM_BIN_SH_BASH=y
+BR2_ROOTFS_OVERLAY="fs-overlay"
+BR2_LINUX_KERNEL=y
+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.9.71"
+BR2_LINUX_KERNEL_DEFCONFIG="i386"
+BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
+BR2_PACKAGE_MESA3D_DEMOS=y
+BR2_PACKAGE_MESA3D=y
+BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST=y
+BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST=y
+BR2_PACKAGE_MESA3D_OPENGL_EGL=y
+BR2_PACKAGE_MESA3D_OPENGL_ES=y
+BR2_PACKAGE_MESA3D_OPENGL_TEXTURE_FLOAT=y
+BR2_PACKAGE_QT5=y
+BR2_PACKAGE_QT5BASE_EXAMPLES=y
+BR2_PACKAGE_QT5BASE_WIDGETS=y
+BR2_PACKAGE_QT5BASE_OPENGL_ES2=y
+BR2_PACKAGE_QT5BASE_XCB=y
+BR2_PACKAGE_QT5BASE_DEFAULT_QPA="xcb"
+BR2_PACKAGE_QT5BASE_FONTCONFIG=y
+BR2_PACKAGE_QT5QUICKCONTROLS2=y
+BR2_PACKAGE_XORG7=y
+BR2_PACKAGE_XSERVER_XORG_SERVER=y
+BR2_PACKAGE_XAPP_XINIT=y
+BR2_PACKAGE_XAPP_XINPUT=y
+BR2_PACKAGE_XAPP_XINPUT_CALIBRATOR=y
+BR2_PACKAGE_XDRIVER_XF86_INPUT_EVDEV=y
+BR2_PACKAGE_XDRIVER_XF86_INPUT_TSLIB=y
+BR2_PACKAGE_XDRIVER_XF86_VIDEO_FBDEV=y
+BR2_PACKAGE_XDRIVER_XF86_VIDEO_VESA=y
+BR2_PACKAGE_XTERM=y
+BR2_PACKAGE_FLUXBOX=y
+BR2_TARGET_ROOTFS_INITRAMFS=y
+BR2_TARGET_ROOTFS_ISO9660=y
+# BR2_TARGET_ROOTFS_TAR is not set
+BR2_TARGET_SYSLINUX=y
 
-br,
+Long story short, I am trying to run a Qt 5.9.x Open GL application (based
+on Quick Controls 2) on a an x86 platform that has no Linux support for
+hardware accelerated graphics. Trying to get a valid framebuffer working on
+that platform is no go either (usually crashes the system when you try to
+load an intel video driver) so I'm stuck with trying to get it to work with
+a software rasterizer and xcb. Upon testing the results, the application
+runs very poorly. My only guess is it's because BR's mesa3d package is not
+building the llvmpipe driver. When I run glxgears / glxinfo, I can show it
+running swrast or softpipe instead. How do I force Mesa to build AND use
+this specific driver?
 
-Jan
+I know it's not completely the hardware's fault because when I run Tiny Core
+on it with X and OpenGL SW rast, it seems to run much smoother and the only
+difference I see is that they seem to explicitly configure it to build llvm:
+http://tinycorelinux.net/8.x/x86/tcz/src/Xorg-7.7-3d/compile_mesa.
 
-On Fri, Dec 22, 2017 at 4:00 PM, Samuel Martin <s.martin49@gmail.com> wrote:
->  Hi Jan,
->
-> Thanks for this contribution.
->
-> On Thu, Dec 21, 2017 at 10:41 AM,  <heyleke@gmail.com> wrote:
->> From: Jan Heylen <jan.heylen@nokia.com>
->>
->> ---
->>  package/Config.in                            |  1 +
->>  package/opentracing-cpp/Config.in            | 11 +++++++++++
->>  package/opentracing-cpp/opentracing-cpp.hash |  2 ++
->>  package/opentracing-cpp/opentracing-cpp.mk   | 15 +++++++++++++++
->>  4 files changed, 29 insertions(+)
->>  create mode 100644 package/opentracing-cpp/Config.in
->>  create mode 100644 package/opentracing-cpp/opentracing-cpp.hash
->>  create mode 100644 package/opentracing-cpp/opentracing-cpp.mk
->>
->> diff --git a/package/Config.in b/package/Config.in
->> index bd39a37..044a7e8 100644
->> --- a/package/Config.in
->> +++ b/package/Config.in
->> @@ -1288,6 +1288,7 @@ menu "Logging"
->>         source "package/log4cplus/Config.in"
->>         source "package/log4cpp/Config.in"
->>         source "package/log4cxx/Config.in"
->> +    source "package/opentracing-cpp/Config.in"
->
-> Here it should be indented with 1 tab instead of 4 spaces.
->
->>         source "package/zlog/Config.in"
->>  endmenu
->>
->> diff --git a/package/opentracing-cpp/Config.in b/package/opentracing-cpp/Config.in
->> new file mode 100644
->> index 0000000..3f6f1ad
->> --- /dev/null
->> +++ b/package/opentracing-cpp/Config.in
->> @@ -0,0 +1,11 @@
->> +config BR2_PACKAGE_OPENTRACING_CPP
->> +       bool "opentracing-cpp"
->> +       depends on BR2_INSTALL_LIBSTDCPP
->> +       depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
->> +       help
->> +         OpenTracing API for C++
->> +
->> +         http://opentracing.io
->> +
->> +comment "opentracing-cpp needs a toolchain w/ C++"
->> +       depends on !BR2_INSTALL_LIBSTDCPP
->> diff --git a/package/opentracing-cpp/opentracing-cpp.hash b/package/opentracing-cpp/opentracing-cpp.hash
->> new file mode 100644
->> index 0000000..a710d62
->> --- /dev/null
->> +++ b/package/opentracing-cpp/opentracing-cpp.hash
->> @@ -0,0 +1,2 @@
->> +# Locally calculated
->> +sha256 c77041cb2f147ac81b2b0702abfced5565a9cebc318d045c060a4c3e074009ee opentracing-cpp-v1.2.0.tar.gz
->
-> Could you add the hash of the license files as well, please?
->
->> diff --git a/package/opentracing-cpp/opentracing-cpp.mk b/package/opentracing-cpp/opentracing-cpp.mk
->> new file mode 100644
->> index 0000000..e090be5
->> --- /dev/null
->> +++ b/package/opentracing-cpp/opentracing-cpp.mk
->> @@ -0,0 +1,15 @@
->> +################################################################################
->> +#
->> +# opentracing-cpp
->> +#
->> +################################################################################
->> +
->> +OPENTRACING_CPP_VERSION = v1.2.0
->> +OPENTRACING_CPP_SITE = $(call github,opentracing,opentracing-cpp,$(OPENTRACING_CPP_VERSION))
->> +OPENTRACING_CPP_LICENSE = MIT
->> +OPENTRACING_CPP_LICENSE_FILES = COPYING
->> +
->> +OPENTRACING_CPP_INSTALL_STAGING = YES
->> +OPENTRACING_CPP_INSTALL_TARGET = YES
->
-> *_INSTALL_TARGET default is YES, so this line is unnecessary.
->
-> Looking at the opentracing-cpp CMakeLists.txt, it seems both shared
-> and static libraries are built and installed.
-> Maybe, this should be cleaned up for proper static-only (or shared
-> only) support.
->
->> +
->> +$(eval $(cmake-package))
->> --
->> 2.7.4
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
->
-> Regards,
->
-> --
-> Samuel
+Thoughts? Maybe I am misunderstanding how Mesa and OpenGL with swrast,
+softpipe, and llvmpipe all work.
+
+
+
+--
+Sent from: http://buildroot-busybox.2317881.n4.nabble.com/
