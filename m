@@ -1,165 +1,68 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri, 22 Dec 2017 12:27:37 +0200
-Subject: [Buildroot] [PATCH 1/2] alsa-lib: bump to version 1.1.5
-Message-ID: <75cacfeecb3050ab53925db150892c8034ab0303.1513938458.git.baruch@tkos.co.il>
+Date: Fri, 22 Dec 2017 13:15:26 +0200
+Subject: [Buildroot] [PATCH 1/2] xfsprogs: bump to version 4.14.0
+Message-ID: <2e7d914e7b12cdac37de9790884642d6547a3752.1513941327.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Drop upstream patches; renumber the rest.
+Add licenses and hashes for these licenses.
 
-Add license files hashes.
+Enabled build with musl; the non standard types have been removed
+upstream. Fixes bug #10581.
 
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- package/alsa-lib/0001-musl-pcm-h.patch             | 33 --------------
- .../{0002-no-mmu.patch => 0001-no-mmu.patch}       |  0
- .../{0003-dlmisc.patch => 0002-dlmisc.patch}       |  0
- ...0003-conditional-enabling-of-libdl-in-m4.patch} |  0
- ...-rawmidi_symbols.c-use-rawmidi_virt-only-.patch | 52 ----------------------
- package/alsa-lib/alsa-lib.hash                     |  4 +-
- package/alsa-lib/alsa-lib.mk                       |  2 +-
- 7 files changed, 4 insertions(+), 87 deletions(-)
- delete mode 100644 package/alsa-lib/0001-musl-pcm-h.patch
- rename package/alsa-lib/{0002-no-mmu.patch => 0001-no-mmu.patch} (100%)
- rename package/alsa-lib/{0003-dlmisc.patch => 0002-dlmisc.patch} (100%)
- rename package/alsa-lib/{0004-conditional-enabling-of-libdl-in-m4.patch => 0003-conditional-enabling-of-libdl-in-m4.patch} (100%)
- delete mode 100644 package/alsa-lib/0005-src-rawmidi-rawmidi_symbols.c-use-rawmidi_virt-only-.patch
+ package/xfsprogs/Config.in     | 5 ++---
+ package/xfsprogs/xfsprogs.hash | 3 ++-
+ package/xfsprogs/xfsprogs.mk   | 4 +++-
+ 3 files changed, 7 insertions(+), 5 deletions(-)
 
-diff --git a/package/alsa-lib/0001-musl-pcm-h.patch b/package/alsa-lib/0001-musl-pcm-h.patch
-deleted file mode 100644
-index ce1528c572a6..000000000000
---- a/package/alsa-lib/0001-musl-pcm-h.patch
-+++ /dev/null
-@@ -1,33 +0,0 @@
--Fix musl-related build errors in packages depending on alsa, in our case
--this fixes openal.
--
--Downloaded from
--http://git.alpinelinux.org/cgit/aports/tree/main/alsa-lib/alsa-lib_pcm_h.patch
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
--
----- alsa-lib-1.0.25/include/pcm.h
--+++ alsa-lib-1.0.25.patched/include/pcm.h
--@@ -33,6 +33,7 @@
-- extern "C" {
-- #endif
-- 
--+#include <stdint.h>
-- /**
--  *  \defgroup PCM PCM Interface
--  *  See the \ref pcm page for more details.
--@@ -941,10 +942,10 @@
-- int snd_pcm_format_physical_width(snd_pcm_format_t format);		/* in bits */
-- snd_pcm_format_t snd_pcm_build_linear_format(int width, int pwidth, int unsignd, int big_endian);
-- ssize_t snd_pcm_format_size(snd_pcm_format_t format, size_t samples);
---u_int8_t snd_pcm_format_silence(snd_pcm_format_t format);
---u_int16_t snd_pcm_format_silence_16(snd_pcm_format_t format);
---u_int32_t snd_pcm_format_silence_32(snd_pcm_format_t format);
---u_int64_t snd_pcm_format_silence_64(snd_pcm_format_t format);
--+uint8_t snd_pcm_format_silence(snd_pcm_format_t format);
--+uint16_t snd_pcm_format_silence_16(snd_pcm_format_t format);
--+uint32_t snd_pcm_format_silence_32(snd_pcm_format_t format);
--+uint64_t snd_pcm_format_silence_64(snd_pcm_format_t format);
-- int snd_pcm_format_set_silence(snd_pcm_format_t format, void *buf, unsigned int samples);
-- 
-- snd_pcm_sframes_t snd_pcm_bytes_to_frames(snd_pcm_t *pcm, ssize_t bytes);
-diff --git a/package/alsa-lib/0002-no-mmu.patch b/package/alsa-lib/0001-no-mmu.patch
-similarity index 100%
-rename from package/alsa-lib/0002-no-mmu.patch
-rename to package/alsa-lib/0001-no-mmu.patch
-diff --git a/package/alsa-lib/0003-dlmisc.patch b/package/alsa-lib/0002-dlmisc.patch
-similarity index 100%
-rename from package/alsa-lib/0003-dlmisc.patch
-rename to package/alsa-lib/0002-dlmisc.patch
-diff --git a/package/alsa-lib/0004-conditional-enabling-of-libdl-in-m4.patch b/package/alsa-lib/0003-conditional-enabling-of-libdl-in-m4.patch
-similarity index 100%
-rename from package/alsa-lib/0004-conditional-enabling-of-libdl-in-m4.patch
-rename to package/alsa-lib/0003-conditional-enabling-of-libdl-in-m4.patch
-diff --git a/package/alsa-lib/0005-src-rawmidi-rawmidi_symbols.c-use-rawmidi_virt-only-.patch b/package/alsa-lib/0005-src-rawmidi-rawmidi_symbols.c-use-rawmidi_virt-only-.patch
-deleted file mode 100644
-index 72646dda8dd5..000000000000
---- a/package/alsa-lib/0005-src-rawmidi-rawmidi_symbols.c-use-rawmidi_virt-only-.patch
-+++ /dev/null
-@@ -1,52 +0,0 @@
--From da16e18f03fc63e1206b93d6a719b177d4f4bb99 Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Date: Fri, 11 Aug 2017 22:33:01 +0200
--Subject: [PATCH] src/rawmidi/rawmidi_symbols.c: use rawmidi_virt only when
-- available
--
--src/rawmidi/Makefile.am only brings rawmidi_virt.c into the build when
--BUILD_SEQ is defined (i.e when --enable-seq is passed). However,
--rawmidi_symbols.c unconditionally refers to _snd_module_rawmidi_virt,
--defined in rawmidi_virt.c.
--
--This causes a link failure when BUILD_SEQ is disabled. For example
--when linking ffmpeg against alsa-lib:
--
--/home/thomas/projets/buildroot/output/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libasound.a(pcm_dmix.o): In function `snd_pcm_dmix_sync_ptr':
--pcm_dmix.c:(.text+0x83c): warning:
--/home/thomas/projets/buildroot/output/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libasound.a(rawmidi_symbols.o):(.data+0x4): undefined reference to `_snd_module_rawmidi_virt'
--collect2: error: ld returned 1 exit status
--
--To fix this, we make sure that rawmidi_symbols.c only uses
--_snd_module_rawmidi_virt when available.
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--
--Patch sent upstream: https://www.spinics.net/lists/alsa-devel/msg65902.html
-----
-- src/rawmidi/rawmidi_symbols.c | 4 ++++
-- 1 file changed, 4 insertions(+)
--
--diff --git a/src/rawmidi/rawmidi_symbols.c b/src/rawmidi/rawmidi_symbols.c
--index cdc06d7..6473433 100644
----- a/src/rawmidi/rawmidi_symbols.c
--+++ b/src/rawmidi/rawmidi_symbols.c
--@@ -21,11 +21,15 @@
-- #ifndef PIC
-- 
-- extern const char *_snd_module_rawmidi_hw;
--+#ifdef BUILD_SEQ
-- extern const char *_snd_module_rawmidi_virt;
--+#endif
-- 
-- static const char **snd_rawmidi_open_objects[] = {
-- 	&_snd_module_rawmidi_hw,
--+#ifdef BUILD_SEQ
-- 	&_snd_module_rawmidi_virt
--+#endif
-- };
-- 	
-- void *snd_rawmidi_open_symbols(void)
---- 
--2.9.4
--
-diff --git a/package/alsa-lib/alsa-lib.hash b/package/alsa-lib/alsa-lib.hash
-index cf2a705b3971..885309386e6e 100644
---- a/package/alsa-lib/alsa-lib.hash
-+++ b/package/alsa-lib/alsa-lib.hash
-@@ -1,2 +1,4 @@
- # Locally calculated
--sha256 91bb870c14d1c7c269213285eeed874fa3d28112077db061a3af8010d0885b76  alsa-lib-1.1.4.1.tar.bz2
-+sha256 f4f68ad3c6da36b0b5241ac3c798a7a71e0e97d51f972e9f723b3f20a9650ae6  alsa-lib-1.1.5.tar.bz2
-+sha256 a190dc9c8043755d90f8b0a75fa66b9e42d4af4c980bf5ddc633f0124db3cee7  COPYING
-+sha256 bfe16cf823bcff261fc6a062c07ee96660e3c39678f42f39a788a68dbc234ced  aserver/COPYING
-diff --git a/package/alsa-lib/alsa-lib.mk b/package/alsa-lib/alsa-lib.mk
-index 12fa408cffa5..323550208978 100644
---- a/package/alsa-lib/alsa-lib.mk
-+++ b/package/alsa-lib/alsa-lib.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/xfsprogs/Config.in b/package/xfsprogs/Config.in
+index fb603ad4b985..9cd4aa3f9fad 100644
+--- a/package/xfsprogs/Config.in
++++ b/package/xfsprogs/Config.in
+@@ -1,11 +1,10 @@
+-comment "xfsprogs needs a glibc or uClibc toolchain w/ threads"
++comment "xfsprogs needs a toolchain w/ threads"
+ 	depends on BR2_USE_MMU
+-	depends on BR2_TOOLCHAIN_USES_MUSL || !BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
+ 
+ config BR2_PACKAGE_XFSPROGS
+ 	bool "xfsprogs"
+ 	depends on BR2_USE_MMU # fork()
+-	depends on !BR2_TOOLCHAIN_USES_MUSL # missing __[u]int*_t
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_PACKAGE_UTIL_LINUX
+ 	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+diff --git a/package/xfsprogs/xfsprogs.hash b/package/xfsprogs/xfsprogs.hash
+index edb2933c368b..886a8f10c54b 100644
+--- a/package/xfsprogs/xfsprogs.hash
++++ b/package/xfsprogs/xfsprogs.hash
+@@ -1,2 +1,3 @@
+ # From https://www.kernel.org/pub/linux/utils/fs/xfs/xfsprogs/sha256sums.asc
+-sha256 c3a6d87b564d7738243c507df82276bed982265e345363a95f2c764e8a5f5bb2  xfsprogs-4.11.0.tar.xz
++sha256 b1b710b268bc95d6f45eca06e1262c29eb38865a19cd4404e48ba446e043b7ec  xfsprogs-4.14.0.tar.xz
++sha256 ee304b1b1da08b261f1d1f31d229fc70d2d0c552c7429e9e84c0fac878d94209  doc/COPYING
+diff --git a/package/xfsprogs/xfsprogs.mk b/package/xfsprogs/xfsprogs.mk
+index 2f708f1fa4c6..e6e8493684f1 100644
+--- a/package/xfsprogs/xfsprogs.mk
++++ b/package/xfsprogs/xfsprogs.mk
+@@ -4,9 +4,11 @@
  #
  ################################################################################
  
--ALSA_LIB_VERSION = 1.1.4.1
-+ALSA_LIB_VERSION = 1.1.5
- ALSA_LIB_SOURCE = alsa-lib-$(ALSA_LIB_VERSION).tar.bz2
- ALSA_LIB_SITE = ftp://ftp.alsa-project.org/pub/lib
- ALSA_LIB_LICENSE = LGPL-2.1+ (library), GPL-2.0+ (aserver)
+-XFSPROGS_VERSION = 4.11.0
++XFSPROGS_VERSION = 4.14.0
+ XFSPROGS_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/fs/xfs/xfsprogs
+ XFSPROGS_SOURCE = xfsprogs-$(XFSPROGS_VERSION).tar.xz
++XFSPROGS_LICENSE = GPL-2.0, GPL-2.0+, LGPL-2.1 (libhandle, few headers)
++XFSPROGS_LICENSE_FILES = doc/COPYING
+ 
+ XFSPROGS_DEPENDENCIES = util-linux
+ 
 -- 
 2.15.1
