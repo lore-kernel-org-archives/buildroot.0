@@ -1,162 +1,129 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 22 Dec 2017 15:32:24 +0100
-Subject: [Buildroot] [git commit] alsa-lib: bump to version 1.1.5
-Message-ID: <20171222144124.036877FC9E@busybox.osuosl.org>
+Date: Fri, 22 Dec 2017 15:38:26 +0100
+Subject: [Buildroot] [git commit] cryptsetup: bump to version 2.0.0
+Message-ID: <20171222144124.32A1C82E77@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a4d76e206d1c32e671cde324f1b8bb0da247af4e
+commit: https://git.buildroot.net/buildroot/commit/?id=de7bd25bfad5434079b9aa91eb52b65eca0c37e0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Drop upstream patches; renumber the rest.
+Add the now mandatory json-c depencecy. Propagate to reverse
+dependencies.
+
+Drop the no longer needed patch.
 
 Add license files hashes.
 
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+[Peter: propagate _HAS_SYNC_4 dependency to comments as pointed out by
+	Thomas]
+Cc: Martin Hicks <mort@bork.org>
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/alsa-lib/0001-musl-pcm-h.patch             | 33 --------------
- .../{0002-no-mmu.patch => 0001-no-mmu.patch}       |  0
- .../{0003-dlmisc.patch => 0002-dlmisc.patch}       |  0
- ...0003-conditional-enabling-of-libdl-in-m4.patch} |  0
- ...-rawmidi_symbols.c-use-rawmidi_virt-only-.patch | 52 ----------------------
- package/alsa-lib/alsa-lib.hash                     |  4 +-
- package/alsa-lib/alsa-lib.mk                       |  2 +-
- 7 files changed, 4 insertions(+), 87 deletions(-)
+ package/cryptsetup/0001-mkdir.patch | 18 ------------------
+ package/cryptsetup/Config.in        |  3 +++
+ package/cryptsetup/cryptsetup.hash  |  6 ++++--
+ package/cryptsetup/cryptsetup.mk    |  6 +++---
+ package/luksmeta/Config.in          |  2 ++
+ 5 files changed, 12 insertions(+), 23 deletions(-)
 
-diff --git a/package/alsa-lib/0001-musl-pcm-h.patch b/package/alsa-lib/0001-musl-pcm-h.patch
+diff --git a/package/cryptsetup/0001-mkdir.patch b/package/cryptsetup/0001-mkdir.patch
 deleted file mode 100644
-index ce1528c..0000000
---- a/package/alsa-lib/0001-musl-pcm-h.patch
+index d4d7052..0000000
+--- a/package/cryptsetup/0001-mkdir.patch
 +++ /dev/null
-@@ -1,33 +0,0 @@
--Fix musl-related build errors in packages depending on alsa, in our case
--this fixes openal.
+@@ -1,18 +0,0 @@
+-$(mkdir_p) is obsolete for newer automake, use $(MKDIR_P) instead.
+-Upstream should really gettextize with a newer version before packing up.
 -
--Downloaded from
--http://git.alpinelinux.org/cgit/aports/tree/main/alsa-lib/alsa-lib_pcm_h.patch
+-[base on a similar patch from Gustavo Zacarias for Linux-PAM-1.1.7]
+-Signed-off-by: Axel Lin <axel.lin@ingics.com>
 -
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
--
----- alsa-lib-1.0.25/include/pcm.h
--+++ alsa-lib-1.0.25.patched/include/pcm.h
--@@ -33,6 +33,7 @@
-- extern "C" {
-- #endif
+-diff -Nura cryptsetup-1.6.3.ori/po/Makefile.in.in cryptsetup-1.6.3/po/Makefile.in.in
+---- cryptsetup-1.6.3.ori/po/Makefile.in.in	2013-12-30 11:53:22.731942516 +0800
+-+++ cryptsetup-1.6.3/po/Makefile.in.in	2014-01-09 09:46:13.594071188 +0800
+-@@ -31,7 +31,7 @@
+- INSTALL = @INSTALL@
+- INSTALL_DATA = @INSTALL_DATA@
+- mkinstalldirs = $(SHELL) @install_sh@ -d
+--mkdir_p = @mkdir_p@
+-+mkdir_p = @MKDIR_P@
 - 
--+#include <stdint.h>
-- /**
--  *  \defgroup PCM PCM Interface
--  *  See the \ref pcm page for more details.
--@@ -941,10 +942,10 @@
-- int snd_pcm_format_physical_width(snd_pcm_format_t format);		/* in bits */
-- snd_pcm_format_t snd_pcm_build_linear_format(int width, int pwidth, int unsignd, int big_endian);
-- ssize_t snd_pcm_format_size(snd_pcm_format_t format, size_t samples);
---u_int8_t snd_pcm_format_silence(snd_pcm_format_t format);
---u_int16_t snd_pcm_format_silence_16(snd_pcm_format_t format);
---u_int32_t snd_pcm_format_silence_32(snd_pcm_format_t format);
---u_int64_t snd_pcm_format_silence_64(snd_pcm_format_t format);
--+uint8_t snd_pcm_format_silence(snd_pcm_format_t format);
--+uint16_t snd_pcm_format_silence_16(snd_pcm_format_t format);
--+uint32_t snd_pcm_format_silence_32(snd_pcm_format_t format);
--+uint64_t snd_pcm_format_silence_64(snd_pcm_format_t format);
-- int snd_pcm_format_set_silence(snd_pcm_format_t format, void *buf, unsigned int samples);
-- 
-- snd_pcm_sframes_t snd_pcm_bytes_to_frames(snd_pcm_t *pcm, ssize_t bytes);
-diff --git a/package/alsa-lib/0002-no-mmu.patch b/package/alsa-lib/0001-no-mmu.patch
-similarity index 100%
-rename from package/alsa-lib/0002-no-mmu.patch
-rename to package/alsa-lib/0001-no-mmu.patch
-diff --git a/package/alsa-lib/0003-dlmisc.patch b/package/alsa-lib/0002-dlmisc.patch
-similarity index 100%
-rename from package/alsa-lib/0003-dlmisc.patch
-rename to package/alsa-lib/0002-dlmisc.patch
-diff --git a/package/alsa-lib/0004-conditional-enabling-of-libdl-in-m4.patch b/package/alsa-lib/0003-conditional-enabling-of-libdl-in-m4.patch
-similarity index 100%
-rename from package/alsa-lib/0004-conditional-enabling-of-libdl-in-m4.patch
-rename to package/alsa-lib/0003-conditional-enabling-of-libdl-in-m4.patch
-diff --git a/package/alsa-lib/0005-src-rawmidi-rawmidi_symbols.c-use-rawmidi_virt-only-.patch b/package/alsa-lib/0005-src-rawmidi-rawmidi_symbols.c-use-rawmidi_virt-only-.patch
-deleted file mode 100644
-index 72646dd..0000000
---- a/package/alsa-lib/0005-src-rawmidi-rawmidi_symbols.c-use-rawmidi_virt-only-.patch
-+++ /dev/null
-@@ -1,52 +0,0 @@
--From da16e18f03fc63e1206b93d6a719b177d4f4bb99 Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Date: Fri, 11 Aug 2017 22:33:01 +0200
--Subject: [PATCH] src/rawmidi/rawmidi_symbols.c: use rawmidi_virt only when
-- available
--
--src/rawmidi/Makefile.am only brings rawmidi_virt.c into the build when
--BUILD_SEQ is defined (i.e when --enable-seq is passed). However,
--rawmidi_symbols.c unconditionally refers to _snd_module_rawmidi_virt,
--defined in rawmidi_virt.c.
--
--This causes a link failure when BUILD_SEQ is disabled. For example
--when linking ffmpeg against alsa-lib:
--
--/home/thomas/projets/buildroot/output/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libasound.a(pcm_dmix.o): In function `snd_pcm_dmix_sync_ptr':
--pcm_dmix.c:(.text+0x83c): warning:
--/home/thomas/projets/buildroot/output/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libasound.a(rawmidi_symbols.o):(.data+0x4): undefined reference to `_snd_module_rawmidi_virt'
--collect2: error: ld returned 1 exit status
--
--To fix this, we make sure that rawmidi_symbols.c only uses
--_snd_module_rawmidi_virt when available.
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--
--Patch sent upstream: https://www.spinics.net/lists/alsa-devel/msg65902.html
-----
-- src/rawmidi/rawmidi_symbols.c | 4 ++++
-- 1 file changed, 4 insertions(+)
--
--diff --git a/src/rawmidi/rawmidi_symbols.c b/src/rawmidi/rawmidi_symbols.c
--index cdc06d7..6473433 100644
----- a/src/rawmidi/rawmidi_symbols.c
--+++ b/src/rawmidi/rawmidi_symbols.c
--@@ -21,11 +21,15 @@
-- #ifndef PIC
-- 
-- extern const char *_snd_module_rawmidi_hw;
--+#ifdef BUILD_SEQ
-- extern const char *_snd_module_rawmidi_virt;
--+#endif
-- 
-- static const char **snd_rawmidi_open_objects[] = {
-- 	&_snd_module_rawmidi_hw,
--+#ifdef BUILD_SEQ
-- 	&_snd_module_rawmidi_virt
--+#endif
-- };
-- 	
-- void *snd_rawmidi_open_symbols(void)
---- 
--2.9.4
--
-diff --git a/package/alsa-lib/alsa-lib.hash b/package/alsa-lib/alsa-lib.hash
-index cf2a705..8853093 100644
---- a/package/alsa-lib/alsa-lib.hash
-+++ b/package/alsa-lib/alsa-lib.hash
+- GMSGFMT_ = @GMSGFMT@
+- GMSGFMT_no = @GMSGFMT@
+diff --git a/package/cryptsetup/Config.in b/package/cryptsetup/Config.in
+index d24f7b0..7322a4b 100644
+--- a/package/cryptsetup/Config.in
++++ b/package/cryptsetup/Config.in
+@@ -3,10 +3,12 @@ config BR2_PACKAGE_CRYPTSETUP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # lvm2
+ 	depends on BR2_USE_MMU # lvm2
+ 	depends on !BR2_STATIC_LIBS # lvm2
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # json-c
+ 	select BR2_PACKAGE_POPT
+ 	select BR2_PACKAGE_LVM2
+ 	select BR2_PACKAGE_UTIL_LINUX
+ 	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
++	select BR2_PACKAGE_JSON_C
+ 	help
+ 	  This tool helps manipulate dm-crypt and luks partitions for
+ 	  on-disk encryption.
+@@ -15,4 +17,5 @@ config BR2_PACKAGE_CRYPTSETUP
+ 
+ comment "cryptsetup needs a toolchain w/ threads, dynamic library"
+ 	depends on BR2_USE_MMU
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/cryptsetup/cryptsetup.hash b/package/cryptsetup/cryptsetup.hash
+index 6d0fb58..c54b0dc 100644
+--- a/package/cryptsetup/cryptsetup.hash
++++ b/package/cryptsetup/cryptsetup.hash
 @@ -1,2 +1,4 @@
- # Locally calculated
--sha256 91bb870c14d1c7c269213285eeed874fa3d28112077db061a3af8010d0885b76  alsa-lib-1.1.4.1.tar.bz2
-+sha256 f4f68ad3c6da36b0b5241ac3c798a7a71e0e97d51f972e9f723b3f20a9650ae6  alsa-lib-1.1.5.tar.bz2
-+sha256 a190dc9c8043755d90f8b0a75fa66b9e42d4af4c980bf5ddc633f0124db3cee7  COPYING
-+sha256 bfe16cf823bcff261fc6a062c07ee96660e3c39678f42f39a788a68dbc234ced  aserver/COPYING
-diff --git a/package/alsa-lib/alsa-lib.mk b/package/alsa-lib/alsa-lib.mk
-index 12fa408..3235502 100644
---- a/package/alsa-lib/alsa-lib.mk
-+++ b/package/alsa-lib/alsa-lib.mk
-@@ -4,7 +4,7 @@
+-# From https://www.kernel.org/pub/linux/utils/cryptsetup/v1.7/sha256sums.asc
+-sha256 2b30cd1d0dd606a53ac77b406e1d37798d4b0762fa89de6ea546201906a251bd  cryptsetup-1.7.5.tar.xz
++# From https://www.kernel.org/pub/linux/utils/cryptsetup/v2.0/sha256sums.asc
++sha256 adc623b9e3e3ab5c14145b8baf21b741e513ee5bf90d2b4d85a745c2f05da199  cryptsetup-2.0.0.tar.xz
++sha256 45670cce8b6a0ddd66c8016cd8ccef6cd71f35717cbacc7f1e895b3855207b33  COPYING
++sha256 8c33cc37871654ec7ed87e6fbb896c8cf33ef5ef05b1611a5aed857596ffafa5  COPYING.LGPL
+diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
+index 6b0fa31..1abee0b 100644
+--- a/package/cryptsetup/cryptsetup.mk
++++ b/package/cryptsetup/cryptsetup.mk
+@@ -4,11 +4,11 @@
  #
  ################################################################################
  
--ALSA_LIB_VERSION = 1.1.4.1
-+ALSA_LIB_VERSION = 1.1.5
- ALSA_LIB_SOURCE = alsa-lib-$(ALSA_LIB_VERSION).tar.bz2
- ALSA_LIB_SITE = ftp://ftp.alsa-project.org/pub/lib
- ALSA_LIB_LICENSE = LGPL-2.1+ (library), GPL-2.0+ (aserver)
+-CRYPTSETUP_VERSION_MAJOR = 1.7
+-CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).5
++CRYPTSETUP_VERSION_MAJOR = 2.0
++CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).0
+ CRYPTSETUP_SOURCE = cryptsetup-$(CRYPTSETUP_VERSION).tar.xz
+ CRYPTSETUP_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/cryptsetup/v$(CRYPTSETUP_VERSION_MAJOR)
+-CRYPTSETUP_DEPENDENCIES = lvm2 popt util-linux host-pkgconf \
++CRYPTSETUP_DEPENDENCIES = lvm2 popt util-linux host-pkgconf json-c \
+ 	$(TARGET_NLS_DEPENDENCIES)
+ CRYPTSETUP_LICENSE = GPL-2.0+ (programs), LGPL-2.1+ (library)
+ CRYPTSETUP_LICENSE_FILES = COPYING COPYING.LGPL
+diff --git a/package/luksmeta/Config.in b/package/luksmeta/Config.in
+index 62e1f3e..f2f6feb 100644
+--- a/package/luksmeta/Config.in
++++ b/package/luksmeta/Config.in
+@@ -4,6 +4,7 @@ config BR2_PACKAGE_LUKSMETA
+ 	depends on BR2_USE_MMU # cryptsetup -> lvm2
+ 	depends on !BR2_STATIC_LIBS # cryptsetup -> lvm2
+ 	depends on !BR2_TOOLCHAIN_USES_MUSL # cryptsetup -> lvm2
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # cryptsetup -> json-c
+ 	select BR2_PACKAGE_CRYPTSETUP
+ 	help
+ 	  LUKSMeta is a simple library and utility for storing
+@@ -13,5 +14,6 @@ config BR2_PACKAGE_LUKSMETA
+ 
+ comment "luksmeta needs a glibc or uClibc toolchain w/ threads, dynamic library"
+ 	depends on BR2_USE_MMU
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS \
+ 		|| BR2_TOOLCHAIN_USES_MUSL
