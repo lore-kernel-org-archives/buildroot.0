@@ -1,68 +1,157 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 23 Dec 2017 17:15:40 +0100
-Subject: [Buildroot] [PATCH 2/2 v2] package/matchbox-lib: correctly fix the
- .pc file
-In-Reply-To: <cover.1514045682.git.yann.morin.1998@free.fr>
-References: <cover.1514045682.git.yann.morin.1998@free.fr>
-Message-ID: <92f0878e530274e8e883f96c4eee06f4dce7241e.1514045682.git.yann.morin.1998@free.fr>
+From: Sergio Prado <sergio.prado@e-labworks.com>
+Date: Sat, 23 Dec 2017 14:32:15 -0200
+Subject: [Buildroot] [PATCH v2] wolfssl: new package
+Message-ID: <1514046735-14732-1-git-send-email-sergio.prado@e-labworks.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-First, the .pc file was so far fixed as a post-configure hook of the
-matchbox-fakekey package, by directly tweaking the .pc file installed in
-staging by matchbox-lib. That's uterly wrong and bad.
+The wolfSSL embedded SSL library is a lightweight and portable
+SSL/TLS library.
 
-So, we move the fix to matchbox-lib.
+Tested on Beaglebone Black using a tool called testsuite that
+comes with wolfssl source code inside the testsuite/ directory.
+To build it, we have to pass --enable-examples in the configure,
+and then manually copy the binary to the rootfs. Also, to use
+this tool, you will we need to copy the certs/* directory to the
+rootfs.
 
-Second, it was incorreclty tweaking the .pc file when xlib_libXft was
-not enabled, because only then a path to staging was present.
+Build-tested with test-pkg script.
 
-Third, even when xlib_libXft was enabled, the tweaking was still wrong,
-because unnecessary.
-
-Fix all that.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
+Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
 ---
 Changes v1 -> v2:
-  - fix existing hook, rather than adding a new one
+  - bump to version 3.13.0
+  - new version needs a toolchain with threads support
+  - added two new menu options to enable all wolfssl features
+    and SSv3 support
+  - added an explanation on why we need autoreconf
+  - removed options related to nginx, wpa_supplicant and lighttpd
 ---
- package/matchbox-fakekey/matchbox-fakekey.mk | 4 ++--
- package/matchbox-lib/matchbox-lib.mk         | 3 ++-
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ DEVELOPERS                   |  1 +
+ package/Config.in            |  1 +
+ package/wolfssl/Config.in    | 27 +++++++++++++++++++++++++++
+ package/wolfssl/wolfssl.hash |  6 ++++++
+ package/wolfssl/wolfssl.mk   | 38 ++++++++++++++++++++++++++++++++++++++
+ 5 files changed, 73 insertions(+)
+ create mode 100644 package/wolfssl/Config.in
+ create mode 100644 package/wolfssl/wolfssl.hash
+ create mode 100644 package/wolfssl/wolfssl.mk
 
-diff --git a/package/matchbox-fakekey/matchbox-fakekey.mk b/package/matchbox-fakekey/matchbox-fakekey.mk
-index 996206e266..e607c48c15 100644
---- a/package/matchbox-fakekey/matchbox-fakekey.mk
-+++ b/package/matchbox-fakekey/matchbox-fakekey.mk
-@@ -14,8 +14,8 @@ MATCHBOX_FAKEKEY_DEPENDENCIES = matchbox-lib xlib_libXtst
- MATCHBOX_FAKEKEY_CONF_OPTS = --enable-expat
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 77e3344fa4dc..54ba8ceb2a64 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1541,6 +1541,7 @@ F:	package/mongodb/
+ F:	package/stella/
+ F:	package/tunctl/
+ F:	package/ubus/
++F:	package/wolfssl/
  
- define MATCHBOX_FAKEKEY_POST_CONFIGURE_FIXES
--	$(SED) 's:-I[^$$].*/usr/include/freetype2:-I/usr/include/freetype2:' $(STAGING_DIR)/usr/lib/pkgconfig/libmb.pc
--	$(SED) 's:^SUBDIRS = fakekey src tests.*:SUBDIRS = fakekey src:g' $(MATCHBOX_FAKEKEY_DIR)/Makefile
-+	$(SED) 's:^SUBDIRS = fakekey src tests.*:SUBDIRS = fakekey src:g' \
-+		$(@D)/Makefile
- endef
+ N:	Simon Dawson <spdawson@gmail.com>
+ F:	boot/at91bootstrap3/
+diff --git a/package/Config.in b/package/Config.in
+index cb2141b8f3c8..1455ca6ddc1a 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1046,6 +1046,7 @@ menu "Crypto"
+ 	source "package/tinydtls/Config.in"
+ 	source "package/trousers/Config.in"
+ 	source "package/ustream-ssl/Config.in"
++	source "package/wolfssl/Config.in"
+ endmenu
  
- MATCHBOX_FAKEKEY_POST_CONFIGURE_HOOKS += MATCHBOX_FAKEKEY_POST_CONFIGURE_FIXES
-diff --git a/package/matchbox-lib/matchbox-lib.mk b/package/matchbox-lib/matchbox-lib.mk
-index 18204d2d0b..5541867699 100644
---- a/package/matchbox-lib/matchbox-lib.mk
-+++ b/package/matchbox-lib/matchbox-lib.mk
-@@ -15,7 +15,8 @@ MATCHBOX_LIB_CONF_OPTS = --disable-doxygen-docs
- MATCHBOX_LIB_CONF_ENV = LIBS="-lX11"
- 
- define MATCHBOX_LIB_POST_INSTALL_FIXES
--	$(SED) 's:-I[^$$].*/usr/include/freetype2:-I/usr/include/freetype2:' \
-+	$(SED) 's:-I$(STAGING_DIR)/:-I/:g' \
-+		-e 's:-I/usr/include\( \|$$\)::g' \
- 		$(STAGING_DIR)/usr/lib/pkgconfig/libmb.pc
- endef
- 
+ menu "Database"
+diff --git a/package/wolfssl/Config.in b/package/wolfssl/Config.in
+new file mode 100644
+index 000000000000..3c6d68f592fc
+--- /dev/null
++++ b/package/wolfssl/Config.in
+@@ -0,0 +1,27 @@
++config BR2_PACKAGE_WOLFSSL
++	bool "wolfssl"
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	help
++	  The wolfSSL embedded SSL library (formerly CyaSSL) is a
++	  lightweight, portable, C-language-based SSL/TLS library
++	  targeted at IoT, embedded, and RTOS environments primarily
++	  because of its size, speed, and feature set.
++
++	  https://www.wolfssl.com/
++
++if BR2_PACKAGE_WOLFSSL
++
++config BR2_PACKAGE_WOLFSSL_ALL
++	bool "enable all features, except SSLv3"
++	help
++	  Enable all wolfSSL features, except SSL version 3.0 support.
++
++config BR2_PACKAGE_WOLFSSL_SSLV3
++	bool "enable SSLv3"
++	help
++	  Enable SSL version 3.0 support.
++
++endif
++
++comment "wolfssl needs a toolchain w/ threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/wolfssl/wolfssl.hash b/package/wolfssl/wolfssl.hash
+new file mode 100644
+index 000000000000..204f2f09571d
+--- /dev/null
++++ b/package/wolfssl/wolfssl.hash
+@@ -0,0 +1,6 @@
++# Locally computed:
++sha256 3bafeb0cb7eaff80002ba3f7cbb70023757bcc35fc4d82181945b143f1f927c6  v3.13.0-stable.tar.gz
++
++# Hash for license files:
++sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
++sha256 74adaaef40b96c71378b6daa3feb8ccd4a1bfd9b76debf3f3f29cf3a0e86c9a0  LICENSING
+diff --git a/package/wolfssl/wolfssl.mk b/package/wolfssl/wolfssl.mk
+new file mode 100644
+index 000000000000..c8ef50a9bc6e
+--- /dev/null
++++ b/package/wolfssl/wolfssl.mk
+@@ -0,0 +1,38 @@
++################################################################################
++#
++# wolfssl
++#
++################################################################################
++
++WOLFSSL_VERSION = 3.13.0
++WOLFSSL_SITE = https://github.com/wolfSSL/wolfssl/archive
++WOLFSSL_SOURCE = v$(WOLFSSL_VERSION)-stable.tar.gz
++
++WOLFSSL_LICENSE = GPL-2.0
++WOLFSSL_LICENSE_FILES = COPYING LICENSING
++
++WOLFSSL_DEPENDENCIES = host-pkgconf
++
++# wolfssl's source code is released without a configure
++# script, so we need autoreconf
++WOLFSSL_AUTORECONF = YES
++
++ifeq ($(BR2_PACKAGE_WOLFSSL_ALL),y)
++WOLFSSL_CONF_OPTS += --enable-all
++else
++WOLFSSL_CONF_OPTS += --disable-all
++endif
++
++ifeq ($(BR2_PACKAGE_WOLFSSL_SSLV3),y)
++WOLFSSL_CONF_OPTS += --enable-sslv3
++else
++WOLFSSL_CONF_OPTS += --disable-sslv3
++endif
++
++ifeq ($(BR2_ARM_CPU_ARMV8A),y)
++WOLFSSL_CONF_OPTS += --enable-armasm
++else
++WOLFSSL_CONF_OPTS += --disable-armasm
++endif
++
++$(eval $(autotools-package))
 -- 
-2.11.0
+1.9.1
