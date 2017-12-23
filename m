@@ -1,34 +1,57 @@
-From: Christian Stewart <christian@paral.in>
-Date: Sat, 23 Dec 2017 12:36:34 -0800
-Subject: [Buildroot] systemd: build failure against pam on arm
-In-Reply-To: <1397D1DC-9330-40CF-89AB-8CB27EEFF333@openadk.org>
-References: <CA+h8R2q1W9PZ8DbTDuxZQhg3+hauZqaDdwzFAGgmTJd7KqiQEg@mail.gmail.com>
- <87fufjgycd.fsf@dell.be.48ers.dk>
- <CA+h8R2qdYZkwynNoPKjiDynzs_gs=TfFZ7i-STGrednoG4O-ew@mail.gmail.com>
- <CA+h8R2o8=LmmcudEaiJSCenX7t4QmHB3SPwm-UowrGQEu2bMPw@mail.gmail.com>
- <29DD8155-F769-488E-8A9E-39D8B6D18B54@openadk.org> <87608xykge.fsf@paral.in>
- <1397D1DC-9330-40CF-89AB-8CB27EEFF333@openadk.org>
-Message-ID: <873741w59p.fsf@paral.in>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 23 Dec 2017 23:28:27 +0100
+Subject: [Buildroot] [PATCH 1/2] json-c: build for host
+In-Reply-To: <874c469c732d0301687987f41dcbd7141f319b58.1514050983.git.baruch@tkos.co.il>
+References: <874c469c732d0301687987f41dcbd7141f319b58.1514050983.git.baruch@tkos.co.il>
+Message-ID: <20171223222827.GA17887@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Waldemar,
+Baruch, All,
 
-Thank you for looking into this-
+On 2017-12-23 19:43 +0200, Baruch Siach spake thusly:
+> This is needed for the recent cryptsetup version host build.
+> 
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
-Waldemar Brodkorb <wbx@openadk.org> writes:
-> check config.log where pam_misc is added. May be configure has a bug and detects your host pam under certain conditions.
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Seems like it.
+Regards,
+Yann E. MORIN.
 
-> PAM_LIBS='-lpam -lpam_misc'
+> ---
+>  package/json-c/json-c.mk | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/package/json-c/json-c.mk b/package/json-c/json-c.mk
+> index 7adbcafa7238..86636d7433eb 100644
+> --- a/package/json-c/json-c.mk
+> +++ b/package/json-c/json-c.mk
+> @@ -11,7 +11,9 @@ JSON_C_MAKE = $(MAKE1)
+>  JSON_C_CONF_OPTS = --disable-oldname-compat
+>  # AUTORECONF is needed because of Makefile.am.inc patch.
+>  JSON_C_AUTORECONF = YES
+> +HOST_JSON_C_AUTORECONF = YES
+>  JSON_C_LICENSE = MIT
+>  JSON_C_LICENSE_FILES = COPYING
+>  
+>  $(eval $(autotools-package))
+> +$(eval $(host-autotools-package))
+> -- 
+> 2.15.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-Here is the full log:
-
-https://gist.githubusercontent.com/paralin/94cd4b80efcce6b419e337eccd534fb9/raw/59a9df0c09bc0ebd9968c7992aa8f608a4bc75ce/systemd-config.log
-
-Thanks,
-Christian
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
