@@ -1,136 +1,154 @@
-From: Alexander Mukhin <alexander.i.mukhin@gmail.com>
-Date: Sat, 23 Dec 2017 22:06:17 +0300
-Subject: [Buildroot] [PATCH 4/4] hostapd: drop default netlink dependency
-In-Reply-To: <20171223190617.3981-1-alexander.i.mukhin@gmail.com>
-References: <20171223190617.3981-1-alexander.i.mukhin@gmail.com>
-Message-ID: <20171223190617.3981-5-alexander.i.mukhin@gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sat, 23 Dec 2017 21:29:43 +0200
+Subject: [Buildroot] [PATCH] json-c: bump to version 0.13
+Message-ID: <78b00dd8559b57a0c687caf9aef6c28c243b7f89.1514057383.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Get rid of netlink and threads dependency if the options selected
-allow so.
+Use upstream provided tarball; drop autoreconf.
 
-Signed-off-by: Alexander Mukhin <alexander.i.mukhin@gmail.com>
+Drop -Werror removal patch; json-c builds fine with gcc 7 without this
+patch.
+
+Drop upstream libm patch.
+
+Drop --disable-oldname-compat; removed upstream.
+
+Add license file hash.
+
+Enable parallel build. The commit introducing MAKE1, ecd0f65af92
+(json-c: bump to version 0.11) does not explain the reason for that. A
+sequence of a few builds on a multi-core system never faild.
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- package/hostapd/Config.in  | 16 ++++++++++------
- package/hostapd/hostapd.mk | 29 +++++++++++++++++++----------
- 2 files changed, 29 insertions(+), 16 deletions(-)
+ .../0001-don-t-threat-warnings-as-errors.patch     | 21 ---------
+ .../0002-Link-against-libm-when-needed.patch       | 53 ----------------------
+ package/json-c/json-c.hash                         |  4 +-
+ package/json-c/json-c.mk                           |  9 +---
+ 4 files changed, 5 insertions(+), 82 deletions(-)
+ delete mode 100644 package/json-c/0001-don-t-threat-warnings-as-errors.patch
+ delete mode 100644 package/json-c/0002-Link-against-libm-when-needed.patch
 
-diff --git a/package/hostapd/Config.in b/package/hostapd/Config.in
-index 57cec469c6..115563f564 100644
---- a/package/hostapd/Config.in
-+++ b/package/hostapd/Config.in
-@@ -1,8 +1,6 @@
- config BR2_PACKAGE_HOSTAPD
- 	bool "hostapd"
--	depends on BR2_TOOLCHAIN_HAS_THREADS # libnl
- 	depends on BR2_USE_MMU # fork()
--	select BR2_PACKAGE_LIBNL
- 	help
- 	  User space daemon for wireless access points.
- 
-@@ -23,9 +21,14 @@ config BR2_PACKAGE_HOSTAPD_DRIVER_HOSTAP
- config BR2_PACKAGE_HOSTAPD_DRIVER_NL80211
- 	bool "Enable nl80211 driver"
- 	default y
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libnl
-+	select BR2_PACKAGE_LIBNL
- 	help
- 	  Enable support for drivers using the nl80211 kernel interface.
- 
-+comment "nl80211 driver needs a toolchain w/ threads"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+
- config BR2_PACKAGE_HOSTAPD_DRIVER_RTW
- 	bool "Enable rtl871xdrv driver"
- 	help
-@@ -83,12 +86,13 @@ config BR2_PACKAGE_HOSTAPD_VLAN_NETLINK
- 	bool "Use netlink-based API for VLAN operations"
- 	default y
- 	depends on BR2_PACKAGE_HOSTAPD_VLAN
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libnl
-+	select BR2_PACKAGE_LIBNL
- 	help
- 	  Use netlink-based kernel API for VLAN operations
- 	  instead of ioctl().
- 
--endif
+diff --git a/package/json-c/0001-don-t-threat-warnings-as-errors.patch b/package/json-c/0001-don-t-threat-warnings-as-errors.patch
+deleted file mode 100644
+index 804fb2cd33ec..000000000000
+--- a/package/json-c/0001-don-t-threat-warnings-as-errors.patch
++++ /dev/null
+@@ -1,21 +0,0 @@
+-From 2b4a43a94fb988e344f2d7edc74d6a4a5f64571d Mon Sep 17 00:00:00 2001
+-From: Sagaert Johan <sagaert.johan@proximus.be>
+-Date: Wed, 15 Apr 2015 00:40:46 +0200
+-Subject: [PATCH] don't threat warnings as errors
 -
--comment "hostapd needs a toolchain w/ threads"
-+comment "netlink-based VLAN support needs a toolchain w/ threads"
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS
--	depends on BR2_USE_MMU
-+
-+endif
-diff --git a/package/hostapd/hostapd.mk b/package/hostapd/hostapd.mk
-index 143efe9627..9b73c596f8 100644
---- a/package/hostapd/hostapd.mk
-+++ b/package/hostapd/hostapd.mk
-@@ -11,8 +11,8 @@ HOSTAPD_PATCH = \
- 	http://w1.fi/security/2017-1/rebased-v2.6-0005-Fix-PTK-rekeying-to-generate-a-new-ANonce.patch
- HOSTAPD_SUBDIR = hostapd
- HOSTAPD_CONFIG = $(HOSTAPD_DIR)/$(HOSTAPD_SUBDIR)/.config
--HOSTAPD_DEPENDENCIES = host-pkgconf libnl
--HOSTAPD_CFLAGS = $(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include/libnl3/
-+HOSTAPD_DEPENDENCIES = host-pkgconf
-+HOSTAPD_CFLAGS = $(TARGET_CFLAGS)
- HOSTAPD_LICENSE = BSD-3-Clause
- HOSTAPD_LICENSE_FILES = README
- HOSTAPD_CONFIG_SET =
-@@ -23,17 +23,11 @@ HOSTAPD_CONFIG_ENABLE = \
- 	CONFIG_IEEE80211N \
- 	CONFIG_IEEE80211R \
- 	CONFIG_INTERNAL_LIBTOMMATH \
--	CONFIG_INTERWORKING \
--	CONFIG_LIBNL32
-+	CONFIG_INTERWORKING
+-Signed-off-by: Sagaert Johan <sagaert.johan@proximus.be>
+----
+- Makefile.am.inc | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/Makefile.am.inc b/Makefile.am.inc
+-index fec591b..5eb461e 100644
+---- a/Makefile.am.inc
+-+++ b/Makefile.am.inc
+-@@ -1,2 +1,2 @@
+--AM_CFLAGS = -Wall -Werror -Wno-error=deprecated-declarations -Wextra -Wwrite-strings -Wno-unused-parameter -std=gnu99 -D_GNU_SOURCE -D_REENTRANT
+-+AM_CFLAGS = -Wall -Wno-error=deprecated-declarations -Wextra -Wwrite-strings -std=gnu99 -D_GNU_SOURCE -D_REENTRANT
+- 
+--- 
+-2.1.0
+-
+diff --git a/package/json-c/0002-Link-against-libm-when-needed.patch b/package/json-c/0002-Link-against-libm-when-needed.patch
+deleted file mode 100644
+index 305b782f76c4..000000000000
+--- a/package/json-c/0002-Link-against-libm-when-needed.patch
++++ /dev/null
+@@ -1,53 +0,0 @@
+-From ccb15ee3d7e8c925cb3af9ea805feea2863c4f81 Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Date: Fri, 1 May 2015 12:52:18 +0200
+-Subject: [PATCH] Link against libm when needed
+-
+-In certain C libraries (e.g uClibc), isnan() and related functions are
+-implemented in libm, so json-c needs to link against it. This commit
+-therefore adds an AC_TRY_LINK() test to check whether a program
+-calling isnan() can be properly linked with no special flags. If not,
+-we assume linking against libm is needed.
+-
+-The json-c.pc.in file is also adjusted so that in the case of static
+-linking against json-c, -lm is also used.
+-
+-Submitted upstream: https://github.com/json-c/json-c/pull/182
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+----
+- configure.ac | 4 ++++
+- json-c.pc.in | 3 ++-
+- 2 files changed, 6 insertions(+), 1 deletion(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index 99660a4..2a14ccf 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -50,6 +50,10 @@ AC_CHECK_DECLS([isinf], [], [], [[#include <math.h>]])
+- AC_CHECK_DECLS([_isnan], [], [], [[#include <float.h>]])
+- AC_CHECK_DECLS([_finite], [], [], [[#include <float.h>]])
+- 
+-+if test "$ac_cv_have_decl_isnan" = "yes" ; then
+-+   AC_TRY_LINK([#include <math.h>], [float f = 0.0; return isnan(f)], [], [LIBS="$LIBS -lm"])
+-+fi
+-+
+- #check if .section.gnu.warning accepts long strings (for __warn_references)
+- AC_LANG_PUSH([C])
+- 
+-diff --git a/json-c.pc.in b/json-c.pc.in
+-index 037739d..05bfbc8 100644
+---- a/json-c.pc.in
+-+++ b/json-c.pc.in
+-@@ -6,6 +6,7 @@ includedir=@includedir@
+- Name: json-c
+- Description: JSON implementation in C
+- Version: @VERSION@
+--Requires: 
+-+Requires:
+-+Libs.private: @LIBS@
+- Libs:  -L${libdir} -ljson-c
+- Cflags: -I${includedir}/json-c
+--- 
+-2.1.0
+-
+diff --git a/package/json-c/json-c.hash b/package/json-c/json-c.hash
+index 1868d75042ca..41e614d6dc32 100644
+--- a/package/json-c/json-c.hash
++++ b/package/json-c/json-c.hash
+@@ -1,2 +1,4 @@
++# From https://github.com/json-c/json-c/wiki
++sha256 0316780be9ad16c42d7c26b015a784fd5df4b0909fef0aba51cfb13e492ac24d  json-c-0.13.tar.gz
+ # Locally calculated
+-sha256 989e09b99ded277a0a651cd18b81fcb76885fea08769d7a21b6da39fb8a34816  json-c-json-c-0.12.1-20160607.tar.gz
++sha256 74c1e6ca5eba76b54d0ad00d4815c8315c1b3bc45ff99de61d103dc92486284c  COPYING
+diff --git a/package/json-c/json-c.mk b/package/json-c/json-c.mk
+index 86636d7433eb..d8007b869133 100644
+--- a/package/json-c/json-c.mk
++++ b/package/json-c/json-c.mk
+@@ -4,14 +4,9 @@
+ #
+ ################################################################################
  
- HOSTAPD_CONFIG_DISABLE =
+-JSON_C_VERSION = json-c-0.12.1-20160607
+-JSON_C_SITE = $(call github,json-c,json-c,$(JSON_C_VERSION))
++JSON_C_VERSION = 0.13
++JSON_C_SITE = https://s3.amazonaws.com/json-c_releases/releases
+ JSON_C_INSTALL_STAGING = YES
+-JSON_C_MAKE = $(MAKE1)
+-JSON_C_CONF_OPTS = --disable-oldname-compat
+-# AUTORECONF is needed because of Makefile.am.inc patch.
+-JSON_C_AUTORECONF = YES
+-HOST_JSON_C_AUTORECONF = YES
+ JSON_C_LICENSE = MIT
+ JSON_C_LICENSE_FILES = COPYING
  
--# libnl-3 needs -lm (for rint) and -lpthread if linking statically
--# And library order matters hence stick -lnl-3 first since it's appended
--# in the hostapd Makefiles as in LIBS+=-lnl-3 ... thus failing
--ifeq ($(BR2_STATIC_LIBS),y)
--HOSTAPD_LIBS += -lnl-3 -lm -lpthread
--endif
-+HOSTAPD_USE_NL =
- 
- # Try to use openssl if it's already available
- ifeq ($(BR2_PACKAGE_LIBOPENSSL),y)
-@@ -51,6 +45,8 @@ endif
- 
- ifneq ($(BR2_PACKAGE_HOSTAPD_DRIVER_NL80211),y)
- HOSTAPD_CONFIG_DISABLE += CONFIG_DRIVER_NL80211
-+else
-+HOSTAPD_USE_NL = y
- endif
- 
- ifeq ($(BR2_PACKAGE_HOSTAPD_DRIVER_RTW),y)
-@@ -89,9 +85,22 @@ HOSTAPD_CONFIG_ENABLE += CONFIG_FULL_DYNAMIC_VLAN
- endif
- 
- ifeq ($(BR2_PACKAGE_HOSTAPD_VLAN_NETLINK),y)
-+HOSTAPD_USE_NL = y
- HOSTAPD_CONFIG_ENABLE += CONFIG_VLAN_NETLINK
- endif
- 
-+ifeq ($(HOSTAPD_USE_NL),y)
-+HOSTAPD_DEPENDENCIES += libnl
-+HOSTAPD_CFLAGS += -I$(STAGING_DIR)/usr/include/libnl3/
-+HOSTAPD_CONFIG_ENABLE += CONFIG_LIBNL32
-+# libnl-3 needs -lm (for rint) and -lpthread if linking statically
-+# And library order matters hence stick -lnl-3 first since it's appended
-+# in the hostapd Makefiles as in LIBS+=-lnl-3 ... thus failing
-+ifeq ($(BR2_STATIC_LIBS),y)
-+HOSTAPD_LIBS += -lnl-3 -lm -lpthread
-+endif
-+endif
-+
- define HOSTAPD_CONFIGURE_CMDS
- 	cp $(@D)/hostapd/defconfig $(HOSTAPD_CONFIG)
- 	sed -i $(patsubst %,-e 's/^#\(%\)/\1/',$(HOSTAPD_CONFIG_ENABLE)) \
 -- 
-2.11.0
+2.15.1
