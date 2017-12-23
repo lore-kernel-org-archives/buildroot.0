@@ -1,39 +1,36 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sat, 23 Dec 2017 19:43:03 +0200
-Subject: [Buildroot] [PATCH 2/2] cryptsetup: add json-c dependency to host
- build
-In-Reply-To: <874c469c732d0301687987f41dcbd7141f319b58.1514050983.git.baruch@tkos.co.il>
-References: <874c469c732d0301687987f41dcbd7141f319b58.1514050983.git.baruch@tkos.co.il>
-Message-ID: <385b491953e3abadd6dc39f1e869e12391aaac32.1514050983.git.baruch@tkos.co.il>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sat, 23 Dec 2017 19:22:43 +0100
+Subject: [Buildroot] [PATCH] package/libcue: is not parallel-safe
+In-Reply-To: <874lojyvco.fsf@dell.be.48ers.dk>
+References: <20171221164817.32302-1-romain.naour@gmail.com>
+ <874lojyvco.fsf@dell.be.48ers.dk>
+Message-ID: <cdba9fdd-e573-f990-9a5e-4d64f314b957@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/ecf/ecf5d87791e0255c3fce117447105db88749f796/
-http://autobuild.buildroot.net/results/384/38462d222f2a893d44de894c30dc1e53d09c377d/
-http://autobuild.buildroot.net/results/c29/c2901415345d94ef2135e460f4c78c21ae7ad09a/
-... and many more.
+Hi Peter,
 
-Cc: Martin Hicks <mort@bork.org>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/cryptsetup/cryptsetup.mk | 1 +
- 1 file changed, 1 insertion(+)
+Le 22/12/2017 ? 10:17, Peter Korsgaard a ?crit?:
+>>>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
+> 
+>  > The last commit before the 1.4.0 release was to disable parallel build [1]
+>  > [1] https://github.com/lipnitsk/libcue/commit/bebbc18a8c00a0b8c26bc6191af68c6a83629b40
+> 
+>  > Fixes:
+>  > http://autobuild.buildroot.net/results/f25/f256037ca3d49f96add8ca2e2f9c980f5f9d764e
+>  > http://autobuild.buildroot.net/results/d84/d84c7d0cb9cf5fa9996c42149eda5295700516f5
+> 
+>  > Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> 
+> Committed, thanks.
+> 
 
-diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
-index 1abee0bc2f9b..0d8480ba4886 100644
---- a/package/cryptsetup/cryptsetup.mk
-+++ b/package/cryptsetup/cryptsetup.mk
-@@ -33,6 +33,7 @@ HOST_CRYPTSETUP_DEPENDENCIES = \
- 	host-lvm2 \
- 	host-popt \
- 	host-util-linux \
-+	host-json-c \
- 	host-openssl
- 
- HOST_CRYPTSETUP_CONF_OPTS = --with-crypto-backend=openssl
--- 
-2.15.1
+This patch needs to be backported to 2017.08 and 2017.02 branches.
+
+http://autobuild.buildroot.net/results/51d/51d585cbf387fb514d04304aa0ea38324a02362e/build-end.log
+
+Best regards,
+Romain
