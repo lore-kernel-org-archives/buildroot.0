@@ -1,45 +1,44 @@
-From: Christian Stewart <christian@paral.in>
-Date: Fri, 22 Dec 2017 23:25:37 -0800
-Subject: [Buildroot] systemd: build failure against pam on arm
-In-Reply-To: <29DD8155-F769-488E-8A9E-39D8B6D18B54@openadk.org>
-References: <CA+h8R2q1W9PZ8DbTDuxZQhg3+hauZqaDdwzFAGgmTJd7KqiQEg@mail.gmail.com>
- <87fufjgycd.fsf@dell.be.48ers.dk>
- <CA+h8R2qdYZkwynNoPKjiDynzs_gs=TfFZ7i-STGrednoG4O-ew@mail.gmail.com>
- <CA+h8R2o8=LmmcudEaiJSCenX7t4QmHB3SPwm-UowrGQEu2bMPw@mail.gmail.com>
- <29DD8155-F769-488E-8A9E-39D8B6D18B54@openadk.org>
-Message-ID: <87608xykge.fsf@paral.in>
+From: Jan Heylen <heyleke@gmail.com>
+Date: Sat, 23 Dec 2017 08:40:00 +0100
+Subject: [Buildroot] [PATCH v2 0/2] Opentracing-cpp: new package
+In-Reply-To: <1513849309-550-2-git-send-email-heyleke@gmail.com>
+References: <1513849309-550-2-git-send-email-heyleke@gmail.com>
+Message-ID: <1514014802-23736-1-git-send-email-heyleke@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+From: Jan Heylen <jan.heylen@nokia.com>
 
-Hi Waldemar, all,
+Hi,
 
-Waldemar Brodkorb <wbx@openadk.org> writes:
-> can you make the last failing link command more verbose?
-> CCLD should be expanded to the full command used.
+this adds opentracing-cpp package as a logging library package.
 
-I went back and figured out how to make autotools verbose in Buildroot,
-so here you are. Note that I am using out-of-tree build mode, like this:
+Extra patch included to make shared/static target configurable.
 
-  make -O$(pwd) -C path/to/buildroot
+Upstream of that patch is ongoing:
+https://github.com/opentracing/opentracing-cpp/pull/46
 
-/bin/sh ./libtool  --tag=CC   --mode=link /home/paralin/buildroot/host/bin/arm-buildroot-linux-gnueabihf-gcc -D__SANE_USERSPACE_TYPES__  -pipe -Wall -Wextra -Wundef -Wlogical-op -Wmissing-include-dirs -Wold-style-definition -Wpointer-arith -Winit-self -Wdeclaration-after-statement -Wfloat-equal -Wsuggest-attribute=noreturn -Werror=missing-prototypes -Werror=implicit-function-declaration -Werror=missing-declarations -Werror=return-type -Werror=incompatible-pointer-types -Werror=format=2 -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wstrict-aliasing=2 -Wwrite-strings -Wno-unused-parameter -Wno-missing-field-initializers -Wno-unused-result -Wno-format-signedness -Werror=overflow -Wdate-time -Wnested-externs -ffast-math -fno-common -fdiagnostics-show-option -fno-strict-aliasing -fvisibility=hidden -fstack-protector -fstack-protector-strong -fPIE --param=ssp-buffer-size=4 -Werror=shadow -flto -ffunction-sections -fdata-sections   -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O2  -fno-lto -Wl,--gc-sections -Wl,--as-needed -Wl,--no-undefined -Wl,-z,relro -Wl,-z,now -pie    -o busctl src/busctl/busctl.o src/busctl/busctl-introspect.o libsystemd-shared.la                           
-libtool: link: /home/paralin/buildroot/host/bin/arm-buildroot-linux-gnueabihf-gcc -D__SANE_USERSPACE_TYPES__ -pipe -Wall -Wextra -Wundef -Wlogical-op -Wmissing-include-dirs -Wold-style-definition -Wpointer-arith -Winit-self -Wdeclaration-after-statement -Wfloat-equal -Wsuggest-attribute=noreturn -Werror=missing-prototypes -Werror=implicit-function-declaration -Werror=missing-declarations -Werror=return-type -Werror=incompatible-pointer-types -Werror=format=2 -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wstrict-aliasing=2 -Wwrite-strings -Wno-unused-parameter -Wno-missing-field-initializers -Wno-unused-result -Wno-format-signedness -Werror=overflow -Wdate-time -Wnested-externs -ffast-math -fno-common -fdiagnostics-show-option -fno-strict-aliasing -fvisibility=hidden -fstack-protector -fstack-protector-strong -fPIE --param=ssp-buffer-size=4 -Werror=shadow -flto -ffunction-sections -fdata-sections -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -O2 -fno-lto -Wl,--gc-sections -Wl,--as-needed -Wl,--no-undefined -Wl,-z -Wl,relro -Wl,-z -Wl,now -pie -o systemd-mount src/mount/mount-tool.o  ./.libs/libsystemd-shared.so -L/home/paralin/buildroot/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib -lcap -lrt -lresolv /home/paralin/buildroot/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/liblzma.so -llz4 /home/paralin/buildroot/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libgcrypt.so /home/paralin/buildroot/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libgpg-error.so /home/paralin/buildroot/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libblkid.so /home/paralin/buildroot/build/util-linux-2.31/.libs/libuuid.so -pthread -Wl,-rpath -Wl,/home/paralin/buildroot/build/systemd-234/.libs -Wl,-rpath -Wl,/home/paralin/buildroot/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib -Wl,-rpath -Wl,/home/paralin/buildroot/build/util-linux-2.31/.libs -Wl,-rpath -Wl,/lib/systemd -Wl,-rpath -Wl,/home/paralin/buildroot/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib                                                                                                                                                                                             
-libtool: link: /home/paralin/buildroot/host/bin/arm-buildroot-linux-gnueabihf-gcc -D__SANE_USERSPACE_TYPES__ -pipe -Wall -Wextra -Wundef -Wlogical-op -Wmissing-include-dirs -Wold-style-definition -Wpointer-arith -Winit-self -Wdeclaration-after-statement -Wfloat-equal -Wsuggest-attribute=noreturn -Werror=missing-prototypes -Werror=implicit-function-declaration -Werror=missing-declarations -Werror=return-type -Werror=incompatible-pointer-types -Werror=format=2 -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wstrict-aliasing=2 -Wwrite-strings -Wno-unused-parameter -Wno-missing-field-initializers -Wno-unused-result -Wno-format-signedness -Werror=overflow -Wdate-time -Wnested-externs -ffast-math -fno-common -fdiagnostics-show-option -fno-strict-aliasing -fvisibility=hidden -fstack-protector -fstack-protector-strong -fPIE --param=ssp-buffer-size=4 -Werror=shadow -flto -ffunction-sections -fdata-sections -I/home/paralin/buildroot/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/libmount -I/home/paralin/buildroot/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/blkid -I/home/paralin/buildroot/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/uuid -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -O2 -fno-lto -Wl,--gc-sections -Wl,--as-needed -Wl,--no-undefined -Wl,-z -Wl,relro -Wl,-z -Wl,now -pie -o systemd-analyze src/analyze/systemd_analyze-analyze.o src/analyze/systemd_analyze-analyze-verify.o  ./.libs/libcore.a /home/paralin/buildroot/build/systemd-234/.libs/libsystemd-shared.so -L/home/paralin/buildroot/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib -lcap -lresolv -llz4 /home/paralin/buildroot/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libgcrypt.so /home/paralin/buildroot/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libgpg-error.so /home/paralin/buildroot/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libblkid.so /lib/libpam.so /lib/libpam_misc.so /home/paralin/buildroot/build/linux-pam-1.3.0/libpam/.libs/libpam.so -ldl /home/paralin/buildroot/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libkmod.so /home/paralin/buildroot/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/liblzma.so -lz /home/paralin/buildroot/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libmount.so /home/paralin/buildroot/build/util-linux-2.31/.libs/libblkid.so /home/paralin/buildroot/build/util-linux-2.31/.libs/libuuid.so -lrt -pthread -Wl,-rpath -Wl,/home/paralin/buildroot/build/systemd-234/.libs -Wl,-rpath -Wl,/home/paralin/buildroot/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib -Wl,-rpath -Wl,/home/paralin/buildroot/build/linux-pam-1.3.0/libpam/.libs -Wl,-rpath -Wl,/home/paralin/buildroot/build/util-linux-2.31/.libs -Wl,-rpath -Wl,/lib/systemd -Wl,-rpath -Wl,/home/paralin/buildroot/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib                                                                                                                                                                                          
-/lib/libpam.so: file not recognized: File format not recognized
-collect2: error: ld returned 1 exit status
-make[4]: *** [Makefile:12785: systemd-analyze] Error 1
-make[4]: *** Waiting for unfinished jobs....
-libtool: link: /home/paralin/buildroot/host/bin/arm-buildroot-linux-gnueabihf-gcc -D__SANE_USERSPACE_TYPES__ -pipe -Wall -Wextra -Wundef -Wlogical-op -Wmissing-include-dirs -Wold-style
+br,
 
-It appears to be explicitly linking against absolute path /lib/libpam.so
-on my machine. My environment is clean, no LD_PATH modifications or so.
+Jan
 
-Any help is greatly appreciated. I cannot use the newer versions of
-Buildroot because of this.
+Jan Heylen (2):
+  Opentracing: add opentracing-cpp v1.2.0 package
+  opentracing-cpp: make shared/static target a configurable option
 
-Thanks,
-Christian
+ package/Config.in                                  |  1 +
+ ...shared-static-target-a-configurable-optio.patch | 73 ++++++++++++++++++++++
+ package/opentracing-cpp/Config.in                  | 11 ++++
+ package/opentracing-cpp/opentracing-cpp.hash       |  3 +
+ package/opentracing-cpp/opentracing-cpp.mk         | 22 +++++++
+ 5 files changed, 110 insertions(+)
+ create mode 100644 package/opentracing-cpp/0001-CMake-make-shared-static-target-a-configurable-optio.patch
+ create mode 100644 package/opentracing-cpp/Config.in
+ create mode 100644 package/opentracing-cpp/opentracing-cpp.hash
+ create mode 100644 package/opentracing-cpp/opentracing-cpp.mk
+
+-- 
+2.7.4
