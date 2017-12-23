@@ -1,27 +1,97 @@
 From: Alexander Mukhin <alexander.i.mukhin@gmail.com>
-Date: Sat, 23 Dec 2017 22:06:13 +0300
-Subject: [Buildroot] [PATCH 0/4] hostapd: new configuration options
-Message-ID: <20171223190617.3981-1-alexander.i.mukhin@gmail.com>
+Date: Sat, 23 Dec 2017 22:06:14 +0300
+Subject: [Buildroot] [PATCH 1/4] hostapd: select VLAN support
+In-Reply-To: <20171223190617.3981-1-alexander.i.mukhin@gmail.com>
+References: <20171223190617.3981-1-alexander.i.mukhin@gmail.com>
+Message-ID: <20171223190617.3981-2-alexander.i.mukhin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Below is the list of patches for hostapd to give user more control
-on which options to include in the build. As a byproduct, we can drop
-dependencies on netlink and threads if the options selected
-do not require them.
+Add configuration options for hostapd to select which kind
+of VLAN support to build.
 
-Alexander Mukhin (4):
-  hostapd: select VLAN support
-  hostapd: select driver support
-  hostapd: make ACS dependent on nl80211
-  hostapd: drop default netlink dependency
+Signed-off-by: Alexander Mukhin <alexander.i.mukhin@gmail.com>
+---
+ package/hostapd/Config.in  | 23 +++++++++++++++++++++++
+ package/hostapd/hostapd.mk | 16 +++++++++++++---
+ 2 files changed, 36 insertions(+), 3 deletions(-)
 
- package/hostapd/Config.in  | 58 ++++++++++++++++++++++++++++++++++++++++++----
- package/hostapd/hostapd.mk | 51 ++++++++++++++++++++++++++++++----------
- 2 files changed, 92 insertions(+), 17 deletions(-)
-
+diff --git a/package/hostapd/Config.in b/package/hostapd/Config.in
+index 40c7015e73..84156e8f11 100644
+--- a/package/hostapd/Config.in
++++ b/package/hostapd/Config.in
+@@ -43,6 +43,29 @@ config BR2_PACKAGE_HOSTAPD_WPS
+ 	help
+ 	  Enable support for Wi-Fi Protected Setup.
+ 
++config BR2_PACKAGE_HOSTAPD_VLAN
++	bool "Enable VLAN support"
++	default y
++	help
++	  Enable support for VLANs.
++
++config BR2_PACKAGE_HOSTAPD_VLAN_DYNAMIC
++	bool "Enable dynamic VLAN support"
++	default y
++	depends on BR2_PACKAGE_HOSTAPD_VLAN
++	help
++	  Enable support for fully dynamic VLANs.
++	  This enables hostapd to automatically create
++	  bridge and VLAN interfaces if necessary.
++
++config BR2_PACKAGE_HOSTAPD_VLAN_NETLINK
++	bool "Use netlink-based API for VLAN operations"
++	default y
++	depends on BR2_PACKAGE_HOSTAPD_VLAN
++	help
++	  Use netlink-based kernel API for VLAN operations
++	  instead of ioctl().
++
+ endif
+ 
+ comment "hostapd needs a toolchain w/ threads"
+diff --git a/package/hostapd/hostapd.mk b/package/hostapd/hostapd.mk
+index 0ed1631421..04ffa35758 100644
+--- a/package/hostapd/hostapd.mk
++++ b/package/hostapd/hostapd.mk
+@@ -18,15 +18,13 @@ HOSTAPD_LICENSE_FILES = README
+ HOSTAPD_CONFIG_SET =
+ 
+ HOSTAPD_CONFIG_ENABLE = \
+-	CONFIG_FULL_DYNAMIC_VLAN \
+ 	CONFIG_HS20 \
+ 	CONFIG_IEEE80211AC \
+ 	CONFIG_IEEE80211N \
+ 	CONFIG_IEEE80211R \
+ 	CONFIG_INTERNAL_LIBTOMMATH \
+ 	CONFIG_INTERWORKING \
+-	CONFIG_LIBNL32 \
+-	CONFIG_VLAN_NETLINK
++	CONFIG_LIBNL32
+ 
+ HOSTAPD_CONFIG_DISABLE =
+ 
+@@ -74,6 +72,18 @@ ifeq ($(BR2_PACKAGE_HOSTAPD_WPS),y)
+ HOSTAPD_CONFIG_ENABLE += CONFIG_WPS
+ endif
+ 
++ifneq ($(BR2_PACKAGE_HOSTAPD_VLAN),y)
++HOSTAPD_CONFIG_ENABLE += CONFIG_NO_VLAN
++endif
++
++ifeq ($(BR2_PACKAGE_HOSTAPD_VLAN_DYNAMIC),y)
++HOSTAPD_CONFIG_ENABLE += CONFIG_FULL_DYNAMIC_VLAN
++endif
++
++ifeq ($(BR2_PACKAGE_HOSTAPD_VLAN_NETLINK),y)
++HOSTAPD_CONFIG_ENABLE += CONFIG_VLAN_NETLINK
++endif
++
+ define HOSTAPD_CONFIGURE_CMDS
+ 	cp $(@D)/hostapd/defconfig $(HOSTAPD_CONFIG)
+ 	sed -i $(patsubst %,-e 's/^#\(%\)/\1/',$(HOSTAPD_CONFIG_ENABLE)) \
 -- 
 2.11.0
