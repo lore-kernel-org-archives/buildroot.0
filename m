@@ -1,50 +1,37 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 24 Dec 2017 22:00:35 +0200
-Subject: [Buildroot] [PATCH] libassuan: bump to version 2.5.1
-Message-ID: <98bcb36e7d47ca9d2b62163a5c7fb44f277dc72c.1514145635.git.baruch@tkos.co.il>
+From: Sergey Matyukevich <geomatsi@gmail.com>
+Date: Sun, 24 Dec 2017 23:49:20 +0300
+Subject: [Buildroot] [PATCH 2/4] hostapd: select driver support
+In-Reply-To: <20171223190617.3981-3-alexander.i.mukhin@gmail.com>
+References: <20171223190617.3981-1-alexander.i.mukhin@gmail.com>
+ <20171223190617.3981-3-alexander.i.mukhin@gmail.com>
+Message-ID: <20171224204920.uwyafn63a6lyyqan@speedy.hunter>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add cryptographically secure sha256 hash and a reference to upstream
-signature.
+Hello Alexander,
 
-Add license files hashes.
+> Add configuration options for hostapd to select which
+> drivers to build.
+> 
+> Signed-off-by: Alexander Mukhin <alexander.i.mukhin@gmail.com>
 
-Cc: Philipp Claves <claves@budelmann-elektronik.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/libassuan/libassuan.hash | 7 ++++++-
- package/libassuan/libassuan.mk   | 2 +-
- 2 files changed, 7 insertions(+), 2 deletions(-)
+[...]
 
-diff --git a/package/libassuan/libassuan.hash b/package/libassuan/libassuan.hash
-index 01ade11f26b3..2e80cfa4e11d 100644
---- a/package/libassuan/libassuan.hash
-+++ b/package/libassuan/libassuan.hash
-@@ -1,2 +1,7 @@
- # From https://www.gnupg.org/download/integrity_check.html
--sha1 27391cf4a820b5350ea789c30661830c9a271518  libassuan-2.4.3.tar.bz2
-+sha1 c8432695bf1daa914a92f51e911881ed93d50604  libassuan-2.5.1.tar.bz2
-+# Locally calculated after checking signature
-+# https://www.gnupg.org/ftp/gcrypt/libassuan/libassuan-2.5.1.tar.bz2.sig
-+sha256 47f96c37b4f2aac289f0bc1bacfa8bd8b4b209a488d3d15e2229cb6cc9b26449  libassuan-2.5.1.tar.bz2
-+sha256 a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  COPYING.LIB
-+sha256 fc82ca8b6fdb18d4e3e85cfd8ab58d1bcd3f1b29abe782895abd91d64763f8e7  COPYING
-diff --git a/package/libassuan/libassuan.mk b/package/libassuan/libassuan.mk
-index 0e3aca36e224..e807086b7380 100644
---- a/package/libassuan/libassuan.mk
-+++ b/package/libassuan/libassuan.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBASSUAN_VERSION = 2.4.3
-+LIBASSUAN_VERSION = 2.5.1
- LIBASSUAN_SITE = ftp://ftp.gnupg.org/gcrypt/libassuan
- LIBASSUAN_SOURCE = libassuan-$(LIBASSUAN_VERSION).tar.bz2
- LIBASSUAN_LICENSE = LGPL-2.1+ (library), GPL-3.0 (tests, doc)
--- 
-2.15.1
+> +comment "at least one driver must be selected"
+> +	depends on !BR2_PACKAGE_HOSTAPD_DRIVER_HOSTAP
+> +	depends on !BR2_PACKAGE_HOSTAPD_DRIVER_NL80211
+> +	depends on !BR2_PACKAGE_HOSTAPD_DRIVER_RTW
+> +
+
+Does it makes sense to enforce enablement of at least one driver ?
+
+Another option would be to add DRIVER_NONE to the list of drivers,
+and enable it by default if no other actual wired/wireless driver
+has been selected. According to example hostapd.conf only 'none'
+driver is needed if hostapd is built as a standalone RADIUS server.
+
+Regards,
+Sergey
