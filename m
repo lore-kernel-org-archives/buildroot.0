@@ -1,106 +1,50 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 24 Dec 2017 21:49:12 +0200
-Subject: [Buildroot] [PATCH] faad2: bump to version 2.8.8
-Message-ID: <6a79654b376420cca710f9b4fecbdde8cd6dc430.1514144952.git.baruch@tkos.co.il>
+Date: Sun, 24 Dec 2017 22:00:35 +0200
+Subject: [Buildroot] [PATCH] libassuan: bump to version 2.5.1
+Message-ID: <98bcb36e7d47ca9d2b62163a5c7fb44f277dc72c.1514145635.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Drop patch; issue fixed upstream.
+Add cryptographically secure sha256 hash and a reference to upstream
+signature.
 
-Add license file hash.
+Add license files hashes.
 
-Revert back to .tar.gz since that is what upstream provides.
-
-Remove autoreconf; tarball has configure script.
-
+Cc: Philipp Claves <claves@budelmann-elektronik.com>
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- .../0001-getopt-fix-strncmp-declaration.patch      | 40 ----------------------
- package/faad2/faad2.hash                           |  6 ++--
- package/faad2/faad2.mk                             |  5 +--
- 3 files changed, 5 insertions(+), 46 deletions(-)
- delete mode 100644 package/faad2/0001-getopt-fix-strncmp-declaration.patch
+ package/libassuan/libassuan.hash | 7 ++++++-
+ package/libassuan/libassuan.mk   | 2 +-
+ 2 files changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/package/faad2/0001-getopt-fix-strncmp-declaration.patch b/package/faad2/0001-getopt-fix-strncmp-declaration.patch
-deleted file mode 100644
-index 0e5f27e52af2..000000000000
---- a/package/faad2/0001-getopt-fix-strncmp-declaration.patch
-+++ /dev/null
-@@ -1,40 +0,0 @@
--From 6787914efad562e4097a153988109c5c7158abf7 Mon Sep 17 00:00:00 2001
--From: Baruch Siach <baruch@tkos.co.il>
--Date: Wed, 16 Aug 2017 13:35:57 +0300
--Subject: [PATCH] getopt: fix strncmp() declaration
--
--The strncmp() declaration does not conform with the standard as to the
--type of the 'n' parameter. Fix this to avoid the following build failure
--with musl libc:
--
--n file included from main.c:61:0:
--getopt.c:175:13: error: conflicting types for 'strncmp'
-- extern int  strncmp(const char *s1, const char *s2, unsigned int n);
--             ^~~~~~~
--In file included from main.c:49:0:
--.../host/x86_64-buildroot-linux-musl/sysroot/usr/include/string.h:38:5: note: previous declaration of 'strncmp' was here
-- int strncmp (const char *, const char *, size_t);
--     ^~~~~~~
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-----
--Upstream status: https://sourceforge.net/p/faac/bugs/217/
--
-- frontend/getopt.c | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/frontend/getopt.c b/frontend/getopt.c
--index 185d49b804dd..40c7a2242551 100644
----- a/frontend/getopt.c
--+++ b/frontend/getopt.c
--@@ -172,7 +172,7 @@ static enum
-- #if __STDC__ || defined(PROTO)
-- extern char *getenv(const char *name);
-- extern int  strcmp (const char *s1, const char *s2);
---extern int  strncmp(const char *s1, const char *s2, unsigned int n);
--+extern int  strncmp(const char *s1, const char *s2, size_t n);
-- 
-- static int my_strlen(const char *s);
-- static char *my_index (const char *str, int chr);
---- 
--2.14.1
--
-diff --git a/package/faad2/faad2.hash b/package/faad2/faad2.hash
-index d298e909a97c..2c6acee3d7fb 100644
---- a/package/faad2/faad2.hash
-+++ b/package/faad2/faad2.hash
-@@ -1,4 +1,6 @@
- # From http://sourceforge.net/projects/faac/files/faad2-src/faad2-2.8.0/ (used by upstream):
--sha1	a5caa71cd915acd502d96cba56f38296277f2350  faad2-2.8.1.tar.bz2
-+md5	28f6116efdbe9378269f8a6221767d1f  faad2-2.8.8.tar.gz
-+sha1	0d49c516d4a83c39053a9bd214fddba72cbc34ad  faad2-2.8.8.tar.gz
- # Locally computed
--sha256  f4042496f6b0a60f5ded6acd11093230044ef8a2fd965360c1bbd5b58780933d  faad2-2.8.1.tar.bz2
-+sha256  985c3fadb9789d2815e50f4ff714511c79c2710ac27a4aaaf5c0c2662141426d  faad2-2.8.8.tar.gz
-+sha256  d3baf3a54943cf12a994c85867a18dec84f810901b2f2878ddfd77efcc3c150f  COPYING
-diff --git a/package/faad2/faad2.mk b/package/faad2/faad2.mk
-index fa965fe5909c..27daadfc125f 100644
---- a/package/faad2/faad2.mk
-+++ b/package/faad2/faad2.mk
-@@ -5,13 +5,10 @@
+diff --git a/package/libassuan/libassuan.hash b/package/libassuan/libassuan.hash
+index 01ade11f26b3..2e80cfa4e11d 100644
+--- a/package/libassuan/libassuan.hash
++++ b/package/libassuan/libassuan.hash
+@@ -1,2 +1,7 @@
+ # From https://www.gnupg.org/download/integrity_check.html
+-sha1 27391cf4a820b5350ea789c30661830c9a271518  libassuan-2.4.3.tar.bz2
++sha1 c8432695bf1daa914a92f51e911881ed93d50604  libassuan-2.5.1.tar.bz2
++# Locally calculated after checking signature
++# https://www.gnupg.org/ftp/gcrypt/libassuan/libassuan-2.5.1.tar.bz2.sig
++sha256 47f96c37b4f2aac289f0bc1bacfa8bd8b4b209a488d3d15e2229cb6cc9b26449  libassuan-2.5.1.tar.bz2
++sha256 a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  COPYING.LIB
++sha256 fc82ca8b6fdb18d4e3e85cfd8ab58d1bcd3f1b29abe782895abd91d64763f8e7  COPYING
+diff --git a/package/libassuan/libassuan.mk b/package/libassuan/libassuan.mk
+index 0e3aca36e224..e807086b7380 100644
+--- a/package/libassuan/libassuan.mk
++++ b/package/libassuan/libassuan.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- FAAD2_VERSION_MAJOR = 2.8
--FAAD2_VERSION = $(FAAD2_VERSION_MAJOR).1
-+FAAD2_VERSION = $(FAAD2_VERSION_MAJOR).8
- FAAD2_SITE = http://downloads.sourceforge.net/project/faac/faad2-src/faad2-$(FAAD2_VERSION_MAJOR).0
--FAAD2_SOURCE = faad2-$(FAAD2_VERSION).tar.bz2
- FAAD2_LICENSE = GPL-2.0
- FAAD2_LICENSE_FILES = COPYING
--# No configure script in upstream tarball
--FAAD2_AUTORECONF = YES
- # frontend/faad calls frexp()
- FAAD2_CONF_ENV = LIBS=-lm
- FAAD2_INSTALL_STAGING = YES
+-LIBASSUAN_VERSION = 2.4.3
++LIBASSUAN_VERSION = 2.5.1
+ LIBASSUAN_SITE = ftp://ftp.gnupg.org/gcrypt/libassuan
+ LIBASSUAN_SOURCE = libassuan-$(LIBASSUAN_VERSION).tar.bz2
+ LIBASSUAN_LICENSE = LGPL-2.1+ (library), GPL-3.0 (tests, doc)
 -- 
 2.15.1
