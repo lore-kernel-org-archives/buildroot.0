@@ -1,41 +1,79 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Sun, 24 Dec 2017 13:09:57 +0100
-Subject: [Buildroot] systemd: build failure against pam on arm
-In-Reply-To: <873741w59p.fsf@paral.in>
-References: <CA+h8R2q1W9PZ8DbTDuxZQhg3+hauZqaDdwzFAGgmTJd7KqiQEg@mail.gmail.com>
- <87fufjgycd.fsf@dell.be.48ers.dk>
- <CA+h8R2qdYZkwynNoPKjiDynzs_gs=TfFZ7i-STGrednoG4O-ew@mail.gmail.com>
- <CA+h8R2o8=LmmcudEaiJSCenX7t4QmHB3SPwm-UowrGQEu2bMPw@mail.gmail.com>
- <29DD8155-F769-488E-8A9E-39D8B6D18B54@openadk.org>
- <87608xykge.fsf@paral.in>
- <1397D1DC-9330-40CF-89AB-8CB27EEFF333@openadk.org>
- <873741w59p.fsf@paral.in>
-Message-ID: <20171224120957.GY27558@waldemar-brodkorb.de>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sun, 24 Dec 2017 18:10:29 +0200
+Subject: [Buildroot] [PATCH] package/mfgtools: bump to 0.02
+In-Reply-To: <20171224102029.17178-1-romain.naour@gmail.com>
+References: <20171224102029.17178-1-romain.naour@gmail.com>
+Message-ID: <20171224161029.smqyft5nh2ec23mt@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-Christian Stewart wrote,
+Hi Romain,
 
-> Hi Waldemar,
+On Sun, Dec 24, 2017 at 11:20:29AM +0100, Romain Naour wrote:
+> Bump mfgtools to include the fix [1] for the C++ build issue reported
+> by the autobuilders.
 > 
-> Thank you for looking into this-
+> This bump include only 4 small commit fixing memory leak and this
+> build issue.
 > 
-> Waldemar Brodkorb <wbx@openadk.org> writes:
-> > check config.log where pam_misc is added. May be configure has a bug and detects your host pam under certain conditions.
+> Remove CPOL.htm (removed upstream) from MFGTOOLS_LICENSE_FILES.
+> Add license file hash.
 > 
-> Seems like it.
+> [1] https://github.com/codeauroraforum/mfgtools/commit/b370a43e548440025d274ff2abbb25342bbaa78c
 > 
-> > PAM_LIBS='-lpam -lpam_misc'
+> Fixes:
+> http://autobuild.buildroot.net/results/7c2bbbe13ab315684f3502afd96958a76879b1d5
 > 
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> Cc: Gary Bisson <gary.bisson@boundarydevices.com>
+> ---
+> This patch should be backported to stable branches 2017.02 and 2017.08.
+> ---
+>  package/mfgtools/mfgtools.hash | 3 ++-
+>  package/mfgtools/mfgtools.mk   | 4 ++--
+>  2 files changed, 4 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/mfgtools/mfgtools.hash b/package/mfgtools/mfgtools.hash
+> index e73a7fa13a..4d36ed809c 100644
+> --- a/package/mfgtools/mfgtools.hash
+> +++ b/package/mfgtools/mfgtools.hash
+> @@ -1,2 +1,3 @@
+>  # locally computed
+> -sha256  6ce93a33c269282df305cf7e517d2d14fde78203537d8ea75b064966afe48464  mfgtools-b219fc219a35c365010897ed093c40750f8cdac6.tar.gz
+> +sha256  055d71227d18883d6e8bc9e854c076015f9a7749820a94272e19071bf0b25c89  mfgtools-v0.02.tar.gz
+> +sha256  2655559a6bb1179eae514f5c7166f4ede4f2453efa9cf4dc3c045cab5d57dede  LICENSE
+> diff --git a/package/mfgtools/mfgtools.mk b/package/mfgtools/mfgtools.mk
+> index 00a011af85..865364eece 100644
+> --- a/package/mfgtools/mfgtools.mk
+> +++ b/package/mfgtools/mfgtools.mk
+> @@ -4,11 +4,11 @@
+>  #
+>  ################################################################################
+>  
+> -MFGTOOLS_VERSION = b219fc219a35c365010897ed093c40750f8cdac6
+> +MFGTOOLS_VERSION = v0.02
+>  MFGTOOLS_SITE = $(call github,NXPmicro,mfgtools,$(MFGTOOLS_VERSION))
 
-I cannot reproduce the problem with your defconfig and br git
-master.
-I disabled ccache. Could you try without ccache?
-Isn't --disable-pam used when you did not enable linux-pam?
+This redirects to https://github.com/codeauroraforum/mfgtools. Should _SITE be 
+update?
 
-best regards
- Waldemar
+>  MFGTOOLS_SUBDIR = MfgToolLib
+>  MFGTOOLS_LICENSE = BSD-3-Clause or CPOL
+
+Should the license be updates as well with the removal of COPL?
+
+> -MFGTOOLS_LICENSE_FILES = LICENSE CPOL.htm
+> +MFGTOOLS_LICENSE_FILES = LICENSE
+>  HOST_MFGTOOLS_DEPENDENCIES = host-libusb
+>  
+>  HOST_MFGTOOLS_CFLAGS = \
+
+baruch
+
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
