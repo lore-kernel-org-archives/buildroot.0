@@ -1,79 +1,73 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 24 Dec 2017 18:10:29 +0200
-Subject: [Buildroot] [PATCH] package/mfgtools: bump to 0.02
-In-Reply-To: <20171224102029.17178-1-romain.naour@gmail.com>
-References: <20171224102029.17178-1-romain.naour@gmail.com>
-Message-ID: <20171224161029.smqyft5nh2ec23mt@sapphire.tkos.co.il>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 24 Dec 2017 17:11:23 +0100
+Subject: [Buildroot] [PATCH] configs: introduce a minimalist defconfig
+Message-ID: <20171224161123.5397-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Romain,
+It is very often interesting to start from a minimalist configuration
+with no package and no filesystem.
 
-On Sun, Dec 24, 2017 at 11:20:29AM +0100, Romain Naour wrote:
-> Bump mfgtools to include the fix [1] for the C++ build issue reported
-> by the autobuilders.
-> 
-> This bump include only 4 small commit fixing memory leak and this
-> build issue.
-> 
-> Remove CPOL.htm (removed upstream) from MFGTOOLS_LICENSE_FILES.
-> Add license file hash.
-> 
-> [1] https://github.com/codeauroraforum/mfgtools/commit/b370a43e548440025d274ff2abbb25342bbaa78c
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/7c2bbbe13ab315684f3502afd96958a76879b1d5
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> Cc: Gary Bisson <gary.bisson@boundarydevices.com>
-> ---
-> This patch should be backported to stable branches 2017.02 and 2017.08.
-> ---
->  package/mfgtools/mfgtools.hash | 3 ++-
->  package/mfgtools/mfgtools.mk   | 4 ++--
->  2 files changed, 4 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/mfgtools/mfgtools.hash b/package/mfgtools/mfgtools.hash
-> index e73a7fa13a..4d36ed809c 100644
-> --- a/package/mfgtools/mfgtools.hash
-> +++ b/package/mfgtools/mfgtools.hash
-> @@ -1,2 +1,3 @@
->  # locally computed
-> -sha256  6ce93a33c269282df305cf7e517d2d14fde78203537d8ea75b064966afe48464  mfgtools-b219fc219a35c365010897ed093c40750f8cdac6.tar.gz
-> +sha256  055d71227d18883d6e8bc9e854c076015f9a7749820a94272e19071bf0b25c89  mfgtools-v0.02.tar.gz
-> +sha256  2655559a6bb1179eae514f5c7166f4ede4f2453efa9cf4dc3c045cab5d57dede  LICENSE
-> diff --git a/package/mfgtools/mfgtools.mk b/package/mfgtools/mfgtools.mk
-> index 00a011af85..865364eece 100644
-> --- a/package/mfgtools/mfgtools.mk
-> +++ b/package/mfgtools/mfgtools.mk
-> @@ -4,11 +4,11 @@
->  #
->  ################################################################################
->  
-> -MFGTOOLS_VERSION = b219fc219a35c365010897ed093c40750f8cdac6
-> +MFGTOOLS_VERSION = v0.02
->  MFGTOOLS_SITE = $(call github,NXPmicro,mfgtools,$(MFGTOOLS_VERSION))
+Re-use the existing minimalist configuration and promote it to a full
+defconfig.
 
-This redirects to https://github.com/codeauroraforum/mfgtools. Should _SITE be 
-update?
+This thus contains options that default to 'y', like the paranoid
+wrapper and busybox-show-others, as the defconfig is used by test-pkg
+too.
 
->  MFGTOOLS_SUBDIR = MfgToolLib
->  MFGTOOLS_LICENSE = BSD-3-Clause or CPOL
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+---
+ support/config-fragments/minimal.config => configs/minimal_defconfig | 2 ++
+ utils/genrandconfig                                                  | 2 +-
+ utils/test-pkg                                                       | 2 +-
+ 3 files changed, 4 insertions(+), 2 deletions(-)
+ rename support/config-fragments/minimal.config => configs/minimal_defconfig (82%)
 
-Should the license be updates as well with the removal of COPL?
-
-> -MFGTOOLS_LICENSE_FILES = LICENSE CPOL.htm
-> +MFGTOOLS_LICENSE_FILES = LICENSE
->  HOST_MFGTOOLS_DEPENDENCIES = host-libusb
->  
->  HOST_MFGTOOLS_CFLAGS = \
-
-baruch
-
+diff --git a/support/config-fragments/minimal.config b/configs/minimal_defconfig
+similarity index 82%
+rename from support/config-fragments/minimal.config
+rename to configs/minimal_defconfig
+index 71344e2c69..88406fdf4d 100644
+--- a/support/config-fragments/minimal.config
++++ b/configs/minimal_defconfig
+@@ -4,5 +4,7 @@ BR2_INIT_NONE=y
+ BR2_SYSTEM_BIN_SH_NONE=y
+ # BR2_PACKAGE_BUSYBOX is not set
+ # BR2_TARGET_ROOTFS_TAR is not set
++
++# For test-pkg, we also want those options to be forcibly 'y'
+ BR2_COMPILER_PARANOID_UNSAFE_PATH=y
+ BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
+diff --git a/utils/genrandconfig b/utils/genrandconfig
+index 883322552c..d193b99e8b 100755
+--- a/utils/genrandconfig
++++ b/utils/genrandconfig
+@@ -343,7 +343,7 @@ def gen_config(args):
+ 
+     # Combine with the minimal configuration
+     minimalconfigfile = os.path.join(args.buildrootdir,
+-                                     'support/config-fragments/minimal.config')
++                                     'configs/minimal_defconfig')
+     with open(minimalconfigfile) as minimalf:
+         configlines += minimalf.readlines()
+ 
+diff --git a/utils/test-pkg b/utils/test-pkg
+index 1b7046eac4..0e8b2f973b 100755
+--- a/utils/test-pkg
++++ b/utils/test-pkg
+@@ -99,7 +99,7 @@ build_one() {
+     mkdir -p "${dir}"
+ 
+     support/kconfig/merge_config.sh -O "${dir}" \
+-        "${toolchainconfig}" "support/config-fragments/minimal.config" "${cfg}" \
++        "${toolchainconfig}" "configs/minimal_defconfig" "${cfg}" \
+         > /dev/null
+     # We want all the options from the snippet to be present as-is (set
+     # or not set) in the actual .config; if one of them is not, it means
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+2.11.0
