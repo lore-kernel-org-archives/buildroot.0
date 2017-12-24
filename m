@@ -1,5 +1,5 @@
 From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Sun, 24 Dec 2017 11:38:03 +0100
+Date: Sun, 24 Dec 2017 13:09:57 +0100
 Subject: [Buildroot] systemd: build failure against pam on arm
 In-Reply-To: <873741w59p.fsf@paral.in>
 References: <CA+h8R2q1W9PZ8DbTDuxZQhg3+hauZqaDdwzFAGgmTJd7KqiQEg@mail.gmail.com>
@@ -10,7 +10,7 @@ References: <CA+h8R2q1W9PZ8DbTDuxZQhg3+hauZqaDdwzFAGgmTJd7KqiQEg@mail.gmail.com>
  <87608xykge.fsf@paral.in>
  <1397D1DC-9330-40CF-89AB-8CB27EEFF333@openadk.org>
  <873741w59p.fsf@paral.in>
-Message-ID: <20171224103803.GW27558@waldemar-brodkorb.de>
+Message-ID: <20171224120957.GY27558@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -32,8 +32,10 @@ Christian Stewart wrote,
 > > PAM_LIBS='-lpam -lpam_misc'
 > 
 
-Is there a copy of libpam_misc.so somewhere in your buildroot
-directory?
+I cannot reproduce the problem with your defconfig and br git
+master.
+I disabled ccache. Could you try without ccache?
+Isn't --disable-pam used when you did not enable linux-pam?
 
 best regards
  Waldemar
