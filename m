@@ -1,98 +1,51 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Mon, 25 Dec 2017 13:14:47 +0100
-Subject: [Buildroot] [PATCH] package/mfgtools: bump to 0.02
-In-Reply-To: <20171224161029.smqyft5nh2ec23mt@sapphire.tkos.co.il>
-References: <20171224102029.17178-1-romain.naour@gmail.com>
- <20171224161029.smqyft5nh2ec23mt@sapphire.tkos.co.il>
-Message-ID: <dfec903f-ffef-d840-62f4-39f0dabcdd8c@gmail.com>
+Date: Mon, 25 Dec 2017 13:16:47 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2017-12-23
+In-Reply-To: <CANQCQpYAVCagCrqYUyuzRaMTFXzYxraBC21cjAhRXJtP6N6msA@mail.gmail.com>
+References: <20171224070010.58DF22070B@mail.free-electrons.com>
+ <d5eb5b67-0a7b-0490-d119-e6ffc4a0dae3@gmail.com>
+ <CANQCQpYAVCagCrqYUyuzRaMTFXzYxraBC21cjAhRXJtP6N6msA@mail.gmail.com>
+Message-ID: <460285ee-009d-0e5a-3c16-95fb5dee7579@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Baruch,
+Hi Matthew,
 
-Le 24/12/2017 ? 17:10, Baruch Siach a ?crit?:
-> Hi Romain,
+Le 25/12/2017 ? 02:46, Matthew Weber a ?crit?:
+> Romain,
 > 
-> On Sun, Dec 24, 2017 at 11:20:29AM +0100, Romain Naour wrote:
->> Bump mfgtools to include the fix [1] for the C++ build issue reported
->> by the autobuilders.
+> On Sun, Dec 24, 2017 at 4:36 AM, Romain Naour <romain.naour@gmail.com> wrote:
+>> Hi All,
 >>
->> This bump include only 4 small commit fixing memory leak and this
->> build issue.
->>
->> Remove CPOL.htm (removed upstream) from MFGTOOLS_LICENSE_FILES.
->> Add license file hash.
->>
->> [1] https://github.com/codeauroraforum/mfgtools/commit/b370a43e548440025d274ff2abbb25342bbaa78c
->>
->> Fixes:
->> http://autobuild.buildroot.net/results/7c2bbbe13ab315684f3502afd96958a76879b1d5
->>
->> Signed-off-by: Romain Naour <romain.naour@gmail.com>
->> Cc: Gary Bisson <gary.bisson@boundarydevices.com>
->> ---
->> This patch should be backported to stable branches 2017.02 and 2017.08.
->> ---
->>  package/mfgtools/mfgtools.hash | 3 ++-
->>  package/mfgtools/mfgtools.mk   | 4 ++--
->>  2 files changed, 4 insertions(+), 3 deletions(-)
->>
->> diff --git a/package/mfgtools/mfgtools.hash b/package/mfgtools/mfgtools.hash
->> index e73a7fa13a..4d36ed809c 100644
->> --- a/package/mfgtools/mfgtools.hash
->> +++ b/package/mfgtools/mfgtools.hash
->> @@ -1,2 +1,3 @@
->>  # locally computed
->> -sha256  6ce93a33c269282df305cf7e517d2d14fde78203537d8ea75b064966afe48464  mfgtools-b219fc219a35c365010897ed093c40750f8cdac6.tar.gz
->> +sha256  055d71227d18883d6e8bc9e854c076015f9a7749820a94272e19071bf0b25c89  mfgtools-v0.02.tar.gz
->> +sha256  2655559a6bb1179eae514f5c7166f4ede4f2453efa9cf4dc3c045cab5d57dede  LICENSE
->> diff --git a/package/mfgtools/mfgtools.mk b/package/mfgtools/mfgtools.mk
->> index 00a011af85..865364eece 100644
->> --- a/package/mfgtools/mfgtools.mk
->> +++ b/package/mfgtools/mfgtools.mk
->> @@ -4,11 +4,11 @@
->>  #
->>  ################################################################################
->>  
->> -MFGTOOLS_VERSION = b219fc219a35c365010897ed093c40750f8cdac6
->> +MFGTOOLS_VERSION = v0.02
->>  MFGTOOLS_SITE = $(call github,NXPmicro,mfgtools,$(MFGTOOLS_VERSION))
+>> Le 24/12/2017 ? 08:00, Thomas Petazzoni a ?crit :
+>>> Hello,
+>>>
+>>> Build statistics for 2017-12-23
+>>> ===============================
+> [snip]
+>>>      powerpc |             liburiparser-0.8.1 | TIM | http://autobuild.buildroot.net/results/e7816d6a15d2a96ca9a401e95955c75d54e7d6da |
+>>>       x86_64 | make[2]: *** [libtests/buil... | TIM | http://autobuild.buildroot.net/results/fded34f8e5da52737f4c40107e28ad77a223d64b |
+>>>       x86_64 | make[2]: *** [Makefile:71: ... | TIM | http://autobuild.buildroot.net/results/52f9379d98a1826e1d0faa60ba89a8d5ac09895e |
+>> The default timeout value seems too short for my autobuilder.
 > 
-> This redirects to https://github.com/codeauroraforum/mfgtools. Should _SITE be 
-> update?
+> I've got a autobr patchset I'll send out in the next couple days that
+> removes the timeout and makes it based on updates to the
+> build-time.log.  I think I've got enough test coverage at this point.
+> My largo autobuilder has been running for a couple day and handling
+> 8+hr builds as well as successful/timeouts.
 
-Indeed, thanks for noticing this.
+Great thanks!
 
-> 
->>  MFGTOOLS_SUBDIR = MfgToolLib
->>  MFGTOOLS_LICENSE = BSD-3-Clause or CPOL
-> 
-> Should the license be updates as well with the removal of COPL?
-
-The CPOL file was removed but the CPOL license is still valid.
-See the Readme file from this version:
-
-Licenses:
-- CPOL: MfgToolLib/XmlLite.CPP and XmlLite.h
-- BSD: Others.
-
-I hesitated to add these files in MFGTOOLS_LICENSE_FILES since their content
-(hash) are likely to be modified between each version.
-
-Thoughts?
+For now, I increased the timeout to 12h but it's annoying especially for the
+host-ti-cgt-pru issue :-/
 
 Best regards,
 Romain
 
 > 
->> -MFGTOOLS_LICENSE_FILES = LICENSE CPOL.htm
->> +MFGTOOLS_LICENSE_FILES = LICENSE
->>  HOST_MFGTOOLS_DEPENDENCIES = host-libusb
->>  
->>  HOST_MFGTOOLS_CFLAGS = \
-> 
-> baruch
+> Matt Weber
 > 
