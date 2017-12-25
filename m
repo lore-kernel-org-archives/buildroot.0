@@ -1,168 +1,206 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 25 Dec 2017 08:00:36 +0100 (CET)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2017-12-24
-Message-ID: <20171225070036.1C1C4207C8@mail.free-electrons.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Mon, 25 Dec 2017 13:08:36 +0100
+Subject: [Buildroot] How to force mesa3d to use llvmpipe?
+In-Reply-To: <CALoSW66eRFZXbVrd_PihP8txbd_oZx4os5mjf6s_Sfs7-bFMtA@mail.gmail.com>
+References: <1513976018164-0.post@n4.nabble.com>
+ <1513977748342-0.post@n4.nabble.com>
+ <7829580e-0ae9-e063-5124-c4e2cde424da@gmail.com>
+ <CALoSW666QZZCi=XMkir+UP=8N+dG6hbZQ0ZiFLM=nGKRxQRB-Q@mail.gmail.com>
+ <20171223010843.GC26647@momiji> <20171223011148.GE26647@momiji>
+ <CALoSW66Tm=qrsgpi8_GgG0_P5tsFLFPBtspKG_0HAV-bD3ydNg@mail.gmail.com>
+ <CALoSW66eRFZXbVrd_PihP8txbd_oZx4os5mjf6s_Sfs7-bFMtA@mail.gmail.com>
+Message-ID: <d360d446-3501-1931-405a-1b0928059e88@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Nimai, All,
 
-Build statistics for 2017-12-24
-===============================
+Le 24/12/2017 ? 17:46, Nimai Mahajan a ?crit?:
+> 
+> 
+> On Fri, Dec 22, 2017 at 7:05 PM, Nimai Mahajan <nimaim@gmail.com
+> <mailto:nimaim@gmail.com>> wrote:
+> 
+>     On Fri, Dec 22, 2017, 6:12 PM Adrian Perez de Castro <aperez@igalia.com
+>     <mailto:aperez@igalia.com>> wrote:
+> 
+>         On Sat, 23 Dec 2017 01:08:43 +0200, Adrian Perez de Castro
+>         <aperez at igalia.com <mailto:aperez@igalia.com>> wrote:
+>         > Hello Nimai,
+>         >
+>         > On Fri, 22 Dec 2017 17:10:49 -0500, Nimai Mahajan <nimaim@gmail.com
+>         <mailto:nimaim@gmail.com>> wrote:
+>         > > On Fri, Dec 22, 2017 at 4:52 PM, Romain Naour
+>         <romain.naour at gmail.com <mailto:romain.naour@gmail.com>> wrote:
+>         > >
+>         > > > Hi Nimai,
+>         > > >
+>         > > > Le 22/12/2017 ? 22:22, nimaim a ?crit :
+>         > > > > Looks like BR may still not have llvmpipe support. Curious if
+>         this patch got
+>         > > > > anywhere?
+>         > > > >?
+>         http://lists.busybox.net/pipermail/buildroot/2017-July/195823.html
+>         <http://lists.busybox.net/pipermail/buildroot/2017-July/195823.html>
+>         >
+>         > I have made those patches as part of a proof-of-concept for a project. The
+>         > people involved have decided to switch over to a GPU-accelerated
+>         solution, and
+>         > that means that I have not been devoting time to polish the patch set for
+>         > inclusion upstream. While I think it would be nice to have LLVM packages
+>         > merged, so far I have been working on Buildroot using my laptop and it has
+>         > been prohibitive to me to spend CPU time on side quests which don't
+>         help my
+>         > daily work ? sorry about that!
+>         >
+>         > > > This patch series is still present in the patchwork [1] but this
+>         work need
+>         > > > to be updated with the latest llvm/clang release (5.0.1).
+>         >
+>         > After Christmas I expect to have a powerful build machine and plenty
+>         of disk
+>         > space, and then it will be more feasible for me to try do some additional
+>         > contributions to Buildroot. Let's see then whether I can get it updated.
+>         >
+>         > > > However, you can still test this series and you should be able to use
+>         > > > llvmpipe.
+>         > >
+>         > > Thanks! Sounds good, I will try to merge Adrian's llvm package and
+>         mesa3d
+>         > > patches locally and rebuild mesa and see if I can get Qt to work
+>         with the
+>         > > llvm OpenGL driver. By any chance, do you know if llvm v4.0.0 will work
+>         > > with mesa 17.2.x or 17.3.x or will it have to be bumped to v5? Also, not
+>         > > sure how familiar with Qt you are, but do you know if Qt will require
+>         > > special hooks to be able to use this with xcb?
+>         >
+>         > Any Mesa 17.x should work fine with LLVM 4.x; it should not be needed to
+>         > update the build recipes to LLVM 5. Quoting from the Mesa website:
+>         >
+>         >? ??Unless otherwise stated, LLVM version 3.4 is recommended; 3.3 or
+>         >? ? later is required.?
+>         >
+>         > There is also this note regarding PowerPC support:
+>         >
+>         >? ??For ppc64le processors, use of the Altivec feature (the Vector
+>         Facility) is
+>         >? ?recommended if supported; use of the VSX feature (the Vector-Scalar
+>         >? ?Facility) is recommended if supported AND Mesa is built with LLVM
+>         version
+>         >? ?4.0 or later.?
+>         >
+>         > (See https://www.mesa3d.org/llvmpipe.html
+>         <https://www.mesa3d.org/llvmpipe.html> for more details.)
+> 
+>         One more detail: If Mesa does not realize by itself that it should use a
+>         software-based rendering driver (which can happen when there are multiple
+>         drivers built into Mesa), you can force it at runtime by setting the
+>         ?LIBGL_ALWAYS_SOFTWARE=1? environment variable. There is more about the
+>         environment variables supported by Mesa here:
+> 
+>         ? https://www.mesa3d.org/envvars.html <https://www.mesa3d.org/envvars.html>
+> 
+>         Interesting, thanks I'll check that out. Not sure how to force it to use
+>         llvmpipe if you have gallium and dri swrast both enabled as well but I
+>         guess in that case you'd have to explicitly disable those, which
+>         hopefully doesn't break something else. Will be interesting integrating
+>         Qt into the mix here but as long as libGL.so is provided by mesa's
+>         llvmpipe, it should work.
+> 
+> 
+> 
+> So I patched buildroot master with those two patches (successfully) but build
+> fails. It seems to build llvm just fine, but mesa3d can't find any of the llvm
+> stuff and crashes on that. I pasted a stripped buildroot build log of the llvm
+> and mesa3d builds
+> here:?https://gist.github.com/anonymous/6a5638bb91e4310029aaf90f43ef0d1c (the
+> blank lines are merely suppressed?cmake:?/usr/local/lib/libcurl.so.4:?no?version
+> information available?(required?by?cmake)?messages to make the output easier to
+> read). I will have to look at this error more thoroughly at work this week. I
+> believe the ./configure for mesa3d looks good now though (and should build
+> llvmpipe swrast):
+> 
+> ? ? ? ? prefix:? ? ? ? ? /usr
+> ? ? ? ? exec_prefix:? ? ?/usr
+> ? ? ? ? libdir:? ? ? ? ? ${exec_prefix}/lib
+> ? ? ? ? includedir:? ? ? ${prefix}/include
+> 
+> ? ? ? ? OpenGL:? ? ? ? ? yes (ES1: yes ES2: yes)
+> 
+> ? ? ? ? OSMesa:? ? ? ? ? no
+> 
+> ? ? ? ? DRI platform:? ? drm
+> ? ? ? ? DRI drivers:? ? ?swrast?
+> ? ? ? ? DRI driver dir:? ${libdir}/dri
+> ? ? ? ? GLX:? ? ? ? ? ? ?DRI-based
+> 
+> ? ? ? ? EGL:? ? ? ? ? ? ?yes
+> ? ? ? ? EGL drivers:? ? ?builtin:egl_dri2
+> ? ? ? ? GBM:? ? ? ? ? ? ?yes
+> ? ? ? ? EGL/Vulkan/VL platforms:? ?drm x11
+> 
+> ? ? ? ? Vulkan drivers:? no
+> 
+> ? ? ? ? llvm:? ? ? ? ? ? yes
+> ? ? ? ? llvm-config:? ?
+> ?/home/nimai/Desktop/buildroot/output/host/i686-buildroot-linux-gnu/sysroot/usr/bin/llvm-config
+> ? ? ? ? llvm-version:? ? 4.0.0
+> 
+> ? ? ? ? Gallium drivers: swrast
+> ? ? ? ? Gallium st:? ? ? mesa
+> 
+> ? ? ? ? HUD extra stats: yes
+> ? ? ? ? HUD lmsensors:? ?no
+> 
+> 
+> ? ? ? ? Shared libs:? ? ?yes
+> ? ? ? ? Static libs:? ? ?no
+> ? ? ? ? Shared-glapi:? ? yes
+> 
+> ? ? ? ? CFLAGS:? ? ? ? ? -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+> -D_FILE_OFFSET_BITS=64 -Os -Wall -Werror=implicit-function-declaration
+> -Werror=missing-prototypes -Wmissing-prototypes -fno-math-errno
+> -fno-trapping-math -std=c99
+> ? ? ? ? CXXFLAGS:? ? ? ? -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+> -D_FILE_OFFSET_BITS=64 -Os -Wall -fno-math-errno -fno-trapping-math
+> ? ? ? ? LDFLAGS:? ? ? ? ?
+> ? ? ? ? Macros:? ? ? ? ? -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS
+> -D__STDC_LIMIT_MACROS -D_GNU_SOURCE -DUSE_SSE41 -DUSE_GCC_ATOMIC_BUILTINS
+> -DNDEBUG -DTEXTURE_FLOAT_ENABLED -DHAVE_XLOCALE_H -DHAVE_SYS_SYSCTL_H
+> -DHAVE_ENDIAN_H -DHAVE_STRTOF -DHAVE_MKOSTEMP -DHAVE_STRTOD_L
+> -DHAVE_DL_ITERATE_PHDR -DHAVE_POSIX_MEMALIGN -DHAVE_GALLIUM_EXTRA_HUD=1
+> -DHAVE_LIBDRM -DGLX_USE_DRM -DGLX_INDIRECT_RENDERING -DGLX_DIRECT_RENDERING
+> -DGLX_USE_TLS -DHAVE_DRM_PLATFORM -DHAVE_X11_PLATFORM -DENABLE_SHADER_CACHE
+> -DHAVE_MINCORE -DHAVE_LLVM=0x0400 -DMESA_LLVM_VERSION_PATCH=0
+> 
+> ? ? ? ? LLVM_CFLAGS:? ?
+> ?-I/home/nimai/Desktop/buildroot/output/host/i686-buildroot-linux-gnu/sysroot/usr/include
+> -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS
+> ? ? ? ? LLVM_CXXFLAGS:?
+> ?-I/home/nimai/Desktop/buildroot/output/host/i686-buildroot-linux-gnu/sysroot/usr/include?
+> -std=c++11 -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS
+> ? ? ? ? LLVM_CPPFLAGS:?
+> ?-I/home/nimai/Desktop/buildroot/output/host/i686-buildroot-linux-gnu/sysroot/usr/include
+> -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS
+> ? ? ? ? LLVM_LDFLAGS:? ?
+> -L/home/nimai/Desktop/buildroot/output/host/i686-buildroot-linux-gnu/sysroot/usr/lib?
+> 
+> ? ? ? ? PYTHON2:? ? ? ? ?python2.7
+> 
+> ? ? ? ? Run 'make' to build Mesa
+> 
+> Any ideas that will make this compile properly? Thanks. Sorry if this gets
+> posted twice, I originally pasted the log file which exceeded the mailing list
+> limit.
 
-      branch |  OK | NOK | TIM | TOT |
-      master | 250 |  88 |   4 | 342 |
-   2017.08.x |  19 |   3 |   0 |  22 |
+Last time I tried this, an older version of mesa was used (17.0 or 17.1).
+I don't have much time these days to work on llvm+mesa.
+IIRC, mesa needs to be statically linked with llvm libraries. llvm libraries in
+staging directory should be shared libraries (*.so). Try to force llvm for the
+target to be build statically.
 
-Results for branch 'master'
-===========================
-
-Classification of failures by reason
-------------------------------------
-
-         host-cryptsetup-2.0.0 | 41
-                    brltty-5.5 | 12
-             libostree-2017.15 | 12
-                 libdrm-2.4.89 | 3 
-         host-ti-cgt-pru-2.1.4 | 2 
-                 libpqxx-4.0.1 | 2 
-                     pound-2.7 | 2 
-                qt5scxml-5.9.3 | 2 
-                  boost-1.65.1 | 1 
-                  cc-tool-0.26 | 1 
-                  cppcms-1.0.5 | 1 
-     glibc-arc-2017.09-release | 1 
-              host-erlang-20.0 | 1 
-                 host-icu-60.1 | 1 
-                   jamvm-2.0.0 | 1 
-kvm-unit-tests-kvm-unit-tes... | 1 
-                 mesa3d-17.3.1 | 1 
- netcat-openbsd-debian_1.178-3 | 1 
-                    php-7.1.12 | 1 
-                  physfs-3.0.1 | 1 
-    portaudio-v190600_20161030 | 1 
-                 qt5base-5.9.3 | 1 
-                  samba4-4.7.3 | 1 
-                       unknown | 1 
-
-
-Detail of failures
-------------------
-
-     powerpc |                   boost-1.65.1 | NOK | http://autobuild.buildroot.net/results/06f4d84c98c9d2457b335073916e3e404f456c51 |     
-        m68k |                     brltty-5.5 | NOK | http://autobuild.buildroot.net/results/9ab9135cb480ff1d8b6c8923d3004b3141c7857b |     
-         arm |                     brltty-5.5 | NOK | http://autobuild.buildroot.net/results/5103559dec563bf4055dc818f58d259dfa6259f8 |     
-        m68k |                     brltty-5.5 | NOK | http://autobuild.buildroot.net/results/66ce48bdaf6a8ad36a410ca3550f39e59ed283ec |     
-    mips64el |                     brltty-5.5 | NOK | http://autobuild.buildroot.net/results/f31e617ae2236d57bcac9c684005ca547975dac9 |     
-        m68k |                     brltty-5.5 | NOK | http://autobuild.buildroot.net/results/a5df09f8bd72b472585412e01d12fb48862fffcb |     
-         sh4 |                     brltty-5.5 | NOK | http://autobuild.buildroot.net/results/a3e8d900a4766252236b34a4971832dc0b26a28c |     
-         arm |                     brltty-5.5 | NOK | http://autobuild.buildroot.net/results/feba2d5b5b5a19ed0a4cebc122835553a8a1202e |     
-         sh4 |                     brltty-5.5 | NOK | http://autobuild.buildroot.net/results/69807a84ebc508898ac58d365169aa82d4ae0f51 |     
-         sh4 |                     brltty-5.5 | NOK | http://autobuild.buildroot.net/results/f572cda277de0bccfcc3e601c603f357c0744aa8 |     
-    mips64el |                     brltty-5.5 | NOK | http://autobuild.buildroot.net/results/edcb0b5c343a79ffdde86e4f2a4daac58a653ad7 |     
-    mips64el |                     brltty-5.5 | NOK | http://autobuild.buildroot.net/results/04488ffc4154c9b0df35b52e64ca59152488e089 |     
-    mips64el |                     brltty-5.5 | NOK | http://autobuild.buildroot.net/results/e98e791e8970c54fafe9ba6f6ea9d18f895f8cb6 |     
-        m68k |                   cc-tool-0.26 | NOK | http://autobuild.buildroot.net/results/2a99efee4927b5ad6fe453ae6f2db016be63630b |     
-         sh4 |                   cppcms-1.0.5 | NOK | http://autobuild.buildroot.net/results/7b2506179477a1803f390294876eb1d8360c4cca | ORPH
-         arc |      glibc-arc-2017.09-release | NOK | http://autobuild.buildroot.net/results/d98f70013a2b9d013710cced3103f2b79f421519 |     
-     powerpc |          host-cryptsetup-2.0.0 | NOK | http://autobuild.buildroot.net/results/1518292ae974bdb81c77432fcb130405b4e45364 |     
-       nios2 |          host-cryptsetup-2.0.0 | NOK | http://autobuild.buildroot.net/results/ae2ebbdcc593e98d2175e2eaa00427c5542248bf |     
-         arm |          host-cryptsetup-2.0.0 | NOK | http://autobuild.buildroot.net/results/ac65d82a9b779eec4982f84dad4868059f0d7313 |     
-      xtensa |          host-cryptsetup-2.0.0 | NOK | http://autobuild.buildroot.net/results/dd415fc15e5718fa555369eb4b3706805c821bcd |     
-         sh4 |          host-cryptsetup-2.0.0 | NOK | http://autobuild.buildroot.net/results/2451675ad4eb4e3e4b770032e09b225962424799 |     
-         arc |          host-cryptsetup-2.0.0 | NOK | http://autobuild.buildroot.net/results/b34f867866a2724123309a058367ac9cdf11cddc |     
-        i686 |          host-cryptsetup-2.0.0 | NOK | http://autobuild.buildroot.net/results/0f4f0fff2dc7a65bfe38db31d2585b8e2041fd7e |     
-         arm |          host-cryptsetup-2.0.0 | NOK | http://autobuild.buildroot.net/results/f7a62e9cd8b97eacf9784a6f6fcc95df017f3281 |     
-microblazeel |          host-cryptsetup-2.0.0 | NOK | http://autobuild.buildroot.net/results/0e27b636812308ca87b590d8466e4979cf770332 |     
-       sparc |          host-cryptsetup-2.0.0 | NOK | http://autobuild.buildroot.net/results/89c9661d77708be4b798e5164fa115b80a49ff42 |     
-      xtensa |          host-cryptsetup-2.0.0 | NOK | http://autobuild.buildroot.net/results/fd4d1f7500260f062c68fdcd45a20c86c7b9f64c |     
-         arm |          host-cryptsetup-2.0.0 | NOK | http://autobuild.buildroot.net/results/2545c236b5963fc6805f56d0a46843b04182c353 |     
-         arm |          host-cryptsetup-2.0.0 | NOK | http://autobuild.buildroot.net/results/3d4e1b1d80a5da939718de4d9c39e6d873278bd1 |     
-     powerpc |          host-cryptsetup-2.0.0 | NOK | http://autobuild.buildroot.net/results/f3b0244a28778bd33144be6169e479abb0528eeb |     
-         arc |          host-cryptsetup-2.0.0 | NOK | http://autobuild.buildroot.net/results/33660efe271843754417b2cd0be1fcb3a53517fb |     
-      x86_64 |          host-cryptsetup-2.0.0 | NOK | http://autobuild.buildroot.net/results/5772678ded5fa5ec82383ce800943b2ca4fbffb5 |     
-        bfin |          host-cryptsetup-2.0.0 | NOK | http://autobuild.buildroot.net/results/96b2313fade052195ba7572ac50f266c1239dfcf |     
-microblazeel |          host-cryptsetup-2.0.0 | NOK | http://autobuild.buildroot.net/results/804a28600f8e8cf114d934d7313e367fa872ee90 |     
-    mips64el |          host-cryptsetup-2.0.0 | NOK | http://autobuild.buildroot.net/results/1aa634a4568f44a7fba0fe68a7fee3ad4cc64d65 |     
-         arm |          host-cryptsetup-2.0.0 | NOK | http://autobuild.buildroot.net/results/55345104dfe50cb1d0d04cd2df969c0a0db9edf7 |     
-         arc |          host-cryptsetup-2.0.0 | NOK | http://autobuild.buildroot.net/results/ba57c767cfe6f1468bfd0d5b7ad67b2d61e9fe39 |     
-       sparc |          host-cryptsetup-2.0.0 | NOK | http://autobuild.buildroot.net/results/af6fdac8d69d24260ec30323c5711852022d2235 |     
-      x86_64 |          host-cryptsetup-2.0.0 | NOK | http://autobuild.buildroot.net/results/343321ae5e2c73c13fae08e6f443df29015795c6 |     
-      x86_64 |          host-cryptsetup-2.0.0 | NOK | http://autobuild.buildroot.net/results/9e43d33a2e44724e690c0ad139ba45ed8aef7f38 |     
-         arm |          host-cryptsetup-2.0.0 | NOK | http://autobuild.buildroot.net/results/7ad119c62e5a80ea5ef7ee5e904b431a2caff9a6 |     
-        or1k |          host-cryptsetup-2.0.0 | NOK | http://autobuild.buildroot.net/results/c0ff1bc26621da706a66f33a1261532cd788d7ed |     
-      mipsel |          host-cryptsetup-2.0.0 | NOK | http://autobuild.buildroot.net/results/4ef07fae8e2db135a2879756bad3670d9b964985 |     
-        bfin |          host-cryptsetup-2.0.0 | NOK | http://autobuild.buildroot.net/results/9b1a0463d599e5892bd15c0019e1843c95c4fa5c |     
-         arm |          host-cryptsetup-2.0.0 | NOK | http://autobuild.buildroot.net/results/f4b68d4d85a791a848d0268b00c5e4e9f28f134a |     
-microblazeel |          host-cryptsetup-2.0.0 | NOK | http://autobuild.buildroot.net/results/143ff0eb8d14ba0799e90a96b4c9d862d4b01d2f |     
-         arc |          host-cryptsetup-2.0.0 | NOK | http://autobuild.buildroot.net/results/bb3ec7e260ef201cbbf7e6bb8c20c8df68ce77e5 |     
-         arc |          host-cryptsetup-2.0.0 | NOK | http://autobuild.buildroot.net/results/87724c0c0d7095bdeddf98f8824be66864603dcc |     
-        or1k |          host-cryptsetup-2.0.0 | NOK | http://autobuild.buildroot.net/results/d82f10131b4f0e4f30f49fffe4a101a98503018e |     
-       sparc |          host-cryptsetup-2.0.0 | NOK | http://autobuild.buildroot.net/results/3e534189e130b023c09fe7037ab6a0b50687327f |     
-      xtensa |          host-cryptsetup-2.0.0 | NOK | http://autobuild.buildroot.net/results/9dbaebc018b8b45788ee03102763f321bda316f9 |     
-microblazeel |          host-cryptsetup-2.0.0 | NOK | http://autobuild.buildroot.net/results/5da927e5e3eb8aa30481b733f24df3bc488f504e |     
-        mips |          host-cryptsetup-2.0.0 | NOK | http://autobuild.buildroot.net/results/0bc1de40679130533407e7936f5ec3cef5f7a585 |     
-    mips64el |          host-cryptsetup-2.0.0 | NOK | http://autobuild.buildroot.net/results/2f655666d2708300b8926b2657ac1a09ac1808a0 |     
-      x86_64 |          host-cryptsetup-2.0.0 | NOK | http://autobuild.buildroot.net/results/d85605e958e50d223dc151076e39e2e3feeeae75 |     
-      xtensa |          host-cryptsetup-2.0.0 | NOK | http://autobuild.buildroot.net/results/f55e172e51de4557b03376a0f5a2d96a0ddfcfb4 |     
-         arm |          host-cryptsetup-2.0.0 | NOK | http://autobuild.buildroot.net/results/486ae3ec4f87546463fd943d91bb19494921b2a2 |     
-         arm |               host-erlang-20.0 | NOK | http://autobuild.buildroot.net/results/cd66759c09a46b4842f940c44f0fa184675c017e |     
-      xtensa |                  host-icu-60.1 | NOK | http://autobuild.buildroot.net/results/d5b5eb7cef7d8c84d9bbebeca6ebff06ac16d2be | ORPH
-         arm |          host-ti-cgt-pru-2.1.4 | TIM | http://autobuild.buildroot.net/results/b0b38862b04426e9dd3d6a291a7012977cbe5a85 |     
-         arm |          host-ti-cgt-pru-2.1.4 | TIM | http://autobuild.buildroot.net/results/8524b4c723caa026933844f6827438e74265ed8b |     
-      mipsel |                    jamvm-2.0.0 | NOK | http://autobuild.buildroot.net/results/f1a33bae16809633c58187bf990a262e6facf67f | ORPH
-      x86_64 | kvm-unit-tests-kvm-unit-tes... | NOK | http://autobuild.buildroot.net/results/de10b08cf37c2a700b6964c21458331ca01ea4b2 |     
-       sparc |                  libdrm-2.4.89 | NOK | http://autobuild.buildroot.net/results/c2385eeefad258d0de7fb34fe310ad46690bbbd6 |     
-       sparc |                  libdrm-2.4.89 | NOK | http://autobuild.buildroot.net/results/b01f8ef48b0362e2cf09323c07dec76407b184d8 |     
-       sparc |                  libdrm-2.4.89 | NOK | http://autobuild.buildroot.net/results/b45ec2cfca31c18ad93cf6f9991f22a14e2316d3 |     
-       nios2 |              libostree-2017.15 | NOK | http://autobuild.buildroot.net/results/290defa9b5600ad654f02d9d9b38a0fd094ea859 |     
-         arm |              libostree-2017.15 | NOK | http://autobuild.buildroot.net/results/c0244e85a2158747edf17e1470f64bb5c353b593 |     
-      x86_64 |              libostree-2017.15 | NOK | http://autobuild.buildroot.net/results/9aa65f30640ee7ef3418c33a49f6b9d7c8c90d17 |     
-        i686 |              libostree-2017.15 | NOK | http://autobuild.buildroot.net/results/fbfe365714cc61496d650c36f3024ade6bccb25a |     
-         arm |              libostree-2017.15 | NOK | http://autobuild.buildroot.net/results/279ed265fc4759d87562549abfb8a8fe6d5bc548 |     
-         arm |              libostree-2017.15 | NOK | http://autobuild.buildroot.net/results/d5ead189eff485a628920d8378213bd032202951 |     
-        mips |              libostree-2017.15 | NOK | http://autobuild.buildroot.net/results/b58c28a27504c7aaf22cb8fdb8a4669969e47744 |     
-         sh4 |              libostree-2017.15 | NOK | http://autobuild.buildroot.net/results/3cd7b10f34606eaa376d29be22fb39acbee310d3 |     
-     aarch64 |              libostree-2017.15 | NOK | http://autobuild.buildroot.net/results/56d80db990f1ba2f070eec9ef6e43f16f679ba58 |     
-    mips64el |              libostree-2017.15 | NOK | http://autobuild.buildroot.net/results/9b8a8ccd22e9a027e37006cdf6b951c93c80b13f |     
-         arm |              libostree-2017.15 | NOK | http://autobuild.buildroot.net/results/0922be2f9d82dc948dd66b44e73b865ea40a3250 |     
-    mips64el |              libostree-2017.15 | NOK | http://autobuild.buildroot.net/results/bde092b2e97634b77d842436ad60fc6b880c18a9 |     
-        m68k |                  libpqxx-4.0.1 | NOK | http://autobuild.buildroot.net/results/3ca66b351a6ca4f329a597b80167ab081fe01fcd |     
-        i686 |                  libpqxx-4.0.1 | NOK | http://autobuild.buildroot.net/results/6c33611d9f045f2f6827894823fa781b045f5330 |     
-     powerpc |                  mesa3d-17.3.1 | NOK | http://autobuild.buildroot.net/results/ee62ce205457429a8c6741492865ca316e7abee6 |     
-        i686 |  netcat-openbsd-debian_1.178-3 | NOK | http://autobuild.buildroot.net/results/27ddba3ebd5fae2df8500565a55a283fefd32dd0 |     
-         arm |                     php-7.1.12 | NOK | http://autobuild.buildroot.net/results/7a51377b7d97485389687258902ff5962f90351f | ORPH
-         arm |                   physfs-3.0.1 | NOK | http://autobuild.buildroot.net/results/6542b91fee2e93347e80a049fe0844cd02d524bc |     
-        or1k |     portaudio-v190600_20161030 | TIM | http://autobuild.buildroot.net/results/27a08bbdd2af42a44d76d4e94fbef05e8f74b1c2 |     
-       nios2 |                      pound-2.7 | NOK | http://autobuild.buildroot.net/results/fd9a67ea3b748777215d0b99367a3dd077825096 |     
-         arm |                      pound-2.7 | NOK | http://autobuild.buildroot.net/results/d3368939d7ffbcdde4ce4bd914236c61b86d382d |     
-         arm |                  qt5base-5.9.3 | NOK | http://autobuild.buildroot.net/results/d9f698a30477fe93ae2db66f83f0bbe57b8a389a |     
-         arm |                 qt5scxml-5.9.3 | NOK | http://autobuild.buildroot.net/results/3a29089203f6098d3239e8e77db564f96905964d |     
-    mips64el |                 qt5scxml-5.9.3 | NOK | http://autobuild.buildroot.net/results/cef096df6f25798068087915a8e001ad1dc44a63 |     
-    mips64el |                   samba4-4.7.3 | NOK | http://autobuild.buildroot.net/results/ec40f7db7f62f9741776c2f03aaaaf7e0cfaf832 | ORPH
-     powerpc |                        unknown | TIM | http://autobuild.buildroot.net/results/a1e765f5f6173660174a8385e5541c4db6d639b7 |     
-
-Results for branch '2017.08.x'
-==============================
-
-Classification of failures by reason
-------------------------------------
-
-                 host-icu-59.1 | 1 
-                   jamvm-2.0.0 | 1 
-            xlib_libXpm-3.5.12 | 1 
-
-
-Detail of failures
-------------------
-
-        i686 |                  host-icu-59.1 | NOK | http://autobuild.buildroot.net/results/3eed8276051ee4d1f1062b96d17b85f4f8ddc6d9 | ORPH
-      mipsel |                    jamvm-2.0.0 | NOK | http://autobuild.buildroot.net/results/3d9fd98d5f92eb58e6e958a3ce3ef4b343d53146 | ORPH
-         arm |             xlib_libXpm-3.5.12 | NOK | http://autobuild.buildroot.net/results/9dc2cb42087ba53acc4df6cac4ce5ea83e2b02ca |     
-
-
--- 
-http://autobuild.buildroot.net
+Best regards,
+Romain
