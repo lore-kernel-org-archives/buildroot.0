@@ -1,75 +1,87 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Tue, 26 Dec 2017 14:14:25 +0100
-Subject: [Buildroot] [PATCH] package/libpqxx: fix broken sed call
-Message-ID: <20171226131425.7199-1-romain.naour@gmail.com>
+Date: Tue, 26 Dec 2017 14:19:21 +0100
+Subject: [Buildroot] [PATCH v3] package/mfgtools: bump to 0.02
+Message-ID: <20171226131921.8312-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Backport 2 upstream fix.
+Bump mfgtools to include the fix [1] for the C++ build issue reported
+by the autobuilders.
+
+This bump include only 4 small commit fixing memory leak and this
+build issue.
+
+Remove CPOL.htm (removed upstream) from MFGTOOLS_LICENSE_FILES but CPOL
+license is still valid.
+Add the README.txt file to MFGTOOLS_LICENSE_FILES since it contains
+licensing informations:
+
+Licenses:
+- CPOL: MfgToolLib/XmlLite.CPP and XmlLite.h
+- BSD: Others.
+
+Add license file hash.
+
+[1] https://github.com/codeauroraforum/mfgtools/commit/b370a43e548440025d274ff2abbb25342bbaa78c
 
 Fixes:
-http://autobuild.buildroot.net/results/0d1/0d131f9fa5cce259d999f7d57f9092675bfc24c7
+http://autobuild.buildroot.net/results/7c2bbbe13ab315684f3502afd96958a76879b1d5
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Gary Bisson <gary.bisson@boundarydevices.com>
 ---
- ...01-Fix-broken-sed-call-in-configure.ac.in.patch | 31 ++++++++++++++++++++++
- package/libpqxx/libpqxx.mk                         |  3 +++
- 2 files changed, 34 insertions(+)
- create mode 100644 package/libpqxx/0001-Fix-broken-sed-call-in-configure.ac.in.patch
+This patch should be backported to stable branches 2017.02 and 2017.08.
 
-diff --git a/package/libpqxx/0001-Fix-broken-sed-call-in-configure.ac.in.patch b/package/libpqxx/0001-Fix-broken-sed-call-in-configure.ac.in.patch
-new file mode 100644
-index 0000000000..672133a506
---- /dev/null
-+++ b/package/libpqxx/0001-Fix-broken-sed-call-in-configure.ac.in.patch
-@@ -0,0 +1,31 @@
-+From d5120738a9b6b90d19e742f3c591727d16d76c9c Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@gmail.com>
-+Date: Tue, 26 Dec 2017 14:09:46 +0100
-+Subject: [PATCH] Fix broken sed call in configure.ac.in
-+
-+Upstream fix from commit [1][2]
-+
-+[1] 80a9d5386641ac67d4ea1b602c786b45b40b252f
-+[2] 85e9336740475be25ed19924cca0961f7d844c4b
-+
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
-+---
-+ configure.ac | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 32cf5cb5..77cf7edd 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -480,7 +480,7 @@ occurring in the file.
-+ ])], -L${with_postgres_lib})
-+ 
-+ # Remove redundant occurrances of -lpq
-+-LIBS="`echo "$LIBS" | sed -e 's/-lpq[[:space:]]*[[:space:]]-lpq\>/-lpq/g'`"
-++LIBS=[`echo "$LIBS" | sed -e 's/-lpq * -lpq\>/-lpq/g'`]
-+ 
-+ AC_LANG_POP(C)
-+ 
-+-- 
-+2.14.3
-+
-diff --git a/package/libpqxx/libpqxx.mk b/package/libpqxx/libpqxx.mk
-index ec6a3bce68..6a8c37a7cc 100644
---- a/package/libpqxx/libpqxx.mk
-+++ b/package/libpqxx/libpqxx.mk
-@@ -11,6 +11,9 @@ LIBPQXX_DEPENDENCIES = postgresql
- LIBPQXX_LICENSE = BSD-3-Clause
- LIBPQXX_LICENSE_FILES = COPYING
+v3: update url in Config.in.host (Gary)
+v2: update url (Baruch)
+    add README.txt to MFGTOOLS_LICENSE_FILES (Baruch)
+---
+ package/mfgtools/Config.in.host | 2 +-
+ package/mfgtools/mfgtools.hash  | 4 +++-
+ package/mfgtools/mfgtools.mk    | 6 +++---
+ 3 files changed, 7 insertions(+), 5 deletions(-)
+
+diff --git a/package/mfgtools/Config.in.host b/package/mfgtools/Config.in.host
+index 1cb5a7f095..4bbdde38e2 100644
+--- a/package/mfgtools/Config.in.host
++++ b/package/mfgtools/Config.in.host
+@@ -11,4 +11,4 @@ config BR2_PACKAGE_HOST_MFGTOOLS
+ 	  production. The communication is done over USB using the
+ 	  Freescale UTP protocol.
  
-+# 0001-Fix-broken-sed-call-in-configure.ac.in.patch
-+LIBPQXX_AUTORECONF = YES
-+
- LIBPQXX_CONF_ENV += ac_cv_path_PG_CONFIG=$(STAGING_DIR)/usr/bin/pg_config
+-	  https://github.com/NXPmicro/mfgtools
++	  https://github.com/codeauroraforum/mfgtools
+diff --git a/package/mfgtools/mfgtools.hash b/package/mfgtools/mfgtools.hash
+index e73a7fa13a..4932a80dba 100644
+--- a/package/mfgtools/mfgtools.hash
++++ b/package/mfgtools/mfgtools.hash
+@@ -1,2 +1,4 @@
+ # locally computed
+-sha256  6ce93a33c269282df305cf7e517d2d14fde78203537d8ea75b064966afe48464  mfgtools-b219fc219a35c365010897ed093c40750f8cdac6.tar.gz
++sha256  055d71227d18883d6e8bc9e854c076015f9a7749820a94272e19071bf0b25c89  mfgtools-v0.02.tar.gz
++sha256  2655559a6bb1179eae514f5c7166f4ede4f2453efa9cf4dc3c045cab5d57dede  LICENSE
++sha256  0963b6e5086bf454265b0f57821a02b681d1211e40ad74c310231cb4d94815c9  README.txt
+diff --git a/package/mfgtools/mfgtools.mk b/package/mfgtools/mfgtools.mk
+index 00a011af85..e4663a8af9 100644
+--- a/package/mfgtools/mfgtools.mk
++++ b/package/mfgtools/mfgtools.mk
+@@ -4,11 +4,11 @@
+ #
+ ################################################################################
  
- $(eval $(autotools-package))
+-MFGTOOLS_VERSION = b219fc219a35c365010897ed093c40750f8cdac6
+-MFGTOOLS_SITE = $(call github,NXPmicro,mfgtools,$(MFGTOOLS_VERSION))
++MFGTOOLS_VERSION = v0.02
++MFGTOOLS_SITE = $(call github,codeauroraforum,mfgtools,$(MFGTOOLS_VERSION))
+ MFGTOOLS_SUBDIR = MfgToolLib
+ MFGTOOLS_LICENSE = BSD-3-Clause or CPOL
+-MFGTOOLS_LICENSE_FILES = LICENSE CPOL.htm
++MFGTOOLS_LICENSE_FILES = LICENSE README.txt
+ HOST_MFGTOOLS_DEPENDENCIES = host-libusb
+ 
+ HOST_MFGTOOLS_CFLAGS = \
 -- 
 2.14.3
