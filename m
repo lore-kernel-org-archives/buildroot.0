@@ -1,52 +1,107 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 26 Dec 2017 17:35:21 +0100
-Subject: [Buildroot] [git commit] libassuan: bump to version 2.5.1
-Message-ID: <20171226164129.004A583542@busybox.osuosl.org>
+Date: Tue, 26 Dec 2017 17:36:25 +0100
+Subject: [Buildroot] [git commit] libv4l: bump to version 1.12.6
+Message-ID: <20171226164129.0ACE383542@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b8879bca7c0194f7c8fbb9452103e695c0bac513
+commit: https://git.buildroot.net/buildroot/commit/?id=9345b85b47f6e3a357a45cae4b45f7856fd98361
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add cryptographically secure sha256 hash and a reference to upstream
-signature.
+Use https URL to avoid redirect.
+
+Drop non-LFS compatibility patch; we do not support non-LFS build
+anymore.
 
 Add license files hashes.
 
-Cc: Philipp Claves <claves@budelmann-elektronik.com>
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libassuan/libassuan.hash | 7 ++++++-
- package/libassuan/libassuan.mk   | 2 +-
- 2 files changed, 7 insertions(+), 2 deletions(-)
+ ...1-fixup-lfs-mismatch-in-preload-libraries.patch | 44 ----------------------
+ package/libv4l/libv4l.hash                         |  7 +++-
+ package/libv4l/libv4l.mk                           |  4 +-
+ 3 files changed, 8 insertions(+), 47 deletions(-)
 
-diff --git a/package/libassuan/libassuan.hash b/package/libassuan/libassuan.hash
-index 01ade11..2e80cfa 100644
---- a/package/libassuan/libassuan.hash
-+++ b/package/libassuan/libassuan.hash
+diff --git a/package/libv4l/0001-fixup-lfs-mismatch-in-preload-libraries.patch b/package/libv4l/0001-fixup-lfs-mismatch-in-preload-libraries.patch
+deleted file mode 100644
+index f23eb7a..0000000
+--- a/package/libv4l/0001-fixup-lfs-mismatch-in-preload-libraries.patch
++++ /dev/null
+@@ -1,44 +0,0 @@
+-From e5952b043a71fe83fbc392e498e8f77774fca0d8 Mon Sep 17 00:00:00 2001
+-From: Peter Korsgaard <jacmet@sunsite.dk>
+-Date: Sat, 28 Jun 2014 09:32:53 -0300
+-Subject: [PATCH] fixup lfs mismatch in preload libraries
+-
+-Ensure that the lfs variants are not transparently used instead of the !lfs
+-ones so both can be wrapped, independently of any custom CFLAGS/CPPFLAGS.
+-
+-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+----
+- lib/libv4l1/v4l1compat.c  | 3 +++
+- lib/libv4l2/v4l2convert.c | 3 +++
+- 2 files changed, 6 insertions(+)
+-
+-diff --git a/lib/libv4l1/v4l1compat.c b/lib/libv4l1/v4l1compat.c
+-index e328288..70eb74f 100644
+---- a/lib/libv4l1/v4l1compat.c
+-+++ b/lib/libv4l1/v4l1compat.c
+-@@ -19,6 +19,9 @@
+- # Foundation, Inc., 51 Franklin Street, Suite 500, Boston, MA  02110-1335  USA
+-  */
+-
+-+/* ensure we see *64 variants and they aren't transparently used */
+-+#undef _LARGEFILE_SOURCE
+-+#undef _FILE_OFFSET_BITS
+- #define _LARGEFILE64_SOURCE 1
+-
+- #include <config.h>
+-diff --git a/lib/libv4l2/v4l2convert.c b/lib/libv4l2/v4l2convert.c
+-index 9b46ab8..bc41056 100644
+---- a/lib/libv4l2/v4l2convert.c
+-+++ b/lib/libv4l2/v4l2convert.c
+-@@ -23,6 +23,9 @@
+- /* prevent GCC 4.7 inlining error */
+- #undef _FORTIFY_SOURCE
+-
+-+/* ensure we see *64 variants and they aren't transparently used */
+-+#undef _LARGEFILE_SOURCE
+-+#undef _FILE_OFFSET_BITS
+- #define _LARGEFILE64_SOURCE 1
+-
+- #include <config.h>
+---
+-1.9.1
+diff --git a/package/libv4l/libv4l.hash b/package/libv4l/libv4l.hash
+index fc7bd1b..909ef73 100644
+--- a/package/libv4l/libv4l.hash
++++ b/package/libv4l/libv4l.hash
 @@ -1,2 +1,7 @@
- # From https://www.gnupg.org/download/integrity_check.html
--sha1 27391cf4a820b5350ea789c30661830c9a271518  libassuan-2.4.3.tar.bz2
-+sha1 c8432695bf1daa914a92f51e911881ed93d50604  libassuan-2.5.1.tar.bz2
 +# Locally calculated after checking signature
-+# https://www.gnupg.org/ftp/gcrypt/libassuan/libassuan-2.5.1.tar.bz2.sig
-+sha256 47f96c37b4f2aac289f0bc1bacfa8bd8b4b209a488d3d15e2229cb6cc9b26449  libassuan-2.5.1.tar.bz2
-+sha256 a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  COPYING.LIB
-+sha256 fc82ca8b6fdb18d4e3e85cfd8ab58d1bcd3f1b29abe782895abd91d64763f8e7  COPYING
-diff --git a/package/libassuan/libassuan.mk b/package/libassuan/libassuan.mk
-index 0e3aca3..e807086 100644
---- a/package/libassuan/libassuan.mk
-+++ b/package/libassuan/libassuan.mk
-@@ -4,7 +4,7 @@
++# https://linuxtv.org/downloads/v4l-utils/v4l-utils-1.12.6.tar.bz2.asc
++sha256 74da1040284eaba48277ad051ffe1fca0ee05c5591bb01179d928def6d0a4561  v4l-utils-1.12.6.tar.bz2
+ # Locally calculated
+-sha256 0618162ddb0b57fe7c45407d4d66ed79e3a134cdbc9e72598d34e61d3359e20d  v4l-utils-1.12.5.tar.bz2
++sha256 391e4da1c54a422a78d83be7bf84b2dfb8bacdd8ad256fa4374e128655584a8a  COPYING
++sha256 5a7f623a50e384aaf6d2ced068339ddf93d0a50d3a0ecbe86f125b07804ecc78  COPYING.libv4l
++sha256 37d0f2c8dc3f267d864cb39d54f82c5092a599beb29cb5caa96d50d27e069a44  lib/libv4l1/libv4l1-kernelcode-license.txt
+diff --git a/package/libv4l/libv4l.mk b/package/libv4l/libv4l.mk
+index 9b2b417..b24002a 100644
+--- a/package/libv4l/libv4l.mk
++++ b/package/libv4l/libv4l.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--LIBASSUAN_VERSION = 2.4.3
-+LIBASSUAN_VERSION = 2.5.1
- LIBASSUAN_SITE = ftp://ftp.gnupg.org/gcrypt/libassuan
- LIBASSUAN_SOURCE = libassuan-$(LIBASSUAN_VERSION).tar.bz2
- LIBASSUAN_LICENSE = LGPL-2.1+ (library), GPL-3.0 (tests, doc)
+-LIBV4L_VERSION = 1.12.5
++LIBV4L_VERSION = 1.12.6
+ LIBV4L_SOURCE = v4l-utils-$(LIBV4L_VERSION).tar.bz2
+-LIBV4L_SITE = http://linuxtv.org/downloads/v4l-utils
++LIBV4L_SITE = https://linuxtv.org/downloads/v4l-utils
+ LIBV4L_INSTALL_STAGING = YES
+ LIBV4L_DEPENDENCIES = host-pkgconf
+ LIBV4L_CONF_OPTS = --disable-doxygen-doc
