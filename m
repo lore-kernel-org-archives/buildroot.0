@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 27 Dec 2017 00:39:01 +0100
-Subject: [Buildroot] [PATCH 1/4] legacy: drop 2012.08 entries
+Date: Wed, 27 Dec 2017 00:39:02 +0100
+Subject: [Buildroot] [PATCH 2/4] legacy: drop 2012.11 entries
 In-Reply-To: <cover.1514331522.git.yann.morin.1998@free.fr>
 References: <cover.1514331522.git.yann.morin.1998@free.fr>
-Message-ID: <454c98514343f038c79210852414275eb3de724e.1514331522.git.yann.morin.1998@free.fr>
+Message-ID: <dc95d913a5649eeedef6ea00c5d45bf938236b59.1514331522.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,51 +14,52 @@ Those entries are older than 5 years, we can drop them now.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- Config.in.legacy | 35 -----------------------------------
- 1 file changed, 35 deletions(-)
+ Config.in.legacy | 36 ------------------------------------
+ 1 file changed, 36 deletions(-)
 
 diff --git a/Config.in.legacy b/Config.in.legacy
-index decbaceb76..47b495667d 100644
+index 47b495667d..4efce8015b 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
-@@ -3166,41 +3166,6 @@ config BR2_PACKAGE_PTHREAD_STUBS
- 	  For consistency reason, the pthread-stubs package has been
- 	  renamed to libpthread-stubs.
+@@ -3130,42 +3130,6 @@ config BR2_PACKAGE_DIRECTB_TESTS
+ 	  The option has been renamed
+ 	  BR2_PACKAGE_DIRECTFB_TESTS.
  
 -###############################################################################
--comment "Legacy options removed in 2012.08"
+-comment "Legacy options removed in 2012.11"
 -
--config BR2_PACKAGE_GETTEXT_STATIC
--	bool "libgettext.a is now selected by BR2_PREFER_STATIC_LIB"
+-config BR2_PACKAGE_CUSTOMIZE
+-	bool "customize package has been removed"
 -	select BR2_LEGACY
 -	help
--	  To build a static gettext library, select BR2_PREFER_STATIC_LIB.
+-	  The 'customize' special package has been removed. Instead,
+-	  we recommend to create either your own packages, or use a
+-	  post-build script to customize your root filesystem. See
+-	  Buildroot's documentation for more details.
 -
--
--config BR2_PACKAGE_LIBINTL
--	bool "libintl"
+-config BR2_PACKAGE_XSERVER_xorg
+-	bool "X.org modular server"
 -	select BR2_LEGACY
--	select BR2_PACKAGE_GETTEXT
+-	select BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR
 -	help
--	  libintl is now installed by selecting BR2_PACKAGE_GETTEXT. This now
--	  only installs the library, not the executables.
+-	  The option has been renamed
+-	  BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR.
 -
--config BR2_PACKAGE_INPUT_TOOLS_EVTEST
--	bool "input-tools evtest is now a separate package evtest"
+-config BR2_PACKAGE_XSERVER_tinyx
+-	bool "KDrive / TinyX server"
 -	select BR2_LEGACY
--	select BR2_PACKAGE_EVTEST
+-	select BR2_PACKAGE_XSERVER_XORG_SERVER_KDRIVE
 -	help
--	  The evtest program from input-tools is now a separate package.
+-	  The option has been renamed
+-	  BR2_PACKAGE_XSERVER_XORG_SERVER_KDRIVE.
 -
--config BR2_BFIN_FDPIC
--	bool "BR2_BFIN_FDPIC is now BR2_BINFMT_FDPIC"
--	select BR2_BINFMT_FDPIC
+-config BR2_PACKAGE_PTHREAD_STUBS
+-	bool "pthread-stubs option has been renamed"
 -	select BR2_LEGACY
--
--config BR2_BFIN_FLAT
--	bool "BR2_BFIN_FLAT is now BR2_BINFMT_FLAT"
--	select BR2_BINFMT_FLAT
--	select BR2_LEGACY
+-	select BR2_PACKAGE_LIBPTHREAD_STUBS
+-	help
+-	  For consistency reason, the pthread-stubs package has been
+-	  renamed to libpthread-stubs.
 -
  endmenu
  
