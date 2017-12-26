@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 26 Dec 2017 17:34:46 +0100
-Subject: [Buildroot] [PATCH] faad2: bump to version 2.8.8
-In-Reply-To: <6a79654b376420cca710f9b4fecbdde8cd6dc430.1514144952.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Sun, 24 Dec 2017 21:49:12 +0200")
-References: <6a79654b376420cca710f9b4fecbdde8cd6dc430.1514144952.git.baruch@tkos.co.il>
-Message-ID: <87wp19wiqh.fsf@dell.be.48ers.dk>
+Date: Tue, 26 Dec 2017 17:35:23 +0100
+Subject: [Buildroot] [PATCH] libassuan: bump to version 2.5.1
+In-Reply-To: <98bcb36e7d47ca9d2b62163a5c7fb44f277dc72c.1514145635.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Sun, 24 Dec 2017 22:00:35 +0200")
+References: <98bcb36e7d47ca9d2b62163a5c7fb44f277dc72c.1514145635.git.baruch@tkos.co.il>
+Message-ID: <87shbxwipg.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,13 +13,12 @@ To: buildroot@busybox.net
 
 >>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > Drop patch; issue fixed upstream.
- > Add license file hash.
+ > Add cryptographically secure sha256 hash and a reference to upstream
+ > signature.
 
- > Revert back to .tar.gz since that is what upstream provides.
+ > Add license files hashes.
 
- > Remove autoreconf; tarball has configure script.
-
+ > Cc: Philipp Claves <claves@budelmann-elektronik.com>
  > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
 Committed, thanks.
