@@ -1,49 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 26 Dec 2017 17:33:24 +0100
-Subject: [Buildroot] [git commit] nettle: bump to version 3.4
-Message-ID: <20171226164128.DB496835B6@busybox.osuosl.org>
+Date: Tue, 26 Dec 2017 17:35:21 +0100
+Subject: [Buildroot] [git commit] libassuan: bump to version 2.5.1
+Message-ID: <20171226164129.004A583542@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a6ef069a8d1afb9f0ef030a4e7f6aacb200d82e4
+commit: https://git.buildroot.net/buildroot/commit/?id=b8879bca7c0194f7c8fbb9452103e695c0bac513
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add link to upstream signature.
+Add cryptographically secure sha256 hash and a reference to upstream
+signature.
 
-Add license file hash.
+Add license files hashes.
 
+Cc: Philipp Claves <claves@budelmann-elektronik.com>
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/nettle/nettle.hash | 6 +++++-
- package/nettle/nettle.mk   | 2 +-
- 2 files changed, 6 insertions(+), 2 deletions(-)
+ package/libassuan/libassuan.hash | 7 ++++++-
+ package/libassuan/libassuan.mk   | 2 +-
+ 2 files changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/package/nettle/nettle.hash b/package/nettle/nettle.hash
-index cd911c0..473be1c 100644
---- a/package/nettle/nettle.hash
-+++ b/package/nettle/nettle.hash
-@@ -1,2 +1,6 @@
- # Locally calculated after checking pgp signature
--sha256	46942627d5d0ca11720fec18d81fc38f7ef837ea4197c1f630e71ce0d470b11e	nettle-3.3.tar.gz
-+# https://ftp.gnu.org/gnu/nettle/nettle-3.4.tar.gz.sig
-+sha256	ae7a42df026550b85daca8389b6a60ba6313b0567f374392e54918588a411e94	nettle-3.4.tar.gz
-+# Locally calculated
-+sha256	a853c2ffec17057872340eee242ae4d96cbf2b520ae27d903e1b2fef1a5f9d1c	COPYING.LESSERv3
-+sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYINGv2
-diff --git a/package/nettle/nettle.mk b/package/nettle/nettle.mk
-index e5012d2..9582815 100644
---- a/package/nettle/nettle.mk
-+++ b/package/nettle/nettle.mk
+diff --git a/package/libassuan/libassuan.hash b/package/libassuan/libassuan.hash
+index 01ade11..2e80cfa 100644
+--- a/package/libassuan/libassuan.hash
++++ b/package/libassuan/libassuan.hash
+@@ -1,2 +1,7 @@
+ # From https://www.gnupg.org/download/integrity_check.html
+-sha1 27391cf4a820b5350ea789c30661830c9a271518  libassuan-2.4.3.tar.bz2
++sha1 c8432695bf1daa914a92f51e911881ed93d50604  libassuan-2.5.1.tar.bz2
++# Locally calculated after checking signature
++# https://www.gnupg.org/ftp/gcrypt/libassuan/libassuan-2.5.1.tar.bz2.sig
++sha256 47f96c37b4f2aac289f0bc1bacfa8bd8b4b209a488d3d15e2229cb6cc9b26449  libassuan-2.5.1.tar.bz2
++sha256 a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  COPYING.LIB
++sha256 fc82ca8b6fdb18d4e3e85cfd8ab58d1bcd3f1b29abe782895abd91d64763f8e7  COPYING
+diff --git a/package/libassuan/libassuan.mk b/package/libassuan/libassuan.mk
+index 0e3aca3..e807086 100644
+--- a/package/libassuan/libassuan.mk
++++ b/package/libassuan/libassuan.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--NETTLE_VERSION = 3.3
-+NETTLE_VERSION = 3.4
- NETTLE_SITE = http://www.lysator.liu.se/~nisse/archive
- NETTLE_DEPENDENCIES = gmp
- NETTLE_INSTALL_STAGING = YES
+-LIBASSUAN_VERSION = 2.4.3
++LIBASSUAN_VERSION = 2.5.1
+ LIBASSUAN_SITE = ftp://ftp.gnupg.org/gcrypt/libassuan
+ LIBASSUAN_SOURCE = libassuan-$(LIBASSUAN_VERSION).tar.bz2
+ LIBASSUAN_LICENSE = LGPL-2.1+ (library), GPL-3.0 (tests, doc)
