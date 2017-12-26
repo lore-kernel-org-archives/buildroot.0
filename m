@@ -1,40 +1,38 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Tue, 26 Dec 2017 15:46:31 -0200
-Subject: [Buildroot] [PATCH 2/2] linux-headers: bump 4.{1, 4, 9, 14}.x series
-In-Reply-To: <1514310391-20520-1-git-send-email-festevam@gmail.com>
-References: <1514310391-20520-1-git-send-email-festevam@gmail.com>
-Message-ID: <1514310391-20520-2-git-send-email-festevam@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 26 Dec 2017 19:46:43 +0100
+Subject: [Buildroot] [PATCH] package/libpqxx: fix broken sed call
+In-Reply-To: <8adcfc70-d485-3bb0-1e2a-99215f841571@gmail.com> (Romain Naour's
+ message of "Tue, 26 Dec 2017 18:11:43 +0100")
+References: <20171226131425.7199-1-romain.naour@gmail.com>
+ <87k1x9wikr.fsf@dell.be.48ers.dk>
+ <8adcfc70-d485-3bb0-1e2a-99215f841571@gmail.com>
+Message-ID: <87bmilwcmk.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
----
- package/linux-headers/Config.in.host | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+>>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index b86f6c5..9d7fae5 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -251,12 +251,12 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.4.113"	if BR2_KERNEL_HEADERS_3_4
- 	default "3.10.108"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.12.74"	if BR2_KERNEL_HEADERS_3_12
--	default "4.1.47"	if BR2_KERNEL_HEADERS_4_1
--	default "4.4.107"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.71"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.1.48"	if BR2_KERNEL_HEADERS_4_1
-+	default "4.4.108"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.9.72"	if BR2_KERNEL_HEADERS_4_9
- 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
- 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
- 	default "4.12.14"	if BR2_KERNEL_HEADERS_4_12
- 	default "4.13.16"	if BR2_KERNEL_HEADERS_4_13
--	default "4.14.8"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.14.9"	if BR2_KERNEL_HEADERS_4_14
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ > Le 26/12/2017 ? 17:38, Peter Korsgaard a ?crit?:
+ >>>>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
+ >> 
+ >> > Backport 2 upstream fix.
+ >> 
+ >> 2? I only see 1 patch. Did you forget to git add a file?
+ >> 
+ > There are squashed together inside the same patch file:
+
+ > "Upstream fix from commit [1][2]
+
+ > [1] 80a9d5386641ac67d4ea1b602c786b45b40b252f
+ > [2] 85e9336740475be25ed19924cca0961f7d844c4b"
+
+ > I haven't used git cherry-pick here since the upstream patch contains other
+ > stuff :-/
+
+Ahh, ok - Committed, thanks.
+
 -- 
-2.7.4
+Bye, Peter Korsgaard
