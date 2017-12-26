@@ -1,59 +1,110 @@
-From: Marcus Folkesson <marcus.folkesson@gmail.com>
-Date: Tue, 26 Dec 2017 21:16:09 +0100
-Subject: [Buildroot] [PATCH] libostree: make sure libavahi-client is
- built
-In-Reply-To: <CANQCQpZ5v3h_b1_UCK0_08T1pPt5m6Kg-6qmoVRO9LoeOGyjjw@mail.gmail.com>
-References: <20171221231932.31913-1-marcus.folkesson@gmail.com>
- <CANQCQpafX_AGPwTKB3Hq5G7c0f_Zz1NmjDOG8Rby73J4N9Mr+Q@mail.gmail.com>
- <CANQCQpZ5v3h_b1_UCK0_08T1pPt5m6Kg-6qmoVRO9LoeOGyjjw@mail.gmail.com>
-Message-ID: <20171226201609.GA24556@gmail.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Tue, 26 Dec 2017 22:10:06 +0100
+Subject: [Buildroot] [PATCH] package/libgta: new package
+Message-ID: <20171226211006.9660-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Matthew,
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+---
+Package tested with test-pkg and checked with check-package.
+---
+ DEVELOPERS                 |  1 +
+ package/Config.in          |  1 +
+ package/libgta/Config.in   | 10 ++++++++++
+ package/libgta/libgta.hash |  3 +++
+ package/libgta/libgta.mk   | 29 +++++++++++++++++++++++++++++
+ 5 files changed, 44 insertions(+)
+ create mode 100644 package/libgta/Config.in
+ create mode 100644 package/libgta/libgta.hash
+ create mode 100644 package/libgta/libgta.mk
 
-On Tue, Dec 26, 2017 at 02:06:57PM -0600, Matthew Weber wrote:
-> Marcus,
-> 
-> On Mon, Dec 25, 2017 at 10:16 PM, Matthew Weber
-> <matthew.weber@rockwellcollins.com> wrote:
-> > Marcus,
-> >
-> > On Thu, Dec 21, 2017 at 5:19 PM, Marcus Folkesson
-> > <marcus.folkesson@gmail.com> wrote:
-> >> Avahi support also needs libavahi-client, which is built by avahi if avahi-daemon
-> >> and dbus is selected.
-> >>
-> >> Fixes:
-> >> http://autobuild.buildroot.net/results/1edfb60add17945eabc557e1dbfb08a0ba466df9/
-> >>
-> [snip]
-> 
-> >
-> > Tested-by: Matt Weber <matthew.weber@rockwellcollins.com>
-> >
-> > I've kicked off a validation using utils/test-pkg with the following
-> > config and both of your libostree patches applied.
-> > BR2_TOOLCHAIN_USES_GLIBC=y
-> > BR2_PACKAGE_LIBOSTREE=y
-> > BR2_PACKAGE_E2FSPROGS=y
-> > BR2_PACKAGE_LIBFUSE=y
-> > BR2_PACKAGE_LIBGLIB2=y
-> > BR2_PACKAGE_LIBGPGME=y
-> > BR2_PACKAGE_XZ=y
-> > BR2_PACKAGE_AVAHI=y
-> > BR2_PACKAGE_AVAHI_DAEMON=y
-> > BR2_PACKAGE_DBUS=y
-> >
-> 
-> test-pkg looked good with the above config and the case of avahi&dbus disabled.
-> 
-> Matt
-
-Thank you for testing.
-
-Best regards
-Marcus Folkesson
+diff --git a/DEVELOPERS b/DEVELOPERS
+index abbb99a022..9ff564b6e9 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1462,6 +1462,7 @@ F:	package/iqvlinux/
+ F:	package/irrlicht/
+ F:	package/liblinear/
+ F:	package/lensfun/
++F:	package/libgta/
+ F:	package/libspatialindex/
+ F:	package/linux-syscall-support/
+ F:	package/lugaru/
+diff --git a/package/Config.in b/package/Config.in
+index b12227b684..0f0de43234 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1129,6 +1129,7 @@ menu "Graphics"
+ 	source "package/libglew/Config.in"
+ 	source "package/libglfw/Config.in"
+ 	source "package/libglu/Config.in"
++	source "package/libgta/Config.in"
+ 	source "package/libgtk2/Config.in"
+ 	source "package/libgtk3/Config.in"
+ 	source "package/libmediaart/Config.in"
+diff --git a/package/libgta/Config.in b/package/libgta/Config.in
+new file mode 100644
+index 0000000000..894dced096
+--- /dev/null
++++ b/package/libgta/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_LIBGTA
++	bool "libgta"
++	select BR2_PACKAGE_BZIP2
++	select BR2_PACKAGE_ZLIB
++	select BR2_PACKAGE_XZ
++	help
++	  Libgta is a portable library that implements the Generic
++	  Tagged Array (GTA) file format.
++
++	  http://gta.nongnu.org
+diff --git a/package/libgta/libgta.hash b/package/libgta/libgta.hash
+new file mode 100644
+index 0000000000..d5fceb4205
+--- /dev/null
++++ b/package/libgta/libgta.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256 1d2ff713955eee28310de082a8fd8e236403c27dee3716ba1238c56e6643e4fb  libgta-1.0.8.tar.xz
++sha256 36b6d3fa47916943fd5fec313c584784946047ec1337a78b440e5992cb595f89  COPYING
+diff --git a/package/libgta/libgta.mk b/package/libgta/libgta.mk
+new file mode 100644
+index 0000000000..1189feeff9
+--- /dev/null
++++ b/package/libgta/libgta.mk
+@@ -0,0 +1,29 @@
++################################################################################
++#
++# libgta
++#
++################################################################################
++
++LIBGTA_VERSION = 1.0.8
++LIBGTA_SITE = http://download.savannah.nongnu.org/releases/gta
++LIBGTA_SOURCE = libgta-$(LIBGTA_VERSION).tar.xz
++LIBGTA_INSTALL_STAGING = YES
++LIBGTA_DEPENDENCIES = host-pkgconf bzip2 xz zlib
++LIBGTA_LICENSE = LGPL-2.1+
++LIBGTA_LICENSE_FILES = COPYING
++
++LIBGTA_CONF_OPTS += -DGTA_BUILD_DOCUMENTATION=OFF
++
++ifeq ($(BR2_STATIC_LIBS),)
++LIBGTA_CONF_OPTS += -DGTA_BUILD_SHARED_LIB=ON
++else
++LIBGTA_CONF_OPTS += -DGTA_BUILD_SHARED_LIB=OFF
++endif
++
++ifeq ($(BR2_SHARED_LIBS),)
++LIBGTA_CONF_OPTS += -DGTA_BUILD_STATIC_LIB=ON
++else
++LIBGTA_CONF_OPTS += -DGTA_BUILD_STATIC_LIB=OFF
++endif
++
++$(eval $(cmake-package))
+-- 
+2.14.3
