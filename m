@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 26 Dec 2017 17:33:28 +0100
-Subject: [Buildroot] [PATCH] nettle: bump to version 3.4
-In-Reply-To: <d2bf949e792e5909ca706bc5392bb694d9e40641.1514140919.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Sun, 24 Dec 2017 20:41:59 +0200")
-References: <d2bf949e792e5909ca706bc5392bb694d9e40641.1514140919.git.baruch@tkos.co.il>
-Message-ID: <871sjhxxd3.fsf@dell.be.48ers.dk>
+Date: Tue, 26 Dec 2017 17:34:46 +0100
+Subject: [Buildroot] [PATCH] faad2: bump to version 2.8.8
+In-Reply-To: <6a79654b376420cca710f9b4fecbdde8cd6dc430.1514144952.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Sun, 24 Dec 2017 21:49:12 +0200")
+References: <6a79654b376420cca710f9b4fecbdde8cd6dc430.1514144952.git.baruch@tkos.co.il>
+Message-ID: <87wp19wiqh.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,8 +13,12 @@ To: buildroot@busybox.net
 
 >>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > Add link to upstream signature.
+ > Drop patch; issue fixed upstream.
  > Add license file hash.
+
+ > Revert back to .tar.gz since that is what upstream provides.
+
+ > Remove autoreconf; tarball has configure script.
 
  > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
