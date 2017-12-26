@@ -1,83 +1,107 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 26 Dec 2017 17:39:21 +0100
-Subject: [Buildroot] [git commit] package/mfgtools: bump to 0.02
-Message-ID: <20171226164129.169A283542@busybox.osuosl.org>
+Date: Tue, 26 Dec 2017 17:33:52 +0100
+Subject: [Buildroot] [git commit] faad2: bump to version 2.8.8
+Message-ID: <20171226164128.EC15383542@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=34c4c0680a6de06e8c11e7361c26c8594315ba36
+commit: https://git.buildroot.net/buildroot/commit/?id=6dcb16f69e96a46e98ef9ea85277f49369e1fc69
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Bump mfgtools to include the fix [1] for the C++ build issue reported
-by the autobuilders.
-
-This bump include only 4 small commits fixing memory leak and this
-build issue.
-
-Remove CPOL.htm (removed upstream) from MFGTOOLS_LICENSE_FILES but CPOL
-license is still valid.
-Add the README.txt file to MFGTOOLS_LICENSE_FILES since it contains
-licensing informations:
-
-Licenses:
-- CPOL: MfgToolLib/XmlLite.CPP and XmlLite.h
-- BSD: Others.
+Drop patch; issue fixed upstream.
 
 Add license file hash.
 
-[1] https://github.com/codeauroraforum/mfgtools/commit/b370a43e548440025d274ff2abbb25342bbaa78c
+Revert back to .tar.gz since that is what upstream provides.
 
-Fixes:
-http://autobuild.buildroot.net/results/7c2bbbe13ab315684f3502afd96958a76879b1d5
+Remove autoreconf; tarball has configure script.
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Gary Bisson <gary.bisson@boundarydevices.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mfgtools/Config.in.host | 2 +-
- package/mfgtools/mfgtools.hash  | 4 +++-
- package/mfgtools/mfgtools.mk    | 6 +++---
- 3 files changed, 7 insertions(+), 5 deletions(-)
+ .../0001-getopt-fix-strncmp-declaration.patch      | 40 ----------------------
+ package/faad2/faad2.hash                           |  6 ++--
+ package/faad2/faad2.mk                             |  5 +--
+ 3 files changed, 5 insertions(+), 46 deletions(-)
 
-diff --git a/package/mfgtools/Config.in.host b/package/mfgtools/Config.in.host
-index 1cb5a7f..4bbdde3 100644
---- a/package/mfgtools/Config.in.host
-+++ b/package/mfgtools/Config.in.host
-@@ -11,4 +11,4 @@ config BR2_PACKAGE_HOST_MFGTOOLS
- 	  production. The communication is done over USB using the
- 	  Freescale UTP protocol.
- 
--	  https://github.com/NXPmicro/mfgtools
-+	  https://github.com/codeauroraforum/mfgtools
-diff --git a/package/mfgtools/mfgtools.hash b/package/mfgtools/mfgtools.hash
-index e73a7fa..4932a80 100644
---- a/package/mfgtools/mfgtools.hash
-+++ b/package/mfgtools/mfgtools.hash
-@@ -1,2 +1,4 @@
- # locally computed
--sha256  6ce93a33c269282df305cf7e517d2d14fde78203537d8ea75b064966afe48464  mfgtools-b219fc219a35c365010897ed093c40750f8cdac6.tar.gz
-+sha256  055d71227d18883d6e8bc9e854c076015f9a7749820a94272e19071bf0b25c89  mfgtools-v0.02.tar.gz
-+sha256  2655559a6bb1179eae514f5c7166f4ede4f2453efa9cf4dc3c045cab5d57dede  LICENSE
-+sha256  0963b6e5086bf454265b0f57821a02b681d1211e40ad74c310231cb4d94815c9  README.txt
-diff --git a/package/mfgtools/mfgtools.mk b/package/mfgtools/mfgtools.mk
-index 00a011a..e4663a8 100644
---- a/package/mfgtools/mfgtools.mk
-+++ b/package/mfgtools/mfgtools.mk
-@@ -4,11 +4,11 @@
- #
+diff --git a/package/faad2/0001-getopt-fix-strncmp-declaration.patch b/package/faad2/0001-getopt-fix-strncmp-declaration.patch
+deleted file mode 100644
+index 0e5f27e..0000000
+--- a/package/faad2/0001-getopt-fix-strncmp-declaration.patch
++++ /dev/null
+@@ -1,40 +0,0 @@
+-From 6787914efad562e4097a153988109c5c7158abf7 Mon Sep 17 00:00:00 2001
+-From: Baruch Siach <baruch@tkos.co.il>
+-Date: Wed, 16 Aug 2017 13:35:57 +0300
+-Subject: [PATCH] getopt: fix strncmp() declaration
+-
+-The strncmp() declaration does not conform with the standard as to the
+-type of the 'n' parameter. Fix this to avoid the following build failure
+-with musl libc:
+-
+-n file included from main.c:61:0:
+-getopt.c:175:13: error: conflicting types for 'strncmp'
+- extern int  strncmp(const char *s1, const char *s2, unsigned int n);
+-             ^~~~~~~
+-In file included from main.c:49:0:
+-.../host/x86_64-buildroot-linux-musl/sysroot/usr/include/string.h:38:5: note: previous declaration of 'strncmp' was here
+- int strncmp (const char *, const char *, size_t);
+-     ^~~~~~~
+-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+----
+-Upstream status: https://sourceforge.net/p/faac/bugs/217/
+-
+- frontend/getopt.c | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/frontend/getopt.c b/frontend/getopt.c
+-index 185d49b804dd..40c7a2242551 100644
+---- a/frontend/getopt.c
+-+++ b/frontend/getopt.c
+-@@ -172,7 +172,7 @@ static enum
+- #if __STDC__ || defined(PROTO)
+- extern char *getenv(const char *name);
+- extern int  strcmp (const char *s1, const char *s2);
+--extern int  strncmp(const char *s1, const char *s2, unsigned int n);
+-+extern int  strncmp(const char *s1, const char *s2, size_t n);
+- 
+- static int my_strlen(const char *s);
+- static char *my_index (const char *str, int chr);
+--- 
+-2.14.1
+-
+diff --git a/package/faad2/faad2.hash b/package/faad2/faad2.hash
+index d298e90..2c6acee 100644
+--- a/package/faad2/faad2.hash
++++ b/package/faad2/faad2.hash
+@@ -1,4 +1,6 @@
+ # From http://sourceforge.net/projects/faac/files/faad2-src/faad2-2.8.0/ (used by upstream):
+-sha1	a5caa71cd915acd502d96cba56f38296277f2350  faad2-2.8.1.tar.bz2
++md5	28f6116efdbe9378269f8a6221767d1f  faad2-2.8.8.tar.gz
++sha1	0d49c516d4a83c39053a9bd214fddba72cbc34ad  faad2-2.8.8.tar.gz
+ # Locally computed
+-sha256  f4042496f6b0a60f5ded6acd11093230044ef8a2fd965360c1bbd5b58780933d  faad2-2.8.1.tar.bz2
++sha256  985c3fadb9789d2815e50f4ff714511c79c2710ac27a4aaaf5c0c2662141426d  faad2-2.8.8.tar.gz
++sha256  d3baf3a54943cf12a994c85867a18dec84f810901b2f2878ddfd77efcc3c150f  COPYING
+diff --git a/package/faad2/faad2.mk b/package/faad2/faad2.mk
+index fa965fe..27daadf 100644
+--- a/package/faad2/faad2.mk
++++ b/package/faad2/faad2.mk
+@@ -5,13 +5,10 @@
  ################################################################################
  
--MFGTOOLS_VERSION = b219fc219a35c365010897ed093c40750f8cdac6
--MFGTOOLS_SITE = $(call github,NXPmicro,mfgtools,$(MFGTOOLS_VERSION))
-+MFGTOOLS_VERSION = v0.02
-+MFGTOOLS_SITE = $(call github,codeauroraforum,mfgtools,$(MFGTOOLS_VERSION))
- MFGTOOLS_SUBDIR = MfgToolLib
- MFGTOOLS_LICENSE = BSD-3-Clause or CPOL
--MFGTOOLS_LICENSE_FILES = LICENSE CPOL.htm
-+MFGTOOLS_LICENSE_FILES = LICENSE README.txt
- HOST_MFGTOOLS_DEPENDENCIES = host-libusb
- 
- HOST_MFGTOOLS_CFLAGS = \
+ FAAD2_VERSION_MAJOR = 2.8
+-FAAD2_VERSION = $(FAAD2_VERSION_MAJOR).1
++FAAD2_VERSION = $(FAAD2_VERSION_MAJOR).8
+ FAAD2_SITE = http://downloads.sourceforge.net/project/faac/faad2-src/faad2-$(FAAD2_VERSION_MAJOR).0
+-FAAD2_SOURCE = faad2-$(FAAD2_VERSION).tar.bz2
+ FAAD2_LICENSE = GPL-2.0
+ FAAD2_LICENSE_FILES = COPYING
+-# No configure script in upstream tarball
+-FAAD2_AUTORECONF = YES
+ # frontend/faad calls frexp()
+ FAAD2_CONF_ENV = LIBS=-lm
+ FAAD2_INSTALL_STAGING = YES
