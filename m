@@ -1,58 +1,88 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Tue, 26 Dec 2017 18:14:14 +0100
-Subject: [Buildroot] [PATCH v3] package/mfgtools: bump to 0.02
-In-Reply-To: <87fu7xwig1.fsf@dell.be.48ers.dk>
-References: <20171226131921.8312-1-romain.naour@gmail.com>
- <87fu7xwig1.fsf@dell.be.48ers.dk>
-Message-ID: <c865db51-bff1-af62-7a9c-b584504b0e46@gmail.com>
+Date: Tue, 26 Dec 2017 18:19:01 +0100
+Subject: [Buildroot] [PATCH 1/1] package/x11r7/xserver_xorg-server: bump
+ version to 1.19.6
+In-Reply-To: <20171220222510.433-1-bernd.kuhls@t-online.de>
+References: <20171220222510.433-1-bernd.kuhls@t-online.de>
+Message-ID: <ff74d729-5432-c98d-4797-c6623a39903e@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+Hi Bernd,
 
-Le 26/12/2017 ? 17:41, Peter Korsgaard a ?crit?:
->>>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
-> 
->  > Bump mfgtools to include the fix [1] for the C++ build issue reported
->  > by the autobuilders.
-> 
->  > This bump include only 4 small commit fixing memory leak and this
->  > build issue.
-> 
->  > Remove CPOL.htm (removed upstream) from MFGTOOLS_LICENSE_FILES but CPOL
->  > license is still valid.
->  > Add the README.txt file to MFGTOOLS_LICENSE_FILES since it contains
->  > licensing informations:
-> 
->  > Licenses:
->  > - CPOL: MfgToolLib/XmlLite.CPP and XmlLite.h
->  > - BSD: Others.
-> 
->  > Add license file hash.
-> 
->  > [1] https://github.com/codeauroraforum/mfgtools/commit/b370a43e548440025d274ff2abbb25342bbaa78c
-> 
->  > Fixes:
->  > http://autobuild.buildroot.net/results/7c2bbbe13ab315684f3502afd96958a76879b1d5
-> 
->  > Signed-off-by: Romain Naour <romain.naour@gmail.com>
->  > Cc: Gary Bisson <gary.bisson@boundarydevices.com>
-> 
-> Committed, thanks.
-> 
->> ---
->  > This patch should be backported to stable branches 2017.02 and 2017.08.
-> 
-> 2017.08? I guess you mean 2017.11? I'll take care of that when I sync
-> 2017.02.x / 2017.11.x with master, thanks.
+Le 20/12/2017 ? 23:25, Bernd Kuhls a ?crit?:
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-Yes 2017.11 sorry.
-This patch needs to be backported to stable branches that are still maintained :)
+Reviewed-by: Romain Naour <romain.naour@gmail.com>
+Tested-by: Romain Naour <romain.naour@gmail.com>
 
 Best regards,
 Romain
 
+> ---
+>  .../{1.19.5 => 1.19.6}/0001-modesettings-needs-dri2.patch      |  0
+>  .../0002-configure.ac-Fix-check-for-CLOCK_MONOTONIC.patch      |  0
+>  .../0003-Remove-check-for-useSIGIO-option.patch                |  0
+>  package/x11r7/xserver_xorg-server/Config.in                    |  4 ++--
+>  package/x11r7/xserver_xorg-server/xserver_xorg-server.hash     | 10 +++++-----
+>  5 files changed, 7 insertions(+), 7 deletions(-)
+>  rename package/x11r7/xserver_xorg-server/{1.19.5 => 1.19.6}/0001-modesettings-needs-dri2.patch (100%)
+>  rename package/x11r7/xserver_xorg-server/{1.19.5 => 1.19.6}/0002-configure.ac-Fix-check-for-CLOCK_MONOTONIC.patch (100%)
+>  rename package/x11r7/xserver_xorg-server/{1.19.5 => 1.19.6}/0003-Remove-check-for-useSIGIO-option.patch (100%)
+> 
+> diff --git a/package/x11r7/xserver_xorg-server/1.19.5/0001-modesettings-needs-dri2.patch b/package/x11r7/xserver_xorg-server/1.19.6/0001-modesettings-needs-dri2.patch
+> similarity index 100%
+> rename from package/x11r7/xserver_xorg-server/1.19.5/0001-modesettings-needs-dri2.patch
+> rename to package/x11r7/xserver_xorg-server/1.19.6/0001-modesettings-needs-dri2.patch
+> diff --git a/package/x11r7/xserver_xorg-server/1.19.5/0002-configure.ac-Fix-check-for-CLOCK_MONOTONIC.patch b/package/x11r7/xserver_xorg-server/1.19.6/0002-configure.ac-Fix-check-for-CLOCK_MONOTONIC.patch
+> similarity index 100%
+> rename from package/x11r7/xserver_xorg-server/1.19.5/0002-configure.ac-Fix-check-for-CLOCK_MONOTONIC.patch
+> rename to package/x11r7/xserver_xorg-server/1.19.6/0002-configure.ac-Fix-check-for-CLOCK_MONOTONIC.patch
+> diff --git a/package/x11r7/xserver_xorg-server/1.19.5/0003-Remove-check-for-useSIGIO-option.patch b/package/x11r7/xserver_xorg-server/1.19.6/0003-Remove-check-for-useSIGIO-option.patch
+> similarity index 100%
+> rename from package/x11r7/xserver_xorg-server/1.19.5/0003-Remove-check-for-useSIGIO-option.patch
+> rename to package/x11r7/xserver_xorg-server/1.19.6/0003-Remove-check-for-useSIGIO-option.patch
+> diff --git a/package/x11r7/xserver_xorg-server/Config.in b/package/x11r7/xserver_xorg-server/Config.in
+> index 416dc7b440..3107e2c1e5 100644
+> --- a/package/x11r7/xserver_xorg-server/Config.in
+> +++ b/package/x11r7/xserver_xorg-server/Config.in
+> @@ -79,7 +79,7 @@ choice
+>  	bool "X Window System server version"
+>  
+>  config BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_19
+> -	bool "1.19.5"
+> +	bool "1.19.6"
+>  	select BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_23
+>  	select BR2_PACKAGE_XLIB_LIBXFONT2
+>  	select BR2_PACKAGE_XPROTO_PRESENTPROTO
+> @@ -99,7 +99,7 @@ endchoice
+>  
+>  config BR2_PACKAGE_XSERVER_XORG_SERVER_VERSION
+>  	string
+> -	default "1.19.5" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_19
+> +	default "1.19.6" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_19
+>  	default "1.17.4" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_17
+>  	default "1.14.7" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_14
+>  
+> diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
+> index c0feb985d2..10285abf12 100644
+> --- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
+> +++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
+> @@ -3,8 +3,8 @@ sha1   7a95765e56b124758fcd7b609589e65b8870880b                                x
+>  sha256 fcf66fa6ad86227613d2d3e8ae13ded297e2a1e947e9060a083eaf80d323451f        xorg-server-1.14.7.tar.bz2
+>  # From https://lists.x.org/archives/xorg-announce/2015-October/002650.html
+>  sha256 0c4b45c116a812a996eb432d8508cf26c2ec8c3916ff2a50781796882f8d6457        xorg-server-1.17.4.tar.bz2
+> -# From https://lists.x.org/archives/xorg-announce/2017-October/002814.html
+> -md5 4ac6feeae6790436ce9de879ca9a3bf8  xorg-server-1.19.5.tar.bz2
+> -sha1 307d3405f709f7e41966c850b37deefe7f83eb9b  xorg-server-1.19.5.tar.bz2
+> -sha256 18fffa8eb93d06d2800d06321fc0df4d357684d8d714315a66d8dfa7df251447  xorg-server-1.19.5.tar.bz2
+> -sha512 928dea5850b98cd815004cfa133eca23cfa9521920c934c68a92787f2cae13cca1534eee772a4fb74b8ae8cb92662b5d68b95b834c8aa8ec57cd57cb4e5dd45c  xorg-server-1.19.5.tar.bz2
+> +# From https://lists.x.org/archives/xorg-announce/2017-December/002830.html
+> +md5 3e47777ff034a331aed2322b078694a8  xorg-server-1.19.6.tar.bz2
+> +sha1 2dd560ac49bdbda7f67166546af43541fabf517f  xorg-server-1.19.6.tar.bz2
+> +sha256 a732502f1db000cf36a376cd0c010ffdbf32ecdd7f1fa08ba7f5bdf9601cc197  xorg-server-1.19.6.tar.bz2
+> +sha512 38519a8d0af9dd034045fc346959496dd718fa59b6188307974797a1cd9c349deb54987f6232ea8396baf810dcc710c0ff191f76ed2186cae4d44921b3680412  xorg-server-1.19.6.tar.bz2
 > 
