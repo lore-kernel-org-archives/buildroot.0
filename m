@@ -1,59 +1,90 @@
-From: Christian Stewart <christian@paral.in>
-Date: Tue, 26 Dec 2017 13:50:38 -0800
-Subject: [Buildroot] systemd: build failure against pam on arm
-In-Reply-To: <20171225151337.GC27558@waldemar-brodkorb.de>
-References: <CA+h8R2q1W9PZ8DbTDuxZQhg3+hauZqaDdwzFAGgmTJd7KqiQEg@mail.gmail.com>
- <87fufjgycd.fsf@dell.be.48ers.dk>
- <CA+h8R2qdYZkwynNoPKjiDynzs_gs=TfFZ7i-STGrednoG4O-ew@mail.gmail.com>
- <CA+h8R2o8=LmmcudEaiJSCenX7t4QmHB3SPwm-UowrGQEu2bMPw@mail.gmail.com>
- <29DD8155-F769-488E-8A9E-39D8B6D18B54@openadk.org> <87608xykge.fsf@paral.in>
- <1397D1DC-9330-40CF-89AB-8CB27EEFF333@openadk.org> <873741w59p.fsf@paral.in>
- <20171224120957.GY27558@waldemar-brodkorb.de> <87po73d1xz.fsf@paral.in>
- <20171225151337.GC27558@waldemar-brodkorb.de>
-Message-ID: <87mv25cg5t.fsf@paral.in>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 27 Dec 2017 00:20:41 +0100
+Subject: [Buildroot] [PATCH 0/3] fs: make it behave more like the package
+ infra
+Message-ID: <cover.1514330428.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Waldemar,
+Hello All!
 
-Waldemar Brodkorb <wbx@openadk.org> writes:
->> There are no extra pam files in my Buildroot tree - before building I
->> ensure this with a "git clean -xfd" and I've searched the tree as well.
->
-> But that is strange then.
-> find . -name libpam_misc.so\*
-> ./output/build/linux-pam-1.3.0/libpam_misc/.libs/libpam_misc.so.0
-> ./output/build/linux-pam-1.3.0/libpam_misc/.libs/libpam_misc.so
-> ./output/build/linux-pam-1.3.0/libpam_misc/.libs/libpam_misc.so.0.82.1
+Currently, to register a new filesystem, one has to call:
 
-... please note that I am building out of tree. There are no
-limpam_misc* inside the "buildroot tree" which includes the main source
-tree. When the compilation fails, inside my "output tree":
+    $(eval $(call ROOTFS_TARGET,blabla))
 
-  $ find -name "libpam_misc.so*"
-  ./build/linux-pam-1.3.0/libpam_misc/.libs/libpam_misc.so
-  ./build/linux-pam-1.3.0/libpam_misc/.libs/libpam_misc.so.0
-  ./build/linux-pam-1.3.0/libpam_misc/.libs/libpam_misc.so.0.82.1
-  ./target/usr/lib/libpam_misc.so
-  ./target/usr/lib/libpam_misc.so.0
-  ./target/usr/lib/libpam_misc.so.0.82.1
-  ./host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libpam_misc.so
-  ./host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libpam_misc.so.0
-  ./host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libpam_misc.so.0.82.1
+This is different from the package infrastructure, where the name of the
+package needs not be specified, and is automatically guessed. This makes
+the fs infra a bit different, when there is no reason for that.
 
-> Systemd wants to find libpam, if it is not there it seems to
-> fallback to your native libpam.
+Well, it turns out that there is a reason: we currently register two
+filesystems from the same directory: ubifs and ubi. But it turns out
+that these are in fact not two filesystems, but ubi can be considered
+only as a post-preocessing of the ubifs one.
 
-Clearly, then, it is not finding the "./target/usr/lib/libpam_misc.so"
-in "out-of-tree" build.
+So, after we fix the ubifs filesystem to register only one filesystem,
+we eventually turn the rootfs infra into a package-like infra, whereby
+naming the filesystem is no longer needed, which allows one to simply
+write:
+   $(eval $(rootfs))
 
-> You should always run "make clean && make" if you make any
-> changes to your .config.
+The 'rootfs' keyword may seem rather generic, but it is currently unused
+in our tree (except in a post-image script for the chromebook defconfig):
 
-...I do...
+    $ git grep -E '\<rootfs[[:space:]]*:?='
+    board/chromebook/snow/mksd.sh:rootfs=$BINARIES_DIR/rootfs.ext2
 
-Best,
-Christian
+
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit 131188de8df20028e2a7efaba3fdb13b6cca0aa2
+
+  json-c: bump to version 0.13 (2017-12-26 19:57:44 +0100)
+
+
+are available in the git repository at:
+
+  git://git.buildroot.org/~ymorin/git/buildroot.git
+
+for you to fetch changes up to 63ee53d0a4bbf5e9fc6f3f500dda279d99d1350f
+
+  fs: make it behave a bit more like the package infra (2017-12-27 00:16:51 +0100)
+
+
+----------------------------------------------------------------
+Yann E. MORIN (3):
+      fs/ubifs: split long line, use simple asignment
+      fs/ubifs: UBI image is not another type of filesystem
+      fs: make it behave a bit more like the package infra
+
+ Config.in.legacy                     | 59 ++++++++++++++++++++++++++++++++++++
+ fs/axfs/axfs.mk                      |  2 +-
+ fs/cloop/cloop.mk                    |  2 +-
+ fs/common.mk                         |  7 ++---
+ fs/cpio/cpio.mk                      |  2 +-
+ fs/cramfs/cramfs.mk                  |  2 +-
+ fs/ext2/ext2.mk                      |  2 +-
+ fs/iso9660/iso9660.mk                |  2 +-
+ fs/jffs2/jffs2.mk                    |  2 +-
+ fs/romfs/romfs.mk                    |  2 +-
+ fs/squashfs/squashfs.mk              |  2 +-
+ fs/tar/tar.mk                        |  2 +-
+ fs/ubifs/Config.in                   | 23 ++++++++------
+ fs/ubifs/ubi.mk                      | 32 -------------------
+ fs/ubifs/ubifs.mk                    | 34 +++++++++++++++++++--
+ fs/yaffs2/yaffs.mk                   |  2 +-
+ support/testing/tests/fs/test_ubi.py |  6 ++--
+ 17 files changed, 122 insertions(+), 61 deletions(-)
+ delete mode 100644 fs/ubifs/ubi.mk
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
