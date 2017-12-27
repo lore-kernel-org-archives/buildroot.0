@@ -1,10 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 27 Dec 2017 23:29:14 +0100
-Subject: [Buildroot] [PATCH] pulseaudio: remove the ConsoleKit module
-In-Reply-To: <b7568fe9d9659520356ec09c58908edd27656a03.1513696352.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Tue, 19 Dec 2017 17:12:32 +0200")
-References: <b7568fe9d9659520356ec09c58908edd27656a03.1513696352.git.baruch@tkos.co.il>
-Message-ID: <87tvwboldx.fsf@dell.be.48ers.dk>
+Date: Wed, 27 Dec 2017 23:29:31 +0100
+Subject: [Buildroot] [PATCH 1/2] pulseaudio: normalize alsa-lib optional
+ dependency
+In-Reply-To: <6e8f78216f2cc0177456fa5723e6ad37832833da.1513785771.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Wed, 20 Dec 2017 18:02:50 +0200")
+References: <6e8f78216f2cc0177456fa5723e6ad37832833da.1513785771.git.baruch@tkos.co.il>
+Message-ID: <87po6zoldg.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,11 +14,13 @@ To: buildroot@busybox.net
 
 >>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > The ConsoleKit module is loaded by default from the default.pa
- > configuration file, but its initialization fails because Buildroot has
- > no ConsoleKit package yet. This breaks per-user pulseaudio daemon.
- > The default.pa configuration load module-console-kit only when it
- > exists. Remove module-console-kit to fix pulseaudio per-user startup.
+ > Put together alsa-lib dependency and configure option code. As a side
+ > effect we now avoid alsa-lib dependency when the required support in
+ > alsa is missing.
+
+ > Use positive logic.
+
+ > Explicitly enable alsa support when available.
 
  > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
