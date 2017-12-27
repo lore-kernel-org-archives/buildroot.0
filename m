@@ -1,42 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 27 Dec 2017 23:27:39 +0100
-Subject: [Buildroot] [git commit] package/qt5/qt5scxml: needs
- qt5declarative package
-In-Reply-To: <20171227231700.4b3cfadf@gmx.net>
-References: <20171227210731.11EFE83571@busybox.osuosl.org>
- <20171227222616.6f4dd5de@gmx.net>
- <20171227224206.37fef60a@windsurf.home>
- <20171227231700.4b3cfadf@gmx.net>
-Message-ID: <20171227232739.3312d727@windsurf.home>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 27 Dec 2017 23:27:54 +0100
+Subject: [Buildroot] [PATCH] lldpd: remove check on CXX compiler
+In-Reply-To: <20171218211935.15149-1-damien.riegel@savoirfairelinux.com>
+ (Damien Riegel's message of "Mon, 18 Dec 2017 16:19:35 -0500")
+References: <20171218211935.15149-1-damien.riegel@savoirfairelinux.com>
+Message-ID: <87y3lnolg5.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Damien" == Damien Riegel <damien.riegel@savoirfairelinux.com> writes:
 
-On Wed, 27 Dec 2017 23:17:00 +0100, Peter Seiderer wrote:
+ > lldpd currently depends on a C++ compiler to configure properly, but
+ > the package doesn't select that option, so builds fail if
+ > BR2_TOOLCHAIN_BUILDROOT_CXX is not selected with following errors:
 
-> > > 	select BR2_PACKAGE_QT5BASE_GUI # qt5declarative
-> > > 	select BR2_PACKAGE_QT5XMLPATTERNS # qt5declarative    
-> > 
-> > So why does your patch also selects them, if they are already
-> > implicitly selected by qt5declarative ?  
-> 
-> Thanks for the reasoning, but one more question: with this logic
-> the above 'select BR2_PACKAGE_QT5BASE' could be removed (but the
-> below dependency on qt5base without the corresponding select seems
-> ugly)?
+ >   checking how to run the C++ preprocessor... /lib/cpp
+ >   configure: error: in `/home/dkc/src/buildroot/build-zii/build/lldpd-0.9.4':
+ >   configure: error: C++ preprocessor "/lib/cpp" fails sanity check
 
-We don't have a very clear cut approach on this. I believe the best
-reasoning is: if the package uses *directly* qt5base, then it should
-explicitly select it and have it in <pkg>_DEPENDENCIES. If it's only
-indirectly used through another package, then selecting this "another
-package" is enough.
+ > This package actually builds fine without C++, so drop this check in
+ > configure.ac. Attached patch has already been accepted upstream [1].
 
-Thomas
+ > [1] https://github.com/vincentbernat/lldpd/pull/261
+
+ > Signed-off-by: Damien Riegel <damien.riegel@savoirfairelinux.com>
+
+Committed to 2017.11.x, thanks.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
