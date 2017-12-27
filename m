@@ -1,21 +1,61 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 27 Dec 2017 12:48:41 +0100
-Subject: [Buildroot] [PATCH 1/1] linux-headers: bump 4.{4, 9}.x series
-In-Reply-To: <20171210083348.7679-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Sun, 10 Dec 2017 09:33:48 +0100")
-References: <20171210083348.7679-1-bernd.kuhls@t-online.de>
-Message-ID: <87mv24qtly.fsf@dell.be.48ers.dk>
+Date: Wed, 27 Dec 2017 12:46:33 +0100
+Subject: [Buildroot] [git commit branch/2017.11.x] wireshark: security bump
+ to version 2.2.11
+Message-ID: <20171227114858.52DCA83700@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=c9ebd5e966f929c4ae1eafb803a867c9614f3410
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.11.x
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Fixes the following security issues:
 
-Committed to 2017.11.x, thanks.
+wnpa-sec-2017-47: The IWARP_MPA dissector could crash. (Bug 14236)
 
--- 
-Bye, Peter Korsgaard
+https://www.wireshark.org/security/wnpa-sec-2017-47.html
+
+wnpa-sec-2017-48: The NetBIOS dissector could crash. (Bug 14249)
+
+https://www.wireshark.org/security/wnpa-sec-2017-48.html
+
+wnpa-sec-2017-49: The CIP Safety dissector could crash. (Bug 14250)
+
+https://www.wireshark.org/security/wnpa-sec-2017-49.html
+
+For more information, see the release notes:
+https://www.wireshark.org/docs/relnotes/wireshark-2.2.11.html
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit d2bc1e2bbbabc70f2e9436387b8a40ff96216372)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/wireshark/wireshark.hash | 4 ++--
+ package/wireshark/wireshark.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
+index 3494f2e..cffdab2 100644
+--- a/package/wireshark/wireshark.hash
++++ b/package/wireshark/wireshark.hash
+@@ -1,2 +1,2 @@
+-# From: https://www.wireshark.org/download/src/all-versions/SIGNATURES-2.2.10.txt
+-sha256 8574a5e1fdec7affae640924bd46c1aed1bd866e02632fa5625e1450e4a50707  wireshark-2.2.10.tar.bz2
++# From: https://www.wireshark.org/download/src/all-versions/SIGNATURES-2.2.11.txt
++sha256 a9f11621e85d7e1d72259157edd94825e72af3fd72e184b8474459f92ad5fc40  wireshark-2.2.11.tar.bz2
+diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
+index 34ee563..535ed7a 100644
+--- a/package/wireshark/wireshark.mk
++++ b/package/wireshark/wireshark.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WIRESHARK_VERSION = 2.2.10
++WIRESHARK_VERSION = 2.2.11
+ WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.bz2
+ WIRESHARK_SITE = https://www.wireshark.org/download/src/all-versions
+ WIRESHARK_LICENSE = wireshark license
