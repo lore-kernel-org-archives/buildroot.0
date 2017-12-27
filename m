@@ -1,49 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 27 Dec 2017 23:26:38 +0100
-Subject: [Buildroot] [git commit branch/2017.11.x] package/nodejs: security
- bump to version 8.9.3
-Message-ID: <20171227223843.47CEF8376D@busybox.osuosl.org>
+Date: Wed, 27 Dec 2017 23:30:55 +0100
+Subject: [Buildroot] [git commit branch/2017.11.x] linux-headers: bump 4.{4,
+ 9, 14}.x series
+Message-ID: <20171227223843.943E78376E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=26d133e09cb8cff3d73aa742535a8b101b94c0e6
+commit: https://git.buildroot.net/buildroot/commit/?id=a1cae24009e6f27a513355598a76203a0b1a2f28
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.11.x
 
-See https://nodejs.org/en/blog/release/v8.9.3/
-
-[Peter: mention that this fixes security issues]
-Signed-off-by: Martin Bark <martin@barkynet.com>
+[Peter: drop 4.14.x bump]
+Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-(cherry picked from commit 380c3d5e4067fcd0d551890083dc83edd6b8a055)
+(cherry picked from commit 8447f04c1c2ea596d69c3a90d73e25f6d937e511)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/nodejs/nodejs.hash | 4 ++--
- package/nodejs/nodejs.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/linux-headers/Config.in.host | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
-index 658f80b..ae50faf 100644
---- a/package/nodejs/nodejs.hash
-+++ b/package/nodejs/nodejs.hash
-@@ -1,2 +1,2 @@
--# From http://nodejs.org/dist/v8.9.1/SHASUMS256.txt
--sha256 ef160c21f60f8aca64145985e01b4044435e381dc16e8f0640ed0223e84f17e0  node-v8.9.1.tar.xz
-+# From http://nodejs.org/dist/v8.9.3/SHASUMS256.txt
-+sha256 748ddb3baa6b85e6a56e38aacd066586e7581952f84a92bc8152248a9be6b2da  node-v8.9.3.tar.xz
-diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-index 9cf26da..4c1deb1 100644
---- a/package/nodejs/nodejs.mk
-+++ b/package/nodejs/nodejs.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--NODEJS_VERSION = 8.9.1
-+NODEJS_VERSION = 8.9.3
- NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.xz
- NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
- NODEJS_DEPENDENCIES = host-python host-nodejs c-ares \
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 5bd1a20..866686d 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -244,8 +244,8 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.10.108"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.12.74"	if BR2_KERNEL_HEADERS_3_12
+ 	default "4.1.47"	if BR2_KERNEL_HEADERS_4_1
+-	default "4.4.106"	if BR2_KERNEL_HEADERS_4_4
+-	default "4.9.70"	if BR2_KERNEL_HEADERS_4_9
++	default "4.4.107"	if BR2_KERNEL_HEADERS_4_4
++	default "4.9.71"	if BR2_KERNEL_HEADERS_4_9
+ 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
+ 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
+ 	default "4.12.14"	if BR2_KERNEL_HEADERS_4_12
