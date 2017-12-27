@@ -1,58 +1,61 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 27 Dec 2017 10:54:59 +0100
-Subject: [Buildroot] [git commit branch/2017.11.x] package/kodi-pvr-stalker:
- needs libxml2
-Message-ID: <20171227095711.14D93836C7@busybox.osuosl.org>
+Date: Wed, 27 Dec 2017 10:55:52 +0100
+Subject: [Buildroot] [git commit branch/2017.11.x]
+ package/kodi-pvr-mediaportal-tvserver: fix build with glibc 2.26
+Message-ID: <20171227095711.1E1E7836CB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4ad89ba554d73cce2656985d3e92928e7b69f65f
+commit: https://git.buildroot.net/buildroot/commit/?id=f4b971441f971e7e7c38bda6eebe279db8e90179
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.11.x
-
-Since
-https://git.buildroot.net/buildroot/commit/package/kodi?id=bf9bfd065ba3fab328fd041ca040f2bf134fecf2
-kodi itself does not depend on libxml2 anymore which previously
-provided libxml2 still needed by kodi-pvr-stalker:
-https://github.com/kodi-pvr/pvr.stalker/blob/Krypton/CMakeLists.txt#L12
-
-Fixes a build error not caught by autobuilders because they do not have
-host jdk installed:
-CMake Error at /usr/share/cmake-3.7/Modules/FindPackageHandleStandardArgs.cmake:138 (message):
-  Could NOT find LibXml2 (missing: LIBXML2_LIBRARIES LIBXML2_INCLUDE_DIR)
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 7be5653b865938af3fdbcbd1553145a8e90426a1)
+(cherry picked from commit 2c4149df17166e023bbe8ef06a6fa6d594f8aea8)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/kodi-pvr-stalker/Config.in           | 1 +
- package/kodi-pvr-stalker/kodi-pvr-stalker.mk | 2 +-
- 2 files changed, 2 insertions(+), 1 deletion(-)
+ ...1-live555-remove-xlocale.h-from-Locale.hh.patch | 33 ++++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
 
-diff --git a/package/kodi-pvr-stalker/Config.in b/package/kodi-pvr-stalker/Config.in
-index 3ec530c..d334d0c 100644
---- a/package/kodi-pvr-stalker/Config.in
-+++ b/package/kodi-pvr-stalker/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_KODI_PVR_STALKER
- 	bool "kodi-pvr-stalker"
- 	select BR2_PACKAGE_JSONCPP
- 	select BR2_PACKAGE_KODI_PLATFORM
-+	select BR2_PACKAGE_LIBXML2
- 	help
- 	  A PVR Client that connects Kodi to Stalker Middleware
- 
-diff --git a/package/kodi-pvr-stalker/kodi-pvr-stalker.mk b/package/kodi-pvr-stalker/kodi-pvr-stalker.mk
-index ee61171..32ac2ca 100644
---- a/package/kodi-pvr-stalker/kodi-pvr-stalker.mk
-+++ b/package/kodi-pvr-stalker/kodi-pvr-stalker.mk
-@@ -10,6 +10,6 @@ KODI_PVR_STALKER_VERSION = 2.8.6-Krypton
- KODI_PVR_STALKER_SITE = $(call github,kodi-pvr,pvr.stalker,$(KODI_PVR_STALKER_VERSION))
- KODI_PVR_STALKER_LICENSE = GPL-2.0+
- KODI_PVR_STALKER_LICENSE_FILES = src/client.h
--KODI_PVR_STALKER_DEPENDENCIES = jsoncpp kodi-platform
-+KODI_PVR_STALKER_DEPENDENCIES = jsoncpp kodi-platform libxml2
- 
- $(eval $(cmake-package))
+diff --git a/package/kodi-pvr-mediaportal-tvserver/0001-live555-remove-xlocale.h-from-Locale.hh.patch b/package/kodi-pvr-mediaportal-tvserver/0001-live555-remove-xlocale.h-from-Locale.hh.patch
+new file mode 100644
+index 0000000..7abb153
+--- /dev/null
++++ b/package/kodi-pvr-mediaportal-tvserver/0001-live555-remove-xlocale.h-from-Locale.hh.patch
+@@ -0,0 +1,33 @@
++From 64b264d141fd80991ac071c5370802e2d7394f6d Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd.kuhls@t-online.de>
++Date: Sun, 3 Dec 2017 22:17:12 +0100
++Subject: [PATCH] live555: remove xlocale.h from Locale.hh
++
++Fixes build error with glibc 2.26:
++https://sourceware.org/glibc/wiki/Release/2.26#Removal_of_.27xlocale.h.27
++
++Patch sent upstream:
++https://github.com/kodi-pvr/pvr.mediaportal.tvserver/pull/79
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ src/lib/live555/liveMedia/include/Locale.hh | 3 ---
++ 1 file changed, 3 deletions(-)
++
++diff --git a/src/lib/live555/liveMedia/include/Locale.hh b/src/lib/live555/liveMedia/include/Locale.hh
++index b327948..c4b4f4a 100644
++--- a/src/lib/live555/liveMedia/include/Locale.hh
+++++ b/src/lib/live555/liveMedia/include/Locale.hh
++@@ -43,9 +43,6 @@ along with this library; if not, write to the Free Software Foundation, Inc.,
++ 
++ #ifndef LOCALE_NOT_USED
++ #include <locale.h>
++-#ifndef XLOCALE_NOT_USED
++-#include <xlocale.h> // because, on some systems, <locale.h> doesn't include <xlocale.h>; this makes sure that we get both
++-#endif
++ #endif
++ 
++ 
++-- 
++2.11.0
++
