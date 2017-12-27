@@ -1,20 +1,20 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 27 Dec 2017 17:12:10 +0100
-Subject: [Buildroot] [PATCH] linux: bump CIP version to v4.4.105-cip15
-In-Reply-To: <1513258264-20239-1-git-send-email-angelo@amarulasolutions.com>
- (Angelo Compagnucci's message of "Thu, 14 Dec 2017 14:31:04 +0100")
-References: <1513258264-20239-1-git-send-email-angelo@amarulasolutions.com>
-Message-ID: <87shbwp2ud.fsf@dell.be.48ers.dk>
+Date: Wed, 27 Dec 2017 17:13:23 +0100
+Subject: [Buildroot] [PATCH 2/2] linux-headers: bump 4.{9, 14}.x series
+In-Reply-To: <1513272514-3427-2-git-send-email-festevam@gmail.com> (Fabio
+ Estevam's message of "Thu, 14 Dec 2017 15:28:34 -0200")
+References: <1513272514-3427-1-git-send-email-festevam@gmail.com>
+ <1513272514-3427-2-git-send-email-festevam@gmail.com>
+Message-ID: <87o9mkp2sc.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Angelo" == Angelo Compagnucci <angelo@amarulasolutions.com> writes:
+>>>>> "Fabio" == Fabio Estevam <festevam@gmail.com> writes:
 
- > This patch bumps the Linux CIP version to v4.4.105-cip15.
- > Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+ > Signed-off-by: Fabio Estevam <festevam@gmail.com>
 
 Committed to 2017.11.x, thanks.
 
