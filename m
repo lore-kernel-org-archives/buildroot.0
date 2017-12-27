@@ -1,38 +1,54 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 27 Dec 2017 23:30:55 +0100
-Subject: [Buildroot] [git commit branch/2017.11.x] linux-headers: bump 4.{4,
- 9, 14}.x series
-Message-ID: <20171227223843.943E78376E@busybox.osuosl.org>
+Date: Wed, 27 Dec 2017 23:28:42 +0100
+Subject: [Buildroot] [git commit branch/2017.11.x] pulseaudio: normalize
+ alsa-lib optional dependency
+Message-ID: <20171227223843.732AC8376D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a1cae24009e6f27a513355598a76203a0b1a2f28
+commit: https://git.buildroot.net/buildroot/commit/?id=32e2502ce8cb8ec3a0b660f0f25748605697aa49
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.11.x
 
-[Peter: drop 4.14.x bump]
-Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
+Put together alsa-lib dependency and configure option code. As a side
+effect we now avoid alsa-lib dependency when the required support in
+alsa is missing.
+
+Use positive logic.
+
+Explicitly enable alsa support when available.
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 8447f04c1c2ea596d69c3a90d73e25f6d937e511)
+(cherry picked from commit 8a560563f94e2aa2053db1cd41aa6c74ece1957c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-headers/Config.in.host | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/pulseaudio/pulseaudio.mk | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 5bd1a20..866686d 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -244,8 +244,8 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.10.108"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.12.74"	if BR2_KERNEL_HEADERS_3_12
- 	default "4.1.47"	if BR2_KERNEL_HEADERS_4_1
--	default "4.4.106"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.70"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.4.107"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.9.71"	if BR2_KERNEL_HEADERS_4_9
- 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
- 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
- 	default "4.12.14"	if BR2_KERNEL_HEADERS_4_12
+diff --git a/package/pulseaudio/pulseaudio.mk b/package/pulseaudio/pulseaudio.mk
+index a30d540..3863557 100644
+--- a/package/pulseaudio/pulseaudio.mk
++++ b/package/pulseaudio/pulseaudio.mk
+@@ -18,7 +18,6 @@ PULSEAUDIO_CONF_OPTS = \
+ PULSEAUDIO_DEPENDENCIES = \
+ 	host-pkgconf libtool libsndfile speex host-intltool \
+ 	$(if $(BR2_PACKAGE_LIBSAMPLERATE),libsamplerate) \
+-	$(if $(BR2_PACKAGE_ALSA_LIB),alsa-lib) \
+ 	$(if $(BR2_PACKAGE_LIBGLIB2),libglib2) \
+ 	$(if $(BR2_PACKAGE_AVAHI_DAEMON),avahi) \
+ 	$(if $(BR2_PACKAGE_DBUS),dbus) \
+@@ -119,7 +118,10 @@ PULSEAUDIO_CONF_OPTS += --enable-neon-opt=no
+ endif
+ 
+ # pulseaudio alsa backend needs pcm/mixer apis
+-ifneq ($(BR2_PACKAGE_ALSA_LIB_PCM)$(BR2_PACKAGE_ALSA_LIB_MIXER),yy)
++ifeq ($(BR2_PACKAGE_ALSA_LIB_PCM)$(BR2_PACKAGE_ALSA_LIB_MIXER),yy)
++PULSEAUDIO_DEPENDENCIES += alsa-lib
++PULSEAUDIO_CONF_OPTS += --enable-alsa
++else
+ PULSEAUDIO_CONF_OPTS += --disable-alsa
+ endif
+ 
