@@ -1,100 +1,90 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Tue, 26 Dec 2017 19:02:30 -0600
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2017-12-25
-In-Reply-To: <20171226070035.2CF762072B@mail.free-electrons.com>
-References: <20171226070035.2CF762072B@mail.free-electrons.com>
-Message-ID: <CANQCQpZtU10yqmgxmEHOtwLmRK_7bEfw7nosbD0V_Ffgujf7Tg@mail.gmail.com>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Wed, 27 Dec 2017 04:05:48 +0100
+Subject: [Buildroot] systemd: build failure against pam on arm
+In-Reply-To: <87shbxq99x.fsf@paral.in>
+References: <CA+h8R2o8=LmmcudEaiJSCenX7t4QmHB3SPwm-UowrGQEu2bMPw@mail.gmail.com>
+ <29DD8155-F769-488E-8A9E-39D8B6D18B54@openadk.org>
+ <87608xykge.fsf@paral.in>
+ <1397D1DC-9330-40CF-89AB-8CB27EEFF333@openadk.org>
+ <873741w59p.fsf@paral.in>
+ <20171224120957.GY27558@waldemar-brodkorb.de>
+ <87po73d1xz.fsf@paral.in>
+ <20171225151337.GC27558@waldemar-brodkorb.de>
+ <87mv25cg5t.fsf@paral.in> <87shbxq99x.fsf@paral.in>
+Message-ID: <20171227030548.GE27558@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Mario/All,
+Hi Christian,
+Christian Stewart wrote,
 
-On Tue, Dec 26, 2017 at 1:00 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
->
-> Build statistics for 2017-12-25
-> ===============================
->
->       branch |  OK | NOK | TIM | TOT |
->       master | 216 |  74 |   2 | 292 |
->    2017.08.x |  19 |   2 |   1 |  22 |
->
-> Results for branch 'master'
-> ===========================
->
-> Classification of failures by reason
-> ------------------------------------
->
->          host-cryptsetup-2.0.0 | 43
->              libostree-2017.15 | 8
->                     brltty-5.5 | 7
+> Hi Waldemar, All,
+> 
+> Christian Stewart <christian@paral.in> writes:
+> > Hi Waldemar,
+> >
+> > Waldemar Brodkorb <wbx@openadk.org> writes:
+> >>> There are no extra pam files in my Buildroot tree - before building I
+> >>> ensure this with a "git clean -xfd" and I've searched the tree as well.
+> >>
+> >> But that is strange then.
+> >> find . -name libpam_misc.so\*
+> >> ./output/build/linux-pam-1.3.0/libpam_misc/.libs/libpam_misc.so.0
+> >> ./output/build/linux-pam-1.3.0/libpam_misc/.libs/libpam_misc.so
+> >> ./output/build/linux-pam-1.3.0/libpam_misc/.libs/libpam_misc.so.0.82.1
+> >
+> > ... please note that I am building out of tree. There are no
+> > limpam_misc* inside the "buildroot tree" which includes the main source
+> > tree. When the compilation fails, inside my "output tree":
+> 
+> I can confirm now that even in-tree builds result in the same thing:
 
-Looked like a couple different failures for brltty, so I ran it
-through utils/test-pkg.
+..
 
-Config:
-BR2_USE_WCHAR=y
-BR2_TOOLCHAIN_HAS_THREADS=y
-BR2_PACKAGE_BRLTTY=y
+I believe it is an issue how gcc is calling the linker.
+In my case I see following:
+libsystemd-shared.la -lpam -lpam_misc
+-L/home/wbx/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib
+-lkmod
 
-Builds which failed:
-                   br-arm-cortex-a9-musl [ 7/47]: FAILED
-                   br-bfin-full [12/47]: FAILED
-                   br-sh4-full [28/47]: FAILED
-ports_glibc.o: In function `enablePorts':
-ports_glibc.c:(.text+0x1c): undefined reference to `ioperm'
-ports_glibc.o: In function `disablePorts':
-ports_glibc.c:(.text+0x74): undefined reference to `ioperm'
-ports_glibc.o: In function `readPort1':
-ports_glibc.c:(.text+0xc0): undefined reference to `inb'
-ports_glibc.o: In function `writePort1':
-ports_glibc.c:(.text+0xd8): undefined reference to `outb'
+So the linker does not get -L before -lpam -lpam_misc pointing to
+the sysroot. 
 
+If you start gcc with verbose linker output you see:
+./output/host/bin/arm-buildroot-linux-gnueabihf-gcc -Wl,-verbose
 
-                   br-arm-cortex-m4-full [ 8/47]: FAILED
-                   br-m68k-5208-full [15/47]: FAILED
-checking for msgmerge... /usr/bin/msgmerge
-checking for msgfmt... /usr/bin/msgfmt
-checking for linuxdoc... false
-checking for doxygen... false
-configure: error: dynamic linkage not supported for uclinux-uclibcgnueabi
+The included linker script has:
+SEARCH_DIR("=/home/wbx/buildroot/output/host/arm-buildroot-linux-gnueabihf/lib");
+SEARCH_DIR("=/usr/local/lib"); SEARCH_DIR("=/lib");
+SEARCH_DIR("=/usr/lib");
 
+In my case on Debian libpam.so is not in the search dirs, but in
+ls /lib/x86_64-linux-gnu/libpam.so.0*
+/lib/x86_64-linux-gnu/libpam.so.0
+/lib/x86_64-linux-gnu/libpam.so.0.83.1
+wbx at helium:~/buildroot$ lsb_release -a
+No LSB modules are available.
+Distributor ID: Debian
+Description:    Debian GNU/Linux 8.9 (jessie)
+Release:        8.9
+Codename:       jessie
 
-                      br-arm-full-static [11/47]: FAILED
-/nvme/rc-buildroot-hardening/brltty/br-arm-full-static/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libc.a(__uClibc_main.os):
-In function `__uClibc_fini':
-__uClibc_main.c:(.text+0x164): undefined reference to `__fini_array_end'
-__uClibc_main.c:(.text+0x168): undefined reference to `__fini_array_start'
-__uClibc_main.c:(.text+0x16c): undefined reference to `__fini_array_start'
+In you case the linker finds libpam.so in /lib and try to use it.
 
+To verify my analyzation you can add -L<sysrootpathofyourbr> into:
+systemd/Makefile
+PAM_LIBS =
+-L/home/paralin/buildroot/pi3/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib
+-lpam -lpam_misc
 
-                     br-mips64-n64-full [19/47]: FAILED
-                     br-mips64r6-el-hf-glibc [20/47]: FAILED
-                     mips64el-ctng_n64-linux-gnu [38/47]: FAILED
-                     sourcery-mips64 [43/47]: FAILED
-/nvme/rc-buildroot-hardening/brltty/br-mips64-n64-full/host/bin/mips64el-linux-ld
--r -o  braille.o eu_braille.o eu_clio.o eu_esysiris.o
-/nvme/rc-buildroot-hardening/brltty/br-mips64-n64-full/host/bin/mips64el-linux-ld:
-eu_braille.o: ABI is incompatible with that of the selected emulation
-/nvme/rc-buildroot-hardening/brltty/br-mips64-n64-full/host/bin/mips64el-linux-ld:
-failed to merge target specific data of file eu_braille.o
-/nvme/rc-buildroot-hardening/brltty/br-mips64-n64-full/host/bin/mips64el-linux-ld:
-eu_clio.o: ABI is incompatible with that of the selected emulation
-/nvme/rc-buildroot-hardening/brltty/br-mips64-n64-full/host/bin/mips64el-linux-ld:
-failed to merge target specific data of file eu_clio.o
-/nvme/rc-buildroot-hardening/brltty/br-mips64-n64-full/host/bin/mips64el-linux-ld:
-eu_esysiris.o: ABI is incompatible with that of the selected emulation
-/nvme/rc-buildroot-hardening/brltty/br-mips64-n64-full/host/bin/mips64el-linux-ld:
-failed to merge target specific data of file eu_esysiris.o
-/nvme/rc-buildroot-hardening/brltty/br-mips64-n64-full/host/bin/mips64el-linux-ld:
-Attempt to do relocatable link with elf64-tradlittlemips input and
-elf32-ntradlittlemips output
-/nvme/rc-buildroot-hardening/brltty/br-mips64-n64-full/host/bin/mips64el-linux-ld:
-eu_braille.o: file class ELFCLASS64 incompatible with ELFCLASS32
-/nvme/rc-buildroot-hardening/brltty/br-mips64-n64-full/host/bin/mips64el-linux-ld:
-final link failed: File in wrong format
+Like in KMOD_LIBS. Then just continue the build with make V=1 and
+see if it succeeds.
+
+As systemd is switching completely to meson buildsystem a
+upstreamable patch is not possible.
+
+best regards
+ Waldemar
