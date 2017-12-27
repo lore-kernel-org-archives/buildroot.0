@@ -1,28 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 27 Dec 2017 12:54:15 +0100
-Subject: [Buildroot] [PATCH] package/linux-tools: fixes build of iio
- with 4.14+ kernels
-In-Reply-To: <1512733938-29854-1-git-send-email-julien.boibessot@free.fr>
- (julien boibessot's message of "Fri, 8 Dec 2017 12:52:18 +0100")
-References: <1512733938-29854-1-git-send-email-julien.boibessot@free.fr>
-Message-ID: <87efngqtco.fsf@dell.be.48ers.dk>
+Date: Wed, 27 Dec 2017 12:55:26 +0100
+Subject: [Buildroot] [PATCH 1/1] package/vlc: security bump to version
+ 2.2.8
+In-Reply-To: <20171212175414.28267-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Tue, 12 Dec 2017 18:54:14 +0100")
+References: <20171212175414.28267-1-bernd.kuhls@t-online.de>
+Message-ID: <87a7y4qtap.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "julien" == julien boibessot <julien.boibessot@free.fr> writes:
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
- > From: Julien BOIBESSOT <julien.boibessot@armadeus.com>
- > Since this commit [1], iio build has been moved to other linux-tools build
- > system. Installation dir is now given by DESTDIR, like for all other linux-tools.
- > I kept INSTALL_DIR env and 'install' target to be compatible with oldest
- > kernels.
+ > Version 2.2.7 fixes CVE-2017-10699
+ > http://git.videolan.org/?p=vlc/vlc-2.2.git;a=commitdiff;h=0de56d69ff06afceb5b16721ea5965a676b938b9
 
- > [1]: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git/commit/tools/iio/Makefile?h=v4.14.4&id=18956cf2d78a8d4a5959e20240f04ce8d5a6c121
+ > Removed patches applied upstream:
+ > 0013-codec-avcodec-check-avcodec-visible-sizes.patch
+ > http://git.videolan.org/?p=vlc/vlc-2.2.git;a=commitdiff;h=6cc73bcad19da2cd2e95671173f2e0d203a57e9b
 
- > Signed-off-by: Julien BOIBESSOT <julien.boibessot@armadeus.com>
+ > 0014-decoder-check-visible-size-when-creating-buffer.patch
+ > http://git.videolan.org/?p=vlc/vlc-2.2.git;a=commitdiff;h=a38a85db58c569cc592d9380cc07096757ef3d49
+
+ > Added all hashes provided by upstream, added license hashes.
+
+ > Switched _SITE to https.
+
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
 Committed to 2017.11.x, thanks.
 
