@@ -1,54 +1,69 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 27 Dec 2017 23:28:42 +0100
-Subject: [Buildroot] [git commit branch/2017.11.x] pulseaudio: normalize
- alsa-lib optional dependency
-Message-ID: <20171227223843.732AC8376D@busybox.osuosl.org>
+Date: Wed, 27 Dec 2017 23:29:58 +0100
+Subject: [Buildroot] [git commit branch/2017.11.x] rsync: add upstream
+ security fix for CVE-2017-16548
+Message-ID: <20171227223843.890C88376E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=32e2502ce8cb8ec3a0b660f0f25748605697aa49
+commit: https://git.buildroot.net/buildroot/commit/?id=70d836c618550b58efc75dd1305272e8d221d9cb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.11.x
 
-Put together alsa-lib dependency and configure option code. As a side
-effect we now avoid alsa-lib dependency when the required support in
-alsa is missing.
+The receive_xattr function in xattrs.c in rsync 3.1.2 and 3.1.3-development
+does not check for a trailing '\0' character in an xattr name, which allows
+remote attackers to cause a denial of service (heap-based buffer over-read
+and application crash) or possibly have unspecified other impact by sending
+crafted data to the daemon.
 
-Use positive logic.
+For more details, see:
+https://bugzilla.samba.org/show_bug.cgi?id=13112
 
-Explicitly enable alsa support when available.
-
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 8a560563f94e2aa2053db1cd41aa6c74ece1957c)
+(cherry picked from commit 7f33f1d848908975b513f852873ae4fdb2702183)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pulseaudio/pulseaudio.mk | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ ...ailing-0-when-receiving-xattr-name-values.patch | 33 ++++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
 
-diff --git a/package/pulseaudio/pulseaudio.mk b/package/pulseaudio/pulseaudio.mk
-index a30d540..3863557 100644
---- a/package/pulseaudio/pulseaudio.mk
-+++ b/package/pulseaudio/pulseaudio.mk
-@@ -18,7 +18,6 @@ PULSEAUDIO_CONF_OPTS = \
- PULSEAUDIO_DEPENDENCIES = \
- 	host-pkgconf libtool libsndfile speex host-intltool \
- 	$(if $(BR2_PACKAGE_LIBSAMPLERATE),libsamplerate) \
--	$(if $(BR2_PACKAGE_ALSA_LIB),alsa-lib) \
- 	$(if $(BR2_PACKAGE_LIBGLIB2),libglib2) \
- 	$(if $(BR2_PACKAGE_AVAHI_DAEMON),avahi) \
- 	$(if $(BR2_PACKAGE_DBUS),dbus) \
-@@ -119,7 +118,10 @@ PULSEAUDIO_CONF_OPTS += --enable-neon-opt=no
- endif
- 
- # pulseaudio alsa backend needs pcm/mixer apis
--ifneq ($(BR2_PACKAGE_ALSA_LIB_PCM)$(BR2_PACKAGE_ALSA_LIB_MIXER),yy)
-+ifeq ($(BR2_PACKAGE_ALSA_LIB_PCM)$(BR2_PACKAGE_ALSA_LIB_MIXER),yy)
-+PULSEAUDIO_DEPENDENCIES += alsa-lib
-+PULSEAUDIO_CONF_OPTS += --enable-alsa
-+else
- PULSEAUDIO_CONF_OPTS += --disable-alsa
- endif
- 
+diff --git a/package/rsync/0004-Enforce-trailing-0-when-receiving-xattr-name-values.patch b/package/rsync/0004-Enforce-trailing-0-when-receiving-xattr-name-values.patch
+new file mode 100644
+index 0000000..be90400
+--- /dev/null
++++ b/package/rsync/0004-Enforce-trailing-0-when-receiving-xattr-name-values.patch
+@@ -0,0 +1,33 @@
++From 47a63d90e71d3e19e0e96052bb8c6b9cb140ecc1 Mon Sep 17 00:00:00 2001
++From: Wayne Davison <wayned@samba.org>
++Date: Sun, 5 Nov 2017 11:33:15 -0800
++Subject: [PATCH] Enforce trailing \0 when receiving xattr name values. Fixes
++ bug 13112.
++
++Fixes CVE-2017-16548
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++Patch status: upstream commit 47a63d90e7
++
++ xattrs.c | 4 ++++
++ 1 file changed, 4 insertions(+)
++
++diff --git a/xattrs.c b/xattrs.c
++index 68305d75..4867e6f5 100644
++--- a/xattrs.c
+++++ b/xattrs.c
++@@ -824,6 +824,10 @@ void receive_xattr(int f, struct file_struct *file)
++ 			out_of_memory("receive_xattr");
++ 		name = ptr + dget_len + extra_len;
++ 		read_buf(f, name, name_len);
+++		if (name_len < 1 || name[name_len-1] != '\0') {
+++			rprintf(FERROR, "Invalid xattr name received (missing trailing \\0).\n");
+++			exit_cleanup(RERR_FILEIO);
+++		}
++ 		if (dget_len == datum_len)
++ 			read_buf(f, ptr, dget_len);
++ 		else {
++-- 
++2.11.0
++
