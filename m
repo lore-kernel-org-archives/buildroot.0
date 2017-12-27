@@ -1,157 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 27 Dec 2017 12:41:07 +0100
-Subject: [Buildroot] [git commit branch/2017.11.x] rsync: add security fix
- patches
-Message-ID: <20171227114858.3535B7FBC5@busybox.osuosl.org>
+Date: Wed, 27 Dec 2017 12:48:04 +0100
+Subject: [Buildroot] [git commit branch/2017.11.x] linux-headers: bump 4.{4,
+ 9}.x series
+Message-ID: <20171227114858.710AF83700@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ad635622fc92128212e3d600ef392863ad3bce92
+commit: https://git.buildroot.net/buildroot/commit/?id=5d65377ccae9dbdba8f716c16c4f547c53b9f651
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.11.x
 
-Fixes CVE-2017-17433 and CVE-2017-17434: remote bypass of security
-restrictions.
-
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 7e0a002df7f3e0b74f99cdc5b6d0a0e165ba1228)
+(cherry picked from commit 1bc6f2d5cde30537b392d92601fe860c20a4d049)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0001-Check-fname-in-recv_files-sooner.patch    | 45 ++++++++++++++++++++++
- ...0002-Sanitize-xname-in-read_ndx_and_attrs.patch | 39 +++++++++++++++++++
- ...mon-filter-against-fnamecmp-in-recv_files.patch | 28 ++++++++++++++
- 3 files changed, 112 insertions(+)
+ package/linux-headers/Config.in.host | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/rsync/0001-Check-fname-in-recv_files-sooner.patch b/package/rsync/0001-Check-fname-in-recv_files-sooner.patch
-new file mode 100644
-index 0000000..3616960
---- /dev/null
-+++ b/package/rsync/0001-Check-fname-in-recv_files-sooner.patch
-@@ -0,0 +1,45 @@
-+From 3e06d40029cfdce9d0f73d87cfd4edaf54be9c51 Mon Sep 17 00:00:00 2001
-+From: Jeriko One <jeriko.one@gmx.us>
-+Date: Thu, 2 Nov 2017 23:44:19 -0700
-+Subject: [PATCH] Check fname in recv_files sooner.
-+
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Patch status: upstream commit 3e06d40029c
-+
-+ receiver.c | 12 ++++++------
-+ 1 file changed, 6 insertions(+), 6 deletions(-)
-+
-+diff --git a/receiver.c b/receiver.c
-+index baae3a919cdd..9fdafa152cb3 100644
-+--- a/receiver.c
-++++ b/receiver.c
-+@@ -574,6 +574,12 @@ int recv_files(int f_in, int f_out, char *local_name)
-+ 			file = dir_flist->files[cur_flist->parent_ndx];
-+ 		fname = local_name ? local_name : f_name(file, fbuf);
-+ 
-++		if (daemon_filter_list.head
-++		    && check_filter(&daemon_filter_list, FLOG, fname, 0) < 0) {
-++			rprintf(FERROR, "attempt to hack rsync failed.\n");
-++			exit_cleanup(RERR_PROTOCOL);
-++		}
-++
-+ 		if (DEBUG_GTE(RECV, 1))
-+ 			rprintf(FINFO, "recv_files(%s)\n", fname);
-+ 
-+@@ -645,12 +651,6 @@ int recv_files(int f_in, int f_out, char *local_name)
-+ 
-+ 		cleanup_got_literal = 0;
-+ 
-+-		if (daemon_filter_list.head
-+-		    && check_filter(&daemon_filter_list, FLOG, fname, 0) < 0) {
-+-			rprintf(FERROR, "attempt to hack rsync failed.\n");
-+-			exit_cleanup(RERR_PROTOCOL);
-+-		}
-+-
-+ 		if (read_batch) {
-+ 			int wanted = redoing
-+ 				   ? we_want_redo(ndx)
-+-- 
-+2.15.0
-+
-diff --git a/package/rsync/0002-Sanitize-xname-in-read_ndx_and_attrs.patch b/package/rsync/0002-Sanitize-xname-in-read_ndx_and_attrs.patch
-new file mode 100644
-index 0000000..1e5d371
---- /dev/null
-+++ b/package/rsync/0002-Sanitize-xname-in-read_ndx_and_attrs.patch
-@@ -0,0 +1,39 @@
-+From 70aeb5fddd1b2f8e143276f8d5a085db16c593b9 Mon Sep 17 00:00:00 2001
-+From: Jeriko One <jeriko.one@gmx.us>
-+Date: Thu, 16 Nov 2017 17:05:42 -0800
-+Subject: [PATCH] Sanitize xname in read_ndx_and_attrs.
-+
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Patch status: upstream commit 70aeb5fddd
-+
-+ rsync.c | 6 ++++++
-+ 1 file changed, 6 insertions(+)
-+
-+diff --git a/rsync.c b/rsync.c
-+index b82e59881018..a0945ba4e7f5 100644
-+--- a/rsync.c
-++++ b/rsync.c
-+@@ -49,6 +49,7 @@ extern int flist_eof;
-+ extern int file_old_total;
-+ extern int keep_dirlinks;
-+ extern int make_backups;
-++extern int sanitize_paths;
-+ extern struct file_list *cur_flist, *first_flist, *dir_flist;
-+ extern struct chmod_mode_struct *daemon_chmod_modes;
-+ #ifdef ICONV_OPTION
-+@@ -396,6 +397,11 @@ int read_ndx_and_attrs(int f_in, int f_out, int *iflag_ptr, uchar *type_ptr,
-+ 	if (iflags & ITEM_XNAME_FOLLOWS) {
-+ 		if ((len = read_vstring(f_in, buf, MAXPATHLEN)) < 0)
-+ 			exit_cleanup(RERR_PROTOCOL);
-++
-++		if (sanitize_paths) {
-++			sanitize_path(buf, buf, "", 0, SP_DEFAULT);
-++			len = strlen(buf);
-++		}
-+ 	} else {
-+ 		*buf = '\0';
-+ 		len = -1;
-+-- 
-+2.15.0
-+
-diff --git a/package/rsync/0003-Check-daemon-filter-against-fnamecmp-in-recv_files.patch b/package/rsync/0003-Check-daemon-filter-against-fnamecmp-in-recv_files.patch
-new file mode 100644
-index 0000000..b19921c
---- /dev/null
-+++ b/package/rsync/0003-Check-daemon-filter-against-fnamecmp-in-recv_files.patch
-@@ -0,0 +1,28 @@
-+From 5509597decdbd7b91994210f700329d8a35e70a1 Mon Sep 17 00:00:00 2001
-+From: Jeriko One <jeriko.one@gmx.us>
-+Date: Thu, 16 Nov 2017 17:26:03 -0800
-+Subject: [PATCH] Check daemon filter against fnamecmp in recv_files().
-+
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Patch status: upstream commit 5509597dec
-+
-+ receiver.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/receiver.c b/receiver.c
-+index 9fdafa152cb3..9c46242e013c 100644
-+--- a/receiver.c
-++++ b/receiver.c
-+@@ -722,7 +722,7 @@ int recv_files(int f_in, int f_out, char *local_name)
-+ 				break;
-+ 			}
-+ 			if (!fnamecmp || (daemon_filter_list.head
-+-			  && check_filter(&daemon_filter_list, FLOG, fname, 0) < 0)) {
-++			  && check_filter(&daemon_filter_list, FLOG, fnamecmp, 0) < 0)) {
-+ 				fnamecmp = fname;
-+ 				fnamecmp_type = FNAMECMP_FNAME;
-+ 			}
-+-- 
-+2.15.0
-+
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 49d567e..ad7002a 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -244,8 +244,8 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.10.108"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.12.74"	if BR2_KERNEL_HEADERS_3_12
+ 	default "4.1.47"	if BR2_KERNEL_HEADERS_4_1
+-	default "4.4.104"	if BR2_KERNEL_HEADERS_4_4
+-	default "4.9.67"	if BR2_KERNEL_HEADERS_4_9
++	default "4.4.105"	if BR2_KERNEL_HEADERS_4_4
++	default "4.9.68"	if BR2_KERNEL_HEADERS_4_9
+ 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
+ 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
+ 	default "4.12.14"	if BR2_KERNEL_HEADERS_4_12
