@@ -1,26 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 27 Dec 2017 23:35:15 +0100
-Subject: [Buildroot] [PATCH 2/2] xfsprogs: update homepage link
-In-Reply-To: <4690efda9cfb4bd4017f3769eae250fbb65b281a.1513941327.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Fri, 22 Dec 2017 13:15:27 +0200")
-References: <2e7d914e7b12cdac37de9790884642d6547a3752.1513941327.git.baruch@tkos.co.il>
- <4690efda9cfb4bd4017f3769eae250fbb65b281a.1513941327.git.baruch@tkos.co.il>
-Message-ID: <87vagrn6jg.fsf@dell.be.48ers.dk>
+Date: Wed, 27 Dec 2017 23:36:29 +0100
+Subject: [Buildroot] [PATCH v3] package/mfgtools: bump to 0.02
+In-Reply-To: <20171226131921.8312-1-romain.naour@gmail.com> (Romain Naour's
+ message of "Tue, 26 Dec 2017 14:19:21 +0100")
+References: <20171226131921.8312-1-romain.naour@gmail.com>
+Message-ID: <87r2rfn6he.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+>>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
 
- > The old SGI site is not accessible anymore. Use the link from the README
- > file.
+ > Bump mfgtools to include the fix [1] for the C++ build issue reported
+ > by the autobuilders.
 
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+ > This bump include only 4 small commit fixing memory leak and this
+ > build issue.
+
+ > Remove CPOL.htm (removed upstream) from MFGTOOLS_LICENSE_FILES but CPOL
+ > license is still valid.
+ > Add the README.txt file to MFGTOOLS_LICENSE_FILES since it contains
+ > licensing informations:
+
+ > Licenses:
+ > - CPOL: MfgToolLib/XmlLite.CPP and XmlLite.h
+ > - BSD: Others.
+
+ > Add license file hash.
+
+ > [1] https://github.com/codeauroraforum/mfgtools/commit/b370a43e548440025d274ff2abbb25342bbaa78c
+
+ > Fixes:
+ > http://autobuild.buildroot.net/results/7c2bbbe13ab315684f3502afd96958a76879b1d5
+
+ > Signed-off-by: Romain Naour <romain.naour@gmail.com>
+ > Cc: Gary Bisson <gary.bisson@boundarydevices.com>
  > ---
- > Actually, xfs.org is also down at the moment. But according to the
- > google cache it has been online a few days ago. We'll see.
+ > This patch should be backported to stable branches 2017.02 and 2017.08.
+
+ > v3: update url in Config.in.host (Gary)
+ > v2: update url (Baruch)
+ >     add README.txt to MFGTOOLS_LICENSE_FILES (Baruch)
 
 Committed to 2017.11.x, thanks.
 
