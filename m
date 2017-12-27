@@ -1,38 +1,33 @@
-From: Marcus Folkesson <marcus.folkesson@gmail.com>
-Date: Wed, 27 Dec 2017 13:35:55 +0100
-Subject: [Buildroot] [PATCH v2] libiio: fix libavahi-client dependency
-Message-ID: <20171227123555.15388-1-marcus.folkesson@gmail.com>
+From: Bartosz Bilas <b.bilas@grinn-global.com>
+Date: Wed, 27 Dec 2017 13:41:12 +0100
+Subject: [Buildroot] [PATCH v1] package/qt5scxml: Needs QT5DECLARATIVE
+ package
+Message-ID: <1514378472-13479-1-git-send-email-b.bilas@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Avahi needs avahi-daemon and D-Bus to build avahi-client.
-
-Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
 ---
-v2:
-- Do not check for AVAHI as it is implicity checked by
-  AVAHI_DAEMON
+qt5scxml package needs qml-private module which is delivered by qt5declaritive
 
- package/libiio/libiio.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Fixed: http://autobuild.buildroot.net/?reason=qt5scxml-5.9.3
 
-diff --git a/package/libiio/libiio.mk b/package/libiio/libiio.mk
-index 0b13064085..3fbd39188a 100644
---- a/package/libiio/libiio.mk
-+++ b/package/libiio/libiio.mk
-@@ -54,8 +54,8 @@ else
- LIBIIO_CONF_OPTS += -DWITH_IIOD_USBD=OFF
- endif
- 
--# Avahi support in libiio requires avahi-client, which needs avahi-daemon
--ifeq ($(BR2_PACKAGE_AVAHI)$(BR2_PACKAGE_AVAHI_DAEMON),yy)
-+# Avahi support in libiio requires avahi-client, which needs avahi-daemon and dbus
-+ifeq ($(BR2_PACKAGE_AVAHI_DAEMON)$(BR2_PACKAGE_DBUS),yy)
- LIBIIO_DEPENDENCIES += avahi
- endif
- 
+ package/qt5/qt5scxml/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/qt5/qt5scxml/Config.in b/package/qt5/qt5scxml/Config.in
+index 4ae6a5b..a7b49a4 100644
+--- a/package/qt5/qt5scxml/Config.in
++++ b/package/qt5/qt5scxml/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_QT5SCXML
+ 	bool "qt5scxml"
+ 	depends on BR2_PACKAGE_QT5_VERSION_LATEST
+ 	select BR2_PACKAGE_QT5BASE
++	select BR2_PACKAGE_QT5DECLARATIVE
+ 	help
+ 	  Qt is a cross-platform application and UI framework for
+ 	  developers using C++.
 -- 
-2.15.1
+2.7.4
