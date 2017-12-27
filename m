@@ -1,41 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 27 Dec 2017 23:31:32 +0100
-Subject: [Buildroot] [git commit branch/2017.11.x] libsoxr: remove unicode
- dash from help text
-Message-ID: <20171227223843.9EEAB8376E@busybox.osuosl.org>
+Date: Wed, 27 Dec 2017 23:33:04 +0100
+Subject: [Buildroot] [git commit branch/2017.11.x] webkitgtk: Add license
+ hashes
+Message-ID: <20171227223843.B6B618376E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=73531776dfac6669e077b8ee5c45ab85d57fae8d
+commit: https://git.buildroot.net/buildroot/commit/?id=c2d03f1172f3f99cca3cd0c27f1967fdd6fa65d2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.11.x
 
-This would make the unicode challenged menuconfig show something
-sensible.
-
-Split the sentence for the text to make sense.
-
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 5099c909393e6dc0c4e16f904e36259b4e499cb9)
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+(cherry picked from commit e7f82694cfe98f659ff08b5834e32f8996ca55c5)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libsoxr/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/webkitgtk/webkitgtk.hash | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/libsoxr/Config.in b/package/libsoxr/Config.in
-index a218ae9..ae1ea10 100644
---- a/package/libsoxr/Config.in
-+++ b/package/libsoxr/Config.in
-@@ -2,7 +2,7 @@ config BR2_PACKAGE_LIBSOXR
- 	bool "libsoxr"
- 	help
- 	  The SoX Resampler library `libsoxr' performs one-dimensional
--	  sample-rate conversion???it may be used, for example, to
-+	  sample-rate conversion. It may be used, for example, to
- 	  resample PCM-encoded audio.
- 
- 	  It aims to give fast and high quality results for any constant
+diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
+index 669bb1c..9e207c5 100644
+--- a/package/webkitgtk/webkitgtk.hash
++++ b/package/webkitgtk/webkitgtk.hash
+@@ -2,3 +2,7 @@
+ md5 264a22d7467deae606e42b6eb5dd65af webkitgtk-2.18.3.tar.xz
+ sha1 164cad34281ef597a3d4ad214e8037c3ddef4d17 webkitgtk-2.18.3.tar.xz
+ sha256 e15420e1616a6f70f321541d467af5ca285bff66b1e0fa68a01df3ccf1b18f9e webkitgtk-2.18.3.tar.xz
++
++# Hashes for license files:
++sha256 0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4 Source/WebCore/LICENSE-APPLE
++sha256 f2b3bd09663381deb99721109d22b47af1213bb43007a8b56a06c6375c8050ce Source/WebCore/LICENSE-LGPL-2.1
