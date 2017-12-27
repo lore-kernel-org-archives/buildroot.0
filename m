@@ -1,47 +1,56 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 27 Dec 2017 12:47:32 +0100
-Subject: [Buildroot] [git commit branch/2017.11.x] package/heimdal: bump
- version to 7.5.0
-Message-ID: <20171227114858.66DB883700@busybox.osuosl.org>
+Date: Wed, 27 Dec 2017 12:47:08 +0100
+Subject: [Buildroot] [git commit branch/2017.11.x] package/libopenssl:
+ security bump to version 1.0.2n
+Message-ID: <20171227114858.5CF3883700@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0b4319ff6d85b9fb77a6399c8c3f97f769801ac6
+commit: https://git.buildroot.net/buildroot/commit/?id=b952174bae513246301560254d57a0e854567f68
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.11.x
 
-This release fixes CVE-2017-17439:
-https://github.com/heimdal/heimdal/releases
+Fixes CVE-2017-3737 & CVE-2017-3738:
+https://www.openssl.org/news/secadv/20171207.txt
+
+Added license hash.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 87ae2ac1ccc636b81341b51ea5e68ad257e46485)
+(cherry picked from commit 09a756a5a740d38d835538401944b94025ef1b06)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/heimdal/heimdal.hash | 2 +-
- package/heimdal/heimdal.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libopenssl/libopenssl.hash | 5 +++--
+ package/libopenssl/libopenssl.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/heimdal/heimdal.hash b/package/heimdal/heimdal.hash
-index a0e0f3f..ac26aa6 100644
---- a/package/heimdal/heimdal.hash
-+++ b/package/heimdal/heimdal.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 3de14ecd36ad21c1694a13da347512b047f4010d176fe412820664cb5d1429ad  heimdal-7.4.0.tar.gz
-+sha256 c5a2a0030fcc728022fa2332bad85569084d1c3b9a59587b7ebe141b0532acad  heimdal-7.5.0.tar.gz
-diff --git a/package/heimdal/heimdal.mk b/package/heimdal/heimdal.mk
-index 5732556..79aaacb 100644
---- a/package/heimdal/heimdal.mk
-+++ b/package/heimdal/heimdal.mk
+diff --git a/package/libopenssl/libopenssl.hash b/package/libopenssl/libopenssl.hash
+index c6226c3..e3d3da7 100644
+--- a/package/libopenssl/libopenssl.hash
++++ b/package/libopenssl/libopenssl.hash
+@@ -1,7 +1,8 @@
+-# From https://www.openssl.org/source/openssl-1.0.2m.tar.gz.sha256
+-sha256	8c6ff15ec6b319b50788f42c7abc2890c08ba5a1cdcd3810eb9092deada37b0f	openssl-1.0.2m.tar.gz
++# From https://www.openssl.org/source/openssl-1.0.2n.tar.gz.sha256
++sha256	370babb75f278c39e0c50e8c4e7493bc0f18db6867478341a832a982fd15a8fe	openssl-1.0.2n.tar.gz
+ # Locally computed
+ sha256	eddd8a5123748052c598214487ac178e4bfa4e31ba2ec520c70d59c8c5bfa2e9	openssl-1.0.2a-parallel-install-dirs.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d
+ sha256	147c3eeaad614c044749ea527cb433eae5e2d5cad34a78c6ba61cd967bfbe01f	openssl-1.0.2a-parallel-obj-headers.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d
+ sha256	30cb49489de5041841a74da9155cd4fabfbce33237262ba7cd23974314ae2956	openssl-1.0.2a-parallel-symlinking.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d
+ sha256	deaf6f3af41874ecc6d63841ea14b8e6c71cea81d4a511a754bc90c9a993147f	openssl-1.0.2d-parallel-build.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d
++sha256	9ee37d72966bb4a841343f0606ce44d41b3eae4df4285200c5a8ddc2b935992a	LICENSE
+diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
+index 8cccb9c..5a78676 100644
+--- a/package/libopenssl/libopenssl.mk
++++ b/package/libopenssl/libopenssl.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--HEIMDAL_VERSION = 7.4.0
-+HEIMDAL_VERSION = 7.5.0
- HEIMDAL_SITE = https://github.com/heimdal/heimdal/releases/download/heimdal-$(HEIMDAL_VERSION)
- HOST_HEIMDAL_DEPENDENCIES = host-e2fsprogs host-ncurses host-pkgconf
- HEIMDAL_INSTALL_STAGING = YES
+-LIBOPENSSL_VERSION = 1.0.2m
++LIBOPENSSL_VERSION = 1.0.2n
+ LIBOPENSSL_SITE = http://www.openssl.org/source
+ LIBOPENSSL_SOURCE = openssl-$(LIBOPENSSL_VERSION).tar.gz
+ LIBOPENSSL_LICENSE = OpenSSL or SSLeay
