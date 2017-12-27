@@ -1,20 +1,28 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 27 Dec 2017 12:51:51 +0100
-Subject: [Buildroot] [PATCH] wireguard: bump version
-In-Reply-To: <20171211112014.15274-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Mon, 11 Dec 2017 12:20:14 +0100")
-References: <20171211112014.15274-1-peter@korsgaard.com>
-Message-ID: <87incsqtgo.fsf@dell.be.48ers.dk>
+Date: Wed, 27 Dec 2017 12:54:15 +0100
+Subject: [Buildroot] [PATCH] package/linux-tools: fixes build of iio
+ with 4.14+ kernels
+In-Reply-To: <1512733938-29854-1-git-send-email-julien.boibessot@free.fr>
+ (julien boibessot's message of "Fri, 8 Dec 2017 12:52:18 +0100")
+References: <1512733938-29854-1-git-send-email-julien.boibessot@free.fr>
+Message-ID: <87efngqtco.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "julien" == julien boibessot <julien.boibessot@free.fr> writes:
 
- > Various bugfixes, including a compat fix for <= 3.10.
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > From: Julien BOIBESSOT <julien.boibessot@armadeus.com>
+ > Since this commit [1], iio build has been moved to other linux-tools build
+ > system. Installation dir is now given by DESTDIR, like for all other linux-tools.
+ > I kept INSTALL_DIR env and 'install' target to be compatible with oldest
+ > kernels.
+
+ > [1]: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git/commit/tools/iio/Makefile?h=v4.14.4&id=18956cf2d78a8d4a5959e20240f04ce8d5a6c121
+
+ > Signed-off-by: Julien BOIBESSOT <julien.boibessot@armadeus.com>
 
 Committed to 2017.11.x, thanks.
 
