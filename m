@@ -1,50 +1,48 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 27 Dec 2017 23:36:29 +0100
-Subject: [Buildroot] [PATCH v3] package/mfgtools: bump to 0.02
-In-Reply-To: <20171226131921.8312-1-romain.naour@gmail.com> (Romain Naour's
- message of "Tue, 26 Dec 2017 14:19:21 +0100")
-References: <20171226131921.8312-1-romain.naour@gmail.com>
-Message-ID: <87r2rfn6he.fsf@dell.be.48ers.dk>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Wed, 27 Dec 2017 23:36:41 +0100
+Subject: [Buildroot] [PATCH v1] package/qt5/qt5scxml: needs qt5declarative
+ package (fixes)
+Message-ID: <20171227223641.8885-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
+- add qt5declarative depends comment
+- add missing qt5declarative dependency
 
- > Bump mfgtools to include the fix [1] for the C++ build issue reported
- > by the autobuilders.
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+ package/qt5/qt5scxml/Config.in   | 2 +-
+ package/qt5/qt5scxml/qt5scxml.mk | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- > This bump include only 4 small commit fixing memory leak and this
- > build issue.
-
- > Remove CPOL.htm (removed upstream) from MFGTOOLS_LICENSE_FILES but CPOL
- > license is still valid.
- > Add the README.txt file to MFGTOOLS_LICENSE_FILES since it contains
- > licensing informations:
-
- > Licenses:
- > - CPOL: MfgToolLib/XmlLite.CPP and XmlLite.h
- > - BSD: Others.
-
- > Add license file hash.
-
- > [1] https://github.com/codeauroraforum/mfgtools/commit/b370a43e548440025d274ff2abbb25342bbaa78c
-
- > Fixes:
- > http://autobuild.buildroot.net/results/7c2bbbe13ab315684f3502afd96958a76879b1d5
-
- > Signed-off-by: Romain Naour <romain.naour@gmail.com>
- > Cc: Gary Bisson <gary.bisson@boundarydevices.com>
- > ---
- > This patch should be backported to stable branches 2017.02 and 2017.08.
-
- > v3: update url in Config.in.host (Gary)
- > v2: update url (Baruch)
- >     add README.txt to MFGTOOLS_LICENSE_FILES (Baruch)
-
-Committed to 2017.11.x, thanks.
-
+diff --git a/package/qt5/qt5scxml/Config.in b/package/qt5/qt5scxml/Config.in
+index 469bdc1d3a..d94b5ea1c6 100644
+--- a/package/qt5/qt5scxml/Config.in
++++ b/package/qt5/qt5scxml/Config.in
+@@ -1,7 +1,7 @@
+ config BR2_PACKAGE_QT5SCXML
+ 	bool "qt5scxml"
+ 	depends on BR2_PACKAGE_QT5_VERSION_LATEST
+-	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
++	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE # qt5declarative
+ 	select BR2_PACKAGE_QT5BASE
+ 	select BR2_PACKAGE_QT5DECLARATIVE
+ 	help
+diff --git a/package/qt5/qt5scxml/qt5scxml.mk b/package/qt5/qt5scxml/qt5scxml.mk
+index 4b1f97973d..2d197a2bca 100644
+--- a/package/qt5/qt5scxml/qt5scxml.mk
++++ b/package/qt5/qt5scxml/qt5scxml.mk
+@@ -7,7 +7,7 @@
+ QT5SCXML_VERSION = $(QT5_VERSION)
+ QT5SCXML_SITE = $(QT5_SITE)
+ QT5SCXML_SOURCE = qtscxml-opensource-src-$(QT5SCXML_VERSION).tar.xz
+-QT5SCXML_DEPENDENCIES = qt5base
++QT5SCXML_DEPENDENCIES = qt5base qt5declarative
+ QT5SCXML_INSTALL_STAGING = YES
+ 
+ QT5SCXML_LICENSE = GPL-2.0+ or LGPL-3.0, GPL-3.0 with exception(tools), GFDL-1.3 (docs)
 -- 
-Bye, Peter Korsgaard
+2.15.1
