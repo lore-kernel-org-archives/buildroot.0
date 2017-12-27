@@ -1,11 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 27 Dec 2017 23:17:46 +0100
-Subject: [Buildroot] [PATCH 2/2] hostapd: select DRIVER_NONE if no other
- drivers enabled
-In-Reply-To: <20171227192928.1129-1-alexander.i.mukhin@gmail.com>
-References: <20171224204920.uwyafn63a6lyyqan@speedy.hunter>
- <20171227192928.1129-1-alexander.i.mukhin@gmail.com>
-Message-ID: <20171227231746.564d6c8a@windsurf.home>
+Date: Wed, 27 Dec 2017 23:20:25 +0100
+Subject: [Buildroot] [PATCH] configs: introduce a minimalist defconfig
+In-Reply-To: <20171224161123.5397-1-yann.morin.1998@free.fr>
+References: <20171224161123.5397-1-yann.morin.1998@free.fr>
+Message-ID: <20171227232025.29354b46@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,61 +12,29 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 27 Dec 2017 22:29:28 +0300, Alexander Mukhin wrote:
+On Sun, 24 Dec 2017 17:11:23 +0100, Yann E. MORIN wrote:
+> It is very often interesting to start from a minimalist configuration
+> with no package and no filesystem.
+> 
+> Re-use the existing minimalist configuration and promote it to a full
+> defconfig.
+> 
+> This thus contains options that default to 'y', like the paranoid
+> wrapper and busybox-show-others, as the defconfig is used by test-pkg
+> too.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Arnout Vandecappelle <arnout@mind.be>
 
-> diff --git a/package/hostapd/hostapd.mk b/package/hostapd/hostapd.mk
-> index 1700335c1a..e6c981dbe5 100644
-> --- a/package/hostapd/hostapd.mk
-> +++ b/package/hostapd/hostapd.mk
-> @@ -17,18 +17,14 @@ HOSTAPD_LICENSE = BSD-3-Clause
->  HOSTAPD_LICENSE_FILES = README
->  HOSTAPD_CONFIG_SET =
->  
-> -HOSTAPD_CONFIG_ENABLE = \
-> -	CONFIG_HS20 \
-> -	CONFIG_IEEE80211AC \
-> -	CONFIG_IEEE80211N \
-> -	CONFIG_IEEE80211R \
-> -	CONFIG_INTERNAL_LIBTOMMATH \
-> -	CONFIG_INTERWORKING
-> +HOSTAPD_CONFIG_ENABLE = CONFIG_INTERNAL_LIBTOMMATH
->  
->  HOSTAPD_CONFIG_DISABLE =
->  
->  HOSTAPD_USE_NL =
->  
-> +HOSTAPD_USE_WIRELESS_DRIVERS =
+I'm not too sure of the value of this. Our defconfigs are meant to
+allow generating a working Linux system for a specific HW platform.
+This minimalist_defconfig would heavily deviate from this principle,
+and could confuse newcomers who want to build a "minimal" system.
 
-I think this would be better handled via a hidden Config.in option,
-something like:
-
-config BR2_PACKAGE_HOSTAPD_HAS_WIFI_DRIVERS
-	bool
-
-config BR2_PACKAGE_HOSTAPD_<something>
-	bool "something"
-	select BR2_PACKAGE_HOSTAPD_HAS_WIFI_DRIVERS
-
-> +# Enable CONFIG_DRIVER_NONE if no other drivers enabled
-> +ifneq ($(BR2_PACKAGE_HOSTAPD_DRIVER_HOSTAP),y)
-> +ifneq ($(BR2_PACKAGE_HOSTAPD_DRIVER_NL80211),y)
-> +ifneq ($(BR2_PACKAGE_HOSTAPD_DRIVER_RTW),y)
-> +ifneq ($(BR2_PACKAGE_HOSTAPD_DRIVER_WIRED),y)
-
-Perhaps this could be simplified to:
-
-ifeq ($(BR2_PACKAGE_HOSTAPD_HAS_WIFI_DRIVERS)$(BR2_PACKAGE_HOSTAPD_DRIVER_WIRED),)
-
-> +HOSTAPD_CONFIG_ENABLE += CONFIG_DRIVER_NONE
-> +endif
-> +endif
-> +endif
-> +endif
-> +
-> +# Add options for wireless drivers
-> +ifeq ($(HOSTAPD_USE_WIRELESS_DRIVERS),y)
-
-This would use BR2_PACKAGE_HOSTAPD_HAS_WIFI_DRIVERS.
+I'd say this minimalist configuration is more of an internal thing, for
+advanced Buildroot developers, and we should keep it "hidden" where it
+is today.
 
 Best regards,
 
