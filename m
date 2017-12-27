@@ -1,12 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 27 Dec 2017 10:35:51 +0100
-Subject: [Buildroot] [PATCH 1/1] package/tor: security bump to version
- 0.3.1.9
-In-Reply-To: <20171201222403.5c1461f1@windsurf.lan> (Thomas Petazzoni's
- message of "Fri, 1 Dec 2017 22:24:03 +0100")
-References: <20171201174603.14173-1-bernd.kuhls@t-online.de>
- <20171201222403.5c1461f1@windsurf.lan>
-Message-ID: <87shbwtsw8.fsf@dell.be.48ers.dk>
+Date: Wed, 27 Dec 2017 10:37:10 +0100
+Subject: [Buildroot] [PATCH 1/1] package/linknx: add optional dependency
+ to libcurl again
+In-Reply-To: <20171201223852.736b8246@windsurf.lan> (Thomas Petazzoni's
+ message of "Fri, 1 Dec 2017 22:38:52 +0100")
+References: <20171201190523.4997-1-bernd.kuhls@t-online.de>
+ <20171201223852.736b8246@windsurf.lan>
+Message-ID: <87o9mktsu1.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,20 +16,43 @@ To: buildroot@busybox.net
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
  > Hello,
- > On Fri,  1 Dec 2017 18:46:03 +0100, Bernd Kuhls wrote:
- >> Release notes:
- >> https://blog.torproject.org/new-stable-tor-releases-security-fixes-0319-03013-02914-02817-02516
+ > On Fri,  1 Dec 2017 20:05:23 +0100, Bernd Kuhls wrote:
+ >> https://git.buildroot.net/buildroot/commit/package/linknx?id=e1c9a2349006e657e76dff35706a774376921fb7
+ >> made libcurl a hard dependency to fix autoreconf.
  >> 
- >> Fixes CVE-2017-8819, CVE-2017-8820, CVE-2017-8821, CVE-2017-8822
- >> and CVE-2017-8823.
+ >> https://git.buildroot.net/buildroot/commit/package/linknx?id=b56083099f113817edc6811e2cdd820df1c80450
+ >> removed autoreconf but did not re-add libcurl as optional dependency by
+ >> mistakenly assuming that libcurl is needed only for autoreconf.
+ >> 
+ >> Tested using this defconfig:
+ >> 
+ >> BR2_TOOLCHAIN_BUILDROOT_CXX=y
+ >> BR2_PACKAGE_LIBCURL=y
+ >> BR2_PACKAGE_LINKNX=y
+ >> 
+ >> Configure log of linknx without this patch
+ >> 
+ >> checking for curl-config... /usr/bin/curl-config
+ >> checking for the version of libcurl... 7.52.1
+ >> checking for libcurl >= version 7.14.0... yes
+ >> checking whether libcurl is usable... no
+ >> 
+ >> and with this patch
+ >> 
+ >> checking for
+ >> curl-config... /home/buildroot/br4/output/host/i586-buildroot-linux-uclibc/sysroot/usr/bin/curl-config
+ >> checking for the version of libcurl... 7.57.0
+ >> checking for libcurl >= version 7.14.0... yes
+ >> checking whether libcurl is usable... yes
+ >> checking for curl_free... yes
+ >> 
+ >> Inspired by the fli4l project
+ >> https://web.nettworks.org/repo/changelog/fli4l?cs=49347
  >> 
  >> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
  >> ---
- >> package/tor/tor.hash | 2 +-
- >> package/tor/tor.mk   | 2 +-
- >> 2 files changed, 2 insertions(+), 2 deletions(-)
-
- > Applied to master, thanks.
+ >> package/linknx/linknx.mk | 7 +++++++
+ >> 1 file changed, 7 insertions(+)
 
 Committed to 2017.11.x, thanks.
 
