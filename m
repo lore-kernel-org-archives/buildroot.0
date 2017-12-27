@@ -1,57 +1,45 @@
-From: =?UTF-8?q?Stefan=20Fr=C3=B6berg?= <stefan.froberg@petroprogram.com>
-Date: Wed, 27 Dec 2017 16:50:03 +0200
-Subject: [Buildroot] [PATCH 1/1] gcc: Add support for --enable-default-pie
- configure option.
-Message-ID: <20171227145003.1669-1-stefan.froberg@petroprogram.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 27 Dec 2017 17:11:05 +0100
+Subject: [Buildroot] [PATCHv3] package/uboot: detect missing
+ user-supplied environment source files
+In-Reply-To: <20171209113549.1510-1-yann.morin.1998@free.fr> (Yann E. MORIN's
+ message of "Sat, 9 Dec 2017 12:35:49 +0100")
+References: <20171209113549.1510-1-yann.morin.1998@free.fr>
+Message-ID: <87wp18p2w6.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-With this option GCC will make PIE binaries by default. To override this
-default behaviour, use -no-pie
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-https://gcc.gnu.org/onlinedocs/gcc-6.2.0/gcc/Link-Options.html
+ > Since 0542bb79e8 (uboot: Support multiple environment source files),
+ > missing user-supplied environment source files is no longer detected.
 
-Signed-off-by: Stefan Fr?berg <stefan.froberg@petroprogram.com>
----
- package/gcc/Config.in.host | 10 ++++++++++
- package/gcc/gcc.mk         |  4 ++++
- 2 files changed, 14 insertions(+)
+ > This is because we cat them all, and feed the concatenation to the stdin
+ > of mkenvimage. So, if one source file is missing, the cat exits in error,
+ > but the compound command exits with the exit code of the last command,
+ > which is that of mkenvimage, which happens to be happy with whatever it
+ > is fed on its stdin, even is empty.
 
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index 70cce0a5c5..bf646fa07b 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -152,3 +152,13 @@ config BR2_GCC_ENABLE_GRAPHITE
- 
- comment "graphite support needs gcc >= 5.x"
- 	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_5
-+
-+config BR2_GCC_ENABLE_DEFAULT_PIE
-+	bool "Enable default PIE support"
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_6
-+	help
-+	  This option enables the GCC to make PIE
-+	  binaries by default.
-+
-+comment "default PIE support needs gcc >= 6.x"
-+	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_6
-diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-index 27fc1e987c..0910fb3932 100644
---- a/package/gcc/gcc.mk
-+++ b/package/gcc/gcc.mk
-@@ -183,6 +183,10 @@ else
- HOST_GCC_COMMON_CONF_OPTS += --without-isl --without-cloog
- endif
- 
-+ifeq ($(BR2_GCC_ENABLE_DEFAULT_PIE),y)
-+HOST_GCC_COMMON_CONF_OPTS += --enable-default-pie
-+endif
-+
- ifeq ($(BR2_arc)$(BR2_or1k),y)
- HOST_GCC_COMMON_DEPENDENCIES += host-flex host-bison
- endif
+ > We fix that by creating a temporary file, that we even leave afterward
+ > for the user to inspect.
+
+ > We also move it out of the _CMDS block and into a macro of its own, so
+ > that it is easier to write and maintain.
+
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Cc: Cam Hutchison <camh@xdna.net>
+ > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+ > ---
+ > Changes v2 -> v3:
+ >   - generate inter;ediate file in $(@D) to avoid conflicts with
+ >     user-generated files in $(O)/images/  (Cam)
+ >   - typo
+
+Committed to 2017.11.x, thanks.
+
 -- 
-2.13.6
+Bye, Peter Korsgaard
