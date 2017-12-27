@@ -1,79 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 27 Dec 2017 23:36:54 +0100
-Subject: [Buildroot] [git commit branch/2017.11.x] package/libpqxx: fix
- broken sed call
-Message-ID: <20171227223843.F3ACA81038@busybox.osuosl.org>
+Date: Wed, 27 Dec 2017 23:29:03 +0100
+Subject: [Buildroot] [git commit branch/2017.11.x] pulseaudio: fix
+ libsamplerate dependency
+Message-ID: <20171227223843.7EAFE8376D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=58e312961df67f602100de7e52b9e3370cfc23a1
+commit: https://git.buildroot.net/buildroot/commit/?id=943c7d21fd828b328be01ba70d4f9cd8cf5ca115
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.11.x
 
-Backport 2 upstream fix.
+The (deprecated) libsamplerate support is not enabled unless
+--enable-samplerate is passed to configure. Fix this.
 
-Fixes:
-http://autobuild.buildroot.net/results/0d1/0d131f9fa5cce259d999f7d57f9092675bfc24c7
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit de035220aa17cfa223a2de8d5d1233d95d6dd0e7)
+(cherry picked from commit 5b85c6a038cc210355d8d5715cdf6fa73d18e8ac)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...01-Fix-broken-sed-call-in-configure.ac.in.patch | 31 ++++++++++++++++++++++
- package/libpqxx/libpqxx.mk                         |  3 +++
- 2 files changed, 34 insertions(+)
+ package/pulseaudio/pulseaudio.mk | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/package/libpqxx/0001-Fix-broken-sed-call-in-configure.ac.in.patch b/package/libpqxx/0001-Fix-broken-sed-call-in-configure.ac.in.patch
-new file mode 100644
-index 0000000..672133a
---- /dev/null
-+++ b/package/libpqxx/0001-Fix-broken-sed-call-in-configure.ac.in.patch
-@@ -0,0 +1,31 @@
-+From d5120738a9b6b90d19e742f3c591727d16d76c9c Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@gmail.com>
-+Date: Tue, 26 Dec 2017 14:09:46 +0100
-+Subject: [PATCH] Fix broken sed call in configure.ac.in
-+
-+Upstream fix from commit [1][2]
-+
-+[1] 80a9d5386641ac67d4ea1b602c786b45b40b252f
-+[2] 85e9336740475be25ed19924cca0961f7d844c4b
-+
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
-+---
-+ configure.ac | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 32cf5cb5..77cf7edd 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -480,7 +480,7 @@ occurring in the file.
-+ ])], -L${with_postgres_lib})
-+ 
-+ # Remove redundant occurrances of -lpq
-+-LIBS="`echo "$LIBS" | sed -e 's/-lpq[[:space:]]*[[:space:]]-lpq\>/-lpq/g'`"
-++LIBS=[`echo "$LIBS" | sed -e 's/-lpq * -lpq\>/-lpq/g'`]
-+ 
-+ AC_LANG_POP(C)
-+ 
-+-- 
-+2.14.3
-+
-diff --git a/package/libpqxx/libpqxx.mk b/package/libpqxx/libpqxx.mk
-index ec6a3bc..6a8c37a 100644
---- a/package/libpqxx/libpqxx.mk
-+++ b/package/libpqxx/libpqxx.mk
-@@ -11,6 +11,9 @@ LIBPQXX_DEPENDENCIES = postgresql
- LIBPQXX_LICENSE = BSD-3-Clause
- LIBPQXX_LICENSE_FILES = COPYING
+diff --git a/package/pulseaudio/pulseaudio.mk b/package/pulseaudio/pulseaudio.mk
+index 3863557..13fcec5 100644
+--- a/package/pulseaudio/pulseaudio.mk
++++ b/package/pulseaudio/pulseaudio.mk
+@@ -17,7 +17,6 @@ PULSEAUDIO_CONF_OPTS = \
  
-+# 0001-Fix-broken-sed-call-in-configure.ac.in.patch
-+LIBPQXX_AUTORECONF = YES
-+
- LIBPQXX_CONF_ENV += ac_cv_path_PG_CONFIG=$(STAGING_DIR)/usr/bin/pg_config
+ PULSEAUDIO_DEPENDENCIES = \
+ 	host-pkgconf libtool libsndfile speex host-intltool \
+-	$(if $(BR2_PACKAGE_LIBSAMPLERATE),libsamplerate) \
+ 	$(if $(BR2_PACKAGE_LIBGLIB2),libglib2) \
+ 	$(if $(BR2_PACKAGE_AVAHI_DAEMON),avahi) \
+ 	$(if $(BR2_PACKAGE_DBUS),dbus) \
+@@ -25,6 +24,13 @@ PULSEAUDIO_DEPENDENCIES = \
+ 	$(if $(BR2_PACKAGE_FFTW),fftw) \
+ 	$(if $(BR2_PACKAGE_SYSTEMD),systemd)
  
- $(eval $(autotools-package))
++ifeq ($(BR2_PACKAGE_LIBSAMPLERATE),y)
++PULSEAUDIO_CONF_OPTS += --enable-samplerate
++PULSEAUDIO_DEPENDENCIES += libsamplerate
++else
++PULSEAUDIO_CONF_OPTS += --disable-samplerate
++endif
++
+ ifeq ($(BR2_PACKAGE_GDBM),y)
+ PULSEAUDIO_CONF_OPTS += --with-database=gdbm
+ PULSEAUDIO_DEPENDENCIES += gdbm
