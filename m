@@ -1,29 +1,24 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 27 Dec 2017 23:30:10 +0100
-Subject: [Buildroot] [PATCH] rsync: add upstream security fix for
- CVE-2017-16548
-In-Reply-To: <20171219115628.16785-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Tue, 19 Dec 2017 12:56:28 +0100")
-References: <20171219115628.16785-1-peter@korsgaard.com>
-Message-ID: <87h8sbolcd.fsf@dell.be.48ers.dk>
+Date: Wed, 27 Dec 2017 23:32:01 +0100
+Subject: [Buildroot] [PATCH] libsoxr: remove unicode dash from help text
+In-Reply-To: <aba1f1782c8833a67af16f2325a5fccf6cc2e689.1513782978.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Wed, 20 Dec 2017 17:16:27 +0200")
+References: <aba1f1782c8833a67af16f2325a5fccf6cc2e689.1513782978.git.baruch@tkos.co.il>
+Message-ID: <87d12zol9a.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > The receive_xattr function in xattrs.c in rsync 3.1.2 and 3.1.3-development
- > does not check for a trailing '\0' character in an xattr name, which allows
- > remote attackers to cause a denial of service (heap-based buffer over-read
- > and application crash) or possibly have unspecified other impact by sending
- > crafted data to the daemon.
+ > This would make the unicode challenged menuconfig show something
+ > sensible.
 
- > For more details, see:
- > https://bugzilla.samba.org/show_bug.cgi?id=13112
+ > Split the sentence for the text to make sense.
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
 Committed to 2017.11.x, thanks.
 
