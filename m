@@ -1,36 +1,33 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Wed, 27 Dec 2017 09:34:32 +0100
-Subject: [Buildroot] build failure against libintl on alpine
-In-Reply-To: <871sjgg4mk.fsf@paral.in>
-References: <871sjgg4mk.fsf@paral.in>
-Message-ID: <20171227083432.GJ27558@waldemar-brodkorb.de>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 27 Dec 2017 09:41:53 +0100
+Subject: [Buildroot] [PATCH] libv4l: restore LFS mismatch fix patch
+In-Reply-To: <2a31dda7a229212bd19f9fb8b2b6f50916fe11cc.1514354092.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Wed, 27 Dec 2017 07:54:52 +0200")
+References: <2a31dda7a229212bd19f9fb8b2b6f50916fe11cc.1514354092.git.baruch@tkos.co.il>
+Message-ID: <87d130v9ym.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-Christian Stewart wrote,
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-> 
-> Hi all,
-> 
-> Here with another build error today, this time against Alpine linux.
+ > Restore the patch that commit 9345b85b47 (libv4l: bump to version
+ > 1.12.6) has wrongly removed. This is needed for LFS builds for 32bit
+ > targets.
 
-Alpine uses musl C library, I think your errors are all related to
-that. Does anyone used musl based system for buildroot development
-before Christian?
- 
-> make[1]: Entering directory '/home/buildroot/output/build/uclibc-1.0.26/utils'
->   HOSTCC utils/getconf.host
->   HOSTCC utils/ldconfig.host
->   HOSTCC utils/ldd.host
-> ../utils/getconf.c:439:29: error: '_SC_CHARCLASS_NAME_MAX' undeclared here (not in a function)
->      { "CHARCLASS_NAME_MAX", _SC_CHARCLASS_NAME_MAX, SYSCONF },
->                              ^~~~~~~~~~~~~~~~~~~~~~
+ > Fixes:
+ > http://autobuild.buildroot.net/results/461/46100c008c894e3f998227b2a9c9a79bfcbbda7c/
+ > http://autobuild.buildroot.net/results/63b/63babd09b8a64fd4da80d99c4c2aed25e5532aec/
+ > http://autobuild.buildroot.net/results/92b/92bd49d881ed11b2540e434af57ae7347ac186d2/
 
-I can take a look for this error.
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
-best regards
- Waldemar
+Committed, thanks.
+
+It seems my patch never got upstreamed :/ Feel free to submit it if you
+actively use libv4l, otherwise I will try to find time to do so.
+
+-- 
+Bye, Peter Korsgaard
