@@ -1,18 +1,22 @@
 From: Bartosz Bilas <b.bilas@grinn-global.com>
-Date: Wed, 27 Dec 2017 13:41:12 +0100
-Subject: [Buildroot] [PATCH v1] package/qt5scxml: Needs QT5DECLARATIVE
+Date: Wed, 27 Dec 2017 13:54:20 +0100
+Subject: [Buildroot] [PATCH v2] package/qt5scxml: Needs QT5DECLARATIVE
  package
-Message-ID: <1514378472-13479-1-git-send-email-b.bilas@grinn-global.com>
+Message-ID: <1514379260-15119-1-git-send-email-b.bilas@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
 ---
 qt5scxml package needs qml-private module which is delivered by qt5declaritive
 
 Fixed: http://autobuild.buildroot.net/?reason=qt5scxml-5.9.3
+
+changes v1 -> v2:
+	* Add missing signature
 
  package/qt5/qt5scxml/Config.in | 1 +
  1 file changed, 1 insertion(+)
