@@ -1,47 +1,83 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 27 Dec 2017 12:51:40 +0100
-Subject: [Buildroot] [git commit branch/2017.11.x] wireguard: bump version
-Message-ID: <20171227115759.D2301836CD@busybox.osuosl.org>
+Date: Wed, 27 Dec 2017 12:56:46 +0100
+Subject: [Buildroot] [git commit branch/2017.11.x] dhcp: add upstream
+ security fix
+Message-ID: <20171227115800.03E7B836CD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1939324d00d36091856b39a0e686ea13c553a056
+commit: https://git.buildroot.net/buildroot/commit/?id=e9c97ab491b6f731643c7c98a8bc888a69a0d824
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.11.x
 
-Various bugfixes, including a compat fix for <= 3.10.
+Fixes socket leak that might cause denial of service.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 6bfa6b2a046775abe90506930fd1a6aa13d02531)
+https://bugzilla.redhat.com/show_bug.cgi?id=1523547
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+(cherry picked from commit a4c6ac59e6e056e43c899d0e6c59a7e6139bfd52)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wireguard/wireguard.hash | 4 ++--
- package/wireguard/wireguard.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ ...3-Plugs-a-socket-descriptor-leak-in-OMAPI.patch | 51 ++++++++++++++++++++++
+ 1 file changed, 51 insertions(+)
 
-diff --git a/package/wireguard/wireguard.hash b/package/wireguard/wireguard.hash
-index 3749456..3e90603 100644
---- a/package/wireguard/wireguard.hash
-+++ b/package/wireguard/wireguard.hash
-@@ -1,4 +1,4 @@
--# From https://lists.zx2c4.com/pipermail/wireguard/2017-November/001935.html
--sha256 d9347786a9406ac276d86321ca64aadb1f0639cb0582c6e0519c634cf6e81157  WireGuard-0.0.20171111.tar.xz
-+# From https://lists.zx2c4.com/pipermail/wireguard/2017-December/002200.html
-+sha256 57d799d35e92c905e548d00adeb7ed1ead4d6560f084c99e5aae0a87b4eb09e4  WireGuard-0.0.20171211.tar.xz
- # Locally calculated
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/wireguard/wireguard.mk b/package/wireguard/wireguard.mk
-index 2eacb22..5f19cc7 100644
---- a/package/wireguard/wireguard.mk
-+++ b/package/wireguard/wireguard.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WIREGUARD_VERSION = 0.0.20171111
-+WIREGUARD_VERSION = 0.0.20171211
- WIREGUARD_SITE = https://git.zx2c4.com/WireGuard/snapshot
- WIREGUARD_SOURCE = WireGuard-$(WIREGUARD_VERSION).tar.xz
- WIREGUARD_LICENSE = GPL-2.0
+diff --git a/package/dhcp/0002-v4_3-Plugs-a-socket-descriptor-leak-in-OMAPI.patch b/package/dhcp/0002-v4_3-Plugs-a-socket-descriptor-leak-in-OMAPI.patch
+new file mode 100644
+index 0000000..df29465
+--- /dev/null
++++ b/package/dhcp/0002-v4_3-Plugs-a-socket-descriptor-leak-in-OMAPI.patch
+@@ -0,0 +1,51 @@
++From 5097bc0559f592683faac1f67bf350e1bddf6ed4 Mon Sep 17 00:00:00 2001
++From: Thomas Markwalder <tmark@isc.org>
++Date: Thu, 7 Dec 2017 11:39:30 -0500
++Subject: [PATCH] [v4_3] Plugs a socket descriptor leak in OMAPI
++
++        Merges in rt46767.
++
++[baruch: drop RELNOTES hunk]
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Patch status: upstream commit 5097bc0559f
++
++ omapip/buffer.c  | 9 +++++++++
++ omapip/message.c | 2 +-
++
++diff --git a/omapip/buffer.c b/omapip/buffer.c
++index f7fdc3250e82..809034d1317b 100644
++--- a/omapip/buffer.c
+++++ b/omapip/buffer.c
++@@ -566,6 +566,15 @@ isc_result_t omapi_connection_writer (omapi_object_t *h)
++ 			omapi_buffer_dereference (&buffer, MDL);
++ 		}
++ 	}
+++
+++	/* If we had data left to write when we're told to disconnect,
+++	* we need recall disconnect, now that we're done writing.
+++	* See rt46767. */
+++	if (c->out_bytes == 0 && c->state == omapi_connection_disconnecting) {
+++		omapi_disconnect (h, 1);
+++		return ISC_R_SHUTTINGDOWN;
+++	}
+++
++ 	return ISC_R_SUCCESS;
++ }
++ 
++diff --git a/omapip/message.c b/omapip/message.c
++index 59ccdc2c05cf..21bcfc3822e7 100644
++--- a/omapip/message.c
+++++ b/omapip/message.c
++@@ -339,7 +339,7 @@ isc_result_t omapi_message_unregister (omapi_object_t *mo)
++ }
++ 
++ #ifdef DEBUG_PROTOCOL
++-static const char *omapi_message_op_name(int op) {
+++const char *omapi_message_op_name(int op) {
++ 	switch (op) {
++ 	case OMAPI_OP_OPEN:    return "OMAPI_OP_OPEN";
++ 	case OMAPI_OP_REFRESH: return "OMAPI_OP_REFRESH";
++-- 
++2.15.1
++
