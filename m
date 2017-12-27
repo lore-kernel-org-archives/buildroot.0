@@ -1,124 +1,80 @@
-From: Alexander Mukhin <alexander.i.mukhin@gmail.com>
-Date: Wed, 27 Dec 2017 22:29:28 +0300
-Subject: [Buildroot] [PATCH 2/2] hostapd: select DRIVER_NONE if no other
- drivers enabled
-In-Reply-To: <20171224204920.uwyafn63a6lyyqan@speedy.hunter>
-References: <20171224204920.uwyafn63a6lyyqan@speedy.hunter>
-Message-ID: <20171227192928.1129-1-alexander.i.mukhin@gmail.com>
+From: Christian Stewart <christian@paral.in>
+Date: Wed, 27 Dec 2017 12:03:40 -0800
+Subject: [Buildroot] build failure against libintl on alpine
+In-Reply-To: <d0640059-1525-2c82-def1-a961e5340d9e@petroprogram.com>
+Message-ID: <87k1x8djkz.fsf@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Select DRIVER_NONE if no wireless or wired drivers selected.
-This may be the case when building hostapd as a standalone
-RADIUS server.
 
-Apply wireless-specific options only if we have at least one
-wireless driver enabled. Otherwise, an attempt to build
-a wired-only or RADIUS-only hostapd will fail.
+Hi Waldemar, Stefan,
 
-Signed-off-by: Alexander Mukhin <alexander.i.mukhin@gmail.com>
----
- package/hostapd/Config.in  |  6 ------
- package/hostapd/hostapd.mk | 36 +++++++++++++++++++++++++++++-------
- 2 files changed, 29 insertions(+), 13 deletions(-)
+Thanks for the help on this. 
 
-diff --git a/package/hostapd/Config.in b/package/hostapd/Config.in
-index bfb5447c1e..2ce26e79aa 100644
---- a/package/hostapd/Config.in
-+++ b/package/hostapd/Config.in
-@@ -40,12 +40,6 @@ config BR2_PACKAGE_HOSTAPD_DRIVER_WIRED
- 	help
- 	  Enable support for wired authenticator.
- 
--comment "at least one driver must be selected"
--	depends on !BR2_PACKAGE_HOSTAPD_DRIVER_HOSTAP
--	depends on !BR2_PACKAGE_HOSTAPD_DRIVER_NL80211
--	depends on !BR2_PACKAGE_HOSTAPD_DRIVER_RTW
--	depends on !BR2_PACKAGE_HOSTAPD_DRIVER_WIRED
--
- config BR2_PACKAGE_HOSTAPD_ACS
- 	bool "Enable ACS"
- 	default y
-diff --git a/package/hostapd/hostapd.mk b/package/hostapd/hostapd.mk
-index 1700335c1a..e6c981dbe5 100644
---- a/package/hostapd/hostapd.mk
-+++ b/package/hostapd/hostapd.mk
-@@ -17,18 +17,14 @@ HOSTAPD_LICENSE = BSD-3-Clause
- HOSTAPD_LICENSE_FILES = README
- HOSTAPD_CONFIG_SET =
- 
--HOSTAPD_CONFIG_ENABLE = \
--	CONFIG_HS20 \
--	CONFIG_IEEE80211AC \
--	CONFIG_IEEE80211N \
--	CONFIG_IEEE80211R \
--	CONFIG_INTERNAL_LIBTOMMATH \
--	CONFIG_INTERWORKING
-+HOSTAPD_CONFIG_ENABLE = CONFIG_INTERNAL_LIBTOMMATH
- 
- HOSTAPD_CONFIG_DISABLE =
- 
- HOSTAPD_USE_NL =
- 
-+HOSTAPD_USE_WIRELESS_DRIVERS =
-+
- # Try to use openssl if it's already available
- ifeq ($(BR2_PACKAGE_LIBOPENSSL),y)
- HOSTAPD_DEPENDENCIES += libopenssl
-@@ -39,25 +35,51 @@ HOSTAPD_CONFIG_DISABLE += CONFIG_EAP_PWD
- HOSTAPD_CONFIG_EDITS += 's/\#\(CONFIG_TLS=\).*/\1internal/'
- endif
- 
-+# Select which drivers to build
- ifneq ($(BR2_PACKAGE_HOSTAPD_DRIVER_HOSTAP),y)
- HOSTAPD_CONFIG_DISABLE += CONFIG_DRIVER_HOSTAP
-+else
-+HOSTAPD_USE_WIRELESS_DRIVERS = y
- endif
- 
- ifneq ($(BR2_PACKAGE_HOSTAPD_DRIVER_NL80211),y)
- HOSTAPD_CONFIG_DISABLE += CONFIG_DRIVER_NL80211
- else
- HOSTAPD_USE_NL = y
-+HOSTAPD_USE_WIRELESS_DRIVERS = y
- endif
- 
- ifeq ($(BR2_PACKAGE_HOSTAPD_DRIVER_RTW),y)
- HOSTAPD_PATCH += https://github.com/pritambaral/hostapd-rtl871xdrv/raw/master/rtlxdrv.patch
- HOSTAPD_CONFIG_SET += CONFIG_DRIVER_RTW
-+HOSTAPD_USE_WIRELESS_DRIVERS = y
- endif
- 
- ifeq ($(BR2_PACKAGE_HOSTAPD_DRIVER_WIRED),y)
- HOSTAPD_CONFIG_ENABLE += CONFIG_DRIVER_WIRED
- endif
- 
-+# Enable CONFIG_DRIVER_NONE if no other drivers enabled
-+ifneq ($(BR2_PACKAGE_HOSTAPD_DRIVER_HOSTAP),y)
-+ifneq ($(BR2_PACKAGE_HOSTAPD_DRIVER_NL80211),y)
-+ifneq ($(BR2_PACKAGE_HOSTAPD_DRIVER_RTW),y)
-+ifneq ($(BR2_PACKAGE_HOSTAPD_DRIVER_WIRED),y)
-+HOSTAPD_CONFIG_ENABLE += CONFIG_DRIVER_NONE
-+endif
-+endif
-+endif
-+endif
-+
-+# Add options for wireless drivers
-+ifeq ($(HOSTAPD_USE_WIRELESS_DRIVERS),y)
-+HOSTAPD_CONFIG_ENABLE += \
-+	CONFIG_HS20 \
-+	CONFIG_IEEE80211AC \
-+	CONFIG_IEEE80211N \
-+	CONFIG_IEEE80211R \
-+	CONFIG_INTERWORKING
-+endif
-+
- ifeq ($(BR2_PACKAGE_HOSTAPD_ACS),y)
- HOSTAPD_CONFIG_ENABLE += CONFIG_ACS
- endif
--- 
-2.11.0
+Stefan Fr?berg <stefan.froberg@petroprogram.com> writes:
+> Try adding the "--disable-nls" to HOST_BINUTILS_CONF_OPTS in the
+> package/binutils/binutils.mk file
+> Might be also needed for ??? HOST_GCC_COMMON_CONF_OPTS in
+> package/gcc/gcc.mk as also for
+> all other buildroot host packages because NLS support is really useless
+> there ...
+
+OK. Initially adding to HOST_BINUTILS_CONF_OPTS makes the build go
+farther, but it still breaks on glibc:
+
+rpc_main.c:41:21: fatal error: libintl.h: No such file or directory
+ #include <libintl.h>
+
+Adding to HOST_GCC_COMMON_CONF_OPTS, and forcing a rebuild of glibc I
+get the same error and these too:
+
+In file included from rpc/types.h:69:0,
+                 from rpc_parse.c:39:
+/usr/include/sys/types.h:69:28: note: previous declaration of 'u_quad_t' was here
+ typedef unsigned long long u_quad_t;
+                            ^~~~~~~~
+In file included from rpc_parse.c:39:0:
+rpc/types.h:84:9: error: unknown type name '__fsid_t'
+ typedef __fsid_t fsid_t;
+         ^~~~~~~~
+rpc/types.h:88:9: error: unknown type name '__daddr_t'
+ typedef __daddr_t daddr_t;
+         ^~~~~~~~~
+rpc/types.h:89:9: error: unknown type name '__caddr_t'
+ typedef __caddr_t caddr_t;
+         ^~~~~~~~~
+rpc/types.h:89:19: error: conflicting types for 'caddr_t'
+ typedef __caddr_t caddr_t;
+                   ^~~~~~~
+In file included from rpc/types.h:69:0,
+                 from rpc_parse.c:39:
+/usr/include/sys/types.h:63:15: note: previous declaration of 'caddr_t' was here
+ typedef char *caddr_t;
+               ^~~~~~~
+make[6]: *** [Makefile:178: /home/buildroot/skiff/workspaces/docker/build/glibc-glibc-2.26-73-g4b692dffb95ac4812b161eb6a16113d7e824982e/build/sunrpc/cross-rpc_parse.o] Error 1
+
+
+> musl has it's own dgettext stuff in libc.so* (or libc.a) so it should
+> not need the libintl version of gettext.
+
+To anyone interested: I can confirm that compilation in a Ubuntu
+container works fine with this Dockerfile:
+
+FROM ubuntu:latest
+RUN apt update && \
+    apt install -y build-essential \
+    git gcc wget curl musl-dev file \
+    perl python rsync bc patch unzip cpio
+RUN adduser --gecos "Buildroot" --disabled-login --uid 1000 buildroot && \
+    mkdir -p /home/buildroot && chown buildroot:buildroot /home/buildroot
+USER buildroot
+WORKDIR /home/buildroot
+
+Alpine is better because it's light weight. Building in this env would
+be very nice. The full Ubuntu container is highly unnecessary.
+
+Best,
+Christian
