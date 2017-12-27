@@ -1,59 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 27 Dec 2017 12:42:01 +0100
-Subject: [Buildroot] [git commit branch/2017.11.x] package/ltp-testsuite:
- Add upstream patch to fix build on uClibc-ng
-Message-ID: <20171227114858.3F7B483703@busybox.osuosl.org>
+Date: Wed, 27 Dec 2017 12:40:23 +0100
+Subject: [Buildroot] [git commit branch/2017.11.x] linux-headers: bump 4.1.x
+ series
+Message-ID: <20171227114858.2BB3583700@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d7886713ad93cd61eae3466c7f454ee5d20e7c07
+commit: https://git.buildroot.net/buildroot/commit/?id=09e903d947c20659c5a80538d09929bb74691979
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.11.x
 
-Fixes:
-http://autobuild.buildroot.net/results/6c0506423c76b61018da26c2549570e3d9eb5763/
-
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 9e46f59482282364fdcc816cd5961ccb42b3cdb3)
+(cherry picked from commit ddfd34382804dcbe6f862e44ac8d20edcf951566)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0004-syscalls-mknodat-Fix-missing-config.patch | 28 ++++++++++++++++++++++
- 1 file changed, 28 insertions(+)
+ package/linux-headers/Config.in.host | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/ltp-testsuite/0004-syscalls-mknodat-Fix-missing-config.patch b/package/ltp-testsuite/0004-syscalls-mknodat-Fix-missing-config.patch
-new file mode 100644
-index 0000000..d315a94
---- /dev/null
-+++ b/package/ltp-testsuite/0004-syscalls-mknodat-Fix-missing-config.patch
-@@ -0,0 +1,28 @@
-+From 0ee59c66f4e4930d543395fb8617e26cf8b22025 Mon Sep 17 00:00:00 2001
-+From: Petr Vorel <pvorel@suse.cz>
-+Date: Thu, 7 Dec 2017 17:37:01 +0100
-+Subject: [PATCH] syscalls/mknodat: Fix missing config
-+
-+Found by buildroot project, where this broke build on uClibc-ng, thanks!
-+http://autobuild.buildroot.net/results/6c0506423c76b61018da26c2549570e3d9eb5763/build-end.log
-+
-+Signed-off-by: Petr Vorel <pvorel@suse.cz>
-+---
-+ testcases/kernel/syscalls/mknodat/mknodat.h | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/testcases/kernel/syscalls/mknodat/mknodat.h b/testcases/kernel/syscalls/mknodat/mknodat.h
-+index 577d5ac9c..b4e828c5d 100644
-+--- a/testcases/kernel/syscalls/mknodat/mknodat.h
-++++ b/testcases/kernel/syscalls/mknodat/mknodat.h
-+@@ -22,6 +22,7 @@
-+ #define MKNODAT_H
-+ 
-+ #include <sys/types.h>
-++#include "config.h"
-+ #include "lapi/syscalls.h"
-+ 
-+ #if !defined(HAVE_MKNODAT)
-+-- 
-+2.15.0
-+
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index fad5f06..49d567e 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -243,7 +243,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.4.113"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.10.108"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.12.74"	if BR2_KERNEL_HEADERS_3_12
+-	default "4.1.46"	if BR2_KERNEL_HEADERS_4_1
++	default "4.1.47"	if BR2_KERNEL_HEADERS_4_1
+ 	default "4.4.104"	if BR2_KERNEL_HEADERS_4_4
+ 	default "4.9.67"	if BR2_KERNEL_HEADERS_4_9
+ 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
