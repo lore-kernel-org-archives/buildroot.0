@@ -1,56 +1,59 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 27 Dec 2017 12:47:08 +0100
-Subject: [Buildroot] [git commit branch/2017.11.x] package/libopenssl:
- security bump to version 1.0.2n
-Message-ID: <20171227114858.5CF3883700@busybox.osuosl.org>
+Date: Wed, 27 Dec 2017 12:42:01 +0100
+Subject: [Buildroot] [git commit branch/2017.11.x] package/ltp-testsuite:
+ Add upstream patch to fix build on uClibc-ng
+Message-ID: <20171227114858.3F7B483703@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b952174bae513246301560254d57a0e854567f68
+commit: https://git.buildroot.net/buildroot/commit/?id=d7886713ad93cd61eae3466c7f454ee5d20e7c07
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.11.x
 
-Fixes CVE-2017-3737 & CVE-2017-3738:
-https://www.openssl.org/news/secadv/20171207.txt
+Fixes:
+http://autobuild.buildroot.net/results/6c0506423c76b61018da26c2549570e3d9eb5763/
 
-Added license hash.
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 09a756a5a740d38d835538401944b94025ef1b06)
+(cherry picked from commit 9e46f59482282364fdcc816cd5961ccb42b3cdb3)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libopenssl/libopenssl.hash | 5 +++--
- package/libopenssl/libopenssl.mk   | 2 +-
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ .../0004-syscalls-mknodat-Fix-missing-config.patch | 28 ++++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
 
-diff --git a/package/libopenssl/libopenssl.hash b/package/libopenssl/libopenssl.hash
-index c6226c3..e3d3da7 100644
---- a/package/libopenssl/libopenssl.hash
-+++ b/package/libopenssl/libopenssl.hash
-@@ -1,7 +1,8 @@
--# From https://www.openssl.org/source/openssl-1.0.2m.tar.gz.sha256
--sha256	8c6ff15ec6b319b50788f42c7abc2890c08ba5a1cdcd3810eb9092deada37b0f	openssl-1.0.2m.tar.gz
-+# From https://www.openssl.org/source/openssl-1.0.2n.tar.gz.sha256
-+sha256	370babb75f278c39e0c50e8c4e7493bc0f18db6867478341a832a982fd15a8fe	openssl-1.0.2n.tar.gz
- # Locally computed
- sha256	eddd8a5123748052c598214487ac178e4bfa4e31ba2ec520c70d59c8c5bfa2e9	openssl-1.0.2a-parallel-install-dirs.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d
- sha256	147c3eeaad614c044749ea527cb433eae5e2d5cad34a78c6ba61cd967bfbe01f	openssl-1.0.2a-parallel-obj-headers.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d
- sha256	30cb49489de5041841a74da9155cd4fabfbce33237262ba7cd23974314ae2956	openssl-1.0.2a-parallel-symlinking.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d
- sha256	deaf6f3af41874ecc6d63841ea14b8e6c71cea81d4a511a754bc90c9a993147f	openssl-1.0.2d-parallel-build.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d
-+sha256	9ee37d72966bb4a841343f0606ce44d41b3eae4df4285200c5a8ddc2b935992a	LICENSE
-diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
-index 8cccb9c..5a78676 100644
---- a/package/libopenssl/libopenssl.mk
-+++ b/package/libopenssl/libopenssl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBOPENSSL_VERSION = 1.0.2m
-+LIBOPENSSL_VERSION = 1.0.2n
- LIBOPENSSL_SITE = http://www.openssl.org/source
- LIBOPENSSL_SOURCE = openssl-$(LIBOPENSSL_VERSION).tar.gz
- LIBOPENSSL_LICENSE = OpenSSL or SSLeay
+diff --git a/package/ltp-testsuite/0004-syscalls-mknodat-Fix-missing-config.patch b/package/ltp-testsuite/0004-syscalls-mknodat-Fix-missing-config.patch
+new file mode 100644
+index 0000000..d315a94
+--- /dev/null
++++ b/package/ltp-testsuite/0004-syscalls-mknodat-Fix-missing-config.patch
+@@ -0,0 +1,28 @@
++From 0ee59c66f4e4930d543395fb8617e26cf8b22025 Mon Sep 17 00:00:00 2001
++From: Petr Vorel <pvorel@suse.cz>
++Date: Thu, 7 Dec 2017 17:37:01 +0100
++Subject: [PATCH] syscalls/mknodat: Fix missing config
++
++Found by buildroot project, where this broke build on uClibc-ng, thanks!
++http://autobuild.buildroot.net/results/6c0506423c76b61018da26c2549570e3d9eb5763/build-end.log
++
++Signed-off-by: Petr Vorel <pvorel@suse.cz>
++---
++ testcases/kernel/syscalls/mknodat/mknodat.h | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/testcases/kernel/syscalls/mknodat/mknodat.h b/testcases/kernel/syscalls/mknodat/mknodat.h
++index 577d5ac9c..b4e828c5d 100644
++--- a/testcases/kernel/syscalls/mknodat/mknodat.h
+++++ b/testcases/kernel/syscalls/mknodat/mknodat.h
++@@ -22,6 +22,7 @@
++ #define MKNODAT_H
++ 
++ #include <sys/types.h>
+++#include "config.h"
++ #include "lapi/syscalls.h"
++ 
++ #if !defined(HAVE_MKNODAT)
++-- 
++2.15.0
++
