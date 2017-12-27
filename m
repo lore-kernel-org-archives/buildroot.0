@@ -1,37 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 27 Dec 2017 23:32:37 +0100
-Subject: [Buildroot] [PATCH] qemu: security bump to version 2.10.2
-In-Reply-To: <20171220112601.19056-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Wed, 20 Dec 2017 12:26:01 +0100")
-References: <20171220112601.19056-1-peter@korsgaard.com>
-Message-ID: <878tdnol8a.fsf@dell.be.48ers.dk>
+Date: Wed, 27 Dec 2017 23:33:33 +0100
+Subject: [Buildroot] [PATCH 1/1] webkitgtk: security bimp to version
+ 2.18.4
+In-Reply-To: <20171221133630.29763-1-aperez@igalia.com> (Adrian Perez de
+ Castro's message of "Thu, 21 Dec 2017 15:36:30 +0200")
+References: <20171221133630.29763-1-aperez@igalia.com>
+Message-ID: <874lobol6q.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Adrian" == Adrian Perez de Castro <aperez@igalia.com> writes:
 
- > Fixes the following security issues:
- > CVE-2017-13672: QEMU (aka Quick Emulator), when built with the VGA display
- > emulator support, allows local guest OS privileged users to cause a denial
- > of service (out-of-bounds read and QEMU process crash) via vectors involving
- > display update.
+ > This is a maintenance release of the current stable WebKitGTK+ version,
+ > which contains for CVE-2017-13866, CVE-2017-13870, CVE-2017-7156, and
+ > CVE-2017-13856. Additionally, this release brings improvements in the
+ > WebDriver spec-compliance, plugs several memory leaks in its GStreamer
+ > based multimedia backend, and fixes a bug when handling cookie removal.
 
- > CVE-2017-15118: Stack buffer overflow in NBD server triggered via long
- > export name
+ > Release notes can be found in the announcement:
 
- > CVE-2017-15119: DoS via large option request
+ >   https://webkitgtk.org/2017/12/19/webkitgtk2.18.4-released.html
 
- > CVE-2017-15268: Qemu through 2.10.0 allows remote attackers to cause a
- > memory leak by triggering slow data-channel read operations, related to
- > io/channel-websock.c.
+ > More details about the security fixes are provided in the following
+ > WebKitGTK+ Security Advisory report:
 
- > For more details, see the release announcement:
- > https://lists.nongnu.org/archive/html/qemu-devel/2017-12/msg03618.html
+ >   https://webkitgtk.org/security/WSA-2017-0010.html
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > Last but not least, this new release includes the fix for honoring the
+ > CMAKE_BUILD_TYPE value from CMake toolchain files and the corresponding
+ > patch is removed.
+
+ > Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 
 Committed to 2017.11.x, thanks.
 
