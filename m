@@ -1,58 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 27 Dec 2017 10:37:10 +0100
-Subject: [Buildroot] [PATCH 1/1] package/linknx: add optional dependency
- to libcurl again
-In-Reply-To: <20171201223852.736b8246@windsurf.lan> (Thomas Petazzoni's
- message of "Fri, 1 Dec 2017 22:38:52 +0100")
-References: <20171201190523.4997-1-bernd.kuhls@t-online.de>
- <20171201223852.736b8246@windsurf.lan>
-Message-ID: <87o9mktsu1.fsf@dell.be.48ers.dk>
+Date: Wed, 27 Dec 2017 10:40:19 +0100
+Subject: [Buildroot] [PATCH v2 branch/next] uboot-tools: fix dtc
+ invocation
+In-Reply-To: <20171201124020.4475-1-yegorslists@googlemail.com>
+ (yegorslists@googlemail.com's message of "Fri, 1 Dec 2017 13:40:20
+ +0100")
+References: <20171201124020.4475-1-yegorslists@googlemail.com>
+Message-ID: <87k1x8tsos.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "yegorslists" == yegorslists  <yegorslists@googlemail.com> writes:
 
- > Hello,
- > On Fri,  1 Dec 2017 20:05:23 +0100, Bernd Kuhls wrote:
- >> https://git.buildroot.net/buildroot/commit/package/linknx?id=e1c9a2349006e657e76dff35706a774376921fb7
- >> made libcurl a hard dependency to fix autoreconf.
- >> 
- >> https://git.buildroot.net/buildroot/commit/package/linknx?id=b56083099f113817edc6811e2cdd820df1c80450
- >> removed autoreconf but did not re-add libcurl as optional dependency by
- >> mistakenly assuming that libcurl is needed only for autoreconf.
- >> 
- >> Tested using this defconfig:
- >> 
- >> BR2_TOOLCHAIN_BUILDROOT_CXX=y
- >> BR2_PACKAGE_LIBCURL=y
- >> BR2_PACKAGE_LINKNX=y
- >> 
- >> Configure log of linknx without this patch
- >> 
- >> checking for curl-config... /usr/bin/curl-config
- >> checking for the version of libcurl... 7.52.1
- >> checking for libcurl >= version 7.14.0... yes
- >> checking whether libcurl is usable... no
- >> 
- >> and with this patch
- >> 
- >> checking for
- >> curl-config... /home/buildroot/br4/output/host/i586-buildroot-linux-uclibc/sysroot/usr/bin/curl-config
- >> checking for the version of libcurl... 7.57.0
- >> checking for libcurl >= version 7.14.0... yes
- >> checking whether libcurl is usable... yes
- >> checking for curl_free... yes
- >> 
- >> Inspired by the fli4l project
- >> https://web.nettworks.org/repo/changelog/fli4l?cs=49347
- >> 
- >> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
- >> ---
- >> package/linknx/linknx.mk | 7 +++++++
- >> 1 file changed, 7 insertions(+)
+ > From: Yegor Yefremov <yegorslists@googlemail.com>
+ > Since uboot 2017.09 path to dtc will be configured via Kconfig. As BR
+ > skips this step for uboot-tools building one has to provide
+ > CONFIG_MKIMAGE_DTC_PATH=dtc on the build command line. Otherwise
+ > mkimage will not be able to create FIT images, i.e.:
+
+ > mkimage -f kernel-fit.its kernel-fit.itb
+
+ > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+ > ---
+ > Changes v1 -> v2:
+ >   - pass CONFIG_MKIMAGE_DTC_PATH=dtc on the build command line
+ >     instead of patching the Makefile (suggested by Thomas Petazzoni)
 
 Committed to 2017.11.x, thanks.
 
