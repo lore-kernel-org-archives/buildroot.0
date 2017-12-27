@@ -1,22 +1,24 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 27 Dec 2017 12:41:24 +0100
-Subject: [Buildroot] [PATCH] rsync: add security fix patches
-In-Reply-To: <17fb44f01e897a5d27a57582bd5b21d3cea030a2.1512665543.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Thu, 7 Dec 2017 18:52:23 +0200")
-References: <17fb44f01e897a5d27a57582bd5b21d3cea030a2.1512665543.git.baruch@tkos.co.il>
-Message-ID: <87d130s8ij.fsf@dell.be.48ers.dk>
+Date: Wed, 27 Dec 2017 12:42:15 +0100
+Subject: [Buildroot] [PATCH 1/1] package/ltp-testsuite: Fix build on
+ uClibc-ng
+In-Reply-To: <20171207172900.4758-1-petr.vorel@gmail.com> (Petr Vorel's
+ message of "Thu, 7 Dec 2017 18:29:00 +0100")
+References: <20171207172900.4758-1-petr.vorel@gmail.com>
+Message-ID: <878tdos8h4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+>>>>> "Petr" == Petr Vorel <petr.vorel@gmail.com> writes:
 
- > Fixes CVE-2017-17433 and CVE-2017-17434: remote bypass of security
- > restrictions.
-
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+ > Fixes: http://autobuild.buildroot.net/results/6c0506423c76b61018da26c2549570e3d9eb5763/
+ > Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+ > ---
+ > Fix from upstream
+ > https://github.com/linux-test-project/ltp/commit/0ee59c66f4e4930d543395fb8617e26cf8b22025
 
 Committed to 2017.11.x, thanks.
 
