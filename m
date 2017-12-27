@@ -1,20 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 27 Dec 2017 17:13:23 +0100
-Subject: [Buildroot] [PATCH 2/2] linux-headers: bump 4.{9, 14}.x series
-In-Reply-To: <1513272514-3427-2-git-send-email-festevam@gmail.com> (Fabio
- Estevam's message of "Thu, 14 Dec 2017 15:28:34 -0200")
-References: <1513272514-3427-1-git-send-email-festevam@gmail.com>
- <1513272514-3427-2-git-send-email-festevam@gmail.com>
-Message-ID: <87o9mkp2sc.fsf@dell.be.48ers.dk>
+Date: Wed, 27 Dec 2017 17:13:47 +0100
+Subject: [Buildroot] [PATCH 1/1] mariadb: security bump version to
+ 10.1.29
+In-Reply-To: <20171214174157.3354-1-bluemrp9@gmail.com> (Ryan Coe's message of
+ "Thu, 14 Dec 2017 09:41:57 -0800")
+References: <20171214174157.3354-1-bluemrp9@gmail.com>
+Message-ID: <87k1x8p2ro.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabio" == Fabio Estevam <festevam@gmail.com> writes:
+>>>>> "Ryan" == Ryan Coe <bluemrp9@gmail.com> writes:
 
- > Signed-off-by: Fabio Estevam <festevam@gmail.com>
+ > Release notes: https://mariadb.com/kb/en/mariadb-10129-release-notes/
+ > Changelog: https://mariadb.com/kb/en/mariadb-10129-changelog/
+
+ > Fixes the following security vulnerabilities:
+
+ > CVE-2017-10378 - Vulnerability in the MySQL Server component of Oracle MySQL
+ > (subcomponent: Server: Optimizer). Supported versions that are affected are
+ > 5.5.57 and earlier, 5.6.37 and earlier and 5.7.11 and earlier. Easily
+ > exploitable vulnerability allows low privileged attacker with network access
+ > via multiple protocols to compromise MySQL Server. Successful attacks of this
+ > vulnerability can result in unauthorized ability to cause a hang or frequently
+ > repeatable crash (complete DOS) of MySQL Server.
+
+ > CVE-2017-10268 - Vulnerability in the MySQL Server component of Oracle MySQL
+ > (subcomponent: Server: Replication). Supported versions that are affected are
+ > 5.5.57 and earlier, 5.6.37 and earlier and 5.7.19 and earlier. Difficult to
+ > exploit vulnerability allows high privileged attacker with logon to the
+ > infrastructure where MySQL Server executes to compromise MySQL Server.
+ > Successful attacks of this vulnerability can result in unauthorized access to
+ > critical data or complete access to all MySQL Server accessible data.
+
+ > Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
 
 Committed to 2017.11.x, thanks.
 
