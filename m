@@ -1,24 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 27 Dec 2017 10:31:50 +0100
-Subject: [Buildroot] [PATCH] package/asterisk: fix parallel install
-In-Reply-To: <20171201101805.8226-1-yann.morin.1998@free.fr> (Yann E. MORIN's
- message of "Fri, 1 Dec 2017 11:18:05 +0100")
-References: <20171201101805.8226-1-yann.morin.1998@free.fr>
-Message-ID: <87zi64tt2x.fsf@dell.be.48ers.dk>
+Date: Wed, 27 Dec 2017 10:35:51 +0100
+Subject: [Buildroot] [PATCH 1/1] package/tor: security bump to version
+ 0.3.1.9
+In-Reply-To: <20171201222403.5c1461f1@windsurf.lan> (Thomas Petazzoni's
+ message of "Fri, 1 Dec 2017 22:24:03 +0100")
+References: <20171201174603.14173-1-bernd.kuhls@t-online.de>
+ <20171201222403.5c1461f1@windsurf.lan>
+Message-ID: <87shbwtsw8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- > Fixes:
- >     http://autobuild.buildroot.org/results/7c92fb71d0aee211c8e0ef9d646da477fd97fb4c/
- >     http://autobuild.buildroot.org/results/2b8c810bd8775413fd4567b2f8495be70b7bb808/
- >     ...
+ > Hello,
+ > On Fri,  1 Dec 2017 18:46:03 +0100, Bernd Kuhls wrote:
+ >> Release notes:
+ >> https://blog.torproject.org/new-stable-tor-releases-security-fixes-0319-03013-02914-02817-02516
+ >> 
+ >> Fixes CVE-2017-8819, CVE-2017-8820, CVE-2017-8821, CVE-2017-8822
+ >> and CVE-2017-8823.
+ >> 
+ >> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ >> ---
+ >> package/tor/tor.hash | 2 +-
+ >> package/tor/tor.mk   | 2 +-
+ >> 2 files changed, 2 insertions(+), 2 deletions(-)
 
- > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Applied to master, thanks.
 
 Committed to 2017.11.x, thanks.
 
