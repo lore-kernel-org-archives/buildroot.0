@@ -1,35 +1,22 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 27 Dec 2017 12:40:23 +0100
-Subject: [Buildroot] [git commit branch/2017.11.x] linux-headers: bump 4.1.x
- series
-Message-ID: <20171227114858.2BB3583700@busybox.osuosl.org>
+Date: Wed, 27 Dec 2017 12:51:51 +0100
+Subject: [Buildroot] [PATCH] wireguard: bump version
+In-Reply-To: <20171211112014.15274-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Mon, 11 Dec 2017 12:20:14 +0100")
+References: <20171211112014.15274-1-peter@korsgaard.com>
+Message-ID: <87incsqtgo.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=09e903d947c20659c5a80538d09929bb74691979
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.11.x
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit ddfd34382804dcbe6f862e44ac8d20edcf951566)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/linux-headers/Config.in.host | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ > Various bugfixes, including a compat fix for <= 3.10.
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index fad5f06..49d567e 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -243,7 +243,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.4.113"	if BR2_KERNEL_HEADERS_3_4
- 	default "3.10.108"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.12.74"	if BR2_KERNEL_HEADERS_3_12
--	default "4.1.46"	if BR2_KERNEL_HEADERS_4_1
-+	default "4.1.47"	if BR2_KERNEL_HEADERS_4_1
- 	default "4.4.104"	if BR2_KERNEL_HEADERS_4_4
- 	default "4.9.67"	if BR2_KERNEL_HEADERS_4_9
- 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
+Committed to 2017.11.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
