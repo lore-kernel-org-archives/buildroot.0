@@ -1,53 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 27 Dec 2017 23:18:19 +0100
-Subject: [Buildroot] [git commit branch/2017.11.x] python-cffi: add missing
- runtime dependency
-Message-ID: <20171227223843.421E78376E@busybox.osuosl.org>
+Date: Wed, 27 Dec 2017 23:26:38 +0100
+Subject: [Buildroot] [git commit branch/2017.11.x] package/nodejs: security
+ bump to version 8.9.3
+Message-ID: <20171227223843.47CEF8376D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c3d6eab0bcbb08804369867f318b8bb632d19015
+commit: https://git.buildroot.net/buildroot/commit/?id=26d133e09cb8cff3d73aa742535a8b101b94c0e6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.11.x
 
-python-pycparser is mentioned in setup.py as install_requires, so
-select it in Config.in.
+See https://nodejs.org/en/blog/release/v8.9.3/
 
-As python-cffi will be installed with python-crossbar's dependencies,
-remove it from python-crossbar's Config.in.
+[Peter: mention that this fixes security issues]
+Signed-off-by: Martin Bark <martin@barkynet.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit a24153a73fc13fb580aa7fcf3c58745ad69e5f8e)
+(cherry picked from commit 380c3d5e4067fcd0d551890083dc83edd6b8a055)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-cffi/Config.in     | 1 +
- package/python-crossbar/Config.in | 1 -
- 2 files changed, 1 insertion(+), 1 deletion(-)
+ package/nodejs/nodejs.hash | 4 ++--
+ package/nodejs/nodejs.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-cffi/Config.in b/package/python-cffi/Config.in
-index 3805d3d..bc9f6a2 100644
---- a/package/python-cffi/Config.in
-+++ b/package/python-cffi/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_PYTHON_CFFI
- 	bool "python-cffi"
- 	select BR2_PACKAGE_LIBFFI
-+	select BR2_PACKAGE_PYTHON_PYCPARSER # runtime
- 	help
- 	  This is the Foreign Function Interface for Python calling C
- 	  code. The aim of this project is to provide a convenient
-diff --git a/package/python-crossbar/Config.in b/package/python-crossbar/Config.in
-index faec922..2a98467 100644
---- a/package/python-crossbar/Config.in
-+++ b/package/python-crossbar/Config.in
-@@ -5,7 +5,6 @@ config BR2_PACKAGE_PYTHON_CROSSBAR
- 	select BR2_PACKAGE_PYTHON_AUTOBAHN
- 	select BR2_PACKAGE_PYTHON_CBOR
- 	select BR2_PACKAGE_PYTHON_CLICK
--	select BR2_PACKAGE_PYTHON_PYCPARSER
- 	select BR2_PACKAGE_PYTHON_CRYPTOGRAPHY
- 	select BR2_PACKAGE_PYTHON_JINJA2
- 	select BR2_PACKAGE_PYTHON_LMDB
+diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
+index 658f80b..ae50faf 100644
+--- a/package/nodejs/nodejs.hash
++++ b/package/nodejs/nodejs.hash
+@@ -1,2 +1,2 @@
+-# From http://nodejs.org/dist/v8.9.1/SHASUMS256.txt
+-sha256 ef160c21f60f8aca64145985e01b4044435e381dc16e8f0640ed0223e84f17e0  node-v8.9.1.tar.xz
++# From http://nodejs.org/dist/v8.9.3/SHASUMS256.txt
++sha256 748ddb3baa6b85e6a56e38aacd066586e7581952f84a92bc8152248a9be6b2da  node-v8.9.3.tar.xz
+diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+index 9cf26da..4c1deb1 100644
+--- a/package/nodejs/nodejs.mk
++++ b/package/nodejs/nodejs.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-NODEJS_VERSION = 8.9.1
++NODEJS_VERSION = 8.9.3
+ NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.xz
+ NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
+ NODEJS_DEPENDENCIES = host-python host-nodejs c-ares \
