@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 28 Dec 2017 22:32:38 +0100
-Subject: [Buildroot] [PATCH v9 8/8] cargo: new package
-In-Reply-To: <20171228155146.18193-9-eric.le.bihan.dev@free.fr>
+Date: Thu, 28 Dec 2017 22:36:29 +0100
+Subject: [Buildroot] [PATCH v9 0/8] Add support for the Rust programming
+In-Reply-To: <20171228175256.GA24806@ned>
 References: <20171228155146.18193-1-eric.le.bihan.dev@free.fr>
- <20171228155146.18193-9-eric.le.bihan.dev@free.fr>
-Message-ID: <20171228223238.69698252@windsurf>
+ <20171228172129.3dd0acdc@windsurf.home>
+ <20171228175256.GA24806@ned>
+Message-ID: <20171228223629.0fd45695@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,152 +14,33 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 28 Dec 2017 16:51:46 +0100, Eric Le Bihan wrote:
-> This new package provides Cargo, the Rust official package manager.
-> Cargo is written in Rust and uses Cargo as its build system. It also
-> depends on other Rust packages.
-> 
-> Normally, a previously installed version of Cargo would be used to:
-> 
->  1. Fetch the dependencies.
->  2. Build the new version of Cargo, using the available Rust compiler.
-> 
-> But the fetching step prevents offline builds. So instead two features
-> of Cargo are levelled: vendoring [1] and local registry.
+On Thu, 28 Dec 2017 18:52:56 +0100, Eric Le Bihan wrote:
 
-Did you want to say "leveraged" instead of "levelled" ?
+> Yes, this is correct. The introduction of a virtual package for the Rust
+> compiler was suggested in the mail thread about version v4 of this
+> series [1], as building the compiler from source takes time and using the
+> available pre-built version would speed things up (as done for GCC).
 
-> diff --git a/package/cargo/Config.in.host b/package/cargo/Config.in.host
-> new file mode 100644
-> index 0000000000..0f1ca305c6
-> --- /dev/null
-> +++ b/package/cargo/Config.in.host
-> @@ -0,0 +1,8 @@
-> +config BR2_PACKAGE_HOST_CARGO
-> +	bool "host cargo"
-> +	depends on BR2_PACKAGE_HAS_HOST_RUSTC
-> +	help
-> +	  Cargo is the package manager for the Rust programming
-> +	  language.
-> +
-> +	  https://crates.io/
+OK, thanks for the additional explanation, makes sense.
 
-How would "host cargo" be used in the context of Buildroot ? Would it
-be used by packages that are written in Rust as part of their build
-process ? What would such packages look like ?
+I reviewed the different patches in your series, and I think it's
+really close to a state where it can be merged. If you can take care of
+the few comments/questions in the near future, it would definitely
+help, as I would still have the context in mind.
 
-> diff --git a/package/cargo/cargo.hash b/package/cargo/cargo.hash
-> new file mode 100644
-> index 0000000000..2b2ae43f6b
-> --- /dev/null
-> +++ b/package/cargo/cargo.hash
-> @@ -0,0 +1,4 @@
-> +# Locally generated
-> +sha256 f4bbe2a8719dbb8da20842235093f7f70f034d01633189e83f75897d68cd274f  cargo-0.23.0.tar.gz
-> +sha512 9060ec6e67b54f7fad7da8dd8450dd051d62b3f8ed4606196fc238a98beba1c3b43087c787f35d012d9b641c8572e70f50b95b0e01fdd75ed82932b6e6efbbf0  cargo-0.23.0-vendor.tar.xz
-> +sha256 dc7240d60a869fa24a68c8734fb7c810c27cca0a6dad52df6279865e4e8e7fae  rust-installer-4f994850808a572e2cc8d43f968893c8e942e9bf.tar.gz
+Two other things that would be nice to do is:
 
-Why are you using sha256 sometimes, and sha512 sometimes? Seems like
-for the cargo-0.23.0-vendor tarball, the hash is not exactly locally
-generated, but really comes from upstream.
+ - Add two test cases in support/testing/. One that builds a system with
+   rust-bin, builds a hello world program in Rust, and run it on the
+   target. And another that does the same, but by building the rust
+   compiler from source. Perhaps additional test cases can be added for
+   Cargo, but I'm not sure how it's supposed to be used.
 
-> +HOST_CARGO_DEPENDENCIES = \
-> +	host-cmake \
+ - Add a short section in the documentation that explains how the Rust
+   support in Buildroot is working. This would help people trying to do
+   stuff with Rust to understand how things work.
 
-Do you need host-cmake absolutely here, or can you use
-$(BR2_CMAKE_HOST_DEPENDENCY) instead ?
-
-> +	host-pkgconf \
-> +	host-openssl \
-> +	host-libhttpparser \
-> +	host-libssh2 \
-> +	host-libcurl \
-> +	host-rustc \
-> +	host-cargo-bin
-> +
-> +HOST_CARGO_SNAP_BIN = $(HOST_CARGO_BIN_DIR)/cargo/bin/cargo
-> +HOST_CARGO_HOME = $(HOST_DIR)/share/cargo
-> +
-> +define HOST_CARGO_EXTRACT_DEPS
-> +	@mkdir -p $(@D)/vendor
-> +	$(call suitable-extractor,$(CARGO_DEPS_SOURCE)) \
-> +		$(DL_DIR)/$(CARGO_DEPS_SOURCE) | \
-> +		$(TAR) --strip-components=1 -C $(@D)/vendor $(TAR_OPTIONS) -
-> +endef
-> +
-> +HOST_CARGO_POST_EXTRACT_HOOKS += HOST_CARGO_EXTRACT_DEPS
-> +
-> +define HOST_CARGO_EXTRACT_INSTALLER
-> +	@mkdir -p $(@D)/src/rust-installer
-> +	$(call suitable-extractor,$(CARGO_INSTALLER_SOURCE)) \
-> +		$(DL_DIR)/$(CARGO_INSTALLER_SOURCE) | \
-> +		$(TAR) --strip-components=1 -C $(@D)/src/rust-installer $(TAR_OPTIONS) -
-> +endef
-> +
-> +HOST_CARGO_POST_EXTRACT_HOOKS += HOST_CARGO_EXTRACT_INSTALLER
-> +
-> +define HOST_CARGO_SETUP_DEPS
-> +	mkdir -p $(@D)/.cargo
-> +	( \
-> +		echo "[source.crates-io]"; \
-> +		echo "registry = 'https://github.com/rust-lang/crates.io-index'"; \
-> +		echo "replace-with = 'vendored-sources'"; \
-> +		echo "[source.vendored-sources]"; \
-> +		echo "directory = '$(@D)/vendor'"; \
-> +	) > $(@D)/.cargo/config
-> +endef
-> +
-> +HOST_CARGO_PRE_CONFIGURE_HOOKS += HOST_CARGO_SETUP_DEPS
-> +
-> +HOST_CARGO_SNAP_OPTS = --release
-> +HOST_CARGO_SNAP_OPTS += $(if $(VERBOSE),--verbose)
-
-A single assignment would be prettier:
-
-HOST_CARGO_SNAP_OPTS = \
-	--release \
-	$(if $(VERBOSE),--verbose)
-
-> +HOST_CARGO_ENV = \
-> +	RUSTFLAGS="-Clink-arg=-Wl,-rpath,$(HOST_DIR)/lib" \
-> +	CARGO_HOME=$(HOST_DIR)/share/cargo
-
-Why don't you use $(HOST_CARGO_HOME) here ?
-
-> +define HOST_CARGO_BUILD_CMDS
-> +	(cd $(@D); $(HOST_MAKE_ENV) $(HOST_CARGO_ENV) $(HOST_CARGO_SNAP_BIN) \
-> +		build $(HOST_CARGO_SNAP_OPTS))
-> +endef
-> +
-> +define HOST_CARGO_INSTALL_CMDS
-> +	$(INSTALL) -d -m 0755 $(HOST_DIR)/bin
-
-This is not needed, just use the -D option in the command command
-installing the cargo binary.
-
-> +	$(INSTALL) -m 0755 $(@D)/target/release/cargo $(HOST_DIR)/bin/cargo
-> +endef
-> +
-> +define HOST_CARGO_INSTALL_CONF_FILE
-> +	$(INSTALL) -D package/cargo/config.in \
-> +		$(HOST_DIR)/share/cargo/config
-> +	$(SED) 's/@RUST_TARGET_NAME@/$(RUST_TARGET_NAME)/' \
-> +		$(HOST_DIR)/share/cargo/config
-> +	$(SED) 's/@CROSS_PREFIX@/$(notdir $(TARGET_CROSS))/' \
-> +		$(HOST_DIR)/share/cargo/config
-
-This should be moved inside HOST_CARGO_INSTALL_CMDS, there is no need
-for a separate post-install hook.
-
-Also, I'm wondering of your choice between generating config files from
-the .mk file, or having a template that gets tweaked using SED. In this
-cargo.mk, you are producing a 5 lines file in HOST_CARGO_SETUP_DEPS
-where only a single value varies (and would need to be tweaked with
-sed). But on the other hand, you create a two lines share/cargo/config
-file from a template. Perhaps we should settle on one or the other
-solution ?
-
-Best regards,
+Thanks!
 
 Thomas
 -- 
