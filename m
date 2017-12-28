@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 28 Dec 2017 22:57:43 +0100
-Subject: [Buildroot] [PATCH] libostree: add patch to fix compilation
- error
-In-Reply-To: <20171221231959.31974-1-marcus.folkesson@gmail.com>
-References: <20171221231959.31974-1-marcus.folkesson@gmail.com>
-Message-ID: <20171228225743.60a1fd60@windsurf>
+Date: Thu, 28 Dec 2017 23:07:43 +0100
+Subject: [Buildroot] [PATCH 1/1 v2] gcc: Add support for
+ --enable-default-pie configure option.
+In-Reply-To: <20171228214333.8340-1-stefan.froberg@petroprogram.com>
+References: <20171228214333.8340-1-stefan.froberg@petroprogram.com>
+Message-ID: <20171228230743.1e6c59ab@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,27 +13,35 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 22 Dec 2017 00:19:59 +0100, Marcus Folkesson wrote:
-> Fix the following compilation error:
-> src/libostree/ostree-repo-pull.c:1493:1: error: no previous prototype
-> for '_ostree_repo_verify_bindings' [-Werror=missing-prototypes]
+On Thu, 28 Dec 2017 23:43:33 +0200, Stefan Fr?berg wrote:
+> By default, buildroot produces insecure binaries.
 > 
-> The patch is submitted upstreams (8d3d14503b3105f93db635022e881e02688f2db4)
-> and should be removed in the next version bump.
+> GCC 6.x added build time configuration option "--enable-default-pie".
+> With that enabled, GCC will produce PIE 
+> (Position-independent executables) binaries.
 > 
-> Fixes:
-> http://autobuild.buildroot.net/results/3fc91565cb2d0fabe566c109257a616bd57cb08c
+> PIE is a requirement for ASLR (Address space layout randomization)
+> that will make exploits like return-to-libc attack impossible. 
 > 
-> Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
-> ---
->  ...llways-include-ostree-repo-pull-private.h.patch | 37 ++++++++++++++++++++++
->  1 file changed, 37 insertions(+)
->  create mode 100644 package/libostree/0001-lib-pull-allways-include-ostree-repo-pull-private.h.patch
+> If you want to have a modern, secure system then enable this option.
+> 
+> To override this default behaviour, you can use -no-pie
+> with your CFLAGS/CXXFLAGS.
+> 
+> https://gcc.gnu.org/onlinedocs/gcc-6.2.0/gcc/Link-Options.html
 
-Applied to master, thanks.
+As I said in my previous review, I think we want a solution that also
+applies to external toolchains, by passing -pie in the compiler wrapper.
+
+Please see "[PATCH 2/2] security hardening: add RELFO,  FORTIFY
+options" in the mailing list archives,
+https://patchwork.ozlabs.org/patch/830085/, it was also adding -pie
+support, but in a more generic way. Could you use this instead ?
+
+Thanks!
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
