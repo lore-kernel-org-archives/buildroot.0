@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 28 Dec 2017 23:21:23 +0100
-Subject: [Buildroot] [PATCH v4 1/2] meson: new package
-In-Reply-To: <20171029131052.18850-2-eric.le.bihan.dev@free.fr>
+Date: Thu, 28 Dec 2017 23:22:10 +0100
+Subject: [Buildroot] [PATCH v4 2/2] docs/manual: document meson-based
+ packages
+In-Reply-To: <20171029131052.18850-3-eric.le.bihan.dev@free.fr>
 References: <20171029131052.18850-1-eric.le.bihan.dev@free.fr>
- <20171029131052.18850-2-eric.le.bihan.dev@free.fr>
-Message-ID: <20171228232123.66ee58c0@windsurf>
+ <20171029131052.18850-3-eric.le.bihan.dev@free.fr>
+Message-ID: <20171228232210.5dda9865@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,37 +14,27 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 29 Oct 2017 14:10:51 +0100, Eric Le Bihan wrote:
-> This new package provides the host variant of the Meson Build System, an
-> open source build system meant to be both extremely fast, and as user
-> friendly as possible.
-> 
-> More precisely, Meson creates configuration files for the Ninja build
-> system.
-> 
-> Besides building Meson, it generates a configuration file
-> ("$(HOST_DIR)/etc/meson/cross-compilation.conf") to be used when
-> cross-compiling a Meson-based project.
+On Sun, 29 Oct 2017 14:10:52 +0100, Eric Le Bihan wrote:
+> Add instructions for adding a package which uses the Meson build system.
 > 
 > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 > Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-> ---
->  package/meson/cross-compilation.conf.in | 23 ++++++++++++++++++++++
->  package/meson/meson.hash                |  3 +++
->  package/meson/meson.mk                  | 35 +++++++++++++++++++++++++++++++++
->  3 files changed, 61 insertions(+)
->  create mode 100644 package/meson/cross-compilation.conf.in
->  create mode 100644 package/meson/meson.hash
->  create mode 100644 package/meson/meson.mk
 
-Applied to master after adding an entry to the DEVELOPERS file. It
-would be nice to quickly have a package that uses this, as right now
-host-meson is not used anywhere.
+I've applied to the master branch, after adding an entry in the
+DEVELOPERS file. I also have one comment/question below.
 
-Thanks a lot!
+
+> +27: define FOO_CONFIGURE_CMDS
+> +28: 	rm -rf $(@D)/build
+> +29: 	mkdir -p $(@D)/build
+
+Is this really needed? It's not really nice to have to do this. But
+perhaps meson really insists in having an empty build directory ?
+
+Thanks!
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
