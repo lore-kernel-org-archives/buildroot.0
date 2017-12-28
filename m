@@ -1,107 +1,69 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 28 Dec 2017 20:01:59 +0200
-Subject: [Buildroot] [RFC 0/2] Handle conflicting files with Busybox
-In-Reply-To: <20171228172030.GF3428@scaer>
-References: <20171213130131.15744-1-thomas.petazzoni@free-electrons.com>
- <20171228170017.GE3428@scaer>
- <20171228180412.34c81ce2@windsurf.home>
- <20171228172030.GF3428@scaer>
-Message-ID: <20171228180159.ffefqkowcxhegl7g@tarshish>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Thu, 28 Dec 2017 19:04:03 +0100
+Subject: [Buildroot] systemd: build failure against pam on arm
+In-Reply-To: <87o9mkdlf1.fsf@paral.in>
+References: <873741w59p.fsf@paral.in>
+ <20171224120957.GY27558@waldemar-brodkorb.de>
+ <87po73d1xz.fsf@paral.in>
+ <20171225151337.GC27558@waldemar-brodkorb.de>
+ <87mv25cg5t.fsf@paral.in> <87shbxq99x.fsf@paral.in>
+ <20171227030548.GE27558@waldemar-brodkorb.de>
+ <87y3loenlr.fsf@paral.in>
+ <20171227080520.GF27558@waldemar-brodkorb.de>
+ <87o9mkdlf1.fsf@paral.in>
+Message-ID: <20171228180402.GR27558@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+Hi Christian,
+Christian Stewart wrote,
 
-On Thu, Dec 28, 2017 at 06:20:30PM +0100, Yann E. MORIN wrote:
-> On 2017-12-28 18:04 +0100, Thomas Petazzoni spake thusly:
-> > Thanks for the feedback.
-> > 
-> > On Thu, 28 Dec 2017 18:00:17 +0100, Yann E. MORIN wrote:
-> > 
-> > > > This RFC series is an attempt at solving this problem for Busybox. I
-> > > > have not fixed all packages yet: since it is a very boring task to do,
-> > > > I wanted to first get some feedback on whether the approach looks
-> > > > reasonable or not.
-> > > > 
-> > > > If the feedback is positive, I'll go ahead and submit proper patches
-> > > > that fix all packages that conflict with Busybox.  
-> > > 
-> > > As I previously said on IRC: I do not much like the big list we will now
-> > > have to maintain; that's sad...
-> > 
-> > Even though I agree it's not nice to maintain, I think it's unavoidable
-> > if we want to solve the overwriting issue.
+> Sure. To make things less ambiguous, here is exactly what I did to produce
+> these new results in this email:
 > 
-> So that we are on the same line: I do agree with the underlying reason
-> for the change, yes. I'm just trying to see if there are better ways to
-> go with that.
+>  $ cd ~/Documents
+>  $ git clone git://git.busybox.net/buildroot buildroot
+>  $ cd buildroot && git checkout 2017.11
+>  $ cp ~/Notes/buildroot-pam/defconfig ./defconfig
+>  $ make defconfig BR2_DEFCONFIG=defconfig
+>  $ make # build fails on systemd
+>  $ rm -rf output/build/systemd*
+>  $ make V=1 BR2_JOBS=1 &>systemd-fail.log
+>  $ tar -cvf systemd-fail.tar.gz ./output/build/systemd*
 > 
-> > > However, I like the fact that we can get rid of the many dependencies in
-> > > so many packages here and there. :-)
-> > > 
-> > > What I would have suggested, though, is to do what Baruch hinted at: use
-> > > the noclobber install of Busybox, and then have Busybox depend on all
-> > > the packages it provides applets for:
-> > > 
-> > >     BUSYBOX_DEPENDENCIES = \
-> > >         $(if $(BR2_PACKAGE_COREUTILS),coreutils) \
-> > >         $(if $(BR2_PACKAGE_util_LINUX),util-linux) \
-> > >         etc...
-> > > 
-> > > But unfortunately, the noclobber install option is not usable:
-> > > 
-> > >   - first, there is no way to cause a noclobber install;
-> > > 
-> > >   - second, the noclobber is not accounted for in the case shell
-> > >     wrappers are used.
-> > > 
-> > > So, I'm afraid we don't have much choice but to do as your series
-> > > does...
-> > 
-> > There is however one remaining debate: my patch series tweaks the
-> > Busybox configuration to not build the support for applets for which
-> > the functionality is provided by a full-featured program. But Baruch
-> > didn't like this tweaking of the Busybox configuration, and would
-> > prefer to not install the symlinks, and leave the Busybox configuration
-> > unchanged (which means we have lots of Busybox applets built into
-> > Busybox that are not really used on the target).
-> > 
-> > Do you have an opinion on this specific topic ?
+> > Can you do rm -rf output/build/systemd* && make V=1 &>log
+> > And sent me the log and the systemd build directory for post-mortem
+> > analysis.
 > 
-> I prefer they be explicitly disabled as you did.
-
-As I said earlier, I don't like this heavy handed modification of the Busybox 
-configuration. I'm not sure how robust this solution would be, as there might 
-be unintended consequences. Kconfig 'select' and 'depends' contribute to that. 
-I prefer to keep config modifications to minimum.
-
-> First, because this is a security issue that there is dead code: these
-> applets are still usable by calling 'busybox foo' for example, and that
-> is a security issue.
-
-That is no different than the current behaviour.
-
-> Second, yes it gains a bit of space. But that is not so compelling,
-> becasue if you already have the big buddies enabled, a few kB lost
-> inBusybox is not that much of a burden anyway...
-
-I agree.
-
-> > Another question is whether we want to have this logic centralized in
-> > busybox.mk, or spread into the packages that provide the full-featured
-> > variants of the applets ? The latter may have some variable definition
-> > ordering issues though.
+> Attached are defconfig and systemd-fail.log. The archive is too big, so
+> I uploaded it to Google Drive, available here:
 > 
-> Please leave it centralised in busybox.mk.
+> https://drive.google.com/a/aperturerobotics.com/file/d/1Sxq-5smjUFntRCe0o9zIYs6_--dxjjGA/view?usp=sharing
+> 
+> Thank you again for taking the time to debug this, I've had this issue
+> early 2017 and have avoided upgrading Buildroot until we find a fix.
 
-I agree here as well.
+Sorry I believe you entered the world of libtool hell.
 
-baruch
+For the hardcore buildroot hackers, if you create a symlink in /lib
+pointing to libpam.so / libpam_misc.so you can reproduce the issue.
 
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+By the way, I couldn't reproduce the issue with OpenADK.
+Unfortunately I can't point to a specific patch. 
+I always pass -Wl,-rpath-link -Wl,$(STAGING_DIR)/usr/lib in
+LDFLAGS and I always remove any .la files from staging directory.
+
+I do not patch the package provided ltmain.sh/libtool stuff like
+Buildroot, but I always use libtool 2.4.6 with a small patch 
+like this when autoreconfing a package:
++++ libtool-2.4.6/m4/libtool.m4
+-  _LT_TAGVAR(hardcode_automatic, $1)=no
++  _LT_TAGVAR(hardcode_automatic, $1)=yes
+ 
+So sorry, I can't help you out of the hell.
+
+best regards
+ Waldemar
