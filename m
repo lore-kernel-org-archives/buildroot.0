@@ -1,469 +1,110 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Thu, 28 Dec 2017 14:27:19 -0500
-Subject: [Buildroot] [PATCH 2/4] ODB: New package
+Date: Thu, 28 Dec 2017 14:27:21 -0500
+Subject: [Buildroot] [PATCH 4/4] libodb-pgsql: new package
 In-Reply-To: <20171228192721.18494-1-Adamduskett@outlook.com>
 References: <20171228192721.18494-1-Adamduskett@outlook.com>
-Message-ID: <20171228192721.18494-3-Adamduskett@outlook.com>
+Message-ID: <20171228192721.18494-5-Adamduskett@outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-ODB is an open-source, cross-platform, and cross-database object-relational
-mapping (ORM) system for C++. It allows you to persist C++ objects to a
-relational database without having to deal with tables, columns, or SQL and
-without manually writing any mapping code.
-
-ODB supports MySQL, SQLite, PostgreSQL, Oracle, and Microsoft SQL
-Server relational databases as well as C++98/03 and C++11 language
-standards. It also comes with optional profiles for Boost and Qt
-which allow you to seamlessly use value types, containers, and smart
-pointers from these libraries in your persistent C++ classes.
-
-This package is used for auto-generating ODB specific header files into useable
-code that can be linked against a seperate libodb and a specific libodb
-database library.  As such, it is only needed as a host program and is not user
-selectable.
+This package contains the PostgreSQL ODB runtime library. Every application
+that includes code generated for the PostgreSQL database will need to link to
+this library.
 
 Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
 ---
- DEVELOPERS                                         |   1 +
- .../odb/0001-make-ODB-compatible-with-GCC-6.patch  | 327 +++++++++++++++++++++
- ...x-bug-in-GCC-6-input_location-translation.patch |  37 +++
- package/odb/odb.hash                               |   6 +
- package/odb/odb.mk                                 |  20 ++
- 5 files changed, 391 insertions(+)
- create mode 100644 package/odb/0001-make-ODB-compatible-with-GCC-6.patch
- create mode 100644 package/odb/0002-Fix-bug-in-GCC-6-input_location-translation.patch
- create mode 100644 package/odb/odb.hash
- create mode 100644 package/odb/odb.mk
+ DEVELOPERS                             |  1 +
+ package/Config.in                      |  1 +
+ package/libodb-pgsql/Config.in         | 15 +++++++++++++++
+ package/libodb-pgsql/libodb-pgsql.hash |  6 ++++++
+ package/libodb-pgsql/libodb-pgsql.mk   | 16 ++++++++++++++++
+ 5 files changed, 39 insertions(+)
+ create mode 100644 package/libodb-pgsql/Config.in
+ create mode 100644 package/libodb-pgsql/libodb-pgsql.hash
+ create mode 100644 package/libodb-pgsql/libodb-pgsql.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index a3d00ef892..f9e25f853c 100644
+index ca28d0be50..eb67a6a023 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -49,6 +49,7 @@ F:	package/libselinux/
+@@ -45,6 +45,7 @@ F:	package/imx-usb-loader/
+ F:	package/janus-gateway/
+ F:	package/libcutl/
+ F:	package/libodb/
++F:	package/libodb-pgsql/
+ F:	package/libressl/
+ F:	package/libselinux/
  F:	package/libsemanage/
- F:	package/libsepol/
- F:	package/nginx-naxsi/
-+F:	package/odb/
- F:	package/policycoreutils/
- F:	package/python-mutagen/
- F:	package/restorecond/
-diff --git a/package/odb/0001-make-ODB-compatible-with-GCC-6.patch b/package/odb/0001-make-ODB-compatible-with-GCC-6.patch
+diff --git a/package/Config.in b/package/Config.in
+index c7b80af455..0a8f04af13 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1060,6 +1060,7 @@ menu "Database"
+ 	source "package/hiredis/Config.in"
+ 	source "package/kompexsqlite/Config.in"
+ 	source "package/leveldb/Config.in"
++	source "package/libodb-pgsql/Config.in"
+ 	source "package/libpqxx/Config.in"
+ 	source "package/mongodb/Config.in"
+ 	source "package/mysql/Config.in"
+diff --git a/package/libodb-pgsql/Config.in b/package/libodb-pgsql/Config.in
 new file mode 100644
-index 0000000000..06f71ed21d
+index 0000000000..28a17a7cee
 --- /dev/null
-+++ b/package/odb/0001-make-ODB-compatible-with-GCC-6.patch
-@@ -0,0 +1,327 @@
-+From 511dcf67322ad87fb32f97d1cf7725c129e83898 Mon Sep 17 00:00:00 2001
-+From: Boris Kolpackov <boris@codesynthesis.com>
-+Date: Fri, 5 Feb 2016 16:01:42 +0200
-+Subject: [PATCH] make ODB compatible with GCC 6
++++ b/package/libodb-pgsql/Config.in
+@@ -0,0 +1,16 @@
++config BR2_PACKAGE_LIBODB_PGSQL
++	bool "libodb-pgsql"
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_PACKAGE_POSTGRESQL
++	select BR2_PACKAGE_LIBODB
++	help
++	  This package contains the PostgreSQL ODB runtime library.
++	  Every application that includes code generated for the
++	  PostgreSQL database will need to link to this library.
 +
-+From:
-+http://dl.fedoraproject.org/pub/fedora/linux/releases/26/Everything/source/tree/Packages/o/odb-2.4.0-19.fc26.src.rpm
++	  https://www.codesynthesis.com/products/odb/
 +
-+Original author: Boris Kolpackov <boris@codesynthesis.com>
-+Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
-+---
-+ odb/cxx-lexer.cxx          |  4 ++++
-+ odb/gcc-fwd.hxx            | 23 ++++++++++++++++++++++-
-+ odb/gcc.hxx                | 13 +++++++++++++
-+ odb/include.cxx            | 31 +++++++++++++++++++++----------
-+ odb/parser.cxx             | 10 ++++++----
-+ odb/plugin.cxx             | 29 +++++++++++++++++++++++++++--
-+ odb/semantics/elements.cxx |  4 ++--
-+ 7 files changed, 95 insertions(+), 19 deletions(-)
-+
-+diff --git a/odb/cxx-lexer.cxx b/odb/cxx-lexer.cxx
-+index 7029c7e..64df296 100644
-+--- a/odb/cxx-lexer.cxx
-++++ b/odb/cxx-lexer.cxx
-+@@ -135,8 +135,12 @@ cpp_error_callback (
-+ #if BUILDING_GCC_MAJOR > 4 || BUILDING_GCC_MAJOR == 4 && BUILDING_GCC_MINOR > 5
-+   int /*reason*/, // Added in GCC 4.6.0.
-+ #endif
-++#if BUILDING_GCC_MAJOR <= 5
-+   location_t,
-+   unsigned int,
-++#else
-++  rich_location*,
-++#endif
-+   char const* msg,
-+   va_list *ap)
-+ {
-+diff --git a/odb/gcc-fwd.hxx b/odb/gcc-fwd.hxx
-+index a120f05..618b106 100644
-+--- a/odb/gcc-fwd.hxx
-++++ b/odb/gcc-fwd.hxx
-+@@ -7,6 +7,24 @@
-+ 
-+ #include <bversion.h>
-+ 
-++#if BUILDING_GCC_MAJOR >= 6
-++
-++// If we include <system.h> here, it pulls in all kinds of GCC trouble that
-++// "poisons" standard C/C++ declarations; see safe-ctype.h. So instead we
-++// are going to "exclude" safe-ctype.h. To compensate, however, we will
-++// include it first thing in gcc.hxx.
-++//
-++#  include <config.h>
-++#  define SAFE_CTYPE_H
-++#  include <system.h>
-++#  undef SAFE_CTYPE_H
-++#  include <coretypes.h>
-++
-++typedef unsigned int source_location; // <line-map.h>
-++typedef source_location location_t;   // <input.h>
-++
-++#else // GCC < 6
-++
-+ #if BUILDING_GCC_MAJOR > 4 || BUILDING_GCC_MAJOR == 4 && BUILDING_GCC_MINOR > 8
-+ #  include <limits.h> // CHAR_BIT
-+ #  include <config.h>
-+@@ -33,6 +51,9 @@ extern "C"
-+ 
-+ typedef unsigned int source_location; // <line-map.h>
-+ typedef source_location location_t;   // <input.h>
-+-}
-++
-++} // extern "C"
-++
-++#endif
-+ 
-+ #endif // ODB_GCC_FWD_HXX
-+diff --git a/odb/gcc.hxx b/odb/gcc.hxx
-+index 504b59b..f91db49 100644
-+--- a/odb/gcc.hxx
-++++ b/odb/gcc.hxx
-+@@ -7,6 +7,13 @@
-+ 
-+ #include <odb/gcc-fwd.hxx>
-+ 
-++// Actually, let's keep it out. With it included we can compile in C++98
-++// but not in C++14 (GCC 6 default).
-++//
-++// #if BUILDING_GCC_MAJOR >= 6
-++// #  include <safe-ctype.h> // See gcc-fwd.hxx.
-++// #endif
-++
-+ // GCC header includes to get the plugin and parse tree declarations.
-+ // The order is important and doesn't follow any kind of logic.
-+ //
-+@@ -147,4 +154,10 @@ gcc_tree_code_name (gcc_tree_code_type tc) {return tree_code_name[tc];}
-+ #define DECL_CHAIN(x) TREE_CHAIN(x)
-+ #endif
-+ 
-++// In GCC 6, ANON_AGGRNAME_P became anon_aggrname_p().
-++//
-++#if BUILDING_GCC_MAJOR < 6
-++#  define anon_aggrname_p(X) ANON_AGGRNAME_P(X)
-++#endif
-++
-+ #endif // ODB_GCC_HXX
-+diff --git a/odb/include.cxx b/odb/include.cxx
-+index c397993..08c93ce 100644
-+--- a/odb/include.cxx
-++++ b/odb/include.cxx
-+@@ -30,9 +30,18 @@ namespace
-+     path path_;
-+   };
-+ 
-++#if BUILDING_GCC_MAJOR >= 6
-++  typedef line_map_ordinary line_map_type;
-++#else
-++  typedef line_map line_map_type;
-++# ifndef linemap_check_ordinary
-++#   define linemap_check_ordinary(X) (X)
-++# endif
-++#endif
-++
-+   struct includes
-+   {
-+-    typedef std::map<line_map const*, include_directive> map_type;
-++    typedef std::map<line_map_type const*, include_directive> map_type;
-+     bool trailing; // Included at the beginning or at the end of the main file.
-+     map_type map;
-+   };
-+@@ -144,7 +153,9 @@ namespace
-+       //
-+       if (l > BUILTINS_LOCATION)
-+       {
-+-        line_map const* lm (linemap_lookup (line_table, l));
-++        line_map_type const* lm (
-++          linemap_check_ordinary (
-++            linemap_lookup (line_table, l)));
-+ 
-+         if (lm != 0 && !MAIN_FILE_P (lm))
-+         {
-+@@ -537,20 +548,20 @@ namespace
-+     //
-+ #if BUILDING_GCC_MAJOR == 4 && BUILDING_GCC_MINOR <= 6
-+     size_t used (line_table->used);
-+-    line_map const* maps (line_table->maps);
-++    line_map_type const* maps (line_table->maps);
-+ #else
-+     size_t used (line_table->info_ordinary.used);
-+-    line_map const* maps (line_table->info_ordinary.maps);
-++    line_map_type const* maps (line_table->info_ordinary.maps);
-+ #endif
-+ 
-+     for (size_t i (0); i < used; ++i)
-+     {
-+-      line_map const* m (maps + i);
-++      line_map_type const* m (maps + i);
-+ 
-+       if (MAIN_FILE_P (m) || m->reason != LC_ENTER)
-+         continue;
-+ 
-+-      line_map const* ifm (INCLUDED_FROM (line_table, m));
-++      line_map_type const* ifm (INCLUDED_FROM (line_table, m));
-+ 
-+ #if BUILDING_GCC_MAJOR == 4 && BUILDING_GCC_MINOR <= 6
-+       path f (m->to_file);
-+@@ -580,7 +591,7 @@ namespace
-+       for (includes::iterator j (i->second.begin ());
-+            j != i->second.end (); ++j)
-+       {
-+-        line_map const* lm (j->first);
-++        line_map_type const* lm (j->first);
-+         cerr << '\t' << lm->to_file << ":" << LAST_SOURCE_LINE (lm) << endl;
-+       }
-+       */
-+@@ -589,13 +600,13 @@ namespace
-+       // it is preferred over all others. Use the first one if there are
-+       // several.
-+       //
-+-      line_map const* main_lm (0);
-++      line_map_type const* main_lm (0);
-+       include_directive* main_inc (0);
-+ 
-+       for (includes::map_type::iterator j (i->second.map.begin ());
-+            j != i->second.map.end (); ++j)
-+       {
-+-        line_map const* lm (j->first);
-++        line_map_type const* lm (j->first);
-+ 
-+         if (MAIN_FILE_P (lm))
-+         {
-+@@ -636,7 +647,7 @@ namespace
-+       for (includes::map_type::iterator j (i->second.map.begin ());
-+            j != i->second.map.end (); ++j)
-+       {
-+-        line_map const* lm (j->first);
-++        line_map_type const* lm (j->first);
-+ 
-+ #if BUILDING_GCC_MAJOR == 4 && BUILDING_GCC_MINOR <= 6
-+         string f (lm->to_file);
-+diff --git a/odb/parser.cxx b/odb/parser.cxx
-+index a8e6a6a..a9d22fb 100644
-+--- a/odb/parser.cxx
-++++ b/odb/parser.cxx
-+@@ -1044,14 +1044,14 @@ emit_type_decl (tree decl)
-+     // says that in typedef struct {} S; S becomes struct's
-+     // name.
-+     //
-+-    if (ANON_AGGRNAME_P (decl_name))
-++    if (anon_aggrname_p (decl_name))
-+     {
-+       tree d (TYPE_NAME (t));
-+ 
-+       if (d != NULL_TREE &&
-+           !DECL_ARTIFICIAL (d) &&
-+           DECL_NAME (d) != NULL_TREE &&
-+-          !ANON_AGGRNAME_P (DECL_NAME (d)))
-++          !anon_aggrname_p (DECL_NAME (d)))
-+       {
-+         decl = d;
-+         decl_name = DECL_NAME (decl);
-+@@ -1668,7 +1668,7 @@ create_type (tree t,
-+             ts << "start anon/stub " << gcc_tree_code_name(tc) << "@"
-+                << file << ":" << line << endl;
-+ 
-+-          if (d == NULL_TREE || ANON_AGGRNAME_P (DECL_NAME (d)))
-++          if (d == NULL_TREE || anon_aggrname_p (DECL_NAME (d)))
-+           {
-+             if (tc == RECORD_TYPE)
-+               r = &emit_class<class_> (t, file, line, clmn);
-+@@ -1765,7 +1765,7 @@ create_type (tree t,
-+         ts << "start anon/stub " << gcc_tree_code_name(tc) << "@"
-+            << file << ":" << line << endl;
-+ 
-+-      if (d == NULL_TREE || ANON_AGGRNAME_P (DECL_NAME (d)))
-++      if (d == NULL_TREE || anon_aggrname_p (DECL_NAME (d)))
-+       {
-+         r = &emit_enum (t, access, file, line, clmn);
-+       }
-+@@ -1831,6 +1831,8 @@ create_type (tree t,
-+       // the array type. In other words, we view it as "constant array"
-+       // rather than "array of constant elements".
-+       //
-++      using semantics::array; // vs std::array.
-++
-+       tree bt (TREE_TYPE (t));
-+       tree bt_mv (TYPE_MAIN_VARIANT (bt));
-+       type& bt_node (emit_type (bt_mv, access::public_, file, line, clmn));
-+diff --git a/odb/plugin.cxx b/odb/plugin.cxx
-+index e32f225..3aeaa3c 100644
-+--- a/odb/plugin.cxx
-++++ b/odb/plugin.cxx
-+@@ -45,14 +45,28 @@ path file_;    // File being compiled.
-+ paths inputs_; // List of input files in at-once mode or just file_.
-+ 
-+ bool (*cpp_error_prev) (
-+-  cpp_reader*, int, int, location_t, unsigned int, const char*, va_list*);
-++  cpp_reader*,
-++  int,
-++  int,
-++#if BUILDING_GCC_MAJOR >= 6
-++  rich_location*,
-++#else
-++  location_t,
-++  unsigned int,
-++#endif
-++  const char*,
-++  va_list*);
-+ 
-+ static bool
-+ cpp_error_filter (cpp_reader* r,
-+                   int level,
-+                   int reason,
-++#if BUILDING_GCC_MAJOR >= 6
-++                  rich_location* l,
-++#else
-+                   location_t l,
-+                   unsigned int column_override,
-++#endif
-+                   const char* msg,
-+                   va_list* ap)
-+ {
-+@@ -66,7 +80,18 @@ cpp_error_filter (cpp_reader* r,
-+   if (strstr (msg, "#pragma once") != 0)
-+     return true;
-+ 
-+-  return cpp_error_prev (r, level, reason, l, column_override, msg, ap);
-++  return cpp_error_prev (
-++    r,
-++    level,
-++    reason,
-++#if BUILDING_GCC_MAJOR >= 6
-++    l,
-++#else
-++    l,
-++    column_override,
-++#endif
-++    msg,
-++    ap);
-+ }
-+ 
-+ // A prefix of the _cpp_file struct. This struct is not part of the
-+diff --git a/odb/semantics/elements.cxx b/odb/semantics/elements.cxx
-+index 21e3260..399d5e9 100644
-+--- a/odb/semantics/elements.cxx
-++++ b/odb/semantics/elements.cxx
-+@@ -59,7 +59,7 @@ namespace semantics
-+       if (tree decl = TYPE_NAME (n))
-+         name = DECL_NAME (decl);
-+ 
-+-      return name != 0 && ANON_AGGRNAME_P (name);
-++      return name != 0 && anon_aggrname_p (name);
-+     }
-+ 
-+     return true;
-+@@ -108,7 +108,7 @@ namespace semantics
-+       if (tree decl = TYPE_NAME (type))
-+       {
-+         name = DECL_NAME (decl);
-+-        if (name != 0 && ANON_AGGRNAME_P (name))
-++        if (name != 0 && anon_aggrname_p (name))
-+           return true;
-+ 
-+         tree s (CP_DECL_CONTEXT (decl));
-+-- 
-+2.14.3
-+
-diff --git a/package/odb/0002-Fix-bug-in-GCC-6-input_location-translation.patch b/package/odb/0002-Fix-bug-in-GCC-6-input_location-translation.patch
++comment "libodb-pgsql needs a toolchain w/ C++, threads"
++	depends on BR2_PACKAGE_POSTGRESQL
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/libodb-pgsql/libodb-pgsql.hash b/package/libodb-pgsql/libodb-pgsql.hash
 new file mode 100644
-index 0000000000..c2bb37d3c0
+index 0000000000..5799f09236
 --- /dev/null
-+++ b/package/odb/0002-Fix-bug-in-GCC-6-input_location-translation.patch
-@@ -0,0 +1,37 @@
-+From ec777147024fde72e4411cc6b1e1e49f4a1d1804 Mon Sep 17 00:00:00 2001
-+From: Boris Kolpackov <boris@codesynthesis.com>
-+Date: Fri, 23 Dec 2016 10:18:01 +0200
-+Subject: [PATCH] Fix bug in GCC 6 input_location translation
-+
-+From:
-+http://dl.fedoraproject.org/pub/fedora/linux/releases/26/Everything/source/tree/Packages/o/odb-2.4.0-19.fc26.src.rpm
-+
-+Original author: Boris Kolpackov <boris@codesynthesis.com>
-+Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
-+---
-+ odb/cxx-lexer.cxx | 8 ++++++++
-+ 1 file changed, 8 insertions(+)
-+
-+diff --git a/odb/cxx-lexer.cxx b/odb/cxx-lexer.cxx
-+index 64df296..ae045d9 100644
-+--- a/odb/cxx-lexer.cxx
-++++ b/odb/cxx-lexer.cxx
-+@@ -106,7 +106,15 @@ next (string& token, tree* node)
-+ location_t cxx_pragma_lexer::
-+ location () const
-+ {
-++  // Starting from GCC 6 the input location seem to require the same
-++  // translation as what we do in real_source_location().
-++  //
-++#if BUILDING_GCC_MAJOR >= 6
-++  return linemap_resolve_location (
-++    line_table, input_location, LRK_MACRO_EXPANSION_POINT, 0);
-++#else
-+   return input_location;
-++#endif
-+ }
-+ 
-+ string cxx_pragma_lexer::
-+-- 
-+2.14.3
-+
-diff --git a/package/odb/odb.hash b/package/odb/odb.hash
-new file mode 100644
-index 0000000000..773a9c829b
---- /dev/null
-+++ b/package/odb/odb.hash
++++ b/package/libodb-pgsql/libodb-pgsql.hash
 @@ -0,0 +1,6 @@
-+# From https://www.codesynthesis.com/products/odb/download.xhtml
-+sha1	810fc02e591429ed19f5a2699d144fb611fb121b	odb-2.4.0.tar.bz2
++# From https://www.codesynthesis.com/download/odb/2.4/libodb-pgsql-2.4.0.tar.bz2.sha1
++sha1	4628d5e296da01dbaf8658fd402b4f709f30ea2d	libodb-pgsql-2.4.0.tar.bz2
 +
-+# Locally computed
-+sha256	6785154fa98ea3977c8c2ab38cec16c4aa78c2c2039e80cd2908347b1c1d4198	odb-2.4.0.tar.bz2
-+sha256	7983b82cb1f1686ac2b55420ded9c0f348f93dd17bf3e048ae3b25c1da51b80e	LICENSE
-diff --git a/package/odb/odb.mk b/package/odb/odb.mk
++# Locally Computed
++sha256	778a4d38bd1161e1f0b368815514c3335da20c7584e3d07613526dcce53523bc	libodb-pgsql-2.4.0.tar.bz2
++sha256	841105a470fc283851c63941510ffd403c726d1910b688f7df95914ab8b1b5a3	LICENSE
+diff --git a/package/libodb-pgsql/libodb-pgsql.mk b/package/libodb-pgsql/libodb-pgsql.mk
 new file mode 100644
-index 0000000000..b6dcfe8e9b
+index 0000000000..fd95439d7d
 --- /dev/null
-+++ b/package/odb/odb.mk
-@@ -0,0 +1,20 @@
++++ b/package/libodb-pgsql/libodb-pgsql.mk
+@@ -0,0 +1,16 @@
 +################################################################################
 +#
-+# odb
++# libodb-pgsql
 +#
 +################################################################################
 +
-+ODB_VERSION_MAJOR = 2.4
-+ODB_VERSION = $(ODB_VERSION_MAJOR).0
-+ODB_SOURCE = odb-$(ODB_VERSION).tar.bz2
-+ODB_SITE = https://www.codesynthesis.com/download/odb/$(ODB_VERSION_MAJOR)
-+ODB_LICENSE = MIT
-+ODB_LICENSE_FILES = LICENSE
-+HOST_ODB_DEPENDENCIES = host-libcutl
++LIBODB_PGSQL_VERSION_MAJOR = 2.4
++LIBODB_PGSQL_VERSION = $(LIBODB_PGSQL_VERSION_MAJOR).0
++LIBODB_PGSQL_SOURCE = libodb-pgsql-$(LIBODB_PGSQL_VERSION).tar.bz2
++LIBODB_PGSQL_SITE = https://www.codesynthesis.com/download/odb/$(LIBODB_PGSQL_VERSION_MAJOR)
++LIBODB_PGSQL_DEPENDENCIES += postgresql libodb
++LIBODB_PGSQL_LICENSE = MIT
++LIBODB_PGSQL_LICENSE_FILES = LICENSE
++LIBODB_PGSQL_INSTALL_STAGING = YES
 +
-+# Prevent odb from trying to install the gcc plugin into the hosts
-+# gcc plugin directory. Instead, this will install the gcc plugin
-+# into host/libexec/odb
-+HOST_ODB_CONF_OPTS = --with-gcc-plugin-dir=no
-+
-+$(eval $(host-autotools-package))
++$(eval $(autotools-package))
 -- 
 2.14.3
