@@ -1,64 +1,92 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 28 Dec 2017 10:45:15 +0100
-Subject: [Buildroot] [PATCH 0/3] fs: make it behave more like the
- package infra
-In-Reply-To: <20171227225531.30c62b76@windsurf.home>
-References: <cover.1514330428.git.yann.morin.1998@free.fr>
- <20171227225531.30c62b76@windsurf.home>
-Message-ID: <20171228094515.GA3428@scaer>
+Date: Thu, 28 Dec 2017 11:40:26 +0100
+Subject: [Buildroot] [PATCH 0/2 v2] fs: make it behave more like the package
+ infra
+Message-ID: <cover.1514457621.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Hello All!
 
-On 2017-12-27 22:55 +0100, Thomas Petazzoni spake thusly:
-> On Wed, 27 Dec 2017 00:20:41 +0100, Yann E. MORIN wrote:
-> > Currently, to register a new filesystem, one has to call:
-> > 
-> >     $(eval $(call ROOTFS_TARGET,blabla))
-> > 
-> > This is different from the package infrastructure, where the name of the
-> > package needs not be specified, and is automatically guessed. This makes
-> > the fs infra a bit different, when there is no reason for that.
-> > 
-> > Well, it turns out that there is a reason: we currently register two
-> > filesystems from the same directory: ubifs and ubi. But it turns out
-> > that these are in fact not two filesystems, but ubi can be considered
-> > only as a post-preocessing of the ubifs one.
-> > 
-> > So, after we fix the ubifs filesystem to register only one filesystem,
-> > we eventually turn the rootfs infra into a package-like infra, whereby
-> > naming the filesystem is no longer needed, which allows one to simply
-> > write:
-> >    $(eval $(rootfs))
-> > 
-> > The 'rootfs' keyword may seem rather generic, but it is currently unused
-> > in our tree (except in a post-image script for the chromebook defconfig):
-> > 
-> >     $ git grep -E '\<rootfs[[:space:]]*:?='
-> >     board/chromebook/snow/mksd.sh:rootfs=$BINARIES_DIR/rootfs.ext2
-> 
-> I've applied PATCH 1/3, which is a preparation patch. However, I'm not
-> 100% convinced with the value of PATCH 2/3 and 3/3. And PATCH 2/3 has a
-> significant drawback: it breaks all existing configurations that build
-> an UBI filesystem. That's a rather high price to pay for an internal
-> change that isn't that important IMO.
+Currently, to register a new filesystem, one has to call:
 
-I made it so that the legacy infra would take care of converting the old
-configurations over to the new options, though. ;-)
+    $(eval $(call ROOTFS_TARGET,blabla))
 
-> So I'd like to gather more feedback on this change, but at this point,
-> I'm a bit reluctant I have to say.
+This is different from the package infrastructure, where the name of the
+package needs not be specified, and is automatically guessed. This makes
+the fs infra a bit different, when there is no reason for that.
 
-As discussed on IRC, I'll submit a different patch that converts ubi in
-a full filesystem of its own, in its opwn ubi/ directory, so we can
-compare.
+Well, it turns out that there is a reason: we currently register two
+filesystems from the same directory: ubifs and ubi. But it turns out
+that these are in fact not two filesystems, but ubi can be spun off as
+its own filesystem (that depends on ubifs, which is anyway already the
+case).
+
+So, after we spin off the UBI image to its own filesystem, we eventually
+turn the rootfs infra into a package-like infra, whereby naming the
+filesystem is no longer needed, which allows one to simply write:
+
+   $(eval $(rootfs))
+
+The 'rootfs' keyword may seem rather generic, but it is currently unused
+in our tree (except in a post-image script for the chromebook defconfig):
+
+    $ git grep -E '\<rootfs[[:space:]]*:?='
+    board/chromebook/snow/mksd.sh:rootfs=$BINARIES_DIR/rootfs.ext2
+
+Changes v1 -> v2:
+  - register the UBI image as a separate filesystem, not an option of
+    the ubifs filesystem  (Thomas)
+
 
 Regards,
 Yann E. MORIN.
+
+
+The following changes since commit 0b39b14b27700ff4cde566b704d9f633f9230a30
+
+  Config.in.legacy: update comment that old entries have been removed (2017-12-28 10:06:58 +0100)
+
+
+are available in the git repository at:
+
+  git://git.buildroot.org/~ymorin/git/buildroot.git
+
+for you to fetch changes up to f803f25cacb7d566fdc0bb1af9dd134371e25a86
+
+  fs: make it behave a bit more like the package infra (2017-12-28 11:25:35 +0100)
+
+
+----------------------------------------------------------------
+Yann E. MORIN (2):
+      fs/ubifs: spin-off ubi to be its own filesystem
+      fs: make it behave a bit more like the package infra
+
+ fs/Config.in                  |  1 +
+ fs/axfs/axfs.mk               |  2 +-
+ fs/cloop/cloop.mk             |  2 +-
+ fs/common.mk                  |  7 +++---
+ fs/cpio/cpio.mk               |  2 +-
+ fs/cramfs/cramfs.mk           |  2 +-
+ fs/ext2/ext2.mk               |  2 +-
+ fs/iso9660/iso9660.mk         |  2 +-
+ fs/jffs2/jffs2.mk             |  2 +-
+ fs/romfs/romfs.mk             |  2 +-
+ fs/squashfs/squashfs.mk       |  2 +-
+ fs/tar/tar.mk                 |  2 +-
+ fs/ubi/Config.in              | 51 +++++++++++++++++++++++++++++++++++++++++++
+ fs/{ubifs => ubi}/ubi.mk      |  4 ++--
+ fs/{ubifs => ubi}/ubinize.cfg |  0
+ fs/ubifs/Config.in            | 51 -------------------------------------------
+ fs/ubifs/ubifs.mk             |  2 +-
+ fs/yaffs2/yaffs.mk            |  2 +-
+ 18 files changed, 69 insertions(+), 69 deletions(-)
+ create mode 100644 fs/ubi/Config.in
+ rename fs/{ubifs => ubi}/ubi.mk (92%)
+ rename fs/{ubifs => ubi}/ubinize.cfg (100%)
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
