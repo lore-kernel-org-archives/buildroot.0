@@ -1,36 +1,56 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 28 Dec 2017 23:42:37 +0100
-Subject: [Buildroot] [git commit branch/2017.02.x] linux-headers: bump 4.{4,
- 9}.x series
-Message-ID: <20171228224434.3700C837B3@busybox.osuosl.org>
+Date: Thu, 28 Dec 2017 23:41:03 +0100
+Subject: [Buildroot] [git commit branch/2017.02.x] package/openssl: security
+ bump to version 1.0.2n
+Message-ID: <20171228224434.266D9837D1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=758216aceae0bc7f69ad9b1da4c66d417fbe9289
+commit: https://git.buildroot.net/buildroot/commit/?id=3d0e4eb17f4fa0f491f199b385671d7bbc011750
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
+
+Fixes CVE-2017-3737 & CVE-2017-3738:
+https://www.openssl.org/news/secadv/20171207.txt
+
+Added license hash.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 1bc6f2d5cde30537b392d92601fe860c20a4d049)
+(cherry picked from commit 09a756a5a740d38d835538401944b94025ef1b06)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-headers/Config.in.host | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/openssl/openssl.hash | 5 +++--
+ package/openssl/openssl.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 173ac98..6d6afc6 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -222,7 +222,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
- 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
- 	default "4.1.47"	if BR2_KERNEL_HEADERS_4_1
--	default "4.4.104"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.4.105"	if BR2_KERNEL_HEADERS_4_4
- 	default "4.8.17"	if BR2_KERNEL_HEADERS_4_8
--	default "4.9.67"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.9.68"	if BR2_KERNEL_HEADERS_4_9
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/package/openssl/openssl.hash b/package/openssl/openssl.hash
+index c6226c3..e3d3da7 100644
+--- a/package/openssl/openssl.hash
++++ b/package/openssl/openssl.hash
+@@ -1,7 +1,8 @@
+-# From https://www.openssl.org/source/openssl-1.0.2m.tar.gz.sha256
+-sha256	8c6ff15ec6b319b50788f42c7abc2890c08ba5a1cdcd3810eb9092deada37b0f	openssl-1.0.2m.tar.gz
++# From https://www.openssl.org/source/openssl-1.0.2n.tar.gz.sha256
++sha256	370babb75f278c39e0c50e8c4e7493bc0f18db6867478341a832a982fd15a8fe	openssl-1.0.2n.tar.gz
+ # Locally computed
+ sha256	eddd8a5123748052c598214487ac178e4bfa4e31ba2ec520c70d59c8c5bfa2e9	openssl-1.0.2a-parallel-install-dirs.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d
+ sha256	147c3eeaad614c044749ea527cb433eae5e2d5cad34a78c6ba61cd967bfbe01f	openssl-1.0.2a-parallel-obj-headers.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d
+ sha256	30cb49489de5041841a74da9155cd4fabfbce33237262ba7cd23974314ae2956	openssl-1.0.2a-parallel-symlinking.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d
+ sha256	deaf6f3af41874ecc6d63841ea14b8e6c71cea81d4a511a754bc90c9a993147f	openssl-1.0.2d-parallel-build.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d
++sha256	9ee37d72966bb4a841343f0606ce44d41b3eae4df4285200c5a8ddc2b935992a	LICENSE
+diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
+index c7ff59f..ef83877 100644
+--- a/package/openssl/openssl.mk
++++ b/package/openssl/openssl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-OPENSSL_VERSION = 1.0.2m
++OPENSSL_VERSION = 1.0.2n
+ OPENSSL_SITE = http://www.openssl.org/source
+ OPENSSL_LICENSE = OpenSSL or SSLeay
+ OPENSSL_LICENSE_FILES = LICENSE
