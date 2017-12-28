@@ -1,61 +1,63 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 28 Dec 2017 23:35:52 +0100
-Subject: [Buildroot] [git commit branch/2017.02.x] wireshark: security bump
- to version 2.2.11
-Message-ID: <20171228224434.1EBF6837AE@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 28 Dec 2017 23:46:45 +0100
+Subject: [Buildroot] [PATCH v4 2/2] docs/manual: document meson-based
+ packages
+In-Reply-To: <20171228233525.375fcbd2@windsurf>
+References: <20171029131052.18850-1-eric.le.bihan.dev@free.fr>
+ <20171029131052.18850-3-eric.le.bihan.dev@free.fr>
+ <20171228232210.5dda9865@windsurf> <20171228222539.GH3428@scaer>
+ <20171228233525.375fcbd2@windsurf>
+Message-ID: <20171228224645.GJ3428@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2808a6dcd9c1be2f74b9f05b85d0945dee50fbc5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
+On 2017-12-28 23:35 +0100, Thomas Petazzoni spake thusly:
+> Hello,
+> 
+> On Thu, 28 Dec 2017 23:25:39 +0100, Yann E. MORIN wrote:
+> 
+> > IIRC, I made the same comment in a  previous iteration of this patch, and
+> > yes, meson really insists on having an empty build directory, otherwise it
+> > fails loudly... :-/
+> > 
+> > This should have been part of the commit log *and* should be clearly
+> > stated in the manual that this is required.
+> 
+> Follow-up patches welcome :-)
+> 
+> meson support has been sitting in patchwork for a while, and nobody
+> made this comment.
 
-Fixes the following security issues:
+Hmm... ;-)
+http://lists.busybox.net/pipermail/buildroot/2017-October/203982.html
 
-wnpa-sec-2017-47: The IWARP_MPA dissector could crash. (Bug 14236)
+Indeed, I did not explicitly asked for the explanations to be added in
+the commit log, because I expect that to be the case when such a comment
+is made...
 
-https://www.wireshark.org/security/wnpa-sec-2017-47.html
+;-)
 
-wnpa-sec-2017-48: The NetBIOS dissector could crash. (Bug 14249)
+Regards,
+Yann E. MORIN.
 
-https://www.wireshark.org/security/wnpa-sec-2017-48.html
+> It was time to apply it, and it is always time to
+> apply follow-up patches :-)
+> 
+> Thanks!
+> 
+> Thomas
+> -- 
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux and Kernel engineering
+> http://free-electrons.com
 
-wnpa-sec-2017-49: The CIP Safety dissector could crash. (Bug 14250)
-
-https://www.wireshark.org/security/wnpa-sec-2017-49.html
-
-For more information, see the release notes:
-https://www.wireshark.org/docs/relnotes/wireshark-2.2.11.html
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit d2bc1e2bbbabc70f2e9436387b8a40ff96216372)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/wireshark/wireshark.hash | 4 ++--
- package/wireshark/wireshark.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
-index 3494f2e..cffdab2 100644
---- a/package/wireshark/wireshark.hash
-+++ b/package/wireshark/wireshark.hash
-@@ -1,2 +1,2 @@
--# From: https://www.wireshark.org/download/src/all-versions/SIGNATURES-2.2.10.txt
--sha256 8574a5e1fdec7affae640924bd46c1aed1bd866e02632fa5625e1450e4a50707  wireshark-2.2.10.tar.bz2
-+# From: https://www.wireshark.org/download/src/all-versions/SIGNATURES-2.2.11.txt
-+sha256 a9f11621e85d7e1d72259157edd94825e72af3fd72e184b8474459f92ad5fc40  wireshark-2.2.11.tar.bz2
-diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
-index 0b781a2..76c0db3 100644
---- a/package/wireshark/wireshark.mk
-+++ b/package/wireshark/wireshark.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WIRESHARK_VERSION = 2.2.10
-+WIRESHARK_VERSION = 2.2.11
- WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.bz2
- WIRESHARK_SITE = https://www.wireshark.org/download/src/all-versions
- WIRESHARK_LICENSE = wireshark license
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
