@@ -1,36 +1,55 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 29 Dec 2017 00:08:34 +0100
-Subject: [Buildroot] [PATCH v7] package/i2c-tools: bump to version 4.0
-In-Reply-To: <1513868050-6206-1-git-send-email-angelo@amarulasolutions.com>
-References: <1513868050-6206-1-git-send-email-angelo@amarulasolutions.com>
-Message-ID: <20171229000834.0432518d@windsurf>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Thu, 28 Dec 2017 17:28:49 -0600
+Subject: [Buildroot] [PATCH 1/1 v2] gcc: Add support for
+ --enable-default-pie configure option.
+In-Reply-To: <CANQCQpZ40Q3T2gOPqu8_vGHCTAup_fxgW3ubfYjewfgo7DwW0A@mail.gmail.com>
+References: <20171228214333.8340-1-stefan.froberg@petroprogram.com>
+ <20171228230743.1e6c59ab@windsurf>
+ <CANQCQpZ40Q3T2gOPqu8_vGHCTAup_fxgW3ubfYjewfgo7DwW0A@mail.gmail.com>
+Message-ID: <CANQCQpaRU59QsTQGmRKiTjFsvpVq6K2BGfWsTeO6JpcPie4Sgw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Stefan,
+
+On Dec 28, 2017 4:08 PM, "Thomas Petazzoni" <
+thomas.petazzoni@free-electrons.com> wrote:
+
 Hello,
 
-On Thu, 21 Dec 2017 15:54:10 +0100, Angelo Compagnucci wrote:
-> This patch bumps i2c-tools to version 4.0 and adds a couple of
-> new commands named i2ctransfer and eeprog.
-> It adds also several upstream commits not included in the release
-> that fix static compilation issues and parallel build issues.
-> 
-> Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
-> ---
-> Changes:
+On Thu, 28 Dec 2017 23:43:33 +0200, Stefan Fr?berg wrote:
+> By default, buildroot produces insecure binaries.
+>
+> GCC 6.x added build time configuration option "--enable-default-pie".
+> With that enabled, GCC will produce PIE
+> (Position-independent executables) binaries.
+>
+> PIE is a requirement for ASLR (Address space layout randomization)
+> that will make exploits like return-to-libc attack impossible.
+>
+> If you want to have a modern, secure system then enable this option.
+>
+> To override this default behaviour, you can use -no-pie
+> with your CFLAGS/CXXFLAGS.
+>
+> https://gcc.gnu.org/onlinedocs/gcc-6.2.0/gcc/Link-Options.html
 
-Applied to master, thanks. I couldn't reproduce any parallel build
-failure with this iteration. Let's see if the autobuilders agree!
+As I said in my previous review, I think we want a solution that also
+applies to external toolchains, by passing -pie in the compiler wrapper.
 
-And thanks for your work on this package update!
+Please see "[PATCH 2/2] security hardening: add RELFO,  FORTIFY
+options" in the mailing list archives,
+https://patchwork.ozlabs.org/patch/830085/, it was also adding -pie
+support, but in a more generic way. Could you use this instead ?
 
-Best regards,
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+I've got a v3 in the works for that one, I can incorporate this into it if
+you'd like and send out the set this weekend (currently no computer)
+
+Matt
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20171228/eda3b18f/attachment.html>
