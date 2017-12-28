@@ -1,39 +1,42 @@
 From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Thu, 28 Dec 2017 16:51:44 +0100
-Subject: [Buildroot] [PATCH v9 6/8] libhttpparser: add host variant
+Date: Thu, 28 Dec 2017 16:51:45 +0100
+Subject: [Buildroot] [PATCH v9 7/8] libcurl: add host variant
 In-Reply-To: <20171228155146.18193-1-eric.le.bihan.dev@free.fr>
 References: <20171228155146.18193-1-eric.le.bihan.dev@free.fr>
-Message-ID: <20171228155146.18193-7-eric.le.bihan.dev@free.fr>
+Message-ID: <20171228155146.18193-8-eric.le.bihan.dev@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Allow build of host variant of libhttpparser.
-
 Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 ---
- package/libhttpparser/libhttpparser.mk | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ package/libcurl/libcurl.mk | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
-diff --git a/package/libhttpparser/libhttpparser.mk b/package/libhttpparser/libhttpparser.mk
-index 8ff0413322..1df26017e7 100644
---- a/package/libhttpparser/libhttpparser.mk
-+++ b/package/libhttpparser/libhttpparser.mk
-@@ -23,4 +23,13 @@ define LIBHTTPPARSER_INSTALL_TARGET_CMDS
- 	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) PREFIX=$(TARGET_DIR)/usr install
- endef
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index 0aab58a7de..ea5c99cf70 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
+@@ -88,4 +88,18 @@ endef
+ LIBCURL_POST_INSTALL_TARGET_HOOKS += LIBCURL_TARGET_CLEANUP
+ endif
  
-+define HOST_LIBHTTPPARSER_BUILD_CMDS
-+	$(MAKE) $(HOST_CONFIGURE_OPTS) -C $(@D) library package
-+endef
++HOST_LIBCURL_DEPENDENCIES = host-openssl
++HOST_LIBCURL_CONF_OPTS = \
++	--disable-manual \
++	--disable-ntlm-wb \
++	--disable-curldebug \
++	--with-ssl \
++	--without-gnutls \
++	--without-mbedtls \
++	--without-polarssl \
++	--without-nss
 +
-+define HOST_LIBHTTPPARSER_INSTALL_CMDS
-+	$(MAKE) $(HOST_CONFIGURE_OPTS) -C $(@D) PREFIX=$(HOST_DIR)/usr install
-+endef
++HOST_LIBCURL_POST_PATCH_HOOKS += LIBCURL_FIX_DOT_PC
 +
- $(eval $(generic-package))
-+$(eval $(host-generic-package))
+ $(eval $(autotools-package))
++$(eval $(host-autotools-package))
 -- 
 2.14.3
