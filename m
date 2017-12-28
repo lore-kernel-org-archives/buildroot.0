@@ -1,30 +1,36 @@
-From: Trent Piepho <tpiepho@impinj.com>
-Date: Thu, 28 Dec 2017 22:58:51 +0000
-Subject: [Buildroot] [PATCH] ncurses: Install 256 color terminfo files
-In-Reply-To: <20171228233235.49005288@windsurf>
-References: <20171220020624.22252-1-tpiepho@impinj.com>
- <20171228233235.49005288@windsurf>
-Message-ID: <1514501930.26695.98.camel@impinj.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 29 Dec 2017 00:08:34 +0100
+Subject: [Buildroot] [PATCH v7] package/i2c-tools: bump to version 4.0
+In-Reply-To: <1513868050-6206-1-git-send-email-angelo@amarulasolutions.com>
+References: <1513868050-6206-1-git-send-email-angelo@amarulasolutions.com>
+Message-ID: <20171229000834.0432518d@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 2017-12-28 at 23:32 +0100, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Tue, 19 Dec 2017 18:06:24 -0800, Trent Piepho wrote:
-> > There are three 256 color terminfo files that buildroot only installs if
-> > ncurses is configured with wide character support, which also enables
-> > ext-color.  There is a fourth 256 color terminfo file and does not depend
-> > on wchar suport and is always installed.
-> > 
-> > This changes that to always install all four 256 color terminfo files.
-> 
-> The patch looks fine, but I'm confused when you say "all four 256 color
-> terminfo files", while the patch only changes the installation of three
-> terminfo files. Could you explain ?
+Hello,
 
-The fourth file is already always installed.  I change from 3 wchar
-dependent plus 1 unconditional to 4 unconditional.
+On Thu, 21 Dec 2017 15:54:10 +0100, Angelo Compagnucci wrote:
+> This patch bumps i2c-tools to version 4.0 and adds a couple of
+> new commands named i2ctransfer and eeprog.
+> It adds also several upstream commits not included in the release
+> that fix static compilation issues and parallel build issues.
+> 
+> Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+> ---
+> Changes:
+
+Applied to master, thanks. I couldn't reproduce any parallel build
+failure with this iteration. Let's see if the autobuilders agree!
+
+And thanks for your work on this package update!
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
