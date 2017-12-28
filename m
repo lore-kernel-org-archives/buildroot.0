@@ -1,9 +1,12 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 28 Dec 2017 23:32:35 +0100
-Subject: [Buildroot] [PATCH] ncurses: Install 256 color terminfo files
-In-Reply-To: <20171220020624.22252-1-tpiepho@impinj.com>
-References: <20171220020624.22252-1-tpiepho@impinj.com>
-Message-ID: <20171228233235.49005288@windsurf>
+Date: Thu, 28 Dec 2017 23:35:25 +0100
+Subject: [Buildroot] [PATCH v4 2/2] docs/manual: document meson-based
+ packages
+In-Reply-To: <20171228222539.GH3428@scaer>
+References: <20171029131052.18850-1-eric.le.bihan.dev@free.fr>
+ <20171029131052.18850-3-eric.le.bihan.dev@free.fr>
+ <20171228232210.5dda9865@windsurf> <20171228222539.GH3428@scaer>
+Message-ID: <20171228233525.375fcbd2@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,30 +15,20 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 19 Dec 2017 18:06:24 -0800, Trent Piepho wrote:
-> There are three 256 color terminfo files that buildroot only installs if
-> ncurses is configured with wide character support, which also enables
-> ext-color.  There is a fourth 256 color terminfo file and does not depend
-> on wchar suport and is always installed.
-> 
-> This changes that to always install all four 256 color terminfo files.
+On Thu, 28 Dec 2017 23:25:39 +0100, Yann E. MORIN wrote:
 
-The patch looks fine, but I'm confused when you say "all four 256 color
-terminfo files", while the patch only changes the installation of three
-terminfo files. Could you explain ?
+> IIRC, I made the same comment in a  previous iteration of this patch, and
+> yes, meson really insists on having an empty build directory, otherwise it
+> fails loudly... :-/
+> 
+> This should have been part of the commit log *and* should be clearly
+> stated in the manual that this is required.
 
-> When ncurses has ext-colors enabled,it allows 256 fg and bg colors at the
-> same time.  Without ext-colors, it is still possible to use the 256 color
-> terminfo files and one can get a combination of fb and bg colors that
-> equals up to 256, e.g. 256 fg colors on one background or 16 fg and 16 bg
-> colors.
-> 
-> In short, the 256 color files work fine without wchar or ext-color support
-> and support more colors than the normal xterm, etc.  terminfo files.  It's
-> common today for the default terminal to use xterm-256color and it's nice
-> if thinks like vim and top work out of the box.
-> 
-> Signed-off-by: Trent Piepho <tpiepho@impinj.com>
+Follow-up patches welcome :-)
+
+meson support has been sitting in patchwork for a while, and nobody
+made this comment. It was time to apply it, and it is always time to
+apply follow-up patches :-)
 
 Thanks!
 
