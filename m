@@ -1,73 +1,468 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Thu, 28 Dec 2017 14:27:18 -0500
-Subject: [Buildroot] [PATCH 1/4] libcutl: new package
+Date: Thu, 28 Dec 2017 14:27:19 -0500
+Subject: [Buildroot] [PATCH 2/4] ODB: New package
 In-Reply-To: <20171228192721.18494-1-Adamduskett@outlook.com>
 References: <20171228192721.18494-1-Adamduskett@outlook.com>
-Message-ID: <20171228192721.18494-2-Adamduskett@outlook.com>
+Message-ID: <20171228192721.18494-3-Adamduskett@outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libcutl is distributed in source code and includes the standard autotools build
-system as well as the VC++ project files. It is a dependency for odb.
+ODB is an open-source, cross-platform, and cross-database object-relational
+mapping (ORM) system for C++. It allows you to persist C++ objects to a
+relational database without having to deal with tables, columns, or SQL and
+without manually writing any mapping code.
 
-Because ODB is a host-only package, and no other package depends on libcutl,
-this package will also be a host-only package.
+ODB supports MySQL, SQLite, PostgreSQL, Oracle, and Microsoft SQL
+Server relational databases as well as C++98/03 and C++11 language
+standards. It also comes with optional profiles for Boost and Qt
+which allow you to seamlessly use value types, containers, and smart
+pointers from these libraries in your persistent C++ classes.
+
+This package is used for auto-generating ODB specific header files into useable
+code that can be linked against a seperate libodb and a specific libodb
+database library.  As such, it is only needed as a host program and is not user
+selectable.
 
 Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
 ---
- DEVELOPERS                   |  1 +
- package/libcutl/libcutl.hash |  6 ++++++
- package/libcutl/libcutl.mk   | 15 +++++++++++++++
- 3 files changed, 22 insertions(+)
- create mode 100644 package/libcutl/libcutl.hash
- create mode 100644 package/libcutl/libcutl.mk
+ DEVELOPERS                                         |   1 +
+ .../odb/0001-make-ODB-compatible-with-GCC-6.patch  | 327 +++++++++++++++++++++
+ ...x-bug-in-GCC-6-input_location-translation.patch |  37 +++
+ package/odb/odb.hash                               |   6 +
+ package/odb/odb.mk                                 |  20 ++
+ 5 files changed, 391 insertions(+)
+ create mode 100644 package/odb/0001-make-ODB-compatible-with-GCC-6.patch
+ create mode 100644 package/odb/0002-Fix-bug-in-GCC-6-input_location-translation.patch
+ create mode 100644 package/odb/odb.hash
+ create mode 100644 package/odb/odb.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 9f4f282203..a3d00ef892 100644
+index a3d00ef892..f9e25f853c 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -43,6 +43,7 @@ F:	package/gstreamer1/gst1-plugins-ugly/
- F:	package/gstreamer1/gst1-vaapi/
- F:	package/imx-usb-loader/
- F:	package/janus-gateway/
-+F:	package/libcutl/
- F:	package/libressl/
- F:	package/libselinux/
+@@ -49,6 +49,7 @@ F:	package/libselinux/
  F:	package/libsemanage/
-diff --git a/package/libcutl/libcutl.hash b/package/libcutl/libcutl.hash
+ F:	package/libsepol/
+ F:	package/nginx-naxsi/
++F:	package/odb/
+ F:	package/policycoreutils/
+ F:	package/python-mutagen/
+ F:	package/restorecond/
+diff --git a/package/odb/0001-make-ODB-compatible-with-GCC-6.patch b/package/odb/0001-make-ODB-compatible-with-GCC-6.patch
 new file mode 100644
-index 0000000000..1e0baa7f6e
+index 0000000000..06f71ed21d
 --- /dev/null
-+++ b/package/libcutl/libcutl.hash
++++ b/package/odb/0001-make-ODB-compatible-with-GCC-6.patch
+@@ -0,0 +1,327 @@
++From 511dcf67322ad87fb32f97d1cf7725c129e83898 Mon Sep 17 00:00:00 2001
++From: Boris Kolpackov <boris@codesynthesis.com>
++Date: Fri, 5 Feb 2016 16:01:42 +0200
++Subject: [PATCH] make ODB compatible with GCC 6
++
++From:
++http://dl.fedoraproject.org/pub/fedora/linux/releases/26/Everything/source/tree/Packages/o/odb-2.4.0-19.fc26.src.rpm
++
++Original author: Boris Kolpackov <boris@codesynthesis.com>
++Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
++---
++ odb/cxx-lexer.cxx          |  4 ++++
++ odb/gcc-fwd.hxx            | 23 ++++++++++++++++++++++-
++ odb/gcc.hxx                | 13 +++++++++++++
++ odb/include.cxx            | 31 +++++++++++++++++++++----------
++ odb/parser.cxx             | 10 ++++++----
++ odb/plugin.cxx             | 29 +++++++++++++++++++++++++++--
++ odb/semantics/elements.cxx |  4 ++--
++ 7 files changed, 95 insertions(+), 19 deletions(-)
++
++diff --git a/odb/cxx-lexer.cxx b/odb/cxx-lexer.cxx
++index 7029c7e..64df296 100644
++--- a/odb/cxx-lexer.cxx
+++++ b/odb/cxx-lexer.cxx
++@@ -135,8 +135,12 @@ cpp_error_callback (
++ #if BUILDING_GCC_MAJOR > 4 || BUILDING_GCC_MAJOR == 4 && BUILDING_GCC_MINOR > 5
++   int /*reason*/, // Added in GCC 4.6.0.
++ #endif
+++#if BUILDING_GCC_MAJOR <= 5
++   location_t,
++   unsigned int,
+++#else
+++  rich_location*,
+++#endif
++   char const* msg,
++   va_list *ap)
++ {
++diff --git a/odb/gcc-fwd.hxx b/odb/gcc-fwd.hxx
++index a120f05..618b106 100644
++--- a/odb/gcc-fwd.hxx
+++++ b/odb/gcc-fwd.hxx
++@@ -7,6 +7,24 @@
++ 
++ #include <bversion.h>
++ 
+++#if BUILDING_GCC_MAJOR >= 6
+++
+++// If we include <system.h> here, it pulls in all kinds of GCC trouble that
+++// "poisons" standard C/C++ declarations; see safe-ctype.h. So instead we
+++// are going to "exclude" safe-ctype.h. To compensate, however, we will
+++// include it first thing in gcc.hxx.
+++//
+++#  include <config.h>
+++#  define SAFE_CTYPE_H
+++#  include <system.h>
+++#  undef SAFE_CTYPE_H
+++#  include <coretypes.h>
+++
+++typedef unsigned int source_location; // <line-map.h>
+++typedef source_location location_t;   // <input.h>
+++
+++#else // GCC < 6
+++
++ #if BUILDING_GCC_MAJOR > 4 || BUILDING_GCC_MAJOR == 4 && BUILDING_GCC_MINOR > 8
++ #  include <limits.h> // CHAR_BIT
++ #  include <config.h>
++@@ -33,6 +51,9 @@ extern "C"
++ 
++ typedef unsigned int source_location; // <line-map.h>
++ typedef source_location location_t;   // <input.h>
++-}
+++
+++} // extern "C"
+++
+++#endif
++ 
++ #endif // ODB_GCC_FWD_HXX
++diff --git a/odb/gcc.hxx b/odb/gcc.hxx
++index 504b59b..f91db49 100644
++--- a/odb/gcc.hxx
+++++ b/odb/gcc.hxx
++@@ -7,6 +7,13 @@
++ 
++ #include <odb/gcc-fwd.hxx>
++ 
+++// Actually, let's keep it out. With it included we can compile in C++98
+++// but not in C++14 (GCC 6 default).
+++//
+++// #if BUILDING_GCC_MAJOR >= 6
+++// #  include <safe-ctype.h> // See gcc-fwd.hxx.
+++// #endif
+++
++ // GCC header includes to get the plugin and parse tree declarations.
++ // The order is important and doesn't follow any kind of logic.
++ //
++@@ -147,4 +154,10 @@ gcc_tree_code_name (gcc_tree_code_type tc) {return tree_code_name[tc];}
++ #define DECL_CHAIN(x) TREE_CHAIN(x)
++ #endif
++ 
+++// In GCC 6, ANON_AGGRNAME_P became anon_aggrname_p().
+++//
+++#if BUILDING_GCC_MAJOR < 6
+++#  define anon_aggrname_p(X) ANON_AGGRNAME_P(X)
+++#endif
+++
++ #endif // ODB_GCC_HXX
++diff --git a/odb/include.cxx b/odb/include.cxx
++index c397993..08c93ce 100644
++--- a/odb/include.cxx
+++++ b/odb/include.cxx
++@@ -30,9 +30,18 @@ namespace
++     path path_;
++   };
++ 
+++#if BUILDING_GCC_MAJOR >= 6
+++  typedef line_map_ordinary line_map_type;
+++#else
+++  typedef line_map line_map_type;
+++# ifndef linemap_check_ordinary
+++#   define linemap_check_ordinary(X) (X)
+++# endif
+++#endif
+++
++   struct includes
++   {
++-    typedef std::map<line_map const*, include_directive> map_type;
+++    typedef std::map<line_map_type const*, include_directive> map_type;
++     bool trailing; // Included at the beginning or at the end of the main file.
++     map_type map;
++   };
++@@ -144,7 +153,9 @@ namespace
++       //
++       if (l > BUILTINS_LOCATION)
++       {
++-        line_map const* lm (linemap_lookup (line_table, l));
+++        line_map_type const* lm (
+++          linemap_check_ordinary (
+++            linemap_lookup (line_table, l)));
++ 
++         if (lm != 0 && !MAIN_FILE_P (lm))
++         {
++@@ -537,20 +548,20 @@ namespace
++     //
++ #if BUILDING_GCC_MAJOR == 4 && BUILDING_GCC_MINOR <= 6
++     size_t used (line_table->used);
++-    line_map const* maps (line_table->maps);
+++    line_map_type const* maps (line_table->maps);
++ #else
++     size_t used (line_table->info_ordinary.used);
++-    line_map const* maps (line_table->info_ordinary.maps);
+++    line_map_type const* maps (line_table->info_ordinary.maps);
++ #endif
++ 
++     for (size_t i (0); i < used; ++i)
++     {
++-      line_map const* m (maps + i);
+++      line_map_type const* m (maps + i);
++ 
++       if (MAIN_FILE_P (m) || m->reason != LC_ENTER)
++         continue;
++ 
++-      line_map const* ifm (INCLUDED_FROM (line_table, m));
+++      line_map_type const* ifm (INCLUDED_FROM (line_table, m));
++ 
++ #if BUILDING_GCC_MAJOR == 4 && BUILDING_GCC_MINOR <= 6
++       path f (m->to_file);
++@@ -580,7 +591,7 @@ namespace
++       for (includes::iterator j (i->second.begin ());
++            j != i->second.end (); ++j)
++       {
++-        line_map const* lm (j->first);
+++        line_map_type const* lm (j->first);
++         cerr << '\t' << lm->to_file << ":" << LAST_SOURCE_LINE (lm) << endl;
++       }
++       */
++@@ -589,13 +600,13 @@ namespace
++       // it is preferred over all others. Use the first one if there are
++       // several.
++       //
++-      line_map const* main_lm (0);
+++      line_map_type const* main_lm (0);
++       include_directive* main_inc (0);
++ 
++       for (includes::map_type::iterator j (i->second.map.begin ());
++            j != i->second.map.end (); ++j)
++       {
++-        line_map const* lm (j->first);
+++        line_map_type const* lm (j->first);
++ 
++         if (MAIN_FILE_P (lm))
++         {
++@@ -636,7 +647,7 @@ namespace
++       for (includes::map_type::iterator j (i->second.map.begin ());
++            j != i->second.map.end (); ++j)
++       {
++-        line_map const* lm (j->first);
+++        line_map_type const* lm (j->first);
++ 
++ #if BUILDING_GCC_MAJOR == 4 && BUILDING_GCC_MINOR <= 6
++         string f (lm->to_file);
++diff --git a/odb/parser.cxx b/odb/parser.cxx
++index a8e6a6a..a9d22fb 100644
++--- a/odb/parser.cxx
+++++ b/odb/parser.cxx
++@@ -1044,14 +1044,14 @@ emit_type_decl (tree decl)
++     // says that in typedef struct {} S; S becomes struct's
++     // name.
++     //
++-    if (ANON_AGGRNAME_P (decl_name))
+++    if (anon_aggrname_p (decl_name))
++     {
++       tree d (TYPE_NAME (t));
++ 
++       if (d != NULL_TREE &&
++           !DECL_ARTIFICIAL (d) &&
++           DECL_NAME (d) != NULL_TREE &&
++-          !ANON_AGGRNAME_P (DECL_NAME (d)))
+++          !anon_aggrname_p (DECL_NAME (d)))
++       {
++         decl = d;
++         decl_name = DECL_NAME (decl);
++@@ -1668,7 +1668,7 @@ create_type (tree t,
++             ts << "start anon/stub " << gcc_tree_code_name(tc) << "@"
++                << file << ":" << line << endl;
++ 
++-          if (d == NULL_TREE || ANON_AGGRNAME_P (DECL_NAME (d)))
+++          if (d == NULL_TREE || anon_aggrname_p (DECL_NAME (d)))
++           {
++             if (tc == RECORD_TYPE)
++               r = &emit_class<class_> (t, file, line, clmn);
++@@ -1765,7 +1765,7 @@ create_type (tree t,
++         ts << "start anon/stub " << gcc_tree_code_name(tc) << "@"
++            << file << ":" << line << endl;
++ 
++-      if (d == NULL_TREE || ANON_AGGRNAME_P (DECL_NAME (d)))
+++      if (d == NULL_TREE || anon_aggrname_p (DECL_NAME (d)))
++       {
++         r = &emit_enum (t, access, file, line, clmn);
++       }
++@@ -1831,6 +1831,8 @@ create_type (tree t,
++       // the array type. In other words, we view it as "constant array"
++       // rather than "array of constant elements".
++       //
+++      using semantics::array; // vs std::array.
+++
++       tree bt (TREE_TYPE (t));
++       tree bt_mv (TYPE_MAIN_VARIANT (bt));
++       type& bt_node (emit_type (bt_mv, access::public_, file, line, clmn));
++diff --git a/odb/plugin.cxx b/odb/plugin.cxx
++index e32f225..3aeaa3c 100644
++--- a/odb/plugin.cxx
+++++ b/odb/plugin.cxx
++@@ -45,14 +45,28 @@ path file_;    // File being compiled.
++ paths inputs_; // List of input files in at-once mode or just file_.
++ 
++ bool (*cpp_error_prev) (
++-  cpp_reader*, int, int, location_t, unsigned int, const char*, va_list*);
+++  cpp_reader*,
+++  int,
+++  int,
+++#if BUILDING_GCC_MAJOR >= 6
+++  rich_location*,
+++#else
+++  location_t,
+++  unsigned int,
+++#endif
+++  const char*,
+++  va_list*);
++ 
++ static bool
++ cpp_error_filter (cpp_reader* r,
++                   int level,
++                   int reason,
+++#if BUILDING_GCC_MAJOR >= 6
+++                  rich_location* l,
+++#else
++                   location_t l,
++                   unsigned int column_override,
+++#endif
++                   const char* msg,
++                   va_list* ap)
++ {
++@@ -66,7 +80,18 @@ cpp_error_filter (cpp_reader* r,
++   if (strstr (msg, "#pragma once") != 0)
++     return true;
++ 
++-  return cpp_error_prev (r, level, reason, l, column_override, msg, ap);
+++  return cpp_error_prev (
+++    r,
+++    level,
+++    reason,
+++#if BUILDING_GCC_MAJOR >= 6
+++    l,
+++#else
+++    l,
+++    column_override,
+++#endif
+++    msg,
+++    ap);
++ }
++ 
++ // A prefix of the _cpp_file struct. This struct is not part of the
++diff --git a/odb/semantics/elements.cxx b/odb/semantics/elements.cxx
++index 21e3260..399d5e9 100644
++--- a/odb/semantics/elements.cxx
+++++ b/odb/semantics/elements.cxx
++@@ -59,7 +59,7 @@ namespace semantics
++       if (tree decl = TYPE_NAME (n))
++         name = DECL_NAME (decl);
++ 
++-      return name != 0 && ANON_AGGRNAME_P (name);
+++      return name != 0 && anon_aggrname_p (name);
++     }
++ 
++     return true;
++@@ -108,7 +108,7 @@ namespace semantics
++       if (tree decl = TYPE_NAME (type))
++       {
++         name = DECL_NAME (decl);
++-        if (name != 0 && ANON_AGGRNAME_P (name))
+++        if (name != 0 && anon_aggrname_p (name))
++           return true;
++ 
++         tree s (CP_DECL_CONTEXT (decl));
++-- 
++2.14.3
++
+diff --git a/package/odb/0002-Fix-bug-in-GCC-6-input_location-translation.patch b/package/odb/0002-Fix-bug-in-GCC-6-input_location-translation.patch
+new file mode 100644
+index 0000000000..c2bb37d3c0
+--- /dev/null
++++ b/package/odb/0002-Fix-bug-in-GCC-6-input_location-translation.patch
+@@ -0,0 +1,37 @@
++From ec777147024fde72e4411cc6b1e1e49f4a1d1804 Mon Sep 17 00:00:00 2001
++From: Boris Kolpackov <boris@codesynthesis.com>
++Date: Fri, 23 Dec 2016 10:18:01 +0200
++Subject: [PATCH] Fix bug in GCC 6 input_location translation
++
++From:
++http://dl.fedoraproject.org/pub/fedora/linux/releases/26/Everything/source/tree/Packages/o/odb-2.4.0-19.fc26.src.rpm
++
++Original author: Boris Kolpackov <boris@codesynthesis.com>
++Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
++---
++ odb/cxx-lexer.cxx | 8 ++++++++
++ 1 file changed, 8 insertions(+)
++
++diff --git a/odb/cxx-lexer.cxx b/odb/cxx-lexer.cxx
++index 64df296..ae045d9 100644
++--- a/odb/cxx-lexer.cxx
+++++ b/odb/cxx-lexer.cxx
++@@ -106,7 +106,15 @@ next (string& token, tree* node)
++ location_t cxx_pragma_lexer::
++ location () const
++ {
+++  // Starting from GCC 6 the input location seem to require the same
+++  // translation as what we do in real_source_location().
+++  //
+++#if BUILDING_GCC_MAJOR >= 6
+++  return linemap_resolve_location (
+++    line_table, input_location, LRK_MACRO_EXPANSION_POINT, 0);
+++#else
++   return input_location;
+++#endif
++ }
++ 
++ string cxx_pragma_lexer::
++-- 
++2.14.3
++
+diff --git a/package/odb/odb.hash b/package/odb/odb.hash
+new file mode 100644
+index 0000000000..773a9c829b
+--- /dev/null
++++ b/package/odb/odb.hash
 @@ -0,0 +1,6 @@
-+# From https://www.codesynthesis.com/download/libcutl/1.10/libcutl-1.10.0.tar.bz2.sha1
-+sha1	2885b79529f8caeb13687d722f5c114186f56956	libcutl-1.10.0.tar.bz2
++# From https://www.codesynthesis.com/products/odb/download.xhtml
++sha1	810fc02e591429ed19f5a2699d144fb611fb121b	odb-2.4.0.tar.bz2
 +
-+# Locally Computed
-+sha256	125163c670e372b47d5626d54379ff8fbaded6ccd5db77ac0bf5912a4017121c	libcutl-1.10.0.tar.bz2
-+sha256	c7aa98c5af3b67174f16b12a1fed4332a51cd524b82c69e85baa4c2c412da239	LICENSE
-diff --git a/package/libcutl/libcutl.mk b/package/libcutl/libcutl.mk
++# Locally computed
++sha256	6785154fa98ea3977c8c2ab38cec16c4aa78c2c2039e80cd2908347b1c1d4198	odb-2.4.0.tar.bz2
++sha256	7983b82cb1f1686ac2b55420ded9c0f348f93dd17bf3e048ae3b25c1da51b80e	LICENSE
+diff --git a/package/odb/odb.mk b/package/odb/odb.mk
 new file mode 100644
-index 0000000000..49c05e6019
+index 0000000000..b6dcfe8e9b
 --- /dev/null
-+++ b/package/libcutl/libcutl.mk
-@@ -0,0 +1,15 @@
++++ b/package/odb/odb.mk
+@@ -0,0 +1,20 @@
 +################################################################################
 +#
-+# libcutl
++# odb
 +#
 +################################################################################
 +
-+LIBCUTL_VERSION_MAJOR = 1.10
-+LIBCUTL_VERSION = $(LIBCUTL_VERSION_MAJOR).0
-+LIBCUTL_SOURCE = libcutl-$(LIBCUTL_VERSION).tar.bz2
-+LIBCUTL_SITE = https://www.codesynthesis.com/download/libcutl/$(LIBCUTL_VERSION_MAJOR)
-+LIBCUTL_INSTALL_STAGING = YES
-+LIBCUTL_LICENSE = MIT
-+LIBCUTL_LICENSE_FILES = LICENSE
++ODB_VERSION_MAJOR = 2.4
++ODB_VERSION = $(ODB_VERSION_MAJOR).0
++ODB_SOURCE = odb-$(ODB_VERSION).tar.bz2
++ODB_SITE = https://www.codesynthesis.com/download/odb/$(ODB_VERSION_MAJOR)
++ODB_LICENSE = MIT
++ODB_LICENSE_FILES = LICENSE
++HOST_ODB_DEPENDENCIES = host-libcutl
++
++# Prevent odb from trying to install the gcc plugin into the hosts
++# gcc plugin directory. Instead, this will install the gcc plugin
++# into host/libexec/odb
++HOST_ODB_CONF_OPTS = --with-gcc-plugin-dir=no
 +
 +$(eval $(host-autotools-package))
 -- 
