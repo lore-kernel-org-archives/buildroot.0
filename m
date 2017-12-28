@@ -1,35 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 28 Dec 2017 23:33:35 +0100
-Subject: [Buildroot] [git commit branch/2017.02.x] linux-headers: bump 4.1.x
- series
-Message-ID: <20171228224434.0EDBF837AE@busybox.osuosl.org>
+Date: Thu, 28 Dec 2017 23:42:04 +0100
+Subject: [Buildroot] [git commit branch/2017.02.x] package/heimdal: bump
+ version to 7.5.0
+Message-ID: <20171228224434.2E822837B3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9f17c300ce96ab2aedbee5ec4a89fb91e99a3ffe
+commit: https://git.buildroot.net/buildroot/commit/?id=7d5d1005d63b670a74e9121586a8e991f9ac1c95
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
+
+This release fixes CVE-2017-17439:
+https://github.com/heimdal/heimdal/releases
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit ddfd34382804dcbe6f862e44ac8d20edcf951566)
+(cherry picked from commit 87ae2ac1ccc636b81341b51ea5e68ad257e46485)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-headers/Config.in.host | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/heimdal/heimdal.hash | 2 +-
+ package/heimdal/heimdal.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index a6676ba..173ac98 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -221,7 +221,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.18.72"	if BR2_KERNEL_HEADERS_3_18
- 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
- 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
--	default "4.1.46"	if BR2_KERNEL_HEADERS_4_1
-+	default "4.1.47"	if BR2_KERNEL_HEADERS_4_1
- 	default "4.4.104"	if BR2_KERNEL_HEADERS_4_4
- 	default "4.8.17"	if BR2_KERNEL_HEADERS_4_8
- 	default "4.9.67"	if BR2_KERNEL_HEADERS_4_9
+diff --git a/package/heimdal/heimdal.hash b/package/heimdal/heimdal.hash
+index a0e0f3f..ac26aa6 100644
+--- a/package/heimdal/heimdal.hash
++++ b/package/heimdal/heimdal.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 3de14ecd36ad21c1694a13da347512b047f4010d176fe412820664cb5d1429ad  heimdal-7.4.0.tar.gz
++sha256 c5a2a0030fcc728022fa2332bad85569084d1c3b9a59587b7ebe141b0532acad  heimdal-7.5.0.tar.gz
+diff --git a/package/heimdal/heimdal.mk b/package/heimdal/heimdal.mk
+index 2d4b826..0dbb151 100644
+--- a/package/heimdal/heimdal.mk
++++ b/package/heimdal/heimdal.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-HEIMDAL_VERSION = 7.4.0
++HEIMDAL_VERSION = 7.5.0
+ HEIMDAL_SITE = https://github.com/heimdal/heimdal/releases/download/heimdal-$(HEIMDAL_VERSION)
+ HOST_HEIMDAL_DEPENDENCIES = host-e2fsprogs host-ncurses host-pkgconf
+ HEIMDAL_INSTALL_STAGING = YES
