@@ -1,7 +1,7 @@
 From: Ilya Kuzmich <ilya.kuzmich@gmail.com>
-Date: Thu, 28 Dec 2017 18:04:41 +0300
+Date: Thu, 28 Dec 2017 18:09:37 +0300
 Subject: [Buildroot] [PATCH 1/1] merge_config.sh: add br2-external support
-Message-ID: <1514473481-20353-1-git-send-email-ilya.kuzmich@gmail.com>
+Message-ID: <1514473777-20799-1-git-send-email-ilya.kuzmich@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
