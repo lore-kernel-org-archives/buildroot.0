@@ -1,49 +1,68 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 28 Dec 2017 22:36:29 +0100
-Subject: [Buildroot] [PATCH v9 0/8] Add support for the Rust programming
-In-Reply-To: <20171228175256.GA24806@ned>
-References: <20171228155146.18193-1-eric.le.bihan.dev@free.fr>
- <20171228172129.3dd0acdc@windsurf.home>
- <20171228175256.GA24806@ned>
-Message-ID: <20171228223629.0fd45695@windsurf>
+From: =?UTF-8?q?Stefan=20Fr=C3=B6berg?= <stefan.froberg@petroprogram.com>
+Date: Thu, 28 Dec 2017 23:43:33 +0200
+Subject: [Buildroot] [PATCH 1/1 v2] gcc: Add support for
+ --enable-default-pie configure option.
+Message-ID: <20171228214333.8340-1-stefan.froberg@petroprogram.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+By default, buildroot produces insecure binaries.
 
-On Thu, 28 Dec 2017 18:52:56 +0100, Eric Le Bihan wrote:
+GCC 6.x added build time configuration option "--enable-default-pie".
+With that enabled, GCC will produce PIE 
+(Position-independent executables) binaries.
 
-> Yes, this is correct. The introduction of a virtual package for the Rust
-> compiler was suggested in the mail thread about version v4 of this
-> series [1], as building the compiler from source takes time and using the
-> available pre-built version would speed things up (as done for GCC).
+PIE is a requirement for ASLR (Address space layout randomization)
+that will make exploits like return-to-libc attack impossible. 
 
-OK, thanks for the additional explanation, makes sense.
+If you want to have a modern, secure system then enable this option.
 
-I reviewed the different patches in your series, and I think it's
-really close to a state where it can be merged. If you can take care of
-the few comments/questions in the near future, it would definitely
-help, as I would still have the context in mind.
+To override this default behaviour, you can use -no-pie
+with your CFLAGS/CXXFLAGS.
 
-Two other things that would be nice to do is:
+https://gcc.gnu.org/onlinedocs/gcc-6.2.0/gcc/Link-Options.html
 
- - Add two test cases in support/testing/. One that builds a system with
-   rust-bin, builds a hello world program in Rust, and run it on the
-   target. And another that does the same, but by building the rust
-   compiler from source. Perhaps additional test cases can be added for
-   Cargo, but I'm not sure how it's supposed to be used.
+Signed-off-by: Stefan Fr?berg <stefan.froberg@petroprogram.com>
+---
+ package/gcc/Config.in.host | 10 ++++++++++
+ package/gcc/gcc.mk         |  4 ++++
+ 2 files changed, 14 insertions(+)
 
- - Add a short section in the documentation that explains how the Rust
-   support in Buildroot is working. This would help people trying to do
-   stuff with Rust to understand how things work.
-
-Thanks!
-
-Thomas
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index 70cce0a5c5..bf646fa07b 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -152,3 +152,13 @@ config BR2_GCC_ENABLE_GRAPHITE
+ 
+ comment "graphite support needs gcc >= 5.x"
+ 	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_5
++
++config BR2_GCC_ENABLE_DEFAULT_PIE
++	bool "Enable default PIE support"
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_6
++	help
++	  This option enables the GCC to make PIE
++	  binaries by default.
++
++comment "default PIE support needs gcc >= 6.x"
++	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_6
+diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+index 27fc1e987c..0910fb3932 100644
+--- a/package/gcc/gcc.mk
++++ b/package/gcc/gcc.mk
+@@ -183,6 +183,10 @@ else
+ HOST_GCC_COMMON_CONF_OPTS += --without-isl --without-cloog
+ endif
+ 
++ifeq ($(BR2_GCC_ENABLE_DEFAULT_PIE),y)
++HOST_GCC_COMMON_CONF_OPTS += --enable-default-pie
++endif
++
+ ifeq ($(BR2_arc)$(BR2_or1k),y)
+ HOST_GCC_COMMON_DEPENDENCIES += host-flex host-bison
+ endif
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.13.6
