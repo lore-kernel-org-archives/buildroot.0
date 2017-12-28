@@ -1,56 +1,74 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 28 Dec 2017 22:56:50 +0100
-Subject: [Buildroot] [PATCH] libostree: make sure libavahi-client is
- built
-In-Reply-To: <20171221231932.31913-1-marcus.folkesson@gmail.com>
-References: <20171221231932.31913-1-marcus.folkesson@gmail.com>
-Message-ID: <20171228225650.08d5303d@windsurf>
+Date: Thu, 28 Dec 2017 22:57:32 +0100
+Subject: [Buildroot] [git commit] libostree: add patch to fix compilation
+ error
+Message-ID: <20171228215737.7EE9E811C9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=2493638ff74911d187396ed9ce6137d8357c90cb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 22 Dec 2017 00:19:32 +0100, Marcus Folkesson wrote:
-> Avahi support also needs libavahi-client, which is built by avahi if avahi-daemon
-> and dbus is selected.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/1edfb60add17945eabc557e1dbfb08a0ba466df9/
-> 
-> Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
-> ---
->  package/libostree/libostree.mk | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/libostree/libostree.mk b/package/libostree/libostree.mk
-> index 612c284870..f0aeb8d72a 100644
-> --- a/package/libostree/libostree.mk
-> +++ b/package/libostree/libostree.mk
-> @@ -27,9 +27,13 @@ else
->  LIBOSTREE_CONF_OPTS += --without-openssl
->  endif
->  
-> -ifeq ($(BR2_PACKAGE_AVAHI),y)
-> +# Avahi support needs libavahi-client, which is built by avahi if avahi-daemon
-> +# and dbus is selected. Since there is no BR2_PACKAGE_LIBAVAHI_CLIENT config
-> +# option yet, use the avahi-daemon and dbus config symbols to check for
-> +# libavahi-client.
-> +ifeq ($(BR2_PACKAGE_AVAHI_DAEMON)$(BR2_PACKAGE_DBUS),yy)
->  LIBOSTREE_CONF_OPTS += --with-avahi
-> -LIBOSTREE_DEPENDENCIES += avahi
-> +LIBOSTREE_DEPENDENCIES += avahi dbus
+Fix the following compilation error:
+src/libostree/ostree-repo-pull.c:1493:1: error: no previous prototype
+for '_ostree_repo_verify_bindings' [-Werror=missing-prototypes]
 
-Adding the dependency on dbus here isn't needed: libostree doesn't need
-dbus itself, it only needs libavahi-client. So I've applied your patch,
-but after dropping the dbus dependency.
+The patch is submitted upstreams (8d3d14503b3105f93db635022e881e02688f2db4)
+and should be removed in the next version bump.
 
-Thanks!
+Fixes:
+http://autobuild.buildroot.net/results/3fc91565cb2d0fabe566c109257a616bd57cb08c
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
+Tested-by: Matt Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...llways-include-ostree-repo-pull-private.h.patch | 37 ++++++++++++++++++++++
+ 1 file changed, 37 insertions(+)
+
+diff --git a/package/libostree/0001-lib-pull-allways-include-ostree-repo-pull-private.h.patch b/package/libostree/0001-lib-pull-allways-include-ostree-repo-pull-private.h.patch
+new file mode 100644
+index 0000000..3bd36d0
+--- /dev/null
++++ b/package/libostree/0001-lib-pull-allways-include-ostree-repo-pull-private.h.patch
+@@ -0,0 +1,37 @@
++From af58eb62038202eb1082a66af1be7d405c8a2de1 Mon Sep 17 00:00:00 2001
++From: Marcus Folkesson <marcus.folkesson@gmail.com>
++Date: Thu, 21 Dec 2017 10:20:48 +0100
++Subject: [PATCH] lib/pull: always include ostree-repo-pull-private.h
++
++Always include ostree-repo-pull-private.h to get rid of the following
++build error when HAVE_LIBCURL_OR_LIBSOUP is not defined:
++
++src/libostree/ostree-repo-pull.c:1493:1: error: no previous prototype
++for '_ostree_repo_verify_bindings' [-Werror=missing-prototypes]
++
++Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
++---
++ src/libostree/ostree-repo-pull.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/libostree/ostree-repo-pull.c b/src/libostree/ostree-repo-pull.c
++index 2e6e308c..b2a00ea2 100644
++--- a/src/libostree/ostree-repo-pull.c
+++++ b/src/libostree/ostree-repo-pull.c
++@@ -27,12 +27,12 @@
++ #include "libglnx.h"
++ #include "ostree.h"
++ #include "otutil.h"
+++#include "ostree-repo-pull-private.h"
++ 
++ #ifdef HAVE_LIBCURL_OR_LIBSOUP
++ 
++ #include "ostree-core-private.h"
++ #include "ostree-repo-private.h"
++-#include "ostree-repo-pull-private.h"
++ #include "ostree-repo-static-delta-private.h"
++ #include "ostree-metalink.h"
++ #include "ostree-fetcher-util.h"
++-- 
++2.15.1
++
