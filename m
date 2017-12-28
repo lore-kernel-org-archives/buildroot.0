@@ -1,58 +1,55 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 28 Dec 2017 23:46:45 +0100
-Subject: [Buildroot] [PATCH v4 2/2] docs/manual: document meson-based
+Date: Thu, 28 Dec 2017 23:56:39 +0100
+Subject: [Buildroot] [RFC 1/2] busybox: avoid conflict with other
  packages
-In-Reply-To: <20171228233525.375fcbd2@windsurf>
-References: <20171029131052.18850-1-eric.le.bihan.dev@free.fr>
- <20171029131052.18850-3-eric.le.bihan.dev@free.fr>
- <20171228232210.5dda9865@windsurf> <20171228222539.GH3428@scaer>
- <20171228233525.375fcbd2@windsurf>
-Message-ID: <20171228224645.GJ3428@scaer>
+In-Reply-To: <20171228162307.GD3428@scaer>
+References: <20171213130131.15744-1-thomas.petazzoni@free-electrons.com>
+ <20171213130131.15744-2-thomas.petazzoni@free-electrons.com>
+ <20171213144305.zs2iowvzy4n5xzqj@sapphire.tkos.co.il>
+ <20171214061850.62bb4ae9@windsurf.png.is.keysight.com>
+ <20171214065807.74cqtgpex5oldpx3@sapphire.tkos.co.il>
+ <20171228162307.GD3428@scaer>
+Message-ID: <20171228225639.GK3428@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2017-12-28 23:35 +0100, Thomas Petazzoni spake thusly:
-> Hello,
-> 
-> On Thu, 28 Dec 2017 23:25:39 +0100, Yann E. MORIN wrote:
-> 
-> > IIRC, I made the same comment in a  previous iteration of this patch, and
-> > yes, meson really insists on having an empty build directory, otherwise it
-> > fails loudly... :-/
+Baruch, Thomas, All,
+
+On 2017-12-28 17:23 +0100, Yann E. MORIN spake thusly:
+> On 2017-12-14 08:58 +0200, Baruch Siach spake thusly:
+[--SNIP--]
+> > Quoting busybox.mk:
 > > 
-> > This should have been part of the commit log *and* should be clearly
-> > stated in the manual that this is required.
+> > # Enable "noclobber" in install.sh, to prevent BusyBox from overwriting any
+> > # full-blown versions of apps installed by other packages with sym/hard links.
+> > 
+> > Unfortunately, the noclobber implementation is racy.
 > 
-> Follow-up patches welcome :-)
+> How is it racy?
 > 
-> meson support has been sitting in patchwork for a while, and nobody
-> made this comment.
+> At the moment we're gonna call it, no other package will be installing
+> at the same time (in the location seen by busybox at least), so there
+> should be no race.
 
-Hmm... ;-)
-http://lists.busybox.net/pipermail/buildroot/2017-October/203982.html
+Yet there were some issues with that part, so I've sent a small
+patch-series to busybox to fix the noclobber stuff:
+    http://lists.busybox.net/pipermail/busybox/2017-December/086039.html
 
-Indeed, I did not explicitly asked for the explanations to be added in
-the commit log, because I expect that to be the case when such a comment
-is made...
+So, with this, we should be able to:
 
-;-)
+  - invert the dependency chain, so thatr busybox now depends on all
+    otehr packages that it may install applets of;
+
+  - drop the big list of applets-to-disable in busybox, and rely on the
+    install-noclobber install rule
+
+If upstream accepts that series, of course...
 
 Regards,
 Yann E. MORIN.
-
-> It was time to apply it, and it is always time to
-> apply follow-up patches :-)
-> 
-> Thanks!
-> 
-> Thomas
-> -- 
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux and Kernel engineering
-> http://free-electrons.com
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
