@@ -1,48 +1,58 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Thu, 28 Dec 2017 11:36:45 -0600
-Subject: [Buildroot] [RFC 0/2] Handle conflicting files with Busybox
-In-Reply-To: <CANQCQpYmpCKopmh_5yYV74kOyezJSCLxp6T1mUiqnocHLZV92A@mail.gmail.com>
-References: <20171213130131.15744-1-thomas.petazzoni@free-electrons.com>
- <20171228170017.GE3428@scaer> <20171228180412.34c81ce2@windsurf.home>
- <20171228172030.GF3428@scaer>
- <CANQCQpZ-qO6v+K4kdqmAEdk2+Dk1Yca1fBqyNwfAjau=50cY7A@mail.gmail.com>
- <CANQCQpYmpCKopmh_5yYV74kOyezJSCLxp6T1mUiqnocHLZV92A@mail.gmail.com>
-Message-ID: <CANQCQpZ9ndTBXbhSKtTuG8u_x63rn4hmeiK4vrqeoHU7TUETOA@mail.gmail.com>
+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Thu, 28 Dec 2017 18:52:56 +0100
+Subject: [Buildroot] [PATCH v9 0/8] Add support for the Rust programming
+In-Reply-To: <20171228172129.3dd0acdc@windsurf.home>
+References: <20171228155146.18193-1-eric.le.bihan.dev@free.fr>
+ <20171228172129.3dd0acdc@windsurf.home>
+Message-ID: <20171228175256.GA24806@ned>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All
+Hi!
 
-On Dec 28, 2017 11:20 AM, "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+On 17-12-28 17:21:29, Thomas Petazzoni wrote:
+> Hello,
+>
+> On Thu, 28 Dec 2017 16:51:38 +0100, Eric Le Bihan wrote:
+> > This series adds support for the Rust programming language by adding the
+> > following packages:
+> >
+> >  - rustc: a virtual package for the Rust compiler.
+> >  - rust-bin: provides a pre-built version of rustc.
+> >  - cargo-bin: provides a pre-built version of Rust package manager.
+> >  - rust: builds rustc from source.
+> >  - cargo: builds Rust package manager from source.
+>
+> One question: with your series, one can therefore chose whether he
+> wants to build its own Rust compiler and standard library ("rust"
+> package) or use the pre-built Rust compiler and standard library
+> ("rustc-bin" package) ?
+>
+> In other words, does this means that there are two options:
+>
+>  - User chooses rustc-bin, every Rust package is built using the
+>    pre-built compiler, and the pre-built standard library is used.
+>
+>  - User chooses rust. In this case, rust is built using rustc-bin, but
+>    every other Rust package will be built with the Rust compiler we
+>    have built from source, and will be using the Rust standard library
+>    we have built from source.
+>
+> Is this correct ?
+>
+> (I'm just trying to understand the overall series.)
 
-Thomas, All,
+Yes, this is correct. The introduction of a virtual package for the Rust
+compiler was suggested in the mail thread about version v4 of this
+series [1], as building the compiler from source takes time and using the
+available pre-built version would speed things up (as done for GCC).
 
-[Snip]
+[1] http://lists.busybox.net/pipermail/buildroot/2017-April/189451.html
 
+Regards,
 
-I prefer they be explicitly disabled as you did.
-
-First, because this is a security issue that there is dead code: these
-applets are still usable by calling 'busybox foo' for example, and that
-is a security issue.
-
-Second, yes it gains a bit of space. But that is not so compelling,
-becasue if you already have the big buddies enabled, a few kB lost
-inBusybox is not that much of a burden anyway...
-
-
-When it comes to maintaining a custom BusyBox config (which could now be
-dynamically updated), maybe we should output a warning when we detect that
-we change a config value so the user can know to update their
-customizations.  Unsure if this is best as a altered.configs file or just
-printing it out.....
-
-(Pardon the html response, no computer this week)
-
-Matt
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20171228/32c0871e/attachment.html>
+--
+ELB
