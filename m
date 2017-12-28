@@ -1,189 +1,195 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 28 Dec 2017 11:40:31 +0100
-Subject: [Buildroot] [PATCH 1/2 v2] fs/ubifs: spin-off ubi to be its own
- filesystem
+Date: Thu, 28 Dec 2017 11:40:32 +0100
+Subject: [Buildroot] [PATCH 2/2 v2] fs: make it behave a bit more like the
+ package infra
 In-Reply-To: <cover.1514457621.git.yann.morin.1998@free.fr>
 References: <cover.1514457621.git.yann.morin.1998@free.fr>
-Message-ID: <4374156970b5d0885cbe71a9bb5db8493508550c.1514457621.git.yann.morin.1998@free.fr>
+Message-ID: <f803f25cacb7d566fdc0bb1af9dd134371e25a86.1514457621.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, the ubifs-in-ubi-image ("UBI image" thereafter) filesystem is
-half an option of the ubifs filesystem, half a filesystem on its own:
-the configoptions are options of the ubifs filesystem, but the .mk code
-is in a separate .mk and registers a real filesystem.
+Currently, to register a filesystem, one has to call:
+    $(eval $(call ROOTFS_TARGET,blabla))
 
-Make it a full filesystem on its own, in its own directory tree.
+This is very unlike the package infrastrucutre, where the name of the
+packagge os automatically guessed by the infra.
+
+It turns out that we can nowe do that for the filesystem infra too.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
 ---
-Changes v1 -> v2:
-  - don't make it an option of the ubifs anymore, make it a separate fs
-    (Thomas)
----
- fs/Config.in                  |  1 +
- fs/ubi/Config.in              | 51 +++++++++++++++++++++++++++++++++++++++++++
- fs/{ubifs => ubi}/ubi.mk      |  2 +-
- fs/{ubifs => ubi}/ubinize.cfg |  0
- fs/ubifs/Config.in            | 51 -------------------------------------------
- 5 files changed, 53 insertions(+), 52 deletions(-)
- create mode 100644 fs/ubi/Config.in
- rename fs/{ubifs => ubi}/ubi.mk (95%)
- rename fs/{ubifs => ubi}/ubinize.cfg (100%)
+ fs/axfs/axfs.mk         | 2 +-
+ fs/cloop/cloop.mk       | 2 +-
+ fs/common.mk            | 7 +++----
+ fs/cpio/cpio.mk         | 2 +-
+ fs/cramfs/cramfs.mk     | 2 +-
+ fs/ext2/ext2.mk         | 2 +-
+ fs/iso9660/iso9660.mk   | 2 +-
+ fs/jffs2/jffs2.mk       | 2 +-
+ fs/romfs/romfs.mk       | 2 +-
+ fs/squashfs/squashfs.mk | 2 +-
+ fs/tar/tar.mk           | 2 +-
+ fs/ubi/ubi.mk           | 2 +-
+ fs/ubifs/ubifs.mk       | 2 +-
+ fs/yaffs2/yaffs.mk      | 2 +-
+ 14 files changed, 16 insertions(+), 17 deletions(-)
 
-diff --git a/fs/Config.in b/fs/Config.in
-index 51ccf28169..c25b01c3de 100644
---- a/fs/Config.in
-+++ b/fs/Config.in
-@@ -11,6 +11,7 @@ source "fs/jffs2/Config.in"
- source "fs/romfs/Config.in"
- source "fs/squashfs/Config.in"
- source "fs/tar/Config.in"
-+source "fs/ubi/Config.in"
- source "fs/ubifs/Config.in"
- source "fs/yaffs2/Config.in"
+diff --git a/fs/axfs/axfs.mk b/fs/axfs/axfs.mk
+index 6c795d7062..4b93df55c0 100644
+--- a/fs/axfs/axfs.mk
++++ b/fs/axfs/axfs.mk
+@@ -10,4 +10,4 @@ define ROOTFS_AXFS_CMD
+ 	$(HOST_DIR)/bin/mkfs.axfs -s -a $(TARGET_DIR) $@
+ endef
  
-diff --git a/fs/ubi/Config.in b/fs/ubi/Config.in
-new file mode 100644
-index 0000000000..5fa2f1f61d
---- /dev/null
-+++ b/fs/ubi/Config.in
-@@ -0,0 +1,51 @@
-+config BR2_TARGET_ROOTFS_UBI
-+	bool "ubi image containing an ubifs root filesystem"
-+	select BR2_TARGET_ROOTFS_UBIFS
-+	help
-+	  Build an ubi image from the ubifs one (with ubinize).
-+
-+if BR2_TARGET_ROOTFS_UBI
-+
-+config BR2_TARGET_ROOTFS_UBI_PEBSIZE
-+	hex "physical eraseblock size"
-+	default 0x20000
-+	help
-+	  Tells ubinize the physical eraseblock (PEB) size of the
-+	  flash chip the ubi image is created for. The value provided
-+	  here is passed to the -p/--peb-size option of ubinize.
-+
-+config BR2_TARGET_ROOTFS_UBI_SUBSIZE
-+	int "sub-page size"
-+	default 512
-+	help
-+	  Tells ubinize that the flash supports sub-pages and the sub-page
-+	  size. Use 0 if sub-pages are not supported on flash chip.
-+	  The value provided here is passed to the -s/--sub-page-size
-+	  option of ubinize.
-+
-+config BR2_TARGET_ROOTFS_UBI_USE_CUSTOM_CONFIG
-+	bool "Use custom config file"
-+	help
-+	  Select this option to use a custom ubinize configuration file,
-+	  rather than the default configuration used by Buildroot (which
-+	  defines a single dynamic volume marked as auto-resize).  Passing
-+	  a custom ubinize configuration file allows you to create several
-+	  volumes, specify volume types, etc.
-+
-+	  As a convenience, buildroot replaces the string
-+	  "BR2_ROOTFS_UBIFS_PATH" with the path to the built ubifs file.
-+	  So the volume defined for the root filesystem can specify the
-+	  image path as:  image=BR2_ROOTFS_UBIFS_PATH
-+
-+config BR2_TARGET_ROOTFS_UBI_CUSTOM_CONFIG_FILE
-+	string "Configuration file path"
-+	depends on BR2_TARGET_ROOTFS_UBI_USE_CUSTOM_CONFIG
-+	help
-+	  Path to the ubinize configuration file.
-+
-+config BR2_TARGET_ROOTFS_UBI_OPTS
-+	string "Additional ubinize options"
-+	help
-+	  Any additional ubinize options you may want to include.
-+
-+endif # BR2_TARGET_ROOTFS_UBI
-diff --git a/fs/ubifs/ubi.mk b/fs/ubi/ubi.mk
-similarity index 95%
-rename from fs/ubifs/ubi.mk
-rename to fs/ubi/ubi.mk
-index 2baece5fb0..b71a555efb 100644
---- a/fs/ubifs/ubi.mk
-+++ b/fs/ubi/ubi.mk
-@@ -17,7 +17,7 @@ ROOTFS_UBI_DEPENDENCIES = rootfs-ubifs
- ifeq ($(BR2_TARGET_ROOTFS_UBI_USE_CUSTOM_CONFIG),y)
- UBINIZE_CONFIG_FILE_PATH = $(call qstrip,$(BR2_TARGET_ROOTFS_UBI_CUSTOM_CONFIG_FILE))
- else
--UBINIZE_CONFIG_FILE_PATH = fs/ubifs/ubinize.cfg
-+UBINIZE_CONFIG_FILE_PATH = fs/ubi/ubinize.cfg
+-$(eval $(call ROOTFS_TARGET,axfs))
++$(eval $(rootfs))
+diff --git a/fs/cloop/cloop.mk b/fs/cloop/cloop.mk
+index cbfc79b0d1..17749c5a3b 100644
+--- a/fs/cloop/cloop.mk
++++ b/fs/cloop/cloop.mk
+@@ -11,4 +11,4 @@ define ROOTFS_CLOOP_CMD
+ 		$(HOST_DIR)/bin/create_compressed_fs - 65536 > $@
+ endef
+ 
+-$(eval $(call ROOTFS_TARGET,cloop))
++$(eval $(rootfs))
+diff --git a/fs/common.mk b/fs/common.mk
+index b06e9b5597..98232f0b9f 100644
+--- a/fs/common.mk
++++ b/fs/common.mk
+@@ -37,7 +37,7 @@ ROOTFS_USERS_TABLES = $(call qstrip,$(BR2_ROOTFS_USERS_TABLES))
+ 
+ # Since this function will be called from within an $(eval ...)
+ # all variable references except the arguments must be $$-quoted.
+-define ROOTFS_TARGET_INTERNAL
++define inner-rootfs
+ 
+ # extra deps
+ ROOTFS_$(2)_DEPENDENCIES += host-fakeroot host-makedevs \
+@@ -128,8 +128,7 @@ endif
+ 
+ endef
+ 
+-define ROOTFS_TARGET
+-	$(call ROOTFS_TARGET_INTERNAL,$(1),$(call UPPERCASE,$(1)))
+-endef
++# $(pkgname) also works well to return the filesystem name
++rootfs = $(call inner-rootfs,$(pkgname),$(call UPPERCASE,$(pkgname)))
+ 
+ include $(sort $(wildcard fs/*/*.mk))
+diff --git a/fs/cpio/cpio.mk b/fs/cpio/cpio.mk
+index c68e0bfb97..aa4d947fa5 100644
+--- a/fs/cpio/cpio.mk
++++ b/fs/cpio/cpio.mk
+@@ -40,4 +40,4 @@ endef
+ ROOTFS_CPIO_POST_GEN_HOOKS += ROOTFS_CPIO_UBOOT_MKIMAGE
  endif
  
- # don't use sed -i as it misbehaves on systems with SELinux enabled when this is
-diff --git a/fs/ubifs/ubinize.cfg b/fs/ubi/ubinize.cfg
-similarity index 100%
-rename from fs/ubifs/ubinize.cfg
-rename to fs/ubi/ubinize.cfg
-diff --git a/fs/ubifs/Config.in b/fs/ubifs/Config.in
-index ff604c5c38..e79ab9a17e 100644
---- a/fs/ubifs/Config.in
-+++ b/fs/ubifs/Config.in
-@@ -95,55 +95,4 @@ config BR2_TARGET_ROOTFS_UBIFS_OPTS
- 	help
- 	  Any additional mkfs.ubifs options you may want to include.
+-$(eval $(call ROOTFS_TARGET,cpio))
++$(eval $(rootfs))
+diff --git a/fs/cramfs/cramfs.mk b/fs/cramfs/cramfs.mk
+index 85b98b8ccd..f880871935 100644
+--- a/fs/cramfs/cramfs.mk
++++ b/fs/cramfs/cramfs.mk
+@@ -16,4 +16,4 @@ endef
  
--config BR2_TARGET_ROOTFS_UBI
--	bool "Embed into an UBI image"
--	help
--	  Build an ubi image from the ubifs one (with ubinize).
--
--if BR2_TARGET_ROOTFS_UBI
--
--config BR2_TARGET_ROOTFS_UBI_PEBSIZE
--	hex "physical eraseblock size"
--	default 0x20000
--	help
--	  Tells ubinize the physical eraseblock (PEB) size of the
--	  flash chip the ubi image is created for. The value provided
--	  here is passed to the -p/--peb-size option of ubinize.
--
--config BR2_TARGET_ROOTFS_UBI_SUBSIZE
--	int "sub-page size"
--	default 512
--	help
--	  Tells ubinize that the flash supports sub-pages and the sub-page
--	  size. Use 0 if sub-pages are not supported on flash chip.
--	  The value provided here is passed to the -s/--sub-page-size
--	  option of ubinize.
--
--config BR2_TARGET_ROOTFS_UBI_USE_CUSTOM_CONFIG
--	bool "Use custom config file"
--	help
--	  Select this option to use a custom ubinize configuration file,
--	  rather than the default configuration used by Buildroot (which
--	  defines a single dynamic volume marked as auto-resize).  Passing
--	  a custom ubinize configuration file allows you to create several
--	  volumes, specify volume types, etc.
--
--	  As a convenience, buildroot replaces the string
--	  "BR2_ROOTFS_UBIFS_PATH" with the path to the built ubifs file.
--	  So the volume defined for the root filesystem can specify the
--	  image path as:  image=BR2_ROOTFS_UBIFS_PATH
--
--config BR2_TARGET_ROOTFS_UBI_CUSTOM_CONFIG_FILE
--	string "Configuration file path"
--	depends on BR2_TARGET_ROOTFS_UBI_USE_CUSTOM_CONFIG
--	help
--	  Path to the ubinize configuration file.
--
--config BR2_TARGET_ROOTFS_UBI_OPTS
--	string "Additional ubinize options"
--	help
--	  Any additional ubinize options you may want to include.
--
--endif # BR2_TARGET_ROOTFS_UBI
--
- endif # BR2_TARGET_ROOTFS_UBIFS
+ ROOTFS_CRAMFS_DEPENDENCIES = host-cramfs
+ 
+-$(eval $(call ROOTFS_TARGET,cramfs))
++$(eval $(rootfs))
+diff --git a/fs/ext2/ext2.mk b/fs/ext2/ext2.mk
+index 12b87a722c..6bb4b1c7f8 100644
+--- a/fs/ext2/ext2.mk
++++ b/fs/ext2/ext2.mk
+@@ -43,4 +43,4 @@ endef
+ ROOTFS_EXT2_POST_GEN_HOOKS += ROOTFS_EXT2_SYMLINK
+ endif
+ 
+-$(eval $(call ROOTFS_TARGET,ext2))
++$(eval $(rootfs))
+diff --git a/fs/iso9660/iso9660.mk b/fs/iso9660/iso9660.mk
+index c2de27101a..ab11a393e1 100644
+--- a/fs/iso9660/iso9660.mk
++++ b/fs/iso9660/iso9660.mk
+@@ -128,4 +128,4 @@ endef
+ ROOTFS_ISO9660_POST_GEN_HOOKS += ROOTFS_ISO9660_GEN_HYBRID
+ endif
+ 
+-$(eval $(call ROOTFS_TARGET,iso9660))
++$(eval $(rootfs))
+diff --git a/fs/jffs2/jffs2.mk b/fs/jffs2/jffs2.mk
+index 9a36a75ff4..740ab3e03d 100644
+--- a/fs/jffs2/jffs2.mk
++++ b/fs/jffs2/jffs2.mk
+@@ -49,4 +49,4 @@ define ROOTFS_JFFS2_CMD
+ endef
+ endif
+ 
+-$(eval $(call ROOTFS_TARGET,jffs2))
++$(eval $(rootfs))
+diff --git a/fs/romfs/romfs.mk b/fs/romfs/romfs.mk
+index eded91df0a..163751b4e2 100644
+--- a/fs/romfs/romfs.mk
++++ b/fs/romfs/romfs.mk
+@@ -10,4 +10,4 @@ define ROOTFS_ROMFS_CMD
+ 	$(HOST_DIR)/bin/genromfs -d $(TARGET_DIR) -f $@
+ endef
+ 
+-$(eval $(call ROOTFS_TARGET,romfs))
++$(eval $(rootfs))
+diff --git a/fs/squashfs/squashfs.mk b/fs/squashfs/squashfs.mk
+index 7de7f51af1..51abd5d7d0 100644
+--- a/fs/squashfs/squashfs.mk
++++ b/fs/squashfs/squashfs.mk
+@@ -24,4 +24,4 @@ define ROOTFS_SQUASHFS_CMD
+ 	$(HOST_DIR)/bin/mksquashfs $(TARGET_DIR) $@ $(ROOTFS_SQUASHFS_ARGS)
+ endef
+ 
+-$(eval $(call ROOTFS_TARGET,squashfs))
++$(eval $(rootfs))
+diff --git a/fs/tar/tar.mk b/fs/tar/tar.mk
+index 0e3eacbedf..e39c2fdbf1 100644
+--- a/fs/tar/tar.mk
++++ b/fs/tar/tar.mk
+@@ -11,4 +11,4 @@ define ROOTFS_TAR_CMD
+ 		tar $(TAR_OPTS) -cf $@ --null --no-recursion -T - --numeric-owner)
+ endef
+ 
+-$(eval $(call ROOTFS_TARGET,tar))
++$(eval $(rootfs))
+diff --git a/fs/ubi/ubi.mk b/fs/ubi/ubi.mk
+index b71a555efb..c78feda5a3 100644
+--- a/fs/ubi/ubi.mk
++++ b/fs/ubi/ubi.mk
+@@ -29,4 +29,4 @@ define ROOTFS_UBI_CMD
+ 	rm $(BUILD_DIR)/ubinize.cfg
+ endef
+ 
+-$(eval $(call ROOTFS_TARGET,ubi))
++$(eval $(rootfs))
+diff --git a/fs/ubifs/ubifs.mk b/fs/ubifs/ubifs.mk
+index 4f45acdc4a..2cfc397aca 100644
+--- a/fs/ubifs/ubifs.mk
++++ b/fs/ubifs/ubifs.mk
+@@ -27,4 +27,4 @@ define ROOTFS_UBIFS_CMD
+ 	$(HOST_DIR)/sbin/mkfs.ubifs -d $(TARGET_DIR) $(UBIFS_OPTS) -o $@
+ endef
+ 
+-$(eval $(call ROOTFS_TARGET,ubifs))
++$(eval $(rootfs))
+diff --git a/fs/yaffs2/yaffs.mk b/fs/yaffs2/yaffs.mk
+index 30570735fa..9cba27af70 100644
+--- a/fs/yaffs2/yaffs.mk
++++ b/fs/yaffs2/yaffs.mk
+@@ -10,4 +10,4 @@ define ROOTFS_YAFFS2_CMD
+ 	$(HOST_DIR)/bin/mkyaffs2 --all-root $(TARGET_DIR) $@
+ endef
+ 
+-$(eval $(call ROOTFS_TARGET,yaffs2))
++$(eval $(rootfs))
 -- 
 2.11.0
