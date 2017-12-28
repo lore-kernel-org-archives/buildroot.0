@@ -1,67 +1,99 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 28 Dec 2017 10:06:52 +0100
-Subject: [Buildroot] [git commit] Config.in.legacy: drop 2012.11 entries
-Message-ID: <20171228090718.3D909837B4@busybox.osuosl.org>
+Date: Thu, 28 Dec 2017 10:06:54 +0100
+Subject: [Buildroot] [git commit] Config.in.legacy: drop 2013.02 entries
+Message-ID: <20171228090718.51AC97FD6B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3bd83aed7c0925955b4730d488b13fd49381e4c0
+commit: https://git.buildroot.net/buildroot/commit/?id=a7f49a9693d77d4e695bce407ea32c9aae592680
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Those entries are older than 5 years, we can drop them now.
+When we release 2018.02 at the end of this cycle, those entries will
+have been removed for more than five years, so we can drop them now.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- Config.in.legacy | 36 ------------------------------------
- 1 file changed, 36 deletions(-)
+ Config.in.legacy | 67 --------------------------------------------------------
+ 1 file changed, 67 deletions(-)
 
 diff --git a/Config.in.legacy b/Config.in.legacy
-index 47b4956..4efce80 100644
+index 4efce80..bff8563 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
-@@ -3130,42 +3130,6 @@ config BR2_PACKAGE_DIRECTB_TESTS
- 	  The option has been renamed
- 	  BR2_PACKAGE_DIRECTFB_TESTS.
+@@ -3063,73 +3063,6 @@ config BR2_PACKAGE_LINUX_FIRMWARE_RTL_8712
+ 	help
+ 	  Now covers the whole Realtek 87xx familly: 8712/8723.
  
 -###############################################################################
--comment "Legacy options removed in 2012.11"
+-comment "Legacy options removed in 2013.02"
 -
--config BR2_PACKAGE_CUSTOMIZE
--	bool "customize package has been removed"
+-config BR2_sa110
+-	bool "sa110 ARM target switched to strongarm"
+-	select BR2_LEGACY
+-	select BR2_strongarm
+-	help
+-	  The SA110 is the same as a generic StrongARM, it just differs
+-	  in speed, peripherals and cache.
+-
+-config BR2_sa1100
+-	bool "sa1100 ARM target switched to strongarm"
+-	select BR2_LEGACY
+-	select BR2_strongarm
+-	help
+-	  The SA1100 is the same as a generic StrongARM, it just differs
+-	  in speed, peripherals and cache.
+-
+-config BR2_PACKAGE_GDISK
+-	bool "gdisk has been replaced by gptfdisk"
+-	select BR2_LEGACY
+-	select BR2_PACKAGE_GPTFDISK
+-	help
+-	  The option has been renamed BR2_PACKAGE_GPTFDISK.
+-
+-config BR2_PACKAGE_GDISK_GDISK
+-	bool "gdisk tool from gdisk has been replaced by gdisk in gptfdisk"
+-	select BR2_LEGACY
+-	select BR2_PACKAGE_GPTFDISK
+-	select BR2_PACKAGE_GPTFDISK_GDISK
+-	help
+-	  The option has been renamed BR2_PACKAGE_GPTFDISK_GDISK.
+-
+-config BR2_PACKAGE_GDISK_SGDISK
+-	bool "sgdisk tool from gdisk has been replaced by sgdisk in gptfdisk"
+-	select BR2_LEGACY
+-	select BR2_PACKAGE_GPTFDISK
+-	select BR2_PACKAGE_GPTFDISK_SGDISK
+-	help
+-	  The option has been renamed BR2_PACKAGE_GPTFDISK_SGDISK.
+-
+-config BR2_PACKAGE_GDB_HOST
+-	bool "gdb for the host option has been renamed"
+-	select BR2_PACKAGE_HOST_GDB
 -	select BR2_LEGACY
 -	help
--	  The 'customize' special package has been removed. Instead,
--	  we recommend to create either your own packages, or use a
--	  post-build script to customize your root filesystem. See
--	  Buildroot's documentation for more details.
+-	  Due to the conversion of gdb to the package infrastructure,
+-	  the BR2_PACKAGE_GDB_HOST option has been renamed
+-	  BR2_PACKAGE_HOST_GDB.
 -
--config BR2_PACKAGE_XSERVER_xorg
--	bool "X.org modular server"
+-config BR2_PACKAGE_DIRECTB_DITHER_RGB16
+-	bool "DirectFB RGB16 dithering option has been renamed"
+-	select BR2_PACKAGE_DIRECTFB_DITHER_RGB16
 -	select BR2_LEGACY
--	select BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR
 -	help
 -	  The option has been renamed
--	  BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR.
+-	  BR2_PACKAGE_DIRECTFB_DITHER_RGB16.
 -
--config BR2_PACKAGE_XSERVER_tinyx
--	bool "KDrive / TinyX server"
+-config BR2_PACKAGE_DIRECTB_TESTS
+-	bool "DirectFB Tests option has been renamed"
+-	select BR2_PACKAGE_DIRECTFB_TESTS
 -	select BR2_LEGACY
--	select BR2_PACKAGE_XSERVER_XORG_SERVER_KDRIVE
 -	help
 -	  The option has been renamed
--	  BR2_PACKAGE_XSERVER_XORG_SERVER_KDRIVE.
--
--config BR2_PACKAGE_PTHREAD_STUBS
--	bool "pthread-stubs option has been renamed"
--	select BR2_LEGACY
--	select BR2_PACKAGE_LIBPTHREAD_STUBS
--	help
--	  For consistency reason, the pthread-stubs package has been
--	  renamed to libpthread-stubs.
+-	  BR2_PACKAGE_DIRECTFB_TESTS.
 -
  endmenu
  
