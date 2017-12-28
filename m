@@ -1,104 +1,91 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 28 Dec 2017 17:27:49 +0100
-Subject: [Buildroot] [PATCH v9 1/8] rustc: new virtual package
-In-Reply-To: <20171228155146.18193-2-eric.le.bihan.dev@free.fr>
-References: <20171228155146.18193-1-eric.le.bihan.dev@free.fr>
- <20171228155146.18193-2-eric.le.bihan.dev@free.fr>
-Message-ID: <20171228172749.4b376a8c@windsurf.home>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 28 Dec 2017 18:00:17 +0100
+Subject: [Buildroot] [RFC 0/2] Handle conflicting files with Busybox
+In-Reply-To: <20171213130131.15744-1-thomas.petazzoni@free-electrons.com>
+References: <20171213130131.15744-1-thomas.petazzoni@free-electrons.com>
+Message-ID: <20171228170017.GE3428@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Thomas, All,
 
-On Thu, 28 Dec 2017 16:51:39 +0100, Eric Le Bihan wrote:
+On 2017-12-13 14:01 +0100, Thomas Petazzoni spake thusly:
+> As we discussed during the Prague Buildroot Developers meeting, in
+> order to implement per-package SDK, we need to ensure that no package
+> overwrites files installed by another package.
+> 
+> This RFC series is an attempt at solving this problem for Busybox. I
+> have not fixed all packages yet: since it is a very boring task to do,
+> I wanted to first get some feedback on whether the approach looks
+> reasonable or not.
+> 
+> If the feedback is positive, I'll go ahead and submit proper patches
+> that fix all packages that conflict with Busybox.
 
-> diff --git a/package/rustc/Config.in.host b/package/rustc/Config.in.host
-> new file mode 100644
-> index 0000000000..16c95fa0b4
-> --- /dev/null
-> +++ b/package/rustc/Config.in.host
-> @@ -0,0 +1,17 @@
-> +config BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS
-> +	bool
-> +	default y
-> +	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-> +	depends on BR2_i386 || BR2_x86_64 \
-> +		|| BR2_arm  || BR2_aarch64 \
-> +		|| BR2_powerpc  || BR2_powerpc64 \
-> +		|| BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
+As I previously said on IRC: I do not much like the big list we will now
+have to maintain; that's sad...
 
-This would be more readable as:
+However, I like the fact that we can get rid of the many dependencies in
+so many packages here and there. :-)
 
-	default y if BR2_aarch64
-	default y if BR2_arm && !BR2_ARM_CPU_ARMV4 && !BR2_ARM_CPU_ARMV5
-	default y if BR2_i386
-	default y if ...
-	default y if BR2_mips || BR2_mipsel
-	default y if (BR2_mips64 || BR2_mips64el) && BR2_MIPS_NABI64
-	default y if BR2_x86_64
+What I would have suggested, though, is to do what Baruch hinted at: use
+the noclobber install of Busybox, and then have Busybox depend on all
+the packages it provides applets for:
 
-> +	depends on !BR2_ARM_CPU_ARMV4 && !BR2_ARM_CPU_ARMV5
-> +	depends on !BR2_MIPS_NABI32
-> +	depends on BR2_TOOLCHAIN_USES_GLIBC
+    BUSYBOX_DEPENDENCIES = \
+        $(if $(BR2_PACKAGE_COREUTILS),coreutils) \
+        $(if $(BR2_PACKAGE_util_LINUX),util-linux) \
+        etc...
 
-Since it's weird for a host package to have a target architecture
-dependency and target C library dependency, it would be good to have a
-comment that explains this. I assume it's because of the Rust standard
-library, so something like:
+But unfortunately, the noclobber install option is not usable:
 
-	# The pre-built Rust standard library is only available for the
-	# following architectures/ABIs, and is built against glibc.
+  - first, there is no way to cause a noclobber install;
 
-> diff --git a/package/rustc/rustc.mk b/package/rustc/rustc.mk
-> new file mode 100644
-> index 0000000000..4163a44bc1
-> --- /dev/null
-> +++ b/package/rustc/rustc.mk
-> @@ -0,0 +1,31 @@
-> +################################################################################
-> +#
-> +# rustc
-> +#
-> +################################################################################
-> +
-> +RUST_ARCH := $(call qstrip,$(BR2_ARCH))
-> +
-> +ifeq ($(BR2_ARM_CPU_ARMV7A),y)
-> +RUST_ARCH := armv7
-> +endif
-> +
-> +ifeq ($(BR2_ARM_EABI),y)
-> +RUST_ABI := eabi
-> +else ifeq ($(BR2_ARM_EABIHF),y)
-> +RUST_ABI := eabihf
-> +else ifeq ($(BR2_mips64)$(BR2_mips64el),y)
-> +RUST_ABI := abi64
-> +endif
+  - second, the noclobber is not accounted for in the case shell
+    wrappers are used.
 
-Perhaps this could be defined in the Config.in file as well ?
+So, I'm afraid we don't have much choice but to do as your series
+does...
 
-config BR2_PACKAGE_HOST_RUSTC_ARCH
-	string
-	default "armv7" 	if BR2_ARM_CPU_ARMV7A
-	default BR2_ARCH 	if !BR2_ARM_CPU_ARMV7A
+Regards,
+Yann E. MORIN.
 
-config BR2_PACKAGE_HOST_RUSTC_ABI
-	string
-	default "eabi" 		if BR2_ARM_EABI
-	default "eabihf" 	if BR2_ARM_EABIHF
-	default "abi64" 	if BR2_MIPS_NABI64
+> Thanks for your feedback!
+> 
+> Thomas
+> 
+> Thomas Petazzoni (2):
+>   busybox: avoid conflict with other packages
+>   packages: drop no longer needed busybox dependencies
+> 
+>  package/bc/bc.mk                   |  5 ----
+>  package/binutils/binutils.mk       |  5 ----
+>  package/busybox/busybox.mk         | 58 ++++++++++++++++++++++++++++++++++++++
+>  package/coreutils/coreutils.mk     |  6 ----
+>  package/cpio/cpio.mk               |  1 -
+>  package/dcron/dcron.mk             |  5 ----
+>  package/debianutils/debianutils.mk |  2 --
+>  package/diffutils/diffutils.mk     |  4 ---
+>  package/fbset/fbset.mk             |  5 ----
+>  package/kmod/kmod.mk               |  3 --
+>  package/util-linux/util-linux.mk   |  6 ----
+>  11 files changed, 58 insertions(+), 42 deletions(-)
+> 
+> -- 
+> 2.14.3
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-> +RUST_TARGET_NAME := $(RUST_ARCH)-unknown-linux-gnu$(RUST_ABI)
-
-Why are you using := in this file instead of = ?
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
