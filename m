@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 29 Dec 2017 22:37:48 +0100
-Subject: [Buildroot] [PATCH 3/4] hostapd: make ACS dependent on nl80211
-In-Reply-To: <20171223190617.3981-4-alexander.i.mukhin@gmail.com>
+Date: Fri, 29 Dec 2017 22:38:45 +0100
+Subject: [Buildroot] [PATCH 4/4] hostapd: drop default netlink dependency
+In-Reply-To: <20171223190617.3981-5-alexander.i.mukhin@gmail.com>
 References: <20171223190617.3981-1-alexander.i.mukhin@gmail.com>
- <20171223190617.3981-4-alexander.i.mukhin@gmail.com>
-Message-ID: <20171229223748.5dd69cd3@windsurf.lan>
+ <20171223190617.3981-5-alexander.i.mukhin@gmail.com>
+Message-ID: <20171229223845.7be434d4@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,17 +13,19 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 23 Dec 2017 22:06:16 +0300, Alexander Mukhin wrote:
-> ACS is supported for nl80211 driver only.
-> 
-> Signed-off-by: Alexander Mukhin <alexander.i.mukhin@gmail.com>
+On Sat, 23 Dec 2017 22:06:17 +0300, Alexander Mukhin wrote:
 
-Could you add more details here? Do you see a build failure? Runtime
-failure?
+> -# libnl-3 needs -lm (for rint) and -lpthread if linking statically
+> -# And library order matters hence stick -lnl-3 first since it's appended
+> -# in the hostapd Makefiles as in LIBS+=-lnl-3 ... thus failing
+> -ifeq ($(BR2_STATIC_LIBS),y)
+> -HOSTAPD_LIBS += -lnl-3 -lm -lpthread
+> -endif
+> +HOSTAPD_USE_NL =
 
-If CONFIG_ACS=y doesn't build when CONFIG_DRIVER_NL80211 is disabled,
-then this fix should be part of PATCH 2/4, otherwise PATCH 2/4
-introduces a build regression.
+Instead of this, just use:
+
+ifeq ($(BR2_PACKAGE_LIBNL),y)
 
 Thanks!
 
