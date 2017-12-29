@@ -1,13 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 29 Dec 2017 16:27:42 +0100
-Subject: [Buildroot] [RFCv3 04/15] pkg-cmake: install CMake files as
- part of a package
-In-Reply-To: <20171203235540.395d4714@windsurf.home>
+Date: Fri, 29 Dec 2017 16:30:48 +0100
+Subject: [Buildroot] [RFCv3 05/15] pkg-generic: add .stamp_installed step
+In-Reply-To: <20171201205352.24287-6-thomas.petazzoni@free-electrons.com>
 References: <20171201205352.24287-1-thomas.petazzoni@free-electrons.com>
- <20171201205352.24287-5-thomas.petazzoni@free-electrons.com>
- <20171203223454.GB4164@scaer>
- <20171203235540.395d4714@windsurf.home>
-Message-ID: <20171229152742.GF3176@scaer>
+ <20171201205352.24287-6-thomas.petazzoni@free-electrons.com>
+Message-ID: <20171229153048.GG3176@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,69 +13,152 @@ To: buildroot@busybox.net
 
 Thomas, All,
 
-On 2017-12-03 23:55 +0100, Thomas Petazzoni spake thusly:
-> On Sun, 3 Dec 2017 23:34:54 +0100, Yann E. MORIN wrote:
-> > On 2017-12-01 21:53 +0100, Thomas Petazzoni spake thusly:
-> > > Currently, the toolchainfile.cmake and Buildroot.cmake files are
-> > > installed outside of any package, just triggered by the toolchain
-> > > target.
-> > > 
-> > > As part of the per-package SDK effort, we are trying to avoid anything
-> > > that installs to the global $(HOST_DIR), and this is one of the
-> > > remaining files installed in $(HOST_DIR) outside of any package. We
-> > > fix this by installing such files as part of the toolchain package
-> > > post-install staging hooks.
-> > > 
-> > > Yes, a post-install staging hook to install things to $(HOST_DIR) is a
-> > > bit weird, but the toolchain infrastructure is made of target packages
-> > > only, and they all install a lot of stuff to $(HOST_DIR) already.  
-> > 
-> > What I am more concerned about, is that the cmake package is registering
-> > a hook for another package, toolchain.
+On 2017-12-01 21:53 +0100, Thomas Petazzoni spake thusly:
+> The installation to target, staging and images as well as the host
+> installation are all done in 4 different make targets. We don't have
+> any place currently to run something at the end of a package
+> installation, i.e once all of target/staging/images (for target) or
+> host (for host) installation have completed.
 > 
-> Do we want to introduce a toolchain-cmake package, that all CMake
-> packages would depend on, just for the sake of installing those files ?
+> We will need such a step to fix the RPATH of binaries in the host
+> directory. Indeed, while normally only host packages should install
+> things in $(HOST_DIR), in practice a number of target packages (ex:
+> qt4, qt5base) do install things in $(HOST_DIR).
 > 
-> If we would do this, then a normal toolchain build (i.e without
-> building any CMake package) would no longer generate the
-> toolchainfile.cmake file, which is quite useful for SDKs. People could
-> indeed enable that package explicitly when they are building a SDK.
+> Therefore, we want to run our RPATH fixing logic at the end of all
+> installation steps. To achieve this, this commit introduces a new make
+> target, .stamp_installed, which depends on
+> .stamp_{target,staging,images}_installed for target packages and
+> .stamp_host_installed for host packages.
 > 
-> But all in all, I'm not sure it's really worth the hassle. But I'm open
-> to comments on that.
+> This new step currently doesn't do anything, but the actual logic is
+> added in a follow-up commit.
 > 
-> Or perhaps you had other suggestions in mind?
-
-No, I don't have a better solution. And in fact, it is not a package
-that is registering a hook for another one; it is the cmake infra that
-registers a hook for the toolchain package.
-
-And I'm pretty fine with this, in fact.
+> This change in fact makes the overall step sequencing more logical:
+> for all steps the dependencies were done on the stamp file targets,
+> except for the install step where we were using phony targets to make
+> $(1)-install depends on $(1)-install-{target,staging,images,host}. So
+> now, the phony targets $(1)-install-{target,staging,images,host} are
+> only human-readable targets that are shortcuts to the corresponding
+> stamp file targets, and not usded anymore for the step
+> sequencing. This makes them more consistent with the other phony
+> $(1)-{build,configure,patch,...} phony targets.
+> 
+> It also makes $(1)-install-host more consistent with other phony
+> targets: $(1)-install-target only existed if the package had
+> <pkg>_INSTALL_TARGET = YES, but $(1)-install-host existed
+> unconditionally. Now it only exists if it's a host package.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-> > Have you tried to run check-package on that?
-> 
-> Nope, I did not, but it does not complain:
-> 
-> $ ./utils/check-package package/pkg-cmake.mk 
-> 0 lines processed
-> 0 warnings generated
-
-Right, because this is not a package, but a package infra.
-
-Thanks! :-)
 
 Regards,
 Yann E. MORIN.
 
-> Thanks for the review!
+> ---
+> Changes since v2:
+>  - None
+> Changes since v1:
+>  - New patch.
+> ---
+>  package/pkg-generic.mk | 44 +++++++++++++++++++++++++++-----------------
+>  1 file changed, 27 insertions(+), 17 deletions(-)
 > 
-> Thomas
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index 0019814276..2b821e9bdf 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -340,6 +340,12 @@ $(BUILD_DIR)/%/.stamp_target_installed:
+>  	@$(call step_end,install-target)
+>  	$(Q)touch $@
+>  
+> +# Finalize installation
+> +$(BUILD_DIR)/%/.stamp_installed:
+> +	@$(call step_start,install)
+> +	@$(call step_end,install)
+> +	$(Q)touch $@
+> +
+>  # Remove package sources
+>  $(BUILD_DIR)/%/.stamp_dircleaned:
+>  	rm -Rf $(@D)
+> @@ -595,6 +601,7 @@ $(2)_TARGET_INSTALL_TARGET =	$$($(2)_DIR)/.stamp_target_installed
+>  $(2)_TARGET_INSTALL_STAGING =	$$($(2)_DIR)/.stamp_staging_installed
+>  $(2)_TARGET_INSTALL_IMAGES =	$$($(2)_DIR)/.stamp_images_installed
+>  $(2)_TARGET_INSTALL_HOST =      $$($(2)_DIR)/.stamp_host_installed
+> +$(2)_TARGET_INSTALL =      	$$($(2)_DIR)/.stamp_installed
+>  $(2)_TARGET_BUILD =		$$($(2)_DIR)/.stamp_built
+>  $(2)_TARGET_CONFIGURE =		$$($(2)_DIR)/.stamp_configured
+>  $(2)_TARGET_RSYNC =	        $$($(2)_DIR)/.stamp_rsynced
+> @@ -642,38 +649,40 @@ $(2)_ROOTFS_POST_CMD_HOOKS      ?=
+>  # human-friendly targets and target sequencing
+>  $(1):			$(1)-install
+>  
+> +$(1)-install:			$$($(2)_TARGET_INSTALL)
+> +
+>  ifeq ($$($(2)_TYPE),host)
+> -$(1)-install:	        $(1)-install-host
+> -else
+> -$(1)-install:		$(1)-install-staging $(1)-install-target $(1)-install-images
+> -endif
+> +
+> +$(1)-install-host:		$$($(2)_TARGET_INSTALL_HOST)
+> +$$($(2)_TARGET_INSTALL):	$$($(2)_TARGET_INSTALL_HOST)
+> +
+> +else # host vs. target
+>  
+>  ifeq ($$($(2)_INSTALL_TARGET),YES)
+>  $(1)-install-target:		$$($(2)_TARGET_INSTALL_TARGET)
+> -$$($(2)_TARGET_INSTALL_TARGET):	$$($(2)_TARGET_BUILD)
+> -else
+> -$(1)-install-target:
+> +$$($(2)_TARGET_INSTALL):	$$($(2)_TARGET_INSTALL_TARGET)
+>  endif
+>  
+>  ifeq ($$($(2)_INSTALL_STAGING),YES)
+> -$(1)-install-staging:			$$($(2)_TARGET_INSTALL_STAGING)
+> -$$($(2)_TARGET_INSTALL_STAGING):	$$($(2)_TARGET_BUILD)
+> -# Some packages use install-staging stuff for install-target
+> -$$($(2)_TARGET_INSTALL_TARGET):		$$($(2)_TARGET_INSTALL_STAGING)
+> -else
+> -$(1)-install-staging:
+> +$(1)-install-staging:		$$($(2)_TARGET_INSTALL_STAGING)
+> +$$($(2)_TARGET_INSTALL):	$$($(2)_TARGET_INSTALL_STAGING)
+>  endif
+>  
+>  ifeq ($$($(2)_INSTALL_IMAGES),YES)
+>  $(1)-install-images:		$$($(2)_TARGET_INSTALL_IMAGES)
+> -$$($(2)_TARGET_INSTALL_IMAGES):	$$($(2)_TARGET_BUILD)
+> -else
+> -$(1)-install-images:
+> +$$($(2)_TARGET_INSTALL):	$$($(2)_TARGET_INSTALL_IMAGES)
+>  endif
+>  
+> -$(1)-install-host:		$$($(2)_TARGET_INSTALL_HOST)
+> +endif # host vs.target
+> +
+> +$$($(2)_TARGET_INSTALL_TARGET):	$$($(2)_TARGET_BUILD)
+> +$$($(2)_TARGET_INSTALL_STAGING):$$($(2)_TARGET_BUILD)
+> +$$($(2)_TARGET_INSTALL_IMAGES):	$$($(2)_TARGET_BUILD)
+>  $$($(2)_TARGET_INSTALL_HOST):	$$($(2)_TARGET_BUILD)
+>  
+> +# Some packages use install-staging stuff for install-target
+> +$$($(2)_TARGET_INSTALL_TARGET):		$$($(2)_TARGET_INSTALL_STAGING)
+> +
+>  $(1)-build:		$$($(2)_TARGET_BUILD)
+>  $$($(2)_TARGET_BUILD):	$$($(2)_TARGET_CONFIGURE)
+>  
+> @@ -813,6 +822,7 @@ $(1)-reconfigure:	$(1)-clean-for-reconfigure $(1)
+>  
+>  # define the PKG variable for all targets, containing the
+>  # uppercase package variable prefix
+> +$$($(2)_TARGET_INSTALL):		PKG=$(2)
+>  $$($(2)_TARGET_INSTALL_TARGET):		PKG=$(2)
+>  $$($(2)_TARGET_INSTALL_STAGING):	PKG=$(2)
+>  $$($(2)_TARGET_INSTALL_IMAGES):		PKG=$(2)
 > -- 
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux and Kernel engineering
-> http://free-electrons.com
+> 2.13.6
+> 
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
