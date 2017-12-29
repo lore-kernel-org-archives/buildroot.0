@@ -1,103 +1,58 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 29 Dec 2017 16:53:57 +0100
-Subject: [Buildroot] [RFCv3 12/15] core: kill DEPENDENCIES_HOST_PREREQ
-In-Reply-To: <20171201205352.24287-13-thomas.petazzoni@free-electrons.com>
-References: <20171201205352.24287-1-thomas.petazzoni@free-electrons.com>
- <20171201205352.24287-13-thomas.petazzoni@free-electrons.com>
-Message-ID: <20171229155357.GN3176@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 29 Dec 2017 17:19:59 +0100
+Subject: [Buildroot] [PATCH v2 2/2] package/brltty: explicitly check if
+ ioperm is available
+In-Reply-To: <20171229140641.13882-2-mlang@blind.guru>
+References: <20171229140641.13882-1-mlang@blind.guru>
+ <20171229140641.13882-2-mlang@blind.guru>
+Message-ID: <20171229171959.419ba4ae@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Hello,
 
-On 2017-12-01 21:53 +0100, Thomas Petazzoni spake thusly:
-> Now that DEPENDENCIES_HOST_PREREQ is no longer used anywhere, we can
-> kill it.
+On Fri, 29 Dec 2017 15:06:41 +0100, Mario Lang wrote:
 
-With fire! A lot of fire! ;-]
+> +diff --git a/configure.ac b/configure.ac
+> +index 5e94d33bd..07119dd9f 100644
+> +--- a/configure.ac
+> ++++ b/configure.ac
+> +@@ -1446,7 +1446,9 @@ BRLTTY_ARG_PACKAGE([ports], [I/O ports], [], [dnl
+> +       ports_package="kfreebsd"
+> +       ;;
+> +    linux*)
+> +-      ports_package="glibc"
+> ++      AC_CHECK_FUNC([ioperm], [
+> ++         ports_package="glibc"
 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+This seems weird. What happens then when ioperm() is not available ?
+Which ports_package is used ?
 
-Defintiely:
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Regards,
-Yann E. MORIN.
-
-> ---
-> Changes since v2:
->  - New patch
-> ---
->  Makefile                             |  2 --
->  package/pkg-generic.mk               |  2 --
->  support/dependencies/dependencies.mk | 10 +++-------
->  3 files changed, 3 insertions(+), 11 deletions(-)
-> 
-> diff --git a/Makefile b/Makefile
-> index f31834682c..090b3ba191 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -485,8 +485,6 @@ include package/Makefile.in
->  -include $(wildcard arch/arch.mk.*)
->  include support/dependencies/dependencies.mk
+> -BRLTTY_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
+> +BRLTTY_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES) host-autoconf
 >  
-> -PACKAGES += $(DEPENDENCIES_HOST_PREREQ)
-> -
->  include toolchain/*.mk
->  include toolchain/*/*.mk
+>  BRLTTY_CONF_OPTS = \
+>  	--disable-java-bindings \
+> @@ -24,6 +24,12 @@ BRLTTY_CONF_OPTS = \
+>  	--without-mikropuhe --without-speechd --without-swift \
+>  	--without-theta --without-viavoice
 >  
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index 7c5d951af9..8c6e34cc9f 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -725,9 +725,7 @@ $(1)-configure:			$$($(2)_TARGET_CONFIGURE)
->  $$($(2)_TARGET_CONFIGURE):	| $$($(2)_FINAL_DEPENDENCIES)
->  
->  $$($(2)_TARGET_SOURCE) $$($(2)_TARGET_RSYNC): | dirs prepare
-> -ifeq ($$(filter $(1),$$(DEPENDENCIES_HOST_PREREQ)),)
->  $$($(2)_TARGET_SOURCE) $$($(2)_TARGET_RSYNC): | dependencies
-> -endif
->  
->  ifeq ($$($(2)_OVERRIDE_SRCDIR),)
->  # In the normal case (no package override), the sequence of steps is
-> diff --git a/support/dependencies/dependencies.mk b/support/dependencies/dependencies.mk
-> index 1a4b5df9f2..d8ec137b12 100644
-> --- a/support/dependencies/dependencies.mk
-> +++ b/support/dependencies/dependencies.mk
-> @@ -14,18 +14,14 @@ $(shell support/dependencies/check-host-$(1).sh $(2))
->  endef
->  -include $(sort $(wildcard support/dependencies/check-host-*.mk))
->  
-> -core-dependencies:
-> -	@HOSTCC="$(firstword $(HOSTCC))" MAKE="$(MAKE)" \
-> +dependencies:
-> +	@HOSTCC="$(firstword $(HOSTCC_NOCCACHE))" MAKE="$(MAKE)" \
->  		DL_TOOLS="$(sort $(DL_TOOLS_DEPENDENCIES))" \
->  		$(TOPDIR)/support/dependencies/dependencies.sh
->  
-> -core-dependencies $(DEPENDENCIES_HOST_PREREQ): HOSTCC=$(HOSTCC_NOCCACHE)
-> -core-dependencies $(DEPENDENCIES_HOST_PREREQ): HOSTCXX=$(HOSTCXX_NOCCACHE)
-> -dependencies: core-dependencies $(DEPENDENCIES_HOST_PREREQ)
-> -
->  ################################################################################
->  #
->  # Toplevel Makefile options
->  #
->  ################################################################################
-> -.PHONY: dependencies core-dependencies
-> +.PHONY: dependencies
-> -- 
-> 2.13.6
-> 
+> +define BRLTTY_AUTOCONF
+> +	cd $(BRLTTY_SRCDIR) && $(AUTOCONF)
+> +endef
+> +
+> +BRLTTY_PRE_CONFIGURE_HOOKS += BRLTTY_AUTOCONF
 
+Please use BRLTTY_AUTORECONF = YES instead.
+
+Thanks!
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
