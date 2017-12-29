@@ -1,44 +1,91 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 29 Dec 2017 15:04:46 +0100
-Subject: [Buildroot] [PATCH 1/1 v2] gcc: Add support for
- --enable-default-pie configure option.
-In-Reply-To: <3ca77bc6-5613-bc51-be89-0b241fd6d204@petroprogram.com>
-References: <20171228214333.8340-1-stefan.froberg@petroprogram.com>
- <20171228230743.1e6c59ab@windsurf>
- <5a5a8ab0-25f3-a3a2-bf5a-b9c7fe851c66@petroprogram.com>
- <20171229144204.00605c4e@windsurf.lan>
- <3ca77bc6-5613-bc51-be89-0b241fd6d204@petroprogram.com>
-Message-ID: <20171229150446.197ea731@windsurf.lan>
+From: daggs <daggs@gmx.com>
+Date: Fri, 29 Dec 2017 15:24:11 +0100
+Subject: [Buildroot] [PATCH] libtirpc: fix compilation error
+In-Reply-To: <20171229143805.7f083140@windsurf.lan>
+References: <20171229130333.13661-1-daggs@gmx.com>
+ <20171229143805.7f083140@windsurf.lan>
+Message-ID: <trinity-145e0c2a-2583-47ec-b583-2128a636e7e6-1514557451788@3c-app-mailcom-bs06>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Greetings Thomas
 
-On Fri, 29 Dec 2017 15:48:48 +0200, Stefan Fr?berg wrote:
+> Sent: Friday, December 29, 2017 at 3:38 PM
+> From: "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>
+> To: "Dagg Stompler" <daggs@gmx.com>
+> Cc: buildroot at buildroot.org
+> Subject: Re: [Buildroot] [PATCH] libtirpc: fix compilation error
+>
+> Hello,
+> 
+> On Fri, 29 Dec 2017 15:03:33 +0200, Dagg Stompler wrote:
+> > when compiling libtirpc, rpcgen will fail with file not found on
+> > netconfig.h and rpc/types.h
+> > adding the proper include path to the makefile fixes it.
+> > 
+> > Signed-off-by: Dagg Stompler <daggs@gmx.com>
+> 
+> Could you give more details about the failures? Is this fixing an
+> autobuilder issue? Under what conditions does this happens? Why aren't
+> the autobuilders seeing this problem?
 
-> Yeah, there is no other way for external toolchains than generic flags
-> passing (and possibly patching)
-> or compiler wrapper (well, there is specs file but it's ...soooo messy...).
+here is an example error:
+>>> libtirpc 1.0.2 Building
+PATH="/home/dagg/workspace/buildroots/buildroot-master4/output/host/bin:/home/dagg/workspace/buildroots/buildroot-master4/output/host/sbin:/usr/x86_64-pc-linux-gnu/gcc-bin/7.2.0:/usr/x86_64-pc-linux-gnu/aarch64-unknown-linux-gnu/gcc-bin/5.4.0:/usr/x86_64-pc-linux-gnu/aarch64-unknown-linux-musl/gcc-bin/6.4.0:/usr/lib/llvm/5/bin:/usr/local/bin:/usr/bin:/bin:/opt/bin:/usr/games/bin:/usr/sbin:/usr/local/bin"  /usr/bin/make -j9  -C /home/dagg/workspace/buildroots/buildroot-master4/output/build/libtirpc-1.0.2/
+make[1]: Entering directory '/home/dagg/workspace/buildroots/buildroot-master4/output/build/libtirpc-1.0.2'
+cd rpcgen && /usr/bin/make
+make[2]: Entering directory '/home/dagg/workspace/buildroots/buildroot-master4/output/build/libtirpc-1.0.2/rpcgen'
+  CC       rpc_clntout.o
+  CC       rpc_cout.o
+  CC       rpc_hout.o
+  CC       rpc_main.o
+  CC       rpc_parse.o
+  CC       rpc_sample.o
+  CC       rpc_scan.o
+  CC       rpc_svcout.o
+  CC       rpc_tblout.o
+rpc_parse.c:39:10: fatal error: rpc/types.h: No such file or directory
+ #include "rpc/types.h"
+          ^~~~~~~~~~~~~
+compilation terminated.
+make[2]: *** [Makefile:412: rpc_parse.o] Error 1
+make[2]: *** Waiting for unfinished jobs....
+rpc_tblout.c: In function ?write_table?:
+rpc_tblout.c:97:18: warning: format not a string literal and no format arguments [-Wformat-security]
+    f_print(fout, null_entry);
+                  ^~~~~~~~~~
+rpc_hout.c: In function ?pdeclaration?:
+rpc_hout.c:470:2: warning: format not a string literal and no format arguments [-Wformat-security]
+  f_print(fout, separator );
+  ^~~~~~~
+rpc_tblout.c:137:17: warning: format not a string literal and no format arguments [-Wformat-security]
+   f_print(fout, tbl_end);
+                 ^~~~~~~
+rpc_svcout.c: In function ?write_real_program?:
+rpc_svcout.c:296:8: warning: format not a string literal and no format arguments [-Wformat-security]
+        f_print(fout, proc->args.argname);
+        ^~~~~~~
+rpc_clntout.c:39:10: fatal error: rpc/types.h: No such file or directory
+ #include <rpc/types.h>
+          ^~~~~~~~~~~~~
+compilation terminated.
+make[2]: *** [Makefile:412: rpc_clntout.o] Error 1
+rpc_main.c: In function ?h_output?:
+rpc_main.c:504:17: warning: format not a string literal and no format arguments [-Wformat-security]
+   f_print(fout, rpcgen_table_dcl);
+                 ^~~~~~~~~~~~~~~~
+make[2]: Leaving directory '/home/dagg/workspace/buildroots/buildroot-master4/output/build/libtirpc-1.0.2/rpcgen'
+make[1]: *** [Makefile:985: rpcgen/rpcgen] Error 2
+make[1]: Leaving directory '/home/dagg/workspace/buildroots/buildroot-master4/output/build/libtirpc-1.0.2'
+make: *** [package/pkg-generic.mk:250: /home/dagg/workspace/buildroots/buildroot-master4/output/build/libtirpc-1.0.2/.stamp_built] Error 2
 
-And since the different method needed for external toolchains would
-also work for internal toolchains, there is no point in doing a
-solution that only works for internal toolchains. See my point ?
+config to reproduce:
+BR2_x86_i686=y
+BR2_PACKAGE_LIBTIRPC=y
 
-> Personally, Im only interested of internal toolchain
-> (and I think this is not the first case that internal/external
-> toolchains have different rules?)
+no idea why the autobuilds didn't caught it.
 
-We generally try to have internal and external toolchains supported in
-the same way. You may only be interested in internal toolchains, but
-Buildroot as a project needs to keep the feature parity between
-internal and external toolchains, so we would like to have a solution
-that solves both situations.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Dagg.
