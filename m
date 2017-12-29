@@ -1,101 +1,113 @@
-From: =?UTF-8?Q?Stefan_Fr=c3=b6berg?= <stefan.froberg@petroprogram.com>
-Date: Fri, 29 Dec 2017 15:25:21 +0200
-Subject: [Buildroot] [PATCH 1/1 v2] gcc: Add support for
- --enable-default-pie configure option.
-In-Reply-To: <20171228230743.1e6c59ab@windsurf>
-References: <20171228214333.8340-1-stefan.froberg@petroprogram.com>
- <20171228230743.1e6c59ab@windsurf>
-Message-ID: <5a5a8ab0-25f3-a3a2-bf5a-b9c7fe851c66@petroprogram.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 29 Dec 2017 14:32:04 +0100
+Subject: [Buildroot] [PATCH] core: add optional failure when 2+ packages
+ touch the same file
+Message-ID: <20171229133204.16887-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas
+For top-level parallel build, we will really want to avoid the situation
+where two packages touch the same file.
 
-Yes, of course PIE (and other hardening flags) could be passed with
-CFLAGS/CXXFLAGS/LDFLAGS.
+We currently only warn about the situation, but we have no real hard
+numbers about how many packages are affected and cause the issue.
 
-But what if some package does not care about CFLAGS/CXXFLAGS/LDFLAGS?
-(Like for example, zlib by default does not do, but I see that buildroot
-maually passes them
-to configure script)
+Add a user-settable option (mostly for the autobuilders for now) to turn
+the warning into a hard error.
 
-Then you would need to patch all those packages while with default PIE
-there would
-be no need to patch. Compiler would automatically do the right thing
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ Config.in                        |  8 ++++++++
+ Makefile                         | 10 +++++++---
+ support/scripts/check-uniq-files |  9 ++++++++-
+ 3 files changed, 23 insertions(+), 4 deletions(-)
 
-And in the case of PIE, there seems to be tricky rules what to put and
-where:
-https://fedoraproject.org/wiki/Changes/Harden_All_Packages
-
-From the above link:
-
-"The key change is that for PIE builds, compilation for static linking
-(such as object files which go into the main program, not a library)
-needs the flag -fPIE.
-
-But this flag /must not be included when compiling for dynamic linking/
-because the
-resulting object code is not compatible with that.
-
-To repeat, /*you should not specify both -fpic and -fpie on the same
-command line/*
-because this rarely has the intended effect. "
-
-So with default pie built into compiler, the compiler would
-automatically do the right thing.
-
-Other than letting compiler to handle the PIE and changing
-"fstack-protector-all" to
-"fstack-protector-strong"? (introduced in GCC 4.9, pretty much the same
-result that "all" but with less performance penalty)
-that generic hardening patch looks okay to me.
-
-So I suggest that let the compiler handle PIE.
-
-Either builtin (need GCC 6.x + ), with specs file (very ugly and messy
-but also very effective) or maybe
-compiler wrapper (call it "hardened-gcc/g++" or whatever) that I
-remember Arnout Vandecappelle suggesting.
-
-Best Regards
--S-
-
-
-
-Thomas Petazzoni kirjoitti 29.12.2017 klo 00:07:
-> Hello,
->
-> On Thu, 28 Dec 2017 23:43:33 +0200, Stefan Fr?berg wrote:
->> By default, buildroot produces insecure binaries.
->>
->> GCC 6.x added build time configuration option "--enable-default-pie".
->> With that enabled, GCC will produce PIE 
->> (Position-independent executables) binaries.
->>
->> PIE is a requirement for ASLR (Address space layout randomization)
->> that will make exploits like return-to-libc attack impossible. 
->>
->> If you want to have a modern, secure system then enable this option.
->>
->> To override this default behaviour, you can use -no-pie
->> with your CFLAGS/CXXFLAGS.
->>
->> https://gcc.gnu.org/onlinedocs/gcc-6.2.0/gcc/Link-Options.html
-> As I said in my previous review, I think we want a solution that also
-> applies to external toolchains, by passing -pie in the compiler wrapper.
->
-> Please see "[PATCH 2/2] security hardening: add RELFO,  FORTIFY
-> options" in the mailing list archives,
-> https://patchwork.ozlabs.org/patch/830085/, it was also adding -pie
-> support, but in a more generic way. Could you use this instead ?
->
-> Thanks!
->
-> Thomas
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20171229/b8c720cf/attachment.html>
+diff --git a/Config.in b/Config.in
+index 62d67ce957..2808205454 100644
+--- a/Config.in
++++ b/Config.in
+@@ -711,6 +711,14 @@ config BR2_COMPILER_PARANOID_UNSAFE_PATH
+ 	  toolchain (through the toolchain wrapper and binutils patches)
+ 	  and external toolchain backends (through the toolchain wrapper).
+ 
++config BR2_UNIQ_FILES
++	bool "Forbid two packages from touching the same files"
++	help
++	  By default, Buildroot will detect and warn when two packages
++	  (or more) touch the same files.
++
++	  Say 'y' here to turn the warning into an error.
++
+ config BR2_REPRODUCIBLE
+ 	bool "Make the build reproducible (experimental)"
+ 	# SOURCE_DATE_EPOCH support in toolchain-wrapper requires GCC 4.4
+diff --git a/Makefile b/Makefile
+index ed5642f8eb..bdf00b6d4f 100644
+--- a/Makefile
++++ b/Makefile
+@@ -674,15 +674,19 @@ endef
+ TARGET_FINALIZE_HOOKS += PURGE_LOCALES
+ endif
+ 
++ifeq ($(BR2_UNIQ_FILES),y)
++UNIQ_FILES_OPTS = --fail
++endif
++
+ $(TARGETS_ROOTFS): target-finalize
+ 
+ .PHONY: target-finalize
+ target-finalize: $(PACKAGES)
+ 	@$(call MESSAGE,"Finalizing target directory")
+ 	# Check files that are touched by more than one package
+-	./support/scripts/check-uniq-files -t target $(BUILD_DIR)/packages-file-list.txt
+-	./support/scripts/check-uniq-files -t staging $(BUILD_DIR)/packages-file-list-staging.txt
+-	./support/scripts/check-uniq-files -t host $(BUILD_DIR)/packages-file-list-host.txt
++	./support/scripts/check-uniq-files $(UNIQ_FILES_OPTS) -t target $(BUILD_DIR)/packages-file-list.txt
++	./support/scripts/check-uniq-files $(UNIQ_FILES_OPTS) -t staging $(BUILD_DIR)/packages-file-list-staging.txt
++	./support/scripts/check-uniq-files $(UNIQ_FILES_OPTS) -t host $(BUILD_DIR)/packages-file-list-host.txt
+ 	$(foreach hook,$(TARGET_FINALIZE_HOOKS),$($(hook))$(sep))
+ 	rm -rf $(TARGET_DIR)/usr/include $(TARGET_DIR)/usr/share/aclocal \
+ 		$(TARGET_DIR)/usr/lib/pkgconfig $(TARGET_DIR)/usr/share/pkgconfig \
+diff --git a/support/scripts/check-uniq-files b/support/scripts/check-uniq-files
+index ea5afdb0b3..5144590e44 100755
+--- a/support/scripts/check-uniq-files
++++ b/support/scripts/check-uniq-files
+@@ -5,7 +5,7 @@ import csv
+ import argparse
+ from collections import defaultdict
+ 
+-warn = 'Warning: {} file "{}" is touched by more than one package: {}\n'
++warn = 'Error: {} file "{}" is touched by more than one package: {}\n'
+ 
+ def main():
+     parser = argparse.ArgumentParser()
+@@ -13,6 +13,8 @@ def main():
+                     help='The packages-file-list to check from')
+     parser.add_argument('-t', '--type', metavar="TYPE",
+                         help='Report as a TYPE file (TYPE is either target, staging, or host)')
++    parser.add_argument('-f', '--fail', action='store_false',
++                        help='Fail if a file is touched by more than one package')
+ 
+     args = parser.parse_args()
+ 
+@@ -32,9 +34,14 @@ def main():
+             file = row[1]
+             file_to_pkg[file].append(pkg)
+ 
++    ret = True
+     for file in file_to_pkg:
+         if len(file_to_pkg[file]) > 1:
+             sys.stderr.write(warn.format(args.type, file, file_to_pkg[file]))
++            ret = args.fail
++
++    # True means !0, False means 0, so invert to get correct shell exit code
++    return not ret
+ 
+ if __name__ == "__main__":
+     sys.exit(main())
+-- 
+2.11.0
