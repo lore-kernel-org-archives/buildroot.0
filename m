@@ -1,11 +1,13 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 29 Dec 2017 16:33:44 +0100
-Subject: [Buildroot] [RFCv3 06/15] package/pkg-generic: add the concept
- of extract dependency
-In-Reply-To: <20171201205352.24287-7-thomas.petazzoni@free-electrons.com>
+Date: Fri, 29 Dec 2017 16:34:50 +0100
+Subject: [Buildroot] [RFCv3 07/15] package/pkg-generic: handle host-tar
+ as an extract dependency
+In-Reply-To: <20171202211910.7f2a7b96@windsurf.lan>
 References: <20171201205352.24287-1-thomas.petazzoni@free-electrons.com>
- <20171201205352.24287-7-thomas.petazzoni@free-electrons.com>
-Message-ID: <20171229153344.GH3176@scaer>
+ <20171201205352.24287-8-thomas.petazzoni@free-electrons.com>
+ <20171202150606.GC2988@scaer>
+ <20171202211910.7f2a7b96@windsurf.lan>
+Message-ID: <20171229153450.GI3176@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,100 +16,50 @@ To: buildroot@busybox.net
 
 Thomas, All,
 
-On 2017-12-01 21:53 +0100, Thomas Petazzoni spake thusly:
-> Extract dependencies are dependencies that must be ready before the
-> extract step of a package, i.e for tools that are needed to extract
-> packages themselves. Current examples of such tools are host-tar,
-> host-lzip and host-xz.
+On 2017-12-02 21:19 +0100, Thomas Petazzoni spake thusly:
+> On Sat, 2 Dec 2017 16:06:06 +0100, Yann E. MORIN wrote:
+> > > To achieve that, check-host-tar.mk fills in the  
+> > s/$/ variable/
+> ACK, will fix.
 > 
-> They are currently handled through DEPENDENCIES_HOST_PREREQ. However,
-> this mechanism has a number of drawbacks:
+> > > The BR2_TAR_HOST_DEPENDENCY is added to all packages, except host-tar
+> > > itself (obviously) and host-skeleton, because we depend on
+> > > host-skeleton to install host-tar properly in HOST_DIR.  
+> > 
+> > As we discussed on IRC, there is also the case for the tar filesystem,
+> > which may require host-tar.
+> > 
+> > Granted, it is very very unlikely that we end up with no package that
+> > require host-tar, but still...
 > 
->  - First and foremost, because host-tar/host-lzip/host-xz are not
->    listed in the dependencies of packages, the package infrastructure
->    does not know it should rsync them in the context of per-package
->    SDK.
+> Yes, I agree, the tar filesystem should depend on
+> $(BR2_TAR_HOST_DEPENDENCY) as well. I'll fix that.
 > 
->  - Second, there is no dependency handling *between* them. I.e, we
->    have no mechanism that says host-tar should be built before
->    host-lzip, while it is in fact the case: if you need to build
->    host-lzip, you need to extract a tarball, so you may need host-tar
->    if your system tarball is not capable enough.
+> > > +ifeq ($(filter host-tar host-skeleton,$(1)),)
+> > > +$(2)_EXTRACT_DEPENDENCIES += $(BR2_TAR_HOST_DEPENDENCY)
+> > > +endif  
+> > 
+> > So, even packages that are available as a zip file will get the
+> > dependency on host-tar?
 > 
-> For those reasons, it makes sense to add explicit support for "extract
-> dependencies" in the package infrastructure, through the
-> <pkg>_EXTRACT_DEPENDENCIES variable. It is unlikely this variable will
-> ever be used by a package .mk file, but it will be used internally by
-> the package infrastructure.
+> Yes. Like host-xz/host-lzip, my series does not attempt to switch to
+> more fine-grained dependencies, it only intends to move to proper
+> package dependencies. Using more fine-grained dependencies is left for
+> future work.
 > 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> > >  ifeq (,$(call suitable-host-package,tar,$(TAR)))
+> > > -DEPENDENCIES_HOST_PREREQ += host-tar
+> > >  TAR = $(HOST_DIR)/bin/tar
+> > > +BR2_TAR_HOST_DEPENDENCY += host-tar  
+> > Why assign-append here, instead of simply assign?
+> Good point, will fix.
 
-Except for a typo (see below):
+Once the two minor issues are fixed:
 
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-> ---
-> Changes since v2:
->  - New patch
-> ---
->  docs/manual/adding-packages-generic.txt | 7 +++++++
->  package/pkg-generic.mk                  | 8 +++++++-
->  2 files changed, 14 insertions(+), 1 deletion(-)
-> 
-> diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
-> index 63ea51bf89..7f42cb09e9 100644
-> --- a/docs/manual/adding-packages-generic.txt
-> +++ b/docs/manual/adding-packages-generic.txt
-> @@ -347,6 +347,13 @@ information is (assuming the package name is +libfoo+) :
->    a similar way, +HOST_LIBFOO_DEPENDENCIES+ lists the dependencies for
->    the current host package.
->  
-> +* +LIBFOO_EXTRACT_DEPENDENCIES+ lists the dependencies (in terms of
-> +  package name) that are required for the current target package to be
-> +  extracted. These depnedencies are guaranteed to be compiled and
-> +  installed before the extract step of the current package
-> +  starts. This is only use internally by the package infrastructure,
-
-*used
-
 Regards,
 Yann E. MORIN.
-
-> +  and should typically not be used directly by packages.
-> +
->  * +LIBFOO_PATCH_DEPENDENCIES+ lists the dependencies (in terms of
->    package name) that are required for the current package to be
->    patched. These dependencies are guaranteed to be extracted and
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index 2b821e9bdf..824c34bec9 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -589,8 +589,13 @@ endif
->  
->  # Eliminate duplicates in dependencies
->  $(2)_FINAL_DEPENDENCIES = $$(sort $$($(2)_DEPENDENCIES))
-> +$(2)_FINAL_EXTRACT_DEPENDENCIES = $$(sort $$($(2)_EXTRACT_DEPENDENCIES))
->  $(2)_FINAL_PATCH_DEPENDENCIES = $$(sort $$($(2)_PATCH_DEPENDENCIES))
-> -$(2)_FINAL_ALL_DEPENDENCIES = $$(sort $$($(2)_FINAL_DEPENDENCIES) $$($(2)_FINAL_PATCH_DEPENDENCIES))
-> +$(2)_FINAL_ALL_DEPENDENCIES = \
-> +	$$(sort \
-> +		$$($(2)_FINAL_DEPENDENCIES) \
-> +		$$($(2)_FINAL_EXTRACT_DEPENDENCIES) \
-> +		$$($(2)_FINAL_PATCH_DEPENDENCIES))
->  
->  $(2)_INSTALL_STAGING		?= NO
->  $(2)_INSTALL_IMAGES		?= NO
-> @@ -716,6 +721,7 @@ $$($(2)_TARGET_PATCH):  | $$(patsubst %,%-patch,$$($(2)_FINAL_PATCH_DEPENDENCIES
->  
->  $(1)-extract:			$$($(2)_TARGET_EXTRACT)
->  $$($(2)_TARGET_EXTRACT):	$$($(2)_TARGET_SOURCE)
-> +$$($(2)_TARGET_EXTRACT): | $$($(2)_FINAL_EXTRACT_DEPENDENCIES)
->  
->  $(1)-depends:		$$($(2)_FINAL_DEPENDENCIES)
->  
-> -- 
-> 2.13.6
-> 
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
