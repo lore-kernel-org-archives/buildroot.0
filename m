@@ -1,42 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 29 Dec 2017 21:59:03 +0100
-Subject: [Buildroot] [PATCH v2 2/2] package/brltty: explicitly check if
- ioperm is available
-In-Reply-To: <20171229140641.13882-2-mlang@blind.guru>
-References: <20171229140641.13882-1-mlang@blind.guru>
- <20171229140641.13882-2-mlang@blind.guru>
-Message-ID: <20171229215903.15ae85a3@windsurf.lan>
+Date: Fri, 29 Dec 2017 22:21:06 +0100
+Subject: [Buildroot] [git commit] libtirpc: fix compilation error of rpcgen
+Message-ID: <20171229212221.C4146837B9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=1521836c4e0d173767d7417fcc2682cb19ca8aba
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 29 Dec 2017 15:06:41 +0100, Mario Lang wrote:
-> ioperm, inb and outb are i386 specific functions usually
-> not available on non-PC archs.  Check if ioperm is available before
-> trying to use it.
-> 
-> Patch cherry-picked from upstream, can be removed when 5.6 is out.
-> 
-> Fixes:
->   http://autobuild.buildroot.net/results/f09974f2ba24319e55e578ece34bb2e7e8bb3c43
->   http://autobuild.buildroot.net/results/7d502f280c46f0d1e2678140f9117fcc59bc2d7b
-> Signed-off-by: Mario Lang <mlang@blind.guru>
-> ---
-> v2 fixes commit message and adds forgotten dependency on host-autoconf.
+When compiling libtirpc, without RPC support available on the host
+machine, the build of the rpcgen host program because it cannot find
+the netconfig.h and rpc/types.h headers. Instead of relying on the
+system-provided ones, let's use the ones included in the libtirpc
+source code by patching the rpcgen build logic.
 
-Like for PATCH 1/2, I've moved the patch back into package/brltty/,
-since a per-version sub-directory is not needed. I've also added a
-comment in the .mk file about why we're doing autoconf, and not an
-autoreconf.
+Signed-off-by: Dagg Stompler <daggs@gmx.com>
+[Thomas: reword commit log.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libtirpc/0003-Add-rpcgen-program-from-nfs-utils-sources.patch | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/libtirpc/0003-Add-rpcgen-program-from-nfs-utils-sources.patch b/package/libtirpc/0003-Add-rpcgen-program-from-nfs-utils-sources.patch
+index 1cf8614..f2b15fe 100644
+--- a/package/libtirpc/0003-Add-rpcgen-program-from-nfs-utils-sources.patch
++++ b/package/libtirpc/0003-Add-rpcgen-program-from-nfs-utils-sources.patch
+@@ -83,7 +83,7 @@ index 0000000..2277b6f
+ --- /dev/null
+ +++ b/rpcgen/Makefile.am
+ @@ -0,0 +1,22 @@
+-+COMPILE = $(CC_FOR_BUILD) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
+++COMPILE = $(CC_FOR_BUILD) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) -I../tirpc $(AM_CPPFLAGS) \
+ +	$(CPPFLAGS_FOR_BUILD) $(AM_CFLAGS) $(CFLAGS_FOR_BUILD)
+ +LINK = $(CC_FOR_BUILD) $(AM_CFLAGS) $(CFLAGS_FOR_BUILD) $(AM_LDFLAGS) $(LDFLAGS_FOR_BUILD) -o $@
+ +
