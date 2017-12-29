@@ -1,105 +1,80 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 29 Dec 2017 21:18:06 +0100
-Subject: [Buildroot] [RFC 1/2] busybox: avoid conflict with other
- packages
-In-Reply-To: <1514577289.26695.127.camel@impinj.com>
-References: <20171213130131.15744-1-thomas.petazzoni@free-electrons.com>
- <20171213130131.15744-2-thomas.petazzoni@free-electrons.com>
- <20171213144305.zs2iowvzy4n5xzqj@sapphire.tkos.co.il>
- <20171214061850.62bb4ae9@windsurf.png.is.keysight.com>
- <20171214065807.74cqtgpex5oldpx3@sapphire.tkos.co.il>
- <20171228162307.GD3428@scaer> <20171228225639.GK3428@scaer>
- <20171229055921.abdwvjddkvcuncyr@tarshish>
- <20171229093818.GA3176@scaer>
- <1514577289.26695.127.camel@impinj.com>
-Message-ID: <20171229201806.GR3176@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 29 Dec 2017 21:20:34 +0100
+Subject: [Buildroot] [RFCv3 13/15] core: change host RPATH handling
+In-Reply-To: <20171229173118.GP3176@scaer>
+References: <20171201205352.24287-1-thomas.petazzoni@free-electrons.com>
+ <20171201205352.24287-14-thomas.petazzoni@free-electrons.com>
+ <20171229173118.GP3176@scaer>
+Message-ID: <20171229212034.416e8b23@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Trent, All,
+Hello,
 
-On 2017-12-29 19:54 +0000, Trent Piepho spake thusly:
-> On Fri, 2017-12-29 at 10:38 +0100, Yann E. MORIN wrote:
+On Fri, 29 Dec 2017 18:31:18 +0100, Yann E. MORIN wrote:
+
+> > In order to achieve this, the following changes are made:
 > > 
-> > I prefer the second option, because it concentrates the dependency chain
-> > in a single package, and it becomes very easy to write:
+> >  - HOST_LDFLAGS no longer contains -Wl,-rpath,$(HOST_DIR)
 > > 
-> >     BUSYBOX_DEPENDENCIES = \
-> >         $(if $(BR2_PACKAGE_COREUTILS),coreutils) \
-> >         $(if $(BR2_PACKAGE_UTIL_LINUX),util-linux) \
-> >     [...]
+> >  - The hook that ran at the end of every package installation
+> >    (check_host_rpath) to verify that our hardcoded RPATH is indeed
+> >    present in all binaries is removed, as it is no longer needed: we
+> >    will force $ORIGIN/../LIB as an RPATH in all binaries.  
 > 
-> Could one have a package variable specifically for install
-> dependencies, like:
+> Then you can just get rid of support/scripts/check-host-rpath that is
+> now no longer used.
 
-I think you already suggested so on IRC a while back, right?
+True.
 
-In fact, I do see the reasoning behind this, but I don;t think there is
-a big advantage for us, in Buildroot.
-
-In any case, we will want those dependencies to be installed befiore the
-package itself is installed, so we don't care that they were installed
-before the package is built.
-
-One case where that might be interesting is to test-build a package
-without building its install dependencies. But except for busybox, it
-would only be usefull for very few packages, because in the vast
-majority of cases, dependencies are build dependencies.
-
-So I don't think it warrants the extra complexity in the infra...
-
-> BUSYBOX_INSTALL_DEPENDENCIES = coreutils util-linux ...
-
-If we were to add support for install dependencies, we would want to
-treat them as the other dependencies and not do magical thigns like list
-all of them and defer to the infra to sort out those that are enabeld.
-
-In fact, that would go contrary to what we currently do for the existing
-dependencies: if a package lists a dependency but it is not enabled, we
-explicitly fail.
-
-So we'd want to have:
-
-    BUSYBOX_INSTALL_DEPENDENCIES = \
-        $(if $(BR2_PACKAGE_COREUTILS),coreutils) \
-        [...]
-
-Adn then...
-
-> It seems like the base pkg infra could automagically turn that into
-> conditional dependencies, e.g. "coreutils" -> "(if
-> $(BR2_PACKAGE_COREUTILS), coreutils)".  And then append those to the
-> package dependencies.
 > 
-> So less boilerplate to write in the package file.
+> >  - host-patchelf is added as a dependency of all packages, except
+> >    itself. This is necessary as all packages now need to run patchelf
+> >    at the end of their installation process.
+> > 
+> >    TODO: things like host-tar, host-lzip and host-ccache will have to
+> >    be handled properly.  
 
-... that would not diminish the "boilerplate" in the package's .mk file.
+In fact, this TODO was no longer accurate: I did take care of host-tar,
+host-lzip and host-ccache as part of this RFCv3. However...
 
-But know that this is specifically just for busybox (and maybe a very
-few other packages), so that really does not warrant extra support in
-the infra, IMHO...
+> Indeed, because the very moment that patchelf is available, the next
+> package will trigger patchelf on all executables, which means that
+> package will be responsible for touching files from previous packages,
+> and thus will trigger the no-two-packages-should-touch-the-same-file
+> check.
 
-Regards,
-Yann E. MORIN.
+... I indeed didn't think of this problem. I see two possibilities to
+address this:
 
-> But it would also allow the possibility to take advantage of knowing
-> that coreutils is an install dependency rather than a build dependency.
->  So it's allowed to build busybox and coreutils at the same time in
-> parallel.  The requirement is only that coreutils be installed to the
-> target dir first.  Usually installing is much faster than building, so
-> one gets more parallelism this way.
+ 1. Have host-patchelf built earlier. I.e have only host-tar be a
+    dependency of host-patchelf and nothing else (in my current patch
+    series, host-patchelf is built after host-tar, host-xz, host-lzip,
+    host-ccache). This requires using HOSTCC_NOCCACHE to build host-tar
+    and host-patchelf, but I don't think it's a big deal. And then do a
+    special case in fix-rpath to not fix the rpath of the tar program,
+    since it should not have dependencies on libraries in HOST_DIR/lib
+
+ 2. Make the RPATH fixing logic smarter, and don't set a RPATH to
+    $ORIGIN/../lib if the program doesn't use a library that is in
+    HOST_DIR/lib. This is perhaps the most pretty solution.
+
+> > This change is independent from the per-package SDK functionality, and
+> > could be applied separately.  
 > 
-> Of course this optimization is not necessary, but separating out the
-> install deps now allows the possibility in the future, while being less
-> boilerplate and more clear documentation now.
+> Except it requires the host-tar et al. stuff to be handled first.
 
+Which is why the host-tar and al. stuff is earlier. What I meant with
+this sentence is that reworking the host RPATH handling can be applied
+*before* we switch to per-package SDK.
+
+Best regards,
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
