@@ -1,80 +1,132 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 29 Dec 2017 18:13:04 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2017-12-25
-In-Reply-To: <20171229172248.6c41ef2f@windsurf.lan>
-References: <20171226070035.2CF762072B@mail.free-electrons.com>
- <CANQCQpZtU10yqmgxmEHOtwLmRK_7bEfw7nosbD0V_Ffgujf7Tg@mail.gmail.com>
- <20171229172248.6c41ef2f@windsurf.lan>
-Message-ID: <20171229171304.GO3176@scaer>
+From: Jan Heylen <heyleke@gmail.com>
+Date: Fri, 29 Dec 2017 18:23:17 +0100
+Subject: [Buildroot] [PATCH v2 2/2] opentracing-cpp: make shared/static
+ target a configurable option
+In-Reply-To: <1514014802-23736-3-git-send-email-heyleke@gmail.com>
+References: <1513849309-550-2-git-send-email-heyleke@gmail.com>
+ <1514014802-23736-1-git-send-email-heyleke@gmail.com>
+ <1514014802-23736-3-git-send-email-heyleke@gmail.com>
+Message-ID: <CAGszK3iNYTFU8V+tam+YsAkFgMFg6B7+M7Gs5-XmLsKz7q4PWA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, Matt, Mario, All,
+fyi, patch got merged into opentracing-cpp upstream, no
+opentracing-cpp release yet that includes it
 
-On 2017-12-29 17:22 +0100, Thomas Petazzoni spake thusly:
-> On Tue, 26 Dec 2017 19:02:30 -0600, Matthew Weber wrote:
-> > Looked like a couple different failures for brltty, so I ran it
-> > through utils/test-pkg.
-[--SNIP--]
-> >                      sourcery-mips64 [43/47]: FAILED
-> > /nvme/rc-buildroot-hardening/brltty/br-mips64-n64-full/host/bin/mips64el-linux-ld
-> > -r -o  braille.o eu_braille.o eu_clio.o eu_esysiris.o
-> > /nvme/rc-buildroot-hardening/brltty/br-mips64-n64-full/host/bin/mips64el-linux-ld:
-> > eu_braille.o: ABI is incompatible with that of the selected emulation
-> > /nvme/rc-buildroot-hardening/brltty/br-mips64-n64-full/host/bin/mips64el-linux-ld:
-> > failed to merge target specific data of file eu_braille.o
-> > /nvme/rc-buildroot-hardening/brltty/br-mips64-n64-full/host/bin/mips64el-linux-ld:
-> > eu_clio.o: ABI is incompatible with that of the selected emulation
-> > /nvme/rc-buildroot-hardening/brltty/br-mips64-n64-full/host/bin/mips64el-linux-ld:
-> > failed to merge target specific data of file eu_clio.o
-> > /nvme/rc-buildroot-hardening/brltty/br-mips64-n64-full/host/bin/mips64el-linux-ld:
-> > eu_esysiris.o: ABI is incompatible with that of the selected emulation
-> > /nvme/rc-buildroot-hardening/brltty/br-mips64-n64-full/host/bin/mips64el-linux-ld:
-> > failed to merge target specific data of file eu_esysiris.o
-> > /nvme/rc-buildroot-hardening/brltty/br-mips64-n64-full/host/bin/mips64el-linux-ld:
-> > Attempt to do relocatable link with elf64-tradlittlemips input and
-> > elf32-ntradlittlemips output
-> > /nvme/rc-buildroot-hardening/brltty/br-mips64-n64-full/host/bin/mips64el-linux-ld:
-> > eu_braille.o: file class ELFCLASS64 incompatible with ELFCLASS32
-> > /nvme/rc-buildroot-hardening/brltty/br-mips64-n64-full/host/bin/mips64el-linux-ld:
-> > final link failed: File in wrong format
-> 
-> This generally happens when the package build system is using "ld"
-> directly at link time instead of using "gcc". It should use "gcc" to
-> work on all platforms. Mario, could you have a look into this, and
-> generally test with test-pkg that brltty builds on all configurations ?
-
-I've had a go at trying to use gcc instead of ld, but no amount of love
-would make it build...
-
-In Drivers/Braille/EuroBraille/Makefile.in, it basically is doing:
-
-    ld -r -o braille.sO braille*.o
-
-'ld -r -o' comes from $(MKOBJ), which comes from configure.ac, where it
-gets the value of ${brltty_cv_prog_mkobj}, which defaults to $(LD) -r -o
-
-I don't know how to do that with gcc. I've tried:
-
-    brltty_cv_prog_mkobj='$(TARGET_CC) -Wl,-r -o'
-
-but it fails...
-
-I've tried a few other things as well, and the build eventually
-succeeded once, but I have no idea wether my change was correct or not,
-so I dropped it (something to do with using -shared).
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+On Sat, Dec 23, 2017 at 8:40 AM, Jan Heylen <heyleke@gmail.com> wrote:
+> From: Jan Heylen <jan.heylen@nokia.com>
+>
+> Signed-off-by: Jan Heylen <jan.heylen@nokia.com>
+>
+> ---
+> Changes v1 -> v2:
+>   - v1: no patch include, v2: include extra patch to make shared/static configurable
+>
+> ---
+>  ...shared-static-target-a-configurable-optio.patch | 73 ++++++++++++++++++++++
+>  package/opentracing-cpp/opentracing-cpp.mk         |  8 +++
+>  2 files changed, 81 insertions(+)
+>  create mode 100644 package/opentracing-cpp/0001-CMake-make-shared-static-target-a-configurable-optio.patch
+>
+> diff --git a/package/opentracing-cpp/0001-CMake-make-shared-static-target-a-configurable-optio.patch b/package/opentracing-cpp/0001-CMake-make-shared-static-target-a-configurable-optio.patch
+> new file mode 100644
+> index 0000000..1323f3f
+> --- /dev/null
+> +++ b/package/opentracing-cpp/0001-CMake-make-shared-static-target-a-configurable-optio.patch
+> @@ -0,0 +1,73 @@
+> +From 9462847f23a25524fdc2112cbc8de3f2c02a1669 Mon Sep 17 00:00:00 2001
+> +From: Jan Heylen <jan.heylen@nokia.com>
+> +Date: Fri, 22 Dec 2017 22:04:29 +0100
+> +Subject: [PATCH] CMake: make shared/static target a configurable option
+> +
+> +---
+> + CMakeLists.txt | 40 ++++++++++++++++++++++++++++------------
+> + 1 file changed, 28 insertions(+), 12 deletions(-)
+> +
+> +diff --git a/CMakeLists.txt b/CMakeLists.txt
+> +index aadf2f9..d03bd00 100644
+> +--- a/CMakeLists.txt
+> ++++ b/CMakeLists.txt
+> +@@ -70,18 +70,36 @@ endif()
+> + include_directories(include)
+> + include_directories(SYSTEM 3rd_party/include)
+> +
+> ++option(BUILD_SHARED_LIBS "Build as a shared library" ON)
+> ++option(BUILD_STATIC_LIBS "Build as a static library" ON)
+> ++
+> ++if (NOT BUILD_SHARED_LIBS AND NOT BUILD_STATIC_LIBS)
+> ++    message(FATAL_ERROR "One or both of BUILD_SHARED_LIBS or BUILD_STATIC_LIBS must be set to ON to build")
+> ++endif()
+> ++
+> + set(SRCS src/propagation.cpp src/noop.cpp src/tracer.cpp)
+> +-add_library(opentracing SHARED ${SRCS})
+> +-target_include_directories(opentracing INTERFACE "$<INSTALL_INTERFACE:include/>")
+> +-set_target_properties(opentracing PROPERTIES VERSION ${OPENTRACING_VERSION_STRING}
+> ++
+> ++if (BUILD_SHARED_LIBS)
+> ++  add_library(opentracing SHARED ${SRCS})
+> ++  target_include_directories(opentracing INTERFACE "$<INSTALL_INTERFACE:include/>")
+> ++  set_target_properties(opentracing PROPERTIES VERSION ${OPENTRACING_VERSION_STRING}
+> +                                              SOVERSION ${OPENTRACING_VERSION_MAJOR})
+> +-add_library(opentracing-static STATIC ${SRCS})
+> +-set_target_properties(opentracing-static PROPERTIES OUTPUT_NAME opentracing)
+> +-target_include_directories(opentracing-static INTERFACE "$<INSTALL_INTERFACE:include/>")
+> +-if (CLANG_TIDY_EXE)
+> +-  set_target_properties(opentracing PROPERTIES
+> ++  install(TARGETS opentracing EXPORT OpenTracingTargets
+> ++          LIBRARY DESTINATION lib
+> ++          ARCHIVE DESTINATION lib)
+> ++  if (CLANG_TIDY_EXE)
+> ++    set_target_properties(opentracing PROPERTIES
+> +                                     CXX_CLANG_TIDY "${DO_CLANG_TIDY}")
+> +-endif()
+> ++  endif()
+> ++endif(BUILD_SHARED_LIBS)
+> ++
+> ++if (BUILD_STATIC_LIBS)
+> ++  add_library(opentracing-static STATIC ${SRCS})
+> ++  set_target_properties(opentracing-static PROPERTIES OUTPUT_NAME opentracing)
+> ++  target_include_directories(opentracing-static INTERFACE "$<INSTALL_INTERFACE:include/>")
+> ++  install(TARGETS opentracing-static EXPORT OpenTracingTargets
+> ++          ARCHIVE DESTINATION lib)
+> ++endif(BUILD_STATIC_LIBS)
+> +
+> +
+> + install(DIRECTORY 3rd_party/include/opentracing DESTINATION include
+> +@@ -89,9 +107,7 @@ install(DIRECTORY 3rd_party/include/opentracing DESTINATION include
+> +                            PATTERN "*.h")
+> + install(DIRECTORY include/opentracing DESTINATION include
+> +             FILES_MATCHING PATTERN "*.h")
+> +-install(TARGETS opentracing opentracing-static EXPORT OpenTracingTargets
+> +-        LIBRARY DESTINATION lib
+> +-        ARCHIVE DESTINATION lib)
+> ++
+> +
+> + # ==============================================================================
+> + # Package configuration setup
+> +--
+> +2.7.4
+> +
+> diff --git a/package/opentracing-cpp/opentracing-cpp.mk b/package/opentracing-cpp/opentracing-cpp.mk
+> index f1748ef..9043966 100644
+> --- a/package/opentracing-cpp/opentracing-cpp.mk
+> +++ b/package/opentracing-cpp/opentracing-cpp.mk
+> @@ -11,4 +11,12 @@ OPENTRACING_CPP_LICENSE_FILES = COPYING
+>
+>  OPENTRACING_CPP_INSTALL_STAGING = YES
+>
+> +ifeq ($(BR2_STATIC_LIBS),y)
+> +       OPENTRACING_CPP_CONF_OPTS += -DBUILD_SHARED_LIBS=OFF -DBUILD_STATIC_LIBS=ON
+> +else ifeq ($(BR2_SHARED_STATIC_LIBS),y)
+> +       OPENTRACING_CPP_CONF_OPTS += -DBUILD_SHARED_LIBS=ON -DBUILD_STATIC_LIBS=ON
+> +else ifeq ($(BR2_SHARED_LIBS),y)
+> +       OPENTRACING_CPP_CONF_OPTS += -DBUILD_SHARED_LIBS=ON -DBUILD_STATIC_LIBS=OFF
+> +endif
+> +
+>  $(eval $(cmake-package))
+> --
+> 2.7.4
+>
