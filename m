@@ -1,79 +1,85 @@
-From: daggs <daggs@gmx.com>
-Date: Fri, 29 Dec 2017 15:27:15 +0100
-Subject: [Buildroot] [PATCH] tvheadend: add dependency on udev based
- rootfs creation
-In-Reply-To: <20171229150307.17ea122c@windsurf.lan>
-References: <20171229130604.9897-1-daggs@gmx.com>
- <20171229144031.798b5f81@windsurf.lan>
- <trinity-7a471839-219c-4b6c-945d-9f235fe5b75a-1514555879257@3c-app-mailcom-bs06>
- <20171229150307.17ea122c@windsurf.lan>
-Message-ID: <trinity-713eb7e7-e94d-497b-92b0-2f72040284ba-1514557634858@3c-app-mailcom-bs06>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 29 Dec 2017 16:22:26 +0100
+Subject: [Buildroot] [RFCv3 01/15] pkgconf: use relative path to
+ STAGING_DIR instead of absolute path
+In-Reply-To: <20171201205352.24287-2-thomas.petazzoni@free-electrons.com>
+References: <20171201205352.24287-1-thomas.petazzoni@free-electrons.com>
+ <20171201205352.24287-2-thomas.petazzoni@free-electrons.com>
+Message-ID: <20171229152226.GD3176@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Greetings Thomas,
+Thomas, All,
 
-> Sent: Friday, December 29, 2017 at 4:03 PM
-> From: "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>
-> To: daggs <daggs@gmx.com>
-> Cc: buildroot at buildroot.org, "Bernd Kuhls" <bernd.kuhls@t-online.de>
-> Subject: Re: [Buildroot] [PATCH] tvheadend: add dependency on udev based rootfs creation
->
-> Hello,
+On 2017-12-01 21:53 +0100, Thomas Petazzoni spake thusly:
+> The pkg-config wrapper script is currently generated with absolute
+> paths to $(STAGING_DIR). However, this will not work properly with
+> per-package SDK, and each package will be built with a different
+> STAGING_DIR value.
 > 
-> On Fri, 29 Dec 2017 14:57:59 +0100, daggs wrote:
+> In order to fix this, we adjust how the pkg-config wrapper script is
+> generated, so that it uses a relative path to itself: the sysroot (i.e
+> STAGING_DIR) is always located in $(path of
+> pkg-config)/../$(STAGING_SUBDIR).
 > 
-> > > You should use BR2_PACKAGE_HAS_UDEV instead. Indeed udev can be
-> > > provided by either eudev or systemd.  
-> > does using BR2_PACKAGE_HAS_UDEV means rootfs dev creation will use udev?
+> This change is independent from the per-package SDK work, and could be
+> applied independently from it.
 > 
-> config BR2_PACKAGE_EUDEV
->         bool "eudev"
->         depends on BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV
->         depends on BR2_USE_MMU # uses fork()
->         depends on BR2_USE_WCHAR # needs C99 compiler
->         depends on !BR2_STATIC_LIBS # kmod
->         select BR2_PACKAGE_HAS_UDEV
-> 
-> So for the eudev case, BR2_PACKAGE_HAS_UDEV is selected when eudev is
-> enabled, and eudev can only be enabled when
-> BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV is enabled.
-> 
-> For the systemd case:
-> 
-> menuconfig BR2_PACKAGE_SYSTEMD
->         bool "systemd"
->         depends on BR2_INIT_SYSTEMD
->         depends on !BR2_STATIC_LIBS # kmod
->         depends on BR2_TOOLCHAIN_HAS_THREADS # dbus
->         depends on BR2_USE_MMU # dbus
->         select BR2_PACKAGE_HAS_UDEV
-> 
-> So BR2_PACKAGE_HAS_UDEV is selected when systemd is enabled, which is
-> only possible when systemd is the init system.
-> 
-> Bottom line: as soon as systemd is the init system *or* eudev is used
-> at the dev management method, you are guaranteed that
-> BR2_PACKAGE_HAS_UDEV=y.
-ok, I'll look into it.
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-> 
-> > > Also, does tvheadend needs to link with libudev ? If so, it should have
-> > > udev in its <pkg>_DEPENDENCIES. If it doesn't link with libudev, then
-> > > I'm not sure to see how udev helps for tvheadend to detect USB DVB
-> > > cards.  
-> > it doesn't, frankly I don't understand it too, I'm wrestling this for 3 weeks now, without udev, tvheadend didn't listed my adapter in the webui.
-> > on the desktop it did, after some thinking I've decided to try building udev and it worked.
-> > maybe Bernd might have some ideas on the matter. 
-> 
-> This is a somewhat weak understanding of what's happening here. I think
-> we need a better understanding of what's going on rather than
-> more-or-less randomly adding a dependency.
-for that I need either time to look into the code or an answer from the devs, time I don't have unfortunately, devs aren't responding yet.
-I encountered the issue and was able to get it to work, I assume that others might have seen it and didn't had time to look into it.
-also as said, maybe Bernd knows what is the issue here and can propose a better fix.
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Dagg.
+Regards,
+Yann E. MORIN.
+
+> ---
+> Changes since v2:
+>  - None
+> Changes since v1:
+>  - As suggested by Arnout, simplify the generation of the pkg-config
+>    script by doing only a replacement on @STAGING_SUBDIR@, the rest
+>    being encoded inside the pkg-config script.
+> ---
+>  package/pkgconf/pkg-config.in | 5 ++++-
+>  package/pkgconf/pkgconf.mk    | 3 +--
+>  2 files changed, 5 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/pkgconf/pkg-config.in b/package/pkgconf/pkg-config.in
+> index 4dec48789a..b9ce0935cc 100644
+> --- a/package/pkgconf/pkg-config.in
+> +++ b/package/pkgconf/pkg-config.in
+> @@ -1,2 +1,5 @@
+>  #!/bin/sh
+> -PKG_CONFIG_LIBDIR=${PKG_CONFIG_LIBDIR:- at PKG_CONFIG_LIBDIR@} PKG_CONFIG_SYSROOT_DIR=${PKG_CONFIG_SYSROOT_DIR:- at STAGING_DIR@} $(dirname $0)/pkgconf @STATIC@ $@
+> +PKGCONFDIR=$(dirname $0)
+> +DEFAULT_PKG_CONFIG_LIBDIR=${PKGCONFDIR}/../@STAGING_SUBDIR@/usr/lib/pkgconfig:${PKGCONFDIR}/../@STAGING_SUBDIR@/usr/share/pkgconfig
+> +DEFAULT_PKG_CONFIG_SYSROOT_DIR=${PKGCONFDIR}/../@STAGING_SUBDIR@
+> +PKG_CONFIG_LIBDIR=${PKG_CONFIG_LIBDIR:-${DEFAULT_PKG_CONFIG_LIBDIR}} PKG_CONFIG_SYSROOT_DIR=${PKG_CONFIG_SYSROOT_DIR:-${DEFAULT_PKG_CONFIG_SYSROOT_DIR}} ${PKGCONFDIR}/pkgconf @STATIC@ $@
+> diff --git a/package/pkgconf/pkgconf.mk b/package/pkgconf/pkgconf.mk
+> index cc190d26da..00b2d017ee 100644
+> --- a/package/pkgconf/pkgconf.mk
+> +++ b/package/pkgconf/pkgconf.mk
+> @@ -19,8 +19,7 @@ endef
+>  define HOST_PKGCONF_INSTALL_WRAPPER
+>  	$(INSTALL) -m 0755 -D package/pkgconf/pkg-config.in \
+>  		$(HOST_DIR)/bin/pkg-config
+> -	$(SED) 's, at PKG_CONFIG_LIBDIR@,$(STAGING_DIR)/usr/lib/pkgconfig:$(STAGING_DIR)/usr/share/pkgconfig,' \
+> -		-e 's, at STAGING_DIR@,$(STAGING_DIR),' \
+> +	$(SED) 's, at STAGING_SUBDIR@,$(STAGING_SUBDIR),g' \
+>  		$(HOST_DIR)/bin/pkg-config
+>  endef
+>  
+> -- 
+> 2.13.6
+> 
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
