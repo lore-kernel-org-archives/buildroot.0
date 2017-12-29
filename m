@@ -1,8 +1,8 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 29 Dec 2017 10:52:42 +0100
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 29 Dec 2017 10:55:21 +0100
 Subject: [Buildroot] [RFC 1/2] busybox: avoid conflict with other
  packages
-In-Reply-To: <20171229104219.71c908e6@windsurf.lan>
+In-Reply-To: <20171229095242.GB3176@scaer>
 References: <20171213130131.15744-1-thomas.petazzoni@free-electrons.com>
  <20171213130131.15744-2-thomas.petazzoni@free-electrons.com>
  <20171213144305.zs2iowvzy4n5xzqj@sapphire.tkos.co.il>
@@ -12,73 +12,51 @@ References: <20171213130131.15744-1-thomas.petazzoni@free-electrons.com>
  <20171229055921.abdwvjddkvcuncyr@tarshish>
  <20171229093818.GA3176@scaer>
  <20171229104219.71c908e6@windsurf.lan>
-Message-ID: <20171229095242.GB3176@scaer>
+ <20171229095242.GB3176@scaer>
+Message-ID: <20171229105521.78a4e35a@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Hello,
 
-On 2017-12-29 10:42 +0100, Thomas Petazzoni spake thusly:
-> On Fri, 29 Dec 2017 10:38:18 +0100, Yann E. MORIN wrote:
-> > As was discussed during the DevDays in Pragues about top-level parallel
-> > build, we've concluded that we could not have two packages that touch
-> > the same file.
+On Fri, 29 Dec 2017 10:52:42 +0100, Yann E. MORIN wrote:
+
+> > > Rather than duplicate the optional dependency on Busybox in all the
+> > > packages (and as Thomas demonstrated, there are quite a few of them).  
 > > 
-> > When we are doing top-level parallel build, we no longer have any
-> > guarantee of the ordering, especially the order packages install in
-> > target/, so we loose the reproducibility that sequentiallity currently
-> > provides.
-> > 
-> > So we have to ensure proper install ordering, so that we guarantee what
-> > files are in target/.
-> > 
-> > So we either go with the current dependencies, added to all packages to
-> > ensure they get installed after busybox, or we add them to busybox so it
-> > gets installed after all the packages for which it may provide applets.
-> > 
-> > I prefer the second option, because it concentrates the dependency chain
-> > in a single package, and it becomes very easy to write:
-> > 
-> >     BUSYBOX_DEPENDENCIES = \
-> >         $(if $(BR2_PACKAGE_COREUTILS),coreutils) \
-> >         $(if $(BR2_PACKAGE_UTIL_LINUX),util-linux) \
-> >     [...]
-> > 
-> > Rather than duplicate the optional dependency on Busybox in all the
-> > packages (and as Thomas demonstrated, there are quite a few of them).
+> > Seems like a good idea to me.  
 > 
-> Seems like a good idea to me.
+> For that, we'll need the three-patch series I submitted to Busybox:
+>     http://lists.busybox.net/pipermail/busybox/2017-December/086039.html
 
-For that, we'll need the three-patch series I submitted to Busybox:
-    http://lists.busybox.net/pipermail/busybox/2017-December/086039.html
+Absolutely. Hopefully, upstream will give some feedback soon.
 
-> > I may even go further: we could even make busybox depend on *all*
-> > packages, irrespective on whether it provides applets for them or not,
-> > since busybiox is pretty fast to build and does build in parallel quite
-> > nicely anyway. That would nicely solve the issue.
+> > I don't really like this approach, I find it too brutal.  
 > 
-> I don't really like this approach, I find it too brutal.
+> Sorry, I was not advocating for this solution. What I meant was that, to
+> simplify things even further we could do that. But I don't think we need
+> that.
 
-Sorry, I was not advocating for this solution. What I meant was that, to
-simplify things even further we could do that. But I don't think we need
-that.
+OK, then we agree :)
 
-> Since we have the testing logic to validate that no package overwrites
-> files from another package, I think the approach of having explicit
-> dependencies in Busybox is good enough.
+> > Since we have the testing logic to validate that no package overwrites
+> > files from another package, I think the approach of having explicit
+> > dependencies in Busybox is good enough.  
+> 
+> Once we turn the warniong into a hard error, yes. ;-)
 
-Once we turn the warniong into a hard error, yes. ;-)
+In fact, I'd like to turn this into a hard error fairly soon. Or
+perhaps I could do some research in the autobuilder logs to identify
+the issues (other than Busybox) so that we try to fix them ahead of
+time.
 
-Regards,
-Yann E. MORIN.
+Best regards,
 
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
