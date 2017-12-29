@@ -1,91 +1,79 @@
 From: daggs <daggs@gmx.com>
-Date: Fri, 29 Dec 2017 15:24:11 +0100
-Subject: [Buildroot] [PATCH] libtirpc: fix compilation error
-In-Reply-To: <20171229143805.7f083140@windsurf.lan>
-References: <20171229130333.13661-1-daggs@gmx.com>
- <20171229143805.7f083140@windsurf.lan>
-Message-ID: <trinity-145e0c2a-2583-47ec-b583-2128a636e7e6-1514557451788@3c-app-mailcom-bs06>
+Date: Fri, 29 Dec 2017 15:27:15 +0100
+Subject: [Buildroot] [PATCH] tvheadend: add dependency on udev based
+ rootfs creation
+In-Reply-To: <20171229150307.17ea122c@windsurf.lan>
+References: <20171229130604.9897-1-daggs@gmx.com>
+ <20171229144031.798b5f81@windsurf.lan>
+ <trinity-7a471839-219c-4b6c-945d-9f235fe5b75a-1514555879257@3c-app-mailcom-bs06>
+ <20171229150307.17ea122c@windsurf.lan>
+Message-ID: <trinity-713eb7e7-e94d-497b-92b0-2f72040284ba-1514557634858@3c-app-mailcom-bs06>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Greetings Thomas
+Greetings Thomas,
 
-> Sent: Friday, December 29, 2017 at 3:38 PM
+> Sent: Friday, December 29, 2017 at 4:03 PM
 > From: "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>
-> To: "Dagg Stompler" <daggs@gmx.com>
-> Cc: buildroot at buildroot.org
-> Subject: Re: [Buildroot] [PATCH] libtirpc: fix compilation error
+> To: daggs <daggs@gmx.com>
+> Cc: buildroot at buildroot.org, "Bernd Kuhls" <bernd.kuhls@t-online.de>
+> Subject: Re: [Buildroot] [PATCH] tvheadend: add dependency on udev based rootfs creation
 >
 > Hello,
 > 
-> On Fri, 29 Dec 2017 15:03:33 +0200, Dagg Stompler wrote:
-> > when compiling libtirpc, rpcgen will fail with file not found on
-> > netconfig.h and rpc/types.h
-> > adding the proper include path to the makefile fixes it.
-> > 
-> > Signed-off-by: Dagg Stompler <daggs@gmx.com>
+> On Fri, 29 Dec 2017 14:57:59 +0100, daggs wrote:
 > 
-> Could you give more details about the failures? Is this fixing an
-> autobuilder issue? Under what conditions does this happens? Why aren't
-> the autobuilders seeing this problem?
+> > > You should use BR2_PACKAGE_HAS_UDEV instead. Indeed udev can be
+> > > provided by either eudev or systemd.  
+> > does using BR2_PACKAGE_HAS_UDEV means rootfs dev creation will use udev?
+> 
+> config BR2_PACKAGE_EUDEV
+>         bool "eudev"
+>         depends on BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV
+>         depends on BR2_USE_MMU # uses fork()
+>         depends on BR2_USE_WCHAR # needs C99 compiler
+>         depends on !BR2_STATIC_LIBS # kmod
+>         select BR2_PACKAGE_HAS_UDEV
+> 
+> So for the eudev case, BR2_PACKAGE_HAS_UDEV is selected when eudev is
+> enabled, and eudev can only be enabled when
+> BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV is enabled.
+> 
+> For the systemd case:
+> 
+> menuconfig BR2_PACKAGE_SYSTEMD
+>         bool "systemd"
+>         depends on BR2_INIT_SYSTEMD
+>         depends on !BR2_STATIC_LIBS # kmod
+>         depends on BR2_TOOLCHAIN_HAS_THREADS # dbus
+>         depends on BR2_USE_MMU # dbus
+>         select BR2_PACKAGE_HAS_UDEV
+> 
+> So BR2_PACKAGE_HAS_UDEV is selected when systemd is enabled, which is
+> only possible when systemd is the init system.
+> 
+> Bottom line: as soon as systemd is the init system *or* eudev is used
+> at the dev management method, you are guaranteed that
+> BR2_PACKAGE_HAS_UDEV=y.
+ok, I'll look into it.
 
-here is an example error:
->>> libtirpc 1.0.2 Building
-PATH="/home/dagg/workspace/buildroots/buildroot-master4/output/host/bin:/home/dagg/workspace/buildroots/buildroot-master4/output/host/sbin:/usr/x86_64-pc-linux-gnu/gcc-bin/7.2.0:/usr/x86_64-pc-linux-gnu/aarch64-unknown-linux-gnu/gcc-bin/5.4.0:/usr/x86_64-pc-linux-gnu/aarch64-unknown-linux-musl/gcc-bin/6.4.0:/usr/lib/llvm/5/bin:/usr/local/bin:/usr/bin:/bin:/opt/bin:/usr/games/bin:/usr/sbin:/usr/local/bin"  /usr/bin/make -j9  -C /home/dagg/workspace/buildroots/buildroot-master4/output/build/libtirpc-1.0.2/
-make[1]: Entering directory '/home/dagg/workspace/buildroots/buildroot-master4/output/build/libtirpc-1.0.2'
-cd rpcgen && /usr/bin/make
-make[2]: Entering directory '/home/dagg/workspace/buildroots/buildroot-master4/output/build/libtirpc-1.0.2/rpcgen'
-  CC       rpc_clntout.o
-  CC       rpc_cout.o
-  CC       rpc_hout.o
-  CC       rpc_main.o
-  CC       rpc_parse.o
-  CC       rpc_sample.o
-  CC       rpc_scan.o
-  CC       rpc_svcout.o
-  CC       rpc_tblout.o
-rpc_parse.c:39:10: fatal error: rpc/types.h: No such file or directory
- #include "rpc/types.h"
-          ^~~~~~~~~~~~~
-compilation terminated.
-make[2]: *** [Makefile:412: rpc_parse.o] Error 1
-make[2]: *** Waiting for unfinished jobs....
-rpc_tblout.c: In function ?write_table?:
-rpc_tblout.c:97:18: warning: format not a string literal and no format arguments [-Wformat-security]
-    f_print(fout, null_entry);
-                  ^~~~~~~~~~
-rpc_hout.c: In function ?pdeclaration?:
-rpc_hout.c:470:2: warning: format not a string literal and no format arguments [-Wformat-security]
-  f_print(fout, separator );
-  ^~~~~~~
-rpc_tblout.c:137:17: warning: format not a string literal and no format arguments [-Wformat-security]
-   f_print(fout, tbl_end);
-                 ^~~~~~~
-rpc_svcout.c: In function ?write_real_program?:
-rpc_svcout.c:296:8: warning: format not a string literal and no format arguments [-Wformat-security]
-        f_print(fout, proc->args.argname);
-        ^~~~~~~
-rpc_clntout.c:39:10: fatal error: rpc/types.h: No such file or directory
- #include <rpc/types.h>
-          ^~~~~~~~~~~~~
-compilation terminated.
-make[2]: *** [Makefile:412: rpc_clntout.o] Error 1
-rpc_main.c: In function ?h_output?:
-rpc_main.c:504:17: warning: format not a string literal and no format arguments [-Wformat-security]
-   f_print(fout, rpcgen_table_dcl);
-                 ^~~~~~~~~~~~~~~~
-make[2]: Leaving directory '/home/dagg/workspace/buildroots/buildroot-master4/output/build/libtirpc-1.0.2/rpcgen'
-make[1]: *** [Makefile:985: rpcgen/rpcgen] Error 2
-make[1]: Leaving directory '/home/dagg/workspace/buildroots/buildroot-master4/output/build/libtirpc-1.0.2'
-make: *** [package/pkg-generic.mk:250: /home/dagg/workspace/buildroots/buildroot-master4/output/build/libtirpc-1.0.2/.stamp_built] Error 2
-
-config to reproduce:
-BR2_x86_i686=y
-BR2_PACKAGE_LIBTIRPC=y
-
-no idea why the autobuilds didn't caught it.
+> 
+> > > Also, does tvheadend needs to link with libudev ? If so, it should have
+> > > udev in its <pkg>_DEPENDENCIES. If it doesn't link with libudev, then
+> > > I'm not sure to see how udev helps for tvheadend to detect USB DVB
+> > > cards.  
+> > it doesn't, frankly I don't understand it too, I'm wrestling this for 3 weeks now, without udev, tvheadend didn't listed my adapter in the webui.
+> > on the desktop it did, after some thinking I've decided to try building udev and it worked.
+> > maybe Bernd might have some ideas on the matter. 
+> 
+> This is a somewhat weak understanding of what's happening here. I think
+> we need a better understanding of what's going on rather than
+> more-or-less randomly adding a dependency.
+for that I need either time to look into the code or an answer from the devs, time I don't have unfortunately, devs aren't responding yet.
+I encountered the issue and was able to get it to work, I assume that others might have seen it and didn't had time to look into it.
+also as said, maybe Bernd knows what is the issue here and can propose a better fix.
 
 Dagg.
