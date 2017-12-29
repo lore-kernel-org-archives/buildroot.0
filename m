@@ -1,8 +1,8 @@
 From: Mario Lang <mlang@blind.guru>
-Date: Fri, 29 Dec 2017 15:06:40 +0100
-Subject: [Buildroot] [PATCH v2 1/2] package/brltty: avoid spurious log
- messages while decoding scancodes
-Message-ID: <20171229140641.13882-1-mlang@blind.guru>
+Date: Fri, 29 Dec 2017 13:52:02 +0100
+Subject: [Buildroot] [PATCH 1/2] Avoid spurious log messages when decoding
+ scancodes
+Message-ID: <20171229125203.2361-1-mlang@blind.guru>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,8 +13,6 @@ Patch cerry-picked from upstream, can be removed upon next release.
 
 Signed-off-by: Mario Lang <mlang@blind.guru>
 ---
-v2 fixes the commit message to include a package prefix.
-
  ...ncodes-from-generating-spurious-log-messa.patch | 28 ++++++++++++++++++++++
  1 file changed, 28 insertions(+)
  create mode 100644 package/brltty/5.5/0001-Prevent-scancodes-from-generating-spurious-log-messa.patch
