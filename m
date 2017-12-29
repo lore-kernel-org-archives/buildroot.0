@@ -1,96 +1,118 @@
-From: Mario Lang <mlang@blind.guru>
-Date: Fri, 29 Dec 2017 15:06:41 +0100
-Subject: [Buildroot] [PATCH v2 2/2] package/brltty: explicitly check if
- ioperm is available
-In-Reply-To: <20171229140641.13882-1-mlang@blind.guru>
-References: <20171229140641.13882-1-mlang@blind.guru>
-Message-ID: <20171229140641.13882-2-mlang@blind.guru>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 29 Dec 2017 16:33:44 +0100
+Subject: [Buildroot] [RFCv3 06/15] package/pkg-generic: add the concept
+ of extract dependency
+In-Reply-To: <20171201205352.24287-7-thomas.petazzoni@free-electrons.com>
+References: <20171201205352.24287-1-thomas.petazzoni@free-electrons.com>
+ <20171201205352.24287-7-thomas.petazzoni@free-electrons.com>
+Message-ID: <20171229153344.GH3176@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-ioperm, inb and outb are i386 specific functions usually
-not available on non-PC archs.  Check if ioperm is available before
-trying to use it.
+Thomas, All,
 
-Patch cherry-picked from upstream, can be removed when 5.6 is out.
+On 2017-12-01 21:53 +0100, Thomas Petazzoni spake thusly:
+> Extract dependencies are dependencies that must be ready before the
+> extract step of a package, i.e for tools that are needed to extract
+> packages themselves. Current examples of such tools are host-tar,
+> host-lzip and host-xz.
+> 
+> They are currently handled through DEPENDENCIES_HOST_PREREQ. However,
+> this mechanism has a number of drawbacks:
+> 
+>  - First and foremost, because host-tar/host-lzip/host-xz are not
+>    listed in the dependencies of packages, the package infrastructure
+>    does not know it should rsync them in the context of per-package
+>    SDK.
+> 
+>  - Second, there is no dependency handling *between* them. I.e, we
+>    have no mechanism that says host-tar should be built before
+>    host-lzip, while it is in fact the case: if you need to build
+>    host-lzip, you need to extract a tarball, so you may need host-tar
+>    if your system tarball is not capable enough.
+> 
+> For those reasons, it makes sense to add explicit support for "extract
+> dependencies" in the package infrastructure, through the
+> <pkg>_EXTRACT_DEPENDENCIES variable. It is unlikely this variable will
+> ever be used by a package .mk file, but it will be used internally by
+> the package infrastructure.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-Fixes:
-  http://autobuild.buildroot.net/results/f09974f2ba24319e55e578ece34bb2e7e8bb3c43
-  http://autobuild.buildroot.net/results/7d502f280c46f0d1e2678140f9117fcc59bc2d7b
-Signed-off-by: Mario Lang <mlang@blind.guru>
----
-v2 fixes commit message and adds forgotten dependency on host-autoconf.
+Except for a typo (see below):
 
- ...operm-to-make-sure-the-platform-supports-.patch | 31 ++++++++++++++++++++++
- package/brltty/brltty.mk                           |  8 +++++-
- 2 files changed, 38 insertions(+), 1 deletion(-)
- create mode 100644 package/brltty/5.5/0002-Check-for-ioperm-to-make-sure-the-platform-supports-.patch
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-diff --git a/package/brltty/5.5/0002-Check-for-ioperm-to-make-sure-the-platform-supports-.patch b/package/brltty/5.5/0002-Check-for-ioperm-to-make-sure-the-platform-supports-.patch
-new file mode 100644
-index 0000000000..3dbacb3b57
---- /dev/null
-+++ b/package/brltty/5.5/0002-Check-for-ioperm-to-make-sure-the-platform-supports-.patch
-@@ -0,0 +1,31 @@
-+From 28dde6749327fd15a1b8b7bcf5cc74a95598582a Mon Sep 17 00:00:00 2001
-+From: Mario Lang <mlang@delysid.org>
-+Date: Fri, 29 Dec 2017 10:35:05 +0100
-+Subject: [PATCH] Check for ioperm to make sure the platform supports ports
-+ I/O. (ml)
-+
-+Signed-off-by: Mario Lang <mlang@blind.guru>
-+---
-+This patch was taken from upstream, and can be removed when 5.6 is out.
-+
-+ configure.ac | 4 +++-
-+ 1 file changed, 3 insertions(+), 1 deletion(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 5e94d33bd..07119dd9f 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -1446,7 +1446,9 @@ BRLTTY_ARG_PACKAGE([ports], [I/O ports], [], [dnl
-+       ports_package="kfreebsd"
-+       ;;
-+    linux*)
-+-      ports_package="glibc"
-++      AC_CHECK_FUNC([ioperm], [
-++         ports_package="glibc"
-++      ])
-+       ;;
-+    mingw*)
-+       ports_package="windows"
-+-- 
-+2.15.0
-+
-diff --git a/package/brltty/brltty.mk b/package/brltty/brltty.mk
-index 9621d4f9c1..16d804dabf 100644
---- a/package/brltty/brltty.mk
-+++ b/package/brltty/brltty.mk
-@@ -11,7 +11,7 @@ BRLTTY_INSTALL_STAGING_OPTS = INSTALL_ROOT=$(STAGING_DIR) install
- BRLTTY_INSTALL_TARGET_OPTS = INSTALL_ROOT=$(TARGET_DIR) install
- BRLTTY_LICENSE_FILES = LICENSE-GPL LICENSE-LGPL
- 
--BRLTTY_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
-+BRLTTY_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES) host-autoconf
- 
- BRLTTY_CONF_OPTS = \
- 	--disable-java-bindings \
-@@ -24,6 +24,12 @@ BRLTTY_CONF_OPTS = \
- 	--without-mikropuhe --without-speechd --without-swift \
- 	--without-theta --without-viavoice
- 
-+define BRLTTY_AUTOCONF
-+	cd $(BRLTTY_SRCDIR) && $(AUTOCONF)
-+endef
-+
-+BRLTTY_PRE_CONFIGURE_HOOKS += BRLTTY_AUTOCONF
-+
- ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS),y)
- BRLTTY_DEPENDENCIES += bluez5_utils
- BRLTTY_CONF_OPTS += --with-bluetooth-package
+> ---
+> Changes since v2:
+>  - New patch
+> ---
+>  docs/manual/adding-packages-generic.txt | 7 +++++++
+>  package/pkg-generic.mk                  | 8 +++++++-
+>  2 files changed, 14 insertions(+), 1 deletion(-)
+> 
+> diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
+> index 63ea51bf89..7f42cb09e9 100644
+> --- a/docs/manual/adding-packages-generic.txt
+> +++ b/docs/manual/adding-packages-generic.txt
+> @@ -347,6 +347,13 @@ information is (assuming the package name is +libfoo+) :
+>    a similar way, +HOST_LIBFOO_DEPENDENCIES+ lists the dependencies for
+>    the current host package.
+>  
+> +* +LIBFOO_EXTRACT_DEPENDENCIES+ lists the dependencies (in terms of
+> +  package name) that are required for the current target package to be
+> +  extracted. These depnedencies are guaranteed to be compiled and
+> +  installed before the extract step of the current package
+> +  starts. This is only use internally by the package infrastructure,
+
+*used
+
+Regards,
+Yann E. MORIN.
+
+> +  and should typically not be used directly by packages.
+> +
+>  * +LIBFOO_PATCH_DEPENDENCIES+ lists the dependencies (in terms of
+>    package name) that are required for the current package to be
+>    patched. These dependencies are guaranteed to be extracted and
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index 2b821e9bdf..824c34bec9 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -589,8 +589,13 @@ endif
+>  
+>  # Eliminate duplicates in dependencies
+>  $(2)_FINAL_DEPENDENCIES = $$(sort $$($(2)_DEPENDENCIES))
+> +$(2)_FINAL_EXTRACT_DEPENDENCIES = $$(sort $$($(2)_EXTRACT_DEPENDENCIES))
+>  $(2)_FINAL_PATCH_DEPENDENCIES = $$(sort $$($(2)_PATCH_DEPENDENCIES))
+> -$(2)_FINAL_ALL_DEPENDENCIES = $$(sort $$($(2)_FINAL_DEPENDENCIES) $$($(2)_FINAL_PATCH_DEPENDENCIES))
+> +$(2)_FINAL_ALL_DEPENDENCIES = \
+> +	$$(sort \
+> +		$$($(2)_FINAL_DEPENDENCIES) \
+> +		$$($(2)_FINAL_EXTRACT_DEPENDENCIES) \
+> +		$$($(2)_FINAL_PATCH_DEPENDENCIES))
+>  
+>  $(2)_INSTALL_STAGING		?= NO
+>  $(2)_INSTALL_IMAGES		?= NO
+> @@ -716,6 +721,7 @@ $$($(2)_TARGET_PATCH):  | $$(patsubst %,%-patch,$$($(2)_FINAL_PATCH_DEPENDENCIES
+>  
+>  $(1)-extract:			$$($(2)_TARGET_EXTRACT)
+>  $$($(2)_TARGET_EXTRACT):	$$($(2)_TARGET_SOURCE)
+> +$$($(2)_TARGET_EXTRACT): | $$($(2)_FINAL_EXTRACT_DEPENDENCIES)
+>  
+>  $(1)-depends:		$$($(2)_FINAL_DEPENDENCIES)
+>  
+> -- 
+> 2.13.6
+> 
+
 -- 
-2.15.0
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
