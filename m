@@ -1,58 +1,65 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 30 Dec 2017 10:56:35 +0100
-Subject: [Buildroot] [PATCHv2] package/meson: fix malformed
- cross-compilation.conf.in
-Message-ID: <20171230095635.18123-1-yann.morin.1998@free.fr>
+From: Angelo Compagnucci <angelo@amarulasolutions.com>
+Date: Sat, 30 Dec 2017 11:02:00 +0100
+Subject: [Buildroot] [PATCH v2 0/7] New infrastructure for golang packages
+Message-ID: <1514628127-15938-1-git-send-email-angelo@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, meson will set the c_link_args and the cpp_link_args to the
-value of TARGET_LDFLAGS, even when it's not defined.
+This series add a new pkg-golang infrastructure and converts some of the
+packages based on go.
 
-This creates a malformed array ["",] which will break any package
-building using meson/ninja.
+Version 2:
 
-We fix that by using an empty replacement when the corresponding values
-are empty.
+* Completed the conversion of all golang packages to the new infrastructure
+adding docker-engine
 
-Reported-by: Adam Duskett <Adamduskett@outlook.com>
-Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
-[yann.morin.1998 at free.fr: alternate implementation, suggested by Thomas]
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/meson/meson.mk | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+* Added a new package. mender
 
-diff --git a/package/meson/meson.mk b/package/meson/meson.mk
-index 55ce84da07..d55c3c7c00 100644
---- a/package/meson/meson.mk
-+++ b/package/meson/meson.mk
-@@ -16,15 +16,19 @@ HOST_MESON_NEEDS_HOST_PYTHON = python3
- HOST_MESON_TARGET_ENDIAN = $(call LOWERCASE,$(BR2_ENDIAN))
- HOST_MESON_TARGET_CPU = $(call qstrip,$(BR2_GCC_TARGET_CPU))
- 
-+HOST_MESON_SED_CFLAGS = $(if $(TARGET_CFLAGS),`printf '"%s"$(comma) ' $(TARGET_CFLAGS)`)
-+HOST_MESON_SED_LDFLAGS = $(if $(TARGET_LDFLAGS),`printf '"%s"$(comma) ' $(TARGET_LDFLAGS)`)
-+HOST_MESON_SED_CXXFLAGS = $(if $(TARGET_CXXFLAGS),`printf '"%s"$(comma) ' $(TARGET_CXXFLAGS)`)
-+
- define HOST_MESON_INSTALL_CROSS_CONF
- 	mkdir -p $(HOST_DIR)/etc/meson
- 	sed -e "s%@TARGET_CROSS@%$(TARGET_CROSS)%g" \
- 	    -e "s%@TARGET_ARCH@%$(ARCH)%g" \
- 	    -e "s%@TARGET_CPU@%$(HOST_MESON_TARGET_CPU)%g" \
- 	    -e "s%@TARGET_ENDIAN@%$(HOST_MESON_TARGET_ENDIAN)%g" \
--	    -e "s%@TARGET_CFLAGS@%`printf '"%s", ' $(TARGET_CFLAGS)`%g" \
--	    -e "s%@TARGET_LDFLAGS@%`printf '"%s", ' $(TARGET_LDFLAGS)`%g" \
--	    -e "s%@TARGET_CXXFLAGS@%`printf '"%s", ' $(TARGET_CXXFLAGS)`%g" \
-+	    -e "s%@TARGET_CFLAGS@%$(HOST_MESON_SED_CFLAGS)%g" \
-+	    -e "s%@TARGET_LDFLAGS@%$(HOST_MESON_SED_LDFLAGS)%g" \
-+	    -e "s%@TARGET_CXXFLAGS@%$(HOST_MESON_SED_CXXFLAGS)%g" \
- 	    -e "s%@HOST_DIR@%$(HOST_DIR)%g" \
- 	    $(HOST_MESON_PKGDIR)/cross-compilation.conf.in \
- 	    > $(HOST_DIR)/etc/meson/cross-compilation.conf
+
+Angelo Compagnucci (7):
+  package/pkg-golang: new package infrastructure
+  docs/manual: adding documentation for the golang infrastructure
+  package/flannel: converting to golang infrastructure
+  package/runc: converting to golang infrastructure
+  package/docker-containerd: converting to golang infrastructure
+  package/docker-engine: converting to golang infrastructure
+  package/mender: new package
+
+ docs/manual/adding-packages-golang.txt         | 116 ++++++++++++++++++++++++
+ docs/manual/adding-packages.txt                |   2 +
+ package/Config.in                              |   1 +
+ package/Makefile.in                            |   1 +
+ package/docker-containerd/docker-containerd.mk |  37 +++-----
+ package/docker-engine/docker-engine.mk         |  53 ++++-------
+ package/flannel/flannel.mk                     |  32 +------
+ package/mender/Config.in                       |  14 +++
+ package/mender/mender-device-identity          |  52 +++++++++++
+ package/mender/mender-inventory-hostinfo       |  21 +++++
+ package/mender/mender-inventory-network        |  47 ++++++++++
+ package/mender/mender.conf                     |  14 +++
+ package/mender/mender.hash                     |   2 +
+ package/mender/mender.mk                       |  31 +++++++
+ package/mender/mender.service                  |  15 +++
+ package/mender/server.crt                      |  22 +++++
+ package/mender/tenant.conf                     |   0
+ package/pkg-golang.mk                          | 121 +++++++++++++++++++++++++
+ package/runc/runc.mk                           |  37 +-------
+ 19 files changed, 500 insertions(+), 118 deletions(-)
+ create mode 100644 docs/manual/adding-packages-golang.txt
+ create mode 100644 package/mender/Config.in
+ create mode 100644 package/mender/mender-device-identity
+ create mode 100644 package/mender/mender-inventory-hostinfo
+ create mode 100644 package/mender/mender-inventory-network
+ create mode 100644 package/mender/mender.conf
+ create mode 100644 package/mender/mender.hash
+ create mode 100644 package/mender/mender.mk
+ create mode 100644 package/mender/mender.service
+ create mode 100644 package/mender/server.crt
+ create mode 100644 package/mender/tenant.conf
+ create mode 100644 package/pkg-golang.mk
+
 -- 
-2.11.0
+2.7.4
