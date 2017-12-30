@@ -1,52 +1,30 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 30 Dec 2017 15:43:15 +0100
-Subject: [Buildroot] [PATCH 2/3] package/brltty: use gcc instead of ld
- to link shared objects
-In-Reply-To: <87o9mg1e37.fsf@home.blind.guru>
-References: <20171230104804.16489-1-mlang@blind.guru>
- <20171230104804.16489-2-mlang@blind.guru>
- <20171230130711.GB2921@scaer> <87o9mg1e37.fsf@home.blind.guru>
-Message-ID: <20171230144315.GF2921@scaer>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Sat, 30 Dec 2017 13:16:46 -0200
+Subject: [Buildroot] [PATCH 1/2] linux: bump default to version 4.14.10
+Message-ID: <1514647007-14561-1-git-send-email-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Mario, All,
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+---
+ linux/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On 2017-12-30 15:32 +0100, Mario Lang spake thusly:
-> "Yann E. MORIN" <yann.morin.1998@free.fr> writes:
-> > Since this is a backport of an upstream commit, we like to have a
-> > pointer to the upstream commit:
-> >     https://github.com/brltty/brltty/commit/4c8aba42e246b96d10ffcbd57653682375499e46
-> OK, sorry.  Was not aware of that.  Can you add this to the commit log,
-> or should I resend the patch?
-[--SNIP--]
-> > Also, since you are patching configure.ac, you must autoreconf:
-> >     BRLTTY_AUTORECONF = YES
-[--SNIP--]
-> We already do the equivalent of autoreconf.  BRLTTY_AUTORECONF = YES
-> does not work with BRLTTY, as BRLTTY is a autoconf-only package.  Please
-> see the comment added by Thomas in brltty.mk:
-
-Ah, I did not have an up-to-date master branch. I pulled and now I can
-see it, indeed.
-
-So, since we already need to autoconf, we can keep your patch as-is.
-
-I guess whoever applies your patch can add the URL to the patch commit
-log, yes, so I would say no need to resend.
-
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/linux/Config.in b/linux/Config.in
+index 0abf9c6..d325c4e 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -116,7 +116,7 @@ endif
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "4.14.9" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "4.14.10" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "v4.4.105-cip15" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.7.4
