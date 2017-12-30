@@ -1,12 +1,14 @@
 From: daggs <daggs@gmx.com>
-Date: Sat, 30 Dec 2017 07:44:43 +0100
-Subject: [Buildroot] [PATCH] libtirpc: fix compilation error
-In-Reply-To: <20171229222345.7ecb9545@windsurf.lan>
-References: <20171229130333.13661-1-daggs@gmx.com>
- <20171229143805.7f083140@windsurf.lan>
- <trinity-145e0c2a-2583-47ec-b583-2128a636e7e6-1514557451788@3c-app-mailcom-bs06>
- <20171229222345.7ecb9545@windsurf.lan>
-Message-ID: <trinity-bca13856-de1a-42f4-a4d4-41193f6eaf92-1514616283921@3c-app-mailcom-bs04>
+Date: Sat, 30 Dec 2017 07:48:28 +0100
+Subject: [Buildroot] [PATCH] tvheadend: add dependency on udev based
+ rootfs creation
+In-Reply-To: <trinity-713eb7e7-e94d-497b-92b0-2f72040284ba-1514557634858@3c-app-mailcom-bs06>
+References: <20171229130604.9897-1-daggs@gmx.com>
+ <20171229144031.798b5f81@windsurf.lan>
+ <trinity-7a471839-219c-4b6c-945d-9f235fe5b75a-1514555879257@3c-app-mailcom-bs06>
+ <20171229150307.17ea122c@windsurf.lan>
+ <trinity-713eb7e7-e94d-497b-92b0-2f72040284ba-1514557634858@3c-app-mailcom-bs06>
+Message-ID: <trinity-11bf727c-b1f3-4561-ba72-92c60d8acca2-1514616508591@3c-app-mailcom-bs04>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,39 +17,70 @@ To: buildroot@busybox.net
 
 Greetings Thomas,
 
+>
+> Greetings Thomas,
 > 
-> > config to reproduce:
-> > BR2_x86_i686=y
-> > BR2_PACKAGE_LIBTIRPC=y
+> > Sent: Friday, December 29, 2017 at 4:03 PM
+> > From: "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>
+> > To: daggs <daggs@gmx.com>
+> > Cc: buildroot at buildroot.org, "Bernd Kuhls" <bernd.kuhls@t-online.de>
+> > Subject: Re: [Buildroot] [PATCH] tvheadend: add dependency on udev based rootfs creation
+> >
+> > Hello,
 > > 
-> > no idea why the autobuilds didn't caught it.
+> > On Fri, 29 Dec 2017 14:57:59 +0100, daggs wrote:
+> > 
+> > > > You should use BR2_PACKAGE_HAS_UDEV instead. Indeed udev can be
+> > > > provided by either eudev or systemd.  
+> > > does using BR2_PACKAGE_HAS_UDEV means rootfs dev creation will use udev?
+> > 
+> > config BR2_PACKAGE_EUDEV
+> >         bool "eudev"
+> >         depends on BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV
+> >         depends on BR2_USE_MMU # uses fork()
+> >         depends on BR2_USE_WCHAR # needs C99 compiler
+> >         depends on !BR2_STATIC_LIBS # kmod
+> >         select BR2_PACKAGE_HAS_UDEV
+> > 
+> > So for the eudev case, BR2_PACKAGE_HAS_UDEV is selected when eudev is
+> > enabled, and eudev can only be enabled when
+> > BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV is enabled.
+> > 
+> > For the systemd case:
+> > 
+> > menuconfig BR2_PACKAGE_SYSTEMD
+> >         bool "systemd"
+> >         depends on BR2_INIT_SYSTEMD
+> >         depends on !BR2_STATIC_LIBS # kmod
+> >         depends on BR2_TOOLCHAIN_HAS_THREADS # dbus
+> >         depends on BR2_USE_MMU # dbus
+> >         select BR2_PACKAGE_HAS_UDEV
+> > 
+> > So BR2_PACKAGE_HAS_UDEV is selected when systemd is enabled, which is
+> > only possible when systemd is the init system.
+> > 
+> > Bottom line: as soon as systemd is the init system *or* eudev is used
+> > at the dev management method, you are guaranteed that
+> > BR2_PACKAGE_HAS_UDEV=y.
+> ok, I'll look into it.
 > 
-> I initially couldn't reproduce it, but after thinking more about the
-> problem, I understood what happened: you don't have RPC support
-> installed in your host system. The build of the rpcgen host program
-> fails to build because it can't find those headers, which on my system
-> (or the autobuilder instances) are provided system-wide.
-weird, I have it too on my system:
-dagg at NCC-5001-D ~ $ ll /usr/include/tirpc/rpc/types.h
--rw-r--r-- 1 root root 3270 Dec  1 15:44 /usr/include/tirpc/rpc/types.h
-dagg at NCC-5001-D ~ $ eix net-libs/libtirpc
-[I] net-libs/libtirpc
-     Available versions:  1.0.1-r1(0/3) 1.0.2-r1(0/3) [m]1.0.2-r1(0/3)[1] {ipv6 kerberos static-libs ABI_MIPS="n32 n64 o32" ABI_PPC="32 64" ABI_S390="32 64" ABI_X86="32 64 x32"}
-     Installed versions:  1.0.2-r1(0/3)(15:44:39 01/12/17)(-ipv6 -kerberos -static-libs ABI_MIPS="-n32 -n64 -o32" ABI_PPC="-32 -64" ABI_S390="-32 -64" ABI_X86="64 -32 -x32")
-     Homepage:            http://libtirpc.sourceforge.net/
-     Description:         Transport Independent RPC library (SunRPC replacement)
-
-[1] "musl" /var/lib/layman/musl
-dagg at NCC-5001-D ~ $ qfile /usr/include/tirpc/rpc/types.h
-net-libs/libtirpc (/usr/include/tirpc/rpc/types.h)
-
-I wonder why it didn't reproduced when you tried it.
-maybe it is a global include config or something, does buildroot appends to existing includes or uses a blanked one?
-
+> > 
+> > > > Also, does tvheadend needs to link with libudev ? If so, it should have
+> > > > udev in its <pkg>_DEPENDENCIES. If it doesn't link with libudev, then
+> > > > I'm not sure to see how udev helps for tvheadend to detect USB DVB
+> > > > cards.  
+> > > it doesn't, frankly I don't understand it too, I'm wrestling this for 3 weeks now, without udev, tvheadend didn't listed my adapter in the webui.
+> > > on the desktop it did, after some thinking I've decided to try building udev and it worked.
+> > > maybe Bernd might have some ideas on the matter. 
+> > 
+> > This is a somewhat weak understanding of what's happening here. I think
+> > we need a better understanding of what's going on rather than
+> > more-or-less randomly adding a dependency.
+> for that I need either time to look into the code or an answer from the devs, time I don't have unfortunately, devs aren't responding yet.
+> I encountered the issue and was able to get it to work, I assume that others might have seen it and didn't had time to look into it.
+> also as said, maybe Bernd knows what is the issue here and can propose a better fix.
 > 
-> So indeed, your patch is correct. Just the explanation was not
-> sufficient, so I've reworded the commit log accordingly.
-I was never good with words, thanks!
-
+I did a quick search on the tvheadend repo for udev, one hit poped up: https://github.com/tvheadend/tvheadend/blob/master/debian/tvheadend.init
+it seems that they do depend on udev when the boot system isn't systemd, am I correct?
 
 Dagg.
