@@ -1,13 +1,12 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 30 Dec 2017 11:51:17 +0100
-Subject: [Buildroot] [PATCH] libtirpc: fix compilation error
-In-Reply-To: <trinity-bca13856-de1a-42f4-a4d4-41193f6eaf92-1514616283921@3c-app-mailcom-bs04>
-References: <20171229130333.13661-1-daggs@gmx.com>
- <20171229143805.7f083140@windsurf.lan>
- <trinity-145e0c2a-2583-47ec-b583-2128a636e7e6-1514557451788@3c-app-mailcom-bs06>
- <20171229222345.7ecb9545@windsurf.lan>
- <trinity-bca13856-de1a-42f4-a4d4-41193f6eaf92-1514616283921@3c-app-mailcom-bs04>
-Message-ID: <20171230115117.7b80bb20@windsurf.lan>
+From: Alexander Mukhin <alexander.i.mukhin@gmail.com>
+Date: Sat, 30 Dec 2017 15:09:34 +0300
+Subject: [Buildroot] [PATCH 3/4] hostapd: make ACS dependent on nl80211
+In-Reply-To: <20171230111856.1d7198e4@windsurf.lan>
+References: <20171223190617.3981-1-alexander.i.mukhin@gmail.com>
+ <20171223190617.3981-4-alexander.i.mukhin@gmail.com>
+ <20171229223748.5dd69cd3@windsurf.lan> <20171230095000.GA486@hpx>
+ <20171230111856.1d7198e4@windsurf.lan>
+Message-ID: <20171230120934.GB486@hpx>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,31 +15,14 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 30 Dec 2017 07:44:43 +0100, daggs wrote:
+On Sat, Dec 30, 2017 at 11:18:56AM +0100, Thomas Petazzoni wrote:
+> 
+> Thanks for this additional explanation. Could you include this in the
+> commit log in the next iteration of this patch series ?
+>
 
-> > I initially couldn't reproduce it, but after thinking more about the
-> > problem, I understood what happened: you don't have RPC support
-> > installed in your host system. The build of the rpcgen host program
-> > fails to build because it can't find those headers, which on my system
-> > (or the autobuilder instances) are provided system-wide.  
-> weird, I have it too on my system:
-> dagg at NCC-5001-D ~ $ ll /usr/include/tirpc/rpc/types.h
-> -rw-r--r-- 1 root root 3270 Dec  1 15:44 /usr/include/tirpc/rpc/types.h
+Yes, I'll surely do.
 
-Notice how it is in /usr/include/tirpc, while on my system it is in:
-
-$ ls -l /usr/include/rpc/types.h 
--rw-r--r-- 1 root root 3233 Dec  6 18:20 /usr/include/rpc/types.h
-
-So, in your system, a #include <rpc/types.h> doesn't find it, while it
-does on my system. I believe it's because on your system, the RPC
-implementation comes from libtirpc, while on my system, it comes from
-glibc.
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Cheers,
+Alexander. 
