@@ -1,45 +1,34 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Sat, 30 Dec 2017 11:34:21 +0100
-Subject: [Buildroot] [PATCH] package/python-shutilwhich: also available
- in python3
-In-Reply-To: <20171230103008.1828-1-yann.morin.1998@free.fr>
-References: <20171230103008.1828-1-yann.morin.1998@free.fr>
-Message-ID: <CAGm1_kvHUTzc-9KDJNYTm1D7+SEuD4XEMPnPB7SSb=+foYf+tA@mail.gmail.com>
+From: Mario Lang <mlang@blind.guru>
+Date: Sat, 30 Dec 2017 11:48:02 +0100
+Subject: [Buildroot] [PATCH 1/3] package/brltty: add missing dependency on
+ host-pkgconf
+Message-ID: <20171230104804.16489-1-mlang@blind.guru>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Dec 30, 2017 at 11:30 AM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> When in python3, shutilwhich will simply use shutil.which.
->
-> Some packages (e.g. crossbar.io) unconditionally require shutilwhich,
-> even when they are running under python3.
->
-> So, enable python-shutilwhich even for python3.
->
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Mauro Condarelli <mc5686@mclink.it>
-> Cc: Yegor Yefremov <yegorslists@googlemail.com>
+This fixes the following error:
+  ./configure: line 14978: .../host/bin/pkg-config: No such file or directory
 
-Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Mario Lang <mlang@blind.guru>
+---
+ package/brltty/brltty.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> ---
->  package/python-shutilwhich/Config.in | 1 -
->  1 file changed, 1 deletion(-)
->
-> diff --git a/package/python-shutilwhich/Config.in b/package/python-shutilwhich/Config.in
-> index abdc8d77a1..a75a63bbf4 100644
-> --- a/package/python-shutilwhich/Config.in
-> +++ b/package/python-shutilwhich/Config.in
-> @@ -1,6 +1,5 @@
->  config BR2_PACKAGE_PYTHON_SHUTILWHICH
->         bool "python-shutilwhich"
-> -       depends on BR2_PACKAGE_PYTHON
->         help
->           shutil.which for those not using Python 3.3 yet.
->
-> --
-> 2.11.0
->
+diff --git a/package/brltty/brltty.mk b/package/brltty/brltty.mk
+index 632aa68386..eb91ef8ff7 100644
+--- a/package/brltty/brltty.mk
++++ b/package/brltty/brltty.mk
+@@ -11,7 +11,7 @@ BRLTTY_INSTALL_STAGING_OPTS = INSTALL_ROOT=$(STAGING_DIR) install
+ BRLTTY_INSTALL_TARGET_OPTS = INSTALL_ROOT=$(TARGET_DIR) install
+ BRLTTY_LICENSE_FILES = LICENSE-GPL LICENSE-LGPL
+ 
+-BRLTTY_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES) host-autoconf
++BRLTTY_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES) host-autoconf host-pkgconf
+ 
+ BRLTTY_CONF_OPTS = \
+ 	--disable-java-bindings \
+-- 
+2.15.0
