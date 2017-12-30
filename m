@@ -1,36 +1,83 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 30 Dec 2017 23:40:51 +0100
-Subject: [Buildroot] [PATCH 1/1] package/vlc: security bump to version
- 2.2.8
-In-Reply-To: <20171212175414.28267-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Tue, 12 Dec 2017 18:54:14 +0100")
-References: <20171212175414.28267-1-bernd.kuhls@t-online.de>
-Message-ID: <87lghjkff0.fsf@dell.be.48ers.dk>
+Date: Sat, 30 Dec 2017 23:31:48 +0100
+Subject: [Buildroot] [git commit branch/2017.02.x] dhcp: add upstream
+ security fix
+Message-ID: <20171230224100.3CCD27FA40@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=91322d7682e8a115382ee5bf3ab627813f764a66
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
- > Version 2.2.7 fixes CVE-2017-10699
- > http://git.videolan.org/?p=vlc/vlc-2.2.git;a=commitdiff;h=0de56d69ff06afceb5b16721ea5965a676b938b9
+Fixes socket leak that might cause denial of serivce.
 
- > Removed patches applied upstream:
- > 0013-codec-avcodec-check-avcodec-visible-sizes.patch
- > http://git.videolan.org/?p=vlc/vlc-2.2.git;a=commitdiff;h=6cc73bcad19da2cd2e95671173f2e0d203a57e9b
+https://bugzilla.redhat.com/show_bug.cgi?id=1523547
 
- > 0014-decoder-check-visible-size-when-creating-buffer.patch
- > http://git.videolan.org/?p=vlc/vlc-2.2.git;a=commitdiff;h=a38a85db58c569cc592d9380cc07096757ef3d49
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+(cherry picked from commit a4c6ac59e6e056e43c899d0e6c59a7e6139bfd52)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...3-Plugs-a-socket-descriptor-leak-in-OMAPI.patch | 51 ++++++++++++++++++++++
+ 1 file changed, 51 insertions(+)
 
- > Added all hashes provided by upstream, added license hashes.
-
- > Switched _SITE to https.
-
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-
-Committed to 2017.02.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/dhcp/0002-v4_3-Plugs-a-socket-descriptor-leak-in-OMAPI.patch b/package/dhcp/0002-v4_3-Plugs-a-socket-descriptor-leak-in-OMAPI.patch
+new file mode 100644
+index 0000000..df29465
+--- /dev/null
++++ b/package/dhcp/0002-v4_3-Plugs-a-socket-descriptor-leak-in-OMAPI.patch
+@@ -0,0 +1,51 @@
++From 5097bc0559f592683faac1f67bf350e1bddf6ed4 Mon Sep 17 00:00:00 2001
++From: Thomas Markwalder <tmark@isc.org>
++Date: Thu, 7 Dec 2017 11:39:30 -0500
++Subject: [PATCH] [v4_3] Plugs a socket descriptor leak in OMAPI
++
++        Merges in rt46767.
++
++[baruch: drop RELNOTES hunk]
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Patch status: upstream commit 5097bc0559f
++
++ omapip/buffer.c  | 9 +++++++++
++ omapip/message.c | 2 +-
++
++diff --git a/omapip/buffer.c b/omapip/buffer.c
++index f7fdc3250e82..809034d1317b 100644
++--- a/omapip/buffer.c
+++++ b/omapip/buffer.c
++@@ -566,6 +566,15 @@ isc_result_t omapi_connection_writer (omapi_object_t *h)
++ 			omapi_buffer_dereference (&buffer, MDL);
++ 		}
++ 	}
+++
+++	/* If we had data left to write when we're told to disconnect,
+++	* we need recall disconnect, now that we're done writing.
+++	* See rt46767. */
+++	if (c->out_bytes == 0 && c->state == omapi_connection_disconnecting) {
+++		omapi_disconnect (h, 1);
+++		return ISC_R_SHUTTINGDOWN;
+++	}
+++
++ 	return ISC_R_SUCCESS;
++ }
++ 
++diff --git a/omapip/message.c b/omapip/message.c
++index 59ccdc2c05cf..21bcfc3822e7 100644
++--- a/omapip/message.c
+++++ b/omapip/message.c
++@@ -339,7 +339,7 @@ isc_result_t omapi_message_unregister (omapi_object_t *mo)
++ }
++ 
++ #ifdef DEBUG_PROTOCOL
++-static const char *omapi_message_op_name(int op) {
+++const char *omapi_message_op_name(int op) {
++ 	switch (op) {
++ 	case OMAPI_OP_OPEN:    return "OMAPI_OP_OPEN";
++ 	case OMAPI_OP_REFRESH: return "OMAPI_OP_REFRESH";
++-- 
++2.15.1
++
