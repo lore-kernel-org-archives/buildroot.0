@@ -1,79 +1,43 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 30 Dec 2017 18:10:21 +0100
-Subject: [Buildroot] Bug report or teaching moment -- downloading kernel
- patches
-In-Reply-To: <CAF_dkJCrv_M-bXkXGtoY0esM6GS_MW6+Pjeb9aJWUCRFstST8A@mail.gmail.com>
-References: <CAF_dkJCrv_M-bXkXGtoY0esM6GS_MW6+Pjeb9aJWUCRFstST8A@mail.gmail.com>
-Message-ID: <20171230171021.GG2921@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 30 Dec 2017 18:10:23 +0100
+Subject: [Buildroot] [git commit] package/brltty: depends on !BR2_STATIC_LIBS
+Message-ID: <20171230171046.2E6EF810A4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Patrick, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=391efec78a3be2c95b9a30571fbff2660cd79d6f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2017-12-30 11:32 -0500, Patrick Doyle spake thusly:
-> I can't figure this out...am I doing something wrong or have I uncovered a bug?
+This requirement is likely to go away in the future.  However, declaring
+this fact explicitly for now fixes a number of test-pkg failures.
 
-Bug.
+Signed-off-by: Mario Lang <mlang@blind.guru>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/brltty/Config.in | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-It's a known bug, where extra downloads are not downloaded when the main
-download is something that is not a tarball.
-
-And for atmel_sama5d27_som1_ek_mmc_dev_defconfig, the kernel is from a
-git tree, so is not downloaded with wget, so the extra dowenloads are
-not downloaded.
-
-Regards,
-Yann E. MORIN.
-
-> $ export BR2_DL_DIR=
-> # (make sure we start with an empty download directory)
-> $ git clone git://git.buildroot.net/buildroot buildroot.test
-> # (I am working with master=2a604ddcd8d8bf093cdedaefc074a8c61933a4b6
-> from a few days ago)
-> $ cd buildroot.test
-> $ make atmel_sama5d27_som1_ek_mmc_dev_defconfig
-> $ make menuconfig
-> -- navigate to Kernel ---> Custom kernel patches
-> -- enter https://cdn.kernel.org/pub/linux/kernel/projects/rt/4.9/patches-4.9.61-rt61.tar.gz
-> -- Exit, Exit, Exit, save changes, etc...
-> $ make linux-patch
-> 
-> When I do this, a kernel gets downloaded, but no patches get applied.
-> If I follow that up with
-> 
-> $ cd dl
-> $ wget https://cdn.kernel.org/pub/linux/kernel/projects/rt/4.9/patches-4.9.61-rt61.tar.gz
-> $ cd ..
-> $ make linux-dirclean
-> $ make linux-patch
-> 
-> The patches I manually downloaded get applied.
-> 
-> Can somebody help me figure out what's going on here?  From everything
-> I've read (and from Yann's email earlier), I would expect the patch
-> file to be downloaded by the machinery.
-> 
-> If it makes any difference, I have attached the .config file from my build.
-> Also, for full disclosure, as I just tried this again, I didn't
-> actually clone from git://git.buildroot.net, I cloned from my existing
-> (unmodified) buildroot directory, just to save some time.
-> 
-> --wpd
-
-
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/brltty/Config.in b/package/brltty/Config.in
+index dfd2ff4..288d9b5 100644
+--- a/package/brltty/Config.in
++++ b/package/brltty/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_BRLTTY
+ 	bool "brltty"
+ 	depends on BR2_USE_WCHAR
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_STATIC_LIBS
+ 	help
+ 	  A daemon providing access to the Linux console for a blind
+ 	  person using a refreshable braille display.
+@@ -15,5 +16,5 @@ config BR2_PACKAGE_BRLTTY_TEXT_TABLE
+ 
+ endif
+ 
+-comment "brltty needs a toolchain w/ threads, wchar"
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
++comment "brltty needs a toolchain w/ dynamic lib, threads, wchar"
++	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
