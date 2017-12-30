@@ -1,56 +1,149 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 30 Dec 2017 23:31:18 +0100
-Subject: [Buildroot] [git commit branch/2017.02.x] dhcp: bump to version
- 4.3.6
-Message-ID: <20171230224100.2C7677FA40@busybox.osuosl.org>
+Date: Sat, 30 Dec 2017 23:30:28 +0100
+Subject: [Buildroot] [git commit branch/2017.02.x] package/vlc: security
+ bump to version 2.2.8
+Message-ID: <20171230224100.1ECF983703@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=21f669bcc2c17d35d6623b7ddfb05cf5d300c530
+commit: https://git.buildroot.net/buildroot/commit/?id=2e0893e3332144c74aa7d16b7e1de1803fc6551e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Renumber the patch.
+Version 2.2.7 fixes CVE-2017-10699
+http://git.videolan.org/?p=vlc/vlc-2.2.git;a=commitdiff;h=0de56d69ff06afceb5b16721ea5965a676b938b9
 
-Add license hash.
+Removed patches applied upstream:
+0013-codec-avcodec-check-avcodec-visible-sizes.patch
+http://git.videolan.org/?p=vlc/vlc-2.2.git;a=commitdiff;h=6cc73bcad19da2cd2e95671173f2e0d203a57e9b
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+0014-decoder-check-visible-size-when-creating-buffer.patch
+http://git.videolan.org/?p=vlc/vlc-2.2.git;a=commitdiff;h=a38a85db58c569cc592d9380cc07096757ef3d49
+
+Added all hashes provided by upstream, added license hashes.
+
+Switched _SITE to https.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 99da25a5fabe422ee6519e5ff45f4d015c0d18fc)
+(cherry picked from commit 94e523941e4d8f4c98fe00288513697cd372f077)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 59c427d86af8b030801e18fd9430f2bfe2aa630c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...{0002-bind-cross-compile.patch => 0001-bind-cross-compile.patch} | 0
- package/dhcp/dhcp.hash                                              | 6 ++++--
- package/dhcp/dhcp.mk                                                | 2 +-
- 3 files changed, 5 insertions(+), 3 deletions(-)
+ ...codec-avcodec-check-avcodec-visible-sizes.patch | 33 ----------------------
+ ...r-check-visible-size-when-creating-buffer.patch | 33 ----------------------
+ package/vlc/vlc.hash                               | 10 +++++--
+ package/vlc/vlc.mk                                 |  4 +--
+ 4 files changed, 10 insertions(+), 70 deletions(-)
 
-diff --git a/package/dhcp/0002-bind-cross-compile.patch b/package/dhcp/0001-bind-cross-compile.patch
-similarity index 100%
-rename from package/dhcp/0002-bind-cross-compile.patch
-rename to package/dhcp/0001-bind-cross-compile.patch
-diff --git a/package/dhcp/dhcp.hash b/package/dhcp/dhcp.hash
-index 7898aa4..ce5f995 100644
---- a/package/dhcp/dhcp.hash
-+++ b/package/dhcp/dhcp.hash
-@@ -1,2 +1,4 @@
--# Verified from https://ftp.isc.org/isc/dhcp/4.3.5/dhcp-4.3.5.tar.gz.sha256.asc
--sha256 eb95936bf15d2393c55dd505bc527d1d4408289cec5a9fa8abb99f7577e7f954  dhcp-4.3.5.tar.gz
-+# Verified from https://ftp.isc.org/isc/dhcp/4.3.6/dhcp-4.3.6.tar.gz.sha256.asc
-+sha256 a41eaf6364f1377fe065d35671d9cf82bbbc8f21207819b2b9f33f652aec6f1b  dhcp-4.3.6.tar.gz
-+# Locally calculated
-+sha256 dd7ae2201c0c11c3c1e2510d731c67b2f4bc8ba735707d7348ddd65f7b598562  LICENSE
-diff --git a/package/dhcp/dhcp.mk b/package/dhcp/dhcp.mk
-index 45cae08..4e1b24b 100644
---- a/package/dhcp/dhcp.mk
-+++ b/package/dhcp/dhcp.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/vlc/0013-codec-avcodec-check-avcodec-visible-sizes.patch b/package/vlc/0013-codec-avcodec-check-avcodec-visible-sizes.patch
+deleted file mode 100644
+index 41a5e25..0000000
+--- a/package/vlc/0013-codec-avcodec-check-avcodec-visible-sizes.patch
++++ /dev/null
+@@ -1,33 +0,0 @@
+-From 6cc73bcad19da2cd2e95671173f2e0d203a57e9b Mon Sep 17 00:00:00 2001
+-From: Francois Cartegnie <fcvlcdev@free.fr>
+-Date: Thu, 29 Jun 2017 09:45:20 +0200
+-Subject: [PATCH] codec: avcodec: check avcodec visible sizes
+-
+-refs #18467
+-
+-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+----
+- modules/codec/avcodec/video.c | 6 ++++--
+- 1 file changed, 4 insertions(+), 2 deletions(-)
+-
+-diff --git a/modules/codec/avcodec/video.c b/modules/codec/avcodec/video.c
+-index 1bcad21..ce52544 100644
+---- a/modules/codec/avcodec/video.c
+-+++ b/modules/codec/avcodec/video.c
+-@@ -137,9 +137,11 @@ static inline picture_t *ffmpeg_NewPictBuf( decoder_t *p_dec,
+-     }
+- 
+- 
+--    if( width == 0 || height == 0 || width > 8192 || height > 8192 )
+-+    if( width == 0 || height == 0 || width > 8192 || height > 8192 ||
+-+        width < p_context->width || height < p_context->height )
+-     {
+--        msg_Err( p_dec, "Invalid frame size %dx%d.", width, height );
+-+        msg_Err( p_dec, "Invalid frame size %dx%d. vsz %dx%d",
+-+                 width, height, p_context->width, p_context->height );
+-         return NULL; /* invalid display size */
+-     }
+-     p_dec->fmt_out.video.i_width = width;
+--- 
+-2.1.4
+-
+diff --git a/package/vlc/0014-decoder-check-visible-size-when-creating-buffer.patch b/package/vlc/0014-decoder-check-visible-size-when-creating-buffer.patch
+deleted file mode 100644
+index a16dcf0..0000000
+--- a/package/vlc/0014-decoder-check-visible-size-when-creating-buffer.patch
++++ /dev/null
+@@ -1,33 +0,0 @@
+-From a38a85db58c569cc592d9380cc07096757ef3d49 Mon Sep 17 00:00:00 2001
+-From: Francois Cartegnie <fcvlcdev@free.fr>
+-Date: Thu, 29 Jun 2017 11:09:02 +0200
+-Subject: [PATCH] decoder: check visible size when creating buffer
+-
+-early reject invalid visible size
+-mishandled by filters.
+-
+-refs #18467
+-
+-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+----
+- src/input/decoder.c | 4 +++-
+- 1 file changed, 3 insertions(+), 1 deletion(-)
+-
+-diff --git a/src/input/decoder.c b/src/input/decoder.c
+-index 2c0823f..a216165 100644
+---- a/src/input/decoder.c
+-+++ b/src/input/decoder.c
+-@@ -2060,7 +2060,9 @@ static picture_t *vout_new_buffer( decoder_t *p_dec )
+-         vout_thread_t *p_vout;
+- 
+-         if( !p_dec->fmt_out.video.i_width ||
+--            !p_dec->fmt_out.video.i_height )
+-+            !p_dec->fmt_out.video.i_height ||
+-+            p_dec->fmt_out.video.i_width < p_dec->fmt_out.video.i_visible_width ||
+-+            p_dec->fmt_out.video.i_height < p_dec->fmt_out.video.i_visible_height )
+-         {
+-             /* Can't create a new vout without display size */
+-             return NULL;
+--- 
+-2.1.4
+-
+diff --git a/package/vlc/vlc.hash b/package/vlc/vlc.hash
+index 628dad7..02b70ef 100644
+--- a/package/vlc/vlc.hash
++++ b/package/vlc/vlc.hash
+@@ -1,2 +1,8 @@
+-# From http://download.videolan.org/pub/videolan/vlc/2.2.6/vlc-2.2.6.tar.xz.sha256
+-sha256 c403d3accd9a400eb2181c958f3e7bc5524fe5738425f4253d42883b425a42a8  vlc-2.2.6.tar.xz
++# From http://download.videolan.org/pub/videolan/vlc/2.2.8/vlc-2.2.8.tar.xz.sha256
++sha256 9bf046848fb56d93518881b39099b8288ee005d5ba0ddf705b6f6643b8d562ec vlc-2.2.8.tar.xz
++# From http://download.videolan.org/pub/videolan/vlc/2.2.8/vlc-2.2.8.tar.xz.sha1
++sha1 b960ec5bdb9a51da285430fc68962927ccc87187 vlc-2.2.8.tar.xz
++# From http://download.videolan.org/pub/videolan/vlc/2.2.8/vlc-2.2.8.tar.xz.md5
++md5 b721fddf65aaf64eeee5629aa9bf7c9e vlc-2.2.8.tar.xz
++sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
++sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
+diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
+index 47fb3e8..dfa84c3 100644
+--- a/package/vlc/vlc.mk
++++ b/package/vlc/vlc.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--DHCP_VERSION = 4.3.5
-+DHCP_VERSION = 4.3.6
- DHCP_SITE = http://ftp.isc.org/isc/dhcp/$(DHCP_VERSION)
- DHCP_INSTALL_STAGING = YES
- DHCP_LICENSE = ISC
+-VLC_VERSION = 2.2.6
+-VLC_SITE = http://get.videolan.org/vlc/$(VLC_VERSION)
++VLC_VERSION = 2.2.8
++VLC_SITE = https://get.videolan.org/vlc/$(VLC_VERSION)
+ VLC_SOURCE = vlc-$(VLC_VERSION).tar.xz
+ VLC_LICENSE = GPLv2+, LGPLv2.1+
+ VLC_LICENSE_FILES = COPYING COPYING.LIB
