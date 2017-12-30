@@ -1,70 +1,45 @@
-From: Angelo Compagnucci <angelo@amarulasolutions.com>
-Date: Sat, 30 Dec 2017 11:02:03 +0100
-Subject: [Buildroot] [PATCH v2 3/7] package/flannel: converting to golang
- infrastructure
-In-Reply-To: <1514628127-15938-1-git-send-email-angelo@amarulasolutions.com>
-References: <1514628127-15938-1-git-send-email-angelo@amarulasolutions.com>
-Message-ID: <1514628127-15938-4-git-send-email-angelo@amarulasolutions.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 30 Dec 2017 11:18:56 +0100
+Subject: [Buildroot] [PATCH 3/4] hostapd: make ACS dependent on nl80211
+In-Reply-To: <20171230095000.GA486@hpx>
+References: <20171223190617.3981-1-alexander.i.mukhin@gmail.com>
+ <20171223190617.3981-4-alexander.i.mukhin@gmail.com>
+ <20171229223748.5dd69cd3@windsurf.lan> <20171230095000.GA486@hpx>
+Message-ID: <20171230111856.1d7198e4@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Hello,
 
-This patch converts the flannel package to the new golang
-infrastructure.
+On Sat, 30 Dec 2017 12:50:00 +0300, Alexander Mukhin wrote:
 
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
----
- package/flannel/flannel.mk | 32 ++++----------------------------
- 1 file changed, 4 insertions(+), 28 deletions(-)
+> > > ACS is supported for nl80211 driver only.
+> > >   
+> > Could you add more details here? Do you see a build failure? Runtime
+> > failure?
+> > 
+> > If CONFIG_ACS=y doesn't build when CONFIG_DRIVER_NL80211 is disabled,
+> > then this fix should be part of PATCH 2/4, otherwise PATCH 2/4
+> > introduces a build regression.  
+> 
+> My guide here is hostapd's defconfig, where it's stated that "ACS is
+> currently only supported through the nl80211 driver". Search through the
+> source code also reveals ACS machinery in the nl80211 driver only.
+> 
+> hostapd builds successively with ACS enabled and nl80211 disabled, but
+> an attempt to use ACS by setting a wireless channel to 0 results in a
+> runtime failure (driver doesn't accept this value).
 
-diff --git a/package/flannel/flannel.mk b/package/flannel/flannel.mk
-index bbb2c72..78f9a09 100644
---- a/package/flannel/flannel.mk
-+++ b/package/flannel/flannel.mk
-@@ -11,36 +11,12 @@ FLANNEL_SOURCE = $(FLANNEL_VERSION).tar.gz
- FLANNEL_LICENSE = Apache-2.0
- FLANNEL_LICENSE_FILES = LICENSE
- 
--FLANNEL_DEPENDENCIES = host-go
--
--FLANNEL_MAKE_ENV = \
--	$(HOST_GO_TARGET_ENV) \
--	GOBIN="$(@D)/bin" \
--	GOPATH="$(@D)/gopath" \
--	CGO_ENABLED=1
--
--FLANNEL_GLDFLAGS = \
--	-X github.com/coreos/flannel/version.Version=$(FLANNEL_VERSION)
--
--ifeq ($(BR2_STATIC_LIBS),y)
--FLANNEL_GLDFLAGS += -extldflags '-static'
--endif
--
--define FLANNEL_CONFIGURE_CMDS
--	# Put sources at prescribed GOPATH location.
--	mkdir -p $(@D)/gopath/src/github.com/coreos
--	ln -s $(@D) $(@D)/gopath/src/github.com/coreos/flannel
--endef
--
--define FLANNEL_BUILD_CMDS
--	cd $(@D) && $(FLANNEL_MAKE_ENV) $(HOST_DIR)/bin/go \
--		build -v -o $(@D)/bin/flanneld -ldflags "$(FLANNEL_GLDFLAGS)" .
--endef
-+FLANNEL_GO_LDFLAGS = -X github.com/coreos/flannel/version.Version=$(FLANNEL_VERSION)
- 
-+# Install flannel to its well known location.
- define FLANNEL_INSTALL_TARGET_CMDS
--	# Install flannel to its well known location.
--	$(INSTALL) -D -m 0755 $(@D)/bin/flanneld $(TARGET_DIR)/opt/bin/flanneld
-+	$(INSTALL) -D -m 0755 $(@D)/$(FLANNEL_BINDIR)/flannel $(TARGET_DIR)/opt/bin/flanneld
- 	$(INSTALL) -D -m 0755 $(@D)/dist/mk-docker-opts.sh $(TARGET_DIR)/opt/bin/mk-docker-opts.sh
- endef
- 
--$(eval $(generic-package))
-+$(eval $(golang-package))
+Thanks for this additional explanation. Could you include this in the
+commit log in the next iteration of this patch series ?
+
+Thanks!
+
+Thomas
 -- 
-2.7.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
