@@ -1,38 +1,47 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 30 Dec 2017 11:30:08 +0100
-Subject: [Buildroot] [PATCH] package/python-shutilwhich: also available in
- python3
-Message-ID: <20171230103008.1828-1-yann.morin.1998@free.fr>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Sat, 30 Dec 2017 11:33:29 +0100
+Subject: [Buildroot] [PATCH] python-crossbar: add a warning comment
+ concerning version bump
+In-Reply-To: <20171230102856.GA2921@scaer>
+References: <20170302135853.3111-1-yegorslists@googlemail.com>
+ <20171230102856.GA2921@scaer>
+Message-ID: <CAGm1_kvHVKvkf=BxSyFMqE_s0g+oWXsmCrL6bEKE71zQMc-5UA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When in python3, shutilwhich will simply use shutil.which.
+Yann,
 
-Some packages (e.g. crossbar.io) unconditionally require shutilwhich,
-even when they are running under python3.
+On Sat, Dec 30, 2017 at 11:28 AM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> Yegor, All,
+>
+> On 2017-03-02 14:58 +0100, yegorslists at googlemail.com spake thusly:
+>> From: Yegor Yefremov <yegorslists@googlemail.com>
+>>
+>> The latest crossbar needs a rather recent setuptools package, that
+>> has circular dependencies. Until this issue is not resolved, it is
+>> not safe to bump crossbar version.
+>>
+>> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+>> ---
+>>  package/python-crossbar/python-crossbar.mk | 2 ++
+>>  1 file changed, 2 insertions(+)
+>>
+>> diff --git a/package/python-crossbar/python-crossbar.mk b/package/python-crossbar/python-crossbar.mk
+>> index 3d82d7704..9c543e6cc 100644
+>> --- a/package/python-crossbar/python-crossbar.mk
+>> +++ b/package/python-crossbar/python-crossbar.mk
+>> @@ -4,6 +4,8 @@
+>>  #
+>>  ################################################################################
+>>
+>> +# don't bump version as newer setuptools package is needed,
+>> +# that still didn't make its way into BR
+>
+> Now that we are using setup-tools 36.0.1, is this comment still valid?
 
-So, enable python-shutilwhich even for python3.
+I'll have to check this and bump to the newest version.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Mauro Condarelli <mc5686@mclink.it>
-Cc: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/python-shutilwhich/Config.in | 1 -
- 1 file changed, 1 deletion(-)
-
-diff --git a/package/python-shutilwhich/Config.in b/package/python-shutilwhich/Config.in
-index abdc8d77a1..a75a63bbf4 100644
---- a/package/python-shutilwhich/Config.in
-+++ b/package/python-shutilwhich/Config.in
-@@ -1,6 +1,5 @@
- config BR2_PACKAGE_PYTHON_SHUTILWHICH
- 	bool "python-shutilwhich"
--	depends on BR2_PACKAGE_PYTHON
- 	help
- 	  shutil.which for those not using Python 3.3 yet.
- 
--- 
-2.11.0
+Yegor
