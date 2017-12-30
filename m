@@ -1,43 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 30 Dec 2017 22:25:58 +0100
-Subject: [Buildroot] [PATCH v2 1/1] json for modern c++: new package
-In-Reply-To: <20171230192437.6706-1-Adamduskett@outlook.com>
-References: <20171230192437.6706-1-Adamduskett@outlook.com>
-Message-ID: <20171230222558.762f4938@windsurf>
+Date: Sat, 30 Dec 2017 22:33:53 +0100
+Subject: [Buildroot] [git commit] tar: do not build SELinux support for host
+ variant
+Message-ID: <20171230213543.3BEB683594@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=121807c08927c0a0d04c965beb6a8785ea89e47f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 30 Dec 2017 14:24:37 -0500, Adam Duskett wrote:
+If we don't explicitly disable SELinux support in the host-tar build,
+it might pick up system-wide installed SELinux libraries, causing the
+tar in HOST_DIR/bin/ to depend on the host SELinux libraries, which is
+not desirable to make the SDK portable/relocatable.
 
-> +config BR2_PACKAGE_JSON_FOR_MODERN_CPP
-> +	bool "json for modern c++"
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/tar/tar.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Changed to json-for-modern-cpp
-
-> new file mode 100644
-> index 0000000000..8f31c8921d
-> --- /dev/null
-> +++ b/package/json-for-modern-cpp/json-for-modern-cpp.mk
-> @@ -0,0 +1,15 @@
-> +################################################################################
-> +#
-> +# json for modern c++
-
-Changes to json-for-modern-cpp
-
-> +JSON_FOR_MODERN_CPP_INSTALL_STAGING = YES
-
-Since it's a header only library, I've added <pkg>_INSTALL_TARGET = NO.
-
-Applied with those changes. Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/tar/tar.mk b/package/tar/tar.mk
+index cb2ddc0..a8a15d9 100644
+--- a/package/tar/tar.mk
++++ b/package/tar/tar.mk
+@@ -44,4 +44,7 @@ define HOST_TAR_EXTRACT_CMDS
+ 	mv $(@D)/tar-$(TAR_VERSION)/* $(@D)
+ 	rmdir $(@D)/tar-$(TAR_VERSION)
+ endef
++
++HOST_TAR_CONF_OPTS = --without-selinux
++
+ $(eval $(host-autotools-package))
