@@ -1,96 +1,35 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 30 Dec 2017 18:58:29 +0100
-Subject: [Buildroot] [PATCH 1/1] merge_config.sh: add br2-external
- support
-In-Reply-To: <1514473777-20799-1-git-send-email-ilya.kuzmich@gmail.com>
-References: <1514473777-20799-1-git-send-email-ilya.kuzmich@gmail.com>
-Message-ID: <20171230175829.GH2921@scaer>
+Date: Sat, 30 Dec 2017 19:01:27 +0100
+Subject: [Buildroot] Bug report or teaching moment -- downloading kernel
+ patches
+In-Reply-To: <CAF_dkJD0Qp_U5Efes44iiZegnG4+4++1DSQA7CvG9M_ekK84xA@mail.gmail.com>
+References: <CAF_dkJCrv_M-bXkXGtoY0esM6GS_MW6+Pjeb9aJWUCRFstST8A@mail.gmail.com>
+ <20171230171021.GG2921@scaer>
+ <CAF_dkJD0Qp_U5Efes44iiZegnG4+4++1DSQA7CvG9M_ekK84xA@mail.gmail.com>
+Message-ID: <20171230180127.GI2921@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ilya, All,
+Patrick, All,
 
-On 2017-12-28 18:09 +0300, Ilya Kuzmich spake thusly:
-> Pass BR2_EXTERNAL value via -e option.
-> This will prevent merge_config.sh from silently eating any symbols defined in
-> external trees on a clean buildroot tree invocation.
-> 
-> Signed-off-by: Ilya Kuzmich <ilya.kuzmich@gmail.com>
-> ---
->  support/kconfig/merge_config.sh | 13 ++++++++++++-
->  1 file changed, 12 insertions(+), 1 deletion(-)
-> 
-> diff --git a/support/kconfig/merge_config.sh b/support/kconfig/merge_config.sh
-> index 8a1708b..f52318a 100755
-> --- a/support/kconfig/merge_config.sh
-> +++ b/support/kconfig/merge_config.sh
-> @@ -33,6 +33,7 @@ usage() {
->  	echo "  -n    use allnoconfig instead of alldefconfig"
->  	echo "  -r    list redundant entries when merging fragments"
->  	echo "  -O    dir to put generated output files"
-> +	echo "  -e    br external tree"
+On 2017-12-30 12:55 -0500, Patrick Doyle spake thusly:
+> On Sat, Dec 30, 2017 at 12:10 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> > On 2017-12-30 11:32 -0500, Patrick Doyle spake thusly:
+> >> I can't figure this out...am I doing something wrong or have I uncovered a bug?
+> >
+> > Bug.
+> Is there a workaround?  Or should I just wget the patch set into my dl
+> directory (and put a big README reminding me & others to do the same)
+> and hope that nobody forgets.
 
-So, this is not only about one tree, since we also support mutiple
-trees, so:
-
-    -e    colon-separated list of br2-external trees to use (optional)
-
->  }
->  
->  MAKE=true
-> @@ -71,6 +72,11 @@ while true; do
->  		shift 2
->  		continue
->  		;;
-> +	"-e")
-> +		EXTERNAL=$2
-> +		shift 2
-> +		continue
-> +		;;
->  	*)
->  		break
->  		;;
-> @@ -127,11 +133,16 @@ if [ "$OUTPUT" != "." ] ; then
->  	OUTPUT_ARG="O=$OUTPUT"
->  fi
->  
-> +EXTERNAL_ARG=""
-> +if [ "$EXTERNAL" ] ; then
-> +    EXTERNAL_ARG="BR2_EXTERNAL=$EXTERNAL"
-> +fi
-
-Why don't you simply handle that in the case statement, above?
-
-    "-e")
-        EXTERNAL_ARG="BR2_EXTERNAL=$2"
-        shift 2
-        continue
-        ;;
-
-And that all. And no need to explicitly set it to empty first.
+If the kernel is also available as a tarball, then use that instead of a
+git clone.
 
 Regards,
 Yann E. MORIN.
-
->  
->  # Use the merged file as the starting point for:
->  # alldefconfig: Fills in any missing symbols with Kconfig default
->  # allnoconfig: Fills in any missing symbols with # CONFIG_* is not set
-> -make KCONFIG_ALLCONFIG=$TMP_FILE $OUTPUT_ARG $ALLTARGET
-> +make KCONFIG_ALLCONFIG=$TMP_FILE $EXTERNAL_ARG $OUTPUT_ARG $ALLTARGET
->  
->  
->  # Check all specified config values took (might have missed-dependency issues)
-> -- 
-> 2.7.4
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
