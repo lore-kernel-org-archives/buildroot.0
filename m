@@ -1,98 +1,69 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Fri, 29 Dec 2017 21:50:16 -0600
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2017-12-23
-In-Reply-To: <778378ed-9ca4-7b45-e3e1-f5af3138e978@gmail.com>
-References: <20171224070010.58DF22070B@mail.free-electrons.com>
- <d5eb5b67-0a7b-0490-d119-e6ffc4a0dae3@gmail.com>
- <CANQCQpYAVCagCrqYUyuzRaMTFXzYxraBC21cjAhRXJtP6N6msA@mail.gmail.com>
- <460285ee-009d-0e5a-3c16-95fb5dee7579@gmail.com>
- <CANQCQpZj8=xz+JwSkmjuNqqoHP4ZTbHofJ53P2ui8-bDp6NORA@mail.gmail.com>
- <778378ed-9ca4-7b45-e3e1-f5af3138e978@gmail.com>
-Message-ID: <CANQCQpbvhxAeVKBG-HDtpaYCHVMTugEBba4qUwJ4S-Yj_hiniA@mail.gmail.com>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Fri, 29 Dec 2017 23:32:45 -0500
+Subject: [Buildroot] [PATCH 1/2] meson: fix malformed
+ cross-compilation.conf.in
+In-Reply-To: <20171229232234.44b89144@windsurf.lan>
+References: <20171229215243.6273-1-Adamduskett@outlook.com>
+ <20171229232234.44b89144@windsurf.lan>
+Message-ID: <CAFSsvmq6TkXGQ3+9whEJFDoZ77f7_R_AiVVjc_7Z1kNn+aswdw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Romain,
+Hello;
 
-On Dec 26, 2017 11:24 AM, "Romain Naour" <romain.naour@gmail.com> wrote:
-
-Hi Matt,
-
-Le 25/12/2017 ? 18:44, Matthew Weber a ?crit :
-> Romain,
+On Fri, Dec 29, 2017 at 5:22 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
 >
-> On Mon, Dec 25, 2017 at 6:16 AM, Romain Naour <romain.naour@gmail.com>
-wrote:
->> Hi Matthew,
+> On Fri, 29 Dec 2017 16:52:42 -0500, Adam Duskett wrote:
+>> Currently, meson will set the c_link_args and the cpp_link_args to the value
+>> of TARGET_LDFLAGS, even when it's not defined.
 >>
->> Le 25/12/2017 ? 02:46, Matthew Weber a ?crit :
->>> Romain,
->>>
->>> On Sun, Dec 24, 2017 at 4:36 AM, Romain Naour <romain.naour@gmail.com>
-wrote:
->>>> Hi All,
->>>>
->>>> Le 24/12/2017 ? 08:00, Thomas Petazzoni a ?crit :
->>>>> Hello,
->>>>>
->>>>> Build statistics for 2017-12-23
->>>>> ===============================
->>> [snip]
->>>>>      powerpc |             liburiparser-0.8.1 | TIM |
-http://autobuild.buildroot.net/results/e7816d6a15d2a96ca9a401e95955c7
-5d54e7d6da |
->>>>>       x86_64 | make[2]: *** [libtests/buil... | TIM |
-http://autobuild.buildroot.net/results/fded34f8e5da52737f4c40107e28ad
-77a223d64b |
->>>>>       x86_64 | make[2]: *** [Makefile:71: ... | TIM |
-http://autobuild.buildroot.net/results/52f9379d98a1826e1d0faa60ba89a8
-d5ac09895e |
->>>> The default timeout value seems too short for my autobuilder.
->>>
->>> I've got a autobr patchset I'll send out in the next couple days that
->>> removes the timeout and makes it based on updates to the
->>> build-time.log.  I think I've got enough test coverage at this point.
->>> My largo autobuilder has been running for a couple day and handling
->>> 8+hr builds as well as successful/timeouts.
+>> This creates a malformed array ["",] which will break any package building
+>> using meson/ninja.
 >>
->> Great thanks!
+>> Add a small regular expression at the end of the sed command to check for
+>> ["", ] and replace it with [] instead.
 >>
->> For now, I increased the timeout to 12h but it's annoying especially for
-the
->> host-ti-cgt-pru issue :-/
+>> Credit goes to Yann for the regular expression.
 >>
+>> Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
+>> ---
+>>  package/meson/meson.mk | 1 +
+>>  1 file changed, 1 insertion(+)
+>>
+>> diff --git a/package/meson/meson.mk b/package/meson/meson.mk
+>> index 55ce84da07..75b9a1666a 100644
+>> --- a/package/meson/meson.mk
+>> +++ b/package/meson/meson.mk
+>> @@ -26,6 +26,7 @@ define HOST_MESON_INSTALL_CROSS_CONF
+>>           -e "s%@TARGET_LDFLAGS@%`printf '"%s", ' $(TARGET_LDFLAGS)`%g" \
+>>           -e "s%@TARGET_CXXFLAGS@%`printf '"%s", ' $(TARGET_CXXFLAGS)`%g" \
+>>           -e "s%@HOST_DIR@%$(HOST_DIR)%g" \
+>> +         -e 's/\["", \]/[]/' \
+>>           $(HOST_MESON_PKGDIR)/cross-compilation.conf.in \
+>>           > $(HOST_DIR)/etc/meson/cross-compilation.conf
+>>  endef
 >
-> http://patchwork.ozlabs.org/patch/852842/
+> While this works, it feels a bit like a hack to me: we are just fixing
+> the mess we have created a few lines before. Can we instead do the
+> replacement only if it's needed ? Or calculate some intermediate
+> variable that is empty is TARGET_CFLAGS is empty, and equal to
+> '"$(TARGET_CFLAGS)", ' if not ?
 >
-> Happy testing :-)
+We could, but this works and is the only issue I could find with the
+build system.
+The end result would be exactly the same for a bunch of extra effort yes?
 
-Thanks, I added your patch yesterday and the first "big monster" config has
-been
-reported:
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux and Kernel engineering
+> http://free-electrons.com
 
-(10:02:40)
-http://autobuild.buildroot.net/results/c76/c763674e0fccf2cedaaa1ee6069326
-cfd90bc594/
+Thanks!
 
-(09:11:02)
-http://autobuild.buildroot.net/results/7e7/7e7c85ee377045026f2cb45430e510
-199d2ee4c8/
-
-Now lets wait for the timeout on host-ti-cgt-pru.
-
-
-
-
-Just noticed some weird failures today from your builder that will come out
-in the report tomorrow.  They might be related to one of the corner cases
-Thomas have me for feedback yesterday on my patchset.  Any ideas on your
-end?
-
-Matt
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20171229/007377ef/attachment.html>
+Adam
