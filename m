@@ -1,66 +1,98 @@
-From: =?UTF-8?Q?Stefan_Fr=c3=b6berg?= <stefan.froberg@petroprogram.com>
-Date: Sat, 30 Dec 2017 04:34:14 +0200
-Subject: [Buildroot] [PATCH 1/1 v2] gcc: Add support for
- --enable-default-pie configure option.
-In-Reply-To: <20171229150446.197ea731@windsurf.lan>
-References: <20171228214333.8340-1-stefan.froberg@petroprogram.com>
- <20171228230743.1e6c59ab@windsurf>
- <5a5a8ab0-25f3-a3a2-bf5a-b9c7fe851c66@petroprogram.com>
- <20171229144204.00605c4e@windsurf.lan>
- <3ca77bc6-5613-bc51-be89-0b241fd6d204@petroprogram.com>
- <20171229150446.197ea731@windsurf.lan>
-Message-ID: <774e53d5-5fbd-b59d-2b2f-9b4737dd2784@petroprogram.com>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Fri, 29 Dec 2017 21:50:16 -0600
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2017-12-23
+In-Reply-To: <778378ed-9ca4-7b45-e3e1-f5af3138e978@gmail.com>
+References: <20171224070010.58DF22070B@mail.free-electrons.com>
+ <d5eb5b67-0a7b-0490-d119-e6ffc4a0dae3@gmail.com>
+ <CANQCQpYAVCagCrqYUyuzRaMTFXzYxraBC21cjAhRXJtP6N6msA@mail.gmail.com>
+ <460285ee-009d-0e5a-3c16-95fb5dee7579@gmail.com>
+ <CANQCQpZj8=xz+JwSkmjuNqqoHP4ZTbHofJ53P2ui8-bDp6NORA@mail.gmail.com>
+ <778378ed-9ca4-7b45-e3e1-f5af3138e978@gmail.com>
+Message-ID: <CANQCQpbvhxAeVKBG-HDtpaYCHVMTugEBba4qUwJ4S-Yj_hiniA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello
+Romain,
 
+On Dec 26, 2017 11:24 AM, "Romain Naour" <romain.naour@gmail.com> wrote:
 
-Thomas Petazzoni kirjoitti 29.12.2017 klo 16:04:
-> Hello,
+Hi Matt,
+
+Le 25/12/2017 ? 18:44, Matthew Weber a ?crit :
+> Romain,
 >
-> On Fri, 29 Dec 2017 15:48:48 +0200, Stefan Fr?berg wrote:
+> On Mon, Dec 25, 2017 at 6:16 AM, Romain Naour <romain.naour@gmail.com>
+wrote:
+>> Hi Matthew,
+>>
+>> Le 25/12/2017 ? 02:46, Matthew Weber a ?crit :
+>>> Romain,
+>>>
+>>> On Sun, Dec 24, 2017 at 4:36 AM, Romain Naour <romain.naour@gmail.com>
+wrote:
+>>>> Hi All,
+>>>>
+>>>> Le 24/12/2017 ? 08:00, Thomas Petazzoni a ?crit :
+>>>>> Hello,
+>>>>>
+>>>>> Build statistics for 2017-12-23
+>>>>> ===============================
+>>> [snip]
+>>>>>      powerpc |             liburiparser-0.8.1 | TIM |
+http://autobuild.buildroot.net/results/e7816d6a15d2a96ca9a401e95955c7
+5d54e7d6da |
+>>>>>       x86_64 | make[2]: *** [libtests/buil... | TIM |
+http://autobuild.buildroot.net/results/fded34f8e5da52737f4c40107e28ad
+77a223d64b |
+>>>>>       x86_64 | make[2]: *** [Makefile:71: ... | TIM |
+http://autobuild.buildroot.net/results/52f9379d98a1826e1d0faa60ba89a8
+d5ac09895e |
+>>>> The default timeout value seems too short for my autobuilder.
+>>>
+>>> I've got a autobr patchset I'll send out in the next couple days that
+>>> removes the timeout and makes it based on updates to the
+>>> build-time.log.  I think I've got enough test coverage at this point.
+>>> My largo autobuilder has been running for a couple day and handling
+>>> 8+hr builds as well as successful/timeouts.
+>>
+>> Great thanks!
+>>
+>> For now, I increased the timeout to 12h but it's annoying especially for
+the
+>> host-ti-cgt-pru issue :-/
+>>
 >
->> Yeah, there is no other way for external toolchains than generic flags
->> passing (and possibly patching)
->> or compiler wrapper (well, there is specs file but it's ...soooo messy...).
-> And since the different method needed for external toolchains would
-> also work for internal toolchains, there is no point in doing a
-> solution that only works for internal toolchains. See my point ?
-
-Except can you be absolute sure that -fpic and -fpie will never happen
-in the same commandline
-when using just flags?
-
->> Personally, Im only interested of internal toolchain
->> (and I think this is not the first case that internal/external
->> toolchains have different rules?)
-> We generally try to have internal and external toolchains supported in
-> the same way. You may only be interested in internal toolchains, but
-> Buildroot as a project needs to keep the feature parity between
-> internal and external toolchains, so we would like to have a solution
-> that solves both situations.
+> http://patchwork.ozlabs.org/patch/852842/
 >
-> Thomas
+> Happy testing :-)
 
-Actually, not true. You already have options like "Enable compiler
-link-time-optimization support",
-"Enable compiler OpenMP support" and "Enable graphite support".
-(with pretty spartan description I might add)
+Thanks, I added your patch yesterday and the first "big monster" config has
+been
+reported:
 
-All those are optimization related, activated by built-time
-configuration switches.
-Mine is security related and also activated by built-time configuration
-switch.
+(10:02:40)
+http://autobuild.buildroot.net/results/c76/c763674e0fccf2cedaaa1ee6069326
+cfd90bc594/
 
-And when selecting External toolchain then ...*poof* ... they all vanish
-into the air.
+(09:11:02)
+http://autobuild.buildroot.net/results/7e7/7e7c85ee377045026f2cb45430e510
+199d2ee4c8/
 
-So if buildroot would really treat both external and internal toolchain
-equally then those options should
-also be added when using external toolchain.
+Now lets wait for the timeout on host-ti-cgt-pru.
 
--S-
+
+
+
+Just noticed some weird failures today from your builder that will come out
+in the report tomorrow.  They might be related to one of the corner cases
+Thomas have me for feedback yesterday on my patchset.  Any ideas on your
+end?
+
+Matt
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20171229/007377ef/attachment.html>
