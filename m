@@ -1,43 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 31 Dec 2017 00:06:24 +0100
-Subject: [Buildroot] [PATCH 1/1] mariadb: security bump version to
- 10.1.29
-In-Reply-To: <20171214174157.3354-1-bluemrp9@gmail.com> (Ryan Coe's message of
- "Thu, 14 Dec 2017 09:41:57 -0800")
-References: <20171214174157.3354-1-bluemrp9@gmail.com>
-Message-ID: <878tdjke8f.fsf@dell.be.48ers.dk>
+Date: Sun, 31 Dec 2017 00:00:07 +0100
+Subject: [Buildroot] [git commit branch/2017.02.x] linux-headers: bump 4.{9,
+ 14}.x series
+Message-ID: <20171230230909.C872083651@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Ryan" == Ryan Coe <bluemrp9@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=6970383186385932b1d9b5cf91111be3c21e7429
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
- > Release notes: https://mariadb.com/kb/en/mariadb-10129-release-notes/
- > Changelog: https://mariadb.com/kb/en/mariadb-10129-changelog/
+[Peter: drop 4.14.x bump]
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 985d1a03c394a947f38ec33254fba0488ba9518d)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/linux-headers/Config.in.host | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- > Fixes the following security vulnerabilities:
-
- > CVE-2017-10378 - Vulnerability in the MySQL Server component of Oracle MySQL
- > (subcomponent: Server: Optimizer). Supported versions that are affected are
- > 5.5.57 and earlier, 5.6.37 and earlier and 5.7.11 and earlier. Easily
- > exploitable vulnerability allows low privileged attacker with network access
- > via multiple protocols to compromise MySQL Server. Successful attacks of this
- > vulnerability can result in unauthorized ability to cause a hang or frequently
- > repeatable crash (complete DOS) of MySQL Server.
-
- > CVE-2017-10268 - Vulnerability in the MySQL Server component of Oracle MySQL
- > (subcomponent: Server: Replication). Supported versions that are affected are
- > 5.5.57 and earlier, 5.6.37 and earlier and 5.7.19 and earlier. Difficult to
- > exploit vulnerability allows high privileged attacker with logon to the
- > infrastructure where MySQL Server executes to compromise MySQL Server.
- > Successful attacks of this vulnerability can result in unauthorized access to
- > critical data or complete access to all MySQL Server accessible data.
-
- > Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
-
-Committed to 2017.02.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 6d6afc6..49707f6 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -224,5 +224,5 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "4.1.47"	if BR2_KERNEL_HEADERS_4_1
+ 	default "4.4.105"	if BR2_KERNEL_HEADERS_4_4
+ 	default "4.8.17"	if BR2_KERNEL_HEADERS_4_8
+-	default "4.9.68"	if BR2_KERNEL_HEADERS_4_9
++	default "4.9.69"	if BR2_KERNEL_HEADERS_4_9
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
