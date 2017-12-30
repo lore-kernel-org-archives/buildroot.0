@@ -1,22 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 31 Dec 2017 00:02:58 +0100
-Subject: [Buildroot] [PATCH 2/2] linux-headers: bump 4.{9, 14}.x series
-In-Reply-To: <1514647007-14561-2-git-send-email-festevam@gmail.com> (Fabio
- Estevam's message of "Sat, 30 Dec 2017 13:16:47 -0200")
-References: <1514647007-14561-1-git-send-email-festevam@gmail.com>
- <1514647007-14561-2-git-send-email-festevam@gmail.com>
-Message-ID: <87h8s7kee5.fsf@dell.be.48ers.dk>
+Date: Sun, 31 Dec 2017 00:06:10 +0100
+Subject: [Buildroot] [PATCH v2] gdb: prevent installation of libbfd.so
+ and libopcode.so
+In-Reply-To: <20171208212952.20366-1-ps.report@gmx.net> (Peter Seiderer's
+ message of "Fri, 8 Dec 2017 22:29:52 +0100")
+References: <20171208212952.20366-1-ps.report@gmx.net>
+Message-ID: <87d12vke8t.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabio" == Fabio Estevam <festevam@gmail.com> writes:
+>>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
 
- > Signed-off-by: Fabio Estevam <festevam@gmail.com>
+ > The gdb install target installs dynamic versions of libbfd and
+ > libopcode, accidentally overwriting the binutils provided versions
+ > (gdb itself links against the bundled static ones to avoid
+ > version problems, so the dynamic ones are un-needed).
 
-Committed to 2017.02.x and 2017.11.x, thanks.
+ > Prevent the installation by using the '--disable-install-libbfd'
+ > configure option.
+
+ > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+ > ---
+ > Changes v1 -> v2:
+ >   - enhance commit log (suggested by Thomas Petazzoni)
+ >   - use --disable-install-libbfd instead of --disable-shared
+
+Committed to 2017.02.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
