@@ -1,86 +1,77 @@
-From: daggs <daggs@gmx.com>
-Date: Sat, 30 Dec 2017 07:48:28 +0100
-Subject: [Buildroot] [PATCH] tvheadend: add dependency on udev based
- rootfs creation
-In-Reply-To: <trinity-713eb7e7-e94d-497b-92b0-2f72040284ba-1514557634858@3c-app-mailcom-bs06>
-References: <20171229130604.9897-1-daggs@gmx.com>
- <20171229144031.798b5f81@windsurf.lan>
- <trinity-7a471839-219c-4b6c-945d-9f235fe5b75a-1514555879257@3c-app-mailcom-bs06>
- <20171229150307.17ea122c@windsurf.lan>
- <trinity-713eb7e7-e94d-497b-92b0-2f72040284ba-1514557634858@3c-app-mailcom-bs06>
-Message-ID: <trinity-11bf727c-b1f3-4561-ba72-92c60d8acca2-1514616508591@3c-app-mailcom-bs04>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 30 Dec 2017 08:00:07 +0100 (CET)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2017-12-29
+Message-ID: <20171230070007.AC28220503@mail.free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Greetings Thomas,
+Hello,
 
->
-> Greetings Thomas,
-> 
-> > Sent: Friday, December 29, 2017 at 4:03 PM
-> > From: "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>
-> > To: daggs <daggs@gmx.com>
-> > Cc: buildroot at buildroot.org, "Bernd Kuhls" <bernd.kuhls@t-online.de>
-> > Subject: Re: [Buildroot] [PATCH] tvheadend: add dependency on udev based rootfs creation
-> >
-> > Hello,
-> > 
-> > On Fri, 29 Dec 2017 14:57:59 +0100, daggs wrote:
-> > 
-> > > > You should use BR2_PACKAGE_HAS_UDEV instead. Indeed udev can be
-> > > > provided by either eudev or systemd.  
-> > > does using BR2_PACKAGE_HAS_UDEV means rootfs dev creation will use udev?
-> > 
-> > config BR2_PACKAGE_EUDEV
-> >         bool "eudev"
-> >         depends on BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV
-> >         depends on BR2_USE_MMU # uses fork()
-> >         depends on BR2_USE_WCHAR # needs C99 compiler
-> >         depends on !BR2_STATIC_LIBS # kmod
-> >         select BR2_PACKAGE_HAS_UDEV
-> > 
-> > So for the eudev case, BR2_PACKAGE_HAS_UDEV is selected when eudev is
-> > enabled, and eudev can only be enabled when
-> > BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV is enabled.
-> > 
-> > For the systemd case:
-> > 
-> > menuconfig BR2_PACKAGE_SYSTEMD
-> >         bool "systemd"
-> >         depends on BR2_INIT_SYSTEMD
-> >         depends on !BR2_STATIC_LIBS # kmod
-> >         depends on BR2_TOOLCHAIN_HAS_THREADS # dbus
-> >         depends on BR2_USE_MMU # dbus
-> >         select BR2_PACKAGE_HAS_UDEV
-> > 
-> > So BR2_PACKAGE_HAS_UDEV is selected when systemd is enabled, which is
-> > only possible when systemd is the init system.
-> > 
-> > Bottom line: as soon as systemd is the init system *or* eudev is used
-> > at the dev management method, you are guaranteed that
-> > BR2_PACKAGE_HAS_UDEV=y.
-> ok, I'll look into it.
-> 
-> > 
-> > > > Also, does tvheadend needs to link with libudev ? If so, it should have
-> > > > udev in its <pkg>_DEPENDENCIES. If it doesn't link with libudev, then
-> > > > I'm not sure to see how udev helps for tvheadend to detect USB DVB
-> > > > cards.  
-> > > it doesn't, frankly I don't understand it too, I'm wrestling this for 3 weeks now, without udev, tvheadend didn't listed my adapter in the webui.
-> > > on the desktop it did, after some thinking I've decided to try building udev and it worked.
-> > > maybe Bernd might have some ideas on the matter. 
-> > 
-> > This is a somewhat weak understanding of what's happening here. I think
-> > we need a better understanding of what's going on rather than
-> > more-or-less randomly adding a dependency.
-> for that I need either time to look into the code or an answer from the devs, time I don't have unfortunately, devs aren't responding yet.
-> I encountered the issue and was able to get it to work, I assume that others might have seen it and didn't had time to look into it.
-> also as said, maybe Bernd knows what is the issue here and can propose a better fix.
-> 
-I did a quick search on the tvheadend repo for udev, one hit poped up: https://github.com/tvheadend/tvheadend/blob/master/debian/tvheadend.init
-it seems that they do depend on udev when the boot system isn't systemd, am I correct?
+Build statistics for 2017-12-29
+===============================
 
-Dagg.
+      branch |  OK | NOK | TIM | TOT |
+      master | 152 |  26 |   2 | 180 |
+   2017.11.x |  19 |   0 |   0 |  19 |
+
+Results for branch 'master'
+===========================
+
+Classification of failures by reason
+------------------------------------
+
+              syslog-ng-3.10.1 | 9 
+                    brltty-5.5 | 3 
+                   json-c-0.13 | 2 
+             qt5location-5.9.3 | 2 
+                       unknown | 2 
+                  boost-1.65.1 | 1 
+                  ffmpeg-3.4.1 | 1 
+              ghostscript-9.22 | 1 
+                    mpv-0.27.0 | 1 
+ netcat-openbsd-debian_1.178-3 | 1 
+                   pcre2-10.30 | 1 
+                    php-7.1.12 | 1 
+                 rings-1.3.0-1 | 1 
+          shairport-sync-3.1.6 | 1 
+    xserver_xorg-server-1.19.6 | 1 
+
+
+Detail of failures
+------------------
+
+     powerpc |                   boost-1.65.1 | NOK | http://autobuild.buildroot.net/results/b3e1b1e570be3efbca21f9ec332581e8e1e4c262 |     
+    mips64el |                     brltty-5.5 | NOK | http://autobuild.buildroot.net/results/2419741c43dea0f91859c19167c8d65cb54e1470 |     
+    mips64el |                     brltty-5.5 | NOK | http://autobuild.buildroot.net/results/4b83e53c718520661dc99cde2121f69ce3fd08d7 |     
+         sh4 |                     brltty-5.5 | NOK | http://autobuild.buildroot.net/results/f5e2446b7e4a918f3081ab404be5c5ececb82fb8 |     
+         arm |                   ffmpeg-3.4.1 | NOK | http://autobuild.buildroot.net/results/c7e0afdf17dd803e86cf9d50c3aa95032b4c7e2d |     
+microblazeel |               ghostscript-9.22 | NOK | http://autobuild.buildroot.net/results/6252348ee21b9719f09eadb18544cf6247cbe883 |     
+         arm |                    json-c-0.13 | NOK | http://autobuild.buildroot.net/results/969faba96d94c1bda7e06b005d8f3a3f7175a0a2 | ORPH
+         arm |                    json-c-0.13 | NOK | http://autobuild.buildroot.net/results/60683141f2ef320a28820c4cd65d2b951123b147 | ORPH
+     aarch64 |                     mpv-0.27.0 | NOK | http://autobuild.buildroot.net/results/c6acf39acc87a97ede58eacebe611cc1af819516 | ORPH
+        i686 |  netcat-openbsd-debian_1.178-3 | NOK | http://autobuild.buildroot.net/results/a421d0b91414b07b8a4be43eb12ec007aab67c47 |     
+        m68k |                    pcre2-10.30 | NOK | http://autobuild.buildroot.net/results/290f4061d0b6cd18cc57219f955f20ce24d72471 | ORPH
+         arm |                     php-7.1.12 | NOK | http://autobuild.buildroot.net/results/9ca65764619c168e5f798b2ea43510094a1610d0 | ORPH
+         sh4 |              qt5location-5.9.3 | NOK | http://autobuild.buildroot.net/results/7ca3383e6521ccda278d439081ff0901dda36826 |     
+    mips64el |              qt5location-5.9.3 | NOK | http://autobuild.buildroot.net/results/99a27fbe51c738086b0c1a21e85c09eb917c13b5 |     
+      x86_64 |                  rings-1.3.0-1 | NOK | http://autobuild.buildroot.net/results/d17f0370ac3563ae26c1ee6ee2ae9f1841423f66 | ORPH
+     powerpc |           shairport-sync-3.1.6 | NOK | http://autobuild.buildroot.net/results/0ce992415fc931e63160d20264aec3e2782d0a74 |     
+         arm |               syslog-ng-3.10.1 | NOK | http://autobuild.buildroot.net/results/7d33a5672124eec9a95bf9c5f96e914951a92f99 |     
+        mips |               syslog-ng-3.10.1 | NOK | http://autobuild.buildroot.net/results/7446ebd51b01733a83a3a1bd45372a0a051166bb |     
+         arc |               syslog-ng-3.10.1 | NOK | http://autobuild.buildroot.net/results/0d0f74fceb8a3828ec40067cf475269fa6c3dfae |     
+    mips64el |               syslog-ng-3.10.1 | NOK | http://autobuild.buildroot.net/results/fded7640791d5d6c6f97aa1063faf6cff1f4385e |     
+        i686 |               syslog-ng-3.10.1 | NOK | http://autobuild.buildroot.net/results/cf66bd9d53acc4dc80c81efd92111de50885e1d3 |     
+         arm |               syslog-ng-3.10.1 | NOK | http://autobuild.buildroot.net/results/33316b93b2eb95bfd6c6f90611205b1c5d5ebf35 |     
+        i686 |               syslog-ng-3.10.1 | NOK | http://autobuild.buildroot.net/results/19bb85cdb4f4eab336a04d5efc40511ad05af70e |     
+      mipsel |               syslog-ng-3.10.1 | NOK | http://autobuild.buildroot.net/results/addef06684fe8741fac07783b5cdec27faff763d |     
+     aarch64 |               syslog-ng-3.10.1 | NOK | http://autobuild.buildroot.net/results/6c89daa5640efd91fd1e422d842f3b832fd24226 |     
+         arc |                        unknown | TIM | http://autobuild.buildroot.net/results/ee729fd294288d91b171dced4a9567edfd735b21 |     
+        i586 |                        unknown | TIM | http://autobuild.buildroot.net/results/709c67ddb591eee610cf51af1845628d8bbfcb1d |     
+        i686 |     xserver_xorg-server-1.19.6 | NOK | http://autobuild.buildroot.net/results/44e29c2fb5d236a66e0466698fbc9201a37dbc63 |     
+
+
+-- 
+http://autobuild.buildroot.net
