@@ -1,37 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 30 Dec 2017 18:28:35 +0100
-Subject: [Buildroot] [PATCH] package/python-shutilwhich: also available
- in python3
-In-Reply-To: <20171230103008.1828-1-yann.morin.1998@free.fr>
-References: <20171230103008.1828-1-yann.morin.1998@free.fr>
-Message-ID: <20171230182835.72a7f87b@windsurf>
+Date: Sat, 30 Dec 2017 18:31:48 +0100
+Subject: [Buildroot] [git commit] libiio: fix libavahi-client dependency
+Message-ID: <20171230173221.0A618832CC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=18e00edb7796790b1ac1a0f6982ab8e25e27c691
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 30 Dec 2017 11:30:08 +0100, Yann E. MORIN wrote:
-> When in python3, shutilwhich will simply use shutil.which.
-> 
-> Some packages (e.g. crossbar.io) unconditionally require shutilwhich,
-> even when they are running under python3.
-> 
-> So, enable python-shutilwhich even for python3.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Mauro Condarelli <mc5686@mclink.it>
-> Cc: Yegor Yefremov <yegorslists@googlemail.com>
-> ---
->  package/python-shutilwhich/Config.in | 1 -
->  1 file changed, 1 deletion(-)
+Avahi needs avahi-daemon and D-Bus to build avahi-client.
 
-Applied to master, thanks.
+Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libiio/libiio.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/libiio/libiio.mk b/package/libiio/libiio.mk
+index 0b13064..3fbd391 100644
+--- a/package/libiio/libiio.mk
++++ b/package/libiio/libiio.mk
+@@ -54,8 +54,8 @@ else
+ LIBIIO_CONF_OPTS += -DWITH_IIOD_USBD=OFF
+ endif
+ 
+-# Avahi support in libiio requires avahi-client, which needs avahi-daemon
+-ifeq ($(BR2_PACKAGE_AVAHI)$(BR2_PACKAGE_AVAHI_DAEMON),yy)
++# Avahi support in libiio requires avahi-client, which needs avahi-daemon and dbus
++ifeq ($(BR2_PACKAGE_AVAHI_DAEMON)$(BR2_PACKAGE_DBUS),yy)
+ LIBIIO_DEPENDENCIES += avahi
+ endif
+ 
