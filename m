@@ -1,23 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 30 Dec 2017 23:40:15 +0100
-Subject: [Buildroot] [PATCH 2/2] dhcp: add upstream security fix
-In-Reply-To: <1297d1b88cdabb9705f05b5d05a9615b690ee3de.1513108295.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Tue, 12 Dec 2017 21:51:35 +0200")
-References: <b408b98eeb4a9479b974d3d98e84b5d1f279c5b2.1513108295.git.baruch@tkos.co.il>
- <1297d1b88cdabb9705f05b5d05a9615b690ee3de.1513108295.git.baruch@tkos.co.il>
-Message-ID: <87po6vkfg0.fsf@dell.be.48ers.dk>
+Date: Sat, 30 Dec 2017 23:40:51 +0100
+Subject: [Buildroot] [PATCH 1/1] package/vlc: security bump to version
+ 2.2.8
+In-Reply-To: <20171212175414.28267-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Tue, 12 Dec 2017 18:54:14 +0100")
+References: <20171212175414.28267-1-bernd.kuhls@t-online.de>
+Message-ID: <87lghjkff0.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
- > Fixes socket leak that might cause denial of serivce.
- > https://bugzilla.redhat.com/show_bug.cgi?id=1523547
+ > Version 2.2.7 fixes CVE-2017-10699
+ > http://git.videolan.org/?p=vlc/vlc-2.2.git;a=commitdiff;h=0de56d69ff06afceb5b16721ea5965a676b938b9
 
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+ > Removed patches applied upstream:
+ > 0013-codec-avcodec-check-avcodec-visible-sizes.patch
+ > http://git.videolan.org/?p=vlc/vlc-2.2.git;a=commitdiff;h=6cc73bcad19da2cd2e95671173f2e0d203a57e9b
+
+ > 0014-decoder-check-visible-size-when-creating-buffer.patch
+ > http://git.videolan.org/?p=vlc/vlc-2.2.git;a=commitdiff;h=a38a85db58c569cc592d9380cc07096757ef3d49
+
+ > Added all hashes provided by upstream, added license hashes.
+
+ > Switched _SITE to https.
+
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
 Committed to 2017.02.x, thanks.
 
