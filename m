@@ -1,12 +1,12 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 30 Dec 2017 22:46:28 +0100
-Subject: [Buildroot] [PATCH v2 1/2] Opentracing: add opentracing-cpp
- v1.2.0 package
-In-Reply-To: <1514014802-23736-2-git-send-email-heyleke@gmail.com>
+Date: Sat, 30 Dec 2017 22:47:47 +0100
+Subject: [Buildroot] [PATCH v2 2/2] opentracing-cpp: make shared/static
+ target a configurable option
+In-Reply-To: <1514014802-23736-3-git-send-email-heyleke@gmail.com>
 References: <1513849309-550-2-git-send-email-heyleke@gmail.com>
  <1514014802-23736-1-git-send-email-heyleke@gmail.com>
- <1514014802-23736-2-git-send-email-heyleke@gmail.com>
-Message-ID: <20171230224628.746682f5@windsurf>
+ <1514014802-23736-3-git-send-email-heyleke@gmail.com>
+Message-ID: <20171230224747.29c32635@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,87 +15,44 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 23 Dec 2017 08:40:01 +0100, Jan Heylen wrote:
+On Sat, 23 Dec 2017 08:40:02 +0100, Jan Heylen wrote:
 > From: Jan Heylen <jan.heylen@nokia.com>
 > 
 > Signed-off-by: Jan Heylen <jan.heylen@nokia.com>
 
-The commit title should be:
+As I said, please merge this into the previous patch.
 
-	opentracing-cpp: new package
-
-
->  package/Config.in                            |  1 +
->  package/opentracing-cpp/Config.in            | 11 +++++++++++
->  package/opentracing-cpp/opentracing-cpp.hash |  3 +++
->  package/opentracing-cpp/opentracing-cpp.mk   | 14 ++++++++++++++
-
-Please add an entry in the DEVELOPERS file for this package.
-
-> diff --git a/package/opentracing-cpp/Config.in b/package/opentracing-cpp/Config.in
+> diff --git a/package/opentracing-cpp/0001-CMake-make-shared-static-target-a-configurable-optio.patch b/package/opentracing-cpp/0001-CMake-make-shared-static-target-a-configurable-optio.patch
 > new file mode 100644
-> index 0000000..3f6f1ad
+> index 0000000..1323f3f
 > --- /dev/null
-> +++ b/package/opentracing-cpp/Config.in
-> @@ -0,0 +1,11 @@
-> +config BR2_PACKAGE_OPENTRACING_CPP
-> +	bool "opentracing-cpp"
-> +	depends on BR2_INSTALL_LIBSTDCPP
-> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
-> +	help
-> +	  OpenTracing API for C++
+> +++ b/package/opentracing-cpp/0001-CMake-make-shared-static-target-a-configurable-optio.patch
+> @@ -0,0 +1,73 @@
+> +From 9462847f23a25524fdc2112cbc8de3f2c02a1669 Mon Sep 17 00:00:00 2001
+> +From: Jan Heylen <jan.heylen@nokia.com>
+> +Date: Fri, 22 Dec 2017 22:04:29 +0100
+> +Subject: [PATCH] CMake: make shared/static target a configurable option
 > +
-> +	  http://opentracing.io
-> +
-> +comment "opentracing-cpp needs a toolchain w/ C++"
-> +	depends on !BR2_INSTALL_LIBSTDCPP
 
-You forgot to include in the comment the gcc >= 4.8 dependency.
+Please add your Signed-off-by line here.
 
-Also, this package doesn't build with the following defconfig:
 
-BR2_arm=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2017.11-rc1.tar.bz2"
-BR2_TOOLCHAIN_EXTERNAL_GCC_4_9=y
-BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_10=y
-BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
-# BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
-BR2_TOOLCHAIN_EXTERNAL_CXX=y
-BR2_INIT_NONE=y
-BR2_SYSTEM_BIN_SH_NONE=y
-# BR2_PACKAGE_BUSYBOX is not set
-BR2_PACKAGE_OPENTRACING_CPP=y
-# BR2_TARGET_ROOTFS_TAR is not set
+> +ifeq ($(BR2_STATIC_LIBS),y)
+> +	OPENTRACING_CPP_CONF_OPTS += -DBUILD_SHARED_LIBS=OFF -DBUILD_STATIC_LIBS=ON
+> +else ifeq ($(BR2_SHARED_STATIC_LIBS),y)
+> +	OPENTRACING_CPP_CONF_OPTS += -DBUILD_SHARED_LIBS=ON -DBUILD_STATIC_LIBS=ON
+> +else ifeq ($(BR2_SHARED_LIBS),y)
+> +	OPENTRACING_CPP_CONF_OPTS += -DBUILD_SHARED_LIBS=ON -DBUILD_STATIC_LIBS=OFF
+> +endif
 
-It fails with:
+Don't indent the OPENTRACING_CPP_CONF_OPTS lines.
 
->>> opentracing-cpp v1.2.0 Building
-PATH="/home/thomas/projets/buildroot/output/host/bin:/home/thomas/projets/buildroot/output/host/sbin:/usr/local/bin:/usr/bin:/bin:/home/thomas/.rvm/bin:/usr/local/sbin:/usr/sbin:/home/thomas/.rvm/bin:/home/thomas/sys/bin:/home/thomas/.gem/ruby/2.1.0/bin:/home/thomas/.rvm/bin"  /usr/bin/make -j5  -C /home/thomas/projets/buildroot/output/build/opentracing-cpp-v1.2.0/
-Scanning dependencies of target opentracing
-[ 25%] Building CXX object CMakeFiles/opentracing.dir/src/tracer.cpp.o
-[ 75%] Building CXX object CMakeFiles/opentracing.dir/src/propagation.cpp.o
-[ 75%] Building CXX object CMakeFiles/opentracing.dir/src/noop.cpp.o
-In file included from /home/thomas/projets/buildroot/output/build/opentracing-cpp-v1.2.0/include/opentracing/util.h:13:0,
-                 from /home/thomas/projets/buildroot/output/build/opentracing-cpp-v1.2.0/include/opentracing/propagation.h:5,
-                 from /home/thomas/projets/buildroot/output/build/opentracing-cpp-v1.2.0/include/opentracing/tracer.h:4,
-                 from /home/thomas/projets/buildroot/output/build/opentracing-cpp-v1.2.0/include/opentracing/noop.h:4,
-                 from /home/thomas/projets/buildroot/output/build/opentracing-cpp-v1.2.0/src/noop.cpp:1:
-/home/thomas/projets/buildroot/output/build/opentracing-cpp-v1.2.0/3rd_party/include/opentracing/expected/expected.hpp:230:24: error: ?exception_ptr? is not a member of ?std?
- class unexpected_type< std::exception_ptr >
-                        ^
-/home/thomas/projets/buildroot/output/build/opentracing-cpp-v1.2.0/3rd_party/include/opentracing/expected/expected.hpp:230:24: error: ?exception_ptr? is not a member of ?std?
-/home/thomas/projets/buildroot/output/build/opentracing-cpp-v1.2.0/3rd_party/include/opentracing/expected/expected.hpp:230:43: error: template argument 1 is invalid
- class unexpected_type< std::exception_ptr >
-                                           ^
-and many more of such errors.
+The CMake package infrastructure is already passing
+-DBUILD_SHARED_LIBS=OFF/ON, but not -DBUILD_STATIC_LIBS=ON/OFF. And a
+number of packages are anyway passing -DBUILD_SHARED_LIBS=ON/OFF. Until
+we clarify this, it's OK to have your package pass both options.
 
-Could you verify with ./utils/test-pkg that your package builds
-properly?
-
-Thanks a lot!
+Thanks!
 
 Thomas
 -- 
