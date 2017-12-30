@@ -1,66 +1,32 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 30 Dec 2017 14:08:39 +0100
-Subject: [Buildroot] [PATCH 3/3] package/brltty: depends on
- !BR2_STATIC_LIBS
-In-Reply-To: <20171230104804.16489-3-mlang@blind.guru>
-References: <20171230104804.16489-1-mlang@blind.guru>
- <20171230104804.16489-3-mlang@blind.guru>
-Message-ID: <20171230130839.GC2921@scaer>
+From: Patrick Doyle <wpdster@gmail.com>
+Date: Sat, 30 Dec 2017 08:16:27 -0500
+Subject: [Buildroot] How to apply RT kernel patches?
+Message-ID: <CAF_dkJBtZ=gS8-GQme7eCYyZPRcHPFdYWTsOv=8kQvFdHbfJEA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Mario, All,
+How do folks tend to apply the RT kernel patches using buildroot?
 
-On 2017-12-30 11:48 +0100, Mario Lang spake thusly:
-> This requirement is likely to go away in the future.  However, declaring
-> this fact explicitly for now fixes a number of test-pkg failures.
-> 
-> Signed-off-by: Mario Lang <mlang@blind.guru>
+There are patch sets available at
+https://cdn.kernel.org/pub/linux/kernel/projects/rt/4.9/.  I could
+download one of those, unpack it into my buildroot tree, and configure
+that directory as a patch directory for the kernel.  But that is
+problematic from a version control standpoint.  I would end up with
+the whole set of (300+) patches in my source tree that will lead to
+repository bloat.
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+I would rather convince the buildroot machinery to download and apply
+the patches automatically as part of the build process.
 
-Regards,
-Yann E. MORIN.
+Do others do this?
 
-> ---
->  package/brltty/Config.in | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/brltty/Config.in b/package/brltty/Config.in
-> index dfd2ff4428..288d9b56d8 100644
-> --- a/package/brltty/Config.in
-> +++ b/package/brltty/Config.in
-> @@ -2,6 +2,7 @@ config BR2_PACKAGE_BRLTTY
->  	bool "brltty"
->  	depends on BR2_USE_WCHAR
->  	depends on BR2_TOOLCHAIN_HAS_THREADS
-> +	depends on !BR2_STATIC_LIBS
->  	help
->  	  A daemon providing access to the Linux console for a blind
->  	  person using a refreshable braille display.
-> @@ -15,5 +16,5 @@ config BR2_PACKAGE_BRLTTY_TEXT_TABLE
->  
->  endif
->  
-> -comment "brltty needs a toolchain w/ threads, wchar"
-> -	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
-> +comment "brltty needs a toolchain w/ dynamic lib, threads, wchar"
-> +	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
-> -- 
-> 2.15.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Do others do something else?
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+I think I'll just toss this question out there and see what I can learn.
+
+Thank you.
+
+--wpd
