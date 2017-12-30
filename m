@@ -1,138 +1,148 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Sat, 30 Dec 2017 14:24:37 -0500
-Subject: [Buildroot] [PATCH v2 1/1] json for modern c++: new package
-Message-ID: <20171230192437.6706-1-Adamduskett@outlook.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 30 Dec 2017 21:15:07 +0100
+Subject: [Buildroot] [git commit] daq: new package
+Message-ID: <20171230201558.462D683521@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-A json library that aims to make json feel like a first class data type
-using C++11, json for modern c++ is a easy to use, flexible, modern json
-library.
+commit: https://git.buildroot.net/buildroot/commit/?id=2f7382b6f6c2fcb0f0a26ec1cf19df9128257cc3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Design goals include:
-
-- Intuitive syntax. In languages such as Python, JSON feels like a first
-  class data type. All the operator magic of modern C++ is used to achieve
-  the same feeling in c++.
-
-- Trivial integration. The whole code consists of a single header file
-  json.hpp. That's it. No library, no subproject, no dependencies, no
-  complex build system. The class is written in vanilla C++11.
-  All in all, everything should require no adjustment of compiler flags or
-  project settings.
-
-- Serious testing. The class is heavily unit-tested and covers 100% of the
-  code, including all exceptional behavior. Furthermore, it is checked with
-  Valgrind that there are no memory leaks. To maintain high quality,
-  the project is following the Core Infrastructure Initiative (CII) best
-  practices.
-
-Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
+Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+[Thomas:
+ - re-order depends on/select in Config.in
+ - add <pkg>_INSTALL_STAGING = YES
+ - drop double quotes when passing values in <pkg>_CONF_ENV.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
-Changes v1 -> v2
-  - Updated to v3.0.1
-  - Added package to the DEVELOPERS file
-
  DEVELOPERS                                         |  1 +
  package/Config.in                                  |  1 +
- package/json-for-modern-cpp/Config.in              | 28 ++++++++++++++++++++++
- .../json-for-modern-cpp/json-for-modern-cpp.hash   |  3 +++
- package/json-for-modern-cpp/json-for-modern-cpp.mk | 15 ++++++++++++
- 5 files changed, 48 insertions(+)
- create mode 100644 package/json-for-modern-cpp/Config.in
- create mode 100644 package/json-for-modern-cpp/json-for-modern-cpp.hash
- create mode 100644 package/json-for-modern-cpp/json-for-modern-cpp.mk
+ ...0001-Fix-build-against-the-musl-C-library.patch | 29 ++++++++++++++++++++++
+ package/daq/Config.in                              | 13 ++++++++++
+ package/daq/daq.hash                               |  5 ++++
+ package/daq/daq.mk                                 | 25 +++++++++++++++++++
+ 6 files changed, 74 insertions(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index b6cc7a0950..e3dbde53c4 100644
+index f00329c..0588a0c 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -43,6 +43,7 @@ F:	package/gstreamer1/gst1-plugins-ugly/
- F:	package/gstreamer1/gst1-vaapi/
- F:	package/imx-usb-loader/
- F:	package/janus-gateway/
-+F:	package/json-for-modern-cpp/
- F:	package/libressl/
- F:	package/libselinux/
- F:	package/libsemanage/
+@@ -1566,6 +1566,7 @@ F:	package/rtl8189fs/
+ F:	package/xr819-xradio/
+ 
+ N:	Sergio Prado <sergio.prado@e-labworks.com>
++F:	package/daq/
+ F:	package/libgdiplus/
+ F:	package/mongodb/
+ F:	package/pimd/
 diff --git a/package/Config.in b/package/Config.in
-index bd39a374f0..06b8386299 100644
+index bd39a37..c1e52a3 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1255,6 +1255,7 @@ menu "JSON/XML"
- 	source "package/jose/Config.in"
- 	source "package/jsmn/Config.in"
- 	source "package/json-c/Config.in"
-+	source "package/json-for-modern-cpp/Config.in"
- 	source "package/json-glib/Config.in"
- 	source "package/jsoncpp/Config.in"
- 	source "package/libbson/Config.in"
-diff --git a/package/json-for-modern-cpp/Config.in b/package/json-for-modern-cpp/Config.in
+@@ -1338,6 +1338,7 @@ menu "Networking"
+ 	source "package/cgic/Config.in"
+ 	source "package/cppzmq/Config.in"
+ 	source "package/czmq/Config.in"
++	source "package/daq/Config.in"
+ 	source "package/filemq/Config.in"
+ 	source "package/flickcurl/Config.in"
+ 	source "package/fmlib/Config.in"
+diff --git a/package/daq/0001-Fix-build-against-the-musl-C-library.patch b/package/daq/0001-Fix-build-against-the-musl-C-library.patch
 new file mode 100644
-index 0000000000..d3f2e869a1
+index 0000000..a37fe9a
 --- /dev/null
-+++ b/package/json-for-modern-cpp/Config.in
-@@ -0,0 +1,28 @@
-+config BR2_PACKAGE_JSON_FOR_MODERN_CPP
-+	bool "json for modern c++"
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++11
-+	depends on BR2_INSTALL_LIBSTDCPP
++++ b/package/daq/0001-Fix-build-against-the-musl-C-library.patch
+@@ -0,0 +1,29 @@
++From d3eec1a3b7c67a5e6f524c65608fd2eacac3782b Mon Sep 17 00:00:00 2001
++From: Sergio Prado <sergio.prado@e-labworks.com>
++Date: Sun, 24 Dec 2017 12:58:49 -0200
++Subject: [PATCH] Fix build against the musl C library
++
++Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
++---
++ os-daq-modules/daq_ipfw.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/os-daq-modules/daq_ipfw.c b/os-daq-modules/daq_ipfw.c
++index 016beb06ad61..c2a41759bb04 100644
++--- a/os-daq-modules/daq_ipfw.c
+++++ b/os-daq-modules/daq_ipfw.c
++@@ -23,10 +23,10 @@
++ #include <stdlib.h>
++ #include <string.h>
++ #include <stdio.h>
+++#include <unistd.h>
++ 
++ #include <sys/types.h>
++ #include <sys/time.h>
++-#include <sys/unistd.h>
++ 
++ #include <netinet/in.h>
++ #include <sys/socket.h>
++-- 
++1.9.1
++
+diff --git a/package/daq/Config.in b/package/daq/Config.in
+new file mode 100644
+index 0000000..7800061
+--- /dev/null
++++ b/package/daq/Config.in
+@@ -0,0 +1,13 @@
++config BR2_PACKAGE_DAQ
++	bool "daq"
++	depends on !BR2_STATIC_LIBS # dlfcn.h
++	select BR2_PACKAGE_LIBPCAP
++	select BR2_PACKAGE_LIBDNET
 +	help
-+	  Json for modern c++ has the following desing goals in mind:
++	  DAQ is a Data Acquisition library for packet I/O from the
++	  Snort project.
 +
-+	  - Intuitive syntax. In languages such as Python, JSON feels
-+	    like a first class data type. All the operator magic of
-+	    modern C++ is used to achieve the same feeling in c++.
++	  https://www.snort.org
 +
-+	  - Trivial integration. The whole code consists of a single
-+	    header file json.hpp. That's it. No library, no subproject,
-+	    no dependencies, no complex build system. The class is
-+	    written in vanilla C++11. All in all, everything should
-+	    require no adjustment of compiler flags or project settings.
-+
-+	  - Serious testing. The class is heavily unit-tested and covers
-+	  	100% of the code, including all exceptional behavior.
-+	  	Furthermore, it is checked with Valgrind that there are no
-+	  	memory leaks. To maintain high quality, the project is
-+	  	following the Core Infrastructure Initiative (CII) best
-+	  	practices.
-+
-+	  https://github.com/nlohmann/json
-+
-+comment "json for modern c++ needs a toolchain w/ C++, gcc >= 4.9"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-diff --git a/package/json-for-modern-cpp/json-for-modern-cpp.hash b/package/json-for-modern-cpp/json-for-modern-cpp.hash
++comment "daq needs a toolchain w/ dynamic library"
++	depends on BR2_STATIC_LIBS
+diff --git a/package/daq/daq.hash b/package/daq/daq.hash
 new file mode 100644
-index 0000000000..7f394aaee7
+index 0000000..6a0cb5e
 --- /dev/null
-+++ b/package/json-for-modern-cpp/json-for-modern-cpp.hash
-@@ -0,0 +1,3 @@
-+# Locally computed
-+sha256	402464cd6d50c81bb6a683d07c537e5a8c4684fd1186826d3aa1385ce6adac13	json-v3.0.1.tar.gz
-+sha256	6a6115fc4a7239a135f2dce8d33f94cb8a936b8f608ac0f6699fbac278b0dd5b	LICENSE.MIT
-diff --git a/package/json-for-modern-cpp/json-for-modern-cpp.mk b/package/json-for-modern-cpp/json-for-modern-cpp.mk
++++ b/package/daq/daq.hash
+@@ -0,0 +1,5 @@
++# Locally computed:
++sha256 d41da5f7793e66044e6927dd868c0525e7ee4ec1a3515bf74ef9a30cd9273af0  daq-2.0.6.tar.gz
++
++# Hash for license files:
++sha256 07f28289c09fd9eb5a6ff7bc710ff40363601b1bbc6f3637d8ed412150e90819  COPYING
+diff --git a/package/daq/daq.mk b/package/daq/daq.mk
 new file mode 100644
-index 0000000000..8f31c8921d
+index 0000000..c4b4c88
 --- /dev/null
-+++ b/package/json-for-modern-cpp/json-for-modern-cpp.mk
-@@ -0,0 +1,15 @@
++++ b/package/daq/daq.mk
+@@ -0,0 +1,25 @@
 +################################################################################
 +#
-+# json for modern c++
++# daq
 +#
 +################################################################################
 +
-+JSON_FOR_MODERN_CPP_VERSION = v3.0.1
-+JSON_FOR_MODERN_CPP_SOURCE=json-${JSON_FOR_MODERN_CPP_VERSION}.tar.gz
-+JSON_FOR_MODERN_CPP_SITE = $(call github,nlohmann,json,$(JSON_FOR_MODERN_CPP_VERSION))
-+JSON_FOR_MODERN_CPP_LICENSE = MIT
-+JSON_FOR_MODERN_CPP_LICENSE_FILES = LICENSE.MIT
-+JSON_FOR_MODERN_CPP_INSTALL_STAGING = YES
-+JSON_FOR_MODERN_CPP_CONF_OPTS += -DJSON_BuildTests=OFF
++DAQ_VERSION = 2.0.6
++DAQ_SITE = https://www.snort.org/downloads/snort
++DAQ_SOURCE = daq-$(DAQ_VERSION).tar.gz
++DAQ_LICENSE = GPL-2.0
++DAQ_LICENSE_FILES = COPYING
++DAQ_INSTALL_STAGING = YES
++DAQ_DEPENDENCIES = libpcap libdnet
 +
-+$(eval $(cmake-package))
--- 
-2.14.3
++# package does not build in parallel due to improper make rules
++# related to the generation of the tokdefs.h header file
++DAQ_MAKE = $(MAKE1)
++
++# assume these flags are available to prevent configure from running
++# test programs while cross compiling
++DAQ_CONF_ENV = \
++	ac_cv_lib_pcap_pcap_lib_version=yes \
++	daq_cv_libpcap_version_1x=yes
++
++$(eval $(autotools-package))
