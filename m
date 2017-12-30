@@ -1,69 +1,53 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Fri, 29 Dec 2017 23:32:45 -0500
-Subject: [Buildroot] [PATCH 1/2] meson: fix malformed
- cross-compilation.conf.in
-In-Reply-To: <20171229232234.44b89144@windsurf.lan>
-References: <20171229215243.6273-1-Adamduskett@outlook.com>
- <20171229232234.44b89144@windsurf.lan>
-Message-ID: <CAFSsvmq6TkXGQ3+9whEJFDoZ77f7_R_AiVVjc_7Z1kNn+aswdw@mail.gmail.com>
+From: daggs <daggs@gmx.com>
+Date: Sat, 30 Dec 2017 07:44:43 +0100
+Subject: [Buildroot] [PATCH] libtirpc: fix compilation error
+In-Reply-To: <20171229222345.7ecb9545@windsurf.lan>
+References: <20171229130333.13661-1-daggs@gmx.com>
+ <20171229143805.7f083140@windsurf.lan>
+ <trinity-145e0c2a-2583-47ec-b583-2128a636e7e6-1514557451788@3c-app-mailcom-bs06>
+ <20171229222345.7ecb9545@windsurf.lan>
+Message-ID: <trinity-bca13856-de1a-42f4-a4d4-41193f6eaf92-1514616283921@3c-app-mailcom-bs04>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello;
+Greetings Thomas,
 
-On Fri, Dec 29, 2017 at 5:22 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
->
-> On Fri, 29 Dec 2017 16:52:42 -0500, Adam Duskett wrote:
->> Currently, meson will set the c_link_args and the cpp_link_args to the value
->> of TARGET_LDFLAGS, even when it's not defined.
->>
->> This creates a malformed array ["",] which will break any package building
->> using meson/ninja.
->>
->> Add a small regular expression at the end of the sed command to check for
->> ["", ] and replace it with [] instead.
->>
->> Credit goes to Yann for the regular expression.
->>
->> Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
->> ---
->>  package/meson/meson.mk | 1 +
->>  1 file changed, 1 insertion(+)
->>
->> diff --git a/package/meson/meson.mk b/package/meson/meson.mk
->> index 55ce84da07..75b9a1666a 100644
->> --- a/package/meson/meson.mk
->> +++ b/package/meson/meson.mk
->> @@ -26,6 +26,7 @@ define HOST_MESON_INSTALL_CROSS_CONF
->>           -e "s%@TARGET_LDFLAGS@%`printf '"%s", ' $(TARGET_LDFLAGS)`%g" \
->>           -e "s%@TARGET_CXXFLAGS@%`printf '"%s", ' $(TARGET_CXXFLAGS)`%g" \
->>           -e "s%@HOST_DIR@%$(HOST_DIR)%g" \
->> +         -e 's/\["", \]/[]/' \
->>           $(HOST_MESON_PKGDIR)/cross-compilation.conf.in \
->>           > $(HOST_DIR)/etc/meson/cross-compilation.conf
->>  endef
->
-> While this works, it feels a bit like a hack to me: we are just fixing
-> the mess we have created a few lines before. Can we instead do the
-> replacement only if it's needed ? Or calculate some intermediate
-> variable that is empty is TARGET_CFLAGS is empty, and equal to
-> '"$(TARGET_CFLAGS)", ' if not ?
->
-We could, but this works and is the only issue I could find with the
-build system.
-The end result would be exactly the same for a bunch of extra effort yes?
+> 
+> > config to reproduce:
+> > BR2_x86_i686=y
+> > BR2_PACKAGE_LIBTIRPC=y
+> > 
+> > no idea why the autobuilds didn't caught it.
+> 
+> I initially couldn't reproduce it, but after thinking more about the
+> problem, I understood what happened: you don't have RPC support
+> installed in your host system. The build of the rpcgen host program
+> fails to build because it can't find those headers, which on my system
+> (or the autobuilder instances) are provided system-wide.
+weird, I have it too on my system:
+dagg at NCC-5001-D ~ $ ll /usr/include/tirpc/rpc/types.h
+-rw-r--r-- 1 root root 3270 Dec  1 15:44 /usr/include/tirpc/rpc/types.h
+dagg at NCC-5001-D ~ $ eix net-libs/libtirpc
+[I] net-libs/libtirpc
+     Available versions:  1.0.1-r1(0/3) 1.0.2-r1(0/3) [m]1.0.2-r1(0/3)[1] {ipv6 kerberos static-libs ABI_MIPS="n32 n64 o32" ABI_PPC="32 64" ABI_S390="32 64" ABI_X86="32 64 x32"}
+     Installed versions:  1.0.2-r1(0/3)(15:44:39 01/12/17)(-ipv6 -kerberos -static-libs ABI_MIPS="-n32 -n64 -o32" ABI_PPC="-32 -64" ABI_S390="-32 -64" ABI_X86="64 -32 -x32")
+     Homepage:            http://libtirpc.sourceforge.net/
+     Description:         Transport Independent RPC library (SunRPC replacement)
 
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux and Kernel engineering
-> http://free-electrons.com
+[1] "musl" /var/lib/layman/musl
+dagg at NCC-5001-D ~ $ qfile /usr/include/tirpc/rpc/types.h
+net-libs/libtirpc (/usr/include/tirpc/rpc/types.h)
 
-Thanks!
+I wonder why it didn't reproduced when you tried it.
+maybe it is a global include config or something, does buildroot appends to existing includes or uses a blanked one?
 
-Adam
+> 
+> So indeed, your patch is correct. Just the explanation was not
+> sufficient, so I've reworded the commit log accordingly.
+I was never good with words, thanks!
+
+
+Dagg.
