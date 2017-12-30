@@ -1,10 +1,10 @@
 From: Angelo Compagnucci <angelo@amarulasolutions.com>
-Date: Sat, 30 Dec 2017 11:02:02 +0100
-Subject: [Buildroot] [PATCH v2 2/7] docs/manual: adding documentation for
- the golang infrastructure
+Date: Sat, 30 Dec 2017 11:02:05 +0100
+Subject: [Buildroot] [PATCH v2 5/7] package/docker-containerd: converting to
+ golang infrastructure
 In-Reply-To: <1514628127-15938-1-git-send-email-angelo@amarulasolutions.com>
 References: <1514628127-15938-1-git-send-email-angelo@amarulasolutions.com>
-Message-ID: <1514628127-15938-3-git-send-email-angelo@amarulasolutions.com>
+Message-ID: <1514628127-15938-6-git-send-email-angelo@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,151 +13,75 @@ To: buildroot@busybox.net
 
 From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 
-This patch adds the documentation for the golang infrastructure.
+This patch converts the docker-containerd package to the new golang
+infrastructure.
 
 Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 ---
 Changes:
-v1 -> v2: Adding documentation for go TAGS
- docs/manual/adding-packages-golang.txt | 116 +++++++++++++++++++++++++++++++++
- docs/manual/adding-packages.txt        |   2 +
- 2 files changed, 118 insertions(+)
- create mode 100644 docs/manual/adding-packages-golang.txt
+v1 -> v2: Updated GO_BIN definition
 
-diff --git a/docs/manual/adding-packages-golang.txt b/docs/manual/adding-packages-golang.txt
-new file mode 100644
-index 0000000..5d6de3a
---- /dev/null
-+++ b/docs/manual/adding-packages-golang.txt
-@@ -0,0 +1,116 @@
-+// -*- mode:doc; -*-
-+// vim: set syntax=asciidoc:
-+
-+=== Infrastructure for Go packages
-+
-+This infrastructure applies to Go packages that use the standard
-+build system and use bundled dependencies.
-+
-+[[golang-package-tutorial]]
-+
-+==== +golang-package+ tutorial
-+
-+First, let's see how to write a +.mk+ file for a go package,
-+with an example :
-+
-+------------------------
-+01: ################################################################################
-+02: #
-+03: # go-foo
-+04: #
-+05: ################################################################################
-+06:
-+07: GO_FOO_VERSION = 1.0
-+08: GO_FOO_SOURCE = go-foo-$(GO_FOO_VERSION).tar.xz
-+09: GO_FOO_SITE = http://www.foosoftware.org/download
-+10: GO_FOO_LICENSE = BSD-3-Clause
-+11: GO_FOO_LICENSE_FILES = LICENSE
-+12:
-+13: $(eval $(golang-package))
-+------------------------
-+
-+On line 7, we declare the version of the package.
-+
-+On line 8 and 9, we declare the name of the tarball (xz-ed tarball
-+recommended) and the location of the tarball on the Web. Buildroot
-+will automatically download the tarball from this location.
-+
-+On line 10 and 11, we give licensing details about the package (its
-+license on line 10, and the file containing the license text on line
-+11).
-+
-+Finally, on line 13, we invoke the +golang-package+ macro that
-+generates all the Makefile rules that actually allow the package to be
-+built.
-+
-+[[golang-package-reference]]
-+
-+==== +golang-package+ reference
-+
-+As a policy packages can freely choose their name (existing example in 
-+Buildroot is +flannel+).
-+
-+In their +Config.in+ file, they should depend on 
-++BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS+ and
-++BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS+ cause host-go will compile when Buildroot will add the
-+dependency automatically.
-+
-+The main macro of the Go package infrastructure is
-++golang-package+. It is similar to the +generic-package+ macro.
-+
-+Just like the generic infrastructure, the Go infrastructure works
-+by defining a number of variables before calling the +golang-package+.
-+
-+All the package metadata information variables that exist in the
-+xref:generic-package-reference[generic package infrastructure] also
-+exist in the Go infrastructure: +GO_FOO_VERSION+,
-++GO_FOO_SOURCE+, +GO_FOO_PATCH+, +GO_FOO_SITE+,
-++GO_FOO_SUBDIR+, +GO_FOO_DEPENDENCIES+, +GO_FOO_LICENSE+,
-++GO_FOO_LICENSE_FILES+, +GO_FOO_INSTALL_STAGING+, etc.
-+
-+Note that:
-+
-+ * It is not necessary to add +go+ or +host-go+ in the
-+   +GO_FOO_DEPENDENCIES+ variable of a package, since these basic
-+   dependencies are automatically added as needed by the Go
-+   package infrastructure.
-+
-+A few additional variables, specific to the Go infrastructure, can
-+optionally be defined, depending on the package's needs. Many of them
-+are only useful in very specific cases, typical packages will
-+therefore only use a few of them, or none.
-+
-+* If your package need a custom GOPATH to be compiled in, you can use the
-+  +GO_FOO_GOPATH+.
-+
-+* +GO_FOO_GO_SRC_PATH+ is the path where your source will be compiled
-+  relatively to the GOPATH.
-+  The golang package infrastructure tries to guess the correct 
-+  sub folder to compile in but if guessing is not correct for you or your
-+  package behaves differently, you can use this variable to
-+  redefine the path.
-+
-+* +GOO_FOO_GO_LDFLAGS+ and +GO_FOO_GO_TAGS+ can be used to pass
-+  respectively the LDFLAGS or the TAGS to the build command.
-+  +GOO_FOO_GO_LDFLAGS+ and +GO_FOO_GO_TAGS+ will be combined into
-+  the proper command line options to be passed to the compiler.
-+
-+* If you need to customize the install location for you binaries, you
-+  can use +GOO_FOO_BINDIR+ to know where the binaries are.
-+
-+* If you need to customize the building tags you can use GOO_FOO_GO_TAGS
-+
-+With the Go infrastructure, all the steps required to build and
-+install the packages are already defined, and they generally work well
-+for most Go-based packages. However, when required, it is still
-+possible to customize what is done in any particular step:
-+
-+* By adding a post-operation hook (after extract, patch, configure,
-+  build or install). See xref:hooks[] for details.
-+
-+* By overriding one of the steps. For example, even if the Go
-+  infrastructure is used, if the package +.mk+ file defines its own
-+  +GO_FOO_BUILD_CMDS+ variable, it will be used instead of the
-+  default Go one. However, using this method should be restricted
-+  to very specific cases. Do not use it in the general case.
-+
-diff --git a/docs/manual/adding-packages.txt b/docs/manual/adding-packages.txt
-index e542124..56991ab 100644
---- a/docs/manual/adding-packages.txt
-+++ b/docs/manual/adding-packages.txt
-@@ -36,6 +36,8 @@ include::adding-packages-waf.txt[]
+ package/docker-containerd/docker-containerd.mk | 37 +++++++++++---------------
+ 1 file changed, 15 insertions(+), 22 deletions(-)
+
+diff --git a/package/docker-containerd/docker-containerd.mk b/package/docker-containerd/docker-containerd.mk
+index ffbadb0..5d21172 100644
+--- a/package/docker-containerd/docker-containerd.mk
++++ b/package/docker-containerd/docker-containerd.mk
+@@ -9,39 +9,32 @@ DOCKER_CONTAINERD_SITE = $(call github,docker,containerd,$(DOCKER_CONTAINERD_VER
+ DOCKER_CONTAINERD_LICENSE = Apache-2.0
+ DOCKER_CONTAINERD_LICENSE_FILES = LICENSE.code
  
- include::adding-packages-meson.txt[]
+-DOCKER_CONTAINERD_DEPENDENCIES = host-go
++DOCKER_CONTAINERD_GOPATH = vendor
  
-+include::adding-packages-golang.txt[]
+-DOCKER_CONTAINERD_GOPATH = "$(@D)/vendor"
+-DOCKER_CONTAINERD_MAKE_ENV = $(HOST_GO_TARGET_ENV) \
+-	CGO_ENABLED=1 \
+-	GOBIN="$(@D)/bin" \
+-	GOPATH="$(DOCKER_CONTAINERD_GOPATH)"
+-
+-DOCKER_CONTAINERD_GLDFLAGS = \
++DOCKER_CONTAINERD_GO_LDFLAGS = \
+ 	-X github.com/docker/containerd.GitCommit=$(DOCKER_CONTAINERD_VERSION)
+ 
+-ifeq ($(BR2_STATIC_LIBS),y)
+-DOCKER_CONTAINERD_GLDFLAGS += -extldflags '-static'
+-endif
+-
+-define DOCKER_CONTAINERD_CONFIGURE_CMDS
+-	mkdir -p $(DOCKER_CONTAINERD_GOPATH)/src/github.com/docker
+-	ln -s $(@D) $(DOCKER_CONTAINERD_GOPATH)/src/github.com/docker/containerd
+-	mkdir -p $(DOCKER_CONTAINERD_GOPATH)/src/github.com/opencontainers
+-	ln -s $(RUNC_SRCDIR) $(DOCKER_CONTAINERD_GOPATH)/src/github.com/opencontainers/runc
++define DOCKER_CONTAINERD_LINK_DIR
++	ln -sf $(@D) $(@D)/$(DOCKER_CONTAINERD_GOPATH)/src/github.com/docker/containerd
++	mkdir -p $(@D)/$(DOCKER_CONTAINERD_GOPATH)/src/github.com/opencontainers
++	ln -s $(RUNC_SRCDIR) $(@D)/$(DOCKER_CONTAINERD_GOPATH)/src/github.com/opencontainers/runc
+ endef
+ 
++DOCKER_CONTAINERD_POST_CONFIGURE_HOOKS += DOCKER_CONTAINERD_LINK_DIR
 +
- include::adding-packages-kernel-module.txt[]
+ define DOCKER_CONTAINERD_BUILD_CMDS
+ 	$(foreach d,ctr containerd containerd-shim,\
+-		cd $(@D); $(DOCKER_CONTAINERD_MAKE_ENV) $(HOST_DIR)/bin/go build \
+-			-v -o $(@D)/bin/$(d) -ldflags "$(DOCKER_CONTAINERD_GLDFLAGS)" ./$(d)$(sep))
++		cd $(@D)/$(DOCKER_CONTAINERD_GOPATH)/src/github.com/docker/containerd; \
++		$(DOCKER_CONTAINERD_GO_ENV) \
++		$(GO_BIN) install -v \
++		$(DOCKER_CONTAINERD_BUILD_OPTS) ./$(d)$(sep))
+ endef
  
- include::adding-packages-asciidoc.txt[]
+ define DOCKER_CONTAINERD_INSTALL_TARGET_CMDS
+ 	ln -fs runc $(TARGET_DIR)/usr/bin/docker-runc
+-	$(INSTALL) -D -m 0755 $(@D)/bin/containerd $(TARGET_DIR)/usr/bin/docker-containerd
+-	$(INSTALL) -D -m 0755 $(@D)/bin/containerd-shim $(TARGET_DIR)/usr/bin/containerd-shim
++	$(INSTALL) -D -m 0755 $(@D)/$(DOCKER_CONTAINERD_BINDIR)/containerd $(TARGET_DIR)/usr/bin/docker-containerd
++	$(INSTALL) -D -m 0755 $(@D)/$(DOCKER_CONTAINERD_BINDIR)/containerd-shim $(TARGET_DIR)/usr/bin/containerd-shim
+ 	ln -fs containerd-shim $(TARGET_DIR)/usr/bin/docker-containerd-shim
+ endef
+ 
+-$(eval $(generic-package))
++$(eval $(golang-package))
 -- 
 2.7.4
