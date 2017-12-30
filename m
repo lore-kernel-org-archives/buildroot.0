@@ -1,36 +1,58 @@
-From: Alexander Mukhin <alexander.i.mukhin@gmail.com>
-Date: Sat, 30 Dec 2017 12:50:00 +0300
-Subject: [Buildroot] [PATCH 3/4] hostapd: make ACS dependent on nl80211
-In-Reply-To: <20171229223748.5dd69cd3@windsurf.lan>
-References: <20171223190617.3981-1-alexander.i.mukhin@gmail.com>
- <20171223190617.3981-4-alexander.i.mukhin@gmail.com>
- <20171229223748.5dd69cd3@windsurf.lan>
-Message-ID: <20171230095000.GA486@hpx>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 30 Dec 2017 10:56:35 +0100
+Subject: [Buildroot] [PATCHv2] package/meson: fix malformed
+ cross-compilation.conf.in
+Message-ID: <20171230095635.18123-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Currently, meson will set the c_link_args and the cpp_link_args to the
+value of TARGET_LDFLAGS, even when it's not defined.
 
-> > ACS is supported for nl80211 driver only.
-> > 
-> Could you add more details here? Do you see a build failure? Runtime
-> failure?
-> 
-> If CONFIG_ACS=y doesn't build when CONFIG_DRIVER_NL80211 is disabled,
-> then this fix should be part of PATCH 2/4, otherwise PATCH 2/4
-> introduces a build regression.
+This creates a malformed array ["",] which will break any package
+building using meson/ninja.
 
-My guide here is hostapd's defconfig, where it's stated that "ACS is
-currently only supported through the nl80211 driver". Search through the
-source code also reveals ACS machinery in the nl80211 driver only.
+We fix that by using an empty replacement when the corresponding values
+are empty.
 
-hostapd builds successively with ACS enabled and nl80211 disabled, but
-an attempt to use ACS by setting a wireless channel to 0 results in a
-runtime failure (driver doesn't accept this value).
+Reported-by: Adam Duskett <Adamduskett@outlook.com>
+Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
+[yann.morin.1998 at free.fr: alternate implementation, suggested by Thomas]
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/meson/meson.mk | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
 
+diff --git a/package/meson/meson.mk b/package/meson/meson.mk
+index 55ce84da07..d55c3c7c00 100644
+--- a/package/meson/meson.mk
++++ b/package/meson/meson.mk
+@@ -16,15 +16,19 @@ HOST_MESON_NEEDS_HOST_PYTHON = python3
+ HOST_MESON_TARGET_ENDIAN = $(call LOWERCASE,$(BR2_ENDIAN))
+ HOST_MESON_TARGET_CPU = $(call qstrip,$(BR2_GCC_TARGET_CPU))
+ 
++HOST_MESON_SED_CFLAGS = $(if $(TARGET_CFLAGS),`printf '"%s"$(comma) ' $(TARGET_CFLAGS)`)
++HOST_MESON_SED_LDFLAGS = $(if $(TARGET_LDFLAGS),`printf '"%s"$(comma) ' $(TARGET_LDFLAGS)`)
++HOST_MESON_SED_CXXFLAGS = $(if $(TARGET_CXXFLAGS),`printf '"%s"$(comma) ' $(TARGET_CXXFLAGS)`)
++
+ define HOST_MESON_INSTALL_CROSS_CONF
+ 	mkdir -p $(HOST_DIR)/etc/meson
+ 	sed -e "s%@TARGET_CROSS@%$(TARGET_CROSS)%g" \
+ 	    -e "s%@TARGET_ARCH@%$(ARCH)%g" \
+ 	    -e "s%@TARGET_CPU@%$(HOST_MESON_TARGET_CPU)%g" \
+ 	    -e "s%@TARGET_ENDIAN@%$(HOST_MESON_TARGET_ENDIAN)%g" \
+-	    -e "s%@TARGET_CFLAGS@%`printf '"%s", ' $(TARGET_CFLAGS)`%g" \
+-	    -e "s%@TARGET_LDFLAGS@%`printf '"%s", ' $(TARGET_LDFLAGS)`%g" \
+-	    -e "s%@TARGET_CXXFLAGS@%`printf '"%s", ' $(TARGET_CXXFLAGS)`%g" \
++	    -e "s%@TARGET_CFLAGS@%$(HOST_MESON_SED_CFLAGS)%g" \
++	    -e "s%@TARGET_LDFLAGS@%$(HOST_MESON_SED_LDFLAGS)%g" \
++	    -e "s%@TARGET_CXXFLAGS@%$(HOST_MESON_SED_CXXFLAGS)%g" \
+ 	    -e "s%@HOST_DIR@%$(HOST_DIR)%g" \
+ 	    $(HOST_MESON_PKGDIR)/cross-compilation.conf.in \
+ 	    > $(HOST_DIR)/etc/meson/cross-compilation.conf
 -- 
-Best regards,
-Alexander.
+2.11.0
