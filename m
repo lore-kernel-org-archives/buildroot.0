@@ -1,90 +1,82 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 30 Dec 2017 23:13:28 +0100
-Subject: [Buildroot] [PATCH v7 1/1] libcpprestsdk: new package
-In-Reply-To: <20171230191655.32606-1-Adamduskett@outlook.com>
-References: <20171230191655.32606-1-Adamduskett@outlook.com>
-Message-ID: <20171230231328.3299abdc@windsurf>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sun, 31 Dec 2017 00:31:29 +0200
+Subject: [Buildroot] [PATCH] json-c: fix build without threads support
+Message-ID: <969aa23e24cae04dd3d71c0d29c48445b0335a4d.1514673089.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+An uClibc toolchain that does not support threads emits a warning when
+_REENTRANT is defined. This breaks build with -Werror. Remove -Werror as
+a workaround to fix the build.
 
-On Sat, 30 Dec 2017 14:16:55 -0500, Adam Duskett wrote:
-> The C++ REST SDK is a Microsoft project for cloud-based client-server
-> communication in native code using a modern asynchronous C++ API design.
-> This project aims to help C++ developers connect to and interact with
-> services.
-> 
-> This package is licensed under the MIT package and depends on BOOST
-> and OpenSSL/LibreSSL.
-> 
-> Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
+This issue as been reported upstream
+(https://github.com/json-c/json-c/issues/396).
 
-As discussed on IRC, this fails to build with the following defconfig:
+Fixes:
+http://autobuild.buildroot.net/results/606/60683141f2ef320a28820c4cd65d2b951123b147/
+http://autobuild.buildroot.net/results/969/969faba96d94c1bda7e06b005d8f3a3f7175a0a2/
 
-BR2_arm=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2017.11-rc1.tar.bz2"
-BR2_TOOLCHAIN_EXTERNAL_GCC_4_9=y
-BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_10=y
-BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
-# BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
-BR2_TOOLCHAIN_EXTERNAL_CXX=y
-BR2_INIT_NONE=y
-BR2_SYSTEM_BIN_SH_NONE=y
-# BR2_PACKAGE_BUSYBOX is not set
-BR2_PACKAGE_LIBCPPRESTSDK=y
-# BR2_TARGET_ROOTFS_TAR is not set
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ .../json-c/0001-configure.ac-remove-Werror.patch   | 32 ++++++++++++++++++++++
+ package/json-c/json-c.mk                           |  4 +++
+ 2 files changed, 36 insertions(+)
+ create mode 100644 package/json-c/0001-configure.ac-remove-Werror.patch
 
-It fails with:
-
->>> libcpprestsdk v2.10.1 Building
-PATH="/home/thomas/projets/buildroot/output/host/bin:/home/thomas/projets/buildroot/output/host/sbin:/usr/local/bin:/usr/bin:/bin:/home/thomas/.rvm/bin:/usr/local/sbin:/usr/sbin:/home/thomas/.rvm/bin:/home/thomas/sys/bin:/home/thomas/.gem/ruby/2.1.0/bin:/home/thomas/.rvm/bin"  /usr/bin/make -j5  -C /home/thomas/projets/buildroot/output/build/libcpprestsdk-v2.10.1/Release
-Scanning dependencies of target cpprest
-[  4%] Building CXX object src/CMakeFiles/cpprest.dir/http/client/http_client_msg.cpp.o
-[  6%] Building CXX object src/CMakeFiles/cpprest.dir/http/client/x509_cert_utilities.cpp.o
-[  6%] Building CXX object src/CMakeFiles/cpprest.dir/http/client/http_client.cpp.o
-[ 10%] Building CXX object src/CMakeFiles/cpprest.dir/http/common/http_helpers.cpp.o
-[ 10%] Building CXX object src/CMakeFiles/cpprest.dir/http/common/http_msg.cpp.o
-In file included from /home/thomas/projets/buildroot/output/build/libcpprestsdk-v2.10.1/Release/src/pch/stdafx.h:94:0,
-                 from /home/thomas/projets/buildroot/output/build/libcpprestsdk-v2.10.1/Release/src/http/common/http_helpers.cpp:14:
-/home/thomas/projets/buildroot/output/build/libcpprestsdk-v2.10.1/Release/include/pplx/pplxtasks.h:923:46: error: ?exception_ptr? in namespace ?std? does not name a type
-         explicit _ExceptionHolder(const std::exception_ptr& _E, const _TaskCreationCallstack &_stackTrace) :
-                                              ^
-/home/thomas/projets/buildroot/output/build/libcpprestsdk-v2.10.1/Release/include/pplx/pplxtasks.h:971:14: error: ?exception_ptr? in namespace ?std? does not name a type
-         std::exception_ptr _M_stdException;
-              ^
-/home/thomas/projets/buildroot/output/build/libcpprestsdk-v2.10.1/Release/include/pplx/pplxtasks.h: In constructor ?pplx::details::_ExceptionHolder::_ExceptionHolder(const int&, const pplx::details::_TaskCreationCallstack&)?:
-/home/thomas/projets/buildroot/output/build/libcpprestsdk-v2.10.1/Release/include/pplx/pplxtasks.h:924:34: error: class ?pplx::details::_ExceptionHolder? does not have any field named ?_M_stdException?
-         _M_exceptionObserved(0), _M_stdException(_E), _M_stackTrace(_stackTrace)
-                                  ^
-/home/thomas/projets/buildroot/output/build/libcpprestsdk-v2.10.1/Release/include/pplx/pplxtasks.h: In member function ?void pplx::details::_ExceptionHolder::_RethrowUserException()?:
-/home/thomas/projets/buildroot/output/build/libcpprestsdk-v2.10.1/Release/include/pplx/pplxtasks.h:963:13: error: ?rethrow_exception? is not a member of ?std?
-             std::rethrow_exception(_M_stdException);
-             ^
-/home/thomas/projets/buildroot/output/build/libcpprestsdk-v2.10.1/Release/include/pplx/pplxtasks.h:963:36: error: ?_M_stdException? was not declared in this scope
-             std::rethrow_exception(_M_stdException);
-                                    ^
-/home/thomas/projets/buildroot/output/build/libcpprestsdk-v2.10.1/Release/include/pplx/pplxtasks.h: In member function ?virtual void pplx::details::_PPLTaskHandle<_ReturnType, _DerivedTaskHandle, _BaseTaskHandle>::invoke() const?:
-/home/thomas/projets/buildroot/output/build/libcpprestsdk-v2.10.1/Release/include/pplx/pplxtasks.h:1655:48: error: ?current_exception? is not a member of ?std?
-                 _M_pTask->_CancelWithException(std::current_exception());
-                                                ^
-Interestingly, it is the same error I had when building opentracing-cpp
-with the same toolchain. Building with the Linaro ARM toolchain works
-fine however.
-
-Could you test this package with ./utils/test-pkg before submitting the
-next version ?
-
-Thanks!
-
-Thomas
+diff --git a/package/json-c/0001-configure.ac-remove-Werror.patch b/package/json-c/0001-configure.ac-remove-Werror.patch
+new file mode 100644
+index 000000000000..e877671519d2
+--- /dev/null
++++ b/package/json-c/0001-configure.ac-remove-Werror.patch
+@@ -0,0 +1,32 @@
++From 79d862ccaabc6620ce4b2783a44d6014ae837df9 Mon Sep 17 00:00:00 2001
++From: Baruch Siach <baruch@tkos.co.il>
++Date: Sun, 31 Dec 2017 00:01:37 +0200
++Subject: [PATCH] configure.ac: remove -Werror
++
++The unconditional _REENTRANT macro causes a warning when building with a
++no-threads toolchain. Remove -Werror to fix the build.
++
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Patch status: not upstreamable
++Issue reported upstream: https://github.com/json-c/json-c/issues/396
++---
++ configure.ac | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/configure.ac b/configure.ac
++index 024c5aa0d687..74caa4d99e15 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -165,7 +165,7 @@ AS_IF([test "x$enable_Bsymbolic" = "xcheck"],
++ AS_IF([test "x$enable_Bsymbolic" = "xyes"], [JSON_BSYMBOLIC_LDFLAGS=-Wl[,]-Bsymbolic-functions])
++ AC_SUBST(JSON_BSYMBOLIC_LDFLAGS)
++ 
++-AX_APPEND_COMPILE_FLAGS([-Wall -Werror -Wcast-qual -Wno-error=deprecated-declarations])
+++AX_APPEND_COMPILE_FLAGS([-Wall -Wcast-qual -Wno-error=deprecated-declarations])
++ AX_APPEND_COMPILE_FLAGS([-Wextra -Wwrite-string -Wno-unused-parameter])
++ AX_APPEND_COMPILE_FLAGS([-D_GNU_SOURCE -D_REENTRANT])
++ 
++-- 
++2.15.1
++
+diff --git a/package/json-c/json-c.mk b/package/json-c/json-c.mk
+index d8007b869133..046529560861 100644
+--- a/package/json-c/json-c.mk
++++ b/package/json-c/json-c.mk
+@@ -10,5 +10,9 @@ JSON_C_INSTALL_STAGING = YES
+ JSON_C_LICENSE = MIT
+ JSON_C_LICENSE_FILES = COPYING
+ 
++# Patching configure.ac
++JSON_C_AUTORECONF = YES
++HOST_JSON_C_AUTORECONF = YES
++
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.15.1
