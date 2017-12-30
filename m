@@ -1,93 +1,46 @@
-From: Mario Lang <mlang@blind.guru>
-Date: Sat, 30 Dec 2017 11:48:03 +0100
-Subject: [Buildroot] [PATCH 2/3] package/brltty: use gcc instead of ld to
- link shared objects
-In-Reply-To: <20171230104804.16489-1-mlang@blind.guru>
-References: <20171230104804.16489-1-mlang@blind.guru>
-Message-ID: <20171230104804.16489-2-mlang@blind.guru>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 30 Dec 2017 11:51:17 +0100
+Subject: [Buildroot] [PATCH] libtirpc: fix compilation error
+In-Reply-To: <trinity-bca13856-de1a-42f4-a4d4-41193f6eaf92-1514616283921@3c-app-mailcom-bs04>
+References: <20171229130333.13661-1-daggs@gmx.com>
+ <20171229143805.7f083140@windsurf.lan>
+ <trinity-145e0c2a-2583-47ec-b583-2128a636e7e6-1514557451788@3c-app-mailcom-bs06>
+ <20171229222345.7ecb9545@windsurf.lan>
+ <trinity-bca13856-de1a-42f4-a4d4-41193f6eaf92-1514616283921@3c-app-mailcom-bs04>
+Message-ID: <20171230115117.7b80bb20@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-  http://autobuild.buildroot.net/results/2419741c43dea0f91859c19167c8d65cb54e1470
-  http://autobuild.buildroot.net/results/4b83e53c718520661dc99cde2121f69ce3fd08d7
-Signed-off-by: Mario Lang <mlang@blind.guru>
----
- .../0003-Remove-MKOBJ-in-favour-of-MKMOD.patch     | 63 ++++++++++++++++++++++
- 1 file changed, 63 insertions(+)
- create mode 100644 package/brltty/0003-Remove-MKOBJ-in-favour-of-MKMOD.patch
+Hello,
 
-diff --git a/package/brltty/0003-Remove-MKOBJ-in-favour-of-MKMOD.patch b/package/brltty/0003-Remove-MKOBJ-in-favour-of-MKMOD.patch
-new file mode 100644
-index 0000000000..d836652850
---- /dev/null
-+++ b/package/brltty/0003-Remove-MKOBJ-in-favour-of-MKMOD.patch
-@@ -0,0 +1,63 @@
-+From b3b0e47015e9162f519730789976157c7cc38178 Mon Sep 17 00:00:00 2001
-+From: Mario Lang <mlang@delysid.org>
-+Date: Fri, 29 Dec 2017 14:52:37 +0100
-+Subject: [PATCH] Remove MKOBJ in favour of MKMOD. (ml)
-+
-+Calling ld directly can lead to problems when cross-compiling.
-+
-+Signed-off-by: Mario Lang <mlang@blind.guru>
-+---
-+ Drivers/Braille/EuroBraille/Makefile.in |  2 +-
-+ config.mk.in                            |  1 -
-+ configure.ac                            | 10 ----------
-+ 3 files changed, 1 insertion(+), 12 deletions(-)
-+
-+diff --git a/Drivers/Braille/EuroBraille/Makefile.in b/Drivers/Braille/EuroBraille/Makefile.in
-+index 0500aa70e..ce8a3d1a4 100644
-+--- a/Drivers/Braille/EuroBraille/Makefile.in
-++++ b/Drivers/Braille/EuroBraille/Makefile.in
-+@@ -28,7 +28,7 @@ SRC_FILES = eu_braille.c eu_clio.c eu_esysiris.c
-+ OBJ_FILES = $(SRC_FILES:.c=.$O)
-+ 
-+ braille.$O: $(OBJ_FILES)
-+-	$(MKOBJ)  $@ $(OBJ_FILES)
-++	$(MKMOD)  $@ $(OBJ_FILES)
-+ 
-+ %.$O: $(SRC_DIR)/%.c
-+ 	$(CC) $(BRL_CFLAGS) -o $@ -c $<
-+diff --git a/config.mk.in b/config.mk.in
-+index 686f547e6..8d1da79b4 100644
-+--- a/config.mk.in
-++++ b/config.mk.in
-+@@ -250,7 +250,6 @@ LD = @LD@
-+ LDFLAGS = @LDFLAGS@
-+ LDLIBS = $(ICU_LIBS) $(POLKIT_LIBS) $(SYSTEM_LIBS) @LIBS@
-+ 
-+-MKOBJ = @MKOBJ@
-+ MKMOD = @MKMOD@
-+ MKLIB = @MKLIB@
-+ CONFLIBDIR = @CONFLIBDIR@
-+diff --git a/configure.ac b/configure.ac
-+index 07119dd9f..ad80b8d60 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -428,16 +428,6 @@ AC_SUBST([can_make_manual])
-+ test "${DOXYGEN}" = "false" && can_make_BrlAPIref=no || can_make_BrlAPIref=yes
-+ AC_SUBST([can_make_BrlAPIref])
-+ 
-+-AC_CACHE_CHECK([for make relocatable object command], [brltty_cv_prog_mkobj], [dnl
-+-case "${host_os}"
-+-in
-+-   *)
-+-      brltty_cv_prog_mkobj="\$(LD) -r -o"
-+-      ;;
-+-esac])
-+-MKOBJ="${brltty_cv_prog_mkobj}"
-+-AC_SUBST([MKOBJ])
-+-
-+ AC_CACHE_CHECK([for loadable module creation command], [brltty_cv_prog_mkmod], [dnl
-+ case "${host_os}"
-+ in
-+-- 
-+2.15.0
-+
+On Sat, 30 Dec 2017 07:44:43 +0100, daggs wrote:
+
+> > I initially couldn't reproduce it, but after thinking more about the
+> > problem, I understood what happened: you don't have RPC support
+> > installed in your host system. The build of the rpcgen host program
+> > fails to build because it can't find those headers, which on my system
+> > (or the autobuilder instances) are provided system-wide.  
+> weird, I have it too on my system:
+> dagg at NCC-5001-D ~ $ ll /usr/include/tirpc/rpc/types.h
+> -rw-r--r-- 1 root root 3270 Dec  1 15:44 /usr/include/tirpc/rpc/types.h
+
+Notice how it is in /usr/include/tirpc, while on my system it is in:
+
+$ ls -l /usr/include/rpc/types.h 
+-rw-r--r-- 1 root root 3233 Dec  6 18:20 /usr/include/rpc/types.h
+
+So, in your system, a #include <rpc/types.h> doesn't find it, while it
+does on my system. I believe it's because on your system, the RPC
+implementation comes from libtirpc, while on my system, it comes from
+glibc.
+
+Best regards,
+
+Thomas
 -- 
-2.15.0
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
