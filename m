@@ -1,43 +1,95 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 30 Dec 2017 18:10:23 +0100
-Subject: [Buildroot] [git commit] package/brltty: depends on !BR2_STATIC_LIBS
-Message-ID: <20171230171046.2E6EF810A4@busybox.osuosl.org>
+Date: Sat, 30 Dec 2017 18:09:40 +0100
+Subject: [Buildroot] [git commit] package/brltty: use gcc instead of ld to
+ link shared objects
+Message-ID: <20171230171046.20E2482B72@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=391efec78a3be2c95b9a30571fbff2660cd79d6f
+commit: https://git.buildroot.net/buildroot/commit/?id=97352f8957ff4c3b96d157f5084237416e728230
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This requirement is likely to go away in the future.  However, declaring
-this fact explicitly for now fixes a number of test-pkg failures.
+Fixes:
+  http://autobuild.buildroot.net/results/2419741c43dea0f91859c19167c8d65cb54e1470
+  http://autobuild.buildroot.net/results/4b83e53c718520661dc99cde2121f69ce3fd08d7
 
 Signed-off-by: Mario Lang <mlang@blind.guru>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+[Thomas: add reference to upstream commit, as suggested by Yann.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/brltty/Config.in | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ .../0003-Remove-MKOBJ-in-favour-of-MKMOD.patch     | 64 ++++++++++++++++++++++
+ 1 file changed, 64 insertions(+)
 
-diff --git a/package/brltty/Config.in b/package/brltty/Config.in
-index dfd2ff4..288d9b5 100644
---- a/package/brltty/Config.in
-+++ b/package/brltty/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_BRLTTY
- 	bool "brltty"
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_STATIC_LIBS
- 	help
- 	  A daemon providing access to the Linux console for a blind
- 	  person using a refreshable braille display.
-@@ -15,5 +16,5 @@ config BR2_PACKAGE_BRLTTY_TEXT_TABLE
- 
- endif
- 
--comment "brltty needs a toolchain w/ threads, wchar"
--	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
-+comment "brltty needs a toolchain w/ dynamic lib, threads, wchar"
-+	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
+diff --git a/package/brltty/0003-Remove-MKOBJ-in-favour-of-MKMOD.patch b/package/brltty/0003-Remove-MKOBJ-in-favour-of-MKMOD.patch
+new file mode 100644
+index 0000000..c198041
+--- /dev/null
++++ b/package/brltty/0003-Remove-MKOBJ-in-favour-of-MKMOD.patch
+@@ -0,0 +1,64 @@
++From b3b0e47015e9162f519730789976157c7cc38178 Mon Sep 17 00:00:00 2001
++From: Mario Lang <mlang@delysid.org>
++Date: Fri, 29 Dec 2017 14:52:37 +0100
++Subject: [PATCH] Remove MKOBJ in favour of MKMOD. (ml)
++
++Calling ld directly can lead to problems when cross-compiling.
++
++Upstream: https://github.com/brltty/brltty/commit/4c8aba42e246b96d10ffcbd57653682375499e46
++Signed-off-by: Mario Lang <mlang@blind.guru>
++---
++ Drivers/Braille/EuroBraille/Makefile.in |  2 +-
++ config.mk.in                            |  1 -
++ configure.ac                            | 10 ----------
++ 3 files changed, 1 insertion(+), 12 deletions(-)
++
++diff --git a/Drivers/Braille/EuroBraille/Makefile.in b/Drivers/Braille/EuroBraille/Makefile.in
++index 0500aa70e..ce8a3d1a4 100644
++--- a/Drivers/Braille/EuroBraille/Makefile.in
+++++ b/Drivers/Braille/EuroBraille/Makefile.in
++@@ -28,7 +28,7 @@ SRC_FILES = eu_braille.c eu_clio.c eu_esysiris.c
++ OBJ_FILES = $(SRC_FILES:.c=.$O)
++ 
++ braille.$O: $(OBJ_FILES)
++-	$(MKOBJ)  $@ $(OBJ_FILES)
+++	$(MKMOD)  $@ $(OBJ_FILES)
++ 
++ %.$O: $(SRC_DIR)/%.c
++ 	$(CC) $(BRL_CFLAGS) -o $@ -c $<
++diff --git a/config.mk.in b/config.mk.in
++index 686f547e6..8d1da79b4 100644
++--- a/config.mk.in
+++++ b/config.mk.in
++@@ -250,7 +250,6 @@ LD = @LD@
++ LDFLAGS = @LDFLAGS@
++ LDLIBS = $(ICU_LIBS) $(POLKIT_LIBS) $(SYSTEM_LIBS) @LIBS@
++ 
++-MKOBJ = @MKOBJ@
++ MKMOD = @MKMOD@
++ MKLIB = @MKLIB@
++ CONFLIBDIR = @CONFLIBDIR@
++diff --git a/configure.ac b/configure.ac
++index 07119dd9f..ad80b8d60 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -428,16 +428,6 @@ AC_SUBST([can_make_manual])
++ test "${DOXYGEN}" = "false" && can_make_BrlAPIref=no || can_make_BrlAPIref=yes
++ AC_SUBST([can_make_BrlAPIref])
++ 
++-AC_CACHE_CHECK([for make relocatable object command], [brltty_cv_prog_mkobj], [dnl
++-case "${host_os}"
++-in
++-   *)
++-      brltty_cv_prog_mkobj="\$(LD) -r -o"
++-      ;;
++-esac])
++-MKOBJ="${brltty_cv_prog_mkobj}"
++-AC_SUBST([MKOBJ])
++-
++ AC_CACHE_CHECK([for loadable module creation command], [brltty_cv_prog_mkmod], [dnl
++ case "${host_os}"
++ in
++-- 
++2.15.0
++
