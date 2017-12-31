@@ -1,26 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 31 Dec 2017 09:33:47 +0100
-Subject: [Buildroot] [PATCH 2/2] xfsprogs: update homepage link
-In-Reply-To: <4690efda9cfb4bd4017f3769eae250fbb65b281a.1513941327.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Fri, 22 Dec 2017 13:15:27 +0200")
-References: <2e7d914e7b12cdac37de9790884642d6547a3752.1513941327.git.baruch@tkos.co.il>
- <4690efda9cfb4bd4017f3769eae250fbb65b281a.1513941327.git.baruch@tkos.co.il>
-Message-ID: <87r2rbi9ec.fsf@dell.be.48ers.dk>
+Date: Sun, 31 Dec 2017 09:34:06 +0100
+Subject: [Buildroot] [PATCH] lldpd: remove check on CXX compiler
+In-Reply-To: <20171218211935.15149-1-damien.riegel@savoirfairelinux.com>
+ (Damien Riegel's message of "Mon, 18 Dec 2017 16:19:35 -0500")
+References: <20171218211935.15149-1-damien.riegel@savoirfairelinux.com>
+Message-ID: <87mv1zi9dt.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+>>>>> "Damien" == Damien Riegel <damien.riegel@savoirfairelinux.com> writes:
 
- > The old SGI site is not accessible anymore. Use the link from the README
- > file.
+ > lldpd currently depends on a C++ compiler to configure properly, but
+ > the package doesn't select that option, so builds fail if
+ > BR2_TOOLCHAIN_BUILDROOT_CXX is not selected with following errors:
 
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
- > ---
- > Actually, xfs.org is also down at the moment. But according to the
- > google cache it has been online a few days ago. We'll see.
+ >   checking how to run the C++ preprocessor... /lib/cpp
+ >   configure: error: in `/home/dkc/src/buildroot/build-zii/build/lldpd-0.9.4':
+ >   configure: error: C++ preprocessor "/lib/cpp" fails sanity check
+
+ > This package actually builds fine without C++, so drop this check in
+ > configure.ac. Attached patch has already been accepted upstream [1].
+
+ > [1] https://github.com/vincentbernat/lldpd/pull/261
+
+ > Signed-off-by: Damien Riegel <damien.riegel@savoirfairelinux.com>
 
 Committed to 2017.02.x, thanks.
 
