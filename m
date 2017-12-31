@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 31 Dec 2017 17:56:21 +0100
-Subject: [Buildroot] [PATCH 1/1] cjson: build shared and static library
-In-Reply-To: <20171231162933.19446-1-fontaine.fabrice@gmail.com>
-References: <20171231162933.19446-1-fontaine.fabrice@gmail.com>
-Message-ID: <20171231175621.44c67b85@windsurf>
+Date: Sun, 31 Dec 2017 17:57:34 +0100
+Subject: [Buildroot] [PATCH v2] nilfs-utils: add new package
+In-Reply-To: <1514490355-5272-1-git-send-email-dev.kurt@vandijck-laurijssen.be>
+References: <1514490355-5272-1-git-send-email-dev.kurt@vandijck-laurijssen.be>
+Message-ID: <20171231175734.3eb75ffd@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,32 +12,27 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 31 Dec 2017 17:29:33 +0100, Fabrice Fontaine wrote:
-> cjson 1.6.0 added the BUILD_SHARED_AND_STATIC_LIBS option which is OFF
-> by default so set it depending on BR2_SHARED_STATIC_LIBS value
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/cjson/cjson.mk | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/package/cjson/cjson.mk b/package/cjson/cjson.mk
-> index f3ef7fd2ac..aabf3677ea 100644
-> --- a/package/cjson/cjson.mk
-> +++ b/package/cjson/cjson.mk
-> @@ -15,4 +15,10 @@ CJSON_CONF_OPTS += \
->  	-DENABLE_CJSON_TEST=OFF \
->  	-DENABLE_CUSTOM_COMPILER_FLAGS=OFF
->  
-> +ifeq ($(BR2_SHARED_STATIC_LIBS),y)
-> +CJSON_CONF_OPTS += -DBUILD_SHARED_AND_STATIC_LIBS=ON
-> +else
-> +CJSON_CONF_OPTS += -DBUILD_SHARED_AND_STATIC_LIBS=OFF
-> +endif
-> +
->  $(eval $(cmake-package))
+On Thu, 28 Dec 2017 20:45:55 +0100, Kurt Van Dijck wrote:
 
-How is BR2_STATIC_LIBS=y handled ?
+> +NILFS_UTILS_VERSION = v2.2.7
+> +NILFS_UTILS_SITE = $(call github,nilfs-dev,nilfs-utils,$(NILFS_UTILS_VERSION))
+> +NILFS_UTILS_LICENSE = LGPL-2.1
+
+This license information was not quite correct. The top of the COPYING
+file says:
+
+This package, the NILFS2 filesystem utilities, are made available
+under the GNU Public License version 2, with the exception of the
+lib/nilfs libraries and their header files, which are made available
+under the GNU Lesser General Public License Version 2.1
+
+So I've changed to:
+
+NILFS_UTILS_LICENSE = GPL-2.0+ (programs), LGPL-2.1+ (libraries)
+
+And applied. Thanks!
+
+Best regards,
 
 Thomas
 -- 
