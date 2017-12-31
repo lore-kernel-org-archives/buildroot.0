@@ -1,32 +1,29 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 31 Dec 2017 09:34:06 +0100
-Subject: [Buildroot] [PATCH] lldpd: remove check on CXX compiler
-In-Reply-To: <20171218211935.15149-1-damien.riegel@savoirfairelinux.com>
- (Damien Riegel's message of "Mon, 18 Dec 2017 16:19:35 -0500")
-References: <20171218211935.15149-1-damien.riegel@savoirfairelinux.com>
-Message-ID: <87mv1zi9dt.fsf@dell.be.48ers.dk>
+Date: Sun, 31 Dec 2017 09:34:36 +0100
+Subject: [Buildroot] [PATCH] rsync: add upstream security fix for
+ CVE-2017-16548
+In-Reply-To: <20171219115628.16785-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Tue, 19 Dec 2017 12:56:28 +0100")
+References: <20171219115628.16785-1-peter@korsgaard.com>
+Message-ID: <87incni9cz.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Damien" == Damien Riegel <damien.riegel@savoirfairelinux.com> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > lldpd currently depends on a C++ compiler to configure properly, but
- > the package doesn't select that option, so builds fail if
- > BR2_TOOLCHAIN_BUILDROOT_CXX is not selected with following errors:
+ > The receive_xattr function in xattrs.c in rsync 3.1.2 and 3.1.3-development
+ > does not check for a trailing '\0' character in an xattr name, which allows
+ > remote attackers to cause a denial of service (heap-based buffer over-read
+ > and application crash) or possibly have unspecified other impact by sending
+ > crafted data to the daemon.
 
- >   checking how to run the C++ preprocessor... /lib/cpp
- >   configure: error: in `/home/dkc/src/buildroot/build-zii/build/lldpd-0.9.4':
- >   configure: error: C++ preprocessor "/lib/cpp" fails sanity check
+ > For more details, see:
+ > https://bugzilla.samba.org/show_bug.cgi?id=13112
 
- > This package actually builds fine without C++, so drop this check in
- > configure.ac. Attached patch has already been accepted upstream [1].
-
- > [1] https://github.com/vincentbernat/lldpd/pull/261
-
- > Signed-off-by: Damien Riegel <damien.riegel@savoirfairelinux.com>
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
 Committed to 2017.02.x, thanks.
 
