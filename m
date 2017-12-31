@@ -1,65 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 31 Dec 2017 10:35:38 +0100
-Subject: [Buildroot] Buildroot 2017.11.1 released
-Message-ID: <87zi5zgryt.fsf@dell.be.48ers.dk>
+Date: Sun, 31 Dec 2017 10:38:24 +0100
+Subject: [Buildroot] [git commit] Update for 2017.11.1
+Message-ID: <20171231094252.3C6F07FCD0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+commit: https://git.buildroot.net/buildroot/commit/?id=1fa8113a6d456665c5cba77aaad0ea4f746ed1ad
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Buildroot is a simple tool for creating complete embedded Linux systems
-(http://buildroot.org).
+[Peter: drop Makefile changes]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit b919080e2061598e1beac3fa04da8ce62ae1e5f5)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ CHANGES | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-Buildroot 2017.11.1 is released - Go download it at:
-
-http://buildroot.org/downloads/buildroot-2017.11.1.tar.gz
-
-or
-
-http://buildroot.org/downloads/buildroot-2017.11.1.tar.bz2
-
-Or get it from Git:
-
-git://git.buildroot.org/buildroot
-
-Buildroot 2017.11.1 is a bugfix release, fixing a number of important /
-security related issues discovered since the 2017.11 release.
-
-- Security fixes for dhcp, glibc, heimdal, libopenssl, mariadb, nodejs,
-  qemu, rsync, tor, vlc, webkitgtk, wireshark,
-
-- Fixes for download/compilation/runtime issues in asterisk,
-  checkpolicy, flann, gdb, kodi-pvr-stalker,
-  kodi-pvr-mediaportal-tvserver, libcue, libpqxx, libsoxr, linknx,
-  linux-tools, lldpd, ltp-testsuite, mfgtools, nut, pulseaudio,
-  python-cffi, uboot, uboot-tools, weston, wireguard, xenomai, xfsprogs
-
-Users of the affected packages are strongly encouraged to upgrade.
-
-Many thanks to all the people contributing to this release:
-
-git shortlog -sn 2017.11..
-
-    11  Bernd Kuhls
-     9  Baruch Siach
-     6  Fabio Estevam
-     5  Peter Korsgaard
-     4  Yann E. MORIN
-     3  Romain Naour
-     2  Adrian Perez de Castro
-     2  Angelo Compagnucci
-     2  Yegor Yefremov
-     1  Damien Riegel
-     1  Johan Oudinet
-     1  Julien BOIBESSOT
-     1  Martin Bark
-     1  Norbert Lange
-     1  Peter Seiderer
-     1  Petr Vorel
-     1  Ryan Coe
-
--- 
-Bye, Peter Korsgaard
+diff --git a/CHANGES b/CHANGES
+index bca075a..5de127d 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,15 @@
++2017.11.1, Released December 31th, 2017
++
++	Important / security related fixes.
++
++	Updated/fixed packages: asterisk, checkpolicy, dhcp, flann,
++	gdb, glibc, heimdal, kodi-pvr-mediaportal-tvserver,
++	kodi-pvr-stalker, libcue, libopenssl, libpqxx, libsoxr,
++	linknx, linux-tools, lldpd, ltp-testsuite, mariadb, mfgtools,
++	nodejs, nut, pulseaudio, python-cffi, qemu, rsync, tor, uboot,
++	uboot-tools, vlc, webkitgtk, weston, wireguard, wireshark,
++	xenomai, xfsprogs
++
+ 2017.11, Released November 30, 2017
+ 
+ 	Fixes all over the tree.
