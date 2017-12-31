@@ -1,50 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 31 Dec 2017 09:35:48 +0100
-Subject: [Buildroot] [PATCH v3] package/mfgtools: bump to 0.02
-In-Reply-To: <20171226131921.8312-1-romain.naour@gmail.com> (Romain Naour's
- message of "Tue, 26 Dec 2017 14:19:21 +0100")
-References: <20171226131921.8312-1-romain.naour@gmail.com>
-Message-ID: <87608ni9az.fsf@dell.be.48ers.dk>
+Date: Sun, 31 Dec 2017 09:16:23 +0100
+Subject: [Buildroot] [git commit branch/2017.02.x] linux-headers: bump 4.{4,
+ 9, 14}.x series
+Message-ID: <20171231083605.95884838FD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=0ac71f58f20396a61179c11662857f1cbd8effda
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
- > Bump mfgtools to include the fix [1] for the C++ build issue reported
- > by the autobuilders.
+[Peter: drop 4.14.x bump]
+Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 8447f04c1c2ea596d69c3a90d73e25f6d937e511)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/linux-headers/Config.in.host | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
- > This bump include only 4 small commit fixing memory leak and this
- > build issue.
-
- > Remove CPOL.htm (removed upstream) from MFGTOOLS_LICENSE_FILES but CPOL
- > license is still valid.
- > Add the README.txt file to MFGTOOLS_LICENSE_FILES since it contains
- > licensing informations:
-
- > Licenses:
- > - CPOL: MfgToolLib/XmlLite.CPP and XmlLite.h
- > - BSD: Others.
-
- > Add license file hash.
-
- > [1] https://github.com/codeauroraforum/mfgtools/commit/b370a43e548440025d274ff2abbb25342bbaa78c
-
- > Fixes:
- > http://autobuild.buildroot.net/results/7c2bbbe13ab315684f3502afd96958a76879b1d5
-
- > Signed-off-by: Romain Naour <romain.naour@gmail.com>
- > Cc: Gary Bisson <gary.bisson@boundarydevices.com>
- > ---
- > This patch should be backported to stable branches 2017.02 and 2017.08.
-
- > v3: update url in Config.in.host (Gary)
- > v2: update url (Baruch)
- >     add README.txt to MFGTOOLS_LICENSE_FILES (Baruch)
-
-Committed to 2017.02.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index b5bdc94..f50a996 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -222,7 +222,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
+ 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
+ 	default "4.1.47"	if BR2_KERNEL_HEADERS_4_1
+-	default "4.4.106"	if BR2_KERNEL_HEADERS_4_4
++	default "4.4.107"	if BR2_KERNEL_HEADERS_4_4
+ 	default "4.8.17"	if BR2_KERNEL_HEADERS_4_8
+-	default "4.9.70"	if BR2_KERNEL_HEADERS_4_9
++	default "4.9.71"	if BR2_KERNEL_HEADERS_4_9
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
