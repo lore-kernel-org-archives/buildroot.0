@@ -1,60 +1,70 @@
-From: Jan Heylen <heyleke@gmail.com>
-Date: Sun, 31 Dec 2017 18:57:22 +0100
-Subject: [Buildroot] [PATCH v2 1/2] Opentracing: add opentracing-cpp
- v1.2.0 package
-In-Reply-To: <20171231171046.1b6b5036@windsurf>
-References: <1513849309-550-2-git-send-email-heyleke@gmail.com>
- <1514014802-23736-1-git-send-email-heyleke@gmail.com>
- <1514014802-23736-2-git-send-email-heyleke@gmail.com>
- <20171230224628.746682f5@windsurf>
- <CAGszK3iD7PYCjtekPy2DxXnu3VpYto9bQsb_R20+GuVM9P4WtQ@mail.gmail.com>
- <CAGszK3jy2faOBddMzamf9-0H9MuDxBP847vS22u3n2dH8GCc0Q@mail.gmail.com>
- <CAGszK3jYUcxxKit8SjH3biCR66WgaQLm7X4dVBF0pe8KfCbapQ@mail.gmail.com>
- <CAGszK3g5-MyNQKQkOAb6F021iShcvF0Dgxhi8nJVE9ZUeN+AuA@mail.gmail.com>
- <20171231171046.1b6b5036@windsurf>
-Message-ID: <CAGszK3jGYW=pGNWzRN-U_tS=rHF11PpJjB3FF3Z7MXOc_9tGOg@mail.gmail.com>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Sun, 31 Dec 2017 16:04:00 -0500
+Subject: [Buildroot] [PATCHv2] package/meson: fix malformed
+ cross-compilation.conf.in
+In-Reply-To: <20171230095635.18123-1-yann.morin.1998@free.fr>
+References: <20171230095635.18123-1-yann.morin.1998@free.fr>
+Message-ID: <CAFSsvmr21N+7tTGDY-qXQ7zhD1C2-QKBOKxPWuZdB-6QPHSeZg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Will do, thanks!  I tested it already. Need to squash the commits and
-resubmit. But first some festivities to handle. So my best wishes and
-you'll see the patch in 2018 ;-)
+All;
 
-Also m68k coldfire doesn't seem to handle it correctly. So I'll depend on
-that one too.
-
-Br,
-
-Jan
-
-On 31 Dec 2017 5:10 pm, "Thomas Petazzoni" <
-thomas.petazzoni@free-electrons.com> wrote:
-
-Hello,
-
-On Sun, 31 Dec 2017 14:23:06 +0100, Jan Heylen wrote:
-> I found that this issue has actually a feature in buildroot:
+On Sat, Dec 30, 2017 at 4:56 AM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> Currently, meson will set the c_link_args and the cpp_link_args to the
+> value of TARGET_LDFLAGS, even when it's not defined.
 >
-> BR2_TOOLCHAIN_HAS_GCC_BUG_64735
+> This creates a malformed array ["",] which will break any package
+> building using meson/ninja.
 >
-> I'll dig some deeper into that and propose a new version of the patch.
-
-Indeed! I forgot about this one. So just make your package depends
-on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735.
-
-Could you resubmit, taking into account this issue, and the few other
-comments that I made ?
-
-Thanks a lot!
-
-Thomas
---
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20171231/ab830141/attachment.html>
+> We fix that by using an empty replacement when the corresponding values
+> are empty.
+>
+> Reported-by: Adam Duskett <Adamduskett@outlook.com>
+> Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
+> [yann.morin.1998 at free.fr: alternate implementation, suggested by Thomas]
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  package/meson/meson.mk | 10 +++++++---
+>  1 file changed, 7 insertions(+), 3 deletions(-)
+>
+> diff --git a/package/meson/meson.mk b/package/meson/meson.mk
+> index 55ce84da07..d55c3c7c00 100644
+> --- a/package/meson/meson.mk
+> +++ b/package/meson/meson.mk
+> @@ -16,15 +16,19 @@ HOST_MESON_NEEDS_HOST_PYTHON = python3
+>  HOST_MESON_TARGET_ENDIAN = $(call LOWERCASE,$(BR2_ENDIAN))
+>  HOST_MESON_TARGET_CPU = $(call qstrip,$(BR2_GCC_TARGET_CPU))
+>
+> +HOST_MESON_SED_CFLAGS = $(if $(TARGET_CFLAGS),`printf '"%s"$(comma) ' $(TARGET_CFLAGS)`)
+> +HOST_MESON_SED_LDFLAGS = $(if $(TARGET_LDFLAGS),`printf '"%s"$(comma) ' $(TARGET_LDFLAGS)`)
+> +HOST_MESON_SED_CXXFLAGS = $(if $(TARGET_CXXFLAGS),`printf '"%s"$(comma) ' $(TARGET_CXXFLAGS)`)
+> +
+>  define HOST_MESON_INSTALL_CROSS_CONF
+>         mkdir -p $(HOST_DIR)/etc/meson
+>         sed -e "s%@TARGET_CROSS@%$(TARGET_CROSS)%g" \
+>             -e "s%@TARGET_ARCH@%$(ARCH)%g" \
+>             -e "s%@TARGET_CPU@%$(HOST_MESON_TARGET_CPU)%g" \
+>             -e "s%@TARGET_ENDIAN@%$(HOST_MESON_TARGET_ENDIAN)%g" \
+> -           -e "s%@TARGET_CFLAGS@%`printf '"%s", ' $(TARGET_CFLAGS)`%g" \
+> -           -e "s%@TARGET_LDFLAGS@%`printf '"%s", ' $(TARGET_LDFLAGS)`%g" \
+> -           -e "s%@TARGET_CXXFLAGS@%`printf '"%s", ' $(TARGET_CXXFLAGS)`%g" \
+> +           -e "s%@TARGET_CFLAGS@%$(HOST_MESON_SED_CFLAGS)%g" \
+> +           -e "s%@TARGET_LDFLAGS@%$(HOST_MESON_SED_LDFLAGS)%g" \
+> +           -e "s%@TARGET_CXXFLAGS@%$(HOST_MESON_SED_CXXFLAGS)%g" \
+>             -e "s%@HOST_DIR@%$(HOST_DIR)%g" \
+>             $(HOST_MESON_PKGDIR)/cross-compilation.conf.in \
+>             > $(HOST_DIR)/etc/meson/cross-compilation.conf
+> --
+> 2.11.0
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+Tested and works well. This needs to be pushed before I can send a
+systemd patch.
