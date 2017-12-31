@@ -1,10 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 31 Dec 2017 09:32:22 +0100
-Subject: [Buildroot] [PATCH] libsoxr: remove unicode dash from help text
-In-Reply-To: <aba1f1782c8833a67af16f2325a5fccf6cc2e689.1513782978.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Wed, 20 Dec 2017 17:16:27 +0200")
-References: <aba1f1782c8833a67af16f2325a5fccf6cc2e689.1513782978.git.baruch@tkos.co.il>
-Message-ID: <87vagni9gp.fsf@dell.be.48ers.dk>
+Date: Sun, 31 Dec 2017 09:33:47 +0100
+Subject: [Buildroot] [PATCH 2/2] xfsprogs: update homepage link
+In-Reply-To: <4690efda9cfb4bd4017f3769eae250fbb65b281a.1513941327.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Fri, 22 Dec 2017 13:15:27 +0200")
+References: <2e7d914e7b12cdac37de9790884642d6547a3752.1513941327.git.baruch@tkos.co.il>
+ <4690efda9cfb4bd4017f3769eae250fbb65b281a.1513941327.git.baruch@tkos.co.il>
+Message-ID: <87r2rbi9ec.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,12 +14,13 @@ To: buildroot@busybox.net
 
 >>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > This would make the unicode challenged menuconfig show something
- > sensible.
-
- > Split the sentence for the text to make sense.
+ > The old SGI site is not accessible anymore. Use the link from the README
+ > file.
 
  > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+ > ---
+ > Actually, xfs.org is also down at the moment. But according to the
+ > google cache it has been online a few days ago. We'll see.
 
 Committed to 2017.02.x, thanks.
 
