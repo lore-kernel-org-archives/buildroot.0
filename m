@@ -1,93 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 31 Dec 2017 09:12:25 +0100
-Subject: [Buildroot] [git commit branch/2017.02.x] lldpd: remove check on
- CXX compiler
-Message-ID: <20171231083605.7D186838FE@busybox.osuosl.org>
+Date: Sun, 31 Dec 2017 09:23:54 +0100
+Subject: [Buildroot] [git commit branch/2017.02.x] package/libcue: is not
+ parallel-safe
+Message-ID: <20171231083605.CEA03838FC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b6d7c3c1c9532d1054aacbbf962f88997f66b83e
+commit: https://git.buildroot.net/buildroot/commit/?id=c3fb5bb317c84af097f031f08591f28710828923
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-lldpd currently depends on a C++ compiler to configure properly, but
-the package doesn't select that option, so builds fail if
-BR2_TOOLCHAIN_BUILDROOT_CXX is not selected with following errors:
+The last commit before the 1.4.0 release was to disable parallel build [1]
 
-  checking how to run the C++ preprocessor... /lib/cpp
-  configure: error: in `/home/dkc/src/buildroot/build-zii/build/lldpd-0.9.4':
-  configure: error: C++ preprocessor "/lib/cpp" fails sanity check
+[1] https://github.com/lipnitsk/libcue/commit/bebbc18a8c00a0b8c26bc6191af68c6a83629b40
 
-This package actually builds fine without C++, so drop this check in
-configure.ac. Attached patch has already been accepted upstream [1].
+Fixes:
+http://autobuild.buildroot.net/results/f25/f256037ca3d49f96add8ca2e2f9c980f5f9d764e
+http://autobuild.buildroot.net/results/d84/d84c7d0cb9cf5fa9996c42149eda5295700516f5
 
-[1] https://github.com/vincentbernat/lldpd/pull/261
-
-[Peter: adjust autoreconf comment]
-Signed-off-by: Damien Riegel <damien.riegel@savoirfairelinux.com>
-Reviewed-by: Julien Floret <julien.floret@6wind.com>
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-(cherry picked from commit 18c9cda6e4b94aa9426a1355d05b000f69453c6b)
+(cherry picked from commit 103d283c445ea518cd4529e91c957fc6d2ffdf96)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...03-configure-remove-check-on-CXX-compiler.patch | 35 ++++++++++++++++++++++
- package/lldpd/lldpd.mk                             |  2 +-
- 2 files changed, 36 insertions(+), 1 deletion(-)
+ package/libcue/libcue.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/lldpd/0003-configure-remove-check-on-CXX-compiler.patch b/package/lldpd/0003-configure-remove-check-on-CXX-compiler.patch
-new file mode 100644
-index 0000000..880f603
---- /dev/null
-+++ b/package/lldpd/0003-configure-remove-check-on-CXX-compiler.patch
-@@ -0,0 +1,35 @@
-+From d28b3bfa1b224f7770004dddf4dfaf10ad7ad6c9 Mon Sep 17 00:00:00 2001
-+From: Damien Riegel <damien.riegel@savoirfairelinux.com>
-+Date: Mon, 18 Dec 2017 14:37:08 -0500
-+Subject: [PATCH] configure: remove check on CXX compiler
-+
-+lldpd fails to build if the toolchain doesn't have a C++ compiler
-+because configure fails with the following error:
-+
-+  checking how to run the C++ preprocessor... /lib/cpp
-+  configure: error: in `/home/dkc/src/buildroot/build-zii/build/lldpd-0.9.4':
-+  configure: error: C++ preprocessor "/lib/cpp" fails sanity check
-+
-+Since "8d92800b: build: cleaner way to not alter CFLAGS/CPPFLAGS/LDFLAGS",
-+it seems that the dependency on C++ is not required anymore, so there
-+is no reason to keep this restriction. Dropping AC_PROG_CXX allows to
-+build with a toolchain that doesn't have C++ just fine.
-+---
-+ configure.ac | 1 -
-+ 1 file changed, 1 deletion(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 0edceb1..5afe8f2 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -48,7 +48,6 @@ AC_PROG_CC_C99
-+ if test x"$ac_cv_prog_cc_c99" = x"no"; then
-+   AC_MSG_FAILURE([*** C99 support is mandatory])
-+ fi
-+-AC_PROG_CXX
-+ AM_PROG_CC_C_O
-+ AC_PROG_LIBTOOL
-+ AC_PROG_LN_S
-+-- 
-+2.15.1
-+
-diff --git a/package/lldpd/lldpd.mk b/package/lldpd/lldpd.mk
-index 349c556..2bdda02 100644
---- a/package/lldpd/lldpd.mk
-+++ b/package/lldpd/lldpd.mk
-@@ -9,7 +9,7 @@ LLDPD_SITE = http://media.luffy.cx/files/lldpd
- LLDPD_DEPENDENCIES = host-pkgconf libevent
- LLDPD_LICENSE = ISC
- LLDPD_LICENSE_FILES = README.md
--# 0002-configure-do-not-check-for-libbsd.patch
-+# 0002-configure-do-not-check-for-libbsd.patch / 0003-configure-remove-check-on-CXX-compiler.patch
- LLDPD_AUTORECONF = YES
+diff --git a/package/libcue/libcue.mk b/package/libcue/libcue.mk
+index 7012453..ba559a7 100644
+--- a/package/libcue/libcue.mk
++++ b/package/libcue/libcue.mk
+@@ -12,6 +12,8 @@ LIBCUE_DEPENDENCIES = host-bison host-flex flex
+ LIBCUE_INSTALL_STAGING = YES
+ LIBCUE_AUTORECONF = YES
  
- ifeq ($(BR2_PACKAGE_CHECK),y)
++LIBCUE_MAKE = $(MAKE1)
++
+ # Needed for autoreconf
+ define LIBCUE_MAKE_CONFIG_DIR
+ 	mkdir $(@D)/config
