@@ -1,11 +1,14 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 31 Dec 2017 18:24:36 +0100
-Subject: [Buildroot] [RFCv3 02/15] toolchain: post-pone evaluation of
- TOOLCHAIN_EXTERNAL_BIN
-In-Reply-To: <20171201205352.24287-3-thomas.petazzoni@free-electrons.com>
-References: <20171201205352.24287-1-thomas.petazzoni@free-electrons.com>
- <20171201205352.24287-3-thomas.petazzoni@free-electrons.com>
-Message-ID: <20171231182436.5022f74b@windsurf>
+Date: Sun, 31 Dec 2017 18:35:18 +0100
+Subject: [Buildroot] [PATCH 1/2] android-tools: Enable build for ext4
+ fsutils
+In-Reply-To: <CAHjoi4ckaCH9VHUAh3vu26MXiVMBwjm0A40mcxTNnoOZfeDVXw@mail.gmail.com>
+References: <20171130205631.93251-1-ek9852@gmail.com>
+ <20171201124924.ajmy3ibrnlznfddb@t450s.lan>
+ <CAHjoi4fMAY3B7kOBfUQ1VNknR27ks-RU+nYGhy3+w609kA+s+w@mail.gmail.com>
+ <20171204112321.mte4qbqtgffu7sjf@t450s.lan>
+ <CAHjoi4ckaCH9VHUAh3vu26MXiVMBwjm0A40mcxTNnoOZfeDVXw@mail.gmail.com>
+Message-ID: <20171231183518.6c86a664@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,33 +17,19 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri,  1 Dec 2017 21:53:39 +0100, Thomas Petazzoni wrote:
-> The upcoming per-package SDK functionality is heavily based on the
-> fact that HOST_DIR, STAGING_DIR and TARGET_DIR are evaluated during
-> the configure/build/install steps of the packages. Therefore, any
-> evaluation-during-assignment using := is going to cause problems, and
-> need to be turned into evaluation-during-use using =.
-> 
-> This patch fix up one such instance in the external toolchain code.
-> 
-> This change is independent from the per-package SDK functionality, and
-> could be applied separately.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> ---
-> Changes since v2:
->  - None
-> Changes since v1:
->  - Added Arnout Reviewed-by.
-> ---
->  toolchain/toolchain-external/pkg-toolchain-external.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+On Tue, 5 Dec 2017 11:21:13 -0600, Keith Mok wrote:
 
-Applied to master, thanks.
+> Just sync with Google, that they are removed make_ext4fs in internal
+> branch. and merge Android specific things into e2fsprogs.
+> So we possibly no need this anymore.
+
+OK, so I've marked your patch as "Rejected" in our patch tracking
+system. If a patch is still needed, please resend a new version.
+
+Thanks!
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
