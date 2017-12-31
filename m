@@ -1,130 +1,55 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 31 Dec 2017 09:22:46 +0100
-Subject: [Buildroot] [git commit branch/2017.02.x] webkitgtk: security bump
- to version 2.18.4
-Message-ID: <20171231083605.C0034800A5@busybox.osuosl.org>
+Date: Sun, 31 Dec 2017 10:03:52 +0100
+Subject: [Buildroot] [git commit branch/2017.11.x] Update for 2017.11.1
+Message-ID: <20171231090454.E2CBB800D6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b62235b055b5cdbcbcda2e8fcf204002828ff1be
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=b919080e2061598e1beac3fa04da8ce62ae1e5f5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.11.x
 
-This is a maintenance release of the current stable WebKitGTK+ version,
-which contains fixes for CVE-2017-13866, CVE-2017-13870, CVE-2017-7156, and
-CVE-2017-13856.  Additionally, this release brings improvements in the
-WebDriver spec-compliance, plugs several memory leaks in its GStreamer based
-multimedia backend, and fixes a bug when handling cookie removal.
-
-Release notes can be found in the announcement:
-
-  https://webkitgtk.org/2017/12/19/webkitgtk2.18.4-released.html
-
-More details about the security fixes are provided in the following
-WebKitGTK+ Security Advisory report:
-
-  https://webkitgtk.org/security/WSA-2017-0010.html
-
-Last but not least, this new release includes the fix for honoring the
-CMAKE_BUILD_TYPE value from CMake toolchain files and the corresponding
-patch is removed.
-
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit fbf6a483e00a87fb561fa5fe9a423c4a14867f50)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...s-of-CMAKE_BUILD_TYPE-from-toolchain-file.patch | 52 ----------------------
- package/webkitgtk/webkitgtk.hash                   |  8 ++--
- package/webkitgtk/webkitgtk.mk                     |  2 +-
- 3 files changed, 5 insertions(+), 57 deletions(-)
+ CHANGES  | 12 ++++++++++++
+ Makefile |  4 ++--
+ 2 files changed, 14 insertions(+), 2 deletions(-)
 
-diff --git a/package/webkitgtk/0001-CMake-Values-of-CMAKE_BUILD_TYPE-from-toolchain-file.patch b/package/webkitgtk/0001-CMake-Values-of-CMAKE_BUILD_TYPE-from-toolchain-file.patch
-deleted file mode 100644
-index 6ac1258..0000000
---- a/package/webkitgtk/0001-CMake-Values-of-CMAKE_BUILD_TYPE-from-toolchain-file.patch
-+++ /dev/null
-@@ -1,52 +0,0 @@
--From 3b13b1ec9985e72132ec6a3ba13cf60b34848817 Mon Sep 17 00:00:00 2001
--From: "aperez at igalia.com"
-- <aperez@igalia.com@268f45cc-cd09-0410-ab3c-d52691b4dbfc>
--Date: Mon, 27 Nov 2017 15:34:49 +0000
--Subject: [PATCH] [CMake] Values of CMAKE_BUILD_TYPE from toolchain file are
-- ignored https://bugs.webkit.org/show_bug.cgi?id=179971
--
--Reviewed by Carlos Alberto Lopez Perez.
--
--* CMakeLists.txt: Call project() first, as it loads the toolchain
--file, so that's done before checking CMAKE_BUILD_TYPE.
--
--
--git-svn-id: http://svn.webkit.org/repository/webkit/trunk at 225168 268f45cc-cd09-0410-ab3c-d52691b4dbfc
--
--Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
--Backported from: 75986e1807b
--
--diff --git a/CMakeLists.txt b/CMakeLists.txt
--index d80c37b950a..0a9bd17b981 100644
----- a/CMakeLists.txt
--+++ b/CMakeLists.txt
--@@ -1,8 +1,17 @@
-- # -----------------------------------------------------------------------------
-- # Determine CMake version and build type.
-- # -----------------------------------------------------------------------------
--+#
--+# NOTE: cmake_minimum_required() and project() *MUST* be the two fist commands
--+# used, see https://cmake.org/cmake/help/v3.3/command/project.html -- the
--+# latter in particular handles loading a bunch of shared CMake definitions
--+# and loading the cross-compilation settings from CMAKE_TOOLCHAIN_FILE.
--+#
--+
-- cmake_minimum_required(VERSION 3.3)
-- 
--+project(WebKit)
--+
-- if (NOT CMAKE_BUILD_TYPE)
--     message(WARNING "No CMAKE_BUILD_TYPE value specified, defaulting to RelWithDebInfo.")
--     set(CMAKE_BUILD_TYPE "RelWithDebInfo" CACHE STRING "Choose the type of build." FORCE)
--@@ -10,8 +19,6 @@ else ()
--     message(STATUS "The CMake build type is: ${CMAKE_BUILD_TYPE}")
-- endif ()
-- 
---project(WebKit)
---
-- set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/Source/cmake")
-- 
-- set(ENABLE_WEBCORE ON)
---- 
--2.15.1
--
-diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
-index 9e207c5..3d64b6f5 100644
---- a/package/webkitgtk/webkitgtk.hash
-+++ b/package/webkitgtk/webkitgtk.hash
-@@ -1,7 +1,7 @@
--# From https://webkitgtk.org/releases/webkitgtk-2.18.3.tar.xz.sums
--md5 264a22d7467deae606e42b6eb5dd65af webkitgtk-2.18.3.tar.xz
--sha1 164cad34281ef597a3d4ad214e8037c3ddef4d17 webkitgtk-2.18.3.tar.xz
--sha256 e15420e1616a6f70f321541d467af5ca285bff66b1e0fa68a01df3ccf1b18f9e webkitgtk-2.18.3.tar.xz
-+# From https://webkitgtk.org/releases/webkitgtk-2.18.4.tar.xz.sums
-+md5 c4686971eac2760bab685e21ac8849be webkitgtk-2.18.4.tar.xz
-+sha1 709616b445158dc3163a64bb59e95aadbe58949c webkitgtk-2.18.4.tar.xz
-+sha256 87b6bb9a6065b949ecbe6191313c43e57ad28efdf1f2b5e763405093520632b8 webkitgtk-2.18.4.tar.xz
+diff --git a/CHANGES b/CHANGES
+index bca075a..5de127d 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,15 @@
++2017.11.1, Released December 31th, 2017
++
++	Important / security related fixes.
++
++	Updated/fixed packages: asterisk, checkpolicy, dhcp, flann,
++	gdb, glibc, heimdal, kodi-pvr-mediaportal-tvserver,
++	kodi-pvr-stalker, libcue, libopenssl, libpqxx, libsoxr,
++	linknx, linux-tools, lldpd, ltp-testsuite, mariadb, mfgtools,
++	nodejs, nut, pulseaudio, python-cffi, qemu, rsync, tor, uboot,
++	uboot-tools, vlc, webkitgtk, weston, wireguard, wireshark,
++	xenomai, xfsprogs
++
+ 2017.11, Released November 30, 2017
  
- # Hashes for license files:
- sha256 0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4 Source/WebCore/LICENSE-APPLE
-diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-index 43e9aa0..00f7920 100644
---- a/package/webkitgtk/webkitgtk.mk
-+++ b/package/webkitgtk/webkitgtk.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ 	Fixes all over the tree.
+diff --git a/Makefile b/Makefile
+index a86d764..e4fb90a 100644
+--- a/Makefile
++++ b/Makefile
+@@ -87,9 +87,9 @@ all:
+ .PHONY: all
  
--WEBKITGTK_VERSION = 2.18.3
-+WEBKITGTK_VERSION = 2.18.4
- WEBKITGTK_SITE = http://www.webkitgtk.org/releases
- WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
- WEBKITGTK_INSTALL_STAGING = YES
+ # Set and export the version string
+-export BR2_VERSION := 2017.11
++export BR2_VERSION := 2017.11.1
+ # Actual time the release is cut (for reproducible builds)
+-BR2_VERSION_EPOCH = 1512070000
++BR2_VERSION_EPOCH = 1514710000
+ 
+ # Save running make version since it's clobbered by the make package
+ RUNNING_MAKE_VERSION := $(MAKE_VERSION)
