@@ -1,37 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 31 Dec 2017 09:16:23 +0100
-Subject: [Buildroot] [git commit branch/2017.02.x] linux-headers: bump 4.{4,
- 9, 14}.x series
-Message-ID: <20171231083605.95884838FD@busybox.osuosl.org>
+Date: Sun, 31 Dec 2017 09:22:09 +0100
+Subject: [Buildroot] [git commit branch/2017.02.x] webkitgtk: Add license
+ hashes
+Message-ID: <20171231083605.B0F13800A5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0ac71f58f20396a61179c11662857f1cbd8effda
+commit: https://git.buildroot.net/buildroot/commit/?id=329eca530bf5b67b6c58a615d91d99268bdcd773
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-[Peter: drop 4.14.x bump]
-Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 8447f04c1c2ea596d69c3a90d73e25f6d937e511)
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+(cherry picked from commit e7f82694cfe98f659ff08b5834e32f8996ca55c5)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-headers/Config.in.host | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/webkitgtk/webkitgtk.hash | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index b5bdc94..f50a996 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -222,7 +222,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
- 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
- 	default "4.1.47"	if BR2_KERNEL_HEADERS_4_1
--	default "4.4.106"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.4.107"	if BR2_KERNEL_HEADERS_4_4
- 	default "4.8.17"	if BR2_KERNEL_HEADERS_4_8
--	default "4.9.70"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.9.71"	if BR2_KERNEL_HEADERS_4_9
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
+index 669bb1c..9e207c5 100644
+--- a/package/webkitgtk/webkitgtk.hash
++++ b/package/webkitgtk/webkitgtk.hash
+@@ -2,3 +2,7 @@
+ md5 264a22d7467deae606e42b6eb5dd65af webkitgtk-2.18.3.tar.xz
+ sha1 164cad34281ef597a3d4ad214e8037c3ddef4d17 webkitgtk-2.18.3.tar.xz
+ sha256 e15420e1616a6f70f321541d467af5ca285bff66b1e0fa68a01df3ccf1b18f9e webkitgtk-2.18.3.tar.xz
++
++# Hashes for license files:
++sha256 0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4 Source/WebCore/LICENSE-APPLE
++sha256 f2b3bd09663381deb99721109d22b47af1213bb43007a8b56a06c6375c8050ce Source/WebCore/LICENSE-LGPL-2.1
