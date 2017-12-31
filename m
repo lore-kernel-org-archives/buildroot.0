@@ -1,42 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 31 Dec 2017 17:10:46 +0100
-Subject: [Buildroot] [PATCH v2 1/2] Opentracing: add opentracing-cpp
- v1.2.0 package
-In-Reply-To: <CAGszK3g5-MyNQKQkOAb6F021iShcvF0Dgxhi8nJVE9ZUeN+AuA@mail.gmail.com>
-References: <1513849309-550-2-git-send-email-heyleke@gmail.com>
- <1514014802-23736-1-git-send-email-heyleke@gmail.com>
- <1514014802-23736-2-git-send-email-heyleke@gmail.com>
- <20171230224628.746682f5@windsurf>
- <CAGszK3iD7PYCjtekPy2DxXnu3VpYto9bQsb_R20+GuVM9P4WtQ@mail.gmail.com>
- <CAGszK3jy2faOBddMzamf9-0H9MuDxBP847vS22u3n2dH8GCc0Q@mail.gmail.com>
- <CAGszK3jYUcxxKit8SjH3biCR66WgaQLm7X4dVBF0pe8KfCbapQ@mail.gmail.com>
- <CAGszK3g5-MyNQKQkOAb6F021iShcvF0Dgxhi8nJVE9ZUeN+AuA@mail.gmail.com>
-Message-ID: <20171231171046.1b6b5036@windsurf>
+Date: Sun, 31 Dec 2017 17:13:30 +0100
+Subject: [Buildroot] [git commit] i2c-tools: fix missing runtime library
+Message-ID: <20171231161440.925A68393A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=f7bf37b65245059232a3e6c6c2ad37aab9c6962d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 31 Dec 2017 14:23:06 +0100, Jan Heylen wrote:
-> I found that this issue has actually a feature in buildroot:
-> 
-> BR2_TOOLCHAIN_HAS_GCC_BUG_64735
-> 
-> I'll dig some deeper into that and propose a new version of the patch.
+When building with dynamic library support, i2c-tools utilities are
+linked against the libi2c.so library. Current i2c-tools install commands
+don't take this into account, which leads to the following run-time
+error:
 
-Indeed! I forgot about this one. So just make your package depends
-on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735.
+eeprog: error while loading shared libraries: libi2c.so.0: cannot open shared object file: No such file or directory
 
-Could you resubmit, taking into account this issue, and the few other
-comments that I made ?
+Use the native install target to fix that.
 
-Thanks a lot!
+Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Cc: Matt Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/i2c-tools/i2c-tools.mk | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/i2c-tools/i2c-tools.mk b/package/i2c-tools/i2c-tools.mk
+index 0f71fd4..9ddaa72 100644
+--- a/package/i2c-tools/i2c-tools.mk
++++ b/package/i2c-tools/i2c-tools.mk
+@@ -61,11 +61,8 @@ define I2C_TOOLS_BUILD_CMDS
+ endef
+ 
+ define I2C_TOOLS_INSTALL_TARGET_CMDS
+-	for i in i2cdump i2cget i2cset i2cdetect i2ctransfer; \
+-	do \
+-		$(INSTALL) -m 755 -D $(@D)/tools/$$i $(TARGET_DIR)/usr/sbin/$$i; \
+-	done
+-	$(INSTALL) -m 755 -D $(@D)/eeprog/eeprog $(TARGET_DIR)/usr/bin/eeprog;
++	$(MAKE) $(TARGET_CONFIGURE_OPTS) $(I2C_TOOLS_MAKE_OPTS) \
++		DESTDIR="$(TARGET_DIR)" prefix=/usr -C $(@D) install
+ 	$(I2C_TOOLS_INSTALL_PYSMBUS)
+ endef
+ 
