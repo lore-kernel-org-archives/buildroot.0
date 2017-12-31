@@ -1,36 +1,63 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 31 Dec 2017 18:05:02 +0100
-Subject: [Buildroot] [PATCH] package/libgta: new package
-In-Reply-To: <20171226211006.9660-1-romain.naour@gmail.com>
-References: <20171226211006.9660-1-romain.naour@gmail.com>
-Message-ID: <20171231180502.054d257c@windsurf>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 31 Dec 2017 18:19:34 +0100
+Subject: [Buildroot] [PATCH 1/1] cjson: build shared and static library
+In-Reply-To: <20171231175621.44c67b85@windsurf>
+References: <20171231162933.19446-1-fontaine.fabrice@gmail.com>
+ <20171231175621.44c67b85@windsurf>
+Message-ID: <CAPi7W83cQCMig324jhj8uyM5a=3Reh11BbbQ25KjhwDEhvqcyQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Dear Thomas,
 
-On Tue, 26 Dec 2017 22:10:06 +0100, Romain Naour wrote:
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> ---
-> Package tested with test-pkg and checked with check-package.
-> ---
->  DEVELOPERS                 |  1 +
->  package/Config.in          |  1 +
->  package/libgta/Config.in   | 10 ++++++++++
->  package/libgta/libgta.hash |  3 +++
->  package/libgta/libgta.mk   | 29 +++++++++++++++++++++++++++++
->  5 files changed, 44 insertions(+)
->  create mode 100644 package/libgta/Config.in
->  create mode 100644 package/libgta/libgta.hash
->  create mode 100644 package/libgta/libgta.mk
+2017-12-31 17:56 GMT+01:00 Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com>:
 
-Applied to master, thanks.
+> Hello,
+>
+> On Sun, 31 Dec 2017 17:29:33 +0100, Fabrice Fontaine wrote:
+> > cjson 1.6.0 added the BUILD_SHARED_AND_STATIC_LIBS option which is OFF
+> > by default so set it depending on BR2_SHARED_STATIC_LIBS value
+> >
+> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> > ---
+> >  package/cjson/cjson.mk | 6 ++++++
+> >  1 file changed, 6 insertions(+)
+> >
+> > diff --git a/package/cjson/cjson.mk b/package/cjson/cjson.mk
+> > index f3ef7fd2ac..aabf3677ea 100644
+> > --- a/package/cjson/cjson.mk
+> > +++ b/package/cjson/cjson.mk
+> > @@ -15,4 +15,10 @@ CJSON_CONF_OPTS += \
+> >       -DENABLE_CJSON_TEST=OFF \
+> >       -DENABLE_CUSTOM_COMPILER_FLAGS=OFF
+> >
+> > +ifeq ($(BR2_SHARED_STATIC_LIBS),y)
+> > +CJSON_CONF_OPTS += -DBUILD_SHARED_AND_STATIC_LIBS=ON
+> > +else
+> > +CJSON_CONF_OPTS += -DBUILD_SHARED_AND_STATIC_LIBS=OFF
+> > +endif
+> > +
+> >  $(eval $(cmake-package))
+>
+> How is BR2_STATIC_LIBS=y handled ?
+>
+> If BUILD_SHARED_AND_STATIC_LIBS is not set, cjson uses the standard
+BUILD_SHARED_LIBS option which is passed to OFF by buildroot if
+BR2_STATIC_LIBS is set.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux and Kernel engineering
+> http://free-electrons.com
+>
+Best Regards,
+
+Fabrice
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20171231/5737d17e/attachment.html>
