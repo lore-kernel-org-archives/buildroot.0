@@ -1,35 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 31 Dec 2017 17:29:58 +0100
-Subject: [Buildroot] [PATCH] curlpp: new package
-In-Reply-To: <1514721304-12634-1-git-send-email-sergio.prado@e-labworks.com>
-References: <1514721304-12634-1-git-send-email-sergio.prado@e-labworks.com>
-Message-ID: <20171231172958.527ddbe1@windsurf>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 31 Dec 2017 17:29:33 +0100
+Subject: [Buildroot] [PATCH 1/1] cjson: build shared and static library
+Message-ID: <20171231162933.19446-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+cjson 1.6.0 added the BUILD_SHARED_AND_STATIC_LIBS option which is OFF
+by default so set it depending on BR2_SHARED_STATIC_LIBS value
 
-On Sun, 31 Dec 2017 09:55:04 -0200, Sergio Prado wrote:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/cjson/cjson.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-> +# Locally computed:
-> +sha256 97e3819bdcffc3e4047b6ac57ca14e04af85380bd93afe314bee9dd5c7f46a0a  v0.8.1.tar.gz
-
-What an annoying tarball name :-/ It's going to conflict with any other
-package using the same name.
-
-But well, we don't have a good solution to work-around this at the
-moment. The mid-term solution is to move to one sub-folder per-package
-in DL_DIR.
-
-Anyway, I've applied your patch. Thanks!
-
-Best regards,
-
-Thomas
+diff --git a/package/cjson/cjson.mk b/package/cjson/cjson.mk
+index f3ef7fd2ac..aabf3677ea 100644
+--- a/package/cjson/cjson.mk
++++ b/package/cjson/cjson.mk
+@@ -15,4 +15,10 @@ CJSON_CONF_OPTS += \
+ 	-DENABLE_CJSON_TEST=OFF \
+ 	-DENABLE_CUSTOM_COMPILER_FLAGS=OFF
+ 
++ifeq ($(BR2_SHARED_STATIC_LIBS),y)
++CJSON_CONF_OPTS += -DBUILD_SHARED_AND_STATIC_LIBS=ON
++else
++CJSON_CONF_OPTS += -DBUILD_SHARED_AND_STATIC_LIBS=OFF
++endif
++
+ $(eval $(cmake-package))
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.14.1
