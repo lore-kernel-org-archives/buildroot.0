@@ -1,103 +1,101 @@
-From: Carlos Santos <casantos@datacom.ind.br>
-Date: Sun, 31 Dec 2017 09:51:45 -0200
-Subject: [Buildroot] [PATCH] util-linux: bump to version 2.31.1
-Message-ID: <20171231115145.2625-1-casantos@datacom.ind.br>
+From: Sergio Prado <sergio.prado@e-labworks.com>
+Date: Sun, 31 Dec 2017 09:55:04 -0200
+Subject: [Buildroot] [PATCH] curlpp: new package
+Message-ID: <1514721304-12634-1-git-send-email-sergio.prado@e-labworks.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Changes in this version:
-
-- Small improvement and bug fixes.
-- Install rfkill at /usr/sbin (thus overriding the one eventually
-  installed by BusyBox).
-
-Drop the md5 patch, already applyed upstream.
-
-Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
 ---
- .../0001-md5-declare-byteReverse-as-static.patch   | 44 ----------------------
- package/util-linux/util-linux.hash                 |  2 +-
- package/util-linux/util-linux.mk                   |  3 +-
- 3 files changed, 3 insertions(+), 46 deletions(-)
- delete mode 100644 package/util-linux/0001-md5-declare-byteReverse-as-static.patch
+ DEVELOPERS                 |  1 +
+ package/Config.in          |  1 +
+ package/curlpp/Config.in   | 12 ++++++++++++
+ package/curlpp/curlpp.hash |  5 +++++
+ package/curlpp/curlpp.mk   | 18 ++++++++++++++++++
+ 5 files changed, 37 insertions(+)
+ create mode 100644 package/curlpp/Config.in
+ create mode 100644 package/curlpp/curlpp.hash
+ create mode 100644 package/curlpp/curlpp.mk
 
-diff --git a/package/util-linux/0001-md5-declare-byteReverse-as-static.patch b/package/util-linux/0001-md5-declare-byteReverse-as-static.patch
-deleted file mode 100644
-index a5b290c4db..0000000000
---- a/package/util-linux/0001-md5-declare-byteReverse-as-static.patch
-+++ /dev/null
-@@ -1,44 +0,0 @@
--From 424cee0f06ece9473786c189ab4741e1dea7061d Mon Sep 17 00:00:00 2001
--From: Luca Ceresoli <luca@lucaceresoli.net>
--Date: Tue, 7 Nov 2017 14:39:09 +0100
--Subject: [PATCH] md5: declare byteReverse as static
--
--byteReverse() is an internal function in md5.c, and is not exposed via
--any header file, but it is not declared as static. This is a problem
--with the md5.c file since it is copied more or less verbatim in other
--programs (fontconfig and pjsip among others), causing a link error
--when linking two of them together.
--
--Fixes link failures such as:
--  http://autobuild.buildroot.net/results/419ab2c0e034cc68991281c51caa8271b0fadbab/build-end.log
--
--[Upstream patch: https://git.kernel.org/pub/scm/utils/util-linux/util-linux.git/commit/?id=424cee0f06ece9473786c189ab4741e1dea7061d]
--
--Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-----
-- lib/md5.c | 4 ++--
-- 1 file changed, 2 insertions(+), 2 deletions(-)
--
--diff --git a/lib/md5.c b/lib/md5.c
--index 488d16ef69b4..282e2d22af25 100644
----- a/lib/md5.c
--+++ b/lib/md5.c
--@@ -21,13 +21,13 @@
-- #if !defined(WORDS_BIGENDIAN)
-- #define byteReverse(buf, len)	/* Nothing */
-- #else
---void byteReverse(unsigned char *buf, unsigned longs);
--+static void byteReverse(unsigned char *buf, unsigned longs);
-- 
-- #ifndef ASM_MD5
-- /*
--  * Note: this code is harmless on little-endian machines.
--  */
---void byteReverse(unsigned char *buf, unsigned longs)
--+static void byteReverse(unsigned char *buf, unsigned longs)
-- {
--     uint32_t t;
--     do {
---- 
--2.7.4
--
-diff --git a/package/util-linux/util-linux.hash b/package/util-linux/util-linux.hash
-index 8142505f8d..838d2dcb53 100644
---- a/package/util-linux/util-linux.hash
-+++ b/package/util-linux/util-linux.hash
-@@ -1,5 +1,5 @@
- # From https://www.kernel.org/pub/linux/utils/util-linux/v2.31/sha256sums.asc
--sha256 f9be7cdcf4fc5c5064a226599acdda6bdf3d86c640152ba01ea642d91108dc8a  util-linux-2.31.tar.xz
-+sha256 1a51b16fa9cd51d26ef9ab52d2f1de12403b810fc8252bf7d478df91b3cddf11  util-linux-2.31.1.tar.xz
- # License files, locally calculated
- sha256 1e4b65802b0df8115395c697029d03339f983d451a473a08643309c684410d9a  README.licensing
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  Documentation/licenses/COPYING.GPLv2
-diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
-index 31a3fe47ab..5858887b04 100644
---- a/package/util-linux/util-linux.mk
-+++ b/package/util-linux/util-linux.mk
-@@ -5,7 +5,8 @@
- ################################################################################
+diff --git a/DEVELOPERS b/DEVELOPERS
+index b6cc7a095002..32194307c925 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1566,6 +1566,7 @@ F:	package/rtl8189fs/
+ F:	package/xr819-xradio/
  
- UTIL_LINUX_VERSION_MAJOR = 2.31
--UTIL_LINUX_VERSION = $(UTIL_LINUX_VERSION_MAJOR)
-+UTIL_LINUX_VERSION_MINOR = 1
-+UTIL_LINUX_VERSION = $(UTIL_LINUX_VERSION_MAJOR).$(UTIL_LINUX_VERSION_MINOR)
- UTIL_LINUX_SOURCE = util-linux-$(UTIL_LINUX_VERSION).tar.xz
- UTIL_LINUX_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/util-linux/v$(UTIL_LINUX_VERSION_MAJOR)
- 
+ N:	Sergio Prado <sergio.prado@e-labworks.com>
++F:	package/curlpp/
+ F:	package/libgdiplus/
+ F:	package/mongodb/
+ F:	package/pimd/
+diff --git a/package/Config.in b/package/Config.in
+index bd39a374f06f..62242b2ee8ad 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1337,6 +1337,7 @@ menu "Networking"
+ 	source "package/canfestival/Config.in"
+ 	source "package/cgic/Config.in"
+ 	source "package/cppzmq/Config.in"
++	source "package/curlpp/Config.in"
+ 	source "package/czmq/Config.in"
+ 	source "package/filemq/Config.in"
+ 	source "package/flickcurl/Config.in"
+diff --git a/package/curlpp/Config.in b/package/curlpp/Config.in
+new file mode 100644
+index 000000000000..a23e5d939bd6
+--- /dev/null
++++ b/package/curlpp/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_CURLPP
++	bool "curlpp"
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on !BR2_STATIC_LIBS
++	select BR2_PACKAGE_LIBCURL
++	help
++	  cURLpp is a C++ wrapper for libcURL.
++
++	  http://www.curlpp.org/
++
++comment "curlpp needs a toolchain w/ C++, dynamic library"
++	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS
+diff --git a/package/curlpp/curlpp.hash b/package/curlpp/curlpp.hash
+new file mode 100644
+index 000000000000..2b14a235ee77
+--- /dev/null
++++ b/package/curlpp/curlpp.hash
+@@ -0,0 +1,5 @@
++# Locally computed:
++sha256 97e3819bdcffc3e4047b6ac57ca14e04af85380bd93afe314bee9dd5c7f46a0a  v0.8.1.tar.gz
++
++# Hash for license files:
++sha256 8b9e3afd4d06ad3c169e788e5187a3e9f4f35671e9a7322f7e74bea9643b5b5a  doc/LICENSE
+diff --git a/package/curlpp/curlpp.mk b/package/curlpp/curlpp.mk
+new file mode 100644
+index 000000000000..97717100c446
+--- /dev/null
++++ b/package/curlpp/curlpp.mk
+@@ -0,0 +1,18 @@
++################################################################################
++#
++# curlpp
++#
++################################################################################
++
++CURLPP_VERSION = 0.8.1
++CURLPP_SITE = https://github.com/jpbarrette/curlpp/archive
++CURLPP_SOURCE = v$(CURLPP_VERSION).tar.gz
++
++CURLPP_LICENSE = MIT
++CURLPP_LICENSE_FILES = doc/LICENSE
++
++CURLPP_INSTALL_STAGING = YES
++
++CURLPP_DEPENDENCIES = libcurl
++
++$(eval $(cmake-package))
 -- 
-2.14.3
+1.9.1
