@@ -1,39 +1,24 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 31 Dec 2017 09:32:03 +0100
-Subject: [Buildroot] [PATCH 1/1] webkitgtk: security bimp to version
- 2.18.4
-In-Reply-To: <20171221133630.29763-1-aperez@igalia.com> (Adrian Perez de
- Castro's message of "Thu, 21 Dec 2017 15:36:30 +0200")
-References: <20171221133630.29763-1-aperez@igalia.com>
-Message-ID: <87zi5zi9h8.fsf@dell.be.48ers.dk>
+Date: Sun, 31 Dec 2017 09:32:22 +0100
+Subject: [Buildroot] [PATCH] libsoxr: remove unicode dash from help text
+In-Reply-To: <aba1f1782c8833a67af16f2325a5fccf6cc2e689.1513782978.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Wed, 20 Dec 2017 17:16:27 +0200")
+References: <aba1f1782c8833a67af16f2325a5fccf6cc2e689.1513782978.git.baruch@tkos.co.il>
+Message-ID: <87vagni9gp.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Adrian" == Adrian Perez de Castro <aperez@igalia.com> writes:
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > This is a maintenance release of the current stable WebKitGTK+ version,
- > which contains for CVE-2017-13866, CVE-2017-13870, CVE-2017-7156, and
- > CVE-2017-13856. Additionally, this release brings improvements in the
- > WebDriver spec-compliance, plugs several memory leaks in its GStreamer
- > based multimedia backend, and fixes a bug when handling cookie removal.
+ > This would make the unicode challenged menuconfig show something
+ > sensible.
 
- > Release notes can be found in the announcement:
+ > Split the sentence for the text to make sense.
 
- >   https://webkitgtk.org/2017/12/19/webkitgtk2.18.4-released.html
-
- > More details about the security fixes are provided in the following
- > WebKitGTK+ Security Advisory report:
-
- >   https://webkitgtk.org/security/WSA-2017-0010.html
-
- > Last but not least, this new release includes the fix for honoring the
- > CMAKE_BUILD_TYPE value from CMake toolchain files and the corresponding
- > patch is removed.
-
- > Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
 Committed to 2017.02.x, thanks.
 
