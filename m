@@ -1,79 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 31 Dec 2017 09:27:37 +0100
-Subject: [Buildroot] [git commit branch/2017.02.x] package/libpqxx: fix
- broken sed call
-Message-ID: <20171231083606.0873E838FC@busybox.osuosl.org>
+Date: Sun, 31 Dec 2017 09:29:24 +0100
+Subject: [Buildroot] [git commit branch/2017.02.x] linux-headers: bump 4.{1,
+ 4, 9, 14}.x series
+Message-ID: <20171231083606.17906838FC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e4901804642a4a2fccb5e6de6f9197def2250019
+commit: https://git.buildroot.net/buildroot/commit/?id=a95aa0ee5ed27fab3dbb2d87f8d1256d3e6c7b96
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Backport 2 upstream fix.
-
-Fixes:
-http://autobuild.buildroot.net/results/0d1/0d131f9fa5cce259d999f7d57f9092675bfc24c7
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+[Peter: drop 4.14.x bump]
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit de035220aa17cfa223a2de8d5d1233d95d6dd0e7)
+(cherry picked from commit 634bdbd52e7451b615b8972f0d3973e5b76ef987)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...01-Fix-broken-sed-call-in-configure.ac.in.patch | 31 ++++++++++++++++++++++
- package/libpqxx/libpqxx.mk                         |  3 +++
- 2 files changed, 34 insertions(+)
+ package/linux-headers/Config.in.host | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libpqxx/0001-Fix-broken-sed-call-in-configure.ac.in.patch b/package/libpqxx/0001-Fix-broken-sed-call-in-configure.ac.in.patch
-new file mode 100644
-index 0000000..672133a
---- /dev/null
-+++ b/package/libpqxx/0001-Fix-broken-sed-call-in-configure.ac.in.patch
-@@ -0,0 +1,31 @@
-+From d5120738a9b6b90d19e742f3c591727d16d76c9c Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@gmail.com>
-+Date: Tue, 26 Dec 2017 14:09:46 +0100
-+Subject: [PATCH] Fix broken sed call in configure.ac.in
-+
-+Upstream fix from commit [1][2]
-+
-+[1] 80a9d5386641ac67d4ea1b602c786b45b40b252f
-+[2] 85e9336740475be25ed19924cca0961f7d844c4b
-+
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
-+---
-+ configure.ac | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 32cf5cb5..77cf7edd 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -480,7 +480,7 @@ occurring in the file.
-+ ])], -L${with_postgres_lib})
-+ 
-+ # Remove redundant occurrances of -lpq
-+-LIBS="`echo "$LIBS" | sed -e 's/-lpq[[:space:]]*[[:space:]]-lpq\>/-lpq/g'`"
-++LIBS=[`echo "$LIBS" | sed -e 's/-lpq * -lpq\>/-lpq/g'`]
-+ 
-+ AC_LANG_POP(C)
-+ 
-+-- 
-+2.14.3
-+
-diff --git a/package/libpqxx/libpqxx.mk b/package/libpqxx/libpqxx.mk
-index 0587190..89a3520 100644
---- a/package/libpqxx/libpqxx.mk
-+++ b/package/libpqxx/libpqxx.mk
-@@ -11,6 +11,9 @@ LIBPQXX_DEPENDENCIES = postgresql
- LIBPQXX_LICENSE = BSD-3c
- LIBPQXX_LICENSE_FILES = COPYING
- 
-+# 0001-Fix-broken-sed-call-in-configure.ac.in.patch
-+LIBPQXX_AUTORECONF = YES
-+
- LIBPQXX_CONF_ENV += ac_cv_path_PG_CONFIG=$(STAGING_DIR)/usr/bin/pg_config
- 
- $(eval $(autotools-package))
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index f50a996..6c64a63 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -221,8 +221,8 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.18.72"	if BR2_KERNEL_HEADERS_3_18
+ 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
+ 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
+-	default "4.1.47"	if BR2_KERNEL_HEADERS_4_1
++	default "4.1.48"	if BR2_KERNEL_HEADERS_4_1
+ 	default "4.4.107"	if BR2_KERNEL_HEADERS_4_4
+ 	default "4.8.17"	if BR2_KERNEL_HEADERS_4_8
+-	default "4.9.71"	if BR2_KERNEL_HEADERS_4_9
++	default "4.9.72"	if BR2_KERNEL_HEADERS_4_9
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
