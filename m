@@ -1,50 +1,35 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 31 Dec 2017 15:25:45 +0200
-Subject: [Buildroot] [PATCH] i2c-tools: fix missing runtime library
-Message-ID: <dc29cedc871401a5e6ae7c4ffb67e9b092f63905.1514726745.git.baruch@tkos.co.il>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 31 Dec 2017 17:08:10 +0100
+Subject: [Buildroot] [PATCH] eeprog: fix homepage link
+In-Reply-To: <20171231131108.3ulaftfta3ohm3pk@sapphire.tkos.co.il>
+References: <5d4e572b6a29cdf484a8df1562993d68206022dd.1514719506.git.baruch@tkos.co.il>
+ <20171231124812.2e20d6e0@windsurf>
+ <20171231122618.ezq72ybk2rem2wvv@sapphire.tkos.co.il>
+ <20171231135433.1d0b98a9@windsurf>
+ <20171231131108.3ulaftfta3ohm3pk@sapphire.tkos.co.il>
+Message-ID: <20171231170810.741501ec@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When building with dynamic library support, i2c-tools utilities are
-linked against the libi2c.so library. Current i2c-tools install commands
-don't take this into account, which leads to the following run-time
-error:
+Hello,
 
-eeprog: error while loading shared libraries: libi2c.so.0: cannot open shared object file: No such file or directory
+On Sun, 31 Dec 2017 15:11:08 +0200, Baruch Siach wrote:
 
-Use the native install target to fix that.
+> They are both based on the same code. It looks like i2c-tools adopted eeprog 
+> after the last eeprog release in February 2004.
 
-Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Cc: Matt Weber <matthew.weber@rockwellcollins.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
+OK.
 
-I think we can also get rid of I2C_TOOLS_INSTALL_PYSMBUS now. But let's
-fix the bug first.
----
- package/i2c-tools/i2c-tools.mk | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
+> OK. Let's give Matt some time to recover from the holidays and respond before 
+> I send a patch to remove the eeprog package.
 
-diff --git a/package/i2c-tools/i2c-tools.mk b/package/i2c-tools/i2c-tools.mk
-index 0f71fd4fb581..9ddaa7278673 100644
---- a/package/i2c-tools/i2c-tools.mk
-+++ b/package/i2c-tools/i2c-tools.mk
-@@ -61,11 +61,8 @@ define I2C_TOOLS_BUILD_CMDS
- endef
- 
- define I2C_TOOLS_INSTALL_TARGET_CMDS
--	for i in i2cdump i2cget i2cset i2cdetect i2ctransfer; \
--	do \
--		$(INSTALL) -m 755 -D $(@D)/tools/$$i $(TARGET_DIR)/usr/sbin/$$i; \
--	done
--	$(INSTALL) -m 755 -D $(@D)/eeprog/eeprog $(TARGET_DIR)/usr/bin/eeprog;
-+	$(MAKE) $(TARGET_CONFIGURE_OPTS) $(I2C_TOOLS_MAKE_OPTS) \
-+		DESTDIR="$(TARGET_DIR)" prefix=/usr -C $(@D) install
- 	$(I2C_TOOLS_INSTALL_PYSMBUS)
- endef
- 
+Sounds good. Thanks!
+
+Thomas
 -- 
-2.15.1
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
