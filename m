@@ -1,14 +1,13 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 31 Dec 2017 18:35:18 +0100
-Subject: [Buildroot] [PATCH 1/2] android-tools: Enable build for ext4
- fsutils
-In-Reply-To: <CAHjoi4ckaCH9VHUAh3vu26MXiVMBwjm0A40mcxTNnoOZfeDVXw@mail.gmail.com>
+Date: Sun, 31 Dec 2017 18:35:41 +0100
+Subject: [Buildroot] [PATCH 2/2] android-tools: upport char, block, fifo,
+ socket devices
+In-Reply-To: <CAHjoi4fkKs+ChWaWM6GVeZHsvD+Q_RWHwU-6BRJbRV2RTM0YSw@mail.gmail.com>
 References: <20171130205631.93251-1-ek9852@gmail.com>
- <20171201124924.ajmy3ibrnlznfddb@t450s.lan>
- <CAHjoi4fMAY3B7kOBfUQ1VNknR27ks-RU+nYGhy3+w609kA+s+w@mail.gmail.com>
- <20171204112321.mte4qbqtgffu7sjf@t450s.lan>
- <CAHjoi4ckaCH9VHUAh3vu26MXiVMBwjm0A40mcxTNnoOZfeDVXw@mail.gmail.com>
-Message-ID: <20171231183518.6c86a664@windsurf>
+ <20171130205631.93251-2-ek9852@gmail.com>
+ <20171201135528.16e0c342@windsurf.lan>
+ <CAHjoi4fkKs+ChWaWM6GVeZHsvD+Q_RWHwU-6BRJbRV2RTM0YSw@mail.gmail.com>
+Message-ID: <20171231183541.3395959c@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,16 +16,13 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 5 Dec 2017 11:21:13 -0600, Keith Mok wrote:
+On Fri, 1 Dec 2017 22:20:06 -0800, Keith Mok wrote:
 
-> Just sync with Google, that they are removed make_ext4fs in internal
-> branch. and merge Android specific things into e2fsprogs.
-> So we possibly no need this anymore.
+> Wil try to submit to AOSP for [PATCH 2/2].
 
-OK, so I've marked your patch as "Rejected" in our patch tracking
-system. If a patch is still needed, please resend a new version.
+Have you received any feedback ?
 
-Thanks!
+Best regards,
 
 Thomas
 -- 
