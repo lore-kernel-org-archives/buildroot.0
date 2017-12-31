@@ -1,43 +1,79 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 31 Dec 2017 09:18:29 +0100
-Subject: [Buildroot] [git commit branch/2017.02.x] libsoxr: remove unicode
- dash from help text
-Message-ID: <20171231083605.A335F838FC@busybox.osuosl.org>
+Date: Sun, 31 Dec 2017 09:27:37 +0100
+Subject: [Buildroot] [git commit branch/2017.02.x] package/libpqxx: fix
+ broken sed call
+Message-ID: <20171231083606.0873E838FC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=738cc3e3523451268100689a271bb006c70c47cc
+commit: https://git.buildroot.net/buildroot/commit/?id=e4901804642a4a2fccb5e6de6f9197def2250019
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-This would make the unicode challenged menuconfig show something
-sensible.
+Backport 2 upstream fix.
 
-Split the sentence for the text to make sense.
+Fixes:
+http://autobuild.buildroot.net/results/0d1/0d131f9fa5cce259d999f7d57f9092675bfc24c7
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 5099c909393e6dc0c4e16f904e36259b4e499cb9)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 73531776dfac6669e077b8ee5c45ab85d57fae8d)
+(cherry picked from commit de035220aa17cfa223a2de8d5d1233d95d6dd0e7)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libsoxr/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ ...01-Fix-broken-sed-call-in-configure.ac.in.patch | 31 ++++++++++++++++++++++
+ package/libpqxx/libpqxx.mk                         |  3 +++
+ 2 files changed, 34 insertions(+)
 
-diff --git a/package/libsoxr/Config.in b/package/libsoxr/Config.in
-index a218ae9..ae1ea10 100644
---- a/package/libsoxr/Config.in
-+++ b/package/libsoxr/Config.in
-@@ -2,7 +2,7 @@ config BR2_PACKAGE_LIBSOXR
- 	bool "libsoxr"
- 	help
- 	  The SoX Resampler library `libsoxr' performs one-dimensional
--	  sample-rate conversion???it may be used, for example, to
-+	  sample-rate conversion. It may be used, for example, to
- 	  resample PCM-encoded audio.
+diff --git a/package/libpqxx/0001-Fix-broken-sed-call-in-configure.ac.in.patch b/package/libpqxx/0001-Fix-broken-sed-call-in-configure.ac.in.patch
+new file mode 100644
+index 0000000..672133a
+--- /dev/null
++++ b/package/libpqxx/0001-Fix-broken-sed-call-in-configure.ac.in.patch
+@@ -0,0 +1,31 @@
++From d5120738a9b6b90d19e742f3c591727d16d76c9c Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@gmail.com>
++Date: Tue, 26 Dec 2017 14:09:46 +0100
++Subject: [PATCH] Fix broken sed call in configure.ac.in
++
++Upstream fix from commit [1][2]
++
++[1] 80a9d5386641ac67d4ea1b602c786b45b40b252f
++[2] 85e9336740475be25ed19924cca0961f7d844c4b
++
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
++---
++ configure.ac | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/configure.ac b/configure.ac
++index 32cf5cb5..77cf7edd 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -480,7 +480,7 @@ occurring in the file.
++ ])], -L${with_postgres_lib})
++ 
++ # Remove redundant occurrances of -lpq
++-LIBS="`echo "$LIBS" | sed -e 's/-lpq[[:space:]]*[[:space:]]-lpq\>/-lpq/g'`"
+++LIBS=[`echo "$LIBS" | sed -e 's/-lpq * -lpq\>/-lpq/g'`]
++ 
++ AC_LANG_POP(C)
++ 
++-- 
++2.14.3
++
+diff --git a/package/libpqxx/libpqxx.mk b/package/libpqxx/libpqxx.mk
+index 0587190..89a3520 100644
+--- a/package/libpqxx/libpqxx.mk
++++ b/package/libpqxx/libpqxx.mk
+@@ -11,6 +11,9 @@ LIBPQXX_DEPENDENCIES = postgresql
+ LIBPQXX_LICENSE = BSD-3c
+ LIBPQXX_LICENSE_FILES = COPYING
  
- 	  It aims to give fast and high quality results for any constant
++# 0001-Fix-broken-sed-call-in-configure.ac.in.patch
++LIBPQXX_AUTORECONF = YES
++
+ LIBPQXX_CONF_ENV += ac_cv_path_PG_CONFIG=$(STAGING_DIR)/usr/bin/pg_config
+ 
+ $(eval $(autotools-package))
