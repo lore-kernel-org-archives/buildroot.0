@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 31 Dec 2017 17:22:30 +0100
-Subject: [Buildroot] [PATCH] util-linux: bump to version 2.31.1
-In-Reply-To: <20171231115145.2625-1-casantos@datacom.ind.br>
-References: <20171231115145.2625-1-casantos@datacom.ind.br>
-Message-ID: <20171231172230.52130ab3@windsurf>
+Date: Sun, 31 Dec 2017 17:23:25 +0100
+Subject: [Buildroot] [PATCH v7 1/1] libcpprestsdk: new package
+In-Reply-To: <20171230231328.3299abdc@windsurf>
+References: <20171230191655.32606-1-Adamduskett@outlook.com>
+ <20171230231328.3299abdc@windsurf>
+Message-ID: <20171231172325.6a0ef08f@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,27 +13,25 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 31 Dec 2017 09:51:45 -0200, Carlos Santos wrote:
-> Changes in this version:
-> 
-> - Small improvement and bug fixes.
-> - Install rfkill at /usr/sbin (thus overriding the one eventually
->   installed by BusyBox).
-> 
-> Drop the md5 patch, already applyed upstream.
-> 
-> Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
-> ---
->  .../0001-md5-declare-byteReverse-as-static.patch   | 44 ----------------------
->  package/util-linux/util-linux.hash                 |  2 +-
->  package/util-linux/util-linux.mk                   |  3 +-
->  3 files changed, 3 insertions(+), 46 deletions(-)
->  delete mode 100644 package/util-linux/0001-md5-declare-byteReverse-as-static.patch
+On Sat, 30 Dec 2017 23:13:28 +0100, Thomas Petazzoni wrote:
 
-Applied to master, thanks.
+> Interestingly, it is the same error I had when building opentracing-cpp
+> with the same toolchain. Building with the Linaro ARM toolchain works
+> fine however.
+> 
+> Could you test this package with ./utils/test-pkg before submitting the
+> next version ?
+
+Since Jan Heylen had the same problem on opentracing-cpp, he
+investigated it. It turns out that you need to make your package
+"depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735" to avoid a gcc bug.
+
+Could you resubmit with this change ?
+
+Thanks!
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
