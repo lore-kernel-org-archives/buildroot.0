@@ -1,13 +1,17 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 31 Dec 2017 17:08:10 +0100
-Subject: [Buildroot] [PATCH] eeprog: fix homepage link
-In-Reply-To: <20171231131108.3ulaftfta3ohm3pk@sapphire.tkos.co.il>
-References: <5d4e572b6a29cdf484a8df1562993d68206022dd.1514719506.git.baruch@tkos.co.il>
- <20171231124812.2e20d6e0@windsurf>
- <20171231122618.ezq72ybk2rem2wvv@sapphire.tkos.co.il>
- <20171231135433.1d0b98a9@windsurf>
- <20171231131108.3ulaftfta3ohm3pk@sapphire.tkos.co.il>
-Message-ID: <20171231170810.741501ec@windsurf>
+Date: Sun, 31 Dec 2017 17:10:46 +0100
+Subject: [Buildroot] [PATCH v2 1/2] Opentracing: add opentracing-cpp
+ v1.2.0 package
+In-Reply-To: <CAGszK3g5-MyNQKQkOAb6F021iShcvF0Dgxhi8nJVE9ZUeN+AuA@mail.gmail.com>
+References: <1513849309-550-2-git-send-email-heyleke@gmail.com>
+ <1514014802-23736-1-git-send-email-heyleke@gmail.com>
+ <1514014802-23736-2-git-send-email-heyleke@gmail.com>
+ <20171230224628.746682f5@windsurf>
+ <CAGszK3iD7PYCjtekPy2DxXnu3VpYto9bQsb_R20+GuVM9P4WtQ@mail.gmail.com>
+ <CAGszK3jy2faOBddMzamf9-0H9MuDxBP847vS22u3n2dH8GCc0Q@mail.gmail.com>
+ <CAGszK3jYUcxxKit8SjH3biCR66WgaQLm7X4dVBF0pe8KfCbapQ@mail.gmail.com>
+ <CAGszK3g5-MyNQKQkOAb6F021iShcvF0Dgxhi8nJVE9ZUeN+AuA@mail.gmail.com>
+Message-ID: <20171231171046.1b6b5036@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,17 +20,20 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 31 Dec 2017 15:11:08 +0200, Baruch Siach wrote:
+On Sun, 31 Dec 2017 14:23:06 +0100, Jan Heylen wrote:
+> I found that this issue has actually a feature in buildroot:
+> 
+> BR2_TOOLCHAIN_HAS_GCC_BUG_64735
+> 
+> I'll dig some deeper into that and propose a new version of the patch.
 
-> They are both based on the same code. It looks like i2c-tools adopted eeprog 
-> after the last eeprog release in February 2004.
+Indeed! I forgot about this one. So just make your package depends
+on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735.
 
-OK.
+Could you resubmit, taking into account this issue, and the few other
+comments that I made ?
 
-> OK. Let's give Matt some time to recover from the holidays and respond before 
-> I send a patch to remove the eeprog package.
-
-Sounds good. Thanks!
+Thanks a lot!
 
 Thomas
 -- 
