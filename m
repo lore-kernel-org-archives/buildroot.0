@@ -1,29 +1,26 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 31 Dec 2017 09:34:36 +0100
-Subject: [Buildroot] [PATCH] rsync: add upstream security fix for
- CVE-2017-16548
-In-Reply-To: <20171219115628.16785-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Tue, 19 Dec 2017 12:56:28 +0100")
-References: <20171219115628.16785-1-peter@korsgaard.com>
-Message-ID: <87incni9cz.fsf@dell.be.48ers.dk>
+Date: Sun, 31 Dec 2017 09:35:01 +0100
+Subject: [Buildroot] [PATCH] package/libcue: is not parallel-safe
+In-Reply-To: <20171221164817.32302-1-romain.naour@gmail.com> (Romain Naour's
+ message of "Thu, 21 Dec 2017 17:48:17 +0100")
+References: <20171221164817.32302-1-romain.naour@gmail.com>
+Message-ID: <87efnbi9ca.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
 
- > The receive_xattr function in xattrs.c in rsync 3.1.2 and 3.1.3-development
- > does not check for a trailing '\0' character in an xattr name, which allows
- > remote attackers to cause a denial of service (heap-based buffer over-read
- > and application crash) or possibly have unspecified other impact by sending
- > crafted data to the daemon.
+ > The last commit before the 1.4.0 release was to disable parallel build [1]
+ > [1] https://github.com/lipnitsk/libcue/commit/bebbc18a8c00a0b8c26bc6191af68c6a83629b40
 
- > For more details, see:
- > https://bugzilla.samba.org/show_bug.cgi?id=13112
+ > Fixes:
+ > http://autobuild.buildroot.net/results/f25/f256037ca3d49f96add8ca2e2f9c980f5f9d764e
+ > http://autobuild.buildroot.net/results/d84/d84c7d0cb9cf5fa9996c42149eda5295700516f5
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > Signed-off-by: Romain Naour <romain.naour@gmail.com>
 
 Committed to 2017.02.x, thanks.
 
