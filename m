@@ -1,54 +1,44 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 31 Dec 2017 15:11:08 +0200
-Subject: [Buildroot] [PATCH] eeprog: fix homepage link
-In-Reply-To: <20171231135433.1d0b98a9@windsurf>
-References: <5d4e572b6a29cdf484a8df1562993d68206022dd.1514719506.git.baruch@tkos.co.il>
- <20171231124812.2e20d6e0@windsurf>
- <20171231122618.ezq72ybk2rem2wvv@sapphire.tkos.co.il>
- <20171231135433.1d0b98a9@windsurf>
-Message-ID: <20171231131108.3ulaftfta3ohm3pk@sapphire.tkos.co.il>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 31 Dec 2017 14:16:19 +0100
+Subject: [Buildroot] [PATCH 1/1] netcat-openbsd: depends on
+ linux-headers >= 3.12
+In-Reply-To: <20171128154437.1631-1-gael.portay@savoirfairelinux.com>
+References: <20171128154437.1631-1-gael.portay@savoirfairelinux.com>
+Message-ID: <20171231141619.11116894@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hello,
 
-On Sun, Dec 31, 2017 at 01:54:33PM +0100, Thomas Petazzoni wrote:
-> On Sun, 31 Dec 2017 14:26:18 +0200, Baruch Siach wrote:
-> > > Applied to master, thanks. However, do we still need this package, now
-> > > that i2c-tools also builds/installs eeprog ?  
-> > 
-> > Probably not.
+On Tue, 28 Nov 2017 10:44:37 -0500, Ga?l PORTAY wrote:
+> This debian fork of netcat includes the kernel UAPI inet6 header. This
+> header conflicts with the existing libc inet header and causes
+> redefinition of structures when they are both included.
 > 
-> Do they provide the same features ?
-
-They are both based on the same code. It looks like i2c-tools adopted eeprog 
-after the last eeprog release in February 2004.
-
-> > Event worse. When both i2c-tools and eeprog are enabled, the target 
-> > /usr/bin/eeprog depends on the build order. Has the autobuilder caught 
-> > this file overwrite?
+> The compiler raises the following error:
 > 
-> It will, be currently such errors are not errors, but warnings: they
-> don't make the build fail. Yann recently posted a patch that would
-> allow to turn such warnings into errors, but there are so many of such
-> overwrites today that enabling such an option in the autobuilders would
-> turn almost all results to NOK.
+> 	/home/buildroot/build/instance-0/output/host/x86_64-buildroot-linux-gnu/sysroot/usr/include/linux/in6.h:30:8: error: redefinition of 'struct in6_addr' struct in6_addr {
 > 
-> > Are you OK with dropping eeprog? Matt?
+> From version 3.12 of linux, the kernel UAPI header has mechanisms in
+> libc-compat.h to prevent such situations (see __UAPI_DEF_SOCKADDR_IN6
+> macros).
 > 
-> I don't use eeprog, so I don't really care. But if the standalone
-> eeprog and the one on i2c-tools are equivalent, I think it makes sense
-> to keep the one from i2c-tools.
+> Unfortunately the build is broken when toolchains do not satisfy at least
+> the linux headers condition (>= 3.12).
+> 
+> The package now depends on the toolchain headers at least 3.12.
+> 
+> Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
+> ---
 
-OK. Let's give Matt some time to recover from the holidays and respond before 
-I send a patch to remove the eeprog package.
+You forgot to update the Config.in comment, so I've done so, and
+applied your patch. Thanks!
 
-baruch
-
+Thomas
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
