@@ -1,112 +1,73 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Sat, 30 Dec 2017 20:03:50 -0500
-Subject: [Buildroot] [PATCH v7 1/1] libcpprestsdk: new package
-In-Reply-To: <20171230231328.3299abdc@windsurf>
-References: <20171230191655.32606-1-Adamduskett@outlook.com>
- <20171230231328.3299abdc@windsurf>
-Message-ID: <CAFSsvmq1G84OF5tR4M47ZHSBeivUHFiE-1rrb1iJcE4DjQF+MA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 31 Dec 2017 08:00:07 +0100 (CET)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2017-12-30
+Message-ID: <20171231070007.C377220741@mail.free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello;
+Hello,
 
-On Sat, Dec 30, 2017 at 5:13 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
->
-> On Sat, 30 Dec 2017 14:16:55 -0500, Adam Duskett wrote:
->> The C++ REST SDK is a Microsoft project for cloud-based client-server
->> communication in native code using a modern asynchronous C++ API design.
->> This project aims to help C++ developers connect to and interact with
->> services.
->>
->> This package is licensed under the MIT package and depends on BOOST
->> and OpenSSL/LibreSSL.
->>
->> Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
->
-> As discussed on IRC, this fails to build with the following defconfig:
->
-> BR2_arm=y
-> BR2_TOOLCHAIN_EXTERNAL=y
-> BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-> BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-> BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2017.11-rc1.tar.bz2"
-> BR2_TOOLCHAIN_EXTERNAL_GCC_4_9=y
-> BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_10=y
-> BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
-> # BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
-> BR2_TOOLCHAIN_EXTERNAL_CXX=y
-> BR2_INIT_NONE=y
-> BR2_SYSTEM_BIN_SH_NONE=y
-> # BR2_PACKAGE_BUSYBOX is not set
-> BR2_PACKAGE_LIBCPPRESTSDK=y
-> # BR2_TARGET_ROOTFS_TAR is not set
->
-> It fails with:
->
->>>> libcpprestsdk v2.10.1 Building
-> PATH="/home/thomas/projets/buildroot/output/host/bin:/home/thomas/projets/buildroot/output/host/sbin:/usr/local/bin:/usr/bin:/bin:/home/thomas/.rvm/bin:/usr/local/sbin:/usr/sbin:/home/thomas/.rvm/bin:/home/thomas/sys/bin:/home/thomas/.gem/ruby/2.1.0/bin:/home/thomas/.rvm/bin"  /usr/bin/make -j5  -C /home/thomas/projets/buildroot/output/build/libcpprestsdk-v2.10.1/Release
-> Scanning dependencies of target cpprest
-> [  4%] Building CXX object src/CMakeFiles/cpprest.dir/http/client/http_client_msg.cpp.o
-> [  6%] Building CXX object src/CMakeFiles/cpprest.dir/http/client/x509_cert_utilities.cpp.o
-> [  6%] Building CXX object src/CMakeFiles/cpprest.dir/http/client/http_client.cpp.o
-> [ 10%] Building CXX object src/CMakeFiles/cpprest.dir/http/common/http_helpers.cpp.o
-> [ 10%] Building CXX object src/CMakeFiles/cpprest.dir/http/common/http_msg.cpp.o
-> In file included from /home/thomas/projets/buildroot/output/build/libcpprestsdk-v2.10.1/Release/src/pch/stdafx.h:94:0,
->                  from /home/thomas/projets/buildroot/output/build/libcpprestsdk-v2.10.1/Release/src/http/common/http_helpers.cpp:14:
-> /home/thomas/projets/buildroot/output/build/libcpprestsdk-v2.10.1/Release/include/pplx/pplxtasks.h:923:46: error: ?exception_ptr? in namespace ?std? does not name a type
->          explicit _ExceptionHolder(const std::exception_ptr& _E, const _TaskCreationCallstack &_stackTrace) :
->                                               ^
-> /home/thomas/projets/buildroot/output/build/libcpprestsdk-v2.10.1/Release/include/pplx/pplxtasks.h:971:14: error: ?exception_ptr? in namespace ?std? does not name a type
->          std::exception_ptr _M_stdException;
->               ^
-> /home/thomas/projets/buildroot/output/build/libcpprestsdk-v2.10.1/Release/include/pplx/pplxtasks.h: In constructor ?pplx::details::_ExceptionHolder::_ExceptionHolder(const int&, const pplx::details::_TaskCreationCallstack&)?:
-> /home/thomas/projets/buildroot/output/build/libcpprestsdk-v2.10.1/Release/include/pplx/pplxtasks.h:924:34: error: class ?pplx::details::_ExceptionHolder? does not have any field named ?_M_stdException?
->          _M_exceptionObserved(0), _M_stdException(_E), _M_stackTrace(_stackTrace)
->                                   ^
-> /home/thomas/projets/buildroot/output/build/libcpprestsdk-v2.10.1/Release/include/pplx/pplxtasks.h: In member function ?void pplx::details::_ExceptionHolder::_RethrowUserException()?:
-> /home/thomas/projets/buildroot/output/build/libcpprestsdk-v2.10.1/Release/include/pplx/pplxtasks.h:963:13: error: ?rethrow_exception? is not a member of ?std?
->              std::rethrow_exception(_M_stdException);
->              ^
-> /home/thomas/projets/buildroot/output/build/libcpprestsdk-v2.10.1/Release/include/pplx/pplxtasks.h:963:36: error: ?_M_stdException? was not declared in this scope
->              std::rethrow_exception(_M_stdException);
->                                     ^
-> /home/thomas/projets/buildroot/output/build/libcpprestsdk-v2.10.1/Release/include/pplx/pplxtasks.h: In member function ?virtual void pplx::details::_PPLTaskHandle<_ReturnType, _DerivedTaskHandle, _BaseTaskHandle>::invoke() const?:
-> /home/thomas/projets/buildroot/output/build/libcpprestsdk-v2.10.1/Release/include/pplx/pplxtasks.h:1655:48: error: ?current_exception? is not a member of ?std?
->                  _M_pTask->_CancelWithException(std::current_exception());
->                                                 ^
-> Interestingly, it is the same error I had when building opentracing-cpp
-> with the same toolchain. Building with the Linaro ARM toolchain works
-> fine however.
->
-> Could you test this package with ./utils/test-pkg before submitting the
-> next version ?
->
-So, at this point I always do.  Here are the results from what I normally run:
+Build statistics for 2017-12-30
+===============================
 
-./utils/test-pkg -c configs/libcpprestsdk_defconfig -p libcpprestsdk
--t /home/adam/Documents/brtest/small_test.csv
-                     min_glibc_defconfig [1/3]: OK
-                      min_musl_defconfig [2/3]: OK
-                    min_uclibc_defconfig [3/3]: OK
-3 builds, 0 skipped, 0 build failed, 0 legal-info failed
+      branch |  OK | NOK | TIM | TOT |
+      master | 166 |  20 |   7 | 193 |
+   2017.11.x |  20 |   0 |   0 |  20 |
 
-> Thanks!
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux and Kernel engineering
-> http://free-electrons.com
+Results for branch 'master'
+===========================
 
-This tells me that at least glibc, musl, and uclibc-ng all build
-successfully.  I normally test with gcc 7.x, and the toolchain you
-tested with is quite a bit older.
+Classification of failures by reason
+------------------------------------
 
-Thanks!
+              syslog-ng-3.10.1 | 7 
+                       unknown | 7 
+                    brltty-5.5 | 2 
+                   jamvm-2.0.0 | 2 
+                 mplayer-1.3.0 | 2 
+                  dash-0.5.9.1 | 1 
+              host-erlang-20.0 | 1 
+           host-mono-5.4.0.201 | 1 
+kvm-unit-tests-kvm-unit-tes... | 1 
+                 mesa3d-17.3.1 | 1 
+                  samba4-4.7.3 | 1 
+              wireshark-2.2.11 | 1 
 
-Adam
+
+Detail of failures
+------------------
+
+    mips64el |                     brltty-5.5 | NOK | http://autobuild.buildroot.net/results/b51f867a4316ff5ce021bd35e19f841735b5c9b2 |     
+        bfin |                     brltty-5.5 | NOK | http://autobuild.buildroot.net/results/489dd7a19911b45ae7b0f1eade63def793e03ade |     
+         arm |                   dash-0.5.9.1 | NOK | http://autobuild.buildroot.net/results/f475227ce6b4d728c813e9dbf93d97cada2000db | ORPH
+         arm |               host-erlang-20.0 | NOK | http://autobuild.buildroot.net/results/dffff671f7900ddc465dfc4819f83571d025d490 |     
+         arm |            host-mono-5.4.0.201 | NOK | http://autobuild.buildroot.net/results/8f6b0200f7601ee7198bce6defa5d6e563def35a |     
+      mipsel |                    jamvm-2.0.0 | NOK | http://autobuild.buildroot.net/results/90f8cac1bf434efe3e4a352a92fcf04dff9e0ede | ORPH
+      mipsel |                    jamvm-2.0.0 | NOK | http://autobuild.buildroot.net/results/eb1ea3339a2d6ea0faf8eaafd80f3c783176c612 | ORPH
+      x86_64 | kvm-unit-tests-kvm-unit-tes... | NOK | http://autobuild.buildroot.net/results/7be4e7cfd7862bb2bf16528b177c42af3567b9bb |     
+     powerpc |                  mesa3d-17.3.1 | NOK | http://autobuild.buildroot.net/results/7f11d56604e5f461d417b28cfa3765ba1b4df892 |     
+        i686 |                  mplayer-1.3.0 | NOK | http://autobuild.buildroot.net/results/f44d7201c6b247df1eba0ee5624b5521d68c88b8 |     
+        i686 |                  mplayer-1.3.0 | NOK | http://autobuild.buildroot.net/results/b8f3885f37e9135df4093179ec620cdfb818b141 |     
+    mips64el |                   samba4-4.7.3 | NOK | http://autobuild.buildroot.net/results/cd0d83417ba97999929f10deac182feb5ac03d76 | ORPH
+      x86_64 |               syslog-ng-3.10.1 | NOK | http://autobuild.buildroot.net/results/7165380d46f169de57a1a420899a8f9ed0803f45 |     
+         arm |               syslog-ng-3.10.1 | NOK | http://autobuild.buildroot.net/results/b9c9c343f7477029242052bb28923f7a400e46cc |     
+    mips64el |               syslog-ng-3.10.1 | NOK | http://autobuild.buildroot.net/results/15225aa00f0db0671b035332ad78d2a3ef050b06 |     
+         arm |               syslog-ng-3.10.1 | NOK | http://autobuild.buildroot.net/results/e93bb9970503ac259f0428370abb878a4dac845a |     
+microblazeel |               syslog-ng-3.10.1 | NOK | http://autobuild.buildroot.net/results/b854c97b5af5125394246298d010baafa175a4c3 |     
+      x86_64 |               syslog-ng-3.10.1 | NOK | http://autobuild.buildroot.net/results/cdc941b47fe04e8e99393004b750451490dc8c8e |     
+         arm |               syslog-ng-3.10.1 | NOK | http://autobuild.buildroot.net/results/e12b88d082f053247863124f4802cafc73278c8c |     
+     aarch64 |                        unknown | TIM | http://autobuild.buildroot.net/results/8b1bbc649e7d334b809c8e7187885d32b9e2deba |     
+      x86_64 |                        unknown | TIM | http://autobuild.buildroot.net/results/b6269b9c7114a6bf309cf4ad9f24c6dad152e750 |     
+         arc |                        unknown | TIM | http://autobuild.buildroot.net/results/d180fa7654d3171fcf133e6b399c840cbf9febf6 |     
+      xtensa |                        unknown | TIM | http://autobuild.buildroot.net/results/72fbfa3c05687b56663ce0fbfba65834ca008235 |     
+         arm |                        unknown | TIM | http://autobuild.buildroot.net/results/cc3a2bbb3b988631b5214f4aea20096a4749a9e7 |     
+         arc |                        unknown | TIM | http://autobuild.buildroot.net/results/93f97039768b14f6fe68a1913dbc2dc9c7a6e44c |     
+         arm |                        unknown | TIM | http://autobuild.buildroot.net/results/ceca4fadcad1070bc030ce560093cf80a26e5c12 |     
+         arc |               wireshark-2.2.11 | NOK | http://autobuild.buildroot.net/results/10a9c0eb70c9e346a781891516a4330ab37fd31e | ORPH
+
+
+-- 
+http://autobuild.buildroot.net
