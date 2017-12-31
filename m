@@ -1,35 +1,93 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 31 Dec 2017 09:24:11 +0100
-Subject: [Buildroot] [git commit branch/2017.02.x] xfsprogs: update homepage
- link
-Message-ID: <20171231083605.DD25C838FC@busybox.osuosl.org>
+Date: Sun, 31 Dec 2017 09:12:25 +0100
+Subject: [Buildroot] [git commit branch/2017.02.x] lldpd: remove check on
+ CXX compiler
+Message-ID: <20171231083605.7D186838FE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eb1dcc49e56b2a90c54371683ac00eed8173d833
+commit: https://git.buildroot.net/buildroot/commit/?id=b6d7c3c1c9532d1054aacbbf962f88997f66b83e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-The old SGI site is not accessible anymore. Use the link from the README
-file.
+lldpd currently depends on a C++ compiler to configure properly, but
+the package doesn't select that option, so builds fail if
+BR2_TOOLCHAIN_BUILDROOT_CXX is not selected with following errors:
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+  checking how to run the C++ preprocessor... /lib/cpp
+  configure: error: in `/home/dkc/src/buildroot/build-zii/build/lldpd-0.9.4':
+  configure: error: C++ preprocessor "/lib/cpp" fails sanity check
+
+This package actually builds fine without C++, so drop this check in
+configure.ac. Attached patch has already been accepted upstream [1].
+
+[1] https://github.com/vincentbernat/lldpd/pull/261
+
+[Peter: adjust autoreconf comment]
+Signed-off-by: Damien Riegel <damien.riegel@savoirfairelinux.com>
+Reviewed-by: Julien Floret <julien.floret@6wind.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 1fa2f7646f11e775fc8f2e5ba729a2efb9b2e653)
+
+(cherry picked from commit 18c9cda6e4b94aa9426a1355d05b000f69453c6b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/xfsprogs/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ ...03-configure-remove-check-on-CXX-compiler.patch | 35 ++++++++++++++++++++++
+ package/lldpd/lldpd.mk                             |  2 +-
+ 2 files changed, 36 insertions(+), 1 deletion(-)
 
-diff --git a/package/xfsprogs/Config.in b/package/xfsprogs/Config.in
-index 9f0d250..78c1aa9 100644
---- a/package/xfsprogs/Config.in
-+++ b/package/xfsprogs/Config.in
-@@ -13,4 +13,4 @@ config BR2_PACKAGE_XFSPROGS
- 	help
- 	  The XFS file system utilities and libraries
+diff --git a/package/lldpd/0003-configure-remove-check-on-CXX-compiler.patch b/package/lldpd/0003-configure-remove-check-on-CXX-compiler.patch
+new file mode 100644
+index 0000000..880f603
+--- /dev/null
++++ b/package/lldpd/0003-configure-remove-check-on-CXX-compiler.patch
+@@ -0,0 +1,35 @@
++From d28b3bfa1b224f7770004dddf4dfaf10ad7ad6c9 Mon Sep 17 00:00:00 2001
++From: Damien Riegel <damien.riegel@savoirfairelinux.com>
++Date: Mon, 18 Dec 2017 14:37:08 -0500
++Subject: [PATCH] configure: remove check on CXX compiler
++
++lldpd fails to build if the toolchain doesn't have a C++ compiler
++because configure fails with the following error:
++
++  checking how to run the C++ preprocessor... /lib/cpp
++  configure: error: in `/home/dkc/src/buildroot/build-zii/build/lldpd-0.9.4':
++  configure: error: C++ preprocessor "/lib/cpp" fails sanity check
++
++Since "8d92800b: build: cleaner way to not alter CFLAGS/CPPFLAGS/LDFLAGS",
++it seems that the dependency on C++ is not required anymore, so there
++is no reason to keep this restriction. Dropping AC_PROG_CXX allows to
++build with a toolchain that doesn't have C++ just fine.
++---
++ configure.ac | 1 -
++ 1 file changed, 1 deletion(-)
++
++diff --git a/configure.ac b/configure.ac
++index 0edceb1..5afe8f2 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -48,7 +48,6 @@ AC_PROG_CC_C99
++ if test x"$ac_cv_prog_cc_c99" = x"no"; then
++   AC_MSG_FAILURE([*** C99 support is mandatory])
++ fi
++-AC_PROG_CXX
++ AM_PROG_CC_C_O
++ AC_PROG_LIBTOOL
++ AC_PROG_LN_S
++-- 
++2.15.1
++
+diff --git a/package/lldpd/lldpd.mk b/package/lldpd/lldpd.mk
+index 349c556..2bdda02 100644
+--- a/package/lldpd/lldpd.mk
++++ b/package/lldpd/lldpd.mk
+@@ -9,7 +9,7 @@ LLDPD_SITE = http://media.luffy.cx/files/lldpd
+ LLDPD_DEPENDENCIES = host-pkgconf libevent
+ LLDPD_LICENSE = ISC
+ LLDPD_LICENSE_FILES = README.md
+-# 0002-configure-do-not-check-for-libbsd.patch
++# 0002-configure-do-not-check-for-libbsd.patch / 0003-configure-remove-check-on-CXX-compiler.patch
+ LLDPD_AUTORECONF = YES
  
--	  http://oss.sgi.com/projects/xfs/
-+	  http://xfs.org
+ ifeq ($(BR2_PACKAGE_CHECK),y)
