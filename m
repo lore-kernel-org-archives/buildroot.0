@@ -1,12 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 1 Jan 2018 15:47:24 +0100
-Subject: [Buildroot] [PATCH 1/1] fs/cpio: add option to manually specify
- file list
-In-Reply-To: <20180101132242.GB24931@scaer>
-References: <20171026191627.18949-1-sconnor@lynx.com>
- <20171026191627.18949-2-sconnor@lynx.com>
- <20180101125448.41ee4404@windsurf> <20180101132242.GB24931@scaer>
-Message-ID: <20180101154724.10ad21fc@windsurf>
+Date: Mon, 1 Jan 2018 15:58:40 +0100
+Subject: [Buildroot] [PATCH v3] mpv: add support for Raspberry Pi "rpi"
+ output
+In-Reply-To: <20171024090740.13683-1-mahyar.koshkouei@gmail.com>
+References: <20171024090740.13683-1-mahyar.koshkouei@gmail.com>
+Message-ID: <20180101155840.455bea53@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,51 +13,44 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 1 Jan 2018 14:22:42 +0100, Yann E. MORIN wrote:
+On Tue, 24 Oct 2017 10:07:40 +0100, Mahyar Koshkouei wrote:
+> mpv now compiles with the "rpi" video driver that provides hardware
+> acceleration on the Raspberry Pi.
+> 
+> Tested working on a Raspberry Pi 1 Model B+ and Zero.
+> 
+> Signed-off-by: Mahyar Koshkouei <mahyar.koshkouei@gmail.com>
 
-> > So I'm inclined to just apply this, as it may be useful for some users.
-> > If you don't voice a concern within the next days, I'll apply.  
-> 
-> I don't like this much, in fact.
-> 
-> In such a case, I would say that the initramfs filesystem is a different
-> system, and thus should be built with a different .config.
-> 
-> Basically, what I do in this situation:
-> 
->   - have a first .config for kernel+modules + initramfs, and with a
->     post-build script that:
->     1. copy all the kernel modules "somewhere",
->     2. trim the kernel modules that end up in the initramfs, to keep
->        just what is needed to boot;
-> 
->   - have a second .config with just userland, plus a post-build script
->     that vampirises the kernel modules from "somwehere" (as saved above)
-> 
-> Of course, the "somewhere" is agreed on because I know it.
-> 
-> Besides, this is much more flexible than what this patch proposes.
-> 
-> Really, the core of the issue is to believe that the two systems are
-> one. They are not: they are two different systems.
+I've applied your patch, but I have some comments/questions below.
 
-On the other hand, the initramfs is very often a subset of the complete
-root filesystem, and being able to generate an image of this subset
-directly from the same configuration as the full-blown system is
-definitely a nice thing.
+> diff --git a/package/mpv/0003-rpi-fix-linking-errors.patch b/package/mpv/0003-rpi-fix-linking-errors.patch
+> new file mode 100644
+> index 0000000000..0e65a5a3eb
+> --- /dev/null
+> +++ b/package/mpv/0003-rpi-fix-linking-errors.patch
+> @@ -0,0 +1,90 @@
+> +From fe482a600d507dc7ce77f6d154a9e8b395f74fdd Mon Sep 17 00:00:00 2001
+> +From: Mahyar Koshkouei <mahyar.koshkouei@gmail.com>
+> +Date: Tue, 24 Oct 2017 09:47:38 +0100
+> +Subject: [PATCH] rpi: fix linking errors
+> +
+> +Fixes linking issues when compiling with Raspberry Pi support.
+> +
+> +Signed-off-by: Mahyar Koshkouei <mahyar.koshkouei@gmail.com>
+> +---
+> +Status: pull request https://github.com/mpv-player/mpv/pull/4883
 
-I agree that a separate configuration to build the initramfs is more
-flexible, but it also has its drawbacks (to handle kernel modules, as
-you mentioned, but also in terms of rebuilding the toolchain if you're
-using an internal toolchain). One example where it might be annoying to
-have a separate configuration is if you have a single package that
-builds both a kernel module and a user-space counterpart.
+Could you try to revive this discussion, which seems to have stalled ?
 
-So yeah, Seamus proposal is not ideal in terms of flexibility, but it
-does solve one common use-case with little complexity.
 
-Again, I'm not 100% convinced either, so it's good to have this
-discussion.
+> +# Raspberry Pi support
+> +ifeq ($(BR2_PACKAGE_RPI_FIRMWARE)$(BR2_PACKAGE_RPI_USERLAND),yy)
+
+I don't see why the rpi-firmware dependency was necessary. Yes, it was
+there for ffmpeg, but I've also committed a patch to drop it. I removed
+it as well from your mpv change. Hopefully I was not mistaken :-)
+
+Thanks!
 
 Thomas
 -- 
