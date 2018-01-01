@@ -1,53 +1,53 @@
-From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Mon, 1 Jan 2018 21:14:47 +0100
-Subject: [Buildroot] [PATCH v9 3/8] cargo-bin: new package
-In-Reply-To: <20171228213833.54dc03fa@windsurf>
-References: <20171228155146.18193-1-eric.le.bihan.dev@free.fr>
- <20171228155146.18193-4-eric.le.bihan.dev@free.fr>
- <20171228213833.54dc03fa@windsurf>
-Message-ID: <20180101201447.GC7252@itchy>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 1 Jan 2018 21:16:46 +0100
+Subject: [Buildroot] [PATCH 1/1] cjson: build shared and static library
+In-Reply-To: <20180101120448.6badab8a@windsurf>
+References: <20171231162933.19446-1-fontaine.fabrice@gmail.com>
+ <20171231175621.44c67b85@windsurf>
+ <CAPi7W83cQCMig324jhj8uyM5a=3Reh11BbbQ25KjhwDEhvqcyQ@mail.gmail.com>
+ <20180101120448.6badab8a@windsurf>
+Message-ID: <CAPi7W82RO2hJUeqB9i+2y6YmAe6uoX_zRzipgvFX8U993=jQ8A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 17-12-28 21:38:33, Thomas Petazzoni wrote:
+Hello and happy new year,,
+
+2018-01-01 12:04 GMT+01:00 Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com>:
+
 > Hello,
 >
-> On Thu, 28 Dec 2017 16:51:41 +0100, Eric Le Bihan wrote:
-> > This new package fetches a binary version of Cargo, suitable to
-> > bootstrap the host variants of the Rust compiler and Cargo, the package
-> > manager.
-> >
-> > Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+> Happy New Year!
 >
-> Looks good, just one comment below.
+> On Sun, 31 Dec 2017 18:19:34 +0100, Fabrice Fontaine wrote:
 >
-> > diff --git a/package/cargo-bin/cargo-bin.mk b/package/cargo-bin/cargo-bin.mk
-> > new file mode 100644
-> > index 0000000000..e0f6381070
-> > --- /dev/null
-> > +++ b/package/cargo-bin/cargo-bin.mk
-> > @@ -0,0 +1,14 @@
-> > +################################################################################
-> > +#
-> > +# cargo-bin
-> > +#
-> > +################################################################################
-> > +
-> > +CARGO_BIN_VERSION = 0.23.0
-> > +CARGO_BIN_SITE = https://static.rust-lang.org/dist
-> > +CARGO_BIN_SOURCE = cargo-$(CARGO_BIN_VERSION)-$(RUST_HOST_NAME).tar.xz
-> > +CARGO_BIN_LICENSE = Apache-2.0 or MIT
-> > +CARGO_BIN_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
-> > +CARGO_BIN_STRIP_COMPONENTS = 1
+> > > How is BR2_STATIC_LIBS=y handled ?
+> > >
+> > If BUILD_SHARED_AND_STATIC_LIBS is not set, cjson uses the standard
+> > BUILD_SHARED_LIBS option which is passed to OFF by buildroot if
+> > BR2_STATIC_LIBS is set.
 >
-> This is the default, so why do you need this ?
+> When you say "If BUILD_SHARED_AND_STATIC_LIBS is not set", do you mean
+> BUILD_SHARED_AND_STATIC_LIBS=OFF or "no value is passed for
+> BUILD_SHARED_AND_STATIC_LIBS" ?
+>
+I mean BUILD_SHARED_AND_STATIC_LIBS=OFF.
 
-Leftover from previous patch version. I'll remove it.
+>
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux and Kernel engineering
+> http://free-electrons.com
+>
+Best Regards,
 
-Regards,
-
---
-ELB
+Fabrice
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180101/bd90e3ca/attachment.html>
