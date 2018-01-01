@@ -1,100 +1,119 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 1 Jan 2018 12:51:59 +0100
-Subject: [Buildroot] [git commit] docs/website: update for 2017.02.9
-Message-ID: <20180101115229.D58838129F@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 1 Jan 2018 12:54:48 +0100
+Subject: [Buildroot] [PATCH 1/1] fs/cpio: add option to manually specify
+ file list
+In-Reply-To: <20171026191627.18949-2-sconnor@lynx.com>
+References: <Multiple root filesystems for single kernel/toolchain>
+ <20171026191627.18949-1-sconnor@lynx.com>
+ <20171026191627.18949-2-sconnor@lynx.com>
+Message-ID: <20180101125448.41ee4404@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7da7a1f96f69b3dcd52af1d33d2b260d53af6bc3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Peter, Arnout, Yann, all,
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- docs/website/download.html | 18 +++++++++---------
- docs/website/news.html     | 19 +++++++++++++++++++
- 2 files changed, 28 insertions(+), 9 deletions(-)
+This patch has been pending since ~2 months with no feedback. Do we
+want something like this?
 
-diff --git a/docs/website/download.html b/docs/website/download.html
-index e5d7c81..8e2525d 100644
---- a/docs/website/download.html
-+++ b/docs/website/download.html
-@@ -8,37 +8,37 @@
-     <div class="panel-heading">Download</div>
-     <div class="panel-body">
- 
--      <h3 style="text-align: center;">Latest long term support release: <b>2017.02.8</b></h3>
-+      <h3 style="text-align: center;">Latest long term support release: <b>2017.02.9</b></h3>
- 
-       <div class="row mt centered">
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2017.02.8.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2017.02.9.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2017.02.8.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2017.02.9.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
--	  <h3><a href="/downloads/buildroot-2017.02.8.tar.gz">buildroot-2017.02.8.tar.gz</a></h3>
--	  <p><a href="/downloads/buildroot-2017.02.8.tar.gz.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2017.02.9.tar.gz">buildroot-2017.02.9.tar.gz</a></h3>
-+	  <p><a href="/downloads/buildroot-2017.02.9.tar.gz.sign">PGP signature</a></p>
- 	</div>
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2017.02.8.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2017.02.9.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2017.02.8.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2017.02.9.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
- 
--	  <h3><a href="/downloads/buildroot-2017.02.8.tar.bz2">buildroot-2017.02.8.tar.bz2</a></h3>
--	  <p><a href="/downloads/buildroot-2017.02.8.tar.bz2.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2017.02.9.tar.bz2">buildroot-2017.02.9.tar.bz2</a></h3>
-+	  <p><a href="/downloads/buildroot-2017.02.9.tar.bz2.sign">PGP signature</a></p>
- 	</div>
-       </div>
- 
-diff --git a/docs/website/news.html b/docs/website/news.html
-index 7522f26..d6e4962 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -9,6 +9,25 @@
- <h2>News</h2>
- <ul class="timeline">
- 
-+  <li>
-+    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-+    <div class="timeline-panel">
-+      <div class="timeline-heading">
-+	<h4 class="timeline-title">2017.02.9 released</h4>
-+	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>1 January 2018</small></p>
-+      </div>
-+      <div class="timeline-body">
-+	<p>The 2017.02.9 bugfix release is out, fixing a number of important /
-+	  security related issues discovered since the 2017.02.8 release. See the
-+	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2017.02.9">CHANGES</a>
-+	  file for more details, read the
-+	  <a href="http://lists.busybox.net/pipermail/buildroot/2018-January/210559.html">announcement</a>
-+	  and go to the <a href="/downloads/">downloads page</a> to pick up the
-+	  <a href="/downloads/buildroot-2017.02.9.tar.bz2">2017.02.9 release</a>.</p>
-+      </div>
-+    </div>
-+  </li>
-+
-   <li class="timeline-inverted">
-     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-     <div class="timeline-panel">
+One thing that bothers me a bit is that it would make the
+initramfs/cpio image contain a filesystem that is different from other
+root filesystem images. But perhaps this is OK, because initramfs is
+indeed special.
+
+So I'm inclined to just apply this, as it may be useful for some users.
+If you don't voice a concern within the next days, I'll apply.
+
+Thanks!
+
+Thmas
+
+On Thu, 26 Oct 2017 12:16:27 -0700, Seamus Connor wrote:
+> For some systems it may be desireable to have an initramfs that is
+> smaller than the full root filesystem. This commit adds support for
+> creating an initramfs based on a manually specified set of files. It is
+> up to the user to define a sensible set of files. This file list could
+> either be statically created, or it could be created as the result of a
+> pre-fs hook script.
+> 
+> Signed-off-by: Seamus Connor <sconnor@lynx.com>
+> ---
+>  fs/cpio/Config.in | 30 ++++++++++++++++++++++++++++++
+>  fs/cpio/cpio.mk   | 10 ++++++++++
+>  2 files changed, 40 insertions(+)
+> 
+> diff --git a/fs/cpio/Config.in b/fs/cpio/Config.in
+> index 206baca677..21aa2c6fb8 100644
+> --- a/fs/cpio/Config.in
+> +++ b/fs/cpio/Config.in
+> @@ -7,6 +7,36 @@ config BR2_TARGET_ROOTFS_CPIO
+>  
+>  if BR2_TARGET_ROOTFS_CPIO
+>  
+> +choice
+> +	prompt "Seleted Fileset"
+> +	default BR2_TARGET_ROOTFS_CPIO_INCLUDE_ALL
+> +	help
+> +	  Select the set of files to include in the cpio of the root filesystem.
+> +	  This may either be all files installed to the target, or it may be a
+> +	  subset defined in the custom file list.
+> +
+> +config BR2_TARGET_ROOTFS_CPIO_INCLUDE_ALL
+> +	bool "Include all files from target"
+> +	help
+> +	  Include all files from the target directory in the root filesystem.
+> +
+> +config BR2_TARGET_ROOTFS_CPIO_INCLUDE_CUSTOM
+> +	bool "Include a subset of files from target"
+> +	help
+> +	  Include a subset of the files from the target directory in the root filesystem.
+> +	  This requires a custom file list to be defined.  The actual file list may be
+> +	  generated by a user script defined as part of the pre-fs hook.
+> +
+> +endchoice
+> +
+> +config BR2_TARGET_ROOTFS_CPIO_CUSTOM_FILELIST
+> +	string "path to a custom file list"
+> +	depends on BR2_TARGET_ROOTFS_CPIO && BR2_TARGET_ROOTFS_CPIO_INCLUDE_CUSTOM
+> +	help
+> +	  This file defines the contents of the rootfilesystem.  All files and folders
+> +	  created in the rootfilesystem must be defined here.  This file can be statically
+> +	  defined, or created as part of the pre-fs hook.
+> +
+>  choice
+>  	prompt "Compression method"
+>  	default BR2_TARGET_ROOTFS_CPIO_NONE
+> diff --git a/fs/cpio/cpio.mk b/fs/cpio/cpio.mk
+> index e82167e512..984ff37895 100644
+> --- a/fs/cpio/cpio.mk
+> +++ b/fs/cpio/cpio.mk
+> @@ -27,10 +27,20 @@ endif # BR2_ROOTFS_DEVICE_CREATION_STATIC
+>  
+>  ROOTFS_CPIO_PRE_GEN_HOOKS += ROOTFS_CPIO_ADD_INIT
+>  
+> +ifeq ($(BR2_TARGET_ROOTFS_CPIO_INCLUDE_ALL),y)
+> +
+>  define ROOTFS_CPIO_CMD
+>  	cd $(TARGET_DIR) && find . | cpio --quiet -o -H newc > $@
+>  endef
+>  
+> +else
+> +
+> +define ROOTFS_CPIO_CMD
+> +	cd $(TARGET_DIR) && cpio --quiet -o -H newc < $(BR2_TARGET_ROOTFS_CPIO_CUSTOM_FILELIST) > $@
+> +endef
+> +
+> +endif
+> +
+>  $(BINARIES_DIR)/rootfs.cpio.uboot: $(BINARIES_DIR)/rootfs.cpio host-uboot-tools
+>  	$(MKIMAGE) -A $(MKIMAGE_ARCH) -T ramdisk \
+>  		-C none -d $<$(ROOTFS_CPIO_COMPRESS_EXT) $@
+
+
+
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
