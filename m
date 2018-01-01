@@ -1,46 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 1 Jan 2018 12:50:26 +0100
-Subject: [Buildroot] [PATCH] scanpypi: get license names from SPDX
- database
-In-Reply-To: <20171114105856.2077-1-yegorslists@googlemail.com>
-References: <20171114105856.2077-1-yegorslists@googlemail.com>
-Message-ID: <20180101125026.0c7d7722@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 1 Jan 2018 12:48:38 +0100
+Subject: [Buildroot] [git commit] Update for 2017.02.9
+Message-ID: <20180101115229.C76758129F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=93a8938d847a9900a868910b640495f9f162855f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 14 Nov 2017 11:58:56 +0100, yegorslists at googlemail.com wrote:
+[Peter: drop Makefile changes]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 8f03647169a17b10503594e5f3d95113a01171f9)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ CHANGES | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
-> +try:
-> +    import spdx_lookup as liclookup
-> +except ImportError:
-> +    # spdx_lookup is not installed
-> +    liclookup = None
-> +
-
-I understand the idea, but I find it a bit weird to have the script
-behave differently depending on whether we have the SDPX Python package
-installed or not. Indeed, it may return different license results.
-
-Should we at the very least display a warning when the SDPX package is
-not there? Or should we have an option to explicitly select if the SDPX
-package should be used or not?
-
-I don't have a strong opinion on this, so if you (and others) believe
-that your proposal is good enough, then I'm fine with it.
-
->          filenames = ['LICENCE', 'LICENSE', 'LICENSE.RST', 'LICENSE.TXT',
-> -		     'COPYING', 'COPYING.TXT']
-> +                     'COPYING', 'COPYING.TXT']
-
-This is a spurious and not really related change :)
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/CHANGES b/CHANGES
+index 5de127d..5f9c3bd 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -672,6 +672,21 @@
+ 	#9846: musl libc not installed correctly in target folder
+ 	#9856: build libubox failed on ubuntu 17.04 64bit
+ 
++2017.02.9, Released January 1st, 2018
++
++	Important / security related fixes.
++
++	Fix divide by zero issue in size-stats script.
++
++	Fix makefile include ordering issue with certain make versions
++	in the external toolchain handling.
++
++	Updated/fixed packages: dhcp, exim, flann, gdb, heimdal,
++	libcue, libcurl, libevent, libpqxx, libsoxr, linphone, lldpd,
++	mariadb, mfgtools, mtools, nodejs, nut, openssl, rsync,
++	samba4, tor, vlc, webkitgtk, wireshark, xfsprogs,
++	xlib_libXcursor, xlib_libXfont, xlib_libXfont2
++
+ 2017.02.8, Released November 27th, 2017
+ 
+ 	Important / security related fixes.
