@@ -1,31 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 1 Jan 2018 15:59:19 +0100
-Subject: [Buildroot] [PATCH] coreutils: expand list of files moved from
- /usr/bin to /bin
-In-Reply-To: <20171012233332.30550-1-casantos@datacom.ind.br>
-References: <20171012233332.30550-1-casantos@datacom.ind.br>
-Message-ID: <20180101155919.050a470c@windsurf>
+From: Mario Lang <mlang@blind.guru>
+Date: Mon,  1 Jan 2018 16:12:18 +0100
+Subject: [Buildroot] [PATCH] package/brltty: depends on BR2_USE_MMU due to
+ calls to fork()
+Message-ID: <20180101151218.20372-1-mlang@blind.guru>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Fixes:
+  http://autobuild.buildroot.net/results/489dd7a19911b45ae7b0f1eade63def793e03ade
+Signed-off-by: Mario Lang <mlang@blind.guru>
+---
+ package/brltty/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-On Thu, 12 Oct 2017 20:33:32 -0300, Carlos Santos wrote:
-> BusyBox installs kill, link, mktemp, nice and printenv on /bin, so
-> ensure that coreutils replaces them.
-> 
-> Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
-> ---
->  package/coreutils/coreutils.mk | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-
-Applied to master, thanks.
-
-Thomas
+diff --git a/package/brltty/Config.in b/package/brltty/Config.in
+index 288d9b56d8..48ceb04c99 100644
+--- a/package/brltty/Config.in
++++ b/package/brltty/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_BRLTTY
+ 	depends on BR2_USE_WCHAR
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on !BR2_STATIC_LIBS
++	depends on BR2_USE_MMU # fork()
+ 	help
+ 	  A daemon providing access to the Linux console for a blind
+ 	  person using a refreshable braille display.
+@@ -17,4 +18,5 @@ config BR2_PACKAGE_BRLTTY_TEXT_TABLE
+ endif
+ 
+ comment "brltty needs a toolchain w/ dynamic lib, threads, wchar"
++	depends on BR2_USE_MMU
+ 	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.15.0
