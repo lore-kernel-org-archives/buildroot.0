@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 1 Jan 2018 23:04:28 +0100
-Subject: [Buildroot] [PATCH] package/brltty: depends on BR2_USE_MMU due
- to calls to fork()
-In-Reply-To: <20180101151218.20372-1-mlang@blind.guru>
-References: <20180101151218.20372-1-mlang@blind.guru>
-Message-ID: <20180101230428.69f0598a@windsurf>
+Date: Mon, 1 Jan 2018 23:04:33 +0100
+Subject: [Buildroot] [PATCH] sysstat: bump to version 11.6.1
+In-Reply-To: <6a909e7705ea5ef23e992b3dbdb6c1671f6bc8fb.1514834682.git.baruch@tkos.co.il>
+References: <6a909e7705ea5ef23e992b3dbdb6c1671f6bc8fb.1514834682.git.baruch@tkos.co.il>
+Message-ID: <20180101230433.425bf7b4@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,13 +12,17 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon,  1 Jan 2018 16:12:18 +0100, Mario Lang wrote:
-> Fixes:
->   http://autobuild.buildroot.net/results/489dd7a19911b45ae7b0f1eade63def793e03ade
-> Signed-off-by: Mario Lang <mlang@blind.guru>
+On Mon,  1 Jan 2018 21:24:42 +0200, Baruch Siach wrote:
+> The isag tool has been removed in version 11.5.5; no need to avoid its
+> installation anymore.
+> 
+> Add license file hash.
+> 
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 > ---
->  package/brltty/Config.in | 2 ++
->  1 file changed, 2 insertions(+)
+>  package/sysstat/sysstat.hash | 5 +++--
+>  package/sysstat/sysstat.mk   | 6 +-----
+>  2 files changed, 4 insertions(+), 7 deletions(-)
 
 Applied to master, thanks.
 
