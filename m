@@ -1,74 +1,68 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 1 Jan 2018 13:05:16 +0100
-Subject: [Buildroot] [git commit] arch: add Atom CPUs as Silvermont
- Architecture target
-Message-ID: <20180101120521.885418393B@busybox.osuosl.org>
+From: Joseph Kogut <joseph.kogut@gmail.com>
+Date: Mon, 1 Jan 2018 04:05:48 -0800
+Subject: [Buildroot] [PATCH 1/1] gconf: new package
+In-Reply-To: <20180101123414.49e3b498@windsurf>
+References: <20171121020258.31523-1-joseph.kogut@gmail.com>
+ <20180101123414.49e3b498@windsurf>
+Message-ID: <CAMWSM7gD6i+EbD0-Fwfy00a_ZuVsBv8PimYbexA5ptjGQshAcQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1eecd462ae052cbb056de2d89419f445c4cbd4fa
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi,
 
-The old Atom target is not really fitting for recent Atom CPUs based
-on Silvermont, Airmont or Goldmont. Those have more in common with
-older Desktop CPUs than old Atoms.
+On Jan 1, 2018 3:34 AM, "Thomas Petazzoni" <
+thomas.petazzoni@free-electrons.com> wrote:
 
-Signed-off-by: Norbert Lange <norbert.lange@andritz.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- arch/Config.in.x86         | 11 +++++++++++
- package/openblas/Config.in |  2 +-
- 2 files changed, 12 insertions(+), 1 deletion(-)
+Hello,
 
-diff --git a/arch/Config.in.x86 b/arch/Config.in.x86
-index 0d9e93b..8e623b3 100644
---- a/arch/Config.in.x86
-+++ b/arch/Config.in.x86
-@@ -129,6 +129,15 @@ config BR2_x86_atom
- 	select BR2_X86_CPU_HAS_SSE2
- 	select BR2_X86_CPU_HAS_SSE3
- 	select BR2_X86_CPU_HAS_SSSE3
-+config BR2_x86_silvermont
-+	bool "silvermont"
-+	select BR2_X86_CPU_HAS_MMX
-+	select BR2_X86_CPU_HAS_SSE
-+	select BR2_X86_CPU_HAS_SSE2
-+	select BR2_X86_CPU_HAS_SSE3
-+	select BR2_X86_CPU_HAS_SSSE3
-+	select BR2_X86_CPU_HAS_SSE4
-+	select BR2_X86_CPU_HAS_SSE42
- config BR2_x86_k6
- 	bool "k6"
- 	select BR2_X86_CPU_HAS_MMX
-@@ -229,6 +238,7 @@ config BR2_ARCH
- 	default "i686"		if BR2_x86_corei7_avx && BR2_i386
- 	default "i686"		if BR2_x86_corei7_avx2 && BR2_i386
- 	default "i686"		if BR2_x86_atom && BR2_i386
-+	default "i686"		if BR2_x86_silvermont && BR2_i386
- 	default "i686"		if BR2_x86_opteron && BR2_i386
- 	default "i686"		if BR2_x86_opteron_sse3 && BR2_i386
- 	default "i686"		if BR2_x86_barcelona && BR2_i386
-@@ -261,6 +271,7 @@ config BR2_GCC_TARGET_ARCH
- 	default "corei7-avx"	if BR2_x86_corei7_avx
- 	default "core-avx2"	if BR2_x86_core_avx2
- 	default "atom"		if BR2_x86_atom
-+	default "silvermont"	if BR2_x86_silvermont
- 	default "k8"		if BR2_x86_opteron
- 	default "k8-sse3"	if BR2_x86_opteron_sse3
- 	default "barcelona"	if BR2_x86_barcelona
-diff --git a/package/openblas/Config.in b/package/openblas/Config.in
-index bc62896..eb93e31 100644
---- a/package/openblas/Config.in
-+++ b/package/openblas/Config.in
-@@ -6,7 +6,7 @@ config BR2_PACKAGE_OPENBLAS_DEFAULT_TARGET
- 	default "PRESCOTT"     if BR2_x86_prescott
- 	default "BANIAS"       if BR2_x86_pentium_m
- 	default "CORE2"        if BR2_x86_core2
--	default "NEHALEM"      if BR2_x86_corei7
-+	default "NEHALEM"      if BR2_x86_corei7 || BR2_x86_silvermont
- 	default "SANDYBRIDGE"  if BR2_x86_corei7_avx
- 	default "HASWELL"      if BR2_x86_core_avx2
- 	default "ATOM"         if BR2_x86_atom
+On Mon, 20 Nov 2017 18:02:58 -0800, Joseph Kogut wrote:
+> Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
+> ---
+>  DEVELOPERS               |  1 +
+>  package/Config.in        |  1 +
+>  package/gconf/Config.in  | 10 ++++++++++
+>  package/gconf/gconf.hash |  4 ++++
+>  package/gconf/gconf.mk   | 10 ++++++++++
+>  5 files changed, 26 insertions(+)
+>  create mode 100644 package/gconf/Config.in
+>  create mode 100644 package/gconf/gconf.hash
+>  create mode 100644 package/gconf/gconf.mk
+
+Thanks for your contribution. I've applied, after fixing a number of
+issues:
+
+    [Thomas:
+     - propagate dependencies of selected packages in Config.in
+     - add missing Config.in comment about dependencies
+     - add missing upstream URL in Config.in
+     - add missing comment header in .mk file
+     - remove --disable-nls from configuration options, it is taken care
+       of by the package infrastructure
+     - remove --disable-dependency-tracking, it is taken care of in the
+       package infrastructure
+     - add $(TARGET_NLS_DEPENDENCIES) to <pkg>_DEPENDENCIES, since gconf
+       has optional NLS support
+     - add host-intltool to <pkg>_DEPENDENCIES, since gconf needs
+       intltool-update
+     - fix license: it's LGPL-2.0+, not GPL-2.0.]
+
+Thanks!
+
+Thomas
+--
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
+
+
+Thanks, Thomas! I meant to fix this one, but I've been busy with other work.
+
+Best,
+
+Joseph
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180101/350dec74/attachment.html>
