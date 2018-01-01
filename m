@@ -1,52 +1,73 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 1 Jan 2018 12:34:14 +0100
-Subject: [Buildroot] [PATCH 1/1] gconf: new package
-In-Reply-To: <20171121020258.31523-1-joseph.kogut@gmail.com>
-References: <20171121020258.31523-1-joseph.kogut@gmail.com>
-Message-ID: <20180101123414.49e3b498@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 01 Jan 2018 12:37:06 +0100
+Subject: [Buildroot] Buildroot 2017.02.9 released
+Message-ID: <87shbpajz1.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi,
 
-On Mon, 20 Nov 2017 18:02:58 -0800, Joseph Kogut wrote:
-> Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
-> ---
->  DEVELOPERS               |  1 +
->  package/Config.in        |  1 +
->  package/gconf/Config.in  | 10 ++++++++++
->  package/gconf/gconf.hash |  4 ++++
->  package/gconf/gconf.mk   | 10 ++++++++++
->  5 files changed, 26 insertions(+)
->  create mode 100644 package/gconf/Config.in
->  create mode 100644 package/gconf/gconf.hash
->  create mode 100644 package/gconf/gconf.mk
+Buildroot is a simple tool for creating complete embedded Linux systems
+(http://buildroot.org).
 
-Thanks for your contribution. I've applied, after fixing a number of
-issues:
+Buildroot 2017.02.9 is released - Go download it at:
 
-    [Thomas:
-     - propagate dependencies of selected packages in Config.in
-     - add missing Config.in comment about dependencies
-     - add missing upstream URL in Config.in
-     - add missing comment header in .mk file
-     - remove --disable-nls from configuration options, it is taken care
-       of by the package infrastructure
-     - remove --disable-dependency-tracking, it is taken care of in the
-       package infrastructure
-     - add $(TARGET_NLS_DEPENDENCIES) to <pkg>_DEPENDENCIES, since gconf
-       has optional NLS support
-     - add host-intltool to <pkg>_DEPENDENCIES, since gconf needs
-       intltool-update
-     - fix license: it's LGPL-2.0+, not GPL-2.0.]
+http://buildroot.org/downloads/buildroot-2017.02.9.tar.gz
 
-Thanks!
+or
 
-Thomas
+http://buildroot.org/downloads/buildroot-2017.02.9.tar.bz2
+
+Or get it from Git:
+
+git://git.buildroot.org/buildroot
+
+Buildroot 2017.02.9 is the 9th bugfix release on the current long term
+release, fixing a number of important / security related issues
+discovered since the 2017.02.8 release.
+
+- Security fixes for dhcp, exim, heimdal, libcurl, mariadb, nodejs,
+  openssl, rsync, tor, vlc, webkitgtk, wireshark, xlib_libXcursor,
+  xlib_libXfont, xlib_libXfont2
+
+- Fixes for download/compilation/runtime issues in flann, gdb, libcue,
+  libevent, libpqxx, libsoxr, linphone, lldpd, mfgtools, mtools, nut,
+  samba4, webkitgtk, xfsprogs
+
+- Fix divide by zero issue in size-stats script.
+
+- Fix makefile include ordering issue with certain make versions in the
+  external toolchain handling.
+
+For more details, see the CHANGES file:
+
+https://git.buildroot.net/buildroot/plain/CHANGES?id=2017.02.9
+
+Users of the affected packages are strongly encouraged to upgrade.
+
+Many thanks to all the people contributing to this release:
+
+git shortlog -sn 2017.02.8..
+
+    13  Bernd Kuhls
+     6  Baruch Siach
+     6  Fabio Estevam
+     6  Peter Korsgaard
+     3  Adrian Perez de Castro
+     3  Romain Naour
+     2  Peter Seiderer
+     2  Ryan Coe
+     1  Andrey Yurovsky
+     1  Carlos Santos
+     1  Damien Riegel
+     1  Danomi Manchego
+     1  Fabrice Fontaine
+     1  Jerzy Grzegorek
+     1  Johan Oudinet
+     1  Yann E. MORIN
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
