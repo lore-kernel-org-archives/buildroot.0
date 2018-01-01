@@ -1,77 +1,39 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 1 Jan 2018 14:02:29 +0100
-Subject: [Buildroot] [PATCHv2] package/meson: fix malformed
- cross-compilation.conf.in
-In-Reply-To: <CAFSsvmr21N+7tTGDY-qXQ7zhD1C2-QKBOKxPWuZdB-6QPHSeZg@mail.gmail.com>
-References: <20171230095635.18123-1-yann.morin.1998@free.fr>
- <CAFSsvmr21N+7tTGDY-qXQ7zhD1C2-QKBOKxPWuZdB-6QPHSeZg@mail.gmail.com>
-Message-ID: <20180101130229.GA2999@scaer>
+Date: Mon, 1 Jan 2018 14:05:56 +0100
+Subject: [Buildroot] [PATCH 2/2] core/tests: add test for compressed
+ iso9660
+In-Reply-To: <20171231182302.59012b3f@windsurf>
+References: <cover.1513805241.git.yann.morin.1998@free.fr>
+ <d9148095910e211f1b38a85f93a10ab88fa1af04.1513805241.git.yann.morin.1998@free.fr>
+ <20171231182302.59012b3f@windsurf>
+Message-ID: <20180101130556.GA24931@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Adam, All,
+Thomas, All,
 
-On 2017-12-31 16:04 -0500, Adam Duskett spake thusly:
-> On Sat, Dec 30, 2017 at 4:56 AM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> > Currently, meson will set the c_link_args and the cpp_link_args to the
-> > value of TARGET_LDFLAGS, even when it's not defined.
-> >
-> > This creates a malformed array ["",] which will break any package
-> > building using meson/ninja.
-> >
-> > We fix that by using an empty replacement when the corresponding values
-> > are empty.
-> >
-> > Reported-by: Adam Duskett <Adamduskett@outlook.com>
-> > Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
-> > [yann.morin.1998 at free.fr: alternate implementation, suggested by Thomas]
-> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> > ---
-> >  package/meson/meson.mk | 10 +++++++---
-> >  1 file changed, 7 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/package/meson/meson.mk b/package/meson/meson.mk
-> > index 55ce84da07..d55c3c7c00 100644
-> > --- a/package/meson/meson.mk
-> > +++ b/package/meson/meson.mk
-> > @@ -16,15 +16,19 @@ HOST_MESON_NEEDS_HOST_PYTHON = python3
-> >  HOST_MESON_TARGET_ENDIAN = $(call LOWERCASE,$(BR2_ENDIAN))
-> >  HOST_MESON_TARGET_CPU = $(call qstrip,$(BR2_GCC_TARGET_CPU))
-> >
-> > +HOST_MESON_SED_CFLAGS = $(if $(TARGET_CFLAGS),`printf '"%s"$(comma) ' $(TARGET_CFLAGS)`)
-> > +HOST_MESON_SED_LDFLAGS = $(if $(TARGET_LDFLAGS),`printf '"%s"$(comma) ' $(TARGET_LDFLAGS)`)
-> > +HOST_MESON_SED_CXXFLAGS = $(if $(TARGET_CXXFLAGS),`printf '"%s"$(comma) ' $(TARGET_CXXFLAGS)`)
-> > +
-> >  define HOST_MESON_INSTALL_CROSS_CONF
-> >         mkdir -p $(HOST_DIR)/etc/meson
-> >         sed -e "s%@TARGET_CROSS@%$(TARGET_CROSS)%g" \
-> >             -e "s%@TARGET_ARCH@%$(ARCH)%g" \
-> >             -e "s%@TARGET_CPU@%$(HOST_MESON_TARGET_CPU)%g" \
-> >             -e "s%@TARGET_ENDIAN@%$(HOST_MESON_TARGET_ENDIAN)%g" \
-> > -           -e "s%@TARGET_CFLAGS@%`printf '"%s", ' $(TARGET_CFLAGS)`%g" \
-> > -           -e "s%@TARGET_LDFLAGS@%`printf '"%s", ' $(TARGET_LDFLAGS)`%g" \
-> > -           -e "s%@TARGET_CXXFLAGS@%`printf '"%s", ' $(TARGET_CXXFLAGS)`%g" \
-> > +           -e "s%@TARGET_CFLAGS@%$(HOST_MESON_SED_CFLAGS)%g" \
-> > +           -e "s%@TARGET_LDFLAGS@%$(HOST_MESON_SED_LDFLAGS)%g" \
-> > +           -e "s%@TARGET_CXXFLAGS@%$(HOST_MESON_SED_CXXFLAGS)%g" \
-> >             -e "s%@HOST_DIR@%$(HOST_DIR)%g" \
-> >             $(HOST_MESON_PKGDIR)/cross-compilation.conf.in \
-> >             > $(HOST_DIR)/etc/meson/cross-compilation.conf
+On 2017-12-31 18:23 +0100, Thomas Petazzoni spake thusly:
+> On Wed, 20 Dec 2017 22:27:43 +0100, Yann E. MORIN wrote:
+> > +class TestIso9660Grub2ExternalCompress(infra.basetest.BRTest):
+> > +    config = BASIC_CONFIG + \
+> > +        """
+> > +        BR2_TARGET_ROOTFS_ISO9660=y
+> > +        # BR2_TARGET_ROOTFS_ISO9660_INITRD is not set
+> > +        BR2_TARGET_ROOTFS_ISO9660_TRANSP_COMPRESS
+> Not sure you really tested with transparent compression enabled, since
+> =y was missing. So I've fixed that, taken into account the option
+> rename, and applied. Thanks!
 
-> Tested and works well. This needs to be pushed before I can send a
-> systemd patch.
+I'm pretty sure that got tested:
+    https://gitlab.com/ymorin/buildroot-ci/pipelines/15356311
 
-To report testing success, one just replies with something like (with no
-indentation):
+But it proabably got ignored, so the filesystem was not compression
+enabled.
 
-    Tested-by: You you at there
-
-This way this gets picked up by patchwork, and reported as such:
-    https://patchwork.ozlabs.org/project/buildroot/list/
+Thanks for the fix.
 
 Regards,
 Yann E. MORIN.
