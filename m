@@ -1,41 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 1 Jan 2018 23:05:21 +0100
-Subject: [Buildroot] [PATCHv2] package/meson: fix malformed
- cross-compilation.conf.in
-In-Reply-To: <20171230095635.18123-1-yann.morin.1998@free.fr>
-References: <20171230095635.18123-1-yann.morin.1998@free.fr>
-Message-ID: <20180101230521.2c5da61c@windsurf>
+Date: Mon, 1 Jan 2018 23:14:06 +0100
+Subject: [Buildroot] [git commit] gst1-validate: bump to 1.12.4
+Message-ID: <20180101221428.58BC583A05@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=4d8969be69eafda0b1963710467159240139f6a9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 30 Dec 2017 10:56:35 +0100, Yann E. MORIN wrote:
-> Currently, meson will set the c_link_args and the cpp_link_args to the
-> value of TARGET_LDFLAGS, even when it's not defined.
-> 
-> This creates a malformed array ["",] which will break any package
-> building using meson/ninja.
-> 
-> We fix that by using an empty replacement when the corresponding values
-> are empty.
-> 
-> Reported-by: Adam Duskett <Adamduskett@outlook.com>
-> Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
-> [yann.morin.1998 at free.fr: alternate implementation, suggested by Thomas]
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  package/meson/meson.mk | 10 +++++++---
->  1 file changed, 7 insertions(+), 3 deletions(-)
+Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/gstreamer1/gst1-validate/gst1-validate.hash | 4 ++--
+ package/gstreamer1/gst1-validate/gst1-validate.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/gstreamer1/gst1-validate/gst1-validate.hash b/package/gstreamer1/gst1-validate/gst1-validate.hash
+index c726c17..50bddd0 100644
+--- a/package/gstreamer1/gst1-validate/gst1-validate.hash
++++ b/package/gstreamer1/gst1-validate/gst1-validate.hash
+@@ -1,2 +1,2 @@
+-# From https://gstreamer.freedesktop.org/src/gst-validate/gst-validate-1.12.3.tar.xz.sha256sum
+-sha256 5139949d20274fdd702492438eeab2c9e55aa82f60aca17db27ebd3faf08489e gst-validate-1.12.3.tar.xz
++# From https://gstreamer.freedesktop.org/src/gst-validate/gst-validate-1.12.4.tar.xz.sha256sum
++sha256 f9da9dfe6e5d6f5ba3b38c5752b42d3f927715904942b405c2924d3cb77afba1 gst-validate-1.12.4.tar.xz
+diff --git a/package/gstreamer1/gst1-validate/gst1-validate.mk b/package/gstreamer1/gst1-validate/gst1-validate.mk
+index 33fec08..d276490 100644
+--- a/package/gstreamer1/gst1-validate/gst1-validate.mk
++++ b/package/gstreamer1/gst1-validate/gst1-validate.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GST1_VALIDATE_VERSION = 1.12.3
++GST1_VALIDATE_VERSION = 1.12.4
+ GST1_VALIDATE_SOURCE = gst-validate-$(GST1_VALIDATE_VERSION).tar.xz
+ GST1_VALIDATE_SITE = https://gstreamer.freedesktop.org/src/gst-validate
+ GST1_VALIDATE_LICENSE = LGPL-2.1+
