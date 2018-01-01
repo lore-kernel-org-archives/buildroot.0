@@ -1,150 +1,68 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 1 Jan 2018 13:45:07 +0100
-Subject: [Buildroot] [git commit] mpv: add support for Raspberry Pi "rpi"
- output
-Message-ID: <20180101144311.1EE0381137@busybox.osuosl.org>
+Date: Mon, 1 Jan 2018 15:47:24 +0100
+Subject: [Buildroot] [PATCH 1/1] fs/cpio: add option to manually specify
+ file list
+In-Reply-To: <20180101132242.GB24931@scaer>
+References: <20171026191627.18949-1-sconnor@lynx.com>
+ <20171026191627.18949-2-sconnor@lynx.com>
+ <20180101125448.41ee4404@windsurf> <20180101132242.GB24931@scaer>
+Message-ID: <20180101154724.10ad21fc@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8e741412d444f9fd2a9af75bf33066a083f7f81b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-mpv now compiles with the "rpi" video driver that provides hardware
-acceleration on the Raspberry Pi.
+On Mon, 1 Jan 2018 14:22:42 +0100, Yann E. MORIN wrote:
 
-Tested working on a Raspberry Pi 1 Model B+ and Zero.
+> > So I'm inclined to just apply this, as it may be useful for some users.
+> > If you don't voice a concern within the next days, I'll apply.  
+> 
+> I don't like this much, in fact.
+> 
+> In such a case, I would say that the initramfs filesystem is a different
+> system, and thus should be built with a different .config.
+> 
+> Basically, what I do in this situation:
+> 
+>   - have a first .config for kernel+modules + initramfs, and with a
+>     post-build script that:
+>     1. copy all the kernel modules "somewhere",
+>     2. trim the kernel modules that end up in the initramfs, to keep
+>        just what is needed to boot;
+> 
+>   - have a second .config with just userland, plus a post-build script
+>     that vampirises the kernel modules from "somwehere" (as saved above)
+> 
+> Of course, the "somewhere" is agreed on because I know it.
+> 
+> Besides, this is much more flexible than what this patch proposes.
+> 
+> Really, the core of the issue is to believe that the two systems are
+> one. They are not: they are two different systems.
 
-Signed-off-by: Mahyar Koshkouei <mahyar.koshkouei@gmail.com>
-[Thomas: drop unneeded dependency on rpi-firmware.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/mpv/0003-rpi-fix-linking-errors.patch | 90 +++++++++++++++++++++++++++
- package/mpv/mpv.mk                            |  9 ++-
- 2 files changed, 98 insertions(+), 1 deletion(-)
+On the other hand, the initramfs is very often a subset of the complete
+root filesystem, and being able to generate an image of this subset
+directly from the same configuration as the full-blown system is
+definitely a nice thing.
 
-diff --git a/package/mpv/0003-rpi-fix-linking-errors.patch b/package/mpv/0003-rpi-fix-linking-errors.patch
-new file mode 100644
-index 0000000..0e65a5a
---- /dev/null
-+++ b/package/mpv/0003-rpi-fix-linking-errors.patch
-@@ -0,0 +1,90 @@
-+From fe482a600d507dc7ce77f6d154a9e8b395f74fdd Mon Sep 17 00:00:00 2001
-+From: Mahyar Koshkouei <mahyar.koshkouei@gmail.com>
-+Date: Tue, 24 Oct 2017 09:47:38 +0100
-+Subject: [PATCH] rpi: fix linking errors
-+
-+Fixes linking issues when compiling with Raspberry Pi support.
-+
-+Signed-off-by: Mahyar Koshkouei <mahyar.koshkouei@gmail.com>
-+---
-+Status: pull request https://github.com/mpv-player/mpv/pull/4883
-+---
-+ waftools/checks/custom.py | 26 +++++++++++++++++++++++++-
-+ wscript                   | 18 +-----------------
-+ 2 files changed, 26 insertions(+), 18 deletions(-)
-+
-+diff --git a/waftools/checks/custom.py b/waftools/checks/custom.py
-+index d8065a3..9086795 100644
-+--- a/waftools/checks/custom.py
-++++ b/waftools/checks/custom.py
-+@@ -4,7 +4,7 @@ from waflib import Utils
-+ import os
-+ 
-+ __all__ = ["check_pthreads", "check_iconv", "check_lua",
-+-           "check_cocoa", "check_openal"]
-++           "check_cocoa", "check_openal", "check_rpi"]
-+ 
-+ pthreads_program = load_fragment('pthreads.c')
-+ 
-+@@ -103,3 +103,27 @@ def check_openal(ctx, dependency_identifier):
-+         if fn(ctx, dependency_identifier):
-+             return True
-+     return False
-++
-++def check_rpi(ctx, dependency_identifier):
-++    # We need MMAL/bcm_host/dispmanx APIs.
-++    # Upstream keeps pkgconfig files in '/opt/vc/lib/pkgconfig'.
-++    # See https://github.com/raspberrypi/userland/issues/245
-++    # PKG_CONFIG_SYSROOT_DIR helps with cross compilation.
-++    prev_pkg_path = os.getenv('PKG_CONFIG_PATH', '')
-++    os.environ['PKG_CONFIG_PATH'] = os.pathsep.join(
-++        filter(None, [os.path.join(os.getenv('PKG_CONFIG_SYSROOT_DIR', '/'),
-++                                   'opt/vc/lib/pkgconfig'),
-++                      prev_pkg_path]))
-++
-++    checks = [
-++        # We still need all OpenGL symbols, because the vo_opengl code is
-++        # generic and supports anything from GLES2/OpenGL 2.1 to OpenGL 4 core.
-++        check_pkg_config('bcm_host', uselib_store='bcm_host'),
-++        check_pkg_config('egl'),
-++        check_pkg_config('glesv2'),
-++        check_cc(lib=['mmal_core', 'mmal_util', 'mmal_vc_client'], use=['bcm_host']),
-++    ]
-++
-++    ret = all((fn(ctx, dependency_identifier) for fn in checks))
-++    os.environ['PKG_CONFIG_PATH'] = prev_pkg_path
-++    return ret
-+diff --git a/wscript b/wscript
-+index 9d88588..84e5f2e 100644
-+--- a/wscript
-++++ b/wscript
-+@@ -732,25 +732,9 @@ video_output_features = [
-+         'desc': 'Android support',
-+         'func': check_statement('android/api-level.h', '(void)__ANDROID__'),  # arbitrary android-specific header
-+     }, {
-+-        # We need MMAL/bcm_host/dispmanx APIs. Also, most RPI distros require
-+-        # every project to hardcode the paths to the include directories. Also,
-+-        # these headers are so broken that they spam tons of warnings by merely
-+-        # including them (compensate with -isystem and -fgnu89-inline).
-+         'name': '--rpi',
-+         'desc': 'Raspberry Pi support',
-+-        'func': compose_checks(
-+-            check_cc(cflags="-isystem/opt/vc/include/ "+
-+-                            "-isystem/opt/vc/include/interface/vcos/pthreads " +
-+-                            "-isystem/opt/vc/include/interface/vmcs_host/linux " +
-+-                            "-fgnu89-inline",
-+-                     linkflags="-L/opt/vc/lib",
-+-                     header_name="bcm_host.h",
-+-                     lib=['mmal_core', 'mmal_util', 'mmal_vc_client', 'bcm_host']),
-+-            # We still need all OpenGL symbols, because the vo_opengl code is
-+-            # generic and supports anything from GLES2/OpenGL 2.1 to OpenGL 4 core.
-+-            check_cc(lib="EGL"),
-+-            check_cc(lib="GLESv2"),
-+-        ),
-++        'func': check_rpi,
-+     } , {
-+         'name': '--ios-gl',
-+         'desc': 'iOS OpenGL ES hardware decoding interop support',
-+-- 
-+2.14.2
-+
-diff --git a/package/mpv/mpv.mk b/package/mpv/mpv.mk
-index 730ced6..b7dfb36 100644
---- a/package/mpv/mpv.mk
-+++ b/package/mpv/mpv.mk
-@@ -26,7 +26,6 @@ MPV_CONF_OPTS = \
- 	--disable-cuda-hwaccel \
- 	--disable-libv4l2 \
- 	--disable-opensles \
--	--disable-rpi \
- 	--disable-rsound \
- 	--disable-rubberband \
- 	--disable-uchardet \
-@@ -169,6 +168,14 @@ else
- MPV_CONF_OPTS += --disable-sdl1 --disable-sdl2
- endif
- 
-+# Raspberry Pi support
-+ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
-+MPV_CONF_OPTS += --enable-rpi --enable-gl
-+FFMPEG_DEPENDENCIES += rpi-userland
-+else
-+MPV_CONF_OPTS += --disable-rpi
-+endif
-+
- # va-api support
- # This requires one or more of the egl-drm, wayland, x11 backends
- # For now we support wayland and x11
+I agree that a separate configuration to build the initramfs is more
+flexible, but it also has its drawbacks (to handle kernel modules, as
+you mentioned, but also in terms of rebuilding the toolchain if you're
+using an internal toolchain). One example where it might be annoying to
+have a separate configuration is if you have a single package that
+builds both a kernel module and a user-space counterpart.
+
+So yeah, Seamus proposal is not ideal in terms of flexibility, but it
+does solve one common use-case with little complexity.
+
+Again, I'm not 100% convinced either, so it's good to have this
+discussion.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
