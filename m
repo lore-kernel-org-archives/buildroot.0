@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 1 Jan 2018 12:39:36 +0100
-Subject: [Buildroot] [PATCH] glibc: ARC is now supported via patches
-In-Reply-To: <20171109215821.16615-1-abrodkin@synopsys.com>
-References: <20171109215821.16615-1-abrodkin@synopsys.com>
-Message-ID: <20180101123936.609b7f41@windsurf>
+Date: Mon, 1 Jan 2018 12:50:26 +0100
+Subject: [Buildroot] [PATCH] scanpypi: get license names from SPDX
+ database
+In-Reply-To: <20171114105856.2077-1-yegorslists@googlemail.com>
+References: <20171114105856.2077-1-yegorslists@googlemail.com>
+Message-ID: <20180101125026.0c7d7722@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,36 +13,31 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 10 Nov 2017 00:58:21 +0300, Alexey Brodkin wrote:
-> Given ARC port is just a very few patches away from upstream
-> and if those are based on 2.29 everything works like a charm
-> let's forget about SNPS GitHub stuff and use vanilla glibc
-> plus patches.
-> 
-> This among other things solves a problem with stable fixes for glibc.
-> Now when Buildroot switched to the tip of glibc's stable branch instead of
-> applying cherry-picked patches ARC version would stay behind every time
-> glibc's "version" gets updated in Buildroot.
-> 
-> But if we just apply ARC patches then we're good with whatever commit
-> from upstream stable branch is taken.
-> 
-> Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-> Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  package/glibc/0001-longlong.h-sync-from-gcc.patch  |  133 +
->  .../0002-ARC-add-definitions-to-elf-elf.h.patch    |   94 +
->  package/glibc/0003-ARC-Initial-port-to-glibc.patch | 7625 ++++++++++++++++++++
+On Tue, 14 Nov 2017 11:58:56 +0100, yegorslists at googlemail.com wrote:
 
-This is a bit too much feature patches IMO, it's a complete
-architecture port. I agree it's a backport from upstream, so it's not
-too bad. But since glibc 2.27, which includes this, is expected to be
-released on February 1st, I prefer to post-pone this change until glibc
-2.27 gets released and we move to it.
+> +try:
+> +    import spdx_lookup as liclookup
+> +except ImportError:
+> +    # spdx_lookup is not installed
+> +    liclookup = None
+> +
 
-Best regards,
+I understand the idea, but I find it a bit weird to have the script
+behave differently depending on whether we have the SDPX Python package
+installed or not. Indeed, it may return different license results.
+
+Should we at the very least display a warning when the SDPX package is
+not there? Or should we have an option to explicitly select if the SDPX
+package should be used or not?
+
+I don't have a strong opinion on this, so if you (and others) believe
+that your proposal is good enough, then I'm fine with it.
+
+>          filenames = ['LICENCE', 'LICENSE', 'LICENSE.RST', 'LICENSE.TXT',
+> -		     'COPYING', 'COPYING.TXT']
+> +                     'COPYING', 'COPYING.TXT']
+
+This is a spurious and not really related change :)
 
 Thomas
 -- 
