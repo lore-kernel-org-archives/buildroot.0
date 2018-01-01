@@ -1,158 +1,62 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 1 Jan 2018 14:22:42 +0100
-Subject: [Buildroot] [PATCH 1/1] fs/cpio: add option to manually specify
- file list
-In-Reply-To: <20180101125448.41ee4404@windsurf>
-References: <20171026191627.18949-1-sconnor@lynx.com>
- <20171026191627.18949-2-sconnor@lynx.com>
- <20180101125448.41ee4404@windsurf>
-Message-ID: <20180101132242.GB24931@scaer>
+From: Patrick Doyle <wpdster@gmail.com>
+Date: Mon, 1 Jan 2018 09:42:32 -0500
+Subject: [Buildroot] Sharing an SDK with others
+Message-ID: <CAF_dkJDKzOUDW=68rp1ZUtuD2NbTvSYt6dFHxoJZx7_wAGf4QQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, Seanus, All,
+Hello All!
+Happy New Year!
 
-On 2018-01-01 12:54 +0100, Thomas Petazzoni spake thusly:
-> Peter, Arnout, Yann, all,
-> 
-> This patch has been pending since ~2 months with no feedback. Do we
-> want something like this?
-> 
-> One thing that bothers me a bit is that it would make the
-> initramfs/cpio image contain a filesystem that is different from other
-> root filesystem images. But perhaps this is OK, because initramfs is
-> indeed special.
-> 
-> So I'm inclined to just apply this, as it may be useful for some users.
-> If you don't voice a concern within the next days, I'll apply.
+I work with a team of developers, most of whom care much more about
+developing the end application than they do about the ins & outs of
+configuring a kernel, building a rootfs, etc...  (I guess it takes all
+kinds).
 
-I don't like this much, in fact.
+I would like to distribute a (buildroot based/compatible) SDK to the
+other developers to use so that they may compile their code and scp it
+to the target for testing/debugging.  I was very excited to see a
+"make sdk" option available.  I was hoping that would produce a
+relocatable SDK tarball of some sort in the images directory.  But
+that does not seem to be the case.  (In fact, when I ran "make sdk" on
+a fresh checkout, the system still generated bootstrap code, a rootfs,
+and a kernel, as well as the host toolchain... so I'm not sure what
+"make sdk" actually does.)
 
-In such a case, I would say that the initramfs filesystem is a different
-system, and thus should be built with a different .config.
+I tried plan B:
 
-Basically, what I do in this situation:
+Set BR2_HOST_DIR=/opt/<company-name>/<project-name>
+Give myself write permission to /opt
+make
 
-  - have a first .config for kernel+modules + initramfs, and with a
-    post-build script that:
-    1. copy all the kernel modules "somewhere",
-    2. trim the kernel modules that end up in the initramfs, to keep
-       just what is needed to boot;
+When all was said & done, I followed instructions from
+http://www.king-foo.com/2011/11/creating-debianubuntu-deb-packages/
+and https://debian-administration.org/article/529/Making_Debian_packages_from_proprietary_software
+to construct a .deb file to distribute my /opt base code chain.
 
-  - have a second .config with just userland, plus a post-build script
-    that vampirises the kernel modules from "somwehere" (as saved above)
+Then I blew away the contents of /opt/<company-name>, installed my
+.deb file, and tried a fresh build (pointing BR2_HOST_DIR to /opt
+again), but when I tried to build, the build failed because
+/opt/<company-name>/<project-name>/lib64 was not writable.
 
-Of course, the "somewhere" is agreed on because I know it.
+So I tried plan B-2:
+I configured buildroot to use an external, user supplied, toolchain in
+/opt/<company-name>/<project-name> and made the various compiler setup
+options match those of the installed toolchain (hopefully).
 
-Besides, this is much more flexible than what this patch proposes.
+Thanks for reading this far :-)
+Here is my (set of) question(s):
+Is this a reasonable approach?
+Is there a better approach?
+Would anybody like me to submit a documentation patch outlining the
+best approach (or, at a minimum, _an_ approach)?
+(I can guess I know the answer to that last one).
 
-Really, the core of the issue is to believe that the two systems are
-one. They are not: they are two different systems.
+Happy New Year All.
 
-So, I am not in favour of this patch.
+And Thanks.
 
-Regards,
-Yann E. MORIN.
-
-> Thanks!
-> 
-> Thmas
-> 
-> On Thu, 26 Oct 2017 12:16:27 -0700, Seamus Connor wrote:
-> > For some systems it may be desireable to have an initramfs that is
-> > smaller than the full root filesystem. This commit adds support for
-> > creating an initramfs based on a manually specified set of files. It is
-> > up to the user to define a sensible set of files. This file list could
-> > either be statically created, or it could be created as the result of a
-> > pre-fs hook script.
-> > 
-> > Signed-off-by: Seamus Connor <sconnor@lynx.com>
-> > ---
-> >  fs/cpio/Config.in | 30 ++++++++++++++++++++++++++++++
-> >  fs/cpio/cpio.mk   | 10 ++++++++++
-> >  2 files changed, 40 insertions(+)
-> > 
-> > diff --git a/fs/cpio/Config.in b/fs/cpio/Config.in
-> > index 206baca677..21aa2c6fb8 100644
-> > --- a/fs/cpio/Config.in
-> > +++ b/fs/cpio/Config.in
-> > @@ -7,6 +7,36 @@ config BR2_TARGET_ROOTFS_CPIO
-> >  
-> >  if BR2_TARGET_ROOTFS_CPIO
-> >  
-> > +choice
-> > +	prompt "Seleted Fileset"
-> > +	default BR2_TARGET_ROOTFS_CPIO_INCLUDE_ALL
-> > +	help
-> > +	  Select the set of files to include in the cpio of the root filesystem.
-> > +	  This may either be all files installed to the target, or it may be a
-> > +	  subset defined in the custom file list.
-> > +
-> > +config BR2_TARGET_ROOTFS_CPIO_INCLUDE_ALL
-> > +	bool "Include all files from target"
-> > +	help
-> > +	  Include all files from the target directory in the root filesystem.
-> > +
-> > +config BR2_TARGET_ROOTFS_CPIO_INCLUDE_CUSTOM
-> > +	bool "Include a subset of files from target"
-> > +	help
-> > +	  Include a subset of the files from the target directory in the root filesystem.
-> > +	  This requires a custom file list to be defined.  The actual file list may be
-> > +	  generated by a user script defined as part of the pre-fs hook.
-> > +
-> > +endchoice
-> > +
-> > +config BR2_TARGET_ROOTFS_CPIO_CUSTOM_FILELIST
-> > +	string "path to a custom file list"
-> > +	depends on BR2_TARGET_ROOTFS_CPIO && BR2_TARGET_ROOTFS_CPIO_INCLUDE_CUSTOM
-> > +	help
-> > +	  This file defines the contents of the rootfilesystem.  All files and folders
-> > +	  created in the rootfilesystem must be defined here.  This file can be statically
-> > +	  defined, or created as part of the pre-fs hook.
-> > +
-> >  choice
-> >  	prompt "Compression method"
-> >  	default BR2_TARGET_ROOTFS_CPIO_NONE
-> > diff --git a/fs/cpio/cpio.mk b/fs/cpio/cpio.mk
-> > index e82167e512..984ff37895 100644
-> > --- a/fs/cpio/cpio.mk
-> > +++ b/fs/cpio/cpio.mk
-> > @@ -27,10 +27,20 @@ endif # BR2_ROOTFS_DEVICE_CREATION_STATIC
-> >  
-> >  ROOTFS_CPIO_PRE_GEN_HOOKS += ROOTFS_CPIO_ADD_INIT
-> >  
-> > +ifeq ($(BR2_TARGET_ROOTFS_CPIO_INCLUDE_ALL),y)
-> > +
-> >  define ROOTFS_CPIO_CMD
-> >  	cd $(TARGET_DIR) && find . | cpio --quiet -o -H newc > $@
-> >  endef
-> >  
-> > +else
-> > +
-> > +define ROOTFS_CPIO_CMD
-> > +	cd $(TARGET_DIR) && cpio --quiet -o -H newc < $(BR2_TARGET_ROOTFS_CPIO_CUSTOM_FILELIST) > $@
-> > +endef
-> > +
-> > +endif
-> > +
-> >  $(BINARIES_DIR)/rootfs.cpio.uboot: $(BINARIES_DIR)/rootfs.cpio host-uboot-tools
-> >  	$(MKIMAGE) -A $(MKIMAGE_ARCH) -T ramdisk \
-> >  		-C none -d $<$(ROOTFS_CPIO_COMPRESS_EXT) $@
-> 
-> 
-> 
-> -- 
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux and Kernel engineering
-> http://free-electrons.com
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+--wpd
