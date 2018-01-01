@@ -1,73 +1,50 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 01 Jan 2018 12:37:06 +0100
-Subject: [Buildroot] Buildroot 2017.02.9 released
-Message-ID: <87shbpajz1.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 1 Jan 2018 12:39:36 +0100
+Subject: [Buildroot] [PATCH] glibc: ARC is now supported via patches
+In-Reply-To: <20171109215821.16615-1-abrodkin@synopsys.com>
+References: <20171109215821.16615-1-abrodkin@synopsys.com>
+Message-ID: <20180101123936.609b7f41@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hello,
 
-Buildroot is a simple tool for creating complete embedded Linux systems
-(http://buildroot.org).
+On Fri, 10 Nov 2017 00:58:21 +0300, Alexey Brodkin wrote:
+> Given ARC port is just a very few patches away from upstream
+> and if those are based on 2.29 everything works like a charm
+> let's forget about SNPS GitHub stuff and use vanilla glibc
+> plus patches.
+> 
+> This among other things solves a problem with stable fixes for glibc.
+> Now when Buildroot switched to the tip of glibc's stable branch instead of
+> applying cherry-picked patches ARC version would stay behind every time
+> glibc's "version" gets updated in Buildroot.
+> 
+> But if we just apply ARC patches then we're good with whatever commit
+> from upstream stable branch is taken.
+> 
+> Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+> Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Peter Korsgaard <peter@korsgaard.com>
+> ---
+>  package/glibc/0001-longlong.h-sync-from-gcc.patch  |  133 +
+>  .../0002-ARC-add-definitions-to-elf-elf.h.patch    |   94 +
+>  package/glibc/0003-ARC-Initial-port-to-glibc.patch | 7625 ++++++++++++++++++++
 
-Buildroot 2017.02.9 is released - Go download it at:
+This is a bit too much feature patches IMO, it's a complete
+architecture port. I agree it's a backport from upstream, so it's not
+too bad. But since glibc 2.27, which includes this, is expected to be
+released on February 1st, I prefer to post-pone this change until glibc
+2.27 gets released and we move to it.
 
-http://buildroot.org/downloads/buildroot-2017.02.9.tar.gz
+Best regards,
 
-or
-
-http://buildroot.org/downloads/buildroot-2017.02.9.tar.bz2
-
-Or get it from Git:
-
-git://git.buildroot.org/buildroot
-
-Buildroot 2017.02.9 is the 9th bugfix release on the current long term
-release, fixing a number of important / security related issues
-discovered since the 2017.02.8 release.
-
-- Security fixes for dhcp, exim, heimdal, libcurl, mariadb, nodejs,
-  openssl, rsync, tor, vlc, webkitgtk, wireshark, xlib_libXcursor,
-  xlib_libXfont, xlib_libXfont2
-
-- Fixes for download/compilation/runtime issues in flann, gdb, libcue,
-  libevent, libpqxx, libsoxr, linphone, lldpd, mfgtools, mtools, nut,
-  samba4, webkitgtk, xfsprogs
-
-- Fix divide by zero issue in size-stats script.
-
-- Fix makefile include ordering issue with certain make versions in the
-  external toolchain handling.
-
-For more details, see the CHANGES file:
-
-https://git.buildroot.net/buildroot/plain/CHANGES?id=2017.02.9
-
-Users of the affected packages are strongly encouraged to upgrade.
-
-Many thanks to all the people contributing to this release:
-
-git shortlog -sn 2017.02.8..
-
-    13  Bernd Kuhls
-     6  Baruch Siach
-     6  Fabio Estevam
-     6  Peter Korsgaard
-     3  Adrian Perez de Castro
-     3  Romain Naour
-     2  Peter Seiderer
-     2  Ryan Coe
-     1  Andrey Yurovsky
-     1  Carlos Santos
-     1  Damien Riegel
-     1  Danomi Manchego
-     1  Fabrice Fontaine
-     1  Jerzy Grzegorek
-     1  Johan Oudinet
-     1  Yann E. MORIN
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
