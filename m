@@ -1,42 +1,38 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Mon,  1 Jan 2018 11:17:18 -0500
-Subject: [Buildroot] [PATCH 06/10] gst1-rtsp-server: bump to 1.12.4
-In-Reply-To: <20180101161722.12637-1-Adamduskett@outlook.com>
-References: <20180101161722.12637-1-Adamduskett@outlook.com>
-Message-ID: <20180101161722.12637-6-Adamduskett@outlook.com>
+From: Mahyar Koshkouei <mahyar.koshkouei@gmail.com>
+Date: Mon,  1 Jan 2018 16:39:32 +0000
+Subject: [Buildroot] [PATCH 1/1] DEVELOPERS: Add myself to mpv & others
+Message-ID: <20180101163932.7341-1-mahyar.koshkouei@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
----
- package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash | 4 ++--
- package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Additionally added myself to ffmpeg, rpi-firmware and rpi-userland as
+changes to mpv may require updates or other changes to these packages
+and vice-versa.
 
-diff --git a/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash b/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash
-index 536a77ce82..95c8eef832 100644
---- a/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash
-+++ b/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash
-@@ -1,2 +1,2 @@
--# From https://gstreamer.freedesktop.org/src/gst-rtsp-server/gst-rtsp-server-1.12.3.tar.xz.sha256sum
--sha256 67255971bb16029a01de66b9f9687f20d8dbf3d3bd75feb48605d0723a7c74ec gst-rtsp-server-1.12.3.tar.xz
-+# From https://gstreamer.freedesktop.org/src/gst-rtsp-server/gst-rtsp-server-1.12.4.tar.xz.sha256sum
-+sha256 7660112ebd59838f1054796b38109dcbe32f0a040e3a252a68a81055aeaa56a9 gst-rtsp-server-1.12.4.tar.xz
-diff --git a/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk b/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk
-index 71c9ef5bda..d6a82ee654 100644
---- a/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk
-+++ b/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+Signed-off-by: Mahyar Koshkouei <mahyar.koshkouei@gmail.com>
+---
+ DEVELOPERS | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 8e3e6b1545..28beff618c 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1029,6 +1029,12 @@ F:	package/python-simplejson/
+ F:	package/python-versiontools/
+ F:	package/wilc1000-firmware/
  
--GST1_RTSP_SERVER_VERSION = 1.12.3
-+GST1_RTSP_SERVER_VERSION = 1.12.4
- GST1_RTSP_SERVER_SOURCE = gst-rtsp-server-$(GST1_RTSP_SERVER_VERSION).tar.xz
- GST1_RTSP_SERVER_SITE = http://gstreamer.freedesktop.org/src/gst-rtsp-server
- GST1_RTSP_SERVER_LICENSE = LGPL-2.0+
++N:	Mahyar Koshkouei <mahyar.koshkouei@gmail.com>
++F:	package/ffmpeg/
++F:	package/mpv/
++F:	package/rpi-firmware/
++F:	package/rpi-userland/
++
+ N:	Mamatha Inamdar <mamatha4@linux.vnet.ibm.com>
+ F:	package/nvme/
+ 
 -- 
-2.14.3
+2.15.1
