@@ -1,59 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 1 Jan 2018 15:58:40 +0100
-Subject: [Buildroot] [PATCH v3] mpv: add support for Raspberry Pi "rpi"
- output
-In-Reply-To: <20171024090740.13683-1-mahyar.koshkouei@gmail.com>
-References: <20171024090740.13683-1-mahyar.koshkouei@gmail.com>
-Message-ID: <20180101155840.455bea53@windsurf>
+Date: Mon, 1 Jan 2018 15:58:58 +0100
+Subject: [Buildroot] [git commit] coreutils: expand list of files moved from
+ /usr/bin to /bin
+Message-ID: <20180101145914.319E08033D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=443897bce4b01eae98155ac947d3387e6a2f289e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 24 Oct 2017 10:07:40 +0100, Mahyar Koshkouei wrote:
-> mpv now compiles with the "rpi" video driver that provides hardware
-> acceleration on the Raspberry Pi.
-> 
-> Tested working on a Raspberry Pi 1 Model B+ and Zero.
-> 
-> Signed-off-by: Mahyar Koshkouei <mahyar.koshkouei@gmail.com>
+BusyBox installs kill, link, mktemp, nice and printenv on /bin, so
+ensure that coreutils replaces them.
 
-I've applied your patch, but I have some comments/questions below.
+Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/coreutils/coreutils.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-> diff --git a/package/mpv/0003-rpi-fix-linking-errors.patch b/package/mpv/0003-rpi-fix-linking-errors.patch
-> new file mode 100644
-> index 0000000000..0e65a5a3eb
-> --- /dev/null
-> +++ b/package/mpv/0003-rpi-fix-linking-errors.patch
-> @@ -0,0 +1,90 @@
-> +From fe482a600d507dc7ce77f6d154a9e8b395f74fdd Mon Sep 17 00:00:00 2001
-> +From: Mahyar Koshkouei <mahyar.koshkouei@gmail.com>
-> +Date: Tue, 24 Oct 2017 09:47:38 +0100
-> +Subject: [PATCH] rpi: fix linking errors
-> +
-> +Fixes linking issues when compiling with Raspberry Pi support.
-> +
-> +Signed-off-by: Mahyar Koshkouei <mahyar.koshkouei@gmail.com>
-> +---
-> +Status: pull request https://github.com/mpv-player/mpv/pull/4883
-
-Could you try to revive this discussion, which seems to have stalled ?
-
-
-> +# Raspberry Pi support
-> +ifeq ($(BR2_PACKAGE_RPI_FIRMWARE)$(BR2_PACKAGE_RPI_USERLAND),yy)
-
-I don't see why the rpi-firmware dependency was necessary. Yes, it was
-there for ffmpeg, but I've also committed a patch to drop it. I removed
-it as well from your mpv change. Hopefully I was not mistaken :-)
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/coreutils/coreutils.mk b/package/coreutils/coreutils.mk
+index 6a8a31b..8259f42 100644
+--- a/package/coreutils/coreutils.mk
++++ b/package/coreutils/coreutils.mk
+@@ -56,8 +56,8 @@ COREUTILS_CONF_ENV = ac_cv_c_restrict=no \
+ 	INSTALL_PROGRAM=$(INSTALL)
+ 
+ COREUTILS_BIN_PROGS = cat chgrp chmod chown cp date dd df dir echo false \
+-	ln ls mkdir mknod mv pwd rm rmdir vdir sleep stty sync touch true \
+-	uname join
++	kill link ln ls mkdir mknod mktemp mv nice printenv pwd rm rmdir \
++	vdir sleep stty sync touch true uname join
+ 
+ # If both coreutils and busybox are selected, make certain coreutils
+ # wins the fight over who gets to have their utils actually installed.
