@@ -1,38 +1,33 @@
-From: Mahyar Koshkouei <mahyar.koshkouei@gmail.com>
-Date: Mon,  1 Jan 2018 16:39:32 +0000
-Subject: [Buildroot] [PATCH 1/1] DEVELOPERS: Add myself to mpv & others
-Message-ID: <20180101163932.7341-1-mahyar.koshkouei@gmail.com>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Mon, 1 Jan 2018 11:32:18 -0600
+Subject: [Buildroot] [PATCH] eeprog: fix homepage link
+In-Reply-To: <20171231170810.741501ec@windsurf>
+References: <5d4e572b6a29cdf484a8df1562993d68206022dd.1514719506.git.baruch@tkos.co.il>
+ <20171231124812.2e20d6e0@windsurf>
+ <20171231122618.ezq72ybk2rem2wvv@sapphire.tkos.co.il>
+ <20171231135433.1d0b98a9@windsurf>
+ <20171231131108.3ulaftfta3ohm3pk@sapphire.tkos.co.il>
+ <20171231170810.741501ec@windsurf>
+Message-ID: <CANQCQpb5ZTbwrT9VSsRWrdj2soeBkA05t3bOR7LxE+GO5S=MaQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Additionally added myself to ffmpeg, rpi-firmware and rpi-userland as
-changes to mpv may require updates or other changes to these packages
-and vice-versa.
+Baruch, Thomas,
 
-Signed-off-by: Mahyar Koshkouei <mahyar.koshkouei@gmail.com>
----
- DEVELOPERS | 6 ++++++
- 1 file changed, 6 insertions(+)
+On Sun, Dec 31, 2017 at 10:08 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
+>
+>> OK. Let's give Matt some time to recover from the holidays and respond before
+>> I send a patch to remove the eeprog package.
+>
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 8e3e6b1545..28beff618c 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1029,6 +1029,12 @@ F:	package/python-simplejson/
- F:	package/python-versiontools/
- F:	package/wilc1000-firmware/
- 
-+N:	Mahyar Koshkouei <mahyar.koshkouei@gmail.com>
-+F:	package/ffmpeg/
-+F:	package/mpv/
-+F:	package/rpi-firmware/
-+F:	package/rpi-userland/
-+
- N:	Mamatha Inamdar <mamatha4@linux.vnet.ibm.com>
- F:	package/nvme/
- 
--- 
-2.15.1
+Removal sounds good to me.
+
+Angelo, thanks for bumping i2c-tools!  Lots of good stuff with this
+cleanup and the new tools we now install.
+
+Matt
