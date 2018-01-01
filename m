@@ -1,33 +1,37 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 1 Jan 2018 13:06:12 +0100
-Subject: [Buildroot] [PATCH 1/1] Add newer Atom CPUs as Silvermont
- Architecture target
-In-Reply-To: <20171024122206.24616-1-norbert.lange@andritz.com>
-References: <20171024122206.24616-1-norbert.lange@andritz.com>
-Message-ID: <20180101130612.3abf928e@windsurf>
+From: Carlos Santos <casantos@datacom.ind.br>
+Date: Mon, 1 Jan 2018 10:14:15 -0200 (BRST)
+Subject: [Buildroot] [PATCH] util-linux: bump to version 2.31.1
+In-Reply-To: <20171231172230.52130ab3@windsurf>
+References: <20171231115145.2625-1-casantos@datacom.ind.br>
+ <20171231172230.52130ab3@windsurf>
+Message-ID: <1910236339.14495.1514808855906.JavaMail.zimbra@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+> From: "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>
+> To: "Carlos Santos" <casantos@datacom.ind.br>
+> Cc: buildroot at buildroot.org
+> Sent: Sunday, December 31, 2017 2:22:30 PM
+> Subject: Re: [Buildroot] [PATCH] util-linux: bump to version 2.31.1
 
-On Tue, 24 Oct 2017 14:22:06 +0200, Norbert Lange wrote:
-> The old Atom target is not really fitting for recent Atom CPUs
-> based on Silvermont, Airmont or Goldmont. Those have more in
-> common with older Desktop CPUs than old Atoms.
+> Hello,
 > 
-> Signed-off-by: Norbert Lange <norbert.lange@andritz.com>
-> ---
->  arch/Config.in.x86         | 11 +++++++++++
->  package/openblas/Config.in |  2 +-
->  2 files changed, 12 insertions(+), 1 deletion(-)
+> On Sun, 31 Dec 2017 09:51:45 -0200, Carlos Santos wrote:
+>> Changes in this version:
+>> 
+>> - Small improvement and bug fixes.
+>> - Install rfkill at /usr/sbin (thus overriding the one eventually
+>>   installed by BusyBox).
+>> 
+>> Drop the md5 patch, already applyed upstream.
 
-Applied to master, thanks.
+Gosh, "applyed"!
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Carlos Santos (Casantos) - DATACOM, P&D
+?The greatest triumph that modern PR can offer is the transcendent 
+success of having your words and actions judged by your reputation, 
+rather than the other way about.? ? Christopher Hitchens
