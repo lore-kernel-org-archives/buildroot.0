@@ -1,9 +1,9 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Tue,  2 Jan 2018 10:28:06 -0500
-Subject: [Buildroot] [PATCH 7/8] setools: check host-python version
+Date: Tue,  2 Jan 2018 10:28:07 -0500
+Subject: [Buildroot] [PATCH 8/8] libselinux: check host-python version
 In-Reply-To: <20180102152807.31470-1-aduskett@gmail.com>
 References: <20180102152807.31470-1-aduskett@gmail.com>
-Message-ID: <20180102152807.31470-8-aduskett@gmail.com>
+Message-ID: <20180102152807.31470-9-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,25 +14,21 @@ Check if host-python3 is selected instead of target-python3.
 
 Signed-off-by: Adam Duskett <aduskett@gmail.com>
 ---
- package/setools/setools.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+ package/libsemanage/libsemanage.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/setools/setools.mk b/package/setools/setools.mk
-index 6748c95c23..f4644b091c 100644
---- a/package/setools/setools.mk
-+++ b/package/setools/setools.mk
-@@ -20,6 +20,12 @@ SETOOLS_PYLIBVER = python$(PYTHON_VERSION_MAJOR)
- SETOOLS_DEPENDENCIES += python-enum34
- endif
+diff --git a/package/libsemanage/libsemanage.mk b/package/libsemanage/libsemanage.mk
+index 829409f527..b9a98c7b6c 100644
+--- a/package/libsemanage/libsemanage.mk
++++ b/package/libsemanage/libsemanage.mk
+@@ -37,7 +37,7 @@ HOST_LIBSEMANAGE_MAKE_OPTS += \
+ 	PREFIX=$(HOST_DIR) \
+ 	SWIG_LIB="$(HOST_DIR)/share/swig/$(SWIG_VERSION)/"
  
+-ifeq ($(BR2_PACKAGE_PYTHON3),y)
 +ifeq ($(BR2_PACKAGE_HOST_PYTHON3),y)
-+HOST_SETOOLS_NEEDS_HOST_PYTHON += python3
-+else
-+HOST_SETOOLS_NEEDS_HOST_PYTHON += python
-+endif
-+
- define SETOOLS_FIX_SETUP
- 	# By default, setup.py will look for libsepol.a in the host machines
- 	# /usr/lib directory. This needs to be changed to the staging directory.
+ HOST_LIBSEMANAGE_DEPENDENCIES += host-python3
+ HOST_LIBSEMANAGE_MAKE_OPTS += \
+ 	PYINC="-I$(HOST_DIR)/include/python$(PYTHON3_VERSION_MAJOR)m/" \
 -- 
 2.14.3
