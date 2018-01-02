@@ -1,62 +1,64 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue,  2 Jan 2018 21:04:06 +0100
-Subject: [Buildroot] [PATCH 0/2] fs/iso9660: fix transparent (de)compression
-Message-ID: <cover.1514923441.git.yann.morin.1998@free.fr>
+Date: Tue,  2 Jan 2018 21:04:11 +0100
+Subject: [Buildroot] [PATCH 1/2] package/zisofs_tools: new package
+In-Reply-To: <cover.1514923441.git.yann.morin.1998@free.fr>
+References: <cover.1514923441.git.yann.morin.1998@free.fr>
+Message-ID: <00e4aeb9db64cb141c15a9fff0f3be4903504af6.1514923441.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+To support transparent (de)compression in iso9660, we need mkzftree,
+which comes from zisofs_tools, biundled with cdrkit.
 
-We need mkzftree, from zisofs_tools, bundled in cdrkit. This was missing
-so far, so here we add it as a new package, and make iso9660 depend on
-it when needed.
+However, cdrkit is a cmake package, but zisofs_tools is an autotools
+package, so we need a separate package just to get mkzftree, but it is
+pretty lightweight.
 
-The kernel also needs support for compressed isofs, so we update the
-test kernel config.
+We just need the host variant for now,so we just add that.
 
-Finally, the kernel images must be stored uncompressed in the iso9660
-filesystem, because grub does not decompresses the files it reads from
-the filesystem.
-
-
-Regards,
-Yann E. MORIN.
-
-
-The following changes since commit 55d79ed93e44e1876334f795c6313ea6f406d229
-
-  eeprog: remove package (2018-01-02 10:10:25 +0100)
-
-
-are available in the git repository at:
-
-  git://git.buildroot.org/~ymorin/git/buildroot.git
-
-for you to fetch changes up to e793abe185c20ebd853db927552156e203813613
-
-  fs/iso9660: fix transparent (de)compression (2018-01-02 20:57:10 +0100)
-
-
-----------------------------------------------------------------
-Yann E. MORIN (2):
-      package/zisofs_tools: new package
-      fs/iso9660: fix transparent (de)compression
-
- fs/iso9660/iso9660.mk                               | 12 ++++++++----
- package/zisofs_tools/zisofs_tools.hash              |  5 +++++
- package/zisofs_tools/zisofs_tools.mk                | 15 +++++++++++++++
- support/testing/conf/minimal-x86-qemu-kernel.config |  1 +
- 4 files changed, 29 insertions(+), 4 deletions(-)
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/zisofs_tools/zisofs_tools.hash |  5 +++++
+ package/zisofs_tools/zisofs_tools.mk   | 15 +++++++++++++++
+ 2 files changed, 20 insertions(+)
  create mode 100644 package/zisofs_tools/zisofs_tools.hash
  create mode 100644 package/zisofs_tools/zisofs_tools.mk
 
+diff --git a/package/zisofs_tools/zisofs_tools.hash b/package/zisofs_tools/zisofs_tools.hash
+new file mode 100644
+index 0000000000..d2f594c757
+--- /dev/null
++++ b/package/zisofs_tools/zisofs_tools.hash
+@@ -0,0 +1,5 @@
++# From http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/c/cdrkit/cdrkit_1.1.11-3.dsc
++sha256  d1c030756ecc182defee9fe885638c1785d35a2c2a297b4604c0e0dcc78e47da  cdrkit_1.1.11.orig.tar.gz
++
++# Locally computed
++sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  3rd-party/zisofs_tools/COPYING
+diff --git a/package/zisofs_tools/zisofs_tools.mk b/package/zisofs_tools/zisofs_tools.mk
+new file mode 100644
+index 0000000000..fd8c371fea
+--- /dev/null
++++ b/package/zisofs_tools/zisofs_tools.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# zisofs-tools
++#
++################################################################################
++
++ZISOFS_TOOLS_VERSION = 1.1.11
++ZISOFS_TOOLS_SOURCE = cdrkit_$(ZISOFS_TOOLS_VERSION).orig.tar.gz
++ZISOFS_TOOLS_SITE = http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/c/cdrkit
++ZISOFS_TOOLS_LICENSE = GPL-2.0+
++ZISOFS_TOOLS_LICENSE_FILES = 3rd-party/zisofs_tools/COPYING
++ZISOFS_TOOLS_SUBDIR = 3rd-party/zisofs_tools
++HOST_ZISOFS_TOOLS_DEPENDENCIES = host-zlib
++
++$(eval $(host-autotools-package))
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.11.0
