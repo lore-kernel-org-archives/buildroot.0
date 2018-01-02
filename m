@@ -1,53 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 2 Jan 2018 22:44:13 +0100
-Subject: [Buildroot] [PATCH 0/8] python: clean up host version logic.
-In-Reply-To: <20180102214032.GA17491@scaer>
-References: <20180102163337.6334-1-aduskett@gmail.com>
- <20180102214053.7c49ec09@windsurf.lan>
- <20180102214032.GA17491@scaer>
-Message-ID: <20180102224413.70930c9d@windsurf.lan>
+From: Trent Piepho <tpiepho@impinj.com>
+Date: Tue, 2 Jan 2018 22:27:54 +0000
+Subject: [Buildroot] [PATCH 4/8] pkg-waf.mk: check host-python version
+In-Reply-To: <20180102152807.31470-5-aduskett@gmail.com>
+References: <20180102152807.31470-1-aduskett@gmail.com>
+ <20180102152807.31470-5-aduskett@gmail.com>
+Message-ID: <1514932073.26695.192.camel@impinj.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Tue, 2018-01-02 at 10:28 -0500, Adam Duskett wrote:
+>  
+> +# We need a host-python to run waf
+> +ifeq ($(BR2_PACKAGE_HOST_PYTHON3),y)
+> +$(2)_DEPENDENCIES += host-python3
+> +$(2)_WAF_PYTHON_PATH ?= $$(HOST_DIR)/bin/python3
+> +else
+> +$(2)_DEPENDENCIES += host-python
+> +$(2)_WAF_PYTHON_PATH ?= $$(HOST_DIR)/bin/python2
+> +endif
 
-On Tue, 2 Jan 2018 22:40:32 +0100, Yann E. MORIN wrote:
+PYTHON_PATH above is called PYLIBVER in the five existing definitions
+of this variable.   PYTHON_PATH already exists, and it the absolute
+path in the target dir of sysconfigdata.
 
-> > However, there is one thing that I believe is missing in your patch
-> > series: BR2_PACKAGE_PYTHON3 should select BR2_PACKAGE_HOST_PYTHON3, and
-> > BR2_PACKAGE_PYTHON should select BR2_PACKAGE_HOST_PYTHON.  
-> 
-> Furthermore, I believe the prompt should be hidden, because it does not
-> make sense for the user to actually select the host version for python.
+So it would be a lot more consistent to name this PYLIBVER.
 
-If the prompt is not user-selectable, then I don't see the point of the
-patch series. Indeed, you can already do:
+It also seems like this variable will be re-created in a lot of
+packages, if every package that needs to correctly call the host python
+must define it.  I wonder if there could be an easier way for python
+package files to call the host python correctly.  Like:
 
-<pkg>_DEPENDENCIES = $(if $(BR2_PACKAGE_PYTHON3),host-python3,host-python)
-
-to use host-python3 if already built as part of the python3 build
-process, or fallback to host-python otherwise. We already use this
-construct in a number of places.
-
-> Besides, the current series allows for building both host-python and
-> host-python3 in the same configuration, and we do not support this for
-> now (or we would have made it possible for the target variant too).
-
-Of course we support building both host-python and host-python3. What
-we don't support is:
-
- - python and python3 in the same configuration
-
- - building third-party host python modules for a host python version
-   different from the selected target python version
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+$(HOST_PYTHON_EXE)  Program to run for host python, 2 or 3 as selected.
+$(HOST_PYTHON2_EXE) If you must have python 2
+$(HOST_PYTHON3_EXE) If you must have python 3
