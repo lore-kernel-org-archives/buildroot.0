@@ -1,43 +1,44 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 2 Jan 2018 10:14:45 +0100
-Subject: [Buildroot] [PATCH v2] eeprog: remove package
-In-Reply-To: <2647f36b9fbe9f718b30aa984c2c488f7cf6bc9c.1514873761.git.baruch@tkos.co.il>
-References: <2647f36b9fbe9f718b30aa984c2c488f7cf6bc9c.1514873761.git.baruch@tkos.co.il>
-Message-ID: <20180102101445.5c39e076@windsurf>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue,  2 Jan 2018 13:42:23 +0200
+Subject: [Buildroot] [PATCH] nilfs-utils: needs threads support
+Message-ID: <9b6db0c182b7adc0dbc24bf62e9c7464859f5e6c.1514893343.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+nilfs-utils uses the sem_* family of functions from the realtime
+extension. Technically this is not part of pthreads. But in uClibc
+enabling threads enables also UCLIBC_HAS_REALTIME.
 
-On Tue,  2 Jan 2018 08:16:01 +0200, Baruch Siach wrote:
-> The i2c-tools package has adopted the code of eeprog.
-> 
-> Cc: Matt Weber <matthew.weber@rockwellcollins.com>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
-> v2:
->   Select BR2_LEGACY (Thomas)
->   Select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS to make sure i2c-tools is
->   enabled (Thomas)
-> ---
->  Config.in.legacy           |  8 ++++++++
->  DEVELOPERS                 |  1 -
->  package/Config.in          |  1 -
->  package/eeprog/Config.in   |  6 ------
->  package/eeprog/eeprog.hash |  2 --
->  package/eeprog/eeprog.mk   | 20 --------------------
->  6 files changed, 8 insertions(+), 30 deletions(-)
->  delete mode 100644 package/eeprog/Config.in
->  delete mode 100644 package/eeprog/eeprog.hash
->  delete mode 100644 package/eeprog/eeprog.mk
+Fixes:
+http://autobuild.buildroot.net/results/c5d/c5d93b6ab5b260fe5db46298b956a9ae765c828a/
+http://autobuild.buildroot.net/results/9d6/9d6a248f9acbb58b6c2893de58978c6013332415/
 
-Applied to master, thanks.
+Cc: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/nilfs-utils/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Thomas
+diff --git a/package/nilfs-utils/Config.in b/package/nilfs-utils/Config.in
+index 2763af54fd24..0c6b7a0ce861 100644
+--- a/package/nilfs-utils/Config.in
++++ b/package/nilfs-utils/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_NILFS_UTILS
+ 	bool "nilfs-utils"
++	depends on BR2_TOOLCHAIN_HAS_THREADS # sem_open()
+ 	depends on BR2_USE_MMU # util-linux libmount, libblkid
+ 	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+ 	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
+@@ -9,3 +10,6 @@ config BR2_PACKAGE_NILFS_UTILS
+ 	  Tools for creating and managing NILFS2 filesystems.
+ 
+ 	  https://github.com/nilfs-dev/nilfs-utils
++
++comment "nilfs-utils needs a toolchain w/ threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.15.1
