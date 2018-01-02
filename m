@@ -1,44 +1,32 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue,  2 Jan 2018 13:42:23 +0200
-Subject: [Buildroot] [PATCH] nilfs-utils: needs threads support
-Message-ID: <9b6db0c182b7adc0dbc24bf62e9c7464859f5e6c.1514893343.git.baruch@tkos.co.il>
+From: Fabio Estevam <fabio.estevam@nxp.com>
+Date: Tue, 2 Jan 2018 10:09:22 -0200
+Subject: [Buildroot] [PATCH] linux-headers: bump 3.2.x series
+Message-ID: <1514894962-18694-1-git-send-email-fabio.estevam@nxp.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-nilfs-utils uses the sem_* family of functions from the realtime
-extension. Technically this is not part of pthreads. But in uClibc
-enabling threads enables also UCLIBC_HAS_REALTIME.
+From: Fabio Estevam <festevam@gmail.com>
 
-Fixes:
-http://autobuild.buildroot.net/results/c5d/c5d93b6ab5b260fe5db46298b956a9ae765c828a/
-http://autobuild.buildroot.net/results/9d6/9d6a248f9acbb58b6c2893de58978c6013332415/
-
-Cc: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
 ---
- package/nilfs-utils/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/linux-headers/Config.in.host | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/nilfs-utils/Config.in b/package/nilfs-utils/Config.in
-index 2763af54fd24..0c6b7a0ce861 100644
---- a/package/nilfs-utils/Config.in
-+++ b/package/nilfs-utils/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_NILFS_UTILS
- 	bool "nilfs-utils"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # sem_open()
- 	depends on BR2_USE_MMU # util-linux libmount, libblkid
- 	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
- 	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
-@@ -9,3 +10,6 @@ config BR2_PACKAGE_NILFS_UTILS
- 	  Tools for creating and managing NILFS2 filesystems.
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 6802217..4fcc7e1 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -247,7 +247,7 @@ endchoice
  
- 	  https://github.com/nilfs-dev/nilfs-utils
-+
-+comment "nilfs-utils needs a toolchain w/ threads"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "3.2.96"	if BR2_KERNEL_HEADERS_3_2
++	default "3.2.97"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.4.113"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.10.108"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.12.74"	if BR2_KERNEL_HEADERS_3_12
 -- 
-2.15.1
+2.7.4
