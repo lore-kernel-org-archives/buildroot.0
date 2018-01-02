@@ -1,140 +1,219 @@
-From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Tue,  2 Jan 2018 13:56:08 -0600
-Subject: [Buildroot] [PATCH v2] hung build: convert to monitor thread
-Message-ID: <20180102195608.10806-1-matthew.weber@rockwellcollins.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 2 Jan 2018 20:55:15 +0100
+Subject: [Buildroot] [git commit] libdrm: fix libatomic_ops linking
+Message-ID: <20180102200000.0A1387F91F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Check the build-time.log and monitor for modifications to
-determine if the build has hung for at most 60mins
-before killing the build and reporting a timeout.
+commit: https://git.buildroot.net/buildroot/commit/?id=fa6c7d165971e1f70b9ac94bae9cd1fd9180c072
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This allows infinite sized builds as we get to a lower
-number of autobr fails.  Less failures means we start
-to see false timeout failures when we hit the boundary
-of the old MAX_DURATION ~8hrs.
+Add patch 0003-configure-Makefile.am-use-pkg-config-to-discover-lib.patch
+provided by Thomas Petazzoni handling libatomic_ops linking when needed.
 
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Fixes [1]:
 
---
-Change Log
+    CCLD     etnaviv_cmd_stream_test
+  ../../etnaviv/.libs/libdrm_etnaviv.so: undefined reference to `AO_store_full_emulation'
+  ../../etnaviv/.libs/libdrm_etnaviv.so: undefined reference to `AO_fetch_compare_and_swap_emulation'
+  collect2: error: ld returned 1 exit status
 
-v1->v2
-[Thomas P.
- - Use mtime vs reading file
- - Use datetime for hung delta check
- - Removed camel case
- - Added hung build event to sync hand-off back to main thread
+[1] http://autobuild.buildroot.net/results/92e074c49417261843eef95872ff935a56077c98
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- scripts/autobuild-run | 53 ++++++++++++++++++++++++++++++++++++++++++---------
- 1 file changed, 44 insertions(+), 9 deletions(-)
+ ...akefile.am-use-pkg-config-to-discover-lib.patch | 160 +++++++++++++++++++++
+ package/libdrm/libdrm.mk                           |   8 +-
+ 2 files changed, 167 insertions(+), 1 deletion(-)
 
-diff --git a/scripts/autobuild-run b/scripts/autobuild-run
-index 8475437..7274c80 100755
---- a/scripts/autobuild-run
-+++ b/scripts/autobuild-run
-@@ -73,6 +73,8 @@ import sys
- from time import localtime, strftime
- from distutils.version import StrictVersion
- import platform
-+from threading import Thread, Event
-+import datetime
- 
- if sys.hexversion >= 0x3000000:
-     import configparser
-@@ -167,7 +169,7 @@ else:
-     decode_bytes = _identity
-     encode_str = _identity
- 
--MAX_DURATION = 60 * 60 * 8
-+HUNG_BUILD_TIMEOUT = 60 # mins
- VERSION = 1
- 
- def log_write(logf, msg):
-@@ -199,7 +201,7 @@ def get_branch():
-     return branches[randint(0, len(branches) - 1)]
- 
- class SystemInfo:
--    DEFAULT_NEEDED_PROGS = ["make", "git", "gcc", "timeout"]
-+    DEFAULT_NEEDED_PROGS = ["make", "git", "gcc"]
-     DEFAULT_OPTIONAL_PROGS = ["bzr", "java", "javac", "jar"]
- 
-     def __init__(self):
-@@ -358,6 +360,24 @@ def gen_config(**kwargs):
-     ret = subprocess.call(args, stdout=devnull, stderr=log)
-     return ret
- 
-+def stop_on_build_hang(monitor_thread_hung_build_flag,
-+                       monitor_thread_stop_flag,
-+                       sub_proc, outputdir, log):
-+    build_time_logfile = os.path.join(outputdir, "build/build-time.log")
-+    while True:
-+        if monitor_thread_stop_flag.is_set():
-+            return
-+        if os.path.exists(build_time_logfile):
-+            mtime = datetime.datetime.fromtimestamp(os.stat(build_time_logfile).st_mtime)
+diff --git a/package/libdrm/0003-configure-Makefile.am-use-pkg-config-to-discover-lib.patch b/package/libdrm/0003-configure-Makefile.am-use-pkg-config-to-discover-lib.patch
+new file mode 100644
+index 0000000..20bb0a3
+--- /dev/null
++++ b/package/libdrm/0003-configure-Makefile.am-use-pkg-config-to-discover-lib.patch
+@@ -0,0 +1,160 @@
++From 57d544ff2f96a26cac07d5be00ff7b67678ae7b8 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Date: Mon, 18 Dec 2017 13:08:39 +0100
++Subject: [PATCH] configure/Makefile.am: use pkg-config to discover
++ libatomic_ops
 +
-+            if mtime < datetime.datetime.now() - datetime.timedelta(minutes=HUNG_BUILD_TIMEOUT):
-+                if sub_proc.poll() is None:
-+                    monitor_thread_hung_build_flag.set() # Used by do_build() to determine build hang
-+                    log_write(log, "INFO: build hung")
-+                    sub_proc.kill()
-+                break
-+        monitor_thread_stop_flag.wait(30)
++The configure script currently tests the availability of libatomic_ops
++by checking the presence of atomic_ops.h. While this is good enough as
++an availability test, it is not sufficient as on some platforms,
++libatomic_ops provides an actual shared library against which we
++should be linked to access libatomic_ops functionality.
 +
- def do_build(**kwargs):
-     """Run the build itself"""
++Therefore, we instead use PKG_CHECK_MODULES() to test the availability
++of libatomic_ops. Besides testing its availability, this also fills in
++the ATOMIC_OPS_LIBS variable with the list of libraries we need to
++link with to use libatomic_ops.
++
++All Mesa drivers that include xf86atomic.h have been updated to link
++against ATOMIC_OPS_LIBS.
++
++Of course, if we're not using libatomic_ops, ATOMIC_OPS_LIBS is empty,
++and we don't link against it.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++---
++ amdgpu/Makefile.am    | 2 +-
++ configure.ac          | 2 +-
++ etnaviv/Makefile.am   | 3 ++-
++ freedreno/Makefile.am | 3 ++-
++ intel/Makefile.am     | 3 ++-
++ nouveau/Makefile.am   | 2 +-
++ omap/Makefile.am      | 2 +-
++ radeon/Makefile.am    | 2 +-
++ tegra/Makefile.am     | 2 +-
++ 9 files changed, 12 insertions(+), 9 deletions(-)
++
++diff --git a/amdgpu/Makefile.am b/amdgpu/Makefile.am
++index a1b0d05c..b2bcceff 100644
++--- a/amdgpu/Makefile.am
+++++ b/amdgpu/Makefile.am
++@@ -36,7 +36,7 @@ AM_CPPFLAGS = -DAMDGPU_ASIC_ID_TABLE=\"${libdrmdatadir}/amdgpu.ids\"
++ libdrm_amdgpu_la_LTLIBRARIES = libdrm_amdgpu.la
++ libdrm_amdgpu_ladir = $(libdir)
++ libdrm_amdgpu_la_LDFLAGS = -version-number 1:0:0 -no-undefined
++-libdrm_amdgpu_la_LIBADD = ../libdrm.la @PTHREADSTUBS_LIBS@
+++libdrm_amdgpu_la_LIBADD = ../libdrm.la @PTHREADSTUBS_LIBS@ @ATOMIC_OPS_LIBS@
++ 
++ libdrm_amdgpu_la_SOURCES = $(LIBDRM_AMDGPU_FILES)
++ amdgpu_asic_id.lo: $(top_srcdir)/data/amdgpu.ids
++diff --git a/configure.ac b/configure.ac
++index 35378b33..501d0871 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -247,7 +247,7 @@ AC_CACHE_CHECK([for native atomic primitives], drm_cv_atomic_primitives, [
++ 					  ]],[[]])], [drm_cv_atomic_primitives="Intel"],[])
++ 
++ 	if test "x$drm_cv_atomic_primitives" = "xnone"; then
++-		AC_CHECK_HEADER([atomic_ops.h], drm_cv_atomic_primitives="libatomic-ops")
+++		PKG_CHECK_MODULES(ATOMIC_OPS, [atomic_ops], drm_cv_atomic_primitives="libatomic-ops")
++ 	fi
++ 
++ 	# atomic functions defined in <atomic.h> & libc on Solaris
++diff --git a/etnaviv/Makefile.am b/etnaviv/Makefile.am
++index be96ba86..669cf14f 100644
++--- a/etnaviv/Makefile.am
+++++ b/etnaviv/Makefile.am
++@@ -12,7 +12,8 @@ libdrm_etnaviv_la_LDFLAGS = -version-number 1:0:0 -no-undefined
++ libdrm_etnaviv_la_LIBADD = \
++ 	../libdrm.la \
++ 	@PTHREADSTUBS_LIBS@ \
++-	@CLOCK_LIB@
+++	@CLOCK_LIB@ \
+++	@ATOMIC_OPS_LIBS@
++ 
++ libdrm_etnaviv_la_SOURCES = $(LIBDRM_ETNAVIV_FILES)
++ 
++diff --git a/freedreno/Makefile.am b/freedreno/Makefile.am
++index cbb0d031..238407e3 100644
++--- a/freedreno/Makefile.am
+++++ b/freedreno/Makefile.am
++@@ -14,7 +14,8 @@ libdrm_freedreno_la_LDFLAGS = -version-number 1:0:0 -no-undefined
++ libdrm_freedreno_la_LIBADD = \
++ 	../libdrm.la \
++ 	@PTHREADSTUBS_LIBS@ \
++-	@CLOCK_LIB@
+++	@CLOCK_LIB@ \
+++	@ATOMIC_OPS_LIBS@
++ 
++ libdrm_freedreno_la_SOURCES = $(LIBDRM_FREEDRENO_FILES)
++ if HAVE_FREEDRENO_KGSL
++diff --git a/intel/Makefile.am b/intel/Makefile.am
++index c52e8c08..f3635a64 100644
++--- a/intel/Makefile.am
+++++ b/intel/Makefile.am
++@@ -38,7 +38,8 @@ libdrm_intel_la_LDFLAGS = -version-number 1:0:0 -no-undefined
++ libdrm_intel_la_LIBADD = ../libdrm.la \
++ 	@PTHREADSTUBS_LIBS@ \
++ 	@PCIACCESS_LIBS@ \
++-	@CLOCK_LIB@
+++	@CLOCK_LIB@ \
+++	@ATOMIC_OPS_LIBS@
++ 
++ libdrm_intel_la_SOURCES = $(LIBDRM_INTEL_FILES)
++ 
++diff --git a/nouveau/Makefile.am b/nouveau/Makefile.am
++index 344a8445..a4e6a78b 100644
++--- a/nouveau/Makefile.am
+++++ b/nouveau/Makefile.am
++@@ -10,7 +10,7 @@ AM_CFLAGS = \
++ libdrm_nouveau_la_LTLIBRARIES = libdrm_nouveau.la
++ libdrm_nouveau_ladir = $(libdir)
++ libdrm_nouveau_la_LDFLAGS = -version-number 2:0:0 -no-undefined
++-libdrm_nouveau_la_LIBADD = ../libdrm.la @PTHREADSTUBS_LIBS@
+++libdrm_nouveau_la_LIBADD = ../libdrm.la @PTHREADSTUBS_LIBS@ @ATOMIC_OPS_LIBS@
++ 
++ libdrm_nouveau_la_SOURCES = $(LIBDRM_NOUVEAU_FILES)
++ 
++diff --git a/omap/Makefile.am b/omap/Makefile.am
++index 599bb9de..524afee3 100644
++--- a/omap/Makefile.am
+++++ b/omap/Makefile.am
++@@ -7,7 +7,7 @@ AM_CFLAGS = \
++ libdrm_omap_la_LTLIBRARIES = libdrm_omap.la
++ libdrm_omap_ladir = $(libdir)
++ libdrm_omap_la_LDFLAGS = -version-number 1:0:0 -no-undefined
++-libdrm_omap_la_LIBADD = ../libdrm.la @PTHREADSTUBS_LIBS@
+++libdrm_omap_la_LIBADD = ../libdrm.la @PTHREADSTUBS_LIBS@ @ATOMIC_OPS_LIBS@
++ 
++ libdrm_omap_la_SOURCES = omap_drm.c
++ 
++diff --git a/radeon/Makefile.am b/radeon/Makefile.am
++index e2415314..c27d3c75 100644
++--- a/radeon/Makefile.am
+++++ b/radeon/Makefile.am
++@@ -33,7 +33,7 @@ AM_CFLAGS = \
++ libdrm_radeon_la_LTLIBRARIES = libdrm_radeon.la
++ libdrm_radeon_ladir = $(libdir)
++ libdrm_radeon_la_LDFLAGS = -version-number 1:0:1 -no-undefined
++-libdrm_radeon_la_LIBADD = ../libdrm.la @PTHREADSTUBS_LIBS@
+++libdrm_radeon_la_LIBADD = ../libdrm.la @PTHREADSTUBS_LIBS@ @ATOMIC_OPS_LIBS@
++ 
++ libdrm_radeon_la_SOURCES = $(LIBDRM_RADEON_FILES)
++ 
++diff --git a/tegra/Makefile.am b/tegra/Makefile.am
++index fb40be55..12abe8c4 100644
++--- a/tegra/Makefile.am
+++++ b/tegra/Makefile.am
++@@ -9,7 +9,7 @@ AM_CFLAGS = \
++ libdrm_tegra_ladir = $(libdir)
++ libdrm_tegra_la_LTLIBRARIES = libdrm_tegra.la
++ libdrm_tegra_la_LDFLAGS = -version-number 0:0:0 -no-undefined
++-libdrm_tegra_la_LIBADD = ../libdrm.la @PTHREADSTUBS_LIBS@
+++libdrm_tegra_la_LIBADD = ../libdrm.la @PTHREADSTUBS_LIBS@ @ATOMIC_OPS_LIBS@
++ 
++ libdrm_tegra_la_SOURCES = \
++ 	private.h \
++-- 
++2.14.3
++
+diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
+index b6546c9..1c898a5 100644
+--- a/package/libdrm/libdrm.mk
++++ b/package/libdrm/libdrm.mk
+@@ -9,9 +9,15 @@ LIBDRM_SOURCE = libdrm-$(LIBDRM_VERSION).tar.bz2
+ LIBDRM_SITE = https://dri.freedesktop.org/libdrm
+ LIBDRM_LICENSE = MIT
+ LIBDRM_INSTALL_STAGING = YES
++
++# patch 0003-configure-Makefile.am-use-pkg-config-to-discover-lib.patch
++# touching configure.ac/Makefile.am (and host-xutil_util-macros dependency)
++LIBDRM_AUTORECONF = YES
++
+ LIBDRM_DEPENDENCIES = \
+ 	libpthread-stubs \
+-	host-pkgconf
++	host-pkgconf \
++	host-xutil_util-macros
  
-@@ -380,25 +400,40 @@ def do_build(**kwargs):
-     f = open(os.path.join(outputdir, "logfile"), "w+")
-     log_write(log, "INFO: build started")
- 
--    cmd = ["timeout", str(MAX_DURATION),
--            "nice", "-n", str(nice),
-+    cmd = ["nice", "-n", str(nice),
-             "make", "O=%s" % outputdir,
-             "-C", srcdir, "BR2_DL_DIR=%s" % dldir,
-             "BR2_JLEVEL=%s" % kwargs['njobs']] \
-           + kwargs['make_opts'].split()
-     sub = subprocess.Popen(cmd, stdout=f, stderr=f)
-+
-+    # Setup hung build monitoring thread
-+    monitor_thread_hung_build_flag = Event()
-+    monitor_thread_stop_flag = Event()
-+    build_monitor = Thread(target=stop_on_build_hang,
-+                           args=(monitor_thread_hung_build_flag,
-+                                 monitor_thread_stop_flag,
-+                                 sub, outputdir, log))
-+    build_monitor.daemon = True
-+    build_monitor.start()
-+
-     kwargs['buildpid'][kwargs['instance']] = sub.pid
-     ret = sub.wait()
-     kwargs['buildpid'][kwargs['instance']] = 0
- 
--    # 124 is a special error code that indicates we have reached the
--    # timeout
--    if ret == 124:
--        log_write(log, "INFO: build timed out")
-+    # If build failed, monitor thread would have exited@this point
-+    if monitor_thread_hung_build_flag.is_set():
-+        log_write(log, "INFO: build timed out [%d]" % ret)
-         return -2
-+    else:
-+        # Stop monitor thread as this build didn't timeout
-+        monitor_thread_stop_flag.set()
-+    # Monitor thread should be exiting around this point
-+
-     if ret != 0:
--        log_write(log, "INFO: build failed")
-+        log_write(log, "INFO: build failed [%d]" % ret)
-         return -1
-+
-     cmd = ["make", "O=%s" % outputdir, "-C", srcdir,
-             "BR2_DL_DIR=%s" % dldir, "legal-info"] \
-           + kwargs['make_opts'].split()
--- 
-2.14.2
+ LIBDRM_CONF_OPTS = \
+ 	--disable-cairo-tests \
