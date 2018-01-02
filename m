@@ -1,9 +1,9 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Tue,  2 Jan 2018 11:33:35 -0500
-Subject: [Buildroot] [PATCH 6/8] libselinux: check host-python version
+Date: Tue,  2 Jan 2018 11:33:36 -0500
+Subject: [Buildroot] [PATCH 7/8] setools: check host-python version
 In-Reply-To: <20180102163337.6334-1-aduskett@gmail.com>
 References: <20180102163337.6334-1-aduskett@gmail.com>
-Message-ID: <20180102163337.6334-7-aduskett@gmail.com>
+Message-ID: <20180102163337.6334-8-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,21 +14,25 @@ Check if host-python3 is selected instead of target-python3.
 
 Signed-off-by: Adam Duskett <aduskett@gmail.com>
 ---
- package/libselinux/libselinux.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/setools/setools.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/package/libselinux/libselinux.mk b/package/libselinux/libselinux.mk
-index 8ac8000de5..f8e8ea1285 100644
---- a/package/libselinux/libselinux.mk
-+++ b/package/libselinux/libselinux.mk
-@@ -75,7 +75,7 @@ endef
- HOST_LIBSELINUX_DEPENDENCIES = \
- 	host-libsepol host-pcre host-swig
+diff --git a/package/setools/setools.mk b/package/setools/setools.mk
+index 6748c95c23..f4644b091c 100644
+--- a/package/setools/setools.mk
++++ b/package/setools/setools.mk
+@@ -20,6 +20,12 @@ SETOOLS_PYLIBVER = python$(PYTHON_VERSION_MAJOR)
+ SETOOLS_DEPENDENCIES += python-enum34
+ endif
  
--ifeq ($(BR2_PACKAGE_PYTHON3),y)
 +ifeq ($(BR2_PACKAGE_HOST_PYTHON3),y)
- HOST_LIBSELINUX_DEPENDENCIES += host-python3
- HOST_LIBSELINUX_PYINC = -I$(HOST_DIR)/include/python$(PYTHON3_VERSION_MAJOR)m/
- HOST_LIBSELINUX_PYLIBVER = python$(PYTHON3_VERSION_MAJOR)
++HOST_SETOOLS_NEEDS_HOST_PYTHON += python3
++else
++HOST_SETOOLS_NEEDS_HOST_PYTHON += python
++endif
++
+ define SETOOLS_FIX_SETUP
+ 	# By default, setup.py will look for libsepol.a in the host machines
+ 	# /usr/lib directory. This needs to be changed to the staging directory.
 -- 
 2.14.3
