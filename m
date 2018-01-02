@@ -1,40 +1,140 @@
-From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Tue, 2 Jan 2018 18:51:28 +0100
-Subject: [Buildroot] [PATCH v9 0/8] Add support for the Rust programming
-In-Reply-To: <20171228223629.0fd45695@windsurf>
-References: <20171228155146.18193-1-eric.le.bihan.dev@free.fr>
- <20171228172129.3dd0acdc@windsurf.home>
- <20171228175256.GA24806@ned> <20171228223629.0fd45695@windsurf>
-Message-ID: <20180102175128.GB22123@itchy>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Tue,  2 Jan 2018 13:56:08 -0600
+Subject: [Buildroot] [PATCH v2] hung build: convert to monitor thread
+Message-ID: <20180102195608.10806-1-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi!
+Check the build-time.log and monitor for modifications to
+determine if the build has hung for at most 60mins
+before killing the build and reporting a timeout.
 
-On 17-12-28 22:36:29, Thomas Petazzoni wrote:
-> I reviewed the different patches in your series, and I think it's
-> really close to a state where it can be merged. If you can take care of
-> the few comments/questions in the near future, it would definitely
-> help, as I would still have the context in mind.
->
-> Two other things that would be nice to do is:
->
->  - Add two test cases in support/testing/. One that builds a system with
->    rust-bin, builds a hello world program in Rust, and run it on the
->    target. And another that does the same, but by building the rust
->    compiler from source. Perhaps additional test cases can be added for
->    Cargo, but I'm not sure how it's supposed to be used.
->
->  - Add a short section in the documentation that explains how the Rust
->    support in Buildroot is working. This would help people trying to do
->    stuff with Rust to understand how things work.
+This allows infinite sized builds as we get to a lower
+number of autobr fails.  Less failures means we start
+to see false timeout failures when we hit the boundary
+of the old MAX_DURATION ~8hrs.
 
-I'll add these. Thanks for the review!
-
-Regards,
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 
 --
-ELB
+Change Log
+
+v1->v2
+[Thomas P.
+ - Use mtime vs reading file
+ - Use datetime for hung delta check
+ - Removed camel case
+ - Added hung build event to sync hand-off back to main thread
+---
+ scripts/autobuild-run | 53 ++++++++++++++++++++++++++++++++++++++++++---------
+ 1 file changed, 44 insertions(+), 9 deletions(-)
+
+diff --git a/scripts/autobuild-run b/scripts/autobuild-run
+index 8475437..7274c80 100755
+--- a/scripts/autobuild-run
++++ b/scripts/autobuild-run
+@@ -73,6 +73,8 @@ import sys
+ from time import localtime, strftime
+ from distutils.version import StrictVersion
+ import platform
++from threading import Thread, Event
++import datetime
+ 
+ if sys.hexversion >= 0x3000000:
+     import configparser
+@@ -167,7 +169,7 @@ else:
+     decode_bytes = _identity
+     encode_str = _identity
+ 
+-MAX_DURATION = 60 * 60 * 8
++HUNG_BUILD_TIMEOUT = 60 # mins
+ VERSION = 1
+ 
+ def log_write(logf, msg):
+@@ -199,7 +201,7 @@ def get_branch():
+     return branches[randint(0, len(branches) - 1)]
+ 
+ class SystemInfo:
+-    DEFAULT_NEEDED_PROGS = ["make", "git", "gcc", "timeout"]
++    DEFAULT_NEEDED_PROGS = ["make", "git", "gcc"]
+     DEFAULT_OPTIONAL_PROGS = ["bzr", "java", "javac", "jar"]
+ 
+     def __init__(self):
+@@ -358,6 +360,24 @@ def gen_config(**kwargs):
+     ret = subprocess.call(args, stdout=devnull, stderr=log)
+     return ret
+ 
++def stop_on_build_hang(monitor_thread_hung_build_flag,
++                       monitor_thread_stop_flag,
++                       sub_proc, outputdir, log):
++    build_time_logfile = os.path.join(outputdir, "build/build-time.log")
++    while True:
++        if monitor_thread_stop_flag.is_set():
++            return
++        if os.path.exists(build_time_logfile):
++            mtime = datetime.datetime.fromtimestamp(os.stat(build_time_logfile).st_mtime)
++
++            if mtime < datetime.datetime.now() - datetime.timedelta(minutes=HUNG_BUILD_TIMEOUT):
++                if sub_proc.poll() is None:
++                    monitor_thread_hung_build_flag.set() # Used by do_build() to determine build hang
++                    log_write(log, "INFO: build hung")
++                    sub_proc.kill()
++                break
++        monitor_thread_stop_flag.wait(30)
++
+ def do_build(**kwargs):
+     """Run the build itself"""
+ 
+@@ -380,25 +400,40 @@ def do_build(**kwargs):
+     f = open(os.path.join(outputdir, "logfile"), "w+")
+     log_write(log, "INFO: build started")
+ 
+-    cmd = ["timeout", str(MAX_DURATION),
+-            "nice", "-n", str(nice),
++    cmd = ["nice", "-n", str(nice),
+             "make", "O=%s" % outputdir,
+             "-C", srcdir, "BR2_DL_DIR=%s" % dldir,
+             "BR2_JLEVEL=%s" % kwargs['njobs']] \
+           + kwargs['make_opts'].split()
+     sub = subprocess.Popen(cmd, stdout=f, stderr=f)
++
++    # Setup hung build monitoring thread
++    monitor_thread_hung_build_flag = Event()
++    monitor_thread_stop_flag = Event()
++    build_monitor = Thread(target=stop_on_build_hang,
++                           args=(monitor_thread_hung_build_flag,
++                                 monitor_thread_stop_flag,
++                                 sub, outputdir, log))
++    build_monitor.daemon = True
++    build_monitor.start()
++
+     kwargs['buildpid'][kwargs['instance']] = sub.pid
+     ret = sub.wait()
+     kwargs['buildpid'][kwargs['instance']] = 0
+ 
+-    # 124 is a special error code that indicates we have reached the
+-    # timeout
+-    if ret == 124:
+-        log_write(log, "INFO: build timed out")
++    # If build failed, monitor thread would have exited@this point
++    if monitor_thread_hung_build_flag.is_set():
++        log_write(log, "INFO: build timed out [%d]" % ret)
+         return -2
++    else:
++        # Stop monitor thread as this build didn't timeout
++        monitor_thread_stop_flag.set()
++    # Monitor thread should be exiting around this point
++
+     if ret != 0:
+-        log_write(log, "INFO: build failed")
++        log_write(log, "INFO: build failed [%d]" % ret)
+         return -1
++
+     cmd = ["make", "O=%s" % outputdir, "-C", srcdir,
+             "BR2_DL_DIR=%s" % dldir, "legal-info"] \
+           + kwargs['make_opts'].split()
+-- 
+2.14.2
