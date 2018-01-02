@@ -1,37 +1,32 @@
-From: Trent Piepho <tpiepho@impinj.com>
-Date: Tue, 2 Jan 2018 22:13:15 +0000
-Subject: [Buildroot] [PATCH 3/8] python-setuptools: check host-python
- version
-In-Reply-To: <20180102163337.6334-4-aduskett@gmail.com>
-References: <20180102163337.6334-1-aduskett@gmail.com>
- <20180102163337.6334-4-aduskett@gmail.com>
-Message-ID: <1514931195.26695.184.camel@impinj.com>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Tue,  2 Jan 2018 21:32:25 -0200
+Subject: [Buildroot] [PATCH 1/2] linux: bump default to version 4.14.11
+Message-ID: <1514935946-19760-1-git-send-email-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 2018-01-02 at 11:33 -0500, Adam Duskett wrote:
-> python-setuptools is compatible with both python2 and python3, as such,
-> there is no need to force python2 as a dependency.
-> 
->  
-> +ifeq ($(BR2_PACKAGE_HOST_PYTHON3),y)
-> +HOST_PYTHON_SETUPTOOLS_NEEDS_HOST_PYTHON += python3
-> +HOST_PYTHON_SETUPTOOLS_PYLIBVER = python$(PYTHON3_VERSION_MAJOR)
-> +else
-> +HOST_PYTHON_SETUPTOOLS_NEEDS_HOST_PYTHON += python
-> +HOST_PYTHON_SETUPTOOLS_PYLIBVER = python$(PYTHON_VERSION_MAJOR)
-> +endif
+From: Fabio Estevam <fabio.estevam@nxp.com>
 
-From why I see in pkg-python, the default behavior for host packages is
-to depend on the default interpreter, which is python3 if enabled
-otherwise python2.  Isn't the above block basically doing the same
-thing?  Other than using HOST_PYTHON3 rather than PYTHON3.
+Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
+---
+ linux/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-But shouldn't this be changed in pkg-python?
-
-Then setting <PKG>_NEEDS_HOST_PYTHON based on why python version is in
-use could be eliminated, unless the package needs a specific version,
-which appear to be how it's supposed to work.
+diff --git a/linux/Config.in b/linux/Config.in
+index d325c4e..61e5586 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -116,7 +116,7 @@ endif
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "4.14.10" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "4.14.11" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "v4.4.105-cip15" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+-- 
+2.7.4
