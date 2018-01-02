@@ -1,46 +1,90 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Tue,  2 Jan 2018 10:28:02 -0500
-Subject: [Buildroot] [PATCH 3/8] python-setuptools: check host-python version
+Date: Tue,  2 Jan 2018 10:28:03 -0500
+Subject: [Buildroot] [PATCH 4/8] pkg-waf.mk: check host-python version
 In-Reply-To: <20180102152807.31470-1-aduskett@gmail.com>
 References: <20180102152807.31470-1-aduskett@gmail.com>
-Message-ID: <20180102152807.31470-4-aduskett@gmail.com>
+Message-ID: <20180102152807.31470-5-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-python-setuptools is compatible with both python2 and python3, as such,
-there is no need to force python2 as a dependency.
+waf is compatible with both python2 and python3. Now that there are host
+entries for python, the make logic can be changed to check if host-python3
+has been selected, and if so, depend on it instead of explicitly depending
+only on python2.
 
 Signed-off-by: Adam Duskett <aduskett@gmail.com>
 ---
- package/python-setuptools/python-setuptools.mk | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+ package/pkg-waf.mk | 20 +++++++++++++-------
+ 1 file changed, 13 insertions(+), 7 deletions(-)
 
-diff --git a/package/python-setuptools/python-setuptools.mk b/package/python-setuptools/python-setuptools.mk
-index 28d4f29b5b..a21494a288 100644
---- a/package/python-setuptools/python-setuptools.mk
-+++ b/package/python-setuptools/python-setuptools.mk
-@@ -10,10 +10,18 @@ PYTHON_SETUPTOOLS_LICENSE = MIT
- PYTHON_SETUPTOOLS_LICENSE_FILES = LICENSE
- PYTHON_SETUPTOOLS_SETUP_TYPE = setuptools
+diff --git a/package/pkg-waf.mk b/package/pkg-waf.mk
+index e5b606f063..8df287074b 100644
+--- a/package/pkg-waf.mk
++++ b/package/pkg-waf.mk
+@@ -36,9 +36,6 @@
  
+ define inner-waf-package
+ 
+-# We need host-python to run waf
+-$(2)_DEPENDENCIES += host-python
+-
+ $(2)_NEEDS_EXTERNAL_WAF ?= NO
+ 
+ # If the package does not have its own waf, use our own.
+@@ -49,6 +46,15 @@ else
+ $(2)_WAF = ./waf
+ endif
+ 
++# We need a host-python to run waf
 +ifeq ($(BR2_PACKAGE_HOST_PYTHON3),y)
-+HOST_PYTHON_SETUPTOOLS_NEEDS_HOST_PYTHON += python3
-+HOST_PYTHON_SETUPTOOLS_PYLIBVER = python$(PYTHON3_VERSION_MAJOR)
++$(2)_DEPENDENCIES += host-python3
++$(2)_WAF_PYTHON_PATH ?= $$(HOST_DIR)/bin/python3
 +else
-+HOST_PYTHON_SETUPTOOLS_NEEDS_HOST_PYTHON += python
-+HOST_PYTHON_SETUPTOOLS_PYLIBVER = python$(PYTHON_VERSION_MAJOR)
++$(2)_DEPENDENCIES += host-python
++$(2)_WAF_PYTHON_PATH ?= $$(HOST_DIR)/bin/python2
 +endif
 +
- # recent setuptools versions require bootstrap.py to be invoked
- # before the standard setup process.
- define PYTHON_SETUPTOOLS_RUN_BOOTSTRAP
--	cd  $(@D) && $(HOST_DIR)/bin/python ./bootstrap.py
-+	cd  $(@D) && $(HOST_DIR)/bin/$(HOST_PYTHON_SETUPTOOLS_PYLIBVER) ./bootstrap.py
+ $(2)_BUILD_OPTS				?=
+ $(2)_INSTALL_STAGING_OPTS		?=
+ $(2)_INSTALL_TARGET_OPTS		?=
+@@ -63,7 +69,7 @@ define $(2)_CONFIGURE_CMDS
+ 	cd $$(@D) && \
+ 	$$(TARGET_CONFIGURE_OPTS) \
+ 	$$($(2)_CONF_ENV) \
+-	$$(HOST_DIR)/bin/python2 $$($(2)_WAF) configure \
++	$$($(2)_WAF_PYTHON_PATH) $$($(2)_WAF) configure \
+ 		--prefix=/usr \
+ 		--libdir=/usr/lib \
+ 		$$($(2)_CONF_OPTS) \
+@@ -78,7 +84,7 @@ endif
+ ifndef $(2)_BUILD_CMDS
+ define $(2)_BUILD_CMDS
+ 	cd $$(@D) && \
+-	$$(TARGET_MAKE_ENV) $$(HOST_DIR)/bin/python2 $$($(2)_WAF) \
++	$$(TARGET_MAKE_ENV) $$($(2)_WAF_PYTHON_PATH) $$($(2)_WAF) \
+ 		build -j $$(PARALLEL_JOBS) $$($(2)_BUILD_OPTS) \
+ 		$$($(2)_WAF_OPTS)
  endef
- 
- PYTHON_SETUPTOOLS_PRE_CONFIGURE_HOOKS = PYTHON_SETUPTOOLS_RUN_BOOTSTRAP
+@@ -91,7 +97,7 @@ endif
+ ifndef $(2)_INSTALL_STAGING_CMDS
+ define $(2)_INSTALL_STAGING_CMDS
+ 	cd $$(@D) && \
+-	$$(TARGET_MAKE_ENV) $$(HOST_DIR)/bin/python2 $$($(2)_WAF) \
++	$$(TARGET_MAKE_ENV) $$($(2)_WAF_PYTHON_PATH) $$($(2)_WAF) \
+ 		install --destdir=$$(STAGING_DIR) \
+ 		$$($(2)_INSTALL_STAGING_OPTS) \
+ 		$$($(2)_WAF_OPTS)
+@@ -105,7 +111,7 @@ endif
+ ifndef $(2)_INSTALL_TARGET_CMDS
+ define $(2)_INSTALL_TARGET_CMDS
+ 	cd $$(@D) && \
+-	$$(TARGET_MAKE_ENV) $$(HOST_DIR)/bin/python2 $$($(2)_WAF) \
++	$$(TARGET_MAKE_ENV) $$($(2)_WAF_PYTHON_PATH) $$($(2)_WAF) \
+ 		install --destdir=$$(TARGET_DIR) \
+ 		$$($(2)_INSTALL_TARGET_OPTS) \
+ 		$$($(2)_WAF_OPTS)
 -- 
 2.14.3
