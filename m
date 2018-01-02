@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 2 Jan 2018 10:14:38 +0100
-Subject: [Buildroot] [PATCH] i2c-tools: fix static build
-In-Reply-To: <2c1e421f520c2910f43cc85913628dec1104ea89.1514871379.git.baruch@tkos.co.il>
-References: <2c1e421f520c2910f43cc85913628dec1104ea89.1514871379.git.baruch@tkos.co.il>
-Message-ID: <20180102101438.1136a648@windsurf>
+Date: Tue, 2 Jan 2018 10:14:45 +0100
+Subject: [Buildroot] [PATCH v2] eeprog: remove package
+In-Reply-To: <2647f36b9fbe9f718b30aa984c2c488f7cf6bc9c.1514873761.git.baruch@tkos.co.il>
+References: <2647f36b9fbe9f718b30aa984c2c488f7cf6bc9c.1514873761.git.baruch@tkos.co.il>
+Message-ID: <20180102101445.5c39e076@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,21 +12,27 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue,  2 Jan 2018 07:36:19 +0200, Baruch Siach wrote:
-> Add a patch to disable installation of dynamic library on static build.
+On Tue,  2 Jan 2018 08:16:01 +0200, Baruch Siach wrote:
+> The i2c-tools package has adopted the code of eeprog.
 > 
-> Fixes:
-> http://autobuild.buildroot.net/results/2ba/2bab61f82fdab8fe7e13da61b7814a4c33501cd8/
-> http://autobuild.buildroot.net/results/284/28474ec930dc82fa504c57927e1f9bd994b2774a/
-> http://autobuild.buildroot.net/results/a1b/a1bf99467ad3661dcb3ede491a70a57f1f1e01b1/
-> 
-> Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 > Cc: Matt Weber <matthew.weber@rockwellcollins.com>
 > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 > ---
->  ...mk-don-t-install-dynamic-library-when-dis.patch | 41 ++++++++++++++++++++++
->  1 file changed, 41 insertions(+)
->  create mode 100644 package/i2c-tools/0008-lib-Module.mk-don-t-install-dynamic-library-when-dis.patch
+> v2:
+>   Select BR2_LEGACY (Thomas)
+>   Select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS to make sure i2c-tools is
+>   enabled (Thomas)
+> ---
+>  Config.in.legacy           |  8 ++++++++
+>  DEVELOPERS                 |  1 -
+>  package/Config.in          |  1 -
+>  package/eeprog/Config.in   |  6 ------
+>  package/eeprog/eeprog.hash |  2 --
+>  package/eeprog/eeprog.mk   | 20 --------------------
+>  6 files changed, 8 insertions(+), 30 deletions(-)
+>  delete mode 100644 package/eeprog/Config.in
+>  delete mode 100644 package/eeprog/eeprog.hash
+>  delete mode 100644 package/eeprog/eeprog.mk
 
 Applied to master, thanks.
 
