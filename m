@@ -1,48 +1,76 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 2 Jan 2018 21:45:20 +0100
-Subject: [Buildroot] [PATCH v2] libdrm: fix libatomic_ops linking
-In-Reply-To: <20171218185531.31686-1-ps.report@gmx.net>
-References: <20171218185531.31686-1-ps.report@gmx.net>
-Message-ID: <20180102214520.53169c7b@windsurf.lan>
+Date: Tue, 2 Jan 2018 21:47:52 +0100
+Subject: [Buildroot] [git commit] package/zisofs-tools: new package
+Message-ID: <20180102205800.7CE54838FF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=fa4ee4dc0a46754b737a99e02800703a9171a309
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 18 Dec 2017 19:55:31 +0100, Peter Seiderer wrote:
-> Add patch 0003-configure-Makefile.am-use-pkg-config-to-discover-lib.patch
-> provided by Thomas Petazzoni handling libatomic_ops linking when needed.
-> 
-> Fixes [1]:
-> 
->     CCLD     etnaviv_cmd_stream_test
->   ../../etnaviv/.libs/libdrm_etnaviv.so: undefined reference to `AO_store_full_emulation'
->   ../../etnaviv/.libs/libdrm_etnaviv.so: undefined reference to `AO_fetch_compare_and_swap_emulation'
->   collect2: error: ld returned 1 exit status
-> 
-> [1] http://autobuild.buildroot.net/results/92e074c49417261843eef95872ff935a56077c98
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
-> Changes v1 -> v2:
->   - use patch provided by Thomas Petazzoni instead of forced
->     libatomic_ops linking.
-> ---
->  ...akefile.am-use-pkg-config-to-discover-lib.patch | 160 +++++++++++++++++++++
->  package/libdrm/libdrm.mk                           |   8 +-
->  2 files changed, 167 insertions(+), 1 deletion(-)
->  create mode 100644 package/libdrm/0003-configure-Makefile.am-use-pkg-config-to-discover-lib.patch
+To support transparent (de)compression in iso9660, we need mkzftree,
+which comes from zisofs_tools, biundled with cdrkit.
 
-Applied to master, thanks. Could you submit the patch upstream to the
-libdrm project ?
+However, cdrkit is a cmake package, but zisofs_tools is an autotools
+package, so we need a separate package just to get mkzftree, but it is
+pretty lightweight.
 
-Thanks a lot!
+We just need the host variant for now,so we just add that.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+[Thomas: add entry to DEVELOPERS file, rename to zisofs-tools.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ DEVELOPERS                             |  1 +
+ package/zisofs-tools/zisofs-tools.hash |  5 +++++
+ package/zisofs-tools/zisofs-tools.mk   | 15 +++++++++++++++
+ 3 files changed, 21 insertions(+)
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 7e14b56..f8cf260 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1879,6 +1879,7 @@ F:	package/vde2/
+ F:	package/w_scan/
+ F:	package/wayland/
+ F:	package/weston/
++F:	package/zisofs-tools/
+ F:	support/download/
+ 
+ N:	Yegor Yefremov <yegorslists@googlemail.com>
+diff --git a/package/zisofs-tools/zisofs-tools.hash b/package/zisofs-tools/zisofs-tools.hash
+new file mode 100644
+index 0000000..d2f594c
+--- /dev/null
++++ b/package/zisofs-tools/zisofs-tools.hash
+@@ -0,0 +1,5 @@
++# From http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/c/cdrkit/cdrkit_1.1.11-3.dsc
++sha256  d1c030756ecc182defee9fe885638c1785d35a2c2a297b4604c0e0dcc78e47da  cdrkit_1.1.11.orig.tar.gz
++
++# Locally computed
++sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  3rd-party/zisofs_tools/COPYING
+diff --git a/package/zisofs-tools/zisofs-tools.mk b/package/zisofs-tools/zisofs-tools.mk
+new file mode 100644
+index 0000000..fd8c371
+--- /dev/null
++++ b/package/zisofs-tools/zisofs-tools.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# zisofs-tools
++#
++################################################################################
++
++ZISOFS_TOOLS_VERSION = 1.1.11
++ZISOFS_TOOLS_SOURCE = cdrkit_$(ZISOFS_TOOLS_VERSION).orig.tar.gz
++ZISOFS_TOOLS_SITE = http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/c/cdrkit
++ZISOFS_TOOLS_LICENSE = GPL-2.0+
++ZISOFS_TOOLS_LICENSE_FILES = 3rd-party/zisofs_tools/COPYING
++ZISOFS_TOOLS_SUBDIR = 3rd-party/zisofs_tools
++HOST_ZISOFS_TOOLS_DEPENDENCIES = host-zlib
++
++$(eval $(host-autotools-package))
