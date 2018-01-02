@@ -1,33 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 2 Jan 2018 22:40:44 +0100
-Subject: [Buildroot] [PATCH] package/sysdig: bump to version 0.19.1
-In-Reply-To: <1514910326-24416-1-git-send-email-angelo@amarulasolutions.com>
-References: <1514910326-24416-1-git-send-email-angelo@amarulasolutions.com>
-Message-ID: <20180102224044.6bb26220@windsurf.lan>
+Date: Tue, 2 Jan 2018 22:40:53 +0100
+Subject: [Buildroot] [git commit] linux-headers: bump 3.2.x series
+Message-ID: <20180102214056.AE17983A65@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=28d57106b87ef97480374925e5f44dc541eba381
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue,  2 Jan 2018 17:25:26 +0100, Angelo Compagnucci wrote:
-> This patch bumps sysdig to version 0.19.1 and removes
-> an upstreamed patch.
-> 
-> Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
-> ---
->  .../sysdig/0001-Don-t-include-curlbuild.h.patch    | 58 ----------------------
->  package/sysdig/sysdig.hash                         |  2 +-
->  package/sysdig/sysdig.mk                           |  2 +-
->  3 files changed, 2 insertions(+), 60 deletions(-)
->  delete mode 100644 package/sysdig/0001-Don-t-include-curlbuild.h.patch
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/linux-headers/Config.in.host | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 6802217..4fcc7e1 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -247,7 +247,7 @@ endchoice
+ 
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "3.2.96"	if BR2_KERNEL_HEADERS_3_2
++	default "3.2.97"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.4.113"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.10.108"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.12.74"	if BR2_KERNEL_HEADERS_3_12
