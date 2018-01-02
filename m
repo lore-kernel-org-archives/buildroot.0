@@ -1,47 +1,46 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Tue,  2 Jan 2018 10:28:01 -0500
-Subject: [Buildroot] [PATCH 2/8] python3: add selectable host entry
+Date: Tue,  2 Jan 2018 10:28:02 -0500
+Subject: [Buildroot] [PATCH 3/8] python-setuptools: check host-python version
 In-Reply-To: <20180102152807.31470-1-aduskett@gmail.com>
 References: <20180102152807.31470-1-aduskett@gmail.com>
-Message-ID: <20180102152807.31470-3-aduskett@gmail.com>
+Message-ID: <20180102152807.31470-4-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add a user selectable entry to build python3 as a host package.
+python-setuptools is compatible with both python2 and python3, as such,
+there is no need to force python2 as a dependency.
 
 Signed-off-by: Adam Duskett <aduskett@gmail.com>
 ---
- package/Config.in.host         | 1 +
- package/python3/Config.in.host | 6 ++++++
- 2 files changed, 7 insertions(+)
- create mode 100644 package/python3/Config.in.host
+ package/python-setuptools/python-setuptools.mk | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
-diff --git a/package/Config.in.host b/package/Config.in.host
-index 7d908c409c..19d45e9d9e 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -42,6 +42,7 @@ menu "Host utilities"
- 	source "package/pru-software-support/Config.in.host"
- 	source "package/pwgen/Config.in.host"
- 	source "package/python/Config.in.host"
-+	source "package/python3/Config.in.host"
- 	source "package/python-lxml/Config.in.host"
- 	source "package/python-six/Config.in.host"
- 	source "package/qemu/Config.in.host"
-diff --git a/package/python3/Config.in.host b/package/python3/Config.in.host
-new file mode 100644
-index 0000000000..876661e71b
---- /dev/null
-+++ b/package/python3/Config.in.host
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_HOST_PYTHON3
-+	bool "host python3"
-+	help
-+	  The python language interpreter.
+diff --git a/package/python-setuptools/python-setuptools.mk b/package/python-setuptools/python-setuptools.mk
+index 28d4f29b5b..a21494a288 100644
+--- a/package/python-setuptools/python-setuptools.mk
++++ b/package/python-setuptools/python-setuptools.mk
+@@ -10,10 +10,18 @@ PYTHON_SETUPTOOLS_LICENSE = MIT
+ PYTHON_SETUPTOOLS_LICENSE_FILES = LICENSE
+ PYTHON_SETUPTOOLS_SETUP_TYPE = setuptools
+ 
++ifeq ($(BR2_PACKAGE_HOST_PYTHON3),y)
++HOST_PYTHON_SETUPTOOLS_NEEDS_HOST_PYTHON += python3
++HOST_PYTHON_SETUPTOOLS_PYLIBVER = python$(PYTHON3_VERSION_MAJOR)
++else
++HOST_PYTHON_SETUPTOOLS_NEEDS_HOST_PYTHON += python
++HOST_PYTHON_SETUPTOOLS_PYLIBVER = python$(PYTHON_VERSION_MAJOR)
++endif
 +
-+	  http://www.python.org/
+ # recent setuptools versions require bootstrap.py to be invoked
+ # before the standard setup process.
+ define PYTHON_SETUPTOOLS_RUN_BOOTSTRAP
+-	cd  $(@D) && $(HOST_DIR)/bin/python ./bootstrap.py
++	cd  $(@D) && $(HOST_DIR)/bin/$(HOST_PYTHON_SETUPTOOLS_PYLIBVER) ./bootstrap.py
+ endef
+ 
+ PYTHON_SETUPTOOLS_PRE_CONFIGURE_HOOKS = PYTHON_SETUPTOOLS_RUN_BOOTSTRAP
 -- 
 2.14.3
