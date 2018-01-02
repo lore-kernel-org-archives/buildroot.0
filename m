@@ -1,108 +1,52 @@
-From: Angelo Compagnucci <angelo@amarulasolutions.com>
-Date: Tue,  2 Jan 2018 17:25:26 +0100
-Subject: [Buildroot] [PATCH] package/sysdig: bump to version 0.19.1
-Message-ID: <1514910326-24416-1-git-send-email-angelo@amarulasolutions.com>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Tue,  2 Jan 2018 11:33:29 -0500
+Subject: [Buildroot] [PATCH 0/8] python: clean up host version logic.
+Message-ID: <20180102163337.6334-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch bumps sysdig to version 0.19.1 and removes
-an upstreamed patch.
+Currently, packages that rely on host-python, and are compatible with both
+python2 and 3, only build python3 if python3 is selected for the target.
 
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
----
- .../sysdig/0001-Don-t-include-curlbuild.h.patch    | 58 ----------------------
- package/sysdig/sysdig.hash                         |  2 +-
- package/sysdig/sysdig.mk                           |  2 +-
- 3 files changed, 2 insertions(+), 60 deletions(-)
- delete mode 100644 package/sysdig/0001-Don-t-include-curlbuild.h.patch
+This causes a problem in the following scenario:
 
-diff --git a/package/sysdig/0001-Don-t-include-curlbuild.h.patch b/package/sysdig/0001-Don-t-include-curlbuild.h.patch
-deleted file mode 100644
-index 5b53bb1..0000000
---- a/package/sysdig/0001-Don-t-include-curlbuild.h.patch
-+++ /dev/null
-@@ -1,58 +0,0 @@
--From 8a6670ea4b57c0e2bf8588d4534b22d1ea860989 Mon Sep 17 00:00:00 2001
--From: Mark Stemm <mark.stemm@gmail.com>
--Date: Tue, 15 Aug 2017 17:49:53 -0700
--Subject: [PATCH] Don't include curlbuild.h
--
--It's not required to build and it's not present with some newer versions
--of libcurl, so removing it.
--
--Thanks to https://github.com/hhoffstaette for the tip.
--
--This fixes https://github.com/draios/sysdig/issues/895.
--
--Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-----
-- userspace/libsinsp/marathon_http.cpp | 1 -
-- userspace/libsinsp/mesos_http.cpp    | 1 -
-- userspace/sysdig.project             | 1 -
-- 3 files changed, 3 deletions(-)
--
--diff --git a/userspace/libsinsp/marathon_http.cpp b/userspace/libsinsp/marathon_http.cpp
--index f7937b6..2e4449a 100644
----- a/userspace/libsinsp/marathon_http.cpp
--+++ b/userspace/libsinsp/marathon_http.cpp
--@@ -7,7 +7,6 @@
-- #include "marathon_http.h"
-- #include "curl/curl.h"
-- #include "curl/easy.h"
---#include "curl/curlbuild.h"
-- #define BUFFERSIZE 512 // b64 needs this macro
-- #include "b64/encode.h"
-- #include "sinsp.h"
--diff --git a/userspace/libsinsp/mesos_http.cpp b/userspace/libsinsp/mesos_http.cpp
--index 18ac9f5..c6bfb58 100644
----- a/userspace/libsinsp/mesos_http.cpp
--+++ b/userspace/libsinsp/mesos_http.cpp
--@@ -7,7 +7,6 @@
-- #include "mesos_http.h"
-- #include "curl/curl.h"
-- #include "curl/easy.h"
---#include "curl/curlbuild.h"
-- #include "sinsp.h"
-- #include "sinsp_int.h"
-- #include "sinsp_curl.h"
--diff --git a/userspace/sysdig.project b/userspace/sysdig.project
--index 5d00f18..76a18f0 100644
----- a/userspace/sysdig.project
--+++ b/userspace/sysdig.project
--@@ -752,7 +752,6 @@
--             </VirtualDirectory>
--             <VirtualDirectory Name="include">
--               <VirtualDirectory Name="curl">
---                <File Name="../build/release/curl-prefix/src/curl/include/curl/curlbuild.h"/>
--                 <File Name="../build/release/curl-prefix/src/curl/include/curl/easy.h"/>
--                 <File Name="../build/release/curl-prefix/src/curl/include/curl/stdcheaders.h"/>
--                 <File Name="../build/release/curl-prefix/src/curl/include/curl/curlrules.h"/>
---- 
--2.7.4
--
-diff --git a/package/sysdig/sysdig.hash b/package/sysdig/sysdig.hash
-index 8305413..63a9e38 100644
---- a/package/sysdig/sysdig.hash
-+++ b/package/sysdig/sysdig.hash
-@@ -1,2 +1,2 @@
- # locally computed
--sha256  f009acc32f2b15fcb0d2267bde6f6de9b3445179003c979ba61a8836abdb78f9  sysdig-0.17.0.tar.gz
-+sha256  480d5d8fd7e7373c08008c30bd8e2c7595d5c45d710bf07bd15a522021b560f6  sysdig-0.19.1.tar.gz
-diff --git a/package/sysdig/sysdig.mk b/package/sysdig/sysdig.mk
-index ecafb9d..a9c9f21 100644
---- a/package/sysdig/sysdig.mk
-+++ b/package/sysdig/sysdig.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SYSDIG_VERSION = 0.17.0
-+SYSDIG_VERSION = 0.19.1
- SYSDIG_SITE = $(call github,draios,sysdig,$(SYSDIG_VERSION))
- SYSDIG_LICENSE = GPL-2.0
- SYSDIG_LICENSE_FILES = COPYING
+- A user does not have a target python selected.
+- Package A depends on host-python3
+- Package B is compatible with host-python and host-python3
+
+In this scenario, host-python is not needed, as package A and B are
+both compatible with python3. However; both host-python and host-python3 will
+be built because no target-python has been selected.
+
+To fix this, the following patch series introduces a few minimal changes
+that will allow the user to manually select a host version of python.
+(Note: I have changed only the packages that I personally use and have tested.)
+
+Adam Duskett (8):
+  python: add host-entry
+  python3: add host-entry
+  python-setuptools: check host-python version
+  pkg-waf.mk: check host-python version
+  ninja: check host-python version
+  libselinux: check host-python version
+  setools: check host-python version
+  libselinux: check host-python version
+
+ package/Config.in.host                         |  2 ++
+ package/libselinux/libselinux.mk               |  2 +-
+ package/libsemanage/libsemanage.mk             |  2 +-
+ package/ninja/ninja.mk                         |  2 +-
+ package/pkg-waf.mk                             | 20 +++++++++++++-------
+ package/python-setuptools/python-setuptools.mk | 10 +++++++++-
+ package/python/Config.in.host                  |  6 ++++++
+ package/python3/Config.in.host                 |  6 ++++++
+ package/setools/setools.mk                     |  6 ++++++
+ 9 files changed, 45 insertions(+), 11 deletions(-)
+ create mode 100644 package/python/Config.in.host
+ create mode 100644 package/python3/Config.in.host
+
 -- 
-2.7.4
+2.14.3
