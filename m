@@ -1,52 +1,47 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Tue,  2 Jan 2018 10:27:59 -0500
-Subject: [Buildroot] [PATCH 0/8] python: clean up host version logic.
-Message-ID: <20180102152807.31470-1-aduskett@gmail.com>
+Date: Tue,  2 Jan 2018 10:28:00 -0500
+Subject: [Buildroot] [PATCH 1/8] python: add selectable host entry
+In-Reply-To: <20180102152807.31470-1-aduskett@gmail.com>
+References: <20180102152807.31470-1-aduskett@gmail.com>
+Message-ID: <20180102152807.31470-2-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, packages that rely on host-python, and are compatible with both
-python2 and 3, only build python3 if python3 is selected for the target.
+Add a user selectable entry to build python2 as a host package.
 
-This causes a problem in the following scenario:
-
-- A user does not have a target python selected.
-- Package A depends on host-python3
-- Package B is compatible with host-python and host-python3
-
-In this scenario, host-python is not needed, as package A and B are
-both compatible with python3. However; both host-python and host-python3 will
-be built because no target-python has been selected.
-
-To fix this, the following patch series introduces a few minimal changes
-that will allow the user to manually select a host version of python.
-(Note: I have changed only the packages that I personally use and have tested.)
-
-Adam Duskett (8):
-  python: add host-entry
-  python3: add host-entry
-  python-setuptools: check host-python version
-  pkg-waf.mk: check host-python version
-  ninja: check host-python version
-  libselinux: check host-python version
-  setools: check host-python version
-  libselinux: check host-python version
-
- package/Config.in.host                         |  2 ++
- package/libselinux/libselinux.mk               |  2 +-
- package/libsemanage/libsemanage.mk             |  2 +-
- package/ninja/ninja.mk                         |  2 +-
- package/pkg-waf.mk                             | 20 +++++++++++++-------
- package/python-setuptools/python-setuptools.mk | 10 +++++++++-
- package/python/Config.in.host                  |  6 ++++++
- package/python3/Config.in.host                 |  6 ++++++
- package/setools/setools.mk                     |  6 ++++++
- 9 files changed, 45 insertions(+), 11 deletions(-)
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
+---
+ package/Config.in.host        | 1 +
+ package/python/Config.in.host | 6 ++++++
+ 2 files changed, 7 insertions(+)
  create mode 100644 package/python/Config.in.host
- create mode 100644 package/python3/Config.in.host
 
+diff --git a/package/Config.in.host b/package/Config.in.host
+index dd6415bba5..7d908c409c 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -41,6 +41,7 @@ menu "Host utilities"
+ 	source "package/pkgconf/Config.in.host"
+ 	source "package/pru-software-support/Config.in.host"
+ 	source "package/pwgen/Config.in.host"
++	source "package/python/Config.in.host"
+ 	source "package/python-lxml/Config.in.host"
+ 	source "package/python-six/Config.in.host"
+ 	source "package/qemu/Config.in.host"
+diff --git a/package/python/Config.in.host b/package/python/Config.in.host
+new file mode 100644
+index 0000000000..0a8d6d179f
+--- /dev/null
++++ b/package/python/Config.in.host
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_HOST_PYTHON
++	bool "host python"
++	help
++	  The python language interpreter.
++
++	  http://www.python.org/
 -- 
 2.14.3
