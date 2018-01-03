@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 3 Jan 2018 21:45:00 +0100
-Subject: [Buildroot] [PATCH] configs/mx25pdk: Bump U-Boot and kernel
- versions
-In-Reply-To: <1515006609-26005-1-git-send-email-festevam@gmail.com>
-References: <1515006609-26005-1-git-send-email-festevam@gmail.com>
-Message-ID: <20180103214500.7f86d1b5@windsurf.lan>
+Date: Wed, 3 Jan 2018 21:47:29 +0100
+Subject: [Buildroot] [PATCH 03/16] imx-gpu-viv: bump to version 6.2.2.p0
+In-Reply-To: <20180103183842.10182-4-gary.bisson@boundarydevices.com>
+References: <20180103183842.10182-1-gary.bisson@boundarydevices.com>
+ <20180103183842.10182-4-gary.bisson@boundarydevices.com>
+Message-ID: <20180103214729.1239fa29@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,20 +13,38 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed,  3 Jan 2018 17:10:09 -0200, Fabio Estevam wrote:
-> From: Fabio Estevam <fabio.estevam@nxp.com>
-> 
-> Bump to U-Boot 2017.11 and kernel to 4.14.11.
-> 
-> Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
-> ---
->  configs/mx25pdk_defconfig | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
+On Wed,  3 Jan 2018 19:38:29 +0100, Gary Bisson wrote:
 
-Applied to master, thanks.
+> -config BR2_PACKAGE_IMX_GPU_VIV_APITRACE
+> -	bool "install apitrace tools"
+> -	select BR2_PACKAGE_IMX_GPU_VIV_G2D
+> -	select BR2_PACKAGE_LIBPNG
+> -	help
+> -	  Copy the apitrace tool to the target. Apitrace consists
+> -	  of a set of tools to trace, replay and/or inspect OpenGL,
+> -	  OpenGL ES APIs calls
+> -
+> -	  http://apitrace.github.io/
+> -
+>  config BR2_PACKAGE_IMX_GPU_VIV_EXAMPLES
+>  	bool "install examples"
+>  	help
+> @@ -78,11 +67,6 @@ config BR2_PACKAGE_IMX_GPU_VIV_EXAMPLES
+>  
+>  	  Warning: examples take approximately 150 MB of disk space.
+>  
+> -config BR2_PACKAGE_IMX_GPU_VIV_G2D
+> -	bool "install G2D libraries"
+> -	help
+> -	  Copy the GPU2D libraries to the target.
+> -
+
+You need Config.in.legacy handle for those removed options.
+
+Thanks!
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
