@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 3 Jan 2018 21:54:58 +0100
-Subject: [Buildroot] [PATCH 00/16] imx: update packages to
- 4.9.x_1.0.0_ga release
-In-Reply-To: <20180103183842.10182-1-gary.bisson@boundarydevices.com>
-References: <20180103183842.10182-1-gary.bisson@boundarydevices.com>
-Message-ID: <20180103215458.629888e2@windsurf.lan>
+Date: Wed, 3 Jan 2018 21:56:55 +0100
+Subject: [Buildroot] [PATCH 1/2] linux: bump default to version 4.14.11
+In-Reply-To: <1514935946-19760-1-git-send-email-festevam@gmail.com>
+References: <1514935946-19760-1-git-send-email-festevam@gmail.com>
+Message-ID: <20180103215655.2f318355@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,30 +12,18 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed,  3 Jan 2018 19:38:26 +0100, Gary Bisson wrote:
-
-> Here's some update on pretty much all the i.MX-related packages.
+On Tue,  2 Jan 2018 21:32:25 -0200, Fabio Estevam wrote:
+> From: Fabio Estevam <fabio.estevam@nxp.com>
 > 
-> Mainly:
-> - Switch to 4.9-based kernel
-> - Graphics driver updated accordingly
->   -> g2d and apitrace now in separate packages
->   -> apitrace package not included in this series  
-> - Switch freescale.com repositories to codeaurora
-> - Switch NXPMicro repositories to codeaurora
-> 
-> Since G2D libraries now have their own package (preparation for i.MX8
-> which uses the DPU for G2D operation) gst1-imx needed to match the new
-> package name. Right now it is in its own commit but let me know if you
-> prefer having it squashed with the 'g2d new package' commit.
+> Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
+> ---
+>  linux/Config.in | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thanks for this update! I made a few comments on some of the patches.
-Could you take them into account and resend the entire series ?
-
-Thanks a lot!
+Both applied. Thanks!
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
+Embedded Linux, Kernel and Android engineering
 http://free-electrons.com
