@@ -1,58 +1,66 @@
 From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Wed,  3 Jan 2018 19:38:33 +0100
-Subject: [Buildroot] [PATCH 07/16] gst1-imx: update g2d libraries
- dependencies
+Date: Wed,  3 Jan 2018 19:38:36 +0100
+Subject: [Buildroot] [PATCH 10/16] imx-parser: bump to version 4.2.1
 In-Reply-To: <20180103183842.10182-1-gary.bisson@boundarydevices.com>
 References: <20180103183842.10182-1-gary.bisson@boundarydevices.com>
-Message-ID: <20180103183842.10182-8-gary.bisson@boundarydevices.com>
+Message-ID: <20180103183842.10182-11-gary.bisson@boundarydevices.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-To match the new imx-gpu-g2d package.
+Changelog:
+1. Upgrade EULA to v18
+2. Bugfixes/Optimization
+ - Update HEVC PARSER 01.00.02/ APE PARSER 00.00.08/ MPEG2 PARSER 04.05.10
+   1. Delete the useless label in HEVC PARSER.
+   2. Fix 2 variables' not init in special case for APE PARSER.
+   3. Fix one struct's not init for MPEG2 PARSER.
+ - Fix one mp3 can't play on jb4.3_1.1.1-ga
+   ID3V2 contains a picture larger than 3MB, need to save ID3 data size
+   in self->m_dwID3V2Size to let parser skip it when starting playback.
+ - Fix creating parser error
+   When variable value is negative, if(bytesToRead) will return true,
+   modify this condition to if(bytesToRead > 0).
 
 Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
 ---
- package/gstreamer1/gst1-imx/Config.in   | 6 +++---
- package/gstreamer1/gst1-imx/gst1-imx.mk | 4 ++++
- 2 files changed, 7 insertions(+), 3 deletions(-)
+ package/freescale-imx/imx-parser/imx-parser.hash | 2 +-
+ package/freescale-imx/imx-parser/imx-parser.mk   | 6 +++++-
+ 2 files changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-imx/Config.in b/package/gstreamer1/gst1-imx/Config.in
-index e4cee05b90..7b46233b53 100644
---- a/package/gstreamer1/gst1-imx/Config.in
-+++ b/package/gstreamer1/gst1-imx/Config.in
-@@ -27,12 +27,12 @@ comment "imxeglvivsink needs the Vivante 3D libraries"
+diff --git a/package/freescale-imx/imx-parser/imx-parser.hash b/package/freescale-imx/imx-parser/imx-parser.hash
+index f6e82338aa..3266f48110 100644
+--- a/package/freescale-imx/imx-parser/imx-parser.hash
++++ b/package/freescale-imx/imx-parser/imx-parser.hash
+@@ -1,2 +1,2 @@
+ # locally computed
+-sha256	d3a03e60780bbbd0c92932f60bd34d2fe14ffecf6aa6b810723c3edf798cad1f  imx-parser-4.1.4.bin
++sha256	36d3ae7285f3a83a87abf680b8a52b3c07df869d2443de844fb5f0ff528ca862  imx-parser-4.2.1.bin
+diff --git a/package/freescale-imx/imx-parser/imx-parser.mk b/package/freescale-imx/imx-parser/imx-parser.mk
+index a57647c03b..d79a4444c8 100644
+--- a/package/freescale-imx/imx-parser/imx-parser.mk
++++ b/package/freescale-imx/imx-parser/imx-parser.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_PACKAGE_GST1_IMX_G2D
- 	bool "imxg2d"
--	depends on BR2_PACKAGE_IMX_GPU_VIV_G2D
-+	depends on BR2_PACKAGE_IMX_GPU_G2D
- 	help
- 	  Elements leveraging the 2D GPU
+-IMX_PARSER_VERSION = 4.1.4
++IMX_PARSER_VERSION = 4.2.1
+ IMX_PARSER_SITE = $(FREESCALE_IMX_SITE)
+ IMX_PARSER_SOURCE = imx-parser-$(IMX_PARSER_VERSION).bin
+ IMX_PARSER_INSTALL_STAGING = YES
+@@ -13,6 +13,10 @@ IMX_PARSER_LICENSE = NXP Semiconductor Software License Agreement
+ IMX_PARSER_LICENSE_FILES = EULA COPYING
+ IMX_PARSER_REDISTRIBUTE = NO
  
--comment "imxg2d needs the Vivante 2D libraries"
--	depends on !BR2_PACKAGE_IMX_GPU_VIV_G2D
-+comment "imxg2d needs the G2D libraries"
-+	depends on !BR2_PACKAGE_IMX_GPU_G2D
- 
- config BR2_PACKAGE_GST1_IMX_IPU
- 	bool "imxipu"
-diff --git a/package/gstreamer1/gst1-imx/gst1-imx.mk b/package/gstreamer1/gst1-imx/gst1-imx.mk
-index a8fe6fe041..43b4d9b15f 100644
---- a/package/gstreamer1/gst1-imx/gst1-imx.mk
-+++ b/package/gstreamer1/gst1-imx/gst1-imx.mk
-@@ -33,6 +33,10 @@ ifeq ($(BR2_PACKAGE_IMX_GPU_VIV),y)
- GST1_IMX_DEPENDENCIES += imx-gpu-viv
- endif
- 
-+ifeq ($(BR2_PACKAGE_IMX_GPU_G2D),y)
-+GST1_IMX_DEPENDENCIES += imx-gpu-g2d
++ifeq ($(BR2_aarch64),y)
++IMX_PARSER_CONF_OPTS += --enable-armv8
 +endif
 +
- ifeq ($(BR2_PACKAGE_GST1_IMX_EGLVISINK),y)
- # There's no --enable-eglvivsink option
- ifeq ($(BR2_PACKAGE_XLIB_LIBX11),y)
+ ifeq ($(BR2_ARM_EABIHF),y)
+ IMX_PARSER_CONF_OPTS += --enable-fhw
+ else
 -- 
 2.15.1
