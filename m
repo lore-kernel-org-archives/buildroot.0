@@ -1,30 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 3 Jan 2018 22:06:36 +0100
-Subject: [Buildroot] [PATCH 0/2 v2] fs: make it behave more like the
- package infra
-In-Reply-To: <cover.1514457621.git.yann.morin.1998@free.fr>
-References: <cover.1514457621.git.yann.morin.1998@free.fr>
-Message-ID: <20180103220636.16606b10@windsurf.lan>
+Date: Wed, 3 Jan 2018 22:08:30 +0100
+Subject: [Buildroot] [git commit] cjson: build shared and static library
+Message-ID: <20180103210844.8B01783A9B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=aca8412ce27fdb216e80145933baa13c15118719
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 28 Dec 2017 11:40:26 +0100, Yann E. MORIN wrote:
+cjson 1.6.0 added the BUILD_SHARED_AND_STATIC_LIBS option which is OFF
+by default so set it depending on BR2_SHARED_STATIC_LIBS value.
 
-> Yann E. MORIN (2):
->       fs/ubifs: spin-off ubi to be its own filesystem
->       fs: make it behave a bit more like the package infra
+If BUILD_SHARED_AND_STATIC_LIBS is set to OFF, cjson uses the standard
+BUILD_SHARED_LIBS option which is passed by the cmake-package
+infrastructure.
 
-I've fixed a few typos in the commit logs, and applied. Thanks!
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/cjson/cjson.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/cjson/cjson.mk b/package/cjson/cjson.mk
+index f3ef7fd..aabf367 100644
+--- a/package/cjson/cjson.mk
++++ b/package/cjson/cjson.mk
+@@ -15,4 +15,10 @@ CJSON_CONF_OPTS += \
+ 	-DENABLE_CJSON_TEST=OFF \
+ 	-DENABLE_CUSTOM_COMPILER_FLAGS=OFF
+ 
++ifeq ($(BR2_SHARED_STATIC_LIBS),y)
++CJSON_CONF_OPTS += -DBUILD_SHARED_AND_STATIC_LIBS=ON
++else
++CJSON_CONF_OPTS += -DBUILD_SHARED_AND_STATIC_LIBS=OFF
++endif
++
+ $(eval $(cmake-package))
