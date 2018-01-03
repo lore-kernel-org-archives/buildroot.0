@@ -1,9 +1,13 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 3 Jan 2018 23:26:17 +0100
-Subject: [Buildroot] [PATCH v4 1/1] tcfagent: new package
-In-Reply-To: <20180102173925.3945-1-nolange79@gmail.com>
-References: <20180102173925.3945-1-nolange79@gmail.com>
-Message-ID: <20180103232617.796a1eea@windsurf.lan>
+Date: Wed, 3 Jan 2018 23:27:07 +0100
+Subject: [Buildroot] [PATCH] kvm-unit-test: revert use of RDSEED and
+ RDRAND
+In-Reply-To: <20171218084954.54776e85@windsurf>
+References: <20171207043631.9312-1-matthew.weber@rockwellcollins.com>
+ <20171214094459.4b383336@windsurf.png.is.keysight.com>
+ <CANQCQpaDCyJLRZRk5mwun3sGy1Ex7WVZO5E35YZM02m-Synv-g@mail.gmail.com>
+ <20171218084954.54776e85@windsurf>
+Message-ID: <20180103232707.1e834d98@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,28 +16,19 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue,  2 Jan 2018 18:39:25 +0100, Norbert Lange wrote:
+On Mon, 18 Dec 2017 08:49:54 +0100, Thomas Petazzoni wrote:
 
-> +config BR2_PACKAGE_TCFAGENT_ARCH
-> +	string
-> +	default "arm"        if BR2_arm || BR2_armeb
-> +	default "a64"        if BR2_aarch64 || BR2_aarch64_be
-> +	default "i686"       if BR2_i386 && BR2_ARCH="i686"
-> +	default "i386"       if BR2_i386
-> +	default "x86_64"     if BR2_x86_64
-> +	default "powerpc"    if BR2_powerpc || BR2_powerpcle
-> +	default "ppc64"      if BR2_powerpc64 || BR2_powerpc64le
-> +	default "microblaze" if BR2_microblaze || BR2_microblazeel
+> On Fri, 15 Dec 2017 14:41:05 -0600, Matthew Weber wrote:
+> 
+> > It isn't really a bug upstream.  I think the long term fix would be a
+> > check for a minimum binutils version.  
+> 
+> Or kvm-unit-tests could do a configure test to verify if
+> rdseed/rdrand are supported, and only use them if so.
 
-This package fails to build on Microblaze:
+Any chance you could submit a patch implementing this?
 
-  http://autobuild.buildroot.net/?reason=tcf-agent-1.6.0
-
-Seems like the Microblaze port is not complete. Perhaps we should
-simply disable it, and you could report the issue to the upstream
-developers ?
-
-Best regards,
+Thanks!
 
 Thomas
 -- 
