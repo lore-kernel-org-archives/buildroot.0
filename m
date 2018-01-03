@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 3 Jan 2018 21:48:57 +0100
-Subject: [Buildroot] [PATCH 02/16] imx-lib: bump to version
- imx_4.9.11_1.0.0_ga
-In-Reply-To: <20180103183842.10182-3-gary.bisson@boundarydevices.com>
+Date: Wed, 3 Jan 2018 21:50:58 +0100
+Subject: [Buildroot] [PATCH 06/16] xdriver_xf86-video-imx-viv: bump to
+ version 6.2.2.p0
+In-Reply-To: <20180103183842.10182-7-gary.bisson@boundarydevices.com>
 References: <20180103183842.10182-1-gary.bisson@boundarydevices.com>
- <20180103183842.10182-3-gary.bisson@boundarydevices.com>
-Message-ID: <20180103214857.770c738f@windsurf.lan>
+ <20180103183842.10182-7-gary.bisson@boundarydevices.com>
+Message-ID: <20180103215058.6ec3d6b6@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,18 +14,39 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed,  3 Jan 2018 19:38:28 +0100, Gary Bisson wrote:
+On Wed,  3 Jan 2018 19:38:32 +0100, Gary Bisson wrote:
+> The following xorg.conf was used in order to force the use of the
+> vivante module:
+> https://github.com/Freescale/meta-freescale/blob/master/recipes-graphics/xorg-xserver/xserver-xf86-config/mx6/xorg.conf
+> 
+> Note that the X server must be started with the "noreset" option to
+> avoid crashes when closing X apps.
+> Tested with:
+>  # X -noreset &
+>  # cd /usr/share/examples/viv_samples/vdk/
+>  # DISPLAY=:0 ./tutorial7
+> 
+> Cc: J?r?me Pouiller <jezz@sysmic.org>
+> Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+> Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+> ---
+>  ...001-Stop-using-Git-to-write-local-version.patch | 90 ----------------------
 
-> -IMX_LIB_VERSION = 5.4
-> -IMX_LIB_SITE = $(FREESCALE_IMX_SITE)
-> +IMX_LIB_VERSION = rel_imx_4.9.x_1.0.0_ga
-> +IMX_LIB_SITE = https://source.codeaurora.org/external/imx/imx-lib
+Explaining in the commit log why the patch is removed would be nice.
 
-So now, some stuff will come from FREESCALE_IMX_SITE, some stuff from
-https://source.codeaurora.org/external/imx/, and some stuff from
-github,Freescale,kernel-module-imx-gpu-viv ?
+> diff --git a/package/x11r7/xdriver_xf86-video-imx-viv/Config.in b/package/x11r7/xdriver_xf86-video-imx-viv/Config.in
+> index c3746a100f..5a0257305c 100644
+> --- a/package/x11r7/xdriver_xf86-video-imx-viv/Config.in
+> +++ b/package/x11r7/xdriver_xf86-video-imx-viv/Config.in
+> @@ -1,6 +1,7 @@
+>  config BR2_PACKAGE_XDRIVER_XF86_VIDEO_IMX_VIV
+>  	bool "xf86-video-imx-viv"
+>  	depends on BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_X11
+> +	depends on BR2_PACKAGE_IMX_GPU_G2D
 
-Is it really that messy ? :-)
+Perhaps a "select BR2_PACKAGE_IMX_GPU_G2D" would be better.
+
+Thanks!
 
 Thomas
 -- 
