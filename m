@@ -1,72 +1,73 @@
-From: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
-Date: Wed, 03 Jan 2018 11:06:57 -0500
-Subject: [Buildroot] package "expat" fails to build without a C++
- compiler
-In-Reply-To: <20171220235311.h34bqw7kefkvwazn@workotop.localdomain>
-References: <20171219215831.4rlfcixr32ocr7tg@workotop.localdomain>
- <87r2rpcf5n.fsf@dell.be.48ers.dk>
- <20171220205345.lxrjqnwcpclvcwvi@workotop.localdomain>
- <87vah19jcu.fsf@dell.be.48ers.dk>
- <20171220235311.h34bqw7kefkvwazn@workotop.localdomain>
-Message-ID: <87mv1vorj2.fsf@weeman.i-did-not-set--mail-host-address--so-tickle-me>
+From: Sergio Prado <sergio.prado@e-labworks.com>
+Date: Wed, 3 Jan 2018 14:56:03 -0200
+Subject: [Buildroot] [PATCH] daq: new package
+In-Reply-To: <CANQCQpbP2D1d_UZfLqWucRpF3t_0EnK=2zHbbVA5O1VS7oogXw@mail.gmail.com>
+References: <1514150285-19871-1-git-send-email-sergio.prado@e-labworks.com>
+ <20171230211822.7967e315@windsurf>
+ <CANu7NGuALNdssHnz9BRApZc_SYQ6VPknZt2ZvML6EAcOX1PQAA@mail.gmail.com>
+ <CANQCQpbP2D1d_UZfLqWucRpF3t_0EnK=2zHbbVA5O1VS7oogXw@mail.gmail.com>
+Message-ID: <CANu7NGuHRkM=t3L9NF7+0KkV5twUkWAw6zAK9qX3iY-rgdghLg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+Hi Matthew,
 
-Damien Riegel <damien.riegel@savoirfairelinux.com> writes:
+I think the CONF_OPTS changes are not needed, but my patch is missing the
+optional dependency on libnetfilter queue. I'll prepare a patch with this
+change.
 
->>  >> > I tried to build an image with the "expat" package in it, using a
->>  >> > toolchain without a C++ compiler. It fails with the following error:
->>  >> 
->>  >> >   configure: error: in `/home/dkc/src/buildroot/build/build/expat-2.2.4':
->>  >> >   configure: error: C++ preprocessor "/lib/cpp" fails sanity check
->>  >> 
->>  >> > Enabling C++ support fixed that error.
->>  >> 
->>  >> Hmm, can you have a look in expat-2.2.4/config.log to see what exactly
->>  >> goes wrong?
->>  >> 
->>  >> /lib/cpp is from your host toolchain, so enabling or not enabling C++
->>  >> support shouldn't matter.
->> 
->>  > /lib/cpp is the default value for the C++ preprocessor when '$CXX -E'
->>  > fails. When activating C++ support, $CXX points to a program that is
->>  > actually there, and CXXCPP doesn't default to /lib/cpp. That's why it
->>  > builds successfully when I activate C++ support.
->> 
->> Ok. CXX actually also points to an available program when C++ support
->> isn't available (it points to 'false').
->> 
->>  > I guess you have /lib/cpp on your machine and I don't.
->> 
->> :/
->> 
->> Out of interest, what Distribution are you using?
+Thanks for pointing that out!
+
+Best regards,
+
+Sergio Prado
+Embedded Labworks
+Office: +55 11 2628-3461
+Mobile: +55 11 97123-3420
+
+2018-01-03 12:15 GMT-02:00 Matthew Weber <matthew.weber@rockwellcollins.com>
+:
+
+> Sergio,
 >
-> Arch Linux
-
-I have the same issue for months now and my local fix is the following:
-
-
-    --- a/package/Makefile.in
-    +++ b/package/Makefile.in
-    @@ -266,6 +266,7 @@ TARGET_CONFIGURE_OPTS = \
-            GCC="$(TARGET_CC)" \
-            CPP="$(TARGET_CPP)" \
-            CXX="$(TARGET_CXX)" \
-    +       CXXCPP="/usr/bin/cpp" \
-            FC="$(TARGET_FC)" \
-            F77="$(TARGET_FC)" \
-            RANLIB="$(TARGET_RANLIB)" \
-    
-
-How would you like this to be properly fixed?
-
-
-Thanks,
-
-        Vivien
+> On Sun, Dec 31, 2017 at 6:22 AM, Sergio Prado
+> <sergio.prado@e-labworks.com> wrote:
+> >> > diff --git a/package/daq/daq.mk b/package/daq/daq.mk
+> >> > new file mode 100644
+> >> > index 000000000000..f10c31d4a157
+> >> > --- /dev/null
+> >> > +++ b/package/daq/daq.mk
+> >> > @@ -0,0 +1,26 @@
+> >> >
+> >> > +###########################################################
+> #####################
+> >> > +#
+> >> > +# daq
+> >> > +#
+> >> >
+> >> > +###########################################################
+> #####################
+> >> > +
+> >> > +DAQ_VERSION = 2.0.6
+> >> > +DAQ_SITE = https://www.snort.org/downloads/snort
+> >> > +DAQ_SOURCE = daq-$(DAQ_VERSION).tar.gz
+> >> > +
+> >> > +DAQ_LICENSE = GPL-2.0
+> >> > +DAQ_LICENSE_FILES = COPYING
+> >>
+>
+> Just realized I never upstreamed this package we had been carrying
+> internally.  There were a couple differences with CONF_OPTS and a
+> netfilter queue dependency (may have been self imposed).
+> https://nopaste.xyz/?ba118cb90d65e34d#Gk9cY60V/sMzu+UT5nY/YTb8bDq2KV+
+> P1swXhc4v28s=
+>
+>
+> Matt
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180103/4c2f4b6a/attachment.html>
