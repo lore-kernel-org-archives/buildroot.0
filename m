@@ -1,34 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 3 Jan 2018 22:09:15 +0100
-Subject: [Buildroot] [PATCH 1/1] cjson: build shared and static library
-In-Reply-To: <20171231162933.19446-1-fontaine.fabrice@gmail.com>
-References: <20171231162933.19446-1-fontaine.fabrice@gmail.com>
-Message-ID: <20180103220915.74379889@windsurf.lan>
+From: Jan Heylen <heyleke@gmail.com>
+Date: Wed,  3 Jan 2018 22:20:08 +0100
+Subject: [Buildroot] [PATCH v5 0/3] Opentracing-cpp: new package
+Message-ID: <1515014411-3504-1-git-send-email-heyleke@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+From: Jan Heylen <jan.heylen@nokia.com>
 
-On Sun, 31 Dec 2017 17:29:33 +0100, Fabrice Fontaine wrote:
-> cjson 1.6.0 added the BUILD_SHARED_AND_STATIC_LIBS option which is OFF
-> by default so set it depending on BR2_SHARED_STATIC_LIBS value
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/cjson/cjson.mk | 6 ++++++
->  1 file changed, 6 insertions(+)
+Hi,
 
-I've added a comment in the .mk file and in the commit log to explain
-how BUILD_SHARED_AND_STATIC_LIBS interacts with BUILD_SHARED_LIBS. And
-I've applied to master.
+V5 of "this adds opentracing-cpp package as a logging library package."
 
-Thanks!
+Removed generalisation of pkg-cmake stuff related to shared/static stuff again and added note in pkg-cmake.mk why.
 
-Thomas
+br,
+
+Jan
+
+Jan Heylen (3):
+  rabbitmq-c: BUILD_SHARED_LIBS is handled in pkg-cmake.mk
+  pkg-cmake: add note on BUILD_STATIC_LIBS
+  opentracing-cpp: new package
+
+ DEVELOPERS                                         |  3 +
+ package/Config.in                                  |  1 +
+ ...shared-static-target-a-configurable-optio.patch | 74 ++++++++++++++++++++++
+ package/opentracing-cpp/Config.in                  | 16 +++++
+ package/opentracing-cpp/opentracing-cpp.hash       |  3 +
+ package/opentracing-cpp/opentracing-cpp.mk         | 25 ++++++++
+ package/pkg-cmake.mk                               |  9 +++
+ package/rabbitmq-c/rabbitmq-c.mk                   |  7 +-
+ 8 files changed, 135 insertions(+), 3 deletions(-)
+ create mode 100644 package/opentracing-cpp/0001-CMake-make-shared-static-target-a-configurable-optio.patch
+ create mode 100644 package/opentracing-cpp/Config.in
+ create mode 100644 package/opentracing-cpp/opentracing-cpp.hash
+ create mode 100644 package/opentracing-cpp/opentracing-cpp.mk
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.7.4
