@@ -1,82 +1,106 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed,  3 Jan 2018 18:39:52 +0100
-Subject: [Buildroot] [PATCH RFC] core/infra: fix build on toolchain without
- C++
-Message-ID: <20180103173952.10834-1-yann.morin.1998@free.fr>
+From: Gary Bisson <gary.bisson@boundarydevices.com>
+Date: Wed,  3 Jan 2018 19:38:26 +0100
+Subject: [Buildroot] [PATCH 00/16] imx: update packages to 4.9.x_1.0.0_ga
+ release
+Message-ID: <20180103183842.10182-1-gary.bisson@boundarydevices.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Autotools-based packages that do not need C++ but check for it, and use
-libtool, will fail to configure on distros that lack /lib/cpp.
+Hi,
 
-This is the case for example on Arch Linux, where expat fails to build
-with:
+Here's some update on pretty much all the i.MX-related packages.
 
-    configure: error: in `/home/dkc/src/buildroot/build/build/expat-2.2.4':
-    configure: error: C++ preprocessor "/lib/cpp" fails sanity check
+Mainly:
+- Switch to 4.9-based kernel
+- Graphics driver updated accordingly
+  -> g2d and apitrace now in separate packages
+  -> apitrace package not included in this series
+- Switch freescale.com repositories to codeaurora
+- Switch NXPMicro repositories to codeaurora
 
-This is because libtool uses AC_PROC_CXXCPP, which can not be avoided,
-and does require a cpp that passes some "sanity" checks (does not choke
-on valid input, but does choke on invalid input). So we can use neither
-/bin/false nor /bin/true...
+Since G2D libraries now have their own package (preparation for i.MX8
+which uses the DPU for G2D operation) gst1-imx needed to match the new
+package name. Right now it is in its own commit but let me know if you
+prefer having it squashed with the 'g2d new package' commit.
 
-We instead need something that can digest some basic C++ preprocessor
-input. We can't use the target preprocessor: that does not work, because
-it obviously has no C++ cupport:
+Let me know if you have any question.
 
-    arm-linux-cpp.br_real: error: conftest.cpp: C++ compiler not
-    installed on this system
+Regards,
+Gary
 
-We can however consider that the host machine does have a C++ compiler,
-so we use the host' cpp, which is gcc's compiler wrapper that ends up
-calling the host's C++ preprocessor.
+Gary Bisson (16):
+  freescale-imx: add config options for i.MX6SL/SX and i.MX7D/ULP
+  imx-lib: bump to version imx_4.9.11_1.0.0_ga
+  imx-gpu-viv: bump to version 6.2.2.p0
+  kernel-module-imx-gpu-viv: bump to version 6.2.2.p0
+  imx-gpu-g2d: new package
+  xdriver_xf86-video-imx-viv: bump to version 6.2.2.p0
+  gst1-imx: update g2d libraries dependencies
+  firmware-imx: bump to version 6.0
+  imx-codec: bump to version 4.2.1
+  imx-parser: bump to version 4.2.1
+  imx-vpu: bump to version 5.4.37
+  imx-kobs: bump revision to a0e9adce
+  imx-uuc: bump revision to 2ae63428
+  configs: freescale_imx*: bump to version 4.9.x_1.0.0_ga
+  configs: nitrogen*: bump kernel version to 4.9.x_1.0.0_ga
+  configs: nitrogen*: bump u-boot version to 2017.07
 
-That would give us a valid C++ preprocessor when we don't have one, in
-fact. But autotools will then correctly fail anyway, because there is
-indeed no C++ compiler at all, as we can see in this excerpt of a
-configure log from expat:
+ board/boundarydevices/common/boot.cmd              | 155 +++++++++++++++++++++
+ board/boundarydevices/common/post-build.sh         |   7 +-
+ board/boundarydevices/common/upgrade.cmd           | 154 ++++++++++++++++++++
+ ...ommon-boot-Linux-to-init-in-mfgtools-mode.patch |   4 +-
+ configs/freescale_imx31_3stack_defconfig           |   8 +-
+ configs/freescale_imx6dlsabreauto_defconfig        |  12 +-
+ configs/freescale_imx6dlsabresd_defconfig          |  12 +-
+ configs/freescale_imx6qsabreauto_defconfig         |  12 +-
+ configs/freescale_imx6qsabresd_defconfig           |  12 +-
+ configs/freescale_imx6sololiteevk_defconfig        |  12 +-
+ configs/freescale_imx6sxsabresd_defconfig          |  12 +-
+ configs/freescale_imx6ulevk_defconfig              |  12 +-
+ configs/freescale_imx7dsabresd_defconfig           |  12 +-
+ configs/nitrogen6sx_defconfig                      |  19 +--
+ configs/nitrogen6x_defconfig                       |  19 +--
+ configs/nitrogen7_defconfig                        |  19 +--
+ package/freescale-imx/Config.in                    |  24 +++-
+ .../freescale-imx/firmware-imx/firmware-imx.hash   |   2 +-
+ package/freescale-imx/firmware-imx/firmware-imx.mk |   2 +-
+ package/freescale-imx/imx-codec/imx-codec.hash     |   2 +-
+ package/freescale-imx/imx-codec/imx-codec.mk       |   6 +-
+ package/freescale-imx/imx-gpu-g2d/Config.in        |  25 ++++
+ package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.hash |   1 +
+ package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.mk   |  37 +++++
+ package/freescale-imx/imx-gpu-viv/Config.in        |  16 ---
+ package/freescale-imx/imx-gpu-viv/imx-gpu-viv.hash |   2 +-
+ package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk   |  36 +----
+ package/freescale-imx/imx-kobs/imx-kobs.hash       |   2 +-
+ package/freescale-imx/imx-kobs/imx-kobs.mk         |   4 +-
+ package/freescale-imx/imx-lib/imx-lib.hash         |   2 +-
+ package/freescale-imx/imx-lib/imx-lib.mk           |   7 +-
+ package/freescale-imx/imx-parser/imx-parser.hash   |   2 +-
+ package/freescale-imx/imx-parser/imx-parser.mk     |   6 +-
+ package/freescale-imx/imx-uuc/imx-uuc.hash         |   2 +-
+ package/freescale-imx/imx-uuc/imx-uuc.mk           |   4 +-
+ package/freescale-imx/imx-vpu/imx-vpu.hash         |   2 +-
+ package/freescale-imx/imx-vpu/imx-vpu.mk           |   2 +-
+ .../kernel-module-imx-gpu-viv.hash                 |   2 +-
+ .../kernel-module-imx-gpu-viv.mk                   |   2 +-
+ package/gstreamer1/gst1-imx/Config.in              |   6 +-
+ package/gstreamer1/gst1-imx/gst1-imx.mk            |   4 +
+ ...001-Stop-using-Git-to-write-local-version.patch |  90 ------------
+ package/x11r7/xdriver_xf86-video-imx-viv/Config.in |   7 +
+ .../xdriver_xf86-video-imx-viv.hash                |   2 +-
+ .../xdriver_xf86-video-imx-viv.mk                  |  10 +-
+ 45 files changed, 537 insertions(+), 253 deletions(-)
+ create mode 100644 board/boundarydevices/common/boot.cmd
+ create mode 100644 board/boundarydevices/common/upgrade.cmd
+ create mode 100644 package/freescale-imx/imx-gpu-g2d/Config.in
+ create mode 100644 package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.hash
+ create mode 100644 package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.mk
+ delete mode 100644 package/x11r7/xdriver_xf86-video-imx-viv/0001-Stop-using-Git-to-write-local-version.patch
 
-    checking whether we are using the GNU C++ compiler... no
-    checking whether false accepts -g... no
-    checking dependency style of false... none
-    checking how to run the C++ preprocessor... cpp
-    checking whether the false linker (/home/ymorin/dev/buildroot/O/host/bin/arm-linux-ld) supports shared libraries... yes
-    libtool.m4: error: problem compiling CXX test program
-    checking for false option to produce PIC...  -DPIC
-    checking if false PIC flag  -DPIC works... no
-    checking if false static flag  works... no
-    checking if false supports -c -o file.o... no
-    checking if false supports -c -o file.o... (cached) no
-    checking whether the false linker (/home/ymorin/dev/buildroot/O/host/bin/arm-linux-ld) supports shared libraries... yes
-
-So, using the host's C++ preprocessor (by way of gcc's wrapper) leads to
-a working situation, where the end result is as expected.
-
-Reported-by: Damien Riegel <damien.riegel@savoirfairelinux.com>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Damien Riegel <damien.riegel@savoirfairelinux.com>
-Cc: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/Makefile.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/package/Makefile.in b/package/Makefile.in
-index a1a5316051..61f0a8f9d0 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -398,7 +398,7 @@ NLS_OPTS = --disable-nls
- endif
- 
- ifneq ($(BR2_INSTALL_LIBSTDCPP),y)
--TARGET_CONFIGURE_OPTS += CXX=false
-+TARGET_CONFIGURE_OPTS += CXX=false CXXCPP=cpp
- endif
- 
- ifeq ($(BR2_STATIC_LIBS),y)
 -- 
-2.11.0
+2.15.1
