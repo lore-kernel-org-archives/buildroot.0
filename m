@@ -1,11 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 3 Jan 2018 21:37:47 +0100
-Subject: [Buildroot] [PATCH v4 1/2] pkg-cmake: make BUILD_SHARED_LIBS
- part of generic cmake pkg logic
-In-Reply-To: <1515010165-25315-2-git-send-email-heyleke@gmail.com>
+Date: Wed, 3 Jan 2018 21:40:52 +0100
+Subject: [Buildroot] [PATCH v4 2/2] opentracing-cpp: new package
+In-Reply-To: <1515010165-25315-3-git-send-email-heyleke@gmail.com>
 References: <1515010165-25315-1-git-send-email-heyleke@gmail.com>
- <1515010165-25315-2-git-send-email-heyleke@gmail.com>
-Message-ID: <20180103213747.0edd0567@windsurf.lan>
+ <1515010165-25315-3-git-send-email-heyleke@gmail.com>
+Message-ID: <20180103214052.7e2e5499@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,65 +13,45 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed,  3 Jan 2018 21:09:24 +0100, Jan Heylen wrote:
-> From: Jan Heylen <jan.heylen@nokia.com>
-> 
-> Signed-off-by: Jan Heylen <jan.heylen@nokia.com>
+On Wed,  3 Jan 2018 21:09:25 +0100, Jan Heylen wrote:
 
-This commit really needs a better description as to why we are doing
-this.
+> diff --git a/package/opentracing-cpp/Config.in b/package/opentracing-cpp/Config.in
+> new file mode 100644
+> index 0000000..f13d21b
+> --- /dev/null
+> +++ b/package/opentracing-cpp/Config.in
+> @@ -0,0 +1,16 @@
+> +config BR2_PACKAGE_OPENTRACING_CPP
+> +	bool "opentracing-cpp"
+> +	depends on BR2_INSTALL_LIBSTDCPP
+> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
+> +	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # exception_ptr
+> +	depends on !BR2_m68k_cf # exception_ptr
 
+So exception_ptr is not available on m68k coldfire, regardless of the
+gcc version ?
 
-> +ifeq ($(BR2_STATIC_LIBS),y)
-> +CMAKE_BUILD_SHARED_LIBS = OFF
-> +CMAKE_BUILD_STATIC_LIBS = ON
-> +else ifeq ($(BR2_SHARED_STATIC_LIBS),y)
-> +CMAKE_BUILD_SHARED_LIBS = ON
-> +CMAKE_BUILD_STATIC_LIBS = ON
-> +else ifeq ($(BR2_SHARED_LIBS),y)
-> +CMAKE_BUILD_SHARED_LIBS = ON
-> +CMAKE_BUILD_STATIC_LIBS = OFF
+If so, we perhaps want to introduce something like:
 
-I don't think those intermediate variables are really useful.
+config BR2_TOOLCHAIN_HAS_EXECPTION_PTR
+	bool
+	default y
+	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735
+	depends on !BR2_m68k_cf
 
-> +endif
+but please confirm first that there really is something special about
+m68k coldfire.
+
+> +	help
+> +	  OpenTracing API for C++
 > +
->  #
->  # Configure step. Only define it if not already defined by the package
->  # .mk file. And take care of the differences between host and target
-> @@ -96,7 +107,8 @@ define $(2)_CONFIGURE_CMDS
->  		-DBUILD_TEST=OFF \
->  		-DBUILD_TESTS=OFF \
->  		-DBUILD_TESTING=OFF \
-> -		-DBUILD_SHARED_LIBS=$$(if $$(BR2_STATIC_LIBS),OFF,ON) \
-> +		-DBUILD_SHARED_LIBS=$$(CMAKE_BUILD_SHARED_LIBS) \
-> +		-DBUILD_STATIC_LIBS=$$(CMAKE_BUILD_STATIC_LIBS) \
+> +	  http://opentracing.io
+> +
+> +comment "opentracing-cpp needs a toolchain w/ C++11"
 
-Indeed, you can just do:
+This should be:
 
-		-DBUILD_SHARED_LIBS=$$(if $$(BR2_STATIC_LIBS),OFF,ON) \
-		-DBUILD_STATIC_LIBS=$$(if $$(BR2_SHARED_LIBS),OFF,ON)
-
-and that's it.
-
-> diff --git a/package/rabbitmq-c/rabbitmq-c.mk b/package/rabbitmq-c/rabbitmq-c.mk
-> index eef09ec..5a34e53 100644
-> --- a/package/rabbitmq-c/rabbitmq-c.mk
-> +++ b/package/rabbitmq-c/rabbitmq-c.mk
-> @@ -13,14 +13,6 @@ RABBITMQ_C_CONF_OPTS = \
->  	-DBUILD_API_DOCS=OFF \
->  	-DBUILD_TOOLS_DOCS=OFF
->  
-> -ifeq ($(BR2_STATIC_LIBS),y)
-> -RABBITMQ_C_CONF_OPTS += -DBUILD_SHARED_LIBS=OFF -DBUILD_STATIC_LIBS=ON
-> -else ifeq ($(BR2_SHARED_STATIC_LIBS),y)
-> -RABBITMQ_C_CONF_OPTS += -DBUILD_SHARED_LIBS=ON -DBUILD_STATIC_LIBS=ON
-> -else ifeq ($(BR2_SHARED_LIBS),y)
-> -RABBITMQ_C_CONF_OPTS += -DBUILD_SHARED_LIBS=ON -DBUILD_STATIC_LIBS=OFF
-> -endif
-
-This should be part of a separate commit, since it's a simplification
-that follows the previous change.
+	opentracing-cpp needs a toolchain w/ C++, gcc >= 4.8"
 
 Thanks!
 
