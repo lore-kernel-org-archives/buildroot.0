@@ -1,41 +1,46 @@
 From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Wed,  3 Jan 2018 19:38:34 +0100
-Subject: [Buildroot] [PATCH 08/16] firmware-imx: bump to version 6.0
+Date: Wed,  3 Jan 2018 19:38:38 +0100
+Subject: [Buildroot] [PATCH 12/16] imx-kobs: bump revision to a0e9adce
 In-Reply-To: <20180103183842.10182-1-gary.bisson@boundarydevices.com>
 References: <20180103183842.10182-1-gary.bisson@boundarydevices.com>
-Message-ID: <20180103183842.10182-9-gary.bisson@boundarydevices.com>
+Message-ID: <20180103183842.10182-13-gary.bisson@boundarydevices.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Cc: Arnout Vandecappelle <arnout@mind.be>
+Changelog:
+- Fix compiler error with kernel headers >= 4.4
+- Add i.MX8 platforms support
+
 Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
 ---
- package/freescale-imx/firmware-imx/firmware-imx.hash | 2 +-
- package/freescale-imx/firmware-imx/firmware-imx.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/freescale-imx/imx-kobs/imx-kobs.hash | 2 +-
+ package/freescale-imx/imx-kobs/imx-kobs.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/freescale-imx/firmware-imx/firmware-imx.hash b/package/freescale-imx/firmware-imx/firmware-imx.hash
-index a6e5bd58ef..f45b35aaad 100644
---- a/package/freescale-imx/firmware-imx/firmware-imx.hash
-+++ b/package/freescale-imx/firmware-imx/firmware-imx.hash
+diff --git a/package/freescale-imx/imx-kobs/imx-kobs.hash b/package/freescale-imx/imx-kobs/imx-kobs.hash
+index 258d08c7e9..2ede0a9b48 100644
+--- a/package/freescale-imx/imx-kobs/imx-kobs.hash
++++ b/package/freescale-imx/imx-kobs/imx-kobs.hash
 @@ -1 +1 @@
--sha256 c5bd4bff48cce9715a5d6d2c190ff3cd2262c7196f7facb9b0eda231c92cc223  firmware-imx-5.4.bin
-+sha256 9fa7c204a6ff8a30f2b5e8f9002d8c5736791e455dc137b952fa725dc0c3aeb8  firmware-imx-6.0.bin
-diff --git a/package/freescale-imx/firmware-imx/firmware-imx.mk b/package/freescale-imx/firmware-imx/firmware-imx.mk
-index 08fb4636a0..736ff895ff 100644
---- a/package/freescale-imx/firmware-imx/firmware-imx.mk
-+++ b/package/freescale-imx/firmware-imx/firmware-imx.mk
-@@ -4,7 +4,7 @@
+-sha256	5b040de6e3db5d47371b311e7068380926827a7a6ef02e45fb2ba08b680d0ec5  imx-kobs-b402243a04e5a6760a860445e5ff6a931d86f794.tar.gz
++sha256	5855c8964f908ad30e5d4500180ee57c51af68186289ef1bdf8553ee60d3b1f5  imx-kobs-a0e9adce2fb7fcd57e794d7f9a5deba0f94f521b.tar.gz
+diff --git a/package/freescale-imx/imx-kobs/imx-kobs.mk b/package/freescale-imx/imx-kobs/imx-kobs.mk
+index 897820df3f..d6a250cf72 100644
+--- a/package/freescale-imx/imx-kobs/imx-kobs.mk
++++ b/package/freescale-imx/imx-kobs/imx-kobs.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--FIRMWARE_IMX_VERSION = 5.4
-+FIRMWARE_IMX_VERSION = 6.0
- FIRMWARE_IMX_SITE = $(FREESCALE_IMX_SITE)
- FIRMWARE_IMX_SOURCE = firmware-imx-$(FIRMWARE_IMX_VERSION).bin
+-IMX_KOBS_VERSION = b402243a04e5a6760a860445e5ff6a931d86f794
+-IMX_KOBS_SITE = $(call github,NXPmicro,imx-kobs,$(IMX_KOBS_VERSION))
++IMX_KOBS_VERSION = a0e9adce2fb7fcd57e794d7f9a5deba0f94f521b
++IMX_KOBS_SITE = $(call github,codeauroraforum,imx-kobs,$(IMX_KOBS_VERSION))
+ IMX_KOBS_LICENSE = GPL-2.0+
+ IMX_KOBS_LICENSE_FILES = COPYING
  
 -- 
 2.15.1
