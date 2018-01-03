@@ -1,71 +1,52 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 3 Jan 2018 20:54:58 +0200
-Subject: [Buildroot] [PATCH 09/16] imx-codec: bump to version 4.2.1
-In-Reply-To: <20180103183842.10182-10-gary.bisson@boundarydevices.com>
-References: <20180103183842.10182-1-gary.bisson@boundarydevices.com>
- <20180103183842.10182-10-gary.bisson@boundarydevices.com>
-Message-ID: <20180103185458.zf2euj5xs4pd3zwh@tarshish>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Wed,  3 Jan 2018 17:10:09 -0200
+Subject: [Buildroot] [PATCH] configs/mx25pdk: Bump U-Boot and kernel versions
+Message-ID: <1515006609-26005-1-git-send-email-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Gary,
+From: Fabio Estevam <fabio.estevam@nxp.com>
 
-On Wed, Jan 03, 2018 at 07:38:35PM +0100, Gary Bisson wrote:
-> Changelog:
-> 1. Upgrade EULA to v18
-> 2. Bugfix/Optimization
->  - AACPlus: fixed playbe silence after 1s of stream
->  - Removed duplicated code in aac_dec/aacplus_dec.
->  - Removed unused code in flac_dec.
-> 
-> Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
-> ---
->  package/freescale-imx/imx-codec/imx-codec.hash | 2 +-
->  package/freescale-imx/imx-codec/imx-codec.mk   | 6 +++++-
->  2 files changed, 6 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/freescale-imx/imx-codec/imx-codec.hash b/package/freescale-imx/imx-codec/imx-codec.hash
-> index 2bb7a242e9..53d8f71c39 100644
-> --- a/package/freescale-imx/imx-codec/imx-codec.hash
-> +++ b/package/freescale-imx/imx-codec/imx-codec.hash
-> @@ -1,2 +1,2 @@
->  # locally computed
-> -sha256	98fe71cb44f7e858c64c5eda81741ed02f40afaadc3d4ed1e693c7d1e684b81d  imx-codec-4.1.4.bin
-> +sha256	20d3f9b4187fcd9e7007c94558a00bab1191513eee74b6f0d8c7b43f874e06ed  imx-codec-4.2.1.bin
-> diff --git a/package/freescale-imx/imx-codec/imx-codec.mk b/package/freescale-imx/imx-codec/imx-codec.mk
-> index 44be941fe2..ea4d90110f 100644
-> --- a/package/freescale-imx/imx-codec/imx-codec.mk
-> +++ b/package/freescale-imx/imx-codec/imx-codec.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -IMX_CODEC_VERSION = 4.1.4
-> +IMX_CODEC_VERSION = 4.2.1
->  IMX_CODEC_SITE = $(FREESCALE_IMX_SITE)
->  IMX_CODEC_SOURCE = imx-codec-$(IMX_CODEC_VERSION).bin
->  IMX_CODEC_INSTALL_STAGING = YES
-> @@ -13,6 +13,10 @@ IMX_CODEC_LICENSE = NXP Semiconductor Software License Agreement, BSD-3-Clause (
->  IMX_CODEC_LICENSE_FILES = EULA COPYING
->  IMX_CODEC_REDISTRIBUTE = NO
->  
-> +ifeq ($(BR2_aarch64),y)
-> +IMX_CODEC_CONF_OPTS += --enable-armv8
-> +endif
+Bump to U-Boot 2017.11 and kernel to 4.14.11.
 
-BR2_PACKAGE_IMX_CODEC depends on BR2_arm.
+Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
+---
+ configs/mx25pdk_defconfig | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-> +
->  ifeq ($(BR2_ARM_EABIHF),y)
->  IMX_CODEC_CONF_OPTS += --enable-fhw
->  endif
-
-baruch
-
+diff --git a/configs/mx25pdk_defconfig b/configs/mx25pdk_defconfig
+index 271be44..a88fb2a 100644
+--- a/configs/mx25pdk_defconfig
++++ b/configs/mx25pdk_defconfig
+@@ -2,8 +2,8 @@
+ BR2_arm=y
+ BR2_arm926t=y
+ 
+-# Linux headers same as kernel, a 4.13 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_13=y
++# Linux headers same as kernel, a 4.14 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
+ 
+ # System
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+@@ -22,13 +22,13 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="mx25pdk"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.09"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.11"
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.13.3"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.14.11"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v4_v5"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx25-pdk"
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+2.7.4
