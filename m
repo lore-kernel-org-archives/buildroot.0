@@ -1,12 +1,13 @@
 From: Sergio Prado <sergio.prado@e-labworks.com>
-Date: Wed, 3 Jan 2018 14:56:03 -0200
+Date: Wed, 3 Jan 2018 15:13:17 -0200
 Subject: [Buildroot] [PATCH] daq: new package
-In-Reply-To: <CANQCQpbP2D1d_UZfLqWucRpF3t_0EnK=2zHbbVA5O1VS7oogXw@mail.gmail.com>
+In-Reply-To: <CANQCQpbG2z5oFJWHHp5mp-T66GBDEB8xmScn+f0QV79k+e463g@mail.gmail.com>
 References: <1514150285-19871-1-git-send-email-sergio.prado@e-labworks.com>
  <20171230211822.7967e315@windsurf>
  <CANu7NGuALNdssHnz9BRApZc_SYQ6VPknZt2ZvML6EAcOX1PQAA@mail.gmail.com>
  <CANQCQpbP2D1d_UZfLqWucRpF3t_0EnK=2zHbbVA5O1VS7oogXw@mail.gmail.com>
-Message-ID: <CANu7NGuHRkM=t3L9NF7+0KkV5twUkWAw6zAK9qX3iY-rgdghLg@mail.gmail.com>
+ <CANQCQpbG2z5oFJWHHp5mp-T66GBDEB8xmScn+f0QV79k+e463g@mail.gmail.com>
+Message-ID: <CANu7NGsC3otVrxQj8Z=cp0XbuDtPr8zNUrv6QoUNkJDR_Lf+og@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,59 +16,66 @@ To: buildroot@busybox.net
 
 Hi Matthew,
 
-I think the CONF_OPTS changes are not needed, but my patch is missing the
-optional dependency on libnetfilter queue. I'll prepare a patch with this
-change.
+Actually I was preparing the snort patch. :)
 
-Thanks for pointing that out!
+I'll take a look at yours and see if I am missing something.
 
-Best regards,
+Thanks!
 
 Sergio Prado
 Embedded Labworks
 Office: +55 11 2628-3461
 Mobile: +55 11 97123-3420
 
-2018-01-03 12:15 GMT-02:00 Matthew Weber <matthew.weber@rockwellcollins.com>
+2018-01-03 13:40 GMT-02:00 Matthew Weber <matthew.weber@rockwellcollins.com>
 :
 
 > Sergio,
 >
-> On Sun, Dec 31, 2017 at 6:22 AM, Sergio Prado
-> <sergio.prado@e-labworks.com> wrote:
-> >> > diff --git a/package/daq/daq.mk b/package/daq/daq.mk
-> >> > new file mode 100644
-> >> > index 000000000000..f10c31d4a157
-> >> > --- /dev/null
-> >> > +++ b/package/daq/daq.mk
-> >> > @@ -0,0 +1,26 @@
-> >> >
-> >> > +###########################################################
+> On Wed, Jan 3, 2018 at 8:15 AM, Matthew Weber
+> <matthew.weber@rockwellcollins.com> wrote:
+> > Sergio,
+> >
+> > On Sun, Dec 31, 2017 at 6:22 AM, Sergio Prado
+> > <sergio.prado@e-labworks.com> wrote:
+> >>> > diff --git a/package/daq/daq.mk b/package/daq/daq.mk
+> >>> > new file mode 100644
+> >>> > index 000000000000..f10c31d4a157
+> >>> > --- /dev/null
+> >>> > +++ b/package/daq/daq.mk
+> >>> > @@ -0,0 +1,26 @@
+> >>> >
+> >>> > +###########################################################
 > #####################
-> >> > +#
-> >> > +# daq
-> >> > +#
-> >> >
-> >> > +###########################################################
+> >>> > +#
+> >>> > +# daq
+> >>> > +#
+> >>> >
+> >>> > +###########################################################
 > #####################
-> >> > +
-> >> > +DAQ_VERSION = 2.0.6
-> >> > +DAQ_SITE = https://www.snort.org/downloads/snort
-> >> > +DAQ_SOURCE = daq-$(DAQ_VERSION).tar.gz
-> >> > +
-> >> > +DAQ_LICENSE = GPL-2.0
-> >> > +DAQ_LICENSE_FILES = COPYING
-> >>
->
-> Just realized I never upstreamed this package we had been carrying
-> internally.  There were a couple differences with CONF_OPTS and a
-> netfilter queue dependency (may have been self imposed).
-> https://nopaste.xyz/?ba118cb90d65e34d#Gk9cY60V/sMzu+UT5nY/YTb8bDq2KV+
+> >>> > +
+> >>> > +DAQ_VERSION = 2.0.6
+> >>> > +DAQ_SITE = https://www.snort.org/downloads/snort
+> >>> > +DAQ_SOURCE = daq-$(DAQ_VERSION).tar.gz
+> >>> > +
+> >>> > +DAQ_LICENSE = GPL-2.0
+> >>> > +DAQ_LICENSE_FILES = COPYING
+> >>>
+> >
+> > Just realized I never upstreamed this package we had been carrying
+> > internally.  There were a couple differences with CONF_OPTS and a
+> > netfilter queue dependency (may have been self imposed).
+> > https://nopaste.xyz/?ba118cb90d65e34d#Gk9cY60V/sMzu+UT5nY/YTb8bDq2KV+
 > P1swXhc4v28s=
+> >
 >
+> DAQ was used internally for snort, here's what I've got for that one
+> too.  Never got to upstreaming it and it probably has some bugs :-)
+> https://nopaste.xyz/?326d9f18b3df4fc2#0B2Zs/N6eiD6OWiMHVvMA0OpAeD7w36hZkDK
+> g/rRFKk=
 >
 > Matt
 >
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180103/4c2f4b6a/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180103/2fa8f83c/attachment.html>
