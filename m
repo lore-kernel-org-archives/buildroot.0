@@ -1,46 +1,355 @@
 From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Wed,  3 Jan 2018 19:38:38 +0100
-Subject: [Buildroot] [PATCH 12/16] imx-kobs: bump revision to a0e9adce
+Date: Wed,  3 Jan 2018 19:38:40 +0100
+Subject: [Buildroot] [PATCH 14/16] configs: freescale_imx*: bump to version
+ 4.9.x_1.0.0_ga
 In-Reply-To: <20180103183842.10182-1-gary.bisson@boundarydevices.com>
 References: <20180103183842.10182-1-gary.bisson@boundarydevices.com>
-Message-ID: <20180103183842.10182-13-gary.bisson@boundarydevices.com>
+Message-ID: <20180103183842.10182-15-gary.bisson@boundarydevices.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Changelog:
-- Fix compiler error with kernel headers >= 4.4
-- Add i.MX8 platforms support
+Also switch repository from old freescale site to codeaurora:
+https://source.codeaurora.org/external/imx/
 
+Cc: Fabio Estevam <festevam@gmail.com>
 Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
 ---
- package/freescale-imx/imx-kobs/imx-kobs.hash | 2 +-
- package/freescale-imx/imx-kobs/imx-kobs.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ ...x6qsabre_common-boot-Linux-to-init-in-mfgtools-mode.patch |  4 ++--
+ configs/freescale_imx31_3stack_defconfig                     |  8 ++++----
+ configs/freescale_imx6dlsabreauto_defconfig                  | 12 ++++++------
+ configs/freescale_imx6dlsabresd_defconfig                    | 12 ++++++------
+ configs/freescale_imx6qsabreauto_defconfig                   | 12 ++++++------
+ configs/freescale_imx6qsabresd_defconfig                     | 12 ++++++------
+ configs/freescale_imx6sololiteevk_defconfig                  | 12 ++++++------
+ configs/freescale_imx6sxsabresd_defconfig                    | 12 ++++++------
+ configs/freescale_imx6ulevk_defconfig                        | 12 ++++++------
+ configs/freescale_imx7dsabresd_defconfig                     | 12 ++++++------
+ 10 files changed, 54 insertions(+), 54 deletions(-)
 
-diff --git a/package/freescale-imx/imx-kobs/imx-kobs.hash b/package/freescale-imx/imx-kobs/imx-kobs.hash
-index 258d08c7e9..2ede0a9b48 100644
---- a/package/freescale-imx/imx-kobs/imx-kobs.hash
-+++ b/package/freescale-imx/imx-kobs/imx-kobs.hash
-@@ -1 +1 @@
--sha256	5b040de6e3db5d47371b311e7068380926827a7a6ef02e45fb2ba08b680d0ec5  imx-kobs-b402243a04e5a6760a860445e5ff6a931d86f794.tar.gz
-+sha256	5855c8964f908ad30e5d4500180ee57c51af68186289ef1bdf8553ee60d3b1f5  imx-kobs-a0e9adce2fb7fcd57e794d7f9a5deba0f94f521b.tar.gz
-diff --git a/package/freescale-imx/imx-kobs/imx-kobs.mk b/package/freescale-imx/imx-kobs/imx-kobs.mk
-index 897820df3f..d6a250cf72 100644
---- a/package/freescale-imx/imx-kobs/imx-kobs.mk
-+++ b/package/freescale-imx/imx-kobs/imx-kobs.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
+diff --git a/board/freescale/imx6sabre/patches/uboot/uboot-0001-mx6qsabre_common-boot-Linux-to-init-in-mfgtools-mode.patch b/board/freescale/imx6sabre/patches/uboot/uboot-0001-mx6qsabre_common-boot-Linux-to-init-in-mfgtools-mode.patch
+index 9e2aebf3d9..d57875f842 100644
+--- a/board/freescale/imx6sabre/patches/uboot/uboot-0001-mx6qsabre_common-boot-Linux-to-init-in-mfgtools-mode.patch
++++ b/board/freescale/imx6sabre/patches/uboot/uboot-0001-mx6qsabre_common-boot-Linux-to-init-in-mfgtools-mode.patch
+@@ -22,10 +22,10 @@ diff --git a/include/configs/mx6sabre_common.h b/include/configs/mx6sabre_common
+ index 93d4c4b..d2e7efd 100644
+ --- a/include/configs/mx6sabre_common.h
+ +++ b/include/configs/mx6sabre_common.h
+-@@ -106,7 +106,7 @@
++@@ -52,7 +52,7 @@
+  
+  #define CONFIG_MFG_ENV_SETTINGS \
+- 	"mfgtool_args=setenv bootargs console=" CONFIG_CONSOLE_DEV ",115200 " \
++ 	"mfgtool_args=setenv bootargs console=" CONSOLE_DEV ",115200 " \
+ -		"rdinit=/linuxrc " \
+ +		"rdinit=/init " \
+  		"g_mass_storage.stall=0 g_mass_storage.removable=1 " \
+diff --git a/configs/freescale_imx31_3stack_defconfig b/configs/freescale_imx31_3stack_defconfig
+index 0476fc1b59..025f93f6a6 100644
+--- a/configs/freescale_imx31_3stack_defconfig
++++ b/configs/freescale_imx31_3stack_defconfig
+@@ -3,8 +3,8 @@ BR2_arm=y
+ BR2_arm1136jf_s=y
+ BR2_ARM_EABIHF=y
  
--IMX_KOBS_VERSION = b402243a04e5a6760a860445e5ff6a931d86f794
--IMX_KOBS_SITE = $(call github,NXPmicro,imx-kobs,$(IMX_KOBS_VERSION))
-+IMX_KOBS_VERSION = a0e9adce2fb7fcd57e794d7f9a5deba0f94f521b
-+IMX_KOBS_SITE = $(call github,codeauroraforum,imx-kobs,$(IMX_KOBS_VERSION))
- IMX_KOBS_LICENSE = GPL-2.0+
- IMX_KOBS_LICENSE_FILES = COPYING
+-# Linux headers same as kernel, a 4.1 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
++# Linux headers same as kernel, a 4.9 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
  
+ # system
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+@@ -12,8 +12,8 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+ # kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+-BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.freescale.com/imx/linux-imx.git"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_4.1.15_2.0.0_ga"
++BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/linux-imx.git"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_4.9.x_1.0.0_ga"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/freescale/imx31_3stack/linux.fragment"
+ BR2_TARGET_ROOTFS_CPIO_GZIP=y
+diff --git a/configs/freescale_imx6dlsabreauto_defconfig b/configs/freescale_imx6dlsabreauto_defconfig
+index c946988f25..19c1cc286a 100644
+--- a/configs/freescale_imx6dlsabreauto_defconfig
++++ b/configs/freescale_imx6dlsabreauto_defconfig
+@@ -8,8 +8,8 @@ BR2_ARM_FPU_VFPV3=y
+ # patches
+ BR2_GLOBAL_PATCH_DIR="board/freescale/imx6sabre/patches"
+ 
+-# Linux headers same as kernel, a 4.1 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
++# Linux headers same as kernel, a 4.9 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
+ 
+ # system
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc3"
+@@ -17,8 +17,8 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc3"
+ # kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+-BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.freescale.com/imx/linux-imx.git"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_4.1.15_2.0.0_ga"
++BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/linux-imx.git"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_4.9.x_1.0.0_ga"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6dl-sabreauto"
+@@ -38,5 +38,5 @@ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="mx6dlsabreauto"
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+-BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.freescale.com/imx/uboot-imx.git"
+-BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_4.1.15_2.0.0_ga"
++BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/uboot-imx.git"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_4.9.x_1.0.0_ga"
+diff --git a/configs/freescale_imx6dlsabresd_defconfig b/configs/freescale_imx6dlsabresd_defconfig
+index 18cef00dd6..a5c0aa6090 100644
+--- a/configs/freescale_imx6dlsabresd_defconfig
++++ b/configs/freescale_imx6dlsabresd_defconfig
+@@ -8,8 +8,8 @@ BR2_ARM_FPU_VFPV3=y
+ # patches
+ BR2_GLOBAL_PATCH_DIR="board/freescale/imx6sabre/patches"
+ 
+-# Linux headers same as kernel, a 4.1 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
++# Linux headers same as kernel, a 4.9 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
+ 
+ # system
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+@@ -17,8 +17,8 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+ # kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+-BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.freescale.com/imx/linux-imx.git"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_4.1.15_2.0.0_ga"
++BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/linux-imx.git"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_4.9.x_1.0.0_ga"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6dl-sabresd"
+@@ -37,5 +37,5 @@ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="mx6dlsabresd"
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+-BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.freescale.com/imx/uboot-imx.git"
+-BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_4.1.15_2.0.0_ga"
++BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/uboot-imx.git"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_4.9.x_1.0.0_ga"
+diff --git a/configs/freescale_imx6qsabreauto_defconfig b/configs/freescale_imx6qsabreauto_defconfig
+index 9e8e007651..f03b7101fb 100644
+--- a/configs/freescale_imx6qsabreauto_defconfig
++++ b/configs/freescale_imx6qsabreauto_defconfig
+@@ -8,8 +8,8 @@ BR2_ARM_FPU_VFPV3=y
+ # patches
+ BR2_GLOBAL_PATCH_DIR="board/freescale/imx6sabre/patches"
+ 
+-# Linux headers same as kernel, a 4.1 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
++# Linux headers same as kernel, a 4.9 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
+ 
+ # system
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc3"
+@@ -17,8 +17,8 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc3"
+ # kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+-BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.freescale.com/imx/linux-imx.git"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_4.1.15_2.0.0_ga"
++BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/linux-imx.git"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_4.9.x_1.0.0_ga"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-sabreauto"
+@@ -38,5 +38,5 @@ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="mx6qsabreauto"
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+-BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.freescale.com/imx/uboot-imx.git"
+-BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_4.1.15_2.0.0_ga"
++BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/uboot-imx.git"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_4.9.x_1.0.0_ga"
+diff --git a/configs/freescale_imx6qsabresd_defconfig b/configs/freescale_imx6qsabresd_defconfig
+index 824e12888d..613b48a913 100644
+--- a/configs/freescale_imx6qsabresd_defconfig
++++ b/configs/freescale_imx6qsabresd_defconfig
+@@ -8,8 +8,8 @@ BR2_ARM_FPU_VFPV3=y
+ # patches
+ BR2_GLOBAL_PATCH_DIR="board/freescale/imx6sabre/patches"
+ 
+-# Linux headers same as kernel, a 4.1 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
++# Linux headers same as kernel, a 4.9 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
+ 
+ # system
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+@@ -17,8 +17,8 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+ # kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+-BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.freescale.com/imx/linux-imx.git"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_4.1.15_2.0.0_ga"
++BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/linux-imx.git"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_4.9.x_1.0.0_ga"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-sabresd"
+@@ -38,5 +38,5 @@ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="mx6qsabresd"
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+-BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.freescale.com/imx/uboot-imx.git"
+-BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_4.1.15_2.0.0_ga"
++BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/uboot-imx.git"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_4.9.x_1.0.0_ga"
+diff --git a/configs/freescale_imx6sololiteevk_defconfig b/configs/freescale_imx6sololiteevk_defconfig
+index 0e81b2bd68..1b3546255a 100644
+--- a/configs/freescale_imx6sololiteevk_defconfig
++++ b/configs/freescale_imx6sololiteevk_defconfig
+@@ -5,8 +5,8 @@ BR2_ARM_ENABLE_NEON=y
+ BR2_ARM_ENABLE_VFP=y
+ BR2_ARM_FPU_VFPV3=y
+ 
+-# Linux headers same as kernel, a 4.1 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
++# Linux headers same as kernel, a 4.9 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
+ 
+ # system
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+@@ -14,8 +14,8 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+ # kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+-BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.freescale.com/imx/linux-imx.git"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_4.1.15_2.0.0_ga"
++BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/linux-imx.git"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_4.9.x_1.0.0_ga"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6sl-evk"
+@@ -34,5 +34,5 @@ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="mx6slevk"
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+-BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.freescale.com/imx/uboot-imx.git"
+-BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_4.1.15_2.0.0_ga"
++BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/uboot-imx.git"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_4.9.x_1.0.0_ga"
+diff --git a/configs/freescale_imx6sxsabresd_defconfig b/configs/freescale_imx6sxsabresd_defconfig
+index 4a40c26340..01e13143b2 100644
+--- a/configs/freescale_imx6sxsabresd_defconfig
++++ b/configs/freescale_imx6sxsabresd_defconfig
+@@ -8,8 +8,8 @@ BR2_ARM_FPU_VFPV3=y
+ # patches
+ BR2_GLOBAL_PATCH_DIR="board/freescale/imx6sabre/patches"
+ 
+-# Linux headers same as kernel, a 4.1 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
++# Linux headers same as kernel, a 4.9 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
+ 
+ # system
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+@@ -17,8 +17,8 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+ # kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+-BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.freescale.com/imx/linux-imx.git"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_4.1.15_2.0.0_ga"
++BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/linux-imx.git"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_4.9.x_1.0.0_ga"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6sx-sdb"
+@@ -36,6 +36,6 @@ BR2_PACKAGE_HOST_MTOOLS=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="mx6sxsabresd"
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+-BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.freescale.com/imx/uboot-imx.git"
+-BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_4.1.15_2.0.0_ga"
++BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/uboot-imx.git"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_4.9.x_1.0.0_ga"
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
+diff --git a/configs/freescale_imx6ulevk_defconfig b/configs/freescale_imx6ulevk_defconfig
+index 3c5a9099a0..76ad101053 100644
+--- a/configs/freescale_imx6ulevk_defconfig
++++ b/configs/freescale_imx6ulevk_defconfig
+@@ -2,8 +2,8 @@
+ BR2_arm=y
+ BR2_cortex_a7=y
+ 
+-# Linux headers same as kernel, a 4.1 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
++# Linux headers same as kernel, a 4.9 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
+ 
+ # system
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+@@ -11,8 +11,8 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+ # kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+-BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.freescale.com/imx/linux-imx.git"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_4.1.15_2.0.0_ga"
++BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/linux-imx.git"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_4.9.x_1.0.0_ga"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6ul-14x14-evk"
+@@ -21,8 +21,8 @@ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6ul-14x14-evk"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="mx6ul_14x14_evk"
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+-BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.freescale.com/imx/uboot-imx.git"
+-BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_4.1.15_2.0.0_ga"
++BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/uboot-imx.git"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_4.9.x_1.0.0_ga"
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
+ 
+ # required tools to create the microSD image
+diff --git a/configs/freescale_imx7dsabresd_defconfig b/configs/freescale_imx7dsabresd_defconfig
+index 97d3cde16e..844b547670 100644
+--- a/configs/freescale_imx7dsabresd_defconfig
++++ b/configs/freescale_imx7dsabresd_defconfig
+@@ -2,8 +2,8 @@
+ BR2_arm=y
+ BR2_cortex_a7=y
+ 
+-# Linux headers same as kernel, a 4.1 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
++# Linux headers same as kernel, a 4.9 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
+ 
+ # system
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+@@ -11,8 +11,8 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+-BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.freescale.com/imx/linux-imx.git"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_4.1.15_2.0.0_ga"
++BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/linux-imx.git"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_4.9.x_1.0.0_ga"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx7d-sdb"
+@@ -25,8 +25,8 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="mx7dsabresd"
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+-BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.freescale.com/imx/uboot-imx.git"
+-BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_4.1.15_2.0.0_ga"
++BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/uboot-imx.git"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_4.9.x_1.0.0_ga"
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
+ 
+ # required tools to create the microSD image
 -- 
 2.15.1
