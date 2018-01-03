@@ -1,81 +1,82 @@
-From: Sergio Prado <sergio.prado@e-labworks.com>
-Date: Wed, 3 Jan 2018 15:13:17 -0200
-Subject: [Buildroot] [PATCH] daq: new package
-In-Reply-To: <CANQCQpbG2z5oFJWHHp5mp-T66GBDEB8xmScn+f0QV79k+e463g@mail.gmail.com>
-References: <1514150285-19871-1-git-send-email-sergio.prado@e-labworks.com>
- <20171230211822.7967e315@windsurf>
- <CANu7NGuALNdssHnz9BRApZc_SYQ6VPknZt2ZvML6EAcOX1PQAA@mail.gmail.com>
- <CANQCQpbP2D1d_UZfLqWucRpF3t_0EnK=2zHbbVA5O1VS7oogXw@mail.gmail.com>
- <CANQCQpbG2z5oFJWHHp5mp-T66GBDEB8xmScn+f0QV79k+e463g@mail.gmail.com>
-Message-ID: <CANu7NGsC3otVrxQj8Z=cp0XbuDtPr8zNUrv6QoUNkJDR_Lf+og@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed,  3 Jan 2018 18:39:52 +0100
+Subject: [Buildroot] [PATCH RFC] core/infra: fix build on toolchain without
+ C++
+Message-ID: <20180103173952.10834-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Matthew,
+Autotools-based packages that do not need C++ but check for it, and use
+libtool, will fail to configure on distros that lack /lib/cpp.
 
-Actually I was preparing the snort patch. :)
+This is the case for example on Arch Linux, where expat fails to build
+with:
 
-I'll take a look at yours and see if I am missing something.
+    configure: error: in `/home/dkc/src/buildroot/build/build/expat-2.2.4':
+    configure: error: C++ preprocessor "/lib/cpp" fails sanity check
 
-Thanks!
+This is because libtool uses AC_PROC_CXXCPP, which can not be avoided,
+and does require a cpp that passes some "sanity" checks (does not choke
+on valid input, but does choke on invalid input). So we can use neither
+/bin/false nor /bin/true...
 
-Sergio Prado
-Embedded Labworks
-Office: +55 11 2628-3461
-Mobile: +55 11 97123-3420
+We instead need something that can digest some basic C++ preprocessor
+input. We can't use the target preprocessor: that does not work, because
+it obviously has no C++ cupport:
 
-2018-01-03 13:40 GMT-02:00 Matthew Weber <matthew.weber@rockwellcollins.com>
-:
+    arm-linux-cpp.br_real: error: conftest.cpp: C++ compiler not
+    installed on this system
 
-> Sergio,
->
-> On Wed, Jan 3, 2018 at 8:15 AM, Matthew Weber
-> <matthew.weber@rockwellcollins.com> wrote:
-> > Sergio,
-> >
-> > On Sun, Dec 31, 2017 at 6:22 AM, Sergio Prado
-> > <sergio.prado@e-labworks.com> wrote:
-> >>> > diff --git a/package/daq/daq.mk b/package/daq/daq.mk
-> >>> > new file mode 100644
-> >>> > index 000000000000..f10c31d4a157
-> >>> > --- /dev/null
-> >>> > +++ b/package/daq/daq.mk
-> >>> > @@ -0,0 +1,26 @@
-> >>> >
-> >>> > +###########################################################
-> #####################
-> >>> > +#
-> >>> > +# daq
-> >>> > +#
-> >>> >
-> >>> > +###########################################################
-> #####################
-> >>> > +
-> >>> > +DAQ_VERSION = 2.0.6
-> >>> > +DAQ_SITE = https://www.snort.org/downloads/snort
-> >>> > +DAQ_SOURCE = daq-$(DAQ_VERSION).tar.gz
-> >>> > +
-> >>> > +DAQ_LICENSE = GPL-2.0
-> >>> > +DAQ_LICENSE_FILES = COPYING
-> >>>
-> >
-> > Just realized I never upstreamed this package we had been carrying
-> > internally.  There were a couple differences with CONF_OPTS and a
-> > netfilter queue dependency (may have been self imposed).
-> > https://nopaste.xyz/?ba118cb90d65e34d#Gk9cY60V/sMzu+UT5nY/YTb8bDq2KV+
-> P1swXhc4v28s=
-> >
->
-> DAQ was used internally for snort, here's what I've got for that one
-> too.  Never got to upstreaming it and it probably has some bugs :-)
-> https://nopaste.xyz/?326d9f18b3df4fc2#0B2Zs/N6eiD6OWiMHVvMA0OpAeD7w36hZkDK
-> g/rRFKk=
->
-> Matt
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180103/2fa8f83c/attachment.html>
+We can however consider that the host machine does have a C++ compiler,
+so we use the host' cpp, which is gcc's compiler wrapper that ends up
+calling the host's C++ preprocessor.
+
+That would give us a valid C++ preprocessor when we don't have one, in
+fact. But autotools will then correctly fail anyway, because there is
+indeed no C++ compiler at all, as we can see in this excerpt of a
+configure log from expat:
+
+    checking whether we are using the GNU C++ compiler... no
+    checking whether false accepts -g... no
+    checking dependency style of false... none
+    checking how to run the C++ preprocessor... cpp
+    checking whether the false linker (/home/ymorin/dev/buildroot/O/host/bin/arm-linux-ld) supports shared libraries... yes
+    libtool.m4: error: problem compiling CXX test program
+    checking for false option to produce PIC...  -DPIC
+    checking if false PIC flag  -DPIC works... no
+    checking if false static flag  works... no
+    checking if false supports -c -o file.o... no
+    checking if false supports -c -o file.o... (cached) no
+    checking whether the false linker (/home/ymorin/dev/buildroot/O/host/bin/arm-linux-ld) supports shared libraries... yes
+
+So, using the host's C++ preprocessor (by way of gcc's wrapper) leads to
+a working situation, where the end result is as expected.
+
+Reported-by: Damien Riegel <damien.riegel@savoirfairelinux.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Damien Riegel <damien.riegel@savoirfairelinux.com>
+Cc: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Makefile.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/Makefile.in b/package/Makefile.in
+index a1a5316051..61f0a8f9d0 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -398,7 +398,7 @@ NLS_OPTS = --disable-nls
+ endif
+ 
+ ifneq ($(BR2_INSTALL_LIBSTDCPP),y)
+-TARGET_CONFIGURE_OPTS += CXX=false
++TARGET_CONFIGURE_OPTS += CXX=false CXXCPP=cpp
+ endif
+ 
+ ifeq ($(BR2_STATIC_LIBS),y)
+-- 
+2.11.0
