@@ -1,106 +1,84 @@
 From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Wed,  3 Jan 2018 19:38:26 +0100
-Subject: [Buildroot] [PATCH 00/16] imx: update packages to 4.9.x_1.0.0_ga
- release
-Message-ID: <20180103183842.10182-1-gary.bisson@boundarydevices.com>
+Date: Wed,  3 Jan 2018 19:38:27 +0100
+Subject: [Buildroot] [PATCH 01/16] freescale-imx: add config options for
+ i.MX6SL/SX and i.MX7D/ULP
+In-Reply-To: <20180103183842.10182-1-gary.bisson@boundarydevices.com>
+References: <20180103183842.10182-1-gary.bisson@boundarydevices.com>
+Message-ID: <20180103183842.10182-2-gary.bisson@boundarydevices.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+In order to match the latest imx-lib PLATFORM variable requirements [1].
 
-Here's some update on pretty much all the i.MX-related packages.
+Also creating BR2_PACKAGE_FREESCALE_IMX_HAS_VIV_GPU so that it is easier
+to hide/show the Vivante-related packages.
 
-Mainly:
-- Switch to 4.9-based kernel
-- Graphics driver updated accordingly
-  -> g2d and apitrace now in separate packages
-  -> apitrace package not included in this series
-- Switch freescale.com repositories to codeaurora
-- Switch NXPMicro repositories to codeaurora
+[1] https://github.com/Freescale/meta-freescale/blob/master/recipes-bsp/imx-lib/imx-lib_git.bb
 
-Since G2D libraries now have their own package (preparation for i.MX8
-which uses the DPU for G2D operation) gst1-imx needed to match the new
-package name. Right now it is in its own commit but let me know if you
-prefer having it squashed with the 'g2d new package' commit.
+Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+---
+ package/freescale-imx/Config.in | 23 +++++++++++++++++++----
+ 1 file changed, 19 insertions(+), 4 deletions(-)
 
-Let me know if you have any question.
-
-Regards,
-Gary
-
-Gary Bisson (16):
-  freescale-imx: add config options for i.MX6SL/SX and i.MX7D/ULP
-  imx-lib: bump to version imx_4.9.11_1.0.0_ga
-  imx-gpu-viv: bump to version 6.2.2.p0
-  kernel-module-imx-gpu-viv: bump to version 6.2.2.p0
-  imx-gpu-g2d: new package
-  xdriver_xf86-video-imx-viv: bump to version 6.2.2.p0
-  gst1-imx: update g2d libraries dependencies
-  firmware-imx: bump to version 6.0
-  imx-codec: bump to version 4.2.1
-  imx-parser: bump to version 4.2.1
-  imx-vpu: bump to version 5.4.37
-  imx-kobs: bump revision to a0e9adce
-  imx-uuc: bump revision to 2ae63428
-  configs: freescale_imx*: bump to version 4.9.x_1.0.0_ga
-  configs: nitrogen*: bump kernel version to 4.9.x_1.0.0_ga
-  configs: nitrogen*: bump u-boot version to 2017.07
-
- board/boundarydevices/common/boot.cmd              | 155 +++++++++++++++++++++
- board/boundarydevices/common/post-build.sh         |   7 +-
- board/boundarydevices/common/upgrade.cmd           | 154 ++++++++++++++++++++
- ...ommon-boot-Linux-to-init-in-mfgtools-mode.patch |   4 +-
- configs/freescale_imx31_3stack_defconfig           |   8 +-
- configs/freescale_imx6dlsabreauto_defconfig        |  12 +-
- configs/freescale_imx6dlsabresd_defconfig          |  12 +-
- configs/freescale_imx6qsabreauto_defconfig         |  12 +-
- configs/freescale_imx6qsabresd_defconfig           |  12 +-
- configs/freescale_imx6sololiteevk_defconfig        |  12 +-
- configs/freescale_imx6sxsabresd_defconfig          |  12 +-
- configs/freescale_imx6ulevk_defconfig              |  12 +-
- configs/freescale_imx7dsabresd_defconfig           |  12 +-
- configs/nitrogen6sx_defconfig                      |  19 +--
- configs/nitrogen6x_defconfig                       |  19 +--
- configs/nitrogen7_defconfig                        |  19 +--
- package/freescale-imx/Config.in                    |  24 +++-
- .../freescale-imx/firmware-imx/firmware-imx.hash   |   2 +-
- package/freescale-imx/firmware-imx/firmware-imx.mk |   2 +-
- package/freescale-imx/imx-codec/imx-codec.hash     |   2 +-
- package/freescale-imx/imx-codec/imx-codec.mk       |   6 +-
- package/freescale-imx/imx-gpu-g2d/Config.in        |  25 ++++
- package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.hash |   1 +
- package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.mk   |  37 +++++
- package/freescale-imx/imx-gpu-viv/Config.in        |  16 ---
- package/freescale-imx/imx-gpu-viv/imx-gpu-viv.hash |   2 +-
- package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk   |  36 +----
- package/freescale-imx/imx-kobs/imx-kobs.hash       |   2 +-
- package/freescale-imx/imx-kobs/imx-kobs.mk         |   4 +-
- package/freescale-imx/imx-lib/imx-lib.hash         |   2 +-
- package/freescale-imx/imx-lib/imx-lib.mk           |   7 +-
- package/freescale-imx/imx-parser/imx-parser.hash   |   2 +-
- package/freescale-imx/imx-parser/imx-parser.mk     |   6 +-
- package/freescale-imx/imx-uuc/imx-uuc.hash         |   2 +-
- package/freescale-imx/imx-uuc/imx-uuc.mk           |   4 +-
- package/freescale-imx/imx-vpu/imx-vpu.hash         |   2 +-
- package/freescale-imx/imx-vpu/imx-vpu.mk           |   2 +-
- .../kernel-module-imx-gpu-viv.hash                 |   2 +-
- .../kernel-module-imx-gpu-viv.mk                   |   2 +-
- package/gstreamer1/gst1-imx/Config.in              |   6 +-
- package/gstreamer1/gst1-imx/gst1-imx.mk            |   4 +
- ...001-Stop-using-Git-to-write-local-version.patch |  90 ------------
- package/x11r7/xdriver_xf86-video-imx-viv/Config.in |   7 +
- .../xdriver_xf86-video-imx-viv.hash                |   2 +-
- .../xdriver_xf86-video-imx-viv.mk                  |  10 +-
- 45 files changed, 537 insertions(+), 253 deletions(-)
- create mode 100644 board/boundarydevices/common/boot.cmd
- create mode 100644 board/boundarydevices/common/upgrade.cmd
- create mode 100644 package/freescale-imx/imx-gpu-g2d/Config.in
- create mode 100644 package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.hash
- create mode 100644 package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.mk
- delete mode 100644 package/x11r7/xdriver_xf86-video-imx-viv/0001-Stop-using-Git-to-write-local-version.patch
-
+diff --git a/package/freescale-imx/Config.in b/package/freescale-imx/Config.in
+index fa3f9a0d38..e02adf51e3 100644
+--- a/package/freescale-imx/Config.in
++++ b/package/freescale-imx/Config.in
+@@ -29,10 +29,16 @@ config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX53
+ 	bool "imx53"
+ 
+ config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q
+-	bool "imx6q"
++	bool "imx6q/imx6dl"
++
++config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6S
++	bool "imx6sl/imx6sx"
+ 
+ config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6UL
+-	bool "imx6ul"
++	bool "imx6ul/imx6ull"
++
++config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX7
++	bool "imx7d/imx7ulp"
+ 
+ endchoice
+ 
+@@ -45,14 +51,23 @@ config BR2_PACKAGE_FREESCALE_IMX_PLATFORM
+ 	default "IMX51" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX51
+ 	default "IMX53" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX53
+ 	default "IMX6Q" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q
++	default "IMX6S" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6S
+ 	default "IMX6UL" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6UL
++	default "IMX7" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX7
+ 
+ config BR2_PACKAGE_FREESCALE_IMX_HAS_VPU
+ 	bool
+ 	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX27ADS || \
+ 		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX51 || \
+ 		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX53 || \
+-		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q
++		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q || \
++		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6S
++
++config BR2_PACKAGE_FREESCALE_IMX_HAS_VIV_GPU
++	bool
++	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q || \
++		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6S || \
++		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX7
+ 
+ source "package/freescale-imx/imx-codec/Config.in"
+ source "package/freescale-imx/imx-kobs/Config.in"
+@@ -66,7 +81,7 @@ if (BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX51 || BR2_PACKAGE_FREESCALE_IMX_PLATFO
+ source "package/freescale-imx/gpu-amd-bin-mx51/Config.in"
+ source "package/freescale-imx/libz160/Config.in"
+ endif
+-if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q
++if BR2_PACKAGE_FREESCALE_IMX_HAS_VIV_GPU
+ source "package/freescale-imx/imx-gpu-viv/Config.in"
+ source "package/freescale-imx/kernel-module-imx-gpu-viv/Config.in"
+ endif
 -- 
 2.15.1
