@@ -1,50 +1,46 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Thu,  4 Jan 2018 09:21:00 +0100
-Subject: [Buildroot] [PATCH] configs/bananapro: bump Linux and U-Boot version
-Message-ID: <20180104082100.22411-1-joerg.krause@embedded.rocks>
+From: Doha Ehab <dohaehab@gmail.com>
+Date: Thu, 4 Jan 2018 10:34:05 +0200
+Subject: [Buildroot] GNU Bison package
+Message-ID: <CAEjFr-Z5vQ3uaFmDvh4pBs4VeTCH5Qyn9+CA7ZBHqFQn3vOcsQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
----
- configs/bananapro_defconfig | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+Hello,
+ I have generated uclibc toolchain using buildroot-2017.02-rc3. I am trying
+to use it to cross compile Gnu GCC for Android. I have checked flex and
+gettext from target packages-> development tools but I cannot find bison
+library and I always get this error:
 
-diff --git a/configs/bananapro_defconfig b/configs/bananapro_defconfig
-index e5ac820bfa..5a71d757e4 100644
---- a/configs/bananapro_defconfig
-+++ b/configs/bananapro_defconfig
-@@ -4,8 +4,8 @@ BR2_cortex_a7=y
- BR2_ARM_EABIHF=y
- BR2_ARM_FPU_NEON_VFPV4=y
- 
--# Linux headers same as kernel, a 4.13 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_13=y
-+# Linux headers same as kernel, a 4.14 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
- 
- # Toolchain
- BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
-@@ -22,7 +22,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/lemaker/bananapro/post-image.sh"
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.13.4"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.14.11"
- BR2_LINUX_KERNEL_USE_DEFCONFIG=y
- BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/lemaker/bananapro/linux-wifi.fragment"
-@@ -39,7 +39,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.09"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.11"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="Bananapro"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
--- 
-2.15.1
+/home/Desktop/gcc_5/missing bison -y --name-prefix=__gettext --output
+plural.c ../.././intl/plural.y
+/home/Desktop/gcc_5/missing: 81: /home/Desktop/gcc_5/missing: bison: not
+found
+WARNING: 'bison' is missing on your system.
+         You should only need it if you modified a '.y' file.
+         You may want to install the GNU Bison package:
+         <http://www.gnu.org/software/bison/>
+Makefile:136: recipe for target 'plural.c' failed
+make[2]: *** [plural.c] Error 127
+make[2]: Leaving directory
+'/home/Desktop/gcc_5/host-aarch64-buildroot-linux-uclibc/intl'
+Makefile:5345: recipe for target 'all-intl' failed
+make[1]: *** [all-intl] Error 2
+make[1]: Leaving directory '/home/Desktop/gcc_5'
+Makefile:855: recipe for target 'all' failed
+make: *** [all] Error 2
+
+My configuration options:
+./configure --prefix=/home/Desktop/gcc_5/build/
+CC=/home/Desktop/buildroot-2017.02-rc3/output/host/usr/bin/aarch64-linux-gcc
+CXX=/home/Desktop/buildroot-2017.02-rc3/output/host/usr/bin/aarch64-linux-g++
+CFLAGS="-I/home/Desktop/buildroot-2017.02-rc3/output/host/usr/include/
+-fPIC -static -lgmp -lmpfr -lmpc"
+LDFLAGS="-L/home/Desktop/buildroot-2017.02-rc3/output/host/usr/lib"
+--host=aarch64-buildroot-linux-uclibc  --disable-shared --disable-f77
+--disable-fc --disable-fortran
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180104/dbba4c2b/attachment.html>
