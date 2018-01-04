@@ -1,44 +1,64 @@
-From: Sergey Matyukevich <geomatsi@gmail.com>
-Date: Thu,  4 Jan 2018 21:36:28 +0300
-Subject: [Buildroot] [PATCH 2/2] xradio: bump version to 33f4b1c2
-In-Reply-To: <20180104183628.3913-1-geomatsi@gmail.com>
-References: <20180104183628.3913-1-geomatsi@gmail.com>
-Message-ID: <20180104183628.3913-3-geomatsi@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Thu,  4 Jan 2018 19:36:59 +0100
+Subject: [Buildroot] [PATCH 1/1] daq: libpcap is optional not mandatory
+Message-ID: <20180104183659.4169-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Out-of-tree driver has been updated according to mac80211
-and timer API changes in the upcoming Linux v4.15.
+daq can be compiled without libpcap thanks to --enable-pcap-module and
+ --disable-pcap-module options.
+libpcap is just a mandadory dependency of snort.
 
-Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/xr819-xradio/xr819-xradio.hash | 2 +-
- package/xr819-xradio/xr819-xradio.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/daq/Config.in |  1 -
+ package/daq/daq.mk    | 10 +++++++++-
+ 2 files changed, 9 insertions(+), 2 deletions(-)
 
-diff --git a/package/xr819-xradio/xr819-xradio.hash b/package/xr819-xradio/xr819-xradio.hash
-index 75e3c496bd..869801cad6 100644
---- a/package/xr819-xradio/xr819-xradio.hash
-+++ b/package/xr819-xradio/xr819-xradio.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 91095bd2d49d54c5e26919dc0c767be56eb0a2430c133d0bacdc814e97a5df4c xr819-xradio-c03a053a9e731d56c89c0c09627e886db2a0e04e.tar.gz
-+sha256 7b78fc61d13a428a0d8a3d8dcffaa604d23b5a17c6e8e86d2e5e8372dcd17672 xr819-xradio-33f4b1c25eff0d9db7cbac19f36b130da9857f37.tar.gz
-diff --git a/package/xr819-xradio/xr819-xradio.mk b/package/xr819-xradio/xr819-xradio.mk
-index 429c665dea..edf423bc3c 100644
---- a/package/xr819-xradio/xr819-xradio.mk
-+++ b/package/xr819-xradio/xr819-xradio.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/daq/Config.in b/package/daq/Config.in
+index 7800061642..1d24c6d11a 100644
+--- a/package/daq/Config.in
++++ b/package/daq/Config.in
+@@ -1,7 +1,6 @@
+ config BR2_PACKAGE_DAQ
+ 	bool "daq"
+ 	depends on !BR2_STATIC_LIBS # dlfcn.h
+-	select BR2_PACKAGE_LIBPCAP
+ 	select BR2_PACKAGE_LIBDNET
+ 	help
+ 	  DAQ is a Data Acquisition library for packet I/O from the
+diff --git a/package/daq/daq.mk b/package/daq/daq.mk
+index c4b4c881f1..a3bf3ac2d6 100644
+--- a/package/daq/daq.mk
++++ b/package/daq/daq.mk
+@@ -10,16 +10,24 @@ DAQ_SOURCE = daq-$(DAQ_VERSION).tar.gz
+ DAQ_LICENSE = GPL-2.0
+ DAQ_LICENSE_FILES = COPYING
+ DAQ_INSTALL_STAGING = YES
+-DAQ_DEPENDENCIES = libpcap libdnet
++DAQ_DEPENDENCIES = libdnet
  
--XR819_XRADIO_VERSION = c03a053a9e731d56c89c0c09627e886db2a0e04e
-+XR819_XRADIO_VERSION = 33f4b1c25eff0d9db7cbac19f36b130da9857f37
- XR819_XRADIO_SITE = $(call github,fifteenhex,xradio,$(XR819_XRADIO_VERSION))
- XR819_XRADIO_LICENSE = GPL-2.0
- XR819_XRADIO_LICENSE_FILES = LICENSE
+ # package does not build in parallel due to improper make rules
+ # related to the generation of the tokdefs.h header file
+ DAQ_MAKE = $(MAKE1)
+ 
++ifeq ($(BR2_PACKAGE_LIBPCAP),y)
++DAQ_DEPENDENCIES += libpcap
++
+ # assume these flags are available to prevent configure from running
+ # test programs while cross compiling
+ DAQ_CONF_ENV = \
+ 	ac_cv_lib_pcap_pcap_lib_version=yes \
+ 	daq_cv_libpcap_version_1x=yes
+ 
++DAQ_CONF_OPTS += --enable-pcap-module
++else
++DAQ_CONF_OPTS += --disable-pcap-module
++endif
++
+ $(eval $(autotools-package))
 -- 
-2.11.0
+2.14.1
