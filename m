@@ -1,97 +1,76 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Thu,  4 Jan 2018 11:40:23 +0100
-Subject: [Buildroot] [PATCH] mpd: bump to version 0.20.14
-Message-ID: <20180104104023.2676-1-joerg.krause@embedded.rocks>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 4 Jan 2018 11:41:46 +0100
+Subject: [Buildroot] [PATCH 06/16] xdriver_xf86-video-imx-viv: bump to
+ version 6.2.2.p0
+In-Reply-To: <CAAMH-ysZ8A=d8dWUApLk0BtQs5iHB1hX46BJJ-KcZEeO5LOZjw@mail.gmail.com>
+References: <20180103183842.10182-1-gary.bisson@boundarydevices.com>
+ <20180103183842.10182-7-gary.bisson@boundarydevices.com>
+ <20180103215058.6ec3d6b6@windsurf.lan>
+ <CAAMH-ysZ8A=d8dWUApLk0BtQs5iHB1hX46BJJ-KcZEeO5LOZjw@mail.gmail.com>
+Message-ID: <20180104114146.3983f8e0@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Remove upstream patch '0002-libupnp-1-6-24-compat.patch'.
+Hello,
 
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
----
- package/mpd/0002-libupnp-1-6-24-compat.patch | 48 ----------------------------
- package/mpd/mpd.hash                         |  2 +-
- package/mpd/mpd.mk                           |  2 +-
- 3 files changed, 2 insertions(+), 50 deletions(-)
- delete mode 100644 package/mpd/0002-libupnp-1-6-24-compat.patch
+On Thu, 4 Jan 2018 11:32:47 +0100, Gary Bisson wrote:
 
-diff --git a/package/mpd/0002-libupnp-1-6-24-compat.patch b/package/mpd/0002-libupnp-1-6-24-compat.patch
-deleted file mode 100644
-index abcafa8616..0000000000
---- a/package/mpd/0002-libupnp-1-6-24-compat.patch
-+++ /dev/null
-@@ -1,48 +0,0 @@
--From 78728138a04c2493c6bfadee98060043eca204bf Mon Sep 17 00:00:00 2001
--From: Max Kellermann <max@musicpd.org>
--Date: Sat, 2 Dec 2017 14:47:27 +0100
--Subject: [PATCH] lib/upnp/Compat: disable the 1.8 API emulation with libupnp
-- 1.6.24
--
--libupnp 1.6.24 added a few badly designed macros which break the MPD
--build:
--
-- https://sourceforge.net/p/pupnp/code/ci/8177a4195a4d4a5d6cb095eaf4ca5b65ac446381/
--
--To work around this, we disable our emulation functions (from
--714011c81ed6053f7a35812071499356f337dd70) on this libupnp version.
--
--Closes #163
--
--Backported from: 78728138a04c2493c6bfadee98060043eca204bf
--
--Signed-off-by: Max Kellermann <max@musicpd.org>
--[J?rg Krause: Drop patching News file]
--Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
--
-----
-- src/lib/upnp/Compat.hxx | 7 +++++--
-- 1 file changed, 5 insertions(+), 2 deletions(-)
--
--diff --git a/src/lib/upnp/Compat.hxx b/src/lib/upnp/Compat.hxx
--index 2e2d2f1de..c9f1cc47f 100644
----- a/src/lib/upnp/Compat.hxx
--+++ b/src/lib/upnp/Compat.hxx
--@@ -23,12 +23,15 @@
-- #include <upnp/upnp.h>
-- 
-- #if UPNP_VERSION < 10800
---#include "Compiler.h"
---
-- /* emulate the libupnp 1.8 API with older versions */
-- 
-- using UpnpDiscovery = Upnp_Discovery;
-- 
--+#endif
--+
--+#if UPNP_VERSION < 10624
--+#include "Compiler.h"
--+
-- gcc_pure
-- static inline int
-- UpnpDiscovery_get_Expires(const UpnpDiscovery *disco) noexcept
-diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
-index 16661e5fa4..99ec6c82f2 100644
---- a/package/mpd/mpd.hash
-+++ b/package/mpd/mpd.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256  e159ac0608fb85c891bd19375ed7056d5f9ec4ba492b052f24820513e774f709  mpd-0.20.12.tar.xz
-+sha256  7d59afa1e7aabe5f7ad2d66eb274b0d54568b4110a783dfe8e74bd0f94e3f781  mpd-0.20.14.tar.xz
-diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
-index 57e3b464af..f9ca1600b5 100644
---- a/package/mpd/mpd.mk
-+++ b/package/mpd/mpd.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- MPD_VERSION_MAJOR = 0.20
--MPD_VERSION = $(MPD_VERSION_MAJOR).12
-+MPD_VERSION = $(MPD_VERSION_MAJOR).14
- MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
- MPD_SITE = http://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
- MPD_DEPENDENCIES = host-pkgconf boost
+> >> diff --git a/package/x11r7/xdriver_xf86-video-imx-viv/Config.in b/package/x11r7/xdriver_xf86-video-imx-viv/Config.in
+> >> index c3746a100f..5a0257305c 100644
+> >> --- a/package/x11r7/xdriver_xf86-video-imx-viv/Config.in
+> >> +++ b/package/x11r7/xdriver_xf86-video-imx-viv/Config.in
+> >> @@ -1,6 +1,7 @@
+> >>  config BR2_PACKAGE_XDRIVER_XF86_VIDEO_IMX_VIV
+> >>       bool "xf86-video-imx-viv"
+> >>       depends on BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_X11
+> >> +     depends on BR2_PACKAGE_IMX_GPU_G2D  
+> >
+> > Perhaps a "select BR2_PACKAGE_IMX_GPU_G2D" would be better.  
+> 
+> Well, this part of the i.MX packages is messy, you can't select much
+> without having recursive dependency.
+> 
+> Here if I try your suggestion I get:
+> package/x11r7/xdriver_xf86-video-imx-viv/Config.in:1:error: recursive
+> dependency detected!
+> package/x11r7/xdriver_xf86-video-imx-viv/Config.in:1: symbol
+> BR2_PACKAGE_XDRIVER_XF86_VIDEO_IMX_VIV depends on
+> BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_X11
+> package/freescale-imx/imx-gpu-viv/Config.in:34: symbol
+> BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_X11 is part of choice <choice>
+> package/freescale-imx/imx-gpu-viv/Config.in:27: choice <choice>
+> contains symbol <choice>
+> package/freescale-imx/imx-gpu-viv/Config.in:27: choice <choice>
+> contains symbol BR2_PACKAGE_IMX_GPU_VIV
+> package/freescale-imx/imx-gpu-viv/Config.in:5: symbol
+> BR2_PACKAGE_IMX_GPU_VIV is selected by BR2_PACKAGE_IMX_GPU_G2D
+> package/freescale-imx/imx-gpu-g2d/Config.in:5: symbol
+> BR2_PACKAGE_IMX_GPU_G2D is selected by
+> BR2_PACKAGE_XDRIVER_XF86_VIDEO_IMX_VIV
+> 
+> So using depends is the easy path, let me know if you'd like more
+> investigation on that.
+> 
+> Also, since G2D will be provided by a different package for the i.MX8,
+> my plan is to later have a virtual/g2d and depend on it.
+> 
+> Then depending on the platform it will either be imx-gpu-g2d or imx-dpu-g2d.
+
+OK. Let's stick with a "depends on" for now then. I'm not sure the
+switch to a virtual package will require a "depends on". Normally you
+can indeed only "depends on" a virtual package. But for this specific
+case, we can have a virtual package that automatically selects the
+right implementation depending on the selected platform, so this
+virtual-package could be selected (like we can select jpeg or zlib or
+openssl).
+
+Best regards,
+
+Thomas
 -- 
-2.15.1
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
