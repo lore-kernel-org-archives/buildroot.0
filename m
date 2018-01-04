@@ -1,48 +1,45 @@
-From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Thu,  4 Jan 2018 12:39:44 +0100
-Subject: [Buildroot] [PATCH v2 12/15] imx-uuc: bump revision to 2ae63428
-In-Reply-To: <20180104113947.21235-1-gary.bisson@boundarydevices.com>
-References: <20180104113947.21235-1-gary.bisson@boundarydevices.com>
-Message-ID: <20180104113947.21235-13-gary.bisson@boundarydevices.com>
+From: Jan Heylen <heyleke@gmail.com>
+Date: Thu,  4 Jan 2018 13:28:27 +0100
+Subject: [Buildroot] [PATCH v6 0/4] Opentracing-cpp: new package
+Message-ID: <1515068911-21112-1-git-send-email-heyleke@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Changelog:
-- Setup utp via configfs
-- Fix many compiler warnings
-- Robustness improved
+From: Jan Heylen <jan.heylen@nokia.com>
 
-Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
----
- package/freescale-imx/imx-uuc/imx-uuc.hash | 2 +-
- package/freescale-imx/imx-uuc/imx-uuc.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Hi,
 
-diff --git a/package/freescale-imx/imx-uuc/imx-uuc.hash b/package/freescale-imx/imx-uuc/imx-uuc.hash
-index d6e4d97ea0..c9c29f8692 100644
---- a/package/freescale-imx/imx-uuc/imx-uuc.hash
-+++ b/package/freescale-imx/imx-uuc/imx-uuc.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 eac0c3e288c845cd9b82d02993f8358731a7a03e51591b27feeb453b143beb73  imx-uuc-3440b1108373e79669cc17ba1d2be91a123a2053.tar.gz
-+sha256 1463e855d1229e6b6c02df2085f6bff5974bc061d13a61646b63675c160cba99  imx-uuc-2ae634281a39c82b6a8ee0fdcfbfbe42183ceb53.tar.gz
-diff --git a/package/freescale-imx/imx-uuc/imx-uuc.mk b/package/freescale-imx/imx-uuc/imx-uuc.mk
-index f24216da26..5e0bb3be0e 100644
---- a/package/freescale-imx/imx-uuc/imx-uuc.mk
-+++ b/package/freescale-imx/imx-uuc/imx-uuc.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--IMX_UUC_VERSION = 3440b1108373e79669cc17ba1d2be91a123a2053
--IMX_UUC_SITE = $(call github,NXPmicro,imx-uuc,$(IMX_UUC_VERSION))
-+IMX_UUC_VERSION = 2ae634281a39c82b6a8ee0fdcfbfbe42183ceb53
-+IMX_UUC_SITE = $(call github,codeauroraforum,imx-uuc,$(IMX_UUC_VERSION))
- IMX_UUC_LICENSE = GPL-2.0+
- IMX_UUC_LICENSE_FILES = COPYING
- 
+V6 of "this adds opentracing-cpp package as a logging library package."
+
+added a patch for m68k cf toolchains suffering from BR2_TOOLCHAIN_HAS_GCC_BUG_64735
+
+br,
+
+Jan
+
+Jan Heylen (4):
+  rabbitmq-c: BUILD_SHARED_LIBS is handled in pkg-cmake.mk
+  pkg-cmake: add note on BUILD_STATIC_LIBS
+  m68k_cf5208: suffers from gcc 64735
+  opentracing-cpp: new package
+
+ DEVELOPERS                                         |  3 +
+ package/Config.in                                  |  1 +
+ ...shared-static-target-a-configurable-optio.patch | 74 ++++++++++++++++++++++
+ package/opentracing-cpp/Config.in                  | 15 +++++
+ package/opentracing-cpp/opentracing-cpp.hash       |  3 +
+ package/opentracing-cpp/opentracing-cpp.mk         | 25 ++++++++
+ package/pkg-cmake.mk                               |  9 +++
+ package/rabbitmq-c/rabbitmq-c.mk                   |  7 +-
+ toolchain/toolchain-common.in                      |  1 +
+ 9 files changed, 135 insertions(+), 3 deletions(-)
+ create mode 100644 package/opentracing-cpp/0001-CMake-make-shared-static-target-a-configurable-optio.patch
+ create mode 100644 package/opentracing-cpp/Config.in
+ create mode 100644 package/opentracing-cpp/opentracing-cpp.hash
+ create mode 100644 package/opentracing-cpp/opentracing-cpp.mk
+
 -- 
-2.15.1
+2.7.4
