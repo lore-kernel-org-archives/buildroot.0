@@ -1,9 +1,9 @@
 From: Jan Heylen <heyleke@gmail.com>
-Date: Thu,  4 Jan 2018 13:28:29 +0100
-Subject: [Buildroot] [PATCH v6 2/4] pkg-cmake: add note on BUILD_STATIC_LIBS
+Date: Thu,  4 Jan 2018 13:28:30 +0100
+Subject: [Buildroot] [PATCH v6 3/4] m68k_cf5208: suffers from gcc 64735
 In-Reply-To: <1515068911-21112-1-git-send-email-heyleke@gmail.com>
 References: <1515068911-21112-1-git-send-email-heyleke@gmail.com>
-Message-ID: <1515068911-21112-3-git-send-email-heyleke@gmail.com>
+Message-ID: <1515068911-21112-4-git-send-email-heyleke@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,35 +12,28 @@ To: buildroot@busybox.net
 
 From: Jan Heylen <jan.heylen@nokia.com>
 
-as BUILD_STATIC_LIBS is not a standard cmake variable (while BUILD_SHARED_LIBS is)
-we shouldn't add it in pkg-cmake.mk, although for some packages that would
-make sense. Therefore, add a note so we don't forget about this abnormality.
+so add it to the list of BR2_TOOLCHAIN_HAS_GCC_BUG_64735
 
-see: https://cmake.org/cmake/help/v3.8/manual/cmake-variables.7.html#variables-that-change-behavior
+Identified experimentally by using exception_ptr with m68k_cf5208 and
+looking at the value of ATOMIC_INT_LOCK_FREE. ATOMIC_INT_LOCK_FREE = 1,
+so the issue is present. Also verified that gcc 7.x fixed it also for cf5208.
+
 Signed-off-by: Jan Heylen <jan.heylen@nokia.com>
 ---
- package/pkg-cmake.mk | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ toolchain/toolchain-common.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
-index 6739704..b75cb98 100644
---- a/package/pkg-cmake.mk
-+++ b/package/pkg-cmake.mk
-@@ -80,6 +80,15 @@ ifndef $(2)_CONFIGURE_CMDS
- ifeq ($(4),target)
+diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
+index d743c63..0000713 100644
+--- a/toolchain/toolchain-common.in
++++ b/toolchain/toolchain-common.in
+@@ -22,6 +22,7 @@ config BR2_TOOLCHAIN_HAS_GCC_BUG_64735
+ 	default y if BR2_ARM_CPU_ARMV4
+ 	default y if BR2_ARM_CPU_ARMV5
+ 	default y if BR2_sparc_v8
++	default y if BR2_m68k_cf5208
+ 	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_7
  
- # Configure package for target
-+#
-+# Note:
-+# BUILD_SHARED_LIBS is a cmake internal variable,
-+# BUILD_STATIC_LIBS is not standard in any way, which means some
-+# projects may choose another name for a similar option and there is not
-+# much we can do about this.
-+# see: https://cmake.org/cmake/help/v3.8/manual/cmake-variables.7.html#variables-that-change-behavior
-+#
-+# So: we handle BUILD_SHARED_LIBS here, but BUILD_STATIC_LIBS must be handled per package
- define $(2)_CONFIGURE_CMDS
- 	(mkdir -p $$($$(PKG)_BUILDDIR) && \
- 	cd $$($$(PKG)_BUILDDIR) && \
+ config BR2_TOOLCHAIN_HAS_NATIVE_RPC
 -- 
 2.7.4
