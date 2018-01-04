@@ -1,87 +1,50 @@
-From: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
-Date: Thu, 4 Jan 2018 09:14:00 +0100
-Subject: [Buildroot] [PATCH] nilfs-utils: fix build with static
- toolchains
-In-Reply-To: <20180103213359.10611a4e@windsurf.lan>
-References: <1515010544-28357-1-git-send-email-dev.kurt@vandijck-laurijssen.be>
- <20180103213359.10611a4e@windsurf.lan>
-Message-ID: <20180104081400.GA18339@airbook.vandijck-laurijssen.be>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Thu,  4 Jan 2018 09:21:00 +0100
+Subject: [Buildroot] [PATCH] configs/bananapro: bump Linux and U-Boot version
+Message-ID: <20180104082100.22411-1-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+---
+ configs/bananapro_defconfig | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-> Hello,
-> 
-> On Wed,  3 Jan 2018 21:15:44 +0100, Kurt Van Dijck wrote:
-> > This commit adds a patch to respect the dependency libmount->libblkid->libuuid
-> > properly in autoconf. This becomes necessary for static builds.
-> > 
-> > Signed-off-by: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
-> > ---
-> >  ...nt-libblkid-fix-order-of-autoconf-probing.patch | 62 ++++++++++++++++++++++
-> >  1 file changed, 62 insertions(+)
-> >  create mode 100644 package/nilfs-utils/0004-libmount-libblkid-fix-order-of-autoconf-probing.patch
-> > 
-> > diff --git a/package/nilfs-utils/0004-libmount-libblkid-fix-order-of-autoconf-probing.patch b/package/nilfs-utils/0004-libmount-libblkid-fix-order-of-autoconf-probing.patch
-> > new file mode 100644
-> > index 0000000..78b6902
-> > --- /dev/null
-> > +++ b/package/nilfs-utils/0004-libmount-libblkid-fix-order-of-autoconf-probing.patch
-> > @@ -0,0 +1,62 @@
-> > +From 94732d03c5361a9f8f9d0f018e0fd9850a2c7d29 Mon Sep 17 00:00:00 2001
-> > +From: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
-> > +Date: Wed, 3 Jan 2018 20:38:15 +0100
-> > +Subject: [PATCH] libmount, libblkid: fix order of autoconf probing
-> > +
-> > +make sure that libuuid is linked during probes.
-> > +Since libmount depends on libblkid, probe libblkid first.
-> > +This fixes autoprobing on systems that use static libraries exclusively
-> > +
-> > +Signed-off-by: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
-> > +---
-> > + configure.ac | 26 +++++++++++++-------------
-> > + 1 file changed, 13 insertions(+), 13 deletions(-)
-> > +
-> > +diff --git a/configure.ac b/configure.ac
-> > +index 6fa8c41..50250d9 100644
-> > +--- a/configure.ac
-> > ++++ b/configure.ac
-> > +@@ -103,9 +103,20 @@ AC_CHECK_HEADERS([ctype.h err.h fcntl.h grp.h libintl.h limits.h \
-> > + 		  time.h unistd.h])
-> > + 
-> > + # Check for conditional libraries and headers.
-> > ++if test "${with_blkid}" = "yes"; then
-> > ++   AC_CHECK_LIB(blkid, blkid_new_probe_from_filename,
-> > ++   		[AC_DEFINE(HAVE_LIBBLKID, 1,
-> > ++		    [Define to 1 if you have the 'blkid' library (-lblkid).])
-> > ++		 LIB_BLKID="-lblkid -luuid"
-> > ++		],
-> > ++		AC_MSG_ERROR([BLKID library not found]), [-luuid])
-> > ++   AC_CHECK_HEADERS([blkid/blkid.h])
-> > ++fi
-> > ++AC_SUBST(LIB_BLKID)
-> 
-> Thanks for this patch. Unfortunately, this really isn't the most
-> appropriate solution. The good solution for this is to use pkg-config,
-> through the PKG_CHECK_MODULES() autoconf macro.
-> 
-> if test "${with_blkid}" = "yes"; then
-> 	PKG_CHECK_MODULES([BLKID], [blkid])
-> fi
-> 
-> and then use BLKID_LIBS in Makefile.am to link against libblkid.
-> pkg-config automatically takes care of indirect dependencies when
-> static linking:
-> 
-> $ ./output/host/bin/pkg-config --libs blkid
-> -L./output/host/bin/../arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib -lblkid -L./output/host/bin/../arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib -luuid
-> 
-> Could you rework your patch accordingly ?
-
-Ok, I'll rework.
-Thanks for the feedback.
-
-Kurt
+diff --git a/configs/bananapro_defconfig b/configs/bananapro_defconfig
+index e5ac820bfa..5a71d757e4 100644
+--- a/configs/bananapro_defconfig
++++ b/configs/bananapro_defconfig
+@@ -4,8 +4,8 @@ BR2_cortex_a7=y
+ BR2_ARM_EABIHF=y
+ BR2_ARM_FPU_NEON_VFPV4=y
+ 
+-# Linux headers same as kernel, a 4.13 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_13=y
++# Linux headers same as kernel, a 4.14 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
+ 
+ # Toolchain
+ BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+@@ -22,7 +22,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/lemaker/bananapro/post-image.sh"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.13.4"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.14.11"
+ BR2_LINUX_KERNEL_USE_DEFCONFIG=y
+ BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/lemaker/bananapro/linux-wifi.fragment"
+@@ -39,7 +39,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.09"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.11"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="Bananapro"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+-- 
+2.15.1
