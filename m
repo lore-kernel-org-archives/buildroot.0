@@ -1,53 +1,107 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 5 Jan 2018 16:11:22 +0100
-Subject: [Buildroot] [git commit] mariadb: security bump version to 10.1.30
-Message-ID: <20180105151726.1C094831EB@busybox.osuosl.org>
+Date: Fri, 5 Jan 2018 16:16:39 +0100
+Subject: [Buildroot] [git commit] libzip: bump to version 1.4.0
+Message-ID: <20180105151726.7BA2181036@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ca1f2d266ddba2f530731e91ebbf792638cee8bb
+commit: https://git.buildroot.net/buildroot/commit/?id=b7da7469de0bbefedde34c9af1ff9a832a241a58
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes: https://mariadb.com/kb/en/mariadb-10130-release-notes/
-Changelog: https://mariadb.com/kb/en/mariadb-10130-changelog/
+Upstream switched to cmake.
 
-Fixes the following security vulnerability:
+Add upstream patch that removes run of target binary on the host.
 
-CVE-2017-15365 - Replication in sql/event_data_objects.cc occurs before ACL
-checks.
-
-Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
+Cc: Bartosz Golaszewski <brgl@bgdev.pl>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mariadb/mariadb.hash | 4 ++--
- package/mariadb/mariadb.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ ...0001-Use-cmake-E-tar-to-extract-test-data.patch | 40 ++++++++++++++++++++++
+ package/libzip/libzip.hash                         |  2 +-
+ package/libzip/libzip.mk                           |  7 ++--
+ 3 files changed, 44 insertions(+), 5 deletions(-)
 
-diff --git a/package/mariadb/mariadb.hash b/package/mariadb/mariadb.hash
-index fcca9be..f8e1c6c 100644
---- a/package/mariadb/mariadb.hash
-+++ b/package/mariadb/mariadb.hash
-@@ -1,5 +1,5 @@
--# From https://downloads.mariadb.org/mariadb/10.1.29/
--sha256 73bbd5602f52ab5aa4d83f465134871b6c87bda25371d098f6da5a3d98517ed4  mariadb-10.1.29.tar.gz
-+# From https://downloads.mariadb.org/mariadb/10.1.30/
-+sha256 173a5e5a24819e0a469c3bd09b5c98491676c37c6095882a2ea34c5af0996c88  mariadb-10.1.30.tar.gz
- 
- # Hash for license files
- sha256 69ce89a0cadbe35a858398c258be93c388715e84fc0ca04e5a1fd1aa9770dd3a  README
-diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
-index a726032..b406692 100644
---- a/package/mariadb/mariadb.mk
-+++ b/package/mariadb/mariadb.mk
+diff --git a/package/libzip/0001-Use-cmake-E-tar-to-extract-test-data.patch b/package/libzip/0001-Use-cmake-E-tar-to-extract-test-data.patch
+new file mode 100644
+index 0000000..7d40111
+--- /dev/null
++++ b/package/libzip/0001-Use-cmake-E-tar-to-extract-test-data.patch
+@@ -0,0 +1,40 @@
++From e9244b207c0fc883ff84c1fc46602feb1e2b0347 Mon Sep 17 00:00:00 2001
++From: Thomas Klausner <tk@giga.or.at>
++Date: Wed, 3 Jan 2018 11:41:57 +0100
++Subject: [PATCH] Use 'cmake -E tar' to extract test data.
++
++For easier cross-compilation (Github issue #21).
++
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Patch status: upstream commit e9244b207c0
++
++ regress/CMakeLists.txt | 12 +++---------
++ 1 file changed, 3 insertions(+), 9 deletions(-)
++
++diff --git a/regress/CMakeLists.txt b/regress/CMakeLists.txt
++index e2ce232c774a..3a0d4f77dcf6 100644
++--- a/regress/CMakeLists.txt
+++++ b/regress/CMakeLists.txt
++@@ -51,15 +51,9 @@ ADD_CUSTOM_TARGET(cleanup
++ ADD_CUSTOM_TARGET(testinput
++   ALL
++   VERBATIM
++-  COMMAND ziptool ${CMAKE_CURRENT_SOURCE_DIR}/manyfiles-zip.zip cat 0 > manyfiles.zip
++-  COMMAND ziptool ${CMAKE_CURRENT_SOURCE_DIR}/manyfiles-zip.zip cat 1 > manyfiles-133000.zip
++-  COMMAND ziptool ${CMAKE_CURRENT_SOURCE_DIR}/manyfiles-zip.zip cat 2 > manyfiles-65536.zip
++-  COMMAND ziptool ${CMAKE_CURRENT_SOURCE_DIR}/manyfiles-zip.zip cat 3 > manyfiles-zip64-modulo.zip
++-  COMMAND ziptool ${CMAKE_CURRENT_SOURCE_DIR}/manyfiles-zip.zip cat 4 > manyfiles-zip64.zip
++-  COMMAND ziptool ${CMAKE_CURRENT_SOURCE_DIR}/manyfiles-zip.zip cat 5 > manyfiles-fewer.zip
++-  COMMAND ziptool ${CMAKE_CURRENT_SOURCE_DIR}/manyfiles-zip.zip cat 6 > manyfiles-more.zip
++-  COMMAND ziptool ${CMAKE_CURRENT_SOURCE_DIR}/bigzero-zip.zip cat 0 > bigzero.zip
++-  DEPENDS ziptool ${CMAKE_CURRENT_SOURCE_DIR}/manyfiles-zip.zip ${CMAKE_CURRENT_SOURCE_DIR}/bigzero-zip.zip
+++  COMMAND cmake -E tar x ${CMAKE_CURRENT_SOURCE_DIR}/manyfiles-zip.zip
+++  COMMAND cmake -E tar x ${CMAKE_CURRENT_SOURCE_DIR}/bigzero-zip.zip
+++  DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/manyfiles-zip.zip ${CMAKE_CURRENT_SOURCE_DIR}/bigzero-zip.zip
++ )
++ 
++ SET_PROPERTY(DIRECTORY PROPERTY ADDITIONAL_MAKE_CLEAN_FILES
++-- 
++2.15.1
++
+diff --git a/package/libzip/libzip.hash b/package/libzip/libzip.hash
+index d100982..abfd20f 100644
+--- a/package/libzip/libzip.hash
++++ b/package/libzip/libzip.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256	aa936efe34911be7acac2ab07fb5c8efa53ed9bb4d44ad1fe8bff19630e0d373  libzip-1.3.0.tar.xz
++sha256	e508aba025f5f94b267d5120fc33761bcd98440ebe49dbfe2ed3df3afeacc7b1  libzip-1.4.0.tar.xz
+ sha256  d159ae325ca0b8236c44dfd980ca99810dbcfc057b077c50dbbda1131cbd263a  LICENSE
+diff --git a/package/libzip/libzip.mk b/package/libzip/libzip.mk
+index 5ffa1ca..537aa1d 100644
+--- a/package/libzip/libzip.mk
++++ b/package/libzip/libzip.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MARIADB_VERSION = 10.1.29
-+MARIADB_VERSION = 10.1.30
- MARIADB_SITE = https://downloads.mariadb.org/interstitial/mariadb-$(MARIADB_VERSION)/source
- MARIADB_LICENSE = GPL-2.0 (server), GPL-2.0 with FLOSS exception (GPL client library), LGPL-2.0 (LGPL client library)
- # Tarball no longer contains LGPL license text
+-LIBZIP_VERSION = 1.3.0
++LIBZIP_VERSION = 1.4.0
+ LIBZIP_SITE = http://www.nih.at/libzip
+ LIBZIP_SOURCE = libzip-$(LIBZIP_VERSION).tar.xz
+ LIBZIP_LICENSE = BSD-3-Clause
+@@ -13,10 +13,9 @@ LIBZIP_INSTALL_STAGING = YES
+ LIBZIP_DEPENDENCIES = zlib
+ 
+ ifeq ($(BR2_PACKAGE_BZIP2),y)
+-LIBZIP_CONF_OPTS += --with-bzip2
+ LIBZIP_DEPENDENCIES += bzip2
+ else
+-LIBZIP_CONF_OPTS += --without-bzip2
++LIBZIP_CONF_OPTS += -DCMAKE_DISABLE_FIND_PACKAGE_BZIP2=TRUE
+ endif
+ 
+-$(eval $(autotools-package))
++$(eval $(cmake-package))
