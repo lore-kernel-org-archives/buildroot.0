@@ -1,48 +1,80 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri, 5 Jan 2018 16:03:03 +0200
-Subject: [Buildroot] [PATCH 1/2] nilfs-utils: need NPTL threads
-In-Reply-To: <20180105132050.GB22026@airbook.vandijck-laurijssen.be>
-References: <20180104113336.6b7ed00a@windsurf.lan>
- <20180104105154.l24rvscxbsliquv3@tarshish>
- <20180104112815.GD18339@airbook.vandijck-laurijssen.be>
- <20180104155213.GC3684@scaer>
- <20180104172352.k6u2i3bkfmovgwgm@tarshish>
- <20180104201958.GB5130@waldemar-brodkorb.de>
- <20180105052334.mc3fabifliw7gzqn@tarshish>
- <20180105101708.GF8058@airbook.vandijck-laurijssen.be>
- <20180105112404.i66kqd6ey6es4don@tarshish>
- <20180105132050.GB22026@airbook.vandijck-laurijssen.be>
-Message-ID: <20180105140303.obxm3hqutglt3wun@tarshish>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Fri, 5 Jan 2018 08:29:32 -0600
+Subject: [Buildroot] [PATCH] libselinux: add patch to create a proper
+ pkg-config file
+In-Reply-To: <20180103221529.GA27551@gmail.com>
+References: <20180103210851.26851-1-marcus.folkesson@gmail.com>
+ <20180103222626.305ff910@windsurf.lan> <20180103221529.GA27551@gmail.com>
+Message-ID: <CANQCQpaktisuCN6Ku8G=2f_fj4bjOW_1dc0jeWZemgFP+=+y9g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Kurt,
+Marcus,
 
-On Fri, Jan 05, 2018 at 02:20:50PM +0100, Kurt Van Dijck wrote:
-> > On Fri, Jan 05, 2018 at 11:17:08AM +0100, Kurt Van Dijck wrote:
-> [...] 
-> > I agree. There were a few more unrelated comment on this patch. Please fix and 
-> > repost.
-> 
-> Ok, now I got lost.
-> I cannot find any comments on this ('[PATCH 1/2] ... NPTL threads') patch other
-> than the uclibc remark you had.
-> 
-> Can you indicate the timestamps of the other comments, so I can re-read them.
-> I can't fix anything without those, isn't it?
+On Wed, Jan 3, 2018 at 4:15 PM, Marcus Folkesson
+<marcus.folkesson@gmail.com> wrote:
+>
+> On Wed, Jan 03, 2018 at 10:26:26PM +0100, Thomas Petazzoni wrote:
+> > Hello,
+> >
+[snip]
+> > > + # Installation directories.
+> > > + PREFIX ?= $(DESTDIR)/usr
+> > > ++PCPREFIX ?= $(DESTDIR)/usr
+> > > + LIBDIR ?= $(PREFIX)/lib
+> > > + SHLIBDIR ?= $(DESTDIR)/lib
+> > > +-INCLUDEDIR ?= $(PREFIX)/include
+> > > ++INCLUDEDIR ?= $(PCPREFIX)/include
+> >
+> > Meh, this is messy :-/
+>
+> Yeah.
+>
+> >
+> > Can we instead switch to using the correct semantic for DESTDIR and
+> > PREFIX ? I.e:
+> >
+> >  - PREFIX defines where the program/library will be installed when
+> >    executed.
+> >
+> >  - DESTDIR is only passed at installation, to divert the installation
+> >    to a specific folder.
+> >
+> > I.e, for the target version, PREFIX=/usr DESTDIR=$(TARGET_DIR), and for
+> > the host version, PREFIX=$(HOST_DIR).
+>
 
-My comment are archived in the link below:
+This was really similar to some of the other selinux packages I've had
+to deal with prefix/destdir on, so I took a try at resolving the
+target piece of this (didn't look at the host build).  What I noticed
+is I was getting double include paths, even when the raw PC file looks
+correct.  Examples below
 
-  http://patchwork.ozlabs.org/patch/855530/
+++++++Proposed patch++++++
+https://nopaste.xyz/?c89837863d676de5#0lBP2mX+omzeRvLYNmvgHjxy/ZE1DZcM+21dK2UKVO8=
 
-I refer to the part below the 'depends on' that this patch adds.
++++++Raw libselinux.pc file it generates++++++
+prefix=/usr
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=/usr/include
 
-baruch
+Name: libselinux
+Description: SELinux utility library
+Version: 2.7
+URL: http://userspace.selinuxproject.org/
+Requires.private: libsepol libpcre
+Libs: -L${libdir} -lselinux
+Cflags: -I${includedir}
 
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+++++Output from `output/host/bin/pkg-config -cflags libselinux` using
+my patch.  The initial include looks correct now, but I can't find how
+I'm getting the second.....++++++
+-Ioutput/host/bin/../mips64el-buildroot-linux-gnu/sysroot/usr/include
+-Ioutput/host/bin/../mips64el-buildroot-linux-gnu/sysroot/nvme/rc-buildroot-hardening/output/host/mips64el-buildroot-linux-gnu/sysroot/usr/include
+
+
+Matt
