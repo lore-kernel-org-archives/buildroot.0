@@ -1,85 +1,141 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri,  5 Jan 2018 08:00:04 +0100 (CET)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2018-01-04
-Message-ID: <20180105070004.A3EBB20727@mail.free-electrons.com>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Fri, 5 Jan 2018 08:55:52 +0100
+Subject: [Buildroot] [PATCH 1/1] python-xlib: new package
+In-Reply-To: <20180105000420.20152-1-joseph.kogut@gmail.com>
+References: <20180105000420.20152-1-joseph.kogut@gmail.com>
+Message-ID: <CAGm1_ksEHXZZk9dQCJg3M4qUYxY16VrRAOiHN6X9WccVe_SEtA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
-
-Build statistics for 2018-01-04
-===============================
-
-      branch |  OK | NOK | TIM | TOT |
-      master | 167 |  26 |   5 | 198 |
-   2017.11.x |  15 |   0 |   0 |  15 |
-
-Results for branch 'master'
-===========================
-
-Classification of failures by reason
-------------------------------------
-
-             libostree-2017.15 | 7 
-               tcf-agent-1.6.0 | 3 
-                classpath-0.99 | 2 
-                   gconf-3.2.6 | 2 
-                      qt-4.8.7 | 2 
-              host-erlang-20.0 | 1 
-           host-mono-5.4.0.201 | 1 
-      host-xlib_libXfont-1.5.4 | 1 
-                 libdrm-2.4.89 | 1 
-                 libpqxx-6.0.0 | 1 
-                 mplayer-1.3.0 | 1 
-            nilfs-utils-v2.2.7 | 1 
-                   pcre2-10.30 | 1 
-                    php-7.1.12 | 1 
-                  physfs-3.0.1 | 1 
-         python-watchdog-0.8.3 | 1 
-                  qlibc-v2.4.1 | 1 
-                 setools-4.1.1 | 1 
-wiringpi-96344ff7125182989f... | 1 
-                     xen-4.9.0 | 1 
+Hello Joseph,
 
 
-Detail of failures
-------------------
+On Fri, Jan 5, 2018 at 1:04 AM, Joseph Kogut <joseph.kogut@gmail.com> wrote:
+> Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
+> ---
+>  DEVELOPERS                                      |  1 +
+>  package/Config.in                               |  1 +
+>  package/python-xlib/Config.in                   |  7 +++++++
+>  package/python-xlib/python-xlib.hash            |  6 ++++++
+>  package/python-xlib/python-xlib.mk              | 15 +++++++++++++++
+>  package/python-xlib/remove_setup_requires.patch | 13 +++++++++++++
+>  6 files changed, 43 insertions(+)
+>  create mode 100644 package/python-xlib/Config.in
+>  create mode 100644 package/python-xlib/python-xlib.hash
+>  create mode 100644 package/python-xlib/python-xlib.mk
+>  create mode 100644 package/python-xlib/remove_setup_requires.patch
+>
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index a9a9ac5a39..999e7d3300 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -848,6 +848,7 @@ F:  package/gconf/
+>  F:     package/python-raven/
+>  F:     package/python-schedule/
+>  F:     package/python-websockets/
+> +F:     package/python-xlib/
+>
+>  N:     Johan Derycke <johanderycke@gmail.com>
+>  F:     package/python-libconfig/
+> diff --git a/package/Config.in b/package/Config.in
+> index 37b1e9fe4f..729d660d52 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -941,6 +941,7 @@ menu "External python modules"
+>         source "package/python-whoosh/Config.in"
+>         source "package/python-ws4py/Config.in"
+>         source "package/python-wsaccel/Config.in"
+> +       source "package/python-xlib/Config.in"
+>         source "package/python-xlrd/Config.in"
+>         source "package/python-xlsxwriter/Config.in"
+>         source "package/python-xlutils/Config.in"
+> diff --git a/package/python-xlib/Config.in b/package/python-xlib/Config.in
+> new file mode 100644
+> index 0000000000..3cd83f030c
+> --- /dev/null
+> +++ b/package/python-xlib/Config.in
+> @@ -0,0 +1,7 @@
+> +config BR2_PACKAGE_PYTHON_XLIB
+> +       bool "python-xlib"
+> +       select BR2_PACKAGE_PYTHON_SIX
 
-         arm |                 classpath-0.99 | NOK | http://autobuild.buildroot.net/results/fe7bdb2e1867f35a339ff2da410131eb285b0f20 | ORPH
-     sparc64 |                 classpath-0.99 | NOK | http://autobuild.buildroot.net/results/322e843082c34df7bdc71a8453204ce7062a2812 | ORPH
-         arm |                    gconf-3.2.6 | NOK | http://autobuild.buildroot.net/results/1cd62f9ad5bfc37391d879f4d0df1051e8ff2f3d |     
-         arc |                    gconf-3.2.6 | NOK | http://autobuild.buildroot.net/results/3915e3be9ae7790f9fec0c87a1265621e90b9dea |     
-         arm |               host-erlang-20.0 | NOK | http://autobuild.buildroot.net/results/ae7280ed8d879e9940ef93fd63bd99f1a66eaf87 |     
-         arm |            host-mono-5.4.0.201 | NOK | http://autobuild.buildroot.net/results/e39e160b0fbce73b59d143c5223a9484f202a787 |     
-      xtensa |       host-xlib_libXfont-1.5.4 | TIM | http://autobuild.buildroot.net/results/0c998632938932f7adcfeba4ef8c7b047a6c0e8c |     
-       sparc |                  libdrm-2.4.89 | NOK | http://autobuild.buildroot.net/results/4b47af55e026a05ba6ea10140a786f42fe21c0e1 |     
-    mips64el |              libostree-2017.15 | NOK | http://autobuild.buildroot.net/results/018062bd3d9efad26d82b1888edfdc89bd83228c |     
-    mips64el |              libostree-2017.15 | NOK | http://autobuild.buildroot.net/results/b30a7f68215085f13be59b4761a427a0147754d5 |     
-       nios2 |              libostree-2017.15 | NOK | http://autobuild.buildroot.net/results/09c8283d792eb38b9fb97b03f6a7ac602911bccf |     
-        mips |              libostree-2017.15 | NOK | http://autobuild.buildroot.net/results/38118aa492c7a7fe873bd9fbcdfb0e493a2f5a03 |     
-    mips64el |              libostree-2017.15 | NOK | http://autobuild.buildroot.net/results/dc3ce02c70fb51c76c7b4702f6393d9d56821483 |     
-     aarch64 |              libostree-2017.15 | NOK | http://autobuild.buildroot.net/results/22c0c2e8e3599f8d22ce14714fd15e0283f92d97 |     
-     aarch64 |              libostree-2017.15 | NOK | http://autobuild.buildroot.net/results/9e9d1e6c4909329e385558aaa68be118e7442ef0 |     
-         arm |                  libpqxx-6.0.0 | NOK | http://autobuild.buildroot.net/results/eb6d786d496a0f93160971081690e9201abb021d |     
-        mips |                  mplayer-1.3.0 | NOK | http://autobuild.buildroot.net/results/1cf639131d443ed219f86ee3185cb275d596ff5a |     
-      xtensa |             nilfs-utils-v2.2.7 | NOK | http://autobuild.buildroot.net/results/a9fe41ed428d26ef5500cec9f762c0bae3eebd39 |     
-        m68k |                    pcre2-10.30 | NOK | http://autobuild.buildroot.net/results/6268c0a1b366f68561e71a3eab7ccba8321a7909 | ORPH
-         arm |                     php-7.1.12 | NOK | http://autobuild.buildroot.net/results/c4e6ca15896def0a88361c59331b18c7df8923d0 | ORPH
-         arm |                   physfs-3.0.1 | NOK | http://autobuild.buildroot.net/results/500f58d4bdf096466ce88a9099b89e6b9b632010 |     
-      xtensa |          python-watchdog-0.8.3 | TIM | http://autobuild.buildroot.net/results/baaf8e4cbb9099ca307b7ecc8a81cf184610da3e |     
-         arc |                   qlibc-v2.4.1 | TIM | http://autobuild.buildroot.net/results/27e224e2df6fc58d2aa325d9666ddae256903966 |     
-    mips64el |                       qt-4.8.7 | NOK | http://autobuild.buildroot.net/results/ba595c911042e753abf5780aafd093fede0a5220 | ORPH
-     powerpc |                       qt-4.8.7 | NOK | http://autobuild.buildroot.net/results/d19dfb15d4ff63ee1bc400d2e0eeadeb9c19e7d7 | ORPH
-        i686 |                  setools-4.1.1 | TIM | http://autobuild.buildroot.net/results/0205ce480af81c86f012d917804dbe7f24318e81 |     
-microblazeel |                tcf-agent-1.6.0 | NOK | http://autobuild.buildroot.net/results/d010c2c58e183787e8275d6173b09832db876e6b |     
-microblazeel |                tcf-agent-1.6.0 | NOK | http://autobuild.buildroot.net/results/53f84e00e81e05deeb8e92f5e8f945e0fa32e353 |     
-microblazeel |                tcf-agent-1.6.0 | NOK | http://autobuild.buildroot.net/results/7e9f3087dbed6b2d82a61bdec06f9ee697326db9 |     
-         arc | wiringpi-96344ff7125182989f... | TIM | http://autobuild.buildroot.net/results/8f61bc787bba3234ced35082804637346ffb821f |     
-         arm |                      xen-4.9.0 | NOK | http://autobuild.buildroot.net/results/fc240f19fdc0d899dc3fde8333a42ec7f8d48e16 |     
+please add "# runtime" tag to the selected dependency (see
+https://git.busybox.net/buildroot/tree/package/python-tornado/Config.in
+for the reference)
 
+> +       help
+> +         XLib in pure Python (Py2/Py3 compatible)
+> +
+> +         https://github.com/python-xlib/python-xlib
+> diff --git a/package/python-xlib/python-xlib.hash b/package/python-xlib/python-xlib.hash
+> new file mode 100644
+> index 0000000000..05b407209c
+> --- /dev/null
+> +++ b/package/python-xlib/python-xlib.hash
+> @@ -0,0 +1,6 @@
+> +# md5 from https://pypi.python.org/pypi/python-xlib/json, sha256 locally computed
+> +md5 cdf342aa145c2be0ccae46cfb7b62551 python-xlib-0.21.tar.bz2
+> +sha256 25aad0056172920552c01a163e979b02336abaf47b0792dae9c93ecb29500431 python-xlib-0.21.tar.bz2
+> +# License file, locally calculated
 
--- 
-http://autobuild.buildroot.net
+remove this comment
+
+> +sha256 5ce9459bc19ced99cc9eb135d4f559ed01e336354bdf16dd998be85aa688c233 LICENSE
+> +
+
+remove this empty line
+
+> diff --git a/package/python-xlib/python-xlib.mk b/package/python-xlib/python-xlib.mk
+> new file mode 100644
+> index 0000000000..ca200e6a97
+> --- /dev/null
+> +++ b/package/python-xlib/python-xlib.mk
+> @@ -0,0 +1,15 @@
+> +###############################################################################
+> +#
+> +# python-xlib
+> +#
+> +###############################################################################
+> +
+> +PYTHON_XLIB_VERSION = 0.21
+> +PYTHON_XLIB_SOURCE = python-xlib-$(PYTHON_XLIB_VERSION).tar.bz2
+> +PYTHON_XLIB_SITE = https://pypi.python.org/packages/eb/de/b0eaaea7b8512dc41504db071824eef30293ff55c58d83081ebaebe85a38
+> +PYTHON_XLIB_SETUP_TYPE = setuptools
+> +PYTHON_XLIB_LICENSE = LGPL-2.0+
+> +PYTHON_XLIB_LICENSE_FILES = LICENSE
+> +PYTHON_XLIB_DEPENDENCIES = python-six
+
+this should be PYTHON_XLIB_DEPENDENCIES = host-python-setuptools-scm
+see package/python-jaraco-classes/python-jaraco-classes.mk for the reference
+
+> +
+> +$(eval $(python-package))
+> diff --git a/package/python-xlib/remove_setup_requires.patch b/package/python-xlib/remove_setup_requires.patch
+> new file mode 100644
+> index 0000000000..a2bb4656ac
+> --- /dev/null
+> +++ b/package/python-xlib/remove_setup_requires.patch
+> @@ -0,0 +1,13 @@
+> +diff --git a/setup.py b/setup.py
+> +index 9b4a47e..cac95ba 100644
+> +--- a/setup.py
+> ++++ b/setup.py
+> +@@ -5,7 +5,6 @@ from setuptools import setup
+> +
+> + setup(
+> +     install_requires=['six>=1.10.0'],
+> +-    setup_requires=['setuptools-scm'],
+> +     packages=[
+> +         'Xlib',
+> +         'Xlib.ext',
+> +
+
+remove this patch, as with proper build time dependency you don't need it.
+
+With all these issues fixed you can add my Reviewed-by: Yegor Yefremov
+<yegorslists@googlemail.com> for the v2 patch version.
+
+Yegor
