@@ -1,47 +1,53 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 05 Jan 2018 12:02:41 +0000
-Subject: [Buildroot] [Bug 10636] New: BR2_SYSTEM_DHCP is removed from
- .config and breaks auto eth0
-Message-ID: <bug-10636-163@https.bugs.busybox.net/>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Fri, 5 Jan 2018 13:46:45 +0100
+Subject: [Buildroot] [PATCH 2/3] package/waffle: new package
+In-Reply-To: <20171229232538.03219251@windsurf.lan>
+References: <20171225154923.18773-1-romain.naour@gmail.com>
+ <20171225154923.18773-2-romain.naour@gmail.com>
+ <20171229232538.03219251@windsurf.lan>
+Message-ID: <e33ef32e-c2a5-c0e0-022c-fef144a85550@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=10636
+Hi Thomas,
 
-            Bug ID: 10636
-           Summary: BR2_SYSTEM_DHCP is removed from .config and breaks
-                    auto eth0
-           Product: buildroot
-           Version: 2017.08
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: patrice.blanchardie at gmail.com
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+Le 29/12/2017 ? 23:25, Thomas Petazzoni a ?crit?:
+> Hello,
+> 
+> On Mon, 25 Dec 2017 16:49:22 +0100, Romain Naour wrote:
+>> diff --git a/package/waffle/Config.in b/package/waffle/Config.in
+>> new file mode 100644
+>> index 0000000000..a9799ef43e
+>> --- /dev/null
+>> +++ b/package/waffle/Config.in
+>> @@ -0,0 +1,30 @@
+>> +comment "waffle needs an OpenGL GL or EGL provider"
+>> +	depends on BR2_PACKAGE_XORG7 || BR2_PACKAGE_WAYLAND
+>> +	depends on !BR2_PACKAGE_HAS_LIBGL && !BR2_PACKAGE_HAS_LIBEGL
+>> +
+>> +config BR2_PACKAGE_WAFFLE
+>> +	bool "waffle"
+>> +	depends on BR2_PACKAGE_XORG7 || BR2_PACKAGE_WAYLAND
+>> +	depends on BR2_PACKAGE_HAS_LIBGL || BR2_PACKAGE_HAS_LIBEGL
+>> +	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XORG7
+> 
+> I'm curious: why are you selecting xlib_libX11, but not libxcb, while
+> both seem to be needed for X11 support ?
 
-Hi,
+Indeed but libxcb is selected by xlib_libX11 anyway.
 
-The BR2_SYSTEM_DHCP config is needed if you want the package ifupdown-scripts
-to add automatic eth0 configuration to /etc/network/interfaces.
+I'll add it for the v2.
 
-It's not available in menuconfig.
-If you add it to the defconfig and make, it will be removed. You have to add it
-to the .config manually and make if you want proper files to be generated.
+Best regards,
+Romain
 
-I'm using a custom skeleton and busybox.
-
-Why is it suppressed? Am I doing something wrong?
-
-Thanks, happy new year!
-
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+> 
+> Other than this question, looks good to me.
+> 
+> Thanks!
+> 
+> Thomas
+> 
