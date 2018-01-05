@@ -1,74 +1,52 @@
-From: Jan Heylen <heyleke@gmail.com>
-Date: Fri, 5 Jan 2018 13:57:36 +0100
-Subject: [Buildroot] [PATCH v4 2/2] opentracing-cpp: new package
-In-Reply-To: <20180103214052.7e2e5499@windsurf.lan>
-References: <1515010165-25315-1-git-send-email-heyleke@gmail.com>
- <1515010165-25315-3-git-send-email-heyleke@gmail.com>
- <20180103214052.7e2e5499@windsurf.lan>
-Message-ID: <CAGszK3hp_CMYoO2nqmKx+nzwnss_tVm6LzqEE_85tmhTWDcVmw@mail.gmail.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Fri, 5 Jan 2018 14:03:40 +0100
+Subject: [Buildroot] [PATCH 2/3] package/waffle: new package
+In-Reply-To: <20171229232748.28a799d3@windsurf.lan>
+References: <20171225154923.18773-1-romain.naour@gmail.com>
+ <20171225154923.18773-2-romain.naour@gmail.com>
+ <20171229232748.28a799d3@windsurf.lan>
+Message-ID: <72210198-42a8-d04a-6ea7-b42ac72565c3@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
-
-On Wed, Jan 3, 2018 at 9:40 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
+Le 29/12/2017 ? 23:27, Thomas Petazzoni a ?crit?:
 > Hello,
->
-> On Wed,  3 Jan 2018 21:09:25 +0100, Jan Heylen wrote:
->
->> diff --git a/package/opentracing-cpp/Config.in b/package/opentracing-cpp/Config.in
->> new file mode 100644
->> index 0000000..f13d21b
->> --- /dev/null
->> +++ b/package/opentracing-cpp/Config.in
->> @@ -0,0 +1,16 @@
->> +config BR2_PACKAGE_OPENTRACING_CPP
->> +     bool "opentracing-cpp"
->> +     depends on BR2_INSTALL_LIBSTDCPP
->> +     depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
->> +     depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # exception_ptr
->> +     depends on !BR2_m68k_cf # exception_ptr
->
-> So exception_ptr is not available on m68k coldfire, regardless of the
-> gcc version ?
->
-> If so, we perhaps want to introduce something like:
->
-> config BR2_TOOLCHAIN_HAS_EXECPTION_PTR
->         bool
->         default y
->         depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735
->         depends on !BR2_m68k_cf
->
-> but please confirm first that there really is something special about
-> m68k coldfire.
+> 
+> In fact, another question.
+> 
+> On Mon, 25 Dec 2017 16:49:22 +0100, Romain Naour wrote:
+> 
+>> +config BR2_PACKAGE_WAFFLE
+>> +	bool "waffle"
+>> +	depends on BR2_PACKAGE_XORG7 || BR2_PACKAGE_WAYLAND
+>> +	depends on BR2_PACKAGE_HAS_LIBGL || BR2_PACKAGE_HAS_LIBEGL
+> 
+> You require libgl *or* libegl. What about OpenGL ES ?
+> 
+> Indeed, when you have OpenGL ES, you generally have EGL support as
+> well, but it seems weird that an optional dependency on OpenGL ES is
+> not expressed. I am missing something ?
 
-Done by experiment, in V6 added BR2_m68k_cf to
-BR2_TOOLCHAIN_HAS_GCC_BUG_64735. See V6 op this patchset.
+It's not expressed in the build system.
 
->
->> +     help
->> +       OpenTracing API for C++
->> +
->> +       http://opentracing.io
->> +
->> +comment "opentracing-cpp needs a toolchain w/ C++11"
->
-> This should be:
->
->         opentracing-cpp needs a toolchain w/ C++, gcc >= 4.8"
+We need to enable one of these option while configuring Waffle:
+waffle_has_glx		(OpenGL with X11)
+waffle_has_wayland      (egl with wayland)
+waffle_has_x11_egl      (egl with X11)
+waffle_has_gbm		(mesa3d with EGL support)
 
-Done in V6.
+So, Waffle can't be build with only OpenGLES.
 
->
-> Thanks!
->
+Looking at the code, libGLESv2.so.2 library is loaded at runtime with dlopen().
+I'm not sure how Waffle behave when this library is missing (for example with
+the glx only case).
+
+Best regards,
+Romain
+
+> 
 > Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux and Kernel engineering
-> http://free-electrons.com
+> 
