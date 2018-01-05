@@ -1,45 +1,47 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri,  5 Jan 2018 12:42:53 +0100
-Subject: [Buildroot] [PATCH] gstreamer: bump to version 1.12.4
-Message-ID: <20180105114253.3759-1-peter@korsgaard.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 05 Jan 2018 12:02:41 +0000
+Subject: [Buildroot] [Bug 10636] New: BR2_SYSTEM_DHCP is removed from
+ .config and breaks auto eth0
+Message-ID: <bug-10636-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes #10631
+https://bugs.busybox.net/show_bug.cgi?id=10636
 
-The gstreamer plugins were recently bumped to 1.12.4, but the main
-gstreamer1 package not.  Fix that.
+            Bug ID: 10636
+           Summary: BR2_SYSTEM_DHCP is removed from .config and breaks
+                    auto eth0
+           Product: buildroot
+           Version: 2017.08
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: patrice.blanchardie at gmail.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/gstreamer1/gstreamer1/gstreamer1.hash | 4 ++--
- package/gstreamer1/gstreamer1/gstreamer1.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Hi,
 
-diff --git a/package/gstreamer1/gstreamer1/gstreamer1.hash b/package/gstreamer1/gstreamer1/gstreamer1.hash
-index abcb62e12e..f8af907562 100644
---- a/package/gstreamer1/gstreamer1/gstreamer1.hash
-+++ b/package/gstreamer1/gstreamer1/gstreamer1.hash
-@@ -1,2 +1,2 @@
--# From https://gstreamer.freedesktop.org/src/gstreamer/gstreamer-1.12.3.tar.xz.sha256sum
--sha256 d388f492440897f02b01eebb033ca2d41078a3d85c0eddc030cdea5a337a216e gstreamer-1.12.3.tar.xz
-+# From https://gstreamer.freedesktop.org/src/gstreamer/gstreamer-1.12.4.tar.xz.sha256sum
-+sha256 5a8704aa4c2eeb04da192c4a9942f94f860ac1a585de90d9f914bac26a970674 gstreamer-1.12.4.tar.xz
-diff --git a/package/gstreamer1/gstreamer1/gstreamer1.mk b/package/gstreamer1/gstreamer1/gstreamer1.mk
-index c2da60182a..ea9f29a4f3 100644
---- a/package/gstreamer1/gstreamer1/gstreamer1.mk
-+++ b/package/gstreamer1/gstreamer1/gstreamer1.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GSTREAMER1_VERSION = 1.12.3
-+GSTREAMER1_VERSION = 1.12.4
- GSTREAMER1_SOURCE = gstreamer-$(GSTREAMER1_VERSION).tar.xz
- GSTREAMER1_SITE = https://gstreamer.freedesktop.org/src/gstreamer
- GSTREAMER1_INSTALL_STAGING = YES
+The BR2_SYSTEM_DHCP config is needed if you want the package ifupdown-scripts
+to add automatic eth0 configuration to /etc/network/interfaces.
+
+It's not available in menuconfig.
+If you add it to the defconfig and make, it will be removed. You have to add it
+to the .config manually and make if you want proper files to be generated.
+
+I'm using a custom skeleton and busybox.
+
+Why is it suppressed? Am I doing something wrong?
+
+Thanks, happy new year!
+
 -- 
-2.11.0
+You are receiving this mail because:
+You are on the CC list for the bug.
