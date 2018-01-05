@@ -1,28 +1,21 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 05 Jan 2018 16:11:38 +0100
-Subject: [Buildroot] [PATCH 1/1] mariadb: security bump version to
- 10.1.30
-In-Reply-To: <20180105144726.3756-1-bluemrp9@gmail.com> (Ryan Coe's message of
- "Fri, 5 Jan 2018 06:47:26 -0800")
-References: <20180105144726.3756-1-bluemrp9@gmail.com>
-Message-ID: <87o9m8s5lh.fsf@dell.be.48ers.dk>
+Date: Fri, 05 Jan 2018 16:12:13 +0100
+Subject: [Buildroot] [PATCH] mpd: bump to version 0.20.14
+In-Reply-To: <20180104104023.2676-1-joerg.krause@embedded.rocks>
+ (=?utf-8?Q?=22J=C3=B6rg?=
+ Krause"'s message of "Thu, 4 Jan 2018 11:40:23 +0100")
+References: <20180104104023.2676-1-joerg.krause@embedded.rocks>
+Message-ID: <87k1wws5ki.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Ryan" == Ryan Coe <bluemrp9@gmail.com> writes:
+>>>>> "J?rg" == J?rg Krause <joerg.krause@embedded.rocks> writes:
 
- > Release notes: https://mariadb.com/kb/en/mariadb-10130-release-notes/
- > Changelog: https://mariadb.com/kb/en/mariadb-10130-changelog/
-
- > Fixes the following security vulnerability:
-
- > CVE-2017-15365 - Replication in sql/event_data_objects.cc occurs before ACL
- > checks.
-
- > Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
+ > Remove upstream patch '0002-libupnp-1-6-24-compat.patch'.
+ > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 
 Committed, thanks.
 
