@@ -1,58 +1,38 @@
-From: Johannes Schmitz <johannes.schmitz1@gmail.com>
-Date: Fri,  5 Jan 2018 17:38:25 +0100
-Subject: [Buildroot] [PATCH 2/2] toolchain: Fix toolchain to create proper
- builds for MIPS XBurst targets
-Message-ID: <1515170305-25742-1-git-send-email-johannes.schmitz1@gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 05 Jan 2018 16:58:51 +0000
+Subject: [Buildroot] [Bug 10636] BR2_SYSTEM_DHCP is removed from .config and
+ breaks auto eth0
+In-Reply-To: <bug-10636-163@https.bugs.busybox.net/>
+References: <bug-10636-163@https.bugs.busybox.net/>
+Message-ID: <bug-10636-163-CXkwO6e7LY@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch is need for example for ci20, -mfused-madd is deprecated, we
-need to use -ffp-contract instead.
+https://bugs.busybox.net/show_bug.cgi?id=10636
 
-This is basically a resubmission of
-https://patchwork.ozlabs.org/patch/800406/
+Yann E. MORIN <yann.morin.1998@free.fr> changed:
 
-Please consider accepting the original patch, otherwise buildroot is
-basically broken for ci20 and similar platforms.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+                 CC|                            |yann.morin.1998 at free.fr
+         Resolution|---                         |INVALID
 
-Signed-off-by: Johannes Schmitz <johannes.schmitz1@gmail.com>
----
- toolchain/toolchain-wrapper.c  | 4 ++--
- toolchain/toolchain-wrapper.mk | 3 ++-
- 2 files changed, 4 insertions(+), 3 deletions(-)
+--- Comment #3 from Yann E. MORIN <yann.morin.1998@free.fr> ---
+Patrice,
 
-diff --git a/toolchain/toolchain-wrapper.c b/toolchain/toolchain-wrapper.c
-index 2928ea4..822bcdc 100644
---- a/toolchain/toolchain-wrapper.c
-+++ b/toolchain/toolchain-wrapper.c
-@@ -79,8 +79,8 @@ static char *predef_args[] = {
- #ifdef BR_OMIT_LOCK_PREFIX
- 	"-Wa,-momit-lock-prefix=yes",
- #endif
--#ifdef BR_NO_FUSED_MADD
--	"-mno-fused-madd",
-+#ifdef BR_FP_CONTRACT_OFF
-+   "-ffp-contract=off",
- #endif
- #ifdef BR_BINFMT_FLAT
- 	"-Wl,-elf2flt",
-diff --git a/toolchain/toolchain-wrapper.mk b/toolchain/toolchain-wrapper.mk
-index 7f72a0c..ecf67a4 100644
---- a/toolchain/toolchain-wrapper.mk
-+++ b/toolchain/toolchain-wrapper.mk
-@@ -27,8 +27,9 @@ TOOLCHAIN_WRAPPER_ARGS += -DBR_OMIT_LOCK_PREFIX
- endif
- 
- # Avoid FPU bug on XBurst CPUs
-+# -mfused-madd is deprecated, use -ffp-contract instead
- ifeq ($(BR2_mips_xburst),y)
--TOOLCHAIN_WRAPPER_ARGS += -DBR_NO_FUSED_MADD
-+TOOLCHAIN_WRAPPER_ARGS += -DBR_FP_CONTRACT_OFF
- endif
- 
- ifeq ($(BR2_CCACHE_USE_BASEDIR),y)
+BR2_SYSTEM_DHCP is only available if you use the default skeleton, and any
+of busybox, ifupdown or systemd-networkd package.
+
+If you use your own custom skeleton, you are responsible for providing the
+necessary files (usually /etc/network/interfaces) in your custom skeleton.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.7.4
+You are receiving this mail because:
+You are on the CC list for the bug.
