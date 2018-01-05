@@ -1,53 +1,74 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Fri, 5 Jan 2018 13:46:45 +0100
-Subject: [Buildroot] [PATCH 2/3] package/waffle: new package
-In-Reply-To: <20171229232538.03219251@windsurf.lan>
-References: <20171225154923.18773-1-romain.naour@gmail.com>
- <20171225154923.18773-2-romain.naour@gmail.com>
- <20171229232538.03219251@windsurf.lan>
-Message-ID: <e33ef32e-c2a5-c0e0-022c-fef144a85550@gmail.com>
+From: Jan Heylen <heyleke@gmail.com>
+Date: Fri, 5 Jan 2018 13:57:36 +0100
+Subject: [Buildroot] [PATCH v4 2/2] opentracing-cpp: new package
+In-Reply-To: <20180103214052.7e2e5499@windsurf.lan>
+References: <1515010165-25315-1-git-send-email-heyleke@gmail.com>
+ <1515010165-25315-3-git-send-email-heyleke@gmail.com>
+ <20180103214052.7e2e5499@windsurf.lan>
+Message-ID: <CAGszK3hp_CMYoO2nqmKx+nzwnss_tVm6LzqEE_85tmhTWDcVmw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hello,
 
-Le 29/12/2017 ? 23:25, Thomas Petazzoni a ?crit?:
+On Wed, Jan 3, 2018 at 9:40 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
 > Hello,
-> 
-> On Mon, 25 Dec 2017 16:49:22 +0100, Romain Naour wrote:
->> diff --git a/package/waffle/Config.in b/package/waffle/Config.in
+>
+> On Wed,  3 Jan 2018 21:09:25 +0100, Jan Heylen wrote:
+>
+>> diff --git a/package/opentracing-cpp/Config.in b/package/opentracing-cpp/Config.in
 >> new file mode 100644
->> index 0000000000..a9799ef43e
+>> index 0000000..f13d21b
 >> --- /dev/null
->> +++ b/package/waffle/Config.in
->> @@ -0,0 +1,30 @@
->> +comment "waffle needs an OpenGL GL or EGL provider"
->> +	depends on BR2_PACKAGE_XORG7 || BR2_PACKAGE_WAYLAND
->> +	depends on !BR2_PACKAGE_HAS_LIBGL && !BR2_PACKAGE_HAS_LIBEGL
+>> +++ b/package/opentracing-cpp/Config.in
+>> @@ -0,0 +1,16 @@
+>> +config BR2_PACKAGE_OPENTRACING_CPP
+>> +     bool "opentracing-cpp"
+>> +     depends on BR2_INSTALL_LIBSTDCPP
+>> +     depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
+>> +     depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # exception_ptr
+>> +     depends on !BR2_m68k_cf # exception_ptr
+>
+> So exception_ptr is not available on m68k coldfire, regardless of the
+> gcc version ?
+>
+> If so, we perhaps want to introduce something like:
+>
+> config BR2_TOOLCHAIN_HAS_EXECPTION_PTR
+>         bool
+>         default y
+>         depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735
+>         depends on !BR2_m68k_cf
+>
+> but please confirm first that there really is something special about
+> m68k coldfire.
+
+Done by experiment, in V6 added BR2_m68k_cf to
+BR2_TOOLCHAIN_HAS_GCC_BUG_64735. See V6 op this patchset.
+
+>
+>> +     help
+>> +       OpenTracing API for C++
 >> +
->> +config BR2_PACKAGE_WAFFLE
->> +	bool "waffle"
->> +	depends on BR2_PACKAGE_XORG7 || BR2_PACKAGE_WAYLAND
->> +	depends on BR2_PACKAGE_HAS_LIBGL || BR2_PACKAGE_HAS_LIBEGL
->> +	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XORG7
-> 
-> I'm curious: why are you selecting xlib_libX11, but not libxcb, while
-> both seem to be needed for X11 support ?
+>> +       http://opentracing.io
+>> +
+>> +comment "opentracing-cpp needs a toolchain w/ C++11"
+>
+> This should be:
+>
+>         opentracing-cpp needs a toolchain w/ C++, gcc >= 4.8"
 
-Indeed but libxcb is selected by xlib_libX11 anyway.
+Done in V6.
 
-I'll add it for the v2.
-
-Best regards,
-Romain
-
-> 
-> Other than this question, looks good to me.
-> 
+>
 > Thanks!
-> 
+>
 > Thomas
-> 
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux and Kernel engineering
+> http://free-electrons.com
