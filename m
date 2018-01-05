@@ -1,254 +1,193 @@
 From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Fri,  5 Jan 2018 15:39:36 +0100
-Subject: [Buildroot] [PATCH v2 04/15] imx-gpu-viv: bump to version 6.2.2.p0
+Date: Fri,  5 Jan 2018 15:39:38 +0100
+Subject: [Buildroot] [PATCH v2 06/15] xdriver_xf86-video-imx-viv: bump to
+ version 6.2.2.p0
 In-Reply-To: <20180105143947.26934-1-gary.bisson@boundarydevices.com>
 References: <20180105143947.26934-1-gary.bisson@boundarydevices.com>
-Message-ID: <20180105143947.26934-5-gary.bisson@boundarydevices.com>
+Message-ID: <20180105143947.26934-7-gary.bisson@boundarydevices.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-New features:
-- Added mutex protection for referencing gctSIGNAL in gckOS_MapSignal to
-  fix a MT race issue.
-- Streamlined GPU address calculation base on MC20 (0/1) and MMU (0/1)
-  combinations.
-- Fixed multiple Android HWC 2.0 rendering issues. Refined HWC 2.0 driver
-  implementation.
-- Improved HWC2.0 composition performance by composing damaged regions
-  only.
-- Enabled offline/online compiler IR assembly dump function for users.
-- Implemented the direct rendering support (no-resolve) for Wayland
-  platform.
-- Added EGL_EXT_buffer_age extension for Wayland and fbdev platforms.
-- Updated wayland-viv protocol to support tile status sync from client
-  to server.
-- Improved OpenCL 1.2 builtin function support with native GPU
-  instructions.
-- Enabled OpenCL 1.2 API trace dump function controlled by VIV_TRACE
-  environment variable.
-- Support for OpenGL4.0
-- Cleaned up driver code issues reported by Klocwork and Coverity.
+The following xorg.conf was used in order to force the use of the
+vivante module:
+https://github.com/Freescale/meta-freescale/blob/master/recipes-graphics/xorg-xserver/xserver-xf86-config/mx6/xorg.conf
 
-Full changelog:
-http://git.freescale.com/git/cgit.cgi/imx/fsl-arm-yocto-bsp.git/tree/GraphicsChangeLogv6?h=imx-morty
-
-Note that the apitrace tool and the G2D libraries are not part of the
-package any longer. Those will be added as separate packages later on.
-
-This package has been tested with both X11 and Framebuffer backends:
+Note that the X server must be started with the "noreset" option to
+avoid crashes when closing X apps.
+Tested with:
+ # X -noreset &
  # cd /usr/share/examples/viv_samples/vdk/
- # ./tutorial7
- # gmem_info
- ... display memory use per PID ...
+ # DISPLAY=:0 ./tutorial7
 
-Also update packages that depended on g2d libraries to match new package
-name.
+Note that this package patch is removed as now upstream:
+https://source.codeaurora.org/external/imx/xf86-video-imx-vivante/commit/?id=70ebd67c
 
+Cc: J?r?me Pouiller <jezz@sysmic.org>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
 ---
-Changelog v2:
-- Add missing Config.in.legacy options (Thomas)
-- Squash gst1-imx changes (Thomas)
----
- Config.in.legacy                                   | 14 +++++++++
- package/freescale-imx/imx-gpu-viv/Config.in        | 16 ----------
- package/freescale-imx/imx-gpu-viv/imx-gpu-viv.hash |  2 +-
- package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk   | 36 ++--------------------
- package/gstreamer1/gst1-imx/Config.in              |  6 ++--
- package/gstreamer1/gst1-imx/gst1-imx.mk            |  4 +++
- 6 files changed, 25 insertions(+), 53 deletions(-)
+ ...001-Stop-using-Git-to-write-local-version.patch | 90 ----------------------
+ package/x11r7/xdriver_xf86-video-imx-viv/Config.in |  7 ++
+ .../xdriver_xf86-video-imx-viv.hash                |  2 +-
+ .../xdriver_xf86-video-imx-viv.mk                  | 10 +--
+ 4 files changed, 13 insertions(+), 96 deletions(-)
+ delete mode 100644 package/x11r7/xdriver_xf86-video-imx-viv/0001-Stop-using-Git-to-write-local-version.patch
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 1f83c0dfd2..1833c7246b 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -161,6 +161,20 @@ config BR2_PACKAGE_GNUPG2_GPGV2
- 	  The gpgv2 executable is now named gpgv. The config option
- 	  has been renamed accordingly.
- 
-+config BR2_PACKAGE_IMX_GPU_VIV_APITRACE
-+	bool "Vivante apitrace tool option removed"
-+	select BR2_LEGACY
-+	help
-+	  The apitrace tool for Vivante is not provided by the
-+	  imx-gpu-viv package any longer.
+diff --git a/package/x11r7/xdriver_xf86-video-imx-viv/0001-Stop-using-Git-to-write-local-version.patch b/package/x11r7/xdriver_xf86-video-imx-viv/0001-Stop-using-Git-to-write-local-version.patch
+deleted file mode 100644
+index 2117e725cd..0000000000
+--- a/package/x11r7/xdriver_xf86-video-imx-viv/0001-Stop-using-Git-to-write-local-version.patch
++++ /dev/null
+@@ -1,90 +0,0 @@
+-From 69a92f4576a1e789ba2fcf957164d2c4013020c5 Mon Sep 17 00:00:00 2001
+-From: Otavio Salvador <otavio@ossystems.com.br>
+-Date: Wed, 2 Dec 2015 13:36:25 +0000
+-Subject: [PATCH] Stop using Git to write local version
+-Organization: O.S. Systems Software LTDA.
+-
+-The standard version does not use a Git repository so we should not
+-use Git to identify the commit of the build as it can end getting the
+-version from a wrong repository and can be misleading.
+-
+-Upstream-Status: Pending
+-
+-Signed-off-by: Otavio Salvador <otavio@ossystems.com.br>
+-[Downloaded from
+-https://github.com/Freescale/meta-fsl-arm/blob/master/recipes-graphics/xorg-driver/xf86-video-imxfb-vivante/Stop-using-Git-to-write-local-version.patch]
+-Signed-off-by: Andrew Webster <awebster@arcx.com>
+----
+- EXA/src/makefile.tc         | 6 +++---
+- FslExt/src/makefile.tc      | 6 +++---
+- util/autohdmi/makefile.tc   | 6 +++---
+- util/pandisplay/makefile.tc | 6 +++---
+- 4 files changed, 12 insertions(+), 12 deletions(-)
+-
+-diff --git a/EXA/src/makefile.tc b/EXA/src/makefile.tc
+-index 0b9a9e6..ec6e68d 100644
+---- a/EXA/src/makefile.tc
+-+++ b/EXA/src/makefile.tc
+-@@ -52,8 +52,8 @@ prefix ?= /usr
+- sysroot ?= /
+- 
+- # get git commit number
+--COMMITNR := `git log -n 1 --format=%H`
+--DIRTY := `git diff-index --quiet HEAD || echo '-dirty'`
+--LOCAL_CFLAGS += -DCOMMIT="${COMMITNR}${DIRTY}"
+-+#COMMITNR := `git log -n 1 --format=%H`
+-+#DIRTY := `git diff-index --quiet HEAD || echo '-dirty'`
+-+#LOCAL_CFLAGS += -DCOMMIT="${COMMITNR}${DIRTY}"
+- 
+- 
+-diff --git a/FslExt/src/makefile.tc b/FslExt/src/makefile.tc
+-index 0b9a9e6..ec6e68d 100644
+---- a/FslExt/src/makefile.tc
+-+++ b/FslExt/src/makefile.tc
+-@@ -52,8 +52,8 @@ prefix ?= /usr
+- sysroot ?= /
+- 
+- # get git commit number
+--COMMITNR := `git log -n 1 --format=%H`
+--DIRTY := `git diff-index --quiet HEAD || echo '-dirty'`
+--LOCAL_CFLAGS += -DCOMMIT="${COMMITNR}${DIRTY}"
+-+#COMMITNR := `git log -n 1 --format=%H`
+-+#DIRTY := `git diff-index --quiet HEAD || echo '-dirty'`
+-+#LOCAL_CFLAGS += -DCOMMIT="${COMMITNR}${DIRTY}"
+- 
+- 
+-diff --git a/util/autohdmi/makefile.tc b/util/autohdmi/makefile.tc
+-index c9de0a6..d0a468c 100644
+---- a/util/autohdmi/makefile.tc
+-+++ b/util/autohdmi/makefile.tc
+-@@ -64,8 +64,8 @@ prefix ?= /usr
+- sysroot ?= /
+- 
+- # get git commit number
+--COMMITNR := `git log -n 1 --format=%H`
+--DIRTY := `git diff-index --quiet HEAD || echo '-dirty'`
+--LOCAL_CFLAGS += -DCOMMIT="${COMMITNR}${DIRTY}"
+-+#COMMITNR := `git log -n 1 --format=%H`
+-+#DIRTY := `git diff-index --quiet HEAD || echo '-dirty'`
+-+#LOCAL_CFLAGS += -DCOMMIT="${COMMITNR}${DIRTY}"
+- 
+- 
+-diff --git a/util/pandisplay/makefile.tc b/util/pandisplay/makefile.tc
+-index 28732b9..bf54c20 100644
+---- a/util/pandisplay/makefile.tc
+-+++ b/util/pandisplay/makefile.tc
+-@@ -64,8 +64,8 @@ prefix ?= /usr
+- sysroot ?= /
+- 
+- # get git commit number
+--COMMITNR := `git log -n 1 --format=%H`
+--DIRTY := `git diff-index --quiet HEAD || echo '-dirty'`
+--LOCAL_CFLAGS += -DCOMMIT="${COMMITNR}${DIRTY}"
+-+#COMMITNR := `git log -n 1 --format=%H`
+-+#DIRTY := `git diff-index --quiet HEAD || echo '-dirty'`
+-+#LOCAL_CFLAGS += -DCOMMIT="${COMMITNR}${DIRTY}"
+- 
+- 
+--- 
+-2.1.4
+-
+diff --git a/package/x11r7/xdriver_xf86-video-imx-viv/Config.in b/package/x11r7/xdriver_xf86-video-imx-viv/Config.in
+index c3746a100f..5a0257305c 100644
+--- a/package/x11r7/xdriver_xf86-video-imx-viv/Config.in
++++ b/package/x11r7/xdriver_xf86-video-imx-viv/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_IMX_VIV
+ 	bool "xf86-video-imx-viv"
+ 	depends on BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_X11
++	depends on BR2_PACKAGE_IMX_GPU_G2D
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_1 # mesa3d
+ 	select BR2_PACKAGE_MESA3D # Needed in order to compile xorg with glx/dri
+ 	select BR2_PACKAGE_MESA3D_DRI_DRIVER
+@@ -32,3 +33,9 @@ comment "xf86-video-imx-viv depends on imx-gpu-viv with X11 output"
+ 	depends on BR2_arm
+ 	depends on !BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_X11
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_1
 +
-+config BR2_PACKAGE_IMX_GPU_VIV_G2D
-+	bool "Vivante G2D libraries from imx-gpu-viv removed"
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_IMX_GPU_G2D
-+	help
-+	  The G2D libraries are now provided by the imx-gpu-g2d package.
-+
- ###############################################################################
- comment "Legacy options removed in 2017.11"
- 
-diff --git a/package/freescale-imx/imx-gpu-viv/Config.in b/package/freescale-imx/imx-gpu-viv/Config.in
-index dba378c2d2..cf58ad475c 100644
---- a/package/freescale-imx/imx-gpu-viv/Config.in
-+++ b/package/freescale-imx/imx-gpu-viv/Config.in
-@@ -60,17 +60,6 @@ config BR2_PACKAGE_PROVIDES_LIBGLES
- config BR2_PACKAGE_PROVIDES_LIBOPENVG
- 	default "imx-gpu-viv"
- 
--config BR2_PACKAGE_IMX_GPU_VIV_APITRACE
--	bool "install apitrace tools"
--	select BR2_PACKAGE_IMX_GPU_VIV_G2D
--	select BR2_PACKAGE_LIBPNG
--	help
--	  Copy the apitrace tool to the target. Apitrace consists
--	  of a set of tools to trace, replay and/or inspect OpenGL,
--	  OpenGL ES APIs calls
--
--	  http://apitrace.github.io/
--
- config BR2_PACKAGE_IMX_GPU_VIV_EXAMPLES
- 	bool "install examples"
- 	help
-@@ -78,11 +67,6 @@ config BR2_PACKAGE_IMX_GPU_VIV_EXAMPLES
- 
- 	  Warning: examples take approximately 150 MB of disk space.
- 
--config BR2_PACKAGE_IMX_GPU_VIV_G2D
--	bool "install G2D libraries"
--	help
--	  Copy the GPU2D libraries to the target.
--
- config BR2_PACKAGE_IMX_GPU_VIV_GMEM_INFO
- 	bool "install gmem_info tool"
- 	help
-diff --git a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.hash b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.hash
-index 6c526c5876..894bc90dae 100644
---- a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.hash
-+++ b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.hash
++comment "xf86-video-imx-viv depends on imx-gpu-g2d"
++	depends on BR2_arm
++	depends on !BR2_PACKAGE_IMX_GPU_G2D
++	depends on BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_X11
++	depends on BR2_TOOLCHAIN_HAS_SYNC_1
+diff --git a/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.hash b/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.hash
+index 7d7da84e6b..be41cb091b 100644
+--- a/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.hash
++++ b/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.hash
 @@ -1 +1 @@
--sha256	caaabd59a259e29aa5b7f9d1d7f3fe71cff9336ba44904485d258baef276351f  imx-gpu-viv-5.0.11.p8.6-hfp.bin
-+sha256	4f93a4412c93ca5959aa2437bfed2ecbaf983b5b272be5977f76a967de5db150  imx-gpu-viv-6.2.2.p0-aarch32.bin
-diff --git a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
-index 961f574c8b..5d3d9c671b 100644
---- a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
-+++ b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
-@@ -4,7 +4,7 @@
+-sha256	3eed38193e31bb5ba8d2c817bd9b4f6e2fe7540d2cab36de9098cb4f11946a9f  xserver-xorg-video-imx-viv-5.0.11.p8.6.tar.gz
++sha256	61b3a7a22f80d1cbc797c329615e1699f3906c9261de7eabcf0de2bf2399de55  xdriver_xf86-video-imx-viv-rel_imx_4.9.x_1.0.0_ga.tar.gz
+diff --git a/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk b/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk
+index b31d98fbf4..222d74ac4b 100644
+--- a/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk
++++ b/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk
+@@ -4,10 +4,10 @@
  #
  ################################################################################
  
--IMX_GPU_VIV_VERSION = 5.0.11.p8.6-hfp
-+IMX_GPU_VIV_VERSION = 6.2.2.p0-aarch32
- IMX_GPU_VIV_SITE = $(FREESCALE_IMX_SITE)
- IMX_GPU_VIV_SOURCE = imx-gpu-viv-$(IMX_GPU_VIV_VERSION).bin
- 
-@@ -45,6 +45,7 @@ define IMX_GPU_VIV_BUILD_CMDS
- 	ln -sf libGLESv2-$(IMX_GPU_VIV_LIB_TARGET).so $(@D)/gpu-core/usr/lib/libGLESv2.so.2.0.0
- 	ln -sf libVIVANTE-$(IMX_GPU_VIV_LIB_TARGET).so $(@D)/gpu-core/usr/lib/libVIVANTE.so
- 	ln -sf libGAL-$(IMX_GPU_VIV_LIB_TARGET).so $(@D)/gpu-core/usr/lib/libGAL.so
-+	ln -sf libVDK-$(IMX_GPU_VIV_LIB_TARGET).so $(@D)/gpu-core/usr/lib/libVDK.so
+-XDRIVER_XF86_VIDEO_IMX_VIV_VERSION = 5.0.11.p8.6
+-XDRIVER_XF86_VIDEO_IMX_VIV_SITE = $(FREESCALE_IMX_SITE)
+-XDRIVER_XF86_VIDEO_IMX_VIV_SOURCE = xserver-xorg-video-imx-viv-$(XDRIVER_XF86_VIDEO_IMX_VIV_VERSION).tar.gz
+-XDRIVER_XF86_VIDEO_IMX_VIV_DEPENDENCIES = imx-gpu-viv xserver_xorg-server \
++XDRIVER_XF86_VIDEO_IMX_VIV_VERSION = rel_imx_4.9.x_1.0.0_ga
++XDRIVER_XF86_VIDEO_IMX_VIV_SITE = https://source.codeaurora.org/external/imx/xf86-video-imx-vivante
++XDRIVER_XF86_VIDEO_IMX_VIV_SITE_METHOD = git
++XDRIVER_XF86_VIDEO_IMX_VIV_DEPENDENCIES = imx-gpu-viv imx-gpu-g2d xserver_xorg-server \
+ 	xproto_xproto xproto_xf86driproto libdrm
+ XDRIVER_XF86_VIDEO_IMX_VIV_LICENSE = MIT
+ XDRIVER_XF86_VIDEO_IMX_VIV_LICENSE_FILES = COPYING-MIT
+@@ -17,7 +17,7 @@ XDRIVER_XF86_VIDEO_IMX_VIV_MAKE_CMD = $(TARGET_CONFIGURE_OPTS) $(MAKE1) -C $(@D)
+ define XDRIVER_XF86_VIDEO_IMX_VIV_BUILD_CMDS
+ 	$(XDRIVER_XF86_VIDEO_IMX_VIV_MAKE_CMD) sysroot=$(STAGING_DIR) \
+ 		BUSID_HAS_NUMBER=1 BUILD_IN_YOCTO=1 XSERVER_GREATER_THAN_13=1 \
+-		CFLAGS="$(TARGET_CFLAGS) -I$(@D)/DRI_1.10.4/src"
++		CFLAGS="$(TARGET_CFLAGS)"
  endef
  
- ifeq ($(IMX_GPU_VIV_LIB_TARGET),fb)
-@@ -56,17 +57,9 @@ define IMX_GPU_VIV_FIXUP_FB_HEADERS
- endef
- endif
- 
--ifeq ($(BR2_PACKAGE_IMX_GPU_VIV_G2D),y)
--define IMX_GPU_VIV_INSTALL_G2D_STAGING
--	cp -dpfr $(@D)/g2d/usr/include/* $(STAGING_DIR)/usr/include/
--	cp -dpfr $(@D)/g2d/usr/lib/* $(STAGING_DIR)/usr/lib/
--endef
--endif
--
- define IMX_GPU_VIV_INSTALL_STAGING_CMDS
- 	cp -r $(@D)/gpu-core/usr/* $(STAGING_DIR)/usr
- 	$(IMX_GPU_VIV_FIXUP_FB_HEADERS)
--	$(IMX_GPU_VIV_INSTALL_G2D_STAGING)
- 	for lib in egl glesv2 vg; do \
- 		$(INSTALL) -m 0644 -D \
- 			$(@D)/gpu-core/usr/lib/pkgconfig/$${lib}.pc \
-@@ -74,21 +67,6 @@ define IMX_GPU_VIV_INSTALL_STAGING_CMDS
- 	done
- endef
- 
--ifeq ($(BR2_PACKAGE_IMX_GPU_VIV_APITRACE),y)
--IMX_GPU_VIV_DEPENDENCIES += libpng
--ifeq ($(IMX_GPU_VIV_LIB_TARGET),x11)
--define IMX_GPU_VIV_INSTALL_APITRACE
--	cp -dpfr $(@D)/apitrace/x11/usr/bin/* $(TARGET_DIR)/usr/bin/
--	cp -dpfr $(@D)/apitrace/x11/usr/lib/* $(TARGET_DIR)/usr/lib/
--endef
--else
--define IMX_GPU_VIV_INSTALL_APITRACE
--	cp -dpfr $(@D)/apitrace/non-x11/usr/bin/* $(TARGET_DIR)/usr/bin/
--	cp -dpfr $(@D)/apitrace/non-x11/usr/lib/* $(TARGET_DIR)/usr/lib/
--endef
--endif
--endif
--
- ifeq ($(BR2_PACKAGE_IMX_GPU_VIV_EXAMPLES),y)
- define IMX_GPU_VIV_INSTALL_EXAMPLES
- 	mkdir -p $(TARGET_DIR)/usr/share/examples/
-@@ -96,12 +74,6 @@ define IMX_GPU_VIV_INSTALL_EXAMPLES
- endef
- endif
- 
--ifeq ($(BR2_PACKAGE_IMX_GPU_VIV_G2D),y)
--define IMX_GPU_VIV_INSTALL_G2D
--	cp -dpfr $(@D)/g2d/usr/lib/* $(TARGET_DIR)/usr/lib/
--endef
--endif
--
- ifeq ($(BR2_PACKAGE_IMX_GPU_VIV_GMEM_INFO),y)
- define IMX_GPU_VIV_INSTALL_GMEM_INFO
- 	cp -dpfr $(@D)/gpu-tools/gmem-info/usr/bin/* $(TARGET_DIR)/usr/bin/
-@@ -112,12 +84,10 @@ endif
- # Note that this is _required_, else ldconfig may create symlinks
- # to the wrong library
- define IMX_GPU_VIV_INSTALL_TARGET_CMDS
--	$(IMX_GPU_VIV_INSTALL_APITRACE)
- 	$(IMX_GPU_VIV_INSTALL_EXAMPLES)
--	$(IMX_GPU_VIV_INSTALL_G2D)
- 	$(IMX_GPU_VIV_INSTALL_GMEM_INFO)
- 	cp -a $(@D)/gpu-core/usr/lib $(TARGET_DIR)/usr
--	for lib in EGL GAL VIVANTE GLESv2; do \
-+	for lib in EGL GAL VIVANTE GLESv2 VDK; do \
- 		for f in $(TARGET_DIR)/usr/lib/lib$${lib}-*.so; do \
- 			case $$f in \
- 				*-$(IMX_GPU_VIV_LIB_TARGET).so) : ;; \
-diff --git a/package/gstreamer1/gst1-imx/Config.in b/package/gstreamer1/gst1-imx/Config.in
-index e4cee05b90..7b46233b53 100644
---- a/package/gstreamer1/gst1-imx/Config.in
-+++ b/package/gstreamer1/gst1-imx/Config.in
-@@ -27,12 +27,12 @@ comment "imxeglvivsink needs the Vivante 3D libraries"
- 
- config BR2_PACKAGE_GST1_IMX_G2D
- 	bool "imxg2d"
--	depends on BR2_PACKAGE_IMX_GPU_VIV_G2D
-+	depends on BR2_PACKAGE_IMX_GPU_G2D
- 	help
- 	  Elements leveraging the 2D GPU
- 
--comment "imxg2d needs the Vivante 2D libraries"
--	depends on !BR2_PACKAGE_IMX_GPU_VIV_G2D
-+comment "imxg2d needs the G2D libraries"
-+	depends on !BR2_PACKAGE_IMX_GPU_G2D
- 
- config BR2_PACKAGE_GST1_IMX_IPU
- 	bool "imxipu"
-diff --git a/package/gstreamer1/gst1-imx/gst1-imx.mk b/package/gstreamer1/gst1-imx/gst1-imx.mk
-index a8fe6fe041..43b4d9b15f 100644
---- a/package/gstreamer1/gst1-imx/gst1-imx.mk
-+++ b/package/gstreamer1/gst1-imx/gst1-imx.mk
-@@ -33,6 +33,10 @@ ifeq ($(BR2_PACKAGE_IMX_GPU_VIV),y)
- GST1_IMX_DEPENDENCIES += imx-gpu-viv
- endif
- 
-+ifeq ($(BR2_PACKAGE_IMX_GPU_G2D),y)
-+GST1_IMX_DEPENDENCIES += imx-gpu-g2d
-+endif
-+
- ifeq ($(BR2_PACKAGE_GST1_IMX_EGLVISINK),y)
- # There's no --enable-eglvivsink option
- ifeq ($(BR2_PACKAGE_XLIB_LIBX11),y)
+ define XDRIVER_XF86_VIDEO_IMX_VIV_INSTALL_STAGING_CMDS
 -- 
 2.15.1
