@@ -1,5 +1,5 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 5 Jan 2018 11:31:42 +0100
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Fri, 5 Jan 2018 13:24:04 +0200
 Subject: [Buildroot] [PATCH 1/2] nilfs-utils: need NPTL threads
 In-Reply-To: <20180105101708.GF8058@airbook.vandijck-laurijssen.be>
 References: <1515060652-22472-1-git-send-email-dev.kurt@vandijck-laurijssen.be>
@@ -12,23 +12,26 @@ References: <1515060652-22472-1-git-send-email-dev.kurt@vandijck-laurijssen.be>
  <20180104201958.GB5130@waldemar-brodkorb.de>
  <20180105052334.mc3fabifliw7gzqn@tarshish>
  <20180105101708.GF8058@airbook.vandijck-laurijssen.be>
-Message-ID: <20180105113142.47e4e087@windsurf.lan>
+Message-ID: <20180105112404.i66kqd6ey6es4don@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Kurt,
 
-On Fri, 5 Jan 2018 11:17:08 +0100, Kurt Van Dijck wrote:
-
+On Fri, Jan 05, 2018 at 11:17:08AM +0100, Kurt Van Dijck wrote:
+> [...]
+> > > > > > Yann, do you remember the reason why "clock_nanosleep() is only 
+> > > > > > availabe with NPTL" as commit ec875d9bf9b183 says?
+> [...]
 > > The UCLIBC_HAS_ADVANCED_REALTIME help text says that this options enables 
 > > clock_nanosleep(). But with current code you must have NPTL enabled for 
 > > clock_nanosleep(). So the help text is not correct.
 > > 
 > > This also means that architectures lack NPTL support can't have 
-> > clock_nanosleep() at all. Is there a reason for that?  
+> > clock_nanosleep() at all. Is there a reason for that?
 > 
 > I share the concern, I appears that a shortcut has been taken in the
 > uClibc configuration.
@@ -43,13 +46,12 @@ On Fri, 5 Jan 2018 11:17:08 +0100, Kurt Van Dijck wrote:
 > 
 > What do you think about that?
 
-I agree. Especially since the same problem affects other packages, and
-we have already added a NPTL dependency for those. When/if the uClibc
-problem is fixed, we can get back to those packages and remove the NPTL
-dependency if clock_nanosleep() becomes usable without NPTL.
+I agree. There were a few more unrelated comment on this patch. Please fix and 
+repost.
 
-Thomas
+baruch
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
