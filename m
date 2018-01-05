@@ -1,29 +1,48 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 05 Jan 2018 13:23:30 +0000
-Subject: [Buildroot] [Bug 10631] Please set gstreamer version to 1.12.4
-In-Reply-To: <bug-10631-163@https.bugs.busybox.net/>
-References: <bug-10631-163@https.bugs.busybox.net/>
-Message-ID: <bug-10631-163-PMI1yw8AgW@https.bugs.busybox.net/>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Fri, 5 Jan 2018 16:03:03 +0200
+Subject: [Buildroot] [PATCH 1/2] nilfs-utils: need NPTL threads
+In-Reply-To: <20180105132050.GB22026@airbook.vandijck-laurijssen.be>
+References: <20180104113336.6b7ed00a@windsurf.lan>
+ <20180104105154.l24rvscxbsliquv3@tarshish>
+ <20180104112815.GD18339@airbook.vandijck-laurijssen.be>
+ <20180104155213.GC3684@scaer>
+ <20180104172352.k6u2i3bkfmovgwgm@tarshish>
+ <20180104201958.GB5130@waldemar-brodkorb.de>
+ <20180105052334.mc3fabifliw7gzqn@tarshish>
+ <20180105101708.GF8058@airbook.vandijck-laurijssen.be>
+ <20180105112404.i66kqd6ey6es4don@tarshish>
+ <20180105132050.GB22026@airbook.vandijck-laurijssen.be>
+Message-ID: <20180105140303.obxm3hqutglt3wun@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=10631
+Hi Kurt,
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+On Fri, Jan 05, 2018 at 02:20:50PM +0100, Kurt Van Dijck wrote:
+> > On Fri, Jan 05, 2018 at 11:17:08AM +0100, Kurt Van Dijck wrote:
+> [...] 
+> > I agree. There were a few more unrelated comment on this patch. Please fix and 
+> > repost.
+> 
+> Ok, now I got lost.
+> I cannot find any comments on this ('[PATCH 1/2] ... NPTL threads') patch other
+> than the uclibc remark you had.
+> 
+> Can you indicate the timestamps of the other comments, so I can re-read them.
+> I can't fix anything without those, isn't it?
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|---                         |FIXED
+My comment are archived in the link below:
 
---- Comment #1 from Peter Korsgaard <jacmet@uclibc.org> ---
-Fixed by
-https://git.buildroot.org/buildroot/commit/?id=ea86ea99a638a52e50547bfbb2f397e1bce19447
-thanks!
+  http://patchwork.ozlabs.org/patch/855530/
+
+I refer to the part below the 'depends on' that this patch adds.
+
+baruch
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
