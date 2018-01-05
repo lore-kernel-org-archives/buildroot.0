@@ -1,48 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 5 Jan 2018 21:43:40 +0100
-Subject: [Buildroot] patchwork.ozlabs.org down, and e-mails not recorded
-Message-ID: <20180105214340.6f0cc1f7@windsurf>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Fri, 5 Jan 2018 14:57:22 -0600
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2018-01-03
+In-Reply-To: <CANQCQpaphdhYG8Z23vnxEvUN=fG+UVra2gzc-QApLjbmCeGdpQ@mail.gmail.com>
+References: <20180104070035.EEAA2207B1@mail.free-electrons.com>
+ <12466b9b-4377-b65c-bdb7-c76b136fc3ef@gmail.com>
+ <CANQCQpahMS8fVOAS1-1R9veM_4LoO8xdnRosEs9yKNC4EtTERg@mail.gmail.com>
+ <CANQCQpaphdhYG8Z23vnxEvUN=fG+UVra2gzc-QApLjbmCeGdpQ@mail.gmail.com>
+Message-ID: <CANQCQpaqZdMqsoXcODeTjM_hLdH5mX4p3Mmmj4zO6Ab258L1DQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Romain,
 
-Just a quick note to let you know that from here, patchwork.ozlabs.org
-seems to be down at this time (or awfully slow).
+On Fri, Jan 5, 2018 at 11:56 AM, Matthew Weber
+<matthew.weber@rockwellcollins.com> wrote:
+> Romain / Thomas,
+>
+> On Fri, Jan 5, 2018 at 11:53 AM, Matthew Weber
+> <matthew.weber@rockwellcollins.com> wrote:
+>> Romain,
+>>
+>> On Thu, Jan 4, 2018 at 8:42 AM, Romain Naour <romain.naour@gmail.com> wrote:
+>>> Hi Matt,
+>>>
+>>> Le 04/01/2018 ? 08:00, Thomas Petazzoni a ?crit :
+>>>> Hello,
+>>>>
+>>
+>>
+>> Looks like a new failure, would you mind sending the instance logs?
+>>
+>> http://autobuild.buildroot.net/results/711/71197db2d13428d2d32d02efe528a3e9d75e498a//
+>>
+>> http://autobuild.buildroot.net/results/40f/40f1882b9958de1f962358d7b981cb775d95d426//
 
-Also, since a few weeks, we have seen that patchwork misses some
-patches that are sent on the Buildroot mailing list. The mails are sent
-on the mailing list, they are in the mailing list archives, but
-patchwork does not record them.
-
-An example is:
-
-  http://lists.busybox.net/pipermail/buildroot/2017-December/209885.html
-
-PATCH 3/3 was not recorded by patchwork, while other patches in the
-series have been.
-
-This again happened today. The first send of:
-
-  http://lists.busybox.net/pipermail/buildroot/2018-January/210797.html
-
-only had a few of its patches recorded by patchwork. It was resent a
-few minutes later:
-
-  http://lists.busybox.net/pipermail/buildroot/2018-January/210858.html
-
-and then all the patches got recorded.
-
-This is quite annoying. Is there a way to look in the patchwork logs
-what has happened with those patches ?
-
-Thanks a lot!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+I've brought a 17.10 machine online (4.13 kernel and 2.26 glibc).
+We'll see what it finds.
+http://autobuild.buildroot.net/?submitter=Matt+Weber+%28U17.10%29
