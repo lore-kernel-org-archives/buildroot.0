@@ -1,141 +1,57 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Fri, 5 Jan 2018 08:55:52 +0100
-Subject: [Buildroot] [PATCH 1/1] python-xlib: new package
-In-Reply-To: <20180105000420.20152-1-joseph.kogut@gmail.com>
-References: <20180105000420.20152-1-joseph.kogut@gmail.com>
-Message-ID: <CAGm1_ksEHXZZk9dQCJg3M4qUYxY16VrRAOiHN6X9WccVe_SEtA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 5 Jan 2018 09:59:38 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
+ 2018-01-04
+In-Reply-To: <20180105084309.GB8058@airbook.vandijck-laurijssen.be>
+References: <20180105070004.41340207B4@mail.free-electrons.com>
+ <20180105084309.GB8058@airbook.vandijck-laurijssen.be>
+Message-ID: <20180105095938.39a18748@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Joseph,
+Hello,
 
+On Fri, 5 Jan 2018 09:43:09 +0100, Kurt Van Dijck wrote:
 
-On Fri, Jan 5, 2018 at 1:04 AM, Joseph Kogut <joseph.kogut@gmail.com> wrote:
-> Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
-> ---
->  DEVELOPERS                                      |  1 +
->  package/Config.in                               |  1 +
->  package/python-xlib/Config.in                   |  7 +++++++
->  package/python-xlib/python-xlib.hash            |  6 ++++++
->  package/python-xlib/python-xlib.mk              | 15 +++++++++++++++
->  package/python-xlib/remove_setup_requires.patch | 13 +++++++++++++
->  6 files changed, 43 insertions(+)
->  create mode 100644 package/python-xlib/Config.in
->  create mode 100644 package/python-xlib/python-xlib.hash
->  create mode 100644 package/python-xlib/python-xlib.mk
->  create mode 100644 package/python-xlib/remove_setup_requires.patch
->
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index a9a9ac5a39..999e7d3300 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -848,6 +848,7 @@ F:  package/gconf/
->  F:     package/python-raven/
->  F:     package/python-schedule/
->  F:     package/python-websockets/
-> +F:     package/python-xlib/
->
->  N:     Johan Derycke <johanderycke@gmail.com>
->  F:     package/python-libconfig/
-> diff --git a/package/Config.in b/package/Config.in
-> index 37b1e9fe4f..729d660d52 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -941,6 +941,7 @@ menu "External python modules"
->         source "package/python-whoosh/Config.in"
->         source "package/python-ws4py/Config.in"
->         source "package/python-wsaccel/Config.in"
-> +       source "package/python-xlib/Config.in"
->         source "package/python-xlrd/Config.in"
->         source "package/python-xlsxwriter/Config.in"
->         source "package/python-xlutils/Config.in"
-> diff --git a/package/python-xlib/Config.in b/package/python-xlib/Config.in
-> new file mode 100644
-> index 0000000000..3cd83f030c
-> --- /dev/null
-> +++ b/package/python-xlib/Config.in
-> @@ -0,0 +1,7 @@
-> +config BR2_PACKAGE_PYTHON_XLIB
-> +       bool "python-xlib"
-> +       select BR2_PACKAGE_PYTHON_SIX
+> > Results for the 'master' branch
+> > ===============================
+> > 
+> > Build failures related to your packages:
+> > 
+> >       xtensa |             nilfs-utils-v2.2.7 | http://autobuild.buildroot.net/results/a9fe41ed428d26ef5500cec9f762c0bae3eebd39  
+> 
+> I just ran this on my local branch, including the patches I sent
+> yesterday (and are still pending), and that went ok, so I propose
+> to wait and see until those 2 patches are accepted/denied.
+> 
+> Just a question.
+> I don't understand why xtensa fails today and not yesterday ...
+> Is there a random toolchain selection everyday for each package to save
+> buildserver resources?
 
-please add "# runtime" tag to the selected dependency (see
-https://git.busybox.net/buildroot/tree/package/python-tornado/Config.in
-for the reference)
+The autobuilders only do random testing. Essentially, what they do is:
 
-> +       help
-> +         XLib in pure Python (Py2/Py3 compatible)
-> +
-> +         https://github.com/python-xlib/python-xlib
-> diff --git a/package/python-xlib/python-xlib.hash b/package/python-xlib/python-xlib.hash
-> new file mode 100644
-> index 0000000000..05b407209c
-> --- /dev/null
-> +++ b/package/python-xlib/python-xlib.hash
-> @@ -0,0 +1,6 @@
-> +# md5 from https://pypi.python.org/pypi/python-xlib/json, sha256 locally computed
-> +md5 cdf342aa145c2be0ccae46cfb7b62551 python-xlib-0.21.tar.bz2
-> +sha256 25aad0056172920552c01a163e979b02336abaf47b0792dae9c93ecb29500431 python-xlib-0.21.tar.bz2
-> +# License file, locally calculated
+ - Pick a random architecture/toolchain configuration among the one
+   available in support/config-fragments/autobuild/
 
-remove this comment
+ - Run "make randpackageconfig" to generate on top of the
+   architecture/toolchain configuration a random selection of packages.
 
-> +sha256 5ce9459bc19ced99cc9eb135d4f559ed01e336354bdf16dd998be85aa688c233 LICENSE
-> +
+ - Build
 
-remove this empty line
+So the results every day are different, since it's completely random
+what testing is being done. This allows us to test a very wide variety
+of package/toolchain/architecture combinations, since doing an
+exhaustive testing is simply impossible when you have thousands of
+Config.in options.
 
-> diff --git a/package/python-xlib/python-xlib.mk b/package/python-xlib/python-xlib.mk
-> new file mode 100644
-> index 0000000000..ca200e6a97
-> --- /dev/null
-> +++ b/package/python-xlib/python-xlib.mk
-> @@ -0,0 +1,15 @@
-> +###############################################################################
-> +#
-> +# python-xlib
-> +#
-> +###############################################################################
-> +
-> +PYTHON_XLIB_VERSION = 0.21
-> +PYTHON_XLIB_SOURCE = python-xlib-$(PYTHON_XLIB_VERSION).tar.bz2
-> +PYTHON_XLIB_SITE = https://pypi.python.org/packages/eb/de/b0eaaea7b8512dc41504db071824eef30293ff55c58d83081ebaebe85a38
-> +PYTHON_XLIB_SETUP_TYPE = setuptools
-> +PYTHON_XLIB_LICENSE = LGPL-2.0+
-> +PYTHON_XLIB_LICENSE_FILES = LICENSE
-> +PYTHON_XLIB_DEPENDENCIES = python-six
+Best regards,
 
-this should be PYTHON_XLIB_DEPENDENCIES = host-python-setuptools-scm
-see package/python-jaraco-classes/python-jaraco-classes.mk for the reference
-
-> +
-> +$(eval $(python-package))
-> diff --git a/package/python-xlib/remove_setup_requires.patch b/package/python-xlib/remove_setup_requires.patch
-> new file mode 100644
-> index 0000000000..a2bb4656ac
-> --- /dev/null
-> +++ b/package/python-xlib/remove_setup_requires.patch
-> @@ -0,0 +1,13 @@
-> +diff --git a/setup.py b/setup.py
-> +index 9b4a47e..cac95ba 100644
-> +--- a/setup.py
-> ++++ b/setup.py
-> +@@ -5,7 +5,6 @@ from setuptools import setup
-> +
-> + setup(
-> +     install_requires=['six>=1.10.0'],
-> +-    setup_requires=['setuptools-scm'],
-> +     packages=[
-> +         'Xlib',
-> +         'Xlib.ext',
-> +
-
-remove this patch, as with proper build time dependency you don't need it.
-
-With all these issues fixed you can add my Reviewed-by: Yegor Yefremov
-<yegorslists@googlemail.com> for the v2 patch version.
-
-Yegor
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
