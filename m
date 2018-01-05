@@ -1,26 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 05 Jan 2018 16:16:25 +0100
-Subject: [Buildroot] [PATCH 2/2] xradio: bump version to 33f4b1c2
-In-Reply-To: <20180104183628.3913-3-geomatsi@gmail.com> (Sergey Matyukevich's
- message of "Thu, 4 Jan 2018 21:36:28 +0300")
-References: <20180104183628.3913-1-geomatsi@gmail.com>
- <20180104183628.3913-3-geomatsi@gmail.com>
-Message-ID: <87bmi8s5di.fsf@dell.be.48ers.dk>
+Date: Fri, 05 Jan 2018 16:17:03 +0100
+Subject: [Buildroot] [PATCH] libzip: bump to version 1.4.0
+In-Reply-To: <53d342efdcd8e2dded87c63be938921a8ad94f18.1515091166.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Thu, 4 Jan 2018 20:39:26 +0200")
+References: <53d342efdcd8e2dded87c63be938921a8ad94f18.1515091166.git.baruch@tkos.co.il>
+Message-ID: <877esws5cg.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Sergey" == Sergey Matyukevich <geomatsi@gmail.com> writes:
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > Out-of-tree driver has been updated according to mac80211
- > and timer API changes in the upcoming Linux v4.15.
+ > Upstream switched to cmake.
+ > Add upstream patch that removes run of target binary on the host.
 
-I've changed the subject to xr819-xradio instead of just xradio and
-committed, thanks.
+ > Cc: Bartosz Golaszewski <brgl@bgdev.pl>
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
-I see we don't have a hash value for the LICENSE file, care to add one?
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
