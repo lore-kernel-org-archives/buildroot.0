@@ -1,44 +1,60 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Fri, 5 Jan 2018 11:56:40 -0600
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2018-01-03
-In-Reply-To: <CANQCQpahMS8fVOAS1-1R9veM_4LoO8xdnRosEs9yKNC4EtTERg@mail.gmail.com>
-References: <20180104070035.EEAA2207B1@mail.free-electrons.com>
- <12466b9b-4377-b65c-bdb7-c76b136fc3ef@gmail.com>
- <CANQCQpahMS8fVOAS1-1R9veM_4LoO8xdnRosEs9yKNC4EtTERg@mail.gmail.com>
-Message-ID: <CANQCQpaphdhYG8Z23vnxEvUN=fG+UVra2gzc-QApLjbmCeGdpQ@mail.gmail.com>
+From: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
+Date: Fri, 5 Jan 2018 20:56:07 +0100
+Subject: [Buildroot] [PATCH 1/2] nilfs-utils: need NPTL threads
+In-Reply-To: <20180104101927.oexxtwusya3wppyk@tarshish>
+References: <1515060652-22472-1-git-send-email-dev.kurt@vandijck-laurijssen.be>
+ <20180104101927.oexxtwusya3wppyk@tarshish>
+Message-ID: <20180105195607.GC24055@airbook.vandijck-laurijssen.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Romain / Thomas,
+Hey,
 
-On Fri, Jan 5, 2018 at 11:53 AM, Matthew Weber
-<matthew.weber@rockwellcollins.com> wrote:
-> Romain,
->
-> On Thu, Jan 4, 2018 at 8:42 AM, Romain Naour <romain.naour@gmail.com> wrote:
->> Hi Matt,
->>
->> Le 04/01/2018 ? 08:00, Thomas Petazzoni a ?crit :
->>> Hello,
->>>
->
->
-> Looks like a new failure, would you mind sending the instance logs?
->
-> http://autobuild.buildroot.net/results/711/71197db2d13428d2d32d02efe528a3e9d75e498a//
->
-> http://autobuild.buildroot.net/results/40f/40f1882b9958de1f962358d7b981cb775d95d426//
->
->
-> I've also got one I'm looking into too
-> http://autobuild.buildroot.net/results/4a7/4a7f7c07fd68c96e26880f8f08beff73ae2aa1ad//
+> On Thu, Jan 04, 2018 at 11:10:51AM +0100, Kurt Van Dijck wrote:
+> > nilfs-utils use clock_nanosleep(), which comes with NPTL threads
+> 
+> What is your indication that this is the case? In the uClibc-ng config 
+> UCLIBC_HAS_REALTIME is selected by both linuxthreads and NPTL. When 
+> UCLIBC_HAS_REALTIME is enabled, UCLIBC_HAS_ADVANCED_REALTIME is also enabled 
+> by default. UCLIBC_HAS_ADVANCED_REALTIME provides clock_nanosleep().
+> 
+> > Signed-off-by: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
+> > ---
+> >  package/nilfs-utils/Config.in | 1 +
+> >  1 file changed, 1 insertion(+)
+> > 
+> > diff --git a/package/nilfs-utils/Config.in b/package/nilfs-utils/Config.in
+> > index 0c6b7a0..9dda27c 100644
+> > --- a/package/nilfs-utils/Config.in
+> > +++ b/package/nilfs-utils/Config.in
+> > @@ -1,6 +1,7 @@
+> >  config BR2_PACKAGE_NILFS_UTILS
+> >  	bool "nilfs-utils"
+> >  	depends on BR2_TOOLCHAIN_HAS_THREADS # sem_open()
+> > +	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # clock_nanosleep()
+> 
+> NPTL implies threads support, so the NPTL dependency alone is enough.
+> 
+> You also need to update the comment.
+> 
 
+IMHO, appending the comment 'sem_open()' to BR2_..._NPTL would only
+cause confusion, since sem_open() does not depend on BR2_..._NPTL.
 
-For this one it looks like our timeout needs to be longer.  Maybe we
-could set it to 2hrs and see if we hit.
+Given the recent discussion about clock_nanosleep not really depending
+on BR2_..._NPTL, I suspect a change in the near future, so I hesitate to
+remove the BR2_..._THREADS dependency.
 
-Matt
+How exactly is the current patch wrong?
+KConfig resolves this, better than any of us would, so I see no
+advantage in modifying the patch.
+
+> >  	depends on BR2_USE_MMU # util-linux libmount, libblkid
+> >  	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+> >  	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
+
+Kind regards,
+Kurt
