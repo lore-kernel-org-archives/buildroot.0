@@ -1,12 +1,7 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 5 Jan 2018 21:29:08 +0100
-Subject: [Buildroot] [PATCH 3/8] python-setuptools: check host-python
- version
-In-Reply-To: <1514931195.26695.184.camel@impinj.com>
-References: <20180102163337.6334-1-aduskett@gmail.com>
- <20180102163337.6334-4-aduskett@gmail.com>
- <1514931195.26695.184.camel@impinj.com>
-Message-ID: <20180105212908.7a048009@windsurf>
+Date: Fri, 5 Jan 2018 21:43:40 +0100
+Subject: [Buildroot] patchwork.ozlabs.org down, and e-mails not recorded
+Message-ID: <20180105214340.6f0cc1f7@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,32 +10,36 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 2 Jan 2018 22:13:15 +0000, Trent Piepho wrote:
-> On Tue, 2018-01-02 at 11:33 -0500, Adam Duskett wrote:
-> > python-setuptools is compatible with both python2 and python3, as such,
-> > there is no need to force python2 as a dependency.
-> > 
-> >  
-> > +ifeq ($(BR2_PACKAGE_HOST_PYTHON3),y)
-> > +HOST_PYTHON_SETUPTOOLS_NEEDS_HOST_PYTHON += python3
-> > +HOST_PYTHON_SETUPTOOLS_PYLIBVER = python$(PYTHON3_VERSION_MAJOR)
-> > +else
-> > +HOST_PYTHON_SETUPTOOLS_NEEDS_HOST_PYTHON += python
-> > +HOST_PYTHON_SETUPTOOLS_PYLIBVER = python$(PYTHON_VERSION_MAJOR)
-> > +endif  
-> 
-> From why I see in pkg-python, the default behavior for host packages is
-> to depend on the default interpreter, which is python3 if enabled
-> otherwise python2.  Isn't the above block basically doing the same
-> thing?  Other than using HOST_PYTHON3 rather than PYTHON3.
-> 
-> But shouldn't this be changed in pkg-python?
-> 
-> Then setting <PKG>_NEEDS_HOST_PYTHON based on why python version is in
-> use could be eliminated, unless the package needs a specific version,
-> which appear to be how it's supposed to work.
+Just a quick note to let you know that from here, patchwork.ozlabs.org
+seems to be down at this time (or awfully slow).
 
-See my reply to this patch, which explains why it is (IMO) broken.
+Also, since a few weeks, we have seen that patchwork misses some
+patches that are sent on the Buildroot mailing list. The mails are sent
+on the mailing list, they are in the mailing list archives, but
+patchwork does not record them.
+
+An example is:
+
+  http://lists.busybox.net/pipermail/buildroot/2017-December/209885.html
+
+PATCH 3/3 was not recorded by patchwork, while other patches in the
+series have been.
+
+This again happened today. The first send of:
+
+  http://lists.busybox.net/pipermail/buildroot/2018-January/210797.html
+
+only had a few of its patches recorded by patchwork. It was resent a
+few minutes later:
+
+  http://lists.busybox.net/pipermail/buildroot/2018-January/210858.html
+
+and then all the patches got recorded.
+
+This is quite annoying. Is there a way to look in the patchwork logs
+what has happened with those patches ?
+
+Thanks a lot!
 
 Thomas
 -- 
