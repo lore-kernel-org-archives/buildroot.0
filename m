@@ -1,51 +1,30 @@
-From: Ryan Coe <bluemrp9@gmail.com>
-Date: Fri,  5 Jan 2018 06:47:26 -0800
-Subject: [Buildroot] [PATCH 1/1] mariadb: security bump version to 10.1.30
-Message-ID: <20180105144726.3756-1-bluemrp9@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 05 Jan 2018 16:11:38 +0100
+Subject: [Buildroot] [PATCH 1/1] mariadb: security bump version to
+ 10.1.30
+In-Reply-To: <20180105144726.3756-1-bluemrp9@gmail.com> (Ryan Coe's message of
+ "Fri, 5 Jan 2018 06:47:26 -0800")
+References: <20180105144726.3756-1-bluemrp9@gmail.com>
+Message-ID: <87o9m8s5lh.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Release notes: https://mariadb.com/kb/en/mariadb-10130-release-notes/
-Changelog: https://mariadb.com/kb/en/mariadb-10130-changelog/
+>>>>> "Ryan" == Ryan Coe <bluemrp9@gmail.com> writes:
 
-Fixes the following security vulnerability:
+ > Release notes: https://mariadb.com/kb/en/mariadb-10130-release-notes/
+ > Changelog: https://mariadb.com/kb/en/mariadb-10130-changelog/
 
-CVE-2017-15365 - Replication in sql/event_data_objects.cc occurs before ACL
-checks.
+ > Fixes the following security vulnerability:
 
-Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
----
- package/mariadb/mariadb.hash | 4 ++--
- package/mariadb/mariadb.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ > CVE-2017-15365 - Replication in sql/event_data_objects.cc occurs before ACL
+ > checks.
 
-diff --git a/package/mariadb/mariadb.hash b/package/mariadb/mariadb.hash
-index fcca9be6e4..f8e1c6ce10 100644
---- a/package/mariadb/mariadb.hash
-+++ b/package/mariadb/mariadb.hash
-@@ -1,5 +1,5 @@
--# From https://downloads.mariadb.org/mariadb/10.1.29/
--sha256 73bbd5602f52ab5aa4d83f465134871b6c87bda25371d098f6da5a3d98517ed4  mariadb-10.1.29.tar.gz
-+# From https://downloads.mariadb.org/mariadb/10.1.30/
-+sha256 173a5e5a24819e0a469c3bd09b5c98491676c37c6095882a2ea34c5af0996c88  mariadb-10.1.30.tar.gz
- 
- # Hash for license files
- sha256 69ce89a0cadbe35a858398c258be93c388715e84fc0ca04e5a1fd1aa9770dd3a  README
-diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
-index a726032fcb..b406692b47 100644
---- a/package/mariadb/mariadb.mk
-+++ b/package/mariadb/mariadb.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MARIADB_VERSION = 10.1.29
-+MARIADB_VERSION = 10.1.30
- MARIADB_SITE = https://downloads.mariadb.org/interstitial/mariadb-$(MARIADB_VERSION)/source
- MARIADB_LICENSE = GPL-2.0 (server), GPL-2.0 with FLOSS exception (GPL client library), LGPL-2.0 (LGPL client library)
- # Tarball no longer contains LGPL license text
+ > Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
+
+Committed, thanks.
+
 -- 
-2.15.1
+Bye, Peter Korsgaard
