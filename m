@@ -1,10 +1,8 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  6 Jan 2018 18:25:31 +0100
-Subject: [Buildroot] [PATCH 4/4] package/kodi-peripheral-joystick: bump
- version to v1.3.4
-In-Reply-To: <20180106172531.7806-1-bernd.kuhls@t-online.de>
-References: <20180106172531.7806-1-bernd.kuhls@t-online.de>
-Message-ID: <20180106172531.7806-4-bernd.kuhls@t-online.de>
+Date: Sat,  6 Jan 2018 18:25:28 +0100
+Subject: [Buildroot] [PATCH 1/4] package/kodi-pvr-dvbviewer: bump version to
+ 2.4.14-Krypton
+Message-ID: <20180106172531.7806-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,30 +11,30 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash | 2 +-
- package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk   | 2 +-
+ package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.hash | 2 +-
+ package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash
-index ca2bdc378c..728c3cac53 100644
---- a/package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash
-+++ b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash
+diff --git a/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.hash b/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.hash
+index ccb45219cc..017bd8360a 100644
+--- a/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.hash
++++ b/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.hash
 @@ -1,2 +1,2 @@
  # Locally computed
--sha256 c2025c4ec280b44b5d8bb1c34185a94cc105f66f0b762087804bb7d2d633d999  kodi-peripheral-joystick-v1.3.2.tar.gz
-+sha256 9a183e1f92ff2c68816bfa0056c65585a3e1129d924326359d7a5dfbcba6c56a  kodi-peripheral-joystick-v1.3.4.tar.gz
-diff --git a/package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk
-index f0cad13a27..2fadbcc210 100644
---- a/package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk
-+++ b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk
+-sha256 4332fa50172409271909c90a8f923eb336ff93b0a7d61b183ce84d6975fa622e  kodi-pvr-dvbviewer-2.4.11-Krypton.tar.gz
++sha256 f1cd26234e33a027d1ef2f3ea7b5f33be3a8aff9a7bf0117ee4bdfcf1e18fd9f  kodi-pvr-dvbviewer-2.4.14-Krypton.tar.gz
+diff --git a/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.mk b/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.mk
+index 0c62c5a5b9..bc37de7545 100644
+--- a/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.mk
++++ b/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.mk
 @@ -6,7 +6,7 @@
  
  # This cset is on the branch 'Krypton'
  # When Kodi is updated, then this should be updated to the corresponding branch
--KODI_PERIPHERAL_JOYSTICK_VERSION = v1.3.2
-+KODI_PERIPHERAL_JOYSTICK_VERSION = v1.3.4
- KODI_PERIPHERAL_JOYSTICK_SITE = $(call github,xbmc,peripheral.joystick,$(KODI_PERIPHERAL_JOYSTICK_VERSION))
- KODI_PERIPHERAL_JOYSTICK_LICENSE = GPL-2.0+
- KODI_PERIPHERAL_JOYSTICK_LICENSE_FILES = src/addon.cpp
+-KODI_PVR_DVBVIEWER_VERSION = 2.4.11-Krypton
++KODI_PVR_DVBVIEWER_VERSION = 2.4.14-Krypton
+ KODI_PVR_DVBVIEWER_SITE = $(call github,kodi-pvr,pvr.dvbviewer,$(KODI_PVR_DVBVIEWER_VERSION))
+ KODI_PVR_DVBVIEWER_LICENSE = GPL-2.0+
+ KODI_PVR_DVBVIEWER_LICENSE_FILES = src/client.h
 -- 
 2.11.0
