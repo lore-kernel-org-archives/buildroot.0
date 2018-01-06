@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 6 Jan 2018 15:13:08 +0100
-Subject: [Buildroot] [PATCH v2 1/1] python-xlib: new package
-In-Reply-To: <20180105211307.25071-1-joseph.kogut@gmail.com>
-References: <20180105000420.20152-1-joseph.kogut@gmail.com>
- <20180105211307.25071-1-joseph.kogut@gmail.com>
-Message-ID: <20180106151308.7b5765f7@windsurf>
+Date: Sat, 6 Jan 2018 15:14:25 +0100
+Subject: [Buildroot] [PATCH] package/enlightenment: bump to 0.22.1
+In-Reply-To: <20180105163223.10142-1-romain.naour@gmail.com>
+References: <20180105163223.10142-1-romain.naour@gmail.com>
+Message-ID: <20180106151425.7e15f86f@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,36 +12,23 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri,  5 Jan 2018 13:13:07 -0800, Joseph Kogut wrote:
-> Thanks for the review, Yegor!
-> 
-> Changes since v1:
-> - added runtime tag to python-six Config dependency
-> - remove unneeded command and newline from python-xlib.hash
-> - added host-python-setuptools-scm to build dependencies
-> - removed setup.py patch
+On Fri,  5 Jan 2018 17:32:23 +0100, Romain Naour wrote:
 
-This personal message and changelog should have gone...
+> -ENLIGHTENMENT_CONF_OPTS = \
+> -	--with-edje-cc=$(HOST_DIR)/bin/edje_cc \
+> -	--with-eet-eet=$(HOST_DIR)/bin/eet \
+> -	--with-eldbus_codegen=$(HOST_DIR)/bin/eldbus-codegen \
+> -	--disable-pam \
+> -	--disable-rpath
+> +ENLIGHTENMENT_MESON_OPTS += \
+> +	--prefix=/usr \
+> +	--buildtype $(if $(BR2_ENABLE_DEBUG),debug,release) \
+> +	--cross-file $(HOST_DIR)/etc/meson/cross-compilation.conf \
 
-> 
-> Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
-> Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
-> ---
+So sometimes the options are defined using =, sometimes not ? Is this
+expected ?
 
-... here, so that Git doesn't include it as part of the commit log.
-Indeed, we don't need to keep such details in the Git history (but they
-are very useful to have during the patch review process).
-
-> +PYTHON_XLIB_VERSION = 0.21
-> +PYTHON_XLIB_SOURCE = python-xlib-$(PYTHON_XLIB_VERSION).tar.bz2
-> +PYTHON_XLIB_SITE = https://pypi.python.org/packages/eb/de/b0eaaea7b8512dc41504db071824eef30293ff55c58d83081ebaebe85a38
-> +PYTHON_XLIB_SETUP_TYPE = setuptools
-> +PYTHON_XLIB_LICENSE = LGPL-2.0+
-
-The license is in fact LGPL-2.1+, so I've fixed that and applied your
-patch to the master branch.
-
-Thanks for your contribution!
+Thanks,
 
 Thomas
 -- 
