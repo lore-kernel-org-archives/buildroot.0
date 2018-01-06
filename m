@@ -1,65 +1,40 @@
-From: daggs <daggs@gmx.com>
-Date: Sat, 6 Jan 2018 14:31:05 +0100
-Subject: [Buildroot] [PATCH v2] tvheadend: add dependency on udev
-In-Reply-To: <20180105225459.GC3673@scaer>
-References: <20180105093501.5793-1-daggs@gmx.com> <20180105225459.GC3673@scaer>
-Message-ID: <trinity-2bd270b3-d02a-4175-80f4-6eb5beb56345-1515245465268@3c-app-mailcom-bs02>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 6 Jan 2018 15:06:29 +0100
+Subject: [Buildroot] [git commit] tcf-agent: disable package for microblaze
+Message-ID: <20180106140642.815D581133@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Greetings Yan,
+commit: https://git.buildroot.net/buildroot/commit/?id=920d2adfaa531f1058f86db15a7224177953805e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Dagg, All,
-> 
-> On 2018-01-05 11:35 +0200, Dagg Stompler spake thusly:
-> > udev is needed in order to detect usb based DVB cards.
-> > reference for none SystemD systems can be found at https://github.com/tvheadend/tvheadend/blob/master/debian/tvheadend.init
-> 
-> We do not use this startup script in Buildroot, since we have our own:
->     https://git.buildroot.org/buildroot/tree/package/tvheadend/S99tvheadend
-> 
-> So I fail to see why their init script calling udevadm is a reason to
-> force a dependency on udev.
-> 
-> Besides, our own udev startup does an udevadm settle, and it is called
-> before the tvheadend startup script (S10 vs. S99):
->     https://git.buildroot.org/buildroot/tree/package/eudev/S10udev
+For now, tcf-agent fails to build on microblaze. Disable microblaze
+until upstream is fixed.
 
-I know buildroot has its own init script implementation, I just added it as reference to why I think it is needed.
+Fixes:
 
-> 
-> Furthermore, last time udev was mentioned in the tvheadend repository was
-> in 2014, commit 517af478ab20, where Adam said:
->     "... I've given up on using udev (for various reasons)."
-> 
-> The previous mention of udev was the commit that added the call to
-> udevadm in 2010, commit 5e20573581f0.
+  http://autobuild.buildroot.net/results/72554c9c70c1a068e4ed6612e65ea294e678bb0c/
 
-the repo still has it in it, if it isn't needed, it should be removed but it isn't my job as I'm not part of the tvheadend dev team.
-more over, after my experience, is indeed there is no need for udev, tvheadend has a bug.
+Signed-off-by: Norbert Lange <nolange79@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/tcf-agent/Config.in | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-> 
-> And personal experience has shown that my setup was working OK without
-> udev as well, at a time _after_ those two commits.
-> 
-> So I still believe we should not add a dependency on udev at all,
-> because as far as I understand, you claim it is only needed for USB
-> devices. Other devices seem to be working fine without udev, and it
-> is perfectly valid to have a setup with a non-USB device and no udev.
-
-I'm happy that it worked out of the box for you but fact to the matter, it didn't for me.
-it took me three weekends to figure it out. imho, the fact that it works on one scenario doesn't means there isn't a bug.
-
-> 
-> So, still no from me...
-> 
-> We may however add a blurb in the help text that states that using
-> certain devices may require use of udev or another manager of /dev.
-as said, imho there is still a bug here but this suggestion might be good enough for a possible commit, I didn't liked that I've wasted a lot of my spare time on this, I'm sure that anyone else that will encounter it won't want to waste his time.
-
-Thanks,
-
-Dagg.
+diff --git a/package/tcf-agent/Config.in b/package/tcf-agent/Config.in
+index 50e5864..d2a05d0 100644
+--- a/package/tcf-agent/Config.in
++++ b/package/tcf-agent/Config.in
+@@ -29,7 +29,8 @@ config BR2_PACKAGE_TCF_AGENT_ARCH
+ 	default "x86_64"     if BR2_x86_64
+ 	default "powerpc"    if BR2_powerpc || BR2_powerpcle
+ 	default "ppc64"      if BR2_powerpc64 || BR2_powerpc64le
+-	default "microblaze" if BR2_microblaze || BR2_microblazeel
++#	fails to build currently
++#	default "microblaze" if BR2_microblaze || BR2_microblazeel
+ 
+ config BR2_PACKAGE_TCF_AGENT_ARCH_SUPPORTS
+ 	bool
