@@ -1,23 +1,46 @@
-From: Sergey Matyukevich <geomatsi@gmail.com>
-Date: Sat, 6 Jan 2018 20:33:46 +0300
-Subject: [Buildroot] [PATCH 2/2] xradio: bump version to 33f4b1c2
-In-Reply-To: <87bmi8s5di.fsf@dell.be.48ers.dk>
-References: <20180104183628.3913-1-geomatsi@gmail.com>
- <20180104183628.3913-3-geomatsi@gmail.com>
- <87bmi8s5di.fsf@dell.be.48ers.dk>
-Message-ID: <20180106173346.uezqs5sxzb2iamtd@speedy.hunter>
+From: Vincent Stehle <vincent.stehle@laposte.net>
+Date: Sat,  6 Jan 2018 18:15:53 +0100
+Subject: [Buildroot] [PATCH] numactl: enable for aarch64
+Message-ID: <20180106171553.5585-1-vincent.stehle@laposte.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->  > Out-of-tree driver has been updated according to mac80211
->  > and timer API changes in the upcoming Linux v4.15.
-> 
-> I've changed the subject to xr819-xradio instead of just xradio and
-> committed, thanks.
-> 
-> I see we don't have a hash value for the LICENSE file, care to add one?
+From: Vincent Stehl? <vincent.stehle@laposte.net>
 
-Sure, will do.
+numactl works on aarch64 so enable it for that architecture.
+
+Signed-off-by: Vincent Stehl? <vincent.stehle@laposte.net>
+Cc: Will Newton <will.newton@imgtec.com>
+---
+
+
+Hi,
+
+I also checked with test-pkg and it is still happy after this patch.
+
+Best regards,
+
+Vincent.
+
+
+ package/numactl/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/numactl/Config.in b/package/numactl/Config.in
+index f18e28d9ff..95057d3c33 100644
+--- a/package/numactl/Config.in
++++ b/package/numactl/Config.in
+@@ -2,7 +2,7 @@ config BR2_PACKAGE_NUMACTL
+ 	bool "numactl"
+ 	# numactl uses some system calls that are not available on all
+ 	# architectures.
+-	depends on BR2_i386 || BR2_mips || BR2_mipsel || \
++	depends on BR2_aarch64 || BR2_i386 || BR2_mips || BR2_mipsel || \
+ 		BR2_mips64 || BR2_mips64el || BR2_powerpc || BR2_x86_64
+ 	help
+ 	  numactl allows you to run your application on specific cpus
+-- 
+2.15.1
