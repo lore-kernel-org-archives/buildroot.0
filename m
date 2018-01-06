@@ -1,42 +1,48 @@
-From: Marcus Folkesson <marcus.folkesson@gmail.com>
-Date: Sat,  6 Jan 2018 15:53:49 +0100
-Subject: [Buildroot] [PATCH] libsepol: set PREFIX to generate proper .pc file
-Message-ID: <20180106145349.3225-1-marcus.folkesson@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat,  6 Jan 2018 16:28:33 +0100
+Subject: [Buildroot] [PATCH] support/dockerfile: add directives to run as
+ non-root
+Message-ID: <20180106152833.10111-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
----
- package/libsepol/libsepol.mk | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+Currently, our jobs on the gitlab-ci infra are running as root, which is
+problematic for two reasons:
 
-diff --git a/package/libsepol/libsepol.mk b/package/libsepol/libsepol.mk
-index c54c3bfc42..d94955023c 100644
---- a/package/libsepol/libsepol.mk
-+++ b/package/libsepol/libsepol.mk
-@@ -19,10 +19,11 @@ ifeq ($(BR2_STATIC_LIBS),y)
- LIBSEPOL_MAKE_FLAGS += STATIC=1
- endif
+  - this is not the usual way Buildroot is built;
+  - it may miss issues where running as non-root is problematic.
+
+So, complement our Dockerfile with directives to add a new user and run
+everything as that user, as demonstrated by this build job:
+    https://gitlab.com/ymorin/buildroot-ci/-/jobs/46929562
+
+Additional, enforce an UTF-8 locale while running.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ support/docker/Dockerfile | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/support/docker/Dockerfile b/support/docker/Dockerfile
+index d45b23dc23..ebb471f7e5 100644
+--- a/support/docker/Dockerfile
++++ b/support/docker/Dockerfile
+@@ -28,3 +28,10 @@ RUN apt-get -q -y clean
+ RUN sed -i 's/# \(en_US.UTF-8\)/\1/' /etc/locale.gen
+ RUN /usr/sbin/locale-gen
  
-+# DESTDIR is needed during the compile to compute library and header paths.
- define LIBSEPOL_BUILD_CMDS
- 	# DESTDIR is needed during the compile to compute library and
- 	# header paths.
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(LIBSEPOL_MAKE_FLAGS) DESTDIR=$(STAGING_DIR)
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(LIBSEPOL_MAKE_FLAGS) DESTDIR=$(STAGING_DIR) PREFIX=/usr
- endef
- 
- define LIBSEPOL_INSTALL_STAGING_CMDS
-@@ -33,6 +34,7 @@ define LIBSEPOL_INSTALL_TARGET_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install $(LIBSEPOL_MAKE_FLAGS) DESTDIR=$(TARGET_DIR)
- endef
- 
-+# DESTDIR is needed during the compile to compute library and header paths.
- HOST_LIBSEPOL_MAKE_ENV = \
- 	$(HOST_MAKE_ENV) \
- 	DESTDIR=$(HOST_DIR) \
++RUN useradd -ms /bin/bash br-user
++RUN chown -R br-user:br-user /home/br-user
++
++USER br-user
++WORKDIR /home/br-user
++ENV HOME /home/br-user
++ENV LC_ALL en_US.UTF-8
 -- 
-2.15.1
+2.11.0
