@@ -1,45 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 6 Jan 2018 15:16:46 +0100
-Subject: [Buildroot] [PATCH 2/2] toolchain: Fix toolchain to create
- proper builds for MIPS XBurst targets
-In-Reply-To: <CAMbDF3KKpBcAw-03Ek3MgsLSKwP9hbuuz5KkVPBF6BSZfG-pfA@mail.gmail.com>
-References: <1515170305-25742-1-git-send-email-johannes.schmitz1@gmail.com>
- <20180105212715.5e50d391@windsurf>
- <CAMbDF3KKpBcAw-03Ek3MgsLSKwP9hbuuz5KkVPBF6BSZfG-pfA@mail.gmail.com>
-Message-ID: <20180106151646.673c523c@windsurf>
+Date: Sat, 6 Jan 2018 15:18:06 +0100
+Subject: [Buildroot] [git commit] linux-firmware: update Broadcom 43xxx file
+ list
+Message-ID: <20180106141809.637AF83A5A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Johannes,
+commit: https://git.buildroot.net/buildroot/commit/?id=3c1001ee53b1e149adcd31ca0c54f5817096c8fd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 5 Jan 2018 22:34:14 +0100, Johannes Schmitz wrote:
+Add firmware file 'brcmfmac43430a0-sdio.bin' for bcm43430 revision 0.
+Fix alphatical order for entry 'brcmfmac43430-sdio.bin'.
 
-> It was not my own patch but I want to help bringing it up again because the
-> original author complained that so far it hasn't been accepted. He
-> recommended me to try it and see if it helps and it did help.
-> 
-> Also, the commit log should explain since which gcc version is
-> -mfused-madd deprecated, and since which gcc version is -ffp-contract
-> available.
-> 
-> I don't know this, my knowledge is incomplete in this area. I just manually
-> applied the original patch. What can we do together to get this patch to an
-> acceptable state?
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/linux-firmware/linux-firmware.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Could you please send a complete patch that includes both Waldemar
-changes and yours ? Also, please read the comments in
-https://patchwork.ozlabs.org/patch/800406/, they pointed out the fact
-that -ffp-contract only exists since gcc 4.6, so its use should be made
-conditional. Read the comments from Arnout, who suggests how to address
-that.
-
-Thanks a lot!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+index 2cfc5e6..b636f79 100644
+--- a/package/linux-firmware/linux-firmware.mk
++++ b/package/linux-firmware/linux-firmware.mk
+@@ -415,10 +415,10 @@ LINUX_FIRMWARE_FILES += \
+ 	brcm/brcmfmac43236b.bin brcm/brcmfmac43241b0-sdio.bin \
+ 	brcm/brcmfmac43241b4-sdio.bin brcm/brcmfmac43241b5-sdio.bin \
+ 	brcm/brcmfmac43242a.bin brcm/brcmfmac43340-sdio.bin \
+-	brcm/brcmfmac43362-sdio.bin brcm/brcmfmac43455-sdio.bin \
++	brcm/brcmfmac43362-sdio.bin brcm/brcmfmac43430-sdio.bin \
++	brcm/brcmfmac43430a0-sdio.bin brcm/brcmfmac43455-sdio.bin \
+ 	brcm/brcmfmac43569.bin brcm/brcmfmac43570-pcie.bin \
+ 	brcm/brcmfmac43602-pcie.ap.bin brcm/brcmfmac43602-pcie.bin \
+-	brcm/brcmfmac43430-sdio.bin
+ LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.broadcom_bcm43xx
+ endif
+ 
