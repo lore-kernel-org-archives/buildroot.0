@@ -1,7 +1,7 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  6 Jan 2018 18:52:40 +0100
-Subject: [Buildroot] [PATCH 1/1] package/zstd: bump version to v1.3.3
-Message-ID: <20180106175240.30817-1-bernd.kuhls@t-online.de>
+Date: Sat,  6 Jan 2018 19:01:21 +0100
+Subject: [Buildroot] [PATCH 1/1] package/bluez5_utils: bump version to 5.48
+Message-ID: <20180106180121.9756-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,33 +10,30 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/zstd/zstd.hash | 2 +-
- package/zstd/zstd.mk   | 2 +-
+ package/bluez5_utils/bluez5_utils.hash | 2 +-
+ package/bluez5_utils/bluez5_utils.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/zstd/zstd.hash b/package/zstd/zstd.hash
-index 5bcdde968a..51e5fc245c 100644
---- a/package/zstd/zstd.hash
-+++ b/package/zstd/zstd.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256 ac5054a3c64e6510bc1ae890d05e3d271cc33ceebc9d06ac9f08105766d2798a zstd-v1.3.2.tar.gz
-+sha256 a77c47153ee7de02626c5b2a097005786b71688be61e9fb81806a011f90b297b zstd-v1.3.3.tar.gz
- 
- # License files (locally computed as well)
- sha256 2c1a7fa704df8f3a606f6fc010b8b5aaebf403f3aeec339a12048f1ba7331a0b LICENSE
-diff --git a/package/zstd/zstd.mk b/package/zstd/zstd.mk
-index 592e85ae61..ab35f748c7 100644
---- a/package/zstd/zstd.mk
-+++ b/package/zstd/zstd.mk
+diff --git a/package/bluez5_utils/bluez5_utils.hash b/package/bluez5_utils/bluez5_utils.hash
+index 36791c9e6f..dc331b5a0d 100644
+--- a/package/bluez5_utils/bluez5_utils.hash
++++ b/package/bluez5_utils/bluez5_utils.hash
+@@ -1,2 +1,2 @@
+ # From https://www.kernel.org/pub/linux/bluetooth/sha256sums.asc:
+-sha256 cf75bf7cd5d564f21cc4a2bd01d5c39ce425397335fd47d9bbe43af0a58342c8  bluez-5.47.tar.xz
++sha256 b9a8723072ef66bae7ec301c774902ebcb444c9c5b149b5a199e60a1ba970e90  bluez-5.48.tar.xz
+diff --git a/package/bluez5_utils/bluez5_utils.mk b/package/bluez5_utils/bluez5_utils.mk
+index 57e9c264e1..0634ec9f6f 100644
+--- a/package/bluez5_utils/bluez5_utils.mk
++++ b/package/bluez5_utils/bluez5_utils.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ZSTD_VERSION = v1.3.2
-+ZSTD_VERSION = v1.3.3
- ZSTD_SITE = $(call github,facebook,zstd,$(ZSTD_VERSION))
- ZSTD_LICENSE = BSD-3-Clause, GPL-2.0
- ZSTD_LICENSE_FILES = LICENSE COPYING
+-BLUEZ5_UTILS_VERSION = 5.47
++BLUEZ5_UTILS_VERSION = 5.48
+ BLUEZ5_UTILS_SOURCE = bluez-$(BLUEZ5_UTILS_VERSION).tar.xz
+ BLUEZ5_UTILS_SITE = $(BR2_KERNEL_MIRROR)/linux/bluetooth
+ BLUEZ5_UTILS_INSTALL_STAGING = YES
 -- 
 2.11.0
