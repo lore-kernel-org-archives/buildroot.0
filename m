@@ -1,47 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 7 Jan 2018 21:54:27 +0100
-Subject: [Buildroot] [git commit] package/pkg-cmake.mk: add note about
- BUILD_STATIC_LIBS
-Message-ID: <20180107224039.08E6583B9D@busybox.osuosl.org>
+Date: Sun, 7 Jan 2018 21:56:59 +0100
+Subject: [Buildroot] [git commit] toolchain: m68k coldfire is also affected
+ by gcc bug 64735
+Message-ID: <20180107224039.173818347F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2d0058e2d3d5ebc22d4ad4ffaa9a265ba680bf53
+commit: https://git.buildroot.net/buildroot/commit/?id=98b3b83fb54323cd1be0f38084a51c4e0c939e65
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-As BUILD_STATIC_LIBS is not a standard cmake variable (while
-BUILD_SHARED_LIBS is) we shouldn't add it in pkg-cmake.mk, although
-for some packages that would make sense. Therefore, add a note so we
-don't forget about this abnormality.
-
-See: https://cmake.org/cmake/help/v3.8/manual/cmake-variables.7.html#variables-that-change-behavior
+Verified experimentally by using exception_ptr with m68k_cf5208 and
+looking at the value of ATOMIC_INT_LOCK_FREE. ATOMIC_INT_LOCK_FREE=1,
+so the issue is present. Also verified that gcc 7.x fixed it also for
+cf5208.
 
 Signed-off-by: Jan Heylen <jan.heylen@nokia.com>
-[Thomas: rework the comment in the code.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/pkg-cmake.mk | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ toolchain/toolchain-common.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
-index 6739704..14ffe4a 100644
---- a/package/pkg-cmake.mk
-+++ b/package/pkg-cmake.mk
-@@ -80,6 +80,14 @@ ifndef $(2)_CONFIGURE_CMDS
- ifeq ($(4),target)
+diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
+index d743c63..0000713 100644
+--- a/toolchain/toolchain-common.in
++++ b/toolchain/toolchain-common.in
+@@ -22,6 +22,7 @@ config BR2_TOOLCHAIN_HAS_GCC_BUG_64735
+ 	default y if BR2_ARM_CPU_ARMV4
+ 	default y if BR2_ARM_CPU_ARMV5
+ 	default y if BR2_sparc_v8
++	default y if BR2_m68k_cf5208
+ 	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_7
  
- # Configure package for target
-+#
-+# - We are passing BUILD_SHARED_LIBS because it is documented as a
-+#   standard CMake variable to control the build of shared libraries
-+#   (see https://cmake.org/cmake/help/v3.8/manual/cmake-variables.7.html#variables-that-change-behavior)
-+# - We are not passing BUILD_STATIC_LIBS because it is *not*
-+#   documented as a standard CMake variable. If a package supports it,
-+#   it must handle it explicitly.
-+#
- define $(2)_CONFIGURE_CMDS
- 	(mkdir -p $$($$(PKG)_BUILDDIR) && \
- 	cd $$($$(PKG)_BUILDDIR) && \
+ config BR2_TOOLCHAIN_HAS_NATIVE_RPC
