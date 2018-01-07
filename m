@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 7 Jan 2018 21:36:12 +0100
-Subject: [Buildroot] [PATCH 1/1] package/x11r7/xlib_libXpm: disable
- gettext detection when not needed
-In-Reply-To: <20180107175626.19944-1-bernd.kuhls@t-online.de>
-References: <20180107175626.19944-1-bernd.kuhls@t-online.de>
-Message-ID: <20180107213612.1c396628@windsurf>
+Date: Sun, 7 Jan 2018 21:36:19 +0100
+Subject: [Buildroot] [PATCH 1/1] package/x11r7/xserver_xorg-server: fix
+ build with composite support disabled
+In-Reply-To: <20180107190009.22933-1-bernd.kuhls@t-online.de>
+References: <20180107190009.22933-1-bernd.kuhls@t-online.de>
+Message-ID: <20180107213619.6c3068cb@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,23 +13,20 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun,  7 Jan 2018 18:56:26 +0100, Bernd Kuhls wrote:
-> Patch originates from FreeBSD:
-> https://lists.freebsd.org/pipermail/freebsd-x11/2015-July/016528.html
-> https://svnweb.freebsd.org/ports/head/x11/libXpm/Makefile?r1=384234&r2=391122&pathrev=391122
-> 
-> Fixes
-> http://autobuild.buildroot.net/results/f24/f24dc74c111690f068833ff6fc72df9a0853d210/
+On Sun,  7 Jan 2018 20:00:09 +0100, Bernd Kuhls wrote:
+> Added upstream to fix
+> http://autobuild.buildroot.net/results/44e/44e29c2fb5d236a66e0466698fbc9201a37dbc63/
 > 
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  ...clude-compositeext.h-if-COMPOSITE-is-supp.patch | 31 ++++++++++++++++++++++
+>  1 file changed, 31 insertions(+)
+>  create mode 100644 package/x11r7/xserver_xorg-server/1.19.6/0004-glx-Only-include-compositeext.h-if-COMPOSITE-is-supp.patch
 
-Not the nicest fix, but it is much simpler than fixing the gettext
-integration in xlib_libXpm, so: applied.
-
-Thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
+Embedded Linux, Kernel and Android engineering
 http://free-electrons.com
