@@ -1,30 +1,59 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 07 Jan 2018 18:57:34 +0100
-Subject: [Buildroot] [PATCH 1/1] package/x11r7/xlib_libXpm: needs
- host-gettext
-References: <20170822170304.7160-1-bernd.kuhls@t-online.de>
- <20170822230152.40dab192@windsurf>
-Message-ID: <el3aiexcto.ln2@ID-313208.user.individual.net>
+Date: Sun,  7 Jan 2018 20:00:09 +0100
+Subject: [Buildroot] [PATCH 1/1] package/x11r7/xserver_xorg-server: fix
+ build with composite support disabled
+Message-ID: <20180107190009.22933-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Tue, 22 Aug 2017 23:01:52 +0200 schrieb Thomas Petazzoni:
+Added upstream to fix
+http://autobuild.buildroot.net/results/44e/44e29c2fb5d236a66e0466698fbc9201a37dbc63/
 
-> Hello,
-> 
-> On Tue, 22 Aug 2017 19:03:04 +0200, Bernd Kuhls wrote:
->> https://git.buildroot.net/buildroot/commit/package/x11r7?
-id=e398ec92e9ad04e5bbae32f03cd18a53b5761517
->> removed the host-gettext dependency. Since then building the package
->> fails on hosts without the xgettext binary:
->> 
->> /bin/sh: xgettext: command not found
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ ...clude-compositeext.h-if-COMPOSITE-is-supp.patch | 31 ++++++++++++++++++++++
+ 1 file changed, 31 insertions(+)
+ create mode 100644 package/x11r7/xserver_xorg-server/1.19.6/0004-glx-Only-include-compositeext.h-if-COMPOSITE-is-supp.patch
 
-Hi,
-
-superseded by http://patchwork.ozlabs.org/patch/856573/
-
-Regards, Bernd
+diff --git a/package/x11r7/xserver_xorg-server/1.19.6/0004-glx-Only-include-compositeext.h-if-COMPOSITE-is-supp.patch b/package/x11r7/xserver_xorg-server/1.19.6/0004-glx-Only-include-compositeext.h-if-COMPOSITE-is-supp.patch
+new file mode 100644
+index 0000000000..93be91ae7f
+--- /dev/null
++++ b/package/x11r7/xserver_xorg-server/1.19.6/0004-glx-Only-include-compositeext.h-if-COMPOSITE-is-supp.patch
+@@ -0,0 +1,31 @@
++From d16133e3e293fe16b291114d344fbd5a61d5ed65 Mon Sep 17 00:00:00 2001
++From: Jeremy Huddleston Sequoia <jeremyhu@apple.com>
++Date: Thu, 20 Jul 2017 19:48:26 -0700
++Subject: [PATCH] glx: Only include compositeext.h if COMPOSITE is
++ supported
++
++Regressed-in: ea483af99a6351323afe00a0b630cd63310efdb1
++Signed-off-by: Jeremy Huddleston Sequoia <jeremyhu@apple.com>
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ glx/glxscreens.c | 3 +++
++ 1 file changed, 3 insertions(+)
++
++diff --git a/glx/glxscreens.c b/glx/glxscreens.c
++index 78e0aaff9..609661274 100644
++--- a/glx/glxscreens.c
+++++ b/glx/glxscreens.c
++@@ -43,7 +43,10 @@
++ #include "glxutil.h"
++ #include "glxext.h"
++ #include "protocol-versions.h"
+++
+++#ifdef COMPOSITE
++ #include "compositeext.h"
+++#endif
++ 
++ static DevPrivateKeyRec glxScreenPrivateKeyRec;
++ 
++-- 
++2.11.0
++
+-- 
+2.11.0
