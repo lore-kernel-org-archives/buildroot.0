@@ -1,38 +1,30 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  7 Jan 2018 18:56:26 +0100
-Subject: [Buildroot] [PATCH 1/1] package/x11r7/xlib_libXpm: disable gettext
- detection when not needed
-Message-ID: <20180107175626.19944-1-bernd.kuhls@t-online.de>
+Date: Sun, 07 Jan 2018 18:57:34 +0100
+Subject: [Buildroot] [PATCH 1/1] package/x11r7/xlib_libXpm: needs
+ host-gettext
+References: <20170822170304.7160-1-bernd.kuhls@t-online.de>
+ <20170822230152.40dab192@windsurf>
+Message-ID: <el3aiexcto.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Patch originates from FreeBSD:
-https://lists.freebsd.org/pipermail/freebsd-x11/2015-July/016528.html
-https://svnweb.freebsd.org/ports/head/x11/libXpm/Makefile?r1=384234&r2=391122&pathrev=391122
+Am Tue, 22 Aug 2017 23:01:52 +0200 schrieb Thomas Petazzoni:
 
-Fixes
-http://autobuild.buildroot.net/results/f24/f24dc74c111690f068833ff6fc72df9a0853d210/
+> Hello,
+> 
+> On Tue, 22 Aug 2017 19:03:04 +0200, Bernd Kuhls wrote:
+>> https://git.buildroot.net/buildroot/commit/package/x11r7?
+id=e398ec92e9ad04e5bbae32f03cd18a53b5761517
+>> removed the host-gettext dependency. Since then building the package
+>> fails on hosts without the xgettext binary:
+>> 
+>> /bin/sh: xgettext: command not found
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/x11r7/xlib_libXpm/xlib_libXpm.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+Hi,
 
-diff --git a/package/x11r7/xlib_libXpm/xlib_libXpm.mk b/package/x11r7/xlib_libXpm/xlib_libXpm.mk
-index e781a8b518..09f897ea09 100644
---- a/package/x11r7/xlib_libXpm/xlib_libXpm.mk
-+++ b/package/x11r7/xlib_libXpm/xlib_libXpm.mk
-@@ -16,4 +16,8 @@ XLIB_LIBXPM_DEPENDENCIES = xlib_libX11 xlib_libXext xlib_libXt xproto_xproto \
- 	$(if $(BR2_PACKAGE_LIBICONV),libiconv) \
- 	$(TARGET_NLS_DEPENDENCIES)
- 
-+ifeq ($(BR2_SYSTEM_ENABLE_NLS),)
-+XLIB_LIBXPM_CONF_ENV = ac_cv_search_gettext=no
-+endif
-+
- $(eval $(autotools-package))
--- 
-2.11.0
+superseded by http://patchwork.ozlabs.org/patch/856573/
+
+Regards, Bernd
