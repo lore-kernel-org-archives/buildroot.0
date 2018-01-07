@@ -1,15 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 7 Jan 2018 23:20:54 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2018-01-03
-In-Reply-To: <cbf92a23-f475-b9e4-a71c-d3edf95e46da@gmail.com>
-References: <20180104070035.EEAA2207B1@mail.free-electrons.com>
- <12466b9b-4377-b65c-bdb7-c76b136fc3ef@gmail.com>
- <CANQCQpahMS8fVOAS1-1R9veM_4LoO8xdnRosEs9yKNC4EtTERg@mail.gmail.com>
- <CANQCQpaphdhYG8Z23vnxEvUN=fG+UVra2gzc-QApLjbmCeGdpQ@mail.gmail.com>
- <CANQCQpaqZdMqsoXcODeTjM_hLdH5mX4p3Mmmj4zO6Ab258L1DQ@mail.gmail.com>
- <cbf92a23-f475-b9e4-a71c-d3edf95e46da@gmail.com>
-Message-ID: <20180107232054.750b6a84@windsurf>
+Date: Sun, 7 Jan 2018 23:29:00 +0100
+Subject: [Buildroot] [PATCH] nilfs-utils: fix build with static
+ toolchains
+In-Reply-To: <1515357573-10780-1-git-send-email-dev.kurt@vandijck-laurijssen.be>
+References: <1515357573-10780-1-git-send-email-dev.kurt@vandijck-laurijssen.be>
+Message-ID: <20180107232900.63de8126@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,36 +13,43 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 7 Jan 2018 23:16:08 +0100, Romain Naour wrote:
-
-> Here is the instance log for the following build:
+On Sun,  7 Jan 2018 21:39:33 +0100, Kurt Van Dijck wrote:
+> This commit adds a patch to respect the dependency libmount->libblkid->libuuid
+> properly in autoconf. This becomes necessary for static builds.
 > 
-> [Fri, 05 Jan 2018 11:35:51] INFO: build started
-> [Sat, 06 Jan 2018 03:19:51] INFO: build hung
-> [Sat, 06 Jan 2018 03:19:51] INFO: file mtime:[02:19:47]
-> [Sat, 06 Jan 2018 03:19:51] INFO: timeNow:[03:19:51]
-> [Sat, 06 Jan 2018 03:19:51] INFO: file mtime(second read):[02:19:47]
-> [Sat, 06 Jan 2018 03:19:51] INFO: build timed out [-9]
-> 
-> http://autobuild.buildroot.net/results/ca7/ca70ce7cdbdb834bf448bcb168de9d5bba9f9178/build-end.log
+> Signed-off-by: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
 
-The build-time.log ends with:
+Nit: when sending a new version of a patch, it is strongly recommended
+to use [PATCH v2], [PATCH v3], and include a changelog...
 
-1515201587:start:extract             : host-ti-cgt-pru
+> ---
 
-And 1515201587 is:
+... right here.
 
-Saturday, January 6, 2018 2:19:47 AM GMT+01:00
 
-I.e, it does match the mtime of 02:19:47.
+> +-#if HAVE_LIBMOUNT_LIBMOUNT_H
+> +-#include <libmount/libmount.h>
+> +-#endif	/* HAVE_LIBMOUNT_H */
+> ++#include <libmount.h>
+> + 
+> + #include <stdarg.h>
+> + #include <errno.h>
+> +diff --git a/sbin/mount/umount_libmount.c b/sbin/mount/umount_libmount.c
+> +index ae5a337..2987f5d 100644
+> +--- a/sbin/mount/umount_libmount.c
+> ++++ b/sbin/mount/umount_libmount.c
+> +@@ -59,9 +59,7 @@
+> + #include <syslog.h>
+> + #endif	/* HAVE_SYSLOG_H */
+> + 
+> +-#if HAVE_LIBMOUNT_LIBMOUNT_H
+> + #include <libmount/libmount.h>
+> +-#endif	/* HAVE_LIBMOUNT_H */
 
-So it really seems like this extract step was stuck for an hour.
+You still haven't fixed the <libmount/libmount.h> vs. <libmount.h>
+discrepancy here :-)
 
-To me, this log shows that the hung detector worked as expected, and
-that for this specific situation, the problem is that the extract step
-of host-ti-cgt-pru never completes.
-
-Best regards,
+Thanks!
 
 Thomas
 -- 
