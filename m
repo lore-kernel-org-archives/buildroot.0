@@ -1,30 +1,46 @@
-From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Sat,  6 Jan 2018 18:32:40 -0600
-Subject: [Buildroot] [PATCH] python-xlib: fix LICENSE hash
-Message-ID: <1515285160-8887-1-git-send-email-matthew.weber@rockwellcollins.com>
+From: Joseph Kogut <joseph.kogut@gmail.com>
+Date: Sat, 6 Jan 2018 18:48:36 -0800
+Subject: [Buildroot] [PATCH v2 1/1] python-xlib: new package
+In-Reply-To: <20180106151308.7b5765f7@windsurf>
+References: <20180105000420.20152-1-joseph.kogut@gmail.com>
+ <20180105211307.25071-1-joseph.kogut@gmail.com>
+ <20180106151308.7b5765f7@windsurf>
+Message-ID: <CAMWSM7jG_EYigcbzNTKPyO9+VU+rFiW6XPhMKCMiFXK6pkEw_Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Resolves:
-http://autobuild.buildroot.net/results/762/7627e9da786852d6b08e2fc6092a5ce3ba2f4ea0/
+Hello,
 
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
----
- package/python-xlib/python-xlib.hash | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Sat, Jan 6, 2018 at 6:13 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+>
+> This personal message and changelog should have gone...
+>
+>>
+>> Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
+>> Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+>> ---
+>
+> ... here, so that Git doesn't include it as part of the commit log.
+> Indeed, we don't need to keep such details in the Git history (but they
+> are very useful to have during the patch review process).
+>
+>> +PYTHON_XLIB_VERSION = 0.21
+>> +PYTHON_XLIB_SOURCE = python-xlib-$(PYTHON_XLIB_VERSION).tar.bz2
+>> +PYTHON_XLIB_SITE = https://pypi.python.org/packages/eb/de/b0eaaea7b8512dc41504db071824eef30293ff55c58d83081ebaebe85a38
+>> +PYTHON_XLIB_SETUP_TYPE = setuptools
+>> +PYTHON_XLIB_LICENSE = LGPL-2.0+
+>
+> The license is in fact LGPL-2.1+, so I've fixed that and applied your
+> patch to the master branch.
 
-diff --git a/package/python-xlib/python-xlib.hash b/package/python-xlib/python-xlib.hash
-index 5cb9806..2c4861a 100644
---- a/package/python-xlib/python-xlib.hash
-+++ b/package/python-xlib/python-xlib.hash
-@@ -1,4 +1,4 @@
- # md5 from https://pypi.python.org/pypi/python-xlib/json, sha256 locally computed
- md5 cdf342aa145c2be0ccae46cfb7b62551 python-xlib-0.21.tar.bz2
- sha256 25aad0056172920552c01a163e979b02336abaf47b0792dae9c93ecb29500431 python-xlib-0.21.tar.bz2
--sha256 5ce9459bc19ced99cc9eb135d4f559ed01e336354bdf16dd998be85aa688c233 LICENSE
-+sha256 9b872a8a070b8ad329c4bd380fb1bf0000f564c75023ec8e1e6803f15364b9e9 LICENSE
--- 
-1.9.1
+Ah, thanks for the fixup. I'll keep that in mind next time.
+
+> Thanks for your contribution!
+
+Thanks for all your support!
+
+Joseph
