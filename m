@@ -1,102 +1,70 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 7 Jan 2018 15:48:21 +0100
-Subject: [Buildroot] [git commit] configs: nitrogen*: bump kernel version to
- 4.9.x_1.0.0_ga
-Message-ID: <20180107144906.7E63B802F5@busybox.osuosl.org>
+Date: Sun, 7 Jan 2018 15:50:32 +0100
+Subject: [Buildroot] [git commit] daq: libdnet is optional not mandatory
+Message-ID: <20180107145323.9C64383B3F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8484084dcbea9a08365c150e3a59f15c73882f1b
+commit: https://git.buildroot.net/buildroot/commit/?id=fadd4a9f1c0b86a0c1a0bcbe70bed1b781a2af50
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Currently based upon 4.9.74 stable release.
+libdnet is an optional dependency, it is only needed if nfq or ipq
+module are enabled.
 
-Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+So, if libdnet and libnetfilter_queue are available, enable nfq module
+and add a dependency to both packages otherwise disable nfq module.
+
+Moreover, always disable ipq module as libipq is deprecated, it isn't
+enable in iptables. Even if it was enabled, libipq.h can't be included
+as it makes a reference to linux/netfilter_ipv4/ip_queue.h which is not
+available anymore
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- configs/nitrogen6sx_defconfig | 8 ++++----
- configs/nitrogen6x_defconfig  | 8 ++++----
- configs/nitrogen7_defconfig   | 8 ++++----
- 3 files changed, 12 insertions(+), 12 deletions(-)
+ package/daq/Config.in |  1 -
+ package/daq/daq.mk    | 11 ++++++++++-
+ 2 files changed, 10 insertions(+), 2 deletions(-)
 
-diff --git a/configs/nitrogen6sx_defconfig b/configs/nitrogen6sx_defconfig
-index fc568fb..03c8f9a 100644
---- a/configs/nitrogen6sx_defconfig
-+++ b/configs/nitrogen6sx_defconfig
-@@ -17,8 +17,8 @@ BR2_PACKAGE_HOST_UBOOT_TOOLS=y
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
+diff --git a/package/daq/Config.in b/package/daq/Config.in
+index 1d24c6d..ad294ab 100644
+--- a/package/daq/Config.in
++++ b/package/daq/Config.in
+@@ -1,7 +1,6 @@
+ config BR2_PACKAGE_DAQ
+ 	bool "daq"
+ 	depends on !BR2_STATIC_LIBS # dlfcn.h
+-	select BR2_PACKAGE_LIBDNET
+ 	help
+ 	  DAQ is a Data Acquisition library for packet I/O from the
+ 	  Snort project.
+diff --git a/package/daq/daq.mk b/package/daq/daq.mk
+index 4499fb4..33c8a1f 100644
+--- a/package/daq/daq.mk
++++ b/package/daq/daq.mk
+@@ -10,12 +10,21 @@ DAQ_SOURCE = daq-$(DAQ_VERSION).tar.gz
+ DAQ_LICENSE = GPL-2.0
+ DAQ_LICENSE_FILES = COPYING
+ DAQ_INSTALL_STAGING = YES
+-DAQ_DEPENDENCIES = libdnet
  
--# Linux headers same as kernel, a 4.1 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
-+# Linux headers same as kernel, a 4.9 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
+ # package does not build in parallel due to improper make rules
+ # related to the generation of the tokdefs.h header file
+ DAQ_MAKE = $(MAKE1)
  
- # bootloader
- BR2_TARGET_UBOOT=y
-@@ -31,8 +31,8 @@ BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-b
- # kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--# Last version of branch boundary-imx_4.1.15_2.0.0_ga
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/8b305512.tar.gz"
-+# Last version of branch boundary-imx_4.9.x_1.0.0_ga
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/2aef1ef6.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="boundary"
- BR2_LINUX_KERNEL_INSTALL_TARGET=y
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
-diff --git a/configs/nitrogen6x_defconfig b/configs/nitrogen6x_defconfig
-index 43ff708..049c684 100644
---- a/configs/nitrogen6x_defconfig
-+++ b/configs/nitrogen6x_defconfig
-@@ -17,8 +17,8 @@ BR2_PACKAGE_HOST_UBOOT_TOOLS=y
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
- 
--# Linux headers same as kernel, a 4.1 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
-+# Linux headers same as kernel, a 4.9 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
- 
- # bootloader
- BR2_TARGET_UBOOT=y
-@@ -31,8 +31,8 @@ BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-b
- # kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--# Last version of branch boundary-imx_4.1.15_2.0.0_ga
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/8b305512.tar.gz"
-+# Last version of branch boundary-imx_4.9.x_1.0.0_ga
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/2aef1ef6.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="boundary"
- BR2_LINUX_KERNEL_INSTALL_TARGET=y
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
-diff --git a/configs/nitrogen7_defconfig b/configs/nitrogen7_defconfig
-index da5938b..3b50828 100644
---- a/configs/nitrogen7_defconfig
-+++ b/configs/nitrogen7_defconfig
-@@ -16,8 +16,8 @@ BR2_PACKAGE_HOST_UBOOT_TOOLS=y
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
- 
--# Linux headers same as kernel, a 4.1 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
-+# Linux headers same as kernel, a 4.9 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
- 
- # bootloader
- BR2_TARGET_UBOOT=y
-@@ -30,8 +30,8 @@ BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-b
- # kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--# Last version of branch boundary-imx_4.1.15_2.0.0_ga
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/8b305512.tar.gz"
-+# Last version of branch boundary-imx_4.9.x_1.0.0_ga
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/2aef1ef6.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="boundary"
- BR2_LINUX_KERNEL_INSTALL_TARGET=y
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
++# disable ipq module as libipq is deprecated
++DAQ_CONF_OPTS += --disable-ipq-module
++
++ifeq ($(BR2_PACKAGE_LIBDNET)$(BR2_PACKAGE_LIBNETFILTER_QUEUE),yy)
++DAQ_DEPENDENCIES += libdnet libnetfilter_queue
++DAQ_CONF_OPTS += --enable-nfq-module
++else
++DAQ_CONF_OPTS += --disable-nfq-module
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBPCAP),y)
+ DAQ_DEPENDENCIES += libpcap
+ # assume these flags are available to prevent configure from running
