@@ -1,44 +1,48 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  7 Jan 2018 17:58:10 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libatomic_ops: bump version to
- 7.4.10
-Message-ID: <20180107165810.21891-1-bernd.kuhls@t-online.de>
+Date: Sun,  7 Jan 2018 18:07:38 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libdrm: PKG_CHECK_MODULES should
+ not fail when libatomic_ops is missing
+Message-ID: <20180107170738.21617-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Added license hashes.
+According to https://autotools.io/pkgconfig/pkg_check_modules.html
+"In contrast with almost all of the original macros, though, the default
+ action-if-not-found will end the execution with an error for not having
+ found the dependency."
+
+Fixes
+http://autobuild.buildroot.net/results/cea/cea777dc997f86c1122c8b818d264215a0e77e5a/
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/libatomic_ops/libatomic_ops.hash | 4 +++-
- package/libatomic_ops/libatomic_ops.mk   | 2 +-
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ .../0003-configure-Makefile.am-use-pkg-config-to-discover-lib.patch   | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/libatomic_ops/libatomic_ops.hash b/package/libatomic_ops/libatomic_ops.hash
-index 9e67624d91..90af18dc38 100644
---- a/package/libatomic_ops/libatomic_ops.hash
-+++ b/package/libatomic_ops/libatomic_ops.hash
-@@ -1,2 +1,4 @@
- # Locally calculated
--sha256 cf7e61f7f929651b65d6186a03446819805c867f4f75c7148c8f26321eb66260  libatomic_ops-v7.4.6.tar.gz
-+sha256 7ee6a1772a49d02711b97c600bd214bd86ba8a31bd7c6d6e850b502780de367c  libatomic_ops-v7.4.10.tar.gz
-+sha256 f0e630c0ca489767033da5a0c869fb4231db522c5ff479ce55a853a923a00f69  doc/LICENSING.txt
-+sha256 32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
-diff --git a/package/libatomic_ops/libatomic_ops.mk b/package/libatomic_ops/libatomic_ops.mk
-index 483f118128..dff62c51b0 100644
---- a/package/libatomic_ops/libatomic_ops.mk
-+++ b/package/libatomic_ops/libatomic_ops.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/libdrm/0003-configure-Makefile.am-use-pkg-config-to-discover-lib.patch b/package/libdrm/0003-configure-Makefile.am-use-pkg-config-to-discover-lib.patch
+index 20bb0a36d3..0fbe77ef7c 100644
+--- a/package/libdrm/0003-configure-Makefile.am-use-pkg-config-to-discover-lib.patch
++++ b/package/libdrm/0003-configure-Makefile.am-use-pkg-config-to-discover-lib.patch
+@@ -23,6 +23,8 @@ and we don't link against it.
  
--LIBATOMIC_OPS_VERSION = v7.4.6
-+LIBATOMIC_OPS_VERSION = v7.4.10
- LIBATOMIC_OPS_SITE = $(call github,ivmai,libatomic_ops,$(LIBATOMIC_OPS_VERSION))
- LIBATOMIC_OPS_AUTORECONF = YES
- 
+ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++[Bernd: PKG_CHECK_MODULES should not fail when libatomic_ops is missing]
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ ---
+  amdgpu/Makefile.am    | 2 +-
+  configure.ac          | 2 +-
+@@ -57,7 +59,7 @@ index 35378b33..501d0871 100644
+  
+  	if test "x$drm_cv_atomic_primitives" = "xnone"; then
+ -		AC_CHECK_HEADER([atomic_ops.h], drm_cv_atomic_primitives="libatomic-ops")
+-+		PKG_CHECK_MODULES(ATOMIC_OPS, [atomic_ops], drm_cv_atomic_primitives="libatomic-ops")
+++		PKG_CHECK_MODULES(ATOMIC_OPS, [atomic_ops], drm_cv_atomic_primitives="libatomic-ops", true)
+  	fi
+  
+  	# atomic functions defined in <atomic.h> & libc on Solaris
 -- 
 2.11.0
