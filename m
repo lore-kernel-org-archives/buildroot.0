@@ -1,81 +1,68 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 7 Jan 2018 15:20:22 +0100
-Subject: [Buildroot] [PATCH] snort: new package
-In-Reply-To: <1515326249-26971-1-git-send-email-sergio.prado@e-labworks.com>
-References: <1515326249-26971-1-git-send-email-sergio.prado@e-labworks.com>
-Message-ID: <20180107152022.18f6c1df@windsurf>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun,  7 Jan 2018 15:30:30 +0100
+Subject: [Buildroot] [PATCH 1/1] daq: libdnet is optional not mandatory
+Message-ID: <20180107143030.15589-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+libdnet is an optional dependency, it is only needed if nfq or ipq
+module are enabled.
 
-On Sun,  7 Jan 2018 09:57:29 -0200, Sergio Prado wrote:
+So, if libdnet and libnetfilter_queue are available, enable nfq module
+and add a dependency to both packages otherwise disable nfq module.
 
-> diff --git a/package/snort/0001-Fix-cross-compilation-errors.patch b/package/snort/0001-Fix-cross-compilation-errors.patch
-> new file mode 100644
-> index 000000000000..f5ff03343821
-> --- /dev/null
-> +++ b/package/snort/0001-Fix-cross-compilation-errors.patch
-> @@ -0,0 +1,251 @@
-> +From 30d31b3064e26ce437ffc36e6e95cf8ebd1ecc22 Mon Sep 17 00:00:00 2001
-> +From: Sergio Prado <sergio.prado@e-labworks.com>
-> +Date: Sat, 6 Jan 2018 20:13:18 -0200
-> +Subject: [PATCH] Fix cross compilation errors
-> +
-> +Ignore errors when trying to run programs in a cross compilation
-> +environment.
-> +
-> +Also remove unsafe header/library path used in cross-compilation.
-> +
-> +Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
-> +---
+Moreover, always disable ipq module as libipq is deprecated, it isn't
+enable in iptables. Even if it was enabled, libipq.h can't be included
+as it makes a reference to linux/netfilter_ipv4/ip_queue.h which is not
+available anymore
 
-Why do you patch the configure script instead of configure.ac, and use
-autoreconf ?
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/daq/Config.in |  1 -
+ package/daq/daq.mk    | 11 ++++++++++-
+ 2 files changed, 10 insertions(+), 2 deletions(-)
 
-> diff --git a/package/snort/snort.mk b/package/snort/snort.mk
-> new file mode 100644
-> index 000000000000..73e376a6474c
-> --- /dev/null
-> +++ b/package/snort/snort.mk
-> @@ -0,0 +1,28 @@
-> +################################################################################
-> +#
-> +# snort
-> +#
-> +################################################################################
-> +
-> +SNORT_VERSION = 2.9.11.1
-> +SNORT_SOURCE = snort-$(SNORT_VERSION).tar.gz
-> +SNORT_SITE = https://www.snort.org/downloads/snort
-> +SNORT_LICENSE = GPL-2.0
-> +SNORT_LICENSE_FILES = LICENSE COPYING
-> +
-> +SNORT_DEPENDENCIES = libpcap daq pcre
-> +
-> +SNORT_CONF_OPTS = \
-> +	--with-libpcap-includes=$(TARGET_DIR)/usr/include/pcap \
-
-TARGET_DIR doesn't have header files. Use STAGING_DIR instead.
-
-> +	--disable-static-daq
-> +
-> +ifeq ($(BR2_PACKAGE_LIBTIRPC),y)
-> +SNORT_DEPENDENCIES += libtirpc host-pkgconf
-> +SNORT_CFLAGS += `$(PKG_CONFIG_HOST_BINARY) --cflags libtirpc`
-> +SNORT_LIBS += `$(PKG_CONFIG_HOST_BINARY) --libs libtirpc`
-> +endif
-> +
-> +SNORT_CONF_ENV = \
-> +	CFLAGS="$(TARGET_CFLAGS) $(SNORT_CFLAGS)" LIBS="$(SNORT_LIBS)"
-
-Thanks!
-
-Thomas
+diff --git a/package/daq/Config.in b/package/daq/Config.in
+index 1d24c6d11a..ad294abd60 100644
+--- a/package/daq/Config.in
++++ b/package/daq/Config.in
+@@ -1,7 +1,6 @@
+ config BR2_PACKAGE_DAQ
+ 	bool "daq"
+ 	depends on !BR2_STATIC_LIBS # dlfcn.h
+-	select BR2_PACKAGE_LIBDNET
+ 	help
+ 	  DAQ is a Data Acquisition library for packet I/O from the
+ 	  Snort project.
+diff --git a/package/daq/daq.mk b/package/daq/daq.mk
+index 4499fb4b68..33c8a1f662 100644
+--- a/package/daq/daq.mk
++++ b/package/daq/daq.mk
+@@ -10,12 +10,21 @@ DAQ_SOURCE = daq-$(DAQ_VERSION).tar.gz
+ DAQ_LICENSE = GPL-2.0
+ DAQ_LICENSE_FILES = COPYING
+ DAQ_INSTALL_STAGING = YES
+-DAQ_DEPENDENCIES = libdnet
+ 
+ # package does not build in parallel due to improper make rules
+ # related to the generation of the tokdefs.h header file
+ DAQ_MAKE = $(MAKE1)
+ 
++# disable ipq module as libipq is deprecated
++DAQ_CONF_OPTS += --disable-ipq-module
++
++ifeq ($(BR2_PACKAGE_LIBDNET)$(BR2_PACKAGE_LIBNETFILTER_QUEUE),yy)
++DAQ_DEPENDENCIES += libdnet libnetfilter_queue
++DAQ_CONF_OPTS += --enable-nfq-module
++else
++DAQ_CONF_OPTS += --disable-nfq-module
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBPCAP),y)
+ DAQ_DEPENDENCIES += libpcap
+ # assume these flags are available to prevent configure from running
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.14.1
