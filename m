@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 7 Jan 2018 23:51:14 +0100
-Subject: [Buildroot] [PATCH] package/enlightenment: bump to 0.22.1
-In-Reply-To: <20180105163223.10142-1-romain.naour@gmail.com>
-References: <20180105163223.10142-1-romain.naour@gmail.com>
-Message-ID: <20180107235114.29989985@windsurf>
+Date: Sun, 7 Jan 2018 23:52:38 +0100
+Subject: [Buildroot] [PATCH] ncurses: Install 256 color terminfo files
+In-Reply-To: <20171220020624.22252-1-tpiepho@impinj.com>
+References: <20171220020624.22252-1-tpiepho@impinj.com>
+Message-ID: <20180107235238.14263617@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,24 +12,31 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri,  5 Jan 2018 17:32:23 +0100, Romain Naour wrote:
-> See https://www.enlightenment.org/news/e22_release and
-> https://www.enlightenment.org/news/e0.22.1_release
+On Tue, 19 Dec 2017 18:06:24 -0800, Trent Piepho wrote:
+> There are three 256 color terminfo files that buildroot only installs if
+> ncurses is configured with wide character support, which also enables
+> ext-color.  There is a fourth 256 color terminfo file and does not depend
+> on wchar suport and is always installed.
 > 
-> Switch to the meson build system.
+> This changes that to always install all four 256 color terminfo files.
 > 
-> The autotools build system has been removed upstream by commit
-> https://git.enlightenment.org/core/enlightenment.git/commit/?id=bd8828204779509a2f47fffc4031abcab2b34d79
+> When ncurses has ext-colors enabled,it allows 256 fg and bg colors at the
+> same time.  Without ext-colors, it is still possible to use the 256 color
+> terminfo files and one can get a combination of fb and bg colors that
+> equals up to 256, e.g. 256 fg colors on one background or 16 fg and 16 bg
+> colors.
 > 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> In short, the 256 color files work fine without wchar or ext-color support
+> and support more colors than the normal xterm, etc.  terminfo files.  It's
+> common today for the default terminal to use xterm-256color and it's nice
+> if thinks like vim and top work out of the box.
+> 
+> Signed-off-by: Trent Piepho <tpiepho@impinj.com>
 > ---
-> ---
->  package/enlightenment/enlightenment.hash |  4 ++--
->  package/enlightenment/enlightenment.mk   | 41 +++++++++++++++++++++++---------
->  2 files changed, 32 insertions(+), 13 deletions(-)
+>  package/ncurses/ncurses.mk | 7 +++----
+>  1 file changed, 3 insertions(+), 4 deletions(-)
 
-Applied to master after using --option=value consistently, as pointed
-out in my earlier e-mail. Thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
