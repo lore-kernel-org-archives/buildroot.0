@@ -1,9 +1,9 @@
 From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Sun,  7 Jan 2018 20:08:47 +0100
-Subject: [Buildroot] [PATCH 3/9] s6-rc: bump version to 0.4.0.0
+Date: Sun,  7 Jan 2018 20:08:48 +0100
+Subject: [Buildroot] [PATCH 4/9] s6-dns: bump version to 2.3.0.0
 In-Reply-To: <20180107190853.15382-1-eric.le.bihan.dev@free.fr>
 References: <20180107190853.15382-1-eric.le.bihan.dev@free.fr>
-Message-ID: <20180107190853.15382-4-eric.le.bihan.dev@free.fr>
+Message-ID: <20180107190853.15382-5-eric.le.bihan.dev@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,31 +14,31 @@ Also add license hash.
 
 Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 ---
- package/s6-rc/s6-rc.hash | 3 ++-
- package/s6-rc/s6-rc.mk   | 2 +-
+ package/s6-dns/s6-dns.hash | 3 ++-
+ package/s6-dns/s6-dns.mk   | 2 +-
  2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/s6-rc/s6-rc.hash b/package/s6-rc/s6-rc.hash
-index 4c6e32a647..76ab69df18 100644
---- a/package/s6-rc/s6-rc.hash
-+++ b/package/s6-rc/s6-rc.hash
+diff --git a/package/s6-dns/s6-dns.hash b/package/s6-dns/s6-dns.hash
+index 2e019ce7d6..483d4f0e4b 100644
+--- a/package/s6-dns/s6-dns.hash
++++ b/package/s6-dns/s6-dns.hash
 @@ -1,2 +1,3 @@
  # Locally generated
--sha256 ac0afe7adb3be24e3d0bd7ff1ed1011018751699669ce763a9562ab336fc7428  s6-rc-0.3.0.1.tar.gz
-+sha256 96b8e7f275d42113b9ba7ef1d8856f64183b9421c39702f8332e6f5686496fba  s6-rc-0.4.0.0.tar.gz
-+sha256 1377d3b18a31de11e8bb06f0f46888a23bc16cbc57285035793bf7e7943bbcb3  COPYING
-diff --git a/package/s6-rc/s6-rc.mk b/package/s6-rc/s6-rc.mk
-index 4a940ae0b6..396adaeaf4 100644
---- a/package/s6-rc/s6-rc.mk
-+++ b/package/s6-rc/s6-rc.mk
+-sha256 e31b454aef2bd0e35afb497c42dd0d49c011e0535ad2bf4dd6719afcf6e5e6b4  s6-dns-2.2.0.1.tar.gz
++sha256 a828583e48741927c88de3822283c317c792ffc15d5e9043f29625b87ba38740  s6-dns-2.3.0.0.tar.gz
++sha256 6ee77e7199d69b707ab864ea7a838f9562717aaa41c89413bdb2cf835f95052f  COPYING
+diff --git a/package/s6-dns/s6-dns.mk b/package/s6-dns/s6-dns.mk
+index f0c63f35c3..42639aa9c4 100644
+--- a/package/s6-dns/s6-dns.mk
++++ b/package/s6-dns/s6-dns.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--S6_RC_VERSION = 0.3.0.1
-+S6_RC_VERSION = 0.4.0.0
- S6_RC_SITE = http://skarnet.org/software/s6-rc
- S6_RC_LICENSE = ISC
- S6_RC_LICENSE_FILES = COPYING
+-S6_DNS_VERSION = 2.2.0.1
++S6_DNS_VERSION = 2.3.0.0
+ S6_DNS_SITE = http://skarnet.org/software/s6-dns
+ S6_DNS_LICENSE = ISC
+ S6_DNS_LICENSE_FILES = COPYING
 -- 
 2.14.3
