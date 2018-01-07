@@ -1,29 +1,68 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 7 Jan 2018 23:45:34 +0100
-Subject: [Buildroot] [PATCH v6 4/4] opentracing-cpp: new package
-In-Reply-To: <1515068911-21112-5-git-send-email-heyleke@gmail.com>
-References: <1515068911-21112-1-git-send-email-heyleke@gmail.com>
- <1515068911-21112-5-git-send-email-heyleke@gmail.com>
-Message-ID: <20180107234534.609dcf07@windsurf>
+Date: Sun, 7 Jan 2018 23:47:43 +0100
+Subject: [Buildroot] [git commit] irssi: security bump to version 1.0.6
+Message-ID: <20180107224754.3D54C8355E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=aebdb1cd4b4034542eb7c50fc4b6a265c5ba5c77
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu,  4 Jan 2018 13:28:31 +0100, Jan Heylen wrote:
-> From: Jan Heylen <jan.heylen@nokia.com>
-> 
-> Signed-off-by: Jan Heylen <jan.heylen@nokia.com>
-> ---
-> test-pkg passes
+From the advisory (https://irssi.org/security/irssi_sa_2018_01.txt):
 
-Applied to master, thanks.
+Multiple vulnerabilities have been located in Irssi.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+(a) When the channel topic is set without specifying a sender, Irssi
+    may dereference NULL pointer. Found by Joseph Bisch. (CWE-476)
+
+    CVE-2018-5206 was assigned to this issue.
+
+(b) When using incomplete escape codes, Irssi may access data beyond
+    the end of the string. (CWE-126) Found by Joseph Bisch.
+
+    CVE-2018-5205 was assigned to this issue.
+
+(c) A calculation error in the completion code could cause a heap
+    buffer overflow when completing certain strings. (CWE-126) Found
+    by Joseph Bisch.
+
+    CVE-2018-5208 was assigned to this issue.
+
+(d) When using an incomplete variable argument, Irssi may access data
+    beyond the end of the string. (CWE-126) Found by Joseph Bisch.
+
+    CVE-2018-5207 was assigned to this issue.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/irssi/irssi.hash | 2 +-
+ package/irssi/irssi.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/irssi/irssi.hash b/package/irssi/irssi.hash
+index 0a6c3f6..83dde00 100644
+--- a/package/irssi/irssi.hash
++++ b/package/irssi/irssi.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-sha256	c2556427e12eb06cabfed40839ac6f57eb8b1aa6365fab6dfcd331b7a04bb914  irssi-1.0.5.tar.xz
++sha256	029e884f3ebf337f7266d8ed4e1a035ca56d9f85015d74c868b488f279de8585  irssi-1.0.6.tar.xz
+ # Locally calculated
+ sha256	a1a27cb2ecee8d5378fbb3562f577104a445d6d66fee89286e16758305e63e2b  COPYING
+diff --git a/package/irssi/irssi.mk b/package/irssi/irssi.mk
+index f945078..d49b5d7 100644
+--- a/package/irssi/irssi.mk
++++ b/package/irssi/irssi.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-IRSSI_VERSION = 1.0.5
++IRSSI_VERSION = 1.0.6
+ IRSSI_SOURCE = irssi-$(IRSSI_VERSION).tar.xz
+ # Do not use the github helper here. The generated tarball is *NOT* the
+ # same as the one uploaded by upstream for the release.
