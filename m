@@ -1,30 +1,46 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 07 Jan 2018 21:14:09 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2018-01-05
-In-Reply-To: <20180106111711.GA9774@scaer> (Yann E. MORIN's message of "Sat, 6
- Jan 2018 12:17:11 +0100")
-References: <20180106070039.EE62C207B4@mail.free-electrons.com>
- <20180106111711.GA9774@scaer>
-Message-ID: <87d12lqve6.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 7 Jan 2018 21:24:24 +0100
+Subject: [Buildroot] [git commit] package/libatomic_ops: bump version to
+ 7.4.10
+Message-ID: <20180107203114.6C63783B3F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=a0b3d592ff5b8cc57fb101c6b549b6762b4bb089
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Hi,
+Added license hashes.
 
- > It looks like there is no Makefile in that directory. Yes, so, what... :-/
- > I can't reproduce, neither on my machine, nor on the affected autobuilder.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libatomic_ops/libatomic_ops.hash | 4 +++-
+ package/libatomic_ops/libatomic_ops.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
-Indeed, I saw it as well - Very strange!
-
- > Let's say this is a butterfly-effect (xkcd:378)...
-
-Yeah, unless it pops up again..
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libatomic_ops/libatomic_ops.hash b/package/libatomic_ops/libatomic_ops.hash
+index 9e67624..90af18d 100644
+--- a/package/libatomic_ops/libatomic_ops.hash
++++ b/package/libatomic_ops/libatomic_ops.hash
+@@ -1,2 +1,4 @@
+ # Locally calculated
+-sha256 cf7e61f7f929651b65d6186a03446819805c867f4f75c7148c8f26321eb66260  libatomic_ops-v7.4.6.tar.gz
++sha256 7ee6a1772a49d02711b97c600bd214bd86ba8a31bd7c6d6e850b502780de367c  libatomic_ops-v7.4.10.tar.gz
++sha256 f0e630c0ca489767033da5a0c869fb4231db522c5ff479ce55a853a923a00f69  doc/LICENSING.txt
++sha256 32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
+diff --git a/package/libatomic_ops/libatomic_ops.mk b/package/libatomic_ops/libatomic_ops.mk
+index 483f118..dff62c5 100644
+--- a/package/libatomic_ops/libatomic_ops.mk
++++ b/package/libatomic_ops/libatomic_ops.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBATOMIC_OPS_VERSION = v7.4.6
++LIBATOMIC_OPS_VERSION = v7.4.10
+ LIBATOMIC_OPS_SITE = $(call github,ivmai,libatomic_ops,$(LIBATOMIC_OPS_VERSION))
+ LIBATOMIC_OPS_AUTORECONF = YES
+ 
