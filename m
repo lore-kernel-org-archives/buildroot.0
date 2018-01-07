@@ -1,85 +1,81 @@
-From: Marcus Folkesson <marcus.folkesson@gmail.com>
-Date: Sun, 7 Jan 2018 17:24:34 +0100
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 7 Jan 2018 17:34:27 +0100
 Subject: [Buildroot] [PATCH] libselinux: set PREFIX to generate proper
  .pc file
-In-Reply-To: <20180107151618.62c734e2@windsurf>
+In-Reply-To: <20180107162434.GA27635@gmail.com>
 References: <20180106145249.3090-1-marcus.folkesson@gmail.com>
  <20180107151618.62c734e2@windsurf>
-Message-ID: <20180107162434.GA27635@gmail.com>
+ <20180107162434.GA27635@gmail.com>
+Message-ID: <20180107173427.1dc604d7@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hello,
 
-On Sun, Jan 07, 2018 at 03:16:18PM +0100, Thomas Petazzoni wrote:
-> Hello,
+On Sun, 7 Jan 2018 17:24:34 +0100, Marcus Folkesson wrote:
+
+> > How can this work without passing PREFIX=/usr also at install time ?
+> > (Same question for libsemanage and libsepol).  
 > 
-> Thanks for continuing the work on this topic!
+> If not PREFIX is passed, it get the value of $(DESTDIR)/usr, which I
+> think is correct?
+
+No, in the standard semantic of DESTDIR and PREFIX:
+
+ - PREFIX should be /usr, and DESTDIR $(TARGET_DIR) or $(STAGING_DIR)
+   for target installation
+
+ - PREFIX should be $(HOST_DIR) for host installation, DESTDIR is not
+   used
+
+PREFIX is where the software is going to be executed from. So the
+software is going to be executed from /usr for target software, from
+$(HOST_DIR) for host software. PREFIX potentially has an effect on the
+stuff being built: PREFIX might end up being hardcoded into the
+binaries being compiled.
+
+DESTDIR is used to divert the installation. It is only meaningful
+during installation. It has no effect on the stuff being built: DESTDIR
+is never going to be hardcoded in a binary.
+
+> If PREFIX=/usr at install time, it tries to install on the host
+> system.
+
+That's bogus.
+
+> I guess autotools would have done a better job with DESTDIR and PREFIX.
+
+Yes.
+
+> What I can tell, the libselinux.pc is the only target that make use of
+> PREFIX during compile time.
 > 
-> On Sat,  6 Jan 2018 15:52:49 +0100, Marcus Folkesson wrote:
-> > Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
-> > ---
-> >  package/libselinux/libselinux.mk | 4 +++-
-> >  1 file changed, 3 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/package/libselinux/libselinux.mk b/package/libselinux/libselinux.mk
-> > index 8ac8000de5..bf33da7f75 100644
-> > --- a/package/libselinux/libselinux.mk
-> > +++ b/package/libselinux/libselinux.mk
-> > @@ -43,17 +43,19 @@ LIBSELINUX_MAKE_INSTALL_TARGETS += install-pywrap
-> >  # dependencies are broken and result in file truncation errors at link
-> >  # time if the Python bindings are built through the same make
-> >  # invocation as the rest of the library.
-> > +# DESTDIR is needed during the compile to compute library and header paths.
-> >  define LIBSELINUX_BUILD_PYTHON_BINDINGS
-> >  	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
-> >  		$(LIBSELINUX_MAKE_OPTS) DESTDIR=$(STAGING_DIR) swigify pywrap
-> >  endef
-> >  endif # python || python3
-> >  
-> > +# DESTDIR is needed during the compile to compute library and header paths.
-> >  define LIBSELINUX_BUILD_CMDS
-> >  	# DESTDIR is needed during the compile to compute library and
-> >  	# header paths.
-> >  	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
-> > -		$(LIBSELINUX_MAKE_OPTS) DESTDIR=$(STAGING_DIR) all
-> > +		$(LIBSELINUX_MAKE_OPTS) DESTDIR=$(STAGING_DIR) PREFIX=/usr all
-> >  	$(LIBSELINUX_BUILD_PYTHON_BINDINGS)
-> >  endef
-> 
-> How can this work without passing PREFIX=/usr also at install time ?
-> (Same question for libsemanage and libsepol).
+> But maybe I should set PREFIX explicitly to $(XXXXX_DIR)/usr during
+> installation just for clarity?
 
-If not PREFIX is passed, it get the value of $(DESTDIR)/usr, which I
-think is correct?
+In the standard (autotools) semantic of PREFIX,
+PREFIX=$(TARGET_DIR)/usr is wrong, see above.
 
-If PREFIX=/usr at install time, it tries to install on the host
-system.
+> From libselinux/src/Makefile:
+> PREFIX ?= $(DESTDIR)/usr
 
-I guess autotools would have done a better job with DESTDIR and PREFIX.
+Yes that's just plain wrong.
 
-What I can tell, the libselinux.pc is the only target that make use of
-PREFIX during compile time.
+So, two options:
 
-But maybe I should set PREFIX explicitly to $(XXXXX_DIR)/usr during
-installation just for clarity?
+ - We fix libselinux Makefile to have a more standard DESTDIR/PREFIX
+   usage.
 
-From libselinux/src/Makefile:
-PREFIX ?= $(DESTDIR)/usr
+ - We keep libselinux Makefile as-is, but we had some comments in
+   libselinux.mk that explain the weird PREFIX/DESTDIR usage.
 
+Thanks!
 
-> 
-> Thanks,
-> 
-> Thomas
-> -- 
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux and Kernel engineering
-> http://free-electrons.com
-
-
-Best regards
-Marcus Folkesson
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
