@@ -1,31 +1,47 @@
-From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Sun,  7 Jan 2018 16:32:14 -0600
-Subject: [Buildroot] [PATCH] cjson: update LICENSE hash for 1.7.0
-Message-ID: <1515364334-26975-1-git-send-email-matthew.weber@rockwellcollins.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sun, 7 Jan 2018 23:39:16 +0100
+Subject: [Buildroot] [PATCH] package/enlightenment: bump to 0.22.1
+In-Reply-To: <20180106151425.7e15f86f@windsurf>
+References: <20180105163223.10142-1-romain.naour@gmail.com>
+ <20180106151425.7e15f86f@windsurf>
+Message-ID: <316b059e-cb1c-86cb-49cc-e31941d1214e@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-No change to the contents but indentation.
+Hi Thomas,
 
-Fixes:
-http://autobuild.buildroot.net/results/626/626f01bb2e769914d471e70665f7f2909e1f5fe2/
+Le 06/01/2018 ? 15:14, Thomas Petazzoni a ?crit?:
+> Hello,
+> 
+> On Fri,  5 Jan 2018 17:32:23 +0100, Romain Naour wrote:
+> 
+>> -ENLIGHTENMENT_CONF_OPTS = \
+>> -	--with-edje-cc=$(HOST_DIR)/bin/edje_cc \
+>> -	--with-eet-eet=$(HOST_DIR)/bin/eet \
+>> -	--with-eldbus_codegen=$(HOST_DIR)/bin/eldbus-codegen \
+>> -	--disable-pam \
+>> -	--disable-rpath
+>> +ENLIGHTENMENT_MESON_OPTS += \
+>> +	--prefix=/usr \
+>> +	--buildtype $(if $(BR2_ENABLE_DEBUG),debug,release) \
+>> +	--cross-file $(HOST_DIR)/etc/meson/cross-compilation.conf \
+> 
+> So sometimes the options are defined using =, sometimes not ? Is this
+> expected ?
 
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
----
- package/cjson/cjson.hash | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+It's a copy past mistake.
+Using --buildtype= and --cross-file= works perfectly fine.
 
-diff --git a/package/cjson/cjson.hash b/package/cjson/cjson.hash
-index 7ec85e2..44de790 100644
---- a/package/cjson/cjson.hash
-+++ b/package/cjson/cjson.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
- sha256 6429f928c32c7f24714f85550b7fdff6fb424b60bc05fafa7bd8137af5182b55  cjson-v1.7.0.tar.gz
--sha256 f6f207863675ca5a5128fd120b9aef4f4bbab73ffa57e5f771ccffc8e3cc56b7  LICENSE
-+sha256 a36dda207c36db5818729c54e7ad4e8b0c6fba847491ba64f372c1a2037b6d5c  LICENSE
--- 
-1.9.1
+Note that changing the build system can lead to new build failure.
+I tested the meson build system as best as I could.
+
+Best regards,
+Romain
+> 
+> Thanks,
+> 
+> Thomas
+> 
