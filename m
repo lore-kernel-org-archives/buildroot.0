@@ -1,43 +1,28 @@
 From: Sergey Matyukevich <geomatsi@gmail.com>
-Date: Sun,  7 Jan 2018 23:11:28 +0300
-Subject: [Buildroot] [PATCH 0/2] cleanup: xradio package and orangepi boards
-Message-ID: <20180107201130.12952-1-geomatsi@gmail.com>
+Date: Sun,  7 Jan 2018 23:11:29 +0300
+Subject: [Buildroot] [PATCH 1/2] xr819-xradio: add license file hash
+In-Reply-To: <20180107201130.12952-1-geomatsi@gmail.com>
+References: <20180107201130.12952-1-geomatsi@gmail.com>
+Message-ID: <20180107201130.12952-2-geomatsi@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
+---
+ package/xr819-xradio/xr819-xradio.hash | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Here is a couple of cleanup patches. The first patch adds license file hash
-for xr819-xradio package. The second patch drops custom Orange Pi post-image
-and post-build scripts replacing them by generic Buildroot tools.
-
-Regards,
-Sergey
-
-Sergey Matyukevich (2):
-  xr819-xradio: add license file hash
-  orangepi: drop custom post-build and post-image scripts
-
-
- b/configs/orangepi_lite_defconfig             |    6 ++++--
- b/configs/orangepi_one_defconfig              |    6 ++++--
- b/configs/orangepi_pc_defconfig               |    6 ++++--
- b/configs/orangepi_pc_plus_defconfig          |    6 ++++--
- b/configs/orangepi_zero_defconfig             |    6 ++++--
- b/package/xr819-xradio/xr819-xradio.hash      |    2 ++
- board/orangepi/orangepi-lite/post-build.sh    |    1 -
- board/orangepi/orangepi-lite/post-image.sh    |    1 -
- board/orangepi/orangepi-one/post-build.sh     |    1 -
- board/orangepi/orangepi-one/post-image.sh     |    1 -
- board/orangepi/orangepi-pc-plus/post-build.sh |    1 -
- board/orangepi/orangepi-pc-plus/post-image.sh |    1 -
- board/orangepi/orangepi-pc/post-build.sh      |    1 -
- board/orangepi/orangepi-pc/post-image.sh      |    1 -
- board/orangepi/orangepi-zero/post-build.sh    |    1 -
- board/orangepi/orangepi-zero/post-image.sh    |    1 -
- board/orangepi/post-build.sh                  |   11 -----------
- board/orangepi/post-image.sh                  |   14 --------------
- 18 files changed, 22 insertions(+), 45 deletions(-)
+diff --git a/package/xr819-xradio/xr819-xradio.hash b/package/xr819-xradio/xr819-xradio.hash
+index 869801cad6..341747c5b5 100644
+--- a/package/xr819-xradio/xr819-xradio.hash
++++ b/package/xr819-xradio/xr819-xradio.hash
+@@ -1,2 +1,4 @@
+ # Locally computed
+ sha256 7b78fc61d13a428a0d8a3d8dcffaa604d23b5a17c6e8e86d2e5e8372dcd17672 xr819-xradio-33f4b1c25eff0d9db7cbac19f36b130da9857f37.tar.gz
++# Locally computed
++sha256 db296f2f7f35bca3a174efb0eb392b3b17bd94b341851429a3dff411b1c2fc73 LICENSE
+-- 
+2.11.0
