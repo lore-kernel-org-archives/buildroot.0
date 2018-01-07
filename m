@@ -1,126 +1,83 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 7 Jan 2018 15:27:45 +0100
-Subject: [Buildroot] [git commit] imx-gpu-g2d: new package
-Message-ID: <20180107144905.E34F0802F5@busybox.osuosl.org>
+Date: Sun, 7 Jan 2018 15:38:28 +0100
+Subject: [Buildroot] [git commit] imx-parser: bump to version 4.2.1,
+ enable on AArch64
+Message-ID: <20180107144906.40F8B802F5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=266208972192f1e0869f89d7be941de6294a810a
+commit: https://git.buildroot.net/buildroot/commit/?id=86571c582b27d5330200ba663e9090bdff777c3e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Up until now, the G2D libraries were included inside the imx-gpu-viv
-package. However, since next version of the i.MX will use a new
-hardware IP to do 2D rendering (DPU), the GPU 2D libraries have been
-separated from the 3D GPU package.
+Changelog:
+1. Upgrade EULA to v18
+2. Bugfixes/Optimization
+ - Update HEVC PARSER 01.00.02/ APE PARSER 00.00.08/ MPEG2 PARSER 04.05.10
+   1. Delete the useless label in HEVC PARSER.
+   2. Fix 2 variables' not init in special case for APE PARSER.
+   3. Fix one struct's not init for MPEG2 PARSER.
+ - Fix one mp3 can't play on jb4.3_1.1.1-ga
+   ID3V2 contains a picture larger than 3MB, need to save ID3 data size
+   in self->m_dwID3V2Size to let parser skip it when starting playback.
+ - Fix creating parser error
+   When variable value is negative, if(bytesToRead) will return true,
+   modify this condition to if(bytesToRead > 0).
 
-Tested with the following commands:
- # /usr/share/examples/g2d_samples/g2d_multiblit_test
- # /usr/share/examples/g2d_samples/g2d_overlay_test
- # /usr/share/examples/g2d_samples/g2d_test
- # gst-launch-1.0 videotestsrc ! imxg2dvideosink
+Note that this package now includes AARCH64 libraries for the upcoming
+i.MX8 CPU family.
 
 Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/freescale-imx/Config.in                    |  1 +
- package/freescale-imx/imx-gpu-g2d/Config.in        | 25 +++++++++++++++
- package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.hash |  1 +
- package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.mk   | 37 ++++++++++++++++++++++
- 4 files changed, 64 insertions(+)
+ package/freescale-imx/imx-parser/Config.in       | 2 +-
+ package/freescale-imx/imx-parser/imx-parser.hash | 2 +-
+ package/freescale-imx/imx-parser/imx-parser.mk   | 6 +++++-
+ 3 files changed, 7 insertions(+), 3 deletions(-)
 
-diff --git a/package/freescale-imx/Config.in b/package/freescale-imx/Config.in
-index e02adf5..e1dbdfb 100644
---- a/package/freescale-imx/Config.in
-+++ b/package/freescale-imx/Config.in
-@@ -82,6 +82,7 @@ source "package/freescale-imx/gpu-amd-bin-mx51/Config.in"
- source "package/freescale-imx/libz160/Config.in"
- endif
- if BR2_PACKAGE_FREESCALE_IMX_HAS_VIV_GPU
-+source "package/freescale-imx/imx-gpu-g2d/Config.in"
- source "package/freescale-imx/imx-gpu-viv/Config.in"
- source "package/freescale-imx/kernel-module-imx-gpu-viv/Config.in"
- endif
-diff --git a/package/freescale-imx/imx-gpu-g2d/Config.in b/package/freescale-imx/imx-gpu-g2d/Config.in
-new file mode 100644
-index 0000000..4737578
---- /dev/null
-+++ b/package/freescale-imx/imx-gpu-g2d/Config.in
-@@ -0,0 +1,25 @@
-+comment "imx-gpu-g2d needs a glibc toolchain with armhf enabled"
-+	depends on BR2_arm
-+	depends on !BR2_TOOLCHAIN_USES_GLIBC || !BR2_ARM_EABIHF
-+
-+config BR2_PACKAGE_IMX_GPU_G2D
-+	bool "imx-gpu-g2d"
-+	# Pre-built binaries only available for ARM EABIhf
-+	depends on BR2_ARM_EABIHF
-+	# Library binaries are linked against libc.so.6
-+	depends on BR2_TOOLCHAIN_USES_GLIBC
-+	select BR2_PACKAGE_IMX_GPU_VIV
-+	help
-+	  Userspace 2D libraries for Vivante GPU on i.MX platforms.
-+
-+	  This library is provided by NXP as-is and doesn't have an
-+	  upstream.
-+
-+if BR2_PACKAGE_IMX_GPU_G2D
-+
-+config BR2_PACKAGE_IMX_GPU_G2D_EXAMPLES
-+	bool "install examples"
-+	help
-+	  Copy the Vivante G2D examples to the target.
-+
-+endif
-diff --git a/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.hash b/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.hash
-new file mode 100644
-index 0000000..299ec70
---- /dev/null
-+++ b/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.hash
-@@ -0,0 +1 @@
-+sha256	070a95aa9942bd67e8ba4012962df74143bffb9998301ac097dab5e1437000d8  imx-gpu-g2d-6.2.2.p0.bin
-diff --git a/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.mk b/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.mk
-new file mode 100644
-index 0000000..0c92b82
---- /dev/null
-+++ b/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.mk
-@@ -0,0 +1,37 @@
-+################################################################################
-+#
-+# imx-gpu-g2d
-+#
-+################################################################################
-+
-+IMX_GPU_G2D_VERSION = 6.2.2.p0
-+IMX_GPU_G2D_SITE = $(FREESCALE_IMX_SITE)
-+IMX_GPU_G2D_SOURCE = imx-gpu-g2d-$(IMX_GPU_G2D_VERSION).bin
-+IMX_GPU_G2D_DEPENDENCIES = imx-gpu-viv
-+IMX_GPU_G2D_INSTALL_STAGING = YES
-+
-+IMX_GPU_G2D_LICENSE = NXP Semiconductor Software License Agreement
-+IMX_GPU_G2D_LICENSE_FILES = EULA COPYING
-+IMX_GPU_G2D_REDISTRIBUTE = NO
-+
-+define IMX_GPU_G2D_EXTRACT_CMDS
-+	$(call FREESCALE_IMX_EXTRACT_HELPER,$(DL_DIR)/$(IMX_GPU_G2D_SOURCE))
-+endef
-+
-+define IMX_GPU_G2D_INSTALL_STAGING_CMDS
-+	cp -a $(@D)/g2d/usr/* $(STAGING_DIR)/usr
-+endef
-+
-+ifeq ($(BR2_PACKAGE_IMX_GPU_G2D_EXAMPLES),y)
-+define IMX_GPU_G2D_INSTALL_EXAMPLES
-+	mkdir -p $(TARGET_DIR)/usr/share/examples/
-+	cp -a $(@D)/gpu-demos/opt/* $(TARGET_DIR)/usr/share/examples/
-+endef
+diff --git a/package/freescale-imx/imx-parser/Config.in b/package/freescale-imx/imx-parser/Config.in
+index 526f066..028b2bf 100644
+--- a/package/freescale-imx/imx-parser/Config.in
++++ b/package/freescale-imx/imx-parser/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_IMX_PARSER
+ 	bool "imx-parser"
+-	depends on BR2_arm # Only relevant for i.MX
++	depends on BR2_arm || BR2_aarch64 # Only relevant for i.MX
+ 	help
+ 	  Binary parser libraries for the NXP i.MX SoCs.
+ 
+diff --git a/package/freescale-imx/imx-parser/imx-parser.hash b/package/freescale-imx/imx-parser/imx-parser.hash
+index f6e8233..3266f48 100644
+--- a/package/freescale-imx/imx-parser/imx-parser.hash
++++ b/package/freescale-imx/imx-parser/imx-parser.hash
+@@ -1,2 +1,2 @@
+ # locally computed
+-sha256	d3a03e60780bbbd0c92932f60bd34d2fe14ffecf6aa6b810723c3edf798cad1f  imx-parser-4.1.4.bin
++sha256	36d3ae7285f3a83a87abf680b8a52b3c07df869d2443de844fb5f0ff528ca862  imx-parser-4.2.1.bin
+diff --git a/package/freescale-imx/imx-parser/imx-parser.mk b/package/freescale-imx/imx-parser/imx-parser.mk
+index a57647c..d79a444 100644
+--- a/package/freescale-imx/imx-parser/imx-parser.mk
++++ b/package/freescale-imx/imx-parser/imx-parser.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-IMX_PARSER_VERSION = 4.1.4
++IMX_PARSER_VERSION = 4.2.1
+ IMX_PARSER_SITE = $(FREESCALE_IMX_SITE)
+ IMX_PARSER_SOURCE = imx-parser-$(IMX_PARSER_VERSION).bin
+ IMX_PARSER_INSTALL_STAGING = YES
+@@ -13,6 +13,10 @@ IMX_PARSER_LICENSE = NXP Semiconductor Software License Agreement
+ IMX_PARSER_LICENSE_FILES = EULA COPYING
+ IMX_PARSER_REDISTRIBUTE = NO
+ 
++ifeq ($(BR2_aarch64),y)
++IMX_PARSER_CONF_OPTS += --enable-armv8
 +endif
 +
-+define IMX_GPU_G2D_INSTALL_TARGET_CMDS
-+	$(IMX_GPU_G2D_INSTALL_EXAMPLES)
-+	cp -a $(@D)/g2d/usr/lib $(TARGET_DIR)/usr
-+endef
-+
-+$(eval $(generic-package))
+ ifeq ($(BR2_ARM_EABIHF),y)
+ IMX_PARSER_CONF_OPTS += --enable-fhw
+ else
