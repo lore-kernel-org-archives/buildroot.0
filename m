@@ -1,107 +1,44 @@
-From: Marcus Folkesson <marcus.folkesson@gmail.com>
-Date: Sun, 7 Jan 2018 17:51:32 +0100
-Subject: [Buildroot] [PATCH] libselinux: set PREFIX to generate proper
- .pc file
-In-Reply-To: <20180107173427.1dc604d7@windsurf>
-References: <20180106145249.3090-1-marcus.folkesson@gmail.com>
- <20180107151618.62c734e2@windsurf>
- <20180107162434.GA27635@gmail.com>
- <20180107173427.1dc604d7@windsurf>
-Message-ID: <20180107165132.GB27635@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun,  7 Jan 2018 17:58:10 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libatomic_ops: bump version to
+ 7.4.10
+Message-ID: <20180107165810.21891-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Added license hashes.
 
-On Sun, Jan 07, 2018 at 05:34:27PM +0100, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Sun, 7 Jan 2018 17:24:34 +0100, Marcus Folkesson wrote:
-> 
-> > > How can this work without passing PREFIX=/usr also at install time ?
-> > > (Same question for libsemanage and libsepol).  
-> > 
-> > If not PREFIX is passed, it get the value of $(DESTDIR)/usr, which I
-> > think is correct?
-> 
-> No, in the standard semantic of DESTDIR and PREFIX:
-> 
->  - PREFIX should be /usr, and DESTDIR $(TARGET_DIR) or $(STAGING_DIR)
->    for target installation
-> 
->  - PREFIX should be $(HOST_DIR) for host installation, DESTDIR is not
->    used
-> 
-> PREFIX is where the software is going to be executed from. So the
-> software is going to be executed from /usr for target software, from
-> $(HOST_DIR) for host software. PREFIX potentially has an effect on the
-> stuff being built: PREFIX might end up being hardcoded into the
-> binaries being compiled.
-> 
-> DESTDIR is used to divert the installation. It is only meaningful
-> during installation. It has no effect on the stuff being built: DESTDIR
-> is never going to be hardcoded in a binary.
-> 
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/libatomic_ops/libatomic_ops.hash | 4 +++-
+ package/libatomic_ops/libatomic_ops.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
-You are right.
-
-> > If PREFIX=/usr at install time, it tries to install on the host
-> > system.
-> 
-> That's bogus.
-
-Just to make clear - *this* package will try to install on the host
-system.
-
-> 
-> > I guess autotools would have done a better job with DESTDIR and PREFIX.
-> 
-> Yes.
-> 
-> > What I can tell, the libselinux.pc is the only target that make use of
-> > PREFIX during compile time.
-> > 
-> > But maybe I should set PREFIX explicitly to $(XXXXX_DIR)/usr during
-> > installation just for clarity?
-> 
-> In the standard (autotools) semantic of PREFIX,
-> PREFIX=$(TARGET_DIR)/usr is wrong, see above.
-> 
-> > From libselinux/src/Makefile:
-> > PREFIX ?= $(DESTDIR)/usr
-> 
-> Yes that's just plain wrong.
-> 
-> So, two options:
-> 
->  - We fix libselinux Makefile to have a more standard DESTDIR/PREFIX
->    usage.
-
-I think we should go for this one in the long run.
-I will try to come up with something and get it upstreams for the
-selinux project.
-
-Should we keep libselinux Makefile as-is in meanwhile or add patches?
-
-I can take responsibility for the packages being fixed when it is
-upstreams.
-
-> 
->  - We keep libselinux Makefile as-is, but we had some comments in
->    libselinux.mk that explain the weird PREFIX/DESTDIR usage.
-
-> 
-> Thanks!
-> 
-> Thomas
-> -- 
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux and Kernel engineering
-> http://free-electrons.com
-
-
-Best regards
-Marcus Folkesson
+diff --git a/package/libatomic_ops/libatomic_ops.hash b/package/libatomic_ops/libatomic_ops.hash
+index 9e67624d91..90af18dc38 100644
+--- a/package/libatomic_ops/libatomic_ops.hash
++++ b/package/libatomic_ops/libatomic_ops.hash
+@@ -1,2 +1,4 @@
+ # Locally calculated
+-sha256 cf7e61f7f929651b65d6186a03446819805c867f4f75c7148c8f26321eb66260  libatomic_ops-v7.4.6.tar.gz
++sha256 7ee6a1772a49d02711b97c600bd214bd86ba8a31bd7c6d6e850b502780de367c  libatomic_ops-v7.4.10.tar.gz
++sha256 f0e630c0ca489767033da5a0c869fb4231db522c5ff479ce55a853a923a00f69  doc/LICENSING.txt
++sha256 32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
+diff --git a/package/libatomic_ops/libatomic_ops.mk b/package/libatomic_ops/libatomic_ops.mk
+index 483f118128..dff62c51b0 100644
+--- a/package/libatomic_ops/libatomic_ops.mk
++++ b/package/libatomic_ops/libatomic_ops.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBATOMIC_OPS_VERSION = v7.4.6
++LIBATOMIC_OPS_VERSION = v7.4.10
+ LIBATOMIC_OPS_SITE = $(call github,ivmai,libatomic_ops,$(LIBATOMIC_OPS_VERSION))
+ LIBATOMIC_OPS_AUTORECONF = YES
+ 
+-- 
+2.11.0
