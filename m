@@ -1,48 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 7 Jan 2018 15:06:38 +0100
-Subject: [Buildroot] [git commit] package/intel-microcode: bump version to
- 20171117
-Message-ID: <20180107141229.B5DA0801C8@busybox.osuosl.org>
+Date: Sun, 7 Jan 2018 15:07:23 +0100
+Subject: [Buildroot] [git commit] package/zstd: bump version to v1.3.3
+Message-ID: <20180107141229.D145081046@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6d2d6cbf90c56f28caad8d78bc4ee7b28dc4423b
+commit: https://git.buildroot.net/buildroot/commit/?id=72052afc294b67c34825a320d368d983e9f1f3ed
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Added license hash.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/intel-microcode/intel-microcode.hash | 3 ++-
- package/intel-microcode/intel-microcode.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ package/zstd/zstd.hash | 2 +-
+ package/zstd/zstd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/intel-microcode/intel-microcode.hash b/package/intel-microcode/intel-microcode.hash
-index 5ccfd51..0b2aa60 100644
---- a/package/intel-microcode/intel-microcode.hash
-+++ b/package/intel-microcode/intel-microcode.hash
-@@ -1,2 +1,3 @@
+diff --git a/package/zstd/zstd.hash b/package/zstd/zstd.hash
+index 5bcdde9..51e5fc2 100644
+--- a/package/zstd/zstd.hash
++++ b/package/zstd/zstd.hash
+@@ -1,5 +1,5 @@
  # Locally computed
--sha256 4fd44769bf52a7ac11e90651a307aa6e56ca6e1a814e50d750ba8207973bee93  microcode-20170707.tgz
-+sha256 93bd1da9fa58ece0016702e657f708b7e496e56da637a3fe9a6d21f1d6f524dc  microcode-20171117.tgz
-+sha256 6f905d812453a4775927b2558d51e5ca25a8e0b9bd06841b1b366c722dc0a64f  license.txt
-diff --git a/package/intel-microcode/intel-microcode.mk b/package/intel-microcode/intel-microcode.mk
-index 7ad3bba..7a88138 100644
---- a/package/intel-microcode/intel-microcode.mk
-+++ b/package/intel-microcode/intel-microcode.mk
-@@ -4,9 +4,9 @@
+-sha256 ac5054a3c64e6510bc1ae890d05e3d271cc33ceebc9d06ac9f08105766d2798a zstd-v1.3.2.tar.gz
++sha256 a77c47153ee7de02626c5b2a097005786b71688be61e9fb81806a011f90b297b zstd-v1.3.3.tar.gz
+ 
+ # License files (locally computed as well)
+ sha256 2c1a7fa704df8f3a606f6fc010b8b5aaebf403f3aeec339a12048f1ba7331a0b LICENSE
+diff --git a/package/zstd/zstd.mk b/package/zstd/zstd.mk
+index 089d654..d5459f9 100644
+--- a/package/zstd/zstd.mk
++++ b/package/zstd/zstd.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--INTEL_MICROCODE_VERSION = 20170707
-+INTEL_MICROCODE_VERSION = 20171117
- INTEL_MICROCODE_SOURCE = microcode-$(INTEL_MICROCODE_VERSION).tgz
--INTEL_MICROCODE_SITE = http://downloadmirror.intel.com/26925/eng
-+INTEL_MICROCODE_SITE = http://downloadmirror.intel.com/27337/eng
- INTEL_MICROCODE_STRIP_COMPONENTS = 0
- INTEL_MICROCODE_LICENSE = PROPRIETARY
- INTEL_MICROCODE_LICENSE_FILES = license.txt
+-ZSTD_VERSION = v1.3.2
++ZSTD_VERSION = v1.3.3
+ ZSTD_SITE = $(call github,facebook,zstd,$(ZSTD_VERSION))
+ ZSTD_LICENSE = BSD-3-Clause, GPL-2.0
+ ZSTD_LICENSE_FILES = LICENSE COPYING
