@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 7 Jan 2018 21:35:23 +0100
-Subject: [Buildroot] [PATCH 1/1] package/pound: Fix build with openssl
- 1.0.2
-In-Reply-To: <20180107160952.25244-1-bernd.kuhls@t-online.de>
-References: <20180107160952.25244-1-bernd.kuhls@t-online.de>
-Message-ID: <20180107213523.509a8f07@windsurf>
+Date: Sun, 7 Jan 2018 21:35:26 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libatomic_ops: bump version to
+ 7.4.10
+In-Reply-To: <20180107165810.21891-1-bernd.kuhls@t-online.de>
+References: <20180107165810.21891-1-bernd.kuhls@t-online.de>
+Message-ID: <20180107213526.5eb95f68@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,15 +13,14 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun,  7 Jan 2018 17:09:52 +0100, Bernd Kuhls wrote:
-> Fixes
-> http://autobuild.buildroot.net/results/5be/5be1082dee8387b1140d802ac3c788896a4bf980/
+On Sun,  7 Jan 2018 17:58:10 +0100, Bernd Kuhls wrote:
+> Added license hashes.
 > 
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  package/pound/0001-fix-openssl-1.0.2.patch | 127 +++++++++++++++++++++++++++++
->  1 file changed, 127 insertions(+)
->  create mode 100644 package/pound/0001-fix-openssl-1.0.2.patch
+>  package/libatomic_ops/libatomic_ops.hash | 4 +++-
+>  package/libatomic_ops/libatomic_ops.mk   | 2 +-
+>  2 files changed, 4 insertions(+), 2 deletions(-)
 
 Applied to master, thanks.
 
