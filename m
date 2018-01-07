@@ -1,51 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 7 Jan 2018 20:41:38 +0100
-Subject: [Buildroot] [PATCH v2 15/15] configs: nitrogen*: bump u-boot
- version to 2017.07
-In-Reply-To: <CAAMH-yv1gsYbyvsfMSBWTytEeGCL39Wvjs76Xq1PZGvGk8wGBA@mail.gmail.com>
-References: <20180105143947.26934-1-gary.bisson@boundarydevices.com>
- <20180105143947.26934-16-gary.bisson@boundarydevices.com>
- <20180107155519.33de28e7@windsurf>
- <CAAMH-yv1gsYbyvsfMSBWTytEeGCL39Wvjs76Xq1PZGvGk8wGBA@mail.gmail.com>
-Message-ID: <20180107204138.698cd177@windsurf>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Sun, 7 Jan 2018 21:08:29 +0100
+Subject: [Buildroot] [PATCH 1/2] nilfs-utils: need NPTL threads
+In-Reply-To: <20180105052334.mc3fabifliw7gzqn@tarshish>
+References: <1515060652-22472-1-git-send-email-dev.kurt@vandijck-laurijssen.be>
+ <20180104101927.oexxtwusya3wppyk@tarshish>
+ <20180104113336.6b7ed00a@windsurf.lan>
+ <20180104105154.l24rvscxbsliquv3@tarshish>
+ <20180104112815.GD18339@airbook.vandijck-laurijssen.be>
+ <20180104155213.GC3684@scaer>
+ <20180104172352.k6u2i3bkfmovgwgm@tarshish>
+ <20180104201958.GB5130@waldemar-brodkorb.de>
+ <20180105052334.mc3fabifliw7gzqn@tarshish>
+Message-ID: <20180107200829.GA30596@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Baruch,
+Baruch Siach wrote,
 
-On Sun, 7 Jan 2018 20:07:24 +0100, Gary Bisson wrote:
-
-> I understand although as it is said in the commit log, the previous
-> scripts will be removed in a future release.
-
-OK.
-
-> As for where those scripts are located, we actually have them in our
-> U-Boot repo now:
-> https://github.com/boundarydevices/u-boot-imx6/tree/boundary-v2017.07/board/boundary/bootscripts
+> The UCLIBC_HAS_ADVANCED_REALTIME help text says that this options enables 
+> clock_nanosleep(). But with current code you must have NPTL enabled for 
+> clock_nanosleep(). So the help text is not correct.
 > 
-> That is how it is used in Yocto. I don't mind using it from U-Boot
-> directly, but what's the best way to do so? Is there a bootloader
-> equivalent to LINUX_DIR so I can easily point to the bootloader
-> source?
+> This also means that architectures lack NPTL support can't have 
+> clock_nanosleep() at all. Is there a reason for that?
 
-Well LINUX_DIR is a standard package variable. So for every package
-<pkg>_DIR exists and points to its source directory :)
+You are right. It seems there is no reason for it.
+clock_nanosleep is internally using a syscall.
 
-> Also, would you guys be ok with a
-> BR2_TARGET_UBOOT_BOOT_SCRIPT_INSTALL_TARGET option? That would reduce
-> the post-build script for several configs which copies it manually to
-> TARGET_DIR/boot/ right now.
+I prepared attached patch and running the regression tests.
 
-I'm not sure what would be the benefit here. You see to propose to
-replace one post-build script by one post-uboot-install-script. What's
-the benefit?
+Do you like to test or review?
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+I cleaned up old code, which might be only required for Linux
+kernels older than 2.6.0, which I do not going to support anyway.
+
+best regards
+ Waldemar
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: 0006-rt-cleanup-and-allow-to-build-for-linuxthreads.patch
+Type: text/x-diff
+Size: 11284 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180107/62b2ebc0/attachment.patch>
