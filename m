@@ -1,44 +1,82 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 7 Jan 2018 15:07:23 +0100
-Subject: [Buildroot] [git commit] package/zstd: bump version to v1.3.3
-Message-ID: <20180107141229.D145081046@busybox.osuosl.org>
+Date: Sun, 7 Jan 2018 15:07:53 +0100
+Subject: [Buildroot] [git commit] package/samba4: bump version to 4.7.4
+Message-ID: <20180107141229.DDE0C81046@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=72052afc294b67c34825a320d368d983e9f1f3ed
+commit: https://git.buildroot.net/buildroot/commit/?id=83cd7fc25cc171ef4a34bdb680315f35a05f06da
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Release notes: https://www.samba.org/samba/history/samba-4.7.4.html
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/zstd/zstd.hash | 2 +-
- package/zstd/zstd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...-patch-source3__libads__kerberos_keytab.c.patch | 31 ++++++++++++++++++++++
+ package/samba4/samba4.hash                         |  2 +-
+ package/samba4/samba4.mk                           |  2 +-
+ 3 files changed, 33 insertions(+), 2 deletions(-)
 
-diff --git a/package/zstd/zstd.hash b/package/zstd/zstd.hash
-index 5bcdde9..51e5fc2 100644
---- a/package/zstd/zstd.hash
-+++ b/package/zstd/zstd.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256 ac5054a3c64e6510bc1ae890d05e3d271cc33ceebc9d06ac9f08105766d2798a zstd-v1.3.2.tar.gz
-+sha256 a77c47153ee7de02626c5b2a097005786b71688be61e9fb81806a011f90b297b zstd-v1.3.3.tar.gz
- 
- # License files (locally computed as well)
- sha256 2c1a7fa704df8f3a606f6fc010b8b5aaebf403f3aeec339a12048f1ba7331a0b LICENSE
-diff --git a/package/zstd/zstd.mk b/package/zstd/zstd.mk
-index 089d654..d5459f9 100644
---- a/package/zstd/zstd.mk
-+++ b/package/zstd/zstd.mk
+diff --git a/package/samba4/0002-patch-source3__libads__kerberos_keytab.c.patch b/package/samba4/0002-patch-source3__libads__kerberos_keytab.c.patch
+new file mode 100644
+index 0000000..1213659
+--- /dev/null
++++ b/package/samba4/0002-patch-source3__libads__kerberos_keytab.c.patch
+@@ -0,0 +1,31 @@
++From: Timur I. Bakeyev <timur@freebsd.org>
++Subject: Fix compilation of Samba 4.7.4 with disabled ADS
++
++Downloaded from upstream mailinglist
++https://lists.samba.org/archive/samba-technical/2017-December/124629.html
++
++Patch originates from FreeBSD:
++https://svnweb.freebsd.org/ports/head/net/samba47/files/patch-source3__libads__kerberos_keytab.c?revision=457119&view=markup
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++
++--- a/source3/libads/kerberos_keytab.c.orig	2017-12-23 14:23:53.247467000 +0100
+++++ b/source3/libads/kerberos_keytab.c	2017-12-23 18:57:07.135340000 +0100
++@@ -32,8 +32,6 @@
++ 
++ #ifdef HAVE_KRB5
++ 
++-#ifdef HAVE_ADS
++-
++ /* This MAX_NAME_LEN is a constant defined in krb5.h */
++ #ifndef MAX_KEYTAB_NAME_LEN
++ #define MAX_KEYTAB_NAME_LEN 1100
++@@ -85,6 +83,8 @@
++ 	return ret;
++ }
++ 
+++#ifdef HAVE_ADS
+++
++ /**********************************************************************
++  Adds a single service principal, i.e. 'host' to the system keytab
++ ***********************************************************************/
+diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
+index 49122c6..2876544 100644
+--- a/package/samba4/samba4.hash
++++ b/package/samba4/samba4.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 06e4152ca1cb803f005e92eb6baedb6cc874998b44ee37c2a7819e77a55bfd2c  samba-4.7.3.tar.gz
++sha256 fb12d0c4452f85b67b78bbeabd4c762d8feb8ff83e39d044d285120c2c488247  samba-4.7.4.tar.gz
+ sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index ba31d4c..6f3207f 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ZSTD_VERSION = v1.3.2
-+ZSTD_VERSION = v1.3.3
- ZSTD_SITE = $(call github,facebook,zstd,$(ZSTD_VERSION))
- ZSTD_LICENSE = BSD-3-Clause, GPL-2.0
- ZSTD_LICENSE_FILES = LICENSE COPYING
+-SAMBA4_VERSION = 4.7.3
++SAMBA4_VERSION = 4.7.4
+ SAMBA4_SITE = https://download.samba.org/pub/samba/stable
+ SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+ SAMBA4_INSTALL_STAGING = YES
