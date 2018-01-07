@@ -1,68 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 7 Jan 2018 23:47:43 +0100
-Subject: [Buildroot] [git commit] irssi: security bump to version 1.0.6
-Message-ID: <20180107224754.3D54C8355E@busybox.osuosl.org>
+Date: Sun, 7 Jan 2018 23:47:45 +0100
+Subject: [Buildroot] [git commit] cjson: update LICENSE hash for 1.7.0
+Message-ID: <20180107224754.57C23802F5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=aebdb1cd4b4034542eb7c50fc4b6a265c5ba5c77
+commit: https://git.buildroot.net/buildroot/commit/?id=b6314a181178cc6c8074f69b5d2313347100c3e9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-From the advisory (https://irssi.org/security/irssi_sa_2018_01.txt):
+No change to the contents but indentation.
 
-Multiple vulnerabilities have been located in Irssi.
+Fixes:
+http://autobuild.buildroot.net/results/626/626f01bb2e769914d471e70665f7f2909e1f5fe2/
 
-(a) When the channel topic is set without specifying a sender, Irssi
-    may dereference NULL pointer. Found by Joseph Bisch. (CWE-476)
-
-    CVE-2018-5206 was assigned to this issue.
-
-(b) When using incomplete escape codes, Irssi may access data beyond
-    the end of the string. (CWE-126) Found by Joseph Bisch.
-
-    CVE-2018-5205 was assigned to this issue.
-
-(c) A calculation error in the completion code could cause a heap
-    buffer overflow when completing certain strings. (CWE-126) Found
-    by Joseph Bisch.
-
-    CVE-2018-5208 was assigned to this issue.
-
-(d) When using an incomplete variable argument, Irssi may access data
-    beyond the end of the string. (CWE-126) Found by Joseph Bisch.
-
-    CVE-2018-5207 was assigned to this issue.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/irssi/irssi.hash | 2 +-
- package/irssi/irssi.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/cjson/cjson.hash | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/irssi/irssi.hash b/package/irssi/irssi.hash
-index 0a6c3f6..83dde00 100644
---- a/package/irssi/irssi.hash
-+++ b/package/irssi/irssi.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--sha256	c2556427e12eb06cabfed40839ac6f57eb8b1aa6365fab6dfcd331b7a04bb914  irssi-1.0.5.tar.xz
-+sha256	029e884f3ebf337f7266d8ed4e1a035ca56d9f85015d74c868b488f279de8585  irssi-1.0.6.tar.xz
- # Locally calculated
- sha256	a1a27cb2ecee8d5378fbb3562f577104a445d6d66fee89286e16758305e63e2b  COPYING
-diff --git a/package/irssi/irssi.mk b/package/irssi/irssi.mk
-index f945078..d49b5d7 100644
---- a/package/irssi/irssi.mk
-+++ b/package/irssi/irssi.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--IRSSI_VERSION = 1.0.5
-+IRSSI_VERSION = 1.0.6
- IRSSI_SOURCE = irssi-$(IRSSI_VERSION).tar.xz
- # Do not use the github helper here. The generated tarball is *NOT* the
- # same as the one uploaded by upstream for the release.
+diff --git a/package/cjson/cjson.hash b/package/cjson/cjson.hash
+index 7ec85e2..44de790 100644
+--- a/package/cjson/cjson.hash
++++ b/package/cjson/cjson.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+ sha256 6429f928c32c7f24714f85550b7fdff6fb424b60bc05fafa7bd8137af5182b55  cjson-v1.7.0.tar.gz
+-sha256 f6f207863675ca5a5128fd120b9aef4f4bbab73ffa57e5f771ccffc8e3cc56b7  LICENSE
++sha256 a36dda207c36db5818729c54e7ad4e8b0c6fba847491ba64f372c1a2037b6d5c  LICENSE
