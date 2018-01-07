@@ -1,58 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 7 Jan 2018 23:29:00 +0100
-Subject: [Buildroot] [PATCH] nilfs-utils: fix build with static
- toolchains
-In-Reply-To: <1515357573-10780-1-git-send-email-dev.kurt@vandijck-laurijssen.be>
-References: <1515357573-10780-1-git-send-email-dev.kurt@vandijck-laurijssen.be>
-Message-ID: <20180107232900.63de8126@windsurf>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Sun,  7 Jan 2018 16:32:14 -0600
+Subject: [Buildroot] [PATCH] cjson: update LICENSE hash for 1.7.0
+Message-ID: <1515364334-26975-1-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+No change to the contents but indentation.
 
-On Sun,  7 Jan 2018 21:39:33 +0100, Kurt Van Dijck wrote:
-> This commit adds a patch to respect the dependency libmount->libblkid->libuuid
-> properly in autoconf. This becomes necessary for static builds.
-> 
-> Signed-off-by: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
+Fixes:
+http://autobuild.buildroot.net/results/626/626f01bb2e769914d471e70665f7f2909e1f5fe2/
 
-Nit: when sending a new version of a patch, it is strongly recommended
-to use [PATCH v2], [PATCH v3], and include a changelog...
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+---
+ package/cjson/cjson.hash | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> ---
-
-... right here.
-
-
-> +-#if HAVE_LIBMOUNT_LIBMOUNT_H
-> +-#include <libmount/libmount.h>
-> +-#endif	/* HAVE_LIBMOUNT_H */
-> ++#include <libmount.h>
-> + 
-> + #include <stdarg.h>
-> + #include <errno.h>
-> +diff --git a/sbin/mount/umount_libmount.c b/sbin/mount/umount_libmount.c
-> +index ae5a337..2987f5d 100644
-> +--- a/sbin/mount/umount_libmount.c
-> ++++ b/sbin/mount/umount_libmount.c
-> +@@ -59,9 +59,7 @@
-> + #include <syslog.h>
-> + #endif	/* HAVE_SYSLOG_H */
-> + 
-> +-#if HAVE_LIBMOUNT_LIBMOUNT_H
-> + #include <libmount/libmount.h>
-> +-#endif	/* HAVE_LIBMOUNT_H */
-
-You still haven't fixed the <libmount/libmount.h> vs. <libmount.h>
-discrepancy here :-)
-
-Thanks!
-
-Thomas
+diff --git a/package/cjson/cjson.hash b/package/cjson/cjson.hash
+index 7ec85e2..44de790 100644
+--- a/package/cjson/cjson.hash
++++ b/package/cjson/cjson.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+ sha256 6429f928c32c7f24714f85550b7fdff6fb424b60bc05fafa7bd8137af5182b55  cjson-v1.7.0.tar.gz
+-sha256 f6f207863675ca5a5128fd120b9aef4f4bbab73ffa57e5f771ccffc8e3cc56b7  LICENSE
++sha256 a36dda207c36db5818729c54e7ad4e8b0c6fba847491ba64f372c1a2037b6d5c  LICENSE
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+1.9.1
