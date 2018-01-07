@@ -1,140 +1,63 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 7 Jan 2018 21:28:37 +0100
-Subject: [Buildroot] [git commit] package/bdwgc: bump version to 7.6.2
-Message-ID: <20180107203114.A431A83B3F@busybox.osuosl.org>
+Date: Sun, 7 Jan 2018 21:25:41 +0100
+Subject: [Buildroot] [git commit] package/libdrm: adjust patch switching to
+ pkg-config for libatomic_ops
+Message-ID: <20180107203114.77E9E83B3F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8dc6c7c5be0c831cf442cd7767476b4a4eaaba08
+commit: https://git.buildroot.net/buildroot/commit/?id=a27ef82d51591405e20ab57779fe9dffdb66e42b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Removed patches applied upstream:
+In commit fa6c7d165971e1f70b9ac94bae9cd1fd9180c072 ("libdrm: fix
+libatomic_ops linking"), a patch was added to switch to
+PKG_CHECK_MODULES() to detect libatomic_ops instead of
+AC_CHECK_HEADER.
 
-0002-Fix-uClibc-build.patch
-https://github.com/ivmai/bdwgc/commit/047230b71d421407ad2c8641ee4a87a1bd89145b
+However, as explained in
+https://autotools.io/pkgconfig/pkg_check_modules.html:
 
-0003-configure-match-uclinux-pattern.patch
-https://github.com/ivmai/bdwgc/commit/a628c90bdbf397465ac2ab2b11f14eb2e853651c
+"In contrast with almost all of the original macros, though, the default
+ action-if-not-found will end the execution with an error for not having
+ found the dependency."
 
-Renumbered remaining patches, added license hash.
+This makes the configure script bail out when libatomic_ops is not
+available, which is not what we want in libdrm's configure
+script. This commit adjusts the PKG_CHECK_MODULES() call to avoid
+failing.
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/cea/cea777dc997f86c1122c8b818d264215a0e77e5a/
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...tv-is-unknown-error-in-brief_async_signa.patch} |  0
- package/bdwgc/0002-Fix-uClibc-build.patch          | 42 ----------------------
- .../0003-configure-match-uclinux-pattern.patch     | 27 --------------
- package/bdwgc/bdwgc.hash                           |  3 +-
- package/bdwgc/bdwgc.mk                             |  2 +-
- 5 files changed, 3 insertions(+), 71 deletions(-)
+ .../0003-configure-Makefile.am-use-pkg-config-to-discover-lib.patch   | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/bdwgc/0003-Fix-size-of-tv-is-unknown-error-in-brief_async_signa.patch b/package/bdwgc/0002-Fix-size-of-tv-is-unknown-error-in-brief_async_signa.patch
-similarity index 100%
-rename from package/bdwgc/0003-Fix-size-of-tv-is-unknown-error-in-brief_async_signa.patch
-rename to package/bdwgc/0002-Fix-size-of-tv-is-unknown-error-in-brief_async_signa.patch
-diff --git a/package/bdwgc/0002-Fix-uClibc-build.patch b/package/bdwgc/0002-Fix-uClibc-build.patch
-deleted file mode 100644
-index 55896eb..0000000
---- a/package/bdwgc/0002-Fix-uClibc-build.patch
-+++ /dev/null
-@@ -1,42 +0,0 @@
--From 8d3caf00db5d71ec19f03fbf96cecf6f70b4e868 Mon Sep 17 00:00:00 2001
--From: Bernd Kuhls <bernd.kuhls@t-online.de>
--Date: Sun, 28 May 2017 20:21:09 +0200
--Subject: [PATCH] Fix uClibc build
--
--uClibc defines __GLIBC__ but does not contain libc-version.h leading to
--a build error:
--
--./include/private/gcconfig.h:1426:72: fatal error: gnu/libc-version.h: No such file or directory
--
--Patch sent upstream: https://github.com/ivmai/bdwgc/pull/164
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-----
-- include/private/gcconfig.h | 4 ++--
-- 1 file changed, 2 insertions(+), 2 deletions(-)
--
--diff --git a/include/private/gcconfig.h b/include/private/gcconfig.h
--index d7912e9e..bf17dd63 100644
----- a/include/private/gcconfig.h
--+++ b/include/private/gcconfig.h
--@@ -1442,7 +1442,7 @@
-- #         define GC_PREFETCH_FOR_WRITE(x) \
--             __asm__ __volatile__ ("prefetchw %0" : : "m"(*(char *)(x)))
-- #       endif
---#       if defined(__GLIBC__)
--+#       if defined(__GLIBC__) && !defined(__UCLIBC__)
--           /* Workaround lock elision implementation for some glibc.     */
-- #         define GLIBC_2_19_TSX_BUG
-- #         include <gnu/libc-version.h> /* for gnu_get_libc_version() */
--@@ -2455,7 +2455,7 @@
--           /* FIXME: This seems to be fixed in GLibc v2.14.              */
-- #         define GETCONTEXT_FPU_EXCMASK_BUG
-- #       endif
---#       if defined(__GLIBC__)
--+#       if defined(__GLIBC__) && !defined(__UCLIBC__)
--           /* Workaround lock elision implementation for some glibc.     */
-- #         define GLIBC_2_19_TSX_BUG
-- #         include <gnu/libc-version.h> /* for gnu_get_libc_version() */
---- 
--2.11.0
--
-diff --git a/package/bdwgc/0003-configure-match-uclinux-pattern.patch b/package/bdwgc/0003-configure-match-uclinux-pattern.patch
-deleted file mode 100644
-index b2c6198..0000000
---- a/package/bdwgc/0003-configure-match-uclinux-pattern.patch
-+++ /dev/null
-@@ -1,27 +0,0 @@
--From a628c90bdbf397465ac2ab2b11f14eb2e853651c Mon Sep 17 00:00:00 2001
--From: Romain Naour <romain.naour@gmail.com>
--Date: Sat, 6 Aug 2016 23:24:35 +0200
--Subject: [PATCH] configure: match uclinux pattern
--
--BDWGC does not recognize "uclinux" as a valid OS part of the target
--tuple which is used by some arm cortex-M toolchains.
--
--* configure.ac [$THREADS=pthreads] (GC_LINUX_THREADS, _REENTRANT): Define
--for hosts matching "*-*-*linux*" (instead of "*-*-linux*").
-----
-- configure.ac | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/configure.ac b/configure.ac
--index 22353547..fa745b56 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -190,7 +190,7 @@ case "$THREADS" in
--         AC_DEFINE(THREAD_LOCAL_ALLOC)
--         AC_MSG_WARN("Explicit GC_INIT() calls may be required.");
--         ;;
---     *-*-linux* | *-*-nacl*)
--+     *-*-*linux* | *-*-nacl*)
--         AC_DEFINE(GC_LINUX_THREADS)
--         AC_DEFINE(_REENTRANT)
--         ;;
-diff --git a/package/bdwgc/bdwgc.hash b/package/bdwgc/bdwgc.hash
-index 4b41e1d..0ebc41c 100644
---- a/package/bdwgc/bdwgc.hash
-+++ b/package/bdwgc/bdwgc.hash
-@@ -1,2 +1,3 @@
- # Locally computed
--sha256 a14a28b1129be90e55cd6f71127ffc5594e1091d5d54131528c24cd0c03b7d90  gc-7.6.0.tar.gz
-+sha256 bd112005563d787675163b5afff02c364fc8deb13a99c03f4e80fdf6608ad41e  gc-7.6.2.tar.gz
-+sha256 9944acfcee6cca308d974933977c1608804f5ad4345aac7cb8608137104e3742  README.QUICK
-diff --git a/package/bdwgc/bdwgc.mk b/package/bdwgc/bdwgc.mk
-index e148f72..5603df8 100644
---- a/package/bdwgc/bdwgc.mk
-+++ b/package/bdwgc/bdwgc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/libdrm/0003-configure-Makefile.am-use-pkg-config-to-discover-lib.patch b/package/libdrm/0003-configure-Makefile.am-use-pkg-config-to-discover-lib.patch
+index 20bb0a3..0fbe77e 100644
+--- a/package/libdrm/0003-configure-Makefile.am-use-pkg-config-to-discover-lib.patch
++++ b/package/libdrm/0003-configure-Makefile.am-use-pkg-config-to-discover-lib.patch
+@@ -23,6 +23,8 @@ and we don't link against it.
  
--BDWGC_VERSION = 7.6.0
-+BDWGC_VERSION = 7.6.2
- BDWGC_SOURCE = gc-$(BDWGC_VERSION).tar.gz
- BDWGC_SITE = http://www.hboehm.info/gc/gc_source
- BDWGC_INSTALL_STAGING = YES
+ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++[Bernd: PKG_CHECK_MODULES should not fail when libatomic_ops is missing]
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ ---
+  amdgpu/Makefile.am    | 2 +-
+  configure.ac          | 2 +-
+@@ -57,7 +59,7 @@ index 35378b33..501d0871 100644
+  
+  	if test "x$drm_cv_atomic_primitives" = "xnone"; then
+ -		AC_CHECK_HEADER([atomic_ops.h], drm_cv_atomic_primitives="libatomic-ops")
+-+		PKG_CHECK_MODULES(ATOMIC_OPS, [atomic_ops], drm_cv_atomic_primitives="libatomic-ops")
+++		PKG_CHECK_MODULES(ATOMIC_OPS, [atomic_ops], drm_cv_atomic_primitives="libatomic-ops", true)
+  	fi
+  
+  	# atomic functions defined in <atomic.h> & libc on Solaris
