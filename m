@@ -1,47 +1,47 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 7 Jan 2018 23:39:16 +0100
-Subject: [Buildroot] [PATCH] package/enlightenment: bump to 0.22.1
-In-Reply-To: <20180106151425.7e15f86f@windsurf>
-References: <20180105163223.10142-1-romain.naour@gmail.com>
- <20180106151425.7e15f86f@windsurf>
-Message-ID: <316b059e-cb1c-86cb-49cc-e31941d1214e@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 7 Jan 2018 21:54:27 +0100
+Subject: [Buildroot] [git commit] package/pkg-cmake.mk: add note about
+ BUILD_STATIC_LIBS
+Message-ID: <20180107224039.08E6583B9D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+commit: https://git.buildroot.net/buildroot/commit/?id=2d0058e2d3d5ebc22d4ad4ffaa9a265ba680bf53
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Le 06/01/2018 ? 15:14, Thomas Petazzoni a ?crit?:
-> Hello,
-> 
-> On Fri,  5 Jan 2018 17:32:23 +0100, Romain Naour wrote:
-> 
->> -ENLIGHTENMENT_CONF_OPTS = \
->> -	--with-edje-cc=$(HOST_DIR)/bin/edje_cc \
->> -	--with-eet-eet=$(HOST_DIR)/bin/eet \
->> -	--with-eldbus_codegen=$(HOST_DIR)/bin/eldbus-codegen \
->> -	--disable-pam \
->> -	--disable-rpath
->> +ENLIGHTENMENT_MESON_OPTS += \
->> +	--prefix=/usr \
->> +	--buildtype $(if $(BR2_ENABLE_DEBUG),debug,release) \
->> +	--cross-file $(HOST_DIR)/etc/meson/cross-compilation.conf \
-> 
-> So sometimes the options are defined using =, sometimes not ? Is this
-> expected ?
+As BUILD_STATIC_LIBS is not a standard cmake variable (while
+BUILD_SHARED_LIBS is) we shouldn't add it in pkg-cmake.mk, although
+for some packages that would make sense. Therefore, add a note so we
+don't forget about this abnormality.
 
-It's a copy past mistake.
-Using --buildtype= and --cross-file= works perfectly fine.
+See: https://cmake.org/cmake/help/v3.8/manual/cmake-variables.7.html#variables-that-change-behavior
 
-Note that changing the build system can lead to new build failure.
-I tested the meson build system as best as I could.
+Signed-off-by: Jan Heylen <jan.heylen@nokia.com>
+[Thomas: rework the comment in the code.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/pkg-cmake.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-Best regards,
-Romain
-> 
-> Thanks,
-> 
-> Thomas
-> 
+diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
+index 6739704..14ffe4a 100644
+--- a/package/pkg-cmake.mk
++++ b/package/pkg-cmake.mk
+@@ -80,6 +80,14 @@ ifndef $(2)_CONFIGURE_CMDS
+ ifeq ($(4),target)
+ 
+ # Configure package for target
++#
++# - We are passing BUILD_SHARED_LIBS because it is documented as a
++#   standard CMake variable to control the build of shared libraries
++#   (see https://cmake.org/cmake/help/v3.8/manual/cmake-variables.7.html#variables-that-change-behavior)
++# - We are not passing BUILD_STATIC_LIBS because it is *not*
++#   documented as a standard CMake variable. If a package supports it,
++#   it must handle it explicitly.
++#
+ define $(2)_CONFIGURE_CMDS
+ 	(mkdir -p $$($$(PKG)_BUILDDIR) && \
+ 	cd $$($$(PKG)_BUILDDIR) && \
