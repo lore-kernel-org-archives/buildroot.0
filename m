@@ -1,34 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 7 Jan 2018 15:55:19 +0100
-Subject: [Buildroot] [PATCH v2 15/15] configs: nitrogen*: bump u-boot
- version to 2017.07
-In-Reply-To: <20180105143947.26934-16-gary.bisson@boundarydevices.com>
-References: <20180105143947.26934-1-gary.bisson@boundarydevices.com>
- <20180105143947.26934-16-gary.bisson@boundarydevices.com>
-Message-ID: <20180107155519.33de28e7@windsurf>
+Date: Sun, 7 Jan 2018 15:56:22 +0100
+Subject: [Buildroot] [git commit] configs/bananapro: bump Linux and U-Boot
+ version
+Message-ID: <20180107145627.1AAA4837CE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=9df448afb1d509282a31772bf190184e078182fe
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri,  5 Jan 2018 15:39:47 +0100, Gary Bisson wrote:
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ configs/bananapro_defconfig | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
->  board/boundarydevices/common/boot.cmd      | 155 +++++++++++++++++++++++++++++
->  board/boundarydevices/common/post-build.sh |   7 +-
->  board/boundarydevices/common/upgrade.cmd   | 154 ++++++++++++++++++++++++++++
-
-Note: I start to find it annoying that we have 300+ lines of U-Boot
-script code specific to the Boundary Devices board. I assume this stuff
-is also duplicated in Yocto ? Shouldn't this be added to some common
-repository ?
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/configs/bananapro_defconfig b/configs/bananapro_defconfig
+index e5ac820..5a71d75 100644
+--- a/configs/bananapro_defconfig
++++ b/configs/bananapro_defconfig
+@@ -4,8 +4,8 @@ BR2_cortex_a7=y
+ BR2_ARM_EABIHF=y
+ BR2_ARM_FPU_NEON_VFPV4=y
+ 
+-# Linux headers same as kernel, a 4.13 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_13=y
++# Linux headers same as kernel, a 4.14 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
+ 
+ # Toolchain
+ BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+@@ -22,7 +22,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/lemaker/bananapro/post-image.sh"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.13.4"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.14.11"
+ BR2_LINUX_KERNEL_USE_DEFCONFIG=y
+ BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/lemaker/bananapro/linux-wifi.fragment"
+@@ -39,7 +39,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.09"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.11"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="Bananapro"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
