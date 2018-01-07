@@ -1,155 +1,140 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 7 Jan 2018 21:22:00 +0100
-Subject: [Buildroot] [git commit] package/pound: Fix build with openssl 1.0.2
-Message-ID: <20180107203114.5FBC783B3F@busybox.osuosl.org>
+Date: Sun, 7 Jan 2018 21:28:37 +0100
+Subject: [Buildroot] [git commit] package/bdwgc: bump version to 7.6.2
+Message-ID: <20180107203114.A431A83B3F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d28fa26f272fddb1573da2d20e52412fd70dff4b
+commit: https://git.buildroot.net/buildroot/commit/?id=8dc6c7c5be0c831cf442cd7767476b4a4eaaba08
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes
-http://autobuild.buildroot.net/results/5be/5be1082dee8387b1140d802ac3c788896a4bf980/
+Removed patches applied upstream:
+
+0002-Fix-uClibc-build.patch
+https://github.com/ivmai/bdwgc/commit/047230b71d421407ad2c8641ee4a87a1bd89145b
+
+0003-configure-match-uclinux-pattern.patch
+https://github.com/ivmai/bdwgc/commit/a628c90bdbf397465ac2ab2b11f14eb2e853651c
+
+Renumbered remaining patches, added license hash.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/pound/0001-fix-openssl-1.0.2.patch | 127 +++++++++++++++++++++++++++++
- 1 file changed, 127 insertions(+)
+ ...tv-is-unknown-error-in-brief_async_signa.patch} |  0
+ package/bdwgc/0002-Fix-uClibc-build.patch          | 42 ----------------------
+ .../0003-configure-match-uclinux-pattern.patch     | 27 --------------
+ package/bdwgc/bdwgc.hash                           |  3 +-
+ package/bdwgc/bdwgc.mk                             |  2 +-
+ 5 files changed, 3 insertions(+), 71 deletions(-)
 
-diff --git a/package/pound/0001-fix-openssl-1.0.2.patch b/package/pound/0001-fix-openssl-1.0.2.patch
-new file mode 100644
-index 0000000..b20fdb3
---- /dev/null
-+++ b/package/pound/0001-fix-openssl-1.0.2.patch
-@@ -0,0 +1,127 @@
-+From eb471de8f26e0367dd08d299d2252fa8b2b958a9 Mon Sep 17 00:00:00 2001
-+From: Emilio <emilio.campos@zevenet.com>
-+Date: Mon, 17 Jul 2017 09:41:32 +0200
-+Subject: [PATCH] [Improvement] Added support to compile pound with openssl
-+ 1.0.2
-+
-+Signed-off-by: Emilio <emilio.campos@zevenet.com>
-+
-+	new file:   dh2048.h
-+	modified:   svc.c
-+
-+Patch was downloaded from 3rd-party repo:
-+https://github.com/zevenet/pound/commit/eb471de8f26e0367dd08d299d2252fa8b2b958a9
-+
-+This repo was announced on upstream mailinglist:
-+http://www.apsis.ch/pound/pound_list/archive/2017/2017-07/1500287626000#1500287626000
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ dh2048.h | 53 +++++++++++++++++++++++++++++++++++++++++++++++++++++
-+ svc.c    | 33 +++++++++++++++++++++++++++++++++
-+ 2 files changed, 86 insertions(+)
-+ create mode 100644 dh2048.h
-+
-+diff --git a/dh2048.h b/dh2048.h
-+new file mode 100644
-+index 0000000..79c693c
-+--- /dev/null
-++++ b/dh2048.h
-+@@ -0,0 +1,53 @@
-++#ifndef HEADER_DH_H
-++# include <openssl/dh.h>
-++#endif
-++
-++DH *get_dh2048()
-++{
-++    static unsigned char dhp_2048[] = {
-++	0xBF, 0x6C, 0xC6, 0xBD, 0xEA, 0x10, 0x84, 0x59, 0x40, 0xC2, 
-++	0xC6, 0xA2, 0x9B, 0x19, 0xD3, 0x2E, 0x2F, 0xAB, 0xE6, 0xE4, 
-++	0x1E, 0x91, 0x0D, 0x59, 0xDC, 0x96, 0x3F, 0x6E, 0x65, 0x38, 
-++	0xB9, 0xBE, 0xBB, 0x8F, 0xDF, 0x73, 0xAC, 0xAC, 0xB3, 0x2F, 
-++	0xA7, 0x02, 0x0B, 0x87, 0xB7, 0x3F, 0x3A, 0x42, 0x8A, 0x94, 
-++	0xDD, 0xEC, 0x33, 0xA4, 0x25, 0xB1, 0xBF, 0x84, 0x91, 0x87, 
-++	0xD8, 0x1C, 0x42, 0xB9, 0x8E, 0x00, 0x1F, 0x49, 0xED, 0x57, 
-++	0xA4, 0x48, 0xB0, 0xCC, 0xD8, 0xB8, 0x83, 0xCA, 0x3E, 0xDF, 
-++	0xA2, 0xF2, 0x07, 0x71, 0x71, 0x18, 0x1F, 0x50, 0x45, 0x3A, 
-++	0x66, 0x04, 0x7F, 0x15, 0xB2, 0xA8, 0x02, 0x77, 0xCE, 0xC6, 
-++	0xF9, 0x7C, 0x63, 0xE4, 0x52, 0x41, 0xFA, 0x62, 0xB9, 0x0D, 
-++	0xDC, 0x08, 0x62, 0xEC, 0x00, 0xAB, 0xB0, 0xF7, 0x79, 0x48, 
-++	0x75, 0x22, 0x85, 0xCC, 0x67, 0x3C, 0xEA, 0x09, 0x32, 0xAC, 
-++	0x30, 0xED, 0x1E, 0x67, 0xDC, 0x74, 0xF8, 0xD9, 0xC3, 0xD0, 
-++	0xA0, 0x60, 0x4D, 0xCE, 0x52, 0xBC, 0xA3, 0xE5, 0x18, 0x7B, 
-++	0x0B, 0xC8, 0xCE, 0x70, 0xA2, 0xC8, 0x21, 0xCA, 0xCE, 0xA5, 
-++	0xD4, 0xCB, 0x85, 0xFC, 0xC7, 0x07, 0x5C, 0x05, 0x87, 0xFC, 
-++	0x2F, 0x67, 0x4D, 0x2D, 0x4F, 0xA4, 0xEE, 0x63, 0x98, 0x49, 
-++	0xE4, 0x2E, 0xD7, 0x3F, 0x7D, 0x69, 0x68, 0x0A, 0xA2, 0x3E, 
-++	0x5A, 0x04, 0xD4, 0xDD, 0xBB, 0xC7, 0xB4, 0x34, 0xB7, 0x21, 
-++	0xD3, 0xAC, 0x99, 0xD7, 0x87, 0x45, 0x5E, 0x18, 0x68, 0x16, 
-++	0x3A, 0xAF, 0xE2, 0x04, 0x57, 0xB8, 0x6A, 0xB8, 0x2F, 0x75, 
-++	0xD5, 0x79, 0x96, 0x60, 0x8D, 0xD1, 0xCC, 0xD1, 0x33, 0x85, 
-++	0x53, 0x88, 0x87, 0x34, 0xA6, 0x4B, 0x49, 0x24, 0x53, 0xD6, 
-++	0xF1, 0x1E, 0x4E, 0x98, 0x4D, 0x6B, 0x44, 0x31, 0x94, 0xFF, 
-++	0x46, 0xC2, 0x38, 0x2E, 0xEA, 0xBB
-++    };
-++    static unsigned char dhg_2048[] = {
-++	0x05
-++    };
-++    DH *dh = DH_new();
-++    BIGNUM *dhp_bn, *dhg_bn;
-++
-++    if (dh == NULL)
-++        return NULL;
-++    dhp_bn = BN_bin2bn(dhp_2048, sizeof (dhp_2048), NULL);
-++    dhg_bn = BN_bin2bn(dhg_2048, sizeof (dhg_2048), NULL);
-++    if (dhp_bn == NULL || dhg_bn == NULL
-++            || !DH_set0_pqg(dh, dhp_bn, NULL, dhg_bn)) {
-++        DH_free(dh);
-++        BN_free(dhp_bn);
-++        BN_free(dhg_bn);
-++        return NULL;
-++    }
-++    return dh;
-++}
-+diff --git a/svc.c b/svc.c
-+index 1341397..758dfbd 100644
-+--- a/svc.c
-++++ b/svc.c
-+@@ -1512,6 +1512,39 @@ do_RSAgen(void)
-+     return;
-+ }
-+ 
-++
-++#if OPENSSL_VERSION_NUMBER < 0x10100000
-++static inline int DH_set0_pqg(DH *dh, BIGNUM *p, BIGNUM *q, BIGNUM *g)
-++{
-++	/* If the fields p and g in d are NULL, the corresponding input
-++	 * parameters MUST be non-NULL.  q may remain NULL.
-++	 */
-++	if ((dh->p == NULL && p == NULL)
-++	    || (dh->g == NULL && g == NULL))
-++		return 0;
-++
-++	if (p != NULL) {
-++		BN_free(dh->p);
-++		dh->p = p;
-++	}
-++	if (q != NULL) {
-++		BN_free(dh->q);
-++		dh->q = q;
-++	}
-++	if (g != NULL) {
-++		BN_free(dh->g);
-++		dh->g = g;
-++	}
-++
-++	if (q != NULL) {
-++		dh->length = BN_num_bits(q);
-++	}
-++
-++	return 1;
-++}
-++#endif
-++
-++
-+ #include    "dh512.h"
-+ 
-+ #if DH_LEN == 1024
+diff --git a/package/bdwgc/0003-Fix-size-of-tv-is-unknown-error-in-brief_async_signa.patch b/package/bdwgc/0002-Fix-size-of-tv-is-unknown-error-in-brief_async_signa.patch
+similarity index 100%
+rename from package/bdwgc/0003-Fix-size-of-tv-is-unknown-error-in-brief_async_signa.patch
+rename to package/bdwgc/0002-Fix-size-of-tv-is-unknown-error-in-brief_async_signa.patch
+diff --git a/package/bdwgc/0002-Fix-uClibc-build.patch b/package/bdwgc/0002-Fix-uClibc-build.patch
+deleted file mode 100644
+index 55896eb..0000000
+--- a/package/bdwgc/0002-Fix-uClibc-build.patch
++++ /dev/null
+@@ -1,42 +0,0 @@
+-From 8d3caf00db5d71ec19f03fbf96cecf6f70b4e868 Mon Sep 17 00:00:00 2001
+-From: Bernd Kuhls <bernd.kuhls@t-online.de>
+-Date: Sun, 28 May 2017 20:21:09 +0200
+-Subject: [PATCH] Fix uClibc build
+-
+-uClibc defines __GLIBC__ but does not contain libc-version.h leading to
+-a build error:
+-
+-./include/private/gcconfig.h:1426:72: fatal error: gnu/libc-version.h: No such file or directory
+-
+-Patch sent upstream: https://github.com/ivmai/bdwgc/pull/164
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+----
+- include/private/gcconfig.h | 4 ++--
+- 1 file changed, 2 insertions(+), 2 deletions(-)
+-
+-diff --git a/include/private/gcconfig.h b/include/private/gcconfig.h
+-index d7912e9e..bf17dd63 100644
+---- a/include/private/gcconfig.h
+-+++ b/include/private/gcconfig.h
+-@@ -1442,7 +1442,7 @@
+- #         define GC_PREFETCH_FOR_WRITE(x) \
+-             __asm__ __volatile__ ("prefetchw %0" : : "m"(*(char *)(x)))
+- #       endif
+--#       if defined(__GLIBC__)
+-+#       if defined(__GLIBC__) && !defined(__UCLIBC__)
+-           /* Workaround lock elision implementation for some glibc.     */
+- #         define GLIBC_2_19_TSX_BUG
+- #         include <gnu/libc-version.h> /* for gnu_get_libc_version() */
+-@@ -2455,7 +2455,7 @@
+-           /* FIXME: This seems to be fixed in GLibc v2.14.              */
+- #         define GETCONTEXT_FPU_EXCMASK_BUG
+- #       endif
+--#       if defined(__GLIBC__)
+-+#       if defined(__GLIBC__) && !defined(__UCLIBC__)
+-           /* Workaround lock elision implementation for some glibc.     */
+- #         define GLIBC_2_19_TSX_BUG
+- #         include <gnu/libc-version.h> /* for gnu_get_libc_version() */
+--- 
+-2.11.0
+-
+diff --git a/package/bdwgc/0003-configure-match-uclinux-pattern.patch b/package/bdwgc/0003-configure-match-uclinux-pattern.patch
+deleted file mode 100644
+index b2c6198..0000000
+--- a/package/bdwgc/0003-configure-match-uclinux-pattern.patch
++++ /dev/null
+@@ -1,27 +0,0 @@
+-From a628c90bdbf397465ac2ab2b11f14eb2e853651c Mon Sep 17 00:00:00 2001
+-From: Romain Naour <romain.naour@gmail.com>
+-Date: Sat, 6 Aug 2016 23:24:35 +0200
+-Subject: [PATCH] configure: match uclinux pattern
+-
+-BDWGC does not recognize "uclinux" as a valid OS part of the target
+-tuple which is used by some arm cortex-M toolchains.
+-
+-* configure.ac [$THREADS=pthreads] (GC_LINUX_THREADS, _REENTRANT): Define
+-for hosts matching "*-*-*linux*" (instead of "*-*-linux*").
+----
+- configure.ac | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index 22353547..fa745b56 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -190,7 +190,7 @@ case "$THREADS" in
+-         AC_DEFINE(THREAD_LOCAL_ALLOC)
+-         AC_MSG_WARN("Explicit GC_INIT() calls may be required.");
+-         ;;
+--     *-*-linux* | *-*-nacl*)
+-+     *-*-*linux* | *-*-nacl*)
+-         AC_DEFINE(GC_LINUX_THREADS)
+-         AC_DEFINE(_REENTRANT)
+-         ;;
+diff --git a/package/bdwgc/bdwgc.hash b/package/bdwgc/bdwgc.hash
+index 4b41e1d..0ebc41c 100644
+--- a/package/bdwgc/bdwgc.hash
++++ b/package/bdwgc/bdwgc.hash
+@@ -1,2 +1,3 @@
+ # Locally computed
+-sha256 a14a28b1129be90e55cd6f71127ffc5594e1091d5d54131528c24cd0c03b7d90  gc-7.6.0.tar.gz
++sha256 bd112005563d787675163b5afff02c364fc8deb13a99c03f4e80fdf6608ad41e  gc-7.6.2.tar.gz
++sha256 9944acfcee6cca308d974933977c1608804f5ad4345aac7cb8608137104e3742  README.QUICK
+diff --git a/package/bdwgc/bdwgc.mk b/package/bdwgc/bdwgc.mk
+index e148f72..5603df8 100644
+--- a/package/bdwgc/bdwgc.mk
++++ b/package/bdwgc/bdwgc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-BDWGC_VERSION = 7.6.0
++BDWGC_VERSION = 7.6.2
+ BDWGC_SOURCE = gc-$(BDWGC_VERSION).tar.gz
+ BDWGC_SITE = http://www.hboehm.info/gc/gc_source
+ BDWGC_INSTALL_STAGING = YES
