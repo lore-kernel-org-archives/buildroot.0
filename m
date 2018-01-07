@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 7 Jan 2018 15:16:18 +0100
-Subject: [Buildroot] [PATCH] libselinux: set PREFIX to generate proper
- .pc file
-In-Reply-To: <20180106145249.3090-1-marcus.folkesson@gmail.com>
-References: <20180106145249.3090-1-marcus.folkesson@gmail.com>
-Message-ID: <20180107151618.62c734e2@windsurf>
+Date: Sun, 7 Jan 2018 15:17:56 +0100
+Subject: [Buildroot] [PATCH 1/4] package/kodi-pvr-dvbviewer: bump
+ version to 2.4.14-Krypton
+In-Reply-To: <20180106172531.7806-1-bernd.kuhls@t-online.de>
+References: <20180106172531.7806-1-bernd.kuhls@t-online.de>
+Message-ID: <20180107151756.30838060@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,46 +13,17 @@ To: buildroot@busybox.net
 
 Hello,
 
-Thanks for continuing the work on this topic!
-
-On Sat,  6 Jan 2018 15:52:49 +0100, Marcus Folkesson wrote:
-> Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
+On Sat,  6 Jan 2018 18:25:28 +0100, Bernd Kuhls wrote:
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  package/libselinux/libselinux.mk | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/libselinux/libselinux.mk b/package/libselinux/libselinux.mk
-> index 8ac8000de5..bf33da7f75 100644
-> --- a/package/libselinux/libselinux.mk
-> +++ b/package/libselinux/libselinux.mk
-> @@ -43,17 +43,19 @@ LIBSELINUX_MAKE_INSTALL_TARGETS += install-pywrap
->  # dependencies are broken and result in file truncation errors at link
->  # time if the Python bindings are built through the same make
->  # invocation as the rest of the library.
-> +# DESTDIR is needed during the compile to compute library and header paths.
->  define LIBSELINUX_BUILD_PYTHON_BINDINGS
->  	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
->  		$(LIBSELINUX_MAKE_OPTS) DESTDIR=$(STAGING_DIR) swigify pywrap
->  endef
->  endif # python || python3
->  
-> +# DESTDIR is needed during the compile to compute library and header paths.
->  define LIBSELINUX_BUILD_CMDS
->  	# DESTDIR is needed during the compile to compute library and
->  	# header paths.
->  	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
-> -		$(LIBSELINUX_MAKE_OPTS) DESTDIR=$(STAGING_DIR) all
-> +		$(LIBSELINUX_MAKE_OPTS) DESTDIR=$(STAGING_DIR) PREFIX=/usr all
->  	$(LIBSELINUX_BUILD_PYTHON_BINDINGS)
->  endef
+>  package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.hash | 2 +-
+>  package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-How can this work without passing PREFIX=/usr also at install time ?
-(Same question for libsemanage and libsepol).
-
-Thanks,
+Series applied. Thanks!
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
+Embedded Linux, Kernel and Android engineering
 http://free-electrons.com
