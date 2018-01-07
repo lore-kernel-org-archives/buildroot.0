@@ -1,192 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 7 Jan 2018 15:37:47 +0100
-Subject: [Buildroot] [git commit] xdriver_xf86-video-imx-viv: bump to
- version 6.2.2.p0
-Message-ID: <20180107144906.1952E80142@busybox.osuosl.org>
+Date: Sun, 7 Jan 2018 15:17:38 +0100
+Subject: [Buildroot] [git commit] package/kodi-pvr-vuplus: bump version to
+ 2.4.12-Krypton
+Message-ID: <20180107144905.97B17802F5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=87741ae2c2c4d0cf3ae7d0b6ff47b08a7280886b
+commit: https://git.buildroot.net/buildroot/commit/?id=e020a87d52042bdac81e86d0508b61f014fc2619
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The following xorg.conf was used in order to force the use of the
-vivante module:
-https://github.com/Freescale/meta-freescale/blob/master/recipes-graphics/xorg-xserver/xserver-xf86-config/mx6/xorg.conf
-
-Note that the X server must be started with the "noreset" option to
-avoid crashes when closing X apps.
-Tested with:
- # X -noreset &
- # cd /usr/share/examples/viv_samples/vdk/
- # DISPLAY=:0 ./tutorial7
-
-Note that this package patch is removed as now upstream:
-https://source.codeaurora.org/external/imx/xf86-video-imx-vivante/commit/?id=70ebd67c
-
-Cc: J??r??me Pouiller <jezz@sysmic.org>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...001-Stop-using-Git-to-write-local-version.patch | 90 ----------------------
- package/x11r7/xdriver_xf86-video-imx-viv/Config.in |  7 ++
- .../xdriver_xf86-video-imx-viv.hash                |  2 +-
- .../xdriver_xf86-video-imx-viv.mk                  | 10 +--
- 4 files changed, 13 insertions(+), 96 deletions(-)
+ package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash | 2 +-
+ package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-video-imx-viv/0001-Stop-using-Git-to-write-local-version.patch b/package/x11r7/xdriver_xf86-video-imx-viv/0001-Stop-using-Git-to-write-local-version.patch
-deleted file mode 100644
-index 2117e72..0000000
---- a/package/x11r7/xdriver_xf86-video-imx-viv/0001-Stop-using-Git-to-write-local-version.patch
-+++ /dev/null
-@@ -1,90 +0,0 @@
--From 69a92f4576a1e789ba2fcf957164d2c4013020c5 Mon Sep 17 00:00:00 2001
--From: Otavio Salvador <otavio@ossystems.com.br>
--Date: Wed, 2 Dec 2015 13:36:25 +0000
--Subject: [PATCH] Stop using Git to write local version
--Organization: O.S. Systems Software LTDA.
--
--The standard version does not use a Git repository so we should not
--use Git to identify the commit of the build as it can end getting the
--version from a wrong repository and can be misleading.
--
--Upstream-Status: Pending
--
--Signed-off-by: Otavio Salvador <otavio@ossystems.com.br>
--[Downloaded from
--https://github.com/Freescale/meta-fsl-arm/blob/master/recipes-graphics/xorg-driver/xf86-video-imxfb-vivante/Stop-using-Git-to-write-local-version.patch]
--Signed-off-by: Andrew Webster <awebster@arcx.com>
-----
-- EXA/src/makefile.tc         | 6 +++---
-- FslExt/src/makefile.tc      | 6 +++---
-- util/autohdmi/makefile.tc   | 6 +++---
-- util/pandisplay/makefile.tc | 6 +++---
-- 4 files changed, 12 insertions(+), 12 deletions(-)
--
--diff --git a/EXA/src/makefile.tc b/EXA/src/makefile.tc
--index 0b9a9e6..ec6e68d 100644
----- a/EXA/src/makefile.tc
--+++ b/EXA/src/makefile.tc
--@@ -52,8 +52,8 @@ prefix ?= /usr
-- sysroot ?= /
-- 
-- # get git commit number
---COMMITNR := `git log -n 1 --format=%H`
---DIRTY := `git diff-index --quiet HEAD || echo '-dirty'`
---LOCAL_CFLAGS += -DCOMMIT="${COMMITNR}${DIRTY}"
--+#COMMITNR := `git log -n 1 --format=%H`
--+#DIRTY := `git diff-index --quiet HEAD || echo '-dirty'`
--+#LOCAL_CFLAGS += -DCOMMIT="${COMMITNR}${DIRTY}"
-- 
-- 
--diff --git a/FslExt/src/makefile.tc b/FslExt/src/makefile.tc
--index 0b9a9e6..ec6e68d 100644
----- a/FslExt/src/makefile.tc
--+++ b/FslExt/src/makefile.tc
--@@ -52,8 +52,8 @@ prefix ?= /usr
-- sysroot ?= /
-- 
-- # get git commit number
---COMMITNR := `git log -n 1 --format=%H`
---DIRTY := `git diff-index --quiet HEAD || echo '-dirty'`
---LOCAL_CFLAGS += -DCOMMIT="${COMMITNR}${DIRTY}"
--+#COMMITNR := `git log -n 1 --format=%H`
--+#DIRTY := `git diff-index --quiet HEAD || echo '-dirty'`
--+#LOCAL_CFLAGS += -DCOMMIT="${COMMITNR}${DIRTY}"
-- 
-- 
--diff --git a/util/autohdmi/makefile.tc b/util/autohdmi/makefile.tc
--index c9de0a6..d0a468c 100644
----- a/util/autohdmi/makefile.tc
--+++ b/util/autohdmi/makefile.tc
--@@ -64,8 +64,8 @@ prefix ?= /usr
-- sysroot ?= /
-- 
-- # get git commit number
---COMMITNR := `git log -n 1 --format=%H`
---DIRTY := `git diff-index --quiet HEAD || echo '-dirty'`
---LOCAL_CFLAGS += -DCOMMIT="${COMMITNR}${DIRTY}"
--+#COMMITNR := `git log -n 1 --format=%H`
--+#DIRTY := `git diff-index --quiet HEAD || echo '-dirty'`
--+#LOCAL_CFLAGS += -DCOMMIT="${COMMITNR}${DIRTY}"
-- 
-- 
--diff --git a/util/pandisplay/makefile.tc b/util/pandisplay/makefile.tc
--index 28732b9..bf54c20 100644
----- a/util/pandisplay/makefile.tc
--+++ b/util/pandisplay/makefile.tc
--@@ -64,8 +64,8 @@ prefix ?= /usr
-- sysroot ?= /
-- 
-- # get git commit number
---COMMITNR := `git log -n 1 --format=%H`
---DIRTY := `git diff-index --quiet HEAD || echo '-dirty'`
---LOCAL_CFLAGS += -DCOMMIT="${COMMITNR}${DIRTY}"
--+#COMMITNR := `git log -n 1 --format=%H`
--+#DIRTY := `git diff-index --quiet HEAD || echo '-dirty'`
--+#LOCAL_CFLAGS += -DCOMMIT="${COMMITNR}${DIRTY}"
-- 
-- 
---- 
--2.1.4
--
-diff --git a/package/x11r7/xdriver_xf86-video-imx-viv/Config.in b/package/x11r7/xdriver_xf86-video-imx-viv/Config.in
-index c3746a1..5a02573 100644
---- a/package/x11r7/xdriver_xf86-video-imx-viv/Config.in
-+++ b/package/x11r7/xdriver_xf86-video-imx-viv/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_XDRIVER_XF86_VIDEO_IMX_VIV
- 	bool "xf86-video-imx-viv"
- 	depends on BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_X11
-+	depends on BR2_PACKAGE_IMX_GPU_G2D
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_1 # mesa3d
- 	select BR2_PACKAGE_MESA3D # Needed in order to compile xorg with glx/dri
- 	select BR2_PACKAGE_MESA3D_DRI_DRIVER
-@@ -32,3 +33,9 @@ comment "xf86-video-imx-viv depends on imx-gpu-viv with X11 output"
- 	depends on BR2_arm
- 	depends on !BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_X11
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_1
-+
-+comment "xf86-video-imx-viv depends on imx-gpu-g2d"
-+	depends on BR2_arm
-+	depends on !BR2_PACKAGE_IMX_GPU_G2D
-+	depends on BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_X11
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_1
-diff --git a/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.hash b/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.hash
-index 7d7da84..be41cb0 100644
---- a/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.hash
-+++ b/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.hash
-@@ -1 +1 @@
--sha256	3eed38193e31bb5ba8d2c817bd9b4f6e2fe7540d2cab36de9098cb4f11946a9f  xserver-xorg-video-imx-viv-5.0.11.p8.6.tar.gz
-+sha256	61b3a7a22f80d1cbc797c329615e1699f3906c9261de7eabcf0de2bf2399de55  xdriver_xf86-video-imx-viv-rel_imx_4.9.x_1.0.0_ga.tar.gz
-diff --git a/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk b/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk
-index b31d98f..222d74a 100644
---- a/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk
-+++ b/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
+diff --git a/package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash b/package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash
+index 7c91e36..f4f6756 100644
+--- a/package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash
++++ b/package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 79cd3ea79957ae2bca67c9a1cefe3546f27a6d4e88adb4973bb08228425be2fe  kodi-pvr-vuplus-2.4.10-Krypton.tar.gz
++sha256 a8c7345e4e2e415e29c21f14460b257dfbe08ed5ecf1cc2dc6bc393a10f95cf3  kodi-pvr-vuplus-2.4.12-Krypton.tar.gz
+diff --git a/package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk b/package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk
+index e99f226..581d884 100644
+--- a/package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk
++++ b/package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk
+@@ -6,7 +6,7 @@
  
--XDRIVER_XF86_VIDEO_IMX_VIV_VERSION = 5.0.11.p8.6
--XDRIVER_XF86_VIDEO_IMX_VIV_SITE = $(FREESCALE_IMX_SITE)
--XDRIVER_XF86_VIDEO_IMX_VIV_SOURCE = xserver-xorg-video-imx-viv-$(XDRIVER_XF86_VIDEO_IMX_VIV_VERSION).tar.gz
--XDRIVER_XF86_VIDEO_IMX_VIV_DEPENDENCIES = imx-gpu-viv xserver_xorg-server \
-+XDRIVER_XF86_VIDEO_IMX_VIV_VERSION = rel_imx_4.9.x_1.0.0_ga
-+XDRIVER_XF86_VIDEO_IMX_VIV_SITE = https://source.codeaurora.org/external/imx/xf86-video-imx-vivante
-+XDRIVER_XF86_VIDEO_IMX_VIV_SITE_METHOD = git
-+XDRIVER_XF86_VIDEO_IMX_VIV_DEPENDENCIES = imx-gpu-viv imx-gpu-g2d xserver_xorg-server \
- 	xproto_xproto xproto_xf86driproto libdrm
- XDRIVER_XF86_VIDEO_IMX_VIV_LICENSE = MIT
- XDRIVER_XF86_VIDEO_IMX_VIV_LICENSE_FILES = COPYING-MIT
-@@ -17,7 +17,7 @@ XDRIVER_XF86_VIDEO_IMX_VIV_MAKE_CMD = $(TARGET_CONFIGURE_OPTS) $(MAKE1) -C $(@D)
- define XDRIVER_XF86_VIDEO_IMX_VIV_BUILD_CMDS
- 	$(XDRIVER_XF86_VIDEO_IMX_VIV_MAKE_CMD) sysroot=$(STAGING_DIR) \
- 		BUSID_HAS_NUMBER=1 BUILD_IN_YOCTO=1 XSERVER_GREATER_THAN_13=1 \
--		CFLAGS="$(TARGET_CFLAGS) -I$(@D)/DRI_1.10.4/src"
-+		CFLAGS="$(TARGET_CFLAGS)"
- endef
- 
- define XDRIVER_XF86_VIDEO_IMX_VIV_INSTALL_STAGING_CMDS
+ # This cset is on the branch 'Krypton'
+ # When Kodi is updated, then this should be updated to the corresponding branch
+-KODI_PVR_VUPLUS_VERSION = 2.4.10-Krypton
++KODI_PVR_VUPLUS_VERSION = 2.4.12-Krypton
+ KODI_PVR_VUPLUS_SITE = $(call github,kodi-pvr,pvr.vuplus,$(KODI_PVR_VUPLUS_VERSION))
+ KODI_PVR_VUPLUS_LICENSE = GPL-2.0+
+ KODI_PVR_VUPLUS_LICENSE_FILES = src/client.h
