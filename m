@@ -1,42 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 7 Jan 2018 15:17:45 +0100
-Subject: [Buildroot] [git commit] package/kodi-peripheral-joystick: bump
- version to v1.3.4
-Message-ID: <20180107144905.B11BC802F5@busybox.osuosl.org>
+Date: Sun, 7 Jan 2018 15:38:59 +0100
+Subject: [Buildroot] [git commit] imx-uuc: bump revision to 2ae63428
+Message-ID: <20180107144906.668E1802F5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f1b91e4cafc6e8f9f514bd97b6b17401d2ea2dc6
+commit: https://git.buildroot.net/buildroot/commit/?id=e24803edd09a3963b7c2fc03cff78528d74c7dd9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Changelog:
+- Setup utp via configfs
+- Fix many compiler warnings
+- Robustness improved
+
+Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash | 2 +-
- package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/freescale-imx/imx-uuc/imx-uuc.hash | 2 +-
+ package/freescale-imx/imx-uuc/imx-uuc.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash
-index ca2bdc3..728c3ca 100644
---- a/package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash
-+++ b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash
+diff --git a/package/freescale-imx/imx-uuc/imx-uuc.hash b/package/freescale-imx/imx-uuc/imx-uuc.hash
+index d6e4d97..c9c29f8 100644
+--- a/package/freescale-imx/imx-uuc/imx-uuc.hash
++++ b/package/freescale-imx/imx-uuc/imx-uuc.hash
 @@ -1,2 +1,2 @@
  # Locally computed
--sha256 c2025c4ec280b44b5d8bb1c34185a94cc105f66f0b762087804bb7d2d633d999  kodi-peripheral-joystick-v1.3.2.tar.gz
-+sha256 9a183e1f92ff2c68816bfa0056c65585a3e1129d924326359d7a5dfbcba6c56a  kodi-peripheral-joystick-v1.3.4.tar.gz
-diff --git a/package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk
-index f0cad13..2fadbcc 100644
---- a/package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk
-+++ b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk
-@@ -6,7 +6,7 @@
+-sha256 eac0c3e288c845cd9b82d02993f8358731a7a03e51591b27feeb453b143beb73  imx-uuc-3440b1108373e79669cc17ba1d2be91a123a2053.tar.gz
++sha256 1463e855d1229e6b6c02df2085f6bff5974bc061d13a61646b63675c160cba99  imx-uuc-2ae634281a39c82b6a8ee0fdcfbfbe42183ceb53.tar.gz
+diff --git a/package/freescale-imx/imx-uuc/imx-uuc.mk b/package/freescale-imx/imx-uuc/imx-uuc.mk
+index f24216d..5e0bb3b 100644
+--- a/package/freescale-imx/imx-uuc/imx-uuc.mk
++++ b/package/freescale-imx/imx-uuc/imx-uuc.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
  
- # This cset is on the branch 'Krypton'
- # When Kodi is updated, then this should be updated to the corresponding branch
--KODI_PERIPHERAL_JOYSTICK_VERSION = v1.3.2
-+KODI_PERIPHERAL_JOYSTICK_VERSION = v1.3.4
- KODI_PERIPHERAL_JOYSTICK_SITE = $(call github,xbmc,peripheral.joystick,$(KODI_PERIPHERAL_JOYSTICK_VERSION))
- KODI_PERIPHERAL_JOYSTICK_LICENSE = GPL-2.0+
- KODI_PERIPHERAL_JOYSTICK_LICENSE_FILES = src/addon.cpp
+-IMX_UUC_VERSION = 3440b1108373e79669cc17ba1d2be91a123a2053
+-IMX_UUC_SITE = $(call github,NXPmicro,imx-uuc,$(IMX_UUC_VERSION))
++IMX_UUC_VERSION = 2ae634281a39c82b6a8ee0fdcfbfbe42183ceb53
++IMX_UUC_SITE = $(call github,codeauroraforum,imx-uuc,$(IMX_UUC_VERSION))
+ IMX_UUC_LICENSE = GPL-2.0+
+ IMX_UUC_LICENSE_FILES = COPYING
+ 
