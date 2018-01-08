@@ -1,33 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 8 Jan 2018 09:16:54 +0100
-Subject: [Buildroot] [git commit] execline: fix hash "sha" type spelling
-Message-ID: <20180108081841.7774283BE8@busybox.osuosl.org>
+Date: Mon, 8 Jan 2018 09:16:50 +0100
+Subject: [Buildroot] [git commit] utils/test-pkg: always run a global
+ legal-info
+Message-ID: <20180108081841.50D8583BE7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fce137b343a432a548407fd03f1c09c6dd2dc6e2
+commit: https://git.buildroot.net/buildroot/commit/?id=17cd914917307c11e3cbeab03becadc16854ae23
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-sah256 -> sha256
+Instead of limiting it to the package under test, we run it globally.
 
-Fixes:
-http://autobuild.buildroot.net/results/9d0/9d054a26d7833353efbe49c984a7cb66d77b1d0c/
-
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Matthew Weber <matthew.weber@rockwellcollins.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/execline/execline.hash | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ utils/test-pkg | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/package/execline/execline.hash b/package/execline/execline.hash
-index 0e64ed9..afead5c 100644
---- a/package/execline/execline.hash
-+++ b/package/execline/execline.hash
-@@ -1,3 +1,3 @@
- # Locally generated
- sha256 e4bb8fc8f20cca96f4bac9f0f74ebce5081b4b687bb11c79c843faf12507a64b  execline-2.3.0.4.tar.gz
--sah256 6ee77e7199d69b707ab864ea7a838f9562717aaa41c89413bdb2cf835f95052f  COPYING
-+sha256 6ee77e7199d69b707ab864ea7a838f9562717aaa41c89413bdb2cf835f95052f  COPYING
+diff --git a/utils/test-pkg b/utils/test-pkg
+index 1b7046e..cd7b9da 100755
+--- a/utils/test-pkg
++++ b/utils/test-pkg
+@@ -127,10 +127,8 @@ build_one() {
+ 
+     # legal-info done systematically, because some packages have different
+     # sources depending on the configuration (e.g. lua-5.2 vs. lua-5.3)
+-    if [ -n "${pkg}" ]; then
+-        if ! make O="${dir}" "${pkg}-legal-info" >> "${dir}/logfile" 2>&1; then
+-            return 3
+-        fi
++    if ! make O="${dir}" legal-info >> "${dir}/logfile" 2>&1; then
++        return 3
+     fi
+ }
+ 
