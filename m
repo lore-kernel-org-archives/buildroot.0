@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 8 Jan 2018 09:17:21 +0100
-Subject: [Buildroot] [PATCH] execline: fix hash "sha" type spelling
-In-Reply-To: <1515367746-46395-1-git-send-email-matthew.weber@rockwellcollins.com>
-References: <1515367746-46395-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <20180108091721.689186fb@windsurf>
+Date: Mon, 8 Jan 2018 09:17:26 +0100
+Subject: [Buildroot] [PATCH v2] linux-headers: bump 3.2.x series
+In-Reply-To: <1515374108-29630-1-git-send-email-festevam@gmail.com>
+References: <1515374108-29630-1-git-send-email-festevam@gmail.com>
+Message-ID: <20180108091726.60746e34@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,16 +12,11 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun,  7 Jan 2018 17:29:06 -0600, Matt Weber wrote:
-> sah256 -> sha256
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/9d0/9d054a26d7833353efbe49c984a7cb66d77b1d0c/
-> 
-> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+On Sun,  7 Jan 2018 23:15:08 -0200, Fabio Estevam wrote:
+> Signed-off-by: Fabio Estevam <festevam@gmail.com>
 > ---
->  package/execline/execline.hash | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> Changes since v1:
+> - Fix Subject line
 
 Applied to master, thanks.
 
