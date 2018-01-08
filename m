@@ -1,82 +1,57 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon,  8 Jan 2018 19:10:42 +0100
-Subject: [Buildroot] [PATCH 1/1] rygel: fix UI build
-Message-ID: <20180108181042.16089-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 8 Jan 2018 20:56:46 +0100
+Subject: [Buildroot] [git commit] asterisk: security bump to version 14.7.5
+Message-ID: <20180108195747.2FF3983C05@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add a patch to avoid failing on a configure error if UI example can't be
-built if libgtk3 is available but not gst1-plugins-base (gstreamer-video
-is only needed for UI example, not for rygel UI)
+commit: https://git.buildroot.net/buildroot/commit/?id=4f13dc362d5c9c63fb5a21ede7cf902c1281cef0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
- - http://autobuild.buildroot.net/results/6c659aadfc418c0a27a93284eb34d75e2b0dc169
+Fixes the following security issues:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+* AST-2017-014: Crash in PJSIP resource when missing a contact header A
+  select set of SIP messages create a dialog in Asterisk.  Those SIP
+  messages must contain a contact header.  For those messages, if the header
+  was not present and using the PJSIP channel driver, it would cause
+  Asterisk to crash.  The severity of this vulnerability is somewhat
+  mitigated if authentication is enabled.  If authentication is enabled a
+  user would have to first be authorized before reaching the crash point.
+
+For more details, see the announcement:
+https://www.asterisk.org/downloads/asterisk-news/asterisk-13185-1475-1515-and-1318-cert2-now-available-security
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...01-Allow-UI-build-without-gstreamer-video.patch | 37 ++++++++++++++++++++++
- package/rygel/rygel.mk                             |  2 ++
- 2 files changed, 39 insertions(+)
- create mode 100644 package/rygel/0001-Allow-UI-build-without-gstreamer-video.patch
+ package/asterisk/asterisk.hash | 2 +-
+ package/asterisk/asterisk.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/rygel/0001-Allow-UI-build-without-gstreamer-video.patch b/package/rygel/0001-Allow-UI-build-without-gstreamer-video.patch
-new file mode 100644
-index 0000000000..6e1f528719
---- /dev/null
-+++ b/package/rygel/0001-Allow-UI-build-without-gstreamer-video.patch
-@@ -0,0 +1,37 @@
-+From f3a49ad1a4ba172e97bd860bc067f7e9ebe69509 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Mon, 8 Jan 2018 13:27:42 +0100
-+Subject: [PATCH] Allow UI build without gstreamer-video
-+
-+If EXAMPLE_UI dependencies are not met, only display a warning.
-+Indeed, currently, we can't build rygel UI without gstreamer-video which
-+is only a dependency of fullscreen-renderer application.
-+
-+fullscreen-renderer won't be build without gstreamer as HAVE_GSTREAMER
-+has to be true to check HAVE_UI in examples/Makefile.am
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ configure.ac | 6 +++++-
-+ 1 file changed, 5 insertions(+), 1 deletion(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 00b94da..d140a27 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -359,7 +359,11 @@ if test x$try_ui = xyes ; then
-+                           [$RYGEL_COMMON_MODULES gio-2.0 >= $GIO_REQUIRED
-+                            gssdp-1.0 >= $GSSDP_REQUIRED
-+                            gstreamer-video-1.0 >= $GSTREAMER_REQUIRED
-+-                           gtk+-3.0 >= $GTK_REQUIRED])
-++                           gtk+-3.0 >= $GTK_REQUIRED],,
-++                          [
-++                           AC_MSG_WARN([Example UI dependencies not found.])
-++                           AC_MSG_WARN([Example UI applications will not be built.])
-++                          ])
-+       ],
-+       [
-+         AC_MSG_WARN([UI dependencies not found.])
-+-- 
-+2.7.4
-+
-diff --git a/package/rygel/rygel.mk b/package/rygel/rygel.mk
-index e892df75a0..cd8897ceb5 100644
---- a/package/rygel/rygel.mk
-+++ b/package/rygel/rygel.mk
-@@ -16,6 +16,8 @@ RYGEL_DEPENDENCIES = \
- 	libmediaart \
- 	sqlite
- RYGEL_INSTALL_STAGING = YES
-+# We're patching configure.ac
-+RYGEL_AUTORECONF = YES
+diff --git a/package/asterisk/asterisk.hash b/package/asterisk/asterisk.hash
+index d1667ac..f537c2d 100644
+--- a/package/asterisk/asterisk.hash
++++ b/package/asterisk/asterisk.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256  f85f6df802de485d9b8cb1bfa5493e22f6401dce8246646af9506489a264d7b1  asterisk-14.6.2.tar.gz
++sha256  6525170fa16fecb08cb3cde2c1bd5d3140df55b14e4561ac0771fbd1e04b3b75  asterisk-14.7.5.tar.gz
  
- RYGEL_CONF_OPTS += \
- 	--disable-apidocs \
--- 
-2.14.1
+ # sha1 from: http://downloads.asterisk.org/pub/telephony/sounds/releases
+ # sha256 locally computed
+diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
+index da78b25..fc9a961 100644
+--- a/package/asterisk/asterisk.mk
++++ b/package/asterisk/asterisk.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ASTERISK_VERSION = 14.6.2
++ASTERISK_VERSION = 14.7.5
+ # Use the github mirror: it's an official mirror maintained by Digium, and
+ # provides tarballs, which the main Asterisk git tree (behind Gerrit) does not.
+ ASTERISK_SITE = $(call github,asterisk,asterisk,$(ASTERISK_VERSION))
