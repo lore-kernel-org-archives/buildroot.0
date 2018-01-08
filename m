@@ -1,56 +1,77 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 8 Jan 2018 22:01:04 +0100
-Subject: [Buildroot] [git commit] libjpeg: add pkg-config file for libjpeg
-Message-ID: <20180108210853.73AD57FD4F@busybox.osuosl.org>
+Date: Mon, 8 Jan 2018 22:13:46 +0100
+Subject: [Buildroot] [PATCH 1/1] libjpeg: add pkg-config file for libjpeg
+In-Reply-To: <20171023131743.32292-1-olivier.schonken@gmail.com>
+References: <20171023131743.32292-1-olivier.schonken@gmail.com>
+Message-ID: <20180108221346.44472cfd@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c93f56d46593155a244bf83fd36c78c7968ce6b0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Olivier Schonken <olivier.schonken@gmail.com>
-[Thomas: change to automatically set the version in the generated .pc file.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/libjpeg/libjpeg.mk    |  9 +++++++++
- package/libjpeg/libjpeg.pc.in | 10 ++++++++++
- 2 files changed, 19 insertions(+)
+On Mon, 23 Oct 2017 15:17:43 +0200, Olivier Schonken wrote:
+> Signed-off-by: Olivier Schonken <olivier.schonken@gmail.com>
+> ---
+> This change is necessary to successfully build cups-filters with
+> either libjpeg-turbo or libjpeg
+> 
+>  package/libjpeg/libjpeg.mk |  7 +++++++
+>  package/libjpeg/libjpeg.pc | 10 ++++++++++
+>  2 files changed, 17 insertions(+)
+>  create mode 100644 package/libjpeg/libjpeg.pc
+> 
+> diff --git a/package/libjpeg/libjpeg.mk b/package/libjpeg/libjpeg.mk
+> index e5bd454479..9e8380f44c 100644
+> --- a/package/libjpeg/libjpeg.mk
+> +++ b/package/libjpeg/libjpeg.mk
+> @@ -16,6 +16,13 @@ define LIBJPEG_REMOVE_USELESS_TOOLS
+>  	rm -f $(addprefix $(TARGET_DIR)/usr/bin/,cjpeg djpeg jpegtran rdjpgcom wrjpgcom)
+>  endef
+>  
+> +define LIBJPEG_INSTALL_STAGING_PC
+> +	$(INSTALL) -D package/libjpeg/libjpeg.pc \
+> +		$(STAGING_DIR)/usr/lib/pkgconfig/libjpeg.pc
+> +endef
+> +
+> +LIBJPEG_POST_INSTALL_STAGING_HOOKS += LIBJPEG_INSTALL_STAGING_PC
+> +
+>  LIBJPEG_POST_INSTALL_TARGET_HOOKS += LIBJPEG_REMOVE_USELESS_TOOLS
 
-diff --git a/package/libjpeg/libjpeg.mk b/package/libjpeg/libjpeg.mk
-index e5bd454..95663a9 100644
---- a/package/libjpeg/libjpeg.mk
-+++ b/package/libjpeg/libjpeg.mk
-@@ -18,5 +18,14 @@ endef
- 
- LIBJPEG_POST_INSTALL_TARGET_HOOKS += LIBJPEG_REMOVE_USELESS_TOOLS
- 
-+define LIBJPEG_INSTALL_STAGING_PC
-+	$(INSTALL) -D -m 0644 package/libjpeg/libjpeg.pc.in \
-+		$(STAGING_DIR)/usr/lib/pkgconfig/libjpeg.pc
-+	version=`sed -e '/^PACKAGE_VERSION/!d;s/PACKAGE_VERSION = \(.*\)/\1/' $(@D)/Makefile` ; \
-+		$(SED) "s/@PACKAGE_VERSION@/$${version}/" $(STAGING_DIR)/usr/lib/pkgconfig/libjpeg.pc
-+endef
-+
-+LIBJPEG_POST_INSTALL_STAGING_HOOKS += LIBJPEG_INSTALL_STAGING_PC
-+
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
-diff --git a/package/libjpeg/libjpeg.pc.in b/package/libjpeg/libjpeg.pc.in
-new file mode 100644
-index 0000000..59220ca
---- /dev/null
-+++ b/package/libjpeg/libjpeg.pc.in
-@@ -0,0 +1,10 @@
-+prefix=/usr
-+exec_prefix=/usr
-+libdir=${exec_prefix}/lib
-+includedir=${prefix}/include
-+
-+Name: libjpeg
-+Description: A JPEG codec that provides the libjpeg API
-+Version: @PACKAGE_VERSION@
-+Libs: -L${libdir} -ljpeg
-+Cflags: -I${includedir}
+It is better to group the hook registration with the definition of the
+hook itself, so I've tweaked this.
+
+>  
+>  $(eval $(autotools-package))
+> diff --git a/package/libjpeg/libjpeg.pc b/package/libjpeg/libjpeg.pc
+> new file mode 100644
+> index 0000000000..41cd21ce64
+> --- /dev/null
+> +++ b/package/libjpeg/libjpeg.pc
+> @@ -0,0 +1,10 @@
+> +prefix=/usr
+> +exec_prefix=/usr
+> +libdir=${exec_prefix}/lib
+> +includedir=${prefix}/include
+> +
+> +Name: libjpeg
+> +Description: A JPEG codec that provides the libjpeg API
+> +Version: 9.2.0
+
+I was not totally happy with this hardcoded version, so I've changed
+that to some SED logic in the .mk file to get the version from the
+libjpeg source code.
+
+I hesitated doing a patch to libjpeg instead, but I'm not sure upstream
+would have accepted it, and it would have meant keeping autoreconf
+forever.
+
+So, I've applied your patch after some tweaks. Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
