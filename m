@@ -1,93 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 8 Jan 2018 22:36:11 +0100
-Subject: [Buildroot] [git commit branch/2017.11.x] package/php: security
- bump to 7.1.13
-Message-ID: <20180108215441.D6770803A7@busybox.osuosl.org>
+Date: Mon, 8 Jan 2018 22:41:08 +0100
+Subject: [Buildroot] [git commit branch/2017.11.x] linux-headers: bump 3.2.x
+ series
+Message-ID: <20180108215442.45711803A7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8a658c4654d3bbfadcbd65372efdc238a85e65e3
+commit: https://git.buildroot.net/buildroot/commit/?id=7b4366005deb410920164532f5613c9a9350b6d9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.11.x
 
-Removed 0008-fix-asm-constraints-in-aarch64-multiply-macro.patch, patch
-was applied upstream:
-https://github.com/php/php-src/commit/d6d4f2a9b38cd7fa7e938142e49e5a514d612e52
-
-Renumbered patch 0009.
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 2c59323b846f9eefafb0d3c5d892119d2aa7becd)
+(cherry picked from commit a24ed4127eafa8d2f1bea13142f5632f4c62031f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...ch => 0008-Call-apxs-with-correct-prefix.patch} |  0
- ...asm-constraints-in-aarch64-multiply-macro.patch | 28 ----------------------
- package/php/php.hash                               |  2 +-
- package/php/php.mk                                 |  2 +-
- 4 files changed, 2 insertions(+), 30 deletions(-)
+ package/linux-headers/Config.in.host | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/php/0009-Call-apxs-with-correct-prefix.patch b/package/php/0008-Call-apxs-with-correct-prefix.patch
-similarity index 100%
-rename from package/php/0009-Call-apxs-with-correct-prefix.patch
-rename to package/php/0008-Call-apxs-with-correct-prefix.patch
-diff --git a/package/php/0008-fix-asm-constraints-in-aarch64-multiply-macro.patch b/package/php/0008-fix-asm-constraints-in-aarch64-multiply-macro.patch
-deleted file mode 100644
-index f4812da..0000000
---- a/package/php/0008-fix-asm-constraints-in-aarch64-multiply-macro.patch
-+++ /dev/null
-@@ -1,28 +0,0 @@
--From 1622f24fde4220967bd907bf8f0325d444bf9339 Mon Sep 17 00:00:00 2001
--From: Andy Postnikov <apostnikov@gmail.com>
--Date: Sat, 10 Dec 2016 23:51:17 +0300
--Subject: [PATCH] Fix bug #70015 - Compilation failure on aarch64
--
--Fixes build at -O0.
--
--[From pull request https://github.com/php/php-src/pull/2236.]
--Signed-off-by: Tatsuyuki Ishi <ishitatsuyuki@gmail.com>
-----
-- Zend/zend_multiply.h | 4 ++--
-- 1 file changed, 2 insertions(+), 2 deletions(-)
--
--diff --git a/Zend/zend_multiply.h b/Zend/zend_multiply.h
--index 75769db..fbd69ab 100644
----- a/Zend/zend_multiply.h
--+++ b/Zend/zend_multiply.h
--@@ -75,8 +75,8 @@
-- 	__asm__("mul %0, %2, %3\n"										\
-- 		"smulh %1, %2, %3\n"										\
-- 		"sub %1, %1, %0, asr #63\n"									\
---			: "=X"(__tmpvar), "=X"(usedval)							\
---			: "X"(a), "X"(b));										\
--+			: "=&r"(__tmpvar), "=&r"(usedval)						\
--+			: "r"(a), "r"(b));										\
-- 	if (usedval) (dval) = (double) (a) * (double) (b);				\
-- 	else (lval) = __tmpvar;											\
-- } while (0)
-diff --git a/package/php/php.hash b/package/php/php.hash
-index cdec308..3b3c97b 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
-@@ -1,5 +1,5 @@
- # From http://php.net/downloads.php
--sha256 a0118850774571b1f2d4e30b4fe7a4b958ca66f07d07d65ebdc789c54ba6eeb3  php-7.1.12.tar.xz
-+sha256 1a0b3f2fb61959b57a3ee01793a77ed3f19bde5aa90c43dcacc85ea32f64fc10  php-7.1.13.tar.xz
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index a1a7eb3..4c4d901 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -239,7 +239,7 @@ endchoice
  
- # License file
- sha256 a44951f93b10c87c3f7cd9f311d95999c57c95ed950eec32b14c1c7ea6baf25e  LICENSE
-diff --git a/package/php/php.mk b/package/php/php.mk
-index 72d5ea8..941000c 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PHP_VERSION = 7.1.12
-+PHP_VERSION = 7.1.13
- PHP_SITE = http://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "3.2.97"	if BR2_KERNEL_HEADERS_3_2
++	default "3.2.98"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.4.113"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.10.108"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.12.74"	if BR2_KERNEL_HEADERS_3_12
