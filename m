@@ -1,11 +1,10 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 8 Jan 2018 21:28:27 +0100
-Subject: [Buildroot] [PATCH v2 01/13] pkg-{download,
- generic}: remove source-check
-In-Reply-To: <20171025201003.16105-2-ps.report@gmx.net>
-References: <20171025201003.16105-1-ps.report@gmx.net>
- <20171025201003.16105-2-ps.report@gmx.net>
-Message-ID: <20180108212827.4d876213@windsurf>
+From: Sergio Prado <sergio.prado@e-labworks.com>
+Date: Mon, 8 Jan 2018 19:02:45 -0200
+Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
+ 2018-01-07
+In-Reply-To: <20180108070010.4B8A220731@mail.free-electrons.com>
+References: <20180108070010.4B8A220731@mail.free-electrons.com>
+Message-ID: <CANu7NGsmMRSaQm_TpLp_HXhxBCgfyTSFrVJJU_G9Wkpe6WxFNg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,30 +13,38 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 25 Oct 2017 22:09:51 +0200, Peter Seiderer wrote:
-> From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-> 
-> This feature is not used by anyone in the core developpers and makes a
-> drastic simplification of the pkg-download infrastructure harder.
-> 
-> The future patch will move much of what's in the current pkg-download.mk
-> file into the dl-wrapper which is a shell script.
-> 
-> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-> ---
-> Changes v1 --> v2:
->  - from https://github.com/maximeh/buildroot/commit/a4d0e83729a1ab534ff99d6f258058a1be1ed949.patch
->  - remove more references to source-check (suggested by Thomas Petazzoni)
-> ---
->  Makefile                |  7 +------
->  package/pkg-download.mk | 44 --------------------------------------------
->  package/pkg-generic.mk  | 14 +-------------
->  3 files changed, 2 insertions(+), 63 deletions(-)
+> Hello,
+>
+> This is the list of Buildroot build failures that occured on
+> 2018-01-07, and for which you are a registered architecture developer
+> or package developer. Please help us improving the quality of
+> Buildroot by investigating those build failures and sending patches to
+> fix them. Thanks!
+>
+> Results for the 'master' branch
+> ===============================
+>
+> Build failures related to your packages:
+>
+>         i586 |                      daq-2.0.6 |
+http://autobuild.buildroot.net/results/054f6581f67338b28af4dc2203b285ae1055581c
 
-Applied to master, thanks.
+That is the second time I receive this build failure report in the last
+days, but I couldn't reproduce it in my machine using the defconfig from
+autobuild. It doesn't look like a build server error. Any idea?
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Best regards,
+
+Sergio Prado
+Embedded Labworks
+https://e-labworks.com/en
+
+2018-01-08 5:00 GMT-02:00 Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com>:
+>
+>
+> --
+> http://autobuild.buildroot.net
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180108/939b6fb5/attachment.html>
