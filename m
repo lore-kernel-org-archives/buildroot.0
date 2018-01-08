@@ -1,62 +1,51 @@
-From: Andrew Donnellan <andrew.donnellan@au1.ibm.com>
-Date: Mon, 8 Jan 2018 10:33:21 +1100
-Subject: [Buildroot] patchwork.ozlabs.org down, and e-mails not recorded
-In-Reply-To: <20180105214340.6f0cc1f7@windsurf>
-References: <20180105214340.6f0cc1f7@windsurf>
-Message-ID: <ced2aeb2-82f6-c836-dd5a-e65c6b49c81a@au1.ibm.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon, 8 Jan 2018 07:49:16 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2018-01-06
+In-Reply-To: <CAMRc=MeF+VTsFC-O8M3wdbwLf-No5NALimddaVyN3=w=M2TR7w@mail.gmail.com>
+References: <20180107070006.3886D207B4@mail.free-electrons.com>
+ <CAMRc=MeF+VTsFC-O8M3wdbwLf-No5NALimddaVyN3=w=M2TR7w@mail.gmail.com>
+Message-ID: <20180108054916.wtom7vmn52cpzsj7@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/01/18 07:43, Thomas Petazzoni wrote:
-> Hello,
-> 
-> Just a quick note to let you know that from here, patchwork.ozlabs.org
-> seems to be down at this time (or awfully slow).
+Hi Bartosz,
 
-bilbo (i.e. ozlabs.org) required a reboot a couple of days ago for a 
-kernel upgrade iirc.
+On Mon, Jan 08, 2018 at 01:55:54AM +0100, Bartosz Golaszewski wrote:
+> 2018-01-07 8:00 GMT+01:00 Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com>:
+> > Hello,
+> >
+> > Build statistics for 2018-01-06
+> > ===============================
+> >
+> >       branch |  OK | NOK | TIM | TOT |
+> >       master | 189 |  42 |   4 | 235 |
+> >    2017.11.x |  24 |   0 |   0 |  24 |
+> >
+> > Results for branch 'master'
+> > ===========================
+> >
+> > Classification of failures by reason
+> > ------------------------------------
+> >
+> >              libzip-legal-info | 16
+> 
+> I believe this has something to do with the recent bump to 1.4.0 you
+> submitted. Could you take a look? I'm travelling this week and don't
+> have the bandwidth.
 
-ajd at bilbo:~$ uptime
-  10:27:36 up 2 days,  1:10,  5 users,  load average: 1.38, 1.96, 1.64
+The fix that Matt Weber posted while I was offline on Saturday has already 
+been applied:
 
-> 
-> Also, since a few weeks, we have seen that patchwork misses some
-> patches that are sent on the Buildroot mailing list. The mails are sent
-> on the mailing list, they are in the mailing list archives, but
-> patchwork does not record them.
-> 
-> An example is:
-> 
->    http://lists.busybox.net/pipermail/buildroot/2017-December/209885.html
-> 
-> PATCH 3/3 was not recorded by patchwork, while other patches in the
-> series have been.
+https://git.busybox.net/buildroot/commit/?id=13f554f530b371137eb39dd07b07ebefad1d5a73
 
-Hmm, looking at the patch list, I also see that patch 2/3 in that series 
-(https://patchwork.ozlabs.org/patch/852063/) wasn't correctly identified 
-in the same series as patch 1 
-(https://patchwork.ozlabs.org/patch/852062/) which is a bit weird.
-
-> 
-> This again happened today. The first send of:
-> 
->    http://lists.busybox.net/pipermail/buildroot/2018-January/210797.html
-> 
-> only had a few of its patches recorded by patchwork. It was resent a
-> few minutes later:
-> 
->    http://lists.busybox.net/pipermail/buildroot/2018-January/210858.html
-> 
-> and then all the patches got recorded.
-> 
-> This is quite annoying. Is there a way to look in the patchwork logs
-> what has happened with those patches ?
-
-I don't have access to the patchwork logs myself - jk, any thoughts?
+baruch
 
 -- 
-Andrew Donnellan              OzLabs, ADL Canberra
-andrew.donnellan at au1.ibm.com  IBM Australia Limited
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
