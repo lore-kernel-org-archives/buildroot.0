@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 8 Jan 2018 09:17:18 +0100
-Subject: [Buildroot] [PATCH] ntp: does not work with libressl
-In-Reply-To: <20180107225940.26656-1-peter@korsgaard.com>
-References: <20180107225940.26656-1-peter@korsgaard.com>
-Message-ID: <20180108091718.5df632f6@windsurf>
+Date: Mon, 8 Jan 2018 09:17:21 +0100
+Subject: [Buildroot] [PATCH] execline: fix hash "sha" type spelling
+In-Reply-To: <1515367746-46395-1-git-send-email-matthew.weber@rockwellcollins.com>
+References: <1515367746-46395-1-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <20180108091721.689186fb@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,27 +12,15 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun,  7 Jan 2018 23:59:40 +0100, Peter Korsgaard wrote:
-> Fixes #10556
+On Sun,  7 Jan 2018 17:29:06 -0600, Matt Weber wrote:
+> sah256 -> sha256
 > 
-> The --with-crypto handling in ntp only works with libopenssl, not with
-> libressl, where it ends up with compilation issues like:
+> Fixes:
+> http://autobuild.buildroot.net/results/9d0/9d054a26d7833353efbe49c984a7cb66d77b1d0c/
 > 
-> ntp_control.c:(.text+0x64): undefined reference to `EVP_MD_CTX_new'
-> ntp_control.c:(.text+0x10c): undefined reference to `EVP_MD_CTX_free'
-> libntpd.a(ntp_crypto.o): In function `bighash':
-> ntp_crypto.c:(.text+0x2e8): undefined reference to `EVP_MD_CTX_new'
-> ntp_crypto.c:(.text+0x328): undefined reference to `EVP_MD_CTX_free'
-> libntpd.a(ntp_crypto.o): In function `crypto_verify':
-> ntp_crypto.c:(.text+0x6cc): undefined reference to `EVP_MD_CTX_new'
-> ntp_crypto.c:(.text+0x710): undefined reference to `EVP_MD_CTX_free'
-> ntp_crypto.c:(.text+0x72c): undefined reference to `EVP_MD_CTX_free'
-> 
-> So ensure we only pass --with-crypto when libopenssl is used.
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 > ---
->  package/ntp/ntp.mk | 2 +-
+>  package/execline/execline.hash | 2 +-
 >  1 file changed, 1 insertion(+), 1 deletion(-)
 
 Applied to master, thanks.
