@@ -1,86 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 8 Jan 2018 22:37:09 +0100
-Subject: [Buildroot] [git commit branch/2017.11.x] core/infra: fix build on
- toolchain without C++
-Message-ID: <20180108215441.E251E803A7@busybox.osuosl.org>
+Date: Mon, 8 Jan 2018 22:36:03 +0100
+Subject: [Buildroot] [git commit branch/2017.11.x] package/php: bump version
+ to 7.1.12
+Message-ID: <20180108215441.CA59A803A7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=434a3e4933dac9e8c9fbe97c5a8f73905d0a93e2
+commit: https://git.buildroot.net/buildroot/commit/?id=a23693b0cd12fdcd5125cdbf28198e106ac82897
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.11.x
 
-Autotools-based packages that do not need C++ but check for it, and use
-libtool, will fail to configure on distros that lack /lib/cpp.
-
-This is the case for example on Arch Linux, where expat fails to build
-with:
-
-    configure: error: in `/home/dkc/src/buildroot/build/build/expat-2.2.4':
-    configure: error: C++ preprocessor "/lib/cpp" fails sanity check
-
-This is because libtool uses AC_PROC_CXXCPP, which can not be avoided,
-and does require a cpp that passes some "sanity" checks (does not choke
-on valid input, but does choke on invalid input). So we can use neither
-/bin/false nor /bin/true...
-
-We instead need something that can digest some basic C++ preprocessor
-input. We can't use the target preprocessor: that does not work, because
-it obviously has no C++ cupport:
-
-    arm-linux-cpp.br_real: error: conftest.cpp: C++ compiler not
-    installed on this system
-
-We can however consider that the host machine does have a C++ compiler,
-so we use the host' cpp, which is gcc's compiler wrapper that ends up
-calling the host's C++ preprocessor.
-
-That would give us a valid C++ preprocessor when we don't have one, in
-fact. But autotools will then correctly fail anyway, because there is
-indeed no C++ compiler at all, as we can see in this excerpt of a
-configure log from expat:
-
-    checking whether we are using the GNU C++ compiler... no
-    checking whether false accepts -g... no
-    checking dependency style of false... none
-    checking how to run the C++ preprocessor... cpp
-    checking whether the false linker (/home/ymorin/dev/buildroot/O/host/bin/arm-linux-ld) supports shared libraries... yes
-    libtool.m4: error: problem compiling CXX test program
-    checking for false option to produce PIC...  -DPIC
-    checking if false PIC flag  -DPIC works... no
-    checking if false static flag  works... no
-    checking if false supports -c -o file.o... no
-    checking if false supports -c -o file.o... (cached) no
-    checking whether the false linker (/home/ymorin/dev/buildroot/O/host/bin/arm-linux-ld) supports shared libraries... yes
-
-So, using the host's C++ preprocessor (by way of gcc's wrapper) leads to
-a working situation, where the end result is as expected.
-
-Reported-by: Damien Riegel <damien.riegel@savoirfairelinux.com>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Damien Riegel <damien.riegel@savoirfairelinux.com>
-Cc: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit bd39d11d2eaa679f09ab49fd3e4cd5511a168d1c)
+(cherry picked from commit ab01a1279c4990d201e6a560dbe9cc5b25a20fae)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/Makefile.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/php/php.hash | 2 +-
+ package/php/php.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index a1a5316..61f0a8f 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -398,7 +398,7 @@ NLS_OPTS = --disable-nls
- endif
+diff --git a/package/php/php.hash b/package/php/php.hash
+index d1f36f2..cdec308 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
+@@ -1,5 +1,5 @@
+ # From http://php.net/downloads.php
+-sha256 074093e9d7d21afedc5106904218a80a47b854abe368d2728ed22184c884893e  php-7.1.11.tar.xz
++sha256 a0118850774571b1f2d4e30b4fe7a4b958ca66f07d07d65ebdc789c54ba6eeb3  php-7.1.12.tar.xz
  
- ifneq ($(BR2_INSTALL_LIBSTDCPP),y)
--TARGET_CONFIGURE_OPTS += CXX=false
-+TARGET_CONFIGURE_OPTS += CXX=false CXXCPP=cpp
- endif
+ # License file
+ sha256 a44951f93b10c87c3f7cd9f311d95999c57c95ed950eec32b14c1c7ea6baf25e  LICENSE
+diff --git a/package/php/php.mk b/package/php/php.mk
+index aaeacde..72d5ea8 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_STATIC_LIBS),y)
+-PHP_VERSION = 7.1.11
++PHP_VERSION = 7.1.12
+ PHP_SITE = http://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
