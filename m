@@ -1,83 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 8 Jan 2018 20:57:25 +0100
-Subject: [Buildroot] [git commit] rygel: fix UI build
-Message-ID: <20180108195747.532CD83574@busybox.osuosl.org>
+Date: Mon, 8 Jan 2018 20:59:26 +0100
+Subject: [Buildroot] [PATCH] asterisk: security bump to version 14.7.5
+In-Reply-To: <20180108100815.16770-1-peter@korsgaard.com>
+References: <20180108100815.16770-1-peter@korsgaard.com>
+Message-ID: <20180108205926.39961fa0@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4fbd28e217a3ee64b3864cca3a3ac554493d979f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Add a patch to avoid failing on a configure error if UI example can't be
-built if libgtk3 is available but not gst1-plugins-base (gstreamer-video
-is only needed for UI example, not for rygel UI)
+On Mon,  8 Jan 2018 11:08:15 +0100, Peter Korsgaard wrote:
+> Fixes the following security issues:
+> 
+> * AST-2017-014: Crash in PJSIP resource when missing a contact header A
+>   select set of SIP messages create a dialog in Asterisk.  Those SIP
+>   messages must contain a contact header.  For those messages, if the header
+>   was not present and using the PJSIP channel driver, it would cause
+>   Asterisk to crash.  The severity of this vulnerability is somewhat
+>   mitigated if authentication is enabled.  If authentication is enabled a
+>   user would have to first be authorized before reaching the crash point.
+> 
+> For more details, see the announcement:
+> https://www.asterisk.org/downloads/asterisk-news/asterisk-13185-1475-1515-and-1318-cert2-now-available-security
+> 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> ---
+>  package/asterisk/asterisk.hash | 2 +-
+>  package/asterisk/asterisk.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-Fixes:
- - http://autobuild.buildroot.net/results/6c659aadfc418c0a27a93284eb34d75e2b0dc169
+Applied to master, thanks.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- ...01-Allow-UI-build-without-gstreamer-video.patch | 37 ++++++++++++++++++++++
- package/rygel/rygel.mk                             |  2 ++
- 2 files changed, 39 insertions(+)
-
-diff --git a/package/rygel/0001-Allow-UI-build-without-gstreamer-video.patch b/package/rygel/0001-Allow-UI-build-without-gstreamer-video.patch
-new file mode 100644
-index 0000000..6e1f528
---- /dev/null
-+++ b/package/rygel/0001-Allow-UI-build-without-gstreamer-video.patch
-@@ -0,0 +1,37 @@
-+From f3a49ad1a4ba172e97bd860bc067f7e9ebe69509 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Mon, 8 Jan 2018 13:27:42 +0100
-+Subject: [PATCH] Allow UI build without gstreamer-video
-+
-+If EXAMPLE_UI dependencies are not met, only display a warning.
-+Indeed, currently, we can't build rygel UI without gstreamer-video which
-+is only a dependency of fullscreen-renderer application.
-+
-+fullscreen-renderer won't be build without gstreamer as HAVE_GSTREAMER
-+has to be true to check HAVE_UI in examples/Makefile.am
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ configure.ac | 6 +++++-
-+ 1 file changed, 5 insertions(+), 1 deletion(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 00b94da..d140a27 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -359,7 +359,11 @@ if test x$try_ui = xyes ; then
-+                           [$RYGEL_COMMON_MODULES gio-2.0 >= $GIO_REQUIRED
-+                            gssdp-1.0 >= $GSSDP_REQUIRED
-+                            gstreamer-video-1.0 >= $GSTREAMER_REQUIRED
-+-                           gtk+-3.0 >= $GTK_REQUIRED])
-++                           gtk+-3.0 >= $GTK_REQUIRED],,
-++                          [
-++                           AC_MSG_WARN([Example UI dependencies not found.])
-++                           AC_MSG_WARN([Example UI applications will not be built.])
-++                          ])
-+       ],
-+       [
-+         AC_MSG_WARN([UI dependencies not found.])
-+-- 
-+2.7.4
-+
-diff --git a/package/rygel/rygel.mk b/package/rygel/rygel.mk
-index e892df7..cd8897c 100644
---- a/package/rygel/rygel.mk
-+++ b/package/rygel/rygel.mk
-@@ -16,6 +16,8 @@ RYGEL_DEPENDENCIES = \
- 	libmediaart \
- 	sqlite
- RYGEL_INSTALL_STAGING = YES
-+# We're patching configure.ac
-+RYGEL_AUTORECONF = YES
- 
- RYGEL_CONF_OPTS += \
- 	--disable-apidocs \
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
