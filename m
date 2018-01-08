@@ -1,22 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 08 Jan 2018 22:51:48 +0100
-Subject: [Buildroot] [PATCH 2/2] linux-headers: bump 4.{4, 9,
- 14}.x series
-In-Reply-To: <1515166515-30464-2-git-send-email-festevam@gmail.com> (Fabio
- Estevam's message of "Fri, 5 Jan 2018 13:35:15 -0200")
-References: <1515166515-30464-1-git-send-email-festevam@gmail.com>
- <1515166515-30464-2-git-send-email-festevam@gmail.com>
-Message-ID: <87vagcnhmz.fsf@dell.be.48ers.dk>
+Date: Mon, 08 Jan 2018 22:52:00 +0100
+Subject: [Buildroot] [PATCH 1/1] package/php: bump version to 7.1.13
+In-Reply-To: <20180106183657.20579-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Sat, 6 Jan 2018 19:36:57 +0100")
+References: <20180106183657.20579-1-bernd.kuhls@t-online.de>
+Message-ID: <87r2r0nhmn.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabio" == Fabio Estevam <festevam@gmail.com> writes:
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
- > Signed-off-by: Fabio Estevam <festevam@gmail.com>
- > ---
+ > Removed 0008-fix-asm-constraints-in-aarch64-multiply-macro.patch, patch
+ > was applied upstream:
+ > https://github.com/php/php-src/commit/d6d4f2a9b38cd7fa7e938142e49e5a514d612e52
+
+ > Renumbered patch 0009.
+
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
 Committed to 2017.11.x, thanks.
 
