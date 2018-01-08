@@ -1,38 +1,71 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 8 Jan 2018 22:34:35 +0100
-Subject: [Buildroot] [git commit branch/2017.11.x] linux-headers: bump 4.{4,
- 9, 14}.x series
-Message-ID: <20180108215441.BE1E0803A7@busybox.osuosl.org>
+Date: Mon, 8 Jan 2018 22:40:12 +0100
+Subject: [Buildroot] [git commit branch/2017.11.x] irssi: security bump to
+ version 1.0.6
+Message-ID: <20180108215442.1D951803A7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f68d0751541e28b775dc75e57283599baa68cdbe
+commit: https://git.buildroot.net/buildroot/commit/?id=427354a3b9f0fd26d5568eed988b49bb536fc6eb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.11.x
 
-[Peter: drop 4.14.x bump]
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
+From the advisory (https://irssi.org/security/irssi_sa_2018_01.txt):
+
+Multiple vulnerabilities have been located in Irssi.
+
+(a) When the channel topic is set without specifying a sender, Irssi
+    may dereference NULL pointer. Found by Joseph Bisch. (CWE-476)
+
+    CVE-2018-5206 was assigned to this issue.
+
+(b) When using incomplete escape codes, Irssi may access data beyond
+    the end of the string. (CWE-126) Found by Joseph Bisch.
+
+    CVE-2018-5205 was assigned to this issue.
+
+(c) A calculation error in the completion code could cause a heap
+    buffer overflow when completing certain strings. (CWE-126) Found
+    by Joseph Bisch.
+
+    CVE-2018-5208 was assigned to this issue.
+
+(d) When using an incomplete variable argument, Irssi may access data
+    beyond the end of the string. (CWE-126) Found by Joseph Bisch.
+
+    CVE-2018-5207 was assigned to this issue.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 7f02b4ae4525cdfb2a67286f982264c7de1e73dc)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+(cherry picked from commit aebdb1cd4b4034542eb7c50fc4b6a265c5ba5c77)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-headers/Config.in.host | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/irssi/irssi.hash | 2 +-
+ package/irssi/irssi.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 43728dc..a1a7eb3 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -244,8 +244,8 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.10.108"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.12.74"	if BR2_KERNEL_HEADERS_3_12
- 	default "4.1.48"	if BR2_KERNEL_HEADERS_4_1
--	default "4.4.109"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.74"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.4.110"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.9.75"	if BR2_KERNEL_HEADERS_4_9
- 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
- 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
- 	default "4.12.14"	if BR2_KERNEL_HEADERS_4_12
+diff --git a/package/irssi/irssi.hash b/package/irssi/irssi.hash
+index 0a6c3f6..83dde00 100644
+--- a/package/irssi/irssi.hash
++++ b/package/irssi/irssi.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-sha256	c2556427e12eb06cabfed40839ac6f57eb8b1aa6365fab6dfcd331b7a04bb914  irssi-1.0.5.tar.xz
++sha256	029e884f3ebf337f7266d8ed4e1a035ca56d9f85015d74c868b488f279de8585  irssi-1.0.6.tar.xz
+ # Locally calculated
+ sha256	a1a27cb2ecee8d5378fbb3562f577104a445d6d66fee89286e16758305e63e2b  COPYING
+diff --git a/package/irssi/irssi.mk b/package/irssi/irssi.mk
+index f945078..d49b5d7 100644
+--- a/package/irssi/irssi.mk
++++ b/package/irssi/irssi.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-IRSSI_VERSION = 1.0.5
++IRSSI_VERSION = 1.0.6
+ IRSSI_SOURCE = irssi-$(IRSSI_VERSION).tar.xz
+ # Do not use the github helper here. The generated tarball is *NOT* the
+ # same as the one uploaded by upstream for the release.
