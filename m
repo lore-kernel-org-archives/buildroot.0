@@ -1,162 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 8 Jan 2018 22:40:25 +0100
-Subject: [Buildroot] [git commit branch/2017.11.x] asterisk: security bump
- to version 14.6.2
-Message-ID: <20180108215442.2A98F803A7@busybox.osuosl.org>
+Date: Mon, 8 Jan 2018 22:31:50 +0100
+Subject: [Buildroot] [git commit branch/2017.11.x] linux-headers: bump 3.2.x
+ series
+Message-ID: <20180108215441.975E5838FC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7776e245c7e53cf24adb4a8761f8103f249c3d0c
+commit: https://git.buildroot.net/buildroot/commit/?id=e9feb0845fcecf1ade90b084a8b62083b045e67e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.11.x
 
-Fixes the following security issues:
-
-14.6.1:
-
-* AST-2017-005 (applied to all released versions): The "strictrtp" option in
-  rtp.conf enables a feature of the RTP stack that learns the source address
-  of media for a session and drops any packets that do not originate from
-  the expected address.  This option is enabled by default in Asterisk 11
-  and above.  The "nat" and "rtp_symmetric" options for chan_sip and
-  chan_pjsip respectively enable symmetric RTP support in the RTP stack.
-  This uses the source address of incoming media as the target address of
-  any sent media.  This option is not enabled by default but is commonly
-  enabled to handle devices behind NAT.
-
-  A change was made to the strict RTP support in the RTP stack to better
-  tolerate late media when a reinvite occurs.  When combined with the
-  symmetric RTP support this introduced an avenue where media could be
-  hijacked.  Instead of only learning a new address when expected the new
-  code allowed a new source address to be learned at all times.
-
-  If a flood of RTP traffic was received the strict RTPsupport would allow
-  the new address to provide media and with symmetric RTP enabled outgoing
-  traffic would be sent to this new address, allowing the media to be
-  hijacked.  Provided the attacker continued to send traffic they would
-  continue to receive traffic as well.
-
-* AST-2017-006 (applied to all released versions): The app_minivm module has
-  an ???externnotify??? program configuration option that is executed by the
-  MinivmNotify dialplan application.  The application uses the caller-id
-  name and number as part of a built string passed to the OS shell for
-  interpretation and execution.  Since the caller-id name and number can
-  come from an untrusted source, a crafted caller-id name or number allows
-  an arbitrary shell command injection.
-
-* AST-2017-007 (applied only to 13.17.1 and 14.6.1): A carefully crafted URI
-  in a From, To or Contact header could cause Asterisk to crash
-
-For more details, see the announcement:
-https://www.asterisk.org/downloads/asterisk-news/asterisk-11252-13171-1461-116-cert17-1313-cert5-now-available-security
-
-14.6.2:
-
-* AST-2017-008: Insufficient RTCP packet validation could allow reading
-  stale buffer contents and when combined with the ???nat??? and ???symmetric_rtp???
-  options allow redirecting where Asterisk sends the next RTCP report.
-
-  The RTP stream qualification to learn the source address of media always
-  accepted the first RTP packet as the new source and allowed what
-  AST-2017-005 was mitigating.  The intent was to qualify a series of
-  packets before accepting the new source address.
-
-For more details, see the announcement:
-https://www.asterisk.org/downloads/asterisk-news/asterisk-11253-13172-1462-116-cert18-1313-cert6-now-available-security
-
-Drop 0004-configure-in-cross-complation-assimne-eventfd-are-av.patch as this
-is now handled differently upstream (by disabling eventfd for cross
-compilation, see commit 2e927990b3d2 (eventfd: Disable during cross
-compilation)).  If eventfd support is needed then this should be submitted
-upstream.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 3f1d2c6c746a04d19a493f4e7b866e84e3aa7dc8)
+(cherry picked from commit 28d57106b87ef97480374925e5f44dc541eba381)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...sure-target-directory-for-modules-exists.patch} |  0
- ...n-cross-complation-assimne-eventfd-are-av.patch | 37 ----------------------
- ...0005-install-samples-need-the-data-files.patch} |  0
- package/asterisk/asterisk.hash                     |  2 +-
- package/asterisk/asterisk.mk                       |  2 +-
- 5 files changed, 2 insertions(+), 39 deletions(-)
+ package/linux-headers/Config.in.host | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/asterisk/0005-build-ensure-target-directory-for-modules-exists.patch b/package/asterisk/0004-build-ensure-target-directory-for-modules-exists.patch
-similarity index 100%
-rename from package/asterisk/0005-build-ensure-target-directory-for-modules-exists.patch
-rename to package/asterisk/0004-build-ensure-target-directory-for-modules-exists.patch
-diff --git a/package/asterisk/0004-configure-in-cross-complation-assimne-eventfd-are-av.patch b/package/asterisk/0004-configure-in-cross-complation-assimne-eventfd-are-av.patch
-deleted file mode 100644
-index dae36d1..0000000
---- a/package/asterisk/0004-configure-in-cross-complation-assimne-eventfd-are-av.patch
-+++ /dev/null
-@@ -1,37 +0,0 @@
--From e7de812c979d219765fbf1292f0e150bfa087716 Mon Sep 17 00:00:00 2001
--From: "Yann E. MORIN" <yann.morin.1998@free.fr>
--Date: Sun, 18 Jun 2017 21:54:16 +0200
--Subject: [PATCH] configure: in cross-complation, assume eventfd are available
--
--eventfd have been in the kernel since 2.6.22, and in glibc since 2.8,
--repectively released in July 2007 and April 2008, almost a decade ago
--now.
--
--Assume that no one building from now on for cross-compilation will be
--unlucky enough to get versions older than that...
--
--As such, in cross-compilation, assume eventfd are available.
--
--Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-----
-- configure.ac | 4 +++-
-- 1 file changed, 3 insertions(+), 1 deletion(-)
--
--diff --git a/configure.ac b/configure.ac
--index 1c20517864..474d17ae55 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -1107,7 +1107,9 @@ AC_RUN_IFELSE(
--       [return eventfd(0, EFD_NONBLOCK | EFD_SEMAPHORE) == -1;])],
--   AC_MSG_RESULT(yes)
--   AC_DEFINE([HAVE_EVENTFD], 1, [Define to 1 if your system supports eventfd and the EFD_NONBLOCK and EFD_SEMAPHORE flags.]),
---  AC_MSG_RESULT(no)
--+  AC_MSG_RESULT(no),
--+  AC_MSG_RESULT([cross-compile; assume yes])
--+  AC_DEFINE([HAVE_EVENTFD], 1, [Define to 1 if your system supports eventfd and the EFD_NONBLOCK and EFD_SEMAPHORE flags.])
-- )
-- 
-- AST_GCC_ATTRIBUTE(pure)
---- 
--2.11.0
--
-diff --git a/package/asterisk/0006-install-samples-need-the-data-files.patch b/package/asterisk/0005-install-samples-need-the-data-files.patch
-similarity index 100%
-rename from package/asterisk/0006-install-samples-need-the-data-files.patch
-rename to package/asterisk/0005-install-samples-need-the-data-files.patch
-diff --git a/package/asterisk/asterisk.hash b/package/asterisk/asterisk.hash
-index 7ae35bc..d1667ac 100644
---- a/package/asterisk/asterisk.hash
-+++ b/package/asterisk/asterisk.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256  c122fbe88e089737fa2c80356762ceed38498aa26da1dfdd4da5506f9b135696  asterisk-14.5.0.tar.gz
-+sha256  f85f6df802de485d9b8cb1bfa5493e22f6401dce8246646af9506489a264d7b1  asterisk-14.6.2.tar.gz
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 4d9652b..872614f 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -239,7 +239,7 @@ endchoice
  
- # sha1 from: http://downloads.asterisk.org/pub/telephony/sounds/releases
- # sha256 locally computed
-diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
-index 50512c0..da78b25 100644
---- a/package/asterisk/asterisk.mk
-+++ b/package/asterisk/asterisk.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ASTERISK_VERSION = 14.5.0
-+ASTERISK_VERSION = 14.6.2
- # Use the github mirror: it's an official mirror maintained by Digium, and
- # provides tarballs, which the main Asterisk git tree (behind Gerrit) does not.
- ASTERISK_SITE = $(call github,asterisk,asterisk,$(ASTERISK_VERSION))
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "3.2.96"	if BR2_KERNEL_HEADERS_3_2
++	default "3.2.97"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.4.113"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.10.108"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.12.74"	if BR2_KERNEL_HEADERS_3_12
