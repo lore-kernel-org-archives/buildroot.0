@@ -1,32 +1,29 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 8 Jan 2018 09:16:55 +0100
-Subject: [Buildroot] [git commit] linux-headers: bump 3.2.x series
-Message-ID: <20180108081841.73EB282AA3@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 08 Jan 2018 08:34:18 +0000
+Subject: [Buildroot] [Bug 10556] Building ntp package with SSL library
+ libressl instead of openssl fails
+In-Reply-To: <bug-10556-163@https.bugs.busybox.net/>
+References: <bug-10556-163@https.bugs.busybox.net/>
+Message-ID: <bug-10556-163-dQIN2QFQaB@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a24ed4127eafa8d2f1bea13142f5632f4c62031f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+https://bugs.busybox.net/show_bug.cgi?id=10556
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/linux-headers/Config.in.host | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Peter Korsgaard <jacmet@uclibc.org> changed:
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 7cac2b3..44751c8 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -247,7 +247,7 @@ endchoice
- 
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
--	default "3.2.97"	if BR2_KERNEL_HEADERS_3_2
-+	default "3.2.98"	if BR2_KERNEL_HEADERS_3_2
- 	default "3.4.113"	if BR2_KERNEL_HEADERS_3_4
- 	default "3.10.108"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.12.74"	if BR2_KERNEL_HEADERS_3_12
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+         Resolution|---                         |FIXED
+             Status|NEW                         |RESOLVED
+
+--- Comment #2 from Peter Korsgaard <jacmet@uclibc.org> ---
+Thanks, fixed by:
+https://git.buildroot.org/buildroot/commit/?id=522111f81c7d535f4f362ad4a15d141d0eb39ec5
+
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
