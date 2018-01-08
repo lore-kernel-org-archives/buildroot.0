@@ -1,55 +1,69 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon,  8 Jan 2018 11:08:15 +0100
-Subject: [Buildroot] [PATCH] asterisk: security bump to version 14.7.5
-Message-ID: <20180108100815.16770-1-peter@korsgaard.com>
+From: Gary Bisson <gary.bisson@boundarydevices.com>
+Date: Mon, 8 Jan 2018 11:58:15 +0100
+Subject: [Buildroot] [PATCH v2 15/15] configs: nitrogen*: bump u-boot
+ version to 2017.07
+In-Reply-To: <20180107204138.698cd177@windsurf>
+References: <20180105143947.26934-1-gary.bisson@boundarydevices.com>
+ <20180105143947.26934-16-gary.bisson@boundarydevices.com>
+ <20180107155519.33de28e7@windsurf>
+ <CAAMH-yv1gsYbyvsfMSBWTytEeGCL39Wvjs76Xq1PZGvGk8wGBA@mail.gmail.com>
+ <20180107204138.698cd177@windsurf>
+Message-ID: <CAAMH-yuoK38VkAcHHyOEgGT1+YA-Zvfyy8x6in8Jk5CB0gEpCw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes the following security issues:
+Hi Thomas,
 
-* AST-2017-014: Crash in PJSIP resource when missing a contact header A
-  select set of SIP messages create a dialog in Asterisk.  Those SIP
-  messages must contain a contact header.  For those messages, if the header
-  was not present and using the PJSIP channel driver, it would cause
-  Asterisk to crash.  The severity of this vulnerability is somewhat
-  mitigated if authentication is enabled.  If authentication is enabled a
-  user would have to first be authorized before reaching the crash point.
+On Sun, Jan 7, 2018 at 8:41 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
+>
+> On Sun, 7 Jan 2018 20:07:24 +0100, Gary Bisson wrote:
+>
+>> I understand although as it is said in the commit log, the previous
+>> scripts will be removed in a future release.
+>
+> OK.
+>
+>> As for where those scripts are located, we actually have them in our
+>> U-Boot repo now:
+>> https://github.com/boundarydevices/u-boot-imx6/tree/boundary-v2017.07/board/boundary/bootscripts
+>>
+>> That is how it is used in Yocto. I don't mind using it from U-Boot
+>> directly, but what's the best way to do so? Is there a bootloader
+>> equivalent to LINUX_DIR so I can easily point to the bootloader
+>> source?
+>
+> Well LINUX_DIR is a standard package variable. So for every package
+> <pkg>_DIR exists and points to its source directory :)
 
-For more details, see the announcement:
-https://www.asterisk.org/downloads/asterisk-news/asterisk-13185-1475-1515-and-1318-cert2-now-available-security
+Ha, didn't think this through ;)
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/asterisk/asterisk.hash | 2 +-
- package/asterisk/asterisk.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+So do you want me to remove those text files and use the one from our
+U-Boot tree?
 
-diff --git a/package/asterisk/asterisk.hash b/package/asterisk/asterisk.hash
-index d1667acaae..f537c2df66 100644
---- a/package/asterisk/asterisk.hash
-+++ b/package/asterisk/asterisk.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256  f85f6df802de485d9b8cb1bfa5493e22f6401dce8246646af9506489a264d7b1  asterisk-14.6.2.tar.gz
-+sha256  6525170fa16fecb08cb3cde2c1bd5d3140df55b14e4561ac0771fbd1e04b3b75  asterisk-14.7.5.tar.gz
- 
- # sha1 from: http://downloads.asterisk.org/pub/telephony/sounds/releases
- # sha256 locally computed
-diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
-index da78b25405..fc9a961c89 100644
---- a/package/asterisk/asterisk.mk
-+++ b/package/asterisk/asterisk.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ASTERISK_VERSION = 14.6.2
-+ASTERISK_VERSION = 14.7.5
- # Use the github mirror: it's an official mirror maintained by Digium, and
- # provides tarballs, which the main Asterisk git tree (behind Gerrit) does not.
- ASTERISK_SITE = $(call github,asterisk,asterisk,$(ASTERISK_VERSION))
--- 
-2.11.0
+>> Also, would you guys be ok with a
+>> BR2_TARGET_UBOOT_BOOT_SCRIPT_INSTALL_TARGET option? That would reduce
+>> the post-build script for several configs which copies it manually to
+>> TARGET_DIR/boot/ right now.
+>
+> I'm not sure what would be the benefit here. You see to propose to
+> replace one post-build script by one post-uboot-install-script. What's
+> the benefit?
+
+I was just surprised there was no option to have the boot script
+copied to boot/ automatically, just like the zImage/dtb. It makes
+sense to me that the boot script should reside somewhere in the final
+image.
+
+Also, by adding such option, this would remove the post-build script
+completely for:
+- Udoo Neo
+- Wandboard
+- Mx6Cubox
+
+Regards,
+Gary
