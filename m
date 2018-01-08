@@ -1,27 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 8 Jan 2018 09:17:26 +0100
-Subject: [Buildroot] [PATCH v2] linux-headers: bump 3.2.x series
-In-Reply-To: <1515374108-29630-1-git-send-email-festevam@gmail.com>
-References: <1515374108-29630-1-git-send-email-festevam@gmail.com>
-Message-ID: <20180108091726.60746e34@windsurf>
+Date: Mon, 8 Jan 2018 09:16:51 +0100
+Subject: [Buildroot] [git commit] ntp: does not work with libressl
+Message-ID: <20180108081841.763DE83BEF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=522111f81c7d535f4f362ad4a15d141d0eb39ec5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun,  7 Jan 2018 23:15:08 -0200, Fabio Estevam wrote:
-> Signed-off-by: Fabio Estevam <festevam@gmail.com>
-> ---
-> Changes since v1:
-> - Fix Subject line
+Fixes #10556
 
-Applied to master, thanks.
+The --with-crypto handling in ntp only works with libopenssl, not with
+libressl, where it ends up with compilation issues like:
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+ntp_control.c:(.text+0x64): undefined reference to `EVP_MD_CTX_new'
+ntp_control.c:(.text+0x10c): undefined reference to `EVP_MD_CTX_free'
+libntpd.a(ntp_crypto.o): In function `bighash':
+ntp_crypto.c:(.text+0x2e8): undefined reference to `EVP_MD_CTX_new'
+ntp_crypto.c:(.text+0x328): undefined reference to `EVP_MD_CTX_free'
+libntpd.a(ntp_crypto.o): In function `crypto_verify':
+ntp_crypto.c:(.text+0x6cc): undefined reference to `EVP_MD_CTX_new'
+ntp_crypto.c:(.text+0x710): undefined reference to `EVP_MD_CTX_free'
+ntp_crypto.c:(.text+0x72c): undefined reference to `EVP_MD_CTX_free'
+
+So ensure we only pass --with-crypto when libopenssl is used.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/ntp/ntp.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/ntp/ntp.mk b/package/ntp/ntp.mk
+index 05619ae..74cf546 100644
+--- a/package/ntp/ntp.mk
++++ b/package/ntp/ntp.mk
+@@ -23,7 +23,7 @@ NTP_CONF_OPTS = \
+ # 0003-ntpq-fpic.patch
+ NTP_AUTORECONF = YES
+ 
+-ifeq ($(BR2_PACKAGE_OPENSSL),y)
++ifeq ($(BR2_PACKAGE_LIBOPENSSL),y)
+ NTP_CONF_OPTS += --with-crypto
+ NTP_DEPENDENCIES += openssl
+ else
