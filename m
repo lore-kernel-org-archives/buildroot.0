@@ -1,158 +1,162 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 8 Jan 2018 22:37:58 +0100
-Subject: [Buildroot] [git commit branch/2017.11.x] package/pound: Fix build
- with openssl 1.0.2
-Message-ID: <20180108215441.EE9C7803A7@busybox.osuosl.org>
+Date: Mon, 8 Jan 2018 22:40:25 +0100
+Subject: [Buildroot] [git commit branch/2017.11.x] asterisk: security bump
+ to version 14.6.2
+Message-ID: <20180108215442.2A98F803A7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=de3234fd1e52cf07426dcf56dee2b216d948b4ea
+commit: https://git.buildroot.net/buildroot/commit/?id=7776e245c7e53cf24adb4a8761f8103f249c3d0c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.11.x
 
-Fixes
-http://autobuild.buildroot.net/results/5be/5be1082dee8387b1140d802ac3c788896a4bf980/
+Fixes the following security issues:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+14.6.1:
+
+* AST-2017-005 (applied to all released versions): The "strictrtp" option in
+  rtp.conf enables a feature of the RTP stack that learns the source address
+  of media for a session and drops any packets that do not originate from
+  the expected address.  This option is enabled by default in Asterisk 11
+  and above.  The "nat" and "rtp_symmetric" options for chan_sip and
+  chan_pjsip respectively enable symmetric RTP support in the RTP stack.
+  This uses the source address of incoming media as the target address of
+  any sent media.  This option is not enabled by default but is commonly
+  enabled to handle devices behind NAT.
+
+  A change was made to the strict RTP support in the RTP stack to better
+  tolerate late media when a reinvite occurs.  When combined with the
+  symmetric RTP support this introduced an avenue where media could be
+  hijacked.  Instead of only learning a new address when expected the new
+  code allowed a new source address to be learned at all times.
+
+  If a flood of RTP traffic was received the strict RTPsupport would allow
+  the new address to provide media and with symmetric RTP enabled outgoing
+  traffic would be sent to this new address, allowing the media to be
+  hijacked.  Provided the attacker continued to send traffic they would
+  continue to receive traffic as well.
+
+* AST-2017-006 (applied to all released versions): The app_minivm module has
+  an ???externnotify??? program configuration option that is executed by the
+  MinivmNotify dialplan application.  The application uses the caller-id
+  name and number as part of a built string passed to the OS shell for
+  interpretation and execution.  Since the caller-id name and number can
+  come from an untrusted source, a crafted caller-id name or number allows
+  an arbitrary shell command injection.
+
+* AST-2017-007 (applied only to 13.17.1 and 14.6.1): A carefully crafted URI
+  in a From, To or Contact header could cause Asterisk to crash
+
+For more details, see the announcement:
+https://www.asterisk.org/downloads/asterisk-news/asterisk-11252-13171-1461-116-cert17-1313-cert5-now-available-security
+
+14.6.2:
+
+* AST-2017-008: Insufficient RTCP packet validation could allow reading
+  stale buffer contents and when combined with the ???nat??? and ???symmetric_rtp???
+  options allow redirecting where Asterisk sends the next RTCP report.
+
+  The RTP stream qualification to learn the source address of media always
+  accepted the first RTP packet as the new source and allowed what
+  AST-2017-005 was mitigating.  The intent was to qualify a series of
+  packets before accepting the new source address.
+
+For more details, see the announcement:
+https://www.asterisk.org/downloads/asterisk-news/asterisk-11253-13172-1462-116-cert18-1313-cert6-now-available-security
+
+Drop 0004-configure-in-cross-complation-assimne-eventfd-are-av.patch as this
+is now handled differently upstream (by disabling eventfd for cross
+compilation, see commit 2e927990b3d2 (eventfd: Disable during cross
+compilation)).  If eventfd support is needed then this should be submitted
+upstream.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit d28fa26f272fddb1573da2d20e52412fd70dff4b)
+(cherry picked from commit 3f1d2c6c746a04d19a493f4e7b866e84e3aa7dc8)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pound/0001-fix-openssl-1.0.2.patch | 127 +++++++++++++++++++++++++++++
- 1 file changed, 127 insertions(+)
+ ...sure-target-directory-for-modules-exists.patch} |  0
+ ...n-cross-complation-assimne-eventfd-are-av.patch | 37 ----------------------
+ ...0005-install-samples-need-the-data-files.patch} |  0
+ package/asterisk/asterisk.hash                     |  2 +-
+ package/asterisk/asterisk.mk                       |  2 +-
+ 5 files changed, 2 insertions(+), 39 deletions(-)
 
-diff --git a/package/pound/0001-fix-openssl-1.0.2.patch b/package/pound/0001-fix-openssl-1.0.2.patch
-new file mode 100644
-index 0000000..b20fdb3
---- /dev/null
-+++ b/package/pound/0001-fix-openssl-1.0.2.patch
-@@ -0,0 +1,127 @@
-+From eb471de8f26e0367dd08d299d2252fa8b2b958a9 Mon Sep 17 00:00:00 2001
-+From: Emilio <emilio.campos@zevenet.com>
-+Date: Mon, 17 Jul 2017 09:41:32 +0200
-+Subject: [PATCH] [Improvement] Added support to compile pound with openssl
-+ 1.0.2
-+
-+Signed-off-by: Emilio <emilio.campos@zevenet.com>
-+
-+	new file:   dh2048.h
-+	modified:   svc.c
-+
-+Patch was downloaded from 3rd-party repo:
-+https://github.com/zevenet/pound/commit/eb471de8f26e0367dd08d299d2252fa8b2b958a9
-+
-+This repo was announced on upstream mailinglist:
-+http://www.apsis.ch/pound/pound_list/archive/2017/2017-07/1500287626000#1500287626000
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ dh2048.h | 53 +++++++++++++++++++++++++++++++++++++++++++++++++++++
-+ svc.c    | 33 +++++++++++++++++++++++++++++++++
-+ 2 files changed, 86 insertions(+)
-+ create mode 100644 dh2048.h
-+
-+diff --git a/dh2048.h b/dh2048.h
-+new file mode 100644
-+index 0000000..79c693c
-+--- /dev/null
-++++ b/dh2048.h
-+@@ -0,0 +1,53 @@
-++#ifndef HEADER_DH_H
-++# include <openssl/dh.h>
-++#endif
-++
-++DH *get_dh2048()
-++{
-++    static unsigned char dhp_2048[] = {
-++	0xBF, 0x6C, 0xC6, 0xBD, 0xEA, 0x10, 0x84, 0x59, 0x40, 0xC2, 
-++	0xC6, 0xA2, 0x9B, 0x19, 0xD3, 0x2E, 0x2F, 0xAB, 0xE6, 0xE4, 
-++	0x1E, 0x91, 0x0D, 0x59, 0xDC, 0x96, 0x3F, 0x6E, 0x65, 0x38, 
-++	0xB9, 0xBE, 0xBB, 0x8F, 0xDF, 0x73, 0xAC, 0xAC, 0xB3, 0x2F, 
-++	0xA7, 0x02, 0x0B, 0x87, 0xB7, 0x3F, 0x3A, 0x42, 0x8A, 0x94, 
-++	0xDD, 0xEC, 0x33, 0xA4, 0x25, 0xB1, 0xBF, 0x84, 0x91, 0x87, 
-++	0xD8, 0x1C, 0x42, 0xB9, 0x8E, 0x00, 0x1F, 0x49, 0xED, 0x57, 
-++	0xA4, 0x48, 0xB0, 0xCC, 0xD8, 0xB8, 0x83, 0xCA, 0x3E, 0xDF, 
-++	0xA2, 0xF2, 0x07, 0x71, 0x71, 0x18, 0x1F, 0x50, 0x45, 0x3A, 
-++	0x66, 0x04, 0x7F, 0x15, 0xB2, 0xA8, 0x02, 0x77, 0xCE, 0xC6, 
-++	0xF9, 0x7C, 0x63, 0xE4, 0x52, 0x41, 0xFA, 0x62, 0xB9, 0x0D, 
-++	0xDC, 0x08, 0x62, 0xEC, 0x00, 0xAB, 0xB0, 0xF7, 0x79, 0x48, 
-++	0x75, 0x22, 0x85, 0xCC, 0x67, 0x3C, 0xEA, 0x09, 0x32, 0xAC, 
-++	0x30, 0xED, 0x1E, 0x67, 0xDC, 0x74, 0xF8, 0xD9, 0xC3, 0xD0, 
-++	0xA0, 0x60, 0x4D, 0xCE, 0x52, 0xBC, 0xA3, 0xE5, 0x18, 0x7B, 
-++	0x0B, 0xC8, 0xCE, 0x70, 0xA2, 0xC8, 0x21, 0xCA, 0xCE, 0xA5, 
-++	0xD4, 0xCB, 0x85, 0xFC, 0xC7, 0x07, 0x5C, 0x05, 0x87, 0xFC, 
-++	0x2F, 0x67, 0x4D, 0x2D, 0x4F, 0xA4, 0xEE, 0x63, 0x98, 0x49, 
-++	0xE4, 0x2E, 0xD7, 0x3F, 0x7D, 0x69, 0x68, 0x0A, 0xA2, 0x3E, 
-++	0x5A, 0x04, 0xD4, 0xDD, 0xBB, 0xC7, 0xB4, 0x34, 0xB7, 0x21, 
-++	0xD3, 0xAC, 0x99, 0xD7, 0x87, 0x45, 0x5E, 0x18, 0x68, 0x16, 
-++	0x3A, 0xAF, 0xE2, 0x04, 0x57, 0xB8, 0x6A, 0xB8, 0x2F, 0x75, 
-++	0xD5, 0x79, 0x96, 0x60, 0x8D, 0xD1, 0xCC, 0xD1, 0x33, 0x85, 
-++	0x53, 0x88, 0x87, 0x34, 0xA6, 0x4B, 0x49, 0x24, 0x53, 0xD6, 
-++	0xF1, 0x1E, 0x4E, 0x98, 0x4D, 0x6B, 0x44, 0x31, 0x94, 0xFF, 
-++	0x46, 0xC2, 0x38, 0x2E, 0xEA, 0xBB
-++    };
-++    static unsigned char dhg_2048[] = {
-++	0x05
-++    };
-++    DH *dh = DH_new();
-++    BIGNUM *dhp_bn, *dhg_bn;
-++
-++    if (dh == NULL)
-++        return NULL;
-++    dhp_bn = BN_bin2bn(dhp_2048, sizeof (dhp_2048), NULL);
-++    dhg_bn = BN_bin2bn(dhg_2048, sizeof (dhg_2048), NULL);
-++    if (dhp_bn == NULL || dhg_bn == NULL
-++            || !DH_set0_pqg(dh, dhp_bn, NULL, dhg_bn)) {
-++        DH_free(dh);
-++        BN_free(dhp_bn);
-++        BN_free(dhg_bn);
-++        return NULL;
-++    }
-++    return dh;
-++}
-+diff --git a/svc.c b/svc.c
-+index 1341397..758dfbd 100644
-+--- a/svc.c
-++++ b/svc.c
-+@@ -1512,6 +1512,39 @@ do_RSAgen(void)
-+     return;
-+ }
-+ 
-++
-++#if OPENSSL_VERSION_NUMBER < 0x10100000
-++static inline int DH_set0_pqg(DH *dh, BIGNUM *p, BIGNUM *q, BIGNUM *g)
-++{
-++	/* If the fields p and g in d are NULL, the corresponding input
-++	 * parameters MUST be non-NULL.  q may remain NULL.
-++	 */
-++	if ((dh->p == NULL && p == NULL)
-++	    || (dh->g == NULL && g == NULL))
-++		return 0;
-++
-++	if (p != NULL) {
-++		BN_free(dh->p);
-++		dh->p = p;
-++	}
-++	if (q != NULL) {
-++		BN_free(dh->q);
-++		dh->q = q;
-++	}
-++	if (g != NULL) {
-++		BN_free(dh->g);
-++		dh->g = g;
-++	}
-++
-++	if (q != NULL) {
-++		dh->length = BN_num_bits(q);
-++	}
-++
-++	return 1;
-++}
-++#endif
-++
-++
-+ #include    "dh512.h"
-+ 
-+ #if DH_LEN == 1024
+diff --git a/package/asterisk/0005-build-ensure-target-directory-for-modules-exists.patch b/package/asterisk/0004-build-ensure-target-directory-for-modules-exists.patch
+similarity index 100%
+rename from package/asterisk/0005-build-ensure-target-directory-for-modules-exists.patch
+rename to package/asterisk/0004-build-ensure-target-directory-for-modules-exists.patch
+diff --git a/package/asterisk/0004-configure-in-cross-complation-assimne-eventfd-are-av.patch b/package/asterisk/0004-configure-in-cross-complation-assimne-eventfd-are-av.patch
+deleted file mode 100644
+index dae36d1..0000000
+--- a/package/asterisk/0004-configure-in-cross-complation-assimne-eventfd-are-av.patch
++++ /dev/null
+@@ -1,37 +0,0 @@
+-From e7de812c979d219765fbf1292f0e150bfa087716 Mon Sep 17 00:00:00 2001
+-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+-Date: Sun, 18 Jun 2017 21:54:16 +0200
+-Subject: [PATCH] configure: in cross-complation, assume eventfd are available
+-
+-eventfd have been in the kernel since 2.6.22, and in glibc since 2.8,
+-repectively released in July 2007 and April 2008, almost a decade ago
+-now.
+-
+-Assume that no one building from now on for cross-compilation will be
+-unlucky enough to get versions older than that...
+-
+-As such, in cross-compilation, assume eventfd are available.
+-
+-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+----
+- configure.ac | 4 +++-
+- 1 file changed, 3 insertions(+), 1 deletion(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index 1c20517864..474d17ae55 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -1107,7 +1107,9 @@ AC_RUN_IFELSE(
+-       [return eventfd(0, EFD_NONBLOCK | EFD_SEMAPHORE) == -1;])],
+-   AC_MSG_RESULT(yes)
+-   AC_DEFINE([HAVE_EVENTFD], 1, [Define to 1 if your system supports eventfd and the EFD_NONBLOCK and EFD_SEMAPHORE flags.]),
+--  AC_MSG_RESULT(no)
+-+  AC_MSG_RESULT(no),
+-+  AC_MSG_RESULT([cross-compile; assume yes])
+-+  AC_DEFINE([HAVE_EVENTFD], 1, [Define to 1 if your system supports eventfd and the EFD_NONBLOCK and EFD_SEMAPHORE flags.])
+- )
+- 
+- AST_GCC_ATTRIBUTE(pure)
+--- 
+-2.11.0
+-
+diff --git a/package/asterisk/0006-install-samples-need-the-data-files.patch b/package/asterisk/0005-install-samples-need-the-data-files.patch
+similarity index 100%
+rename from package/asterisk/0006-install-samples-need-the-data-files.patch
+rename to package/asterisk/0005-install-samples-need-the-data-files.patch
+diff --git a/package/asterisk/asterisk.hash b/package/asterisk/asterisk.hash
+index 7ae35bc..d1667ac 100644
+--- a/package/asterisk/asterisk.hash
++++ b/package/asterisk/asterisk.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256  c122fbe88e089737fa2c80356762ceed38498aa26da1dfdd4da5506f9b135696  asterisk-14.5.0.tar.gz
++sha256  f85f6df802de485d9b8cb1bfa5493e22f6401dce8246646af9506489a264d7b1  asterisk-14.6.2.tar.gz
+ 
+ # sha1 from: http://downloads.asterisk.org/pub/telephony/sounds/releases
+ # sha256 locally computed
+diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
+index 50512c0..da78b25 100644
+--- a/package/asterisk/asterisk.mk
++++ b/package/asterisk/asterisk.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ASTERISK_VERSION = 14.5.0
++ASTERISK_VERSION = 14.6.2
+ # Use the github mirror: it's an official mirror maintained by Digium, and
+ # provides tarballs, which the main Asterisk git tree (behind Gerrit) does not.
+ ASTERISK_SITE = $(call github,asterisk,asterisk,$(ASTERISK_VERSION))
