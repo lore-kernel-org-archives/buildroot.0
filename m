@@ -1,7 +1,7 @@
 From: Fabio Estevam <festevam@gmail.com>
-Date: Sun,  7 Jan 2018 23:13:23 -0200
-Subject: [Buildroot] [PATCH] bumpheaders
-Message-ID: <1515374003-29392-1-git-send-email-festevam@gmail.com>
+Date: Sun,  7 Jan 2018 23:15:08 -0200
+Subject: [Buildroot] [PATCH v2] linux-headers: bump 3.2.x series
+Message-ID: <1515374108-29630-1-git-send-email-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,6 +10,9 @@ To: buildroot@busybox.net
 
 Signed-off-by: Fabio Estevam <festevam@gmail.com>
 ---
+Changes since v1:
+- Fix Subject line
+
  package/linux-headers/Config.in.host | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
