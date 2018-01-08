@@ -1,29 +1,30 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 08 Jan 2018 08:34:18 +0000
-Subject: [Buildroot] [Bug 10556] Building ntp package with SSL library
- libressl instead of openssl fails
-In-Reply-To: <bug-10556-163@https.bugs.busybox.net/>
-References: <bug-10556-163@https.bugs.busybox.net/>
-Message-ID: <bug-10556-163-dQIN2QFQaB@https.bugs.busybox.net/>
+From: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
+Date: Mon, 8 Jan 2018 09:35:33 +0100
+Subject: [Buildroot] [PATCH] nilfs-utils: fix build with static
+ toolchains
+In-Reply-To: <20180107234226.27471e8a@windsurf>
+References: <1515357573-10780-1-git-send-email-dev.kurt@vandijck-laurijssen.be>
+ <20180107232900.63de8126@windsurf>
+ <20180107234226.27471e8a@windsurf>
+Message-ID: <20180108083533.GA24186@airbook.vandijck-laurijssen.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=10556
+> > 
+> > Nit: when sending a new version of a patch, it is strongly recommended
+> > to use [PATCH v2], [PATCH v3], and include a changelog...
+> 
+> Also, when you're fixing autobuilder failures, your commit log should
+> include a reference to one such failure. Something like this:
+> 
+> Fixes:
+> 
+>   http://autobuild.buildroot.org/results/<hash>/
+> 
+> Thanks!
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
-
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-         Resolution|---                         |FIXED
-             Status|NEW                         |RESOLVED
-
---- Comment #2 from Peter Korsgaard <jacmet@uclibc.org> ---
-Thanks, fixed by:
-https://git.buildroot.org/buildroot/commit/?id=522111f81c7d535f4f362ad4a15d141d0eb39ec5
-
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+I see. Will I resend?
+Kurt
