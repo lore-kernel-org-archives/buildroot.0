@@ -1,67 +1,53 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 8 Jan 2018 23:48:02 +0100
-Subject: [Buildroot] [PATCH 1/1] utils/checkpackagelib: add function to
- check of the default package source variable
-In-Reply-To: <1513599266-6954-1-git-send-email-jerzy.m.grzegorek@gmail.com>
-References: <1513599266-6954-1-git-send-email-jerzy.m.grzegorek@gmail.com>
-Message-ID: <20180108234802.42d06229@windsurf>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Tue,  9 Jan 2018 00:10:19 +0100
+Subject: [Buildroot] [PATCH] package/ti-cgt-pru: bump to 2.2.1
+Message-ID: <20180108231019.24969-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ricardo,
+See: http://www.ti.com/tool/download/PRU-CGT-2-2
 
-Do you think you could have a look at the below patch touching
-checkpackagelib ?
+The ti-cgt-pru v2.1.x installer are affected by a bug with recent
+distribution (Fedora 27 and Ubuntu 17.10) using kernel 4.13 or 4.14
+with a glibc 2.26.
+The installer is stuck in a futex(wait) system call.
 
-It looks OK to me, so unless you complain in the next days, I'll apply.
+Fixes:
+http://autobuild.buildroot.net/results/68f/68f60ad38d9b6eae83b5d233966616a25d8c9391
 
-Thanks a lot for your feedback!
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Ash Charles <ash.charles@savoirfairelinux.com>
+Cc: Matthew Weber <matthew.weber@rockwellcollins.com>
+---
+Note: This bump is not tested on real PRU hardware.
+---
+ package/ti-cgt-pru/ti-cgt-pru.hash | 2 +-
+ package/ti-cgt-pru/ti-cgt-pru.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Thomas
-
-On Mon, 18 Dec 2017 13:14:26 +0100, Jerzy Grzegorek wrote:
-> Signed-off-by: Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com>
-> ---
->  utils/checkpackagelib/lib_mk.py | 19 +++++++++++++++++++
->  1 file changed, 19 insertions(+)
-> 
-> diff --git a/utils/checkpackagelib/lib_mk.py b/utils/checkpackagelib/lib_mk.py
-> index 817e809..5ae565c 100644
-> --- a/utils/checkpackagelib/lib_mk.py
-> +++ b/utils/checkpackagelib/lib_mk.py
-> @@ -99,6 +99,25 @@ class PackageHeader(_CheckFunction):
->                          text]
->  
->  
-> +class RemoveDefaultPackageSourceVariable(_CheckFunction):
-> +    PACKAGE_NAME = re.compile("/([^/]+)\.mk")
-> +
-> +    def before(self):
-> +        package = self.PACKAGE_NAME.search(self.filename).group(1)
-> +        package_upper = package.replace("-", "_").upper()
-> +        self.package = package
-> +        self.package_upper = package_upper
-> +        self.FIND_SOURCE = re.compile(
-> +            "^{}_SOURCE\s*=\s*{}-\$\({}_VERSION\)\.tar\.gz"
-> +            .format(package_upper, package, package_upper))
-> +
-> +    def check_line(self, lineno, text):
-> +        if self.FIND_SOURCE.search(text):
-> +            return ["{}:{}: remove default value of _SOURCE variable ({}#writing-rules-mk)"
-> +                    .format(self.filename, lineno, self.url_to_manual),
-> +                    text]
-> +
-> +
->  class SpaceBeforeBackslash(_CheckFunction):
->      TAB_OR_MULTIPLE_SPACES_BEFORE_BACKSLASH = re.compile(r"^.*(  |\t)\\$")
->  
-
-
-
+diff --git a/package/ti-cgt-pru/ti-cgt-pru.hash b/package/ti-cgt-pru/ti-cgt-pru.hash
+index 3ff08ace32..3944f35609 100644
+--- a/package/ti-cgt-pru/ti-cgt-pru.hash
++++ b/package/ti-cgt-pru/ti-cgt-pru.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	c80dbf35e7401f4c122ff25cc2f6b5db496607782fb4583cee8663a2763f4472	ti_cgt_pru_2.1.4_linux_installer_x86.bin
++sha256	7dc37fd689d1d506bf410d2a00af658b93a58d4bc10ac32c2210129dab617377	ti_cgt_pru_2.2.1_linux_installer_x86.bin
+diff --git a/package/ti-cgt-pru/ti-cgt-pru.mk b/package/ti-cgt-pru/ti-cgt-pru.mk
+index f923e835dc..4f70d4b023 100644
+--- a/package/ti-cgt-pru/ti-cgt-pru.mk
++++ b/package/ti-cgt-pru/ti-cgt-pru.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TI_CGT_PRU_VERSION = 2.1.4
++TI_CGT_PRU_VERSION = 2.2.1
+ TI_CGT_PRU_SOURCE = ti_cgt_pru_$(TI_CGT_PRU_VERSION)_linux_installer_x86.bin
+ TI_CGT_PRU_SITE = http://downloads.ti.com/codegen/esd/cgt_public_sw/PRU/$(TI_CGT_PRU_VERSION)
+ TI_CGT_PRU_LICENSE = TI Technology and Software Publicly Available License (compiler + PRU library), \
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.14.3
