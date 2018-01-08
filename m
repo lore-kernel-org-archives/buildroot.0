@@ -1,38 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 8 Jan 2018 22:32:34 +0100
-Subject: [Buildroot] [git commit branch/2017.11.x] linux-headers: bump 4.{4,
- 9, 14}.x series
-Message-ID: <20180108215441.A3CE8803A7@busybox.osuosl.org>
+Date: Mon, 8 Jan 2018 16:10:11 +0100
+Subject: [Buildroot] [git commit branch/2017.11.x] tar: do not build SELinux
+ support for host variant
+Message-ID: <20180108215441.6D43B838FC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=01dd528fce74bdaf948d8e68d59885fdd2ffb9f8
+commit: https://git.buildroot.net/buildroot/commit/?id=ee57b63fc8c8f75023a3d8531aa24d824209043f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.11.x
 
-[Peter: drop 4.14.x bump]
-Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
+If we don't explicitly disable SELinux support in the host-tar build,
+it might pick up system-wide installed SELinux libraries, causing the
+tar in HOST_DIR/bin/ to depend on the host SELinux libraries, which is
+not desirable to make the SDK portable/relocatable.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 1897a56a2baae64f40dc9b155443d13818ef726b)
+(cherry picked from commit 121807c08927c0a0d04c965beb6a8785ea89e47f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-headers/Config.in.host | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/tar/tar.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 872614f..43728dc 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -244,8 +244,8 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.10.108"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.12.74"	if BR2_KERNEL_HEADERS_3_12
- 	default "4.1.48"	if BR2_KERNEL_HEADERS_4_1
--	default "4.4.108"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.73"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.4.109"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.9.74"	if BR2_KERNEL_HEADERS_4_9
- 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
- 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
- 	default "4.12.14"	if BR2_KERNEL_HEADERS_4_12
+diff --git a/package/tar/tar.mk b/package/tar/tar.mk
+index cb2ddc0..a8a15d9 100644
+--- a/package/tar/tar.mk
++++ b/package/tar/tar.mk
+@@ -44,4 +44,7 @@ define HOST_TAR_EXTRACT_CMDS
+ 	mv $(@D)/tar-$(TAR_VERSION)/* $(@D)
+ 	rmdir $(@D)/tar-$(TAR_VERSION)
+ endef
++
++HOST_TAR_CONF_OPTS = --without-selinux
++
+ $(eval $(host-autotools-package))
