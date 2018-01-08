@@ -1,38 +1,56 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 8 Jan 2018 16:10:11 +0100
-Subject: [Buildroot] [git commit branch/2017.11.x] tar: do not build SELinux
- support for host variant
-Message-ID: <20180108215441.6D43B838FC@busybox.osuosl.org>
+Date: Mon, 8 Jan 2018 22:33:51 +0100
+Subject: [Buildroot] [git commit branch/2017.11.x] mariadb: security bump
+ version to 10.1.30
+Message-ID: <20180108215441.B076E803A7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ee57b63fc8c8f75023a3d8531aa24d824209043f
+commit: https://git.buildroot.net/buildroot/commit/?id=29365654c6a86dc10b6b1b76fdbffff8c7e91e21
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.11.x
 
-If we don't explicitly disable SELinux support in the host-tar build,
-it might pick up system-wide installed SELinux libraries, causing the
-tar in HOST_DIR/bin/ to depend on the host SELinux libraries, which is
-not desirable to make the SDK portable/relocatable.
+Release notes: https://mariadb.com/kb/en/mariadb-10130-release-notes/
+Changelog: https://mariadb.com/kb/en/mariadb-10130-changelog/
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 121807c08927c0a0d04c965beb6a8785ea89e47f)
+Fixes the following security vulnerability:
+
+CVE-2017-15365 - Replication in sql/event_data_objects.cc occurs before ACL
+checks.
+
+Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit ca1f2d266ddba2f530731e91ebbf792638cee8bb)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/tar/tar.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ package/mariadb/mariadb.hash | 4 ++--
+ package/mariadb/mariadb.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/tar/tar.mk b/package/tar/tar.mk
-index cb2ddc0..a8a15d9 100644
---- a/package/tar/tar.mk
-+++ b/package/tar/tar.mk
-@@ -44,4 +44,7 @@ define HOST_TAR_EXTRACT_CMDS
- 	mv $(@D)/tar-$(TAR_VERSION)/* $(@D)
- 	rmdir $(@D)/tar-$(TAR_VERSION)
- endef
-+
-+HOST_TAR_CONF_OPTS = --without-selinux
-+
- $(eval $(host-autotools-package))
+diff --git a/package/mariadb/mariadb.hash b/package/mariadb/mariadb.hash
+index fcca9be..f8e1c6c 100644
+--- a/package/mariadb/mariadb.hash
++++ b/package/mariadb/mariadb.hash
+@@ -1,5 +1,5 @@
+-# From https://downloads.mariadb.org/mariadb/10.1.29/
+-sha256 73bbd5602f52ab5aa4d83f465134871b6c87bda25371d098f6da5a3d98517ed4  mariadb-10.1.29.tar.gz
++# From https://downloads.mariadb.org/mariadb/10.1.30/
++sha256 173a5e5a24819e0a469c3bd09b5c98491676c37c6095882a2ea34c5af0996c88  mariadb-10.1.30.tar.gz
+ 
+ # Hash for license files
+ sha256 69ce89a0cadbe35a858398c258be93c388715e84fc0ca04e5a1fd1aa9770dd3a  README
+diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
+index a726032..b406692 100644
+--- a/package/mariadb/mariadb.mk
++++ b/package/mariadb/mariadb.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MARIADB_VERSION = 10.1.29
++MARIADB_VERSION = 10.1.30
+ MARIADB_SITE = https://downloads.mariadb.org/interstitial/mariadb-$(MARIADB_VERSION)/source
+ MARIADB_LICENSE = GPL-2.0 (server), GPL-2.0 with FLOSS exception (GPL client library), LGPL-2.0 (LGPL client library)
+ # Tarball no longer contains LGPL license text
