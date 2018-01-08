@@ -1,39 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 8 Jan 2018 22:39:50 +0100
-Subject: [Buildroot] [git commit branch/2017.11.x] toolchain: m68k coldfire
- is also affected by gcc bug 64735
-Message-ID: <20180108215442.118F7803A7@busybox.osuosl.org>
+Date: Mon, 8 Jan 2018 22:40:56 +0100
+Subject: [Buildroot] [git commit branch/2017.11.x] ntp: does not work with
+ libressl
+Message-ID: <20180108215442.379AA803A7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=13ade0145c2457f0a35a9519549f30da87579f03
+commit: https://git.buildroot.net/buildroot/commit/?id=f8bff449e5e4f90d777b1ba9b9ca216fd47d3128
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.11.x
 
-Verified experimentally by using exception_ptr with m68k_cf5208 and
-looking at the value of ATOMIC_INT_LOCK_FREE. ATOMIC_INT_LOCK_FREE=1,
-so the issue is present. Also verified that gcc 7.x fixed it also for
-cf5208.
+Fixes #10556
 
-Signed-off-by: Jan Heylen <jan.heylen@nokia.com>
+The --with-crypto handling in ntp only works with libopenssl, not with
+libressl, where it ends up with compilation issues like:
+
+ntp_control.c:(.text+0x64): undefined reference to `EVP_MD_CTX_new'
+ntp_control.c:(.text+0x10c): undefined reference to `EVP_MD_CTX_free'
+libntpd.a(ntp_crypto.o): In function `bighash':
+ntp_crypto.c:(.text+0x2e8): undefined reference to `EVP_MD_CTX_new'
+ntp_crypto.c:(.text+0x328): undefined reference to `EVP_MD_CTX_free'
+libntpd.a(ntp_crypto.o): In function `crypto_verify':
+ntp_crypto.c:(.text+0x6cc): undefined reference to `EVP_MD_CTX_new'
+ntp_crypto.c:(.text+0x710): undefined reference to `EVP_MD_CTX_free'
+ntp_crypto.c:(.text+0x72c): undefined reference to `EVP_MD_CTX_free'
+
+So ensure we only pass --with-crypto when libopenssl is used.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 98b3b83fb54323cd1be0f38084a51c4e0c939e65)
+(cherry picked from commit 522111f81c7d535f4f362ad4a15d141d0eb39ec5)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- toolchain/toolchain-common.in | 1 +
- 1 file changed, 1 insertion(+)
+ package/ntp/ntp.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
-index d87d4d7..6c28599 100644
---- a/toolchain/toolchain-common.in
-+++ b/toolchain/toolchain-common.in
-@@ -22,6 +22,7 @@ config BR2_TOOLCHAIN_HAS_GCC_BUG_64735
- 	default y if BR2_ARM_CPU_ARMV4
- 	default y if BR2_ARM_CPU_ARMV5
- 	default y if BR2_sparc_v8
-+	default y if BR2_m68k_cf5208
- 	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_7
+diff --git a/package/ntp/ntp.mk b/package/ntp/ntp.mk
+index 6605c3b..055bf61 100644
+--- a/package/ntp/ntp.mk
++++ b/package/ntp/ntp.mk
+@@ -23,7 +23,7 @@ NTP_CONF_OPTS = \
+ # 0003-ntpq-fpic.patch
+ NTP_AUTORECONF = YES
  
- config BR2_TOOLCHAIN_HAS_NATIVE_RPC
+-ifeq ($(BR2_PACKAGE_OPENSSL),y)
++ifeq ($(BR2_PACKAGE_LIBOPENSSL),y)
+ NTP_CONF_OPTS += --with-crypto
+ NTP_DEPENDENCIES += openssl
+ else
