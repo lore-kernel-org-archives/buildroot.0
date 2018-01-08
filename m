@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 8 Jan 2018 20:59:30 +0100
-Subject: [Buildroot] [PATCH 1/1] tcf-agent: disable package for powerpc64
-In-Reply-To: <20180108134045.12578-1-nolange79@gmail.com>
-References: <20180108134045.12578-1-nolange79@gmail.com>
-Message-ID: <20180108205930.23c72cb0@windsurf>
+Date: Mon, 8 Jan 2018 20:59:43 +0100
+Subject: [Buildroot] [PATCH 1/1] rygel: fix UI build
+In-Reply-To: <20180108181042.16089-1-fontaine.fabrice@gmail.com>
+References: <20180108181042.16089-1-fontaine.fabrice@gmail.com>
+Message-ID: <20180108205943.5276e34b@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,18 +12,23 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon,  8 Jan 2018 14:40:45 +0100, Norbert Lange wrote:
-> Fails to build, disable powerpc64 until upstream fixed it
+On Mon,  8 Jan 2018 19:10:42 +0100, Fabrice Fontaine wrote:
+> Add a patch to avoid failing on a configure error if UI example can't be
+> built if libgtk3 is available but not gst1-plugins-base (gstreamer-video
+> is only needed for UI example, not for rygel UI)
 > 
 > Fixes:
->   http://autobuild.buildroot.net/results/5088f6efd44ce9b081c2c7825a7005a9cb60799d
+>  - http://autobuild.buildroot.net/results/6c659aadfc418c0a27a93284eb34d75e2b0dc169
 > 
-> Signed-off-by: Norbert Lange <nolange79@gmail.com>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/tcf-agent/Config.in | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  ...01-Allow-UI-build-without-gstreamer-video.patch | 37 ++++++++++++++++++++++
+>  package/rygel/rygel.mk                             |  2 ++
+>  2 files changed, 39 insertions(+)
+>  create mode 100644 package/rygel/0001-Allow-UI-build-without-gstreamer-video.patch
 
-Applied to master, thanks.
+Applied to master, thanks. Please submit the patch upstream if not
+already done. Thanks!
 
 Thomas
 -- 
