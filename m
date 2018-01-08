@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 8 Jan 2018 21:10:15 +0100
-Subject: [Buildroot] [PATCH v1 1/2] libopenssl: do not leak the compiler
- path (reproducible builds)
-In-Reply-To: <20171027192424.19760-1-ps.report@gmx.net>
+Date: Mon, 8 Jan 2018 21:18:57 +0100
+Subject: [Buildroot] [PATCH v1 2/2] dhcp: disable isc assertions
+ (reproducible builds)
+In-Reply-To: <20171027192424.19760-2-ps.report@gmx.net>
 References: <20171027192424.19760-1-ps.report@gmx.net>
-Message-ID: <20180108211015.4a032f2a@windsurf>
+ <20171027192424.19760-2-ps.report@gmx.net>
+Message-ID: <20180108211857.2166f95e@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,51 +14,53 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 27 Oct 2017 21:24:23 +0200, Peter Seiderer wrote:
+On Fri, 27 Oct 2017 21:24:24 +0200, Peter Seiderer wrote:
+> The isc assertions from the bundled bind dns library are
+> using the __FILE__ macro for debug messages (see
+> dhcp-4.3.5/bind/bind-9.9.9-P3/lib/isc/include/isc/assertions.h).
+> 
+> Disabling the assertions gains:
+> 
+> - reproducible builds (no built time pathes in the executable)
+> - space saving on the target:
+>   dhcpd: 1.9M -> 1.6M
+>   dhcrelay: 1.6M -> 1.3M
+> 
 > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 > ---
->  ...roducible-build-do-not-leak-compiler-path.patch | 26 ++++++++++++++++++++++
->  1 file changed, 26 insertions(+)
->  create mode 100644 package/libopenssl/0003-Reproducible-build-do-not-leak-compiler-path.patch
+>  package/dhcp/dhcp.mk | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
 > 
-> diff --git a/package/libopenssl/0003-Reproducible-build-do-not-leak-compiler-path.patch b/package/libopenssl/0003-Reproducible-build-do-not-leak-compiler-path.patch
-> new file mode 100644
-> index 0000000000..eff72c548a
-> --- /dev/null
-> +++ b/package/libopenssl/0003-Reproducible-build-do-not-leak-compiler-path.patch
-> @@ -0,0 +1,26 @@
-> +From 875fcad2ad84877763cba86c1265b57679b878b0 Mon Sep 17 00:00:00 2001
-> +From: Peter Seiderer <ps.report@gmx.net>
-> +Date: Tue, 24 Oct 2017 16:58:32 +0200
-> +Subject: [PATCH] Reproducible build: do not leak compiler path
-> +
-> +Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> +---
-> + crypto/Makefile | 2 +-
-> + 1 file changed, 1 insertion(+), 1 deletion(-)
-> +
-> +diff --git a/crypto/Makefile b/crypto/Makefile
-> +index 7869996..7e63291 100644
-> +--- a/crypto/Makefile
-> ++++ b/crypto/Makefile
-> +@@ -55,7 +55,7 @@ top:
-> + all: shared
-> + 
-> + buildinf.h: ../Makefile
-> +-	$(PERL) $(TOP)/util/mkbuildinf.pl "$(CC) $(CFLAGS)" "$(PLATFORM)" >buildinf.h
-> ++	$(PERL) $(TOP)/util/mkbuildinf.pl "$$(basename $(CC)) $(CFLAGS)" "$(PLATFORM)" >buildinf.h
+> diff --git a/package/dhcp/dhcp.mk b/package/dhcp/dhcp.mk
+> index 45cae087aa..0bae61283a 100644
+> --- a/package/dhcp/dhcp.mk
+> +++ b/package/dhcp/dhcp.mk
+> @@ -11,7 +11,9 @@ DHCP_LICENSE = ISC
+>  DHCP_LICENSE_FILES = LICENSE
+>  DHCP_CONF_ENV = \
+>  	CPPFLAGS='-D_PATH_DHCPD_CONF=\"/etc/dhcp/dhcpd.conf\" \
+> -		-D_PATH_DHCLIENT_CONF=\"/etc/dhcp/dhclient.conf\"'
+> +		-D_PATH_DHCLIENT_CONF=\"/etc/dhcp/dhclient.conf\"' \
+> +	CFLAGS='$(TARGET_CFLAGS) -DISC_CHECK_NONE=1'
 
-I hesitated a bit on this one, because after all it's our fault: we are
-passing an absolute path as the value of CC. If we change that to pass
-just the name of the compiler, then OpenSSL doesn't have a problem.
+I'm not sure about this one.
 
-But, it really is OpenSSL choice to hardcode such compiler/flags
-information into the binary, so it should sanitize that before using it.
+Do we want to remove assertions from production code ?
 
-Even though I believe there's probably not much hope, could you try to
-submit this patch upstream?
+Regarding the __FILE__ problem, I think this is going to bite us on a
+large number of packages. So instead of a per-package solution, we
+should perhaps have a look at:
 
-In the mean time, I've applied to master. Thanks!
+  https://gcc.gnu.org/bugzilla/show_bug.cgi?id=70268, proposal for a
+  -ffile-map-prefix option to gcc
+
+  https://wiki.debian.org/ReproducibleBuilds/BuildPathProposal, also
+  discussing a similar idea
+
+Peter, Arnout, Yann, what do you think, especially about the
+assertions ?
+
+Best regards,
 
 Thomas
 -- 
