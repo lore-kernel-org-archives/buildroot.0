@@ -1,37 +1,61 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 8 Jan 2018 23:38:28 +0100
-Subject: [Buildroot] [PATCH 1/2] core-dependencies: remove unneeded
- HOSTCC
-In-Reply-To: <20171022141752.26105-1-arnout@mind.be>
-References: <20171022141752.26105-1-arnout@mind.be>
-Message-ID: <20180108233828.79bc8099@windsurf>
+Date: Mon, 8 Jan 2018 23:41:09 +0100
+Subject: [Buildroot] [RFCv3 00/15] Per-package host/target directory
+ support
+In-Reply-To: <20171201205352.24287-1-thomas.petazzoni@free-electrons.com>
+References: <20171201205352.24287-1-thomas.petazzoni@free-electrons.com>
+Message-ID: <20180108234109.77518fb7@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Peter, Arnout,
 
-On Sun, 22 Oct 2017 16:17:51 +0200, Arnout Vandecappelle
-(Essensium/Mind) wrote:
-> dependencies.sh uses HOSTCC_NOCCACHE directly, and this variable is
-> exported from the top-level Makefile, so there is no need to pass
-> HOSTCC to it. HOSTCC is not used at all in dependencies.sh.
-> 
-> Thus, we also no longer need to apply the HOSTCC override for
-> core-dependencies. The core-depencies rule doesn't use HOSTCC or
-> HOSTCXX.
-> 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> ---
->  support/dependencies/dependencies.mk | 7 +++----
->  1 file changed, 3 insertions(+), 4 deletions(-)
+I'd like to apply some of the patches in this series in the current
+cycle. See below.
 
-Both patches applied. Thanks!
+On Fri,  1 Dec 2017 21:53:37 +0100, Thomas Petazzoni wrote:
+
+> Thomas Petazzoni (15):
+>   pkgconf: use relative path to STAGING_DIR instead of absolute path
+>   toolchain: post-pone evaluation of TOOLCHAIN_EXTERNAL_BIN
+
+These two are already applied.
+
+>   Makefile, skeleton: move the host skeleton logic to host-skeleton
+>     package
+>   pkg-cmake: install CMake files as part of a package
+
+I'd like to apply those two.
+
+>   pkg-generic: add .stamp_installed step
+
+This one should instead be just before "core: change host RPATH
+handling", it is not needed before.
+
+>   package/pkg-generic: add the concept of extract dependency
+>   package/pkg-generic: handle host-tar as an extract dependency
+>   package/pkg-generic: handle host-xz as an extract dependency
+>   package/pkg-generic: handle host-lzip as an extract dependency
+>   package/pkg-generic: handle host-ccache as a regular dependency
+>   package/pkg-generic: handle host-fakedate as a regular dependency
+>   core: kill DEPENDENCIES_HOST_PREREQ
+
+And I'd like to apply all those ones, i.e the extract dependency idea
+and killing DEPENDENCIES_HOST_PREREQ.
+
+Are you OK with that ? If so, I'll respin just those ones after taking
+Yann's feedback into account.
+
+So if you have anything against the approach used in those patches,
+please speak up ! :-)
+
+Thanks!
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
