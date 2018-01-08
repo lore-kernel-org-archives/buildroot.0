@@ -1,57 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 8 Jan 2018 20:56:46 +0100
-Subject: [Buildroot] [git commit] asterisk: security bump to version 14.7.5
-Message-ID: <20180108195747.2FF3983C05@busybox.osuosl.org>
+Date: Mon, 8 Jan 2018 20:57:25 +0100
+Subject: [Buildroot] [git commit] tcf-agent: disable package for powerpc64
+Message-ID: <20180108195747.3B59783574@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4f13dc362d5c9c63fb5a21ede7cf902c1281cef0
+commit: https://git.buildroot.net/buildroot/commit/?id=d6067889352887f38d0fcbbb0b269dd8de1bba0e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes the following security issues:
+Fails to build, disable powerpc64 until upstream fixed it
 
-* AST-2017-014: Crash in PJSIP resource when missing a contact header A
-  select set of SIP messages create a dialog in Asterisk.  Those SIP
-  messages must contain a contact header.  For those messages, if the header
-  was not present and using the PJSIP channel driver, it would cause
-  Asterisk to crash.  The severity of this vulnerability is somewhat
-  mitigated if authentication is enabled.  If authentication is enabled a
-  user would have to first be authorized before reaching the crash point.
+Fixes:
+  http://autobuild.buildroot.net/results/5088f6efd44ce9b081c2c7825a7005a9cb60799d
 
-For more details, see the announcement:
-https://www.asterisk.org/downloads/asterisk-news/asterisk-13185-1475-1515-and-1318-cert2-now-available-security
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Norbert Lange <nolange79@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/asterisk/asterisk.hash | 2 +-
- package/asterisk/asterisk.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/tcf-agent/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/asterisk/asterisk.hash b/package/asterisk/asterisk.hash
-index d1667ac..f537c2d 100644
---- a/package/asterisk/asterisk.hash
-+++ b/package/asterisk/asterisk.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256  f85f6df802de485d9b8cb1bfa5493e22f6401dce8246646af9506489a264d7b1  asterisk-14.6.2.tar.gz
-+sha256  6525170fa16fecb08cb3cde2c1bd5d3140df55b14e4561ac0771fbd1e04b3b75  asterisk-14.7.5.tar.gz
+diff --git a/package/tcf-agent/Config.in b/package/tcf-agent/Config.in
+index d2a05d0..9cd2831 100644
+--- a/package/tcf-agent/Config.in
++++ b/package/tcf-agent/Config.in
+@@ -28,8 +28,8 @@ config BR2_PACKAGE_TCF_AGENT_ARCH
+ 	default "i386"       if BR2_i386 && !BR2_ARCH="i686"
+ 	default "x86_64"     if BR2_x86_64
+ 	default "powerpc"    if BR2_powerpc || BR2_powerpcle
+-	default "ppc64"      if BR2_powerpc64 || BR2_powerpc64le
+-#	fails to build currently
++#	those architectures fail to build currently
++#	default "ppc64"      if BR2_powerpc64 || BR2_powerpc64le
+ #	default "microblaze" if BR2_microblaze || BR2_microblazeel
  
- # sha1 from: http://downloads.asterisk.org/pub/telephony/sounds/releases
- # sha256 locally computed
-diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
-index da78b25..fc9a961 100644
---- a/package/asterisk/asterisk.mk
-+++ b/package/asterisk/asterisk.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ASTERISK_VERSION = 14.6.2
-+ASTERISK_VERSION = 14.7.5
- # Use the github mirror: it's an official mirror maintained by Digium, and
- # provides tarballs, which the main Asterisk git tree (behind Gerrit) does not.
- ASTERISK_SITE = $(call github,asterisk,asterisk,$(ASTERISK_VERSION))
+ config BR2_PACKAGE_TCF_AGENT_ARCH_SUPPORTS
