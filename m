@@ -1,50 +1,56 @@
-From: Sergio Prado <sergio.prado@e-labworks.com>
-Date: Mon, 8 Jan 2018 19:02:45 -0200
-Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
- 2018-01-07
-In-Reply-To: <20180108070010.4B8A220731@mail.free-electrons.com>
-References: <20180108070010.4B8A220731@mail.free-electrons.com>
-Message-ID: <CANu7NGsmMRSaQm_TpLp_HXhxBCgfyTSFrVJJU_G9Wkpe6WxFNg@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 8 Jan 2018 22:01:04 +0100
+Subject: [Buildroot] [git commit] libjpeg: add pkg-config file for libjpeg
+Message-ID: <20180108210853.73AD57FD4F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=c93f56d46593155a244bf83fd36c78c7968ce6b0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Hello,
->
-> This is the list of Buildroot build failures that occured on
-> 2018-01-07, and for which you are a registered architecture developer
-> or package developer. Please help us improving the quality of
-> Buildroot by investigating those build failures and sending patches to
-> fix them. Thanks!
->
-> Results for the 'master' branch
-> ===============================
->
-> Build failures related to your packages:
->
->         i586 |                      daq-2.0.6 |
-http://autobuild.buildroot.net/results/054f6581f67338b28af4dc2203b285ae1055581c
+Signed-off-by: Olivier Schonken <olivier.schonken@gmail.com>
+[Thomas: change to automatically set the version in the generated .pc file.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libjpeg/libjpeg.mk    |  9 +++++++++
+ package/libjpeg/libjpeg.pc.in | 10 ++++++++++
+ 2 files changed, 19 insertions(+)
 
-That is the second time I receive this build failure report in the last
-days, but I couldn't reproduce it in my machine using the defconfig from
-autobuild. It doesn't look like a build server error. Any idea?
-
-Best regards,
-
-Sergio Prado
-Embedded Labworks
-https://e-labworks.com/en
-
-2018-01-08 5:00 GMT-02:00 Thomas Petazzoni <
-thomas.petazzoni@free-electrons.com>:
->
->
-> --
-> http://autobuild.buildroot.net
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180108/939b6fb5/attachment.html>
+diff --git a/package/libjpeg/libjpeg.mk b/package/libjpeg/libjpeg.mk
+index e5bd454..95663a9 100644
+--- a/package/libjpeg/libjpeg.mk
++++ b/package/libjpeg/libjpeg.mk
+@@ -18,5 +18,14 @@ endef
+ 
+ LIBJPEG_POST_INSTALL_TARGET_HOOKS += LIBJPEG_REMOVE_USELESS_TOOLS
+ 
++define LIBJPEG_INSTALL_STAGING_PC
++	$(INSTALL) -D -m 0644 package/libjpeg/libjpeg.pc.in \
++		$(STAGING_DIR)/usr/lib/pkgconfig/libjpeg.pc
++	version=`sed -e '/^PACKAGE_VERSION/!d;s/PACKAGE_VERSION = \(.*\)/\1/' $(@D)/Makefile` ; \
++		$(SED) "s/@PACKAGE_VERSION@/$${version}/" $(STAGING_DIR)/usr/lib/pkgconfig/libjpeg.pc
++endef
++
++LIBJPEG_POST_INSTALL_STAGING_HOOKS += LIBJPEG_INSTALL_STAGING_PC
++
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
+diff --git a/package/libjpeg/libjpeg.pc.in b/package/libjpeg/libjpeg.pc.in
+new file mode 100644
+index 0000000..59220ca
+--- /dev/null
++++ b/package/libjpeg/libjpeg.pc.in
+@@ -0,0 +1,10 @@
++prefix=/usr
++exec_prefix=/usr
++libdir=${exec_prefix}/lib
++includedir=${prefix}/include
++
++Name: libjpeg
++Description: A JPEG codec that provides the libjpeg API
++Version: @PACKAGE_VERSION@
++Libs: -L${libdir} -ljpeg
++Cflags: -I${includedir}
