@@ -1,56 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 8 Jan 2018 22:33:51 +0100
-Subject: [Buildroot] [git commit branch/2017.11.x] mariadb: security bump
- version to 10.1.30
-Message-ID: <20180108215441.B076E803A7@busybox.osuosl.org>
+Date: Mon, 8 Jan 2018 22:27:08 +0100
+Subject: [Buildroot] [git commit branch/2017.11.x] eeprog: fix homepage link
+Message-ID: <20180108215441.78093803A7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=29365654c6a86dc10b6b1b76fdbffff8c7e91e21
+commit: https://git.buildroot.net/buildroot/commit/?id=8418639346137b2b1fa7293dd5e70818ef1f3834
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.11.x
 
-Release notes: https://mariadb.com/kb/en/mariadb-10130-release-notes/
-Changelog: https://mariadb.com/kb/en/mariadb-10130-changelog/
+The current link leads to a 400 Bad Request error page.
 
-Fixes the following security vulnerability:
-
-CVE-2017-15365 - Replication in sql/event_data_objects.cc occurs before ACL
-checks.
-
-Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit ca1f2d266ddba2f530731e91ebbf792638cee8bb)
+Cc: Matt Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+(cherry picked from commit b0748bd1baf60461425ec124fd4f3be68f2dd4d6)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mariadb/mariadb.hash | 4 ++--
- package/mariadb/mariadb.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/eeprog/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/mariadb/mariadb.hash b/package/mariadb/mariadb.hash
-index fcca9be..f8e1c6c 100644
---- a/package/mariadb/mariadb.hash
-+++ b/package/mariadb/mariadb.hash
-@@ -1,5 +1,5 @@
--# From https://downloads.mariadb.org/mariadb/10.1.29/
--sha256 73bbd5602f52ab5aa4d83f465134871b6c87bda25371d098f6da5a3d98517ed4  mariadb-10.1.29.tar.gz
-+# From https://downloads.mariadb.org/mariadb/10.1.30/
-+sha256 173a5e5a24819e0a469c3bd09b5c98491676c37c6095882a2ea34c5af0996c88  mariadb-10.1.30.tar.gz
+diff --git a/package/eeprog/Config.in b/package/eeprog/Config.in
+index ff313bd..73582c7 100644
+--- a/package/eeprog/Config.in
++++ b/package/eeprog/Config.in
+@@ -3,4 +3,4 @@ config BR2_PACKAGE_EEPROG
+ 	help
+ 	  Simple tool to read/write i2c eeprom chips.
  
- # Hash for license files
- sha256 69ce89a0cadbe35a858398c258be93c388715e84fc0ca04e5a1fd1aa9770dd3a  README
-diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
-index a726032..b406692 100644
---- a/package/mariadb/mariadb.mk
-+++ b/package/mariadb/mariadb.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MARIADB_VERSION = 10.1.29
-+MARIADB_VERSION = 10.1.30
- MARIADB_SITE = https://downloads.mariadb.org/interstitial/mariadb-$(MARIADB_VERSION)/source
- MARIADB_LICENSE = GPL-2.0 (server), GPL-2.0 with FLOSS exception (GPL client library), LGPL-2.0 (LGPL client library)
- # Tarball no longer contains LGPL license text
+-	  http://codesink.org/eeprog.html
++	  http://www.codesink.org/eeprog.html
