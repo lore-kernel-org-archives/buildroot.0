@@ -1,47 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 8 Jan 2018 22:36:03 +0100
-Subject: [Buildroot] [git commit branch/2017.11.x] package/php: bump version
- to 7.1.12
-Message-ID: <20180108215441.CA59A803A7@busybox.osuosl.org>
+Date: Mon, 8 Jan 2018 22:39:07 +0100
+Subject: [Buildroot] [git commit branch/2017.11.x]
+ package/x11r7/xlib_libXpm: disable gettext detection when not needed
+Message-ID: <20180108215442.0661C803A7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a23693b0cd12fdcd5125cdbf28198e106ac82897
+commit: https://git.buildroot.net/buildroot/commit/?id=9d2c1a7146707ae66cc4c031bce89e22339e077e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.11.x
+
+Patch originates from FreeBSD:
+https://lists.freebsd.org/pipermail/freebsd-x11/2015-July/016528.html
+https://svnweb.freebsd.org/ports/head/x11/libXpm/Makefile?r1=384234&r2=391122&pathrev=391122
+
+Fixes
+http://autobuild.buildroot.net/results/f24/f24dc74c111690f068833ff6fc72df9a0853d210/
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit ab01a1279c4990d201e6a560dbe9cc5b25a20fae)
+(cherry picked from commit 6653b0929fc3f4007294e289f88afa3920af2a89)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/php/php.hash | 2 +-
- package/php/php.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/x11r7/xlib_libXpm/xlib_libXpm.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/php/php.hash b/package/php/php.hash
-index d1f36f2..cdec308 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
-@@ -1,5 +1,5 @@
- # From http://php.net/downloads.php
--sha256 074093e9d7d21afedc5106904218a80a47b854abe368d2728ed22184c884893e  php-7.1.11.tar.xz
-+sha256 a0118850774571b1f2d4e30b4fe7a4b958ca66f07d07d65ebdc789c54ba6eeb3  php-7.1.12.tar.xz
+diff --git a/package/x11r7/xlib_libXpm/xlib_libXpm.mk b/package/x11r7/xlib_libXpm/xlib_libXpm.mk
+index e781a8b..09f897e 100644
+--- a/package/x11r7/xlib_libXpm/xlib_libXpm.mk
++++ b/package/x11r7/xlib_libXpm/xlib_libXpm.mk
+@@ -16,4 +16,8 @@ XLIB_LIBXPM_DEPENDENCIES = xlib_libX11 xlib_libXext xlib_libXt xproto_xproto \
+ 	$(if $(BR2_PACKAGE_LIBICONV),libiconv) \
+ 	$(TARGET_NLS_DEPENDENCIES)
  
- # License file
- sha256 a44951f93b10c87c3f7cd9f311d95999c57c95ed950eec32b14c1c7ea6baf25e  LICENSE
-diff --git a/package/php/php.mk b/package/php/php.mk
-index aaeacde..72d5ea8 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PHP_VERSION = 7.1.11
-+PHP_VERSION = 7.1.12
- PHP_SITE = http://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
++ifeq ($(BR2_SYSTEM_ENABLE_NLS),)
++XLIB_LIBXPM_CONF_ENV = ac_cv_search_gettext=no
++endif
++
+ $(eval $(autotools-package))
