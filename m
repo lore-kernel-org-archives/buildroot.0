@@ -1,70 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 8 Jan 2018 15:37:54 +0100
-Subject: [Buildroot] [git commit branch/2017.11.x] matchbox-lib: fix
- dependencies
-Message-ID: <20180108215441.56EB2838FC@busybox.osuosl.org>
+Date: Mon, 8 Jan 2018 22:30:02 +0100
+Subject: [Buildroot] [git commit branch/2017.11.x] coreutils: expand list of
+ files moved from /usr/bin to /bin
+Message-ID: <20180108215441.82A0C803A7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=727b7bfdde12b5030201262e253dc4100f05fc86
+commit: https://git.buildroot.net/buildroot/commit/?id=67bd585fba27985dc5e32fe45d489d1a22bab3d3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.11.x
 
-matchbox-lib build-depends on xlib_libXext, but forgets to select it.
-It also build-depends on expat without selecting it, but it does need
-it.
+BusyBox installs kill, link, mktemp, nice and printenv on /bin, so
+ensure that coreutils replaces them.
 
-Fix that: select xlib_libXext, remove expat.
-
-Add myself to developpers for matchbox packages.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 2cfda4704e0fbf486bf1255c0779caed1ffab946)
+(cherry picked from commit 443897bce4b01eae98155ac947d3387e6a2f289e)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS                           | 1 +
- package/matchbox-lib/Config.in       | 1 +
- package/matchbox-lib/matchbox-lib.mk | 4 ++--
- 3 files changed, 4 insertions(+), 2 deletions(-)
+ package/coreutils/coreutils.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index b25823b..1e58dd6 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1763,6 +1763,7 @@ F:	package/libpri/
- F:	package/libseccomp/
- F:	package/libss7/
- F:	package/linux-tools/
-+F:	package/matchbox*
- F:	package/mesa3d-headers/
- F:	package/nbd/
- F:	package/nut/
-diff --git a/package/matchbox-lib/Config.in b/package/matchbox-lib/Config.in
-index e50a543..d758ab3 100644
---- a/package/matchbox-lib/Config.in
-+++ b/package/matchbox-lib/Config.in
-@@ -1,4 +1,5 @@
- config BR2_PACKAGE_MATCHBOX_LIB
- 	bool "matchbox-lib"
-+	select BR2_PACKAGE_XLIB_LIBXEXT
- 	help
- 	  Matchbox common functionality library.
-diff --git a/package/matchbox-lib/matchbox-lib.mk b/package/matchbox-lib/matchbox-lib.mk
-index ee206b6..18204d2 100644
---- a/package/matchbox-lib/matchbox-lib.mk
-+++ b/package/matchbox-lib/matchbox-lib.mk
-@@ -10,8 +10,8 @@ MATCHBOX_LIB_SITE = http://downloads.yoctoproject.org/releases/matchbox/libmatch
- MATCHBOX_LIB_LICENSE = LGPL-2.1+
- MATCHBOX_LIB_LICENSE_FILES = COPYING
- MATCHBOX_LIB_INSTALL_STAGING = YES
--MATCHBOX_LIB_DEPENDENCIES = host-pkgconf expat xlib_libXext
--MATCHBOX_LIB_CONF_OPTS = --enable-expat --disable-doxygen-docs
-+MATCHBOX_LIB_DEPENDENCIES = host-pkgconf xlib_libXext
-+MATCHBOX_LIB_CONF_OPTS = --disable-doxygen-docs
- MATCHBOX_LIB_CONF_ENV = LIBS="-lX11"
+diff --git a/package/coreutils/coreutils.mk b/package/coreutils/coreutils.mk
+index 6a8a31b..8259f42 100644
+--- a/package/coreutils/coreutils.mk
++++ b/package/coreutils/coreutils.mk
+@@ -56,8 +56,8 @@ COREUTILS_CONF_ENV = ac_cv_c_restrict=no \
+ 	INSTALL_PROGRAM=$(INSTALL)
  
- define MATCHBOX_LIB_POST_INSTALL_FIXES
+ COREUTILS_BIN_PROGS = cat chgrp chmod chown cp date dd df dir echo false \
+-	ln ls mkdir mknod mv pwd rm rmdir vdir sleep stty sync touch true \
+-	uname join
++	kill link ln ls mkdir mknod mktemp mv nice printenv pwd rm rmdir \
++	vdir sleep stty sync touch true uname join
+ 
+ # If both coreutils and busybox are selected, make certain coreutils
+ # wins the fight over who gets to have their utils actually installed.
