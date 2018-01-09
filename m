@@ -1,132 +1,124 @@
-From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Tue,  9 Jan 2018 06:04:47 -0600
-Subject: [Buildroot] [PATCH v2] kvm-unit-tests: test for rdseed/rdrand
-Message-ID: <1515499487-29937-1-git-send-email-matthew.weber@rockwellcollins.com>
+From: Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com>
+Date: Tue, 9 Jan 2018 13:51:11 +0100
+Subject: [Buildroot] [PATCH 1/1] utils/checkpackagelib: add function to
+ check of the default package source variable
+In-Reply-To: <5a5423b8d08a0_5241d7ae4c960fb@ultri3.mail>
+References: <20180108234802.42d06229@windsurf>
+ <5a5423b8d08a0_5241d7ae4c960fb@ultri3.mail>
+Message-ID: <67387bfc-e6f9-2cdb-a81b-a455bb9a0b21@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The build fails when the host binutils isn't at least 2.23
-(2.22.x introduced RDSEED).
+Hi Ricardo,
 
-The host toolchain is used for x86_64 target builds where
-we need to do a 32bit build. Most other buildroot builds
-are using a much newer binutils unless it's a external
-older toolchain.
+> Hello,
+>
+> On Mon, Jan 08, 2018 at 08:48 PM, Thomas Petazzoni wrote:
+>
+>> Ricardo,
+>>
+>> Do you think you could have a look at the below patch touching
+>> checkpackagelib ?
+> Thomas,
+> Thank you for adding me in CC.
+>
+>> It looks OK to me, so unless you complain in the next days, I'll apply.
+> Don't apply just yet. See at the end.
+>
+> [snip]
+>> On Mon, 18 Dec 2017 13:14:26 +0100, Jerzy Grzegorek wrote:
+> Jerzy,
+> The code is almost good.
+> Below see some nits about the code.
+>
+> And at the end see my main concerns. I think we will need a whitelist and some
+> patches fixing packages.
 
-Fixes:
-http://autobuild.buildroot.net/results/c39/c3987a3cbd2960b0ff50f872636bdfd8d1a9c820/
+Thanks for your feedback.
 
-Upstream:
-https://www.spinics.net/lists/kvm/msg161542.html
+>
+> [snip]
+>>>   
+>>> +class RemoveDefaultPackageSourceVariable(_CheckFunction):
+>>> +    PACKAGE_NAME = re.compile("/([^/]+)\.mk")
+>>> +
+>>> +    def before(self):
+>>> +        package = self.PACKAGE_NAME.search(self.filename).group(1)
+>>> +        package_upper = package.replace("-", "_").upper()
+>>> +        self.package = package
+>>> +        self.package_upper = package_upper
+> These 2 lines are not needed because the variables are not used in other
+> methods of this class.
 
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
----
+In fact, you're right.
 
-Thomas/Peter could you test this on one of your builders?
-I've requested a gcc farm account but still waiting at this
-point.  Here's the builders which can reproduce the failure
-(ie have old enough host binutils).
-http://autobuild.buildroot.net/?reason=kvm-unit-tests-kvm-unit-tests-20171020
+>
+>>> +        self.FIND_SOURCE = re.compile(
+>>> +            "^{}_SOURCE\s*=\s*{}-\$\({}_VERSION\)\.tar\.gz"
+>>> +            .format(package_upper, package, package_upper))
+>>> +
+>>> +    def check_line(self, lineno, text):
+>>> +        if self.FIND_SOURCE.search(text):
+>>> +            return ["{}:{}: remove default value of _SOURCE variable ({}#writing-rules-mk)"
+> Instead of #writing-rules-mk maybe a better url would be
+> #generic-package-reference
+> It contains this text for LIBFOO_SOURCE: "If none are specified, then the value
+> is assumed to be libfoo-$(LIBFOO_VERSION).tar.gz"
 
-Changes v1 -> v2
-[Thomas
- - Suggested a configure check vs the original revert of
-   the upstream commit which added these instructions to the package.
----
- ...0002-x86-vmx_tests-test-for-rdseed-rdrand.patch | 82 ++++++++++++++++++++++
- 1 file changed, 82 insertions(+)
- create mode 100644 package/kvm-unit-tests/0002-x86-vmx_tests-test-for-rdseed-rdrand.patch
+Will do.
+>
+>>> +                    .format(self.filename, lineno, self.url_to_manual),
+>>> +                    text]
+>>> +
+>>> +
+>>>   class SpaceBeforeBackslash(_CheckFunction):
+>>>       TAB_OR_MULTIPLE_SPACES_BEFORE_BACKSLASH = re.compile(r"^.*(  |\t)\\$")
+>>>   
 
-diff --git a/package/kvm-unit-tests/0002-x86-vmx_tests-test-for-rdseed-rdrand.patch b/package/kvm-unit-tests/0002-x86-vmx_tests-test-for-rdseed-rdrand.patch
-new file mode 100644
-index 0000000..5fc15b4
---- /dev/null
-+++ b/package/kvm-unit-tests/0002-x86-vmx_tests-test-for-rdseed-rdrand.patch
-@@ -0,0 +1,82 @@
-+From 9a8ddd7fdde14f4f1085fe89a2e2dfba6b291aa3 Mon Sep 17 00:00:00 2001
-+From: Matt Weber <matthew.weber@rockwellcollins.com>
-+Date: Mon, 8 Jan 2018 22:39:29 -0600
-+Subject: [PATCH] x86/vmx_tests: test for rdseed/rdrand
-+
-+A binutils of at least 2.23 is required
-+(2.22.x introduced RDSEED).
-+
-+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-+---
-+ configure       | 17 +++++++++++++++++
-+ x86/vmx_tests.c |  6 ++++++
-+ 2 files changed, 23 insertions(+)
-+
-+diff --git a/configure b/configure
-+index dd9d361..4912582 100755
-+--- a/configure
-++++ b/configure
-+@@ -171,6 +171,23 @@ mkdir -p lib
-+ ln -sf "$asm" lib/asm
-+ 
-+ 
-++cat > rd_test.c <<EOF
-++#include <stdint.h>
-++int main() {
-++   uint16_t seed=0;
-++   unsigned char ok;
-++   asm volatile ("rdseed %0; setc %1"
-++                 : "=r" (seed), "=qm" (ok));
-++   return ok;
-++}
-++EOF
-++if $cross_prefix$cc -o /dev/null rd_test.c &> /dev/null; then
-++  echo "Checking for rdseed/rdrand... Yes."
-++else
-++  CFLAGS="${CFLAGS} -DNO_RDSEEDRAND"
-++  echo "Checking for rdseed/rdrand... No."
-++fi
-++
-+ # create the config
-+ cat <<EOF > config.mak
-+ SRCDIR=$srcdir
-+diff --git a/x86/vmx_tests.c b/x86/vmx_tests.c
-+index 4a3e94b..2cbe3eb 100644
-+--- a/x86/vmx_tests.c
-++++ b/x86/vmx_tests.c
-+@@ -770,8 +770,10 @@ asm(
-+ 	"insn_sldt: sldt %ax;ret\n\t"
-+ 	"insn_lldt: xor %eax, %eax; lldt %ax;ret\n\t"
-+ 	"insn_str: str %ax;ret\n\t"
-++#ifndef NO_RDSEEDRAND
-+ 	"insn_rdrand: rdrand %rax;ret\n\t"
-+ 	"insn_rdseed: rdseed %rax;ret\n\t"
-++#endif
-+ );
-+ extern void insn_hlt();
-+ extern void insn_invlpg();
-+@@ -796,8 +798,10 @@ extern void insn_lldt();
-+ extern void insn_str();
-+ extern void insn_cpuid();
-+ extern void insn_invd();
-++#ifndef NO_RDSEEDRAND
-+ extern void insn_rdrand();
-+ extern void insn_rdseed();
-++#endif
-+ 
-+ u32 cur_insn;
-+ u64 cr3;
-+@@ -853,8 +857,10 @@ static struct insn_table insn_table[] = {
-+ 	{"DESC_TABLE (LLDT)", CPU_DESC_TABLE, insn_lldt, INSN_CPU1, 47, 0, 0, 0},
-+ 	{"DESC_TABLE (STR)", CPU_DESC_TABLE, insn_str, INSN_CPU1, 47, 0, 0, 0},
-+ 	/* LTR causes a #GP if done with a busy selector, so it is not tested.  */
-++#ifndef NO_RDSEEDRAND
-+ 	{"RDRAND", CPU_RDRAND, insn_rdrand, INSN_CPU1, VMX_RDRAND, 0, 0, 0},
-+ 	{"RDSEED", CPU_RDSEED, insn_rdseed, INSN_CPU1, VMX_RDSEED, 0, 0, 0},
-++#endif
-+ 	// Instructions always trap
-+ 	{"CPUID", 0, insn_cpuid, INSN_ALWAYS_TRAP, 10, 0, 0, 0},
-+ 	{"INVD", 0, insn_invd, INSN_ALWAYS_TRAP, 13, 0, 0, 0},
-+-- 
-+1.9.1
-+
--- 
-1.9.1
+Regards,
+Jerzy
+
+> Running the new check function in the tree we get warnings from 6 files.
+> https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/47157096
+>
+> Unrelated... but I see there are few more (other) warnings in the tree.
+>
+>
+> 1) daq
+> A patch fixing this (removing the unneeded variable) ideally should be added to
+> the series because it is tested in gitlab.
+>
+>
+> 2) glibc
+> It's a special package, but the removal of the variable seems fine to me (needs
+> testing of course).
+>
+> 3) python-networkmanager
+> I guess the variable can be removed. Could it interact with scanpypi? Do we
+> care if it does interact?
+> By 'interact' I mean: when someone uses scanpypi to create a package should
+> he/she use check-package after it?
+>
+> For these 2 I am not sure which one is the best solution: fix or whitelist.
+>
+>
+> 4) gdb
+> The variable is overwritten for ARC. Would removing the variable make the code
+> worst in this case? The 'if' would need to be negated, and the non-default
+> value be assigned for not-ARC, I guess.
+>
+> 5) binutils
+> It has '?=' later for the same variable. I am not sure the first assignment can
+> be removed.
+>
+> 6) gcc
+> Maybe we want it to be explicit to ease the maintenance? Not sure.
+>
+> These 3 are good candidates for a whitelist.
+>
+>
+> Regards,
+> Ricardo
