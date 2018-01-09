@@ -1,13 +1,12 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 9 Jan 2018 16:05:18 +0100
-Subject: [Buildroot] [PATCH] glibc: ARC is now supported via patches
-In-Reply-To: <1515510195.3868.14.camel@synopsys.com>
-References: <20171109215821.16615-1-abrodkin@synopsys.com>
- <20180101123936.609b7f41@windsurf>
- <1515506414.3868.7.camel@synopsys.com>
- <20180109155057.659c646b@windsurf>
- <1515510195.3868.14.camel@synopsys.com>
-Message-ID: <20180109160518.31e2fd01@windsurf.lan>
+Date: Tue, 9 Jan 2018 16:36:08 +0100
+Subject: [Buildroot] [PATCH 1/1] board/ci20: Implement creation of a
+ basic sdcard image for ci20
+In-Reply-To: <CAMbDF3JqN=7DxC3N1KBAkBsrPYn6AU=+Tn0ct=AQsNMmNWw8cg@mail.gmail.com>
+References: <1515504542-26528-1-git-send-email-johannes.schmitz1@gmail.com>
+ <20180109153854.774a0b7c@windsurf>
+ <CAMbDF3JqN=7DxC3N1KBAkBsrPYn6AU=+Tn0ct=AQsNMmNWw8cg@mail.gmail.com>
+Message-ID: <20180109163608.6126ca99@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,19 +15,21 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 9 Jan 2018 15:03:15 +0000, Alexey Brodkin wrote:
+Please keep the Buildroot mailing list in Cc, thanks!
 
-> > Is that OK for you ?  
+On Tue, 9 Jan 2018 16:30:37 +0100, Johannes Schmitz wrote:
+
+> > The toolchain changes are really unrelated, they shouldn't be part of
+> > the same patch.
 > 
-> Sure. Again I'm mostly concerned about things that will be fixed in
-> glibc's "stable" branch but still affecting our fork. But I'm sure we'll be able to
-> resolve it if it ever happens at all.
+> The problem without the patch I can not even complete the build, I get an
+> error, so how is it unrelated?
+> I can split it again but I don't think it is completely unrelated.
 
-You could always rebase your fork once in a while, or merge the glibc
-stable branch.
+So today the current ci20_defconfig is broken ?
 
-We are also not updating every day the glibc commit we're using for the
-glibc package, so we're also not getting fixes every day.
+At the very least, the gcc flag patch should be separate, with a proper
+commit log that explains what is going on.
 
 Best regards,
 
