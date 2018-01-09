@@ -1,72 +1,48 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 9 Jan 2018 09:50:28 +0100
-Subject: [Buildroot] [PATCH 1/1] utils/checkpackagelib: add function to
- check of the default package source variable
-In-Reply-To: <5a5423b8d08a0_5241d7ae4c960fb@ultri3.mail>
-References: <20180108234802.42d06229@windsurf>
- <5a5423b8d08a0_5241d7ae4c960fb@ultri3.mail>
-Message-ID: <20180109095028.286b1ecd@windsurf>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Tue,  9 Jan 2018 09:58:30 +0100
+Subject: [Buildroot] [PATCH 1/2] uboot: bump to version 2018.01
+Message-ID: <20180109085831.620-1-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+---
+ boot/uboot/Config.in  | 4 ++--
+ boot/uboot/uboot.hash | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-+Yegor in Cc, since there is some scanpypi discussion below.
-
-On Tue, 09 Jan 2018 00:06:48 -0200, Ricardo Martincoski wrote:
-
-> Unrelated... but I see there are few more (other) warnings in the tree.
-> 
-> 
-> 1) daq
-> A patch fixing this (removing the unneeded variable) ideally should be added to
-> the series because it is tested in gitlab.
-
-I fixed this one.
-
-> 2) glibc
-> It's a special package, but the removal of the variable seems fine to me (needs
-> testing of course).
-
-I think it can be changed indeed, but I haven't tested it.
-
-> 3) python-networkmanager
-> I guess the variable can be removed. Could it interact with scanpypi? Do we
-> care if it does interact?
-> By 'interact' I mean: when someone uses scanpypi to create a package should
-> he/she use check-package after it?
-
-I fixed this one as well. I guess scanpypi could be improved to not
-emit the <pkg>_SOURCE line when its value is the default one.
-
-> For these 2 I am not sure which one is the best solution: fix or whitelist.
-
-Fix :-)
-
-> 4) gdb
-> The variable is overwritten for ARC. Would removing the variable make the code
-> worst in this case? The 'if' would need to be negated, and the non-default
-> value be assigned for not-ARC, I guess.
-> 
-> 5) binutils
-> It has '?=' later for the same variable. I am not sure the first assignment can
-> be removed.
-> 
-> 6) gcc
-> Maybe we want it to be explicit to ease the maintenance? Not sure.
-> 
-> These 3 are good candidates for a whitelist.
-
-Yes, agreed. Jerzy, could you send an updated patch that takes into
-account Ricardo's comments, including whitelisting gdb/binutils/gcc ?
-
-Thanks!
-
-Thomas
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index 2829d2ca5e..264f343767 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -38,7 +38,7 @@ choice
+ 	  Select the specific U-Boot version you want to use
+ 
+ config BR2_TARGET_UBOOT_LATEST_VERSION
+-	bool "2017.11"
++	bool "2018.01"
+ 
+ config BR2_TARGET_UBOOT_CUSTOM_VERSION
+ 	bool "Custom version"
+@@ -86,7 +86,7 @@ endif
+ 
+ config BR2_TARGET_UBOOT_VERSION
+ 	string
+-	default "2017.11"	if BR2_TARGET_UBOOT_LATEST_VERSION
++	default "2018.01"	if BR2_TARGET_UBOOT_LATEST_VERSION
+ 	default BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE \
+ 		if BR2_TARGET_UBOOT_CUSTOM_VERSION
+ 	default "custom"	if BR2_TARGET_UBOOT_CUSTOM_TARBALL
+diff --git a/boot/uboot/uboot.hash b/boot/uboot/uboot.hash
+index db15efb22d..9425df3f17 100644
+--- a/boot/uboot/uboot.hash
++++ b/boot/uboot/uboot.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256  6a018fd3caf58f3dcfa23ee989a82bd35df03af71872b9dca8c6d758a0d26c05  u-boot-2017.11.tar.bz2
++sha256  938f597394b33e82e5af8c98bd5ea1a238f61892aabef36384adbf7ca5b52dda  u-boot-2018.01.tar.bz2
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.15.1
