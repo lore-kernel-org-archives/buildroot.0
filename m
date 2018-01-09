@@ -1,116 +1,85 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Tue,  9 Jan 2018 09:58:31 +0100
-Subject: [Buildroot] [PATCH 2/2] uboot-tools: bump to version 2018.01
-In-Reply-To: <20180109085831.620-1-joerg.krause@embedded.rocks>
-References: <20180109085831.620-1-joerg.krause@embedded.rocks>
-Message-ID: <20180109085831.620-2-joerg.krause@embedded.rocks>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 9 Jan 2018 10:07:14 +0100
+Subject: [Buildroot] [git commit] toolchain: bump ARC prebuild toolchain to
+ arc-2017.09
+Message-ID: <20180109093030.9C87281364@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Drop patch 0004-uboot-tools-disable-pylibfdt.patch. The issue addressed by
-this patch has been fixed in upstream commit
-15b97f5c5e6d88e0560c6928f3acd01c999a494d.
+commit: https://git.buildroot.net/buildroot/commit/?id=c208203618cfaf3e9dcbcc8c987f9927999c53ff
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+There might be subtle differences between uClibc configuration
+compared to Buildroot's one.
+
+Native RPC now is disabled because uClinc-ng has removed it.
+
+Signed-off-by: Evgeniy Didin <didin@synopsys.com>
+Cc: Alexey Brodkin <abrodkin@synopsys.com>
+Cc: arc-buildroot at synopsys.com
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../0004-uboot-tools-disable-pylibfdt.patch        | 63 ----------------------
- package/uboot-tools/uboot-tools.hash               |  2 +-
- package/uboot-tools/uboot-tools.mk                 |  2 +-
- 3 files changed, 2 insertions(+), 65 deletions(-)
- delete mode 100644 package/uboot-tools/0004-uboot-tools-disable-pylibfdt.patch
+ .../toolchain-external-synopsys-arc/Config.in                  |  7 +++----
+ .../toolchain-external-synopsys-arc.hash                       | 10 +++++-----
+ .../toolchain-external-synopsys-arc.mk                         |  2 +-
+ 3 files changed, 9 insertions(+), 10 deletions(-)
 
-diff --git a/package/uboot-tools/0004-uboot-tools-disable-pylibfdt.patch b/package/uboot-tools/0004-uboot-tools-disable-pylibfdt.patch
-deleted file mode 100644
-index 0c2f54d95f..0000000000
---- a/package/uboot-tools/0004-uboot-tools-disable-pylibfdt.patch
-+++ /dev/null
-@@ -1,63 +0,0 @@
--From d882c99de59316e50bfee7f5fce10fe9062dfa32 Mon Sep 17 00:00:00 2001
--From: Matt Weber <matthew.weber@rockwellcollins.com>
--Date: Wed, 1 Nov 2017 10:57:31 -0500
--Subject: [PATCH] uboot-tools: disable pylibfdt
--
--The current U-Boot build system assumes that if swig is installed on
--the host system, it should build pylibfdt, without checking if other
--dependencies are available. This causes a number of build failures.
--
--This patch fixes that by using concepts from the future upstream fix
--(post 2017.11), which sets up a kconfig variable for pylibfdt and
--conditionally enables the swig wrapper creation (default=n).
--
--Relevant upstream patches under review:
--
-- - https://patchwork.ozlabs.org/patch/826742/
-- - https://patchwork.ozlabs.org/patch/826752/
--
--Fixes (one of many):
--http://autobuild.buildroot.net/results/f9e13caae9b31c9dcde7d24caecc036324f269cc
--
--Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-----
-- Kconfig        | 5 +++++
-- tools/Makefile | 6 +++---
-- 2 files changed, 8 insertions(+), 3 deletions(-)
--
--diff --git a/Kconfig b/Kconfig
--index bb80ada..99b0258 100644
----- a/Kconfig
--+++ b/Kconfig
--@@ -358,6 +358,11 @@ source "disk/Kconfig"
-- 
-- source "dts/Kconfig"
-- 
--+config PYLIBFDT
--+	bool
--+	help
--+	  Enables the generation of the pylibfdt swig wrapper.
--+
-- source "net/Kconfig"
-- 
-- source "drivers/Kconfig"
--diff --git a/tools/Makefile b/tools/Makefile
--index 77706a9..cb6cb7a 100644
----- a/tools/Makefile
--+++ b/tools/Makefile
--@@ -226,9 +226,9 @@ clean-dirs := lib common
-- 
-- always := $(hostprogs-y)
-- 
---# Build a libfdt Python module if swig is available
---# Use 'sudo apt-get install swig libpython-dev' to enable this
---always += $(if $(shell which swig 2> /dev/null),_libfdt.so)
--+ifneq ($(CONFIG_PYLIBFDT),)
--+always += _libfdt.so
--+endif
-- 
-- # Generated LCD/video logo
-- LOGO_H = $(objtree)/include/bmp_logo.h
---- 
--1.8.3.1
--
-diff --git a/package/uboot-tools/uboot-tools.hash b/package/uboot-tools/uboot-tools.hash
-index db15efb22d..9425df3f17 100644
---- a/package/uboot-tools/uboot-tools.hash
-+++ b/package/uboot-tools/uboot-tools.hash
-@@ -1,2 +1,2 @@
- # Locally computed:
--sha256  6a018fd3caf58f3dcfa23ee989a82bd35df03af71872b9dca8c6d758a0d26c05  u-boot-2017.11.tar.bz2
-+sha256  938f597394b33e82e5af8c98bd5ea1a238f61892aabef36384adbf7ca5b52dda  u-boot-2018.01.tar.bz2
-diff --git a/package/uboot-tools/uboot-tools.mk b/package/uboot-tools/uboot-tools.mk
-index 4c559185af..cc57ce84de 100644
---- a/package/uboot-tools/uboot-tools.mk
-+++ b/package/uboot-tools/uboot-tools.mk
+diff --git a/toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in b/toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in
+index 8e4344a..fefbb47 100644
+--- a/toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in
++++ b/toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in
+@@ -1,19 +1,18 @@
+ config BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC
+-	bool "Synopsys ARC 2016.09 toolchain"
++	bool "Synopsys ARC 2017.09 toolchain"
+ 	depends on BR2_arc
+ 	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_7
+ 	depends on BR2_HOSTARCH = "x86_64"
+ 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+ 	select BR2_INSTALL_LIBSTDCPP
+-	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 	select BR2_ENABLE_LOCALE
+ 	select BR2_USE_WCHAR
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_SSP
+-	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_8
+-	select BR2_TOOLCHAIN_GCC_AT_LEAST_6
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_7
+ 	help
+ 	  Toolchain for the ARC cores, from
+ 	  https://github.com/foss-for-synopsys-dwc-arc-processors/toolchain/releases
+diff --git a/toolchain/toolchain-external/toolchain-external-synopsys-arc/toolchain-external-synopsys-arc.hash b/toolchain/toolchain-external/toolchain-external-synopsys-arc/toolchain-external-synopsys-arc.hash
+index c96f53b..3479e18 100644
+--- a/toolchain/toolchain-external/toolchain-external-synopsys-arc/toolchain-external-synopsys-arc.hash
++++ b/toolchain/toolchain-external/toolchain-external-synopsys-arc/toolchain-external-synopsys-arc.hash
+@@ -1,5 +1,5 @@
+-# Locally calculated
+-sha256 9123e35510cc9105e5f9468d5154e0093770d7c11ed771c1a595ecf813692baf  arc_gnu_2016.09_prebuilt_uclibc_le_arc700_linux_install.tar.gz
+-sha256 3140066cdbda2df7ed0fb60424bbd9db740fb25393928e733234b0bf65508df2  arc_gnu_2016.09_prebuilt_uclibc_be_arc700_linux_install.tar.gz
+-sha256 aa6edb2101b13df3ac59f8d8ccbcfba37a6f7882f0e03baa9d9883480dbed4e7  arc_gnu_2016.09_prebuilt_uclibc_le_archs_linux_install.tar.gz
+-sha256 4de227bf73536a87784d88e5f10085b91ede62c76ef8fedf53b4bf2e215054cf  arc_gnu_2016.09_prebuilt_uclibc_be_archs_linux_install.tar.gz
++# From https://github.com/foss-for-synopsys-dwc-arc-processors/toolchain/releases/tag/arc-2017.09-release
++sha256 ef74a7567a7341bc5e5d7bf6bcff64c2515be175d08a7def52df847583080ac2  arc_gnu_2017.09_prebuilt_uclibc_le_arc700_linux_install.tar.gz
++sha256 8a7620dd7500641de40adb2ae490d90d53fcad01d13f77ba305fc00df32a26e3  arc_gnu_2017.09_prebuilt_uclibc_be_arc700_linux_install.tar.gz
++sha256 ef7afba0da38cc08d863850f4987ebd16c71c8920c51990f490ad79389f102c1  arc_gnu_2017.09_prebuilt_uclibc_le_archs_linux_install.tar.gz
++sha256 eab1d4872298008bd141104368ec0b7873af600a09704827f767ae57b067c874  arc_gnu_2017.09_prebuilt_uclibc_be_archs_linux_install.tar.gz
+diff --git a/toolchain/toolchain-external/toolchain-external-synopsys-arc/toolchain-external-synopsys-arc.mk b/toolchain/toolchain-external/toolchain-external-synopsys-arc/toolchain-external-synopsys-arc.mk
+index f4cb7b7..d751934 100644
+--- a/toolchain/toolchain-external/toolchain-external-synopsys-arc/toolchain-external-synopsys-arc.mk
++++ b/toolchain/toolchain-external/toolchain-external-synopsys-arc/toolchain-external-synopsys-arc.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--UBOOT_TOOLS_VERSION = 2017.11
-+UBOOT_TOOLS_VERSION = 2018.01
- UBOOT_TOOLS_SOURCE = u-boot-$(UBOOT_TOOLS_VERSION).tar.bz2
- UBOOT_TOOLS_SITE = ftp://ftp.denx.de/pub/u-boot
- UBOOT_TOOLS_LICENSE = GPL-2.0+
--- 
-2.15.1
+-TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_VERSION = 2016.09
++TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_VERSION = 2017.09
+ TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_SITE = https://github.com/foss-for-synopsys-dwc-arc-processors/toolchain/releases/download/arc-$(TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_VERSION)-release
+ 
+ ifeq ($(BR2_arc750d)$(BR2_arc770d),y)
