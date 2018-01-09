@@ -1,8 +1,8 @@
 From: Johannes Schmitz <johannes.schmitz1@gmail.com>
-Date: Tue,  9 Jan 2018 17:07:44 +0100
+Date: Tue,  9 Jan 2018 17:08:27 +0100
 Subject: [Buildroot] [PATCH 1/2] toolchain: Fix the toolchain-wrapper to
  support more recent GCC versions
-Message-ID: <1515514065-18911-1-git-send-email-johannes.schmitz1@gmail.com>
+Message-ID: <1515514108-18962-1-git-send-email-johannes.schmitz1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
