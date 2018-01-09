@@ -1,68 +1,36 @@
-From: John Keeping <john@metanate.com>
-Date: Tue, 9 Jan 2018 16:15:31 +0000
-Subject: [Buildroot] linux-firmware hash mismatch (tar-1.30)
-Message-ID: <20180109161531.47ec21e0.john@metanate.com>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Tue, 9 Jan 2018 11:39:17 -0600
+Subject: [Buildroot] [PATCH 2/2] uboot-tools: bump to version 2018.01
+In-Reply-To: <20180109085831.620-2-joerg.krause@embedded.rocks>
+References: <20180109085831.620-1-joerg.krause@embedded.rocks>
+ <20180109085831.620-2-joerg.krause@embedded.rocks>
+Message-ID: <CANQCQpapbUANTGy_35v_EXVhu-qQ=dMmDCHURkidyXCXGHR0UQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Jorg,
 
-I'm getting the following error cloning linux-firmware:
+On Tue, Jan 9, 2018 at 2:58 AM, J?rg Krause <joerg.krause@embedded.rocks> wrote:
+>
+> Drop patch 0004-uboot-tools-disable-pylibfdt.patch. The issue addressed by
+> this patch has been fixed in upstream commit
+> 15b97f5c5e6d88e0560c6928f3acd01c999a494d.
+>
 
-ERROR: linux-firmware-17e6288135d4500f9fe60224dce2b46d850c346b.tar.gz has wrong sha256 hash:
-ERROR: expected: 28d359523a36c1cdc3e85a8e148bb2d68b036d28b10f0e80a192f3dc29f02c16
-ERROR: got     : bf6fe8d7620949a3e771954cb6d9d18dcf000d37ecc910a7cf69723c1798e246
-ERROR: Incomplete download, or man-in-the-middle (MITM) attack
+I've ran it through test-pkg on my builder that had the issue
+requiring the patch.
+BR2_PACKAGE_UBOOT_TOOLS=y
+BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT=y
+BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SIGNATURE_SUPPORT=y
+Plus a variant with Python enabled as this was a corner case where it
+was detecting executables before and then enabling python/swig.
+BR2_PACKAGE_PYTHON=y
 
+This one takes a bit to build so I just tested armv5/7 and aarch64 at
+this point.  I'll let it run through them all in the background.
 
-After a bit of digging, it looks like this is caused by tar-1.30 which
-includes the following fix:
-
-* --numeric-owner now affects private headers too.
-
-Comparing the tarball created on my system with one from
-sources.buildroot.net gives the output like this, which shows that the
-uname/gname fields are set for a GNUTYPE_LONGNAME record in the version
-from sources.buildroot.net and not set in the version created with
-tar-1.30:
-
--- >8 --
-@@ -669379,24 +669379,24 @@
- 00a36c20: 0000 0000 0000 0000 0000 0000 0000 0000  ................
- 00a36c30: 0000 0000 0000 0000 0000 0000 0000 0000  ................
- 00a36c40: 0000 0000 0000 0000 0000 0000 0000 0000  ................
- 00a36c50: 0000 0000 0000 0000 0000 0000 0000 0000  ................
- 00a36c60: 0000 0000 3030 3030 3634 3400 3030 3030  ....0000644.0000
- 00a36c70: 3030 3000 3030 3030 3030 3000 3030 3030  000.0000000.0000
- 00a36c80: 3030 3030 3135 3600 3030 3030 3030 3030  0000156.00000000
--00a36c90: 3030 3000 3031 3136 3035 0020 4c00 0000  000.011605. L...
-+00a36c90: 3030 3000 3030 3737 3735 0020 4c00 0000  000.007775. L...
- 00a36ca0: 0000 0000 0000 0000 0000 0000 0000 0000  ................
- 00a36cb0: 0000 0000 0000 0000 0000 0000 0000 0000  ................
- 00a36cc0: 0000 0000 0000 0000 0000 0000 0000 0000  ................
- 00a36cd0: 0000 0000 0000 0000 0000 0000 0000 0000  ................
- 00a36ce0: 0000 0000 0000 0000 0000 0000 0000 0000  ................
- 00a36cf0: 0000 0000 0000 0000 0000 0000 0000 0000  ................
--00a36d00: 0075 7374 6172 2020 0072 6f6f 7400 0000  .ustar  .root...
-+00a36d00: 0075 7374 6172 2020 0000 0000 0000 0000  .ustar  ........
- 00a36d10: 0000 0000 0000 0000 0000 0000 0000 0000  ................
--00a36d20: 0000 0000 0000 0000 0072 6f6f 7400 0000  .........root...
-+00a36d20: 0000 0000 0000 0000 0000 0000 0000 0000  ................
- 00a36d30: 0000 0000 0000 0000 0000 0000 0000 0000  ................
- 00a36d40: 0000 0000 0000 0000 0000 0000 0000 0000  ................
- 00a36d50: 0000 0000 0000 0000 0000 0000 0000 0000  ................
- 00a36d60: 0000 0000 0000 0000 0000 0000 0000 0000  ................
- 00a36d70: 0000 0000 0000 0000 0000 0000 0000 0000  ................
- 00a36d80: 0000 0000 0000 0000 0000 0000 0000 0000  ................
- 00a36d90: 0000 0000 0000 0000 0000 0000 0000 0000  ................
--- 8< --
-
-I'm not sure whether anything can be done to avoid this problem, but
-hopefully reporting it will save the next person some debugging time.
-
-
-Regards,
-John
+Tested-by: Matthew Weber <matthew.weber@rockwellcollins.com>
