@@ -1,73 +1,116 @@
-From: Trent Piepho <tpiepho@impinj.com>
-Date: Tue, 9 Jan 2018 01:47:42 +0000
-Subject: [Buildroot] [PATCH 3/8] python-setuptools: check host-python
- version
-In-Reply-To: <20180105212908.7a048009@windsurf>
-References: <20180102163337.6334-1-aduskett@gmail.com>
- <20180102163337.6334-4-aduskett@gmail.com>
- <1514931195.26695.184.camel@impinj.com> <20180105212908.7a048009@windsurf>
-Message-ID: <1515462462.25398.31.camel@impinj.com>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Tue, 09 Jan 2018 00:06:48 -0200
+Subject: [Buildroot] [PATCH 1/1] utils/checkpackagelib: add function to
+ check of the default package source variable
+References: <20180108234802.42d06229@windsurf>
+Message-ID: <5a5423b8d08a0_5241d7ae4c960fb@ultri3.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 2018-01-05 at 21:29 +0100, Thomas Petazzoni wrote:
-> n Tue, 2 Jan 2018 22:13:15 +0000, Trent Piepho wrote:
-> > On Tue, 2018-01-02 at 11:33 -0500, Adam Duskett wrote:
-> > > 
-> > > +ifeq ($(BR2_PACKAGE_HOST_PYTHON3),y)
-> > > +HOST_PYTHON_SETUPTOOLS_NEEDS_HOST_PYTHON += python3
-> > > +HOST_PYTHON_SETUPTOOLS_PYLIBVER = python$(PYTHON3_VERSION_MAJOR)
-> > > +else
-> > > +HOST_PYTHON_SETUPTOOLS_NEEDS_HOST_PYTHON += python
-> > > +HOST_PYTHON_SETUPTOOLS_PYLIBVER = python$(PYTHON_VERSION_MAJOR)
-> > > +endif  
-> > 
-> > From why I see in pkg-python, the default behavior for host packages is
-> > to depend on the default interpreter, which is python3 if enabled
-> > otherwise python2.  Isn't the above block basically doing the same
-> > thing?  Other than using HOST_PYTHON3 rather than PYTHON3.
-> > 
-> > But shouldn't this be changed in pkg-python?
-> > 
-> > Then setting <PKG>_NEEDS_HOST_PYTHON based on why python version is in
-> > use could be eliminated, unless the package needs a specific version,
-> > which appear to be how it's supposed to work.
+Hello,
+
+On Mon, Jan 08, 2018 at 08:48 PM, Thomas Petazzoni wrote:
+
+> Ricardo,
 > 
-> See my reply to this patch, which explains why it is (IMO) broken.
+> Do you think you could have a look at the below patch touching
+> checkpackagelib ?
+
+Thomas,
+Thank you for adding me in CC.
+
 > 
+> It looks OK to me, so unless you complain in the next days, I'll apply.
 
-If I understand correctly, the fundamental problem is that Adam's patch
-allows for simultaneously enabling both host python2 and host python3
-and building host python packages using both python versions or a
-version different than the target python version.
+Don't apply just yet. See at the end.
 
-But I think Adam pointed out a real flaw that can be fixed.  It's
-caused problems for me as well.
+[snip]
+> On Mon, 18 Dec 2017 13:14:26 +0100, Jerzy Grzegorek wrote:
 
-The issue is that the host python version is linked to the target
-python version.  Which is fine, if there is a target python.  But the
-logic fails if there is no target python.
+Jerzy,
+The code is almost good.
+Below see some nits about the code.
 
-Right now, one gets this:
-Target Python 2 -> Host Python 2
-Target Python 3 -> Host Python 3
-No Target Python -> Host Python 2
+And at the end see my main concerns. I think we will need a whitelist and some
+patches fixing packages.
 
-I'd like to build host python 3 utilities and don't have python on the
-target.  Can't see a way to configure buildroot to do that.  I can add
-a build dep on host-python3 and get the interpreter built, but I can't
-make a host-python-package using python3.
+[snip]
+>>  
+>> +class RemoveDefaultPackageSourceVariable(_CheckFunction):
+>> +    PACKAGE_NAME = re.compile("/([^/]+)\.mk")
+>> +
+>> +    def before(self):
+>> +        package = self.PACKAGE_NAME.search(self.filename).group(1)
+>> +        package_upper = package.replace("-", "_").upper()
 
-I think this could be fixed by making host python config options, which
-are forced by the target python configs, so that host python can only
-be selected manually if no target python is enabled.
+>> +        self.package = package
+>> +        self.package_upper = package_upper
 
-Packages that want to depend on host python should use the host python
-config to select which python to depends on, rather than the target
-python config as they do now.  If target python is enabled, then host
-python == target python so there is no change.  But without target
-python it will be possible to build select either host-python3 or host-
-python as the python version to be used by host-python-setuptools.
+These 2 lines are not needed because the variables are not used in other
+methods of this class.
+
+>> +        self.FIND_SOURCE = re.compile(
+>> +            "^{}_SOURCE\s*=\s*{}-\$\({}_VERSION\)\.tar\.gz"
+>> +            .format(package_upper, package, package_upper))
+>> +
+>> +    def check_line(self, lineno, text):
+>> +        if self.FIND_SOURCE.search(text):
+>> +            return ["{}:{}: remove default value of _SOURCE variable ({}#writing-rules-mk)"
+
+Instead of #writing-rules-mk maybe a better url would be
+#generic-package-reference
+It contains this text for LIBFOO_SOURCE: "If none are specified, then the value
+is assumed to be libfoo-$(LIBFOO_VERSION).tar.gz"
+
+>> +                    .format(self.filename, lineno, self.url_to_manual),
+>> +                    text]
+>> +
+>> +
+>>  class SpaceBeforeBackslash(_CheckFunction):
+>>      TAB_OR_MULTIPLE_SPACES_BEFORE_BACKSLASH = re.compile(r"^.*(  |\t)\\$")
+>>  
+
+Running the new check function in the tree we get warnings from 6 files.
+https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/47157096
+
+Unrelated... but I see there are few more (other) warnings in the tree.
+
+
+1) daq
+A patch fixing this (removing the unneeded variable) ideally should be added to
+the series because it is tested in gitlab.
+
+
+2) glibc
+It's a special package, but the removal of the variable seems fine to me (needs
+testing of course).
+
+3) python-networkmanager
+I guess the variable can be removed. Could it interact with scanpypi? Do we
+care if it does interact?
+By 'interact' I mean: when someone uses scanpypi to create a package should
+he/she use check-package after it?
+
+For these 2 I am not sure which one is the best solution: fix or whitelist.
+
+
+4) gdb
+The variable is overwritten for ARC. Would removing the variable make the code
+worst in this case? The 'if' would need to be negated, and the non-default
+value be assigned for not-ARC, I guess.
+
+5) binutils
+It has '?=' later for the same variable. I am not sure the first assignment can
+be removed.
+
+6) gcc
+Maybe we want it to be explicit to ease the maintenance? Not sure.
+
+These 3 are good candidates for a whitelist.
+
+
+Regards,
+Ricardo
