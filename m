@@ -1,69 +1,38 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 9 Jan 2018 21:30:51 +0100
-Subject: [Buildroot] [PATCH] qt5wayland: compositor depends on
- BR2_PACKAGE_QT5BASE_OPENGL
-In-Reply-To: <1515457090-29564-1-git-send-email-joshua.henderson@microchip.com>
-References: <1515457090-29564-1-git-send-email-joshua.henderson@microchip.com>
-Message-ID: <20180109203051.GD3834@scaer>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Tue, 9 Jan 2018 15:20:03 -0600
+Subject: [Buildroot] [PATCH v2] package/ti-cgt-pru: bump to 2.2.1
+In-Reply-To: <20180109201306.13526-1-romain.naour@gmail.com>
+References: <20180109201306.13526-1-romain.naour@gmail.com>
+Message-ID: <CANQCQpYf9jJ3SinrW-_Fk469pTDOQ0nwqEbwzJCYuOJDVjEj7Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Joshua, All,
+Romain,
 
-On 2018-01-08 17:18 -0700, Joshua Henderson spake thusly:
-> When building Qt 5.6.3, the qt5wayland compositor depends on Qt OpenGL support.
-
-Certainly not. It can also work on EGL/GLES setups as well.
-
-AFAIK, it can also work with various non-GL wayland backends, like a
-rpi-specific one...
-
-I'm not sure what the correct solution is, though, but certainly not a
-dependency on GL.
-
-Regards,
-Yann E. MORIN.
-
+On Tue, Jan 9, 2018 at 2:13 PM, Romain Naour <romain.naour@gmail.com> wrote:
+> See: http://www.ti.com/tool/download/PRU-CGT-2-2
+>
+> The ti-cgt-pru v2.1.x installer are affected by a bug with recent
+> distribution (Fedora 27 and Ubuntu 17.10) using kernel 4.13 or 4.14
+> with a glibc 2.26.
+> The installer is stuck in a futex(wait) system call.
+>
+> While at it, add license hash.
+>
 > Fixes:
->       http://autobuild.buildroot.net/results/289d9b73d99e29d61c2df9ce228fed3968d89f5c
-> 
-> Signed-off-by: Joshua Henderson <joshua.henderson@microchip.com>
+> http://autobuild.buildroot.net/results/68f/68f60ad38d9b6eae83b5d233966616a25d8c9391
+>
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> Cc: Ash Charles <ash.charles@savoirfairelinux.com>
+> Cc: Matthew Weber <matthew.weber@rockwellcollins.com>
 > ---
->  package/qt5/qt5wayland/Config.in | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/package/qt5/qt5wayland/Config.in b/package/qt5/qt5wayland/Config.in
-> index 0182d3c..e201830 100644
-> --- a/package/qt5/qt5wayland/Config.in
-> +++ b/package/qt5/qt5wayland/Config.in
-> @@ -18,8 +18,12 @@ config BR2_PACKAGE_QT5WAYLAND
->  
->  if BR2_PACKAGE_QT5WAYLAND
->  
-> +comment "qt5wayland compositor needs Qt OpenGL support"
-> +	depends on !BR2_PACKAGE_QT5BASE_OPENGL && !BR2_PACKAGE_QT5_VERSION_LATEST
-> +
->  config BR2_PACKAGE_QT5WAYLAND_COMPOSITOR
->  	bool "Enable compositor (experimental)"
-> +	depends on BR2_PACKAGE_QT5BASE_OPENGL || BR2_PACKAGE_QT5_VERSION_LATEST
->  	help
->  	  The compositor API is still experimental, and not built by
->  	  default.
-> -- 
-> 2.7.4
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> Note: This bump is not tested on real PRU hardware.
+>
+> v2: update license files and add license hash
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Checked legal info and the extract.
+
+Tested-by: Matt Weber <matthew.weber@rockwellcollins.com>
