@@ -1,124 +1,29 @@
-From: Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com>
-Date: Tue, 9 Jan 2018 13:51:11 +0100
-Subject: [Buildroot] [PATCH 1/1] utils/checkpackagelib: add function to
- check of the default package source variable
-In-Reply-To: <5a5423b8d08a0_5241d7ae4c960fb@ultri3.mail>
-References: <20180108234802.42d06229@windsurf>
- <5a5423b8d08a0_5241d7ae4c960fb@ultri3.mail>
-Message-ID: <67387bfc-e6f9-2cdb-a81b-a455bb9a0b21@gmail.com>
+From: Jagan Teki <jagan@amarulasolutions.com>
+Date: Tue, 9 Jan 2018 18:22:16 +0530
+Subject: [Buildroot] [PATCH 2/2] orangepi: drop custom post-build and
+ post-image scripts
+In-Reply-To: <20180107201130.12952-3-geomatsi@gmail.com>
+References: <20180107201130.12952-1-geomatsi@gmail.com>
+ <20180107201130.12952-3-geomatsi@gmail.com>
+Message-ID: <CAMty3ZAjTOOmr9ATiSu9_nV4nwd7doEd9VmM2zxCYiajDKe4Yw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Ricardo,
+On Mon, Jan 8, 2018 at 1:41 AM, Sergey Matyukevich <geomatsi@gmail.com> wrote:
+> Currently in Orange Pi boards post-build script is used only to generate
+> U-Boot boot script and post-image script is used only to generate sdcard
+> image according to genimage configuration. However both those tasks can
+> now be handled by generic Buildroot tools:
+> - BR2_TARGET_UBOOT_BOOT_SCRIPT config options
+> - support/scripts/genimage.sh script
+>
+> This patch drops custom scripts replacing them
+> by generic Buildroot tools.
+>
+> Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
+> ---
 
-> Hello,
->
-> On Mon, Jan 08, 2018 at 08:48 PM, Thomas Petazzoni wrote:
->
->> Ricardo,
->>
->> Do you think you could have a look at the below patch touching
->> checkpackagelib ?
-> Thomas,
-> Thank you for adding me in CC.
->
->> It looks OK to me, so unless you complain in the next days, I'll apply.
-> Don't apply just yet. See at the end.
->
-> [snip]
->> On Mon, 18 Dec 2017 13:14:26 +0100, Jerzy Grzegorek wrote:
-> Jerzy,
-> The code is almost good.
-> Below see some nits about the code.
->
-> And at the end see my main concerns. I think we will need a whitelist and some
-> patches fixing packages.
-
-Thanks for your feedback.
-
->
-> [snip]
->>>   
->>> +class RemoveDefaultPackageSourceVariable(_CheckFunction):
->>> +    PACKAGE_NAME = re.compile("/([^/]+)\.mk")
->>> +
->>> +    def before(self):
->>> +        package = self.PACKAGE_NAME.search(self.filename).group(1)
->>> +        package_upper = package.replace("-", "_").upper()
->>> +        self.package = package
->>> +        self.package_upper = package_upper
-> These 2 lines are not needed because the variables are not used in other
-> methods of this class.
-
-In fact, you're right.
-
->
->>> +        self.FIND_SOURCE = re.compile(
->>> +            "^{}_SOURCE\s*=\s*{}-\$\({}_VERSION\)\.tar\.gz"
->>> +            .format(package_upper, package, package_upper))
->>> +
->>> +    def check_line(self, lineno, text):
->>> +        if self.FIND_SOURCE.search(text):
->>> +            return ["{}:{}: remove default value of _SOURCE variable ({}#writing-rules-mk)"
-> Instead of #writing-rules-mk maybe a better url would be
-> #generic-package-reference
-> It contains this text for LIBFOO_SOURCE: "If none are specified, then the value
-> is assumed to be libfoo-$(LIBFOO_VERSION).tar.gz"
-
-Will do.
->
->>> +                    .format(self.filename, lineno, self.url_to_manual),
->>> +                    text]
->>> +
->>> +
->>>   class SpaceBeforeBackslash(_CheckFunction):
->>>       TAB_OR_MULTIPLE_SPACES_BEFORE_BACKSLASH = re.compile(r"^.*(  |\t)\\$")
->>>   
-
-Regards,
-Jerzy
-
-> Running the new check function in the tree we get warnings from 6 files.
-> https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/47157096
->
-> Unrelated... but I see there are few more (other) warnings in the tree.
->
->
-> 1) daq
-> A patch fixing this (removing the unneeded variable) ideally should be added to
-> the series because it is tested in gitlab.
->
->
-> 2) glibc
-> It's a special package, but the removal of the variable seems fine to me (needs
-> testing of course).
->
-> 3) python-networkmanager
-> I guess the variable can be removed. Could it interact with scanpypi? Do we
-> care if it does interact?
-> By 'interact' I mean: when someone uses scanpypi to create a package should
-> he/she use check-package after it?
->
-> For these 2 I am not sure which one is the best solution: fix or whitelist.
->
->
-> 4) gdb
-> The variable is overwritten for ARC. Would removing the variable make the code
-> worst in this case? The 'if' would need to be negated, and the non-default
-> value be assigned for not-ARC, I guess.
->
-> 5) binutils
-> It has '?=' later for the same variable. I am not sure the first assignment can
-> be removed.
->
-> 6) gcc
-> Maybe we want it to be explicit to ease the maintenance? Not sure.
->
-> These 3 are good candidates for a whitelist.
->
->
-> Regards,
-> Ricardo
+Reviewed-by: Jagan Teki <jagan@amarulasolutions.com>
