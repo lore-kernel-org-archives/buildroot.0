@@ -1,38 +1,64 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Tue, 9 Jan 2018 15:20:03 -0600
-Subject: [Buildroot] [PATCH v2] package/ti-cgt-pru: bump to 2.2.1
-In-Reply-To: <20180109201306.13526-1-romain.naour@gmail.com>
-References: <20180109201306.13526-1-romain.naour@gmail.com>
-Message-ID: <CANQCQpYf9jJ3SinrW-_Fk469pTDOQ0nwqEbwzJCYuOJDVjEj7Q@mail.gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Tue,  9 Jan 2018 22:25:33 +0100
+Subject: [Buildroot] [PATCH 1/1] package/{mesa3d,
+ mesa3d-headers}: bump version to 17.3.2
+Message-ID: <20180109212533.28691-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Romain,
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/mesa3d-headers/mesa3d-headers.mk |  2 +-
+ package/mesa3d/mesa3d.hash               | 10 +++++-----
+ package/mesa3d/mesa3d.mk                 |  2 +-
+ 3 files changed, 7 insertions(+), 7 deletions(-)
 
-On Tue, Jan 9, 2018 at 2:13 PM, Romain Naour <romain.naour@gmail.com> wrote:
-> See: http://www.ti.com/tool/download/PRU-CGT-2-2
->
-> The ti-cgt-pru v2.1.x installer are affected by a bug with recent
-> distribution (Fedora 27 and Ubuntu 17.10) using kernel 4.13 or 4.14
-> with a glibc 2.26.
-> The installer is stuck in a futex(wait) system call.
->
-> While at it, add license hash.
->
-> Fixes:
-> http://autobuild.buildroot.net/results/68f/68f60ad38d9b6eae83b5d233966616a25d8c9391
->
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> Cc: Ash Charles <ash.charles@savoirfairelinux.com>
-> Cc: Matthew Weber <matthew.weber@rockwellcollins.com>
-> ---
-> Note: This bump is not tested on real PRU hardware.
->
-> v2: update license files and add license hash
-
-Checked legal info and the extract.
-
-Tested-by: Matt Weber <matthew.weber@rockwellcollins.com>
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index 3de1039822..7b50b8f2bc 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
+ 
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 17.3.1
++MESA3D_HEADERS_VERSION = 17.3.2
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = https://mesa.freedesktop.org/archive
+ MESA3D_HEADERS_LICENSE = MIT, SGI, Khronos
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index c342f89394..f16a3905cf 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
+@@ -1,8 +1,8 @@
+-# From https://lists.freedesktop.org/archives/mesa-announce/2017-December/000385.html
+-md5 b4b021279ea21e1eb8a1369afa6f19a0  mesa-17.3.1.tar.xz
+-sha1 1bda76199addb01946e5a6cd35e00a05540b7eb0  mesa-17.3.1.tar.xz
+-sha256 9ae607e0998a586fb2c866cfc8e45e6f52d1c56cb1b41288253ea83eada824c1  mesa-17.3.1.tar.xz
+-sha512 a2bd0123bf2df0db03197001a9e001b25f2609f3c6bf1bae66f3bc50c51d2558b5b77e232e81c1658c3a4dec88eda32a8b5a85c1fedc937a7441476228ef8238  mesa-17.3.1.tar.xz
++# From https://lists.freedesktop.org/archives/mesa-announce/2018-January/000388.html
++md5  5c59b779925f504ffd0f13c7dcd29ac6  mesa-17.3.2.tar.xz
++sha1 d3fd1b57a5b853d91150aea8db033e6c995fd9e9  mesa-17.3.2.tar.xz
++sha256 e2844a13f2d6f8f24bee65804a51c42d8dc6ae9c36cff7ee61d0940e796d64c6  mesa-17.3.2.tar.xz
++sha512 46a85f5f5f9a503bc0e3f8c4469ffaa5cec3861070321d5d9cb5805c6d3ea50ae2a5438f012f467cb57d7e3b7c1e67ddabbfbf44e0fabb5856802454c576a5d3  mesa-17.3.2.tar.xz
+ # License
+ sha256 630e75b4fdeb75ee2bf9e55db54dd1e3ff7353d52d9314ca8512bfd460f8e24c  docs/license.html
+ sha256 a75ee0cec909515ff80a3ec07155b7fb0aafe8051abe1f0e45d5c4c5e2539366  docs/patents.txt
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index bd93dbbd8e..2eadc862e4 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 17.3.1
++MESA3D_VERSION = 17.3.2
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = https://mesa.freedesktop.org/archive
+ MESA3D_LICENSE = MIT, SGI, Khronos
+-- 
+2.11.0
