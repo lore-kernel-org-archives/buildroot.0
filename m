@@ -1,64 +1,49 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue,  9 Jan 2018 22:25:33 +0100
-Subject: [Buildroot] [PATCH 1/1] package/{mesa3d,
- mesa3d-headers}: bump version to 17.3.2
-Message-ID: <20180109212533.28691-1-bernd.kuhls@t-online.de>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue,  9 Jan 2018 22:29:56 +0100
+Subject: [Buildroot] [PATCH autobuild] autobuild-run: enforce a sane umask
+Message-ID: <20180109212956.13278-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/mesa3d-headers/mesa3d-headers.mk |  2 +-
- package/mesa3d/mesa3d.hash               | 10 +++++-----
- package/mesa3d/mesa3d.mk                 |  2 +-
- 3 files changed, 7 insertions(+), 7 deletions(-)
+When the umask of the user the autobuild-run script runs as is not what
+Buildroot expects, Buildroot will respawn another make instance with the
+expected umask.
 
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-index 3de1039822..7b50b8f2bc 100644
---- a/package/mesa3d-headers/mesa3d-headers.mk
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -12,7 +12,7 @@ endif
+However, in case of failure, the error message of the inner make are
+printed, followed by the error message of the outter make. And we are
+interested to catch only the errors from the inner make (the real one).
+
+This means that we can miss the reason for the failure.
+
+So we enforce a correct umask value from within the autobuild-run script
+itself.
+
+Reported-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Matthew Weber <matthew.weber@rockwellcollins.com>
+---
+ scripts/autobuild-run | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/scripts/autobuild-run b/scripts/autobuild-run
+index 2949417..b3f3c65 100755
+--- a/scripts/autobuild-run
++++ b/scripts/autobuild-run
+@@ -666,6 +666,11 @@ def main():
+     if not sysinfo.check_requirements():
+         sys.exit(1)
  
- # Not possible to directly refer to mesa3d variables, because of
- # first/second expansion trickery...
--MESA3D_HEADERS_VERSION = 17.3.1
-+MESA3D_HEADERS_VERSION = 17.3.2
- MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
- MESA3D_HEADERS_SITE = https://mesa.freedesktop.org/archive
- MESA3D_HEADERS_LICENSE = MIT, SGI, Khronos
-diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
-index c342f89394..f16a3905cf 100644
---- a/package/mesa3d/mesa3d.hash
-+++ b/package/mesa3d/mesa3d.hash
-@@ -1,8 +1,8 @@
--# From https://lists.freedesktop.org/archives/mesa-announce/2017-December/000385.html
--md5 b4b021279ea21e1eb8a1369afa6f19a0  mesa-17.3.1.tar.xz
--sha1 1bda76199addb01946e5a6cd35e00a05540b7eb0  mesa-17.3.1.tar.xz
--sha256 9ae607e0998a586fb2c866cfc8e45e6f52d1c56cb1b41288253ea83eada824c1  mesa-17.3.1.tar.xz
--sha512 a2bd0123bf2df0db03197001a9e001b25f2609f3c6bf1bae66f3bc50c51d2558b5b77e232e81c1658c3a4dec88eda32a8b5a85c1fedc937a7441476228ef8238  mesa-17.3.1.tar.xz
-+# From https://lists.freedesktop.org/archives/mesa-announce/2018-January/000388.html
-+md5  5c59b779925f504ffd0f13c7dcd29ac6  mesa-17.3.2.tar.xz
-+sha1 d3fd1b57a5b853d91150aea8db033e6c995fd9e9  mesa-17.3.2.tar.xz
-+sha256 e2844a13f2d6f8f24bee65804a51c42d8dc6ae9c36cff7ee61d0940e796d64c6  mesa-17.3.2.tar.xz
-+sha512 46a85f5f5f9a503bc0e3f8c4469ffaa5cec3861070321d5d9cb5805c6d3ea50ae2a5438f012f467cb57d7e3b7c1e67ddabbfbf44e0fabb5856802454c576a5d3  mesa-17.3.2.tar.xz
- # License
- sha256 630e75b4fdeb75ee2bf9e55db54dd1e3ff7353d52d9314ca8512bfd460f8e24c  docs/license.html
- sha256 a75ee0cec909515ff80a3ec07155b7fb0aafe8051abe1f0e45d5c4c5e2539366  docs/patents.txt
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index bd93dbbd8e..2eadc862e4 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -5,7 +5,7 @@
- ################################################################################
++    # Enforce the sanest umask here, to avoid buildroot doing it on its
++    # own and causing a double-make call, thus adding extraneous lines
++    # in case of failures.
++    os.umask(0022)
++
+     def sigterm_handler(signum, frame):
+         """Kill all children"""
  
- # When updating the version, please also update mesa3d-headers
--MESA3D_VERSION = 17.3.1
-+MESA3D_VERSION = 17.3.2
- MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
- MESA3D_SITE = https://mesa.freedesktop.org/archive
- MESA3D_LICENSE = MIT, SGI, Khronos
 -- 
-2.11.0
+2.14.1
