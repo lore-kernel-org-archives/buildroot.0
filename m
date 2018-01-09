@@ -1,10 +1,10 @@
 From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Tue, 9 Jan 2018 14:00:15 +0000
-Subject: [Buildroot] [PATCH] glibc: ARC is now supported via patches
-In-Reply-To: <20180101123936.609b7f41@windsurf>
-References: <20171109215821.16615-1-abrodkin@synopsys.com>
- <20180101123936.609b7f41@windsurf>
-Message-ID: <1515506414.3868.7.camel@synopsys.com>
+Date: Tue, 9 Jan 2018 14:03:01 +0000
+Subject: [Buildroot] [PATCH] vlc: enable package on ARC
+In-Reply-To: <20180101170713.54183634@windsurf>
+References: <20171011125005.25545-1-didin@synopsys.com>
+ <20180101170713.54183634@windsurf>
+Message-ID: <1515506581.3868.9.camel@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,52 +13,22 @@ To: buildroot@busybox.net
 
 Hi Thomas,
 
-On Mon, 2018-01-01 at 12:39 +0100, Thomas Petazzoni wrote:
+On Mon, 2018-01-01 at 17:07 +0100, Thomas Petazzoni wrote:
 > Hello,
 > 
-> On Fri, 10 Nov 2017 00:58:21 +0300, Alexey Brodkin wrote:
-> > Given ARC port is just a very few patches away from upstream
-> > and if those are based on 2.29 everything works like a charm
-> > let's forget about SNPS GitHub stuff and use vanilla glibc
-> > plus patches.
+> On Wed, 11 Oct 2017 15:50:05 +0300, Evgeniy Didin wrote:
+> > Now using arc-2017.09-rc1 toolchain it is possible to
+> > build vlc package.
 > > 
-> > This among other things solves a problem with stable fixes for glibc.
-> > Now when Buildroot switched to the tip of glibc's stable branch instead of
-> > applying cherry-picked patches ARC version would stay behind every time
-> > glibc's "version" gets updated in Buildroot.
-> > 
-> > But if we just apply ARC patches then we're good with whatever commit
-> > from upstream stable branch is taken.
-> > 
-> > Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-> > Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> > Cc: Peter Korsgaard <peter@korsgaard.com>
-> > ---
-> >  package/glibc/0001-longlong.h-sync-from-gcc.patch  |  133 +
-> >  .../0002-ARC-add-definitions-to-elf-elf.h.patch    |   94 +
-> >  package/glibc/0003-ARC-Initial-port-to-glibc.patch | 7625 ++++++++++++++++++++
+> > Note this patch has a prerequisite that updates ARC prebuilt toolchain,
+> > https://urldefense.proofpoint.com/v2/url?u=http-3A__patchwork.ozlabs.org_patch_824311_&d=DwICAg&c=DPL6_X_6JkXFx7AXWqB0tg&r=lqdeeSSEes0GFDDl656eViX
+> > O7breS55ytWkhpk5R81I&m=oXjZ7iSe0ULSbamHCYCDrRMyfbYSj9WjWCPS6OHy66I&s=gnkVm--myTL2YUFtDvz5VfzEZVxwxwtbjnw4mMxXGJY&e=
 > 
-> This is a bit too much feature patches IMO, it's a complete
-> architecture port. I agree it's a backport from upstream, so it's not
-> too bad. But since glibc 2.27, which includes this, is expected to be
-> released on February 1st, I prefer to post-pone this change until glibc
-> 2.27 gets released and we move to it.
+> I've applied this patch. However, we still haven't received a new
+> version of the patch bumping the ARC external toolchain. Could you send
+> such an update in the near future ?
 
-That's very unfortunate but looks like we're not going to make ARC glibc port
-accepted before the upcoming release.
-
-See https://sourceware.org/ml/libc-alpha/2017-12/msg00251.html for more details.
-Basically Vineet [who's doing the port] is now chasing a couple of issues found
-by glibc test-suite and before pretty much all of them are fixed the port will be
-considered for merging. That said having quite functional port in our fork
-we can and want to use it more to get better test coverage but for some more time
-[hopefully just before the next release] we'll need to use sources either from our GitHub
-[as we do today] or keep a set of patches.
-
-Probably getting sources from GitHub is not the worst idea but my intention with
-patches on top of the tip of glibc sources from upstream "stable" branch was to get
-all latest fixes from this "stable" branch especially if those are fixes of build- and run-time
-issues.
+I think with https://git.buildroot.net/buildroot/commit/toolchain/toolchain-external/toolchain-external-synopsys-arc?id=c208203618cfaf3e9dcbcc8c987f99
+27999c53ff in place your request is resolved right?
 
 -Alexey
