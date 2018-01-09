@@ -1,41 +1,62 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 9 Jan 2018 10:56:28 +0100
-Subject: [Buildroot] [PATCH v2 1/2] iqvlinux: bump to version 1.2.0.3
-In-Reply-To: <20171217050554.5377c971@windsurf>
-References: <20171215153830.4864-1-casantos@datacom.ind.br>
- <20171216155053.2b40b409@windsurf>
- <367239421.6256025.1513450988190.JavaMail.zimbra@datacom.ind.br>
- <1833448217.6256112.1513453992880.JavaMail.zimbra@datacom.ind.br>
- <20171217050554.5377c971@windsurf>
-Message-ID: <20180109105628.6bd70119@windsurf>
+From: Ilya Kuzmich <ilya.kuzmich@gmail.com>
+Date: Tue,  9 Jan 2018 14:37:43 +0300
+Subject: [Buildroot] [v2 1/1] merge_config.sh: add br2-external support
+In-Reply-To: <20171230175829.GH2921@scaer>
+References: <20171230175829.GH2921@scaer>
+Message-ID: <1515497863-13204-1-git-send-email-ilya.kuzmich@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Carlos,
+Pass BR2_EXTERNAL value via -e option.
+This will prevent merge_config.sh from silently eating any symbols defined in
+external trees on a clean buildroot tree invocation.
 
-On Sun, 17 Dec 2017 05:05:54 +0100, Thomas Petazzoni wrote:
-> On Sat, 16 Dec 2017 17:53:12 -0200 (BRST), Carlos Santos wrote:
-> 
-> > > I will try it. Meanwhile we need a temporary solution.    
-> > 
-> > BTW, I their current naming scheme is already reasonable, since each
-> > release use a separate path. Those who download the file can save it
-> > with a different name. That's not rocket science.  
-> 
-> Except it's totally uncommon, and many people save tarballs in a single
-> folder. What they do is contrary to the practice of pretty much every
-> other open-source project.
+Signed-off-by: Ilya Kuzmich <ilya.kuzmich@gmail.com>
 
-In the end, did you get the chance to raise the issue of the tarball
-name with the upstream developers ?
+---
+Changes v1 -> v2:
+Simplifications
 
-Thanks!
+Signed-off-by: Ilya Kuzmich <ilya.kuzmich@gmail.com>
+---
+ support/kconfig/merge_config.sh | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-Thomas
+diff --git a/support/kconfig/merge_config.sh b/support/kconfig/merge_config.sh
+index 8a1708b..e1d7ffa 100755
+--- a/support/kconfig/merge_config.sh
++++ b/support/kconfig/merge_config.sh
+@@ -33,6 +33,7 @@ usage() {
+ 	echo "  -n    use allnoconfig instead of alldefconfig"
+ 	echo "  -r    list redundant entries when merging fragments"
+ 	echo "  -O    dir to put generated output files"
++	echo "  -e    colon-separated list of br2-external trees to use (optional)"
+ }
+ 
+ MAKE=true
+@@ -71,6 +72,11 @@ while true; do
+ 		shift 2
+ 		continue
+ 		;;
++	"-e")
++		EXTERNAL_ARG="BR2_EXTERNAL=$2"
++		shift 2
++		continue
++		;;
+ 	*)
+ 		break
+ 		;;
+@@ -131,7 +137,7 @@ fi
+ # Use the merged file as the starting point for:
+ # alldefconfig: Fills in any missing symbols with Kconfig default
+ # allnoconfig: Fills in any missing symbols with # CONFIG_* is not set
+-make KCONFIG_ALLCONFIG=$TMP_FILE $OUTPUT_ARG $ALLTARGET
++make KCONFIG_ALLCONFIG=$TMP_FILE $EXTERNAL_ARG $OUTPUT_ARG $ALLTARGET
+ 
+ 
+ # Check all specified config values took (might have missed-dependency issues)
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.7.4
