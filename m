@@ -1,27 +1,51 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 10 Jan 2018 22:09:09 +0000
-Subject: [Buildroot] [Bug 10316] Building grub fails on debian stretch
-In-Reply-To: <bug-10316-163@https.bugs.busybox.net/>
-References: <bug-10316-163@https.bugs.busybox.net/>
-Message-ID: <bug-10316-163-hCVo8Cgutc@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 10 Jan 2018 23:14:02 +0100
+Subject: [Buildroot] [PATCH] system/Config.in: hide
+ BR2_TARGET_GENERIC_GETTY_{TERM, OPTIONS} with systemd
+Message-ID: <20180110221402.19743-1-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=10316
+When systemd is used as the init system, the
+BR2_TARGET_GENERIC_GETTY_TERM and BR2_TARGET_GENERIC_GETTY_OPTIONS are
+completely ignored, which might confuse the user, as reported in bug
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+For now, let's simply make those options visible only with busybox
+init and sysv init, as suggested by Yann E. Morin in the discussion of
+bug #10301.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-         Resolution|---                         |WONTFIX
-             Status|NEW                         |RESOLVED
+Fixes #10301.
 
---- Comment #3 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
-We removed grub legacy from Buildroot, so this problem no longer exists.
+Reported-by: Michael Heinemann <posted@heine.so>
+Suggested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ system/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
+diff --git a/system/Config.in b/system/Config.in
+index b9714923c4..0fe0fb60b4 100644
+--- a/system/Config.in
++++ b/system/Config.in
+@@ -355,12 +355,16 @@ config BR2_TARGET_GENERIC_GETTY_BAUDRATE
+ config BR2_TARGET_GENERIC_GETTY_TERM
+ 	string "TERM environment variable"
+ 	default "vt100"
++	# currently not observed by systemd
++	depends on BR2_INIT_BUSYBOX || BR2_INIT_SYSV
+ 	help
+ 	  Specify a TERM type.
+ 
+ config BR2_TARGET_GENERIC_GETTY_OPTIONS
+ 	string "other options to pass to getty"
+ 	default ""
++	# currently not observed by systemd
++	depends on BR2_INIT_BUSYBOX || BR2_INIT_SYSV
+ 	help
+ 	  Any other flags you want to pass to getty,
+ 	  Refer to getty --help for details.
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.14.3
