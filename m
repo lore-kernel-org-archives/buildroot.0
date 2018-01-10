@@ -1,45 +1,47 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 10 Jan 2018 23:03:03 +0100
-Subject: [Buildroot] [PATCH] mcookie: correct wrong memset argument
-Message-ID: <20180110220303.27944-1-peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 10 Jan 2018 23:03:59 +0100
+Subject: [Buildroot] [git commit] busybox: don't remove S01logging when
+ CONFIG_SYSLOGD is disabled
+Message-ID: <20180110220628.309B9835A1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes #10216
+commit: https://git.buildroot.net/buildroot/commit/?id=84e835ea9261b3e844f1a18489dd89253e3eb839
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Building mcookie generates a warning about possible wrong arguments to
-memset:
+The current busybox.mk explicitly removes S01logging if CONFIG_SYSLOGD
+is disabled in the Busybox configuration. However:
 
-mcookie.c:207:26: warning: argument to ?sizeof? in ?memset? call is the same expression
-  as the destination; did you mean to dereference it? [-Wsizeof-pointer-memaccess]
-     memset(ctx, 0, sizeof(ctx)); /* In case it's sensitive */
+ - This causes the removal of the S01logging script potentially
+   installed by another package (currently syslog-ng, rsyslog and
+   sysklogd can all install a S01logging script).
 
-ctx is a pointer to a structure, so the code should use the size of the
-structure and not the size of the pointer when it tries to clear the
-structure, similar to how it got fixed upstream back in 2009:
+ - We generally don't try to clean-up stuff that we may have installed
+   in a previous make invocation and that is no longer needed
+   following a configuration change.
 
-https://git.kernel.org/pub/scm/utils/util-linux/util-linux.git/commit/lib/md5.c?id=6596057175c6ed342dc20e85eae8a42eb29b629f
+Fixes bug #10176
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Reported-by: Karl Krach <mail@kkrach.de>
+Fix-provided-by: Karl Krach <mail@kkrach.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/x11r7/mcookie/mcookie.c | 2 +-
+ package/busybox/busybox.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/x11r7/mcookie/mcookie.c b/package/x11r7/mcookie/mcookie.c
-index 902d92fc47..3c38f6f3b3 100644
---- a/package/x11r7/mcookie/mcookie.c
-+++ b/package/x11r7/mcookie/mcookie.c
-@@ -204,7 +204,7 @@ void MD5Final(unsigned char digest[16], struct MD5Context *ctx)
-     MD5Transform(ctx->buf, (uint32 *) ctx->in);
-     byteReverse((unsigned char *) ctx->buf, 4);
-     memcpy(digest, ctx->buf, 16);
--    memset(ctx, 0, sizeof(ctx));	/* In case it's sensitive */
-+    memset(ctx, 0, sizeof(*ctx));	/* In case it's sensitive */
- }
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index 8b720b3..d0bbd3f 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -221,7 +221,7 @@ define BUSYBOX_INSTALL_LOGGING_SCRIPT
+ 	if grep -q CONFIG_SYSLOGD=y $(@D)/.config; then \
+ 		$(INSTALL) -m 0755 -D package/busybox/S01logging \
+ 			$(TARGET_DIR)/etc/init.d/S01logging; \
+-	else rm -f $(TARGET_DIR)/etc/init.d/S01logging; fi
++	fi
+ endef
  
- /* The four core functions - F1 is optimized somewhat */
--- 
-2.11.0
+ ifeq ($(BR2_INIT_BUSYBOX),y)
