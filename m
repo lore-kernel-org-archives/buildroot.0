@@ -1,12 +1,12 @@
 From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Wed, 10 Jan 2018 06:20:54 -0600
+Date: Wed, 10 Jan 2018 06:25:09 -0600
 Subject: [Buildroot] [PATCH v3 2/8] security hardening: add RELFO,
  FORTIFY options
-In-Reply-To: <1341e9d3-f42a-2162-1f47-6cc2b53716a4@green-communications.fr>
+In-Reply-To: <466a98fe-c60f-8ac6-181e-9dba54215cd9@green-communications.fr>
 References: <1515557739-6027-1-git-send-email-matthew.weber@rockwellcollins.com>
  <1515557739-6027-2-git-send-email-matthew.weber@rockwellcollins.com>
- <1341e9d3-f42a-2162-1f47-6cc2b53716a4@green-communications.fr>
-Message-ID: <CANQCQpZc4RMMmF0j5dHZVnSfAH2OV1ymHzCmy4jKXiyH2X0k0w@mail.gmail.com>
+ <466a98fe-c60f-8ac6-181e-9dba54215cd9@green-communications.fr>
+Message-ID: <CANQCQpbuXLuFBGkWEr6PGX7zRVRGUc+yXvZMaCL8=NwB68M93g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,25 +15,32 @@ To: buildroot@busybox.net
 
 Nicolas,
 
-On Wed, Jan 10, 2018 at 2:22 AM, Nicolas Cavallari
+On Wed, Jan 10, 2018 at 3:41 AM, Nicolas Cavallari
 <Nicolas.Cavallari@green-communications.fr> wrote:
 > On 10/01/2018 05:15, Matt Weber wrote:
->> [...]
->> +config BR2_RELRO_NONE
->> +     bool "None"
->> +     help
->> +       Enables Relocation link-time protections.
+>> +ifneq ($(BR2_OPTIMIZE_S)$(BR2_OPTIMIZE_0)$(BR2_OPTIMIZE_1)$(BR2_OPTIMIZE_2)$(BR2_OPTIMIZE_G),)
+>> +ifeq ($(BR2_FORTIFY_SOURCE_1),y)
+>> +TARGET_CPPFLAGS += -D_FORTIFY_SOURCE=1
+>> +else ifeq ($(BR2_FORTIFY_SOURCE_2),y)
+>> +TARGET_CPPFLAGS += -D_FORTIFY_SOURCE=2
+>> +endif
+>> +else
+>> +$(error BR2_FORTIFY_SOURCE_# requires optimization level s/1/2/3/g)
+>> +endif
 >
-> Disables ?
->
->> +config BR2_FORTIFY_SOURCE_NONE
->> +     bool "None"
->> +     help
->> +       Enables additional checks to detect buffer-overflows.
->
-> And here too ?
+> This seems to test if the optimization level is s/0/1/2/g instead of
+> s/1/2/3/g
 
-Correct in both cases, oops.  I'll update in v4.
+Good catch, will update in v4
 
-Thanks for the review!
+>
+> Shouldn't this actually be expressed as a dependency in Config.in
+> instead ? (i.e. make BR2_FORTIFY_SOURCE_{1,2} depends on !BR2_OPTIMIZE_0)
+
+I looked at a few ways of doing this and since those optimize
+variables are from a choice, I couldn't depend on them in Kconfig.  I
+think I could change how that choice works to evaluate a value which
+is set to the choice, however that seemed more complex then just
+documenting and errorring.  I'm definitely open to ideas on this.
+
 Matt
