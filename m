@@ -1,66 +1,73 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 10 Jan 2018 20:15:56 +0100
-Subject: [Buildroot] [git commit] package/{mesa3d,
- mesa3d-headers}: bump version to 17.3.2
-Message-ID: <20180110191825.4A39483C88@busybox.osuosl.org>
+Date: Wed, 10 Jan 2018 20:16:34 +0100
+Subject: [Buildroot] [git commit] package/intel-microcode: security bump to
+ version 20180108
+Message-ID: <20180110191825.5F77982944@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c425a925b409744a2b0d7446fb1b89a9ac9f9cde
+commit: https://git.buildroot.net/buildroot/commit/?id=19ab5952fafb6cb3d9ae00efec362fcebac5df99
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Quoting releasenote:
+
+"Intel Processor Microcode Package for Linux
+20180108 Release
+
+-- Updates upon 20171117 release --
+IVT C0          (06-3e-04:ed) 428->42a
+SKL-U/Y D0      (06-4e-03:c0) ba->c2
+BDW-U/Y E/F     (06-3d-04:c0) 25->28
+HSW-ULT Cx/Dx   (06-45-01:72) 20->21
+Crystalwell Cx  (06-46-01:32) 17->18
+BDW-H E/G       (06-47-01:22) 17->1b
+HSX-EX E0       (06-3f-04:80) 0f->10
+SKL-H/S R0      (06-5e-03:36) ba->c2
+HSW Cx/Dx       (06-3c-03:32) 22->23
+HSX C0          (06-3f-02:6f) 3a->3b
+BDX-DE V0/V1    (06-56-02:10) 0f->14
+BDX-DE V2       (06-56-03:10) 700000d->7000011
+KBL-U/Y H0      (06-8e-09:c0) 62->80
+KBL Y0 / CFL D0 (06-8e-0a:c0) 70->80
+KBL-H/S B0      (06-9e-09:2a) 5e->80
+CFL U0          (06-9e-0a:22) 70->80
+CFL B0          (06-9e-0b:02) 72->80
+SKX H0          (06-55-04:b7) 2000035->200003c
+GLK B0          (06-7a-01:01) 1e->22"
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mesa3d-headers/mesa3d-headers.mk |  2 +-
- package/mesa3d/mesa3d.hash               | 10 +++++-----
- package/mesa3d/mesa3d.mk                 |  2 +-
- 3 files changed, 7 insertions(+), 7 deletions(-)
+ package/intel-microcode/intel-microcode.hash | 4 ++--
+ package/intel-microcode/intel-microcode.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-index 3de1039..7b50b8f 100644
---- a/package/mesa3d-headers/mesa3d-headers.mk
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -12,7 +12,7 @@ endif
- 
- # Not possible to directly refer to mesa3d variables, because of
- # first/second expansion trickery...
--MESA3D_HEADERS_VERSION = 17.3.1
-+MESA3D_HEADERS_VERSION = 17.3.2
- MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
- MESA3D_HEADERS_SITE = https://mesa.freedesktop.org/archive
- MESA3D_HEADERS_LICENSE = MIT, SGI, Khronos
-diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
-index c342f89..f16a390 100644
---- a/package/mesa3d/mesa3d.hash
-+++ b/package/mesa3d/mesa3d.hash
-@@ -1,8 +1,8 @@
--# From https://lists.freedesktop.org/archives/mesa-announce/2017-December/000385.html
--md5 b4b021279ea21e1eb8a1369afa6f19a0  mesa-17.3.1.tar.xz
--sha1 1bda76199addb01946e5a6cd35e00a05540b7eb0  mesa-17.3.1.tar.xz
--sha256 9ae607e0998a586fb2c866cfc8e45e6f52d1c56cb1b41288253ea83eada824c1  mesa-17.3.1.tar.xz
--sha512 a2bd0123bf2df0db03197001a9e001b25f2609f3c6bf1bae66f3bc50c51d2558b5b77e232e81c1658c3a4dec88eda32a8b5a85c1fedc937a7441476228ef8238  mesa-17.3.1.tar.xz
-+# From https://lists.freedesktop.org/archives/mesa-announce/2018-January/000388.html
-+md5  5c59b779925f504ffd0f13c7dcd29ac6  mesa-17.3.2.tar.xz
-+sha1 d3fd1b57a5b853d91150aea8db033e6c995fd9e9  mesa-17.3.2.tar.xz
-+sha256 e2844a13f2d6f8f24bee65804a51c42d8dc6ae9c36cff7ee61d0940e796d64c6  mesa-17.3.2.tar.xz
-+sha512 46a85f5f5f9a503bc0e3f8c4469ffaa5cec3861070321d5d9cb5805c6d3ea50ae2a5438f012f467cb57d7e3b7c1e67ddabbfbf44e0fabb5856802454c576a5d3  mesa-17.3.2.tar.xz
- # License
- sha256 630e75b4fdeb75ee2bf9e55db54dd1e3ff7353d52d9314ca8512bfd460f8e24c  docs/license.html
- sha256 a75ee0cec909515ff80a3ec07155b7fb0aafe8051abe1f0e45d5c4c5e2539366  docs/patents.txt
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index bd93dbb..2eadc86 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/intel-microcode/intel-microcode.hash b/package/intel-microcode/intel-microcode.hash
+index 0b2aa60..12e1dfb 100644
+--- a/package/intel-microcode/intel-microcode.hash
++++ b/package/intel-microcode/intel-microcode.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 93bd1da9fa58ece0016702e657f708b7e496e56da637a3fe9a6d21f1d6f524dc  microcode-20171117.tgz
+-sha256 6f905d812453a4775927b2558d51e5ca25a8e0b9bd06841b1b366c722dc0a64f  license.txt
++sha256 063f1aa3a546cb49323a5e0b516894e4b040007107b8c8ff017aca8a86204130  microcode-20180108.tgz
++sha256 6d4deb65ca688d930e188bf93f78430f134097b161e6df4a2ef00728e14965e3  license.txt
+diff --git a/package/intel-microcode/intel-microcode.mk b/package/intel-microcode/intel-microcode.mk
+index 7a88138..d6c35b2 100644
+--- a/package/intel-microcode/intel-microcode.mk
++++ b/package/intel-microcode/intel-microcode.mk
+@@ -4,9 +4,9 @@
+ #
  ################################################################################
  
- # When updating the version, please also update mesa3d-headers
--MESA3D_VERSION = 17.3.1
-+MESA3D_VERSION = 17.3.2
- MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
- MESA3D_SITE = https://mesa.freedesktop.org/archive
- MESA3D_LICENSE = MIT, SGI, Khronos
+-INTEL_MICROCODE_VERSION = 20171117
++INTEL_MICROCODE_VERSION = 20180108
+ INTEL_MICROCODE_SOURCE = microcode-$(INTEL_MICROCODE_VERSION).tgz
+-INTEL_MICROCODE_SITE = http://downloadmirror.intel.com/27337/eng
++INTEL_MICROCODE_SITE = http://downloadmirror.intel.com/27431/eng
+ INTEL_MICROCODE_STRIP_COMPONENTS = 0
+ INTEL_MICROCODE_LICENSE = PROPRIETARY
+ INTEL_MICROCODE_LICENSE_FILES = license.txt
