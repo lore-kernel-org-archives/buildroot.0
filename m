@@ -1,85 +1,76 @@
-From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Tue,  9 Jan 2018 22:15:38 -0600
-Subject: [Buildroot] [PATCH v3 7/8] libpcap: correct linker flag seq
-In-Reply-To: <1515557739-6027-1-git-send-email-matthew.weber@rockwellcollins.com>
-References: <1515557739-6027-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <1515557739-6027-7-git-send-email-matthew.weber@rockwellcollins.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 10 Jan 2018 08:00:05 +0100 (CET)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2018-01-09
+Message-ID: <20180110070005.6B915207AA@mail.free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch will correct the sequence of -pie and -shared options.
-When used together, -pie should be provided to the linker before
--shared.
+Hello,
 
-Upstream:
-https://github.com/the-tcpdump-group/libpcap/commit/800fff521b3a90300d03af880b4626ede13c57bd
+Build statistics for 2018-01-09
+===============================
 
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
----
- ...cap-patch-to-correct-linker-flag-sequence.patch | 52 ++++++++++++++++++++++
- 1 file changed, 52 insertions(+)
- create mode 100644 package/libpcap/0001-libpcap-patch-to-correct-linker-flag-sequence.patch
+      branch |  OK | NOK | TIM | TOT |
+      master | 211 |  22 |   5 | 238 |
+   2017.11.x |  19 |   0 |   0 |  19 |
 
-diff --git a/package/libpcap/0001-libpcap-patch-to-correct-linker-flag-sequence.patch b/package/libpcap/0001-libpcap-patch-to-correct-linker-flag-sequence.patch
-new file mode 100644
-index 0000000..5b1c133
---- /dev/null
-+++ b/package/libpcap/0001-libpcap-patch-to-correct-linker-flag-sequence.patch
-@@ -0,0 +1,52 @@
-+From eb4806e2a4f4575889ff8ecf7eb4a473a654ec02 Mon Sep 17 00:00:00 2001
-+From: Yogesh Prasad <yogesh.prasad@rockwellcollins.com>
-+Date: Tue, 26 Sep 2017 15:03:52 -0500
-+Subject: [PATCH 1/1] libpcap: patch to correct linker flag sequence
-+
-+Description
-+ This patch will correct the sequence of -pie and -shared options.
-+ When used together, -pie should be provided to the linker before
-+ -shared. If -pie is provided after -shared, the linker throws
-+ below error.
-+-------------------------------------------------------------------------
-+/host/powerpc-buildroot-linux-gnu/sysroot/usr/lib/Scrt1.o:(.data+0x4):
-+ undefined reference to `main'
-+/host/lib/gcc/powerpc-buildroot-linux-gnu/6.4.0/../../../../
-+powerpc-buildroot-linux-gnu/bin/ld: BFD (GNU Binutils) 2.28.1 assertion
-+fail elf32-ppc.c:8923
-+collect2: error: ld returned 1 exit status
-+make[2]: *** [libpcap.so] Error 1
-+make[1]: *** [/build/libpcap-1.8.1/.stamp_built] Error 2
-+make: *** [_all] Error 2
-+-------------------------------------------------------------------------
-+
-+Signed-off-by: Yogesh Prasad <yogesh.prasad@rockwellcollins.com>
-+---
-+ Makefile.in | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/Makefile.in b/Makefile.in
-+index e71d973..34b1097 100644
-+--- a/Makefile.in
-++++ b/Makefile.in
-+@@ -371,7 +371,7 @@ libpcap.so: $(OBJ)
-+ 	@rm -f $@
-+ 	VER=`cat $(srcdir)/VERSION`; \
-+ 	MAJOR_VER=`sed 's/\([0-9][0-9]*\)\..*/\1/' $(srcdir)/VERSION`; \
-+-	@V_SHLIB_CMD@ @V_SHLIB_OPT@ @V_SONAME_OPT@$@.$$MAJOR_VER $(LDFLAGS) \
-++	@V_SHLIB_CMD@ $(LDFLAGS) @V_SHLIB_OPT@ @V_SONAME_OPT@$@.$$MAJOR_VER \
-+ 	    -o $@.$$VER $(OBJ) $(ADDLOBJS) $(LIBS)
-+ 
-+ #
-+@@ -434,7 +434,7 @@ libpcap.sl: $(OBJ)
-+ #
-+ libpcap.shareda: $(OBJ)
-+ 	@rm -f $@ shr.o
-+-	$(CC) @V_SHLIB_OPT@ -o shr.o $(OBJ) $(ADDLOBJS) $(LDFLAGS) $(LIBS)
-++	$(CC) $(LDFLAGS) @V_SHLIB_OPT@ -o shr.o $(OBJ) $(ADDLOBJS) $(LIBS)
-+ 	$(AR) rc $@ shr.o
-+ 
-+ #
-+-- 
-+1.9.1
-+
+Results for branch 'master'
+===========================
+
+Classification of failures by reason
+------------------------------------
+
+                       unknown | 6 
+             libostree-2017.15 | 5 
+             bluez5_utils-5.48 | 2 
+            nilfs-utils-v2.2.7 | 2 
+                      qt-4.8.7 | 2 
+               asterisk-14.7.5 | 1 
+                  cc-tool-0.26 | 1 
+           cups-filters-1.17.9 | 1 
+                     gpsd-3.16 | 1 
+              host-sam-ba-2.16 | 1 
+                      icu-60.1 | 1 
+kvm-unit-tests-kvm-unit-tes... | 1 
+package/python-xlib/python-... | 1 
+                  samba4-4.7.4 | 1 
+          usb_modeswitch-2.5.0 | 1 
+
+
+Detail of failures
+------------------
+
+     sparc64 |                asterisk-14.7.5 | NOK | http://autobuild.buildroot.net/results/285ebaf09a03d580c348b9c74544281c0460171c |     
+     sparc64 |              bluez5_utils-5.48 | NOK | http://autobuild.buildroot.net/results/7fa870edf928dd52b6cb091d26becea5d59839d6 |     
+      xtensa |              bluez5_utils-5.48 | NOK | http://autobuild.buildroot.net/results/3ea73c51f73d1dc968f2f61702775fb7681444ce |     
+        m68k |                   cc-tool-0.26 | NOK | http://autobuild.buildroot.net/results/2b65557e9c689a678228d7f364c75290435b557f |     
+     powerpc |            cups-filters-1.17.9 | NOK | http://autobuild.buildroot.net/results/3d49d72ac8150ab60b815b9e833957d959be2e39 |     
+         arc |                      gpsd-3.16 | NOK | http://autobuild.buildroot.net/results/f966183d6aec9c1e53144a15745c05b3c7849d52 | ORPH
+    mips64el |               host-sam-ba-2.16 | TIM | http://autobuild.buildroot.net/results/bf23aff19be436333611749a78d969f424dc0812 |     
+        bfin |                       icu-60.1 | NOK | http://autobuild.buildroot.net/results/6b848f9535043448ab6686b0608f41e3445fa67c | ORPH
+      x86_64 | kvm-unit-tests-kvm-unit-tes... | NOK | http://autobuild.buildroot.net/results/5ed3e10d6218b50526d082237fd89473eab76796 |     
+      mipsel |              libostree-2017.15 | NOK | http://autobuild.buildroot.net/results/651d280271545abcc5096b2e25ca365179388f68 |     
+       nios2 |              libostree-2017.15 | NOK | http://autobuild.buildroot.net/results/0299460eea49d5df62541da0a4b5893734661ebd |     
+    mips64el |              libostree-2017.15 | NOK | http://autobuild.buildroot.net/results/dc11d6fa536b5feccb731e3794b167daf975a9a4 |     
+         arm |              libostree-2017.15 | NOK | http://autobuild.buildroot.net/results/e25ffce4c98f82e9fa90b872bb5b0dffbb0aee45 |     
+     aarch64 |              libostree-2017.15 | NOK | http://autobuild.buildroot.net/results/8fad79d7c790a5d04066dec561ecc4f136fa1c96 |     
+         arm |             nilfs-utils-v2.2.7 | NOK | http://autobuild.buildroot.net/results/6fc51ade76571536133ac9e79ee50d8d1deaa806 |     
+         arm |             nilfs-utils-v2.2.7 | NOK | http://autobuild.buildroot.net/results/08ed07316e4e2858d20134ab6c67fd56c792ebdd |     
+      mipsel | package/python-xlib/python-... | NOK | http://autobuild.buildroot.net/results/28354b5f35969f2194c6376f4848ebe8ef2a0797 |     
+     powerpc |                       qt-4.8.7 | NOK | http://autobuild.buildroot.net/results/fa411a4b1253c3c19f42567ffb5f1519e759c463 | ORPH
+     powerpc |                       qt-4.8.7 | NOK | http://autobuild.buildroot.net/results/7c021638fed650a14211517835873fbb5cf4c756 | ORPH
+    mips64el |                   samba4-4.7.4 | NOK | http://autobuild.buildroot.net/results/5cf38d8e631367f24ac9c9e3dead7395a4868ed6 | ORPH
+         arm |                        unknown | TIM | http://autobuild.buildroot.net/results/8bba68e624ae96f92bbbfbd8d0f647370c06caa3 |     
+         arm |                        unknown | TIM | http://autobuild.buildroot.net/results/e9dcc250fe1bc814a9c2433662f555f3567182cd |     
+         arm |                        unknown | NOK | http://autobuild.buildroot.net/results/9c5f28fc3b4ac0867550a2a0131ccfa4b05689ce |     
+      mipsel |                        unknown | TIM | http://autobuild.buildroot.net/results/abf8dc76a7ae1db30f6ffb54b7f866ecfd77bec9 |     
+         arm |                        unknown | TIM | http://autobuild.buildroot.net/results/9fdc9816672f3fb4f810a79a195c7fc7566fd8ea |     
+         arm |                        unknown | NOK | http://autobuild.buildroot.net/results/95a729110fdb4599c3192b95c41316b6a10cf611 |     
+      xtensa |           usb_modeswitch-2.5.0 | NOK | http://autobuild.buildroot.net/results/af3036347a369dd6a6f9bde75350d845801d2a01 | ORPH
+
+
 -- 
-1.9.1
+http://autobuild.buildroot.net
