@@ -1,187 +1,155 @@
 From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Tue,  9 Jan 2018 22:15:33 -0600
-Subject: [Buildroot] [PATCH v3 2/8] security hardening: add RELFO,
- FORTIFY options
-In-Reply-To: <1515557739-6027-1-git-send-email-matthew.weber@rockwellcollins.com>
-References: <1515557739-6027-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <1515557739-6027-2-git-send-email-matthew.weber@rockwellcollins.com>
+Date: Tue,  9 Jan 2018 22:15:32 -0600
+Subject: [Buildroot] [PATCH v3 1/8] stack protector: moved option out of adv
+ menu
+Message-ID: <1515557739-6027-1-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This enables a user to build a complete system using these
-options.  It is important to note that not all packages will
-build correctly to start with.
-
-A good testing tool to check a target's elf files for compliance
-to an array of hardening techniques can be found here:
-https://github.com/slimm609/checksec.sh
-
 Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
---
+---
 Changes
-
 v2 -> v3
- - Consolidated the way flags were set using CPPFLAGS (Arnout)
- - Removed fortran flag as not relevant for this feature (Arnout)
- - Added BR2_TOOLCHAIN_USES_GLIBC and optimization level dependency
+ - Moved back up to the menu instead of a submenu (Arnout)
 
 v1 -> v2
- - Cosmetic caps on titles
+ - Broke out into an individual commit for the menu change (Arnout)
 ---
- Config.in           | 69 +++++++++++++++++++++++++++++++++++++++++++++++++++++
- package/Makefile.in | 46 +++++++++++++++++++++++------------
- 2 files changed, 100 insertions(+), 15 deletions(-)
+ Config.in | 112 ++++++++++++++++++++++++++++++++------------------------------
+ 1 file changed, 57 insertions(+), 55 deletions(-)
 
 diff --git a/Config.in b/Config.in
-index e7e5c2d..f57e2b6 100644
+index 62d67ce..e7e5c2d 100644
 --- a/Config.in
 +++ b/Config.in
-@@ -734,6 +734,75 @@ endchoice
- comment "Stack Smashing Protection needs a toolchain w/ SSP"
- 	depends on !BR2_TOOLCHAIN_HAS_SSP
+@@ -568,61 +568,6 @@ config BR2_GOOGLE_BREAKPAD_INCLUDE_FILES
+ endif
  
-+choice
-+	bool "RELRO Protection"
-+	depends on BR2_SHARED_LIBS
-+	help
-+	  Enable a link-time protection know as RELRO (RELocation Read Only)
-+	  which helps to protect from certain type of exploitation techniques
-+	  altering the content of some ELF sections.
+ choice
+-	bool "build code with Stack Smashing Protection"
+-	default BR2_SSP_ALL if BR2_ENABLE_SSP # legacy
+-	depends on BR2_TOOLCHAIN_HAS_SSP
+-	help
+-	  Enable stack smashing protection support using GCC's
+-	  -fstack-protector option family.
+-
+-	  See
+-	  http://www.linuxfromscratch.org/hints/downloads/files/ssp.txt
+-	  for details.
+-
+-	  Note that this requires the toolchain to have SSP support.
+-	  This is always the case for glibc and eglibc toolchain, but is
+-	  optional in uClibc toolchains.
+-
+-config BR2_SSP_NONE
+-	bool "None"
+-	help
+-	  Disable stack-smashing protection.
+-
+-config BR2_SSP_REGULAR
+-	bool "-fstack-protector"
+-	help
+-	  Emit extra code to check for buffer overflows, such as stack
+-	  smashing attacks. This is done by adding a guard variable to
+-	  functions with vulnerable objects. This includes functions
+-	  that call alloca, and functions with buffers larger than 8
+-	  bytes. The guards are initialized when a function is entered
+-	  and then checked when the function exits. If a guard check
+-	  fails, an error message is printed and the program exits.
+-
+-config BR2_SSP_STRONG
+-	bool "-fstack-protector-strong"
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+-	help
+-	  Like -fstack-protector but includes additional functions to be
+-	  protected - those that have local array definitions, or have
+-	  references to local frame addresses.
+-
+-comment "Stack Smashing Protection strong needs a toolchain w/ gcc >= 4.9"
+-	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+-
+-config BR2_SSP_ALL
+-	bool "-fstack-protector-all"
+-	help
+-	  Like -fstack-protector except that all functions are
+-	  protected. This option might have a significant performance
+-	  impact on the compiled binaries.
+-
+-endchoice
+-
+-comment "Stack Smashing Protection needs a toolchain w/ SSP"
+-	depends on !BR2_TOOLCHAIN_HAS_SSP
+-
+-choice
+ 	bool "libraries"
+ 	default BR2_SHARED_LIBS if BR2_BINFMT_SUPPORTS_SHARED
+ 	default BR2_STATIC_LIBS if !BR2_BINFMT_SUPPORTS_SHARED
+@@ -732,6 +677,63 @@ config BR2_REPRODUCIBLE
+ 
+ endmenu
+ 
++comment "Security Hardening Options"
 +
-+config BR2_RELRO_NONE
++choice
++	bool "Stack Smashing Protection"
++	default BR2_SSP_ALL if BR2_ENABLE_SSP # legacy
++	depends on BR2_TOOLCHAIN_HAS_SSP
++	help
++	  Enable stack smashing protection support using GCC's
++	  -fstack-protector option family.
++
++	  See
++	  http://www.linuxfromscratch.org/hints/downloads/files/ssp.txt
++	  for details.
++
++	  Note that this requires the toolchain to have SSP support.
++	  This is always the case for glibc and eglibc toolchain, but is
++	  optional in uClibc toolchains.
++
++config BR2_SSP_NONE
 +	bool "None"
 +	help
-+	  Enables Relocation link-time protections.
++	  Disable stack-smashing protection.
 +
-+config BR2_RELRO_PARTIAL
-+	bool "Partial"
++config BR2_SSP_REGULAR
++	bool "-fstack-protector"
 +	help
-+	  This option makes the dynamic section not writeable after
-+	  initialization (with almost no performance penalty).
++	  Emit extra code to check for buffer overflows, such as stack
++	  smashing attacks. This is done by adding a guard variable to
++	  functions with vulnerable objects. This includes functions
++	  that call alloca, and functions with buffers larger than 8
++	  bytes. The guards are initialized when a function is entered
++	  and then checked when the function exits. If a guard check
++	  fails, an error message is printed and the program exits.
 +
-+config BR2_RELRO_FULL
-+	bool "Full"
++config BR2_SSP_STRONG
++	bool "-fstack-protector-strong"
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
 +	help
-+	  This option includes the partial configuration, but also
-+	  marks the GOT as read-only at the cost of initialization time
-+	  during program loading, i.e every time an executable is started.
++	  Like -fstack-protector but includes additional functions to be
++	  protected - those that have local array definitions, or have
++	  references to local frame addresses.
++
++comment "Stack Smashing Protection strong needs a toolchain w/ gcc >= 4.9"
++	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
++
++config BR2_SSP_ALL
++	bool "-fstack-protector-all"
++	help
++	  Like -fstack-protector except that all functions are
++	  protected. This option might have a significant performance
++	  impact on the compiled binaries.
 +
 +endchoice
 +
-+comment "RELocation Read Only (RELRO) needs shared libraries"
-+	depends on !BR2_SHARED_LIBS
++comment "Stack Smashing Protection needs a toolchain w/ SSP"
++	depends on !BR2_TOOLCHAIN_HAS_SSP
 +
-+choice
-+	bool "Buffer-overflow Detection (FORTIFY_SOURCE)"
-+	depends on BR2_TOOLCHAIN_USES_GLIBC
-+	help
-+	  Enable the _FORTIFY_SOURCE macro which introduces additional
-+	  checks to detect buffer-overflows in the following standard library
-+	  functions: memcpy, mempcpy, memmove, memset, strcpy, stpcpy,
-+	  strncpy, strcat, strncat, sprintf, vsprintf, snprintf, vsnprintf,
-+	  gets.
-+
-+	  NOTE: This feature requires an optimization level of s/1/2/3/g
-+
-+	  Support for this feature has been present since GCC 4.x.
-+
-+config BR2_FORTIFY_SOURCE_NONE
-+	bool "None"
-+	help
-+	  Enables additional checks to detect buffer-overflows.
-+
-+config BR2_FORTIFY_SOURCE_1
-+	bool "Conservative"
-+	help
-+	  This option sets _FORTIFY_SOURCE set to 1 and only introduces
-+	  checks that shouldn't change the behavior of conforming programs.
-+	  Adds checks at compile-time only.
-+
-+config BR2_FORTIFY_SOURCE_2
-+	bool "Aggressive"
-+	help
-+	  This option sets _FORTIFY_SOURCES set to 2 and some more checking
-+	  is added, but some conforming programs might fail.
-+	  Also adds checks at run-time (detected buffer overflow terminates
-+	  the program)
-+
-+endchoice
-+
-+comment "Fortify Source needs a GLIBC toolchain"
-+	depends on !BR2_TOOLCHAIN_USES_GLIBC
  endmenu
  
  source "toolchain/Config.in"
-diff --git a/package/Makefile.in b/package/Makefile.in
-index a1a5316..84d4f0c 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -138,11 +138,41 @@ ifeq ($(BR2_DEBUG_3),y)
- TARGET_DEBUGGING = -g3
- endif
- 
-+TARGET_CFLAGS_RELRO = -Wl,-z,relro
-+TARGET_CFLAGS_RELRO_FULL = -Wl,-z,now $(TARGET_CFLAGS_RELRO)
-+
-+TARGET_LDFLAGS = $(call qstrip,$(BR2_TARGET_LDFLAGS))
-+
-+ifeq ($(BR2_SSP_REGULAR),y)
-+TARGET_CPPFLAGS += -fstack-protector
-+else ifeq ($(BR2_SSP_STRONG),y)
-+TARGET_CPPFLAGS += -fstack-protector-strong
-+else ifeq ($(BR2_SSP_ALL),y)
-+TARGET_CPPFLAGS += -fstack-protector-all
-+endif
-+
-+ifeq ($(BR2_RELRO_PARTIAL),y)
-+TARGET_CPPFLAGS += $(TARGET_CFLAGS_RELRO)
-+TARGET_LDFLAGS += $(TARGET_CFLAGS_RELRO)
-+else ifeq ($(BR2_RELRO_FULL),y)
-+TARGET_CPPFLAGS += -fPIE $(TARGET_CFLAGS_RELRO_FULL)
-+TARGET_LDFLAGS += -pie
-+endif
-+
-+ifneq ($(BR2_OPTIMIZE_S)$(BR2_OPTIMIZE_0)$(BR2_OPTIMIZE_1)$(BR2_OPTIMIZE_2)$(BR2_OPTIMIZE_G),)
-+ifeq ($(BR2_FORTIFY_SOURCE_1),y)
-+TARGET_CPPFLAGS += -D_FORTIFY_SOURCE=1
-+else ifeq ($(BR2_FORTIFY_SOURCE_2),y)
-+TARGET_CPPFLAGS += -D_FORTIFY_SOURCE=2
-+endif
-+else
-+$(error BR2_FORTIFY_SOURCE_# requires optimization level s/1/2/3/g)
-+endif
-+
- TARGET_CPPFLAGS += -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
- TARGET_CFLAGS = $(TARGET_CPPFLAGS) $(TARGET_ABI) $(TARGET_OPTIMIZATION) $(TARGET_DEBUGGING)
- TARGET_CXXFLAGS = $(TARGET_CFLAGS)
- TARGET_FCFLAGS = $(TARGET_ABI) $(TARGET_OPTIMIZATION) $(TARGET_DEBUGGING)
--TARGET_LDFLAGS = $(call qstrip,$(BR2_TARGET_LDFLAGS))
- 
- ifeq ($(BR2_BINFMT_FLAT),y)
- TARGET_CFLAGS += $(if $($(PKG)_FLAT_STACKSIZE),-Wl$(comma)-elf2flt=-s$($(PKG)_FLAT_STACKSIZE),\
-@@ -167,20 +197,6 @@ TARGET_FCFLAGS += -msep-data
- TARGET_CXXFLAGS += -msep-data
- endif
- 
--ifeq ($(BR2_SSP_REGULAR),y)
--TARGET_CFLAGS += -fstack-protector
--TARGET_CXXFLAGS += -fstack-protector
--TARGET_FCFLAGS += -fstack-protector
--else ifeq ($(BR2_SSP_STRONG),y)
--TARGET_CFLAGS += -fstack-protector-strong
--TARGET_CXXFLAGS += -fstack-protector-strong
--TARGET_FCFLAGS += -fstack-protector-strong
--else ifeq ($(BR2_SSP_ALL),y)
--TARGET_CFLAGS += -fstack-protector-all
--TARGET_CXXFLAGS += -fstack-protector-all
--TARGET_FCFLAGS += -fstack-protector-all
--endif
--
- ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
- TARGET_CROSS = $(HOST_DIR)/bin/$(GNU_TARGET_NAME)-
- else
 -- 
 1.9.1
