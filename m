@@ -1,67 +1,45 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Wed, 10 Jan 2018 22:38:58 +0100
-Subject: [Buildroot] [PATCH v1 1/2] linux-firmware: bump version to 65b1c68
-Message-ID: <20180110213859.8384-1-ps.report@gmx.net>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 10 Jan 2018 23:03:03 +0100
+Subject: [Buildroot] [PATCH] mcookie: correct wrong memset argument
+Message-ID: <20180110220303.27944-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Changes since last version (17e6288):
+Fixes #10216
 
-  02d857e linux-firmware: DMC firmware for skylake v1.27
-  00a92a3 nfp: update firmware for Agilio CX SmartNICs
-  c752e24 nfp: change firmware directory layout
-  b39260f nfp: add firmware for tc-flower
-  89c6211 linux-firmware: intel: Add Cannonlake audio firmware
-  71a4800 amdgpu: update vega10 vce firmware
-  30946b9 amdgpu: add firmware for Raven
-  73d13b5 linux-firmware: Add firmware file for Intel Bluetooth 9560
-  041aff8 linux-firmware: Add firmware file for Intel Bluetooth 9260
-  c113d33 linux-firmware: Update firmware file for Intel Bluetooth 8265
-  a42f895 linux-firmware: Update firmware patch for Intel Bluetooth 8260
-  5d98692 Merge branch 'cnl' of git://git.kernel.org/pub/scm/linux/kernel/git/vkoul/firmware
-  e4252cf Revert commits a42f895, c113d33, 041aff8, 73d13b5
-  db9964e linux-firmware: Add firmware file for Intel Bluetooth 9560
-  97339b3 linux-firmware: Add firmware file for Intel Bluetooth 9260
-  9a843a1 linux-firmware: Update firmware file for Intel Bluetooth 8265
-  fdee922 linux-firmware: Update firmware patch for Intel Bluetooth 8260
-  bc2164d Merge commit 'b39260f04b9b0a9da8a337098f73cbca7c4e9b2d' of https://github.com/Netronome/linux-firmware
-  7f93c9d brcm: add CYW4373 firmwares and Cypress license file
-  2451bb2 linux-firmware: liquidio: add v1.7.0 vswitch firmware
-  2567e09 nvidia: add GP108 signed firmware
-  4a77cab linux-firmware: DMC firmware for cannonlake v1.07
-  2eefafb rtlwifi: rtl8723de: Add firmware for new driver/device
-  8650396 wl127x/wl128x: update firmwares
-  65b1c68 wl18xx: update firmware file 8.9.0.0.76
+Building mcookie generates a warning about possible wrong arguments to
+memset:
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+mcookie.c:207:26: warning: argument to ?sizeof? in ?memset? call is the same expression
+  as the destination; did you mean to dereference it? [-Wsizeof-pointer-memaccess]
+     memset(ctx, 0, sizeof(ctx)); /* In case it's sensitive */
+
+ctx is a pointer to a structure, so the code should use the size of the
+structure and not the size of the pointer when it tries to clear the
+structure, similar to how it got fixed upstream back in 2009:
+
+https://git.kernel.org/pub/scm/utils/util-linux/util-linux.git/commit/lib/md5.c?id=6596057175c6ed342dc20e85eae8a42eb29b629f
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-firmware/linux-firmware.hash | 2 +-
- package/linux-firmware/linux-firmware.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/x11r7/mcookie/mcookie.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/linux-firmware/linux-firmware.hash b/package/linux-firmware/linux-firmware.hash
-index 209ea26228..ff2e162b42 100644
---- a/package/linux-firmware/linux-firmware.hash
-+++ b/package/linux-firmware/linux-firmware.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 28d359523a36c1cdc3e85a8e148bb2d68b036d28b10f0e80a192f3dc29f02c16 linux-firmware-17e6288135d4500f9fe60224dce2b46d850c346b.tar.gz
-+sha256 d253f7abb32e0407bcc840a5bddba1dc20190bb4a4bb6d40512f279fde384671 linux-firmware-65b1c68c63f974d72610db38dfae49861117cae2.tar.gz
-diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index b636f79b64..1a4fbc1588 100644
---- a/package/linux-firmware/linux-firmware.mk
-+++ b/package/linux-firmware/linux-firmware.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/x11r7/mcookie/mcookie.c b/package/x11r7/mcookie/mcookie.c
+index 902d92fc47..3c38f6f3b3 100644
+--- a/package/x11r7/mcookie/mcookie.c
++++ b/package/x11r7/mcookie/mcookie.c
+@@ -204,7 +204,7 @@ void MD5Final(unsigned char digest[16], struct MD5Context *ctx)
+     MD5Transform(ctx->buf, (uint32 *) ctx->in);
+     byteReverse((unsigned char *) ctx->buf, 4);
+     memcpy(digest, ctx->buf, 16);
+-    memset(ctx, 0, sizeof(ctx));	/* In case it's sensitive */
++    memset(ctx, 0, sizeof(*ctx));	/* In case it's sensitive */
+ }
  
--LINUX_FIRMWARE_VERSION = 17e6288135d4500f9fe60224dce2b46d850c346b
-+LINUX_FIRMWARE_VERSION = 65b1c68c63f974d72610db38dfae49861117cae2
- LINUX_FIRMWARE_SITE = http://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git
- LINUX_FIRMWARE_SITE_METHOD = git
- 
+ /* The four core functions - F1 is optimized somewhat */
 -- 
-2.15.1
+2.11.0
