@@ -1,32 +1,29 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 10 Jan 2018 20:53:58 +0100
-Subject: [Buildroot] [git commit] package/avahi: fix typo in
- avahi_tmpfiles.conf
-Message-ID: <20180110195522.5FD2381116@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 10 Jan 2018 19:55:53 +0000
+Subject: [Buildroot] [Bug 10641] avahi-autoipd not starting when using
+ systemd-tmpfiles
+In-Reply-To: <bug-10641-163@https.bugs.busybox.net/>
+References: <bug-10641-163@https.bugs.busybox.net/>
+Message-ID: <bug-10641-163-qc62hQleYH@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c427ce4d9f54d9b6433969ecb0fc8a4a5a9ba9b5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+https://bugs.busybox.net/show_bug.cgi?id=10641
 
-There is an obvious typo in avahi_tmpfiles.conf: avahi-autoipd is
-badly spelled.
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
-Fixes bug #10641.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+         Resolution|---                         |FIXED
+             Status|NEW                         |RESOLVED
 
-Reported-by: Michael Heinemann <posted@heine.so>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/avahi/avahi_tmpfiles.conf | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+--- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
+Thanks a lot for the bug report. Fixed in commit
+https://git.buildroot.org/buildroot/commit/?id=c427ce4d9f54d9b6433969ecb0fc8a4a5a9ba9b5.
 
-diff --git a/package/avahi/avahi_tmpfiles.conf b/package/avahi/avahi_tmpfiles.conf
-index f9aebdf..da23c14 100644
---- a/package/avahi/avahi_tmpfiles.conf
-+++ b/package/avahi/avahi_tmpfiles.conf
-@@ -1 +1 @@
--d /tmp/avahi-autopid 0755 avahi avahi
-+d /tmp/avahi-autoipd 0755 avahi avahi
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
