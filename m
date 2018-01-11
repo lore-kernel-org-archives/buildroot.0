@@ -1,9 +1,7 @@
-From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Wed, 10 Jan 2018 23:54:43 -0200
-Subject: [Buildroot] [PATCHv2 1/1] utils/checkpackagelib: add function
- to check of the default package source variable
-References: <1515620175-11260-1-git-send-email-jerzy.m.grzegorek@gmail.com>
-Message-ID: <5a56c3e3881e1_39321a452589094e@ultri3.mail>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 11 Jan 2018 08:00:06 +0100 (CET)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2018-01-10
+Message-ID: <20180111070006.9614020864@mail.free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,54 +10,71 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, Jan 10, 2018 at 07:36 PM, Jerzy Grzegorek wrote:
+Build statistics for 2018-01-10
+===============================
 
-[snip]
-> +class RemoveDefaultPackageSourceVariable(_CheckFunction):
-> +    packages_that_may_contain_default_source = ["binutils","gcc","gdb"]
+      branch |  OK | NOK | TIM | TOT |
+      master | 199 |  14 |   4 | 217 |
+   2017.11.x |  20 |   2 |   0 |  22 |
 
-This line adds 2 style warnings (detected with flake8):
-E231 missing whitespace after ','
-Can you fix them?
+Results for branch 'master'
+===========================
 
-Please ignore the other 4 warnings
-F401 'lib.*' imported but unused
-already present in the file. I will send a series to fix them and all other
-style warnings detected by flake8 in the tree.
+Classification of failures by reason
+------------------------------------
 
-> +    PACKAGE_NAME = re.compile("/([^/]+)\.mk")
-> +
-> +    def before(self):
-> +        package = self.PACKAGE_NAME.search(self.filename).group(1)
-> +        package_upper = package.replace("-", "_").upper()
-> +        self.package = package
-> +        self.FIND_SOURCE = re.compile(
-> +            "^{}_SOURCE\s*=\s*{}-\$\({}_VERSION\)\.tar\.gz"
-> +            .format(package_upper, package, package_upper))
-> +
-> +    def check_line(self, lineno, text):
-> +        if self.FIND_SOURCE.search(text):
-> +
-> +            if self.package in self.packages_that_may_contain_default_source:
-> +                return ["{}:{}: this package may contain default value of "
-> +                        "_SOURCE variable to remove ({}#generic-package-reference)"
-> +                        .format(self.filename, lineno, self.url_to_manual),
-> +                        text]
-
-For the whitelist case we need to use just:
-                return
-
-Any value returned by a check function is counted as a warning, making the main
-check-package script to exit with code 1 to the shell, that in turn makes the
-job in gitlab to be marked as failed.
+             libostree-2017.15 | 3 
+                    php-7.1.13 | 3 
+                       unknown | 3 
+                  boost-1.65.1 | 1 
+               host-efl-1.20.6 | 1 
+              host-erlang-20.0 | 1 
+           host-mono-5.4.0.201 | 1 
+         linux-headers-4.14.12 | 1 
+make[2]: *** [test/CMakeFil... | 1 
+                poppler-0.59.0 | 1 
+          qt5xmlpatterns-5.9.3 | 1 
+                  samba4-4.7.4 | 1 
 
 
-There is also the glibc.mk to remove the default value of _SOURCE variable
-from, to be done in a separate patch. 'make printvars' can be helpful to test
-it besides a build test.
+Detail of failures
+------------------
 
-Are you willing to work on this too?
+     powerpc |                   boost-1.65.1 | NOK | http://autobuild.buildroot.net/results/05552a7a84e2880c0da139ccf34d3f9cd60a2ffa |     
+         arm |                host-efl-1.20.6 | NOK | http://autobuild.buildroot.net/results/876a94d5400e52f503fc9ea057e94857568b42ea |     
+         arm |               host-erlang-20.0 | NOK | http://autobuild.buildroot.net/results/48ca4b452c4c04d217f62c704a2fd281e60cf52e |     
+         arm |            host-mono-5.4.0.201 | NOK | http://autobuild.buildroot.net/results/78a259c110be1efe419f51f5f9b17de3ed492513 |     
+   powerpc64 |              libostree-2017.15 | NOK | http://autobuild.buildroot.net/results/ed9527196367ba21459cf30366be163326fdad3a |     
+   powerpc64 |              libostree-2017.15 | NOK | http://autobuild.buildroot.net/results/79124e5a48adeeac702e944da804cb7232cfe4fa |     
+     sparc64 |              libostree-2017.15 | NOK | http://autobuild.buildroot.net/results/f8c709f5d950875d6e8a48b0c795c97238663369 |     
+         arc |          linux-headers-4.14.12 | NOK | http://autobuild.buildroot.net/results/38282c3ba0783baff626db87e10fb91f8cffb123 | ORPH
+         arm | make[2]: *** [test/CMakeFil... | TIM | http://autobuild.buildroot.net/results/854eae9857a96d437158ab510f5fef2658925e30 |     
+    mips64el |                     php-7.1.13 | NOK | http://autobuild.buildroot.net/results/46c6039e6ffe42c4ef25ec289133ee09c0da0ae1 | ORPH
+microblazeel |                     php-7.1.13 | NOK | http://autobuild.buildroot.net/results/cf4bc9af645b6cafd880a170a48cefe2bb9d2cde | ORPH
+         arm |                     php-7.1.13 | NOK | http://autobuild.buildroot.net/results/2ddee93dc033849a4f79ae824ecafbfb433e86ac | ORPH
+         arm |                 poppler-0.59.0 | NOK | http://autobuild.buildroot.net/results/2de74f912e66af0cf810c01aecf23ca32b31ba62 |     
+        i586 |           qt5xmlpatterns-5.9.3 | NOK | http://autobuild.buildroot.net/results/fb7d04a50d8d3e00ed782ba2a0827a993d7c57c9 |     
+    mips64el |                   samba4-4.7.4 | NOK | http://autobuild.buildroot.net/results/8471728ec9f73bfd6b46681f2904af4b48cbdc98 | ORPH
+         arm |                        unknown | TIM | http://autobuild.buildroot.net/results/8722c580b353f7e48fe694645613845b4b009215 |     
+         arm |                        unknown | TIM | http://autobuild.buildroot.net/results/251acb297cf058a0388ae0dda90d3c20cd8ab2f1 |     
+         arm |                        unknown | TIM | http://autobuild.buildroot.net/results/b11639ad94c8a29de19e80e11df001a7fd1fb9b0 |     
+
+Results for branch '2017.11.x'
+==============================
+
+Classification of failures by reason
+------------------------------------
+
+                  boost-1.65.1 | 1 
+                 mesa3d-17.2.4 | 1 
 
 
-Regards,
-Ricardo
+Detail of failures
+------------------
+
+     powerpc |                   boost-1.65.1 | NOK | http://autobuild.buildroot.net/results/b7e2412e4ff988f7673a699c2b459619993c5d4e |     
+     powerpc |                  mesa3d-17.2.4 | NOK | http://autobuild.buildroot.net/results/28f1129079f905c781329a4809482fc6b35e5006 |     
+
+
+-- 
+http://autobuild.buildroot.net
