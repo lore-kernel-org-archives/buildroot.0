@@ -1,60 +1,73 @@
-From: Martin Kepplinger <martink@posteo.de>
-Date: Thu, 11 Jan 2018 15:46:51 +0100
-Subject: [Buildroot] [PATCH] tslib: update to 1.15
-Message-ID: <20180111144651.4038-1-martink@posteo.de>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 11 Jan 2018 18:13:57 +0100
+Subject: [Buildroot] [PATCH] package/bash: add /bin/bash to /etc/shells
+In-Reply-To: <1515666444-13390-1-git-send-email-romain.naour@smile.fr>
+References: <1515666444-13390-1-git-send-email-romain.naour@smile.fr>
+Message-ID: <20180111171357.GA3559@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As usual, https://github.com/kergoth/tslib/releases has the changelog
-summary.
+Romain, All,
 
-This release includes a new plugin "invert" that is being built by
-default; so we add that to the list of statically compiled in plugins
-for static builds.
+On 2018-01-11 11:27 +0100, Romain Naour spake thusly:
+> When bash is selected, /bin/bash is not added to /etc/shells
+> (see man shells). So, login tools like dropbear reject the ssh
+> connexions for users using bash as shell in /etc/passwd.
+> 
+> buildroot authpriv.warn dropbear[853]: User 'kubu' has invalid shell, rejected
+> 
+> Reported-by: Jeremy Rosen <jeremy.rosen@smile.fr>
+> Signed-off-by: Romain Naour <romain.naour@smile.fr>
+> Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> ---
+> The same issue can happend with other shells.
+> ---
+>  package/bash/bash.mk | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/package/bash/bash.mk b/package/bash/bash.mk
+> index 089d062..eec6559 100644
+> --- a/package/bash/bash.mk
+> +++ b/package/bash/bash.mk
+> @@ -40,10 +40,13 @@ endif
+>  endif
+>  
+>  # Make /bin/sh -> bash (no other shell, better than busybox shells)
+> +# Add /bin/bash to /etc/shells otherwise some login tools like dropbear
+> +# can reject the user connexion. See man shells.
+>  define BASH_INSTALL_TARGET_CMDS
+>  	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
+>  		DESTDIR=$(TARGET_DIR) exec_prefix=/ install
+>  	rm -f $(TARGET_DIR)/bin/bashbug
+> +	echo "/bin/bash" >> $(TARGET_DIR)/etc/shells
 
-Signed-off-by: Martin Kepplinger <martink@posteo.de>
----
- package/tslib/tslib.hash | 4 ++--
- package/tslib/tslib.mk   | 5 +++--
- 2 files changed, 5 insertions(+), 4 deletions(-)
+What if the user uses a custom skeleton and bash is already listed
+there?
 
-diff --git a/package/tslib/tslib.hash b/package/tslib/tslib.hash
-index 8184143bec..f0c6ff842f 100644
---- a/package/tslib/tslib.hash
-+++ b/package/tslib/tslib.hash
-@@ -1,5 +1,5 @@
--# https://github.com/kergoth/tslib/releases/download/1.14/tslib-1.14.tar.xz.sha256
--sha256  56ce7adfb896442001938470a7f946cc029bfb03ed74e7f62db92d9c9ba83df4  tslib-1.14.tar.xz
-+# https://github.com/kergoth/tslib/releases/download/1.15/tslib-1.15.tar.xz.sha256
-+sha256  7ce48807cab655076d71a1ceef3ed0ab8a25df98074981d4a8fd1477ee5f710c  tslib-1.15.tar.xz
- 
- # Locally computed
- sha256  9b872a8a070b8ad329c4bd380fb1bf0000f564c75023ec8e1e6803f15364b9e9  COPYING
-diff --git a/package/tslib/tslib.mk b/package/tslib/tslib.mk
-index 7a6379cc48..3ba94d2568 100644
---- a/package/tslib/tslib.mk
-+++ b/package/tslib/tslib.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TSLIB_VERSION = 1.14
-+TSLIB_VERSION = 1.15
- TSLIB_SITE = https://github.com/kergoth/tslib/releases/download/$(TSLIB_VERSION)
- TSLIB_SOURCE = tslib-$(TSLIB_VERSION).tar.xz
- TSLIB_LICENSE = GPL-2.0+ (programs), LGPL-2.1+ (libraries)
-@@ -27,7 +27,8 @@ TSLIB_CONF_OPTS += \
- 	--enable-dejitter=static \
- 	--enable-debounce=static \
- 	--enable-skip=static \
--	--enable-lowpass=static
-+	--enable-lowpass=static \
-+	--enable-invert=static
- endif
- 
- $(eval $(autotools-package))
+I would do:
+
+    grep -E '^/bin/bash$' $(TARGET_DIR)/etc/shells >/dev/null 2>&1 \
+    || echo "/bin/bash" >> $(TARGET_DIR)/etc/shells
+
+That way, we only install it if not already present.
+
+Regards,
+Yann E. MORIN.
+
+>  endef
+>  
+>  $(eval $(autotools-package))
+> -- 
+> 2.7.4
+> 
+
 -- 
-2.11.0
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
