@@ -1,91 +1,60 @@
-From: Romain Naour <romain.naour@smile.fr>
-Date: Thu, 11 Jan 2018 13:50:00 +0100
-Subject: [Buildroot] [PATCH v2] package/bash-completion: new package
-Message-ID: <1515675000-13355-1-git-send-email-romain.naour@smile.fr>
+From: Martin Kepplinger <martink@posteo.de>
+Date: Thu, 11 Jan 2018 15:46:51 +0100
+Subject: [Buildroot] [PATCH] tslib: update to 1.15
+Message-ID: <20180111144651.4038-1-martink@posteo.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Jeremy Rosen <jeremy.rosen@smile.fr>
+As usual, https://github.com/kergoth/tslib/releases has the changelog
+summary.
 
-Signed-off-by: Jeremy Rosen <jeremy.rosen@smile.fr>
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
----
-v2: use a install target hook (Baruch)
-    install to staging
----
- package/Config.in                            |  1 +
- package/bash-completion/Config.in            |  7 +++++++
- package/bash-completion/bash-completion.hash |  3 +++
- package/bash-completion/bash-completion.mk   | 22 ++++++++++++++++++++++
- 4 files changed, 33 insertions(+)
- create mode 100644 package/bash-completion/Config.in
- create mode 100644 package/bash-completion/bash-completion.hash
- create mode 100644 package/bash-completion/bash-completion.mk
+This release includes a new plugin "invert" that is being built by
+default; so we add that to the list of statically compiled in plugins
+for static builds.
 
-diff --git a/package/Config.in b/package/Config.in
-index 01f4095..d41d855 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1892,6 +1892,7 @@ comment "Shells"
- 	source "package/zsh/Config.in"
- comment "Utilities"
- 	source "package/at/Config.in"
-+	source "package/bash-completion/Config.in"
- 	source "package/ccrypt/Config.in"
- 	source "package/crudini/Config.in"
- 	source "package/dialog/Config.in"
-diff --git a/package/bash-completion/Config.in b/package/bash-completion/Config.in
-new file mode 100644
-index 0000000..597c928
---- /dev/null
-+++ b/package/bash-completion/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_BASH_COMPLETION
-+	bool "bash completion"
-+	depends on BR2_PACKAGE_BASH
-+	help
-+	  Add bash completion infrastructure.
-+
-+	  https://github.com/scop/bash-completion
-diff --git a/package/bash-completion/bash-completion.hash b/package/bash-completion/bash-completion.hash
-new file mode 100644
-index 0000000..facbeb0
---- /dev/null
-+++ b/package/bash-completion/bash-completion.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256 41ba892d3f427d4a686de32673f35401bc947a7801f684127120cdb13641441e  bash-completion-2.7.tar.xz
-+sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/bash-completion/bash-completion.mk b/package/bash-completion/bash-completion.mk
-new file mode 100644
-index 0000000..b6606ad
---- /dev/null
-+++ b/package/bash-completion/bash-completion.mk
-@@ -0,0 +1,22 @@
-+################################################################################
-+#
-+# bash-completion
-+#
-+################################################################################
-+
-+BASH_COMPLETION_VERSION = 2.7
-+BASH_COMPLETION_SITE = https://github.com/scop/bash-completion/releases/download/$(BASH_COMPLETION_VERSION)
-+BASH_COMPLETION_SOURCE = bash-completion-$(BASH_COMPLETION_VERSION).tar.xz
-+BASH_COMPLETION_LICENSE = GPL-2.0+
-+BASH_COMPLETION_LICENSE_FILES = COPYING
-+
-+# Install bash-completion.pc file
-+BASH_COMPLETION_INSTALL_STAGING = YES
-+
-+define BASH_COMPLETION_INSTALL_FILE
-+	echo ". /usr/share/bash-completion/bash_completion" > $(TARGET_DIR)/etc/bash_completion
-+endef
-+
-+BASH_COMPLETION_POST_INSTALL_TARGET_HOOKS += BASH_COMPLETION_INSTALL_FILE
-+
-+$(eval $(autotools-package))
+Signed-off-by: Martin Kepplinger <martink@posteo.de>
+---
+ package/tslib/tslib.hash | 4 ++--
+ package/tslib/tslib.mk   | 5 +++--
+ 2 files changed, 5 insertions(+), 4 deletions(-)
+
+diff --git a/package/tslib/tslib.hash b/package/tslib/tslib.hash
+index 8184143bec..f0c6ff842f 100644
+--- a/package/tslib/tslib.hash
++++ b/package/tslib/tslib.hash
+@@ -1,5 +1,5 @@
+-# https://github.com/kergoth/tslib/releases/download/1.14/tslib-1.14.tar.xz.sha256
+-sha256  56ce7adfb896442001938470a7f946cc029bfb03ed74e7f62db92d9c9ba83df4  tslib-1.14.tar.xz
++# https://github.com/kergoth/tslib/releases/download/1.15/tslib-1.15.tar.xz.sha256
++sha256  7ce48807cab655076d71a1ceef3ed0ab8a25df98074981d4a8fd1477ee5f710c  tslib-1.15.tar.xz
+ 
+ # Locally computed
+ sha256  9b872a8a070b8ad329c4bd380fb1bf0000f564c75023ec8e1e6803f15364b9e9  COPYING
+diff --git a/package/tslib/tslib.mk b/package/tslib/tslib.mk
+index 7a6379cc48..3ba94d2568 100644
+--- a/package/tslib/tslib.mk
++++ b/package/tslib/tslib.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TSLIB_VERSION = 1.14
++TSLIB_VERSION = 1.15
+ TSLIB_SITE = https://github.com/kergoth/tslib/releases/download/$(TSLIB_VERSION)
+ TSLIB_SOURCE = tslib-$(TSLIB_VERSION).tar.xz
+ TSLIB_LICENSE = GPL-2.0+ (programs), LGPL-2.1+ (libraries)
+@@ -27,7 +27,8 @@ TSLIB_CONF_OPTS += \
+ 	--enable-dejitter=static \
+ 	--enable-debounce=static \
+ 	--enable-skip=static \
+-	--enable-lowpass=static
++	--enable-lowpass=static \
++	--enable-invert=static
+ endif
+ 
+ $(eval $(autotools-package))
 -- 
-2.7.4
+2.11.0
