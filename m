@@ -1,54 +1,83 @@
-From: John Keeping <john@metanate.com>
-Date: Thu, 11 Jan 2018 10:55:57 +0000
-Subject: [Buildroot] linux-firmware hash mismatch (tar-1.30)
-In-Reply-To: <87vag9plt1.fsf@dell.be.48ers.dk>
-References: <20180109161531.47ec21e0.john@metanate.com>
- <87vag9plt1.fsf@dell.be.48ers.dk>
-Message-ID: <20180111105557.6f97bb46.john@metanate.com>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Thu, 11 Jan 2018 12:17:26 +0100
+Subject: [Buildroot] [PATCH] package/bash-completion: new package
+Message-ID: <1515669446-25694-1-git-send-email-romain.naour@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 10 Jan 2018 20:15:38 +0100, Peter Korsgaard wrote:
+From: Jeremy Rosen <jeremy.rosen@smile.fr>
 
-> >>>>> "John" == John Keeping <john@metanate.com> writes:  
-> 
->  > Hi,
->  > I'm getting the following error cloning linux-firmware:  
-> 
->  > ERROR: linux-firmware-17e6288135d4500f9fe60224dce2b46d850c346b.tar.gz has wrong sha256 hash:
->  > ERROR: expected: 28d359523a36c1cdc3e85a8e148bb2d68b036d28b10f0e80a192f3dc29f02c16
->  > ERROR: got     : bf6fe8d7620949a3e771954cb6d9d18dcf000d37ecc910a7cf69723c1798e246
->  > ERROR: Incomplete download, or man-in-the-middle (MITM) attack  
-> 
-> 
->  > After a bit of digging, it looks like this is caused by tar-1.30 which
->  > includes the following fix:  
-> 
->  > * --numeric-owner now affects private headers too.  
-> 
->  > Comparing the tarball created on my system with one from
->  > sources.buildroot.net gives the output like this, which shows that the
->  > uname/gname fields are set for a GNUTYPE_LONGNAME record in the version
->  > from sources.buildroot.net and not set in the version created with
->  > tar-1.30:  
-> 
-> Gaah, what a mess :/
-> 
->  > I'm not sure whether anything can be done to avoid this problem, but
->  > hopefully reporting it will save the next person some debugging time.  
-> 
-> I also don't quite see any good solutions either :/
-> 
-> Did you try bringing it up with tar upstream? Perhaps there is a way to
-> disable this? Alternatively we can build tar-1.29 for the host and use
-> that instead of whichever tar version is available on the build machine,
-> but this will slow down the build.
+Signed-off-by: Jeremy Rosen <jeremy.rosen@smile.fr>
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+---
+ package/Config.in                            |  1 +
+ package/bash-completion/Config.in            |  7 +++++++
+ package/bash-completion/bash-completion.hash |  3 +++
+ package/bash-completion/bash-completion.mk   | 17 +++++++++++++++++
+ 4 files changed, 28 insertions(+)
+ create mode 100644 package/bash-completion/Config.in
+ create mode 100644 package/bash-completion/bash-completion.hash
+ create mode 100644 package/bash-completion/bash-completion.mk
 
-No, I didn't bring it up with tar upstream; I'm not sure there's much
-point since it is a clear bug fix to the --numeric-owner option.
-
-I don't think it's possible to reproducibly create bit-identical
-archives without using the same software version to produce the archive.
+diff --git a/package/Config.in b/package/Config.in
+index 01f4095..d41d855 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1892,6 +1892,7 @@ comment "Shells"
+ 	source "package/zsh/Config.in"
+ comment "Utilities"
+ 	source "package/at/Config.in"
++	source "package/bash-completion/Config.in"
+ 	source "package/ccrypt/Config.in"
+ 	source "package/crudini/Config.in"
+ 	source "package/dialog/Config.in"
+diff --git a/package/bash-completion/Config.in b/package/bash-completion/Config.in
+new file mode 100644
+index 0000000..597c928
+--- /dev/null
++++ b/package/bash-completion/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_BASH_COMPLETION
++	bool "bash completion"
++	depends on BR2_PACKAGE_BASH
++	help
++	  Add bash completion infrastructure.
++
++	  https://github.com/scop/bash-completion
+diff --git a/package/bash-completion/bash-completion.hash b/package/bash-completion/bash-completion.hash
+new file mode 100644
+index 0000000..facbeb0
+--- /dev/null
++++ b/package/bash-completion/bash-completion.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256 41ba892d3f427d4a686de32673f35401bc947a7801f684127120cdb13641441e  bash-completion-2.7.tar.xz
++sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/bash-completion/bash-completion.mk b/package/bash-completion/bash-completion.mk
+new file mode 100644
+index 0000000..39177cf
+--- /dev/null
++++ b/package/bash-completion/bash-completion.mk
+@@ -0,0 +1,17 @@
++################################################################################
++#
++# bash-completion
++#
++################################################################################
++
++BASH_COMPLETION_VERSION = 2.7
++BASH_COMPLETION_SITE = https://github.com/scop/bash-completion/releases/download/$(BASH_COMPLETION_VERSION)
++BASH_COMPLETION_SOURCE = bash-completion-$(BASH_COMPLETION_VERSION).tar.xz
++BASH_COMPLETION_LICENSE = GPL-2.0+
++BASH_COMPLETION_LICENSE_FILES = COPYING
++
++define BASH_COMPLETION_INSTALL_TARGET_CMDS
++	echo ". /usr/share/bash-completion/bash_completion" > $(TARGET_DIR)/etc/bash_completion
++endef
++
++$(eval $(autotools-package))
+-- 
+2.7.4
