@@ -1,30 +1,76 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 11 Jan 2018 17:17:45 +0000
-Subject: [Buildroot] [Bug 10136] can't compile systemd with GCC 7.X when
- optimization is on
-In-Reply-To: <bug-10136-163@https.bugs.busybox.net/>
-References: <bug-10136-163@https.bugs.busybox.net/>
-Message-ID: <bug-10136-163-UzX9zFwiZ3@https.bugs.busybox.net/>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 11 Jan 2018 18:31:04 +0100
+Subject: [Buildroot] [PATCH] system/Config.in: hide
+ BR2_TARGET_GENERIC_GETTY_{TERM, OPTIONS} with systemd
+In-Reply-To: <20180110221402.19743-1-thomas.petazzoni@free-electrons.com>
+References: <20180110221402.19743-1-thomas.petazzoni@free-electrons.com>
+Message-ID: <20180111173104.GB3559@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=10136
+On 2018-01-10 23:14 +0100, Thomas Petazzoni spake thusly:
+> When systemd is used as the init system, the
+> BR2_TARGET_GENERIC_GETTY_TERM and BR2_TARGET_GENERIC_GETTY_OPTIONS are
+> completely ignored, which might confuse the user, as reported in bug
+> 
+> For now, let's simply make those options visible only with busybox
+> init and sysv init, as suggested by Yann E. Morin in the discussion of
+> bug #10301.
+> 
+> Fixes #10301.
+> 
+> Reported-by: Michael Heinemann <posted@heine.so>
+> Suggested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  system/Config.in | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/system/Config.in b/system/Config.in
+> index b9714923c4..0fe0fb60b4 100644
+> --- a/system/Config.in
+> +++ b/system/Config.in
+> @@ -355,12 +355,16 @@ config BR2_TARGET_GENERIC_GETTY_BAUDRATE
+>  config BR2_TARGET_GENERIC_GETTY_TERM
+>  	string "TERM environment variable"
+>  	default "vt100"
+> +	# currently not observed by systemd
+> +	depends on BR2_INIT_BUSYBOX || BR2_INIT_SYSV
 
---- Comment #5 from Yann E. MORIN <yann.morin.1998@free.fr> ---
-(In reply to Thomas Petazzoni from comment #4)
-> we already have a patch in patchwork updating it to version 236.
-> Once this patch gets merged, this bug will be fixed.
+Why not:
+    depends on !BR2_INIT_SYSTEMD
 
-We must also apply https://patchwork.ozlabs.org/patch/856392/
-first, otherwise the gitlab-ci infra will not be able to run
-the runtime tests.
+because this is really want we want to express: this is not compatible
+with systemd...
+
+>  	help
+>  	  Specify a TERM type.
+>  
+>  config BR2_TARGET_GENERIC_GETTY_OPTIONS
+>  	string "other options to pass to getty"
+>  	default ""
+> +	# currently not observed by systemd
+> +	depends on BR2_INIT_BUSYBOX || BR2_INIT_SYSV
+
+Ditto...
 
 Regards,
 Yann E. MORIN.
 
+>  	help
+>  	  Any other flags you want to pass to getty,
+>  	  Refer to getty --help for details.
+> -- 
+> 2.14.3
+> 
+
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
