@@ -1,109 +1,65 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 10 Jan 2018 22:55:11 +0000
-Subject: [Buildroot] [Bug 10041] Qt5base: examples were not installed
-In-Reply-To: <bug-10041-163@https.bugs.busybox.net/>
-References: <bug-10041-163@https.bugs.busybox.net/>
-Message-ID: <bug-10041-163-MQksmusczp@https.bugs.busybox.net/>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Wed, 10 Jan 2018 23:54:43 -0200
+Subject: [Buildroot] [PATCHv2 1/1] utils/checkpackagelib: add function
+ to check of the default package source variable
+References: <1515620175-11260-1-git-send-email-jerzy.m.grzegorek@gmail.com>
+Message-ID: <5a56c3e3881e1_39321a452589094e@ultri3.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=10041
+Hello,
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+On Wed, Jan 10, 2018 at 07:36 PM, Jerzy Grzegorek wrote:
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-         Resolution|---                         |WORKSFORME
-             Status|NEW                         |RESOLVED
+[snip]
+> +class RemoveDefaultPackageSourceVariable(_CheckFunction):
+> +    packages_that_may_contain_default_source = ["binutils","gcc","gdb"]
 
---- Comment #2 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
-With:
+This line adds 2 style warnings (detected with flake8):
+E231 missing whitespace after ','
+Can you fix them?
 
-BR2_PACKAGE_QT5=y
-BR2_PACKAGE_QT5BASE_EXAMPLES=y
+Please ignore the other 4 warnings
+F401 'lib.*' imported but unused
+already present in the file. I will send a series to fix them and all other
+style warnings detected by flake8 in the tree.
 
-I indeed see a bunch of examples installed:
+> +    PACKAGE_NAME = re.compile("/([^/]+)\.mk")
+> +
+> +    def before(self):
+> +        package = self.PACKAGE_NAME.search(self.filename).group(1)
+> +        package_upper = package.replace("-", "_").upper()
+> +        self.package = package
+> +        self.FIND_SOURCE = re.compile(
+> +            "^{}_SOURCE\s*=\s*{}-\$\({}_VERSION\)\.tar\.gz"
+> +            .format(package_upper, package, package_upper))
+> +
+> +    def check_line(self, lineno, text):
+> +        if self.FIND_SOURCE.search(text):
+> +
+> +            if self.package in self.packages_that_may_contain_default_source:
+> +                return ["{}:{}: this package may contain default value of "
+> +                        "_SOURCE variable to remove ({}#generic-package-reference)"
+> +                        .format(self.filename, lineno, self.url_to_manual),
+> +                        text]
 
-$ find output/target/usr/lib/qt/examples/
-output/target/usr/lib/qt/examples/
-output/target/usr/lib/qt/examples/README
-output/target/usr/lib/qt/examples/network
-output/target/usr/lib/qt/examples/network/README
-output/target/usr/lib/qt/examples/network/network.pro
-output/target/usr/lib/qt/examples/network/downloadmanager
-output/target/usr/lib/qt/examples/network/downloadmanager/textprogressbar.h
-output/target/usr/lib/qt/examples/network/downloadmanager/textprogressbar.cpp
-output/target/usr/lib/qt/examples/network/downloadmanager/downloadmanager
-output/target/usr/lib/qt/examples/network/downloadmanager/downloadmanager.cpp
-output/target/usr/lib/qt/examples/network/downloadmanager/main.cpp
-output/target/usr/lib/qt/examples/network/downloadmanager/downloadmanager.h
-output/target/usr/lib/qt/examples/network/downloadmanager/downloadmanager.pro
-output/target/usr/lib/qt/examples/network/dnslookup
-output/target/usr/lib/qt/examples/network/dnslookup/dnslookup.cpp
-output/target/usr/lib/qt/examples/network/dnslookup/dnslookup
-output/target/usr/lib/qt/examples/network/dnslookup/dnslookup.pro
-output/target/usr/lib/qt/examples/network/dnslookup/dnslookup.h
-output/target/usr/lib/qt/examples/network/download
-output/target/usr/lib/qt/examples/network/download/download
-output/target/usr/lib/qt/examples/network/download/download.pro
-output/target/usr/lib/qt/examples/network/download/main.cpp
-output/target/usr/lib/qt/examples/network/shared
-output/target/usr/lib/qt/examples/network/shared/sctpchannels.h
-output/target/usr/lib/qt/examples/qtconcurrent
-output/target/usr/lib/qt/examples/qtconcurrent/README
-output/target/usr/lib/qt/examples/qtconcurrent/qtconcurrent.pro
-output/target/usr/lib/qt/examples/corelib
-output/target/usr/lib/qt/examples/corelib/json
-output/target/usr/lib/qt/examples/corelib/json/savegame
-output/target/usr/lib/qt/examples/corelib/json/savegame/character.h
-output/target/usr/lib/qt/examples/corelib/json/savegame/game.h
-output/target/usr/lib/qt/examples/corelib/json/savegame/savegame.pro
-output/target/usr/lib/qt/examples/corelib/json/savegame/main.cpp
-output/target/usr/lib/qt/examples/corelib/json/savegame/savegame
-output/target/usr/lib/qt/examples/corelib/json/savegame/game.cpp
-output/target/usr/lib/qt/examples/corelib/json/savegame/level.cpp
-output/target/usr/lib/qt/examples/corelib/json/savegame/character.cpp
-output/target/usr/lib/qt/examples/corelib/json/savegame/level.h
-output/target/usr/lib/qt/examples/corelib/json/json.pro
-output/target/usr/lib/qt/examples/corelib/mimetypes
-output/target/usr/lib/qt/examples/corelib/mimetypes/mimetypes.pro
-output/target/usr/lib/qt/examples/corelib/corelib.pro
-output/target/usr/lib/qt/examples/corelib/threads
-output/target/usr/lib/qt/examples/corelib/threads/README
-output/target/usr/lib/qt/examples/corelib/threads/semaphores
-output/target/usr/lib/qt/examples/corelib/threads/semaphores/semaphores
-output/target/usr/lib/qt/examples/corelib/threads/semaphores/semaphores.pro
-output/target/usr/lib/qt/examples/corelib/threads/semaphores/semaphores.cpp
-output/target/usr/lib/qt/examples/corelib/threads/threads.pro
-output/target/usr/lib/qt/examples/corelib/threads/waitconditions
-output/target/usr/lib/qt/examples/corelib/threads/waitconditions/waitconditions.cpp
-output/target/usr/lib/qt/examples/corelib/threads/waitconditions/waitconditions.pro
-output/target/usr/lib/qt/examples/corelib/threads/waitconditions/waitconditions
-output/target/usr/lib/qt/examples/examples.pro
-output/target/usr/lib/qt/examples/xml
-output/target/usr/lib/qt/examples/xml/README
-output/target/usr/lib/qt/examples/xml/htmlinfo
-output/target/usr/lib/qt/examples/xml/htmlinfo/htmlinfo
-output/target/usr/lib/qt/examples/xml/htmlinfo/resources.qrc
-output/target/usr/lib/qt/examples/xml/htmlinfo/w3c_org.html
-output/target/usr/lib/qt/examples/xml/htmlinfo/apache_org.html
-output/target/usr/lib/qt/examples/xml/htmlinfo/trolltech_com.html
-output/target/usr/lib/qt/examples/xml/htmlinfo/main.cpp
-output/target/usr/lib/qt/examples/xml/htmlinfo/simpleexample.html
-output/target/usr/lib/qt/examples/xml/htmlinfo/youtube_com.html
-output/target/usr/lib/qt/examples/xml/htmlinfo/htmlinfo.pro
-output/target/usr/lib/qt/examples/xml/xml.pro
-output/target/usr/lib/qt/examples/xml/xmlstreamlint
-output/target/usr/lib/qt/examples/xml/xmlstreamlint/xmlstreamlint.pro
-output/target/usr/lib/qt/examples/xml/xmlstreamlint/main.cpp
-output/target/usr/lib/qt/examples/xml/xmlstreamlint/xmlstreamlint
+For the whitelist case we need to use just:
+                return
 
-So like Peter Seiderer suggested, I believe Refik forgot to rebuild after
-enabling BR2_PACKAGE_QT5BASE_EXAMPLES.
+Any value returned by a check function is counted as a warning, making the main
+check-package script to exit with code 1 to the shell, that in turn makes the
+job in gitlab to be marked as failed.
 
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+
+There is also the glibc.mk to remove the default value of _SOURCE variable
+from, to be done in a separate patch. 'make printvars' can be helpful to test
+it besides a build test.
+
+Are you willing to work on this too?
+
+
+Regards,
+Ricardo
