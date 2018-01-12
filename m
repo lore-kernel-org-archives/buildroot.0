@@ -1,71 +1,47 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Fri, 12 Jan 2018 22:29:44 +0100
-Subject: [Buildroot] [PATCH 1/1] open-lldp: new package
-In-Reply-To: <20180112220436.677e3084@windsurf.lan>
-References: <20180112140107.15301-1-laurent_pubs@yahoo.com>
- <CAGm1_kvL9UWVX5jrzE1dhsOHvWT_LukRJKZ5z6eu8Tma0bjXdw@mail.gmail.com>
- <20180112220436.677e3084@windsurf.lan>
-Message-ID: <CAGm1_ksP2c_gLsSCJjN=Sr7gK0OR0Bdxd-jidXVhjgwOCFyiwQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 12 Jan 2018 22:35:01 +0100
+Subject: [Buildroot] [PATCH] augeas: bump to version 1.9.0
+In-Reply-To: <20180109201846.1156-1-joerg.krause@embedded.rocks>
+References: <20180109201846.1156-1-joerg.krause@embedded.rocks>
+Message-ID: <20180112223501.396a6dc9@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Jan 12, 2018 at 10:04 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
->
-> On Fri, 12 Jan 2018 15:46:14 +0100, Yegor Yefremov wrote:
->
->> > +# Run the bootstrap.sh command.
->> > +# (from the 'lldpad Application Install' section of the README file)
->> > +define OPEN_LLDP_BOOTSTRAP
->> > +       (cd $(@D) && ./bootstrap.sh)
->> > +endef
->>
->> m4 folder is missing. It is worth sending a patch upstream (open-lldp)
->> to fix this. As long as you have this hook, you don't need
->> OPEN_LLDP_AUTORECONF = YES, because boostrap.sh already invokes
->> "autoreconf -i". At least thy this.
->
-> No, I disagree here. If you drop <pkg>_AUTORECONF = YES, then you loose
-> the dependency on host-autoconf, host-automake and host-libtool.
+Hello,
 
-You're right.
+On Tue,  9 Jan 2018 21:18:46 +0100, J?rg Krause wrote:
+> Add two patches from upstream to fix a build issue when building an
+> example. Ideally, the examples should not be build at all. However,
+> upstream disliked the idea of adding configure options like
+> `--disable-examples` [1]. So we'll make do with the patches and force a
+> autoreconf.
 
-> So instead, please keep <pkg>_AUTORECONF = YES, and if the missing m4
-> folder is the only problem (but I doubt it because the bootstrap.sh
-> script doesn't create it), then add a post-extract hook that creates
-> the m4 file.
+Well, since the patches are upstream, once a new release is made, we
+can drop the patches, and remove AUTORECONF = YES, correct ?
 
-bootstrap.sh doesn't create m4 folder, but if you just clone the
-open-lldp repo and invoke "autoreconf -i", it would just complain
-about missing m4 folder, but create it. In BR environment we get an
-error. We had similar situation earlier with some other package
-(libsoc) and I coudn't find the case of the problem, so I just added
-m4 upstream and now it is working.
+> diff --git a/package/augeas/0001-examples-Makefile-fix-missing-trailing-backslash-for-dump-LDADD.patch b/package/augeas/0001-examples-Makefile-fix-missing-trailing-backslash-for-dump-LDADD.patch
+> new file mode 100644
+> index 0000000000..8ccd6b54b7
+> --- /dev/null
+> +++ b/package/augeas/0001-examples-Makefile-fix-missing-trailing-backslash-for-dump-LDADD.patch
+> @@ -0,0 +1,21 @@
+> +From d506cf6c1567cbb0a762c04d9354ab1694a5ac05 Mon Sep 17 00:00:00 2001
+> +From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+> +Date: Mon, 11 Dec 2017 23:33:08 +0100
+> +Subject: [PATCH] Update Makefile.am
+> +
+> +Add missing trailing backslash for `dump_LDADD`.
 
->> The package doesn't build:
->>
->> In file included from lldpad.c:58:0:
->> ./include/lldp_8021qaz.h:237:12: error: inline function
->> ?ieee8021qaz_clif_cmd? declared but never defined [-Werror]
->>  inline int ieee8021qaz_clif_cmd(void *data, struct sockaddr_un *from,
->>             ^~~~~~~~~~~~~~~~~~~~
->> ./include/lldp_8021qaz.h:222:13: error: inline function ?set_prio_map?
->> declared but never defined [-Werror]
->>  inline void set_prio_map(u32 *prio_map, u8 prio, int tc);
->>              ^~~~~~~~~~~~
->> ./include/lldp_8021qaz.h:221:12: error: inline function ?get_prio_map?
->> declared but never defined [-Werror]
->>  inline int get_prio_map(u32 prio_map, int tc);
->>             ^~~~~~~~~~~~
->
-> Perhaps you could tell Laurent which configuration you've used to
-> produce this build failure, so that he can reproduce it.
+Missing SoB here and for the other patch as well. Could you fix this
+and resend ?
 
-I get this error even on my Debian 9 host. In BR I've been playing
-with powerpc defconf, that has boost issues in autobuilders.
+Thanks!
 
-Yegor
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
