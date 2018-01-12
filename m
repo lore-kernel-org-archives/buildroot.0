@@ -1,48 +1,44 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 12 Jan 2018 11:57:49 +0100
-Subject: [Buildroot] Iputils not setting suid root?
-In-Reply-To: <CABhNV23FhwkRdDwmNimoeKa++i3vQbErgVHg_8fUG_SWWi-Z=Q@mail.gmail.com>
-References: <CABhNV21G9hPsHpATOeXUnyPuCpT71XGhVsgXW_Uniq88WUuqSQ@mail.gmail.com>
- <20180112105022.6ef14d5c@windsurf.lan>
- <CABhNV23FhwkRdDwmNimoeKa++i3vQbErgVHg_8fUG_SWWi-Z=Q@mail.gmail.com>
-Message-ID: <20180112115749.1fee6110@windsurf.lan>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Fri, 12 Jan 2018 12:58:00 +0200
+Subject: [Buildroot] [PATCH] libsodium: bump to version 1.0.16
+Message-ID: <fa6dbf1edcd6598f156830b94a6012d0f5c36ac0.1515754680.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Add pgp signature reference.
 
-On Fri, 12 Jan 2018 11:54:40 +0100, Einar J?n wrote:
+Cc: Frank Hunleth <fhunleth@troodon-software.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/libsodium/libsodium.hash | 3 ++-
+ package/libsodium/libsodium.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-> > That's a bug. Could you submit a proper patch that fixes this ?
-> >  
-> 
-> Attached one below, done against current master (84e835e)
-> I hope that's the way you want it.
-
-It is almost good :)
-
-Things to adjust:
-
- - We need your Signed-off-by at the end of the commit log.
-
- - Please send the patch inline, using "git send-email". This makes
-   review easier, and allows our patchwork tracking tool
-   (http://patchwork.ozlabs.org/project/buildroot/list/) to properly
-   record the patch.
-
- - You could slightly tweak the commit log, with something like: "The
-   ping and traceroute6 programs need to be SUID-root to work
-   correctly."
-
-Could you fix those minor details and send an updated version?
-
-Thanks!
-
-Thomas
+diff --git a/package/libsodium/libsodium.hash b/package/libsodium/libsodium.hash
+index 12f332d72d7f..5cc076364ba7 100644
+--- a/package/libsodium/libsodium.hash
++++ b/package/libsodium/libsodium.hash
+@@ -1,3 +1,4 @@
+ # Locally calculated after checking pgp signature
+-sha256 fb6a9e879a2f674592e4328c5d9f79f082405ee4bb05cb6e679b90afe9e178f4  libsodium-1.0.15.tar.gz
++# https://download.libsodium.org/libsodium/releases/libsodium-1.0.16.tar.gz.sig
++sha256 eeadc7e1e1bcef09680fb4837d448fbdf57224978f865ac1c16745868fbd0533  libsodium-1.0.16.tar.gz
+ sha256 6faf327c97dca6da69acefc6d3969d7bffb70a24f0707874870fdcfd6b0acf58  LICENSE
+diff --git a/package/libsodium/libsodium.mk b/package/libsodium/libsodium.mk
+index b45f013d6bb9..ffdd1717ba35 100644
+--- a/package/libsodium/libsodium.mk
++++ b/package/libsodium/libsodium.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBSODIUM_VERSION = 1.0.15
++LIBSODIUM_VERSION = 1.0.16
+ LIBSODIUM_SITE = https://github.com/jedisct1/libsodium/releases/download/$(LIBSODIUM_VERSION)
+ LIBSODIUM_LICENSE = ISC
+ LIBSODIUM_LICENSE_FILES = LICENSE
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.15.1
