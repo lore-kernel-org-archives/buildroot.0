@@ -1,7 +1,7 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 12 Jan 2018 19:20:58 +0100
-Subject: [Buildroot] [PATCH 1/1] boinc: bump to version 7.8.5
-Message-ID: <20180112182058.16809-1-fontaine.fabrice@gmail.com>
+Date: Fri, 12 Jan 2018 19:21:29 +0100
+Subject: [Buildroot] [PATCH 1/1] cjson: bump to version 1.7.1
+Message-ID: <20180112182129.16865-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,32 +10,31 @@ To: buildroot@busybox.net
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/boinc/boinc.hash | 2 +-
- package/boinc/boinc.mk   | 2 +-
+ package/cjson/cjson.hash | 2 +-
+ package/cjson/cjson.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/boinc/boinc.hash b/package/boinc/boinc.hash
-index 3f31ee7582..3e4c221818 100644
---- a/package/boinc/boinc.hash
-+++ b/package/boinc/boinc.hash
-@@ -1,4 +1,4 @@
+diff --git a/package/cjson/cjson.hash b/package/cjson/cjson.hash
+index 44de790dd4..ea2ecbb7e9 100644
+--- a/package/cjson/cjson.hash
++++ b/package/cjson/cjson.hash
+@@ -1,3 +1,3 @@
  # Locally computed:
--sha256 0038044916749687455d0f5ca33e79f14e2d1d5451ddfd04b33446b2d9d467ab  boinc-7.8.4.tar.gz
-+sha256 e03736026e048a06793bd19d3e613d4053f56fd34fbc8990258705ed3c98cf38  boinc-7.8.5.tar.gz
- sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
- sha256 a853c2ffec17057872340eee242ae4d96cbf2b520ae27d903e1b2fef1a5f9d1c  COPYING.LESSER
-diff --git a/package/boinc/boinc.mk b/package/boinc/boinc.mk
-index 04f85ae3a5..f4cad3ec6b 100644
---- a/package/boinc/boinc.mk
-+++ b/package/boinc/boinc.mk
-@@ -5,7 +5,7 @@
+-sha256 6429f928c32c7f24714f85550b7fdff6fb424b60bc05fafa7bd8137af5182b55  cjson-v1.7.0.tar.gz
++sha256 28ef8c069db19010b9af247b86b05f0f879ac914a4620997c3e5181465170b40  cjson-v1.7.1.tar.gz
+ sha256 a36dda207c36db5818729c54e7ad4e8b0c6fba847491ba64f372c1a2037b6d5c  LICENSE
+diff --git a/package/cjson/cjson.mk b/package/cjson/cjson.mk
+index 8220f40c80..88a33a2ce4 100644
+--- a/package/cjson/cjson.mk
++++ b/package/cjson/cjson.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- BOINC_VERSION_MAJOR = 7.8
--BOINC_VERSION = $(BOINC_VERSION_MAJOR).4
-+BOINC_VERSION = $(BOINC_VERSION_MAJOR).5
- # client_release can be used to build the Client and Manager but not the Server
- # part. The Server currently has no versioning (see
- # https://github.com/BOINC/boinc/pull/1798).
+-CJSON_VERSION = v1.7.0
++CJSON_VERSION = v1.7.1
+ CJSON_SITE = $(call github,DaveGamble,cjson,$(CJSON_VERSION))
+ CJSON_INSTALL_STAGING = YES
+ CJSON_LICENSE = MIT
 -- 
 2.14.1
