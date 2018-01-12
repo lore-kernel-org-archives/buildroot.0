@@ -1,9 +1,12 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 12 Jan 2018 23:17:11 +0100
-Subject: [Buildroot] [PATCH v2] kvm-unit-tests: test for rdseed/rdrand
-In-Reply-To: <1515499487-29937-1-git-send-email-matthew.weber@rockwellcollins.com>
-References: <1515499487-29937-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <20180112231711.16d6b77d@windsurf.lan>
+Date: Fri, 12 Jan 2018 23:38:42 +0100
+Subject: [Buildroot] [PATCH 1/1] open-lldp: new package
+In-Reply-To: <CAGm1_ksP2c_gLsSCJjN=Sr7gK0OR0Bdxd-jidXVhjgwOCFyiwQ@mail.gmail.com>
+References: <20180112140107.15301-1-laurent_pubs@yahoo.com>
+ <CAGm1_kvL9UWVX5jrzE1dhsOHvWT_LukRJKZ5z6eu8Tma0bjXdw@mail.gmail.com>
+ <20180112220436.677e3084@windsurf.lan>
+ <CAGm1_ksP2c_gLsSCJjN=Sr7gK0OR0Bdxd-jidXVhjgwOCFyiwQ@mail.gmail.com>
+Message-ID: <20180112233842.388e29a0@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,49 +15,60 @@ To: buildroot@busybox.net
 
 Hello,
 
-Thanks for your work on this!
+On Fri, 12 Jan 2018 22:29:44 +0100, Yegor Yefremov wrote:
 
-On Tue,  9 Jan 2018 06:04:47 -0600, Matt Weber wrote:
-> The build fails when the host binutils isn't at least 2.23
-> (2.22.x introduced RDSEED).
+> > So instead, please keep <pkg>_AUTORECONF = YES, and if the missing m4
+> > folder is the only problem (but I doubt it because the bootstrap.sh
+> > script doesn't create it), then add a post-extract hook that creates
+> > the m4 file.  
 > 
-> The host toolchain is used for x86_64 target builds where
-> we need to do a 32bit build. Most other buildroot builds
-> are using a much newer binutils unless it's a external
-> older toolchain.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/c39/c3987a3cbd2960b0ff50f872636bdfd8d1a9c820/
-> 
-> Upstream:
-> https://www.spinics.net/lists/kvm/msg161542.html
-> 
-> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-> ---
-> 
-> Thomas/Peter could you test this on one of your builders?
-> I've requested a gcc farm account but still waiting at this
-> point.  Here's the builders which can reproduce the failure
-> (ie have old enough host binutils).
-> http://autobuild.buildroot.net/?reason=kvm-unit-tests-kvm-unit-tests-20171020
+> bootstrap.sh doesn't create m4 folder, but if you just clone the
+> open-lldp repo and invoke "autoreconf -i", it would just complain
+> about missing m4 folder, but create it. In BR environment we get an
+> error. We had similar situation earlier with some other package
+> (libsoc) and I coudn't find the case of the problem, so I just added
+> m4 upstream and now it is working.
 
-Sadly, it doesn't work. It correctly detects that rdseed isn't
-available:
+Interesting, I never realized that. After a bit of experiment, it seems
+like passing a -I option makes a difference:
 
->>> kvm-unit-tests kvm-unit-tests-20171020 Configuring
-cd /home/test/buildroot/output/build/kvm-unit-tests-kvm-unit-tests-20171020 && ./configure --arch="x86_64" --processor="" --endian="little"
-Checking for rdseed/rdrand... No.
+thomas at windsurf:~/projets/open-lldp (master)$ autoreconf -f -i -I "/home/thomas/projets/buildroot/output/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/share/aclocal" -I "/home/thomas/projets/buildroot/output/host/share/aclocal"
+aclocal: error: couldn't open directory 'm4': No such file or directory
+autoreconf: aclocal failed with exit status: 1
+thomas at windsurf:~/projets/open-lldp (master)$ autoreconf -f -i -I "/home/thomas/projets/buildroot/output/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/share/aclocal"
+aclocal: error: couldn't open directory 'm4': No such file or directory
+autoreconf: aclocal failed with exit status: 1
+thomas at windsurf:~/projets/open-lldp (master)$ autoreconf -f -i  -I "/home/thomas/projets/buildroot/output/host/share/aclocal"
+aclocal: error: couldn't open directory 'm4': No such file or directory
+autoreconf: aclocal failed with exit status: 1
+thomas at windsurf:~/projets/open-lldp (master)$ autoreconf -f -i
+aclocal: warning: couldn't open directory 'm4': No such file or directory
+libtoolize: putting auxiliary files in '.'.
+libtoolize: copying file './ltmain.sh'
+libtoolize: putting macros in AC_CONFIG_MACRO_DIRS, 'm4'.
+libtoolize: copying file 'm4/libtool.m4'
+libtoolize: copying file 'm4/ltoptions.m4'
+libtoolize: copying file 'm4/ltsugar.m4'
+libtoolize: copying file 'm4/ltversion.m4'
+libtoolize: copying file 'm4/lt~obsolete.m4'
+configure.ac:5: installing './ar-lib'
+configure.ac:5: installing './compile'
+configure.ac:19: installing './config.guess'
+configure.ac:19: installing './config.sub'
+configure.ac:2: installing './install-sh'
+configure.ac:2: installing './missing'
+Makefile.am: installing './depcomp'
 
-but the CFLAGS you assign have no effect. And indeed you assign CFLAGS,
-but there's nothing that actually uses the CFLAGS set by the configure
-script.
+Even more funny:
 
-In fact, you can perfectly test this on your side: just introduce a
-stupid typo in the rdseed test program that makes it fail to build
-unconditionally, and verify that the NO_RDSEEDRAND define really exists
-when the C file is built.
+thomas at windsurf:~/projets/open-lldp (master)$ mkdir /tmp/foo
+thomas at windsurf:~/projets/open-lldp (master)$ autoreconf -f -i  -I /tmp/foo/
+aclocal: error: couldn't open directory 'm4': No such file or directory
+autoreconf: aclocal failed with exit status: 1
 
-Thanks!
+Not sure what's going on here :)
+
+Best regards,
 
 Thomas
 -- 
