@@ -1,46 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 12 Jan 2018 22:25:28 +0100
-Subject: [Buildroot] [PATCH] support/config-fragments: linaro-arm:
- remove default option
-In-Reply-To: <20180109225407.24501-1-romain.naour@gmail.com>
-References: <20180109225407.24501-1-romain.naour@gmail.com>
-Message-ID: <20180112222528.15c247e9@windsurf.lan>
+Date: Fri, 12 Jan 2018 22:25:52 +0100
+Subject: [Buildroot] [git commit] support/config-fragments:
+ br-powerpc-internal-full: remove old option
+Message-ID: <20180112212557.A112682216@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=b6d39f8c03431092e02ad30c948db8423b1de05c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue,  9 Jan 2018 23:54:05 +0100, Romain Naour wrote:
-> Remove BR2_ARM_EABIHF and BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM which are
-> used by default when a cortex-A8 CPU is used.
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> ---
->  support/config-fragments/autobuild/linaro-arm.config | 2 --
->  1 file changed, 2 deletions(-)
-> 
-> diff --git a/support/config-fragments/autobuild/linaro-arm.config b/support/config-fragments/autobuild/linaro-arm.config
-> index d72e19b3ad..0f9b687d7a 100644
-> --- a/support/config-fragments/autobuild/linaro-arm.config
-> +++ b/support/config-fragments/autobuild/linaro-arm.config
-> @@ -1,5 +1,3 @@
->  BR2_arm=y
->  BR2_cortex_a8=y
-> -BR2_ARM_EABIHF=y
->  BR2_TOOLCHAIN_EXTERNAL=y
-> -BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM=y
+BR2_TOOLCHAIN_BUILDROOT_INET_IPV6 has been removed with the commit [1].
 
-I am not convinced about removing BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM.
-Indeed, we may very well add another external toolchain in the future
-for ARM EABIhf. But since this defconfig is named linaro-arm, it really
-should test the Linaro ARM toolchain, so it makes sense to have this
-explicit option.
+Since this option is still in br-powerpc-internal-full config-fragment,
+the powerpc configuration is droped by autobuild-run script:
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+WARN: toolchain can't be used
+      Missing: BR2_TOOLCHAIN_BUILDROOT_INET_IPV6=y
+[Sat, 06 Jan 2018 03:03:43] WARN: failed to generate configuration
+
+[1] 4bcacfd2c05f45171c011d4af7731c6f848819a4
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ support/config-fragments/autobuild/br-powerpc-internal-full.config | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/support/config-fragments/autobuild/br-powerpc-internal-full.config b/support/config-fragments/autobuild/br-powerpc-internal-full.config
+index 2621e9f..61b3e7a 100644
+--- a/support/config-fragments/autobuild/br-powerpc-internal-full.config
++++ b/support/config-fragments/autobuild/br-powerpc-internal-full.config
+@@ -1,5 +1,4 @@
+ BR2_powerpc=y
+-BR2_TOOLCHAIN_BUILDROOT_INET_IPV6=y
+ BR2_TOOLCHAIN_BUILDROOT_LOCALE=y
+ BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+ BR2_TOOLCHAIN_BUILDROOT_CXX=y
