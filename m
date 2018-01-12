@@ -1,57 +1,93 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 12 Jan 2018 22:16:18 +0100
-Subject: [Buildroot] [PATCH] swupdate: bump to version 2017.11
-In-Reply-To: <20180110222816.20579-1-joerg.krause@embedded.rocks>
-References: <20180110222816.20579-1-joerg.krause@embedded.rocks>
-Message-ID: <20180112221618.123f744f@windsurf.lan>
+Date: Fri, 12 Jan 2018 22:17:01 +0100
+Subject: [Buildroot] [git commit] daq: fix build against the musl C library
+Message-ID: <20180112211704.6FBAD83CD4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=dbe64f4691e8e67066b4df0c91281674bdefeced
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 10 Jan 2018 23:28:16 +0100, J?rg Krause wrote:
-> Remove upstream patch 0001-Fix-SHA256-hash-verification.patch.
-> 
-> Re-enable support for Lua 5.1 and LuaJIT, which was removed in version 2017.09
-> because of compatibility issues [1]. Meanwhile, the issues have been resolved
-> upstream [2].
-> 
-> Note, that `CONFIG_HANDLER_IN_LUA` is now supported by Lua 5.1/LuaJIT, too.
-> 
-> Add a fixup command `SWUPDATE_SET_LUA_VERSION` to set the correct base name for
-> the Lua/LuaJIT pkg-config file used by the swupdates config option `LUAPKG`.
-> 
-> Fix a small type in the help text:
->   'in my mind' -> 'in mind'.
-> 
-> Regenerated the .config script by doing:
-> 
-> ```
-> make swupdate-menuconfig
-> make swupdate-update-config
-> ```
-> .. and removing the paths for the build options manually.
-> 
-> [1] http://patchwork.ozlabs.org/patch/795958/
-> [2] https://github.com/sbabic/swupdate/commit/7b49b8dc59acc0591fe9823f1739ba7422eb30c7
-> 
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> ---
->  .../0001-Fix-SHA256-hash-verification.patch        | 119 ---------------------
->  package/swupdate/Config.in                         |   8 +-
->  package/swupdate/swupdate.config                   |  63 +++++++++--
->  package/swupdate/swupdate.hash                     |   2 +-
->  package/swupdate/swupdate.mk                       |  12 ++-
->  5 files changed, 71 insertions(+), 133 deletions(-)
->  delete mode 100644 package/swupdate/0001-Fix-SHA256-hash-verification.patch
+Musl doesn't have <sys/unistd.h>, so let's change to <unistd.h>.
 
-Applied to master, thanks.
+Fixes:
+http://autobuild.buildroot.net/results/054f6581f67338b28af4dc2203b285ae1055581c
+http://autobuild.buildroot.net/results/99ec5d70b2ecf3a17fd5b5461d3e6b8ec0d22bfa
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...0001-Fix-build-against-the-musl-C-library.patch | 43 +++++++++++++++++-----
+ 1 file changed, 34 insertions(+), 9 deletions(-)
+
+diff --git a/package/daq/0001-Fix-build-against-the-musl-C-library.patch b/package/daq/0001-Fix-build-against-the-musl-C-library.patch
+index a37fe9a..25f2f9c 100644
+--- a/package/daq/0001-Fix-build-against-the-musl-C-library.patch
++++ b/package/daq/0001-Fix-build-against-the-musl-C-library.patch
+@@ -1,29 +1,54 @@
+-From d3eec1a3b7c67a5e6f524c65608fd2eacac3782b Mon Sep 17 00:00:00 2001
++From 42efa6d76a3b52f35e576a6b941a9afb5b3879e9 Mon Sep 17 00:00:00 2001
+ From: Sergio Prado <sergio.prado@e-labworks.com>
+-Date: Sun, 24 Dec 2017 12:58:49 -0200
++Date: Tue, 9 Jan 2018 21:39:27 -0200
+ Subject: [PATCH] Fix build against the musl C library
+ 
+ Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+ ---
+  os-daq-modules/daq_ipfw.c | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
++ os-daq-modules/daq_ipq.c  | 2 +-
++ os-daq-modules/daq_nfq.c  | 2 +-
++ 3 files changed, 3 insertions(+), 3 deletions(-)
+ 
+ diff --git a/os-daq-modules/daq_ipfw.c b/os-daq-modules/daq_ipfw.c
+-index 016beb06ad61..c2a41759bb04 100644
++index 016beb06ad61..98f67717f646 100644
+ --- a/os-daq-modules/daq_ipfw.c
+ +++ b/os-daq-modules/daq_ipfw.c
+-@@ -23,10 +23,10 @@
+- #include <stdlib.h>
+- #include <string.h>
+- #include <stdio.h>
+-+#include <unistd.h>
++@@ -26,7 +26,7 @@
+  
+  #include <sys/types.h>
+  #include <sys/time.h>
+ -#include <sys/unistd.h>
+++#include <unistd.h>
+  
+  #include <netinet/in.h>
+  #include <sys/socket.h>
++diff --git a/os-daq-modules/daq_ipq.c b/os-daq-modules/daq_ipq.c
++index 77ec6e9505e5..b15e5cf82af0 100644
++--- a/os-daq-modules/daq_ipq.c
+++++ b/os-daq-modules/daq_ipq.c
++@@ -27,7 +27,7 @@
++ 
++ #include <sys/types.h>
++ #include <sys/time.h>
++-#include <sys/unistd.h>
+++#include <unistd.h>
++ 
++ #include <netinet/ip.h>
++ 
++diff --git a/os-daq-modules/daq_nfq.c b/os-daq-modules/daq_nfq.c
++index 33021c0ec991..0df1e61c74c4 100644
++--- a/os-daq-modules/daq_nfq.c
+++++ b/os-daq-modules/daq_nfq.c
++@@ -27,7 +27,7 @@
++ 
++ #include <sys/types.h>
++ #include <sys/time.h>
++-#include <sys/unistd.h>
+++#include <unistd.h>
++ 
++ #include <netinet/ip.h>
++ 
+ -- 
+ 1.9.1
+ 
