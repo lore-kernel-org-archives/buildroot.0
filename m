@@ -1,51 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 12 Jan 2018 19:53:56 +0100
-Subject: [Buildroot] [git commit] gnupg2: bump to version 2.2.4
-Message-ID: <20180112185503.5A0CB81D56@busybox.osuosl.org>
+Date: Fri, 12 Jan 2018 19:54:31 +0100
+Subject: [Buildroot] [git commit] cjson: bump to version 1.7.1
+Message-ID: <20180112185503.8905981D56@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=97ec1ddd5ae847c9fadedc1b26594f5c3437c5f7
+commit: https://git.buildroot.net/buildroot/commit/?id=bdfb180d58ae0c5b5707e64e075658b5b062bdae
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add license hash.
-
-Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gnupg2/gnupg2.hash | 9 +++++----
- package/gnupg2/gnupg2.mk   | 2 +-
- 2 files changed, 6 insertions(+), 5 deletions(-)
+ package/cjson/cjson.hash | 2 +-
+ package/cjson/cjson.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/gnupg2/gnupg2.hash b/package/gnupg2/gnupg2.hash
-index e12f880..a003da6 100644
---- a/package/gnupg2/gnupg2.hash
-+++ b/package/gnupg2/gnupg2.hash
-@@ -1,5 +1,6 @@
--# From https://lists.gnupg.org/pipermail/gnupg-announce/2017q4/000417.html
--sha1 68ed37d363166b5bd79971537484148eb8f2958c  gnupg-2.2.3.tar.bz2
-+# From https://lists.gnupg.org/pipermail/gnupg-announce/2017q4/000419.html
-+sha1 732266e8888c6f41c084d043c7a0058332ff3580  gnupg-2.2.4.tar.bz2
- # Calculated based on the hash above and signature
--# https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.2.3.tar.bz2.sig
--sha256 cbd37105d139f7aa74f92b6f65d136658682094b0e308666b820ae4b984084b4  gnupg-2.2.3.tar.bz2
-+# https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.2.4.tar.bz2.sig
-+sha256 401a3e64780fdfa6d7670de0880aa5c9d589b3db7a7098979d7606cec546f2ec  gnupg-2.2.4.tar.bz2
-+sha256 bc2d6664f6276fa0a72d57633b3ae68dc7dcb677b71018bf08c8e93e509f1357  COPYING
-diff --git a/package/gnupg2/gnupg2.mk b/package/gnupg2/gnupg2.mk
-index 83397e2..980fae3 100644
---- a/package/gnupg2/gnupg2.mk
-+++ b/package/gnupg2/gnupg2.mk
+diff --git a/package/cjson/cjson.hash b/package/cjson/cjson.hash
+index 44de790..ea2ecbb 100644
+--- a/package/cjson/cjson.hash
++++ b/package/cjson/cjson.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256 6429f928c32c7f24714f85550b7fdff6fb424b60bc05fafa7bd8137af5182b55  cjson-v1.7.0.tar.gz
++sha256 28ef8c069db19010b9af247b86b05f0f879ac914a4620997c3e5181465170b40  cjson-v1.7.1.tar.gz
+ sha256 a36dda207c36db5818729c54e7ad4e8b0c6fba847491ba64f372c1a2037b6d5c  LICENSE
+diff --git a/package/cjson/cjson.mk b/package/cjson/cjson.mk
+index 8220f40..88a33a2 100644
+--- a/package/cjson/cjson.mk
++++ b/package/cjson/cjson.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GNUPG2_VERSION = 2.2.3
-+GNUPG2_VERSION = 2.2.4
- GNUPG2_SOURCE = gnupg-$(GNUPG2_VERSION).tar.bz2
- GNUPG2_SITE = https://gnupg.org/ftp/gcrypt/gnupg
- GNUPG2_LICENSE = GPL-3.0+
+-CJSON_VERSION = v1.7.0
++CJSON_VERSION = v1.7.1
+ CJSON_SITE = $(call github,DaveGamble,cjson,$(CJSON_VERSION))
+ CJSON_INSTALL_STAGING = YES
+ CJSON_LICENSE = MIT
