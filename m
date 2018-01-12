@@ -1,49 +1,34 @@
-From: Sam Voss <sam.voss@rockwellcollins.com>
-Date: Fri, 12 Jan 2018 13:53:45 -0600
-Subject: [Buildroot] [PATCH] package/pure-ftpd: Add uploadscript option
-Message-ID: <1515786826-41633-1-git-send-email-sam.voss@rockwellcollins.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 12 Jan 2018 21:21:57 +0100
+Subject: [Buildroot] [PATCH] package/bash: add /bin/bash to /etc/shells
+In-Reply-To: <20180112173510.GA3226@scaer>
+References: <1515666444-13390-1-git-send-email-romain.naour@smile.fr>
+ <20180111171357.GA3559@scaer>
+ <20180112095938.621ff1bc@windsurf.lan>
+ <20180112173510.GA3226@scaer>
+Message-ID: <20180112212157.2541d33f@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Enable option to compile with '--with-uploadscript' to allow running
-script after successful uploads.
+Hello,
 
-Signed-off-by: Sam Voss <sam.voss@rockwellcollins.com>
----
- package/pure-ftpd/Config.in    | 6 ++++++
- package/pure-ftpd/pure-ftpd.mk | 4 ++++
- 2 files changed, 10 insertions(+)
+On Fri, 12 Jan 2018 18:35:10 +0100, Yann E. MORIN wrote:
 
-diff --git a/package/pure-ftpd/Config.in b/package/pure-ftpd/Config.in
-index b5eca87..d03170b 100644
---- a/package/pure-ftpd/Config.in
-+++ b/package/pure-ftpd/Config.in
-@@ -30,4 +30,10 @@ config BR2_PACKAGE_PURE_FTPD_QUOTAS
- 	  his account. In addition, restrictions can also be placed on
- 	  the total size.
- 
-+config BR2_PACKAGE_PURE_FTPD_UPLOADSCRIPT
-+	bool "uploadscript"
-+	help
-+	  Enable pure-upload script. Automatically run an external program
-+	  after a successful upload.
-+
- endif
-diff --git a/package/pure-ftpd/pure-ftpd.mk b/package/pure-ftpd/pure-ftpd.mk
-index 815de90..457e67e 100644
---- a/package/pure-ftpd/pure-ftpd.mk
-+++ b/package/pure-ftpd/pure-ftpd.mk
-@@ -53,4 +53,8 @@ ifeq ($(BR2_PACKAGE_PURE_FTPD_QUOTAS),y)
- PURE_FTPD_CONF_OPTS += --with-quotas
- endif
- 
-+ifeq ($(BR2_PACKAGE_PURE_FTPD_UPLOADSCRIPT),y)
-+PURE_FTPD_CONF_OPTS += --with-uploadscript
-+endif
-+
- $(eval $(autotools-package))
+> On 2018-01-12 09:59 +0100, Thomas Petazzoni spake thusly:
+> > On Thu, 11 Jan 2018 18:13:57 +0100, Yann E. MORIN wrote:  
+> > >     grep -E '^/bin/bash$' $(TARGET_DIR)/etc/shells >/dev/null 2>&1 \  
+> > grep -q ?  
+> 
+> -q is not POSIX. Redirecting is guaranteed to always work.
+
+Knowing that Buildroot only supports Linux hosts, do we care about -q
+not being POSIX ?
+
+Thomas
 -- 
-1.9.1
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
