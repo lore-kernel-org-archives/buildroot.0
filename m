@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 12 Jan 2018 09:59:38 +0100
-Subject: [Buildroot] [PATCH] package/bash: add /bin/bash to /etc/shells
-In-Reply-To: <20180111171357.GA3559@scaer>
-References: <1515666444-13390-1-git-send-email-romain.naour@smile.fr>
- <20180111171357.GA3559@scaer>
-Message-ID: <20180112095938.621ff1bc@windsurf.lan>
+Date: Fri, 12 Jan 2018 10:02:16 +0100
+Subject: [Buildroot] [PATCH] system/Config.in: hide
+ BR2_TARGET_GENERIC_GETTY_{TERM, OPTIONS} with systemd
+In-Reply-To: <20180111173104.GB3559@scaer>
+References: <20180110221402.19743-1-thomas.petazzoni@free-electrons.com>
+ <20180111173104.GB3559@scaer>
+Message-ID: <20180112100216.36d494c1@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,19 +14,24 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 11 Jan 2018 18:13:57 +0100, Yann E. MORIN wrote:
+On Thu, 11 Jan 2018 18:31:04 +0100, Yann E. MORIN wrote:
 
-> I would do:
+> > +	# currently not observed by systemd
+> > +	depends on BR2_INIT_BUSYBOX || BR2_INIT_SYSV  
 > 
->     grep -E '^/bin/bash$' $(TARGET_DIR)/etc/shells >/dev/null 2>&1 \
-
-grep -q ?
-
->     || echo "/bin/bash" >> $(TARGET_DIR)/etc/shells
+> Why not:
+>     depends on !BR2_INIT_SYSTEMD
 > 
-> That way, we only install it if not already present.
+> because this is really want we want to express: this is not compatible
+> with systemd...
 
-Otherwise, yes, agreed.
+No, what we really want to express is that
+BR2_TARGET_GENERIC_GETTY_{TERM,OPTIONS} are only handled in the busybox
+code and sysvinit code. It's not so much that they are not compatible
+with systemd, it is that only busybox and sysvinit observe those
+options.
+
+Best regards,
 
 Thomas
 -- 
