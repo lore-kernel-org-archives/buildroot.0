@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 12 Jan 2018 12:05:02 +0100
-Subject: [Buildroot] [PATCH 1/1] open-lldp: new package
-In-Reply-To: <20180112110015.18956-2-laurent_pubs@yahoo.com>
-References: <20180112110015.18956-1-laurent_pubs@yahoo.com>
- <20180112110015.18956-2-laurent_pubs@yahoo.com>
-Message-ID: <20180112120502.3708d148@windsurf.lan>
+Date: Fri, 12 Jan 2018 12:08:03 +0100
+Subject: [Buildroot] [PATCH 1/1] unbound: new package
+In-Reply-To: <7b6d5bbd-86f5-6c81-e26e-db8b29ae2831@petroprogram.com>
+References: <20180111232039.24270-1-stefan.froberg@petroprogram.com>
+ <jt1miexfp7.ln2@ID-313208.user.individual.net>
+ <7b6d5bbd-86f5-6c81-e26e-db8b29ae2831@petroprogram.com>
+Message-ID: <20180112120803.0ddb7b6d@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,19 +14,39 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 12 Jan 2018 12:00:15 +0100, Laurent Charpentier wrote:
-> The lldpad package comes with utilities to manage an LLDP interface with
-> support for reading and configuring TLVs. TLVs and interfaces are individual
-> controlled allowing flexible configuration for TX only, RX only, or TX/RX
-> modes per TLV.
-> 
-> http://open-lldp.org/
-> 
-> Signed-off-by: Laurent Charpentier <laurent_pubs@yahoo.com>
+On Fri, 12 Jan 2018 12:45:06 +0200, Stefan Fr?berg wrote:
 
-Thanks for this new version, but you only fixed the commit title, and
-none of the other review comments that I made. Did you miss them
-perhaps?
+> > Why not "select BR2_PACKAGE_OPENSSL"?
+> > Did you test with libressl as well?
+> >  
+> 
+> That cannot be select because it's a choise and if I remember buildroot
+> manual and
+> what Thomas said, you can't (or actually shouldn't) select from choice
+> unless
+> absolutely necessary (like, for example, in my turbovnc patch...have to
+> remember update that too...)
+
+It is correct that regular virtual packages cannot be selected.
+
+But openssl (like jpeg) is special, and you can select
+BR2_PACKAGE_OPENSSL. BR2_PACKAGE_OPENSSL is not part of a choice.
+
+The case of turbovnc is different: you wanted to select jpeg-turbo
+specifically, which is one jpeg implementation. And this is not
+possible.
+
+See the difference ? BR2_PACKAGE_OPENSSL is the virtual package itself,
+which has two implementations: libopenssl and libressl, selectable
+through a choice.
+
+BR2_PACKAGE_JPEG_TURBO is one implementation of the BR2_PACKAGE_JPEG
+virtual package. Selecting BR2_PACKAGE_JPEG is OK (just like selecting
+BR2_PACKAGE_OPENSSL is OK), but selecting BR2_PACKAGE_JPEG_TURBO
+doesn't work.
+
+So Bernd is totally correct: you should select BR2_PACKAGE_OPENSSL. See
+how many packages are already doing this today :-)
 
 Best regards,
 
