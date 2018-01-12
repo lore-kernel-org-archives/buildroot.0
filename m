@@ -1,11 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 12 Jan 2018 22:26:02 +0100
-Subject: [Buildroot] [PATCH] support/config-fragments:
- br-powerpc-internal-full: remove old option
-In-Reply-To: <20180109225407.24501-3-romain.naour@gmail.com>
-References: <20180109225407.24501-1-romain.naour@gmail.com>
- <20180109225407.24501-3-romain.naour@gmail.com>
-Message-ID: <20180112222602.14c9eb75@windsurf.lan>
+Date: Fri, 12 Jan 2018 22:26:43 +0100
+Subject: [Buildroot] [PATCH v2] package/ti-cgt-pru: bump to 2.2.1
+In-Reply-To: <20180109201306.13526-1-romain.naour@gmail.com>
+References: <20180109201306.13526-1-romain.naour@gmail.com>
+Message-ID: <20180112222643.1a67ffea@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,23 +12,24 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue,  9 Jan 2018 23:54:07 +0100, Romain Naour wrote:
-> BR2_TOOLCHAIN_BUILDROOT_INET_IPV6 has been removed with the commit [1].
+On Tue,  9 Jan 2018 21:13:06 +0100, Romain Naour wrote:
+> See: http://www.ti.com/tool/download/PRU-CGT-2-2
 > 
-> Since this option is still in br-powerpc-internal-full config-fragment,
-> the powerpc configuration is droped by autobuild-run script:
+> The ti-cgt-pru v2.1.x installer are affected by a bug with recent
+> distribution (Fedora 27 and Ubuntu 17.10) using kernel 4.13 or 4.14
+> with a glibc 2.26.
+> The installer is stuck in a futex(wait) system call.
 > 
-> WARN: toolchain can't be used
->       Missing: BR2_TOOLCHAIN_BUILDROOT_INET_IPV6=y
-> [Sat, 06 Jan 2018 03:03:43] WARN: failed to generate configuration
+> While at it, add license hash.
 > 
-> [1] 4bcacfd2c05f45171c011d4af7731c6f848819a4
+> Fixes:
+> http://autobuild.buildroot.net/results/68f/68f60ad38d9b6eae83b5d233966616a25d8c9391
 > 
 > Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Ash Charles <ash.charles@savoirfairelinux.com>
+> Cc: Matthew Weber <matthew.weber@rockwellcollins.com>
 > ---
->  support/config-fragments/autobuild/br-powerpc-internal-full.config | 1 -
->  1 file changed, 1 deletion(-)
+> Note: This bump is not tested on real PRU hardware.
 
 Applied to master, thanks.
 
