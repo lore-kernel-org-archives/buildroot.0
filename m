@@ -1,43 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 12 Jan 2018 19:54:28 +0100
-Subject: [Buildroot] [git commit] boinc: bump to version 7.8.5
-Message-ID: <20180112185503.7904481D56@busybox.osuosl.org>
+Date: Fri, 12 Jan 2018 19:53:56 +0100
+Subject: [Buildroot] [git commit] gnupg2: bump to version 2.2.4
+Message-ID: <20180112185503.5A0CB81D56@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3a2b6041690829e129943dd95e221e1a20b4e78e
+commit: https://git.buildroot.net/buildroot/commit/?id=97ec1ddd5ae847c9fadedc1b26594f5c3437c5f7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Add license hash.
+
+Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/boinc/boinc.hash | 2 +-
- package/boinc/boinc.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/gnupg2/gnupg2.hash | 9 +++++----
+ package/gnupg2/gnupg2.mk   | 2 +-
+ 2 files changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/package/boinc/boinc.hash b/package/boinc/boinc.hash
-index 3f31ee7..3e4c221 100644
---- a/package/boinc/boinc.hash
-+++ b/package/boinc/boinc.hash
-@@ -1,4 +1,4 @@
- # Locally computed:
--sha256 0038044916749687455d0f5ca33e79f14e2d1d5451ddfd04b33446b2d9d467ab  boinc-7.8.4.tar.gz
-+sha256 e03736026e048a06793bd19d3e613d4053f56fd34fbc8990258705ed3c98cf38  boinc-7.8.5.tar.gz
- sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
- sha256 a853c2ffec17057872340eee242ae4d96cbf2b520ae27d903e1b2fef1a5f9d1c  COPYING.LESSER
-diff --git a/package/boinc/boinc.mk b/package/boinc/boinc.mk
-index 04f85ae..f4cad3e 100644
---- a/package/boinc/boinc.mk
-+++ b/package/boinc/boinc.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/gnupg2/gnupg2.hash b/package/gnupg2/gnupg2.hash
+index e12f880..a003da6 100644
+--- a/package/gnupg2/gnupg2.hash
++++ b/package/gnupg2/gnupg2.hash
+@@ -1,5 +1,6 @@
+-# From https://lists.gnupg.org/pipermail/gnupg-announce/2017q4/000417.html
+-sha1 68ed37d363166b5bd79971537484148eb8f2958c  gnupg-2.2.3.tar.bz2
++# From https://lists.gnupg.org/pipermail/gnupg-announce/2017q4/000419.html
++sha1 732266e8888c6f41c084d043c7a0058332ff3580  gnupg-2.2.4.tar.bz2
+ # Calculated based on the hash above and signature
+-# https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.2.3.tar.bz2.sig
+-sha256 cbd37105d139f7aa74f92b6f65d136658682094b0e308666b820ae4b984084b4  gnupg-2.2.3.tar.bz2
++# https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.2.4.tar.bz2.sig
++sha256 401a3e64780fdfa6d7670de0880aa5c9d589b3db7a7098979d7606cec546f2ec  gnupg-2.2.4.tar.bz2
++sha256 bc2d6664f6276fa0a72d57633b3ae68dc7dcb677b71018bf08c8e93e509f1357  COPYING
+diff --git a/package/gnupg2/gnupg2.mk b/package/gnupg2/gnupg2.mk
+index 83397e2..980fae3 100644
+--- a/package/gnupg2/gnupg2.mk
++++ b/package/gnupg2/gnupg2.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- BOINC_VERSION_MAJOR = 7.8
--BOINC_VERSION = $(BOINC_VERSION_MAJOR).4
-+BOINC_VERSION = $(BOINC_VERSION_MAJOR).5
- # client_release can be used to build the Client and Manager but not the Server
- # part. The Server currently has no versioning (see
- # https://github.com/BOINC/boinc/pull/1798).
+-GNUPG2_VERSION = 2.2.3
++GNUPG2_VERSION = 2.2.4
+ GNUPG2_SOURCE = gnupg-$(GNUPG2_VERSION).tar.bz2
+ GNUPG2_SITE = https://gnupg.org/ftp/gcrypt/gnupg
+ GNUPG2_LICENSE = GPL-3.0+
