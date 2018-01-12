@@ -1,71 +1,150 @@
-From: =?UTF-8?Q?Einar_J=C3=B3n?= <tolvupostur@gmail.com>
-Date: Fri, 12 Jan 2018 12:47:52 +0100
-Subject: [Buildroot] Iputils not setting suid root?
-In-Reply-To: <20180112115749.1fee6110@windsurf.lan>
-References: <CABhNV21G9hPsHpATOeXUnyPuCpT71XGhVsgXW_Uniq88WUuqSQ@mail.gmail.com>
- <20180112105022.6ef14d5c@windsurf.lan>
- <CABhNV23FhwkRdDwmNimoeKa++i3vQbErgVHg_8fUG_SWWi-Z=Q@mail.gmail.com>
- <20180112115749.1fee6110@windsurf.lan>
-Message-ID: <CABhNV22yZEoFj+eK8iWyCkWJkFMtJk1Tm9Y1C7OzJpWGTvF0wQ@mail.gmail.com>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Fri, 12 Jan 2018 11:45:58 +0100
+Subject: [Buildroot] [PATCH 1/1] Added lldpad (LLDP Agent Daemon)
+ package.
+In-Reply-To: <20180112103508.17334-1-laurent_pubs@yahoo.com>
+References: <20180112103508.17334-1-laurent_pubs@yahoo.com>
+Message-ID: <CAGm1_ktAgP8eh_65Hf-A+E-Bx-DAHi2-F_dL8HJnV9XrZQ=VBA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-OK.
+Hi Laurent,
 
-I installed git-email, and followed
-https://buildroot.org/downloads/manual/manual.html#submitting-patches
-but my workplace blocks emails that are not sent via Outlook, and my work email
-is not on the buldroot mailing list, so I don't think could get it through.
+On Fri, Jan 12, 2018 at 11:35 AM, Laurent Charpentier
+<laurent_pubs@yahoo.com> wrote:
+> The lldpad package comes with utilities to manage an LLDP interface with
+> support for reading and configuring TLVs. TLVs and interfaces are individual
+> controlled allowing flexible configuration for TX only, RX only, or TX/RX
+> modes per TLV.
+>
+> http://open-lldp.org/
+>
+> Signed-off-by: Laurent Charpentier <laurent_pubs@yahoo.com>
+> ---
+>  package/Config.in                                  |  1 +
+>  .../open-lldp/0001-lldpad-vdptool-getline.patch    | 10 +++++++++
+>  package/open-lldp/Config.in                        | 11 +++++++++
+>  package/open-lldp/open-lldp.hash                   |  2 ++
+>  package/open-lldp/open-lldp.mk                     | 26 ++++++++++++++++++++++
 
-Sending an update with the cc-s suggested.
+Please also add an entry to the DEVELOPERS file.
 
--- 
-Regards
-Einar J?n
+>  5 files changed, 50 insertions(+)
+>  create mode 100644 package/open-lldp/0001-lldpad-vdptool-getline.patch
+>  create mode 100644 package/open-lldp/Config.in
+>  create mode 100644 package/open-lldp/open-lldp.hash
+>  create mode 100644 package/open-lldp/open-lldp.mk
+>
+> diff --git a/package/Config.in b/package/Config.in
+> index 01f4095be5..37e1e753e3 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -1760,6 +1760,7 @@ endif
+>         source "package/odhcp6c/Config.in"
+>         source "package/odhcploc/Config.in"
+>         source "package/olsr/Config.in"
+> +       source "package/open-lldp/Config.in"
+>         source "package/open-plc-utils/Config.in"
+>         source "package/openntpd/Config.in"
+>         source "package/openobex/Config.in"
+> diff --git a/package/open-lldp/0001-lldpad-vdptool-getline.patch b/package/open-lldp/0001-lldpad-vdptool-getline.patch
+> new file mode 100644
+> index 0000000000..ac2e62ff16
+> --- /dev/null
+> +++ b/package/open-lldp/0001-lldpad-vdptool-getline.patch
+> @@ -0,0 +1,10 @@
+> +--- open-lldp-036e314/vdptool.c 2015-08-24 19:31:59.000000000 +0200
+> ++++ open-lldp-036e314_patched/vdptool.c 2018-01-10 10:16:24.096431555 +0100
+> +@@ -36,6 +36,7 @@
+> +  * set and query VSI profile settings.
+> +  */
+> +
+> ++#define _GNU_SOURCE
+> + #include <stdlib.h>
+> + #include <stdio.h>
+> + #include <unistd.h>
 
-On 12 January 2018 at 11:57, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
->
-> On Fri, 12 Jan 2018 11:54:40 +0100, Einar J?n wrote:
->
->> > That's a bug. Could you submit a proper patch that fixes this ?
->> >
->>
->> Attached one below, done against current master (84e835e)
->> I hope that's the way you want it.
->
-> It is almost good :)
->
-> Things to adjust:
->
->  - We need your Signed-off-by at the end of the commit log.
->
->  - Please send the patch inline, using "git send-email". This makes
->    review easier, and allows our patchwork tracking tool
->    (http://patchwork.ozlabs.org/project/buildroot/list/) to properly
->    record the patch.
->
->  - You could slightly tweak the commit log, with something like: "The
->    ping and traceroute6 programs need to be SUID-root to work
->    correctly."
->
-> Could you fix those minor details and send an updated version?
->
-> Thanks!
->
-> Thomas
+The patch should be git formatted, have a proper commit log and your
+Signed-off-by tag.
+
+> diff --git a/package/open-lldp/Config.in b/package/open-lldp/Config.in
+> new file mode 100644
+> index 0000000000..84b24702c7
+> --- /dev/null
+> +++ b/package/open-lldp/Config.in
+> @@ -0,0 +1,11 @@
+> +config BR2_PACKAGE_OPEN_LLDP
+> +        bool "open-lldp"
+> +        select BR2_PACKAGE_LIBCONFIG
+> +        select BR2_PACKAGE_LIBNL
+> +        select BR2_PACKAGE_LIBTOOL
+> +        select BR2_PACKAGE_READLINE
+> +        help
+> +         This package contains the Linux user space daemon and configuration
+> +         tool for Intel LLDP Agent with Enhanced Ethernet support for the
+> +         Data Center.
+> +
+
+Projects URL missing.
+
+> diff --git a/package/open-lldp/open-lldp.hash b/package/open-lldp/open-lldp.hash
+> new file mode 100644
+> index 0000000000..6fef5b2999
+> --- /dev/null
+> +++ b/package/open-lldp/open-lldp.hash
+> @@ -0,0 +1,2 @@
+> +# Locally computed
+> +sha256 217124f24ac57d3191ab33c53fccf5d7319e83f9029610be3c3cb71392480a2a  open-lldp-036e314.tar.gz
+
+checksum for licence file (README) is missing.
+
+> diff --git a/package/open-lldp/open-lldp.mk b/package/open-lldp/open-lldp.mk
+> new file mode 100644
+> index 0000000000..5a69595b4f
+> --- /dev/null
+> +++ b/package/open-lldp/open-lldp.mk
+> @@ -0,0 +1,26 @@
+> +################################################################################
+> +#
+> +# open-lldp
+> +#
+> +################################################################################
+> +
+> +OPEN_LLDP_VERSION = 036e314
+> +OPEN_LLDP_SITE = git://open-lldp.org/open-lldp.git
+> +OPEN_LLDP_SITE_METHOD = git
+> +OPEN_LLDP_DEPENDENCIES = libconfig host-pkgconf libtool
+
+What about libnl?
+
+> +OPEN_LLDP_LICENSE = GPL-2.0
+> +OPEN_LLDP_LICENSE_FILES = README
+> +
+> +OPEN_LLDP_AUTORECONF = YES
+> +OPEN_LLDP_INSTALL_STAGING = YES
+> +
+> +OPEN_LLDP_CONF_OPTS = \
+> +        --disable-static
+> +
+> +define OPEN_LLDP_BOOTSTRAP
+> +        (cd $(@D) && ./bootstrap.sh)
+> +endef
+
+Why is this needed? Isn't OPEN_LLDP_AUTORECONF = YES sufficient?
+
+Yegor
+
+> +
+> +OPEN_LLDP_PRE_CONFIGURE_HOOKS += OPEN_LLDP_BOOTSTRAP
+> +
+> +$(eval $(autotools-package))
 > --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux and Kernel engineering
-> http://free-electrons.com
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: 0001-iputils-fix-ping-and-traceroute6-executable-permissi.patch
-Type: application/octet-stream
-Size: 1064 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180112/3734b674/attachment.obj>
+> 2.14.3
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
