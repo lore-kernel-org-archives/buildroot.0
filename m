@@ -1,28 +1,28 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 12 Jan 2018 18:59:15 +0000
-Subject: [Buildroot] [Bug 10216] package/x11r7/mcookie/mcookie.c:207: bad
- size ?
-In-Reply-To: <bug-10216-163@https.bugs.busybox.net/>
-References: <bug-10216-163@https.bugs.busybox.net/>
-Message-ID: <bug-10216-163-NqbGfhz5gc@https.bugs.busybox.net/>
+Date: Fri, 12 Jan 2018 18:59:49 +0000
+Subject: [Buildroot] [Bug 9996] lz4 package does not install lz4 binaries in
+ target
+In-Reply-To: <bug-9996-163@https.bugs.busybox.net/>
+References: <bug-9996-163@https.bugs.busybox.net/>
+Message-ID: <bug-9996-163-tkcbWODKEy@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=10216
+https://bugs.busybox.net/show_bug.cgi?id=9996
 
 Peter Korsgaard <jacmet@uclibc.org> changed:
 
            What    |Removed                     |Added
 ----------------------------------------------------------------------------
          Resolution|---                         |FIXED
-             Status|ASSIGNED                    |RESOLVED
+             Status|NEW                         |RESOLVED
 
---- Comment #4 from Peter Korsgaard <jacmet@uclibc.org> ---
+--- Comment #3 from Peter Korsgaard <jacmet@uclibc.org> ---
 Fixed by
-https://git.buildroot.org/buildroot/commit/?id=40f4191f2a1246b792ffc0c02b6c9bd2d62649f2,
+https://git.buildroot.org/buildroot/commit/?id=6f1c11f79a64387c1f1749550804f8aae0cfa7a7,
 thanks
 
 -- 
