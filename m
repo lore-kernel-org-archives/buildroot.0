@@ -1,7 +1,9 @@
 From: Laurent Charpentier <laurent_pubs@yahoo.com>
-Date: Fri, 12 Jan 2018 12:00:14 +0100
-Subject: [Buildroot] [PATCH 1/1] Added lldpad (LLDP Agent Daemon) package.
-Message-ID: <20180112110015.18956-1-laurent_pubs@yahoo.com>
+Date: Fri, 12 Jan 2018 12:00:15 +0100
+Subject: [Buildroot] [PATCH 1/1] open-lldp: new package
+In-Reply-To: <20180112110015.18956-1-laurent_pubs@yahoo.com>
+References: <20180112110015.18956-1-laurent_pubs@yahoo.com>
+Message-ID: <20180112110015.18956-2-laurent_pubs@yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
