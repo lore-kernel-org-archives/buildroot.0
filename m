@@ -1,22 +1,19 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 12 Jan 2018 19:54:08 +0100
-Subject: [Buildroot] [PATCH 2/2] gnupg2: bump to version 2.2.4
-In-Reply-To: <40dc82356b1f40dd565c6607543e27fa2b8a94e8.1515753558.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Fri, 12 Jan 2018 12:39:18 +0200")
-References: <652141f338b9b6c383dd9da7c409e10e5fbb9242.1515753558.git.baruch@tkos.co.il>
- <40dc82356b1f40dd565c6607543e27fa2b8a94e8.1515753558.git.baruch@tkos.co.il>
-Message-ID: <876086q567.fsf@dell.be.48ers.dk>
+Date: Fri, 12 Jan 2018 19:54:34 +0100
+Subject: [Buildroot] [PATCH 1/1] boinc: bump to version 7.8.5
+In-Reply-To: <20180112182058.16809-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Fri, 12 Jan 2018 19:20:58 +0100")
+References: <20180112182058.16809-1-fontaine.fabrice@gmail.com>
+Message-ID: <871siuq55h.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Add license hash.
- > Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed, thanks.
 
