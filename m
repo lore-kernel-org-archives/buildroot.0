@@ -1,51 +1,117 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri, 12 Jan 2018 12:39:18 +0200
-Subject: [Buildroot] [PATCH 2/2] gnupg2: bump to version 2.2.4
-In-Reply-To: <652141f338b9b6c383dd9da7c409e10e5fbb9242.1515753558.git.baruch@tkos.co.il>
-References: <652141f338b9b6c383dd9da7c409e10e5fbb9242.1515753558.git.baruch@tkos.co.il>
-Message-ID: <40dc82356b1f40dd565c6607543e27fa2b8a94e8.1515753558.git.baruch@tkos.co.il>
+From: Laurent Charpentier <laurent_pubs@yahoo.com>
+Date: Fri, 12 Jan 2018 11:35:08 +0100
+Subject: [Buildroot] [PATCH 1/1] Added lldpad (LLDP Agent Daemon) package.
+Message-ID: <20180112103508.17334-1-laurent_pubs@yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add license hash.
+The lldpad package comes with utilities to manage an LLDP interface with
+support for reading and configuring TLVs. TLVs and interfaces are individual
+controlled allowing flexible configuration for TX only, RX only, or TX/RX
+modes per TLV.
 
-Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+http://open-lldp.org/
+
+Signed-off-by: Laurent Charpentier <laurent_pubs@yahoo.com>
 ---
- package/gnupg2/gnupg2.hash | 9 +++++----
- package/gnupg2/gnupg2.mk   | 2 +-
- 2 files changed, 6 insertions(+), 5 deletions(-)
+ package/Config.in                                  |  1 +
+ .../open-lldp/0001-lldpad-vdptool-getline.patch    | 10 +++++++++
+ package/open-lldp/Config.in                        | 11 +++++++++
+ package/open-lldp/open-lldp.hash                   |  2 ++
+ package/open-lldp/open-lldp.mk                     | 26 ++++++++++++++++++++++
+ 5 files changed, 50 insertions(+)
+ create mode 100644 package/open-lldp/0001-lldpad-vdptool-getline.patch
+ create mode 100644 package/open-lldp/Config.in
+ create mode 100644 package/open-lldp/open-lldp.hash
+ create mode 100644 package/open-lldp/open-lldp.mk
 
-diff --git a/package/gnupg2/gnupg2.hash b/package/gnupg2/gnupg2.hash
-index e12f880b09d7..a003da668bec 100644
---- a/package/gnupg2/gnupg2.hash
-+++ b/package/gnupg2/gnupg2.hash
-@@ -1,5 +1,6 @@
--# From https://lists.gnupg.org/pipermail/gnupg-announce/2017q4/000417.html
--sha1 68ed37d363166b5bd79971537484148eb8f2958c  gnupg-2.2.3.tar.bz2
-+# From https://lists.gnupg.org/pipermail/gnupg-announce/2017q4/000419.html
-+sha1 732266e8888c6f41c084d043c7a0058332ff3580  gnupg-2.2.4.tar.bz2
- # Calculated based on the hash above and signature
--# https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.2.3.tar.bz2.sig
--sha256 cbd37105d139f7aa74f92b6f65d136658682094b0e308666b820ae4b984084b4  gnupg-2.2.3.tar.bz2
-+# https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.2.4.tar.bz2.sig
-+sha256 401a3e64780fdfa6d7670de0880aa5c9d589b3db7a7098979d7606cec546f2ec  gnupg-2.2.4.tar.bz2
-+sha256 bc2d6664f6276fa0a72d57633b3ae68dc7dcb677b71018bf08c8e93e509f1357  COPYING
-diff --git a/package/gnupg2/gnupg2.mk b/package/gnupg2/gnupg2.mk
-index 83397e2bbf15..980fae342b7b 100644
---- a/package/gnupg2/gnupg2.mk
-+++ b/package/gnupg2/gnupg2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GNUPG2_VERSION = 2.2.3
-+GNUPG2_VERSION = 2.2.4
- GNUPG2_SOURCE = gnupg-$(GNUPG2_VERSION).tar.bz2
- GNUPG2_SITE = https://gnupg.org/ftp/gcrypt/gnupg
- GNUPG2_LICENSE = GPL-3.0+
+diff --git a/package/Config.in b/package/Config.in
+index 01f4095be5..37e1e753e3 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1760,6 +1760,7 @@ endif
+ 	source "package/odhcp6c/Config.in"
+ 	source "package/odhcploc/Config.in"
+ 	source "package/olsr/Config.in"
++	source "package/open-lldp/Config.in"
+ 	source "package/open-plc-utils/Config.in"
+ 	source "package/openntpd/Config.in"
+ 	source "package/openobex/Config.in"
+diff --git a/package/open-lldp/0001-lldpad-vdptool-getline.patch b/package/open-lldp/0001-lldpad-vdptool-getline.patch
+new file mode 100644
+index 0000000000..ac2e62ff16
+--- /dev/null
++++ b/package/open-lldp/0001-lldpad-vdptool-getline.patch
+@@ -0,0 +1,10 @@
++--- open-lldp-036e314/vdptool.c 2015-08-24 19:31:59.000000000 +0200
+++++ open-lldp-036e314_patched/vdptool.c 2018-01-10 10:16:24.096431555 +0100
++@@ -36,6 +36,7 @@
++  * set and query VSI profile settings.
++  */
++
+++#define _GNU_SOURCE
++ #include <stdlib.h>
++ #include <stdio.h>
++ #include <unistd.h>
+diff --git a/package/open-lldp/Config.in b/package/open-lldp/Config.in
+new file mode 100644
+index 0000000000..84b24702c7
+--- /dev/null
++++ b/package/open-lldp/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_OPEN_LLDP
++        bool "open-lldp"
++        select BR2_PACKAGE_LIBCONFIG
++        select BR2_PACKAGE_LIBNL
++        select BR2_PACKAGE_LIBTOOL
++        select BR2_PACKAGE_READLINE
++        help
++	  This package contains the Linux user space daemon and configuration
++	  tool for Intel LLDP Agent with Enhanced Ethernet support for the
++	  Data Center.
++
+diff --git a/package/open-lldp/open-lldp.hash b/package/open-lldp/open-lldp.hash
+new file mode 100644
+index 0000000000..6fef5b2999
+--- /dev/null
++++ b/package/open-lldp/open-lldp.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256 217124f24ac57d3191ab33c53fccf5d7319e83f9029610be3c3cb71392480a2a  open-lldp-036e314.tar.gz
+diff --git a/package/open-lldp/open-lldp.mk b/package/open-lldp/open-lldp.mk
+new file mode 100644
+index 0000000000..5a69595b4f
+--- /dev/null
++++ b/package/open-lldp/open-lldp.mk
+@@ -0,0 +1,26 @@
++################################################################################
++#
++# open-lldp
++#
++################################################################################
++
++OPEN_LLDP_VERSION = 036e314
++OPEN_LLDP_SITE = git://open-lldp.org/open-lldp.git
++OPEN_LLDP_SITE_METHOD = git
++OPEN_LLDP_DEPENDENCIES = libconfig host-pkgconf libtool
++OPEN_LLDP_LICENSE = GPL-2.0
++OPEN_LLDP_LICENSE_FILES = README
++
++OPEN_LLDP_AUTORECONF = YES
++OPEN_LLDP_INSTALL_STAGING = YES
++
++OPEN_LLDP_CONF_OPTS = \
++        --disable-static
++
++define OPEN_LLDP_BOOTSTRAP
++        (cd $(@D) && ./bootstrap.sh)
++endef
++
++OPEN_LLDP_PRE_CONFIGURE_HOOKS += OPEN_LLDP_BOOTSTRAP
++
++$(eval $(autotools-package))
 -- 
-2.15.1
+2.14.3
