@@ -1,128 +1,47 @@
-From: =?UTF-8?Q?Stefan_Fr=c3=b6berg?= <stefan.froberg@petroprogram.com>
-Date: Fri, 12 Jan 2018 12:34:41 +0200
-Subject: [Buildroot] [PATCH 1/1] unbound: new package
-In-Reply-To: <jt1miexfp7.ln2@ID-313208.user.individual.net>
-References: <20180111232039.24270-1-stefan.froberg@petroprogram.com>
- <jt1miexfp7.ln2@ID-313208.user.individual.net>
-Message-ID: <2075ceff-cae9-29b4-365b-5c11334754b9@petroprogram.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Fri, 12 Jan 2018 12:39:17 +0200
+Subject: [Buildroot] [PATCH 1/2] libgcrypt: bump to version 1.8.2
+Message-ID: <652141f338b9b6c383dd9da7c409e10e5fbb9242.1515753558.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Bernd
+Add license hash.
 
-Okay, I will send a new one soon.
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/libgcrypt/libgcrypt.hash | 7 ++++---
+ package/libgcrypt/libgcrypt.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
-Best Regards
-Stefan
-
-Bernd Kuhls kirjoitti 12.01.2018 klo 08:41:
-> Hi Stefan,
->
-> Am Fri, 12 Jan 2018 01:20:39 +0200 schrieb Stefan Fr?berg:
->
->> diff --git a/package/unbound/Config.in b/package/unbound/Config.in
->> new file mode 100644
->> index 0000000000..07e4fa39f2
->> --- /dev/null
->> +++ b/package/unbound/Config.in
->> @@ -0,0 +1,37 @@
->> +config BR2_PACKAGE_UNBOUND
->> +	bool "unbound"
->> +	select BR2_PACKAGE_EXPAT
->> +	select BR2_PACKAGE_LIBEVENT
->> +	select BR2_PACKAGE_LIBSODIUM if BR2_PACKAGE_UNBOUND_DNSCRYPT
-> parts of this line should be moved inside
-> "config BR2_PACKAGE_UNBOUND_DNSCRYPT".
->
->> +	depends on BR2_PACKAGE_OPENSSL
-> Why not "select BR2_PACKAGE_OPENSSL"?
-> Did you test with libressl as well?
->
->> +	help
->> +	  Unbound is a validating, recursive, and caching DNS resolver.
->> +	  It supports DNSSEC, QNAME minimisation, DNS-over-TLS and
->> +	  DNSCrypt.
->> +
->> +	  https://www.unbound.net
->> +
->> +if BR2_PACKAGE_UNBOUND
->> +
->> +config BR2_PACKAGE_UNBOUND_DNSCRYPT
->> +	bool "Enable DNSCrypt"
-> Add
->
->> +	select BR2_PACKAGE_LIBSODIUM
-> here.
->
-> [...]
->
->> diff --git a/package/unbound/unbound.mk b/package/unbound/unbound.mk
->> new file mode 100644
->> index 0000000000..3c6f4ac895
->> --- /dev/null
->> +++ b/package/unbound/unbound.mk
->> @@ -0,0 +1,50 @@
->> +################################################################################
->> +#
->> +# unbound
->> +#
->> +################################################################################
->> +
->> +UNBOUND_VERSION = 1.6.7
->> +UNBOUND_SOURCE = unbound-$(UNBOUND_VERSION).tar.gz
-> the variable value contains the default, this line can therefore
-> be removed completely.
->
->> +UNBOUND_SITE = https://www.unbound.net/downloads
->> +UNBOUND_DEPENDENCIES = host-pkgconf expat libevent openssl
->> +UNBOUND_LICENSE = BSD
-> According to https://spdx.org/licenses/ the value "BSD" does not exist,
-> afaics the license is "BSD-3-Clause".
->
->> +UNBOUND_LICENSE_FILES = LICENSE
->> +UNBOUND_CONF_OPTS += --disable-rpath \
->> +		     --disable-debug \
->> +		     --with-conf-file=/etc/unbound/unbound.conf \
->> +		     --with-pidfile=/var/run/unbound.pid \
->> +		     --with-rootkey-file=/etc/unbound/root.key \
->> +		     --enable-tfo-server \
->> +		     --enable-relro-now \
->> +		     --with-pic \
->> +		     --enable-pie
-> Please add
-> 		--with-ssl=$(STAGING_DIR)/usr \
->
-> to avoid
->
-> checking for SSL... configure: error: Cannot find the SSL libraries in
->  /usr/local/ssl /usr/lib/ssl /usr/ssl /usr/pkg /usr/local /opt/local /usr/sfw /usr
->
-> Small nit: I do not like the idention used, how about something like this?
-> https://git.buildroot.net/buildroot/tree/package/kodi/kodi.mk#n59
->
->> +# uClibc-ng does not have MSG_FASTOPEN
->> +# so TCP Fast Open client mode disabled for it
->> +ifeq ($(BR2_TOOLCHAIN_BUILDROOT_UCLIBC),y)
->> +UNBOUND_CONF_OPTS += --disable-tfo-client
->> +else
->> +UNBOUND_CONF_OPTS += --enable-tfo-client
->> +endif
-> An external uClibc toolchain does not define
-> BR2_TOOLCHAIN_BUILDROOT_UCLIBC:
->
-> $ grep UCLIBC .config
-> BR2_TOOLCHAIN_USES_UCLIBC=y
-> BR2_TOOLCHAIN_EXTERNAL_UCLIBC=y
-> BR2_TOOLCHAIN_EXTERNAL_CUSTOM_UCLIBC=y
->
-> Better check for BR2_TOOLCHAIN_USES_UCLIBC.
->
-> Regards, Bernd
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+diff --git a/package/libgcrypt/libgcrypt.hash b/package/libgcrypt/libgcrypt.hash
+index 8999db8970fb..736332d3505c 100644
+--- a/package/libgcrypt/libgcrypt.hash
++++ b/package/libgcrypt/libgcrypt.hash
+@@ -1,5 +1,6 @@
+ # From https://www.gnupg.org/download/integrity_check.html
+-sha1 dd35f00da45602afe81e01f4d60c40bbdd826fe6  libgcrypt-1.8.1.tar.bz2
++sha1 ab8aae5d7a68f8e0988f90e11e7f6a4805af5c8d  libgcrypt-1.8.2.tar.bz2
+ # Locally calculated after checking signature
+-# https://gnupg.org/ftp/gcrypt/libgcrypt/libgcrypt-1.8.1.tar.bz2.sig
+-sha256  7a2875f8b1ae0301732e878c0cca2c9664ff09ef71408f085c50e332656a78b3  libgcrypt-1.8.1.tar.bz2
++# https://gnupg.org/ftp/gcrypt/libgcrypt/libgcrypt-1.8.2.tar.bz2.sig
++sha256  c8064cae7558144b13ef0eb87093412380efa16c4ee30ad12ecb54886a524c07  libgcrypt-1.8.2.tar.bz2
++sha256  ca0061fc1381a3ab242310e4b3f56389f28e3d460eb2fd822ed7a21c6f030532  COPYING.LIB
+diff --git a/package/libgcrypt/libgcrypt.mk b/package/libgcrypt/libgcrypt.mk
+index fbbb83162e3a..00e864e836a2 100644
+--- a/package/libgcrypt/libgcrypt.mk
++++ b/package/libgcrypt/libgcrypt.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBGCRYPT_VERSION = 1.8.1
++LIBGCRYPT_VERSION = 1.8.2
+ LIBGCRYPT_SOURCE = libgcrypt-$(LIBGCRYPT_VERSION).tar.bz2
+ LIBGCRYPT_LICENSE = LGPL-2.1+
+ LIBGCRYPT_LICENSE_FILES = COPYING.LIB
+-- 
+2.15.1
