@@ -1,7 +1,8 @@
 From: Steve Kenton <skenton@ou.edu>
-Date: Fri, 12 Jan 2018 17:29:51 -0600
-Subject: [Buildroot] [PATCH 1/1] Add new package udftools, try 2
-Message-ID: <20180112232951.1032-1-skenton@ou.edu>
+Date: Fri, 12 Jan 2018 18:31:22 -0600
+Subject: [Buildroot] [PATCH 1/1] Add a new package udftools,
+ third time is the charm
+Message-ID: <20180113003122.2375-1-skenton@ou.edu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,31 +11,31 @@ To: buildroot@busybox.net
 
 Signed-off-by: Steve Kenton <skenton@ou.edu>
 ---
-Try 2: fix stupid copy paste error in Config.in
+ Try 2: fix stupid copy paste error in Config.in
+ Try 3: remove duplicate/misplaced addition to master Config.in
+ I wish I could see these issues  when I first look the patch over - sigh
 
- package/Config.in              |  2 ++
+package/Config.in              |  1 +
  package/udftools/Config.in     | 13 +++++++++++++
  package/udftools/udftools.hash |  2 ++
  package/udftools/udftools.mk   | 13 +++++++++++++
- 4 files changed, 30 insertions(+)
+ 4 files changed, 29 insertions(+)
  create mode 100644 package/udftools/Config.in
  create mode 100644 package/udftools/udftools.hash
  create mode 100644 package/udftools/udftools.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 01f4095..4d3d6c8 100644
+index 01f4095..ad901ec 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -196,7 +196,9 @@ menu "Filesystem and flash utilities"
+@@ -196,6 +196,7 @@ menu "Filesystem and flash utilities"
  	source "package/squashfs/Config.in"
  	source "package/sshfs/Config.in"
  	source "package/sunxi-tools/Config.in"
 +	source "package/udftools/Config.in"
  	source "package/unionfs/Config.in"
-+	source "package/udftools/Config.in"
  	source "package/xfsprogs/Config.in"
  endmenu
- 
 diff --git a/package/udftools/Config.in b/package/udftools/Config.in
 new file mode 100644
 index 0000000..b217cd2
