@@ -1,50 +1,82 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 13 Jan 2018 23:24:29 +0100
-Subject: [Buildroot] [PATCH] package/linux-firmware: fix incorrect
- line-continuation
-Message-ID: <20180113222429.21497-1-yann.morin.1998@free.fr>
+Date: Sat, 13 Jan 2018 23:28:03 +0100
+Subject: [Buildroot] [PATCH] swupdate: bump to version 2017.11
+In-Reply-To: <20180110222816.20579-1-joerg.krause@embedded.rocks>
+References: <20180110222816.20579-1-joerg.krause@embedded.rocks>
+Message-ID: <20180113222803.GI3226@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Partially fixes:
-    https://gitlab.com/buildroot.org/buildroot/-/jobs/47806089
+J?rg, All,
 
-And add myself to the list of devloppers for it.
+On 2018-01-10 23:28 +0100, J?rg Krause spake thusly:
+[--SNIP--]
+> diff --git a/package/swupdate/swupdate.mk b/package/swupdate/swupdate.mk
+> index fbb092da05..d1afbc4882 100644
+> --- a/package/swupdate/swupdate.mk
+> +++ b/package/swupdate/swupdate.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -SWUPDATE_VERSION = 2017.07
+> +SWUPDATE_VERSION = 2017.11
+>  SWUPDATE_SITE = $(call github,sbabic,swupdate,$(SWUPDATE_VERSION))
+>  SWUPDATE_LICENSE = GPL-2.0+, MIT, Public Domain
+>  SWUPDATE_LICENSE_FILES = COPYING
+> @@ -39,8 +39,13 @@ else
+>  SWUPDATE_MAKE_ENV += HAVE_LIBCURL=n
+>  endif
+>  
+> -ifeq ($(BR2_PACKAGE_LUA_5_2)$(BR2_PACKAGE_LUA_5_3),y)
+> -SWUPDATE_DEPENDENCIES += lua host-pkgconf
+> +
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Yegor Yefremov <yegorslists@googlemail.com>
----
- DEVELOPERS                               | 1 +
- package/linux-firmware/linux-firmware.mk | 2 +-
- 2 files changed, 2 insertions(+), 1 deletion(-)
+This is adding an extra empty line, which would have been caught by
+running:
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 2f7d051e8a..bbe9d405c1 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1862,6 +1862,7 @@ F:	package/libiscsi/
- F:	package/libpri/
- F:	package/libseccomp/
- F:	package/libss7/
-+F:	package/linux-firmware/
- F:	package/linux-tools/
- F:	package/matchbox*
- F:	package/mesa3d-headers/
-diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index 394f2868c3..cf79e5603d 100644
---- a/package/linux-firmware/linux-firmware.mk
-+++ b/package/linux-firmware/linux-firmware.mk
-@@ -423,7 +423,7 @@ LINUX_FIRMWARE_FILES += \
- 	brcm/brcmfmac43362-sdio.bin brcm/brcmfmac43430-sdio.bin \
- 	brcm/brcmfmac43430a0-sdio.bin brcm/brcmfmac43455-sdio.bin \
- 	brcm/brcmfmac43569.bin brcm/brcmfmac43570-pcie.bin \
--	brcm/brcmfmac43602-pcie.ap.bin brcm/brcmfmac43602-pcie.bin \
-+	brcm/brcmfmac43602-pcie.ap.bin brcm/brcmfmac43602-pcie.bin
- LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.broadcom_bcm43xx
- endif
- 
+    $ ./utils/check-package package/swupdate/swupdate.mk
+    package/swupdate/swupdate.mk:42: consecutive empty lines
+    140 lines processed
+    1 warnings generated
+
+Care to fix, please?
+
+Regards,
+Yann E. MORIN.
+
+> +ifeq ($(BR2_PACKAGE_HAS_LUAINTERPRETER),y)
+> +SWUPDATE_DEPENDENCIES += luainterpreter host-pkgconf
+> +# defines the base name for the pkg-config file ("lua" or "luajit")
+> +define SWUPDATE_SET_LUA_VERSION
+> +	$(call KCONFIG_SET_OPT,CONFIG_LUAPKG,$(BR2_PACKAGE_PROVIDES_LUAINTERPRETER),$(SWUPDATE_BUILD_CONFIG))
+> +endef
+>  SWUPDATE_MAKE_ENV += HAVE_LUA=y
+>  else
+>  SWUPDATE_MAKE_ENV += HAVE_LUA=n
+> @@ -110,6 +115,7 @@ endef
+>  define SWUPDATE_KCONFIG_FIXUP_CMDS
+>  	$(SWUPDATE_PREFER_STATIC)
+>  	$(SWUPDATE_SET_BUILD_OPTIONS)
+> +	$(SWUPDATE_SET_LUA_VERSION)
+>  endef
+>  
+>  define SWUPDATE_BUILD_CMDS
+> -- 
+> 2.15.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.14.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
