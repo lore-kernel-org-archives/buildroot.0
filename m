@@ -1,169 +1,70 @@
-From: =?UTF-8?q?Stefan=20Fr=C3=B6berg?= <stefan.froberg@petroprogram.com>
-Date: Sun, 14 Jan 2018 00:26:51 +0200
-Subject: [Buildroot] [PATCH v2 1/1] unbound: new package
-Message-ID: <20180113222651.22755-1-stefan.froberg@petroprogram.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 13 Jan 2018 23:37:09 +0100
+Subject: [Buildroot] [PATCH] iputils: fix ping and traceroute6
+ executable permissions
+In-Reply-To: <CANQCQpYOku9_1AZtk9Qw=j=wMw2PKb=8hS0=dCvsZfbeR29e7Q@mail.gmail.com>
+References: <1515874782-14986-1-git-send-email-tolvupostur@gmail.com>
+ <CANQCQpYOku9_1AZtk9Qw=j=wMw2PKb=8hS0=dCvsZfbeR29e7Q@mail.gmail.com>
+Message-ID: <20180113223709.GJ3226@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Unbound: validating, recursive & caching DNS resolver with
-DNSSEC, QNAME minimisation, DNSCrypt and DNS-over-TLS support.
+Matt, Einar, All,
 
-Signed-off-by: Stefan Fr?berg <stefan.froberg@petroprogram.com>
----
+On 2018-01-13 15:54 -0600, Matthew Weber spake thusly:
+> On Sat, Jan 13, 2018 at 2:19 PM,  <tolvupostur@gmail.com> wrote:
+> > From: Einar Jon Gunnarsson <tolvupostur@gmail.com>
+> > The iputils executables are installed without the setuid bit set,
+> > which prevents some programs from working.
+> >
+> 
+> Does your use case involve a system with non-root users?
+> 
+> Could you describe what you mean by "some programs"?
+> 
+> The landscape of how ping gets elevated privileges for raw socket
+> access has a number of options (setuid / cap_net_raw capability / new
+> socket type).   The backwards compatible fix would be to use setuid
+> but from a security hardening aspect, I wish we could set capabilities
+> for this instead.  The issue I see is the filesystem type dependency
+> so we can pre-set the capabilities in xattribs.   I'll have to ask
+> around if setuid vs capabilities has come up before but as most
+> buildroot systems run as root, I'm guessing it hasn't been a hot
+> topic.
+> 
+> Some backstory on Ubuntu's situation, I believe as of 16.04 they still
+> did setuid but have selectively transitioned to not.
+> https://bugs.launchpad.net/ubuntu/+source/iputils/+bug/534341
 
-Changes v1 -> v2:
+Still the case in 17.10, and if I remove the setuid bit, it fails:
 
-- Fixed license to BSD-3-Clause (by Bernd Kuhls)
-- Fixed DNSCrypt handling (by Bernd Kuhls)
-- Use "select BR2_PACKAGE_OPENSSL" (by Bernd Kuhls)
-- Added "--with-ssl=$(STAGING_DIR)/usr" (by Bernd Kuhls)
-- Use "BR2_TOOLCHAIN_USES_UCLIBC" (by Bernd Kuhls)
+    $ ping some-host
+    ping: socket: Operation not permitted
 
- DEVELOPERS                   |  1 +
- package/Config.in            |  1 +
- package/unbound/Config.in    | 37 ++++++++++++++++++++++++++++++++
- package/unbound/unbound.hash |  3 +++
- package/unbound/unbound.mk   | 51 ++++++++++++++++++++++++++++++++++++++++++++
- 5 files changed, 93 insertions(+)
- create mode 100644 package/unbound/Config.in
- create mode 100644 package/unbound/unbound.hash
- create mode 100644 package/unbound/unbound.mk
+Regards,
+Yann E. MORIN.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 2f7d051e8a..184ce82cec 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1642,6 +1642,7 @@ N:	Stefan Fr?berg <stefan.froberg@petroprogram.com>
- F:	package/elfutils/
- F:	package/libtasn1/
- F:	package/proxychains-ng/
-+F:	package/unbound/
- F:	package/yasm/
- F:	package/zlib-ng/
- 
-diff --git a/package/Config.in b/package/Config.in
-index 01f4095be5..f810445e27 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1827,6 +1827,7 @@ endif
- 	source "package/udpcast/Config.in"
- 	source "package/uhttpd/Config.in"
- 	source "package/ulogd/Config.in"
-+	source "package/unbound/Config.in"
- 	source "package/ushare/Config.in"
- 	source "package/ussp-push/Config.in"
- 	source "package/vde2/Config.in"
-diff --git a/package/unbound/Config.in b/package/unbound/Config.in
-new file mode 100644
-index 0000000000..a53cd2537c
---- /dev/null
-+++ b/package/unbound/Config.in
-@@ -0,0 +1,37 @@
-+config BR2_PACKAGE_UNBOUND
-+	bool "unbound"
-+	select BR2_PACKAGE_EXPAT
-+	select BR2_PACKAGE_LIBEVENT
-+	select BR2_PACKAGE_OPENSSL
-+	help
-+	  Unbound is a validating, recursive, and caching DNS resolver.
-+	  It supports DNSSEC, QNAME minimisation, DNS-over-TLS and
-+	  DNSCrypt.
-+
-+	  https://www.unbound.net
-+
-+if BR2_PACKAGE_UNBOUND
-+
-+config BR2_PACKAGE_UNBOUND_DNSCRYPT
-+	bool "Enable DNSCrypt"
-+	select BR2_PACKAGE_LIBSODIUM
-+	help
-+	  DNSCrypt wraps unmodified DNS queries between a client and
-+	  a DNS resolver. Default port used is 443 and like with
-+	  normal unencrypted DNS, it uses UDP first and falling back
-+	  to TCP if response too large.
-+
-+	  There is also DNS-over-TLS, a TCP only version
-+	  of proposed standard for DNS encryption (RFC 7858).
-+	  Default port for DNS-over-TLS is 853 and Unbound has
-+	  built-in support for it.
-+
-+	  https://tools.ietf.org/html/rfc7858
-+
-+	  Note: Neither DNSCrypt or DNS-over-TLS encrypt the SNI.
-+	  Here is some suggestions how to handle SNI encryption:
-+
-+	  https://tools.ietf.org/html/draft-ietf-tls-sni-encryption-00
-+
-+endif
-+
-diff --git a/package/unbound/unbound.hash b/package/unbound/unbound.hash
-new file mode 100644
-index 0000000000..5f2183897e
---- /dev/null
-+++ b/package/unbound/unbound.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256	4e7bd43d827004c6d51bef73adf941798e4588bdb40de5e79d89034d69751c9f  unbound-1.6.7.tar.gz
-+sha256	8eb9a16cbfb8703090bbfa3a2028fd46bb351509a2f90dc1001e51fbe6fd45db  LICENSE
-diff --git a/package/unbound/unbound.mk b/package/unbound/unbound.mk
-new file mode 100644
-index 0000000000..ccbb490f1c
---- /dev/null
-+++ b/package/unbound/unbound.mk
-@@ -0,0 +1,51 @@
-+################################################################################
-+#
-+# unbound
-+#
-+################################################################################
-+
-+UNBOUND_VERSION = 1.6.7
-+UNBOUND_SITE = https://www.unbound.net/downloads
-+UNBOUND_DEPENDENCIES = host-pkgconf expat libevent openssl
-+UNBOUND_LICENSE = BSD-3-Clause
-+UNBOUND_LICENSE_FILES = LICENSE
-+UNBOUND_CONF_OPTS += \
-+		--disable-rpath \
-+		--disable-debug \
-+		--with-conf-file=/etc/unbound/unbound.conf \
-+		--with-pidfile=/var/run/unbound.pid \
-+		--with-rootkey-file=/etc/unbound/root.key \
-+		--enable-tfo-server \
-+		--enable-relro-now \
-+		--with-pic \
-+		--enable-pie \
-+		--with-ssl=$(STAGING_DIR)/usr
-+
-+# uClibc-ng does not have MSG_FASTOPEN
-+# so TCP Fast Open client mode disabled for it
-+ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
-+UNBOUND_CONF_OPTS += --disable-tfo-client
-+else
-+UNBOUND_CONF_OPTS += --enable-tfo-client
-+endif
-+
-+ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
-+UNBOUND_CONF_OPTS += --with-pthreads
-+else
-+UNBOUND_CONF_OPTS += --without-pthreads
-+endif
-+
-+ifeq ($(BR2_GCC_ENABLE_LTO),y)
-+UNBOUND_CONF_OPTS += --enable-flto
-+else
-+UNBOUND_CONF_OPTS += --disable-flto
-+endif
-+
-+ifeq ($(BR2_PACKAGE_UNBOUND_DNSCRYPT),y)
-+UNBOUND_CONF_OPTS += --enable-dnscrypt
-+UNBOUND_DEPENDENCIES += libsodium
-+else
-+UNBOUND_CONF_OPTS += --disable-dnscrypt
-+endif
-+
-+$(eval $(autotools-package))
+> > +define IPUTILS_PERMISSIONS
+> > +       /bin/ping        f 4755 0 0 - - - - -
+> > +       /bin/traceroute6 f 4755 0 0 - - - - -
+> > +endef
+> 
+> The package installs other binaries when IPUTILS_INSTALL_TARGET_CMDS
+> executes, did you confirm that none of the others also require it?
+> 
+> Matt
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.13.6
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
