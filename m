@@ -1,40 +1,64 @@
-From: tolvupostur at gmail.com <tolvupostur@gmail.com>
-Date: Sat, 13 Jan 2018 21:19:42 +0100
-Subject: [Buildroot] [PATCH] iputils: fix ping and traceroute6 executable
- permissions
-Message-ID: <1515874782-14986-1-git-send-email-tolvupostur@gmail.com>
+From: Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com>
+Date: Sat, 13 Jan 2018 22:39:43 +0100
+Subject: [Buildroot] [PATCHv3 1/1] utils/checkpackagelib: add function to
+ check of the default package source variable
+Message-ID: <1515879583-8269-1-git-send-email-jerzy.m.grzegorek@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Einar Jon Gunnarsson <tolvupostur@gmail.com>
-
-The iputils executables are installed without the setuid bit set,
-which prevents some programs from working.
-
-This patch adds a post-install hook to fix the permissions of the
-ping and traceroute6 executables.
-
-Signed-off-by: Einar Jon Gunnarsson <tolvupostur@gmail.com>
+Signed-off-by: Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com>
+Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/iputils/iputils.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+Changes v2 -> v3
+ - add missing whitespaces after ',' (Ricardo Martincoski)
+ - remove value returned by the check function (Ricardo Martincoski)
 
-diff --git a/package/iputils/iputils.mk b/package/iputils/iputils.mk
-index b20cd12..13e3389 100644
---- a/package/iputils/iputils.mk
-+++ b/package/iputils/iputils.mk
-@@ -69,4 +69,9 @@ define IPUTILS_INSTALL_TARGET_CMDS
- 	$(INSTALL) -D -m 755 $(@D)/traceroute6 $(TARGET_DIR)/bin/traceroute6
- endef
+Changes v1 -> v2
+ - remove unused variable (Ricardo Martincoski)
+ - change warning url (Ricardo Martincoski)
+ - add whitelist of packages (Ricardo Martincoski)
+
+ utils/checkpackagelib/lib_mk.py | 24 ++++++++++++++++++++++++
+ 1 file changed, 24 insertions(+)
+
+diff --git a/utils/checkpackagelib/lib_mk.py b/utils/checkpackagelib/lib_mk.py
+index 817e809..a6cfeb6 100644
+--- a/utils/checkpackagelib/lib_mk.py
++++ b/utils/checkpackagelib/lib_mk.py
+@@ -99,6 +99,30 @@ class PackageHeader(_CheckFunction):
+                         text]
  
-+define IPUTILS_PERMISSIONS
-+	/bin/ping        f 4755 0 0 - - - - -
-+	/bin/traceroute6 f 4755 0 0 - - - - -
-+endef
+ 
++class RemoveDefaultPackageSourceVariable(_CheckFunction):
++    packages_that_may_contain_default_source = ["binutils", "gcc", "gdb"]
++    PACKAGE_NAME = re.compile("/([^/]+)\.mk")
 +
- $(eval $(generic-package))
++    def before(self):
++        package = self.PACKAGE_NAME.search(self.filename).group(1)
++        package_upper = package.replace("-", "_").upper()
++        self.package = package
++        self.FIND_SOURCE = re.compile(
++            "^{}_SOURCE\s*=\s*{}-\$\({}_VERSION\)\.tar\.gz"
++            .format(package_upper, package, package_upper))
++
++    def check_line(self, lineno, text):
++        if self.FIND_SOURCE.search(text):
++
++            if self.package in self.packages_that_may_contain_default_source:
++                return
++
++            return ["{}:{}: remove default value of _SOURCE variable "
++                    "({}#generic-package-reference)"
++                    .format(self.filename, lineno, self.url_to_manual),
++                    text]
++
++
+ class SpaceBeforeBackslash(_CheckFunction):
+     TAB_OR_MULTIPLE_SPACES_BEFORE_BACKSLASH = re.compile(r"^.*(  |\t)\\$")
+ 
 -- 
 1.9.1
