@@ -1,86 +1,165 @@
-From: Steve Kenton <skenton@ou.edu>
-Date: Fri, 12 Jan 2018 18:31:22 -0600
-Subject: [Buildroot] [PATCH 1/1] Add a new package udftools,
- third time is the charm
-Message-ID: <20180113003122.2375-1-skenton@ou.edu>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Fri, 12 Jan 2018 20:21:11 -0600
+Subject: [Buildroot] [PATCH v3] kvm-unit-tests: test for rdseed/rdrand
+Message-ID: <1515810071-10003-1-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Steve Kenton <skenton@ou.edu>
+The build fails when the host binutils isn't at least 2.23
+(2.22.x introduced RDSEED).
+
+The host toolchain is used for x86_64 target builds where
+we need to do a 32bit build. Most other buildroot builds
+are using a much newer binutils unless it's a external
+older toolchain.
+
+Fixes:
+http://autobuild.buildroot.net/results/c39/c3987a3cbd2960b0ff50f872636bdfd8d1a9c820/
+
+Upstream:
+https://marc.info/?l=kvm&m=151580743523259&w=2
+
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 ---
- Try 2: fix stupid copy paste error in Config.in
- Try 3: remove duplicate/misplaced addition to master Config.in
- I wish I could see these issues  when I first look the patch over - sigh
 
-package/Config.in              |  1 +
- package/udftools/Config.in     | 13 +++++++++++++
- package/udftools/udftools.hash |  2 ++
- package/udftools/udftools.mk   | 13 +++++++++++++
- 4 files changed, 29 insertions(+)
- create mode 100644 package/udftools/Config.in
- create mode 100644 package/udftools/udftools.hash
- create mode 100644 package/udftools/udftools.mk
+Thomas/Peter could you test this on one of your builders?
+I've requested a gcc farm account but still waiting at this
+point.  Here's the builders which can reproduce the failure
+(ie have old enough host binutils).
+http://autobuild.buildroot.net/?reason=kvm-unit-tests-kvm-unit-tests-20171020
 
-diff --git a/package/Config.in b/package/Config.in
-index 01f4095..ad901ec 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -196,6 +196,7 @@ menu "Filesystem and flash utilities"
- 	source "package/squashfs/Config.in"
- 	source "package/sshfs/Config.in"
- 	source "package/sunxi-tools/Config.in"
-+	source "package/udftools/Config.in"
- 	source "package/unionfs/Config.in"
- 	source "package/xfsprogs/Config.in"
- endmenu
-diff --git a/package/udftools/Config.in b/package/udftools/Config.in
+Changes v2 -> v3
+[Thomas
+ - Actually hooked up a extra cflags variable from configure so
+   they are used.  I didn't notice the CFLAGS are cleared by default.
+
+Changes v1 -> v2
+[Thomas
+ - Suggested a configure check vs the original revert of
+   the upstream commit which added these instructions to the package.
+---
+ ...002-kvm-unit-tests-test-for-rdseed-rdrand.patch | 110 +++++++++++++++++++++
+ 1 file changed, 110 insertions(+)
+ create mode 100644 package/kvm-unit-tests/0002-kvm-unit-tests-test-for-rdseed-rdrand.patch
+
+diff --git a/package/kvm-unit-tests/0002-kvm-unit-tests-test-for-rdseed-rdrand.patch b/package/kvm-unit-tests/0002-kvm-unit-tests-test-for-rdseed-rdrand.patch
 new file mode 100644
-index 0000000..b217cd2
+index 0000000..47f15c6
 --- /dev/null
-+++ b/package/udftools/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_UDFTOOLS
-+	bool "udftools"
-+	depends on BR2_PACKAGE_READLINE
-+	help
-+	  Tools for creating UDF filesystems
-+	  Maintained fork of the 2004 Sourcforge package
++++ b/package/kvm-unit-tests/0002-kvm-unit-tests-test-for-rdseed-rdrand.patch
+@@ -0,0 +1,110 @@
++From 8d9a62a5fa89001266352a929c5d40b28c0dda85 Mon Sep 17 00:00:00 2001
++From: Matt Weber <matthew.weber@rockwellcollins.com>
++Date: Fri, 12 Jan 2018 19:07:27 -0600
++Subject: [PATCH v2] kvm-unit-tests: test for rdseed/rdrand
 +
-+	  https://github.com/pali/udftools/releases/tag/2.0
++The build fails when the host binutils isn't at least 2.23
++(2.22.x introduced RDSEED).
 +
-+comment "udftools needs a toolchain w/ wchar"
-+	depends on !BR2_USE_WCHAR
++Fixes:
++http://autobuild.buildroot.net/results/c39/c3987a3cbd2960b0ff50f872636bdfd8d1a9c820/
 +
++Upstream:
++https://marc.info/?l=kvm&m=151580743523259&w=2
 +
-diff --git a/package/udftools/udftools.hash b/package/udftools/udftools.hash
-new file mode 100644
-index 0000000..b297edf
---- /dev/null
-+++ b/package/udftools/udftools.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha256	67fe428d452901215cfad8049d250540c97114b1a20dd63277b91c2c4fae8292	udftools-2.0.tar.gz
-diff --git a/package/udftools/udftools.mk b/package/udftools/udftools.mk
-new file mode 100644
-index 0000000..7cc8d9a
---- /dev/null
-+++ b/package/udftools/udftools.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# udftools
-+#
-+################################################################################
++Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
++---
++ Makefile        |  2 +-
++ configure       | 18 ++++++++++++++++++
++ x86/vmx_tests.c |  6 ++++++
++ 3 files changed, 25 insertions(+), 1 deletion(-)
 +
-+UDFTOOLS_VERSION = 2.0
-+UDFTOOLS_SITE = https://github.com/pali/udftools/releases/download/$(UDFTOOLS_VERSION)
-+UDFTOOLS_LICENSE = GPL-2.0
-+UDFTOOLS_LICENSE_FILES = COPYING
-+
-+$(eval $(autotools-package))
++diff --git a/Makefile b/Makefile
++index d9ad42b..799e9b5 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -50,7 +50,7 @@ include $(SRCDIR)/$(TEST_DIR)/Makefile
++ cc-option = $(shell if $(CC) $(1) -S -o /dev/null -xc /dev/null \
++               > /dev/null 2>&1; then echo "$(1)"; else echo "$(2)"; fi ;)
++ 
++-COMMON_CFLAGS += -g $(autodepend-flags)
+++COMMON_CFLAGS += -g $(autodepend-flags) $(EXTRA_CFLAGS)
++ COMMON_CFLAGS += -Wall -Wwrite-strings -Wclobbered -Wempty-body -Wuninitialized
++ COMMON_CFLAGS += -Wignored-qualifiers -Wunused-but-set-parameter
++ frame-pointer-flag=-f$(if $(KEEP_FRAME_POINTER),no-,)omit-frame-pointer
++diff --git a/configure b/configure
++index dd9d361..21c0219 100755
++--- a/configure
+++++ b/configure
++@@ -171,6 +171,23 @@ mkdir -p lib
++ ln -sf "$asm" lib/asm
++ 
++ 
+++cat > rd_test.c <<EOF
+++#include <stdint.h>
+++int main() {
+++   uint16_t seed=0;
+++   unsigned char ok;
+++   asm volatile ("rdseed %0; setc %1"
+++                 : "=r" (seed), "=qm" (ok));
+++   return ok;
+++}
+++EOF
+++if $cross_prefix$cc -o /dev/null rd_test.c &> /dev/null; then
+++  echo "Checking for rdseed/rdrand... Yes."
+++else
+++  echo "Checking for rdseed/rdrand... No."
+++  extra_cflags="-DNO_RDSEEDRAND"
+++fi
+++
++ # create the config
++ cat <<EOF > config.mak
++ SRCDIR=$srcdir
++@@ -181,6 +198,7 @@ ARCH_NAME=$arch_name
++ PROCESSOR=$processor
++ CC=$cross_prefix$cc
++ CXX=$cross_prefix$cxx
+++EXTRA_CFLAGS=$extra_cflags
++ LD=$cross_prefix$ld
++ OBJCOPY=$cross_prefix$objcopy
++ OBJDUMP=$cross_prefix$objdump
++diff --git a/x86/vmx_tests.c b/x86/vmx_tests.c
++index 4a3e94b..2cbe3eb 100644
++--- a/x86/vmx_tests.c
+++++ b/x86/vmx_tests.c
++@@ -770,8 +770,10 @@ asm(
++ 	"insn_sldt: sldt %ax;ret\n\t"
++ 	"insn_lldt: xor %eax, %eax; lldt %ax;ret\n\t"
++ 	"insn_str: str %ax;ret\n\t"
+++#ifndef NO_RDSEEDRAND
++ 	"insn_rdrand: rdrand %rax;ret\n\t"
++ 	"insn_rdseed: rdseed %rax;ret\n\t"
+++#endif
++ );
++ extern void insn_hlt();
++ extern void insn_invlpg();
++@@ -796,8 +798,10 @@ extern void insn_lldt();
++ extern void insn_str();
++ extern void insn_cpuid();
++ extern void insn_invd();
+++#ifndef NO_RDSEEDRAND
++ extern void insn_rdrand();
++ extern void insn_rdseed();
+++#endif
++ 
++ u32 cur_insn;
++ u64 cr3;
++@@ -853,8 +857,10 @@ static struct insn_table insn_table[] = {
++ 	{"DESC_TABLE (LLDT)", CPU_DESC_TABLE, insn_lldt, INSN_CPU1, 47, 0, 0, 0},
++ 	{"DESC_TABLE (STR)", CPU_DESC_TABLE, insn_str, INSN_CPU1, 47, 0, 0, 0},
++ 	/* LTR causes a #GP if done with a busy selector, so it is not tested.  */
+++#ifndef NO_RDSEEDRAND
++ 	{"RDRAND", CPU_RDRAND, insn_rdrand, INSN_CPU1, VMX_RDRAND, 0, 0, 0},
++ 	{"RDSEED", CPU_RDSEED, insn_rdseed, INSN_CPU1, VMX_RDSEED, 0, 0, 0},
+++#endif
++ 	// Instructions always trap
++ 	{"CPUID", 0, insn_cpuid, INSN_ALWAYS_TRAP, 10, 0, 0, 0},
++ 	{"INVD", 0, insn_invd, INSN_ALWAYS_TRAP, 13, 0, 0, 0},
++-- 
++1.9.1
 +
 -- 
-2.9.0.137.gcf4c2cf
+1.9.1
