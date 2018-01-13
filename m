@@ -1,60 +1,39 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 13 Jan 2018 23:45:32 +0100
-Subject: [Buildroot] [PATCH 1/1] package/bluez5_utils: needs readline
-Message-ID: <20180113224532.2715-1-bernd.kuhls@t-online.de>
+Date: Sun, 14 Jan 2018 00:11:58 +0100
+Subject: [Buildroot] [PATCH v2 1/1] unbound: new package
+References: <20180113222651.22755-1-stefan.froberg@petroprogram.com>
+Message-ID: <uagqiexfnk.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Upstream commit
-https://git.kernel.org/pub/scm/bluetooth/bluez.git/commit/?id=bee3796113196da1b3f56da42fcae4d9bae6695e
+Am Sun, 14 Jan 2018 00:26:51 +0200 schrieb Stefan Fr?berg:
 
-moved code depending on readline from the client tool to the shared
-library, readline is therefore not an optional dependency anymore.
+> Unbound: validating, recursive & caching DNS resolver with
+> DNSSEC, QNAME minimisation, DNSCrypt and DNS-over-TLS support.
+> 
+> Signed-off-by: Stefan Fr?berg <stefan.froberg@petroprogram.com>
 
-Fixes
-http://autobuild.buildroot.net/results/019/0197ee0036e129b736c1dc0e83722236fb656618/
+Hi,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/bluez5_utils/Config.in       | 1 +
- package/bluez5_utils/bluez5_utils.mk | 3 +--
- 2 files changed, 2 insertions(+), 2 deletions(-)
+when testing your package with this defconfig stored in ./test-unbound
 
-diff --git a/package/bluez5_utils/Config.in b/package/bluez5_utils/Config.in
-index 55831e9b61..bb0a2905c5 100644
---- a/package/bluez5_utils/Config.in
-+++ b/package/bluez5_utils/Config.in
-@@ -9,6 +9,7 @@ config BR2_PACKAGE_BLUEZ5_UTILS
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	select BR2_PACKAGE_DBUS
- 	select BR2_PACKAGE_LIBGLIB2
-+	select BR2_PACKAGE_READLINE
- 	help
- 	  bluez utils version 5.x
- 
-diff --git a/package/bluez5_utils/bluez5_utils.mk b/package/bluez5_utils/bluez5_utils.mk
-index 0634ec9f6f..055d44de78 100644
---- a/package/bluez5_utils/bluez5_utils.mk
-+++ b/package/bluez5_utils/bluez5_utils.mk
-@@ -8,7 +8,7 @@ BLUEZ5_UTILS_VERSION = 5.48
- BLUEZ5_UTILS_SOURCE = bluez-$(BLUEZ5_UTILS_VERSION).tar.xz
- BLUEZ5_UTILS_SITE = $(BR2_KERNEL_MIRROR)/linux/bluetooth
- BLUEZ5_UTILS_INSTALL_STAGING = YES
--BLUEZ5_UTILS_DEPENDENCIES = dbus libglib2
-+BLUEZ5_UTILS_DEPENDENCIES = dbus libglib2 readline
- BLUEZ5_UTILS_LICENSE = GPL-2.0+, LGPL-2.1+
- BLUEZ5_UTILS_LICENSE_FILES = COPYING COPYING.LIB
- 
-@@ -26,7 +26,6 @@ endif
- 
- ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS_CLIENT),y)
- BLUEZ5_UTILS_CONF_OPTS += --enable-client
--BLUEZ5_UTILS_DEPENDENCIES += readline
- else
- BLUEZ5_UTILS_CONF_OPTS += --disable-client
- endif
--- 
-2.11.0
+$ cat ./test-unbound 
+BR2_PACKAGE_UNBOUND=y
+BR2_PACKAGE_UNBOUND_DNSCRYPT=y
+
+$ utils/test-pkg -c test-unbound $HOME/test-unbound
+
+it fails on some platforms:
+
+                   br-arm-cortex-m4-full [ 8/47]: FAILED
+                      br-arm-full-static [11/47]: FAILED
+                            br-bfin-full [12/47]: FAILED
+                       br-m68k-5208-full [15/47]: FAILED
+
+I stopped the test at this point, maybe you can have a look at the 
+failures? I did not do that at this time (CET) of day ;)
+
+Regards, Bernd
