@@ -1,13 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 13 Jan 2018 12:25:07 +0100
-Subject: [Buildroot] [PATCH] package/bash: add /bin/bash to /etc/shells
-In-Reply-To: <20180112212157.2541d33f@windsurf.lan>
-References: <1515666444-13390-1-git-send-email-romain.naour@smile.fr>
- <20180111171357.GA3559@scaer>
- <20180112095938.621ff1bc@windsurf.lan>
- <20180112173510.GA3226@scaer>
- <20180112212157.2541d33f@windsurf.lan>
-Message-ID: <20180113112507.GE3226@scaer>
+Date: Sat, 13 Jan 2018 12:28:43 +0100
+Subject: [Buildroot] [PATCH] support/dockerfile: add directives to run
+ as non-root
+In-Reply-To: <20180112225408.4a91ca0b@windsurf.lan>
+References: <20180106152833.10111-1-yann.morin.1998@free.fr>
+ <20180112225408.4a91ca0b@windsurf.lan>
+Message-ID: <20180113112843.GF3226@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,26 +14,44 @@ To: buildroot@busybox.net
 
 Thomas, All,
 
-On 2018-01-12 21:21 +0100, Thomas Petazzoni spake thusly:
-> On Fri, 12 Jan 2018 18:35:10 +0100, Yann E. MORIN wrote:
-> > On 2018-01-12 09:59 +0100, Thomas Petazzoni spake thusly:
-> > > On Thu, 11 Jan 2018 18:13:57 +0100, Yann E. MORIN wrote:  
-> > > >     grep -E '^/bin/bash$' $(TARGET_DIR)/etc/shells >/dev/null 2>&1 \  
-> > > grep -q ?  
+On 2018-01-12 22:54 +0100, Thomas Petazzoni spake thusly:
+> On Sat,  6 Jan 2018 16:28:33 +0100, Yann E. MORIN wrote:
+> > Currently, our jobs on the gitlab-ci infra are running as root, which is
+> > problematic for two reasons:
 > > 
-> > -q is not POSIX. Redirecting is guaranteed to always work.
+> >   - this is not the usual way Buildroot is built;
+> >   - it may miss issues where running as non-root is problematic.
+> > 
+> > So, complement our Dockerfile with directives to add a new user and run
+> > everything as that user, as demonstrated by this build job:
+> >     https://gitlab.com/ymorin/buildroot-ci/-/jobs/46929562
+> > 
+> > Additional, enforce an UTF-8 locale while running.
+> > 
+> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> > Cc: Arnout Vandecappelle <arnout@mind.be>
+> > Cc: Peter Korsgaard <peter@korsgaard.com>
+> > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> > ---
+> >  support/docker/Dockerfile | 7 +++++++
+> >  1 file changed, 7 insertions(+)
 > 
-> Knowing that Buildroot only supports Linux hosts, do we care about -q
-> not being POSIX ?
+> Applied to master, thanks. Could you update the official Buildroot
+> Docker image, so that the Gitlab CI testing benefits from this ?
 
-Linux host does not mean GNU extensions. For example, Alpine is using
-busybox, so not GNU grep...
-
-But I back-pedal on this, it seems that -q has been added to POSIX now:
-    http://pubs.opengroup.org/onlinepubs/9699919799/utilities/grep.html
+I would if I could, but I am not supposed to have push-access to that
+image, have I?
 
 Regards,
 Yann E. MORIN.
+
+> Thanks!
+> 
+> Thomas
+> -- 
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
