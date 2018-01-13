@@ -1,64 +1,49 @@
-From: Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com>
-Date: Sat, 13 Jan 2018 22:39:43 +0100
-Subject: [Buildroot] [PATCHv3 1/1] utils/checkpackagelib: add function to
- check of the default package source variable
-Message-ID: <1515879583-8269-1-git-send-email-jerzy.m.grzegorek@gmail.com>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Sat, 13 Jan 2018 15:54:44 -0600
+Subject: [Buildroot] [PATCH] iputils: fix ping and traceroute6
+ executable permissions
+In-Reply-To: <1515874782-14986-1-git-send-email-tolvupostur@gmail.com>
+References: <1515874782-14986-1-git-send-email-tolvupostur@gmail.com>
+Message-ID: <CANQCQpYOku9_1AZtk9Qw=j=wMw2PKb=8hS0=dCvsZfbeR29e7Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com>
-Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
-Changes v2 -> v3
- - add missing whitespaces after ',' (Ricardo Martincoski)
- - remove value returned by the check function (Ricardo Martincoski)
+Einar,
 
-Changes v1 -> v2
- - remove unused variable (Ricardo Martincoski)
- - change warning url (Ricardo Martincoski)
- - add whitelist of packages (Ricardo Martincoski)
+On Sat, Jan 13, 2018 at 2:19 PM,  <tolvupostur@gmail.com> wrote:
+> From: Einar Jon Gunnarsson <tolvupostur@gmail.com>
+>
+> The iputils executables are installed without the setuid bit set,
+> which prevents some programs from working.
+>
 
- utils/checkpackagelib/lib_mk.py | 24 ++++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
+Does your use case involve a system with non-root users?
 
-diff --git a/utils/checkpackagelib/lib_mk.py b/utils/checkpackagelib/lib_mk.py
-index 817e809..a6cfeb6 100644
---- a/utils/checkpackagelib/lib_mk.py
-+++ b/utils/checkpackagelib/lib_mk.py
-@@ -99,6 +99,30 @@ class PackageHeader(_CheckFunction):
-                         text]
- 
- 
-+class RemoveDefaultPackageSourceVariable(_CheckFunction):
-+    packages_that_may_contain_default_source = ["binutils", "gcc", "gdb"]
-+    PACKAGE_NAME = re.compile("/([^/]+)\.mk")
-+
-+    def before(self):
-+        package = self.PACKAGE_NAME.search(self.filename).group(1)
-+        package_upper = package.replace("-", "_").upper()
-+        self.package = package
-+        self.FIND_SOURCE = re.compile(
-+            "^{}_SOURCE\s*=\s*{}-\$\({}_VERSION\)\.tar\.gz"
-+            .format(package_upper, package, package_upper))
-+
-+    def check_line(self, lineno, text):
-+        if self.FIND_SOURCE.search(text):
-+
-+            if self.package in self.packages_that_may_contain_default_source:
-+                return
-+
-+            return ["{}:{}: remove default value of _SOURCE variable "
-+                    "({}#generic-package-reference)"
-+                    .format(self.filename, lineno, self.url_to_manual),
-+                    text]
-+
-+
- class SpaceBeforeBackslash(_CheckFunction):
-     TAB_OR_MULTIPLE_SPACES_BEFORE_BACKSLASH = re.compile(r"^.*(  |\t)\\$")
- 
--- 
-1.9.1
+Could you describe what you mean by "some programs"?
+
+The landscape of how ping gets elevated privileges for raw socket
+access has a number of options (setuid / cap_net_raw capability / new
+socket type).   The backwards compatible fix would be to use setuid
+but from a security hardening aspect, I wish we could set capabilities
+for this instead.  The issue I see is the filesystem type dependency
+so we can pre-set the capabilities in xattribs.   I'll have to ask
+around if setuid vs capabilities has come up before but as most
+buildroot systems run as root, I'm guessing it hasn't been a hot
+topic.
+
+Some backstory on Ubuntu's situation, I believe as of 16.04 they still
+did setuid but have selectively transitioned to not.
+https://bugs.launchpad.net/ubuntu/+source/iputils/+bug/534341
+
+> +define IPUTILS_PERMISSIONS
+> +       /bin/ping        f 4755 0 0 - - - - -
+> +       /bin/traceroute6 f 4755 0 0 - - - - -
+> +endef
+
+The package installs other binaries when IPUTILS_INSTALL_TARGET_CMDS
+executes, did you confirm that none of the others also require it?
+
+Matt
