@@ -1,66 +1,46 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 13 Jan 2018 23:10:34 +0100
-Subject: [Buildroot] [PATCH v2 1/1] python-xlib: new package
-In-Reply-To: <20180105211307.25071-1-joseph.kogut@gmail.com>
-References: <20180105000420.20152-1-joseph.kogut@gmail.com>
- <20180105211307.25071-1-joseph.kogut@gmail.com>
-Message-ID: <20180113221034.GH3226@scaer>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 13 Jan 2018 23:22:58 +0100
+Subject: [Buildroot] [PATCH v2] tvheadend: add dependency on udev
+References: <20180105093501.5793-1-daggs@gmx.com>
+ <20180105225459.GC3673@scaer> <5ffjiex4oj.ln2@ID-313208.user.individual.net>
+ <trinity-2e15bf47-914d-4de7-9461-34ddbcc6c51d-1515859378864@3c-app-mailcom-bs05>
+Message-ID: <2fdqiexfnk.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Joseph, All,
+Am Sat, 13 Jan 2018 17:02:58 +0100 schrieb daggs:
 
-On 2018-01-05 13:13 -0800, Joseph Kogut spake thusly:
-[--SNIP--]
-> diff --git a/package/python-xlib/python-xlib.mk b/package/python-xlib/python-xlib.mk
-> new file mode 100644
-> index 0000000000..5476edfe0d
-> --- /dev/null
-> +++ b/package/python-xlib/python-xlib.mk
-> @@ -0,0 +1,15 @@
-> +###############################################################################
-> +#
-> +# python-xlib
-> +#
-> +###############################################################################
+> btw, just want to know, do you use a usb adapter?
 
-Running the check-package script will return two issues:
+Hi daggs,
 
-    $ utils/check-package package/python-xlib/*
-    package/python-xlib/python-xlib.mk:1: should be 80 hashes (http://nightly.buildroot.org/#writing-rules-mk)
-    package/python-xlib/python-xlib.mk:5: should be 80 hashes (http://nightly.buildroot.org/#writing-rules-mk)
-    26 lines processed
-    2 warnings generated
+yes, here are some snippets from lsusb -vv:
 
-CAn you fix, please?
+Bus 001 Device 006: ID 0b48:3017 TechnoTrend AG
+  iManufacturer           1 CityCom GmbH
+  iProduct                2 TechnoTrend USB2.0
 
-Regards,
-Yann E. MORIN.
+https://cateee.net/lkddb/web-lkddb/DVB_USB_DVBSKY.html
 
-> +PYTHON_XLIB_VERSION = 0.21
-> +PYTHON_XLIB_SOURCE = python-xlib-$(PYTHON_XLIB_VERSION).tar.bz2
-> +PYTHON_XLIB_SITE = https://pypi.python.org/packages/eb/de/b0eaaea7b8512dc41504db071824eef30293ff55c58d83081ebaebe85a38
-> +PYTHON_XLIB_SETUP_TYPE = setuptools
-> +PYTHON_XLIB_LICENSE = LGPL-2.0+
-> +PYTHON_XLIB_LICENSE_FILES = LICENSE
-> +PYTHON_XLIB_DEPENDENCIES = host-python-setuptools-scm
-> +
-> +$(eval $(python-package))
-> --
-> 2.15.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+I am using tvheadend on a buildroot-built linux distro (fli4l) which does 
+not contain udev but uses BR2_ROOTFS_DEVICE_CREATION_STATIC=y, for this 
+distro I created personal packages adding the function I need. Therefore 
+I do not use buildroot-provided init scripts but instead coded my own 
+init script for tvheadend which suits my needs and works fine without an 
+udev daemon. For Kodi I need libudev[1] support for detecting my CEC-USB 
+adapter but again, no udev daemon needed.
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+My init scripts only contain one hardware-specific command relating to 
+tvheadend:
+
+modprobe dvb_usb_dvbsky
+
+Everything else worked out-of-the box after configuring all the kernel 
+modules needed for my USB device.
+
+Regards, Bernd
+
+[1] https://github.com/bkuhls/buildroot/tree/libudev
