@@ -1,82 +1,59 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 14 Jan 2018 23:51:26 +0100
-Subject: [Buildroot] [PATCH 1/7] package/skeleton-init-common: add
- /bin/sh to /etc/shells
-In-Reply-To: <1515963815-5843-2-git-send-email-romain.naour@smile.fr>
-References: <1515963815-5843-1-git-send-email-romain.naour@smile.fr>
- <1515963815-5843-2-git-send-email-romain.naour@smile.fr>
-Message-ID: <20180114225126.GJ16760@scaer>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Sun, 14 Jan 2018 21:41:19 -0200
+Subject: [Buildroot] [PATCH 1/3] linux-firmware: fail build for missing file
+Message-ID: <1515973281-3997-1-git-send-email-ricardo.martincoski@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2018-01-14 22:03 +0100, Romain Naour spake thusly:
-> Add the default shell /bin/sh to /etc/shells only if BR2_SYSTEM_BIN_SH_NONE
-> is not selected.
-> 
-> Add an empty /etc/shells in the rootfs skeleton.
-> 
-> Signed-off-by: Romain Naour <romain.naour@smile.fr>
-> ---
->  package/skeleton-init-common/skeleton-init-common.mk | 7 +++++++
->  system/skeleton/etc/shells                           | 1 +
->  2 files changed, 8 insertions(+)
->  create mode 100644 system/skeleton/etc/shells
-> 
-> diff --git a/package/skeleton-init-common/skeleton-init-common.mk b/package/skeleton-init-common/skeleton-init-common.mk
-> index 8228a81..707f1aa 100644
-> --- a/package/skeleton-init-common/skeleton-init-common.mk
-> +++ b/package/skeleton-init-common/skeleton-init-common.mk
-> @@ -79,6 +79,12 @@ define SKELETON_INIT_COMMON_SET_BIN_SH
->  	rm -f $(TARGET_DIR)/bin/sh
->  endef
->  else
-> +# Add /bin/sh to /etc/shells otherwise some login tools like dropbear
-> +# can reject the user connexion. See man shells.
-> +define SKELETON_INIT_COMMON_ADD_SH_TO_SHELLS
-> +	grep -qsE '^/bin/sh' $(TARGET_DIR)/etc/shells \
-> +		|| echo "/bin/sh" >> $(TARGET_DIR)/etc/shells
-> +endef
->  ifneq ($(SKELETON_INIT_COMMON_BIN_SH),)
->  define SKELETON_INIT_COMMON_SET_BIN_SH
->  	ln -sf $(SKELETON_INIT_COMMON_BIN_SH) $(TARGET_DIR)/bin/sh
-> @@ -86,5 +92,6 @@ endef
->  endif
->  endif
->  SKELETON_INIT_COMMON_TARGET_FINALIZE_HOOKS += SKELETON_INIT_COMMON_SET_BIN_SH
-> +SKELETON_INIT_COMMON_POST_INSTALL_TARGET_HOOKS += SKELETON_INIT_COMMON_ADD_SH_TO_SHELLS
+When a file is listed to be installed but is missing from the package
+source currently the first tar command exits with error code but it is
+ignored and the build succeeds.
+This issue by itself is minor because those listed files that are
+present in the package source get installed to the target.
+But the code is currently error prone, e.g. to a typo in the file list.
 
-Rgister your new hook right after it's defined.
+Fix this by first creating a tarball in the build directory and then
+installing it, instead of using a pipe between the two tar invocations.
+Also use && between the commands, so the first command that exits with
+error code fails the build.
+Since the two tar invocations remain in use, the desired behavior
+remains the same:
+ - list of files can contain *;
+ - list of files can contain file inside path, and the path is then
+   replicated in the target;
+ - symlinks are not followed but are installed.
 
-The existing one is registered after the if-block, becasue it is the
-same hook-name for the two cases of the condition, b ut your new hook is
-only defined in the else case, so register it there.
+Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Cc: Fabio Estevam <festevam@gmail.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Cc: Peter Seiderer <ps.report@gmx.net>
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Yegor Yefremov <yegorslists@googlemail.com>
+---
+Should it go to 2017.11.x and 2017.08.x too? See next patch
+---
+ package/linux-firmware/linux-firmware.mk | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Regards,
-Yann E. MORIN.
-
->  $(eval $(generic-package))
-> diff --git a/system/skeleton/etc/shells b/system/skeleton/etc/shells
-> new file mode 100644
-> index 0000000..b5fd584
-> --- /dev/null
-> +++ b/system/skeleton/etc/shells
-> @@ -0,0 +1 @@
-> +# /etc/shells: valid login shells
-> -- 
-> 2.7.4
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+index cf79e56..03704d8 100644
+--- a/package/linux-firmware/linux-firmware.mk
++++ b/package/linux-firmware/linux-firmware.mk
+@@ -443,9 +443,9 @@ endif
+ 
+ ifneq ($(LINUX_FIRMWARE_FILES),)
+ define LINUX_FIRMWARE_INSTALL_FILES
+-	cd $(@D) ; \
+-	$(TAR) c $(sort $(LINUX_FIRMWARE_FILES)) | \
+-		$(TAR) x -C $(TARGET_DIR)/lib/firmware
++	cd $(@D) && \
++		$(TAR) cf install.tar $(sort $(LINUX_FIRMWARE_FILES)) && \
++		$(TAR) xf install.tar -C $(TARGET_DIR)/lib/firmware
+ endef
+ endif
+ 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.7.4
