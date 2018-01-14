@@ -1,71 +1,77 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Sun, 14 Jan 2018 21:34:03 +0100
-Subject: [Buildroot] [PATCH v2 1/1] python-xlib: new package
-In-Reply-To: <CAMWSM7j=7peQ8SA_2OkuyLSZY3REme2Zcr8axnF4vYVsp7WnUA@mail.gmail.com>
-References: <20180105000420.20152-1-joseph.kogut@gmail.com>
- <20180105211307.25071-1-joseph.kogut@gmail.com>
- <20180106151308.7b5765f7@windsurf>
- <CAMWSM7jG_EYigcbzNTKPyO9+VU+rFiW6XPhMKCMiFXK6pkEw_Q@mail.gmail.com>
- <CAGm1_ksR1uvjaj5fdYmKjPuaUL1gjJ9Az5xCB2MpyOvOFU89aA@mail.gmail.com>
- <CAMWSM7j=7peQ8SA_2OkuyLSZY3REme2Zcr8axnF4vYVsp7WnUA@mail.gmail.com>
-Message-ID: <CAGm1_ksiLUagAoO-GDg+2u1Gt__2znck3XTUwHaaBNRq=YHoLw@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 14 Jan 2018 22:01:14 +0100
+Subject: [Buildroot] [PATCH 1/2] minnowboard-max: defconfigs: bump kernel to
+ 4.14.13
+Message-ID: <20180114210115.7284-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Jan 14, 2018 at 9:28 PM, Joseph Kogut <joseph.kogut@gmail.com> wrote:
-> Hi Yegor,
->
-> On Sun, Jan 7, 2018 at 2:06 AM, Yegor Yefremov
-> <yegorslists@googlemail.com> wrote:
->> Hello Joseph,
->>
->> On Sun, Jan 7, 2018 at 3:48 AM, Joseph Kogut <joseph.kogut@gmail.com> wrote:
->>> Hello,
->>>
->>> On Sat, Jan 6, 2018 at 6:13 AM, Thomas Petazzoni
->>> <thomas.petazzoni@free-electrons.com> wrote:
->>>>
->>>> This personal message and changelog should have gone...
->>>>
->>>>>
->>>>> Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
->>>>> Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
->>>>> ---
->>>>
->>>> ... here, so that Git doesn't include it as part of the commit log.
->>>> Indeed, we don't need to keep such details in the Git history (but they
->>>> are very useful to have during the patch review process).
->>>>
->>>>> +PYTHON_XLIB_VERSION = 0.21
->>>>> +PYTHON_XLIB_SOURCE = python-xlib-$(PYTHON_XLIB_VERSION).tar.bz2
->>>>> +PYTHON_XLIB_SITE = https://pypi.python.org/packages/eb/de/b0eaaea7b8512dc41504db071824eef30293ff55c58d83081ebaebe85a38
->>>>> +PYTHON_XLIB_SETUP_TYPE = setuptools
->>>>> +PYTHON_XLIB_LICENSE = LGPL-2.0+
->>>>
->>>> The license is in fact LGPL-2.1+, so I've fixed that and applied your
->>>> patch to the master branch.
->>>
->>> Ah, thanks for the fixup. I'll keep that in mind next time.
->>>
->>>> Thanks for your contribution!
->>>
->>> Thanks for all your support!
->>
->> Btw. have you ever tried utils/scanpypi (see "17.8.3. Generating a
->> python-package from a PyPI repository" for the reference)?
->>
->> Yegor
->
-> I have, but I've had issues with using the tool for certain packages.
-> Practically speaking the correct course of action would probably be
-> for me to submit patches to improve the tool, rather than not use it.
-> Clearly, I made some mistakes with this submission as a result.
+Use CONFIG_UNWINDER_FRAME_POINTER as CONFIG_UNWINDER_ORC needs libelf.
 
-scanpypi still has problems with some odd setup.py files, but the most
-packages can be handled without fuss. And patches are always welcome
-:-)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ board/minnowboard/linux.config              | 1 +
+ configs/minnowboard_max-graphical_defconfig | 4 ++--
+ configs/minnowboard_max_defconfig           | 6 +++---
+ 3 files changed, 6 insertions(+), 5 deletions(-)
 
-Yegor
+diff --git a/board/minnowboard/linux.config b/board/minnowboard/linux.config
+index fba48a163c..03ffc5e371 100644
+--- a/board/minnowboard/linux.config
++++ b/board/minnowboard/linux.config
+@@ -56,3 +56,4 @@ CONFIG_MMC_SDHCI_PCI=y
+ CONFIG_MMC_SDHCI_ACPI=y
+ CONFIG_PWM=y
+ CONFIG_EXT4_FS=y
++CONFIG_UNWINDER_FRAME_POINTER=y
+diff --git a/configs/minnowboard_max-graphical_defconfig b/configs/minnowboard_max-graphical_defconfig
+index 2c11fb378c..22b10dc733 100644
+--- a/configs/minnowboard_max-graphical_defconfig
++++ b/configs/minnowboard_max-graphical_defconfig
+@@ -3,7 +3,7 @@ BR2_x86_64=y
+ BR2_x86_atom=y
+ 
+ # Toolchain
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_12=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
+ BR2_TOOLCHAIN_BUILDROOT_LOCALE=y
+ BR2_TOOLCHAIN_BUILDROOT_CXX=y
+ # needed for TARGET_GRUB2
+@@ -23,7 +23,7 @@ BR2_PACKAGE_HOST_MTOOLS=y
+ # Linux
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.12.2"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.14.13"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/minnowboard/linux.config"
+ 
+diff --git a/configs/minnowboard_max_defconfig b/configs/minnowboard_max_defconfig
+index db6e595779..f7ba26efdd 100644
+--- a/configs/minnowboard_max_defconfig
++++ b/configs/minnowboard_max_defconfig
+@@ -7,8 +7,8 @@ BR2_SYSTEM_DHCP="eth0"
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/minnowboard/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/minnowboard/post-image.sh"
+ 
+-# Linux headers same as kernel, a 4.12 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_12=y
++# Linux headers same as kernel, a 4.14 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
+ # Needed for grub2
+ BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+ 
+@@ -23,7 +23,7 @@ BR2_PACKAGE_LINUX_FIRMWARE_RTL_8169=y
+ # Linux kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.12.2"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.14.13"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/minnowboard/linux.config"
+ 
+-- 
+2.11.0
