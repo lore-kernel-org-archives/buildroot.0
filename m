@@ -1,9 +1,9 @@
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Sun, 14 Jan 2018 21:52:13 -0200
-Subject: [Buildroot] [PATCHv3 1/1] utils/checkpackagelib: add function
- to check of the default package source variable
-References: <1515879583-8269-1-git-send-email-jerzy.m.grzegorek@gmail.com>
-Message-ID: <5a5bed2d6ec82_291018fc77098856@ultri3.mail>
+Date: Sun, 14 Jan 2018 21:53:53 -0200
+Subject: [Buildroot] [PATCH 02/17] tests: add test for post-fakeroot
+ script
+References: <878bd9ac6569877450e28861cb047a93c1550eb9.1515939400.git.yann.morin.1998@free.fr>
+Message-ID: <5a5bed91131a0_29103fc7069d9bb4990d1@ultri3.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,18 +12,22 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, Jan 13, 2018 at 07:39 PM, Jerzy Grzegorek wrote:
+On Sun, Jan 14, 2018 at 12:16 PM, Yann E. MORIN wrote:
 
-> Signed-off-by: Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com>
+> Currently, only post-build and post-image scripts were tested, each with
+> their own test-script.
+> 
+> The two test-scripts only differ in the name of the log file they
+> create, and it is based on the name of the script, so it is easy to
+> share the script.
+> 
+> This allows us to easily re-use it for testing post-fakeroot scripts.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Reviewed-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-[https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/47905172]
+[with only the 2 first patches from the series applied
+ https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/47907854]
 Tested-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-
-Note 1: the new warning added to check-package job in gitlab will be fixed by:
-http://patchwork.ozlabs.org/patch/859399/
-Note 2: the warnings already in the tree have fixes too:
-http://patchwork.ozlabs.org/patch/860493/
-http://patchwork.ozlabs.org/patch/860542/
 
 Regards,
 Ricardo
