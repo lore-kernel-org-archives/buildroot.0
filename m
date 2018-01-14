@@ -1,93 +1,63 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 14 Jan 2018 20:59:44 +0100
-Subject: [Buildroot] [PATCH v2,1/1] domoticz: fix build with boost 1.66
-Message-ID: <20180114195944.18250-1-fontaine.fabrice@gmail.com>
+From: Joseph Kogut <joseph.kogut@gmail.com>
+Date: Sun, 14 Jan 2018 12:28:10 -0800
+Subject: [Buildroot] [PATCH v2 1/1] python-xlib: new package
+In-Reply-To: <CAGm1_ksR1uvjaj5fdYmKjPuaUL1gjJ9Az5xCB2MpyOvOFU89aA@mail.gmail.com>
+References: <20180105000420.20152-1-joseph.kogut@gmail.com>
+ <20180105211307.25071-1-joseph.kogut@gmail.com>
+ <20180106151308.7b5765f7@windsurf>
+ <CAMWSM7jG_EYigcbzNTKPyO9+VU+rFiW6XPhMKCMiFXK6pkEw_Q@mail.gmail.com>
+ <CAGm1_ksR1uvjaj5fdYmKjPuaUL1gjJ9Az5xCB2MpyOvOFU89aA@mail.gmail.com>
+Message-ID: <CAMWSM7j=7peQ8SA_2OkuyLSZY3REme2Zcr8axnF4vYVsp7WnUA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Patch fetch from one of the answer of
- https://github.com/domoticz/domoticz/issues/2034
-(issue still opened, no official PR sent upstream)
+Hi Yegor,
 
-Boost asio changed its API:
- - http://www.boost.org/doc/libs/1_66_0/doc/html/boost_asio/net_ts.html
+On Sun, Jan 7, 2018 at 2:06 AM, Yegor Yefremov
+<yegorslists@googlemail.com> wrote:
+> Hello Joseph,
+>
+> On Sun, Jan 7, 2018 at 3:48 AM, Joseph Kogut <joseph.kogut@gmail.com> wrote:
+>> Hello,
+>>
+>> On Sat, Jan 6, 2018 at 6:13 AM, Thomas Petazzoni
+>> <thomas.petazzoni@free-electrons.com> wrote:
+>>>
+>>> This personal message and changelog should have gone...
+>>>
+>>>>
+>>>> Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
+>>>> Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+>>>> ---
+>>>
+>>> ... here, so that Git doesn't include it as part of the commit log.
+>>> Indeed, we don't need to keep such details in the Git history (but they
+>>> are very useful to have during the patch review process).
+>>>
+>>>> +PYTHON_XLIB_VERSION = 0.21
+>>>> +PYTHON_XLIB_SOURCE = python-xlib-$(PYTHON_XLIB_VERSION).tar.bz2
+>>>> +PYTHON_XLIB_SITE = https://pypi.python.org/packages/eb/de/b0eaaea7b8512dc41504db071824eef30293ff55c58d83081ebaebe85a38
+>>>> +PYTHON_XLIB_SETUP_TYPE = setuptools
+>>>> +PYTHON_XLIB_LICENSE = LGPL-2.0+
+>>>
+>>> The license is in fact LGPL-2.1+, so I've fixed that and applied your
+>>> patch to the master branch.
+>>
+>> Ah, thanks for the fixup. I'll keep that in mind next time.
+>>
+>>> Thanks for your contribution!
+>>
+>> Thanks for all your support!
+>
+> Btw. have you ever tried utils/scanpypi (see "17.8.3. Generating a
+> python-package from a PyPI repository" for the reference)?
+>
+> Yegor
 
-Fixes:
- - http://autobuild.buildroot.net/results/5f02c8fc84889748f283ee1cb76248bb0880215a
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
-Changes v1 -> v2 (after review of Jorg Krause):
- - Add a note about patch's origin and upstream status
-
- .../0001-Fix-compilation-with-boost-1.66.patch     | 56 ++++++++++++++++++++++
- 1 file changed, 56 insertions(+)
- create mode 100644 package/domoticz/0001-Fix-compilation-with-boost-1.66.patch
-
-diff --git a/package/domoticz/0001-Fix-compilation-with-boost-1.66.patch b/package/domoticz/0001-Fix-compilation-with-boost-1.66.patch
-new file mode 100644
-index 0000000000..d73ea4f002
---- /dev/null
-+++ b/package/domoticz/0001-Fix-compilation-with-boost-1.66.patch
-@@ -0,0 +1,56 @@
-+From b9481d3382d416d72f523a0442d662e49b4192d1 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sun, 14 Jan 2018 18:18:32 +0100
-+Subject: [PATCH] Fix compilation with boost 1.66
-+
-+Patch fetch from one of the answer of
-+ https://github.com/domoticz/domoticz/issues/2034
-+(issue still opened, no official PR sent upstream)
-+
-+Boost asio changed its API:
-+ - http://www.boost.org/doc/libs/1_66_0/doc/html/boost_asio/net_ts.html
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ webserver/proxyclient.cpp | 2 +-
-+ webserver/server.cpp      | 4 ++--
-+ 2 files changed, 3 insertions(+), 3 deletions(-)
-+
-+diff --git a/webserver/proxyclient.cpp b/webserver/proxyclient.cpp
-+index 203ee619..efc9815a 100644
-+--- a/webserver/proxyclient.cpp
-++++ b/webserver/proxyclient.cpp
-+@@ -639,7 +639,7 @@ namespace http {
-+ 		void CProxyManager::StartThread()
-+ 		{
-+ 			try {
-+-				boost::asio::ssl::context ctx(io_service, boost::asio::ssl::context::sslv23);
-++				boost::asio::ssl::context ctx(boost::asio::ssl::context::sslv23);
-+ 				ctx.set_verify_mode(boost::asio::ssl::verify_none);
-+ 
-+ 				proxyclient.reset(new CProxyClient(io_service, ctx, m_pWebEm));
-+diff --git a/webserver/server.cpp b/webserver/server.cpp
-+index 5255aa34..0c1af08a 100644
-+--- a/webserver/server.cpp
-++++ b/webserver/server.cpp
-+@@ -148,7 +148,7 @@ void server::handle_accept(const boost::system::error_code& e) {
-+ ssl_server::ssl_server(const ssl_server_settings & ssl_settings, request_handler & user_request_handler) :
-+ 		server_base(ssl_settings, user_request_handler),
-+ 		settings_(ssl_settings),
-+-		context_(io_service_, ssl_settings.get_ssl_method())
-++		context_(ssl_settings.get_ssl_method())
-+ {
-+ #ifdef DEBUG_WWW
-+ 	_log.Log(LOG_STATUS, "[web:%s] create ssl_server using ssl_server_settings : %s", ssl_settings.listening_port.c_str(), ssl_settings.to_string().c_str());
-+@@ -161,7 +161,7 @@ ssl_server::ssl_server(const ssl_server_settings & ssl_settings, request_handler
-+ ssl_server::ssl_server(const server_settings & settings, request_handler & user_request_handler) :
-+ 		server_base(settings, user_request_handler),
-+ 		settings_(dynamic_cast<ssl_server_settings const &>(settings)),
-+-		context_(io_service_, dynamic_cast<ssl_server_settings const &>(settings).get_ssl_method()) {
-++		context_(dynamic_cast<ssl_server_settings const &>(settings).get_ssl_method()) {
-+ #ifdef DEBUG_WWW
-+ 	_log.Log(LOG_STATUS, "[web:%s] create ssl_server using server_settings : %s", settings.listening_port.c_str(), settings.to_string().c_str());
-+ #endif
-+-- 
-+2.14.1
-+
--- 
-2.14.1
+I have, but I've had issues with using the tool for certain packages.
+Practically speaking the correct course of action would probably be
+for me to submit patches to improve the tool, rather than not use it.
+Clearly, I made some mistakes with this submission as a result.
