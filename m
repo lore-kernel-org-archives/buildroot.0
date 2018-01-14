@@ -1,66 +1,47 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 14 Jan 2018 15:17:13 +0100
-Subject: [Buildroot] [PATCH 17/17] fs: remove intermediate artefacts
-In-Reply-To: <cover.1515939400.git.yann.morin.1998@free.fr>
-References: <cover.1515939400.git.yann.morin.1998@free.fr>
-Message-ID: <2e287d91a65316ba4a8dc49feb963872b69a13b6.1515939400.git.yann.morin.1998@free.fr>
+From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
+Date: Sun, 14 Jan 2018 17:27:37 +0100
+Subject: [Buildroot] [PATCH] augeas: bump to version 1.9.0
+In-Reply-To: <20180112223501.396a6dc9@windsurf.lan>
+References: <20180109201846.1156-1-joerg.krause@embedded.rocks>
+ <20180112223501.396a6dc9@windsurf.lan>
+Message-ID: <1515947257.8426.1.camel@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Each of the intermediate, per-rootfs target directories, as well as the
-intermediate tarball, can take quite some place, and is mostly a
-duplication of what's already in target/. The only delta, if any, would
-be the tweaks made by the filesystem image generations, but those tweaks
-are most probably only meaningfull when seen as root.
+On Fri, 2018-01-12 at 22:35 +0100, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Tue,  9 Jan 2018 21:18:46 +0100, J?rg Krause wrote:
+> > Add two patches from upstream to fix a build issue when building an
+> > example. Ideally, the examples should not be build at all. However,
+> > upstream disliked the idea of adding configure options like
+> > `--disable-examples` [1]. So we'll make do with the patches and force a
+> > autoreconf.
+> 
+> Well, since the patches are upstream, once a new release is made, we
+> can drop the patches, and remove AUTORECONF = YES, correct ?
 
-We normally do not remove intermediate files, but those can be quite
-large, and are not directly usable by, nor accessible to the user.
-So, get rid of them once the filesystem has been generated.
+Correct.
 
-This does not need to be done in fakeroot.
+> > diff --git a/package/augeas/0001-examples-Makefile-fix-missing-trailing-backslash-for-dump-LDADD.patch b/package/augeas/0001-examples-Makefile-fix-missing-trailing-backslash-for-dump-LDADD.patch
+> > new file mode 100644
+> > index 0000000000..8ccd6b54b7
+> > --- /dev/null
+> > +++ b/package/augeas/0001-examples-Makefile-fix-missing-trailing-backslash-for-dump-LDADD.patch
+> > @@ -0,0 +1,21 @@
+> > +From d506cf6c1567cbb0a762c04d9354ab1694a5ac05 Mon Sep 17 00:00:00 2001
+> > +From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+> > +Date: Mon, 11 Dec 2017 23:33:08 +0100
+> > +Subject: [PATCH] Update Makefile.am
+> > +
+> > +Add missing trailing backslash for `dump_LDADD`.
+> 
+> Missing SoB here and for the other patch as well. Could you fix this
+> and resend ?
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
----
- Makefile     | 1 +
- fs/common.mk | 2 ++
- 2 files changed, 3 insertions(+)
+Yes, I will.
 
-diff --git a/Makefile b/Makefile
-index 85075f12fc..6d23c67d39 100644
---- a/Makefile
-+++ b/Makefile
-@@ -752,6 +752,7 @@ endif
- 
- .PHONY: target-post-image
- target-post-image: $(TARGETS_ROOTFS) target-finalize
-+	@rm -f $(ROOTFS_COMMON_TAR)
- 	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_IMAGE_SCRIPT)), \
- 		$(call MESSAGE,"Executing post-image script $(s)"); \
- 		$(EXTRA_ENV) $(s) $(BINARIES_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
-diff --git a/fs/common.mk b/fs/common.mk
-index bacc98ec68..2ee130ee08 100644
---- a/fs/common.mk
-+++ b/fs/common.mk
-@@ -96,6 +96,7 @@ endif
- 	$(call PRINTF,$(ROOTFS_COMMON_TAR_CMD)) >> $(FAKEROOT_SCRIPT)
- 	chmod a+x $(FAKEROOT_SCRIPT)
- 	PATH=$(BR_PATH) $(HOST_DIR)/bin/fakeroot -- $(FAKEROOT_SCRIPT)
-+	$(Q)rm -rf $(TARGET_DIR)
- 
- rootfs-common-show-depends:
- 	@echo $(ROOTFS_COMMON_DEPENDENCIES)
-@@ -154,6 +155,7 @@ $$(BINARIES_DIR)/rootfs.$(1): $$(ROOTFS_$(2)_DEPENDENCIES)
- 	$$(call PRINTF,$$(ROOTFS_$(2)_CMD)) >> $$(FAKEROOT_SCRIPT)
- 	chmod a+x $$(FAKEROOT_SCRIPT)
- 	PATH=$$(BR_PATH) $$(HOST_DIR)/bin/fakeroot -- $$(FAKEROOT_SCRIPT)
-+	$(Q)rm -rf $$(TARGET_DIR)
- ifneq ($$(ROOTFS_$(2)_COMPRESS_CMD),)
- 	PATH=$$(BR_PATH) $$(ROOTFS_$(2)_COMPRESS_CMD) $$@ > $$@$$(ROOTFS_$(2)_COMPRESS_EXT)
- endif
--- 
-2.14.1
+J?rg
