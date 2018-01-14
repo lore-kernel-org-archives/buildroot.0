@@ -1,35 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 14 Jan 2018 15:03:57 +0100
-Subject: [Buildroot] [PATCH] package/linux-firmware: fix incorrect
- line-continuation
-In-Reply-To: <20180113222429.21497-1-yann.morin.1998@free.fr>
-References: <20180113222429.21497-1-yann.morin.1998@free.fr>
-Message-ID: <20180114150357.18e4406f@windsurf>
+Date: Sun, 14 Jan 2018 15:04:20 +0100
+Subject: [Buildroot] [git commit] package/bash: add /bin/bash to /etc/shells
+Message-ID: <20180114140424.0F77F83BD8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=4d279697afbf8fb295274784103be2b837113d5e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 13 Jan 2018 23:24:29 +0100, Yann E. MORIN wrote:
-> Partially fixes:
->     https://gitlab.com/buildroot.org/buildroot/-/jobs/47806089
-> 
-> And add myself to the list of devloppers for it.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Yegor Yefremov <yegorslists@googlemail.com>
-> ---
->  DEVELOPERS                               | 1 +
->  package/linux-firmware/linux-firmware.mk | 2 +-
->  2 files changed, 2 insertions(+), 1 deletion(-)
+When bash is selected, /bin/bash is not added to /etc/shells
+(see man shells). So, login tools like dropbear reject the ssh
+connexions for users using bash as shell in /etc/passwd.
 
-Applied to master, thanks.
+buildroot authpriv.warn dropbear[853]: User 'kubu' has invalid shell, rejected
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Reported-by: Jeremy Rosen <jeremy.rosen@smile.fr>
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/bash/bash.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/package/bash/bash.mk b/package/bash/bash.mk
+index 089d062..03f8f28 100644
+--- a/package/bash/bash.mk
++++ b/package/bash/bash.mk
+@@ -40,10 +40,14 @@ endif
+ endif
+ 
+ # Make /bin/sh -> bash (no other shell, better than busybox shells)
++# Add /bin/bash to /etc/shells otherwise some login tools like dropbear
++# can reject the user connexion. See man shells.
+ define BASH_INSTALL_TARGET_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
+ 		DESTDIR=$(TARGET_DIR) exec_prefix=/ install
+ 	rm -f $(TARGET_DIR)/bin/bashbug
++	grep -qsE '^/bin/bash' $(TARGET_DIR)/etc/shells \
++		|| echo "/bin/bash" >> $(TARGET_DIR)/etc/shells
+ endef
+ 
+ $(eval $(autotools-package))
