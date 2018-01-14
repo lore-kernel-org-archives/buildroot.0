@@ -1,58 +1,56 @@
 From: Romain Naour <romain.naour@smile.fr>
-Date: Sun, 14 Jan 2018 22:03:29 +0100
-Subject: [Buildroot] [PATCH 1/7] package/skeleton-init-common: add /bin/sh
- to /etc/shells
+Date: Sun, 14 Jan 2018 22:03:30 +0100
+Subject: [Buildroot] [PATCH 2/7] package/busybox: add /bin/ash to /etc/shells
 In-Reply-To: <1515963815-5843-1-git-send-email-romain.naour@smile.fr>
 References: <1515963815-5843-1-git-send-email-romain.naour@smile.fr>
-Message-ID: <1515963815-5843-2-git-send-email-romain.naour@smile.fr>
+Message-ID: <1515963815-5843-3-git-send-email-romain.naour@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add the default shell /bin/sh to /etc/shells only if BR2_SYSTEM_BIN_SH_NONE
-is not selected.
+When ash (busybox) is selected, /bin/ash is not added to /etc/shells
+(see man shells). So, login tools like dropbear reject the ssh
+connexions for users using ash as shell in /etc/passwd.
 
-Add an empty /etc/shells in the rootfs skeleton.
+buildroot authpriv.warn dropbear[853]: User 'kubu' has invalid shell, rejected
+
+ash is disabled for MMUless systems, so don't add /bin/ash in
+/etc/shells in this case.
 
 Signed-off-by: Romain Naour <romain.naour@smile.fr>
 ---
- package/skeleton-init-common/skeleton-init-common.mk | 7 +++++++
- system/skeleton/etc/shells                           | 1 +
- 2 files changed, 8 insertions(+)
- create mode 100644 system/skeleton/etc/shells
+ package/busybox/busybox.mk | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/package/skeleton-init-common/skeleton-init-common.mk b/package/skeleton-init-common/skeleton-init-common.mk
-index 8228a81..707f1aa 100644
---- a/package/skeleton-init-common/skeleton-init-common.mk
-+++ b/package/skeleton-init-common/skeleton-init-common.mk
-@@ -79,6 +79,12 @@ define SKELETON_INIT_COMMON_SET_BIN_SH
- 	rm -f $(TARGET_DIR)/bin/sh
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index d0bbd3f..37d064a 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -258,6 +258,15 @@ define BUSYBOX_INSTALL_TELNET_SCRIPT
+ 	fi
  endef
- else
-+# Add /bin/sh to /etc/shells otherwise some login tools like dropbear
-+# can reject the user connexion. See man shells.
-+define SKELETON_INIT_COMMON_ADD_SH_TO_SHELLS
-+	grep -qsE '^/bin/sh' $(TARGET_DIR)/etc/shells \
-+		|| echo "/bin/sh" >> $(TARGET_DIR)/etc/shells
-+endef
- ifneq ($(SKELETON_INIT_COMMON_BIN_SH),)
- define SKELETON_INIT_COMMON_SET_BIN_SH
- 	ln -sf $(SKELETON_INIT_COMMON_BIN_SH) $(TARGET_DIR)/bin/sh
-@@ -86,5 +92,6 @@ endef
- endif
- endif
- SKELETON_INIT_COMMON_TARGET_FINALIZE_HOOKS += SKELETON_INIT_COMMON_SET_BIN_SH
-+SKELETON_INIT_COMMON_POST_INSTALL_TARGET_HOOKS += SKELETON_INIT_COMMON_ADD_SH_TO_SHELLS
  
- $(eval $(generic-package))
-diff --git a/system/skeleton/etc/shells b/system/skeleton/etc/shells
-new file mode 100644
-index 0000000..b5fd584
---- /dev/null
-+++ b/system/skeleton/etc/shells
-@@ -0,0 +1 @@
-+# /etc/shells: valid login shells
++# Add /bin/ash to /etc/shells otherwise some login tools like dropbear
++# can reject the user connexion. See man shells.
++ifeq ($(BR2_USE_MMU),y)
++define BUSYBOX_INSTALL_ADD_ASH_TO_SHELLS
++	grep -qsE '^/bin/ash' $(TARGET_DIR)/etc/shells \
++		|| echo "/bin/ash" >> $(TARGET_DIR)/etc/shells
++endef
++endif
++
+ # Enable "noclobber" in install.sh, to prevent BusyBox from overwriting any
+ # full-blown versions of apps installed by other packages with sym/hard links.
+ define BUSYBOX_NOCLOBBER_INSTALL
+@@ -291,6 +300,7 @@ define BUSYBOX_INSTALL_TARGET_CMDS
+ 	$(BUSYBOX_INSTALL_INITTAB)
+ 	$(BUSYBOX_INSTALL_UDHCPC_SCRIPT)
+ 	$(BUSYBOX_INSTALL_MDEV_CONF)
++	$(BUSYBOX_INSTALL_ADD_ASH_TO_SHELLS)
+ endef
+ 
+ define BUSYBOX_INSTALL_INIT_SYSV
 -- 
 2.7.4
