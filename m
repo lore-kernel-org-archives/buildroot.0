@@ -1,7 +1,7 @@
 From: Carlos Santos <casantos@datacom.ind.br>
-Date: Sun, 14 Jan 2018 17:26:54 -0200
-Subject: [Buildroot] [PATCH] util-linux: estract ISC licence from rfkill.c
-Message-ID: <20180114192654.12079-1-casantos@datacom.ind.br>
+Date: Sun, 14 Jan 2018 17:28:43 -0200
+Subject: [Buildroot] [PATCH v2] util-linux: extract ISC licence from rfkill.c
+Message-ID: <20180114192843.12352-1-casantos@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,7 +9,7 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Save the top 21 lines of sys-utils/rfkill.c as COPYING.ISC instead of
-distributin the whole file. This matches a corresponding patch alreardy
+distributing the whole file. This matches a corresponding patch alreardy
 submitted upstream that creates the Documentation/licenses/COPYING.ISC
 file.
 
