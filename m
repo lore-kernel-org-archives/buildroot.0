@@ -1,86 +1,86 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 14 Jan 2018 15:17:02 +0100
-Subject: [Buildroot] [PATCH 06/17] core: introduce intermediate
- BASE_TARGET_DIR variable
+Date: Sun, 14 Jan 2018 15:17:03 +0100
+Subject: [Buildroot] [PATCH 07/17] fs: set per-rootfs variable name
 In-Reply-To: <cover.1515939400.git.yann.morin.1998@free.fr>
 References: <cover.1515939400.git.yann.morin.1998@free.fr>
-Message-ID: <995c1387d0b9a5083d8caaacc8d7e03e93e11c9c.1515939400.git.yann.morin.1998@free.fr>
+Message-ID: <dd835f78a7398e87f3ddcdc723b1f0ffcf0a84d6.1515939400.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This new BASE_TARGET_DIR variable is set in stone to point to the real
-location where packages will be installed. Its name is modelled after
-its definition: it is located in $(BASE_DIR), and it is named 'target/',
-hence BASE_TARGET_DIR.
+Like we do for packages with the PKG variable, set ROOTFS to contain the
+upper-case name of the rootfs currently being generated.
 
-The already-existing TARGET_DIR variable now simply points to the same
-location, except that it is recursively expanded, so that we can later
-change it depending on the context.
+This will be usefull in later patches, when we need more per-rootfs
+variables, like a per-rootfs TARGET_DIR for example.
 
-All locations that really need to reference the existing target/
-directory, are changed to use BASE_TARGET_DIR; surprinsigly enough, they
-all seem to be located in the main Makefile. :-) The rest is left with
-using good-old TARGET_DIR.
+In Makefiles, per-rule variables trickle down the dependency chain, to
+all dependencies of that rule, so we have to stop ROOTFS as soone as
+we're not in a rootfs. This means we have to stop it at target-finalize
+(which is a dependency of all filesystems), and for each package
+individually, since some packages (host or target) can be direct
+dependencies of filesystems as well.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Cc: Arnout Vandecappelle <arnout@mind.be>
 ---
- Makefile | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+ Makefile               | 3 +++
+ fs/common.mk           | 3 +++
+ package/pkg-generic.mk | 4 ++++
+ 3 files changed, 10 insertions(+)
 
 diff --git a/Makefile b/Makefile
-index 7d8ab51a8c..756a5be7ed 100644
+index 756a5be7ed..88e66766bf 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -215,7 +215,8 @@ BR_GRAPH_OUT := $(or $(BR2_GRAPH_OUT),pdf)
+@@ -677,6 +677,9 @@ endif
  
- BUILD_DIR := $(BASE_DIR)/build
- BINARIES_DIR := $(BASE_DIR)/images
--TARGET_DIR := $(BASE_DIR)/target
-+BASE_TARGET_DIR := $(BASE_DIR)/target
-+TARGET_DIR = $(BASE_TARGET_DIR)
- # initial definition so that 'make clean' works for most users, even without
- # .config. HOST_DIR will be overwritten later when .config is included.
- HOST_DIR := $(BASE_DIR)/host
-@@ -237,7 +238,7 @@ LEGAL_REPORT = $(LEGAL_INFO_DIR)/README
- # dependencies anywhere else
- #
- ################################################################################
--$(BUILD_DIR) $(TARGET_DIR) $(HOST_DIR) $(BINARIES_DIR) $(LEGAL_INFO_DIR) $(REDIST_SOURCES_DIR_TARGET) $(REDIST_SOURCES_DIR_HOST):
-+$(BUILD_DIR) $(BASE_TARGET_DIR) $(HOST_DIR) $(BINARIES_DIR) $(LEGAL_INFO_DIR) $(REDIST_SOURCES_DIR_TARGET) $(REDIST_SOURCES_DIR_HOST):
- 	@mkdir -p $@
+ $(TARGETS_ROOTFS): target-finalize
  
- BR2_CONFIG = $(CONFIG_DIR)/.config
-@@ -444,7 +445,7 @@ BR_PATH = "$(HOST_DIR)/bin:$(HOST_DIR)/sbin:$(PATH)"
++# Avoid the rootfs name leaking down the dependency chain
++target-finalize: ROOTFS=
++
+ .PHONY: target-finalize
+ target-finalize: $(PACKAGES)
+ 	@$(call MESSAGE,"Finalizing target directory")
+diff --git a/fs/common.mk b/fs/common.mk
+index 274a3e9c7b..af6799bb83 100644
+--- a/fs/common.mk
++++ b/fs/common.mk
+@@ -39,6 +39,8 @@ ROOTFS_USERS_TABLES = $(call qstrip,$(BR2_ROOTFS_USERS_TABLES))
+ # all variable references except the arguments must be $$-quoted.
+ define inner-rootfs
  
- # Location of a file giving a big fat warning that output/target
- # should not be used as the root filesystem.
--TARGET_DIR_WARNING_FILE = $(TARGET_DIR)/THIS_IS_NOT_YOUR_ROOT_FILESYSTEM
-+TARGET_DIR_WARNING_FILE = $(BASE_TARGET_DIR)/THIS_IS_NOT_YOUR_ROOT_FILESYSTEM
- 
- ifeq ($(BR2_CCACHE),y)
- CCACHE := $(HOST_DIR)/bin/ccache
-@@ -543,7 +544,7 @@ $(foreach pkg,$(call UPPERCASE,$(PACKAGES)),\
++ROOTFS_$(2)_NAME = $(1)
++
+ # extra deps
+ ROOTFS_$(2)_DEPENDENCIES += host-fakeroot host-makedevs \
+ 	$$(if $$(PACKAGES_USERS)$$(ROOTFS_USERS_TABLES),host-mkpasswd)
+@@ -72,6 +74,7 @@ ROOTFS_$(2)_COMPRESS_EXT = .xz
+ ROOTFS_$(2)_COMPRESS_CMD = xz -9 -C crc32 -c
  endif
  
- .PHONY: dirs
--dirs: $(BUILD_DIR) $(STAGING_DIR) $(TARGET_DIR) \
-+dirs: $(BUILD_DIR) $(STAGING_DIR) $(BASE_TARGET_DIR) \
- 	$(HOST_DIR) $(HOST_DIR)/usr $(HOST_DIR)/lib $(BINARIES_DIR)
++$$(BINARIES_DIR)/rootfs.$(1): ROOTFS=$(2)
+ $$(BINARIES_DIR)/rootfs.$(1): target-finalize $$(ROOTFS_$(2)_DEPENDENCIES)
+ 	@$$(call MESSAGE,"Generating root filesystem image rootfs.$(1)")
+ 	rm -rf $(FS_DIR)
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index a2a12e7b56..cb30d29f89 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -410,6 +410,10 @@ endef
  
- $(BUILD_DIR)/buildroot-config/auto.conf: $(BR2_CONFIG)
-@@ -968,7 +969,7 @@ printvars:
+ define inner-generic-package
  
- .PHONY: clean
- clean:
--	rm -rf $(TARGET_DIR) $(BINARIES_DIR) $(HOST_DIR) \
-+	rm -rf $(BASE_TARGET_DIR) $(BINARIES_DIR) $(HOST_DIR) \
- 		$(BUILD_DIR) $(BASE_DIR)/staging \
- 		$(LEGAL_INFO_DIR) $(GRAPHS_DIR)
- 
++# When doing a package, we're definitely not doing a rootfs, but we
++# may inherit it via the dependency chain, so we reset it.
++$(1): ROOTFS=
++
+ # Ensure the package is only declared once, i.e. do not accept that a
+ # package be re-defined by a br2-external tree
+ ifneq ($(call strip,$(filter $(1),$(PACKAGES_ALL))),)
 -- 
 2.14.1
