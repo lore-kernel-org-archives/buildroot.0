@@ -1,54 +1,78 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 14 Jan 2018 15:17:07 +0100
-Subject: [Buildroot] [PATCH 11/17] fs: introduce per-rootfs TARGET_DIR
- variable
+Date: Sun, 14 Jan 2018 15:17:08 +0100
+Subject: [Buildroot] [PATCH 12/17] fs: new intermediate rootfs-common to
+ gather common dependencies
 In-Reply-To: <cover.1515939400.git.yann.morin.1998@free.fr>
 References: <cover.1515939400.git.yann.morin.1998@free.fr>
-Message-ID: <683e7a9addce215eee05c1684164052ec606283c.1515939400.git.yann.morin.1998@free.fr>
+Message-ID: <561feacf4e1aec169b41164f874a2bfa22a5bd38.1515939400.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-... which for now still points to the base target directory, but this is
-a step forward.
+Before we can create an intermediate tarball for all filesystems, we
+nedd to move the common dependencies needed to generate that
+intermediate tarball, rather than levae those dependencies to each
+filesystem.
+
+So, we introduce rootfs-common, which gathers all those common
+dependencies.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Cc: Arnout Vandecappelle <arnout@mind.be>
 ---
- Makefile     | 4 +++-
- fs/common.mk | 1 +
- 2 files changed, 4 insertions(+), 1 deletion(-)
+ fs/common.mk | 23 +++++++++++++++++++----
+ 1 file changed, 19 insertions(+), 4 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index 88e66766bf..85075f12fc 100644
---- a/Makefile
-+++ b/Makefile
-@@ -215,8 +215,10 @@ BR_GRAPH_OUT := $(or $(BR2_GRAPH_OUT),pdf)
- 
- BUILD_DIR := $(BASE_DIR)/build
- BINARIES_DIR := $(BASE_DIR)/images
-+# The target directory is common to all packages,
-+# but there is one that is specific to each filesystem.
- BASE_TARGET_DIR := $(BASE_DIR)/target
--TARGET_DIR = $(BASE_TARGET_DIR)
-+TARGET_DIR = $(if $(ROOTFS),$(ROOTFS_$(ROOTFS)_TARGET_DIR),$(BASE_TARGET_DIR))
- # initial definition so that 'make clean' works for most users, even without
- # .config. HOST_DIR will be overwritten later when .config is included.
- HOST_DIR := $(BASE_DIR)/host
 diff --git a/fs/common.mk b/fs/common.mk
-index cd132cdbc7..363798bb20 100644
+index 363798bb20..3505a32e5d 100644
 --- a/fs/common.mk
 +++ b/fs/common.mk
-@@ -40,6 +40,7 @@ define inner-rootfs
+@@ -34,6 +34,24 @@ ROOTFS_DEVICE_TABLES = $(call qstrip,$(BR2_ROOTFS_DEVICE_TABLE) \
+ USERS_TABLE = $(FS_DIR)/users_table.txt
+ ROOTFS_USERS_TABLES = $(call qstrip,$(BR2_ROOTFS_USERS_TABLES))
  
- ROOTFS_$(2)_NAME = $(1)
++ROOTFS_COMMON_TAR = $(FS_DIR)/rootfs.common.tar
++
++.PHONY: rootfs-common
++rootfs-common: $(ROOTFS_COMMON_TAR)
++
++ROOTFS_COMMON_DEPENDENCIES = \
++	host-fakeroot host-makedevs \
++	$(if $(PACKAGES_USERS)$(ROOTFS_USERS_TABLES),host-mkpasswd)
++
++.PHONY: $(ROOTFS_COMMON_TAR)
++# When doing the common tarball, we're not really doing a rootfs.
++$(ROOTFS_COMMON_TAR): ROOTFS=
++$(ROOTFS_COMMON_TAR): $(ROOTFS_COMMON_DEPENDENCIES) target-finalize
++	@:
++
++rootfs-common-show-depends:
++	@echo $(ROOTFS_COMMON_DEPENDENCIES)
++
+ # Since this function will be called from within an $(eval ...)
+ # all variable references except the arguments must be $$-quoted.
+ define inner-rootfs
+@@ -42,9 +60,7 @@ ROOTFS_$(2)_NAME = $(1)
  ROOTFS_$(2)_DIR = $$(FS_DIR)/$(1)
-+ROOTFS_$(2)_TARGET_DIR = $$(BASE_TARGET_DIR)
+ ROOTFS_$(2)_TARGET_DIR = $$(BASE_TARGET_DIR)
  
- # extra deps
- ROOTFS_$(2)_DEPENDENCIES += host-fakeroot host-makedevs \
+-# extra deps
+-ROOTFS_$(2)_DEPENDENCIES += host-fakeroot host-makedevs \
+-	$$(if $$(PACKAGES_USERS)$$(ROOTFS_USERS_TABLES),host-mkpasswd)
++ROOTFS_$(2)_DEPENDENCIES += rootfs-common
+ 
+ ifeq ($$(BR2_TARGET_ROOTFS_$(2)_GZIP),y)
+ ROOTFS_$(2)_COMPRESS_EXT = .gz
+@@ -77,7 +93,6 @@ endif
+ 
+ $$(BINARIES_DIR)/rootfs.$(1): ROOTFS=$(2)
+ $$(BINARIES_DIR)/rootfs.$(1): FAKEROOT_SCRIPT=$$(ROOTFS_$(2)_DIR)/fakeroot
+-$$(BINARIES_DIR)/rootfs.$(1): target-finalize
+ $$(BINARIES_DIR)/rootfs.$(1): $$(ROOTFS_$(2)_DEPENDENCIES)
+ 	@$$(call MESSAGE,"Generating root filesystem image rootfs.$(1)")
+ 	rm -rf $(FS_DIR) $$(ROOTFS_$(2)_DIR)
 -- 
 2.14.1
