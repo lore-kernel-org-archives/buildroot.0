@@ -1,43 +1,149 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 14 Jan 2018 15:05:19 +0100
-Subject: [Buildroot] [git commit] package/waylandpp: bump version to 0.2.1
-Message-ID: <20180114140539.04BE180FA3@busybox.osuosl.org>
+Date: Sun, 14 Jan 2018 15:08:37 +0100
+Subject: [Buildroot] [git commit] kvm-unit-tests: test for rdseed/rdrand
+Message-ID: <20180114140955.E09E58390B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a6f518c74677c44724d445b7f5baec06fc432a31
+commit: https://git.buildroot.net/buildroot/commit/?id=e4c2c68c3e1af04a3477a1777620f6021aa76065
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+The build fails when the host binutils isn't at least 2.23
+(2.22.x introduced RDSEED).
+
+The host toolchain is used for x86_64 target builds where
+we need to do a 32bit build. Most other buildroot builds
+are using a much newer binutils unless it's a external
+older toolchain.
+
+Fixes:
+http://autobuild.buildroot.net/results/c39/c3987a3cbd2960b0ff50f872636bdfd8d1a9c820/
+
+Upstream:
+https://marc.info/?l=kvm&m=151580743523259&w=2
+
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/waylandpp/waylandpp.hash | 2 +-
- package/waylandpp/waylandpp.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...002-kvm-unit-tests-test-for-rdseed-rdrand.patch | 110 +++++++++++++++++++++
+ 1 file changed, 110 insertions(+)
 
-diff --git a/package/waylandpp/waylandpp.hash b/package/waylandpp/waylandpp.hash
-index 070cf7c..56f3db8 100644
---- a/package/waylandpp/waylandpp.hash
-+++ b/package/waylandpp/waylandpp.hash
-@@ -1,4 +1,4 @@
- # Locally computed
--sha256 33d3ec385704c5545fb50d2283aabf4ef26aaaf3e416b292e650fea67c430d23  waylandpp-0.1.6.tar.gz
-+sha256 44001d0b9dfe27388e84603eb625056bb96fbcc68853882b9673cde007dcde3f  waylandpp-0.2.1.tar.gz
- sha256 49aa6d728fd13226952c9e3a5a9cae46379b2a501010064760172b5ce7cd94bb  LICENSE
- sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  scanner/gpl-3.0.txt
-diff --git a/package/waylandpp/waylandpp.mk b/package/waylandpp/waylandpp.mk
-index f192a12..d1ceb45 100644
---- a/package/waylandpp/waylandpp.mk
-+++ b/package/waylandpp/waylandpp.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WAYLANDPP_VERSION = 0.1.6
-+WAYLANDPP_VERSION = 0.2.1
- WAYLANDPP_SITE = $(call github,NilsBrause,waylandpp,$(WAYLANDPP_VERSION))
- WAYLANDPP_LICENSE = MIT, GPL-3.0+ (wayland_scanner)
- WAYLANDPP_LICENSE_FILES = LICENSE scanner/gpl-3.0.txt
+diff --git a/package/kvm-unit-tests/0002-kvm-unit-tests-test-for-rdseed-rdrand.patch b/package/kvm-unit-tests/0002-kvm-unit-tests-test-for-rdseed-rdrand.patch
+new file mode 100644
+index 0000000..47f15c6
+--- /dev/null
++++ b/package/kvm-unit-tests/0002-kvm-unit-tests-test-for-rdseed-rdrand.patch
+@@ -0,0 +1,110 @@
++From 8d9a62a5fa89001266352a929c5d40b28c0dda85 Mon Sep 17 00:00:00 2001
++From: Matt Weber <matthew.weber@rockwellcollins.com>
++Date: Fri, 12 Jan 2018 19:07:27 -0600
++Subject: [PATCH v2] kvm-unit-tests: test for rdseed/rdrand
++
++The build fails when the host binutils isn't at least 2.23
++(2.22.x introduced RDSEED).
++
++Fixes:
++http://autobuild.buildroot.net/results/c39/c3987a3cbd2960b0ff50f872636bdfd8d1a9c820/
++
++Upstream:
++https://marc.info/?l=kvm&m=151580743523259&w=2
++
++Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
++---
++ Makefile        |  2 +-
++ configure       | 18 ++++++++++++++++++
++ x86/vmx_tests.c |  6 ++++++
++ 3 files changed, 25 insertions(+), 1 deletion(-)
++
++diff --git a/Makefile b/Makefile
++index d9ad42b..799e9b5 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -50,7 +50,7 @@ include $(SRCDIR)/$(TEST_DIR)/Makefile
++ cc-option = $(shell if $(CC) $(1) -S -o /dev/null -xc /dev/null \
++               > /dev/null 2>&1; then echo "$(1)"; else echo "$(2)"; fi ;)
++ 
++-COMMON_CFLAGS += -g $(autodepend-flags)
+++COMMON_CFLAGS += -g $(autodepend-flags) $(EXTRA_CFLAGS)
++ COMMON_CFLAGS += -Wall -Wwrite-strings -Wclobbered -Wempty-body -Wuninitialized
++ COMMON_CFLAGS += -Wignored-qualifiers -Wunused-but-set-parameter
++ frame-pointer-flag=-f$(if $(KEEP_FRAME_POINTER),no-,)omit-frame-pointer
++diff --git a/configure b/configure
++index dd9d361..21c0219 100755
++--- a/configure
+++++ b/configure
++@@ -171,6 +171,23 @@ mkdir -p lib
++ ln -sf "$asm" lib/asm
++ 
++ 
+++cat > rd_test.c <<EOF
+++#include <stdint.h>
+++int main() {
+++   uint16_t seed=0;
+++   unsigned char ok;
+++   asm volatile ("rdseed %0; setc %1"
+++                 : "=r" (seed), "=qm" (ok));
+++   return ok;
+++}
+++EOF
+++if $cross_prefix$cc -o /dev/null rd_test.c &> /dev/null; then
+++  echo "Checking for rdseed/rdrand... Yes."
+++else
+++  echo "Checking for rdseed/rdrand... No."
+++  extra_cflags="-DNO_RDSEEDRAND"
+++fi
+++
++ # create the config
++ cat <<EOF > config.mak
++ SRCDIR=$srcdir
++@@ -181,6 +198,7 @@ ARCH_NAME=$arch_name
++ PROCESSOR=$processor
++ CC=$cross_prefix$cc
++ CXX=$cross_prefix$cxx
+++EXTRA_CFLAGS=$extra_cflags
++ LD=$cross_prefix$ld
++ OBJCOPY=$cross_prefix$objcopy
++ OBJDUMP=$cross_prefix$objdump
++diff --git a/x86/vmx_tests.c b/x86/vmx_tests.c
++index 4a3e94b..2cbe3eb 100644
++--- a/x86/vmx_tests.c
+++++ b/x86/vmx_tests.c
++@@ -770,8 +770,10 @@ asm(
++ 	"insn_sldt: sldt %ax;ret\n\t"
++ 	"insn_lldt: xor %eax, %eax; lldt %ax;ret\n\t"
++ 	"insn_str: str %ax;ret\n\t"
+++#ifndef NO_RDSEEDRAND
++ 	"insn_rdrand: rdrand %rax;ret\n\t"
++ 	"insn_rdseed: rdseed %rax;ret\n\t"
+++#endif
++ );
++ extern void insn_hlt();
++ extern void insn_invlpg();
++@@ -796,8 +798,10 @@ extern void insn_lldt();
++ extern void insn_str();
++ extern void insn_cpuid();
++ extern void insn_invd();
+++#ifndef NO_RDSEEDRAND
++ extern void insn_rdrand();
++ extern void insn_rdseed();
+++#endif
++ 
++ u32 cur_insn;
++ u64 cr3;
++@@ -853,8 +857,10 @@ static struct insn_table insn_table[] = {
++ 	{"DESC_TABLE (LLDT)", CPU_DESC_TABLE, insn_lldt, INSN_CPU1, 47, 0, 0, 0},
++ 	{"DESC_TABLE (STR)", CPU_DESC_TABLE, insn_str, INSN_CPU1, 47, 0, 0, 0},
++ 	/* LTR causes a #GP if done with a busy selector, so it is not tested.  */
+++#ifndef NO_RDSEEDRAND
++ 	{"RDRAND", CPU_RDRAND, insn_rdrand, INSN_CPU1, VMX_RDRAND, 0, 0, 0},
++ 	{"RDSEED", CPU_RDSEED, insn_rdseed, INSN_CPU1, VMX_RDSEED, 0, 0, 0},
+++#endif
++ 	// Instructions always trap
++ 	{"CPUID", 0, insn_cpuid, INSN_ALWAYS_TRAP, 10, 0, 0, 0},
++ 	{"INVD", 0, insn_invd, INSN_ALWAYS_TRAP, 13, 0, 0, 0},
++-- 
++1.9.1
++
