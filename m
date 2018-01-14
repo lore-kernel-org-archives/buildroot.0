@@ -1,102 +1,91 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 14 Jan 2018 19:18:27 +0100
-Subject: [Buildroot] [PATCH 1/1] package/python-mwclient: bump version to
- 0.8.7
-Message-ID: <20180114181827.13854-1-bernd.kuhls@t-online.de>
+From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
+Date: Sun, 14 Jan 2018 19:33:41 +0100
+Subject: [Buildroot] [PATCH 1/1] domoticz: fix build with boost 1.66
+In-Reply-To: <20180114180304.17439-1-fontaine.fabrice@gmail.com>
+References: <20180114180304.17439-1-fontaine.fabrice@gmail.com>
+Message-ID: <1515954821.8426.10.camel@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Removed patch applied upstream:
-https://github.com/mwclient/mwclient/commit/60d4b933184172b98e4b31b79b4420c35571bbea
+Hi Fabrice,
 
-Added license hash.
+On Sun, 2018-01-14 at 19:03 +0100, Fabrice Fontaine wrote:
+> Boost asio changed its API:
+>  - http://www.boost.org/doc/libs/1_66_0/doc/html/boost_asio/net_ts.html
+> 
+> Fixes:
+>  - http://autobuild.buildroot.net/results/5f02c8fc84889748f283ee1cb76248bb0880215a
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  .../0001-Fix-compilation-with-boost-1.66.patch     | 52 ++++++++++++++++++++++
+>  1 file changed, 52 insertions(+)
+>  create mode 100644 package/domoticz/0001-Fix-compilation-with-boost-1.66.patch
+> 
+> diff --git a/package/domoticz/0001-Fix-compilation-with-boost-1.66.patch b/package/domoticz/0001-Fix-compilation-with-boost-1.66.patch
+> new file mode 100644
+> index 0000000000..a3ec8cc549
+> --- /dev/null
+> +++ b/package/domoticz/0001-Fix-compilation-with-boost-1.66.patch
+> @@ -0,0 +1,52 @@
+> +From 36ca9cfa044fb6789fd24338f5d52614de7c0a19 Mon Sep 17 00:00:00 2001
+> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +Date: Sun, 14 Jan 2018 18:18:32 +0100
+> +Subject: [PATCH] Fix compilation with boost 1.66
+> +
+> +Boost asio changed its API:
+> + - http://www.boost.org/doc/libs/1_66_0/doc/html/boost_asio/net_ts.html
+> +
+> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +---
+> + webserver/proxyclient.cpp | 2 +-
+> + webserver/server.cpp      | 4 ++--
+> + 2 files changed, 3 insertions(+), 3 deletions(-)
+> +
+> +diff --git a/webserver/proxyclient.cpp b/webserver/proxyclient.cpp
+> +index 203ee619..efc9815a 100644
+> +--- a/webserver/proxyclient.cpp
+> ++++ b/webserver/proxyclient.cpp
+> +@@ -639,7 +639,7 @@ namespace http {
+> + 		void CProxyManager::StartThread()
+> + 		{
+> + 			try {
+> +-				boost::asio::ssl::context ctx(io_service, boost::asio::ssl::context::sslv23);
+> ++				boost::asio::ssl::context ctx(boost::asio::ssl::context::sslv23);
+> + 				ctx.set_verify_mode(boost::asio::ssl::verify_none);
+> + 
+> + 				proxyclient.reset(new CProxyClient(io_service, ctx, m_pWebEm));
+> +diff --git a/webserver/server.cpp b/webserver/server.cpp
+> +index 5255aa34..0c1af08a 100644
+> +--- a/webserver/server.cpp
+> ++++ b/webserver/server.cpp
+> +@@ -148,7 +148,7 @@ void server::handle_accept(const boost::system::error_code& e) {
+> + ssl_server::ssl_server(const ssl_server_settings & ssl_settings, request_handler & user_request_handler) :
+> + 		server_base(ssl_settings, user_request_handler),
+> + 		settings_(ssl_settings),
+> +-		context_(io_service_, ssl_settings.get_ssl_method())
+> ++		context_(ssl_settings.get_ssl_method())
+> + {
+> + #ifdef DEBUG_WWW
+> + 	_log.Log(LOG_STATUS, "[web:%s] create ssl_server using ssl_server_settings : %s", ssl_settings.listening_port.c_str(), ssl_settings.to_string().c_str());
+> +@@ -161,7 +161,7 @@ ssl_server::ssl_server(const ssl_server_settings & ssl_settings, request_handler
+> + ssl_server::ssl_server(const server_settings & settings, request_handler & user_request_handler) :
+> + 		server_base(settings, user_request_handler),
+> + 		settings_(dynamic_cast<ssl_server_settings const &>(settings)),
+> +-		context_(io_service_, dynamic_cast<ssl_server_settings const &>(settings).get_ssl_method()) {
+> ++		context_(dynamic_cast<ssl_server_settings const &>(settings).get_ssl_method()) {
+> + #ifdef DEBUG_WWW
+> + 	_log.Log(LOG_STATUS, "[web:%s] create ssl_server using server_settings : %s", settings.listening_port.c_str(), settings.to_string().c_str());
+> + #endif
+> +-- 
+> +2.14.1
+> +
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- ...require-pytest-runner-only-when-necessary.patch | 43 ----------------------
- package/python-mwclient/python-mwclient.hash       |  5 ++-
- package/python-mwclient/python-mwclient.mk         |  4 +-
- 3 files changed, 5 insertions(+), 47 deletions(-)
- delete mode 100644 package/python-mwclient/0001-setup.py-require-pytest-runner-only-when-necessary.patch
+Thanks for the patch? Can you add a note about upstream status and
+where you fetched the patch from, please?
 
-diff --git a/package/python-mwclient/0001-setup.py-require-pytest-runner-only-when-necessary.patch b/package/python-mwclient/0001-setup.py-require-pytest-runner-only-when-necessary.patch
-deleted file mode 100644
-index 124236c0b8..0000000000
---- a/package/python-mwclient/0001-setup.py-require-pytest-runner-only-when-necessary.patch
-+++ /dev/null
-@@ -1,43 +0,0 @@
--From a6ff9745f56b776f244c2c412685f5c10ff0f09d Mon Sep 17 00:00:00 2001
--From: Bernd Kuhls <bernd.kuhls@t-online.de>
--Date: Fri, 24 Nov 2017 20:44:53 +0100
--Subject: [PATCH] setup.py: require pytest-runner only when necessary
--
--This optimizes setup.py for cases when pytest-runner is not needed,
--using the approach that is suggested upstream:
--
--https://pypi.python.org/pypi/pytest-runner#conditional-requirement
--
--Patch sent upstream: https://github.com/mwclient/mwclient/pull/180
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-----
-- setup.py | 5 ++++-
-- 1 file changed, 4 insertions(+), 1 deletion(-)
--
--diff --git a/setup.py b/setup.py
--index a32cbde..660d93b 100644
----- a/setup.py
--+++ b/setup.py
--@@ -8,6 +8,9 @@ from setuptools import setup
-- here = os.path.abspath(os.path.dirname(__file__))
-- README = open(os.path.join(here, 'README.rst')).read()
-- 
--+needs_pytest = set(['pytest', 'test', 'ptr']).intersection(sys.argv)
--+pytest_runner = ['pytest-runner'] if needs_pytest else []
--+
-- setup(name='mwclient',
--       version='0.8.6',  # Use bumpversion to update
--       description='MediaWiki API client',
--@@ -27,7 +30,7 @@ setup(name='mwclient',
--       license='MIT',
--       packages=['mwclient'],
--       install_requires=['requests_oauthlib', 'six'],
---      setup_requires=['pytest-runner'],
--+      setup_requires=pytest_runner,
--       tests_require=['pytest', 'pytest-pep8', 'pytest-cache', 'pytest-cov',
--                      'responses>=0.3.0', 'responses!=0.6.0', 'mock'],
--       zip_safe=True
---- 
--2.11.0
--
-diff --git a/package/python-mwclient/python-mwclient.hash b/package/python-mwclient/python-mwclient.hash
-index 1e9744ce38..3fb643e601 100644
---- a/package/python-mwclient/python-mwclient.hash
-+++ b/package/python-mwclient/python-mwclient.hash
-@@ -1,3 +1,4 @@
- # md5 from https://pypi.python.org/pypi/mwclient/json, sha256 locally computed
--md5	a73687e8caa4248e9f48caece76592ff  mwclient-0.8.6.tar.gz
--sha256	08f917b995b331b937ed8c7e297406e3c8d33b80234679ee7fbfeeafd7570a8e  mwclient-0.8.6.tar.gz
-+md5	486d3109e73d298d512d967501b23647  mwclient-0.8.7.tar.gz
-+sha256	3bdaaa48fda6386b190651e49484a549bd0c48b97573dbda34a8b7c4c80430ed  mwclient-0.8.7.tar.gz
-+sha256	d29eaa80939b6d8fc3ab458bab90f4af879fa9e0430ed7e0fb2b94752e7eb33f  mwclient/__init__.py
-diff --git a/package/python-mwclient/python-mwclient.mk b/package/python-mwclient/python-mwclient.mk
-index 7c2a0b0025..5f18ef7d1b 100644
---- a/package/python-mwclient/python-mwclient.mk
-+++ b/package/python-mwclient/python-mwclient.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_MWCLIENT_VERSION = 0.8.6
-+PYTHON_MWCLIENT_VERSION = 0.8.7
- PYTHON_MWCLIENT_SOURCE = mwclient-$(PYTHON_MWCLIENT_VERSION).tar.gz
--PYTHON_MWCLIENT_SITE = https://pypi.python.org/packages/cd/38/beaf985032b42a0b0c8f9028b469c4dcb0bd7bfab62707ec27af7e890e84
-+PYTHON_MWCLIENT_SITE = https://pypi.python.org/packages/63/05/ddf7d1b0d3a1dc9ee650dcaef7ddfbb980b4d2f0c41128c5f9e6fed5e8e2
- PYTHON_MWCLIENT_LICENSE = MIT
- PYTHON_MWCLIENT_LICENSE_FILES = mwclient/__init__.py
- PYTHON_MWCLIENT_SETUP_TYPE = setuptools
--- 
-2.11.0
+Best regards,
+J?rg Krause
