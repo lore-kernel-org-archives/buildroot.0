@@ -1,69 +1,82 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 14 Jan 2018 19:03:39 +0100
-Subject: [Buildroot] [PATCH] swupdate: remove empty line
-In-Reply-To: <20180114175306.18388-1-joerg.krause@embedded.rocks>
-References: <20180114175306.18388-1-joerg.krause@embedded.rocks>
-Message-ID: <20180114180339.GC20105@scaer>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 14 Jan 2018 19:03:04 +0100
+Subject: [Buildroot] [PATCH 1/1] domoticz: fix build with boost 1.66
+Message-ID: <20180114180304.17439-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-J"org, All,
+Boost asio changed its API:
+ - http://www.boost.org/doc/libs/1_66_0/doc/html/boost_asio/net_ts.html
 
-On 2018-01-14 18:53 +0100, J?rg Krause spake thusly:
-> Reported by Yann E. Morin running:
-> 
-> ```
->     $ ./utils/check-package package/swupdate/swupdate.mk
->     package/swupdate/swupdate.mk:42: consecutive empty lines
->     140 lines processed
->     1 warnings generated
-> ```
+Fixes:
+ - http://autobuild.buildroot.net/results/5f02c8fc84889748f283ee1cb76248bb0880215a
 
-Note: I could have very well done it myself, but by having other do it,
-that spreads the knowledge, and people get used to running it before
-submitting. Or so I hope! ;-)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ .../0001-Fix-compilation-with-boost-1.66.patch     | 52 ++++++++++++++++++++++
+ 1 file changed, 52 insertions(+)
+ create mode 100644 package/domoticz/0001-Fix-compilation-with-boost-1.66.patch
 
-Thanks! :-)
-
-> Reported-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/swupdate/swupdate.mk | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/package/swupdate/swupdate.mk b/package/swupdate/swupdate.mk
-> index d1afbc4882..aa232e5837 100644
-> --- a/package/swupdate/swupdate.mk
-> +++ b/package/swupdate/swupdate.mk
-> @@ -39,7 +39,6 @@ else
->  SWUPDATE_MAKE_ENV += HAVE_LIBCURL=n
->  endif
->  
-> -
->  ifeq ($(BR2_PACKAGE_HAS_LUAINTERPRETER),y)
->  SWUPDATE_DEPENDENCIES += luainterpreter host-pkgconf
->  # defines the base name for the pkg-config file ("lua" or "luajit")
-> -- 
-> 2.15.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/domoticz/0001-Fix-compilation-with-boost-1.66.patch b/package/domoticz/0001-Fix-compilation-with-boost-1.66.patch
+new file mode 100644
+index 0000000000..a3ec8cc549
+--- /dev/null
++++ b/package/domoticz/0001-Fix-compilation-with-boost-1.66.patch
+@@ -0,0 +1,52 @@
++From 36ca9cfa044fb6789fd24338f5d52614de7c0a19 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sun, 14 Jan 2018 18:18:32 +0100
++Subject: [PATCH] Fix compilation with boost 1.66
++
++Boost asio changed its API:
++ - http://www.boost.org/doc/libs/1_66_0/doc/html/boost_asio/net_ts.html
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ webserver/proxyclient.cpp | 2 +-
++ webserver/server.cpp      | 4 ++--
++ 2 files changed, 3 insertions(+), 3 deletions(-)
++
++diff --git a/webserver/proxyclient.cpp b/webserver/proxyclient.cpp
++index 203ee619..efc9815a 100644
++--- a/webserver/proxyclient.cpp
+++++ b/webserver/proxyclient.cpp
++@@ -639,7 +639,7 @@ namespace http {
++ 		void CProxyManager::StartThread()
++ 		{
++ 			try {
++-				boost::asio::ssl::context ctx(io_service, boost::asio::ssl::context::sslv23);
+++				boost::asio::ssl::context ctx(boost::asio::ssl::context::sslv23);
++ 				ctx.set_verify_mode(boost::asio::ssl::verify_none);
++ 
++ 				proxyclient.reset(new CProxyClient(io_service, ctx, m_pWebEm));
++diff --git a/webserver/server.cpp b/webserver/server.cpp
++index 5255aa34..0c1af08a 100644
++--- a/webserver/server.cpp
+++++ b/webserver/server.cpp
++@@ -148,7 +148,7 @@ void server::handle_accept(const boost::system::error_code& e) {
++ ssl_server::ssl_server(const ssl_server_settings & ssl_settings, request_handler & user_request_handler) :
++ 		server_base(ssl_settings, user_request_handler),
++ 		settings_(ssl_settings),
++-		context_(io_service_, ssl_settings.get_ssl_method())
+++		context_(ssl_settings.get_ssl_method())
++ {
++ #ifdef DEBUG_WWW
++ 	_log.Log(LOG_STATUS, "[web:%s] create ssl_server using ssl_server_settings : %s", ssl_settings.listening_port.c_str(), ssl_settings.to_string().c_str());
++@@ -161,7 +161,7 @@ ssl_server::ssl_server(const ssl_server_settings & ssl_settings, request_handler
++ ssl_server::ssl_server(const server_settings & settings, request_handler & user_request_handler) :
++ 		server_base(settings, user_request_handler),
++ 		settings_(dynamic_cast<ssl_server_settings const &>(settings)),
++-		context_(io_service_, dynamic_cast<ssl_server_settings const &>(settings).get_ssl_method()) {
+++		context_(dynamic_cast<ssl_server_settings const &>(settings).get_ssl_method()) {
++ #ifdef DEBUG_WWW
++ 	_log.Log(LOG_STATUS, "[web:%s] create ssl_server using server_settings : %s", settings.listening_port.c_str(), settings.to_string().c_str());
++ #endif
++-- 
++2.14.1
++
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.14.1
