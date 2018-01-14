@@ -1,54 +1,52 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Sun, 14 Jan 2018 18:53:48 +0100
-Subject: [Buildroot] [PATCH] swupdate: bump to version 2017.11
-In-Reply-To: <20180113222803.GI3226@scaer>
-References: <20180110222816.20579-1-joerg.krause@embedded.rocks>
- <20180113222803.GI3226@scaer>
-Message-ID: <1515952428.8426.2.camel@embedded.rocks>
+From: =?UTF-8?Q?Stefan_Fr=c3=b6berg?= <stefan.froberg@petroprogram.com>
+Date: Sun, 14 Jan 2018 19:56:00 +0200
+Subject: [Buildroot] [PATCH v2 1/1] unbound: new package
+In-Reply-To: <uagqiexfnk.ln2@ID-313208.user.individual.net>
+References: <20180113222651.22755-1-stefan.froberg@petroprogram.com>
+ <uagqiexfnk.ln2@ID-313208.user.individual.net>
+Message-ID: <6b37de5d-dd14-17a8-44a8-bd9b078c2920@petroprogram.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann,
+Hi Bernd
 
-On Sat, 2018-01-13 at 23:28 +0100, Yann E. MORIN wrote:
-> J?rg, All,
-> 
-> On 2018-01-10 23:28 +0100, J?rg Krause spake thusly:
-> [--SNIP--]
-> > diff --git a/package/swupdate/swupdate.mk b/package/swupdate/swupdate.mk
-> > index fbb092da05..d1afbc4882 100644
-> > --- a/package/swupdate/swupdate.mk
-> > +++ b/package/swupdate/swupdate.mk
-> > @@ -4,7 +4,7 @@
-> >  #
-> >  ################################################################################
-> >  
-> > -SWUPDATE_VERSION = 2017.07
-> > +SWUPDATE_VERSION = 2017.11
-> >  SWUPDATE_SITE = $(call github,sbabic,swupdate,$(SWUPDATE_VERSION))
-> >  SWUPDATE_LICENSE = GPL-2.0+, MIT, Public Domain
-> >  SWUPDATE_LICENSE_FILES = COPYING
-> > @@ -39,8 +39,13 @@ else
-> >  SWUPDATE_MAKE_ENV += HAVE_LIBCURL=n
-> >  endif
-> >  
-> > -ifeq ($(BR2_PACKAGE_LUA_5_2)$(BR2_PACKAGE_LUA_5_3),y)
-> > -SWUPDATE_DEPENDENCIES += lua host-pkgconf
-> > +
-> 
-> This is adding an extra empty line, which would have been caught by
-> running:
-> 
->     $ ./utils/check-package package/swupdate/swupdate.mk
->     package/swupdate/swupdate.mk:42: consecutive empty lines
->     140 lines processed
->     1 warnings generated
-> 
-> Care to fix, please?
 
-Thanks for reporting! Fix is on his way...
+Bernd Kuhls kirjoitti 14.01.2018 klo 01:11:
+> Am Sun, 14 Jan 2018 00:26:51 +0200 schrieb Stefan Fr?berg:
+>
+>> Unbound: validating, recursive & caching DNS resolver with
+>> DNSSEC, QNAME minimisation, DNSCrypt and DNS-over-TLS support.
+>>
+>> Signed-off-by: Stefan Fr?berg <stefan.froberg@petroprogram.com>
+> Hi,
+>
+> when testing your package with this defconfig stored in ./test-unbound
+>
+> $ cat ./test-unbound 
+> BR2_PACKAGE_UNBOUND=y
+> BR2_PACKAGE_UNBOUND_DNSCRYPT=y
+>
+> $ utils/test-pkg -c test-unbound $HOME/test-unbound
+>
+> it fails on some platforms:
+>
+>                    br-arm-cortex-m4-full [ 8/47]: FAILED
+>                       br-arm-full-static [11/47]: FAILED
+>                             br-bfin-full [12/47]: FAILED
+>                        br-m68k-5208-full [15/47]: FAILED
+>
+> I stopped the test at this point, maybe you can have a look at the 
+> failures? I did not do that at this time (CET) of day ;)
+>
 
-J?rg
+Uh...47 compiler/platform combinations? Jeeez...that will take ages with
+my poor comp ...
+
+Where does that test-pkg script output the build failures?
+
+Regards
+Stefan
+?
