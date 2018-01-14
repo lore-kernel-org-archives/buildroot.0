@@ -1,52 +1,69 @@
-From: =?UTF-8?Q?Stefan_Fr=c3=b6berg?= <stefan.froberg@petroprogram.com>
-Date: Sun, 14 Jan 2018 19:56:00 +0200
-Subject: [Buildroot] [PATCH v2 1/1] unbound: new package
-In-Reply-To: <uagqiexfnk.ln2@ID-313208.user.individual.net>
-References: <20180113222651.22755-1-stefan.froberg@petroprogram.com>
- <uagqiexfnk.ln2@ID-313208.user.individual.net>
-Message-ID: <6b37de5d-dd14-17a8-44a8-bd9b078c2920@petroprogram.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 14 Jan 2018 19:03:39 +0100
+Subject: [Buildroot] [PATCH] swupdate: remove empty line
+In-Reply-To: <20180114175306.18388-1-joerg.krause@embedded.rocks>
+References: <20180114175306.18388-1-joerg.krause@embedded.rocks>
+Message-ID: <20180114180339.GC20105@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Bernd
+J"org, All,
 
+On 2018-01-14 18:53 +0100, J?rg Krause spake thusly:
+> Reported by Yann E. Morin running:
+> 
+> ```
+>     $ ./utils/check-package package/swupdate/swupdate.mk
+>     package/swupdate/swupdate.mk:42: consecutive empty lines
+>     140 lines processed
+>     1 warnings generated
+> ```
 
-Bernd Kuhls kirjoitti 14.01.2018 klo 01:11:
-> Am Sun, 14 Jan 2018 00:26:51 +0200 schrieb Stefan Fr?berg:
->
->> Unbound: validating, recursive & caching DNS resolver with
->> DNSSEC, QNAME minimisation, DNSCrypt and DNS-over-TLS support.
->>
->> Signed-off-by: Stefan Fr?berg <stefan.froberg@petroprogram.com>
-> Hi,
->
-> when testing your package with this defconfig stored in ./test-unbound
->
-> $ cat ./test-unbound 
-> BR2_PACKAGE_UNBOUND=y
-> BR2_PACKAGE_UNBOUND_DNSCRYPT=y
->
-> $ utils/test-pkg -c test-unbound $HOME/test-unbound
->
-> it fails on some platforms:
->
->                    br-arm-cortex-m4-full [ 8/47]: FAILED
->                       br-arm-full-static [11/47]: FAILED
->                             br-bfin-full [12/47]: FAILED
->                        br-m68k-5208-full [15/47]: FAILED
->
-> I stopped the test at this point, maybe you can have a look at the 
-> failures? I did not do that at this time (CET) of day ;)
->
+Note: I could have very well done it myself, but by having other do it,
+that spreads the knowledge, and people get used to running it before
+submitting. Or so I hope! ;-)
 
-Uh...47 compiler/platform combinations? Jeeez...that will take ages with
-my poor comp ...
+Thanks! :-)
 
-Where does that test-pkg script output the build failures?
+> Reported-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 
-Regards
-Stefan
-?
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  package/swupdate/swupdate.mk | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/package/swupdate/swupdate.mk b/package/swupdate/swupdate.mk
+> index d1afbc4882..aa232e5837 100644
+> --- a/package/swupdate/swupdate.mk
+> +++ b/package/swupdate/swupdate.mk
+> @@ -39,7 +39,6 @@ else
+>  SWUPDATE_MAKE_ENV += HAVE_LIBCURL=n
+>  endif
+>  
+> -
+>  ifeq ($(BR2_PACKAGE_HAS_LUAINTERPRETER),y)
+>  SWUPDATE_DEPENDENCIES += luainterpreter host-pkgconf
+>  # defines the base name for the pkg-config file ("lua" or "luajit")
+> -- 
+> 2.15.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
