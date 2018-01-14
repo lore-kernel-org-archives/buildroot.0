@@ -1,37 +1,59 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 14 Jan 2018 15:16:59 +0100
-Subject: [Buildroot] [PATCH 03/17] fs: run filesystem hooks under fakeroot
+Date: Sun, 14 Jan 2018 15:17:00 +0100
+Subject: [Buildroot] [PATCH 04/17] fs/cpio: don't extend packages'
+ permissions table
 In-Reply-To: <cover.1515939400.git.yann.morin.1998@free.fr>
 References: <cover.1515939400.git.yann.morin.1998@free.fr>
-Message-ID: <32c8e4163ab1f955741edfb8ae6bfff784ac55b8.1515939400.git.yann.morin.1998@free.fr>
+Message-ID: <32219a9dca495a3547a60e749cd90b159e0f792f.1515939400.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Currently, when we build a cpio filesystem without static devices, we
+shoehorn the /dev/console node as if it were specified by a package.
+
+This means that this device is added for all filesystems as well, not
+just the cpio. But if we disable cpio, that device is not created for
+other filesystems.
+
+This is not very clean, and may break expectations.
+
+Instead, use an explicit mknod as part of the _CMD, as we know it's
+going to run under fakeroot.
+
+This is still visible to all filesystems built after cpio, and not to
+those built before it, though.
+
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Cc: Arnout Vandecappelle <arnout@mind.be>
 ---
- fs/common.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ fs/cpio/cpio.mk | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/fs/common.mk b/fs/common.mk
-index 6d579db810..274a3e9c7b 100644
---- a/fs/common.mk
-+++ b/fs/common.mk
-@@ -76,9 +76,10 @@ $$(BINARIES_DIR)/rootfs.$(1): target-finalize $$(ROOTFS_$(2)_DEPENDENCIES)
- 	@$$(call MESSAGE,"Generating root filesystem image rootfs.$(1)")
- 	rm -rf $(FS_DIR)
- 	mkdir -p $(FS_DIR)
--	$$(foreach hook,$$(ROOTFS_$(2)_PRE_GEN_HOOKS),$$(call $$(hook))$$(sep))
- 	echo '#!/bin/sh' > $$(FAKEROOT_SCRIPT)
- 	echo "set -e" >> $$(FAKEROOT_SCRIPT)
-+	$$(foreach hook,$$(ROOTFS_$(2)_PRE_GEN_HOOKS),\
-+		$$(call PRINTF,$$($$(hook))) >> $$(FAKEROOT_SCRIPT)$$(sep))
- 	echo "chown -h -R 0:0 $$(TARGET_DIR)" >> $$(FAKEROOT_SCRIPT)
- ifneq ($$(ROOTFS_USERS_TABLES),)
- 	cat $$(ROOTFS_USERS_TABLES) >> $$(USERS_TABLE)
+diff --git a/fs/cpio/cpio.mk b/fs/cpio/cpio.mk
+index aa4d947fa5..505976512b 100644
+--- a/fs/cpio/cpio.mk
++++ b/fs/cpio/cpio.mk
+@@ -15,14 +15,15 @@ endef
+ else
+ # devtmpfs does not get automounted when initramfs is used.
+ # Add a pre-init script to mount it before running init
++# We must have /dev/console very early, even before /init runs, so
++# that it can at least open its stdin/stdout/stderr filedescriptors.
+ define ROOTFS_CPIO_ADD_INIT
+ 	if [ ! -e $(TARGET_DIR)/init ]; then \
+ 		$(INSTALL) -m 0755 fs/cpio/init $(TARGET_DIR)/init; \
+ 	fi
++	mknod -m 0622 $(TARGET_DIR)/dev/console c 5 1
+ endef
+ 
+-PACKAGES_PERMISSIONS_TABLE += /dev/console c 622 0 0 5 1 - - -$(sep)
+-
+ endif # BR2_ROOTFS_DEVICE_CREATION_STATIC
+ 
+ ROOTFS_CPIO_PRE_GEN_HOOKS += ROOTFS_CPIO_ADD_INIT
 -- 
 2.14.1
