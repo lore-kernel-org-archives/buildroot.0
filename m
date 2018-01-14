@@ -1,39 +1,53 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 14 Jan 2018 00:11:58 +0100
-Subject: [Buildroot] [PATCH v2 1/1] unbound: new package
-References: <20180113222651.22755-1-stefan.froberg@petroprogram.com>
-Message-ID: <uagqiexfnk.ln2@ID-313208.user.individual.net>
+From: Guillermo A. Amaral <g@maral.me>
+Date: Sat, 13 Jan 2018 19:12:02 -0800
+Subject: [Buildroot] [PATCH 1/1] Fix nconfig for systems with both ncurses
+ and ncursesw
+Message-ID: <20180114031202.30678-1-g@maral.me>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Sun, 14 Jan 2018 00:26:51 +0200 schrieb Stefan Fr?berg:
+Buildroot's "make ncurses" stopped working a while ago on all my Gentoo
+systems, running the command would just cause it to crash.
 
-> Unbound: validating, recursive & caching DNS resolver with
-> DNSSEC, QNAME minimisation, DNSCrypt and DNS-over-TLS support.
-> 
-> Signed-off-by: Stefan Fr?berg <stefan.froberg@petroprogram.com>
+I look into it and found that the issue was caused by lxdialog's cflags
+which are also used to build nconfig; It would detect *ncursesw* and turn
+on WIDECHAR support -- but the Makefile would still link to plain
+*ncurses* while building nconfig (which was built without WIDECHAR
+support).
 
-Hi,
+This would cause a crash after using *wattrset* on a WINDOW instance.
+WIDECHAR *wattrset* would try to set the _color member in the WINDOW
+struct which does not exist in the NON-WIDECHAR ncurses instance. It
+would end up clobbering data outside the struct (usually _line entries).
 
-when testing your package with this defconfig stored in ./test-unbound
+Just linking to *ncursesw* instead could possibly brick nconfig on older
+systems, so I decided to use the same lxdialog script used to find
+ncurses' cflags/ldflags for menuconfig.
 
-$ cat ./test-unbound 
-BR2_PACKAGE_UNBOUND=y
-BR2_PACKAGE_UNBOUND_DNSCRYPT=y
+Signed-off-by: Guillermo A. Amaral <g@maral.me>
+---
+ support/kconfig/Makefile | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-$ utils/test-pkg -c test-unbound $HOME/test-unbound
-
-it fails on some platforms:
-
-                   br-arm-cortex-m4-full [ 8/47]: FAILED
-                      br-arm-full-static [11/47]: FAILED
-                            br-bfin-full [12/47]: FAILED
-                       br-m68k-5208-full [15/47]: FAILED
-
-I stopped the test at this point, maybe you can have a look at the 
-failures? I did not do that at this time (CET) of day ;)
-
-Regards, Bernd
+diff --git a/support/kconfig/Makefile b/support/kconfig/Makefile
+index 7eb4071b4e..f54a60baff 100644
+--- a/support/kconfig/Makefile
++++ b/support/kconfig/Makefile
+@@ -220,8 +220,10 @@ HOSTCFLAGS_gconf.o	= `pkg-config --cflags gtk+-2.0 gmodule-2.0 libglade-2.0` \
+ HOSTLOADLIBES_mconf   = $(shell $(CONFIG_SHELL) $(check-lxdialog) -ldflags $(HOSTCC))
+ 
+ HOSTLOADLIBES_nconf	= $(shell \
+-				pkg-config --libs menu panel ncurses 2>/dev/null \
+-				|| echo "-lmenu -lpanel -lncurses"  )
++				pkg-config --libs menu panel 2>/dev/null \
++				|| echo "-lmenu -lpanel")
++HOSTLOADLIBES_nconf	+= $(shell $(CONFIG_SHELL) $(check-lxdialog) -ldflags)
++
+ $(obj)/qconf.o: $(obj)/.tmp_qtcheck
+ 
+ ifeq ($(qconf-target),1)
+-- 
+2.13.6
