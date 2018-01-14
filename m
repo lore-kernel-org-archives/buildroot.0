@@ -1,82 +1,67 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 14 Jan 2018 23:18:20 +0100
-Subject: [Buildroot] [PATCH v2] util-linux: extract ISC licence from
- rfkill.c
-In-Reply-To: <20180114192843.12352-1-casantos@datacom.ind.br>
-References: <20180114192843.12352-1-casantos@datacom.ind.br>
-Message-ID: <20180114221820.GB16760@scaer>
+Date: Sun, 14 Jan 2018 23:26:41 +0100
+Subject: [Buildroot] [PATCH 3/7] package/dash: add /etc/dash to
+ /etc/shells
+In-Reply-To: <1515963815-5843-4-git-send-email-romain.naour@smile.fr>
+References: <1515963815-5843-1-git-send-email-romain.naour@smile.fr>
+ <1515963815-5843-4-git-send-email-romain.naour@smile.fr>
+Message-ID: <20180114222641.GC16760@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Carlos, All,
+Romain, All,
 
-On 2018-01-14 17:28 -0200, Carlos Santos spake thusly:
-> Save the top 21 lines of sys-utils/rfkill.c as COPYING.ISC instead of
-> distributing the whole file.
+On 2018-01-14 22:03 +0100, Romain Naour spake thusly:
+> When dash is selected, /bin/dash is not added to /etc/shells
+> (see man shells). So, login tools like dropbear reject the ssh
+> connexions for users using dash as shell in /etc/passwd.
+> 
+> buildroot authpriv.warn dropbear[853]: User 'kubu' has invalid shell, rejected
+> 
+> Signed-off-by: Romain Naour <romain.naour@smile.fr>
+> ---
+>  package/dash/dash.mk | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/package/dash/dash.mk b/package/dash/dash.mk
+> index c8b4164..391c06e 100644
+> --- a/package/dash/dash.mk
+> +++ b/package/dash/dash.mk
+> @@ -9,8 +9,12 @@ DASH_SITE = http://gondor.apana.org.au/~herbert/dash/files
+>  DASH_LICENSE = BSD-3-Clause, GPL-2.0+ (mksignames.c)
+>  DASH_LICENSE_FILES = COPYING
+>  
+> +# Add /bin/dash to /etc/shells otherwise some login tools like dropbear
+> +# can reject the user connexion. See man shells.
+>  define DASH_INSTALL_TARGET_CMDS
+>  	$(INSTALL) -m 0755 $(@D)/src/dash $(TARGET_DIR)/bin/dash
+> +	grep -qsE '^/bin/dash' $(TARGET_DIR)/etc/shells \
+> +		|| echo "/bin/dash" >> $(TARGET_DIR)/etc/shells
 
-We usually do not do that, and there are quite a few packages where
-source files are actually listed as _LICENSE_FILES.
+Very unlikely, but what if there already is a shell named /bin/dashfoo ?
+You should make sure to also match the end of the line (double-dollar
+because of make...):
 
-We refrained from doing such a split in the past, just because there is
-no point in it. Just including such source files in the output of
-legal-info is the easiest thing to do.
+    grep -qsE '^/bin/dash$$'
 
-> This matches a corresponding patch alreardy
-> submitted upstream that creates the Documentation/licenses/COPYING.ISC
-> file.
+Note: comment valid for all the patches in the series, of course...
 
-Then when we update util-linux we can update the list of license files.
+And now that I re-read your bash patch, I missed it during the review.
+Or I did suggest you do, but you missed it, and then I missed it in the
+second review...
+    http://lists.busybox.net/pipermail/buildroot/2018-January/211338.html
 
 Regards,
 Yann E. MORIN.
 
-> Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
-> ---
->  package/util-linux/util-linux.hash | 2 +-
->  package/util-linux/util-linux.mk   | 8 +++++++-
->  2 files changed, 8 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/util-linux/util-linux.hash b/package/util-linux/util-linux.hash
-> index 838d2dcb53..a614190f41 100644
-> --- a/package/util-linux/util-linux.hash
-> +++ b/package/util-linux/util-linux.hash
-> @@ -6,4 +6,4 @@ sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  Documen
->  sha256 ba7640f00d93e72e92b94b9d71f25ec53bac2f1682f5c4adcccb0018359f60f8  Documentation/licenses/COPYING.UCB
->  sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  Documentation/licenses/COPYING.LGPLv2.1
->  sha256 9b718a9460fed5952466421235bc79eb49d4e9eacc920d7a9dd6285ab8fd6c6d  Documentation/licenses/COPYING.BSD-3
-> -sha256 996126b78a42dd2eeea1256d78b7fd6dec090ea196365c0ccb46adc32bc92460  sys-utils/rfkill.c
-> +sha256 7c219a72182dcc988e9b748fa39c17df3e973994260741750be3e12e94234e28  Documentation/licenses/COPYING.ISC
-> diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
-> index 5858887b04..c33b73594c 100644
-> --- a/package/util-linux/util-linux.mk
-> +++ b/package/util-linux/util-linux.mk
-> @@ -13,7 +13,7 @@ UTIL_LINUX_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/util-linux/v$(UTIL_LINUX_VERS
->  # README.licensing claims that some files are GPL-2.0 only, but this is not true.
->  # Some files are GPL-3.0+ but only in tests. rfkill uses an ISC-style license.
->  UTIL_LINUX_LICENSE = GPL-2.0+, BSD-4-Clause, LGPL-2.1+ (libblkid, libfdisk, libmount), BSD-3-Clause (libuuid) ISC (rfkill)
-> -UTIL_LINUX_LICENSE_FILES = README.licensing Documentation/licenses/COPYING.GPLv2 Documentation/licenses/COPYING.UCB Documentation/licenses/COPYING.LGPLv2.1 Documentation/licenses/COPYING.BSD-3 sys-utils/rfkill.c
-> +UTIL_LINUX_LICENSE_FILES = README.licensing Documentation/licenses/COPYING.GPLv2 Documentation/licenses/COPYING.UCB Documentation/licenses/COPYING.LGPLv2.1 Documentation/licenses/COPYING.BSD-3 Documentation/licenses/COPYING.ISC
->  UTIL_LINUX_INSTALL_STAGING = YES
->  UTIL_LINUX_DEPENDENCIES = host-pkgconf $(TARGET_NLS_DEPENDENCIES)
->  # uClibc needs NTP_LEGACY for sys/timex.h -> ntp_gettime() support
-> @@ -206,6 +206,12 @@ else
->  UTIL_LINUX_CONF_OPTS += --without-audit
->  endif
+>  endef
 >  
-> +# rfkill contails the license inside rfkill.c
-> +define UTIL_LINUX_EXTRACT_LICENSE
-> +	head -n 21 $(@D)/sys-utils/rfkill.c > $(@D)/Documentation/licenses/COPYING.ISC
-> +endef
-> +UTIL_LINUX_POST_EXTRACT_HOOKS += UTIL_LINUX_EXTRACT_LICENSE
-> +
->  # Install PAM configuration files
->  ifeq ($(BR2_PACKAGE_UTIL_LINUX_SU)$(BR2_PACKAGE_LINUX_PAM),yy)
->  define UTIL_LINUX_INSTALL_PAMFILES
+>  $(eval $(autotools-package))
 > -- 
-> 2.14.3
+> 2.7.4
 > 
 > _______________________________________________
 > buildroot mailing list
