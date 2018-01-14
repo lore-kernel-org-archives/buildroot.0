@@ -1,53 +1,85 @@
-From: Guillermo A. Amaral <g@maral.me>
-Date: Sat, 13 Jan 2018 19:12:02 -0800
-Subject: [Buildroot] [PATCH 1/1] Fix nconfig for systems with both ncurses
- and ncursesw
-Message-ID: <20180114031202.30678-1-g@maral.me>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sun, 14 Jan 2018 07:32:04 +0200
+Subject: [Buildroot] [PATCH 1/1] package/bluez5_utils: needs readline
+In-Reply-To: <20180113224532.2715-1-bernd.kuhls@t-online.de>
+References: <20180113224532.2715-1-bernd.kuhls@t-online.de>
+Message-ID: <20180114053204.qzh6l3xgqywgcmyr@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Buildroot's "make ncurses" stopped working a while ago on all my Gentoo
-systems, running the command would just cause it to crash.
+Hi Bernd,
 
-I look into it and found that the issue was caused by lxdialog's cflags
-which are also used to build nconfig; It would detect *ncursesw* and turn
-on WIDECHAR support -- but the Makefile would still link to plain
-*ncurses* while building nconfig (which was built without WIDECHAR
-support).
+On Sat, Jan 13, 2018 at 11:45:32PM +0100, Bernd Kuhls wrote:
+> Upstream commit
+> https://git.kernel.org/pub/scm/bluetooth/bluez.git/commit/?id=bee3796113196da1b3f56da42fcae4d9bae6695e
+> 
+> moved code depending on readline from the client tool to the shared
+> library, readline is therefore not an optional dependency anymore.
+> 
+> Fixes
+> http://autobuild.buildroot.net/results/019/0197ee0036e129b736c1dc0e83722236fb656618/
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/bluez5_utils/Config.in       | 1 +
+>  package/bluez5_utils/bluez5_utils.mk | 3 +--
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/bluez5_utils/Config.in b/package/bluez5_utils/Config.in
+> index 55831e9b61..bb0a2905c5 100644
+> --- a/package/bluez5_utils/Config.in
+> +++ b/package/bluez5_utils/Config.in
+> @@ -9,6 +9,7 @@ config BR2_PACKAGE_BLUEZ5_UTILS
+>  	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+>  	select BR2_PACKAGE_DBUS
+>  	select BR2_PACKAGE_LIBGLIB2
+> +	select BR2_PACKAGE_READLINE
 
-This would cause a crash after using *wattrset* on a WINDOW instance.
-WIDECHAR *wattrset* would try to set the _color member in the WINDOW
-struct which does not exist in the NON-WIDECHAR ncurses instance. It
-would end up clobbering data outside the struct (usually _line entries).
+I don't think that this is the correct fix. The bluez README file says:
 
-Just linking to *ncursesw* instead could possibly brick nconfig on older
-systems, so I decided to use the same lxdialog script used to find
-ncurses' cflags/ldflags for menuconfig.
+        --disable-client
 
-Signed-off-by: Guillermo A. Amaral <g@maral.me>
----
- support/kconfig/Makefile | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+                Disable support for the command line client
 
-diff --git a/support/kconfig/Makefile b/support/kconfig/Makefile
-index 7eb4071b4e..f54a60baff 100644
---- a/support/kconfig/Makefile
-+++ b/support/kconfig/Makefile
-@@ -220,8 +220,10 @@ HOSTCFLAGS_gconf.o	= `pkg-config --cflags gtk+-2.0 gmodule-2.0 libglade-2.0` \
- HOSTLOADLIBES_mconf   = $(shell $(CONFIG_SHELL) $(check-lxdialog) -ldflags $(HOSTCC))
- 
- HOSTLOADLIBES_nconf	= $(shell \
--				pkg-config --libs menu panel ncurses 2>/dev/null \
--				|| echo "-lmenu -lpanel -lncurses"  )
-+				pkg-config --libs menu panel 2>/dev/null \
-+				|| echo "-lmenu -lpanel")
-+HOSTLOADLIBES_nconf	+= $(shell $(CONFIG_SHELL) $(check-lxdialog) -ldflags)
-+
- $(obj)/qconf.o: $(obj)/.tmp_qtcheck
- 
- ifeq ($(qconf-target),1)
+                By default the command line client is enabled and uses the
+                readline library. For specific systems where BlueZ is
+                configured by other means, the command line client can be
+                disabled and the dependency on readline is removed.
+
+So this does not look like a decision to make readline a mandatory dependency, 
+but a bug that needs to be fixed upstream.
+
+>  	help
+>  	  bluez utils version 5.x
+>  
+> diff --git a/package/bluez5_utils/bluez5_utils.mk b/package/bluez5_utils/bluez5_utils.mk
+> index 0634ec9f6f..055d44de78 100644
+> --- a/package/bluez5_utils/bluez5_utils.mk
+> +++ b/package/bluez5_utils/bluez5_utils.mk
+> @@ -8,7 +8,7 @@ BLUEZ5_UTILS_VERSION = 5.48
+>  BLUEZ5_UTILS_SOURCE = bluez-$(BLUEZ5_UTILS_VERSION).tar.xz
+>  BLUEZ5_UTILS_SITE = $(BR2_KERNEL_MIRROR)/linux/bluetooth
+>  BLUEZ5_UTILS_INSTALL_STAGING = YES
+> -BLUEZ5_UTILS_DEPENDENCIES = dbus libglib2
+> +BLUEZ5_UTILS_DEPENDENCIES = dbus libglib2 readline
+>  BLUEZ5_UTILS_LICENSE = GPL-2.0+, LGPL-2.1+
+>  BLUEZ5_UTILS_LICENSE_FILES = COPYING COPYING.LIB
+>  
+> @@ -26,7 +26,6 @@ endif
+>  
+>  ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS_CLIENT),y)
+>  BLUEZ5_UTILS_CONF_OPTS += --enable-client
+> -BLUEZ5_UTILS_DEPENDENCIES += readline
+>  else
+>  BLUEZ5_UTILS_CONF_OPTS += --disable-client
+>  endif
+
+baruch
+
 -- 
-2.13.6
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
