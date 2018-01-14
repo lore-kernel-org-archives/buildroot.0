@@ -1,45 +1,34 @@
-From: Romain Naour <romain.naour@smile.fr>
-Date: Sun, 14 Jan 2018 22:03:33 +0100
-Subject: [Buildroot] [PATCH 5/7] package/tmux: add /usr/bin/tmux to
- /etc/shells
-In-Reply-To: <1515963815-5843-1-git-send-email-romain.naour@smile.fr>
-References: <1515963815-5843-1-git-send-email-romain.naour@smile.fr>
-Message-ID: <1515963815-5843-6-git-send-email-romain.naour@smile.fr>
+From: Joseph Kogut <joseph.kogut@gmail.com>
+Date: Sun, 14 Jan 2018 13:16:57 -0800
+Subject: [Buildroot] [PATCH 1/1] python-xlib: fix check-package warning
+In-Reply-To: <20180113221034.GH3226@scaer>
+References: <20180113221034.GH3226@scaer>
+Message-ID: <20180114211657.5160-1-joseph.kogut@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When tmux is selected, /usr/bin/tmux is not added to /etc/shells
-(see man shells). So, login tools like dropbear reject the ssh
-connexions for users using tmux as shell in /etc/passwd.
-
-buildroot authpriv.warn dropbear[853]: User 'kubu' has invalid shell, rejected
-
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
 ---
- package/tmux/tmux.mk | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ package/python-xlib/python-xlib.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/tmux/tmux.mk b/package/tmux/tmux.mk
-index 6e03d01..27727fe 100644
---- a/package/tmux/tmux.mk
-+++ b/package/tmux/tmux.mk
-@@ -10,4 +10,13 @@ TMUX_LICENSE = ISC
- TMUX_LICENSE_FILES = README
- TMUX_DEPENDENCIES = libevent ncurses host-pkgconf
+diff --git a/package/python-xlib/python-xlib.mk b/package/python-xlib/python-xlib.mk
+index 93de424a3e..0ce6e43422 100644
+--- a/package/python-xlib/python-xlib.mk
++++ b/package/python-xlib/python-xlib.mk
+@@ -1,8 +1,8 @@
+-###############################################################################
++################################################################################
+ #
+ # python-xlib
+ #
+-###############################################################################
++################################################################################
  
-+# Add /usr/bin/tmux to /etc/shells otherwise some login tools like dropbear
-+# can reject the user connexion. See man shells.
-+define TMUX_INSTALL_ADD_TMUX_TO_SHELLS
-+	grep -qsE '^/usr/bin/tmux' $(TARGET_DIR)/etc/shells \
-+		|| echo "/usr/bin/tmux" >> $(TARGET_DIR)/etc/shells
-+endef
-+
-+TMUX_POST_INSTALL_TARGET_HOOKS += TMUX_INSTALL_ADD_TMUX_TO_SHELLS
-+
- $(eval $(autotools-package))
+ PYTHON_XLIB_VERSION = 0.21
+ PYTHON_XLIB_SOURCE = python-xlib-$(PYTHON_XLIB_VERSION).tar.bz2
 -- 
-2.7.4
+2.15.1
