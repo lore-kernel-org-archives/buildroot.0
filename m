@@ -1,28 +1,30 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Sun, 14 Jan 2018 19:38:14 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2018-01-13
-In-Reply-To: <20180114070004.AA6D320888@mail.free-electrons.com>
-References: <20180114070004.AA6D320888@mail.free-electrons.com>
-Message-ID: <1515955094.32326.1.camel@embedded.rocks>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 14 Jan 2018 19:42:27 +0100
+Subject: [Buildroot] [PATCH v2 1/1] unbound: new package
+References: <20180113222651.22755-1-stefan.froberg@petroprogram.com>
+ <uagqiexfnk.ln2@ID-313208.user.individual.net>
+ <6b37de5d-dd14-17a8-44a8-bd9b078c2920@petroprogram.com>
+Message-ID: <jtksiex3i1.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 2018-01-14 at 08:00 +0100, Thomas Petazzoni wrote:
-> Hello,
-> 
-> Build statistics for 2018-01-13
-> ===============================
+Hi Stefan,
 
-[snip]
+Am Sun, 14 Jan 2018 19:56:00 +0200 schrieb Stefan Fr?berg:
 
->          arm |               swupdate-2017.11 | NOK | http://autobuild.buildroot.net/results/b87c7269459fdae241f1345c389e322456d5fbaa |     
->         i586 |               swupdate-2017.11 | NOK | http://autobuild.buildroot.net/results/d5705f9e4289186a7d9b96c553339f633ec081ec |     
+> Uh...47 compiler/platform combinations? Jeeez...that will take ages with
+> my poor comp ...
 
-musl issue. Reported upstream:
-https://groups.google.com/forum/#!topic/swupdate/R5CRVrJ6eA0
+Maybe not, test-pkg uses pre-built toolchains, just like the autobuilders.
 
-J?rg
+> Where does that test-pkg script output the build failures?
+
+$HOME/test-unbound/{name of compiler/platform combo}/logfile
+
+Some errors are thread-related, maybe you need to check for 
+BR2_TOOLCHAIN_HAS_THREADS_NPTL instead of BR2_TOOLCHAIN_HAS_THREADS.
+
+Regards, Bernd
