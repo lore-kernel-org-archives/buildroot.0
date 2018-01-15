@@ -1,29 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 15 Jan 2018 21:24:29 +0100
-Subject: [Buildroot] [PATCH v2] wolfssl: fix build on ARMV8
-In-Reply-To: <1516027690-24571-1-git-send-email-sergio.prado@e-labworks.com>
-References: <1516027690-24571-1-git-send-email-sergio.prado@e-labworks.com>
-Message-ID: <20180115212429.53d6c26c@windsurf>
+Date: Mon, 15 Jan 2018 21:24:35 +0100
+Subject: [Buildroot] [git commit] wolfssl: fix build on ARMV8
+Message-ID: <20180115202438.5D0D083CCE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=d7210d1dfd1b521b30e2d24d36700a5d00088f2c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 15 Jan 2018 12:48:10 -0200, Sergio Prado wrote:
+Build on ARMV8 fails when hardware acceleration is enabled:
 
-> +# build fails when ARMv8 hardware acceleration is enabled
->  ifeq ($(BR2_ARM_CPU_ARMV8A),y)
+/tmp/ccmGP5RI.s: Assembler messages:
+/tmp/ccmGP5RI.s:532: Error: invalid addressing mode at operand 2 -- `ld1 {v0.2d},[x0,256]'
+/tmp/ccmGP5RI.s:568: Error: invalid addressing mode at operand 2 -- `st1 {v0.2d},[x0,256]'
+/tmp/ccmGP5RI.s:581: Error: invalid addressing mode at operand 2 -- `ld1 {v0.2d},[x0,256]'
+/tmp/ccmGP5RI.s:621: Error: invalid addressing mode at operand 2 -- `st1 {v0.2d},[x0,256]'
 
-I really didn't see the need for this condition, so I just passed
---disable-armasm unconditionally.
+So let's disable ARMv8 hardware acceleration for now.
 
-Applied with this change. Thanks!
+Fixes:
+http://autobuild.buildroot.net/results/6080648394d09a0d382087831ee6f063c7638be9
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/wolfssl/wolfssl.mk | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
+
+diff --git a/package/wolfssl/wolfssl.mk b/package/wolfssl/wolfssl.mk
+index c8ef50a..84073f3 100644
+--- a/package/wolfssl/wolfssl.mk
++++ b/package/wolfssl/wolfssl.mk
+@@ -29,10 +29,7 @@ else
+ WOLFSSL_CONF_OPTS += --disable-sslv3
+ endif
+ 
+-ifeq ($(BR2_ARM_CPU_ARMV8A),y)
+-WOLFSSL_CONF_OPTS += --enable-armasm
+-else
++# build fails when ARMv8 hardware acceleration is enabled
+ WOLFSSL_CONF_OPTS += --disable-armasm
+-endif
+ 
+ $(eval $(autotools-package))
