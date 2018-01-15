@@ -1,38 +1,36 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 15 Jan 2018 17:57:43 +0100
-Subject: [Buildroot] [PATCH 2/3] linux-firmware: fix install for Chelsio
- T[45]
-In-Reply-To: <1515973281-3997-2-git-send-email-ricardo.martincoski@gmail.com>
+Date: Mon, 15 Jan 2018 18:00:18 +0100
+Subject: [Buildroot] [PATCH 1/3] linux-firmware: fail build for missing
+ file
+In-Reply-To: <1515973281-3997-1-git-send-email-ricardo.martincoski@gmail.com>
 References: <1515973281-3997-1-git-send-email-ricardo.martincoski@gmail.com>
- <1515973281-3997-2-git-send-email-ricardo.martincoski@gmail.com>
-Message-ID: <20180115165743.GB2533@scaer>
+Message-ID: <20180115170018.GA11122@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ricardo, All,
+Ricardo, all,
 
 On 2018-01-14 21:41 -0200, Ricardo Martincoski spake thusly:
-> It's broken for the last 3 version bumps, since
-> 1c9846ecc9 "linux-firmware: Bump to the latest version"
+> When a file is listed to be installed but is missing from the package
+> source currently the first tar command exits with error code but it is
+> ignored and the build succeeds.
+> This issue by itself is minor because those listed files that are
+> present in the package source get installed to the target.
+> But the code is currently error prone, e.g. to a typo in the file list.
 > 
-> Fix it by updating the name of the file to install.
-> Do not use * since it would install also old versions that would take
-> 1MB extra space in the target.
-
-I would prefer if we were to keep installing the older version, because
-presumably older kernel versions (even if they request the unversionned
-t4fw.bin) would probably have been working with earlier versions of the
-firmware, so I'd prefer we leave to the user the option to redirect the
-symlink to the correct version they want to use.
-
-(of course, they'd have to provide a post-build script for that.)
-
-> A comment to remember to update the file name when bumping the package
-> is not needed because a previous patch in the series makes the build
-> to fail for missing file.
+> Fix this by first creating a tarball in the build directory and then
+> installing it, instead of using a pipe between the two tar invocations.
+> Also use && between the commands, so the first command that exits with
+> error code fails the build.
+> Since the two tar invocations remain in use, the desired behavior
+> remains the same:
+>  - list of files can contain *;
+>  - list of files can contain file inside path, and the path is then
+>    replicated in the target;
+>  - symlinks are not followed but are installed.
 > 
 > Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 > Cc: Fabio Estevam <festevam@gmail.com>
@@ -41,48 +39,46 @@ symlink to the correct version they want to use.
 > Cc: Yann E. MORIN <yann.morin.1998@free.fr>
 > Cc: Yegor Yefremov <yegorslists@googlemail.com>
 
-But still, this change is technically OK, so:
+Bizarely enough I am in Cc of this patch, but I did not receive it
+directly... Anyway...
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+I was about to do a very similar change, so let's go with yours:
+
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
 
 > ---
-> I don't have hardware to run-test the firmware itself.
-> 
-> 2017.11.x and 2017.08.x should use t[45]fw-1.16.45.0.bin instead
-> 2017.05.x is OK
+> Should it go to 2017.11.x and 2017.08.x too? See next patch
 > ---
->  package/linux-firmware/linux-firmware.mk | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
+>  package/linux-firmware/linux-firmware.mk | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 > 
 > diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-> index 03704d8..45483a3 100644
+> index cf79e56..03704d8 100644
 > --- a/package/linux-firmware/linux-firmware.mk
 > +++ b/package/linux-firmware/linux-firmware.mk
-> @@ -337,14 +337,14 @@ LINUX_FIRMWARE_FILES += bnx2x/*
->  endif
+> @@ -443,9 +443,9 @@ endif
 >  
->  ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_CXGB4_T4),y)
-> -# cxgb4/t4fw.bin is a symlink to cxgb4/t4fw-1.16.26.0.bin
-> -LINUX_FIRMWARE_FILES += cxgb4/t4fw-1.16.26.0.bin cxgb4/t4fw.bin
-> +# cxgb4/t4fw.bin is a symlink to cxgb4/t4fw-1.16.63.0.bin
-> +LINUX_FIRMWARE_FILES += cxgb4/t4fw-1.16.63.0.bin cxgb4/t4fw.bin
->  LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.chelsio_firmware
->  endif
->  
->  ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_CXGB4_T5),y)
-> -# cxgb4/t5fw.bin is a symlink to cxgb4/t5fw-1.16.26.0.bin
-> -LINUX_FIRMWARE_FILES += cxgb4/t5fw-1.16.26.0.bin cxgb4/t5fw.bin
-> +# cxgb4/t5fw.bin is a symlink to cxgb4/t5fw-1.16.63.0.bin
-> +LINUX_FIRMWARE_FILES += cxgb4/t5fw-1.16.63.0.bin cxgb4/t5fw.bin
->  LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.chelsio_firmware
+>  ifneq ($(LINUX_FIRMWARE_FILES),)
+>  define LINUX_FIRMWARE_INSTALL_FILES
+> -	cd $(@D) ; \
+> -	$(TAR) c $(sort $(LINUX_FIRMWARE_FILES)) | \
+> -		$(TAR) x -C $(TARGET_DIR)/lib/firmware
+> +	cd $(@D) && \
+> +		$(TAR) cf install.tar $(sort $(LINUX_FIRMWARE_FILES)) && \
+> +		$(TAR) xf install.tar -C $(TARGET_DIR)/lib/firmware
+>  endef
 >  endif
 >  
 > -- 
 > 2.7.4
 > 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
