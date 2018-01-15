@@ -1,36 +1,28 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 15 Jan 2018 21:35:08 +0100
-Subject: [Buildroot] [PATCH 1/1] package/python-mwclient: bump version
- to 0.8.7
-In-Reply-To: <20180114181827.13854-1-bernd.kuhls@t-online.de>
-References: <20180114181827.13854-1-bernd.kuhls@t-online.de>
-Message-ID: <20180115213508.07a71341@windsurf>
+From: James Knight <james.knight@rockwellcollins.com>
+Date: Mon, 15 Jan 2018 15:32:01 -0500
+Subject: [Buildroot] [PATCH 1/1] libpqxx: apply upstream compilation fix
+In-Reply-To: <20180115212025.482dad6f@windsurf>
+References: <20180115200055.6404-1-james.knight@rockwellcollins.com>
+ <20180115212025.482dad6f@windsurf>
+Message-ID: <CALe+oY9KRQP+dq74MjsW-_i1fJjy8sTyKDF6FhFwMtZvkghoTA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Thomas,
 
-On Sun, 14 Jan 2018 19:18:27 +0100, Bernd Kuhls wrote:
-> Removed patch applied upstream:
-> https://github.com/mwclient/mwclient/commit/60d4b933184172b98e4b31b79b4420c35571bbea
-> 
-> Added license hash.
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  ...require-pytest-runner-only-when-necessary.patch | 43 ----------------------
->  package/python-mwclient/python-mwclient.hash       |  5 ++-
->  package/python-mwclient/python-mwclient.mk         |  4 +-
->  3 files changed, 5 insertions(+), 47 deletions(-)
->  delete mode 100644 package/python-mwclient/0001-setup.py-require-pytest-runner-only-when-necessary.patch
+On Mon, Jan 15, 2018 at 3:20 PM, Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com> wrote:
 
-Applied to master, thanks.
+> Thanks, but please add the patch itself in package/libpqxx/. We stopped
+> fetching patches from github this way, because those patches are not
+> stable, and therefore their hash might change.
+>
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Noted. Thanks, I'll submit a proper patch. Been out of the game too long.
+:(
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180115/c05cb877/attachment.html>
