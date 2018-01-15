@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 15 Jan 2018 20:56:28 +0100
-Subject: [Buildroot] Adding Flex library
-In-Reply-To: <CAEjFr-aN64GGtExE8VwWsu=c5CadSvh+M1Pzm-Q10gBSY9_3aA@mail.gmail.com>
-References: <CAEjFr-aN64GGtExE8VwWsu=c5CadSvh+M1Pzm-Q10gBSY9_3aA@mail.gmail.com>
-Message-ID: <20180115205628.4da9ac69@windsurf>
+Date: Mon, 15 Jan 2018 20:57:34 +0100
+Subject: [Buildroot] [PATCH v2 2/2] open-lldp: new package
+In-Reply-To: <20180115162122.32108-2-laurent_pubs@yahoo.com>
+References: <20180115162122.32108-1-laurent_pubs@yahoo.com>
+ <20180115162122.32108-2-laurent_pubs@yahoo.com>
+Message-ID: <20180115205734.2dbd0afd@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,23 +13,19 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 15 Jan 2018 20:53:56 +0200, Doha Ehab wrote:
+Thanks for this new iteration, things are getting better!
 
->  I am using buildroot-2017.02.9*. *I have chosen flex library from target
-> packages -> Development Tools. My question is, am I supposed to find the
-> flex binary under output-> host ->usr->bin? I checked the Config.in for
-> flex and the package address is incorrect (http://flex.sourceforge.net/)
+On Mon, 15 Jan 2018 17:21:22 +0100, Laurent Charpentier wrote:
+> - Removed call to bootstrap.sh. However the m4 directory needs to be created for autoconf.
+> - Added hash for COPYING.
+> - Fixed gcc compile errors (inline functions).
+> 
+> Signed-off-by: Laurent Charpentier <laurent_pubs@yahoo.com>
 
-"Target packages" are target packages, so they are cross-compiled and
-installed in the target filesystem, i.e output/target, and are
-therefore present in the filesystem images generated in output/images.
+You shouldn't have two patches, but just one. Please use "git rebase
+-i" to squash your two patches into one.
 
-If you need the host variant of flex (i.e built with the native
-compiler) then your package should have a dependency on host-flex.
-There is no option in menuconfig to enable host-flex, because it is
-generally just a build dependency of another package.
-
-Best regards,
+Thanks!
 
 Thomas
 -- 
