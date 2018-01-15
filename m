@@ -1,29 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 15 Jan 2018 23:53:46 +0100
-Subject: [Buildroot] [PATCH] package/linux-firmware: install older
+Date: Mon, 15 Jan 2018 23:53:06 +0100
+Subject: [Buildroot] [git commit] package/linux-firmware: install older
  versions for gcgb4 firmware
-In-Reply-To: <20180115204336.29051-1-yann.morin.1998@free.fr> (Yann E. MORIN's
- message of "Mon, 15 Jan 2018 21:43:36 +0100")
-References: <20180115204336.29051-1-yann.morin.1998@free.fr>
-Message-ID: <871siqsphh.fsf@dell.be.48ers.dk>
+Message-ID: <20180115225355.B4D778394D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=a092357fdd18828e9075d9b2f1666c08d81ca9bc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Supposedly, older kernels could require that an older firmware be used,
- > so leave to the user the opportunity to choose the one they require.
+Supposedly, older kernels could require that an older firmware be used,
+so leave to the user the opportunity to choose the one they require.
 
- > Simplify the pattern as suggested by Peter. Thanks!
+Simplify the pattern as suggested by Peter. Thanks!
 
- > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > Cc: Peter Korsgaard <peter@korsgaard.com>
- > Cc: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Cc: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/linux-firmware/linux-firmware.mk | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+index 45483a3..9515f5e 100644
+--- a/package/linux-firmware/linux-firmware.mk
++++ b/package/linux-firmware/linux-firmware.mk
+@@ -337,14 +337,12 @@ LINUX_FIRMWARE_FILES += bnx2x/*
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_CXGB4_T4),y)
+-# cxgb4/t4fw.bin is a symlink to cxgb4/t4fw-1.16.63.0.bin
+-LINUX_FIRMWARE_FILES += cxgb4/t4fw-1.16.63.0.bin cxgb4/t4fw.bin
++LINUX_FIRMWARE_FILES += cxgb4/t4fw*.bin
+ LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.chelsio_firmware
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_CXGB4_T5),y)
+-# cxgb4/t5fw.bin is a symlink to cxgb4/t5fw-1.16.63.0.bin
+-LINUX_FIRMWARE_FILES += cxgb4/t5fw-1.16.63.0.bin cxgb4/t5fw.bin
++LINUX_FIRMWARE_FILES += cxgb4/t5fw*.bin
+ LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.chelsio_firmware
+ endif
+ 
