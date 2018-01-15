@@ -1,20 +1,41 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Mon, 15 Jan 2018 15:52:46 +0100
+From: Laurent Charpentier <laurent_pubs@yahoo.com>
+Date: Mon, 15 Jan 2018 15:15:13 +0000 (UTC)
 Subject: [Buildroot] [PATCH 1/1] open-lldp: new package
-In-Reply-To: <276755364.2420280.1516020636845@mail.yahoo.com>
+In-Reply-To: <CAGm1_ktPX4fMyRO-A2dAcAR3ygj7kFxsbV+wex6imWxn--bMpw@mail.gmail.com>
 References: <20180112140107.15301-1-laurent_pubs@yahoo.com>
  <CAGm1_kvL9UWVX5jrzE1dhsOHvWT_LukRJKZ5z6eu8Tma0bjXdw@mail.gmail.com>
  <20180112220436.677e3084@windsurf.lan>
  <CAGm1_ksP2c_gLsSCJjN=Sr7gK0OR0Bdxd-jidXVhjgwOCFyiwQ@mail.gmail.com>
  <20180112233842.388e29a0@windsurf.lan>
  <276755364.2420280.1516020636845@mail.yahoo.com>
-Message-ID: <CAGm1_ktPX4fMyRO-A2dAcAR3ygj7kFxsbV+wex6imWxn--bMpw@mail.gmail.com>
+ <CAGm1_ktPX4fMyRO-A2dAcAR3ygj7kFxsbV+wex6imWxn--bMpw@mail.gmail.com>
+Message-ID: <1209491448.2489150.1516029313233@mail.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi Yegor,
+>> Here are some experiments on my side.
+>> (1) AUTORECONF=yes (no use of ./bootstrap.sh)
+>> -> ./configure fails
+>
+> use this variant and create a LIBFOO_PRE_CONFIGURE_HOOKS in order to
+> create m4 folder via "mkdir -p". That's all. This way you'll preserve
+> depedency on host-autoconf, host-automake and host-libtool.
+
+I'm not sure to understand everything.
+Do you want this?define OPEN_LLDP_PRE_CONFIGURE_HOOKS? ? ? ? (cd $(@D) && mkdir -p m4)endef
+Do you also want this? :OPEN_LLDP_DEPENDENCIES +=?host-autoconf host-automake host-libtool
+
+Thank youLaurent
+      From: Yegor Yefremov <yegorslists@googlemail.com>
+ To: Laurent Charpentier <laurent_pubs@yahoo.com> 
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>; buildroot <buildroot@buildroot.org>
+ Sent: Monday, January 15, 2018 3:53 PM
+ Subject: Re: [Buildroot] [PATCH 1/1] open-lldp: new package
+   
 On Mon, Jan 15, 2018 at 1:50 PM, Laurent Charpentier
 <laurent_pubs@yahoo.com> wrote:
 > Hi Thomas and Yegor,
@@ -42,3 +63,13 @@ create m4 folder via "mkdir -p". That's all. This way you'll preserve
 depedency on host-autoconf, host-automake and host-libtool.
 
 Yegor
+_______________________________________________
+buildroot mailing list
+buildroot at busybox.net
+http://lists.busybox.net/mailman/listinfo/buildroot
+
+
+   
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180115/aaf7dfa7/attachment.html>
