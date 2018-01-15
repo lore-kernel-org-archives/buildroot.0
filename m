@@ -1,42 +1,91 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 15 Jan 2018 15:16:31 +0100
-Subject: [Buildroot] [git commit] swupdate: remove empty line
-Message-ID: <20180115142638.E215783C62@busybox.osuosl.org>
+Date: Mon, 15 Jan 2018 15:20:19 +0100
+Subject: [Buildroot] [git commit] domoticz: fix build with boost 1.66
+Message-ID: <20180115142638.EE67583C62@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=65793bab3d21b1a8d6091174eb2f57b6a8d61b51
+commit: https://git.buildroot.net/buildroot/commit/?id=f193ba1e18766ad0352085e548e4f8000120ae3d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Reported by Yann E. Morin running:
+Patch fetch from one of the answer of
+ https://github.com/domoticz/domoticz/issues/2034
+(issue still opened, no official PR sent upstream)
 
-```
-    $ ./utils/check-package package/swupdate/swupdate.mk
-    package/swupdate/swupdate.mk:42: consecutive empty lines
-    140 lines processed
-    1 warnings generated
-```
+Boost asio changed its API:
+ - http://www.boost.org/doc/libs/1_66_0/doc/html/boost_asio/net_ts.html
 
-Reported-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Fixes:
+ - http://autobuild.buildroot.net/results/5f02c8fc84889748f283ee1cb76248bb0880215a
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/swupdate/swupdate.mk | 1 -
- 1 file changed, 1 deletion(-)
+ .../0001-Fix-compilation-with-boost-1.66.patch     | 56 ++++++++++++++++++++++
+ 1 file changed, 56 insertions(+)
 
-diff --git a/package/swupdate/swupdate.mk b/package/swupdate/swupdate.mk
-index d1afbc4..aa232e5 100644
---- a/package/swupdate/swupdate.mk
-+++ b/package/swupdate/swupdate.mk
-@@ -39,7 +39,6 @@ else
- SWUPDATE_MAKE_ENV += HAVE_LIBCURL=n
- endif
- 
--
- ifeq ($(BR2_PACKAGE_HAS_LUAINTERPRETER),y)
- SWUPDATE_DEPENDENCIES += luainterpreter host-pkgconf
- # defines the base name for the pkg-config file ("lua" or "luajit")
+diff --git a/package/domoticz/0001-Fix-compilation-with-boost-1.66.patch b/package/domoticz/0001-Fix-compilation-with-boost-1.66.patch
+new file mode 100644
+index 0000000..d73ea4f
+--- /dev/null
++++ b/package/domoticz/0001-Fix-compilation-with-boost-1.66.patch
+@@ -0,0 +1,56 @@
++From b9481d3382d416d72f523a0442d662e49b4192d1 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sun, 14 Jan 2018 18:18:32 +0100
++Subject: [PATCH] Fix compilation with boost 1.66
++
++Patch fetch from one of the answer of
++ https://github.com/domoticz/domoticz/issues/2034
++(issue still opened, no official PR sent upstream)
++
++Boost asio changed its API:
++ - http://www.boost.org/doc/libs/1_66_0/doc/html/boost_asio/net_ts.html
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ webserver/proxyclient.cpp | 2 +-
++ webserver/server.cpp      | 4 ++--
++ 2 files changed, 3 insertions(+), 3 deletions(-)
++
++diff --git a/webserver/proxyclient.cpp b/webserver/proxyclient.cpp
++index 203ee619..efc9815a 100644
++--- a/webserver/proxyclient.cpp
+++++ b/webserver/proxyclient.cpp
++@@ -639,7 +639,7 @@ namespace http {
++ 		void CProxyManager::StartThread()
++ 		{
++ 			try {
++-				boost::asio::ssl::context ctx(io_service, boost::asio::ssl::context::sslv23);
+++				boost::asio::ssl::context ctx(boost::asio::ssl::context::sslv23);
++ 				ctx.set_verify_mode(boost::asio::ssl::verify_none);
++ 
++ 				proxyclient.reset(new CProxyClient(io_service, ctx, m_pWebEm));
++diff --git a/webserver/server.cpp b/webserver/server.cpp
++index 5255aa34..0c1af08a 100644
++--- a/webserver/server.cpp
+++++ b/webserver/server.cpp
++@@ -148,7 +148,7 @@ void server::handle_accept(const boost::system::error_code& e) {
++ ssl_server::ssl_server(const ssl_server_settings & ssl_settings, request_handler & user_request_handler) :
++ 		server_base(ssl_settings, user_request_handler),
++ 		settings_(ssl_settings),
++-		context_(io_service_, ssl_settings.get_ssl_method())
+++		context_(ssl_settings.get_ssl_method())
++ {
++ #ifdef DEBUG_WWW
++ 	_log.Log(LOG_STATUS, "[web:%s] create ssl_server using ssl_server_settings : %s", ssl_settings.listening_port.c_str(), ssl_settings.to_string().c_str());
++@@ -161,7 +161,7 @@ ssl_server::ssl_server(const ssl_server_settings & ssl_settings, request_handler
++ ssl_server::ssl_server(const server_settings & settings, request_handler & user_request_handler) :
++ 		server_base(settings, user_request_handler),
++ 		settings_(dynamic_cast<ssl_server_settings const &>(settings)),
++-		context_(io_service_, dynamic_cast<ssl_server_settings const &>(settings).get_ssl_method()) {
+++		context_(dynamic_cast<ssl_server_settings const &>(settings).get_ssl_method()) {
++ #ifdef DEBUG_WWW
++ 	_log.Log(LOG_STATUS, "[web:%s] create ssl_server using server_settings : %s", settings.listening_port.c_str(), settings.to_string().c_str());
++ #endif
++-- 
++2.14.1
++
