@@ -1,48 +1,44 @@
-From: Sergio Prado <sergio.prado@e-labworks.com>
-Date: Mon, 15 Jan 2018 12:48:10 -0200
-Subject: [Buildroot] [PATCH v2] wolfssl: fix build on ARMV8
-Message-ID: <1516027690-24571-1-git-send-email-sergio.prado@e-labworks.com>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Mon, 15 Jan 2018 15:52:46 +0100
+Subject: [Buildroot] [PATCH 1/1] open-lldp: new package
+In-Reply-To: <276755364.2420280.1516020636845@mail.yahoo.com>
+References: <20180112140107.15301-1-laurent_pubs@yahoo.com>
+ <CAGm1_kvL9UWVX5jrzE1dhsOHvWT_LukRJKZ5z6eu8Tma0bjXdw@mail.gmail.com>
+ <20180112220436.677e3084@windsurf.lan>
+ <CAGm1_ksP2c_gLsSCJjN=Sr7gK0OR0Bdxd-jidXVhjgwOCFyiwQ@mail.gmail.com>
+ <20180112233842.388e29a0@windsurf.lan>
+ <276755364.2420280.1516020636845@mail.yahoo.com>
+Message-ID: <CAGm1_ktPX4fMyRO-A2dAcAR3ygj7kFxsbV+wex6imWxn--bMpw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Build on ARMV8 fails when hardware acceleration is enabled:
+On Mon, Jan 15, 2018 at 1:50 PM, Laurent Charpentier
+<laurent_pubs@yahoo.com> wrote:
+> Hi Thomas and Yegor,
+>
+> On Fri, 12 Jan 2018 22:29:44 +0100, Yegor Yefremov wrote:
+>
+>> > So instead, please keep <pkg>_AUTORECONF = YES, and if the missing m4
+>> > folder is the only problem (but I doubt it because the bootstrap.sh
+>> > script doesn't create it), then add a post-extract hook that creates
+>> > the m4 file.
+>>
+>> bootstrap.sh doesn't create m4 folder, but if you just clone the
+>> open-lldp repo and invoke "autoreconf -i", it would just complain
+>> about missing m4 folder, but create it. In BR environment we get an
+>> error. We had similar situation earlier with some other package
+>> (libsoc) and I coudn't find the case of the problem, so I just added
+>> m4 upstream and now it is working.
+>
+> Here are some experiments on my side.
+> (1) AUTORECONF=yes (no use of ./bootstrap.sh)
+> -> ./configure fails
 
-/tmp/ccmGP5RI.s: Assembler messages:
-/tmp/ccmGP5RI.s:532: Error: invalid addressing mode at operand 2 -- `ld1 {v0.2d},[x0,256]'
-/tmp/ccmGP5RI.s:568: Error: invalid addressing mode at operand 2 -- `st1 {v0.2d},[x0,256]'
-/tmp/ccmGP5RI.s:581: Error: invalid addressing mode at operand 2 -- `ld1 {v0.2d},[x0,256]'
-/tmp/ccmGP5RI.s:621: Error: invalid addressing mode at operand 2 -- `st1 {v0.2d},[x0,256]'
+use this variant and create a LIBFOO_PRE_CONFIGURE_HOOKS in order to
+create m4 folder via "mkdir -p". That's all. This way you'll preserve
+depedency on host-autoconf, host-automake and host-libtool.
 
-So let's disable ARMv8 hardware acceleration for now.
-
-Fixes:
-http://autobuild.buildroot.net/results/6080648394d09a0d382087831ee6f063c7638be9
-
-Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
----
-Changes v1 -> v2:
-  - Force configure option to --disable-armasm
----
- package/wolfssl/wolfssl.mk | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
-
-diff --git a/package/wolfssl/wolfssl.mk b/package/wolfssl/wolfssl.mk
-index c8ef50a9bc6e..a2e60532f342 100644
---- a/package/wolfssl/wolfssl.mk
-+++ b/package/wolfssl/wolfssl.mk
-@@ -29,9 +29,8 @@ else
- WOLFSSL_CONF_OPTS += --disable-sslv3
- endif
- 
-+# build fails when ARMv8 hardware acceleration is enabled
- ifeq ($(BR2_ARM_CPU_ARMV8A),y)
--WOLFSSL_CONF_OPTS += --enable-armasm
--else
- WOLFSSL_CONF_OPTS += --disable-armasm
- endif
- 
--- 
-1.9.1
+Yegor
