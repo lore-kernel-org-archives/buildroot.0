@@ -1,35 +1,43 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 15 Jan 2018 16:38:01 +0100
-Subject: [Buildroot] [git commit] python-xlib: fix check-package warning
-Message-ID: <20180115153858.5A46883D24@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 15 Jan 2018 16:40:42 +0100
+Subject: [Buildroot] [PATCH 1/1] open-lldp: new package
+In-Reply-To: <CAGm1_kstjv26G48Kmb=SEWMhn7S032voR+5qGk8cvURt0kTNHQ@mail.gmail.com>
+References: <20180112140107.15301-1-laurent_pubs@yahoo.com>
+ <CAGm1_kvL9UWVX5jrzE1dhsOHvWT_LukRJKZ5z6eu8Tma0bjXdw@mail.gmail.com>
+ <20180112220436.677e3084@windsurf.lan>
+ <CAGm1_ksP2c_gLsSCJjN=Sr7gK0OR0Bdxd-jidXVhjgwOCFyiwQ@mail.gmail.com>
+ <20180112233842.388e29a0@windsurf.lan>
+ <276755364.2420280.1516020636845@mail.yahoo.com>
+ <CAGm1_ktPX4fMyRO-A2dAcAR3ygj7kFxsbV+wex6imWxn--bMpw@mail.gmail.com>
+ <1209491448.2489150.1516029313233@mail.yahoo.com>
+ <CAGm1_kstjv26G48Kmb=SEWMhn7S032voR+5qGk8cvURt0kTNHQ@mail.gmail.com>
+Message-ID: <20180115164042.168b6197@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=34fb29f4fc7fd15a0377f2042d3468fa3cdd56b5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/python-xlib/python-xlib.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+On Mon, 15 Jan 2018 16:21:13 +0100, Yegor Yefremov wrote:
 
-diff --git a/package/python-xlib/python-xlib.mk b/package/python-xlib/python-xlib.mk
-index 93de424..0ce6e43 100644
---- a/package/python-xlib/python-xlib.mk
-+++ b/package/python-xlib/python-xlib.mk
-@@ -1,8 +1,8 @@
--###############################################################################
-+################################################################################
- #
- # python-xlib
- #
--###############################################################################
-+################################################################################
- 
- PYTHON_XLIB_VERSION = 0.21
- PYTHON_XLIB_SOURCE = python-xlib-$(PYTHON_XLIB_VERSION).tar.bz2
+> > define OPEN_LLDP_PRE_CONFIGURE_HOOKS
+> >         (cd $(@D) && mkdir -p m4)
+> > endef  
+> 
+> Yes.
+
+Minor nit:
+
+	mkdir -p $(@D)/m4
+
+is sufficient. No need to "cd" into that folder.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
