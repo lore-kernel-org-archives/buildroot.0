@@ -1,92 +1,37 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Mon, 15 Jan 2018 11:04:50 +0100
-Subject: [Buildroot] [PATCH] scanpypi: add support for licence files
- checksums
-Message-ID: <1516010690-7361-1-git-send-email-yegorslists@googlemail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 15 Jan 2018 11:32:38 +0100
+Subject: [Buildroot] [PATCH] wolfssl: fix build on ARMV8
+In-Reply-To: <1516010110-11590-1-git-send-email-sergio.prado@e-labworks.com>
+References: <1516010110-11590-1-git-send-email-sergio.prado@e-labworks.com>
+Message-ID: <20180115113238.66aef010@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+Hello,
 
-Store the list of detected licence files in the main object and
-automatically add their sha256 checksums when creating *.hash file.
+On Mon, 15 Jan 2018 07:55:10 -0200, Sergio Prado wrote:
 
-Bonus: fix wrong indentation.
+> diff --git a/package/wolfssl/wolfssl.mk b/package/wolfssl/wolfssl.mk
+> index c8ef50a9bc6e..3e661cd26ef4 100644
+> --- a/package/wolfssl/wolfssl.mk
+> +++ b/package/wolfssl/wolfssl.mk
+> @@ -29,10 +29,4 @@ else
+>  WOLFSSL_CONF_OPTS += --disable-sslv3
+>  endif
+>  
+> -ifeq ($(BR2_ARM_CPU_ARMV8A),y)
+> -WOLFSSL_CONF_OPTS += --enable-armasm
+> -else
+> -WOLFSSL_CONF_OPTS += --disable-armasm
+> -endif
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- utils/scanpypi | 25 +++++++++++++++++++++----
- 1 file changed, 21 insertions(+), 4 deletions(-)
+So perhaps --disable-armasm should be passed unconditionally?
 
-diff --git a/utils/scanpypi b/utils/scanpypi
-index d3b0d2f..765bfdc 100755
---- a/utils/scanpypi
-+++ b/utils/scanpypi
-@@ -24,6 +24,8 @@ import tempfile
- import imp
- from functools import wraps
- 
-+BUF_SIZE = 65536
-+
- try:
-     import spdx_lookup as liclookup
- except ImportError:
-@@ -132,6 +134,7 @@ class BuildrootPackage():
-         self.filename = None
-         self.url = None
-         self.version = None
-+        self.license_files = []
- 
-     def fetch_package_info(self):
-         """
-@@ -439,12 +442,12 @@ class BuildrootPackage():
- 
-         filenames = ['LICENCE', 'LICENSE', 'LICENSE.RST', 'LICENSE.TXT',
-                      'COPYING', 'COPYING.TXT']
--        license_files = list(find_file_upper_case(filenames, self.tmp_extract))
-+        self.license_files = list(find_file_upper_case(filenames, self.tmp_extract))
- 
--        lines.append(self.__get_license_names(license_files))
-+        lines.append(self.__get_license_names(self.license_files))
- 
-         license_files = [license.replace(self.tmp_extract, '')[1:]
--                         for license in license_files]
-+                         for license in self.license_files]
-         if len(license_files) > 0:
-             if len(license_files) > 1:
-                 print('More than one file found for license:',
-@@ -508,7 +511,7 @@ class BuildrootPackage():
-         lines = []
-         if self.used_url['md5_digest']:
-             md5_comment = '# md5 from {url}, sha256 locally computed\n'.format(
--		url=self.metadata_url)
-+                url=self.metadata_url)
-             lines.append(md5_comment)
-             hash_line = '{method}\t{digest}  {filename}\n'.format(
-                 method='md5',
-@@ -522,6 +525,20 @@ class BuildrootPackage():
-             filename=self.filename)
-         lines.append(hash_line)
- 
-+        for license_file in self.license_files:
-+            sha256 = hashlib.sha256()
-+            with open(license_file, 'rb') as lic_f:
-+                while True:
-+                    data = lic_f.read(BUF_SIZE)
-+                    if not data:
-+                        break
-+                    sha256.update(data)
-+            hash_line = '{method}\t{digest}  {filename}\n'.format(
-+                method='sha256',
-+                digest=sha256.hexdigest(),
-+                filename=os.path.basename(license_file))
-+            lines.append(hash_line)
-+
-         with open(path_to_hash, 'w') as hash_file:
-             hash_file.writelines(lines)
- 
+Thomas
 -- 
-2.1.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
