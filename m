@@ -1,34 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 15 Jan 2018 14:47:26 +0100
-Subject: [Buildroot] [PATCH 1/1] open-lldp: new package
-In-Reply-To: <276755364.2420280.1516020636845@mail.yahoo.com>
-References: <20180112140107.15301-1-laurent_pubs@yahoo.com>
- <CAGm1_kvL9UWVX5jrzE1dhsOHvWT_LukRJKZ5z6eu8Tma0bjXdw@mail.gmail.com>
- <20180112220436.677e3084@windsurf.lan>
- <CAGm1_ksP2c_gLsSCJjN=Sr7gK0OR0Bdxd-jidXVhjgwOCFyiwQ@mail.gmail.com>
- <20180112233842.388e29a0@windsurf.lan>
- <276755364.2420280.1516020636845@mail.yahoo.com>
-Message-ID: <20180115144726.02c4bbd1@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 15 Jan 2018 15:19:53 +0100
+Subject: [Buildroot] [PATCH] swupdate: remove empty line
+In-Reply-To: <20180114175306.18388-1-joerg.krause@embedded.rocks>
+ (=?utf-8?Q?=22J=C3=B6rg?=
+ Krause"'s message of "Sun, 14 Jan 2018 18:53:06 +0100")
+References: <20180114175306.18388-1-joerg.krause@embedded.rocks>
+Message-ID: <876083w6eu.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "J?rg" == J?rg Krause <joerg.krause@embedded.rocks> writes:
 
-On Mon, 15 Jan 2018 12:50:36 +0000 (UTC), Laurent Charpentier wrote:
+ > Reported by Yann E. Morin running:
+ > ```
+ >     $ ./utils/check-package package/swupdate/swupdate.mk
+ >     package/swupdate/swupdate.mk:42: consecutive empty lines
+ >     140 lines processed
+ >     1 warnings generated
+ > ```
 
-> Here are some experiments on my side.(1) AUTORECONF=yes (no use of ./bootstrap.sh)-> ./configure fails
-> (2) (cd $(@D) && PATH=$(BR_PATH) ./bootstrap.sh) (no use of AUTORECONF)-> run OK (configure passed, build passed)
-> (3) AUTORECONF=yes and (cd $(@D) &&?./bootstrap.sh)-> run OK (configure passed, build passed)
-> I would like to use choice (2). This choice is similar to the RPM packaging (http://pkgs.fedoraproject.org/cgit/rpms/lldpad.git/tree/lldpad.spec) and follows the guidelines in the README file.
+ > Reported-by: Yann E. MORIN <yann.morin.1998@free.fr>
+ > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 
-Choice (2) alone is wrong, because you won't have the dependency on
-host-autoconf, host-automake and host-libtool.
+Committed, thanks.
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
