@@ -1,37 +1,42 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 15 Jan 2018 22:52:30 +0100
-Subject: [Buildroot] [PATCH v2,1/1] flatbuffers: new package
-In-Reply-To: <20171218211039.4450-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Mon, 18 Dec 2017 22:10:39 +0100")
-References: <20171218211039.4450-1-fontaine.fabrice@gmail.com>
-Message-ID: <87tvvmssbl.fsf@dell.be.48ers.dk>
+From: Philippe Proulx <eeppeliteloop@gmail.com>
+Date: Mon, 15 Jan 2018 16:55:38 -0500
+Subject: [Buildroot] [PATCH] lttng-libust: bump version to 2.10.1
+Message-ID: <20180115215538.12802-1-eeppeliteloop@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+Signed-off-by: Philippe Proulx <eeppeliteloop@gmail.com>
+---
+ package/lttng-libust/lttng-libust.hash | 6 +++---
+ package/lttng-libust/lttng-libust.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
- > FlatBuffers is an efficient cross platform serialization
- > library for C++, C#, C, Go, Java, JavaScript, PHP, and
- > Python. It was originally created at Google for game
- > development and other performance-critical applications.
+diff --git a/package/lttng-libust/lttng-libust.hash b/package/lttng-libust/lttng-libust.hash
+index 897bcf6299..6e5fdf23ce 100644
+--- a/package/lttng-libust/lttng-libust.hash
++++ b/package/lttng-libust/lttng-libust.hash
+@@ -1,3 +1,3 @@
+-# From http://lttng.org/files/lttng-ust/lttng-ust-2.10.0.tar.bz2.{md5,sha1}
+-md5 8c539bc749c4533877095aa4c0f3cee8  lttng-ust-2.10.0.tar.bz2
+-sha1 40fd9f1f405d155fe27a699cf44b87c768a20e7e  lttng-ust-2.10.0.tar.bz2
++# From http://lttng.org/files/lttng-ust/lttng-ust-2.10.1.tar.bz2.{md5,sha1}
++md5 4863cc2f9f0a070b42438bb646bbba06  lttng-ust-2.10.1.tar.bz2
++sha1 3779c9ed75e3fa532797431f2c47979ce73614a7  lttng-ust-2.10.1.tar.bz2
+diff --git a/package/lttng-libust/lttng-libust.mk b/package/lttng-libust/lttng-libust.mk
+index 5496e926d5..d645220ba6 100644
+--- a/package/lttng-libust/lttng-libust.mk
++++ b/package/lttng-libust/lttng-libust.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
 
- > http://google.github.io/flatbuffers/
-
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- > ---
- > Changes v1 -> v2 (after review of Thomas Petazzoni and reading of
- > https://patchwork.ozlabs.org/patch/814900):
- >  - Fix DEVELOPERS entry
- >  - Add dependencies on BR2_INSTALL_LIBSTDCPP and
- >  BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
- >  - Set FLATBUFFERS_BUILD_SHAREDLIB depending on BR2_STATIC_LIBS instead
- >  of using BR2_SHARED_LIBS and BR2_SHARED_STATIC_LIBS
- >  - Add -DCMAKE_CXX_FLAGS="-std=c++11"
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+ LTTNG_LIBUST_SITE = http://lttng.org/files/lttng-ust
+-LTTNG_LIBUST_VERSION = 2.10.0
++LTTNG_LIBUST_VERSION = 2.10.1
+ LTTNG_LIBUST_SOURCE = lttng-ust-$(LTTNG_LIBUST_VERSION).tar.bz2
+ LTTNG_LIBUST_LICENSE = LGPL-2.1, MIT (system headers), GPL-2.0 (liblttng-ust-ctl/ustctl.c used by lttng-sessiond)
+ LTTNG_LIBUST_LICENSE_FILES = COPYING
+--
+2.15.1
