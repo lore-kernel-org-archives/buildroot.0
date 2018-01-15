@@ -1,24 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 15 Jan 2018 15:26:17 +0100
-Subject: [Buildroot] [PATCH 2/2] minnowboard-max: defconfigs: use
- silvermont x86 variant
-In-Reply-To: <20180114210115.7284-2-peter@korsgaard.com> (Peter Korsgaard's
- message of "Sun, 14 Jan 2018 22:01:15 +0100")
-References: <20180114210115.7284-1-peter@korsgaard.com>
- <20180114210115.7284-2-peter@korsgaard.com>
-Message-ID: <87shb7urjq.fsf@dell.be.48ers.dk>
+Date: Mon, 15 Jan 2018 15:16:31 +0100
+Subject: [Buildroot] [git commit] swupdate: remove empty line
+Message-ID: <20180115142638.E215783C62@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=65793bab3d21b1a8d6091174eb2f57b6a8d61b51
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > As that is the CPU core in the E38xx Atoms used on the Minnowboard max.
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Reported by Yann E. Morin running:
 
-Committed, thanks.
+```
+    $ ./utils/check-package package/swupdate/swupdate.mk
+    package/swupdate/swupdate.mk:42: consecutive empty lines
+    140 lines processed
+    1 warnings generated
+```
 
--- 
-Bye, Peter Korsgaard
+Reported-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/swupdate/swupdate.mk | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/package/swupdate/swupdate.mk b/package/swupdate/swupdate.mk
+index d1afbc4..aa232e5 100644
+--- a/package/swupdate/swupdate.mk
++++ b/package/swupdate/swupdate.mk
+@@ -39,7 +39,6 @@ else
+ SWUPDATE_MAKE_ENV += HAVE_LIBCURL=n
+ endif
+ 
+-
+ ifeq ($(BR2_PACKAGE_HAS_LUAINTERPRETER),y)
+ SWUPDATE_DEPENDENCIES += luainterpreter host-pkgconf
+ # defines the base name for the pkg-config file ("lua" or "luajit")
