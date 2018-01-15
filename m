@@ -1,90 +1,92 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 15 Jan 2018 21:49:05 +0100
-Subject: [Buildroot] [PATCH] aoetools: new package
-In-Reply-To: <1516007331-17509-1-git-send-email-sergio.prado@e-labworks.com>
-References: <1516007331-17509-1-git-send-email-sergio.prado@e-labworks.com>
-Message-ID: <20180115214905.10772c21@windsurf>
+Date: Mon, 15 Jan 2018 22:12:47 +0100
+Subject: [Buildroot] [git commit] scanpypi: add support for licence files
+ checksums
+Message-ID: <20180115211250.9BE02838F6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=13d94669b924be92ea9e8f0690f9a51617705b57
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 15 Jan 2018 07:08:51 -0200, Sergio Prado wrote:
-> The aoetools are programs for users of the ATA over Ethernet (AoE)
-> network storage protocol, a simple protocol for using storage over an
-> ethernet LAN.
-> 
-> Tested on Beaglebone Black.
-> 
-> Build tested with test-pkg.
-> 
-> Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+Store the list of detected licence files in the main object and
+automatically add their sha256 checksums when creating *.hash file.
 
-I've applied, but after fixing a number of issues, see below.
+Bonus: fix wrong indentation.
 
-> diff --git a/package/aoetools/Config.in b/package/aoetools/Config.in
-> new file mode 100644
-> index 000000000000..25623743b884
-> --- /dev/null
-> +++ b/package/aoetools/Config.in
-> @@ -0,0 +1,12 @@
-> +config BR2_PACKAGE_AOETOOLS
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS
-> +	bool "aoetools"
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ utils/scanpypi | 25 +++++++++++++++++++++----
+ 1 file changed, 21 insertions(+), 4 deletions(-)
 
-The bool property goes before the depends on. This is reported by
-check-package.
-
-> +	help
-> +	  The aoetools are programs for users of the ATA over Ethernet (AoE)
-> +	  network storage protocol, a simple protocol for using storage over
-> +	  an ethernet LAN.
-
-The lines here are too long. This is also reported by check-package.
-
-> diff --git a/package/aoetools/aoetools.mk b/package/aoetools/aoetools.mk
-> new file mode 100644
-> index 000000000000..e11a4f72f924
-> --- /dev/null
-> +++ b/package/aoetools/aoetools.mk
-> @@ -0,0 +1,22 @@
-> +################################################################################
-> +#
-> +# aoetools
-> +#
-> +################################################################################
-> +
-> +AOETOOLS_VERSION = 37
-> +AOETOOLS_SITE = https://github.com/OpenAoE/aoetools/archive
-
-You should have used the github helper here, since there is no tarball
-uploaded by the maintainer.
-
-> +AOETOOLS_LICENSE = GPLv2
-
-This should have been GPL-2.0, which is the SPDX license code for the
-GPLv2.
-
-> +AOETOOLS_LICENSE_FILES = COPYING
-> +
-> +define AOETOOLS_BUILD_CMDS
-> +	$(TARGET_MAKE_ENV) $(MAKE) CC=$(TARGET_CC) -C $(@D)
-
-And here, I've changed to use $(TARGET_CONFIGURE_OPTS) instead of just
-CC, so that the CFLAGS are properly passed/used.
-
-One thing I didn't fix is that the aoe-stat script installed by this
-package uses /bin/bash in its shebang, so it won't work because this
-package doesn't depend on bash. Does this script really needs bash?
-Should we remove it in a post-install target hook? Something else?
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/utils/scanpypi b/utils/scanpypi
+index d3b0d2f..765bfdc 100755
+--- a/utils/scanpypi
++++ b/utils/scanpypi
+@@ -24,6 +24,8 @@ import tempfile
+ import imp
+ from functools import wraps
+ 
++BUF_SIZE = 65536
++
+ try:
+     import spdx_lookup as liclookup
+ except ImportError:
+@@ -132,6 +134,7 @@ class BuildrootPackage():
+         self.filename = None
+         self.url = None
+         self.version = None
++        self.license_files = []
+ 
+     def fetch_package_info(self):
+         """
+@@ -439,12 +442,12 @@ class BuildrootPackage():
+ 
+         filenames = ['LICENCE', 'LICENSE', 'LICENSE.RST', 'LICENSE.TXT',
+                      'COPYING', 'COPYING.TXT']
+-        license_files = list(find_file_upper_case(filenames, self.tmp_extract))
++        self.license_files = list(find_file_upper_case(filenames, self.tmp_extract))
+ 
+-        lines.append(self.__get_license_names(license_files))
++        lines.append(self.__get_license_names(self.license_files))
+ 
+         license_files = [license.replace(self.tmp_extract, '')[1:]
+-                         for license in license_files]
++                         for license in self.license_files]
+         if len(license_files) > 0:
+             if len(license_files) > 1:
+                 print('More than one file found for license:',
+@@ -508,7 +511,7 @@ class BuildrootPackage():
+         lines = []
+         if self.used_url['md5_digest']:
+             md5_comment = '# md5 from {url}, sha256 locally computed\n'.format(
+-		url=self.metadata_url)
++                url=self.metadata_url)
+             lines.append(md5_comment)
+             hash_line = '{method}\t{digest}  {filename}\n'.format(
+                 method='md5',
+@@ -522,6 +525,20 @@ class BuildrootPackage():
+             filename=self.filename)
+         lines.append(hash_line)
+ 
++        for license_file in self.license_files:
++            sha256 = hashlib.sha256()
++            with open(license_file, 'rb') as lic_f:
++                while True:
++                    data = lic_f.read(BUF_SIZE)
++                    if not data:
++                        break
++                    sha256.update(data)
++            hash_line = '{method}\t{digest}  {filename}\n'.format(
++                method='sha256',
++                digest=sha256.hexdigest(),
++                filename=os.path.basename(license_file))
++            lines.append(hash_line)
++
+         with open(path_to_hash, 'w') as hash_file:
+             hash_file.writelines(lines)
+ 
