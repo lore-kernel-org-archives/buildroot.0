@@ -1,40 +1,91 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 15 Jan 2018 18:06:44 +0100
-Subject: [Buildroot] [PATCH 1/7] package/skeleton-init-common: add
- /bin/sh to /etc/shells
-In-Reply-To: <87o9lvuqu0.fsf@dell.be.48ers.dk>
-References: <1515963815-5843-1-git-send-email-romain.naour@smile.fr>
- <1515963815-5843-2-git-send-email-romain.naour@smile.fr>
- <87o9lvuqu0.fsf@dell.be.48ers.dk>
-Message-ID: <20180115170644.GB11122@scaer>
+From: Ricardo Martincoski <ricardo.martincoski@datacom.ind.br>
+Date: Mon, 15 Jan 2018 15:07:59 -0200 (BRST)
+Subject: [Buildroot] [PATCH 3/3] armbian-firmware: fail build for
+ missing file
+In-Reply-To: <20180115165337.GA2533@scaer>
+References: <1515973281-3997-1-git-send-email-ricardo.martincoski@gmail.com>
+ <1515973281-3997-3-git-send-email-ricardo.martincoski@gmail.com>
+ <20180115165337.GA2533@scaer>
+Message-ID: <756122449.97050.1516036079715.JavaMail.zimbra@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
 
-On 2018-01-15 15:41 +0100, Peter Korsgaard spake thusly:
-> >>>>> "Romain" == Romain Naour <romain.naour@smile.fr> writes:
->  > Add the default shell /bin/sh to /etc/shells only if BR2_SYSTEM_BIN_SH_NONE
->  > is not selected.
+
+----- Original Message -----
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: "ricardo martincoski" <ricardo.martincoski@gmail.com>
+Cc: "Sergey Matyukevich" <geomatsi@gmail.com>, buildroot at buildroot.org
+Sent: Monday, January 15, 2018 2:53:37 PM
+Subject: Re: [Buildroot] [PATCH 3/3] armbian-firmware: fail build for missing file
+
+Ricardo, All,
+
+I gues you wanted to Cc me on the first patch in the series, related to
+linux-firmware, not armbian-firmware, right? ;-)
+
+Sure.
+I first added you explicitly only for patches 1 and 2.
+Then I ran get-developers again for all patches, copy&paste and send
+using git.?
+
+On 2018-01-14 21:41 -0200, Ricardo Martincoski spake thusly:
+> When a file is listed to be installed but is missing from the package
+> source currently the first tar command exits with error code but it is
+> ignored and the build succeeds.
+> This issue by itself is minor because those listed files that are
+> present in the package source get installed to the target.
+> But the code is currently error prone, e.g. to a typo in the file list.
 > 
->  > Add an empty /etc/shells in the rootfs skeleton.
+> Fix this by first creating a tarball in the build directory and then
+> installing it, instead of using a pipe between the two tar invocations.
+> Also use && between the commands, so the first command that exits with
+> error code fails the build.
+> Since the two tar invocations remain in use, the desired behavior
+> remains the same:
+>  - list of files can contain *;
+>  - list of files can contain file inside path, and the path is then
+>    replicated in the target;
+>  - symlinks are not followed but are installed.
 > 
-> Is there any specific reason to have an empty /etc/shells?
+> Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+> Cc: Sergey Matyukevich <geomatsi@gmail.com>
 
-In fact, I don't see the point of an empty one, indeed...
-
-> It is a bit noisy to have this extra file in the BIN_SH_NONE case, and
-> it afaik changes behaviour (E.G. getusershell() will return default
-> values if there is no /etc/shells, but will now presumably return the
-> empty string).
-
-Woah.. I did not know about getusershell(), but its API is ugly... :-/
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
+
+> ---
+> This package copied the install commands from linux-firmware.
+> So let's copy the fix and also the commit log.
+> ---
+>  package/armbian-firmware/armbian-firmware.mk | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/armbian-firmware/armbian-firmware.mk b/package/armbian-firmware/armbian-firmware.mk
+> index 48b0372..77e5185 100644
+> --- a/package/armbian-firmware/armbian-firmware.mk
+> +++ b/package/armbian-firmware/armbian-firmware.mk
+> @@ -23,9 +23,9 @@ endif
+>  
+>  ifneq ($(ARMBIAN_FIRMWARE_FILES),)
+>  define ARMBIAN_FIRMWARE_INSTALL_FILES
+> -	cd $(@D) ; \
+> -	$(TAR) c $(sort $(ARMBIAN_FIRMWARE_FILES)) | \
+> -		$(TAR) x -C $(TARGET_DIR)/lib/firmware
+> +	cd $(@D) && \
+> +		$(TAR) cf install.tar $(sort $(ARMBIAN_FIRMWARE_FILES)) && \
+> +		$(TAR) xf install.tar -C $(TARGET_DIR)/lib/firmware
+>  endef
+>  endif
+>  
+> -- 
+> 2.7.4
+> 
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
@@ -43,3 +94,7 @@ Yann E. MORIN.
 | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
 | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
 '------------------------------^-------^------------------^--------------------'
+_______________________________________________
+buildroot mailing list
+buildroot at busybox.net
+http://lists.busybox.net/mailman/listinfo/buildroot
