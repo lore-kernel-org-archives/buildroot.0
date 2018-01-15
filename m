@@ -1,31 +1,48 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 15 Jan 2018 15:41:43 +0100
-Subject: [Buildroot] [PATCH 1/7] package/skeleton-init-common: add
- /bin/sh to /etc/shells
-In-Reply-To: <1515963815-5843-2-git-send-email-romain.naour@smile.fr> (Romain
- Naour's message of "Sun, 14 Jan 2018 22:03:29 +0100")
-References: <1515963815-5843-1-git-send-email-romain.naour@smile.fr>
- <1515963815-5843-2-git-send-email-romain.naour@smile.fr>
-Message-ID: <87o9lvuqu0.fsf@dell.be.48ers.dk>
+From: Sergio Prado <sergio.prado@e-labworks.com>
+Date: Mon, 15 Jan 2018 12:48:10 -0200
+Subject: [Buildroot] [PATCH v2] wolfssl: fix build on ARMV8
+Message-ID: <1516027690-24571-1-git-send-email-sergio.prado@e-labworks.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Romain" == Romain Naour <romain.naour@smile.fr> writes:
+Build on ARMV8 fails when hardware acceleration is enabled:
 
- > Add the default shell /bin/sh to /etc/shells only if BR2_SYSTEM_BIN_SH_NONE
- > is not selected.
+/tmp/ccmGP5RI.s: Assembler messages:
+/tmp/ccmGP5RI.s:532: Error: invalid addressing mode at operand 2 -- `ld1 {v0.2d},[x0,256]'
+/tmp/ccmGP5RI.s:568: Error: invalid addressing mode at operand 2 -- `st1 {v0.2d},[x0,256]'
+/tmp/ccmGP5RI.s:581: Error: invalid addressing mode at operand 2 -- `ld1 {v0.2d},[x0,256]'
+/tmp/ccmGP5RI.s:621: Error: invalid addressing mode at operand 2 -- `st1 {v0.2d},[x0,256]'
 
- > Add an empty /etc/shells in the rootfs skeleton.
+So let's disable ARMv8 hardware acceleration for now.
 
-Is there any specific reason to have an empty /etc/shells?
+Fixes:
+http://autobuild.buildroot.net/results/6080648394d09a0d382087831ee6f063c7638be9
 
-It is a bit noisy to have this extra file in the BIN_SH_NONE case, and
-it afaik changes behaviour (E.G. getusershell() will return default
-values if there is no /etc/shells, but will now presumably return the
-empty string).
+Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+---
+Changes v1 -> v2:
+  - Force configure option to --disable-armasm
+---
+ package/wolfssl/wolfssl.mk | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
+diff --git a/package/wolfssl/wolfssl.mk b/package/wolfssl/wolfssl.mk
+index c8ef50a9bc6e..a2e60532f342 100644
+--- a/package/wolfssl/wolfssl.mk
++++ b/package/wolfssl/wolfssl.mk
+@@ -29,9 +29,8 @@ else
+ WOLFSSL_CONF_OPTS += --disable-sslv3
+ endif
+ 
++# build fails when ARMv8 hardware acceleration is enabled
+ ifeq ($(BR2_ARM_CPU_ARMV8A),y)
+-WOLFSSL_CONF_OPTS += --enable-armasm
+-else
+ WOLFSSL_CONF_OPTS += --disable-armasm
+ endif
+ 
 -- 
-Bye, Peter Korsgaard
+1.9.1
