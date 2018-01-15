@@ -1,136 +1,57 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 15 Jan 2018 21:17:52 +0100
-Subject: [Buildroot] [git commit] augeas: bump to version 1.9.0
-Message-ID: <20180115202007.8161A838F7@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 15 Jan 2018 21:20:25 +0100
+Subject: [Buildroot] [PATCH 1/1] libpqxx: apply upstream compilation fix
+In-Reply-To: <20180115200055.6404-1-james.knight@rockwellcollins.com>
+References: <20180115200055.6404-1-james.knight@rockwellcollins.com>
+Message-ID: <20180115212025.482dad6f@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d2db5a6c5bb19b58fea86fae790a8d06a731e733
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Add two patches from upstream to fix a build issue when building an
-example. Ideally, the examples should not be build at all. However,
-upstream disliked the idea of adding configure options like
-`--disable-examples` [1]. So we'll make do with the patches and force a
-autoreconf.
+On Mon, 15 Jan 2018 15:00:55 -0500, James Knight wrote:
+> Apply an upstream patch which addresses a compilation issue with respect
+> to an undefined 'timeval' structure. This issue exists in at least v6.0.
+> It is expected that this patch can be removed when libpqxx provides a
+> new releases (either v6.0.1 or v6.1).
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/48b015650ede4e55e199538072c7228cccf64422
+> 
+> Signed-off-by: James Knight <james.knight@rockwellcollins.com>
+> ---
+>  package/libpqxx/libpqxx.hash | 1 +
+>  package/libpqxx/libpqxx.mk   | 7 +++++++
+>  2 files changed, 8 insertions(+)
+> 
+> diff --git a/package/libpqxx/libpqxx.hash b/package/libpqxx/libpqxx.hash
+> index 372be603c5..6fc388fc89 100644
+> --- a/package/libpqxx/libpqxx.hash
+> +++ b/package/libpqxx/libpqxx.hash
+> @@ -1,3 +1,4 @@
+>  # Locally computed:
+>  sha256	81cac92458efd799fadb0374107464320d93eba71de05aedf21afb9c8dda7c3a	libpqxx-6.0.0.tar.gz
+>  sha256	9e1c78fa302e4e9738bf3315b130429035c03fcb0f046531ccd977cb474f6b31	COPYING
+> +sha256	85881a11caab61f0c8d10cfef673e48c86e701f5a9fdd6cb344aa4f4beb1f2bf	44970d7331e4f369e160af0135a2d1fc16f27a21.patch
 
-Additionaly, the signature was checked and a hash for the license file
-is added.
+Thanks, but please add the patch itself in package/libpqxx/. We stopped
+fetching patches from github this way, because those patches are not
+stable, and therefore their hash might change.
 
-[1] https://github.com/hercules-team/augeas/issues/535
+Indeed, the line "index ccafa9ce71..23b0953735 100644" contains
+references to Git commits, but those references are partial (i.e not
+the full 40 digits SHA1). Due to this, when more commits are made to
+the same repos, git may add additional digits in this "index" line to
+ensure the commit references and non-ambiguous. Good for Git, but bad
+for the patch hash.
 
-Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...missing-trailing-backslash-for-dump-LDADD.patch | 25 ++++++++++++++++
- ...efile-do-not-force-static-linking-of-dump.patch | 33 ++++++++++++++++++++++
- package/augeas/augeas.hash                         |  6 ++--
- package/augeas/augeas.mk                           |  5 +++-
- 4 files changed, 66 insertions(+), 3 deletions(-)
+Hence, please bring the patch inside package/libpqxx/. Thanks! :-)
 
-diff --git a/package/augeas/0001-examples-Makefile-fix-missing-trailing-backslash-for-dump-LDADD.patch b/package/augeas/0001-examples-Makefile-fix-missing-trailing-backslash-for-dump-LDADD.patch
-new file mode 100644
-index 0000000..82d7c89
---- /dev/null
-+++ b/package/augeas/0001-examples-Makefile-fix-missing-trailing-backslash-for-dump-LDADD.patch
-@@ -0,0 +1,25 @@
-+From d506cf6c1567cbb0a762c04d9354ab1694a5ac05 Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-+Date: Mon, 11 Dec 2017 23:33:08 +0100
-+Subject: [PATCH] Update Makefile.am
-+
-+Add missing trailing backslash for `dump_LDADD`.
-+
-+Backported from: d506cf6c1567cbb0a762c04d9354ab1694a5ac05
-+
-+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
-+---
-+ examples/Makefile.am | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/examples/Makefile.am b/examples/Makefile.am
-+index 66ebcdf2..a19597bf 100644
-+--- a/examples/Makefile.am
-++++ b/examples/Makefile.am
-+@@ -13,5 +13,5 @@ fadot_LDADD = $(top_builddir)/src/libfa.la $(GNULIB)
-+ 
-+ dump_sources = dump.c
-+ dump_LDFLAGS = -static
-+-dump_LDADD =  $(top_builddir)/src/libaugeas.la $(top_builddir)/src/libfa.la
-++dump_LDADD =  $(top_builddir)/src/libaugeas.la $(top_builddir)/src/libfa.la \
-+ 	          $(GNULIB)
-diff --git a/package/augeas/0002-examples-Makefile-do-not-force-static-linking-of-dump.patch b/package/augeas/0002-examples-Makefile-do-not-force-static-linking-of-dump.patch
-new file mode 100644
-index 0000000..fe83fa7
---- /dev/null
-+++ b/package/augeas/0002-examples-Makefile-do-not-force-static-linking-of-dump.patch
-@@ -0,0 +1,33 @@
-+From c50b793f6ab17c192e048b4a06421be7c6381998 Mon Sep 17 00:00:00 2001
-+From: David Lutterkort <lutter@watzmann.net>
-+Date: Fri, 5 Jan 2018 14:48:15 -0800
-+Subject: [PATCH] * examples/Makefile.am: do not force static linking of dump
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Forcing static linking of 'dump' was accidentally left in from some
-+testing; there is no reason to force that specifically for dump.
-+
-+Thanks to J??rg Krause for reporting the issue and verifying the fix.
-+
-+Fixes https://github.com/hercules-team/augeas/issues/535
-+
-+Backported from: c50b793f6ab17c192e048b4a06421be7c6381998
-+
-+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
-+---
-+ examples/Makefile.am | 1 -
-+ 1 file changed, 1 deletion(-)
-+
-+diff --git a/examples/Makefile.am b/examples/Makefile.am
-+index a19597bf..928eb517 100644
-+--- a/examples/Makefile.am
-++++ b/examples/Makefile.am
-+@@ -12,6 +12,5 @@ fadot_SOURCES = fadot.c
-+ fadot_LDADD = $(top_builddir)/src/libfa.la $(GNULIB)
-+ 
-+ dump_sources = dump.c
-+-dump_LDFLAGS = -static
-+ dump_LDADD =  $(top_builddir)/src/libaugeas.la $(top_builddir)/src/libfa.la \
-+ 	          $(GNULIB)
-diff --git a/package/augeas/augeas.hash b/package/augeas/augeas.hash
-index e044ff4..a256686 100644
---- a/package/augeas/augeas.hash
-+++ b/package/augeas/augeas.hash
-@@ -1,2 +1,4 @@
--# Locally calculated
--sha256  65cf75b5a573fee2a5c6c6e3c95cad05f0101e70d3f9db10d53f6cc5b11bc9f9  augeas-1.8.1.tar.gz
-+# Locally calculated after checking pgp signature from
-+# http://download.augeas.net/augeas-1.9.0.tar.gz.sig
-+sha256  2b463d398cabc9b42747aa61d3e83ed6a93ce03d9074cf8e7a7bd3107a668343  augeas-1.9.0.tar.gz
-+sha256  ca0061fc1381a3ab242310e4b3f56389f28e3d460eb2fd822ed7a21c6f030532  COPYING
-diff --git a/package/augeas/augeas.mk b/package/augeas/augeas.mk
-index 20d09eb..8a7f38e 100644
---- a/package/augeas/augeas.mk
-+++ b/package/augeas/augeas.mk
-@@ -4,13 +4,16 @@
- #
- ################################################################################
- 
--AUGEAS_VERSION = 1.8.1
-+AUGEAS_VERSION = 1.9.0
- AUGEAS_SITE = http://download.augeas.net
- AUGEAS_INSTALL_STAGING = YES
- AUGEAS_LICENSE = LGPL-2.1+
- AUGEAS_LICENSE_FILES = COPYING
- AUGEAS_DEPENDENCIES = host-pkgconf readline libxml2
- 
-+# patching examples/Makefile.am, can be removed when updating from version 1.9.0
-+AUGEAS_AUTORECONF = YES
-+
- AUGEAS_CONF_OPTS = --disable-gnulib-tests
- 
- # Remove the test lenses which occupy about 1.4 MB on the target
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
