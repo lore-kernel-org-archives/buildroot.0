@@ -1,41 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 15 Jan 2018 21:10:31 +0100
-Subject: [Buildroot] [PATCH 2/3] linux-firmware: fix install for Chelsio
- T[45]
-In-Reply-To: <20180115165743.GB2533@scaer> (Yann E. MORIN's message of "Mon,
- 15 Jan 2018 17:57:43 +0100")
+Date: Mon, 15 Jan 2018 21:11:28 +0100
+Subject: [Buildroot] [PATCH 3/3] armbian-firmware: fail build for
+ missing file
+In-Reply-To: <1515973281-3997-3-git-send-email-ricardo.martincoski@gmail.com>
+ (Ricardo Martincoski's message of "Sun, 14 Jan 2018 21:41:21 -0200")
 References: <1515973281-3997-1-git-send-email-ricardo.martincoski@gmail.com>
- <1515973281-3997-2-git-send-email-ricardo.martincoski@gmail.com>
- <20180115165743.GB2533@scaer>
-Message-ID: <87o9luubm0.fsf@dell.be.48ers.dk>
+ <1515973281-3997-3-git-send-email-ricardo.martincoski@gmail.com>
+Message-ID: <87k1wiubkf.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>>>>> "Ricardo" == Ricardo Martincoski <ricardo.martincoski@gmail.com> writes:
 
- > Ricardo, All,
- > On 2018-01-14 21:41 -0200, Ricardo Martincoski spake thusly:
- >> It's broken for the last 3 version bumps, since
- >> 1c9846ecc9 "linux-firmware: Bump to the latest version"
- >> 
- >> Fix it by updating the name of the file to install.
- >> Do not use * since it would install also old versions that would take
- >> 1MB extra space in the target.
+ > When a file is listed to be installed but is missing from the package
+ > source currently the first tar command exits with error code but it is
+ > ignored and the build succeeds.
+ > This issue by itself is minor because those listed files that are
+ > present in the package source get installed to the target.
+ > But the code is currently error prone, e.g. to a typo in the file list.
 
- > I would prefer if we were to keep installing the older version, because
- > presumably older kernel versions (even if they request the unversionned
- > t4fw.bin) would probably have been working with earlier versions of the
- > firmware, so I'd prefer we leave to the user the option to redirect the
- > symlink to the correct version they want to use.
+ > Fix this by first creating a tarball in the build directory and then
+ > installing it, instead of using a pipe between the two tar invocations.
+ > Also use && between the commands, so the first command that exits with
+ > error code fails the build.
+ > Since the two tar invocations remain in use, the desired behavior
+ > remains the same:
+ >  - list of files can contain *;
+ >  - list of files can contain file inside path, and the path is then
+ >    replicated in the target;
+ >  - symlinks are not followed but are installed.
 
-That might indeed be nice, but should be done as a separate patch. A
-nice thing about install t4fw*bin would be that this kind of problems
-wouldn't happen again.
+ > Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+ > Cc: Sergey Matyukevich <geomatsi@gmail.com>
+ > ---
+ > This package copied the install commands from linux-firmware.
+ > So let's copy the fix and also the commit log.
 
-Will you send a patch?
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
