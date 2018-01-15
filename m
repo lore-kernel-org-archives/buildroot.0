@@ -1,9 +1,7 @@
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Sun, 14 Jan 2018 21:53:53 -0200
-Subject: [Buildroot] [PATCH 02/17] tests: add test for post-fakeroot
- script
-References: <878bd9ac6569877450e28861cb047a93c1550eb9.1515939400.git.yann.morin.1998@free.fr>
-Message-ID: <5a5bed91131a0_29103fc7069d9bb4990d1@ultri3.mail>
+Date: Sun, 14 Jan 2018 22:46:02 -0200
+Subject: [Buildroot] support/scripts/xorg-release: what to do?
+Message-ID: <5a5bf9ca2534a_4d3ab785e0163c3@ultri3.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,22 +10,46 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, Jan 14, 2018 at 12:16 PM, Yann E. MORIN wrote:
+This script is currently broken. Here are some possible actions:
 
-> Currently, only post-build and post-image scripts were tested, each with
-> their own test-script.
-> 
-> The two test-scripts only differ in the name of the log file they
-> create, and it is based on the name of the script, so it is easy to
-> share the script.
-> 
-> This allows us to easily re-use it for testing post-fakeroot scripts.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Reviewed-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-[with only the 2 first patches from the series applied
- https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/47907854]
-Tested-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+(1) move it to utils/, see http://patchwork.ozlabs.org/patch/783008/
+(2) fix code style warnings from flake8
+(3) make it callable again. Not that much effort, see this hackish patch
+    (notice I limited the size of the lines to make it more email-friendly)
+    +++ support/scripts/xorg-release
+    @@ -36,3 +36,3 @@ XORG_EXCEPTIONS = [
+     def get_xorg_release_pkgs():
+    -    u = urllib.URLopener().open("http://www.x.org/releases/%s/src/every...
+    +    u = urllib.URLopener().open("https://www.x.org/releases/%s/src/ever...
+         b = BeautifulSoup.BeautifulSoup()
+    @@ -67,2 +67,6 @@ BUILDROOT_EXCEPTIONS = [
+         "xdriver_xf86-input-tslib", # From Pengutronix, not part of X.org r...
+    +    "xdriver_xf86-video-imx-viv",
+    +    "xdriver_xf86-video-intel",
+    +    "xdriver_xf86-video-voodoo",
+    +    "xserver_xorg-server",
+     ]
+(4) support xserver_xorg-server with multiple versions. I am not sure it makes
+    sense to add such support, maybe it must be added to list of exceptions too
+    because all versions would always be reported as newer.
+(5) update BUILDROOT_EXCEPTIONS to ignore all results that must be ignored.
+    I guess every package using
+    http://xorg.freedesktop.org/releases/individual/app
+    will always have newer version and then need to be ignored.
+(6) remove the script
+(7) do nothing
+(8) add a magic comment to the script to make flake8 do skip checking it
+
+I am willing to do either (1=resend)+(2)+(3), only (2) or only (8) myself as
+part of the series fixing flake8 warning in the tree.
+
+But someone with more knowledge about the xorg packages (who will actually
+*use* the script) should do (4)+(5) IMO.
+
+I don't like (7) because the series will contain a job for gitlab that runs
+flake8 and would fail from the beginning.
+
+Thoughts?
 
 Regards,
 Ricardo
