@@ -1,34 +1,22 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 15 Jan 2018 20:57:34 +0100
-Subject: [Buildroot] [PATCH v2 2/2] open-lldp: new package
-In-Reply-To: <20180115162122.32108-2-laurent_pubs@yahoo.com>
-References: <20180115162122.32108-1-laurent_pubs@yahoo.com>
- <20180115162122.32108-2-laurent_pubs@yahoo.com>
-Message-ID: <20180115205734.2dbd0afd@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 15 Jan 2018 20:59:54 +0100
+Subject: [Buildroot] [PATCH] configs/sheevaplug_defconfig: bump linux
+ kernel to 4.14.13
+In-Reply-To: <20180114215355.3765-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Sun, 14 Jan 2018 22:53:55 +0100")
+References: <20180114215355.3765-1-peter@korsgaard.com>
+Message-ID: <87fu76vqo5.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-Thanks for this new iteration, things are getting better!
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-On Mon, 15 Jan 2018 17:21:22 +0100, Laurent Charpentier wrote:
-> - Removed call to bootstrap.sh. However the m4 directory needs to be created for autoconf.
-> - Added hash for COPYING.
-> - Fixed gcc compile errors (inline functions).
-> 
-> Signed-off-by: Laurent Charpentier <laurent_pubs@yahoo.com>
+Committed, thanks.
 
-You shouldn't have two patches, but just one. Please use "git rebase
--i" to squash your two patches into one.
-
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
