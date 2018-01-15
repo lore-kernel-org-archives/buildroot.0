@@ -1,31 +1,35 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 15 Jan 2018 22:20:54 +0000
-Subject: [Buildroot] [Bug 10541] QT5 package leaves out aarch64 in
- BR2_PACKAGE_QT5_JSCORE_AVAILABLE
-In-Reply-To: <bug-10541-163@https.bugs.busybox.net/>
-References: <bug-10541-163@https.bugs.busybox.net/>
-Message-ID: <bug-10541-163-w7SzRu4nio@https.bugs.busybox.net/>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 15 Jan 2018 23:20:57 +0100
+Subject: [Buildroot] [PATCH 1/4] package/mpv: fix build with libva 2.0
+In-Reply-To: <20171218205609.17653-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Mon, 18 Dec 2017 21:56:06 +0100")
+References: <20171218205609.17653-1-bernd.kuhls@t-online.de>
+Message-ID: <87inc2sr06.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=10541
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > ---
+ >  package/mpv/0003-libva20.patch | 93 ++++++++++++++++++++++++++++++++++++++++++
+ >  1 file changed, 93 insertions(+)
+ >  create mode 100644 package/mpv/0003-libva20.patch
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-         Resolution|---                         |FIXED
-             Status|NEW                         |RESOLVED
+ > diff --git a/package/mpv/0003-libva20.patch b/package/mpv/0003-libva20.patch
+ > new file mode 100644
+ > index 0000000000..349dd3cb14
+ > --- /dev/null
+ > +++ b/package/mpv/0003-libva20.patch
 
---- Comment #3 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
-Fixed by
-https://git.buildroot.org/buildroot/commit/?id=ec8f5db9bbd172b2cdb571727eef9819b836c4a7.
-Thanks JD for reporting the bug, and thanks Peter for looking into it and
-providing a patch!
+We already have 0003-rpi-fix-linking-errors.patch, so I've renamed to
+0004-libva20.patch and applied, thanks.
+
+I see that mpv-0.28 (which includes this change) has been released, so
+it might be worth bumping the version.
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
