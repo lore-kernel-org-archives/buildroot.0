@@ -1,73 +1,90 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 15 Jan 2018 21:48:25 +0100
-Subject: [Buildroot] [git commit] e2fsprogs: fix build for big-endian targets
-Message-ID: <20180115204828.6A20283C2E@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 15 Jan 2018 21:49:05 +0100
+Subject: [Buildroot] [PATCH] aoetools: new package
+In-Reply-To: <1516007331-17509-1-git-send-email-sergio.prado@e-labworks.com>
+References: <1516007331-17509-1-git-send-email-sergio.prado@e-labworks.com>
+Message-ID: <20180115214905.10772c21@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cfd1c939b7999d090f850c8acc55e4c147675c52
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Add upstream patch fixing two issues with big-endian target build.
+On Mon, 15 Jan 2018 07:08:51 -0200, Sergio Prado wrote:
+> The aoetools are programs for users of the ATA over Ethernet (AoE)
+> network storage protocol, a simple protocol for using storage over an
+> ethernet LAN.
+> 
+> Tested on Beaglebone Black.
+> 
+> Build tested with test-pkg.
+> 
+> Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
 
-Fixes:
-http://autobuild.buildroot.net/results/33f/33f54b271843f926c94b8261b0d7e708987da407/
-http://autobuild.buildroot.net/results/0f0/0f01192b03049f2042d318b3a2589ecc19d1cdd7/
-http://autobuild.buildroot.net/results/4d2/4d2c5457a9c9a31d86409ca78fbc6d776fba6248/
+I've applied, but after fixing a number of issues, see below.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...ix-build-failure-in-swapfs.c-on-big-endia.patch | 41 ++++++++++++++++++++++
- 1 file changed, 41 insertions(+)
+> diff --git a/package/aoetools/Config.in b/package/aoetools/Config.in
+> new file mode 100644
+> index 000000000000..25623743b884
+> --- /dev/null
+> +++ b/package/aoetools/Config.in
+> @@ -0,0 +1,12 @@
+> +config BR2_PACKAGE_AOETOOLS
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS
+> +	bool "aoetools"
 
-diff --git a/package/e2fsprogs/0001-libext2fs-fix-build-failure-in-swapfs.c-on-big-endia.patch b/package/e2fsprogs/0001-libext2fs-fix-build-failure-in-swapfs.c-on-big-endia.patch
-new file mode 100644
-index 0000000..526157d
---- /dev/null
-+++ b/package/e2fsprogs/0001-libext2fs-fix-build-failure-in-swapfs.c-on-big-endia.patch
-@@ -0,0 +1,41 @@
-+From 876d9b0c8eac2fd80dd62bfa1b09adea62aa08f3 Mon Sep 17 00:00:00 2001
-+From: Theodore Ts'o <tytso@mit.edu>
-+Date: Wed, 3 Jan 2018 01:32:02 -0500
-+Subject: [PATCH] libext2fs: fix build failure in swapfs.c on big-endian
-+ systems
-+
-+Addresses-Debian-Bug: #886119
-+
-+Reported-by: James Clarke <jrtc27@debian.org>
-+Signed-off-by: Theodore Ts'o <tytso@mit.edu>
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Patch status: upstream commit 876d9b0c8eac
-+
-+ lib/ext2fs/swapfs.c | 3 ++-
-+ 1 file changed, 2 insertions(+), 1 deletion(-)
-+
-+diff --git a/lib/ext2fs/swapfs.c b/lib/ext2fs/swapfs.c
-+index 6e5cff97e505..b13dc4229225 100644
-+--- a/lib/ext2fs/swapfs.c
-++++ b/lib/ext2fs/swapfs.c
-+@@ -19,6 +19,7 @@
-+ 
-+ #include "ext2_fs.h"
-+ #include "ext2fs.h"
-++#include "ext2fsP.h"
-+ #include <ext2fs/ext2_ext_attr.h>
-+ 
-+ #ifdef WORDS_BIGENDIAN
-+@@ -358,7 +359,7 @@ void ext2fs_swap_inode_full(ext2_filsys fs, struct ext2_inode_large *t,
-+ 	if (inode_includes(inode_size, i_projid))
-+                 t->i_projid = ext2fs_swab16(f->i_projid);
-+ 	/* catch new static fields added after i_projid */
-+-	EXT2FS_BUILD_BUG_ON(sizeof(ext2_inode_large) != 160);
-++	EXT2FS_BUILD_BUG_ON(sizeof(struct ext2_inode_large) != 160);
-+ 
-+ 	i = sizeof(struct ext2_inode) + extra_isize + sizeof(__u32);
-+ 	if (bufsize < (int) i)
-+-- 
-+2.15.1
-+
+The bool property goes before the depends on. This is reported by
+check-package.
+
+> +	help
+> +	  The aoetools are programs for users of the ATA over Ethernet (AoE)
+> +	  network storage protocol, a simple protocol for using storage over
+> +	  an ethernet LAN.
+
+The lines here are too long. This is also reported by check-package.
+
+> diff --git a/package/aoetools/aoetools.mk b/package/aoetools/aoetools.mk
+> new file mode 100644
+> index 000000000000..e11a4f72f924
+> --- /dev/null
+> +++ b/package/aoetools/aoetools.mk
+> @@ -0,0 +1,22 @@
+> +################################################################################
+> +#
+> +# aoetools
+> +#
+> +################################################################################
+> +
+> +AOETOOLS_VERSION = 37
+> +AOETOOLS_SITE = https://github.com/OpenAoE/aoetools/archive
+
+You should have used the github helper here, since there is no tarball
+uploaded by the maintainer.
+
+> +AOETOOLS_LICENSE = GPLv2
+
+This should have been GPL-2.0, which is the SPDX license code for the
+GPLv2.
+
+> +AOETOOLS_LICENSE_FILES = COPYING
+> +
+> +define AOETOOLS_BUILD_CMDS
+> +	$(TARGET_MAKE_ENV) $(MAKE) CC=$(TARGET_CC) -C $(@D)
+
+And here, I've changed to use $(TARGET_CONFIGURE_OPTS) instead of just
+CC, so that the CFLAGS are properly passed/used.
+
+One thing I didn't fix is that the aoe-stat script installed by this
+package uses /bin/bash in its shebang, so it won't work because this
+package doesn't depend on bash. Does this script really needs bash?
+Should we remove it in a post-install target hook? Something else?
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
