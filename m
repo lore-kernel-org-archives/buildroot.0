@@ -1,53 +1,43 @@
-From: James Knight <james.knight@rockwellcollins.com>
-Date: Mon, 15 Jan 2018 15:00:55 -0500
-Subject: [Buildroot] [PATCH 1/1] libpqxx: apply upstream compilation fix
-Message-ID: <20180115200055.6404-1-james.knight@rockwellcollins.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 15 Jan 2018 20:59:34 +0100
+Subject: [Buildroot] [git commit] configs/sheevaplug_defconfig: bump linux
+ kernel to 4.14.13
+Message-ID: <20180115200320.16A4A83D24@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Apply an upstream patch which addresses a compilation issue with respect
-to an undefined 'timeval' structure. This issue exists in at least v6.0.
-It is expected that this patch can be removed when libpqxx provides a
-new releases (either v6.0.1 or v6.1).
+commit: https://git.buildroot.net/buildroot/commit/?id=b272896b77ea6f9301fb2785c22255d02796e484
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-http://autobuild.buildroot.net/results/48b015650ede4e55e199538072c7228cccf64422
-
-Signed-off-by: James Knight <james.knight@rockwellcollins.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libpqxx/libpqxx.hash | 1 +
- package/libpqxx/libpqxx.mk   | 7 +++++++
- 2 files changed, 8 insertions(+)
+ configs/sheevaplug_defconfig | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libpqxx/libpqxx.hash b/package/libpqxx/libpqxx.hash
-index 372be603c5..6fc388fc89 100644
---- a/package/libpqxx/libpqxx.hash
-+++ b/package/libpqxx/libpqxx.hash
-@@ -1,3 +1,4 @@
- # Locally computed:
- sha256	81cac92458efd799fadb0374107464320d93eba71de05aedf21afb9c8dda7c3a	libpqxx-6.0.0.tar.gz
- sha256	9e1c78fa302e4e9738bf3315b130429035c03fcb0f046531ccd977cb474f6b31	COPYING
-+sha256	85881a11caab61f0c8d10cfef673e48c86e701f5a9fdd6cb344aa4f4beb1f2bf	44970d7331e4f369e160af0135a2d1fc16f27a21.patch
-diff --git a/package/libpqxx/libpqxx.mk b/package/libpqxx/libpqxx.mk
-index ccafa9ce71..23b0953735 100644
---- a/package/libpqxx/libpqxx.mk
-+++ b/package/libpqxx/libpqxx.mk
-@@ -11,6 +11,13 @@ LIBPQXX_DEPENDENCIES = postgresql
- LIBPQXX_LICENSE = BSD-3-Clause
- LIBPQXX_LICENSE_FILES = COPYING
+diff --git a/configs/sheevaplug_defconfig b/configs/sheevaplug_defconfig
+index 9d62444..edafffe 100644
+--- a/configs/sheevaplug_defconfig
++++ b/configs/sheevaplug_defconfig
+@@ -11,8 +11,8 @@ BR2_SYSTEM_DHCP="eth0"
+ BR2_TARGET_ROOTFS_JFFS2=y
+ BR2_TARGET_ROOTFS_JFFS2_NANDFLASH_128K=y
  
-+# pull build-fix patch from upstream to address timeval issues (until ~v6.0.1)
-+#
-+# fixes:
-+#  http://autobuild.buildroot.net/results/48b015650ede4e55e199538072c7228cccf64422
-+LIBPQXX_PATCH = \
-+    https://github.com/jtv/libpqxx/commit/44970d7331e4f369e160af0135a2d1fc16f27a21.patch
-+
- LIBPQXX_CONF_ENV += ac_cv_path_PG_CONFIG=$(STAGING_DIR)/usr/bin/pg_config
+-# Linux headers same as kernel, a 4.6 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_6=y
++# Linux headers same as kernel, a 4.14 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
  
- $(eval $(autotools-package))
--- 
-2.13.3.windows.1
+ # bootloader
+ BR2_TARGET_UBOOT=y
+@@ -26,7 +26,7 @@ BR2_TARGET_UBOOT_FORMAT_KWB=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.6"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.14.13"
+ BR2_LINUX_KERNEL_DEFCONFIG="mvebu_v5"
+ BR2_LINUX_KERNEL_APPENDED_UIMAGE=y
+ BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x8000"
