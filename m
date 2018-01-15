@@ -1,103 +1,38 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon, 15 Jan 2018 22:34:51 +0100
-Subject: [Buildroot] [PATCH v1] qt5: enable jscore/qt5declarative support
- for aarch64
-Message-ID: <20180115213451.10981-1-ps.report@gmx.net>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Mon, 15 Jan 2018 22:38:10 +0100
+Subject: [Buildroot] [PATCH v2] package/ti-cgt-pru: bump to 2.2.1
+In-Reply-To: <87bmhuuass.fsf@dell.be.48ers.dk>
+References: <20180109201306.13526-1-romain.naour@gmail.com>
+ <87bmhuuass.fsf@dell.be.48ers.dk>
+Message-ID: <8f95e1aa-b379-1873-8889-f3c728695e48@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes [1] (as suggested by JD Conley <jd.conley@gmail.com>).
+Hi Peter,
 
-[1] https://bugs.busybox.net/show_bug.cgi?id=10541
+Le 15/01/2018 ? 21:28, Peter Korsgaard a ?crit?:
+>>>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
+> 
+>  > See: http://www.ti.com/tool/download/PRU-CGT-2-2
+>  > The ti-cgt-pru v2.1.x installer are affected by a bug with recent
+>  > distribution (Fedora 27 and Ubuntu 17.10) using kernel 4.13 or 4.14
+>  > with a glibc 2.26.
+>  > The installer is stuck in a futex(wait) system call.
+> 
+>  > While at it, add license hash.
+> 
+>  > Fixes:
+>  > http://autobuild.buildroot.net/results/68f/68f60ad38d9b6eae83b5d233966616a25d8c9391
+> 
+> 2017.02.x is using 2.1.3. Can you confirm that this version is also
+> affected by the issue?
+> 
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
-Compile testes for BR2_PACKAGE_QT5_VERSION_LATEST and qt5declarative/qtquick
-with the following defconfig:
+I confirm and it's the same for 2017.11.x. As soon as a recent Linux distro is
+used with the ti-cgt-pru installer it hang.
 
-BR2_aarch64=y
-BR2_ARM_FPU_VFPV4=y
-BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
-BR2_BINUTILS_VERSION_2_29_X=y
-BR2_GCC_VERSION_7_X=y
-BR2_TOOLCHAIN_BUILDROOT_CXX=y
-BR2_INIT_SYSTEMD=y
-BR2_SYSTEM_DHCP="eth0"
-BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi3-64/post-build.sh"
-BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi3-64/post-image.sh"
-BR2_ROOTFS_POST_SCRIPT_ARGS="--aarch64"
-BR2_LINUX_KERNEL=y
-BR2_LINUX_KERNEL_CUSTOM_GIT=y
-BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/raspberrypi/linux.git"
-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="240d0482ad9341f7d98b06705d0a55e298034121"
-BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi3"
-BR2_LINUX_KERNEL_DTS_SUPPORT=y
-BR2_LINUX_KERNEL_INTREE_DTS_NAME="broadcom/bcm2710-rpi-3-b broadcom/bcm2837-rpi-3-b"
-BR2_PACKAGE_QT5=y
-BR2_PACKAGE_QT5DECLARATIVE=y
-BR2_PACKAGE_QT5DECLARATIVE_QUICK=y
-BR2_PACKAGE_RPI_FIRMWARE=y
-BR2_TARGET_ROOTFS_EXT2=y
-BR2_TARGET_ROOTFS_EXT2_4=y
-BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
-BR2_PACKAGE_HOST_DOSFSTOOLS=y
-BR2_PACKAGE_HOST_GENIMAGE=y
-BR2_PACKAGE_HOST_MTOOLS=y
-
-Compile testes for BR2_PACKAGE_QT5_VERSION_5_6 and qt5declarative
-with the following defconfig:
-
-BR2_aarch64=y
-BR2_ARM_FPU_VFPV4=y
-BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
-BR2_BINUTILS_VERSION_2_29_X=y
-BR2_GCC_VERSION_7_X=y
-BR2_TOOLCHAIN_BUILDROOT_CXX=y
-BR2_INIT_SYSTEMD=y
-BR2_SYSTEM_DHCP="eth0"
-BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi3-64/post-build.sh"
-BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi3-64/post-image.sh"
-BR2_ROOTFS_POST_SCRIPT_ARGS="--aarch64"
-BR2_LINUX_KERNEL=y
-BR2_LINUX_KERNEL_CUSTOM_GIT=y
-BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/raspberrypi/linux.git"
-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="240d0482ad9341f7d98b06705d0a55e298034121"
-BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi3"
-BR2_LINUX_KERNEL_DTS_SUPPORT=y
-BR2_LINUX_KERNEL_INTREE_DTS_NAME="broadcom/bcm2710-rpi-3-b broadcom/bcm2837-rpi-3-b"
-BR2_PACKAGE_QT5=y
-BR2_PACKAGE_QT5_VERSION_5_6=y
-BR2_PACKAGE_QT5DECLARATIVE=y
-BR2_PACKAGE_RPI_FIRMWARE=y
-BR2_PACKAGE_PCRE2=y
-BR2_PACKAGE_PCRE2_16=y
-BR2_TARGET_ROOTFS_EXT2=y
-BR2_TARGET_ROOTFS_EXT2_4=y
-BR2_TARGET_ROOTFS_EXT2_SIZE="256M"
-BR2_PACKAGE_HOST_DOSFSTOOLS=y
-BR2_PACKAGE_HOST_GENIMAGE=y
-BR2_PACKAGE_HOST_MTOOLS=y
----
- package/qt5/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/package/qt5/Config.in b/package/qt5/Config.in
-index 8eb00ca780..a9ee44c11f 100644
---- a/package/qt5/Config.in
-+++ b/package/qt5/Config.in
-@@ -7,7 +7,7 @@ config BR2_PACKAGE_QT5_JSCORE_AVAILABLE
- 	bool
- 	default y
- 	# Javascript engine is only available on certain architectures
--	depends on BR2_arm || BR2_i386 || BR2_x86_64 || BR2_mipsel
-+	depends on BR2_arm || BR2_aarch64 || BR2_i386 || BR2_x86_64 || BR2_mipsel
- 	# ARM needs BLX, so v5t+
- 	depends on !BR2_ARM_CPU_ARMV4
- 
--- 
-2.15.1
+Best regards,
+Romain
