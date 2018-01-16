@@ -1,56 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 16 Jan 2018 23:47:00 +0100
-Subject: [Buildroot] [PATCH 1/1] vte: new package
-In-Reply-To: <e04130e5-b0f0-8477-a7d4-34742bfbfc7a@petroprogram.com>
-References: <20180116152333.29596-1-stefan.froberg@petroprogram.com>
- <20180116170712.63ad80cf@windsurf>
- <d8bb959e-509d-98fa-6f1f-178a16096fe5@petroprogram.com>
- <e04130e5-b0f0-8477-a7d4-34742bfbfc7a@petroprogram.com>
-Message-ID: <20180116234700.545dad71@windsurf>
+Date: Tue, 16 Jan 2018 23:48:08 +0100
+Subject: [Buildroot] [PATCH] toolchain/toolchain-external: libatomic should
+ also be copied for musl toolchains
+Message-ID: <20180116224808.1630-1-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+libatomic, like libgcc_s, is provided by gcc, so there is no reason to
+copy it over only for the glibc and uclibc cases, it should also be
+copied for the musl case. Without this, a program linked with
+libatomic on a musl system will fail to run due to the missing
+library.
 
-On Wed, 17 Jan 2018 00:29:13 +0200, Stefan Fr?berg wrote:
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ toolchain/toolchain-external/pkg-toolchain-external.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-> >>         depends on BR2_USE_WCHAR # glib2
-> >>         depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
-> >>         depends on BR2_USE_MMU # glib2
-> >>         depends on BR2_INSTALL_LIBSTDCPP # pango
-> >>         depends on BR2_TOOLCHAIN_HAS_SYNC_4 # pango -> harfbuzz
-> >> *depends on BR2_PACKAGE_HAS_LIBEGL_WAYLAND || \ BR2_PACKAGE_HAS_LIBGL *  
-> 
-> Is OpenGL *really* needed for libgtk3 ?
-
-I remember having a lengthy discussion back then with Gustavo, who said
-OpenGL was really needed. However, things might have evolved since then.
-
-> Im asking because I have a chrooted musl environment where I
-> intentionally tried to avoid any package that tries to pull OpenGL stuff
-> (like mesa, wayland etc...) and I managed to build
-> gtk3 just fine (version 3.22.26)
-> 
-> Here's it's built conf (uses static libs, introspection disabled and
-> uses X11 backend):
-> 
-> ./configure --prefix=/usr --sysconfdir=/etc --disable-nls
-> --disable-rpath --disable-shared --disable-modules --enable-static
-> --enable-x11-backend --enable-broadway-backend --disable-glibtest
-> --disable-cloudprint --disable-introspection --disable-gtk-doc
-> --disable-man --disable-gtk-doc-html --disable-gtk-doc-pdf --with-pic
-
-Does the result actually runs on some target platform ?
-
-If so, it would definitely be nice to support gtk3 without OpenGL.
-
-Best regards,
-
-Thomas
+diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
+index b9ad1720a1..3bf9fac412 100644
+--- a/toolchain/toolchain-external/pkg-toolchain-external.mk
++++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
+@@ -108,10 +108,10 @@ endif
+ # Definitions of the list of libraries that should be copied to the target.
+ #
+ 
+-TOOLCHAIN_EXTERNAL_LIBS += ld*.so* libgcc_s.so.*
++TOOLCHAIN_EXTERNAL_LIBS += ld*.so* libgcc_s.so.* libatomic.so.*
+ 
+ ifeq ($(BR2_TOOLCHAIN_EXTERNAL_GLIBC)$(BR2_TOOLCHAIN_EXTERNAL_UCLIBC),y)
+-TOOLCHAIN_EXTERNAL_LIBS += libatomic.so.* libc.so.* libcrypt.so.* libdl.so.* libm.so.* libnsl.so.* libresolv.so.* librt.so.* libutil.so.*
++TOOLCHAIN_EXTERNAL_LIBS += libc.so.* libcrypt.so.* libdl.so.* libm.so.* libnsl.so.* libresolv.so.* librt.so.* libutil.so.*
+ ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+ TOOLCHAIN_EXTERNAL_LIBS += libpthread.so.*
+ ifneq ($(BR2_PACKAGE_GDB)$(BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY),)
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.14.3
