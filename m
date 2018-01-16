@@ -1,33 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 16 Jan 2018 20:39:07 +0100
-Subject: [Buildroot] [PATCH] mcookie: correct wrong memset argument
-In-Reply-To: <20180110220303.27944-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Wed, 10 Jan 2018 23:03:03 +0100")
-References: <20180110220303.27944-1-peter@korsgaard.com>
-Message-ID: <876081fvac.fsf@dell.be.48ers.dk>
+Date: Tue, 16 Jan 2018 20:39:18 +0100
+Subject: [Buildroot] [PATCH] lz4: install programs as well as libraries
+In-Reply-To: <20180110224052.6830-1-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Wed, 10 Jan 2018 23:40:52 +0100")
+References: <20180110224052.6830-1-thomas.petazzoni@free-electrons.com>
+Message-ID: <871sipfva1.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- > Fixes #10216
- > Building mcookie generates a warning about possible wrong arguments to
- > memset:
+ > Prior to commit 8ad38a4fc2007df4bee9a941aed46c8771b6a84c
+ > ("package/lz4: bump version to r131"), the lz4 package was installing
+ > both libraries and programs, but this commit changed the behavior to
+ > only install libraries.
 
- > mcookie.c:207:26: warning: argument to ?sizeof? in ?memset? call is the same expression
- >   as the destination; did you mean to dereference it? [-Wsizeof-pointer-memaccess]
- >      memset(ctx, 0, sizeof(ctx)); /* In case it's sensitive */
+ > The contributor might have been confused by the fact that the build
+ > command was "$(MAKE) ... -C $(@D) liblz4", suggesting that only the
+ > library was built. But since the install command was "$(MAKE) ... -C
+ > $(@D) install", the programs were effectively built as part of the
+ > install step, and installed as well.
 
- > ctx is a pointer to a structure, so the code should use the size of the
- > structure and not the size of the pointer when it tries to clear the
- > structure, similar to how it got fixed upstream back in 2009:
+ > Since it makes sense for lz4 to also installs its programs, this
+ > commit adjusts the package accordingly.
 
- > https://git.kernel.org/pub/scm/utils/util-linux/util-linux.git/commit/lib/md5.c?id=6596057175c6ed342dc20e85eae8a42eb29b629f
+ > It is worth mentioning that using the "all" target during the build
+ > step is important. Indeed, otherwise the programs/Makefile has a
+ > "default" target that doesn't build everything (especially the lz4c
+ > program) and it end up being built as part of the install step, due to
+ > how the makefile dependencies are handled in the lz4 project. To make
+ > sure that everything gets built during the build step, we explicitly
+ > use the "all" target.
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > Fixes bug #9996
+
+ > Reported-by: Jamin Collins <jamin.collins@gmail.com>
+ > Initial-analysis-by: Arnout Vandecappelle <arnout@mind.be>
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
 Committed to 2017.11.x, thanks.
 
