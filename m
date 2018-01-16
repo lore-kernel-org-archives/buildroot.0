@@ -1,38 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 16 Jan 2018 20:39:53 +0100
-Subject: [Buildroot] [PATCH v2] package/ti-cgt-pru: bump to 2.2.1
-In-Reply-To: <20180109201306.13526-1-romain.naour@gmail.com> (Romain Naour's
- message of "Tue, 9 Jan 2018 21:13:06 +0100")
-References: <20180109201306.13526-1-romain.naour@gmail.com>
-Message-ID: <87shb5egom.fsf@dell.be.48ers.dk>
+Date: Tue, 16 Jan 2018 19:41:04 +0100
+Subject: [Buildroot] [git commit branch/2017.11.x] linux-headers: bump 4.{4,
+ 9, 14}.x series
+Message-ID: <20180116194020.874B583C30@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=226e5e946cc21236cf3b8e06159b55479fbd5f46
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.11.x
 
- > See: http://www.ti.com/tool/download/PRU-CGT-2-2
- > The ti-cgt-pru v2.1.x installer are affected by a bug with recent
- > distribution (Fedora 27 and Ubuntu 17.10) using kernel 4.13 or 4.14
- > with a glibc 2.26.
- > The installer is stuck in a futex(wait) system call.
+[Peter: drop 4.14.x bump]
+Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit f932dc96260bf56d732d3e7088c228775a286f90)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/linux-headers/Config.in.host | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
- > While at it, add license hash.
-
- > Fixes:
- > http://autobuild.buildroot.net/results/68f/68f60ad38d9b6eae83b5d233966616a25d8c9391
-
- > Signed-off-by: Romain Naour <romain.naour@gmail.com>
- > Cc: Ash Charles <ash.charles@savoirfairelinux.com>
- > Cc: Matthew Weber <matthew.weber@rockwellcollins.com>
- > ---
- > Note: This bump is not tested on real PRU hardware.
-
- > v2: update license files and add license hash
-
-Committed to 2017.11.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 4c4d901..af774cb 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -244,8 +244,8 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.10.108"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.12.74"	if BR2_KERNEL_HEADERS_3_12
+ 	default "4.1.48"	if BR2_KERNEL_HEADERS_4_1
+-	default "4.4.110"	if BR2_KERNEL_HEADERS_4_4
+-	default "4.9.75"	if BR2_KERNEL_HEADERS_4_9
++	default "4.4.111"	if BR2_KERNEL_HEADERS_4_4
++	default "4.9.76"	if BR2_KERNEL_HEADERS_4_9
+ 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
+ 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
+ 	default "4.12.14"	if BR2_KERNEL_HEADERS_4_12
