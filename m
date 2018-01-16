@@ -1,46 +1,260 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 16 Jan 2018 09:22:17 +0100
-Subject: [Buildroot] [PATCH 1/1] linux-firmware: install missing
- firmware files for rtlwifi
-In-Reply-To: <1515367214-4788-1-git-send-email-rom.reignier@gmail.com> (Romain
- Reignier's message of "Mon, 8 Jan 2018 00:20:14 +0100")
-References: <1515367214-4788-1-git-send-email-rom.reignier@gmail.com>
-Message-ID: <87k1wiqkli.fsf@dell.be.48ers.dk>
+From: Marcus Folkesson <marcus.folkesson@gmail.com>
+Date: Tue, 16 Jan 2018 09:22:18 +0100
+Subject: [Buildroot] [PATCH] libsepol: add patch to make the build process
+ more standard
+Message-ID: <20180116082218.8546-1-marcus.folkesson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Romain" == Romain Reignier <rom.reignier@gmail.com> writes:
+Patch the Makefiles to make PREFIX and DESTDIR follow standard
+semantics to get rid of DESTDIR during compile time in
+libsepol.mk and generate proper pkg-config files.
 
- > All the rtlwifi firmware files were not installed, so added the
- > missing ones.
+Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
+---
+ ...build-follow-standard-semantics-for-DESTD.patch | 109 +++++++++++++++++++++
+ ...c-only.patch => 0003-support-static-only.patch} |  33 +++----
+ ...elative.patch => 0004-revert-ln-relative.patch} |  25 ++---
+ package/libsepol/libsepol.mk                       |   5 +-
+ 4 files changed, 131 insertions(+), 41 deletions(-)
+ create mode 100644 package/libsepol/0001-libsepol-build-follow-standard-semantics-for-DESTD.patch
+ rename package/libsepol/{0001-support-static-only.patch => 0003-support-static-only.patch} (57%)
+ rename package/libsepol/{0003-revert-ln-relative.patch => 0004-revert-ln-relative.patch} (54%)
 
- > Signed-off-by: Romain Reignier <rom.reignier@gmail.com>
- > ---
- >  package/linux-firmware/linux-firmware.mk | 15 ++++++++++++---
- >  1 file changed, 12 insertions(+), 3 deletions(-)
-
- > diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
- > index b636f79..93d3a34 100644
- > --- a/package/linux-firmware/linux-firmware.mk
- > +++ b/package/linux-firmware/linux-firmware.mk
- > @@ -70,7 +70,9 @@ LINUX_FIRMWARE_FILES += \
- >  	rtlwifi/rtl8192defw.bin rtlwifi/rtl8192sefw.bin \
- >  	rtlwifi/rtl8188efw.bin rtlwifi/rtl8188eufw.bin \
- >  	rtlwifi/rtl8192cufw_A.bin \
- > -	rtlwifi/rtl8192cufw_B.bin rtlwifi/rtl8192cufw_TMSC.bin
- > +	rtlwifi/rtl8192cufw_B.bin rtlwifi/rtl8192cufw_TMSC.bin \
- > +	rtlwifi/rtl8192eefw.bin rtlwifi/rtl8192eu_ap_wowlan.bin \
- > +	rtlwifi/rtl8192eu_nic.bin rtlwifi/rtl8192eu_wowlan.bin
-
-Committed, thanks.
-
-Wouldn't it make more sense to rework this with wildcards to not have
-such issues in the future?
-
-E.G. rtlwifi/rtl81*.bin
-
+diff --git a/package/libsepol/0001-libsepol-build-follow-standard-semantics-for-DESTD.patch b/package/libsepol/0001-libsepol-build-follow-standard-semantics-for-DESTD.patch
+new file mode 100644
+index 0000000000..1daf7206d3
+--- /dev/null
++++ b/package/libsepol/0001-libsepol-build-follow-standard-semantics-for-DESTD.patch
+@@ -0,0 +1,109 @@
++libsepol: build: follow standard semantics for DESTDIR and PREFIX
++
++This patch solves the following issues:
++- The pkg-config files generates odd paths when using DESTDIR without PREFIX
++- DESTDIR is needed during compile time to compute library and header paths which it should not.
++- Installing with both DESTDIR and PREFIX set gives us odd paths
++- Make usage of DESTDIR and PREFIX more standard
++
++Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
++
++diff -durN libsepol.orig/include/Makefile libsepol/include/Makefile
++--- libsepol.orig/include/Makefile	2018-01-12 12:42:30.908709792 +0100
+++++ libsepol/include/Makefile	2018-01-12 09:58:04.322148228 +0100
++@@ -1,6 +1,6 @@
++ # Installation directories.
++-PREFIX ?= $(DESTDIR)/usr
++-INCDIR ?= $(PREFIX)/include/sepol
+++PREFIX ?= /usr
+++INCDIR = $(DESTDIR)$(PREFIX)/include/sepol
++ CILDIR ?= ../cil
++ 
++ all:
++diff -durN libsepol.orig/man/Makefile libsepol/man/Makefile
++--- libsepol.orig/man/Makefile	2018-01-12 12:42:30.912043126 +0100
+++++ libsepol/man/Makefile	2018-01-12 09:58:04.322148228 +0100
++@@ -1,6 +1,7 @@
++ # Installation directories.
++-MAN8DIR ?= $(DESTDIR)/usr/share/man/man8
++-MAN3DIR ?= $(DESTDIR)/usr/share/man/man3
+++PREFIX ?= /usr
+++MAN8DIR ?= $(DESTDIR)$(PREFIX)/share/man/man8
+++MAN3DIR ?= $(DESTDIR)$(PREFIX)/share/man/man3
++ 
++ all:
++ 
++diff -durN libsepol.orig/src/libsepol.pc.in libsepol/src/libsepol.pc.in
++--- libsepol.orig/src/libsepol.pc.in	2018-01-12 12:42:30.912043126 +0100
+++++ libsepol/src/libsepol.pc.in	2018-01-12 09:58:04.322148228 +0100
++@@ -1,6 +1,6 @@
++ prefix=@prefix@
++ exec_prefix=${prefix}
++-libdir=${exec_prefix}/@libdir@
+++libdir=@libdir@
++ includedir=@includedir@
++ 
++ Name: libsepol
++diff -durN libsepol.orig/src/Makefile libsepol/src/Makefile
++--- libsepol.orig/src/Makefile	2018-01-12 12:42:30.912043126 +0100
+++++ libsepol/src/Makefile	2018-01-12 09:58:04.322148228 +0100
++@@ -1,11 +1,10 @@
++ # Installation directories.
++-PREFIX ?= $(DESTDIR)/usr
+++PREFIX ?= /usr
++ INCLUDEDIR ?= $(PREFIX)/include
++ LIBDIR ?= $(PREFIX)/lib
++-SHLIBDIR ?= $(DESTDIR)/lib
++ RANLIB ?= ranlib
++-LIBBASE ?= $(shell basename $(LIBDIR))
++ CILDIR ?= ../cil
+++LIBINSTALL = $(DESTDIR)$(LIBDIR)
++ 
++ VERSION = $(shell cat ../VERSION)
++ LIBVERSION = 1
++@@ -52,7 +51,7 @@
++ 	ln -sf $@ $(TARGET) 
++ 
++ $(LIBPC): $(LIBPC).in ../VERSION
++-	sed -e 's/@VERSION@/$(VERSION)/; s:@prefix@:$(PREFIX):; s:@libdir@:$(LIBBASE):; s:@includedir@:$(INCLUDEDIR):' < $< > $@
+++	sed -e 's/@VERSION@/$(VERSION)/; s:@prefix@:$(PREFIX):; s:@libdir@:$(LIBDIR):; s:@includedir@:$(INCLUDEDIR):' < $< > $@
++ 
++ $(LIBMAP): $(LIBMAP).in
++ ifneq ($(DISABLE_CIL),y)
++@@ -80,16 +79,16 @@
++ 	$(CC) $(CFLAGS) -fPIC -DSHARED -c -o $@ $<
++ 
++ install: all
++-	test -d $(LIBDIR) || install -m 755 -d $(LIBDIR)
++-	install -m 644 $(LIBA) $(LIBDIR)
++-	test -d $(SHLIBDIR) || install -m 755 -d $(SHLIBDIR)
++-	install -m 755 $(LIBSO) $(SHLIBDIR)
++-	test -d $(LIBDIR)/pkgconfig || install -m 755 -d $(LIBDIR)/pkgconfig
++-	install -m 644 $(LIBPC) $(LIBDIR)/pkgconfig
++-	$(LN) -sf --relative $(SHLIBDIR)/$(LIBSO) $(LIBDIR)/$(TARGET)
+++	test -d $(LIBINSTALL) || install -m 755 -d $(LIBINSTALL)
+++	install -m 644 $(LIBA) $(LIBINSTALL)
+++	test -d $(LIBINSTALL) || install -m 755 -d $(LIBINSTALL)
+++	install -m 755 $(LIBSO) $(LIBINSTALL)
+++	test -d $(LIBINSTALL)/pkgconfig || install -m 755 -d $(LIBINSTALL)/pkgconfig
+++	install -m 644 $(LIBPC) $(LIBINSTALL)/pkgconfig
+++	$(LN) -sf --relative $(LIBINSTALL)/$(LIBSO) $(LIBINSTALL)/$(TARGET)
++ 
++ relabel:
++-	/sbin/restorecon $(SHLIBDIR)/$(LIBSO)
+++	/sbin/restorecon $(LIBINSTALL)/$(LIBSO)
++ 
++ clean: 
++ 	-rm -f $(LIBPC) $(LIBMAP) $(OBJS) $(LOBJS) $(LIBA) $(LIBSO) $(TARGET) $(CIL_GENERATED)
++diff -durN libsepol.orig/utils/Makefile libsepol/utils/Makefile
++--- libsepol.orig/utils/Makefile	2018-01-12 12:42:30.915376458 +0100
+++++ libsepol/utils/Makefile	2018-01-12 09:58:04.322148228 +0100
++@@ -1,6 +1,6 @@
++ # Installation directories.
++-PREFIX ?= $(DESTDIR)/usr
++-BINDIR ?= $(PREFIX)/bin
+++PREFIX ?= /usr
+++BINDIR ?= $(DESTDIR)$(PREFIX)/bin
++ 
++ CFLAGS ?= -Wall -Werror
++ override CFLAGS += -I../include
+diff --git a/package/libsepol/0001-support-static-only.patch b/package/libsepol/0003-support-static-only.patch
+similarity index 57%
+rename from package/libsepol/0001-support-static-only.patch
+rename to package/libsepol/0003-support-static-only.patch
+index 185a5641de..8cf9a180ff 100644
+--- a/package/libsepol/0001-support-static-only.patch
++++ b/package/libsepol/0003-support-static-only.patch
+@@ -15,11 +15,10 @@ Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
+  src/Makefile | 13 ++++++++++---
+  1 file changed, 10 insertions(+), 3 deletions(-)
+ 
+-diff --git a/src/Makefile b/src/Makefile
+-index 819d261..040921d 100644
+---- a/src/Makefile
+-+++ b/src/Makefile
+-@@ -40,7 +40,12 @@ LDFLAGS += -undefined dynamic_lookup
++diff -durNw libsepol-2.7.orig/src/Makefile libsepol-2.7/src/Makefile
++--- libsepol-2.7.orig/src/Makefile	2018-01-15 21:07:51.285183415 +0100
+++++ libsepol-2.7/src/Makefile	2018-01-15 21:08:56.515182717 +0100
++@@ -39,7 +39,12 @@
+  LN=gln
+  endif
+  
+@@ -33,22 +32,14 @@ index 819d261..040921d 100644
+  
+  
+  $(LIBA):  $(OBJS)
+-@@ -82,11 +87,13 @@ endif
++@@ -81,8 +86,10 @@
+  install: all
+- 	test -d $(LIBDIR) || install -m 755 -d $(LIBDIR)
+- 	install -m 644 $(LIBA) $(LIBDIR)
+--	test -d $(SHLIBDIR) || install -m 755 -d $(SHLIBDIR)
+--	install -m 755 $(LIBSO) $(SHLIBDIR)
+- 	test -d $(LIBDIR)/pkgconfig || install -m 755 -d $(LIBDIR)/pkgconfig
+- 	install -m 644 $(LIBPC) $(LIBDIR)/pkgconfig
++ 	test -d $(LIBINSTALL) || install -m 755 -d $(LIBINSTALL)
++ 	install -m 644 $(LIBA) $(LIBINSTALL)
+ +ifeq ($(STATIC),)
+-+	test -d $(SHLIBDIR) || install -m 755 -d $(SHLIBDIR)
+-+	install -m 755 $(LIBSO) $(SHLIBDIR)
+- 	$(LN) -sf --relative $(SHLIBDIR)/$(LIBSO) $(LIBDIR)/$(TARGET)
++ 	test -d $(LIBINSTALL) || install -m 755 -d $(LIBINSTALL)
++ 	install -m 755 $(LIBSO) $(LIBINSTALL)
+ +endif
+- 
+- relabel:
+- 	/sbin/restorecon $(SHLIBDIR)/$(LIBSO)
+--- 
+-2.13.6
+-
++ 	test -d $(LIBINSTALL)/pkgconfig || install -m 755 -d $(LIBINSTALL)/pkgconfig
++ 	install -m 644 $(LIBPC) $(LIBINSTALL)/pkgconfig
++ 	$(LN) -sf --relative $(LIBINSTALL)/$(LIBSO) $(LIBINSTALL)/$(TARGET)
+diff --git a/package/libsepol/0003-revert-ln-relative.patch b/package/libsepol/0004-revert-ln-relative.patch
+similarity index 54%
+rename from package/libsepol/0003-revert-ln-relative.patch
+rename to package/libsepol/0004-revert-ln-relative.patch
+index 488a9abea0..9d1553ed97 100644
+--- a/package/libsepol/0003-revert-ln-relative.patch
++++ b/package/libsepol/0004-revert-ln-relative.patch
+@@ -12,23 +12,16 @@ they are maintained (up to 10 years in some cases?).
+ For the sake of Buildroot, revert the upstream patch.
+ 
+ Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+----
+- src/Makefile | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+ 
+-diff --git a/src/Makefile b/src/Makefile
+-index 040921d..e811c9e 100644
+---- a/src/Makefile
+-+++ b/src/Makefile
+-@@ -92,7 +92,7 @@ install: all
+- ifeq ($(STATIC),)
+- 	test -d $(SHLIBDIR) || install -m 755 -d $(SHLIBDIR)
+- 	install -m 755 $(LIBSO) $(SHLIBDIR)
+--	$(LN) -sf --relative $(SHLIBDIR)/$(LIBSO) $(LIBDIR)/$(TARGET)
+-+	cd $(LIBDIR) && ln -sf ../../`basename $(SHLIBDIR)`/$(LIBSO) $(TARGET)
++diff -durNw libsepol-2.7.orig/src/Makefile libsepol-2.7/src/Makefile
++--- libsepol-2.7.orig/src/Makefile	2018-01-15 21:37:12.821831315 +0100
+++++ libsepol-2.7/src/Makefile	2018-01-15 21:38:03.838497434 +0100
++@@ -92,7 +92,7 @@
+  endif
++ 	test -d $(LIBINSTALL)/pkgconfig || install -m 755 -d $(LIBINSTALL)/pkgconfig
++ 	install -m 644 $(LIBPC) $(LIBINSTALL)/pkgconfig
++-	$(LN) -sf --relative $(LIBINSTALL)/$(LIBSO) $(LIBINSTALL)/$(TARGET)
+++	cd $(LIBINSTALL) && ln -sf $(LIBSO) $(TARGET)
+  
+  relabel:
+--- 
+-2.13.6
+-
++ 	/sbin/restorecon $(LIBINSTALL)/$(LIBSO)
+diff --git a/package/libsepol/libsepol.mk b/package/libsepol/libsepol.mk
+index c54c3bfc42..5932ca1464 100644
+--- a/package/libsepol/libsepol.mk
++++ b/package/libsepol/libsepol.mk
+@@ -20,9 +20,7 @@ LIBSEPOL_MAKE_FLAGS += STATIC=1
+ endif
+ 
+ define LIBSEPOL_BUILD_CMDS
+-	# DESTDIR is needed during the compile to compute library and
+-	# header paths.
+-	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(LIBSEPOL_MAKE_FLAGS) DESTDIR=$(STAGING_DIR)
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(LIBSEPOL_MAKE_FLAGS)
+ endef
+ 
+ define LIBSEPOL_INSTALL_STAGING_CMDS
+@@ -35,7 +33,6 @@ endef
+ 
+ HOST_LIBSEPOL_MAKE_ENV = \
+ 	$(HOST_MAKE_ENV) \
+-	DESTDIR=$(HOST_DIR) \
+ 	PREFIX=$(HOST_DIR)
+ 
+ define HOST_LIBSEPOL_BUILD_CMDS
 -- 
-Bye, Peter Korsgaard
+2.15.1
