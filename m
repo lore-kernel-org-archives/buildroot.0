@@ -1,68 +1,62 @@
-From: Johannes Schmitz <johannes.schmitz1@gmail.com>
-Date: Tue, 16 Jan 2018 22:42:54 +0100
-Subject: [Buildroot] [PATCH 1/1] toolchain: use -ffp-contract=off on
- MIPS in the wrapper when needed
-In-Reply-To: <20180116210339.4c541835@windsurf>
-References: <1516128616-20127-1-git-send-email-johannes.schmitz1@gmail.com>
- <20180116210339.4c541835@windsurf>
-Message-ID: <CAMbDF3+fauUH=mdax6gqLxEzhe-xBp8FK7QSiHsmEq5eNymfQQ@mail.gmail.com>
+From: Charles Hardin <ckhardin@exablox.com>
+Date: Tue, 16 Jan 2018 13:40:46 -0800
+Subject: [Buildroot] [PATCH 1/1] package/docker-engine: add the macros to
+ install docker-proxy
+Message-ID: <20180116214046.10605-1-charles.hardin@storagecraft.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
-I am sorry,  I was fully aware that it wasn't a good thing to do.
-Afterwards. The problem is my lack of experiencie with submissions through
-git send.
-I found some formal mistakes such as missing -s in the submitted patch.
-Then it was in the middle of a git rebase --interactive and I screwed up.
-So I fully accept your criticism. Will continue learning and promise to do
-a more thorough review before sending. Basically I have to get used to the
-workflow.
+During the bringup of some of the network within the containers,
+an error was show about missing the docker-proxy - so, add the
+definitions to build the proxy
 
-Too bad there is no git send --amend
+Signed-off-by: Charles Hardin <charles.hardin@storagecraft.com>
+---
+ package/docker-engine/docker-engine.mk | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
-For now please consider the last patch as the correct one.
-
-Regards
-Johannes
-
-
-
-Am 16.01.2018 21:03 schrieb "Thomas Petazzoni" <
-thomas.petazzoni@free-electrons.com>:
-
-Hello,
-
-On Tue, 16 Jan 2018 19:50:16 +0100, Johannes Schmitz wrote:
-> This fix is necessary for to build for MIPS, for example for the MIPS
-> XBurst architecture used on ci20 boards.
->
-> GCC has replaced (no)mfused-madd with ffp-contract.
-> Find more details and a long discussion at
-> https://gcc.gnu.org/ml/gcc-patches/2015-06/msg00876.html
->
-> Signed-off-by: Johannes Schmitz <johannes.schmitz1@gmail.com>
-
-Within just 3 minutes, you sent this patch 3 times. Two times the exact
-same version, and one time a different version. There is also no
-version number on the patches, making it very difficult to understand
-what is *the* correct patch.
-
-Could you add a version number to your patches (git format-patch -v X),
-include a changelog between version (below the --- sign that follows
-the Signed-off-by line) and try to avoid sending 3 times the same patch
-in a row ? :-)
-
-Thanks!
-
-Thomas
---
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180116/5ea947ee/attachment.html>
+diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
+index 8928f072e7..94552b1201 100644
+--- a/package/docker-engine/docker-engine.mk
++++ b/package/docker-engine/docker-engine.mk
+@@ -87,6 +87,20 @@ endef
+ 
+ ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_DAEMON),y)
+ 
++define DOCKER_ENGINE_BUILD_PROXY
++	cd $(@D)/gopath/src/github.com/docker/docker; \
++		$(DOCKER_ENGINE_MAKE_ENV) \
++		$(HOST_DIR)/bin/go build -v \
++			-o $(@D)/bin/docker-proxy \
++			-tags "$(DOCKER_ENGINE_BUILD_TAGS)" \
++			-ldflags "$(DOCKER_ENGINE_GLDFLAGS) $(DOCKER_ENGINE_GLDFLAGS_$(call UPPERCASE,$(target)))" \
++			github.com/docker/libnetwork/cmd/proxy
++endef
++
++define DOCKER_ENGINE_INSTALL_PROXY
++	$(INSTALL) -D -m 0755 $(@D)/bin/docker-proxy $(TARGET_DIR)/usr/bin/docker-proxy
++endef
++
+ define DOCKER_ENGINE_INSTALL_INIT_SYSTEMD
+ 	$(INSTALL) -D -m 0644 $(@D)/contrib/init/systemd/docker.service \
+ 		$(TARGET_DIR)/usr/lib/systemd/system/docker.service
+@@ -113,12 +127,14 @@ define DOCKER_ENGINE_BUILD_CMDS
+ 			-ldflags "$(DOCKER_ENGINE_GLDFLAGS) $(DOCKER_ENGINE_GLDFLAGS_$(call UPPERCASE,$(target)))" \
+ 			github.com/docker/docker/cmd/$(target)
+ 	)
++	$(DOCKER_ENGINE_BUILD_PROXY)
+ endef
+ 
+ define DOCKER_ENGINE_INSTALL_TARGET_CMDS
+ 	$(foreach target,$(DOCKER_ENGINE_BUILD_TARGETS), \
+ 		$(INSTALL) -D -m 0755 $(@D)/bin/$(target) $(TARGET_DIR)/usr/bin/$(target)
+ 	)
++	$(DOCKER_ENGINE_INSTALL_PROXY)
+ endef
+ 
+ $(eval $(generic-package))
+-- 
+2.14.3 (Apple Git-98)
