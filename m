@@ -1,33 +1,231 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 16 Jan 2018 23:51:09 +0100
-Subject: [Buildroot] [PATCH 1/5] python-setuptools: bump to version
- v38.4.0
-In-Reply-To: <20180111092520.28438-1-yegorslists@googlemail.com>
-References: <20180111092520.28438-1-yegorslists@googlemail.com>
-Message-ID: <20180116235109.1a3d33cc@windsurf>
+Date: Tue, 16 Jan 2018 23:51:58 +0100
+Subject: [Buildroot] [git commit] open-lldp: new package
+Message-ID: <20180116225225.8229D815FA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=6110deb8f85609ded64eae0f6242b2ebd63f081d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 11 Jan 2018 10:25:16 +0100, yegorslists at googlemail.com wrote:
-> From: Yegor Yefremov <yegorslists@googlemail.com>
-> 
-> Add licence checksum.
-> 
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> ---
->  package/python-setuptools/python-setuptools.hash | 3 ++-
->  package/python-setuptools/python-setuptools.mk   | 2 +-
->  2 files changed, 3 insertions(+), 2 deletions(-)
+The lldpad package comes with utilities to manage an LLDP interface with
+support for reading and configuring TLVs. TLVs and interfaces are individual
+controlled allowing flexible configuration for TX only, RX only, or TX/RX
+modes per TLV.
 
-Patches 1 to 3 applied to master. Thanks!
+http://open-lldp.org/
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: Laurent Charpentier <laurent_pubs@yahoo.com>
+Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ DEVELOPERS                                         |  3 +
+ package/Config.in                                  |  1 +
+ ...1-vdptool-fixed-compile-error-for-getline.patch | 27 ++++++++
+ ...-functions-work-with-both-gnu11-and-gnu89.patch | 73 ++++++++++++++++++++++
+ package/open-lldp/Config.in                        | 15 +++++
+ package/open-lldp/open-lldp.hash                   |  3 +
+ package/open-lldp/open-lldp.mk                     | 24 +++++++
+ 7 files changed, 146 insertions(+)
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 0e75445..07c31ce 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -931,6 +931,9 @@ F:	package/qt5/
+ N:	Julien Floret <julien.floret@6wind.com>
+ F:	package/lldpd/
+ 
++N:	Laurent Charpentier <laurent_pubs@yahoo.com>
++F:	package/open-lldp/
++
+ N:	Julien Viard de Galbert <julien@vdg.name>
+ F:	package/dieharder/
+ F:	package/easy-rsa/
+diff --git a/package/Config.in b/package/Config.in
+index 713d701..b133c93 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1764,6 +1764,7 @@ endif
+ 	source "package/odhcp6c/Config.in"
+ 	source "package/odhcploc/Config.in"
+ 	source "package/olsr/Config.in"
++	source "package/open-lldp/Config.in"
+ 	source "package/open-plc-utils/Config.in"
+ 	source "package/openntpd/Config.in"
+ 	source "package/openobex/Config.in"
+diff --git a/package/open-lldp/0001-vdptool-fixed-compile-error-for-getline.patch b/package/open-lldp/0001-vdptool-fixed-compile-error-for-getline.patch
+new file mode 100644
+index 0000000..c202677
+--- /dev/null
++++ b/package/open-lldp/0001-vdptool-fixed-compile-error-for-getline.patch
+@@ -0,0 +1,27 @@
++From 3c7887bb8a61a3b49a2989329c756a038023c544 Mon Sep 17 00:00:00 2001
++From: Laurent Charpentier <laurent_pubs@yahoo.com>
++Date: Fri, 12 Jan 2018 12:25:41 +0100
++Subject: [PATCH] vdptool: fixed compile error for getline()
++
++vdptool.c was generating an error: implicit declaration for the getline() function.
++
++Signed-off-by: Laurent Charpentier <laurent_pubs@yahoo.com>
++---
++ vdptool.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/vdptool.c b/vdptool.c
++index b805372..4930f6a 100644
++--- a/vdptool.c
+++++ b/vdptool.c
++@@ -36,6 +36,7 @@
++  * set and query VSI profile settings.
++  */
++ 
+++#define _GNU_SOURCE
++ #include <stdlib.h>
++ #include <stdio.h>
++ #include <unistd.h>
++-- 
++2.14.3
++
+diff --git a/package/open-lldp/0002-get-inline-functions-work-with-both-gnu11-and-gnu89.patch b/package/open-lldp/0002-get-inline-functions-work-with-both-gnu11-and-gnu89.patch
+new file mode 100644
+index 0000000..57a23b2
+--- /dev/null
++++ b/package/open-lldp/0002-get-inline-functions-work-with-both-gnu11-and-gnu89.patch
+@@ -0,0 +1,73 @@
++From e186ca9ebda181f62504a1922559ef3ddae5e3b6 Mon Sep 17 00:00:00 2001
++From: Laurent Charpentier <laurent_pubs@yahoo.com>
++Date: Mon, 15 Jan 2018 11:24:45 +0100
++Subject: [PATCH] get inline functions work with both gnu11 and gnu89
++
++After gcc upgraded to gcc5, and if the codes are compiled without optimization(-O0), and the below error will happen:
++
++./include/lldp_8021qaz.h:237:12: error: inline function 'ieee8021qaz_clif_cmd' declared but never defined [-Werror]
++ inline int ieee8021qaz_clif_cmd(void *data, struct sockaddr_un *from,
++            ^
++./include/lldp_8021qaz.h:222:13: error: inline function 'set_prio_map' declared but never defined [-Werror]
++ inline void set_prio_map(u32 *prio_map, u8 prio, int tc);
++             ^
++./include/lldp_8021qaz.h:221:12: error: inline function 'get_prio_map' declared but never defined [-Werror]
++ inline int get_prio_map(u32 prio_map, int tc);
++
++gcc5 defaults to -std=gnu11 instead of -std=gnu89, and it requires that exactly one C source file has the callable copy of the inline function.
++
++Signed-off-by: Laurent Charpentier <laurent_pubs@yahoo.com>
++---
++ include/lldp_8021qaz.h | 6 ------
++ lldp_8021qaz.c         | 4 ++--
++ 2 files changed, 2 insertions(+), 8 deletions(-)
++
++diff --git a/include/lldp_8021qaz.h b/include/lldp_8021qaz.h
++index 55353b8..09dee20 100644
++--- a/include/lldp_8021qaz.h
+++++ b/include/lldp_8021qaz.h
++@@ -218,9 +218,6 @@ int ieee8021qaz_mod_app(struct app_tlv_head *head, int peer,
++ 			u8 prio, u8 sel, u16 proto, u32 ops);
++ int ieee8021qaz_app_sethw(char *ifname, struct app_tlv_head *head);
++ 
++-inline int get_prio_map(u32 prio_map, int tc);
++-inline void set_prio_map(u32 *prio_map, u8 prio, int tc);
++-
++ struct ieee8021qaz_tlvs *ieee8021qaz_data(const char *);
++ 
++ int ieee8021qaz_tlvs_rxed(const char *ifname);
++@@ -234,9 +231,6 @@ int ieee8021qaz_rchange(struct port *port, struct lldp_agent *,
++ void ieee8021qaz_ifup(char *ifname, struct lldp_agent *);
++ void ieee8021qaz_ifdown(char *ifname, struct lldp_agent *);
++ u8 ieee8021qaz_mibDeleteObject(struct port *port, struct lldp_agent *);
++-inline int ieee8021qaz_clif_cmd(void *data, struct sockaddr_un *from,
++-				socklen_t fromlen, char *ibuf, int ilen,
++-				char *rbuf);
++ int ieee8021qaz_check_operstate(void);
++ int get_dcbx_hw(const char *ifname, __u8 *dcbx);
++ 
++diff --git a/lldp_8021qaz.c b/lldp_8021qaz.c
++index 094676d..f154317 100644
++--- a/lldp_8021qaz.c
+++++ b/lldp_8021qaz.c
++@@ -396,7 +396,7 @@ static int read_cfg_file(char *ifname, struct lldp_agent *agent,
++ 	return 0;
++ }
++ 
++-inline int get_prio_map(u32 prio_map, int prio)
+++static inline int get_prio_map(u32 prio_map, int prio)
++ {
++ 	if (prio > 7)
++ 		return 0;
++@@ -404,7 +404,7 @@ inline int get_prio_map(u32 prio_map, int prio)
++ 	return (prio_map >> (4 * (7-prio))) & 0xF;
++ }
++ 
++-inline void set_prio_map(u32 *prio_map, u8 prio, int tc)
+++static inline void set_prio_map(u32 *prio_map, u8 prio, int tc)
++ {
++ 	u32 mask = ~(0xffffffff & (0xF << (4 * (7-prio))));
++ 	*prio_map &= mask;
++-- 
++2.14.3
++
+diff --git a/package/open-lldp/Config.in b/package/open-lldp/Config.in
+new file mode 100644
+index 0000000..d54cf18
+--- /dev/null
++++ b/package/open-lldp/Config.in
+@@ -0,0 +1,15 @@
++config BR2_PACKAGE_OPEN_LLDP
++	bool "open-lldp"
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libnl
++	select BR2_PACKAGE_LIBCONFIG
++	select BR2_PACKAGE_LIBNL
++	select BR2_PACKAGE_READLINE
++	help
++	  This package contains the Linux user space daemon and
++	  configuration tool for Intel LLDP Agent with Enhanced Ethernet
++	  support for the Data Center.
++
++	  http://open-lldp.org/
++
++comment "open-lldp needs a toolchain w/ threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/open-lldp/open-lldp.hash b/package/open-lldp/open-lldp.hash
+new file mode 100644
+index 0000000..fdd85fe
+--- /dev/null
++++ b/package/open-lldp/open-lldp.hash
+@@ -0,0 +1,3 @@
++# Locally computed
++sha256 f2c8a3307970374b01ad832ea18cf6d9abce6f00b3d8aed9305aa1428ad8252d  open-lldp-036e314bd93602f7388262cc37faf8b626980af1.tar.gz
++sha256 67af5abeb092213cd9c53781503320f635ba28b641e0c3f24d367e8e93a9839b  COPYING
+diff --git a/package/open-lldp/open-lldp.mk b/package/open-lldp/open-lldp.mk
+new file mode 100644
+index 0000000..b650aea
+--- /dev/null
++++ b/package/open-lldp/open-lldp.mk
+@@ -0,0 +1,24 @@
++################################################################################
++#
++# open-lldp
++#
++################################################################################
++
++OPEN_LLDP_VERSION = 036e314bd93602f7388262cc37faf8b626980af1
++OPEN_LLDP_SITE = git://open-lldp.org/open-lldp.git
++OPEN_LLDP_DEPENDENCIES = readline libnl libconfig host-pkgconf
++OPEN_LLDP_LICENSE = GPL-2.0
++OPEN_LLDP_LICENSE_FILES = COPYING
++
++# Fetching from git, need to generate configure/Makefile.in
++OPEN_LLDP_AUTORECONF = YES
++
++# Create the m4 directory (missing from the archive).
++# This is required for autoconf.
++define OPEN_LLDP_CREATE_M4
++	mkdir -p $(@D)/m4
++endef
++
++OPEN_LLDP_PRE_CONFIGURE_HOOKS += OPEN_LLDP_CREATE_M4
++
++$(eval $(autotools-package))
