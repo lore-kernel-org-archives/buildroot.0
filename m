@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 16 Jan 2018 09:23:41 +0100
-Subject: [Buildroot] [PATCH 1/2] package/sdl2: Fix Raspberry Pi support
- for SDL2
-In-Reply-To: <20180116033450.6926-1-g@maral.me>
+Date: Tue, 16 Jan 2018 09:26:33 +0100
+Subject: [Buildroot] [PATCH 2/2] package/rpi-fbcp: Added package for
+ Raspberry Pi
+In-Reply-To: <20180116033450.6926-2-g@maral.me>
 References: <20180116033450.6926-1-g@maral.me>
-Message-ID: <20180116092341.17c72427@windsurf>
+ <20180116033450.6926-2-g@maral.me>
+Message-ID: <20180116092633.668590e9@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,104 +14,113 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 15 Jan 2018 19:34:49 -0800, Guillermo A. Amaral wrote:
+On Mon, 15 Jan 2018 19:34:50 -0800, Guillermo A. Amaral wrote:
+> Raspberry Pi utility used to mirror primary framebuffer to secondary
+> framebuffer.
+> 
+> Signed-off-by: Guillermo A. Amaral <g@maral.me>
+> ---
+>  package/Config.in                                  |  1 +
+>  .../rpi-fbcp/0001-make-buildroot-friendly.patch    | 35 ++++++++++++++++++++++
+>  package/rpi-fbcp/Config.in                         | 13 ++++++++
+>  package/rpi-fbcp/rpi-fbcp.mk                       | 11 +++++++
 
-> diff --git a/package/sdl2/0001-sdl2-rpi-video-buildroot-fix.patch b/package/sdl2/0001-sdl2-rpi-video-buildroot-fix.patch
+Could you add an entry in the DEVELOPERS file for this package?
+
+> diff --git a/package/rpi-fbcp/0001-make-buildroot-friendly.patch b/package/rpi-fbcp/0001-make-buildroot-friendly.patch
 > new file mode 100644
-> index 000000000..1866579f1
+> index 000000000..5f86f5af6
 > --- /dev/null
-> +++ b/package/sdl2/0001-sdl2-rpi-video-buildroot-fix.patch
-> @@ -0,0 +1,90 @@
-> +From 76cb63afbe53c984c9734dc4f034c670791ca4d2 Mon Sep 17 00:00:00 2001
+> +++ b/package/rpi-fbcp/0001-make-buildroot-friendly.patch
+> @@ -0,0 +1,35 @@
+> +From 8218434aafd18f7a1f742bddeef10b8829d59f89 Mon Sep 17 00:00:00 2001
 > +From: "Guillermo A. Amaral" <g@maral.me>
-> +Date: Sun, 14 Jan 2018 23:01:47 -0800
-> +Subject: [PATCH] sdl2: Get Raspberry Pi video working on Buildroot
-
-It's not nice to have this specific to Buildroot. It shouldn't be that
-way, and having it specific to Buildroot means that the patch cannot be
-accepted upstream. See below for a suggestion on how to improve.
-
-> + configure           |  8 +++++++-
-
-Do you really need to patch the configure script? What about fixing
-just configure.in, and using AUTORECONF = YES ?
-
-> + configure.in        |  8 +++++++-
-> + src/video/SDL_egl.c | 12 ++++++------
-> + 3 files changed, 20 insertions(+), 8 deletions(-)
+> +Date: Sun, 14 Jan 2018 15:22:21 -0800
+> +Subject: [PATCH] Make build script more buildroot friendly
 > +
-> +diff --git a/configure.in b/configure.in
-> +index 5ac2130..daee88b 100644
-> +--- a/configure.in
-> ++++ b/configure.in
-> +@@ -1566,6 +1566,9 @@ AC_HELP_STRING([--enable-video-rpi], [use Raspberry Pi video driver [[default=ye
-> +         if test x$ARCH = xnetbsd; then
-> +             RPI_CFLAGS="-I/usr/pkg/include -I/usr/pkg/include/interface/vcos/pthreads -I/usr/pkg/include/interface/vmcs_host/linux"
-> +             RPI_LDFLAGS="-Wl,-R/usr/pkg/lib -L/usr/pkg/lib -lbcm_host"
-> ++        elif test x$VENDOR = xbuildroot; then
-> ++            RPI_CFLAGS="-I${STAGING_DIR}/usr/include/interface/vcos/pthreads -I${STAGING_DIR}/usr/include/interface/vmcs_host/linux"
-> ++            RPI_LDFLAGS="-L${STAGING_DIR}/usr/lib -lbcm_host -lvchostif"
-> +         else
-> +             RPI_CFLAGS="-I/opt/vc/include -I/opt/vc/include/interface/vcos/pthreads -I/opt/vc/include/interface/vmcs_host/linux"
-> +             RPI_LDFLAGS="-L/opt/vc/lib -lbcm_host"
+> +Signed-off-by: Guillermo A. Amaral <g@maral.me>
 
-Here is a different suggestion. In the "else", do the following:
+Here as well, this Buildroot-specific patch is not nice.
 
-	AC_PATH_PROG(PKG_CONFIG, pkg-config, no)
-	if test x$PKG_CONFIG != xno && $PKG_CONFIG --exists bcm_host; then
-		RPI_CFLAGS=`$PKG_CONFIG --cflags bcm_host`
-		RPI_LDFLAGS=`$PKG_CONFIG --libs bcm_host`
-	else
-		RPI_CFLAGS="-I/opt/vc/include -I/opt/vc/include/interface/vcos/pthreads -I/opt/vc/include/interface/vmcs_host/linux"
-		RPI_LDFLAGS="-L/opt/vc/lib -lbcm_host"
-	fi
+> +---
+> + CMakeLists.txt | 13 +++----------
+> + 1 file changed, 3 insertions(+), 10 deletions(-)
+> +
+> +diff --git a/CMakeLists.txt b/CMakeLists.txt
+> +index 6202553..367182c 100644
+> +--- a/CMakeLists.txt
+> ++++ b/CMakeLists.txt
+> +@@ -1,14 +1,7 @@
+> + cmake_minimum_required(VERSION 2.8)
+> + 
+> +-SET(COMPILE_DEFINITIONS -Werror)
+> +-
+> +-include_directories(/opt/vc/include)
+> +-include_directories(/opt/vc/include/interface/vcos/pthreads)
+> +-include_directories(/opt/vc/include/interface/vmcs_host)
+> +-include_directories(/opt/vc/include/interface/vmcs_host/linux)
+> +-
+> +-link_directories(/opt/vc/lib)
+> +-
 
-This should use pkg-config if available, and bcm_host is available as
-pkg-config module, and if not default to the hardcoded path in /opt/vc.
+What about using pkg-config again ?
 
-> +@@ -3260,7 +3263,10 @@ case "$host" in
-> +                     SUMMARY_video="${SUMMARY_video} android"
-> +                 fi
-> +                 ;;
-> +-            *-*-linux*)         ARCH=linux ;;
-> ++            *-*-linux*)
-> ++                ARCH=linux
-> ++                VENDOR=buildroot
-> ++                ;;
+> + add_executable(fbcp main.c)
+> + 
+> +-target_link_libraries(fbcp bcm_host)
+> ++target_link_libraries(fbcp bcm_host vchostif)
+> ++
+> ++install(TARGETS fbcp RUNTIME DESTINATION "${CMAKE_INSTALL_PREFIX}/sbin")
+> +-- 
+> +2.13.6
+> +
+> diff --git a/package/rpi-fbcp/Config.in b/package/rpi-fbcp/Config.in
+> new file mode 100644
+> index 000000000..9a186de9c
+> --- /dev/null
+> +++ b/package/rpi-fbcp/Config.in
+> @@ -0,0 +1,13 @@
+> +config BR2_PACKAGE_RPI_FBCP
+> +	bool "rpi-fbcp"
+> +	depends on BR2_arm
+> +	depends on BR2_PACKAGE_RPI_USERLAND
+> +	help
+> +	  Raspberry Pi utility. Used for mirror primary framebuffer to
+> +	  secondary framebuffer.
+> +
+> +	  https://github.com/tasanakorn/rpi-fbcp
+> +
+> +comment "rpi-fbc needs rpi-userland"
+> +	depends on BR2_arm
+> +	depends on !BR2_PACKAGE_RPI_USERLAND
+> diff --git a/package/rpi-fbcp/rpi-fbcp.mk b/package/rpi-fbcp/rpi-fbcp.mk
+> new file mode 100644
+> index 000000000..72f778c1e
+> --- /dev/null
+> +++ b/package/rpi-fbcp/rpi-fbcp.mk
+> @@ -0,0 +1,11 @@
+> +################################################################################
+> +#
+> +# rpi-fbcp
+> +#
+> +################################################################################
+> +
+> +RPI_FBCP_VERSION = 8087a71d0330a078d91aa78656684ab5313616c6
+> +RPI_FBCP_SITE = $(call github,tasanakorn,rpi-fbcp,$(RPI_FBCP_VERSION))
+> +RPI_FBCP_DEPENDENCIES = rpi-userland
 
-It would make this change unneeded.
+The package upstream has no license information, which basically means
+you're not allowed to distribute it. A bit annoying, no?
 
-> + #if SDL_VIDEO_DRIVER_RPI
-> + /* Raspbian places the OpenGL ES/EGL binaries in a non standard path */
-> +-#define DEFAULT_EGL "/opt/vc/lib/libbrcmEGL.so"
-> +-#define DEFAULT_OGL_ES2 "/opt/vc/lib/libbrcmGLESv2.so"
-> +-#define ALT_EGL "/opt/vc/lib/libEGL.so"
-> +-#define ALT_OGL_ES2 "/opt/vc/lib/libGLESv2.so"
-> +-#define DEFAULT_OGL_ES_PVR "/opt/vc/lib/libGLES_CM.so"
-> +-#define DEFAULT_OGL_ES "/opt/vc/lib/libGLESv1_CM.so"
-> ++#define DEFAULT_EGL "libbrcmEGL.so"
-> ++#define DEFAULT_OGL_ES2 "libbrcmGLESv2.so"
-> ++#define ALT_EGL "libEGL.so"
-> ++#define ALT_OGL_ES2 "libGLESv2.so"
-> ++#define DEFAULT_OGL_ES_PVR "libGLES_CM.so"
-> ++#define DEFAULT_OGL_ES "libGLESv1_CM.so"
+Could you get in touch with the upstream developer to ask him/her to
+add license information. I do realize that this repository hasn't seen
+any update since 4 years, so there are some chances that the upstream
+developer doesn't answer. But really, shipping code that has no license
+is bad.
 
-I am not totally sure how to solve this though. I think the easiest
-solution is for the configure script to fill in another variable, like
-RPI_LIB_DIR. It would be set to empty in the pkg-config case, assuming
-the libraries are in the right location, and set to /opt/vc/lib in the
-hardcoded case. Or for the pkg-config case you do:
+Thanks!
 
-	RPI_LIB_DIR=`PKG_CONFIG_SYSROOT_DIR=/ $PKG_CONFIG --libs-only-L bcm_host | sed 's/^-L//'`
-
-But I believe leaving it to empty is fine as well. Indeed dlopen()
-automatically searches in the default library paths, and if the library
-is not installed in the default location, it's up to the user to pass
-LD_LIBRARY_PATH.
-
-Best regards,
-
-Thomas Petazzoni
+Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
 Embedded Linux and Kernel engineering
