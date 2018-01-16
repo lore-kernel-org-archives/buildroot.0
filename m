@@ -1,9 +1,9 @@
 From: Johan Oudinet <johan.oudinet@gmail.com>
-Date: Tue, 16 Jan 2018 15:06:43 +0100
-Subject: [Buildroot] [PATCH 08/14] erlang-p1-iconv: Bump to version 1.0.6
+Date: Tue, 16 Jan 2018 15:06:45 +0100
+Subject: [Buildroot] [PATCH 10/14] erlang-p1-tls: Bump to version 1.0.17
 In-Reply-To: <20180116140649.7381-1-johan.oudinet@gmail.com>
 References: <20180116140649.7381-1-johan.oudinet@gmail.com>
-Message-ID: <20180116140649.7381-9-johan.oudinet@gmail.com>
+Message-ID: <20180116140649.7381-11-johan.oudinet@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,30 +12,30 @@ To: buildroot@busybox.net
 
 Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
 ---
- package/erlang-p1-iconv/erlang-p1-iconv.hash | 2 +-
- package/erlang-p1-iconv/erlang-p1-iconv.mk   | 2 +-
+ package/erlang-p1-tls/erlang-p1-tls.hash | 2 +-
+ package/erlang-p1-tls/erlang-p1-tls.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/erlang-p1-iconv/erlang-p1-iconv.hash b/package/erlang-p1-iconv/erlang-p1-iconv.hash
-index 883fd52095..0f0a23161a 100644
---- a/package/erlang-p1-iconv/erlang-p1-iconv.hash
-+++ b/package/erlang-p1-iconv/erlang-p1-iconv.hash
+diff --git a/package/erlang-p1-tls/erlang-p1-tls.hash b/package/erlang-p1-tls/erlang-p1-tls.hash
+index eb707f1d49..b5b800b202 100644
+--- a/package/erlang-p1-tls/erlang-p1-tls.hash
++++ b/package/erlang-p1-tls/erlang-p1-tls.hash
 @@ -1,2 +1,2 @@
  # Locally calculated
--sha256 ca20d58166a4fb38883977600aca61e02bfd1257b8bded8c8ddd82d2a96084e6 erlang-p1-iconv-1.0.4.tar.gz
-+sha256 c7214ea7503c3de1edf3bdd72b37187aa3a9a36d7cf7f5945a067ae8d262d3fb erlang-p1-iconv-1.0.6.tar.gz
-diff --git a/package/erlang-p1-iconv/erlang-p1-iconv.mk b/package/erlang-p1-iconv/erlang-p1-iconv.mk
-index 044361e415..6b22431cce 100644
---- a/package/erlang-p1-iconv/erlang-p1-iconv.mk
-+++ b/package/erlang-p1-iconv/erlang-p1-iconv.mk
+-sha256 c42237e5dd231c558b48633788a0e9ca55b4f3b5bc4692107fee031a8f91cda3 erlang-p1-tls-1.0.11.tar.gz
++sha256 ca9670b7f78a025b101e3fee6255d7472d6b52abc46444cc45616c3d1bd75b9b erlang-p1-tls-1.0.17.tar.gz
+diff --git a/package/erlang-p1-tls/erlang-p1-tls.mk b/package/erlang-p1-tls/erlang-p1-tls.mk
+index 63d0112cc2..ad7317dc8c 100644
+--- a/package/erlang-p1-tls/erlang-p1-tls.mk
++++ b/package/erlang-p1-tls/erlang-p1-tls.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ERLANG_P1_ICONV_VERSION = 1.0.4
-+ERLANG_P1_ICONV_VERSION = 1.0.6
- ERLANG_P1_ICONV_SITE = $(call github,processone,iconv,$(ERLANG_P1_ICONV_VERSION))
- ERLANG_P1_ICONV_LICENSE = Apache-2.0
- ERLANG_P1_ICONV_LICENSE_FILES = LICENSE.txt
+-ERLANG_P1_TLS_VERSION = 1.0.11
++ERLANG_P1_TLS_VERSION = 1.0.17
+ ERLANG_P1_TLS_SITE = $(call github,processone,fast_tls,$(ERLANG_P1_TLS_VERSION))
+ ERLANG_P1_TLS_LICENSE = Apache-2.0
+ ERLANG_P1_TLS_LICENSE_FILES = LICENSE.txt
 -- 
 2.14.1
