@@ -1,11 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 16 Jan 2018 21:02:04 +0100
-Subject: [Buildroot] Requesting libvte
-In-Reply-To: <ZRit0bTMnKM_Wv_-OSp5Hg0NRDUP5SuRTtNFFfhnCqlnu5Jr24Y5Qp2AiqAy1J187ve2bK9WHz4e6l0mHgMZC5CvW-G8itWNrlVj4yNv4Ok=@protonmail.com>
-References: <7xZpCd7a9iHnFDkxtk-hp9r3cZammqShsBXFvsl8e_Xbvk5l0ZifgDyr0M_xvct0Xx2orSf12gjFE2EIXUrvDjADA4rOOaMBqwcpt3dBqtY=@protonmail.com>
- <20180116151134.1b343472@windsurf>
- <ZRit0bTMnKM_Wv_-OSp5Hg0NRDUP5SuRTtNFFfhnCqlnu5Jr24Y5Qp2AiqAy1J187ve2bK9WHz4e6l0mHgMZC5CvW-G8itWNrlVj4yNv4Ok=@protonmail.com>
-Message-ID: <20180116210204.3773f989@windsurf>
+Date: Tue, 16 Jan 2018 21:03:39 +0100
+Subject: [Buildroot] [PATCH 1/1] toolchain: use -ffp-contract=off on
+ MIPS in the wrapper when needed
+In-Reply-To: <1516128616-20127-1-git-send-email-johannes.schmitz1@gmail.com>
+References: <1516128616-20127-1-git-send-email-johannes.schmitz1@gmail.com>
+Message-ID: <20180116210339.4c541835@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,15 +13,25 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 16 Jan 2018 14:20:45 -0500, Biz.122 wrote:
-> Ok, as you correctly assumed I am a newb to open-source contributions - hence my unintended ignorant suggestion.
-> I took a look at the list again, and it seems as if someone was unexpectedly quick on his feet:
-> http://lists.busybox.net/pipermail/buildroot/2018-January/211713.html
+On Tue, 16 Jan 2018 19:50:16 +0100, Johannes Schmitz wrote:
+> This fix is necessary for to build for MIPS, for example for the MIPS
+> XBurst architecture used on ci20 boards.
 > 
-> Should I attempt to make a patch for this or leave it to him?
+> GCC has replaced (no)mfused-madd with ffp-contract.
+> Find more details and a long discussion at
+> https://gcc.gnu.org/ml/gcc-patches/2015-06/msg00876.html
+> 
+> Signed-off-by: Johannes Schmitz <johannes.schmitz1@gmail.com>
 
-Since Stefan has taken up the task, I believe what you could do to help
-is test his patch, and report if it works for you (or not).
+Within just 3 minutes, you sent this patch 3 times. Two times the exact
+same version, and one time a different version. There is also no
+version number on the patches, making it very difficult to understand
+what is *the* correct patch.
+
+Could you add a version number to your patches (git format-patch -v X),
+include a changelog between version (below the --- sign that follows
+the Signed-off-by line) and try to avoid sending 3 times the same patch
+in a row ? :-)
 
 Thanks!
 
