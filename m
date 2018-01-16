@@ -1,62 +1,39 @@
-From: Charles Hardin <ckhardin@exablox.com>
-Date: Tue, 16 Jan 2018 13:40:46 -0800
-Subject: [Buildroot] [PATCH 1/1] package/docker-engine: add the macros to
- install docker-proxy
-Message-ID: <20180116214046.10605-1-charles.hardin@storagecraft.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Tue, 16 Jan 2018 22:48:24 +0100
+Subject: [Buildroot] [PATCH v2 1/1] unbound: new package
+References: <20180113222651.22755-1-stefan.froberg@petroprogram.com>
+ <uagqiexfnk.ln2@ID-313208.user.individual.net>
+ <6b37de5d-dd14-17a8-44a8-bd9b078c2920@petroprogram.com>
+ <jtksiex3i1.ln2@ID-313208.user.individual.net>
+ <1a1a4349-bb17-6657-1d60-2e8c7891b0e9@petroprogram.com>
+Message-ID: <8i82jex0fn.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-During the bringup of some of the network within the containers,
-an error was show about missing the docker-proxy - so, add the
-definitions to build the proxy
+Am Tue, 16 Jan 2018 23:28:58 +0200 schrieb Stefan Fr?berg:
 
-Signed-off-by: Charles Hardin <charles.hardin@storagecraft.com>
----
- package/docker-engine/docker-engine.mk | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+> Hello Bernd
+> 
+> I have a little problem. I have ran all the tests now but my
+> $HOME/tests-unbound is totally empty.
+> What I am doing wrong?
 
-diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
-index 8928f072e7..94552b1201 100644
---- a/package/docker-engine/docker-engine.mk
-+++ b/package/docker-engine/docker-engine.mk
-@@ -87,6 +87,20 @@ endef
- 
- ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_DAEMON),y)
- 
-+define DOCKER_ENGINE_BUILD_PROXY
-+	cd $(@D)/gopath/src/github.com/docker/docker; \
-+		$(DOCKER_ENGINE_MAKE_ENV) \
-+		$(HOST_DIR)/bin/go build -v \
-+			-o $(@D)/bin/docker-proxy \
-+			-tags "$(DOCKER_ENGINE_BUILD_TAGS)" \
-+			-ldflags "$(DOCKER_ENGINE_GLDFLAGS) $(DOCKER_ENGINE_GLDFLAGS_$(call UPPERCASE,$(target)))" \
-+			github.com/docker/libnetwork/cmd/proxy
-+endef
-+
-+define DOCKER_ENGINE_INSTALL_PROXY
-+	$(INSTALL) -D -m 0755 $(@D)/bin/docker-proxy $(TARGET_DIR)/usr/bin/docker-proxy
-+endef
-+
- define DOCKER_ENGINE_INSTALL_INIT_SYSTEMD
- 	$(INSTALL) -D -m 0644 $(@D)/contrib/init/systemd/docker.service \
- 		$(TARGET_DIR)/usr/lib/systemd/system/docker.service
-@@ -113,12 +127,14 @@ define DOCKER_ENGINE_BUILD_CMDS
- 			-ldflags "$(DOCKER_ENGINE_GLDFLAGS) $(DOCKER_ENGINE_GLDFLAGS_$(call UPPERCASE,$(target)))" \
- 			github.com/docker/docker/cmd/$(target)
- 	)
-+	$(DOCKER_ENGINE_BUILD_PROXY)
- endef
- 
- define DOCKER_ENGINE_INSTALL_TARGET_CMDS
- 	$(foreach target,$(DOCKER_ENGINE_BUILD_TARGETS), \
- 		$(INSTALL) -D -m 0755 $(@D)/bin/$(target) $(TARGET_DIR)/usr/bin/$(target)
- 	)
-+	$(DOCKER_ENGINE_INSTALL_PROXY)
- endef
- 
- $(eval $(generic-package))
--- 
-2.14.3 (Apple Git-98)
+Hi Stefan,
+
+I wrote
+
+$ utils/test-pkg -c test-unbound $HOME/test-unbound
+
+and forgot to add "-d" before $HOME/test-unbound, sorry.
+
+The correct syntax would have been
+
+$ utils/test-pkg -c test-unbound -d $HOME/test-unbound
+
+Therefore $HOME/test-unbound was not used but you should find the builds 
+in $HOME/br-test-pkg/ instead, this is the default value.
+
+Regards, Bernd
