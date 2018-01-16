@@ -1,49 +1,54 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 16 Jan 2018 19:45:05 +0100
-Subject: [Buildroot] [git commit branch/2017.11.x] mcookie: correct wrong
- memset argument
-Message-ID: <20180116194020.E711280386@busybox.osuosl.org>
+Date: Tue, 16 Jan 2018 20:31:25 +0100
+Subject: [Buildroot] [git commit branch/2017.11.x] system: only expose getty
+ options for busybox and sysvinit
+Message-ID: <20180116194021.016228022D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c57572b95e9da33c1367e3706f4191147c9ad4c4
+commit: https://git.buildroot.net/buildroot/commit/?id=857a01ad7d31b817dd7223e1bb6dc61916801468
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.11.x
 
-Fixes #10216
+Only busybox and sysvinit handle the BR2_TARGET_GENERIC_GETTY_TERM and
+BR2_TARGET_GENERIC_GETTY_OPTIONS options; the other init systems do
+not.
 
-Building mcookie generates a warning about possible wrong arguments to
-memset:
+So, protect those options behind appropriate dependencies on busybox
+or sysvinit.
 
-mcookie.c:207:26: warning: argument to ???sizeof??? in ???memset??? call is the same expression
-  as the destination; did you mean to dereference it? [-Wsizeof-pointer-memaccess]
-     memset(ctx, 0, sizeof(ctx)); /* In case it's sensitive */
+Fixes #10301.
 
-ctx is a pointer to a structure, so the code should use the size of the
-structure and not the size of the pointer when it tries to clear the
-structure, similar to how it got fixed upstream back in 2009:
-
-https://git.kernel.org/pub/scm/utils/util-linux/util-linux.git/commit/lib/md5.c?id=6596057175c6ed342dc20e85eae8a42eb29b629f
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 40f4191f2a1246b792ffc0c02b6c9bd2d62649f2)
+Reported-by: Michael Heinemann <posted@heine.so>
+Suggested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+(cherry picked from commit 5e23eb5da7b3848cc6b317af9d8c23aac3a13260)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/x11r7/mcookie/mcookie.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ system/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/x11r7/mcookie/mcookie.c b/package/x11r7/mcookie/mcookie.c
-index 902d92f..3c38f6f 100644
---- a/package/x11r7/mcookie/mcookie.c
-+++ b/package/x11r7/mcookie/mcookie.c
-@@ -204,7 +204,7 @@ void MD5Final(unsigned char digest[16], struct MD5Context *ctx)
-     MD5Transform(ctx->buf, (uint32 *) ctx->in);
-     byteReverse((unsigned char *) ctx->buf, 4);
-     memcpy(digest, ctx->buf, 16);
--    memset(ctx, 0, sizeof(ctx));	/* In case it's sensitive */
-+    memset(ctx, 0, sizeof(*ctx));	/* In case it's sensitive */
- }
+diff --git a/system/Config.in b/system/Config.in
+index b971492..d48cf8d 100644
+--- a/system/Config.in
++++ b/system/Config.in
+@@ -355,12 +355,16 @@ config BR2_TARGET_GENERIC_GETTY_BAUDRATE
+ config BR2_TARGET_GENERIC_GETTY_TERM
+ 	string "TERM environment variable"
+ 	default "vt100"
++	# currently observed only by busybox and sysvinit
++	depends on BR2_INIT_BUSYBOX || BR2_INIT_SYSV
+ 	help
+ 	  Specify a TERM type.
  
- /* The four core functions - F1 is optimized somewhat */
+ config BR2_TARGET_GENERIC_GETTY_OPTIONS
+ 	string "other options to pass to getty"
+ 	default ""
++	# currently observed only by busybox and sysvinit
++	depends on BR2_INIT_BUSYBOX || BR2_INIT_SYSV
+ 	help
+ 	  Any other flags you want to pass to getty,
+ 	  Refer to getty --help for details.
