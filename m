@@ -1,50 +1,62 @@
-From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Mon, 15 Jan 2018 23:53:53 -0200
-Subject: [Buildroot] [PATCH-2017.11.x] linux-firmware: fix install for
- Chelsio T[45]
-Message-ID: <1516067633-25511-1-git-send-email-ricardo.martincoski@gmail.com>
+From: Guillermo A. Amaral <g@maral.me>
+Date: Mon, 15 Jan 2018 19:14:28 -0800
+Subject: [Buildroot] [PATCH 1/1] kconfig: Apply upstream nconfig
+ ncurses/ncursesw fix
+In-Reply-To: <20180115213706.61ee21b5@windsurf>
+References: <20180114163932.GA24925@enterprise.starfleet>
+ <20180114172807.28196-1-g@maral.me>
+ <20180115213706.61ee21b5@windsurf>
+Message-ID: <20180116031428.GA4897@enterprise.starfleet>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It's broken since 1c9846ec "linux-firmware: Bump to the latest version"
+Cool, thanks for taking the time to review and tweak.
 
-Fix it by updating the name of the file to install.
-Do not use * since it would install also old versions that would take
-1MB extra space in the target.
+Cheers!
 
-Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/linux-firmware/linux-firmware.mk | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+On Mon, Jan 15, 2018 at 09:37:06PM +0100, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Sun, 14 Jan 2018 09:28:07 -0800, Guillermo A. Amaral wrote:
+> > Buildroot's "make nconfig" command stopped working a while ago on all my
+> > Gentoo systems. Running the command would result in a crash.
+> > 
+> > I found that the issue was caused by lxdialog's cflags which are also
+> > used to build nconfig; It would detect *ncursesw* and turn on WIDECHAR
+> > support -- but the Makefile would still link to plain *ncurses* while
+> > building nconfig (which was built without WIDECHAR support).
+> > 
+> > This would cause a crash after using *wattrset* on a WINDOW instance.
+> > WIDECHAR *wattrset* would try to set the _color member in the WINDOW
+> > struct which does not exist in the NON-WIDECHAR ncurses instance. It
+> > would end up clobbering data outside the struct (usually _line entries).
+> > 
+> > I found an upstream patch fixing the issue, so I'm applying it to
+> > Buildroot's kconfig.
+> > 
+> > Signed-off-by: Guillermo A. Amaral <g@maral.me>
+> > ---
+> >  support/kconfig/Makefile                           |  3 +-
+> >  ...onfig-nconfig-fix-multi-byte-UTF-handling.patch | 45 ++++++++++++++++++++++
+> >  support/kconfig/patches/series                     |  1 +
+> >  3 files changed, 48 insertions(+), 1 deletion(-)
+> >  create mode 100644 support/kconfig/patches/18-kconfig-nconfig-fix-multi-byte-UTF-handling.patch
+> 
+> I've applied after tweaking a bit the commit title ("support/kconfig"
+> instead of "kconfig") and the commit log (using the singular first
+> person is not very common).
+> 
+> Thanks a lot for this contribution!
+> 
+> Thomas
+> -- 
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
 
-diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index d238abe..3d18c6f 100644
---- a/package/linux-firmware/linux-firmware.mk
-+++ b/package/linux-firmware/linux-firmware.mk
-@@ -324,14 +324,14 @@ LINUX_FIRMWARE_FILES += bnx2x/*
- endif
- 
- ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_CXGB4_T4),y)
--# cxgb4/t4fw.bin is a symlink to cxgb4/t4fw-1.16.26.0.bin
--LINUX_FIRMWARE_FILES += cxgb4/t4fw-1.16.26.0.bin cxgb4/t4fw.bin
-+# cxgb4/t4fw.bin is a symlink to cxgb4/t4fw-1.16.45.0.bin
-+LINUX_FIRMWARE_FILES += cxgb4/t4fw-1.16.45.0.bin cxgb4/t4fw.bin
- LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.chelsio_firmware
- endif
- 
- ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_CXGB4_T5),y)
--# cxgb4/t5fw.bin is a symlink to cxgb4/t5fw-1.16.26.0.bin
--LINUX_FIRMWARE_FILES += cxgb4/t5fw-1.16.26.0.bin cxgb4/t5fw.bin
-+# cxgb4/t5fw.bin is a symlink to cxgb4/t5fw-1.16.45.0.bin
-+LINUX_FIRMWARE_FILES += cxgb4/t5fw-1.16.45.0.bin cxgb4/t5fw.bin
- LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.chelsio_firmware
- endif
- 
 -- 
-2.7.4
+gamaral
+http://about.me/gamaral
