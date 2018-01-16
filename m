@@ -1,55 +1,33 @@
-From: Biz.122 <biz.122@protonmail.com>
-Date: Tue, 16 Jan 2018 14:20:45 -0500
-Subject: [Buildroot] Requesting libvte
-In-Reply-To: <20180116151134.1b343472@windsurf>
-References: <7xZpCd7a9iHnFDkxtk-hp9r3cZammqShsBXFvsl8e_Xbvk5l0ZifgDyr0M_xvct0Xx2orSf12gjFE2EIXUrvDjADA4rOOaMBqwcpt3dBqtY=@protonmail.com>
- <20180116151134.1b343472@windsurf>
-Message-ID: <ZRit0bTMnKM_Wv_-OSp5Hg0NRDUP5SuRTtNFFfhnCqlnu5Jr24Y5Qp2AiqAy1J187ve2bK9WHz4e6l0mHgMZC5CvW-G8itWNrlVj4yNv4Ok=@protonmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 16 Jan 2018 20:37:02 +0100
+Subject: [Buildroot] [PATCH] asterisk: security bump to version 14.7.5
+In-Reply-To: <20180108100815.16770-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Mon, 8 Jan 2018 11:08:15 +0100")
+References: <20180108100815.16770-1-peter@korsgaard.com>
+Message-ID: <87vag1fvdt.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ok, as you correctly assumed I am a newb to open-source contributions - hence my unintended ignorant suggestion.
-I took a look at the list again, and it seems as if someone was unexpectedly quick on his feet:
-http://lists.busybox.net/pipermail/buildroot/2018-January/211713.html
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-Should I attempt to make a patch for this or leave it to him?
+ > Fixes the following security issues:
+ > * AST-2017-014: Crash in PJSIP resource when missing a contact header A
+ >   select set of SIP messages create a dialog in Asterisk.  Those SIP
+ >   messages must contain a contact header.  For those messages, if the header
+ >   was not present and using the PJSIP channel driver, it would cause
+ >   Asterisk to crash.  The severity of this vulnerability is somewhat
+ >   mitigated if authentication is enabled.  If authentication is enabled a
+ >   user would have to first be authorized before reaching the crash point.
 
-Best Regards,
-Eric
+ > For more details, see the announcement:
+ > https://www.asterisk.org/downloads/asterisk-news/asterisk-13185-1475-1515-and-1318-cert2-now-available-security
 
-Sent with [ProtonMail](https://protonmail.com) Secure Email.
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-> -------- Original Message --------
-> Subject: Re: [Buildroot] Requesting libvte
-> Local Time: January 16, 2018 3:11 PM
-> UTC Time: January 16, 2018 2:11 PM
-> From: thomas.petazzoni at free-electrons.com
-> To: Biz.122 <biz.122@protonmail.com>
-> buildroot at busybox.net <buildroot@busybox.net>
->
-> Hello,
->
-> On Tue, 16 Jan 2018 05:44:22 -0500, Biz.122 wrote:
->
->> I noticed that libvte is not in buildroot, can someone please add it?
->> That lib is a terminal emulator widget for gtk and I am a little surprised that it isn't in there (since we have gstreamer and other common gtk stuff already).
->> For convenience, website: https://github.com/GNOME/vte
->
-> Thanks for your suggestion. Why don't you send a patch adding this
-> package? This is how open-source works: if something isn't done yet,
-> it's because nobody did it, so it's up to you to contribute what's
-> missing :-)
->
-> Best regards,
->
-> Thomas Petazzoni
->
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux and Kernel engineering
-> http://free-electrons.com
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180116/1708ec3c/attachment.html>
+Committed to 2017.11.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
