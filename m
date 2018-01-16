@@ -1,37 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 16 Jan 2018 23:22:03 +0100
-Subject: [Buildroot] [git commit] libsepol: add patch to make the build
+Date: Tue, 16 Jan 2018 23:21:45 +0100
+Subject: [Buildroot] [git commit] libselinux: add patch to make the build
  process more standard
-Message-ID: <20180116224330.D777481339@busybox.osuosl.org>
+Message-ID: <20180116224330.C7F7C81339@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=65de266c23eb07670a3dba95aa44e5fb57729371
+commit: https://git.buildroot.net/buildroot/commit/?id=c85e86c555930c242689e135b0c60559849fdbcd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Patch the Makefiles to make PREFIX and DESTDIR follow standard
 semantics to get rid of DESTDIR during compile time in
-libsepol.mk and generate proper pkg-config files.
+libselinux.mk and generate proper pkg-config files.
+
+Fixes:
+ http://autobuild.buildroot.net/results/74d27370c7623e89e401203a485193340e992e7c/
 
 Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...build-follow-standard-semantics-for-DESTD.patch | 109 +++++++++++++++++++++
- ...c-only.patch => 0003-support-static-only.patch} |  33 +++----
- ...elative.patch => 0004-revert-ln-relative.patch} |  25 ++---
- package/libsepol/libsepol.mk                       |   5 +-
- 4 files changed, 131 insertions(+), 41 deletions(-)
+ ...build-follow-standard-semantics-for-DESTD.patch | 137 +++++++++++++++++++++
+ package/libselinux/0003-revert-ln-relative.patch   |  24 ----
+ package/libselinux/0004-revert-ln-relative.patch   |  24 ++++
+ package/libselinux/libselinux.mk                   |   8 +-
+ 4 files changed, 163 insertions(+), 30 deletions(-)
 
-diff --git a/package/libsepol/0001-libsepol-build-follow-standard-semantics-for-DESTD.patch b/package/libsepol/0001-libsepol-build-follow-standard-semantics-for-DESTD.patch
+diff --git a/package/libselinux/0003-libselinux-build-follow-standard-semantics-for-DESTD.patch b/package/libselinux/0003-libselinux-build-follow-standard-semantics-for-DESTD.patch
 new file mode 100644
-index 0000000..1daf720
+index 0000000..089eef4
 --- /dev/null
-+++ b/package/libsepol/0001-libsepol-build-follow-standard-semantics-for-DESTD.patch
-@@ -0,0 +1,109 @@
-+libsepol: build: follow standard semantics for DESTDIR and PREFIX
++++ b/package/libselinux/0003-libselinux-build-follow-standard-semantics-for-DESTD.patch
+@@ -0,0 +1,137 @@
++libselinux: build: follow standard semantics for DESTDIR and PREFIX
 +
 +This patch solves the following issues:
 +- The pkg-config files generates odd paths when using DESTDIR without PREFIX
@@ -41,34 +44,36 @@ index 0000000..1daf720
 +
 +Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
 +
-+diff -durN libsepol.orig/include/Makefile libsepol/include/Makefile
-+--- libsepol.orig/include/Makefile	2018-01-12 12:42:30.908709792 +0100
-++++ libsepol/include/Makefile	2018-01-12 09:58:04.322148228 +0100
++diff -durN libselinux.orig/include/Makefile libselinux/include/Makefile
++--- libselinux.orig/include/Makefile	2018-01-12 12:42:30.898709792 +0100
+++++ libselinux/include/Makefile	2018-01-12 10:02:57.745478435 +0100
 +@@ -1,6 +1,6 @@
 + # Installation directories.
 +-PREFIX ?= $(DESTDIR)/usr
-+-INCDIR ?= $(PREFIX)/include/sepol
++-INCDIR ?= $(PREFIX)/include/selinux
 ++PREFIX ?= /usr
-++INCDIR = $(DESTDIR)$(PREFIX)/include/sepol
-+ CILDIR ?= ../cil
+++INCDIR = $(DESTDIR)$(PREFIX)/include/selinux
 + 
 + all:
-+diff -durN libsepol.orig/man/Makefile libsepol/man/Makefile
-+--- libsepol.orig/man/Makefile	2018-01-12 12:42:30.912043126 +0100
-++++ libsepol/man/Makefile	2018-01-12 09:58:04.322148228 +0100
-+@@ -1,6 +1,7 @@
++ 
++diff -durN libselinux.orig/man/Makefile libselinux/man/Makefile
++--- libselinux.orig/man/Makefile	2018-01-12 12:42:30.898709792 +0100
+++++ libselinux/man/Makefile	2018-01-12 10:02:57.745478435 +0100
++@@ -1,7 +1,8 @@
 + # Installation directories.
 +-MAN8DIR ?= $(DESTDIR)/usr/share/man/man8
++-MAN5DIR ?= $(DESTDIR)/usr/share/man/man5
 +-MAN3DIR ?= $(DESTDIR)/usr/share/man/man3
-++PREFIX ?= /usr
+++PREFIX	?= /usr
 ++MAN8DIR ?= $(DESTDIR)$(PREFIX)/share/man/man8
+++MAN5DIR ?= $(DESTDIR)$(PREFIX)/share/man/man5
 ++MAN3DIR ?= $(DESTDIR)$(PREFIX)/share/man/man3
 + 
 + all:
 + 
-+diff -durN libsepol.orig/src/libsepol.pc.in libsepol/src/libsepol.pc.in
-+--- libsepol.orig/src/libsepol.pc.in	2018-01-12 12:42:30.912043126 +0100
-++++ libsepol/src/libsepol.pc.in	2018-01-12 09:58:04.322148228 +0100
++diff -durN libselinux.orig/src/libselinux.pc.in libselinux/src/libselinux.pc.in
++--- libselinux.orig/src/libselinux.pc.in	2018-01-12 12:42:30.905376458 +0100
+++++ libselinux/src/libselinux.pc.in	2018-01-12 10:02:57.745478435 +0100
 +@@ -1,6 +1,6 @@
 + prefix=@prefix@
 + exec_prefix=${prefix}
@@ -76,184 +81,186 @@ index 0000000..1daf720
 ++libdir=@libdir@
 + includedir=@includedir@
 + 
-+ Name: libsepol
-+diff -durN libsepol.orig/src/Makefile libsepol/src/Makefile
-+--- libsepol.orig/src/Makefile	2018-01-12 12:42:30.912043126 +0100
-++++ libsepol/src/Makefile	2018-01-12 09:58:04.322148228 +0100
-+@@ -1,11 +1,10 @@
++ Name: libselinux
++diff -durN libselinux.orig/src/Makefile libselinux/src/Makefile
++--- libselinux.orig/src/Makefile	2018-01-12 12:42:30.902043126 +0100
+++++ libselinux/src/Makefile	2018-01-12 10:02:57.745478435 +0100
++@@ -8,10 +8,10 @@
++ PKG_CONFIG ?= pkg-config
++ 
 + # Installation directories.
 +-PREFIX ?= $(DESTDIR)/usr
 ++PREFIX ?= /usr
-+ INCLUDEDIR ?= $(PREFIX)/include
 + LIBDIR ?= $(PREFIX)/lib
 +-SHLIBDIR ?= $(DESTDIR)/lib
-+ RANLIB ?= ranlib
-+-LIBBASE ?= $(shell basename $(LIBDIR))
-+ CILDIR ?= ../cil
++ INCLUDEDIR ?= $(PREFIX)/include
 ++LIBINSTALL = $(DESTDIR)$(LIBDIR)
++ PYINC ?= $(shell $(PKG_CONFIG) --cflags $(PYPREFIX))
++ PYLIBS ?= $(shell $(PKG_CONFIG) --libs $(PYPREFIX))
++ PYSITEDIR ?= $(DESTDIR)$(shell $(PYTHON) -c 'import site; print(site.getsitepackages()[0])')
++@@ -19,8 +19,6 @@
++ RUBYINC ?= $(shell $(RUBY) -e 'puts "-I" + RbConfig::CONFIG["rubyarchhdrdir"] + " -I" + RbConfig::CONFIG["rubyhdrdir"]')
++ RUBYLIBS ?= $(shell $(RUBY) -e 'puts "-L" + RbConfig::CONFIG["libdir"] + " -L" + RbConfig::CONFIG["archlibdir"] + " " + RbConfig::CONFIG["LIBRUBYARG_SHARED"]')
++ RUBYINSTALL ?= $(DESTDIR)$(shell $(RUBY) -e 'puts RbConfig::CONFIG["vendorarchdir"]')
++-LIBBASE ?= $(shell basename $(LIBDIR))
++-LIBSEPOLA ?= $(LIBDIR)/libsepol.a
 + 
 + VERSION = $(shell cat ../VERSION)
 + LIBVERSION = 1
-+@@ -52,7 +51,7 @@
-+ 	ln -sf $@ $(TARGET) 
++@@ -148,7 +146,7 @@
++ 	ln -sf $@ $(TARGET)
 + 
 + $(LIBPC): $(LIBPC).in ../VERSION
 +-	sed -e 's/@VERSION@/$(VERSION)/; s:@prefix@:$(PREFIX):; s:@libdir@:$(LIBBASE):; s:@includedir@:$(INCLUDEDIR):' < $< > $@
 ++	sed -e 's/@VERSION@/$(VERSION)/; s:@prefix@:$(PREFIX):; s:@libdir@:$(LIBDIR):; s:@includedir@:$(INCLUDEDIR):' < $< > $@
 + 
-+ $(LIBMAP): $(LIBMAP).in
-+ ifneq ($(DISABLE_CIL),y)
-+@@ -80,16 +79,16 @@
-+ 	$(CC) $(CFLAGS) -fPIC -DSHARED -c -o $@ $<
++ selinuxswig_python_exception.i: ../include/selinux/selinux.h
++ 	bash -e exception.sh > $@ || (rm -f $@ ; false)
++@@ -156,8 +154,8 @@
++ $(AUDIT2WHYLOBJ): audit2why.c
++ 	$(CC) $(filter-out -Werror, $(CFLAGS)) $(PYINC) -fPIC -DSHARED -c -o $@ $<
 + 
-+ install: all
++-$(AUDIT2WHYSO): $(AUDIT2WHYLOBJ) $(LIBSEPOLA)
++-	$(CC) $(CFLAGS) $(LDFLAGS) -L. -shared -o $@ $^ -lselinux $(PYLIBS)
+++$(AUDIT2WHYSO): $(AUDIT2WHYLOBJ)
+++	$(CC) $(CFLAGS) $(LDFLAGS) -L. -shared -o $@ $^ -lselinux $(PYLIBS) -l:libsepol.a
++ 
++ %.o:  %.c policy.h
++ 	$(CC) $(CFLAGS) $(TLSFLAGS) -c -o $@ $<
++@@ -177,13 +175,13 @@
++ 	$(SWIG) $<
++ 
++ install: all 
 +-	test -d $(LIBDIR) || install -m 755 -d $(LIBDIR)
 +-	install -m 644 $(LIBA) $(LIBDIR)
 +-	test -d $(SHLIBDIR) || install -m 755 -d $(SHLIBDIR)
 +-	install -m 755 $(LIBSO) $(SHLIBDIR)
 +-	test -d $(LIBDIR)/pkgconfig || install -m 755 -d $(LIBDIR)/pkgconfig
 +-	install -m 644 $(LIBPC) $(LIBDIR)/pkgconfig
-+-	$(LN) -sf --relative $(SHLIBDIR)/$(LIBSO) $(LIBDIR)/$(TARGET)
++-	ln -sf --relative $(SHLIBDIR)/$(LIBSO) $(LIBDIR)/$(TARGET)
 ++	test -d $(LIBINSTALL) || install -m 755 -d $(LIBINSTALL)
 ++	install -m 644 $(LIBA) $(LIBINSTALL)
 ++	test -d $(LIBINSTALL) || install -m 755 -d $(LIBINSTALL)
 ++	install -m 755 $(LIBSO) $(LIBINSTALL)
 ++	test -d $(LIBINSTALL)/pkgconfig || install -m 755 -d $(LIBINSTALL)/pkgconfig
 ++	install -m 644 $(LIBPC) $(LIBINSTALL)/pkgconfig
-++	$(LN) -sf --relative $(LIBINSTALL)/$(LIBSO) $(LIBINSTALL)/$(TARGET)
+++	ln -sf --relative $(LIBINSTALL)/$(LIBSO) $(LIBINSTALL)/$(TARGET)
++ 
++ install-pywrap: pywrap
++ 	test -d $(PYSITEDIR)/selinux || install -m 755 -d $(PYSITEDIR)/selinux
++@@ -196,7 +194,7 @@
++ 	install -m 755 $(SWIGRUBYSO) $(RUBYINSTALL)/selinux.so
 + 
 + relabel:
 +-	/sbin/restorecon $(SHLIBDIR)/$(LIBSO)
 ++	/sbin/restorecon $(LIBINSTALL)/$(LIBSO)
 + 
-+ clean: 
-+ 	-rm -f $(LIBPC) $(LIBMAP) $(OBJS) $(LOBJS) $(LIBA) $(LIBSO) $(TARGET) $(CIL_GENERATED)
-+diff -durN libsepol.orig/utils/Makefile libsepol/utils/Makefile
-+--- libsepol.orig/utils/Makefile	2018-01-12 12:42:30.915376458 +0100
-++++ libsepol/utils/Makefile	2018-01-12 09:58:04.322148228 +0100
-+@@ -1,6 +1,6 @@
++ clean-pywrap:
++ 	-rm -f $(SWIGLOBJ) $(SWIGSO) $(AUDIT2WHYLOBJ) $(AUDIT2WHYSO)
++diff -durN libselinux.orig/utils/Makefile libselinux/utils/Makefile
++--- libselinux.orig/utils/Makefile	2018-01-12 12:42:30.905376458 +0100
+++++ libselinux/utils/Makefile	2018-01-12 10:02:57.745478435 +0100
++@@ -1,8 +1,6 @@
 + # Installation directories.
 +-PREFIX ?= $(DESTDIR)/usr
-+-BINDIR ?= $(PREFIX)/bin
++-LIBDIR ?= $(PREFIX)/lib
++-SBINDIR ?= $(PREFIX)/sbin
++-INCLUDEDIR ?= $(PREFIX)/include
 ++PREFIX ?= /usr
-++BINDIR ?= $(DESTDIR)$(PREFIX)/bin
+++SBINDIR ?= $(DESTDIR)$(PREFIX)/sbin
 + 
-+ CFLAGS ?= -Wall -Werror
-+ override CFLAGS += -I../include
-diff --git a/package/libsepol/0001-support-static-only.patch b/package/libsepol/0003-support-static-only.patch
-similarity index 57%
-rename from package/libsepol/0001-support-static-only.patch
-rename to package/libsepol/0003-support-static-only.patch
-index 185a564..8cf9a18 100644
---- a/package/libsepol/0001-support-static-only.patch
-+++ b/package/libsepol/0003-support-static-only.patch
-@@ -15,11 +15,10 @@ Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
-  src/Makefile | 13 ++++++++++---
-  1 file changed, 10 insertions(+), 3 deletions(-)
- 
--diff --git a/src/Makefile b/src/Makefile
--index 819d261..040921d 100644
++ OS ?= $(shell uname)
++ 
+diff --git a/package/libselinux/0003-revert-ln-relative.patch b/package/libselinux/0003-revert-ln-relative.patch
+deleted file mode 100644
+index b8ad070..0000000
+--- a/package/libselinux/0003-revert-ln-relative.patch
++++ /dev/null
+@@ -1,24 +0,0 @@
+-Makefile: revert libselinux: use ln --relative to create .so symlinks
+-
+-This reverts 71393a181d63c9baae5fe8dcaeb9411d1f253998
+-
+-ln --relative is too recent to be available in all distributions,
+-especially enterprise-grade distros that can stick around as long as
+-they are maintained (up to 10 years in some cases?).
+-
+-For the sake of Buildroot, revert the upstream patch.
+-
+-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+-
+-diff -durN a/src/Makefile b/src/Makefile
 ---- a/src/Makefile
 -+++ b/src/Makefile
--@@ -40,7 +40,12 @@ LDFLAGS += -undefined dynamic_lookup
-+diff -durNw libsepol-2.7.orig/src/Makefile libsepol-2.7/src/Makefile
-+--- libsepol-2.7.orig/src/Makefile	2018-01-15 21:07:51.285183415 +0100
-++++ libsepol-2.7/src/Makefile	2018-01-15 21:08:56.515182717 +0100
-+@@ -39,7 +39,12 @@
-  LN=gln
-  endif
-  
-@@ -33,22 +32,14 @@ index 819d261..040921d 100644
-  
-  
-  $(LIBA):  $(OBJS)
--@@ -82,11 +87,13 @@ endif
-+@@ -81,8 +86,10 @@
-  install: all
-- 	test -d $(LIBDIR) || install -m 755 -d $(LIBDIR)
-- 	install -m 644 $(LIBA) $(LIBDIR)
---	test -d $(SHLIBDIR) || install -m 755 -d $(SHLIBDIR)
---	install -m 755 $(LIBSO) $(SHLIBDIR)
+-@@ -151,7 +151,7 @@
+- 	install -m 755 $(LIBSO) $(SHLIBDIR)
 - 	test -d $(LIBDIR)/pkgconfig || install -m 755 -d $(LIBDIR)/pkgconfig
 - 	install -m 644 $(LIBPC) $(LIBDIR)/pkgconfig
-+ 	test -d $(LIBINSTALL) || install -m 755 -d $(LIBINSTALL)
-+ 	install -m 644 $(LIBA) $(LIBINSTALL)
- +ifeq ($(STATIC),)
--+	test -d $(SHLIBDIR) || install -m 755 -d $(SHLIBDIR)
--+	install -m 755 $(LIBSO) $(SHLIBDIR)
-- 	$(LN) -sf --relative $(SHLIBDIR)/$(LIBSO) $(LIBDIR)/$(TARGET)
-+ 	test -d $(LIBINSTALL) || install -m 755 -d $(LIBINSTALL)
-+ 	install -m 755 $(LIBSO) $(LIBINSTALL)
- +endif
-- 
-- relabel:
-- 	/sbin/restorecon $(SHLIBDIR)/$(LIBSO)
---- 
--2.13.6
--
-+ 	test -d $(LIBINSTALL)/pkgconfig || install -m 755 -d $(LIBINSTALL)/pkgconfig
-+ 	install -m 644 $(LIBPC) $(LIBINSTALL)/pkgconfig
-+ 	$(LN) -sf --relative $(LIBINSTALL)/$(LIBSO) $(LIBINSTALL)/$(TARGET)
-diff --git a/package/libsepol/0003-revert-ln-relative.patch b/package/libsepol/0004-revert-ln-relative.patch
-similarity index 54%
-rename from package/libsepol/0003-revert-ln-relative.patch
-rename to package/libsepol/0004-revert-ln-relative.patch
-index 488a9ab..9d1553e 100644
---- a/package/libsepol/0003-revert-ln-relative.patch
-+++ b/package/libsepol/0004-revert-ln-relative.patch
-@@ -12,23 +12,16 @@ they are maintained (up to 10 years in some cases?).
- For the sake of Buildroot, revert the upstream patch.
- 
- Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-----
-- src/Makefile | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
- 
--diff --git a/src/Makefile b/src/Makefile
--index 040921d..e811c9e 100644
----- a/src/Makefile
--+++ b/src/Makefile
--@@ -92,7 +92,7 @@ install: all
-- ifeq ($(STATIC),)
-- 	test -d $(SHLIBDIR) || install -m 755 -d $(SHLIBDIR)
-- 	install -m 755 $(LIBSO) $(SHLIBDIR)
---	$(LN) -sf --relative $(SHLIBDIR)/$(LIBSO) $(LIBDIR)/$(TARGET)
+--	ln -sf --relative $(SHLIBDIR)/$(LIBSO) $(LIBDIR)/$(TARGET)
 -+	cd $(LIBDIR) && ln -sf ../../`basename $(SHLIBDIR)`/$(LIBSO) $(TARGET)
-+diff -durNw libsepol-2.7.orig/src/Makefile libsepol-2.7/src/Makefile
-+--- libsepol-2.7.orig/src/Makefile	2018-01-15 21:37:12.821831315 +0100
-++++ libsepol-2.7/src/Makefile	2018-01-15 21:38:03.838497434 +0100
-+@@ -92,7 +92,7 @@
-  endif
+- 
+- install-pywrap: pywrap
+- 	test -d $(PYLIBDIR)/site-packages/selinux || install -m 755 -d $(PYLIBDIR)/site-packages/selinux
+diff --git a/package/libselinux/0004-revert-ln-relative.patch b/package/libselinux/0004-revert-ln-relative.patch
+new file mode 100644
+index 0000000..f72afa1
+--- /dev/null
++++ b/package/libselinux/0004-revert-ln-relative.patch
+@@ -0,0 +1,24 @@
++Makefile: revert libselinux: use ln --relative to create .so symlinks
++
++This reverts 71393a181d63c9baae5fe8dcaeb9411d1f253998
++
++ln --relative is too recent to be available in all distributions,
++especially enterprise-grade distros that can stick around as long as
++they are maintained (up to 10 years in some cases?).
++
++For the sake of Buildroot, revert the upstream patch.
++
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++
++diff -durNw libselinux-2.7.orig/src/Makefile libselinux-2.7/src/Makefile
++--- libselinux-2.7.orig/src/Makefile	2018-01-15 20:53:50.168525700 +0100
+++++ libselinux-2.7/src/Makefile	2018-01-15 20:55:27.061858005 +0100
++@@ -181,7 +181,7 @@
++ 	install -m 755 $(LIBSO) $(LIBINSTALL)
 + 	test -d $(LIBINSTALL)/pkgconfig || install -m 755 -d $(LIBINSTALL)/pkgconfig
 + 	install -m 644 $(LIBPC) $(LIBINSTALL)/pkgconfig
-+-	$(LN) -sf --relative $(LIBINSTALL)/$(LIBSO) $(LIBINSTALL)/$(TARGET)
++-	ln -sf --relative $(LIBINSTALL)/$(LIBSO) $(LIBINSTALL)/$(TARGET)
 ++	cd $(LIBINSTALL) && ln -sf $(LIBSO) $(TARGET)
-  
-  relabel:
---- 
--2.13.6
--
-+ 	/sbin/restorecon $(LIBINSTALL)/$(LIBSO)
-diff --git a/package/libsepol/libsepol.mk b/package/libsepol/libsepol.mk
-index c54c3bf..5932ca1 100644
---- a/package/libsepol/libsepol.mk
-+++ b/package/libsepol/libsepol.mk
-@@ -20,9 +20,7 @@ LIBSEPOL_MAKE_FLAGS += STATIC=1
- endif
++ 
++ install-pywrap: pywrap
++ 	test -d $(PYSITEDIR)/selinux || install -m 755 -d $(PYSITEDIR)/selinux
+diff --git a/package/libselinux/libselinux.mk b/package/libselinux/libselinux.mk
+index 8ac8000..b3d48f7 100644
+--- a/package/libselinux/libselinux.mk
++++ b/package/libselinux/libselinux.mk
+@@ -45,15 +45,13 @@ LIBSELINUX_MAKE_INSTALL_TARGETS += install-pywrap
+ # invocation as the rest of the library.
+ define LIBSELINUX_BUILD_PYTHON_BINDINGS
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
+-		$(LIBSELINUX_MAKE_OPTS) DESTDIR=$(STAGING_DIR) swigify pywrap
++		$(LIBSELINUX_MAKE_OPTS) swigify pywrap
+ endef
+ endif # python || python3
  
- define LIBSEPOL_BUILD_CMDS
+ define LIBSELINUX_BUILD_CMDS
 -	# DESTDIR is needed during the compile to compute library and
 -	# header paths.
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(LIBSEPOL_MAKE_FLAGS) DESTDIR=$(STAGING_DIR)
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(LIBSEPOL_MAKE_FLAGS)
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
+-		$(LIBSELINUX_MAKE_OPTS) DESTDIR=$(STAGING_DIR) all
++		$(LIBSELINUX_MAKE_OPTS) all
+ 	$(LIBSELINUX_BUILD_PYTHON_BINDINGS)
  endef
  
- define LIBSEPOL_INSTALL_STAGING_CMDS
-@@ -35,7 +33,6 @@ endef
+@@ -85,10 +83,8 @@ HOST_LIBSELINUX_PYINC = -I$(HOST_DIR)/include/python$(PYTHON_VERSION_MAJOR)/
+ HOST_LIBSELINUX_PYLIBVER = python$(PYTHON_VERSION_MAJOR)
+ endif
  
- HOST_LIBSEPOL_MAKE_ENV = \
- 	$(HOST_MAKE_ENV) \
+-# DESTDIR is needed during the compile to compute library and header paths.
+ HOST_LIBSELINUX_MAKE_OPTS = \
+ 	$(HOST_CONFIGURE_OPTS) \
 -	DESTDIR=$(HOST_DIR) \
- 	PREFIX=$(HOST_DIR)
- 
- define HOST_LIBSEPOL_BUILD_CMDS
+ 	PREFIX=$(HOST_DIR) \
+ 	LDFLAGS="$(HOST_LDFLAGS) -lpcre -lpthread" \
+ 	PYINC="$(HOST_LIBSELINUX_PYINC)" \
