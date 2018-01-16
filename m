@@ -1,54 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 16 Jan 2018 19:43:26 +0100
-Subject: [Buildroot] [git commit branch/2017.11.x] package/kmsxx: don't
- install static libraries when BR2_SHARED_STATIC_LIBS=y
-Message-ID: <20180116194020.C1CC483C30@busybox.osuosl.org>
+Date: Tue, 16 Jan 2018 19:45:05 +0100
+Subject: [Buildroot] [git commit branch/2017.11.x] mcookie: correct wrong
+ memset argument
+Message-ID: <20180116194020.E711280386@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fe3ac2c20aef525e51ff425f8acbb14f9b7a9334
+commit: https://git.buildroot.net/buildroot/commit/?id=c57572b95e9da33c1367e3706f4191147c9ad4c4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.11.x
 
-The kmsxx build system can only build either shared libraries *or*
-static libraries, not both. Therefore, the build currently fails when
-BR2_SHARED_STATIC_LIBS=y because we try to install the static
-libraries, that haven't been built.
+Fixes #10216
 
-We fix this by not installing the static libraries when
-BR2_SHARED_STATIC_LIBS=y, making BR2_SHARED_STATIC_LIBS=y essentially
-the same as BR2_SHARED_LIBS=y for this package.
+Building mcookie generates a warning about possible wrong arguments to
+memset:
 
-Fixes bug #10331.
+mcookie.c:207:26: warning: argument to ???sizeof??? in ???memset??? call is the same expression
+  as the destination; did you mean to dereference it? [-Wsizeof-pointer-memaccess]
+     memset(ctx, 0, sizeof(ctx)); /* In case it's sensitive */
 
-Reported-by:  Frederic MATHIEU <frederic.mathieu@dualis.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 28d5ca9c96f5144e86fac7ec6485fa5634cd6e97)
+ctx is a pointer to a structure, so the code should use the size of the
+structure and not the size of the pointer when it tries to clear the
+structure, similar to how it got fixed upstream back in 2009:
+
+https://git.kernel.org/pub/scm/utils/util-linux/util-linux.git/commit/lib/md5.c?id=6596057175c6ed342dc20e85eae8a42eb29b629f
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 40f4191f2a1246b792ffc0c02b6c9bd2d62649f2)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/kmsxx/kmsxx.mk | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ package/x11r7/mcookie/mcookie.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/kmsxx/kmsxx.mk b/package/kmsxx/kmsxx.mk
-index 5c4a0c1..dc0f8c1 100644
---- a/package/kmsxx/kmsxx.mk
-+++ b/package/kmsxx/kmsxx.mk
-@@ -44,12 +44,15 @@ define KMSXX_INSTALL_TARGET_CMDS
- 	$(KMSXX_INSTALL_TARGET_TESTS)
- endef
+diff --git a/package/x11r7/mcookie/mcookie.c b/package/x11r7/mcookie/mcookie.c
+index 902d92f..3c38f6f 100644
+--- a/package/x11r7/mcookie/mcookie.c
++++ b/package/x11r7/mcookie/mcookie.c
+@@ -204,7 +204,7 @@ void MD5Final(unsigned char digest[16], struct MD5Context *ctx)
+     MD5Transform(ctx->buf, (uint32 *) ctx->in);
+     byteReverse((unsigned char *) ctx->buf, 4);
+     memcpy(digest, ctx->buf, 16);
+-    memset(ctx, 0, sizeof(ctx));	/* In case it's sensitive */
++    memset(ctx, 0, sizeof(*ctx));	/* In case it's sensitive */
+ }
  
-+# kmsxx only builds shared or static libraries, so when
-+# BR2_SHARED_STATIC_LIBS=y, we don't have any static library to
-+# install
- define KMSXX_INSTALL_STAGING_CMDS
- 	$(foreach l,$(KMSXX_LIBS),\
- 		$(if $(BR2_SHARED_LIBS)$(BR2_SHARED_STATIC_LIBS),
- 			$(INSTALL) -D -m 0755 $(@D)/lib/lib$(l).so \
- 				$(STAGING_DIR)/usr/lib/lib$(l).so)
--		$(if $(BR2_STATIC_LIBS)$(BR2_SHARED_STATIC_LIBS),
-+		$(if $(BR2_STATIC_LIBS),
- 			$(INSTALL) -D -m 0755 $(@D)/lib/lib$(l).a \
- 				$(STAGING_DIR)/usr/lib/lib$(l).a)
- 		mkdir -p $(STAGING_DIR)/usr/include/$(l)
+ /* The four core functions - F1 is optimized somewhat */
