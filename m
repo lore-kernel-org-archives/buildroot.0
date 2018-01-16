@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 16 Jan 2018 15:10:38 +0100
-Subject: [Buildroot] llvm/clang
-In-Reply-To: <eea8291f-5cdc-3cb3-3df0-9dac033d9025@smile.fr>
-References: <eea8291f-5cdc-3cb3-3df0-9dac033d9025@smile.fr>
-Message-ID: <20180116151038.3d27d2d0@windsurf>
+Date: Tue, 16 Jan 2018 15:11:34 +0100
+Subject: [Buildroot] Requesting libvte
+In-Reply-To: <7xZpCd7a9iHnFDkxtk-hp9r3cZammqShsBXFvsl8e_Xbvk5l0ZifgDyr0M_xvct0Xx2orSf12gjFE2EIXUrvDjADA4rOOaMBqwcpt3dBqtY=@protonmail.com>
+References: <7xZpCd7a9iHnFDkxtk-hp9r3cZammqShsBXFvsl8e_Xbvk5l0ZifgDyr0M_xvct0Xx2orSf12gjFE2EIXUrvDjADA4rOOaMBqwcpt3dBqtY=@protonmail.com>
+Message-ID: <20180116151134.1b343472@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,24 +12,21 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 16 Jan 2018 10:25:39 +0100, Valentin KORENBLIT wrote:
+On Tue, 16 Jan 2018 05:44:22 -0500, Biz.122 wrote:
 
-> As an intern at Smile (Paris), I will be working for 6 months on the integration
-> of LLVM/Clang for Buildroot, on top of what has already been done by Romain
-> Naour and others [1].
+> I noticed that libvte is not in buildroot, can someone please add it?
+> That lib is a terminal emulator widget for gtk and I am a little surprised that it isn't in there (since we have gstreamer and other common gtk stuff already).
+> 
+> For convenience, website: https://github.com/GNOME/vte
 
-Great!
-
-> Feel free to send me any suggestions, advice or whatever you believe it is
-> necessary to be considered for this patch. I am available on IRC in the
-> Buildroot channel as vkorenblit.
-
-Welcome, and looking forward to meeting you during the Buildroot
-Developers Meeting next month in Brussels!
+Thanks for your suggestion. Why don't you send a patch adding this
+package? This is how open-source works: if something isn't done yet,
+it's because nobody did it, so it's up to you to contribute what's
+missing :-)
 
 Best regards,
 
-Thomas
+Thomas Petazzoni
 -- 
 Thomas Petazzoni, CTO, Free Electrons
 Embedded Linux and Kernel engineering
