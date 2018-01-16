@@ -1,9 +1,9 @@
 From: Johan Oudinet <johan.oudinet@gmail.com>
-Date: Tue, 16 Jan 2018 15:06:46 +0100
-Subject: [Buildroot] [PATCH 11/14] erlang-p1-stun: Bump to version 1.0.16
+Date: Tue, 16 Jan 2018 15:06:47 +0100
+Subject: [Buildroot] [PATCH 12/14] erlang-p1-sip: Bump to version 1.0.17
 In-Reply-To: <20180116140649.7381-1-johan.oudinet@gmail.com>
 References: <20180116140649.7381-1-johan.oudinet@gmail.com>
-Message-ID: <20180116140649.7381-12-johan.oudinet@gmail.com>
+Message-ID: <20180116140649.7381-13-johan.oudinet@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,54 +14,57 @@ Adapt the patch that removes rebar dependencies to version changes.
 
 Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
 ---
- .../erlang-p1-stun/0001-remove-dependencies-from-rebar-config.patch | 6 +++---
- package/erlang-p1-stun/erlang-p1-stun.hash                          | 2 +-
- package/erlang-p1-stun/erlang-p1-stun.mk                            | 2 +-
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ .../0002-remove-dependencies-from-rebar-config.patch           | 10 +++++-----
+ package/erlang-p1-sip/erlang-p1-sip.hash                       |  2 +-
+ package/erlang-p1-sip/erlang-p1-sip.mk                         |  2 +-
+ 3 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/package/erlang-p1-stun/0001-remove-dependencies-from-rebar-config.patch b/package/erlang-p1-stun/0001-remove-dependencies-from-rebar-config.patch
-index 30101359f4..7e6b4b5345 100644
---- a/package/erlang-p1-stun/0001-remove-dependencies-from-rebar-config.patch
-+++ b/package/erlang-p1-stun/0001-remove-dependencies-from-rebar-config.patch
-@@ -2,15 +2,15 @@ Without this patch, dependencies would be downloaded and compiled
- by rebar at build time.
+diff --git a/package/erlang-p1-sip/0002-remove-dependencies-from-rebar-config.patch b/package/erlang-p1-sip/0002-remove-dependencies-from-rebar-config.patch
+index 5fe86d900f..da86076988 100644
+--- a/package/erlang-p1-sip/0002-remove-dependencies-from-rebar-config.patch
++++ b/package/erlang-p1-sip/0002-remove-dependencies-from-rebar-config.patch
+@@ -4,16 +4,16 @@ by rebar at build time.
+ Signed-off-by: Christophe Romain <cromain@process-one.net>
  
  diff --git a/rebar.config b/rebar.config
--index 94ee830..d0af863 100644
-+index f02ea40..d0af863 100644
+-index fbc69a1..6250420 100644
++index ed93134..5b32788 100644
  --- a/rebar.config
  +++ b/rebar.config
- @@ -22,9 +22,6 @@
+-@@ -29,10 +29,6 @@
++@@ -31,10 +31,6 @@
  
-  {erl_opts, [debug_info, {i, "include"}]}.
+  {port_specs, [{"priv/lib/esip_drv.so", ["c_src/esip_codec.c"]}]}.
  
---{deps, [{fast_tls, ".*", {git, "https://github.com/processone/fast_tls", {tag, "1.0.11"}}},
+--{deps, [{stun, ".*", {git, "https://github.com/processone/stun", {tag, "1.0.10"}}},
+--	{fast_tls, ".*", {git, "https://github.com/processone/fast_tls", {tag, "1.0.11"}}},
 --	{p1_utils, ".*", {git, "https://github.com/processone/p1_utils", {tag, "1.0.7"}}}]}.
-+-{deps, [{fast_tls, ".*", {git, "https://github.com/processone/fast_tls", {tag, "1.0.17"}}},
++-{deps, [{stun, ".*", {git, "https://github.com/processone/stun", {tag, "1.0.16"}}},
++-	{fast_tls, ".*", {git, "https://github.com/processone/fast_tls", {tag, "1.0.17"}}},
 +-	{p1_utils, ".*", {git, "https://github.com/processone/p1_utils", {tag, "1.0.10"}}}]}.
  -
-  {cover_enabled, true}.
-  {cover_export_enabled, true}.
-diff --git a/package/erlang-p1-stun/erlang-p1-stun.hash b/package/erlang-p1-stun/erlang-p1-stun.hash
-index 893bc30e0b..ee32834e34 100644
---- a/package/erlang-p1-stun/erlang-p1-stun.hash
-+++ b/package/erlang-p1-stun/erlang-p1-stun.hash
+  {clean_files, ["c_src/esip_codec.gcda", "c_src/esip_codec.gcno"]}.
+ 
+diff --git a/package/erlang-p1-sip/erlang-p1-sip.hash b/package/erlang-p1-sip/erlang-p1-sip.hash
+index 2ea7bc8ec4..4d41b9884c 100644
+--- a/package/erlang-p1-sip/erlang-p1-sip.hash
++++ b/package/erlang-p1-sip/erlang-p1-sip.hash
 @@ -1,2 +1,2 @@
  # Locally calculated
--sha256 75aac56fa770b3b4ea2d32e63706d2b8d56f8e0db54243acffa7448f4256864e erlang-p1-stun-1.0.10.tar.gz
-+sha256 8efe2f47c2460b1e0d68a680dcfcd938a2bc98c85abb5b100c15246fe6a25506 erlang-p1-stun-1.0.16.tar.gz
-diff --git a/package/erlang-p1-stun/erlang-p1-stun.mk b/package/erlang-p1-stun/erlang-p1-stun.mk
-index 5116c15284..42bbc758e5 100644
---- a/package/erlang-p1-stun/erlang-p1-stun.mk
-+++ b/package/erlang-p1-stun/erlang-p1-stun.mk
+-sha256 2c6ed00220ead631a4755000ad9f118d79c8c4d41aa7c98bd27365a8345f9a5d erlang-p1-sip-1.0.11.tar.gz
++sha256 6ac36594921561d0d5502bb824b7408223a3f53560a9d2fa4b0f685c0441baf0 erlang-p1-sip-1.0.17.tar.gz
+diff --git a/package/erlang-p1-sip/erlang-p1-sip.mk b/package/erlang-p1-sip/erlang-p1-sip.mk
+index 0f4b33e2d1..a9f572df2d 100644
+--- a/package/erlang-p1-sip/erlang-p1-sip.mk
++++ b/package/erlang-p1-sip/erlang-p1-sip.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ERLANG_P1_STUN_VERSION = 1.0.10
-+ERLANG_P1_STUN_VERSION = 1.0.16
- ERLANG_P1_STUN_SITE = $(call github,processone,stun,$(ERLANG_P1_STUN_VERSION))
- ERLANG_P1_STUN_LICENSE = Apache-2.0
- ERLANG_P1_STUN_LICENSE_FILES = LICENSE.txt
+-ERLANG_P1_SIP_VERSION = 1.0.11
++ERLANG_P1_SIP_VERSION = 1.0.17
+ ERLANG_P1_SIP_SITE = $(call github,processone,esip,$(ERLANG_P1_SIP_VERSION))
+ ERLANG_P1_SIP_LICENSE = Apache-2.0
+ ERLANG_P1_SIP_LICENSE_FILES = LICENSE.txt
 -- 
 2.14.1
