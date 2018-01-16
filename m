@@ -1,8 +1,8 @@
 From: Johannes Schmitz <johannes.schmitz1@gmail.com>
-Date: Tue, 16 Jan 2018 19:50:43 +0100
+Date: Tue, 16 Jan 2018 19:50:16 +0100
 Subject: [Buildroot] [PATCH 1/1] toolchain: use -ffp-contract=off on MIPS in
  the wrapper when needed
-Message-ID: <1516128643-20202-1-git-send-email-johannes.schmitz1@gmail.com>
+Message-ID: <1516128616-20127-1-git-send-email-johannes.schmitz1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
