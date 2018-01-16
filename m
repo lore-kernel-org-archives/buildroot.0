@@ -1,35 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 16 Jan 2018 20:39:35 +0100
-Subject: [Buildroot] [git commit] system: only expose getty options for
- busybox and sysvinit
-In-Reply-To: <20180112210924.2C66382BCA@busybox.osuosl.org> (Thomas
- Petazzoni's message of "Fri, 12 Jan 2018 22:07:59 +0100")
-References: <20180112210924.2C66382BCA@busybox.osuosl.org>
-Message-ID: <87wp0hegp4.fsf@dell.be.48ers.dk>
+Date: Tue, 16 Jan 2018 20:39:53 +0100
+Subject: [Buildroot] [PATCH v2] package/ti-cgt-pru: bump to 2.2.1
+In-Reply-To: <20180109201306.13526-1-romain.naour@gmail.com> (Romain Naour's
+ message of "Tue, 9 Jan 2018 21:13:06 +0100")
+References: <20180109201306.13526-1-romain.naour@gmail.com>
+Message-ID: <87shb5egom.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=5e23eb5da7b3848cc6b317af9d8c23aac3a13260
- > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ > See: http://www.ti.com/tool/download/PRU-CGT-2-2
+ > The ti-cgt-pru v2.1.x installer are affected by a bug with recent
+ > distribution (Fedora 27 and Ubuntu 17.10) using kernel 4.13 or 4.14
+ > with a glibc 2.26.
+ > The installer is stuck in a futex(wait) system call.
 
- > Only busybox and sysvinit handle the BR2_TARGET_GENERIC_GETTY_TERM and
- > BR2_TARGET_GENERIC_GETTY_OPTIONS options; the other init systems do
- > not.
+ > While at it, add license hash.
 
- > So, protect those options behind appropriate dependencies on busybox
- > or sysvinit.
+ > Fixes:
+ > http://autobuild.buildroot.net/results/68f/68f60ad38d9b6eae83b5d233966616a25d8c9391
 
- > Fixes #10301.
+ > Signed-off-by: Romain Naour <romain.naour@gmail.com>
+ > Cc: Ash Charles <ash.charles@savoirfairelinux.com>
+ > Cc: Matthew Weber <matthew.weber@rockwellcollins.com>
+ > ---
+ > Note: This bump is not tested on real PRU hardware.
 
- > Reported-by: Michael Heinemann <posted@heine.so>
- > Suggested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ > v2: update license files and add license hash
 
 Committed to 2017.11.x, thanks.
 
