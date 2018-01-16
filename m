@@ -1,62 +1,54 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 16 Jan 2018 19:41:36 +0100
-Subject: [Buildroot] [git commit branch/2017.11.x] webkitgtk: security bump
- to version 2.18.5
-Message-ID: <20180116194020.930B283C30@busybox.osuosl.org>
+Date: Tue, 16 Jan 2018 19:43:26 +0100
+Subject: [Buildroot] [git commit branch/2017.11.x] package/kmsxx: don't
+ install static libraries when BR2_SHARED_STATIC_LIBS=y
+Message-ID: <20180116194020.C1CC483C30@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4d757cfd39e642dd3d726dcffe3432bc5a7d983c
+commit: https://git.buildroot.net/buildroot/commit/?id=fe3ac2c20aef525e51ff425f8acbb14f9b7a9334
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.11.x
 
-This is a maintenance release of the current stable WebKitGTK+ version,
-which contains mitigations for CVE-2017-5753 and CVE-2017-5715, the
-vulnerabilities known as the "Spectre" attack. It also contains a fix
-which allows building the reference documentation with newer gtk-doc
-versions.
+The kmsxx build system can only build either shared libraries *or*
+static libraries, not both. Therefore, the build currently fails when
+BR2_SHARED_STATIC_LIBS=y because we try to install the static
+libraries, that haven't been built.
 
-Release notes can be found in the announcement:
+We fix this by not installing the static libraries when
+BR2_SHARED_STATIC_LIBS=y, making BR2_SHARED_STATIC_LIBS=y essentially
+the same as BR2_SHARED_LIBS=y for this package.
 
-  https://webkitgtk.org/2018/01/10/webkitgtk2.18.5-released.html
+Fixes bug #10331.
 
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 4c5bc08ba3198075dcf6f96b34684d577cfe5a69)
+Reported-by:  Frederic MATHIEU <frederic.mathieu@dualis.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+(cherry picked from commit 28d5ca9c96f5144e86fac7ec6485fa5634cd6e97)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/webkitgtk/webkitgtk.hash | 8 ++++----
- package/webkitgtk/webkitgtk.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/kmsxx/kmsxx.mk | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
-index 3d64b6f5..0eeaca5 100644
---- a/package/webkitgtk/webkitgtk.hash
-+++ b/package/webkitgtk/webkitgtk.hash
-@@ -1,7 +1,7 @@
--# From https://webkitgtk.org/releases/webkitgtk-2.18.4.tar.xz.sums
--md5 c4686971eac2760bab685e21ac8849be webkitgtk-2.18.4.tar.xz
--sha1 709616b445158dc3163a64bb59e95aadbe58949c webkitgtk-2.18.4.tar.xz
--sha256 87b6bb9a6065b949ecbe6191313c43e57ad28efdf1f2b5e763405093520632b8 webkitgtk-2.18.4.tar.xz
-+# From https://webkitgtk.org/releases/webkitgtk-2.18.5.tar.xz.sums
-+md5 af18c2cfa00cadfd0b4d8db21cab011d webkitgtk-2.18.5.tar.xz
-+sha1 5f36db464f6b7bbe6a57e55bc9bb172f87a4c398 webkitgtk-2.18.5.tar.xz
-+sha256 0c6d80cc7eb5d32f8063041fa11a1a6f17a29765c2f69c6bc862cd47c2d539b8 webkitgtk-2.18.5.tar.xz
+diff --git a/package/kmsxx/kmsxx.mk b/package/kmsxx/kmsxx.mk
+index 5c4a0c1..dc0f8c1 100644
+--- a/package/kmsxx/kmsxx.mk
++++ b/package/kmsxx/kmsxx.mk
+@@ -44,12 +44,15 @@ define KMSXX_INSTALL_TARGET_CMDS
+ 	$(KMSXX_INSTALL_TARGET_TESTS)
+ endef
  
- # Hashes for license files:
- sha256 0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4 Source/WebCore/LICENSE-APPLE
-diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-index 142f976..ebe682e 100644
---- a/package/webkitgtk/webkitgtk.mk
-+++ b/package/webkitgtk/webkitgtk.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WEBKITGTK_VERSION = 2.18.4
-+WEBKITGTK_VERSION = 2.18.5
- WEBKITGTK_SITE = http://www.webkitgtk.org/releases
- WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
- WEBKITGTK_INSTALL_STAGING = YES
++# kmsxx only builds shared or static libraries, so when
++# BR2_SHARED_STATIC_LIBS=y, we don't have any static library to
++# install
+ define KMSXX_INSTALL_STAGING_CMDS
+ 	$(foreach l,$(KMSXX_LIBS),\
+ 		$(if $(BR2_SHARED_LIBS)$(BR2_SHARED_STATIC_LIBS),
+ 			$(INSTALL) -D -m 0755 $(@D)/lib/lib$(l).so \
+ 				$(STAGING_DIR)/usr/lib/lib$(l).so)
+-		$(if $(BR2_STATIC_LIBS)$(BR2_SHARED_STATIC_LIBS),
++		$(if $(BR2_STATIC_LIBS),
+ 			$(INSTALL) -D -m 0755 $(@D)/lib/lib$(l).a \
+ 				$(STAGING_DIR)/usr/lib/lib$(l).a)
+ 		mkdir -p $(STAGING_DIR)/usr/include/$(l)
