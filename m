@@ -1,10 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 16 Jan 2018 20:39:18 +0100
-Subject: [Buildroot] [PATCH] lz4: install programs as well as libraries
-In-Reply-To: <20180110224052.6830-1-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Wed, 10 Jan 2018 23:40:52 +0100")
-References: <20180110224052.6830-1-thomas.petazzoni@free-electrons.com>
-Message-ID: <871sipfva1.fsf@dell.be.48ers.dk>
+Date: Tue, 16 Jan 2018 20:39:35 +0100
+Subject: [Buildroot] [git commit] system: only expose getty options for
+ busybox and sysvinit
+In-Reply-To: <20180112210924.2C66382BCA@busybox.osuosl.org> (Thomas
+ Petazzoni's message of "Fri, 12 Jan 2018 22:07:59 +0100")
+References: <20180112210924.2C66382BCA@busybox.osuosl.org>
+Message-ID: <87wp0hegp4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,32 +14,21 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- > Prior to commit 8ad38a4fc2007df4bee9a941aed46c8771b6a84c
- > ("package/lz4: bump version to r131"), the lz4 package was installing
- > both libraries and programs, but this commit changed the behavior to
- > only install libraries.
+ > commit: https://git.buildroot.net/buildroot/commit/?id=5e23eb5da7b3848cc6b317af9d8c23aac3a13260
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > The contributor might have been confused by the fact that the build
- > command was "$(MAKE) ... -C $(@D) liblz4", suggesting that only the
- > library was built. But since the install command was "$(MAKE) ... -C
- > $(@D) install", the programs were effectively built as part of the
- > install step, and installed as well.
+ > Only busybox and sysvinit handle the BR2_TARGET_GENERIC_GETTY_TERM and
+ > BR2_TARGET_GENERIC_GETTY_OPTIONS options; the other init systems do
+ > not.
 
- > Since it makes sense for lz4 to also installs its programs, this
- > commit adjusts the package accordingly.
+ > So, protect those options behind appropriate dependencies on busybox
+ > or sysvinit.
 
- > It is worth mentioning that using the "all" target during the build
- > step is important. Indeed, otherwise the programs/Makefile has a
- > "default" target that doesn't build everything (especially the lz4c
- > program) and it end up being built as part of the install step, due to
- > how the makefile dependencies are handled in the lz4 project. To make
- > sure that everything gets built during the build step, we explicitly
- > use the "all" target.
+ > Fixes #10301.
 
- > Fixes bug #9996
-
- > Reported-by: Jamin Collins <jamin.collins@gmail.com>
- > Initial-analysis-by: Arnout Vandecappelle <arnout@mind.be>
+ > Reported-by: Michael Heinemann <posted@heine.so>
+ > Suggested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
  > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
 Committed to 2017.11.x, thanks.
