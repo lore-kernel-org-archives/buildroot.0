@@ -1,40 +1,65 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 16 Jan 2018 16:50:21 +0100
-Subject: [Buildroot] [PATCH] xen: bump to version 4.9.1
-In-Reply-To: <CANQCQpayJkVAxWQS_42y+o3b-TJ5P5EVFzoz5cOcwmcsLTZJYA@mail.gmail.com>
- (Matthew Weber's message of "Tue, 16 Jan 2018 08:18:47 -0600")
-References: <20180114224711.25133-1-peter@korsgaard.com>
- <CANQCQpayJkVAxWQS_42y+o3b-TJ5P5EVFzoz5cOcwmcsLTZJYA@mail.gmail.com>
-Message-ID: <87po69yf9e.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 16 Jan 2018 17:07:12 +0100
+Subject: [Buildroot] [PATCH 1/1] vte: new package
+In-Reply-To: <20180116152333.29596-1-stefan.froberg@petroprogram.com>
+References: <20180116152333.29596-1-stefan.froberg@petroprogram.com>
+Message-ID: <20180116170712.63ad80cf@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Matthew" == Matthew Weber <matthew.weber@rockwellcollins.com> writes:
+Hello,
 
- > Peter,
- > On Sun, Jan 14, 2018 at 4:47 PM, Peter Korsgaard <peter@korsgaard.com> wrote:
- >> Drop 0003-tools-libxc-xc_dom_arm-add-missing-variable-initiali.patch as that
- >> is now upstream:
- >> 
- >> https://xenbits.xenproject.org/gitweb/?p=xen.git;a=commit;h=88bfbf90e35f1213f9967a97dee0b2039f9998a4
- >> 
- >> Drop security patches as 4.9.1 includes up to xsa-245.
- >> 
+On Tue, 16 Jan 2018 17:23:33 +0200, Stefan Fr?berg wrote:
 
- > I ran it through test-pkg and that looked good.
+> diff --git a/package/vte/Config.in b/package/vte/Config.in
+> new file mode 100644
+> index 0000000000..e448477d69
+> --- /dev/null
+> +++ b/package/vte/Config.in
+> @@ -0,0 +1,15 @@
+> +config BR2_PACKAGE_VTE
+> +	bool "vte"
+> +	select BR2_PACKAGE_LIBGTK3
+
+You can't just select libgtk3 so easily. It has lots of dependencies:
+
+        depends on BR2_USE_WCHAR # glib2
+        depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
+        depends on BR2_USE_MMU # glib2
+        depends on BR2_INSTALL_LIBSTDCPP # pango
+        depends on BR2_TOOLCHAIN_HAS_SYNC_4 # pango -> harfbuzz
+        depends on BR2_PACKAGE_HAS_LIBEGL_WAYLAND || \
+                BR2_PACKAGE_HAS_LIBGL
+
+> +	select BR2_PACKAGE_LIBXML2
+> +	select BR2_PACKAGE_PCRE2
+> +	depends on BR2_PACKAGE_XORG7
+
+The depends on should go before the select. This is checked
+by ./utils/check-package.
+
+> +	help
+> +	  VTE is a library (libvte) implementing a terminal emulator
+> +	  widget for GTK+, and a minimal sample application (vte)
+> +	  using that. Vte is mainly used in gnome-terminal, but
+> +	  can also be used to embed a console/terminal in games,
+> +	  editors, IDEs, etc.
+> +
+> +	  http://github.com/GNOME/vte
+> +
+
+Spurious empty line.
+
+You will need a bunch of Config.in comments here about this package
+dependencies.
 
 Thanks!
 
- > I also did a build against the autobuilder failure below.  Looks like
- > that failure is still present.
- > http://autobuild.buildroot.net/results/8bcb80dc93d38bb38ca32ad93d52c22d1176d57e/
-
-Hmm, it looks like the embedded qemu copy picks up sdl2, which it
-probably shouldn't (or we should atleast handle the dependencies
-correctly).
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
