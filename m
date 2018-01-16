@@ -1,34 +1,33 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 16 Jan 2018 19:42:46 +0100
-Subject: [Buildroot] [git commit branch/2017.11.x] package/avahi: fix typo
- in avahi_tmpfiles.conf
-Message-ID: <20180116194020.B711F83C30@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 16 Jan 2018 21:02:04 +0100
+Subject: [Buildroot] Requesting libvte
+In-Reply-To: <ZRit0bTMnKM_Wv_-OSp5Hg0NRDUP5SuRTtNFFfhnCqlnu5Jr24Y5Qp2AiqAy1J187ve2bK9WHz4e6l0mHgMZC5CvW-G8itWNrlVj4yNv4Ok=@protonmail.com>
+References: <7xZpCd7a9iHnFDkxtk-hp9r3cZammqShsBXFvsl8e_Xbvk5l0ZifgDyr0M_xvct0Xx2orSf12gjFE2EIXUrvDjADA4rOOaMBqwcpt3dBqtY=@protonmail.com>
+ <20180116151134.1b343472@windsurf>
+ <ZRit0bTMnKM_Wv_-OSp5Hg0NRDUP5SuRTtNFFfhnCqlnu5Jr24Y5Qp2AiqAy1J187ve2bK9WHz4e6l0mHgMZC5CvW-G8itWNrlVj4yNv4Ok=@protonmail.com>
+Message-ID: <20180116210204.3773f989@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6329ed2a4905430b13b0a38e1894d4184c718485
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.11.x
+Hello,
 
-There is an obvious typo in avahi_tmpfiles.conf: avahi-autoipd is
-badly spelled.
+On Tue, 16 Jan 2018 14:20:45 -0500, Biz.122 wrote:
+> Ok, as you correctly assumed I am a newb to open-source contributions - hence my unintended ignorant suggestion.
+> I took a look at the list again, and it seems as if someone was unexpectedly quick on his feet:
+> http://lists.busybox.net/pipermail/buildroot/2018-January/211713.html
+> 
+> Should I attempt to make a patch for this or leave it to him?
 
-Fixes bug #10641.
+Since Stefan has taken up the task, I believe what you could do to help
+is test his patch, and report if it works for you (or not).
 
-Reported-by: Michael Heinemann <posted@heine.so>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit c427ce4d9f54d9b6433969ecb0fc8a4a5a9ba9b5)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/avahi/avahi_tmpfiles.conf | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thanks!
 
-diff --git a/package/avahi/avahi_tmpfiles.conf b/package/avahi/avahi_tmpfiles.conf
-index f9aebdf..da23c14 100644
---- a/package/avahi/avahi_tmpfiles.conf
-+++ b/package/avahi/avahi_tmpfiles.conf
-@@ -1 +1 @@
--d /tmp/avahi-autopid 0755 avahi avahi
-+d /tmp/avahi-autoipd 0755 avahi avahi
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
