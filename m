@@ -1,131 +1,70 @@
-From: Guillermo A. Amaral <g@maral.me>
-Date: Tue, 16 Jan 2018 09:50:54 -0800
-Subject: [Buildroot] [PATCH 1/2] package/sdl2: Fix Raspberry Pi support
- for SDL2
-In-Reply-To: <20180116092341.17c72427@windsurf>
-References: <20180116033450.6926-1-g@maral.me>
- <20180116092341.17c72427@windsurf>
-Message-ID: <20180116175054.GB28324@enterprise.starfleet>
+From: =?UTF-8?Q?Stefan_Fr=c3=b6berg?= <stefan.froberg@petroprogram.com>
+Date: Tue, 16 Jan 2018 19:58:38 +0200
+Subject: [Buildroot] [PATCH 1/1] vte: new package
+In-Reply-To: <20180116170712.63ad80cf@windsurf>
+References: <20180116152333.29596-1-stefan.froberg@petroprogram.com>
+ <20180116170712.63ad80cf@windsurf>
+Message-ID: <d8bb959e-509d-98fa-6f1f-178a16096fe5@petroprogram.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hi Thomas
 
-On Tue, Jan 16, 2018 at 09:23:41AM +0100, Thomas Petazzoni wrote:
+
+Thomas Petazzoni kirjoitti 16.01.2018 klo 18:07:
 > Hello,
-> 
-> On Mon, 15 Jan 2018 19:34:49 -0800, Guillermo A. Amaral wrote:
-> 
-> > diff --git a/package/sdl2/0001-sdl2-rpi-video-buildroot-fix.patch b/package/sdl2/0001-sdl2-rpi-video-buildroot-fix.patch
-> > new file mode 100644
-> > index 000000000..1866579f1
-> > --- /dev/null
-> > +++ b/package/sdl2/0001-sdl2-rpi-video-buildroot-fix.patch
-> > @@ -0,0 +1,90 @@
-> > +From 76cb63afbe53c984c9734dc4f034c670791ca4d2 Mon Sep 17 00:00:00 2001
-> > +From: "Guillermo A. Amaral" <g@maral.me>
-> > +Date: Sun, 14 Jan 2018 23:01:47 -0800
-> > +Subject: [PATCH] sdl2: Get Raspberry Pi video working on Buildroot
-> 
-> It's not nice to have this specific to Buildroot. It shouldn't be that
-> way, and having it specific to Buildroot means that the patch cannot be
-> accepted upstream. See below for a suggestion on how to improve.
+>
+> On Tue, 16 Jan 2018 17:23:33 +0200, Stefan Fr?berg wrote:
+>
+>> diff --git a/package/vte/Config.in b/package/vte/Config.in
+>> new file mode 100644
+>> index 0000000000..e448477d69
+>> --- /dev/null
+>> +++ b/package/vte/Config.in
+>> @@ -0,0 +1,15 @@
+>> +config BR2_PACKAGE_VTE
+>> +	bool "vte"
+>> +	select BR2_PACKAGE_LIBGTK3
+> You can't just select libgtk3 so easily. It has lots of dependencies:
+>
+>         depends on BR2_USE_WCHAR # glib2
+>         depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
+>         depends on BR2_USE_MMU # glib2
+>         depends on BR2_INSTALL_LIBSTDCPP # pango
+>         depends on BR2_TOOLCHAIN_HAS_SYNC_4 # pango -> harfbuzz
+>         depends on BR2_PACKAGE_HAS_LIBEGL_WAYLAND || \
+>                 BR2_PACKAGE_HAS_LIBGL
+>
+>> +	select BR2_PACKAGE_LIBXML2
+>> +	select BR2_PACKAGE_PCRE2
+>> +	depends on BR2_PACKAGE_XORG7
+> The depends on should go before the select. This is checked
+> by ./utils/check-package.
+>
+>> +	help
+>> +	  VTE is a library (libvte) implementing a terminal emulator
+>> +	  widget for GTK+, and a minimal sample application (vte)
+>> +	  using that. Vte is mainly used in gnome-terminal, but
+>> +	  can also be used to embed a console/terminal in games,
+>> +	  editors, IDEs, etc.
+>> +
+>> +	  http://github.com/GNOME/vte
+>> +
+> Spurious empty line.
+>
+> You will need a bunch of Config.in comments here about this package
+> dependencies.
+>
+> Thanks!
+>
+> Thomas
 
-Agreed, I'll first try to upstream the changes to the project.
+Gosh, and it looked soooo simple package do when I saw that anonymous
+package request.
+Oh, well...Time for patch round 2 then... ;-)
 
-> > + configure           |  8 +++++++-
-> 
-> Do you really need to patch the configure script? What about fixing
-> just configure.in, and using AUTORECONF = YES ?
-
-I was not sure if that was the right way to go, so I left that off and
-updated the configure script too just in case. I'll take that into
-account for any future submissions.
-
-> > + configure.in        |  8 +++++++-
-> > + src/video/SDL_egl.c | 12 ++++++------
-> > + 3 files changed, 20 insertions(+), 8 deletions(-)
-> > +
-> > +diff --git a/configure.in b/configure.in
-> > +index 5ac2130..daee88b 100644
-> > +--- a/configure.in
-> > ++++ b/configure.in
-> > +@@ -1566,6 +1566,9 @@ AC_HELP_STRING([--enable-video-rpi], [use Raspberry Pi video driver [[default=ye
-> > +         if test x$ARCH = xnetbsd; then
-> > +             RPI_CFLAGS="-I/usr/pkg/include -I/usr/pkg/include/interface/vcos/pthreads -I/usr/pkg/include/interface/vmcs_host/linux"
-> > +             RPI_LDFLAGS="-Wl,-R/usr/pkg/lib -L/usr/pkg/lib -lbcm_host"
-> > ++        elif test x$VENDOR = xbuildroot; then
-> > ++            RPI_CFLAGS="-I${STAGING_DIR}/usr/include/interface/vcos/pthreads -I${STAGING_DIR}/usr/include/interface/vmcs_host/linux"
-> > ++            RPI_LDFLAGS="-L${STAGING_DIR}/usr/lib -lbcm_host -lvchostif"
-> > +         else
-> > +             RPI_CFLAGS="-I/opt/vc/include -I/opt/vc/include/interface/vcos/pthreads -I/opt/vc/include/interface/vmcs_host/linux"
-> > +             RPI_LDFLAGS="-L/opt/vc/lib -lbcm_host"
-> 
-> Here is a different suggestion. In the "else", do the following:
-> 
-> 	AC_PATH_PROG(PKG_CONFIG, pkg-config, no)
-> 	if test x$PKG_CONFIG != xno && $PKG_CONFIG --exists bcm_host; then
-> 		RPI_CFLAGS=`$PKG_CONFIG --cflags bcm_host`
-> 		RPI_LDFLAGS=`$PKG_CONFIG --libs bcm_host`
-> 	else
-> 		RPI_CFLAGS="-I/opt/vc/include -I/opt/vc/include/interface/vcos/pthreads -I/opt/vc/include/interface/vmcs_host/linux"
-> 		RPI_LDFLAGS="-L/opt/vc/lib -lbcm_host"
-> 	fi
-> 
-> This should use pkg-config if available, and bcm_host is available as
-> pkg-config module, and if not default to the hardcoded path in /opt/vc.
-
-Oh that's pretty good, I totally forgot about BRs pkg-config. I'll try
-it out.
-
-> > +@@ -3260,7 +3263,10 @@ case "$host" in
-> > +                     SUMMARY_video="${SUMMARY_video} android"
-> > +                 fi
-> > +                 ;;
-> > +-            *-*-linux*)         ARCH=linux ;;
-> > ++            *-*-linux*)
-> > ++                ARCH=linux
-> > ++                VENDOR=buildroot
-> > ++                ;;
-> 
-> It would make this change unneeded.
-> 
-> > + #if SDL_VIDEO_DRIVER_RPI
-> > + /* Raspbian places the OpenGL ES/EGL binaries in a non standard path */
-> > +-#define DEFAULT_EGL "/opt/vc/lib/libbrcmEGL.so"
-> > +-#define DEFAULT_OGL_ES2 "/opt/vc/lib/libbrcmGLESv2.so"
-> > +-#define ALT_EGL "/opt/vc/lib/libEGL.so"
-> > +-#define ALT_OGL_ES2 "/opt/vc/lib/libGLESv2.so"
-> > +-#define DEFAULT_OGL_ES_PVR "/opt/vc/lib/libGLES_CM.so"
-> > +-#define DEFAULT_OGL_ES "/opt/vc/lib/libGLESv1_CM.so"
-> > ++#define DEFAULT_EGL "libbrcmEGL.so"
-> > ++#define DEFAULT_OGL_ES2 "libbrcmGLESv2.so"
-> > ++#define ALT_EGL "libEGL.so"
-> > ++#define ALT_OGL_ES2 "libGLESv2.so"
-> > ++#define DEFAULT_OGL_ES_PVR "libGLES_CM.so"
-> > ++#define DEFAULT_OGL_ES "libGLESv1_CM.so"
-> 
-> I am not totally sure how to solve this though. I think the easiest
-> solution is for the configure script to fill in another variable, like
-> RPI_LIB_DIR. It would be set to empty in the pkg-config case, assuming
-> the libraries are in the right location, and set to /opt/vc/lib in the
-> hardcoded case. Or for the pkg-config case you do:
-> 
-> 	RPI_LIB_DIR=`PKG_CONFIG_SYSROOT_DIR=/ $PKG_CONFIG --libs-only-L bcm_host | sed 's/^-L//'`
-> 
-> But I believe leaving it to empty is fine as well. Indeed dlopen()
-> automatically searches in the default library paths, and if the library
-> is not installed in the default location, it's up to the user to pass
-> LD_LIBRARY_PATH.
-> 
-
-Right, sounds like a plan.
-
-Thanks for reviewing the patch, I'll update it. I'll try to get upstream
-as well.
-
--- 
-gamaral
+Thanks T!
+-S-
