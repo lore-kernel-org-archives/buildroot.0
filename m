@@ -1,84 +1,56 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 16 Jan 2018 22:02:50 +0100
-Subject: [Buildroot] [PATCH 14/14] ejabberd: Bump to version 17.11
-In-Reply-To: <20180116140649.7381-15-johan.oudinet@gmail.com>
-References: <20180116140649.7381-1-johan.oudinet@gmail.com>
- <20180116140649.7381-15-johan.oudinet@gmail.com>
-Message-ID: <20180116220250.483dff36@windsurf>
+Date: Tue, 16 Jan 2018 22:03:31 +0100
+Subject: [Buildroot] [git commit] picocom: bump to version 3.0
+Message-ID: <20180116210334.4E68C82159@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=62926b93de0affb0da06897e6a88f1d7ceed3335
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 16 Jan 2018 15:06:49 +0100, Johan Oudinet wrote:
-> * Adapt all patches.
-> * Use the new configure option enable-system-deps even though there is
->   still a patch needed to correct includes.
-> * Disable graphics to not depends on X libraries. Disable also
->   mod_avatar from the default loaded modules, since this module
->   requires graphics enabled.
-> * Add a configure option to specify the Erlang cookie for users that do
->   not want a random cookie generated at first boot.
-> 
-> Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
+Drop LDFLAGS forcing. Makefile now uses appends to environment LDFLAGS.
 
-Thanks for this update! Can I apply all the erlang package version
-bumps, even if I don't apply the ejabberd bump ?
+Add license hash.
 
-More questions/comments below.
+Cc: Matt Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Tested-by: Matt Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/picocom/picocom.hash | 3 ++-
+ package/picocom/picocom.mk   | 5 ++---
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-
-> diff --git a/package/ejabberd/0004-correct-includes.patch b/package/ejabberd/0004-correct-includes.patch
-> new file mode 100644
-> index 0000000000..812bf6c5be
-> --- /dev/null
-> +++ b/package/ejabberd/0004-correct-includes.patch
-> @@ -0,0 +1,1909 @@
-> +From 0487178693143955ff57e3c9371fb6e7b164294c Mon Sep 17 00:00:00 2001
-> +From: Johan Oudinet <johan.oudinet@gmail.com>
-> +Date: Thu, 11 Jan 2018 12:49:38 +0100
-> +Subject: [PATCH] correct includes
-> +
-> +This part of the code was moved into it's own project and was packaged
-> +separately by me. To make the build process work, this small fix is
-> +necessary.
-> +Author: Philipp Huebner <debalance@debian.org>
-> +
-> +Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
-
-It is not entirely clear: is this patch already upstream?
-
-> +if BR2_PACKAGE_EJABBERD
-> +
-> +config BR2_PACKAGE_EJABBERD_ERLANG_COOKIE
-> +	string "Erlang cookie"
-> +	help
-> +	  An alphanumeric string used by Erlang to authenticate nodes.
-> +	  If empty, erlang creates a random cookie at first execution.
-
-Just curious, why is the Erlang cookie part of the Ejabberd
-configuration?
-
-
-> +# Install an Erlang cookie if any is provided.
-> +ifneq ($(call qstrip,$(BR2_PACKAGE_EJABBERD_ERLANG_COOKIE)),)
-> +define EJABBERD_INSTALL_ERLANG_COOKIE
-> +	echo $(BR2_PACKAGE_EJABBERD_ERLANG_COOKIE) \
-
-Don't you need to $(call qstrip,...) the variable to remove the double
-quotes around the value ?
-
-> +	>'$(TARGET_DIR)/var/lib/ejabberd/.erlang.cookie'
-
-Why is this path between single quotes ?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/picocom/picocom.hash b/package/picocom/picocom.hash
+index 16db03e..f155830 100644
+--- a/package/picocom/picocom.hash
++++ b/package/picocom/picocom.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+-sha256 3e3904158d675541f0fcfdcd1f671b38445338f536080f5de8d6674b5f33d4ce  picocom-2.2.tar.gz
++sha256 a539db95bde3a5ebd52ae58a21f40d00cc2c97bf14b1f50caffc07257989112e  picocom-3.0.tar.gz
++sha256 9273c6b2c55be95f0f0df292d87e8900e5bfdf5b510a6ea09e80306cf45c10f6  LICENSE.txt
+diff --git a/package/picocom/picocom.mk b/package/picocom/picocom.mk
+index 4e25556..0fa60f9 100644
+--- a/package/picocom/picocom.mk
++++ b/package/picocom/picocom.mk
+@@ -4,14 +4,13 @@
+ #
+ ################################################################################
+ 
+-PICOCOM_VERSION = 2.2
++PICOCOM_VERSION = 3.0
+ PICOCOM_SITE = $(call github,npat-efault,picocom,$(PICOCOM_VERSION))
+ PICOCOM_LICENSE = GPL-2.0+
+ PICOCOM_LICENSE_FILES = LICENSE.txt
+ 
+ define PICOCOM_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) \
+-		LDFLAGS="$(TARGET_LDFLAGS)" -C $(@D)
++	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
+ endef
+ 
+ define PICOCOM_INSTALL_TARGET_CMDS
