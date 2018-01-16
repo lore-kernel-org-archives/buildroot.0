@@ -1,62 +1,118 @@
 From: Guillermo A. Amaral <g@maral.me>
-Date: Mon, 15 Jan 2018 19:14:28 -0800
-Subject: [Buildroot] [PATCH 1/1] kconfig: Apply upstream nconfig
- ncurses/ncursesw fix
-In-Reply-To: <20180115213706.61ee21b5@windsurf>
-References: <20180114163932.GA24925@enterprise.starfleet>
- <20180114172807.28196-1-g@maral.me>
- <20180115213706.61ee21b5@windsurf>
-Message-ID: <20180116031428.GA4897@enterprise.starfleet>
+Date: Mon, 15 Jan 2018 19:34:50 -0800
+Subject: [Buildroot] [PATCH 2/2] package/rpi-fbcp: Added package for
+ Raspberry Pi
+In-Reply-To: <20180116033450.6926-1-g@maral.me>
+References: <20180116033450.6926-1-g@maral.me>
+Message-ID: <20180116033450.6926-2-g@maral.me>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Cool, thanks for taking the time to review and tweak.
+Raspberry Pi utility used to mirror primary framebuffer to secondary
+framebuffer.
 
-Cheers!
+Signed-off-by: Guillermo A. Amaral <g@maral.me>
+---
+ package/Config.in                                  |  1 +
+ .../rpi-fbcp/0001-make-buildroot-friendly.patch    | 35 ++++++++++++++++++++++
+ package/rpi-fbcp/Config.in                         | 13 ++++++++
+ package/rpi-fbcp/rpi-fbcp.mk                       | 11 +++++++
+ 4 files changed, 60 insertions(+)
+ create mode 100644 package/rpi-fbcp/0001-make-buildroot-friendly.patch
+ create mode 100644 package/rpi-fbcp/Config.in
+ create mode 100644 package/rpi-fbcp/rpi-fbcp.mk
 
-On Mon, Jan 15, 2018 at 09:37:06PM +0100, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Sun, 14 Jan 2018 09:28:07 -0800, Guillermo A. Amaral wrote:
-> > Buildroot's "make nconfig" command stopped working a while ago on all my
-> > Gentoo systems. Running the command would result in a crash.
-> > 
-> > I found that the issue was caused by lxdialog's cflags which are also
-> > used to build nconfig; It would detect *ncursesw* and turn on WIDECHAR
-> > support -- but the Makefile would still link to plain *ncurses* while
-> > building nconfig (which was built without WIDECHAR support).
-> > 
-> > This would cause a crash after using *wattrset* on a WINDOW instance.
-> > WIDECHAR *wattrset* would try to set the _color member in the WINDOW
-> > struct which does not exist in the NON-WIDECHAR ncurses instance. It
-> > would end up clobbering data outside the struct (usually _line entries).
-> > 
-> > I found an upstream patch fixing the issue, so I'm applying it to
-> > Buildroot's kconfig.
-> > 
-> > Signed-off-by: Guillermo A. Amaral <g@maral.me>
-> > ---
-> >  support/kconfig/Makefile                           |  3 +-
-> >  ...onfig-nconfig-fix-multi-byte-UTF-handling.patch | 45 ++++++++++++++++++++++
-> >  support/kconfig/patches/series                     |  1 +
-> >  3 files changed, 48 insertions(+), 1 deletion(-)
-> >  create mode 100644 support/kconfig/patches/18-kconfig-nconfig-fix-multi-byte-UTF-handling.patch
-> 
-> I've applied after tweaking a bit the commit title ("support/kconfig"
-> instead of "kconfig") and the commit log (using the singular first
-> person is not very common).
-> 
-> Thanks a lot for this contribution!
-> 
-> Thomas
-> -- 
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
-
+diff --git a/package/Config.in b/package/Config.in
+index 8e8e7581c..c54901c69 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -483,6 +483,7 @@ endmenu
+ 	source "package/read-edid/Config.in"
+ 	source "package/rng-tools/Config.in"
+ 	source "package/rpi-userland/Config.in"
++	source "package/rpi-fbcp/Config.in"
+ 	source "package/rs485conf/Config.in"
+ 	source "package/rtl8188eu/Config.in"
+ 	source "package/rtl8723bs/Config.in"
+diff --git a/package/rpi-fbcp/0001-make-buildroot-friendly.patch b/package/rpi-fbcp/0001-make-buildroot-friendly.patch
+new file mode 100644
+index 000000000..5f86f5af6
+--- /dev/null
++++ b/package/rpi-fbcp/0001-make-buildroot-friendly.patch
+@@ -0,0 +1,35 @@
++From 8218434aafd18f7a1f742bddeef10b8829d59f89 Mon Sep 17 00:00:00 2001
++From: "Guillermo A. Amaral" <g@maral.me>
++Date: Sun, 14 Jan 2018 15:22:21 -0800
++Subject: [PATCH] Make build script more buildroot friendly
++
++Signed-off-by: Guillermo A. Amaral <g@maral.me>
++---
++ CMakeLists.txt | 13 +++----------
++ 1 file changed, 3 insertions(+), 10 deletions(-)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index 6202553..367182c 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -1,14 +1,7 @@
++ cmake_minimum_required(VERSION 2.8)
++ 
++-SET(COMPILE_DEFINITIONS -Werror)
++-
++-include_directories(/opt/vc/include)
++-include_directories(/opt/vc/include/interface/vcos/pthreads)
++-include_directories(/opt/vc/include/interface/vmcs_host)
++-include_directories(/opt/vc/include/interface/vmcs_host/linux)
++-
++-link_directories(/opt/vc/lib)
++-
++ add_executable(fbcp main.c)
++ 
++-target_link_libraries(fbcp bcm_host)
+++target_link_libraries(fbcp bcm_host vchostif)
+++
+++install(TARGETS fbcp RUNTIME DESTINATION "${CMAKE_INSTALL_PREFIX}/sbin")
++-- 
++2.13.6
++
+diff --git a/package/rpi-fbcp/Config.in b/package/rpi-fbcp/Config.in
+new file mode 100644
+index 000000000..9a186de9c
+--- /dev/null
++++ b/package/rpi-fbcp/Config.in
+@@ -0,0 +1,13 @@
++config BR2_PACKAGE_RPI_FBCP
++	bool "rpi-fbcp"
++	depends on BR2_arm
++	depends on BR2_PACKAGE_RPI_USERLAND
++	help
++	  Raspberry Pi utility. Used for mirror primary framebuffer to
++	  secondary framebuffer.
++
++	  https://github.com/tasanakorn/rpi-fbcp
++
++comment "rpi-fbc needs rpi-userland"
++	depends on BR2_arm
++	depends on !BR2_PACKAGE_RPI_USERLAND
+diff --git a/package/rpi-fbcp/rpi-fbcp.mk b/package/rpi-fbcp/rpi-fbcp.mk
+new file mode 100644
+index 000000000..72f778c1e
+--- /dev/null
++++ b/package/rpi-fbcp/rpi-fbcp.mk
+@@ -0,0 +1,11 @@
++################################################################################
++#
++# rpi-fbcp
++#
++################################################################################
++
++RPI_FBCP_VERSION = 8087a71d0330a078d91aa78656684ab5313616c6
++RPI_FBCP_SITE = $(call github,tasanakorn,rpi-fbcp,$(RPI_FBCP_VERSION))
++RPI_FBCP_DEPENDENCIES = rpi-userland
++
++$(eval $(cmake-package))
 -- 
-gamaral
-http://about.me/gamaral
+2.13.6
