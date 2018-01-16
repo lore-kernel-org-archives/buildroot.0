@@ -1,42 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 16 Jan 2018 23:11:24 +0100
-Subject: [Buildroot] [PATCH 1/1] boost: fix build with domoticz
-In-Reply-To: <20180116182900.18585-1-fontaine.fabrice@gmail.com>
-References: <20180116182900.18585-1-fontaine.fabrice@gmail.com>
-Message-ID: <20180116231124.7fd5b0fc@windsurf>
+Date: Tue, 16 Jan 2018 23:11:44 +0100
+Subject: [Buildroot] [git commit] configs/freescale_imx28evk: Bump U-Boot
+ and kernel versions
+Message-ID: <20180116221145.4C97B83E2C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=f94a7d54609e4718b963701870578a239bec4cbe
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 16 Jan 2018 19:29:00 +0100, Fabrice Fontaine wrote:
-> Fix domoticz build with boost 1.66 and g++5
-> 
-> Patch fetch from one of the answer of
->  https://github.com/domoticz/domoticz/issues/2034:
->  workaround suggested to the boost developers
-> 
-> Fixes:
->  - http://autobuild.buildroot.net/results/dec57c19e9aa2e367e23de2232c1d22a2f226a32
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/boost/0005-fix-build-with-g-5.patch | 32 +++++++++++++++++++++++++++++
->  1 file changed, 32 insertions(+)
->  create mode 100644 package/boost/0005-fix-build-with-g-5.patch
+Bump U-Boot to 2017.11 and kernel to 4.14.13 versions.
 
-The patch is definitely a bit hackish, so I would prefer a gcc fix. But
-until that happens and all gcc 5.x toolchains get updated, it's good to
-have a workaround for the problem. So I've applied your patch to the
-master branch.
+Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ configs/freescale_imx28evk_defconfig | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/configs/freescale_imx28evk_defconfig b/configs/freescale_imx28evk_defconfig
+index b2242e7..181c9ab 100644
+--- a/configs/freescale_imx28evk_defconfig
++++ b/configs/freescale_imx28evk_defconfig
+@@ -2,8 +2,8 @@
+ BR2_arm=y
+ BR2_arm926t=y
+ 
+-# Linux headers same as kernel, a 4.8 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_8=y
++# Linux headers same as kernel, a 4.14 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
+ 
+ # system
+ BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
+@@ -11,7 +11,7 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
+ # kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.8.8"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.14.13"
+ BR2_LINUX_KERNEL_DEFCONFIG="mxs"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx28-evk"
+@@ -20,7 +20,7 @@ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx28-evk"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="mx28evk"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.09.01"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.11"
+ BR2_TARGET_UBOOT_FORMAT_SD=y
+ 
+ # Filesystem
