@@ -1,48 +1,39 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 15 Jan 2018 23:53:06 +0100
-Subject: [Buildroot] [git commit] package/linux-firmware: install older
- versions for gcgb4 firmware
-Message-ID: <20180115225355.B4D778394D@busybox.osuosl.org>
+From: Vineet Gupta <Vineet.Gupta1@synopsys.com>
+Date: Mon, 15 Jan 2018 16:44:45 -0800
+Subject: [Buildroot] glibc-testsuite: running g++ tests in cross-compile
+ setup
+Message-ID: <22b488c2-6f3f-ec35-48b4-401e07b7c1d5@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a092357fdd18828e9075d9b2f1666c08d81ca9bc
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi,
 
-Supposedly, older kernels could require that an older firmware be used,
-so leave to the user the opportunity to choose the one they require.
+I have a buildroot based ARC cross toolchain (2017.11-rc1 base d+ some hacks of my 
+own). I'm trying to test the glibc testsuite with it with c++ enabled to get 
+additional coverage. All of this was fine initially...
 
-Simplify the pattern as suggested by Peter. Thanks!
+	PASS: argp/argp-test
+	PASS: argp/bug-argp1
+	PASS: argp/bug-argp2
+	PASS: argp/check-installed-headers-c
+	PASS: argp/check-installed-headers-cxx    <-----
+..
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Cc: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/linux-firmware/linux-firmware.mk | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+However@some point in December, not sure if this was a buildroot rebase or 
+glibc, c++ tests stopped getting built.
 
-diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index 45483a3..9515f5e 100644
---- a/package/linux-firmware/linux-firmware.mk
-+++ b/package/linux-firmware/linux-firmware.mk
-@@ -337,14 +337,12 @@ LINUX_FIRMWARE_FILES += bnx2x/*
- endif
- 
- ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_CXGB4_T4),y)
--# cxgb4/t4fw.bin is a symlink to cxgb4/t4fw-1.16.63.0.bin
--LINUX_FIRMWARE_FILES += cxgb4/t4fw-1.16.63.0.bin cxgb4/t4fw.bin
-+LINUX_FIRMWARE_FILES += cxgb4/t4fw*.bin
- LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.chelsio_firmware
- endif
- 
- ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_CXGB4_T5),y)
--# cxgb4/t5fw.bin is a symlink to cxgb4/t5fw-1.16.63.0.bin
--LINUX_FIRMWARE_FILES += cxgb4/t5fw-1.16.63.0.bin cxgb4/t5fw.bin
-+LINUX_FIRMWARE_FILES += cxgb4/t5fw*.bin
- LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.chelsio_firmware
- endif
- 
+    make test-wrapper='<path>/<to>/scripts/cross-test-ssh.sh root at x.x.x.x' xcheck
+
+I'm not sure if this is a glibc or buildroot issue..
+
+gcc-initial : config.log has --enable-languages=c
+gcc-final   : config.log has --enable-languages=c,c++
+glibc       : config.log has --enable-languages=c
+
+I guess issue is #3, but does anyone know why ?
+
+Thx,
+-Vineet
