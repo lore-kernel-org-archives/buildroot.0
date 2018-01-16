@@ -1,60 +1,79 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 16 Jan 2018 17:45:09 +0100
-Subject: [Buildroot] [git commit branch/2017.11.x] asterisk: security bump
- to version 14.7.5
-Message-ID: <20180116194020.77EC383E43@busybox.osuosl.org>
+Date: Tue, 16 Jan 2018 19:44:55 +0100
+Subject: [Buildroot] [git commit branch/2017.11.x] lz4: install programs as
+ well as libraries
+Message-ID: <20180116194020.D96DB83C30@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4fb281dbb8e47ff4b02b415228ae03c8d6b9ee52
+commit: https://git.buildroot.net/buildroot/commit/?id=2e18e017c53441c634e539463de9e11266913185
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.11.x
 
-Fixes the following security issues:
+Prior to commit 8ad38a4fc2007df4bee9a941aed46c8771b6a84c
+("package/lz4: bump version to r131"), the lz4 package was installing
+both libraries and programs, but this commit changed the behavior to
+only install libraries.
 
-* AST-2017-014: Crash in PJSIP resource when missing a contact header A
-  select set of SIP messages create a dialog in Asterisk.  Those SIP
-  messages must contain a contact header.  For those messages, if the header
-  was not present and using the PJSIP channel driver, it would cause
-  Asterisk to crash.  The severity of this vulnerability is somewhat
-  mitigated if authentication is enabled.  If authentication is enabled a
-  user would have to first be authorized before reaching the crash point.
+The contributor might have been confused by the fact that the build
+command was "$(MAKE) ... -C $(@D) liblz4", suggesting that only the
+library was built. But since the install command was "$(MAKE) ... -C
+$(@D) install", the programs were effectively built as part of the
+install step, and installed as well.
 
-For more details, see the announcement:
-https://www.asterisk.org/downloads/asterisk-news/asterisk-13185-1475-1515-and-1318-cert2-now-available-security
+Since it makes sense for lz4 to also installs its programs, this
+commit adjusts the package accordingly.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+It is worth mentioning that using the "all" target during the build
+step is important. Indeed, otherwise the programs/Makefile has a
+"default" target that doesn't build everything (especially the lz4c
+program) and it end up being built as part of the install step, due to
+how the makefile dependencies are handled in the lz4 project. To make
+sure that everything gets built during the build step, we explicitly
+use the "all" target.
+
+Fixes bug #9996
+
+Reported-by: Jamin Collins <jamin.collins@gmail.com>
+Initial-analysis-by: Arnout Vandecappelle <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 4f13dc362d5c9c63fb5a21ede7cf902c1281cef0)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 6f1c11f79a64387c1f1749550804f8aae0cfa7a7)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/asterisk/asterisk.hash | 2 +-
- package/asterisk/asterisk.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/lz4/lz4.mk | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/asterisk/asterisk.hash b/package/asterisk/asterisk.hash
-index d1667ac..f537c2d 100644
---- a/package/asterisk/asterisk.hash
-+++ b/package/asterisk/asterisk.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256  f85f6df802de485d9b8cb1bfa5493e22f6401dce8246646af9506489a264d7b1  asterisk-14.6.2.tar.gz
-+sha256  6525170fa16fecb08cb3cde2c1bd5d3140df55b14e4561ac0771fbd1e04b3b75  asterisk-14.7.5.tar.gz
+diff --git a/package/lz4/lz4.mk b/package/lz4/lz4.mk
+index 91ff43b..de8c311 100644
+--- a/package/lz4/lz4.mk
++++ b/package/lz4/lz4.mk
+@@ -18,7 +18,7 @@ LZ4_POST_PATCH_HOOKS += LZ4_DISABLE_SHARED
+ endif
  
- # sha1 from: http://downloads.asterisk.org/pub/telephony/sounds/releases
- # sha256 locally computed
-diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
-index da78b25..fc9a961 100644
---- a/package/asterisk/asterisk.mk
-+++ b/package/asterisk/asterisk.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ define HOST_LZ4_BUILD_CMDS
+-	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D)
++	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) all
+ endef
  
--ASTERISK_VERSION = 14.6.2
-+ASTERISK_VERSION = 14.7.5
- # Use the github mirror: it's an official mirror maintained by Digium, and
- # provides tarballs, which the main Asterisk git tree (behind Gerrit) does not.
- ASTERISK_SITE = $(call github,asterisk,asterisk,$(ASTERISK_VERSION))
+ define HOST_LZ4_INSTALL_CMDS
+@@ -27,7 +27,7 @@ define HOST_LZ4_INSTALL_CMDS
+ endef
+ 
+ define LZ4_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)/lib
++	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) all
+ endef
+ 
+ define LZ4_INSTALL_STAGING_CMDS
+@@ -37,7 +37,7 @@ endef
+ 
+ define LZ4_INSTALL_TARGET_CMDS
+ 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) DESTDIR=$(TARGET_DIR) \
+-		PREFIX=/usr install -C $(@D)/lib
++		PREFIX=/usr install -C $(@D)
+ endef
+ 
+ $(eval $(generic-package))
