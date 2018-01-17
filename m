@@ -1,43 +1,65 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed, 17 Jan 2018 18:55:00 +0100
-Subject: [Buildroot] [PATCH 1/1] domoticz: depends on exception_ptr
-Message-ID: <20180117175500.19177-1-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 17 Jan 2018 19:16:37 +0100
+Subject: [Buildroot] [PATCH] toolchain/toolchain-external: libatomic
+ should also be copied for musl toolchains
+In-Reply-To: <20180116224808.1630-1-thomas.petazzoni@free-electrons.com>
+References: <20180116224808.1630-1-thomas.petazzoni@free-electrons.com>
+Message-ID: <20180117181637.GA11009@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-boost 1.66 uses std::exception_ptr in boost/asio/impl/use_future.hpp
-So add a dependency on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 for domoticz
+Thomas, All,
 
-Fixes:
- -
-http://autobuild.buildroot.net/results/332f677493bf1d802f3700777219843eeba53c81
+On 2018-01-16 23:48 +0100, Thomas Petazzoni spake thusly:
+> libatomic, like libgcc_s, is provided by gcc, so there is no reason to
+> copy it over only for the glibc and uclibc cases, it should also be
+> copied for the musl case. Without this, a program linked with
+> libatomic on a musl system will fail to run due to the missing
+> library.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/domoticz/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-diff --git a/package/domoticz/Config.in b/package/domoticz/Config.in
-index c03f84ae44..34bf2521a2 100644
---- a/package/domoticz/Config.in
-+++ b/package/domoticz/Config.in
-@@ -7,6 +7,7 @@ config BR2_PACKAGE_DOMOTICZ
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_PACKAGE_LUA_5_2 || BR2_PACKAGE_LUA_5_3
-+	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # exception_ptr
- 	select BR2_PACKAGE_BOOST
- 	select BR2_PACKAGE_BOOST_DATE_TIME
- 	select BR2_PACKAGE_BOOST_SYSTEM
-@@ -31,3 +32,6 @@ comment "domoticz needs lua >= 5.2 and a toolchain w/ C++, threads, wchar, dynam
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
- 		!BR2_USE_WCHAR || BR2_STATIC_LIBS || \
- 		!(BR2_PACKAGE_LUA_5_2 || BR2_PACKAGE_LUA_5_3)
-+
-+comment "domoticz needs exception_ptr"
-+	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
+Regards,
+Yann E. MORIN.
+
+> ---
+>  toolchain/toolchain-external/pkg-toolchain-external.mk | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
+> index b9ad1720a1..3bf9fac412 100644
+> --- a/toolchain/toolchain-external/pkg-toolchain-external.mk
+> +++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
+> @@ -108,10 +108,10 @@ endif
+>  # Definitions of the list of libraries that should be copied to the target.
+>  #
+>  
+> -TOOLCHAIN_EXTERNAL_LIBS += ld*.so* libgcc_s.so.*
+> +TOOLCHAIN_EXTERNAL_LIBS += ld*.so* libgcc_s.so.* libatomic.so.*
+>  
+>  ifeq ($(BR2_TOOLCHAIN_EXTERNAL_GLIBC)$(BR2_TOOLCHAIN_EXTERNAL_UCLIBC),y)
+> -TOOLCHAIN_EXTERNAL_LIBS += libatomic.so.* libc.so.* libcrypt.so.* libdl.so.* libm.so.* libnsl.so.* libresolv.so.* librt.so.* libutil.so.*
+> +TOOLCHAIN_EXTERNAL_LIBS += libc.so.* libcrypt.so.* libdl.so.* libm.so.* libnsl.so.* libresolv.so.* librt.so.* libutil.so.*
+>  ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+>  TOOLCHAIN_EXTERNAL_LIBS += libpthread.so.*
+>  ifneq ($(BR2_PACKAGE_GDB)$(BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY),)
+> -- 
+> 2.14.3
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.14.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
