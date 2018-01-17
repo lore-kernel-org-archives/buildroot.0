@@ -1,33 +1,27 @@
-From: Marcus Folkesson <marcus.folkesson@gmail.com>
-Date: Wed, 17 Jan 2018 10:50:14 +0100
-Subject: [Buildroot] [PATCH] DEVELOPERS: add myself to SELinux related
- packages
-Message-ID: <20180117095014.32665-1-marcus.folkesson@gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 17 Jan 2018 09:52:35 +0000
+Subject: [Buildroot] [Bug 10551] PowerPC SPE and Musl
+In-Reply-To: <bug-10551-163@https.bugs.busybox.net/>
+References: <bug-10551-163@https.bugs.busybox.net/>
+Message-ID: <bug-10551-163-U75GWQDueV@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
----
- DEVELOPERS | 4 ++++
- 1 file changed, 4 insertions(+)
+https://bugs.busybox.net/show_bug.cgi?id=10551
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 0e754456cb..fe2c230142 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1070,6 +1070,10 @@ F:	package/libkcapi/
- 
- N:	Marcus Folkesson <marcus.folkesson@gmail.com>
- F:	package/libostree/
-+F:	package/libselinux/
-+F:	package/libsemanage/
-+F:	package/libsepol/
-+F:	package/selinux-python/
- F:	utils/config
- F:	utils/diffconfig
- 
+--- Comment #4 from sigurd.segtnan at kongsberg.com ---
+We have tested the patch on Power PC with and without SPE, and it works in both
+caes. In view of the original line 74 of buildroot/Config.in ("depens on
+!BR2_powerpc_SPE # not supported, build breaks") I suggest that we keep that
+patch as is-ish.
+
+The -ish part is the change to Config.in. Instead of commenting out the line, a
+link to this discussion might be useful, so that anybody else that have a Power
+PC + musl issue can find it.
+
 -- 
-2.15.1
+You are receiving this mail because:
+You are on the CC list for the bug.
