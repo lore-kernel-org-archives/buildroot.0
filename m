@@ -1,9 +1,9 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Wed, 17 Jan 2018 18:45:19 +0100
-Subject: [Buildroot] [PATCH 13/14] perl-io-socket-ssl: bump to version 2.052
+Date: Wed, 17 Jan 2018 18:45:20 +0100
+Subject: [Buildroot] [PATCH 14/14] perl-gd: bump to version 2.67
 In-Reply-To: <20180117174520.29545-1-francois.perrad@gadz.org>
 References: <20180117174520.29545-1-francois.perrad@gadz.org>
-Message-ID: <20180117174520.29545-13-francois.perrad@gadz.org>
+Message-ID: <20180117174520.29545-14-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,32 +12,32 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/perl-io-socket-ssl/perl-io-socket-ssl.hash | 4 ++--
- package/perl-io-socket-ssl/perl-io-socket-ssl.mk   | 2 +-
+ package/perl-gd/perl-gd.hash | 4 ++--
+ package/perl-gd/perl-gd.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/perl-io-socket-ssl/perl-io-socket-ssl.hash b/package/perl-io-socket-ssl/perl-io-socket-ssl.hash
-index 617a97387..3bf0421ee 100644
---- a/package/perl-io-socket-ssl/perl-io-socket-ssl.hash
-+++ b/package/perl-io-socket-ssl/perl-io-socket-ssl.hash
+diff --git a/package/perl-gd/perl-gd.hash b/package/perl-gd/perl-gd.hash
+index 3fc062895..ad30e0a17 100644
+--- a/package/perl-gd/perl-gd.hash
++++ b/package/perl-gd/perl-gd.hash
 @@ -1,3 +1,3 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5    98184d4ce23b2c5faf2e89120a683a07 IO-Socket-SSL-2.050.tar.gz
--sha256 54e6716e40df8b1c168d8f54a0b8f215313739bd99dda17adb7c00fe94656692 IO-Socket-SSL-2.050.tar.gz
-+md5    26c9bcdfb4ba8763ef89264f21326a48 IO-Socket-SSL-2.052.tar.gz
-+sha256 e4897a9b17cb18a3c44aa683980d52cef534cdfcb8063d6877c879bfa2f26673 IO-Socket-SSL-2.052.tar.gz
-diff --git a/package/perl-io-socket-ssl/perl-io-socket-ssl.mk b/package/perl-io-socket-ssl/perl-io-socket-ssl.mk
-index a1ba9939e..62fc2298c 100644
---- a/package/perl-io-socket-ssl/perl-io-socket-ssl.mk
-+++ b/package/perl-io-socket-ssl/perl-io-socket-ssl.mk
+-md5    5c89ea8861810ca41bc4aca98e3fdfda GD-2.66.tar.gz
+-sha256 ea28343301b82ea862bc58c0c2d1953a074e23cf8d1d09df94c05c52f1c98281 GD-2.66.tar.gz
++md5    b9cfc5a677b5e9fa607be1379f789855 GD-2.67.tar.gz
++sha256 93a47c2259979cf20c6a39c9e03e0da87a9a855d8b650fb68a08d16a96684246 GD-2.67.tar.gz
+diff --git a/package/perl-gd/perl-gd.mk b/package/perl-gd/perl-gd.mk
+index ae3dfbc96..81070a939 100644
+--- a/package/perl-gd/perl-gd.mk
++++ b/package/perl-gd/perl-gd.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_IO_SOCKET_SSL_VERSION = 2.050
-+PERL_IO_SOCKET_SSL_VERSION = 2.052
- PERL_IO_SOCKET_SSL_SOURCE = IO-Socket-SSL-$(PERL_IO_SOCKET_SSL_VERSION).tar.gz
- PERL_IO_SOCKET_SSL_SITE = $(BR2_CPAN_MIRROR)/authors/id/S/SU/SULLR
- PERL_IO_SOCKET_SSL_DEPENDENCIES = perl-net-ssleay
+-PERL_GD_VERSION = 2.66
++PERL_GD_VERSION = 2.67
+ PERL_GD_SOURCE = GD-$(PERL_GD_VERSION).tar.gz
+ PERL_GD_SITE = $(BR2_CPAN_MIRROR)/authors/id/R/RU/RURBAN
+ PERL_GD_DEPENDENCIES = zlib libpng freetype gd
 -- 
 2.11.0
