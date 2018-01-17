@@ -1,43 +1,41 @@
-From: Romain Naour <romain.naour@smile.fr>
-Date: Wed, 17 Jan 2018 18:44:10 +0100
-Subject: [Buildroot] [PATCH v2 0/8] Add /etc/shells handling
-Message-ID: <1516211058-466-1-git-send-email-romain.naour@smile.fr>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Wed, 17 Jan 2018 18:45:07 +0100
+Subject: [Buildroot] [PATCH 01/14] perl-xml-libxml: bump to version 2.0132
+Message-ID: <20180117174520.29545-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Started with commit [1], all package providing a shell interpreter
-should  be listed in /etc/shells file to avoid issues with dropbear
-or other tools.
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ package/perl-xml-libxml/perl-xml-libxml.hash | 4 ++--
+ package/perl-xml-libxml/perl-xml-libxml.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Although a macro could be added to pkg-generic.mk to avoid
-duplicating the /etc/shells handling, there is less than ten
-shell packages in Buildroot. So add /etc/shells handling as
-a POST_INSTALL_TARGET_HOOKS or inside INSTALL_TARGET_CMDS.
-
-[1] 4d279697afbf8fb295274784103be2b837113d5e
-
-Romain Naour (8):
-  package/skeleton-init-common: add /bin/sh to /etc/shells
-  package/busybox: add /bin/{a,hu}sh to /etc/shells
-  package/dash: add /etc/dash to /etc/shells
-  package/screen: add /usr/bin/screen to /etc/shells
-  package/tmux: add /usr/bin/tmux to /etc/shells
-  package/zsh: add /bin/zsh to /etc/shells
-  package/mksh: add /bin/mksh to /etc/shells
-  package/bash: add missing double-dollar for /etc/shells
-
- package/bash/bash.mk                                 |  2 +-
- package/busybox/busybox.mk                           | 14 ++++++++++++++
- package/dash/dash.mk                                 |  4 ++++
- package/mksh/mksh.mk                                 |  8 ++++++++
- package/screen/screen.mk                             |  9 ++++++++-
- package/skeleton-init-common/skeleton-init-common.mk |  7 +++++++
- package/tmux/tmux.mk                                 |  8 ++++++++
- package/zsh/zsh.mk                                   |  8 ++++++++
- 8 files changed, 58 insertions(+), 2 deletions(-)
-
+diff --git a/package/perl-xml-libxml/perl-xml-libxml.hash b/package/perl-xml-libxml/perl-xml-libxml.hash
+index 092ec15d6..bbe841a60 100644
+--- a/package/perl-xml-libxml/perl-xml-libxml.hash
++++ b/package/perl-xml-libxml/perl-xml-libxml.hash
+@@ -1,3 +1,3 @@
+ # retrieved by scancpan from http://cpan.metacpan.org/
+-md5    5806b69d54a2d7884b8d22b395888436 XML-LibXML-2.0129.tar.gz
+-sha256 5ca0269ba06800c84061a7f3333c85fab5584d69cd7b4e0641963da7fd36b366 XML-LibXML-2.0129.tar.gz
++md5    43546fd9a3974f19323f9fb04861ece9 XML-LibXML-2.0132.tar.gz
++sha256 721452e3103ca188f5968ab06d5ba29fe8e00e49f4767790882095050312d476 XML-LibXML-2.0132.tar.gz
+diff --git a/package/perl-xml-libxml/perl-xml-libxml.mk b/package/perl-xml-libxml/perl-xml-libxml.mk
+index 8ef6fcbc2..ff831bb07 100644
+--- a/package/perl-xml-libxml/perl-xml-libxml.mk
++++ b/package/perl-xml-libxml/perl-xml-libxml.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PERL_XML_LIBXML_VERSION = 2.0129
++PERL_XML_LIBXML_VERSION = 2.0132
+ PERL_XML_LIBXML_SOURCE = XML-LibXML-$(PERL_XML_LIBXML_VERSION).tar.gz
+ PERL_XML_LIBXML_SITE = $(BR2_CPAN_MIRROR)/authors/id/S/SH/SHLOMIF
+ PERL_XML_LIBXML_DEPENDENCIES = zlib libxml2 perl-xml-namespacesupport perl-xml-sax perl-xml-sax-base
 -- 
-2.7.4
+2.11.0
