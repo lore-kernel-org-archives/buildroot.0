@@ -1,43 +1,43 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Wed, 17 Jan 2018 18:45:20 +0100
-Subject: [Buildroot] [PATCH 14/14] perl-gd: bump to version 2.67
-In-Reply-To: <20180117174520.29545-1-francois.perrad@gadz.org>
-References: <20180117174520.29545-1-francois.perrad@gadz.org>
-Message-ID: <20180117174520.29545-14-francois.perrad@gadz.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed, 17 Jan 2018 18:55:00 +0100
+Subject: [Buildroot] [PATCH 1/1] domoticz: depends on exception_ptr
+Message-ID: <20180117175500.19177-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/perl-gd/perl-gd.hash | 4 ++--
- package/perl-gd/perl-gd.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+boost 1.66 uses std::exception_ptr in boost/asio/impl/use_future.hpp
+So add a dependency on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 for domoticz
 
-diff --git a/package/perl-gd/perl-gd.hash b/package/perl-gd/perl-gd.hash
-index 3fc062895..ad30e0a17 100644
---- a/package/perl-gd/perl-gd.hash
-+++ b/package/perl-gd/perl-gd.hash
-@@ -1,3 +1,3 @@
- # retrieved by scancpan from http://cpan.metacpan.org/
--md5    5c89ea8861810ca41bc4aca98e3fdfda GD-2.66.tar.gz
--sha256 ea28343301b82ea862bc58c0c2d1953a074e23cf8d1d09df94c05c52f1c98281 GD-2.66.tar.gz
-+md5    b9cfc5a677b5e9fa607be1379f789855 GD-2.67.tar.gz
-+sha256 93a47c2259979cf20c6a39c9e03e0da87a9a855d8b650fb68a08d16a96684246 GD-2.67.tar.gz
-diff --git a/package/perl-gd/perl-gd.mk b/package/perl-gd/perl-gd.mk
-index ae3dfbc96..81070a939 100644
---- a/package/perl-gd/perl-gd.mk
-+++ b/package/perl-gd/perl-gd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PERL_GD_VERSION = 2.66
-+PERL_GD_VERSION = 2.67
- PERL_GD_SOURCE = GD-$(PERL_GD_VERSION).tar.gz
- PERL_GD_SITE = $(BR2_CPAN_MIRROR)/authors/id/R/RU/RURBAN
- PERL_GD_DEPENDENCIES = zlib libpng freetype gd
+Fixes:
+ -
+http://autobuild.buildroot.net/results/332f677493bf1d802f3700777219843eeba53c81
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/domoticz/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/package/domoticz/Config.in b/package/domoticz/Config.in
+index c03f84ae44..34bf2521a2 100644
+--- a/package/domoticz/Config.in
++++ b/package/domoticz/Config.in
+@@ -7,6 +7,7 @@ config BR2_PACKAGE_DOMOTICZ
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_USE_WCHAR
+ 	depends on BR2_PACKAGE_LUA_5_2 || BR2_PACKAGE_LUA_5_3
++	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # exception_ptr
+ 	select BR2_PACKAGE_BOOST
+ 	select BR2_PACKAGE_BOOST_DATE_TIME
+ 	select BR2_PACKAGE_BOOST_SYSTEM
+@@ -31,3 +32,6 @@ comment "domoticz needs lua >= 5.2 and a toolchain w/ C++, threads, wchar, dynam
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
+ 		!BR2_USE_WCHAR || BR2_STATIC_LIBS || \
+ 		!(BR2_PACKAGE_LUA_5_2 || BR2_PACKAGE_LUA_5_3)
++
++comment "domoticz needs exception_ptr"
++	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
 -- 
-2.11.0
+2.14.1
