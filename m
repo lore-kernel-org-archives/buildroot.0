@@ -1,65 +1,42 @@
-From: Marcus Folkesson <marcus.folkesson@gmail.com>
-Date: Wed, 17 Jan 2018 10:06:47 +0100
-Subject: [Buildroot] [PATCH] libselinux: add patch to make the build
- process more standard
-In-Reply-To: <20180116234426.4d2433c0@windsurf>
-References: <20180116082153.8425-1-marcus.folkesson@gmail.com>
- <20180116234426.4d2433c0@windsurf>
-Message-ID: <20180117090647.GA886@gmail.com>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Wed, 17 Jan 2018 10:15:00 +0100
+Subject: [Buildroot] [PATCH] poco: bump to version 1.8.1
+Message-ID: <1516180500-22460-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-On Tue, Jan 16, 2018 at 11:44:26PM +0100, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Tue, 16 Jan 2018 09:21:53 +0100, Marcus Folkesson wrote:
-> > Patch the Makefiles to make PREFIX and DESTDIR follow standard
-> > semantics to get rid of DESTDIR during compile time in
-> > libselinux.mk and generate proper pkg-config files.
-> > 
-> > Fixes:
-> >  http://autobuild.buildroot.net/results/74d27370c7623e89e401203a485193340e992e7c/
-> > 
-> > Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
-> > ---
-> >  ...build-follow-standard-semantics-for-DESTD.patch | 137 +++++++++++++++++++++
-> >  package/libselinux/0003-revert-ln-relative.patch   |  24 ----
-> >  package/libselinux/0004-revert-ln-relative.patch   |  24 ++++
-> >  package/libselinux/libselinux.mk                   |   8 +-
-> >  4 files changed, 163 insertions(+), 30 deletions(-)
-> >  create mode 100644 package/libselinux/0003-libselinux-build-follow-standard-semantics-for-DESTD.patch
-> >  delete mode 100644 package/libselinux/0003-revert-ln-relative.patch
-> >  create mode 100644 package/libselinux/0004-revert-ln-relative.patch
-> 
-> Applied to master, thanks. Thanks a lot for working on this!
-> 
-> Besides the 3 packages you already fixed, there is also selinux-python
-> that still uses DESTDIR during the build process.
-> 
-> Also, could you submit your 3 patches (libselinux, libsepol and
-> libsemanage) to the upstream SELinux project? We really would like to
-> see these being adopted by the upstream project.
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ package/poco/poco.hash | 2 +-
+ package/poco/poco.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-I have reworked all Makefiles in the SELinux project (including
-selinux-python), all patches is submitted upstreams and under review.
-
-OK, I will add the patch for selinux-python package aswell.
-
-
-> 
-> Thanks!
-> 
-> Thomas
-> -- 
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
-
-
-Best regards
-Marcus Folkesson
+diff --git a/package/poco/poco.hash b/package/poco/poco.hash
+index d92645f..0c0266f 100644
+--- a/package/poco/poco.hash
++++ b/package/poco/poco.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  ae87222c674ff5cb1318253d19a72348e385f2a4db4b05329d712361303578f5  poco-poco-1.8.0.1-release.tar.gz
++sha256  43cc469c01d1f799efc51e2bfde6ffdf467b98a8a0901e6b33db86958619b3af  poco-poco-1.8.1-release.tar.gz
+ sha256  c4b1e1e5f36d8331737231fefcc30f5714326aec7c387ad59a8115eb0ba7d6b5  LICENSE
+diff --git a/package/poco/poco.mk b/package/poco/poco.mk
+index 89b9791..3dddb43 100644
+--- a/package/poco/poco.mk
++++ b/package/poco/poco.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-POCO_VERSION = poco-1.8.0.1-release
++POCO_VERSION = poco-1.8.1-release
+ POCO_SITE = $(call github,pocoproject,poco,$(POCO_VERSION))
+ POCO_LICENSE = BSL-1.0
+ POCO_LICENSE_FILES = LICENSE
+-- 
+2.1.4
