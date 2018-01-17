@@ -1,64 +1,50 @@
-From: Ed Blake <ed.blake@sondrel.com>
-Date: Wed, 17 Jan 2018 10:08:58 +0000
-Subject: [Buildroot] [PATCH] rpcbind: fix attempt to free non-dynamic memory
-Message-ID: <20180117100858.30401-1-ed.blake@sondrel.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 17 Jan 2018 13:55:23 +0100
+Subject: [Buildroot] [PATCH] selinux-python: add patch to make the build
+ process more standard
+In-Reply-To: <20180117093134.18230-1-marcus.folkesson@gmail.com>
+References: <20180117093134.18230-1-marcus.folkesson@gmail.com>
+Message-ID: <20180117135523.4728bcad@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit 954509f added a security fix for CVE-2017-8779, involving
-pairing all svc_getargs() calls with svc_freeargs() to avoid a memory
-leak.  This included adding a call to svc_freeargs() to
-rpcbproc_callit_com().
+Hello,
 
-However, rpcbproc_callit_com() allocates memory for args.rmt_args.args
-itself, either dynamically (sendsz > RPC_BUF_MAX) or else on the stack,
-rather than having the memory allocated in svc_getargs().
+On Wed, 17 Jan 2018 10:31:34 +0100, Marcus Folkesson wrote:
+> Patch the Makefiles to make PREFIX and DESTDIR follow standard
+> semantics to get rid of DESTDIR during compile time in
+> selinux-python.mk.
+> 
+> Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
 
-The call to svc_freeargs() results in an attempt to free the memory
-allocated by rpcbproc_callit_com(), which if on the stack results in
-undefined behaviour.
+Thanks for this patch. However...
 
-Fix this by removing the svc_freeargs() call, which is not required as
-rpcbproc_callit_com() allocates (and correctly frees) memory itself.
+> ---
+>  ...build-follow-standard-semantics-for-DESTD.patch | 113 +++++++++++++++++++++
+>  package/selinux-python/selinux-python.mk           |   2 +-
+>  2 files changed, 114 insertions(+), 1 deletion(-)
+>  create mode 100644 package/selinux-python/0001-python-build-follow-standard-semantics-for-DESTD.patch
+> 
+> diff --git a/package/selinux-python/0001-python-build-follow-standard-semantics-for-DESTD.patch b/package/selinux-python/0001-python-build-follow-standard-semantics-for-DESTD.patch
+> new file mode 100644
+> index 0000000000..82c3b06086
+> --- /dev/null
+> +++ b/package/selinux-python/0001-python-build-follow-standard-semantics-for-DESTD.patch
+> @@ -0,0 +1,113 @@
+> +diff -durN python.orig/audit2allow/Makefile python/audit2allow/Makefile
+> +--- python.orig/audit2allow/Makefile	2017-08-04 15:31:00.000000000 +0200
+> ++++ python/audit2allow/Makefile	2018-01-17 09:44:35.659573123 +0100
 
-Change-Id: I7fc34efd58408ec5e626da8edd08aa697ed8b936
-Signed-off-by: Ed Blake <ed.blake@sondrel.com>
----
- ...pair-all-svc_getargs-calls-with-svc_freeargs.patch | 19 -------------------
- 1 file changed, 19 deletions(-)
+.. this patch lacks a description and Signed-off-by, and should be
+Git-formatted.
 
-diff --git a/package/rpcbind/0004-rpcbind-pair-all-svc_getargs-calls-with-svc_freeargs.patch b/package/rpcbind/0004-rpcbind-pair-all-svc_getargs-calls-with-svc_freeargs.patch
-index 130e5d77c..91fe20830 100644
---- a/package/rpcbind/0004-rpcbind-pair-all-svc_getargs-calls-with-svc_freeargs.patch
-+++ b/package/rpcbind/0004-rpcbind-pair-all-svc_getargs-calls-with-svc_freeargs.patch
-@@ -207,25 +207,6 @@ index b673452..3e37b54 100644
-  	}
-  
-  	if (rqstp->rq_proc == RPCBPROC_SET
--diff --git a/src/rpcb_svc_com.c b/src/rpcb_svc_com.c
--index ff9ce6b..98ede61 100644
----- a/src/rpcb_svc_com.c
--+++ b/src/rpcb_svc_com.c
--@@ -931,6 +931,14 @@ error:
-- 	if (call_msg.rm_xid != 0)
-- 		(void) free_slot_by_xid(call_msg.rm_xid);
-- out:
--+	if (!svc_freeargs(transp, (xdrproc_t) xdr_rmtcall_args, (char *) &a)) {
--+		if (debugging) {
--+			(void) xlog(LOG_DEBUG, "unable to free arguments\n");
--+			if (doabort) {
--+				rpcbind_abort();
--+			}
--+		}
--+	}
-- 	if (local_uaddr)
-- 		free(local_uaddr);
-- 	if (buf_alloc)
- -- 
- 2.11.0
- 
+Thanks!
+
+Thomas
 -- 
-2.11.0
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
