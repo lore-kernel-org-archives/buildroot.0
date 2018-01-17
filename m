@@ -1,55 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 17 Jan 2018 21:52:08 +0100
-Subject: [Buildroot] Google Summer of Code 2018 ?
-Message-ID: <20180117215208.45dd61b9@windsurf>
+Date: Wed, 17 Jan 2018 22:11:41 +0100
+Subject: [Buildroot] [git commit] domoticz: depends on exception_ptr
+Message-ID: <20180117211144.8906C8294B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=276d40c6009cf7b45349bfecb4a0c5c8afa3c9ab
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-For information, organizations can apply for GSoC 2018 until January
-23, so there is less than a week left to apply. The questions are: do
-we want to apply? And if yes, for what topics?
+boost 1.66 uses std::exception_ptr in boost/asio/impl/use_future.hpp
+So add a dependency on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 for domoticz
 
-Looking at https://elinux.org/Buildroot:GSoC2017Ideas:
+Fixes:
+ -
+http://autobuild.buildroot.net/results/332f677493bf1d802f3700777219843eeba53c81
 
- - Reproducible builds. While some initial work was done, there is
-   definitely a lot more that could be done.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/domoticz/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
- - Testing infrastructure: the runtime testing infrastructure was
-   added in the mean time. Writing more tests and extending the
-   infrastructure is still needed though.
-
- - Relocatable SDK: this topic is pretty much solved IMO, so this topic
-   is no longer relevant.
-
- - Follow upstream updates and CVEs of packages. I think this topic is
-   still relevant, and IMO is the most interesting topic.
-
- - Support for LLVM: an intern from Smile (France) just announced that
-   he will be working on this topic during the next months, so I don't
-   see the point of having a GSOC on the same topic.
-
- - Support new languages and complete existing ones. I'm not sure about
-   this one:
-   * For NodeJS, I'm not sure we want to have zillions of packages for
-     the different NodeJS modules
-   * The Go package infrastructure has been resubmitted, and is
-     actively being pushed by Angelo
-   * The Rust support is actively being pushed by Eric
-   So I don't know if there's enough things left to do for this project
-   idea.
-
-Any other idea of what's missing in Buildroot, or that could be
-improved ?
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/domoticz/Config.in b/package/domoticz/Config.in
+index c03f84a..34bf252 100644
+--- a/package/domoticz/Config.in
++++ b/package/domoticz/Config.in
+@@ -7,6 +7,7 @@ config BR2_PACKAGE_DOMOTICZ
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_USE_WCHAR
+ 	depends on BR2_PACKAGE_LUA_5_2 || BR2_PACKAGE_LUA_5_3
++	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # exception_ptr
+ 	select BR2_PACKAGE_BOOST
+ 	select BR2_PACKAGE_BOOST_DATE_TIME
+ 	select BR2_PACKAGE_BOOST_SYSTEM
+@@ -31,3 +32,6 @@ comment "domoticz needs lua >= 5.2 and a toolchain w/ C++, threads, wchar, dynam
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
+ 		!BR2_USE_WCHAR || BR2_STATIC_LIBS || \
+ 		!(BR2_PACKAGE_LUA_5_2 || BR2_PACKAGE_LUA_5_3)
++
++comment "domoticz needs exception_ptr"
++	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
