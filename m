@@ -1,40 +1,32 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 17 Jan 2018 23:42:35 +0100
-Subject: [Buildroot] [PATCH 5/5] python-crossbar: bump to version
- 17.6.1.post3
-In-Reply-To: <20180111092520.28438-5-yegorslists@googlemail.com>
-References: <20180111092520.28438-1-yegorslists@googlemail.com>
- <20180111092520.28438-5-yegorslists@googlemail.com>
-Message-ID: <20180117234235.032486fc@windsurf>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 17 Jan 2018 22:44:17 +0000
+Subject: [Buildroot] [Bug 10536] Finding non-relative paths in the ccache
+In-Reply-To: <bug-10536-163@https.bugs.busybox.net/>
+References: <bug-10536-163@https.bugs.busybox.net/>
+Message-ID: <bug-10536-163-qrJg8hDa2M@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=10536
 
-On Thu, 11 Jan 2018 10:25:20 +0100, yegorslists at googlemail.com wrote:
-> From: Yegor Yefremov <yegorslists@googlemail.com>
-> 
-> Update dependencies and add licence checksum.
-> 
-> As BR now has the latest setuptools version, remove now obsolete
-> comment.
-> 
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+--- Comment #4 from Arnout Vandecappelle <arnout@mind.be> ---
+Does the build really fail in that second example? Since the first/ directory
+is in the command-line arguments during the build and it doesn't match
+BR2_CCACHE_DIR, ccache should just treat it as a cache miss. So indeed, ccache
+doesn't work for host packages unless the output directory is the same.
 
-Applied, thanks!
+We could actually easily export CCACHE_BASEDIR from make, so that it works also
+for host packages. We could perhaps even remove it from the toolchain wrapper
+then, though it's probably convenient that the same basedir is used when
+building outside of Buildroot.
 
-Crossbar has a lot of dependencies, so perhaps it would be useful to
-add a runtime test for it in support/testing/ ? I.e a test that builds
-a configuration with Crossbar enabled, boots it and verifies that
-Crossbar works in a minimal way.
+That said, this problem will still exist when a BR2_HOST_DIR is specified that
+points outside of the output directory. In that case we'd need two different
+'base directories', which is obviously not possible...
 
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+You are receiving this mail because:
+You are on the CC list for the bug.
