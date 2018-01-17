@@ -1,59 +1,55 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 17 Jan 2018 20:30:03 +0100
-Subject: [Buildroot] [PATCH v2 8/8] package/bash: add missing
- double-dollar for /etc/shells
-In-Reply-To: <1516211058-466-9-git-send-email-romain.naour@smile.fr>
-References: <1516211058-466-1-git-send-email-romain.naour@smile.fr>
- <1516211058-466-9-git-send-email-romain.naour@smile.fr>
-Message-ID: <20180117193003.GI11009@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 17 Jan 2018 21:52:08 +0100
+Subject: [Buildroot] Google Summer of Code 2018 ?
+Message-ID: <20180117215208.45dd61b9@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Romain, All,
+Hello,
 
-On 2018-01-17 18:44 +0100, Romain Naour spake thusly:
-> Commit 4d279697afbf8fb295274784103be2b837113d5e missed one comment
-> from Yann E. Morin about the double-dollar.
-> 
-> Signed-off-by: Romain Naour <romain.naour@smile.fr>
+For information, organizations can apply for GSoC 2018 until January
+23, so there is less than a week left to apply. The questions are: do
+we want to apply? And if yes, for what topics?
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Looking at https://elinux.org/Buildroot:GSoC2017Ideas:
 
-Regards,
-Yann E. MORIN.
+ - Reproducible builds. While some initial work was done, there is
+   definitely a lot more that could be done.
 
-> ---
->  package/bash/bash.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/bash/bash.mk b/package/bash/bash.mk
-> index 03f8f28..ab6b43b 100644
-> --- a/package/bash/bash.mk
-> +++ b/package/bash/bash.mk
-> @@ -46,7 +46,7 @@ define BASH_INSTALL_TARGET_CMDS
->  	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
->  		DESTDIR=$(TARGET_DIR) exec_prefix=/ install
->  	rm -f $(TARGET_DIR)/bin/bashbug
-> -	grep -qsE '^/bin/bash' $(TARGET_DIR)/etc/shells \
-> +	grep -qsE '^/bin/bash$$' $(TARGET_DIR)/etc/shells \
->  		|| echo "/bin/bash" >> $(TARGET_DIR)/etc/shells
->  endef
->  
-> -- 
-> 2.7.4
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+ - Testing infrastructure: the runtime testing infrastructure was
+   added in the mean time. Writing more tests and extending the
+   infrastructure is still needed though.
 
+ - Relocatable SDK: this topic is pretty much solved IMO, so this topic
+   is no longer relevant.
+
+ - Follow upstream updates and CVEs of packages. I think this topic is
+   still relevant, and IMO is the most interesting topic.
+
+ - Support for LLVM: an intern from Smile (France) just announced that
+   he will be working on this topic during the next months, so I don't
+   see the point of having a GSOC on the same topic.
+
+ - Support new languages and complete existing ones. I'm not sure about
+   this one:
+   * For NodeJS, I'm not sure we want to have zillions of packages for
+     the different NodeJS modules
+   * The Go package infrastructure has been resubmitted, and is
+     actively being pushed by Angelo
+   * The Rust support is actively being pushed by Eric
+   So I don't know if there's enough things left to do for this project
+   idea.
+
+Any other idea of what's missing in Buildroot, or that could be
+improved ?
+
+Best regards,
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
