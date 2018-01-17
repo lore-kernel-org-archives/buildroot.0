@@ -1,76 +1,52 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 17 Jan 2018 23:37:56 +0100
-Subject: [Buildroot] [git commit] python-see: new package
-Message-ID: <20180117223943.1AFE6812D6@busybox.osuosl.org>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Wed, 17 Jan 2018 16:40:11 -0600
+Subject: [Buildroot] [PATCH] xen: bump to version 4.9.1
+In-Reply-To: <87po69yf9e.fsf@dell.be.48ers.dk>
+References: <20180114224711.25133-1-peter@korsgaard.com>
+ <CANQCQpayJkVAxWQS_42y+o3b-TJ5P5EVFzoz5cOcwmcsLTZJYA@mail.gmail.com>
+ <87po69yf9e.fsf@dell.be.48ers.dk>
+Message-ID: <CANQCQpaWOWy86JmBYgaooiOmwhh_+nHVU=roOV6-jfOmu8qhKA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=71e1f38b855f11affd5e05500f1d025ff12bd476
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Peter, all,
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/Config.in                  |  1 +
- package/python-see/Config.in       |  6 ++++++
- package/python-see/python-see.hash |  4 ++++
- package/python-see/python-see.mk   | 14 ++++++++++++++
- 4 files changed, 25 insertions(+)
+On Tue, Jan 16, 2018 at 9:50 AM, Peter Korsgaard <peter@korsgaard.com> wrote:
+>>>>>> "Matthew" == Matthew Weber <matthew.weber@rockwellcollins.com> writes:
+>
+>  > Peter,
+>  > On Sun, Jan 14, 2018 at 4:47 PM, Peter Korsgaard <peter@korsgaard.com> wrote:
+>  >> Drop 0003-tools-libxc-xc_dom_arm-add-missing-variable-initiali.patch as that
+>  >> is now upstream:
+>  >>
+>  >> https://xenbits.xenproject.org/gitweb/?p=xen.git;a=commit;h=88bfbf90e35f1213f9967a97dee0b2039f9998a4
+>  >>
+>  >> Drop security patches as 4.9.1 includes up to xsa-245.
+>  >>
+>
+>  > I ran it through test-pkg and that looked good.
+>
+> Thanks!
+>
+>  > I also did a build against the autobuilder failure below.  Looks like
+>  > that failure is still present.
+>  > http://autobuild.buildroot.net/results/8bcb80dc93d38bb38ca32ad93d52c22d1176d57e/
+>
+> Hmm, it looks like the embedded qemu copy picks up sdl2, which it
+> probably shouldn't (or we should atleast handle the dependencies
+> correctly).
+>
 
-diff --git a/package/Config.in b/package/Config.in
-index b133c93..85bb985 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -897,6 +897,7 @@ menu "External python modules"
- 	source "package/python-schedule/Config.in"
- 	source "package/python-sdnotify/Config.in"
- 	source "package/python-secretstorage/Config.in"
-+	source "package/python-see/Config.in"
- 	source "package/python-serial/Config.in"
- 	source "package/python-service-identity/Config.in"
- 	source "package/python-setproctitle/Config.in"
-diff --git a/package/python-see/Config.in b/package/python-see/Config.in
-new file mode 100644
-index 0000000..f3049fd
---- /dev/null
-+++ b/package/python-see/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PYTHON_SEE
-+	bool "python-see"
-+	help
-+	  dir for humans.
-+
-+	  https://ljcooke.github.io/see/
-diff --git a/package/python-see/python-see.hash b/package/python-see/python-see.hash
-new file mode 100644
-index 0000000..c48ee88
---- /dev/null
-+++ b/package/python-see/python-see.hash
-@@ -0,0 +1,4 @@
-+# md5 from https://pypi.python.org/pypi/see/json, sha256 locally computed
-+md5	cb3bf4d314f73a8f7a2fd3d2d99aab54  see-1.4.1.tar.gz
-+sha256	14f8f8a88a909a7d7dea81f0016e3fdfabd3b5d335992e102a382e1a71672bd1  see-1.4.1.tar.gz
-+sha256  dccbd040a7deacee7f05e5e46a8eba6e786ac319f0cb94c36f92d789585911a6  LICENSE
-diff --git a/package/python-see/python-see.mk b/package/python-see/python-see.mk
-new file mode 100644
-index 0000000..982962b
---- /dev/null
-+++ b/package/python-see/python-see.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-see
-+#
-+################################################################################
-+
-+PYTHON_SEE_VERSION = 1.4.1
-+PYTHON_SEE_SOURCE = see-$(PYTHON_SEE_VERSION).tar.gz
-+PYTHON_SEE_SITE = https://pypi.python.org/packages/ff/fc/fcabb6a9bfe7c56798285839780cae67342256b823b97e94d862b0ba21d6
-+PYTHON_SEE_SETUP_TYPE = setuptools
-+PYTHON_SEE_LICENSE = BSD-3-Clause
-+PYTHON_SEE_LICENSE_FILES = LICENSE
-+
-+$(eval $(python-package))
+Should we by default force SDL to be turned on for xen tools,
+explicitly disable or make it optional?  I can see some additional
+patches to make their --disable-sdl work vs fixing the include paths
+to formally --enable-sdl.
+
+A second item, I realized with sdl2 is that its another package which
+pollutes the sysroot pkg-config with host build paths.  I'll be
+preparing a target-finalize patch which checks for these bad paths
+
+Matt
