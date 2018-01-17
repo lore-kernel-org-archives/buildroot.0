@@ -1,42 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 17 Jan 2018 14:00:14 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
- 2018-01-16
-In-Reply-To: <20180117120824.46377330@x230.trabucayre.com>
-References: <20180117070031.EC9E0208EE@mail.free-electrons.com>
- <20180117120824.46377330@x230.trabucayre.com>
-Message-ID: <20180117140014.6cdf1339@windsurf>
+Date: Wed, 17 Jan 2018 14:07:03 +0100
+Subject: [Buildroot] [git commit] skalibs: bump version to 2.6.3.1
+Message-ID: <20180117130708.C566B83EE0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=76b41157939bb249f47f8f6b3461ccd6ad6e12c9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 17 Jan 2018 12:08:24 +0100, Gwenhael Goavec-Merou wrote:
+Fixes:
 
-> >        nios2 |             python-pyqt-4.11.3 |
-> > http://autobuild.buildroot.net/results/4757f76e56240302cbccf2d460493d13eefb0e56
-> > 
-> > -- 
-> > http://autobuild.buildroot.net  
-> 
-> It's strange I have this result instead of the build failure mentioned
-> in the log :
+ http://autobuild.buildroot.net/results/59f3b6d5fe3e9b561adbafc08eeb1a23f7100278/
 
-Strange, not necessarily. Remember that the autobuilder tests are done
-on various machines, that have various distributions/configurations. So
-sometimes we have build failures occurring on a particular machine, and
-not on others, due to influences of the host system.
+Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/skalibs/skalibs.hash | 2 +-
+ package/skalibs/skalibs.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Other than that, the fact that it fails for you means that you have two
-problems for the price of one :-)
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/skalibs/skalibs.hash b/package/skalibs/skalibs.hash
+index 0936c09..a65aaad 100644
+--- a/package/skalibs/skalibs.hash
++++ b/package/skalibs/skalibs.hash
+@@ -1,3 +1,3 @@
+ # Locally generated
+-sha256 81d63a1918189036e9cc679d9b327d36a6056bba89132f35bb1c45b50ceb7226  skalibs-2.6.3.0.tar.gz
++sha256 8508ca00d4e2355e9ec0ec7f4808e98b349999d6732d2f123ac53b4df5260c81  skalibs-2.6.3.1.tar.gz
+ sha256 3eadcf980c40da0f257b8292d805ff41e5e5a908c1942315d9a627732e1aa012  COPYING
+diff --git a/package/skalibs/skalibs.mk b/package/skalibs/skalibs.mk
+index b8bb8e9..2ce0c33 100644
+--- a/package/skalibs/skalibs.mk
++++ b/package/skalibs/skalibs.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SKALIBS_VERSION = 2.6.3.0
++SKALIBS_VERSION = 2.6.3.1
+ SKALIBS_SITE = http://skarnet.org/software/skalibs
+ SKALIBS_LICENSE = ISC
+ SKALIBS_LICENSE_FILES = COPYING
