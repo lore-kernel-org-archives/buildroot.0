@@ -1,55 +1,58 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 17 Jan 2018 19:16:37 +0100
-Subject: [Buildroot] [PATCH] toolchain/toolchain-external: libatomic
- should also be copied for musl toolchains
-In-Reply-To: <20180116224808.1630-1-thomas.petazzoni@free-electrons.com>
-References: <20180116224808.1630-1-thomas.petazzoni@free-electrons.com>
-Message-ID: <20180117181637.GA11009@scaer>
+Date: Wed, 17 Jan 2018 19:44:53 +0100
+Subject: [Buildroot] [PATCH v2 1/8] package/skeleton-init-common: add
+ /bin/sh to /etc/shells
+In-Reply-To: <1516211058-466-2-git-send-email-romain.naour@smile.fr>
+References: <1516211058-466-1-git-send-email-romain.naour@smile.fr>
+ <1516211058-466-2-git-send-email-romain.naour@smile.fr>
+Message-ID: <20180117184453.GB11009@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Romain, All,
 
-On 2018-01-16 23:48 +0100, Thomas Petazzoni spake thusly:
-> libatomic, like libgcc_s, is provided by gcc, so there is no reason to
-> copy it over only for the glibc and uclibc cases, it should also be
-> copied for the musl case. Without this, a program linked with
-> libatomic on a musl system will fail to run due to the missing
-> library.
+On 2018-01-17 18:44 +0100, Romain Naour spake thusly:
+> Add the default shell /bin/sh to /etc/shells only if BR2_SYSTEM_BIN_SH_NONE
+> is not selected.
 > 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Signed-off-by: Romain Naour <romain.naour@smile.fr>
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
 
 > ---
->  toolchain/toolchain-external/pkg-toolchain-external.mk | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+> v2: add double-dollar after /bin/sh (Yann)
+>     remove empty /etc/shells from skeleton (Yann, Peter)
+>     move the hook right after it's defined (Yann)
+> ---
+>  package/skeleton-init-common/skeleton-init-common.mk | 7 +++++++
+>  1 file changed, 7 insertions(+)
 > 
-> diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
-> index b9ad1720a1..3bf9fac412 100644
-> --- a/toolchain/toolchain-external/pkg-toolchain-external.mk
-> +++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
-> @@ -108,10 +108,10 @@ endif
->  # Definitions of the list of libraries that should be copied to the target.
->  #
->  
-> -TOOLCHAIN_EXTERNAL_LIBS += ld*.so* libgcc_s.so.*
-> +TOOLCHAIN_EXTERNAL_LIBS += ld*.so* libgcc_s.so.* libatomic.so.*
->  
->  ifeq ($(BR2_TOOLCHAIN_EXTERNAL_GLIBC)$(BR2_TOOLCHAIN_EXTERNAL_UCLIBC),y)
-> -TOOLCHAIN_EXTERNAL_LIBS += libatomic.so.* libc.so.* libcrypt.so.* libdl.so.* libm.so.* libnsl.so.* libresolv.so.* librt.so.* libutil.so.*
-> +TOOLCHAIN_EXTERNAL_LIBS += libc.so.* libcrypt.so.* libdl.so.* libm.so.* libnsl.so.* libresolv.so.* librt.so.* libutil.so.*
->  ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
->  TOOLCHAIN_EXTERNAL_LIBS += libpthread.so.*
->  ifneq ($(BR2_PACKAGE_GDB)$(BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY),)
+> diff --git a/package/skeleton-init-common/skeleton-init-common.mk b/package/skeleton-init-common/skeleton-init-common.mk
+> index 8228a81..03cb744 100644
+> --- a/package/skeleton-init-common/skeleton-init-common.mk
+> +++ b/package/skeleton-init-common/skeleton-init-common.mk
+> @@ -79,6 +79,13 @@ define SKELETON_INIT_COMMON_SET_BIN_SH
+>  	rm -f $(TARGET_DIR)/bin/sh
+>  endef
+>  else
+> +# Add /bin/sh to /etc/shells otherwise some login tools like dropbear
+> +# can reject the user connexion. See man shells.
+> +define SKELETON_INIT_COMMON_ADD_SH_TO_SHELLS
+> +	grep -qsE '^/bin/sh$$' $(TARGET_DIR)/etc/shells \
+> +		|| echo "/bin/sh" >> $(TARGET_DIR)/etc/shells
+> +endef
+> +SKELETON_INIT_COMMON_POST_INSTALL_TARGET_HOOKS += SKELETON_INIT_COMMON_ADD_SH_TO_SHELLS
+>  ifneq ($(SKELETON_INIT_COMMON_BIN_SH),)
+>  define SKELETON_INIT_COMMON_SET_BIN_SH
+>  	ln -sf $(SKELETON_INIT_COMMON_BIN_SH) $(TARGET_DIR)/bin/sh
 > -- 
-> 2.14.3
+> 2.7.4
 > 
 > _______________________________________________
 > buildroot mailing list
