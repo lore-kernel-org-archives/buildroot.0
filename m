@@ -1,52 +1,39 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Wed, 17 Jan 2018 16:40:11 -0600
-Subject: [Buildroot] [PATCH] xen: bump to version 4.9.1
-In-Reply-To: <87po69yf9e.fsf@dell.be.48ers.dk>
-References: <20180114224711.25133-1-peter@korsgaard.com>
- <CANQCQpayJkVAxWQS_42y+o3b-TJ5P5EVFzoz5cOcwmcsLTZJYA@mail.gmail.com>
- <87po69yf9e.fsf@dell.be.48ers.dk>
-Message-ID: <CANQCQpaWOWy86JmBYgaooiOmwhh_+nHVU=roOV6-jfOmu8qhKA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 17 Jan 2018 23:41:08 +0100
+Subject: [Buildroot] [PATCH 4/5] python-see: new package
+In-Reply-To: <20180111092520.28438-4-yegorslists@googlemail.com>
+References: <20180111092520.28438-1-yegorslists@googlemail.com>
+ <20180111092520.28438-4-yegorslists@googlemail.com>
+Message-ID: <20180117234108.1935ccf2@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, all,
+Hello,
 
-On Tue, Jan 16, 2018 at 9:50 AM, Peter Korsgaard <peter@korsgaard.com> wrote:
->>>>>> "Matthew" == Matthew Weber <matthew.weber@rockwellcollins.com> writes:
->
->  > Peter,
->  > On Sun, Jan 14, 2018 at 4:47 PM, Peter Korsgaard <peter@korsgaard.com> wrote:
->  >> Drop 0003-tools-libxc-xc_dom_arm-add-missing-variable-initiali.patch as that
->  >> is now upstream:
->  >>
->  >> https://xenbits.xenproject.org/gitweb/?p=xen.git;a=commit;h=88bfbf90e35f1213f9967a97dee0b2039f9998a4
->  >>
->  >> Drop security patches as 4.9.1 includes up to xsa-245.
->  >>
->
->  > I ran it through test-pkg and that looked good.
->
-> Thanks!
->
->  > I also did a build against the autobuilder failure below.  Looks like
->  > that failure is still present.
->  > http://autobuild.buildroot.net/results/8bcb80dc93d38bb38ca32ad93d52c22d1176d57e/
->
-> Hmm, it looks like the embedded qemu copy picks up sdl2, which it
-> probably shouldn't (or we should atleast handle the dependencies
-> correctly).
->
+On Thu, 11 Jan 2018 10:25:19 +0100, yegorslists at googlemail.com wrote:
+> From: Yegor Yefremov <yegorslists@googlemail.com>
+> 
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+> ---
+>  package/Config.in                  |  1 +
+>  package/python-see/Config.in       |  6 ++++++
+>  package/python-see/python-see.hash |  4 ++++
+>  package/python-see/python-see.mk   | 14 ++++++++++++++
+>  4 files changed, 25 insertions(+)
+>  create mode 100644 package/python-see/Config.in
+>  create mode 100644 package/python-see/python-see.hash
+>  create mode 100644 package/python-see/python-see.mk
 
-Should we by default force SDL to be turned on for xen tools,
-explicitly disable or make it optional?  I can see some additional
-patches to make their --disable-sdl work vs fixing the include paths
-to formally --enable-sdl.
+Applied to master, thanks. Just curious: why are you adding this
+package? It seems to only do a cosmetic thing, no?
 
-A second item, I realized with sdl2 is that its another package which
-pollutes the sysroot pkg-config with host build paths.  I'll be
-preparing a target-finalize patch which checks for these bad paths
+Best regards,
 
-Matt
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
