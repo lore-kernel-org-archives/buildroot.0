@@ -1,41 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 17 Jan 2018 22:32:55 +0100
-Subject: [Buildroot] [git commit] erlang-p1-iconv: Bump to version 1.0.6
-Message-ID: <20180117213347.13C6D83F1D@busybox.osuosl.org>
+Date: Wed, 17 Jan 2018 22:27:50 +0100
+Subject: [Buildroot] [git commit] erlang-p1-zlib: Bump to version 1.0.3
+Message-ID: <20180117213346.9EB2483F1D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=30bb874757f858c617085771a46ab6217ea18b8b
+commit: https://git.buildroot.net/buildroot/commit/?id=64ca1555272bc138764faca220dab6382f32d75d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/erlang-p1-iconv/erlang-p1-iconv.hash | 2 +-
- package/erlang-p1-iconv/erlang-p1-iconv.mk   | 2 +-
+ package/erlang-p1-zlib/erlang-p1-zlib.hash | 2 +-
+ package/erlang-p1-zlib/erlang-p1-zlib.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/erlang-p1-iconv/erlang-p1-iconv.hash b/package/erlang-p1-iconv/erlang-p1-iconv.hash
-index 883fd52..0f0a231 100644
---- a/package/erlang-p1-iconv/erlang-p1-iconv.hash
-+++ b/package/erlang-p1-iconv/erlang-p1-iconv.hash
+diff --git a/package/erlang-p1-zlib/erlang-p1-zlib.hash b/package/erlang-p1-zlib/erlang-p1-zlib.hash
+index eded821..dc14dd0 100644
+--- a/package/erlang-p1-zlib/erlang-p1-zlib.hash
++++ b/package/erlang-p1-zlib/erlang-p1-zlib.hash
 @@ -1,2 +1,2 @@
  # Locally calculated
--sha256 ca20d58166a4fb38883977600aca61e02bfd1257b8bded8c8ddd82d2a96084e6 erlang-p1-iconv-1.0.4.tar.gz
-+sha256 c7214ea7503c3de1edf3bdd72b37187aa3a9a36d7cf7f5945a067ae8d262d3fb erlang-p1-iconv-1.0.6.tar.gz
-diff --git a/package/erlang-p1-iconv/erlang-p1-iconv.mk b/package/erlang-p1-iconv/erlang-p1-iconv.mk
-index 044361e..6b22431 100644
---- a/package/erlang-p1-iconv/erlang-p1-iconv.mk
-+++ b/package/erlang-p1-iconv/erlang-p1-iconv.mk
+-sha256 2200330f7d4fc595caf8806fec1318b853009ab3d643cf063d19bff59bf2b45e erlang-p1-zlib-1.0.2.tar.gz
++sha256 8396f9cb17fdb195d9a2537ad76327bf930d66118b87b7108f27e5ed28b7cde6 erlang-p1-zlib-1.0.3.tar.gz
+diff --git a/package/erlang-p1-zlib/erlang-p1-zlib.mk b/package/erlang-p1-zlib/erlang-p1-zlib.mk
+index a57b19f..bc53efc 100644
+--- a/package/erlang-p1-zlib/erlang-p1-zlib.mk
++++ b/package/erlang-p1-zlib/erlang-p1-zlib.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ERLANG_P1_ICONV_VERSION = 1.0.4
-+ERLANG_P1_ICONV_VERSION = 1.0.6
- ERLANG_P1_ICONV_SITE = $(call github,processone,iconv,$(ERLANG_P1_ICONV_VERSION))
- ERLANG_P1_ICONV_LICENSE = Apache-2.0
- ERLANG_P1_ICONV_LICENSE_FILES = LICENSE.txt
+-ERLANG_P1_ZLIB_VERSION = 1.0.2
++ERLANG_P1_ZLIB_VERSION = 1.0.3
+ ERLANG_P1_ZLIB_SITE = $(call github,processone,ezlib,$(ERLANG_P1_ZLIB_VERSION))
+ ERLANG_P1_ZLIB_LICENSE = Apache-2.0
+ ERLANG_P1_ZLIB_LICENSE_FILES = LICENSE.txt
