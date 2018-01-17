@@ -1,43 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 17 Jan 2018 22:36:25 +0100
-Subject: [Buildroot] [git commit] perl-time-hires: bump to version 1.9753
-Message-ID: <20180117213712.240DB81D68@busybox.osuosl.org>
+Date: Wed, 17 Jan 2018 22:36:30 +0100
+Subject: [Buildroot] [git commit] perl-libwww-perl: bump to version 6.31
+Message-ID: <20180117213712.52A3783F1C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b22a79ad9dc38bc1403d669b56402c1426732083
+commit: https://git.buildroot.net/buildroot/commit/?id=d789a1948d1a815d5497f734c10110224c49861f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/perl-time-hires/perl-time-hires.hash | 4 ++--
- package/perl-time-hires/perl-time-hires.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/perl-libwww-perl/perl-libwww-perl.hash | 4 ++--
+ package/perl-libwww-perl/perl-libwww-perl.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/perl-time-hires/perl-time-hires.hash b/package/perl-time-hires/perl-time-hires.hash
-index 210f630..f3ab700 100644
---- a/package/perl-time-hires/perl-time-hires.hash
-+++ b/package/perl-time-hires/perl-time-hires.hash
+diff --git a/package/perl-libwww-perl/perl-libwww-perl.hash b/package/perl-libwww-perl/perl-libwww-perl.hash
+index 24e077d..7ce0853 100644
+--- a/package/perl-libwww-perl/perl-libwww-perl.hash
++++ b/package/perl-libwww-perl/perl-libwww-perl.hash
 @@ -1,3 +1,3 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5    728dc2c2715313a056792191d7d0726c Time-HiRes-1.9746.tar.gz
--sha256 89408c81bb827bc908c98eec50071e6e1158f38fa462865ecc3dc03aebf5f596 Time-HiRes-1.9746.tar.gz
-+md5    b98099e0cb7702210606776e9746e103 Time-HiRes-1.9753.tar.gz
-+sha256 0fbfd5f99cdd26011d5c0bc3a8e369dacc4a9e1d1658f4663ac6018f2cec4915 Time-HiRes-1.9753.tar.gz
-diff --git a/package/perl-time-hires/perl-time-hires.mk b/package/perl-time-hires/perl-time-hires.mk
-index 7f52625..c8dde49 100644
---- a/package/perl-time-hires/perl-time-hires.mk
-+++ b/package/perl-time-hires/perl-time-hires.mk
-@@ -4,7 +4,7 @@
+-md5    457bf4a4f40af3e2f43653329a9c6ab7 libwww-perl-6.26.tar.gz
+-sha256 d0c5435275f8638ff36fff8f655ad2ccad1156e66cc47bfacfb9e44fc585b24f libwww-perl-6.26.tar.gz
++md5    688284bc6282562948c6916f9e8563b0 libwww-perl-6.31.tar.gz
++sha256 525d5386d39d1c1d7da8a0e9dd0cbab95cba2a4bfcfd9b83b257f49be4eecae3 libwww-perl-6.31.tar.gz
+diff --git a/package/perl-libwww-perl/perl-libwww-perl.mk b/package/perl-libwww-perl/perl-libwww-perl.mk
+index fd4857c..cdff6b4 100644
+--- a/package/perl-libwww-perl/perl-libwww-perl.mk
++++ b/package/perl-libwww-perl/perl-libwww-perl.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PERL_TIME_HIRES_VERSION = 1.9746
-+PERL_TIME_HIRES_VERSION = 1.9753
- PERL_TIME_HIRES_SOURCE = Time-HiRes-$(PERL_TIME_HIRES_VERSION).tar.gz
- PERL_TIME_HIRES_SITE = $(BR2_CPAN_MIRROR)/authors/id/J/JH/JHI
- PERL_TIME_HIRES_LICENSE = Artistic or GPL-1.0+
+-PERL_LIBWWW_PERL_VERSION = 6.26
++PERL_LIBWWW_PERL_VERSION = 6.31
+ PERL_LIBWWW_PERL_SOURCE = libwww-perl-$(PERL_LIBWWW_PERL_VERSION).tar.gz
+-PERL_LIBWWW_PERL_SITE = $(BR2_CPAN_MIRROR)/authors/id/O/OA/OALDERS
++PERL_LIBWWW_PERL_SITE = $(BR2_CPAN_MIRROR)/authors/id/E/ET/ETHER
+ PERL_LIBWWW_PERL_DEPENDENCIES = \
+ 	perl-encode-locale \
+ 	perl-file-listing \
