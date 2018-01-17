@@ -1,111 +1,164 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 17 Jan 2018 14:19:56 +0100
-Subject: [Buildroot] [PATCH 14/14] ejabberd: Bump to version 17.11
-In-Reply-To: <CAJtjsKY7XsNAFt79XvzqN7=+mWrLRyLgOmjrEKz0wSkHp+Ns=w@mail.gmail.com>
-References: <20180116140649.7381-1-johan.oudinet@gmail.com>
- <20180116140649.7381-15-johan.oudinet@gmail.com>
- <20180116220250.483dff36@windsurf>
- <CAJtjsKY7XsNAFt79XvzqN7=+mWrLRyLgOmjrEKz0wSkHp+Ns=w@mail.gmail.com>
-Message-ID: <20180117141956.5f83b38d@windsurf>
+From: Marcus Folkesson <marcus.folkesson@gmail.com>
+Date: Wed, 17 Jan 2018 15:13:06 +0100
+Subject: [Buildroot] [PATCH v2] selinux-python: add patch to make the build
+ process more standard
+Message-ID: <20180117141306.15170-1-marcus.folkesson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Patch the Makefiles to make PREFIX and DESTDIR follow standard
+semantics to get rid of DESTDIR during compile time in
+selinux-python.mk.
 
-On Wed, 17 Jan 2018 14:12:32 +0100, Johan Oudinet wrote:
+Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
+---
 
-> > Thanks for this update! Can I apply all the erlang package version
-> > bumps, even if I don't apply the ejabberd bump ?  
-> 
-> Sure. I upgrade them to the same version as the one used by ejabberd
-> to avoid testing for incompatibilities myself but you can apply them
-> separately and it should work fine.
+v2:
+	- Add description and signed-of-by-tag for patch
 
-OK, thanks. This way I can apply the 13 first patches, and we can
-resolve the remaining questions on PATCH 14/14 separately.
+ ...build-follow-standard-semantics-for-DESTD.patch | 117 +++++++++++++++++++++
+ package/selinux-python/selinux-python.mk           |   2 +-
+ 2 files changed, 118 insertions(+), 1 deletion(-)
+ create mode 100644 package/selinux-python/0001-python-build-follow-standard-semantics-for-DESTD.patch
 
-> > It is not entirely clear: is this patch already upstream?  
-> 
-> I started from Philipp Huebner's patch on Debian's package for
-> ejabberd 17.11, but the patch format was not accepted by buildroot, so
-> I did it myself from ejabberd's git repository and copy-paste
-> Huebner's comment, including the Author line.
-> I used the following sed command:
-> for f in src/*.erl include/*.hrl; do
->     sed -i -e 's,esip/include,s1_sip/include,g' \
->              -e 's,include("ns.hrl,include_lib("p1_xmpp/include/ns.hrl,g' \
->              -e 's,include("fxml.hrl,include_lib("p1_xml/include/fxml.hrl,g' \
->              -e 's,include("xmpp\.hrl,include_lib("p1_xmpp/include/xmpp.hrl,g' \
->              -e 's,include("jid\.hrl,include_lib("p1_xmpp/include/jid.hrl,g' \
->              "$f"
-> done
-> 
-> What do you recommend me to do? I don't care of having my name in this patch.
-
-That does not really answer the question I was asking: is the patch
-upstream? Has it been submitted? Will it be accepted?
-
-> >> +config BR2_PACKAGE_EJABBERD_ERLANG_COOKIE
-> >> +     string "Erlang cookie"
-> >> +     help
-> >> +       An alphanumeric string used by Erlang to authenticate nodes.
-> >> +       If empty, erlang creates a random cookie at first execution.  
-> >
-> > Just curious, why is the Erlang cookie part of the Ejabberd
-> > configuration?  
-> 
-> Good point. I added this functionality at the end of testing this
-> version to help me adding such file in the home directory of ejabberd
-> user for read-only rootfs. However, you right, it does not make much
-> sense to have this in Ejabberd configuration and it cannot be added in
-> Erlang's configuration neither, as the location depends on the user
-> who starts an Erlang application. It should be done in a post-build. I
-> guess I simply get rid of it in a second version of this patch. What
-> do you think?
-
-According to your description, it clearly doesn't seem to be related to
-the version bump, so whatever solution is chosen, it should be
-implemented as a separate patch from the version bump.
-
-Since I don't understand what this cookie is, I can't really suggest
-what is the good way to do it. For sure a post-build script +
-custom permission table allows to do that, so your option is not
-strictly necessary. But if everybody using ejabberd has to create this
-cookie file, it might make sense to have an option for it.
-
-If I understand correctly, this cookie is unique per machine, but must
-be preserved across reboots. Correct ?
-
-Also, this cookie is not system-wide, i.e each Erlang application, or
-at least each user (in the sense of /etc/passwd) must have this cookie
-for Erlang applications to not generate one upon first execution.
-Correct ?
-
-> I had written in a previous version :
-> echo '$(call qstrip, $(FOO))' >'$(BAR)'
-> but figured out the quotes would be removed by the shell when
-> executing the echo command, so I could simplify it by removing both
-> the single quotes and the call to qstrip.
-> 
-> >  
-> >> +     >'$(TARGET_DIR)/var/lib/ejabberd/.erlang.cookie'  
-> >
-> > Why is this path between single quotes ?  
-> 
-> In case TARGET_DIR has spaces.
-
-There are gazillions of places where we don't quote
-STAGING_DIR/TARGET_DIR. We don't support spaces in the path to
-Buildroot directories currently, I'm sure lots of things would break if
-you were to build in a folder with spaces.
-
-Best regards,
-
-Thomas
+diff --git a/package/selinux-python/0001-python-build-follow-standard-semantics-for-DESTD.patch b/package/selinux-python/0001-python-build-follow-standard-semantics-for-DESTD.patch
+new file mode 100644
+index 0000000000..156701a818
+--- /dev/null
++++ b/package/selinux-python/0001-python-build-follow-standard-semantics-for-DESTD.patch
+@@ -0,0 +1,117 @@
++python: build: follow standard semantics for DESTDIR and PREFIX
++
++Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
++
++diff -durN python.orig/audit2allow/Makefile python/audit2allow/Makefile
++--- python.orig/audit2allow/Makefile	2017-08-04 15:31:00.000000000 +0200
+++++ python/audit2allow/Makefile	2018-01-17 09:44:35.659573123 +0100
++@@ -1,19 +1,17 @@
++ PYTHON ?= python
++ 
++ # Installation directories.
++-PREFIX ?= $(DESTDIR)/usr
++-BINDIR ?= $(PREFIX)/bin
++-LIBDIR ?= $(PREFIX)/lib
++-MANDIR ?= $(PREFIX)/share/man
++-LOCALEDIR ?= /usr/share/locale
++-INCLUDEDIR ?= $(PREFIX)/include
++-LIBSEPOLA ?= $(LIBDIR)/libsepol.a
+++PREFIX ?= /usr
+++BINDIR ?= $(DESTDIR)$(PREFIX)/bin
+++LIBDIR ?= $(DESTDIR)$(PREFIX)/lib
+++MANDIR ?= $(DESTDIR)$(PREFIX)/share/man
++ 
++ CFLAGS ?= -Werror -Wall -W
++ 
++ all: audit2why sepolgen-ifgen-attr-helper
++ 
++-sepolgen-ifgen-attr-helper: sepolgen-ifgen-attr-helper.o $(LIBSEPOLA)
+++sepolgen-ifgen-attr-helper: sepolgen-ifgen-attr-helper.o
+++	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^ -l:libsepol.a
++ 
++ audit2why:
++ 	ln -sf audit2allow audit2why
++diff -durN python.orig/chcat/Makefile python/chcat/Makefile
++--- python.orig/chcat/Makefile	2017-08-04 15:31:00.000000000 +0200
+++++ python/chcat/Makefile	2018-01-17 09:44:35.659573123 +0100
++@@ -1,8 +1,8 @@
++ # Installation directories.
++-PREFIX ?= $(DESTDIR)/usr
++-BINDIR ?= $(PREFIX)/bin
++-MANDIR ?= $(PREFIX)/share/man
++-LOCALEDIR ?= $(PREFIX)/share/locale
+++PREFIX ?= /usr
+++BINDIR ?= $(DESTDIR)$(PREFIX)/bin
+++MANDIR ?= $(DESTDIR)$(PREFIX)/share/man
+++LOCALEDIR ?= $(DESTDIR)$(PREFIX)/share/locale
++ 
++ .PHONY: all
++ all: chcat
++diff -durN python.orig/semanage/Makefile python/semanage/Makefile
++--- python.orig/semanage/Makefile	2017-08-04 15:31:00.000000000 +0200
+++++ python/semanage/Makefile	2018-01-17 09:44:43.676239705 +0100
++@@ -1,13 +1,12 @@
++ PYTHON ?= python
++ 
++ # Installation directories.
++-PREFIX ?= $(DESTDIR)/usr
++-LIBDIR ?= $(PREFIX)/lib
++-SBINDIR ?= $(PREFIX)/sbin
++-MANDIR = $(PREFIX)/share/man
++-PYTHONLIBDIR ?= $(shell $(PYTHON) -c "from distutils.sysconfig import *; print(get_python_lib(1))")
+++PREFIX ?= /usr
+++SBINDIR ?= $(DESTDIR)$(PREFIX)/sbin
+++MANDIR = $(DESTDIR)$(PREFIX)/share/man
+++PYTHONLIBDIR ?= $(shell $(PYTHON) -c "from distutils.sysconfig import *; print(get_python_lib(prefix='$(PREFIX)'))")
++ PACKAGEDIR ?= $(DESTDIR)/$(PYTHONLIBDIR)
++-BASHCOMPLETIONDIR ?= $(DESTDIR)/usr/share/bash-completion/completions
+++BASHCOMPLETIONDIR ?= $(DESTDIR)$(PREFIX)/share/bash-completion/completions
++ 
++ TARGETS=semanage
++ 
++diff -durN python.orig/sepolgen/src/sepolgen/Makefile python/sepolgen/src/sepolgen/Makefile
++--- python.orig/sepolgen/src/sepolgen/Makefile	2017-08-04 15:31:00.000000000 +0200
+++++ python/sepolgen/src/sepolgen/Makefile	2018-01-17 09:44:35.659573123 +0100
++@@ -1,5 +1,6 @@
+++PREFIX ?= /usr
++ PYTHON ?= python
++-PYTHONLIBDIR ?= $(shell $(PYTHON) -c "from distutils.sysconfig import *; print(get_python_lib(1))")
+++PYTHONLIBDIR ?= $(shell $(PYTHON) -c "from distutils.sysconfig import *; print(get_python_lib(prefix='$(PREFIX)'))")
++ PACKAGEDIR ?= $(DESTDIR)/$(PYTHONLIBDIR)/sepolgen
++ 
++ all:
++diff -durN python.orig/sepolicy/Makefile python/sepolicy/Makefile
++--- python.orig/sepolicy/Makefile	2017-08-04 15:31:00.000000000 +0200
+++++ python/sepolicy/Makefile	2018-01-17 09:44:35.659573123 +0100
++@@ -1,14 +1,14 @@
++ PYTHON ?= python
++ 
++ # Installation directories.
++-PREFIX ?= $(DESTDIR)/usr
++-LIBDIR ?= $(PREFIX)/lib
++-BINDIR ?= $(PREFIX)/bin
++-DATADIR ?= $(PREFIX)/share
++-MANDIR ?= $(PREFIX)/share/man
++-LOCALEDIR ?= /usr/share/locale
++-BASHCOMPLETIONDIR ?= $(DESTDIR)/usr/share/bash-completion/completions
++-SHAREDIR ?= $(PREFIX)/share/sandbox
+++PREFIX ?= /usr
+++LIBDIR ?= $(DESTDIR)$(PREFIX)/lib
+++BINDIR ?= $(DESTDIR)$(PREFIX)/bin
+++DATADIR ?= $(DESTDIR)$(PREFIX)/share
+++MANDIR ?= $(DESTDIR)$(PREFIX)/share/man
+++LOCALEDIR ?= $(DESTDIR)$(PREFIX)/share/locale
+++BASHCOMPLETIONDIR ?= $(DESTDIR)$(PREFIX)/share/bash-completion/completions
+++SHAREDIR ?= $(DESTDIR)$(PREFIX)/share/sandbox
++ CFLAGS ?= -Wall -Werror -Wextra -W
++ override CFLAGS += -DPACKAGE="policycoreutils" -DSHARED -shared
++ 
++@@ -30,7 +30,7 @@
++ 	@$(PYTHON) test_sepolicy.py -v
++ 
++ install:
++-	$(PYTHON) setup.py install `test -n "$(DESTDIR)" && echo --root $(DESTDIR)`
+++	$(PYTHON) setup.py install --prefix=$(PREFIX) `test -n "$(DESTDIR)" && echo --root $(DESTDIR)`
++ 	[ -d $(BINDIR) ] || mkdir -p $(BINDIR)
++ 	install -m 755 sepolicy.py $(BINDIR)/sepolicy
++ 	(cd $(BINDIR); ln -sf sepolicy sepolgen)
+diff --git a/package/selinux-python/selinux-python.mk b/package/selinux-python/selinux-python.mk
+index 9a4622da44..25a2d04105 100644
+--- a/package/selinux-python/selinux-python.mk
++++ b/package/selinux-python/selinux-python.mk
+@@ -36,7 +36,7 @@ endif
+ define SELINUX_PYTHON_BUILD_CMDS
+ 	$(foreach d,$(SELINUX_PYTHON_MAKE_DIRS),
+ 		$(MAKE) -C $(@D)/$(d) $(SELINUX_PYTHON_MAKE_OPTS) \
+-			DESTDIR=$(STAGING_DIR) all
++			all
+ 	)
+ endef
+ 
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.15.1
