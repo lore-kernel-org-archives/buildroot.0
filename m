@@ -1,46 +1,43 @@
 From: Romain Naour <romain.naour@smile.fr>
-Date: Wed, 17 Jan 2018 18:44:15 +0100
-Subject: [Buildroot] [PATCH v2 5/8] package/tmux: add /usr/bin/tmux to
- /etc/shells
-In-Reply-To: <1516211058-466-1-git-send-email-romain.naour@smile.fr>
-References: <1516211058-466-1-git-send-email-romain.naour@smile.fr>
-Message-ID: <1516211058-466-6-git-send-email-romain.naour@smile.fr>
+Date: Wed, 17 Jan 2018 18:44:10 +0100
+Subject: [Buildroot] [PATCH v2 0/8] Add /etc/shells handling
+Message-ID: <1516211058-466-1-git-send-email-romain.naour@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When tmux is selected, /usr/bin/tmux is not added to /etc/shells
-(see man shells). So, login tools like dropbear reject the ssh
-connexions for users using tmux as shell in /etc/passwd.
+Started with commit [1], all package providing a shell interpreter
+should  be listed in /etc/shells file to avoid issues with dropbear
+or other tools.
 
-buildroot authpriv.warn dropbear[853]: User 'kubu' has invalid shell, rejected
+Although a macro could be added to pkg-generic.mk to avoid
+duplicating the /etc/shells handling, there is less than ten
+shell packages in Buildroot. So add /etc/shells handling as
+a POST_INSTALL_TARGET_HOOKS or inside INSTALL_TARGET_CMDS.
 
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
-v2: add double-dollar after /usr/bin/tmux (Yann)
----
- package/tmux/tmux.mk | 8 ++++++++
- 1 file changed, 8 insertions(+)
+[1] 4d279697afbf8fb295274784103be2b837113d5e
 
-diff --git a/package/tmux/tmux.mk b/package/tmux/tmux.mk
-index 6e03d01..94833ed 100644
---- a/package/tmux/tmux.mk
-+++ b/package/tmux/tmux.mk
-@@ -10,4 +10,12 @@ TMUX_LICENSE = ISC
- TMUX_LICENSE_FILES = README
- TMUX_DEPENDENCIES = libevent ncurses host-pkgconf
- 
-+# Add /usr/bin/tmux to /etc/shells otherwise some login tools like dropbear
-+# can reject the user connexion. See man shells.
-+define TMUX_INSTALL_ADD_TMUX_TO_SHELLS
-+	grep -qsE '^/usr/bin/tmux$$' $(TARGET_DIR)/etc/shells \
-+		|| echo "/usr/bin/tmux" >> $(TARGET_DIR)/etc/shells
-+endef
-+TMUX_POST_INSTALL_TARGET_HOOKS += TMUX_INSTALL_ADD_TMUX_TO_SHELLS
-+
- $(eval $(autotools-package))
+Romain Naour (8):
+  package/skeleton-init-common: add /bin/sh to /etc/shells
+  package/busybox: add /bin/{a,hu}sh to /etc/shells
+  package/dash: add /etc/dash to /etc/shells
+  package/screen: add /usr/bin/screen to /etc/shells
+  package/tmux: add /usr/bin/tmux to /etc/shells
+  package/zsh: add /bin/zsh to /etc/shells
+  package/mksh: add /bin/mksh to /etc/shells
+  package/bash: add missing double-dollar for /etc/shells
+
+ package/bash/bash.mk                                 |  2 +-
+ package/busybox/busybox.mk                           | 14 ++++++++++++++
+ package/dash/dash.mk                                 |  4 ++++
+ package/mksh/mksh.mk                                 |  8 ++++++++
+ package/screen/screen.mk                             |  9 ++++++++-
+ package/skeleton-init-common/skeleton-init-common.mk |  7 +++++++
+ package/tmux/tmux.mk                                 |  8 ++++++++
+ package/zsh/zsh.mk                                   |  8 ++++++++
+ 8 files changed, 58 insertions(+), 2 deletions(-)
+
 -- 
 2.7.4
