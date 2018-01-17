@@ -1,43 +1,40 @@
-From: Toan Pham <tpham3783@gmail.com>
-Date: Wed, 17 Jan 2018 17:06:15 -0500
-Subject: [Buildroot] Suggestion for Makefile to probably import BR2_CONFIG
-Message-ID: <CAGNmLEM_x8ykDr54gbT94em9YyH5+0ec=jCgjULh68yJLUzjnw@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 17 Jan 2018 23:22:52 +0100
+Subject: [Buildroot] [git commit] iputils: fix ping and traceroute6
+ executable permissions
+Message-ID: <20180117222303.ECFAB83E41@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+commit: https://git.buildroot.net/buildroot/commit/?id=b0e2d00289eeb1a7201ba49e5cedfd3175f92140
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-I would like to make a suggestion on patching the main Makefile line:
+The iputils executables are installed without the setuid bit set,
+which prevents some programs from working.
 
-BR2_CONFIG = $(CONFIG_DIR)/.config
+This patch adds a permission table to fix the permissions of the ping
+and traceroute6 executables.
 
-to
+Signed-off-by: Einar Jon Gunnarsson <tolvupostur@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/iputils/iputils.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-BR2_CONFIG ?= $(CONFIG_DIR)/.config
-
-
-The main reason for this patch is that it allows the configuration file to
-be specified from command argument.  For example, I would be able to build
-two different targets (even in parallel) with the following commands:
-
-
-make BR2_CONFIG=$PWD/myTarget1 O=output.target1
-
-make BR2_CONFIG=$PWD/myTarget2 O=output.target2
-
-
-Without the above patch, buildroot assumes that the config file is already
-saved under output.target{1,2}/.config and would fail if the file does not
-exist.  I find that the above patch is very valuable, please comment or
-make suggestion!
-
-
-thank you,
-
-TP
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180117/54ca3a3e/attachment.html>
+diff --git a/package/iputils/iputils.mk b/package/iputils/iputils.mk
+index b20cd12..13e3389 100644
+--- a/package/iputils/iputils.mk
++++ b/package/iputils/iputils.mk
+@@ -69,4 +69,9 @@ define IPUTILS_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -D -m 755 $(@D)/traceroute6 $(TARGET_DIR)/bin/traceroute6
+ endef
+ 
++define IPUTILS_PERMISSIONS
++	/bin/ping        f 4755 0 0 - - - - -
++	/bin/traceroute6 f 4755 0 0 - - - - -
++endef
++
+ $(eval $(generic-package))
