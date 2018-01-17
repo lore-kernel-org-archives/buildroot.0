@@ -1,34 +1,57 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 17 Jan 2018 22:11:53 +0100
-Subject: [Buildroot] [PATCH 1/1] domoticz: depends on exception_ptr
-In-Reply-To: <20180117175500.19177-1-fontaine.fabrice@gmail.com>
-References: <20180117175500.19177-1-fontaine.fabrice@gmail.com>
-Message-ID: <20180117221153.724bd8ca@windsurf>
+Date: Wed, 17 Jan 2018 22:14:25 +0100
+Subject: [Buildroot] [git commit] package/libpqxx: update dependencies
+Message-ID: <20180117211441.F2D7D83E9A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=c463407df5236b91460ae1b42873c59b227f8dbf
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 17 Jan 2018 18:55:00 +0100, Fabrice Fontaine wrote:
-> boost 1.66 uses std::exception_ptr in boost/asio/impl/use_future.hpp
-> So add a dependency on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 for domoticz
-> 
-> Fixes:
->  -
-> http://autobuild.buildroot.net/results/332f677493bf1d802f3700777219843eeba53c81
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/domoticz/Config.in | 4 ++++
->  1 file changed, 4 insertions(+)
+As of v6.x, libpqxx takes advantage of thread support for transaction
+sleeps (adding BR2_TOOLCHAIN_HAS_THREADS).
 
-Applied to master, thanks.
+Re-order dependencies for:
+ - Key feature (postgresql)
+ - Architectures dependencies
+ - Remaining dependencies
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Fixes:
+
+  http://autobuild.buildroot.net/results/e1d6f62edfc5eae90953f0a93fdb30d713409c37/
+
+Signed-off-by: James Knight <james.knight@rockwellcollins.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libpqxx/Config.in | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
+
+diff --git a/package/libpqxx/Config.in b/package/libpqxx/Config.in
+index 7832d25..18f905b 100644
+--- a/package/libpqxx/Config.in
++++ b/package/libpqxx/Config.in
+@@ -1,14 +1,17 @@
+ config BR2_PACKAGE_LIBPQXX
+ 	bool "libpqxx"
+-	depends on BR2_INSTALL_LIBSTDCPP
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # C++11
+ 	depends on BR2_PACKAGE_POSTGRESQL
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # C++11
++	depends on BR2_INSTALL_LIBSTDCPP
+ 	help
+ 	  libpqxx is the official C++ client API for PostgreSQL, the
+ 	  enterprise-strength open-source relational database.
+ 
+ 	  http://pqxx.org/development/libpqxx/
+ 
+-comment "libpqxx needs toolchain w/ C++ support, gcc >= 4.7"
+-	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
++comment "libpqxx needs toolchain w/ C++, gcc >= 4.7, threads"
+ 	depends on BR2_PACKAGE_POSTGRESQL
++	depends on !BR2_INSTALL_LIBSTDCPP || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 || \
++		!BR2_TOOLCHAIN_HAS_THREADS
