@@ -1,36 +1,65 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 17 Jan 2018 09:43:15 +0100
-Subject: [Buildroot] [PATCH 1/1] package/bluez5_utils: needs readline
-In-Reply-To: <20180114145324.2d13fdf6@windsurf>
-References: <20180113224532.2715-1-bernd.kuhls@t-online.de>
- <20180114053204.qzh6l3xgqywgcmyr@sapphire.tkos.co.il>
- <20180114145324.2d13fdf6@windsurf>
-Message-ID: <20180117094315.0f02ffaa@windsurf>
+From: Marcus Folkesson <marcus.folkesson@gmail.com>
+Date: Wed, 17 Jan 2018 10:06:47 +0100
+Subject: [Buildroot] [PATCH] libselinux: add patch to make the build
+ process more standard
+In-Reply-To: <20180116234426.4d2433c0@windsurf>
+References: <20180116082153.8425-1-marcus.folkesson@gmail.com>
+ <20180116234426.4d2433c0@windsurf>
+Message-ID: <20180117090647.GA886@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd,
+Hi,
 
-On Sun, 14 Jan 2018 14:53:24 +0100, Thomas Petazzoni wrote:
-
-> I agree it would be nice to check with upstream. They seem to have
-> intentionally added shell.c to the shared library, and this file
-> clearly unconditionally uses readline.
+On Tue, Jan 16, 2018 at 11:44:26PM +0100, Thomas Petazzoni wrote:
+> Hello,
 > 
-> Perhaps it's their README file that is now incorrect.
+> On Tue, 16 Jan 2018 09:21:53 +0100, Marcus Folkesson wrote:
+> > Patch the Makefiles to make PREFIX and DESTDIR follow standard
+> > semantics to get rid of DESTDIR during compile time in
+> > libselinux.mk and generate proper pkg-config files.
+> > 
+> > Fixes:
+> >  http://autobuild.buildroot.net/results/74d27370c7623e89e401203a485193340e992e7c/
+> > 
+> > Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
+> > ---
+> >  ...build-follow-standard-semantics-for-DESTD.patch | 137 +++++++++++++++++++++
+> >  package/libselinux/0003-revert-ln-relative.patch   |  24 ----
+> >  package/libselinux/0004-revert-ln-relative.patch   |  24 ++++
+> >  package/libselinux/libselinux.mk                   |   8 +-
+> >  4 files changed, 163 insertions(+), 30 deletions(-)
+> >  create mode 100644 package/libselinux/0003-libselinux-build-follow-standard-semantics-for-DESTD.patch
+> >  delete mode 100644 package/libselinux/0003-revert-ln-relative.patch
+> >  create mode 100644 package/libselinux/0004-revert-ln-relative.patch
 > 
-> Bernd, could you check with the upstream developers what they say about
-> this?
+> Applied to master, thanks. Thanks a lot for working on this!
+> 
+> Besides the 3 packages you already fixed, there is also selinux-python
+> that still uses DESTDIR during the build process.
+> 
+> Also, could you submit your 3 patches (libselinux, libsepol and
+> libsemanage) to the upstream SELinux project? We really would like to
+> see these being adopted by the upstream project.
 
-Have you had the chance to bring this up to the upstream developers?
+I have reworked all Makefiles in the SELinux project (including
+selinux-python), all patches is submitted upstreams and under review.
 
-Best regards,
+OK, I will add the patch for selinux-python package aswell.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+
+> 
+> Thanks!
+> 
+> Thomas
+> -- 
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+
+
+Best regards
+Marcus Folkesson
