@@ -1,32 +1,81 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 17 Jan 2018 22:44:17 +0000
-Subject: [Buildroot] [Bug 10536] Finding non-relative paths in the ccache
-In-Reply-To: <bug-10536-163@https.bugs.busybox.net/>
-References: <bug-10536-163@https.bugs.busybox.net/>
-Message-ID: <bug-10536-163-qrJg8hDa2M@https.bugs.busybox.net/>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Wed, 17 Jan 2018 16:50:13 -0600
+Subject: [Buildroot] Google Summer of Code 2018 ?
+In-Reply-To: <20180117215208.45dd61b9@windsurf>
+References: <20180117215208.45dd61b9@windsurf>
+Message-ID: <CANQCQpa3v8pf2CvXd867Xv0e9UPCd-L+Q-9yFgZsRNdVvUnkSQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=10536
+On Wed, Jan 17, 2018 at 2:52 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
+>
+> For information, organizations can apply for GSoC 2018 until January
+> 23, so there is less than a week left to apply. The questions are: do
+> we want to apply? And if yes, for what topics?
+>
+> Looking at https://elinux.org/Buildroot:GSoC2017Ideas:
+>
+>  - Reproducible builds. While some initial work was done, there is
+>    definitely a lot more that could be done.
+>
+>  - Testing infrastructure: the runtime testing infrastructure was
+>    added in the mean time. Writing more tests and extending the
+>    infrastructure is still needed though.
+>
+>  - Relocatable SDK: this topic is pretty much solved IMO, so this topic
+>    is no longer relevant.
+>
+>  - Follow upstream updates and CVEs of packages. I think this topic is
+>    still relevant, and IMO is the most interesting topic.
 
---- Comment #4 from Arnout Vandecappelle <arnout@mind.be> ---
-Does the build really fail in that second example? Since the first/ directory
-is in the command-line arguments during the build and it doesn't match
-BR2_CCACHE_DIR, ccache should just treat it as a cache miss. So indeed, ccache
-doesn't work for host packages unless the output directory is the same.
+I'd second that this is an interesting one (even just a manual
+approach to start with).  ie. Minimally having our legal-info (or a
+new cpe-info) generate CPE compliant tags for our packages would be a
+great addition.  Then those lists can be fed into various tools.
 
-We could actually easily export CCACHE_BASEDIR from make, so that it works also
-for host packages. We could perhaps even remove it from the toolchain wrapper
-then, though it's probably convenient that the same basedir is used when
-building outside of Buildroot.
+>
+>  - Support for LLVM: an intern from Smile (France) just announced that
+>    he will be working on this topic during the next months, so I don't
+>    see the point of having a GSOC on the same topic.
+>
+>  - Support new languages and complete existing ones. I'm not sure about
+>    this one:
+>    * For NodeJS, I'm not sure we want to have zillions of packages for
+>      the different NodeJS modules
+>    * The Go package infrastructure has been resubmitted, and is
+>      actively being pushed by Angelo
+>    * The Rust support is actively being pushed by Eric
+>    So I don't know if there's enough things left to do for this project
+>    idea.
+>
+> Any other idea of what's missing in Buildroot, or that could be
+> improved ?
+>
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux and Kernel engineering
+> http://free-electrons.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-That said, this problem will still exist when a BR2_HOST_DIR is specified that
-points outside of the output directory. In that case we'd need two different
-'base directories', which is obviously not possible...
+
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Matthew L Weber / Pr Software Engineer
+Airborne Information Systems / Security Systems and Software / Secure Platforms
+MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
+www.rockwellcollins.com
+
+Note: Any Export License Required Information and License Restricted
+Third Party Intellectual Property (TPIP) content must be encrypted and
+sent to matthew.weber at corp.rockwellcollins.com.
