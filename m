@@ -1,54 +1,104 @@
-From: James Knight <james.knight@rockwellcollins.com>
-Date: Wed, 17 Jan 2018 09:31:48 -0500
-Subject: [Buildroot] [PATCH 1/1] package/libpqxx: update dependencies
-Message-ID: <20180117143148.6252-1-james.knight@rockwellcollins.com>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Wed, 17 Jan 2018 16:17:01 +0100
+Subject: [Buildroot] [PATCH 2/7] package/busybox: add /bin/ash to
+ /etc/shells
+In-Reply-To: <20180114224350.GI16760@scaer>
+References: <1515963815-5843-1-git-send-email-romain.naour@smile.fr>
+ <1515963815-5843-3-git-send-email-romain.naour@smile.fr>
+ <20180114224350.GI16760@scaer>
+Message-ID: <3d42e7dc-fcc6-d10d-bf2d-849425a90245@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As of v6.x, libpqxx takes advantage of thread support for transaction
-sleeps (adding BR2_TOOLCHAIN_HAS_THREADS).
+Hi Yann,
 
-Re-order dependencies for:
- - Key feature (postgresql)
- - Architectures dependencies
- - Remaining dependencies
+Le 14/01/2018 ? 23:43, Yann E. MORIN a ?crit?:
+> Romain, All,
+> 
+> On 2018-01-14 22:03 +0100, Romain Naour spake thusly:
+>> When ash (busybox) is selected, /bin/ash is not added to /etc/shells
+>> (see man shells). So, login tools like dropbear reject the ssh
+>> connexions for users using ash as shell in /etc/passwd.
+>>
+>> buildroot authpriv.warn dropbear[853]: User 'kubu' has invalid shell, rejected
+>>
+>> ash is disabled for MMUless systems, so don't add /bin/ash in
+>> /etc/shells in this case.
+>>
+>> Signed-off-by: Romain Naour <romain.naour@smile.fr>
+>> ---
+>>  package/busybox/busybox.mk | 10 ++++++++++
+>>  1 file changed, 10 insertions(+)
+>>
+>> diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+>> index d0bbd3f..37d064a 100644
+>> --- a/package/busybox/busybox.mk
+>> +++ b/package/busybox/busybox.mk
+>> @@ -258,6 +258,15 @@ define BUSYBOX_INSTALL_TELNET_SCRIPT
+>>  	fi
+>>  endef
+>>  
+>> +# Add /bin/ash to /etc/shells otherwise some login tools like dropbear
+>> +# can reject the user connexion. See man shells.
+>> +ifeq ($(BR2_USE_MMU),y)
+>> +define BUSYBOX_INSTALL_ADD_ASH_TO_SHELLS
+>> +	grep -qsE '^/bin/ash' $(TARGET_DIR)/etc/shells \
+>> +		|| echo "/bin/ash" >> $(TARGET_DIR)/etc/shells
+> 
+> What if the user uses a custom config file where ash is not enabled?
+> What about the other shells busybox may install?
+> 
+>     define BUSYBOX_INSTALL_ADD_TO_SHELLS
+>         if grep -qsE '^CONFIG_ASH=y$$' $(@D)/.config; then
+>             grep -qsE '^/bin/ash' $(TARGET_DIR)/etc/shells \
+>             || echo "/bin/ash" >> $(TARGET_DIR)/etc/shells; \
+>         fi
+>         if grep -qsE '^CONFIG_HUSH=y$$' $(@D)/.config; then
+>             grep -qsE '^/bin/hush' $(TARGET_DIR)/etc/shells \
+>             || echo "/bin/hush" >> $(TARGET_DIR)/etc/shells; \
+>         fi
+>         if grep -qsE '^CONFIG_MSH=y$$' $(@D)/.config; then
+>             grep -qsE '^/bin/msh' $(TARGET_DIR)/etc/shells \
+>             || echo "/bin/msh" >> $(TARGET_DIR)/etc/shells; \
+>         fi
+>     endef
+> 
+> (msh is just an alias for hush, but it can be a shell nonethless...)
 
-Signed-off-by: James Knight <james.knight@rockwellcollins.com>
----
-Fixes:
-http://autobuild.buildroot.net/results/e1d6f62edfc5eae90953f0a93fdb30d713409c37/
----
- package/libpqxx/Config.in | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
+I didn't know about msh and hush...
 
-diff --git a/package/libpqxx/Config.in b/package/libpqxx/Config.in
-index 7832d2508ec6d4932d01d769e4d7642d01a45a0d..18f905b3780beeac9731e9ea24db971e3a4ddeb9 100644
---- a/package/libpqxx/Config.in
-+++ b/package/libpqxx/Config.in
-@@ -1,14 +1,17 @@
- config BR2_PACKAGE_LIBPQXX
- 	bool "libpqxx"
--	depends on BR2_INSTALL_LIBSTDCPP
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # C++11
- 	depends on BR2_PACKAGE_POSTGRESQL
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # C++11
-+	depends on BR2_INSTALL_LIBSTDCPP
- 	help
- 	  libpqxx is the official C++ client API for PostgreSQL, the
- 	  enterprise-strength open-source relational database.
- 
- 	  http://pqxx.org/development/libpqxx/
- 
--comment "libpqxx needs toolchain w/ C++ support, gcc >= 4.7"
--	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
-+comment "libpqxx needs toolchain w/ C++, gcc >= 4.7, threads"
- 	depends on BR2_PACKAGE_POSTGRESQL
-+	depends on !BR2_INSTALL_LIBSTDCPP || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 || \
-+		!BR2_TOOLCHAIN_HAS_THREADS
--- 
-2.13.3.windows.1
+Btw msh has been removed from Busybox 1.28.0
+https://git.busybox.net/busybox/commit/?id=2e989ef232e35750df573898077dd356003705b2
+
+Best regards,
+Romain
+
+> 
+> Regards,
+> Yann E. MORIN.
+> 
+>> +endef
+>> +endif
+>> +
+>>  # Enable "noclobber" in install.sh, to prevent BusyBox from overwriting any
+>>  # full-blown versions of apps installed by other packages with sym/hard links.
+>>  define BUSYBOX_NOCLOBBER_INSTALL
+>> @@ -291,6 +300,7 @@ define BUSYBOX_INSTALL_TARGET_CMDS
+>>  	$(BUSYBOX_INSTALL_INITTAB)
+>>  	$(BUSYBOX_INSTALL_UDHCPC_SCRIPT)
+>>  	$(BUSYBOX_INSTALL_MDEV_CONF)
+>> +	$(BUSYBOX_INSTALL_ADD_ASH_TO_SHELLS)
+>>  endef
+>>  
+>>  define BUSYBOX_INSTALL_INIT_SYSV
+>> -- 
+>> 2.7.4
+>>
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
