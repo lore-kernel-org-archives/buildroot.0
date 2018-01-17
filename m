@@ -1,40 +1,55 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 17 Jan 2018 22:24:05 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libpqxx: update dependencies
-In-Reply-To: <20180117143148.6252-1-james.knight@rockwellcollins.com>
-References: <20180117143148.6252-1-james.knight@rockwellcollins.com>
-Message-ID: <20180117222405.00d7da82@windsurf>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Wed, 17 Jan 2018 22:23:11 +0100
+Subject: [Buildroot] [PATCH 1/1] package/bluez5_utils: needs readline
+References: <20180113224532.2715-1-bernd.kuhls@t-online.de>
+ <20180114053204.qzh6l3xgqywgcmyr@sapphire.tkos.co.il>
+Message-ID: <ver4jexs69.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Am Sun, 14 Jan 2018 07:32:04 +0200 schrieb Baruch Siach:
 
-On Wed, 17 Jan 2018 09:31:48 -0500, James Knight wrote:
-> As of v6.x, libpqxx takes advantage of thread support for transaction
-> sleeps (adding BR2_TOOLCHAIN_HAS_THREADS).
+> Hi Bernd,
 > 
-> Re-order dependencies for:
->  - Key feature (postgresql)
->  - Architectures dependencies
->  - Remaining dependencies
+> On Sat, Jan 13, 2018 at 11:45:32PM +0100, Bernd Kuhls wrote:
+[...]
+>> +	select BR2_PACKAGE_READLINE
 > 
-> Signed-off-by: James Knight <james.knight@rockwellcollins.com>
-> ---
-> Fixes:
-> http://autobuild.buildroot.net/results/e1d6f62edfc5eae90953f0a93fdb30d713409c37/
+> I don't think that this is the correct fix. The bluez README file says:
+> 
+>         --disable-client
+> 
+>                 Disable support for the command line client
+> 
+>                 By default the command line client is enabled and uses
+>                 the readline library. For specific systems where BlueZ
+>                 is configured by other means, the command line client
+>                 can be disabled and the dependency on readline is
+>                 removed.
+> 
+> So this does not look like a decision to make readline a mandatory
+> dependency,
+> but a bug that needs to be fixed upstream.
 
-This should have been before the --- and Signed-off-by, because we want
-to have this information as part of the commit log.
+Hi Baruch,
 
-I've applied after adjusting this.
+this commit https://git.kernel.org/pub/scm/bluetooth/bluez.git/commit/?
+id=70b8b754f8e6f9abe9211c686b279dbef16bf666
 
-Thanks!
+"client: Make use of bt_shell.
+Use bt_shell instead of readline directly."
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+removed readline code from client code and replaced it with calls to 
+bt_shell, bt_shell itself is not used exclusively by client code anymore, 
+see the commit I mentioned in my patch ( https://git.kernel.org/pub/scm/
+bluetooth/bluez.git/commit/?id=bee3796113196da1b3f56da42fcae4d9bae6695e )
+and the many source code files which include "src/shared/shell.h".
+
+Afaics this does look like an outdated README file and not a bug in the 
+source code, what do you think? Before writing to the bluez devs I would 
+like to reach a consensus about what to ask them ;)
+
+Regards, Bernd
