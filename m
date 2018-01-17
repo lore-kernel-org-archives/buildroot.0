@@ -1,9 +1,9 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Wed, 17 Jan 2018 18:45:18 +0100
-Subject: [Buildroot] [PATCH 12/14] perl-mailtools: bump to version 2.19
+Date: Wed, 17 Jan 2018 18:45:19 +0100
+Subject: [Buildroot] [PATCH 13/14] perl-io-socket-ssl: bump to version 2.052
 In-Reply-To: <20180117174520.29545-1-francois.perrad@gadz.org>
 References: <20180117174520.29545-1-francois.perrad@gadz.org>
-Message-ID: <20180117174520.29545-12-francois.perrad@gadz.org>
+Message-ID: <20180117174520.29545-13-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,45 +12,32 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/perl-mailtools/Config.in           | 2 +-
- package/perl-mailtools/perl-mailtools.hash | 4 ++--
- package/perl-mailtools/perl-mailtools.mk   | 2 +-
- 3 files changed, 4 insertions(+), 4 deletions(-)
+ package/perl-io-socket-ssl/perl-io-socket-ssl.hash | 4 ++--
+ package/perl-io-socket-ssl/perl-io-socket-ssl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/perl-mailtools/Config.in b/package/perl-mailtools/Config.in
-index e02d3cba6..2123c61ea 100644
---- a/package/perl-mailtools/Config.in
-+++ b/package/perl-mailtools/Config.in
-@@ -2,6 +2,6 @@ config BR2_PACKAGE_PERL_MAILTOOLS
- 	bool "perl-mailtools"
- 	select BR2_PACKAGE_PERL_TIMEDATE
- 	help
--	  Various e-mail related modules
-+	  Various ancient e-mail related modules
- 
- 	  https://metacpan.org/release/MailTools
-diff --git a/package/perl-mailtools/perl-mailtools.hash b/package/perl-mailtools/perl-mailtools.hash
-index 65a424b06..cb33453ec 100644
---- a/package/perl-mailtools/perl-mailtools.hash
-+++ b/package/perl-mailtools/perl-mailtools.hash
+diff --git a/package/perl-io-socket-ssl/perl-io-socket-ssl.hash b/package/perl-io-socket-ssl/perl-io-socket-ssl.hash
+index 617a97387..3bf0421ee 100644
+--- a/package/perl-io-socket-ssl/perl-io-socket-ssl.hash
++++ b/package/perl-io-socket-ssl/perl-io-socket-ssl.hash
 @@ -1,3 +1,3 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5    972468ab5207b90398d77bed4ffc361d MailTools-2.18.tar.gz
--sha256 dfee9e770257371112f20d978e637759e81bc4f19e97b083585c71ecab37b527 MailTools-2.18.tar.gz
-+md5    a00b9d3c3dec64bd15de8c50f1b73d05 MailTools-2.19.tar.gz
-+sha256 c17ed702efea8eab56fe92961c07cd4980cee26ca6f13aff2688dc8af69c5e1a MailTools-2.19.tar.gz
-diff --git a/package/perl-mailtools/perl-mailtools.mk b/package/perl-mailtools/perl-mailtools.mk
-index bddaf9f2c..75079f9e8 100644
---- a/package/perl-mailtools/perl-mailtools.mk
-+++ b/package/perl-mailtools/perl-mailtools.mk
+-md5    98184d4ce23b2c5faf2e89120a683a07 IO-Socket-SSL-2.050.tar.gz
+-sha256 54e6716e40df8b1c168d8f54a0b8f215313739bd99dda17adb7c00fe94656692 IO-Socket-SSL-2.050.tar.gz
++md5    26c9bcdfb4ba8763ef89264f21326a48 IO-Socket-SSL-2.052.tar.gz
++sha256 e4897a9b17cb18a3c44aa683980d52cef534cdfcb8063d6877c879bfa2f26673 IO-Socket-SSL-2.052.tar.gz
+diff --git a/package/perl-io-socket-ssl/perl-io-socket-ssl.mk b/package/perl-io-socket-ssl/perl-io-socket-ssl.mk
+index a1ba9939e..62fc2298c 100644
+--- a/package/perl-io-socket-ssl/perl-io-socket-ssl.mk
++++ b/package/perl-io-socket-ssl/perl-io-socket-ssl.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_MAILTOOLS_VERSION = 2.18
-+PERL_MAILTOOLS_VERSION = 2.19
- PERL_MAILTOOLS_SOURCE = MailTools-$(PERL_MAILTOOLS_VERSION).tar.gz
- PERL_MAILTOOLS_SITE = $(BR2_CPAN_MIRROR)/authors/id/M/MA/MARKOV
- PERL_MAILTOOLS_DEPENDENCIES = perl-timedate
+-PERL_IO_SOCKET_SSL_VERSION = 2.050
++PERL_IO_SOCKET_SSL_VERSION = 2.052
+ PERL_IO_SOCKET_SSL_SOURCE = IO-Socket-SSL-$(PERL_IO_SOCKET_SSL_VERSION).tar.gz
+ PERL_IO_SOCKET_SSL_SITE = $(BR2_CPAN_MIRROR)/authors/id/S/SU/SULLR
+ PERL_IO_SOCKET_SSL_DEPENDENCIES = perl-net-ssleay
 -- 
 2.11.0
