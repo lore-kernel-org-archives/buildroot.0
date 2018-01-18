@@ -1,60 +1,49 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 18 Jan 2018 22:40:25 +0100
-Subject: [Buildroot] linux-firmware hash mismatch (tar-1.30)
-In-Reply-To: <ef492963-bf3b-3fbb-f5b1-bba0126f3884@mind.be> (Arnout
- Vandecappelle's message of "Thu, 18 Jan 2018 00:28:36 +0100")
-References: <20180109161531.47ec21e0.john@metanate.com>
- <87vag9plt1.fsf@dell.be.48ers.dk>
- <20180111105557.6f97bb46.john@metanate.com>
- <20180114133016.GA20105@scaer>
- <ef492963-bf3b-3fbb-f5b1-bba0126f3884@mind.be>
-Message-ID: <87zi5adewm.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 18 Jan 2018 22:41:38 +0100
+Subject: [Buildroot] [PATCH v2] package/bash-completion: new package
+In-Reply-To: <1515675000-13355-1-git-send-email-romain.naour@smile.fr>
+References: <1515675000-13355-1-git-send-email-romain.naour@smile.fr>
+Message-ID: <20180118224138.17cdb72b@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+Hello,
 
-Hi,
+On Thu, 11 Jan 2018 13:50:00 +0100, Romain Naour wrote:
 
- >>>> Gaah, what a mess :/
+> +define BASH_COMPLETION_INSTALL_FILE
+> +	echo ". /usr/share/bash-completion/bash_completion" > $(TARGET_DIR)/etc/bash_completion
+> +endef
 
- >  Note that this also means our github hashes will break again...
+Who/what is reading this /etc/bash_completion file? Is bash itself
+automatically loading this file? I'm asking because on my distro, I
+have /etc/bash_completion.d/ and no /etc/bash_completion.
 
-Indeed, I also mentioned that earlier.
+It seems like my bashrc here is automatically
+including /usr/share/bash-completion/bash_completion, and otherwise
+falls back to /etc/bash_completion:
 
- >> Alas, this means that we can only depend on building our own tar...
+  if [ -f /usr/share/bash-completion/bash_completion ]; then
+    . /usr/share/bash-completion/bash_completion
+  elif [ -f /etc/bash_completion ]; then
+    . /etc/bash_completion
+  fi
 
- >  Nah, let's not go there.
+Basically, my concerns are:
 
- >> Even when we eventually support using a local git-clone cache, this we
- >> not solve the issue has the hashes we store are on the generated
- >> tarball...
+ - You are using ">" for the redirection. Are we going to be the only
+   package writing to this file?
 
- >  However, the way we create a git tarball can serve as a source of inspiration
- > of how to solve it. Instead of hashing the tarball, we can hash the contents of
- > the tarball instead, using --to-command and a support script (--to-command
- > exists since 1.15.90 and our minimal tar version is 1.17). The support script
- > would print the metadata and a hash of the contents. And the output of all that
- > is piped into sort (to make sure the order of files in the tarball isn't
- > relevant) and shasum.
+ - Do we support having other packages contribute additional bash
+   completion logic?
 
-Hmm, that is perhaps an option. It does make it somewhat more cumbersome
-to calculate the expected hash by hand, but maybe that is ok.
+Thanks!
 
-Alternatively we don't do anything and instead ensure that tarballs on
-s.b.o matches the hashes we commit, and people using incompatible tar
-versions will fall back to the tarballs on s.b.o.
-
-
- >  That way we don't rely on the way the user's tar behaves at all. We really
- > check the contents of the tarball. It would also mean we can drop the complexity
- > in the git download helper and directly use git archive.
-
-I thought the main reason for our custom tarball handling was support
-for git submodules? I take it that git-archive still doesn't handle those?
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
