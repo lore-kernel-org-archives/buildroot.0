@@ -1,48 +1,44 @@
-From: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
-Date: Thu, 18 Jan 2018 20:54:32 +0100
-Subject: [Buildroot] [PATCH] nilfs-utils: fix build with static
- toolchains
-In-Reply-To: <20180118143307.61b70db8@windsurf.lan>
-References: <1515357573-10780-1-git-send-email-dev.kurt@vandijck-laurijssen.be>
- <20180118143307.61b70db8@windsurf.lan>
-Message-ID: <20180118195432.GB21814@airbook.vandijck-laurijssen.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 18 Jan 2018 21:57:55 +0100
+Subject: [Buildroot] [git commit] wireguard: bump version to 0.0.20180118
+Message-ID: <20180118205758.ECF1883805@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hey Thomas,
+commit: https://git.buildroot.net/buildroot/commit/?id=c01b762ab7e44799821c523f37711d0f54d9f395
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-No worries, I didn't forget, but work and sick children came in between :-(
-You may expect a new patch one of these days.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/wireguard/wireguard.hash | 4 ++--
+ package/wireguard/wireguard.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Kurt
-
---- Original message ---
-> Date: Thu, 18 Jan 2018 14:33:07 +0100
-> From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> To: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
-> Cc: buildroot at busybox.net
-> Subject: Re: [Buildroot] [PATCH] nilfs-utils: fix build with static
->  toolchains
-> X-Mailer: Claws Mail 3.15.1-dirty (GTK+ 2.24.31; x86_64-redhat-linux-gnu)
-> 
-> Hello Kurt,
-> 
-> On Sun,  7 Jan 2018 21:39:33 +0100, Kurt Van Dijck wrote:
-> > This commit adds a patch to respect the dependency libmount->libblkid->libuuid
-> > properly in autoconf. This becomes necessary for static builds.
-> > 
-> > Signed-off-by: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
-> 
-> This problem is still occurring in the autobuilders. Could you send a
-> new version of this patch? The issues to be fixed were really minor.
-> 
-> Thanks!
-> 
-> Thomas
-> -- 
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux and Kernel engineering
-> http://free-electrons.com
+diff --git a/package/wireguard/wireguard.hash b/package/wireguard/wireguard.hash
+index 0044562..a99bba5 100644
+--- a/package/wireguard/wireguard.hash
++++ b/package/wireguard/wireguard.hash
+@@ -1,4 +1,4 @@
+-# From https://lists.zx2c4.com/pipermail/wireguard/2017-December/002231.html
+-sha256 2b97697e9b271ba8836a04120a287b824648124f21d5309170ec51c1f86ac5ed  WireGuard-0.0.20171221.tar.xz
++# From https://lists.zx2c4.com/pipermail/wireguard/2018-January/002305.html
++sha256 463f3b402deb66b7ceac8df2d50944f32683933356455d6c1c7453926db3a8a3  WireGuard-0.0.20180118.tar.xz
+ # Locally calculated
+ sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/wireguard/wireguard.mk b/package/wireguard/wireguard.mk
+index 96fd080..5a4f083 100644
+--- a/package/wireguard/wireguard.mk
++++ b/package/wireguard/wireguard.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WIREGUARD_VERSION = 0.0.20171221
++WIREGUARD_VERSION = 0.0.20180118
+ WIREGUARD_SITE = https://git.zx2c4.com/WireGuard/snapshot
+ WIREGUARD_SOURCE = WireGuard-$(WIREGUARD_VERSION).tar.xz
+ WIREGUARD_LICENSE = GPL-2.0
