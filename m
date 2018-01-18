@@ -1,35 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 18 Jan 2018 22:17:56 +0100
-Subject: [Buildroot] [PATCH] python-txtorcon: new package
-In-Reply-To: <1516286957-22757-1-git-send-email-yegorslists@googlemail.com>
-References: <1516286957-22757-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <20180118221756.3132e2b5@windsurf.lan>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 18 Jan 2018 22:27:38 +0100
+Subject: [Buildroot] [PATCH 1/2] package/xen: Force disable SDL for
+ xen-qemu build
+In-Reply-To: <CANQCQpY15sA1HHScDLGKn=nrB-UTJNUZXi3zETDdnx9ZsiED8Q@mail.gmail.com>
+ (Matthew Weber's message of "Thu, 18 Jan 2018 15:13:49 -0600")
+References: <20180118185548.8994-1-alistair.francis@xilinx.com>
+ <CANQCQpZqW-4n=12AJM5LCf-ptL=e5i39k9Vcvjyjm9SQOXzhow@mail.gmail.com>
+ <CANQCQpY15sA1HHScDLGKn=nrB-UTJNUZXi3zETDdnx9ZsiED8Q@mail.gmail.com>
+Message-ID: <874lnieu2d.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Matthew" == Matthew Weber <matthew.weber@rockwellcollins.com> writes:
 
-On Thu, 18 Jan 2018 15:49:17 +0100, yegorslists at googlemail.com wrote:
-> From: Yegor Yefremov <yegorslists@googlemail.com>
-> 
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> ---
->  package/Config.in                            |  1 +
->  package/python-txtorcon/Config.in            | 15 +++++++++++++++
->  package/python-txtorcon/python-txtorcon.hash |  4 ++++
->  package/python-txtorcon/python-txtorcon.mk   | 14 ++++++++++++++
->  4 files changed, 34 insertions(+)
->  create mode 100644 package/python-txtorcon/Config.in
->  create mode 100644 package/python-txtorcon/python-txtorcon.hash
->  create mode 100644 package/python-txtorcon/python-txtorcon.mk
+Hi,
 
-Applied to master, thanks.
+ > Actually this is cleaner and only sets when the tools build occurs.
 
-Thomas
+ > --- a/package/xen/xen.mk
+ > +++ b/package/xen/xen.mk
+ > @@ -43,6 +43,7 @@ XEN_DEPENDENCIES += argp-standalone
+ >  endif
+ >  XEN_INSTALL_TARGET_OPTS += DESTDIR=$(TARGET_DIR) install-tools
+ >  XEN_MAKE_OPTS += dist-tools
+ > +XEN_CONF_OPTS =  --with-extra-qemuu-configure-args="--disable-sdl"
+
+Agreed, but lease make that += like the rest of the file.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
