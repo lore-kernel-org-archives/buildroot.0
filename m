@@ -1,87 +1,132 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 18 Jan 2018 13:25:08 +0100
-Subject: [Buildroot] [PATCH v2] package/bash: add /bin/bash to
- /etc/shells
-In-Reply-To: <270ad24e-4fa1-95f3-026c-7c85edcf2223@smile.fr>
-References: <1515859527-13567-1-git-send-email-romain.naour@smile.fr>
- <20180113161220.GG3226@scaer> <8c2a6cb6-7993-b05f-144f-82986cf2b913@mind.be>
- <270ad24e-4fa1-95f3-026c-7c85edcf2223@smile.fr>
-Message-ID: <df4ba61c-887c-f03c-22a5-1110b68d21e1@mind.be>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Thu, 18 Jan 2018 13:51:21 +0100
+Subject: [Buildroot] [PATCH] swupdate: add upstream patch to fix musl build
+ issue
+Message-ID: <20180118125121.28953-1-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Add upstream patch to fix build issue with the musl C library, as musl
+does not provide the GNU extension `strndupa()` breaking the build with
+an undefined reference:
 
+```
+ipc/lib.a(network_ipc.o): In function `ipc_postupdate':
+network_ipc.c:(.text.ipc_postupdate+0x39): undefined reference to `strndupa'
+```
 
-On 18-01-18 10:46, Romain Naour wrote:
-> Hi Arnout,
-> 
-> Le 18/01/2018 ? 00:53, Arnout Vandecappelle a ?crit?:
->>
->>
->> On 13-01-18 17:12, Yann E. MORIN wrote:
->>> Romain, All,
->>>
->>> On 2018-01-13 17:05 +0100, Romain Naour spake thusly:
->>>> When bash is selected, /bin/bash is not added to /etc/shells
->>>> (see man shells). So, login tools like dropbear reject the ssh
->>>> connexions for users using bash as shell in /etc/passwd.
->>>>
->>>> buildroot authpriv.warn dropbear[853]: User 'kubu' has invalid shell, rejected
->>>>
->>>> Reported-by: Jeremy Rosen <jeremy.rosen@smile.fr>
->>>> Signed-off-by: Romain Naour <romain.naour@smile.fr>
->>>> Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
->>>
->>> Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
->>
->>  Really? The guy who wrote the script that checks that no two packages can touch
->> the same file acks this change?
-> 
-> Which script ?
+The upstream patch provides a compatibility header file adding a definition
+of `strndupa` if it is not already defined.
 
- support/scripts/check-uniq-files was created by Yann, who Acked your patch.
+Backported from:
+https://github.com/sbabic/swupdate/commit/9867a9d6a21e6b0b9bcba57c3e2398fe671cea17
 
-[snip]
->>  I guess the solution is to collect the shells in a make variable and create
->> /etc/shells in a finalize hook. Or alternatively, do this in a finalize hook
->> instead of target-install hook.
-> 
-> What do you think about something in the pkg-generic infra ?
+Fixes:
+http://autobuild.buildroot.net/results/f674219225d0b67d0bc78fd10b47a865250746f4/
+http://autobuild.buildroot.net/results/d2b0cfcfec583d203af1b26152f14ded3ebd3eee/
+http://autobuild.buildroot.net/results/1d0cbd1eb9b1b70bd9f4d1c4fae431baee9d105c/
 
- That's what I meant with "collect the shells in a make variable".
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+---
+ ...1-compat.h-introduce-compatibility-header.patch | 87 ++++++++++++++++++++++
+ 1 file changed, 87 insertions(+)
+ create mode 100644 package/swupdate/0001-compat.h-introduce-compatibility-header.patch
 
-
-> A package like bash register the shell path using
-> 
-> BASH_REGISTER_SHELL = /bin/bash
-> 
-> And the pkg-generic infra will add a hook in TARGET_FINALIZE_HOOKS.
-> 
-> Yann suggested this while discussing about this series.
-> We hesitated to modify the infra just for less that 10 packages, so I've keep
-> the /etc/shells handling in each packages.
-
- Indeed I also prefer to avoid adding infra when it is not needed. We have too
-much infra already IMO.
-
-
-> About the finalize hook, the manual say:
-> "They are seldom used, and your package probably do not need them."
-> It discourages users to use them.
-
- Well, changing the infra is discouraged even more, so much that it's not even
-mentioned as a possibility in the manual :-).
-
- Regards,
- Arnout
-
+diff --git a/package/swupdate/0001-compat.h-introduce-compatibility-header.patch b/package/swupdate/0001-compat.h-introduce-compatibility-header.patch
+new file mode 100644
+index 0000000000..5e3bfb0f49
+--- /dev/null
++++ b/package/swupdate/0001-compat.h-introduce-compatibility-header.patch
+@@ -0,0 +1,87 @@
++From 9867a9d6a21e6b0b9bcba57c3e2398fe671cea17 Mon Sep 17 00:00:00 2001
++From: Christian Storm <christian.storm@siemens.com>
++Date: Tue, 16 Jan 2018 10:34:52 +0100
++Subject: [PATCH] compat.h: introduce compatibility header
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++Introduce a compat.h housing compatibility definitions
++and macros along the lines of commit 7b49b8d having
++introduced a compatibility mechanism for Lua.
++
++First use case (and motivation) is the support for
++musl (https://www.musl-libc.org/) which doesn't
++bother to provide
++    char *strndupa(const char *s, size_t n)
++
++Backported from: 9867a9d6a21e6b0b9bcba57c3e2398fe671cea17
++
++Reviewed-by: Stefano Babic <sbabic@denx.de>
++Reported-by: J?rg Krause <joerg.krause@embedded.rocks>
++Signed-off-by: Christian Storm <christian.storm@siemens.com>
++Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
++---
++ include/compat.h  | 24 ++++++++++++++++++++++++
++ include/util.h    |  1 +
++ ipc/network_ipc.c |  1 +
++ 3 files changed, 26 insertions(+)
++ create mode 100644 include/compat.h
++
++diff --git a/include/compat.h b/include/compat.h
++new file mode 100644
++index 0000000..29d7af1
++--- /dev/null
+++++ b/include/compat.h
++@@ -0,0 +1,24 @@
+++/*
+++ * Author: Christian Storm
+++ * Copyright (C) 2018, Siemens AG
+++ *
+++ * SPDX-License-Identifier:     GPL-2.0-or-later
+++ */
+++
+++#pragma once
+++
+++#ifndef strndupa
+++/*
+++ * Define char *strndupa(const char *s, size_t n)
+++ * for, e.g., musl (https://www.musl-libc.org/)
+++ * which does not bother to implement this function.
+++ */
+++#define strndupa(s, n)                          \
+++	(__extension__({                            \
+++		const char *__in = (s);                 \
+++		size_t __len = strnlen(__in, (n)) + 1;  \
+++		char *__out = (char *)alloca(__len);    \
+++		__out[__len - 1] = '\0';                \
+++		(char *)memcpy(__out, __in, __len - 1); \
+++	}))
+++#endif
++diff --git a/include/util.h b/include/util.h
++index bec2975..d43cd8c 100644
++--- a/include/util.h
+++++ b/include/util.h
++@@ -12,6 +12,7 @@
++ #include <string.h>
++ #include "swupdate.h"
++ #include "swupdate_status.h"
+++#include "compat.h"
++ 
++ #define NOTIFY_BUF_SIZE 	2048
++ #define ENOMEM_ASPRINTF		-1
++diff --git a/ipc/network_ipc.c b/ipc/network_ipc.c
++index 3f197c7..48f6fcc 100644
++--- a/ipc/network_ipc.c
+++++ b/ipc/network_ipc.c
++@@ -27,6 +27,7 @@
++ #include <pthread.h>
++ 
++ #include "network_ipc.h"
+++#include "compat.h"
++ 
++ #ifdef CONFIG_SOCKET_CTRL_PATH
++ static char* SOCKET_CTRL_PATH = (char*)CONFIG_SOCKET_CTRL_PATH;
++-- 
++2.15.1
++
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.15.1
