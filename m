@@ -1,41 +1,48 @@
-From: Alistair Francis <alistair.francis@xilinx.com>
-Date: Thu, 18 Jan 2018 10:55:48 -0800
-Subject: [Buildroot] [PATCH 2/2] package/xen: Bump to latest 4.10.0 release
-In-Reply-To: <20180118185548.8994-1-alistair.francis@xilinx.com>
-References: <20180118185548.8994-1-alistair.francis@xilinx.com>
-Message-ID: <20180118185548.8994-2-alistair.francis@xilinx.com>
+From: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
+Date: Thu, 18 Jan 2018 20:54:32 +0100
+Subject: [Buildroot] [PATCH] nilfs-utils: fix build with static
+ toolchains
+In-Reply-To: <20180118143307.61b70db8@windsurf.lan>
+References: <1515357573-10780-1-git-send-email-dev.kurt@vandijck-laurijssen.be>
+ <20180118143307.61b70db8@windsurf.lan>
+Message-ID: <20180118195432.GB21814@airbook.vandijck-laurijssen.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Alistair Francis <alistair.francis@xilinx.com>
----
- package/xen/xen.hash | 2 +-
- package/xen/xen.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Hey Thomas,
 
-diff --git a/package/xen/xen.hash b/package/xen/xen.hash
-index fcd4e85f45..fa4d25bab2 100644
---- a/package/xen/xen.hash
-+++ b/package/xen/xen.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 ecf88b01f44cd8f4ef208af3f999dceb69bdd2a316d88dd9a9535ea7b49ed356 xen-4.9.1.tar.gz
-+sha256 0262a7023f8b12bcacfb0b25e69b2a63291f944f7683d54d8f33d4b2ca556844 xen-4.10.0.tar.gz
-diff --git a/package/xen/xen.mk b/package/xen/xen.mk
-index d31185914c..6aa066e4e2 100644
---- a/package/xen/xen.mk
-+++ b/package/xen/xen.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XEN_VERSION = 4.9.1
-+XEN_VERSION = 4.10.0
- XEN_SITE = https://downloads.xenproject.org/release/xen/$(XEN_VERSION)
- XEN_LICENSE = GPL-2.0
- XEN_LICENSE_FILES = COPYING
--- 
-2.14.1
+No worries, I didn't forget, but work and sick children came in between :-(
+You may expect a new patch one of these days.
+
+Kurt
+
+--- Original message ---
+> Date: Thu, 18 Jan 2018 14:33:07 +0100
+> From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> To: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
+> Cc: buildroot at busybox.net
+> Subject: Re: [Buildroot] [PATCH] nilfs-utils: fix build with static
+>  toolchains
+> X-Mailer: Claws Mail 3.15.1-dirty (GTK+ 2.24.31; x86_64-redhat-linux-gnu)
+> 
+> Hello Kurt,
+> 
+> On Sun,  7 Jan 2018 21:39:33 +0100, Kurt Van Dijck wrote:
+> > This commit adds a patch to respect the dependency libmount->libblkid->libuuid
+> > properly in autoconf. This becomes necessary for static builds.
+> > 
+> > Signed-off-by: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
+> 
+> This problem is still occurring in the autobuilders. Could you send a
+> new version of this patch? The issues to be fixed were really minor.
+> 
+> Thanks!
+> 
+> Thomas
+> -- 
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux and Kernel engineering
+> http://free-electrons.com
