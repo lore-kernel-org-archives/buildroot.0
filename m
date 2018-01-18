@@ -1,12 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 18 Jan 2018 16:02:05 +0100
-Subject: [Buildroot] [PATCH 4/5] python-see: new package
-In-Reply-To: <CAGm1_ksx2Q3YLtnFxHQf7T2XGz_jxPTYPnDU1U_5jCwOyiCcGg@mail.gmail.com>
-References: <20180111092520.28438-1-yegorslists@googlemail.com>
- <20180111092520.28438-4-yegorslists@googlemail.com>
- <20180117234108.1935ccf2@windsurf>
- <CAGm1_ksx2Q3YLtnFxHQf7T2XGz_jxPTYPnDU1U_5jCwOyiCcGg@mail.gmail.com>
-Message-ID: <20180118160205.5e8fc347@windsurf.lan>
+Date: Thu, 18 Jan 2018 16:05:14 +0100
+Subject: [Buildroot] [PATCH 1/1] package/sdl2: Fix Raspberry Pi support
+ in package SDL2
+In-Reply-To: <20180118081528.16612-1-g@maral.me>
+References: <20180116175054.GB28324@enterprise.starfleet>
+ <20180118081528.16612-1-g@maral.me>
+Message-ID: <20180118160514.0684a720@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,16 +14,29 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 18 Jan 2018 08:33:46 +0100, Yegor Yefremov wrote:
+Thanks for respining! It looks much better, but there's still one thing
+I'm not sure is very good. See below.
 
-> > Applied to master, thanks. Just curious: why are you adding this
-> > package? It seems to only do a cosmetic thing, no?  
-> 
-> This is a dependency of txtorcon, that will be needed for the next
-> crossbar bump.
+On Thu, 18 Jan 2018 00:15:28 -0800, Guillermo A. Amaral wrote:
 
-I don't see python-see being used in the python-txtorcon package you
-just sent. Am I missing something?
+> ++#if SDL_VIDEO_DRIVER_RPI
+> ++    path = SDL_getenv("LD_LIBRARY_PATH");
+> ++    if (path) {
+> ++        const int path_size = SDL_strlen(path) + 1 + sizeof(g_rpi_opt_path);
+> ++        char *new_path = SDL_calloc(1, path_size);
+> ++        strcat(new_path, path);
+> ++        strcat(new_path, ":");
+> ++        strcat(new_path, g_rpi_opt_path);
+> ++        SDL_setenv("LD_LIBRARY_PATH", new_path, 1);
+> ++        SDL_free(new_path);
+> ++    } else {
+> ++        SDL_setenv("LD_LIBRARY_PATH", g_rpi_opt_path, 1);
+> ++    }
+> ++    path = NULL;
+
+Yerk, upstream has accepted this? To me, it looks really terrible to
+set LD_LIBRARY_PATH from within a program. Is it really considered a
+good practice ?
 
 Thomas
 -- 
