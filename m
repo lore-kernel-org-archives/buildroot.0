@@ -1,77 +1,76 @@
-From: Romain Naour <romain.naour@smile.fr>
-Date: Thu, 18 Jan 2018 10:46:06 +0100
-Subject: [Buildroot] [PATCH v2] package/bash: add /bin/bash to
- /etc/shells
-In-Reply-To: <8c2a6cb6-7993-b05f-144f-82986cf2b913@mind.be>
-References: <1515859527-13567-1-git-send-email-romain.naour@smile.fr>
- <20180113161220.GG3226@scaer> <8c2a6cb6-7993-b05f-144f-82986cf2b913@mind.be>
-Message-ID: <270ad24e-4fa1-95f3-026c-7c85edcf2223@smile.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 18 Jan 2018 11:19:24 +0100
+Subject: [Buildroot] host-libsemanage build failure
+In-Reply-To: <20180118101016.GA11479@gmail.com>
+References: <20180118070006.DE0B320994@mail.free-electrons.com>
+ <20180118101016.GA11479@gmail.com>
+Message-ID: <20180118111924.2a2bfdd9@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+Hello,
 
-Le 18/01/2018 ? 00:53, Arnout Vandecappelle a ?crit?:
-> 
-> 
-> On 13-01-18 17:12, Yann E. MORIN wrote:
->> Romain, All,
->>
->> On 2018-01-13 17:05 +0100, Romain Naour spake thusly:
->>> When bash is selected, /bin/bash is not added to /etc/shells
->>> (see man shells). So, login tools like dropbear reject the ssh
->>> connexions for users using bash as shell in /etc/passwd.
->>>
->>> buildroot authpriv.warn dropbear[853]: User 'kubu' has invalid shell, rejected
->>>
->>> Reported-by: Jeremy Rosen <jeremy.rosen@smile.fr>
->>> Signed-off-by: Romain Naour <romain.naour@smile.fr>
->>> Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
->>
->> Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> 
->  Really? The guy who wrote the script that checks that no two packages can touch
-> the same file acks this change?
++Buildroot mailing list in Cc.
 
-Which script ?
+On Thu, 18 Jan 2018 11:10:16 +0100, Marcus Folkesson wrote:
 
-> 
-> [snip]
->>> +	grep -qsE '^/bin/bash' $(TARGET_DIR)/etc/shells \
->>> +		|| echo "/bin/bash" >> $(TARGET_DIR)/etc/shells
-> 
->  So this is a nice example of a package breaking top-level parallel build.
+> I'm looking at this build, but I'm unable to reproduce it.
+> Has this been a problem for a while or is it new? Is it possible to see
+> all build results for a certain package?
 
-ok, I did not take into account the top-level parallel build...
+Yes:
 
-> 
->  I guess the solution is to collect the shells in a make variable and create
-> /etc/shells in a finalize hook. Or alternatively, do this in a finalize hook
-> instead of target-install hook.
+  http://autobuild.buildroot.net/?reason=<package-version>
 
-What do you think about something in the pkg-generic infra ?
+so:
 
-A package like bash register the shell path using
+  http://autobuild.buildroot.net/?reason=host-libsemanage-2.7
 
-BASH_REGISTER_SHELL = /bin/bash
+So it is the first time that this happens.
 
-And the pkg-generic infra will add a hook in TARGET_FINALIZE_HOOKS.
+> However, I discovered another problem.
+> libsemanage is installing configuration files to $(DESTDIR)/etc/, what
+> is the best practice to handle these type of installations? I guess the
+> SELinux guys do not want to have it installed to
+> $(DESTDIR)$(PREFIX)/etc.
+> This must have been a problem for a while, it does not seems to be
+> related to my patch (same error even if I revert it).
 
-Yann suggested this while discussing about this series.
-We hesitated to modify the infra just for less that 10 packages, so I've keep
-the /etc/shells handling in each packages.
+Autotools typically has a separate sysconfdir option, which is not
+subject to prefix:
 
-About the finalize hook, the manual say:
-"They are seldom used, and your package probably do not need them."
-It discourages users to use them.
+                --prefix=/usr \
+                --exec-prefix=/usr \
+                --sysconfdir=/etc \
+
+> Is it a big no-no to use DESTDIR=$(HOST_DIR) in the installation stage?
+> I know you told me to omit DESTDIR and instead use PREFIX=$(HOST_DIR)
+> during host installation.
+
+What is the problem with using the standard semantic?
+DESTDIR=$(HOST_DIR) PREFIX=$(HOST_DIR) is not correct because files
+would be installed in $(HOST_DIR)/$(HOST_DIR). Just DESTDIR=$(HOST_DIR)
+PREFIX=/usr is not correct, because that means the program/library
+expects to be executed from /usr.
+
+> When talking about SELinux.. I saw that we have more packages that is
+> part of the SELinux project that I should fix:
+> - semodule-utils
+> - restorecond
+> - checkpolicy
+> - policycoreutils
+
+Right. Though perhaps we should wait for upstream's feedback. I'm a bit
+unsure of what will be upstream's reaction to those patches, so perhaps
+wait for feedback before fixing all the remaining packages ?
 
 Best regards,
-Romain
 
-> 
->  Regards,
->  Arnout
-> 
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
