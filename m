@@ -1,63 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 18 Jan 2018 22:02:14 +0100
-Subject: [Buildroot] [PATCH 1/2] package/xen: Force disable SDL for
- xen-qemu build
-In-Reply-To: <20180118185548.8994-1-alistair.francis@xilinx.com>
-References: <20180118185548.8994-1-alistair.francis@xilinx.com>
-Message-ID: <20180118220214.39ff4f5b@windsurf.lan>
+Date: Thu, 18 Jan 2018 22:02:30 +0100
+Subject: [Buildroot] [git commit] package/xen: Bump to latest 4.10.0 release
+Message-ID: <20180118210746.25E5783EE6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=7d5796062f19db89880dac899030ac4cbc0372f2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 18 Jan 2018 10:55:47 -0800, Alistair Francis wrote:
+Signed-off-by: Alistair Francis <alistair.francis@xilinx.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/xen/xen.hash | 2 +-
+ package/xen/xen.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> diff --git a/package/xen/003-tools-Makefile-Force-disable-SDL-QEMU-build.patch b/package/xen/003-tools-Makefile-Force-disable-SDL-QEMU-build.patch
-> new file mode 100644
-> index 0000000000..fdb9d9c39d
-> --- /dev/null
-> +++ b/package/xen/003-tools-Makefile-Force-disable-SDL-QEMU-build.patch
-> @@ -0,0 +1,30 @@
-> +From d3b633ee4d7d7a9ae0f99da4720d637d5fbeb007 Mon Sep 17 00:00:00 2001
-> +From: Alistair Francis <alistair.francis@xilinx.com>
-> +Date: Thu, 18 Jan 2018 09:51:35 -0800
-> +Subject: [PATCH] tools/Makefile: Force disable SDL QEMU build
-> +
-> +This patch fixes this compile issue when building xen-qemu with SDL
-> +
-> +/output/host/bin/../arm-buildroot-linux-gnueabihf/sysroot/usr/include/SDL2/SDL_syswm.h:83:22: fatal error: directfb.h: No such file or directory
-> + #include <directfb.h>
-> +
-> +Signed-off-by: Alistair Francis <alistair.francis@xilinx.com>
-> +---
-> + tools/Makefile | 1 +
-> + 1 file changed, 1 insertion(+)
-> +
-> +diff --git a/tools/Makefile b/tools/Makefile
-> +index ab7a01ee1b..4df6228fc5 100644
-> +--- a/tools/Makefile
-> ++++ b/tools/Makefile
-> +@@ -274,6 +274,7 @@ subdir-all-qemu-xen-dir: qemu-xen-dir-find
-> + 		--datadir=$(SHAREDIR)/qemu-xen \
-> + 		--localstatedir=$(localstatedir) \
-> + 		--disable-kvm \
-> ++		--disable-sdl \
-
-Instead of patching, could you try:
-
-	----with-extra-qemuu-configure-args="--disable-sdl"
-
-passed to the top-level configure script, from xen.mk ?
-
-This should have the same effect, without requiring a patch.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/xen/xen.hash b/package/xen/xen.hash
+index fcd4e85..fa4d25b 100644
+--- a/package/xen/xen.hash
++++ b/package/xen/xen.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 ecf88b01f44cd8f4ef208af3f999dceb69bdd2a316d88dd9a9535ea7b49ed356 xen-4.9.1.tar.gz
++sha256 0262a7023f8b12bcacfb0b25e69b2a63291f944f7683d54d8f33d4b2ca556844 xen-4.10.0.tar.gz
+diff --git a/package/xen/xen.mk b/package/xen/xen.mk
+index d311859..6aa066e 100644
+--- a/package/xen/xen.mk
++++ b/package/xen/xen.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XEN_VERSION = 4.9.1
++XEN_VERSION = 4.10.0
+ XEN_SITE = https://downloads.xenproject.org/release/xen/$(XEN_VERSION)
+ XEN_LICENSE = GPL-2.0
+ XEN_LICENSE_FILES = COPYING
