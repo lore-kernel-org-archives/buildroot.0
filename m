@@ -1,42 +1,43 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 18 Jan 2018 17:42:02 +0100
-Subject: [Buildroot] [PATCH] xen: bump to version 4.9.1
-In-Reply-To: <CANQCQpaWOWy86JmBYgaooiOmwhh_+nHVU=roOV6-jfOmu8qhKA@mail.gmail.com>
- (Matthew Weber's message of "Wed, 17 Jan 2018 16:40:11 -0600")
-References: <20180114224711.25133-1-peter@korsgaard.com>
- <CANQCQpayJkVAxWQS_42y+o3b-TJ5P5EVFzoz5cOcwmcsLTZJYA@mail.gmail.com>
- <87po69yf9e.fsf@dell.be.48ers.dk>
- <CANQCQpaWOWy86JmBYgaooiOmwhh_+nHVU=roOV6-jfOmu8qhKA@mail.gmail.com>
-Message-ID: <87bmhrdspx.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 18 Jan 2018 17:43:19 +0100
+Subject: [Buildroot] [PATCH 1/1] package/sdl2: Fix Raspberry Pi support
+ in package SDL2
+In-Reply-To: <20180118163551.GA18359@enterprise.starfleet>
+References: <20180116175054.GB28324@enterprise.starfleet>
+ <20180118081528.16612-1-g@maral.me>
+ <20180118160514.0684a720@windsurf.lan>
+ <20180118154441.GB26856@momiji>
+ <20180118172216.31d59b4c@windsurf.lan>
+ <20180118163551.GA18359@enterprise.starfleet>
+Message-ID: <20180118174319.378bfb1b@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Matthew" == Matthew Weber <matthew.weber@rockwellcollins.com> writes:
+Hello,
 
-Hi,
+On Thu, 18 Jan 2018 08:35:51 -0800, Guillermo A. Amaral wrote:
 
- >> Hmm, it looks like the embedded qemu copy picks up sdl2, which it
- >> probably shouldn't (or we should atleast handle the dependencies
- >> correctly).
- >> 
+> > Yes, I agree it would be much better to add a -Wl,-rpath,/opt/vc/lib to
+> > the LDFLAGS if the libraries are in /opt/vc/lib.
+> 
+> After 6-7 years, I hoped that darn path wouldn't be an issue anymore.
+> If only Raspbian and friends would all add /opt/vc/lib to their
+> ld.so.conf...
+> 
+> Anyway, I'll try the rpath approach, using LD_LIBRARY_PATH did hurt a
+> little, but at the moment it looked like the lesser of two evils; They
+> already added in another workaround for more library locations for the
+> RPi and it's starting to look even more like a hodgepodge.
 
- > Should we by default force SDL to be turned on for xen tools,
- > explicitly disable or make it optional?  I can see some additional
- > patches to make their --disable-sdl work vs fixing the include paths
- > to formally --enable-sdl.
+I would be the SDL2 upstream developers, I would just tell the RPi
+users to add /opt/vc/lib to /etc/ld.so.conf, if they really want to add
+libraries in this non-standard location.
 
-As long as it is optional, it shouldn't be forced on - So we should
-atleast explicitly disable it, but it would naturally be nicer to enable
-support if sdl2 is enabled.
-
- > A second item, I realized with sdl2 is that its another package which
- > pollutes the sysroot pkg-config with host build paths.  I'll be
- > preparing a target-finalize patch which checks for these bad paths
-
-Thanks!
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
