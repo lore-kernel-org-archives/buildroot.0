@@ -1,61 +1,87 @@
-From: Ed Blake <ed.blake@sondrel.com>
-Date: Thu, 18 Jan 2018 12:04:09 +0000
-Subject: [Buildroot] [PATCH] rpcbind: fix attempt to free non-dynamic
- memory
-In-Reply-To: <20180117141318.7d337f52@windsurf>
-References: <20180117100858.30401-1-ed.blake@sondrel.com>
- <20180117141318.7d337f52@windsurf>
-Message-ID: <bec65fd2-d926-6ebf-5ab9-5e0c93b03ae3@sondrel.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 18 Jan 2018 13:25:08 +0100
+Subject: [Buildroot] [PATCH v2] package/bash: add /bin/bash to
+ /etc/shells
+In-Reply-To: <270ad24e-4fa1-95f3-026c-7c85edcf2223@smile.fr>
+References: <1515859527-13567-1-git-send-email-romain.naour@smile.fr>
+ <20180113161220.GG3226@scaer> <8c2a6cb6-7993-b05f-144f-82986cf2b913@mind.be>
+ <270ad24e-4fa1-95f3-026c-7c85edcf2223@smile.fr>
+Message-ID: <df4ba61c-887c-f03c-22a5-1110b68d21e1@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 17/01/18 13:13, Thomas Petazzoni wrote:
-> Hello,
->
-> On Wed, 17 Jan 2018 10:08:58 +0000, Ed Blake wrote:
->> Commit 954509f added a security fix for CVE-2017-8779, involving
->> pairing all svc_getargs() calls with svc_freeargs() to avoid a memory
->> leak.  This included adding a call to svc_freeargs() to
->> rpcbproc_callit_com().
+
+
+On 18-01-18 10:46, Romain Naour wrote:
+> Hi Arnout,
+> 
+> Le 18/01/2018 ? 00:53, Arnout Vandecappelle a ?crit?:
 >>
->> However, rpcbproc_callit_com() allocates memory for args.rmt_args.args
->> itself, either dynamically (sendsz > RPC_BUF_MAX) or else on the stack,
->> rather than having the memory allocated in svc_getargs().
 >>
->> The call to svc_freeargs() results in an attempt to free the memory
->> allocated by rpcbproc_callit_com(), which if on the stack results in
->> undefined behaviour.
+>> On 13-01-18 17:12, Yann E. MORIN wrote:
+>>> Romain, All,
+>>>
+>>> On 2018-01-13 17:05 +0100, Romain Naour spake thusly:
+>>>> When bash is selected, /bin/bash is not added to /etc/shells
+>>>> (see man shells). So, login tools like dropbear reject the ssh
+>>>> connexions for users using bash as shell in /etc/passwd.
+>>>>
+>>>> buildroot authpriv.warn dropbear[853]: User 'kubu' has invalid shell, rejected
+>>>>
+>>>> Reported-by: Jeremy Rosen <jeremy.rosen@smile.fr>
+>>>> Signed-off-by: Romain Naour <romain.naour@smile.fr>
+>>>> Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>>>
+>>> Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 >>
->> Fix this by removing the svc_freeargs() call, which is not required as
->> rpcbproc_callit_com() allocates (and correctly frees) memory itself.
->>
->> Change-Id: I7fc34efd58408ec5e626da8edd08aa697ed8b936
->> Signed-off-by: Ed Blake <ed.blake@sondrel.com>
-> Thanks. Is this fix-for-the-fix in the upstream rpcbind project ? If
-> not, did you submit it ?
+>>  Really? The guy who wrote the script that checks that no two packages can touch
+>> the same file acks this change?
+> 
+> Which script ?
 
-So it looks like this was already fixed here:
+ support/scripts/check-uniq-files was created by Yann, who Acked your patch.
 
-http://git.linux-nfs.org/?p=steved/rpcbind.git;a=commit;h=7c7590ad536c0e24bef790cb1e65702fc54db566
+[snip]
+>>  I guess the solution is to collect the shells in a make variable and create
+>> /etc/shells in a finalize hook. Or alternatively, do this in a finalize hook
+>> instead of target-install hook.
+> 
+> What do you think about something in the pkg-generic infra ?
 
-So I should just submit that as a patch file to buildroot?
+ That's what I meant with "collect the shells in a make variable".
 
-I guess we should also apply this at the same time:
 
-http://git.linux-nfs.org/?p=steved/rpcbind.git;a=commit;h=c49a7ea639eb700823e174fd605bbbe183e229aa
+> A package like bash register the shell path using
+> 
+> BASH_REGISTER_SHELL = /bin/bash
+> 
+> And the pkg-generic infra will add a hook in TARGET_FINALIZE_HOOKS.
+> 
+> Yann suggested this while discussing about this series.
+> We hesitated to modify the infra just for less that 10 packages, so I've keep
+> the /etc/shells handling in each packages.
 
-> I think we'd prefer to keep the existing
-> 0004-rpcbind-pair-all-svc_getargs-calls-with-svc_freeargs.patch
-> unchanged, so that it matches the upstream commit, and add an
-> additional patch that fixes the commit. Just to be inline with what
-> upstream has.
->
-> Best regards,
->
-> Thomas
+ Indeed I also prefer to avoid adding infra when it is not needed. We have too
+much infra already IMO.
+
+
+> About the finalize hook, the manual say:
+> "They are seldom used, and your package probably do not need them."
+> It discourages users to use them.
+
+ Well, changing the infra is discouraged even more, so much that it's not even
+mentioned as a possibility in the manual :-).
+
+ Regards,
+ Arnout
 
 -- 
-Ed
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
