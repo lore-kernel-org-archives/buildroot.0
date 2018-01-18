@@ -1,7 +1,7 @@
 From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Thu, 18 Jan 2018 15:31:00 +0100
-Subject: [Buildroot] [PATCH] python-cssselect: bump to version 1.0.3
-Message-ID: <1516285860-29712-1-git-send-email-yegorslists@googlemail.com>
+Date: Thu, 18 Jan 2018 15:49:17 +0100
+Subject: [Buildroot] [PATCH] python-txtorcon: new package
+Message-ID: <1516286957-22757-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,40 +10,79 @@ To: buildroot@busybox.net
 
 From: Yegor Yefremov <yegorslists@googlemail.com>
 
-Add licence checksum.
-
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- package/python-cssselect/python-cssselect.hash | 5 +++--
- package/python-cssselect/python-cssselect.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 4 deletions(-)
+ package/Config.in                            |  1 +
+ package/python-txtorcon/Config.in            | 15 +++++++++++++++
+ package/python-txtorcon/python-txtorcon.hash |  4 ++++
+ package/python-txtorcon/python-txtorcon.mk   | 14 ++++++++++++++
+ 4 files changed, 34 insertions(+)
+ create mode 100644 package/python-txtorcon/Config.in
+ create mode 100644 package/python-txtorcon/python-txtorcon.hash
+ create mode 100644 package/python-txtorcon/python-txtorcon.mk
 
-diff --git a/package/python-cssselect/python-cssselect.hash b/package/python-cssselect/python-cssselect.hash
-index 4825950..dd05beb 100644
---- a/package/python-cssselect/python-cssselect.hash
-+++ b/package/python-cssselect/python-cssselect.hash
-@@ -1,3 +1,4 @@
- # md5 from https://pypi.python.org/pypi/cssselect/json, sha256 locally computed
--md5 3fa03bf82a9f0b1223c0f1eb1369e139 cssselect-1.0.1.tar.gz
--sha256 73db1c054b9348409e2862fc6c0dde5c4e4fbe4da64c5c5a9e05fbea45744077 cssselect-1.0.1.tar.gz
-+md5	50422c9ec04b74cd60c571f74ddc1a80  cssselect-1.0.3.tar.gz
-+sha256	066d8bc5229af09617e24b3ca4d52f1f9092d9e061931f4184cd572885c23204  cssselect-1.0.3.tar.gz
-+sha256  5c8da9f744e0afba81a48c9b5dbe73048f798b3287d6f1af8a05ee08ebb10892  LICENSE
-diff --git a/package/python-cssselect/python-cssselect.mk b/package/python-cssselect/python-cssselect.mk
-index 7136a52..4ecc07a 100644
---- a/package/python-cssselect/python-cssselect.mk
-+++ b/package/python-cssselect/python-cssselect.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_CSSSELECT_VERSION = 1.0.1
-+PYTHON_CSSSELECT_VERSION = 1.0.3
- PYTHON_CSSSELECT_SOURCE = cssselect-$(PYTHON_CSSSELECT_VERSION).tar.gz
--PYTHON_CSSSELECT_SITE = https://pypi.python.org/packages/77/ff/9c865275cd19290feba56344eba570e719efb7ca5b34d67ed12b22ebbb0d
-+PYTHON_CSSSELECT_SITE = https://pypi.python.org/packages/52/ea/f31e1d2e9eb130fda2a631e22eac369dc644e8807345fbed5113f2d6f92b
- PYTHON_CSSSELECT_SETUP_TYPE = setuptools
- PYTHON_CSSSELECT_LICENSE = BSD-3-Clause
- PYTHON_CSSSELECT_LICENSE_FILES = LICENSE
+diff --git a/package/Config.in b/package/Config.in
+index 85bb985..00451f5 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -928,6 +928,7 @@ menu "External python modules"
+ 	source "package/python-treq/Config.in"
+ 	source "package/python-twisted/Config.in"
+ 	source "package/python-txaio/Config.in"
++	source "package/python-txtorcon/Config.in"
+ 	source "package/python-u-msgpack/Config.in"
+ 	source "package/python-ubjson/Config.in"
+ 	source "package/python-ujson/Config.in"
+diff --git a/package/python-txtorcon/Config.in b/package/python-txtorcon/Config.in
+new file mode 100644
+index 0000000..78d429d
+--- /dev/null
++++ b/package/python-txtorcon/Config.in
+@@ -0,0 +1,15 @@
++config BR2_PACKAGE_PYTHON_TXTORCON
++	bool "python-txtorcon"
++	select BR2_PACKAGE_PYTHON_AUTOMAT # runtime
++	select BR2_PACKAGE_PYTHON_IDNA # runtime
++	select BR2_PACKAGE_PYTHON_INCREMENTAL # runtime
++	select BR2_PACKAGE_PYTHON_IPADDRESS if BR2_PACKAGE_PYTHON # runtime
++	select BR2_PACKAGE_PYTHON_PYOPENSSL # runtime
++	select BR2_PACKAGE_PYTHON_SERVICE_IDENTITY # runtime
++	select BR2_PACKAGE_PYTHON_TWISTED # runtime
++	select BR2_PACKAGE_PYTHON_ZOPE_INTERFACE # runtime
++	help
++	  Twisted-based Tor controller client, with state-tracking and
++	  configuration abstractions.
++
++	  https://github.com/meejah/txtorcon.
+diff --git a/package/python-txtorcon/python-txtorcon.hash b/package/python-txtorcon/python-txtorcon.hash
+new file mode 100644
+index 0000000..71a2ec5
+--- /dev/null
++++ b/package/python-txtorcon/python-txtorcon.hash
+@@ -0,0 +1,4 @@
++# md5 from https://pypi.python.org/pypi/txtorcon/json, sha256 locally computed
++md5	4d7380fa7e721c77cac103d971882374  txtorcon-0.19.3.tar.gz
++sha256	f73396667909a3c7a98f4dd865edf4ed6a2518ee5a935d92e18b8a479ec244fd  txtorcon-0.19.3.tar.gz
++sha256	3ada1c32ef38c23d96d7f4e8f4a226c527f51e0202883c7543b06f9cc5228a2b  LICENSE
+diff --git a/package/python-txtorcon/python-txtorcon.mk b/package/python-txtorcon/python-txtorcon.mk
+new file mode 100644
+index 0000000..f75f504
+--- /dev/null
++++ b/package/python-txtorcon/python-txtorcon.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-txtorcon
++#
++################################################################################
++
++PYTHON_TXTORCON_VERSION = 0.19.3
++PYTHON_TXTORCON_SOURCE = txtorcon-$(PYTHON_TXTORCON_VERSION).tar.gz
++PYTHON_TXTORCON_SITE = https://pypi.python.org/packages/05/4b/d2fbfdc08ab83c299f2ad22ba38ea35f71f1c966684f5754e079108a1f64
++PYTHON_TXTORCON_SETUP_TYPE = setuptools
++PYTHON_TXTORCON_LICENSE = MIT
++PYTHON_TXTORCON_LICENSE_FILES = LICENSE
++
++$(eval $(python-package))
 -- 
 2.1.4
