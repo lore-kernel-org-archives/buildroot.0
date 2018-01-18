@@ -1,40 +1,59 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 18 Jan 2018 08:51:53 +0100
-Subject: [Buildroot] Google Summer of Code 2018 ?
-In-Reply-To: <CANQCQpa3v8pf2CvXd867Xv0e9UPCd-L+Q-9yFgZsRNdVvUnkSQ@mail.gmail.com>
-References: <20180117215208.45dd61b9@windsurf>
- <CANQCQpa3v8pf2CvXd867Xv0e9UPCd-L+Q-9yFgZsRNdVvUnkSQ@mail.gmail.com>
-Message-ID: <20180118085153.57f7ba35@windsurf.lan>
+Date: Thu, 18 Jan 2018 09:03:19 +0100
+Subject: [Buildroot] [PATCH v9 0/8] Add support for the Rust programming
+In-Reply-To: <20180118074850.GA10580@itchy>
+References: <20171228155146.18193-1-eric.le.bihan.dev@free.fr>
+ <20171228172129.3dd0acdc@windsurf.home>
+ <20171228175256.GA24806@ned> <20171228223629.0fd45695@windsurf>
+ <20180118074850.GA10580@itchy>
+Message-ID: <20180118090319.3d32c593@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Eric,
 
-On Wed, 17 Jan 2018 16:50:13 -0600, Matthew Weber wrote:
+On Thu, 18 Jan 2018 08:48:50 +0100, Eric Le Bihan wrote:
 
-> >  - Follow upstream updates and CVEs of packages. I think this topic is
-> >    still relevant, and IMO is the most interesting topic.  
+> On 2017-12-28 22:36, Thomas Petazzoni wrote:
+> >
+> > Two other things that would be nice to do is:
+> >
+> >  - Add two test cases in support/testing/. One that builds a system with
+> >    rust-bin, builds a hello world program in Rust, and run it on the
+> >    target. And another that does the same, but by building the rust
+> >    compiler from source. Perhaps additional test cases can be added for
+> >    Cargo, but I'm not sure how it's supposed to be used.  
 > 
-> I'd second that this is an interesting one (even just a manual
-> approach to start with).  ie. Minimally having our legal-info (or a
-> new cpe-info) generate CPE compliant tags for our packages would be a
-> great addition.  Then those lists can be fed into various tools.
+> Is there a glibc-based toolchain suitable for arm vexpress available on
+> http://autobuild.buildroot.org/toolchains/tarballs/?
 
-Could you describe in more details what are those "CPE compliant tags" ?
+Use the Linaro ARM toolchain ?
 
-Ideally, what I'd like to see is a script that generates a webpage
-showing for each package the current version in Buildroot, the latest
-upstream version available, and whether the current version in
-Buildroot is affected by CVEs. Optionally, such a script could be used
-combined with the DEVELOPERS file to generate some notifications to
-Buildroot developers that the packages they are looking after should
-probably be upgraded (with a weekly notification, or something like
-that).
+> I see br-aarch64-glibc-2017.05-1078-g95b1dae.tar.bz2, but there is no
+> support for Aarch64 in testing
 
-Best regards,
+I'm not sure what you mean by "no support for AArch64 in testing". The
+testing infrastructure can test any arbitrary configuration, so there
+is nothing like "support for architecture <foo> in testing". Perhaps
+you are confused by BASIC_TOOLCHAIN_CONFIG being an ARM toolchain
+configuration. But this BASIC_TOOLCHAIN_CONFIG is not mandatory, it is
+just one toolchain configuration that you can use if your test doesn't
+really care about the architecture/toolchain.
+
+We have tests like support/testing/tests/fs/test_iso9660.py that don't
+use BASIC_TOOLCHAIN_CONFIG.
+
+> and no artefacts are available.
+
+I'm not sure what "artefacts" you are looking for here.
+
+If you need an ARM or AArcH64 glibc toolchain, just use the Linaro
+external toolchains I'd say.
+
+Thanks!
 
 Thomas
 -- 
