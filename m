@@ -1,55 +1,92 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 18 Jan 2018 00:53:39 +0100
-Subject: [Buildroot] [PATCH v2] package/bash: add /bin/bash to
- /etc/shells
-In-Reply-To: <20180113161220.GG3226@scaer>
-References: <1515859527-13567-1-git-send-email-romain.naour@smile.fr>
- <20180113161220.GG3226@scaer>
-Message-ID: <8c2a6cb6-7993-b05f-144f-82986cf2b913@mind.be>
+From: Carlos Santos <casantos@datacom.ind.br>
+Date: Wed, 17 Jan 2018 22:21:03 -0200
+Subject: [Buildroot] [PATCH] util-linux: add ISC licence, used by rfkill
+In-Reply-To: <20180115204216.GD11122@scaer>
+References: <20180115204216.GD11122@scaer>
+Message-ID: <20180118002103.7783-1-casantos@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Pull a patch from upstream that adds Documentation/licenses/COPYING.ISC
+instead of distributing the whole rfkill.c file.
 
+Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+---
+ package/util-linux/0001-docs-add-ISC-licence.patch | 38 ++++++++++++++++++++++
+ package/util-linux/util-linux.hash                 |  2 +-
+ package/util-linux/util-linux.mk                   |  2 +-
+ 3 files changed, 40 insertions(+), 2 deletions(-)
+ create mode 100644 package/util-linux/0001-docs-add-ISC-licence.patch
 
-On 13-01-18 17:12, Yann E. MORIN wrote:
-> Romain, All,
-> 
-> On 2018-01-13 17:05 +0100, Romain Naour spake thusly:
->> When bash is selected, /bin/bash is not added to /etc/shells
->> (see man shells). So, login tools like dropbear reject the ssh
->> connexions for users using bash as shell in /etc/passwd.
->>
->> buildroot authpriv.warn dropbear[853]: User 'kubu' has invalid shell, rejected
->>
->> Reported-by: Jeremy Rosen <jeremy.rosen@smile.fr>
->> Signed-off-by: Romain Naour <romain.naour@smile.fr>
->> Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> 
-> Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
- Really? The guy who wrote the script that checks that no two packages can touch
-the same file acks this change?
-
-[snip]
->> +	grep -qsE '^/bin/bash' $(TARGET_DIR)/etc/shells \
->> +		|| echo "/bin/bash" >> $(TARGET_DIR)/etc/shells
-
- So this is a nice example of a package breaking top-level parallel build.
-
- I guess the solution is to collect the shells in a make variable and create
-/etc/shells in a finalize hook. Or alternatively, do this in a finalize hook
-instead of target-install hook.
-
- Regards,
- Arnout
-
+diff --git a/package/util-linux/0001-docs-add-ISC-licence.patch b/package/util-linux/0001-docs-add-ISC-licence.patch
+new file mode 100644
+index 0000000000..aea7b9719c
+--- /dev/null
++++ b/package/util-linux/0001-docs-add-ISC-licence.patch
+@@ -0,0 +1,38 @@
++From a9e4662d26b10789b28282d7e77ab189ef34cf5c Mon Sep 17 00:00:00 2001
++From: Carlos Santos <casantos@datacom.ind.br>
++Date: Sun, 14 Jan 2018 16:39:31 -0200
++Subject: [PATCH] docs: add ISC licence
++
++Save the top 21 lines of sys-utils/rfkill.c as COPYING.ISC. This is
++useful for Linux distributions an integration tools like Buildroot,
++to collect detailed legal information for each package.
++
++[kzak at redhat.com: - remove C-comments and rfkill header]
++
++Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
++Signed-off-by: Karel Zak <kzak@redhat.com>
++---
++ Documentation/licenses/COPYING.ISC | 11 +++++++++++
++ 1 file changed, 11 insertions(+)
++ create mode 100644 Documentation/licenses/COPYING.ISC
++
++diff --git a/Documentation/licenses/COPYING.ISC b/Documentation/licenses/COPYING.ISC
++new file mode 100644
++index 000000000..8351a30e3
++--- /dev/null
+++++ b/Documentation/licenses/COPYING.ISC
++@@ -0,0 +1,11 @@
+++Permission to use, copy, modify, and/or distribute this software for any
+++purpose with or without fee is hereby granted, provided that the above
+++copyright notice and this permission notice appear in all copies.
+++
+++THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+++WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+++MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+++ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+++WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+++ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+++OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
++-- 
++2.14.3
++
+diff --git a/package/util-linux/util-linux.hash b/package/util-linux/util-linux.hash
+index 838d2dcb53..068bb45e6c 100644
+--- a/package/util-linux/util-linux.hash
++++ b/package/util-linux/util-linux.hash
+@@ -6,4 +6,4 @@ sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  Documen
+ sha256 ba7640f00d93e72e92b94b9d71f25ec53bac2f1682f5c4adcccb0018359f60f8  Documentation/licenses/COPYING.UCB
+ sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  Documentation/licenses/COPYING.LGPLv2.1
+ sha256 9b718a9460fed5952466421235bc79eb49d4e9eacc920d7a9dd6285ab8fd6c6d  Documentation/licenses/COPYING.BSD-3
+-sha256 996126b78a42dd2eeea1256d78b7fd6dec090ea196365c0ccb46adc32bc92460  sys-utils/rfkill.c
++sha256 e53348ce276358e9997014071c5294b36a18c4b34f32f00ee57b9acce0aafd63  Documentation/licenses/COPYING.ISC
+diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+index 5858887b04..e368464e8d 100644
+--- a/package/util-linux/util-linux.mk
++++ b/package/util-linux/util-linux.mk
+@@ -13,7 +13,7 @@ UTIL_LINUX_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/util-linux/v$(UTIL_LINUX_VERS
+ # README.licensing claims that some files are GPL-2.0 only, but this is not true.
+ # Some files are GPL-3.0+ but only in tests. rfkill uses an ISC-style license.
+ UTIL_LINUX_LICENSE = GPL-2.0+, BSD-4-Clause, LGPL-2.1+ (libblkid, libfdisk, libmount), BSD-3-Clause (libuuid) ISC (rfkill)
+-UTIL_LINUX_LICENSE_FILES = README.licensing Documentation/licenses/COPYING.GPLv2 Documentation/licenses/COPYING.UCB Documentation/licenses/COPYING.LGPLv2.1 Documentation/licenses/COPYING.BSD-3 sys-utils/rfkill.c
++UTIL_LINUX_LICENSE_FILES = README.licensing Documentation/licenses/COPYING.GPLv2 Documentation/licenses/COPYING.UCB Documentation/licenses/COPYING.LGPLv2.1 Documentation/licenses/COPYING.BSD-3 Documentation/licenses/COPYING.ISC
+ UTIL_LINUX_INSTALL_STAGING = YES
+ UTIL_LINUX_DEPENDENCIES = host-pkgconf $(TARGET_NLS_DEPENDENCIES)
+ # uClibc needs NTP_LEGACY for sys/timex.h -> ntp_gettime() support
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.14.3
