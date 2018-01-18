@@ -1,41 +1,26 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 18 Jan 2018 14:04:10 +0100
-Subject: [Buildroot] [PATCH] rpcbind: fix attempt to free non-dynamic
- memory
-In-Reply-To: <bec65fd2-d926-6ebf-5ab9-5e0c93b03ae3@sondrel.com>
-References: <20180117100858.30401-1-ed.blake@sondrel.com>
- <20180117141318.7d337f52@windsurf>
- <bec65fd2-d926-6ebf-5ab9-5e0c93b03ae3@sondrel.com>
-Message-ID: <20180118140410.67411c34@windsurf.lan>
+Date: Thu, 18 Jan 2018 14:33:07 +0100
+Subject: [Buildroot] [PATCH] nilfs-utils: fix build with static
+ toolchains
+In-Reply-To: <1515357573-10780-1-git-send-email-dev.kurt@vandijck-laurijssen.be>
+References: <1515357573-10780-1-git-send-email-dev.kurt@vandijck-laurijssen.be>
+Message-ID: <20180118143307.61b70db8@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Kurt,
 
-On Thu, 18 Jan 2018 12:04:09 +0000, Ed Blake wrote:
-
-> >> Change-Id: I7fc34efd58408ec5e626da8edd08aa697ed8b936
-> >> Signed-off-by: Ed Blake <ed.blake@sondrel.com>  
-> > Thanks. Is this fix-for-the-fix in the upstream rpcbind project ? If
-> > not, did you submit it ?  
+On Sun,  7 Jan 2018 21:39:33 +0100, Kurt Van Dijck wrote:
+> This commit adds a patch to respect the dependency libmount->libblkid->libuuid
+> properly in autoconf. This becomes necessary for static builds.
 > 
-> So it looks like this was already fixed here:
-> 
-> http://git.linux-nfs.org/?p=steved/rpcbind.git;a=commit;h=7c7590ad536c0e24bef790cb1e65702fc54db566
-> 
-> So I should just submit that as a patch file to buildroot?
+> Signed-off-by: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
 
-Yes. git format-patch this commit, adds your Signed-off-by, and put the
-patch in package/rpcbind/.
-
-> I guess we should also apply this at the same time:
-> 
-> http://git.linux-nfs.org/?p=steved/rpcbind.git;a=commit;h=c49a7ea639eb700823e174fd605bbbe183e229aa
-
-Indeed.
+This problem is still occurring in the autobuilders. Could you send a
+new version of this patch? The issues to be fixed were really minor.
 
 Thanks!
 
