@@ -1,11 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 18 Jan 2018 22:17:45 +0100
-Subject: [Buildroot] [PATCH 1/1] package/sdl2: Fix Raspberry Pi support
- for SDL2
-In-Reply-To: <20180118175415.16715-1-g@maral.me>
-References: <20180118174319.378bfb1b@windsurf.lan>
- <20180118175415.16715-1-g@maral.me>
-Message-ID: <20180118221745.13fe9f24@windsurf.lan>
+Date: Thu, 18 Jan 2018 22:17:56 +0100
+Subject: [Buildroot] [PATCH] python-txtorcon: new package
+In-Reply-To: <1516286957-22757-1-git-send-email-yegorslists@googlemail.com>
+References: <1516286957-22757-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <20180118221756.3132e2b5@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,18 +12,21 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 18 Jan 2018 09:54:15 -0800, Guillermo A. Amaral wrote:
-> Tweak build system to play well with Buildroot.
+On Thu, 18 Jan 2018 15:49:17 +0100, yegorslists at googlemail.com wrote:
+> From: Yegor Yefremov <yegorslists@googlemail.com>
 > 
-> Signed-off-by: Guillermo A. Amaral <g@maral.me>
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 > ---
->  .../sdl2/0001-make-cross-compiler-friendly.patch   | 167 +++++++++++++++++++++
->  package/sdl2/sdl2.mk                               |   8 +-
->  2 files changed, 174 insertions(+), 1 deletion(-)
->  create mode 100644 package/sdl2/0001-make-cross-compiler-friendly.patch
+>  package/Config.in                            |  1 +
+>  package/python-txtorcon/Config.in            | 15 +++++++++++++++
+>  package/python-txtorcon/python-txtorcon.hash |  4 ++++
+>  package/python-txtorcon/python-txtorcon.mk   | 14 ++++++++++++++
+>  4 files changed, 34 insertions(+)
+>  create mode 100644 package/python-txtorcon/Config.in
+>  create mode 100644 package/python-txtorcon/python-txtorcon.hash
+>  create mode 100644 package/python-txtorcon/python-txtorcon.mk
 
-Applied to master, thanks. Please submit the patch upstream if not
-already done. Thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
