@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 18 Jan 2018 22:12:16 +0100
-Subject: [Buildroot] [PATCH] configs/mx6udoo: Bump kernel and U-Boot
- versions
-In-Reply-To: <1516280334-25506-1-git-send-email-fabio.estevam@nxp.com>
-References: <1516280334-25506-1-git-send-email-fabio.estevam@nxp.com>
-Message-ID: <20180118221216.1fb781fe@windsurf.lan>
+Date: Thu, 18 Jan 2018 22:12:21 +0100
+Subject: [Buildroot] [PATCH] python-cssselect: bump to version 1.0.3
+In-Reply-To: <1516285860-29712-1-git-send-email-yegorslists@googlemail.com>
+References: <1516285860-29712-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <20180118221221.52755735@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,13 +12,16 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 18 Jan 2018 10:58:54 -0200, Fabio Estevam wrote:
-> Bump U-Boot to 2018.01 and kernel to 4.14.13 version.
+On Thu, 18 Jan 2018 15:31:00 +0100, yegorslists at googlemail.com wrote:
+> From: Yegor Yefremov <yegorslists@googlemail.com>
 > 
-> Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
+> Add licence checksum.
+> 
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 > ---
->  configs/mx6udoo_defconfig | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
+>  package/python-cssselect/python-cssselect.hash | 5 +++--
+>  package/python-cssselect/python-cssselect.mk   | 4 ++--
+>  2 files changed, 5 insertions(+), 4 deletions(-)
 
 Applied to master, thanks.
 
