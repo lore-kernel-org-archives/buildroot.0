@@ -1,92 +1,222 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Thu, 18 Jan 2018 15:13:49 -0600
-Subject: [Buildroot] [PATCH 1/2] package/xen: Force disable SDL for
- xen-qemu build
-In-Reply-To: <CANQCQpZqW-4n=12AJM5LCf-ptL=e5i39k9Vcvjyjm9SQOXzhow@mail.gmail.com>
-References: <20180118185548.8994-1-alistair.francis@xilinx.com>
- <CANQCQpZqW-4n=12AJM5LCf-ptL=e5i39k9Vcvjyjm9SQOXzhow@mail.gmail.com>
-Message-ID: <CANQCQpY15sA1HHScDLGKn=nrB-UTJNUZXi3zETDdnx9ZsiED8Q@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 18 Jan 2018 22:13:34 +0100
+Subject: [Buildroot] [git commit] package/sdl2: Fix Raspberry Pi support for
+ SDL2
+Message-ID: <20180118211359.45AFC83B9B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Alistair,
+commit: https://git.buildroot.net/buildroot/commit/?id=9f8a6fdf99017a0d6a48f469ca343acf388f5017
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, Jan 18, 2018 at 3:11 PM, Matthew Weber
-<matthew.weber@rockwellcollins.com> wrote:
-> Alistair,
->
-> On Thu, Jan 18, 2018 at 12:55 PM, Alistair Francis
-> <alistair.francis@xilinx.com> wrote:
->> Fixes autobuilder issue:
->> http://autobuild.buildroot.net/results/8bcb80dc93d38bb38ca32ad93d52c22d1176d57e/
->>
->> Signed-off-by: Alistair Francis <alistair.francis@xilinx.com>
->> ---
->>  ...ols-Makefile-Force-disable-SDL-QEMU-build.patch | 30 ++++++++++++++++++++++
->>  1 file changed, 30 insertions(+)
->>  create mode 100644 package/xen/003-tools-Makefile-Force-disable-SDL-QEMU-build.patch
->>
->> diff --git a/package/xen/003-tools-Makefile-Force-disable-SDL-QEMU-build.patch b/package/xen/003-tools-Makefile-Force-disable-SDL-QEMU-build.patch
->> new file mode 100644
->> index 0000000000..fdb9d9c39d
->> --- /dev/null
->> +++ b/package/xen/003-tools-Makefile-Force-disable-SDL-QEMU-build.patch
->> @@ -0,0 +1,30 @@
->> +From d3b633ee4d7d7a9ae0f99da4720d637d5fbeb007 Mon Sep 17 00:00:00 2001
->> +From: Alistair Francis <alistair.francis@xilinx.com>
->> +Date: Thu, 18 Jan 2018 09:51:35 -0800
->> +Subject: [PATCH] tools/Makefile: Force disable SDL QEMU build
->> +
->> +This patch fixes this compile issue when building xen-qemu with SDL
->> +
->> +/output/host/bin/../arm-buildroot-linux-gnueabihf/sysroot/usr/include/SDL2/SDL_syswm.h:83:22: fatal error: directfb.h: No such file or directory
->> + #include <directfb.h>
->> +
->> +Signed-off-by: Alistair Francis <alistair.francis@xilinx.com>
->> +---
->> + tools/Makefile | 1 +
->> + 1 file changed, 1 insertion(+)
->> +
->> +diff --git a/tools/Makefile b/tools/Makefile
->> +index ab7a01ee1b..4df6228fc5 100644
->> +--- a/tools/Makefile
->> ++++ b/tools/Makefile
->> +@@ -274,6 +274,7 @@ subdir-all-qemu-xen-dir: qemu-xen-dir-find
->> +               --datadir=$(SHAREDIR)/qemu-xen \
->> +               --localstatedir=$(localstatedir) \
->> +               --disable-kvm \
->> ++              --disable-sdl \
->
-> Agree that fixes it but it's another patch.  Ah I see Thomas just sent
-> a similar email while I was typing my update.  I've just finished
-> testing that exact approach below.
->
-> --- a/package/xen/xen.mk
-> +++ b/package/xen/xen.mk
-> @@ -17,7 +17,7 @@ else ifeq ($(ARCH),arm)
->  XEN_ARCH = arm32
->  endif
->
-> -XEN_CONF_OPTS = --disable-ocamltools
-> +XEN_CONF_OPTS = --disable-ocamltools
-> --with-extra-qemuu-configure-args="--disable-sdl"
->
->  XEN_CONF_ENV = PYTHON=$(HOST_DIR)/bin/python2
->  XEN_MAKE_ENV = \
+Tweak build system to play well with Buildroot.
 
-Actually this is cleaner and only sets when the tools build occurs.
+Signed-off-by: Guillermo A. Amaral <g@maral.me>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../sdl2/0001-make-cross-compiler-friendly.patch   | 167 +++++++++++++++++++++
+ package/sdl2/sdl2.mk                               |   8 +-
+ 2 files changed, 174 insertions(+), 1 deletion(-)
 
---- a/package/xen/xen.mk
-+++ b/package/xen/xen.mk
-@@ -43,6 +43,7 @@ XEN_DEPENDENCIES += argp-standalone
+diff --git a/package/sdl2/0001-make-cross-compiler-friendly.patch b/package/sdl2/0001-make-cross-compiler-friendly.patch
+new file mode 100644
+index 0000000..10dcf74
+--- /dev/null
++++ b/package/sdl2/0001-make-cross-compiler-friendly.patch
+@@ -0,0 +1,167 @@
++From 4cbd2fbfcbfe94b5826907f59ee963c69860e522 Mon Sep 17 00:00:00 2001
++From: "Guillermo A. Amaral" <g@maral.me>
++Date: Thu, 18 Jan 2018 09:23:58 -0800
++Subject: [PATCH] Make rpi video cross-compiler friendly.
++
++* Stops using fixed path to find GLES/EGL libs.
++* Tries pkg-config to locate bcm_host.
++
++Signed-off-by: Guillermo A. Amaral <g@maral.me>
++---
++ cmake/sdlchecks.cmake | 15 ++++++++++-----
++ configure             | 48 ++++++++++++++++++++++++++++++++++++++++++++++--
++ configure.in          |  8 ++++++--
++ src/video/SDL_egl.c   | 12 ++++++------
++ 4 files changed, 68 insertions(+), 15 deletions(-)
++
++diff --git a/cmake/sdlchecks.cmake b/cmake/sdlchecks.cmake
++index e2e89a2..fc715f1 100644
++--- a/cmake/sdlchecks.cmake
+++++ b/cmake/sdlchecks.cmake
++@@ -1127,15 +1127,19 @@ endmacro()
++ # - n/a
++ macro(CheckRPI)
++   if(VIDEO_RPI)
++-    set(VIDEO_RPI_INCLUDE_DIRS "/opt/vc/include" "/opt/vc/include/interface/vcos/pthreads" "/opt/vc/include/interface/vmcs_host/linux/" )
++-    set(VIDEO_RPI_LIBRARY_DIRS "/opt/vc/lib" )
++-    set(VIDEO_RPI_LIBS bcm_host )
+++    pkg_check_modules(VIDEO_RPI bcm_host brcmegl)
+++    if (NOT VIDEO_RPI_FOUND)
+++      set(VIDEO_RPI_INCLUDE_DIRS "/opt/vc/include" "/opt/vc/include/interface/vcos/pthreads" "/opt/vc/include/interface/vmcs_host/linux/" )
+++      set(VIDEO_RPI_LIBRARY_DIRS "/opt/vc/lib" )
+++      set(VIDEO_RPI_LIBRARIES bcm_host )
+++      set(VIDEO_RPI_LDFLAGS "-Wl,-rpath,/opt/vc/lib")
+++    endif()
++     listtostr(VIDEO_RPI_INCLUDE_DIRS VIDEO_RPI_INCLUDE_FLAGS "-I")
++     listtostr(VIDEO_RPI_LIBRARY_DIRS VIDEO_RPI_LIBRARY_FLAGS "-L")
++ 
++     set(ORIG_CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS}")
++     set(CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS} ${VIDEO_RPI_INCLUDE_FLAGS} ${VIDEO_RPI_LIBRARY_FLAGS}")
++-    set(CMAKE_REQUIRED_LIBRARIES "${VIDEO_RPI_LIBS}")
+++    set(CMAKE_REQUIRED_LIBRARIES "${VIDEO_RPI_LIBRARIES}")
++     check_c_source_compiles("
++         #include <bcm_host.h>
++         int main(int argc, char **argv) {}" HAVE_VIDEO_RPI)
++@@ -1147,8 +1151,9 @@ macro(CheckRPI)
++       set(SDL_VIDEO_DRIVER_RPI 1)
++       file(GLOB VIDEO_RPI_SOURCES ${SDL2_SOURCE_DIR}/src/video/raspberry/*.c)
++       set(SOURCE_FILES ${SOURCE_FILES} ${VIDEO_RPI_SOURCES})
++-      list(APPEND EXTRA_LIBS ${VIDEO_RPI_LIBS})
+++      list(APPEND EXTRA_LIBS ${VIDEO_RPI_LIBRARIES})
++       set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${VIDEO_RPI_INCLUDE_FLAGS} ${VIDEO_RPI_LIBRARY_FLAGS}")
+++      list(APPEND EXTRA_LDFLAGS ${VIDEO_RPI_LDFLAGS})
++     endif(SDL_VIDEO AND HAVE_VIDEO_RPI)
++   endif(VIDEO_RPI)
++ endmacro(CheckRPI)
++diff --git a/configure b/configure
++index b622085..d42a22a 100755
++--- a/configure
+++++ b/configure
++@@ -19485,12 +19485,56 @@ else
++ fi
++ 
++     if test x$enable_video = xyes -a x$enable_video_rpi = xyes; then
++-        if test x$ARCH = xnetbsd; then
+++        # Extract the first word of "pkg-config", so it can be a program name with args.
+++set dummy pkg-config; ac_word=$2
+++{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+++$as_echo_n "checking for $ac_word... " >&6; }
+++if ${ac_cv_path_PKG_CONFIG+:} false; then :
+++  $as_echo_n "(cached) " >&6
+++else
+++  case $PKG_CONFIG in
+++  [\\/]* | ?:[\\/]*)
+++  ac_cv_path_PKG_CONFIG="$PKG_CONFIG" # Let the user override the test with a path.
+++  ;;
+++  *)
+++  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+++for as_dir in $PATH
+++do
+++  IFS=$as_save_IFS
+++  test -z "$as_dir" && as_dir=.
+++    for ac_exec_ext in '' $ac_executable_extensions; do
+++  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+++    ac_cv_path_PKG_CONFIG="$as_dir/$ac_word$ac_exec_ext"
+++    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+++    break 2
+++  fi
+++done
+++  done
+++IFS=$as_save_IFS
+++
+++  test -z "$ac_cv_path_PKG_CONFIG" && ac_cv_path_PKG_CONFIG="no"
+++  ;;
+++esac
+++fi
+++PKG_CONFIG=$ac_cv_path_PKG_CONFIG
+++if test -n "$PKG_CONFIG"; then
+++  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $PKG_CONFIG" >&5
+++$as_echo "$PKG_CONFIG" >&6; }
+++else
+++  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+++$as_echo "no" >&6; }
+++fi
+++
+++
+++        if test x$PKG_CONFIG != xno && $PKG_CONFIG --exists bcm_host; then
+++            RPI_CFLAGS=`$PKG_CONFIG --cflags bcm_host brcmegl`
+++            RPI_LDFLAGS=`$PKG_CONFIG --libs bcm_host brcmegl`
+++        elif test x$ARCH = xnetbsd; then
++             RPI_CFLAGS="-I/usr/pkg/include -I/usr/pkg/include/interface/vcos/pthreads -I/usr/pkg/include/interface/vmcs_host/linux"
++             RPI_LDFLAGS="-Wl,-R/usr/pkg/lib -L/usr/pkg/lib -lbcm_host"
++         else
++             RPI_CFLAGS="-I/opt/vc/include -I/opt/vc/include/interface/vcos/pthreads -I/opt/vc/include/interface/vmcs_host/linux"
++-            RPI_LDFLAGS="-L/opt/vc/lib -lbcm_host"
+++            RPI_LDFLAGS="-Wl,-rpath,/opt/vc/lib -L/opt/vc/lib -lbcm_host"
++         fi
++ 
++         # Save the original compiler flags and libraries
++diff --git a/configure.in b/configure.in
++index 5ac2130..450bf62 100644
++--- a/configure.in
+++++ b/configure.in
++@@ -1563,12 +1563,16 @@ CheckRPI()
++ AC_HELP_STRING([--enable-video-rpi], [use Raspberry Pi video driver [[default=yes]]]),
++                   , enable_video_rpi=yes)
++     if test x$enable_video = xyes -a x$enable_video_rpi = xyes; then
++-        if test x$ARCH = xnetbsd; then
+++        AC_PATH_PROG(PKG_CONFIG, pkg-config, no)
+++        if test x$PKG_CONFIG != xno && $PKG_CONFIG --exists bcm_host; then
+++            RPI_CFLAGS=`$PKG_CONFIG --cflags bcm_host brcmegl`
+++            RPI_LDFLAGS=`$PKG_CONFIG --libs bcm_host brcmegl`
+++        elif test x$ARCH = xnetbsd; then
++             RPI_CFLAGS="-I/usr/pkg/include -I/usr/pkg/include/interface/vcos/pthreads -I/usr/pkg/include/interface/vmcs_host/linux"
++             RPI_LDFLAGS="-Wl,-R/usr/pkg/lib -L/usr/pkg/lib -lbcm_host"
++         else
++             RPI_CFLAGS="-I/opt/vc/include -I/opt/vc/include/interface/vcos/pthreads -I/opt/vc/include/interface/vmcs_host/linux"
++-            RPI_LDFLAGS="-L/opt/vc/lib -lbcm_host"
+++            RPI_LDFLAGS="-Wl,-rpath,/opt/vc/lib -L/opt/vc/lib -lbcm_host"
++         fi
++ 
++         # Save the original compiler flags and libraries
++diff --git a/src/video/SDL_egl.c b/src/video/SDL_egl.c
++index 9ccc2c3..23a7f2d 100644
++--- a/src/video/SDL_egl.c
+++++ b/src/video/SDL_egl.c
++@@ -44,12 +44,12 @@
++ 
++ #if SDL_VIDEO_DRIVER_RPI
++ /* Raspbian places the OpenGL ES/EGL binaries in a non standard path */
++-#define DEFAULT_EGL "/opt/vc/lib/libbrcmEGL.so"
++-#define DEFAULT_OGL_ES2 "/opt/vc/lib/libbrcmGLESv2.so"
++-#define ALT_EGL "/opt/vc/lib/libEGL.so"
++-#define ALT_OGL_ES2 "/opt/vc/lib/libGLESv2.so"
++-#define DEFAULT_OGL_ES_PVR "/opt/vc/lib/libGLES_CM.so"
++-#define DEFAULT_OGL_ES "/opt/vc/lib/libGLESv1_CM.so"
+++#define DEFAULT_EGL "libbrcmEGL.so"
+++#define DEFAULT_OGL_ES2 "libbrcmGLESv2.so"
+++#define ALT_EGL "libEGL.so"
+++#define ALT_OGL_ES2 "libGLESv2.so"
+++#define DEFAULT_OGL_ES_PVR "libGLES_CM.so"
+++#define DEFAULT_OGL_ES "libGLESv1_CM.so"
++ 
++ #elif SDL_VIDEO_DRIVER_ANDROID || SDL_VIDEO_DRIVER_VIVANTE
++ /* Android */
++-- 
++2.13.6
++
+diff --git a/package/sdl2/sdl2.mk b/package/sdl2/sdl2.mk
+index 3e3ba54..113e106 100644
+--- a/package/sdl2/sdl2.mk
++++ b/package/sdl2/sdl2.mk
+@@ -19,7 +19,6 @@ SDL2_CONF_OPTS += \
+ 	--disable-dbus \
+ 	--disable-pulseaudio \
+ 	--disable-video-wayland \
+-	--disable-video-rpi
+ 
+ # We must enable static build to get compilation successful.
+ SDL2_CONF_OPTS += --enable-static
+@@ -39,6 +38,13 @@ else
+ SDL2_CONF_OPTS += --disable-video-directfb
  endif
- XEN_INSTALL_TARGET_OPTS += DESTDIR=$(TARGET_DIR) install-tools
- XEN_MAKE_OPTS += dist-tools
-+XEN_CONF_OPTS =  --with-extra-qemuu-configure-args="--disable-sdl"
-
- define XEN_INSTALL_INIT_SYSV
-        mv $(TARGET_DIR)/etc/init.d/xencommons
-$(TARGET_DIR)/etc/init.d/S50xencommons
+ 
++ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
++SDL2_DEPENDENCIES += rpi-userland
++SDL2_CONF_OPTS += --enable-video-rpi
++else
++SDL2_CONF_OPTS += --disable-video-rpi
++endif
++
+ # x-includes and x-libraries must be set for cross-compiling
+ # By default x_includes and x_libraries contains unsafe paths.
+ # (/usr/X11R6/include and /usr/X11R6/lib)
