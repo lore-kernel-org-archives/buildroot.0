@@ -1,49 +1,36 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 18 Jan 2018 22:41:38 +0100
-Subject: [Buildroot] [PATCH v2] package/bash-completion: new package
-In-Reply-To: <1515675000-13355-1-git-send-email-romain.naour@smile.fr>
-References: <1515675000-13355-1-git-send-email-romain.naour@smile.fr>
-Message-ID: <20180118224138.17cdb72b@windsurf.lan>
+From: Alistair Francis <alistair.francis@xilinx.com>
+Date: Thu, 18 Jan 2018 13:52:30 -0800
+Subject: [Buildroot] [PATCH] package/xen: Force disable SDL for xen-qemu
+ build
+Message-ID: <20180118215230.27648-1-alistair.francis@xilinx.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Fixes autobuilder issue:
+http://autobuild.buildroot.net/results/8bcb80dc93d38bb38ca32ad93d52c22d1176d57e/
 
-On Thu, 11 Jan 2018 13:50:00 +0100, Romain Naour wrote:
+Signed-off-by: Alistair Francis <alistair.francis@xilinx.com>
+---
+V2:
+ - Don't add a patch, just edit the make options
 
-> +define BASH_COMPLETION_INSTALL_FILE
-> +	echo ". /usr/share/bash-completion/bash_completion" > $(TARGET_DIR)/etc/bash_completion
-> +endef
+ package/xen/xen.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-Who/what is reading this /etc/bash_completion file? Is bash itself
-automatically loading this file? I'm asking because on my distro, I
-have /etc/bash_completion.d/ and no /etc/bash_completion.
-
-It seems like my bashrc here is automatically
-including /usr/share/bash-completion/bash_completion, and otherwise
-falls back to /etc/bash_completion:
-
-  if [ -f /usr/share/bash-completion/bash_completion ]; then
-    . /usr/share/bash-completion/bash_completion
-  elif [ -f /etc/bash_completion ]; then
-    . /etc/bash_completion
-  fi
-
-Basically, my concerns are:
-
- - You are using ">" for the redirection. Are we going to be the only
-   package writing to this file?
-
- - Do we support having other packages contribute additional bash
-   completion logic?
-
-Thanks!
-
-Thomas
+diff --git a/package/xen/xen.mk b/package/xen/xen.mk
+index 6aa066e4e2..8ba2b9d5c2 100644
+--- a/package/xen/xen.mk
++++ b/package/xen/xen.mk
+@@ -43,6 +43,7 @@ XEN_DEPENDENCIES += argp-standalone
+ endif
+ XEN_INSTALL_TARGET_OPTS += DESTDIR=$(TARGET_DIR) install-tools
+ XEN_MAKE_OPTS += dist-tools
++XEN_CONF_OPTS += --with-extra-qemuu-configure-args="--disable-sdl"
+ 
+ define XEN_INSTALL_INIT_SYSV
+ 	mv $(TARGET_DIR)/etc/init.d/xencommons $(TARGET_DIR)/etc/init.d/S50xencommons
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.14.1
