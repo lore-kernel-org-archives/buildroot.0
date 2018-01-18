@@ -1,70 +1,77 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 18 Jan 2018 09:48:07 +0100
-Subject: [Buildroot] [git commit] open-lldp: add patch to remove -Werror
-Message-ID: <20180118084941.6B19783E9A@busybox.osuosl.org>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Thu, 18 Jan 2018 10:46:06 +0100
+Subject: [Buildroot] [PATCH v2] package/bash: add /bin/bash to
+ /etc/shells
+In-Reply-To: <8c2a6cb6-7993-b05f-144f-82986cf2b913@mind.be>
+References: <1515859527-13567-1-git-send-email-romain.naour@smile.fr>
+ <20180113161220.GG3226@scaer> <8c2a6cb6-7993-b05f-144f-82986cf2b913@mind.be>
+Message-ID: <270ad24e-4fa1-95f3-026c-7c85edcf2223@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c38853d708a70208859fa056d527b4cf40a9265a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Arnout,
 
--Werror causes a number of build failures with recent versions of gcc
- that have additional warnings (turned into error due to -Werror). So
- let's remove -Werror.
+Le 18/01/2018 ? 00:53, Arnout Vandecappelle a ?crit?:
+> 
+> 
+> On 13-01-18 17:12, Yann E. MORIN wrote:
+>> Romain, All,
+>>
+>> On 2018-01-13 17:05 +0100, Romain Naour spake thusly:
+>>> When bash is selected, /bin/bash is not added to /etc/shells
+>>> (see man shells). So, login tools like dropbear reject the ssh
+>>> connexions for users using bash as shell in /etc/passwd.
+>>>
+>>> buildroot authpriv.warn dropbear[853]: User 'kubu' has invalid shell, rejected
+>>>
+>>> Reported-by: Jeremy Rosen <jeremy.rosen@smile.fr>
+>>> Signed-off-by: Romain Naour <romain.naour@smile.fr>
+>>> Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>>
+>> Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> 
+>  Really? The guy who wrote the script that checks that no two packages can touch
+> the same file acks this change?
 
-Fixes:
+Which script ?
 
-  http://autobuild.buildroot.net/results/a06feb8616b98d4931145ea5079650e06bd1a61d/
+> 
+> [snip]
+>>> +	grep -qsE '^/bin/bash' $(TARGET_DIR)/etc/shells \
+>>> +		|| echo "/bin/bash" >> $(TARGET_DIR)/etc/shells
+> 
+>  So this is a nice example of a package breaking top-level parallel build.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- .../0003-Makefile.am-disable-Werror.patch          | 38 ++++++++++++++++++++++
- 1 file changed, 38 insertions(+)
+ok, I did not take into account the top-level parallel build...
 
-diff --git a/package/open-lldp/0003-Makefile.am-disable-Werror.patch b/package/open-lldp/0003-Makefile.am-disable-Werror.patch
-new file mode 100644
-index 0000000..d6393bd
---- /dev/null
-+++ b/package/open-lldp/0003-Makefile.am-disable-Werror.patch
-@@ -0,0 +1,38 @@
-+From c350f263136801fd54d42322a07a3b5ad2181dd9 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Date: Thu, 18 Jan 2018 09:29:32 +0100
-+Subject: [PATCH] Makefile.am: disable -Werror
-+
-+Due to additional warnings in recent gcc versions and the use of
-+-Werror the build fails for reasons that are not that important. For
-+example:
-+
-+clif.c:54:2: error: implicit declaration of function 'memset' [-Werror=implicit-function-declaration]
-+  memset(clif, 0, sizeof(*clif));
-+
-+or:
-+
-+log.c:46:30: error: format '%ld' expects argument of type 'long int', but argument 5 has type '__suseconds_t {aka int}' [-Werror=format=]
-+   printf("%02d:%02d:%02d.%06ld ",
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+---
-+ Makefile.am | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/Makefile.am b/Makefile.am
-+index 551d4c7..62a52a5 100644
-+--- a/Makefile.am
-++++ b/Makefile.am
-+@@ -16,7 +16,7 @@ ACLOCAL_AMFLAGS = -I m4
-+ parse_cli.o: CFLAGS+=-U_FORTIFY_SOURCE -Wno-error
-+ 
-+ ## system requires a shared libconfig
-+-AM_CFLAGS = -Wall -Werror -Wextra -Wformat=2 $(LIBCONFIG_CFLAGS) $(LIBNL_CFLAGS)
-++AM_CFLAGS = -Wall -Wextra -Wformat=2 $(LIBCONFIG_CFLAGS) $(LIBNL_CFLAGS)
-+ AM_LDFLAGS = $(LIBCONFIG_LIBS) $(LIBNL_LIBS) -lrt
-+ 
-+ ## header files to be installed, for programs using the client interface to lldpad 
-+-- 
-+2.14.3
-+
+> 
+>  I guess the solution is to collect the shells in a make variable and create
+> /etc/shells in a finalize hook. Or alternatively, do this in a finalize hook
+> instead of target-install hook.
+
+What do you think about something in the pkg-generic infra ?
+
+A package like bash register the shell path using
+
+BASH_REGISTER_SHELL = /bin/bash
+
+And the pkg-generic infra will add a hook in TARGET_FINALIZE_HOOKS.
+
+Yann suggested this while discussing about this series.
+We hesitated to modify the infra just for less that 10 packages, so I've keep
+the /etc/shells handling in each packages.
+
+About the finalize hook, the manual say:
+"They are seldom used, and your package probably do not need them."
+It discourages users to use them.
+
+Best regards,
+Romain
+
+> 
+>  Regards,
+>  Arnout
+> 
