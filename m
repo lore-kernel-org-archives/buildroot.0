@@ -1,48 +1,49 @@
 From: Romain Naour <romain.naour@smile.fr>
-Date: Fri, 19 Jan 2018 11:15:09 +0100
-Subject: [Buildroot] [PATCH v3 9/9] package/bash: use target finalize hook
+Date: Fri, 19 Jan 2018 11:15:06 +0100
+Subject: [Buildroot] [PATCH v3 6/9] package/zsh: add /bin/zsh to /etc/shells
 In-Reply-To: <1516356909-18620-1-git-send-email-romain.naour@smile.fr>
 References: <1516356909-18620-1-git-send-email-romain.naour@smile.fr>
-Message-ID: <1516356909-18620-10-git-send-email-romain.naour@smile.fr>
+Message-ID: <1516356909-18620-7-git-send-email-romain.naour@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout reported an issue with the upcoming top-level parallel build.
-The file /etc/shells can be modified by several packages (shell providers)
+When zsh is selected, /bin/zsh is not added to /etc/shells
+(see man shells). So, login tools like dropbear reject the ssh
+connections for users using zsh as shell in /etc/passwd.
+
+buildroot authpriv.warn dropbear[853]: User 'kubu' has invalid shell, rejected
 
 Signed-off-by: Romain Naour <romain.naour@smile.fr>
-Cc: Arnout Vandecappelle <arnout@mind.be>
 ---
- package/bash/bash.mk | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+v3: Fix typo (Thomas)
+    Use TARGET_FINALIZE_HOOKS to avoid issues with the upcoming
+    top-level parallel build (Arnout)
+v2: add double-dollar after /bin/zsh (Yann)
+---
+ package/zsh/zsh.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/package/bash/bash.mk b/package/bash/bash.mk
-index ab6b43b..12f33f1 100644
---- a/package/bash/bash.mk
-+++ b/package/bash/bash.mk
-@@ -40,14 +40,18 @@ endif
+diff --git a/package/zsh/zsh.mk b/package/zsh/zsh.mk
+index bfd0a1a..e19a896 100644
+--- a/package/zsh/zsh.mk
++++ b/package/zsh/zsh.mk
+@@ -34,6 +34,14 @@ else
+ ZSH_CONF_OPTS += --disable-pcre
  endif
  
- # Make /bin/sh -> bash (no other shell, better than busybox shells)
--# Add /bin/bash to /etc/shells otherwise some login tools like dropbear
--# can reject the user connexion. See man shells.
- define BASH_INSTALL_TARGET_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
- 		DESTDIR=$(TARGET_DIR) exec_prefix=/ install
- 	rm -f $(TARGET_DIR)/bin/bashbug
-+endef
-+
-+# Add /bin/bash to /etc/shells otherwise some login tools like dropbear
++# Add /bin/zsh to /etc/shells otherwise some login tools like dropbear
 +# can reject the user connection. See man shells.
-+define BASH_ADD_MKSH_TO_SHELLS
- 	grep -qsE '^/bin/bash$$' $(TARGET_DIR)/etc/shells \
- 		|| echo "/bin/bash" >> $(TARGET_DIR)/etc/shells
- endef
-+BASH_TARGET_FINALIZE_HOOKS += BASH_ADD_MKSH_TO_SHELLS
- 
- $(eval $(autotools-package))
++define ZSH_ADD_ZSH_TO_SHELLS
++	grep -qsE '^/bin/zsh$$' $(TARGET_DIR)/etc/shells \
++		|| echo "/bin/zsh" >> $(TARGET_DIR)/etc/shells
++endef
++ZSH_TARGET_FINALIZE_HOOKS += ZSH_ADD_ZSH_TO_SHELLS
++
+ # Remove versioned zsh-x.y.z binary taking up space
+ define ZSH_TARGET_INSTALL_FIXUPS
+ 	rm -f $(TARGET_DIR)/bin/zsh-$(ZSH_VERSION)
 -- 
 2.7.4
