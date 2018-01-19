@@ -1,206 +1,227 @@
-From: Dagg Stompler <daggs@gmx.com>
-Date: Fri, 19 Jan 2018 18:42:32 +0200
-Subject: [Buildroot] [PATCH] kodi-texturepacker: fix compiltion error
-Message-ID: <20180119164232.1559-1-daggs@gmx.com>
+From: Ryan Coe <bluemrp9@gmail.com>
+Date: Fri, 19 Jan 2018 09:11:45 -0800
+Subject: [Buildroot] [PATCH 1/1] package/sdl2: Fix Raspberry Pi support
+ for SDL2
+In-Reply-To: <20180118175415.16715-1-g@maral.me>
+References: <20180118174319.378bfb1b@windsurf.lan>
+ <20180118175415.16715-1-g@maral.me>
+Message-ID: <ba624c50-2b56-6e76-7ccc-8fbfdf9fe5bb@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-backport fix the following error: declaration of ?void* reallocarray(void*, size_t, size_t) throw ()? has a different exception specifier
-from upstream kodi which can be reproduced using the following defconfig:
-BR2_x86_64=y
-BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
-BR2_TOOLCHAIN_BUILDROOT_CXX=y
-BR2_PACKAGE_KODI=y
-BR2_PACKAGE_MESA3D=y
-BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600=y
-BR2_PACKAGE_MESA3D_OPENGL_EGL=y
-BR2_PACKAGE_XORG7=y
-BR2_PACKAGE_PYTHON=y
-BR2_PACKAGE_PYTHON_PY_PYC=y
+Guillermo, All,
 
-Signed-off-by: Dagg Stompler <daggs@gmx.com>
----
- .../kodi-texturepacker/0002-fix_reallocarray.patch | 169 +++++++++++++++++++++
- 1 file changed, 169 insertions(+)
- create mode 100644 package/kodi-texturepacker/0002-fix_reallocarray.patch
 
-diff --git a/package/kodi-texturepacker/0002-fix_reallocarray.patch b/package/kodi-texturepacker/0002-fix_reallocarray.patch
-new file mode 100644
-index 0000000000..eb4ed349bd
---- /dev/null
-+++ b/package/kodi-texturepacker/0002-fix_reallocarray.patch
-@@ -0,0 +1,169 @@
-+From ebc5dfcad836936a14e6f18fd7faa377b3c804e7 Mon Sep 17 00:00:00 2001
-+From: MilhouseVH <milhouseVH.github@nmacleod.com>
-+Date: Mon, 6 Nov 2017 11:47:28 +0000
-+Subject: [PATCH] TexturePacker: use C++ headers
-+
-+---
-+ tools/depends/native/TexturePacker/src/SimpleFS.h            | 4 ++--
-+ tools/depends/native/TexturePacker/src/TexturePacker.cpp     | 2 +-
-+ tools/depends/native/TexturePacker/src/XBTFWriter.cpp        | 6 +++---
-+ tools/depends/native/TexturePacker/src/XBTFWriter.h          | 2 +-
-+ tools/depends/native/TexturePacker/src/decoder/GifHelper.cpp | 2 +-
-+ tools/depends/native/TexturePacker/src/md5.h                 | 4 ++--
-+ 6 files changed, 10 insertions(+), 10 deletions(-)
-+
-+diff --git a/tools/depends/native/TexturePacker/src/SimpleFS.h b/tools/depends/native/TexturePacker/src/SimpleFS.h
-+index c48814c0ad..c2288cf8de 100644
-+--- a/tools/depends/native/TexturePacker/src/SimpleFS.h
-++++ b/tools/depends/native/TexturePacker/src/SimpleFS.h
-+@@ -20,9 +20,9 @@
-+  *
-+  */
-+ 
-+-#include <stdio.h>
-++#include <cstdio>
-+ #include <string>
-+-#include <stdint.h>
-++#include <cstdint>
-+ 
-+ class CFile
-+ {
-+diff --git a/tools/depends/native/TexturePacker/src/TexturePacker.cpp b/tools/depends/native/TexturePacker/src/TexturePacker.cpp
-+index ba618be574..045c5ce38d 100644
-+--- a/tools/depends/native/TexturePacker/src/TexturePacker.cpp
-++++ b/tools/depends/native/TexturePacker/src/TexturePacker.cpp
-+@@ -22,7 +22,7 @@
-+ #include <sys/types.h>
-+ #include <sys/stat.h>
-+ #define __STDC_FORMAT_MACROS
-+-#include <inttypes.h>
-++#include <cinttypes>
-+ #define platform_stricmp _stricmp
-+ #else
-+ #define platform_stricmp stricmp
-+diff --git a/tools/depends/native/TexturePacker/src/XBTFWriter.cpp b/tools/depends/native/TexturePacker/src/XBTFWriter.cpp
-+index 9e2493369b..2e80ba674c 100644
-+--- a/tools/depends/native/TexturePacker/src/XBTFWriter.cpp
-++++ b/tools/depends/native/TexturePacker/src/XBTFWriter.cpp
-+@@ -19,14 +19,14 @@
-+  */
-+ 
-+ #define __STDC_FORMAT_MACROS
-+-#include <inttypes.h>
-++#include <cinttypes>
-+ #if defined(TARGET_FREEBSD) || defined(TARGET_DARWIN)
-+-#include <stdlib.h>
-++#include <cstdlib>
-+ #elif !defined(TARGET_DARWIN)
-+ #include <malloc.h>
-+ #endif
-+ #include <memory.h>
-+-#include <string.h>
-++#include <cstring>
-+ 
-+ #include "XBTFWriter.h"
-+ #include "guilib/XBTFReader.h"
-+diff --git a/tools/depends/native/TexturePacker/src/XBTFWriter.h b/tools/depends/native/TexturePacker/src/XBTFWriter.h
-+index 7509303a51..d5cf1a2965 100644
-+--- a/tools/depends/native/TexturePacker/src/XBTFWriter.h
-++++ b/tools/depends/native/TexturePacker/src/XBTFWriter.h
-+@@ -23,7 +23,7 @@
-+ 
-+ #include <vector>
-+ #include <string>
-+-#include <stdio.h>
-++#include <cstdio>
-+ 
-+ #include "guilib/XBTF.h"
-+ 
-+diff --git a/tools/depends/native/TexturePacker/src/decoder/GifHelper.cpp b/tools/depends/native/TexturePacker/src/decoder/GifHelper.cpp
-+index 56c22f7c3a..3ddb20fe88 100644
-+--- a/tools/depends/native/TexturePacker/src/decoder/GifHelper.cpp
-++++ b/tools/depends/native/TexturePacker/src/decoder/GifHelper.cpp
-+@@ -20,7 +20,7 @@
-+ 
-+ #include "GifHelper.h"
-+ #include <algorithm>
-+-#include <stdlib.h>
-++#include <cstdlib>
-+ #include <cstring>
-+ 
-+ #define UNSIGNED_LITTLE_ENDIAN(lo, hi)	((lo) | ((hi) << 8))
-+diff --git a/tools/depends/native/TexturePacker/src/md5.h b/tools/depends/native/TexturePacker/src/md5.h
-+index 456e5be17f..4bb48e0810 100644
-+--- a/tools/depends/native/TexturePacker/src/md5.h
-++++ b/tools/depends/native/TexturePacker/src/md5.h
-+@@ -23,8 +23,8 @@
-+ #ifndef MD5_H
-+ #define MD5_H
-+ 
-+-#include <string.h>		/* for memcpy() */
-+-#include <stdint.h>
-++#include <cstring>		/* for memcpy() */
-++#include <cstdint>
-+ 
-+ struct MD5Context 
-+ {
-+-- 
-+2.16.0
-+
-+From ff3e6dad5fdb7b9a2985b2547c8020c709af0340 Mon Sep 17 00:00:00 2001
-+From: MilhouseVH <milhouseVH.github@nmacleod.com>
-+Date: Mon, 6 Nov 2017 18:05:17 +0000
-+Subject: [PATCH] TexturePacker: drop unused variable
-+
-+---
-+ tools/depends/native/TexturePacker/src/decoder/JPGDecoder.cpp | 2 --
-+ 1 file changed, 2 deletions(-)
-+
-+diff --git a/tools/depends/native/TexturePacker/src/decoder/JPGDecoder.cpp b/tools/depends/native/TexturePacker/src/decoder/JPGDecoder.cpp
-+index 53f5e9beb7..b0f18bed68 100644
-+--- a/tools/depends/native/TexturePacker/src/decoder/JPGDecoder.cpp
-++++ b/tools/depends/native/TexturePacker/src/decoder/JPGDecoder.cpp
-+@@ -72,7 +72,6 @@ bool JPGDecoder::LoadFile(const std::string &filename, DecodedFrames &frames)
-+   struct jpeg_decompress_struct cinfo;
-+   struct jpeg_error_mgr jerr;
-+   
-+-  char *linha;
-+   int ImageSize;
-+   
-+   cinfo.err = jpeg_std_error(&jerr);
-+@@ -89,7 +88,6 @@ bool JPGDecoder::LoadFile(const std::string &filename, DecodedFrames &frames)
-+   DecodedFrame frame;
-+   
-+   frame.rgbaImage.pixels = (char *)new char[ImageSize];
-+-  linha = (char *)frame.rgbaImage.pixels;
-+   
-+   unsigned char *scanlinebuff = new unsigned char[3 * cinfo.image_width];
-+   unsigned char *dst = (unsigned char *)frame.rgbaImage.pixels;
-+-- 
-+2.16.0
-+
-+From ee441543be07de1222bcff2587bfcdb5c1231989 Mon Sep 17 00:00:00 2001
-+From: MilhouseVH <milhouseVH.github@nmacleod.com>
-+Date: Mon, 6 Nov 2017 21:02:06 +0000
-+Subject: [PATCH] TexturePacker: include GifHelper after system headers
-+
-+---
-+ tools/depends/native/TexturePacker/src/decoder/GifHelper.cpp | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/tools/depends/native/TexturePacker/src/decoder/GifHelper.cpp b/tools/depends/native/TexturePacker/src/decoder/GifHelper.cpp
-+index 3ddb20fe88..9ced4ec5bc 100644
-+--- a/tools/depends/native/TexturePacker/src/decoder/GifHelper.cpp
-++++ b/tools/depends/native/TexturePacker/src/decoder/GifHelper.cpp
-+@@ -18,10 +18,10 @@
-+  *
-+  */
-+ 
-+-#include "GifHelper.h"
-+ #include <algorithm>
-+ #include <cstdlib>
-+ #include <cstring>
-++#include "GifHelper.h"
-+ 
-+ #define UNSIGNED_LITTLE_ENDIAN(lo, hi)	((lo) | ((hi) << 8))
-+ #define GIF_MAX_MEMORY 82944000U // about 79 MB, which is equivalent to 10 full hd frames.
-+-- 
-+2.16.0
-+
--- 
-2.16.0
+On 1/18/2018 9:54 AM, Guillermo A. Amaral wrote:
+> Tweak build system to play well with Buildroot.
+>
+> Signed-off-by: Guillermo A. Amaral <g@maral.me>
+> ---
+>   .../sdl2/0001-make-cross-compiler-friendly.patch   | 167 +++++++++++++++++++++
+>   package/sdl2/sdl2.mk                               |   8 +-
+>   2 files changed, 174 insertions(+), 1 deletion(-)
+>   create mode 100644 package/sdl2/0001-make-cross-compiler-friendly.patch
+>
+> diff --git a/package/sdl2/0001-make-cross-compiler-friendly.patch b/package/sdl2/0001-make-cross-compiler-friendly.patch
+> new file mode 100644
+> index 000000000..10dcf7465
+> --- /dev/null
+> +++ b/package/sdl2/0001-make-cross-compiler-friendly.patch
+> @@ -0,0 +1,167 @@
+> +From 4cbd2fbfcbfe94b5826907f59ee963c69860e522 Mon Sep 17 00:00:00 2001
+> +From: "Guillermo A. Amaral" <g@maral.me>
+> +Date: Thu, 18 Jan 2018 09:23:58 -0800
+> +Subject: [PATCH] Make rpi video cross-compiler friendly.
+> +
+> +* Stops using fixed path to find GLES/EGL libs.
+> +* Tries pkg-config to locate bcm_host.
+> +
+> +Signed-off-by: Guillermo A. Amaral <g@maral.me>
+> +---
+> + cmake/sdlchecks.cmake | 15 ++++++++++-----
+> + configure             | 48 ++++++++++++++++++++++++++++++++++++++++++++++--
+> + configure.in          |  8 ++++++--
+> + src/video/SDL_egl.c   | 12 ++++++------
+> + 4 files changed, 68 insertions(+), 15 deletions(-)
+> +
+> +diff --git a/cmake/sdlchecks.cmake b/cmake/sdlchecks.cmake
+> +index e2e89a2..fc715f1 100644
+> +--- a/cmake/sdlchecks.cmake
+> ++++ b/cmake/sdlchecks.cmake
+> +@@ -1127,15 +1127,19 @@ endmacro()
+> + # - n/a
+> + macro(CheckRPI)
+> +   if(VIDEO_RPI)
+> +-    set(VIDEO_RPI_INCLUDE_DIRS "/opt/vc/include" "/opt/vc/include/interface/vcos/pthreads" "/opt/vc/include/interface/vmcs_host/linux/" )
+> +-    set(VIDEO_RPI_LIBRARY_DIRS "/opt/vc/lib" )
+> +-    set(VIDEO_RPI_LIBS bcm_host )
+> ++    pkg_check_modules(VIDEO_RPI bcm_host brcmegl)
+> ++    if (NOT VIDEO_RPI_FOUND)
+> ++      set(VIDEO_RPI_INCLUDE_DIRS "/opt/vc/include" "/opt/vc/include/interface/vcos/pthreads" "/opt/vc/include/interface/vmcs_host/linux/" )
+> ++      set(VIDEO_RPI_LIBRARY_DIRS "/opt/vc/lib" )
+> ++      set(VIDEO_RPI_LIBRARIES bcm_host )
+> ++      set(VIDEO_RPI_LDFLAGS "-Wl,-rpath,/opt/vc/lib")
+> ++    endif()
+> +     listtostr(VIDEO_RPI_INCLUDE_DIRS VIDEO_RPI_INCLUDE_FLAGS "-I")
+> +     listtostr(VIDEO_RPI_LIBRARY_DIRS VIDEO_RPI_LIBRARY_FLAGS "-L")
+> +
+> +     set(ORIG_CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS}")
+> +     set(CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS} ${VIDEO_RPI_INCLUDE_FLAGS} ${VIDEO_RPI_LIBRARY_FLAGS}")
+> +-    set(CMAKE_REQUIRED_LIBRARIES "${VIDEO_RPI_LIBS}")
+> ++    set(CMAKE_REQUIRED_LIBRARIES "${VIDEO_RPI_LIBRARIES}")
+> +     check_c_source_compiles("
+> +         #include <bcm_host.h>
+> +         int main(int argc, char **argv) {}" HAVE_VIDEO_RPI)
+> +@@ -1147,8 +1151,9 @@ macro(CheckRPI)
+> +       set(SDL_VIDEO_DRIVER_RPI 1)
+> +       file(GLOB VIDEO_RPI_SOURCES ${SDL2_SOURCE_DIR}/src/video/raspberry/*.c)
+> +       set(SOURCE_FILES ${SOURCE_FILES} ${VIDEO_RPI_SOURCES})
+> +-      list(APPEND EXTRA_LIBS ${VIDEO_RPI_LIBS})
+> ++      list(APPEND EXTRA_LIBS ${VIDEO_RPI_LIBRARIES})
+> +       set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${VIDEO_RPI_INCLUDE_FLAGS} ${VIDEO_RPI_LIBRARY_FLAGS}")
+> ++      list(APPEND EXTRA_LDFLAGS ${VIDEO_RPI_LDFLAGS})
+> +     endif(SDL_VIDEO AND HAVE_VIDEO_RPI)
+> +   endif(VIDEO_RPI)
+> + endmacro(CheckRPI)
+> +diff --git a/configure b/configure
+> +index b622085..d42a22a 100755
+> +--- a/configure
+> ++++ b/configure
+> +@@ -19485,12 +19485,56 @@ else
+> + fi
+> +
+> +     if test x$enable_video = xyes -a x$enable_video_rpi = xyes; then
+> +-        if test x$ARCH = xnetbsd; then
+> ++        # Extract the first word of "pkg-config", so it can be a program name with args.
+> ++set dummy pkg-config; ac_word=$2
+> ++{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+> ++$as_echo_n "checking for $ac_word... " >&6; }
+> ++if ${ac_cv_path_PKG_CONFIG+:} false; then :
+> ++  $as_echo_n "(cached) " >&6
+> ++else
+> ++  case $PKG_CONFIG in
+> ++  [\\/]* | ?:[\\/]*)
+> ++  ac_cv_path_PKG_CONFIG="$PKG_CONFIG" # Let the user override the test with a path.
+> ++  ;;
+> ++  *)
+> ++  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+> ++for as_dir in $PATH
+> ++do
+> ++  IFS=$as_save_IFS
+> ++  test -z "$as_dir" && as_dir=.
+> ++    for ac_exec_ext in '' $ac_executable_extensions; do
+> ++  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+> ++    ac_cv_path_PKG_CONFIG="$as_dir/$ac_word$ac_exec_ext"
+> ++    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+> ++    break 2
+> ++  fi
+> ++done
+> ++  done
+> ++IFS=$as_save_IFS
+> ++
+> ++  test -z "$ac_cv_path_PKG_CONFIG" && ac_cv_path_PKG_CONFIG="no"
+> ++  ;;
+> ++esac
+> ++fi
+> ++PKG_CONFIG=$ac_cv_path_PKG_CONFIG
+> ++if test -n "$PKG_CONFIG"; then
+> ++  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $PKG_CONFIG" >&5
+> ++$as_echo "$PKG_CONFIG" >&6; }
+> ++else
+> ++  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+> ++$as_echo "no" >&6; }
+> ++fi
+> ++
+> ++
+> ++        if test x$PKG_CONFIG != xno && $PKG_CONFIG --exists bcm_host; then
+> ++            RPI_CFLAGS=`$PKG_CONFIG --cflags bcm_host brcmegl`
+> ++            RPI_LDFLAGS=`$PKG_CONFIG --libs bcm_host brcmegl`
+> ++        elif test x$ARCH = xnetbsd; then
+> +             RPI_CFLAGS="-I/usr/pkg/include -I/usr/pkg/include/interface/vcos/pthreads -I/usr/pkg/include/interface/vmcs_host/linux"
+> +             RPI_LDFLAGS="-Wl,-R/usr/pkg/lib -L/usr/pkg/lib -lbcm_host"
+> +         else
+> +             RPI_CFLAGS="-I/opt/vc/include -I/opt/vc/include/interface/vcos/pthreads -I/opt/vc/include/interface/vmcs_host/linux"
+> +-            RPI_LDFLAGS="-L/opt/vc/lib -lbcm_host"
+> ++            RPI_LDFLAGS="-Wl,-rpath,/opt/vc/lib -L/opt/vc/lib -lbcm_host"
+> +         fi
+> +
+> +         # Save the original compiler flags and libraries
+> +diff --git a/configure.in b/configure.in
+> +index 5ac2130..450bf62 100644
+> +--- a/configure.in
+> ++++ b/configure.in
+> +@@ -1563,12 +1563,16 @@ CheckRPI()
+> + AC_HELP_STRING([--enable-video-rpi], [use Raspberry Pi video driver [[default=yes]]]),
+> +                   , enable_video_rpi=yes)
+> +     if test x$enable_video = xyes -a x$enable_video_rpi = xyes; then
+> +-        if test x$ARCH = xnetbsd; then
+> ++        AC_PATH_PROG(PKG_CONFIG, pkg-config, no)
+> ++        if test x$PKG_CONFIG != xno && $PKG_CONFIG --exists bcm_host; then
+> ++            RPI_CFLAGS=`$PKG_CONFIG --cflags bcm_host brcmegl`
+> ++            RPI_LDFLAGS=`$PKG_CONFIG --libs bcm_host brcmegl`
+> ++        elif test x$ARCH = xnetbsd; then
+> +             RPI_CFLAGS="-I/usr/pkg/include -I/usr/pkg/include/interface/vcos/pthreads -I/usr/pkg/include/interface/vmcs_host/linux"
+> +             RPI_LDFLAGS="-Wl,-R/usr/pkg/lib -L/usr/pkg/lib -lbcm_host"
+> +         else
+> +             RPI_CFLAGS="-I/opt/vc/include -I/opt/vc/include/interface/vcos/pthreads -I/opt/vc/include/interface/vmcs_host/linux"
+> +-            RPI_LDFLAGS="-L/opt/vc/lib -lbcm_host"
+> ++            RPI_LDFLAGS="-Wl,-rpath,/opt/vc/lib -L/opt/vc/lib -lbcm_host"
+> +         fi
+> +
+> +         # Save the original compiler flags and libraries
+> +diff --git a/src/video/SDL_egl.c b/src/video/SDL_egl.c
+> +index 9ccc2c3..23a7f2d 100644
+> +--- a/src/video/SDL_egl.c
+> ++++ b/src/video/SDL_egl.c
+> +@@ -44,12 +44,12 @@
+> +
+> + #if SDL_VIDEO_DRIVER_RPI
+> + /* Raspbian places the OpenGL ES/EGL binaries in a non standard path */
+> +-#define DEFAULT_EGL "/opt/vc/lib/libbrcmEGL.so"
+> +-#define DEFAULT_OGL_ES2 "/opt/vc/lib/libbrcmGLESv2.so"
+> +-#define ALT_EGL "/opt/vc/lib/libEGL.so"
+> +-#define ALT_OGL_ES2 "/opt/vc/lib/libGLESv2.so"
+> +-#define DEFAULT_OGL_ES_PVR "/opt/vc/lib/libGLES_CM.so"
+> +-#define DEFAULT_OGL_ES "/opt/vc/lib/libGLESv1_CM.so"
+> ++#define DEFAULT_EGL "libbrcmEGL.so"
+> ++#define DEFAULT_OGL_ES2 "libbrcmGLESv2.so"
+> ++#define ALT_EGL "libEGL.so"
+> ++#define ALT_OGL_ES2 "libGLESv2.so"
+> ++#define DEFAULT_OGL_ES_PVR "libGLES_CM.so"
+> ++#define DEFAULT_OGL_ES "libGLESv1_CM.so"
+> +
+> + #elif SDL_VIDEO_DRIVER_ANDROID || SDL_VIDEO_DRIVER_VIVANTE
+> + /* Android */
+> +--
+> +2.13.6
+> +
+> diff --git a/package/sdl2/sdl2.mk b/package/sdl2/sdl2.mk
+> index 3e3ba54aa..113e1063d 100644
+> --- a/package/sdl2/sdl2.mk
+> +++ b/package/sdl2/sdl2.mk
+> @@ -19,7 +19,6 @@ SDL2_CONF_OPTS += \
+>   	--disable-dbus \
+>   	--disable-pulseaudio \
+>   	--disable-video-wayland \
+> -	--disable-video-rpi
+--disable-video-wayland now has a dangling backslash.
+>   
+>   # We must enable static build to get compilation successful.
+>   SDL2_CONF_OPTS += --enable-static
+> @@ -39,6 +38,13 @@ else
+>   SDL2_CONF_OPTS += --disable-video-directfb
+>   endif
+>   
+> +ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
+> +SDL2_DEPENDENCIES += rpi-userland
+> +SDL2_CONF_OPTS += --enable-video-rpi
+> +else
+> +SDL2_CONF_OPTS += --disable-video-rpi
+> +endif
+> +
+>   # x-includes and x-libraries must be set for cross-compiling
+>   # By default x_includes and x_libraries contains unsafe paths.
+>   # (/usr/X11R6/include and /usr/X11R6/lib)
