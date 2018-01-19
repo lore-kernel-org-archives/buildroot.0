@@ -1,46 +1,35 @@
-From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Fri, 19 Jan 2018 12:17:43 -0600
-Subject: [Buildroot] [PATCH 2/2] package/fmlib: Remove hash check
-In-Reply-To: <20180119181743.30625-1-matthew.weber@rockwellcollins.com>
-References: <20180119181743.30625-1-matthew.weber@rockwellcollins.com>
-Message-ID: <20180119181743.30625-2-matthew.weber@rockwellcollins.com>
+From: Bryce Ferguson <bryce.ferguson@rockwellcollins.com>
+Date: Fri, 19 Jan 2018 12:21:57 -0600
+Subject: [Buildroot] [PATCH] package/pure-ftpd: Add uploadscript option
+In-Reply-To: <1515786826-41633-1-git-send-email-sam.voss@rockwellcollins.com>
+References: <1515786826-41633-1-git-send-email-sam.voss@rockwellcollins.com>
+Message-ID: <CAKGmAFoDL4NA7mUdGubF0r-eHihwMw+EY8w-mM+a7wtHcwOcJA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This package uses a kconfig value for the version,
-so ignore the hash check which will fail when the
-user specifies something other then the kconfig default.
+Sam / All,
 
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
----
- package/fmlib/fmlib.hash | 2 --
- package/fmlib/fmlib.mk   | 2 ++
- 2 files changed, 2 insertions(+), 2 deletions(-)
- delete mode 100644 package/fmlib/fmlib.hash
+On Fri, Jan 12, 2018 at 1:53 PM, Sam Voss <sam.voss@rockwellcollins.com> wrote:
+> Enable option to compile with '--with-uploadscript' to allow running
+> script after successful uploads.
+>
+> Signed-off-by: Sam Voss <sam.voss@rockwellcollins.com>
 
-diff --git a/package/fmlib/fmlib.hash b/package/fmlib/fmlib.hash
-deleted file mode 100644
-index 3746695db9..0000000000
---- a/package/fmlib/fmlib.hash
-+++ /dev/null
-@@ -1,2 +0,0 @@
--# Locally computed
--sha256	e5870756c7432b15f7a48b860625808f3c95d5f7fa5e251552eb2324ca51b0fa	fmlib-fsl-sdk-v2.0.tar.gz
-diff --git a/package/fmlib/fmlib.mk b/package/fmlib/fmlib.mk
-index e67ab1e5de..29d242a432 100644
---- a/package/fmlib/fmlib.mk
-+++ b/package/fmlib/fmlib.mk
-@@ -11,6 +11,8 @@ FMLIB_LICENSE_FILES = COPYING
- FMLIB_DEPENDENCIES = linux
- FMLIB_INSTALL_STAGING = YES
- 
-+BR_NO_CHECK_HASH_FOR += $(FMLIB_SOURCE)
-+
- # This package installs a static library only, so there's
- # nothing to install to the target
- FMLIB_INSTALL_TARGET = NO
+Acked-by: Bryce Ferguson <bryce.ferguson at rockwellcollins.com
+
+Thanks!
+
+-Bryce
 -- 
-2.14.2
+
+
+Bryce Ferguson
+Software Engineer
+Airborne Information Solutions \ RC Linux Platform
+
+400 Collins Rd NE Cedar Rapids, Iowa 52498
+
+Bryce.Ferguson@rockwellcollins.com
