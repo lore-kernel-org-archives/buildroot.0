@@ -1,7 +1,9 @@
 From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Fri, 19 Jan 2018 12:17:42 -0600
-Subject: [Buildroot] [PATCH 1/2] package/fmc: Remove hash check
-Message-ID: <20180119181743.30625-1-matthew.weber@rockwellcollins.com>
+Date: Fri, 19 Jan 2018 12:17:43 -0600
+Subject: [Buildroot] [PATCH 2/2] package/fmlib: Remove hash check
+In-Reply-To: <20180119181743.30625-1-matthew.weber@rockwellcollins.com>
+References: <20180119181743.30625-1-matthew.weber@rockwellcollins.com>
+Message-ID: <20180119181743.30625-2-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,31 +16,31 @@ user specifies something other then the kconfig default.
 
 Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 ---
- package/fmc/fmc.hash | 2 --
- package/fmc/fmc.mk   | 2 ++
+ package/fmlib/fmlib.hash | 2 --
+ package/fmlib/fmlib.mk   | 2 ++
  2 files changed, 2 insertions(+), 2 deletions(-)
- delete mode 100644 package/fmc/fmc.hash
+ delete mode 100644 package/fmlib/fmlib.hash
 
-diff --git a/package/fmc/fmc.hash b/package/fmc/fmc.hash
+diff --git a/package/fmlib/fmlib.hash b/package/fmlib/fmlib.hash
 deleted file mode 100644
-index 13d9d77ee5..0000000000
---- a/package/fmc/fmc.hash
+index 3746695db9..0000000000
+--- a/package/fmlib/fmlib.hash
 +++ /dev/null
 @@ -1,2 +0,0 @@
--# Locally calculated
--sha256	a91e0c9b7c7f238634c64a755c05671f33f2acdb6ae2d09cad4d683b364ee8e4	fmc-fsl-sdk-v2.0.tar.gz
-diff --git a/package/fmc/fmc.mk b/package/fmc/fmc.mk
-index 2a95fec0b7..5dda914858 100644
---- a/package/fmc/fmc.mk
-+++ b/package/fmc/fmc.mk
-@@ -10,6 +10,8 @@ FMC_LICENSE = MIT
- FMC_LICENSE_FILES = COPYING
- FMC_DEPENDENCIES = libxml2 tclap fmlib
+-# Locally computed
+-sha256	e5870756c7432b15f7a48b860625808f3c95d5f7fa5e251552eb2324ca51b0fa	fmlib-fsl-sdk-v2.0.tar.gz
+diff --git a/package/fmlib/fmlib.mk b/package/fmlib/fmlib.mk
+index e67ab1e5de..29d242a432 100644
+--- a/package/fmlib/fmlib.mk
++++ b/package/fmlib/fmlib.mk
+@@ -11,6 +11,8 @@ FMLIB_LICENSE_FILES = COPYING
+ FMLIB_DEPENDENCIES = linux
+ FMLIB_INSTALL_STAGING = YES
  
-+BR_NO_CHECK_HASH_FOR += $(FMC_SOURCE)
++BR_NO_CHECK_HASH_FOR += $(FMLIB_SOURCE)
 +
- FMC_MAKE_OPTS = \
- 	CC="$(TARGET_CC)" \
- 	CXX="$(TARGET_CXX)" \
+ # This package installs a static library only, so there's
+ # nothing to install to the target
+ FMLIB_INSTALL_TARGET = NO
 -- 
 2.14.2
