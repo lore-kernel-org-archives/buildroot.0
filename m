@@ -1,35 +1,275 @@
-From: Bryce Ferguson <bryce.ferguson@rockwellcollins.com>
-Date: Fri, 19 Jan 2018 12:21:57 -0600
-Subject: [Buildroot] [PATCH] package/pure-ftpd: Add uploadscript option
-In-Reply-To: <1515786826-41633-1-git-send-email-sam.voss@rockwellcollins.com>
-References: <1515786826-41633-1-git-send-email-sam.voss@rockwellcollins.com>
-Message-ID: <CAKGmAFoDL4NA7mUdGubF0r-eHihwMw+EY8w-mM+a7wtHcwOcJA@mail.gmail.com>
+From: Guillermo Amaral <g@maral.me>
+Date: Fri, 19 Jan 2018 11:24:06 -0800
+Subject: [Buildroot] [PATCH 1/1] package/sdl2: Fix Raspberry Pi support
+ for SDL2
+In-Reply-To: <CAPeEpDoZ64=_wE=4OXQvZ_hJdZN9u7eAzOEbXP-+bH05dF1WGg@mail.gmail.com>
+References: <20180118174319.378bfb1b@windsurf.lan>
+ <20180118175415.16715-1-g@maral.me>
+ <ba624c50-2b56-6e76-7ccc-8fbfdf9fe5bb@gmail.com>
+ <CAPeEpDouAm5vqoQQ3PmHcJwvssMe=3yyyrQUvc4zoaw3ehandw@mail.gmail.com>
+ <CAPeEpDrdRC2eDW5Q=YEc8naVfNz6aLq7zbd4Wcx=FUmEmfdswQ@mail.gmail.com>
+ <CAPeEpDqrw8369-bhX0j3+5T-ZWo_1bW6=tnYpw8SiWUj5KMBAQ@mail.gmail.com>
+ <CAPeEpDoZ64=_wE=4OXQvZ_hJdZN9u7eAzOEbXP-+bH05dF1WGg@mail.gmail.com>
+Message-ID: <CAPeEpDqX83pU2u1ej_NdeemuFtKMD_cd+oGE-sw_5Y1JjbM+3w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sam / All,
+Hi Ryan,
 
-On Fri, Jan 12, 2018 at 1:53 PM, Sam Voss <sam.voss@rockwellcollins.com> wrote:
-> Enable option to compile with '--with-uploadscript' to allow running
-> script after successful uploads.
+Yes, but to a blank line; It shouldn't break anything. I tend to leave
+those in, in order to reduce diff changes in the future.
+
+That said, I can avoid doing that in future submissions if that's frowned
+upon here.
+
+Cheers,
+gamaral
+
+On Jan 19, 2018 09:11, "Ryan Coe" <bluemrp9@gmail.com> wrote:
+
+Guillermo, All,
+
+
+
+On 1/18/2018 9:54 AM, Guillermo A. Amaral wrote:
+
+> Tweak build system to play well with Buildroot.
 >
-> Signed-off-by: Sam Voss <sam.voss@rockwellcollins.com>
+> Signed-off-by: Guillermo A. Amaral <g@maral.me>
+> ---
+>   .../sdl2/0001-make-cross-compiler-friendly.patch   | 167
+> +++++++++++++++++++++
+>   package/sdl2/sdl2.mk                               |   8 +-
+>   2 files changed, 174 insertions(+), 1 deletion(-)
+>   create mode 100644 package/sdl2/0001-make-cross-compiler-friendly.patch
+>
+> diff --git a/package/sdl2/0001-make-cross-compiler-friendly.patch
+> b/package/sdl2/0001-make-cross-compiler-friendly.patch
+> new file mode 100644
+> index 000000000..10dcf7465
+> --- /dev/null
+> +++ b/package/sdl2/0001-make-cross-compiler-friendly.patch
+> @@ -0,0 +1,167 @@
+> +From 4cbd2fbfcbfe94b5826907f59ee963c69860e522 Mon Sep 17 00:00:00 2001
+> +From: "Guillermo A. Amaral" <g@maral.me>
+> +Date: Thu, 18 Jan 2018 09:23:58 -0800
+> +Subject: [PATCH] Make rpi video cross-compiler friendly.
+> +
+> +* Stops using fixed path to find GLES/EGL libs.
+> +* Tries pkg-config to locate bcm_host.
+> +
+> +Signed-off-by: Guillermo A. Amaral <g@maral.me>
+> +---
+> + cmake/sdlchecks.cmake | 15 ++++++++++-----
+> + configure             | 48 ++++++++++++++++++++++++++++++
+> ++++++++++++++++--
+> + configure.in          |  8 ++++++--
+> + src/video/SDL_egl.c   | 12 ++++++------
+> + 4 files changed, 68 insertions(+), 15 deletions(-)
+> +
+> +diff --git a/cmake/sdlchecks.cmake b/cmake/sdlchecks.cmake
+> +index e2e89a2..fc715f1 100644
+> +--- a/cmake/sdlchecks.cmake
+> ++++ b/cmake/sdlchecks.cmake
+> +@@ -1127,15 +1127,19 @@ endmacro()
+> + # - n/a
+> + macro(CheckRPI)
+> +   if(VIDEO_RPI)
+> +-    set(VIDEO_RPI_INCLUDE_DIRS "/opt/vc/include"
+> "/opt/vc/include/interface/vcos/pthreads" "/opt/vc/include/interface/vmcs_host/linux/"
+> )
+> +-    set(VIDEO_RPI_LIBRARY_DIRS "/opt/vc/lib" )
+> +-    set(VIDEO_RPI_LIBS bcm_host )
+> ++    pkg_check_modules(VIDEO_RPI bcm_host brcmegl)
+> ++    if (NOT VIDEO_RPI_FOUND)
+> ++      set(VIDEO_RPI_INCLUDE_DIRS "/opt/vc/include"
+> "/opt/vc/include/interface/vcos/pthreads" "/opt/vc/include/interface/vmcs_host/linux/"
+> )
+> ++      set(VIDEO_RPI_LIBRARY_DIRS "/opt/vc/lib" )
+> ++      set(VIDEO_RPI_LIBRARIES bcm_host )
+> ++      set(VIDEO_RPI_LDFLAGS "-Wl,-rpath,/opt/vc/lib")
+> ++    endif()
+> +     listtostr(VIDEO_RPI_INCLUDE_DIRS VIDEO_RPI_INCLUDE_FLAGS "-I")
+> +     listtostr(VIDEO_RPI_LIBRARY_DIRS VIDEO_RPI_LIBRARY_FLAGS "-L")
+> +
+> +     set(ORIG_CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS}")
+> +     set(CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS}
+> ${VIDEO_RPI_INCLUDE_FLAGS} ${VIDEO_RPI_LIBRARY_FLAGS}")
+> +-    set(CMAKE_REQUIRED_LIBRARIES "${VIDEO_RPI_LIBS}")
+> ++    set(CMAKE_REQUIRED_LIBRARIES "${VIDEO_RPI_LIBRARIES}")
+> +     check_c_source_compiles("
+> +         #include <bcm_host.h>
+> +         int main(int argc, char **argv) {}" HAVE_VIDEO_RPI)
+> +@@ -1147,8 +1151,9 @@ macro(CheckRPI)
+> +       set(SDL_VIDEO_DRIVER_RPI 1)
+> +       file(GLOB VIDEO_RPI_SOURCES ${SDL2_SOURCE_DIR}/src/video/r
+> aspberry/*.c)
+> +       set(SOURCE_FILES ${SOURCE_FILES} ${VIDEO_RPI_SOURCES})
+> +-      list(APPEND EXTRA_LIBS ${VIDEO_RPI_LIBS})
+> ++      list(APPEND EXTRA_LIBS ${VIDEO_RPI_LIBRARIES})
+> +       set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${VIDEO_RPI_INCLUDE_FLAGS}
+> ${VIDEO_RPI_LIBRARY_FLAGS}")
+> ++      list(APPEND EXTRA_LDFLAGS ${VIDEO_RPI_LDFLAGS})
+> +     endif(SDL_VIDEO AND HAVE_VIDEO_RPI)
+> +   endif(VIDEO_RPI)
+> + endmacro(CheckRPI)
+> +diff --git a/configure b/configure
+> +index b622085..d42a22a 100755
+> +--- a/configure
+> ++++ b/configure
+> +@@ -19485,12 +19485,56 @@ else
+> + fi
+> +
+> +     if test x$enable_video = xyes -a x$enable_video_rpi = xyes; then
+> +-        if test x$ARCH = xnetbsd; then
+> ++        # Extract the first word of "pkg-config", so it can be a program
+> name with args.
+> ++set dummy pkg-config; ac_word=$2
+> ++{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+> ++$as_echo_n "checking for $ac_word... " >&6; }
+> ++if ${ac_cv_path_PKG_CONFIG+:} false; then :
+> ++  $as_echo_n "(cached) " >&6
+> ++else
+> ++  case $PKG_CONFIG in
+> ++  [\\/]* | ?:[\\/]*)
+> ++  ac_cv_path_PKG_CONFIG="$PKG_CONFIG" # Let the user override the test
+> with a path.
+> ++  ;;
+> ++  *)
+> ++  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+> ++for as_dir in $PATH
+> ++do
+> ++  IFS=$as_save_IFS
+> ++  test -z "$as_dir" && as_dir=.
+> ++    for ac_exec_ext in '' $ac_executable_extensions; do
+> ++  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+> ++    ac_cv_path_PKG_CONFIG="$as_dir/$ac_word$ac_exec_ext"
+> ++    $as_echo "$as_me:${as_lineno-$LINENO}: found
+> $as_dir/$ac_word$ac_exec_ext" >&5
+> ++    break 2
+> ++  fi
+> ++done
+> ++  done
+> ++IFS=$as_save_IFS
+> ++
+> ++  test -z "$ac_cv_path_PKG_CONFIG" && ac_cv_path_PKG_CONFIG="no"
+> ++  ;;
+> ++esac
+> ++fi
+> ++PKG_CONFIG=$ac_cv_path_PKG_CONFIG
+> ++if test -n "$PKG_CONFIG"; then
+> ++  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $PKG_CONFIG" >&5
+> ++$as_echo "$PKG_CONFIG" >&6; }
+> ++else
+> ++  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+> ++$as_echo "no" >&6; }
+> ++fi
+> ++
+> ++
+> ++        if test x$PKG_CONFIG != xno && $PKG_CONFIG --exists bcm_host;
+> then
+> ++            RPI_CFLAGS=`$PKG_CONFIG --cflags bcm_host brcmegl`
+> ++            RPI_LDFLAGS=`$PKG_CONFIG --libs bcm_host brcmegl`
+> ++        elif test x$ARCH = xnetbsd; then
+> +             RPI_CFLAGS="-I/usr/pkg/include
+> -I/usr/pkg/include/interface/vcos/pthreads -I/usr/pkg/include/interface/v
+> mcs_host/linux"
+> +             RPI_LDFLAGS="-Wl,-R/usr/pkg/lib -L/usr/pkg/lib -lbcm_host"
+> +         else
+> +             RPI_CFLAGS="-I/opt/vc/include -I/opt/vc/include/interface/vcos/pthreads
+> -I/opt/vc/include/interface/vmcs_host/linux"
+> +-            RPI_LDFLAGS="-L/opt/vc/lib -lbcm_host"
+> ++            RPI_LDFLAGS="-Wl,-rpath,/opt/vc/lib -L/opt/vc/lib
+> -lbcm_host"
+> +         fi
+> +
+> +         # Save the original compiler flags and libraries
+> +diff --git a/configure.in b/configure.in
+> +index 5ac2130..450bf62 100644
+> +--- a/configure.in
+> ++++ b/configure.in
+> +@@ -1563,12 +1563,16 @@ CheckRPI()
+> + AC_HELP_STRING([--enable-video-rpi], [use Raspberry Pi video driver
+> [[default=yes]]]),
+> +                   , enable_video_rpi=yes)
+> +     if test x$enable_video = xyes -a x$enable_video_rpi = xyes; then
+> +-        if test x$ARCH = xnetbsd; then
+> ++        AC_PATH_PROG(PKG_CONFIG, pkg-config, no)
+> ++        if test x$PKG_CONFIG != xno && $PKG_CONFIG --exists bcm_host;
+> then
+> ++            RPI_CFLAGS=`$PKG_CONFIG --cflags bcm_host brcmegl`
+> ++            RPI_LDFLAGS=`$PKG_CONFIG --libs bcm_host brcmegl`
+> ++        elif test x$ARCH = xnetbsd; then
+> +             RPI_CFLAGS="-I/usr/pkg/include
+> -I/usr/pkg/include/interface/vcos/pthreads -I/usr/pkg/include/interface/v
+> mcs_host/linux"
+> +             RPI_LDFLAGS="-Wl,-R/usr/pkg/lib -L/usr/pkg/lib -lbcm_host"
+> +         else
+> +             RPI_CFLAGS="-I/opt/vc/include -I/opt/vc/include/interface/vcos/pthreads
+> -I/opt/vc/include/interface/vmcs_host/linux"
+> +-            RPI_LDFLAGS="-L/opt/vc/lib -lbcm_host"
+> ++            RPI_LDFLAGS="-Wl,-rpath,/opt/vc/lib -L/opt/vc/lib
+> -lbcm_host"
+> +         fi
+> +
+> +         # Save the original compiler flags and libraries
+> +diff --git a/src/video/SDL_egl.c b/src/video/SDL_egl.c
+> +index 9ccc2c3..23a7f2d 100644
+> +--- a/src/video/SDL_egl.c
+> ++++ b/src/video/SDL_egl.c
+> +@@ -44,12 +44,12 @@
+> +
+> + #if SDL_VIDEO_DRIVER_RPI
+> + /* Raspbian places the OpenGL ES/EGL binaries in a non standard path */
+> +-#define DEFAULT_EGL "/opt/vc/lib/libbrcmEGL.so"
+> +-#define DEFAULT_OGL_ES2 "/opt/vc/lib/libbrcmGLESv2.so"
+> +-#define ALT_EGL "/opt/vc/lib/libEGL.so"
+> +-#define ALT_OGL_ES2 "/opt/vc/lib/libGLESv2.so"
+> +-#define DEFAULT_OGL_ES_PVR "/opt/vc/lib/libGLES_CM.so"
+> +-#define DEFAULT_OGL_ES "/opt/vc/lib/libGLESv1_CM.so"
+> ++#define DEFAULT_EGL "libbrcmEGL.so"
+> ++#define DEFAULT_OGL_ES2 "libbrcmGLESv2.so"
+> ++#define ALT_EGL "libEGL.so"
+> ++#define ALT_OGL_ES2 "libGLESv2.so"
+> ++#define DEFAULT_OGL_ES_PVR "libGLES_CM.so"
+> ++#define DEFAULT_OGL_ES "libGLESv1_CM.so"
+> +
+> + #elif SDL_VIDEO_DRIVER_ANDROID || SDL_VIDEO_DRIVER_VIVANTE
+> + /* Android */
+> +--
+> +2.13.6
+> +
+> diff --git a/package/sdl2/sdl2.mk b/package/sdl2/sdl2.mk
+> index 3e3ba54aa..113e1063d 100644
+> --- a/package/sdl2/sdl2.mk
+> +++ b/package/sdl2/sdl2.mk
+> @@ -19,7 +19,6 @@ SDL2_CONF_OPTS += \
+>         --disable-dbus \
+>         --disable-pulseaudio \
+>         --disable-video-wayland \
+> -       --disable-video-rpi
+>
+--disable-video-wayland now has a dangling backslash.
 
-Acked-by: Bryce Ferguson <bryce.ferguson at rockwellcollins.com
-
-Thanks!
-
--Bryce
--- 
-
-
-Bryce Ferguson
-Software Engineer
-Airborne Information Solutions \ RC Linux Platform
-
-400 Collins Rd NE Cedar Rapids, Iowa 52498
-
-Bryce.Ferguson@rockwellcollins.com
+    # We must enable static build to get compilation successful.
+>   SDL2_CONF_OPTS += --enable-static
+> @@ -39,6 +38,13 @@ else
+>   SDL2_CONF_OPTS += --disable-video-directfb
+>   endif
+>   +ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
+> +SDL2_DEPENDENCIES += rpi-userland
+> +SDL2_CONF_OPTS += --enable-video-rpi
+> +else
+> +SDL2_CONF_OPTS += --disable-video-rpi
+> +endif
+> +
+>   # x-includes and x-libraries must be set for cross-compiling
+>   # By default x_includes and x_libraries contains unsafe paths.
+>   # (/usr/X11R6/include and /usr/X11R6/lib)
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180119/d456eb13/attachment.html>
