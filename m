@@ -1,49 +1,63 @@
-From: Romain Naour <romain.naour@smile.fr>
-Date: Fri, 19 Jan 2018 11:15:06 +0100
-Subject: [Buildroot] [PATCH v3 6/9] package/zsh: add /bin/zsh to /etc/shells
-In-Reply-To: <1516356909-18620-1-git-send-email-romain.naour@smile.fr>
-References: <1516356909-18620-1-git-send-email-romain.naour@smile.fr>
-Message-ID: <1516356909-18620-7-git-send-email-romain.naour@smile.fr>
+From: daggs <daggs@gmx.com>
+Date: Fri, 19 Jan 2018 13:45:25 +0100
+Subject: [Buildroot] [PATCH v2] tvheadend: add dependency on udev
+In-Reply-To: <2fdqiexfnk.ln2@ID-313208.user.individual.net>
+References: <20180105093501.5793-1-daggs@gmx.com> <20180105225459.GC3673@scaer>
+ <5ffjiex4oj.ln2@ID-313208.user.individual.net>
+ <trinity-2e15bf47-914d-4de7-9461-34ddbcc6c51d-1515859378864@3c-app-mailcom-bs05>
+ <2fdqiexfnk.ln2@ID-313208.user.individual.net>
+Message-ID: <trinity-f3a8c702-3a80-4488-9bbd-7ad6ab4ec0c1-1516365925815@3c-app-mailcom-bs14>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When zsh is selected, /bin/zsh is not added to /etc/shells
-(see man shells). So, login tools like dropbear reject the ssh
-connections for users using zsh as shell in /etc/passwd.
+Greetings Bernd,
 
-buildroot authpriv.warn dropbear[853]: User 'kubu' has invalid shell, rejected
+> Sent: Sunday, January 14, 2018 at 12:22 AM
+> From: "Bernd Kuhls" <bernd.kuhls@t-online.de>
+> To: buildroot at uclibc.org
+> Subject: Re: [Buildroot] [PATCH v2] tvheadend: add dependency on udev
+>
+> Am Sat, 13 Jan 2018 17:02:58 +0100 schrieb daggs:
+> 
+> > btw, just want to know, do you use a usb adapter?
+> 
+> Hi daggs,
+> 
+> yes, here are some snippets from lsusb -vv:
+> 
+> Bus 001 Device 006: ID 0b48:3017 TechnoTrend AG
+>   iManufacturer           1 CityCom GmbH
+>   iProduct                2 TechnoTrend USB2.0
+> 
+> https://cateee.net/lkddb/web-lkddb/DVB_USB_DVBSKY.html
+this device is similar to what I have.
 
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
----
-v3: Fix typo (Thomas)
-    Use TARGET_FINALIZE_HOOKS to avoid issues with the upcoming
-    top-level parallel build (Arnout)
-v2: add double-dollar after /bin/zsh (Yann)
----
- package/zsh/zsh.mk | 8 ++++++++
- 1 file changed, 8 insertions(+)
+> 
+> I am using tvheadend on a buildroot-built linux distro (fli4l) which does 
+> not contain udev but uses BR2_ROOTFS_DEVICE_CREATION_STATIC=y, for this 
+> distro I created personal packages adding the function I need. Therefore 
+> I do not use buildroot-provided init scripts but instead coded my own 
+> init script for tvheadend which suits my needs and works fine without an 
+> udev daemon. For Kodi I need libudev[1] support for detecting my CEC-USB 
+> adapter but again, no udev daemon needed.
+> 
+> My init scripts only contain one hardware-specific command relating to 
+> tvheadend:
+> 
+> modprobe dvb_usb_dvbsky
+> 
+> Everything else worked out-of-the box after configuring all the kernel 
+> modules needed for my USB device.
+> 
+> Regards, Bernd
+> 
+> [1] https://github.com/bkuhls/buildroot/tree/libudev
 
-diff --git a/package/zsh/zsh.mk b/package/zsh/zsh.mk
-index bfd0a1a..e19a896 100644
---- a/package/zsh/zsh.mk
-+++ b/package/zsh/zsh.mk
-@@ -34,6 +34,14 @@ else
- ZSH_CONF_OPTS += --disable-pcre
- endif
- 
-+# Add /bin/zsh to /etc/shells otherwise some login tools like dropbear
-+# can reject the user connection. See man shells.
-+define ZSH_ADD_ZSH_TO_SHELLS
-+	grep -qsE '^/bin/zsh$$' $(TARGET_DIR)/etc/shells \
-+		|| echo "/bin/zsh" >> $(TARGET_DIR)/etc/shells
-+endef
-+ZSH_TARGET_FINALIZE_HOOKS += ZSH_ADD_ZSH_TO_SHELLS
-+
- # Remove versioned zsh-x.y.z binary taking up space
- define ZSH_TARGET_INSTALL_FIXUPS
- 	rm -f $(TARGET_DIR)/bin/zsh-$(ZSH_VERSION)
--- 
-2.7.4
+maybe this is what I need too. BR2_ROOTFS_DEVICE_CREATION_STATIC=y and modprobe the modules right before tvheadend boots.
+
+I'll look into it.
+
+Dagg.
