@@ -1,58 +1,41 @@
-From: =?UTF-8?q?Andr=C3=A9=20Hentschel?= <nerv@dawncrow.de>
-Date: Sat, 20 Jan 2018 15:11:21 +0100
-Subject: [Buildroot] [PATCH] wine: Bump to version 3.0
-Message-ID: <1516457481-31778-1-git-send-email-nerv@dawncrow.de>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 20 Jan 2018 18:08:53 +0100
+Subject: [Buildroot] [PATCH 1/1] boinc: bump to version 7.8.6
+Message-ID: <20180120170853.4792-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/wine/wine.hash | 2 +-
- package/wine/wine.mk   | 6 ++++--
- 2 files changed, 5 insertions(+), 3 deletions(-)
+ package/boinc/boinc.hash | 2 +-
+ package/boinc/boinc.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/wine/wine.hash b/package/wine/wine.hash
-index 7f0a785..176e0ee 100644
---- a/package/wine/wine.hash
-+++ b/package/wine/wine.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256 a811c664f870a3a01449443a93a6fcee41aea2e912e58f72742eb7924962be56 wine-2.0.3.tar.xz
-+sha256 346a050aca5cd0d9978a655af11c30e68c201a58aea0c70d5e4c4f1b63c2fbec wine-3.0.tar.xz
-diff --git a/package/wine/wine.mk b/package/wine/wine.mk
-index d540886..02c4c0f 100644
---- a/package/wine/wine.mk
-+++ b/package/wine/wine.mk
-@@ -4,9 +4,9 @@
- #
+diff --git a/package/boinc/boinc.hash b/package/boinc/boinc.hash
+index 3e4c221818..8f44982246 100644
+--- a/package/boinc/boinc.hash
++++ b/package/boinc/boinc.hash
+@@ -1,4 +1,4 @@
+ # Locally computed:
+-sha256 e03736026e048a06793bd19d3e613d4053f56fd34fbc8990258705ed3c98cf38  boinc-7.8.5.tar.gz
++sha256 ed5f3dcdc8d1cc5277529afb701377e77d1ff89711368a7456553bf249940bad  boinc-7.8.6.tar.gz
+ sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+ sha256 a853c2ffec17057872340eee242ae4d96cbf2b520ae27d903e1b2fef1a5f9d1c  COPYING.LESSER
+diff --git a/package/boinc/boinc.mk b/package/boinc/boinc.mk
+index f4cad3ec6b..0105034531 100644
+--- a/package/boinc/boinc.mk
++++ b/package/boinc/boinc.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--WINE_VERSION = 2.0.3
-+WINE_VERSION = 3.0
- WINE_SOURCE = wine-$(WINE_VERSION).tar.xz
--WINE_SITE = https://dl.winehq.org/wine/source/2.0
-+WINE_SITE = https://dl.winehq.org/wine/source/3.0
- WINE_LICENSE = LGPL-2.1+
- WINE_LICENSE_FILES = COPYING.LIB LICENSE
- WINE_DEPENDENCIES = host-bison host-flex host-wine
-@@ -23,6 +23,7 @@ WINE_CONF_OPTS = \
- 	--without-gphoto \
- 	--without-gsm \
- 	--without-hal \
-+	--without-krb5 \
- 	--without-opencl \
- 	--without-oss
- 
-@@ -347,6 +348,7 @@ HOST_WINE_CONF_OPTS += \
- 	--without-gstreamer \
- 	--without-hal \
- 	--without-jpeg \
-+	--without-krb5 \
- 	--without-ldap \
- 	--without-mpg123 \
- 	--without-netapi \
+ BOINC_VERSION_MAJOR = 7.8
+-BOINC_VERSION = $(BOINC_VERSION_MAJOR).5
++BOINC_VERSION = $(BOINC_VERSION_MAJOR).6
+ # client_release can be used to build the Client and Manager but not the Server
+ # part. The Server currently has no versioning (see
+ # https://github.com/BOINC/boinc/pull/1798).
 -- 
-2.7.4
+2.14.1
