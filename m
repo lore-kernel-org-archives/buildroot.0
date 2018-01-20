@@ -1,40 +1,34 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 20 Jan 2018 18:14:27 +0100
-Subject: [Buildroot] [PATCH 1/1] libmaxminddb: bump to version 1.3.2
-Message-ID: <20180120171427.10565-1-fontaine.fabrice@gmail.com>
+From: Guillermo A. Amaral <g@maral.me>
+Date: Sat, 20 Jan 2018 13:25:47 -0800
+Subject: [Buildroot] [PATCH 1/1] package/sdl2: Remove trailing backslash
+In-Reply-To: <87r2qlcys8.fsf@dell.be.48ers.dk>
+References: <87r2qlcys8.fsf@dell.be.48ers.dk>
+Message-ID: <20180120212547.6410-1-g@maral.me>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/libmaxminddb/libmaxminddb.hash | 2 +-
- package/libmaxminddb/libmaxminddb.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Left over from 9f8a6fdf9
 
-diff --git a/package/libmaxminddb/libmaxminddb.hash b/package/libmaxminddb/libmaxminddb.hash
-index 55a0ed6bed..073458a351 100644
---- a/package/libmaxminddb/libmaxminddb.hash
-+++ b/package/libmaxminddb/libmaxminddb.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256	7dcb04daf3c760464d32101c728986bf1b544e17104af81c5b0e2544c771664e	libmaxminddb-1.3.1.tar.gz
-+sha256	c0785521c7e5515f1169db90ed6e51bc2a5a000377d0fbad87e4d5a791a6e364	libmaxminddb-1.3.2.tar.gz
- sha256	cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30	LICENSE
-diff --git a/package/libmaxminddb/libmaxminddb.mk b/package/libmaxminddb/libmaxminddb.mk
-index d035e27e18..4d4f582c21 100644
---- a/package/libmaxminddb/libmaxminddb.mk
-+++ b/package/libmaxminddb/libmaxminddb.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+Signed-off-by: Guillermo A. Amaral <g@maral.me>
+---
+ package/sdl2/sdl2.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/sdl2/sdl2.mk b/package/sdl2/sdl2.mk
+index 113e1063d..6cb24d9e7 100644
+--- a/package/sdl2/sdl2.mk
++++ b/package/sdl2/sdl2.mk
+@@ -18,7 +18,7 @@ SDL2_CONF_OPTS += \
+ 	--disable-esd \
+ 	--disable-dbus \
+ 	--disable-pulseaudio \
+-	--disable-video-wayland \
++	--disable-video-wayland
  
--LIBMAXMINDDB_VERSION = 1.3.1
-+LIBMAXMINDDB_VERSION = 1.3.2
- LIBMAXMINDDB_SITE = $(call github,maxmind,libmaxminddb,$(LIBMAXMINDDB_VERSION))
- LIBMAXMINDDB_INSTALL_STAGING = YES
- LIBMAXMINDDB_LICENSE = Apache-2.0
+ # We must enable static build to get compilation successful.
+ SDL2_CONF_OPTS += --enable-static
 -- 
-2.14.1
+2.13.6
