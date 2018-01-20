@@ -1,52 +1,58 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 20 Jan 2018 12:28:24 +0100
-Subject: [Buildroot] [PATCH 1/1] domoticz: depends on NPTL
-Message-ID: <20180120112824.12236-1-fontaine.fabrice@gmail.com>
+From: =?UTF-8?q?Andr=C3=A9=20Hentschel?= <nerv@dawncrow.de>
+Date: Sat, 20 Jan 2018 15:11:21 +0100
+Subject: [Buildroot] [PATCH] wine: Bump to version 3.0
+Message-ID: <1516457481-31778-1-git-send-email-nerv@dawncrow.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-boost 1.66 uses pthread_condattr_setclock in
-boost/asio/detail/impl/posix_event.ipp so add a dependency to
-BR2_TOOLCHAIN_HAS_THREADS_NPTL
-
-Fixes:
- - http://autobuild.buildroot.net/results/197baa15cbf7f4fc7b3ccc602515af3f375ed68f
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
 ---
- package/domoticz/Config.in | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ package/wine/wine.hash | 2 +-
+ package/wine/wine.mk   | 6 ++++--
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/package/domoticz/Config.in b/package/domoticz/Config.in
-index 34bf2521a2..530027f273 100644
---- a/package/domoticz/Config.in
-+++ b/package/domoticz/Config.in
-@@ -3,7 +3,8 @@ config BR2_PACKAGE_DOMOTICZ
- 	depends on BR2_USE_MMU # mosquitto
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # mosquitto
- 	depends on !BR2_STATIC_LIBS # mosquitto
--	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	# pthread_condattr_setclock
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_PACKAGE_LUA_5_2 || BR2_PACKAGE_LUA_5_3
-@@ -26,10 +27,11 @@ config BR2_PACKAGE_DOMOTICZ
+diff --git a/package/wine/wine.hash b/package/wine/wine.hash
+index 7f0a785..176e0ee 100644
+--- a/package/wine/wine.hash
++++ b/package/wine/wine.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256 a811c664f870a3a01449443a93a6fcee41aea2e912e58f72742eb7924962be56 wine-2.0.3.tar.xz
++sha256 346a050aca5cd0d9978a655af11c30e68c201a58aea0c70d5e4c4f1b63c2fbec wine-3.0.tar.xz
+diff --git a/package/wine/wine.mk b/package/wine/wine.mk
+index d540886..02c4c0f 100644
+--- a/package/wine/wine.mk
++++ b/package/wine/wine.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
- 	  http://domoticz.com
+-WINE_VERSION = 2.0.3
++WINE_VERSION = 3.0
+ WINE_SOURCE = wine-$(WINE_VERSION).tar.xz
+-WINE_SITE = https://dl.winehq.org/wine/source/2.0
++WINE_SITE = https://dl.winehq.org/wine/source/3.0
+ WINE_LICENSE = LGPL-2.1+
+ WINE_LICENSE_FILES = COPYING.LIB LICENSE
+ WINE_DEPENDENCIES = host-bison host-flex host-wine
+@@ -23,6 +23,7 @@ WINE_CONF_OPTS = \
+ 	--without-gphoto \
+ 	--without-gsm \
+ 	--without-hal \
++	--without-krb5 \
+ 	--without-opencl \
+ 	--without-oss
  
--comment "domoticz needs lua >= 5.2 and a toolchain w/ C++, threads, wchar, dynamic library"
-+comment "domoticz needs lua >= 5.2 and a toolchain w/ C++, NPTL, wchar, dynamic library"
- 	depends on BR2_USE_MMU
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
--	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
-+	depends on !BR2_INSTALL_LIBSTDCPP || \
-+		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || \
- 		!BR2_USE_WCHAR || BR2_STATIC_LIBS || \
- 		!(BR2_PACKAGE_LUA_5_2 || BR2_PACKAGE_LUA_5_3)
- 
+@@ -347,6 +348,7 @@ HOST_WINE_CONF_OPTS += \
+ 	--without-gstreamer \
+ 	--without-hal \
+ 	--without-jpeg \
++	--without-krb5 \
+ 	--without-ldap \
+ 	--without-mpg123 \
+ 	--without-netapi \
 -- 
-2.14.1
+2.7.4
