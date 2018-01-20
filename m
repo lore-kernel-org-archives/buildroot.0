@@ -1,7 +1,7 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 20 Jan 2018 18:08:53 +0100
-Subject: [Buildroot] [PATCH 1/1] boinc: bump to version 7.8.6
-Message-ID: <20180120170853.4792-1-fontaine.fabrice@gmail.com>
+Date: Sat, 20 Jan 2018 18:14:27 +0100
+Subject: [Buildroot] [PATCH 1/1] libmaxminddb: bump to version 1.3.2
+Message-ID: <20180120171427.10565-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,32 +10,31 @@ To: buildroot@busybox.net
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/boinc/boinc.hash | 2 +-
- package/boinc/boinc.mk   | 2 +-
+ package/libmaxminddb/libmaxminddb.hash | 2 +-
+ package/libmaxminddb/libmaxminddb.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/boinc/boinc.hash b/package/boinc/boinc.hash
-index 3e4c221818..8f44982246 100644
---- a/package/boinc/boinc.hash
-+++ b/package/boinc/boinc.hash
-@@ -1,4 +1,4 @@
+diff --git a/package/libmaxminddb/libmaxminddb.hash b/package/libmaxminddb/libmaxminddb.hash
+index 55a0ed6bed..073458a351 100644
+--- a/package/libmaxminddb/libmaxminddb.hash
++++ b/package/libmaxminddb/libmaxminddb.hash
+@@ -1,3 +1,3 @@
  # Locally computed:
--sha256 e03736026e048a06793bd19d3e613d4053f56fd34fbc8990258705ed3c98cf38  boinc-7.8.5.tar.gz
-+sha256 ed5f3dcdc8d1cc5277529afb701377e77d1ff89711368a7456553bf249940bad  boinc-7.8.6.tar.gz
- sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
- sha256 a853c2ffec17057872340eee242ae4d96cbf2b520ae27d903e1b2fef1a5f9d1c  COPYING.LESSER
-diff --git a/package/boinc/boinc.mk b/package/boinc/boinc.mk
-index f4cad3ec6b..0105034531 100644
---- a/package/boinc/boinc.mk
-+++ b/package/boinc/boinc.mk
-@@ -5,7 +5,7 @@
+-sha256	7dcb04daf3c760464d32101c728986bf1b544e17104af81c5b0e2544c771664e	libmaxminddb-1.3.1.tar.gz
++sha256	c0785521c7e5515f1169db90ed6e51bc2a5a000377d0fbad87e4d5a791a6e364	libmaxminddb-1.3.2.tar.gz
+ sha256	cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30	LICENSE
+diff --git a/package/libmaxminddb/libmaxminddb.mk b/package/libmaxminddb/libmaxminddb.mk
+index d035e27e18..4d4f582c21 100644
+--- a/package/libmaxminddb/libmaxminddb.mk
++++ b/package/libmaxminddb/libmaxminddb.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- BOINC_VERSION_MAJOR = 7.8
--BOINC_VERSION = $(BOINC_VERSION_MAJOR).5
-+BOINC_VERSION = $(BOINC_VERSION_MAJOR).6
- # client_release can be used to build the Client and Manager but not the Server
- # part. The Server currently has no versioning (see
- # https://github.com/BOINC/boinc/pull/1798).
+-LIBMAXMINDDB_VERSION = 1.3.1
++LIBMAXMINDDB_VERSION = 1.3.2
+ LIBMAXMINDDB_SITE = $(call github,maxmind,libmaxminddb,$(LIBMAXMINDDB_VERSION))
+ LIBMAXMINDDB_INSTALL_STAGING = YES
+ LIBMAXMINDDB_LICENSE = Apache-2.0
 -- 
 2.14.1
