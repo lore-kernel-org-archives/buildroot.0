@@ -1,42 +1,176 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 21 Jan 2018 21:17:41 +0100
-Subject: [Buildroot] [git commit branch/2017.11.x] iputils: fix ping and
- traceroute6 executable permissions
-Message-ID: <20180121210851.59E7983DF0@busybox.osuosl.org>
+Date: Sun, 21 Jan 2018 21:18:25 +0100
+Subject: [Buildroot] [git commit branch/2017.11.x] rpcbind: Backport fixes
+ to memory leak security fix
+Message-ID: <20180121210851.6D88183DF0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=371d7e8495a46d800c4c7322c5c1d09612ed181c
+commit: https://git.buildroot.net/buildroot/commit/?id=637f2b5e121bc7e1c9a96d0b6d636e4ef237a4ee
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.11.x
 
-The iputils executables are installed without the setuid bit set,
-which prevents some programs from working.
+Commit 954509f added a security fix for CVE-2017-8779, involving
+pairing all svc_getargs() calls with svc_freeargs() to avoid a memory
+leak.  However it also introduced a couple of issues:
 
-This patch adds a permission table to fix the permissions of the ping
-and traceroute6 executables.
+- The call to svc_freeargs() from rpcbproc_callit_com() may result in
+  an attempt to free static memory, resulting in undefined behaviour.
 
-Signed-off-by: Einar Jon Gunnarsson <tolvupostur@gmail.com>
+- A typo in the svc_freeargs() call from pmapproc_dump() causes NIS
+  (aka ypbind) to fail.
+
+Backport upstream fixes for these issues to version 0.2.3.
+
+Signed-off-by: Ed Blake <ed.blake@sondrel.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit b0e2d00289eeb1a7201ba49e5cedfd3175f92140)
+(cherry picked from commit 5a9a95d0eb15c189f1361c12c105eb0ba8842c77)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/iputils/iputils.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+ ..._callit_com-Stop-freeing-a-static-pointer.patch | 98 ++++++++++++++++++++++
+ ...proc_dump-Fixed-typo-in-memory-leak-patch.patch | 31 +++++++
+ 2 files changed, 129 insertions(+)
 
-diff --git a/package/iputils/iputils.mk b/package/iputils/iputils.mk
-index b20cd12..13e3389 100644
---- a/package/iputils/iputils.mk
-+++ b/package/iputils/iputils.mk
-@@ -69,4 +69,9 @@ define IPUTILS_INSTALL_TARGET_CMDS
- 	$(INSTALL) -D -m 755 $(@D)/traceroute6 $(TARGET_DIR)/bin/traceroute6
- endef
- 
-+define IPUTILS_PERMISSIONS
-+	/bin/ping        f 4755 0 0 - - - - -
-+	/bin/traceroute6 f 4755 0 0 - - - - -
-+endef
+diff --git a/package/rpcbind/0005-rpcbproc_callit_com-Stop-freeing-a-static-pointer.patch b/package/rpcbind/0005-rpcbproc_callit_com-Stop-freeing-a-static-pointer.patch
+new file mode 100644
+index 0000000..c482af5
+--- /dev/null
++++ b/package/rpcbind/0005-rpcbproc_callit_com-Stop-freeing-a-static-pointer.patch
+@@ -0,0 +1,98 @@
++From 4e201b75928ff7d4894cd30ab0f5f67b9cd95f5c Mon Sep 17 00:00:00 2001
++From: Steve Dickson <steved@redhat.com>
++Date: Thu, 18 Jan 2018 17:33:56 +0000
++Subject: [PATCH] rpcbproc_callit_com: Stop freeing a static pointer
 +
- $(eval $(generic-package))
++commit 7ea36ee introduced a svc_freeargs() call
++that ended up freeing static pointer.
++
++It turns out the allocations for the rmt_args
++is not necessary . The xdr routines (xdr_bytes) will
++handle the memory management and the largest
++possible message size is UDPMSGSIZE (due to UDP only)
++which is smaller than RPC_BUF_MAX
++
++Signed-off-by: Steve Dickson <steved@redhat.com>
++(cherry picked from commit 7c7590ad536c0e24bef790cb1e65702fc54db566)
++Signed-off-by: Ed Blake <ed.blake@sondrel.com>
++---
++ src/rpcb_svc_com.c | 39 ++++++---------------------------------
++ 1 file changed, 6 insertions(+), 33 deletions(-)
++
++diff --git a/src/rpcb_svc_com.c b/src/rpcb_svc_com.c
++index 0432b6f..64f1104 100644
++--- a/src/rpcb_svc_com.c
+++++ b/src/rpcb_svc_com.c
++@@ -616,9 +616,9 @@ rpcbproc_callit_com(struct svc_req *rqstp, SVCXPRT *transp,
++ 	struct netconfig *nconf;
++ 	struct netbuf *caller;
++ 	struct r_rmtcall_args a;
++-	char *buf_alloc = NULL, *outbufp;
+++	char *outbufp;
++ 	char *outbuf_alloc = NULL;
++-	char buf[RPC_BUF_MAX], outbuf[RPC_BUF_MAX];
+++	char  outbuf[RPC_BUF_MAX];
++ 	struct netbuf *na = (struct netbuf *) NULL;
++ 	struct rpc_msg call_msg;
++ 	int outlen;
++@@ -639,36 +639,10 @@ rpcbproc_callit_com(struct svc_req *rqstp, SVCXPRT *transp,
++ 	}
++ 	if (si.si_socktype != SOCK_DGRAM)
++ 		return;	/* Only datagram type accepted */
++-	sendsz = __rpc_get_t_size(si.si_af, si.si_proto, UDPMSGSIZE);
++-	if (sendsz == 0) {	/* data transfer not supported */
++-		if (reply_type == RPCBPROC_INDIRECT)
++-			svcerr_systemerr(transp);
++-		return;
++-	}
++-	/*
++-	 * Should be multiple of 4 for XDR.
++-	 */
++-	sendsz = ((sendsz + 3) / 4) * 4;
++-	if (sendsz > RPC_BUF_MAX) {
++-#ifdef	notyet
++-		buf_alloc = alloca(sendsz);		/* not in IDR2? */
++-#else
++-		buf_alloc = malloc(sendsz);
++-#endif	/* notyet */
++-		if (buf_alloc == NULL) {
++-			if (debugging)
++-				xlog(LOG_DEBUG,
++-					"rpcbproc_callit_com:  No Memory!\n");
++-			if (reply_type == RPCBPROC_INDIRECT)
++-				svcerr_systemerr(transp);
++-			return;
++-		}
++-		a.rmt_args.args = buf_alloc;
++-	} else {
++-		a.rmt_args.args = buf;
++-	}
+++	sendsz = UDPMSGSIZE;
++ 
++ 	call_msg.rm_xid = 0;	/* For error checking purposes */
+++	memset(&a, 0, sizeof(a)); /* Zero out the input buffer */
++ 	if (!svc_getargs(transp, (xdrproc_t) xdr_rmtcall_args, (char *) &a)) {
++ 		if (reply_type == RPCBPROC_INDIRECT)
++ 			svcerr_decode(transp);
++@@ -708,7 +682,8 @@ rpcbproc_callit_com(struct svc_req *rqstp, SVCXPRT *transp,
++ 	if (rbl == (rpcblist_ptr)NULL) {
++ #ifdef RPCBIND_DEBUG
++ 		if (debugging)
++-			xlog(LOG_DEBUG, "not found\n");
+++			xlog(LOG_DEBUG, "prog %lu vers %lu: not found\n", 
+++				a.rmt_prog, a.rmt_vers);
++ #endif
++ 		if (reply_type == RPCBPROC_INDIRECT)
++ 			svcerr_noprog(transp);
++@@ -941,8 +916,6 @@ out:
++ 	}
++ 	if (local_uaddr)
++ 		free(local_uaddr);
++-	if (buf_alloc)
++-		free(buf_alloc);
++ 	if (outbuf_alloc)
++ 		free(outbuf_alloc);
++ 	if (na) {
++-- 
++2.11.0
++
+diff --git a/package/rpcbind/0006-pmapproc_dump-Fixed-typo-in-memory-leak-patch.patch b/package/rpcbind/0006-pmapproc_dump-Fixed-typo-in-memory-leak-patch.patch
+new file mode 100644
+index 0000000..11ce6a8
+--- /dev/null
++++ b/package/rpcbind/0006-pmapproc_dump-Fixed-typo-in-memory-leak-patch.patch
+@@ -0,0 +1,31 @@
++From d3f1f55e50e3c436a2ea91d60da84c3a94e6c53f Mon Sep 17 00:00:00 2001
++From: Steve Dickson <steved@redhat.com>
++Date: Thu, 18 Jan 2018 17:41:49 +0000
++Subject: [PATCH] pmapproc_dump: Fixed typo in memory leak patch
++
++commit 7ea36eee introduce a typo that caused
++NIS (aka ypbind) to fail.
++
++Signed-off-by: Steve Dickson <steved@redhat.com>
++(cherry picked from commit c49a7ea639eb700823e174fd605bbbe183e229aa)
++Signed-off-by: Ed Blake <ed.blake@sondrel.com>
++---
++ src/pmap_svc.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/pmap_svc.c b/src/pmap_svc.c
++index bb57b05..ffca7df 100644
++--- a/src/pmap_svc.c
+++++ b/src/pmap_svc.c
++@@ -384,7 +384,7 @@ pmapproc_dump(struct svc_req *rqstp /*__unused*/, SVCXPRT *xprt)
++ 	}
++ 
++ done:
++-	if (!svc_freeargs(xprt, (xdrproc_t) xdr_pmap, (char *)NULL)) {
+++	if (!svc_freeargs(xprt, (xdrproc_t) xdr_void, (char *)NULL)) {
++ 		if (debugging) {
++ 			(void) xlog(LOG_DEBUG, "unable to free arguments\n");
++ 			if (doabort) {
++-- 
++2.11.0
++
