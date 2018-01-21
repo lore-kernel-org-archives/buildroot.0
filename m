@@ -1,7 +1,9 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Sun, 21 Jan 2018 12:03:28 +0100
-Subject: [Buildroot] [PATCH 1/8] lua-coat: bump to version 0.9.2
-Message-ID: <20180121110335.20927-1-francois.perrad@gadz.org>
+Date: Sun, 21 Jan 2018 12:03:30 +0100
+Subject: [Buildroot] [PATCH 3/8] lua-csnappy: bump to version 0.1.5
+In-Reply-To: <20180121110335.20927-1-francois.perrad@gadz.org>
+References: <20180121110335.20927-1-francois.perrad@gadz.org>
+Message-ID: <20180121110335.20927-3-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,30 +12,30 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/lua-coat/lua-coat.hash | 2 +-
- package/lua-coat/lua-coat.mk   | 2 +-
+ package/lua-csnappy/lua-csnappy.hash | 2 +-
+ package/lua-csnappy/lua-csnappy.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/lua-coat/lua-coat.hash b/package/lua-coat/lua-coat.hash
-index ad15a38b9..1f2135566 100644
---- a/package/lua-coat/lua-coat.hash
-+++ b/package/lua-coat/lua-coat.hash
+diff --git a/package/lua-csnappy/lua-csnappy.hash b/package/lua-csnappy/lua-csnappy.hash
+index 136363497..f88742644 100644
+--- a/package/lua-csnappy/lua-csnappy.hash
++++ b/package/lua-csnappy/lua-csnappy.hash
 @@ -1,2 +1,2 @@
  # Locally calculated
--sha256	38a8342f6b3883a81931feaa9ef90a6343445289f3d65a296f0924818587c7d4  lua-coat-0.9.1-1.src.rock
-+sha256	24d0e894d743f46c09a282e4dd272d2a6004557608b618c1c9d9f464dd65af02  lua-coat-0.9.2-1.src.rock
-diff --git a/package/lua-coat/lua-coat.mk b/package/lua-coat/lua-coat.mk
-index 80ca6b127..6555e66cd 100644
---- a/package/lua-coat/lua-coat.mk
-+++ b/package/lua-coat/lua-coat.mk
+-sha256	855331feb8e09a32eea8366ab9bcd4386db6392de82383f08ae5e59adbb7d8a6  lua-csnappy-0.1.4-1.src.rock
++sha256	4fc373ba714cb8b428e9971f1725d82de6a43dfea361a0b7894e4762238dc95c  lua-csnappy-0.1.5-1.src.rock
+diff --git a/package/lua-csnappy/lua-csnappy.mk b/package/lua-csnappy/lua-csnappy.mk
+index 3325f1f53..cba0a0608 100644
+--- a/package/lua-csnappy/lua-csnappy.mk
++++ b/package/lua-csnappy/lua-csnappy.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LUA_COAT_VERSION = 0.9.1-1
-+LUA_COAT_VERSION = 0.9.2-1
- LUA_COAT_NAME_UPSTREAM = lua-Coat
- LUA_COAT_LICENSE = MIT
- LUA_COAT_LICENSE_FILES = $(LUA_COAT_SUBDIR)/COPYRIGHT
+-LUA_CSNAPPY_VERSION = 0.1.4-1
++LUA_CSNAPPY_VERSION = 0.1.5-1
+ LUA_CSNAPPY_LICENSE = BSD-3-Clause
+ LUA_CSNAPPY_LICENSE_FILES = $(LUA_CSNAPPY_SUBDIR)/COPYRIGHT
+ 
 -- 
 2.11.0
