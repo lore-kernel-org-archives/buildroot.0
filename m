@@ -1,35 +1,30 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 21 Jan 2018 21:27:16 +0100
-Subject: [Buildroot] [PATCH] iputils: fix ping and traceroute6
- executable permissions
-In-Reply-To: <20180117232403.7bfb408f@windsurf> (Thomas Petazzoni's message of
- "Wed, 17 Jan 2018 23:24:03 +0100")
-References: <1515874782-14986-1-git-send-email-tolvupostur@gmail.com>
- <20180117232403.7bfb408f@windsurf>
-Message-ID: <871sijc5zv.fsf@dell.be.48ers.dk>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Sun, 21 Jan 2018 21:27:21 +0100
+Subject: [Buildroot] [PATCH] uclibc-ng-test: update to latest
+Message-ID: <20180121202721.GA10675@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+---
+ package/uclibc-ng-test/uclibc-ng-test.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- > Hello,
- > On Sat, 13 Jan 2018 21:19:42 +0100, tolvupostur at gmail.com wrote:
- >> From: Einar Jon Gunnarsson <tolvupostur@gmail.com>
- >> 
- >> The iputils executables are installed without the setuid bit set,
- >> which prevents some programs from working.
- >> 
- >> This patch adds a post-install hook to fix the permissions of the
- >> ping and traceroute6 executables.
-
- > You didn't add a post-install hook, but a permission table.
-
- > I've applied after adjusting the commit log. Thanks!
-
-Committed to 2017.11.x, thanks.
-
+diff --git a/package/uclibc-ng-test/uclibc-ng-test.mk b/package/uclibc-ng-test/uclibc-ng-test.mk
+index 3fdfe37..0e6433c 100644
+--- a/package/uclibc-ng-test/uclibc-ng-test.mk
++++ b/package/uclibc-ng-test/uclibc-ng-test.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-UCLIBC_NG_TEST_VERSION = c4d54bde7772b55df04399ecb355769c5ac31015
++UCLIBC_NG_TEST_VERSION = c6d62cbc60504c7f6867b486248b0ef7cc2da554
+ UCLIBC_NG_TEST_SITE = git://uclibc-ng.org/git/uclibc-ng-test
+ UCLIBC_NG_TEST_LICENSE = LGPL-2.1+
+ UCLIBC_NG_TEST_LICENSE_FILES = COPYING.LIB
 -- 
-Bye, Peter Korsgaard
+2.1.4
