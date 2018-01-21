@@ -1,100 +1,66 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 21 Jan 2018 22:29:02 +0100
-Subject: [Buildroot] [git commit] docs/website: update for 2017.11.2
-Message-ID: <20180121212920.45E307FB6A@busybox.osuosl.org>
+Date: Sun, 21 Jan 2018 22:26:31 +0100
+Subject: [Buildroot] [git commit] Update for 2017.11.2
+Message-ID: <20180121212920.2F6D97FB6A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0e26df452db48961a14318c4448dc04fafd9b427
+commit: https://git.buildroot.net/buildroot/commit/?id=c34019e1f1a746b8a9297d9df44e0128284d1fb9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+[Peter: drop Makefile changes]
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit adb26f1feed697c063d82943d8c0d1673c6c8aea)
 ---
- docs/website/download.html | 18 +++++++++---------
- docs/website/news.html     | 19 +++++++++++++++++++
- 2 files changed, 28 insertions(+), 9 deletions(-)
+ CHANGES | 35 +++++++++++++++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
 
-diff --git a/docs/website/download.html b/docs/website/download.html
-index 8e2525d..18c94f0 100644
---- a/docs/website/download.html
-+++ b/docs/website/download.html
-@@ -42,37 +42,37 @@
- 	</div>
-       </div>
+diff --git a/CHANGES b/CHANGES
+index d1003e0..3b5bf00 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -3,6 +3,41 @@
+ 	The global source-check and per-package <pkg>-source-check
+ 	targets have been removed.
  
--      <h3 style="text-align: center;">Latest stable release: <b>2017.11.1</b></h3>
-+      <h3 style="text-align: center;">Latest stable release: <b>2017.11.2</b></h3>
- 
-       <div class="row mt centered">
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2017.11.1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2017.11.2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2017.11.1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2017.11.2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
--	  <h3><a href="/downloads/buildroot-2017.11.1.tar.gz">buildroot-2017.11.1.tar.gz</a></h3>
--	  <p><a href="/downloads/buildroot-2017.11.1.tar.gz.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2017.11.2.tar.gz">buildroot-2017.11.2.tar.gz</a></h3>
-+	  <p><a href="/downloads/buildroot-2017.11.2.tar.gz.sign">PGP signature</a></p>
- 	</div>
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2017.11.1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2017.11.2.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2017.11.1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2017.11.2.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
- 
--	  <h3><a href="/downloads/buildroot-2017.11.1.tar.bz2">buildroot-2017.11.1.tar.bz2</a></h3>
--	  <p><a href="/downloads/buildroot-2017.11.1.tar.bz2.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2017.11.2.tar.bz2">buildroot-2017.11.2.tar.bz2</a></h3>
-+	  <p><a href="/downloads/buildroot-2017.11.2.tar.bz2.sign">PGP signature</a></p>
- 	</div>
-       </div>
- <!--
-diff --git a/docs/website/news.html b/docs/website/news.html
-index d6e4962..be8ba8b 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -9,6 +9,25 @@
- <h2>News</h2>
- <ul class="timeline">
- 
-+  <li class="timeline-inverted">
-+    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-+    <div class="timeline-panel">
-+      <div class="timeline-heading">
-+	<h4 class="timeline-title">2017.11.2 released</h4>
-+	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>21 January 2018</small></p>
-+      </div>
-+      <div class="timeline-body">
-+	<p>The 2017.11.2 bugfix release is out, fixing a number of important /
-+	  security related issues discovered since the 2017.11.1 release. See the
-+	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2017.11.2">CHANGES</a>
-+	  file for more details, read the
-+	  <a href="http://lists.busybox.net/pipermail/buildroot/2018-January/212069.html">announcement</a>
-+	  and go to the <a href="/downloads/">downloads page</a> to pick up the
-+	  <a href="/downloads/buildroot-2017.11.2.tar.bz2">2017.11.2 release</a>.</p>
-+      </div>
-+    </div>
-+  </li>
++2017.11.2, Released January 21st, 2018
 +
-   <li>
-     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-     <div class="timeline-panel">
++	Important / security related fixes.
++
++	External toolchain: libatomic is now also copied for musl
++	based toolchains.
++
++	nconfig: Fix for ncurses/ncursesw linking issue causing crashes.
++
++	System: Only show getty options when busybox init or sysvinit
++	are used.
++
++	Infrastructure: Fix build issue for autotools based packages
++	checking for C++ support on toolchains without C++ support and
++	on a distro lacking /lib/cpp (E.G. Arch Linux).
++
++	Pie charts generated by 'graph-build' or 'graph-size' are now
++	sorted according to the size of each piece.
++
++	Updated/fixed packages: asterisk, avahi, bind, busybox,
++	coreutils, eeprog, intel-microcode, iputils, irssi, kmsxx,
++	libiio, linux-firmware, lz4, mariadb, matchbox-lib, mcookie,
++	ntp, php, pound, rpcbind, tar, ti-cgt-pru, webkitgtk, xen,
++	xlib_libXpm
++
++	Issues resolved (http://bugs.buildroot.org):
++
++	#9996: lz4 package does not install lz4 binaries in target
++	#10176: Rsyslog's S01logging is deleted by Busybox.mk from...
++	#10216: package/x11r7/mcookie/mcookie.c:207: bad size ?
++	#10301: systemd/getty unused options
++	#10331: kmsxx, host installation fails with BR2_SHARED_...
++	#10556: Building ntp package with SSL library libressl...
++	#10641: avahi-autoipd not starting when using systemd-tmpfiles
++
+ 2017.11.1, Released December 31th, 2017
+ 
+ 	Important / security related fixes.
