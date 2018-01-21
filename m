@@ -1,27 +1,22 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 21 Jan 2018 21:23:36 +0100
-Subject: [Buildroot] [PATCH] bind: security bump to version 9.11.2-P1
-In-Reply-To: <20180117074243.31352-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Wed, 17 Jan 2018 08:42:43 +0100")
-References: <20180117074243.31352-1-peter@korsgaard.com>
-Message-ID: <87efmjc65z.fsf@dell.be.48ers.dk>
+Date: Sun, 21 Jan 2018 21:23:59 +0100
+Subject: [Buildroot] [PATCH 2/2] linux-headers: bump 4.{4, 9,
+ 14}.x series
+In-Reply-To: <1516188278-27271-2-git-send-email-festevam@gmail.com> (Fabio
+ Estevam's message of "Wed, 17 Jan 2018 09:24:38 -0200")
+References: <1516188278-27271-1-git-send-email-festevam@gmail.com>
+ <1516188278-27271-2-git-send-email-festevam@gmail.com>
+Message-ID: <87a7x7c65c.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Fabio" == Fabio Estevam <festevam@gmail.com> writes:
 
- > Fixes the following security issue:
- > CVE-2017-3145: Improper sequencing during cleanup can lead to a
- > use-after-free error, triggering an assertion failure and crash in
- > named.
-
- > For more details, see the advisory:
- > https://lists.isc.org/pipermail/bind-announce/2018-January/001072.html
-
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > From: Fabio Estevam <fabio.estevam@nxp.com>
+ > Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
 
 Committed to 2017.11.x, thanks.
 
