@@ -1,33 +1,29 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Sun, 21 Jan 2018 20:21:57 +0100
-Subject: [Buildroot] [PATCH] uclibc-ng: enable NPTL for m68k/microblaze
-Message-ID: <20180121192157.GA15314@waldemar-brodkorb.de>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 21 Jan 2018 21:23:36 +0100
+Subject: [Buildroot] [PATCH] bind: security bump to version 9.11.2-P1
+In-Reply-To: <20180117074243.31352-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Wed, 17 Jan 2018 08:42:43 +0100")
+References: <20180117074243.31352-1-peter@korsgaard.com>
+Message-ID: <87efmjc65z.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-With 1.0.28 NPTL support for m68k was added. 
-Microblaze is already supported for a while, enable it now to
-benefit from it.
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
----
- package/uclibc/Config.in | 1 -
- 1 file changed, 1 deletion(-)
+ > Fixes the following security issue:
+ > CVE-2017-3145: Improper sequencing during cleanup can lead to a
+ > use-after-free error, triggering an assertion failure and crash in
+ > named.
 
-diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
-index 90e2f30..0e24b25 100644
---- a/package/uclibc/Config.in
-+++ b/package/uclibc/Config.in
-@@ -48,7 +48,6 @@ choice
- config BR2_PTHREADS_NATIVE
- 	bool "Native POSIX Threading (NPTL)"
- 	depends on BR2_USE_MMU
--	depends on !BR2_m68k && !BR2_microblaze
- 	select BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 
+ > For more details, see the advisory:
+ > https://lists.isc.org/pipermail/bind-announce/2018-January/001072.html
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+Committed to 2017.11.x, thanks.
+
 -- 
-2.1.4
+Bye, Peter Korsgaard
