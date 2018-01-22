@@ -1,13 +1,9 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 22 Jan 2018 22:57:13 +0100
-Subject: [Buildroot] [PATCH v9 0/8] Add support for the Rust programming
-In-Reply-To: <20180119090315.1fd13958@windsurf.lan>
-References: <20171228155146.18193-1-eric.le.bihan.dev@free.fr>
- <20171228172129.3dd0acdc@windsurf.home> <20171228175256.GA24806@ned>
- <20171228223629.0fd45695@windsurf> <20180118074850.GA10580@itchy>
- <20180118090319.3d32c593@windsurf.lan> <20180118224158.GA24327@itchy>
- <20180119090315.1fd13958@windsurf.lan>
-Message-ID: <a3a4a451-864a-f77c-d41f-04afd9ae641a@mind.be>
+Date: Mon, 22 Jan 2018 23:04:00 +0100
+Subject: [Buildroot] Google Summer of Code 2018 ?
+In-Reply-To: <20180117215208.45dd61b9@windsurf>
+References: <20180117215208.45dd61b9@windsurf>
+Message-ID: <2f4f4259-9fce-6eb2-c0ed-15c3b86d4811@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,46 +12,73 @@ To: buildroot@busybox.net
 
 
 
-On 19-01-18 09:03, Thomas Petazzoni wrote:
+On 17-01-18 21:52, Thomas Petazzoni wrote:
 > Hello,
 > 
-> On Thu, 18 Jan 2018 23:41:58 +0100, Eric Le Bihan wrote:
+> For information, organizations can apply for GSoC 2018 until January
+> 23, so there is less than a week left to apply. The questions are: do
+> we want to apply? And if yes, for what topics?
 > 
->>> We have tests like support/testing/tests/fs/test_iso9660.py that don't
->>> use BASIC_TOOLCHAIN_CONFIG.
->>
->> Looking at the existing tests, I thought it was a requirement to use
->> toolchains hosted at http://autobuild.buildroot.org/.
+> Looking at https://elinux.org/Buildroot:GSoC2017Ideas:
 > 
-> Not at all. We do have some tests that don't use those toolchains. Look
-> at support/testing/tests/boot/test_atf.py, the tests use Linaro
-> toolchains.
-> 
->>> I'm not sure what "artefacts" you are looking for here.  
->>
->> I was referring to ARTIFACTS_URL, where ARM versatile/vexpress
->> kernels are available. As I thought I should have used
->> br-aarch64-glibc-2017.05-1078-g95b1dae.tar.bz2 to get a glibc-based
->> toolchain, adding Aarch64 support to the emulator seemed necessary.
->>
->> I'll go with the Linaro toolchain, using ARM vexpress as target.
-> 
-> If you want to do runtime test on an AArch64 platform without building
-> the kernel as part of your test configuration, then yes, we would have
-> to add an artifact on http://autobuild.buildroot.net/artefacts/. I can
-> definitely do that if needed.
-> 
-> I'm not super happy with this artefacts solution, but I wanted to avoid
-> putting all those binary files under version control inside the
-> Buildroot repository. If people have better proposals, I'm definitely
-> interested.
+>  - Reproducible builds. While some initial work was done, there is
+>    definitely a lot more that could be done.
 
- We could have the artefacts produced by gitlab-CI, and use the gitlab pipeline
-feature to make sure the most recently built one is used. Well, that's the
-theory, I haven't looked at the details :-)
+ This is indeed an interesting topic for GSoC.
+
+> 
+>  - Testing infrastructure: the runtime testing infrastructure was
+>    added in the mean time. Writing more tests and extending the
+>    infrastructure is still needed though.
+
+ Useful, but probably a difficult topic.
+
+
+>  - Relocatable SDK: this topic is pretty much solved IMO, so this topic
+>    is no longer relevant.
+
+ Ack.
+
+
+>  - Follow upstream updates and CVEs of packages. I think this topic is
+>    still relevant, and IMO is the most interesting topic.
+
+ Although interesting, I think this is not very suitable for GSoC. Mostly
+because it fits more in a "commercial" use of Buildroot and I don't think GSoC
+is really meant for that. But maybe that's more a personal feeling. Probably
+doesn't hurt to propose it.
+
+
+>  - Support for LLVM: an intern from Smile (France) just announced that
+>    he will be working on this topic during the next months, so I don't
+>    see the point of having a GSOC on the same topic.
+
+ Ack.
+
+
+>  - Support new languages and complete existing ones. I'm not sure about
+>    this one:
+>    * For NodeJS, I'm not sure we want to have zillions of packages for
+>      the different NodeJS modules
+>    * The Go package infrastructure has been resubmitted, and is
+>      actively being pushed by Angelo
+>    * The Rust support is actively being pushed by Eric
+>    So I don't know if there's enough things left to do for this project
+>    idea.
+
+ Yeah, and it's also a very tricky subject. All languages are pretty different.
+
+
+ So, is anyone going to submit these three proposals?
 
  Regards,
  Arnout
+
+
+> Any other idea of what's missing in Buildroot, or that could be
+> improved ?
+
+
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
