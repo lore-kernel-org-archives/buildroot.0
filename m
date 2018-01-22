@@ -1,65 +1,56 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 22 Jan 2018 13:18:03 +0200
-Subject: [Buildroot] [PATCH 1/1] libcpprestsdk: require nptl threads.
-In-Reply-To: <20180122110938.14517-1-aduskett@gmail.com>
-References: <20180122110938.14517-1-aduskett@gmail.com>
-Message-ID: <20180122111803.yh73esasjfuenunm@sapphire.tkos.co.il>
+From: =?UTF-8?Q?Einar_J=C3=B3n?= <tolvupostur@gmail.com>
+Date: Mon, 22 Jan 2018 12:31:29 +0100
+Subject: [Buildroot] [git commit branch/2017.11.x] iputils: fix ping and
+ traceroute6 executable permissions
+In-Reply-To: <20180121210851.59E7983DF0@busybox.osuosl.org>
+References: <20180121210851.59E7983DF0@busybox.osuosl.org>
+Message-ID: <CABhNV20RUXkEY1Brpt7d2Y7NdjQJypjTp2KeZ6VPJTpiguk6_w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Adam,
-
-On Mon, Jan 22, 2018 at 06:09:38AM -0500, Adam Duskett wrote:
-> pthread_condattr_setclock is uses which is NPTL only.
-> 
-> Fixes http://autobuild.buildroot.net/results/abf058948c9e4e9a50d42a05689b76bfb54a02e2/build-end.log
-> 
-> Signed-off-by: Adam Duskett <aduskett@gmail.com>
+On 21 January 2018 at 21:17, Peter Korsgaard <peter@korsgaard.com> wrote:
+> commit: https://git.buildroot.net/buildroot/commit/?id=371d7e8495a46d800c4c7322c5c1d09612ed181c
+> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.11.x
+>
+> The iputils executables are installed without the setuid bit set,
+> which prevents some programs from working.
+>
+> This patch adds a permission table to fix the permissions of the ping
+> and traceroute6 executables.
+>
+> Signed-off-by: Einar Jon Gunnarsson <tolvupostur@gmail.com>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> (cherry picked from commit b0e2d00289eeb1a7201ba49e5cedfd3175f92140)
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 > ---
->  package/libcpprestsdk/Config.in | 9 ++++++---
->  1 file changed, 6 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/libcpprestsdk/Config.in b/package/libcpprestsdk/Config.in
-> index 64c383c2c9..334df41951 100644
-> --- a/package/libcpprestsdk/Config.in
-> +++ b/package/libcpprestsdk/Config.in
-> @@ -4,6 +4,7 @@ config BR2_PACKAGE_LIBCPPRESTSDK
->  	depends on BR2_TOOLCHAIN_HAS_THREADS # boost
+>  package/iputils/iputils.mk | 5 +++++
+>  1 file changed, 5 insertions(+)
+>
+> diff --git a/package/iputils/iputils.mk b/package/iputils/iputils.mk
+> index b20cd12..13e3389 100644
+> --- a/package/iputils/iputils.mk
+> +++ b/package/iputils/iputils.mk
+> @@ -69,4 +69,9 @@ define IPUTILS_INSTALL_TARGET_CMDS
+>         $(INSTALL) -D -m 755 $(@D)/traceroute6 $(TARGET_DIR)/bin/traceroute6
+>  endef
+>
+> +define IPUTILS_PERMISSIONS
+> +       /bin/ping        f 4755 0 0 - - - - -
+> +       /bin/traceroute6 f 4755 0 0 - - - - -
+> +endef
+> +
+>  $(eval $(generic-package))
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-This dependency is now redundant. Besides, threads is a dependency of 
-libcpprestsdk itself, regardless of boost.
 
->  	depends on BR2_USE_WCHAR # boost
->  	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # exception_ptr
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
->  	select BR2_PACKAGE_BOOST
->  	select BR2_PACKAGE_BOOST_ATOMIC
->  	select BR2_PACKAGE_BOOST_CHRONO
-> @@ -22,9 +23,11 @@ config BR2_PACKAGE_LIBCPPRESTSDK
->  
->  	  https://github.com/Microsoft/cpprestsdk
->  
-> -comment "libcpprestsdk needs a toolchain w/ C++, wchar, threads"
-> -	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS \
-> -		|| !BR2_USE_WCHAR
-> +comment "libcpprestsdk needs a toolchain w/ NPTL threads, C++, wchar, threads"
-
-"threads" is duplicated here as well. Actually, "NPTL" alone is enough.
-
-> +	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || \
-> +		!BR2_INSTALL_LIBSTDCPP || \
-> +		!BR2_TOOLCHAIN_HAS_THREADS || \
-> +		!BR2_USE_WCHAR
->  
->  comment "libcpprestsdk needs exception_ptr"
->  	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
-
-baruch
 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Regards
+Einar J?n
++31 610 957234
