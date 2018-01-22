@@ -1,34 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 22 Jan 2018 22:29:03 +0100
-Subject: [Buildroot] [git commit] package/sdl2: Remove trailing backslash
-Message-ID: <20180122213643.13C0083E9A@busybox.osuosl.org>
+Date: Mon, 22 Jan 2018 22:28:38 +0100
+Subject: [Buildroot] [git commit] gtksourceview: bump to version 3.24.6
+Message-ID: <20180122213642.F2BE783E9A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d2c6eaade1f3e120baca53b5e09f1a2b4fc13557
+commit: https://git.buildroot.net/buildroot/commit/?id=e68a51a938b3927134f0e74a44b95f1ee703c58a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Left over from 9f8a6fdf9
-
-Signed-off-by: Guillermo A. Amaral <g@maral.me>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/sdl2/sdl2.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/gtksourceview/gtksourceview.hash | 4 ++--
+ package/gtksourceview/gtksourceview.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/sdl2/sdl2.mk b/package/sdl2/sdl2.mk
-index 113e106..6cb24d9 100644
---- a/package/sdl2/sdl2.mk
-+++ b/package/sdl2/sdl2.mk
-@@ -18,7 +18,7 @@ SDL2_CONF_OPTS += \
- 	--disable-esd \
- 	--disable-dbus \
- 	--disable-pulseaudio \
--	--disable-video-wayland \
-+	--disable-video-wayland
+diff --git a/package/gtksourceview/gtksourceview.hash b/package/gtksourceview/gtksourceview.hash
+index c605253..feaae5e 100644
+--- a/package/gtksourceview/gtksourceview.hash
++++ b/package/gtksourceview/gtksourceview.hash
+@@ -1,5 +1,5 @@
+-# Hash from: http://ftp.gnome.org/pub/gnome/sources/gtksourceview/3.24/gtksourceview-3.24.5.sha256sum:
+-sha256	0246185fcc20c4734d01419a83f58f251a82e2a902fe60bb0335187fcf658181	gtksourceview-3.24.5.tar.xz
++# Hash from: http://ftp.gnome.org/pub/gnome/sources/gtksourceview/3.24/gtksourceview-3.24.6.sha256sum:
++sha256	7aa6bdfebcdc73a763dddeaa42f190c40835e6f8495bb9eb8f78587e2577c188	gtksourceview-3.24.6.tar.xz
  
- # We must enable static build to get compilation successful.
- SDL2_CONF_OPTS += --enable-static
+ # Locally computed:
+ sha256	5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a	COPYING
+diff --git a/package/gtksourceview/gtksourceview.mk b/package/gtksourceview/gtksourceview.mk
+index b9bf4a3..2a33ed4 100644
+--- a/package/gtksourceview/gtksourceview.mk
++++ b/package/gtksourceview/gtksourceview.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ GTKSOURCEVIEW_VERSION_MAJOR = 3.24
+-GTKSOURCEVIEW_VERSION = $(GTKSOURCEVIEW_VERSION_MAJOR).5
++GTKSOURCEVIEW_VERSION = $(GTKSOURCEVIEW_VERSION_MAJOR).6
+ GTKSOURCEVIEW_SOURCE = gtksourceview-$(GTKSOURCEVIEW_VERSION).tar.xz
+ GTKSOURCEVIEW_SITE = \
+ 	http://ftp.gnome.org/pub/gnome/sources/gtksourceview/$(GTKSOURCEVIEW_VERSION_MAJOR)
