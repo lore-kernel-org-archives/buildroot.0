@@ -1,112 +1,51 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Mon, 22 Jan 2018 07:17:18 -0500
-Subject: [Buildroot] [PATCH 1/1] repolicy: bump to 2.20180114
-Message-ID: <20180122121718.1710-1-aduskett@gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 22 Jan 2018 12:48:24 +0000
+Subject: [Buildroot] [Bug 10661] New: /etc/init.d/S29netplug starts multiple
+ instances of netplugd
+Message-ID: <bug-10661-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Remove 0001-fix-regex-escape-sequence-error.patch, as it has been
-committed upstream.
+https://bugs.busybox.net/show_bug.cgi?id=10661
 
-Signed-off-by: Adam Duskett <aduskett@gmail.com>
----
- .../0001-fix-regex-escape-sequence-error.patch     | 59 ----------------------
- package/refpolicy/refpolicy.hash                   |  2 +-
- package/refpolicy/refpolicy.mk                     |  2 +-
- 3 files changed, 2 insertions(+), 61 deletions(-)
- delete mode 100644 package/refpolicy/0001-fix-regex-escape-sequence-error.patch
+            Bug ID: 10661
+           Summary: /etc/init.d/S29netplug starts multiple instances of
+                    netplugd
+           Product: buildroot
+           Version: 2017.11.2
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: mail2k at web.de
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-diff --git a/package/refpolicy/0001-fix-regex-escape-sequence-error.patch b/package/refpolicy/0001-fix-regex-escape-sequence-error.patch
-deleted file mode 100644
-index 1aa01892d0..0000000000
---- a/package/refpolicy/0001-fix-regex-escape-sequence-error.patch
-+++ /dev/null
-@@ -1,59 +0,0 @@
--From 6c9cc47e6cc9c6e67b1b822f7a1a2e1f6d836118 Mon Sep 17 00:00:00 2001
--From: Adam Duskett <Adamduskett@outlook.com>
--Date: Tue, 10 Oct 2017 18:00:30 -0400
--Subject: [PATCH] fix regex escape sequence error.
--
--python3.6 will error out with the message "invalid escape sequence"
--in genhomedircon.py.  This patch fixes these errors by turning the string
--in the into a raw string.
--
--Upstream status: accepted
--
--Signed-off-by: Adam Duskett <aduskett@gmail.com>
-----
-- support/genhomedircon.py | 16 ++++++++--------
-- 1 file changed, 8 insertions(+), 8 deletions(-)
--
--diff --git a/support/genhomedircon.py b/support/genhomedircon.py
--index 036f5cc9..6662f412 100644
----- a/support/genhomedircon.py
--+++ b/support/genhomedircon.py
--@@ -189,13 +189,13 @@ def oldgenhomedircon(filecontextdir, filecontext):
--                 addme = 1
--                 for regex in prefix_regex:
--                         #match a trailing (/*)? which is actually a bug in rpc_pipefs
---                        regex = re.sub("\(/\*\)\?$", "", regex)
--+                        regex = re.sub(r"\(/\*\)\?$", "", regex)
--                         #match a trailing .+
---                        regex = re.sub("\.+$", "", regex)
--+                        regex = re.sub(r"\.+$", "", regex)
--                         #match a trailing .*
---                        regex = re.sub("\.\*$", "", regex)
--+                        regex = re.sub(r"\.\*$", "", regex)
--                         #strip a (/.*)? which matches anything trailing to a /*$ which matches trailing /'s
---                        regex = re.sub("\(\/\.\*\)\?", "", regex)
--+                        regex = re.sub(r"\(\/\.\*\)\?", "", regex)
--                         regex = regex + "/*$"
--                         if re.search(regex, potential, 0):
--                                 addme = 0
--@@ -391,13 +391,13 @@ class selinuxConfig:
-- 		exists=1
-- 		for regex in prefix_regex:
-- 			#match a trailing (/*)? which is actually a bug in rpc_pipefs
---			regex = re.sub("\(/\*\)\?$", "", regex)
--+			regex = re.sub(r"\(/\*\)\?$", "", regex)
-- 			#match a trailing .+
---			regex = re.sub("\.+$", "", regex)
--+			regex = re.sub(r"\.+$", "", regex)
-- 			#match a trailing .*
---			regex = re.sub("\.\*$", "", regex)
--+			regex = re.sub(r"\.\*$", "", regex)
-- 			#strip a (/.*)? which matches anything trailing to a /*$ which matches trailing /'s
---			regex = re.sub("\(\/\.\*\)\?", "", regex)
--+			regex = re.sub(r"\(\/\.\*\)\?", "", regex)
-- 			regex = regex + "/*$"
-- 			if re.search(regex, home, 0):
-- 				exists = 0
---- 
--2.13.6
--
-diff --git a/package/refpolicy/refpolicy.hash b/package/refpolicy/refpolicy.hash
-index 905ac88542..f341566f28 100644
---- a/package/refpolicy/refpolicy.hash
-+++ b/package/refpolicy/refpolicy.hash
-@@ -1,5 +1,5 @@
- # From https://github.com/TresysTechnology/refpolicy/wiki/DownloadRelease
--sha256 045709f5e44199f402149b31c6aab9666bdb1540a5c5ed0312a46c90dedfa52d  refpolicy-2.20170805.tar.bz2
-+sha256 e826f7d7f899a548e538964487e9fc1bc67ca94756ebdce0bfb6532b4eb0d06b  refpolicy-2.20180114.tar.bz2
- 
- # Locally computed
- sha256 204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994 COPYING
-diff --git a/package/refpolicy/refpolicy.mk b/package/refpolicy/refpolicy.mk
-index 1e2180b2cb..590e0ebd9a 100644
---- a/package/refpolicy/refpolicy.mk
-+++ b/package/refpolicy/refpolicy.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--REFPOLICY_VERSION = 2.20170805
-+REFPOLICY_VERSION = 2.20180114
- REFPOLICY_SOURCE = refpolicy-$(REFPOLICY_VERSION).tar.bz2
- REFPOLICY_SITE = https://raw.githubusercontent.com/wiki/TresysTechnology/refpolicy/files
- REFPOLICY_LICENSE = GPL-2.0
+If you execute the command "/etc/init.d/S29netplug start" multiple times, you
+get multiple instances of netplugd. 
+This is not the desired behaviour. We should only have one running netplugd.
+
+The change has to be made in  package/netplug/S29netplug:
+line 46:
+-       start-stop-daemon -S -q -p /var/run/netplugd.pid -x /sbin/netplugd
+${NETPLUGDARGS}
+
++       start-stop-daemon -S -q -x /sbin/netplugd -- -p /var/run/netplugd.pid
+${NETPLUGDARGS}
+
+Reason: 
+If the start-stop-daemon gets the parameter -p /var/run/netplug.pid it will try
+to identify a running process by this pid-file but the file doesn't exist. As a
+result, every call of  "/etc/init.d/S29netplug start" starts a new netplugd.
+
+--> The parameter -p /var/run/netplug.pid must be passed to netplugd.
+
 -- 
-2.14.3
+You are receiving this mail because:
+You are on the CC list for the bug.
