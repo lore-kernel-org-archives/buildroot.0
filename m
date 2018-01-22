@@ -1,41 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 22 Jan 2018 22:34:31 +0100
-Subject: [Buildroot] [git commit] libtomcrypt: bump to version 1.18.1
-Message-ID: <20180122213643.6AD8683E9A@busybox.osuosl.org>
+Date: Mon, 22 Jan 2018 22:34:10 +0100
+Subject: [Buildroot] [git commit] python-certifi: bump to version 2018.1.18
+Message-ID: <20180122213643.573D983E9A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c09d002c4a757df499ff149ced55adf4457b559d
+commit: https://git.buildroot.net/buildroot/commit/?id=dd37ea21abd2c3a0a5946c834d5739c9691b0903
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Add licence checksum.
+
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libtomcrypt/libtomcrypt.hash | 2 +-
- package/libtomcrypt/libtomcrypt.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/python-certifi/python-certifi.hash | 5 +++--
+ package/python-certifi/python-certifi.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/package/libtomcrypt/libtomcrypt.hash b/package/libtomcrypt/libtomcrypt.hash
-index 6f7720e..be8e9b1 100644
---- a/package/libtomcrypt/libtomcrypt.hash
-+++ b/package/libtomcrypt/libtomcrypt.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256  da9df56a314afaab71963aa71bb6a075ea6bdee3d4db4af045f6bfe23e88b87a  crypt-1.18.0.tar.xz
-+sha256  57c13a34fbfd45696189d19e47864e48f4e5c11590c29b444accb8edbf047f14  crypt-1.18.1.tar.xz
-diff --git a/package/libtomcrypt/libtomcrypt.mk b/package/libtomcrypt/libtomcrypt.mk
-index 020ce79..974ef3f 100644
---- a/package/libtomcrypt/libtomcrypt.mk
-+++ b/package/libtomcrypt/libtomcrypt.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-certifi/python-certifi.hash b/package/python-certifi/python-certifi.hash
+index 7aef735..e3e2f07 100644
+--- a/package/python-certifi/python-certifi.hash
++++ b/package/python-certifi/python-certifi.hash
+@@ -1,3 +1,4 @@
+ # md5 from https://pypi.python.org/pypi/certifi/json, sha256 locally computed
+-md5	db40445044feda1437ce3ccd5fc28a57  certifi-2017.4.17.tar.gz
+-sha256	f7527ebf7461582ce95f7a9e03dd141ce810d40590834f4ec20cddd54234c10a  certifi-2017.4.17.tar.gz
++md5	068fd5c3c690ae47504b3e0bf4e56c4c  certifi-2018.1.18.tar.gz
++sha256	edbc3f203427eef571f79a7692bb160a2b0f7ccaa31953e99bd17e307cf63f7d  certifi-2018.1.18.tar.gz
++sha256	6a70a4bf6b010016d59a64b8ae4ad8dc7f5ef16f1fb453cc2ecd771c5a341131  LICENSE
+diff --git a/package/python-certifi/python-certifi.mk b/package/python-certifi/python-certifi.mk
+index 207d4f9..084893f 100644
+--- a/package/python-certifi/python-certifi.mk
++++ b/package/python-certifi/python-certifi.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--LIBTOMCRYPT_VERSION = 1.18.0
-+LIBTOMCRYPT_VERSION = 1.18.1
- LIBTOMCRYPT_SITE = https://github.com/libtom/libtomcrypt/releases/download/v$(LIBTOMCRYPT_VERSION)
- LIBTOMCRYPT_SOURCE = crypt-$(LIBTOMCRYPT_VERSION).tar.xz
- LIBTOMCRYPT_LICENSE = WTFPL
+-PYTHON_CERTIFI_VERSION = 2017.4.17
++PYTHON_CERTIFI_VERSION = 2018.1.18
+ PYTHON_CERTIFI_SOURCE = certifi-$(PYTHON_CERTIFI_VERSION).tar.gz
+-PYTHON_CERTIFI_SITE = https://pypi.python.org/packages/dd/0e/1e3b58c861d40a9ca2d7ea4ccf47271d4456ae4294c5998ad817bd1b4396
++PYTHON_CERTIFI_SITE = https://pypi.python.org/packages/15/d4/2f888fc463d516ff7bf2379a4e9a552fef7f22a94147655d9b1097108248
+ PYTHON_CERTIFI_SETUP_TYPE = setuptools
+ PYTHON_CERTIFI_LICENSE = ISC (Python code), MPL-2.0 (cacert.pem)
+ PYTHON_CERTIFI_LICENSE_FILES = LICENSE
