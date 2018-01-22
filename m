@@ -1,9 +1,12 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 22 Jan 2018 23:04:00 +0100
-Subject: [Buildroot] Google Summer of Code 2018 ?
-In-Reply-To: <20180117215208.45dd61b9@windsurf>
-References: <20180117215208.45dd61b9@windsurf>
-Message-ID: <2f4f4259-9fce-6eb2-c0ed-15c3b86d4811@mind.be>
+Date: Mon, 22 Jan 2018 23:14:08 +0100
+Subject: [Buildroot] linux-firmware hash mismatch (tar-1.30)
+In-Reply-To: <87zi5adewm.fsf@dell.be.48ers.dk>
+References: <20180109161531.47ec21e0.john@metanate.com>
+ <87vag9plt1.fsf@dell.be.48ers.dk> <20180111105557.6f97bb46.john@metanate.com>
+ <20180114133016.GA20105@scaer> <ef492963-bf3b-3fbb-f5b1-bba0126f3884@mind.be>
+ <87zi5adewm.fsf@dell.be.48ers.dk>
+Message-ID: <7f7d3f7b-0771-fff2-0b44-5c81686c9fb9@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,73 +15,63 @@ To: buildroot@busybox.net
 
 
 
-On 17-01-18 21:52, Thomas Petazzoni wrote:
-> Hello,
+On 18-01-18 22:40, Peter Korsgaard wrote:
+>>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 > 
-> For information, organizations can apply for GSoC 2018 until January
-> 23, so there is less than a week left to apply. The questions are: do
-> we want to apply? And if yes, for what topics?
+> Hi,
 > 
-> Looking at https://elinux.org/Buildroot:GSoC2017Ideas:
+>  >>>> Gaah, what a mess :/
 > 
->  - Reproducible builds. While some initial work was done, there is
->    definitely a lot more that could be done.
-
- This is indeed an interesting topic for GSoC.
-
+>  >  Note that this also means our github hashes will break again...
 > 
->  - Testing infrastructure: the runtime testing infrastructure was
->    added in the mean time. Writing more tests and extending the
->    infrastructure is still needed though.
+> Indeed, I also mentioned that earlier.
+> 
+>  >> Alas, this means that we can only depend on building our own tar...
+> 
+>  >  Nah, let's not go there.
+> 
+>  >> Even when we eventually support using a local git-clone cache, this we
+>  >> not solve the issue has the hashes we store are on the generated
+>  >> tarball...
+> 
+>  >  However, the way we create a git tarball can serve as a source of inspiration
+>  > of how to solve it. Instead of hashing the tarball, we can hash the contents of
+>  > the tarball instead, using --to-command and a support script (--to-command
+>  > exists since 1.15.90 and our minimal tar version is 1.17). The support script
+>  > would print the metadata and a hash of the contents. And the output of all that
+>  > is piped into sort (to make sure the order of files in the tarball isn't
+>  > relevant) and shasum.
+> 
+> Hmm, that is perhaps an option. It does make it somewhat more cumbersome
+> to calculate the expected hash by hand, but maybe that is ok.
 
- Useful, but probably a difficult topic.
-
-
->  - Relocatable SDK: this topic is pretty much solved IMO, so this topic
->    is no longer relevant.
-
- Ack.
-
-
->  - Follow upstream updates and CVEs of packages. I think this topic is
->    still relevant, and IMO is the most interesting topic.
-
- Although interesting, I think this is not very suitable for GSoC. Mostly
-because it fits more in a "commercial" use of Buildroot and I don't think GSoC
-is really meant for that. But maybe that's more a personal feeling. Probably
-doesn't hurt to propose it.
-
-
->  - Support for LLVM: an intern from Smile (France) just announced that
->    he will be working on this topic during the next months, so I don't
->    see the point of having a GSOC on the same topic.
-
- Ack.
+ There's still a patch floating around that doesn't remove the downloaded file
+[1], and the calculated hash is already reported. So not much of an issue I think.
 
 
->  - Support new languages and complete existing ones. I'm not sure about
->    this one:
->    * For NodeJS, I'm not sure we want to have zillions of packages for
->      the different NodeJS modules
->    * The Go package infrastructure has been resubmitted, and is
->      actively being pushed by Angelo
->    * The Rust support is actively being pushed by Eric
->    So I don't know if there's enough things left to do for this project
->    idea.
+> Alternatively we don't do anything and instead ensure that tarballs on
+> s.b.o matches the hashes we commit, and people using incompatible tar
+> versions will fall back to the tarballs on s.b.o.
 
- Yeah, and it's also a very tricky subject. All languages are pretty different.
+ But then they'll still be downloaded twice. Not very nice.
+
+ Let's discuss it at the meeting in two weeks.
 
 
- So, is anyone going to submit these three proposals?
+>  >  That way we don't rely on the way the user's tar behaves at all. We really
+>  > check the contents of the tarball. It would also mean we can drop the complexity
+>  > in the git download helper and directly use git archive.
+> 
+> I thought the main reason for our custom tarball handling was support
+> for git submodules? I take it that git-archive still doesn't handle those?
+
+ Right, I forgot about that.
 
  Regards,
  Arnout
 
 
-> Any other idea of what's missing in Buildroot, or that could be
-> improved ?
-
-
+[1] http://patchwork.ozlabs.org/patch/834425/
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
