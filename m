@@ -1,51 +1,69 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 22 Jan 2018 22:38:13 +0100
-Subject: [Buildroot] Broken link in build notification
-In-Reply-To: <7d2636ad-5201-10d9-fe72-4d1001a94c72@gmail.com> (Zoltan
- Gyarmati's message of "Mon, 22 Jan 2018 21:25:44 +0100")
-References: <20180121070008.0687520885@mail.free-electrons.com>
- <7d2636ad-5201-10d9-fe72-4d1001a94c72@gmail.com>
-Message-ID: <87po61o9q2.fsf@dell.be.48ers.dk>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 22 Jan 2018 22:45:43 +0100
+Subject: [Buildroot] Suggestion for Makefile to probably import
+ BR2_CONFIG
+In-Reply-To: <CAGNmLEM_x8ykDr54gbT94em9YyH5+0ec=jCgjULh68yJLUzjnw@mail.gmail.com>
+References: <CAGNmLEM_x8ykDr54gbT94em9YyH5+0ec=jCgjULh68yJLUzjnw@mail.gmail.com>
+Message-ID: <1cb3ee33-b12f-6534-9dbf-fb697fbf3482@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Zoltan" == Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com> writes:
+ Hi TP,
 
- > Dear Thomas &All,
- > On 01/21/2018 08:00 AM, Thomas Petazzoni wrote:
- >> Hello,
- >> 
- >> This is the list of Buildroot build failures that occured on
- >> 2018-01-20, and for which you are a registered architecture developer
- >> or package developer. Please help us improving the quality of
- >> Buildroot by investigating those build failures and sending patches to
- >> fix them. Thanks!
- >> 
- >> Results for the 'master' branch
- >> ===============================
- >> 
- >> Build failures related to your packages:
- >> 
- >> arm | proj-4.9.3 |
- >> http://autobuild.buildroot.net/results/80243a2ae19190d75e84a2ed8aa4b95a20ea9ef0
- >> 
+ Thank you for your suggestion!
 
- > I received this ^^ build error notification mail yesterday.
 
- > The link redirects to
- > https://bugs.busybox.net/results/80243a2ae19190d75e84a2ed8aa4b95a20ea9ef0,
- > and ends up in a 404.
+On 17-01-18 23:06, Toan Pham wrote:
+> 
+> 
+> Hi,
+> 
+> I would like to make a suggestion on patching the main Makefile line:?
+> 
+> BR2_CONFIG = $(CONFIG_DIR)/.config??
+> 
+> to
+> 
+> BR2_CONFIG ?= $(CONFIG_DIR)/.config
+> 
+> 
+> The main reason for this patch is that it allows the configuration file to be
+> specified from command argument.? For example, I would be able to build two
+> different targets (even in parallel) with the following commands:
+> 
+> 
+> make BR2_CONFIG=$PWD/myTarget1 O=output.target1
+> 
+> make BR2_CONFIG=$PWD/myTarget2 O=output.target2
+>
+>
+> Without the above patch, buildroot assumes that the config file is already saved
+> under output.target{1,2}/.config and would fail if the file does not exist.? I
+> find that the above patch is very valuable, please comment or make suggestion!
 
-Sorry, my fault. I am moving sources.buildroot.net to a new VM / behind
-cloudflare, and DNS for autobuild.buildroot.net temporarily pointed at
-the VM running bugs.busybox.net instead of the autobuild master.
+ The .config file is a generated file. In fact, it will sometimes be overwritten
+when you start a build. The .config files also contains information about your
+build environment. So no, it really isn't a good idea to do this.
 
-There's also a few autobuilder failures because of this.
+ If you have an existing defconfig file (normally generated with 'make
+savedefconfig', but you can also just copy the .config file), you can use it as
+the source of the generated .config as follows:
 
-It should be fixed now, and sources.buildroot.net should be faster now.
+make BR2_DEFCONFIG=$PWD/myTarget1 O=output.target1
+make O=output.target1
+
+
+ Regards,
+ Arnout
+
 
 -- 
-Bye, Peter Korsgaard
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
