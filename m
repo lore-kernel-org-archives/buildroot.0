@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 22 Jan 2018 22:28:18 +0100
-Subject: [Buildroot] [PATCH 1/1] boinc: bump to version 7.8.6
-In-Reply-To: <20180120170853.4792-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sat, 20 Jan 2018 18:08:53 +0100")
-References: <20180120170853.4792-1-fontaine.fabrice@gmail.com>
-Message-ID: <87a7x5r3bh.fsf@dell.be.48ers.dk>
+Date: Mon, 22 Jan 2018 22:28:23 +0100
+Subject: [Buildroot] [PATCH 1/1] libmaxminddb: bump to version 1.3.2
+In-Reply-To: <20180120171427.10565-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sat, 20 Jan 2018 18:14:27 +0100")
+References: <20180120171427.10565-1-fontaine.fabrice@gmail.com>
+Message-ID: <87607tr3bc.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
