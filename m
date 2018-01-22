@@ -1,22 +1,66 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 22 Jan 2018 22:33:14 +0100
-Subject: [Buildroot] [PATCH 1/1] repolicy: bump to 2.20180114
-In-Reply-To: <20180122121718.1710-1-aduskett@gmail.com> (Adam Duskett's
- message of "Mon, 22 Jan 2018 07:17:18 -0500")
-References: <20180122121718.1710-1-aduskett@gmail.com>
-Message-ID: <87k1w9poit.fsf@dell.be.48ers.dk>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 22 Jan 2018 22:33:13 +0100
+Subject: [Buildroot] [PATCH 1/2] package/fmc: Remove hash check
+In-Reply-To: <20180119181743.30625-1-matthew.weber@rockwellcollins.com>
+References: <20180119181743.30625-1-matthew.weber@rockwellcollins.com>
+Message-ID: <bf8a232f-bd96-4c0d-209b-9de260ae073c@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Adam" == Adam Duskett <aduskett@gmail.com> writes:
 
- > Remove 0001-fix-regex-escape-sequence-error.patch, as it has been
- > committed upstream.
 
-Committed after fixing the typo in $SUBJECT, thanks.
+On 19-01-18 19:17, Matt Weber wrote:
+> This package uses a kconfig value for the version,
+
+ Huh?
+
+FMC_VERSION = fsl-sdk-v2.0
+
+ Do you have a local patch maybe?
+
+ Regards,
+ Arnout
+
+> so ignore the hash check which will fail when the
+> user specifies something other then the kconfig default.
+> 
+> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+> ---
+>  package/fmc/fmc.hash | 2 --
+>  package/fmc/fmc.mk   | 2 ++
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+>  delete mode 100644 package/fmc/fmc.hash
+> 
+> diff --git a/package/fmc/fmc.hash b/package/fmc/fmc.hash
+> deleted file mode 100644
+> index 13d9d77ee5..0000000000
+> --- a/package/fmc/fmc.hash
+> +++ /dev/null
+> @@ -1,2 +0,0 @@
+> -# Locally calculated
+> -sha256	a91e0c9b7c7f238634c64a755c05671f33f2acdb6ae2d09cad4d683b364ee8e4	fmc-fsl-sdk-v2.0.tar.gz
+> diff --git a/package/fmc/fmc.mk b/package/fmc/fmc.mk
+> index 2a95fec0b7..5dda914858 100644
+> --- a/package/fmc/fmc.mk
+> +++ b/package/fmc/fmc.mk
+> @@ -10,6 +10,8 @@ FMC_LICENSE = MIT
+>  FMC_LICENSE_FILES = COPYING
+>  FMC_DEPENDENCIES = libxml2 tclap fmlib
+>  
+> +BR_NO_CHECK_HASH_FOR += $(FMC_SOURCE)
+> +
+>  FMC_MAKE_OPTS = \
+>  	CC="$(TARGET_CC)" \
+>  	CXX="$(TARGET_CXX)" \
+> 
 
 -- 
-Bye, Peter Korsgaard
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
