@@ -1,64 +1,61 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 22 Jan 2018 22:45:43 +0100
-Subject: [Buildroot] Suggestion for Makefile to probably import
- BR2_CONFIG
-In-Reply-To: <CAGNmLEM_x8ykDr54gbT94em9YyH5+0ec=jCgjULh68yJLUzjnw@mail.gmail.com>
-References: <CAGNmLEM_x8ykDr54gbT94em9YyH5+0ec=jCgjULh68yJLUzjnw@mail.gmail.com>
-Message-ID: <1cb3ee33-b12f-6534-9dbf-fb697fbf3482@mind.be>
+Date: Mon, 22 Jan 2018 22:57:13 +0100
+Subject: [Buildroot] [PATCH v9 0/8] Add support for the Rust programming
+In-Reply-To: <20180119090315.1fd13958@windsurf.lan>
+References: <20171228155146.18193-1-eric.le.bihan.dev@free.fr>
+ <20171228172129.3dd0acdc@windsurf.home> <20171228175256.GA24806@ned>
+ <20171228223629.0fd45695@windsurf> <20180118074850.GA10580@itchy>
+ <20180118090319.3d32c593@windsurf.lan> <20180118224158.GA24327@itchy>
+ <20180119090315.1fd13958@windsurf.lan>
+Message-ID: <a3a4a451-864a-f77c-d41f-04afd9ae641a@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi TP,
-
- Thank you for your suggestion!
 
 
-On 17-01-18 23:06, Toan Pham wrote:
+On 19-01-18 09:03, Thomas Petazzoni wrote:
+> Hello,
 > 
+> On Thu, 18 Jan 2018 23:41:58 +0100, Eric Le Bihan wrote:
 > 
-> Hi,
+>>> We have tests like support/testing/tests/fs/test_iso9660.py that don't
+>>> use BASIC_TOOLCHAIN_CONFIG.
+>>
+>> Looking at the existing tests, I thought it was a requirement to use
+>> toolchains hosted at http://autobuild.buildroot.org/.
 > 
-> I would like to make a suggestion on patching the main Makefile line:?
+> Not at all. We do have some tests that don't use those toolchains. Look
+> at support/testing/tests/boot/test_atf.py, the tests use Linaro
+> toolchains.
 > 
-> BR2_CONFIG = $(CONFIG_DIR)/.config??
+>>> I'm not sure what "artefacts" you are looking for here.  
+>>
+>> I was referring to ARTIFACTS_URL, where ARM versatile/vexpress
+>> kernels are available. As I thought I should have used
+>> br-aarch64-glibc-2017.05-1078-g95b1dae.tar.bz2 to get a glibc-based
+>> toolchain, adding Aarch64 support to the emulator seemed necessary.
+>>
+>> I'll go with the Linaro toolchain, using ARM vexpress as target.
 > 
-> to
+> If you want to do runtime test on an AArch64 platform without building
+> the kernel as part of your test configuration, then yes, we would have
+> to add an artifact on http://autobuild.buildroot.net/artefacts/. I can
+> definitely do that if needed.
 > 
-> BR2_CONFIG ?= $(CONFIG_DIR)/.config
-> 
-> 
-> The main reason for this patch is that it allows the configuration file to be
-> specified from command argument.? For example, I would be able to build two
-> different targets (even in parallel) with the following commands:
-> 
-> 
-> make BR2_CONFIG=$PWD/myTarget1 O=output.target1
-> 
-> make BR2_CONFIG=$PWD/myTarget2 O=output.target2
->
->
-> Without the above patch, buildroot assumes that the config file is already saved
-> under output.target{1,2}/.config and would fail if the file does not exist.? I
-> find that the above patch is very valuable, please comment or make suggestion!
+> I'm not super happy with this artefacts solution, but I wanted to avoid
+> putting all those binary files under version control inside the
+> Buildroot repository. If people have better proposals, I'm definitely
+> interested.
 
- The .config file is a generated file. In fact, it will sometimes be overwritten
-when you start a build. The .config files also contains information about your
-build environment. So no, it really isn't a good idea to do this.
-
- If you have an existing defconfig file (normally generated with 'make
-savedefconfig', but you can also just copy the .config file), you can use it as
-the source of the generated .config as follows:
-
-make BR2_DEFCONFIG=$PWD/myTarget1 O=output.target1
-make O=output.target1
-
+ We could have the artefacts produced by gitlab-CI, and use the gitlab pipeline
+feature to make sure the most recently built one is used. Well, that's the
+theory, I haven't looked at the details :-)
 
  Regards,
  Arnout
-
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
