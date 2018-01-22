@@ -1,9 +1,9 @@
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Sun, 21 Jan 2018 22:44:37 -0200
-Subject: [Buildroot] [PATCH 09/14] genrandconfig: fix code style
+Date: Sun, 21 Jan 2018 22:44:38 -0200
+Subject: [Buildroot] [PATCH 10/14] get-developers: fix code style
 In-Reply-To: <1516581882-30582-1-git-send-email-ricardo.martincoski@gmail.com>
 References: <1516581882-30582-1-git-send-email-ricardo.martincoski@gmail.com>
-Message-ID: <1516581882-30582-10-git-send-email-ricardo.martincoski@gmail.com>
+Message-ID: <1516581882-30582-11-git-send-email-ricardo.martincoski@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,136 +11,230 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Fix these warnings:
-E201 whitespace after '['
 E202 whitespace before ']'
-
-Ignore these warnings:
-E501 line too long (138 > 132 characters)
- -> flake8 has options to ignore all warnings in a single file, to
- ignore a given warning for all files, and to ignore a given warning for
- a line. Unfortunately it does not have an option to ignore a given
- warning for a single file, so add the magic comments to all lines with
- the warning. It makes the lines even longer, but keeps the check for
- the rest of the file and stops generating warning for them.
- Alternative solutions would be to isolate the common part of the
- strings as a variable and concatenate on the fly the strings (using a
- bit more processing):
-   ...="' + COMMON_URL + 'armv5-ctng-linux-gnueabi.tar.xz"\n' in ...
- , or to break the strings in two (the interpreter would join them):
-   ...="http://autobuild.buildroot.org/toolchains/tarballs/' \
-   'armv5-ctng-linux-gnueabi.tar.xz"\n' in ...
- Also, don't try to align all comments because a new toolchain exception
- added to the script in the future can easily break this alignment.
+E203 whitespace before ':'
+E302 expected 2 blank lines, found 1
+E305 expected 2 blank lines after class or function definition, found 1
+E711 comparison to None should be 'if cond is None:'
+E741 ambiguous variable name 'l'
+F401 'sys' imported but unused
+W391 blank line at end of file
 
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- utils/genrandconfig | 34 +++++++++++++++++-----------------
- 1 file changed, 17 insertions(+), 17 deletions(-)
+ utils/get-developers     |  4 +++-
+ utils/getdeveloperlib.py | 52 +++++++++++++++++++++++++++++-------------------
+ 2 files changed, 34 insertions(+), 22 deletions(-)
 
-diff --git a/utils/genrandconfig b/utils/genrandconfig
-index 8833225..021d0f9 100755
---- a/utils/genrandconfig
-+++ b/utils/genrandconfig
-@@ -127,7 +127,7 @@ def get_toolchain_configs(toolchains_csv, buildrootdir):
+diff --git a/utils/get-developers b/utils/get-developers
+index 6a028b4..f525ff2 100755
+--- a/utils/get-developers
++++ b/utils/get-developers
+@@ -5,6 +5,7 @@ import getdeveloperlib
+ import sys
+ import os
  
-     with open(toolchains_csv) as r:
-         # filter empty lines and comments
--        lines = [ t for t in r.readlines() if len(t.strip()) > 0 and t[0] != '#' ]
-+        lines = [t for t in r.readlines() if len(t.strip()) > 0 and t[0] != '#']
-         toolchains = decode_byte_list(lines)
-     configs = []
++
+ def parse_args():
+     parser = argparse.ArgumentParser()
+     parser.add_argument('patches', metavar='P', type=argparse.FileType('r'), nargs='*',
+@@ -19,6 +20,7 @@ def parse_args():
+                         const=True, help='list files not handled by any developer')
+     return parser.parse_args()
  
-@@ -221,36 +221,36 @@ def fixup_config(configfile):
++
+ def __main__():
+     devs = getdeveloperlib.parse_developers()
+     if devs is None:
+@@ -95,5 +97,5 @@ def __main__():
+         if result != "":
+             print("git send-email %s" % result)
+ 
+-__main__()
+ 
++__main__()
+diff --git a/utils/getdeveloperlib.py b/utils/getdeveloperlib.py
+index 6519107..2c8d477 100644
+--- a/utils/getdeveloperlib.py
++++ b/utils/getdeveloperlib.py
+@@ -1,7 +1,5 @@
+-import sys
+ import os
+ import re
+-import argparse
+ import glob
+ import subprocess
+ 
+@@ -11,6 +9,7 @@ import subprocess
+ 
+ FIND_INFRA_IN_PATCH = re.compile("^\+\$\(eval \$\((host-)?([^-]*)-package\)\)$")
+ 
++
+ def analyze_patch(patch):
+     """Parse one patch and return the list of files modified, added or
+     removed by the patch."""
+@@ -24,14 +23,16 @@ def analyze_patch(patch):
+         if not line.startswith("+++ "):
+             continue
+         line.strip()
+-        fname = line[line.find("/") + 1 : ].strip()
++        fname = line[line.find("/") + 1:].strip()
+         if fname == "dev/null":
+             continue
+         files.add(fname)
+     return (files, infras)
+ 
++
+ FIND_INFRA_IN_MK = re.compile("^\$\(eval \$\((host-)?([^-]*)-package\)\)$")
+ 
++
+ def fname_get_package_infra(fname):
+     """Checks whether the file name passed as argument is a Buildroot .mk
+     file describing a package, and find the infrastructure it's using."""
+@@ -42,13 +43,14 @@ def fname_get_package_infra(fname):
+         return None
+ 
+     with open(fname, "r") as f:
+-        for l in f:
+-            l = l.strip()
+-            m = FIND_INFRA_IN_MK.match(l)
++        for line in f:
++            line = line.strip()
++            m = FIND_INFRA_IN_MK.match(line)
+             if m:
+                 return m.group(2)
+     return None
+ 
++
+ def get_infras(files):
+     """Search in the list of files for .mk files, and collect the package
+     infrastructures used by those .mk files."""
+@@ -59,6 +61,7 @@ def get_infras(files):
+             infras.add(infra)
+     return infras
+ 
++
+ def analyze_patches(patches):
+     """Parse a list of patches and returns the list of files modified,
+     added or removed by the patches, as well as the list of package
+@@ -72,6 +75,7 @@ def analyze_patches(patches):
+     allinfras = allinfras | get_infras(allfiles)
+     return (allfiles, allinfras)
+ 
++
+ #
+ # DEVELOPERS file parsing functions
+ #
+@@ -91,6 +95,7 @@ class Developer:
+                 return True
          return False
-     # The ctng toolchain is affected by PR58854
-     if 'BR2_PACKAGE_LTTNG_TOOLS=y\n' in configlines and \
--       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/armv5-ctng-linux-gnueabi.tar.xz"\n' in configlines:
-+       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/armv5-ctng-linux-gnueabi.tar.xz"\n' in configlines:  # noqa E501
-         return False
-     # The ctng toolchain tigger an assembler error with guile package when compiled with -Os (same issue as for CS ARM 2014.05-29)
-     if 'BR2_PACKAGE_GUILE=y\n' in configlines and \
-        'BR2_OPTIMIZE_S=y\n' in configlines and \
--       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/armv5-ctng-linux-gnueabi.tar.xz"\n' in configlines:
-+       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/armv5-ctng-linux-gnueabi.tar.xz"\n' in configlines:  # noqa E501
-         return False
-     # The ctng toolchain is affected by PR58854
-     if 'BR2_PACKAGE_LTTNG_TOOLS=y\n' in configlines and \
--       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/armv6-ctng-linux-uclibcgnueabi.tar.xz"\n' in configlines:
-+       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/armv6-ctng-linux-uclibcgnueabi.tar.xz"\n' in configlines:  # noqa E501
-         return False
-     # The ctng toolchain is affected by PR58854
-     if 'BR2_PACKAGE_LTTNG_TOOLS=y\n' in configlines and \
--       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/armv7-ctng-linux-gnueabihf.tar.xz"\n' in configlines:
-+       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/armv7-ctng-linux-gnueabihf.tar.xz"\n' in configlines:  # noqa E501
-         return False
-     # The ctng toolchain is affected by PR60155
-     if 'BR2_PACKAGE_SDL=y\n' in configlines and \
--       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/powerpc-ctng-linux-uclibc.tar.xz"\n' in configlines:
-+       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/powerpc-ctng-linux-uclibc.tar.xz"\n' in configlines:  # noqa E501
-         return False
-     # The ctng toolchain is affected by PR60155
-     if 'BR2_PACKAGE_LIBMPEG2=y\n' in configlines and \
--       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/powerpc-ctng-linux-uclibc.tar.xz"\n' in configlines:
-+       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/powerpc-ctng-linux-uclibc.tar.xz"\n' in configlines:  # noqa E501
-         return False
-     # This MIPS toolchain uses eglibc-2.18 which lacks SYS_getdents64
-     if 'BR2_PACKAGE_STRONGSWAN=y\n' in configlines and \
--       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/mips64el-ctng_n64-linux-gnu.tar.xz"\n' in configlines:
-+       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/mips64el-ctng_n64-linux-gnu.tar.xz"\n' in configlines:  # noqa E501
-         return False
-     # This MIPS toolchain uses eglibc-2.18 which lacks SYS_getdents64
-     if 'BR2_PACKAGE_PYTHON3=y\n' in configlines and \
--       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/mips64el-ctng_n64-linux-gnu.tar.xz"\n' in configlines:
-+       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/mips64el-ctng_n64-linux-gnu.tar.xz"\n' in configlines:  # noqa E501
-         return False
-     # libffi not available on sh2a and ARMv7-M, but propagating libffi
-     # arch dependencies in Buildroot is really too much work, so we
-@@ -266,37 +266,37 @@ def fixup_config(configfile):
-         configlines.append('BR2_PACKAGE_SUNXI_BOARDS_FEX_FILE="a10/hackberry.fex"\n')
-     # This MIPS uClibc toolchain fails to build the gdb package
-     if 'BR2_PACKAGE_GDB=y\n' in configlines and \
--       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/mipsel-ctng-linux-uclibc.tar.xz"\n' in configlines:
-+       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/mipsel-ctng-linux-uclibc.tar.xz"\n' in configlines:  # noqa E501
-         return False
-     # This MIPS uClibc toolchain fails to build the rt-tests package
-     if 'BR2_PACKAGE_RT_TESTS=y\n' in configlines and \
--       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/mipsel-ctng-linux-uclibc.tar.xz"\n' in configlines:
-+       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/mipsel-ctng-linux-uclibc.tar.xz"\n' in configlines:  # noqa E501
-         return False
-     # This MIPS uClibc toolchain fails to build the civetweb package
-     if 'BR2_PACKAGE_CIVETWEB=y\n' in configlines and \
--       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/mipsel-ctng-linux-uclibc.tar.xz"\n' in configlines:
-+       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/mipsel-ctng-linux-uclibc.tar.xz"\n' in configlines:  # noqa E501
-         return False
-     # This MIPS ctng toolchain fails to build the python3 package
-     if 'BR2_PACKAGE_PYTHON3=y\n' in configlines and \
--       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/mips64el-ctng_n64-linux-gnu.tar.xz"\n' in configlines:
-+       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/mips64el-ctng_n64-linux-gnu.tar.xz"\n' in configlines:  # noqa E501
-         return False
-     # This MIPS uClibc toolchain fails to build the strace package
-     if 'BR2_PACKAGE_STRACE=y\n' in configlines and \
--       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/mipsel-ctng-linux-uclibc.tar.xz"\n' in configlines:
-+       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/mipsel-ctng-linux-uclibc.tar.xz"\n' in configlines:  # noqa E501
-         return False
-     # This MIPS uClibc toolchain fails to build the cdrkit package
-     if 'BR2_PACKAGE_CDRKIT=y\n' in configlines and \
-        'BR2_STATIC_LIBS=y\n' in configlines and \
--       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/mipsel-ctng-linux-uclibc.tar.xz"\n' in configlines:
-+       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/mipsel-ctng-linux-uclibc.tar.xz"\n' in configlines:  # noqa E501
-         return False
-     # uClibc vfork static linking issue
-     if 'BR2_PACKAGE_ALSA_LIB=y\n' in configlines and \
-        'BR2_STATIC_LIBS=y\n' in configlines and \
--       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/i486-ctng-linux-uclibc.tar.xz"\n' in configlines:
-+       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/i486-ctng-linux-uclibc.tar.xz"\n' in configlines:  # noqa E501
-         return False
-     # This MIPS uClibc toolchain fails to build the weston package
-     if 'BR2_PACKAGE_WESTON=y\n' in configlines and \
--       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/mipsel-ctng-linux-uclibc.tar.xz"\n' in configlines:
-+       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/mipsel-ctng-linux-uclibc.tar.xz"\n' in configlines:  # noqa E501
-         return False
-     # The cs nios2 2017.02 toolchain is affected by binutils PR19405
-     if 'BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII=y\n' in configlines and \
+ 
++
+ def parse_developer_packages(fnames):
+     """Given a list of file patterns, travel through the Buildroot source
+     tree to find which packages are implemented by those file
+@@ -105,25 +110,27 @@ def parse_developer_packages(fnames):
+                     packages.add(pkg)
+     return packages
+ 
++
+ def parse_arches_from_config_in(fname):
+     """Given a path to an arch/Config.in.* file, parse it to get the list
+     of BR2_ARCH values for this architecture."""
+     arches = set()
+     with open(fname, "r") as f:
+         parsing_arches = False
+-        for l in f:
+-            l = l.strip()
+-            if l == "config BR2_ARCH":
++        for line in f:
++            line = line.strip()
++            if line == "config BR2_ARCH":
+                 parsing_arches = True
+                 continue
+             if parsing_arches:
+-                m = re.match("^\s*default \"([^\"]*)\".*", l)
++                m = re.match("^\s*default \"([^\"]*)\".*", line)
+                 if m:
+                     arches.add(m.group(1))
+                 else:
+                     parsing_arches = False
+     return arches
+ 
++
+ def parse_developer_architectures(fnames):
+     """Given a list of file names, find the ones starting by
+     'arch/Config.in.', and use that to determine the architecture a
+@@ -135,6 +142,7 @@ def parse_developer_architectures(fnames):
+         arches = arches | parse_arches_from_config_in(fname)
+     return arches
+ 
++
+ def parse_developer_infras(fnames):
+     infras = set()
+     for fname in fnames:
+@@ -143,37 +151,38 @@ def parse_developer_infras(fnames):
+             infras.add(m.group(1))
+     return infras
+ 
++
+ def parse_developers(basepath=None):
+     """Parse the DEVELOPERS file and return a list of Developer objects."""
+     developers = []
+     linen = 0
+-    if basepath == None:
++    if basepath is None:
+         basepath = os.getcwd()
+     with open(os.path.join(basepath, "DEVELOPERS"), "r") as f:
+         files = []
+         name = None
+-        for l in f:
+-            l = l.strip()
+-            if l.startswith("#"):
++        for line in f:
++            line = line.strip()
++            if line.startswith("#"):
+                 continue
+-            elif l.startswith("N:"):
++            elif line.startswith("N:"):
+                 if name is not None or len(files) != 0:
+                     print("Syntax error in DEVELOPERS file, line %d" % linen)
+-                name = l[2:].strip()
+-            elif l.startswith("F:"):
+-                fname = l[2:].strip()
++                name = line[2:].strip()
++            elif line.startswith("F:"):
++                fname = line[2:].strip()
+                 dev_files = glob.glob(os.path.join(basepath, fname))
+                 if len(dev_files) == 0:
+                     print("WARNING: '%s' doesn't match any file" % fname)
+                 files += dev_files
+-            elif l == "":
++            elif line == "":
+                 if not name:
+                     continue
+                 developers.append(Developer(name, files))
+                 files = []
+                 name = None
+             else:
+-                print("Syntax error in DEVELOPERS file, line %d: '%s'" % (linen, l))
++                print("Syntax error in DEVELOPERS file, line %d: '%s'" % (linen, line))
+                 return None
+             linen += 1
+     # handle last developer
+@@ -181,10 +190,11 @@ def parse_developers(basepath=None):
+         developers.append(Developer(name, files))
+     return developers
+ 
++
+ def check_developers(developers, basepath=None):
+     """Look at the list of files versioned in Buildroot, and returns the
+     list of files that are not handled by any developer"""
+-    if basepath == None:
++    if basepath is None:
+         basepath = os.getcwd()
+     cmd = ["git", "--git-dir", os.path.join(basepath, ".git"), "ls-files"]
+     files = subprocess.check_output(cmd).strip().split("\n")
 -- 
 2.7.4
