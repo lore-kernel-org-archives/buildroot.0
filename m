@@ -1,39 +1,46 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Mon, 22 Jan 2018 20:29:47 +0100
-Subject: [Buildroot] [PATCH] libtomcrypt: bump to version 1.18.1
-Message-ID: <20180122192947.30352-1-francois.perrad@gadz.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 22 Jan 2018 20:54:16 +0100
+Subject: [Buildroot] [PATCH v2 1/2] squid: bump version to 3.5.27
+Message-ID: <20180122195417.358-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/libtomcrypt/libtomcrypt.hash | 2 +-
- package/libtomcrypt/libtomcrypt.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+And add a hash for the license files.
 
-diff --git a/package/libtomcrypt/libtomcrypt.hash b/package/libtomcrypt/libtomcrypt.hash
-index 6f7720e8a..be8e9b1bc 100644
---- a/package/libtomcrypt/libtomcrypt.hash
-+++ b/package/libtomcrypt/libtomcrypt.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256  da9df56a314afaab71963aa71bb6a075ea6bdee3d4db4af045f6bfe23e88b87a  crypt-1.18.0.tar.xz
-+sha256  57c13a34fbfd45696189d19e47864e48f4e5c11590c29b444accb8edbf047f14  crypt-1.18.1.tar.xz
-diff --git a/package/libtomcrypt/libtomcrypt.mk b/package/libtomcrypt/libtomcrypt.mk
-index 020ce796f..974ef3f2f 100644
---- a/package/libtomcrypt/libtomcrypt.mk
-+++ b/package/libtomcrypt/libtomcrypt.mk
-@@ -4,7 +4,7 @@
- #
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/squid/squid.hash | 8 +++++---
+ package/squid/squid.mk   | 2 +-
+ 2 files changed, 6 insertions(+), 4 deletions(-)
+
+diff --git a/package/squid/squid.hash b/package/squid/squid.hash
+index 91ba9e6fc4..8787cb25ef 100644
+--- a/package/squid/squid.hash
++++ b/package/squid/squid.hash
+@@ -1,3 +1,5 @@
+-# From http://www.squid-cache.org/Versions/v3/3.5/squid-3.5.26.tar.xz.asc
+-md5 510e2c84773879c00d0e7ced997864d9  squid-3.5.26.tar.xz
+-sha1 51a664217957b35de8b7fae180b9f93a759a4204  squid-3.5.26.tar.xz
++# From http://www.squid-cache.org/Versions/v3/3.5/squid-3.5.27.tar.xz.asc
++md5 39ef8199675d48a314b540f92c00c545 squid-3.5.27.tar.xz
++sha1 1e69c96d13cd49844da3bcf33a0b428fbe7b6f77 squid-3.5.27.tar.xz
++# Locally calculated
++sha256 58f5d05257af1fb964fde20e134d660fac9afa86b6fd8c70d63ead63068378fa COPYING
+diff --git a/package/squid/squid.mk b/package/squid/squid.mk
+index d334d14c88..8ade55ee37 100644
+--- a/package/squid/squid.mk
++++ b/package/squid/squid.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--LIBTOMCRYPT_VERSION = 1.18.0
-+LIBTOMCRYPT_VERSION = 1.18.1
- LIBTOMCRYPT_SITE = https://github.com/libtom/libtomcrypt/releases/download/v$(LIBTOMCRYPT_VERSION)
- LIBTOMCRYPT_SOURCE = crypt-$(LIBTOMCRYPT_VERSION).tar.xz
- LIBTOMCRYPT_LICENSE = WTFPL
+ SQUID_VERSION_MAJOR = 3.5
+-SQUID_VERSION = $(SQUID_VERSION_MAJOR).26
++SQUID_VERSION = $(SQUID_VERSION_MAJOR).27
+ SQUID_SOURCE = squid-$(SQUID_VERSION).tar.xz
+ SQUID_SITE = http://www.squid-cache.org/Versions/v3/$(SQUID_VERSION_MAJOR)
+ SQUID_LICENSE = GPL-2.0+
 -- 
 2.11.0
