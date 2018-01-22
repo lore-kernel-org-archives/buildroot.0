@@ -1,9 +1,9 @@
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Sun, 21 Jan 2018 22:44:36 -0200
-Subject: [Buildroot] [PATCH 08/14] diffconfig: fix code style
+Date: Sun, 21 Jan 2018 22:44:37 -0200
+Subject: [Buildroot] [PATCH 09/14] genrandconfig: fix code style
 In-Reply-To: <1516581882-30582-1-git-send-email-ricardo.martincoski@gmail.com>
 References: <1516581882-30582-1-git-send-email-ricardo.martincoski@gmail.com>
-Message-ID: <1516581882-30582-9-git-send-email-ricardo.martincoski@gmail.com>
+Message-ID: <1516581882-30582-10-git-send-email-ricardo.martincoski@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,103 +11,136 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Fix these warnings:
-E225 missing whitespace around operator
-E231 missing whitespace after ','
-E302 expected 2 blank lines, found 1
-E305 expected 2 blank lines after class or function definition, found 1
-E401 multiple imports on one line
+E201 whitespace after '['
+E202 whitespace before ']'
+
+Ignore these warnings:
+E501 line too long (138 > 132 characters)
+ -> flake8 has options to ignore all warnings in a single file, to
+ ignore a given warning for all files, and to ignore a given warning for
+ a line. Unfortunately it does not have an option to ignore a given
+ warning for a single file, so add the magic comments to all lines with
+ the warning. It makes the lines even longer, but keeps the check for
+ the rest of the file and stops generating warning for them.
+ Alternative solutions would be to isolate the common part of the
+ strings as a variable and concatenate on the fly the strings (using a
+ bit more processing):
+   ...="' + COMMON_URL + 'armv5-ctng-linux-gnueabi.tar.xz"\n' in ...
+ , or to break the strings in two (the interpreter would join them):
+   ...="http://autobuild.buildroot.org/toolchains/tarballs/' \
+   'armv5-ctng-linux-gnueabi.tar.xz"\n' in ...
+ Also, don't try to align all comments because a new toolchain exception
+ added to the script in the future can easily break this alignment.
 
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Cc: Marcus Folkesson <marcus.folkesson@gmail.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
 ---
- utils/diffconfig | 22 ++++++++++++++--------
- 1 file changed, 14 insertions(+), 8 deletions(-)
+ utils/genrandconfig | 34 +++++++++++++++++-----------------
+ 1 file changed, 17 insertions(+), 17 deletions(-)
 
-diff --git a/utils/diffconfig b/utils/diffconfig
-index 5862a62..c8cd04c 100755
---- a/utils/diffconfig
-+++ b/utils/diffconfig
-@@ -8,7 +8,9 @@
- # Adapted to Buildroot 2017 by Marcus Folkesson
- #
+diff --git a/utils/genrandconfig b/utils/genrandconfig
+index 8833225..021d0f9 100755
+--- a/utils/genrandconfig
++++ b/utils/genrandconfig
+@@ -127,7 +127,7 @@ def get_toolchain_configs(toolchains_csv, buildrootdir):
  
--import sys, os
-+import sys
-+import os
-+
+     with open(toolchains_csv) as r:
+         # filter empty lines and comments
+-        lines = [ t for t in r.readlines() if len(t.strip()) > 0 and t[0] != '#' ]
++        lines = [t for t in r.readlines() if len(t.strip()) > 0 and t[0] != '#']
+         toolchains = decode_byte_list(lines)
+     configs = []
  
- def usage():
-     print("""Usage: diffconfig [-h] [-m] [<config1> <config2>]
-@@ -40,6 +42,7 @@ Example usage:
- """)
-     sys.exit(0)
- 
-+
- # returns a dictionary of name/value pairs for config items in the file
- def readconfig(config_file):
-     d = {}
-@@ -52,23 +55,25 @@ def readconfig(config_file):
-             d[line[6:-11]] = "n"
-     return d
- 
-+
- def print_config(op, config, value, new_value):
-     global merge_style
- 
-     if merge_style:
-         if new_value:
--            if new_value=="n":
-+            if new_value == "n":
-                 print("# BR2_%s is not set" % config)
-             else:
-                 print("BR2_%s=%s" % (config, new_value))
-     else:
--        if op=="-":
-+        if op == "-":
-             print("-%s %s" % (config, value))
--        elif op=="+":
-+        elif op == "+":
-             print("+%s %s" % (config, new_value))
-         else:
-             print(" %s %s -> %s" % (config, value, new_value))
- 
-+
- def main():
-     global merge_style
- 
-@@ -82,15 +87,15 @@ def main():
-         sys.argv.remove("-m")
- 
-     argc = len(sys.argv)
--    if not (argc==1 or argc == 3):
-+    if not (argc == 1 or argc == 3):
-         print("Error: incorrect number of arguments or unrecognized option")
-         usage()
- 
-     if argc == 1:
-         # if no filenames given, assume .config and .config.old
--        build_dir=""
-+        build_dir = ""
-         if "KBUILD_OUTPUT" in os.environ:
--            build_dir = os.environ["KBUILD_OUTPUT"]+"/"
-+            build_dir = os.environ["KBUILD_OUTPUT"] + "/"
-         configa_filename = build_dir + ".config.old"
-         configb_filename = build_dir + ".config"
-     else:
-@@ -102,7 +107,7 @@ def main():
-         b = readconfig(open(configb_filename))
-     except (IOError):
-         e = sys.exc_info()[1]
--        print("I/O error[%s]: %s\n" % (e.args[0],e.args[1]))
-+        print("I/O error[%s]: %s\n" % (e.args[0], e.args[1]))
-         usage()
- 
-     # print items in a but not b (accumulate, sort and print)
-@@ -133,4 +138,5 @@ def main():
-     for config in new:
-         print_config("+", config, None, b[config])
- 
-+
- main()
+@@ -221,36 +221,36 @@ def fixup_config(configfile):
+         return False
+     # The ctng toolchain is affected by PR58854
+     if 'BR2_PACKAGE_LTTNG_TOOLS=y\n' in configlines and \
+-       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/armv5-ctng-linux-gnueabi.tar.xz"\n' in configlines:
++       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/armv5-ctng-linux-gnueabi.tar.xz"\n' in configlines:  # noqa E501
+         return False
+     # The ctng toolchain tigger an assembler error with guile package when compiled with -Os (same issue as for CS ARM 2014.05-29)
+     if 'BR2_PACKAGE_GUILE=y\n' in configlines and \
+        'BR2_OPTIMIZE_S=y\n' in configlines and \
+-       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/armv5-ctng-linux-gnueabi.tar.xz"\n' in configlines:
++       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/armv5-ctng-linux-gnueabi.tar.xz"\n' in configlines:  # noqa E501
+         return False
+     # The ctng toolchain is affected by PR58854
+     if 'BR2_PACKAGE_LTTNG_TOOLS=y\n' in configlines and \
+-       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/armv6-ctng-linux-uclibcgnueabi.tar.xz"\n' in configlines:
++       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/armv6-ctng-linux-uclibcgnueabi.tar.xz"\n' in configlines:  # noqa E501
+         return False
+     # The ctng toolchain is affected by PR58854
+     if 'BR2_PACKAGE_LTTNG_TOOLS=y\n' in configlines and \
+-       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/armv7-ctng-linux-gnueabihf.tar.xz"\n' in configlines:
++       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/armv7-ctng-linux-gnueabihf.tar.xz"\n' in configlines:  # noqa E501
+         return False
+     # The ctng toolchain is affected by PR60155
+     if 'BR2_PACKAGE_SDL=y\n' in configlines and \
+-       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/powerpc-ctng-linux-uclibc.tar.xz"\n' in configlines:
++       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/powerpc-ctng-linux-uclibc.tar.xz"\n' in configlines:  # noqa E501
+         return False
+     # The ctng toolchain is affected by PR60155
+     if 'BR2_PACKAGE_LIBMPEG2=y\n' in configlines and \
+-       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/powerpc-ctng-linux-uclibc.tar.xz"\n' in configlines:
++       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/powerpc-ctng-linux-uclibc.tar.xz"\n' in configlines:  # noqa E501
+         return False
+     # This MIPS toolchain uses eglibc-2.18 which lacks SYS_getdents64
+     if 'BR2_PACKAGE_STRONGSWAN=y\n' in configlines and \
+-       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/mips64el-ctng_n64-linux-gnu.tar.xz"\n' in configlines:
++       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/mips64el-ctng_n64-linux-gnu.tar.xz"\n' in configlines:  # noqa E501
+         return False
+     # This MIPS toolchain uses eglibc-2.18 which lacks SYS_getdents64
+     if 'BR2_PACKAGE_PYTHON3=y\n' in configlines and \
+-       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/mips64el-ctng_n64-linux-gnu.tar.xz"\n' in configlines:
++       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/mips64el-ctng_n64-linux-gnu.tar.xz"\n' in configlines:  # noqa E501
+         return False
+     # libffi not available on sh2a and ARMv7-M, but propagating libffi
+     # arch dependencies in Buildroot is really too much work, so we
+@@ -266,37 +266,37 @@ def fixup_config(configfile):
+         configlines.append('BR2_PACKAGE_SUNXI_BOARDS_FEX_FILE="a10/hackberry.fex"\n')
+     # This MIPS uClibc toolchain fails to build the gdb package
+     if 'BR2_PACKAGE_GDB=y\n' in configlines and \
+-       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/mipsel-ctng-linux-uclibc.tar.xz"\n' in configlines:
++       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/mipsel-ctng-linux-uclibc.tar.xz"\n' in configlines:  # noqa E501
+         return False
+     # This MIPS uClibc toolchain fails to build the rt-tests package
+     if 'BR2_PACKAGE_RT_TESTS=y\n' in configlines and \
+-       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/mipsel-ctng-linux-uclibc.tar.xz"\n' in configlines:
++       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/mipsel-ctng-linux-uclibc.tar.xz"\n' in configlines:  # noqa E501
+         return False
+     # This MIPS uClibc toolchain fails to build the civetweb package
+     if 'BR2_PACKAGE_CIVETWEB=y\n' in configlines and \
+-       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/mipsel-ctng-linux-uclibc.tar.xz"\n' in configlines:
++       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/mipsel-ctng-linux-uclibc.tar.xz"\n' in configlines:  # noqa E501
+         return False
+     # This MIPS ctng toolchain fails to build the python3 package
+     if 'BR2_PACKAGE_PYTHON3=y\n' in configlines and \
+-       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/mips64el-ctng_n64-linux-gnu.tar.xz"\n' in configlines:
++       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/mips64el-ctng_n64-linux-gnu.tar.xz"\n' in configlines:  # noqa E501
+         return False
+     # This MIPS uClibc toolchain fails to build the strace package
+     if 'BR2_PACKAGE_STRACE=y\n' in configlines and \
+-       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/mipsel-ctng-linux-uclibc.tar.xz"\n' in configlines:
++       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/mipsel-ctng-linux-uclibc.tar.xz"\n' in configlines:  # noqa E501
+         return False
+     # This MIPS uClibc toolchain fails to build the cdrkit package
+     if 'BR2_PACKAGE_CDRKIT=y\n' in configlines and \
+        'BR2_STATIC_LIBS=y\n' in configlines and \
+-       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/mipsel-ctng-linux-uclibc.tar.xz"\n' in configlines:
++       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/mipsel-ctng-linux-uclibc.tar.xz"\n' in configlines:  # noqa E501
+         return False
+     # uClibc vfork static linking issue
+     if 'BR2_PACKAGE_ALSA_LIB=y\n' in configlines and \
+        'BR2_STATIC_LIBS=y\n' in configlines and \
+-       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/i486-ctng-linux-uclibc.tar.xz"\n' in configlines:
++       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/i486-ctng-linux-uclibc.tar.xz"\n' in configlines:  # noqa E501
+         return False
+     # This MIPS uClibc toolchain fails to build the weston package
+     if 'BR2_PACKAGE_WESTON=y\n' in configlines and \
+-       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/mipsel-ctng-linux-uclibc.tar.xz"\n' in configlines:
++       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/mipsel-ctng-linux-uclibc.tar.xz"\n' in configlines:  # noqa E501
+         return False
+     # The cs nios2 2017.02 toolchain is affected by binutils PR19405
+     if 'BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII=y\n' in configlines and \
 -- 
 2.7.4
