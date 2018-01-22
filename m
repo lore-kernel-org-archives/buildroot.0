@@ -1,9 +1,10 @@
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Sun, 21 Jan 2018 22:44:33 -0200
-Subject: [Buildroot] [PATCH 05/14] size-stats: fix code style
+Date: Sun, 21 Jan 2018 22:44:34 -0200
+Subject: [Buildroot] [PATCH 06/14] testing/tests/boot/test_atf: fix code
+ style
 In-Reply-To: <1516581882-30582-1-git-send-email-ricardo.martincoski@gmail.com>
 References: <1516581882-30582-1-git-send-email-ricardo.martincoski@gmail.com>
-Message-ID: <1516581882-30582-6-git-send-email-ricardo.martincoski@gmail.com>
+Message-ID: <1516581882-30582-7-git-send-email-ricardo.martincoski@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,77 +12,163 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Fix these warnings:
+E122 continuation line missing indentation or outdented
 E302 expected 2 blank lines, found 1
-E305 expected 2 blank lines after class or function definition, found 1
-E713 test for membership should be 'not in'
+F401 'os' imported but unused
 
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- support/scripts/size-stats | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ support/testing/tests/boot/test_atf.py | 124 +++++++++++++++++----------------
+ 1 file changed, 63 insertions(+), 61 deletions(-)
 
-diff --git a/support/scripts/size-stats b/support/scripts/size-stats
-index 85e7c15..deea92e 100755
---- a/support/scripts/size-stats
-+++ b/support/scripts/size-stats
-@@ -35,6 +35,7 @@ except ImportError:
- colors = ['#e60004', '#009836', '#2e1d86', '#ffed00',
-           '#0068b5', '#f28e00', '#940084', '#97c000']
+diff --git a/support/testing/tests/boot/test_atf.py b/support/testing/tests/boot/test_atf.py
+index f1e58af..8288116 100644
+--- a/support/testing/tests/boot/test_atf.py
++++ b/support/testing/tests/boot/test_atf.py
+@@ -1,80 +1,82 @@
+-import os
+ import infra.basetest
  
 +
- #
- # This function adds a new file to 'filesdict', after checking its
- # size. The 'filesdict' contain the relative path of the file as the
-@@ -54,6 +55,7 @@ def add_file(filesdict, relpath, abspath, pkg):
-     sz = os.stat(abspath).st_size
-     filesdict[relpath] = (pkg, sz)
+ class TestATFVexpress(infra.basetest.BRTest):
+     config = \
+-    """
+-    BR2_aarch64=y
+-    BR2_TOOLCHAIN_EXTERNAL=y
+-    BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64=y
+-    BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+-    BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
+-    BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/ARM-software/arm-trusted-firmware.git"
+-    BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="v1.2"
+-    BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="juno"
+-    BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP=y
+-    BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33=y
+-    BR2_TARGET_UBOOT=y
+-    BR2_TARGET_UBOOT_BOARDNAME="vexpress_aemv8a_juno"
+-    BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-    BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.03"
+-    BR2_TARGET_VEXPRESS_FIRMWARE=y
+-    """
++        """
++        BR2_aarch64=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64=y
++        BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
++        BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
++        BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/ARM-software/arm-trusted-firmware.git"
++        BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="v1.2"
++        BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="juno"
++        BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP=y
++        BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33=y
++        BR2_TARGET_UBOOT=y
++        BR2_TARGET_UBOOT_BOARDNAME="vexpress_aemv8a_juno"
++        BR2_TARGET_UBOOT_CUSTOM_VERSION=y
++        BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.03"
++        BR2_TARGET_VEXPRESS_FIRMWARE=y
++        """
+ 
+     def test_run(self):
+         pass
  
 +
- #
- # This function returns a dict where each key is the path of a file in
- # the root filesystem, and the value is a tuple containing two
-@@ -73,6 +75,7 @@ def build_package_dict(builddir):
-             add_file(filesdict, fpath, fullpath, pkg)
-     return filesdict
+ class TestATFAllwinner(infra.basetest.BRTest):
+     config = \
+-    """
+-    BR2_aarch64=y
+-    BR2_TOOLCHAIN_EXTERNAL=y
+-    BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64=y
+-    BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+-    BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
+-    BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/apritzel/arm-trusted-firmware.git"
+-    BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="sun50iw1p1"
+-    BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="aa75c8da415158a94b82a430b2b40000778e851f"
+-    BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
+-    BR2_TARGET_UBOOT=y
+-    BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+-    BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-    BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.09"
+-    BR2_TARGET_UBOOT_BOARD_DEFCONFIG="bananapi_m64"
+-    BR2_TARGET_UBOOT_NEEDS_DTC=y
+-    BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
+-    BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+-    BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.itb"
+-    BR2_TARGET_UBOOT_SPL=y
+-    BR2_TARGET_UBOOT_SPL_NAME="spl/sunxi-spl.bin"
+-    """
++        """
++        BR2_aarch64=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64=y
++        BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
++        BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
++        BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/apritzel/arm-trusted-firmware.git"
++        BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="sun50iw1p1"
++        BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="aa75c8da415158a94b82a430b2b40000778e851f"
++        BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
++        BR2_TARGET_UBOOT=y
++        BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
++        BR2_TARGET_UBOOT_CUSTOM_VERSION=y
++        BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.09"
++        BR2_TARGET_UBOOT_BOARD_DEFCONFIG="bananapi_m64"
++        BR2_TARGET_UBOOT_NEEDS_DTC=y
++        BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
++        BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
++        BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.itb"
++        BR2_TARGET_UBOOT_SPL=y
++        BR2_TARGET_UBOOT_SPL_NAME="spl/sunxi-spl.bin"
++        """
+ 
+     def test_run(self):
+         pass
  
 +
- #
- # This function builds a dictionary that contains the name of a
- # package as key, and the size of the files installed by this package
-@@ -103,7 +106,7 @@ def build_package_size(filesdict, builddir):
-                 seeninodes.add(st.st_ino)
+ class TestATFMarvell(infra.basetest.BRTest):
+     config = \
+-    """
+-    BR2_aarch64=y
+-    BR2_TOOLCHAIN_EXTERNAL=y
+-    BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64=y
+-    BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+-    BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
+-    BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/MarvellEmbeddedProcessors/atf-marvell.git"
+-    BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="atf-v1.3-armada-17.10"
+-    BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="a80x0_mcbin"
+-    BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP=y
+-    BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33=y
+-    BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="USE_COHERENT_MEM=0"
+-    BR2_TARGET_BINARIES_MARVELL=y
+-    BR2_TARGET_BINARIES_MARVELL_8040=y
+-    BR2_TARGET_MV_DDR_MARVELL=y
+-    BR2_TARGET_UBOOT=y
+-    BR2_TARGET_UBOOT_BOARDNAME="mvebu_mcbin-88f8040"
+-    BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-    BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.09"
+-    BR2_TARGET_UBOOT_NEEDS_DTC=y
+-    """
++        """
++        BR2_aarch64=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64=y
++        BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
++        BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
++        BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/MarvellEmbeddedProcessors/atf-marvell.git"
++        BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="atf-v1.3-armada-17.10"
++        BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="a80x0_mcbin"
++        BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP=y
++        BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33=y
++        BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="USE_COHERENT_MEM=0"
++        BR2_TARGET_BINARIES_MARVELL=y
++        BR2_TARGET_BINARIES_MARVELL_8040=y
++        BR2_TARGET_MV_DDR_MARVELL=y
++        BR2_TARGET_UBOOT=y
++        BR2_TARGET_UBOOT_BOARDNAME="mvebu_mcbin-88f8040"
++        BR2_TARGET_UBOOT_CUSTOM_VERSION=y
++        BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.09"
++        BR2_TARGET_UBOOT_NEEDS_DTC=y
++        """
  
-             frelpath = os.path.relpath(fpath, os.path.join(builddir, "target"))
--            if not frelpath in filesdict:
-+            if frelpath not in filesdict:
-                 print("WARNING: %s is not part of any package" % frelpath)
-                 pkg = "unknown"
-             else:
-@@ -113,6 +116,7 @@ def build_package_size(filesdict, builddir):
- 
-     return pkgsize
- 
-+
- #
- # Given a dict returned by build_package_size(), this function
- # generates a pie chart of the size installed by each package.
-@@ -150,6 +154,7 @@ def draw_graph(pkgsize, outputf):
-     plt.title("Total filesystem size: %d kB" % (total / 1000.), fontsize=10, y=.96)
-     plt.savefig(outputf)
- 
-+
- #
- # Generate a CSV file with statistics about the size of each file, its
- # size contribution to the package and to the overall system.
-@@ -208,6 +213,7 @@ def gen_packages_csv(pkgsizes, outputf):
-         for (pkg, size) in pkgsizes.items():
-             wr.writerow([pkg, size, "%.1f" % (float(size) / total * 100)])
- 
-+
- parser = argparse.ArgumentParser(description='Draw size statistics graphs')
- 
- parser.add_argument("--builddir", '-i', metavar="BUILDDIR", required=True,
+     def test_run(self):
+         pass
 -- 
 2.7.4
