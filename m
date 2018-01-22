@@ -1,38 +1,60 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Mon, 22 Jan 2018 18:25:38 -0200
-Subject: [Buildroot] [PATCH] configs/imx6sx-sdb: Bump U-Boot and kernel
- versions
-Message-ID: <1516652738-19512-1-git-send-email-festevam@gmail.com>
+From: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
+Date: Mon, 22 Jan 2018 21:25:44 +0100
+Subject: [Buildroot] Broken link in build notification
+In-Reply-To: <20180121070008.0687520885@mail.free-electrons.com>
+References: <20180121070008.0687520885@mail.free-electrons.com>
+Message-ID: <7d2636ad-5201-10d9-fe72-4d1001a94c72@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bump U-Boot to 2018.01 and kernel to 4.14.4 version.
+Dear Thomas &All,
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
----
- configs/imx6sx-sdb_defconfig | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+On 01/21/2018 08:00 AM, Thomas Petazzoni wrote:
+> Hello,
+>
+> This is the list of Buildroot build failures that occured on
+> 2018-01-20, and for which you are a registered architecture developer
+> or package developer. Please help us improving the quality of
+> Buildroot by investigating those build failures and sending patches to
+> fix them. Thanks!
+>
+> Results for the 'master' branch
+> ===============================
+>
+> Build failures related to your packages:
+>
+>          arm |                     proj-4.9.3 | http://autobuild.buildroot.net/results/80243a2ae19190d75e84a2ed8aa4b95a20ea9ef0
+>
 
-diff --git a/configs/imx6sx-sdb_defconfig b/configs/imx6sx-sdb_defconfig
-index baead34..a87bdf8 100644
---- a/configs/imx6sx-sdb_defconfig
-+++ b/configs/imx6sx-sdb_defconfig
-@@ -11,11 +11,11 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="mx6sxsabresd"
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.11"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.01"
- BR2_TARGET_UBOOT_FORMAT_IMX=y
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.14"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.14.14"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6sx-sdb imx6sx-sdb-reva"
--- 
-2.7.4
+I received this ^^ build error notification mail yesterday.
+
+The link redirects to
+https://bugs.busybox.net/results/80243a2ae19190d75e84a2ed8aa4b95a20ea9ef0,
+and ends up in a 404.
+
+The results available here:
+
+http://autobuild.buildroot.org/results/802/80243a2ae19190d75e84a2ed8aa4b95a20ea9ef0/
+
+It seems there is some configuration problem here so i thought I let you
+know...
+
+In the meantime I also try to reproduce the actual build error.
+
+
+Regards
+
+Zoltan Gyarmati
+https://zgyarmati.de
+
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 473 bytes
+Desc: OpenPGP digital signature
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180122/06030752/attachment.asc>
