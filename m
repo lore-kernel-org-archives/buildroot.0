@@ -1,48 +1,24 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Mon, 22 Jan 2018 06:09:38 -0500
-Subject: [Buildroot] [PATCH 1/1] libcpprestsdk: require nptl threads.
-Message-ID: <20180122110938.14517-1-aduskett@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 22 Jan 2018 12:15:40 +0100
+Subject: [Buildroot] [PATCH] python-txtorcon: needs C++ support
+In-Reply-To: <20180121220916.27851-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Sun, 21 Jan 2018 23:09:16 +0100")
+References: <20180121220916.27851-1-peter@korsgaard.com>
+Message-ID: <87fu6yb0v7.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-pthread_condattr_setclock is uses which is NPTL only.
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-Fixes http://autobuild.buildroot.net/results/abf058948c9e4e9a50d42a05689b76bfb54a02e2/build-end.log
+ > Python-txtorcon selects python-pyopenssl and python-service-identity, both
+ > (indirectly) needing C++ support, so propagate that dependency.
 
-Signed-off-by: Adam Duskett <aduskett@gmail.com>
----
- package/libcpprestsdk/Config.in | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-diff --git a/package/libcpprestsdk/Config.in b/package/libcpprestsdk/Config.in
-index 64c383c2c9..334df41951 100644
---- a/package/libcpprestsdk/Config.in
-+++ b/package/libcpprestsdk/Config.in
-@@ -4,6 +4,7 @@ config BR2_PACKAGE_LIBCPPRESTSDK
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # boost
- 	depends on BR2_USE_WCHAR # boost
- 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # exception_ptr
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 	select BR2_PACKAGE_BOOST
- 	select BR2_PACKAGE_BOOST_ATOMIC
- 	select BR2_PACKAGE_BOOST_CHRONO
-@@ -22,9 +23,11 @@ config BR2_PACKAGE_LIBCPPRESTSDK
- 
- 	  https://github.com/Microsoft/cpprestsdk
- 
--comment "libcpprestsdk needs a toolchain w/ C++, wchar, threads"
--	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS \
--		|| !BR2_USE_WCHAR
-+comment "libcpprestsdk needs a toolchain w/ NPTL threads, C++, wchar, threads"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || \
-+		!BR2_INSTALL_LIBSTDCPP || \
-+		!BR2_TOOLCHAIN_HAS_THREADS || \
-+		!BR2_USE_WCHAR
- 
- comment "libcpprestsdk needs exception_ptr"
- 	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
+Committed, thanks.
+
 -- 
-2.14.3
+Bye, Peter Korsgaard
