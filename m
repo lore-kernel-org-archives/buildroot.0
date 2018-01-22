@@ -1,174 +1,115 @@
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Sun, 21 Jan 2018 22:44:34 -0200
-Subject: [Buildroot] [PATCH 06/14] testing/tests/boot/test_atf: fix code
- style
+Date: Sun, 21 Jan 2018 22:44:35 -0200
+Subject: [Buildroot] [PATCH 07/14] check-package: fix code style
 In-Reply-To: <1516581882-30582-1-git-send-email-ricardo.martincoski@gmail.com>
 References: <1516581882-30582-1-git-send-email-ricardo.martincoski@gmail.com>
-Message-ID: <1516581882-30582-7-git-send-email-ricardo.martincoski@gmail.com>
+Message-ID: <1516581882-30582-8-git-send-email-ricardo.martincoski@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fix these warnings:
-E122 continuation line missing indentation or outdented
-E302 expected 2 blank lines, found 1
-F401 'os' imported but unused
+Ignore these warnings:
+F401 'lib.ConsecutiveEmptyLines' imported but unused
+
+And remove comments that are not needed anymore.
 
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- support/testing/tests/boot/test_atf.py | 124 +++++++++++++++++----------------
- 1 file changed, 63 insertions(+), 61 deletions(-)
+ utils/checkpackagelib/lib_config.py | 9 ++++-----
+ utils/checkpackagelib/lib_hash.py   | 9 ++++-----
+ utils/checkpackagelib/lib_mk.py     | 9 ++++-----
+ utils/checkpackagelib/lib_patch.py  | 3 +--
+ utils/checkpackagelib/readme.txt    | 2 --
+ 5 files changed, 13 insertions(+), 19 deletions(-)
 
-diff --git a/support/testing/tests/boot/test_atf.py b/support/testing/tests/boot/test_atf.py
-index f1e58af..8288116 100644
---- a/support/testing/tests/boot/test_atf.py
-+++ b/support/testing/tests/boot/test_atf.py
-@@ -1,80 +1,82 @@
--import os
- import infra.basetest
+diff --git a/utils/checkpackagelib/lib_config.py b/utils/checkpackagelib/lib_config.py
+index 26ebb39..11d885f 100644
+--- a/utils/checkpackagelib/lib_config.py
++++ b/utils/checkpackagelib/lib_config.py
+@@ -6,11 +6,10 @@
+ import re
  
-+
- class TestATFVexpress(infra.basetest.BRTest):
-     config = \
--    """
--    BR2_aarch64=y
--    BR2_TOOLCHAIN_EXTERNAL=y
--    BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64=y
--    BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
--    BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
--    BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/ARM-software/arm-trusted-firmware.git"
--    BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="v1.2"
--    BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="juno"
--    BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP=y
--    BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33=y
--    BR2_TARGET_UBOOT=y
--    BR2_TARGET_UBOOT_BOARDNAME="vexpress_aemv8a_juno"
--    BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--    BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.03"
--    BR2_TARGET_VEXPRESS_FIRMWARE=y
--    """
-+        """
-+        BR2_aarch64=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64=y
-+        BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
-+        BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
-+        BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/ARM-software/arm-trusted-firmware.git"
-+        BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="v1.2"
-+        BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="juno"
-+        BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP=y
-+        BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33=y
-+        BR2_TARGET_UBOOT=y
-+        BR2_TARGET_UBOOT_BOARDNAME="vexpress_aemv8a_juno"
-+        BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-+        BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.03"
-+        BR2_TARGET_VEXPRESS_FIRMWARE=y
-+        """
+ from base import _CheckFunction
+-# Notice: ignore 'imported but unused' from pyflakes for check functions.
+-from lib import ConsecutiveEmptyLines
+-from lib import EmptyLastLine
+-from lib import NewlineAtEof
+-from lib import TrailingSpace
++from lib import ConsecutiveEmptyLines  # noqa: F401
++from lib import EmptyLastLine          # noqa: F401
++from lib import NewlineAtEof           # noqa: F401
++from lib import TrailingSpace          # noqa: F401
  
-     def test_run(self):
-         pass
  
-+
- class TestATFAllwinner(infra.basetest.BRTest):
-     config = \
--    """
--    BR2_aarch64=y
--    BR2_TOOLCHAIN_EXTERNAL=y
--    BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64=y
--    BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
--    BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
--    BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/apritzel/arm-trusted-firmware.git"
--    BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="sun50iw1p1"
--    BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="aa75c8da415158a94b82a430b2b40000778e851f"
--    BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
--    BR2_TARGET_UBOOT=y
--    BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
--    BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--    BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.09"
--    BR2_TARGET_UBOOT_BOARD_DEFCONFIG="bananapi_m64"
--    BR2_TARGET_UBOOT_NEEDS_DTC=y
--    BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
--    BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
--    BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.itb"
--    BR2_TARGET_UBOOT_SPL=y
--    BR2_TARGET_UBOOT_SPL_NAME="spl/sunxi-spl.bin"
--    """
-+        """
-+        BR2_aarch64=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64=y
-+        BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
-+        BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
-+        BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/apritzel/arm-trusted-firmware.git"
-+        BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="sun50iw1p1"
-+        BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="aa75c8da415158a94b82a430b2b40000778e851f"
-+        BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
-+        BR2_TARGET_UBOOT=y
-+        BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-+        BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-+        BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.09"
-+        BR2_TARGET_UBOOT_BOARD_DEFCONFIG="bananapi_m64"
-+        BR2_TARGET_UBOOT_NEEDS_DTC=y
-+        BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
-+        BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
-+        BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.itb"
-+        BR2_TARGET_UBOOT_SPL=y
-+        BR2_TARGET_UBOOT_SPL_NAME="spl/sunxi-spl.bin"
-+        """
+ def _empty_or_comment(text):
+diff --git a/utils/checkpackagelib/lib_hash.py b/utils/checkpackagelib/lib_hash.py
+index c4d055e..6d4cc9f 100644
+--- a/utils/checkpackagelib/lib_hash.py
++++ b/utils/checkpackagelib/lib_hash.py
+@@ -6,11 +6,10 @@
+ import re
  
-     def test_run(self):
-         pass
+ from base import _CheckFunction
+-# Notice: ignore 'imported but unused' from pyflakes for check functions.
+-from lib import ConsecutiveEmptyLines
+-from lib import EmptyLastLine
+-from lib import NewlineAtEof
+-from lib import TrailingSpace
++from lib import ConsecutiveEmptyLines  # noqa: F401
++from lib import EmptyLastLine          # noqa: F401
++from lib import NewlineAtEof           # noqa: F401
++from lib import TrailingSpace          # noqa: F401
  
-+
- class TestATFMarvell(infra.basetest.BRTest):
-     config = \
--    """
--    BR2_aarch64=y
--    BR2_TOOLCHAIN_EXTERNAL=y
--    BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64=y
--    BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
--    BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
--    BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/MarvellEmbeddedProcessors/atf-marvell.git"
--    BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="atf-v1.3-armada-17.10"
--    BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="a80x0_mcbin"
--    BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP=y
--    BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33=y
--    BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="USE_COHERENT_MEM=0"
--    BR2_TARGET_BINARIES_MARVELL=y
--    BR2_TARGET_BINARIES_MARVELL_8040=y
--    BR2_TARGET_MV_DDR_MARVELL=y
--    BR2_TARGET_UBOOT=y
--    BR2_TARGET_UBOOT_BOARDNAME="mvebu_mcbin-88f8040"
--    BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--    BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.09"
--    BR2_TARGET_UBOOT_NEEDS_DTC=y
--    """
-+        """
-+        BR2_aarch64=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64=y
-+        BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
-+        BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
-+        BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/MarvellEmbeddedProcessors/atf-marvell.git"
-+        BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="atf-v1.3-armada-17.10"
-+        BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="a80x0_mcbin"
-+        BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP=y
-+        BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33=y
-+        BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="USE_COHERENT_MEM=0"
-+        BR2_TARGET_BINARIES_MARVELL=y
-+        BR2_TARGET_BINARIES_MARVELL_8040=y
-+        BR2_TARGET_MV_DDR_MARVELL=y
-+        BR2_TARGET_UBOOT=y
-+        BR2_TARGET_UBOOT_BOARDNAME="mvebu_mcbin-88f8040"
-+        BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-+        BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.09"
-+        BR2_TARGET_UBOOT_NEEDS_DTC=y
-+        """
  
-     def test_run(self):
-         pass
+ def _empty_line_or_comment(text):
+diff --git a/utils/checkpackagelib/lib_mk.py b/utils/checkpackagelib/lib_mk.py
+index a6cfeb6..2df2e1a 100644
+--- a/utils/checkpackagelib/lib_mk.py
++++ b/utils/checkpackagelib/lib_mk.py
+@@ -7,11 +7,10 @@
+ import re
+ 
+ from base import _CheckFunction
+-# Notice: ignore 'imported but unused' from pyflakes for check functions.
+-from lib import ConsecutiveEmptyLines
+-from lib import EmptyLastLine
+-from lib import NewlineAtEof
+-from lib import TrailingSpace
++from lib import ConsecutiveEmptyLines  # noqa: F401
++from lib import EmptyLastLine          # noqa: F401
++from lib import NewlineAtEof           # noqa: F401
++from lib import TrailingSpace          # noqa: F401
+ 
+ 
+ class Indent(_CheckFunction):
+diff --git a/utils/checkpackagelib/lib_patch.py b/utils/checkpackagelib/lib_patch.py
+index 591f13c..555621a 100644
+--- a/utils/checkpackagelib/lib_patch.py
++++ b/utils/checkpackagelib/lib_patch.py
+@@ -6,8 +6,7 @@
+ import re
+ 
+ from base import _CheckFunction
+-# Notice: ignore 'imported but unused' from pyflakes for check functions.
+-from lib import NewlineAtEof
++from lib import NewlineAtEof           # noqa: F401
+ 
+ 
+ class ApplyOrder(_CheckFunction):
+diff --git a/utils/checkpackagelib/readme.txt b/utils/checkpackagelib/readme.txt
+index 85e10fe..3bfe289 100644
+--- a/utils/checkpackagelib/readme.txt
++++ b/utils/checkpackagelib/readme.txt
+@@ -28,8 +28,6 @@ Some hints when changing this code:
+ - when there is no other reason for ordering, use alphabetical order (e.g. keep
+   the check functions in alphabetical order, keep the imports in alphabetical
+   order, and so on).
+-- use pyflakes to detect and fix potential problems.
+-- use pep8 formatting.
+ - keep in mind that for every class the method before() will be called before
+   any line is served to be checked by the method check_line(). A class that
+   checks the filename should only implement the method before(). A function that
 -- 
 2.7.4
