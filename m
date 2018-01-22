@@ -1,38 +1,28 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 22 Jan 2018 17:57:08 +0100
-Subject: [Buildroot] [PATCH 2/2] squid: add upstream post-3.5.27
- security patches
-In-Reply-To: <20180122160816.2246gixwadewjuec@sapphire.tkos.co.il> (Baruch
- Siach's message of "Mon, 22 Jan 2018 18:08:16 +0200")
-References: <20180122151339.23040-1-peter@korsgaard.com>
- <20180122151339.23040-2-peter@korsgaard.com>
- <20180122160816.2246gixwadewjuec@sapphire.tkos.co.il>
-Message-ID: <87vaftrfvf.fsf@dell.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 22 Jan 2018 17:57:43 +0000
+Subject: [Buildroot] [Bug 10536] Finding non-relative paths in the ccache
+In-Reply-To: <bug-10536-163@https.bugs.busybox.net/>
+References: <bug-10536-163@https.bugs.busybox.net/>
+Message-ID: <bug-10536-163-Ek9mxCuYdp@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+https://bugs.busybox.net/show_bug.cgi?id=10536
 
- > Hi Peter,
- > On Mon, Jan 22, 2018 at 04:13:39PM +0100, Peter Korsgaard wrote:
- >> --- a/package/squid/squid.mk
- >> +++ b/package/squid/squid.mk
- >> @@ -12,6 +12,9 @@ SQUID_LICENSE = GPL-2.0+
- >> SQUID_LICENSE_FILES = COPYING
- >> # For 0001-assume-get-certificate-ok.patch
- >> SQUID_AUTORECONF = YES
- >> +SQUID_PATCH = \
- >> +	https://github.com/squid-cache/squid/commit/eb2db98a676321b814fc4a51c4fb7928a8bb45d9.patch \
- >> +	https://github.com/squid-cache/squid/commit/8232b83d3fa47a1399f155cb829db829369fbae9.patch
+--- Comment #6 from Arnout Vandecappelle <arnout@mind.be> ---
+Hm, this build failure doesn't look like it will be solved with CCACHE_BASEDIR.
+Indeed, it is the *target* ccache'd compiler that generated a *.d file that
+apparently still has a full path in it. I don't see how this could happen...
 
- > Didn't we stop fetching patches from github because they might break the hash 
- > in the future? See for example commit bbbe00ea35dd2133 (trinity: don't 
- > download patches from Github).
+Possibly the issue is that this is a path that is embedded in the specs file,
+and ccache will only substitute paths that get passed on the command line
+(through -I etc.).
 
-Hmm, correct - I'll include them in package/squid and resend, thanks!
+Needs more debugging...
 
 -- 
-Bye, Peter Korsgaard
+You are receiving this mail because:
+You are on the CC list for the bug.
