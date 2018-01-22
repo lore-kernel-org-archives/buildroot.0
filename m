@@ -1,32 +1,53 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 22 Jan 2018 22:26:27 +0100
-Subject: [Buildroot] [git commit] uclibc-ng-test: update to latest
-Message-ID: <20180122213642.7F99283E77@busybox.osuosl.org>
+Date: Mon, 22 Jan 2018 22:25:56 +0100
+Subject: [Buildroot] [git commit] bfin-bf512: update to latest kernel
+Message-ID: <20180122213642.6962083E77@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5b871260a5bcae4efb0afbe00faa7d71d42fed4c
+commit: https://git.buildroot.net/buildroot/commit/?id=2b232adfb0e0eaa4ebff03d1e3e25fd10f49aed1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/uclibc-ng-test/uclibc-ng-test.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ board/gdb/bfin-bf512/{linux-4.6.config => linux.config} | 0
+ configs/gdb_bfin_bf512_defconfig                        | 9 ++++-----
+ 2 files changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/package/uclibc-ng-test/uclibc-ng-test.mk b/package/uclibc-ng-test/uclibc-ng-test.mk
-index 3fdfe37..0e6433c 100644
---- a/package/uclibc-ng-test/uclibc-ng-test.mk
-+++ b/package/uclibc-ng-test/uclibc-ng-test.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/board/gdb/bfin-bf512/linux-4.6.config b/board/gdb/bfin-bf512/linux.config
+similarity index 100%
+rename from board/gdb/bfin-bf512/linux-4.6.config
+rename to board/gdb/bfin-bf512/linux.config
+diff --git a/configs/gdb_bfin_bf512_defconfig b/configs/gdb_bfin_bf512_defconfig
+index 37ee728..6740647 100644
+--- a/configs/gdb_bfin_bf512_defconfig
++++ b/configs/gdb_bfin_bf512_defconfig
+@@ -8,15 +8,15 @@ BR2_TARGET_ROOTFS_INITRAMFS=y
  
--UCLIBC_NG_TEST_VERSION = c4d54bde7772b55df04399ecb355769c5ac31015
-+UCLIBC_NG_TEST_VERSION = c6d62cbc60504c7f6867b486248b0ef7cc2da554
- UCLIBC_NG_TEST_SITE = git://uclibc-ng.org/git/uclibc-ng-test
- UCLIBC_NG_TEST_LICENSE = LGPL-2.1+
- UCLIBC_NG_TEST_LICENSE_FILES = COPYING.LIB
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/gdb/post-build.sh"
+ 
+-# Linux headers same as kernel, a 4.6 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_6=y
++# Linux headers same as kernel, a 4.14 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.6.3"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.14.14"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/gdb/bfin-bf512/linux-4.6.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/gdb/bfin-bf512/linux.config"
+ BR2_LINUX_KERNEL_VMLINUX=y
+ 
+ # Serial port config
+@@ -31,4 +31,3 @@ BR2_PACKAGE_HOST_GDB=y
+ # BR2_PACKAGE_HOST_GDB_TUI is not set
+ # BR2_PACKAGE_HOST_GDB_PYTHON is not set
+ BR2_PACKAGE_HOST_GDB_SIM=y
+-
