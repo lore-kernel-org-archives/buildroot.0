@@ -1,72 +1,31 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Mon, 22 Jan 2018 23:23:38 +0100
-Subject: [Buildroot] [PATCH] docs/website: update sponsors for FOSDEM
-Message-ID: <20180122222338.9261-1-arnout@mind.be>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Mon, 22 Jan 2018 16:46:29 -0600
+Subject: [Buildroot] [PATCH 1/2] package/fmc: Remove hash check
+In-Reply-To: <bf8a232f-bd96-4c0d-209b-9de260ae073c@mind.be>
+References: <20180119181743.30625-1-matthew.weber@rockwellcollins.com>
+ <bf8a232f-bd96-4c0d-209b-9de260ae073c@mind.be>
+Message-ID: <CANQCQpbnnQzXzS-oMyOhCJXkwJgXjc+e+d4+-JUmEFU1Bu+rGw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Simply a matter of updating the year, since it's again Google and Mind
-for the FOSDEM2018 developer meeting.
+Arnout,
 
-Also add the 2017 sponsorship to the "Past sponsors" section.
+On Mon, Jan 22, 2018 at 3:33 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+>
+>
+> On 19-01-18 19:17, Matt Weber wrote:
+>> This package uses a kconfig value for the version,
+>
+>  Huh?
+>
+> FMC_VERSION = fsl-sdk-v2.0
+>
+>  Do you have a local patch maybe?
+>
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- docs/website/sponsors.html | 18 +++++++++---------
- 1 file changed, 9 insertions(+), 9 deletions(-)
+:-(  Shoot I do.  I will be including more changes in my v2.
 
-diff --git a/docs/website/sponsors.html b/docs/website/sponsors.html
-index e0f1aab20e..13ff6cc575 100644
---- a/docs/website/sponsors.html
-+++ b/docs/website/sponsors.html
-@@ -21,8 +21,8 @@
- 	      <div class="col-sm-8">
- 		<a href="http://www.google.com">Google</a> is
- 		sponsoring
--		the <a href="http://elinux.org/Buildroot:DeveloperDaysFOSDEM2017">Buildroot
--		  Developers Meeting at FOSDEM 2017</a> in Brussels, by
-+		the <a href="http://elinux.org/Buildroot:DeveloperDaysFOSDEM2018">Buildroot
-+		  Developers Meeting at FOSDEM 2018</a> in Brussels, by
- 		providing logistics for the meeting: a free meeting
- 		room and lunch for the participants.
- 	      </div>
-@@ -39,8 +39,8 @@
- 		</div>
- 		<div class="col-sm-8">
- 		  As it did in previous years, <a href="http://www.mind.be">Mind</a>
--		  is sponsoring the Monday night dinner at the <a href="http://elinux.org/Buildroot:DeveloperDaysFOSDEM2017">Buildroot
--		    Developers Meeting at FOSDEM 2017</a> in Brussels.
-+		  is sponsoring the Monday night dinner at the <a href="http://elinux.org/Buildroot:DeveloperDaysFOSDEM2018">Buildroot
-+		    Developers Meeting at FOSDEM 2018</a> in Brussels.
- 		</div>
- 	      </div>
- 	    </div>
-@@ -83,9 +83,9 @@
- 	      <div class="col-sm-12">
- 		<a href="http://www.mind.be">Mind</a> sponsored the
- 		dinner of the FOSDEM 2014, 2015, 2016 and 2017
--		Developers Meeting (Brussels) and ELCE 2016 (Berlin),
--		the meeting room and the dinner for the ELCE 2014
--		Developers Meeting (D?sseldorf).
-+		Developers Meeting (Brussels) and ELCE 2016 (Berlin)
-+                and 2017 (Prague), and the meeting room and the dinner for
-+                the ELCE 2014 Developers Meeting (D?sseldorf).
- 	      </div>
- 	    </div>
- 	  </div>
-@@ -101,8 +101,8 @@
- 	      <div class="col-sm-12">
- 		<p><a href="http://www.google.com">Google</a> provided
- 		  the logistics for the FOSDEM 2013, FOSDEM 2014,
--		  FOSDEM 2015 and FOSDEM 2016 Developer Days in
--		  Brussels, Belgium.</p>
-+		  FOSDEM 2015, FOSDEM 2016 and FOSDEM 2017 Developer Days
-+		  in Brussels, Belgium.</p>
- 	      </div>
- 	    </div>
- 	  </div>
--- 
-2.15.1
+Matt
