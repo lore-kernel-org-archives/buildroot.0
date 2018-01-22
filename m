@@ -1,51 +1,46 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 22 Jan 2018 12:48:24 +0000
-Subject: [Buildroot] [Bug 10661] New: /etc/init.d/S29netplug starts multiple
- instances of netplugd
-Message-ID: <bug-10661-163@https.bugs.busybox.net/>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 22 Jan 2018 16:13:38 +0100
+Subject: [Buildroot] [PATCH 1/2] squid: bump version to 3.5.27
+Message-ID: <20180122151339.23040-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=10661
+And add a hash for the license files.
 
-            Bug ID: 10661
-           Summary: /etc/init.d/S29netplug starts multiple instances of
-                    netplugd
-           Product: buildroot
-           Version: 2017.11.2
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: mail2k at web.de
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/squid/squid.hash | 8 +++++---
+ package/squid/squid.mk   | 2 +-
+ 2 files changed, 6 insertions(+), 4 deletions(-)
 
-If you execute the command "/etc/init.d/S29netplug start" multiple times, you
-get multiple instances of netplugd. 
-This is not the desired behaviour. We should only have one running netplugd.
-
-The change has to be made in  package/netplug/S29netplug:
-line 46:
--       start-stop-daemon -S -q -p /var/run/netplugd.pid -x /sbin/netplugd
-${NETPLUGDARGS}
-
-+       start-stop-daemon -S -q -x /sbin/netplugd -- -p /var/run/netplugd.pid
-${NETPLUGDARGS}
-
-Reason: 
-If the start-stop-daemon gets the parameter -p /var/run/netplug.pid it will try
-to identify a running process by this pid-file but the file doesn't exist. As a
-result, every call of  "/etc/init.d/S29netplug start" starts a new netplugd.
-
---> The parameter -p /var/run/netplug.pid must be passed to netplugd.
-
+diff --git a/package/squid/squid.hash b/package/squid/squid.hash
+index 91ba9e6fc4..8787cb25ef 100644
+--- a/package/squid/squid.hash
++++ b/package/squid/squid.hash
+@@ -1,3 +1,5 @@
+-# From http://www.squid-cache.org/Versions/v3/3.5/squid-3.5.26.tar.xz.asc
+-md5 510e2c84773879c00d0e7ced997864d9  squid-3.5.26.tar.xz
+-sha1 51a664217957b35de8b7fae180b9f93a759a4204  squid-3.5.26.tar.xz
++# From http://www.squid-cache.org/Versions/v3/3.5/squid-3.5.27.tar.xz.asc
++md5 39ef8199675d48a314b540f92c00c545 squid-3.5.27.tar.xz
++sha1 1e69c96d13cd49844da3bcf33a0b428fbe7b6f77 squid-3.5.27.tar.xz
++# Locally calculated
++sha256 58f5d05257af1fb964fde20e134d660fac9afa86b6fd8c70d63ead63068378fa COPYING
+diff --git a/package/squid/squid.mk b/package/squid/squid.mk
+index d334d14c88..8ade55ee37 100644
+--- a/package/squid/squid.mk
++++ b/package/squid/squid.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ SQUID_VERSION_MAJOR = 3.5
+-SQUID_VERSION = $(SQUID_VERSION_MAJOR).26
++SQUID_VERSION = $(SQUID_VERSION_MAJOR).27
+ SQUID_SOURCE = squid-$(SQUID_VERSION).tar.xz
+ SQUID_SITE = http://www.squid-cache.org/Versions/v3/$(SQUID_VERSION_MAJOR)
+ SQUID_LICENSE = GPL-2.0+
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.11.0
