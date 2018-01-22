@@ -1,61 +1,71 @@
-From: =?UTF-8?Q?Einar_J=C3=B3n?= <tolvupostur@gmail.com>
-Date: Mon, 22 Jan 2018 12:35:44 +0100
-Subject: [Buildroot] [git commit branch/2017.11.x] iputils: fix ping and
- traceroute6 executable permissions
-In-Reply-To: <20180121210851.59E7983DF0@busybox.osuosl.org>
-References: <20180121210851.59E7983DF0@busybox.osuosl.org>
-Message-ID: <CABhNV22x8R=FGaKDLTThfvF1GDHv8ZZFNPHiHjUtNvZB6W17bA@mail.gmail.com>
+From: Laurent Charpentier <laurent_pubs@yahoo.com>
+Date: Mon, 22 Jan 2018 13:09:03 +0100
+Subject: [Buildroot] [PATCH v2] open-lldp: add patch to remove pid_t error
+Message-ID: <20180122120903.22839-1-laurent_pubs@yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello all,
+Added #include <sys/types.h> to fix unknown type 'pid_t' errors.
 
-This is nice to have.
-But what about clockdiff?
+This is to fix autobuild failures:
+http://autobuild.buildroot.net/results/f7e94ae1c2aa6b3f6567d1f567a66329974834e9
+http://autobuild.buildroot.net/results/8a43938d9c0391a846757a54cf5f956b64470865
 
-In my tests it did not work on buildroot, but it is not suid root in
-Ubuntu, and it works without root there.
-I'm not sure if anyone uses that program at all - I certainly have not.
+Signed-off-by: Laurent Charpentier <laurent_pubs@yahoo.com>
+---
+ .../open-lldp/0004-fixed-unknown-type-pid_t.patch  | 41 ++++++++++++++++++++++
+ 1 file changed, 41 insertions(+)
+ create mode 100644 package/open-lldp/0004-fixed-unknown-type-pid_t.patch
 
-regards,
-Eianr J?n
-
-On 21 January 2018 at 21:17, Peter Korsgaard <peter@korsgaard.com> wrote:
-> commit: https://git.buildroot.net/buildroot/commit/?id=371d7e8495a46d800c4c7322c5c1d09612ed181c
-> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.11.x
->
-> The iputils executables are installed without the setuid bit set,
-> which prevents some programs from working.
->
-> This patch adds a permission table to fix the permissions of the ping
-> and traceroute6 executables.
->
-> Signed-off-by: Einar Jon Gunnarsson <tolvupostur@gmail.com>
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> (cherry picked from commit b0e2d00289eeb1a7201ba49e5cedfd3175f92140)
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  package/iputils/iputils.mk | 5 +++++
->  1 file changed, 5 insertions(+)
->
-> diff --git a/package/iputils/iputils.mk b/package/iputils/iputils.mk
-> index b20cd12..13e3389 100644
-> --- a/package/iputils/iputils.mk
-> +++ b/package/iputils/iputils.mk
-> @@ -69,4 +69,9 @@ define IPUTILS_INSTALL_TARGET_CMDS
->         $(INSTALL) -D -m 755 $(@D)/traceroute6 $(TARGET_DIR)/bin/traceroute6
->  endef
->
-> +define IPUTILS_PERMISSIONS
-> +       /bin/ping        f 4755 0 0 - - - - -
-> +       /bin/traceroute6 f 4755 0 0 - - - - -
-> +endef
-> +
->  $(eval $(generic-package))
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+diff --git a/package/open-lldp/0004-fixed-unknown-type-pid_t.patch b/package/open-lldp/0004-fixed-unknown-type-pid_t.patch
+new file mode 100644
+index 0000000000..2d3b9148e0
+--- /dev/null
++++ b/package/open-lldp/0004-fixed-unknown-type-pid_t.patch
+@@ -0,0 +1,41 @@
++From 41e9e6b5aa13d65480cc960a7f15f97d74d64090 Mon Sep 17 00:00:00 2001
++From: Laurent Charpentier <laurent_pubs@yahoo.com>
++Date: Mon, 22 Jan 2018 10:49:45 +0100
++Subject: [PATCH] fixed unknown type pid_t
++
++Fixed 'unknown type pid_t' gcc compile error in dcbtool_cmds.c and
++lldptool_cmds.c
++
++Signed-off-by: Laurent Charpentier <laurent_pubs@yahoo.com>
++---
++ dcbtool_cmds.c  | 1 +
++ lldptool_cmds.c | 1 +
++ 2 files changed, 2 insertions(+)
++
++diff --git a/dcbtool_cmds.c b/dcbtool_cmds.c
++index a5cd0fe..ee5c144 100644
++--- a/dcbtool_cmds.c
+++++ b/dcbtool_cmds.c
++@@ -27,6 +27,7 @@
++ #include <stdlib.h>
++ #include <stdio.h>
++ #include <ctype.h>
+++#include <sys/types.h>
++ #include "clif.h"
++ #include "dcbtool.h"
++ #include "lldp_dcbx_cmds.h"
++diff --git a/lldptool_cmds.c b/lldptool_cmds.c
++index daef8c8..c793e34 100644
++--- a/lldptool_cmds.c
+++++ b/lldptool_cmds.c
++@@ -27,6 +27,7 @@
++ #include <stdio.h>
++ #include <stdlib.h>
++ #include <ctype.h>
+++#include <sys/types.h>
++ #include "clif.h"
++ #include "dcb_types.h"
++ #include "lldptool.h"
++-- 
++2.14.3
++
+-- 
+2.14.3
