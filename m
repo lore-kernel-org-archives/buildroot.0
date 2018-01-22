@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 22 Jan 2018 22:28:23 +0100
-Subject: [Buildroot] [PATCH 1/1] libmaxminddb: bump to version 1.3.2
-In-Reply-To: <20180120171427.10565-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sat, 20 Jan 2018 18:14:27 +0100")
-References: <20180120171427.10565-1-fontaine.fabrice@gmail.com>
-Message-ID: <87607tr3bc.fsf@dell.be.48ers.dk>
+Date: Mon, 22 Jan 2018 22:28:40 +0100
+Subject: [Buildroot] [PATCH 1/1] gtksourceview: bump to version 3.24.6
+In-Reply-To: <20180120225227.3728-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sat, 20 Jan 2018 23:52:27 +0100")
+References: <20180120225227.3728-1-fontaine.fabrice@gmail.com>
+Message-ID: <871sihr3av.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
