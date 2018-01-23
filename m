@@ -1,49 +1,41 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 23 Jan 2018 15:09:16 +0200
-Subject: [Buildroot] [PATCH] libbsd: bump to version 0.8.7
-Message-ID: <9369d64e649f794818aa06d267585dbc3450d287.1516712956.git.baruch@tkos.co.il>
+Date: Tue, 23 Jan 2018 15:17:40 +0200
+Subject: [Buildroot] [PATCH] netcat-openbsd: bump to version 1.187-1
+Message-ID: <c926107008c832cb3bac3b2252098a7712335952.1516713460.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Change download site; the latest version is not on the official site.
-
-Add license hash.
-
-Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- package/libbsd/libbsd.hash | 5 +++--
- package/libbsd/libbsd.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 4 deletions(-)
+ package/netcat-openbsd/netcat-openbsd.hash | 2 +-
+ package/netcat-openbsd/netcat-openbsd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libbsd/libbsd.hash b/package/libbsd/libbsd.hash
-index bc6c7cfb822c..133df90cb9a9 100644
---- a/package/libbsd/libbsd.hash
-+++ b/package/libbsd/libbsd.hash
-@@ -1,2 +1,3 @@
--# Locally calculated after checking pgp signature
--sha256	934b634f4dfd865b6482650b8f522c70ae65c463529de8be907b53c89c3a34a8	libbsd-0.8.3.tar.xz
-+# From https://lists.freedesktop.org/archives/libbsd/2018-January/000166.html
-+sha256	f548f10e5af5a08b1e22889ce84315b1ebe41505b015c9596bad03fd13a12b31	libbsd-0.8.7.tar.xz
-+sha256	0b6cedd686394f9c811a6a9fd314d68ab4738475ad3d9df61154259fa649a2a7	COPYING
-diff --git a/package/libbsd/libbsd.mk b/package/libbsd/libbsd.mk
-index eba25d7d037f..e211389ec7de 100644
---- a/package/libbsd/libbsd.mk
-+++ b/package/libbsd/libbsd.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/netcat-openbsd/netcat-openbsd.hash b/package/netcat-openbsd/netcat-openbsd.hash
+index e90a41a8a962..1bf62bbcd6c8 100644
+--- a/package/netcat-openbsd/netcat-openbsd.hash
++++ b/package/netcat-openbsd/netcat-openbsd.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 f587c02139aedb0bae12fdaef94f8c00649a0b4d603b5a22612e42cb317ba7cf netcat-openbsd-debian_1.178-3.tar.gz
++sha256 63d72b4e5ea629af148d6d655125dcbe48f4996a8a2a8c5e234c62eba2856b5f netcat-openbsd-debian_1.187-1.tar.gz
+ sha256 e2e86d58c38f044a49f51e45515747585db58a2305419c73323eaad88fcaef5c debian/copyright
+diff --git a/package/netcat-openbsd/netcat-openbsd.mk b/package/netcat-openbsd/netcat-openbsd.mk
+index a758714eef08..6d3be500ebea 100644
+--- a/package/netcat-openbsd/netcat-openbsd.mk
++++ b/package/netcat-openbsd/netcat-openbsd.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBBSD_VERSION = 0.8.3
-+LIBBSD_VERSION = 0.8.7
- LIBBSD_SOURCE = libbsd-$(LIBBSD_VERSION).tar.xz
--LIBBSD_SITE = http://libbsd.freedesktop.org/releases
-+LIBBSD_SITE = https://archive.hadrons.org/software/libbsd
- LIBBSD_LICENSE = BSD-3-Clause, MIT
- LIBBSD_LICENSE_FILES = COPYING
- LIBBSD_INSTALL_STAGING = YES
+-NETCAT_OPENBSD_VERSION = debian/1.178-3
++NETCAT_OPENBSD_VERSION = debian/1.187-1
+ NETCAT_OPENBSD_SITE = git://anonscm.debian.org/collab-maint/netcat-openbsd
+ NETCAT_OPENBSD_LICENSE = BSD-3-Clause
+ NETCAT_OPENBSD_LICENSE_FILES = debian/copyright
 -- 
 2.15.1
