@@ -1,46 +1,132 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 23 Jan 2018 15:28:14 +0200
-Subject: [Buildroot] [PATCH] dos2unix: bump to version 7.4.0
-Message-ID: <56242740fd5cdf0dd55f98bcc05f207893a5b36a.1516714094.git.baruch@tkos.co.il>
+From: Carlos Santos <casantos@datacom.ind.br>
+Date: Tue, 23 Jan 2018 12:03:23 -0200
+Subject: [Buildroot] [PATCH] hwdata: bumb to version 0.308
+Message-ID: <20180123140324.20801-1-casantos@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add license hash.
+The hwdata collection is hosted at GitHub now and provides additional
+databases, besides pci.ids and usb.ids:
 
-Add reference to upstream tarball signature.
+- Individual Address Block (IAB) and Organizationally Unique Identifier
+  (OUI) databases, from IEEE Registration Authority
+- PNP ID database (from Microsoft)
 
-Cc: David Bachelart <david.bachelart@bbright.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Install only pci.ids and usb.ids by default, to keep compatibility with
+previous versions.
+
+In the future we can make other packages (pciutils, lshw) use the common
+files instead of installing their own copies, thus saving some storage
+space.
+
+Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
 ---
- package/dos2unix/dos2unix.hash | 4 +++-
- package/dos2unix/dos2unix.mk   | 2 +-
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ package/hwdata/Config.in   | 45 ++++++++++++++++++++++++++++++++++++++++++---
+ package/hwdata/hwdata.hash |  7 ++++---
+ package/hwdata/hwdata.mk   | 20 +++++++++++++-------
+ 3 files changed, 59 insertions(+), 13 deletions(-)
 
-diff --git a/package/dos2unix/dos2unix.hash b/package/dos2unix/dos2unix.hash
-index 1169592fce44..80b739495d96 100644
---- a/package/dos2unix/dos2unix.hash
-+++ b/package/dos2unix/dos2unix.hash
-@@ -1,2 +1,4 @@
- # Locally calculated after checking pgp signature
--sha256	8ccda7bbc5a2f903dafd95900abb5bf5e77a769b572ef25150fde4056c5f30c5	dos2unix-7.3.4.tar.gz
-+# https://waterlan.home.xs4all.nl/dos2unix/dos2unix-7.4.0.tar.gz.asc
-+sha256	bac765abdbd95cdd87a71989d4382c32cf3cbfeee2153f0086cb9cf18261048a	dos2unix-7.4.0.tar.gz
-+sha256	49224e841621b52a72aa38d8ac895a396cd3fa1395190bdfc9252378001eb3c0	COPYING.txt
-diff --git a/package/dos2unix/dos2unix.mk b/package/dos2unix/dos2unix.mk
-index 276a18ebcc76..9b823405902e 100644
---- a/package/dos2unix/dos2unix.mk
-+++ b/package/dos2unix/dos2unix.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/hwdata/Config.in b/package/hwdata/Config.in
+index 8424238e1b..63bb2216da 100644
+--- a/package/hwdata/Config.in
++++ b/package/hwdata/Config.in
+@@ -1,6 +1,45 @@
+ config BR2_PACKAGE_HWDATA
+ 	bool "hwdata"
+ 	help
+-	  Various hardware identification and configuration data,
+-	  such as the pci.ids database, or the XFree86/xorg Cards
+-	  database.
++	  Various hardware identification and configuration data
++
++	  - Individual Address Block (IAB) and Organizationally Unique
++	    Identifier (OUI) databases, from IEEE Registration Authority
++	  - PCI ID database
++	  - PNP ID database (from Microsoft)
++	  - USB ID database
++
++	  https://github.com/vcrhonek/hwdata
++
++if BR2_PACKAGE_HWDATA
++
++config BR2_PACKAGE_HWDATA_ANY
++	bool
++
++config BR2_PACKAGE_HWDATA_IAB_OUI_TXT
++	bool "install iab.txt and oui.txt"
++	select BR2_PACKAGE_HWDATA_ANY
++	help
++	  Install iab.txt and oui.txt
++
++config BR2_PACKAGE_HWDATA_PCI_IDS
++	bool "install pci.ids"
++	default y
++	select BR2_PACKAGE_HWDATA_ANY
++	help
++	  Install pci.ids
++
++config BR2_PACKAGE_HWDATA_PNP_IDS
++	bool "install pnp.ids"
++	select BR2_PACKAGE_HWDATA_ANY
++	help
++	  Install pnp.ids
++
++config BR2_PACKAGE_HWDATA_USB_IDS
++	bool "install usb.ids"
++	default y
++	select BR2_PACKAGE_HWDATA_ANY
++	help
++	  Install usb.ids
++
++endif
+diff --git a/package/hwdata/hwdata.hash b/package/hwdata/hwdata.hash
+index b3c83ebb74..dba1be31e0 100644
+--- a/package/hwdata/hwdata.hash
++++ b/package/hwdata/hwdata.hash
+@@ -1,3 +1,4 @@
+-# From http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/h/hwdata/hwdata_0.267-1.dsc
+-sha256	d77f2b3f3d6e278be669141ffa5dac01b64cab02f7b2c744bbabc500a45263f4	hwdata_0.267.orig.tar.gz
+-sha256	055d2f168de9333562a04f6a230c43dc19c4975882935d8b2f0ab17f64f57275	hwdata_0.267-1.diff.gz
++# Locally calculated
++sha256 986d919c20a0c7f8b669a63830f6d2f4cb5c4cddcfc944c5e2ae05c2e9e5ec9f  hwdata-v0.308.tar.gz
++sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
++sha256 21d0406f93e884a050426ebc21931839a45d56bfcbcbfdda7686d583f36f107f  LICENSE
+diff --git a/package/hwdata/hwdata.mk b/package/hwdata/hwdata.mk
+index 4ad8d42939..6ebcd0e86e 100644
+--- a/package/hwdata/hwdata.mk
++++ b/package/hwdata/hwdata.mk
+@@ -4,16 +4,22 @@
  #
  ################################################################################
  
--DOS2UNIX_VERSION = 7.3.4
-+DOS2UNIX_VERSION = 7.4.0
- DOS2UNIX_SITE = http://waterlan.home.xs4all.nl/dos2unix
- DOS2UNIX_LICENSE = BSD-2-Clause
- DOS2UNIX_LICENSE_FILES = COPYING.txt
+-HWDATA_VERSION = 0.267
+-HWDATA_SOURCE = hwdata_$(HWDATA_VERSION).orig.tar.gz
+-HWDATA_PATCH = hwdata_$(HWDATA_VERSION)-1.diff.gz
+-HWDATA_SITE = http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/h/hwdata
+-HWDATA_LICENSE = GPL-2.0+ or XFree86 1.0 license
++HWDATA_VERSION = v0.308
++HWDATA_SITE = $(call github,vcrhonek,hwdata,$(HWDATA_VERSION))
++HWDATA_LICENSE = GPL-2.0+, BSD-3-Clause, XFree86 1.0
+ HWDATA_LICENSE_FILES = COPYING LICENSE
+ 
++ifeq ($(BR2_PACKAGE_HWDATA):$(BR2_PACKAGE_HWDATA_ANY),y:)
++$(error No hwdata database selected. Select at least one database)
++endif
++
+ define HWDATA_INSTALL_TARGET_CMDS
+-	$(INSTALL) -D -m 644 $(@D)/pci.ids $(TARGET_DIR)/usr/share/hwdata/pci.ids
+-	$(INSTALL) -D -m 644 $(@D)/usb.ids $(TARGET_DIR)/usr/share/hwdata/usb.ids
++	$(INSTALL) -D -m 644 \
++		$(if $(BR2_PACKAGE_HWDATA_IAB_OUI_TXT),$(@D)/iab.txt $(@D)/oui.txt,) \
++		$(if $(BR2_PACKAGE_HWDATA_PCI_IDS),$(@D)/pci.ids,) \
++		$(if $(BR2_PACKAGE_HWDATA_PNP_IDS),$(@D)/pnp.ids,) \
++		$(if $(BR2_PACKAGE_HWDATA_USB_IDS),$(@D)/usb.ids,) \
++		$(TARGET_DIR)/usr/share/hwdata
+ endef
+ 
+ $(eval $(generic-package))
 -- 
-2.15.1
+2.14.3
