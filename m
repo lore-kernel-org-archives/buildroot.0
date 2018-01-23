@@ -1,10 +1,10 @@
 From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Tue, 23 Jan 2018 08:26:02 -0600
-Subject: [Buildroot] [PATCH 1/2] python-flask-cors: new package
-In-Reply-To: <CAGm1_kt3d8wHA0+Eqr0x7+ZqTNZJQ5K3_ZH=ymFB3y0KyvQ=xA@mail.gmail.com>
-References: <1516681048-16580-1-git-send-email-matthew.weber@rockwellcollins.com>
- <CAGm1_kt3d8wHA0+Eqr0x7+ZqTNZJQ5K3_ZH=ymFB3y0KyvQ=xA@mail.gmail.com>
-Message-ID: <CANQCQpa2yBJggVDvtUhHmPd+qP1wJvGZz9+Gsv9JGUDoLWLHxA@mail.gmail.com>
+Date: Tue, 23 Jan 2018 08:27:43 -0600
+Subject: [Buildroot] [PATCH] scanpypi: ignore empty elements in package
+ requirements
+In-Reply-To: <1516695187-1193-1-git-send-email-yegorslists@googlemail.com>
+References: <1516695187-1193-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <CANQCQpZRXFjBo_oyOBWLyB5Nkf9a45RFUhR_6J79UEC818McCQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,23 +13,16 @@ To: buildroot@busybox.net
 
 Yegor,
 
-On Tue, Jan 23, 2018 at 2:15 AM, Yegor Yefremov
-<yegorslists@googlemail.com> wrote:
+On Tue, Jan 23, 2018 at 2:13 AM,  <yegorslists@googlemail.com> wrote:
+> From: Yegor Yefremov <yegorslists@googlemail.com>
 >
-> Hi Matt,
+> Depending on how setup.py reads requirements files empty elements can occur.
+> This patch takes care, that such elements will be ignored and don't crash
+> the scanpypi script.
 >
-[snip]
->
-> Please apply this patch [1] and try to readd this package via
-> utils/scanpypi. python-flask-cors discovered some bugs in the script,
-> but now it is working, so you don't need to tweak the package
-> manually.
->
-> [1] http://patchwork.ozlabs.org/patch/864626/
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 
-That is so cool!  I haven't added a python package in a few years and
-didn't realize the script was there.  Thank you.
+I used this new python package for testing
+(https://patchwork.ozlabs.org/patch/864829/)
 
-Superseded by: https://patchwork.ozlabs.org/patch/864829/
-
-Matt
+Tested-by: Matt Weber <matthew.weber@rockwellcollins.com>
