@@ -1,68 +1,67 @@
-From: James Knight <james.knight@rockwellcollins.com>
-Date: Tue, 23 Jan 2018 13:24:43 -0500
-Subject: [Buildroot] [PATCH 1/1] libpqxx: needs at least gcc 4.8 for c++11
- features
-Message-ID: <20180123182443.3088-1-james.knight@rockwellcollins.com>
+From: Toan Pham <tpham3783@gmail.com>
+Date: Tue, 23 Jan 2018 13:28:34 -0500
+Subject: [Buildroot] Suggestion for Makefile to probably import
+ BR2_CONFIG
+In-Reply-To: <d7cd5dae-5ae3-54f3-4376-f17c27e98065@mind.be>
+References: <CAGNmLEM_x8ykDr54gbT94em9YyH5+0ec=jCgjULh68yJLUzjnw@mail.gmail.com>
+ <1cb3ee33-b12f-6534-9dbf-fb697fbf3482@mind.be>
+ <CAGNmLEMn=NFuq+iKj8e2PuF-A4+tGj_VDjq1FBj6+xzDPU=_iQ@mail.gmail.com>
+ <d7cd5dae-5ae3-54f3-4376-f17c27e98065@mind.be>
+Message-ID: <CAGNmLEN0N9NziMj6OUDEAkEhu6bDmc43jBnXV6MFSP3EEupnSg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This package uses autoconf (AX_CXX_COMPILE_STDCXX_11) to validate C++11
-support. The test code uses an auto static data member for validation;
-however, support for this only exists in GCC 4.8+ [1]. This causes the
-configuration script to generated the following errors:
+>
+>  Well, if you really know what you are doing, then you also know that you
+> can in
+> fact override BR2_CONFIG :-).
 
-    checking whether .../host/bin/powerpc-ctng_e500v2-linux-gnuspe-g++ accepts -g... yes
-    checking whether .../host/bin/powerpc-ctng_e500v2-linux-gnuspe-g++ supports C++11 features by default... no
-    checking whether .../host/bin/powerpc-ctng_e500v2-linux-gnuspe-g++ supports C++11 features with -std=c++11... no
-    checking whether .../host/bin/powerpc-ctng_e500v2-linux-gnuspe-g++ supports C++11 features with +std=c++11... no
-    checking whether .../host/bin/powerpc-ctng_e500v2-linux-gnuspe-g++ supports C++11 features with -h std=c++11... no
-    checking whether .../host/bin/powerpc-ctng_e500v2-linux-gnuspe-g++ supports C++11 features with -std=c++0x... no
-    checking whether .../host/bin/powerpc-ctng_e500v2-linux-gnuspe-g++ supports C++11 features with +std=c++0x... no
-    checking whether .../host/bin/powerpc-ctng_e500v2-linux-gnuspe-g++ supports C++11 features with -h std=c++0x... no
 
-Bumping the required GCC version of this package to at least v4.8.
+Yes, but it wont work if the build is out of branch (O is defined) along
+with BR2_CONFIG.  Please try it out!
 
-Fixes:
 
-    http://autobuild.buildroot.net/results/fae9ccc37c31c6d1852d0dc11d43f9c6ecbf1fe4/
 
-[1]: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=55003
+> In fact, the commandline you give in your original
+> mail *will* work. Any assignment specified on the make commandline (after
+> 'make') overrides the assignments done within the Makefiles.
+>
 
-Signed-off-by: James Knight <james.knight@rockwellcollins.com>
----
-See also:
 
-    https://git.buildroot.net/buildroot/commit/?id=7ef807aba7a74ef57d6db7f5c3718d21df9db03e
----
- package/libpqxx/Config.in | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Yes, except that it doesn't work because  BR2 would print the error
+described in the first email.  I just found the proper patch to fix that
+error (see below patch).  The reason why we got the error because buildroot
+called submake target silentoldconfig without passing along the BR2_CONFIG
+we intended to use.  One way to fix that is to pass -e option to submake
+but it is a bad practice to use environment variable overload.  A better
+way is to pass along BR2_CONFIG, otherwise submake would evaluate
+BR2_CONFIG as $(CONFIG_DIR)/.config as oppose to the path given from
+command line argument.  Please review it and let me know.
 
-diff --git a/package/libpqxx/Config.in b/package/libpqxx/Config.in
-index 18f905b3780beeac9731e9ea24db971e3a4ddeb9..9553d7903c331900f8b6b354fe02e2ba9a5aea46 100644
---- a/package/libpqxx/Config.in
-+++ b/package/libpqxx/Config.in
-@@ -2,7 +2,7 @@ config BR2_PACKAGE_LIBPQXX
- 	bool "libpqxx"
- 	depends on BR2_PACKAGE_POSTGRESQL
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # C++11
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	help
- 	  libpqxx is the official C++ client API for PostgreSQL, the
-@@ -10,8 +10,8 @@ config BR2_PACKAGE_LIBPQXX
- 
- 	  http://pqxx.org/development/libpqxx/
- 
--comment "libpqxx needs toolchain w/ C++, gcc >= 4.7, threads"
-+comment "libpqxx needs toolchain w/ C++, gcc >= 4.8, threads"
- 	depends on BR2_PACKAGE_POSTGRESQL
- 	depends on !BR2_INSTALL_LIBSTDCPP || \
--		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || \
- 		!BR2_TOOLCHAIN_HAS_THREADS
--- 
-2.13.3.windows.1
+
+Thanks for the feedback,
+
+TP
+
+
+
+
+diff --git a/Makefile b/Makefile
+index 7d8ab51..4b12359 100644
+--- a/Makefile
++++ b/Makefile
+ # Pull in the user's configuration file
+@@ -547,7 +550,7 @@ dirs: $(BUILD_DIR) $(STAGING_DIR) $(TARGET_DIR) \
+        $(HOST_DIR) $(HOST_DIR)/usr $(HOST_DIR)/lib $(BINARIES_DIR)
+
+ $(BUILD_DIR)/buildroot-config/auto.conf: $(BR2_CONFIG)
+-       $(MAKE1) $(EXTRAMAKEARGS) HOSTCC="$(HOSTCC_NOCCACHE)"
+HOSTCXX="$(HOSTCXX_NOCCACHE)" silentoldconfig
++       $(MAKE1) BR2_CONFIG=$(BR2_CONFIG) $(EXTRAMAKEARGS)
+HOSTCC="$(HOSTCC_NOCCACHE)" HOSTCXX="$(HOSTCXX_NOCCACHE)" silentoldconfig
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180123/f5b9838d/attachment.html>
