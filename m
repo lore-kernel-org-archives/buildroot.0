@@ -1,47 +1,111 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 23 Jan 2018 08:29:53 +0100
-Subject: [Buildroot] [git commit] squid: bump version to 3.5.27
-Message-ID: <20180123073151.B2BC27F952@busybox.osuosl.org>
+Date: Tue, 23 Jan 2018 08:30:15 +0100
+Subject: [Buildroot] [git commit] squid: add upstream post-3.5.27 security
+ patches
+Message-ID: <20180123073151.CD69283FC4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=001b834aacef82a6205f5b319037d42d0fdb13cd
+commit: https://git.buildroot.net/buildroot/commit/?id=6f481c83b96c76d59a420e5f6559c02cb5d329d3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-And add a hash for the license files.
+Fixes the following security issues:
+
+SQUID-2018:1 Due to incorrect pointer handling Squid is vulnerable to denial
+of service attack when processing ESI responses.
+
+http://www.squid-cache.org/Advisories/SQUID-2018_1.txt
+
+SQUID-2018:2  Due to incorrect pointer handling Squid is vulnerable to
+denial of service attack when processing ESI responses or downloading
+intermediate CA certificates.
+
+http://www.squid-cache.org/Advisories/SQUID-2018_2.txt
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/squid/squid.hash | 8 +++++---
- package/squid/squid.mk   | 2 +-
- 2 files changed, 6 insertions(+), 4 deletions(-)
+ ...e-sure-endofName-never-exceeds-tagEnd-130.patch | 35 ++++++++++++++++++++++
+ ...t-IP-logging-for-transactions-without-a-c.patch | 31 +++++++++++++++++++
+ 2 files changed, 66 insertions(+)
 
-diff --git a/package/squid/squid.hash b/package/squid/squid.hash
-index 91ba9e6..8787cb2 100644
---- a/package/squid/squid.hash
-+++ b/package/squid/squid.hash
-@@ -1,3 +1,5 @@
--# From http://www.squid-cache.org/Versions/v3/3.5/squid-3.5.26.tar.xz.asc
--md5 510e2c84773879c00d0e7ced997864d9  squid-3.5.26.tar.xz
--sha1 51a664217957b35de8b7fae180b9f93a759a4204  squid-3.5.26.tar.xz
-+# From http://www.squid-cache.org/Versions/v3/3.5/squid-3.5.27.tar.xz.asc
-+md5 39ef8199675d48a314b540f92c00c545 squid-3.5.27.tar.xz
-+sha1 1e69c96d13cd49844da3bcf33a0b428fbe7b6f77 squid-3.5.27.tar.xz
-+# Locally calculated
-+sha256 58f5d05257af1fb964fde20e134d660fac9afa86b6fd8c70d63ead63068378fa COPYING
-diff --git a/package/squid/squid.mk b/package/squid/squid.mk
-index d334d14..8ade55e 100644
---- a/package/squid/squid.mk
-+++ b/package/squid/squid.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- SQUID_VERSION_MAJOR = 3.5
--SQUID_VERSION = $(SQUID_VERSION_MAJOR).26
-+SQUID_VERSION = $(SQUID_VERSION_MAJOR).27
- SQUID_SOURCE = squid-$(SQUID_VERSION).tar.xz
- SQUID_SITE = http://www.squid-cache.org/Versions/v3/$(SQUID_VERSION_MAJOR)
- SQUID_LICENSE = GPL-2.0+
+diff --git a/package/squid/0003-ESI-make-sure-endofName-never-exceeds-tagEnd-130.patch b/package/squid/0003-ESI-make-sure-endofName-never-exceeds-tagEnd-130.patch
+new file mode 100644
+index 0000000..6e71677
+--- /dev/null
++++ b/package/squid/0003-ESI-make-sure-endofName-never-exceeds-tagEnd-130.patch
+@@ -0,0 +1,35 @@
++From eb2db98a676321b814fc4a51c4fb7928a8bb45d9 Mon Sep 17 00:00:00 2001
++From: Amos Jeffries <yadij@users.noreply.github.com>
++Date: Fri, 19 Jan 2018 13:54:14 +1300
++Subject: [PATCH] ESI: make sure endofName never exceeds tagEnd (#130)
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ src/esi/CustomParser.cc | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/src/esi/CustomParser.cc b/src/esi/CustomParser.cc
++index d86d2d309..db634d921 100644
++--- a/src/esi/CustomParser.cc
+++++ b/src/esi/CustomParser.cc
++@@ -121,7 +121,7 @@ ESICustomParser::parse(char const *dataToParse, size_t const lengthOfData, bool
++ 
++             char * endofName = strpbrk(const_cast<char *>(tag), w_space);
++ 
++-            if (endofName > tagEnd)
+++            if (!endofName || endofName > tagEnd)
++                 endofName = const_cast<char *>(tagEnd);
++ 
++             *endofName = '\0';
++@@ -214,7 +214,7 @@ ESICustomParser::parse(char const *dataToParse, size_t const lengthOfData, bool
++ 
++             char * endofName = strpbrk(const_cast<char *>(tag), w_space);
++ 
++-            if (endofName > tagEnd)
+++            if (!endofName || endofName > tagEnd)
++                 endofName = const_cast<char *>(tagEnd);
++ 
++             *endofName = '\0';
++-- 
++2.11.0
++
+diff --git a/package/squid/0004-Fix-indirect-IP-logging-for-transactions-without-a-c.patch b/package/squid/0004-Fix-indirect-IP-logging-for-transactions-without-a-c.patch
+new file mode 100644
+index 0000000..51fff30
+--- /dev/null
++++ b/package/squid/0004-Fix-indirect-IP-logging-for-transactions-without-a-c.patch
+@@ -0,0 +1,31 @@
++From 8232b83d3fa47a1399f155cb829db829369fbae9 Mon Sep 17 00:00:00 2001
++From: squidadm <squidadm@users.noreply.github.com>
++Date: Sun, 21 Jan 2018 08:07:08 +1300
++Subject: [PATCH] Fix indirect IP logging for transactions without a client
++ connection (#129) (#136)
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ src/client_side_request.cc | 6 +++---
++ 1 file changed, 3 insertions(+), 3 deletions(-)
++
++diff --git a/src/client_side_request.cc b/src/client_side_request.cc
++index be124f355..203f89d46 100644
++--- a/src/client_side_request.cc
+++++ b/src/client_side_request.cc
++@@ -488,9 +488,9 @@ clientFollowXForwardedForCheck(allow_t answer, void *data)
++         * Ensure that the access log shows the indirect client
++         * instead of the direct client.
++         */
++-        ConnStateData *conn = http->getConn();
++-        conn->log_addr = request->indirect_client_addr;
++-        http->al->cache.caddr = conn->log_addr;
+++        http->al->cache.caddr = request->indirect_client_addr;
+++        if (ConnStateData *conn = http->getConn())
+++            conn->log_addr = request->indirect_client_addr;
++     }
++     request->x_forwarded_for_iterator.clean();
++     request->flags.done_follow_x_forwarded_for = true;
++-- 
++2.11.0
++
