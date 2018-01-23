@@ -1,41 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 23 Jan 2018 08:36:11 +0100
-Subject: [Buildroot] [git commit] lua-resty-http: bump to version 0.12
-Message-ID: <20180123073700.A539683969@busybox.osuosl.org>
+Date: Tue, 23 Jan 2018 08:35:42 +0100
+Subject: [Buildroot] [git commit] lua-testmore: bump to version 0.3.3
+Message-ID: <20180123073700.5F52E80426@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=77ac4737cd3e057c586282bc41edd7da9b4b540a
+commit: https://git.buildroot.net/buildroot/commit/?id=ec3d655aa39086daeab49c57b7859ce1cd349f92
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/lua-resty-http/lua-resty-http.hash | 2 +-
- package/lua-resty-http/lua-resty-http.mk   | 2 +-
+ package/lua-testmore/lua-testmore.hash | 2 +-
+ package/lua-testmore/lua-testmore.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/lua-resty-http/lua-resty-http.hash b/package/lua-resty-http/lua-resty-http.hash
-index 95f011b..e45df0e 100644
---- a/package/lua-resty-http/lua-resty-http.hash
-+++ b/package/lua-resty-http/lua-resty-http.hash
+diff --git a/package/lua-testmore/lua-testmore.hash b/package/lua-testmore/lua-testmore.hash
+index 439097b..8db664f 100644
+--- a/package/lua-testmore/lua-testmore.hash
++++ b/package/lua-testmore/lua-testmore.hash
 @@ -1,2 +1,2 @@
  # Locally calculated
--sha256 12d9aa9a49efdb752c1afb19a6d0a758de6c8dd2dad24ea48bd09e03f7a0e0f1  lua-resty-http-0.11-0.src.rock
-+sha256 4628413a5a2828645e3ddb38a2a0c764e81443cbd1a011357eeed7e983750329  lua-resty-http-0.12-0.src.rock
-diff --git a/package/lua-resty-http/lua-resty-http.mk b/package/lua-resty-http/lua-resty-http.mk
-index e79982e..2aee63d 100644
---- a/package/lua-resty-http/lua-resty-http.mk
-+++ b/package/lua-resty-http/lua-resty-http.mk
+-sha256	a76a9b707487bf3e8b6a5362640bc2e010d184c4f66e423de7b28bd480a0db90  lua-testmore-0.3.2-1.src.rock
++sha256	163055ef92df9e01d9ae57cd45d6f6aace1ff4dd3abf7e29b9e30ecb1ab76ae2  lua-testmore-0.3.3-1.src.rock
+diff --git a/package/lua-testmore/lua-testmore.mk b/package/lua-testmore/lua-testmore.mk
+index 04482e2..7904776 100644
+--- a/package/lua-testmore/lua-testmore.mk
++++ b/package/lua-testmore/lua-testmore.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LUA_RESTY_HTTP_VERSION = 0.11-0
-+LUA_RESTY_HTTP_VERSION = 0.12-0
- LUA_RESTY_HTTP_SUBDIR = lua-resty-http
- LUA_RESTY_HTTP_LICENSE = BSD-2-Clause
- LUA_RESTY_HTTP_LICENSE_FILES = $(LUA_RESTY_HTTP_SUBDIR)/LICENSE
+-LUA_TESTMORE_VERSION = 0.3.2-1
++LUA_TESTMORE_VERSION = 0.3.3-1
+ LUA_TESTMORE_NAME_UPSTREAM = lua-TestMore
+ LUA_TESTMORE_LICENSE = MIT
+ LUA_TESTMORE_LICENSE_FILES = $(LUA_TESTMORE_SUBDIR)/COPYRIGHT
