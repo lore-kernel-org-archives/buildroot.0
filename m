@@ -1,48 +1,40 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 23 Jan 2018 15:32:32 +0100
-Subject: [Buildroot] [git commit] dos2unix: bump to version 7.4.0
-Message-ID: <20180123143331.3BAFF802C8@busybox.osuosl.org>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Tue, 23 Jan 2018 15:33:28 +0100
+Subject: [Buildroot] [PATCH 1/2] python-flask-cors: new package
+In-Reply-To: <CANQCQpa2yBJggVDvtUhHmPd+qP1wJvGZz9+Gsv9JGUDoLWLHxA@mail.gmail.com>
+References: <1516681048-16580-1-git-send-email-matthew.weber@rockwellcollins.com>
+ <CAGm1_kt3d8wHA0+Eqr0x7+ZqTNZJQ5K3_ZH=ymFB3y0KyvQ=xA@mail.gmail.com>
+ <CANQCQpa2yBJggVDvtUhHmPd+qP1wJvGZz9+Gsv9JGUDoLWLHxA@mail.gmail.com>
+Message-ID: <CAGm1_ksPjiuYLx9S6b36412FiZMB3KKgxMAvWy706hfszgj7fQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b2f028e27c87865403fa91482c47d0a3186fecef
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tue, Jan 23, 2018 at 3:26 PM, Matthew Weber
+<matthew.weber@rockwellcollins.com> wrote:
+> Yegor,
+>
+> On Tue, Jan 23, 2018 at 2:15 AM, Yegor Yefremov
+> <yegorslists@googlemail.com> wrote:
+>>
+>> Hi Matt,
+>>
+> [snip]
+>>
+>> Please apply this patch [1] and try to readd this package via
+>> utils/scanpypi. python-flask-cors discovered some bugs in the script,
+>> but now it is working, so you don't need to tweak the package
+>> manually.
+>>
+>> [1] http://patchwork.ozlabs.org/patch/864626/
+>
+> That is so cool!  I haven't added a python package in a few years and
+> didn't realize the script was there.  Thank you.
+>
+> Superseded by: https://patchwork.ozlabs.org/patch/864829/
 
-Add license hash.
+Oh yes, scanpypi saves a lot of time :-)
 
-Add reference to upstream tarball signature.
-
-Cc: David Bachelart <david.bachelart@bbright.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/dos2unix/dos2unix.hash | 4 +++-
- package/dos2unix/dos2unix.mk   | 2 +-
- 2 files changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/package/dos2unix/dos2unix.hash b/package/dos2unix/dos2unix.hash
-index 1169592..80b7394 100644
---- a/package/dos2unix/dos2unix.hash
-+++ b/package/dos2unix/dos2unix.hash
-@@ -1,2 +1,4 @@
- # Locally calculated after checking pgp signature
--sha256	8ccda7bbc5a2f903dafd95900abb5bf5e77a769b572ef25150fde4056c5f30c5	dos2unix-7.3.4.tar.gz
-+# https://waterlan.home.xs4all.nl/dos2unix/dos2unix-7.4.0.tar.gz.asc
-+sha256	bac765abdbd95cdd87a71989d4382c32cf3cbfeee2153f0086cb9cf18261048a	dos2unix-7.4.0.tar.gz
-+sha256	49224e841621b52a72aa38d8ac895a396cd3fa1395190bdfc9252378001eb3c0	COPYING.txt
-diff --git a/package/dos2unix/dos2unix.mk b/package/dos2unix/dos2unix.mk
-index 276a18e..9b82340 100644
---- a/package/dos2unix/dos2unix.mk
-+++ b/package/dos2unix/dos2unix.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DOS2UNIX_VERSION = 7.3.4
-+DOS2UNIX_VERSION = 7.4.0
- DOS2UNIX_SITE = http://waterlan.home.xs4all.nl/dos2unix
- DOS2UNIX_LICENSE = BSD-2-Clause
- DOS2UNIX_LICENSE_FILES = COPYING.txt
+Yegor
