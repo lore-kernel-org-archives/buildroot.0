@@ -1,55 +1,42 @@
 From: Chris Lesiak <chris.lesiak@licor.com>
-Date: Tue, 23 Jan 2018 17:22:21 -0600
-Subject: [Buildroot] [PATCH] package/openssh: Add sysusers.d snippet
-Message-ID: <20180123232221.6106-1-chris.lesiak@licor.com>
+Date: Tue, 23 Jan 2018 17:24:51 -0600
+Subject: [Buildroot] [PATCH] package/openssh: Add tmpfiles.d snippet to make
+ /var/empty
+Message-ID: <20180123232451.6236-1-chris.lesiak@licor.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+This is useful in volatile or stateless systems in which /var is empty.
+
 Signed-off-by: Chris Lesiak <chris.lesiak@licor.com>
 ---
- package/openssh/openssh.mk | 8 ++++++++
- package/openssh/sshd.conf  | 5 +++++
- 2 files changed, 13 insertions(+)
- create mode 100644 package/openssh/sshd.conf
+ package/openssh/openssh.mk        | 2 ++
+ package/openssh/ssh_tmpfiles.conf | 1 +
+ 2 files changed, 3 insertions(+)
+ create mode 100644 package/openssh/ssh_tmpfiles.conf
 
 diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
-index 6b7ac22c19..fc82300ab7 100644
+index fc82300ab7..bb43b2edec 100644
 --- a/package/openssh/openssh.mk
 +++ b/package/openssh/openssh.mk
-@@ -60,12 +60,20 @@ else
- OPENSSH_CONF_OPTS += --without-selinux
- endif
- 
-+ifeq ($(BR2_PACKAGE_SYSTEMD_SYSUSERS),y)
-+define OPENSSH_INSTALL_SYSTEMD_SYSUSERS
-+	$(INSTALL) -m 0644 -D package/openssh/sshd.conf \
-+		$(TARGET_DIR)/usr/lib/sysusers.d/sshd.conf
-+endef
-+endif
-+
- define OPENSSH_INSTALL_INIT_SYSTEMD
- 	$(INSTALL) -D -m 644 package/openssh/sshd.service \
- 		$(TARGET_DIR)/usr/lib/systemd/system/sshd.service
+@@ -73,6 +73,8 @@ define OPENSSH_INSTALL_INIT_SYSTEMD
  	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
  	ln -fs ../../../../usr/lib/systemd/system/sshd.service \
  		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/sshd.service
-+	$(OPENSSH_INSTALL_SYSTEMD_SYSUSERS)
++	$(INSTALL) -m 0644 -D package/openssh/ssh_tmpfiles.conf \
++		$(TARGET_DIR)/usr/lib/tmpfiles.d/ssh.conf
+ 	$(OPENSSH_INSTALL_SYSTEMD_SYSUSERS)
  endef
  
- define OPENSSH_INSTALL_INIT_SYSV
-diff --git a/package/openssh/sshd.conf b/package/openssh/sshd.conf
+diff --git a/package/openssh/ssh_tmpfiles.conf b/package/openssh/ssh_tmpfiles.conf
 new file mode 100644
-index 0000000000..3ea46f65c6
+index 0000000000..9d1370a930
 --- /dev/null
-+++ b/package/openssh/sshd.conf
-@@ -0,0 +1,5 @@
-+# sysusers.d snippet for creating the sshd system user automatically
-+# at boot on systemd-based systems that ship with an unpopulated
-+# /etc. See sysusers.d(5) for details.
-+
-+u sshd - "Privilege-separated SSH"
++++ b/package/openssh/ssh_tmpfiles.conf
+@@ -0,0 +1 @@
++d /var/empty 0711 root root
 -- 
 2.13.6
