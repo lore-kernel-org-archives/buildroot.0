@@ -1,26 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 23 Jan 2018 08:31:36 +0100
-Subject: [Buildroot] [PATCH] docs/website: update sponsors for FOSDEM
-In-Reply-To: <20180122222338.9261-1-arnout@mind.be> (Arnout Vandecappelle's
- message of "Mon, 22 Jan 2018 23:23:38 +0100")
-References: <20180122222338.9261-1-arnout@mind.be>
-Message-ID: <87d121ni93.fsf@dell.be.48ers.dk>
+Date: Tue, 23 Jan 2018 08:29:53 +0100
+Subject: [Buildroot] [git commit] squid: bump version to 3.5.27
+Message-ID: <20180123073151.B2BC27F952@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=001b834aacef82a6205f5b319037d42d0fdb13cd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Simply a matter of updating the year, since it's again Google and Mind
- > for the FOSDEM2018 developer meeting.
+And add a hash for the license files.
 
- > Also add the 2017 sponsorship to the "Past sponsors" section.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/squid/squid.hash | 8 +++++---
+ package/squid/squid.mk   | 2 +-
+ 2 files changed, 6 insertions(+), 4 deletions(-)
 
- > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/squid/squid.hash b/package/squid/squid.hash
+index 91ba9e6..8787cb2 100644
+--- a/package/squid/squid.hash
++++ b/package/squid/squid.hash
+@@ -1,3 +1,5 @@
+-# From http://www.squid-cache.org/Versions/v3/3.5/squid-3.5.26.tar.xz.asc
+-md5 510e2c84773879c00d0e7ced997864d9  squid-3.5.26.tar.xz
+-sha1 51a664217957b35de8b7fae180b9f93a759a4204  squid-3.5.26.tar.xz
++# From http://www.squid-cache.org/Versions/v3/3.5/squid-3.5.27.tar.xz.asc
++md5 39ef8199675d48a314b540f92c00c545 squid-3.5.27.tar.xz
++sha1 1e69c96d13cd49844da3bcf33a0b428fbe7b6f77 squid-3.5.27.tar.xz
++# Locally calculated
++sha256 58f5d05257af1fb964fde20e134d660fac9afa86b6fd8c70d63ead63068378fa COPYING
+diff --git a/package/squid/squid.mk b/package/squid/squid.mk
+index d334d14..8ade55e 100644
+--- a/package/squid/squid.mk
++++ b/package/squid/squid.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ SQUID_VERSION_MAJOR = 3.5
+-SQUID_VERSION = $(SQUID_VERSION_MAJOR).26
++SQUID_VERSION = $(SQUID_VERSION_MAJOR).27
+ SQUID_SOURCE = squid-$(SQUID_VERSION).tar.xz
+ SQUID_SITE = http://www.squid-cache.org/Versions/v3/$(SQUID_VERSION_MAJOR)
+ SQUID_LICENSE = GPL-2.0+
