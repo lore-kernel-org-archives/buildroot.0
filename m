@@ -1,111 +1,74 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 23 Jan 2018 08:30:15 +0100
-Subject: [Buildroot] [git commit] squid: add upstream post-3.5.27 security
- patches
-Message-ID: <20180123073151.CD69283FC4@busybox.osuosl.org>
+Date: Tue, 23 Jan 2018 08:30:59 +0100
+Subject: [Buildroot] [git commit] docs/website: update sponsors for FOSDEM
+Message-ID: <20180123073151.ECA507FD63@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6f481c83b96c76d59a420e5f6559c02cb5d329d3
+commit: https://git.buildroot.net/buildroot/commit/?id=cf467768b798298ed0f1fbedc0ea97accebfeafd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes the following security issues:
+Simply a matter of updating the year, since it's again Google and Mind
+for the FOSDEM2018 developer meeting.
 
-SQUID-2018:1 Due to incorrect pointer handling Squid is vulnerable to denial
-of service attack when processing ESI responses.
+Also add the 2017 sponsorship to the "Past sponsors" section.
 
-http://www.squid-cache.org/Advisories/SQUID-2018_1.txt
-
-SQUID-2018:2  Due to incorrect pointer handling Squid is vulnerable to
-denial of service attack when processing ESI responses or downloading
-intermediate CA certificates.
-
-http://www.squid-cache.org/Advisories/SQUID-2018_2.txt
-
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...e-sure-endofName-never-exceeds-tagEnd-130.patch | 35 ++++++++++++++++++++++
- ...t-IP-logging-for-transactions-without-a-c.patch | 31 +++++++++++++++++++
- 2 files changed, 66 insertions(+)
+ docs/website/sponsors.html | 18 +++++++++---------
+ 1 file changed, 9 insertions(+), 9 deletions(-)
 
-diff --git a/package/squid/0003-ESI-make-sure-endofName-never-exceeds-tagEnd-130.patch b/package/squid/0003-ESI-make-sure-endofName-never-exceeds-tagEnd-130.patch
-new file mode 100644
-index 0000000..6e71677
---- /dev/null
-+++ b/package/squid/0003-ESI-make-sure-endofName-never-exceeds-tagEnd-130.patch
-@@ -0,0 +1,35 @@
-+From eb2db98a676321b814fc4a51c4fb7928a8bb45d9 Mon Sep 17 00:00:00 2001
-+From: Amos Jeffries <yadij@users.noreply.github.com>
-+Date: Fri, 19 Jan 2018 13:54:14 +1300
-+Subject: [PATCH] ESI: make sure endofName never exceeds tagEnd (#130)
-+
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ src/esi/CustomParser.cc | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/src/esi/CustomParser.cc b/src/esi/CustomParser.cc
-+index d86d2d309..db634d921 100644
-+--- a/src/esi/CustomParser.cc
-++++ b/src/esi/CustomParser.cc
-+@@ -121,7 +121,7 @@ ESICustomParser::parse(char const *dataToParse, size_t const lengthOfData, bool
-+ 
-+             char * endofName = strpbrk(const_cast<char *>(tag), w_space);
-+ 
-+-            if (endofName > tagEnd)
-++            if (!endofName || endofName > tagEnd)
-+                 endofName = const_cast<char *>(tagEnd);
-+ 
-+             *endofName = '\0';
-+@@ -214,7 +214,7 @@ ESICustomParser::parse(char const *dataToParse, size_t const lengthOfData, bool
-+ 
-+             char * endofName = strpbrk(const_cast<char *>(tag), w_space);
-+ 
-+-            if (endofName > tagEnd)
-++            if (!endofName || endofName > tagEnd)
-+                 endofName = const_cast<char *>(tagEnd);
-+ 
-+             *endofName = '\0';
-+-- 
-+2.11.0
-+
-diff --git a/package/squid/0004-Fix-indirect-IP-logging-for-transactions-without-a-c.patch b/package/squid/0004-Fix-indirect-IP-logging-for-transactions-without-a-c.patch
-new file mode 100644
-index 0000000..51fff30
---- /dev/null
-+++ b/package/squid/0004-Fix-indirect-IP-logging-for-transactions-without-a-c.patch
-@@ -0,0 +1,31 @@
-+From 8232b83d3fa47a1399f155cb829db829369fbae9 Mon Sep 17 00:00:00 2001
-+From: squidadm <squidadm@users.noreply.github.com>
-+Date: Sun, 21 Jan 2018 08:07:08 +1300
-+Subject: [PATCH] Fix indirect IP logging for transactions without a client
-+ connection (#129) (#136)
-+
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ src/client_side_request.cc | 6 +++---
-+ 1 file changed, 3 insertions(+), 3 deletions(-)
-+
-+diff --git a/src/client_side_request.cc b/src/client_side_request.cc
-+index be124f355..203f89d46 100644
-+--- a/src/client_side_request.cc
-++++ b/src/client_side_request.cc
-+@@ -488,9 +488,9 @@ clientFollowXForwardedForCheck(allow_t answer, void *data)
-+         * Ensure that the access log shows the indirect client
-+         * instead of the direct client.
-+         */
-+-        ConnStateData *conn = http->getConn();
-+-        conn->log_addr = request->indirect_client_addr;
-+-        http->al->cache.caddr = conn->log_addr;
-++        http->al->cache.caddr = request->indirect_client_addr;
-++        if (ConnStateData *conn = http->getConn())
-++            conn->log_addr = request->indirect_client_addr;
-+     }
-+     request->x_forwarded_for_iterator.clean();
-+     request->flags.done_follow_x_forwarded_for = true;
-+-- 
-+2.11.0
-+
+diff --git a/docs/website/sponsors.html b/docs/website/sponsors.html
+index e0f1aab..13ff6cc 100644
+--- a/docs/website/sponsors.html
++++ b/docs/website/sponsors.html
+@@ -21,8 +21,8 @@
+ 	      <div class="col-sm-8">
+ 		<a href="http://www.google.com">Google</a> is
+ 		sponsoring
+-		the <a href="http://elinux.org/Buildroot:DeveloperDaysFOSDEM2017">Buildroot
+-		  Developers Meeting at FOSDEM 2017</a> in Brussels, by
++		the <a href="http://elinux.org/Buildroot:DeveloperDaysFOSDEM2018">Buildroot
++		  Developers Meeting at FOSDEM 2018</a> in Brussels, by
+ 		providing logistics for the meeting: a free meeting
+ 		room and lunch for the participants.
+ 	      </div>
+@@ -39,8 +39,8 @@
+ 		</div>
+ 		<div class="col-sm-8">
+ 		  As it did in previous years, <a href="http://www.mind.be">Mind</a>
+-		  is sponsoring the Monday night dinner at the <a href="http://elinux.org/Buildroot:DeveloperDaysFOSDEM2017">Buildroot
+-		    Developers Meeting at FOSDEM 2017</a> in Brussels.
++		  is sponsoring the Monday night dinner at the <a href="http://elinux.org/Buildroot:DeveloperDaysFOSDEM2018">Buildroot
++		    Developers Meeting at FOSDEM 2018</a> in Brussels.
+ 		</div>
+ 	      </div>
+ 	    </div>
+@@ -83,9 +83,9 @@
+ 	      <div class="col-sm-12">
+ 		<a href="http://www.mind.be">Mind</a> sponsored the
+ 		dinner of the FOSDEM 2014, 2015, 2016 and 2017
+-		Developers Meeting (Brussels) and ELCE 2016 (Berlin),
+-		the meeting room and the dinner for the ELCE 2014
+-		Developers Meeting (D??sseldorf).
++		Developers Meeting (Brussels) and ELCE 2016 (Berlin)
++                and 2017 (Prague), and the meeting room and the dinner for
++                the ELCE 2014 Developers Meeting (D??sseldorf).
+ 	      </div>
+ 	    </div>
+ 	  </div>
+@@ -101,8 +101,8 @@
+ 	      <div class="col-sm-12">
+ 		<p><a href="http://www.google.com">Google</a> provided
+ 		  the logistics for the FOSDEM 2013, FOSDEM 2014,
+-		  FOSDEM 2015 and FOSDEM 2016 Developer Days in
+-		  Brussels, Belgium.</p>
++		  FOSDEM 2015, FOSDEM 2016 and FOSDEM 2017 Developer Days
++		  in Brussels, Belgium.</p>
+ 	      </div>
+ 	    </div>
+ 	  </div>
