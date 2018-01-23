@@ -1,38 +1,38 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Tue, 23 Jan 2018 19:14:23 -0200
-Subject: [Buildroot] [PATCH 2/2] linux-headers: bump 4.{4, 9, 14}.x series
-In-Reply-To: <1516742063-13786-1-git-send-email-festevam@gmail.com>
-References: <1516742063-13786-1-git-send-email-festevam@gmail.com>
-Message-ID: <1516742063-13786-2-git-send-email-festevam@gmail.com>
+From: Sergio Prado <sergio.prado@e-labworks.com>
+Date: Tue, 23 Jan 2018 20:37:59 -0200
+Subject: [Buildroot] [PATCH] daq: fix build when flex and bison are not
+ available
+Message-ID: <1516747079-16281-1-git-send-email-sergio.prado@e-labworks.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
----
- package/linux-headers/Config.in.host | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+daq depends on flex and bison to be configured.
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 55b8df3..5765e76 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -252,11 +252,11 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.10.108"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.12.74"	if BR2_KERNEL_HEADERS_3_12
- 	default "4.1.49"	if BR2_KERNEL_HEADERS_4_1
--	default "4.4.112"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.77"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.4.113"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.9.78"	if BR2_KERNEL_HEADERS_4_9
- 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
- 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
- 	default "4.12.14"	if BR2_KERNEL_HEADERS_4_12
- 	default "4.13.16"	if BR2_KERNEL_HEADERS_4_13
--	default "4.14.14"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.14.15"	if BR2_KERNEL_HEADERS_4_14
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+Fixes:
+http://autobuild.buildroot.net/results/43da4ae3b7fc26e6712d369d4d030954d0d85149
+http://autobuild.buildroot.net/results/0fc2bcf9da758f427adf2fddca8ad1dace6a080e
+http://autobuild.buildroot.net/results/7411ac4ae5bef71b78c69b680de2b72f389ad2ee
+... and many more.
+
+Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+---
+ package/daq/daq.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/daq/daq.mk b/package/daq/daq.mk
+index a1edc20d2a1a..a23a9dc5ee47 100644
+--- a/package/daq/daq.mk
++++ b/package/daq/daq.mk
+@@ -9,6 +9,7 @@ DAQ_SITE = https://www.snort.org/downloads/snort
+ DAQ_LICENSE = GPL-2.0
+ DAQ_LICENSE_FILES = COPYING
+ DAQ_INSTALL_STAGING = YES
++DAQ_DEPENDENCIES = host-bison host-flex
+ 
+ # package does not build in parallel due to improper make rules
+ # related to the generation of the tokdefs.h header file
 -- 
-2.7.4
+1.9.1
