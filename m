@@ -1,34 +1,22 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 24 Jan 2018 09:00:39 +0100
-Subject: [Buildroot] Google Summer of Code 2018 ?
-In-Reply-To: <CANQCQpaTJmghP5Z0+Wbeoa-zisHUN5T0bb73XNmcM+_NUVqYkg@mail.gmail.com>
- (Matthew Weber's message of "Tue, 23 Jan 2018 12:00:37 -0600")
-References: <20180117215208.45dd61b9@windsurf>
- <2f4f4259-9fce-6eb2-c0ed-15c3b86d4811@mind.be>
- <CANQCQpaTJmghP5Z0+Wbeoa-zisHUN5T0bb73XNmcM+_NUVqYkg@mail.gmail.com>
-Message-ID: <87bmhjn0t4.fsf@dell.be.48ers.dk>
+From: Saxena, Nitin <Nitin.Saxena@cavium.com>
+Date: Wed, 24 Jan 2018 11:40:36 +0000
+Subject: [Buildroot] grub/grub2 support on AARCH64 native compilation
+In-Reply-To: <BY2PR07MB69360D7DF88E734B64BD581EAE20@BY2PR07MB693.namprd07.prod.outlook.com>
+References: <DM2PR07MB703B7C9C8A5B9DF875B9E73EAE20@DM2PR07MB703.namprd07.prod.outlook.com>,
+ <BY2PR07MB69360D7DF88E734B64BD581EAE20@BY2PR07MB693.namprd07.prod.outlook.com>
+Message-ID: <BY2PR07MB693C88FA469BDE50F523ABBEAE20@BY2PR07MB693.namprd07.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Matthew" == Matthew Weber <matthew.weber@rockwellcollins.com> writes:
 
- > Arnout,
- > On Mon, Jan 22, 2018 at 4:04 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
- >> 
- >> 
- > [snip]
- >> 
- >> So, is anyone going to submit these three proposals?
- >> 
+Hi buildroot developers,
 
- > I checked this morning and it looks like submission is now closed....
+I want to create VM image for aarch64 using rootfs and grub created by buildroot-2017.11.2 tag. I am doing native compilation on AARCH64.
 
-Argh, indeed - Deadline was January 23th, 17:00 UTC :/
+So during compilation I am not able to find grub or grub2 option in make menuconfig. Can somebody help me in creating grub for AARCH64
 
-https://developers.google.com/open-source/gsoc/timeline
-
--- 
-Bye, Peter Korsgaard
+Thanks,
+Nitin
