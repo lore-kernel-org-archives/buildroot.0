@@ -1,155 +1,65 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Wed, 24 Jan 2018 23:00:29 +0100
-Subject: [Buildroot] [PATCH] swupdate: add upstream patch to fix build error
-Message-ID: <20180124220029.30284-1-joerg.krause@embedded.rocks>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Wed, 24 Jan 2018 17:03:56 -0500
+Subject: [Buildroot] [PATCH 1/2] bootstrap: bump version to 4.0.0
+Message-ID: <20180124220357.2861-1-Adamduskett@outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When building SWUpdate with the following defconfig:
+other changes:
+  - Add a license file to bootstrap.mk
+  - Add a hash for the license file to bootstrap.hash
+  - Remove copying bootstrap-theme.min.css as it's no longer included.
+  - Remove copying fonts folder as it's no longer included.
 
-```
-CONFIG_DOWNLOAD=y
-```
-
-.. the build process breaks with:
-
-```
-corelib/channel_curl.c:27:10: fatal error: json-c/json.h: No such file or directory
- #include <json-c/json.h>
-```
-
-Looking at the SWUpdate Kconfig based build system shows that `CONFIG_DOWNLOAD`
-depends on `HAVE_LIBCURL`, which selects CURL, which eventually enables the
-(unnecessary) build of channel_curl.o.
-
-The upstream fixes the condition for building channel_curl.o by adding a new
-hidden config option `CHANNEL_CURL`, which is only selected by the
-dependent options.
-
-Backported from:
-https://github.com/sbabic/swupdate/commit/37a6666a532e9cbc42b56301f27919ae7c00d2eb
-
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
 ---
- ...-Fix-build-if-DOWNLOAD-is-set-but-no-JSON.patch | 107 +++++++++++++++++++++
- 1 file changed, 107 insertions(+)
- create mode 100644 package/swupdate/0002-Fix-build-if-DOWNLOAD-is-set-but-no-JSON.patch
+ package/bootstrap/bootstrap.hash | 3 ++-
+ package/bootstrap/bootstrap.mk   | 8 ++------
+ 2 files changed, 4 insertions(+), 7 deletions(-)
 
-diff --git a/package/swupdate/0002-Fix-build-if-DOWNLOAD-is-set-but-no-JSON.patch b/package/swupdate/0002-Fix-build-if-DOWNLOAD-is-set-but-no-JSON.patch
-new file mode 100644
-index 0000000000..5e07995582
---- /dev/null
-+++ b/package/swupdate/0002-Fix-build-if-DOWNLOAD-is-set-but-no-JSON.patch
-@@ -0,0 +1,107 @@
-+From 37a6666a532e9cbc42b56301f27919ae7c00d2eb Mon Sep 17 00:00:00 2001
-+From: Stefano Babic <sbabic@denx.de>
-+Date: Tue, 23 Jan 2018 16:52:32 +0100
-+Subject: [PATCH] Fix build if DOWNLOAD is set, but no JSON
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+The downloader does not require JSON, but channel_curl is built
-+even if not called. Build fails with the error:
-+
-+corelib/channel_curl.c:27:10: fatal error: json-c/json.h: No such file or directory
-+
-+Add a CONFIG_CHANNEL_CURL that is automatically set by the modules
-+reuiring it (suricatta and swuforwarder).
-+
-+Backported from: 37a6666a532e9cbc42b56301f27919ae7c00d2eb
-+
-+Signed-off-by: Stefano Babic <sbabic@denx.de>
-+Reported-by: J?rg Krause <joerg.krause@embedded.rocks>
-+Acked-by: J?rg Krause <joerg.krause@embedded.rocks>
-+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-+---
-+ Kconfig             | 7 +++++++
-+ corelib/Makefile    | 2 +-
-+ handlers/Config.in  | 8 +++++---
-+ suricatta/Config.in | 3 +--
-+ 4 files changed, 14 insertions(+), 6 deletions(-)
-+
-+diff --git a/Kconfig b/Kconfig
-+index 4469096..e344572 100644
-+--- a/Kconfig
-++++ b/Kconfig
-+@@ -294,6 +294,13 @@ config DOWNLOAD
-+ comment "Image downloading support needs libcurl"
-+ 	depends on !HAVE_LIBCURL
-+ 
-++config CHANNEL_CURL
-++	bool
-++	depends on HAVE_LIBCURL
-++	depends on HAVE_JSON_C
-++	select CURL
-++	select JSON
-++
-+ config HASH_VERIFY
-+ 	bool "Allow to add sha256 hash to each image"
-+ 	depends on HAVE_LIBSSL
-+diff --git a/corelib/Makefile b/corelib/Makefile
-+index 282bffd..4b30f9c 100644
-+--- a/corelib/Makefile
-++++ b/corelib/Makefile
-+@@ -17,4 +17,4 @@ lib-$(CONFIG_ENCRYPTED_IMAGES)	+= swupdate_decrypt.o
-+ lib-$(CONFIG_LIBCONFIG)		+= swupdate_settings.o \
-+ 				   parsing_library_libconfig.o
-+ lib-$(CONFIG_JSON)		+= parsing_library_libjson.o
-+-lib-$(CONFIG_CURL)		+= channel_curl.o
-++lib-$(CONFIG_CHANNEL_CURL)	+= channel_curl.o
-+diff --git a/handlers/Config.in b/handlers/Config.in
-+index 596f069..6226b59 100644
-+--- a/handlers/Config.in
-++++ b/handlers/Config.in
-+@@ -54,7 +54,6 @@ config UBIVIDOFFSET
-+ 	  if your NAND driver incorrectly reports that it can handle
-+ 	  sub-page accesses when it should not.
-+ 
-+-
-+ config CFI
-+ 	bool "cfi"
-+ 	depends on MTD
-+@@ -164,8 +163,8 @@ comment "remote handler needs zeromq"
-+ config SWUFORWARDER_HANDLER
-+ 	bool "SWU forwarder"
-+ 	depends on HAVE_LIBCURL
-+-	select CURL
-+-	select JSON
-++	depends on HAVE_JSON_C
-++	select CHANNEL_CURL
-+ 	default n
-+ 	help
-+ 	  This allows to build a chain of updater. A
-+@@ -174,6 +173,9 @@ config SWUFORWARDER_HANDLER
-+ 	  embedded SWU to the other devices using the
-+ 	  Webserver REST API.
-+ 
-++comment "swuforward handler needs json-c and curl"
-++	depends on !HAVE_JSON_C || !HAVE_LIBCURL
-++
-+ comment "SWU forwarder requires libcurl"
-+ 	depends on !HAVE_LIBCURL
-+ 
-+diff --git a/suricatta/Config.in b/suricatta/Config.in
-+index 62e448a..2586169 100644
-+--- a/suricatta/Config.in
-++++ b/suricatta/Config.in
-+@@ -71,8 +71,7 @@ config SURICATTA_HAWKBIT
-+ 	bool "hawkBit support"
-+ 	depends on HAVE_LIBCURL
-+ 	depends on HAVE_JSON_C
-+-	select JSON
-+-	select CURL
-++	select CHANNEL_CURL
-+ 	help
-+ 	  Support for hawkBit server.
-+ 	  https://projects.eclipse.org/projects/iot.hawkbit
-+-- 
-+2.16.1
-+
+diff --git a/package/bootstrap/bootstrap.hash b/package/bootstrap/bootstrap.hash
+index abc09da213..6bf6e5218c 100644
+--- a/package/bootstrap/bootstrap.hash
++++ b/package/bootstrap/bootstrap.hash
+@@ -1,2 +1,3 @@
+ # Locally computed:
+-sha256 f498a8ff2dd007e29c2074f5e4b01a9a01775c3ff3aeaf6906ea503bc5791b7b  bootstrap-3.3.7-dist.zip
++sha256	fa1caaaf640c32c553d0b323da1036f2232703d64a1d22c3a2ec84ace68c791a	bootstrap-4.0.0-dist.zip
++sha256	8c1a4c25634d5841924aab1848acc9dcbc3d5672183053c8b71ff2139b65d7c3	bootstrap.css
+diff --git a/package/bootstrap/bootstrap.mk b/package/bootstrap/bootstrap.mk
+index 33161f53ae..aac457c190 100644
+--- a/package/bootstrap/bootstrap.mk
++++ b/package/bootstrap/bootstrap.mk
+@@ -4,25 +4,21 @@
+ #
+ ################################################################################
+ 
+-BOOTSTRAP_VERSION = 3.3.7
++BOOTSTRAP_VERSION = 4.0.0
+ BOOTSTRAP_SITE = https://github.com/twbs/bootstrap/releases/download/v$(BOOTSTRAP_VERSION)
+ BOOTSTRAP_SOURCE = bootstrap-$(BOOTSTRAP_VERSION)-dist.zip
+ BOOTSTRAP_LICENSE = MIT
++BOOTSTRAP_LICENSE_FILES = bootstrap.css
+ 
+ define BOOTSTRAP_EXTRACT_CMDS
+ 	$(UNZIP) $(DL_DIR)/$(BOOTSTRAP_SOURCE) -d $(@D)
+-	mv $(@D)/bootstrap-$(BOOTSTRAP_VERSION)-dist/* $(@D)/
+-	rmdir $(@D)/bootstrap-$(BOOTSTRAP_VERSION)-dist
+ endef
+ 
+ define BOOTSTRAP_INSTALL_TARGET_CMDS
+-	$(INSTALL) -m 0644 -D $(@D)/css/bootstrap-theme.min.css \
+-		$(TARGET_DIR)/var/www/bootstrap/css/bootstrap-theme.min.css
+ 	$(INSTALL) -m 0644 -D $(@D)/css/bootstrap.min.css \
+ 		$(TARGET_DIR)/var/www/bootstrap/css/bootstrap.min.css
+ 	$(INSTALL) -m 0644 -D $(@D)/js/bootstrap.min.js \
+ 		$(TARGET_DIR)/var/www/bootstrap/js/bootstrap.min.js
+-	cp -r $(@D)/fonts $(TARGET_DIR)/var/www/bootstrap/
+ endef
+ 
+ $(eval $(generic-package))
 -- 
-2.16.1
+2.14.3
