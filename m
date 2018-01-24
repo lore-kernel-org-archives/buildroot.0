@@ -1,69 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 24 Jan 2018 08:33:05 +0100
-Subject: [Buildroot] [Hosting] Brief Downtime for VMs - Jan 30,
- 2018 12:00pm PST (Jan 30 20:00 UTC)
-In-Reply-To: <CAFQycX744QXKqZjvtq+XFgSvS0qmYw4AoqMVmWQBpsmS07_BaA@mail.gmail.com>
- (Travis Whitehead's message of "Tue, 23 Jan 2018 14:17:40 -0800")
-References: <CAFQycX744QXKqZjvtq+XFgSvS0qmYw4AoqMVmWQBpsmS07_BaA@mail.gmail.com>
-Message-ID: <87k1w7n232.fsf@dell.be.48ers.dk>
+Date: Wed, 24 Jan 2018 08:59:54 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2018-01-21
+In-Reply-To: <20180123152143.GD14919@momiji> (Adrian Perez de Castro's message
+ of "Tue, 23 Jan 2018 15:21:43 +0000")
+References: <20180122070014.D5074206F0@mail.free-electrons.com>
+ <20180123152143.GD14919@momiji>
+Message-ID: <87fu6vn0ud.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Travis" == Travis Whitehead <whitehet@osuosl.org> writes:
+>>>>> "Adrian" == Adrian Perez de Castro <aperez@igalia.com> writes:
 
-FYI,
+ > Hi,
+ > On Mon, 22 Jan 2018 08:00:14 +0100 (CET), Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
 
-buildroot-sources.osuosl.org is the new VM hosting
-sources.buildroot.net, so expect a short downtime on January 30th.
+ >> x86_64 | webkitgtk-2.18.5 | NOK |
+ >> http://autobuild.buildroot.net/results/57b77520d3a3fcfa683406e223771d0ccf8733df
+ >> |
 
+ > The configuration used for this build has an EGL provider but both OpenGL and
+ > OpenGL ES are disabled:
 
- > Services affected: Many of our VMs will be rebooted. A list is provided below.
- > This outage is only for rebooting the specified VMs, so downtime for
- > each should be brief.
+ >  - BR2_PACKAGE_HAS_LIBEGL is chosen.
+ >  - Both BR2_PACKAGE_HAS_LIBGL and BR2_PACKAGE_HAS_LIBGLES are undefined.
 
- > If this time is problematic, or you have any questions or concerns,
- > please contact us.
+ > It seems to me that the CMake build files for WebKit should disable all the
+ > OpenGL support if EGL is found but a GL/GLES implementation is not found.
+ > I have filed a bug upstream to look into that:
 
- > Outage Window:
- > Start: Tues, Jan 30, 12:00PM PST (Jan 30 20:00 UTC)
+ >   https://bugs.webkit.org/show_bug.cgi?id=181986
 
- > End: Tues, Jan 30, 4:00PM PST (Jan 30 24:00 UTC)
+Sounds sensible, yes.
 
- > Reason for outage:
+ > In the meantime, I'll make a patch for checking in the Buildroot package
+ > whether an OpenGL(ES) implementation is being built, and if not pass the
+ > needed build flags to CMake in order to disable using OpenGL(ES) even if
+ > EGL is present.
 
- > These VMs have newer kernels with desired security updates pertaining
- > to Meltdown & Spectre.
- > Rebooting them will switch over to these updated kernels.
-
- > VMs affected:
-
- > apereo.osuosl.org
- > app1.osuosl.org
- > app2.osuosl.org
- > app3.osuosl.org
- > buildroot-sources.osuosl.org
- > deluge.osuosl.org
- > etherpad-lite.osuosl.org
- > k-3d.osuosl.org
- > lb1.osuosl.org
- > lb2.osuosl.org
- > memc1.osuosl.org
- > open-fcoe.org
- > open-lldp.org
- > py1.osuosl.org
- > ros.osuosl.org
- > supercell-gwm1.osuosl.org
- > web1.osuosl.org
- > web2.osuosl.org
- > web3.osuosl.org
- > webdav1.osuosl.org
- > _______________________________________________
- > Hosting mailing list
- > Hosting at osuosl.org
- > https://lists.osuosl.org/mailman/listinfo/hosting
+Thanks!
 
 -- 
 Bye, Peter Korsgaard
