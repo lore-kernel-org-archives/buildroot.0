@@ -1,85 +1,158 @@
 From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Tue, 23 Jan 2018 22:09:49 -0600
-Subject: [Buildroot] [PATCH v4 10/13] ustr: correct linker flag sequence
-In-Reply-To: <1516766992-48428-1-git-send-email-matthew.weber@rockwellcollins.com>
-References: <1516766992-48428-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <1516766992-48428-10-git-send-email-matthew.weber@rockwellcollins.com>
+Date: Tue, 23 Jan 2018 22:09:40 -0600
+Subject: [Buildroot] [PATCH v4 01/13] stack protector: moved option out of
+ adv menu
+Message-ID: <1516766992-48428-1-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch will correct the sequence of -pie and -shared options.
-When used together, -pie should be provided to the linker before
--shared.
-
 Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
---
-Changes
-v3 -> v4
- - New
 ---
- ...str-patch-to-correct-linker-flag-sequence.patch | 51 ++++++++++++++++++++++
- 1 file changed, 51 insertions(+)
- create mode 100644 package/ustr/0001-ustr-patch-to-correct-linker-flag-sequence.patch
+Changes
+v1 -> v2
+ - Broke out into an individual commit for the menu change (Arnout)
 
-diff --git a/package/ustr/0001-ustr-patch-to-correct-linker-flag-sequence.patch b/package/ustr/0001-ustr-patch-to-correct-linker-flag-sequence.patch
-new file mode 100644
-index 0000000..16751d4
---- /dev/null
-+++ b/package/ustr/0001-ustr-patch-to-correct-linker-flag-sequence.patch
-@@ -0,0 +1,51 @@
-+From 037242704adde8dfdcaa705a8fbc383e36516639 Mon Sep 17 00:00:00 2001
-+From: Yogesh Prasad <yogesh.prasad@rockwellcollins.com>
-+Date: Wed, 27 Sep 2017 08:52:08 -0500
-+Subject: [PATCH 1/1] ustr: patch to correct linker flag sequence
+v2 -> v3
+ - Moved back up to the menu instead of a submenu (Arnout)
+
+v3 -> v4
+ - None.
+---
+ Config.in | 112 ++++++++++++++++++++++++++++++++------------------------------
+ 1 file changed, 57 insertions(+), 55 deletions(-)
+
+diff --git a/Config.in b/Config.in
+index 62d67ce..e7e5c2d 100644
+--- a/Config.in
++++ b/Config.in
+@@ -568,61 +568,6 @@ config BR2_GOOGLE_BREAKPAD_INCLUDE_FILES
+ endif
+ 
+ choice
+-	bool "build code with Stack Smashing Protection"
+-	default BR2_SSP_ALL if BR2_ENABLE_SSP # legacy
+-	depends on BR2_TOOLCHAIN_HAS_SSP
+-	help
+-	  Enable stack smashing protection support using GCC's
+-	  -fstack-protector option family.
+-
+-	  See
+-	  http://www.linuxfromscratch.org/hints/downloads/files/ssp.txt
+-	  for details.
+-
+-	  Note that this requires the toolchain to have SSP support.
+-	  This is always the case for glibc and eglibc toolchain, but is
+-	  optional in uClibc toolchains.
+-
+-config BR2_SSP_NONE
+-	bool "None"
+-	help
+-	  Disable stack-smashing protection.
+-
+-config BR2_SSP_REGULAR
+-	bool "-fstack-protector"
+-	help
+-	  Emit extra code to check for buffer overflows, such as stack
+-	  smashing attacks. This is done by adding a guard variable to
+-	  functions with vulnerable objects. This includes functions
+-	  that call alloca, and functions with buffers larger than 8
+-	  bytes. The guards are initialized when a function is entered
+-	  and then checked when the function exits. If a guard check
+-	  fails, an error message is printed and the program exits.
+-
+-config BR2_SSP_STRONG
+-	bool "-fstack-protector-strong"
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+-	help
+-	  Like -fstack-protector but includes additional functions to be
+-	  protected - those that have local array definitions, or have
+-	  references to local frame addresses.
+-
+-comment "Stack Smashing Protection strong needs a toolchain w/ gcc >= 4.9"
+-	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+-
+-config BR2_SSP_ALL
+-	bool "-fstack-protector-all"
+-	help
+-	  Like -fstack-protector except that all functions are
+-	  protected. This option might have a significant performance
+-	  impact on the compiled binaries.
+-
+-endchoice
+-
+-comment "Stack Smashing Protection needs a toolchain w/ SSP"
+-	depends on !BR2_TOOLCHAIN_HAS_SSP
+-
+-choice
+ 	bool "libraries"
+ 	default BR2_SHARED_LIBS if BR2_BINFMT_SUPPORTS_SHARED
+ 	default BR2_STATIC_LIBS if !BR2_BINFMT_SUPPORTS_SHARED
+@@ -732,6 +677,63 @@ config BR2_REPRODUCIBLE
+ 
+ endmenu
+ 
++comment "Security Hardening Options"
 +
-+Description
-+This patch will correct the sequence of -pie and -shared options.
-+ When used together, -pie should be provided to the linker before
-+ -shared. If -pie is provided after -shared, the linker throws
-+ below error.
-+-------------------------------------------------------------------------
-+/host/powerpc-buildroot-linux-gnu/sysroot/usr/lib/Scrt1.o:(.data+0x4):
-+ undefined reference to `main'
-+/host/lib/gcc/powerpc-buildroot-linux-gnu/6.4.0/../../../../
-+powerpc-buildroot-linux-gnu/bin/ld: BFD (GNU Binutils) 2.28.1
-+assertion fail elf32-ppc.c:8923
-+collect2: error: ld returned 1 exit status
-+make[2]: *** [libustr-debug-1.0.so.1.0.4] Error 1
-+make[2]: *** Waiting for unfinished jobs....
-+collect2: error: ld returned 1 exit status
-+make[2]: *** [libustr-1.0.so.1.0.4] Error 1
-+make[1]: *** [/build/ustr-1.0.4/.stamp_built] Error 2
-+make: *** [_all] Error 2
-+--------------------------------------------------------------------------
++choice
++	bool "Stack Smashing Protection"
++	default BR2_SSP_ALL if BR2_ENABLE_SSP # legacy
++	depends on BR2_TOOLCHAIN_HAS_SSP
++	help
++	  Enable stack smashing protection support using GCC's
++	  -fstack-protector option family.
 +
-+Signed-off-by: Yogesh Prasad <yogesh.prasad@rockwellcollins.com>
-+---
-+ Makefile.in | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
++	  See
++	  http://www.linuxfromscratch.org/hints/downloads/files/ssp.txt
++	  for details.
 +
-+diff --git a/Makefile.in b/Makefile.in
-+index 78357bb..489376d 100644
-+--- a/Makefile.in
-++++ b/Makefile.in
-+@@ -507,11 +507,11 @@ ustr-import: ustr-import.in config.status
-+ # Use LDFLAGS for LDFLAGS="-m32"
-+ $(OPT_LIB_SHARED): $(LIB_SHARED_OPT)
-+ 		$(if $(HIDE), @echo Linking SO OPT lib: $@)
-+-		$(HIDE)$(CC) -shared $^ -Wl,-soname -Wl,$(OPT_LIB_SHARED_NAME) -Wl,-version-script -Wl,libustr.ver $(LDFLAGS) -o $@
-++		$(HIDE)$(CC) $(LDFLAGS) -shared $^ -Wl,-soname -Wl,$(OPT_LIB_SHARED_NAME) -Wl,-version-script -Wl,libustr.ver -o $@
-+ 
-+ $(DBG_LIB_SHARED): $(LIB_SHARED_DBG)
-+ 		$(if $(HIDE), @echo Linking SO DBG lib: $@)
-+-		$(HIDE)$(CC) -shared $^ -Wl,-soname -Wl,$(DBG_LIB_SHARED_NAME) -Wl,-version-script -Wl,libustr.ver $(LDFLAGS) -o $@
-++		$(HIDE)$(CC) $(LDFLAGS) -shared $^ -Wl,-soname -Wl,$(DBG_LIB_SHARED_NAME) -Wl,-version-script -Wl,libustr.ver -o $@
-+ 
-+ libustr.a: $(LIB_STATIC_OPT)
-+ 		$(if $(HIDE), @echo Linking A OPT lib: $@)
-+-- 
-+1.9.1
++	  Note that this requires the toolchain to have SSP support.
++	  This is always the case for glibc and eglibc toolchain, but is
++	  optional in uClibc toolchains.
 +
++config BR2_SSP_NONE
++	bool "None"
++	help
++	  Disable stack-smashing protection.
++
++config BR2_SSP_REGULAR
++	bool "-fstack-protector"
++	help
++	  Emit extra code to check for buffer overflows, such as stack
++	  smashing attacks. This is done by adding a guard variable to
++	  functions with vulnerable objects. This includes functions
++	  that call alloca, and functions with buffers larger than 8
++	  bytes. The guards are initialized when a function is entered
++	  and then checked when the function exits. If a guard check
++	  fails, an error message is printed and the program exits.
++
++config BR2_SSP_STRONG
++	bool "-fstack-protector-strong"
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
++	help
++	  Like -fstack-protector but includes additional functions to be
++	  protected - those that have local array definitions, or have
++	  references to local frame addresses.
++
++comment "Stack Smashing Protection strong needs a toolchain w/ gcc >= 4.9"
++	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
++
++config BR2_SSP_ALL
++	bool "-fstack-protector-all"
++	help
++	  Like -fstack-protector except that all functions are
++	  protected. This option might have a significant performance
++	  impact on the compiled binaries.
++
++endchoice
++
++comment "Stack Smashing Protection needs a toolchain w/ SSP"
++	depends on !BR2_TOOLCHAIN_HAS_SSP
++
+ endmenu
+ 
+ source "toolchain/Config.in"
 -- 
 1.9.1
