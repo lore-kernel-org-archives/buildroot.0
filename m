@@ -1,50 +1,69 @@
-From: Jagan Teki <jagan@amarulasolutions.com>
-Date: Wed, 24 Jan 2018 12:34:42 +0530
-Subject: [Buildroot] [PATCH v8 1/3] board: Add Vyasa RK3288 board support
-In-Reply-To: <1515655227-5575-1-git-send-email-jagan@amarulasolutions.com>
-References: <1515655227-5575-1-git-send-email-jagan@amarulasolutions.com>
-Message-ID: <CAMty3ZCft9-DcseyhL7YmwtoRD5_FBLsT-HS-mqh0Mvp=YrQHg@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 24 Jan 2018 08:33:05 +0100
+Subject: [Buildroot] [Hosting] Brief Downtime for VMs - Jan 30,
+ 2018 12:00pm PST (Jan 30 20:00 UTC)
+In-Reply-To: <CAFQycX744QXKqZjvtq+XFgSvS0qmYw4AoqMVmWQBpsmS07_BaA@mail.gmail.com>
+ (Travis Whitehead's message of "Tue, 23 Jan 2018 14:17:40 -0800")
+References: <CAFQycX744QXKqZjvtq+XFgSvS0qmYw4AoqMVmWQBpsmS07_BaA@mail.gmail.com>
+Message-ID: <87k1w7n232.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Jan 11, 2018 at 12:50 PM, Jagan Teki <jagannadh.teki@gmail.com> wrote:
-> Add Vyasa board, from rk3288 family SOC.
->
-> Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
-> ---
-> Changes for v8:
-> - Rebase on master
-> Changes for v7:
-> - Rebase on master
-> Changes for v6:
-> - None
-> Changes for v5:
-> - Add host-uboot-tools
-> - Fix commit message
-> - Drop Qt5 configs
-> Changes for v4:
-> - enable BR2_LINUX_KERNEL_INSTALL_TARGET
-> - enable BR2_TARGET_UBOOT_FORMAT_DTB_BINe
-> - Create single u-boot binary
-> - Use linux-4.12 along with same headers
->
->  .gitlab-ci.yml                          |  1 +
->  DEVELOPERS                              |  2 ++
->  board/amarula/vyasa/extlinux.conf       |  4 +++
->  board/amarula/vyasa/genimage.cfg        | 21 +++++++++++++++
->  board/amarula/vyasa/linux_gmac.fragment |  3 +++
->  board/amarula/vyasa/post-build.sh       |  9 +++++++
->  board/amarula/vyasa/readme.txt          | 31 ++++++++++++++++++++++
->  configs/amarula_vyasa_rk3288_defconfig  | 46 +++++++++++++++++++++++++++++++++
->  8 files changed, 117 insertions(+)
->  create mode 100644 board/amarula/vyasa/extlinux.conf
->  create mode 100644 board/amarula/vyasa/genimage.cfg
->  create mode 100644 board/amarula/vyasa/linux_gmac.fragment
->  create mode 100755 board/amarula/vyasa/post-build.sh
->  create mode 100644 board/amarula/vyasa/readme.txt
->  create mode 100644 configs/amarula_vyasa_rk3288_defconfig
+>>>>> "Travis" == Travis Whitehead <whitehet@osuosl.org> writes:
 
-Any comments on this series patches?
+FYI,
+
+buildroot-sources.osuosl.org is the new VM hosting
+sources.buildroot.net, so expect a short downtime on January 30th.
+
+
+ > Services affected: Many of our VMs will be rebooted. A list is provided below.
+ > This outage is only for rebooting the specified VMs, so downtime for
+ > each should be brief.
+
+ > If this time is problematic, or you have any questions or concerns,
+ > please contact us.
+
+ > Outage Window:
+ > Start: Tues, Jan 30, 12:00PM PST (Jan 30 20:00 UTC)
+
+ > End: Tues, Jan 30, 4:00PM PST (Jan 30 24:00 UTC)
+
+ > Reason for outage:
+
+ > These VMs have newer kernels with desired security updates pertaining
+ > to Meltdown & Spectre.
+ > Rebooting them will switch over to these updated kernels.
+
+ > VMs affected:
+
+ > apereo.osuosl.org
+ > app1.osuosl.org
+ > app2.osuosl.org
+ > app3.osuosl.org
+ > buildroot-sources.osuosl.org
+ > deluge.osuosl.org
+ > etherpad-lite.osuosl.org
+ > k-3d.osuosl.org
+ > lb1.osuosl.org
+ > lb2.osuosl.org
+ > memc1.osuosl.org
+ > open-fcoe.org
+ > open-lldp.org
+ > py1.osuosl.org
+ > ros.osuosl.org
+ > supercell-gwm1.osuosl.org
+ > web1.osuosl.org
+ > web2.osuosl.org
+ > web3.osuosl.org
+ > webdav1.osuosl.org
+ > _______________________________________________
+ > Hosting mailing list
+ > Hosting at osuosl.org
+ > https://lists.osuosl.org/mailman/listinfo/hosting
+
+-- 
+Bye, Peter Korsgaard
