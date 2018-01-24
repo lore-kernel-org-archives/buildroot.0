@@ -1,158 +1,130 @@
 From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Tue, 23 Jan 2018 22:09:40 -0600
-Subject: [Buildroot] [PATCH v4 01/13] stack protector: moved option out of
- adv menu
-Message-ID: <1516766992-48428-1-git-send-email-matthew.weber@rockwellcollins.com>
+Date: Tue, 23 Jan 2018 22:09:52 -0600
+Subject: [Buildroot] [PATCH v4 13/13] libcap: corrected linker flag sequence
+In-Reply-To: <1516766992-48428-1-git-send-email-matthew.weber@rockwellcollins.com>
+References: <1516766992-48428-1-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <1516766992-48428-13-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Patches
+  0001 - added upstream note as we had to submit it upstream along
+         with 0004
+  0004 - corrects the sequence of -pie and -shared options. When
+         used together, -pie should be provided to the linker before
+         -shared.
+
+Upstream: (Emailed to morgan at kernel.org)
+
 Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
----
+CC: "Yann E. MORIN" <yann.morin.1998@free.fr>
+--
 Changes
-v1 -> v2
- - Broke out into an individual commit for the menu change (Arnout)
-
-v2 -> v3
- - Moved back up to the menu instead of a submenu (Arnout)
-
 v3 -> v4
- - None.
+ - New
 ---
- Config.in | 112 ++++++++++++++++++++++++++++++++------------------------------
- 1 file changed, 57 insertions(+), 55 deletions(-)
+ ...-build-system-fixes-for-cross-compilation.patch |  2 +
+ ...cap-patch-to-correct-linker-flag-sequence.patch | 76 ++++++++++++++++++++++
+ 2 files changed, 78 insertions(+)
+ create mode 100644 package/libcap/0004-libcap-patch-to-correct-linker-flag-sequence.patch
 
-diff --git a/Config.in b/Config.in
-index 62d67ce..e7e5c2d 100644
---- a/Config.in
-+++ b/Config.in
-@@ -568,61 +568,6 @@ config BR2_GOOGLE_BREAKPAD_INCLUDE_FILES
- endif
+diff --git a/package/libcap/0001-build-system-fixes-for-cross-compilation.patch b/package/libcap/0001-build-system-fixes-for-cross-compilation.patch
+index de24090..58217b5 100644
+--- a/package/libcap/0001-build-system-fixes-for-cross-compilation.patch
++++ b/package/libcap/0001-build-system-fixes-for-cross-compilation.patch
+@@ -5,6 +5,8 @@ Subject: [PATCH] build-system: fixes for cross-compilation
  
- choice
--	bool "build code with Stack Smashing Protection"
--	default BR2_SSP_ALL if BR2_ENABLE_SSP # legacy
--	depends on BR2_TOOLCHAIN_HAS_SSP
--	help
--	  Enable stack smashing protection support using GCC's
--	  -fstack-protector option family.
--
--	  See
--	  http://www.linuxfromscratch.org/hints/downloads/files/ssp.txt
--	  for details.
--
--	  Note that this requires the toolchain to have SSP support.
--	  This is always the case for glibc and eglibc toolchain, but is
--	  optional in uClibc toolchains.
--
--config BR2_SSP_NONE
--	bool "None"
--	help
--	  Disable stack-smashing protection.
--
--config BR2_SSP_REGULAR
--	bool "-fstack-protector"
--	help
--	  Emit extra code to check for buffer overflows, such as stack
--	  smashing attacks. This is done by adding a guard variable to
--	  functions with vulnerable objects. This includes functions
--	  that call alloca, and functions with buffers larger than 8
--	  bytes. The guards are initialized when a function is entered
--	  and then checked when the function exits. If a guard check
--	  fails, an error message is printed and the program exits.
--
--config BR2_SSP_STRONG
--	bool "-fstack-protector-strong"
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
--	help
--	  Like -fstack-protector but includes additional functions to be
--	  protected - those that have local array definitions, or have
--	  references to local frame addresses.
--
--comment "Stack Smashing Protection strong needs a toolchain w/ gcc >= 4.9"
--	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
--
--config BR2_SSP_ALL
--	bool "-fstack-protector-all"
--	help
--	  Like -fstack-protector except that all functions are
--	  protected. This option might have a significant performance
--	  impact on the compiled binaries.
--
--endchoice
--
--comment "Stack Smashing Protection needs a toolchain w/ SSP"
--	depends on !BR2_TOOLCHAIN_HAS_SSP
--
--choice
- 	bool "libraries"
- 	default BR2_SHARED_LIBS if BR2_BINFMT_SUPPORTS_SHARED
- 	default BR2_STATIC_LIBS if !BR2_BINFMT_SUPPORTS_SHARED
-@@ -732,6 +677,63 @@ config BR2_REPRODUCIBLE
+ Avoid the libcap buildsys forcing CC/CFLAGS/LDFLAGS/AR/RANLIB
  
- endmenu
- 
-+comment "Security Hardening Options"
++Upstream: (Emailed to morgan at kernel.org)
 +
-+choice
-+	bool "Stack Smashing Protection"
-+	default BR2_SSP_ALL if BR2_ENABLE_SSP # legacy
-+	depends on BR2_TOOLCHAIN_HAS_SSP
-+	help
-+	  Enable stack smashing protection support using GCC's
-+	  -fstack-protector option family.
+ Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ [yann.morin.1998 at free.fr: dont chmod +x the shared lib]
+ Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+diff --git a/package/libcap/0004-libcap-patch-to-correct-linker-flag-sequence.patch b/package/libcap/0004-libcap-patch-to-correct-linker-flag-sequence.patch
+new file mode 100644
+index 0000000..173325f
+--- /dev/null
++++ b/package/libcap/0004-libcap-patch-to-correct-linker-flag-sequence.patch
+@@ -0,0 +1,76 @@
++From 147ad6b4c6b5035061196473c2b3d129fa650392 Mon Sep 17 00:00:00 2001
++From: Yogesh Prasad <yogesh.prasad@rockwellcollins.com>
++Date: Tue, 26 Sep 2017 13:47:05 -0500
++Subject: [PATCH 1/1] libcap: patch to correct linker flag sequence.
 +
-+	  See
-+	  http://www.linuxfromscratch.org/hints/downloads/files/ssp.txt
-+	  for details.
++Description
++ This patch will correct the sequence of -pie and -shared options.
++ When used together, -pie should be provided to the linker before
++ -shared. If -pie is provided after -shared, the linker throws
++ below error.
++-------------------------------------------------------------------------
++/host/powerpc-buildroot-linux-gnu/sysroot/usr/lib/Scrt1.o:(.data+0x4):
++ undefined reference to `main'
++ /host/lib/gcc/powerpc-buildroot-linux-gnu/6.4.0/../../../../
++ powerpc-buildroot-linux-gnu/bin/ld: BFD (GNU Binutils) 2.28.1
++ assertion fail elf32-ppc.c:8923
++collect2: error: ld returned 1 exit status
++make[2]: *** [libcap.so.2.25] Error 1
++---------------------------------------------------------------------------
 +
-+	  Note that this requires the toolchain to have SSP support.
-+	  This is always the case for glibc and eglibc toolchain, but is
-+	  optional in uClibc toolchains.
++Upstream: (Emailed to morgan at kernel.org)
 +
-+config BR2_SSP_NONE
-+	bool "None"
-+	help
-+	  Disable stack-smashing protection.
++Signed-off-by: Yogesh Prasad <yogesh.prasad@rockwellcollins.com>
++--
++Changes
++v3 -> v4
++ - New
 +
-+config BR2_SSP_REGULAR
-+	bool "-fstack-protector"
-+	help
-+	  Emit extra code to check for buffer overflows, such as stack
-+	  smashing attacks. This is done by adding a guard variable to
-+	  functions with vulnerable objects. This includes functions
-+	  that call alloca, and functions with buffers larger than 8
-+	  bytes. The guards are initialized when a function is entered
-+	  and then checked when the function exits. If a guard check
-+	  fails, an error message is printed and the program exits.
++---
++ Make.Rules       | 2 +-
++ libcap/Makefile  | 2 +-
++ pam_cap/Makefile | 2 +-
++ 3 files changed, 3 insertions(+), 3 deletions(-)
 +
-+config BR2_SSP_STRONG
-+	bool "-fstack-protector-strong"
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-+	help
-+	  Like -fstack-protector but includes additional functions to be
-+	  protected - those that have local array definitions, or have
-+	  references to local frame addresses.
++diff --git a/Make.Rules b/Make.Rules
++index 8a07a3f..03b3680 100644
++--- a/Make.Rules
+++++ b/Make.Rules
++@@ -59,7 +59,7 @@ WARNINGS=-Wall -Wwrite-strings \
++         -Wpointer-arith -Wcast-qual -Wcast-align \
++         -Wstrict-prototypes -Wmissing-prototypes \
++         -Wnested-externs -Winline -Wshadow
++-LD=$(CC) -Wl,-x -shared
+++LDOPTS= -Wl,-x -shared
++ LDFLAGS ?= #-g
++ BUILD_GPERF := $(shell which gperf >/dev/null 2>/dev/null && echo yes)
++ 
++diff --git a/libcap/Makefile b/libcap/Makefile
++index 44ddb27..c80a5e6 100644
++--- a/libcap/Makefile
+++++ b/libcap/Makefile
++@@ -52,7 +52,7 @@ $(STALIBNAME): $(OBJS)
++ 	$(RANLIB) $@
++ 
++ $(MINLIBNAME): $(OBJS)
++-	$(LD) $(CFLAGS) $(LDFLAGS) -Wl,-soname,$(MAJLIBNAME) -o $@ $^
+++	$(CC) $(CFLAGS) $(LDFLAGS) $(LDOPTS) -Wl,-soname,$(MAJLIBNAME) -o $@ $^
++ 	ln -sf $(MINLIBNAME) $(MAJLIBNAME)
++ 	ln -sf $(MAJLIBNAME) $(LIBNAME)
++ 
++diff --git a/pam_cap/Makefile b/pam_cap/Makefile
++index cc32fb6..6772075 100644
++--- a/pam_cap/Makefile
+++++ b/pam_cap/Makefile
++@@ -17,7 +17,7 @@ install: all
++ 	install -m 0755 pam_cap.so $(FAKEROOT)$(LIBDIR)/security
++ 
++ pam_cap.so: pam_cap.o
++-	$(LD) $(LDFLAGS) -o pam_cap.so $< $(LDLIBS)
+++	$(CC) $(LDFLAGS) $(LDOPTS) -o pam_cap.so $< $(LDLIBS)
++ 
++ pam_cap.o: pam_cap.c
++ 	$(CC) $(CFLAGS) $(IPATH) -c $< -o $@
++-- 
++1.9.1
 +
-+comment "Stack Smashing Protection strong needs a toolchain w/ gcc >= 4.9"
-+	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-+
-+config BR2_SSP_ALL
-+	bool "-fstack-protector-all"
-+	help
-+	  Like -fstack-protector except that all functions are
-+	  protected. This option might have a significant performance
-+	  impact on the compiled binaries.
-+
-+endchoice
-+
-+comment "Stack Smashing Protection needs a toolchain w/ SSP"
-+	depends on !BR2_TOOLCHAIN_HAS_SSP
-+
- endmenu
- 
- source "toolchain/Config.in"
 -- 
 1.9.1
