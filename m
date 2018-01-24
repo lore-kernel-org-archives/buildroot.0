@@ -1,65 +1,44 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Wed, 24 Jan 2018 17:03:56 -0500
-Subject: [Buildroot] [PATCH 1/2] bootstrap: bump version to 4.0.0
-Message-ID: <20180124220357.2861-1-Adamduskett@outlook.com>
+Date: Wed, 24 Jan 2018 17:03:57 -0500
+Subject: [Buildroot] [PATCH 2/2] angularjs: bump version to 1.6.7
+In-Reply-To: <20180124220357.2861-1-Adamduskett@outlook.com>
+References: <20180124220357.2861-1-Adamduskett@outlook.com>
+Message-ID: <20180124220357.2861-2-Adamduskett@outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-other changes:
-  - Add a license file to bootstrap.mk
-  - Add a hash for the license file to bootstrap.hash
-  - Remove copying bootstrap-theme.min.css as it's no longer included.
-  - Remove copying fonts folder as it's no longer included.
+Also add a hash for the license file.
 
 Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
 ---
- package/bootstrap/bootstrap.hash | 3 ++-
- package/bootstrap/bootstrap.mk   | 8 ++------
- 2 files changed, 4 insertions(+), 7 deletions(-)
+ package/angularjs/angularjs.hash | 3 ++-
+ package/angularjs/angularjs.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/bootstrap/bootstrap.hash b/package/bootstrap/bootstrap.hash
-index abc09da213..6bf6e5218c 100644
---- a/package/bootstrap/bootstrap.hash
-+++ b/package/bootstrap/bootstrap.hash
+diff --git a/package/angularjs/angularjs.hash b/package/angularjs/angularjs.hash
+index 100b6dc667..918c049c73 100644
+--- a/package/angularjs/angularjs.hash
++++ b/package/angularjs/angularjs.hash
 @@ -1,2 +1,3 @@
  # Locally computed:
--sha256 f498a8ff2dd007e29c2074f5e4b01a9a01775c3ff3aeaf6906ea503bc5791b7b  bootstrap-3.3.7-dist.zip
-+sha256	fa1caaaf640c32c553d0b323da1036f2232703d64a1d22c3a2ec84ace68c791a	bootstrap-4.0.0-dist.zip
-+sha256	8c1a4c25634d5841924aab1848acc9dcbc3d5672183053c8b71ff2139b65d7c3	bootstrap.css
-diff --git a/package/bootstrap/bootstrap.mk b/package/bootstrap/bootstrap.mk
-index 33161f53ae..aac457c190 100644
---- a/package/bootstrap/bootstrap.mk
-+++ b/package/bootstrap/bootstrap.mk
-@@ -4,25 +4,21 @@
+-sha256 a99e3c22b54178b7646856efd95e825650d32d3125904a28216aeba52e221bad angular-1.4.3.zip
++sha256	4d4e87d24c7d522f4ee765e4f7d454b9cf2a0f6407248545528064e66ad7b085	angular-1.6.7.zip
++sha256	cec36623ceba33c503784164917c206047079159bf88f51a695a4dfb9d9b7ede	angular.js
+diff --git a/package/angularjs/angularjs.mk b/package/angularjs/angularjs.mk
+index 08a4b60845..60702a26d2 100644
+--- a/package/angularjs/angularjs.mk
++++ b/package/angularjs/angularjs.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--BOOTSTRAP_VERSION = 3.3.7
-+BOOTSTRAP_VERSION = 4.0.0
- BOOTSTRAP_SITE = https://github.com/twbs/bootstrap/releases/download/v$(BOOTSTRAP_VERSION)
- BOOTSTRAP_SOURCE = bootstrap-$(BOOTSTRAP_VERSION)-dist.zip
- BOOTSTRAP_LICENSE = MIT
-+BOOTSTRAP_LICENSE_FILES = bootstrap.css
- 
- define BOOTSTRAP_EXTRACT_CMDS
- 	$(UNZIP) $(DL_DIR)/$(BOOTSTRAP_SOURCE) -d $(@D)
--	mv $(@D)/bootstrap-$(BOOTSTRAP_VERSION)-dist/* $(@D)/
--	rmdir $(@D)/bootstrap-$(BOOTSTRAP_VERSION)-dist
- endef
- 
- define BOOTSTRAP_INSTALL_TARGET_CMDS
--	$(INSTALL) -m 0644 -D $(@D)/css/bootstrap-theme.min.css \
--		$(TARGET_DIR)/var/www/bootstrap/css/bootstrap-theme.min.css
- 	$(INSTALL) -m 0644 -D $(@D)/css/bootstrap.min.css \
- 		$(TARGET_DIR)/var/www/bootstrap/css/bootstrap.min.css
- 	$(INSTALL) -m 0644 -D $(@D)/js/bootstrap.min.js \
- 		$(TARGET_DIR)/var/www/bootstrap/js/bootstrap.min.js
--	cp -r $(@D)/fonts $(TARGET_DIR)/var/www/bootstrap/
- endef
- 
- $(eval $(generic-package))
+-ANGULARJS_VERSION = 1.4.3
++ANGULARJS_VERSION = 1.6.7
+ ANGULARJS_SOURCE = angular-$(ANGULARJS_VERSION).zip
+ ANGULARJS_SITE = https://code.angularjs.org/$(ANGULARJS_VERSION)
+ ANGULARJS_LICENSE = MIT
 -- 
 2.14.3
