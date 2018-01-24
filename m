@@ -1,44 +1,56 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Wed, 24 Jan 2018 17:03:57 -0500
-Subject: [Buildroot] [PATCH 2/2] angularjs: bump version to 1.6.7
-In-Reply-To: <20180124220357.2861-1-Adamduskett@outlook.com>
-References: <20180124220357.2861-1-Adamduskett@outlook.com>
-Message-ID: <20180124220357.2861-2-Adamduskett@outlook.com>
+From: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
+Date: Wed, 24 Jan 2018 23:28:26 +0100
+Subject: [Buildroot] Qt4 - Qt5 Config anomaly
+Message-ID: <0e4d1d30-bdec-7ba0-5df4-9a719f5ee4f9@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also add a hash for the license file.
+Dear All,
 
-Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
----
- package/angularjs/angularjs.hash | 3 ++-
- package/angularjs/angularjs.mk   | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+I'm looking into this autobuild error:
 
-diff --git a/package/angularjs/angularjs.hash b/package/angularjs/angularjs.hash
-index 100b6dc667..918c049c73 100644
---- a/package/angularjs/angularjs.hash
-+++ b/package/angularjs/angularjs.hash
-@@ -1,2 +1,3 @@
- # Locally computed:
--sha256 a99e3c22b54178b7646856efd95e825650d32d3125904a28216aeba52e221bad angular-1.4.3.zip
-+sha256	4d4e87d24c7d522f4ee765e4f7d454b9cf2a0f6407248545528064e66ad7b085	angular-1.6.7.zip
-+sha256	cec36623ceba33c503784164917c206047079159bf88f51a695a4dfb9d9b7ede	angular.js
-diff --git a/package/angularjs/angularjs.mk b/package/angularjs/angularjs.mk
-index 08a4b60845..60702a26d2 100644
---- a/package/angularjs/angularjs.mk
-+++ b/package/angularjs/angularjs.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ANGULARJS_VERSION = 1.4.3
-+ANGULARJS_VERSION = 1.6.7
- ANGULARJS_SOURCE = angular-$(ANGULARJS_VERSION).zip
- ANGULARJS_SITE = https://code.angularjs.org/$(ANGULARJS_VERSION)
- ANGULARJS_LICENSE = MIT
+http://autobuild.buildroot.net/results/3c537e1260dc9ce57657ca0d49e318a10aee111e/
+
+where the qjson build fails because the moc_* files are generated with
+an old version of moc.
+It turned out that Qt4 and Qt5 are both enabled in this autobuild
+config, and Qt4 is being built second, so it overwrites moc and qmake in
+the host dir.
+I remembered that Qt4 at Qt5 used to be mutually exclusive (by setting
+"depends on !BR2_PACKAGE_QT" in package/qt5/Config.in) so I looked
+further and it turned that BR2_PACKAGE_QT5 is enabled because
+BR2_PACKAGE_PINENTRY_QT5 is enabled and it selects BR2_PACKAGE_QT5.
+
+What is the preferred way to fix this?
+
+a) Add also the "depends !BR2_PACKAGE_QT" guard to the
+BR2_PACKAGE_PINENTRY_QT5 config entry?
+
+b) Inverse the dependency and enable BR2_PACKAGE_PINENTRY_QT5 only if
+BR2_PACKAGE_QT5 was enabled, rather then letting
+BR2_PACKAGE_PINENTRY_QT5 select BR2_PACKAGE_QT5). (and same logic for
+BR2_PACKAGE_PINENTRY_QT4)
+
+c) other?
+
+
+I would vote for option b) as it would be more consistent with the other
+Qt based packages' (like qtjson itself) config, but wanted to ask before
+sending in a patch.
+
+Thanks, regards
 -- 
-2.14.3
+Zoltan Gyarmati
+https://zgyarmati.de
+
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 473 bytes
+Desc: OpenPGP digital signature
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180124/187b6988/attachment.asc>
