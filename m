@@ -1,39 +1,31 @@
-From: Petr Kulhavy <brain@jikos.cz>
-Date: Thu, 25 Jan 2018 20:09:49 +0100
-Subject: [Buildroot] [PATCH 1/1] package: lighttpd: bump to version 1.4.48
-Message-ID: <1516907389-32402-1-git-send-email-brain@jikos.cz>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 25 Jan 2018 21:04:43 +0100
+Subject: [Buildroot] Migrated from 2017.08 to 2017.11, rfkill issues
+In-Reply-To: <875670032.71418.1516896415562.JavaMail.zimbra@datacom.ind.br>
+ (Carlos Santos's message of "Thu, 25 Jan 2018 14:06:55 -0200 (BRST)")
+References: <CAPzckP5y+dLADBwJ-pY52v_oNMyfJfwf73tJk-EdDN5VqLQ6fg@mail.gmail.com>
+ <87tvvakkmq.fsf@dell.be.48ers.dk>
+ <875670032.71418.1516896415562.JavaMail.zimbra@datacom.ind.br>
+Message-ID: <87po5xln6s.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Petr Kulhavy <brain@jikos.cz>
----
- package/lighttpd/lighttpd.hash | 2 +-
- package/lighttpd/lighttpd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+>>>>> "Carlos" == Carlos Santos <casantos@datacom.ind.br> writes:
 
-diff --git a/package/lighttpd/lighttpd.hash b/package/lighttpd/lighttpd.hash
-index 36783ff..5d221b3 100644
---- a/package/lighttpd/lighttpd.hash
-+++ b/package/lighttpd/lighttpd.hash
-@@ -1,2 +1,2 @@
- # From http://www.lighttpd.net/
--sha256 1c97225deea33eefba6d4158c2cef27913d47553263516bbe9d2e2760fc43a3f  lighttpd-1.4.45.tar.xz
-+sha256 0f8ad5aac7529d7b948b9d7e8cd0b4a9e177309d85d6bf6516e28e6e40d74f36  lighttpd-1.4.48.tar.xz
-diff --git a/package/lighttpd/lighttpd.mk b/package/lighttpd/lighttpd.mk
-index 97ddfc6..592f547 100644
---- a/package/lighttpd/lighttpd.mk
-+++ b/package/lighttpd/lighttpd.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- LIGHTTPD_VERSION_MAJOR = 1.4
--LIGHTTPD_VERSION = $(LIGHTTPD_VERSION_MAJOR).45
-+LIGHTTPD_VERSION = $(LIGHTTPD_VERSION_MAJOR).48
- LIGHTTPD_SOURCE = lighttpd-$(LIGHTTPD_VERSION).tar.xz
- LIGHTTPD_SITE = http://download.lighttpd.net/lighttpd/releases-$(LIGHTTPD_VERSION_MAJOR).x
- LIGHTTPD_LICENSE = BSD-3-Clause
+Hi,
+
+ >> What is your toolchain configuration? RFKILL_TYPE_FM got added to the
+ >> kernel headers a long time ago (commit 875405a7793e9c35fa, during the
+ >> 2.6.33 cycle), so it sounds quite odd that your toolchain doesn't know
+ >> it.
+
+ > Notice that the problem happens when compiling host-util-linux. The
+ > toolchain should not be relevant in this case.
+
+Ahh, indeed - I completely missed that.
+
 -- 
-2.7.4
+Bye, Peter Korsgaard
