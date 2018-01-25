@@ -1,40 +1,74 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 25 Jan 2018 08:40:24 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2018-01-22
-In-Reply-To: <87wp08n9oo.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
- "Tue, 23 Jan 2018 11:36:39 +0100")
-References: <20180123070007.E56D620788@mail.free-electrons.com>
- <705165292.51458.1516702205725.JavaMail.zimbra@datacom.ind.br>
- <87wp08n9oo.fsf@dell.be.48ers.dk>
-Message-ID: <877es6mlnb.fsf@dell.be.48ers.dk>
+From: Andrei Emeltchenko <Andrei.Emeltchenko.news@gmail.com>
+Date: Thu, 25 Jan 2018 15:09:03 +0200
+Subject: [Buildroot] [PATCH 1/1] package: Add thunderbolt-tools package
+Message-ID: <20180125130903.9481-1-Andrei.Emeltchenko.news@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+From: Andrei Emeltchenko <andrei.emeltchenko@intel.com>
 
->>>>> "Carlos" == Carlos Santos <casantos@datacom.ind.br> writes:
- >>> From: "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>
- >>> To: buildroot at buildroot.org
- >>> Sent: Tuesday, January 23, 2018 5:00:07 AM
- >>> Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2018-01-22
+Add package thunderbolt-tools to handle Thunderbolt devices.
 
- >> --8<--
- >>> arc |         host-util-linux-2.31.1 | NOK |
- >>> http://autobuild.buildroot.net/results/fb2205703ee0f4be3dde95a4efc29ec8231e34bf
+Signed-off-by: Andrei Emeltchenko <andrei.emeltchenko@intel.com>
+---
+ package/Config.in                              |  1 +
+ package/thunderbolt-tools/Config.in            | 11 +++++++++++
+ package/thunderbolt-tools/thunderbolt-tools.mk | 14 ++++++++++++++
+ 3 files changed, 26 insertions(+)
+ create mode 100644 package/thunderbolt-tools/Config.in
+ create mode 100644 package/thunderbolt-tools/thunderbolt-tools.mk
 
- >> Segfault in bash during the build. Looks like a host problem.
-
- > Hmm, that is not good. gcc67 is one of the Ryzen machines on the cluster
- > that had issues in the past, but I restarted the builder as I got a
- > notification that the CPUs had been replaced.
-
- > I'll monitor the autobuilder and stop it if it happens again.
-
-We had a number of similar issues, so I've stopped the builder.
-
+diff --git a/package/Config.in b/package/Config.in
+index 00451f526d..d638ac3a72 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -505,6 +505,7 @@ endmenu
+ 	source "package/sunxi-mali/Config.in"
+ 	source "package/sysstat/Config.in"
+ 	source "package/targetcli-fb/Config.in"
++	source "package/thunderbolt-tools/Config.in"
+ 	source "package/ti-gfx/Config.in"
+ 	source "package/ti-sgx-demos/Config.in"
+ 	source "package/ti-sgx-km/Config.in"
+diff --git a/package/thunderbolt-tools/Config.in b/package/thunderbolt-tools/Config.in
+new file mode 100644
+index 0000000000..1057300772
+--- /dev/null
++++ b/package/thunderbolt-tools/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_THUNDERBOLT_TOOLS
++	bool "thunderbolt-tools"
++#	select BR2_TOOLCHAIN_BUILDROOT_CXX
++	select BR2_PACKAGE_BOOST
++	select BR2_PACKAGE_BOOST_FILESYSTEM
++	depends on BR2_PACKAGE_HAS_UDEV
++	help
++	  Thunderbolt tools for Linux
++
++comment "thunderbolt-tools package needs udev provided by systemd of eudev, C++"
++	depends on BR2_PACKAGE_HAS_UDEV
+diff --git a/package/thunderbolt-tools/thunderbolt-tools.mk b/package/thunderbolt-tools/thunderbolt-tools.mk
+new file mode 100644
+index 0000000000..5fd469c4ef
+--- /dev/null
++++ b/package/thunderbolt-tools/thunderbolt-tools.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# thunderbolt-tools
++#
++################################################################################
++
++THUNDERBOLT_TOOLS_VERSION = master
++THUNDERBOLT_TOOLS_SITE = https://github.com/01org/thunderbolt-software-user-space.git
++#THUNDERBOLT_TOOLS_SITE = $(call github,01org,thunderbolt-software-user-space,$(THUNDERBOLT_TOOLS_VERSION))
++THUNDERBOLT_TOOLS_SITE_METHOD = git
++
++THUNDERBOLT_TOOLS_DEPENDENCIES = host-pkgconf boost eudev
++
++$(eval $(cmake-package))
 -- 
-Bye, Peter Korsgaard
+2.14.1
