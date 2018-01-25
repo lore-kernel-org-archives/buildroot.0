@@ -1,46 +1,60 @@
 From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Thu, 25 Jan 2018 22:42:02 +0200
-Subject: [Buildroot] [PATCH 1/2] webkitgtk: Add missing libtasn1 dependency
-Message-ID: <20180125204203.14165-1-aperez@igalia.com>
+Date: Thu, 25 Jan 2018 22:42:03 +0200
+Subject: [Buildroot] [PATCH 2/2] webkitgtk: security bump to version 2.18.6
+In-Reply-To: <20180125204203.14165-1-aperez@igalia.com>
+References: <20180125204203.14165-1-aperez@igalia.com>
+Message-ID: <20180125204203.14165-2-aperez@igalia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Nowadays libtasn1 is always required and if not present the CMake
-configuration step would fail.
+This is a maintenance release of the current stable WebKitGTK+ version,
+which contains security fixes for CVE-2018-4088, CVE-2017-13885,
+CVE-2017-7165, CVE-2017-13884, CVE-2017-7160, CVE-2017-7153,
+CVE-2017-7153, CVE-2017-7161, and CVE-2018-4096. Additionally, it solves
+a GStreamer deadlock when stopping video playback, and contains fixes
+and improvements for the WebDriver implementation.
+
+Release nots can be found in the announcement:
+
+  https://webkitgtk.org/2018/01/24/webkitgtk2.18.6-released.html
 
 Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 ---
- package/webkitgtk/Config.in    | 1 +
- package/webkitgtk/webkitgtk.mk | 2 +-
- 2 files changed, 2 insertions(+), 1 deletion(-)
+ package/webkitgtk/webkitgtk.hash | 8 ++++----
+ package/webkitgtk/webkitgtk.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/webkitgtk/Config.in b/package/webkitgtk/Config.in
-index c4437d1584..31794ed2a4 100644
---- a/package/webkitgtk/Config.in
-+++ b/package/webkitgtk/Config.in
-@@ -36,6 +36,7 @@ config BR2_PACKAGE_WEBKITGTK
- 	select BR2_PACKAGE_LIBGCRYPT
- 	select BR2_PACKAGE_LIBSECRET
- 	select BR2_PACKAGE_LIBSOUP
-+	select BR2_PACKAGE_LIBTASN1
- 	select BR2_PACKAGE_LIBXML2
- 	select BR2_PACKAGE_LIBXSLT
- 	select BR2_PACKAGE_SQLITE
+diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
+index 0eeaca506f..dd2b28d372 100644
+--- a/package/webkitgtk/webkitgtk.hash
++++ b/package/webkitgtk/webkitgtk.hash
+@@ -1,7 +1,7 @@
+-# From https://webkitgtk.org/releases/webkitgtk-2.18.5.tar.xz.sums
+-md5 af18c2cfa00cadfd0b4d8db21cab011d webkitgtk-2.18.5.tar.xz
+-sha1 5f36db464f6b7bbe6a57e55bc9bb172f87a4c398 webkitgtk-2.18.5.tar.xz
+-sha256 0c6d80cc7eb5d32f8063041fa11a1a6f17a29765c2f69c6bc862cd47c2d539b8 webkitgtk-2.18.5.tar.xz
++# From https://webkitgtk.org/releases/webkitgtk-2.18.6.tar.xz.sums
++md5 c1a548595135ee75ad3bf2e18ac83112 webkitgtk-2.18.6.tar.xz
++sha1 fb0daa85142cfe8822de518dfaa7bd5c3cdd6c23 webkitgtk-2.18.6.tar.xz
++sha256 93912cc2f40f12e452be1ca4babdbdaac0ec4f828d441257a6b06c2963bbac3c webkitgtk-2.18.6.tar.xz
+ 
+ # Hashes for license files:
+ sha256 0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4 Source/WebCore/LICENSE-APPLE
 diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-index ebe682ebb6..7b364cf467 100644
+index 7b364cf467..eb39664b1e 100644
 --- a/package/webkitgtk/webkitgtk.mk
 +++ b/package/webkitgtk/webkitgtk.mk
-@@ -14,7 +14,7 @@ WEBKITGTK_LICENSE_FILES = \
- 	Source/WebCore/LICENSE-LGPL-2.1
- WEBKITGTK_DEPENDENCIES = host-ruby host-flex host-bison host-gperf \
- 	enchant harfbuzz icu jpeg libgcrypt libgtk3 libsecret libsoup \
--	libxml2 libxslt sqlite webp
-+	libtasn1 libxml2 libxslt sqlite webp
- WEBKITGTK_CONF_OPTS = \
- 	-DENABLE_API_TESTS=OFF \
- 	-DENABLE_GEOLOCATION=OFF \
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WEBKITGTK_VERSION = 2.18.5
++WEBKITGTK_VERSION = 2.18.6
+ WEBKITGTK_SITE = http://www.webkitgtk.org/releases
+ WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
+ WEBKITGTK_INSTALL_STAGING = YES
 -- 
 2.16.1
