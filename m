@@ -1,52 +1,100 @@
 From: Carlos Santos <casantos@datacom.ind.br>
-Date: Thu, 25 Jan 2018 14:21:20 -0200
-Subject: [Buildroot] [PATCH 2/3] linux-firmware: add hashes for license files
+Date: Thu, 25 Jan 2018 14:21:21 -0200
+Subject: [Buildroot] [PATCH 3/3] linux-firmware: add menu for Intel
+ QuickAssist firmware
 In-Reply-To: <20180125162121.21737-1-casantos@datacom.ind.br>
 References: <20180125162121.21737-1-casantos@datacom.ind.br>
-Message-ID: <20180125162121.21737-2-casantos@datacom.ind.br>
+Message-ID: <20180125162121.21737-3-casantos@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Locally calculated, to fix legal-info generation.
+Firmware required when Intel QuickAssist is enabled in the kernel via
+CRYPTO_DEV_QAT_DH895xCC, CRYPTO_DEV_QAT_C3XXX or CRYPTO_DEV_QAT_C62X.
+
+See https://dpdk.org/doc/guides/cryptodevs/qat.html
 
 Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
 ---
- package/linux-firmware/linux-firmware.hash | 24 ++++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
+ package/linux-firmware/Config.in           | 20 ++++++++++++++++++++
+ package/linux-firmware/linux-firmware.hash |  1 +
+ package/linux-firmware/linux-firmware.mk   | 21 +++++++++++++++++++++
+ 3 files changed, 42 insertions(+)
 
+diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
+index ad750e82ff..d9852c8b29 100644
+--- a/package/linux-firmware/Config.in
++++ b/package/linux-firmware/Config.in
+@@ -338,4 +338,24 @@ config BR2_PACKAGE_LINUX_FIRMWARE_QLOGIC_2XXX
+ 
+ endmenu
+ 
++menu "Intel QuickAssist Firmware"
++
++config BR2_PACKAGE_LINUX_FIRMWARE_QAT_DH895XCC
++	bool "Support for DH895xCC"
++	help
++	  Firmware files for Intel DH895xCC devices
++
++config BR2_PACKAGE_LINUX_FIRMWARE_QAT_C3XXX
++	bool "Support for C3XXX"
++	help
++	  Firmware files for Intel C3XXX devices
++
++config BR2_PACKAGE_LINUX_FIRMWARE_QAT_C62X
++	bool "Support for C62X"
++	help
++	  Firmware files for Intel C62X devices
++
++
++endmenu
++
+ endif
 diff --git a/package/linux-firmware/linux-firmware.hash b/package/linux-firmware/linux-firmware.hash
-index 9b8dfedb8e..7f2caf195c 100644
+index 7f2caf195c..a31d66b6c1 100644
 --- a/package/linux-firmware/linux-firmware.hash
 +++ b/package/linux-firmware/linux-firmware.hash
-@@ -1,2 +1,26 @@
- # Locally calculated
- sha256 ec58d9aaf3cf80f768c32ba22d925c0542436ef3ee4588acd3e49b12ca2ed9d9 linux-firmware-a3a26af24e29c818ef9b5661856018e21a5c49fb.tar.gz
-+sha256 8116433f4004fc0c24d72b3d9e497808b724aa0e5e1cd63fc1bf66b715b1e2e9 LICENCE.Abilis
-+sha256 38f2037aa14631b4b29826d7a99379613c41a97064d1defdee30a7a022138b20 LICENCE.Marvell
-+sha256 802b7014b26c606cf6248ae8b0ab1ce6d2d1b0db236d38dd269e676cd70710f2 LICENCE.atheros_firmware
-+sha256 b16056fc91b82a0e3e8de8f86c2dac98201aa9dc3cbd33e8d38f1b087fcec30d LICENCE.broadcom_bcm43xx
-+sha256 a5777f9e80aca0603b0648454de996168b1c530322550ccda94d6d78bcf6c061 LICENCE.chelsio_firmware
-+sha256 60fbc9cccb455e1a3306c97db942d6f24fa93664be61d54c497637e6d0e2ae83 LICENCE.fw_sst_0f28
-+sha256 5181b0b51efc79d5acb2c9bb92042878fdbad97a92114d4ab5e32e2b5b52fce4 LICENCE.ibt_firmware
-+sha256 0e0c11073ba3c832097da38e0905da36b8a3526f219407977b13b71c6675be7d LICENCE.it913x
-+sha256 e295020afd7597dc1b3bbe50a84a7e432d9cb92bc053c1c5e657b50d2517627b LICENCE.iwlwifi_firmware
-+sha256 4071a11d878dbc0ac6d9e71203d03b151638f9d7a8bc47a54c3cb964100d5822 LICENCE.qla2xxx
-+sha256 d7bec70668ddd4aae8fb4aa32870e54b49fcdb0b9b007aa9f54b53a1ac7461bd LICENCE.ralink-firmware.txt
-+sha256 8568352b57f3574f9d5b2753cdb7c6e5eb2b79e82fbb9c9ba6566947467ef508 LICENCE.ralink_a_mediatek_company_firmware
-+sha256 a61351665b4f264f6c631364f85b907d8f8f41f8b369533ef4021765f9f3b62e LICENCE.rtlwifi_firmware.txt
-+sha256 106bef96470001e877fcf7ba0337fa6766a317650eb47fcaeb743eeebd62c4ff LICENCE.ti-connectivity
-+sha256 8ea9f4aee5f53ad877041ff089e8c95d34d615ce19a3111e5e1ea70d990ed7ff LICENCE.xc4000
-+sha256 30ec8a66503dc73f83937564ae70ca23aa03259e64727ff4195b5b6f695e782f LICENCE.xc5000
-+sha256 f8822049f32fef2e90a197bd8cf259f476db75d549456bdca8567616a9c07ace LICENCE.xc5000c
-+sha256 a064cbf83e10d72579d236a1e36032681adb8e442943ff75b57020a82992a5ed LICENSE.QualcommAtheros_ath10k
-+sha256 630fd46c95d3ac6544590c2265ba7348fbc930fb386261a1c04dcd9f403645b8 LICENSE.dib0700
-+sha256 8542aeabf2761935122d693561e16766ce1bcc2b0d003204f9040b7d6d929f2e LICENSE.i915
-+sha256 be904cd28cb292b80cdb6cf412ab0d9159d431671e987ad433c1f62e0988a9bc LICENSE.qcom
-+sha256 fc6223d4bfe9f2f9e2eddc44b9fe5721d0caf49f01cb08d602906add686d8c6f LICENSE.radeon
-+sha256 2bdd2e716f05d9737d3f9a20f9a3a3c0caee0e866100ddb0673f1178e42f92b9 LICENSE.sdma_firmware
-+sha256 47aba9c3e8306aeb8de3ddd42e00cf8af558b9633d567aaa5563827add4e18c1 WHENCE
+@@ -9,6 +9,7 @@ sha256 60fbc9cccb455e1a3306c97db942d6f24fa93664be61d54c497637e6d0e2ae83 LICENCE.
+ sha256 5181b0b51efc79d5acb2c9bb92042878fdbad97a92114d4ab5e32e2b5b52fce4 LICENCE.ibt_firmware
+ sha256 0e0c11073ba3c832097da38e0905da36b8a3526f219407977b13b71c6675be7d LICENCE.it913x
+ sha256 e295020afd7597dc1b3bbe50a84a7e432d9cb92bc053c1c5e657b50d2517627b LICENCE.iwlwifi_firmware
++sha256 2051d5bf0755a0668f8c3d9a0d1c41d4b8cc411aba70f720fda71ae9e3b4d25c LICENCE.qat_firmware
+ sha256 4071a11d878dbc0ac6d9e71203d03b151638f9d7a8bc47a54c3cb964100d5822 LICENCE.qla2xxx
+ sha256 d7bec70668ddd4aae8fb4aa32870e54b49fcdb0b9b007aa9f54b53a1ac7461bd LICENCE.ralink-firmware.txt
+ sha256 8568352b57f3574f9d5b2753cdb7c6e5eb2b79e82fbb9c9ba6566947467ef508 LICENCE.ralink_a_mediatek_company_firmware
+diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+index 3d18c6fc34..61cacf771f 100644
+--- a/package/linux-firmware/linux-firmware.mk
++++ b/package/linux-firmware/linux-firmware.mk
+@@ -422,6 +422,27 @@ LINUX_FIRMWARE_FILES += \
+ LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.qla2xxx
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_QAT_DH895XCC),y)
++# qat_mmp.bin is a symlink to qat_895xcc_mmp.bin
++LINUX_FIRMWARE_FILES += qat_895xcc.bin qat_895xcc_mmp.bin qat_mmp.bin
++LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.qat_firmware
++endif
++
++ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_QAT_DH895XCC),y)
++LINUX_FIRMWARE_FILES += qat_895xcc.bin qat_895xcc_mmp.bin
++LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.qat_firmware
++endif
++
++ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_QAT_C3XXX),y)
++LINUX_FIRMWARE_FILES += qat_c3xxx.bin qat_c3xxx_mmp.bin
++LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.qat_firmware
++endif
++
++ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_QAT_C62X),y)
++LINUX_FIRMWARE_FILES += qat_c62x.bin qat_c62x_mmp.bin
++LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.qat_firmware
++endif
++
+ ifneq ($(LINUX_FIRMWARE_FILES),)
+ define LINUX_FIRMWARE_INSTALL_FILES
+ 	cd $(@D) ; \
 -- 
 2.14.3
