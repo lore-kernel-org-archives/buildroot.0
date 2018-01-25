@@ -1,12 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 25 Jan 2018 21:04:43 +0100
+Date: Thu, 25 Jan 2018 21:05:54 +0100
 Subject: [Buildroot] Migrated from 2017.08 to 2017.11, rfkill issues
-In-Reply-To: <875670032.71418.1516896415562.JavaMail.zimbra@datacom.ind.br>
- (Carlos Santos's message of "Thu, 25 Jan 2018 14:06:55 -0200 (BRST)")
+In-Reply-To: <1601364457.72803.1516896858319.JavaMail.zimbra@datacom.ind.br>
+ (Carlos Santos's message of "Thu, 25 Jan 2018 14:14:18 -0200 (BRST)")
 References: <CAPzckP5y+dLADBwJ-pY52v_oNMyfJfwf73tJk-EdDN5VqLQ6fg@mail.gmail.com>
- <87tvvakkmq.fsf@dell.be.48ers.dk>
- <875670032.71418.1516896415562.JavaMail.zimbra@datacom.ind.br>
-Message-ID: <87po5xln6s.fsf@dell.be.48ers.dk>
+ <1601364457.72803.1516896858319.JavaMail.zimbra@datacom.ind.br>
+Message-ID: <87lgglln4t.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,15 +16,19 @@ To: buildroot@busybox.net
 
 Hi,
 
- >> What is your toolchain configuration? RFKILL_TYPE_FM got added to the
- >> kernel headers a long time ago (commit 875405a7793e9c35fa, during the
- >> 2.6.33 cycle), so it sounds quite odd that your toolchain doesn't know
- >> it.
+ >> sys-utils/rfkill.c:67: error: ?RFKILL_TYPE_FM? undeclared here (not in a
+ >> function)
 
- > Notice that the problem happens when compiling host-util-linux. The
- > toolchain should not be relevant in this case.
+ > RFKILL_TYPE_FM should be defined in /usr/include/linux/rfkill.h, which is
+ > included by sys-utils/rfkill.c (line 26).
 
-Ahh, indeed - I completely missed that.
+ > Please edit package/util-linux/util-linux.mk and add "--disable-rfkill"
+ > to HOST_UTIL_LINUX_CONF_OPTS.
+
+We should probably do that unconditionally, there is no need for rfkill
+for the host.
+
+Will you send a patch for this?
 
 -- 
 Bye, Peter Korsgaard
