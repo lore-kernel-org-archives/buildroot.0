@@ -1,77 +1,115 @@
 From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Fri, 26 Jan 2018 22:30:29 +0100
-Subject: [Buildroot] [PATCH 0/5] Add Xilinx ZynqMP and ZCU106 board support
-Message-ID: <1517002234-17608-1-git-send-email-luca@lucaceresoli.net>
+Date: Fri, 26 Jan 2018 22:30:32 +0100
+Subject: [Buildroot] [PATCH 3/5] zynqmp-pmufw-binaries: new package
+In-Reply-To: <1517002234-17608-1-git-send-email-luca@lucaceresoli.net>
+References: <1517002234-17608-1-git-send-email-luca@lucaceresoli.net>
+Message-ID: <1517002234-17608-4-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Downloads pre-built binary firmwares for the Xilinx ZynqMP SoCs PMU.
 
-this patchset adds basic support for the ZynqMP family of ARM64
-SoC+FPGA by Xilinx and for the ZCU106 board based on it.
-
-The ZynqMP sets a few challenges that needed some work besides the
-usual defconfig + readme that is enough for more classic and simple
-SoCs.
-
-First, it requires ARM Trusted Firmware in the U-Boot mkimage format,
-not currently implemented. Nothing really hard here, this is addressed
-in patch 2 (with a trivial preliminary cleanup in patch 1).
-
-The next issue is the PMU (Platform Management Unit). It is a
-Microblaze core that handles power and clock gating and the like, and
-reprogramming it at runtime is necessary to boot any modern U-Boot and
-Linux. Since we can't build Microblaze code out of the ARM64
-toolchain, I've set up a repository with pre-built PMU firmwares and
-added a new package that just downloads from there. This is similar to
-the binaries-marvell and vexpress-firmware packages. This is added in
-patch 3.
-
-Finally, U-Boot needs some tweaks in order for the PMU firmware to
-properly loaded and to initialize peripherals before starting
-Linux. This is done in patch 4.
-
-With all these in place, patch 5 just adds the defconfig and board
-files.
-
-Luca
-
-
-Luca Ceresoli (5):
-  arm-trusted-firmware: simplify release dir path
-  arm-trusted-firmware: generate atf-uboot.ub for ZynqMP booting
-  zynqmp-pmufw-binaries: new package
-  u-boot: add customizations to boot on ZynqMP
-  configs: add Xilinx ZCU106 board (ZynqMP SoC)
-
- DEVELOPERS                                         |     3 +
- board/zynqmp/genimage.cfg                          |    28 +
- board/zynqmp/post-image.sh                         |    13 +
- board/zynqmp/readme.txt                            |    52 +
- board/zynqmp/zcu106/psu_init_gpl.c                 | 20955 +++++++++++
- board/zynqmp/zcu106/psu_init_gpl.h                 | 35810 +++++++++++++++++++
- boot/Config.in                                     |     1 +
- boot/arm-trusted-firmware/Config.in                |     9 +
- boot/arm-trusted-firmware/arm-trusted-firmware.mk  |    23 +-
- boot/uboot/Config.in                               |    32 +
- boot/uboot/uboot.mk                                |    25 +
- boot/zynqmp-pmufw-binaries/Config.in               |    19 +
- .../zynqmp-pmufw-binaries.hash                     |     3 +
- .../zynqmp-pmufw-binaries/zynqmp-pmufw-binaries.mk |    24 +
- configs/zynqmp_zcu106_defconfig                    |    31 +
- 15 files changed, 57027 insertions(+), 1 deletion(-)
- create mode 100644 board/zynqmp/genimage.cfg
- create mode 100755 board/zynqmp/post-image.sh
- create mode 100644 board/zynqmp/readme.txt
- create mode 100644 board/zynqmp/zcu106/psu_init_gpl.c
- create mode 100644 board/zynqmp/zcu106/psu_init_gpl.h
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+---
+ DEVELOPERS                                         |  1 +
+ boot/Config.in                                     |  1 +
+ boot/zynqmp-pmufw-binaries/Config.in               | 19 +++++++++++++++++
+ .../zynqmp-pmufw-binaries.hash                     |  3 +++
+ .../zynqmp-pmufw-binaries/zynqmp-pmufw-binaries.mk | 24 ++++++++++++++++++++++
+ 5 files changed, 48 insertions(+)
  create mode 100644 boot/zynqmp-pmufw-binaries/Config.in
  create mode 100644 boot/zynqmp-pmufw-binaries/zynqmp-pmufw-binaries.hash
  create mode 100644 boot/zynqmp-pmufw-binaries/zynqmp-pmufw-binaries.mk
- create mode 100644 configs/zynqmp_zcu106_defconfig
 
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 73c0231bc0dd..e4db352d3e10 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1013,6 +1013,7 @@ F:	package/ti-sgx-um/
+ 
+ N:	Luca Ceresoli <luca@lucaceresoli.net>
+ F:	board/olimex/a20_olinuxino/
++F:	boot/zynqmp-pmufw-binaries/
+ F:	configs/olimex_a20_olinuxino_*
+ F:	package/agentpp/
+ F:	package/exim/
+diff --git a/boot/Config.in b/boot/Config.in
+index 3687c41a2c00..a23886997c9f 100644
+--- a/boot/Config.in
++++ b/boot/Config.in
+@@ -19,5 +19,6 @@ source "boot/ts4800-mbrboot/Config.in"
+ source "boot/uboot/Config.in"
+ source "boot/vexpress-firmware/Config.in"
+ source "boot/xloader/Config.in"
++source "boot/zynqmp-pmufw-binaries/Config.in"
+ 
+ endmenu
+diff --git a/boot/zynqmp-pmufw-binaries/Config.in b/boot/zynqmp-pmufw-binaries/Config.in
+new file mode 100644
+index 000000000000..e39561cbf91e
+--- /dev/null
++++ b/boot/zynqmp-pmufw-binaries/Config.in
+@@ -0,0 +1,19 @@
++config BR2_TARGET_ZYNQMP_PMUFW_BINARIES
++	bool "Zynqmp PMU firmware"
++	depends on BR2_aarch64
++	help
++	  This package provides precompiled firmwares for the Platform
++	  Management Unit (PMU) of the Xilinx ZynqMP family of SoCs.
++
++	  https://github.com/lucaceresoli/zynqmp-pmufw-binaries
++
++if BR2_TARGET_ZYNQMP_PMUFW_BINARIES
++
++config BR2_TARGET_ZYNQMP_PMUFW_BINARIES_IMAGE
++	string "PMU firmware image file"
++	help
++	  Enter the path to the PMU firmware file for your board and
++	  configuration, relative to the repository top directory.
++	  Example: "zcu106-default/pmufw.bin".
++
++endif
+diff --git a/boot/zynqmp-pmufw-binaries/zynqmp-pmufw-binaries.hash b/boot/zynqmp-pmufw-binaries/zynqmp-pmufw-binaries.hash
+new file mode 100644
+index 000000000000..a60566445290
+--- /dev/null
++++ b/boot/zynqmp-pmufw-binaries/zynqmp-pmufw-binaries.hash
+@@ -0,0 +1,3 @@
++# Locally computed
++sha256  b74808c93522a39bedecd64bd5a75fd766f267e1d540f45dbfe868694f49b1d7  zynqmp-pmufw-binaries-ec64e06b836a0841f40bd52434f6919c5dafb133.tar.gz
++sha256  235b467980655706d5fded5baf3d8b52ddb102a9e0c26804a67c0ec719042d38  license.txt
+diff --git a/boot/zynqmp-pmufw-binaries/zynqmp-pmufw-binaries.mk b/boot/zynqmp-pmufw-binaries/zynqmp-pmufw-binaries.mk
+new file mode 100644
+index 000000000000..2562818f2fb3
+--- /dev/null
++++ b/boot/zynqmp-pmufw-binaries/zynqmp-pmufw-binaries.mk
+@@ -0,0 +1,24 @@
++################################################################################
++#
++# zynqmp-pmufw-binaries
++#
++################################################################################
++
++ZYNQMP_PMUFW_BINARIES_VERSION = ec64e06b836a0841f40bd52434f6919c5dafb133
++ZYNQMP_PMUFW_BINARIES_SITE = $(call github,lucaceresoli,zynqmp-pmufw-binaries,$(ZYNQMP_PMUFW_BINARIES_VERSION))
++
++ZYNQMP_PMUFW_BINARIES_LICENSE = X11 with Xilinx exception
++ZYNQMP_PMUFW_BINARIES_LICENSE_FILES = license.txt
++
++ZYNQMP_PMUFW_BINARIES_IMAGE = $(call qstrip,$(BR2_TARGET_ZYNQMP_PMUFW_BINARIES_IMAGE))
++ZYNQMP_PMUFW_BINARIES_INSTALL_IMAGES = YES
++
++define ZYNQMP_PMUFW_BINARIES_INSTALL_IMAGES_CMDS
++	$(INSTALL) -D -m 0644 $(@D)/$(ZYNQMP_PMUFW_BINARIES_IMAGE) $(BINARIES_DIR)/pmufw.bin
++endef
++
++ifeq ($(ZYNQMP_PMUFW_BINARIES_IMAGE),)
++$(error No PMU firmware image file name set. Check your BR2_TARGET_ZYNQMP_PMUFW_BINARIES_IMAGE setting)
++endif
++
++$(eval $(generic-package))
 -- 
 2.7.4
