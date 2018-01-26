@@ -1,62 +1,78 @@
-From: Sergio Prado <sergio.prado@e-labworks.com>
-Date: Fri, 26 Jan 2018 10:44:02 -0200
-Subject: [Buildroot] [PATCH] aoetools: fix aoe-stat script that was using
- /bin/bash in its shebang
-Message-ID: <1516970642-9098-1-git-send-email-sergio.prado@e-labworks.com>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Fri, 26 Jan 2018 13:48:01 +0100
+Subject: [Buildroot] scanpypi package error adadfruit-ads1x15
+In-Reply-To: <CACG401rYpb5e8m_ou0wAnowPdNRfYNRAHXgRY-BgPzaK9uY3Ow@mail.gmail.com>
+References: <CACG401qs4wj83dGC4t++ZWQWCdax=-3KzEoHNNYzjUGBKTkhBQ@mail.gmail.com>
+ <CACG401rYpb5e8m_ou0wAnowPdNRfYNRAHXgRY-BgPzaK9uY3Ow@mail.gmail.com>
+Message-ID: <CAGm1_ktgUGMkLdi4derUgsgoPOsXnMSf9byecxj2fGUUTyUQrg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This will make the script more portable, making it possible to run on
-systems that do not have bash.
+Hi Jesse,
 
-The script was tested with ash from BusyBox and checked for portability
-issues and bashisms with shellcheck and checkbashisms tools.
+On Fri, Jan 26, 2018 at 5:21 AM, Jesse Cobra <jessecobra@gmail.com> wrote:
+> Made my own package by hand and it worked! Oh well...
+>
+> cat buildroot/package/python-ads1x15/*
+> config BR2_PACKAGE_PYTHON_ADS1X15
 
-The patch was already applied upstream [1] and should be removed in the
-next version bump.
+This package depends on Adafruit-GPIO, so please add this package
+first and select it via select statement.
 
-[1] https://github.com/OpenAoE/aoetools/commit/4ef42740538cefd3c1554aa4df5bcb1388ac927b
+>     bool "python-ADS1X15"
+>     help
+>       encoder, decoder, and lint/validator for JSON (JavaScript Object
+>       Notation) compliant with RFC 7159.
 
-Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
----
- ...l-script-interpreter-from-bin-bash-to-bin.patch | 26 ++++++++++++++++++++++
- 1 file changed, 26 insertions(+)
- create mode 100644 package/aoetools/0001-Change-shell-script-interpreter-from-bin-bash-to-bin.patch
+Project URL is missing.
 
-diff --git a/package/aoetools/0001-Change-shell-script-interpreter-from-bin-bash-to-bin.patch b/package/aoetools/0001-Change-shell-script-interpreter-from-bin-bash-to-bin.patch
-new file mode 100644
-index 000000000000..00b24c8943ec
---- /dev/null
-+++ b/package/aoetools/0001-Change-shell-script-interpreter-from-bin-bash-to-bin.patch
-@@ -0,0 +1,26 @@
-+From 4ef42740538cefd3c1554aa4df5bcb1388ac927b Mon Sep 17 00:00:00 2001
-+From: Sergio Prado <sergio.prado@e-labworks.com>
-+Date: Tue, 16 Jan 2018 22:28:32 -0200
-+Subject: [PATCH] Change shell script interpreter from /bin/bash to /bin/sh
-+
-+This will make the script more portable, making it possible to run on
-+systems that do not have bash.
-+
-+Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
-+---
-+ aoe-stat.in | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/aoe-stat.in b/aoe-stat.in
-+index 50e6ac674169..0c1d6f5ebe1e 100755
-+--- a/aoe-stat.in
-++++ b/aoe-stat.in
-+@@ -1,4 +1,4 @@
-+-#! /bin/bash
-++#! /bin/sh
-+ # aoe-stat - collate and present information about AoE storage
-+ # Copyright 2012, CORAID, Inc., and licensed under GPL v.2.
-+ 
-+-- 
-+1.9.1
-+
--- 
-1.9.1
+> ################################################################################
+> #
+> # python-ads1x15
+> #
+> ################################################################################
+>
+> PYTHON_ADS1X15_VERSION = 1.0.2
+> PYTHON_ADS1X15_SOURCE = Adafruit_ADS1x15-$(PYTHON_ADS1X15_VERSION).tar.gz
+> PYTHON_ADS1X15_SITE =
+> https://pypi.python.org/packages/14/e8/c9935e32f61e6562abea08cb704fcbfbb78b39bd1d20bb9b12eb4c2c820c
+> PYTHON_ADS1X15_SETUP_TYPE = setuptools
+> PYTHON_ADS1X15_LICENSE = GNU Library or Lesser General Public License (LGPL)
+
+please us SPDX short names for the licence type.
+
+> PYTHON_ADS1X15_LICENSE_FILES = LICENSE.txt
+>
+> $(eval $(python-package))
+>
+>
+> On Fri, Jan 26, 2018 at 1:27 AM, Jesse Cobra <jessecobra@gmail.com> wrote:
+>>
+>> building for pi zero w on ubuntu 14.04 32 bit buildroot 2017.02.9
+>>
+>> utils/scanpypi adafruit-ads1x15 -o package
+>> buildroot package name for adafruit-ads1x15: python-adafruit-ads1x15
+>> Package: python-adafruit-ads1x15
+>> Fetching package adafruit-ads1x15
+>> Downloading package adafruit-ads1x15 from
+>> https://pypi.python.org/packages/14/e8/c9935e32f61e6562abea08cb704fcbfbb78b39bd1d20bb9b12eb4c2c820c/Adafruit_ADS1x15-1.0.2.tar.gz...
+>> Traceback (most recent call last):
+>>   File "utils/scanpypi", line 653, in <module>
+>>     main()
+>>   File "utils/scanpypi", line 604, in main
+>>     package.load_setup()
+>>   File "utils/scanpypi", line 247, in load_setup
+>>     os.chdir(self.tmp_extract)
+>> OSError: [Errno 2] No such file or directory:
+>> '/tmp/scanpypi-wzvU4f/python-adafruit-ads1x15/Adafruit-ADS1x15-1.0.2'
+>>
+>> Anyone point me in the right direction?
+
+The package is very strange. First tar name (Adafruit_ADS1x15) and
+meta name (Adafruit-ADS1x15) are different. Even if I fix this then
+there are issues with setup.py. I'll have to dig deeper.
+
+Yegor
