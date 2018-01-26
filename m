@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 26 Jan 2018 13:39:17 +0100
-Subject: [Buildroot] [PATCH] libbsd: bump to version 0.8.7
-In-Reply-To: <9369d64e649f794818aa06d267585dbc3450d287.1516712956.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Tue, 23 Jan 2018 15:09:16 +0200")
-References: <9369d64e649f794818aa06d267585dbc3450d287.1516712956.git.baruch@tkos.co.il>
-Message-ID: <871sickd56.fsf@dell.be.48ers.dk>
+Date: Fri, 26 Jan 2018 13:39:37 +0100
+Subject: [Buildroot] [PATCH] netcat-openbsd: bump to version 1.187-1
+In-Reply-To: <c926107008c832cb3bac3b2252098a7712335952.1516713460.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Tue, 23 Jan 2018 15:17:40 +0200")
+References: <c926107008c832cb3bac3b2252098a7712335952.1516713460.git.baruch@tkos.co.il>
+Message-ID: <87wp04iyk6.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,10 +13,7 @@ To: buildroot@busybox.net
 
 >>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > Change download site; the latest version is not on the official site.
- > Add license hash.
-
- > Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+ > Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
  > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
 Committed, thanks.
