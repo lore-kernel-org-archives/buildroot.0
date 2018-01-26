@@ -1,72 +1,86 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Fri, 26 Jan 2018 14:32:50 +0100
-Subject: [Buildroot] [RFC] scanpypi: handle packages with wrong metadata
-Message-ID: <1516973570-7732-1-git-send-email-yegorslists@googlemail.com>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Fri, 26 Jan 2018 14:35:12 +0100
+Subject: [Buildroot] scanpypi package error adadfruit-ads1x15
+In-Reply-To: <CAGm1_ktgUGMkLdi4derUgsgoPOsXnMSf9byecxj2fGUUTyUQrg@mail.gmail.com>
+References: <CACG401qs4wj83dGC4t++ZWQWCdax=-3KzEoHNNYzjUGBKTkhBQ@mail.gmail.com>
+ <CACG401rYpb5e8m_ou0wAnowPdNRfYNRAHXgRY-BgPzaK9uY3Ow@mail.gmail.com>
+ <CAGm1_ktgUGMkLdi4derUgsgoPOsXnMSf9byecxj2fGUUTyUQrg@mail.gmail.com>
+Message-ID: <CAGm1_kusxoiZP5h_MrSG8a8zTTkY+_24PkdNNuweaYV2nGSO6Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+On Fri, Jan 26, 2018 at 1:48 PM, Yegor Yefremov
+<yegorslists@googlemail.com> wrote:
+> Hi Jesse,
+>
+> On Fri, Jan 26, 2018 at 5:21 AM, Jesse Cobra <jessecobra@gmail.com> wrote:
+>> Made my own package by hand and it worked! Oh well...
+>>
+>> cat buildroot/package/python-ads1x15/*
+>> config BR2_PACKAGE_PYTHON_ADS1X15
+>
+> This package depends on Adafruit-GPIO, so please add this package
+> first and select it via select statement.
+>
+>>     bool "python-ADS1X15"
+>>     help
+>>       encoder, decoder, and lint/validator for JSON (JavaScript Object
+>>       Notation) compliant with RFC 7159.
+>
+> Project URL is missing.
+>
+>> ################################################################################
+>> #
+>> # python-ads1x15
+>> #
+>> ################################################################################
+>>
+>> PYTHON_ADS1X15_VERSION = 1.0.2
+>> PYTHON_ADS1X15_SOURCE = Adafruit_ADS1x15-$(PYTHON_ADS1X15_VERSION).tar.gz
+>> PYTHON_ADS1X15_SITE =
+>> https://pypi.python.org/packages/14/e8/c9935e32f61e6562abea08cb704fcbfbb78b39bd1d20bb9b12eb4c2c820c
+>> PYTHON_ADS1X15_SETUP_TYPE = setuptools
+>> PYTHON_ADS1X15_LICENSE = GNU Library or Lesser General Public License (LGPL)
+>
+> please us SPDX short names for the licence type.
+>
+>> PYTHON_ADS1X15_LICENSE_FILES = LICENSE.txt
+>>
+>> $(eval $(python-package))
+>>
+>>
+>> On Fri, Jan 26, 2018 at 1:27 AM, Jesse Cobra <jessecobra@gmail.com> wrote:
+>>>
+>>> building for pi zero w on ubuntu 14.04 32 bit buildroot 2017.02.9
+>>>
+>>> utils/scanpypi adafruit-ads1x15 -o package
+>>> buildroot package name for adafruit-ads1x15: python-adafruit-ads1x15
+>>> Package: python-adafruit-ads1x15
+>>> Fetching package adafruit-ads1x15
+>>> Downloading package adafruit-ads1x15 from
+>>> https://pypi.python.org/packages/14/e8/c9935e32f61e6562abea08cb704fcbfbb78b39bd1d20bb9b12eb4c2c820c/Adafruit_ADS1x15-1.0.2.tar.gz...
+>>> Traceback (most recent call last):
+>>>   File "utils/scanpypi", line 653, in <module>
+>>>     main()
+>>>   File "utils/scanpypi", line 604, in main
+>>>     package.load_setup()
+>>>   File "utils/scanpypi", line 247, in load_setup
+>>>     os.chdir(self.tmp_extract)
+>>> OSError: [Errno 2] No such file or directory:
+>>> '/tmp/scanpypi-wzvU4f/python-adafruit-ads1x15/Adafruit-ADS1x15-1.0.2'
+>>>
+>>> Anyone point me in the right direction?
+>
+> The package is very strange. First tar name (Adafruit_ADS1x15) and
+> meta name (Adafruit-ADS1x15) are different. Even if I fix this then
+> there are issues with setup.py. I'll have to dig deeper.
 
-Some packages like python-adafruit-ads1x15 have different values in
-PyPI metadata and setup.py or tar file name.
+Please apply this patch [1] and try to add adafruit-ads1x15 again.
 
-Use package name (self.pkg_name) derived from tar file name instead
-of metadata_name taken from JSON.
+[1] http://patchwork.ozlabs.org/patch/866316/
 
-Also output the missing key when trying to setup arguments.
-
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- utils/scanpypi | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
-
-diff --git a/utils/scanpypi b/utils/scanpypi
-index 7392c50..0add12b 100755
---- a/utils/scanpypi
-+++ b/utils/scanpypi
-@@ -130,6 +130,7 @@ class BuildrootPackage():
-         self.md5_sum = None
-         self.metadata = None
-         self.metadata_name = None
-+        self.pkg_name = None
-         self.metadata_url = None
-         self.pkg_req = None
-         self.setup_metadata = None
-@@ -249,10 +250,12 @@ class BuildrootPackage():
-                     os.makedirs(tmp_pkg)
-                 as_tarfile.extractall(tmp_pkg)
- 
-+        index_of_pkg_version = self.filename.index(self.version) - 1
-+        self.pkg_name = self.filename[:index_of_pkg_version]
-         tmp_extract = '{folder}/{name}-{version}'
-         self.tmp_extract = tmp_extract.format(
-             folder=tmp_pkg,
--            name=self.metadata_name,
-+            name=self.pkg_name,
-             version=self.version)
- 
-     def load_setup(self):
-@@ -265,14 +268,15 @@ class BuildrootPackage():
-         s_file, s_path, s_desc = imp.find_module('setup', [self.tmp_extract])
-         setup = imp.load_module('setup', s_file, s_path, s_desc)
-         try:
--            self.setup_metadata = self.setup_args[self.metadata_name]
--        except KeyError:
-+            self.setup_metadata = self.setup_args[self.pkg_name]
-+        except KeyError as err:
-+            print('Following key is missing: {}'.format(err))
-             # This means setup was not called which most likely mean that it is
-             # called through the if __name__ == '__main__' directive.
-             # In this case, we can only pray that it is called through a
-             # function called main() in setup.py.
-             setup.main()  # Will raise AttributeError if not found
--            self.setup_metadata = self.setup_args[self.metadata_name]
-+            self.setup_metadata = self.setup_args[self.pkg_name]
-         # Here we must remove the module the hard way.
-         # We must do this because of a very specific case: if a package calls
-         # setup from the __main__ but does not come with a 'main()' function,
--- 
-2.1.4
+Regards,
+Yegor
