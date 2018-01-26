@@ -1,56 +1,62 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Fri, 26 Jan 2018 16:14:58 +0100
-Subject: [Buildroot] [PATCH 1/2] ltp-testsuite: disable numa tests
-In-Reply-To: <20180126133700.hsnsyfj6owqo2wfz@tarshish>
-References: <944db376505dab7095cf32949160c0d024d92926.1516964598.git.baruch@tkos.co.il>
- <20180126111703.65saceajkfpshqyr@dell5510>
- <20180126133700.hsnsyfj6owqo2wfz@tarshish>
-Message-ID: <20180126151457.shquc4gisrpzbe6y@dell5510>
+From: Petr Kulhavy <brain@jikos.cz>
+Date: Fri, 26 Jan 2018 16:26:01 +0100
+Subject: [Buildroot] Dropbear remote login fails
+In-Reply-To: <87fu6siv3z.fsf@dell.be.48ers.dk>
+References: <0f79957c-e9fd-0b25-e19b-a93149eaffe0@jikos.cz>
+ <87fu6siv3z.fsf@dell.be.48ers.dk>
+Message-ID: <5c7c1231-2405-ba70-c6d3-f0b67187546a@jikos.cz>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Baruch,
 
-> On Fri, Jan 26, 2018 at 12:17:04PM +0100, Petr Vorel wrote:
-> > Hi Baruch,
-> > > The LTP_CHECK_SYSCALL_NUMA autoconf macro uses AC_RUN_IFELSE when it
-> > > detects the numaif.h header. This is incompatible with cross
-> > > compilation.
-> > Is it really about cross compilation or about out-of-tree building?
+On 26/01/18 14:54, Peter Korsgaard wrote:
+>>>>>> "Petr" == Petr Kulhavy <brain@jikos.cz> writes:
+>   > Hi,
+>   > recently I upgraded my system to the latest version of
+>   > buildroot. After that I noticed that I cannot any longer ssh on my
+>   > device because the default shell /bin/sh for the root is not in
+>   > /etc/shells.
+>
+>   > Shouldn't it be added there? Or have I misconfigured something?
+>
+> With 'upgraded' do you mean you are using git head and not
+> E.G. 2017.11.2?
+Yes, I'm using the head now.
 
-> As I understand this is about cross compilation, which is inherently 
-> incompatible with AC_RUN_IFELSE[1].
-OK, doc really warn about using AC_RUN_IFELSE while cross compiling.
+>
+> We recently had a patch changing this for bash:
+>
+> commit 4d279697afbf8fb295274784103be2b837113d5e
+> Author: Romain Naour <romain.naour@smile.fr>
+> Date:   Sat Jan 13 17:05:27 2018 +0100
+>
+>      package/bash: add /bin/bash to /etc/shells
+>
+>      When bash is selected, /bin/bash is not added to /etc/shells
+>      (see man shells). So, login tools like dropbear reject the ssh
+>      connexions for users using bash as shell in /etc/passwd.
+>
+>      buildroot authpriv.warn dropbear[853]: User 'kubu' has invalid shell, rejected
+>
+>      Reported-by: Jeremy Rosen <jeremy.rosen@smile.fr>
+>      Signed-off-by: Romain Naour <romain.naour@smile.fr>
+>      Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>      Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>      Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+>
+> This has the side effect of adding an /etc/shells file to your rootfs
+> where we didn't use to have one (and libc falls back to /bin/sh +
+> /bin/csh if /etc/shells doesn't exist), so if you have bash enabled then
+> /bin/sh is no longer accepted.
+Ah, that explains why it worked before! I do have bash enabled as well.
 
-> > Any idea how to fix it in upstream? As we test both cross compilation and out out-of-tree
-> > compilation with travis:
-> > https://travis-ci.org/linux-test-project/ltp/builds/333338092
+> There's a patch series pending in patchwork fixing this. It would be
+> great if you could give it a test:
+>
+> http://patchwork.ozlabs.org/project/buildroot/list/?series=24357
+I will give it a try.
 
-> > * aarch64 cross compilation
-> > https://travis-ci.org/linux-test-project/ltp/jobs/333338103
-> > * arm cross compilation
-> > https://travis-ci.org/linux-test-project/ltp/jobs/333338102
-> > * native out-of-tree compilation
-> > https://travis-ci.org/linux-test-project/ltp/jobs/333338101
-
-> Do you nave libnuma (numactl) installed in these tests? If not, the 
-> AC_RUN_IFELSE test is skipped. You can reproduce this build failure in 
-> Buildroot by first building the numactl package, and then ltp-testsuite.
-In the third one [2] there is libnuma installed (ibnuma-dev package, so configure works:
-/* Define to 1 if you have libnuma and it's headers version >= 2 installed. */
-#define HAVE_NUMA_V2 1
-The other two don't.
-But all these 3 cross compile builds are build in-tree.
-I tested to build cross compile out tree in our project and it's really broken.
-Thanks for a bug report, I'll fix it.
-
-
-Kind regards,
 Petr
-
-> [1] https://www.gnu.org/software/autoconf/manual/autoconf.html#Runtime
-
-[2] https://api.travis-ci.org/v3/job/333338101/log.txt
