@@ -1,86 +1,77 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Fri, 26 Jan 2018 14:35:12 +0100
-Subject: [Buildroot] scanpypi package error adadfruit-ads1x15
-In-Reply-To: <CAGm1_ktgUGMkLdi4derUgsgoPOsXnMSf9byecxj2fGUUTyUQrg@mail.gmail.com>
-References: <CACG401qs4wj83dGC4t++ZWQWCdax=-3KzEoHNNYzjUGBKTkhBQ@mail.gmail.com>
- <CACG401rYpb5e8m_ou0wAnowPdNRfYNRAHXgRY-BgPzaK9uY3Ow@mail.gmail.com>
- <CAGm1_ktgUGMkLdi4derUgsgoPOsXnMSf9byecxj2fGUUTyUQrg@mail.gmail.com>
-Message-ID: <CAGm1_kusxoiZP5h_MrSG8a8zTTkY+_24PkdNNuweaYV2nGSO6Q@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Fri, 26 Jan 2018 15:37:00 +0200
+Subject: [Buildroot] [PATCH 1/2] ltp-testsuite: disable numa tests
+In-Reply-To: <20180126111703.65saceajkfpshqyr@dell5510>
+References: <944db376505dab7095cf32949160c0d024d92926.1516964598.git.baruch@tkos.co.il>
+ <20180126111703.65saceajkfpshqyr@dell5510>
+Message-ID: <20180126133700.hsnsyfj6owqo2wfz@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Jan 26, 2018 at 1:48 PM, Yegor Yefremov
-<yegorslists@googlemail.com> wrote:
-> Hi Jesse,
->
-> On Fri, Jan 26, 2018 at 5:21 AM, Jesse Cobra <jessecobra@gmail.com> wrote:
->> Made my own package by hand and it worked! Oh well...
->>
->> cat buildroot/package/python-ads1x15/*
->> config BR2_PACKAGE_PYTHON_ADS1X15
->
-> This package depends on Adafruit-GPIO, so please add this package
-> first and select it via select statement.
->
->>     bool "python-ADS1X15"
->>     help
->>       encoder, decoder, and lint/validator for JSON (JavaScript Object
->>       Notation) compliant with RFC 7159.
->
-> Project URL is missing.
->
->> ################################################################################
->> #
->> # python-ads1x15
->> #
->> ################################################################################
->>
->> PYTHON_ADS1X15_VERSION = 1.0.2
->> PYTHON_ADS1X15_SOURCE = Adafruit_ADS1x15-$(PYTHON_ADS1X15_VERSION).tar.gz
->> PYTHON_ADS1X15_SITE =
->> https://pypi.python.org/packages/14/e8/c9935e32f61e6562abea08cb704fcbfbb78b39bd1d20bb9b12eb4c2c820c
->> PYTHON_ADS1X15_SETUP_TYPE = setuptools
->> PYTHON_ADS1X15_LICENSE = GNU Library or Lesser General Public License (LGPL)
->
-> please us SPDX short names for the licence type.
->
->> PYTHON_ADS1X15_LICENSE_FILES = LICENSE.txt
->>
->> $(eval $(python-package))
->>
->>
->> On Fri, Jan 26, 2018 at 1:27 AM, Jesse Cobra <jessecobra@gmail.com> wrote:
->>>
->>> building for pi zero w on ubuntu 14.04 32 bit buildroot 2017.02.9
->>>
->>> utils/scanpypi adafruit-ads1x15 -o package
->>> buildroot package name for adafruit-ads1x15: python-adafruit-ads1x15
->>> Package: python-adafruit-ads1x15
->>> Fetching package adafruit-ads1x15
->>> Downloading package adafruit-ads1x15 from
->>> https://pypi.python.org/packages/14/e8/c9935e32f61e6562abea08cb704fcbfbb78b39bd1d20bb9b12eb4c2c820c/Adafruit_ADS1x15-1.0.2.tar.gz...
->>> Traceback (most recent call last):
->>>   File "utils/scanpypi", line 653, in <module>
->>>     main()
->>>   File "utils/scanpypi", line 604, in main
->>>     package.load_setup()
->>>   File "utils/scanpypi", line 247, in load_setup
->>>     os.chdir(self.tmp_extract)
->>> OSError: [Errno 2] No such file or directory:
->>> '/tmp/scanpypi-wzvU4f/python-adafruit-ads1x15/Adafruit-ADS1x15-1.0.2'
->>>
->>> Anyone point me in the right direction?
->
-> The package is very strange. First tar name (Adafruit_ADS1x15) and
-> meta name (Adafruit-ADS1x15) are different. Even if I fix this then
-> there are issues with setup.py. I'll have to dig deeper.
+Hi Petr,
 
-Please apply this patch [1] and try to add adafruit-ads1x15 again.
+On Fri, Jan 26, 2018 at 12:17:04PM +0100, Petr Vorel wrote:
+> Hi Baruch,
+> > The LTP_CHECK_SYSCALL_NUMA autoconf macro uses AC_RUN_IFELSE when it
+> > detects the numaif.h header. This is incompatible with cross
+> > compilation.
+> Is it really about cross compilation or about out-of-tree building?
 
-[1] http://patchwork.ozlabs.org/patch/866316/
+As I understand this is about cross compilation, which is inherently 
+incompatible with AC_RUN_IFELSE[1].
 
-Regards,
-Yegor
+> Any idea how to fix it in upstream? As we test both cross compilation and out out-of-tree
+> compilation with travis:
+> https://travis-ci.org/linux-test-project/ltp/builds/333338092
+> 
+> * aarch64 cross compilation
+> https://travis-ci.org/linux-test-project/ltp/jobs/333338103
+> * arm cross compilation
+> https://travis-ci.org/linux-test-project/ltp/jobs/333338102
+> * native out-of-tree compilation
+> https://travis-ci.org/linux-test-project/ltp/jobs/333338101
+
+Do you nave libnuma (numactl) installed in these tests? If not, the 
+AC_RUN_IFELSE test is skipped. You can reproduce this build failure in 
+Buildroot by first building the numactl package, and then ltp-testsuite.
+
+[1] https://www.gnu.org/software/autoconf/manual/autoconf.html#Runtime
+
+> > Fixes:
+> > http://autobuild.buildroot.net/results/21a/21a6eeddbf5ccffc34c38527d0807305a5eb3917/
+> > http://autobuild.buildroot.net/results/fc0/fc01921e8e8e1ea100461b29137c4219e6686c58/
+> > http://autobuild.buildroot.net/results/962/96285d154abd65838ff5c66e96db309d9ac26c80/
+> 
+> > Cc: Petr Vorel <petr.vorel@gmail.com>
+> > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> > ---
+> >  package/ltp-testsuite/ltp-testsuite.mk | 3 ++-
+> >  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> > diff --git a/package/ltp-testsuite/ltp-testsuite.mk b/package/ltp-testsuite/ltp-testsuite.mk
+> > index 87854568d8a6..28dc24749ec8 100644
+> > --- a/package/ltp-testsuite/ltp-testsuite.mk
+> > +++ b/package/ltp-testsuite/ltp-testsuite.mk
+> > @@ -56,7 +56,8 @@ LTP_TESTSUITE_CONF_ENV += \
+> >  	CFLAGS="$(LTP_TESTSUITE_CFLAGS)" \
+> >  	CPPFLAGS="$(LTP_TESTSUITE_CPPFLAGS)" \
+> >  	LIBS="$(LTP_TESTSUITE_LIBS)" \
+> > -	SYSROOT="$(STAGING_DIR)"
+> > +	SYSROOT="$(STAGING_DIR)" \
+> > +	have_numa_headers=no
+> 
+> >  # Requires uClibc fts and bessel support, normally not enabled
+> >  ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
+> 
+> Acked-by: Petr Vorel <petr.vorel@gmail.com>
+
+Thanks,
+baruch
+
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
