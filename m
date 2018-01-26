@@ -1,78 +1,43 @@
 From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Fri, 26 Jan 2018 13:48:01 +0100
-Subject: [Buildroot] scanpypi package error adadfruit-ads1x15
-In-Reply-To: <CACG401rYpb5e8m_ou0wAnowPdNRfYNRAHXgRY-BgPzaK9uY3Ow@mail.gmail.com>
-References: <CACG401qs4wj83dGC4t++ZWQWCdax=-3KzEoHNNYzjUGBKTkhBQ@mail.gmail.com>
- <CACG401rYpb5e8m_ou0wAnowPdNRfYNRAHXgRY-BgPzaK9uY3Ow@mail.gmail.com>
-Message-ID: <CAGm1_ktgUGMkLdi4derUgsgoPOsXnMSf9byecxj2fGUUTyUQrg@mail.gmail.com>
+Date: Fri, 26 Jan 2018 13:48:36 +0100
+Subject: [Buildroot] [PATCH] scanpypi: ignore empty elements in package
+ requirements
+In-Reply-To: <87o9lgiydw.fsf@dell.be.48ers.dk>
+References: <1516695187-1193-1-git-send-email-yegorslists@googlemail.com>
+ <87o9lgiydw.fsf@dell.be.48ers.dk>
+Message-ID: <CAGm1_ksde3hV57Ww0V5o5G7693QEpoHVSy2CLXcsmscXGfb8Zg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Jesse,
-
-On Fri, Jan 26, 2018 at 5:21 AM, Jesse Cobra <jessecobra@gmail.com> wrote:
-> Made my own package by hand and it worked! Oh well...
+On Fri, Jan 26, 2018 at 1:43 PM, Peter Korsgaard <peter@korsgaard.com> wrote:
+>>>>>> "yegorslists" == yegorslists  <yegorslists@googlemail.com> writes:
 >
-> cat buildroot/package/python-ads1x15/*
-> config BR2_PACKAGE_PYTHON_ADS1X15
-
-This package depends on Adafruit-GPIO, so please add this package
-first and select it via select statement.
-
->     bool "python-ADS1X15"
->     help
->       encoder, decoder, and lint/validator for JSON (JavaScript Object
->       Notation) compliant with RFC 7159.
-
-Project URL is missing.
-
-> ################################################################################
-> #
-> # python-ads1x15
-> #
-> ################################################################################
+>  > From: Yegor Yefremov <yegorslists@googlemail.com>
+>  > Depending on how setup.py reads requirements files empty elements can occur.
+>  > This patch takes care, that such elements will be ignored and don't crash
+>  > the scanpypi script.
 >
-> PYTHON_ADS1X15_VERSION = 1.0.2
-> PYTHON_ADS1X15_SOURCE = Adafruit_ADS1x15-$(PYTHON_ADS1X15_VERSION).tar.gz
-> PYTHON_ADS1X15_SITE =
-> https://pypi.python.org/packages/14/e8/c9935e32f61e6562abea08cb704fcbfbb78b39bd1d20bb9b12eb4c2c820c
-> PYTHON_ADS1X15_SETUP_TYPE = setuptools
-> PYTHON_ADS1X15_LICENSE = GNU Library or Lesser General Public License (LGPL)
-
-please us SPDX short names for the licence type.
-
-> PYTHON_ADS1X15_LICENSE_FILES = LICENSE.txt
+>  > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+>  > ---
+>  >  utils/scanpypi | 4 +++-
+>  >  1 file changed, 3 insertions(+), 1 deletion(-)
 >
-> $(eval $(python-package))
+>  > diff --git a/utils/scanpypi b/utils/scanpypi
+>  > index d043135..7392c50 100755
+>  > --- a/utils/scanpypi
+>  > +++ b/utils/scanpypi
+>  > @@ -299,7 +299,9 @@ class BuildrootPackage():
+>  >                          for req in self.pkg_req]
 >
+>  >          # get rid of commented lines and also strip the package strings
+>  > -        self.pkg_req = [item.strip() for item in self.pkg_req if item[0] != '#']
+>  > +        print("Req: {}".format(self.pkg_req))
 >
-> On Fri, Jan 26, 2018 at 1:27 AM, Jesse Cobra <jessecobra@gmail.com> wrote:
->>
->> building for pi zero w on ubuntu 14.04 32 bit buildroot 2017.02.9
->>
->> utils/scanpypi adafruit-ads1x15 -o package
->> buildroot package name for adafruit-ads1x15: python-adafruit-ads1x15
->> Package: python-adafruit-ads1x15
->> Fetching package adafruit-ads1x15
->> Downloading package adafruit-ads1x15 from
->> https://pypi.python.org/packages/14/e8/c9935e32f61e6562abea08cb704fcbfbb78b39bd1d20bb9b12eb4c2c820c/Adafruit_ADS1x15-1.0.2.tar.gz...
->> Traceback (most recent call last):
->>   File "utils/scanpypi", line 653, in <module>
->>     main()
->>   File "utils/scanpypi", line 604, in main
->>     package.load_setup()
->>   File "utils/scanpypi", line 247, in load_setup
->>     os.chdir(self.tmp_extract)
->> OSError: [Errno 2] No such file or directory:
->> '/tmp/scanpypi-wzvU4f/python-adafruit-ads1x15/Adafruit-ADS1x15-1.0.2'
->>
->> Anyone point me in the right direction?
+> What is this print for? Just debugging? Did you mean to add it?
 
-The package is very strange. First tar name (Adafruit_ADS1x15) and
-meta name (Adafruit-ADS1x15) are different. Even if I fix this then
-there are issues with setup.py. I'll have to dig deeper.
+You're right. It was for debugging. I'll send v2.
 
 Yegor
