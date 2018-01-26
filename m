@@ -1,60 +1,58 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 26 Jan 2018 09:05:59 +0100
-Subject: [Buildroot] [git commit] webkitgtk: security bump to version 2.18.6
-Message-ID: <20180126081426.B7C9B8404F@busybox.osuosl.org>
+Date: Fri, 26 Jan 2018 09:11:23 +0100
+Subject: [Buildroot] [git commit] libcurl: security bump to version 7.58.0
+Message-ID: <20180126081427.177057FD0E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=54798893b858c597eb70c387400866bfbfb9f0be
+commit: https://git.buildroot.net/buildroot/commit/?id=e02dd5a4924c69fc806f4191bc7be67e28d5ad37
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This is a maintenance release of the current stable WebKitGTK+ version,
-which contains security fixes for CVE-2018-4088, CVE-2017-13885,
-CVE-2017-7165, CVE-2017-13884, CVE-2017-7160, CVE-2017-7153,
-CVE-2017-7153, CVE-2017-7161, and CVE-2018-4096. Additionally, it solves
-a GStreamer deadlock when stopping video playback, and contains fixes
-and improvements for the WebDriver implementation.
+Fixes CVE-2018-1000007: libcurl might leak authentication data to third
+parties.
 
-Release notes can be found in the announcement:
+https://curl.haxx.se/docs/adv_2018-b3bf.html
 
-  https://webkitgtk.org/2018/01/24/webkitgtk2.18.6-released.html
+Fixes CVE-2018-1000005: libcurl contains an out bounds read in code handling
+HTTP/2 trailers.
 
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+https://curl.haxx.se/docs/adv_2018-824a.html
+
+Update license hash due to copyright year change.
+
+[Peter: also add CVE-2018-1000005 reference]
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/webkitgtk/webkitgtk.hash | 8 ++++----
- package/webkitgtk/webkitgtk.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/libcurl/libcurl.hash | 6 +++---
+ package/libcurl/libcurl.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
-index 0eeaca5..dd2b28d 100644
---- a/package/webkitgtk/webkitgtk.hash
-+++ b/package/webkitgtk/webkitgtk.hash
-@@ -1,7 +1,7 @@
--# From https://webkitgtk.org/releases/webkitgtk-2.18.5.tar.xz.sums
--md5 af18c2cfa00cadfd0b4d8db21cab011d webkitgtk-2.18.5.tar.xz
--sha1 5f36db464f6b7bbe6a57e55bc9bb172f87a4c398 webkitgtk-2.18.5.tar.xz
--sha256 0c6d80cc7eb5d32f8063041fa11a1a6f17a29765c2f69c6bc862cd47c2d539b8 webkitgtk-2.18.5.tar.xz
-+# From https://webkitgtk.org/releases/webkitgtk-2.18.6.tar.xz.sums
-+md5 c1a548595135ee75ad3bf2e18ac83112 webkitgtk-2.18.6.tar.xz
-+sha1 fb0daa85142cfe8822de518dfaa7bd5c3cdd6c23 webkitgtk-2.18.6.tar.xz
-+sha256 93912cc2f40f12e452be1ca4babdbdaac0ec4f828d441257a6b06c2963bbac3c webkitgtk-2.18.6.tar.xz
- 
- # Hashes for license files:
- sha256 0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4 Source/WebCore/LICENSE-APPLE
-diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-index 7b364cf..eb39664 100644
---- a/package/webkitgtk/webkitgtk.mk
-+++ b/package/webkitgtk/webkitgtk.mk
+diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
+index 275a5a3..b1afe18 100644
+--- a/package/libcurl/libcurl.hash
++++ b/package/libcurl/libcurl.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# https://curl.haxx.se/download/curl-7.57.0.tar.xz.asc
+-sha256 f5f6fd3c72b7b8389969f4fb671ed8532fa9b5bb7a5cae7ca89bc1cea45c7878  curl-7.57.0.tar.xz
+-sha256 cbcf511f5702f7baf5424193a792bc9c18fab22bcbec2e6a587598389dc632c2  COPYING
++# https://curl.haxx.se/download/curl-7.58.0.tar.xz.asc
++sha256 6a813875243609eb75f37fa72044e4ad618b55ec15a4eafdac2df6a7e800e3e3  curl-7.58.0.tar.xz
++sha256 5f3849ec38ddb927e79f514bf948890c41b8d1407286a49609b8fb1585931095  COPYING
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index 0aab58a..a1d2aa7 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WEBKITGTK_VERSION = 2.18.5
-+WEBKITGTK_VERSION = 2.18.6
- WEBKITGTK_SITE = http://www.webkitgtk.org/releases
- WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
- WEBKITGTK_INSTALL_STAGING = YES
+-LIBCURL_VERSION = 7.57.0
++LIBCURL_VERSION = 7.58.0
+ LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
+ LIBCURL_SITE = https://curl.haxx.se/download
+ LIBCURL_DEPENDENCIES = host-pkgconf \
