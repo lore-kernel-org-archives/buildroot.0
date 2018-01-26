@@ -1,42 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 26 Jan 2018 13:43:23 +0100
-Subject: [Buildroot] [PATCH] scanpypi: ignore empty elements in package
- requirements
-In-Reply-To: <1516695187-1193-1-git-send-email-yegorslists@googlemail.com>
- (yegorslists@googlemail.com's message of "Tue, 23 Jan 2018 09:13:07
- +0100")
-References: <1516695187-1193-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <87o9lgiydw.fsf@dell.be.48ers.dk>
+Date: Fri, 26 Jan 2018 13:39:34 +0100
+Subject: [Buildroot] [git commit] netcat-openbsd: bump to version 1.187-1
+Message-ID: <20180126124345.45E5D83C7F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "yegorslists" == yegorslists  <yegorslists@googlemail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=d91377c1a4236e12b0321ba2a3a65c17223b6308
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > From: Yegor Yefremov <yegorslists@googlemail.com>
- > Depending on how setup.py reads requirements files empty elements can occur.
- > This patch takes care, that such elements will be ignored and don't crash
- > the scanpypi script.
+Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/netcat-openbsd/netcat-openbsd.hash | 2 +-
+ package/netcat-openbsd/netcat-openbsd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
- > ---
- >  utils/scanpypi | 4 +++-
- >  1 file changed, 3 insertions(+), 1 deletion(-)
-
- > diff --git a/utils/scanpypi b/utils/scanpypi
- > index d043135..7392c50 100755
- > --- a/utils/scanpypi
- > +++ b/utils/scanpypi
- > @@ -299,7 +299,9 @@ class BuildrootPackage():
- >                          for req in self.pkg_req]
+diff --git a/package/netcat-openbsd/netcat-openbsd.hash b/package/netcat-openbsd/netcat-openbsd.hash
+index e90a41a..1bf62bb 100644
+--- a/package/netcat-openbsd/netcat-openbsd.hash
++++ b/package/netcat-openbsd/netcat-openbsd.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 f587c02139aedb0bae12fdaef94f8c00649a0b4d603b5a22612e42cb317ba7cf netcat-openbsd-debian_1.178-3.tar.gz
++sha256 63d72b4e5ea629af148d6d655125dcbe48f4996a8a2a8c5e234c62eba2856b5f netcat-openbsd-debian_1.187-1.tar.gz
+ sha256 e2e86d58c38f044a49f51e45515747585db58a2305419c73323eaad88fcaef5c debian/copyright
+diff --git a/package/netcat-openbsd/netcat-openbsd.mk b/package/netcat-openbsd/netcat-openbsd.mk
+index a758714..6d3be50 100644
+--- a/package/netcat-openbsd/netcat-openbsd.mk
++++ b/package/netcat-openbsd/netcat-openbsd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- >          # get rid of commented lines and also strip the package strings
- > -        self.pkg_req = [item.strip() for item in self.pkg_req if item[0] != '#']
- > +        print("Req: {}".format(self.pkg_req))
-
-What is this print for? Just debugging? Did you mean to add it?
-
--- 
-Bye, Peter Korsgaard
+-NETCAT_OPENBSD_VERSION = debian/1.178-3
++NETCAT_OPENBSD_VERSION = debian/1.187-1
+ NETCAT_OPENBSD_SITE = git://anonscm.debian.org/collab-maint/netcat-openbsd
+ NETCAT_OPENBSD_LICENSE = BSD-3-Clause
+ NETCAT_OPENBSD_LICENSE_FILES = debian/copyright
