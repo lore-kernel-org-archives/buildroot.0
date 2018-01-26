@@ -1,43 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 26 Jan 2018 13:39:34 +0100
-Subject: [Buildroot] [git commit] netcat-openbsd: bump to version 1.187-1
-Message-ID: <20180126124345.45E5D83C7F@busybox.osuosl.org>
+Date: Fri, 26 Jan 2018 13:38:43 +0100
+Subject: [Buildroot] [git commit] zbar: enable static build
+Message-ID: <20180126124345.1012283CCB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d91377c1a4236e12b0321ba2a3a65c17223b6308
+commit: https://git.buildroot.net/buildroot/commit/?id=fc4a6abfa6bbffeabefb9967dbf378c410fb6318
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+libv4l supports static build since commit f837251785e9 (package/libv4l:
+allow build of v4l2 utilities on noMMU platforms).
+
+Cc: Volkov Viacheslav <sv99@inbox.ru>
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/netcat-openbsd/netcat-openbsd.hash | 2 +-
- package/netcat-openbsd/netcat-openbsd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/zbar/Config.in | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/package/netcat-openbsd/netcat-openbsd.hash b/package/netcat-openbsd/netcat-openbsd.hash
-index e90a41a..1bf62bb 100644
---- a/package/netcat-openbsd/netcat-openbsd.hash
-+++ b/package/netcat-openbsd/netcat-openbsd.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 f587c02139aedb0bae12fdaef94f8c00649a0b4d603b5a22612e42cb317ba7cf netcat-openbsd-debian_1.178-3.tar.gz
-+sha256 63d72b4e5ea629af148d6d655125dcbe48f4996a8a2a8c5e234c62eba2856b5f netcat-openbsd-debian_1.187-1.tar.gz
- sha256 e2e86d58c38f044a49f51e45515747585db58a2305419c73323eaad88fcaef5c debian/copyright
-diff --git a/package/netcat-openbsd/netcat-openbsd.mk b/package/netcat-openbsd/netcat-openbsd.mk
-index a758714..6d3be50 100644
---- a/package/netcat-openbsd/netcat-openbsd.mk
-+++ b/package/netcat-openbsd/netcat-openbsd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/zbar/Config.in b/package/zbar/Config.in
+index 5097f57..05c9b76 100644
+--- a/package/zbar/Config.in
++++ b/package/zbar/Config.in
+@@ -2,7 +2,6 @@ config BR2_PACKAGE_ZBAR
+ 	bool "zbar"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libv4l
+ 	depends on BR2_USE_MMU # libv4l
+-	depends on !BR2_STATIC_LIBS # libv4l
+ 	depends on BR2_INSTALL_LIBSTDCPP # libv4l
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 # libv4l
+ 	select BR2_PACKAGE_JPEG
+@@ -12,7 +11,7 @@ config BR2_PACKAGE_ZBAR
  
--NETCAT_OPENBSD_VERSION = debian/1.178-3
-+NETCAT_OPENBSD_VERSION = debian/1.187-1
- NETCAT_OPENBSD_SITE = git://anonscm.debian.org/collab-maint/netcat-openbsd
- NETCAT_OPENBSD_LICENSE = BSD-3-Clause
- NETCAT_OPENBSD_LICENSE_FILES = debian/copyright
+ 	  http://zbar.sourceforge.net/
+ 
+-comment "zbar needs a toolchain w/ threads, dynamic library, C++ and headers >= 3.0"
++comment "zbar needs a toolchain w/ threads, C++ and headers >= 3.0"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS \
++	depends on !BR2_TOOLCHAIN_HAS_THREADS \
+ 		|| !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
