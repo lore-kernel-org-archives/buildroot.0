@@ -1,34 +1,45 @@
-From: Marc Murphy <marcmltd@marcm.co.uk>
-Date: Fri, 26 Jan 2018 15:52:23 +0000
-Subject: [Buildroot] post image blues (fakeroot and chown)
-Message-ID: <8AE4BE7D9622DF41B76E1AD887AA1A47A52ED7C0@MARCM-SBS2011.marcmltd.local>
+From: Julien Corjon <corjon.j@ecagroup.com>
+Date: Fri, 26 Jan 2018 17:20:21 +0100
+Subject: [Buildroot] [PATCH 1/1] package/wf111: bump to version 5.2.2-r3
+Message-ID: <20180126162021.5520-1-corjon.j@ecagroup.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All
+Signed-off-by: Julien Corjon <corjon.j@ecagroup.com>
+---
+ package/wf111/wf111.mk | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-I am in the final stages of getting the buildroot image output configured and having an issue.
-
-I have a couple of folders that I am using as partitions on the target. The images are created using genimage in the post-image.sh script before being included in the final complete image. But I have an issue with the folder permissions and trying to correct them before the image is built.
-
-On a normal linux system I would of course perform a:
-# sudo chown -R 0:0 some_folder
-
-That would put the permissions in to the correct root user and group.
-
-This can't be done in the post-image script as cannot use sudo as it requires intervention of entering password.
-
-I have then been trying to use fakeroot and it simply refuses to persistently change the owner and group, ll will show creator when not logged in as fakeroot but root when logged in as fakeroot.
-
-Is there any "standard" way to do this ?
-
-I have been trying with all kinds of ways even resorted to trying to use fakeroot and makedevs:
-fakeroot /home/Devel/buildroot-2017.02/output/host/usr/bin/makedevs -d $PWD/permissions $PWD/image_staging/
-
-
-Kind Regards
-
-Marc
+diff --git a/package/wf111/wf111.mk b/package/wf111/wf111.mk
+index ad9d89149d..ed55672136 100644
+--- a/package/wf111/wf111.mk
++++ b/package/wf111/wf111.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WF111_VERSION = 5.2.2-r2
++WF111_VERSION = 5-2-2-r3
+ WF111_SITE_METHOD = file
+ WF111_SITE = $(call qstrip,$(BR2_PACKAGE_WF111_TARBALL_PATH))
+ WF111_DEPENDENCIES = linux
+@@ -14,11 +14,11 @@ $(error No tarball location specified, check BR2_PACKAGE_WF111_TARBALL_PATH)
+ endif
+ 
+ ifeq ($(BR2_ARM_CPU_ARMV7A),y)
+-WF111_SOURCE = wf111-linux-driver_$(WF111_VERSION)_armv7-a.tar.gz
++WF111_SOURCE = wf111-linux-driver-$(WF111_VERSION)-armv7-a.tar.gz
+ else ifeq ($(BR2_ARM_CPU_ARMV5),y)
+-WF111_SOURCE = wf111-linux-driver_$(WF111_VERSION)_armv5t.tar.gz
++WF111_SOURCE = wf111-linux-driver-$(WF111_VERSION)-armv5t.tar.gz
+ else ifeq ($(BR2_i386),y)
+-WF111_SOURCE = wf111-linux-driver_$(WF111_VERSION)_x86.tar.gz
++WF111_SOURCE = wf111-linux-driver-$(WF111_VERSION)-x86.tar.gz
+ endif
+ 
+ # Due to the stupidity of the package Makefile, we can't invoke
+-- 
+2.14.1
