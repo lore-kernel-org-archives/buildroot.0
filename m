@@ -1,31 +1,27 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 26 Jan 2018 09:06:57 +0100
-Subject: [Buildroot] [PATCH] util-linux: disable useless programs in the
- host package
-In-Reply-To: <20180126001652.7235-1-casantos@datacom.ind.br> (Carlos Santos's
- message of "Thu, 25 Jan 2018 22:16:52 -0200")
-References: <87lgglln4t.fsf@dell.be.48ers.dk>
- <20180126001652.7235-1-casantos@datacom.ind.br>
-Message-ID: <87vafpjb6m.fsf@dell.be.48ers.dk>
+Date: Fri, 26 Jan 2018 09:13:33 +0100
+Subject: [Buildroot] [PATCH] libcurl: security bump to version 7.58.0
+In-Reply-To: <2b63b04eb854b6cbe827f27b75d9fd5f843e4dc9.1516947476.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Fri, 26 Jan 2018 08:17:56 +0200")
+References: <2b63b04eb854b6cbe827f27b75d9fd5f843e4dc9.1516947476.git.baruch@tkos.co.il>
+Message-ID: <87r2qdjavm.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Carlos" == Carlos Santos <casantos@datacom.ind.br> writes:
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > Disable all programs that depend on ncurses, as well as utilities that
- > are useless on the host: agetty, chfn-chsh, chmem, login, lslogins,
- > mesg, more, newgrp, nologin, nsenter, pg, rfkill, schedutils, setpriv,
- > setterm, su, sulogin, tunelp, ul, unshare, uuidd, vipw, wall, wdctl,
- > write, zramctl.
+ > Fixes CVE-2018-1000007: libcurl might leak authentication data to third
+ > parties.
 
- > Also add dependency on host-zlib if host cramfs utils are to be built.
+ > https://curl.haxx.se/docs/adv_2018-b3bf.html
 
- > Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+ > Update license hash due to copyright year change.
 
-Committed, thanks.
+It also fixes CVE-2018-1000005, so I updated the commit log to mention
+that and committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
