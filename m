@@ -1,45 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 26 Jan 2018 13:38:43 +0100
-Subject: [Buildroot] [git commit] zbar: enable static build
-Message-ID: <20180126124345.1012283CCB@busybox.osuosl.org>
+Date: Fri, 26 Jan 2018 13:39:08 +0100
+Subject: [Buildroot] [git commit] libbsd: bump to version 0.8.7
+Message-ID: <20180126124345.2EC2B83C7F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fc4a6abfa6bbffeabefb9967dbf378c410fb6318
+commit: https://git.buildroot.net/buildroot/commit/?id=9c5419c09a1a525bb0d304f62624ccecd4cb2d03
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-libv4l supports static build since commit f837251785e9 (package/libv4l:
-allow build of v4l2 utilities on noMMU platforms).
+Change download site; the latest version is not on the official site.
 
-Cc: Volkov Viacheslav <sv99@inbox.ru>
+Add license hash.
+
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/zbar/Config.in | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ package/libbsd/libbsd.hash | 5 +++--
+ package/libbsd/libbsd.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/package/zbar/Config.in b/package/zbar/Config.in
-index 5097f57..05c9b76 100644
---- a/package/zbar/Config.in
-+++ b/package/zbar/Config.in
-@@ -2,7 +2,6 @@ config BR2_PACKAGE_ZBAR
- 	bool "zbar"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libv4l
- 	depends on BR2_USE_MMU # libv4l
--	depends on !BR2_STATIC_LIBS # libv4l
- 	depends on BR2_INSTALL_LIBSTDCPP # libv4l
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 # libv4l
- 	select BR2_PACKAGE_JPEG
-@@ -12,7 +11,7 @@ config BR2_PACKAGE_ZBAR
+diff --git a/package/libbsd/libbsd.hash b/package/libbsd/libbsd.hash
+index bc6c7cf..133df90 100644
+--- a/package/libbsd/libbsd.hash
++++ b/package/libbsd/libbsd.hash
+@@ -1,2 +1,3 @@
+-# Locally calculated after checking pgp signature
+-sha256	934b634f4dfd865b6482650b8f522c70ae65c463529de8be907b53c89c3a34a8	libbsd-0.8.3.tar.xz
++# From https://lists.freedesktop.org/archives/libbsd/2018-January/000166.html
++sha256	f548f10e5af5a08b1e22889ce84315b1ebe41505b015c9596bad03fd13a12b31	libbsd-0.8.7.tar.xz
++sha256	0b6cedd686394f9c811a6a9fd314d68ab4738475ad3d9df61154259fa649a2a7	COPYING
+diff --git a/package/libbsd/libbsd.mk b/package/libbsd/libbsd.mk
+index eba25d7..e211389 100644
+--- a/package/libbsd/libbsd.mk
++++ b/package/libbsd/libbsd.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
- 	  http://zbar.sourceforge.net/
- 
--comment "zbar needs a toolchain w/ threads, dynamic library, C++ and headers >= 3.0"
-+comment "zbar needs a toolchain w/ threads, C++ and headers >= 3.0"
- 	depends on BR2_USE_MMU
--	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS \
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS \
- 		|| !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
+-LIBBSD_VERSION = 0.8.3
++LIBBSD_VERSION = 0.8.7
+ LIBBSD_SOURCE = libbsd-$(LIBBSD_VERSION).tar.xz
+-LIBBSD_SITE = http://libbsd.freedesktop.org/releases
++LIBBSD_SITE = https://archive.hadrons.org/software/libbsd
+ LIBBSD_LICENSE = BSD-3-Clause, MIT
+ LIBBSD_LICENSE_FILES = COPYING
+ LIBBSD_INSTALL_STAGING = YES
