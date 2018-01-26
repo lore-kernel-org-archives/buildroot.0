@@ -1,58 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 26 Jan 2018 09:11:23 +0100
-Subject: [Buildroot] [git commit] libcurl: security bump to version 7.58.0
-Message-ID: <20180126081427.177057FD0E@busybox.osuosl.org>
+Date: Fri, 26 Jan 2018 09:06:24 +0100
+Subject: [Buildroot] [git commit] gnutls: bump to version 3.5.17
+Message-ID: <20180126081426.D41668404F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e02dd5a4924c69fc806f4191bc7be67e28d5ad37
+commit: https://git.buildroot.net/buildroot/commit/?id=0ed9392196b2e10bf39ffc5aab25d836a1045344
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes CVE-2018-1000007: libcurl might leak authentication data to third
-parties.
-
-https://curl.haxx.se/docs/adv_2018-b3bf.html
-
-Fixes CVE-2018-1000005: libcurl contains an out bounds read in code handling
-HTTP/2 trailers.
-
-https://curl.haxx.se/docs/adv_2018-824a.html
-
-Update license hash due to copyright year change.
-
-[Peter: also add CVE-2018-1000005 reference]
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libcurl/libcurl.hash | 6 +++---
- package/libcurl/libcurl.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/gnutls/gnutls.hash | 4 ++--
+ package/gnutls/gnutls.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
-index 275a5a3..b1afe18 100644
---- a/package/libcurl/libcurl.hash
-+++ b/package/libcurl/libcurl.hash
-@@ -1,4 +1,4 @@
+diff --git a/package/gnutls/gnutls.hash b/package/gnutls/gnutls.hash
+index 9ec366f..173cb40 100644
+--- a/package/gnutls/gnutls.hash
++++ b/package/gnutls/gnutls.hash
+@@ -1,6 +1,6 @@
  # Locally calculated after checking pgp signature
--# https://curl.haxx.se/download/curl-7.57.0.tar.xz.asc
--sha256 f5f6fd3c72b7b8389969f4fb671ed8532fa9b5bb7a5cae7ca89bc1cea45c7878  curl-7.57.0.tar.xz
--sha256 cbcf511f5702f7baf5424193a792bc9c18fab22bcbec2e6a587598389dc632c2  COPYING
-+# https://curl.haxx.se/download/curl-7.58.0.tar.xz.asc
-+sha256 6a813875243609eb75f37fa72044e4ad618b55ec15a4eafdac2df6a7e800e3e3  curl-7.58.0.tar.xz
-+sha256 5f3849ec38ddb927e79f514bf948890c41b8d1407286a49609b8fb1585931095  COPYING
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index 0aab58a..a1d2aa7 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
-@@ -4,7 +4,7 @@
- #
+-# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.5/gnutls-3.5.16.tar.xz.sig
+-sha256	0924dec90c37c05f49fec966eba3672dab4d336d879e5c06e06e13325cbfec25	gnutls-3.5.16.tar.xz
++# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.5/gnutls-3.5.17.tar.xz.sig
++sha256	86b142afef587c118d63f72ccf307f3321dbc40357aae528202b65d913d20919	gnutls-3.5.17.tar.xz
+ # Locally calculated
+ sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	doc/COPYING
+ sha256	6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3	doc/COPYING.LESSER
+diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
+index 3559086..1ce7a74 100644
+--- a/package/gnutls/gnutls.mk
++++ b/package/gnutls/gnutls.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--LIBCURL_VERSION = 7.57.0
-+LIBCURL_VERSION = 7.58.0
- LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
- LIBCURL_SITE = https://curl.haxx.se/download
- LIBCURL_DEPENDENCIES = host-pkgconf \
+ GNUTLS_VERSION_MAJOR = 3.5
+-GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).16
++GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).17
+ GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
+ GNUTLS_SITE = https://www.gnupg.org/ftp/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
+ GNUTLS_LICENSE = LGPL-2.1+ (core library), GPL-3.0+ (gnutls-openssl library)
