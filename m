@@ -1,58 +1,86 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 26 Jan 2018 14:54:08 +0100
-Subject: [Buildroot] Dropbear remote login fails
-In-Reply-To: <0f79957c-e9fd-0b25-e19b-a93149eaffe0@jikos.cz> (Petr Kulhavy's
- message of "Fri, 26 Jan 2018 14:26:29 +0100")
-References: <0f79957c-e9fd-0b25-e19b-a93149eaffe0@jikos.cz>
-Message-ID: <87fu6siv3z.fsf@dell.be.48ers.dk>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Fri, 26 Jan 2018 16:08:30 +0200
+Subject: [Buildroot] [PATCH 1/2] ltp-testsuite: disable numa tests
+In-Reply-To: <20180126133700.hsnsyfj6owqo2wfz@tarshish>
+References: <944db376505dab7095cf32949160c0d024d92926.1516964598.git.baruch@tkos.co.il>
+ <20180126111703.65saceajkfpshqyr@dell5510>
+ <20180126133700.hsnsyfj6owqo2wfz@tarshish>
+Message-ID: <20180126140830.fxuq6featonjyulh@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Petr" == Petr Kulhavy <brain@jikos.cz> writes:
+Hi Petr,
 
- > Hi,
- > recently I upgraded my system to the latest version of
- > buildroot. After that I noticed that I cannot any longer ssh on my
- > device because the default shell /bin/sh for the root is not in
- > /etc/shells.
+On Fri, Jan 26, 2018 at 03:37:00PM +0200, Baruch Siach wrote:
+> On Fri, Jan 26, 2018 at 12:17:04PM +0100, Petr Vorel wrote:
+> > > The LTP_CHECK_SYSCALL_NUMA autoconf macro uses AC_RUN_IFELSE when it
+> > > detects the numaif.h header. This is incompatible with cross
+> > > compilation.
+> > Is it really about cross compilation or about out-of-tree building?
+> 
+> As I understand this is about cross compilation, which is inherently 
+> incompatible with AC_RUN_IFELSE[1].
+> 
+> > Any idea how to fix it in upstream?
 
- > Shouldn't it be added there? Or have I misconfigured something?
+Thinking about this a little more, I think you can make the test into a 
+compile time test instead of run-time with something like:
 
-With 'upgraded' do you mean you are using git head and not
-E.G. 2017.11.2?
+#if LIBNUMA_API_VERSION < 2
+#error libnuma API version too old
+#endif
 
-We recently had a patch changing this for bash:
+baruch
 
-commit 4d279697afbf8fb295274784103be2b837113d5e
-Author: Romain Naour <romain.naour@smile.fr>
-Date:   Sat Jan 13 17:05:27 2018 +0100
-
-    package/bash: add /bin/bash to /etc/shells
-
-    When bash is selected, /bin/bash is not added to /etc/shells
-    (see man shells). So, login tools like dropbear reject the ssh
-    connexions for users using bash as shell in /etc/passwd.
-
-    buildroot authpriv.warn dropbear[853]: User 'kubu' has invalid shell, rejected
-
-    Reported-by: Jeremy Rosen <jeremy.rosen@smile.fr>
-    Signed-off-by: Romain Naour <romain.naour@smile.fr>
-    Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
-    Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-    Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-This has the side effect of adding an /etc/shells file to your rootfs
-where we didn't use to have one (and libc falls back to /bin/sh +
-/bin/csh if /etc/shells doesn't exist), so if you have bash enabled then
-/bin/sh is no longer accepted.
-
-There's a patch series pending in patchwork fixing this. It would be
-great if you could give it a test:
-
-http://patchwork.ozlabs.org/project/buildroot/list/?series=24357
+> > As we test both cross compilation and out out-of-tree
+> > compilation with travis:
+> > https://travis-ci.org/linux-test-project/ltp/builds/333338092
+> > 
+> > * aarch64 cross compilation
+> > https://travis-ci.org/linux-test-project/ltp/jobs/333338103
+> > * arm cross compilation
+> > https://travis-ci.org/linux-test-project/ltp/jobs/333338102
+> > * native out-of-tree compilation
+> > https://travis-ci.org/linux-test-project/ltp/jobs/333338101
+> 
+> Do you nave libnuma (numactl) installed in these tests? If not, the 
+> AC_RUN_IFELSE test is skipped. You can reproduce this build failure in 
+> Buildroot by first building the numactl package, and then ltp-testsuite.
+> 
+> [1] https://www.gnu.org/software/autoconf/manual/autoconf.html#Runtime
+> 
+> > > Fixes:
+> > > http://autobuild.buildroot.net/results/21a/21a6eeddbf5ccffc34c38527d0807305a5eb3917/
+> > > http://autobuild.buildroot.net/results/fc0/fc01921e8e8e1ea100461b29137c4219e6686c58/
+> > > http://autobuild.buildroot.net/results/962/96285d154abd65838ff5c66e96db309d9ac26c80/
+> > 
+> > > Cc: Petr Vorel <petr.vorel@gmail.com>
+> > > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> > > ---
+> > >  package/ltp-testsuite/ltp-testsuite.mk | 3 ++-
+> > >  1 file changed, 2 insertions(+), 1 deletion(-)
+> > 
+> > > diff --git a/package/ltp-testsuite/ltp-testsuite.mk b/package/ltp-testsuite/ltp-testsuite.mk
+> > > index 87854568d8a6..28dc24749ec8 100644
+> > > --- a/package/ltp-testsuite/ltp-testsuite.mk
+> > > +++ b/package/ltp-testsuite/ltp-testsuite.mk
+> > > @@ -56,7 +56,8 @@ LTP_TESTSUITE_CONF_ENV += \
+> > >  	CFLAGS="$(LTP_TESTSUITE_CFLAGS)" \
+> > >  	CPPFLAGS="$(LTP_TESTSUITE_CPPFLAGS)" \
+> > >  	LIBS="$(LTP_TESTSUITE_LIBS)" \
+> > > -	SYSROOT="$(STAGING_DIR)"
+> > > +	SYSROOT="$(STAGING_DIR)" \
+> > > +	have_numa_headers=no
+> > 
+> > >  # Requires uClibc fts and bessel support, normally not enabled
+> > >  ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
+> > 
+> > Acked-by: Petr Vorel <petr.vorel@gmail.com>
 
 -- 
-Bye, Peter Korsgaard
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
