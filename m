@@ -1,44 +1,22 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Fri, 26 Jan 2018 12:35:43 +0100
-Subject: [Buildroot] [PATCH 2/2] ltp-testsuite: drop redundant arch
- dependency entries
-In-Reply-To: <2f61c63d53f8ba4ea0b65942b57f67a156fbf778.1516964598.git.baruch@tkos.co.il>
-References: <944db376505dab7095cf32949160c0d024d92926.1516964598.git.baruch@tkos.co.il>
- <2f61c63d53f8ba4ea0b65942b57f67a156fbf778.1516964598.git.baruch@tkos.co.il>
-Message-ID: <20180126113542.t36ikgu3sgfxwaqd@dell5510>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 26 Jan 2018 13:38:51 +0100
+Subject: [Buildroot] [PATCH 1/2] libv4l: bump to version 1.14.1
+In-Reply-To: <f8d109392a311962340e48caaa33bac6b604c3a7.1516711425.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Tue, 23 Jan 2018 14:43:44 +0200")
+References: <f8d109392a311962340e48caaa33bac6b604c3a7.1516711425.git.baruch@tkos.co.il>
+Message-ID: <87a7x0kd5w.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> BR2_TOOLCHAIN_HAS_SYNC_4 is enabled for all these architectures except
-> arc. There is no need to list them explicitly.
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-> Cc: Romain Naour <romain.naour@gmail.com>
-> Cc: Petr Vorel <petr.vorel@gmail.com>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  package/ltp-testsuite/Config.in | 5 -----
->  1 file changed, 5 deletions(-)
+ > Drop upstream patches. autoreconf is no longer needed.
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
-> diff --git a/package/ltp-testsuite/Config.in b/package/ltp-testsuite/Config.in
-> index 4c00e40f330e..711c859e6caf 100644
-> --- a/package/ltp-testsuite/Config.in
-> +++ b/package/ltp-testsuite/Config.in
-> @@ -5,11 +5,6 @@ config BR2_PACKAGE_LTP_TESTSUITE_ARCH_SUPPORTS
->  	# provided in ltp-testsuite
->  	default y if BR2_TOOLCHAIN_HAS_SYNC_4
->  	default y if BR2_arc
-> -	default y if BR2_i386
-> -	default y if BR2_powerpc
-> -	default y if BR2_powepc64
-> -	default y if BR2_powerpc64le
-> -	default y if BR2_x86_64
->  	# does not build on nios2, cachectl.h issue
->  	depends on !BR2_nios2
-Acked-by: Petr Vorel <petr.vorel@gmail.com>
+Committed, thanks.
 
-
-Kind regards,
-Petr
+-- 
+Bye, Peter Korsgaard
