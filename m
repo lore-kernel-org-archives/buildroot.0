@@ -1,12 +1,11 @@
 From: Petr Vorel <petr.vorel@gmail.com>
-Date: Fri, 26 Jan 2018 15:55:08 +0100
+Date: Fri, 26 Jan 2018 16:14:58 +0100
 Subject: [Buildroot] [PATCH 1/2] ltp-testsuite: disable numa tests
-In-Reply-To: <20180126140830.fxuq6featonjyulh@tarshish>
+In-Reply-To: <20180126133700.hsnsyfj6owqo2wfz@tarshish>
 References: <944db376505dab7095cf32949160c0d024d92926.1516964598.git.baruch@tkos.co.il>
  <20180126111703.65saceajkfpshqyr@dell5510>
  <20180126133700.hsnsyfj6owqo2wfz@tarshish>
- <20180126140830.fxuq6featonjyulh@tarshish>
-Message-ID: <20180126145506.wqngirlpfgut24yl@dell5510>
+Message-ID: <20180126151457.shquc4gisrpzbe6y@dell5510>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,25 +14,43 @@ To: buildroot@busybox.net
 
 Hi Baruch,
 
-> > As I understand this is about cross compilation, which is inherently 
-> > incompatible with AC_RUN_IFELSE[1].
+> On Fri, Jan 26, 2018 at 12:17:04PM +0100, Petr Vorel wrote:
+> > Hi Baruch,
+> > > The LTP_CHECK_SYSCALL_NUMA autoconf macro uses AC_RUN_IFELSE when it
+> > > detects the numaif.h header. This is incompatible with cross
+> > > compilation.
+> > Is it really about cross compilation or about out-of-tree building?
 
-> > > Any idea how to fix it in upstream?
+> As I understand this is about cross compilation, which is inherently 
+> incompatible with AC_RUN_IFELSE[1].
+OK, doc really warn about using AC_RUN_IFELSE while cross compiling.
 
-> Thinking about this a little more, I think you can make the test into a 
-> compile time test instead of run-time with something like:
+> > Any idea how to fix it in upstream? As we test both cross compilation and out out-of-tree
+> > compilation with travis:
+> > https://travis-ci.org/linux-test-project/ltp/builds/333338092
 
-> #if LIBNUMA_API_VERSION < 2
-> #error libnuma API version too old
-> #endif
-No, we had it, but we change it to the current state.  as we want to check for presence of
-libnuma.so as well during build, as there is LTP library which is linked statically.
-I know, this is very unusual, but that's how was LTP designed.
+> > * aarch64 cross compilation
+> > https://travis-ci.org/linux-test-project/ltp/jobs/333338103
+> > * arm cross compilation
+> > https://travis-ci.org/linux-test-project/ltp/jobs/333338102
+> > * native out-of-tree compilation
+> > https://travis-ci.org/linux-test-project/ltp/jobs/333338101
 
-> baruch
+> Do you nave libnuma (numactl) installed in these tests? If not, the 
+> AC_RUN_IFELSE test is skipped. You can reproduce this build failure in 
+> Buildroot by first building the numactl package, and then ltp-testsuite.
+In the third one [2] there is libnuma installed (ibnuma-dev package, so configure works:
+/* Define to 1 if you have libnuma and it's headers version >= 2 installed. */
+#define HAVE_NUMA_V2 1
+The other two don't.
+But all these 3 cross compile builds are build in-tree.
+I tested to build cross compile out tree in our project and it's really broken.
+Thanks for a bug report, I'll fix it.
 
 
 Kind regards,
 Petr
 
-[1] https://www.gnu.org/software/autoconf/manual/autoconf.html#Runtime
+> [1] https://www.gnu.org/software/autoconf/manual/autoconf.html#Runtime
+
+[2] https://api.travis-ci.org/v3/job/333338101/log.txt
