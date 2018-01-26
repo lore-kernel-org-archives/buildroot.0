@@ -1,45 +1,53 @@
-From: Julien Corjon <corjon.j@ecagroup.com>
-Date: Fri, 26 Jan 2018 17:20:21 +0100
-Subject: [Buildroot] [PATCH 1/1] package/wf111: bump to version 5.2.2-r3
-Message-ID: <20180126162021.5520-1-corjon.j@ecagroup.com>
+From: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
+Date: Fri, 26 Jan 2018 19:54:44 +0100
+Subject: [Buildroot] [PATCH] package/tinc: upgrade to 1.0.33,
+ install upstream's systemd files
+Message-ID: <1516992884-5880-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Julien Corjon <corjon.j@ecagroup.com>
+Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
 ---
- package/wf111/wf111.mk | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ package/tinc/tinc.hash | 5 ++++-
+ package/tinc/tinc.mk   | 7 ++++++-
+ 2 files changed, 10 insertions(+), 2 deletions(-)
 
-diff --git a/package/wf111/wf111.mk b/package/wf111/wf111.mk
-index ad9d89149d..ed55672136 100644
---- a/package/wf111/wf111.mk
-+++ b/package/wf111/wf111.mk
+diff --git a/package/tinc/tinc.hash b/package/tinc/tinc.hash
+index 135a4f3..15580dd 100644
+--- a/package/tinc/tinc.hash
++++ b/package/tinc/tinc.hash
+@@ -1,2 +1,5 @@
+ # Locally calculated after checking pgp signature
+-sha256	abc17e25afc1b9e74423c78fef586b11d503cbbbe5e4a2ed323870f4a82faa73 tinc-1.0.30.tar.gz
++sha256	7f6f5dc6444bc651ac635c81f4745bcce581bbd1d45ed60cbdc4ee11bebb10f4 tinc-1.0.33.tar.gz
++sha256  10618781fe68ee0958d627f9f4b279b55eaff6c852f7742bbef64dc470c0077c COPYING
++sha256  9bf76a8aa304d807df20bf3d221c21d259764be63e39b58f299b80ba3ac14b5b COPYING.README
++
+diff --git a/package/tinc/tinc.mk b/package/tinc/tinc.mk
+index f537d46..0027853 100644
+--- a/package/tinc/tinc.mk
++++ b/package/tinc/tinc.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WF111_VERSION = 5.2.2-r2
-+WF111_VERSION = 5-2-2-r3
- WF111_SITE_METHOD = file
- WF111_SITE = $(call qstrip,$(BR2_PACKAGE_WF111_TARBALL_PATH))
- WF111_DEPENDENCIES = linux
-@@ -14,11 +14,11 @@ $(error No tarball location specified, check BR2_PACKAGE_WF111_TARBALL_PATH)
+-TINC_VERSION = 1.0.30
++TINC_VERSION = 1.0.33
+ TINC_SITE = http://www.tinc-vpn.org/packages
+ TINC_DEPENDENCIES = lzo openssl zlib
+ TINC_LICENSE = GPL-2.0+ with OpenSSL exception
+@@ -17,4 +17,9 @@ TINC_CONF_ENV += \
+ 	ax_cv_check_ldflags___pie=no
  endif
  
- ifeq ($(BR2_ARM_CPU_ARMV7A),y)
--WF111_SOURCE = wf111-linux-driver_$(WF111_VERSION)_armv7-a.tar.gz
-+WF111_SOURCE = wf111-linux-driver-$(WF111_VERSION)-armv7-a.tar.gz
- else ifeq ($(BR2_ARM_CPU_ARMV5),y)
--WF111_SOURCE = wf111-linux-driver_$(WF111_VERSION)_armv5t.tar.gz
-+WF111_SOURCE = wf111-linux-driver-$(WF111_VERSION)-armv5t.tar.gz
- else ifeq ($(BR2_i386),y)
--WF111_SOURCE = wf111-linux-driver_$(WF111_VERSION)_x86.tar.gz
-+WF111_SOURCE = wf111-linux-driver-$(WF111_VERSION)-x86.tar.gz
- endif
- 
- # Due to the stupidity of the package Makefile, we can't invoke
++ifeq ($(BR2_INIT_SYSTEMD),y)
++TINC_DEPENDENCIES += systemd
++TINC_CONF_OPTS += --with-systemdsystemunitdir=/usr/lib/systemd/system
++endif
++
+ $(eval $(autotools-package))
 -- 
-2.14.1
+2.7.4
