@@ -1,68 +1,56 @@
-From: Alistair Francis <alistair23@gmail.com>
-Date: Sat, 27 Jan 2018 13:31:34 -0800
-Subject: [Buildroot] [PATCH 0/5] Add Xilinx ZynqMP and ZCU106 board
- support
-In-Reply-To: <87r2qbf4em.fsf@dell.be.48ers.dk>
-References: <1517002234-17608-1-git-send-email-luca@lucaceresoli.net>
- <87372rir1r.fsf@dell.be.48ers.dk>
- <CAKmqyKPCKhWpm+z4P0-LMtu8c6VXpsq5cUecACYEsC1QbRhKoQ@mail.gmail.com>
- <87r2qbf4em.fsf@dell.be.48ers.dk>
-Message-ID: <CAKmqyKMX13u2nazTkd0FpDrzqVez33A=WXoQst0ghusSCx5O+Q@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 27 Jan 2018 23:07:07 +0100
+Subject: [Buildroot] [PATCH 2/2] ltp-testsuite: drop redundant arch
+ dependency entries
+In-Reply-To: <2f61c63d53f8ba4ea0b65942b57f67a156fbf778.1516964598.git.baruch@tkos.co.il>
+References: <944db376505dab7095cf32949160c0d024d92926.1516964598.git.baruch@tkos.co.il>
+ <2f61c63d53f8ba4ea0b65942b57f67a156fbf778.1516964598.git.baruch@tkos.co.il>
+Message-ID: <20180127230707.450300b0@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Jan 27, 2018 at 12:11 PM, Peter Korsgaard <peter@korsgaard.com> wrote:
->>>>>> "Alistair" == Alistair Francis <alistair23@gmail.com> writes:
->
-> Hi,
->
->  >> It would be nice if Xilinx could host these officially. How do they do
->  >> it for Yocto?
->
->  > We don't have anything nice for Yocto either. The files are behind a
->  > click-through license so users have to manually download them.
->
->  > There are instructions here:
->  > https://git.yoctoproject.org/cgit/cgit.cgi/meta-xilinx/tree/meta-xilinx-bsp/README.qemu.md
->
-> But isn't this README about the 32KB pmu boot rom code, and not the
-> runtime loadable pmu fw that you can build from the embeddedsw repo?
->
->  > I don't think hosting the files is a good idea. That puts you are risk
->  > for export compliance violations.
->
-> I agree for the rom code, but that shouldn't be needed to run on a
-> zcu106 board?
+Hello,
 
-Ah! Yes you are correct. I confused myself there.
+On Fri, 26 Jan 2018 13:03:18 +0200, Baruch Siach wrote:
+> BR2_TOOLCHAIN_HAS_SYNC_4 is enabled for all these architectures except
+> arc. There is no need to list them explicitly.
+> 
+> Cc: Romain Naour <romain.naour@gmail.com>
+> Cc: Petr Vorel <petr.vorel@gmail.com>
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> ---
+>  package/ltp-testsuite/Config.in | 5 -----
+>  1 file changed, 5 deletions(-)
+> 
+> diff --git a/package/ltp-testsuite/Config.in b/package/ltp-testsuite/Config.in
+> index 4c00e40f330e..711c859e6caf 100644
+> --- a/package/ltp-testsuite/Config.in
+> +++ b/package/ltp-testsuite/Config.in
+> @@ -5,11 +5,6 @@ config BR2_PACKAGE_LTP_TESTSUITE_ARCH_SUPPORTS
+>  	# provided in ltp-testsuite
+>  	default y if BR2_TOOLCHAIN_HAS_SYNC_4
+>  	default y if BR2_arc
+> -	default y if BR2_i386
+> -	default y if BR2_powerpc
+> -	default y if BR2_powepc64
+> -	default y if BR2_powerpc64le
+> -	default y if BR2_x86_64
 
-Yocto just builds the PMU FW, but it does require a fair bit of
-interaction with Xilinx tools.
+Is this really a correct patch ? It's not because
+BR2_TOOLCHAIN_HAS_SYNC_4 already covers
+i386/powerpc/powerpc64/powerpc64le/x86_64 that it makes sense to use
+BR2_TOOLCHAIN_HAS_SYNC_4 instead.
 
->
->>> > Finally, U-Boot needs some tweaks in order for the PMU firmware to
->  >> > properly loaded and to initialize peripherals before starting
->  >> > Linux. This is done in patch 4.
->  >>
->  >> Is this now the offical supported boot flow from Xilinx? I haven't
->  >> followed in details, but when I assisted with a Zynqmp based project
->  >> last year they used Xilinx fsbl and bootgen instead of u-boot SPL.
->
->  > It's not officially supported. It is what meta-xilinx uses for QEMU boot though.
->
-> Ok. Luca, any specific reason why you are using this for real hw?
->
-> Alistair, do you know if bootgen is downloadable somewhere separately?
+What if an architecture gets added to BR2_TOOLCHAIN_HAS_SYNC_4, but
+isn't supported by ltp-testsuite ?
 
-AFAIK it's not. I think SPL should be fine. Maybe supporting both
-options is the best. If people want to follow the official path then
-they can install bootgen or prepare it manually.
+Best regards,
 
-Alistair
-
->
-> --
-> Bye, Peter Korsgaard
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
