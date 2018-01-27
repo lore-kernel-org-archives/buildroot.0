@@ -1,56 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 27 Jan 2018 23:07:07 +0100
-Subject: [Buildroot] [PATCH 2/2] ltp-testsuite: drop redundant arch
- dependency entries
-In-Reply-To: <2f61c63d53f8ba4ea0b65942b57f67a156fbf778.1516964598.git.baruch@tkos.co.il>
-References: <944db376505dab7095cf32949160c0d024d92926.1516964598.git.baruch@tkos.co.il>
- <2f61c63d53f8ba4ea0b65942b57f67a156fbf778.1516964598.git.baruch@tkos.co.il>
-Message-ID: <20180127230707.450300b0@windsurf>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 27 Jan 2018 23:29:53 +0100
+Subject: [Buildroot] [PATCH 1/1] package/transmission: security bump version
+ to 2.93
+Message-ID: <20180127222953.13741-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Fixes CVE-2018-5702:
+https://github.com/transmission/transmission/pull/468
 
-On Fri, 26 Jan 2018 13:03:18 +0200, Baruch Siach wrote:
-> BR2_TOOLCHAIN_HAS_SYNC_4 is enabled for all these architectures except
-> arc. There is no need to list them explicitly.
-> 
-> Cc: Romain Naour <romain.naour@gmail.com>
-> Cc: Petr Vorel <petr.vorel@gmail.com>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  package/ltp-testsuite/Config.in | 5 -----
->  1 file changed, 5 deletions(-)
-> 
-> diff --git a/package/ltp-testsuite/Config.in b/package/ltp-testsuite/Config.in
-> index 4c00e40f330e..711c859e6caf 100644
-> --- a/package/ltp-testsuite/Config.in
-> +++ b/package/ltp-testsuite/Config.in
-> @@ -5,11 +5,6 @@ config BR2_PACKAGE_LTP_TESTSUITE_ARCH_SUPPORTS
->  	# provided in ltp-testsuite
->  	default y if BR2_TOOLCHAIN_HAS_SYNC_4
->  	default y if BR2_arc
-> -	default y if BR2_i386
-> -	default y if BR2_powerpc
-> -	default y if BR2_powepc64
-> -	default y if BR2_powerpc64le
-> -	default y if BR2_x86_64
+Added license hash.
 
-Is this really a correct patch ? It's not because
-BR2_TOOLCHAIN_HAS_SYNC_4 already covers
-i386/powerpc/powerpc64/powerpc64le/x86_64 that it makes sense to use
-BR2_TOOLCHAIN_HAS_SYNC_4 instead.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/transmission/transmission.hash | 3 ++-
+ package/transmission/transmission.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-What if an architecture gets added to BR2_TOOLCHAIN_HAS_SYNC_4, but
-isn't supported by ltp-testsuite ?
-
-Best regards,
-
-Thomas
+diff --git a/package/transmission/transmission.hash b/package/transmission/transmission.hash
+index 849a722d2b..4c1c3f9a3a 100644
+--- a/package/transmission/transmission.hash
++++ b/package/transmission/transmission.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+-sha256	3a8d045c306ad9acb7bf81126939b9594553a388482efa0ec1bfb67b22acd35f	transmission-2.92.tar.xz
++sha256 8815920e0a4499bcdadbbe89a4115092dab42ce5199f71ff9a926cfd12b9b90b  transmission-2.93.tar.xz
++sha256 20801783bf59e27d03ed6aab625b32a34e221ae95bf801db87827c8023398495  COPYING
+diff --git a/package/transmission/transmission.mk b/package/transmission/transmission.mk
+index 7f4675302e..4e78604fdb 100644
+--- a/package/transmission/transmission.mk
++++ b/package/transmission/transmission.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TRANSMISSION_VERSION = 2.92
++TRANSMISSION_VERSION = 2.93
+ TRANSMISSION_SITE = https://github.com/transmission/transmission-releases/raw/master
+ TRANSMISSION_SOURCE = transmission-$(TRANSMISSION_VERSION).tar.xz
+ TRANSMISSION_DEPENDENCIES = \
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.11.0
