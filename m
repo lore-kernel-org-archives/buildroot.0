@@ -1,22 +1,41 @@
-From: Toan Pham <tpham3783@gmail.com>
-Date: Fri, 26 Jan 2018 18:45:20 -0500
-Subject: [Buildroot] Suggestion for Makefile to probably import
- BR2_CONFIG
-In-Reply-To: <CAGNmLEN0N9NziMj6OUDEAkEhu6bDmc43jBnXV6MFSP3EEupnSg@mail.gmail.com>
-References: <CAGNmLEM_x8ykDr54gbT94em9YyH5+0ec=jCgjULh68yJLUzjnw@mail.gmail.com>
- <1cb3ee33-b12f-6534-9dbf-fb697fbf3482@mind.be>
- <CAGNmLEMn=NFuq+iKj8e2PuF-A4+tGj_VDjq1FBj6+xzDPU=_iQ@mail.gmail.com>
- <d7cd5dae-5ae3-54f3-4376-f17c27e98065@mind.be>
- <CAGNmLEN0N9NziMj6OUDEAkEhu6bDmc43jBnXV6MFSP3EEupnSg@mail.gmail.com>
-Message-ID: <CAGNmLEOGQwk-T0dNM4MV0KaG1FN6_EGphUmDVSZNAV8K5Ph8mg@mail.gmail.com>
+From: Mark Hirota <markhirota@gmail.com>
+Date: Fri, 26 Jan 2018 17:08:43 -0800
+Subject: [Buildroot] [PATCH 1/1] ccache: bump to version 3.3.5
+Message-ID: <20180127010843.50165-1-markhirota@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-ping!
-?
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180126/3a46f3b8/attachment.html>
+https://bugs.buildroot.org/show_bug.cgi?id=10536
+
+Signed-off-by: Mark Hirota <markhirota@gmail.com>
+---
+ package/ccache/ccache.hash | 1 +
+ package/ccache/ccache.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/package/ccache/ccache.hash b/package/ccache/ccache.hash
+index 5354572638..c22394b13b 100644
+--- a/package/ccache/ccache.hash
++++ b/package/ccache/ccache.hash
+@@ -1,2 +1,3 @@
+ # Verified key https://samba.org/ftp/ccache/ccache-3.3.4.tar.xz.asc - sha256 computed locally
+ sha256  24f15bf389e38c41548c9c259532187774ec0cb9686c3497bbb75504c8dc404f  ccache-3.3.4.tar.xz
++sha256  190576a6e938760ec8113523e6fd380141117303e90766cc4802e770422b30c6  ccache-3.3.5.tar.xz
+diff --git a/package/ccache/ccache.mk b/package/ccache/ccache.mk
+index afbec44fac..552a611f42 100644
+--- a/package/ccache/ccache.mk
++++ b/package/ccache/ccache.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CCACHE_VERSION = 3.3.4
++CCACHE_VERSION = 3.3.5
+ CCACHE_SITE = https://www.samba.org/ftp/ccache
+ CCACHE_SOURCE = ccache-$(CCACHE_VERSION).tar.xz
+ CCACHE_LICENSE = GPL-3.0+, others
+-- 
+2.14.3
