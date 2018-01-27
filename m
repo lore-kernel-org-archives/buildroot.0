@@ -1,60 +1,61 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 27 Jan 2018 14:34:52 +0100
-Subject: [Buildroot] [PATCH 1/1] package/clamav: security bump to version
- 0.99.3
-Message-ID: <20180127133452.23681-1-bernd.kuhls@t-online.de>
+Date: Sat, 27 Jan 2018 14:42:29 +0100
+Subject: [Buildroot] [PATCH 1/1] package/freeswitch: bump version to 1.6.20
+Message-ID: <20180127134229.32330-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes CVE-2017-12374, CVE-2017-12375, CVE-2017-12376, CVE-2017-12377,
-CVE-2017-12378, CVE-2017-12379, CVE-2017-12380.
-
-For details see upstream announcement:
-http://blog.clamav.net/2018/01/clamav-0993-has-been-released.html
-
 Added license hashes.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/clamav/clamav.hash | 14 +++++++++++++-
- package/clamav/clamav.mk   |  2 +-
- 2 files changed, 14 insertions(+), 2 deletions(-)
+ package/freeswitch/freeswitch.hash | 23 +++++++++++++++++------
+ package/freeswitch/freeswitch.mk   |  2 +-
+ 2 files changed, 18 insertions(+), 7 deletions(-)
 
-diff --git a/package/clamav/clamav.hash b/package/clamav/clamav.hash
-index d2a1a1299e..fe873bddfc 100644
---- a/package/clamav/clamav.hash
-+++ b/package/clamav/clamav.hash
-@@ -1,2 +1,14 @@
- # Locally calculated
--sha256	167bd6a13e05ece326b968fdb539b05c2ffcfef6018a274a10aeda85c2c0027a	clamav-0.99.2.tar.gz
-+sha256 00fa5292a6e00a3a4035b826267748965d5d2c4943d8ff417d740238263e8e84  clamav-0.99.3.tar.gz
-+sha256 0c4fd2fa9733fc9122503797648710851e4ee6d9e4969dd33fcbd8c63cd2f584  COPYING
-+sha256 d72a145c90918184a05ef65a04c9e6f7466faa59bc1b82c8f6a8ddc7ddcb9bed  COPYING.bzip2
-+sha256 dfb818a0d41411c6fb1c193c68b73018ceadd1994bda41ad541cbff292894bc6  COPYING.file
-+sha256 6dce638b76399e7521ad8e182d3e33e4496c85b3b69b6ff434b53017101e82ad  COPYING.getopt
-+sha256 a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  COPYING.LGPL
-+sha256 e3a9b913515a42f8ff3ef1551c3a2cdba383c39ed959729e0e2911219496ad74  COPYING.llvm
-+sha256 d96d71b66aa32c4a2d1619b9ca3347dafa9460bcf0fb5ac2408916067ad31dfc  COPYING.lzma
-+sha256 accdcf2455c07b99abea59016b3663eaef926a92092d103bfaa25fed27cf6b24  COPYING.pcre
-+sha256 e2c1395a3d9fea6d5d25847c9d783db6e2cc8b085b4025861f459139c5dfd90b  COPYING.regex
-+sha256 1faccc6b5c7b958fb807a3f573d5be9bf7889fe898f7e0617c544b05a81bfd00  COPYING.unrar
-+sha256 a20d6317c5384e8d4c05f9c31097878675d9429ec46090656166039cc10bc957  COPYING.YARA
-+sha256 c2f77553f8d870c5635b0dace0519253233f172b33ce1fdf6578610706294eee  COPYING.zlib
-diff --git a/package/clamav/clamav.mk b/package/clamav/clamav.mk
-index 5429abb989..d53168fc1b 100644
---- a/package/clamav/clamav.mk
-+++ b/package/clamav/clamav.mk
+diff --git a/package/freeswitch/freeswitch.hash b/package/freeswitch/freeswitch.hash
+index ccda477a79..25421de99b 100644
+--- a/package/freeswitch/freeswitch.hash
++++ b/package/freeswitch/freeswitch.hash
+@@ -1,6 +1,17 @@
+-# From http://files.freeswitch.org/freeswitch-releases/freeswitch-1.6.19.tar.xz.md5
+-md5 24b8ee769031ca152b76e6c17edd882b  freeswitch-1.6.19.tar.xz
+-# From http://files.freeswitch.org/freeswitch-releases/freeswitch-1.6.19.tar.xz.sha1
+-sha1 2a48f1f5ca0b24854f93e49a4728f79517a95a24  freeswitch-1.6.19.tar.xz
+-# From http://files.freeswitch.org/freeswitch-releases/freeswitch-1.6.19.tar.xz.sha256
+-sha256 e8d271a0d876ba4cca551682af0a4f5047bfd79438fcebdcc17d00711c04a8ff  freeswitch-1.6.19.tar.xz
++# From http://files.freeswitch.org/freeswitch-releases/freeswitch-1.6.20.tar.xz.md5
++md5 e9890a2d6ca6f58dd3fa440fdfbf91a0  freeswitch-1.6.20.tar.xz
++# From http://files.freeswitch.org/freeswitch-releases/freeswitch-1.6.20.tar.xz.sha1
++sha1 ce284b805e262504cbb1f74796785b4dfa70d5ac  freeswitch-1.6.20.tar.xz
++# From http://files.freeswitch.org/freeswitch-releases/freeswitch-1.6.20.tar.xz.sha256
++sha256 dbb0f73109171bd381772b247b8ef581f6a176964619082a1fe031b004086f6b  freeswitch-1.6.20.tar.xz
++# Locally computed
++sha256 10299420c1e8602c0daf5a59d022621cd72a9148d1f0f33501edb3db3445c7fe  COPYING
++sha256 e8e26b16da14aa3e6ed5c22c705fdc1f45d6225fca461ea9f7314bcdfdc414c4  libs/apr/LICENSE
++sha256 1eefb2ea1db0af7729a9d8a27d7c65d8a37ab185393f935b029aac6828ce315a  libs/apr-util/LICENSE
++sha256 7d72a8aee2c4b1a084200487992a5d86f5df6b535727a14c1874918e99d24600  libs/libzrtp/src/zrtp_legal.c
++sha256 e1c0890440efe31b6cd2ee2abf895eb917c787799f079133f5809414d90d5d60  libs/sofia-sip/COPYING
++sha256 b402ae58cf355b33be8fa023f704a039e3d41ecaccd2bbcda43ca31d703e4556  libs/sofia-sip/COPYRIGHTS
++sha256 366576cb0b869cd9e95a4882878607314650488ac635e5df0692180382e9666a  libs/spandsp/COPYING
++sha256 8defed37d52096ae14b60adc499c33d43975109bc265552ee67e9a888c634b93  libs/srtp/LICENSE
++sha256 fbd6fed7938541d2c809c0826225fc85e551fdbfa8732b10f0c87e0847acafd7  libs/tiff-4.0.2/COPYRIGHT
++sha256 ab00a482b6a3902e40211b43c5d0441962ea99b6cc7c25c0f243fa270b78d482  src/mod/codecs/mod_isac/LICENSE
+diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
+index defa00f47a..98f2f48356 100644
+--- a/package/freeswitch/freeswitch.mk
++++ b/package/freeswitch/freeswitch.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--CLAMAV_VERSION = 0.99.2
-+CLAMAV_VERSION = 0.99.3
- CLAMAV_SITE = https://www.clamav.net/downloads/production
- CLAMAV_LICENSE = GPL-2.0
- CLAMAV_LICENSE_FILES = COPYING COPYING.bzip2 COPYING.file COPYING.getopt \
+-FREESWITCH_VERSION = 1.6.19
++FREESWITCH_VERSION = 1.6.20
+ FREESWITCH_SOURCE = freeswitch-$(FREESWITCH_VERSION).tar.xz
+ FREESWITCH_SITE = http://files.freeswitch.org/freeswitch-releases
+ # External modules need headers/libs from staging
 -- 
 2.11.0
