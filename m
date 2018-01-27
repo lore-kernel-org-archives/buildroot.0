@@ -1,157 +1,157 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 27 Jan 2018 10:53:31 +0100
-Subject: [Buildroot] [git commit] swupdate: add upstream patch to fix build
- error
-Message-ID: <20180127095501.A99BC800EE@busybox.osuosl.org>
+Date: Sat, 27 Jan 2018 11:15:25 +0100
+Subject: [Buildroot] [PATCH v3] hwdata: bump to version 0.308
+In-Reply-To: <20180126102157.4982-1-casantos@datacom.ind.br> (Carlos Santos's
+ message of "Fri, 26 Jan 2018 08:21:57 -0200")
+References: <20180126102157.4982-1-casantos@datacom.ind.br>
+Message-ID: <87tvv7haki.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f8fcece3a13bcfbb65816b83f184ce881400d08b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Carlos" == Carlos Santos <casantos@datacom.ind.br> writes:
 
-When building SWUpdate with the following defconfig:
+ > The hwdata collection is hosted at GitHub now and provides additional
+ > databases, besides pci.ids and usb.ids:
 
-```
-CONFIG_DOWNLOAD=y
-```
+ > - Individual Address Block (IAB) and Organizationally Unique Identifier
+ >   (OUI) databases, from IEEE Registration Authority
+ > - PNP ID database (from Microsoft)
 
-.. the build process breaks with:
+ > Install only pci.ids and usb.ids by default, to keep compatibility with
+ > previous versions.
 
-```
-corelib/channel_curl.c:27:10: fatal error: json-c/json.h: No such file or directory
- #include <json-c/json.h>
-```
+ > In the future we can make other packages (pciutils, lshw) use the common
+ > files instead of installing their own copies, thus saving some storage
+ > space.
 
-Looking at the SWUpdate Kconfig based build system shows that `CONFIG_DOWNLOAD`
-depends on `HAVE_LIBCURL`, which selects CURL, which eventually enables the
-(unnecessary) build of channel_curl.o.
+ > Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+ > ---
+ > Changes v1->v2:
+ >   - Ensure that $(TARGET_DIR)/usr/share/hwdata exists before installing
+ >     the files there.
+ > Changes v2->v3:
+ >   - Fix commit title ("bump", not "bumb").
+ > ---
+ >  package/hwdata/Config.in   | 45 ++++++++++++++++++++++++++++++++++++++++++---
+ >  package/hwdata/hwdata.hash |  7 ++++---
+ >  package/hwdata/hwdata.mk   | 21 ++++++++++++++-------
+ >  3 files changed, 60 insertions(+), 13 deletions(-)
 
-The upstream fixes the condition for building channel_curl.o by adding a new
-hidden config option `CHANNEL_CURL`, which is only selected by the
-dependent options.
+ > diff --git a/package/hwdata/Config.in b/package/hwdata/Config.in
+ > index 8424238e1b..63bb2216da 100644
+ > --- a/package/hwdata/Config.in
+ > +++ b/package/hwdata/Config.in
+ > @@ -1,6 +1,45 @@
+ >  config BR2_PACKAGE_HWDATA
+ >  	bool "hwdata"
+ >  	help
+ > -	  Various hardware identification and configuration data,
+ > -	  such as the pci.ids database, or the XFree86/xorg Cards
+ > -	  database.
+ > +	  Various hardware identification and configuration data
+ > +
+ > +	  - Individual Address Block (IAB) and Organizationally Unique
+ > +	    Identifier (OUI) databases, from IEEE Registration Authority
+ > +	  - PCI ID database
+ > +	  - PNP ID database (from Microsoft)
+ > +	  - USB ID database
+ > +
+ > +	  https://github.com/vcrhonek/hwdata
+ > +
+ > +if BR2_PACKAGE_HWDATA
+ > +
+ > +config BR2_PACKAGE_HWDATA_ANY
+ > +	bool
+ > +
+ > +config BR2_PACKAGE_HWDATA_IAB_OUI_TXT
+ > +	bool "install iab.txt and oui.txt"
+ > +	select BR2_PACKAGE_HWDATA_ANY
+ > +	help
+ > +	  Install iab.txt and oui.txt
+ > +
+ > +config BR2_PACKAGE_HWDATA_PCI_IDS
+ > +	bool "install pci.ids"
+ > +	default y
+ > +	select BR2_PACKAGE_HWDATA_ANY
+ > +	help
+ > +	  Install pci.ids
+ > +
+ > +config BR2_PACKAGE_HWDATA_PNP_IDS
+ > +	bool "install pnp.ids"
+ > +	select BR2_PACKAGE_HWDATA_ANY
+ > +	help
+ > +	  Install pnp.ids
+ > +
+ > +config BR2_PACKAGE_HWDATA_USB_IDS
+ > +	bool "install usb.ids"
+ > +	default y
+ > +	select BR2_PACKAGE_HWDATA_ANY
+ > +	help
+ > +	  Install usb.ids
+ > +
+ > +endif
+ > diff --git a/package/hwdata/hwdata.hash b/package/hwdata/hwdata.hash
+ > index b3c83ebb74..dba1be31e0 100644
+ > --- a/package/hwdata/hwdata.hash
+ > +++ b/package/hwdata/hwdata.hash
+ > @@ -1,3 +1,4 @@
+ > -# From http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/h/hwdata/hwdata_0.267-1.dsc
+ > -sha256	d77f2b3f3d6e278be669141ffa5dac01b64cab02f7b2c744bbabc500a45263f4	hwdata_0.267.orig.tar.gz
+ > -sha256	055d2f168de9333562a04f6a230c43dc19c4975882935d8b2f0ab17f64f57275	hwdata_0.267-1.diff.gz
+ > +# Locally calculated
+ > +sha256 986d919c20a0c7f8b669a63830f6d2f4cb5c4cddcfc944c5e2ae05c2e9e5ec9f  hwdata-v0.308.tar.gz
+ > +sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ > +sha256 21d0406f93e884a050426ebc21931839a45d56bfcbcbfdda7686d583f36f107f  LICENSE
+ > diff --git a/package/hwdata/hwdata.mk b/package/hwdata/hwdata.mk
+ > index 4ad8d42939..a23a282725 100644
+ > --- a/package/hwdata/hwdata.mk
+ > +++ b/package/hwdata/hwdata.mk
+ > @@ -4,16 +4,23 @@
+ >  #
+ >  ################################################################################
+ 
+ > -HWDATA_VERSION = 0.267
+ > -HWDATA_SOURCE = hwdata_$(HWDATA_VERSION).orig.tar.gz
+ > -HWDATA_PATCH = hwdata_$(HWDATA_VERSION)-1.diff.gz
+ > -HWDATA_SITE = http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/h/hwdata
+ > -HWDATA_LICENSE = GPL-2.0+ or XFree86 1.0 license
+ > +HWDATA_VERSION = v0.308
+ > +HWDATA_SITE = $(call github,vcrhonek,hwdata,$(HWDATA_VERSION))
+ > +HWDATA_LICENSE = GPL-2.0+, BSD-3-Clause, XFree86 1.0
+ >  HWDATA_LICENSE_FILES = COPYING LICENSE
+ 
+ > +ifeq ($(BR2_PACKAGE_HWDATA):$(BR2_PACKAGE_HWDATA_ANY),y:)
+ > +$(error No hwdata database selected. Select at least one database)
+ > +endif
 
-Backported from:
-https://github.com/sbabic/swupdate/commit/37a6666a532e9cbc42b56301f27919ae7c00d2eb
+Having this as a build time error is not really nice when we could
+simply skip the install step instead, so I've reworked it to do
+that. The BR2_PACKAGE_HWDATA_ANY symbol also isn't really needed as we
+anyway need to construct the list of files to be installed, so we can
+just check if it is empty.
 
-Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...-Fix-build-if-DOWNLOAD-is-set-but-no-JSON.patch | 107 +++++++++++++++++++++
- 1 file changed, 107 insertions(+)
+> +
+ >  define HWDATA_INSTALL_TARGET_CMDS
+ > -	$(INSTALL) -D -m 644 $(@D)/pci.ids $(TARGET_DIR)/usr/share/hwdata/pci.ids
+ > -	$(INSTALL) -D -m 644 $(@D)/usb.ids $(TARGET_DIR)/usr/share/hwdata/usb.ids
+ > +	$(INSTALL) -d -m 755 $(TARGET_DIR)/usr/share/hwdata
+ > +	$(INSTALL) -D -m 644 \
+ > +		$(if $(BR2_PACKAGE_HWDATA_IAB_OUI_TXT),$(@D)/iab.txt $(@D)/oui.txt,) \
+ > +		$(if $(BR2_PACKAGE_HWDATA_PCI_IDS),$(@D)/pci.ids,) \
+ > +		$(if $(BR2_PACKAGE_HWDATA_PNP_IDS),$(@D)/pnp.ids,) \
+ > +		$(if $(BR2_PACKAGE_HWDATA_USB_IDS),$(@D)/usb.ids,) \
+ > +		$(TARGET_DIR)/usr/share/hwdata
 
-diff --git a/package/swupdate/0002-Fix-build-if-DOWNLOAD-is-set-but-no-JSON.patch b/package/swupdate/0002-Fix-build-if-DOWNLOAD-is-set-but-no-JSON.patch
-new file mode 100644
-index 0000000..5e07995
---- /dev/null
-+++ b/package/swupdate/0002-Fix-build-if-DOWNLOAD-is-set-but-no-JSON.patch
-@@ -0,0 +1,107 @@
-+From 37a6666a532e9cbc42b56301f27919ae7c00d2eb Mon Sep 17 00:00:00 2001
-+From: Stefano Babic <sbabic@denx.de>
-+Date: Tue, 23 Jan 2018 16:52:32 +0100
-+Subject: [PATCH] Fix build if DOWNLOAD is set, but no JSON
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+The downloader does not require JSON, but channel_curl is built
-+even if not called. Build fails with the error:
-+
-+corelib/channel_curl.c:27:10: fatal error: json-c/json.h: No such file or directory
-+
-+Add a CONFIG_CHANNEL_CURL that is automatically set by the modules
-+reuiring it (suricatta and swuforwarder).
-+
-+Backported from: 37a6666a532e9cbc42b56301f27919ae7c00d2eb
-+
-+Signed-off-by: Stefano Babic <sbabic@denx.de>
-+Reported-by: J??rg Krause <joerg.krause@embedded.rocks>
-+Acked-by: J??rg Krause <joerg.krause@embedded.rocks>
-+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
-+---
-+ Kconfig             | 7 +++++++
-+ corelib/Makefile    | 2 +-
-+ handlers/Config.in  | 8 +++++---
-+ suricatta/Config.in | 3 +--
-+ 4 files changed, 14 insertions(+), 6 deletions(-)
-+
-+diff --git a/Kconfig b/Kconfig
-+index 4469096..e344572 100644
-+--- a/Kconfig
-++++ b/Kconfig
-+@@ -294,6 +294,13 @@ config DOWNLOAD
-+ comment "Image downloading support needs libcurl"
-+ 	depends on !HAVE_LIBCURL
-+ 
-++config CHANNEL_CURL
-++	bool
-++	depends on HAVE_LIBCURL
-++	depends on HAVE_JSON_C
-++	select CURL
-++	select JSON
-++
-+ config HASH_VERIFY
-+ 	bool "Allow to add sha256 hash to each image"
-+ 	depends on HAVE_LIBSSL
-+diff --git a/corelib/Makefile b/corelib/Makefile
-+index 282bffd..4b30f9c 100644
-+--- a/corelib/Makefile
-++++ b/corelib/Makefile
-+@@ -17,4 +17,4 @@ lib-$(CONFIG_ENCRYPTED_IMAGES)	+= swupdate_decrypt.o
-+ lib-$(CONFIG_LIBCONFIG)		+= swupdate_settings.o \
-+ 				   parsing_library_libconfig.o
-+ lib-$(CONFIG_JSON)		+= parsing_library_libjson.o
-+-lib-$(CONFIG_CURL)		+= channel_curl.o
-++lib-$(CONFIG_CHANNEL_CURL)	+= channel_curl.o
-+diff --git a/handlers/Config.in b/handlers/Config.in
-+index 596f069..6226b59 100644
-+--- a/handlers/Config.in
-++++ b/handlers/Config.in
-+@@ -54,7 +54,6 @@ config UBIVIDOFFSET
-+ 	  if your NAND driver incorrectly reports that it can handle
-+ 	  sub-page accesses when it should not.
-+ 
-+-
-+ config CFI
-+ 	bool "cfi"
-+ 	depends on MTD
-+@@ -164,8 +163,8 @@ comment "remote handler needs zeromq"
-+ config SWUFORWARDER_HANDLER
-+ 	bool "SWU forwarder"
-+ 	depends on HAVE_LIBCURL
-+-	select CURL
-+-	select JSON
-++	depends on HAVE_JSON_C
-++	select CHANNEL_CURL
-+ 	default n
-+ 	help
-+ 	  This allows to build a chain of updater. A
-+@@ -174,6 +173,9 @@ config SWUFORWARDER_HANDLER
-+ 	  embedded SWU to the other devices using the
-+ 	  Webserver REST API.
-+ 
-++comment "swuforward handler needs json-c and curl"
-++	depends on !HAVE_JSON_C || !HAVE_LIBCURL
-++
-+ comment "SWU forwarder requires libcurl"
-+ 	depends on !HAVE_LIBCURL
-+ 
-+diff --git a/suricatta/Config.in b/suricatta/Config.in
-+index 62e448a..2586169 100644
-+--- a/suricatta/Config.in
-++++ b/suricatta/Config.in
-+@@ -71,8 +71,7 @@ config SURICATTA_HAWKBIT
-+ 	bool "hawkBit support"
-+ 	depends on HAVE_LIBCURL
-+ 	depends on HAVE_JSON_C
-+-	select JSON
-+-	select CURL
-++	select CHANNEL_CURL
-+ 	help
-+ 	  Support for hawkBit server.
-+ 	  https://projects.eclipse.org/projects/iot.hawkbit
-+-- 
-+2.16.1
-+
+install -D is really for installing single files, so I've reworked this
+to use install -t instead.
+
+Minor nit, but the extra comma in $(if ) isn't needed then the else part
+is empty, so I've dropped those.
+
+Committed with these fixes, thanks.
+
+-- 
+Bye, Peter Korsgaard
