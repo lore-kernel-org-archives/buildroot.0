@@ -1,53 +1,68 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sat, 27 Jan 2018 22:55:19 +0200
-Subject: [Buildroot] post image blues (fakeroot and chown)
-In-Reply-To: <8AE4BE7D9622DF41B76E1AD887AA1A47A52ED7C0@MARCM-SBS2011.marcmltd.local>
-References: <8AE4BE7D9622DF41B76E1AD887AA1A47A52ED7C0@MARCM-SBS2011.marcmltd.local>
-Message-ID: <20180127205519.tau3p34feo4uwx7x@tarshish>
+From: Alistair Francis <alistair23@gmail.com>
+Date: Sat, 27 Jan 2018 13:31:34 -0800
+Subject: [Buildroot] [PATCH 0/5] Add Xilinx ZynqMP and ZCU106 board
+ support
+In-Reply-To: <87r2qbf4em.fsf@dell.be.48ers.dk>
+References: <1517002234-17608-1-git-send-email-luca@lucaceresoli.net>
+ <87372rir1r.fsf@dell.be.48ers.dk>
+ <CAKmqyKPCKhWpm+z4P0-LMtu8c6VXpsq5cUecACYEsC1QbRhKoQ@mail.gmail.com>
+ <87r2qbf4em.fsf@dell.be.48ers.dk>
+Message-ID: <CAKmqyKMX13u2nazTkd0FpDrzqVez33A=WXoQst0ghusSCx5O+Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Marc,
+On Sat, Jan 27, 2018 at 12:11 PM, Peter Korsgaard <peter@korsgaard.com> wrote:
+>>>>>> "Alistair" == Alistair Francis <alistair23@gmail.com> writes:
+>
+> Hi,
+>
+>  >> It would be nice if Xilinx could host these officially. How do they do
+>  >> it for Yocto?
+>
+>  > We don't have anything nice for Yocto either. The files are behind a
+>  > click-through license so users have to manually download them.
+>
+>  > There are instructions here:
+>  > https://git.yoctoproject.org/cgit/cgit.cgi/meta-xilinx/tree/meta-xilinx-bsp/README.qemu.md
+>
+> But isn't this README about the 32KB pmu boot rom code, and not the
+> runtime loadable pmu fw that you can build from the embeddedsw repo?
+>
+>  > I don't think hosting the files is a good idea. That puts you are risk
+>  > for export compliance violations.
+>
+> I agree for the rom code, but that shouldn't be needed to run on a
+> zcu106 board?
 
-On Fri, Jan 26, 2018 at 03:52:23PM +0000, Marc Murphy wrote:
-> I am in the final stages of getting the buildroot image output configured 
-> and having an issue.
-> 
-> I have a couple of folders that I am using as partitions on the target. The 
-> images are created using genimage in the post-image.sh script before being 
-> included in the final complete image. But I have an issue with the folder 
-> permissions and trying to correct them before the image is built.
-> 
-> On a normal linux system I would of course perform a:
-> # sudo chown -R 0:0 some_folder
-> 
-> That would put the permissions in to the correct root user and group.
-> 
-> This can't be done in the post-image script as cannot use sudo as it 
-> requires intervention of entering password.
-> 
-> I have then been trying to use fakeroot and it simply refuses to 
-> persistently change the owner and group, ll will show creator when not 
-> logged in as fakeroot but root when logged in as fakeroot.
-> 
-> Is there any "standard" way to do this ?
+Ah! Yes you are correct. I confused myself there.
 
-The standard way is to use BR2_ROOTFS_DEVICE_TABLE. See ?9.5.1 (Setting file 
-permissions and ownership and adding custom devices nodes) in the Buildroot 
-manual:
+Yocto just builds the PMU FW, but it does require a fair bit of
+interaction with Xilinx tools.
 
-  https://buildroot.org/downloads/manual/manual.html#rootfs-custom
+>
+>>> > Finally, U-Boot needs some tweaks in order for the PMU firmware to
+>  >> > properly loaded and to initialize peripherals before starting
+>  >> > Linux. This is done in patch 4.
+>  >>
+>  >> Is this now the offical supported boot flow from Xilinx? I haven't
+>  >> followed in details, but when I assisted with a Zynqmp based project
+>  >> last year they used Xilinx fsbl and bootgen instead of u-boot SPL.
+>
+>  > It's not officially supported. It is what meta-xilinx uses for QEMU boot though.
+>
+> Ok. Luca, any specific reason why you are using this for real hw?
+>
+> Alistair, do you know if bootgen is downloadable somewhere separately?
 
-For more complicated changes that require root permissions, you can use 
-BR2_ROOTFS_POST_FAKEROOT_SCRIPT (see the link above).
+AFAIK it's not. I think SPL should be fine. Maybe supporting both
+options is the best. If people want to follow the official path then
+they can install bootgen or prepare it manually.
 
-Hope this helps,
-baruch
+Alistair
 
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+>
+> --
+> Bye, Peter Korsgaard
