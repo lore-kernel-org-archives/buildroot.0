@@ -1,42 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 27 Jan 2018 11:17:20 +0100
-Subject: [Buildroot] [git commit] ltp-testsuite: drop redundant arch
- dependency entries
-Message-ID: <20180127101815.9D67183F56@busybox.osuosl.org>
+Date: Sat, 27 Jan 2018 11:21:26 +0100
+Subject: [Buildroot] [PATCH] package/physfs: needs threads support
+In-Reply-To: <1516370369-21683-1-git-send-email-romain.naour@smile.fr> (Romain
+ Naour's message of "Fri, 19 Jan 2018 14:59:29 +0100")
+References: <1516370369-21683-1-git-send-email-romain.naour@smile.fr>
+Message-ID: <87h8r7haah.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eb2bb6648fa09a7b59973a9f889e74d098058bd0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Romain" == Romain Naour <romain.naour@smile.fr> writes:
 
-BR2_TOOLCHAIN_HAS_SYNC_4 is enabled for all these architectures except
-arc. There is no need to list them explicitly.
+ > When physfs is build for a Linux system the PHYSFS_PLATFORM_POSIX
+ > (which enable code that use pthread_*()) symbol must defined,
+ > so threads support is required.
+ > The physfs build system used by the previous version didn't correctly
+ > set PHYSFS_PLATFORM_POSIX for system without pthread support.
 
-Cc: Romain Naour <romain.naour@gmail.com>
-Cc: Petr Vorel <petr.vorel@gmail.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Acked-by: Petr Vorel <petr.vorel@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/ltp-testsuite/Config.in | 5 -----
- 1 file changed, 5 deletions(-)
+ > Add pthread dependency.
 
-diff --git a/package/ltp-testsuite/Config.in b/package/ltp-testsuite/Config.in
-index 4c00e40..711c859 100644
---- a/package/ltp-testsuite/Config.in
-+++ b/package/ltp-testsuite/Config.in
-@@ -5,11 +5,6 @@ config BR2_PACKAGE_LTP_TESTSUITE_ARCH_SUPPORTS
- 	# provided in ltp-testsuite
- 	default y if BR2_TOOLCHAIN_HAS_SYNC_4
- 	default y if BR2_arc
--	default y if BR2_i386
--	default y if BR2_powerpc
--	default y if BR2_powepc64
--	default y if BR2_powerpc64le
--	default y if BR2_x86_64
- 	# does not build on nios2, cachectl.h issue
- 	depends on !BR2_nios2
- 
+ > Fixes:
+ > http://autobuild.buildroot.org/results/75d/75d68ff9da42d61f47d80b463445c12bc51ed1a4
+
+ > Signed-off-by: Romain Naour <romain.naour@smile.fr>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
