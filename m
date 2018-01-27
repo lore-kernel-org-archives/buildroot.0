@@ -1,71 +1,54 @@
-From: Sam <samiswt@gmail.com>
-Date: Sat, 27 Jan 2018 11:55:43 -0800
-Subject: [Buildroot] File ownership issues while patching DAQ
-Message-ID: <CAPi4xiUKNY_KLk-0O-1k47n6wqfZ+sWpx3rMqNUhfySF=fu9pw@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 27 Jan 2018 21:11:29 +0100
+Subject: [Buildroot] [PATCH 0/5] Add Xilinx ZynqMP and ZCU106 board
+ support
+In-Reply-To: <CAKmqyKPCKhWpm+z4P0-LMtu8c6VXpsq5cUecACYEsC1QbRhKoQ@mail.gmail.com>
+ (Alistair Francis's message of "Sat, 27 Jan 2018 10:59:52 -0800")
+References: <1517002234-17608-1-git-send-email-luca@lucaceresoli.net>
+ <87372rir1r.fsf@dell.be.48ers.dk>
+ <CAKmqyKPCKhWpm+z4P0-LMtu8c6VXpsq5cUecACYEsC1QbRhKoQ@mail.gmail.com>
+Message-ID: <87r2qbf4em.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi guys,
+>>>>> "Alistair" == Alistair Francis <alistair23@gmail.com> writes:
 
-I'm trying to compile and install DAQ-2.2.2 to my Raspberrypi3B. There's a
-parallel cross-compiling issue that I have to apply a patch, as you can see
-in attached file:0004-sfbpf-Makefile*.patch, to solve it.
-In my default user bash prompt, the problem is that Buildroot copied
-Makefile.in(ownership user:usergrp) to Makefile.in.orig(ownership
-root:root), which is not allowed to modify, and rejected an error as shown
-in attached file build.log.
-I've tried to compile and build it with root:root, Buildroot uncompressed
-DAQ*.gz to files and subdirectories with ownership user:usergrp other than
-root:root which is what I expected.
+Hi,
 
-How can I make this patch work?
+ >> It would be nice if Xilinx could host these officially. How do they do
+ >> it for Yocto?
 
-P.S.: I download daq-2.2.2 from www.snort.org and I've never created a user
-group named usergrp on my host, I don't know if Buildroot did or DAQ.
-Assuming user is my default user name.
+ > We don't have anything nice for Yocto either. The files are behind a
+ > click-through license so users have to manually download them.
 
-Thank you for your consideration,
+ > There are instructions here:
+ > https://git.yoctoproject.org/cgit/cgit.cgi/meta-xilinx/tree/meta-xilinx-bsp/README.qemu.md
 
+But isn't this README about the 32KB pmu boot rom code, and not the
+runtime loadable pmu fw that you can build from the embeddedsw repo?
 
-Tao
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180127/550c442e/attachment.html>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: 0004-sfbpf-Makefile-tokdefs-h-nonexist.patch
-Type: application/octet-stream
-Size: 367 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180127/550c442e/attachment.obj>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: build.log
-Type: application/octet-stream
-Size: 840 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180127/550c442e/attachment-0001.obj>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: Makefile.in
-Type: application/octet-stream
-Size: 32247 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180127/550c442e/attachment-0002.obj>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: Makefile.in.orig
-Type: application/octet-stream
-Size: 32247 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180127/550c442e/attachment-0003.obj>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: Makefile.in.rej
-Type: application/octet-stream
-Size: 346 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180127/550c442e/attachment-0004.obj>
+ > I don't think hosting the files is a good idea. That puts you are risk
+ > for export compliance violations.
+
+I agree for the rom code, but that shouldn't be needed to run on a
+zcu106 board?
+
+>> > Finally, U-Boot needs some tweaks in order for the PMU firmware to
+ >> > properly loaded and to initialize peripherals before starting
+ >> > Linux. This is done in patch 4.
+ >> 
+ >> Is this now the offical supported boot flow from Xilinx? I haven't
+ >> followed in details, but when I assisted with a Zynqmp based project
+ >> last year they used Xilinx fsbl and bootgen instead of u-boot SPL.
+
+ > It's not officially supported. It is what meta-xilinx uses for QEMU boot though.
+
+Ok. Luca, any specific reason why you are using this for real hw?
+
+Alistair, do you know if bootgen is downloadable somewhere separately?
+
+-- 
+Bye, Peter Korsgaard
