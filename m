@@ -1,35 +1,189 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 27 Jan 2018 13:15:41 +0100
-Subject: [Buildroot] [PATCH V2] nilfs-utils: fix build with static
+Date: Sat, 27 Jan 2018 13:15:53 +0100
+Subject: [Buildroot] [git commit] nilfs-utils: fix build with static
  toolchains
-In-Reply-To: <1516652830-18339-1-git-send-email-dev.kurt@vandijck-laurijssen.be>
- (Kurt Van Dijck's message of "Mon, 22 Jan 2018 21:27:10 +0100")
-References: <1516652830-18339-1-git-send-email-dev.kurt@vandijck-laurijssen.be>
-Message-ID: <878tcjh502.fsf@dell.be.48ers.dk>
+Message-ID: <20180127121620.EF8A781047@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Kurt" == Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=8e918d18e41a25ddbfdf048d9fd1f260a6e017d7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > This commit adds a patch to respect the dependency libmount->libblkid->libuuid
- > properly in autoconf. This becomes necessary for static builds.
+This commit adds a patch to respect the dependency libmount->libblkid->libuuid
+properly in autoconf. This becomes necessary for static builds.
 
- > Fixes:
- >  http://autobuild.buildroot.net/results/acaac513eaaa39d4000268428407a9fa6989ef03
- >  http://autobuild.buildroot.net/results/41af95b9ed7bbbe319565e1c20d1f6e2665d445f
+Fixes:
+ http://autobuild.buildroot.net/results/acaac513eaaa39d4000268428407a9fa6989ef03
+ http://autobuild.buildroot.net/results/41af95b9ed7bbbe319565e1c20d1f6e2665d445f
 
- > Signed-off-by: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
- > ---
+[Peter: add host-pkgconf to dependencies]
+Signed-off-by: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...e-PKG_CHECK_MODULES-for-libmount-and-libb.patch | 141 +++++++++++++++++++++
+ package/nilfs-utils/nilfs-utils.mk                 |   2 +-
+ 2 files changed, 142 insertions(+), 1 deletion(-)
 
- > Changes since V1:
- > * use PKG_CHECK_MODULES instead of hand-coding the required libraries.
-
-You then also need to add host-pkgconf to NILFS_UTILS_DEPENDENCIES.
-
-Committed with that fixed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/nilfs-utils/0004-autoconf-use-PKG_CHECK_MODULES-for-libmount-and-libb.patch b/package/nilfs-utils/0004-autoconf-use-PKG_CHECK_MODULES-for-libmount-and-libb.patch
+new file mode 100644
+index 0000000..49cdd26
+--- /dev/null
++++ b/package/nilfs-utils/0004-autoconf-use-PKG_CHECK_MODULES-for-libmount-and-libb.patch
+@@ -0,0 +1,141 @@
++From 65ce9b4817544734770e410c5c2779065152f991 Mon Sep 17 00:00:00 2001
++From: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
++Date: Thu, 4 Jan 2018 09:47:45 +0100
++Subject: [PATCH] autoconf: use PKG_CHECK_MODULES for libmount and libblkid
++
++The dependencies of libmount to libblkid and libblkid to libuuid
++were not handled correctly, and only work for the shared object scenario.
++This commit switches the autoconfiguration to use PKG_CHECK_MODULES
++which handles the static vs. dynamic case.
++This commit has been compile-tested using buildroot on different compilers,
++including static & dynamic ones
++
++Signed-off-by: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
++---
++ configure.ac                 | 13 +++----------
++ sbin/mkfs/Makefile.am        |  4 ++--
++ sbin/mkfs/mkfs.c             |  6 +++---
++ sbin/mount/Makefile.am       |  4 ++--
++ sbin/mount/mount_libmount.c  |  4 +---
++ sbin/mount/umount_libmount.c |  4 +---
++ 6 files changed, 12 insertions(+), 23 deletions(-)
++
++diff --git a/configure.ac b/configure.ac
++index 6fa8c41..3e31e55 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -104,13 +104,10 @@ AC_CHECK_HEADERS([ctype.h err.h fcntl.h grp.h libintl.h limits.h \
++ 
++ # Check for conditional libraries and headers.
++ if test "${with_libmount}" = "yes"; then
++-   AC_CHECK_LIB(mount, mnt_context_do_mount, [LIB_MOUNT="-lmount"],
++-   	AC_MSG_ERROR([Mount library is enabled but libmount not found]))
++-   AC_CHECK_HEADERS([libmount/libmount.h])
+++   PKG_CHECK_MODULES([MOUNT], [mount])
++    with_selinux=no
++ fi
++ AM_CONDITIONAL(CONFIG_LIBMOUNT, [test "$with_libmount" = "yes"])
++-AC_SUBST(LIB_MOUNT)
++ 
++ if test "${with_selinux}" = "yes"; then
++    AC_CHECK_LIB(selinux, getprevcon,
++@@ -125,15 +122,11 @@ fi
++ AC_SUBST([LIB_SELINUX])
++ 
++ if test "${with_blkid}" = "yes"; then
++-   AC_CHECK_LIB(blkid, blkid_new_probe_from_filename,
+++   PKG_CHECK_MODULES([BLKID], [blkid],
++    		[AC_DEFINE(HAVE_LIBBLKID, 1,
++ 		    [Define to 1 if you have the 'blkid' library (-lblkid).])
++-		 LIB_BLKID="-lblkid"
++-		],
++-		AC_MSG_ERROR([BLKID library not found]))
++-   AC_CHECK_HEADERS([blkid/blkid.h])
+++		])
++ fi
++-AC_SUBST(LIB_BLKID)
++ 
++ # Checks for typedefs, structures, and compiler characteristics.
++ AC_C_CONST
++diff --git a/sbin/mkfs/Makefile.am b/sbin/mkfs/Makefile.am
++index 28f5128..408c976 100644
++--- a/sbin/mkfs/Makefile.am
+++++ b/sbin/mkfs/Makefile.am
++@@ -1,8 +1,8 @@
++ ## Makefile.am
++ 
++-AM_CFLAGS = -Wall
+++AM_CFLAGS = -Wall $(BLKID_CFLAGS)
++ AM_CPPFLAGS = -I$(top_srcdir)/include
++-LDADD = -luuid $(LIB_BLKID) $(top_builddir)/lib/libnilfsfeature.la \
+++LDADD = -luuid $(BLKID_LIBS) $(top_builddir)/lib/libnilfsfeature.la \
++ 	$(top_builddir)/lib/libmountchk.la \
++ 	$(top_builddir)/lib/libcrc32.la
++ 
++diff --git a/sbin/mkfs/mkfs.c b/sbin/mkfs/mkfs.c
++index d7f161e..0c45d6a 100644
++--- a/sbin/mkfs/mkfs.c
+++++ b/sbin/mkfs/mkfs.c
++@@ -66,9 +66,9 @@
++ 
++ #include <errno.h>
++ 
++-#if HAVE_BLKID_BLKID_H
++-#include <blkid/blkid.h>
++-#endif	/* HAVE_BLKID_BLKID_H */
+++#if HAVE_LIBBLKID
+++#include <blkid.h>
+++#endif	/* HAVE_LIBBLKID */
++ 
++ #include "nilfs.h"
++ #include "util.h"
++diff --git a/sbin/mount/Makefile.am b/sbin/mount/Makefile.am
++index f5d3c27..9554aa5 100644
++--- a/sbin/mount/Makefile.am
+++++ b/sbin/mount/Makefile.am
++@@ -6,10 +6,10 @@ COMMONHEADERS = mount.nilfs2.h sundries.h xmalloc.h
++ LEGACYSOURCES = fstab.c mount_mntent.c mount_opts.c
++ LEGACYHEADERS = fstab.h mount_constants.h mount_mntent.h mount_opts.h
++ 
++-AM_CFLAGS = -Wall
+++AM_CFLAGS = -Wall $(MOUNT_CFLAGS)
++ AM_CPPFLAGS = -I$(top_srcdir)/include
++ LDADD = $(top_builddir)/lib/librealpath.la \
++-	$(top_builddir)/lib/libcleanerexec.la $(LIB_MOUNT) $(LIB_SELINUX) \
+++	$(top_builddir)/lib/libcleanerexec.la $(MOUNT_LIBS) $(LIB_SELINUX) \
++ 	$(LIB_POSIX_TIMER)
++ 
++ root_sbin_PROGRAMS = mount.nilfs2 umount.nilfs2
++diff --git a/sbin/mount/mount_libmount.c b/sbin/mount/mount_libmount.c
++index ef40e68..a7fec00 100644
++--- a/sbin/mount/mount_libmount.c
+++++ b/sbin/mount/mount_libmount.c
++@@ -67,9 +67,7 @@
++ #include <syslog.h>
++ #endif	/* HAVE_SYSLOG_H */
++ 
++-#if HAVE_LIBMOUNT_LIBMOUNT_H
++-#include <libmount/libmount.h>
++-#endif	/* HAVE_LIBMOUNT_H */
+++#include <libmount.h>
++ 
++ #include <stdarg.h>
++ #include <errno.h>
++diff --git a/sbin/mount/umount_libmount.c b/sbin/mount/umount_libmount.c
++index ae5a337..b678f54 100644
++--- a/sbin/mount/umount_libmount.c
+++++ b/sbin/mount/umount_libmount.c
++@@ -59,9 +59,7 @@
++ #include <syslog.h>
++ #endif	/* HAVE_SYSLOG_H */
++ 
++-#if HAVE_LIBMOUNT_LIBMOUNT_H
++-#include <libmount/libmount.h>
++-#endif	/* HAVE_LIBMOUNT_H */
+++#include <libmount.h>
++ 
++ #include <stdarg.h>
++ #include <errno.h>
++-- 
++1.8.5.rc3
++
+diff --git a/package/nilfs-utils/nilfs-utils.mk b/package/nilfs-utils/nilfs-utils.mk
+index 35f5ffd..3fde94f 100644
+--- a/package/nilfs-utils/nilfs-utils.mk
++++ b/package/nilfs-utils/nilfs-utils.mk
+@@ -10,7 +10,7 @@ NILFS_UTILS_LICENSE = GPL-2.0+ (programs), LGPL-2.1+ (libraries)
+ NILFS_UTILS_LICENSE_FILES = COPYING
+ 
+ # need libuuid, libblkid, libmount
+-NILFS_UTILS_DEPENDENCIES = util-linux
++NILFS_UTILS_DEPENDENCIES = host-pkgconf util-linux
+ 
+ # we're fetching from github
+ NILFS_UTILS_AUTORECONF = YES
