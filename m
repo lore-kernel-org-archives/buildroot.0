@@ -1,46 +1,60 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 27 Jan 2018 23:29:53 +0100
-Subject: [Buildroot] [PATCH 1/1] package/transmission: security bump version
- to 2.93
-Message-ID: <20180127222953.13741-1-bernd.kuhls@t-online.de>
+Date: Sat, 27 Jan 2018 23:41:21 +0100
+Subject: [Buildroot] [PATCH 1/1] package/berkeleydb: add security fix for
+ CVE-2017-10140
+Message-ID: <20180127224121.18181-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes CVE-2018-5702:
-https://github.com/transmission/transmission/pull/468
+For details read
+https://security-tracker.debian.org/tracker/CVE-2017-10140
 
 Added license hash.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/transmission/transmission.hash | 3 ++-
- package/transmission/transmission.mk   | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ package/berkeleydb/0001-cwd-db_config.patch | 21 +++++++++++++++++++++
+ package/berkeleydb/berkeleydb.hash          |  1 +
+ 2 files changed, 22 insertions(+)
+ create mode 100644 package/berkeleydb/0001-cwd-db_config.patch
 
-diff --git a/package/transmission/transmission.hash b/package/transmission/transmission.hash
-index 849a722d2b..4c1c3f9a3a 100644
---- a/package/transmission/transmission.hash
-+++ b/package/transmission/transmission.hash
+diff --git a/package/berkeleydb/0001-cwd-db_config.patch b/package/berkeleydb/0001-cwd-db_config.patch
+new file mode 100644
+index 0000000000..08ce5a3931
+--- /dev/null
++++ b/package/berkeleydb/0001-cwd-db_config.patch
+@@ -0,0 +1,21 @@
++Do not access DB_CONFIG when db_home is not set
++
++Fixes CVE-2017-10140:
++https://bugzilla.redhat.com/show_bug.cgi?id=1464032#c9
++
++Downloaded from
++http://pkgs.fedoraproject.org/cgit/rpms/libdb.git/commit/?id=8047fa8580659fcae740c25e91b490539b8453eb
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++
++--- db-5.3.28/src/env/env_open.c.old	2017-06-26 10:32:11.011419981 +0200
+++++ db-5.3.28/src/env/env_open.c	2017-06-26 10:32:46.893721233 +0200
++@@ -473,7 +473,7 @@
++ 	env->db_mode = mode == 0 ? DB_MODE_660 : mode;
++ 
++ 	/* Read the DB_CONFIG file. */
++-	if ((ret = __env_read_db_config(env)) != 0)
+++	if (env->db_home != NULL && (ret = __env_read_db_config(env)) != 0)
++ 		return (ret);
++ 
++ 	/*
+diff --git a/package/berkeleydb/berkeleydb.hash b/package/berkeleydb/berkeleydb.hash
+index e47c578cbe..7529329748 100644
+--- a/package/berkeleydb/berkeleydb.hash
++++ b/package/berkeleydb/berkeleydb.hash
 @@ -1,2 +1,3 @@
  # Locally calculated
--sha256	3a8d045c306ad9acb7bf81126939b9594553a388482efa0ec1bfb67b22acd35f	transmission-2.92.tar.xz
-+sha256 8815920e0a4499bcdadbbe89a4115092dab42ce5199f71ff9a926cfd12b9b90b  transmission-2.93.tar.xz
-+sha256 20801783bf59e27d03ed6aab625b32a34e221ae95bf801db87827c8023398495  COPYING
-diff --git a/package/transmission/transmission.mk b/package/transmission/transmission.mk
-index 7f4675302e..4e78604fdb 100644
---- a/package/transmission/transmission.mk
-+++ b/package/transmission/transmission.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TRANSMISSION_VERSION = 2.92
-+TRANSMISSION_VERSION = 2.93
- TRANSMISSION_SITE = https://github.com/transmission/transmission-releases/raw/master
- TRANSMISSION_SOURCE = transmission-$(TRANSMISSION_VERSION).tar.xz
- TRANSMISSION_DEPENDENCIES = \
+ sha256	76a25560d9e52a198d37a31440fd07632b5f1f8f9f2b6d5438f4bc3e7c9013ef  db-5.3.28.NC.tar.gz
++sha256	b78815181a53241f9347c6b47d1031fd669946f863e1edc807a291354cec024b  LICENSE
 -- 
 2.11.0
