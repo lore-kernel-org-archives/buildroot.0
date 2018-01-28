@@ -1,40 +1,48 @@
 From: Petr Kulhavy <brain@jikos.cz>
-Date: Sun, 28 Jan 2018 17:00:19 +0100
-Subject: [Buildroot] [PATCH 1/3] package: linuxptp: bump to the latest GIT
- version
-Message-ID: <1517155221-19399-1-git-send-email-brain@jikos.cz>
+Date: Sun, 28 Jan 2018 17:00:20 +0100
+Subject: [Buildroot] [PATCH 2/3] package: linuxptp: enhance systemd service
+In-Reply-To: <1517155221-19399-1-git-send-email-brain@jikos.cz>
+References: <1517155221-19399-1-git-send-email-brain@jikos.cz>
+Message-ID: <1517155221-19399-2-git-send-email-brain@jikos.cz>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+linuxptp now pulls in the time-sync.target
+phc2sys (linuxptp-system-clock.service) starts after ptp4l (linuxptp.service)
+
 Signed-off-by: Petr Kulhavy <brain@jikos.cz>
 ---
- package/linuxptp/linuxptp.hash | 2 +-
- package/linuxptp/linuxptp.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/linuxptp/linuxptp-system-clock.service | 2 +-
+ package/linuxptp/linuxptp.service              | 2 ++
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/linuxptp/linuxptp.hash b/package/linuxptp/linuxptp.hash
-index 91144df..ef2db56 100644
---- a/package/linuxptp/linuxptp.hash
-+++ b/package/linuxptp/linuxptp.hash
-@@ -1,2 +1,2 @@
- # Locally computed:
--sha256	40844a69df82853113732f15498f9bce2666d5052293a3d5d40a1983e7b7b6a6  linuxptp-17c9787b1d6891636b5be9e4e5a08278b44e9a7a.tar.gz
-+sha256 d0ccc4591966e21819cdc248765ebbe02456bc8ca37845eb7c23c2d1ff9bcf6b  linuxptp-303b08cbf55096aba55bd08a314e0701e5c33482.tar.gz
-diff --git a/package/linuxptp/linuxptp.mk b/package/linuxptp/linuxptp.mk
-index 38d8e09..f43fee6 100644
---- a/package/linuxptp/linuxptp.mk
-+++ b/package/linuxptp/linuxptp.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/linuxptp/linuxptp-system-clock.service b/package/linuxptp/linuxptp-system-clock.service
+index 7327254..a4436a3 100644
+--- a/package/linuxptp/linuxptp-system-clock.service
++++ b/package/linuxptp/linuxptp-system-clock.service
+@@ -1,6 +1,6 @@
+ [Unit]
+ Description=Precision Time Protocol system clock synchronization
+-After=syslog.target network.target
++After=linuxptp.service
  
--LINUXPTP_VERSION = 17c9787b1d6891636b5be9e4e5a08278b44e9a7a
-+LINUXPTP_VERSION = 303b08cbf55096aba55bd08a314e0701e5c33482
- LINUXPTP_SITE_METHOD = git
- LINUXPTP_SITE = git://git.code.sf.net/p/linuxptp/code
- LINUXPTP_LICENSE = GPL-2.0+
+ [Service]
+ ExecStart=/usr/sbin/phc2sys -s /dev/ptp0 -c CLOCK_REALTIME -w -S 1.0
+diff --git a/package/linuxptp/linuxptp.service b/package/linuxptp/linuxptp.service
+index f690430..14e9814 100644
+--- a/package/linuxptp/linuxptp.service
++++ b/package/linuxptp/linuxptp.service
+@@ -1,6 +1,8 @@
+ [Unit]
+ Description=Precision Time Protocol daemon
+ After=syslog.target network.target
++Before=time-sync.target
++Wants=time-sync.target
+ Wants=linuxptp-system-clock.service
+ 
+ [Service]
 -- 
 2.7.4
