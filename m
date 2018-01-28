@@ -1,60 +1,41 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 28 Jan 2018 23:48:29 +0100
-Subject: [Buildroot] [git commit] linux-headers: bump to 4.15 kernel version
-Message-ID: <20180128225534.C7A1B85E63@busybox.osuosl.org>
+From: =?UTF-8?Q?Stefan_Fr=c3=b6berg?= <stefan.froberg@petroprogram.com>
+Date: Mon, 29 Jan 2018 01:43:20 +0200
+Subject: [Buildroot] [PATCH v2 1/1] unbound: new package
+In-Reply-To: <87wp02dk9e.fsf@dell.be.48ers.dk>
+References: <20180113222651.22755-1-stefan.froberg@petroprogram.com>
+ <uagqiexfnk.ln2@ID-313208.user.individual.net>
+ <6b37de5d-dd14-17a8-44a8-bd9b078c2920@petroprogram.com>
+ <jtksiex3i1.ln2@ID-313208.user.individual.net>
+ <1a1a4349-bb17-6657-1d60-2e8c7891b0e9@petroprogram.com>
+ <8i82jex0fn.ln2@ID-313208.user.individual.net>
+ <2cacb101-8c6b-7eab-8c5f-0f67e32bf183@petroprogram.com>
+ <87wp02dk9e.fsf@dell.be.48ers.dk>
+Message-ID: <49a25eef-8d91-4acc-769a-b46d55ed09bb@petroprogram.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=79df9ad59912eac38d5a7fe5a5dd4f11314a138e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Peter
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/linux-headers/Config.in.host | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+Yes, I try to go throught them all tomorro.
+Already checked some of them and they give me error because I don't have
+32-bit libs on my pure, non-multilib 64-bit system.
+So those ones I can't check out.
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 5765e76f59..af00679ca7 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -6,7 +6,7 @@ config BR2_PACKAGE_HOST_LINUX_HEADERS
- choice
- 	prompt "Kernel Headers"
- 	default BR2_KERNEL_HEADERS_AS_KERNEL if BR2_LINUX_KERNEL
--	default BR2_KERNEL_HEADERS_4_14
-+	default BR2_KERNEL_HEADERS_4_15
- 	help
- 	  Select the kernel version to get headers from.
- 
-@@ -78,6 +78,10 @@ config BR2_KERNEL_HEADERS_4_14
- 	bool "Linux 4.14.x kernel headers"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_14
- 
-+config BR2_KERNEL_HEADERS_4_15
-+	bool "Linux 4.15.x kernel headers"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_15
-+
- config BR2_KERNEL_HEADERS_VERSION
- 	bool "Manually specified Linux version"
- 
-@@ -100,6 +104,10 @@ choice
- 	  This is used to hide/show some packages that have strict
- 	  requirements on the version of kernel headers.
- 
-+config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_15
-+	bool "4.15.x"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_15
-+
- config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14
- 	bool "4.14.x"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_14
-@@ -259,4 +267,5 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "4.12.14"	if BR2_KERNEL_HEADERS_4_12
- 	default "4.13.16"	if BR2_KERNEL_HEADERS_4_13
- 	default "4.14.15"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.15"		if BR2_KERNEL_HEADERS_4_15
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+Best Regards
+Stefan
+
+Peter Korsgaard kirjoitti 28.01.2018 klo 18:24:
+>>>>>> "Stefan" == Stefan Fr?berg <stefan.froberg@petroprogram.com> writes:
+> Hi,
+>
+>  >> and forgot to add "-d" before $HOME/test-unbound, sorry.
+>  >> 
+>  > No problem at all :-)
+>
+> Will you send an updated patch once you have looked at those build
+> failures? I have so far marked the patch as changes requested in
+> patchwork.
+>
