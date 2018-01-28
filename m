@@ -1,25 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 28 Jan 2018 20:48:11 +0100
-Subject: [Buildroot] [PATCH 1/1] package/transmission: security bump
+Date: Sun, 28 Jan 2018 20:28:43 +0100
+Subject: [Buildroot] [git commit] package/transmission: security bump
  version to 2.93
-In-Reply-To: <20180127222953.13741-1-bernd.kuhls@t-online.de>
-References: <20180127222953.13741-1-bernd.kuhls@t-online.de>
-Message-ID: <CACXmVibHzKdiDRs4K5iJ2LC834Do8CEQmxY-naNeZCuTxQBEUQ@mail.gmail.com>
+Message-ID: <20180128194835.5BBB98435D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Jan 27, 2018 at 11:29 PM, Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
-> Fixes CVE-2018-5702:
-> https://github.com/transmission/transmission/pull/468
->
-> Added license hash.
->
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+commit: https://git.buildroot.net/buildroot/commit/?id=6e43a52aa8a971a4e328335ce993f6868b4c51a4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Committed, thanks.
+Fixes CVE-2018-5702:
+https://github.com/transmission/transmission/pull/468
 
---
-Bye, Peter Korsgaard
+Added license hash.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/transmission/transmission.hash | 3 ++-
+ package/transmission/transmission.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/package/transmission/transmission.hash b/package/transmission/transmission.hash
+index 849a722..4c1c3f9 100644
+--- a/package/transmission/transmission.hash
++++ b/package/transmission/transmission.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+-sha256	3a8d045c306ad9acb7bf81126939b9594553a388482efa0ec1bfb67b22acd35f	transmission-2.92.tar.xz
++sha256 8815920e0a4499bcdadbbe89a4115092dab42ce5199f71ff9a926cfd12b9b90b  transmission-2.93.tar.xz
++sha256 20801783bf59e27d03ed6aab625b32a34e221ae95bf801db87827c8023398495  COPYING
+diff --git a/package/transmission/transmission.mk b/package/transmission/transmission.mk
+index 7f46753..4e78604 100644
+--- a/package/transmission/transmission.mk
++++ b/package/transmission/transmission.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TRANSMISSION_VERSION = 2.92
++TRANSMISSION_VERSION = 2.93
+ TRANSMISSION_SITE = https://github.com/transmission/transmission-releases/raw/master
+ TRANSMISSION_SOURCE = transmission-$(TRANSMISSION_VERSION).tar.xz
+ TRANSMISSION_DEPENDENCIES = \
