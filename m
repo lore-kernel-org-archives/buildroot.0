@@ -1,33 +1,62 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 28 Jan 2018 22:09:57 +0100
-Subject: [Buildroot] [PATCH] package/avahi: Set the path to D-Bus
- system.d directory
-In-Reply-To: <20180123231723.5923-1-chris.lesiak@licor.com> (Chris Lesiak's
- message of "Tue, 23 Jan 2018 17:17:23 -0600")
-References: <20180123231723.5923-1-chris.lesiak@licor.com>
-Message-ID: <87r2q9adwa.fsf@dell.be.48ers.dk>
+Date: Sun, 28 Jan 2018 22:11:28 +0100
+Subject: [Buildroot] [git commit] wireshark: security bump to version 2.2.12
+Message-ID: <20180128211141.75B4B8557E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Chris" == Chris Lesiak <chris.lesiak@licor.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=2d920ad1b40967ae9241eaaa551d7d13c19f1b14
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Add --with-dbus-sys=/usr/share/dbus-1/system.d to configure
- > the path to D-Bus system.d directory.  Without this option,
- > distribution provided configuration files were unnecessarily
- > stored in /etc.
+Fixes the following security issues:
 
-Hmm, if we want this to happen then several other packages also look
-like they need to be fixed:
+CVE-2017-17997: MRDISC dissector crash
+https://www.wireshark.org/security/wnpa-sec-2018-02.html
 
-git grep '/system\.d'
-package/dnsmasq/dnsmasq.mk:             $(TARGET_DIR)/etc/dbus-1/system.d/dnsmasq.conf
-package/miraclecast/miraclecast.mk:             $(TARGET_DIR)/etc/dbus-1/system.d/org.freedesktop.miracle.conf
-package/wpa_supplicant/wpa_supplicant.mk:               $(TARGET_DIR)/etc/dbus-1/system.d/wpa_supplicant.conf
+CVE-2018-5334: IxVeriWave file parser crash
+https://www.wireshark.org/security/wnpa-sec-2018-03.html
 
-When did these files move from /etc/ to /usr/share? In D-Bus 1.8.x?
+CVE-2018-5335: WCP dissector crash
+https://www.wireshark.org/security/wnpa-sec-2018-04.html
 
--- 
-Bye, Peter Korsgaard
+CVE-2018-5336: Multiple dissectors could crash
+https://www.wireshark.org/security/wnpa-sec-2018-01.html
+
+For more information, see the release notes:
+https://www.wireshark.org/docs/relnotes/wireshark-2.2.12.html
+
+While we are at it, also add as hash for license file.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/wireshark/wireshark.hash | 6 ++++--
+ package/wireshark/wireshark.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 3 deletions(-)
+
+diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
+index cffdab2..93421c6 100644
+--- a/package/wireshark/wireshark.hash
++++ b/package/wireshark/wireshark.hash
+@@ -1,2 +1,4 @@
+-# From: https://www.wireshark.org/download/src/all-versions/SIGNATURES-2.2.11.txt
+-sha256 a9f11621e85d7e1d72259157edd94825e72af3fd72e184b8474459f92ad5fc40  wireshark-2.2.11.tar.bz2
++# From: https://www.wireshark.org/download/src/all-versions/SIGNATURES-2.2.12.txt
++sha256 3274458d1bb1658a5001465ecb07c7cbfc709571ef36bd062897570d4bab3ebc  wireshark-2.2.12.tar.bz2
++# Locally calculated
++sha256 7cdbed2b697efaa45576a033f1ac0e73cd045644a91c79bbf41d4a7d81dac7bf  COPYING
+diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
+index 535ed7a..93c6da0 100644
+--- a/package/wireshark/wireshark.mk
++++ b/package/wireshark/wireshark.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WIRESHARK_VERSION = 2.2.11
++WIRESHARK_VERSION = 2.2.12
+ WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.bz2
+ WIRESHARK_SITE = https://www.wireshark.org/download/src/all-versions
+ WIRESHARK_LICENSE = wireshark license
