@@ -1,26 +1,82 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 28 Jan 2018 21:53:00 +0000
-Subject: [Buildroot] [Bug 10116] Could not allocate block in ext2 filesystem
- while writing file "aoe.ko"
-In-Reply-To: <bug-10116-163@https.bugs.busybox.net/>
-References: <bug-10116-163@https.bugs.busybox.net/>
-Message-ID: <bug-10116-163-9amv612cOt@https.bugs.busybox.net/>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 28 Jan 2018 23:02:56 +0100
+Subject: [Buildroot] [PATCH] openocd: add security fix for CVE-2018-5704
+Message-ID: <20180128220256.2198-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=10116
+Open On-Chip Debugger (OpenOCD) 0.10.0 does not block attempts to use HTTP
+POST for sending data to 127.0.0.1 port 4444, which allows remote attackers
+to conduct cross-protocol scripting attacks, and consequently execute
+arbitrary commands, via a crafted web site.
 
-Mike Frysinger <vapier@gentoo.org> changed:
+For more details, see:
+https://sourceforge.net/p/openocd/mailman/message/36188041/
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |buildroot at uclibc.org
-          Component|Bugzilla                    |Other
-            Product|Infrastructure              |buildroot
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...04-Prevent-some-forms-of-Cross-Protocol-S.patch | 50 ++++++++++++++++++++++
+ 1 file changed, 50 insertions(+)
+ create mode 100644 package/openocd/0003-CVE-2018-5704-Prevent-some-forms-of-Cross-Protocol-S.patch
 
+diff --git a/package/openocd/0003-CVE-2018-5704-Prevent-some-forms-of-Cross-Protocol-S.patch b/package/openocd/0003-CVE-2018-5704-Prevent-some-forms-of-Cross-Protocol-S.patch
+new file mode 100644
+index 0000000000..ba19bf5735
+--- /dev/null
++++ b/package/openocd/0003-CVE-2018-5704-Prevent-some-forms-of-Cross-Protocol-S.patch
+@@ -0,0 +1,50 @@
++From 3a223ca3ebc7ac24d7726a0cd58e5695bc813657 Mon Sep 17 00:00:00 2001
++From: Andreas Fritiofson <andreas.fritiofson@gmail.com>
++Date: Sat, 13 Jan 2018 21:00:47 +0100
++Subject: [PATCH] CVE-2018-5704: Prevent some forms of Cross Protocol Scripting
++ attacks
++
++OpenOCD can be targeted by a Cross Protocol Scripting attack from
++a web browser running malicious code, such as the following PoC:
++
++var x = new XMLHttpRequest();
++x.open("POST", "http://127.0.0.1:4444", true);
++x.send("exec xcalc\r\n");
++
++This mitigation should provide some protection from browser-based
++attacks and is based on the corresponding fix in Redis:
++
++https://github.com/antirez/redis/blob/8075572207b5aebb1385c4f233f5302544439325/src/networking.c#L1758
++
++
++Upstream-status: Under review: http://openocd.zylin.com/#/c/4335/
++Change-Id: Ia96ebe19b74b5805dc228bf7364c7971a90a4581
++Signed-off-by: Andreas Fritiofson <andreas.fritiofson@gmail.com>
++Reported-by: Josef Gajdusek <atx@atx.name>
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ src/server/startup.tcl | 11 +++++++++++
++ 1 file changed, 11 insertions(+)
++
++diff --git a/src/server/startup.tcl b/src/server/startup.tcl
++index 64ace407..dd1b31e4 100644
++--- a/src/server/startup.tcl
+++++ b/src/server/startup.tcl
++@@ -8,3 +8,14 @@ proc ocd_gdb_restart {target_id} {
++ 	# one target
++ 	reset halt
++ }
+++
+++proc prevent_cps {} {
+++	echo "Possible SECURITY ATTACK detected."
+++	echo "It looks like somebody is sending POST or Host: commands to OpenOCD."
+++	echo "This is likely due to an attacker attempting to use Cross Protocol Scripting"
+++	echo "to compromise your OpenOCD instance. Connection aborted."
+++	exit
+++}
+++
+++proc POST {args} { prevent_cps }
+++proc Host: {args} { prevent_cps }
++-- 
++2.11.0
++
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.11.0
