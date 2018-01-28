@@ -1,108 +1,21 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 28 Jan 2018 10:14:14 +0100
-Subject: [Buildroot] daq-2.2.2 patch issue: weird files and
- subdirectories ownership
-In-Reply-To: <CAPi4xiXT+6PZ0h4Vh4qqOCGseRLYdp5SbiF2ibyiLS4TpWJGLA@mail.gmail.com>
-References: <CAPi4xiXT+6PZ0h4Vh4qqOCGseRLYdp5SbiF2ibyiLS4TpWJGLA@mail.gmail.com>
-Message-ID: <c158150a-0d3e-384b-03d7-5f4c875cf1e9@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 28 Jan 2018 11:54:28 +0100
+Subject: [Buildroot] [PATCH 1/1] package/git: bump version to 2.16.1
+In-Reply-To: <20180128084049.2956-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Sun, 28 Jan 2018 09:40:49 +0100")
+References: <20180128084049.2956-1-bernd.kuhls@t-online.de>
+Message-ID: <87efmafe3f.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-On 28-01-18 02:46, Sam wrote:
-> Hi guys,
-> 
-> I'm trying to build daq-2.2.2 on my Raspberry Pi 3B.
-
- Just to be clear: you're using the Raspbian on your RPi to build stuff for some
-other target, right?
-
-
-> The files and subdirectories inside `daq-2.2.2` have been changed ownership to
-> sam:samgrp. User `sam` is default user of my host, but the samgrp hasn't existed
-
- Buildroot doesn't create groups on the host - it can't since it doesn't have
-root access.
-
-> before daq got compiled. Anyway, the problem is:
-> 1). Buildroot firstly copied Makefile.in(644 sam:samgrp) to Makefile.in.orig(644
-> root:root), which I suspect where the error is from.
-
- It's actually patch that does that: any file that is patched is first copied.
-Makefile.in.orig retains the ownership and permissions that Makefile.in had. If
-this is root:root, that probably means you were building as root instead of as
-sam. That's not a good idea.
-
-> 2). Buildroot rejected to modify Makefile.in because it's ownership is sam:samgrp.
-
- Are you sure that that's the reason?
-
-
- Regards,
- Arnout?
-> I didn't set up any ownership configuration in my daq.mk <http://daq.mk> and I
-> don't know why Buildroot uncompressed daq-2.2.2.tar.gz with ownership sam:samgrp
-> which only happened inside of daq-2.2.2 directory. No matter what ownership of
-> my buildroot root directory and subdirectories is, sam:samgrp or root:root,
-> nothing changed, still the same problem.
-> 
-> I'm sorry for the previous thread. I'm unaware of ignoring attached files in
-> Mailing list.
-> 
-> 1. patch file:
-> --- daq-2.2.2/sfbpf/Makefile.in.orig2018-01-19 21:32:51.000000000 +0200
-> +++ daq-2.2.2/sfbpf/Makefile.in2018-01-19 15:47:07.654945651 +0200
-> @@ -783,3 +783,3 @@
-> - sf_scanner.c: $(srcdir)/scanner.l
-> + sf_scanner.c: $(srcdir)/scanner.l ${builddir}/tokdefs.h
-> ? ? ? ? @rm -f $(srcdir)/sf_scanner.c
-> ? ? ? ? $(srcdir)/runlex.sh $(V_LEX) -osf_scanner.c $(srcdir)/scanner.l
-> 
-> 2. build.log
-> 
-> WARNING: no hash file for daq-2.2.2.tar.gz
-> ^[[7m>>> daq 2.2.2 Extracting^[[27m
-> gzip -d -c /usr/local/buildroot/dl/daq-2.2.2.tar.gz | tar --strip-components=1
-> -C /usr/local/buildroot/output/build/daq-2.2.2? ?-xf -
-> ^[[7m>>> daq 2.2.2 Patching^[[27m
-> 
-> Applying 0001-correct-the-location-of-unistd.h.patch using patch:
-> patching file os-daq-modules/daq_ipfw.c
-> 
-> Applying 0002-disable-run-test-program-while-cross-compiling.patch using patch:
-> patching file m4/sf.m4
-> 
-> Applying 0003-cross-compile-test.patch using patch:
-> patching file configure
-> 
-> Applying 0004-sfbpf-Makefile-tokdefs-h-nonexist.patch using patch:
-> patching file sfbpf/Makefile.in
-> Hunk #1 FAILED at 783.
-> 1 out of 1 hunk FAILED -- saving rejects to file sfbpf/Makefile.in.rej
-> make: *** [package/pkg-generic.mk:215 <http://pkg-generic.mk:215>:
-> /usr/local/buildroot/output/build/daq-2.2.2/.stamp_patched] Error 1
-> 
-> 
-> Thank you very much,
-> 
-> 
-> Tao
-> 
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+Committed, thanks.
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Bye, Peter Korsgaard
