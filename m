@@ -1,82 +1,77 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 28 Jan 2018 23:02:56 +0100
-Subject: [Buildroot] [PATCH] openocd: add security fix for CVE-2018-5704
-Message-ID: <20180128220256.2198-1-peter@korsgaard.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 28 Jan 2018 23:27:05 +0100
+Subject: [Buildroot] Qt4 - Qt5 Config anomaly
+In-Reply-To: <0e4d1d30-bdec-7ba0-5df4-9a719f5ee4f9@gmail.com>
+References: <0e4d1d30-bdec-7ba0-5df4-9a719f5ee4f9@gmail.com>
+Message-ID: <88976205-6a29-964d-a692-bcc09a4ff8d1@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Open On-Chip Debugger (OpenOCD) 0.10.0 does not block attempts to use HTTP
-POST for sending data to 127.0.0.1 port 4444, which allows remote attackers
-to conduct cross-protocol scripting attacks, and consequently execute
-arbitrary commands, via a crafted web site.
 
-For more details, see:
-https://sourceforge.net/p/openocd/mailman/message/36188041/
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...04-Prevent-some-forms-of-Cross-Protocol-S.patch | 50 ++++++++++++++++++++++
- 1 file changed, 50 insertions(+)
- create mode 100644 package/openocd/0003-CVE-2018-5704-Prevent-some-forms-of-Cross-Protocol-S.patch
+On 24-01-18 23:28, Zoltan Gyarmati wrote:
+> Dear All,
+> 
+> I'm looking into this autobuild error:
+> 
+> http://autobuild.buildroot.net/results/3c537e1260dc9ce57657ca0d49e318a10aee111e/
+> 
+> where the qjson build fails because the moc_* files are generated with
+> an old version of moc.
+> It turned out that Qt4 and Qt5 are both enabled in this autobuild
+> config, and Qt4 is being built second, so it overwrites moc and qmake in
+> the host dir.
+> I remembered that Qt4 at Qt5 used to be mutually exclusive (by setting
+> "depends on !BR2_PACKAGE_QT" in package/qt5/Config.in) so I looked
+> further and it turned that BR2_PACKAGE_QT5 is enabled because
+> BR2_PACKAGE_PINENTRY_QT5 is enabled and it selects BR2_PACKAGE_QT5.
+> 
+> What is the preferred way to fix this?
+> 
+> a) Add also the "depends !BR2_PACKAGE_QT" guard to the
+> BR2_PACKAGE_PINENTRY_QT5 config entry?
 
-diff --git a/package/openocd/0003-CVE-2018-5704-Prevent-some-forms-of-Cross-Protocol-S.patch b/package/openocd/0003-CVE-2018-5704-Prevent-some-forms-of-Cross-Protocol-S.patch
-new file mode 100644
-index 0000000000..ba19bf5735
---- /dev/null
-+++ b/package/openocd/0003-CVE-2018-5704-Prevent-some-forms-of-Cross-Protocol-S.patch
-@@ -0,0 +1,50 @@
-+From 3a223ca3ebc7ac24d7726a0cd58e5695bc813657 Mon Sep 17 00:00:00 2001
-+From: Andreas Fritiofson <andreas.fritiofson@gmail.com>
-+Date: Sat, 13 Jan 2018 21:00:47 +0100
-+Subject: [PATCH] CVE-2018-5704: Prevent some forms of Cross Protocol Scripting
-+ attacks
-+
-+OpenOCD can be targeted by a Cross Protocol Scripting attack from
-+a web browser running malicious code, such as the following PoC:
-+
-+var x = new XMLHttpRequest();
-+x.open("POST", "http://127.0.0.1:4444", true);
-+x.send("exec xcalc\r\n");
-+
-+This mitigation should provide some protection from browser-based
-+attacks and is based on the corresponding fix in Redis:
-+
-+https://github.com/antirez/redis/blob/8075572207b5aebb1385c4f233f5302544439325/src/networking.c#L1758
-+
-+
-+Upstream-status: Under review: http://openocd.zylin.com/#/c/4335/
-+Change-Id: Ia96ebe19b74b5805dc228bf7364c7971a90a4581
-+Signed-off-by: Andreas Fritiofson <andreas.fritiofson@gmail.com>
-+Reported-by: Josef Gajdusek <atx@atx.name>
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ src/server/startup.tcl | 11 +++++++++++
-+ 1 file changed, 11 insertions(+)
-+
-+diff --git a/src/server/startup.tcl b/src/server/startup.tcl
-+index 64ace407..dd1b31e4 100644
-+--- a/src/server/startup.tcl
-++++ b/src/server/startup.tcl
-+@@ -8,3 +8,14 @@ proc ocd_gdb_restart {target_id} {
-+ 	# one target
-+ 	reset halt
-+ }
-++
-++proc prevent_cps {} {
-++	echo "Possible SECURITY ATTACK detected."
-++	echo "It looks like somebody is sending POST or Host: commands to OpenOCD."
-++	echo "This is likely due to an attacker attempting to use Cross Protocol Scripting"
-++	echo "to compromise your OpenOCD instance. Connection aborted."
-++	exit
-++}
-++
-++proc POST {args} { prevent_cps }
-++proc Host: {args} { prevent_cps }
-+-- 
-+2.11.0
-+
+ That indeed would be the proper thing to do.
+
+
+> b) Inverse the dependency and enable BR2_PACKAGE_PINENTRY_QT5 only if
+> BR2_PACKAGE_QT5 was enabled, rather then letting
+> BR2_PACKAGE_PINENTRY_QT5 select BR2_PACKAGE_QT5). (and same logic for
+> BR2_PACKAGE_PINENTRY_QT4)
+
+ I guess here select was chosen rather than depends because you need to be able
+to choose one of them, so for one of them you want to have a select. Anyway
+there are other packages using qt4/5 that use select.
+
+
+ Regards,
+ Arnout
+
+> 
+> c) other?
+> 
+> 
+> I would vote for option b) as it would be more consistent with the other
+> Qt based packages' (like qtjson itself) config, but wanted to ask before
+> sending in a patch.
+> 
+> Thanks, regards
+> 
+> 
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
+
 -- 
-2.11.0
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
