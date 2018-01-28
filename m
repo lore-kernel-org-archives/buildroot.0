@@ -1,39 +1,108 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 28 Jan 2018 22:11:43 +0100
-Subject: [Buildroot] [PATCH] wireshark: security bump to version 2.2.12
-In-Reply-To: <20180128192302.3011-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Sun, 28 Jan 2018 20:23:02 +0100")
-References: <20180128192302.3011-1-peter@korsgaard.com>
-Message-ID: <87mv0xadtc.fsf@dell.be.48ers.dk>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Sun, 28 Jan 2018 22:23:46 +0100
+Subject: [Buildroot] [PATCH] imx-alsa-plugins: new package
+Message-ID: <20180128212346.23249-1-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+Freescale specific alsa-lib plugins for the i.MX processor family.
 
- > Fixes the following security issues:
- > CVE-2017-17997: MRDISC dissector crash
- > https://www.wireshark.org/security/wnpa-sec-2018-02.html
+For now, the only provided plugin is:
+  * Rate Converter Plugin Using Freescale ASRC Resampler
 
- > CVE-2018-5334: IxVeriWave file parser crash
- > https://www.wireshark.org/security/wnpa-sec-2018-03.html
+The ASRC hardware resampler can be found on i.MX53 and most i.MX 6
+processors.
 
- > CVE-2018-5335: WCP dissector crash
- > https://www.wireshark.org/security/wnpa-sec-2018-04.html
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+---
+ package/freescale-imx/Config.in                    |  1 +
+ package/freescale-imx/imx-alsa-plugins/Config.in   | 23 ++++++++++++++++++++++
+ .../imx-alsa-plugins/imx-alsa-plugins.hash         |  3 +++
+ .../imx-alsa-plugins/imx-alsa-plugins.mk           | 21 ++++++++++++++++++++
+ 4 files changed, 48 insertions(+)
+ create mode 100644 package/freescale-imx/imx-alsa-plugins/Config.in
+ create mode 100644 package/freescale-imx/imx-alsa-plugins/imx-alsa-plugins.hash
+ create mode 100644 package/freescale-imx/imx-alsa-plugins/imx-alsa-plugins.mk
 
- > CVE-2018-5336: Multiple dissectors could crash
- > https://www.wireshark.org/security/wnpa-sec-2018-01.html
-
- > For more information, see the release notes:
- > https://www.wireshark.org/docs/relnotes/wireshark-2.2.12.html
-
- > While we are at it, also add as hash for license file.
-
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-Committed, thanks.
-
+diff --git a/package/freescale-imx/Config.in b/package/freescale-imx/Config.in
+index b5e5ab23dc..f658c46ba0 100644
+--- a/package/freescale-imx/Config.in
++++ b/package/freescale-imx/Config.in
+@@ -69,6 +69,7 @@ config BR2_PACKAGE_FREESCALE_IMX_HAS_VIV_GPU
+ 		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6S || \
+ 		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX7
+ 
++source "package/freescale-imx/imx-alsa-plugins/Config.in"
+ source "package/freescale-imx/imx-codec/Config.in"
+ source "package/freescale-imx/imx-kobs/Config.in"
+ source "package/freescale-imx/imx-lib/Config.in"
+diff --git a/package/freescale-imx/imx-alsa-plugins/Config.in b/package/freescale-imx/imx-alsa-plugins/Config.in
+new file mode 100644
+index 0000000000..57ce6216f3
+--- /dev/null
++++ b/package/freescale-imx/imx-alsa-plugins/Config.in
+@@ -0,0 +1,23 @@
++config BR2_PACKAGE_IMX_ALSA_PLUGINS
++	bool "imx-alsa-plugins"
++	depends on BR2_arm # Only relevant for i.MX
++	depends on BR2_LINUX_KERNEL
++	depends on BR2_TOOLCHAIN_HAS_THREADS # alsa-lib
++	select BR2_PACKAGE_ALSA_LIB
++	help
++	  ALSA plugins specific for the Freescale i.MX platform. It
++	  requires a kernel that includes the i.MX specific headers
++	  to be built.
++
++	  The following plugins are provided so far:
++	    * Rate Converter Plugin Using Freescale ASRC Hardware
++	      Resampler (i.MX53 and most i.MX6)
++
++	  This package is provided by Freescale as-is and doesn't have
++	  an upstream.
++
++comment "imx-alsa-libs needs an imx-specific Linux kernel to be built"
++	depends on BR2_arm && !BR2_LINUX_KERNEL
++
++comment "imx-alsa-libs needs a toolchain w/ threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/freescale-imx/imx-alsa-plugins/imx-alsa-plugins.hash b/package/freescale-imx/imx-alsa-plugins/imx-alsa-plugins.hash
+new file mode 100644
+index 0000000000..b0f47080ce
+--- /dev/null
++++ b/package/freescale-imx/imx-alsa-plugins/imx-alsa-plugins.hash
+@@ -0,0 +1,3 @@
++# Locally calculated:
++sha256  e76a71e9166fbedeaa535fd7ebc07edc30a1e87f529ab2aa733e3603d3183ed0  imx-alsa-plugins-rel_imx_4.9.x_1.0.0_ga.tar.gz
++sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING.GPL
+diff --git a/package/freescale-imx/imx-alsa-plugins/imx-alsa-plugins.mk b/package/freescale-imx/imx-alsa-plugins/imx-alsa-plugins.mk
+new file mode 100644
+index 0000000000..9c81ff0df0
+--- /dev/null
++++ b/package/freescale-imx/imx-alsa-plugins/imx-alsa-plugins.mk
+@@ -0,0 +1,21 @@
++################################################################################
++#
++# imx-alsa-plugins
++#
++################################################################################
++
++IMX_ALSA_PLUGINS_VERSION = rel_imx_4.9.x_1.0.0_ga
++IMX_ALSA_PLUGINS_SITE = https://source.codeaurora.org/external/imx/imx-alsa-plugins
++IMX_ALSA_PLUGINS_SITE_METHOD = git
++IMX_ALSA_PLUGINS_LICENSE = GPL-2.0+
++IMX_ALSA_PLUGINS_LICENSE_FILES = COPYING.GPL
++IMX_ALSA_PLUGINS_DEPENDENCIES = host-pkgconf alsa-lib
++
++# git, no configure
++IMX_ALSA_PLUGINS_AUTORECONF = YES
++
++# needs access to imx-specific kernel headers
++IMX_ALSA_PLUGINS_DEPENDENCIES += linux
++IMX_ALSA_PLUGINS_CONF_ENV += CPPFLAGS="$(TARGET_CPPFLAGS) -idirafter $(LINUX_DIR)/include/uapi"
++
++$(eval $(autotools-package))
 -- 
-Bye, Peter Korsgaard
+2.16.1
