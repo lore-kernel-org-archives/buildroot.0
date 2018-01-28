@@ -1,62 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 28 Jan 2018 22:11:28 +0100
-Subject: [Buildroot] [git commit] wireshark: security bump to version 2.2.12
-Message-ID: <20180128211141.75B4B8557E@busybox.osuosl.org>
+Date: Sun, 28 Jan 2018 21:47:21 +0100
+Subject: [Buildroot] [git commit] package/systemd: Set fallback hostname
+Message-ID: <20180128211141.592CF8557E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2d920ad1b40967ae9241eaaa551d7d13c19f1b14
+commit: https://git.buildroot.net/buildroot/commit/?id=aebabb2780da4c5f85fec00b56f4690feb646073
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes the following security issues:
+When BR2_TARGET_GENERIC_HOSTNAME is set, use the config option
+--with-fallback-hostname to specify the fallback hostname to use
+if none is configured in /etc/hostname.  This is useful in a
+pristine installation with an empty /etc.
 
-CVE-2017-17997: MRDISC dissector crash
-https://www.wireshark.org/security/wnpa-sec-2018-02.html
-
-CVE-2018-5334: IxVeriWave file parser crash
-https://www.wireshark.org/security/wnpa-sec-2018-03.html
-
-CVE-2018-5335: WCP dissector crash
-https://www.wireshark.org/security/wnpa-sec-2018-04.html
-
-CVE-2018-5336: Multiple dissectors could crash
-https://www.wireshark.org/security/wnpa-sec-2018-01.html
-
-For more information, see the release notes:
-https://www.wireshark.org/docs/relnotes/wireshark-2.2.12.html
-
-While we are at it, also add as hash for license file.
-
+Signed-off-by: Chris Lesiak <chris.lesiak@licor.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wireshark/wireshark.hash | 6 ++++--
- package/wireshark/wireshark.mk   | 2 +-
- 2 files changed, 5 insertions(+), 3 deletions(-)
+ package/systemd/systemd.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
-index cffdab2..93421c6 100644
---- a/package/wireshark/wireshark.hash
-+++ b/package/wireshark/wireshark.hash
-@@ -1,2 +1,4 @@
--# From: https://www.wireshark.org/download/src/all-versions/SIGNATURES-2.2.11.txt
--sha256 a9f11621e85d7e1d72259157edd94825e72af3fd72e184b8474459f92ad5fc40  wireshark-2.2.11.tar.bz2
-+# From: https://www.wireshark.org/download/src/all-versions/SIGNATURES-2.2.12.txt
-+sha256 3274458d1bb1658a5001465ecb07c7cbfc709571ef36bd062897570d4bab3ebc  wireshark-2.2.12.tar.bz2
-+# Locally calculated
-+sha256 7cdbed2b697efaa45576a033f1ac0e73cd045644a91c79bbf41d4a7d81dac7bf  COPYING
-diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
-index 535ed7a..93c6da0 100644
---- a/package/wireshark/wireshark.mk
-+++ b/package/wireshark/wireshark.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index ef31a0f..b56c6c6 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -317,6 +317,11 @@ else
+ SYSTEMD_CONF_OPTS += -Dhibernate=false
+ endif
  
--WIRESHARK_VERSION = 2.2.11
-+WIRESHARK_VERSION = 2.2.12
- WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.bz2
- WIRESHARK_SITE = https://www.wireshark.org/download/src/all-versions
- WIRESHARK_LICENSE = wireshark license
++SYSTEMD_FALLBACK_HOSTNAME = $(call qstrip,$(BR2_TARGET_GENERIC_HOSTNAME))
++ifneq ($(SYSTEMD_FALLBACK_HOSTNAME),)
++SYSTEMD_CONF_OPTS += --with-fallback-hostname=$(SYSTEMD_FALLBACK_HOSTNAME)
++endif
++
+ define SYSTEMD_INSTALL_INIT_HOOK
+ 	ln -fs ../lib/systemd/systemd $(TARGET_DIR)/sbin/init
+ 	ln -fs ../bin/systemctl $(TARGET_DIR)/sbin/halt
