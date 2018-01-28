@@ -1,61 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 28 Jan 2018 20:23:02 +0100
-Subject: [Buildroot] [PATCH] wireshark: security bump to version 2.2.12
-Message-ID: <20180128192302.3011-1-peter@korsgaard.com>
+Date: Sun, 28 Jan 2018 20:27:34 +0100
+Subject: [Buildroot] [PATCH] package/gcc: bump 7.x series to 7.3.0
+In-Reply-To: <20180127203044.4580-1-romain.naour@gmail.com>
+References: <20180127203044.4580-1-romain.naour@gmail.com>
+Message-ID: <CACXmViYOEQc=kX1_b9hg+i9i4JP8XEu+obLsVMAQeFmc0JB3tg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes the following security issues:
+On Sat, Jan 27, 2018 at 9:30 PM, Romain Naour <romain.naour@gmail.com> wrote:
+> Remove upstream patches:
+> 0870-xtensa-fix-PR-target-82181.patch
+> 0893-ARC-Configure-script-to-allow-non-uclibc-based-tripl.patch
+>
+> See: https://www.mail-archive.com/gcc at gcc.gnu.org/msg84336.html
+>
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
 
-CVE-2017-17997: MRDISC dissector crash
-https://www.wireshark.org/security/wnpa-sec-2018-02.html
+Committed, thanks
 
-CVE-2018-5334: IxVeriWave file parser crash
-https://www.wireshark.org/security/wnpa-sec-2018-03.html
-
-CVE-2018-5335: WCP dissector crash
-https://www.wireshark.org/security/wnpa-sec-2018-04.html
-
-CVE-2018-5336: Multiple dissectors could crash
-https://www.wireshark.org/security/wnpa-sec-2018-01.html
-
-For more information, see the release notes:
-https://www.wireshark.org/docs/relnotes/wireshark-2.2.12.html
-
-While we are at it, also add as hash for license file.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/wireshark/wireshark.hash | 6 ++++--
- package/wireshark/wireshark.mk   | 2 +-
- 2 files changed, 5 insertions(+), 3 deletions(-)
-
-diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
-index cffdab2a24..93421c6498 100644
---- a/package/wireshark/wireshark.hash
-+++ b/package/wireshark/wireshark.hash
-@@ -1,2 +1,4 @@
--# From: https://www.wireshark.org/download/src/all-versions/SIGNATURES-2.2.11.txt
--sha256 a9f11621e85d7e1d72259157edd94825e72af3fd72e184b8474459f92ad5fc40  wireshark-2.2.11.tar.bz2
-+# From: https://www.wireshark.org/download/src/all-versions/SIGNATURES-2.2.12.txt
-+sha256 3274458d1bb1658a5001465ecb07c7cbfc709571ef36bd062897570d4bab3ebc  wireshark-2.2.12.tar.bz2
-+# Locally calculated
-+sha256 7cdbed2b697efaa45576a033f1ac0e73cd045644a91c79bbf41d4a7d81dac7bf  COPYING
-diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
-index 535ed7a2c9..93c6da0398 100644
---- a/package/wireshark/wireshark.mk
-+++ b/package/wireshark/wireshark.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WIRESHARK_VERSION = 2.2.11
-+WIRESHARK_VERSION = 2.2.12
- WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.bz2
- WIRESHARK_SITE = https://www.wireshark.org/download/src/all-versions
- WIRESHARK_LICENSE = wireshark license
--- 
-2.11.0
+--
+Bye, Peter Korsgaard
