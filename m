@@ -1,74 +1,62 @@
-From: Sam <samiswt@gmail.com>
-Date: Sat, 27 Jan 2018 17:46:44 -0800
-Subject: [Buildroot] daq-2.2.2 patch issue: weird files and subdirectories
- ownership
-Message-ID: <CAPi4xiXT+6PZ0h4Vh4qqOCGseRLYdp5SbiF2ibyiLS4TpWJGLA@mail.gmail.com>
+From: Stuart Longland <stuartl@longlandclan.id.au>
+Date: Sun, 28 Jan 2018 12:35:57 +1000
+Subject: [Buildroot] Compiling gcc for the target?
+Message-ID: <45535c2a-31b5-8063-d749-926f7c2f023f@longlandclan.id.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi guys,
+Hi all,
 
-I'm trying to build daq-2.2.2 on my Raspberry Pi 3B.
+I'm trying to bootstrap a musl system and am running into a road-block
+with regards to getting a C compiler running on the target.  My target
+is ARMv5 (specifically, ARM926EJ-S).
 
-The files and subdirectories inside `daq-2.2.2` have been changed ownership
-to sam:samgrp. User `sam` is default user of my host, but the samgrp hasn't
-existed before daq got compiled. Anyway, the problem is:
-1). Buildroot firstly copied Makefile.in(644 sam:samgrp) to
-Makefile.in.orig(644 root:root), which I suspect where the error is from.
-2). Buildroot rejected to modify Makefile.in because it's ownership is
-sam:samgrp.
+The aim will be to use a QEMU VM to "natively" compile packages, as
+there's lots of packages that just don't cross-compile.
 
-I didn't set up any ownership configuration in my daq.mk and I don't know
-why Buildroot uncompressed daq-2.2.2.tar.gz with ownership sam:samgrp which
-only happened inside of daq-2.2.2 directory. No matter what ownership of my
-buildroot root directory and subdirectories is, sam:samgrp or root:root,
-nothing changed, still the same problem.
+The fun ensues when I try to select `gcc` as a package in buildroot:
+>  /tmp/buildroot-2017.11.2/.config - Buildroot 2017.11.2 Configuration
+>  ? Target packages ? Development tools ????????????????????????????????????????????
+>   ?????????????????????????????? Development tools ??????????????????????????????
+>   ?  Arrow keys navigate the menu.  <Enter> selects submenus ---> (or empty     ?  
+>   ?  submenus ----).  Highlighted letters are hotkeys.  Pressing <Y> selects a  ?  
+>   ?  feature, while <N> excludes a feature.  Press <Esc><Esc> to exit, <?> for  ?  
+>   ?  Help, </> for Search.  Legend: [*] feature is selected  [ ] feature is     ?  
+>   ? ??????(-)?????????????????????????????????????????????????????????????????? ?  
+>   ? ?    [ ] cppunit                                                          ? ?  
+>   ? ?    [ ] cvs                                                              ? ?  
+>   ? ?    [ ] cxxtest                                                          ? ?  
+>   ? ?    [ ] flex                                                             ? ?  
+>   ? ?    [ ] gettext                                                          ? ?  
+>   ? ?    [ ] git                                                              ? ?  
+>   ? ?    [ ] git-crypt                                                        ? ?  
+>   ? ?    [ ] gperf                                                            ? ?  
+>   ? ?    [ ] jo                                                               ? ?  
+>   ? ?    [ ] jq                                                               ? ?  
+>   ? ?    [ ] libtool                                                          ? ?  
+>   ? ??????(+)?????????????????????????????????????????????????????????????????? ?  
+>   ???????????????????????????????????????????????????????????????????????????????  
+>   ?          <Select>    < Exit >    < Help >    < Save >    < Load >           ?  
+>   ???????????????????????????????????????????????????????????????????????????????  
 
-I'm sorry for the previous thread. I'm unaware of ignoring attached files
-in Mailing list.
+As can be seen, `gcc` simply isn't an option given.  I recall that it
+was one in the past.  What options must be selected in order to achieve
+this?
 
-1. patch file:
---- daq-2.2.2/sfbpf/Makefile.in.orig 2018-01-19 21:32:51.000000000 +0200
-+++ daq-2.2.2/sfbpf/Makefile.in 2018-01-19 15:47:07.654945651 +0200
-@@ -783,3 +783,3 @@
-- sf_scanner.c: $(srcdir)/scanner.l
-+ sf_scanner.c: $(srcdir)/scanner.l ${builddir}/tokdefs.h
-        @rm -f $(srcdir)/sf_scanner.c
-        $(srcdir)/runlex.sh $(V_LEX) -osf_scanner.c $(srcdir)/scanner.l
+Regards,
+-- 
+Stuart Longland (aka Redhatter, VK4MSL)
 
-2. build.log
+I haven't lost my mind...
+  ...it's backed up on a tape somewhere.
 
-WARNING: no hash file for daq-2.2.2.tar.gz
-^[[7m>>> daq 2.2.2 Extracting^[[27m
-gzip -d -c /usr/local/buildroot/dl/daq-2.2.2.tar.gz | tar
---strip-components=1 -C /usr/local/buildroot/output/build/daq-2.2.2   -xf -
-^[[7m>>> daq 2.2.2 Patching^[[27m
-
-Applying 0001-correct-the-location-of-unistd.h.patch using patch:
-patching file os-daq-modules/daq_ipfw.c
-
-Applying 0002-disable-run-test-program-while-cross-compiling.patch using
-patch:
-patching file m4/sf.m4
-
-Applying 0003-cross-compile-test.patch using patch:
-patching file configure
-
-Applying 0004-sfbpf-Makefile-tokdefs-h-nonexist.patch using patch:
-patching file sfbpf/Makefile.in
-Hunk #1 FAILED at 783.
-1 out of 1 hunk FAILED -- saving rejects to file sfbpf/Makefile.in.rej
-make: *** [package/pkg-generic.mk:215:
-/usr/local/buildroot/output/build/daq-2.2.2/.stamp_patched] Error 1
-
-
-Thank you very much,
-
-
-Tao
 -------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180127/6dbae3a2/attachment.html>
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 833 bytes
+Desc: OpenPGP digital signature
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180128/ee2e2a98/attachment.asc>
