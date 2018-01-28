@@ -1,9 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 28 Jan 2018 10:10:40 +0100
-Subject: [Buildroot] post image blues (fakeroot and chown)
-In-Reply-To: <8AE4BE7D9622DF41B76E1AD887AA1A47A52ED7C0@MARCM-SBS2011.marcmltd.local>
-References: <8AE4BE7D9622DF41B76E1AD887AA1A47A52ED7C0@MARCM-SBS2011.marcmltd.local>
-Message-ID: <62c3dc1f-a8d4-e020-b11c-08fe8fdcf3f8@mind.be>
+Date: Sun, 28 Jan 2018 10:14:14 +0100
+Subject: [Buildroot] daq-2.2.2 patch issue: weird files and
+ subdirectories ownership
+In-Reply-To: <CAPi4xiXT+6PZ0h4Vh4qqOCGseRLYdp5SbiF2ibyiLS4TpWJGLA@mail.gmail.com>
+References: <CAPi4xiXT+6PZ0h4Vh4qqOCGseRLYdp5SbiF2ibyiLS4TpWJGLA@mail.gmail.com>
+Message-ID: <c158150a-0d3e-384b-03d7-5f4c875cf1e9@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,59 +13,84 @@ To: buildroot@busybox.net
 
 
 
-On 26-01-18 16:52, Marc Murphy wrote:
-> Hello All
+On 28-01-18 02:46, Sam wrote:
+> Hi guys,
 > 
-> I am in the final stages of getting the buildroot image output configured and having an issue.
-> 
-> I have a couple of folders that I am using as partitions on the target. The images are created using genimage in the post-image.sh script
+> I'm trying to build daq-2.2.2 on my Raspberry Pi 3B.
 
- Do you use genimage to create a filesystem, or only to create a raw partition?
-If you want genimage to create a filesystem, you'll need to run it under
-fakeroot (i.e. in the BR2_ROOTFS_POST_FAKEROOT_SCRIPT) to get ownership and
-permissions correct.
-
-> before being included in the final complete image. But I have an issue with the folder permissions and trying to correct them before the image is built.
-> 
-> On a normal linux system I would of course perform a:
-> # sudo chown -R 0:0 some_folder
-
- When the script runs under fakeroot, you can in fact use these commands
-(without sudo). However, the result is "forgotten" as soon as fakeroot exits, so
-you have to run the _entire_ script up to the generation of the filesystem under
-a single fakeroot call. That's what BR2_ROOTFS_POST_FAKEROOT_SCRIPT does: the
-scripts are run under the same fakeroot invocation that also generates the
-filesystem.
-
- Alternatively, you can use fakeroot's -i and -s options to make the results
-"persistent". But since Buildroot's invocation doesn't use them, it means you'll
-have to create the filesystem yourself then.
-
-> That would put the permissions in to the correct root user and group.
-> 
-> This can't be done in the post-image script as cannot use sudo as it requires intervention of entering password.
-> 
-> I have then been trying to use fakeroot and it simply refuses to persistently change the owner and group, ll will show creator when not logged in as fakeroot but root when logged in as fakeroot.
-> 
-> Is there any "standard" way to do this ?
-
- As Baruch mentioned, the standard way is BR2_ROOTFS_DEVICE_TABLE, but that only
-works for files and directories that will end up in the Buildroot-generated rootfs.
+ Just to be clear: you're using the Raspbian on your RPi to build stuff for some
+other target, right?
 
 
- Hope this helps.
+> The files and subdirectories inside `daq-2.2.2` have been changed ownership to
+> sam:samgrp. User `sam` is default user of my host, but the samgrp hasn't existed
+
+ Buildroot doesn't create groups on the host - it can't since it doesn't have
+root access.
+
+> before daq got compiled. Anyway, the problem is:
+> 1). Buildroot firstly copied Makefile.in(644 sam:samgrp) to Makefile.in.orig(644
+> root:root), which I suspect where the error is from.
+
+ It's actually patch that does that: any file that is patched is first copied.
+Makefile.in.orig retains the ownership and permissions that Makefile.in had. If
+this is root:root, that probably means you were building as root instead of as
+sam. That's not a good idea.
+
+> 2). Buildroot rejected to modify Makefile.in because it's ownership is sam:samgrp.
+
+ Are you sure that that's the reason?
+
 
  Regards,
- Arnout
-
+ Arnout?
+> I didn't set up any ownership configuration in my daq.mk <http://daq.mk> and I
+> don't know why Buildroot uncompressed daq-2.2.2.tar.gz with ownership sam:samgrp
+> which only happened inside of daq-2.2.2 directory. No matter what ownership of
+> my buildroot root directory and subdirectories is, sam:samgrp or root:root,
+> nothing changed, still the same problem.
 > 
-> I have been trying with all kinds of ways even resorted to trying to use fakeroot and makedevs:
-> fakeroot /home/Devel/buildroot-2017.02/output/host/usr/bin/makedevs -d $PWD/permissions $PWD/image_staging/
+> I'm sorry for the previous thread. I'm unaware of ignoring attached files in
+> Mailing list.
+> 
+> 1. patch file:
+> --- daq-2.2.2/sfbpf/Makefile.in.orig2018-01-19 21:32:51.000000000 +0200
+> +++ daq-2.2.2/sfbpf/Makefile.in2018-01-19 15:47:07.654945651 +0200
+> @@ -783,3 +783,3 @@
+> - sf_scanner.c: $(srcdir)/scanner.l
+> + sf_scanner.c: $(srcdir)/scanner.l ${builddir}/tokdefs.h
+> ? ? ? ? @rm -f $(srcdir)/sf_scanner.c
+> ? ? ? ? $(srcdir)/runlex.sh $(V_LEX) -osf_scanner.c $(srcdir)/scanner.l
+> 
+> 2. build.log
+> 
+> WARNING: no hash file for daq-2.2.2.tar.gz
+> ^[[7m>>> daq 2.2.2 Extracting^[[27m
+> gzip -d -c /usr/local/buildroot/dl/daq-2.2.2.tar.gz | tar --strip-components=1
+> -C /usr/local/buildroot/output/build/daq-2.2.2? ?-xf -
+> ^[[7m>>> daq 2.2.2 Patching^[[27m
+> 
+> Applying 0001-correct-the-location-of-unistd.h.patch using patch:
+> patching file os-daq-modules/daq_ipfw.c
+> 
+> Applying 0002-disable-run-test-program-while-cross-compiling.patch using patch:
+> patching file m4/sf.m4
+> 
+> Applying 0003-cross-compile-test.patch using patch:
+> patching file configure
+> 
+> Applying 0004-sfbpf-Makefile-tokdefs-h-nonexist.patch using patch:
+> patching file sfbpf/Makefile.in
+> Hunk #1 FAILED at 783.
+> 1 out of 1 hunk FAILED -- saving rejects to file sfbpf/Makefile.in.rej
+> make: *** [package/pkg-generic.mk:215 <http://pkg-generic.mk:215>:
+> /usr/local/buildroot/output/build/daq-2.2.2/.stamp_patched] Error 1
 > 
 > 
-> Kind Regards
+> Thank you very much,
 > 
-> Marc
+> 
+> Tao
 > 
 > 
 > _______________________________________________
