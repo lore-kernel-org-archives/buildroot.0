@@ -1,54 +1,74 @@
-From: Carlos Santos <casantos@datacom.ind.br>
-Date: Mon, 29 Jan 2018 02:19:31 -0200
-Subject: [Buildroot] [PATCH] eudev: generate /etc/udev/hwdb.bin at system
- startup
-Message-ID: <20180129041931.28192-1-casantos@datacom.ind.br>
+From: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
+Date: Mon, 29 Jan 2018 05:37:52 +0100
+Subject: [Buildroot] Qt4 - Qt5 Config anomaly
+In-Reply-To: <88976205-6a29-964d-a692-bcc09a4ff8d1@mind.be>
+References: <0e4d1d30-bdec-7ba0-5df4-9a719f5ee4f9@gmail.com>
+ <88976205-6a29-964d-a692-bcc09a4ff8d1@mind.be>
+Message-ID: <daadcd21-cf68-ae1f-e465-61bed98441ee@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Programs that use libudev (e.g. lsusb, from usbutils) need the hwdb.bin
-file to work properly.
+Dear Arnout&All,
 
-If BR2_PACKAGE_EUDEV_ENABLE_HWDB is selected then the eudev installation
-populates /etc/udev/hwdb.d/ but does not genarete /etc/udev/hwdb.bin. It
-must be created running "udevadm hwdb --update" on the target device.
+On 01/28/2018 11:27 PM, Arnout Vandecappelle wrote:
+>
+> On 24-01-18 23:28, Zoltan Gyarmati wrote:
+>> Dear All,
+>>
+>> I'm looking into this autobuild error:
+>>
+>> http://autobuild.buildroot.net/results/3c537e1260dc9ce57657ca0d49e318a10aee111e/
+>>
+>> where the qjson build fails because the moc_* files are generated with
+>> an old version of moc.
+>> It turned out that Qt4 and Qt5 are both enabled in this autobuild
+>> config, and Qt4 is being built second, so it overwrites moc and qmake in
+>> the host dir.
+>> I remembered that Qt4 at Qt5 used to be mutually exclusive (by setting
+>> "depends on !BR2_PACKAGE_QT" in package/qt5/Config.in) so I looked
+>> further and it turned that BR2_PACKAGE_QT5 is enabled because
+>> BR2_PACKAGE_PINENTRY_QT5 is enabled and it selects BR2_PACKAGE_QT5.
+>>
+>> What is the preferred way to fix this?
+>>
+>> a) Add also the "depends !BR2_PACKAGE_QT" guard to the
+>> BR2_PACKAGE_PINENTRY_QT5 config entry?
+>  That indeed would be the proper thing to do.
 
-Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
----
- package/eudev/S10udev | 12 ++++++++++--
- 1 file changed, 10 insertions(+), 2 deletions(-)
+Thanks, gonna send in a patch
+>
+>
+>> b) Inverse the dependency and enable BR2_PACKAGE_PINENTRY_QT5 only if
+>> BR2_PACKAGE_QT5 was enabled, rather then letting
+>> BR2_PACKAGE_PINENTRY_QT5 select BR2_PACKAGE_QT5). (and same logic for
+>> BR2_PACKAGE_PINENTRY_QT4)
+>  I guess here select was chosen rather than depends because you need to be able
+> to choose one of them, so for one of them you want to have a select. Anyway
+> there are other packages using qt4/5 that use select.
+>
+>
+>  Regards,
+>  Arnout
+>
+>> c) other?
+>>
+>>
+>> I would vote for option b) as it would be more consistent with the other
+>> Qt based packages' (like qtjson itself) config, but wanted to ask before
+>> sending in a patch.
+>>
+>> Thanks, regards
+>>
+>>
+>>
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
+>>
 
-diff --git a/package/eudev/S10udev b/package/eudev/S10udev
-index 8382bec2bb..5c25e51317 100755
---- a/package/eudev/S10udev
-+++ b/package/eudev/S10udev
-@@ -25,14 +25,22 @@ UDEV_CONFIG=/etc/udev/udev.conf
- test -r $UDEV_CONFIG || exit 6
- . $UDEV_CONFIG
- 
-+UDEV_HWDB_BIN=/etc/udev/hwdb.bin
-+UDEV_HWDB_D=/etc/udev/hwdb.d
-+
- case "$1" in
-     start)
-         printf "Populating ${udev_root:-/dev} using udev: "
-         printf '\000\000\000\000' > /proc/sys/kernel/hotplug
--        $UDEV_BIN -d || (echo "FAIL" && exit 1)
-+        $UDEV_BIN -d || { echo "FAIL" && exit 1; }
-         udevadm trigger --type=subsystems --action=add
-         udevadm trigger --type=devices --action=add
--        udevadm settle --timeout=30 || echo "udevadm settle failed"
-+        udevadm settle --timeout=30 || { echo "udevadm settle failed" && exit 1; }
-+        [ -d "$UDEV_HWDB_D" ] && {
-+            echo "done"
-+            printf "Compiling hardware database information $UDEV_HWDB_BIN: "
-+            udevadm hwdb --update || { echo "FAIL" && exit 1; }
-+        }
-         echo "done"
-         ;;
-     stop)
--- 
-2.14.3
+Zoltan Gyarmati
+https://zgyarmati.de
