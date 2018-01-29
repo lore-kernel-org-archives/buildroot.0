@@ -1,76 +1,118 @@
-From: Laurent Charpentier <laurent_pubs@yahoo.com>
-Date: Mon, 29 Jan 2018 12:47:55 +0000 (UTC)
-Subject: [Buildroot] missing dlfcn.h
-In-Reply-To: <20180129113510.3id25hgvvw7quigw@sapphire.tkos.co.il>
-References: <1543869406.2474659.1517222386735.ref@mail.yahoo.com>
- <1543869406.2474659.1517222386735@mail.yahoo.com>
- <20180129113510.3id25hgvvw7quigw@sapphire.tkos.co.il>
-Message-ID: <1496840252.2526366.1517230075169@mail.yahoo.com>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Mon, 29 Jan 2018 14:18:32 +0100
+Subject: [Buildroot] [PATCH] augeas: bump to version 1.10.1
+Message-ID: <20180129131832.14055-1-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Baruch,
-Thank you very much for your answer.I've just sent a patch to fix the error (enforce dynamic linking usage).
-Best Regards,Laurent
+Remove upstream patches included in the version bump.
 
-      From: Baruch Siach <baruch@tkos.co.il>
- To: Laurent Charpentier <laurent_pubs@yahoo.com> 
-Cc: Buildroot <buildroot@buildroot.org>
- Sent: Monday, January 29, 2018 12:35 PM
- Subject: Re: [Buildroot] missing dlfcn.h
-   
-Hi Laurent,
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+---
+ ...missing-trailing-backslash-for-dump-LDADD.patch | 25 ----------------
+ ...efile-do-not-force-static-linking-of-dump.patch | 33 ----------------------
+ package/augeas/augeas.hash                         |  4 +--
+ package/augeas/augeas.mk                           |  2 +-
+ 4 files changed, 3 insertions(+), 61 deletions(-)
+ delete mode 100644 package/augeas/0001-examples-Makefile-fix-missing-trailing-backslash-for-dump-LDADD.patch
+ delete mode 100644 package/augeas/0002-examples-Makefile-do-not-force-static-linking-of-dump.patch
 
-On Mon, Jan 29, 2018 at 10:39:46AM +0000, Laurent Charpentier wrote:
-> The non-regression builds show the following error for the "open-lldp" 
-> package for 2 toolchains (br-arm-full-static, br-m68k-5208-full):
-> 
-> weak_readline.c:30:19: fatal error: dlfcn.h: No such file or directory
->? #include <dlfcn.h>
->? ? ? ? ? ? ? ? ? ? ^
-> compilation terminated.
-> 
-> The "dlfcn.h" file is located under <toolchain>/sysroot/usr/include/dlfcn.h 
-> for all toolchains except for the br-arm-full-static and br-m68k-5208-full 
-> toolchains where the file does not exist.
-
-That is because these toolchain can only produce static executables. The C 
-library in these toolchain does not provide the dynamic linking interface 
-(dlsym, dlopen, etc.). So the dlfcn.h header is not present.
-
-> Other projects includes this file ("iproute2" in file iplink.c for example) 
-> and do not report the problem.
-
-iproute2 provides a local header in include/dlfcn.h. The toolchain dlfnc.h 
-header is only included when shared library support is enabled:
-
-#ifndef NO_SHARED_LIBS
-#include_next <dlfcn.h>
-#else
-...
-
-> Question: how to fix this error? is it a toolchain issue?
-
-If there is an easy way to make open-lldp support static build, that would be 
-best. Otherwise, the fix is to make open-lldp depend on !BR2_STATIC_LIBS, like 
-many other packages in Buildroot.
-
-baruch
-
+diff --git a/package/augeas/0001-examples-Makefile-fix-missing-trailing-backslash-for-dump-LDADD.patch b/package/augeas/0001-examples-Makefile-fix-missing-trailing-backslash-for-dump-LDADD.patch
+deleted file mode 100644
+index 82d7c892be..0000000000
+--- a/package/augeas/0001-examples-Makefile-fix-missing-trailing-backslash-for-dump-LDADD.patch
++++ /dev/null
+@@ -1,25 +0,0 @@
+-From d506cf6c1567cbb0a762c04d9354ab1694a5ac05 Mon Sep 17 00:00:00 2001
+-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+-Date: Mon, 11 Dec 2017 23:33:08 +0100
+-Subject: [PATCH] Update Makefile.am
+-
+-Add missing trailing backslash for `dump_LDADD`.
+-
+-Backported from: d506cf6c1567cbb0a762c04d9354ab1694a5ac05
+-
+-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+----
+- examples/Makefile.am | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/examples/Makefile.am b/examples/Makefile.am
+-index 66ebcdf2..a19597bf 100644
+---- a/examples/Makefile.am
+-+++ b/examples/Makefile.am
+-@@ -13,5 +13,5 @@ fadot_LDADD = $(top_builddir)/src/libfa.la $(GNULIB)
+- 
+- dump_sources = dump.c
+- dump_LDFLAGS = -static
+--dump_LDADD =  $(top_builddir)/src/libaugeas.la $(top_builddir)/src/libfa.la
+-+dump_LDADD =  $(top_builddir)/src/libaugeas.la $(top_builddir)/src/libfa.la \
+- 	          $(GNULIB)
+diff --git a/package/augeas/0002-examples-Makefile-do-not-force-static-linking-of-dump.patch b/package/augeas/0002-examples-Makefile-do-not-force-static-linking-of-dump.patch
+deleted file mode 100644
+index fe83fa7af6..0000000000
+--- a/package/augeas/0002-examples-Makefile-do-not-force-static-linking-of-dump.patch
++++ /dev/null
+@@ -1,33 +0,0 @@
+-From c50b793f6ab17c192e048b4a06421be7c6381998 Mon Sep 17 00:00:00 2001
+-From: David Lutterkort <lutter@watzmann.net>
+-Date: Fri, 5 Jan 2018 14:48:15 -0800
+-Subject: [PATCH] * examples/Makefile.am: do not force static linking of dump
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
+-
+-Forcing static linking of 'dump' was accidentally left in from some
+-testing; there is no reason to force that specifically for dump.
+-
+-Thanks to J?rg Krause for reporting the issue and verifying the fix.
+-
+-Fixes https://github.com/hercules-team/augeas/issues/535
+-
+-Backported from: c50b793f6ab17c192e048b4a06421be7c6381998
+-
+-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+----
+- examples/Makefile.am | 1 -
+- 1 file changed, 1 deletion(-)
+-
+-diff --git a/examples/Makefile.am b/examples/Makefile.am
+-index a19597bf..928eb517 100644
+---- a/examples/Makefile.am
+-+++ b/examples/Makefile.am
+-@@ -12,6 +12,5 @@ fadot_SOURCES = fadot.c
+- fadot_LDADD = $(top_builddir)/src/libfa.la $(GNULIB)
+- 
+- dump_sources = dump.c
+--dump_LDFLAGS = -static
+- dump_LDADD =  $(top_builddir)/src/libaugeas.la $(top_builddir)/src/libfa.la \
+- 	          $(GNULIB)
+diff --git a/package/augeas/augeas.hash b/package/augeas/augeas.hash
+index a256686983..46b99dd8fe 100644
+--- a/package/augeas/augeas.hash
++++ b/package/augeas/augeas.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature from
+-# http://download.augeas.net/augeas-1.9.0.tar.gz.sig
+-sha256  2b463d398cabc9b42747aa61d3e83ed6a93ce03d9074cf8e7a7bd3107a668343  augeas-1.9.0.tar.gz
++# http://download.augeas.net/augeas-1.10.1.tar.gz.sig
++sha256  52db256afab261d31cc147eaa1a71795a5fec59e888dfd0b65a84c7aacd6364d  augeas-1.10.1.tar.gz
+ sha256  ca0061fc1381a3ab242310e4b3f56389f28e3d460eb2fd822ed7a21c6f030532  COPYING
+diff --git a/package/augeas/augeas.mk b/package/augeas/augeas.mk
+index 8a7f38ede4..c4b8b7e6c2 100644
+--- a/package/augeas/augeas.mk
++++ b/package/augeas/augeas.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-AUGEAS_VERSION = 1.9.0
++AUGEAS_VERSION = 1.10.1
+ AUGEAS_SITE = http://download.augeas.net
+ AUGEAS_INSTALL_STAGING = YES
+ AUGEAS_LICENSE = LGPL-2.1+
 -- 
-? ? http://baruch.siach.name/blog/ ? ? ? ? ? ? ? ? ~. .~? Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-? - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
-_______________________________________________
-buildroot mailing list
-buildroot at busybox.net
-http://lists.busybox.net/mailman/listinfo/buildroot
-
-
-   
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180129/4487dccd/attachment.html>
+2.16.0
