@@ -1,55 +1,42 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 29 Jan 2018 13:35:10 +0200
-Subject: [Buildroot] missing dlfcn.h
-In-Reply-To: <1543869406.2474659.1517222386735@mail.yahoo.com>
-References: <1543869406.2474659.1517222386735.ref@mail.yahoo.com>
- <1543869406.2474659.1517222386735@mail.yahoo.com>
-Message-ID: <20180129113510.3id25hgvvw7quigw@sapphire.tkos.co.il>
+From: Carlos Santos <casantos@datacom.ind.br>
+Date: Mon, 29 Jan 2018 09:36:12 -0200 (BRST)
+Subject: [Buildroot] [PATCH] eudev: generate /etc/udev/hwdb.bin at
+ system startup
+In-Reply-To: <1839955484.109240.1517222243617.JavaMail.zimbra@datacom.ind.br>
+References: <20180129041931.28192-1-casantos@datacom.ind.br>
+ <20180129053603.pqmufwqeo3cv5p6q@sapphire.tkos.co.il>
+ <1839955484.109240.1517222243617.JavaMail.zimbra@datacom.ind.br>
+Message-ID: <1879296971.142420.1517225772145.JavaMail.zimbra@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Laurent,
+> From: "Carlos Santos" <casantos@datacom.ind.br>
+> To: "Baruch Siach" <baruch@tkos.co.il>
+> Cc: "Bernd Kuhls" <bernd.kuhls@t-online.de>, "Eric Le Bihan" <eric.le.bihan.dev@free.fr>, "buildroot"
+> <buildroot@buildroot.org>
+> Sent: Monday, January 29, 2018 8:37:23 AM
+> Subject: Re: [Buildroot] [PATCH] eudev: generate /etc/udev/hwdb.bin at system startup
 
-On Mon, Jan 29, 2018 at 10:39:46AM +0000, Laurent Charpentier wrote:
-> The non-regression builds show the following error for the "open-lldp" 
-> package for 2 toolchains (br-arm-full-static, br-m68k-5208-full):
+---8<---
+>> 
+>> Wouldn't that break read-only /etc?
 > 
-> weak_readline.c:30:19: fatal error: dlfcn.h: No such file or directory
->  #include <dlfcn.h>
->                    ^
-> compilation terminated.
+> The script may require some customization, as already explained in its
+> opening comments, which is beyond the scope of this change.
 > 
-> The "dlfcn.h" file is located under <toolchain>/sysroot/usr/include/dlfcn.h 
-> for all toolchains except for the br-arm-full-static and br-m68k-5208-full 
-> toolchains where the file does not exist.
+> Notice that a read-only /etc does not break the init script. It breaks
+> the "udevadm hwdb --update" command, as well as any command that assume
+> a rw filesystem (and there is a lot of them).
 
-That is because these toolchain can only produce static executables. The C 
-library in these toolchain does not provide the dynamic linking interface 
-(dlsym, dlopen, etc.). So the dlfcn.h header is not present.
-
-> Other projects includes this file ("iproute2" in file iplink.c for example) 
-> and do not report the problem.
-
-iproute2 provides a local header in include/dlfcn.h. The toolchain dlfnc.h 
-header is only included when shared library support is enabled:
-
-#ifndef NO_SHARED_LIBS
-#include_next <dlfcn.h>
-#else
-...
-
-> Question: how to fix this error? is it a toolchain issue?
-
-If there is an easy way to make open-lldp support static build, that would be 
-best. Otherwise, the fix is to make open-lldp depend on !BR2_STATIC_LIBS, like 
-many other packages in Buildroot.
-
-baruch
+Addendum: the solution would be overriding the udevhwdbbin variable
+in the configuration script, pointing to some read-write path (e.g.
+/run/udev/data/, which is under a tmpfs by default).
 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Carlos Santos (Casantos) - DATACOM, P&D
+?The greatest triumph that modern PR can offer is the transcendent 
+success of having your words and actions judged by your reputation, 
+rather than the other way about.? ? Christopher Hitchens
