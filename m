@@ -1,25 +1,29 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 29 Jan 2018 14:37:21 +0100
-Subject: [Buildroot] [PATCH 1/1] package/systemd: fix build with
- fallback hostname
-In-Reply-To: <20180129094506.31553-1-chemobejk@gmail.com> (Stefan Becker's
- message of "Mon, 29 Jan 2018 11:45:06 +0200")
-References: <20180129094506.31553-1-chemobejk@gmail.com>
-Message-ID: <87zi4w7pm6.fsf@dell.be.48ers.dk>
+Date: Mon, 29 Jan 2018 14:39:06 +0100
+Subject: [Buildroot] [PATCH 1/1] open-lldp: requires dynamic linking
+ interface (dlopen, ...)
+In-Reply-To: <20180129124530.25241-1-laurent_pubs@yahoo.com> (Laurent
+ Charpentier's message of "Mon, 29 Jan 2018 13:45:30 +0100")
+References: <20180129124530.25241-1-laurent_pubs@yahoo.com>
+Message-ID: <87vafk7pj9.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Stefan" == Stefan Becker <chemobejk@gmail.com> writes:
+>>>>> "Laurent" == Laurent Charpentier <laurent_pubs@yahoo.com> writes:
 
- > Commit aebabb2780da4c5f85fec00b56f4690feb646073 used an autmoake
- > configuration option. Replace it with the meson version.
+ > This patch is to fix the following build error:
+ > weak_readline.c:30:19: fatal error: dlfcn.h: No such file or directory
+ >  #include <dlfcn.h>
+ >                    ^
+ > compilation terminated.
+ > Makefile:890: recipe for target 'weak_readline.o' failed
 
- > Fixes #10716
+ > http://autobuild.buildroot.net/results/516456c8e21759e1ecee4ef9f9689a8f720ecd90/build-end.log
 
- > Signed-off-by: Stefan Becker <chemobejk@gmail.com>
+ > Signed-off-by: Laurent Charpentier <laurent_pubs@yahoo.com>
 
 Committed, thanks.
 
