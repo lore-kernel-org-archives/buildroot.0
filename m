@@ -1,53 +1,67 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 29 Jan 2018 09:43:50 +0100
-Subject: [Buildroot] [git commit] linux-firmware: add hashes for license
- files
-Message-ID: <20180129084821.BA08B87F61@busybox.osuosl.org>
+Date: Mon, 29 Jan 2018 09:48:08 +0100
+Subject: [Buildroot] [git commit] dovecot: add upstream security fix for
+ CVE-2017-15132
+Message-ID: <20180129084821.E8B6687F61@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=445ad454b555d7c3d8d0a7526c7676e8fa13601b
+commit: https://git.buildroot.net/buildroot/commit/?id=28adb37be48566ede823969c284c1490b456530a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Locally calculated, to fix legal-info generation.
+A flaw was found in dovecot 2.0 up to 2.2.33 and 2.3.0.  An abort of SASL
+authentication results in a memory leak in dovecot's auth client used by
+login processes.  The leak has impact in high performance configuration
+where same login processes are reused and can cause the process to crash due
+to memory exhaustion.
 
-Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+For more details, see:
+http://www.openwall.com/lists/oss-security/2018/01/25/4
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-firmware/linux-firmware.hash | 24 ++++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
+ ...x-memory-leak-in-auth_client_request_abor.patch | 33 ++++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
 
-diff --git a/package/linux-firmware/linux-firmware.hash b/package/linux-firmware/linux-firmware.hash
-index ff2e162b42..ae5f80f2da 100644
---- a/package/linux-firmware/linux-firmware.hash
-+++ b/package/linux-firmware/linux-firmware.hash
-@@ -1,2 +1,26 @@
- # Locally calculated
- sha256 d253f7abb32e0407bcc840a5bddba1dc20190bb4a4bb6d40512f279fde384671 linux-firmware-65b1c68c63f974d72610db38dfae49861117cae2.tar.gz
-+sha256 8116433f4004fc0c24d72b3d9e497808b724aa0e5e1cd63fc1bf66b715b1e2e9 LICENCE.Abilis
-+sha256 38f2037aa14631b4b29826d7a99379613c41a97064d1defdee30a7a022138b20 LICENCE.Marvell
-+sha256 802b7014b26c606cf6248ae8b0ab1ce6d2d1b0db236d38dd269e676cd70710f2 LICENCE.atheros_firmware
-+sha256 b16056fc91b82a0e3e8de8f86c2dac98201aa9dc3cbd33e8d38f1b087fcec30d LICENCE.broadcom_bcm43xx
-+sha256 a5777f9e80aca0603b0648454de996168b1c530322550ccda94d6d78bcf6c061 LICENCE.chelsio_firmware
-+sha256 60fbc9cccb455e1a3306c97db942d6f24fa93664be61d54c497637e6d0e2ae83 LICENCE.fw_sst_0f28
-+sha256 5181b0b51efc79d5acb2c9bb92042878fdbad97a92114d4ab5e32e2b5b52fce4 LICENCE.ibt_firmware
-+sha256 0e0c11073ba3c832097da38e0905da36b8a3526f219407977b13b71c6675be7d LICENCE.it913x
-+sha256 e295020afd7597dc1b3bbe50a84a7e432d9cb92bc053c1c5e657b50d2517627b LICENCE.iwlwifi_firmware
-+sha256 4071a11d878dbc0ac6d9e71203d03b151638f9d7a8bc47a54c3cb964100d5822 LICENCE.qla2xxx
-+sha256 d7bec70668ddd4aae8fb4aa32870e54b49fcdb0b9b007aa9f54b53a1ac7461bd LICENCE.ralink-firmware.txt
-+sha256 8568352b57f3574f9d5b2753cdb7c6e5eb2b79e82fbb9c9ba6566947467ef508 LICENCE.ralink_a_mediatek_company_firmware
-+sha256 a61351665b4f264f6c631364f85b907d8f8f41f8b369533ef4021765f9f3b62e LICENCE.rtlwifi_firmware.txt
-+sha256 106bef96470001e877fcf7ba0337fa6766a317650eb47fcaeb743eeebd62c4ff LICENCE.ti-connectivity
-+sha256 8ea9f4aee5f53ad877041ff089e8c95d34d615ce19a3111e5e1ea70d990ed7ff LICENCE.xc4000
-+sha256 30ec8a66503dc73f83937564ae70ca23aa03259e64727ff4195b5b6f695e782f LICENCE.xc5000
-+sha256 f8822049f32fef2e90a197bd8cf259f476db75d549456bdca8567616a9c07ace LICENCE.xc5000c
-+sha256 337a55102138d7baa143ee4a4c6c91693e0113fece35d380b2a12109e8c23b3f LICENSE.QualcommAtheros_ath10k
-+sha256 630fd46c95d3ac6544590c2265ba7348fbc930fb386261a1c04dcd9f403645b8 LICENSE.dib0700
-+sha256 8542aeabf2761935122d693561e16766ce1bcc2b0d003204f9040b7d6d929f2e LICENSE.i915
-+sha256 be904cd28cb292b80cdb6cf412ab0d9159d431671e987ad433c1f62e0988a9bc LICENSE.qcom
-+sha256 fc6223d4bfe9f2f9e2eddc44b9fe5721d0caf49f01cb08d602906add686d8c6f LICENSE.radeon
-+sha256 2bdd2e716f05d9737d3f9a20f9a3a3c0caee0e866100ddb0673f1178e42f92b9 LICENSE.sdma_firmware
-+sha256 9703115e298649dfad003d7d3d55f4b2bd417e28f19e9cf6d5c6f9a906a2c4d9 WHENCE
+diff --git a/package/dovecot/0002-lib-auth-Fix-memory-leak-in-auth_client_request_abor.patch b/package/dovecot/0002-lib-auth-Fix-memory-leak-in-auth_client_request_abor.patch
+new file mode 100644
+index 0000000000..babccd3acf
+--- /dev/null
++++ b/package/dovecot/0002-lib-auth-Fix-memory-leak-in-auth_client_request_abor.patch
+@@ -0,0 +1,33 @@
++From 1a29ed2f96da1be22fa5a4d96c7583aa81b8b060 Mon Sep 17 00:00:00 2001
++From: Timo Sirainen <timo.sirainen@dovecot.fi>
++Date: Mon, 18 Dec 2017 16:50:51 +0200
++Subject: [PATCH] lib-auth: Fix memory leak in auth_client_request_abort()
++
++This caused memory leaks when authentication was aborted. For example
++with IMAP:
++
++a AUTHENTICATE PLAIN
++*
++
++Broken by 9137c55411aa39d41c1e705ddc34d5bd26c65021
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ src/lib-auth/auth-client-request.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/src/lib-auth/auth-client-request.c b/src/lib-auth/auth-client-request.c
++index 480fb42b3..046f7c307 100644
++--- a/src/lib-auth/auth-client-request.c
+++++ b/src/lib-auth/auth-client-request.c
++@@ -186,6 +186,7 @@ void auth_client_request_abort(struct auth_client_request **_request)
++ 
++ 	auth_client_send_cancel(request->conn->client, request->id);
++ 	call_callback(request, AUTH_REQUEST_STATUS_ABORT, NULL, NULL);
+++	pool_unref(&request->pool);
++ }
++ 
++ unsigned int auth_client_request_get_id(struct auth_client_request *request)
++-- 
++2.11.0
++
