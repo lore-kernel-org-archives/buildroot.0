@@ -1,11 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 29 Jan 2018 22:35:25 +0100
-Subject: [Buildroot] [PATCH 0/2 v2] package/matchbox: fixes
-In-Reply-To: <20171230183529.618e21a5@windsurf> (Thomas Petazzoni's message of
- "Sat, 30 Dec 2017 18:35:29 +0100")
-References: <cover.1514045682.git.yann.morin.1998@free.fr>
- <20171230183529.618e21a5@windsurf>
-Message-ID: <87tvv44aci.fsf@dell.be.48ers.dk>
+Date: Mon, 29 Jan 2018 22:35:47 +0100
+Subject: [Buildroot] [PATCH] tar: do not build SELinux support for host
+ variant
+In-Reply-To: <20171229202608.1767-1-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Fri, 29 Dec 2017 21:26:08 +0100")
+References: <20171229202608.1767-1-thomas.petazzoni@free-electrons.com>
+Message-ID: <87po5s4abw.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,12 +14,12 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- > Hello,
- > On Sat, 23 Dec 2017 17:15:35 +0100, Yann E. MORIN wrote:
+ > If we don't explicitly disable SELinux support in the host-tar build,
+ > it might pick up system-wide installed SELinux libraries, causing the
+ > tar in HOST_DIR/bin/ to depend on the host SELinux libraries, which is
+ > not desirable to make the SDK portable/relocatable.
 
- >> Yann E. MORIN (2):
- >> matchbox-lib: fix dependencies
- >> package/matchbox-lib: correctly fix the .pc file
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
 Committed to 2017.02.x, thanks.
 
