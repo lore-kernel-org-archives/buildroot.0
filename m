@@ -1,40 +1,46 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 29 Jan 2018 14:21:14 +0200
-Subject: [Buildroot] buildroot-2017-08 - opennhrp
-In-Reply-To: <CAK-ZdpU4fSD8YD3UfNe2FP5jU6mfRxtZYvo=zF-064eovXxB-g@mail.gmail.com>
-References: <CAK-ZdpU4fSD8YD3UfNe2FP5jU6mfRxtZYvo=zF-064eovXxB-g@mail.gmail.com>
-Message-ID: <20180129122114.whqic34ifjid5apj@sapphire.tkos.co.il>
+From: Laurent Charpentier <laurent_pubs@yahoo.com>
+Date: Mon, 29 Jan 2018 13:45:30 +0100
+Subject: [Buildroot] [PATCH 1/1] open-lldp: requires dynamic linking
+ interface (dlopen, ...)
+Message-ID: <20180129124530.25241-1-laurent_pubs@yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Boris,
+This patch is to fix the following build error:
+weak_readline.c:30:19: fatal error: dlfcn.h: No such file or directory
+ #include <dlfcn.h>
+                   ^
+compilation terminated.
+Makefile:890: recipe for target 'weak_readline.o' failed
 
-On Mon, Jan 29, 2018 at 02:10:50PM +0200, Boris Levin wrote:
-> Im a new user with buildroot coming from ltib.
+http://autobuild.buildroot.net/results/516456c8e21759e1ecee4ef9f9689a8f720ecd90/build-end.log
 
-Welcome.
+Signed-off-by: Laurent Charpentier <laurent_pubs@yahoo.com>
+---
+ package/open-lldp/Config.in | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-> My question is dose any one integrated opennhrp demon in to buildroot?
-> Why dose it missing from the current release (2017-11)?
-
-Specific packages are being added to Buildroot by anyone who feels the need 
-for them. Fill free to post a patch adding opennhrp to Buildroot. For more 
-information on adding packages to Buildroot, see chapter 17 (Adding new 
-packages to Buildroot) in the Buildroot manual:
-
-  http://nightly.buildroot.org/manual.html#adding-packages
-
-See also ?21.5 (Submitting patches):
-
-  http://nightly.buildroot.org/manual.html#submitting-patches
-
-Hope this helps,
-baruch
-
+diff --git a/package/open-lldp/Config.in b/package/open-lldp/Config.in
+index d54cf181d3..b40bff8996 100644
+--- a/package/open-lldp/Config.in
++++ b/package/open-lldp/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_OPEN_LLDP
+ 	bool "open-lldp"
++	depends on !BR2_STATIC_LIBS # dlfcn.h
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libnl
+ 	select BR2_PACKAGE_LIBCONFIG
+ 	select BR2_PACKAGE_LIBNL
+@@ -11,5 +12,5 @@ config BR2_PACKAGE_OPEN_LLDP
+ 
+ 	  http://open-lldp.org/
+ 
+-comment "open-lldp needs a toolchain w/ threads"
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS
++comment "open-lldp needs a toolchain w/ dynamic library, threads"
++	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+2.14.3
