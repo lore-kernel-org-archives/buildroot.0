@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 29 Jan 2018 22:29:37 +0100
-Subject: [Buildroot] [PATCH v2] ejabberd: Bump to version 17.11
-In-Reply-To: <20180119162931.27721-1-johan.oudinet@gmail.com>
-References: <20180119162931.27721-1-johan.oudinet@gmail.com>
-Message-ID: <20180129222937.31264d2d@windsurf.lan>
+Date: Mon, 29 Jan 2018 22:34:08 +0100
+Subject: [Buildroot] [PATCH] kodi-texturepacker: fix compiltion error
+In-Reply-To: <20180119164232.1559-1-daggs@gmx.com>
+References: <20180119164232.1559-1-daggs@gmx.com>
+Message-ID: <20180129223408.7364dc0d@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,51 +12,30 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 19 Jan 2018 17:29:31 +0100, Johan Oudinet wrote:
-> * Adapt all patches.
-> * Use the new configure option enable-system-deps even though there is
->   still a patch needed to correct includes.
-> * Disable graphics to not depends on X libraries. Disable also
->   mod_avatar from the default loaded modules, since this module
->   requires graphics enabled.
+On Fri, 19 Jan 2018 18:42:32 +0200, Dagg Stompler wrote:
+> backport fix the following error: declaration of ?void* reallocarray(void*, size_t, size_t) throw ()? has a different exception specifier
+> from upstream kodi which can be reproduced using the following defconfig:
+> BR2_x86_64=y
+> BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+> BR2_TOOLCHAIN_BUILDROOT_CXX=y
+> BR2_PACKAGE_KODI=y
+> BR2_PACKAGE_MESA3D=y
+> BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600=y
+> BR2_PACKAGE_MESA3D_OPENGL_EGL=y
+> BR2_PACKAGE_XORG7=y
+> BR2_PACKAGE_PYTHON=y
+> BR2_PACKAGE_PYTHON_PY_PYC=y
 > 
-> Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
+> Signed-off-by: Dagg Stompler <daggs@gmx.com>
+> ---
+>  .../kodi-texturepacker/0002-fix_reallocarray.patch | 169 +++++++++++++++++++++
+>  1 file changed, 169 insertions(+)
+>  create mode 100644 package/kodi-texturepacker/0002-fix_reallocarray.patch
 
-Thanks for this new version, I've applied to master. However, I have
-one question below.
-
-
-> -EJABBERD_ERLANG_LIBS = sasl crypto public_key ssl mnesia inets compiler
-> +# Install check-erlang-lib script to the directory in which the
-> +# package has been uncompressed, so it is available during the
-> +# configure step.
-> +define EJABBERD_INSTALL_CHECK_ERLANG_LIB
-> +	$(INSTALL) -m 0755 $(EJABBERD_PKGDIR)/check-erlang-lib \
-> +		$(@D)/check-erlang-lib
-> +endef
-> +
-> +EJABBERD_POST_EXTRACT_HOOKS += EJABBERD_INSTALL_CHECK_ERLANG_LIB
-> +
-> +EJABBERD_ERLANG_LIBS = sasl public_key mnesia inets compiler
->  
->  # Guess answers for these tests, configure will bail out otherwise
->  # saying error: cannot run test program while cross compiling.
->  EJABBERD_CONF_ENV = \
->  	ac_cv_erlang_root_dir="$(HOST_DIR)/lib/erlang" \
->  	$(foreach lib,$(EJABBERD_ERLANG_LIBS), \
-> -		ac_cv_erlang_lib_dir_$(lib)="`package/ejabberd/check-erlang-lib $(lib)`")
-> +		ac_cv_erlang_lib_dir_$(lib)="`./check-erlang-lib $(lib)`")
-
-Why did you change the location of check-erlang-lib ? What was the
-problem ? It looked like a good idea to directly used it from
-package/ejabberd/ instead of copying it.
-
-Could you explain this ?
-
-Thanks!
+Applied to master after tweaking the commit log. Thanks!
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
+Embedded Linux, Kernel and Android engineering
 http://free-electrons.com
