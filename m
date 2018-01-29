@@ -1,99 +1,51 @@
-From: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
-Date: Mon, 29 Jan 2018 09:26:38 +0100
-Subject: [Buildroot] [PATCH v1] package/gpsd: upgrade to 3.17,
- remove obsolete patch
-Message-ID: <1517214398-1591-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
+From: Julien Corjon <corjon.j@ecagroup.com>
+Date: Mon, 29 Jan 2018 09:28:19 +0100
+Subject: [Buildroot] [PATCH 1/1] package/wf111: Fix manufacturer name and url
+Message-ID: <20180129082819.13870-1-corjon.j@ecagroup.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The upstream patch which disables the build-time systemctl call made it into
-this release so removing it here. Also adding hash for the COPYING file.
-
-Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
+Signed-off-by: Julien Corjon <corjon.j@ecagroup.com>
 ---
- ...01-SConstruct-do-not-force-O2-by-default.patch} |  0
- ...eract-with-systemctl-when-cross-compiling.patch | 41 ----------------------
- package/gpsd/gpsd.hash                             |  3 +-
- package/gpsd/gpsd.mk                               |  2 +-
- 4 files changed, 3 insertions(+), 43 deletions(-)
- rename package/gpsd/{0002-SConstruct-do-not-force-O2-by-default.patch => 0001-SConstruct-do-not-force-O2-by-default.patch} (100%)
- delete mode 100644 package/gpsd/0001-do-not-interact-with-systemctl-when-cross-compiling.patch
+ package/wf111/Config.in | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/gpsd/0002-SConstruct-do-not-force-O2-by-default.patch b/package/gpsd/0001-SConstruct-do-not-force-O2-by-default.patch
-similarity index 100%
-rename from package/gpsd/0002-SConstruct-do-not-force-O2-by-default.patch
-rename to package/gpsd/0001-SConstruct-do-not-force-O2-by-default.patch
-diff --git a/package/gpsd/0001-do-not-interact-with-systemctl-when-cross-compiling.patch b/package/gpsd/0001-do-not-interact-with-systemctl-when-cross-compiling.patch
-deleted file mode 100644
-index 9e91a02..0000000
---- a/package/gpsd/0001-do-not-interact-with-systemctl-when-cross-compiling.patch
-+++ /dev/null
-@@ -1,41 +0,0 @@
--From 777cb3737ae85b13642fff48eabb601c4d40f527 Mon Sep 17 00:00:00 2001
--From: James Knight <james.d.knight@live.com>
--Date: Tue, 16 Feb 2016 23:51:08 -0500
--Subject: [PATCH] do not interact with systemctl when cross-compiling
--
--The installation process for GPSd on a systemd environment will attempt
--to reload systemd's manager configuration (systemctl daemon-reload).
--This is to allow the system to take advantage of the newly installed
--GPSd services. When cross-compiling, the installation process should not
--attempt to interact with the build environment's systemd instance (if
--any). The following change checks if the build is not cross compiling
--(via 'not env["sysroot"]') before attempting to do a systemd reload.
--
--Signed-off-by: James Knight <james.d.knight@live.com>
--[yann.morin.1998 at free.fr: tweak to apply on 3.16]
--Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-----
-- SConstruct | 4 +++-
-- 1 file changed, 3 insertions(+), 1 deletion(-)
--
--diff --git a/SConstruct b/SConstruct
--index c3bfd0d1..97c1b3a9 100644
----- a/SConstruct
--+++ b/SConstruct
--@@ -1909,10 +1909,12 @@ udev_install = Utility('udev-install', 'install', [
--     ] + hotplug_wrapper_install)
-- 
-- if env['systemd']:
--+    env.Requires(udev_install, systemd_install)
--+
--+if env['systemd'] and not env["sysroot"]:
--     systemctl_daemon_reload = Utility('systemctl-daemon-reload', '', [ 'systemctl daemon-reload || true'])
--     env.AlwaysBuild(systemctl_daemon_reload)
--     env.Precious(systemctl_daemon_reload)
---    env.Requires(udev_install, systemd_install)
--     env.Requires(systemctl_daemon_reload, systemd_install)
--     env.Requires(udev_install, systemctl_daemon_reload)
-- 
---- 
--2.11.0
--
-diff --git a/package/gpsd/gpsd.hash b/package/gpsd/gpsd.hash
-index 3083af2..805c298 100644
---- a/package/gpsd/gpsd.hash
-+++ b/package/gpsd/gpsd.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256	03579af13a4d3fe0c5b79fa44b5f75c9f3cac6749357f1d99ce5d38c09bc2029	gpsd-3.16.tar.gz
-+sha256	68e0dbecfb5831997f8b3d6ba48aed812eb465d8c0089420ab68f9ce4d85e77a	gpsd-3.17.tar.gz
-+sha256	71ff85d18bf063954cfc4251678d0e772223e21f80febbd99d5524c90f73f832	COPYING
-diff --git a/package/gpsd/gpsd.mk b/package/gpsd/gpsd.mk
-index 2b9c38a..e3fa20c 100644
---- a/package/gpsd/gpsd.mk
-+++ b/package/gpsd/gpsd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/wf111/Config.in b/package/wf111/Config.in
+index 80109f1b88..081bd960cb 100644
+--- a/package/wf111/Config.in
++++ b/package/wf111/Config.in
+@@ -6,7 +6,7 @@ config BR2_PACKAGE_WF111
+ 	# dynamically linked against the glibc.
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC
+ 	help
+-	  BlueGiga WF111 WiFi driver and utilities.
++	  Silicon Labs WF111 WiFi driver and utilities.
  
--GPSD_VERSION = 3.16
-+GPSD_VERSION = 3.17
- GPSD_SITE = http://download-mirror.savannah.gnu.org/releases/gpsd
- GPSD_LICENSE = BSD-3-Clause
- GPSD_LICENSE_FILES = COPYING
+ 	  Warning: CONFIG_WIRELESS_EXT and CONFIG_WEXT_PRIV must be
+ 	  selected in the Linux kernel configuration. These are blind
+@@ -17,16 +17,16 @@ config BR2_PACKAGE_WF111
+ 	    configuration entry that selects them, for example.
+ 	  - By enabling another random WiFi driver that select them.
+ 
+-	  http://www.bluegiga.com/en-US/products/wifi-modules/wf111-wifi-module/
++	  https://www.silabs.com/products/wireless/wi-fi/wf111-bluegiga-module
+ 
+ if BR2_PACKAGE_WF111
+ 
+ config BR2_PACKAGE_WF111_TARBALL_PATH
+ 	string "Local tarball location"
+ 	help
+-	  The WF111 tarball can be retrieved on the BlueGiga website
+-	  after registration. This option specifies the path where the
+-	  tarball is locally saved.
++	  The WF111 tarball can be retrieved on the Silicon Labs
++	  website after registration. This option specifies the path
++	  where the tarball is locally saved.
+ 
+ endif
+ 
 -- 
-2.7.4
+2.14.1
