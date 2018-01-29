@@ -1,28 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 29 Jan 2018 22:36:42 +0100
-Subject: [Buildroot] [PATCH 1/1] mariadb: security bump version to
- 10.1.30
-In-Reply-To: <20180105144726.3756-1-bluemrp9@gmail.com> (Ryan Coe's message of
- "Fri, 5 Jan 2018 06:47:26 -0800")
-References: <20180105144726.3756-1-bluemrp9@gmail.com>
-Message-ID: <87d11s4aad.fsf@dell.be.48ers.dk>
+Date: Mon, 29 Jan 2018 22:36:59 +0100
+Subject: [Buildroot] [PATCH 1/1] package/php: bump version to 7.1.13
+In-Reply-To: <20180106183657.20579-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Sat, 6 Jan 2018 19:36:57 +0100")
+References: <20180106183657.20579-1-bernd.kuhls@t-online.de>
+Message-ID: <878tcg4a9w.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Ryan" == Ryan Coe <bluemrp9@gmail.com> writes:
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
- > Release notes: https://mariadb.com/kb/en/mariadb-10130-release-notes/
- > Changelog: https://mariadb.com/kb/en/mariadb-10130-changelog/
+ > Removed 0008-fix-asm-constraints-in-aarch64-multiply-macro.patch, patch
+ > was applied upstream:
+ > https://github.com/php/php-src/commit/d6d4f2a9b38cd7fa7e938142e49e5a514d612e52
 
- > Fixes the following security vulnerability:
+ > Renumbered patch 0009.
 
- > CVE-2017-15365 - Replication in sql/event_data_objects.cc occurs before ACL
- > checks.
-
- > Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
 Committed to 2017.02.x, thanks.
 
