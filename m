@@ -1,50 +1,40 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 29 Jan 2018 21:40:22 +0100
-Subject: [Buildroot] [git commit] orangepi-zero: bump linux to 4.15,
- u-boot to 2018.01
-Message-ID: <20180129204047.40E4987F8B@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 29 Jan 2018 22:07:54 +0100
+Subject: [Buildroot] [git commit] daq: add necessary dependencies on
+ host-flex and host-bison
+Message-ID: <20180129210806.0506D87FB8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=118056059b7c0bc02f8a66ac7793acdc867540de
+commit: https://git.buildroot.net/buildroot/commit/?id=c683d37cdcd920497cbd15cc7fadac756b641a04
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-And enable dhcp for eth0 now that the ethernet is finally supported.
+daq depends on flex and bison to be configured.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Fixes:
+http://autobuild.buildroot.net/results/43da4ae3b7fc26e6712d369d4d030954d0d85149
+http://autobuild.buildroot.net/results/0fc2bcf9da758f427adf2fddca8ad1dace6a080e
+http://autobuild.buildroot.net/results/7411ac4ae5bef71b78c69b680de2b72f389ad2ee
+... and many more.
+
+Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- configs/orangepi_zero_defconfig | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ package/daq/daq.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/configs/orangepi_zero_defconfig b/configs/orangepi_zero_defconfig
-index 5d4ec14e28..86c634e39b 100644
---- a/configs/orangepi_zero_defconfig
-+++ b/configs/orangepi_zero_defconfig
-@@ -3,12 +3,13 @@ BR2_cortex_a7=y
- BR2_ARM_FPU_VFPV4=y
- BR2_GLOBAL_PATCH_DIR="board/orangepi/orangepi-zero/patches"
- BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_13=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_15=y
- BR2_TARGET_GENERIC_HOSTNAME="OrangePi_Zero"
- BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for the Orange Pi Zero"
-+BR2_SYSTEM_DHCP="eth0"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.13.11"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.15"
- BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-h2-plus-orangepi-zero"
-@@ -19,7 +20,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.09"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.01"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="orangepi_zero"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+diff --git a/package/daq/daq.mk b/package/daq/daq.mk
+index a1edc20d2a..a23a9dc5ee 100644
+--- a/package/daq/daq.mk
++++ b/package/daq/daq.mk
+@@ -9,6 +9,7 @@ DAQ_SITE = https://www.snort.org/downloads/snort
+ DAQ_LICENSE = GPL-2.0
+ DAQ_LICENSE_FILES = COPYING
+ DAQ_INSTALL_STAGING = YES
++DAQ_DEPENDENCIES = host-bison host-flex
+ 
+ # package does not build in parallel due to improper make rules
+ # related to the generation of the tokdefs.h header file
