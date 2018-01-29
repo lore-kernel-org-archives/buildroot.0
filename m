@@ -1,99 +1,118 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 29 Jan 2018 14:40:54 +0100
-Subject: [Buildroot] [git commit] package/gpsd: upgrade to 3.17,
- remove obsolete patch
-Message-ID: <20180129134202.A3A3F87F7C@busybox.osuosl.org>
+Date: Mon, 29 Jan 2018 14:39:17 +0100
+Subject: [Buildroot] [git commit] augeas: bump to version 1.10.1
+Message-ID: <20180129134202.8880987F7C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=37ebd3b782fefb43baf16d1fd0f36ece5181b70e
+commit: https://git.buildroot.net/buildroot/commit/?id=3cd6faa04cef1b1ebf5c5d47eeaf7e812ed02cb7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The upstream patch which disables the build-time systemctl call made it into
-this release so removing it here. Also adding hash for the COPYING file.
+Remove upstream patches included in the version bump.
 
-Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...01-SConstruct-do-not-force-O2-by-default.patch} |  0
- ...eract-with-systemctl-when-cross-compiling.patch | 41 ----------------------
- package/gpsd/gpsd.hash                             |  3 +-
- package/gpsd/gpsd.mk                               |  2 +-
- 4 files changed, 3 insertions(+), 43 deletions(-)
+ ...missing-trailing-backslash-for-dump-LDADD.patch | 25 ----------------
+ ...efile-do-not-force-static-linking-of-dump.patch | 33 ----------------------
+ package/augeas/augeas.hash                         |  4 +--
+ package/augeas/augeas.mk                           |  2 +-
+ 4 files changed, 3 insertions(+), 61 deletions(-)
 
-diff --git a/package/gpsd/0002-SConstruct-do-not-force-O2-by-default.patch b/package/gpsd/0001-SConstruct-do-not-force-O2-by-default.patch
-similarity index 100%
-rename from package/gpsd/0002-SConstruct-do-not-force-O2-by-default.patch
-rename to package/gpsd/0001-SConstruct-do-not-force-O2-by-default.patch
-diff --git a/package/gpsd/0001-do-not-interact-with-systemctl-when-cross-compiling.patch b/package/gpsd/0001-do-not-interact-with-systemctl-when-cross-compiling.patch
+diff --git a/package/augeas/0001-examples-Makefile-fix-missing-trailing-backslash-for-dump-LDADD.patch b/package/augeas/0001-examples-Makefile-fix-missing-trailing-backslash-for-dump-LDADD.patch
 deleted file mode 100644
-index 9e91a02ef3..0000000000
---- a/package/gpsd/0001-do-not-interact-with-systemctl-when-cross-compiling.patch
+index 82d7c892be..0000000000
+--- a/package/augeas/0001-examples-Makefile-fix-missing-trailing-backslash-for-dump-LDADD.patch
 +++ /dev/null
-@@ -1,41 +0,0 @@
--From 777cb3737ae85b13642fff48eabb601c4d40f527 Mon Sep 17 00:00:00 2001
--From: James Knight <james.d.knight@live.com>
--Date: Tue, 16 Feb 2016 23:51:08 -0500
--Subject: [PATCH] do not interact with systemctl when cross-compiling
+@@ -1,25 +0,0 @@
+-From d506cf6c1567cbb0a762c04d9354ab1694a5ac05 Mon Sep 17 00:00:00 2001
+-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+-Date: Mon, 11 Dec 2017 23:33:08 +0100
+-Subject: [PATCH] Update Makefile.am
 -
--The installation process for GPSd on a systemd environment will attempt
--to reload systemd's manager configuration (systemctl daemon-reload).
--This is to allow the system to take advantage of the newly installed
--GPSd services. When cross-compiling, the installation process should not
--attempt to interact with the build environment's systemd instance (if
--any). The following change checks if the build is not cross compiling
--(via 'not env["sysroot"]') before attempting to do a systemd reload.
+-Add missing trailing backslash for `dump_LDADD`.
 -
--Signed-off-by: James Knight <james.d.knight@live.com>
--[yann.morin.1998 at free.fr: tweak to apply on 3.16]
--Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+-Backported from: d506cf6c1567cbb0a762c04d9354ab1694a5ac05
+-
+-Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
 ----
-- SConstruct | 4 +++-
-- 1 file changed, 3 insertions(+), 1 deletion(-)
+- examples/Makefile.am | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
 -
--diff --git a/SConstruct b/SConstruct
--index c3bfd0d1..97c1b3a9 100644
----- a/SConstruct
--+++ b/SConstruct
--@@ -1909,10 +1909,12 @@ udev_install = Utility('udev-install', 'install', [
--     ] + hotplug_wrapper_install)
+-diff --git a/examples/Makefile.am b/examples/Makefile.am
+-index 66ebcdf2..a19597bf 100644
+---- a/examples/Makefile.am
+-+++ b/examples/Makefile.am
+-@@ -13,5 +13,5 @@ fadot_LDADD = $(top_builddir)/src/libfa.la $(GNULIB)
 - 
-- if env['systemd']:
--+    env.Requires(udev_install, systemd_install)
--+
--+if env['systemd'] and not env["sysroot"]:
--     systemctl_daemon_reload = Utility('systemctl-daemon-reload', '', [ 'systemctl daemon-reload || true'])
--     env.AlwaysBuild(systemctl_daemon_reload)
--     env.Precious(systemctl_daemon_reload)
---    env.Requires(udev_install, systemd_install)
--     env.Requires(systemctl_daemon_reload, systemd_install)
--     env.Requires(udev_install, systemctl_daemon_reload)
-- 
---- 
--2.11.0
+- dump_sources = dump.c
+- dump_LDFLAGS = -static
+--dump_LDADD =  $(top_builddir)/src/libaugeas.la $(top_builddir)/src/libfa.la
+-+dump_LDADD =  $(top_builddir)/src/libaugeas.la $(top_builddir)/src/libfa.la \
+- 	          $(GNULIB)
+diff --git a/package/augeas/0002-examples-Makefile-do-not-force-static-linking-of-dump.patch b/package/augeas/0002-examples-Makefile-do-not-force-static-linking-of-dump.patch
+deleted file mode 100644
+index fe83fa7af6..0000000000
+--- a/package/augeas/0002-examples-Makefile-do-not-force-static-linking-of-dump.patch
++++ /dev/null
+@@ -1,33 +0,0 @@
+-From c50b793f6ab17c192e048b4a06421be7c6381998 Mon Sep 17 00:00:00 2001
+-From: David Lutterkort <lutter@watzmann.net>
+-Date: Fri, 5 Jan 2018 14:48:15 -0800
+-Subject: [PATCH] * examples/Makefile.am: do not force static linking of dump
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
 -
-diff --git a/package/gpsd/gpsd.hash b/package/gpsd/gpsd.hash
-index 3083af24f1..805c298bca 100644
---- a/package/gpsd/gpsd.hash
-+++ b/package/gpsd/gpsd.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256	03579af13a4d3fe0c5b79fa44b5f75c9f3cac6749357f1d99ce5d38c09bc2029	gpsd-3.16.tar.gz
-+sha256	68e0dbecfb5831997f8b3d6ba48aed812eb465d8c0089420ab68f9ce4d85e77a	gpsd-3.17.tar.gz
-+sha256	71ff85d18bf063954cfc4251678d0e772223e21f80febbd99d5524c90f73f832	COPYING
-diff --git a/package/gpsd/gpsd.mk b/package/gpsd/gpsd.mk
-index 2b9c38a42b..e3fa20c430 100644
---- a/package/gpsd/gpsd.mk
-+++ b/package/gpsd/gpsd.mk
+-Forcing static linking of 'dump' was accidentally left in from some
+-testing; there is no reason to force that specifically for dump.
+-
+-Thanks to J??rg Krause for reporting the issue and verifying the fix.
+-
+-Fixes https://github.com/hercules-team/augeas/issues/535
+-
+-Backported from: c50b793f6ab17c192e048b4a06421be7c6381998
+-
+-Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+----
+- examples/Makefile.am | 1 -
+- 1 file changed, 1 deletion(-)
+-
+-diff --git a/examples/Makefile.am b/examples/Makefile.am
+-index a19597bf..928eb517 100644
+---- a/examples/Makefile.am
+-+++ b/examples/Makefile.am
+-@@ -12,6 +12,5 @@ fadot_SOURCES = fadot.c
+- fadot_LDADD = $(top_builddir)/src/libfa.la $(GNULIB)
+- 
+- dump_sources = dump.c
+--dump_LDFLAGS = -static
+- dump_LDADD =  $(top_builddir)/src/libaugeas.la $(top_builddir)/src/libfa.la \
+- 	          $(GNULIB)
+diff --git a/package/augeas/augeas.hash b/package/augeas/augeas.hash
+index a256686983..46b99dd8fe 100644
+--- a/package/augeas/augeas.hash
++++ b/package/augeas/augeas.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature from
+-# http://download.augeas.net/augeas-1.9.0.tar.gz.sig
+-sha256  2b463d398cabc9b42747aa61d3e83ed6a93ce03d9074cf8e7a7bd3107a668343  augeas-1.9.0.tar.gz
++# http://download.augeas.net/augeas-1.10.1.tar.gz.sig
++sha256  52db256afab261d31cc147eaa1a71795a5fec59e888dfd0b65a84c7aacd6364d  augeas-1.10.1.tar.gz
+ sha256  ca0061fc1381a3ab242310e4b3f56389f28e3d460eb2fd822ed7a21c6f030532  COPYING
+diff --git a/package/augeas/augeas.mk b/package/augeas/augeas.mk
+index 8a7f38ede4..c4b8b7e6c2 100644
+--- a/package/augeas/augeas.mk
++++ b/package/augeas/augeas.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GPSD_VERSION = 3.16
-+GPSD_VERSION = 3.17
- GPSD_SITE = http://download-mirror.savannah.gnu.org/releases/gpsd
- GPSD_LICENSE = BSD-3-Clause
- GPSD_LICENSE_FILES = COPYING
+-AUGEAS_VERSION = 1.9.0
++AUGEAS_VERSION = 1.10.1
+ AUGEAS_SITE = http://download.augeas.net
+ AUGEAS_INSTALL_STAGING = YES
+ AUGEAS_LICENSE = LGPL-2.1+
