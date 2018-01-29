@@ -1,34 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 29 Jan 2018 22:25:06 +0100
-Subject: [Buildroot] [git commit branch/2017.02.x] eeprog: fix homepage link
-Message-ID: <20180129213708.AA1FA88014@busybox.osuosl.org>
+Date: Mon, 29 Jan 2018 22:27:03 +0100
+Subject: [Buildroot] [git commit branch/2017.02.x] linux-headers: bump 3.2.x
+ series
+Message-ID: <20180129213708.CD07486259@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ac845908dd0de63f934b1ab398a1c2337923437e
+commit: https://git.buildroot.net/buildroot/commit/?id=18867c169595de1949e5ac2c487faac6095d539d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-The current link leads to a 400 Bad Request error page.
-
-Cc: Matt Weber <matthew.weber@rockwellcollins.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit b0748bd1baf60461425ec124fd4f3be68f2dd4d6)
+(cherry picked from commit 28d57106b87ef97480374925e5f44dc541eba381)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/eeprog/Config.in | 2 +-
+ package/linux-headers/Config.in.host | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/eeprog/Config.in b/package/eeprog/Config.in
-index ff313bdbae..73582c70f9 100644
---- a/package/eeprog/Config.in
-+++ b/package/eeprog/Config.in
-@@ -3,4 +3,4 @@ config BR2_PACKAGE_EEPROG
- 	help
- 	  Simple tool to read/write i2c eeprom chips.
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index ee9f0e9f1c..0bc1457f70 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -214,7 +214,7 @@ endchoice
  
--	  http://codesink.org/eeprog.html
-+	  http://www.codesink.org/eeprog.html
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "3.2.96"	if BR2_KERNEL_HEADERS_3_2
++	default "3.2.97"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.4.113"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.10.108"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.12.74"	if BR2_KERNEL_HEADERS_3_12
