@@ -1,12 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 29 Jan 2018 23:01:21 +0100
-Subject: [Buildroot] [PATCH 1/2] orangepi-one: bump kernel and u-boot
- versions
-In-Reply-To: <20180129213720.24321-2-geomatsi@gmail.com> (Sergey Matyukevich's
- message of "Tue, 30 Jan 2018 00:37:19 +0300")
+Date: Mon, 29 Jan 2018 23:01:25 +0100
+Subject: [Buildroot] [PATCH 2/2] orangepi-pc-plus: bump kernel and
+ u-boot versions
+In-Reply-To: <20180129213720.24321-3-geomatsi@gmail.com> (Sergey Matyukevich's
+ message of "Tue, 30 Jan 2018 00:37:20 +0300")
 References: <20180129213720.24321-1-geomatsi@gmail.com>
- <20180129213720.24321-2-geomatsi@gmail.com>
-Message-ID: <87vafk2uku.fsf@dell.be.48ers.dk>
+ <20180129213720.24321-3-geomatsi@gmail.com>
+Message-ID: <87r2q82ukq.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
