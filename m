@@ -1,41 +1,26 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 29 Jan 2018 22:34:08 +0100
-Subject: [Buildroot] [PATCH] kodi-texturepacker: fix compiltion error
-In-Reply-To: <20180119164232.1559-1-daggs@gmx.com>
-References: <20180119164232.1559-1-daggs@gmx.com>
-Message-ID: <20180129223408.7364dc0d@windsurf.lan>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 29 Jan 2018 22:35:04 +0100
+Subject: [Buildroot] [PATCH v2] libiio: fix libavahi-client dependency
+In-Reply-To: <20171227123555.15388-1-marcus.folkesson@gmail.com> (Marcus
+ Folkesson's message of "Wed, 27 Dec 2017 13:35:55 +0100")
+References: <20171227123555.15388-1-marcus.folkesson@gmail.com>
+Message-ID: <87y3kg4ad3.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Marcus" == Marcus Folkesson <marcus.folkesson@gmail.com> writes:
 
-On Fri, 19 Jan 2018 18:42:32 +0200, Dagg Stompler wrote:
-> backport fix the following error: declaration of ?void* reallocarray(void*, size_t, size_t) throw ()? has a different exception specifier
-> from upstream kodi which can be reproduced using the following defconfig:
-> BR2_x86_64=y
-> BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
-> BR2_TOOLCHAIN_BUILDROOT_CXX=y
-> BR2_PACKAGE_KODI=y
-> BR2_PACKAGE_MESA3D=y
-> BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600=y
-> BR2_PACKAGE_MESA3D_OPENGL_EGL=y
-> BR2_PACKAGE_XORG7=y
-> BR2_PACKAGE_PYTHON=y
-> BR2_PACKAGE_PYTHON_PY_PYC=y
-> 
-> Signed-off-by: Dagg Stompler <daggs@gmx.com>
-> ---
->  .../kodi-texturepacker/0002-fix_reallocarray.patch | 169 +++++++++++++++++++++
->  1 file changed, 169 insertions(+)
->  create mode 100644 package/kodi-texturepacker/0002-fix_reallocarray.patch
+ > Avahi needs avahi-daemon and D-Bus to build avahi-client.
+ > Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
+ > ---
+ > v2:
+ > - Do not check for AVAHI as it is implicity checked by
+ >   AVAHI_DAEMON
 
-Applied to master after tweaking the commit log. Thanks!
+Committed to 2017.02.x, thanks.
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
