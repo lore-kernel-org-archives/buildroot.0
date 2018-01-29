@@ -1,51 +1,33 @@
-From: Julien Corjon <corjon.j@ecagroup.com>
-Date: Mon, 29 Jan 2018 09:28:19 +0100
-Subject: [Buildroot] [PATCH 1/1] package/wf111: Fix manufacturer name and url
-Message-ID: <20180129082819.13870-1-corjon.j@ecagroup.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 29 Jan 2018 09:28:31 +0100
+Subject: [Buildroot] Suggestion for Makefile to probably import
+ BR2_CONFIG
+In-Reply-To: <20180129091113.3acccd2c@windsurf.lan> (Thomas Petazzoni's
+ message of "Mon, 29 Jan 2018 09:11:13 +0100")
+References: <CAGNmLEM_x8ykDr54gbT94em9YyH5+0ec=jCgjULh68yJLUzjnw@mail.gmail.com>
+ <1cb3ee33-b12f-6534-9dbf-fb697fbf3482@mind.be>
+ <CAGNmLEMn=NFuq+iKj8e2PuF-A4+tGj_VDjq1FBj6+xzDPU=_iQ@mail.gmail.com>
+ <d7cd5dae-5ae3-54f3-4376-f17c27e98065@mind.be>
+ <CAGNmLEN0N9NziMj6OUDEAkEhu6bDmc43jBnXV6MFSP3EEupnSg@mail.gmail.com>
+ <be14460d-9241-e14a-d4f1-8c30a62d7451@mind.be>
+ <20180129091113.3acccd2c@windsurf.lan>
+Message-ID: <87wp0183ww.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Julien Corjon <corjon.j@ecagroup.com>
----
- package/wf111/Config.in | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-diff --git a/package/wf111/Config.in b/package/wf111/Config.in
-index 80109f1b88..081bd960cb 100644
---- a/package/wf111/Config.in
-+++ b/package/wf111/Config.in
-@@ -6,7 +6,7 @@ config BR2_PACKAGE_WF111
- 	# dynamically linked against the glibc.
- 	depends on BR2_TOOLCHAIN_USES_GLIBC
- 	help
--	  BlueGiga WF111 WiFi driver and utilities.
-+	  Silicon Labs WF111 WiFi driver and utilities.
- 
- 	  Warning: CONFIG_WIRELESS_EXT and CONFIG_WEXT_PRIV must be
- 	  selected in the Linux kernel configuration. These are blind
-@@ -17,16 +17,16 @@ config BR2_PACKAGE_WF111
- 	    configuration entry that selects them, for example.
- 	  - By enabling another random WiFi driver that select them.
- 
--	  http://www.bluegiga.com/en-US/products/wifi-modules/wf111-wifi-module/
-+	  https://www.silabs.com/products/wireless/wi-fi/wf111-bluegiga-module
- 
- if BR2_PACKAGE_WF111
- 
- config BR2_PACKAGE_WF111_TARBALL_PATH
- 	string "Local tarball location"
- 	help
--	  The WF111 tarball can be retrieved on the BlueGiga website
--	  after registration. This option specifies the path where the
--	  tarball is locally saved.
-+	  The WF111 tarball can be retrieved on the Silicon Labs
-+	  website after registration. This option specifies the path
-+	  where the tarball is locally saved.
- 
- endif
- 
+Hi,
+ >> Yann, Thomas, Peter, what do you think?
+
+ > I haven't followed the entire discussion, so maybe I'll be out of topic
+ > here. But indeed I believe the split config is completely unused
+ > nowadays, and could be removed entirely.
+
+Agreed!
+
 -- 
-2.14.1
+Bye, Peter Korsgaard
