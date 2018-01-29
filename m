@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 29 Jan 2018 22:15:26 +0100
-Subject: [Buildroot] [PATCH] daq: fix build when flex and bison are not
- available
-In-Reply-To: <1516747079-16281-1-git-send-email-sergio.prado@e-labworks.com>
-References: <1516747079-16281-1-git-send-email-sergio.prado@e-labworks.com>
-Message-ID: <20180129221526.7e755749@windsurf.lan>
+Date: Mon, 29 Jan 2018 22:21:48 +0100
+Subject: [Buildroot] [PATCH] package/network-manager: Bump to version
+ 1.10.2
+In-Reply-To: <20180122152938.23956-1-petr.vorel@gmail.com>
+References: <20180122152938.23956-1-petr.vorel@gmail.com>
+Message-ID: <20180129222148.76b68638@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,24 +13,21 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 23 Jan 2018 20:37:59 -0200, Sergio Prado wrote:
-> daq depends on flex and bison to be configured.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/43da4ae3b7fc26e6712d369d4d030954d0d85149
-> http://autobuild.buildroot.net/results/0fc2bcf9da758f427adf2fddca8ad1dace6a080e
-> http://autobuild.buildroot.net/results/7411ac4ae5bef71b78c69b680de2b72f389ad2ee
-> ... and many more.
-> 
-> Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
-> ---
->  package/daq/daq.mk | 1 +
->  1 file changed, 1 insertion(+)
+On Mon, 22 Jan 2018 16:29:38 +0100, Petr Vorel wrote:
+> + added new option support for OVS (adds new dependency to Jansson)
 
-Applied to master, after tweaking the commit title. Thanks!
+The OpenVSwitch support was added in 1.10.0, so it's not really related
+to this bump. Could you do the bump in one patch, and the OVS addition
+in another patch ?
+
+Also, I believe OVS is not very clear. What about "OpenVSwitch support"
+in the prompt and in the help text. The option could remained named
+BR2_PACKAGE_NETWORK_MANAGER_OVS however, if you want.
+
+Thanks!
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
