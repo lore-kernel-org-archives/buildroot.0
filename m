@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 29 Jan 2018 23:12:58 +0100
-Subject: [Buildroot] [PATCH 09/14] genrandconfig: fix code style
-In-Reply-To: <1516581882-30582-10-git-send-email-ricardo.martincoski@gmail.com>
+Date: Mon, 29 Jan 2018 23:13:53 +0100
+Subject: [Buildroot] [PATCH 12/14] size-stats-compare: fix code style
+In-Reply-To: <1516581882-30582-13-git-send-email-ricardo.martincoski@gmail.com>
 References: <1516581882-30582-1-git-send-email-ricardo.martincoski@gmail.com>
- <1516581882-30582-10-git-send-email-ricardo.martincoski@gmail.com>
-Message-ID: <20180129231258.58dd6879@windsurf.lan>
+ <1516581882-30582-13-git-send-email-ricardo.martincoski@gmail.com>
+Message-ID: <20180129231353.64fa64c8@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,32 +13,20 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 21 Jan 2018 22:44:37 -0200, Ricardo Martincoski wrote:
+On Sun, 21 Jan 2018 22:44:40 -0200, Ricardo Martincoski wrote:
 > Fix these warnings:
-> E201 whitespace after '['
-> E202 whitespace before ']'
-> 
-> Ignore these warnings:
-> E501 line too long (138 > 132 characters)
->  -> flake8 has options to ignore all warnings in a single file, to  
->  ignore a given warning for all files, and to ignore a given warning for
->  a line. Unfortunately it does not have an option to ignore a given
->  warning for a single file, so add the magic comments to all lines with
->  the warning. It makes the lines even longer, but keeps the check for
->  the rest of the file and stops generating warning for them.
->  Alternative solutions would be to isolate the common part of the
->  strings as a variable and concatenate on the fly the strings (using a
->  bit more processing):
->    ...="' + COMMON_URL + 'armv5-ctng-linux-gnueabi.tar.xz"\n' in ...
+> E129 visually indented line with same indent as next logical line
 
-Yes, please do this. Or perhaps we could use some regexp, because we
-really don't care about the full URL, but just about the tarball name,
-no?
+Really?
 
-But I believe all those warning exceptions are really annoying to have.
-I'd really prefer a smarter solution here.
+>      header = next(reader)
+>      if (header[0] != 'File name' or header[1] != 'Package name' or
+> -        header[2] != 'File size' or header[3] != 'Package size'):
+> +            header[2] != 'File size' or header[3] != 'Package size'):
 
-Thanks!
+This looks totally bogus to me. The code was properly and nicely
+indented before the change, and now it looks badly indented. Is this
+really what flake8 wants? If so, flake8 is very strange.
 
 Thomas
 -- 
