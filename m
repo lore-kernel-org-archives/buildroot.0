@@ -1,65 +1,54 @@
-From: =?UTF-8?Q?Stefan_Fr=c3=b6berg?= <stefan.froberg@petroprogram.com>
-Date: Mon, 29 Jan 2018 02:58:46 +0200
-Subject: [Buildroot] [PATCH v2 1/1] unbound: new package
-In-Reply-To: <87wp02dk9e.fsf@dell.be.48ers.dk>
-References: <20180113222651.22755-1-stefan.froberg@petroprogram.com>
- <uagqiexfnk.ln2@ID-313208.user.individual.net>
- <6b37de5d-dd14-17a8-44a8-bd9b078c2920@petroprogram.com>
- <jtksiex3i1.ln2@ID-313208.user.individual.net>
- <1a1a4349-bb17-6657-1d60-2e8c7891b0e9@petroprogram.com>
- <8i82jex0fn.ln2@ID-313208.user.individual.net>
- <2cacb101-8c6b-7eab-8c5f-0f67e32bf183@petroprogram.com>
- <87wp02dk9e.fsf@dell.be.48ers.dk>
-Message-ID: <16896612-b4ff-96a3-e72c-e086c4bebd13@petroprogram.com>
+From: Carlos Santos <casantos@datacom.ind.br>
+Date: Mon, 29 Jan 2018 02:19:31 -0200
+Subject: [Buildroot] [PATCH] eudev: generate /etc/udev/hwdb.bin at system
+ startup
+Message-ID: <20180129041931.28192-1-casantos@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Results:
+Programs that use libudev (e.g. lsusb, from usbutils) need the hwdb.bin
+file to work properly.
 
+If BR2_PACKAGE_EUDEV_ENABLE_HWDB is selected then the eudev installation
+populates /etc/udev/hwdb.d/ but does not genarete /etc/udev/hwdb.bin. It
+must be created running "udevadm hwdb --update" on the target device.
 
-armv5-ctng-linux-gnueabi [ 1/47]: FAILED (cannot execute cross-compiler)
-armv7-ctng-linux-gnueabihf [ 2/47]: FAILED (cannot execute cross-compiler)
+Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+---
+ package/eudev/S10udev | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
 
-br-arm-cortex-m4-full [ 8/47]: FAILED (need openssl 0.9.7 or higher)
-br-arm-full-static [11/47]: FAILED (need openssl 0.9.7 or higher)
-
-br-bfin-full [12/47]: FAILED (undefined pthread_spin_init,
-pthread_spin_lock etc..)
-br-m68k-5208-full [15/47]: FAILED (undefined pthread_spin_init,
-pthread_spin_lock etc..)
-br-m68k-68040-full [16/47]: FAILED (undefined pthread_spin_init,
-pthread_spin_lock etc..)
-br-microblazeel-full [17/47]: FAILED (undefined pthread_spin_init,
-pthread_spin_lock etc..)
-br-openrisc-uclibc [23/47]: FAILED (undefined pthread_spin_init,
-pthread_spin_lock etc..)
-
-i686-ctng-linux-gnu [34/47]: FAILED (cannot execute cross-compiler)
-mips64el-ctng_n32-linux-gnu [37/47]: FAILED (cannot execute cross-compiler)
-mips64el-ctng_n64-linux-gnu [38/47]: FAILED (cannot execute cross-compiler)
-powerpc-ctng_e500v2-linux-gnuspe [39/47]: FAILED (cannot execute
-cross-compiler)
-sourcery-arm-armv4t [40/47]: FAILED (need 32-bit support library)
-sourcery-arm [41/47]: FAILED (need 32-bit support library)
-sourcery-arm-thumb2 [42/47]: FAILED (need 32-bit support library)
-sourcery-mips64 [43/47]: FAILED (need 32-bit support library)
-sourcery-mips [44/47]: FAILED (need 32-bit support library)
-sourcery-nios2 [45/47]: FAILED (need 32-bit support library)
-sourcery-x86-64 [46/47]: FAILED (need 32-bit support library)
-x86_64-ctng_locales-linux-gnu [47/47]: FAILED (cannot execute
-cross-compiler)
-
-
-So only br-bfin-full, br-m68k-5208-full, br-m68k-68040-full,
-br-microblazeel-full, br-openrisc-uclibc
-I could only try to patch.
-
-So what is the proper way of checking if external toolchain has thread
-support ?
-BR2_TOOLCHAIN_HAS_THREADS checks only internal toolchain right?
-
-Best Regards
-Stefan
+diff --git a/package/eudev/S10udev b/package/eudev/S10udev
+index 8382bec2bb..5c25e51317 100755
+--- a/package/eudev/S10udev
++++ b/package/eudev/S10udev
+@@ -25,14 +25,22 @@ UDEV_CONFIG=/etc/udev/udev.conf
+ test -r $UDEV_CONFIG || exit 6
+ . $UDEV_CONFIG
+ 
++UDEV_HWDB_BIN=/etc/udev/hwdb.bin
++UDEV_HWDB_D=/etc/udev/hwdb.d
++
+ case "$1" in
+     start)
+         printf "Populating ${udev_root:-/dev} using udev: "
+         printf '\000\000\000\000' > /proc/sys/kernel/hotplug
+-        $UDEV_BIN -d || (echo "FAIL" && exit 1)
++        $UDEV_BIN -d || { echo "FAIL" && exit 1; }
+         udevadm trigger --type=subsystems --action=add
+         udevadm trigger --type=devices --action=add
+-        udevadm settle --timeout=30 || echo "udevadm settle failed"
++        udevadm settle --timeout=30 || { echo "udevadm settle failed" && exit 1; }
++        [ -d "$UDEV_HWDB_D" ] && {
++            echo "done"
++            printf "Compiling hardware database information $UDEV_HWDB_BIN: "
++            udevadm hwdb --update || { echo "FAIL" && exit 1; }
++        }
+         echo "done"
+         ;;
+     stop)
+-- 
+2.14.3
