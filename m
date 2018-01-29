@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 29 Jan 2018 23:16:55 +0100
-Subject: [Buildroot] [PATCH 1/1] ltp-testsuite: Add upstream patch to
- fix build numa detection
-In-Reply-To: <20180129202314.16767-1-petr.vorel@gmail.com>
-References: <20180129202314.16767-1-petr.vorel@gmail.com>
-Message-ID: <20180129231655.561070fc@windsurf.lan>
+Date: Mon, 29 Jan 2018 23:19:08 +0100
+Subject: [Buildroot] [RFC] scanpypi: handle packages with wrong metadata
+In-Reply-To: <1516973570-7732-1-git-send-email-yegorslists@googlemail.com>
+References: <1516973570-7732-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <20180129231908.4bf07275@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,49 +12,28 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 29 Jan 2018 21:23:14 +0100, Petr Vorel wrote:
-> This removes fix added in commit 3c937807a3 ("ltp-testsuite: disable numa tests")
+On Fri, 26 Jan 2018 14:32:50 +0100, yegorslists at googlemail.com wrote:
+> From: Yegor Yefremov <yegorslists@googlemail.com>
 > 
-> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-
-Thanks for this update. There is however an issue, see below.
-
-> ---
->  ...x-numa-v2-detection-for-cross-compilation.patch | 37 ++++++++++++++++++++++
->  package/ltp-testsuite/ltp-testsuite.mk             |  3 +-
->  2 files changed, 38 insertions(+), 2 deletions(-)
->  create mode 100644 package/ltp-testsuite/0002-numa-Fix-numa-v2-detection-for-cross-compilation.patch
+> Some packages like python-adafruit-ads1x15 have different values in
+> PyPI metadata and setup.py or tar file name.
 > 
-> diff --git a/package/ltp-testsuite/0002-numa-Fix-numa-v2-detection-for-cross-compilation.patch b/package/ltp-testsuite/0002-numa-Fix-numa-v2-detection-for-cross-compilation.patch
-> new file mode 100644
-> index 0000000000..6ad1db046e
-> --- /dev/null
-> +++ b/package/ltp-testsuite/0002-numa-Fix-numa-v2-detection-for-cross-compilation.patch
-> @@ -0,0 +1,37 @@
-> +From 01c134f30be755a43af12a4ae2c31177d04be790 Mon Sep 17 00:00:00 2001
-> +From: Petr Vorel <pvorel@suse.cz>
-> +Date: Mon, 29 Jan 2018 10:31:40 +0100
-> +Subject: [PATCH] numa: Fix numa v2 detection for cross compilation
-> +
-> +Changed to AC_COMPILE_IFELSE as AC_RUN_IFELSE cannot be run while
-> +cross compiling.
-> +
-> +Bug found by Buildroot project.
-> +
-> +Signed-off-by: Petr Vorel <pvorel@suse.cz>
-> +Reported-by: Baruch Siach <baruch@tkos.co.il>
-> +---
-> + m4/ltp-numa.m4 | 4 ++--
-> + 1 file changed, 2 insertions(+), 2 deletions(-)
+> Use package name (self.pkg_name) derived from tar file name instead
+> of metadata_name taken from JSON.
+> 
+> Also output the missing key when trying to setup arguments.
+> 
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 
-You are changing m4 files, which requires regenerating the configure
-script. Therefore, the package should have LTP_TESTSUITE_AUTORECONF =
-YES, with a comment above it that says it's needed for patch
-0002-numa-Fix-numa-v2-detection-for-cross-compilation.patch.
+Do we really want to do this? Shouldn't we instead ask the upstream
+maintainers to fix their Python package? I have the feeling that this
+is a slippery road, and we could start adding lots and lots of weird
+logic to support packages with wrong metadata.
 
-Could you check this, and submit an updated version?
+If it's only fixing one specific package, I'd say the script should
+instead detect the inconsistency, and bail out.
 
-Thanks a lot!
+Best regards,
 
 Thomas
 -- 
