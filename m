@@ -1,94 +1,82 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 29 Jan 2018 09:45:30 +0100
-Subject: [Buildroot] [git commit] linux-firmware: add menu for Intel
- QuickAssist firmware
-Message-ID: <20180129084821.C82F787F62@busybox.osuosl.org>
+Date: Mon, 29 Jan 2018 09:47:53 +0100
+Subject: [Buildroot] [git commit] openocd: add security fix for CVE-2018-5704
+Message-ID: <20180129084821.DAE7887F61@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b473cb15429bbe18c3b5be3266025c38df8a7ae3
+commit: https://git.buildroot.net/buildroot/commit/?id=8fb8dddbf487706891040659959352af8c8d28d4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Firmware required when Intel QuickAssist is enabled in the kernel via
-CRYPTO_DEV_QAT_DH895xCC, CRYPTO_DEV_QAT_C3XXX or CRYPTO_DEV_QAT_C62X.
+Open On-Chip Debugger (OpenOCD) 0.10.0 does not block attempts to use HTTP
+POST for sending data to 127.0.0.1 port 4444, which allows remote attackers
+to conduct cross-protocol scripting attacks, and consequently execute
+arbitrary commands, via a crafted web site.
 
-See https://dpdk.org/doc/guides/cryptodevs/qat.html
+For more details, see:
+https://sourceforge.net/p/openocd/mailman/message/36188041/
 
-Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-firmware/Config.in           | 19 +++++++++++++++++++
- package/linux-firmware/linux-firmware.hash |  1 +
- package/linux-firmware/linux-firmware.mk   | 16 ++++++++++++++++
- 3 files changed, 36 insertions(+)
+ ...04-Prevent-some-forms-of-Cross-Protocol-S.patch | 50 ++++++++++++++++++++++
+ 1 file changed, 50 insertions(+)
 
-diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
-index e27fc35c4b..f93561ee14 100644
---- a/package/linux-firmware/Config.in
-+++ b/package/linux-firmware/Config.in
-@@ -354,4 +354,23 @@ config BR2_PACKAGE_LINUX_FIRMWARE_QLOGIC_2XXX
- 
- endmenu
- 
-+menu "Intel QuickAssist Firmware"
+diff --git a/package/openocd/0003-CVE-2018-5704-Prevent-some-forms-of-Cross-Protocol-S.patch b/package/openocd/0003-CVE-2018-5704-Prevent-some-forms-of-Cross-Protocol-S.patch
+new file mode 100644
+index 0000000000..ba19bf5735
+--- /dev/null
++++ b/package/openocd/0003-CVE-2018-5704-Prevent-some-forms-of-Cross-Protocol-S.patch
+@@ -0,0 +1,50 @@
++From 3a223ca3ebc7ac24d7726a0cd58e5695bc813657 Mon Sep 17 00:00:00 2001
++From: Andreas Fritiofson <andreas.fritiofson@gmail.com>
++Date: Sat, 13 Jan 2018 21:00:47 +0100
++Subject: [PATCH] CVE-2018-5704: Prevent some forms of Cross Protocol Scripting
++ attacks
 +
-+config BR2_PACKAGE_LINUX_FIRMWARE_QAT_DH895XCC
-+	bool "Support for DH895xCC"
-+	help
-+	  Firmware files for Intel DH895xCC devices
++OpenOCD can be targeted by a Cross Protocol Scripting attack from
++a web browser running malicious code, such as the following PoC:
 +
-+config BR2_PACKAGE_LINUX_FIRMWARE_QAT_C3XXX
-+	bool "Support for C3XXX"
-+	help
-+	  Firmware files for Intel C3XXX devices
++var x = new XMLHttpRequest();
++x.open("POST", "http://127.0.0.1:4444", true);
++x.send("exec xcalc\r\n");
 +
-+config BR2_PACKAGE_LINUX_FIRMWARE_QAT_C62X
-+	bool "Support for C62X"
-+	help
-+	  Firmware files for Intel C62X devices
++This mitigation should provide some protection from browser-based
++attacks and is based on the corresponding fix in Redis:
 +
-+endmenu
++https://github.com/antirez/redis/blob/8075572207b5aebb1385c4f233f5302544439325/src/networking.c#L1758
 +
- endif
-diff --git a/package/linux-firmware/linux-firmware.hash b/package/linux-firmware/linux-firmware.hash
-index ae5f80f2da..1beb1f76da 100644
---- a/package/linux-firmware/linux-firmware.hash
-+++ b/package/linux-firmware/linux-firmware.hash
-@@ -9,6 +9,7 @@ sha256 60fbc9cccb455e1a3306c97db942d6f24fa93664be61d54c497637e6d0e2ae83 LICENCE.
- sha256 5181b0b51efc79d5acb2c9bb92042878fdbad97a92114d4ab5e32e2b5b52fce4 LICENCE.ibt_firmware
- sha256 0e0c11073ba3c832097da38e0905da36b8a3526f219407977b13b71c6675be7d LICENCE.it913x
- sha256 e295020afd7597dc1b3bbe50a84a7e432d9cb92bc053c1c5e657b50d2517627b LICENCE.iwlwifi_firmware
-+sha256 2051d5bf0755a0668f8c3d9a0d1c41d4b8cc411aba70f720fda71ae9e3b4d25c LICENCE.qat_firmware
- sha256 4071a11d878dbc0ac6d9e71203d03b151638f9d7a8bc47a54c3cb964100d5822 LICENCE.qla2xxx
- sha256 d7bec70668ddd4aae8fb4aa32870e54b49fcdb0b9b007aa9f54b53a1ac7461bd LICENCE.ralink-firmware.txt
- sha256 8568352b57f3574f9d5b2753cdb7c6e5eb2b79e82fbb9c9ba6566947467ef508 LICENCE.ralink_a_mediatek_company_firmware
-diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index 3f7b79f25a..82680937aa 100644
---- a/package/linux-firmware/linux-firmware.mk
-+++ b/package/linux-firmware/linux-firmware.mk
-@@ -448,6 +448,22 @@ LINUX_FIRMWARE_FILES += rsi/rs9113_wlan_qspi.rps
- # which is installed unconditionally
- endif
- 
-+ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_QAT_DH895XCC),y)
-+# qat_mmp.bin is a symlink to qat_895xcc_mmp.bin
-+LINUX_FIRMWARE_FILES += qat_895xcc.bin qat_895xcc_mmp.bin qat_mmp.bin
-+LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.qat_firmware
-+endif
 +
-+ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_QAT_C3XXX),y)
-+LINUX_FIRMWARE_FILES += qat_c3xxx.bin qat_c3xxx_mmp.bin
-+LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.qat_firmware
-+endif
++Upstream-status: Under review: http://openocd.zylin.com/#/c/4335/
++Change-Id: Ia96ebe19b74b5805dc228bf7364c7971a90a4581
++Signed-off-by: Andreas Fritiofson <andreas.fritiofson@gmail.com>
++Reported-by: Josef Gajdusek <atx@atx.name>
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ src/server/startup.tcl | 11 +++++++++++
++ 1 file changed, 11 insertions(+)
 +
-+ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_QAT_C62X),y)
-+LINUX_FIRMWARE_FILES += qat_c62x.bin qat_c62x_mmp.bin
-+LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.qat_firmware
-+endif
++diff --git a/src/server/startup.tcl b/src/server/startup.tcl
++index 64ace407..dd1b31e4 100644
++--- a/src/server/startup.tcl
+++++ b/src/server/startup.tcl
++@@ -8,3 +8,14 @@ proc ocd_gdb_restart {target_id} {
++ 	# one target
++ 	reset halt
++ }
+++
+++proc prevent_cps {} {
+++	echo "Possible SECURITY ATTACK detected."
+++	echo "It looks like somebody is sending POST or Host: commands to OpenOCD."
+++	echo "This is likely due to an attacker attempting to use Cross Protocol Scripting"
+++	echo "to compromise your OpenOCD instance. Connection aborted."
+++	exit
+++}
+++
+++proc POST {args} { prevent_cps }
+++proc Host: {args} { prevent_cps }
++-- 
++2.11.0
 +
- ifneq ($(LINUX_FIRMWARE_FILES),)
- define LINUX_FIRMWARE_INSTALL_FILES
- 	cd $(@D) && \
