@@ -1,218 +1,313 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Mon, 29 Jan 2018 23:14:24 +0100
-Subject: [Buildroot] [git commit] kodi-texturepacker: fix compilation error
- with host gcc 7.x
-Message-ID: <20180129221636.B8E9C88056@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] graph-depends: fix code style
+Message-ID: <20180129221636.E75C388056@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ceec22f56994a7d7a370a3807cc4a8f07b3749da
+commit: https://git.buildroot.net/buildroot/commit/?id=9ff44852c4fa3df081ec19b14ec5ee9db8d366c0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-When host-kodi-texturepacker is built on a machine using gcc 7.x, it
-fails to build with:
+Fix these warnings:
+E122 continuation line missing indentation or outdented
+E127 continuation line over-indented for visual indent
+E128 continuation line under-indented for visual indent
+E202 whitespace before ']'
+E221 multiple spaces before operator
+E225 missing whitespace around operator
+E231 missing whitespace after ','
+E302 expected 2 blank lines, found 1
+E305 expected 2 blank lines after class or function definition, found 1
+E502 the backslash is redundant between brackets
+E713 test for membership should be 'not in'
 
-/usr/include/stdlib.h:443:14: error: declaration of ???void* reallocarray(void*, size_t, size_t) throw ()??? has a different exception specifier
- extern void *reallocarray (void *__ptr, size_t __nmemb, size_t __size)
-
-This commit backports the upstream fix for this problem.
-
-The issue could be reproduced with the following defconfig (and a gcc
-7.x host compiler):
-
-BR2_x86_64=y
-BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
-BR2_TOOLCHAIN_BUILDROOT_CXX=y
-BR2_PACKAGE_KODI=y
-BR2_PACKAGE_MESA3D=y
-BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600=y
-BR2_PACKAGE_MESA3D_OPENGL_EGL=y
-BR2_PACKAGE_XORG7=y
-BR2_PACKAGE_PYTHON=y
-BR2_PACKAGE_PYTHON_PY_PYC=y
-
-Signed-off-by: Dagg Stompler <daggs@gmx.com>
+Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../kodi-texturepacker/0002-fix_reallocarray.patch | 170 +++++++++++++++++++++
- 1 file changed, 170 insertions(+)
+ support/scripts/brpkgutil.py  |  8 +++--
+ support/scripts/graph-depends | 68 ++++++++++++++++++++++++++-----------------
+ 2 files changed, 48 insertions(+), 28 deletions(-)
 
-diff --git a/package/kodi-texturepacker/0002-fix_reallocarray.patch b/package/kodi-texturepacker/0002-fix_reallocarray.patch
-new file mode 100644
-index 0000000000..e32d09ef53
---- /dev/null
-+++ b/package/kodi-texturepacker/0002-fix_reallocarray.patch
-@@ -0,0 +1,170 @@
-+From ebc5dfcad836936a14e6f18fd7faa377b3c804e7 Mon Sep 17 00:00:00 2001
-+From: MilhouseVH <milhouseVH.github@nmacleod.com>
-+Date: Mon, 6 Nov 2017 11:47:28 +0000
-+Subject: [PATCH] TexturePacker: use C++ headers
+diff --git a/support/scripts/brpkgutil.py b/support/scripts/brpkgutil.py
+index a0e2352bad..4c99ae9110 100644
+--- a/support/scripts/brpkgutil.py
++++ b/support/scripts/brpkgutil.py
+@@ -3,11 +3,12 @@
+ import sys
+ import subprocess
+ 
 +
-+Signed-off-by: Dagg Stompler <daggs@gmx.com>
-+---
-+ tools/depends/native/TexturePacker/src/SimpleFS.h            | 4 ++--
-+ tools/depends/native/TexturePacker/src/TexturePacker.cpp     | 2 +-
-+ tools/depends/native/TexturePacker/src/XBTFWriter.cpp        | 6 +++---
-+ tools/depends/native/TexturePacker/src/XBTFWriter.h          | 2 +-
-+ tools/depends/native/TexturePacker/src/decoder/GifHelper.cpp | 2 +-
-+ tools/depends/native/TexturePacker/src/md5.h                 | 4 ++--
-+ 6 files changed, 10 insertions(+), 10 deletions(-)
+ # Execute the "make <pkg>-show-version" command to get the version of a given
+ # list of packages, and return the version formatted as a Python dictionary.
+ def get_version(pkgs):
+     sys.stderr.write("Getting version for %s\n" % pkgs)
+-    cmd = ["make", "-s", "--no-print-directory" ]
++    cmd = ["make", "-s", "--no-print-directory"]
+     for pkg in pkgs:
+         cmd.append("%s-show-version" % pkg)
+     p = subprocess.Popen(cmd, stdout=subprocess.PIPE, universal_newlines=True)
+@@ -25,9 +26,10 @@ def get_version(pkgs):
+         version[pkg] = output[i]
+     return version
+ 
 +
-+diff --git a/tools/depends/native/TexturePacker/src/SimpleFS.h b/tools/depends/native/TexturePacker/src/SimpleFS.h
-+index c48814c0ad..c2288cf8de 100644
-+--- a/tools/depends/native/TexturePacker/src/SimpleFS.h
-++++ b/tools/depends/native/TexturePacker/src/SimpleFS.h
-+@@ -20,9 +20,9 @@
-+  *
-+  */
-+ 
-+-#include <stdio.h>
-++#include <cstdio>
-+ #include <string>
-+-#include <stdint.h>
-++#include <cstdint>
-+ 
-+ class CFile
-+ {
-+diff --git a/tools/depends/native/TexturePacker/src/TexturePacker.cpp b/tools/depends/native/TexturePacker/src/TexturePacker.cpp
-+index ba618be574..045c5ce38d 100644
-+--- a/tools/depends/native/TexturePacker/src/TexturePacker.cpp
-++++ b/tools/depends/native/TexturePacker/src/TexturePacker.cpp
-+@@ -22,7 +22,7 @@
-+ #include <sys/types.h>
-+ #include <sys/stat.h>
-+ #define __STDC_FORMAT_MACROS
-+-#include <inttypes.h>
-++#include <cinttypes>
-+ #define platform_stricmp _stricmp
-+ #else
-+ #define platform_stricmp stricmp
-+diff --git a/tools/depends/native/TexturePacker/src/XBTFWriter.cpp b/tools/depends/native/TexturePacker/src/XBTFWriter.cpp
-+index 9e2493369b..2e80ba674c 100644
-+--- a/tools/depends/native/TexturePacker/src/XBTFWriter.cpp
-++++ b/tools/depends/native/TexturePacker/src/XBTFWriter.cpp
-+@@ -19,14 +19,14 @@
-+  */
-+ 
-+ #define __STDC_FORMAT_MACROS
-+-#include <inttypes.h>
-++#include <cinttypes>
-+ #if defined(TARGET_FREEBSD) || defined(TARGET_DARWIN)
-+-#include <stdlib.h>
-++#include <cstdlib>
-+ #elif !defined(TARGET_DARWIN)
-+ #include <malloc.h>
-+ #endif
-+ #include <memory.h>
-+-#include <string.h>
-++#include <cstring>
-+ 
-+ #include "XBTFWriter.h"
-+ #include "guilib/XBTFReader.h"
-+diff --git a/tools/depends/native/TexturePacker/src/XBTFWriter.h b/tools/depends/native/TexturePacker/src/XBTFWriter.h
-+index 7509303a51..d5cf1a2965 100644
-+--- a/tools/depends/native/TexturePacker/src/XBTFWriter.h
-++++ b/tools/depends/native/TexturePacker/src/XBTFWriter.h
-+@@ -23,7 +23,7 @@
-+ 
-+ #include <vector>
-+ #include <string>
-+-#include <stdio.h>
-++#include <cstdio>
-+ 
-+ #include "guilib/XBTF.h"
-+ 
-+diff --git a/tools/depends/native/TexturePacker/src/decoder/GifHelper.cpp b/tools/depends/native/TexturePacker/src/decoder/GifHelper.cpp
-+index 56c22f7c3a..3ddb20fe88 100644
-+--- a/tools/depends/native/TexturePacker/src/decoder/GifHelper.cpp
-++++ b/tools/depends/native/TexturePacker/src/decoder/GifHelper.cpp
-+@@ -20,7 +20,7 @@
-+ 
-+ #include "GifHelper.h"
-+ #include <algorithm>
-+-#include <stdlib.h>
-++#include <cstdlib>
-+ #include <cstring>
-+ 
-+ #define UNSIGNED_LITTLE_ENDIAN(lo, hi)	((lo) | ((hi) << 8))
-+diff --git a/tools/depends/native/TexturePacker/src/md5.h b/tools/depends/native/TexturePacker/src/md5.h
-+index 456e5be17f..4bb48e0810 100644
-+--- a/tools/depends/native/TexturePacker/src/md5.h
-++++ b/tools/depends/native/TexturePacker/src/md5.h
-+@@ -23,8 +23,8 @@
-+ #ifndef MD5_H
-+ #define MD5_H
-+ 
-+-#include <string.h>		/* for memcpy() */
-+-#include <stdint.h>
-++#include <cstring>		/* for memcpy() */
-++#include <cstdint>
-+ 
-+ struct MD5Context 
-+ {
-+-- 
-+2.16.0
+ def _get_depends(pkgs, rule):
+     sys.stderr.write("Getting dependencies for %s\n" % pkgs)
+-    cmd = ["make", "-s", "--no-print-directory" ]
++    cmd = ["make", "-s", "--no-print-directory"]
+     for pkg in pkgs:
+         cmd.append("%s-%s" % (pkg, rule))
+     p = subprocess.Popen(cmd, stdout=subprocess.PIPE, universal_newlines=True)
+@@ -49,12 +51,14 @@ def _get_depends(pkgs, rule):
+             deps[pkg] = pkg_deps
+     return deps
+ 
 +
-+From ff3e6dad5fdb7b9a2985b2547c8020c709af0340 Mon Sep 17 00:00:00 2001
-+From: MilhouseVH <milhouseVH.github@nmacleod.com>
-+Date: Mon, 6 Nov 2017 18:05:17 +0000
-+Subject: [PATCH] TexturePacker: drop unused variable
+ # Execute the "make <pkg>-show-depends" command to get the list of
+ # dependencies of a given list of packages, and return the list of
+ # dependencies formatted as a Python dictionary.
+ def get_depends(pkgs):
+     return _get_depends(pkgs, 'show-depends')
+ 
 +
-+---
-+ tools/depends/native/TexturePacker/src/decoder/JPGDecoder.cpp | 2 --
-+ 1 file changed, 2 deletions(-)
+ # Execute the "make <pkg>-show-rdepends" command to get the list of
+ # reverse dependencies of a given list of packages, and return the
+ # list of dependencies formatted as a Python dictionary.
+diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
+index db3041b32e..85c9bf0a4f 100755
+--- a/support/scripts/graph-depends
++++ b/support/scripts/graph-depends
+@@ -30,7 +30,7 @@ import brpkgutil
+ 
+ # Modes of operation:
+ MODE_FULL = 1   # draw full dependency graph for all selected packages
+-MODE_PKG  = 2   # draw dependency graph for a given package
++MODE_PKG = 2    # draw dependency graph for a given package
+ mode = 0
+ 
+ # Limit drawing the dependency graph to this depth. 0 means 'no limit'.
+@@ -49,18 +49,18 @@ parser.add_argument("--package", '-p', metavar="PACKAGE",
+ parser.add_argument("--depth", '-d', metavar="DEPTH", dest="depth", type=int, default=0,
+                     help="Limit the dependency graph to DEPTH levels; 0 means no limit.")
+ parser.add_argument("--stop-on", "-s", metavar="PACKAGE", dest="stop_list", action="append",
+-                    help="Do not graph past this package (can be given multiple times)." \
+-                       + " Can be a package name or a glob, " \
+-                       + " 'virtual' to stop on virtual packages, or " \
+-                       + "'host' to stop on host packages.")
++                    help="Do not graph past this package (can be given multiple times)." +
++                         " Can be a package name or a glob, " +
++                         " 'virtual' to stop on virtual packages, or " +
++                         "'host' to stop on host packages.")
+ parser.add_argument("--exclude", "-x", metavar="PACKAGE", dest="exclude_list", action="append",
+                     help="Like --stop-on, but do not add PACKAGE to the graph.")
+ parser.add_argument("--colours", "-c", metavar="COLOR_LIST", dest="colours",
+                     default="lightblue,grey,gainsboro",
+-                    help="Comma-separated list of the three colours to use" \
+-                       + " to draw the top-level package, the target" \
+-                       + " packages, and the host packages, in this order." \
+-                       + " Defaults to: 'lightblue,grey,gainsboro'")
++                    help="Comma-separated list of the three colours to use" +
++                         " to draw the top-level package, the target" +
++                         " packages, and the host packages, in this order." +
++                         " Defaults to: 'lightblue,grey,gainsboro'")
+ parser.add_argument("--transitive", dest="transitive", action='store_true',
+                     default=False)
+ parser.add_argument("--no-transitive", dest="transitive", action='store_false',
+@@ -114,7 +114,7 @@ else:
+ # Get the colours: we need exactly three colours,
+ # so no need not split more than 4
+ # We'll let 'dot' validate the colours...
+-colours = args.colours.split(',',4)
++colours = args.colours.split(',', 4)
+ if len(colours) != 3:
+     sys.stderr.write("Error: incorrect colour list '%s'\n" % args.colours)
+     sys.exit(1)
+@@ -124,6 +124,7 @@ host_colour = colours[2]
+ 
+ allpkgs = []
+ 
 +
-+diff --git a/tools/depends/native/TexturePacker/src/decoder/JPGDecoder.cpp b/tools/depends/native/TexturePacker/src/decoder/JPGDecoder.cpp
-+index 53f5e9beb7..b0f18bed68 100644
-+--- a/tools/depends/native/TexturePacker/src/decoder/JPGDecoder.cpp
-++++ b/tools/depends/native/TexturePacker/src/decoder/JPGDecoder.cpp
-+@@ -72,7 +72,6 @@ bool JPGDecoder::LoadFile(const std::string &filename, DecodedFrames &frames)
-+   struct jpeg_decompress_struct cinfo;
-+   struct jpeg_error_mgr jerr;
-+   
-+-  char *linha;
-+   int ImageSize;
-+   
-+   cinfo.err = jpeg_std_error(&jerr);
-+@@ -89,7 +88,6 @@ bool JPGDecoder::LoadFile(const std::string &filename, DecodedFrames &frames)
-+   DecodedFrame frame;
-+   
-+   frame.rgbaImage.pixels = (char *)new char[ImageSize];
-+-  linha = (char *)frame.rgbaImage.pixels;
-+   
-+   unsigned char *scanlinebuff = new unsigned char[3 * cinfo.image_width];
-+   unsigned char *dst = (unsigned char *)frame.rgbaImage.pixels;
-+-- 
-+2.16.0
+ # Execute the "make show-targets" command to get the list of the main
+ # Buildroot PACKAGES and return it formatted as a Python list. This
+ # list is used as the starting point for full dependency graphs
+@@ -138,6 +139,7 @@ def get_targets():
+         return []
+     return output.split(' ')
+ 
 +
-+From ee441543be07de1222bcff2587bfcdb5c1231989 Mon Sep 17 00:00:00 2001
-+From: MilhouseVH <milhouseVH.github@nmacleod.com>
-+Date: Mon, 6 Nov 2017 21:02:06 +0000
-+Subject: [PATCH] TexturePacker: include GifHelper after system headers
+ # Recursive function that builds the tree of dependencies for a given
+ # list of packages. The dependencies are built in a list called
+ # 'dependencies', which contains tuples of the form (pkg1 ->
+@@ -179,10 +181,12 @@ def get_all_depends(pkgs):
+ 
+     return dependencies
+ 
 +
-+---
-+ tools/depends/native/TexturePacker/src/decoder/GifHelper.cpp | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
+ # The Graphviz "dot" utility doesn't like dashes in node names. So for
+ # node names, we strip all dashes.
+ def pkg_node_name(pkg):
+-    return pkg.replace("-","")
++    return pkg.replace("-", "")
 +
-+diff --git a/tools/depends/native/TexturePacker/src/decoder/GifHelper.cpp b/tools/depends/native/TexturePacker/src/decoder/GifHelper.cpp
-+index 3ddb20fe88..9ced4ec5bc 100644
-+--- a/tools/depends/native/TexturePacker/src/decoder/GifHelper.cpp
-++++ b/tools/depends/native/TexturePacker/src/decoder/GifHelper.cpp
-+@@ -18,10 +18,10 @@
-+  *
-+  */
-+ 
-+-#include "GifHelper.h"
-+ #include <algorithm>
-+ #include <cstdlib>
-+ #include <cstring>
-++#include "GifHelper.h"
-+ 
-+ #define UNSIGNED_LITTLE_ENDIAN(lo, hi)	((lo) | ((hi) << 8))
-+ #define GIF_MAX_MEMORY 82944000U // about 79 MB, which is equivalent to 10 full hd frames.
-+-- 
-+2.16.0
+ 
+ TARGET_EXCEPTIONS = [
+     "target-finalize",
+@@ -225,35 +229,39 @@ for dep in dependencies:
+ # sub-dicts is "pkg2".
+ is_dep_cache = {}
+ 
 +
+ def is_dep_cache_insert(pkg, pkg2, val):
+     try:
+         is_dep_cache[pkg].update({pkg2: val})
+     except KeyError:
+         is_dep_cache[pkg] = {pkg2: val}
+ 
++
+ # Retrieves from the cache whether pkg2 is a transitive dependency
+ # of pkg.
+ # Note: raises a KeyError exception if the dependency is not known.
+ def is_dep_cache_lookup(pkg, pkg2):
+     return is_dep_cache[pkg][pkg2]
+ 
++
+ # This function return True if pkg is a dependency (direct or
+ # transitive) of pkg2, dependencies being listed in the deps
+ # dictionary. Returns False otherwise.
+ # This is the un-cached version.
+-def is_dep_uncached(pkg,pkg2,deps):
++def is_dep_uncached(pkg, pkg2, deps):
+     try:
+         for p in deps[pkg2]:
+             if pkg == p:
+                 return True
+-            if is_dep(pkg,p,deps):
++            if is_dep(pkg, p, deps):
+                 return True
+     except KeyError:
+         pass
+     return False
+ 
++
+ # See is_dep_uncached() above; this is the cached version.
+-def is_dep(pkg,pkg2,deps):
++def is_dep(pkg, pkg2, deps):
+     try:
+         return is_dep_cache_lookup(pkg, pkg2)
+     except KeyError:
+@@ -261,6 +269,7 @@ def is_dep(pkg,pkg2,deps):
+         is_dep_cache_insert(pkg, pkg2, val)
+         return val
+ 
++
+ # This function eliminates transitive dependencies; for example, given
+ # these dependency chain: A->{B,C} and B->{C}, the A->{C} dependency is
+ # already covered by B->{C}, so C is a transitive dependency of A, via B.
+@@ -269,30 +278,32 @@ def is_dep(pkg,pkg2,deps):
+ #     - if d[i] is a dependency of any of the other dependencies d[j]
+ #       - do not keep d[i]
+ #     - otherwise keep d[i]
+-def remove_transitive_deps(pkg,deps):
++def remove_transitive_deps(pkg, deps):
+     d = deps[pkg]
+     new_d = []
+     for i in range(len(d)):
+         keep_me = True
+         for j in range(len(d)):
+-            if j==i:
++            if j == i:
+                 continue
+-            if is_dep(d[i],d[j],deps):
++            if is_dep(d[i], d[j], deps):
+                 keep_me = False
+         if keep_me:
+             new_d.append(d[i])
+     return new_d
+ 
++
+ # This function removes the dependency on some 'mandatory' package, like the
+ # 'toolchain' package, or the 'skeleton' package
+-def remove_mandatory_deps(pkg,deps):
++def remove_mandatory_deps(pkg, deps):
+     return [p for p in deps[pkg] if p not in ['toolchain', 'skeleton']]
+ 
++
+ # This function will check that there is no loop in the dependency chain
+ # As a side effect, it builds up the dependency cache.
+ def check_circular_deps(deps):
+     def recurse(pkg):
+-        if not pkg in list(deps.keys()):
++        if pkg not in list(deps.keys()):
+             return
+         if pkg in not_loop:
+             return
+@@ -314,24 +325,27 @@ def check_circular_deps(deps):
+     for pkg in list(deps.keys()):
+         recurse(pkg)
+ 
++
+ # This functions trims down the dependency list of all packages.
+ # It applies in sequence all the dependency-elimination methods.
+ def remove_extra_deps(deps):
+     for pkg in list(deps.keys()):
+         if not pkg == 'all':
+-            deps[pkg] = remove_mandatory_deps(pkg,deps)
++            deps[pkg] = remove_mandatory_deps(pkg, deps)
+     for pkg in list(deps.keys()):
+         if not transitive or pkg == 'all':
+-            deps[pkg] = remove_transitive_deps(pkg,deps)
++            deps[pkg] = remove_transitive_deps(pkg, deps)
+     return deps
+ 
++
+ check_circular_deps(dict_deps)
+ if check_only:
+     sys.exit(0)
+ 
+ dict_deps = remove_extra_deps(dict_deps)
+ dict_version = brpkgutil.get_version([pkg for pkg in allpkgs
+-                                if pkg != "all" and not pkg.startswith("root")])
++                                      if pkg != "all" and not pkg.startswith("root")])
++
+ 
+ # Print the attributes of a node: label and fill-color
+ def print_attrs(pkg):
+@@ -344,8 +358,8 @@ def print_attrs(pkg):
+         color = root_colour
+     else:
+         if pkg.startswith('host') \
+-        or pkg.startswith('toolchain') \
+-        or pkg.startswith('rootfs'):
++                or pkg.startswith('toolchain') \
++                or pkg.startswith('rootfs'):
+             color = host_colour
+         else:
+             color = target_colour
+@@ -356,6 +370,7 @@ def print_attrs(pkg):
+         outfile.write("%s [label = \"%s\"]\n" % (name, label))
+     outfile.write("%s [color=%s,style=filled]\n" % (name, color))
+ 
++
+ # Print the dependency graph of a package
+ def print_pkg_deps(depth, pkg):
+     if pkg in done_deps:
+@@ -381,12 +396,13 @@ def print_pkg_deps(depth, pkg):
+                 continue
+             add = True
+             for p in exclude_list:
+-                if fnmatch(d,p):
++                if fnmatch(d, p):
+                     add = False
+                     break
+             if add:
+                 outfile.write("%s -> %s [dir=%s]\n" % (pkg_node_name(pkg), pkg_node_name(d), arrow_dir))
+-                print_pkg_deps(depth+1, d)
++                print_pkg_deps(depth + 1, d)
++
+ 
+ # Start printing the graph data
+ outfile.write("digraph G {\n")
