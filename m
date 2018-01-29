@@ -1,33 +1,54 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 29 Jan 2018 09:28:31 +0100
-Subject: [Buildroot] Suggestion for Makefile to probably import
- BR2_CONFIG
-In-Reply-To: <20180129091113.3acccd2c@windsurf.lan> (Thomas Petazzoni's
- message of "Mon, 29 Jan 2018 09:11:13 +0100")
-References: <CAGNmLEM_x8ykDr54gbT94em9YyH5+0ec=jCgjULh68yJLUzjnw@mail.gmail.com>
- <1cb3ee33-b12f-6534-9dbf-fb697fbf3482@mind.be>
- <CAGNmLEMn=NFuq+iKj8e2PuF-A4+tGj_VDjq1FBj6+xzDPU=_iQ@mail.gmail.com>
- <d7cd5dae-5ae3-54f3-4376-f17c27e98065@mind.be>
- <CAGNmLEN0N9NziMj6OUDEAkEhu6bDmc43jBnXV6MFSP3EEupnSg@mail.gmail.com>
- <be14460d-9241-e14a-d4f1-8c30a62d7451@mind.be>
- <20180129091113.3acccd2c@windsurf.lan>
-Message-ID: <87wp0183ww.fsf@dell.be.48ers.dk>
+From: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
+Date: Mon, 29 Jan 2018 09:29:34 +0100
+Subject: [Buildroot] [PATCH] package/gpsd: upgrade to 3.17,
+ remove obsolete patch
+In-Reply-To: <20180129080301.3x4ek2l3ogyraupn@sapphire.tkos.co.il>
+References: <1517212625-32760-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
+ <20180129080301.3x4ek2l3ogyraupn@sapphire.tkos.co.il>
+Message-ID: <37de60a2-28c9-4135-104c-d804ec73edf5@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Dear Baruch,
 
-Hi,
- >> Yann, Thomas, Peter, what do you think?
+On 01/29/2018 09:03 AM, Baruch Siach wrote:
+> Hi Zoltan,
+>
+> On Mon, Jan 29, 2018 at 08:57:05AM +0100, Zoltan Gyarmati wrote:
+>> The upstream patch which disables the build-time systemctl call made it into
+>> this release so removing it here. Also adding hash for the COPYING file.
+>>
+>> Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
+>> ---
+>>  ...001-SConstruct-do-not-force-O2-by-default.patch | 29 +++++++++++++++
+>>  ...eract-with-systemctl-when-cross-compiling.patch | 41 ----------------------
+>>  ...002-SConstruct-do-not-force-O2-by-default.patch | 29 ---------------
+>>  package/gpsd/gpsd.hash                             |  3 +-
+>>  package/gpsd/gpsd.mk                               |  2 +-
+>>  5 files changed, 32 insertions(+), 72 deletions(-)
+>>  create mode 100644 package/gpsd/0001-SConstruct-do-not-force-O2-by-default.patch
+>>  delete mode 100644 package/gpsd/0001-do-not-interact-with-systemctl-when-cross-compiling.patch
+>>  delete mode 100644 package/gpsd/0002-SConstruct-do-not-force-O2-by-default.patch
+> It looks like the -O2 patch file is just renamed. To make this apparent it 
+> would be better to pass -M to 'git format-patch', so that git would detect the 
+> file rename. This also makes the patch review easier, especially when the file 
+> is also changed along the way.
+Indeed. Thanks for the review, i resent a v1.
+>
+> baruch
+>
 
- > I haven't followed the entire discussion, so maybe I'll be out of topic
- > here. But indeed I believe the split config is completely unused
- > nowadays, and could be removed entirely.
+Zoltan Gyarmati
+https://zgyarmati.de
 
-Agreed!
 
--- 
-Bye, Peter Korsgaard
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 473 bytes
+Desc: OpenPGP digital signature
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180129/bc06ae93/attachment.asc>
