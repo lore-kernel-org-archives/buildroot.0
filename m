@@ -1,70 +1,37 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 29 Jan 2018 07:36:03 +0200
-Subject: [Buildroot] [PATCH] eudev: generate /etc/udev/hwdb.bin at
- system startup
-In-Reply-To: <20180129041931.28192-1-casantos@datacom.ind.br>
-References: <20180129041931.28192-1-casantos@datacom.ind.br>
-Message-ID: <20180129053603.pqmufwqeo3cv5p6q@sapphire.tkos.co.il>
+From: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
+Date: Mon, 29 Jan 2018 06:38:11 +0100
+Subject: [Buildroot] [PATCH] package/pinentry: avoid building qt5 version if
+ qt4 is enabled
+Message-ID: <1517204291-23391-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Carlos,
+BR2_PACKAGE_PINENTRY_QT5 selects BR2_PACKAGE_QT5, which can lead to Qt
+version clash if otherwise Qt4 is selected as well. Making
+BR2_PACKAGE_PINENTRY_QT5 depending on !BR2_PACKAGE_QT to avoid this.
 
-On Mon, Jan 29, 2018 at 02:19:31AM -0200, Carlos Santos wrote:
-> Programs that use libudev (e.g. lsusb, from usbutils) need the hwdb.bin
-> file to work properly.
-> 
-> If BR2_PACKAGE_EUDEV_ENABLE_HWDB is selected then the eudev installation
-> populates /etc/udev/hwdb.d/ but does not genarete /etc/udev/hwdb.bin. It
-> must be created running "udevadm hwdb --update" on the target device.
-> 
-> Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
-> ---
->  package/eudev/S10udev | 12 ++++++++++--
->  1 file changed, 10 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/eudev/S10udev b/package/eudev/S10udev
-> index 8382bec2bb..5c25e51317 100755
-> --- a/package/eudev/S10udev
-> +++ b/package/eudev/S10udev
-> @@ -25,14 +25,22 @@ UDEV_CONFIG=/etc/udev/udev.conf
->  test -r $UDEV_CONFIG || exit 6
->  . $UDEV_CONFIG
->  
-> +UDEV_HWDB_BIN=/etc/udev/hwdb.bin
-> +UDEV_HWDB_D=/etc/udev/hwdb.d
-> +
->  case "$1" in
->      start)
->          printf "Populating ${udev_root:-/dev} using udev: "
->          printf '\000\000\000\000' > /proc/sys/kernel/hotplug
-> -        $UDEV_BIN -d || (echo "FAIL" && exit 1)
-> +        $UDEV_BIN -d || { echo "FAIL" && exit 1; }
+Fixes:
+     http://autobuild.buildroot.net/results/3c537e1260dc9ce57657ca0d49e318a10aee111e
 
-How is this change related to hwdb.bin generation?
+Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
+---
+ package/pinentry/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
->          udevadm trigger --type=subsystems --action=add
->          udevadm trigger --type=devices --action=add
-> -        udevadm settle --timeout=30 || echo "udevadm settle failed"
-> +        udevadm settle --timeout=30 || { echo "udevadm settle failed" && exit 1; }
-> +        [ -d "$UDEV_HWDB_D" ] && {
-> +            echo "done"
-> +            printf "Compiling hardware database information $UDEV_HWDB_BIN: "
-> +            udevadm hwdb --update || { echo "FAIL" && exit 1; }
-
-Wouldn't that break read-only /etc?
-
-> +        }
->          echo "done"
->          ;;
->      stop)
-
-baruch
-
+diff --git a/package/pinentry/Config.in b/package/pinentry/Config.in
+index 781901b..5f2cb58 100644
+--- a/package/pinentry/Config.in
++++ b/package/pinentry/Config.in
+@@ -63,6 +63,7 @@ config BR2_PACKAGE_PINENTRY_QT5
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on !BR2_PACKAGE_PINENTRY_QT4
++	depends on !BR2_PACKAGE_QT
+ 	select BR2_PACKAGE_QT5
+ 	select BR2_PACKAGE_QT5BASE_GUI
+ 	select BR2_PACKAGE_QT5BASE_WIDGETS
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+2.7.4
