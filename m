@@ -1,54 +1,32 @@
-From: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
-Date: Mon, 29 Jan 2018 09:29:34 +0100
-Subject: [Buildroot] [PATCH] package/gpsd: upgrade to 3.17,
- remove obsolete patch
-In-Reply-To: <20180129080301.3x4ek2l3ogyraupn@sapphire.tkos.co.il>
-References: <1517212625-32760-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
- <20180129080301.3x4ek2l3ogyraupn@sapphire.tkos.co.il>
-Message-ID: <37de60a2-28c9-4135-104c-d804ec73edf5@gmail.com>
+From: Julien CORJON <corjon.j@ecagroup.com>
+Date: Mon, 29 Jan 2018 08:30:16 +0000
+Subject: [Buildroot] [PATCH 1/1] package/wf111: bump to version 5.2.2-r3
+In-Reply-To: <877es3irx9.fsf@dell.be.48ers.dk>
+References: <20180126162021.5520-1-corjon.j@ecagroup.com>	<Julien Corjon's
+ message of "Fri, 26 Jan 2018 17:20:21 +0100">
+Message-ID: <1517214618.13585.0@localhost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Baruch,
+Hello Peter,
 
-On 01/29/2018 09:03 AM, Baruch Siach wrote:
-> Hi Zoltan,
->
-> On Mon, Jan 29, 2018 at 08:57:05AM +0100, Zoltan Gyarmati wrote:
->> The upstream patch which disables the build-time systemctl call made it into
->> this release so removing it here. Also adding hash for the COPYING file.
->>
->> Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
->> ---
->>  ...001-SConstruct-do-not-force-O2-by-default.patch | 29 +++++++++++++++
->>  ...eract-with-systemctl-when-cross-compiling.patch | 41 ----------------------
->>  ...002-SConstruct-do-not-force-O2-by-default.patch | 29 ---------------
->>  package/gpsd/gpsd.hash                             |  3 +-
->>  package/gpsd/gpsd.mk                               |  2 +-
->>  5 files changed, 32 insertions(+), 72 deletions(-)
->>  create mode 100644 package/gpsd/0001-SConstruct-do-not-force-O2-by-default.patch
->>  delete mode 100644 package/gpsd/0001-do-not-interact-with-systemctl-when-cross-compiling.patch
->>  delete mode 100644 package/gpsd/0002-SConstruct-do-not-force-O2-by-default.patch
-> It looks like the -O2 patch file is just renamed. To make this apparent it 
-> would be better to pass -M to 'git format-patch', so that git would detect the 
-> file rename. This also makes the patch review easier, especially when the file 
-> is also changed along the way.
-Indeed. Thanks for the review, i resent a v1.
->
-> baruch
->
+Le sam. 27 janv. 2018 ? 10:15, Peter Korsgaard <peter@korsgaard.com> a ?crit
+[..]
+The Config.in refers to http://www.bluegiga.com/en-US/products/wifi-modules/wf111-wifi-module/, which redirects to silabs.com nowadays, so it is not directly clear where to find the tarballs.
 
-Zoltan Gyarmati
-https://zgyarmati.de
+Good catch, i forgot to check Config.in...
 
+Care to send a patch updating Config.in?
 
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 473 bytes
-Desc: OpenPGP digital signature
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180129/bc06ae93/attachment.asc>
+Sure, just done!
+
+Regards,
+
+Julien
+
+Committed, thanks.
+--
+Bye, Peter Korsgaard
