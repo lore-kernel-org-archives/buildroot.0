@@ -1,173 +1,97 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Mon, 29 Jan 2018 23:14:24 +0100
-Subject: [Buildroot] [git commit] testing/tests/boot/test_atf: fix code style
-Message-ID: <20180129221637.A101F87745@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] scanpypi: fix code style
+Message-ID: <20180129221638.179E087745@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a3bb315e42711fa3fd477ffb45b0bfe053810521
+commit: https://git.buildroot.net/buildroot/commit/?id=2455e5a091051ad7062556d45d9c8c079598a9d8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Fix these warnings:
-E122 continuation line missing indentation or outdented
+E101 indentation contains mixed spaces and tabs
+E128 continuation line under-indented for visual indent
+E231 missing whitespace after ','
+E261 at least two spaces before inline comment
 E302 expected 2 blank lines, found 1
-F401 'os' imported but unused
+E305 expected 2 blank lines after class or function definition, found 1
+W191 indentation contains tabs
+
+Ignore these warnings:
+E402 module level import not at top of file
 
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Yegor Yefremov <yegorslists@googlemail.com>
+Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- support/testing/tests/boot/test_atf.py | 124 +++++++++++++++++----------------
- 1 file changed, 63 insertions(+), 61 deletions(-)
+ utils/scanpypi | 13 +++++++++----
+ 1 file changed, 9 insertions(+), 4 deletions(-)
 
-diff --git a/support/testing/tests/boot/test_atf.py b/support/testing/tests/boot/test_atf.py
-index f1e58af134..8288116471 100644
---- a/support/testing/tests/boot/test_atf.py
-+++ b/support/testing/tests/boot/test_atf.py
-@@ -1,80 +1,82 @@
--import os
- import infra.basetest
+diff --git a/utils/scanpypi b/utils/scanpypi
+index 23a2fb8c7b..55bfb2fedb 100755
+--- a/utils/scanpypi
++++ b/utils/scanpypi
+@@ -35,6 +35,7 @@ except ImportError:
+           'pip install spdx_lookup')
+     liclookup = None
  
 +
- class TestATFVexpress(infra.basetest.BRTest):
-     config = \
--    """
--    BR2_aarch64=y
--    BR2_TOOLCHAIN_EXTERNAL=y
--    BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64=y
--    BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
--    BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
--    BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/ARM-software/arm-trusted-firmware.git"
--    BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="v1.2"
--    BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="juno"
--    BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP=y
--    BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33=y
--    BR2_TARGET_UBOOT=y
--    BR2_TARGET_UBOOT_BOARDNAME="vexpress_aemv8a_juno"
--    BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--    BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.03"
--    BR2_TARGET_VEXPRESS_FIRMWARE=y
--    """
-+        """
-+        BR2_aarch64=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64=y
-+        BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
-+        BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
-+        BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/ARM-software/arm-trusted-firmware.git"
-+        BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="v1.2"
-+        BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="juno"
-+        BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP=y
-+        BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33=y
-+        BR2_TARGET_UBOOT=y
-+        BR2_TARGET_UBOOT_BOARDNAME="vexpress_aemv8a_juno"
-+        BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-+        BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.03"
-+        BR2_TARGET_VEXPRESS_FIRMWARE=y
-+        """
+ def setup_decorator(func, method):
+     """
+     Decorator for distutils.core.setup and setuptools.setup.
+@@ -55,11 +56,12 @@ def setup_decorator(func, method):
+     return closure
  
-     def test_run(self):
-         pass
+ # monkey patch
+-import setuptools
++import setuptools  # noqa E402
+ setuptools.setup = setup_decorator(setuptools.setup, 'setuptools')
+-import distutils
++import distutils   # noqa E402
+ distutils.core.setup = setup_decorator(setuptools.setup, 'distutils')
  
 +
- class TestATFAllwinner(infra.basetest.BRTest):
-     config = \
--    """
--    BR2_aarch64=y
--    BR2_TOOLCHAIN_EXTERNAL=y
--    BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64=y
--    BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
--    BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
--    BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/apritzel/arm-trusted-firmware.git"
--    BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="sun50iw1p1"
--    BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="aa75c8da415158a94b82a430b2b40000778e851f"
--    BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
--    BR2_TARGET_UBOOT=y
--    BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
--    BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--    BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.09"
--    BR2_TARGET_UBOOT_BOARD_DEFCONFIG="bananapi_m64"
--    BR2_TARGET_UBOOT_NEEDS_DTC=y
--    BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
--    BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
--    BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.itb"
--    BR2_TARGET_UBOOT_SPL=y
--    BR2_TARGET_UBOOT_SPL_NAME="spl/sunxi-spl.bin"
--    """
-+        """
-+        BR2_aarch64=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64=y
-+        BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
-+        BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
-+        BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/apritzel/arm-trusted-firmware.git"
-+        BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="sun50iw1p1"
-+        BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="aa75c8da415158a94b82a430b2b40000778e851f"
-+        BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
-+        BR2_TARGET_UBOOT=y
-+        BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-+        BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-+        BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.09"
-+        BR2_TARGET_UBOOT_BOARD_DEFCONFIG="bananapi_m64"
-+        BR2_TARGET_UBOOT_NEEDS_DTC=y
-+        BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
-+        BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
-+        BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.itb"
-+        BR2_TARGET_UBOOT_SPL=y
-+        BR2_TARGET_UBOOT_SPL_NAME="spl/sunxi-spl.bin"
-+        """
- 
-     def test_run(self):
-         pass
+ def find_file_upper_case(filenames, path='./'):
+     """
+     List generator:
+@@ -91,9 +93,11 @@ def pkg_buildroot_name(pkg_name):
+     name = pattern.sub(r'python-\1', name)
+     return name
  
 +
- class TestATFMarvell(infra.basetest.BRTest):
-     config = \
--    """
--    BR2_aarch64=y
--    BR2_TOOLCHAIN_EXTERNAL=y
--    BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64=y
--    BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
--    BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
--    BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/MarvellEmbeddedProcessors/atf-marvell.git"
--    BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="atf-v1.3-armada-17.10"
--    BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="a80x0_mcbin"
--    BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP=y
--    BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33=y
--    BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="USE_COHERENT_MEM=0"
--    BR2_TARGET_BINARIES_MARVELL=y
--    BR2_TARGET_BINARIES_MARVELL_8040=y
--    BR2_TARGET_MV_DDR_MARVELL=y
--    BR2_TARGET_UBOOT=y
--    BR2_TARGET_UBOOT_BOARDNAME="mvebu_mcbin-88f8040"
--    BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--    BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.09"
--    BR2_TARGET_UBOOT_NEEDS_DTC=y
--    """
-+        """
-+        BR2_aarch64=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64=y
-+        BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
-+        BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
-+        BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/MarvellEmbeddedProcessors/atf-marvell.git"
-+        BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="atf-v1.3-armada-17.10"
-+        BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="a80x0_mcbin"
-+        BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP=y
-+        BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33=y
-+        BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="USE_COHERENT_MEM=0"
-+        BR2_TARGET_BINARIES_MARVELL=y
-+        BR2_TARGET_BINARIES_MARVELL_8040=y
-+        BR2_TARGET_MV_DDR_MARVELL=y
-+        BR2_TARGET_UBOOT=y
-+        BR2_TARGET_UBOOT_BOARDNAME="mvebu_mcbin-88f8040"
-+        BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-+        BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.09"
-+        BR2_TARGET_UBOOT_NEEDS_DTC=y
-+        """
+ class DownloadFailed(Exception):
+     pass
  
-     def test_run(self):
-         pass
++
+ class BuildrootPackage():
+     """This class's methods are not meant to be used individually please
+     use them in the correct order:
+@@ -267,14 +271,14 @@ class BuildrootPackage():
+             # called through the if __name__ == '__main__' directive.
+             # In this case, we can only pray that it is called through a
+             # function called main() in setup.py.
+-            setup.main() # Will raise AttributeError if not found
++            setup.main()  # Will raise AttributeError if not found
+             self.setup_metadata = self.setup_args[self.metadata_name]
+         # Here we must remove the module the hard way.
+         # We must do this because of a very specific case: if a package calls
+         # setup from the __main__ but does not come with a 'main()' function,
+         # for some reason setup.main() will successfully call the main
+         # function of a previous package...
+-        sys.modules.pop('setup',None)
++        sys.modules.pop('setup', None)
+         del setup
+         os.chdir(current_dir)
+         sys.path.remove(self.tmp_extract)
+@@ -695,5 +699,6 @@ def main():
+     finally:
+         shutil.rmtree(tmp_path)
+ 
++
+ if __name__ == "__main__":
+     main()
