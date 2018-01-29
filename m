@@ -1,29 +1,21 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 29 Jan 2018 14:39:06 +0100
-Subject: [Buildroot] [PATCH 1/1] open-lldp: requires dynamic linking
- interface (dlopen, ...)
-In-Reply-To: <20180129124530.25241-1-laurent_pubs@yahoo.com> (Laurent
- Charpentier's message of "Mon, 29 Jan 2018 13:45:30 +0100")
-References: <20180129124530.25241-1-laurent_pubs@yahoo.com>
-Message-ID: <87vafk7pj9.fsf@dell.be.48ers.dk>
+Date: Mon, 29 Jan 2018 14:39:23 +0100
+Subject: [Buildroot] [PATCH] augeas: bump to version 1.10.1
+In-Reply-To: <20180129131832.14055-1-joerg.krause@embedded.rocks>
+ (=?utf-8?Q?=22J=C3=B6rg?=
+ Krause"'s message of "Mon, 29 Jan 2018 14:18:32 +0100")
+References: <20180129131832.14055-1-joerg.krause@embedded.rocks>
+Message-ID: <87r2q87pis.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Laurent" == Laurent Charpentier <laurent_pubs@yahoo.com> writes:
+>>>>> "J?rg" == J?rg Krause <joerg.krause@embedded.rocks> writes:
 
- > This patch is to fix the following build error:
- > weak_readline.c:30:19: fatal error: dlfcn.h: No such file or directory
- >  #include <dlfcn.h>
- >                    ^
- > compilation terminated.
- > Makefile:890: recipe for target 'weak_readline.o' failed
-
- > http://autobuild.buildroot.net/results/516456c8e21759e1ecee4ef9f9689a8f720ecd90/build-end.log
-
- > Signed-off-by: Laurent Charpentier <laurent_pubs@yahoo.com>
+ > Remove upstream patches included in the version bump.
+ > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 
 Committed, thanks.
 
