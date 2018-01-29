@@ -1,57 +1,114 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 29 Jan 2018 14:54:42 +0100
-Subject: [Buildroot] [git commit] merge_config.sh: add br2-external support
-Message-ID: <20180129135525.0828F87F8A@busybox.osuosl.org>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon, 29 Jan 2018 16:20:58 +0200
+Subject: [Buildroot] [PATCH] eudev: generate /etc/udev/hwdb.bin at
+ system startup
+In-Reply-To: <1839955484.109240.1517222243617.JavaMail.zimbra@datacom.ind.br>
+References: <20180129041931.28192-1-casantos@datacom.ind.br>
+ <20180129053603.pqmufwqeo3cv5p6q@sapphire.tkos.co.il>
+ <1839955484.109240.1517222243617.JavaMail.zimbra@datacom.ind.br>
+Message-ID: <20180129142058.ydoie7epmm5wme66@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=28fac3973b3c693c453594b007c08c1e1e5c4af3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Carlos,
 
-Pass BR2_EXTERNAL value via -e option.
-This will prevent merge_config.sh from silently eating any symbols defined in
-external trees on a clean buildroot tree invocation.
+On Mon, Jan 29, 2018 at 08:37:23AM -0200, Carlos Santos wrote:
+> > From: "Baruch Siach" <baruch@tkos.co.il>
+> > To: "Carlos Santos" <casantos@datacom.ind.br>
+> > Cc: "buildroot" <buildroot@buildroot.org>, "Bernd Kuhls" <bernd.kuhls@t-online.de>, "Eric Le Bihan"
+> > <eric.le.bihan.dev@free.fr>
+> > Sent: Monday, January 29, 2018 3:36:03 AM
+> > Subject: Re: [Buildroot] [PATCH] eudev: generate /etc/udev/hwdb.bin at system startup
+> 
+> > Hi Carlos,
+> > 
+> > On Mon, Jan 29, 2018 at 02:19:31AM -0200, Carlos Santos wrote:
+> >> Programs that use libudev (e.g. lsusb, from usbutils) need the hwdb.bin
+> >> file to work properly.
+> >> 
+> >> If BR2_PACKAGE_EUDEV_ENABLE_HWDB is selected then the eudev installation
+> >> populates /etc/udev/hwdb.d/ but does not genarete /etc/udev/hwdb.bin. It
+> >> must be created running "udevadm hwdb --update" on the target device.
+> >> 
+> >> Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+> >> ---
+> >>  package/eudev/S10udev | 12 ++++++++++--
+> >>  1 file changed, 10 insertions(+), 2 deletions(-)
+> >> 
+> >> diff --git a/package/eudev/S10udev b/package/eudev/S10udev
+> >> index 8382bec2bb..5c25e51317 100755
+> >> --- a/package/eudev/S10udev
+> >> +++ b/package/eudev/S10udev
+> >> @@ -25,14 +25,22 @@ UDEV_CONFIG=/etc/udev/udev.conf
+> >>  test -r $UDEV_CONFIG || exit 6
+> >>  . $UDEV_CONFIG
+> >>  
+> >> +UDEV_HWDB_BIN=/etc/udev/hwdb.bin
+> >> +UDEV_HWDB_D=/etc/udev/hwdb.d
+> >> +
+> >>  case "$1" in
+> >>      start)
+> >>          printf "Populating ${udev_root:-/dev} using udev: "
+> >>          printf '\000\000\000\000' > /proc/sys/kernel/hotplug
+> >> -        $UDEV_BIN -d || (echo "FAIL" && exit 1)
+> >> +        $UDEV_BIN -d || { echo "FAIL" && exit 1; }
+> > 
+> > How is this change related to hwdb.bin generation?
+> 
+> It fixes the logic. ( ... ) runs in a subshell, so the exit does not
+> interrupt the of the parent script. Example:
+> 
+>     $ cat /tmp/foo
+>     #!/bin/sh
+>     echo 1
+>     (echo 2 && exit 1)
+>     echo 3
+>     $ /tmp/foo
+>     1
+>     2
+>     3
+>     $ cat /tmp/bar
+>     #!/bin/sh
+>     echo 1
+>     { echo 2 && exit 1; }
+>     echo 3
+>     $ /tmp/bar
+>     1
+>     2
+>     $
 
-Signed-off-by: Ilya Kuzmich <ilya.kuzmich@gmail.com>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- support/kconfig/merge_config.sh | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+Thanks for the explanation. I think this should better be done in a separate 
+patch with this explanation in the commit log.
 
-diff --git a/support/kconfig/merge_config.sh b/support/kconfig/merge_config.sh
-index 8a1708b50f..e1d7ffa7b5 100755
---- a/support/kconfig/merge_config.sh
-+++ b/support/kconfig/merge_config.sh
-@@ -33,6 +33,7 @@ usage() {
- 	echo "  -n    use allnoconfig instead of alldefconfig"
- 	echo "  -r    list redundant entries when merging fragments"
- 	echo "  -O    dir to put generated output files"
-+	echo "  -e    colon-separated list of br2-external trees to use (optional)"
- }
- 
- MAKE=true
-@@ -71,6 +72,11 @@ while true; do
- 		shift 2
- 		continue
- 		;;
-+	"-e")
-+		EXTERNAL_ARG="BR2_EXTERNAL=$2"
-+		shift 2
-+		continue
-+		;;
- 	*)
- 		break
- 		;;
-@@ -131,7 +137,7 @@ fi
- # Use the merged file as the starting point for:
- # alldefconfig: Fills in any missing symbols with Kconfig default
- # allnoconfig: Fills in any missing symbols with # CONFIG_* is not set
--make KCONFIG_ALLCONFIG=$TMP_FILE $OUTPUT_ARG $ALLTARGET
-+make KCONFIG_ALLCONFIG=$TMP_FILE $EXTERNAL_ARG $OUTPUT_ARG $ALLTARGET
- 
- 
- # Check all specified config values took (might have missed-dependency issues)
+> >>          udevadm trigger --type=subsystems --action=add
+> >>          udevadm trigger --type=devices --action=add
+> >> -        udevadm settle --timeout=30 || echo "udevadm settle failed"
+> >> +        udevadm settle --timeout=30 || { echo "udevadm settle failed" && exit
+> >> 1; }
+> >> +        [ -d "$UDEV_HWDB_D" ] && {
+> >> +            echo "done"
+> >> +            printf "Compiling hardware database information $UDEV_HWDB_BIN: "
+> >> +            udevadm hwdb --update || { echo "FAIL" && exit 1; }
+> > 
+> > Wouldn't that break read-only /etc?
+> 
+> The script may require some customization, as already explained in its
+> opening comments, which is beyond the scope of this change.
+> 
+> Notice that a read-only /etc does not break the init script. It breaks
+> the "udevadm hwdb --update" command, as well as any command that assume
+> a rw filesystem (and there is a lot of them).
+
+It might make sense to detect read-only /etc at the beginning of this script 
+like we do in package/initscripts/init.d/S20urandom. But I agree that this is 
+also a separate issue.
+
+baruch
+
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
