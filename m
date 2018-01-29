@@ -1,35 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 29 Jan 2018 22:27:03 +0100
-Subject: [Buildroot] [git commit branch/2017.02.x] linux-headers: bump 3.2.x
- series
-Message-ID: <20180129213708.CD07486259@busybox.osuosl.org>
+Date: Mon, 29 Jan 2018 22:28:17 +0100
+Subject: [Buildroot] [git commit branch/2017.02.x] linux-headers: bump 4.{4,
+ 9, 14}.x series
+Message-ID: <20180129213708.E0F3188014@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=18867c169595de1949e5ac2c487faac6095d539d
+commit: https://git.buildroot.net/buildroot/commit/?id=8039ef2ebf791d17d85aad2a2ffff9034d96a96a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
+[Peter: drop 4.14.x bump]
+Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 28d57106b87ef97480374925e5f44dc541eba381)
+(cherry picked from commit 1897a56a2baae64f40dc9b155443d13818ef726b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-headers/Config.in.host | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/linux-headers/Config.in.host | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index ee9f0e9f1c..0bc1457f70 100644
+index 0bc1457f70..6be4a4d140 100644
 --- a/package/linux-headers/Config.in.host
 +++ b/package/linux-headers/Config.in.host
-@@ -214,7 +214,7 @@ endchoice
- 
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
--	default "3.2.96"	if BR2_KERNEL_HEADERS_3_2
-+	default "3.2.97"	if BR2_KERNEL_HEADERS_3_2
- 	default "3.4.113"	if BR2_KERNEL_HEADERS_3_4
- 	default "3.10.108"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.12.74"	if BR2_KERNEL_HEADERS_3_12
+@@ -222,7 +222,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
+ 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
+ 	default "4.1.48"	if BR2_KERNEL_HEADERS_4_1
+-	default "4.4.108"	if BR2_KERNEL_HEADERS_4_4
++	default "4.4.109"	if BR2_KERNEL_HEADERS_4_4
+ 	default "4.8.17"	if BR2_KERNEL_HEADERS_4_8
+-	default "4.9.73"	if BR2_KERNEL_HEADERS_4_9
++	default "4.9.74"	if BR2_KERNEL_HEADERS_4_9
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
