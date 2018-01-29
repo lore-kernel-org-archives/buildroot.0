@@ -1,25 +1,52 @@
 From: Sergey Matyukevich <geomatsi@gmail.com>
-Date: Tue, 30 Jan 2018 00:37:18 +0300
-Subject: [Buildroot] [PATCH 0/2] orange-pi: bump u-boot and kernel versions
-Message-ID: <20180129213720.24321-1-geomatsi@gmail.com>
+Date: Tue, 30 Jan 2018 00:37:19 +0300
+Subject: [Buildroot] [PATCH 1/2] orangepi-one: bump kernel and u-boot
+ versions
+In-Reply-To: <20180129213720.24321-1-geomatsi@gmail.com>
+References: <20180129213720.24321-1-geomatsi@gmail.com>
+Message-ID: <20180129213720.24321-2-geomatsi@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+Bump Linux to 4.15 and U-Boot to 2018.01. Enable dhcp for eth0 since
+Ethernet support for Allwinner H2/H3 SoCs has landed in Linux 4.15.
 
-Here are two patches updating kernel and u-boot versions for
-Orange Pi One and Orange Pi PC Plus boards.
+Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
+---
+ configs/orangepi_one_defconfig | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-Regards,
-Sergey
-
-Sergey Matyukevich (2):
-  orangepi-one: bump kernel and u-boot versions
-  orangepi-pc-plus: bump kernel and u-boot
-
- orangepi_one_defconfig     |    7 ++++---
- orangepi_pc_plus_defconfig |    7 ++++---
- 2 files changed, 8 insertions(+), 6 deletions(-)
+diff --git a/configs/orangepi_one_defconfig b/configs/orangepi_one_defconfig
+index 0cd3ece2d2..51f82054c5 100644
+--- a/configs/orangepi_one_defconfig
++++ b/configs/orangepi_one_defconfig
+@@ -1,12 +1,13 @@
+ BR2_arm=y
+ BR2_cortex_a7=y
+ BR2_ARM_FPU_VFPV4=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_13=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_15=y
+ BR2_TARGET_GENERIC_HOSTNAME="OrangePi_One"
+ BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for the Orange Pi One"
++BR2_SYSTEM_DHCP="eth0"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.13.11"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.15"
+ BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-h3-orangepi-one"
+@@ -16,7 +17,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.09"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.01"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="orangepi_one"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+-- 
+2.16.1
