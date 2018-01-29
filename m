@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 29 Jan 2018 22:21:48 +0100
-Subject: [Buildroot] [PATCH] package/network-manager: Bump to version
- 1.10.2
-In-Reply-To: <20180122152938.23956-1-petr.vorel@gmail.com>
-References: <20180122152938.23956-1-petr.vorel@gmail.com>
-Message-ID: <20180129222148.76b68638@windsurf.lan>
+Date: Mon, 29 Jan 2018 22:25:16 +0100
+Subject: [Buildroot] [PATCH 1/1] domoticz: depends on NPTL
+In-Reply-To: <87k1w05sww.fsf@dell.be.48ers.dk>
+References: <20180120112824.12236-1-fontaine.fabrice@gmail.com>
+ <87k1w05sww.fsf@dell.be.48ers.dk>
+Message-ID: <20180129222516.22768129@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,18 +13,29 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 22 Jan 2018 16:29:38 +0100, Petr Vorel wrote:
-> + added new option support for OVS (adds new dependency to Jansson)
+On Mon, 29 Jan 2018 21:09:03 +0100, Peter Korsgaard wrote:
 
-The OpenVSwitch support was added in 1.10.0, so it's not really related
-to this bump. Could you do the bump in one patch, and the OVS addition
-in another patch ?
+>  > boost 1.66 uses pthread_condattr_setclock in
+>  > boost/asio/detail/impl/posix_event.ipp so add a dependency to
+>  > BR2_TOOLCHAIN_HAS_THREADS_NPTL  
+> 
+> Shouldn't boost then depend on BR2_TOOLCHAIN_HAS_THREADS_NPTL (and
+> domoticz enherit it), or is this code only used in special cases?
 
-Also, I believe OVS is not very clear. What about "OpenVSwitch support"
-in the prompt and in the help text. The option could remained named
-BR2_PACKAGE_NETWORK_MANAGER_OVS however, if you want.
+Well, Boost is mostly a header-only library, in particular the asio
+stuff I believe. While we have sub-options for the parts of Boost that
+are not purely headers, we don't have any sub-options for the parts of
+Boost that are just headers.
 
-Thanks!
+So, the options are either to add sub-options to Boost, or to make
+Boost as a whole only available on NPTL toolchains. The latter is a bit
+annoying as it would mean adding this dependency to all Boost reverse
+dependencies, even those not using asio.
+
+So I think Fabrice's patch is the best solution we can have today. I'm
+not saying it's perfect, but it's good enough IMO.
+
+Best regards,
 
 Thomas
 -- 
