@@ -1,32 +1,36 @@
-From: Julien CORJON <corjon.j@ecagroup.com>
-Date: Mon, 29 Jan 2018 08:30:16 +0000
-Subject: [Buildroot] [PATCH 1/1] package/wf111: bump to version 5.2.2-r3
-In-Reply-To: <877es3irx9.fsf@dell.be.48ers.dk>
-References: <20180126162021.5520-1-corjon.j@ecagroup.com>	<Julien Corjon's
- message of "Fri, 26 Jan 2018 17:20:21 +0100">
-Message-ID: <1517214618.13585.0@localhost>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 29 Jan 2018 09:41:38 +0100
+Subject: [Buildroot] buildroot imagw upgrade
+In-Reply-To: <trinity-01900f6e-e7da-4b49-b3b3-4f08bea4a85f-1517212721295@3c-app-mailcom-bs04>
+ (daggs@gmx.com's message of "Mon, 29 Jan 2018 08:58:41 +0100")
+References: <trinity-7ce85c6f-3278-4055-8377-0c3a03dd9a1a-1516300080914@3c-app-mailcom-bs09>
+ <87shaqdjqm.fsf@dell.be.48ers.dk>
+ <trinity-01900f6e-e7da-4b49-b3b3-4f08bea4a85f-1517212721295@3c-app-mailcom-bs04>
+Message-ID: <87shap83b1.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Peter,
+>>>>> "daggs" == daggs  <daggs@gmx.com> writes:
 
-Le sam. 27 janv. 2018 ? 10:15, Peter Korsgaard <peter@korsgaard.com> a ?crit
-[..]
-The Config.in refers to http://www.bluegiga.com/en-US/products/wifi-modules/wf111-wifi-module/, which redirects to silabs.com nowadays, so it is not directly clear where to find the tarballs.
+Hi,
 
-Good catch, i forgot to check Config.in...
+ > I have a dtv server running image based on buildroot, it gets stuck
+ > every day requiring me to reboot it.  I want to upgrade the image but
+ > I have data and config I want to keep.
 
-Care to send a patch updating Config.in?
+And you have not separated your data/config from the buildroot image
+(E.G. on another filesystem)?
 
-Sure, just done!
+> my first idea was to preform and upgrade, that is why I'm asking.
 
-Regards,
+Upgrade handling is always quite system specific, and outside the scope
+of Buildroot.
 
-Julien
+We do provide a number of packages related to upgrade handling, but
+Buildroot is just a toolbox - It doesn't enforce any specific behaviour.
 
-Committed, thanks.
---
+-- 
 Bye, Peter Korsgaard
