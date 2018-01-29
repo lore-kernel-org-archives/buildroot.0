@@ -1,97 +1,240 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Mon, 29 Jan 2018 23:14:24 +0100
-Subject: [Buildroot] [git commit] scanpypi: fix code style
-Message-ID: <20180129221638.179E087745@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] get-developers: fix code style
+Message-ID: <20180129221637.E7E9A87745@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2455e5a091051ad7062556d45d9c8c079598a9d8
+commit: https://git.buildroot.net/buildroot/commit/?id=49ffceef57157e5f74c86312ec711f6dd8857668
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Fix these warnings:
-E101 indentation contains mixed spaces and tabs
-E128 continuation line under-indented for visual indent
-E231 missing whitespace after ','
-E261 at least two spaces before inline comment
+E202 whitespace before ']'
+E203 whitespace before ':'
 E302 expected 2 blank lines, found 1
 E305 expected 2 blank lines after class or function definition, found 1
-W191 indentation contains tabs
-
-Ignore these warnings:
-E402 module level import not at top of file
+E711 comparison to None should be 'if cond is None:'
+E741 ambiguous variable name 'l'
+F401 'sys' imported but unused
+W391 blank line at end of file
 
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Yegor Yefremov <yegorslists@googlemail.com>
-Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- utils/scanpypi | 13 +++++++++----
- 1 file changed, 9 insertions(+), 4 deletions(-)
+ utils/get-developers     |  4 +++-
+ utils/getdeveloperlib.py | 52 +++++++++++++++++++++++++++++-------------------
+ 2 files changed, 34 insertions(+), 22 deletions(-)
 
-diff --git a/utils/scanpypi b/utils/scanpypi
-index 23a2fb8c7b..55bfb2fedb 100755
---- a/utils/scanpypi
-+++ b/utils/scanpypi
-@@ -35,6 +35,7 @@ except ImportError:
-           'pip install spdx_lookup')
-     liclookup = None
+diff --git a/utils/get-developers b/utils/get-developers
+index 6a028b4526..f525ff2226 100755
+--- a/utils/get-developers
++++ b/utils/get-developers
+@@ -5,6 +5,7 @@ import getdeveloperlib
+ import sys
+ import os
  
 +
- def setup_decorator(func, method):
-     """
-     Decorator for distutils.core.setup and setuptools.setup.
-@@ -55,11 +56,12 @@ def setup_decorator(func, method):
-     return closure
- 
- # monkey patch
--import setuptools
-+import setuptools  # noqa E402
- setuptools.setup = setup_decorator(setuptools.setup, 'setuptools')
--import distutils
-+import distutils   # noqa E402
- distutils.core.setup = setup_decorator(setuptools.setup, 'distutils')
+ def parse_args():
+     parser = argparse.ArgumentParser()
+     parser.add_argument('patches', metavar='P', type=argparse.FileType('r'), nargs='*',
+@@ -19,6 +20,7 @@ def parse_args():
+                         const=True, help='list files not handled by any developer')
+     return parser.parse_args()
  
 +
- def find_file_upper_case(filenames, path='./'):
-     """
-     List generator:
-@@ -91,9 +93,11 @@ def pkg_buildroot_name(pkg_name):
-     name = pattern.sub(r'python-\1', name)
-     return name
+ def __main__():
+     devs = getdeveloperlib.parse_developers()
+     if devs is None:
+@@ -95,5 +97,5 @@ def __main__():
+         if result != "":
+             print("git send-email %s" % result)
+ 
+-__main__()
+ 
++__main__()
+diff --git a/utils/getdeveloperlib.py b/utils/getdeveloperlib.py
+index 65191073a3..2c8d477583 100644
+--- a/utils/getdeveloperlib.py
++++ b/utils/getdeveloperlib.py
+@@ -1,7 +1,5 @@
+-import sys
+ import os
+ import re
+-import argparse
+ import glob
+ import subprocess
+ 
+@@ -11,6 +9,7 @@ import subprocess
+ 
+ FIND_INFRA_IN_PATCH = re.compile("^\+\$\(eval \$\((host-)?([^-]*)-package\)\)$")
  
 +
- class DownloadFailed(Exception):
-     pass
+ def analyze_patch(patch):
+     """Parse one patch and return the list of files modified, added or
+     removed by the patch."""
+@@ -24,14 +23,16 @@ def analyze_patch(patch):
+         if not line.startswith("+++ "):
+             continue
+         line.strip()
+-        fname = line[line.find("/") + 1 : ].strip()
++        fname = line[line.find("/") + 1:].strip()
+         if fname == "dev/null":
+             continue
+         files.add(fname)
+     return (files, infras)
  
 +
- class BuildrootPackage():
-     """This class's methods are not meant to be used individually please
-     use them in the correct order:
-@@ -267,14 +271,14 @@ class BuildrootPackage():
-             # called through the if __name__ == '__main__' directive.
-             # In this case, we can only pray that it is called through a
-             # function called main() in setup.py.
--            setup.main() # Will raise AttributeError if not found
-+            setup.main()  # Will raise AttributeError if not found
-             self.setup_metadata = self.setup_args[self.metadata_name]
-         # Here we must remove the module the hard way.
-         # We must do this because of a very specific case: if a package calls
-         # setup from the __main__ but does not come with a 'main()' function,
-         # for some reason setup.main() will successfully call the main
-         # function of a previous package...
--        sys.modules.pop('setup',None)
-+        sys.modules.pop('setup', None)
-         del setup
-         os.chdir(current_dir)
-         sys.path.remove(self.tmp_extract)
-@@ -695,5 +699,6 @@ def main():
-     finally:
-         shutil.rmtree(tmp_path)
+ FIND_INFRA_IN_MK = re.compile("^\$\(eval \$\((host-)?([^-]*)-package\)\)$")
  
 +
- if __name__ == "__main__":
-     main()
+ def fname_get_package_infra(fname):
+     """Checks whether the file name passed as argument is a Buildroot .mk
+     file describing a package, and find the infrastructure it's using."""
+@@ -42,13 +43,14 @@ def fname_get_package_infra(fname):
+         return None
+ 
+     with open(fname, "r") as f:
+-        for l in f:
+-            l = l.strip()
+-            m = FIND_INFRA_IN_MK.match(l)
++        for line in f:
++            line = line.strip()
++            m = FIND_INFRA_IN_MK.match(line)
+             if m:
+                 return m.group(2)
+     return None
+ 
++
+ def get_infras(files):
+     """Search in the list of files for .mk files, and collect the package
+     infrastructures used by those .mk files."""
+@@ -59,6 +61,7 @@ def get_infras(files):
+             infras.add(infra)
+     return infras
+ 
++
+ def analyze_patches(patches):
+     """Parse a list of patches and returns the list of files modified,
+     added or removed by the patches, as well as the list of package
+@@ -72,6 +75,7 @@ def analyze_patches(patches):
+     allinfras = allinfras | get_infras(allfiles)
+     return (allfiles, allinfras)
+ 
++
+ #
+ # DEVELOPERS file parsing functions
+ #
+@@ -91,6 +95,7 @@ class Developer:
+                 return True
+         return False
+ 
++
+ def parse_developer_packages(fnames):
+     """Given a list of file patterns, travel through the Buildroot source
+     tree to find which packages are implemented by those file
+@@ -105,25 +110,27 @@ def parse_developer_packages(fnames):
+                     packages.add(pkg)
+     return packages
+ 
++
+ def parse_arches_from_config_in(fname):
+     """Given a path to an arch/Config.in.* file, parse it to get the list
+     of BR2_ARCH values for this architecture."""
+     arches = set()
+     with open(fname, "r") as f:
+         parsing_arches = False
+-        for l in f:
+-            l = l.strip()
+-            if l == "config BR2_ARCH":
++        for line in f:
++            line = line.strip()
++            if line == "config BR2_ARCH":
+                 parsing_arches = True
+                 continue
+             if parsing_arches:
+-                m = re.match("^\s*default \"([^\"]*)\".*", l)
++                m = re.match("^\s*default \"([^\"]*)\".*", line)
+                 if m:
+                     arches.add(m.group(1))
+                 else:
+                     parsing_arches = False
+     return arches
+ 
++
+ def parse_developer_architectures(fnames):
+     """Given a list of file names, find the ones starting by
+     'arch/Config.in.', and use that to determine the architecture a
+@@ -135,6 +142,7 @@ def parse_developer_architectures(fnames):
+         arches = arches | parse_arches_from_config_in(fname)
+     return arches
+ 
++
+ def parse_developer_infras(fnames):
+     infras = set()
+     for fname in fnames:
+@@ -143,37 +151,38 @@ def parse_developer_infras(fnames):
+             infras.add(m.group(1))
+     return infras
+ 
++
+ def parse_developers(basepath=None):
+     """Parse the DEVELOPERS file and return a list of Developer objects."""
+     developers = []
+     linen = 0
+-    if basepath == None:
++    if basepath is None:
+         basepath = os.getcwd()
+     with open(os.path.join(basepath, "DEVELOPERS"), "r") as f:
+         files = []
+         name = None
+-        for l in f:
+-            l = l.strip()
+-            if l.startswith("#"):
++        for line in f:
++            line = line.strip()
++            if line.startswith("#"):
+                 continue
+-            elif l.startswith("N:"):
++            elif line.startswith("N:"):
+                 if name is not None or len(files) != 0:
+                     print("Syntax error in DEVELOPERS file, line %d" % linen)
+-                name = l[2:].strip()
+-            elif l.startswith("F:"):
+-                fname = l[2:].strip()
++                name = line[2:].strip()
++            elif line.startswith("F:"):
++                fname = line[2:].strip()
+                 dev_files = glob.glob(os.path.join(basepath, fname))
+                 if len(dev_files) == 0:
+                     print("WARNING: '%s' doesn't match any file" % fname)
+                 files += dev_files
+-            elif l == "":
++            elif line == "":
+                 if not name:
+                     continue
+                 developers.append(Developer(name, files))
+                 files = []
+                 name = None
+             else:
+-                print("Syntax error in DEVELOPERS file, line %d: '%s'" % (linen, l))
++                print("Syntax error in DEVELOPERS file, line %d: '%s'" % (linen, line))
+                 return None
+             linen += 1
+     # handle last developer
+@@ -181,10 +190,11 @@ def parse_developers(basepath=None):
+         developers.append(Developer(name, files))
+     return developers
+ 
++
+ def check_developers(developers, basepath=None):
+     """Look at the list of files versioned in Buildroot, and returns the
+     list of files that are not handled by any developer"""
+-    if basepath == None:
++    if basepath is None:
+         basepath = os.getcwd()
+     cmd = ["git", "--git-dir", os.path.join(basepath, ".git"), "ls-files"]
+     files = subprocess.check_output(cmd).strip().split("\n")
