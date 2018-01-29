@@ -1,64 +1,81 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 29 Jan 2018 20:52:07 +0100
-Subject: [Buildroot] [git commit] package/berkeleydb: add security fix for
- CVE-2017-10140
-Message-ID: <20180129195543.437F287F9B@busybox.osuosl.org>
+Date: Mon, 29 Jan 2018 20:31:22 +0100
+Subject: [Buildroot] [git commit] package/turbolua: bump version to v2.1.2
+Message-ID: <20180129194054.D25A38566D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0b368023f7e166648f136244960608a0e009332d
+commit: https://git.buildroot.net/buildroot/commit/?id=df41c7cd5cdeea2c2a536d24aeff24a30c3d26a5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes CVE-2017-10140: Berkeley DB reads DB_CONFIG from cwd
+Drop patch now upstream.
 
-For more details, see:
-https://security-tracker.debian.org/tracker/CVE-2017-10140
-
-And add license hash while we are at it.
-
-[Peter: extend commit message]
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/berkeleydb/0001-cwd-db_config.patch | 21 +++++++++++++++++++++
- package/berkeleydb/berkeleydb.hash          |  1 +
- 2 files changed, 22 insertions(+)
+ ...er-Fix-typo-in-switch-FALLTHROUGH-comment.patch | 31 ----------------------
+ package/turbolua/turbolua.hash                     |  2 +-
+ package/turbolua/turbolua.mk                       |  2 +-
+ 3 files changed, 2 insertions(+), 33 deletions(-)
 
-diff --git a/package/berkeleydb/0001-cwd-db_config.patch b/package/berkeleydb/0001-cwd-db_config.patch
-new file mode 100644
-index 0000000000..08ce5a3931
---- /dev/null
-+++ b/package/berkeleydb/0001-cwd-db_config.patch
-@@ -0,0 +1,21 @@
-+Do not access DB_CONFIG when db_home is not set
-+
-+Fixes CVE-2017-10140:
-+https://bugzilla.redhat.com/show_bug.cgi?id=1464032#c9
-+
-+Downloaded from
-+http://pkgs.fedoraproject.org/cgit/rpms/libdb.git/commit/?id=8047fa8580659fcae740c25e91b490539b8453eb
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+
-+--- db-5.3.28/src/env/env_open.c.old	2017-06-26 10:32:11.011419981 +0200
-++++ db-5.3.28/src/env/env_open.c	2017-06-26 10:32:46.893721233 +0200
-+@@ -473,7 +473,7 @@
-+ 	env->db_mode = mode == 0 ? DB_MODE_660 : mode;
-+ 
-+ 	/* Read the DB_CONFIG file. */
-+-	if ((ret = __env_read_db_config(env)) != 0)
-++	if (env->db_home != NULL && (ret = __env_read_db_config(env)) != 0)
-+ 		return (ret);
-+ 
-+ 	/*
-diff --git a/package/berkeleydb/berkeleydb.hash b/package/berkeleydb/berkeleydb.hash
-index e47c578cbe..7529329748 100644
---- a/package/berkeleydb/berkeleydb.hash
-+++ b/package/berkeleydb/berkeleydb.hash
-@@ -1,2 +1,3 @@
+diff --git a/package/turbolua/0001-http-parser-Fix-typo-in-switch-FALLTHROUGH-comment.patch b/package/turbolua/0001-http-parser-Fix-typo-in-switch-FALLTHROUGH-comment.patch
+deleted file mode 100644
+index bb27056ac6..0000000000
+--- a/package/turbolua/0001-http-parser-Fix-typo-in-switch-FALLTHROUGH-comment.patch
++++ /dev/null
+@@ -1,31 +0,0 @@
+-From 570db52d7fd3b4deffe785e60fb362e1496844ee Mon Sep 17 00:00:00 2001
+-From: Marcin Niestroj <m.niestroj@grinn-global.com>
+-Date: Tue, 26 Sep 2017 12:10:53 +0200
+-Subject: [PATCH] http-parser: Fix typo in switch FALLTHROUGH comment
+-
+-This also suppresses -Wimplicit-fallthrough warning, which is enabled
+-in gcc7 by default.
+-
+-PR for upstream: https://github.com/kernelsauce/turbo/pull/323
+-
+-Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+----
+- deps/http-parser/http_parser.c | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/deps/http-parser/http_parser.c b/deps/http-parser/http_parser.c
+-index 8cf6fb0..2ff1073 100644
+---- a/deps/http-parser/http_parser.c
+-+++ b/deps/http-parser/http_parser.c
+-@@ -2095,7 +2095,7 @@ http_parser_parse_url(
+-       case s_req_server_with_at:
+-         found_at = 1;
+- 
+--      /* FALLTROUGH */
+-+      /* FALLTHROUGH */
+-       case s_req_server:
+-         uf = UF_HOST;
+-         break;
+--- 
+-2.14.1
+-
+diff --git a/package/turbolua/turbolua.hash b/package/turbolua/turbolua.hash
+index dc718f8594..c2a6044498 100644
+--- a/package/turbolua/turbolua.hash
++++ b/package/turbolua/turbolua.hash
+@@ -1,2 +1,2 @@
  # Locally calculated
- sha256	76a25560d9e52a198d37a31440fd07632b5f1f8f9f2b6d5438f4bc3e7c9013ef  db-5.3.28.NC.tar.gz
-+sha256	b78815181a53241f9347c6b47d1031fd669946f863e1edc807a291354cec024b  LICENSE
+-sha256 8b810aa531fcaf05020531fe904d449742fd0da85c31e925a7efa9816d1f8f88 turbolua-v2.1.0.tar.gz
++sha256 a2c30534706fb475545b17a017c63479e93e5e9bf1f5ed88c0db22bb4ea7b4b1 turbolua-v2.1.2.tar.gz
+diff --git a/package/turbolua/turbolua.mk b/package/turbolua/turbolua.mk
+index 49877fab68..49a5559eff 100644
+--- a/package/turbolua/turbolua.mk
++++ b/package/turbolua/turbolua.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TURBOLUA_VERSION = v2.1.0
++TURBOLUA_VERSION = v2.1.2
+ TURBOLUA_SITE = $(call github,kernelsauce,turbo,$(TURBOLUA_VERSION))
+ TURBOLUA_DEPENDENCIES = luajit
+ TURBOLUA_LICENSE = Apache-2.0
