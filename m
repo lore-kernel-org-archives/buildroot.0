@@ -1,9 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 29 Jan 2018 23:19:08 +0100
-Subject: [Buildroot] [RFC] scanpypi: handle packages with wrong metadata
-In-Reply-To: <1516973570-7732-1-git-send-email-yegorslists@googlemail.com>
-References: <1516973570-7732-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <20180129231908.4bf07275@windsurf.lan>
+Date: Mon, 29 Jan 2018 23:22:18 +0100
+Subject: [Buildroot] [PATCH 3/3] package/binutils: remove support for
+ 2.27
+In-Reply-To: <20180129215631.7238-3-romain.naour@gmail.com>
+References: <20180129215631.7238-1-romain.naour@gmail.com>
+ <20180129215631.7238-3-romain.naour@gmail.com>
+Message-ID: <20180129232218.70415496@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,28 +14,23 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 26 Jan 2018 14:32:50 +0100, yegorslists at googlemail.com wrote:
-> From: Yegor Yefremov <yegorslists@googlemail.com>
+On Mon, 29 Jan 2018 22:56:31 +0100, Romain Naour wrote:
+> Now that binutils 2.30 has been introduced, and we have moved to
+> 2.29.1 as the default version, it is time to drop support for binutils
+> 2.27.
 > 
-> Some packages like python-adafruit-ads1x15 have different values in
-> PyPI metadata and setup.py or tar file name.
+> Also use xz-compressed tarball for all official supported version.
 > 
-> Use package name (self.pkg_name) derived from tar file name instead
-> of metadata_name taken from JSON.
-> 
-> Also output the missing key when trying to setup arguments.
-> 
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> ---
+>  package/binutils/Config.in.host | 7 -------
+>  package/binutils/binutils.hash  | 1 -
+>  package/binutils/binutils.mk    | 8 --------
+>  3 files changed, 16 deletions(-)
 
-Do we really want to do this? Shouldn't we instead ask the upstream
-maintainers to fix their Python package? I have the feeling that this
-is a slippery road, and we could start adding lots and lots of weird
-logic to support packages with wrong metadata.
+Config.in.legacy handling is missing here.
 
-If it's only fixing one specific package, I'd say the script should
-instead detect the inconsistency, and bail out.
-
-Best regards,
+Thanks!
 
 Thomas
 -- 
