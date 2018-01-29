@@ -1,10 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 29 Jan 2018 09:47:28 +0100
-Subject: [Buildroot] [PATCH] openocd: add security fix for CVE-2018-5704
-In-Reply-To: <20180128220256.2198-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Sun, 28 Jan 2018 23:02:56 +0100")
-References: <20180128220256.2198-1-peter@korsgaard.com>
-Message-ID: <87fu6p831b.fsf@dell.be.48ers.dk>
+Date: Mon, 29 Jan 2018 09:47:46 +0100
+Subject: [Buildroot] [PATCH] dovecot: add upstream security fix for
+ CVE-2017-15132
+In-Reply-To: <20180128223310.30638-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Sun, 28 Jan 2018 23:33:10 +0100")
+References: <20180128223310.30638-1-peter@korsgaard.com>
+Message-ID: <87bmhd830t.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,13 +14,14 @@ To: buildroot@busybox.net
 
 >>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > Open On-Chip Debugger (OpenOCD) 0.10.0 does not block attempts to use HTTP
- > POST for sending data to 127.0.0.1 port 4444, which allows remote attackers
- > to conduct cross-protocol scripting attacks, and consequently execute
- > arbitrary commands, via a crafted web site.
+ > A flaw was found in dovecot 2.0 up to 2.2.33 and 2.3.0.  An abort of SASL
+ > authentication results in a memory leak in dovecot's auth client used by
+ > login processes.  The leak has impact in high performance configuration
+ > where same login processes are reused and can cause the process to crash due
+ > to memory exhaustion.
 
  > For more details, see:
- > https://sourceforge.net/p/openocd/mailman/message/36188041/
+ > http://www.openwall.com/lists/oss-security/2018/01/25/4
 
  > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
