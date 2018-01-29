@@ -1,44 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 29 Jan 2018 22:25:16 +0100
-Subject: [Buildroot] [PATCH 1/1] domoticz: depends on NPTL
-In-Reply-To: <87k1w05sww.fsf@dell.be.48ers.dk>
-References: <20180120112824.12236-1-fontaine.fabrice@gmail.com>
- <87k1w05sww.fsf@dell.be.48ers.dk>
-Message-ID: <20180129222516.22768129@windsurf.lan>
+Date: Mon, 29 Jan 2018 22:27:19 +0100
+Subject: [Buildroot] [git commit] ejabberd: Bump to version 17.11
+Message-ID: <20180129212806.56B0886A11@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=c8ed115508daa14b185d48fb7a4af54a23e4c970
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 29 Jan 2018 21:09:03 +0100, Peter Korsgaard wrote:
+* Adapt all patches.
+* Use the new configure option enable-system-deps even though there is
+  still a patch needed to correct includes.
+* Disable graphics to not depends on X libraries. Disable also
+  mod_avatar from the default loaded modules, since this module
+  requires graphics enabled.
 
->  > boost 1.66 uses pthread_condattr_setclock in
->  > boost/asio/detail/impl/posix_event.ipp so add a dependency to
->  > BR2_TOOLCHAIN_HAS_THREADS_NPTL  
-> 
-> Shouldn't boost then depend on BR2_TOOLCHAIN_HAS_THREADS_NPTL (and
-> domoticz enherit it), or is this code only used in special cases?
+Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../0001-remove-make-targets-for-deps.patch        |    5 +-
+ ...002-remove-dependencies-from-rebar-config.patch |   82 +-
+ package/ejabberd/0004-correct-include.patch        |   58 -
+ package/ejabberd/0004-correct-includes.patch       | 1919 ++++++++++++++++++++
+ package/ejabberd/0007-fix-ejabberdctl.patch        |   34 +-
+ .../0008-handle-error-case-from-lib_dir.patch      |   32 +
+ .../0008-rebar-uses-host-dependencies.patch        |   33 -
+ package/ejabberd/0009-disable-mod_avatar.patch     |   32 +
+ package/ejabberd/ejabberd.hash                     |    2 +-
+ package/ejabberd/ejabberd.mk                       |   26 +-
+ 10 files changed, 2074 insertions(+), 149 deletions(-)
 
-Well, Boost is mostly a header-only library, in particular the asio
-stuff I believe. While we have sub-options for the parts of Boost that
-are not purely headers, we don't have any sub-options for the parts of
-Boost that are just headers.
-
-So, the options are either to add sub-options to Boost, or to make
-Boost as a whole only available on NPTL toolchains. The latter is a bit
-annoying as it would mean adding this dependency to all Boost reverse
-dependencies, even those not using asio.
-
-So I think Fabrice's patch is the best solution we can have today. I'm
-not saying it's perfect, but it's good enough IMO.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Patch is too large, so refusing to show it
