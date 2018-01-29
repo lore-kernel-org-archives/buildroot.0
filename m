@@ -1,240 +1,64 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 29 Jan 2018 23:14:24 +0100
-Subject: [Buildroot] [git commit] get-developers: fix code style
-Message-ID: <20180129221637.E7E9A87745@busybox.osuosl.org>
+Date: Mon, 29 Jan 2018 23:16:55 +0100
+Subject: [Buildroot] [PATCH 1/1] ltp-testsuite: Add upstream patch to
+ fix build numa detection
+In-Reply-To: <20180129202314.16767-1-petr.vorel@gmail.com>
+References: <20180129202314.16767-1-petr.vorel@gmail.com>
+Message-ID: <20180129231655.561070fc@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=49ffceef57157e5f74c86312ec711f6dd8857668
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Fix these warnings:
-E202 whitespace before ']'
-E203 whitespace before ':'
-E302 expected 2 blank lines, found 1
-E305 expected 2 blank lines after class or function definition, found 1
-E711 comparison to None should be 'if cond is None:'
-E741 ambiguous variable name 'l'
-F401 'sys' imported but unused
-W391 blank line at end of file
+On Mon, 29 Jan 2018 21:23:14 +0100, Petr Vorel wrote:
+> This removes fix added in commit 3c937807a3 ("ltp-testsuite: disable numa tests")
+> 
+> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 
-Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- utils/get-developers     |  4 +++-
- utils/getdeveloperlib.py | 52 +++++++++++++++++++++++++++++-------------------
- 2 files changed, 34 insertions(+), 22 deletions(-)
+Thanks for this update. There is however an issue, see below.
 
-diff --git a/utils/get-developers b/utils/get-developers
-index 6a028b4526..f525ff2226 100755
---- a/utils/get-developers
-+++ b/utils/get-developers
-@@ -5,6 +5,7 @@ import getdeveloperlib
- import sys
- import os
- 
-+
- def parse_args():
-     parser = argparse.ArgumentParser()
-     parser.add_argument('patches', metavar='P', type=argparse.FileType('r'), nargs='*',
-@@ -19,6 +20,7 @@ def parse_args():
-                         const=True, help='list files not handled by any developer')
-     return parser.parse_args()
- 
-+
- def __main__():
-     devs = getdeveloperlib.parse_developers()
-     if devs is None:
-@@ -95,5 +97,5 @@ def __main__():
-         if result != "":
-             print("git send-email %s" % result)
- 
--__main__()
- 
-+__main__()
-diff --git a/utils/getdeveloperlib.py b/utils/getdeveloperlib.py
-index 65191073a3..2c8d477583 100644
---- a/utils/getdeveloperlib.py
-+++ b/utils/getdeveloperlib.py
-@@ -1,7 +1,5 @@
--import sys
- import os
- import re
--import argparse
- import glob
- import subprocess
- 
-@@ -11,6 +9,7 @@ import subprocess
- 
- FIND_INFRA_IN_PATCH = re.compile("^\+\$\(eval \$\((host-)?([^-]*)-package\)\)$")
- 
-+
- def analyze_patch(patch):
-     """Parse one patch and return the list of files modified, added or
-     removed by the patch."""
-@@ -24,14 +23,16 @@ def analyze_patch(patch):
-         if not line.startswith("+++ "):
-             continue
-         line.strip()
--        fname = line[line.find("/") + 1 : ].strip()
-+        fname = line[line.find("/") + 1:].strip()
-         if fname == "dev/null":
-             continue
-         files.add(fname)
-     return (files, infras)
- 
-+
- FIND_INFRA_IN_MK = re.compile("^\$\(eval \$\((host-)?([^-]*)-package\)\)$")
- 
-+
- def fname_get_package_infra(fname):
-     """Checks whether the file name passed as argument is a Buildroot .mk
-     file describing a package, and find the infrastructure it's using."""
-@@ -42,13 +43,14 @@ def fname_get_package_infra(fname):
-         return None
- 
-     with open(fname, "r") as f:
--        for l in f:
--            l = l.strip()
--            m = FIND_INFRA_IN_MK.match(l)
-+        for line in f:
-+            line = line.strip()
-+            m = FIND_INFRA_IN_MK.match(line)
-             if m:
-                 return m.group(2)
-     return None
- 
-+
- def get_infras(files):
-     """Search in the list of files for .mk files, and collect the package
-     infrastructures used by those .mk files."""
-@@ -59,6 +61,7 @@ def get_infras(files):
-             infras.add(infra)
-     return infras
- 
-+
- def analyze_patches(patches):
-     """Parse a list of patches and returns the list of files modified,
-     added or removed by the patches, as well as the list of package
-@@ -72,6 +75,7 @@ def analyze_patches(patches):
-     allinfras = allinfras | get_infras(allfiles)
-     return (allfiles, allinfras)
- 
-+
- #
- # DEVELOPERS file parsing functions
- #
-@@ -91,6 +95,7 @@ class Developer:
-                 return True
-         return False
- 
-+
- def parse_developer_packages(fnames):
-     """Given a list of file patterns, travel through the Buildroot source
-     tree to find which packages are implemented by those file
-@@ -105,25 +110,27 @@ def parse_developer_packages(fnames):
-                     packages.add(pkg)
-     return packages
- 
-+
- def parse_arches_from_config_in(fname):
-     """Given a path to an arch/Config.in.* file, parse it to get the list
-     of BR2_ARCH values for this architecture."""
-     arches = set()
-     with open(fname, "r") as f:
-         parsing_arches = False
--        for l in f:
--            l = l.strip()
--            if l == "config BR2_ARCH":
-+        for line in f:
-+            line = line.strip()
-+            if line == "config BR2_ARCH":
-                 parsing_arches = True
-                 continue
-             if parsing_arches:
--                m = re.match("^\s*default \"([^\"]*)\".*", l)
-+                m = re.match("^\s*default \"([^\"]*)\".*", line)
-                 if m:
-                     arches.add(m.group(1))
-                 else:
-                     parsing_arches = False
-     return arches
- 
-+
- def parse_developer_architectures(fnames):
-     """Given a list of file names, find the ones starting by
-     'arch/Config.in.', and use that to determine the architecture a
-@@ -135,6 +142,7 @@ def parse_developer_architectures(fnames):
-         arches = arches | parse_arches_from_config_in(fname)
-     return arches
- 
-+
- def parse_developer_infras(fnames):
-     infras = set()
-     for fname in fnames:
-@@ -143,37 +151,38 @@ def parse_developer_infras(fnames):
-             infras.add(m.group(1))
-     return infras
- 
-+
- def parse_developers(basepath=None):
-     """Parse the DEVELOPERS file and return a list of Developer objects."""
-     developers = []
-     linen = 0
--    if basepath == None:
-+    if basepath is None:
-         basepath = os.getcwd()
-     with open(os.path.join(basepath, "DEVELOPERS"), "r") as f:
-         files = []
-         name = None
--        for l in f:
--            l = l.strip()
--            if l.startswith("#"):
-+        for line in f:
-+            line = line.strip()
-+            if line.startswith("#"):
-                 continue
--            elif l.startswith("N:"):
-+            elif line.startswith("N:"):
-                 if name is not None or len(files) != 0:
-                     print("Syntax error in DEVELOPERS file, line %d" % linen)
--                name = l[2:].strip()
--            elif l.startswith("F:"):
--                fname = l[2:].strip()
-+                name = line[2:].strip()
-+            elif line.startswith("F:"):
-+                fname = line[2:].strip()
-                 dev_files = glob.glob(os.path.join(basepath, fname))
-                 if len(dev_files) == 0:
-                     print("WARNING: '%s' doesn't match any file" % fname)
-                 files += dev_files
--            elif l == "":
-+            elif line == "":
-                 if not name:
-                     continue
-                 developers.append(Developer(name, files))
-                 files = []
-                 name = None
-             else:
--                print("Syntax error in DEVELOPERS file, line %d: '%s'" % (linen, l))
-+                print("Syntax error in DEVELOPERS file, line %d: '%s'" % (linen, line))
-                 return None
-             linen += 1
-     # handle last developer
-@@ -181,10 +190,11 @@ def parse_developers(basepath=None):
-         developers.append(Developer(name, files))
-     return developers
- 
-+
- def check_developers(developers, basepath=None):
-     """Look at the list of files versioned in Buildroot, and returns the
-     list of files that are not handled by any developer"""
--    if basepath == None:
-+    if basepath is None:
-         basepath = os.getcwd()
-     cmd = ["git", "--git-dir", os.path.join(basepath, ".git"), "ls-files"]
-     files = subprocess.check_output(cmd).strip().split("\n")
+> ---
+>  ...x-numa-v2-detection-for-cross-compilation.patch | 37 ++++++++++++++++++++++
+>  package/ltp-testsuite/ltp-testsuite.mk             |  3 +-
+>  2 files changed, 38 insertions(+), 2 deletions(-)
+>  create mode 100644 package/ltp-testsuite/0002-numa-Fix-numa-v2-detection-for-cross-compilation.patch
+> 
+> diff --git a/package/ltp-testsuite/0002-numa-Fix-numa-v2-detection-for-cross-compilation.patch b/package/ltp-testsuite/0002-numa-Fix-numa-v2-detection-for-cross-compilation.patch
+> new file mode 100644
+> index 0000000000..6ad1db046e
+> --- /dev/null
+> +++ b/package/ltp-testsuite/0002-numa-Fix-numa-v2-detection-for-cross-compilation.patch
+> @@ -0,0 +1,37 @@
+> +From 01c134f30be755a43af12a4ae2c31177d04be790 Mon Sep 17 00:00:00 2001
+> +From: Petr Vorel <pvorel@suse.cz>
+> +Date: Mon, 29 Jan 2018 10:31:40 +0100
+> +Subject: [PATCH] numa: Fix numa v2 detection for cross compilation
+> +
+> +Changed to AC_COMPILE_IFELSE as AC_RUN_IFELSE cannot be run while
+> +cross compiling.
+> +
+> +Bug found by Buildroot project.
+> +
+> +Signed-off-by: Petr Vorel <pvorel@suse.cz>
+> +Reported-by: Baruch Siach <baruch@tkos.co.il>
+> +---
+> + m4/ltp-numa.m4 | 4 ++--
+> + 1 file changed, 2 insertions(+), 2 deletions(-)
+
+You are changing m4 files, which requires regenerating the configure
+script. Therefore, the package should have LTP_TESTSUITE_AUTORECONF =
+YES, with a comment above it that says it's needed for patch
+0002-numa-Fix-numa-v2-detection-for-cross-compilation.patch.
+
+Could you check this, and submit an updated version?
+
+Thanks a lot!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
