@@ -1,64 +1,73 @@
-From: Marcus Folkesson <marcus.folkesson@gmail.com>
-Date: Tue, 30 Jan 2018 21:25:12 +0100
-Subject: [Buildroot] [PATCH 08/14] diffconfig: fix code style
-In-Reply-To: <20180129231152.5e3ee075@windsurf.lan>
-References: <1516581882-30582-1-git-send-email-ricardo.martincoski@gmail.com>
- <1516581882-30582-9-git-send-email-ricardo.martincoski@gmail.com>
- <20180129231152.5e3ee075@windsurf.lan>
-Message-ID: <20180130202512.GA7723@gmail.com>
+From: Martin Bark <martin@barkynet.com>
+Date: Tue, 30 Jan 2018 21:06:09 +0000
+Subject: [Buildroot] [PATCH 1/1] package/connman: fix compilation error for
+ kernels >= 4.15
+Message-ID: <1517346369-1364-1-git-send-email-martin@barkynet.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Include the upstream fix 0001-tethering-Reorder-header-includes.patch
 
-On Mon, Jan 29, 2018 at 11:11:52PM +0100, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Sun, 21 Jan 2018 22:44:36 -0200, Ricardo Martincoski wrote:
-> > Fix these warnings:
-> > E225 missing whitespace around operator
-> > E231 missing whitespace after ','
-> > E302 expected 2 blank lines, found 1
-> > E305 expected 2 blank lines after class or function definition, found 1
-> > E401 multiple imports on one line
-> > 
-> > Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-> > Cc: Marcus Folkesson <marcus.folkesson@gmail.com>
-> 
-> I haven't applied this one, because I don't really like the fact that
-> we're further tweaking a script that comes from the kernel sources. On
-> the other hand, we have already tweaked it for our purposes.
-> 
-> What do others think? Should we stay as close to the original upstream
-> version as possible? Or because we have anyway already tweaked it, we
-> don't really care and can now do whatever changes we believe are useful?
+Fixes
+http://autobuild.buildroot.net/results/90005b436e25495a1113966112785278dfc0420a
+http://autobuild.buildroot.net/results/ab713048093746576734e90290b8777222d70e7e
+http://autobuild.buildroot.net/results/368c2c8ab9b8db7f445a9681082ce1e10c7e0151
+http://autobuild.buildroot.net/results/1c98fd9ce430463e720212ce8a3698e2b72cbe7d
+http://autobuild.buildroot.net/results/bc865093e6ffec4737433c5a213c0241495e9ccc
+http://autobuild.buildroot.net/results/e4d93b136ef8aff600264d743191bf087044c27a
+http://autobuild.buildroot.net/results/a2feeeed4d0d11fda5f029f8c784ed6ce16ee856
 
-Well, I will try to keep the script reasonably synchronized between the
-buildroot and kernel repo, and these type of patches does not really
-help with that.
+Signed-off-by: Martin Bark <martin@barkynet.com>
+---
+ .../0001-tethering-Reorder-header-includes.patch   | 37 ++++++++++++++++++++++
+ 1 file changed, 37 insertions(+)
+ create mode 100644 package/connman/0001-tethering-Reorder-header-includes.patch
 
-However, these scripts does not change that much, so I guess it does not
-really matters.
-
-> 
-> Best regards,
-> 
-> Thomas
-> -- 
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux and Kernel engineering
-> http://free-electrons.com
-
-
-Best regards
-Marcus Folkesson
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 833 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180130/b6d5af48/attachment.asc>
+diff --git a/package/connman/0001-tethering-Reorder-header-includes.patch b/package/connman/0001-tethering-Reorder-header-includes.patch
+new file mode 100644
+index 0000000..4955df1
+--- /dev/null
++++ b/package/connman/0001-tethering-Reorder-header-includes.patch
+@@ -0,0 +1,37 @@
++From bdfb3526466f8fb8f13d9259037d8f42c782ce24 Mon Sep 17 00:00:00 2001
++From: Daniel Wagner <wagi@monom.org>
++Date: Wed, 17 Jan 2018 23:42:50 +0100
++Subject: [PATCH] tethering: Reorder header includes
++
++Avoid compile errors due to unsupported header include order with
++newer kernels (>=4.15). We should import the libc header files first
++and then the Linux header files in user space applications.
++
++Reported by Neil MacLeod <neil@nmacleod.com>. Fix probosal by Jonas
++Bonn <jonas@southpole.se> and Hauke Mehrtens <hauke@hauke-m.de>.
++
++Signed-off-by: Martin Bark <martin@barkynet.com>
++---
++ src/tethering.c | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/src/tethering.c b/src/tethering.c
++index c929ba7..4b20236 100644
++--- a/src/tethering.c
+++++ b/src/tethering.c
++@@ -31,11 +31,11 @@
++ #include <stdio.h>
++ #include <sys/ioctl.h>
++ #include <net/if.h>
++-#include <linux/sockios.h>
++ #include <string.h>
++ #include <fcntl.h>
++-#include <linux/if_tun.h>
++ #include <netinet/in.h>
+++#include <linux/sockios.h>
+++#include <linux/if_tun.h>
++ #include <linux/if_bridge.h>
++
++ #include "connman.h"
++--
++2.7.4
+-- 
+2.7.4
