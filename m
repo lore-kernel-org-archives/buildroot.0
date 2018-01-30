@@ -1,34 +1,62 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 30 Jan 2018 23:23:09 +0100
-Subject: [Buildroot] [git commit] libva: remove consecutive empty lines
-Message-ID: <20180130222327.D31C888126@busybox.osuosl.org>
+Date: Tue, 30 Jan 2018 23:38:07 +0100
+Subject: [Buildroot] [PATCH 1/1] Change host locale from C to
+ en_US.UTF-8 for reproducable builds
+In-Reply-To: <20180128112205.15275-1-julius@kriukas.lt>
+References: <20180128112205.15275-1-julius@kriukas.lt>
+Message-ID: <20180130233807.3bb4b570@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5953cf07fed5fca71098bafcf094e543e4b73ae0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Fixes:
+On Sun, 28 Jan 2018 13:22:05 +0200, Julius Kriukas wrote:
+> When BR2_REPRODUCIBLE is enabled building systemd fails with error:
+> 
+> [1/1080] Generating systemd.bg.catalog with a meson_exe.py custom command.
+> FAILED: catalog/systemd.bg.catalog
+> /buildroot/output/host/bin/python3 /buildroot/output/host/bin/meson --internal exe /buildroot/output/build/systemd-236/build/meson-private/meson_exe_sed_232a0623cc7ce2cd67ec72ed784b76307102ed76.dat
+> Warning: You are using 'ANSI_X3.4-1968' which is not a Unicode-compatible locale.
+> You might see errors if you use UTF-8 strings as filenames, as strings, or as file contents.
+> Please switch to a UTF-8 locale for your platform.
+> ...
+> UnicodeDecodeError: 'ascii' codec can't decode byte 0xd0 in position 1079: ordinal not in range(128)
+> package/pkg-generic.mk:247: recipe for target '/buildroot/output/build/systemd-236/.stamp_built' failed
+> make: *** [/buildroot/output/build/systemd-236/.stamp_built] Error 1
+> 
+> Other packages using meson build system might fail as well.
+> 
+> This patch changes default host system locale from C to en_US.UTF-8 to
+> fix this issue. Any Unicode-compatible locale would be suitable here.
+> 
+> Signed-off-by: Julius Kriukas <julius@kriukas.lt>
 
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/50140040
+Thanks for your patch! I was about to apply it, but one issue I see is
+that we have no guarantee that en_US.UTF-8 is available.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/libva/libva.mk | 1 -
- 1 file changed, 1 deletion(-)
+support/dependencies/dependencies.sh checks that we have at least one
+UTF-8 locale available if BR2_NEEDS_HOST_UTF8_LOCALE=y, but:
 
-diff --git a/package/libva/libva.mk b/package/libva/libva.mk
-index 5f9de903f4..8d1e27f270 100644
---- a/package/libva/libva.mk
-+++ b/package/libva/libva.mk
-@@ -17,7 +17,6 @@ LIBVA_CONF_OPTS = \
- 	--enable-drm \
- 	--with-drivers-path="/usr/lib/va"
- 
--
- ifeq ($(BR2_PACKAGE_XORG7),y)
- LIBVA_DEPENDENCIES += xlib_libX11 xlib_libXext xlib_libXfixes
- LIBVA_CONF_OPTS += --enable-x11
+ - BR2_NEEDS_HOST_UTF8_LOCALE is only selected when a uClibc toolchain
+   is being built
+
+ - it only ensures one UTF-8 locale is available, not specifically
+   en_US.UTF-8
+
+Perhaps we need another BR2_NEEDS_HOST_EN_US_UTF8_LOCALE, which would
+be used by support/dependencies/dependencies.sh to ensure that
+en_US.UTF-8 is available. This new option would be selected by
+BR2_REPRODUCIBLE.
+
+Arnout, Peter, Yann? Thoughts?
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
