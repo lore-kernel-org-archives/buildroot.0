@@ -1,69 +1,44 @@
-From: Petr Kulhavy <brain@jikos.cz>
-Date: Tue, 30 Jan 2018 23:19:51 +0100
-Subject: [Buildroot] [PATCH 2/3] package: linuxptp: enhance systemd
- service
-In-Reply-To: <20180130230054.6cb2551a@windsurf.home>
-References: <1517155221-19399-1-git-send-email-brain@jikos.cz>
- <1517155221-19399-2-git-send-email-brain@jikos.cz>
- <20180130230054.6cb2551a@windsurf.home>
-Message-ID: <c63fff97-491b-8d5a-fb99-095e3fa08423@jikos.cz>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 30 Jan 2018 23:02:42 +0100
+Subject: [Buildroot] [git commit] angularjs: bump version to 1.6.7
+Message-ID: <20180130222101.EF3738629D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+commit: https://git.buildroot.net/buildroot/commit/?id=5d69e6f9d3857e9a50e02e5c657a013a947e7875
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The Before= and Wants=? time-sync.target is what I found in the systemd 
-documentation. A time synchronization service should pull in this 
-special target, so that applications needing time synchronization can 
-depend on it.
-Other time synchronizing services like ntpd or systemd-timesyncd use the 
-same mechanism.
+Also add a hash for the license file.
 
-Cheers
-Petr
+Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/angularjs/angularjs.hash | 3 ++-
+ package/angularjs/angularjs.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-On 30/01/18 23:00, Thomas Petazzoni wrote:
-> Hello,
->
-> On Sun, 28 Jan 2018 17:00:20 +0100, Petr Kulhavy wrote:
->> linuxptp now pulls in the time-sync.target
->> phc2sys (linuxptp-system-clock.service) starts after ptp4l (linuxptp.service)
->>
->> Signed-off-by: Petr Kulhavy <brain@jikos.cz>
->> ---
->>   package/linuxptp/linuxptp-system-clock.service | 2 +-
->>   package/linuxptp/linuxptp.service              | 2 ++
->>   2 files changed, 3 insertions(+), 1 deletion(-)
->>
->> diff --git a/package/linuxptp/linuxptp-system-clock.service b/package/linuxptp/linuxptp-system-clock.service
->> index 7327254..a4436a3 100644
->> --- a/package/linuxptp/linuxptp-system-clock.service
->> +++ b/package/linuxptp/linuxptp-system-clock.service
->> @@ -1,6 +1,6 @@
->>   [Unit]
->>   Description=Precision Time Protocol system clock synchronization
->> -After=syslog.target network.target
->> +After=linuxptp.service
->>   
->>   [Service]
->>   ExecStart=/usr/sbin/phc2sys -s /dev/ptp0 -c CLOCK_REALTIME -w -S 1.0
->> diff --git a/package/linuxptp/linuxptp.service b/package/linuxptp/linuxptp.service
->> index f690430..14e9814 100644
->> --- a/package/linuxptp/linuxptp.service
->> +++ b/package/linuxptp/linuxptp.service
->> @@ -1,6 +1,8 @@
->>   [Unit]
->>   Description=Precision Time Protocol daemon
->>   After=syslog.target network.target
->> +Before=time-sync.target
->> +Wants=time-sync.target
->>   Wants=linuxptp-system-clock.service
->>   
->>   [Service]
-> I'm not knowledgeable enough in systemd stuff to decide on this one.
-> Anyone with more systemd knowledge ?
->
-> Thomas
+diff --git a/package/angularjs/angularjs.hash b/package/angularjs/angularjs.hash
+index 100b6dc667..918c049c73 100644
+--- a/package/angularjs/angularjs.hash
++++ b/package/angularjs/angularjs.hash
+@@ -1,2 +1,3 @@
+ # Locally computed:
+-sha256 a99e3c22b54178b7646856efd95e825650d32d3125904a28216aeba52e221bad angular-1.4.3.zip
++sha256	4d4e87d24c7d522f4ee765e4f7d454b9cf2a0f6407248545528064e66ad7b085	angular-1.6.7.zip
++sha256	cec36623ceba33c503784164917c206047079159bf88f51a695a4dfb9d9b7ede	angular.js
+diff --git a/package/angularjs/angularjs.mk b/package/angularjs/angularjs.mk
+index 08a4b60845..60702a26d2 100644
+--- a/package/angularjs/angularjs.mk
++++ b/package/angularjs/angularjs.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ANGULARJS_VERSION = 1.4.3
++ANGULARJS_VERSION = 1.6.7
+ ANGULARJS_SOURCE = angular-$(ANGULARJS_VERSION).zip
+ ANGULARJS_SITE = https://code.angularjs.org/$(ANGULARJS_VERSION)
+ ANGULARJS_LICENSE = MIT
