@@ -1,44 +1,44 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 30 Jan 2018 19:12:13 +0100
-Subject: [Buildroot] Suggestion for Makefile to probably import
- BR2_CONFIG
-In-Reply-To: <87wp0183ww.fsf@dell.be.48ers.dk>
-References: <CAGNmLEM_x8ykDr54gbT94em9YyH5+0ec=jCgjULh68yJLUzjnw@mail.gmail.com>
- <1cb3ee33-b12f-6534-9dbf-fb697fbf3482@mind.be>
- <CAGNmLEMn=NFuq+iKj8e2PuF-A4+tGj_VDjq1FBj6+xzDPU=_iQ@mail.gmail.com>
- <d7cd5dae-5ae3-54f3-4376-f17c27e98065@mind.be>
- <CAGNmLEN0N9NziMj6OUDEAkEhu6bDmc43jBnXV6MFSP3EEupnSg@mail.gmail.com>
- <be14460d-9241-e14a-d4f1-8c30a62d7451@mind.be>
- <20180129091113.3acccd2c@windsurf.lan>
- <87wp0183ww.fsf@dell.be.48ers.dk>
-Message-ID: <20180130181213.GB3468@scaer>
+From: Martin Bark <martin@barkynet.com>
+Date: Tue, 30 Jan 2018 19:48:54 +0000
+Subject: [Buildroot] [PATCH 1/2] ca-certificates: bump to version 20170717
+Message-ID: <1517341735-18465-1-git-send-email-martin@barkynet.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+Signed-off-by: Martin Bark <martin@barkynet.com>
+---
+ package/ca-certificates/ca-certificates.hash | 4 ++--
+ package/ca-certificates/ca-certificates.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-On 2018-01-29 09:28 +0100, Peter Korsgaard spake thusly:
-> >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
->  >> Yann, Thomas, Peter, what do you think?
-> 
->  > I haven't followed the entire discussion, so maybe I'll be out of topic
->  > here. But indeed I believe the split config is completely unused
->  > nowadays, and could be removed entirely.
-> 
-> Agreed!
-
-Seconded.
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/ca-certificates/ca-certificates.hash b/package/ca-certificates/ca-certificates.hash
+index ecedba4..00296e2 100644
+--- a/package/ca-certificates/ca-certificates.hash
++++ b/package/ca-certificates/ca-certificates.hash
+@@ -1,3 +1,3 @@
+ # hashes from: $(CA_CERTIFICATES_SITE)/ca-certificates_$(CA_CERTIFICATES_VERSION).dsc :
+-sha1   b190ca8849697e842e69401b28d4ee27130d8c4d                         ca-certificates_20161130.tar.xz
+-sha256 04bca9e142a90a834aca0311f7ced237368d71fee7bd5c9f68ef7f4611aee471 ca-certificates_20161130.tar.xz
++sha1   4c093ceee1f1428d5aa7e9a5324b92961c0c0f06                         ca-certificates_20170717.tar.xz
++sha256 e487639b641fa75445174734dd6e9d600373e3248b3d86a7e3c6d0f6977decd2 ca-certificates_20170717.tar.xz
+diff --git a/package/ca-certificates/ca-certificates.mk b/package/ca-certificates/ca-certificates.mk
+index f712e79..cb0e961 100644
+--- a/package/ca-certificates/ca-certificates.mk
++++ b/package/ca-certificates/ca-certificates.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-CA_CERTIFICATES_VERSION = 20161130
++CA_CERTIFICATES_VERSION = 20170717
+ CA_CERTIFICATES_SOURCE = ca-certificates_$(CA_CERTIFICATES_VERSION).tar.xz
+-CA_CERTIFICATES_SITE = http://snapshot.debian.org/archive/debian/20161205T153846Z/pool/main/c/ca-certificates
++CA_CERTIFICATES_SITE = http://snapshot.debian.org/archive/debian/20170814T210836Z/pool/main/c/ca-certificates
+ CA_CERTIFICATES_DEPENDENCIES = host-openssl
+ # ca-certificates can be built with either python 2 or python 3
+ # but it must be at least python 2.7
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.7.4
