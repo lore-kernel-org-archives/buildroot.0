@@ -1,26 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 30 Jan 2018 22:55:24 +0100
-Subject: [Buildroot] [PATCH] macchiatobin: bump kernel and u-boot
- versions
-In-Reply-To: <20180130211307.13653-1-geomatsi@gmail.com> (Sergey Matyukevich's
- message of "Wed, 31 Jan 2018 00:13:07 +0300")
-References: <20180130211307.13653-1-geomatsi@gmail.com>
-Message-ID: <871si7au5v.fsf@dell.be.48ers.dk>
+Date: Tue, 30 Jan 2018 22:49:41 +0100
+Subject: [Buildroot] [git commit] linux: bump Linux CIP to v4.4.112-cip18
+Message-ID: <20180130215615.4898586038@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Sergey" == Sergey Matyukevich <geomatsi@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=a2f8eafdfabb1073a89327ebd190a9383adc539e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Bump Linux to 4.15 and U-Boot to 2018.01. Remove networking dts patches
- > since they has landed in Linux 4.15. Update readme.txt: fix mainline BSP
- > versions and update boot selection for board rev 1.3.
+This patch bump the Linux CIP kernel to version v4.4.112-cip18
 
- > Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ linux/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/linux/Config.in b/linux/Config.in
+index 115247f653..aef17c0c7e 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -29,7 +29,7 @@ config BR2_LINUX_KERNEL_LATEST_VERSION
+ 	bool "Latest version (4.15)"
+ 
+ config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+-	bool "Latest CIP SLTS version (v4.4.105-cip15)"
++	bool "Latest CIP SLTS version (v4.4.112-cip18)"
+ 	help
+ 	  CIP launched in the spring of 2016 to address the needs of
+ 	  organizations in industries such as power generation and
+@@ -117,7 +117,7 @@ endif
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+ 	default "4.15" if BR2_LINUX_KERNEL_LATEST_VERSION
+-	default "v4.4.105-cip15" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
++	default "v4.4.112-cip18" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
