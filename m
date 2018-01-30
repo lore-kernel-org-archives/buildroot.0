@@ -1,216 +1,107 @@
-From: Oleksandr Zhadan <oleks@arcturusnetworks.com>
-Date: Mon, 29 Jan 2018 18:08:04 -0500
-Subject: [Buildroot] [PATCH] configs/arcturus_ucls1012a: new defconfig
-Message-ID: <20180129230804.24157-1-oleks@arcturusnetworks.com>
+From: Jesse Cobra <jessecobra@gmail.com>
+Date: Mon, 29 Jan 2018 17:31:00 -0800
+Subject: [Buildroot] scanpypi package error adadfruit-ads1x15
+In-Reply-To: <CAGm1_kusxoiZP5h_MrSG8a8zTTkY+_24PkdNNuweaYV2nGSO6Q@mail.gmail.com>
+References: <CACG401qs4wj83dGC4t++ZWQWCdax=-3KzEoHNNYzjUGBKTkhBQ@mail.gmail.com>
+ <CACG401rYpb5e8m_ou0wAnowPdNRfYNRAHXgRY-BgPzaK9uY3Ow@mail.gmail.com>
+ <CAGm1_ktgUGMkLdi4derUgsgoPOsXnMSf9byecxj2fGUUTyUQrg@mail.gmail.com>
+ <CAGm1_kusxoiZP5h_MrSG8a8zTTkY+_24PkdNNuweaYV2nGSO6Q@mail.gmail.com>
+Message-ID: <CACG401of=nXOoz-OkQrH50m=bnmXaGa9AyoLjD4BA2P8p1Sfvg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The uCLS1012A-SOM product family (ucls1012a) is an Arcturus Networks Inc.
-64bit ARM Cortex-A53 class System on Module powered by a NXP QorIQ LS1012A
-Low Power Communication Processor.  This 314 pin MXM3.0/SMARC module card
-contains DDR3, QSPI NOR Flash, eMMC NAND Flash, optional Audio CODEC and is
-available with 1 or 2 Gig-Ethernet PHYs
+For some reason I had to apply the last chunk of the patch myself but this
+fixed my issue completely.
 
-Signed-off-by: Oleksandr Zhadan <oleks@arcturusnetworks.com>
-Signed-off-by: Michael Durrant <mike.durrant@arcturusnetworks.com>
----
- DEVELOPERS                                         | 10 +++
- board/arcturus/aarch64-ucls1012a/post-image.sh     |  7 ++
- board/arcturus/aarch64-ucls1012a/readme.txt        | 74 ++++++++++++++++++++++
- .../rootfs_overlay/etc/init.d/S09modload           | 14 ++++
- configs/arcturus_ucls1012a_defconfig               | 37 +++++++++++
- 5 files changed, 142 insertions(+)
- create mode 100755 board/arcturus/aarch64-ucls1012a/post-image.sh
- create mode 100644 board/arcturus/aarch64-ucls1012a/readme.txt
- create mode 100755 board/arcturus/aarch64-ucls1012a/rootfs_overlay/etc/init.d/S09modload
- create mode 100644 configs/arcturus_ucls1012a_defconfig
+Thank you so much for providing a fix.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 1db550399f..f4282d1c13 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1247,6 +1247,11 @@ F:	package/tinyxml/
- N:	Maxime Ripard <maxime.ripard@free-electrons.com>
- F:	package/kmsxx/
- 
-+N:	Michael Durrant <mike.durrant@arcturusnetworks.com>
-+F:	board/arcturus/
-+F:	configs/arcturus_ucp1020_defconfig
-+F:	configs/arcturus_ucls1012a_defconfig
-+
- N:	Michael Rommel <rommel@layer-7.net>
- F:	package/knock/
- F:	package/python-crc16/
-@@ -1305,6 +1310,11 @@ F:	package/tcf-agent/
- N:	Olaf Rempel <razzor@kopf-tisch.de>
- F:	package/ctorrent/
- 
-+N:	Oleksandr Zhadan <oleks@arcturusnetworks.com>
-+F:	board/arcturus/
-+F:	configs/arcturus_ucp1020_defconfig
-+F:	configs/arcturus_ucls1012a_defconfig
-+
- N:	Oli Vogt <oli.vogt.pub01@gmail.com>
- F:	package/python-django/
- F:	package/python-flup/
-diff --git a/board/arcturus/aarch64-ucls1012a/post-image.sh b/board/arcturus/aarch64-ucls1012a/post-image.sh
-new file mode 100755
-index 0000000000..45b34e8cf2
---- /dev/null
-+++ b/board/arcturus/aarch64-ucls1012a/post-image.sh
-@@ -0,0 +1,7 @@
-+#!/bin/sh
-+
-+echo =================== ${BINARIES_DIR} ============================
-+MKIMAGE=${HOST_DIR}/usr/bin/mkimage
-+MKIMAGE_IN=${BINARIES_DIR}/br2-ucls1012a.its
-+MKIMAGE_OUT=${BINARIES_DIR}/part0-000000.itb
-+${MKIMAGE} -f ${MKIMAGE_IN} ${MKIMAGE_OUT}
-diff --git a/board/arcturus/aarch64-ucls1012a/readme.txt b/board/arcturus/aarch64-ucls1012a/readme.txt
-new file mode 100644
-index 0000000000..61fe3c55a8
---- /dev/null
-+++ b/board/arcturus/aarch64-ucls1012a/readme.txt
-@@ -0,0 +1,74 @@
-+Arcturus uCLS1012A SoM
-+======================
-+
-+This tutorial describes how to use the predefined Buildroot
-+configuration for the Arcturus uCLS101A SoM platform.
-+
-+Additional information about the uCLS1012A System on Module can be found at
-+https://www.arcturusnetworks.com/products/ucls1012a
-+and product support for registered users at
-+https://www.arcturusnetworks.com/support
-+
-+Building
-+--------
-+
-+Return to the top directory <buildrootdir> and execute the following commands.
-+
-+  make arcturus_ucls1012a_defconfig
-+  make
-+
-+Result of the build
-+-------------------
-+
-+After building, you should obtain this tree:
-+
-+    output/images/
-+    +-- arc-ucls1012a.dtb
-+    +-- Image
-+    +-- part0-000000.itb
-+    +-- rootfs.cpio
-+    +-- rootfs.cpio.gz
-+    +-- rootfs.tar
-+    +-- u-boot.bin
-+    +-- ucls1012a.its
-+
-+Flashing
-+--------
-+
-+You'll need to program the image created by buildroot into the SPI NOR flash.
-+
-+1. Reboot your module and via the serial console press <escape> to enter the B$
-+u-boot shell.
-+   From the shell you will need to update four environment variables replacing the
-+   IPv4 IP Address with ones that will work with your network and tftp server.
-+
-+   B$ setenv ipaddr 192.168.1.81
-+   B$ setenv serverip 192.168.1.80
-+   B$ setenv gatewayip 192.168.1.1
-+   B$ setenv netmask 255.255.255.0
-+   B$ saveenv
-+
-+2. Enable tftp server to serve the <buildrootdir>/output/images/ folder.
-+
-+3. Program the new U-Boot binary (optional)
-+    If you don't feel confident upgrading your bootloader then don't do it,
-+    it's unnecessary most of the time.
-+
-+    B$ tftp u-boot.bin
-+    B$ run program_uboot
-+
-+4. Program the ITB image (includes Kernel, DTB and Ramdisk)
-+
-+    B$ tftp part0-000000.itb
-+    B$ run program0
-+
-+5. Booting your new system
-+
-+    Reboot your system by reset command
-+    B$ reset
-+
-+        or
-+
-+    B$ run bootcmd
-+
-+Good Luck !
-diff --git a/board/arcturus/aarch64-ucls1012a/rootfs_overlay/etc/init.d/S09modload b/board/arcturus/aarch64-ucls1012a/rootfs_overlay/etc/init.d/S09modload
-new file mode 100755
-index 0000000000..c87ffda14f
---- /dev/null
-+++ b/board/arcturus/aarch64-ucls1012a/rootfs_overlay/etc/init.d/S09modload
-@@ -0,0 +1,14 @@
-+#!/bin/sh
-+#
-+case "$1" in
-+       start)
-+                modprobe pfe
-+                ;;
-+        stop)
-+                ;;
-+        restart|reload)
-+                ;;
-+        *)
-+                echo "Usage: $0 {start|stop|restart}"
-+                exit 1
-+esac
-diff --git a/configs/arcturus_ucls1012a_defconfig b/configs/arcturus_ucls1012a_defconfig
-new file mode 100644
-index 0000000000..7cc502f13c
---- /dev/null
-+++ b/configs/arcturus_ucls1012a_defconfig
-@@ -0,0 +1,37 @@
-+# Architecture
-+BR2_aarch64=y
-+
-+# Linux headers same as kernel, a 4.1 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
-+
-+# System settings
-+BR2_TARGET_GENERIC_HOSTNAME="ucls1012a"
-+BR2_TARGET_GENERIC_ISSUE="Welcome to uCLS1012A-SOM"
-+BR2_SYSTEM_DHCP="eth0"
-+BR2_ROOTFS_OVERLAY="board/arcturus/aarch64-ucls1012a/rootfs_overlay"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/arcturus/aarch64-ucls1012a/post-image.sh"
-+
-+# Kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_HG=y
-+BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://arcturusnetworks at bitbucket.org/arcturusnetworks/ucls1012a-kernel"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="1b49e5e89f5b"
-+BR2_LINUX_KERNEL_DEFCONFIG="ucls1012a"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="arcturus/arc-ucls1012a"
-+
-+# Filesystem
-+BR2_TARGET_ROOTFS_CPIO=y
-+BR2_TARGET_ROOTFS_CPIO_GZIP=y
-+
-+# U-boot
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-+BR2_TARGET_UBOOT_CUSTOM_HG=y
-+BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://arcturusnetworks at bitbucket.org/arcturusnetworks/ucls1012a-uboot"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="8caf347b2e66"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="UCLS1012A_QSPI128"
-+
-+# Tools
-+BR2_PACKAGE_HOST_UBOOT_TOOLS=y
-+BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT=y
--- 
-2.11.0
+On Jan 26, 2018 5:35 AM, "Yegor Yefremov" <yegorslists@googlemail.com>
+wrote:
+
+> On Fri, Jan 26, 2018 at 1:48 PM, Yegor Yefremov
+> <yegorslists@googlemail.com> wrote:
+> > Hi Jesse,
+> >
+> > On Fri, Jan 26, 2018 at 5:21 AM, Jesse Cobra <jessecobra@gmail.com>
+> wrote:
+> >> Made my own package by hand and it worked! Oh well...
+> >>
+> >> cat buildroot/package/python-ads1x15/*
+> >> config BR2_PACKAGE_PYTHON_ADS1X15
+> >
+> > This package depends on Adafruit-GPIO, so please add this package
+> > first and select it via select statement.
+> >
+> >>     bool "python-ADS1X15"
+> >>     help
+> >>       encoder, decoder, and lint/validator for JSON (JavaScript Object
+> >>       Notation) compliant with RFC 7159.
+> >
+> > Project URL is missing.
+> >
+> >> ############################################################
+> ####################
+> >> #
+> >> # python-ads1x15
+> >> #
+> >> ############################################################
+> ####################
+> >>
+> >> PYTHON_ADS1X15_VERSION = 1.0.2
+> >> PYTHON_ADS1X15_SOURCE = Adafruit_ADS1x15-$(PYTHON_
+> ADS1X15_VERSION).tar.gz
+> >> PYTHON_ADS1X15_SITE =
+> >> https://pypi.python.org/packages/14/e8/c9935e32f61e6562abea08cb704fcb
+> fbb78b39bd1d20bb9b12eb4c2c820c
+> >> PYTHON_ADS1X15_SETUP_TYPE = setuptools
+> >> PYTHON_ADS1X15_LICENSE = GNU Library or Lesser General Public License
+> (LGPL)
+> >
+> > please us SPDX short names for the licence type.
+> >
+> >> PYTHON_ADS1X15_LICENSE_FILES = LICENSE.txt
+> >>
+> >> $(eval $(python-package))
+> >>
+> >>
+> >> On Fri, Jan 26, 2018 at 1:27 AM, Jesse Cobra <jessecobra@gmail.com>
+> wrote:
+> >>>
+> >>> building for pi zero w on ubuntu 14.04 32 bit buildroot 2017.02.9
+> >>>
+> >>> utils/scanpypi adafruit-ads1x15 -o package
+> >>> buildroot package name for adafruit-ads1x15: python-adafruit-ads1x15
+> >>> Package: python-adafruit-ads1x15
+> >>> Fetching package adafruit-ads1x15
+> >>> Downloading package adafruit-ads1x15 from
+> >>> https://pypi.python.org/packages/14/e8/c9935e32f61e6562abea08cb704fcb
+> fbb78b39bd1d20bb9b12eb4c2c820c/Adafruit_ADS1x15-1.0.2.tar.gz...
+> >>> Traceback (most recent call last):
+> >>>   File "utils/scanpypi", line 653, in <module>
+> >>>     main()
+> >>>   File "utils/scanpypi", line 604, in main
+> >>>     package.load_setup()
+> >>>   File "utils/scanpypi", line 247, in load_setup
+> >>>     os.chdir(self.tmp_extract)
+> >>> OSError: [Errno 2] No such file or directory:
+> >>> '/tmp/scanpypi-wzvU4f/python-adafruit-ads1x15/Adafruit-ADS1x15-1.0.2'
+> >>>
+> >>> Anyone point me in the right direction?
+> >
+> > The package is very strange. First tar name (Adafruit_ADS1x15) and
+> > meta name (Adafruit-ADS1x15) are different. Even if I fix this then
+> > there are issues with setup.py. I'll have to dig deeper.
+>
+> Please apply this patch [1] and try to add adafruit-ads1x15 again.
+>
+> [1] http://patchwork.ozlabs.org/patch/866316/
+>
+> Regards,
+> Yegor
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180129/f99dd002/attachment.html>
