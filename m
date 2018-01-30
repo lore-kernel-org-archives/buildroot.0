@@ -1,79 +1,70 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 30 Jan 2018 23:36:42 +0100
-Subject: [Buildroot] [git commit branch/2017.02.x] lz4: install programs as
- well as libraries
-Message-ID: <20180130225021.47DA68813D@busybox.osuosl.org>
+Date: Tue, 30 Jan 2018 23:44:58 +0100
+Subject: [Buildroot] [git commit branch/2017.02.x] package/ti-cgt-pru: bump
+ to 2.2.1
+Message-ID: <20180130225021.8611188140@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=17cf7e511e6919d5b6744deb21770c2d0ea922a9
+commit: https://git.buildroot.net/buildroot/commit/?id=4298d90fde9ac105277e5c25c867334070fd1f0e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Prior to commit 8ad38a4fc2007df4bee9a941aed46c8771b6a84c
-("package/lz4: bump version to r131"), the lz4 package was installing
-both libraries and programs, but this commit changed the behavior to
-only install libraries.
+See: http://www.ti.com/tool/download/PRU-CGT-2-2
 
-The contributor might have been confused by the fact that the build
-command was "$(MAKE) ... -C $(@D) liblz4", suggesting that only the
-library was built. But since the install command was "$(MAKE) ... -C
-$(@D) install", the programs were effectively built as part of the
-install step, and installed as well.
+The ti-cgt-pru v2.1.x installer are affected by a bug with recent
+distribution (Fedora 27 and Ubuntu 17.10) using kernel 4.13 or 4.14
+with a glibc 2.26.
+The installer is stuck in a futex(wait) system call.
 
-Since it makes sense for lz4 to also installs its programs, this
-commit adjusts the package accordingly.
+While at it, add license hash.
 
-It is worth mentioning that using the "all" target during the build
-step is important. Indeed, otherwise the programs/Makefile has a
-"default" target that doesn't build everything (especially the lz4c
-program) and it end up being built as part of the install step, due to
-how the makefile dependencies are handled in the lz4 project. To make
-sure that everything gets built during the build step, we explicitly
-use the "all" target.
+Fixes:
+http://autobuild.buildroot.net/results/68f/68f60ad38d9b6eae83b5d233966616a25d8c9391
 
-Fixes bug #9996
-
-Reported-by: Jamin Collins <jamin.collins@gmail.com>
-Initial-analysis-by: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Ash Charles <ash.charles@savoirfairelinux.com>
+Cc: Matthew Weber <matthew.weber@rockwellcollins.com>
+Tested-by: Matt Weber <matthew.weber@rockwellcollins.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 6f1c11f79a64387c1f1749550804f8aae0cfa7a7)
+(cherry picked from commit 0e162b932d67668a4f075da803efb62b01ec917d)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/lz4/lz4.mk | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/ti-cgt-pru/ti-cgt-pru.hash | 4 +++-
+ package/ti-cgt-pru/ti-cgt-pru.mk   | 6 +++---
+ 2 files changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/package/lz4/lz4.mk b/package/lz4/lz4.mk
-index 139be54128..b0d45474cd 100644
---- a/package/lz4/lz4.mk
-+++ b/package/lz4/lz4.mk
-@@ -18,7 +18,7 @@ LZ4_POST_PATCH_HOOKS += LZ4_DISABLE_SHARED
- endif
+diff --git a/package/ti-cgt-pru/ti-cgt-pru.hash b/package/ti-cgt-pru/ti-cgt-pru.hash
+index 3ff08ace32..1975d8d1e6 100644
+--- a/package/ti-cgt-pru/ti-cgt-pru.hash
++++ b/package/ti-cgt-pru/ti-cgt-pru.hash
+@@ -1,2 +1,4 @@
+ # Locally calculated
+-sha256	c80dbf35e7401f4c122ff25cc2f6b5db496607782fb4583cee8663a2763f4472	ti_cgt_pru_2.1.4_linux_installer_x86.bin
++sha256	7dc37fd689d1d506bf410d2a00af658b93a58d4bc10ac32c2210129dab617377	ti_cgt_pru_2.2.1_linux_installer_x86.bin
++sha256	eb646f4f8b14351110992b40ba24d12803bcc150a76e7298705f51088b0a09cc	PRU_Code_Generation_Tools_2.2.x_manifest.html
++sha256	6b98f9262abd1ae9a3731e6feee02a56b6e290542dea119eeeeaf88bf802aabc	pru_rts_2_2_0_82167478-F8C9-49b2-82BD-12F8550770F9.spdx
+diff --git a/package/ti-cgt-pru/ti-cgt-pru.mk b/package/ti-cgt-pru/ti-cgt-pru.mk
+index d6de05e5da..4849543eea 100644
+--- a/package/ti-cgt-pru/ti-cgt-pru.mk
++++ b/package/ti-cgt-pru/ti-cgt-pru.mk
+@@ -4,14 +4,14 @@
+ #
+ ################################################################################
  
- define HOST_LZ4_BUILD_CMDS
--	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D)
-+	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) all
- endef
+-TI_CGT_PRU_VERSION = 2.1.4
++TI_CGT_PRU_VERSION = 2.2.1
+ TI_CGT_PRU_SOURCE = ti_cgt_pru_$(TI_CGT_PRU_VERSION)_linux_installer_x86.bin
+ TI_CGT_PRU_SITE = http://downloads.ti.com/codegen/esd/cgt_public_sw/PRU/$(TI_CGT_PRU_VERSION)
+ TI_CGT_PRU_LICENSE = TI Technology and Software Publicly Available License (compiler + PRU library), \
+ 	Boost Software License 1.0 (compiler), \
+ 	BSD-2c, BSD-3c, MIT, Academic Free License 3.0, Hewlett-Packard (PRU library)
+-TI_CGT_PRU_LICENSE_FILES = PRU_Code_Generation_Tools_2.1.x_manifest.html \
+-	PRU_CodeGen_Library_2.1_0222433C-30C1-442d-B5C6-2073BD97F80F.spdx.tag
++TI_CGT_PRU_LICENSE_FILES = PRU_Code_Generation_Tools_2.2.x_manifest.html \
++	pru_rts_2_2_0_82167478-F8C9-49b2-82BD-12F8550770F9.spdx
  
- define HOST_LZ4_INSTALL_CMDS
-@@ -27,7 +27,7 @@ define HOST_LZ4_INSTALL_CMDS
- endef
- 
- define LZ4_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)/lib
-+	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) all
- endef
- 
- define LZ4_INSTALL_STAGING_CMDS
-@@ -37,7 +37,7 @@ endef
- 
- define LZ4_INSTALL_TARGET_CMDS
- 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) DESTDIR=$(TARGET_DIR) \
--		PREFIX=/usr install -C $(@D)/lib
-+		PREFIX=/usr install -C $(@D)
- endef
- 
- $(eval $(generic-package))
+ define HOST_TI_CGT_PRU_EXTRACT_CMDS
+ 	chmod +x $(DL_DIR)/$(TI_CGT_PRU_SOURCE)
