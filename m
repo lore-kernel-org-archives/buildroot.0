@@ -1,43 +1,41 @@
-From: Auke Oosterhoff <a.oosterhoff@climotion.com>
-Date: Tue, 30 Jan 2018 15:27:08 +0100
-Subject: [Buildroot] Bugs in patch [v2,7/7] package/mender: new package
-Message-ID: <CAGkEsZy33hDrAeY3Cq+_w2Z_EH5WTMqF1fw4dL5q21G1_ev+=Q@mail.gmail.com>
+From: Angelo Compagnucci <angelo@amarulasolutions.com>
+Date: Tue, 30 Jan 2018 16:05:59 +0100
+Subject: [Buildroot] [PATCH] linux: bump Linux CIP to v4.4.112-cip18
+Message-ID: <1517324759-4532-1-git-send-email-angelo@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+This patch bump the Linux CIP kernel to version v4.4.112-cip18
 
-I tested a series of patches which add a new infrastructure for go
-packages[1] and patch 7[2] of this series contains a few bugs. The patch
-add support for the package Mender.
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+---
+ linux/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-The MENDER_INSTALL_TARGET_CMDS copies 2 different files to the same
-location, which is wrong. Both files should keep their name in target.
-
-+	$(INSTALL) -D -m 0644 package/mender/mender.conf
-\+		$(TARGET_DIR)/etc/mender/mender.conf+	$(INSTALL) -D -m 0644
-package/mender/tenant.conf \+		$(TARGET_DIR)/etc/mender/mender.conf
-
-And also, the mender binary isn't copied to the target.
-I think the content of MENDER_INSTALL_TARGET_CMDS should be extended with:
-
-+	$(INSTALL) -D -m 0755 $(@D)/$(MENDER_BINDIR)/mender
-$(TARGET_DIR)/usr/bin/mender
-
+diff --git a/linux/Config.in b/linux/Config.in
+index 115247f..aef17c0 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -29,7 +29,7 @@ config BR2_LINUX_KERNEL_LATEST_VERSION
+ 	bool "Latest version (4.15)"
+ 
+ config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+-	bool "Latest CIP SLTS version (v4.4.105-cip15)"
++	bool "Latest CIP SLTS version (v4.4.112-cip18)"
+ 	help
+ 	  CIP launched in the spring of 2016 to address the needs of
+ 	  organizations in industries such as power generation and
+@@ -117,7 +117,7 @@ endif
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+ 	default "4.15" if BR2_LINUX_KERNEL_LATEST_VERSION
+-	default "v4.4.105-cip15" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
++	default "v4.4.112-cip18" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
 -- 
-Met vriendelijke groet,
-
-Auke Willem Oosterhoff
-
-
-[1]: https://patchwork.ozlabs.org/cover/854079/
-[2]: https://patchwork.ozlabs.org/patch/854085/
-
-
-<http://www.climotion.com/>
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180130/7e48de62/attachment.html>
+2.7.4
