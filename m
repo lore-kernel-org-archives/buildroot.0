@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 30 Jan 2018 23:00:27 +0100
-Subject: [Buildroot] [PATCH 1/3] package: linuxptp: bump to the latest
- GIT version
-In-Reply-To: <1517155221-19399-1-git-send-email-brain@jikos.cz>
+Date: Tue, 30 Jan 2018 23:00:54 +0100
+Subject: [Buildroot] [PATCH 2/3] package: linuxptp: enhance systemd
+ service
+In-Reply-To: <1517155221-19399-2-git-send-email-brain@jikos.cz>
 References: <1517155221-19399-1-git-send-email-brain@jikos.cz>
-Message-ID: <20180130230027.0cff0e24@windsurf.home>
+ <1517155221-19399-2-git-send-email-brain@jikos.cz>
+Message-ID: <20180130230054.6cb2551a@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,17 +14,47 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 28 Jan 2018 17:00:19 +0100, Petr Kulhavy wrote:
+On Sun, 28 Jan 2018 17:00:20 +0100, Petr Kulhavy wrote:
+> linuxptp now pulls in the time-sync.target
+> phc2sys (linuxptp-system-clock.service) starts after ptp4l (linuxptp.service)
+> 
 > Signed-off-by: Petr Kulhavy <brain@jikos.cz>
 > ---
->  package/linuxptp/linuxptp.hash | 2 +-
->  package/linuxptp/linuxptp.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/linuxptp/linuxptp-system-clock.service | 2 +-
+>  package/linuxptp/linuxptp.service              | 2 ++
+>  2 files changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/linuxptp/linuxptp-system-clock.service b/package/linuxptp/linuxptp-system-clock.service
+> index 7327254..a4436a3 100644
+> --- a/package/linuxptp/linuxptp-system-clock.service
+> +++ b/package/linuxptp/linuxptp-system-clock.service
+> @@ -1,6 +1,6 @@
+>  [Unit]
+>  Description=Precision Time Protocol system clock synchronization
+> -After=syslog.target network.target
+> +After=linuxptp.service
+>  
+>  [Service]
+>  ExecStart=/usr/sbin/phc2sys -s /dev/ptp0 -c CLOCK_REALTIME -w -S 1.0
+> diff --git a/package/linuxptp/linuxptp.service b/package/linuxptp/linuxptp.service
+> index f690430..14e9814 100644
+> --- a/package/linuxptp/linuxptp.service
+> +++ b/package/linuxptp/linuxptp.service
+> @@ -1,6 +1,8 @@
+>  [Unit]
+>  Description=Precision Time Protocol daemon
+>  After=syslog.target network.target
+> +Before=time-sync.target
+> +Wants=time-sync.target
+>  Wants=linuxptp-system-clock.service
+>  
+>  [Service]
 
-Applied to master, thanks.
+I'm not knowledgeable enough in systemd stuff to decide on this one.
+Anyone with more systemd knowledge ?
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
