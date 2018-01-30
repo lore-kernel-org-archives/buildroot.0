@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 30 Jan 2018 23:00:54 +0100
-Subject: [Buildroot] [PATCH 2/3] package: linuxptp: enhance systemd
- service
-In-Reply-To: <1517155221-19399-2-git-send-email-brain@jikos.cz>
+Date: Tue, 30 Jan 2018 23:01:47 +0100
+Subject: [Buildroot] [PATCH 3/3] package: linuxptp: workaround for
+ system crash if PHY is not initialized
+In-Reply-To: <1517155221-19399-3-git-send-email-brain@jikos.cz>
 References: <1517155221-19399-1-git-send-email-brain@jikos.cz>
- <1517155221-19399-2-git-send-email-brain@jikos.cz>
-Message-ID: <20180130230054.6cb2551a@windsurf.home>
+ <1517155221-19399-3-git-send-email-brain@jikos.cz>
+Message-ID: <20180130230147.46cc03ec@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,44 +14,28 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 28 Jan 2018 17:00:20 +0100, Petr Kulhavy wrote:
-> linuxptp now pulls in the time-sync.target
-> phc2sys (linuxptp-system-clock.service) starts after ptp4l (linuxptp.service)
+On Sun, 28 Jan 2018 17:00:21 +0100, Petr Kulhavy wrote:
+> On some systems (tested on i.MX6 with Freescale kernel 4.1) the system freezes
+> if phc2sys starts before the PHY is initialized (phc2sys opens /dev/ptp0).
+> 
+> Unfortunately systemd network.target does not guarantee the PHY to be initialized.
+> This workaround pulls in the network-online.target dependency, which postpones
+> the phc2sys start after the link is up.
 > 
 > Signed-off-by: Petr Kulhavy <brain@jikos.cz>
-> ---
->  package/linuxptp/linuxptp-system-clock.service | 2 +-
->  package/linuxptp/linuxptp.service              | 2 ++
->  2 files changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/linuxptp/linuxptp-system-clock.service b/package/linuxptp/linuxptp-system-clock.service
-> index 7327254..a4436a3 100644
-> --- a/package/linuxptp/linuxptp-system-clock.service
-> +++ b/package/linuxptp/linuxptp-system-clock.service
-> @@ -1,6 +1,6 @@
->  [Unit]
->  Description=Precision Time Protocol system clock synchronization
-> -After=syslog.target network.target
-> +After=linuxptp.service
->  
->  [Service]
->  ExecStart=/usr/sbin/phc2sys -s /dev/ptp0 -c CLOCK_REALTIME -w -S 1.0
-> diff --git a/package/linuxptp/linuxptp.service b/package/linuxptp/linuxptp.service
-> index f690430..14e9814 100644
-> --- a/package/linuxptp/linuxptp.service
-> +++ b/package/linuxptp/linuxptp.service
-> @@ -1,6 +1,8 @@
->  [Unit]
->  Description=Precision Time Protocol daemon
->  After=syslog.target network.target
-> +Before=time-sync.target
-> +Wants=time-sync.target
->  Wants=linuxptp-system-clock.service
->  
->  [Service]
 
-I'm not knowledgeable enough in systemd stuff to decide on this one.
-Anyone with more systemd knowledge ?
+Do we really want to workaround this, which appears to be a kernel
+problem?
+
+> +# workaround for crashing Freescale PHY if initialized after /dev/ptp0 is open
+> +After=network-online.target
+> +Wants=network-online.target
+
+Does it make sense to have After and Wants set to the same value ? Are
+both really needed ?
+
+(Again: I don't know much about systemd, so don't hesitate to teach me
+even the basics!)
 
 Thomas
 -- 
