@@ -1,71 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 30 Jan 2018 13:08:43 +0100
-Subject: [Buildroot] [git commit branch/2017.02.x] irssi: security bump to
- version 1.0.6
-Message-ID: <20180130122144.4CB588809F@busybox.osuosl.org>
+Date: Tue, 30 Jan 2018 13:13:21 +0100
+Subject: [Buildroot] [git commit branch/2017.02.x] package/intel-microcode:
+ bump to version 20170707
+Message-ID: <20180130122144.A79AF8809F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=12909ab1b41a02b2afa4a456562353cd31a5bd8d
+commit: https://git.buildroot.net/buildroot/commit/?id=ff54fccc9f29600416cb0d489002fc81b59bd269
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-From the advisory (https://irssi.org/security/irssi_sa_2018_01.txt):
-
-Multiple vulnerabilities have been located in Irssi.
-
-(a) When the channel topic is set without specifying a sender, Irssi
-    may dereference NULL pointer. Found by Joseph Bisch. (CWE-476)
-
-    CVE-2018-5206 was assigned to this issue.
-
-(b) When using incomplete escape codes, Irssi may access data beyond
-    the end of the string. (CWE-126) Found by Joseph Bisch.
-
-    CVE-2018-5205 was assigned to this issue.
-
-(c) A calculation error in the completion code could cause a heap
-    buffer overflow when completing certain strings. (CWE-126) Found
-    by Joseph Bisch.
-
-    CVE-2018-5208 was assigned to this issue.
-
-(d) When using an incomplete variable argument, Irssi may access data
-    beyond the end of the string. (CWE-126) Found by Joseph Bisch.
-
-    CVE-2018-5207 was assigned to this issue.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit aebdb1cd4b4034542eb7c50fc4b6a265c5ba5c77)
+(cherry picked from commit 7896af3f941f27c91419f5374b597d71287a5832)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/irssi/irssi.hash | 2 +-
- package/irssi/irssi.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/intel-microcode/intel-microcode.hash | 2 +-
+ package/intel-microcode/intel-microcode.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/irssi/irssi.hash b/package/irssi/irssi.hash
-index 0a6c3f614a..83dde00352 100644
---- a/package/irssi/irssi.hash
-+++ b/package/irssi/irssi.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--sha256	c2556427e12eb06cabfed40839ac6f57eb8b1aa6365fab6dfcd331b7a04bb914  irssi-1.0.5.tar.xz
-+sha256	029e884f3ebf337f7266d8ed4e1a035ca56d9f85015d74c868b488f279de8585  irssi-1.0.6.tar.xz
- # Locally calculated
- sha256	a1a27cb2ecee8d5378fbb3562f577104a445d6d66fee89286e16758305e63e2b  COPYING
-diff --git a/package/irssi/irssi.mk b/package/irssi/irssi.mk
-index 3ea81a95db..d29d4f0e9b 100644
---- a/package/irssi/irssi.mk
-+++ b/package/irssi/irssi.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/intel-microcode/intel-microcode.hash b/package/intel-microcode/intel-microcode.hash
+index 8f0a3fc84d..5ccfd51466 100644
+--- a/package/intel-microcode/intel-microcode.hash
++++ b/package/intel-microcode/intel-microcode.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 2f77fd2d87403b754d01a66c78a36a8b8ffc16dc3c50fb7aa2c4cd4da7f681a3  microcode-20170511.tgz
++sha256 4fd44769bf52a7ac11e90651a307aa6e56ca6e1a814e50d750ba8207973bee93  microcode-20170707.tgz
+diff --git a/package/intel-microcode/intel-microcode.mk b/package/intel-microcode/intel-microcode.mk
+index 831e6c0940..7ad3bba3d2 100644
+--- a/package/intel-microcode/intel-microcode.mk
++++ b/package/intel-microcode/intel-microcode.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--IRSSI_VERSION = 1.0.5
-+IRSSI_VERSION = 1.0.6
- IRSSI_SOURCE = irssi-$(IRSSI_VERSION).tar.xz
- # Do not use the github helper here. The generated tarball is *NOT* the
- # same as the one uploaded by upstream for the release.
+-INTEL_MICROCODE_VERSION = 20170511
++INTEL_MICROCODE_VERSION = 20170707
+ INTEL_MICROCODE_SOURCE = microcode-$(INTEL_MICROCODE_VERSION).tgz
+-INTEL_MICROCODE_SITE = http://downloadmirror.intel.com/26798/eng
++INTEL_MICROCODE_SITE = http://downloadmirror.intel.com/26925/eng
+ INTEL_MICROCODE_STRIP_COMPONENTS = 0
+ INTEL_MICROCODE_LICENSE = PROPRIETARY
+ INTEL_MICROCODE_LICENSE_FILES = license.txt
