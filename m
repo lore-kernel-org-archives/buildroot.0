@@ -1,63 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 30 Jan 2018 22:58:51 +0100
-Subject: [Buildroot] [git commit] aoetools: fix aoe-stat script that was
- using /bin/bash in its shebang
-Message-ID: <20180130215904.7D88D88107@busybox.osuosl.org>
+Date: Tue, 30 Jan 2018 23:00:22 +0100
+Subject: [Buildroot] [git commit] package: linuxptp: bump to the latest GIT
+ version
+Message-ID: <20180130220023.D25AB8810D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=06407fdf31989e864de0fc851a67129bb99bab81
+commit: https://git.buildroot.net/buildroot/commit/?id=a6672bb3ca7bfdd472467c91bbf5b4cde107b496
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This will make the script more portable, making it possible to run on
-systems that do not have bash.
-
-The script was tested with ash from BusyBox and checked for portability
-issues and bashisms with shellcheck and checkbashisms tools.
-
-The patch was already applied upstream [1] and should be removed in the
-next version bump.
-
-[1] https://github.com/OpenAoE/aoetools/commit/4ef42740538cefd3c1554aa4df5bcb1388ac927b
-
-Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+Signed-off-by: Petr Kulhavy <brain@jikos.cz>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...l-script-interpreter-from-bin-bash-to-bin.patch | 26 ++++++++++++++++++++++
- 1 file changed, 26 insertions(+)
+ package/linuxptp/linuxptp.hash | 2 +-
+ package/linuxptp/linuxptp.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/aoetools/0001-Change-shell-script-interpreter-from-bin-bash-to-bin.patch b/package/aoetools/0001-Change-shell-script-interpreter-from-bin-bash-to-bin.patch
-new file mode 100644
-index 0000000000..00b24c8943
---- /dev/null
-+++ b/package/aoetools/0001-Change-shell-script-interpreter-from-bin-bash-to-bin.patch
-@@ -0,0 +1,26 @@
-+From 4ef42740538cefd3c1554aa4df5bcb1388ac927b Mon Sep 17 00:00:00 2001
-+From: Sergio Prado <sergio.prado@e-labworks.com>
-+Date: Tue, 16 Jan 2018 22:28:32 -0200
-+Subject: [PATCH] Change shell script interpreter from /bin/bash to /bin/sh
-+
-+This will make the script more portable, making it possible to run on
-+systems that do not have bash.
-+
-+Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
-+---
-+ aoe-stat.in | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/aoe-stat.in b/aoe-stat.in
-+index 50e6ac674169..0c1d6f5ebe1e 100755
-+--- a/aoe-stat.in
-++++ b/aoe-stat.in
-+@@ -1,4 +1,4 @@
-+-#! /bin/bash
-++#! /bin/sh
-+ # aoe-stat - collate and present information about AoE storage
-+ # Copyright 2012, CORAID, Inc., and licensed under GPL v.2.
-+ 
-+-- 
-+1.9.1
-+
+diff --git a/package/linuxptp/linuxptp.hash b/package/linuxptp/linuxptp.hash
+index 91144df973..ef2db56226 100644
+--- a/package/linuxptp/linuxptp.hash
++++ b/package/linuxptp/linuxptp.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256	40844a69df82853113732f15498f9bce2666d5052293a3d5d40a1983e7b7b6a6  linuxptp-17c9787b1d6891636b5be9e4e5a08278b44e9a7a.tar.gz
++sha256 d0ccc4591966e21819cdc248765ebbe02456bc8ca37845eb7c23c2d1ff9bcf6b  linuxptp-303b08cbf55096aba55bd08a314e0701e5c33482.tar.gz
+diff --git a/package/linuxptp/linuxptp.mk b/package/linuxptp/linuxptp.mk
+index 38d8e09221..f43fee6f69 100644
+--- a/package/linuxptp/linuxptp.mk
++++ b/package/linuxptp/linuxptp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LINUXPTP_VERSION = 17c9787b1d6891636b5be9e4e5a08278b44e9a7a
++LINUXPTP_VERSION = 303b08cbf55096aba55bd08a314e0701e5c33482
+ LINUXPTP_SITE_METHOD = git
+ LINUXPTP_SITE = git://git.code.sf.net/p/linuxptp/code
+ LINUXPTP_LICENSE = GPL-2.0+
