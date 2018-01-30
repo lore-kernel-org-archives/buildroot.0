@@ -1,109 +1,54 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Tue, 30 Jan 2018 08:47:35 +0100
-Subject: [Buildroot] scanpypi package error adadfruit-ads1x15
-In-Reply-To: <CACG401of=nXOoz-OkQrH50m=bnmXaGa9AyoLjD4BA2P8p1Sfvg@mail.gmail.com>
-References: <CACG401qs4wj83dGC4t++ZWQWCdax=-3KzEoHNNYzjUGBKTkhBQ@mail.gmail.com>
- <CACG401rYpb5e8m_ou0wAnowPdNRfYNRAHXgRY-BgPzaK9uY3Ow@mail.gmail.com>
- <CAGm1_ktgUGMkLdi4derUgsgoPOsXnMSf9byecxj2fGUUTyUQrg@mail.gmail.com>
- <CAGm1_kusxoiZP5h_MrSG8a8zTTkY+_24PkdNNuweaYV2nGSO6Q@mail.gmail.com>
- <CACG401of=nXOoz-OkQrH50m=bnmXaGa9AyoLjD4BA2P8p1Sfvg@mail.gmail.com>
-Message-ID: <CAGm1_ksbPbGG2uFq8wpWG0LQe8vnSbvrVmoizuLHPNGSL8_6hg@mail.gmail.com>
+From: =?UTF-8?Q?Alexis_Lothor=C3=A9?= <alexis.lothore@gmail.com>
+Date: Tue, 30 Jan 2018 08:56:00 +0100
+Subject: [Buildroot] Questions on package makefile variables overriding
+Message-ID: <CALmdmcCD_yjO7YG2S-dNtFoMudtO6RNy5aHStDEjJ+ZEeo1cMg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Jan 30, 2018 at 2:31 AM, Jesse Cobra <jessecobra@gmail.com> wrote:
-> For some reason I had to apply the last chunk of the patch myself but this
-> fixed my issue completely.
->
-> Thank you so much for providing a fix.
+Hello,
+I am currently trying to adapt some buildroot packages behavior without
+hardcoding my changes into the buildroot directory (using a buildroot
+external), but I am encountering a few issues doint it. Here are my two
+cases :
+* I am trying build the janus-gateway package in buildroot 2017-08. I have
+to add libcurl as a dependency (needed in my case for the streaming
+module). In janus-gateway.mk in corresponding buildroot package, the
+dependency variable looks like the following : JANUS_GATEWAY_DEPENDENCIES =
+host-pkgconf jansson libnice \
+        libsrtp host-gengetopt libglib2 openssl
+I have added an external.mk file in my BR2_EXTERNAL directory with the
+following line : JANUS_GATEWAY_DEPENDENCIES += libcurl. It seems to be
+taken in account by buildroot, as seen when printing the proper variables :
+#~ : make -C buildroot BR2_EXTERNAL=../buildroot_external O=output-dev -s
+printvars VARS=JANUS_GATEWAY_%DEPENDENCIES
+JANUS_GATEWAY_DEPENDENCIES=host-pkgconf jansson libnice libsrtp
+host-gengetopt libglib2 openssl host-automake host-autoconf host-libtool
+skeleton toolchain libcurl
+JANUS_GATEWAY_FINAL_ALL_DEPENDENCIES=host-autoconf host-automake
+host-gengetopt host-libtool host-pkgconf jansson libcurl libglib2 libnice
+libsrtp openssl skeleton toolchain
+JANUS_GATEWAY_FINAL_DEPENDENCIES=host-autoconf host-automake host-gengetopt
+host-libtool host-pkgconf jansson libcurl libglib2 libnice libsrtp openssl
+skeleton toolchain
+JANUS_GATEWAY_FINAL_PATCH_DEPENDENCIES=
 
-Great. Then we are waiting for your patches.
+However, even after completely deleting janus-gateway in my builddir and in
+the target dir, libcurl is not automatically built before janus. Am I
+missing a configuration step ?
 
-Yegor
+* I need a more recent version of OpenCV than the current one 2.4.13. Using
+the same mechanism, I update OPENCV_VERSION in my external.mk. This time
+the new version is correctly detected and the package is downloaded in the
+new version. But I encounter a hash mismatch (which seems normal since hash
+is fixed in the package directory). Is there a way to override the hash
+file too ?
+Regards,
 
-> On Jan 26, 2018 5:35 AM, "Yegor Yefremov" <yegorslists@googlemail.com>
-> wrote:
->>
->> On Fri, Jan 26, 2018 at 1:48 PM, Yegor Yefremov
->> <yegorslists@googlemail.com> wrote:
->> > Hi Jesse,
->> >
->> > On Fri, Jan 26, 2018 at 5:21 AM, Jesse Cobra <jessecobra@gmail.com>
->> > wrote:
->> >> Made my own package by hand and it worked! Oh well...
->> >>
->> >> cat buildroot/package/python-ads1x15/*
->> >> config BR2_PACKAGE_PYTHON_ADS1X15
->> >
->> > This package depends on Adafruit-GPIO, so please add this package
->> > first and select it via select statement.
->> >
->> >>     bool "python-ADS1X15"
->> >>     help
->> >>       encoder, decoder, and lint/validator for JSON (JavaScript Object
->> >>       Notation) compliant with RFC 7159.
->> >
->> > Project URL is missing.
->> >
->> >>
->> >> ################################################################################
->> >> #
->> >> # python-ads1x15
->> >> #
->> >>
->> >> ################################################################################
->> >>
->> >> PYTHON_ADS1X15_VERSION = 1.0.2
->> >> PYTHON_ADS1X15_SOURCE =
->> >> Adafruit_ADS1x15-$(PYTHON_ADS1X15_VERSION).tar.gz
->> >> PYTHON_ADS1X15_SITE =
->> >>
->> >> https://pypi.python.org/packages/14/e8/c9935e32f61e6562abea08cb704fcbfbb78b39bd1d20bb9b12eb4c2c820c
->> >> PYTHON_ADS1X15_SETUP_TYPE = setuptools
->> >> PYTHON_ADS1X15_LICENSE = GNU Library or Lesser General Public License
->> >> (LGPL)
->> >
->> > please us SPDX short names for the licence type.
->> >
->> >> PYTHON_ADS1X15_LICENSE_FILES = LICENSE.txt
->> >>
->> >> $(eval $(python-package))
->> >>
->> >>
->> >> On Fri, Jan 26, 2018 at 1:27 AM, Jesse Cobra <jessecobra@gmail.com>
->> >> wrote:
->> >>>
->> >>> building for pi zero w on ubuntu 14.04 32 bit buildroot 2017.02.9
->> >>>
->> >>> utils/scanpypi adafruit-ads1x15 -o package
->> >>> buildroot package name for adafruit-ads1x15: python-adafruit-ads1x15
->> >>> Package: python-adafruit-ads1x15
->> >>> Fetching package adafruit-ads1x15
->> >>> Downloading package adafruit-ads1x15 from
->> >>>
->> >>> https://pypi.python.org/packages/14/e8/c9935e32f61e6562abea08cb704fcbfbb78b39bd1d20bb9b12eb4c2c820c/Adafruit_ADS1x15-1.0.2.tar.gz...
->> >>> Traceback (most recent call last):
->> >>>   File "utils/scanpypi", line 653, in <module>
->> >>>     main()
->> >>>   File "utils/scanpypi", line 604, in main
->> >>>     package.load_setup()
->> >>>   File "utils/scanpypi", line 247, in load_setup
->> >>>     os.chdir(self.tmp_extract)
->> >>> OSError: [Errno 2] No such file or directory:
->> >>> '/tmp/scanpypi-wzvU4f/python-adafruit-ads1x15/Adafruit-ADS1x15-1.0.2'
->> >>>
->> >>> Anyone point me in the right direction?
->> >
->> > The package is very strange. First tar name (Adafruit_ADS1x15) and
->> > meta name (Adafruit-ADS1x15) are different. Even if I fix this then
->> > there are issues with setup.py. I'll have to dig deeper.
->>
->> Please apply this patch [1] and try to add adafruit-ads1x15 again.
->>
->> [1] http://patchwork.ozlabs.org/patch/866316/
->>
->> Regards,
->> Yegor
+-- 
+Alexis Lothor?
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180130/689c58f4/attachment.html>
