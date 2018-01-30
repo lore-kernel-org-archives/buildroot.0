@@ -1,12 +1,12 @@
 From: Petr Kulhavy <brain@jikos.cz>
-Date: Tue, 30 Jan 2018 23:14:46 +0100
-Subject: [Buildroot] [PATCH 3/3] package: linuxptp: workaround for
- system crash if PHY is not initialized
-In-Reply-To: <20180130230147.46cc03ec@windsurf.home>
+Date: Tue, 30 Jan 2018 23:19:51 +0100
+Subject: [Buildroot] [PATCH 2/3] package: linuxptp: enhance systemd
+ service
+In-Reply-To: <20180130230054.6cb2551a@windsurf.home>
 References: <1517155221-19399-1-git-send-email-brain@jikos.cz>
- <1517155221-19399-3-git-send-email-brain@jikos.cz>
- <20180130230147.46cc03ec@windsurf.home>
-Message-ID: <a7ffc70b-d812-17af-a8cc-f03d368e3b99@jikos.cz>
+ <1517155221-19399-2-git-send-email-brain@jikos.cz>
+ <20180130230054.6cb2551a@windsurf.home>
+Message-ID: <c63fff97-491b-8d5a-fb99-095e3fa08423@jikos.cz>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,48 +15,55 @@ To: buildroot@busybox.net
 
 Hi Thomas,
 
-most likely I will post another patch for this as I have modified the 
-service file even further.
-In the newer version both come after network-online.target because I 
-noticed ptp4l fails to execute some ioctl if started too early. This 
-causes that it doesn't start syncing.
+The Before= and Wants=? time-sync.target is what I found in the systemd 
+documentation. A time synchronization service should pull in this 
+special target, so that applications needing time synchronization can 
+depend on it.
+Other time synchronizing services like ntpd or systemd-timesyncd use the 
+same mechanism.
 
-I'm not very happy with the network-online.target either, because it 
-literally waits for the network to come up. Which makes some sense - PTP 
-needs a peer - however systemd documentation indicates this is not the 
-most reliable way to solve missing network and recommends to write 
-robust programs which can wait for network.
-And in the end neither ptp4l or phc2sys need the network to be up. They 
-both just need the kernel to finish the initialization (which is not the 
-same as network up). Unfortunately systemd doesn't provide such target :(
-
-I'm also not an expert in systemd. These changes are base on my 
-self-education. So a real systemd expert would be appreciated.
-
+Cheers
 Petr
 
-On 30/01/18 23:01, Thomas Petazzoni wrote:
+On 30/01/18 23:00, Thomas Petazzoni wrote:
 > Hello,
 >
-> On Sun, 28 Jan 2018 17:00:21 +0100, Petr Kulhavy wrote:
->> On some systems (tested on i.MX6 with Freescale kernel 4.1) the system freezes
->> if phc2sys starts before the PHY is initialized (phc2sys opens /dev/ptp0).
->>
->> Unfortunately systemd network.target does not guarantee the PHY to be initialized.
->> This workaround pulls in the network-online.target dependency, which postpones
->> the phc2sys start after the link is up.
+> On Sun, 28 Jan 2018 17:00:20 +0100, Petr Kulhavy wrote:
+>> linuxptp now pulls in the time-sync.target
+>> phc2sys (linuxptp-system-clock.service) starts after ptp4l (linuxptp.service)
 >>
 >> Signed-off-by: Petr Kulhavy <brain@jikos.cz>
-> Do we really want to workaround this, which appears to be a kernel
-> problem?
->
->> +# workaround for crashing Freescale PHY if initialized after /dev/ptp0 is open
->> +After=network-online.target
->> +Wants=network-online.target
-> Does it make sense to have After and Wants set to the same value ? Are
-> both really needed ?
->
-> (Again: I don't know much about systemd, so don't hesitate to teach me
-> even the basics!)
+>> ---
+>>   package/linuxptp/linuxptp-system-clock.service | 2 +-
+>>   package/linuxptp/linuxptp.service              | 2 ++
+>>   2 files changed, 3 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/package/linuxptp/linuxptp-system-clock.service b/package/linuxptp/linuxptp-system-clock.service
+>> index 7327254..a4436a3 100644
+>> --- a/package/linuxptp/linuxptp-system-clock.service
+>> +++ b/package/linuxptp/linuxptp-system-clock.service
+>> @@ -1,6 +1,6 @@
+>>   [Unit]
+>>   Description=Precision Time Protocol system clock synchronization
+>> -After=syslog.target network.target
+>> +After=linuxptp.service
+>>   
+>>   [Service]
+>>   ExecStart=/usr/sbin/phc2sys -s /dev/ptp0 -c CLOCK_REALTIME -w -S 1.0
+>> diff --git a/package/linuxptp/linuxptp.service b/package/linuxptp/linuxptp.service
+>> index f690430..14e9814 100644
+>> --- a/package/linuxptp/linuxptp.service
+>> +++ b/package/linuxptp/linuxptp.service
+>> @@ -1,6 +1,8 @@
+>>   [Unit]
+>>   Description=Precision Time Protocol daemon
+>>   After=syslog.target network.target
+>> +Before=time-sync.target
+>> +Wants=time-sync.target
+>>   Wants=linuxptp-system-clock.service
+>>   
+>>   [Service]
+> I'm not knowledgeable enough in systemd stuff to decide on this one.
+> Anyone with more systemd knowledge ?
 >
 > Thomas
