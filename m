@@ -1,41 +1,51 @@
-From: Carlos Santos <casantos@datacom.ind.br>
-Date: Tue, 30 Jan 2018 02:07:19 -0200
-Subject: [Buildroot] [PATCH 2/3] eudev: fix printf usage in init script
-In-Reply-To: <20180130040720.20172-1-casantos@datacom.ind.br>
-References: <20180130040720.20172-1-casantos@datacom.ind.br>
-Message-ID: <20180130040720.20172-2-casantos@datacom.ind.br>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 30 Jan 2018 07:15:01 +0200
+Subject: [Buildroot] [PATCH 1/1] ltp-testsuite: Add upstream patch to
+ fix build numa detection
+In-Reply-To: <20180129202314.16767-1-petr.vorel@gmail.com>
+References: <20180129202314.16767-1-petr.vorel@gmail.com>
+Message-ID: <20180130051501.hvjb7h3smtif5zvu@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Using a variable in a printf format string may lead to undesirable
-results if the variable contains format controls, so replace
+Hi Petr,
 
-    printf "foo $var bar"
+On Mon, Jan 29, 2018 at 09:23:14PM +0100, Petr Vorel wrote:
+> This removes fix added in commit 3c937807a3 ("ltp-testsuite: disable numa tests")
+> 
+> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+> ---
+>  ...x-numa-v2-detection-for-cross-compilation.patch | 37 ++++++++++++++++++++++
+>  package/ltp-testsuite/ltp-testsuite.mk             |  3 +-
+>  2 files changed, 38 insertions(+), 2 deletions(-)
+>  create mode 100644 package/ltp-testsuite/0002-numa-Fix-numa-v2-detection-for-cross-compilation.patch
 
-by
+[...]
 
-    printf "foo %s bar" "$var"
+> diff --git a/package/ltp-testsuite/ltp-testsuite.mk b/package/ltp-testsuite/ltp-testsuite.mk
+> index 28dc24749e..87854568d8 100644
+> --- a/package/ltp-testsuite/ltp-testsuite.mk
+> +++ b/package/ltp-testsuite/ltp-testsuite.mk
+> @@ -56,8 +56,7 @@ LTP_TESTSUITE_CONF_ENV += \
+>  	CFLAGS="$(LTP_TESTSUITE_CFLAGS)" \
+>  	CPPFLAGS="$(LTP_TESTSUITE_CPPFLAGS)" \
+>  	LIBS="$(LTP_TESTSUITE_LIBS)" \
+> -	SYSROOT="$(STAGING_DIR)" \
+> -	have_numa_headers=no
+> +	SYSROOT="$(STAGING_DIR)"
+>  
+>  # Requires uClibc fts and bessel support, normally not enabled
+>  ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
 
-Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
----
- package/eudev/S10udev | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+You should also make numactl an optional dependency to make the build more 
+reproducible.
 
-diff --git a/package/eudev/S10udev b/package/eudev/S10udev
-index 654a04df36..640fec625b 100755
---- a/package/eudev/S10udev
-+++ b/package/eudev/S10udev
-@@ -27,7 +27,7 @@ test -r $UDEV_CONFIG || exit 6
- 
- case "$1" in
-     start)
--        printf "Populating ${udev_root:-/dev} using udev: "
-+        printf "Populating %s using udev: " "${udev_root:-/dev}"
-         printf '\000\000\000\000' > /proc/sys/kernel/hotplug
-         $UDEV_BIN -d || { echo "FAIL"; exit 1; }
-         udevadm trigger --type=subsystems --action=add
+baruch
+
 -- 
-2.14.3
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
