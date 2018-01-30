@@ -1,50 +1,64 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue, 30 Jan 2018 21:01:21 +0100
-Subject: [Buildroot] [PATCH v1] libevdev: bump version to 1.5.8
-Message-ID: <20180130200121.24162-1-ps.report@gmx.net>
+From: Marcus Folkesson <marcus.folkesson@gmail.com>
+Date: Tue, 30 Jan 2018 21:25:12 +0100
+Subject: [Buildroot] [PATCH 08/14] diffconfig: fix code style
+In-Reply-To: <20180129231152.5e3ee075@windsurf.lan>
+References: <1516581882-30582-1-git-send-email-ricardo.martincoski@gmail.com>
+ <1516581882-30582-9-git-send-email-ricardo.martincoski@gmail.com>
+ <20180129231152.5e3ee075@windsurf.lan>
+Message-ID: <20180130202512.GA7723@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For details see [1].
+Hi,
 
-[1] https://lists.freedesktop.org/archives/input-tools/2018-January/001447.html
+On Mon, Jan 29, 2018 at 11:11:52PM +0100, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Sun, 21 Jan 2018 22:44:36 -0200, Ricardo Martincoski wrote:
+> > Fix these warnings:
+> > E225 missing whitespace around operator
+> > E231 missing whitespace after ','
+> > E302 expected 2 blank lines, found 1
+> > E305 expected 2 blank lines after class or function definition, found 1
+> > E401 multiple imports on one line
+> > 
+> > Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+> > Cc: Marcus Folkesson <marcus.folkesson@gmail.com>
+> 
+> I haven't applied this one, because I don't really like the fact that
+> we're further tweaking a script that comes from the kernel sources. On
+> the other hand, we have already tweaked it for our purposes.
+> 
+> What do others think? Should we stay as close to the original upstream
+> version as possible? Or because we have anyway already tweaked it, we
+> don't really care and can now do whatever changes we believe are useful?
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
- package/libevdev/libevdev.hash | 10 +++++-----
- package/libevdev/libevdev.mk   |  2 +-
- 2 files changed, 6 insertions(+), 6 deletions(-)
+Well, I will try to keep the script reasonably synchronized between the
+buildroot and kernel repo, and these type of patches does not really
+help with that.
 
-diff --git a/package/libevdev/libevdev.hash b/package/libevdev/libevdev.hash
-index 1d3d18434f..0702a7b006 100644
---- a/package/libevdev/libevdev.hash
-+++ b/package/libevdev/libevdev.hash
-@@ -1,5 +1,5 @@
--# From https://lists.freedesktop.org/archives/input-tools/2017-May/001387.html
--md5 4f1cfaee8d75ea3fbbfeb99a98730952  libevdev-1.5.7.tar.xz
--sha1 ba1d8b66af9bd4e1d503ce6b2ed011e9e309048c  libevdev-1.5.7.tar.xz
--sha256 a1e59e37a2f0d397ffd7e83b73af0e638db83b8dd08902ef0f651a21cc1dd422  libevdev-1.5.7.tar.xz
--sha512 53adf6c92ec61f0635b643a88d8762a18f7cd3088d23ac95831be32cc7150ebd19f20265b90f6a1f9a63420c2f8968c2d17d8dc4892c0e90f9dfcce82c622df1  libevdev-1.5.7.tar.xz
-+# From https://lists.freedesktop.org/archives/input-tools/2018-January/001447.html
-+md5 c25a8c3939e4ad59a5e9e5e1e354832d libevdev-1.5.8.tar.xz
-+sha1 a60e7a43570cdbc64af5adf99ca80023d21a1174 libevdev-1.5.8.tar.xz
-+sha256 6083d81e46609da8ba80cb826c02d9080764a6dec33c8267ccb7e158833d4c6d libevdev-1.5.8.tar.xz
-+sha512 e9485d8c6b48ebf762b32b003bc6b761c548024ad3bc34a0793485b53383746881fcc9b206a078d571937291e519d9822e50c5d8816778d347094691b65ec3fa libevdev-1.5.8.tar.xz
-diff --git a/package/libevdev/libevdev.mk b/package/libevdev/libevdev.mk
-index e5d9c60d26..1893863efd 100644
---- a/package/libevdev/libevdev.mk
-+++ b/package/libevdev/libevdev.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBEVDEV_VERSION = 1.5.7
-+LIBEVDEV_VERSION = 1.5.8
- LIBEVDEV_SITE = http://www.freedesktop.org/software/libevdev
- LIBEVDEV_SOURCE = libevdev-$(LIBEVDEV_VERSION).tar.xz
- LIBEVDEV_LICENSE = X11
--- 
-2.16.1
+However, these scripts does not change that much, so I guess it does not
+really matters.
+
+> 
+> Best regards,
+> 
+> Thomas
+> -- 
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux and Kernel engineering
+> http://free-electrons.com
+
+
+Best regards
+Marcus Folkesson
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 833 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180130/b6d5af48/attachment.asc>
