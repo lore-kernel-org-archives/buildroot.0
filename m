@@ -1,52 +1,74 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 30 Jan 2018 22:52:06 +0100
-Subject: [Buildroot] [git commit] libevdev: bump version to 1.5.8
-Message-ID: <20180130215615.7C16386038@busybox.osuosl.org>
+Date: Tue, 30 Jan 2018 22:53:38 +0100
+Subject: [Buildroot] [git commit] package/connman: fix compilation error for
+ kernels >= 4.15
+Message-ID: <20180130215615.8B81486038@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e4e4f7da179110a1fcd58c60056bc2ce41869af7
+commit: https://git.buildroot.net/buildroot/commit/?id=561913eb9f3efd5d54ae208f93a21aaaaca7c769
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-For details see [1].
+Include the upstream fix 0001-tethering-Reorder-header-includes.patch
 
-[1] https://lists.freedesktop.org/archives/input-tools/2018-January/001447.html
+Fixes
+http://autobuild.buildroot.net/results/90005b436e25495a1113966112785278dfc0420a
+http://autobuild.buildroot.net/results/ab713048093746576734e90290b8777222d70e7e
+http://autobuild.buildroot.net/results/368c2c8ab9b8db7f445a9681082ce1e10c7e0151
+http://autobuild.buildroot.net/results/1c98fd9ce430463e720212ce8a3698e2b72cbe7d
+http://autobuild.buildroot.net/results/bc865093e6ffec4737433c5a213c0241495e9ccc
+http://autobuild.buildroot.net/results/e4d93b136ef8aff600264d743191bf087044c27a
+http://autobuild.buildroot.net/results/a2feeeed4d0d11fda5f029f8c784ed6ce16ee856
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Martin Bark <martin@barkynet.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libevdev/libevdev.hash | 10 +++++-----
- package/libevdev/libevdev.mk   |  2 +-
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ .../0001-tethering-Reorder-header-includes.patch   | 37 ++++++++++++++++++++++
+ 1 file changed, 37 insertions(+)
 
-diff --git a/package/libevdev/libevdev.hash b/package/libevdev/libevdev.hash
-index 1d3d18434f..0702a7b006 100644
---- a/package/libevdev/libevdev.hash
-+++ b/package/libevdev/libevdev.hash
-@@ -1,5 +1,5 @@
--# From https://lists.freedesktop.org/archives/input-tools/2017-May/001387.html
--md5 4f1cfaee8d75ea3fbbfeb99a98730952  libevdev-1.5.7.tar.xz
--sha1 ba1d8b66af9bd4e1d503ce6b2ed011e9e309048c  libevdev-1.5.7.tar.xz
--sha256 a1e59e37a2f0d397ffd7e83b73af0e638db83b8dd08902ef0f651a21cc1dd422  libevdev-1.5.7.tar.xz
--sha512 53adf6c92ec61f0635b643a88d8762a18f7cd3088d23ac95831be32cc7150ebd19f20265b90f6a1f9a63420c2f8968c2d17d8dc4892c0e90f9dfcce82c622df1  libevdev-1.5.7.tar.xz
-+# From https://lists.freedesktop.org/archives/input-tools/2018-January/001447.html
-+md5 c25a8c3939e4ad59a5e9e5e1e354832d libevdev-1.5.8.tar.xz
-+sha1 a60e7a43570cdbc64af5adf99ca80023d21a1174 libevdev-1.5.8.tar.xz
-+sha256 6083d81e46609da8ba80cb826c02d9080764a6dec33c8267ccb7e158833d4c6d libevdev-1.5.8.tar.xz
-+sha512 e9485d8c6b48ebf762b32b003bc6b761c548024ad3bc34a0793485b53383746881fcc9b206a078d571937291e519d9822e50c5d8816778d347094691b65ec3fa libevdev-1.5.8.tar.xz
-diff --git a/package/libevdev/libevdev.mk b/package/libevdev/libevdev.mk
-index e5d9c60d26..1893863efd 100644
---- a/package/libevdev/libevdev.mk
-+++ b/package/libevdev/libevdev.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBEVDEV_VERSION = 1.5.7
-+LIBEVDEV_VERSION = 1.5.8
- LIBEVDEV_SITE = http://www.freedesktop.org/software/libevdev
- LIBEVDEV_SOURCE = libevdev-$(LIBEVDEV_VERSION).tar.xz
- LIBEVDEV_LICENSE = X11
+diff --git a/package/connman/0001-tethering-Reorder-header-includes.patch b/package/connman/0001-tethering-Reorder-header-includes.patch
+new file mode 100644
+index 0000000000..4955df1cdd
+--- /dev/null
++++ b/package/connman/0001-tethering-Reorder-header-includes.patch
+@@ -0,0 +1,37 @@
++From bdfb3526466f8fb8f13d9259037d8f42c782ce24 Mon Sep 17 00:00:00 2001
++From: Daniel Wagner <wagi@monom.org>
++Date: Wed, 17 Jan 2018 23:42:50 +0100
++Subject: [PATCH] tethering: Reorder header includes
++
++Avoid compile errors due to unsupported header include order with
++newer kernels (>=4.15). We should import the libc header files first
++and then the Linux header files in user space applications.
++
++Reported by Neil MacLeod <neil@nmacleod.com>. Fix probosal by Jonas
++Bonn <jonas@southpole.se> and Hauke Mehrtens <hauke@hauke-m.de>.
++
++Signed-off-by: Martin Bark <martin@barkynet.com>
++---
++ src/tethering.c | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/src/tethering.c b/src/tethering.c
++index c929ba7..4b20236 100644
++--- a/src/tethering.c
+++++ b/src/tethering.c
++@@ -31,11 +31,11 @@
++ #include <stdio.h>
++ #include <sys/ioctl.h>
++ #include <net/if.h>
++-#include <linux/sockios.h>
++ #include <string.h>
++ #include <fcntl.h>
++-#include <linux/if_tun.h>
++ #include <netinet/in.h>
+++#include <linux/sockios.h>
+++#include <linux/if_tun.h>
++ #include <linux/if_bridge.h>
++
++ #include "connman.h"
++--
++2.7.4
