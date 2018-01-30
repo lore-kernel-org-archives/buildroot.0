@@ -1,70 +1,66 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 30 Jan 2018 23:44:58 +0100
-Subject: [Buildroot] [git commit branch/2017.02.x] package/ti-cgt-pru: bump
- to 2.2.1
-Message-ID: <20180130225021.8611188140@busybox.osuosl.org>
+Date: Tue, 30 Jan 2018 23:36:29 +0100
+Subject: [Buildroot] [git commit branch/2017.02.x] lz4: pass {TARGET,
+ HOST}_CONFIGURE_OPTS in the environment
+Message-ID: <20180130225021.3A28B88139@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4298d90fde9ac105277e5c25c867334070fd1f0e
+commit: https://git.buildroot.net/buildroot/commit/?id=6b0193a883e8410a378bd9ea3ab31223ad341244
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-See: http://www.ti.com/tool/download/PRU-CGT-2-2
-
-The ti-cgt-pru v2.1.x installer are affected by a bug with recent
-distribution (Fedora 27 and Ubuntu 17.10) using kernel 4.13 or 4.14
-with a glibc 2.26.
-The installer is stuck in a futex(wait) system call.
-
-While at it, add license hash.
+{TARGET,HOST}_CONFIGURE_OPTS are currently passed as $(MAKE) argument,
+which causes some CPPFLAGS/CFLAGS defined by the package build system to
+be overridden, leading to build failures. This commit changes the lz4
+package to pass {TARGET,HOST}_CONFIGURE_OPTS through the environment to
+avoid this issue.
 
 Fixes:
-http://autobuild.buildroot.net/results/68f/68f60ad38d9b6eae83b5d233966616a25d8c9391
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Ash Charles <ash.charles@savoirfairelinux.com>
-Cc: Matthew Weber <matthew.weber@rockwellcollins.com>
-Tested-by: Matt Weber <matthew.weber@rockwellcollins.com>
+  http://autobuild.buildroot.net/results/2a578a9c462463fde802c999156723494fe1b14d/
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 0e162b932d67668a4f075da803efb62b01ec917d)
+(cherry picked from commit f4dc73568b08bd96aa659c5ef29226349dee05de)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ti-cgt-pru/ti-cgt-pru.hash | 4 +++-
- package/ti-cgt-pru/ti-cgt-pru.mk   | 6 +++---
- 2 files changed, 6 insertions(+), 4 deletions(-)
+ package/lz4/lz4.mk | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/ti-cgt-pru/ti-cgt-pru.hash b/package/ti-cgt-pru/ti-cgt-pru.hash
-index 3ff08ace32..1975d8d1e6 100644
---- a/package/ti-cgt-pru/ti-cgt-pru.hash
-+++ b/package/ti-cgt-pru/ti-cgt-pru.hash
-@@ -1,2 +1,4 @@
- # Locally calculated
--sha256	c80dbf35e7401f4c122ff25cc2f6b5db496607782fb4583cee8663a2763f4472	ti_cgt_pru_2.1.4_linux_installer_x86.bin
-+sha256	7dc37fd689d1d506bf410d2a00af658b93a58d4bc10ac32c2210129dab617377	ti_cgt_pru_2.2.1_linux_installer_x86.bin
-+sha256	eb646f4f8b14351110992b40ba24d12803bcc150a76e7298705f51088b0a09cc	PRU_Code_Generation_Tools_2.2.x_manifest.html
-+sha256	6b98f9262abd1ae9a3731e6feee02a56b6e290542dea119eeeeaf88bf802aabc	pru_rts_2_2_0_82167478-F8C9-49b2-82BD-12F8550770F9.spdx
-diff --git a/package/ti-cgt-pru/ti-cgt-pru.mk b/package/ti-cgt-pru/ti-cgt-pru.mk
-index d6de05e5da..4849543eea 100644
---- a/package/ti-cgt-pru/ti-cgt-pru.mk
-+++ b/package/ti-cgt-pru/ti-cgt-pru.mk
-@@ -4,14 +4,14 @@
- #
- ################################################################################
+diff --git a/package/lz4/lz4.mk b/package/lz4/lz4.mk
+index 9d7f56bbf6..139be54128 100644
+--- a/package/lz4/lz4.mk
++++ b/package/lz4/lz4.mk
+@@ -18,25 +18,25 @@ LZ4_POST_PATCH_HOOKS += LZ4_DISABLE_SHARED
+ endif
  
--TI_CGT_PRU_VERSION = 2.1.4
-+TI_CGT_PRU_VERSION = 2.2.1
- TI_CGT_PRU_SOURCE = ti_cgt_pru_$(TI_CGT_PRU_VERSION)_linux_installer_x86.bin
- TI_CGT_PRU_SITE = http://downloads.ti.com/codegen/esd/cgt_public_sw/PRU/$(TI_CGT_PRU_VERSION)
- TI_CGT_PRU_LICENSE = TI Technology and Software Publicly Available License (compiler + PRU library), \
- 	Boost Software License 1.0 (compiler), \
- 	BSD-2c, BSD-3c, MIT, Academic Free License 3.0, Hewlett-Packard (PRU library)
--TI_CGT_PRU_LICENSE_FILES = PRU_Code_Generation_Tools_2.1.x_manifest.html \
--	PRU_CodeGen_Library_2.1_0222433C-30C1-442d-B5C6-2073BD97F80F.spdx.tag
-+TI_CGT_PRU_LICENSE_FILES = PRU_Code_Generation_Tools_2.2.x_manifest.html \
-+	pru_rts_2_2_0_82167478-F8C9-49b2-82BD-12F8550770F9.spdx
+ define HOST_LZ4_BUILD_CMDS
+-	$(HOST_MAKE_ENV) $(MAKE) $(HOST_CONFIGURE_OPTS) -C $(@D)
++	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D)
+ endef
  
- define HOST_TI_CGT_PRU_EXTRACT_CMDS
- 	chmod +x $(DL_DIR)/$(TI_CGT_PRU_SOURCE)
+ define HOST_LZ4_INSTALL_CMDS
+-	$(HOST_MAKE_ENV) $(MAKE) $(HOST_CONFIGURE_OPTS) PREFIX=$(HOST_DIR)/usr \
++	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) PREFIX=$(HOST_DIR)/usr \
+ 		install -C $(@D)
+ endef
+ 
+ define LZ4_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)/lib
++	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)/lib
+ endef
+ 
+ define LZ4_INSTALL_STAGING_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) DESTDIR=$(STAGING_DIR) \
++	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) DESTDIR=$(STAGING_DIR) \
+ 		PREFIX=/usr install -C $(@D)
+ endef
+ 
+ define LZ4_INSTALL_TARGET_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) DESTDIR=$(TARGET_DIR) \
++	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) DESTDIR=$(TARGET_DIR) \
+ 		PREFIX=/usr install -C $(@D)/lib
+ endef
+ 
