@@ -1,107 +1,110 @@
-From: Jesse Cobra <jessecobra@gmail.com>
-Date: Mon, 29 Jan 2018 17:31:00 -0800
-Subject: [Buildroot] scanpypi package error adadfruit-ads1x15
-In-Reply-To: <CAGm1_kusxoiZP5h_MrSG8a8zTTkY+_24PkdNNuweaYV2nGSO6Q@mail.gmail.com>
-References: <CACG401qs4wj83dGC4t++ZWQWCdax=-3KzEoHNNYzjUGBKTkhBQ@mail.gmail.com>
- <CACG401rYpb5e8m_ou0wAnowPdNRfYNRAHXgRY-BgPzaK9uY3Ow@mail.gmail.com>
- <CAGm1_ktgUGMkLdi4derUgsgoPOsXnMSf9byecxj2fGUUTyUQrg@mail.gmail.com>
- <CAGm1_kusxoiZP5h_MrSG8a8zTTkY+_24PkdNNuweaYV2nGSO6Q@mail.gmail.com>
-Message-ID: <CACG401of=nXOoz-OkQrH50m=bnmXaGa9AyoLjD4BA2P8p1Sfvg@mail.gmail.com>
+From: Carlos Santos <casantos@datacom.ind.br>
+Date: Tue, 30 Jan 2018 02:07:20 -0200
+Subject: [Buildroot] [PATCH 3/3] eudev: generate hwdb.bin at system startup
+In-Reply-To: <20180130040720.20172-1-casantos@datacom.ind.br>
+References: <20180130040720.20172-1-casantos@datacom.ind.br>
+Message-ID: <20180130040720.20172-3-casantos@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For some reason I had to apply the last chunk of the patch myself but this
-fixed my issue completely.
+Programs that use libudev (e.g. lsusb, from usbutils) need the hwdb.bin
+file to work properly.
 
-Thank you so much for providing a fix.
+If BR2_PACKAGE_EUDEV_ENABLE_HWDB is selected then the eudev installation
+populates /etc/udev/hwdb.d/ but does not genarete /etc/udev/hwdb.bin. It
+must be created running "udevadm hwdb --update" on the target device but
+this does not work on with read-only /etc, so we need these changes:
 
-On Jan 26, 2018 5:35 AM, "Yegor Yefremov" <yegorslists@googlemail.com>
-wrote:
+- Add the BR2_PACKAGE_EUDEV_HWDB_BIN_PATH config, allowing the user to
+  set the location of hwdb.bin.
+- Patch the configuration script, allowing to set the hwdb.bin path by
+  means of an environment variable (udevhwdbbinpath).
+- Pass the value set in BR2_PACKAGE_EUDEV_HWDB_BIN_PATH to the configure
+  script by means of the udevhwdbbinpath variable.
+- Make the S10udev init script run "udevadm hwdb --update" to recreate
+  hwdb.bin or print an error message if the operation fails (e.g. no
+  write permission on the filesystem).
 
-> On Fri, Jan 26, 2018 at 1:48 PM, Yegor Yefremov
-> <yegorslists@googlemail.com> wrote:
-> > Hi Jesse,
-> >
-> > On Fri, Jan 26, 2018 at 5:21 AM, Jesse Cobra <jessecobra@gmail.com>
-> wrote:
-> >> Made my own package by hand and it worked! Oh well...
-> >>
-> >> cat buildroot/package/python-ads1x15/*
-> >> config BR2_PACKAGE_PYTHON_ADS1X15
-> >
-> > This package depends on Adafruit-GPIO, so please add this package
-> > first and select it via select statement.
-> >
-> >>     bool "python-ADS1X15"
-> >>     help
-> >>       encoder, decoder, and lint/validator for JSON (JavaScript Object
-> >>       Notation) compliant with RFC 7159.
-> >
-> > Project URL is missing.
-> >
-> >> ############################################################
-> ####################
-> >> #
-> >> # python-ads1x15
-> >> #
-> >> ############################################################
-> ####################
-> >>
-> >> PYTHON_ADS1X15_VERSION = 1.0.2
-> >> PYTHON_ADS1X15_SOURCE = Adafruit_ADS1x15-$(PYTHON_
-> ADS1X15_VERSION).tar.gz
-> >> PYTHON_ADS1X15_SITE =
-> >> https://pypi.python.org/packages/14/e8/c9935e32f61e6562abea08cb704fcb
-> fbb78b39bd1d20bb9b12eb4c2c820c
-> >> PYTHON_ADS1X15_SETUP_TYPE = setuptools
-> >> PYTHON_ADS1X15_LICENSE = GNU Library or Lesser General Public License
-> (LGPL)
-> >
-> > please us SPDX short names for the licence type.
-> >
-> >> PYTHON_ADS1X15_LICENSE_FILES = LICENSE.txt
-> >>
-> >> $(eval $(python-package))
-> >>
-> >>
-> >> On Fri, Jan 26, 2018 at 1:27 AM, Jesse Cobra <jessecobra@gmail.com>
-> wrote:
-> >>>
-> >>> building for pi zero w on ubuntu 14.04 32 bit buildroot 2017.02.9
-> >>>
-> >>> utils/scanpypi adafruit-ads1x15 -o package
-> >>> buildroot package name for adafruit-ads1x15: python-adafruit-ads1x15
-> >>> Package: python-adafruit-ads1x15
-> >>> Fetching package adafruit-ads1x15
-> >>> Downloading package adafruit-ads1x15 from
-> >>> https://pypi.python.org/packages/14/e8/c9935e32f61e6562abea08cb704fcb
-> fbb78b39bd1d20bb9b12eb4c2c820c/Adafruit_ADS1x15-1.0.2.tar.gz...
-> >>> Traceback (most recent call last):
-> >>>   File "utils/scanpypi", line 653, in <module>
-> >>>     main()
-> >>>   File "utils/scanpypi", line 604, in main
-> >>>     package.load_setup()
-> >>>   File "utils/scanpypi", line 247, in load_setup
-> >>>     os.chdir(self.tmp_extract)
-> >>> OSError: [Errno 2] No such file or directory:
-> >>> '/tmp/scanpypi-wzvU4f/python-adafruit-ads1x15/Adafruit-ADS1x15-1.0.2'
-> >>>
-> >>> Anyone point me in the right direction?
-> >
-> > The package is very strange. First tar name (Adafruit_ADS1x15) and
-> > meta name (Adafruit-ADS1x15) are different. Even if I fix this then
-> > there are issues with setup.py. I'll have to dig deeper.
->
-> Please apply this patch [1] and try to add adafruit-ads1x15 again.
->
-> [1] http://patchwork.ozlabs.org/patch/866316/
->
-> Regards,
-> Yegor
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180129/f99dd002/attachment.html>
+Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+---
+ package/eudev/Config.in |  9 +++++++++
+ package/eudev/S10udev   |  8 +++++++-
+ package/eudev/eudev.mk  | 13 ++++++++++++-
+ 3 files changed, 28 insertions(+), 2 deletions(-)
+
+diff --git a/package/eudev/Config.in b/package/eudev/Config.in
+index 2220265a55..a589a14af3 100644
+--- a/package/eudev/Config.in
++++ b/package/eudev/Config.in
+@@ -32,6 +32,15 @@ config BR2_PACKAGE_EUDEV_ENABLE_HWDB
+ 	help
+ 	  Enables hardware database installation to /etc/udev/hwdb.d
+ 
++config BR2_PACKAGE_EUDEV_HWDB_BIN_PATH
++	string "hwdb.bin path"
++	default "/etc/udev/hwdb.bin"
++	help
++	  Location of the hwdb.bin file, which is re-generated at system
++	  startup. The default is /etc/udev/hwdb.bin but you may want to
++	  move it elsewhere (e.g. /var/run/udev/hwdb.bin) if /etc is in
++	  a read-only filesystem.
++
+ endif
+ 
+ comment "eudev needs eudev /dev management"
+diff --git a/package/eudev/S10udev b/package/eudev/S10udev
+index 640fec625b..026ab6ae49 100755
+--- a/package/eudev/S10udev
++++ b/package/eudev/S10udev
+@@ -25,14 +25,20 @@ UDEV_CONFIG=/etc/udev/udev.conf
+ test -r $UDEV_CONFIG || exit 6
+ . $UDEV_CONFIG
+ 
++UDEV_HWDB_BIN=%%UDEV_HWDB_BIN%%
++
+ case "$1" in
+     start)
+         printf "Populating %s using udev: " "${udev_root:-/dev}"
+         printf '\000\000\000\000' > /proc/sys/kernel/hotplug
+         $UDEV_BIN -d || { echo "FAIL"; exit 1; }
++        echo "done"
+         udevadm trigger --type=subsystems --action=add
+         udevadm trigger --type=devices --action=add
+-        udevadm settle --timeout=30 || echo "udevadm settle failed"
++        udevadm settle --timeout=30 || { echo "udevadm settle failed" && exit 1; }
++        echo "done"
++        printf "Compiling hardware database information $UDEV_HWDB_BIN: "
++        udevadm hwdb --update || { echo "FAIL" && exit 1; }
+         echo "done"
+         ;;
+     stop)
+diff --git a/package/eudev/eudev.mk b/package/eudev/eudev.mk
+index d08b9bb0c9..25745008d2 100644
+--- a/package/eudev/eudev.mk
++++ b/package/eudev/eudev.mk
+@@ -47,8 +47,19 @@ else
+ EUDEV_CONF_OPTS += --disable-selinux
+ endif
+ 
++define EUDEV_POST_PATCH
++	$(SED) 's,$${udevconfdir}/hwdb.bin,$${udevhwdbbinpath:-$${udevconfdir}/hwdb.bin},' \
++		$(@D)/configure
++endef
++EUDEV_POST_PATCH_HOOKS += EUDEV_POST_PATCH
++
++EUDEV_CONF_ENV += udevhwdbbinpath=$(BR2_PACKAGE_EUDEV_HWDB_BIN_PATH)
++
+ define EUDEV_INSTALL_INIT_SYSV
+-	$(INSTALL) -D -m 0755 package/eudev/S10udev $(TARGET_DIR)/etc/init.d/S10udev
++	$(INSTALL) -D -m 0755 package/eudev/S10udev \
++		$(TARGET_DIR)/etc/init.d/S10udev
++	$(SED) 's,%%UDEV_HWDB_BIN%%,$(BR2_PACKAGE_EUDEV_HWDB_BIN_PATH),' \
++		$(TARGET_DIR)/etc/init.d/S10udev
+ endef
+ 
+ # Required by default rules for input devices
+-- 
+2.14.3
