@@ -1,32 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 30 Jan 2018 22:57:44 +0100
-Subject: [Buildroot] [PATCH 1/1] php: bump to 7.2.1
-In-Reply-To: <20180129165326.18962-1-Adamduskett@outlook.com>
-References: <20180129165326.18962-1-Adamduskett@outlook.com>
-Message-ID: <20180130225744.7f18a816@windsurf.home>
+Date: Tue, 30 Jan 2018 22:58:17 +0100
+Subject: [Buildroot] [git commit] eudev: fix printf usage in init script
+Message-ID: <20180130215819.76C3788103@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=6298ed8bf46dd546d4ee7244136f2f9bad82ecad
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 29 Jan 2018 11:53:26 -0500, Adam Duskett wrote:
-> Also update 0003-configure-disable-the-phar-tool.patch as configure.in is no
-> longer provided in the tarballs. Instead, configure.ac is patched.
-> 
-> Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
-> ---
->  package/php/0003-configure-disable-the-phar-tool.patch | 16 +++++++++-------
->  package/php/php.hash                                   |  2 +-
->  package/php/php.mk                                     |  2 +-
->  3 files changed, 11 insertions(+), 9 deletions(-)
+Using a variable in a printf format string may lead to undesirable
+results if the variable contains format controls, so replace
 
-Applied to master, thanks.
+    printf "foo $var bar"
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+by
+
+    printf "foo %s bar" "$var"
+
+Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/eudev/S10udev | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/eudev/S10udev b/package/eudev/S10udev
+index 654a04df36..640fec625b 100755
+--- a/package/eudev/S10udev
++++ b/package/eudev/S10udev
+@@ -27,7 +27,7 @@ test -r $UDEV_CONFIG || exit 6
+ 
+ case "$1" in
+     start)
+-        printf "Populating ${udev_root:-/dev} using udev: "
++        printf "Populating %s using udev: " "${udev_root:-/dev}"
+         printf '\000\000\000\000' > /proc/sys/kernel/hotplug
+         $UDEV_BIN -d || { echo "FAIL"; exit 1; }
+         udevadm trigger --type=subsystems --action=add
