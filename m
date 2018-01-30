@@ -1,62 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 30 Jan 2018 23:38:07 +0100
-Subject: [Buildroot] [PATCH 1/1] Change host locale from C to
- en_US.UTF-8 for reproducable builds
-In-Reply-To: <20180128112205.15275-1-julius@kriukas.lt>
-References: <20180128112205.15275-1-julius@kriukas.lt>
-Message-ID: <20180130233807.3bb4b570@windsurf.home>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 30 Jan 2018 23:49:00 +0100
+Subject: [Buildroot] [PATCH v2] package/ti-cgt-pru: bump to 2.2.1
+In-Reply-To: <20180109201306.13526-1-romain.naour@gmail.com> (Romain Naour's
+ message of "Tue, 9 Jan 2018 21:13:06 +0100")
+References: <20180109201306.13526-1-romain.naour@gmail.com>
+Message-ID: <87wozz9d43.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
 
-On Sun, 28 Jan 2018 13:22:05 +0200, Julius Kriukas wrote:
-> When BR2_REPRODUCIBLE is enabled building systemd fails with error:
-> 
-> [1/1080] Generating systemd.bg.catalog with a meson_exe.py custom command.
-> FAILED: catalog/systemd.bg.catalog
-> /buildroot/output/host/bin/python3 /buildroot/output/host/bin/meson --internal exe /buildroot/output/build/systemd-236/build/meson-private/meson_exe_sed_232a0623cc7ce2cd67ec72ed784b76307102ed76.dat
-> Warning: You are using 'ANSI_X3.4-1968' which is not a Unicode-compatible locale.
-> You might see errors if you use UTF-8 strings as filenames, as strings, or as file contents.
-> Please switch to a UTF-8 locale for your platform.
-> ...
-> UnicodeDecodeError: 'ascii' codec can't decode byte 0xd0 in position 1079: ordinal not in range(128)
-> package/pkg-generic.mk:247: recipe for target '/buildroot/output/build/systemd-236/.stamp_built' failed
-> make: *** [/buildroot/output/build/systemd-236/.stamp_built] Error 1
-> 
-> Other packages using meson build system might fail as well.
-> 
-> This patch changes default host system locale from C to en_US.UTF-8 to
-> fix this issue. Any Unicode-compatible locale would be suitable here.
-> 
-> Signed-off-by: Julius Kriukas <julius@kriukas.lt>
+ > See: http://www.ti.com/tool/download/PRU-CGT-2-2
+ > The ti-cgt-pru v2.1.x installer are affected by a bug with recent
+ > distribution (Fedora 27 and Ubuntu 17.10) using kernel 4.13 or 4.14
+ > with a glibc 2.26.
+ > The installer is stuck in a futex(wait) system call.
 
-Thanks for your patch! I was about to apply it, but one issue I see is
-that we have no guarantee that en_US.UTF-8 is available.
+ > While at it, add license hash.
 
-support/dependencies/dependencies.sh checks that we have at least one
-UTF-8 locale available if BR2_NEEDS_HOST_UTF8_LOCALE=y, but:
+ > Fixes:
+ > http://autobuild.buildroot.net/results/68f/68f60ad38d9b6eae83b5d233966616a25d8c9391
 
- - BR2_NEEDS_HOST_UTF8_LOCALE is only selected when a uClibc toolchain
-   is being built
+ > Signed-off-by: Romain Naour <romain.naour@gmail.com>
+ > Cc: Ash Charles <ash.charles@savoirfairelinux.com>
+ > Cc: Matthew Weber <matthew.weber@rockwellcollins.com>
+ > ---
+ > Note: This bump is not tested on real PRU hardware.
 
- - it only ensures one UTF-8 locale is available, not specifically
-   en_US.UTF-8
+ > v2: update license files and add license hash
 
-Perhaps we need another BR2_NEEDS_HOST_EN_US_UTF8_LOCALE, which would
-be used by support/dependencies/dependencies.sh to ensure that
-en_US.UTF-8 is available. This new option would be selected by
-BR2_REPRODUCIBLE.
+Committed to 2017.02.x, thanks.
 
-Arnout, Peter, Yann? Thoughts?
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
