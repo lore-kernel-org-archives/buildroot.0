@@ -1,114 +1,79 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 30 Jan 2018 23:45:17 +0100
-Subject: [Buildroot] [git commit branch/2017.02.x] support/kconfig: Apply
- upstream nconfig ncurses/ncursesw fix
-Message-ID: <20180130225021.94D3788141@busybox.osuosl.org>
+Date: Tue, 30 Jan 2018 23:36:42 +0100
+Subject: [Buildroot] [git commit branch/2017.02.x] lz4: install programs as
+ well as libraries
+Message-ID: <20180130225021.47DA68813D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eefe01c5d1c75b7a5cbc27125c84f823e28d27ef
+commit: https://git.buildroot.net/buildroot/commit/?id=17cf7e511e6919d5b6744deb21770c2d0ea922a9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Buildroot's "make nconfig" command stopped working a while ago on
-Gentoo systems. Running the command would result in a crash.
+Prior to commit 8ad38a4fc2007df4bee9a941aed46c8771b6a84c
+("package/lz4: bump version to r131"), the lz4 package was installing
+both libraries and programs, but this commit changed the behavior to
+only install libraries.
 
-The issue is caused by lxdialog's cflags which are also used to build
-nconfig; It would detect *ncursesw* and turn on WIDECHAR support --
-but the Makefile would still link to plain *ncurses* while building
-nconfig (which was built without WIDECHAR support).
+The contributor might have been confused by the fact that the build
+command was "$(MAKE) ... -C $(@D) liblz4", suggesting that only the
+library was built. But since the install command was "$(MAKE) ... -C
+$(@D) install", the programs were effectively built as part of the
+install step, and installed as well.
 
-This would cause a crash after using *wattrset* on a WINDOW instance.
-WIDECHAR *wattrset* would try to set the _color member in the WINDOW
-struct which does not exist in the NON-WIDECHAR ncurses instance. It
-would end up clobbering data outside the struct (usually _line entries).
+Since it makes sense for lz4 to also installs its programs, this
+commit adjusts the package accordingly.
 
-An upstream patch fixes the issue, so we're applying it to Buildroot's
-kconfig.
+It is worth mentioning that using the "all" target during the build
+step is important. Indeed, otherwise the programs/Makefile has a
+"default" target that doesn't build everything (especially the lz4c
+program) and it end up being built as part of the install step, due to
+how the makefile dependencies are handled in the lz4 project. To make
+sure that everything gets built during the build step, we explicitly
+use the "all" target.
 
-Signed-off-by: Guillermo A. Amaral <g@maral.me>
+Fixes bug #9996
+
+Reported-by: Jamin Collins <jamin.collins@gmail.com>
+Initial-analysis-by: Arnout Vandecappelle <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 8aa4ee2b02abe2a04b15ee3ef53887ade9a4afc4)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 6f1c11f79a64387c1f1749550804f8aae0cfa7a7)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/kconfig/Makefile                           |  3 +-
- ...onfig-nconfig-fix-multi-byte-UTF-handling.patch | 45 ++++++++++++++++++++++
- support/kconfig/patches/series                     |  1 +
- 3 files changed, 48 insertions(+), 1 deletion(-)
+ package/lz4/lz4.mk | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/support/kconfig/Makefile b/support/kconfig/Makefile
-index 7eb4071b4e..af62023863 100644
---- a/support/kconfig/Makefile
-+++ b/support/kconfig/Makefile
-@@ -220,7 +220,8 @@ HOSTCFLAGS_gconf.o	= `pkg-config --cflags gtk+-2.0 gmodule-2.0 libglade-2.0` \
- HOSTLOADLIBES_mconf   = $(shell $(CONFIG_SHELL) $(check-lxdialog) -ldflags $(HOSTCC))
+diff --git a/package/lz4/lz4.mk b/package/lz4/lz4.mk
+index 139be54128..b0d45474cd 100644
+--- a/package/lz4/lz4.mk
++++ b/package/lz4/lz4.mk
+@@ -18,7 +18,7 @@ LZ4_POST_PATCH_HOOKS += LZ4_DISABLE_SHARED
+ endif
  
- HOSTLOADLIBES_nconf	= $(shell \
--				pkg-config --libs menu panel ncurses 2>/dev/null \
-+				pkg-config --libs menuw panelw ncursesw 2>/dev/null \
-+				|| pkg-config --libs menu panel ncurses 2>/dev/null \
- 				|| echo "-lmenu -lpanel -lncurses"  )
- $(obj)/qconf.o: $(obj)/.tmp_qtcheck
+ define HOST_LZ4_BUILD_CMDS
+-	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D)
++	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) all
+ endef
  
-diff --git a/support/kconfig/patches/18-kconfig-nconfig-fix-multi-byte-UTF-handling.patch b/support/kconfig/patches/18-kconfig-nconfig-fix-multi-byte-UTF-handling.patch
-new file mode 100644
-index 0000000000..3ca48d0714
---- /dev/null
-+++ b/support/kconfig/patches/18-kconfig-nconfig-fix-multi-byte-UTF-handling.patch
-@@ -0,0 +1,45 @@
-+From 7285996aa0006d671bb01f0d35991d254b2b2b01 Mon Sep 17 00:00:00 2001
-+From: Brian Norris <computersforpeace@gmail.com>
-+Date: Wed, 4 Jun 2014 00:52:31 -0700
-+Subject: kconfig: nconfig: fix multi-byte UTF handling
-+
-+Currently, Kconfig descriptions that use multi-byte UTF-8 characters
-+(such as MTD_NAND_CAFE) will have their menu entries dropped from the
-+'make nconfig' ncurses menu, and all subsequent entries in the same
-+window will be omitted. This seems to be due to the ncurses 'menu'
-+library, which does not traditionally handle UTF-8 >8-bit characters
-+properly.
-+
-+The ncursesw library ('w' is for "wide") is written to handle these
-+UTF-8 characters, and is practically a drop-in replacement at the source
-+level. Use it by default, if available.
-+
-+Link: https://bugzilla.kernel.org/show_bug.cgi?id=43067
-+Signed-off-by: Brian Norris <computersforpeace@gmail.com>
-+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+Cc: Martin Walch <walch.martin@web.de>
-+Acked-by: Sam Ravnborg <sam@ravnborg.org>
-+Signed-off-by: Michal Marek <mmarek@suse.cz>
-+---
-+ scripts/kconfig/Makefile | 3 ++-
-+ 1 file changed, 2 insertions(+), 1 deletion(-)
-+
-+(limited to 'scripts/kconfig/Makefile')
-+
-+diff --git a/scripts/kconfig/Makefile b/scripts/kconfig/Makefile
-+index e7bf38e..c059385 100644
-+--- a/scripts/kconfig/Makefile
-++++ b/scripts/kconfig/Makefile
-+@@ -191,7 +191,8 @@ HOSTCFLAGS_gconf.o	= `pkg-config --cflags gtk+-2.0 gmodule-2.0 libglade-2.0` \
-+ HOSTLOADLIBES_mconf   = $(shell $(CONFIG_SHELL) $(check-lxdialog) -ldflags $(HOSTCC))
-+ 
-+ HOSTLOADLIBES_nconf	= $(shell \
-+-				pkg-config --libs menu panel ncurses 2>/dev/null \
-++				pkg-config --libs menuw panelw ncursesw 2>/dev/null \
-++				|| pkg-config --libs menu panel ncurses 2>/dev/null \
-+ 				|| echo "-lmenu -lpanel -lncurses"  )
-+ $(obj)/qconf.o: $(obj)/.tmp_qtcheck
-+ 
-+-- 
-+cgit v1.1
-+
-diff --git a/support/kconfig/patches/series b/support/kconfig/patches/series
-index e25375ea28..1a53ba9958 100644
---- a/support/kconfig/patches/series
-+++ b/support/kconfig/patches/series
-@@ -7,3 +7,4 @@
- 15-fix-qconf-moc-rule.patch
- 16-fix-space-to-de-select-options.patch
- 17-kconfig-lxdialog-get-ncurses-CFLAGS-with-pkg-config.patch
-+18-kconfig-nconfig-fix-multi-byte-UTF-handling.patch
+ define HOST_LZ4_INSTALL_CMDS
+@@ -27,7 +27,7 @@ define HOST_LZ4_INSTALL_CMDS
+ endef
+ 
+ define LZ4_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)/lib
++	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) all
+ endef
+ 
+ define LZ4_INSTALL_STAGING_CMDS
+@@ -37,7 +37,7 @@ endef
+ 
+ define LZ4_INSTALL_TARGET_CMDS
+ 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) DESTDIR=$(TARGET_DIR) \
+-		PREFIX=/usr install -C $(@D)/lib
++		PREFIX=/usr install -C $(@D)
+ endef
+ 
+ $(eval $(generic-package))
