@@ -1,40 +1,43 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 30 Jan 2018 13:33:07 +0100
-Subject: [Buildroot] [git commit] busybox: don't remove S01logging when
- CONFIG_SYSLOGD is disabled
-In-Reply-To: <20180110220628.309B9835A1@busybox.osuosl.org> (Thomas
- Petazzoni's message of "Wed, 10 Jan 2018 23:03:59 +0100")
-References: <20180110220628.309B9835A1@busybox.osuosl.org>
-Message-ID: <87o9lb1q7w.fsf@dell.be.48ers.dk>
+From: Auke Oosterhoff <a.oosterhoff@climotion.com>
+Date: Tue, 30 Jan 2018 15:27:08 +0100
+Subject: [Buildroot] Bugs in patch [v2,7/7] package/mender: new package
+Message-ID: <CAGkEsZy33hDrAeY3Cq+_w2Z_EH5WTMqF1fw4dL5q21G1_ev+=Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Hello,
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=84e835ea9261b3e844f1a18489dd89253e3eb839
- > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+I tested a series of patches which add a new infrastructure for go
+packages[1] and patch 7[2] of this series contains a few bugs. The patch
+add support for the package Mender.
 
- > The current busybox.mk explicitly removes S01logging if CONFIG_SYSLOGD
- > is disabled in the Busybox configuration. However:
+The MENDER_INSTALL_TARGET_CMDS copies 2 different files to the same
+location, which is wrong. Both files should keep their name in target.
 
- >  - This causes the removal of the S01logging script potentially
- >    installed by another package (currently syslog-ng, rsyslog and
- >    sysklogd can all install a S01logging script).
++	$(INSTALL) -D -m 0644 package/mender/mender.conf
+\+		$(TARGET_DIR)/etc/mender/mender.conf+	$(INSTALL) -D -m 0644
+package/mender/tenant.conf \+		$(TARGET_DIR)/etc/mender/mender.conf
 
- >  - We generally don't try to clean-up stuff that we may have installed
- >    in a previous make invocation and that is no longer needed
- >    following a configuration change.
+And also, the mender binary isn't copied to the target.
+I think the content of MENDER_INSTALL_TARGET_CMDS should be extended with:
 
- > Fixes bug #10176
-
- > Reported-by: Karl Krach <mail@kkrach.de>
- > Fix-provided-by: Karl Krach <mail@kkrach.de>
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-Committed to 2017.02.x, thanks.
++	$(INSTALL) -D -m 0755 $(@D)/$(MENDER_BINDIR)/mender
+$(TARGET_DIR)/usr/bin/mender
 
 -- 
-Bye, Peter Korsgaard
+Met vriendelijke groet,
+
+Auke Willem Oosterhoff
+
+
+[1]: https://patchwork.ozlabs.org/cover/854079/
+[2]: https://patchwork.ozlabs.org/patch/854085/
+
+
+<http://www.climotion.com/>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180130/7e48de62/attachment.html>
