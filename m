@@ -1,46 +1,109 @@
 From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Tue, 30 Jan 2018 08:43:00 +0100
-Subject: [Buildroot] [RFC] scanpypi: handle packages with wrong metadata
-In-Reply-To: <20180129231908.4bf07275@windsurf.lan>
-References: <1516973570-7732-1-git-send-email-yegorslists@googlemail.com>
- <20180129231908.4bf07275@windsurf.lan>
-Message-ID: <CAGm1_ktLfLxd+5hVKF+0CkqvJ4_WNF9+L2mBcS9EKvCA3Gt8kw@mail.gmail.com>
+Date: Tue, 30 Jan 2018 08:47:35 +0100
+Subject: [Buildroot] scanpypi package error adadfruit-ads1x15
+In-Reply-To: <CACG401of=nXOoz-OkQrH50m=bnmXaGa9AyoLjD4BA2P8p1Sfvg@mail.gmail.com>
+References: <CACG401qs4wj83dGC4t++ZWQWCdax=-3KzEoHNNYzjUGBKTkhBQ@mail.gmail.com>
+ <CACG401rYpb5e8m_ou0wAnowPdNRfYNRAHXgRY-BgPzaK9uY3Ow@mail.gmail.com>
+ <CAGm1_ktgUGMkLdi4derUgsgoPOsXnMSf9byecxj2fGUUTyUQrg@mail.gmail.com>
+ <CAGm1_kusxoiZP5h_MrSG8a8zTTkY+_24PkdNNuweaYV2nGSO6Q@mail.gmail.com>
+ <CACG401of=nXOoz-OkQrH50m=bnmXaGa9AyoLjD4BA2P8p1Sfvg@mail.gmail.com>
+Message-ID: <CAGm1_ksbPbGG2uFq8wpWG0LQe8vnSbvrVmoizuLHPNGSL8_6hg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Jan 29, 2018 at 11:19 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
+On Tue, Jan 30, 2018 at 2:31 AM, Jesse Cobra <jessecobra@gmail.com> wrote:
+> For some reason I had to apply the last chunk of the patch myself but this
+> fixed my issue completely.
 >
-> On Fri, 26 Jan 2018 14:32:50 +0100, yegorslists at googlemail.com wrote:
->> From: Yegor Yefremov <yegorslists@googlemail.com>
->>
->> Some packages like python-adafruit-ads1x15 have different values in
->> PyPI metadata and setup.py or tar file name.
->>
->> Use package name (self.pkg_name) derived from tar file name instead
->> of metadata_name taken from JSON.
->>
->> Also output the missing key when trying to setup arguments.
->>
->> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
->
-> Do we really want to do this? Shouldn't we instead ask the upstream
-> maintainers to fix their Python package? I have the feeling that this
-> is a slippery road, and we could start adding lots and lots of weird
-> logic to support packages with wrong metadata.
+> Thank you so much for providing a fix.
 
-That's why I sent it as RFC. I've filed an issue [1], but I doubt it
-will be fixed.
-
-> If it's only fixing one specific package, I'd say the script should
-> instead detect the inconsistency, and bail out.
-
-I'll do it.
-
-[1] https://github.com/adafruit/Adafruit_Python_ADS1x15/issues/9
+Great. Then we are waiting for your patches.
 
 Yegor
+
+> On Jan 26, 2018 5:35 AM, "Yegor Yefremov" <yegorslists@googlemail.com>
+> wrote:
+>>
+>> On Fri, Jan 26, 2018 at 1:48 PM, Yegor Yefremov
+>> <yegorslists@googlemail.com> wrote:
+>> > Hi Jesse,
+>> >
+>> > On Fri, Jan 26, 2018 at 5:21 AM, Jesse Cobra <jessecobra@gmail.com>
+>> > wrote:
+>> >> Made my own package by hand and it worked! Oh well...
+>> >>
+>> >> cat buildroot/package/python-ads1x15/*
+>> >> config BR2_PACKAGE_PYTHON_ADS1X15
+>> >
+>> > This package depends on Adafruit-GPIO, so please add this package
+>> > first and select it via select statement.
+>> >
+>> >>     bool "python-ADS1X15"
+>> >>     help
+>> >>       encoder, decoder, and lint/validator for JSON (JavaScript Object
+>> >>       Notation) compliant with RFC 7159.
+>> >
+>> > Project URL is missing.
+>> >
+>> >>
+>> >> ################################################################################
+>> >> #
+>> >> # python-ads1x15
+>> >> #
+>> >>
+>> >> ################################################################################
+>> >>
+>> >> PYTHON_ADS1X15_VERSION = 1.0.2
+>> >> PYTHON_ADS1X15_SOURCE =
+>> >> Adafruit_ADS1x15-$(PYTHON_ADS1X15_VERSION).tar.gz
+>> >> PYTHON_ADS1X15_SITE =
+>> >>
+>> >> https://pypi.python.org/packages/14/e8/c9935e32f61e6562abea08cb704fcbfbb78b39bd1d20bb9b12eb4c2c820c
+>> >> PYTHON_ADS1X15_SETUP_TYPE = setuptools
+>> >> PYTHON_ADS1X15_LICENSE = GNU Library or Lesser General Public License
+>> >> (LGPL)
+>> >
+>> > please us SPDX short names for the licence type.
+>> >
+>> >> PYTHON_ADS1X15_LICENSE_FILES = LICENSE.txt
+>> >>
+>> >> $(eval $(python-package))
+>> >>
+>> >>
+>> >> On Fri, Jan 26, 2018 at 1:27 AM, Jesse Cobra <jessecobra@gmail.com>
+>> >> wrote:
+>> >>>
+>> >>> building for pi zero w on ubuntu 14.04 32 bit buildroot 2017.02.9
+>> >>>
+>> >>> utils/scanpypi adafruit-ads1x15 -o package
+>> >>> buildroot package name for adafruit-ads1x15: python-adafruit-ads1x15
+>> >>> Package: python-adafruit-ads1x15
+>> >>> Fetching package adafruit-ads1x15
+>> >>> Downloading package adafruit-ads1x15 from
+>> >>>
+>> >>> https://pypi.python.org/packages/14/e8/c9935e32f61e6562abea08cb704fcbfbb78b39bd1d20bb9b12eb4c2c820c/Adafruit_ADS1x15-1.0.2.tar.gz...
+>> >>> Traceback (most recent call last):
+>> >>>   File "utils/scanpypi", line 653, in <module>
+>> >>>     main()
+>> >>>   File "utils/scanpypi", line 604, in main
+>> >>>     package.load_setup()
+>> >>>   File "utils/scanpypi", line 247, in load_setup
+>> >>>     os.chdir(self.tmp_extract)
+>> >>> OSError: [Errno 2] No such file or directory:
+>> >>> '/tmp/scanpypi-wzvU4f/python-adafruit-ads1x15/Adafruit-ADS1x15-1.0.2'
+>> >>>
+>> >>> Anyone point me in the right direction?
+>> >
+>> > The package is very strange. First tar name (Adafruit_ADS1x15) and
+>> > meta name (Adafruit-ADS1x15) are different. Even if I fix this then
+>> > there are issues with setup.py. I'll have to dig deeper.
+>>
+>> Please apply this patch [1] and try to add adafruit-ads1x15 again.
+>>
+>> [1] http://patchwork.ozlabs.org/patch/866316/
+>>
+>> Regards,
+>> Yegor
