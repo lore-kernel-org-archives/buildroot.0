@@ -1,50 +1,54 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 30 Jan 2018 13:13:36 +0100
-Subject: [Buildroot] [git commit branch/2017.02.x] package/intel-microcode:
- bump version to 20171117
-Message-ID: <20180130122144.B88458809F@busybox.osuosl.org>
+Date: Tue, 30 Jan 2018 13:15:38 +0100
+Subject: [Buildroot] [git commit branch/2017.02.x] package/kmsxx: don't
+ install static libraries when BR2_SHARED_STATIC_LIBS=y
+Message-ID: <20180130122144.ED10F8746B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=856379bd1b3461cf6492fcc54f11051c0095d496
+commit: https://git.buildroot.net/buildroot/commit/?id=ca30124eb0bfcc2bebac7378a5fc426eae50b930
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Added license hash.
+The kmsxx build system can only build either shared libraries *or*
+static libraries, not both. Therefore, the build currently fails when
+BR2_SHARED_STATIC_LIBS=y because we try to install the static
+libraries, that haven't been built.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+We fix this by not installing the static libraries when
+BR2_SHARED_STATIC_LIBS=y, making BR2_SHARED_STATIC_LIBS=y essentially
+the same as BR2_SHARED_LIBS=y for this package.
+
+Fixes bug #10331.
+
+Reported-by:  Frederic MATHIEU <frederic.mathieu@dualis.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 6d2d6cbf90c56f28caad8d78bc4ee7b28dc4423b)
+(cherry picked from commit 28d5ca9c96f5144e86fac7ec6485fa5634cd6e97)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/intel-microcode/intel-microcode.hash | 3 ++-
- package/intel-microcode/intel-microcode.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ package/kmsxx/kmsxx.mk | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/package/intel-microcode/intel-microcode.hash b/package/intel-microcode/intel-microcode.hash
-index 5ccfd51466..0b2aa60d96 100644
---- a/package/intel-microcode/intel-microcode.hash
-+++ b/package/intel-microcode/intel-microcode.hash
-@@ -1,2 +1,3 @@
- # Locally computed
--sha256 4fd44769bf52a7ac11e90651a307aa6e56ca6e1a814e50d750ba8207973bee93  microcode-20170707.tgz
-+sha256 93bd1da9fa58ece0016702e657f708b7e496e56da637a3fe9a6d21f1d6f524dc  microcode-20171117.tgz
-+sha256 6f905d812453a4775927b2558d51e5ca25a8e0b9bd06841b1b366c722dc0a64f  license.txt
-diff --git a/package/intel-microcode/intel-microcode.mk b/package/intel-microcode/intel-microcode.mk
-index 7ad3bba3d2..7a8813870e 100644
---- a/package/intel-microcode/intel-microcode.mk
-+++ b/package/intel-microcode/intel-microcode.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+diff --git a/package/kmsxx/kmsxx.mk b/package/kmsxx/kmsxx.mk
+index c06d20be61..4932f47951 100644
+--- a/package/kmsxx/kmsxx.mk
++++ b/package/kmsxx/kmsxx.mk
+@@ -44,12 +44,15 @@ define KMSXX_INSTALL_TARGET_CMDS
+ 	$(KMSXX_INSTALL_TARGET_TESTS)
+ endef
  
--INTEL_MICROCODE_VERSION = 20170707
-+INTEL_MICROCODE_VERSION = 20171117
- INTEL_MICROCODE_SOURCE = microcode-$(INTEL_MICROCODE_VERSION).tgz
--INTEL_MICROCODE_SITE = http://downloadmirror.intel.com/26925/eng
-+INTEL_MICROCODE_SITE = http://downloadmirror.intel.com/27337/eng
- INTEL_MICROCODE_STRIP_COMPONENTS = 0
- INTEL_MICROCODE_LICENSE = PROPRIETARY
- INTEL_MICROCODE_LICENSE_FILES = license.txt
++# kmsxx only builds shared or static libraries, so when
++# BR2_SHARED_STATIC_LIBS=y, we don't have any static library to
++# install
+ define KMSXX_INSTALL_STAGING_CMDS
+ 	$(foreach l,$(KMSXX_LIBS),\
+ 		$(if $(BR2_SHARED_LIBS)$(BR2_SHARED_STATIC_LIBS),
+ 			$(INSTALL) -D -m 0755 $(@D)/lib/lib$(l).so \
+ 				$(STAGING_DIR)/usr/lib/lib$(l).so)
+-		$(if $(BR2_STATIC_LIBS)$(BR2_SHARED_STATIC_LIBS),
++		$(if $(BR2_STATIC_LIBS),
+ 			$(INSTALL) -D -m 0755 $(@D)/lib/lib$(l).a \
+ 				$(STAGING_DIR)/usr/lib/lib$(l).a)
+ 		mkdir -p $(STAGING_DIR)/usr/include/$(l)
