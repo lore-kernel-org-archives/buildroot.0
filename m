@@ -1,43 +1,29 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 30 Jan 2018 13:20:20 +0100
-Subject: [Buildroot] [PATCH] irssi: security bump to version 1.0.6
-In-Reply-To: <20180107210318.15006-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Sun, 7 Jan 2018 22:03:18 +0100")
-References: <20180107210318.15006-1-peter@korsgaard.com>
-Message-ID: <87607j35dn.fsf@dell.be.48ers.dk>
+Date: Tue, 30 Jan 2018 13:20:43 +0100
+Subject: [Buildroot] [git commit] package/avahi: fix typo in
+ avahi_tmpfiles.conf
+In-Reply-To: <20180110195522.5FD2381116@busybox.osuosl.org> (Thomas
+ Petazzoni's message of "Wed, 10 Jan 2018 20:53:58 +0100")
+References: <20180110195522.5FD2381116@busybox.osuosl.org>
+Message-ID: <871si735d0.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- > From the advisory (https://irssi.org/security/irssi_sa_2018_01.txt):
- > Multiple vulnerabilities have been located in Irssi.
+ > commit: https://git.buildroot.net/buildroot/commit/?id=c427ce4d9f54d9b6433969ecb0fc8a4a5a9ba9b5
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > (a) When the channel topic is set without specifying a sender, Irssi
- >     may dereference NULL pointer. Found by Joseph Bisch. (CWE-476)
+ > There is an obvious typo in avahi_tmpfiles.conf: avahi-autoipd is
+ > badly spelled.
 
- >     CVE-2018-5206 was assigned to this issue.
+ > Fixes bug #10641.
 
- > (b) When using incomplete escape codes, Irssi may access data beyond
- >     the end of the string. (CWE-126) Found by Joseph Bisch.
-
- >     CVE-2018-5205 was assigned to this issue.
-
- > (c) A calculation error in the completion code could cause a heap
- >     buffer overflow when completing certain strings. (CWE-126) Found
- >     by Joseph Bisch.
-
- >     CVE-2018-5208 was assigned to this issue.
-
- > (d) When using an incomplete variable argument, Irssi may access data
- >     beyond the end of the string. (CWE-126) Found by Joseph Bisch.
-
- >     CVE-2018-5207 was assigned to this issue.
-
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > Reported-by: Michael Heinemann <posted@heine.so>
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
 Committed to 2017.02.x, thanks.
 
