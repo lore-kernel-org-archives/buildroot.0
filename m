@@ -1,86 +1,158 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 30 Jan 2018 13:01:31 +0100
-Subject: [Buildroot] [git commit branch/2017.02.x] core/infra: fix build on
- toolchain without C++
-Message-ID: <20180130122144.2A6958809F@busybox.osuosl.org>
+Date: Tue, 30 Jan 2018 13:02:17 +0100
+Subject: [Buildroot] [git commit branch/2017.02.x] package/pound: Fix build
+ with openssl 1.0.2
+Message-ID: <20180130122144.3AD1E87FBA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5a7cb6dcf648ab94c7878514c5754e1c8c2bdb93
+commit: https://git.buildroot.net/buildroot/commit/?id=4273c138d1e02c1f878e303c14edc57bfe428046
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Autotools-based packages that do not need C++ but check for it, and use
-libtool, will fail to configure on distros that lack /lib/cpp.
+Fixes
+http://autobuild.buildroot.net/results/5be/5be1082dee8387b1140d802ac3c788896a4bf980/
 
-This is the case for example on Arch Linux, where expat fails to build
-with:
-
-    configure: error: in `/home/dkc/src/buildroot/build/build/expat-2.2.4':
-    configure: error: C++ preprocessor "/lib/cpp" fails sanity check
-
-This is because libtool uses AC_PROC_CXXCPP, which can not be avoided,
-and does require a cpp that passes some "sanity" checks (does not choke
-on valid input, but does choke on invalid input). So we can use neither
-/bin/false nor /bin/true...
-
-We instead need something that can digest some basic C++ preprocessor
-input. We can't use the target preprocessor: that does not work, because
-it obviously has no C++ cupport:
-
-    arm-linux-cpp.br_real: error: conftest.cpp: C++ compiler not
-    installed on this system
-
-We can however consider that the host machine does have a C++ compiler,
-so we use the host' cpp, which is gcc's compiler wrapper that ends up
-calling the host's C++ preprocessor.
-
-That would give us a valid C++ preprocessor when we don't have one, in
-fact. But autotools will then correctly fail anyway, because there is
-indeed no C++ compiler at all, as we can see in this excerpt of a
-configure log from expat:
-
-    checking whether we are using the GNU C++ compiler... no
-    checking whether false accepts -g... no
-    checking dependency style of false... none
-    checking how to run the C++ preprocessor... cpp
-    checking whether the false linker (/home/ymorin/dev/buildroot/O/host/bin/arm-linux-ld) supports shared libraries... yes
-    libtool.m4: error: problem compiling CXX test program
-    checking for false option to produce PIC...  -DPIC
-    checking if false PIC flag  -DPIC works... no
-    checking if false static flag  works... no
-    checking if false supports -c -o file.o... no
-    checking if false supports -c -o file.o... (cached) no
-    checking whether the false linker (/home/ymorin/dev/buildroot/O/host/bin/arm-linux-ld) supports shared libraries... yes
-
-So, using the host's C++ preprocessor (by way of gcc's wrapper) leads to
-a working situation, where the end result is as expected.
-
-Reported-by: Damien Riegel <damien.riegel@savoirfairelinux.com>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Damien Riegel <damien.riegel@savoirfairelinux.com>
-Cc: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit bd39d11d2eaa679f09ab49fd3e4cd5511a168d1c)
+(cherry picked from commit d28fa26f272fddb1573da2d20e52412fd70dff4b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/Makefile.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/pound/0001-fix-openssl-1.0.2.patch | 127 +++++++++++++++++++++++++++++
+ 1 file changed, 127 insertions(+)
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index b32ad8e447..523cc67808 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -388,7 +388,7 @@ DISABLE_NLS :=--disable-nls
- endif
- 
- ifneq ($(BR2_INSTALL_LIBSTDCPP),y)
--TARGET_CONFIGURE_OPTS += CXX=false
-+TARGET_CONFIGURE_OPTS += CXX=false CXXCPP=cpp
- endif
- 
- ifeq ($(BR2_STATIC_LIBS),y)
+diff --git a/package/pound/0001-fix-openssl-1.0.2.patch b/package/pound/0001-fix-openssl-1.0.2.patch
+new file mode 100644
+index 0000000000..b20fdb36f1
+--- /dev/null
++++ b/package/pound/0001-fix-openssl-1.0.2.patch
+@@ -0,0 +1,127 @@
++From eb471de8f26e0367dd08d299d2252fa8b2b958a9 Mon Sep 17 00:00:00 2001
++From: Emilio <emilio.campos@zevenet.com>
++Date: Mon, 17 Jul 2017 09:41:32 +0200
++Subject: [PATCH] [Improvement] Added support to compile pound with openssl
++ 1.0.2
++
++Signed-off-by: Emilio <emilio.campos@zevenet.com>
++
++	new file:   dh2048.h
++	modified:   svc.c
++
++Patch was downloaded from 3rd-party repo:
++https://github.com/zevenet/pound/commit/eb471de8f26e0367dd08d299d2252fa8b2b958a9
++
++This repo was announced on upstream mailinglist:
++http://www.apsis.ch/pound/pound_list/archive/2017/2017-07/1500287626000#1500287626000
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ dh2048.h | 53 +++++++++++++++++++++++++++++++++++++++++++++++++++++
++ svc.c    | 33 +++++++++++++++++++++++++++++++++
++ 2 files changed, 86 insertions(+)
++ create mode 100644 dh2048.h
++
++diff --git a/dh2048.h b/dh2048.h
++new file mode 100644
++index 0000000..79c693c
++--- /dev/null
+++++ b/dh2048.h
++@@ -0,0 +1,53 @@
+++#ifndef HEADER_DH_H
+++# include <openssl/dh.h>
+++#endif
+++
+++DH *get_dh2048()
+++{
+++    static unsigned char dhp_2048[] = {
+++	0xBF, 0x6C, 0xC6, 0xBD, 0xEA, 0x10, 0x84, 0x59, 0x40, 0xC2, 
+++	0xC6, 0xA2, 0x9B, 0x19, 0xD3, 0x2E, 0x2F, 0xAB, 0xE6, 0xE4, 
+++	0x1E, 0x91, 0x0D, 0x59, 0xDC, 0x96, 0x3F, 0x6E, 0x65, 0x38, 
+++	0xB9, 0xBE, 0xBB, 0x8F, 0xDF, 0x73, 0xAC, 0xAC, 0xB3, 0x2F, 
+++	0xA7, 0x02, 0x0B, 0x87, 0xB7, 0x3F, 0x3A, 0x42, 0x8A, 0x94, 
+++	0xDD, 0xEC, 0x33, 0xA4, 0x25, 0xB1, 0xBF, 0x84, 0x91, 0x87, 
+++	0xD8, 0x1C, 0x42, 0xB9, 0x8E, 0x00, 0x1F, 0x49, 0xED, 0x57, 
+++	0xA4, 0x48, 0xB0, 0xCC, 0xD8, 0xB8, 0x83, 0xCA, 0x3E, 0xDF, 
+++	0xA2, 0xF2, 0x07, 0x71, 0x71, 0x18, 0x1F, 0x50, 0x45, 0x3A, 
+++	0x66, 0x04, 0x7F, 0x15, 0xB2, 0xA8, 0x02, 0x77, 0xCE, 0xC6, 
+++	0xF9, 0x7C, 0x63, 0xE4, 0x52, 0x41, 0xFA, 0x62, 0xB9, 0x0D, 
+++	0xDC, 0x08, 0x62, 0xEC, 0x00, 0xAB, 0xB0, 0xF7, 0x79, 0x48, 
+++	0x75, 0x22, 0x85, 0xCC, 0x67, 0x3C, 0xEA, 0x09, 0x32, 0xAC, 
+++	0x30, 0xED, 0x1E, 0x67, 0xDC, 0x74, 0xF8, 0xD9, 0xC3, 0xD0, 
+++	0xA0, 0x60, 0x4D, 0xCE, 0x52, 0xBC, 0xA3, 0xE5, 0x18, 0x7B, 
+++	0x0B, 0xC8, 0xCE, 0x70, 0xA2, 0xC8, 0x21, 0xCA, 0xCE, 0xA5, 
+++	0xD4, 0xCB, 0x85, 0xFC, 0xC7, 0x07, 0x5C, 0x05, 0x87, 0xFC, 
+++	0x2F, 0x67, 0x4D, 0x2D, 0x4F, 0xA4, 0xEE, 0x63, 0x98, 0x49, 
+++	0xE4, 0x2E, 0xD7, 0x3F, 0x7D, 0x69, 0x68, 0x0A, 0xA2, 0x3E, 
+++	0x5A, 0x04, 0xD4, 0xDD, 0xBB, 0xC7, 0xB4, 0x34, 0xB7, 0x21, 
+++	0xD3, 0xAC, 0x99, 0xD7, 0x87, 0x45, 0x5E, 0x18, 0x68, 0x16, 
+++	0x3A, 0xAF, 0xE2, 0x04, 0x57, 0xB8, 0x6A, 0xB8, 0x2F, 0x75, 
+++	0xD5, 0x79, 0x96, 0x60, 0x8D, 0xD1, 0xCC, 0xD1, 0x33, 0x85, 
+++	0x53, 0x88, 0x87, 0x34, 0xA6, 0x4B, 0x49, 0x24, 0x53, 0xD6, 
+++	0xF1, 0x1E, 0x4E, 0x98, 0x4D, 0x6B, 0x44, 0x31, 0x94, 0xFF, 
+++	0x46, 0xC2, 0x38, 0x2E, 0xEA, 0xBB
+++    };
+++    static unsigned char dhg_2048[] = {
+++	0x05
+++    };
+++    DH *dh = DH_new();
+++    BIGNUM *dhp_bn, *dhg_bn;
+++
+++    if (dh == NULL)
+++        return NULL;
+++    dhp_bn = BN_bin2bn(dhp_2048, sizeof (dhp_2048), NULL);
+++    dhg_bn = BN_bin2bn(dhg_2048, sizeof (dhg_2048), NULL);
+++    if (dhp_bn == NULL || dhg_bn == NULL
+++            || !DH_set0_pqg(dh, dhp_bn, NULL, dhg_bn)) {
+++        DH_free(dh);
+++        BN_free(dhp_bn);
+++        BN_free(dhg_bn);
+++        return NULL;
+++    }
+++    return dh;
+++}
++diff --git a/svc.c b/svc.c
++index 1341397..758dfbd 100644
++--- a/svc.c
+++++ b/svc.c
++@@ -1512,6 +1512,39 @@ do_RSAgen(void)
++     return;
++ }
++ 
+++
+++#if OPENSSL_VERSION_NUMBER < 0x10100000
+++static inline int DH_set0_pqg(DH *dh, BIGNUM *p, BIGNUM *q, BIGNUM *g)
+++{
+++	/* If the fields p and g in d are NULL, the corresponding input
+++	 * parameters MUST be non-NULL.  q may remain NULL.
+++	 */
+++	if ((dh->p == NULL && p == NULL)
+++	    || (dh->g == NULL && g == NULL))
+++		return 0;
+++
+++	if (p != NULL) {
+++		BN_free(dh->p);
+++		dh->p = p;
+++	}
+++	if (q != NULL) {
+++		BN_free(dh->q);
+++		dh->q = q;
+++	}
+++	if (g != NULL) {
+++		BN_free(dh->g);
+++		dh->g = g;
+++	}
+++
+++	if (q != NULL) {
+++		dh->length = BN_num_bits(q);
+++	}
+++
+++	return 1;
+++}
+++#endif
+++
+++
++ #include    "dh512.h"
++ 
++ #if DH_LEN == 1024
