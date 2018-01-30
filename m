@@ -1,34 +1,62 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 30 Jan 2018 23:02:52 +0100
-Subject: [Buildroot] [PATCH 1/2] bootstrap: bump version to 4.0.0
-In-Reply-To: <20180124220357.2861-1-Adamduskett@outlook.com>
-References: <20180124220357.2861-1-Adamduskett@outlook.com>
-Message-ID: <20180130230252.56edae11@windsurf.home>
+From: Petr Kulhavy <brain@jikos.cz>
+Date: Tue, 30 Jan 2018 23:14:46 +0100
+Subject: [Buildroot] [PATCH 3/3] package: linuxptp: workaround for
+ system crash if PHY is not initialized
+In-Reply-To: <20180130230147.46cc03ec@windsurf.home>
+References: <1517155221-19399-1-git-send-email-brain@jikos.cz>
+ <1517155221-19399-3-git-send-email-brain@jikos.cz>
+ <20180130230147.46cc03ec@windsurf.home>
+Message-ID: <a7ffc70b-d812-17af-a8cc-f03d368e3b99@jikos.cz>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Thomas,
 
-On Wed, 24 Jan 2018 17:03:56 -0500, Adam Duskett wrote:
-> other changes:
->   - Add a license file to bootstrap.mk
->   - Add a hash for the license file to bootstrap.hash
->   - Remove copying bootstrap-theme.min.css as it's no longer included.
->   - Remove copying fonts folder as it's no longer included.
-> 
-> Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
-> ---
->  package/bootstrap/bootstrap.hash | 3 ++-
->  package/bootstrap/bootstrap.mk   | 8 ++------
->  2 files changed, 4 insertions(+), 7 deletions(-)
+most likely I will post another patch for this as I have modified the 
+service file even further.
+In the newer version both come after network-online.target because I 
+noticed ptp4l fails to execute some ioctl if started too early. This 
+causes that it doesn't start syncing.
 
-Both applied. Thanks!
+I'm not very happy with the network-online.target either, because it 
+literally waits for the network to come up. Which makes some sense - PTP 
+needs a peer - however systemd documentation indicates this is not the 
+most reliable way to solve missing network and recommends to write 
+robust programs which can wait for network.
+And in the end neither ptp4l or phc2sys need the network to be up. They 
+both just need the kernel to finish the initialization (which is not the 
+same as network up). Unfortunately systemd doesn't provide such target :(
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+I'm also not an expert in systemd. These changes are base on my 
+self-education. So a real systemd expert would be appreciated.
+
+Petr
+
+On 30/01/18 23:01, Thomas Petazzoni wrote:
+> Hello,
+>
+> On Sun, 28 Jan 2018 17:00:21 +0100, Petr Kulhavy wrote:
+>> On some systems (tested on i.MX6 with Freescale kernel 4.1) the system freezes
+>> if phc2sys starts before the PHY is initialized (phc2sys opens /dev/ptp0).
+>>
+>> Unfortunately systemd network.target does not guarantee the PHY to be initialized.
+>> This workaround pulls in the network-online.target dependency, which postpones
+>> the phc2sys start after the link is up.
+>>
+>> Signed-off-by: Petr Kulhavy <brain@jikos.cz>
+> Do we really want to workaround this, which appears to be a kernel
+> problem?
+>
+>> +# workaround for crashing Freescale PHY if initialized after /dev/ptp0 is open
+>> +After=network-online.target
+>> +Wants=network-online.target
+> Does it make sense to have After and Wants set to the same value ? Are
+> both really needed ?
+>
+> (Again: I don't know much about systemd, so don't hesitate to teach me
+> even the basics!)
+>
+> Thomas
