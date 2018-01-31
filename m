@@ -1,85 +1,67 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 31 Jan 2018 12:03:33 +0100
-Subject: [Buildroot] [git commit branch/2017.11.x] openocd: add security fix
- for CVE-2018-5704
-Message-ID: <20180131123622.DCC298568A@busybox.osuosl.org>
+Date: Wed, 31 Jan 2018 12:07:13 +0100
+Subject: [Buildroot] [git commit branch/2017.11.x] package/berkeleydb: add
+ security fix for CVE-2017-10140
+Message-ID: <20180131123623.2DA418568A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a01d75d125644ac68c99dc8469f5f47b250c8f24
+commit: https://git.buildroot.net/buildroot/commit/?id=77d0d20796f52cfb3492df621a09d8ff0a01d019
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.11.x
 
-Open On-Chip Debugger (OpenOCD) 0.10.0 does not block attempts to use HTTP
-POST for sending data to 127.0.0.1 port 4444, which allows remote attackers
-to conduct cross-protocol scripting attacks, and consequently execute
-arbitrary commands, via a crafted web site.
+Fixes CVE-2017-10140: Berkeley DB reads DB_CONFIG from cwd
 
 For more details, see:
-https://sourceforge.net/p/openocd/mailman/message/36188041/
+https://security-tracker.debian.org/tracker/CVE-2017-10140
 
+And add license hash while we are at it.
+
+[Peter: extend commit message]
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 8fb8dddbf487706891040659959352af8c8d28d4)
+
+(cherry picked from commit 0b368023f7e166648f136244960608a0e009332d)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...04-Prevent-some-forms-of-Cross-Protocol-S.patch | 50 ++++++++++++++++++++++
- 1 file changed, 50 insertions(+)
+ package/berkeleydb/0001-cwd-db_config.patch | 21 +++++++++++++++++++++
+ package/berkeleydb/berkeleydb.hash          |  1 +
+ 2 files changed, 22 insertions(+)
 
-diff --git a/package/openocd/0003-CVE-2018-5704-Prevent-some-forms-of-Cross-Protocol-S.patch b/package/openocd/0003-CVE-2018-5704-Prevent-some-forms-of-Cross-Protocol-S.patch
+diff --git a/package/berkeleydb/0001-cwd-db_config.patch b/package/berkeleydb/0001-cwd-db_config.patch
 new file mode 100644
-index 0000000000..ba19bf5735
+index 0000000000..08ce5a3931
 --- /dev/null
-+++ b/package/openocd/0003-CVE-2018-5704-Prevent-some-forms-of-Cross-Protocol-S.patch
-@@ -0,0 +1,50 @@
-+From 3a223ca3ebc7ac24d7726a0cd58e5695bc813657 Mon Sep 17 00:00:00 2001
-+From: Andreas Fritiofson <andreas.fritiofson@gmail.com>
-+Date: Sat, 13 Jan 2018 21:00:47 +0100
-+Subject: [PATCH] CVE-2018-5704: Prevent some forms of Cross Protocol Scripting
-+ attacks
++++ b/package/berkeleydb/0001-cwd-db_config.patch
+@@ -0,0 +1,21 @@
++Do not access DB_CONFIG when db_home is not set
 +
-+OpenOCD can be targeted by a Cross Protocol Scripting attack from
-+a web browser running malicious code, such as the following PoC:
++Fixes CVE-2017-10140:
++https://bugzilla.redhat.com/show_bug.cgi?id=1464032#c9
 +
-+var x = new XMLHttpRequest();
-+x.open("POST", "http://127.0.0.1:4444", true);
-+x.send("exec xcalc\r\n");
++Downloaded from
++http://pkgs.fedoraproject.org/cgit/rpms/libdb.git/commit/?id=8047fa8580659fcae740c25e91b490539b8453eb
 +
-+This mitigation should provide some protection from browser-based
-+attacks and is based on the corresponding fix in Redis:
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 +
-+https://github.com/antirez/redis/blob/8075572207b5aebb1385c4f233f5302544439325/src/networking.c#L1758
-+
-+
-+Upstream-status: Under review: http://openocd.zylin.com/#/c/4335/
-+Change-Id: Ia96ebe19b74b5805dc228bf7364c7971a90a4581
-+Signed-off-by: Andreas Fritiofson <andreas.fritiofson@gmail.com>
-+Reported-by: Josef Gajdusek <atx@atx.name>
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ src/server/startup.tcl | 11 +++++++++++
-+ 1 file changed, 11 insertions(+)
-+
-+diff --git a/src/server/startup.tcl b/src/server/startup.tcl
-+index 64ace407..dd1b31e4 100644
-+--- a/src/server/startup.tcl
-++++ b/src/server/startup.tcl
-+@@ -8,3 +8,14 @@ proc ocd_gdb_restart {target_id} {
-+ 	# one target
-+ 	reset halt
-+ }
-++
-++proc prevent_cps {} {
-++	echo "Possible SECURITY ATTACK detected."
-++	echo "It looks like somebody is sending POST or Host: commands to OpenOCD."
-++	echo "This is likely due to an attacker attempting to use Cross Protocol Scripting"
-++	echo "to compromise your OpenOCD instance. Connection aborted."
-++	exit
-++}
-++
-++proc POST {args} { prevent_cps }
-++proc Host: {args} { prevent_cps }
-+-- 
-+2.11.0
-+
++--- db-5.3.28/src/env/env_open.c.old	2017-06-26 10:32:11.011419981 +0200
+++++ db-5.3.28/src/env/env_open.c	2017-06-26 10:32:46.893721233 +0200
++@@ -473,7 +473,7 @@
++ 	env->db_mode = mode == 0 ? DB_MODE_660 : mode;
++ 
++ 	/* Read the DB_CONFIG file. */
++-	if ((ret = __env_read_db_config(env)) != 0)
+++	if (env->db_home != NULL && (ret = __env_read_db_config(env)) != 0)
++ 		return (ret);
++ 
++ 	/*
+diff --git a/package/berkeleydb/berkeleydb.hash b/package/berkeleydb/berkeleydb.hash
+index e47c578cbe..7529329748 100644
+--- a/package/berkeleydb/berkeleydb.hash
++++ b/package/berkeleydb/berkeleydb.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+ sha256	76a25560d9e52a198d37a31440fd07632b5f1f8f9f2b6d5438f4bc3e7c9013ef  db-5.3.28.NC.tar.gz
++sha256	b78815181a53241f9347c6b47d1031fd669946f863e1edc807a291354cec024b  LICENSE
