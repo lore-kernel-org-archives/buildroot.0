@@ -1,44 +1,74 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 31 Jan 2018 13:08:01 +0100
-Subject: [Buildroot] [git commit branch/2017.02.x] package/dovecot: bump
- version to 2.30.1
-Message-ID: <20180131123647.4A65387BC4@busybox.osuosl.org>
+Date: Wed, 31 Jan 2018 12:55:54 +0100
+Subject: [Buildroot] [git commit branch/2017.02.x] util-linux: disable
+ useless programs in the host package
+Message-ID: <20180131123645.7FC2188170@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fd5d1db6608b8b92ff47d81eae6c10673a450703
+commit: https://git.buildroot.net/buildroot/commit/?id=59967b493387f6986e2362b5a856a186411194f8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 083e9c64f052a2dc712bc9d3834a9b9b8e8671c1)
+Disable all programs that depend on ncurses, as well as utilities that
+are useless on the host: agetty, chfn-chsh, chmem, login, lslogins,
+mesg, more, newgrp, nologin, nsenter, pg, rfkill, schedutils, setpriv,
+setterm, su, sulogin, tunelp, ul, unshare, uuidd, vipw, wall, wdctl,
+write, zramctl.
+
+Also add dependency on host-zlib if host cramfs utils are to be built.
+
+Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 67170b76af912bebcdab3aa88a4ac9e5b35d6273)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/dovecot/dovecot.hash | 2 +-
- package/dovecot/dovecot.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/util-linux/util-linux.mk | 33 +++++++++++++++++++++++++++++++--
+ 1 file changed, 31 insertions(+), 2 deletions(-)
 
-diff --git a/package/dovecot/dovecot.hash b/package/dovecot/dovecot.hash
-index 8c6e14ea38..d53be6c0f2 100644
---- a/package/dovecot/dovecot.hash
-+++ b/package/dovecot/dovecot.hash
-@@ -1,2 +1,2 @@
- # Locally computed after checking signature
--sha256 126b07cbf4c313e8fc6df273282f60710b453a7a678f502fd45c2fa7192127f3  dovecot-2.2.30.tar.gz
-+sha256 9049db49f7ccd76850a17872896dfb8778676bab38454575f59bb39f16b083a4  dovecot-2.2.30.1.tar.gz
-diff --git a/package/dovecot/dovecot.mk b/package/dovecot/dovecot.mk
-index 876384f43f..98a400b04c 100644
---- a/package/dovecot/dovecot.mk
-+++ b/package/dovecot/dovecot.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+index 05e1398937..d7358fe581 100644
+--- a/package/util-linux/util-linux.mk
++++ b/package/util-linux/util-linux.mk
+@@ -167,8 +167,37 @@ HOST_UTIL_LINUX_CONF_OPTS += \
  
- DOVECOT_VERSION_MAJOR = 2.2
--DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).30
-+DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).30.1
- DOVECOT_SITE = http://www.dovecot.org/releases/$(DOVECOT_VERSION_MAJOR)
- DOVECOT_INSTALL_STAGING = YES
- DOVECOT_LICENSE = LGPLv2.1
+ ifeq ($(BR2_PACKAGE_HOST_UTIL_LINUX),y)
+ HOST_UTIL_LINUX_CONF_OPTS += --disable-makeinstall-chown
+-# disable more command because of ncurses dependency
+-HOST_UTIL_LINUX_CONF_OPTS += --disable-more
++# disable commands that have ncurses dependency, as well as
++# other ones that are useless on the host
++HOST_UTIL_LINUX_CONF_OPTS += \
++	--disable-agetty \
++	--disable-chfn-chsh \
++	--disable-chmem \
++	--disable-login \
++	--disable-lslogins \
++	--disable-mesg \
++	--disable-more \
++	--disable-newgrp \
++	--disable-nologin \
++	--disable-nsenter \
++	--disable-pg \
++	--disable-rfkill \
++	--disable-schedutils \
++	--disable-setpriv \
++	--disable-setterm \
++	--disable-su \
++	--disable-sulogin \
++	--disable-tunelp \
++	--disable-ul \
++	--disable-unshare \
++	--disable-uuidd \
++	--disable-vipw \
++	--disable-wall \
++	--disable-wdctl \
++	--disable-write \
++	--disable-zramctl
++# Used by cramfs utils
++HOST_UTIL_LINUX_DEPENDENCIES += host-zlib
+ else
+ HOST_UTIL_LINUX_CONF_OPTS += --disable-all-programs
+ endif
