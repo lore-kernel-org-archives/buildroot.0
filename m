@@ -1,69 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 31 Jan 2018 12:04:16 +0100
-Subject: [Buildroot] [git commit branch/2017.11.x] dovecot: add upstream
- security fix for CVE-2017-15132
-Message-ID: <20180131123623.15E378568A@busybox.osuosl.org>
+Date: Wed, 31 Jan 2018 12:12:14 +0100
+Subject: [Buildroot] [git commit branch/2017.11.x] linux: bump Linux CIP to
+ v4.4.112-cip18
+Message-ID: <20180131123623.695CF88163@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8c24f6556f900bc5b113657124b17db2eddd728f
+commit: https://git.buildroot.net/buildroot/commit/?id=320552fbd9e8729f70338d54817138615261710e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.11.x
 
-A flaw was found in dovecot 2.0 up to 2.2.33 and 2.3.0.  An abort of SASL
-authentication results in a memory leak in dovecot's auth client used by
-login processes.  The leak has impact in high performance configuration
-where same login processes are reused and can cause the process to crash due
-to memory exhaustion.
+This patch bump the Linux CIP kernel to version v4.4.112-cip18
 
-For more details, see:
-http://www.openwall.com/lists/oss-security/2018/01/25/4
-
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 28adb37be48566ede823969c284c1490b456530a)
+(cherry picked from commit a2f8eafdfabb1073a89327ebd190a9383adc539e)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...x-memory-leak-in-auth_client_request_abor.patch | 33 ++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
+ linux/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/dovecot/0002-lib-auth-Fix-memory-leak-in-auth_client_request_abor.patch b/package/dovecot/0002-lib-auth-Fix-memory-leak-in-auth_client_request_abor.patch
-new file mode 100644
-index 0000000000..babccd3acf
---- /dev/null
-+++ b/package/dovecot/0002-lib-auth-Fix-memory-leak-in-auth_client_request_abor.patch
-@@ -0,0 +1,33 @@
-+From 1a29ed2f96da1be22fa5a4d96c7583aa81b8b060 Mon Sep 17 00:00:00 2001
-+From: Timo Sirainen <timo.sirainen@dovecot.fi>
-+Date: Mon, 18 Dec 2017 16:50:51 +0200
-+Subject: [PATCH] lib-auth: Fix memory leak in auth_client_request_abort()
-+
-+This caused memory leaks when authentication was aborted. For example
-+with IMAP:
-+
-+a AUTHENTICATE PLAIN
-+*
-+
-+Broken by 9137c55411aa39d41c1e705ddc34d5bd26c65021
-+
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ src/lib-auth/auth-client-request.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/src/lib-auth/auth-client-request.c b/src/lib-auth/auth-client-request.c
-+index 480fb42b3..046f7c307 100644
-+--- a/src/lib-auth/auth-client-request.c
-++++ b/src/lib-auth/auth-client-request.c
-+@@ -186,6 +186,7 @@ void auth_client_request_abort(struct auth_client_request **_request)
-+ 
-+ 	auth_client_send_cancel(request->conn->client, request->id);
-+ 	call_callback(request, AUTH_REQUEST_STATUS_ABORT, NULL, NULL);
-++	pool_unref(&request->pool);
-+ }
-+ 
-+ unsigned int auth_client_request_get_id(struct auth_client_request *request)
-+-- 
-+2.11.0
-+
+diff --git a/linux/Config.in b/linux/Config.in
+index 33c3502590..c54e66ec46 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -29,7 +29,7 @@ config BR2_LINUX_KERNEL_LATEST_VERSION
+ 	bool "Latest version (4.13)"
+ 
+ config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+-	bool "Latest CIP SLTS version (v4.4.105-cip15)"
++	bool "Latest CIP SLTS version (v4.4.112-cip18)"
+ 	help
+ 	  CIP launched in the spring of 2016 to address the needs of
+ 	  organizations in industries such as power generation and
+@@ -117,7 +117,7 @@ endif
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+ 	default "4.13.16" if BR2_LINUX_KERNEL_LATEST_VERSION
+-	default "v4.4.105-cip15" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
++	default "v4.4.112-cip18" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
