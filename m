@@ -1,50 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 31 Jan 2018 12:02:42 +0100
-Subject: [Buildroot] [git commit branch/2017.11.x] package/transmission:
- security bump version to 2.93
-Message-ID: <20180131123622.ADA1D8568A@busybox.osuosl.org>
+Date: Wed, 31 Jan 2018 12:01:20 +0100
+Subject: [Buildroot] [git commit branch/2017.11.x] ccache: bump to version
+ 3.3.5
+Message-ID: <20180131123622.7F2C88568A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2faa1083ce588b7cb7f2c7db57cead882f72c4e6
+commit: https://git.buildroot.net/buildroot/commit/?id=d44a8cf5bc555deaa2cbc0864b38a6b5a0d7f60a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.11.x
 
-Fixes CVE-2018-5702:
-https://github.com/transmission/transmission/pull/468
+(Likely) fixes #10536
 
-Added license hash.
+https://bugs.buildroot.org/show_bug.cgi?id=10536
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Mark Hirota <markhirota@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 6e43a52aa8a971a4e328335ce993f6868b4c51a4)
+(cherry picked from commit 01955b5b6ed6999295d108db789d44c6fc370efc)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/transmission/transmission.hash | 3 ++-
- package/transmission/transmission.mk   | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ package/ccache/ccache.hash | 1 +
+ package/ccache/ccache.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/transmission/transmission.hash b/package/transmission/transmission.hash
-index 849a722d2b..4c1c3f9a3a 100644
---- a/package/transmission/transmission.hash
-+++ b/package/transmission/transmission.hash
+diff --git a/package/ccache/ccache.hash b/package/ccache/ccache.hash
+index 5354572638..c22394b13b 100644
+--- a/package/ccache/ccache.hash
++++ b/package/ccache/ccache.hash
 @@ -1,2 +1,3 @@
- # Locally calculated
--sha256	3a8d045c306ad9acb7bf81126939b9594553a388482efa0ec1bfb67b22acd35f	transmission-2.92.tar.xz
-+sha256 8815920e0a4499bcdadbbe89a4115092dab42ce5199f71ff9a926cfd12b9b90b  transmission-2.93.tar.xz
-+sha256 20801783bf59e27d03ed6aab625b32a34e221ae95bf801db87827c8023398495  COPYING
-diff --git a/package/transmission/transmission.mk b/package/transmission/transmission.mk
-index 7f4675302e..4e78604fdb 100644
---- a/package/transmission/transmission.mk
-+++ b/package/transmission/transmission.mk
+ # Verified key https://samba.org/ftp/ccache/ccache-3.3.4.tar.xz.asc - sha256 computed locally
+ sha256  24f15bf389e38c41548c9c259532187774ec0cb9686c3497bbb75504c8dc404f  ccache-3.3.4.tar.xz
++sha256  190576a6e938760ec8113523e6fd380141117303e90766cc4802e770422b30c6  ccache-3.3.5.tar.xz
+diff --git a/package/ccache/ccache.mk b/package/ccache/ccache.mk
+index afbec44fac..552a611f42 100644
+--- a/package/ccache/ccache.mk
++++ b/package/ccache/ccache.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--TRANSMISSION_VERSION = 2.92
-+TRANSMISSION_VERSION = 2.93
- TRANSMISSION_SITE = https://github.com/transmission/transmission-releases/raw/master
- TRANSMISSION_SOURCE = transmission-$(TRANSMISSION_VERSION).tar.xz
- TRANSMISSION_DEPENDENCIES = \
+-CCACHE_VERSION = 3.3.4
++CCACHE_VERSION = 3.3.5
+ CCACHE_SITE = https://www.samba.org/ftp/ccache
+ CCACHE_SOURCE = ccache-$(CCACHE_VERSION).tar.xz
+ CCACHE_LICENSE = GPL-3.0+, others
