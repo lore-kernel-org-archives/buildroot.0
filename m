@@ -1,47 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 31 Jan 2018 12:14:49 +0100
-Subject: [Buildroot] [git commit branch/2017.02.x] squid: bump version to
- 3.5.25
-Message-ID: <20180131123645.0A53588170@busybox.osuosl.org>
+Date: Wed, 31 Jan 2018 12:58:32 +0100
+Subject: [Buildroot] [git commit branch/2017.02.x] linux-headers: bump 4.{4,
+ 9, 14}.x series
+Message-ID: <20180131123645.B4FC688170@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ceb374ae17614e17b0785e88b3e5d6bc2cdf6176
+commit: https://git.buildroot.net/buildroot/commit/?id=7204c26c1f0a5aac69807d2efbb2cbce239ab1cf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 330ad683c6b0c486473bb497d7639a71d5da67c4)
+[Peter: drop 4.14.x bump]
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 770c19df08d56216f194367084d9e7254bd9a037)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/squid/squid.hash | 6 +++---
- package/squid/squid.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/linux-headers/Config.in.host | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/squid/squid.hash b/package/squid/squid.hash
-index d9b7924de1..95762bc8bd 100644
---- a/package/squid/squid.hash
-+++ b/package/squid/squid.hash
-@@ -1,3 +1,3 @@
--# From http://www.squid-cache.org/Versions/v3/3.5/squid-3.5.24.tar.xz.asc
--md5 3fae511e16b6379b61c011914673973d  squid-3.5.24.tar.xz
--sha1 f203637783301a4b86e554b6dd226de721762ae5  squid-3.5.24.tar.xz
-+# From http://www.squid-cache.org/Versions/v3/3.5/squid-3.5.25.tar.xz.asc
-+md5 6b7dd7b42b1adacf08f3155640ea2782  squid-3.5.25.tar.xz
-+sha1 63ea00cb918e3106fd91b286ec907f1681e0f0e8  squid-3.5.25.tar.xz
-diff --git a/package/squid/squid.mk b/package/squid/squid.mk
-index 9abf3cd8e6..09d9bca139 100644
---- a/package/squid/squid.mk
-+++ b/package/squid/squid.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- SQUID_VERSION_MAJOR = 3.5
--SQUID_VERSION = $(SQUID_VERSION_MAJOR).24
-+SQUID_VERSION = $(SQUID_VERSION_MAJOR).25
- SQUID_SOURCE = squid-$(SQUID_VERSION).tar.xz
- SQUID_SITE = http://www.squid-cache.org/Versions/v3/$(SQUID_VERSION_MAJOR)
- SQUID_LICENSE = GPLv2+
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 08beeb05bf..e2e71c34b4 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -222,7 +222,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
+ 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
+ 	default "4.1.49"	if BR2_KERNEL_HEADERS_4_1
+-	default "4.4.112"	if BR2_KERNEL_HEADERS_4_4
++	default "4.4.113"	if BR2_KERNEL_HEADERS_4_4
+ 	default "4.8.17"	if BR2_KERNEL_HEADERS_4_8
+-	default "4.9.77"	if BR2_KERNEL_HEADERS_4_9
++	default "4.9.78"	if BR2_KERNEL_HEADERS_4_9
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
