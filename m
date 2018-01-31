@@ -1,51 +1,74 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 31 Jan 2018 11:51:50 +0100
-Subject: [Buildroot] [git commit branch/2017.11.x] webkitgtk: Add missing
- libtasn1 dependency
-Message-ID: <20180131123621.D8A8B880C0@busybox.osuosl.org>
+Date: Wed, 31 Jan 2018 11:52:12 +0100
+Subject: [Buildroot] [git commit branch/2017.11.x] util-linux: disable
+ useless programs in the host package
+Message-ID: <20180131123622.1AEBB880C0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=160be50110f95e6fdad6b81e57e5c0881bcd3672
+commit: https://git.buildroot.net/buildroot/commit/?id=c4ccf7619536cf323c61121160a8ca74d259e1c6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.11.x
 
-Nowadays libtasn1 is always required and if not present the CMake
-configuration step would fail.
+Disable all programs that depend on ncurses, as well as utilities that
+are useless on the host: agetty, chfn-chsh, chmem, login, lslogins,
+mesg, more, newgrp, nologin, nsenter, pg, rfkill, schedutils, setpriv,
+setterm, su, sulogin, tunelp, ul, unshare, uuidd, vipw, wall, wdctl,
+write, zramctl.
 
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Also add dependency on host-zlib if host cramfs utils are to be built.
+
+Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit d052ed473dfbee1eabe9eca1185cea5d3e743b9f)
+(cherry picked from commit 67170b76af912bebcdab3aa88a4ac9e5b35d6273)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/webkitgtk/Config.in    | 1 +
- package/webkitgtk/webkitgtk.mk | 2 +-
- 2 files changed, 2 insertions(+), 1 deletion(-)
+ package/util-linux/util-linux.mk | 33 +++++++++++++++++++++++++++++++--
+ 1 file changed, 31 insertions(+), 2 deletions(-)
 
-diff --git a/package/webkitgtk/Config.in b/package/webkitgtk/Config.in
-index 65154db3fa..34ac6dbf95 100644
---- a/package/webkitgtk/Config.in
-+++ b/package/webkitgtk/Config.in
-@@ -36,6 +36,7 @@ config BR2_PACKAGE_WEBKITGTK
- 	select BR2_PACKAGE_LIBGCRYPT
- 	select BR2_PACKAGE_LIBSECRET
- 	select BR2_PACKAGE_LIBSOUP
-+	select BR2_PACKAGE_LIBTASN1
- 	select BR2_PACKAGE_LIBXML2
- 	select BR2_PACKAGE_LIBXSLT
- 	select BR2_PACKAGE_SQLITE
-diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-index ebe682ebb6..7b364cf467 100644
---- a/package/webkitgtk/webkitgtk.mk
-+++ b/package/webkitgtk/webkitgtk.mk
-@@ -14,7 +14,7 @@ WEBKITGTK_LICENSE_FILES = \
- 	Source/WebCore/LICENSE-LGPL-2.1
- WEBKITGTK_DEPENDENCIES = host-ruby host-flex host-bison host-gperf \
- 	enchant harfbuzz icu jpeg libgcrypt libgtk3 libsecret libsoup \
--	libxml2 libxslt sqlite webp
-+	libtasn1 libxml2 libxslt sqlite webp
- WEBKITGTK_CONF_OPTS = \
- 	-DENABLE_API_TESTS=OFF \
- 	-DENABLE_GEOLOCATION=OFF \
+diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+index 8464288600..5a021bea67 100644
+--- a/package/util-linux/util-linux.mk
++++ b/package/util-linux/util-linux.mk
+@@ -164,8 +164,37 @@ HOST_UTIL_LINUX_CONF_OPTS += \
+ 
+ ifeq ($(BR2_PACKAGE_HOST_UTIL_LINUX),y)
+ HOST_UTIL_LINUX_CONF_OPTS += --disable-makeinstall-chown
+-# disable more command because of ncurses dependency
+-HOST_UTIL_LINUX_CONF_OPTS += --disable-more
++# disable commands that have ncurses dependency, as well as
++# other ones that are useless on the host
++HOST_UTIL_LINUX_CONF_OPTS += \
++	--disable-agetty \
++	--disable-chfn-chsh \
++	--disable-chmem \
++	--disable-login \
++	--disable-lslogins \
++	--disable-mesg \
++	--disable-more \
++	--disable-newgrp \
++	--disable-nologin \
++	--disable-nsenter \
++	--disable-pg \
++	--disable-rfkill \
++	--disable-schedutils \
++	--disable-setpriv \
++	--disable-setterm \
++	--disable-su \
++	--disable-sulogin \
++	--disable-tunelp \
++	--disable-ul \
++	--disable-unshare \
++	--disable-uuidd \
++	--disable-vipw \
++	--disable-wall \
++	--disable-wdctl \
++	--disable-write \
++	--disable-zramctl
++# Used by cramfs utils
++HOST_UTIL_LINUX_DEPENDENCIES += host-zlib
+ else
+ HOST_UTIL_LINUX_CONF_OPTS += --disable-all-programs
+ endif
