@@ -1,40 +1,34 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 31 Jan 2018 14:24:32 +0000
-Subject: [Buildroot] [Bug 10721] New: libpng package unaccessible
-Message-ID: <bug-10721-163@https.bugs.busybox.net/>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 31 Jan 2018 16:56:28 +0200
+Subject: [Buildroot] [PATCH] dnsmask: update homepage link
+Message-ID: <a66c32dbd41d94667d7c48626363604ed4817020.1517410588.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=10721
+The doc.html seems like a better choice for a homepage link than the
+list of files in the containing directory listing.
 
-            Bug ID: 10721
-           Summary: libpng package unaccessible
-           Product: buildroot
-           Version: 2017.02.7
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: jpcartal at free.fr
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+Cc: Matt Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/dnsmasq/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-libpng package v1.6.28 is not accessible anymore on buildroot site:
-
---2018-01-31 15:11:06--  http://sources.buildroot.net/libpng-1.6.28.tar.xz
-R?solution de sources.buildroot.net (sources.buildroot.net)? 104.27.167.48,
-104.27.166.48, 2400:cb00:2048:1::681b:a630, ...
-Connexion ? sources.buildroot.net (sources.buildroot.net)|104.27.167.48|:80?
-connect?.
-requ?te HTTP transmise, en attente de la r?ponse? 403 Forbidden
-2018-01-31 15:11:07 erreur?403?: Forbidden.
-
+diff --git a/package/dnsmasq/Config.in b/package/dnsmasq/Config.in
+index 8921fc629dba..262aca688e56 100644
+--- a/package/dnsmasq/Config.in
++++ b/package/dnsmasq/Config.in
+@@ -4,7 +4,7 @@ config BR2_PACKAGE_DNSMASQ
+ 	  A lightweight DNS and DHCP server. It is intended to provide
+ 	  coupled DNS and DHCP service to a LAN.
+ 
+-	  http://www.thekelleys.org.uk/dnsmasq/
++	  http://www.thekelleys.org.uk/dnsmasq/doc.html
+ 
+ if BR2_PACKAGE_DNSMASQ
+ 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.15.1
