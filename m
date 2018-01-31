@@ -1,67 +1,113 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 31 Jan 2018 12:07:13 +0100
-Subject: [Buildroot] [git commit branch/2017.11.x] package/berkeleydb: add
- security fix for CVE-2017-10140
-Message-ID: <20180131123623.2DA418568A@busybox.osuosl.org>
+Date: Wed, 31 Jan 2018 12:15:43 +0100
+Subject: [Buildroot] [git commit branch/2017.02.x] squid: add upstream
+ post-3.5.27 security patches
+Message-ID: <20180131123645.3E09188170@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=77d0d20796f52cfb3492df621a09d8ff0a01d019
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=3be81ea5d3e3fab6e58c8f74f5cef353f7058114
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Fixes CVE-2017-10140: Berkeley DB reads DB_CONFIG from cwd
+Fixes the following security issues:
 
-For more details, see:
-https://security-tracker.debian.org/tracker/CVE-2017-10140
+SQUID-2018:1 Due to incorrect pointer handling Squid is vulnerable to denial
+of service attack when processing ESI responses.
 
-And add license hash while we are at it.
+http://www.squid-cache.org/Advisories/SQUID-2018_1.txt
 
-[Peter: extend commit message]
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+SQUID-2018:2  Due to incorrect pointer handling Squid is vulnerable to
+denial of service attack when processing ESI responses or downloading
+intermediate CA certificates.
+
+http://www.squid-cache.org/Advisories/SQUID-2018_2.txt
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-(cherry picked from commit 0b368023f7e166648f136244960608a0e009332d)
+(cherry picked from commit 6f481c83b96c76d59a420e5f6559c02cb5d329d3)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/berkeleydb/0001-cwd-db_config.patch | 21 +++++++++++++++++++++
- package/berkeleydb/berkeleydb.hash          |  1 +
- 2 files changed, 22 insertions(+)
+ ...e-sure-endofName-never-exceeds-tagEnd-130.patch | 35 ++++++++++++++++++++++
+ ...t-IP-logging-for-transactions-without-a-c.patch | 31 +++++++++++++++++++
+ 2 files changed, 66 insertions(+)
 
-diff --git a/package/berkeleydb/0001-cwd-db_config.patch b/package/berkeleydb/0001-cwd-db_config.patch
+diff --git a/package/squid/0003-ESI-make-sure-endofName-never-exceeds-tagEnd-130.patch b/package/squid/0003-ESI-make-sure-endofName-never-exceeds-tagEnd-130.patch
 new file mode 100644
-index 0000000000..08ce5a3931
+index 0000000000..6e71677a19
 --- /dev/null
-+++ b/package/berkeleydb/0001-cwd-db_config.patch
-@@ -0,0 +1,21 @@
-+Do not access DB_CONFIG when db_home is not set
++++ b/package/squid/0003-ESI-make-sure-endofName-never-exceeds-tagEnd-130.patch
+@@ -0,0 +1,35 @@
++From eb2db98a676321b814fc4a51c4fb7928a8bb45d9 Mon Sep 17 00:00:00 2001
++From: Amos Jeffries <yadij@users.noreply.github.com>
++Date: Fri, 19 Jan 2018 13:54:14 +1300
++Subject: [PATCH] ESI: make sure endofName never exceeds tagEnd (#130)
 +
-+Fixes CVE-2017-10140:
-+https://bugzilla.redhat.com/show_bug.cgi?id=1464032#c9
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ src/esi/CustomParser.cc | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
 +
-+Downloaded from
-+http://pkgs.fedoraproject.org/cgit/rpms/libdb.git/commit/?id=8047fa8580659fcae740c25e91b490539b8453eb
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+
-+--- db-5.3.28/src/env/env_open.c.old	2017-06-26 10:32:11.011419981 +0200
-++++ db-5.3.28/src/env/env_open.c	2017-06-26 10:32:46.893721233 +0200
-+@@ -473,7 +473,7 @@
-+ 	env->db_mode = mode == 0 ? DB_MODE_660 : mode;
++diff --git a/src/esi/CustomParser.cc b/src/esi/CustomParser.cc
++index d86d2d309..db634d921 100644
++--- a/src/esi/CustomParser.cc
+++++ b/src/esi/CustomParser.cc
++@@ -121,7 +121,7 @@ ESICustomParser::parse(char const *dataToParse, size_t const lengthOfData, bool
 + 
-+ 	/* Read the DB_CONFIG file. */
-+-	if ((ret = __env_read_db_config(env)) != 0)
-++	if (env->db_home != NULL && (ret = __env_read_db_config(env)) != 0)
-+ 		return (ret);
++             char * endofName = strpbrk(const_cast<char *>(tag), w_space);
 + 
-+ 	/*
-diff --git a/package/berkeleydb/berkeleydb.hash b/package/berkeleydb/berkeleydb.hash
-index e47c578cbe..7529329748 100644
---- a/package/berkeleydb/berkeleydb.hash
-+++ b/package/berkeleydb/berkeleydb.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
- sha256	76a25560d9e52a198d37a31440fd07632b5f1f8f9f2b6d5438f4bc3e7c9013ef  db-5.3.28.NC.tar.gz
-+sha256	b78815181a53241f9347c6b47d1031fd669946f863e1edc807a291354cec024b  LICENSE
++-            if (endofName > tagEnd)
+++            if (!endofName || endofName > tagEnd)
++                 endofName = const_cast<char *>(tagEnd);
++ 
++             *endofName = '\0';
++@@ -214,7 +214,7 @@ ESICustomParser::parse(char const *dataToParse, size_t const lengthOfData, bool
++ 
++             char * endofName = strpbrk(const_cast<char *>(tag), w_space);
++ 
++-            if (endofName > tagEnd)
+++            if (!endofName || endofName > tagEnd)
++                 endofName = const_cast<char *>(tagEnd);
++ 
++             *endofName = '\0';
++-- 
++2.11.0
++
+diff --git a/package/squid/0004-Fix-indirect-IP-logging-for-transactions-without-a-c.patch b/package/squid/0004-Fix-indirect-IP-logging-for-transactions-without-a-c.patch
+new file mode 100644
+index 0000000000..51fff30034
+--- /dev/null
++++ b/package/squid/0004-Fix-indirect-IP-logging-for-transactions-without-a-c.patch
+@@ -0,0 +1,31 @@
++From 8232b83d3fa47a1399f155cb829db829369fbae9 Mon Sep 17 00:00:00 2001
++From: squidadm <squidadm@users.noreply.github.com>
++Date: Sun, 21 Jan 2018 08:07:08 +1300
++Subject: [PATCH] Fix indirect IP logging for transactions without a client
++ connection (#129) (#136)
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ src/client_side_request.cc | 6 +++---
++ 1 file changed, 3 insertions(+), 3 deletions(-)
++
++diff --git a/src/client_side_request.cc b/src/client_side_request.cc
++index be124f355..203f89d46 100644
++--- a/src/client_side_request.cc
+++++ b/src/client_side_request.cc
++@@ -488,9 +488,9 @@ clientFollowXForwardedForCheck(allow_t answer, void *data)
++         * Ensure that the access log shows the indirect client
++         * instead of the direct client.
++         */
++-        ConnStateData *conn = http->getConn();
++-        conn->log_addr = request->indirect_client_addr;
++-        http->al->cache.caddr = conn->log_addr;
+++        http->al->cache.caddr = request->indirect_client_addr;
+++        if (ConnStateData *conn = http->getConn())
+++            conn->log_addr = request->indirect_client_addr;
++     }
++     request->x_forwarded_for_iterator.clean();
++     request->flags.done_follow_x_forwarded_for = true;
++-- 
++2.11.0
++
