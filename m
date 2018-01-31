@@ -1,50 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 31 Jan 2018 11:50:41 +0100
-Subject: [Buildroot] [git commit branch/2017.11.x] squid: bump version to
- 3.5.27
-Message-ID: <20180131123621.8E4D9880C0@busybox.osuosl.org>
+Date: Wed, 31 Jan 2018 11:51:17 +0100
+Subject: [Buildroot] [git commit branch/2017.11.x] fis: fix typo in build
+ command
+Message-ID: <20180131123621.C155D880C0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b8db6d6aefccfb0a0b85c349cf176a57f4207d29
+commit: https://git.buildroot.net/buildroot/commit/?id=0b02c137240d6df93e49d87b34589d66098a8a46
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.11.x
 
-And add a hash for the license files.
-
+Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 001b834aacef82a6205f5b319037d42d0fdb13cd)
+(cherry picked from commit 840d1a8d56eb3807b1f2b3ab16974f2f0abe9c94)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/squid/squid.hash | 8 +++++---
- package/squid/squid.mk   | 2 +-
- 2 files changed, 6 insertions(+), 4 deletions(-)
+ package/fis/fis.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/squid/squid.hash b/package/squid/squid.hash
-index 91ba9e6fc4..8787cb25ef 100644
---- a/package/squid/squid.hash
-+++ b/package/squid/squid.hash
-@@ -1,3 +1,5 @@
--# From http://www.squid-cache.org/Versions/v3/3.5/squid-3.5.26.tar.xz.asc
--md5 510e2c84773879c00d0e7ced997864d9  squid-3.5.26.tar.xz
--sha1 51a664217957b35de8b7fae180b9f93a759a4204  squid-3.5.26.tar.xz
-+# From http://www.squid-cache.org/Versions/v3/3.5/squid-3.5.27.tar.xz.asc
-+md5 39ef8199675d48a314b540f92c00c545 squid-3.5.27.tar.xz
-+sha1 1e69c96d13cd49844da3bcf33a0b428fbe7b6f77 squid-3.5.27.tar.xz
-+# Locally calculated
-+sha256 58f5d05257af1fb964fde20e134d660fac9afa86b6fd8c70d63ead63068378fa COPYING
-diff --git a/package/squid/squid.mk b/package/squid/squid.mk
-index d334d14c88..8ade55ee37 100644
---- a/package/squid/squid.mk
-+++ b/package/squid/squid.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/package/fis/fis.mk b/package/fis/fis.mk
+index 6d3a227183..6db06bf74a 100644
+--- a/package/fis/fis.mk
++++ b/package/fis/fis.mk
+@@ -12,7 +12,7 @@ FIS_LICENSE_FILES = fis.c
  
- SQUID_VERSION_MAJOR = 3.5
--SQUID_VERSION = $(SQUID_VERSION_MAJOR).26
-+SQUID_VERSION = $(SQUID_VERSION_MAJOR).27
- SQUID_SOURCE = squid-$(SQUID_VERSION).tar.xz
- SQUID_SITE = http://www.squid-cache.org/Versions/v3/$(SQUID_VERSION_MAJOR)
- SQUID_LICENSE = GPL-2.0+
+ define FIS_BUILD_CMDS
+ 	$(TARGET_CC) $(TARGET_CFLAGS) -std=c99 -o $(@D)/fis \
+-		$(@D)/fis.c $(@D)/crc.c $(TARGE_LDFLAGS)
++		$(@D)/fis.c $(@D)/crc.c $(TARGET_LDFLAGS)
+ endef
+ 
+ define FIS_INSTALL_TARGET_CMDS
