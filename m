@@ -1,113 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 31 Jan 2018 11:50:46 +0100
-Subject: [Buildroot] [git commit branch/2017.11.x] squid: add upstream
- post-3.5.27 security patches
-Message-ID: <20180131123621.A7888880C0@busybox.osuosl.org>
+Date: Wed, 31 Jan 2018 11:51:50 +0100
+Subject: [Buildroot] [git commit branch/2017.11.x] webkitgtk: Add missing
+ libtasn1 dependency
+Message-ID: <20180131123621.D8A8B880C0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bf2a0b348f7b7901899baa5ceb7f18c3f5276ffa
+commit: https://git.buildroot.net/buildroot/commit/?id=160be50110f95e6fdad6b81e57e5c0881bcd3672
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.11.x
 
-Fixes the following security issues:
+Nowadays libtasn1 is always required and if not present the CMake
+configuration step would fail.
 
-SQUID-2018:1 Due to incorrect pointer handling Squid is vulnerable to denial
-of service attack when processing ESI responses.
-
-http://www.squid-cache.org/Advisories/SQUID-2018_1.txt
-
-SQUID-2018:2  Due to incorrect pointer handling Squid is vulnerable to
-denial of service attack when processing ESI responses or downloading
-intermediate CA certificates.
-
-http://www.squid-cache.org/Advisories/SQUID-2018_2.txt
-
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 6f481c83b96c76d59a420e5f6559c02cb5d329d3)
+(cherry picked from commit d052ed473dfbee1eabe9eca1185cea5d3e743b9f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...e-sure-endofName-never-exceeds-tagEnd-130.patch | 35 ++++++++++++++++++++++
- ...t-IP-logging-for-transactions-without-a-c.patch | 31 +++++++++++++++++++
- 2 files changed, 66 insertions(+)
+ package/webkitgtk/Config.in    | 1 +
+ package/webkitgtk/webkitgtk.mk | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/squid/0003-ESI-make-sure-endofName-never-exceeds-tagEnd-130.patch b/package/squid/0003-ESI-make-sure-endofName-never-exceeds-tagEnd-130.patch
-new file mode 100644
-index 0000000000..6e71677a19
---- /dev/null
-+++ b/package/squid/0003-ESI-make-sure-endofName-never-exceeds-tagEnd-130.patch
-@@ -0,0 +1,35 @@
-+From eb2db98a676321b814fc4a51c4fb7928a8bb45d9 Mon Sep 17 00:00:00 2001
-+From: Amos Jeffries <yadij@users.noreply.github.com>
-+Date: Fri, 19 Jan 2018 13:54:14 +1300
-+Subject: [PATCH] ESI: make sure endofName never exceeds tagEnd (#130)
-+
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ src/esi/CustomParser.cc | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/src/esi/CustomParser.cc b/src/esi/CustomParser.cc
-+index d86d2d309..db634d921 100644
-+--- a/src/esi/CustomParser.cc
-++++ b/src/esi/CustomParser.cc
-+@@ -121,7 +121,7 @@ ESICustomParser::parse(char const *dataToParse, size_t const lengthOfData, bool
-+ 
-+             char * endofName = strpbrk(const_cast<char *>(tag), w_space);
-+ 
-+-            if (endofName > tagEnd)
-++            if (!endofName || endofName > tagEnd)
-+                 endofName = const_cast<char *>(tagEnd);
-+ 
-+             *endofName = '\0';
-+@@ -214,7 +214,7 @@ ESICustomParser::parse(char const *dataToParse, size_t const lengthOfData, bool
-+ 
-+             char * endofName = strpbrk(const_cast<char *>(tag), w_space);
-+ 
-+-            if (endofName > tagEnd)
-++            if (!endofName || endofName > tagEnd)
-+                 endofName = const_cast<char *>(tagEnd);
-+ 
-+             *endofName = '\0';
-+-- 
-+2.11.0
-+
-diff --git a/package/squid/0004-Fix-indirect-IP-logging-for-transactions-without-a-c.patch b/package/squid/0004-Fix-indirect-IP-logging-for-transactions-without-a-c.patch
-new file mode 100644
-index 0000000000..51fff30034
---- /dev/null
-+++ b/package/squid/0004-Fix-indirect-IP-logging-for-transactions-without-a-c.patch
-@@ -0,0 +1,31 @@
-+From 8232b83d3fa47a1399f155cb829db829369fbae9 Mon Sep 17 00:00:00 2001
-+From: squidadm <squidadm@users.noreply.github.com>
-+Date: Sun, 21 Jan 2018 08:07:08 +1300
-+Subject: [PATCH] Fix indirect IP logging for transactions without a client
-+ connection (#129) (#136)
-+
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ src/client_side_request.cc | 6 +++---
-+ 1 file changed, 3 insertions(+), 3 deletions(-)
-+
-+diff --git a/src/client_side_request.cc b/src/client_side_request.cc
-+index be124f355..203f89d46 100644
-+--- a/src/client_side_request.cc
-++++ b/src/client_side_request.cc
-+@@ -488,9 +488,9 @@ clientFollowXForwardedForCheck(allow_t answer, void *data)
-+         * Ensure that the access log shows the indirect client
-+         * instead of the direct client.
-+         */
-+-        ConnStateData *conn = http->getConn();
-+-        conn->log_addr = request->indirect_client_addr;
-+-        http->al->cache.caddr = conn->log_addr;
-++        http->al->cache.caddr = request->indirect_client_addr;
-++        if (ConnStateData *conn = http->getConn())
-++            conn->log_addr = request->indirect_client_addr;
-+     }
-+     request->x_forwarded_for_iterator.clean();
-+     request->flags.done_follow_x_forwarded_for = true;
-+-- 
-+2.11.0
-+
+diff --git a/package/webkitgtk/Config.in b/package/webkitgtk/Config.in
+index 65154db3fa..34ac6dbf95 100644
+--- a/package/webkitgtk/Config.in
++++ b/package/webkitgtk/Config.in
+@@ -36,6 +36,7 @@ config BR2_PACKAGE_WEBKITGTK
+ 	select BR2_PACKAGE_LIBGCRYPT
+ 	select BR2_PACKAGE_LIBSECRET
+ 	select BR2_PACKAGE_LIBSOUP
++	select BR2_PACKAGE_LIBTASN1
+ 	select BR2_PACKAGE_LIBXML2
+ 	select BR2_PACKAGE_LIBXSLT
+ 	select BR2_PACKAGE_SQLITE
+diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
+index ebe682ebb6..7b364cf467 100644
+--- a/package/webkitgtk/webkitgtk.mk
++++ b/package/webkitgtk/webkitgtk.mk
+@@ -14,7 +14,7 @@ WEBKITGTK_LICENSE_FILES = \
+ 	Source/WebCore/LICENSE-LGPL-2.1
+ WEBKITGTK_DEPENDENCIES = host-ruby host-flex host-bison host-gperf \
+ 	enchant harfbuzz icu jpeg libgcrypt libgtk3 libsecret libsoup \
+-	libxml2 libxslt sqlite webp
++	libtasn1 libxml2 libxslt sqlite webp
+ WEBKITGTK_CONF_OPTS = \
+ 	-DENABLE_API_TESTS=OFF \
+ 	-DENABLE_GEOLOCATION=OFF \
