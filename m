@@ -1,61 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 31 Jan 2018 12:56:10 +0100
-Subject: [Buildroot] [git commit branch/2017.02.x] libcurl: security bump to
- version 7.58.0
-Message-ID: <20180131123645.9055F88170@busybox.osuosl.org>
+Date: Wed, 31 Jan 2018 12:59:07 +0100
+Subject: [Buildroot] [git commit branch/2017.02.x] ccache: bump to version
+ 3.3.4
+Message-ID: <20180131123645.C887A88170@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6577e33ff0539a0486248aa18e4f026a4dde71bc
+commit: https://git.buildroot.net/buildroot/commit/?id=d8e24ab5e7eb1a2613c03260fa6b90839d581f36
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Fixes CVE-2018-1000007: libcurl might leak authentication data to third
-parties.
+Switch download URL to avoid a redirect.
 
-https://curl.haxx.se/docs/adv_2018-b3bf.html
-
-Fixes CVE-2018-1000005: libcurl contains an out bounds read in code handling
-HTTP/2 trailers.
-
-https://curl.haxx.se/docs/adv_2018-824a.html
-
-Update license hash due to copyright year change.
-
-[Peter: also add CVE-2018-1000005 reference]
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit e02dd5a4924c69fc806f4191bc7be67e28d5ad37)
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+(cherry picked from commit 64da2fd2594ac05f84ef04376745dff1d32a8f09)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libcurl/libcurl.hash | 6 +++---
- package/libcurl/libcurl.mk   | 2 +-
+ package/ccache/ccache.hash | 4 ++--
+ package/ccache/ccache.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
-index 275a5a373f..b1afe1891d 100644
---- a/package/libcurl/libcurl.hash
-+++ b/package/libcurl/libcurl.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--# https://curl.haxx.se/download/curl-7.57.0.tar.xz.asc
--sha256 f5f6fd3c72b7b8389969f4fb671ed8532fa9b5bb7a5cae7ca89bc1cea45c7878  curl-7.57.0.tar.xz
--sha256 cbcf511f5702f7baf5424193a792bc9c18fab22bcbec2e6a587598389dc632c2  COPYING
-+# https://curl.haxx.se/download/curl-7.58.0.tar.xz.asc
-+sha256 6a813875243609eb75f37fa72044e4ad618b55ec15a4eafdac2df6a7e800e3e3  curl-7.58.0.tar.xz
-+sha256 5f3849ec38ddb927e79f514bf948890c41b8d1407286a49609b8fb1585931095  COPYING
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index 0aab58a7de..a1d2aa7a60 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/ccache/ccache.hash b/package/ccache/ccache.hash
+index bde53f794d..5354572638 100644
+--- a/package/ccache/ccache.hash
++++ b/package/ccache/ccache.hash
+@@ -1,2 +1,2 @@
+-# Verified key https://samba.org/ftp/ccache/ccache-3.3.3.tar.xz.asc - sha256 computed locally
+-sha256  3b02a745da1cfa9eb438af7147e0fd3545e2f6163de9e5b07da86f58859f04ec  ccache-3.3.3.tar.xz
++# Verified key https://samba.org/ftp/ccache/ccache-3.3.4.tar.xz.asc - sha256 computed locally
++sha256  24f15bf389e38c41548c9c259532187774ec0cb9686c3497bbb75504c8dc404f  ccache-3.3.4.tar.xz
+diff --git a/package/ccache/ccache.mk b/package/ccache/ccache.mk
+index 55a913259f..9b79014c5a 100644
+--- a/package/ccache/ccache.mk
++++ b/package/ccache/ccache.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--LIBCURL_VERSION = 7.57.0
-+LIBCURL_VERSION = 7.58.0
- LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
- LIBCURL_SITE = https://curl.haxx.se/download
- LIBCURL_DEPENDENCIES = host-pkgconf \
+-CCACHE_VERSION = 3.3.3
+-CCACHE_SITE = https://samba.org/ftp/ccache
++CCACHE_VERSION = 3.3.4
++CCACHE_SITE = https://www.samba.org/ftp/ccache
+ CCACHE_SOURCE = ccache-$(CCACHE_VERSION).tar.xz
+ CCACHE_LICENSE = GPLv3+, others
+ CCACHE_LICENSE_FILES = LICENSE.txt GPL-3.0.txt
