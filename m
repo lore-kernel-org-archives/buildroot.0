@@ -1,50 +1,69 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 31 Jan 2018 13:04:16 +0100
-Subject: [Buildroot] [git commit branch/2017.02.x] package/transmission:
- security bump version to 2.93
-Message-ID: <20180131123646.CBEAC8813E@busybox.osuosl.org>
+Date: Wed, 31 Jan 2018 13:09:00 +0100
+Subject: [Buildroot] [git commit branch/2017.02.x] dovecot: add upstream
+ security fix for CVE-2017-15132
+Message-ID: <20180131123647.9CD3B86848@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4b2b530d55869928da7417298cc770825870a1f3
+commit: https://git.buildroot.net/buildroot/commit/?id=e4755cd898212bd42af816ba50cde2d46477daaf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Fixes CVE-2018-5702:
-https://github.com/transmission/transmission/pull/468
+A flaw was found in dovecot 2.0 up to 2.2.33 and 2.3.0.  An abort of SASL
+authentication results in a memory leak in dovecot's auth client used by
+login processes.  The leak has impact in high performance configuration
+where same login processes are reused and can cause the process to crash due
+to memory exhaustion.
 
-Added license hash.
+For more details, see:
+http://www.openwall.com/lists/oss-security/2018/01/25/4
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 6e43a52aa8a971a4e328335ce993f6868b4c51a4)
+(cherry picked from commit 28adb37be48566ede823969c284c1490b456530a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/transmission/transmission.hash | 3 ++-
- package/transmission/transmission.mk   | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ ...x-memory-leak-in-auth_client_request_abor.patch | 33 ++++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
 
-diff --git a/package/transmission/transmission.hash b/package/transmission/transmission.hash
-index 849a722d2b..4c1c3f9a3a 100644
---- a/package/transmission/transmission.hash
-+++ b/package/transmission/transmission.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256	3a8d045c306ad9acb7bf81126939b9594553a388482efa0ec1bfb67b22acd35f	transmission-2.92.tar.xz
-+sha256 8815920e0a4499bcdadbbe89a4115092dab42ce5199f71ff9a926cfd12b9b90b  transmission-2.93.tar.xz
-+sha256 20801783bf59e27d03ed6aab625b32a34e221ae95bf801db87827c8023398495  COPYING
-diff --git a/package/transmission/transmission.mk b/package/transmission/transmission.mk
-index e4a36805c2..34b310bffc 100644
---- a/package/transmission/transmission.mk
-+++ b/package/transmission/transmission.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TRANSMISSION_VERSION = 2.92
-+TRANSMISSION_VERSION = 2.93
- TRANSMISSION_SITE = https://github.com/transmission/transmission-releases/raw/master
- TRANSMISSION_SOURCE = transmission-$(TRANSMISSION_VERSION).tar.xz
- TRANSMISSION_DEPENDENCIES = \
+diff --git a/package/dovecot/0002-lib-auth-Fix-memory-leak-in-auth_client_request_abor.patch b/package/dovecot/0002-lib-auth-Fix-memory-leak-in-auth_client_request_abor.patch
+new file mode 100644
+index 0000000000..babccd3acf
+--- /dev/null
++++ b/package/dovecot/0002-lib-auth-Fix-memory-leak-in-auth_client_request_abor.patch
+@@ -0,0 +1,33 @@
++From 1a29ed2f96da1be22fa5a4d96c7583aa81b8b060 Mon Sep 17 00:00:00 2001
++From: Timo Sirainen <timo.sirainen@dovecot.fi>
++Date: Mon, 18 Dec 2017 16:50:51 +0200
++Subject: [PATCH] lib-auth: Fix memory leak in auth_client_request_abort()
++
++This caused memory leaks when authentication was aborted. For example
++with IMAP:
++
++a AUTHENTICATE PLAIN
++*
++
++Broken by 9137c55411aa39d41c1e705ddc34d5bd26c65021
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ src/lib-auth/auth-client-request.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/src/lib-auth/auth-client-request.c b/src/lib-auth/auth-client-request.c
++index 480fb42b3..046f7c307 100644
++--- a/src/lib-auth/auth-client-request.c
+++++ b/src/lib-auth/auth-client-request.c
++@@ -186,6 +186,7 @@ void auth_client_request_abort(struct auth_client_request **_request)
++ 
++ 	auth_client_send_cancel(request->conn->client, request->id);
++ 	call_callback(request, AUTH_REQUEST_STATUS_ABORT, NULL, NULL);
+++	pool_unref(&request->pool);
++ }
++ 
++ unsigned int auth_client_request_get_id(struct auth_client_request *request)
++-- 
++2.11.0
++
