@@ -1,73 +1,61 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 31 Jan 2018 20:19:39 +0100
-Subject: [Buildroot] [git commit branch/2017.02.x] Update for 2017.02.10
-Message-ID: <20180131192239.9464C881BA@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 31 Jan 2018 19:29:53 +0000
+Subject: [Buildroot] [Bug 10536] Finding non-relative paths in the ccache
+In-Reply-To: <bug-10536-163@https.bugs.busybox.net/>
+References: <bug-10536-163@https.bugs.busybox.net/>
+Message-ID: <bug-10536-163-g6m7BnUvHK@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=91850b34977440182e56c9eeb6d57ce34e5c8adc
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
+https://bugs.busybox.net/show_bug.cgi?id=10536
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- CHANGES  | 30 ++++++++++++++++++++++++++++++
- Makefile |  4 ++--
- 2 files changed, 32 insertions(+), 2 deletions(-)
+--- Comment #10 from Trent Piepho <tpiepho@gmail.com> ---
+I seems like Arnout should be right about host compiles in different
+directories not sharing ccache.  Since CCACHE_BASEDIR is not set, the paths
+should be absolute and different directories would be a cache miss.
 
-diff --git a/CHANGES b/CHANGES
-index a632a93675..d006d9365b 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,3 +1,33 @@
-+2017.02.10, Released January 31st, 2018
-+
-+	Important / security related fixes.
-+
-+	nconfig: Fix for ncurses/ncursesw linking issue causing crashes.
-+
-+	System: Only show getty options when busybox init or sysvinit
-+	are used.
-+
-+	Infrastructure: Fix build issue for autotools based packages
-+	checking for C++ support on toolchains without C++ support and
-+	on a distro lacking /lib/cpp (E.G. Arch Linux).
-+
-+	Updated/fixed packages: avahi, berkeleydb, bind, busybox,
-+	ccache, clamav, coreutils, dovecot, eeprog, eudev, fis,
-+	intel-microcode, iputils, irssi, kmsxx, liberation, libiio,
-+	lz4, mariadb, matchbox-lib, mcookie, openocd, php, pound,
-+	rpcbind, squid, tar, ti-cgt-pru, transmission, util-linux,
-+	webkitgtk, wireshark, xen
-+
-+	Issues resolved (http://bugs.buildroot.org):
-+
-+	#9996: lz4 package does not install lz4 binaries in target
-+	#10176: Rsyslog's S01logging is deleted by Busybox.mk from...
-+	#10216: package/x11r7/mcookie/mcookie.c:207: bad size ?
-+	#10301: systemd/getty unused options
-+	#10331: kmsxx, host installation fails with BR2_SHARED_...
-+	#10536: Finding non-relative paths in the ccache
-+	#10641: avahi-autoipd not starting when using systemd-tmpfiles
-+
- 2017.02.9, Released January 1st, 2018
- 
- 	Important / security related fixes.
-diff --git a/Makefile b/Makefile
-index f35b0a0acd..7d609ed8d9 100644
---- a/Makefile
-+++ b/Makefile
-@@ -86,9 +86,9 @@ else # umask / $(CURDIR) / $(O)
- all:
- 
- # Set and export the version string
--export BR2_VERSION := 2017.02.9
-+export BR2_VERSION := 2017.02.10
- # Actual time the release is cut (for reproducible builds)
--BR2_VERSION_EPOCH = 1514805000
-+BR2_VERSION_EPOCH = 1517426000
- 
- # Save running make version since it's clobbered by the make package
- RUNNING_MAKE_VERSION := $(MAKE_VERSION)
+But here's some testing with host-uboot-tools.  First a build from a cleared
+and reset ccache:
+cache hit (direct)                     0
+cache hit (preprocessed)               0
+cache miss                            58
+cache hit rate                      0.00 %
+called for link                        8
+cleanups performed                     0
+files in cache                       171
+
+As expected, all misses. 58 files.
+
+Building again from the same output dir:
+cache hit (direct)                    53
+cache hit (preprocessed)               5
+cache miss                            58
+cache hit rate                     50.00 %
+called for link                       16
+cleanups performed                     0
+files in cache                       176
+
+Exactly 58 new hits, as expected, everything in cache.  But 5 new files, odd.
+
+Now the tricky one, building from a different output dir:
+cache hit (direct)                    53
+cache hit (preprocessed)              15
+cache miss                           106
+cache hit rate                     39.08 %
+called for link                       24
+cleanups performed                     0
+files in cache                       331
+
+These should be all misses, right?  But there were 10 hits in preprocessed
+mode!  Which is fair, if the preprocessed code ends up being exactly the same. 
+But just because the c code is the same doesn't mean the auto-dependency file
+is the same (absolute paths in the .d file differ!).  If ccache tries to use
+the cached .d file with absolute paths on this supposed preprocessed hit, it
+will fail.
+
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
