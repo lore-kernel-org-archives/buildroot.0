@@ -1,46 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 31 Jan 2018 12:12:14 +0100
-Subject: [Buildroot] [git commit branch/2017.11.x] linux: bump Linux CIP to
- v4.4.112-cip18
-Message-ID: <20180131123623.695CF88163@busybox.osuosl.org>
+Date: Wed, 31 Jan 2018 12:12:37 +0100
+Subject: [Buildroot] [git commit branch/2017.11.x] eudev: fix error handling
+ init script
+Message-ID: <20180131123623.8941288163@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=320552fbd9e8729f70338d54817138615261710e
+commit: https://git.buildroot.net/buildroot/commit/?id=afa5cb9c304e02bf82f35fe228c7ac2f13fbc532
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.11.x
 
-This patch bump the Linux CIP kernel to version v4.4.112-cip18
+Replace (echo "msg" && exit 1) by { echo "msg"; exit 1; }.
 
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit a2f8eafdfabb1073a89327ebd190a9383adc539e)
+The (list) compound command runs in a subshell, so the "exit" interrupts
+the subshell, not the main script. Examples:
+
+    $ sh -c "echo 1; (exit 1); echo 2"
+    1
+    2
+    $ sh -c "echo 1; { exit 1; }; echo 2"
+    1
+    $
+
+Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+(cherry picked from commit 3f568fe09948369831c36a713f5a47fe4c2d19b6)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- linux/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/eudev/S10udev | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 33c3502590..c54e66ec46 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -29,7 +29,7 @@ config BR2_LINUX_KERNEL_LATEST_VERSION
- 	bool "Latest version (4.13)"
- 
- config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
--	bool "Latest CIP SLTS version (v4.4.105-cip15)"
-+	bool "Latest CIP SLTS version (v4.4.112-cip18)"
- 	help
- 	  CIP launched in the spring of 2016 to address the needs of
- 	  organizations in industries such as power generation and
-@@ -117,7 +117,7 @@ endif
- config BR2_LINUX_KERNEL_VERSION
- 	string
- 	default "4.13.16" if BR2_LINUX_KERNEL_LATEST_VERSION
--	default "v4.4.105-cip15" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
-+	default "v4.4.112-cip18" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
+diff --git a/package/eudev/S10udev b/package/eudev/S10udev
+index 8382bec2bb..654a04df36 100755
+--- a/package/eudev/S10udev
++++ b/package/eudev/S10udev
+@@ -29,7 +29,7 @@ case "$1" in
+     start)
+         printf "Populating ${udev_root:-/dev} using udev: "
+         printf '\000\000\000\000' > /proc/sys/kernel/hotplug
+-        $UDEV_BIN -d || (echo "FAIL" && exit 1)
++        $UDEV_BIN -d || { echo "FAIL"; exit 1; }
+         udevadm trigger --type=subsystems --action=add
+         udevadm trigger --type=devices --action=add
+         udevadm settle --timeout=30 || echo "udevadm settle failed"
