@@ -1,102 +1,74 @@
-From: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
-Date: Wed, 31 Jan 2018 19:19:47 +0100
-Subject: [Buildroot] [PATCH] package/gpsd: add config option for Spectratime
- iSync and build fix patch
-Message-ID: <1517422787-12753-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 31 Jan 2018 20:50:16 +0200
+Subject: [Buildroot] linux-firmware: wrong sha256 hash
+In-Reply-To: <1517417554.32426.6.camel@embedded.rocks>
+References: <1517417554.32426.6.camel@embedded.rocks>
+Message-ID: <20180131185016.3diheii3anpqrymi@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- As in the inital 3.17 version bump patch the iSync config option was not
-added, the iSync driver was implicitly enabled in the gpsd config as default,
-and due to a bug in the gpsd build setup, this caused several autobuild issues
-which are fixed by this. This commit adds both the Buildroot config option and
-the gpsd patch which was also sent to and accepted in upstream.
+Hi J?rg,
 
-Fixes:
-    http://autobuild.buildroot.net/results/555b4bdd1707aa21e6d3014e30b635c96c5efffc
-    http://autobuild.buildroot.net/results/cfc14a2c471c63ecc4c95c12b8e00ed7656acfd2
-    http://autobuild.buildroot.net/results/2104e15526bd6f467f0d56dee10b5fa46e2c71dd
-    http://autobuild.buildroot.net/results/610b3f898b396c1def682b809482408c2c4555bc
-    ... and many more.
+On Wed, Jan 31, 2018 at 05:52:34PM +0100, J?rg Krause wrote:
+> looks like the hashes for the linux-firmware git repository have
+> changed:
 
-Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
----
- ...x-isync-build-when-ublox-not-selected-too.patch | 32 ++++++++++++++++++++++
- package/gpsd/Config.in                             |  5 ++++
- package/gpsd/gpsd.mk                               |  3 ++
- 3 files changed, 40 insertions(+)
- create mode 100644 package/gpsd/0002-Fix-isync-build-when-ublox-not-selected-too.patch
+It seem like you were probably bitten by the --numeric-owner behaviour change 
+in tar version 1.30. See the thread starting at:
 
-diff --git a/package/gpsd/0002-Fix-isync-build-when-ublox-not-selected-too.patch b/package/gpsd/0002-Fix-isync-build-when-ublox-not-selected-too.patch
-new file mode 100644
-index 0000000..e3e35a5
---- /dev/null
-+++ b/package/gpsd/0002-Fix-isync-build-when-ublox-not-selected-too.patch
-@@ -0,0 +1,32 @@
-+From 98c8f5f4429ac3bfc09eee235fee08b9aaff8c52 Mon Sep 17 00:00:00 2001
-+From: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
-+Date: Tue, 30 Jan 2018 19:58:54 -0800
-+Subject: [PATCH] Fix isync build when ublox not selected too.
-+
-+The isync support uses the ublox driver, but if the ublox support is
-+disabled while isync is enabled, the build will fail.
-+
-+Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
-+---
-+ SConstruct | 5 +++++
-+ 1 file changed, 5 insertions(+)
-+
-+diff --git a/SConstruct b/SConstruct
-+index 1c1a215..c6a309e 100644
-+--- a/SConstruct
-++++ b/SConstruct
-+@@ -334,6 +334,11 @@ for driver in ('ashtech',
-+         env['nmea0183'] = True
-+         break
-+ 
-++
-++# iSync uses ublox underneath, so we force to enable it
-++if env['isync']:
-++    env['ublox'] = True
-++
-+ opts.Save('.scons-option-cache', env)
-+ env.SConsignFile(".sconsign.dblite")
-+ 
-+-- 
-+2.7.4
-+
-diff --git a/package/gpsd/Config.in b/package/gpsd/Config.in
-index 68d3e2e..d9ab7b7 100644
---- a/package/gpsd/Config.in
-+++ b/package/gpsd/Config.in
-@@ -152,6 +152,11 @@ config BR2_PACKAGE_GPSD_GPSCLOCK
- 	help
- 	  GPSClock support
- 
-+config BR2_PACKAGE_GPSD_ISYNC
-+	bool "iSync"
-+	help
-+	  Spectratime iSync LNRClok/GRCLOK support
-+
- config BR2_PACKAGE_GPSD_ITRAX
- 	bool "iTrax"
- 	help
-diff --git a/package/gpsd/gpsd.mk b/package/gpsd/gpsd.mk
-index e3fa20c..8c8023e 100644
---- a/package/gpsd/gpsd.mk
-+++ b/package/gpsd/gpsd.mk
-@@ -111,6 +111,9 @@ endif
- ifneq ($(BR2_PACKAGE_GPSD_GPSCLOCK),y)
- GPSD_SCONS_OPTS += gpsclock=no
- endif
-+ifneq ($(BR2_PACKAGE_GPSD_ISYNC),y)
-+GPSD_SCONS_OPTS += isync=no
-+endif
- ifneq ($(BR2_PACKAGE_GPSD_ITRAX),y)
- GPSD_SCONS_OPTS += itrax=no
- endif
+  http://lists.busybox.net/pipermail/buildroot/2018-January/211222.html
+
+baruch
+
+> 
+> ```
+> Doing shallow clone
+> Cloning into 'linux-firmware-17e6288135d4500f9fe60224dce2b46d850c346b'...
+> warning: redirecting to https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git/
+> warning: Could not find remote branch 17e6288135d4500f9fe60224dce2b46d850c346b to clone.
+> fatal: Remote branch 17e6288135d4500f9fe60224dce2b46d850c346b not found in upstream origin
+> Shallow clone failed, falling back to doing a full clone
+> Doing full clone
+> Cloning into 'linux-firmware-17e6288135d4500f9fe60224dce2b46d850c346b'...
+> warning: redirecting to https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git/
+> remote: Counting objects: 6074, done.
+> remote: Compressing objects: 100% (73/73), done.
+> remote: Total 6074 (delta 35), reused 0 (delta 0)
+> Receiving objects: 100% (6074/6074), 156.40 MiB | 5.05 MiB/s, done.
+> Resolving deltas: 100% (3756/3756), done.
+> Checking out files: 100% (1717/1717), done.
+> warning: refname '17e6288135d4500f9fe60224dce2b46d850c346b' is ambiguous.
+> Git normally never creates a ref that ends with 40 hex characters
+> because it will be ignored when you just specify 40-hex. These refs
+> may be created by mistake. For example,
+> 
+>   git checkout -b $br $(git rev-parse ...)
+> 
+> where "$br" is somehow empty and a 40-hex ref is created. Please
+> examine these refs and maybe delete them. Turn this message off by
+> running "git config advice.objectNameWarning false"
+> ERROR: linux-firmware-17e6288135d4500f9fe60224dce2b46d850c346b.tar.gz has wrong sha256 hash:
+> ERROR: expected: 28d359523a36c1cdc3e85a8e148bb2d68b036d28b10f0e80a192f3dc29f02c16
+> ERROR: got     : bf6fe8d7620949a3e771954cb6d9d18dcf000d37ecc910a7cf69723c1798e246
+> ERROR: Incomplete download, or man-in-the-middle (MITM) attac
+> ```
+> 
+> This is also true for the non-master branches :-(
+> 
+> I wonder if it would help if we switch to non-git downloading the
+> commit archive from the snapshot URL, e.g.:
+> 
+> -LINUX_FIRMWARE_SITE = http://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git
+> -LINUX_FIRMWARE_SITE_METHOD = git
+> +LINUX_FIRMWARE_SITE = https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git/snapshot
+> 
+> Best regards,
+> J?rg Krause
+
 -- 
-2.7.4
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
