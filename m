@@ -1,69 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 31 Jan 2018 13:09:00 +0100
-Subject: [Buildroot] [git commit branch/2017.02.x] dovecot: add upstream
- security fix for CVE-2017-15132
-Message-ID: <20180131123647.9CD3B86848@busybox.osuosl.org>
+Date: Wed, 31 Jan 2018 13:02:36 +0100
+Subject: [Buildroot] [git commit branch/2017.02.x] package/clamav: add
+ optional dependency to json-c
+Message-ID: <20180131123646.4CEFE87BC4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e4755cd898212bd42af816ba50cde2d46477daaf
+commit: https://git.buildroot.net/buildroot/commit/?id=0420d0910b3d5b63fae3bca9e490ffcbe6ece3c2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-A flaw was found in dovecot 2.0 up to 2.2.33 and 2.3.0.  An abort of SASL
-authentication results in a memory leak in dovecot's auth client used by
-login processes.  The leak has impact in high performance configuration
-where same login processes are reused and can cause the process to crash due
-to memory exhaustion.
+clamav has optional support for json-c:
 
-For more details, see:
-http://www.openwall.com/lists/oss-security/2018/01/25/4
+$ output/host/usr/bin/i586-buildroot-linux-uclibc-readelf -a output/target/usr/lib/libclamav.so.7.1.1 | grep NEEDED
+ 0x00000001 (NEEDED)                     Shared library: [libltdl.so.7]
+ 0x00000001 (NEEDED)                     Shared library: [libssl.so.1.0.0]
+ 0x00000001 (NEEDED)                     Shared library: [libcrypto.so.1.0.0]
+ 0x00000001 (NEEDED)                     Shared library: [libz.so.1]
+ 0x00000001 (NEEDED)                     Shared library: [libjson-c.so.2]
+ 0x00000001 (NEEDED)                     Shared library: [libc.so.0]
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 28adb37be48566ede823969c284c1490b456530a)
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+(cherry picked from commit 013207f2e4997cb836914b6a9bc9dbc6ee87553c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...x-memory-leak-in-auth_client_request_abor.patch | 33 ++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
+ package/clamav/clamav.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/dovecot/0002-lib-auth-Fix-memory-leak-in-auth_client_request_abor.patch b/package/dovecot/0002-lib-auth-Fix-memory-leak-in-auth_client_request_abor.patch
-new file mode 100644
-index 0000000000..babccd3acf
---- /dev/null
-+++ b/package/dovecot/0002-lib-auth-Fix-memory-leak-in-auth_client_request_abor.patch
-@@ -0,0 +1,33 @@
-+From 1a29ed2f96da1be22fa5a4d96c7583aa81b8b060 Mon Sep 17 00:00:00 2001
-+From: Timo Sirainen <timo.sirainen@dovecot.fi>
-+Date: Mon, 18 Dec 2017 16:50:51 +0200
-+Subject: [PATCH] lib-auth: Fix memory leak in auth_client_request_abort()
+diff --git a/package/clamav/clamav.mk b/package/clamav/clamav.mk
+index 86bdda49e2..5d57b8dc00 100644
+--- a/package/clamav/clamav.mk
++++ b/package/clamav/clamav.mk
+@@ -48,6 +48,13 @@ else
+ CLAMAV_CONF_OPTS += --disable-bzip2
+ endif
+ 
++ifeq ($(BR2_PACKAGE_JSON_C),y)
++CLAMAV_CONF_OPTS += --with-libjson=$(STAGING_DIR)/usr
++CLAMAV_DEPENDENCIES += json-c
++else
++CLAMAV_CONF_OPTS += --without-libjson
++endif
 +
-+This caused memory leaks when authentication was aborted. For example
-+with IMAP:
-+
-+a AUTHENTICATE PLAIN
-+*
-+
-+Broken by 9137c55411aa39d41c1e705ddc34d5bd26c65021
-+
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ src/lib-auth/auth-client-request.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/src/lib-auth/auth-client-request.c b/src/lib-auth/auth-client-request.c
-+index 480fb42b3..046f7c307 100644
-+--- a/src/lib-auth/auth-client-request.c
-++++ b/src/lib-auth/auth-client-request.c
-+@@ -186,6 +186,7 @@ void auth_client_request_abort(struct auth_client_request **_request)
-+ 
-+ 	auth_client_send_cancel(request->conn->client, request->id);
-+ 	call_callback(request, AUTH_REQUEST_STATUS_ABORT, NULL, NULL);
-++	pool_unref(&request->pool);
-+ }
-+ 
-+ unsigned int auth_client_request_get_id(struct auth_client_request *request)
-+-- 
-+2.11.0
-+
+ ifeq ($(BR2_PACKAGE_LIBXML2),y)
+ CLAMAV_CONF_OPTS += --with-xml=$(STAGING_DIR)/usr
+ CLAMAV_DEPENDENCIES += libxml2
