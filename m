@@ -1,11 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 31 Jan 2018 13:34:53 +0100
-Subject: [Buildroot] [PATCH] dovecot: add upstream security fix for
- CVE-2017-15132
-In-Reply-To: <20180128223310.30638-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Sun, 28 Jan 2018 23:33:10 +0100")
-References: <20180128223310.30638-1-peter@korsgaard.com>
-Message-ID: <87bmha6wb6.fsf@dell.be.48ers.dk>
+Date: Wed, 31 Jan 2018 13:35:07 +0100
+Subject: [Buildroot] [PATCH 1/1] package/berkeleydb: add security fix
+ for CVE-2017-10140
+In-Reply-To: <CACXmViZeEHwsjznRXrbCweKxDKfW4ZousaS_EMM5QaYDW3eL6g@mail.gmail.com>
+ (Peter Korsgaard's message of "Mon, 29 Jan 2018 20:55:10 +0100")
+References: <20180127224121.18181-1-bernd.kuhls@t-online.de>
+ <CACXmViZeEHwsjznRXrbCweKxDKfW4ZousaS_EMM5QaYDW3eL6g@mail.gmail.com>
+Message-ID: <877ery6was.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,16 +15,13 @@ To: buildroot@busybox.net
 
 >>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > A flaw was found in dovecot 2.0 up to 2.2.33 and 2.3.0.  An abort of SASL
- > authentication results in a memory leak in dovecot's auth client used by
- > login processes.  The leak has impact in high performance configuration
- > where same login processes are reused and can cause the process to crash due
- > to memory exhaustion.
-
- > For more details, see:
- > http://www.openwall.com/lists/oss-security/2018/01/25/4
-
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > On Sat, Jan 27, 2018 at 11:41 PM, Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+ >> For details read
+ >> https://security-tracker.debian.org/tracker/CVE-2017-10140
+ >> 
+ >> Added license hash.
+ >> 
+ >> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
 Committed to 2017.02.x and 2017.11.x, thanks.
 
