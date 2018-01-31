@@ -1,45 +1,39 @@
-From: Andrey Yurovsky <yurovsky@gmail.com>
-Date: Wed, 31 Jan 2018 11:32:08 -0800
-Subject: [Buildroot] [PATCH] ustr: bump debian patch to 1.0.4-6
-Message-ID: <20180131193208.2896-1-yurovsky@gmail.com>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Wed, 31 Jan 2018 20:25:22 +0100
+Subject: [Buildroot] [PATCH] autofs: update to 5.1.4
+Message-ID: <20180131192522.GA19569@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Version 1.0.4-5 is no longer available, replace with 1.0.4-6 so ustr can
-continue to be built.
-
-Signed-off-by: Andrey Yurovsky <yurovsky@gmail.com>
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 ---
- package/ustr/ustr.hash | 4 ++--
- package/ustr/ustr.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/autofs/autofs.hash | 2 +-
+ package/autofs/autofs.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/ustr/ustr.hash b/package/ustr/ustr.hash
-index 214d37a77a..878c607332 100644
---- a/package/ustr/ustr.hash
-+++ b/package/ustr/ustr.hash
-@@ -1,4 +1,4 @@
- # Locally computed
- sha256 3daf6eae9f78de1e872c0b2b83cce35515b94d4bb8a074e48f331fd99e1fc2c4 ustr-1.0.4.tar.bz2
--# From http://debian.gtisc.gatech.edu/debian/pool/main/u/ustr/ustr_1.0.4-5.dsc
--sha256 a21e78acf82dcccef2893932ef7b85852419bfd9b18382e63c34e7710c1d7762 ustr_1.0.4-5.debian.tar.xz
-+# From http://debian.gtisc.gatech.edu/debian/pool/main/u/ustr/ustr_1.0.4-6.dsc
-+sha256 75aa6be2c70eba632ac63078e55ecb4b5a45e6624501a8ed6d81b9a2014d149e ustr_1.0.4-6.debian.tar.xz
-diff --git a/package/ustr/ustr.mk b/package/ustr/ustr.mk
-index 6fca33457e..a2c7a0a320 100644
---- a/package/ustr/ustr.mk
-+++ b/package/ustr/ustr.mk
-@@ -13,7 +13,7 @@ USTR_LICENSE = BSD-2-Clause, MIT, LGPL-2.0+
- USTR_LICENSE_FILES = LICENSE LICENSE_BSD LICENSE_LGPL LICENSE_MIT
- USTR_AUTORECONF = YES
- USTR_PATCH = \
--	http://http.debian.net/debian/pool/main/u/ustr/ustr_$(USTR_VERSION)-5.debian.tar.xz
-+	http://http.debian.net/debian/pool/main/u/ustr/ustr_$(USTR_VERSION)-6.debian.tar.xz
+diff --git a/package/autofs/autofs.hash b/package/autofs/autofs.hash
+index 61e5882..1f2060b 100644
+--- a/package/autofs/autofs.hash
++++ b/package/autofs/autofs.hash
+@@ -1,2 +1,2 @@
+ # From https://www.kernel.org/pub/linux/daemons/autofs/v5/sha256sums.asc
+-sha256 e96eebfe3ed5fb1a30f4510f538198affde223e370c6dc2bed9780309272b1bf  autofs-5.1.3.tar.xz
++sha256 8fce30ee51ffd528fe1a4e8374ef57f43367e1f123030e175fb1b1cf15bc1722  autofs-5.1.4.tar.xz
+diff --git a/package/autofs/autofs.mk b/package/autofs/autofs.mk
+index 148ab1b..90cc38d 100644
+--- a/package/autofs/autofs.mk
++++ b/package/autofs/autofs.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- USTR_INSTALL_STAGING = YES
- 
+-AUTOFS_VERSION = 5.1.3
++AUTOFS_VERSION = 5.1.4
+ AUTOFS_SOURCE = autofs-$(AUTOFS_VERSION).tar.xz
+ AUTOFS_SITE = $(BR2_KERNEL_MIRROR)/linux/daemons/autofs/v5
+ AUTOFS_LICENSE = GPL-2.0+
 -- 
-2.14.3
+2.1.4
