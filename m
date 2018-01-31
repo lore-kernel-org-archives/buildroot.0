@@ -1,63 +1,64 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 31 Jan 2018 11:51:56 +0100
-Subject: [Buildroot] [git commit branch/2017.11.x] webkitgtk: security bump
- to version 2.18.6
-Message-ID: <20180131123622.0297E8568A@busybox.osuosl.org>
+Date: Wed, 31 Jan 2018 12:02:14 +0100
+Subject: [Buildroot] [git commit branch/2017.11.x] package/clamav: security
+ bump to version 0.99.3
+Message-ID: <20180131123622.96B308568A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c58c9138dfc8d33e086931343106251b90e99e63
+commit: https://git.buildroot.net/buildroot/commit/?id=e38b3504762cadca093011179f3d026975d525c7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.11.x
 
-This is a maintenance release of the current stable WebKitGTK+ version,
-which contains security fixes for CVE-2018-4088, CVE-2017-13885,
-CVE-2017-7165, CVE-2017-13884, CVE-2017-7160, CVE-2017-7153,
-CVE-2017-7153, CVE-2017-7161, and CVE-2018-4096. Additionally, it solves
-a GStreamer deadlock when stopping video playback, and contains fixes
-and improvements for the WebDriver implementation.
+Fixes CVE-2017-12374, CVE-2017-12375, CVE-2017-12376, CVE-2017-12377,
+CVE-2017-12378, CVE-2017-12379, CVE-2017-12380.
 
-Release notes can be found in the announcement:
+For details see upstream announcement:
+http://blog.clamav.net/2018/01/clamav-0993-has-been-released.html
 
-  https://webkitgtk.org/2018/01/24/webkitgtk2.18.6-released.html
+Added license hashes.
 
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 54798893b858c597eb70c387400866bfbfb9f0be)
+(cherry picked from commit ffb5dee113b542fd8fa81a7ed32ac64946670224)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/webkitgtk/webkitgtk.hash | 8 ++++----
- package/webkitgtk/webkitgtk.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/clamav/clamav.hash | 14 +++++++++++++-
+ package/clamav/clamav.mk   |  2 +-
+ 2 files changed, 14 insertions(+), 2 deletions(-)
 
-diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
-index 0eeaca506f..dd2b28d372 100644
---- a/package/webkitgtk/webkitgtk.hash
-+++ b/package/webkitgtk/webkitgtk.hash
-@@ -1,7 +1,7 @@
--# From https://webkitgtk.org/releases/webkitgtk-2.18.5.tar.xz.sums
--md5 af18c2cfa00cadfd0b4d8db21cab011d webkitgtk-2.18.5.tar.xz
--sha1 5f36db464f6b7bbe6a57e55bc9bb172f87a4c398 webkitgtk-2.18.5.tar.xz
--sha256 0c6d80cc7eb5d32f8063041fa11a1a6f17a29765c2f69c6bc862cd47c2d539b8 webkitgtk-2.18.5.tar.xz
-+# From https://webkitgtk.org/releases/webkitgtk-2.18.6.tar.xz.sums
-+md5 c1a548595135ee75ad3bf2e18ac83112 webkitgtk-2.18.6.tar.xz
-+sha1 fb0daa85142cfe8822de518dfaa7bd5c3cdd6c23 webkitgtk-2.18.6.tar.xz
-+sha256 93912cc2f40f12e452be1ca4babdbdaac0ec4f828d441257a6b06c2963bbac3c webkitgtk-2.18.6.tar.xz
- 
- # Hashes for license files:
- sha256 0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4 Source/WebCore/LICENSE-APPLE
-diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-index 7b364cf467..eb39664b1e 100644
---- a/package/webkitgtk/webkitgtk.mk
-+++ b/package/webkitgtk/webkitgtk.mk
+diff --git a/package/clamav/clamav.hash b/package/clamav/clamav.hash
+index d2a1a1299e..fe873bddfc 100644
+--- a/package/clamav/clamav.hash
++++ b/package/clamav/clamav.hash
+@@ -1,2 +1,14 @@
+ # Locally calculated
+-sha256	167bd6a13e05ece326b968fdb539b05c2ffcfef6018a274a10aeda85c2c0027a	clamav-0.99.2.tar.gz
++sha256 00fa5292a6e00a3a4035b826267748965d5d2c4943d8ff417d740238263e8e84  clamav-0.99.3.tar.gz
++sha256 0c4fd2fa9733fc9122503797648710851e4ee6d9e4969dd33fcbd8c63cd2f584  COPYING
++sha256 d72a145c90918184a05ef65a04c9e6f7466faa59bc1b82c8f6a8ddc7ddcb9bed  COPYING.bzip2
++sha256 dfb818a0d41411c6fb1c193c68b73018ceadd1994bda41ad541cbff292894bc6  COPYING.file
++sha256 6dce638b76399e7521ad8e182d3e33e4496c85b3b69b6ff434b53017101e82ad  COPYING.getopt
++sha256 a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  COPYING.LGPL
++sha256 e3a9b913515a42f8ff3ef1551c3a2cdba383c39ed959729e0e2911219496ad74  COPYING.llvm
++sha256 d96d71b66aa32c4a2d1619b9ca3347dafa9460bcf0fb5ac2408916067ad31dfc  COPYING.lzma
++sha256 accdcf2455c07b99abea59016b3663eaef926a92092d103bfaa25fed27cf6b24  COPYING.pcre
++sha256 e2c1395a3d9fea6d5d25847c9d783db6e2cc8b085b4025861f459139c5dfd90b  COPYING.regex
++sha256 1faccc6b5c7b958fb807a3f573d5be9bf7889fe898f7e0617c544b05a81bfd00  COPYING.unrar
++sha256 a20d6317c5384e8d4c05f9c31097878675d9429ec46090656166039cc10bc957  COPYING.YARA
++sha256 c2f77553f8d870c5635b0dace0519253233f172b33ce1fdf6578610706294eee  COPYING.zlib
+diff --git a/package/clamav/clamav.mk b/package/clamav/clamav.mk
+index 5429abb989..d53168fc1b 100644
+--- a/package/clamav/clamav.mk
++++ b/package/clamav/clamav.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WEBKITGTK_VERSION = 2.18.5
-+WEBKITGTK_VERSION = 2.18.6
- WEBKITGTK_SITE = http://www.webkitgtk.org/releases
- WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
- WEBKITGTK_INSTALL_STAGING = YES
+-CLAMAV_VERSION = 0.99.2
++CLAMAV_VERSION = 0.99.3
+ CLAMAV_SITE = https://www.clamav.net/downloads/production
+ CLAMAV_LICENSE = GPL-2.0
+ CLAMAV_LICENSE_FILES = COPYING COPYING.bzip2 COPYING.file COPYING.getopt \
