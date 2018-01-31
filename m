@@ -1,12 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 31 Jan 2018 13:34:01 +0100
-Subject: [Buildroot] [PATCH 1/1] package/transmission: security bump
- version to 2.93
-In-Reply-To: <CACXmVibHzKdiDRs4K5iJ2LC834Do8CEQmxY-naNeZCuTxQBEUQ@mail.gmail.com>
- (Peter Korsgaard's message of "Sun, 28 Jan 2018 20:48:11 +0100")
-References: <20180127222953.13741-1-bernd.kuhls@t-online.de>
- <CACXmVibHzKdiDRs4K5iJ2LC834Do8CEQmxY-naNeZCuTxQBEUQ@mail.gmail.com>
-Message-ID: <87o9la6wcm.fsf@dell.be.48ers.dk>
+Date: Wed, 31 Jan 2018 13:34:21 +0100
+Subject: [Buildroot] [PATCH] wireshark: security bump to version 2.2.12
+In-Reply-To: <20180128192302.3011-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Sun, 28 Jan 2018 20:23:02 +0100")
+References: <20180128192302.3011-1-peter@korsgaard.com>
+Message-ID: <87k1vy6wc2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,13 +13,25 @@ To: buildroot@busybox.net
 
 >>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > On Sat, Jan 27, 2018 at 11:29 PM, Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
- >> Fixes CVE-2018-5702:
- >> https://github.com/transmission/transmission/pull/468
- >> 
- >> Added license hash.
- >> 
- >> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > Fixes the following security issues:
+ > CVE-2017-17997: MRDISC dissector crash
+ > https://www.wireshark.org/security/wnpa-sec-2018-02.html
+
+ > CVE-2018-5334: IxVeriWave file parser crash
+ > https://www.wireshark.org/security/wnpa-sec-2018-03.html
+
+ > CVE-2018-5335: WCP dissector crash
+ > https://www.wireshark.org/security/wnpa-sec-2018-04.html
+
+ > CVE-2018-5336: Multiple dissectors could crash
+ > https://www.wireshark.org/security/wnpa-sec-2018-01.html
+
+ > For more information, see the release notes:
+ > https://www.wireshark.org/docs/relnotes/wireshark-2.2.12.html
+
+ > While we are at it, also add as hash for license file.
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
 Committed to 2017.02.x and 2017.11.x, thanks.
 
