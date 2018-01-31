@@ -1,26 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 31 Jan 2018 08:49:16 +0100
-Subject: [Buildroot] [PATCH] package/xen: Force disable SDL for xen-qemu
- build
-In-Reply-To: <20180118215230.27648-1-alistair.francis@xilinx.com> (Alistair
- Francis's message of "Thu, 18 Jan 2018 13:52:30 -0800")
-References: <20180118215230.27648-1-alistair.francis@xilinx.com>
-Message-ID: <877erya2o3.fsf@dell.be.48ers.dk>
+Date: Wed, 31 Jan 2018 08:51:22 +0100
+Subject: [Buildroot] [PATCH] rpcbind: Backport fixes to memory leak
+ security fix
+In-Reply-To: <20180118180531.8149-1-ed.blake@sondrel.com> (Ed Blake's message
+ of "Thu, 18 Jan 2018 18:05:31 +0000")
+References: <20180118180531.8149-1-ed.blake@sondrel.com>
+Message-ID: <87372ma2kl.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Alistair" == Alistair Francis <alistair.francis@xilinx.com> writes:
+>>>>> "Ed" == Ed Blake <ed.blake@sondrel.com> writes:
 
- > Fixes autobuilder issue:
- > http://autobuild.buildroot.net/results/8bcb80dc93d38bb38ca32ad93d52c22d1176d57e/
+ > Commit 954509f added a security fix for CVE-2017-8779, involving
+ > pairing all svc_getargs() calls with svc_freeargs() to avoid a memory
+ > leak.  However it also introduced a couple of issues:
 
- > Signed-off-by: Alistair Francis <alistair.francis@xilinx.com>
- > ---
- > V2:
- >  - Don't add a patch, just edit the make options
+ > - The call to svc_freeargs() from rpcbproc_callit_com() may result in
+ >   an attempt to free static memory, resulting in undefined behaviour.
+
+ > - A typo in the svc_freeargs() call from pmapproc_dump() causes NIS
+ >   (aka ypbind) to fail.
+
+ > Backport upstream fixes for these issues to version 0.2.3.
+
+ > Change-Id: Ib6cb19d51c0ae682e3868593ef78edea4ef587be
+ > Signed-off-by: Ed Blake <ed.blake@sondrel.com>
 
 Committed to 2017.02.x, thanks.
 
