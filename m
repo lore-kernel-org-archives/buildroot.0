@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 31 Jan 2018 13:34:21 +0100
-Subject: [Buildroot] [PATCH] wireshark: security bump to version 2.2.12
-In-Reply-To: <20180128192302.3011-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Sun, 28 Jan 2018 20:23:02 +0100")
-References: <20180128192302.3011-1-peter@korsgaard.com>
-Message-ID: <87k1vy6wc2.fsf@dell.be.48ers.dk>
+Date: Wed, 31 Jan 2018 13:34:35 +0100
+Subject: [Buildroot] [PATCH] openocd: add security fix for CVE-2018-5704
+In-Reply-To: <20180128220256.2198-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Sun, 28 Jan 2018 23:02:56 +0100")
+References: <20180128220256.2198-1-peter@korsgaard.com>
+Message-ID: <87fu6m6wbo.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,23 +13,13 @@ To: buildroot@busybox.net
 
 >>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > Fixes the following security issues:
- > CVE-2017-17997: MRDISC dissector crash
- > https://www.wireshark.org/security/wnpa-sec-2018-02.html
+ > Open On-Chip Debugger (OpenOCD) 0.10.0 does not block attempts to use HTTP
+ > POST for sending data to 127.0.0.1 port 4444, which allows remote attackers
+ > to conduct cross-protocol scripting attacks, and consequently execute
+ > arbitrary commands, via a crafted web site.
 
- > CVE-2018-5334: IxVeriWave file parser crash
- > https://www.wireshark.org/security/wnpa-sec-2018-03.html
-
- > CVE-2018-5335: WCP dissector crash
- > https://www.wireshark.org/security/wnpa-sec-2018-04.html
-
- > CVE-2018-5336: Multiple dissectors could crash
- > https://www.wireshark.org/security/wnpa-sec-2018-01.html
-
- > For more information, see the release notes:
- > https://www.wireshark.org/docs/relnotes/wireshark-2.2.12.html
-
- > While we are at it, also add as hash for license file.
+ > For more details, see:
+ > https://sourceforge.net/p/openocd/mailman/message/36188041/
 
  > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
