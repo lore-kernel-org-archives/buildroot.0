@@ -1,39 +1,86 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Wed, 31 Jan 2018 20:25:22 +0100
-Subject: [Buildroot] [PATCH] autofs: update to 5.1.4
-Message-ID: <20180131192522.GA19569@waldemar-brodkorb.de>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 31 Jan 2018 21:08:17 +0100
+Subject: [Buildroot] Buildroot 2017.02.10 released
+Message-ID: <874ln16bbi.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
----
- package/autofs/autofs.hash | 2 +-
- package/autofs/autofs.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Hi,
 
-diff --git a/package/autofs/autofs.hash b/package/autofs/autofs.hash
-index 61e5882..1f2060b 100644
---- a/package/autofs/autofs.hash
-+++ b/package/autofs/autofs.hash
-@@ -1,2 +1,2 @@
- # From https://www.kernel.org/pub/linux/daemons/autofs/v5/sha256sums.asc
--sha256 e96eebfe3ed5fb1a30f4510f538198affde223e370c6dc2bed9780309272b1bf  autofs-5.1.3.tar.xz
-+sha256 8fce30ee51ffd528fe1a4e8374ef57f43367e1f123030e175fb1b1cf15bc1722  autofs-5.1.4.tar.xz
-diff --git a/package/autofs/autofs.mk b/package/autofs/autofs.mk
-index 148ab1b..90cc38d 100644
---- a/package/autofs/autofs.mk
-+++ b/package/autofs/autofs.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--AUTOFS_VERSION = 5.1.3
-+AUTOFS_VERSION = 5.1.4
- AUTOFS_SOURCE = autofs-$(AUTOFS_VERSION).tar.xz
- AUTOFS_SITE = $(BR2_KERNEL_MIRROR)/linux/daemons/autofs/v5
- AUTOFS_LICENSE = GPL-2.0+
+Buildroot is a simple tool for creating complete embedded Linux systems
+(http://buildroot.org).
+
+Buildroot 2017.02.10 is released - Go download it at:
+
+http://buildroot.org/downloads/buildroot-2017.02.10.tar.gz
+
+or
+
+http://buildroot.org/downloads/buildroot-2017.02.10.tar.bz2
+
+Or get it from Git:
+
+git://git.buildroot.org/buildroot
+
+Buildroot 2017.02.10 is the 10th bugfix release on the current long term
+release, fixing a number of important / security related issues
+discovered since the 2017.02.9 release.
+
+- nconfig: Fix for ncurses/ncursesw linking issue causing crashes.
+
+- System: Only show getty options when busybox init or sysvinit are
+  used.
+
+- Infrastructure: Fix build issue for autotools based packages checking
+  for C++ support on toolchains without C++ support on a distro lacking
+  /lib/cpp (E.G. Arch Linux).
+
+- Security fixes for berkeleydb, bind, clamav, dovecot, intel-microcode,
+  irssi, libcurl, mariadb, openocd, php, squid, transmission, webkitgtk,
+  wireshark
+
+- Fixes for download/compilation/runtime issues in avahi, busybox,
+  ccache, clamav, coreutils, eudev, fis, iputils, kmsxx, liberation,
+  libiio, lz4, matchbox-lib, mcookie, pound, rpcbind, tar, util-linux,
+  ti-cgt-pru, xen
+
+For more details, see the CHANGES file:
+
+https://git.buildroot.net/buildroot/plain/CHANGES?id=2017.02.10
+
+Users of the affected packages are strongly encouraged to upgrade.
+
+Many thanks to all the people contributing to this release:
+
+git shortlog -sn 2017.02.9..
+
+    21  Bernd Kuhls
+     9  Fabio Estevam
+     9  Peter Korsgaard
+     7  Thomas Petazzoni
+     4  Carlos Santos
+     3  Adrian Perez de Castro
+     3  Yann E. MORIN
+     2  Baruch Siach
+     2  Vicente Olivert Riera
+     1  Alistair Francis
+     1  Cam Mannett
+     1  Ed Blake
+     1  Einar Jon Gunnarsson
+     1  Gary Bisson
+     1  Guillermo A. Amaral
+     1  Gustavo Zacarias
+     1  Julien BOIBESSOT
+     1  Marcus Folkesson
+     1  Mark Hirota
+     1  Romain Naour
+     1  Ryan Coe
+
+Notice that 2018.02 will become the new LTS release soon and 2017.02.x
+will become EOL.
+
 -- 
-2.1.4
+Bye, Peter Korsgaard
