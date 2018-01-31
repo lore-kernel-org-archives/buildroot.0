@@ -1,61 +1,45 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 31 Jan 2018 19:29:53 +0000
-Subject: [Buildroot] [Bug 10536] Finding non-relative paths in the ccache
-In-Reply-To: <bug-10536-163@https.bugs.busybox.net/>
-References: <bug-10536-163@https.bugs.busybox.net/>
-Message-ID: <bug-10536-163-g6m7BnUvHK@https.bugs.busybox.net/>
+From: Andrey Yurovsky <yurovsky@gmail.com>
+Date: Wed, 31 Jan 2018 11:32:08 -0800
+Subject: [Buildroot] [PATCH] ustr: bump debian patch to 1.0.4-6
+Message-ID: <20180131193208.2896-1-yurovsky@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=10536
+Version 1.0.4-5 is no longer available, replace with 1.0.4-6 so ustr can
+continue to be built.
 
---- Comment #10 from Trent Piepho <tpiepho@gmail.com> ---
-I seems like Arnout should be right about host compiles in different
-directories not sharing ccache.  Since CCACHE_BASEDIR is not set, the paths
-should be absolute and different directories would be a cache miss.
+Signed-off-by: Andrey Yurovsky <yurovsky@gmail.com>
+---
+ package/ustr/ustr.hash | 4 ++--
+ package/ustr/ustr.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-But here's some testing with host-uboot-tools.  First a build from a cleared
-and reset ccache:
-cache hit (direct)                     0
-cache hit (preprocessed)               0
-cache miss                            58
-cache hit rate                      0.00 %
-called for link                        8
-cleanups performed                     0
-files in cache                       171
-
-As expected, all misses. 58 files.
-
-Building again from the same output dir:
-cache hit (direct)                    53
-cache hit (preprocessed)               5
-cache miss                            58
-cache hit rate                     50.00 %
-called for link                       16
-cleanups performed                     0
-files in cache                       176
-
-Exactly 58 new hits, as expected, everything in cache.  But 5 new files, odd.
-
-Now the tricky one, building from a different output dir:
-cache hit (direct)                    53
-cache hit (preprocessed)              15
-cache miss                           106
-cache hit rate                     39.08 %
-called for link                       24
-cleanups performed                     0
-files in cache                       331
-
-These should be all misses, right?  But there were 10 hits in preprocessed
-mode!  Which is fair, if the preprocessed code ends up being exactly the same. 
-But just because the c code is the same doesn't mean the auto-dependency file
-is the same (absolute paths in the .d file differ!).  If ccache tries to use
-the cached .d file with absolute paths on this supposed preprocessed hit, it
-will fail.
-
+diff --git a/package/ustr/ustr.hash b/package/ustr/ustr.hash
+index 214d37a77a..878c607332 100644
+--- a/package/ustr/ustr.hash
++++ b/package/ustr/ustr.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+ sha256 3daf6eae9f78de1e872c0b2b83cce35515b94d4bb8a074e48f331fd99e1fc2c4 ustr-1.0.4.tar.bz2
+-# From http://debian.gtisc.gatech.edu/debian/pool/main/u/ustr/ustr_1.0.4-5.dsc
+-sha256 a21e78acf82dcccef2893932ef7b85852419bfd9b18382e63c34e7710c1d7762 ustr_1.0.4-5.debian.tar.xz
++# From http://debian.gtisc.gatech.edu/debian/pool/main/u/ustr/ustr_1.0.4-6.dsc
++sha256 75aa6be2c70eba632ac63078e55ecb4b5a45e6624501a8ed6d81b9a2014d149e ustr_1.0.4-6.debian.tar.xz
+diff --git a/package/ustr/ustr.mk b/package/ustr/ustr.mk
+index 6fca33457e..a2c7a0a320 100644
+--- a/package/ustr/ustr.mk
++++ b/package/ustr/ustr.mk
+@@ -13,7 +13,7 @@ USTR_LICENSE = BSD-2-Clause, MIT, LGPL-2.0+
+ USTR_LICENSE_FILES = LICENSE LICENSE_BSD LICENSE_LGPL LICENSE_MIT
+ USTR_AUTORECONF = YES
+ USTR_PATCH = \
+-	http://http.debian.net/debian/pool/main/u/ustr/ustr_$(USTR_VERSION)-5.debian.tar.xz
++	http://http.debian.net/debian/pool/main/u/ustr/ustr_$(USTR_VERSION)-6.debian.tar.xz
+ 
+ USTR_INSTALL_STAGING = YES
+ 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.14.3
