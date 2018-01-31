@@ -1,21 +1,23 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 31 Jan 2018 13:31:53 +0100
-Subject: [Buildroot] [PATCH] fis: fix typo in build command
-In-Reply-To: <20180124171538.13469-1-gary.bisson@boundarydevices.com> (Gary
- Bisson's message of "Wed, 24 Jan 2018 18:15:38 +0100")
-References: <20180124171538.13469-1-gary.bisson@boundarydevices.com>
-Message-ID: <87inbi8b0m.fsf@dell.be.48ers.dk>
+Date: Wed, 31 Jan 2018 13:32:07 +0100
+Subject: [Buildroot] [PATCH 1/2] webkitgtk: Add missing libtasn1
+ dependency
+In-Reply-To: <20180125204203.14165-1-aperez@igalia.com> (Adrian Perez de
+ Castro's message of "Thu, 25 Jan 2018 22:42:02 +0200")
+References: <20180125204203.14165-1-aperez@igalia.com>
+Message-ID: <87efm68b08.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gary" == Gary Bisson <gary.bisson@boundarydevices.com> writes:
+>>>>> "Adrian" == Adrian Perez de Castro <aperez@igalia.com> writes:
 
- > Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
- > ---
- > Typo noticed while during completely unrelated stuff...
+ > Nowadays libtasn1 is always required and if not present the CMake
+ > configuration step would fail.
+
+ > Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 
 Committed to 2017.02.x and 2017.11.x, thanks.
 
