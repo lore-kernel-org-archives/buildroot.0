@@ -1,47 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 31 Jan 2018 12:14:57 +0100
-Subject: [Buildroot] [git commit branch/2017.02.x] squid: bump version to
- 3.5.26
-Message-ID: <20180131123645.1BD2F88170@busybox.osuosl.org>
+Date: Wed, 31 Jan 2018 13:04:16 +0100
+Subject: [Buildroot] [git commit branch/2017.02.x] package/transmission:
+ security bump version to 2.93
+Message-ID: <20180131123646.CBEAC8813E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5ce5653e4882321b087b629f152470cb850ba926
+commit: https://git.buildroot.net/buildroot/commit/?id=4b2b530d55869928da7417298cc770825870a1f3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Fixes CVE-2018-5702:
+https://github.com/transmission/transmission/pull/468
+
+Added license hash.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit fffced338da664e714b102774355e032e0297010)
+(cherry picked from commit 6e43a52aa8a971a4e328335ce993f6868b4c51a4)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/squid/squid.hash | 6 +++---
- package/squid/squid.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/transmission/transmission.hash | 3 ++-
+ package/transmission/transmission.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/squid/squid.hash b/package/squid/squid.hash
-index 95762bc8bd..91ba9e6fc4 100644
---- a/package/squid/squid.hash
-+++ b/package/squid/squid.hash
-@@ -1,3 +1,3 @@
--# From http://www.squid-cache.org/Versions/v3/3.5/squid-3.5.25.tar.xz.asc
--md5 6b7dd7b42b1adacf08f3155640ea2782  squid-3.5.25.tar.xz
--sha1 63ea00cb918e3106fd91b286ec907f1681e0f0e8  squid-3.5.25.tar.xz
-+# From http://www.squid-cache.org/Versions/v3/3.5/squid-3.5.26.tar.xz.asc
-+md5 510e2c84773879c00d0e7ced997864d9  squid-3.5.26.tar.xz
-+sha1 51a664217957b35de8b7fae180b9f93a759a4204  squid-3.5.26.tar.xz
-diff --git a/package/squid/squid.mk b/package/squid/squid.mk
-index 09d9bca139..7379750894 100644
---- a/package/squid/squid.mk
-+++ b/package/squid/squid.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/transmission/transmission.hash b/package/transmission/transmission.hash
+index 849a722d2b..4c1c3f9a3a 100644
+--- a/package/transmission/transmission.hash
++++ b/package/transmission/transmission.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+-sha256	3a8d045c306ad9acb7bf81126939b9594553a388482efa0ec1bfb67b22acd35f	transmission-2.92.tar.xz
++sha256 8815920e0a4499bcdadbbe89a4115092dab42ce5199f71ff9a926cfd12b9b90b  transmission-2.93.tar.xz
++sha256 20801783bf59e27d03ed6aab625b32a34e221ae95bf801db87827c8023398495  COPYING
+diff --git a/package/transmission/transmission.mk b/package/transmission/transmission.mk
+index e4a36805c2..34b310bffc 100644
+--- a/package/transmission/transmission.mk
++++ b/package/transmission/transmission.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- SQUID_VERSION_MAJOR = 3.5
--SQUID_VERSION = $(SQUID_VERSION_MAJOR).25
-+SQUID_VERSION = $(SQUID_VERSION_MAJOR).26
- SQUID_SOURCE = squid-$(SQUID_VERSION).tar.xz
- SQUID_SITE = http://www.squid-cache.org/Versions/v3/$(SQUID_VERSION_MAJOR)
- SQUID_LICENSE = GPLv2+
+-TRANSMISSION_VERSION = 2.92
++TRANSMISSION_VERSION = 2.93
+ TRANSMISSION_SITE = https://github.com/transmission/transmission-releases/raw/master
+ TRANSMISSION_SOURCE = transmission-$(TRANSMISSION_VERSION).tar.xz
+ TRANSMISSION_DEPENDENCIES = \
