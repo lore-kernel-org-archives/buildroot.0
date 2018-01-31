@@ -1,64 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 31 Jan 2018 12:02:14 +0100
-Subject: [Buildroot] [git commit branch/2017.11.x] package/clamav: security
- bump to version 0.99.3
-Message-ID: <20180131123622.96B308568A@busybox.osuosl.org>
+Date: Wed, 31 Jan 2018 12:02:42 +0100
+Subject: [Buildroot] [git commit branch/2017.11.x] package/transmission:
+ security bump version to 2.93
+Message-ID: <20180131123622.ADA1D8568A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e38b3504762cadca093011179f3d026975d525c7
+commit: https://git.buildroot.net/buildroot/commit/?id=2faa1083ce588b7cb7f2c7db57cead882f72c4e6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.11.x
 
-Fixes CVE-2017-12374, CVE-2017-12375, CVE-2017-12376, CVE-2017-12377,
-CVE-2017-12378, CVE-2017-12379, CVE-2017-12380.
+Fixes CVE-2018-5702:
+https://github.com/transmission/transmission/pull/468
 
-For details see upstream announcement:
-http://blog.clamav.net/2018/01/clamav-0993-has-been-released.html
-
-Added license hashes.
+Added license hash.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit ffb5dee113b542fd8fa81a7ed32ac64946670224)
+(cherry picked from commit 6e43a52aa8a971a4e328335ce993f6868b4c51a4)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/clamav/clamav.hash | 14 +++++++++++++-
- package/clamav/clamav.mk   |  2 +-
- 2 files changed, 14 insertions(+), 2 deletions(-)
+ package/transmission/transmission.hash | 3 ++-
+ package/transmission/transmission.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/clamav/clamav.hash b/package/clamav/clamav.hash
-index d2a1a1299e..fe873bddfc 100644
---- a/package/clamav/clamav.hash
-+++ b/package/clamav/clamav.hash
-@@ -1,2 +1,14 @@
+diff --git a/package/transmission/transmission.hash b/package/transmission/transmission.hash
+index 849a722d2b..4c1c3f9a3a 100644
+--- a/package/transmission/transmission.hash
++++ b/package/transmission/transmission.hash
+@@ -1,2 +1,3 @@
  # Locally calculated
--sha256	167bd6a13e05ece326b968fdb539b05c2ffcfef6018a274a10aeda85c2c0027a	clamav-0.99.2.tar.gz
-+sha256 00fa5292a6e00a3a4035b826267748965d5d2c4943d8ff417d740238263e8e84  clamav-0.99.3.tar.gz
-+sha256 0c4fd2fa9733fc9122503797648710851e4ee6d9e4969dd33fcbd8c63cd2f584  COPYING
-+sha256 d72a145c90918184a05ef65a04c9e6f7466faa59bc1b82c8f6a8ddc7ddcb9bed  COPYING.bzip2
-+sha256 dfb818a0d41411c6fb1c193c68b73018ceadd1994bda41ad541cbff292894bc6  COPYING.file
-+sha256 6dce638b76399e7521ad8e182d3e33e4496c85b3b69b6ff434b53017101e82ad  COPYING.getopt
-+sha256 a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  COPYING.LGPL
-+sha256 e3a9b913515a42f8ff3ef1551c3a2cdba383c39ed959729e0e2911219496ad74  COPYING.llvm
-+sha256 d96d71b66aa32c4a2d1619b9ca3347dafa9460bcf0fb5ac2408916067ad31dfc  COPYING.lzma
-+sha256 accdcf2455c07b99abea59016b3663eaef926a92092d103bfaa25fed27cf6b24  COPYING.pcre
-+sha256 e2c1395a3d9fea6d5d25847c9d783db6e2cc8b085b4025861f459139c5dfd90b  COPYING.regex
-+sha256 1faccc6b5c7b958fb807a3f573d5be9bf7889fe898f7e0617c544b05a81bfd00  COPYING.unrar
-+sha256 a20d6317c5384e8d4c05f9c31097878675d9429ec46090656166039cc10bc957  COPYING.YARA
-+sha256 c2f77553f8d870c5635b0dace0519253233f172b33ce1fdf6578610706294eee  COPYING.zlib
-diff --git a/package/clamav/clamav.mk b/package/clamav/clamav.mk
-index 5429abb989..d53168fc1b 100644
---- a/package/clamav/clamav.mk
-+++ b/package/clamav/clamav.mk
+-sha256	3a8d045c306ad9acb7bf81126939b9594553a388482efa0ec1bfb67b22acd35f	transmission-2.92.tar.xz
++sha256 8815920e0a4499bcdadbbe89a4115092dab42ce5199f71ff9a926cfd12b9b90b  transmission-2.93.tar.xz
++sha256 20801783bf59e27d03ed6aab625b32a34e221ae95bf801db87827c8023398495  COPYING
+diff --git a/package/transmission/transmission.mk b/package/transmission/transmission.mk
+index 7f4675302e..4e78604fdb 100644
+--- a/package/transmission/transmission.mk
++++ b/package/transmission/transmission.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--CLAMAV_VERSION = 0.99.2
-+CLAMAV_VERSION = 0.99.3
- CLAMAV_SITE = https://www.clamav.net/downloads/production
- CLAMAV_LICENSE = GPL-2.0
- CLAMAV_LICENSE_FILES = COPYING COPYING.bzip2 COPYING.file COPYING.getopt \
+-TRANSMISSION_VERSION = 2.92
++TRANSMISSION_VERSION = 2.93
+ TRANSMISSION_SITE = https://github.com/transmission/transmission-releases/raw/master
+ TRANSMISSION_SOURCE = transmission-$(TRANSMISSION_VERSION).tar.xz
+ TRANSMISSION_DEPENDENCIES = \
