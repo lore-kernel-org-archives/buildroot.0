@@ -1,65 +1,88 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 31 Jan 2018 12:03:13 +0100
-Subject: [Buildroot] [git commit branch/2017.11.x] wireshark: security bump
- to version 2.2.12
-Message-ID: <20180131123622.C5E848568A@busybox.osuosl.org>
+Date: Wed, 31 Jan 2018 12:04:09 +0100
+Subject: [Buildroot] [git commit branch/2017.11.x] package/dovecot: bump
+ version to 2.2.33.2
+Message-ID: <20180131123622.F3EAA8568A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3738aa22c8ce2c74e970b71f0a9840a6f96a3dbb
+commit: https://git.buildroot.net/buildroot/commit/?id=f4caafafc2d9d7733690bceac71af50600eccee2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.11.x
 
-Fixes the following security issues:
+Added license hashes.
 
-CVE-2017-17997: MRDISC dissector crash
-https://www.wireshark.org/security/wnpa-sec-2018-02.html
-
-CVE-2018-5334: IxVeriWave file parser crash
-https://www.wireshark.org/security/wnpa-sec-2018-03.html
-
-CVE-2018-5335: WCP dissector crash
-https://www.wireshark.org/security/wnpa-sec-2018-04.html
-
-CVE-2018-5336: Multiple dissectors could crash
-https://www.wireshark.org/security/wnpa-sec-2018-01.html
-
-For more information, see the release notes:
-https://www.wireshark.org/docs/relnotes/wireshark-2.2.12.html
-
-While we are at it, also add as hash for license file.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 2d920ad1b40967ae9241eaaa551d7d13c19f1b14)
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+(cherry picked from commit 746f94c282fcc2c0728b53e24d96e7553fcaa46a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wireshark/wireshark.hash | 6 ++++--
- package/wireshark/wireshark.mk   | 2 +-
- 2 files changed, 5 insertions(+), 3 deletions(-)
+ .../0001-byteorder.h-fix-uclibc-build.patch        | 32 ++++++++++++++++++++++
+ package/dovecot/dovecot.hash                       |  5 +++-
+ package/dovecot/dovecot.mk                         |  2 +-
+ 3 files changed, 37 insertions(+), 2 deletions(-)
 
-diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
-index cffdab2a24..93421c6498 100644
---- a/package/wireshark/wireshark.hash
-+++ b/package/wireshark/wireshark.hash
-@@ -1,2 +1,4 @@
--# From: https://www.wireshark.org/download/src/all-versions/SIGNATURES-2.2.11.txt
--sha256 a9f11621e85d7e1d72259157edd94825e72af3fd72e184b8474459f92ad5fc40  wireshark-2.2.11.tar.bz2
-+# From: https://www.wireshark.org/download/src/all-versions/SIGNATURES-2.2.12.txt
-+sha256 3274458d1bb1658a5001465ecb07c7cbfc709571ef36bd062897570d4bab3ebc  wireshark-2.2.12.tar.bz2
-+# Locally calculated
-+sha256 7cdbed2b697efaa45576a033f1ac0e73cd045644a91c79bbf41d4a7d81dac7bf  COPYING
-diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
-index 535ed7a2c9..93c6da0398 100644
---- a/package/wireshark/wireshark.mk
-+++ b/package/wireshark/wireshark.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/dovecot/0001-byteorder.h-fix-uclibc-build.patch b/package/dovecot/0001-byteorder.h-fix-uclibc-build.patch
+new file mode 100644
+index 0000000000..b6d3ed3ec0
+--- /dev/null
++++ b/package/dovecot/0001-byteorder.h-fix-uclibc-build.patch
+@@ -0,0 +1,32 @@
++From 902917880ca29f1007750a70cf46e7246b2d0a2a Mon Sep 17 00:00:00 2001
++From: Josef 'Jeff' Sipek <jeff.sipek@dovecot.fi>
++Date: Tue, 14 Nov 2017 06:01:21 +0100
++Subject: [PATCH] byteorder.h: fix uclibc build
++
++Patch suggested on upstream mailinglist:
++https://www.dovecot.org/pipermail/dovecot/2017-November/110019.html
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ src/lib/byteorder.h | 5 +++++
++ 1 file changed, 5 insertions(+)
++
++diff --git a/src/lib/byteorder.h b/src/lib/byteorder.h
++index 2f5dc7c17..4ffe8da21 100644
++--- a/src/lib/byteorder.h
+++++ b/src/lib/byteorder.h
++@@ -23,6 +23,11 @@
++ #ifndef BYTEORDER_H
++ #define BYTEORDER_H
++ 
+++#undef bswap_8
+++#undef bswap_16
+++#undef bswap_32
+++#undef bswap_64
+++
++ /*
++  * These prototypes exist to catch bugs in the code generating macros below.
++  */
++-- 
++2.11.0
++
+diff --git a/package/dovecot/dovecot.hash b/package/dovecot/dovecot.hash
+index 184745b394..33163d6d8c 100644
+--- a/package/dovecot/dovecot.hash
++++ b/package/dovecot/dovecot.hash
+@@ -1,2 +1,5 @@
+ # Locally computed after checking signature
+-sha256 034be40907748128d65088a4f59789b2f99ae7b33a88974eae0b6a68ece376a1  dovecot-2.2.31.tar.gz
++sha256 fe1e3b78609a56ee22fc209077e4b75348fa1bbd54c46f52bde2472a4c4cee84  dovecot-2.2.33.2.tar.gz
++sha256 a363b132e494f662d98c820d1481297e6ae72f194c2c91b6c39e1518b86240a8  COPYING
++sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
++sha256 52b8c95fabb19575281874b661ef7968ea47e8f5d74ba0dd40ce512e52b3fc97  COPYING.MIT
+diff --git a/package/dovecot/dovecot.mk b/package/dovecot/dovecot.mk
+index fa69acfa20..71a76c2818 100644
+--- a/package/dovecot/dovecot.mk
++++ b/package/dovecot/dovecot.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--WIRESHARK_VERSION = 2.2.11
-+WIRESHARK_VERSION = 2.2.12
- WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.bz2
- WIRESHARK_SITE = https://www.wireshark.org/download/src/all-versions
- WIRESHARK_LICENSE = wireshark license
+ DOVECOT_VERSION_MAJOR = 2.2
+-DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).31
++DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).33.2
+ DOVECOT_SITE = http://www.dovecot.org/releases/$(DOVECOT_VERSION_MAJOR)
+ DOVECOT_INSTALL_STAGING = YES
+ DOVECOT_LICENSE = LGPL-2.1, MIT, Public Domain, BSD-3-Clause, Unicode-DFS-2015
