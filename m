@@ -1,48 +1,82 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 31 Jan 2018 13:00:42 +0100
-Subject: [Buildroot] [git commit branch/2017.02.x] ccache: bump to version
- 3.3.5
-Message-ID: <20180131123645.DB26B88170@busybox.osuosl.org>
+Date: Wed, 31 Jan 2018 13:02:27 +0100
+Subject: [Buildroot] [git commit branch/2017.02.x] package/clamav: needs
+ libtool
+Message-ID: <20180131123646.1711F8817D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2b1b52ba8e160c28495a5dc0ca0c6731a13dd7cd
+commit: https://git.buildroot.net/buildroot/commit/?id=2e7314247f3d90d42f541db0987c71f7b297b9fb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-(Likely) fixes #10536
+clamav contains a copy of libltdl which is used when the libtool
+package is not present, this increases the filesize of the target libs:
 
-https://bugs.buildroot.org/show_bug.cgi?id=10536
+linked against libltdl.so:
 
-Signed-off-by: Mark Hirota <markhirota@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 01955b5b6ed6999295d108db789d44c6fc370efc)
+-rwxr-xr-x 1 bernd bernd 1838528 M??r 11 13:21 output/target/usr/lib/libclamav.so.7.1.1
+
+$ output/host/usr/bin/i586-buildroot-linux-uclibc-readelf -a output/target/usr/lib/libclamav.so.7.1.1 | grep NEEDED
+ 0x00000001 (NEEDED)                     Shared library: [libltdl.so.7]
+ 0x00000001 (NEEDED)                     Shared library: [libssl.so.1.0.0]
+ 0x00000001 (NEEDED)                     Shared library: [libcrypto.so.1.0.0]
+ 0x00000001 (NEEDED)                     Shared library: [libz.so.1]
+ 0x00000001 (NEEDED)                     Shared library: [libc.so.0]
+
+not linked against libltdl.so:
+
+-rwxr-xr-x 1 bernd bernd 1859548 M??r 11 13:21 output/target/usr/lib/libclamav.so.7.1.1
+
+$ output/host/usr/bin/i586-buildroot-linux-uclibc-readelf -a output/target/usr/lib/libclamav.so.7.1.1 | grep NEEDED
+ 0x00000001 (NEEDED)                     Shared library: [libssl.so.1.0.0]
+ 0x00000001 (NEEDED)                     Shared library: [libcrypto.so.1.0.0]
+ 0x00000001 (NEEDED)                     Shared library: [libz.so.1]
+ 0x00000001 (NEEDED)                     Shared library: [libc.so.0]
+
+Therefore this patch adds libtool as hard dependency to clamav.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+(cherry picked from commit a5b0607b4ab811d4cf55c760528093d439355bb7)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ccache/ccache.hash | 1 +
- package/ccache/ccache.mk   | 2 +-
- 2 files changed, 2 insertions(+), 1 deletion(-)
+ package/clamav/Config.in | 1 +
+ package/clamav/clamav.mk | 3 +++
+ 2 files changed, 4 insertions(+)
 
-diff --git a/package/ccache/ccache.hash b/package/ccache/ccache.hash
-index 5354572638..c22394b13b 100644
---- a/package/ccache/ccache.hash
-+++ b/package/ccache/ccache.hash
-@@ -1,2 +1,3 @@
- # Verified key https://samba.org/ftp/ccache/ccache-3.3.4.tar.xz.asc - sha256 computed locally
- sha256  24f15bf389e38c41548c9c259532187774ec0cb9686c3497bbb75504c8dc404f  ccache-3.3.4.tar.xz
-+sha256  190576a6e938760ec8113523e6fd380141117303e90766cc4802e770422b30c6  ccache-3.3.5.tar.xz
-diff --git a/package/ccache/ccache.mk b/package/ccache/ccache.mk
-index 9b79014c5a..6af2d8e547 100644
---- a/package/ccache/ccache.mk
-+++ b/package/ccache/ccache.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--CCACHE_VERSION = 3.3.4
-+CCACHE_VERSION = 3.3.5
- CCACHE_SITE = https://www.samba.org/ftp/ccache
- CCACHE_SOURCE = ccache-$(CCACHE_VERSION).tar.xz
- CCACHE_LICENSE = GPLv3+, others
+diff --git a/package/clamav/Config.in b/package/clamav/Config.in
+index 7ec402d9de..f832341a02 100644
+--- a/package/clamav/Config.in
++++ b/package/clamav/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_CLAMAV
+ 	bool "clamav"
+ 	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
++	select BR2_PACKAGE_LIBTOOL
+ 	select BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_ZLIB
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/clamav/clamav.mk b/package/clamav/clamav.mk
+index 36ab8be0e9..86bdda49e2 100644
+--- a/package/clamav/clamav.mk
++++ b/package/clamav/clamav.mk
+@@ -12,6 +12,7 @@ CLAMAV_LICENSE_FILES = COPYING COPYING.bzip2 COPYING.file COPYING.getopt \
+ 	COPYING.unrar COPYING.zlib
+ CLAMAV_DEPENDENCIES = \
+ 	host-pkgconf \
++	libtool \
+ 	openssl \
+ 	zlib \
+ 	$(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
+@@ -24,6 +25,8 @@ CLAMAV_CONF_ENV = \
+ # UCLIBC_HAS_FTS is disabled, therefore disable fanotify (missing fts.h)
+ CLAMAV_CONF_OPTS = \
+ 	--with-dbdir=/var/lib/clamav \
++	--with-ltdl-include=$(STAGING_DIR)/usr/include \
++	--with-ltdl-lib=$(STAGING_DIR)/usr/lib \
+ 	--with-openssl=$(STAGING_DIR)/usr \
+ 	--with-zlib=$(STAGING_DIR)/usr \
+ 	--disable-zlib-vcheck \
