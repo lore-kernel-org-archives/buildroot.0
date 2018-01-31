@@ -1,74 +1,62 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 31 Jan 2018 11:52:12 +0100
-Subject: [Buildroot] [git commit branch/2017.11.x] util-linux: disable
- useless programs in the host package
-Message-ID: <20180131123622.1AEBB880C0@busybox.osuosl.org>
+Date: Wed, 31 Jan 2018 11:52:49 +0100
+Subject: [Buildroot] [git commit branch/2017.11.x] libcurl: security bump to
+ version 7.58.0
+Message-ID: <20180131123622.32C72880C0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c4ccf7619536cf323c61121160a8ca74d259e1c6
+commit: https://git.buildroot.net/buildroot/commit/?id=3502e407538174f6658bb6576c6aaf21e398ba70
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.11.x
 
-Disable all programs that depend on ncurses, as well as utilities that
-are useless on the host: agetty, chfn-chsh, chmem, login, lslogins,
-mesg, more, newgrp, nologin, nsenter, pg, rfkill, schedutils, setpriv,
-setterm, su, sulogin, tunelp, ul, unshare, uuidd, vipw, wall, wdctl,
-write, zramctl.
+Fixes CVE-2018-1000007: libcurl might leak authentication data to third
+parties.
 
-Also add dependency on host-zlib if host cramfs utils are to be built.
+https://curl.haxx.se/docs/adv_2018-b3bf.html
 
-Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+Fixes CVE-2018-1000005: libcurl contains an out bounds read in code handling
+HTTP/2 trailers.
+
+https://curl.haxx.se/docs/adv_2018-824a.html
+
+Update license hash due to copyright year change.
+
+[Peter: also add CVE-2018-1000005 reference]
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 67170b76af912bebcdab3aa88a4ac9e5b35d6273)
+
+(cherry picked from commit e02dd5a4924c69fc806f4191bc7be67e28d5ad37)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/util-linux/util-linux.mk | 33 +++++++++++++++++++++++++++++++--
- 1 file changed, 31 insertions(+), 2 deletions(-)
+ package/libcurl/libcurl.hash | 6 +++---
+ package/libcurl/libcurl.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
-index 8464288600..5a021bea67 100644
---- a/package/util-linux/util-linux.mk
-+++ b/package/util-linux/util-linux.mk
-@@ -164,8 +164,37 @@ HOST_UTIL_LINUX_CONF_OPTS += \
+diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
+index 275a5a373f..b1afe1891d 100644
+--- a/package/libcurl/libcurl.hash
++++ b/package/libcurl/libcurl.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# https://curl.haxx.se/download/curl-7.57.0.tar.xz.asc
+-sha256 f5f6fd3c72b7b8389969f4fb671ed8532fa9b5bb7a5cae7ca89bc1cea45c7878  curl-7.57.0.tar.xz
+-sha256 cbcf511f5702f7baf5424193a792bc9c18fab22bcbec2e6a587598389dc632c2  COPYING
++# https://curl.haxx.se/download/curl-7.58.0.tar.xz.asc
++sha256 6a813875243609eb75f37fa72044e4ad618b55ec15a4eafdac2df6a7e800e3e3  curl-7.58.0.tar.xz
++sha256 5f3849ec38ddb927e79f514bf948890c41b8d1407286a49609b8fb1585931095  COPYING
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index 0aab58a7de..a1d2aa7a60 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_PACKAGE_HOST_UTIL_LINUX),y)
- HOST_UTIL_LINUX_CONF_OPTS += --disable-makeinstall-chown
--# disable more command because of ncurses dependency
--HOST_UTIL_LINUX_CONF_OPTS += --disable-more
-+# disable commands that have ncurses dependency, as well as
-+# other ones that are useless on the host
-+HOST_UTIL_LINUX_CONF_OPTS += \
-+	--disable-agetty \
-+	--disable-chfn-chsh \
-+	--disable-chmem \
-+	--disable-login \
-+	--disable-lslogins \
-+	--disable-mesg \
-+	--disable-more \
-+	--disable-newgrp \
-+	--disable-nologin \
-+	--disable-nsenter \
-+	--disable-pg \
-+	--disable-rfkill \
-+	--disable-schedutils \
-+	--disable-setpriv \
-+	--disable-setterm \
-+	--disable-su \
-+	--disable-sulogin \
-+	--disable-tunelp \
-+	--disable-ul \
-+	--disable-unshare \
-+	--disable-uuidd \
-+	--disable-vipw \
-+	--disable-wall \
-+	--disable-wdctl \
-+	--disable-write \
-+	--disable-zramctl
-+# Used by cramfs utils
-+HOST_UTIL_LINUX_DEPENDENCIES += host-zlib
- else
- HOST_UTIL_LINUX_CONF_OPTS += --disable-all-programs
- endif
+-LIBCURL_VERSION = 7.57.0
++LIBCURL_VERSION = 7.58.0
+ LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
+ LIBCURL_SITE = https://curl.haxx.se/download
+ LIBCURL_DEPENDENCIES = host-pkgconf \
