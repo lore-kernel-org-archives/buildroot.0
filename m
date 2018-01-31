@@ -1,67 +1,88 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 31 Jan 2018 13:09:18 +0100
-Subject: [Buildroot] [git commit branch/2017.02.x] package/berkeleydb: add
- security fix for CVE-2017-10140
-Message-ID: <20180131123647.AE12B86848@busybox.osuosl.org>
+Date: Wed, 31 Jan 2018 13:08:32 +0100
+Subject: [Buildroot] [git commit branch/2017.02.x] package/dovecot: bump
+ version to 2.2.33.2
+Message-ID: <20180131123647.8720D8635A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8207b3ad28c470f06d356642ea3516354421a590
+commit: https://git.buildroot.net/buildroot/commit/?id=115bebbf18f109684cca03964257a090f6072bd8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Fixes CVE-2017-10140: Berkeley DB reads DB_CONFIG from cwd
+Added license hashes.
 
-For more details, see:
-https://security-tracker.debian.org/tracker/CVE-2017-10140
-
-And add license hash while we are at it.
-
-[Peter: extend commit message]
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-(cherry picked from commit 0b368023f7e166648f136244960608a0e009332d)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+(cherry picked from commit 746f94c282fcc2c0728b53e24d96e7553fcaa46a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/berkeleydb/0001-cwd-db_config.patch | 21 +++++++++++++++++++++
- package/berkeleydb/berkeleydb.hash          |  1 +
- 2 files changed, 22 insertions(+)
+ .../0001-byteorder.h-fix-uclibc-build.patch        | 32 ++++++++++++++++++++++
+ package/dovecot/dovecot.hash                       |  5 +++-
+ package/dovecot/dovecot.mk                         |  2 +-
+ 3 files changed, 37 insertions(+), 2 deletions(-)
 
-diff --git a/package/berkeleydb/0001-cwd-db_config.patch b/package/berkeleydb/0001-cwd-db_config.patch
+diff --git a/package/dovecot/0001-byteorder.h-fix-uclibc-build.patch b/package/dovecot/0001-byteorder.h-fix-uclibc-build.patch
 new file mode 100644
-index 0000000000..08ce5a3931
+index 0000000000..b6d3ed3ec0
 --- /dev/null
-+++ b/package/berkeleydb/0001-cwd-db_config.patch
-@@ -0,0 +1,21 @@
-+Do not access DB_CONFIG when db_home is not set
++++ b/package/dovecot/0001-byteorder.h-fix-uclibc-build.patch
+@@ -0,0 +1,32 @@
++From 902917880ca29f1007750a70cf46e7246b2d0a2a Mon Sep 17 00:00:00 2001
++From: Josef 'Jeff' Sipek <jeff.sipek@dovecot.fi>
++Date: Tue, 14 Nov 2017 06:01:21 +0100
++Subject: [PATCH] byteorder.h: fix uclibc build
 +
-+Fixes CVE-2017-10140:
-+https://bugzilla.redhat.com/show_bug.cgi?id=1464032#c9
-+
-+Downloaded from
-+http://pkgs.fedoraproject.org/cgit/rpms/libdb.git/commit/?id=8047fa8580659fcae740c25e91b490539b8453eb
++Patch suggested on upstream mailinglist:
++https://www.dovecot.org/pipermail/dovecot/2017-November/110019.html
 +
 +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ src/lib/byteorder.h | 5 +++++
++ 1 file changed, 5 insertions(+)
 +
-+--- db-5.3.28/src/env/env_open.c.old	2017-06-26 10:32:11.011419981 +0200
-++++ db-5.3.28/src/env/env_open.c	2017-06-26 10:32:46.893721233 +0200
-+@@ -473,7 +473,7 @@
-+ 	env->db_mode = mode == 0 ? DB_MODE_660 : mode;
++diff --git a/src/lib/byteorder.h b/src/lib/byteorder.h
++index 2f5dc7c17..4ffe8da21 100644
++--- a/src/lib/byteorder.h
+++++ b/src/lib/byteorder.h
++@@ -23,6 +23,11 @@
++ #ifndef BYTEORDER_H
++ #define BYTEORDER_H
 + 
-+ 	/* Read the DB_CONFIG file. */
-+-	if ((ret = __env_read_db_config(env)) != 0)
-++	if (env->db_home != NULL && (ret = __env_read_db_config(env)) != 0)
-+ 		return (ret);
-+ 
-+ 	/*
-diff --git a/package/berkeleydb/berkeleydb.hash b/package/berkeleydb/berkeleydb.hash
-index e47c578cbe..7529329748 100644
---- a/package/berkeleydb/berkeleydb.hash
-+++ b/package/berkeleydb/berkeleydb.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
- sha256	76a25560d9e52a198d37a31440fd07632b5f1f8f9f2b6d5438f4bc3e7c9013ef  db-5.3.28.NC.tar.gz
-+sha256	b78815181a53241f9347c6b47d1031fd669946f863e1edc807a291354cec024b  LICENSE
+++#undef bswap_8
+++#undef bswap_16
+++#undef bswap_32
+++#undef bswap_64
+++
++ /*
++  * These prototypes exist to catch bugs in the code generating macros below.
++  */
++-- 
++2.11.0
++
+diff --git a/package/dovecot/dovecot.hash b/package/dovecot/dovecot.hash
+index 184745b394..33163d6d8c 100644
+--- a/package/dovecot/dovecot.hash
++++ b/package/dovecot/dovecot.hash
+@@ -1,2 +1,5 @@
+ # Locally computed after checking signature
+-sha256 034be40907748128d65088a4f59789b2f99ae7b33a88974eae0b6a68ece376a1  dovecot-2.2.31.tar.gz
++sha256 fe1e3b78609a56ee22fc209077e4b75348fa1bbd54c46f52bde2472a4c4cee84  dovecot-2.2.33.2.tar.gz
++sha256 a363b132e494f662d98c820d1481297e6ae72f194c2c91b6c39e1518b86240a8  COPYING
++sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
++sha256 52b8c95fabb19575281874b661ef7968ea47e8f5d74ba0dd40ce512e52b3fc97  COPYING.MIT
+diff --git a/package/dovecot/dovecot.mk b/package/dovecot/dovecot.mk
+index 2378b9cc63..f8fbaaab65 100644
+--- a/package/dovecot/dovecot.mk
++++ b/package/dovecot/dovecot.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ DOVECOT_VERSION_MAJOR = 2.2
+-DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).31
++DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).33.2
+ DOVECOT_SITE = http://www.dovecot.org/releases/$(DOVECOT_VERSION_MAJOR)
+ DOVECOT_INSTALL_STAGING = YES
+ DOVECOT_LICENSE = LGPLv2.1
