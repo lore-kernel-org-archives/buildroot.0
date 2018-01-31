@@ -1,64 +1,32 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 31 Jan 2018 13:03:19 +0100
-Subject: [Buildroot] [git commit branch/2017.02.x] package/clamav: security
- bump to version 0.99.3
-Message-ID: <20180131123646.AE81B8813E@busybox.osuosl.org>
+From: Fabio Estevam <fabio.estevam@nxp.com>
+Date: Wed, 31 Jan 2018 11:15:15 -0200
+Subject: [Buildroot] [PATCH] linux-headers: bump 4.{4, 9}.x series
+Message-ID: <1517404515-29274-1-git-send-email-fabio.estevam@nxp.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f62ac81b7032744c4b2e5168f08575043b014c01
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
-
-Fixes CVE-2017-12374, CVE-2017-12375, CVE-2017-12376, CVE-2017-12377,
-CVE-2017-12378, CVE-2017-12379, CVE-2017-12380.
-
-For details see upstream announcement:
-http://blog.clamav.net/2018/01/clamav-0993-has-been-released.html
-
-Added license hashes.
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit ffb5dee113b542fd8fa81a7ed32ac64946670224)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
 ---
- package/clamav/clamav.hash | 14 +++++++++++++-
- package/clamav/clamav.mk   |  2 +-
- 2 files changed, 14 insertions(+), 2 deletions(-)
+ package/linux-headers/Config.in.host | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/clamav/clamav.hash b/package/clamav/clamav.hash
-index d2a1a1299e..fe873bddfc 100644
---- a/package/clamav/clamav.hash
-+++ b/package/clamav/clamav.hash
-@@ -1,2 +1,14 @@
- # Locally calculated
--sha256	167bd6a13e05ece326b968fdb539b05c2ffcfef6018a274a10aeda85c2c0027a	clamav-0.99.2.tar.gz
-+sha256 00fa5292a6e00a3a4035b826267748965d5d2c4943d8ff417d740238263e8e84  clamav-0.99.3.tar.gz
-+sha256 0c4fd2fa9733fc9122503797648710851e4ee6d9e4969dd33fcbd8c63cd2f584  COPYING
-+sha256 d72a145c90918184a05ef65a04c9e6f7466faa59bc1b82c8f6a8ddc7ddcb9bed  COPYING.bzip2
-+sha256 dfb818a0d41411c6fb1c193c68b73018ceadd1994bda41ad541cbff292894bc6  COPYING.file
-+sha256 6dce638b76399e7521ad8e182d3e33e4496c85b3b69b6ff434b53017101e82ad  COPYING.getopt
-+sha256 a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  COPYING.LGPL
-+sha256 e3a9b913515a42f8ff3ef1551c3a2cdba383c39ed959729e0e2911219496ad74  COPYING.llvm
-+sha256 d96d71b66aa32c4a2d1619b9ca3347dafa9460bcf0fb5ac2408916067ad31dfc  COPYING.lzma
-+sha256 accdcf2455c07b99abea59016b3663eaef926a92092d103bfaa25fed27cf6b24  COPYING.pcre
-+sha256 e2c1395a3d9fea6d5d25847c9d783db6e2cc8b085b4025861f459139c5dfd90b  COPYING.regex
-+sha256 1faccc6b5c7b958fb807a3f573d5be9bf7889fe898f7e0617c544b05a81bfd00  COPYING.unrar
-+sha256 a20d6317c5384e8d4c05f9c31097878675d9429ec46090656166039cc10bc957  COPYING.YARA
-+sha256 c2f77553f8d870c5635b0dace0519253233f172b33ce1fdf6578610706294eee  COPYING.zlib
-diff --git a/package/clamav/clamav.mk b/package/clamav/clamav.mk
-index 5d57b8dc00..e7e782dc06 100644
---- a/package/clamav/clamav.mk
-+++ b/package/clamav/clamav.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--CLAMAV_VERSION = 0.99.2
-+CLAMAV_VERSION = 0.99.3
- CLAMAV_SITE = https://www.clamav.net/downloads/production
- CLAMAV_LICENSE = GPLv2
- CLAMAV_LICENSE_FILES = COPYING COPYING.bzip2 COPYING.file COPYING.getopt \
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index af00679..b9ba0d9 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -260,8 +260,8 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.10.108"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.12.74"	if BR2_KERNEL_HEADERS_3_12
+ 	default "4.1.49"	if BR2_KERNEL_HEADERS_4_1
+-	default "4.4.113"	if BR2_KERNEL_HEADERS_4_4
+-	default "4.9.78"	if BR2_KERNEL_HEADERS_4_9
++	default "4.4.114"	if BR2_KERNEL_HEADERS_4_4
++	default "4.9.79"	if BR2_KERNEL_HEADERS_4_9
+ 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
+ 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
+ 	default "4.12.14"	if BR2_KERNEL_HEADERS_4_12
+-- 
+2.7.4
