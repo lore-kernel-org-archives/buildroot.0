@@ -1,10 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 31 Jan 2018 13:31:32 +0100
-Subject: [Buildroot] [PATCH v2 1/2] squid: bump version to 3.5.27
-In-Reply-To: <20180122195417.358-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Mon, 22 Jan 2018 20:54:16 +0100")
+Date: Wed, 31 Jan 2018 13:31:40 +0100
+Subject: [Buildroot] [PATCH v2 2/2] squid: add upstream post-3.5.27
+ security patches
+In-Reply-To: <20180122195417.358-2-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Mon, 22 Jan 2018 20:54:17 +0100")
 References: <20180122195417.358-1-peter@korsgaard.com>
-Message-ID: <87r2q68b17.fsf@dell.be.48ers.dk>
+ <20180122195417.358-2-peter@korsgaard.com>
+Message-ID: <87mv0u8b0z.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,7 +15,18 @@ To: buildroot@busybox.net
 
 >>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > And add a hash for the license files.
+ > Fixes the following security issues:
+ > SQUID-2018:1 Due to incorrect pointer handling Squid is vulnerable to denial
+ > of service attack when processing ESI responses.
+
+ > http://www.squid-cache.org/Advisories/SQUID-2018_1.txt
+
+ > SQUID-2018:2  Due to incorrect pointer handling Squid is vulnerable to
+ > denial of service attack when processing ESI responses or downloading
+ > intermediate CA certificates.
+
+ > http://www.squid-cache.org/Advisories/SQUID-2018_2.txt
+
  > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
 Committed to 2017.02.x and 2017.11.x, thanks.
