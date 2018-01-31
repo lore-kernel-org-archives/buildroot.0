@@ -1,35 +1,113 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 31 Jan 2018 11:51:17 +0100
-Subject: [Buildroot] [git commit branch/2017.11.x] fis: fix typo in build
- command
-Message-ID: <20180131123621.C155D880C0@busybox.osuosl.org>
+Date: Wed, 31 Jan 2018 11:50:46 +0100
+Subject: [Buildroot] [git commit branch/2017.11.x] squid: add upstream
+ post-3.5.27 security patches
+Message-ID: <20180131123621.A7888880C0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0b02c137240d6df93e49d87b34589d66098a8a46
+commit: https://git.buildroot.net/buildroot/commit/?id=bf2a0b348f7b7901899baa5ceb7f18c3f5276ffa
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.11.x
 
-Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+Fixes the following security issues:
+
+SQUID-2018:1 Due to incorrect pointer handling Squid is vulnerable to denial
+of service attack when processing ESI responses.
+
+http://www.squid-cache.org/Advisories/SQUID-2018_1.txt
+
+SQUID-2018:2  Due to incorrect pointer handling Squid is vulnerable to
+denial of service attack when processing ESI responses or downloading
+intermediate CA certificates.
+
+http://www.squid-cache.org/Advisories/SQUID-2018_2.txt
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 840d1a8d56eb3807b1f2b3ab16974f2f0abe9c94)
+(cherry picked from commit 6f481c83b96c76d59a420e5f6559c02cb5d329d3)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/fis/fis.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ ...e-sure-endofName-never-exceeds-tagEnd-130.patch | 35 ++++++++++++++++++++++
+ ...t-IP-logging-for-transactions-without-a-c.patch | 31 +++++++++++++++++++
+ 2 files changed, 66 insertions(+)
 
-diff --git a/package/fis/fis.mk b/package/fis/fis.mk
-index 6d3a227183..6db06bf74a 100644
---- a/package/fis/fis.mk
-+++ b/package/fis/fis.mk
-@@ -12,7 +12,7 @@ FIS_LICENSE_FILES = fis.c
- 
- define FIS_BUILD_CMDS
- 	$(TARGET_CC) $(TARGET_CFLAGS) -std=c99 -o $(@D)/fis \
--		$(@D)/fis.c $(@D)/crc.c $(TARGE_LDFLAGS)
-+		$(@D)/fis.c $(@D)/crc.c $(TARGET_LDFLAGS)
- endef
- 
- define FIS_INSTALL_TARGET_CMDS
+diff --git a/package/squid/0003-ESI-make-sure-endofName-never-exceeds-tagEnd-130.patch b/package/squid/0003-ESI-make-sure-endofName-never-exceeds-tagEnd-130.patch
+new file mode 100644
+index 0000000000..6e71677a19
+--- /dev/null
++++ b/package/squid/0003-ESI-make-sure-endofName-never-exceeds-tagEnd-130.patch
+@@ -0,0 +1,35 @@
++From eb2db98a676321b814fc4a51c4fb7928a8bb45d9 Mon Sep 17 00:00:00 2001
++From: Amos Jeffries <yadij@users.noreply.github.com>
++Date: Fri, 19 Jan 2018 13:54:14 +1300
++Subject: [PATCH] ESI: make sure endofName never exceeds tagEnd (#130)
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ src/esi/CustomParser.cc | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/src/esi/CustomParser.cc b/src/esi/CustomParser.cc
++index d86d2d309..db634d921 100644
++--- a/src/esi/CustomParser.cc
+++++ b/src/esi/CustomParser.cc
++@@ -121,7 +121,7 @@ ESICustomParser::parse(char const *dataToParse, size_t const lengthOfData, bool
++ 
++             char * endofName = strpbrk(const_cast<char *>(tag), w_space);
++ 
++-            if (endofName > tagEnd)
+++            if (!endofName || endofName > tagEnd)
++                 endofName = const_cast<char *>(tagEnd);
++ 
++             *endofName = '\0';
++@@ -214,7 +214,7 @@ ESICustomParser::parse(char const *dataToParse, size_t const lengthOfData, bool
++ 
++             char * endofName = strpbrk(const_cast<char *>(tag), w_space);
++ 
++-            if (endofName > tagEnd)
+++            if (!endofName || endofName > tagEnd)
++                 endofName = const_cast<char *>(tagEnd);
++ 
++             *endofName = '\0';
++-- 
++2.11.0
++
+diff --git a/package/squid/0004-Fix-indirect-IP-logging-for-transactions-without-a-c.patch b/package/squid/0004-Fix-indirect-IP-logging-for-transactions-without-a-c.patch
+new file mode 100644
+index 0000000000..51fff30034
+--- /dev/null
++++ b/package/squid/0004-Fix-indirect-IP-logging-for-transactions-without-a-c.patch
+@@ -0,0 +1,31 @@
++From 8232b83d3fa47a1399f155cb829db829369fbae9 Mon Sep 17 00:00:00 2001
++From: squidadm <squidadm@users.noreply.github.com>
++Date: Sun, 21 Jan 2018 08:07:08 +1300
++Subject: [PATCH] Fix indirect IP logging for transactions without a client
++ connection (#129) (#136)
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ src/client_side_request.cc | 6 +++---
++ 1 file changed, 3 insertions(+), 3 deletions(-)
++
++diff --git a/src/client_side_request.cc b/src/client_side_request.cc
++index be124f355..203f89d46 100644
++--- a/src/client_side_request.cc
+++++ b/src/client_side_request.cc
++@@ -488,9 +488,9 @@ clientFollowXForwardedForCheck(allow_t answer, void *data)
++         * Ensure that the access log shows the indirect client
++         * instead of the direct client.
++         */
++-        ConnStateData *conn = http->getConn();
++-        conn->log_addr = request->indirect_client_addr;
++-        http->al->cache.caddr = conn->log_addr;
+++        http->al->cache.caddr = request->indirect_client_addr;
+++        if (ConnStateData *conn = http->getConn())
+++            conn->log_addr = request->indirect_client_addr;
++     }
++     request->x_forwarded_for_iterator.clean();
++     request->flags.done_follow_x_forwarded_for = true;
++-- 
++2.11.0
++
