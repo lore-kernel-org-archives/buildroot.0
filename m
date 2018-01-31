@@ -1,22 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 31 Jan 2018 13:35:30 +0100
-Subject: [Buildroot] [PATCH] linux: bump Linux CIP to v4.4.112-cip18
-In-Reply-To: <1517324759-4532-1-git-send-email-angelo@amarulasolutions.com>
- (Angelo Compagnucci's message of "Tue, 30 Jan 2018 16:05:59 +0100")
-References: <1517324759-4532-1-git-send-email-angelo@amarulasolutions.com>
-Message-ID: <87y3ke5hpp.fsf@dell.be.48ers.dk>
+Date: Wed, 31 Jan 2018 13:35:57 +0100
+Subject: [Buildroot] [PATCH 1/3] eudev: fix error handling init script
+In-Reply-To: <20180130040720.20172-1-casantos@datacom.ind.br> (Carlos Santos's
+ message of "Tue, 30 Jan 2018 02:07:18 -0200")
+References: <20180130040720.20172-1-casantos@datacom.ind.br>
+Message-ID: <87tvv25hoy.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Angelo" == Angelo Compagnucci <angelo@amarulasolutions.com> writes:
+>>>>> "Carlos" == Carlos Santos <casantos@datacom.ind.br> writes:
 
- > This patch bump the Linux CIP kernel to version v4.4.112-cip18
- > Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+ > Replace (echo "msg" && exit 1) by { echo "msg"; exit 1; }.
+ > The (list) compound command runs in a subshell, so the "exit" interrupts
+ > the subshell, not the main script. Examples:
 
-Committed to 2017.11.x, thanks.
+ >     $ sh -c "echo 1; (exit 1); echo 2"
+ >     1
+ >     2
+ >     $ sh -c "echo 1; { exit 1; }; echo 2"
+ >     1
+ >     $
+
+ > Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+
+Committed to 2017.02.x and 2017.11.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
