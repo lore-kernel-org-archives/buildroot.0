@@ -1,41 +1,61 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Thu,  1 Feb 2018 09:32:48 -0500
-Subject: [Buildroot] [PATCH 1/1] audit: bump to 2.8.2
-Message-ID: <20180201143248.21255-1-aduskett@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 1 Feb 2018 16:49:41 +0100
+Subject: [Buildroot] [git commit] Makefile, manual,
+ website: Bump copyright year
+Message-ID: <20180201154952.892E8835D6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Adam Duskett <aduskett@gmail.com>
----
- package/audit/audit.hash | 2 +-
- package/audit/audit.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+commit: https://git.buildroot.net/buildroot/commit/?id=676400379abfdb7d1346c12ab592a88012b2fd5b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/audit/audit.hash b/package/audit/audit.hash
-index 742f94ae42..fb37577782 100644
---- a/package/audit/audit.hash
-+++ b/package/audit/audit.hash
-@@ -1,4 +1,4 @@
- #Locally computed
--sha256 1becde92ff6e81798fa8878820ab2497d867036a6596f55109504b37c8b33b6c audit-2.8.1.tar.gz
-+sha256 67b59b2b77afee9ed87afa4d80ffc8e6f3a1f4bbedd5f2871f387c952147bcba audit-2.8.2.tar.gz
- sha256 32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670 COPYING
- sha256 f18a0811fa0e220ccbc42f661545e77f0388631e209585ed582a1c693029c6aa COPYING.LIB
-diff --git a/package/audit/audit.mk b/package/audit/audit.mk
-index 8778e9845c..f5aa00d2f0 100644
---- a/package/audit/audit.mk
-+++ b/package/audit/audit.mk
-@@ -4,7 +4,7 @@
+Happy 2018!
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ Makefile                   | 2 +-
+ docs/manual/manual.txt     | 2 +-
+ docs/website/copyright.txt | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 1825d0af81..e12bcb45b4 100644
+--- a/Makefile
++++ b/Makefile
+@@ -2,7 +2,7 @@
  #
- ################################################################################
+ # Copyright (C) 1999-2005 by Erik Andersen <andersen@codepoet.org>
+ # Copyright (C) 2006-2014 by the Buildroot developers <buildroot@uclibc.org>
+-# Copyright (C) 2014-2017 by the Buildroot developers <buildroot@buildroot.org>
++# Copyright (C) 2014-2018 by the Buildroot developers <buildroot@buildroot.org>
+ #
+ # This program is free software; you can redistribute it and/or modify
+ # it under the terms of the GNU General Public License as published by
+diff --git a/docs/manual/manual.txt b/docs/manual/manual.txt
+index 490ed031e9..afb53d0482 100644
+--- a/docs/manual/manual.txt
++++ b/docs/manual/manual.txt
+@@ -12,7 +12,7 @@ It is licensed under the GNU General Public License, version 2. Refer to the
+ http://git.buildroot.org/buildroot/tree/COPYING[COPYING] file in the Buildroot
+ sources for the full text of this license.
  
--AUDIT_VERSION = 2.8.1
-+AUDIT_VERSION = 2.8.2
- AUDIT_SITE = http://people.redhat.com/sgrubb/audit
- AUDIT_LICENSE = GPL-2.0+ (programs), LGPL-2.1+ (libraries)
- AUDIT_LICENSE_FILES = COPYING COPYING.LIB
--- 
-2.14.3
+-Copyright (C) 2004-2017 The Buildroot developers
++Copyright (C) 2004-2018 The Buildroot developers
+ 
+ image::logo.png[]
+ 
+diff --git a/docs/website/copyright.txt b/docs/website/copyright.txt
+index 0939b748d2..b8ad36af99 100644
+--- a/docs/website/copyright.txt
++++ b/docs/website/copyright.txt
+@@ -1,6 +1,6 @@
+ 
+ The code and graphics on this website (and it's mirror sites, if any) are
+-Copyright (c) 1999-2005 by Erik Andersen, 2006-2014 The Buildroot
++Copyright (c) 1999-2005 by Erik Andersen, 2006-2018 The Buildroot
+ developers. All rights reserved.
+ 
+ Documents on this Web site including their graphical elements, design, and
