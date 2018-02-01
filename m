@@ -1,41 +1,74 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu,  1 Feb 2018 20:23:31 +0100
-Subject: [Buildroot] [PATCH 1/1] libmaxminddb: needs a toolchain with threads
-Message-ID: <20180201192331.17585-1-fontaine.fabrice@gmail.com>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Thu, 1 Feb 2018 21:09:04 +0100
+Subject: [Buildroot] [PATCH] autofs: allow to use libtirpc
+Message-ID: <20180201200904.GA18467@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libmaxminddb added a pthread dependency to bin/mmdblookup in version
-1.3.2
+uClibc-ng removed internal RPC implementation as it
+is ipv4 only and can not be used for most important RPC software
+rpcbind and nfs-utils.
+musl does not implement RPC and GNU C library deprecated the
+internal implementation a while ago.
+It is still possible to use the C library implementation.
 
-Fixes:
- - https://autobuild.buildroot.net/results/3e653a5fa4cbd714980ce0f1c3b02f3abb6d558e
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 ---
- package/libmaxminddb/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/autofs/Config.in | 7 +++----
+ package/autofs/autofs.mk | 9 ++++++++-
+ 2 files changed, 11 insertions(+), 5 deletions(-)
 
-diff --git a/package/libmaxminddb/Config.in b/package/libmaxminddb/Config.in
-index 1b8061b7b7..9e86cfee07 100644
---- a/package/libmaxminddb/Config.in
-+++ b/package/libmaxminddb/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_LIBMAXMINDDB
- 	bool "libmaxminddb"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/autofs/Config.in b/package/autofs/Config.in
+index 8e08357..efb0ec2 100644
+--- a/package/autofs/Config.in
++++ b/package/autofs/Config.in
+@@ -2,8 +2,8 @@ config BR2_PACKAGE_AUTOFS
+ 	bool "autofs"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	depends on BR2_USE_MMU
+-	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 	depends on !BR2_STATIC_LIBS # dlfcn
++	select BR2_PACKAGE_LIBTIRPC if !BR2_TOOLCHAIN_HAS_NATIVE_RPC
  	help
- 	  C library for the MaxMind DB file format
+ 	  Autofs controls the operation of the automount daemons. The
+ 	  automount daemons automatically mount filesystems when they
+@@ -15,7 +15,6 @@ config BR2_PACKAGE_AUTOFS
  
-@@ -16,3 +17,6 @@ config BR2_PACKAGE_LIBMAXMINDDB
- 	  Attribution-ShareAlike 3.0 Unported License.
+ 	  http://www.linuxfromscratch.org/blfs/view/svn/general/autofs.html
  
- 	  http://maxmind.github.io/libmaxminddb
+-comment "autofs needs a toolchain w/ NPTL, RPC, dynamic library"
++comment "autofs needs a toolchain w/ NPTL and dynamic library"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS || \
+-		!BR2_TOOLCHAIN_HAS_NATIVE_RPC
++	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
+diff --git a/package/autofs/autofs.mk b/package/autofs/autofs.mk
+index 90cc38d..ccab1c9 100644
+--- a/package/autofs/autofs.mk
++++ b/package/autofs/autofs.mk
+@@ -9,7 +9,7 @@ AUTOFS_SOURCE = autofs-$(AUTOFS_VERSION).tar.xz
+ AUTOFS_SITE = $(BR2_KERNEL_MIRROR)/linux/daemons/autofs/v5
+ AUTOFS_LICENSE = GPL-2.0+
+ AUTOFS_LICENSE_FILES = COPYING COPYRIGHT
+-AUTOFS_DEPENDENCIES = host-flex host-bison
++AUTOFS_DEPENDENCIES = host-flex host-bison host-pkgconf
+ 
+ # autofs looks on the build machine for the path of modprobe, so tell
+ # it explicitly where it will be located on the target.
+@@ -31,4 +31,11 @@ AUTOFS_CONF_OPTS = \
+ 
+ AUTOFS_MAKE_ENV = DONTSTRIP=1
+ 
++ifeq ($(BR2_TOOLCHAIN_HAS_NATIVE_RPC),)
++AUTOFS_CONF_OPTS += --with-libtirpc
++AUTOFS_DEPENDENCIES += libtirpc
++else
++AUTOFS_CONF_OPTS += --without-libtirpc
++endif
 +
-+comment "libmaxminddb needs a toolchain w/ threads"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
+ $(eval $(autotools-package))
 -- 
-2.14.1
+2.1.4
