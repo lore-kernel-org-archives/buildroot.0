@@ -1,50 +1,57 @@
-From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Wed, 28 Feb 2018 23:23:34 -0600
-Subject: [Buildroot] [next,v2 3/8] cpe-info: only report target pkgs
-In-Reply-To: <1519881819-51445-1-git-send-email-matthew.weber@rockwellcollins.com>
-References: <1519881819-51445-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <1519881819-51445-4-git-send-email-matthew.weber@rockwellcollins.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 1 Feb 2018 08:28:17 +0200
+Subject: [Buildroot] [PATCH] ustr: bump debian patch to 1.0.4-6
+In-Reply-To: <20180131193208.2896-1-yurovsky@gmail.com>
+References: <20180131193208.2896-1-yurovsky@gmail.com>
+Message-ID: <20180201062817.uqyut7ulo6mtv5hr@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The reporting of host packages causes some duplication
-and complicates what is really in the targets configuration.
-For the purpose of the first version of this patchset,
-its assumed that host packages aren't relevant for the
-configuration and we only report the target's contents.
+Hi Andrey,
 
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
----
-Changes
-v1 -> v2
-[Thomas P
- - select if target vs selecting not host
----
- package/pkg-generic.mk | 2 ++
- 1 file changed, 2 insertions(+)
+On Wed, Jan 31, 2018 at 11:32:08AM -0800, Andrey Yurovsky wrote:
+> Version 1.0.4-5 is no longer available, replace with 1.0.4-6 so ustr can
+> continue to be built.
+> 
+> Signed-off-by: Andrey Yurovsky <yurovsky@gmail.com>
+> ---
+>  package/ustr/ustr.hash | 4 ++--
+>  package/ustr/ustr.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/ustr/ustr.hash b/package/ustr/ustr.hash
+> index 214d37a77a..878c607332 100644
+> --- a/package/ustr/ustr.hash
+> +++ b/package/ustr/ustr.hash
+> @@ -1,4 +1,4 @@
+>  # Locally computed
+>  sha256 3daf6eae9f78de1e872c0b2b83cce35515b94d4bb8a074e48f331fd99e1fc2c4 ustr-1.0.4.tar.bz2
+> -# From http://debian.gtisc.gatech.edu/debian/pool/main/u/ustr/ustr_1.0.4-5.dsc
+> -sha256 a21e78acf82dcccef2893932ef7b85852419bfd9b18382e63c34e7710c1d7762 ustr_1.0.4-5.debian.tar.xz
+> +# From http://debian.gtisc.gatech.edu/debian/pool/main/u/ustr/ustr_1.0.4-6.dsc
+> +sha256 75aa6be2c70eba632ac63078e55ecb4b5a45e6624501a8ed6d81b9a2014d149e ustr_1.0.4-6.debian.tar.xz
+> diff --git a/package/ustr/ustr.mk b/package/ustr/ustr.mk
+> index 6fca33457e..a2c7a0a320 100644
+> --- a/package/ustr/ustr.mk
+> +++ b/package/ustr/ustr.mk
+> @@ -13,7 +13,7 @@ USTR_LICENSE = BSD-2-Clause, MIT, LGPL-2.0+
+>  USTR_LICENSE_FILES = LICENSE LICENSE_BSD LICENSE_LGPL LICENSE_MIT
+>  USTR_AUTORECONF = YES
+>  USTR_PATCH = \
+> -	http://http.debian.net/debian/pool/main/u/ustr/ustr_$(USTR_VERSION)-5.debian.tar.xz
+> +	http://http.debian.net/debian/pool/main/u/ustr/ustr_$(USTR_VERSION)-6.debian.tar.xz
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 21a353e..f84a270 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -841,6 +841,7 @@ $(2)_CPE_PREFIX = $(CPE_PREFIX_APP)
- endif
- 
- 
-+ifeq ($$($(2)_TYPE),target)
- $(1)-cpe-info: PKG=$(2)
- $(1)-cpe-info:
- ifneq ($$(call qstrip,$$($(2)_SOURCE)),)
-@@ -851,6 +852,7 @@ else
- 	$(Q)$$(foreach id,$$($(2)_CPE_ID),$$(call cpe-manifest,$$($(2)_CPE_PREFIX):$$(id):$(CPE_SUFFIX),$$($(2)_CVE_PATCHED),$$($(2)_RAWNAME),$$($(2)_VERSION),$$($(2)_ACTUAL_SOURCE_SITE))$$(sep))
- endif # ifeq ($$(call qstrip,$$($(2)_CPE_ID)),)
- endif # ifneq ($$(call qstrip,$$($(2)_SOURCE)),)
-+endif # ifeq ($$($(2)_TYPE),target)
- 
- # legal-info: declare dependencies and set values used later for the manifest
- ifneq ($$($(2)_LICENSE_FILES),)
+This would also expire at some point. We would probably better use the 
+snapshot.debian.org link:
+
+  http://snapshot.debian.org/archive/debian/20180131T223129Z/pool/main/u/ustr/ustr_1.0.4-6.debian.tar.xz
+
+baruch
+
 -- 
-1.9.1
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
