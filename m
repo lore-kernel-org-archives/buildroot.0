@@ -1,85 +1,61 @@
-From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Thu,  1 Feb 2018 16:21:58 -0600
-Subject: [Buildroot] [PATCH] python-virtualenv: new package
-Message-ID: <1517523718-30586-1-git-send-email-matthew.weber@rockwellcollins.com>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Fri,  2 Feb 2018 00:45:15 +0100
+Subject: [Buildroot] [PATCH v2 1/2] network-manager: Bump to version 1.10.2
+Message-ID: <20180201234516.5031-1-petr.vorel@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-A tool for creating a isolated python env.
+handle new dependency to Jansson (since 1.10.0).
 
-Within Buildroot, the basic problem being addressed is
-one of dependencies and versions, and indirectly permissions.
-A great example are the Django and AMQP protocol packages.
-An applications depending on these are usually locked into a specific
-version.
-
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 ---
- package/Config.in                                |  1 +
- package/python-virtualenv/Config.in              |  6 ++++++
- package/python-virtualenv/python-virtualenv.hash |  4 ++++
- package/python-virtualenv/python-virtualenv.mk   | 14 ++++++++++++++
- 4 files changed, 25 insertions(+)
- create mode 100644 package/python-virtualenv/Config.in
- create mode 100644 package/python-virtualenv/python-virtualenv.hash
- create mode 100644 package/python-virtualenv/python-virtualenv.mk
+Changes v1->v2:
+* Split patch into two (requested by Thomas).
+---
+ package/network-manager/network-manager.hash |  4 ++--
+ package/network-manager/network-manager.mk   | 11 +++++++++--
+ 2 files changed, 11 insertions(+), 4 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 9a6b199..214c986 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -936,6 +936,7 @@ menu "External python modules"
- 	source "package/python-urllib3/Config.in"
- 	source "package/python-urwid/Config.in"
- 	source "package/python-versiontools/Config.in"
-+	source "package/python-virtualenv/Config.in"
- 	source "package/python-watchdog/Config.in"
- 	source "package/python-wcwidth/Config.in"
- 	source "package/python-web2py/Config.in"
-diff --git a/package/python-virtualenv/Config.in b/package/python-virtualenv/Config.in
-new file mode 100644
-index 0000000..e0b3d8a
---- /dev/null
-+++ b/package/python-virtualenv/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PYTHON_VIRTUALENV
-+	bool "python-virtualenv"
-+	help
-+	  Virtual Python Environment builder.
+diff --git a/package/network-manager/network-manager.hash b/package/network-manager/network-manager.hash
+index 3262ad3b00..8fedc64729 100644
+--- a/package/network-manager/network-manager.hash
++++ b/package/network-manager/network-manager.hash
+@@ -1,2 +1,2 @@
+-# From http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/1.8/NetworkManager-1.8.4.sha256sum
+-sha256 625e2eb36386dcae599075226200140d010f213b47f7202d83b3b1a202029212  NetworkManager-1.8.4.tar.xz
++# From http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/1.10/NetworkManager-1.10.2.sha256sum
++sha256 169c34f50770e3c96b431f7d2cff654455246f2e6ccd46eccfb4454d4595625b  NetworkManager-1.10.2.tar.xz
+diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
+index caf462e26e..96e5a0b707 100644
+--- a/package/network-manager/network-manager.mk
++++ b/package/network-manager/network-manager.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-NETWORK_MANAGER_VERSION_MAJOR = 1.8
+-NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).4
++NETWORK_MANAGER_VERSION_MAJOR = 1.10
++NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).2
+ NETWORK_MANAGER_SOURCE = NetworkManager-$(NETWORK_MANAGER_VERSION).tar.xz
+ NETWORK_MANAGER_SITE = http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/$(NETWORK_MANAGER_VERSION_MAJOR)
+ NETWORK_MANAGER_INSTALL_STAGING = YES
+@@ -75,6 +75,13 @@ ifeq ($(BR2_PACKAGE_DHCPCD),y)
+ NETWORK_MANAGER_CONF_OPTS += --with-dhcpcd=/sbin/dhcpcd
+ endif
+ 
++ifeq ($(BR2_PACKAGE_JANSSON),y)
++NETWORK_MANAGER_CONF_OPTS += --enable-ovs
++NETWORK_MANAGER_DEPENDENCIES += jansson
++else
++NETWORK_MANAGER_CONF_OPTS += --disable-ovs
++endif
 +
-+	  https://virtualenv.pypa.io/
-diff --git a/package/python-virtualenv/python-virtualenv.hash b/package/python-virtualenv/python-virtualenv.hash
-new file mode 100644
-index 0000000..54ba07a
---- /dev/null
-+++ b/package/python-virtualenv/python-virtualenv.hash
-@@ -0,0 +1,4 @@
-+# md5 from https://pypi.python.org/pypi/virtualenv/json, sha256 locally computed
-+md5	44e19f4134906fe2d75124427dc9b716  virtualenv-15.1.0.tar.gz
-+sha256	02f8102c2436bb03b3ee6dede1919d1dac8a427541652e5ec95171ec8adbc93a  virtualenv-15.1.0.tar.gz
-+sha256	c2b40423a77ae2ecf014a447ecd3310e594b594a11e42c12c69b9d0e9ebe2e33  LICENSE.txt
-diff --git a/package/python-virtualenv/python-virtualenv.mk b/package/python-virtualenv/python-virtualenv.mk
-new file mode 100644
-index 0000000..58ac3e6
---- /dev/null
-+++ b/package/python-virtualenv/python-virtualenv.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-virtualenv
-+#
-+################################################################################
-+
-+PYTHON_VIRTUALENV_VERSION = 15.1.0
-+PYTHON_VIRTUALENV_SOURCE = virtualenv-$(PYTHON_VIRTUALENV_VERSION).tar.gz
-+PYTHON_VIRTUALENV_SITE = https://pypi.python.org/packages/d4/0c/9840c08189e030873387a73b90ada981885010dd9aea134d6de30cd24cb8
-+PYTHON_VIRTUALENV_SETUP_TYPE = setuptools
-+PYTHON_VIRTUALENV_LICENSE = MIT
-+PYTHON_VIRTUALENV_LICENSE_FILES = LICENSE.txt
-+
-+$(eval $(python-package))
+ # uClibc by default doesn't have backtrace support, so don't use it
+ ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
+ NETWORK_MANAGER_CONF_OPTS += --disable-crashtrace
 -- 
-1.9.1
+2.16.1
