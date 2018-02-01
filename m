@@ -1,42 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 1 Feb 2018 13:44:48 +0100
-Subject: [Buildroot] [PATCH v9 1/3] board: Add Vyasa RK3288 board support
-In-Reply-To: <CAMty3ZDqZJTCa+fjRC+APxQJXvx=WR-UYYCBMSt-+5VSJn5inQ@mail.gmail.com>
-References: <1517313835-21973-1-git-send-email-jagan@amarulasolutions.com>
- <CAMty3ZDqZJTCa+fjRC+APxQJXvx=WR-UYYCBMSt-+5VSJn5inQ@mail.gmail.com>
-Message-ID: <20180201134448.6b6bb9d6@windsurf.lan>
+From: AAlex_ <earthquake.de@freenet.de>
+Date: Thu, 1 Feb 2018 05:57:14 -0700 (MST)
+Subject: [Buildroot] Further partition creation with genimage fails
+In-Reply-To: <87inbh3tbr.fsf@dell.be.48ers.dk>
+References: <1517473948652-0.post@n4.nabble.com>
+ <87inbh3tbr.fsf@dell.be.48ers.dk>
+Message-ID: <1517489834363-0.post@n4.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi,
+enabled loglevel 2 in genimage, 
+the data.ext4 is given as a further argument to genext2fs
+genext2fs -d
+<DIR>/buildroot2017.11rc/pc_x86_64_efi_defconfig/output/build/genimage.tmp/root
+--size-in-blocks=131072 -i 16384
+<DIR>/buildroot2017.11rc/pc_x86_64_efi_defconfig/output/images/data.ext4
 
-On Thu, 1 Feb 2018 16:04:02 +0530, Jagan Teki wrote:
+But as you mentioned i will not longer use the genext2fs tool, so what i
+did:
+Editing  board/pc/post-image.sh, added following:
+/dd if=/dev/zero of=${BINARIES_DIR}/data.ext4 bs=124M count=1
+mkfs.ext4 -F ${BINARIES_DIR}/data.ext4
+echo "created: ${BINARIES_DIR}/data.ext4"
+/
 
-> > Changes for v9:
-> > - Rebase on master
-> > Changes for v8:
-> > - Rebase on master
-> > Changes for v7:
-> > - Rebase on master
-> > Changes for v6:
-> > - None
+And keep just the partition data{} ]entry in the board/pc/genimage-efi.cfg:
+/partition data {
+    partition-type = 0x83
+    image = "data.ext4"
+  }/
 
-Why do you resend like crazy, with no changes between the different
-iterations ?
+This works fine...and no further dependency on genext2fs tool.
 
-> These been in ML, since from couple months any chance to comment or
-> picking up these.
+So i dont need BR2_PACKAGE_HOST_GENEXT2FS anymore.
 
-There are 250+ patches pending in patchwork. If you want your patches to
-be reviewed faster, please help reviewing patches from others.
+Regards,
+AAlex
 
-Best regards,
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+
+--
+Sent from: http://buildroot-busybox.2317881.n4.nabble.com/
