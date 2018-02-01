@@ -1,74 +1,55 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Thu, 1 Feb 2018 21:09:04 +0100
-Subject: [Buildroot] [PATCH] autofs: allow to use libtirpc
-Message-ID: <20180201200904.GA18467@waldemar-brodkorb.de>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Thu, 1 Feb 2018 23:19:51 +0100
+Subject: [Buildroot] [PATCH 1/1] ltp-testsuite: Add upstream patch to
+ fix build numa detection
+In-Reply-To: <20180130051501.hvjb7h3smtif5zvu@sapphire.tkos.co.il>
+References: <20180129202314.16767-1-petr.vorel@gmail.com>
+ <20180130051501.hvjb7h3smtif5zvu@sapphire.tkos.co.il>
+Message-ID: <20180201221950.aj6hrj2do573aqcz@dell5510>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-uClibc-ng removed internal RPC implementation as it
-is ipv4 only and can not be used for most important RPC software
-rpcbind and nfs-utils.
-musl does not implement RPC and GNU C library deprecated the
-internal implementation a while ago.
-It is still possible to use the C library implementation.
+Hi Baruch,
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
----
- package/autofs/Config.in | 7 +++----
- package/autofs/autofs.mk | 9 ++++++++-
- 2 files changed, 11 insertions(+), 5 deletions(-)
+> On Mon, Jan 29, 2018 at 09:23:14PM +0100, Petr Vorel wrote:
+> > This removes fix added in commit 3c937807a3 ("ltp-testsuite: disable numa tests")
 
-diff --git a/package/autofs/Config.in b/package/autofs/Config.in
-index 8e08357..efb0ec2 100644
---- a/package/autofs/Config.in
-+++ b/package/autofs/Config.in
-@@ -2,8 +2,8 @@ config BR2_PACKAGE_AUTOFS
- 	bool "autofs"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 	depends on BR2_USE_MMU
--	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	depends on !BR2_STATIC_LIBS # dlfcn
-+	select BR2_PACKAGE_LIBTIRPC if !BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	help
- 	  Autofs controls the operation of the automount daemons. The
- 	  automount daemons automatically mount filesystems when they
-@@ -15,7 +15,6 @@ config BR2_PACKAGE_AUTOFS
- 
- 	  http://www.linuxfromscratch.org/blfs/view/svn/general/autofs.html
- 
--comment "autofs needs a toolchain w/ NPTL, RPC, dynamic library"
-+comment "autofs needs a toolchain w/ NPTL and dynamic library"
- 	depends on BR2_USE_MMU
--	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS || \
--		!BR2_TOOLCHAIN_HAS_NATIVE_RPC
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
-diff --git a/package/autofs/autofs.mk b/package/autofs/autofs.mk
-index 90cc38d..ccab1c9 100644
---- a/package/autofs/autofs.mk
-+++ b/package/autofs/autofs.mk
-@@ -9,7 +9,7 @@ AUTOFS_SOURCE = autofs-$(AUTOFS_VERSION).tar.xz
- AUTOFS_SITE = $(BR2_KERNEL_MIRROR)/linux/daemons/autofs/v5
- AUTOFS_LICENSE = GPL-2.0+
- AUTOFS_LICENSE_FILES = COPYING COPYRIGHT
--AUTOFS_DEPENDENCIES = host-flex host-bison
-+AUTOFS_DEPENDENCIES = host-flex host-bison host-pkgconf
- 
- # autofs looks on the build machine for the path of modprobe, so tell
- # it explicitly where it will be located on the target.
-@@ -31,4 +31,11 @@ AUTOFS_CONF_OPTS = \
- 
- AUTOFS_MAKE_ENV = DONTSTRIP=1
- 
-+ifeq ($(BR2_TOOLCHAIN_HAS_NATIVE_RPC),)
-+AUTOFS_CONF_OPTS += --with-libtirpc
-+AUTOFS_DEPENDENCIES += libtirpc
-+else
-+AUTOFS_CONF_OPTS += --without-libtirpc
-+endif
-+
- $(eval $(autotools-package))
--- 
-2.1.4
+> > Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+> > ---
+> >  ...x-numa-v2-detection-for-cross-compilation.patch | 37 ++++++++++++++++++++++
+> >  package/ltp-testsuite/ltp-testsuite.mk             |  3 +-
+> >  2 files changed, 38 insertions(+), 2 deletions(-)
+> >  create mode 100644 package/ltp-testsuite/0002-numa-Fix-numa-v2-detection-for-cross-compilation.patch
+
+> [...]
+
+> > diff --git a/package/ltp-testsuite/ltp-testsuite.mk b/package/ltp-testsuite/ltp-testsuite.mk
+> > index 28dc24749e..87854568d8 100644
+> > --- a/package/ltp-testsuite/ltp-testsuite.mk
+> > +++ b/package/ltp-testsuite/ltp-testsuite.mk
+> > @@ -56,8 +56,7 @@ LTP_TESTSUITE_CONF_ENV += \
+> >  	CFLAGS="$(LTP_TESTSUITE_CFLAGS)" \
+> >  	CPPFLAGS="$(LTP_TESTSUITE_CPPFLAGS)" \
+> >  	LIBS="$(LTP_TESTSUITE_LIBS)" \
+> > -	SYSROOT="$(STAGING_DIR)" \
+> > -	have_numa_headers=no
+> > +	SYSROOT="$(STAGING_DIR)"
+
+> >  # Requires uClibc fts and bessel support, normally not enabled
+> >  ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
+
+> You should also make numactl an optional dependency to make the build more 
+> reproducible.
+
+Can you be more specific, what you mean? numactl is required as a command in numa based
+tests (used by testcases/kernel/numa/numa01.sh). But that's not build dependency, it's a
+runtime dependency.
+
+> baruch
+
+
+Kind regards,
+Petr
