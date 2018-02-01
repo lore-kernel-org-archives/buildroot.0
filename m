@@ -1,29 +1,34 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Thu, 01 Feb 2018 08:54:13 +0100
-Subject: [Buildroot] linux-firmware: wrong sha256 hash
-In-Reply-To: <20180131185016.3diheii3anpqrymi@tarshish>
-References: <1517417554.32426.6.camel@embedded.rocks>
- <20180131185016.3diheii3anpqrymi@tarshish>
-Message-ID: <1517471653.2404.1.camel@embedded.rocks>
+From: AAlex_ <earthquake.de@freenet.de>
+Date: Thu, 1 Feb 2018 01:32:28 -0700 (MST)
+Subject: [Buildroot] Further partition creation with genimage fails
+Message-ID: <1517473948652-0.post@n4.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Baruch
+Hi,
+trying to define a further (third) partition within the disk.img fails. With
+error messge:
+/genext2fs: couldn't allocate a block (no free space)
+ext4(data.ext4): failed to generate data.ext4/
 
-On Wed, 2018-01-31 at 20:50 +0200, Baruch Siach wrote:
-> Hi J?rg,
-> 
-> On Wed, Jan 31, 2018 at 05:52:34PM +0100, J?rg Krause wrote:
-> > looks like the hashes for the linux-firmware git repository have
-> > changed:
-> 
-> It seem like you were probably bitten by the --numeric-owner behaviour change 
-> in tar version 1.30. See the thread starting at:
-> 
->   http://lists.busybox.net/pipermail/buildroot/2018-January/211222.html
+Added to the disk.img block in genimage config file a partition named
+data.ext4
+(complete config script  genimage config on pastebin
+<https://pastebin.com/yN1Zfb5r>   )
 
-Thanks! I somehow missed that discussion.
-J?rg
+Creating manually the partition file via dd within the output/image folder
+works. 
+But the goal is creating the partition file when building the system.
+
+Thanks for help or proposal
+
+Regards,
+AAlex
+
+
+
+--
+Sent from: http://buildroot-busybox.2317881.n4.nabble.com/
