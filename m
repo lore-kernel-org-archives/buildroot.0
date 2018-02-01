@@ -1,60 +1,67 @@
-From: Jagan Teki <jagan@amarulasolutions.com>
-Date: Thu, 1 Feb 2018 16:04:02 +0530
-Subject: [Buildroot] [PATCH v9 1/3] board: Add Vyasa RK3288 board support
-In-Reply-To: <1517313835-21973-1-git-send-email-jagan@amarulasolutions.com>
-References: <1517313835-21973-1-git-send-email-jagan@amarulasolutions.com>
-Message-ID: <CAMty3ZDqZJTCa+fjRC+APxQJXvx=WR-UYYCBMSt-+5VSJn5inQ@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 01 Feb 2018 10:44:10 +0000
+Subject: [Buildroot] [Bug 10726] New: Current libglib2.mk creates broken
+ libglib2 binary when using glibc 2.26
+Message-ID: <bug-10726-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Jan 30, 2018 at 5:33 PM, Jagan Teki <jagannadh.teki@gmail.com> wrote:
-> Add Vyasa board, from rk3288 family SOC.
->
-> Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
-> ---
-> Changes for v9:
-> - Rebase on master
-> Changes for v8:
-> - Rebase on master
-> Changes for v7:
-> - Rebase on master
-> Changes for v6:
-> - None
-> Changes for v5:
-> - Add host-uboot-tools
-> - Fix commit message
-> - Drop Qt5 configs
-> Changes for v4:
-> - enable BR2_LINUX_KERNEL_INSTALL_TARGET
-> - enable BR2_TARGET_UBOOT_FORMAT_DTB_BINe
-> - Create single u-boot binary
-> - Use linux-4.12 along with same headers
->
->  .gitlab-ci.yml                          |  1 +
->  DEVELOPERS                              |  2 ++
->  board/amarula/vyasa/extlinux.conf       |  4 +++
->  board/amarula/vyasa/genimage.cfg        | 21 +++++++++++++++
->  board/amarula/vyasa/linux_gmac.fragment |  3 +++
->  board/amarula/vyasa/post-build.sh       |  9 +++++++
->  board/amarula/vyasa/readme.txt          | 31 ++++++++++++++++++++++
->  configs/amarula_vyasa_rk3288_defconfig  | 46 +++++++++++++++++++++++++++++++++
->  8 files changed, 117 insertions(+)
->  create mode 100644 board/amarula/vyasa/extlinux.conf
->  create mode 100644 board/amarula/vyasa/genimage.cfg
->  create mode 100644 board/amarula/vyasa/linux_gmac.fragment
->  create mode 100755 board/amarula/vyasa/post-build.sh
->  create mode 100644 board/amarula/vyasa/readme.txt
->  create mode 100644 configs/amarula_vyasa_rk3288_defconfig
+https://bugs.busybox.net/show_bug.cgi?id=10726
 
-These been in ML, since from couple months any chance to comment or
-picking up these.
+            Bug ID: 10726
+           Summary: Current libglib2.mk creates broken libglib2 binary
+                    when using glibc 2.26
+           Product: buildroot
+           Version: 2017.11.2
+          Hardware: Other
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: porto.rio at gmx.net
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-thanks!
+We recently ran into a weird problem where the udisks-daemon crashes at startup
+when migrating from buildroot 2017.08 to 2017.11.
+
+Debugging the issue yielded the following problem:
+? udisks tries to call g_io_channel_new_file ("/proc/mdstat", "r", &error);
+which fails because "/proc/mdstat" does not exists (see
+build/libglib2-2.54.2/glib/giounix.c:527).
+? libglib2 then tries to create an error string using g_strerror() (see
+build/libglib2-2.54.2/glib/gstrfuncs.c)
+? g_error() uses strerror_r() to acquire the error string but discards the
+returned string (see build/libglib2-2.54.2/glib/gstrfuncs.c:1293).
+
+BR 2017.11 uses libglib2-2.54.2 (BR 2017.08 used 2.52.2) which changed the
+detection of the available variant of strerror_r() (returning the message vs.
+filling a buffer) in the c-library (see
+build/libglib2-2.54.2/glib/gstrfuncs.c).
+
+Old check in libglib2-2.52.2,:
+#  if defined(__GLIBC__) && !((_POSIX_C_SOURCE >= 200112L || _XOPEN_SOURCE >=
+600) && ! _GNU_SOURCE)
+
+New check in libglib2-2.54.2:
+#  if defined(STRERROR_R_CHAR_P)
+
+The 2.54.2 version relies on a configure-time check to determine if
+strerror_r() returns the error message or fills the provided buffer with the
+message.
+STRERROR_R_CHAR_P needs to be defined for the current version of glibc (2.26)
+but is set to undefined in the current makefile for libglib2 in Buildroot.
+See buildroot-2017.11.2/package/libglib2/libglib2.mk. It contains
+LIBGLIB2_CONF_ENV which sets "ac_cv_have_decl_strerror_r=yes
+ac_cv_func_strerror_r_char_p=no".
+If these two lines are removed the resulting libglib2 binary works again as the
+configure script selects the right variant of strerror_r().
+
 -- 
-Jagan Teki
-Senior Linux Kernel Engineer | Amarula Solutions
-U-Boot, Linux | Upstream Maintainer
-Hyderabad, India.
+You are receiving this mail because:
+You are on the CC list for the bug.
