@@ -1,53 +1,60 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 01 Feb 2018 11:19:52 +0100
-Subject: [Buildroot] Further partition creation with genimage fails
-In-Reply-To: <1517473948652-0.post@n4.nabble.com> (AAlex's message of "Thu, 1
- Feb 2018 01:32:28 -0700 (MST)")
-References: <1517473948652-0.post@n4.nabble.com>
-Message-ID: <87inbh3tbr.fsf@dell.be.48ers.dk>
+From: Jagan Teki <jagan@amarulasolutions.com>
+Date: Thu, 1 Feb 2018 16:04:02 +0530
+Subject: [Buildroot] [PATCH v9 1/3] board: Add Vyasa RK3288 board support
+In-Reply-To: <1517313835-21973-1-git-send-email-jagan@amarulasolutions.com>
+References: <1517313835-21973-1-git-send-email-jagan@amarulasolutions.com>
+Message-ID: <CAMty3ZDqZJTCa+fjRC+APxQJXvx=WR-UYYCBMSt-+5VSJn5inQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "AAlex" == AAlex  <earthquake.de@freenet.de> writes:
+On Tue, Jan 30, 2018 at 5:33 PM, Jagan Teki <jagannadh.teki@gmail.com> wrote:
+> Add Vyasa board, from rk3288 family SOC.
+>
+> Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
+> ---
+> Changes for v9:
+> - Rebase on master
+> Changes for v8:
+> - Rebase on master
+> Changes for v7:
+> - Rebase on master
+> Changes for v6:
+> - None
+> Changes for v5:
+> - Add host-uboot-tools
+> - Fix commit message
+> - Drop Qt5 configs
+> Changes for v4:
+> - enable BR2_LINUX_KERNEL_INSTALL_TARGET
+> - enable BR2_TARGET_UBOOT_FORMAT_DTB_BINe
+> - Create single u-boot binary
+> - Use linux-4.12 along with same headers
+>
+>  .gitlab-ci.yml                          |  1 +
+>  DEVELOPERS                              |  2 ++
+>  board/amarula/vyasa/extlinux.conf       |  4 +++
+>  board/amarula/vyasa/genimage.cfg        | 21 +++++++++++++++
+>  board/amarula/vyasa/linux_gmac.fragment |  3 +++
+>  board/amarula/vyasa/post-build.sh       |  9 +++++++
+>  board/amarula/vyasa/readme.txt          | 31 ++++++++++++++++++++++
+>  configs/amarula_vyasa_rk3288_defconfig  | 46 +++++++++++++++++++++++++++++++++
+>  8 files changed, 117 insertions(+)
+>  create mode 100644 board/amarula/vyasa/extlinux.conf
+>  create mode 100644 board/amarula/vyasa/genimage.cfg
+>  create mode 100644 board/amarula/vyasa/linux_gmac.fragment
+>  create mode 100755 board/amarula/vyasa/post-build.sh
+>  create mode 100644 board/amarula/vyasa/readme.txt
+>  create mode 100644 configs/amarula_vyasa_rk3288_defconfig
 
- > Hi,
- > trying to define a further (third) partition within the disk.img fails. With
- > error messge:
- > /genext2fs: couldn't allocate a block (no free space)
- > ext4(data.ext4): failed to generate data.ext4/
+These been in ML, since from couple months any chance to comment or
+picking up these.
 
- > Added to the disk.img block in genimage config file a partition named
- > data.ext4
- > (complete config script  genimage config on pastebin
- > <https://pastebin.com/yN1Zfb5r>   )
-
- > Creating manually the partition file via dd within the output/image folder
- > works. 
- > But the goal is creating the partition file when building the system.
-
- > Thanks for help or proposal
-
-Looking at the genimage code (image-ext2.c) I see it runs genext2fs:
-
-        ret = systemp(image, "%s -d %s --size-in-blocks=%lld -i 16384 %s %s",
-                        get_opt("genext2fs"),
-                        mountpath(image), image->size / 1024, imageoutfile(image),
-                        extraargs);
-
-You could run genimage with '--loglevel 2' to see exactly what arguments it was
-executed with.
-
-I did a quick test here, and it seems to work for me. You do have enough
-disk space on your build machine, right?
-
-Do notice that we have moved away from using genext2fs for creating the
-ext2/3/4 rootfs in Buildroot. Once issue with genext2fs is that it
-doesn't know about the new features in ext3/4, so depending on your use
-case you may be better up running mkfs.ext4 in your post-image script
-manually.
-
+thanks!
 -- 
-Bye, Peter Korsgaard
+Jagan Teki
+Senior Linux Kernel Engineer | Amarula Solutions
+U-Boot, Linux | Upstream Maintainer
+Hyderabad, India.
