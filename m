@@ -1,46 +1,113 @@
-From: AAlex_ <earthquake.de@freenet.de>
-Date: Thu, 1 Feb 2018 05:57:14 -0700 (MST)
-Subject: [Buildroot] Further partition creation with genimage fails
-In-Reply-To: <87inbh3tbr.fsf@dell.be.48ers.dk>
-References: <1517473948652-0.post@n4.nabble.com>
- <87inbh3tbr.fsf@dell.be.48ers.dk>
-Message-ID: <1517489834363-0.post@n4.nabble.com>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Thu,  1 Feb 2018 14:26:29 +0100
+Subject: [Buildroot] [PATCH v2] imx-alsa-plugins: new package
+Message-ID: <20180201132629.13188-1-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-enabled loglevel 2 in genimage, 
-the data.ext4 is given as a further argument to genext2fs
-genext2fs -d
-<DIR>/buildroot2017.11rc/pc_x86_64_efi_defconfig/output/build/genimage.tmp/root
---size-in-blocks=131072 -i 16384
-<DIR>/buildroot2017.11rc/pc_x86_64_efi_defconfig/output/images/data.ext4
+Freescale specific alsa-lib plugins for the i.MX processor family.
 
-But as you mentioned i will not longer use the genext2fs tool, so what i
-did:
-Editing  board/pc/post-image.sh, added following:
-/dd if=/dev/zero of=${BINARIES_DIR}/data.ext4 bs=124M count=1
-mkfs.ext4 -F ${BINARIES_DIR}/data.ext4
-echo "created: ${BINARIES_DIR}/data.ext4"
-/
+For now, the only provided plugin is:
+  * Rate Converter Plugin Using Freescale ASRC Resampler
 
-And keep just the partition data{} ]entry in the board/pc/genimage-efi.cfg:
-/partition data {
-    partition-type = 0x83
-    image = "data.ext4"
-  }/
+The ASRC hardware resampler can be found on i.MX53 and most i.MX 6
+processors.
 
-This works fine...and no further dependency on genext2fs tool.
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+---
+v2:
+ * Fix comment sections (Marcus Folkesson and Baruch Siach)
+---
+ package/freescale-imx/Config.in                    |  1 +
+ package/freescale-imx/imx-alsa-plugins/Config.in   | 25 ++++++++++++++++++++++
+ .../imx-alsa-plugins/imx-alsa-plugins.hash         |  3 +++
+ .../imx-alsa-plugins/imx-alsa-plugins.mk           | 21 ++++++++++++++++++
+ 4 files changed, 50 insertions(+)
+ create mode 100644 package/freescale-imx/imx-alsa-plugins/Config.in
+ create mode 100644 package/freescale-imx/imx-alsa-plugins/imx-alsa-plugins.hash
+ create mode 100644 package/freescale-imx/imx-alsa-plugins/imx-alsa-plugins.mk
 
-So i dont need BR2_PACKAGE_HOST_GENEXT2FS anymore.
-
-Regards,
-AAlex
-
-
-
---
-Sent from: http://buildroot-busybox.2317881.n4.nabble.com/
+diff --git a/package/freescale-imx/Config.in b/package/freescale-imx/Config.in
+index b5e5ab23dc..f658c46ba0 100644
+--- a/package/freescale-imx/Config.in
++++ b/package/freescale-imx/Config.in
+@@ -69,6 +69,7 @@ config BR2_PACKAGE_FREESCALE_IMX_HAS_VIV_GPU
+ 		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6S || \
+ 		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX7
+ 
++source "package/freescale-imx/imx-alsa-plugins/Config.in"
+ source "package/freescale-imx/imx-codec/Config.in"
+ source "package/freescale-imx/imx-kobs/Config.in"
+ source "package/freescale-imx/imx-lib/Config.in"
+diff --git a/package/freescale-imx/imx-alsa-plugins/Config.in b/package/freescale-imx/imx-alsa-plugins/Config.in
+new file mode 100644
+index 0000000000..7f69f30391
+--- /dev/null
++++ b/package/freescale-imx/imx-alsa-plugins/Config.in
+@@ -0,0 +1,25 @@
++config BR2_PACKAGE_IMX_ALSA_PLUGINS
++	bool "imx-alsa-plugins"
++	depends on BR2_arm # Only relevant for i.MX
++	depends on BR2_LINUX_KERNEL
++	depends on BR2_TOOLCHAIN_HAS_THREADS # alsa-lib
++	select BR2_PACKAGE_ALSA_LIB
++	help
++	  ALSA plugins specific for the Freescale i.MX platform. It
++	  requires a kernel that includes the i.MX specific headers
++	  to be built.
++
++	  The following plugins are provided so far:
++	    * Rate Converter Plugin Using Freescale ASRC Hardware
++	      Resampler (i.MX53 and most i.MX6)
++
++	  This package is provided by Freescale as-is and doesn't have
++	  an upstream.
++
++comment "imx-alsa-libs needs an imx-specific Linux kernel to be built"
++	depends on BR2_arm
++	depends on !BR2_LINUX_KERNEL
++
++comment "imx-alsa-libs needs a toolchain w/ threads"
++	depends on BR2_arm
++	depends on BR2_LINUX_KERNEL && !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/freescale-imx/imx-alsa-plugins/imx-alsa-plugins.hash b/package/freescale-imx/imx-alsa-plugins/imx-alsa-plugins.hash
+new file mode 100644
+index 0000000000..b0f47080ce
+--- /dev/null
++++ b/package/freescale-imx/imx-alsa-plugins/imx-alsa-plugins.hash
+@@ -0,0 +1,3 @@
++# Locally calculated:
++sha256  e76a71e9166fbedeaa535fd7ebc07edc30a1e87f529ab2aa733e3603d3183ed0  imx-alsa-plugins-rel_imx_4.9.x_1.0.0_ga.tar.gz
++sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING.GPL
+diff --git a/package/freescale-imx/imx-alsa-plugins/imx-alsa-plugins.mk b/package/freescale-imx/imx-alsa-plugins/imx-alsa-plugins.mk
+new file mode 100644
+index 0000000000..9c81ff0df0
+--- /dev/null
++++ b/package/freescale-imx/imx-alsa-plugins/imx-alsa-plugins.mk
+@@ -0,0 +1,21 @@
++################################################################################
++#
++# imx-alsa-plugins
++#
++################################################################################
++
++IMX_ALSA_PLUGINS_VERSION = rel_imx_4.9.x_1.0.0_ga
++IMX_ALSA_PLUGINS_SITE = https://source.codeaurora.org/external/imx/imx-alsa-plugins
++IMX_ALSA_PLUGINS_SITE_METHOD = git
++IMX_ALSA_PLUGINS_LICENSE = GPL-2.0+
++IMX_ALSA_PLUGINS_LICENSE_FILES = COPYING.GPL
++IMX_ALSA_PLUGINS_DEPENDENCIES = host-pkgconf alsa-lib
++
++# git, no configure
++IMX_ALSA_PLUGINS_AUTORECONF = YES
++
++# needs access to imx-specific kernel headers
++IMX_ALSA_PLUGINS_DEPENDENCIES += linux
++IMX_ALSA_PLUGINS_CONF_ENV += CPPFLAGS="$(TARGET_CPPFLAGS) -idirafter $(LINUX_DIR)/include/uapi"
++
++$(eval $(autotools-package))
+-- 
+2.16.1
