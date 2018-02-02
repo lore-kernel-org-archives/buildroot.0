@@ -1,274 +1,110 @@
-From: Carlos Santos <casantos@datacom.ind.br>
-Date: Fri,  2 Feb 2018 13:56:12 -0200
-Subject: [Buildroot] [PATCH 2/4] tpm2-abrmd: new package
-In-Reply-To: <20180202155614.26938-1-casantos@datacom.ind.br>
-References: <20180202155614.26938-1-casantos@datacom.ind.br>
-Message-ID: <20180202155614.26938-3-casantos@datacom.ind.br>
+From: =?UTF-8?q?Andr=C3=A9=20Hentschel?= <nerv@dawncrow.de>
+Date: Fri,  2 Feb 2018 18:39:00 +0100
+Subject: [Buildroot] [PATCH v5 1/2] libkrb5: New package
+Message-ID: <1517593141-26017-1-git-send-email-nerv@dawncrow.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This is a system daemon implementing the TPM2 access broker (TAB) &
-Resource Manager (RM) spec from the TCG. The daemon (tpm2-abrmd) is
-implemented using Glib and the GObject system.
-
-Communication between the daemon and clients using the TPM is done with
-a combination of DBus and Unix pipes. DBus is used for discovery,
-session management and the 'cancel', 'setLocality', and 'getPollHandles'
-API calls (mostly these aren't yet implemented). Pipes are used to send
-and receive TPM commands and responses (respectively) between client and
-server.
-
-The daemon owns the com.intel.tss2.Tabrmd name on dbus. It can be
-configured to connect to either the system or the session bus.
-
-The package also provides a client library for interacting with the
-daemon via TPM Command Transmission Interface (TCTI). It is intended for
-use with the SAPI library (libsapi) like any other TCTI.
-
-Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
 ---
- package/Config.in                         |  1 +
- package/tpm2-abrmd/Config.in              | 26 +++++++++++
- package/tpm2-abrmd/S30devtpmperms         | 37 ++++++++++++++++
- package/tpm2-abrmd/S80tpm2-abrmd          | 74 +++++++++++++++++++++++++++++++
- package/tpm2-abrmd/etc.default.tpm2-abrmd |  1 +
- package/tpm2-abrmd/tpm2-abrmd.hash        |  3 ++
- package/tpm2-abrmd/tpm2-abrmd.mk          | 36 +++++++++++++++
- 7 files changed, 178 insertions(+)
- create mode 100644 package/tpm2-abrmd/Config.in
- create mode 100755 package/tpm2-abrmd/S30devtpmperms
- create mode 100755 package/tpm2-abrmd/S80tpm2-abrmd
- create mode 100644 package/tpm2-abrmd/etc.default.tpm2-abrmd
- create mode 100644 package/tpm2-abrmd/tpm2-abrmd.hash
- create mode 100644 package/tpm2-abrmd/tpm2-abrmd.mk
+ DEVELOPERS                   |  1 +
+ package/Config.in            |  1 +
+ package/libkrb5/Config.in    | 15 +++++++++++++++
+ package/libkrb5/libkrb5.hash |  2 ++
+ package/libkrb5/libkrb5.mk   | 27 +++++++++++++++++++++++++++
+ 5 files changed, 46 insertions(+)
+ create mode 100644 package/libkrb5/Config.in
+ create mode 100644 package/libkrb5/libkrb5.hash
+ create mode 100644 package/libkrb5/libkrb5.mk
 
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 9048d45..a8fa9ae 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -111,6 +111,7 @@ F:	package/ktap/
+ 
+ N:	Andr? Hentschel <nerv@dawncrow.de>
+ F:	package/azure-iot-sdk-c/
++F:	package/libkrb5/
+ F:	package/openal/
+ F:	package/p7zip/
+ F:	package/wine/
 diff --git a/package/Config.in b/package/Config.in
-index 2e1a78efa2..c078d14688 100644
+index 9a6b199..86042f4 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1996,6 +1996,7 @@ menu "System tools"
- 	source "package/sysvinit/Config.in"
- 	source "package/tar/Config.in"
- 	source "package/tpm-tools/Config.in"
-+	source "package/tpm2-abrmd/Config.in"
- 	source "package/unscd/Config.in"
- 	source "package/util-linux/Config.in"
- 	source "package/xen/Config.in"
-diff --git a/package/tpm2-abrmd/Config.in b/package/tpm2-abrmd/Config.in
+@@ -1374,6 +1374,7 @@ menu "Networking"
+ 	source "package/libhttpparser/Config.in"
+ 	source "package/libidn/Config.in"
+ 	source "package/libiscsi/Config.in"
++	source "package/libkrb5/Config.in"
+ 	source "package/libldns/Config.in"
+ 	source "package/libmaxminddb/Config.in"
+ 	source "package/libmbus/Config.in"
+diff --git a/package/libkrb5/Config.in b/package/libkrb5/Config.in
 new file mode 100644
-index 0000000000..796f9ea7f9
+index 0000000..bdddd2e
 --- /dev/null
-+++ b/package/tpm2-abrmd/Config.in
-@@ -0,0 +1,26 @@
-+config BR2_PACKAGE_TPM2_ABRMD
-+	bool "tpm2-abrmd"
-+	depends on BR2_i386 || BR2_x86_64
-+	depends on BR2_USE_WCHAR # libglib2
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, libglib2
-+	depends on BR2_USE_MMU # dbus, libglib2
-+	select BR2_PACKAGE_DBUS
-+	select BR2_PACKAGE_LIBGLIB2
-+	select BR2_PACKAGE_TPM2_TSS
-+	help
-+	  A system daemon implementing the TPM2 access broker (TAB) &
-+	  Resource Manager (RM) spec from the TCG. It should be started
-+	  during the OS boot process. Communication between the daemon
-+	  and clients using the TPM is done with a combination of DBus
-+	  and Unix pipes.
-+
-+	  The package also provides a client library for interacting
-+	  with the daemon via TPM Command Transmission Interface (TCTI).
-+	  It is intended for use with the SAPI library (libsapi) like
-+	  any other TCTI.
-+
-+	  https://github.com/tpm2-software/tpm2-abrmd
-+
-+comment "tpm2-abrmd needs a toolchain w/ wchar, threads"
++++ b/package/libkrb5/Config.in
+@@ -0,0 +1,15 @@
++config BR2_PACKAGE_LIBKRB5
++	bool "libkrb5"
++	# needs fork()
 +	depends on BR2_USE_MMU
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/tpm2-abrmd/S30devtpmperms b/package/tpm2-abrmd/S30devtpmperms
-new file mode 100755
-index 0000000000..5d9c42d182
---- /dev/null
-+++ b/package/tpm2-abrmd/S30devtpmperms
-@@ -0,0 +1,37 @@
-+#!/bin/sh
-+#
-+# Set the permissions of /dev/tpm[0-9]*
-+#
++	# static libs are not supported on all platforms
++	depends on !(BR2_STATIC_LIBS && (BR2_ARM_CPU_ARMV7M || BR2_m68k))
++	help
++	  Kerberos is a system for authenticating users and services
++	  on a network. Kerberos is a trusted third-party service.
++	  That means that there is a third party (the Kerberos server)
++	  that is trusted by all the entities on the network
++	  (users and services, usually called "principals").
++	  This is the MIT reference implementation of Kerberos V5.
 +
-+check_device() {
-+	ls -1 /dev/tpm[0-9]* > /dev/null 2>&1 || {
-+		echo "device driver not loaded, skipping."
-+		exit 0
-+	}
-+}
-+
-+start() {
-+	printf "Setting the ownership and permissions of /dev/tpm: "
-+	check_device
-+	chown tss:tss /dev/tpm[0-9]* && chmod 600 /dev/tpm* \
-+	&& echo "OK" || echo "FAIL"
-+}
-+
-+stop() {
-+	printf "Restoring the ownership and permissions of /dev/tpm: "
-+	check_device
-+	chown root:root /dev/tpm[0-9]* && chmod 600 /dev/tpm \
-+	&& echo "OK" || echo "FAIL"
-+}
-+
-+case "$1" in
-+  start|restart|reload)
-+      start
-+	;;
-+  stop)
-+      stop
-+	;;
-+  *)
-+	echo "Usage: $0 {start|stop|restart}"
-+	exit 1
-+esac
-diff --git a/package/tpm2-abrmd/S80tpm2-abrmd b/package/tpm2-abrmd/S80tpm2-abrmd
-new file mode 100755
-index 0000000000..053bffdb4f
---- /dev/null
-+++ b/package/tpm2-abrmd/S80tpm2-abrmd
-@@ -0,0 +1,74 @@
-+#!/bin/sh
-+
-+my_name="$0"
-+
-+check_required_files() {
-+	[ -x "$1" ] || {
-+		echo "$my_name: $1 is missing"
-+		exit 1
-+	}
-+	[ -z "$2" ] || [ -f "$2" ] || {
-+		echo "$my_name: $2 is missing"
-+		exit 1
-+	}
-+}
-+
-+check_device() {
-+	ls -1 /dev/tpm[0-9]* > /dev/null 2>&1 || {
-+		echo "device driver not loaded, skipping."
-+		exit 0
-+	}
-+}
-+
-+rm_stale_pidfile() {
-+	if [ -e "$1" ]; then
-+		exe="/proc/$(cat "$1")/exe"
-+		{ [ -s "$exe" ] && [ "$(readlink -f "$exe")" = "$2" ]; } || rm -f "$1"
-+	fi
-+}
-+
-+start() {
-+	printf "Starting tpm2-abrmd: "
-+	check_device
-+	rm_stale_pidfile /var/run/tpm2-abrmd.pid /usr/sbin/tpm2-abrmd
-+	start-stop-daemon -S -q -o -b -p /var/run/tpm2-abrmd.pid -c tss:tss -x /usr/sbin/tpm2-abrmd -- ${DAEMON_OPTS} || {
-+		echo "FAIL"
-+		exit 1
-+	}
-+	pidof /usr/sbin/tpm2-abrmd > /var/run/tpm2-abrmd.pid
-+	echo "OK"
-+}
-+
-+stop() {
-+	printf "Stopping tpm2-abrmd: "
-+	start-stop-daemon -K -q -o -p /var/run/tpm2-abrmd.pid -u tss -x /usr/sbin/tpm2-abrmd || {
-+		echo "FAIL"
-+		exit 1
-+	}
-+	rm_stale_pidfile /var/run/tpm2-abrmd.pid /usr/sbin/tpm2-abrmd
-+	echo "OK"
-+}
-+
-+check_required_files /usr/sbin/tpm2-abrmd /etc/dbus-1/system.d/tpm2-abrmd.conf
-+
-+# Read configuration variable file if it is present
-+[ -r /etc/default/tpm2-abrmd ] && . /etc/default/tpm2-abrmd
-+
-+case "$1" in
-+	start)
-+		start
-+	       	;;
-+	stop)
-+	   	stop
-+		;;
-+	restart|reload)
-+		stop
-+		sleep 1
-+		start
-+		;;
-+	*)
-+		echo "Usage: tpm2-abrmd {start|stop|restart|reload}" >&2
-+		exit 1
-+esac
-+
-+exit 0
-diff --git a/package/tpm2-abrmd/etc.default.tpm2-abrmd b/package/tpm2-abrmd/etc.default.tpm2-abrmd
++	  https://web.mit.edu/kerberos/
+diff --git a/package/libkrb5/libkrb5.hash b/package/libkrb5/libkrb5.hash
 new file mode 100644
-index 0000000000..987978a665
+index 0000000..59552d7
 --- /dev/null
-+++ b/package/tpm2-abrmd/etc.default.tpm2-abrmd
-@@ -0,0 +1 @@
-+DAEMON_OPTS="--tcti=device --logger=syslog --max-connections=20 --max-transient-objects=20 --fail-on-loaded-trans"
-diff --git a/package/tpm2-abrmd/tpm2-abrmd.hash b/package/tpm2-abrmd/tpm2-abrmd.hash
++++ b/package/libkrb5/libkrb5.hash
+@@ -0,0 +1,2 @@
++# Locally calculated after checking pgp signature
++sha256	faeb125f83b0fb4cdb2f99f088140631bb47d975982de0956d18c85842969e08	krb5-1.16.tar.gz
+diff --git a/package/libkrb5/libkrb5.mk b/package/libkrb5/libkrb5.mk
 new file mode 100644
-index 0000000000..503b83e5e3
+index 0000000..3cb64d6
 --- /dev/null
-+++ b/package/tpm2-abrmd/tpm2-abrmd.hash
-@@ -0,0 +1,3 @@
-+# Locally computed:
-+sha256 e20d2796c3097f9eec8410cec6a99d1532769d1cc138d6d9331c8ee1f0d305a4  tpm2-abrmd-1.2.0.tar.gz
-+sha256 18c1bf4b1ba1fb2c4ffa7398c234d83c0d55475298e470ae1e5e3a8a8bd2e448  LICENSE
-diff --git a/package/tpm2-abrmd/tpm2-abrmd.mk b/package/tpm2-abrmd/tpm2-abrmd.mk
-new file mode 100644
-index 0000000000..c2c3bfed46
---- /dev/null
-+++ b/package/tpm2-abrmd/tpm2-abrmd.mk
-@@ -0,0 +1,36 @@
++++ b/package/libkrb5/libkrb5.mk
+@@ -0,0 +1,27 @@
 +################################################################################
 +#
-+# tpm2-abrmd
++# libkrb5
 +#
 +################################################################################
 +
-+TPM2_ABRMD_VERSION = 1.2.0
-+TPM2_ABRMD_SITE = https://github.com/tpm2-software/tpm2-abrmd/releases/download/$(TPM2_ABRMD_VERSION)
-+TPM2_ABRMD_LICENSE = BSD-2-Clause
-+TPM2_ABRMD_LICENSE_FILES = LICENSE
-+TPM2_ABRMD_INSTALL_STAGING = YES
-+TPM2_ABRMD_DEPENDENCIES = dbus libglib2 tpm2-tss host-pkgconf
++LIBKRB5_VERSION = 1.16
++LIBKRB5_SITE = https://web.mit.edu/kerberos/dist/krb5/1.16
++LIBKRB5_SOURCE = krb5-$(LIBKRB5_VERSION).tar.gz
++LIBKRB5_SUBDIR = src
++LIBKRB5_LICENSE = MIT
++LIBKRB5_LICENSE_FILES = NOTICE
++LIBKRB5_INSTALL_STAGING = YES
 +
-+TPM2_ABRMD_CONF_OPTS += \
-+	--with-systemdsystemunitdir=$(if $(BR2_INIT_SYSTEMD),/usr/lib/systemd/system,no) \
-+	--with-udevrulesdir=$(if $(BR2_PACKAGE_HAS_UDEV),/usr/lib/udev/rules.d,no)
++# The configure script uses AC_TRY_RUN tests to check for those values,
++# which doesn't work in a cross-compilation scenario. Therefore,
++# we feed the configure script with the correct answer for those tests
++LIBKRB5_CONF_ENV = \
++	ac_cv_printf_positional=yes \
++	ac_cv_func_regcomp=yes \
++	krb5_cv_attr_constructor_destructor=yes,yes
 +
-+define TPM2_ABRMD_INSTALL_INIT_SYSTEMD
-+	$(TARGET_MAKE_ENV) $(MAKE1) -C $(@D) DESTDIR=$(TARGET_DIR) \
-+		install-systemdpresetDATA install-systemdsystemunitDATA
-+endef
-+
-+# Without udev we need an init script to set the ownership of /dev/tpm[0-9]*
-+define TPM2_ABRMD_INSTALL_INIT_SYSV
-+	$(INSTALL) -D -m 0755 -t $(TARGET_DIR)/etc/init.d \
-+		$(if $(BR2_PACKAGE_HAS_UDEV),,$(TPM2_ABRMD_PKGDIR)/S30devtpmperms) \
-+		$(TPM2_ABRMD_PKGDIR)/S80tpm2-abrmd
-+	$(INSTALL) -D -m 0644 $(TPM2_ABRMD_PKGDIR)/etc.default.tpm2-abrmd \
-+		$(TARGET_DIR)/etc/default/tpm2-abrmd
-+endef
-+
-+define TPM2_ABRMD_USERS
-+	tss -1 tss -1 * - - - TPM2 Access Broker & Resource Management daemon
-+endef
++ifneq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
++LIBKRB5_CONF_OPTS += --disable-thread-support
++endif
 +
 +$(eval $(autotools-package))
 -- 
-2.14.3
+2.7.4
