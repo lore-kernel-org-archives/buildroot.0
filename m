@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 2 Feb 2018 12:01:49 +0100
-Subject: [Buildroot] [PATCH 1/1] audit: bump to 2.8.2
-In-Reply-To: <20180201143248.21255-1-aduskett@gmail.com>
-References: <20180201143248.21255-1-aduskett@gmail.com>
-Message-ID: <20180202120149.79fdbb1b@windsurf.lan>
+Date: Fri, 2 Feb 2018 11:56:35 +0100
+Subject: [Buildroot] [PATCH v2 1/2] network-manager: Bump to version
+ 1.10.2
+In-Reply-To: <20180201234516.5031-1-petr.vorel@gmail.com>
+References: <20180201234516.5031-1-petr.vorel@gmail.com>
+Message-ID: <20180202115635.0fdaab93@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,17 +13,25 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu,  1 Feb 2018 09:32:48 -0500, Adam Duskett wrote:
-> Signed-off-by: Adam Duskett <aduskett@gmail.com>
-> ---
->  package/audit/audit.hash | 2 +-
->  package/audit/audit.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+On Fri,  2 Feb 2018 00:45:15 +0100, Petr Vorel wrote:
 
-Applied to master, thanks.
+> +ifeq ($(BR2_PACKAGE_JANSSON),y)
+> +NETWORK_MANAGER_CONF_OPTS += --enable-ovs
+> +NETWORK_MANAGER_DEPENDENCIES += jansson
+> +else
+> +NETWORK_MANAGER_CONF_OPTS += --disable-ovs
+> +endif
 
-Thomas, first patch committed from @bootlin.com
+It is somewhat weird to introduce this here, and then add an explicit
+option in a second patch.
+
+Perhaps PATCH 1/2 could just do --disable-ovs unconditionally, and
+PATCH 2/2 add the rest. If you agree, I can rework locally before
+applying, I understand it's a lot of nitpicking for such a small
+change :)
+
+Thomas
 -- 
 Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
 Embedded Linux and Kernel engineering
-https://bootlin.com
+http://bootlin.com
