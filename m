@@ -1,51 +1,111 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Fri,  2 Feb 2018 00:45:16 +0100
-Subject: [Buildroot] [PATCH v2 2/2] network-manager: Add option OpenVSwitch
- support
-In-Reply-To: <20180201234516.5031-1-petr.vorel@gmail.com>
-References: <20180201234516.5031-1-petr.vorel@gmail.com>
-Message-ID: <20180201234516.5031-2-petr.vorel@gmail.com>
+From: Gani Suresh <sureshgani@gmail.com>
+Date: Fri, 2 Feb 2018 05:53:08 +0530
+Subject: [Buildroot] Disable e2fsprogfs utilities chattr and lsattr
+In-Reply-To: <CAN+Pz6N=Artes_iA=aDj+Dd_yfLQw1QM8_iFKgEiLQVLfM+5jQ@mail.gmail.com>
+References: <CAN+Pz6N=Artes_iA=aDj+Dd_yfLQw1QM8_iFKgEiLQVLfM+5jQ@mail.gmail.com>
+Message-ID: <CAN+Pz6PQ_2u4AxzmUYFmihD1Vfbo1cq14CKHyK9xzN5i_7u18g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
----
- package/network-manager/Config.in          | 6 ++++++
- package/network-manager/network-manager.mk | 2 +-
- 2 files changed, 7 insertions(+), 1 deletion(-)
+Hi All,
+Please clarify.
 
-diff --git a/package/network-manager/Config.in b/package/network-manager/Config.in
-index 37e9b2fd8c..72658c1278 100644
---- a/package/network-manager/Config.in
-+++ b/package/network-manager/Config.in
-@@ -56,6 +56,12 @@ config BR2_PACKAGE_NETWORK_MANAGER_PPPD
- comment "pppd support needs a glibc or uClibc toolchain"
- 	depends on BR2_TOOLCHAIN_USES_MUSL
- 
-+config BR2_PACKAGE_NETWORK_MANAGER_OVS
-+	bool "OpenVSwitch support"
-+	select BR2_PACKAGE_JANSSON
-+	help
-+	  This option enables support for OpenVSwitch
-+
- endif
- 
- comment "NetworkManager needs udev /dev management and a glibc toolchain w/ headers >= 3.7, dynamic library"
-diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
-index 96e5a0b707..a520aad9c0 100644
---- a/package/network-manager/network-manager.mk
-+++ b/package/network-manager/network-manager.mk
-@@ -75,7 +75,7 @@ ifeq ($(BR2_PACKAGE_DHCPCD),y)
- NETWORK_MANAGER_CONF_OPTS += --with-dhcpcd=/sbin/dhcpcd
- endif
- 
--ifeq ($(BR2_PACKAGE_JANSSON),y)
-+ifeq ($(BR2_PACKAGE_NETWORK_MANAGER_OVS),y)
- NETWORK_MANAGER_CONF_OPTS += --enable-ovs
- NETWORK_MANAGER_DEPENDENCIES += jansson
- else
+Regards
+Suresh
+
+On Tue, Jan 30, 2018 at 10:17 PM, Gani Suresh <sureshgani@gmail.com> wrote:
+
+> Hi All
+>
+> We have a requirement to avoid the vulnerability of our system. So, we are
+> planning to disable *chattr* and *lsattr* when *e2fsprogs* package is
+> built.
+>
+> Until, e2fsprogs version 1.43.1 these utilities were optional in building
+> i.e. there were separate build flags(*e.g BR2_PACKAGE_E2FSPROGS_CHATTR*)
+> to enable/disable the same. In below, commit these flags were removed to
+> enable these utilities by default. Then, we can remove the binaries in our
+> post installation processing. Please clarify our question below.
+>
+>
+>
+> *Are these utilities used by the binaries built as part of e2fsprogs
+> package or some other programs ? If so, what is the impact of removing
+> these binaries from the target ?*
+>
+>
+>
+> author
+>
+> Carlos Santos <casantos@datacom.ind.br>
+>
+> 2017-04-22 22:49:13 (GMT)
+>
+> committer
+>
+> Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+>
+> 2017-05-04 20:26:57 (GMT)
+>
+> commit
+>
+> 742d6bf13e5bddc5e30edeb8b8c314f47cf97e4d
+> <https://git.busybox.net/buildroot/commit/package/e2fsprogs?id=742d6bf13e5bddc5e30edeb8b8c314f47cf97e4d>
+> (patch
+> <https://git.busybox.net/buildroot/patch/package/e2fsprogs?id=742d6bf13e5bddc5e30edeb8b8c314f47cf97e4d>
+> )
+>
+> tree
+>
+> 81d4787890cbf7bd3b0fcb28e1da61a5199854c5
+> <https://git.busybox.net/buildroot/tree/?id=742d6bf13e5bddc5e30edeb8b8c314f47cf97e4d>
+> /package/e2fsprogs
+> <https://git.busybox.net/buildroot/tree/package/e2fsprogs?id=742d6bf13e5bddc5e30edeb8b8c314f47cf97e4d>
+>
+> parent
+>
+> e88995f065986dc56ce5a7c222f7a9f6cbff2b94
+> <https://git.busybox.net/buildroot/commit/package/e2fsprogs?id=e88995f065986dc56ce5a7c222f7a9f6cbff2b94>
+> (diff
+> <https://git.busybox.net/buildroot/diff/package/e2fsprogs?id=742d6bf13e5bddc5e30edeb8b8c314f47cf97e4d&id2=e88995f065986dc56ce5a7c222f7a9f6cbff2b94>
+> )
+>
+> download
+>
+> buildroot-742d6bf13e5bddc5e30edeb8b8c314f47cf97e4d.tar.gz
+> <https://git.busybox.net/buildroot/snapshot/buildroot-742d6bf13e5bddc5e30edeb8b8c314f47cf97e4d.tar.gz>
+> buildroot-742d6bf13e5bddc5e30edeb8b8c314f47cf97e4d.tar.bz2
+> <https://git.busybox.net/buildroot/snapshot/buildroot-742d6bf13e5bddc5e30edeb8b8c314f47cf97e4d.tar.bz2>
+>
+>
+> --
+>
+> Thanks & Regards
+>    Suresh S. Gani
+>
+>    NAGRA
+>    RMZ Centennial , # 8A,8B,8C &8D Tower D unit 402
+>    Opp Graphite India, Mahadevapura Post ITPL Road
+>    560048 Bangalore
+>    India
+>
+>
+>
+
+
 -- 
-2.16.1
+
+Thanks & Regards
+   Suresh S. Gani
+
+   NAGRA
+   RMZ Centennial , # 8A,8B,8C &8D Tower D unit 402
+   Opp Graphite India, Mahadevapura Post ITPL Road
+   560048 Bangalore
+   India
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180202/210a131c/attachment.html>
