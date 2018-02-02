@@ -1,9 +1,9 @@
 From: Evgeniy Didin <Evgeniy.Didin@synopsys.com>
-Date: Fri,  2 Feb 2018 17:55:25 +0300
-Subject: [Buildroot] [PATCH v2 1/2] libdrm-armada: new package
+Date: Fri,  2 Feb 2018 17:55:26 +0300
+Subject: [Buildroot] [PATCH v2 2/2] xf86-video-armada: new package
 In-Reply-To: <20180202145526.20133-1-Evgeniy.Didin@synopsys.com>
 References: <20180202145526.20133-1-Evgeniy.Didin@synopsys.com>
-Message-ID: <20180202145526.20133-2-Evgeniy.Didin@synopsys.com>
+Message-ID: <20180202145526.20133-3-Evgeniy.Didin@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,8 +12,7 @@ To: buildroot@busybox.net
 
 From: Evgeniy Didin <didin@synopsys.com>
 
-libdrm-armada is an Etnaviv libdrm buffer object management module.
-It is used with xf86-driver-video-armada, which is Xorg driver for Etnaviv.
+xf86-video-armada is a Xorg driver for Etnaviv GPU.
 
 Signed-off-by: Evgeniy Didin <didin@synopsys.com>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
@@ -24,94 +23,112 @@ Changes since v1:
 -Add entry in DEVELOPERS
 -Some clean-up was made
 -Add license file
--Add dependency for threads in toolchain
 -Use full Git hash
 
- DEVELOPERS                               |  1 +
- package/Config.in                        |  1 +
- package/libdrm-armada/Config.in          |  8 ++++++++
- package/libdrm-armada/libdrm-armada.hash |  5 +++++
- package/libdrm-armada/libdrm-armada.mk   | 22 ++++++++++++++++++++++
- 5 files changed, 37 insertions(+)
- create mode 100644 package/libdrm-armada/Config.in
- create mode 100644 package/libdrm-armada/libdrm-armada.hash
- create mode 100644 package/libdrm-armada/libdrm-armada.mk
+ DEVELOPERS                                         |  1 +
+ package/x11r7/Config.in                            |  1 +
+ package/x11r7/xdriver_xf86-video-armada/Config.in  | 11 +++++++
+ .../xdriver_xf86-video-armada.hash                 |  6 ++++
+ .../xdriver_xf86-video-armada.mk                   | 37 ++++++++++++++++++++++
+ 5 files changed, 56 insertions(+)
+ create mode 100644 package/x11r7/xdriver_xf86-video-armada/Config.in
+ create mode 100644 package/x11r7/xdriver_xf86-video-armada/xdriver_xf86-video-armada.hash
+ create mode 100644 package/x11r7/xdriver_xf86-video-armada/xdriver_xf86-video-armada.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index fe989c0775..f38ce61966 100644
+index f38ce61966..da41a28793 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -153,6 +153,7 @@ F:	package/wf111/
- 
+@@ -154,6 +154,7 @@ F:	package/wf111/
  N:	ARC Maintainers <arc-buildroot@synopsys.com>
  F:	arch/Config.in.arc
-+F:	package/libdrm-armada
+ F:	package/libdrm-armada
++F:	package/x11r7/xdriver_xf86-video-armada
  
  N:	Ariel D'Alessandro <ariel@vanguardiasur.com.ar>
  F:	package/axfsutils/
-diff --git a/package/Config.in b/package/Config.in
-index bd39a374f0..4e7a15fb49 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1116,6 +1116,7 @@ menu "Graphics"
- 	source "package/libdmtx/Config.in"
- 	source "package/libdri2/Config.in"
- 	source "package/libdrm/Config.in"
-+	source "package/libdrm-armada/Config.in"
- 	source "package/libepoxy/Config.in"
- 	source "package/libexif/Config.in"
- 	source "package/libfm/Config.in"
-diff --git a/package/libdrm-armada/Config.in b/package/libdrm-armada/Config.in
+diff --git a/package/x11r7/Config.in b/package/x11r7/Config.in
+index ddceaa407f..e791419083 100644
+--- a/package/x11r7/Config.in
++++ b/package/x11r7/Config.in
+@@ -157,6 +157,7 @@ if BR2_PACKAGE_XORG7
+ 		source package/x11r7/xdriver_xf86-input-vmmouse/Config.in
+ 		source package/x11r7/xdriver_xf86-video-amdgpu/Config.in
+ 		source package/x11r7/xdriver_xf86-video-ark/Config.in
++		source package/x11r7/xdriver_xf86-video-armada/Config.in
+ 		source package/x11r7/xdriver_xf86-video-ast/Config.in
+ 		source package/x11r7/xdriver_xf86-video-ati/Config.in
+ 		source package/x11r7/xdriver_xf86-video-cirrus/Config.in
+diff --git a/package/x11r7/xdriver_xf86-video-armada/Config.in b/package/x11r7/xdriver_xf86-video-armada/Config.in
 new file mode 100644
-index 0000000000..a78ed44040
+index 0000000000..ade8a75643
 --- /dev/null
-+++ b/package/libdrm-armada/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_LIBDRM_ARMADA
-+	bool "libdrm-armada"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	select BR2_PACKAGE_LIBDRM
++++ b/package/x11r7/xdriver_xf86-video-armada/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_XDRIVER_XF86_VIDEO_ARMADA
++	bool "xf86-video-armada"
++	depends on BR2_PACKAGE_MESA3D
++	select BR2_PACKAGE_LIBDRM_ARMADA
 +	help
-+	  Etnaviv libdrm buffer object management module
++	 Xorg driver for Etnaviv GPU.
 +
-+	  http://git.arm.linux.org.uk/cgit/libdrm-armada.git/
-diff --git a/package/libdrm-armada/libdrm-armada.hash b/package/libdrm-armada/libdrm-armada.hash
++	 http://git.arm.linux.org.uk/cgit/xf86-video-armada.git
++
++comment "xf86-video-armada needs mesa3d"
++        depends on !BR2_PACKAGE_MESA3D
+diff --git a/package/x11r7/xdriver_xf86-video-armada/xdriver_xf86-video-armada.hash b/package/x11r7/xdriver_xf86-video-armada/xdriver_xf86-video-armada.hash
 new file mode 100644
-index 0000000000..7b36147312
+index 0000000000..7fa0f525ed
 --- /dev/null
-+++ b/package/libdrm-armada/libdrm-armada.hash
-@@ -0,0 +1,5 @@
++++ b/package/x11r7/xdriver_xf86-video-armada/xdriver_xf86-video-armada.hash
+@@ -0,0 +1,6 @@
 +# Locally calculated
-+sha256  d9a6184276aa9defe70f6eb215656096a4d3c669f2ceae98e8348a60d749c549  libdrm-armada-6b461c163b0bd02c76b65d94cc2fb3767167bda8.tar.gz
++sha256	5df615507ca6579ffba6df8a2aea6f6b542aa3985598efae836f335f9752cb39	xdriver_xf86-video-armada-04748ff4fb30370086cc97b9487a32951c5600ba.tar.gz
 +
-+# Hash for license file:
-+sha256  cf445db5adf2d878b83f7bbd60948a22303f8cf606a83b85fbaf20d9e16a3861  libdrm_lists.h
-diff --git a/package/libdrm-armada/libdrm-armada.mk b/package/libdrm-armada/libdrm-armada.mk
++# Hashes for license files:
++sha256  57ed74a42ee9ea913ae81c5bac498340ade4ef1e70e9007f39b2da3de952e597	README
++sha256  9d8facadc083641f71b8bcf9f078bd53f27aba3545b170f100c38f07cf3a42a2	etna_viv/LICENSE
+diff --git a/package/x11r7/xdriver_xf86-video-armada/xdriver_xf86-video-armada.mk b/package/x11r7/xdriver_xf86-video-armada/xdriver_xf86-video-armada.mk
 new file mode 100644
-index 0000000000..c01fa69e0f
+index 0000000000..7cac256241
 --- /dev/null
-+++ b/package/libdrm-armada/libdrm-armada.mk
-@@ -0,0 +1,22 @@
++++ b/package/x11r7/xdriver_xf86-video-armada/xdriver_xf86-video-armada.mk
+@@ -0,0 +1,37 @@
 +################################################################################
 +#
-+# libdrm-armada
++# xdriver_xf86-video-armada
 +#
 +################################################################################
 +
-+LIBDRM_ARMADA_VERSION = 6b461c163b0bd02c76b65d94cc2fb3767167bda8
-+LIBDRM_ARMADA_SITE = http://git.arm.linux.org.uk/cgit/libdrm-armada.git
-+LIBDRM_ARMADA_SITE_METHOD = git
-+LIBDRM_ARMADA_DEPENDENCIES = libdrm
-+LIBDRM_ARMADA_INSTALL_STAGING = YES
-+LIBDRM_ARMADA_AUTORECONF = YES
-+LIBDRM_ARMADA_LICENSE_FILES = libdrm_lists.h
++XDRIVER_XF86_VIDEO_ARMADA_VERSION = 04748ff4fb30370086cc97b9487a32951c5600ba
++XDRIVER_XF86_VIDEO_ARMADA_SITE = http://git.arm.linux.org.uk/cgit/xf86-video-armada.git
++XDRIVER_XF86_VIDEO_ARMADA_SITE_METHOD = git
++XDRIVER_XF86_VIDEO_ARMADA_AUTORECONF = YES
++XDRIVER_XF86_VIDEO_ARMADA_DEPENDENCIES = \
++	libdrm-armada \
++	xserver_xorg-server
 +
-+# Needed for autoreconf to work properly
-+define LIBDRM_ARMADA_FIXUP_M4_DIR
++XDRIVER_XF86_VIDEO_ARMADA_LICENSE_FILES= README etna_viv/LICENSE
++XDRIVER_XF86_VIDEO_ARMADA_LICENSE = BSD
++
++#Need etna_viv source files for driver
++define XDRIVER_XF86_VIDEO_ARMADA_ETNASRC
++	git clone https://github.com/laanwj/etna_viv.git $(@D)/etna_viv
 +        mkdir $(@D)/m4
 +endef
 +
-+LIBDRM_ARMADA_POST_PATCH_HOOKS += LIBDRM_ARMADA_FIXUP_M4_DIR
++XDRIVER_XF86_VIDEO_ARMADA_POST_PATCH_HOOKS += XDRIVER_XF86_VIDEO_ARMADA_ETNASRC
++
++define XDRIVER_XF86_VIDEO_ARMADA_INSTALL_CONF_FILE
++        $(INSTALL) -m 0644 -D $(@D)/conf/xorg-sample.conf $(TARGET_DIR)/etc/X11/xorg.conf
++endef
++
++XDRIVER_XF86_VIDEO_ARMADA_POST_INSTALL_TARGET_HOOKS += XDRIVER_XF86_VIDEO_ARMADA_INSTALL_CONF_FILE
++
++
++XDRIVER_XF86_VIDEO_ARMADA_CONF_OPTS = \
++  --prefix=/usr --disable-vivante --disable-etnaviv \
++  --with-etnaviv-source=$(@D)/etna_viv
 +
 +$(eval $(autotools-package))
 -- 
