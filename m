@@ -1,31 +1,46 @@
 From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Fri,  2 Feb 2018 14:57:09 -0600
-Subject: [Buildroot] [PATCH v3 0/3] autobuild: timeout and reporting cleanup
-Message-ID: <20180202205713.27191-1-matthew.weber@rockwellcollins.com>
+Date: Fri,  2 Feb 2018 14:57:13 -0600
+Subject: [Buildroot] [PATCH v3 3/3] autobuilder: failure reason use
+ build-time.log
+In-Reply-To: <20180202205713.27191-1-matthew.weber@rockwellcollins.com>
+References: <20180202205713.27191-1-matthew.weber@rockwellcollins.com>
+Message-ID: <20180202205713.27191-5-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Included in this series
- - Timeout detection using modification time of build-time.log
- - Cleanup build reason reporting to use build-time.log last entry
- - (Misc) Noticed schema was missing the new branch field
+When the make output doesn't parse to provide a result and unknown
+is assumed, check the build-time.log and see if the last line was
+a <stamp>:start:<pkgname>.  IF so, use this pkgname instead
+before declaring unknown.
 
-Related items needing merge
- - Force sane umask to ensure expected log output
-   (https://patchwork.ozlabs.org/patch/857788/)
+This was tested against the ti-cgt-pru hang.
+http://autobuild.buildroot.net/results/60e/60e11a3bb90b9f41259e4a970081b72d8b8d100b//
 
-Matt Weber (3):
-  autobuilder: hung build: convert to monitor thread
-  autobuilder: schema update for branch varchar
-  autobuilder: failure reason use build-time.log
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+---
+ web/import.inc.php | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
- scripts/autobuild-run | 58 +++++++++++++++++++++++++++++++++++++++++++--------
- web/import.inc.php    |  7 ++++++-
- web/schema.sql        |  1 +
- 3 files changed, 56 insertions(+), 10 deletions(-)
-
+diff --git a/web/import.inc.php b/web/import.inc.php
+index 8eb3066..081a1cb 100644
+--- a/web/import.inc.php
++++ b/web/import.inc.php
+@@ -235,7 +235,12 @@ function import_result($buildid, $filename)
+ 	if (trim($tmp[0]))
+ 	  $reason = $tmp[0];
+ 	else
+-	  $reason = "unknown";
++	  exec("tail -1 " . $thisbuildfinaldir . "build-time.log | grep :start: | cut -d':' -f4", $tmp);
++	  if (trim($tmp[0]))
++	    print "Using build-time.log for reason[".trim($tmp[0])."]";
++	    $reason = trim($tmp[0]);
++	  else
++	    $reason = "unknown";
+     }
+ 
+     $db = new db();
 -- 
 2.14.2
