@@ -1,10 +1,10 @@
 From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Fri,  2 Feb 2018 14:57:13 -0600
-Subject: [Buildroot] [PATCH v3 3/3] autobuilder: failure reason use
+Date: Fri,  2 Feb 2018 14:57:10 -0600
+Subject: [Buildroot] [PATCH v3 1/1] autobuilder: failure reason use
  build-time.log
 In-Reply-To: <20180202205713.27191-1-matthew.weber@rockwellcollins.com>
 References: <20180202205713.27191-1-matthew.weber@rockwellcollins.com>
-Message-ID: <20180202205713.27191-5-matthew.weber@rockwellcollins.com>
+Message-ID: <20180202205713.27191-2-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
