@@ -1,45 +1,105 @@
-From: =?UTF-8?q?Andr=C3=A9=20Hentschel?= <nerv@dawncrow.de>
-Date: Fri,  2 Feb 2018 18:39:01 +0100
-Subject: [Buildroot] [PATCH v5 2/2] squid: Add optional dependency on libkrb5
-In-Reply-To: <1517593141-26017-1-git-send-email-nerv@dawncrow.de>
-References: <1517593141-26017-1-git-send-email-nerv@dawncrow.de>
-Message-ID: <1517593141-26017-2-git-send-email-nerv@dawncrow.de>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri,  2 Feb 2018 19:12:32 +0100
+Subject: [Buildroot] [PATCH v2,
+ 1/1] libmaxminddb: disable binaries without threads
+Message-ID: <20180202181232.22150-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
----
- package/squid/squid.mk | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+libmaxminddb added a pthread dependency to bin/mmdblookup in version
+1.3.2
 
-diff --git a/package/squid/squid.mk b/package/squid/squid.mk
-index 8ade55e..2d21ad8 100644
---- a/package/squid/squid.mk
-+++ b/package/squid/squid.mk
-@@ -29,7 +29,6 @@ SQUID_CONF_OPTS = \
- 	--enable-removal-policies="lru,heap" \
- 	--with-filedescriptors=1024 \
- 	--disable-ident-lookups \
--	--without-mit-krb5 \
- 	--enable-auth-basic="fake getpwnam" \
- 	--enable-auth-digest="file" \
- 	--enable-auth-negotiate="wrapper" \
-@@ -50,6 +49,13 @@ else
- SQUID_CONF_ENV += squid_cv_gnu_atomics=no
- endif
+Fixes:
+ - https://autobuild.buildroot.net/results/3e653a5fa4cbd714980ce0f1c3b02f3abb6d558e
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+Changes v1 -> v2:
+ - Add an option to only disable binaries when pthreads is not available
+instead of disabling all package
+
+ .../libmaxminddb/0001-Add-disable-binaries.patch   | 53 ++++++++++++++++++++++
+ package/libmaxminddb/libmaxminddb.mk               |  7 +++
+ 2 files changed, 60 insertions(+)
+ create mode 100644 package/libmaxminddb/0001-Add-disable-binaries.patch
+
+diff --git a/package/libmaxminddb/0001-Add-disable-binaries.patch b/package/libmaxminddb/0001-Add-disable-binaries.patch
+new file mode 100644
+index 0000000000..0053cace71
+--- /dev/null
++++ b/package/libmaxminddb/0001-Add-disable-binaries.patch
+@@ -0,0 +1,53 @@
++From 501f85fa729d08b90f0e1ff6f9378a0864f722a7 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Fri, 2 Feb 2018 13:19:18 +0100
++Subject: [PATCH] Add --disable-binaries
++
++mmdblookup now depends on pthread.h which can be disabled on some
++toolchains so add an option to be able to compile libmaxminddb without
++this binary
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ Makefile.am  | 6 +++++-
++ configure.ac | 6 ++++++
++ 2 files changed, 11 insertions(+), 1 deletion(-)
++
++diff --git a/Makefile.am b/Makefile.am
++index cebcd31..cfbfd77 100644
++--- a/Makefile.am
+++++ b/Makefile.am
++@@ -4,8 +4,12 @@ include_HEADERS = include/maxminddb.h
++ nodist_include_HEADERS = include/maxminddb_config.h
++ 
++ SUBDIRS = \
++-  src     \
+++  src
+++
+++if BINARIES
+++SUBDIRS += \
++   bin
+++endif
++ 
++ if TESTS
++ SUBDIRS += \
++diff --git a/configure.ac b/configure.ac
++index c494746..4d1beb4 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -119,6 +119,12 @@ AC_ARG_ENABLE(
++         esac],[debug=false])
++ AM_CONDITIONAL([DEBUG], [test x$debug = xtrue])
++ 
+++AC_ARG_ENABLE([binaries],
+++        AS_HELP_STRING([--enable-binaries], [Compilation of binaries code]),
+++        [enable_binaries=${enableval}],
+++        [enable_binaries=yes])
+++AM_CONDITIONAL([BINARIES], [test "${enable_binaries}" = "yes"])
+++
++ AC_ARG_ENABLE([tests],
++         AS_HELP_STRING([--enable-tests], [Compilation of tests code]),
++         [enable_tests=${enableval}],
++-- 
++2.7.4
++
+diff --git a/package/libmaxminddb/libmaxminddb.mk b/package/libmaxminddb/libmaxminddb.mk
+index 4d4f582c21..25d4d3378f 100644
+--- a/package/libmaxminddb/libmaxminddb.mk
++++ b/package/libmaxminddb/libmaxminddb.mk
+@@ -13,4 +13,11 @@ LIBMAXMINDDB_LICENSE_FILES = LICENSE
+ LIBMAXMINDDB_AUTORECONF = YES
+ LIBMAXMINDDB_CONF_OPTS = --disable-tests
  
-+ifeq ($(BR2_PACKAGE_LIBKRB5),y)
-+SQUID_CONF_OPTS += --with-mit-krb5
-+SQUID_DEPENDENCIES += libkrb5
++# mmdblookup binary depends on pthreads
++ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
++LIBMAXMINDDB_CONF_OPTS += --enable-binaries
 +else
-+SQUID_CONF_OPTS += --without-mit-krb5
++LIBMAXMINDDB_CONF_OPTS += --disable-binaries
 +endif
 +
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- SQUID_CONF_OPTS += --with-openssl
- SQUID_DEPENDENCIES += openssl
+ $(eval $(autotools-package))
 -- 
-2.7.4
+2.14.1
