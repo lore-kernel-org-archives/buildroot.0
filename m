@@ -1,37 +1,39 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat,  3 Feb 2018 18:05:58 +0100
-Subject: [Buildroot] [PATCH 1/2] package/wf111: fix armv5 URL
-In-Reply-To: <cover.1517677545.git.yann.morin.1998@free.fr>
-References: <cover.1517677545.git.yann.morin.1998@free.fr>
-Message-ID: <a39a7268f72dfab7e861038b75feb065f0d160c5.1517677545.git.yann.morin.1998@free.fr>
+From: Mario Lang <mlang@blind.guru>
+Date: Sat,  3 Feb 2018 18:05:55 +0100
+Subject: [Buildroot] [PATCH] package/lynx: depends on dynamic lib
+Message-ID: <20180203170555.1431-1-mlang@blind.guru>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit b857c7481 (package/wf111: bump to version 5.2.2-r3) forgot to
-completely update the archive name for the armv5te variant.
+This fixes the following autobuild errors:
+  http://autobuild.buildroot.net/results/9a7b37264d592add75dd2a0f233a2de4eba4f489
+  http://autobuild.buildroot.net/results/d3ecc533b5c5a33a9385e7f1f689ddf9bfa6fd43
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Julien CORJON <corjon.j@ecagroup.com>
-Cc: Antoine T?nart <antoine.tenart@free-electrons.com>
+Signed-off-by: Mario Lang <mlang@blind.guru>
 ---
- package/wf111/wf111.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/lynx/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/wf111/wf111.mk b/package/wf111/wf111.mk
-index ed55672136..5178944fa3 100644
---- a/package/wf111/wf111.mk
-+++ b/package/wf111/wf111.mk
-@@ -16,7 +16,7 @@ endif
- ifeq ($(BR2_ARM_CPU_ARMV7A),y)
- WF111_SOURCE = wf111-linux-driver-$(WF111_VERSION)-armv7-a.tar.gz
- else ifeq ($(BR2_ARM_CPU_ARMV5),y)
--WF111_SOURCE = wf111-linux-driver-$(WF111_VERSION)-armv5t.tar.gz
-+WF111_SOURCE = wf111-linux-driver-$(WF111_VERSION)-armv5te.tar.gz
- else ifeq ($(BR2_i386),y)
- WF111_SOURCE = wf111-linux-driver-$(WF111_VERSION)-x86.tar.gz
- endif
+diff --git a/package/lynx/Config.in b/package/lynx/Config.in
+index a338f83616..570d3fd15d 100644
+--- a/package/lynx/Config.in
++++ b/package/lynx/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_LYNX
+ 	bool "lynx"
++	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_USE_MMU
+ 	select BR2_PACKAGE_SLANG if !BR2_PACKAGE_NCURSES
+ 	select BR2_PACKAGE_OPENSSL if !BR2_PACKAGE_GNUTLS
+@@ -7,3 +8,6 @@ config BR2_PACKAGE_LYNX
+ 	  The Text Web-Browser.
+ 
+ 	  http://lynx.invisible-island.net/
++
++comment "lynx needs a toolchain w/ dynamic lib"
++	depends on BR2_STATIC_LIBS
 -- 
-2.14.1
+2.15.1
