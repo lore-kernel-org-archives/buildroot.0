@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 3 Feb 2018 16:34:42 +0100
-Subject: [Buildroot] [PATCH 1/1] package/wf111: bump to version 5.2.2-r3
-In-Reply-To: <877es3irx9.fsf@dell.be.48ers.dk>
-References: <20180126162021.5520-1-corjon.j@ecagroup.com>
- <877es3irx9.fsf@dell.be.48ers.dk>
-Message-ID: <20180203153442.GM2369@scaer>
+Date: Sat, 3 Feb 2018 16:40:15 +0100
+Subject: [Buildroot] [PATCH 1/1] package/wf111: Fix manufacturer name
+ and url
+In-Reply-To: <20180129082819.13870-1-corjon.j@ecagroup.com>
+References: <20180129082819.13870-1-corjon.j@ecagroup.com>
+Message-ID: <20180203154015.GN2369@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,38 +13,66 @@ To: buildroot@busybox.net
 
 Julien, All,
 
-On 2018-01-27 10:15 +0100, Peter Korsgaard spake thusly:
-> >>>>> "Julien" == Julien Corjon <corjon.j@ecagroup.com> writes:
+On 2018-01-29 09:28 +0100, Julien Corjon spake thusly:
+> Signed-off-by: Julien Corjon <corjon.j@ecagroup.com>
+> ---
+>  package/wf111/Config.in | 10 +++++-----
+>  1 file changed, 5 insertions(+), 5 deletions(-)
 > 
->  > Signed-off-by: Julien Corjon <corjon.j@ecagroup.com>
->  > ---
->  >  package/wf111/wf111.mk | 8 ++++----
->  >  1 file changed, 4 insertions(+), 4 deletions(-)
-> 
->  > diff --git a/package/wf111/wf111.mk b/package/wf111/wf111.mk
->  > index ad9d89149d..ed55672136 100644
->  > --- a/package/wf111/wf111.mk
->  > +++ b/package/wf111/wf111.mk
->  > @@ -4,7 +4,7 @@
->  >  #
->  >  ################################################################################
+> diff --git a/package/wf111/Config.in b/package/wf111/Config.in
+> index 80109f1b88..081bd960cb 100644
+> --- a/package/wf111/Config.in
+> +++ b/package/wf111/Config.in
+> @@ -6,7 +6,7 @@ config BR2_PACKAGE_WF111
+>  	# dynamically linked against the glibc.
+>  	depends on BR2_TOOLCHAIN_USES_GLIBC
+>  	help
+> -	  BlueGiga WF111 WiFi driver and utilities.
+> +	  Silicon Labs WF111 WiFi driver and utilities.
 >  
->  > -WF111_VERSION = 5.2.2-r2
->  > +WF111_VERSION = 5-2-2-r3
-> 
-> The Config.in refers to
-> http://www.bluegiga.com/en-US/products/wifi-modules/wf111-wifi-module/,
-> which redirects to silabs.com nowadays, so it is not directly clear
-> where to find the tarballs.
+>  	  Warning: CONFIG_WIRELESS_EXT and CONFIG_WEXT_PRIV must be
+>  	  selected in the Linux kernel configuration. These are blind
+> @@ -17,16 +17,16 @@ config BR2_PACKAGE_WF111
+>  	    configuration entry that selects them, for example.
+>  	  - By enabling another random WiFi driver that select them.
+>  
+> -	  http://www.bluegiga.com/en-US/products/wifi-modules/wf111-wifi-module/
+> +	  https://www.silabs.com/products/wireless/wi-fi/wf111-bluegiga-module
+>  
+>  if BR2_PACKAGE_WF111
+>  
+>  config BR2_PACKAGE_WF111_TARBALL_PATH
+>  	string "Local tarball location"
+>  	help
+> -	  The WF111 tarball can be retrieved on the BlueGiga website
+> -	  after registration. This option specifies the path where the
+> -	  tarball is locally saved.
+> +	  The WF111 tarball can be retrieved on the Silicon Labs
+> +	  website after registration. This option specifies the path
+> +	  where the tarball is locally saved.
 
-It also look that we can now download without any click-wrap
-registration, so this can now be automated, rather than require a local
-tarball.
+As I just replied to your previous patch (but you were dropped from Cc
+for whatever reason), this is no longer true: one can very well do the
+download without registration nowdays: try to download the URLs from
+command line:
 
-Care to send a patch doing the download?
+    wget 'https://www.silabs.com/documents/login/software/wf111-linux-driver-5-2-2-r3-armv5te.tar.gz'
+
+and it magically works now. So we can drop the special local tarball
+path now. Care to send a patch?
 
 Regards,
 Yann E. MORIN.
+
+>  endif
+>  
+> -- 
+> 2.14.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
