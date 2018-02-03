@@ -1,32 +1,27 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 3 Feb 2018 19:54:27 +0100
-Subject: [Buildroot] [git commit] linux: bump default to version 4.15.1
-Message-ID: <20180203190214.30170882D9@busybox.osuosl.org>
+Date: Sat, 03 Feb 2018 20:10:36 +0100
+Subject: [Buildroot] [PATCH 1/2] package/wf111: fix armv5 URL
+In-Reply-To: <a39a7268f72dfab7e861038b75feb065f0d160c5.1517677545.git.yann.morin.1998@free.fr>
+ (Yann E. MORIN's message of "Sat, 3 Feb 2018 18:05:58 +0100")
+References: <cover.1517677545.git.yann.morin.1998@free.fr>
+ <a39a7268f72dfab7e861038b75feb065f0d160c5.1517677545.git.yann.morin.1998@free.fr>
+Message-ID: <87po5l3n4j.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e877684fe93bb29beaf498956f4afded1d72303b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- linux/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ > Commit b857c7481 (package/wf111: bump to version 5.2.2-r3) forgot to
+ > completely update the archive name for the armv5te variant.
 
-diff --git a/linux/Config.in b/linux/Config.in
-index aef17c0c7e..1bc8171291 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -116,7 +116,7 @@ endif
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "4.15" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "4.15.1" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "v4.4.112-cip18" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Cc: Julien CORJON <corjon.j@ecagroup.com>
+ > Cc: Antoine T?nart <antoine.tenart@free-electrons.com>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
