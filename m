@@ -1,41 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 3 Feb 2018 19:54:32 +0100
-Subject: [Buildroot] [git commit] linux-headers: bump 4.{4, 9, 14,
- 15}.x series
-Message-ID: <20180203190214.4D1F984041@busybox.osuosl.org>
+Date: Sat, 3 Feb 2018 19:55:51 +0100
+Subject: [Buildroot] [git commit] package/bash: remove dead comment
+Message-ID: <20180203190214.660C7882B5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9fab7e408a2f4148d732b128eff077a6b38b27bb
+commit: https://git.buildroot.net/buildroot/commit/?id=eadf8696a899cea391d7abe7f0547152c64ed40b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Commit 02e5cef1 (system: add option to choose what /bin/sh points to)
+removed the symlink creation, but forgot to remove the corresponding
+comment, which is now more puzzling than amusing...
+
+Remove the comment.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Romain Naour <romain.naour@gmail.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-headers/Config.in.host | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ package/bash/bash.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index e34636a330..e0f97f3b5e 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -260,12 +260,12 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.10.108"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.12.74"	if BR2_KERNEL_HEADERS_3_12
- 	default "4.1.49"	if BR2_KERNEL_HEADERS_4_1
--	default "4.4.114"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.79"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.4.115"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.9.80"	if BR2_KERNEL_HEADERS_4_9
- 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
- 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
- 	default "4.12.14"	if BR2_KERNEL_HEADERS_4_12
- 	default "4.13.16"	if BR2_KERNEL_HEADERS_4_13
--	default "4.14.16"	if BR2_KERNEL_HEADERS_4_14
--	default "4.15"		if BR2_KERNEL_HEADERS_4_15
-+	default "4.14.17"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.15.1"	if BR2_KERNEL_HEADERS_4_15
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/package/bash/bash.mk b/package/bash/bash.mk
+index 03f8f286ed..e9384911a0 100644
+--- a/package/bash/bash.mk
++++ b/package/bash/bash.mk
+@@ -39,7 +39,6 @@ BASH_CONF_ENV += bash_cv_getenv_redef=yes
+ endif
+ endif
+ 
+-# Make /bin/sh -> bash (no other shell, better than busybox shells)
+ # Add /bin/bash to /etc/shells otherwise some login tools like dropbear
+ # can reject the user connexion. See man shells.
+ define BASH_INSTALL_TARGET_CMDS
