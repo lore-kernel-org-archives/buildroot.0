@@ -1,44 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 03 Feb 2018 22:54:44 +0100
-Subject: [Buildroot] [PATCH v1 2/2] dhcp: disable isc assertions
- (reproducible builds)
-In-Reply-To: <20180130175402.GA3468@scaer> (Yann E. MORIN's message of "Tue,
- 30 Jan 2018 18:54:02 +0100")
-References: <20171027192424.19760-1-ps.report@gmx.net>
- <20171027192424.19760-2-ps.report@gmx.net>
- <20180108211857.2166f95e@windsurf> <20180130175402.GA3468@scaer>
-Message-ID: <877ert20yj.fsf@dell.be.48ers.dk>
+Date: Sat, 3 Feb 2018 22:50:09 +0100
+Subject: [Buildroot] [git commit] dhcp: disable isc assertions (reproducible
+ builds)
+Message-ID: <20180203215454.E6A1588308@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=3d1a7a86205a31625a8d5e8666ae7eb357e0de75
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Hi,
+The isc assertions from the bundled bind dns library are
+using the __FILE__ macro for debug messages (see
+dhcp-4.3.5/bind/bind-9.9.9-P3/lib/isc/include/isc/assertions.h).
 
- >> Peter, Arnout, Yann, what do you think, especially about the
- >> assertions ?
+Disabling the assertions gains:
 
- > Assertions are supposed to be usefull during development, not during
- > production use, so I would be fine with disabling them, yes.
+- reproducible builds (no build time paths in the executable)
+- space saving on the target:
+  dhcpd: 1.9M -> 1.6M
+  dhcrelay: 1.6M -> 1.3M
 
- > At least, I would hope that no sane developer uses assertions to check
- > for normal error conditions in normal operation mode... ;-]
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/dhcp/dhcp.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-Agreed, and the space savings are quite big - So committed, thanks.
-
- > Now, about reproducibility... We could at least pass -DFILE=\"\" and so
- > on from inside our gcc-wrapper, like we already do for __DATE__ and
- > __TIME__. Yes, that would give an empty filename in assertions and the
- > likes, but do we care in the end?
-
-It would be nicer if we could pass basename($file), but that would break
-with compilations with multiple source files passed to gcc or header
-files, so yeah, perhaps that is the best way forward.
-
-How does E.G. Debian handle it?
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/dhcp/dhcp.mk b/package/dhcp/dhcp.mk
+index 4e1b24b700..a1285184d3 100644
+--- a/package/dhcp/dhcp.mk
++++ b/package/dhcp/dhcp.mk
+@@ -11,7 +11,9 @@ DHCP_LICENSE = ISC
+ DHCP_LICENSE_FILES = LICENSE
+ DHCP_CONF_ENV = \
+ 	CPPFLAGS='-D_PATH_DHCPD_CONF=\"/etc/dhcp/dhcpd.conf\" \
+-		-D_PATH_DHCLIENT_CONF=\"/etc/dhcp/dhclient.conf\"'
++		-D_PATH_DHCLIENT_CONF=\"/etc/dhcp/dhclient.conf\"' \
++	CFLAGS='$(TARGET_CFLAGS) -DISC_CHECK_NONE=1'
++
+ DHCP_CONF_OPTS = \
+ 	--with-randomdev=/dev/random \
+ 	--with-srv-lease-file=/var/lib/dhcp/dhcpd.leases \
