@@ -1,156 +1,140 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 3 Feb 2018 21:29:54 +0100
-Subject: [Buildroot] [git commit] safeclib: new package
-Message-ID: <20180203215454.D94FF88307@busybox.osuosl.org>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sat,  3 Feb 2018 23:07:33 +0100
+Subject: [Buildroot] [PATCH v1] quotatool: new package
+Message-ID: <20180203220733.15255-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a67cb08d19e6c123737f7401e87103ecca046ea9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-safec fork with all C11 Annex K functions
-
-This library implements the secure C11 Annex K functions on
-top of most libc implementations, which are missing from them.
-
-https://rurban.github.io/safeclib/
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
  DEVELOPERS                                         |  1 +
  package/Config.in                                  |  1 +
- ...0001-Fix-install-when-HAVE_WCHAR-is-unset.patch | 50 ++++++++++++++++++++++
- package/safeclib/Config.in                         |  9 ++++
- package/safeclib/safeclib.hash                     |  3 ++
- package/safeclib/safeclib.mk                       | 15 +++++++
- 6 files changed, 79 insertions(+)
+ ...x-missing-__P-definition-for-musl-compile.patch | 36 ++++++++++++++++++++++
+ package/quotatool/Config.in                        |  7 +++++
+ package/quotatool/quotatool.hash                   |  5 +++
+ package/quotatool/quotatool.mk                     | 18 +++++++++++
+ 6 files changed, 68 insertions(+)
+ create mode 100644 package/quotatool/0001-fix-missing-__P-definition-for-musl-compile.patch
+ create mode 100644 package/quotatool/Config.in
+ create mode 100644 package/quotatool/quotatool.hash
+ create mode 100644 package/quotatool/quotatool.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 9048d45b16..93b631269e 100644
+index 9048d45b16..40b9590ca1 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -637,6 +637,7 @@ F:	package/libupnp18/
- F:	package/minissdpd/
- F:	package/motion/
- F:	package/rygel/
-+F:	package/safeclib/
- F:	package/tinycbor/
- F:	package/tinydtls/
+@@ -1376,6 +1376,7 @@ F:	package/libevdev/
+ F:	package/log4cplus/
+ F:	package/postgresql/
+ F:	package/qt5/
++F:	package/quotatool/
+ F:	package/racehound/
+ F:	package/wiringpi/
  
 diff --git a/package/Config.in b/package/Config.in
-index 9a6b199f40..84b5ba4ce7 100644
+index 9a6b199f40..8aa1126934 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1555,6 +1555,7 @@ menu "Security"
- 	source "package/libselinux/Config.in"
- 	source "package/libsemanage/Config.in"
- 	source "package/libsepol/Config.in"
-+	source "package/safeclib/Config.in"
- endmenu
- 
- menu "Text and terminal handling"
-diff --git a/package/safeclib/0001-Fix-install-when-HAVE_WCHAR-is-unset.patch b/package/safeclib/0001-Fix-install-when-HAVE_WCHAR-is-unset.patch
+@@ -1971,6 +1971,7 @@ menu "System tools"
+ 	source "package/psmisc/Config.in"
+ 	source "package/pwgen/Config.in"
+ 	source "package/quota/Config.in"
++	source "package/quotatool/Config.in"
+ 	source "package/rauc/Config.in"
+ 	source "package/rsyslog/Config.in"
+ 	source "package/runc/Config.in"
+diff --git a/package/quotatool/0001-fix-missing-__P-definition-for-musl-compile.patch b/package/quotatool/0001-fix-missing-__P-definition-for-musl-compile.patch
 new file mode 100644
-index 0000000000..c34002d24e
+index 0000000000..927e62ba8c
 --- /dev/null
-+++ b/package/safeclib/0001-Fix-install-when-HAVE_WCHAR-is-unset.patch
-@@ -0,0 +1,50 @@
-+From 5991f0d4b86c02a3d7739509b96815ccfa734be7 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fabrice.fontaine@orange.com>
-+Date: Mon, 18 Dec 2017 17:17:54 +0100
-+Subject: [PATCH] Fix install when HAVE_WCHAR is unset
++++ b/package/quotatool/0001-fix-missing-__P-definition-for-musl-compile.patch
+@@ -0,0 +1,36 @@
++From 0e096badc901f755f3bcefabdc57091725a5a0c5 Mon Sep 17 00:00:00 2001
++From: Peter Seiderer <ps.report@gmx.net>
++Date: Thu, 1 Feb 2018 23:50:43 +0100
++Subject: [PATCH] fix missing __P definition for musl compile
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
 +
-+Don't build WCSNORM_xxx man pages if HAVE_WHCAR is not set otherwise
-+installation will fail as the wcsnorm_mode enum is not defined in
-+safe_str_lib.h when SAFECLIB_DISABLE_WCHAR is set
++Fixes:
 +
-+Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
++  In file included from src/quota.h:40:0,
++                   from src/parse.c:26:
++  src/linux/linux_quota.h:120:15: error: expected ?=?, ?,?, ?;?, ?asm? or ?__attribute__? before ?__P?
++   long quotactl __P((int, const char *, qid_t, caddr_t));
++                 ^~~
++
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 +---
-+ Makefile.am | 15 +++++++++------
-+ 1 file changed, 9 insertions(+), 6 deletions(-)
++ src/linux/linux_quota.h | 1 +
++ 1 file changed, 1 insertion(+)
 +
-+diff --git a/Makefile.am b/Makefile.am
-+index 31398d1..b7e65a5 100644
-+--- a/Makefile.am
-++++ b/Makefile.am
-+@@ -142,12 +142,6 @@ dist_man_MANS += \
-+ 	doc/man/man3/SAFE_STR_PASSWORD_MIN_LENGTH.3	\
-+ 	doc/man/man3/STRTOK_DELIM_MAX_LEN.3	\
-+ 	doc/man/man3/TMP_MAX_S.3	\
-+-	doc/man/man3/WCSNORM_FCC.3	\
-+-	doc/man/man3/WCSNORM_FCD.3	\
-+-	doc/man/man3/WCSNORM_NFC.3	\
-+-	doc/man/man3/WCSNORM_NFD.3	\
-+-	doc/man/man3/WCSNORM_NFKC.3	\
-+-	doc/man/man3/WCSNORM_NFKD.3	\
-+ 	doc/man/man3/abort_handler_s.3	\
-+ 	doc/man/man3/abort_handler_s.c.3	\
-+ 	doc/man/man3/asctime_s.3	\
-+@@ -461,6 +455,15 @@ dist_man_MANS += \
-+ 	doc/man/man3/wprintf_s.c.3	\
-+ 	doc/man/man3/wscanf_s.3	\
-+ 	doc/man/man3/wscanf_s.c.3
-++if ENABLE_WCHAR
-++dist_man_MANS += \
-++	doc/man/man3/WCSNORM_FCC.3      \
-++	doc/man/man3/WCSNORM_FCD.3      \
-++	doc/man/man3/WCSNORM_NFC.3      \
-++	doc/man/man3/WCSNORM_NFD.3      \
-++	doc/man/man3/WCSNORM_NFKC.3     \
-++	doc/man/man3/WCSNORM_NFKD.3
-++endif
-+ CLEANFILES += Doxyfile doc/footer README.md
++diff --git a/src/linux/linux_quota.h b/src/linux/linux_quota.h
++index 11f9871..2b29a89 100644
++--- a/src/linux/linux_quota.h
+++++ b/src/linux/linux_quota.h
++@@ -14,6 +14,7 @@
++ #ifndef LINUX_QUOTA_H
++ #define LINUX_QUOTA_H
 + 
-+ # avoid parallel doxygen
+++#include <sys/cdefs.h>
++ #include <sys/types.h>
++ #include "system.h"
++ 
 +-- 
-+2.7.4
++2.16.1
 +
-diff --git a/package/safeclib/Config.in b/package/safeclib/Config.in
+diff --git a/package/quotatool/Config.in b/package/quotatool/Config.in
 new file mode 100644
-index 0000000000..5117c49da7
+index 0000000000..4015cef6c8
 --- /dev/null
-+++ b/package/safeclib/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_SAFECLIB
-+	bool "safeclib"
++++ b/package/quotatool/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_QUOTATOOL
++	bool "quotatool"
 +	help
-+	  safec fork with all C11 Annex K functions
++	  Quotatool is a utility to manipulate filesystem quotas from
++	  the commandline.
 +
-+	  This library implements the secure C11 Annex K functions on
-+	  top of most libc implementations, which are missing from them.
++	  http://quotatool.ekenberg.se/
+diff --git a/package/quotatool/quotatool.hash b/package/quotatool/quotatool.hash
+new file mode 100644
+index 0000000000..45b477830e
+--- /dev/null
++++ b/package/quotatool/quotatool.hash
+@@ -0,0 +1,5 @@
++# Locally computed
++sha256 e53adc480d54ae873d160dc0e88d78095f95d9131e528749fd982245513ea090 quotatool-1.6.2.tar.gz
 +
-+	  https://rurban.github.io/safeclib/
-diff --git a/package/safeclib/safeclib.hash b/package/safeclib/safeclib.hash
++# Hash for license files:
++sha256 94686eeb98a40edc64106c6f8644068d8a08816a510a3cde75e50f1bf470564d COPYING
+diff --git a/package/quotatool/quotatool.mk b/package/quotatool/quotatool.mk
 new file mode 100644
-index 0000000000..95a862eef0
+index 0000000000..ddff036264
 --- /dev/null
-+++ b/package/safeclib/safeclib.hash
-@@ -0,0 +1,3 @@
-+# Locally computed:
-+sha256	9c09c6e9fc95207c7d45944f8b669f2454056bef2bbaef70c94ba3f81be1cbb2	safeclib-v09102017.tar.gz
-+sha256	c33e77efd5781e3d59a2bb648c82d2a615035ef0d24cf58880380e3af906510b	COPYING
-diff --git a/package/safeclib/safeclib.mk b/package/safeclib/safeclib.mk
-new file mode 100644
-index 0000000000..65c6621e0a
---- /dev/null
-+++ b/package/safeclib/safeclib.mk
-@@ -0,0 +1,15 @@
++++ b/package/quotatool/quotatool.mk
+@@ -0,0 +1,18 @@
 +################################################################################
 +#
-+# safeclib
++# quotatool
 +#
 +################################################################################
 +
-+SAFECLIB_VERSION = v09102017
-+SAFECLIB_SITE = $(call github,rurban,safeclib,$(SAFECLIB_VERSION))
-+SAFECLIB_LICENSE = MIT 
-+SAFECLIB_LICENSE_FILES = COPYING
-+SAFECLIB_INSTALL_STAGING = YES
-+# From git
-+SAFECLIB_AUTORECONF = YES
++QUOTATOOL_VERSION = 1.6.2
++QUOTATOOL_SITE = http://quotatool.ekenberg.se
++QUOTATOOL_LICENSE = GPL-2.0
++QUOTATOOL_LICENSE_FILES = COPYING
++
++define QUOTATOOL_PRE_INSTALL_FIXUP
++	mkdir -p $(TARGET_DIR)/usr/share/man/man8
++endef
++
++QUOTATOOL_PRE_INSTALL_TARGET_HOOKS += QUOTATOOL_PRE_INSTALL_FIXUP
 +
 +$(eval $(autotools-package))
+-- 
+2.16.1
