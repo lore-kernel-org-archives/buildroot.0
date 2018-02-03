@@ -1,51 +1,70 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 3 Feb 2018 16:24:13 +0100
-Subject: [Buildroot] [PATCH 12/14] size-stats-compare: fix code style
-In-Reply-To: <20180129231353.64fa64c8@windsurf.lan>
+Date: Sat, 3 Feb 2018 16:26:15 +0100
+Subject: [Buildroot] [PATCH 13/14] support/dockerfile: allow to install
+ packages
+In-Reply-To: <1516581882-30582-14-git-send-email-ricardo.martincoski@gmail.com>
 References: <1516581882-30582-1-git-send-email-ricardo.martincoski@gmail.com>
- <1516581882-30582-13-git-send-email-ricardo.martincoski@gmail.com>
- <20180129231353.64fa64c8@windsurf.lan>
-Message-ID: <20180203152413.GK2369@scaer>
+ <1516581882-30582-14-git-send-email-ricardo.martincoski@gmail.com>
+Message-ID: <20180203152615.GL2369@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, Ricardo, All,
+Ricardo, All,
 
-On 2018-01-29 23:13 +0100, Thomas Petazzoni spake thusly:
-> On Sun, 21 Jan 2018 22:44:40 -0200, Ricardo Martincoski wrote:
-> > Fix these warnings:
-> > E129 visually indented line with same indent as next logical line
-> 
-> Really?
-> 
-> >      header = next(reader)
-> >      if (header[0] != 'File name' or header[1] != 'Package name' or
-> > -        header[2] != 'File size' or header[3] != 'Package size'):
-> > +            header[2] != 'File size' or header[3] != 'Package size'):
-> 
-> This looks totally bogus to me. The code was properly and nicely
-> indented before the change, and now it looks badly indented. Is this
-> really what flake8 wants? If so, flake8 is very strange.
+On 2018-01-21 22:44 -0200, Ricardo Martincoski spake thusly:
+> Some tools in the Docker image can be useful to a single test only.
+> Allow tests to install packages on the fly instead of adding everything
+> to the base Docker image.
 
-I guess it 's probably more about the following line than about hte
-previous one:
-
-    if (header[0] != 'File name' or header[1] != 'Package name' or
-        header[2] != 'File size' or header[3] != 'Package size'):
-        print(("Input file %s does not contain the expected header. Are you "
-
-... where there could be confusion with the 'printf' line.
-
-Maybe the printf line could be indented one-level mnore, instead? Nope,
-that does not solve the issue. I guess flake8 does not do look-ahead...
-
-In this case, I would be happy with an exception...  # noqa E129
+I think I would prefer that our base image has all the tools we need.
 
 Regards,
 Yann E. MORIN.
+
+> Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+> Cc: Arnout Vandecappelle <arnout@mind.be>
+> Cc: Peter Korsgaard <peter@korsgaard.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+> ---
+> For a demo, see the beginning of the log at this job:
+> https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/48876752
+> ---
+>  support/docker/Dockerfile | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
+> 
+> diff --git a/support/docker/Dockerfile b/support/docker/Dockerfile
+> index ebb471f..9d115d8 100644
+> --- a/support/docker/Dockerfile
+> +++ b/support/docker/Dockerfile
+> @@ -20,7 +20,8 @@ RUN apt-get install -y -qq --no-install-recommends \
+>      cvs bzr git mercurial subversion wget \
+>      cpio unzip \
+>      libncurses5-dev \
+> -    python-nose2 python-pexpect qemu-system-arm qemu-system-x86
+> +    python-nose2 python-pexpect qemu-system-arm qemu-system-x86 \
+> +    sudo
+>  RUN apt-get -q -y autoremove
+>  RUN apt-get -q -y clean
+>  
+> @@ -31,6 +32,11 @@ RUN /usr/sbin/locale-gen
+>  RUN useradd -ms /bin/bash br-user
+>  RUN chown -R br-user:br-user /home/br-user
+>  
+> +# Allow user to install packages
+> +RUN adduser br-user sudo
+> +RUN echo "br-user ALL = NOPASSWD : /usr/bin/apt-get" > /etc/sudoers.d/apt-get
+> +RUN chmod 440 /etc/sudoers.d/apt-get
+> +
+>  USER br-user
+>  WORKDIR /home/br-user
+>  ENV HOME /home/br-user
+> -- 
+> 2.7.4
+> 
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
