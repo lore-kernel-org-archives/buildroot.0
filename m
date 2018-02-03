@@ -1,82 +1,33 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sun,  4 Feb 2018 00:21:27 +0100
-Subject: [Buildroot] [RFC v1] libv4l: fix qv4l2 libatomic related compile
- failure
-Message-ID: <20180203232127.22765-1-ps.report@gmx.net>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Sun, 4 Feb 2018 00:43:00 +0100
+Subject: [Buildroot] [PATCH v2] package/gpsd: add config option for
+ Spectratime iSync and build fix patch
+In-Reply-To: <1517694053-15488-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
+References: <1517694053-15488-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
+Message-ID: <CANQCQpaSdOK2WPR==M25jt6unLwySBcsmS2nCSuUSzLYjdFVLw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes [1]:
+Zoltan,
 
-  sparc-buildroot-linux-uclibc/bin/ld: qv4l2-qv4l2.o: undefined reference to symbol '__atomic_fetch_add_4@@LIBATOMIC_1.0'
+On Sat, Feb 3, 2018 at 10:40 PM, Zoltan Gyarmati
+<mr.zoltan.gyarmati@gmail.com> wrote:
+>  As in the inital 3.17 version bump patch the iSync config option was not
+> added, the iSync driver was implicitly enabled in the gpsd config as default,
+> and due to a bug in the gpsd build setup, this caused several autobuild issues
+> which are fixed by this. This commit adds both the Buildroot config option and
+> the gpsd patch which was also sent to and accepted in upstream.
+>
+> Fixes:
+>     http://autobuild.buildroot.net/results/555b4bdd1707aa21e6d3014e30b635c96c5efffc
+>     http://autobuild.buildroot.net/results/cfc14a2c471c63ecc4c95c12b8e00ed7656acfd2
+>     http://autobuild.buildroot.net/results/2104e15526bd6f467f0d56dee10b5fa46e2c71dd
+>     http://autobuild.buildroot.net/results/610b3f898b396c1def682b809482408c2c4555bc
+>     ... and many more.
+>
+> Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
 
-[1] http://autobuild.buildroot.net/results/baa2595e1acdf4e795fbb940ca57fd136c827da3
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
-Patch fixes the qv4l2 linking problem for sparc, but adds a libatomic
-dependency to all v4l libraries. Any better suggestions to add
-libatomic linking only to utils/qv4l2?
----
- .../0003-configure.ac-check-for-libatomic.patch    | 30 ++++++++++++++++++++++
- package/libv4l/libv4l.mk                           |  5 ++++
- 2 files changed, 35 insertions(+)
- create mode 100644 package/libv4l/0003-configure.ac-check-for-libatomic.patch
-
-diff --git a/package/libv4l/0003-configure.ac-check-for-libatomic.patch b/package/libv4l/0003-configure.ac-check-for-libatomic.patch
-new file mode 100644
-index 0000000000..78aaada653
---- /dev/null
-+++ b/package/libv4l/0003-configure.ac-check-for-libatomic.patch
-@@ -0,0 +1,30 @@
-+From 87978992fbcba13550e900fbe9abb2a60be98bf4 Mon Sep 17 00:00:00 2001
-+From: Peter Seiderer <ps.report@gmx.net>
-+Date: Sun, 4 Feb 2018 00:08:45 +0100
-+Subject: [PATCH] configure.ac: check for libatomic
-+
-+Fixes:
-+
-+  .../sparc-buildroot-linux-uclibc/bin/ld: qv4l2-qv4l2.o: undefined reference to symbol '__atomic_fetch_add_4@@LIBATOMIC_1.0'
-+
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+---
-+ configure.ac | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/configure.ac b/configure.ac
-+index dc1e9cbf..65a3caaa 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -279,6 +279,8 @@ AS_IF([test x$enable_shared != xno],
-+ 		   [have_pthread=no])],
-+ 	[have_pthread=no])
-+ 
-++AC_SEARCH_LIBS([__atomic_load_4], [atomic])
-++
-+ # The dlopen() function is in the C library for *BSD and in
-+ # libdl on GLIBC-based systems
-+ 
-+-- 
-+2.16.1
-+
-diff --git a/package/libv4l/libv4l.mk b/package/libv4l/libv4l.mk
-index 11061306c7..bc9b5c9abd 100644
---- a/package/libv4l/libv4l.mk
-+++ b/package/libv4l/libv4l.mk
-@@ -11,6 +11,11 @@ LIBV4L_INSTALL_STAGING = YES
- LIBV4L_DEPENDENCIES = host-pkgconf
- LIBV4L_CONF_OPTS = --disable-doxygen-doc
- 
-+# patch 0003-configure.ac-check-for-libatomic.patch touches configure.ac
-+LIBV4L_AUTORECONF = YES
-+# host-gettext needed for autoreconf to work
-+LIBV4L_DEPENDENCIES += host-gettext
-+
- # fix uclibc-ng configure/compile
- LIBV4L_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
- 
--- 
-2.16.1
+Reviewed-by: Matt Weber <matthew.weber@rockwellcollins.com>
