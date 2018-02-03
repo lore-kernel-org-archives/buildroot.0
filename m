@@ -1,101 +1,82 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 4 Feb 2018 00:02:35 +0100
-Subject: [Buildroot] [git commit] linux-headers: drop old unsupported 3.x
- versions
-Message-ID: <20180203230433.92A5E84356@busybox.osuosl.org>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sun,  4 Feb 2018 00:21:27 +0100
+Subject: [Buildroot] [RFC v1] libv4l: fix qv4l2 libatomic related compile
+ failure
+Message-ID: <20180203232127.22765-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2a9b7b8a1ec0f200c6b82641512325284dee9a54
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Fixes [1]:
 
-These versions are very old and no longer supported according to
-https://www.kernel.org/category/releases.html, so drop them and add legacy
-entries.
+  sparc-buildroot-linux-uclibc/bin/ld: qv4l2-qv4l2.o: undefined reference to symbol '__atomic_fetch_add_4@@LIBATOMIC_1.0'
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+[1] http://autobuild.buildroot.net/results/baa2595e1acdf4e795fbb940ca57fd136c827da3
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- Config.in.legacy                     | 30 ++++++++++++++++++++++++++++++
- package/linux-headers/Config.in.host | 18 ------------------
- 2 files changed, 30 insertions(+), 18 deletions(-)
+Patch fixes the qv4l2 linking problem for sparc, but adds a libatomic
+dependency to all v4l libraries. Any better suggestions to add
+libatomic linking only to utils/qv4l2?
+---
+ .../0003-configure.ac-check-for-libatomic.patch    | 30 ++++++++++++++++++++++
+ package/libv4l/libv4l.mk                           |  5 ++++
+ 2 files changed, 35 insertions(+)
+ create mode 100644 package/libv4l/0003-configure.ac-check-for-libatomic.patch
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index fd8505b167..60f9148234 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -145,6 +145,36 @@ endif
- ###############################################################################
- comment "Legacy options removed in 2018.02"
+diff --git a/package/libv4l/0003-configure.ac-check-for-libatomic.patch b/package/libv4l/0003-configure.ac-check-for-libatomic.patch
+new file mode 100644
+index 0000000000..78aaada653
+--- /dev/null
++++ b/package/libv4l/0003-configure.ac-check-for-libatomic.patch
+@@ -0,0 +1,30 @@
++From 87978992fbcba13550e900fbe9abb2a60be98bf4 Mon Sep 17 00:00:00 2001
++From: Peter Seiderer <ps.report@gmx.net>
++Date: Sun, 4 Feb 2018 00:08:45 +0100
++Subject: [PATCH] configure.ac: check for libatomic
++
++Fixes:
++
++  .../sparc-buildroot-linux-uclibc/bin/ld: qv4l2-qv4l2.o: undefined reference to symbol '__atomic_fetch_add_4@@LIBATOMIC_1.0'
++
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++---
++ configure.ac | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/configure.ac b/configure.ac
++index dc1e9cbf..65a3caaa 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -279,6 +279,8 @@ AS_IF([test x$enable_shared != xno],
++ 		   [have_pthread=no])],
++ 	[have_pthread=no])
++ 
+++AC_SEARCH_LIBS([__atomic_load_4], [atomic])
+++
++ # The dlopen() function is in the C library for *BSD and in
++ # libdl on GLIBC-based systems
++ 
++-- 
++2.16.1
++
+diff --git a/package/libv4l/libv4l.mk b/package/libv4l/libv4l.mk
+index 11061306c7..bc9b5c9abd 100644
+--- a/package/libv4l/libv4l.mk
++++ b/package/libv4l/libv4l.mk
+@@ -11,6 +11,11 @@ LIBV4L_INSTALL_STAGING = YES
+ LIBV4L_DEPENDENCIES = host-pkgconf
+ LIBV4L_CONF_OPTS = --disable-doxygen-doc
  
-+config BR2_KERNEL_HEADERS_3_4
-+	bool "kernel headers version 3.4.x are no longer supported"
-+	select BR2_KERNEL_HEADERS_4_1
-+	select BR2_LEGACY
-+	help
-+	  Version 3.4.x of the Linux kernel headers are no longer
-+	  maintained upstream and are now removed. As an alternative,
-+	  version 4.1.x of the headers have been automatically
-+	  selected in your configuration.
++# patch 0003-configure.ac-check-for-libatomic.patch touches configure.ac
++LIBV4L_AUTORECONF = YES
++# host-gettext needed for autoreconf to work
++LIBV4L_DEPENDENCIES += host-gettext
 +
-+config BR2_KERNEL_HEADERS_3_10
-+	bool "kernel headers version 3.10.x are no longer supported"
-+	select BR2_KERNEL_HEADERS_4_1
-+	select BR2_LEGACY
-+	help
-+	  Version 3.10.x of the Linux kernel headers are no longer
-+	  maintained upstream and are now removed. As an alternative,
-+	  version 4.1.x of the headers have been automatically
-+	  selected in your configuration.
-+
-+config BR2_KERNEL_HEADERS_3_12
-+	bool "kernel headers version 3.12.x are no longer supported"
-+	select BR2_KERNEL_HEADERS_4_1
-+	select BR2_LEGACY
-+	help
-+	  Version 3.12.x of the Linux kernel headers are no longer
-+	  maintained upstream and are now removed. As an alternative,
-+	  version 4.1.x of the headers have been automatically
-+	  selected in your configuration.
-+
- config BR2_BINUTILS_VERSION_2_27_X
- 	bool "binutils version 2.27 support removed"
- 	select BR2_LEGACY
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index e0f97f3b5e..069e31de24 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -31,21 +31,6 @@ config BR2_KERNEL_HEADERS_3_2
- 	depends on !BR2_aarch64 && !BR2_arc && !BR2_nios2
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
+ # fix uclibc-ng configure/compile
+ LIBV4L_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
  
--config BR2_KERNEL_HEADERS_3_4
--	bool "Linux 3.4.x kernel headers"
--	depends on !BR2_aarch64 && !BR2_arc && !BR2_nios2
--	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4
--
--config BR2_KERNEL_HEADERS_3_10
--	bool "Linux 3.10.x kernel headers"
--	depends on !BR2_nios2
--	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
--
--config BR2_KERNEL_HEADERS_3_12
--	bool "Linux 3.12.x kernel headers"
--	depends on !BR2_nios2
--	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
--
- config BR2_KERNEL_HEADERS_4_1
- 	bool "Linux 4.1.x kernel headers"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_1
-@@ -256,9 +241,6 @@ endchoice
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
- 	default "3.2.98"	if BR2_KERNEL_HEADERS_3_2
--	default "3.4.113"	if BR2_KERNEL_HEADERS_3_4
--	default "3.10.108"	if BR2_KERNEL_HEADERS_3_10
--	default "3.12.74"	if BR2_KERNEL_HEADERS_3_12
- 	default "4.1.49"	if BR2_KERNEL_HEADERS_4_1
- 	default "4.4.115"	if BR2_KERNEL_HEADERS_4_4
- 	default "4.9.80"	if BR2_KERNEL_HEADERS_4_9
+-- 
+2.16.1
