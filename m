@@ -1,59 +1,41 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 3 Feb 2018 16:01:54 +0100
-Subject: [Buildroot] [PATCH v3 8/9] package/bash: add missing
- double-dollar for /etc/shells
-In-Reply-To: <1516356909-18620-9-git-send-email-romain.naour@smile.fr>
-References: <1516356909-18620-1-git-send-email-romain.naour@smile.fr>
- <1516356909-18620-9-git-send-email-romain.naour@smile.fr>
-Message-ID: <20180203150154.GI2369@scaer>
+Date: Sat,  3 Feb 2018 16:09:24 +0100
+Subject: [Buildroot] [PATCH] package/bash: remove dead comment
+Message-ID: <20180203150924.3251-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Romain, All,
+Commit 02e5cef1 (system: add option to choose what /bin/sh points to)
+removed the symlink creation, but forgot to remove the corresponding
+comment, which is now more puzzling than amusing...
 
-On 2018-01-19 11:15 +0100, Romain Naour spake thusly:
-> Commit 4d279697afbf8fb295274784103be2b837113d5e missed one comment
-> from Yann E. Morin about the double-dollar.
-> 
-> Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Remove the comment.
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Romain Naour <romain.naour@gmail.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>
 
-Regards,
-Yann E. MORIN.
+---
+Noticed while reviewing the series adding shells to /etc/shells.
+Thanks Romain! ;-)
+---
+ package/bash/bash.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
-> ---
->  package/bash/bash.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/bash/bash.mk b/package/bash/bash.mk
-> index 03f8f28..ab6b43b 100644
-> --- a/package/bash/bash.mk
-> +++ b/package/bash/bash.mk
-> @@ -46,7 +46,7 @@ define BASH_INSTALL_TARGET_CMDS
->  	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
->  		DESTDIR=$(TARGET_DIR) exec_prefix=/ install
->  	rm -f $(TARGET_DIR)/bin/bashbug
-> -	grep -qsE '^/bin/bash' $(TARGET_DIR)/etc/shells \
-> +	grep -qsE '^/bin/bash$$' $(TARGET_DIR)/etc/shells \
->  		|| echo "/bin/bash" >> $(TARGET_DIR)/etc/shells
->  endef
->  
-> -- 
-> 2.7.4
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/bash/bash.mk b/package/bash/bash.mk
+index 03f8f286ed..e9384911a0 100644
+--- a/package/bash/bash.mk
++++ b/package/bash/bash.mk
+@@ -39,7 +39,6 @@ BASH_CONF_ENV += bash_cv_getenv_redef=yes
+ endif
+ endif
+ 
+-# Make /bin/sh -> bash (no other shell, better than busybox shells)
+ # Add /bin/bash to /etc/shells otherwise some login tools like dropbear
+ # can reject the user connexion. See man shells.
+ define BASH_INSTALL_TARGET_CMDS
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.14.1
