@@ -1,68 +1,56 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sat,  3 Feb 2018 23:11:41 +0100
-Subject: [Buildroot] [PATCH v1] libv4l: fix EVIOCSCLOCKID related compile
- failure
-Message-ID: <20180203221141.15490-1-ps.report@gmx.net>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat,  3 Feb 2018 23:23:46 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libfribidi: Switch _SITE to github
+Message-ID: <20180203222346.19803-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes [1]:
+The old site is not available anymore, fribidi.org redirects to
+gihub.com now. Added license hash.
 
-  keytable.c: In function 'test_event':
-  keytable.c:1351:12: error: 'EVIOCSCLOCKID' undeclared (first use in this function)
-    ioctl(fd, EVIOCSCLOCKID, &mode);
-
-[1] http://autobuild.buildroot.net/results/8ba380471423bd2491e40103d7b1a45de1bd12ed
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- ...fix-EVIOCSCLOCKID-related-compile-failure.patch | 35 ++++++++++++++++++++++
- 1 file changed, 35 insertions(+)
- create mode 100644 package/libv4l/0002-keytable-fix-EVIOCSCLOCKID-related-compile-failure.patch
+ package/libfribidi/Config.in       | 2 +-
+ package/libfribidi/libfribidi.hash | 5 +++--
+ package/libfribidi/libfribidi.mk   | 3 +--
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/libv4l/0002-keytable-fix-EVIOCSCLOCKID-related-compile-failure.patch b/package/libv4l/0002-keytable-fix-EVIOCSCLOCKID-related-compile-failure.patch
-new file mode 100644
-index 0000000000..656008b708
---- /dev/null
-+++ b/package/libv4l/0002-keytable-fix-EVIOCSCLOCKID-related-compile-failure.patch
-@@ -0,0 +1,35 @@
-+From 663b7be9d27c979c914011a3ce707e227987bc59 Mon Sep 17 00:00:00 2001
-+From: Peter Seiderer <ps.report@gmx.net>
-+Date: Sat, 3 Feb 2018 22:47:18 +0100
-+Subject: [PATCH] keytable: fix EVIOCSCLOCKID related compile failure
-+
-+Fixes:
-+
-+  keytable.c: In function 'test_event':
-+  keytable.c:1351:12: error: 'EVIOCSCLOCKID' undeclared (first use in this function)
-+    ioctl(fd, EVIOCSCLOCKID, &mode);
-+              ^~~~~~~~~~~~~
-+
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+---
-+ utils/keytable/keytable.c | 4 ++++
-+ 1 file changed, 4 insertions(+)
-+
-+diff --git a/utils/keytable/keytable.c b/utils/keytable/keytable.c
-+index 34a1522e..925eab00 100644
-+--- a/utils/keytable/keytable.c
-++++ b/utils/keytable/keytable.c
-+@@ -55,6 +55,10 @@ struct input_keymap_entry_v2 {
-+ 	u_int8_t  scancode[32];
-+ };
-+ 
-++#ifndef EVIOCSCLOCKID
-++#define EVIOCSCLOCKID		_IOW('E', 0xa0, int)
-++#endif
-++
-+ #ifndef EVIOCGKEYCODE_V2
-+ #define EVIOCGKEYCODE_V2	_IOR('E', 0x04, struct input_keymap_entry_v2)
-+ #define EVIOCSKEYCODE_V2	_IOW('E', 0x04, struct input_keymap_entry_v2)
-+-- 
-+2.16.1
-+
+diff --git a/package/libfribidi/Config.in b/package/libfribidi/Config.in
+index 74d9c5b431..34cc38e8be 100644
+--- a/package/libfribidi/Config.in
++++ b/package/libfribidi/Config.in
+@@ -4,4 +4,4 @@ config BR2_PACKAGE_LIBFRIBIDI
+ 	  GNU FriBidi is an implementation of the Unicode
+ 	  Bidirectional Algorithm (bidi).
+ 
+-	  http://www.fribidi.org/
++	  https://github.com/fribidi/fribidi/
+diff --git a/package/libfribidi/libfribidi.hash b/package/libfribidi/libfribidi.hash
+index 79b5dd3185..660e4f9a07 100644
+--- a/package/libfribidi/libfribidi.hash
++++ b/package/libfribidi/libfribidi.hash
+@@ -1,2 +1,3 @@
+-# From http://www.fribidi.org/download/fribidi-0.19.7.tar.bz2.sha256
+-sha256	08222a6212bbc2276a2d55c3bf370109ae4a35b689acbc66571ad2a670595a8e	fribidi-0.19.7.tar.bz2
++# Locally computed
++sha256 3fc96fa9473bd31dcb5500bdf1aa78b337ba13eb8c301e7c28923fea982453a8  libfribidi-0.19.7.tar.gz
++sha256 32434afcc8666ba060e111d715bfdb6c2d5dd8a35fa4d3ab8ad67d8f850d2f2b  COPYING
+diff --git a/package/libfribidi/libfribidi.mk b/package/libfribidi/libfribidi.mk
+index a7a8519181..70d9633b21 100644
+--- a/package/libfribidi/libfribidi.mk
++++ b/package/libfribidi/libfribidi.mk
+@@ -5,8 +5,7 @@
+ ################################################################################
+ 
+ LIBFRIBIDI_VERSION = 0.19.7
+-LIBFRIBIDI_SOURCE = fribidi-$(LIBFRIBIDI_VERSION).tar.bz2
+-LIBFRIBIDI_SITE = http://www.fribidi.org/download
++LIBFRIBIDI_SITE = $(call github,fribidi,fribidi,$(LIBFRIBIDI_VERSION))
+ LIBFRIBIDI_LICENSE = LGPL-2.1+
+ LIBFRIBIDI_LICENSE_FILES = COPYING
+ LIBFRIBIDI_INSTALL_STAGING = YES
 -- 
-2.16.1
+2.11.0
