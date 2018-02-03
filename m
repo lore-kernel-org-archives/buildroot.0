@@ -1,29 +1,44 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  3 Feb 2018 23:31:50 +0100
-Subject: [Buildroot] [PATCH 1/1] package/kodi-visualisation-goom: fix broken
- hash
-Message-ID: <20180203223150.27467-1-bernd.kuhls@t-online.de>
+Date: Sat,  3 Feb 2018 23:41:27 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libcodec2: fix upstream source URL
+Message-ID: <20180203224127.10311-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Comparing both tarballs, the one from github.com and the one stored at
-sources.buildroot.net, using diff showed no differences.
+Upstream changed to URL of the source tarball and removed SHA1SUMS.
+Added license hash.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-visualisation-goom/kodi-visualisation-goom.hash | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/libcodec2/libcodec2.hash | 3 +--
+ package/libcodec2/libcodec2.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/package/kodi-visualisation-goom/kodi-visualisation-goom.hash b/package/kodi-visualisation-goom/kodi-visualisation-goom.hash
-index fa5fbf6c37..fb247cc7a9 100644
---- a/package/kodi-visualisation-goom/kodi-visualisation-goom.hash
-+++ b/package/kodi-visualisation-goom/kodi-visualisation-goom.hash
-@@ -1,2 +1,2 @@
+diff --git a/package/libcodec2/libcodec2.hash b/package/libcodec2/libcodec2.hash
+index 47483604cc..e401e9d30e 100644
+--- a/package/libcodec2/libcodec2.hash
++++ b/package/libcodec2/libcodec2.hash
+@@ -1,4 +1,3 @@
+-# sha1 from http://files.freedv.org/codec2/SHA1SUMS
+-sha1   8988aa33121b857d58a16f75b5061281b254a146	codec-0.7.tar.xz
  # Locally computed
--sha256 501b8b1d5bd174ec71d57894293ae5eb0c1f41c3b725ab5e7b5a1c5eeea77a7f  kodi-visualisation-goom-54da35870930acd1a3a36195dd2c1498ac336b90.tar.gz
-+sha256 b05a1249a8f61e0d10c6513d117b789ee40b02c03fb8e717d82b17a95fe37a4b  kodi-visualisation-goom-54da35870930acd1a3a36195dd2c1498ac336b90.tar.gz
+ sha256 0695bb93cd985dd39f02f0db35ebc28a98b9b88747318f90774aba5f374eadb2  codec2-0.7.tar.xz
++sha256 9ebb6f82b7380a62ac74c5f0322c88e6744dedf2ebe1f54d6f088282b39844bf  COPYING
+diff --git a/package/libcodec2/libcodec2.mk b/package/libcodec2/libcodec2.mk
+index 7d1c6c3839..3253a35956 100644
+--- a/package/libcodec2/libcodec2.mk
++++ b/package/libcodec2/libcodec2.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ LIBCODEC2_VERSION = 0.7
+-LIBCODEC2_SITE = http://files.freedv.org/codec2
++LIBCODEC2_SITE = https://freedv.com/wp-content/uploads/sites/8/2017/10
+ LIBCODEC2_SOURCE = codec2-$(LIBCODEC2_VERSION).tar.xz
+ LIBCODEC2_LICENSE = LGPL-2.1
+ LIBCODEC2_LICENSE_FILES = COPYING
 -- 
 2.11.0
