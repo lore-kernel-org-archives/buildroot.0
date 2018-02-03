@@ -1,81 +1,57 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat,  3 Feb 2018 21:18:21 +0100
-Subject: [Buildroot] [PATCH] gcc: or1k: use 20170218 tag instead of branch
-Message-ID: <20180203201821.3924-1-peter@korsgaard.com>
+Date: Sat, 03 Feb 2018 21:19:05 +0100
+Subject: [Buildroot] [PATCH] gcc: Update or1k GCC tarball hash
+In-Reply-To: <20180118162526.20572-1-joel@jms.id.au> (Joel Stanley's message
+ of "Thu, 18 Jan 2018 10:25:26 -0600")
+References: <20180118162526.20572-1-joel@jms.id.au>
+Message-ID: <87wozt25dy.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As pointed out by Joel Stanley:
-https://patchwork.ozlabs.org/patch/863011/
+>>>>> "Joel" == Joel Stanley <joel@jms.id.au> writes:
 
-Github now longer provides the exact same tarball for the or1k musl-5.4.0
-tarball, breaking the build.  Even more, musl-5.4.0 is the name of a git
-branch, not a tag.
+ > When doing a build today I noticed the GCC tarball from Github has
+ > changed hash.
 
-Fix both problems by changing to the or1k-musl-5.4.0-20170218 tag, which
-points to the exact same git commit.
+ >>>> host-gcc-initial musl-5.4.0 Downloading
+ >   --2018-01-17 10:27:28--  https://github.com/openrisc/or1k-gcc/archive/musl-5.4.0/gcc-musl-5.4.0.tar.gz
+ >   Resolving github.com (github.com)... 192.30.253.112, 192.30.253.113
+ >   Connecting to github.com (github.com)|192.30.253.112|:443... connected.
+ >   HTTP request sent, awaiting response... 302 Found
+ >   Location: https://codeload.github.com/openrisc/or1k-gcc/tar.gz/musl-5.4.0 [following]
+ >   --2018-01-17 10:27:29--  https://codeload.github.com/openrisc/or1k-gcc/tar.gz/musl-5.4.0
+ >   Resolving codeload.github.com (codeload.github.com)... 192.30.253.121, 192.30.253.120
+ >   Connecting to codeload.github.com (codeload.github.com)|192.30.253.121|:443... connected.
+ >   HTTP request sent, awaiting response... 200 OK
+ >   Length: unspecified [application/x-gzip]
+ >   Saving to: 'output/build/.gcc-musl-5.4.0.tar.gz.1hqnIC/output?
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/gcc/Config.in.host                                              | 2 +-
- package/gcc/gcc.hash                                                    | 2 +-
- .../gcc/{musl-5.4.0 => or1k-musl-5.4.0-20170218}/100-uclibc-conf.patch  | 0
- .../301-missing-execinfo_h.patch                                        | 0
- .../850-libstdcxx-uclibc-c99.patch                                      | 0
- .../gcc/{musl-5.4.0 => or1k-musl-5.4.0-20170218}/860-cilk-wchar.patch   | 0
- .../930-libgcc-disable-split-stack-nothreads.patch                      | 0
- 7 files changed, 2 insertions(+), 2 deletions(-)
- rename package/gcc/{musl-5.4.0 => or1k-musl-5.4.0-20170218}/100-uclibc-conf.patch (100%)
- rename package/gcc/{musl-5.4.0 => or1k-musl-5.4.0-20170218}/301-missing-execinfo_h.patch (100%)
- rename package/gcc/{musl-5.4.0 => or1k-musl-5.4.0-20170218}/850-libstdcxx-uclibc-c99.patch (100%)
- rename package/gcc/{musl-5.4.0 => or1k-musl-5.4.0-20170218}/860-cilk-wchar.patch (100%)
- rename package/gcc/{musl-5.4.0 => or1k-musl-5.4.0-20170218}/930-libgcc-disable-split-stack-nothreads.patch (100%)
+ >   [        <=>                            ] 107.35M   822KB/s    in 2m 27s
 
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index 8432515d73..309ddf572a 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -81,7 +81,7 @@ config BR2_GCC_VERSION
- 	default "6.4.0"     if BR2_GCC_VERSION_6_X
- 	default "7.3.0"     if BR2_GCC_VERSION_7_X
- 	default "arc-2017.09-release" if BR2_GCC_VERSION_ARC
--	default "musl-5.4.0" if BR2_GCC_VERSION_OR1K
-+	default "or1k-musl-5.4.0-20170218" if BR2_GCC_VERSION_OR1K
- 
- config BR2_EXTRA_GCC_CONFIG_OPTIONS
- 	string "Additional gcc options"
-diff --git a/package/gcc/gcc.hash b/package/gcc/gcc.hash
-index 4966b18f59..fd38cfaad1 100644
---- a/package/gcc/gcc.hash
-+++ b/package/gcc/gcc.hash
-@@ -10,4 +10,4 @@ sha512  ad41a7e4584e40e92cdf860bc0288500fbaf5dfb7e8c3fcabe9eba809c87bcfa85b46c19
- # Locally calculated (fetched from Github)
- sha512  c30addd3c4dc66b90749a0f99b257c8a8e7966d27f286057b6b66f4a70ca22a1ee50d92882c4db13307d769a6fb28e1e2a2bab749a692cf3f89ef0c38f145efa  gcc-arc-2017.09-release.tar.gz
- # Locally calculated (fetched from Github)
--sha512  841101f7de45f327bf2e92f3efc73ca88a021e4b9b541458ce80a16e55882bd8606a8492d75c57c589ee2c10d42ae2865b67690155d7289a541df1d68096402f  gcc-musl-5.4.0.tar.gz
-+sha512  2de7cf47333a4092b02d3bb98f4206f14966f1d139a724d09cf3b22f8a43ae0c704f33e6477d6367a03c29b265480dc900169e9d417006c5d46f0ae446b8c6f1  gcc-or1k-musl-5.4.0-20170218.tar.gz
-diff --git a/package/gcc/musl-5.4.0/100-uclibc-conf.patch b/package/gcc/or1k-musl-5.4.0-20170218/100-uclibc-conf.patch
-similarity index 100%
-rename from package/gcc/musl-5.4.0/100-uclibc-conf.patch
-rename to package/gcc/or1k-musl-5.4.0-20170218/100-uclibc-conf.patch
-diff --git a/package/gcc/musl-5.4.0/301-missing-execinfo_h.patch b/package/gcc/or1k-musl-5.4.0-20170218/301-missing-execinfo_h.patch
-similarity index 100%
-rename from package/gcc/musl-5.4.0/301-missing-execinfo_h.patch
-rename to package/gcc/or1k-musl-5.4.0-20170218/301-missing-execinfo_h.patch
-diff --git a/package/gcc/musl-5.4.0/850-libstdcxx-uclibc-c99.patch b/package/gcc/or1k-musl-5.4.0-20170218/850-libstdcxx-uclibc-c99.patch
-similarity index 100%
-rename from package/gcc/musl-5.4.0/850-libstdcxx-uclibc-c99.patch
-rename to package/gcc/or1k-musl-5.4.0-20170218/850-libstdcxx-uclibc-c99.patch
-diff --git a/package/gcc/musl-5.4.0/860-cilk-wchar.patch b/package/gcc/or1k-musl-5.4.0-20170218/860-cilk-wchar.patch
-similarity index 100%
-rename from package/gcc/musl-5.4.0/860-cilk-wchar.patch
-rename to package/gcc/or1k-musl-5.4.0-20170218/860-cilk-wchar.patch
-diff --git a/package/gcc/musl-5.4.0/930-libgcc-disable-split-stack-nothreads.patch b/package/gcc/or1k-musl-5.4.0-20170218/930-libgcc-disable-split-stack-nothreads.patch
-similarity index 100%
-rename from package/gcc/musl-5.4.0/930-libgcc-disable-split-stack-nothreads.patch
-rename to package/gcc/or1k-musl-5.4.0-20170218/930-libgcc-disable-split-stack-nothreads.patch
+ >   2018-01-17 10:29:58 (748 KB/s) - 'output/build/.gcc-musl-5.4.0.tar.gz.1hqnIC/output? saved [112562068]
+
+ >   ERROR: gcc-musl-5.4.0.tar.gz has wrong sha512 hash:
+ >   ERROR: expected: 841101f7de45f327bf2e92f3efc73ca88a021e4b9b541458ce80a16e55882bd8606a8492d75c57c589ee2c10d42ae2865b67690155d7289a541df1d68096402f
+ >   ERROR: got     : 1ffbf4ec610b39107e4bb6224682aa6f49513f3fc96c137278b5d56db22db458f08b8b6e78c3940c00116b6e8e158410c1d337f666ec10cfdc4f0b6540b4b428
+ >   ERROR: Incomplete download, or man-in-the-middle (MITM) attack
+
+ > Signed-off-by: Joel Stanley <joel@jms.id.au>
+ > ---
+ > The tarball mirrored on buildroot.net needs to be updated
+
+We cannot really do that as that would break all releases since
+2017.02.
+
+Looking around on the github repo I see that musl-5.4.0 is a BRANCH and
+not a tag, so that is not really good. There is a
+or1k-musl-5.4.0-20170218 tag pointing to the same revision, so I've
+instead sent a patch to change to that tag (with a valid hash) and
+marked this patch as superseeded:
+
+https://patchwork.ozlabs.org/patch/868941/
+
 -- 
-2.11.0
+Bye, Peter Korsgaard
