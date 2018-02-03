@@ -1,55 +1,80 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 3 Feb 2018 20:25:33 +0100
-Subject: [Buildroot] [git commit] drbd-utils: bump version to 9.2.0
-Message-ID: <20180203192814.A50F3882E9@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 3 Feb 2018 20:32:07 +0100
+Subject: [Buildroot] [PATCH 2/2] package/wf111: do a direct download
+In-Reply-To: <87lgg93mvi.fsf@dell.be.48ers.dk>
+References: <cover.1517677545.git.yann.morin.1998@free.fr>
+ <ef05e42aa7a51d33c666507728602993d04344bb.1517677545.git.yann.morin.1998@free.fr>
+ <87lgg93mvi.fsf@dell.be.48ers.dk>
+Message-ID: <20180203193207.GQ2369@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=945fd1360e384f4016478eb88aabcdff70d9675d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Peter, All,
 
-Also update the download URL.
+On 2018-02-03 20:16 +0100, Peter Korsgaard spake thusly:
+> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+> 
+>  > We can now do a download without prior registration, so we can drop the
+>  > requirement for a local, pre-downloaded tarball, now.
+> 
+>  > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>  > Cc: Julien CORJON <corjon.j@ecagroup.com>
+>  > Cc: Antoine T?nart <antoine.tenart@free-electrons.com>
+>  > ---
+>  >  package/wf111/Config.in | 11 -----------
+>  >  package/wf111/wf111.mk  |  7 +------
+>  >  2 files changed, 1 insertion(+), 17 deletions(-)
+> 
+>  > diff --git a/package/wf111/Config.in b/package/wf111/Config.in
+>  > index 081bd960cb..7b61ea195f 100644
+>  > --- a/package/wf111/Config.in
+>  > +++ b/package/wf111/Config.in
+>  > @@ -19,17 +19,6 @@ config BR2_PACKAGE_WF111
+>  
+>  >  	  https://www.silabs.com/products/wireless/wi-fi/wf111-bluegiga-module
+> 
+> When you click on the links on that page you are still served a login
+> page, but direct download does indeed work.
 
-This patch fixes many autobuild failures because drbd-utils packages
-older than 8.9.9 are no longer provided by linbit.com.
+Weird. I did not even try to click from the browser; I just copy-pasted
+the URL to a wget and it worked...
 
-Fixes:
-http://autobuild.buildroot.net/results/a6d61c7ca8e505509d84869f072d812da79e949a
-http://autobuild.buildroot.net/results/53ea7cfc57d912377b566474b15a47ffc077b047
-http://autobuild.buildroot.net/results/3a6d7a384e6558156695b6ac46754976f4db7652
-http://autobuild.buildroot.net/results/0576b80240ba439f7c2842a58e8bd418199e6100
-http://autobuild.buildroot.net/results/3f9db30f18b58a6258acb5dfb9301936e5e05bf6
+> The question is if we are allowed to redistribute the tarballs?
+> Otherwise we should set WF111_REDISTRIBUTE = NO
+> 
+> Do you use this package?
 
-Signed-off-by: Christophe Vu-Brugier <cvubrugier@fastmail.fm>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/drbd-utils/drbd-utils.hash | 2 +-
- package/drbd-utils/drbd-utils.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+No I'm not, I was just fed up with it because of that stupid click-wrap
+login page. So, when I noticed Julien updated the homepage, I took the
+oportunity to check if the archives still required login. Nope, so I
+updated the package.
 
-diff --git a/package/drbd-utils/drbd-utils.hash b/package/drbd-utils/drbd-utils.hash
-index 0a38fdd396..bcbed1ee8a 100644
---- a/package/drbd-utils/drbd-utils.hash
-+++ b/package/drbd-utils/drbd-utils.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 297b77c9b3f88de2e7dae459234f2753ea4fc2805282b2d276e35cf51e292913  drbd-utils-8.9.6.tar.gz
-+sha256 11299b555b703440ef0af2c74b69cf6dfb833e050b87cfdc3b93d0b71d8820a6  drbd-utils-9.2.0.tar.gz
-diff --git a/package/drbd-utils/drbd-utils.mk b/package/drbd-utils/drbd-utils.mk
-index 7bac28bc89..bb28729b40 100644
---- a/package/drbd-utils/drbd-utils.mk
-+++ b/package/drbd-utils/drbd-utils.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--DRBD_UTILS_VERSION = 8.9.6
--DRBD_UTILS_SITE = http://oss.linbit.com/drbd
-+DRBD_UTILS_VERSION = 9.2.0
-+DRBD_UTILS_SITE = http://www.linbit.com/downloads/drbd/utils
- DRBD_UTILS_LICENSE = GPL-2.0+
- DRBD_UTILS_LICENSE_FILES = COPYING
- DRBD_UTILS_DEPENDENCIES = host-flex
+> Looking at the .mk file we have this comment:
+> 
+> # Due to the stupidity of the package Makefile, we can't invoke
+> # separately the build step and the install step and get a correct
+> # behavior. So we do everything in the install step.
+> 
+> But as far as I can see, you CAN build the Linux driver outside the
+> install step (E.G. make all).
+
+I have not even had a cursory look at it, to be honest. I just checked
+that the download for the three archives (armv5, armv7 and x86) was
+working OK.
+
+Someone that is atcually interested in that package would have to look
+at it further...
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
