@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 3 Feb 2018 15:50:31 +0100
-Subject: [Buildroot] [PATCH v3 1/9] package/skeleton-init-common: add
- /bin/sh to /etc/shells
-In-Reply-To: <1516356909-18620-2-git-send-email-romain.naour@smile.fr>
+Date: Sat, 3 Feb 2018 15:53:58 +0100
+Subject: [Buildroot] [PATCH v3 2/9] package/busybox: add /bin/{a,
+ hu}sh to /etc/shells
+In-Reply-To: <1516356909-18620-3-git-send-email-romain.naour@smile.fr>
 References: <1516356909-18620-1-git-send-email-romain.naour@smile.fr>
- <1516356909-18620-2-git-send-email-romain.naour@smile.fr>
-Message-ID: <20180203145031.GB2369@scaer>
+ <1516356909-18620-3-git-send-email-romain.naour@smile.fr>
+Message-ID: <20180203145358.GC2369@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,12 +15,15 @@ To: buildroot@busybox.net
 Romain, All,
 
 On 2018-01-19 11:15 +0100, Romain Naour spake thusly:
-> Add the default shell /bin/sh to /etc/shells only if BR2_SYSTEM_BIN_SH_NONE
-> is not selected.
+> When ash (busybox) is selected, /bin/{a,hu}sh is not added to /etc/shells
+> (see man shells). So, login tools like dropbear reject the ssh
+> connections for users using {a,hu}sh as shell in /etc/passwd.
+> 
+> buildroot authpriv.warn dropbear[853]: User 'kubu' has invalid shell, rejected
 > 
 > Signed-off-by: Romain Naour <romain.naour@smile.fr>
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>o
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
@@ -29,31 +32,40 @@ Yann E. MORIN.
 > v3: Fix typo (Thomas)
 >     Use TARGET_FINALIZE_HOOKS to avoid issues with the upcoming
 >     top-level parallel build (Arnout)
-> v2: add double-dollar after /bin/sh (Yann)
->     remove empty /etc/shells from skeleton (Yann, Peter)
->     move the hook right after it's defined (Yann)
+> v2: add double-dollar after /bin/{a,hu}sh (Yann)
+>     add hush handling
+>     msh has been removed from Busybox 1.28
+>     https://git.busybox.net/busybox/commit/?id=2e989ef232e35750df573898077dd356003705b2
+>     msh is unlikely used.
 > ---
->  package/skeleton-init-common/skeleton-init-common.mk | 7 +++++++
->  1 file changed, 7 insertions(+)
+>  package/busybox/busybox.mk | 14 ++++++++++++++
+>  1 file changed, 14 insertions(+)
 > 
-> diff --git a/package/skeleton-init-common/skeleton-init-common.mk b/package/skeleton-init-common/skeleton-init-common.mk
-> index 8228a81..e8a0522 100644
-> --- a/package/skeleton-init-common/skeleton-init-common.mk
-> +++ b/package/skeleton-init-common/skeleton-init-common.mk
-> @@ -79,6 +79,13 @@ define SKELETON_INIT_COMMON_SET_BIN_SH
->  	rm -f $(TARGET_DIR)/bin/sh
+> diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+> index d0bbd3f..145bc7c 100644
+> --- a/package/busybox/busybox.mk
+> +++ b/package/busybox/busybox.mk
+> @@ -258,6 +258,20 @@ define BUSYBOX_INSTALL_TELNET_SCRIPT
+>  	fi
 >  endef
->  else
-> +# Add /bin/sh to /etc/shells otherwise some login tools like dropbear
+>  
+> +# Add /bin/{a,hu}sh to /etc/shells otherwise some login tools like dropbear
 > +# can reject the user connection. See man shells.
-> +define SKELETON_INIT_COMMON_ADD_SH_TO_SHELLS
-> +	grep -qsE '^/bin/sh$$' $(TARGET_DIR)/etc/shells \
-> +		|| echo "/bin/sh" >> $(TARGET_DIR)/etc/shells
+> +define BUSYBOX_INSTALL_ADD_TO_SHELLS
+> +	if grep -q CONFIG_ASH=y $(@D)/.config; then \
+> +		grep -qsE '^/bin/ash$$' $(TARGET_DIR)/etc/shells \
+> +		|| echo "/bin/ash" >> $(TARGET_DIR)/etc/shells; \
+> +	fi
+> +	if grep -q CONFIG_HUSH=y $(@D)/.config; then \
+> +		grep -qsE '^/bin/hush$$' $(TARGET_DIR)/etc/shells \
+> +		|| echo "/bin/hush" >> $(TARGET_DIR)/etc/shells; \
+> +	fi
 > +endef
-> +SKELETON_INIT_COMMON_TARGET_FINALIZE_HOOKS += SKELETON_INIT_COMMON_ADD_SH_TO_SHELLS
->  ifneq ($(SKELETON_INIT_COMMON_BIN_SH),)
->  define SKELETON_INIT_COMMON_SET_BIN_SH
->  	ln -sf $(SKELETON_INIT_COMMON_BIN_SH) $(TARGET_DIR)/bin/sh
+> +BUSYBOX_TARGET_FINALIZE_HOOKS += BUSYBOX_INSTALL_ADD_TO_SHELLS
+> +
+>  # Enable "noclobber" in install.sh, to prevent BusyBox from overwriting any
+>  # full-blown versions of apps installed by other packages with sym/hard links.
+>  define BUSYBOX_NOCLOBBER_INSTALL
 > -- 
 > 2.7.4
 > 
