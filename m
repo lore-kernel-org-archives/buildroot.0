@@ -1,67 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 3 Feb 2018 20:05:59 +0100
-Subject: [Buildroot] [git commit] package/wf111: do a direct download
-Message-ID: <20180203191620.EA410882E4@busybox.osuosl.org>
+Date: Sat, 3 Feb 2018 20:03:41 +0100
+Subject: [Buildroot] [git commit] package/wf111: fix armv5 URL
+Message-ID: <20180203191620.D1C00882E4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=65fe1c7c5e94df25f14d4cddd76c8902586b3118
+commit: https://git.buildroot.net/buildroot/commit/?id=e74e060159afec36743eaf1b83972a688cdc6361
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-We can now do a download without prior registration, so we can drop the
-requirement for a local, pre-downloaded tarball, now.
+Commit b857c7481 (package/wf111: bump to version 5.2.2-r3) forgot to
+completely update the archive name for the armv5te variant.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Julien CORJON <corjon.j@ecagroup.com>
 Cc: Antoine T??nart <antoine.tenart@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wf111/Config.in | 11 -----------
- package/wf111/wf111.mk  |  7 +------
- 2 files changed, 1 insertion(+), 17 deletions(-)
+ package/wf111/wf111.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/wf111/Config.in b/package/wf111/Config.in
-index 081bd960cb..7b61ea195f 100644
---- a/package/wf111/Config.in
-+++ b/package/wf111/Config.in
-@@ -19,17 +19,6 @@ config BR2_PACKAGE_WF111
- 
- 	  https://www.silabs.com/products/wireless/wi-fi/wf111-bluegiga-module
- 
--if BR2_PACKAGE_WF111
--
--config BR2_PACKAGE_WF111_TARBALL_PATH
--	string "Local tarball location"
--	help
--	  The WF111 tarball can be retrieved on the Silicon Labs
--	  website after registration. This option specifies the path
--	  where the tarball is locally saved.
--
--endif
--
- comment "wf111 needs a glibc toolchain"
- 	depends on BR2_LINUX_KERNEL
- 	depends on BR2_ARM_CPU_ARMV5 || BR2_ARM_CPU_ARMV7A || BR2_i386
 diff --git a/package/wf111/wf111.mk b/package/wf111/wf111.mk
-index 5178944fa3..72526333fd 100644
+index ed55672136..5178944fa3 100644
 --- a/package/wf111/wf111.mk
 +++ b/package/wf111/wf111.mk
-@@ -5,14 +5,9 @@
- ################################################################################
- 
- WF111_VERSION = 5-2-2-r3
--WF111_SITE_METHOD = file
--WF111_SITE = $(call qstrip,$(BR2_PACKAGE_WF111_TARBALL_PATH))
-+WF111_SITE = https://www.silabs.com/documents/login/software
- WF111_DEPENDENCIES = linux
- 
--ifeq ($(BR2_PACKAGE_WF111)$(call qstrip,$(BR2_PACKAGE_WF111_TARBALL_PATH)),y)
--$(error No tarball location specified, check BR2_PACKAGE_WF111_TARBALL_PATH)
--endif
--
+@@ -16,7 +16,7 @@ endif
  ifeq ($(BR2_ARM_CPU_ARMV7A),y)
  WF111_SOURCE = wf111-linux-driver-$(WF111_VERSION)-armv7-a.tar.gz
  else ifeq ($(BR2_ARM_CPU_ARMV5),y)
+-WF111_SOURCE = wf111-linux-driver-$(WF111_VERSION)-armv5t.tar.gz
++WF111_SOURCE = wf111-linux-driver-$(WF111_VERSION)-armv5te.tar.gz
+ else ifeq ($(BR2_i386),y)
+ WF111_SOURCE = wf111-linux-driver-$(WF111_VERSION)-x86.tar.gz
+ endif
