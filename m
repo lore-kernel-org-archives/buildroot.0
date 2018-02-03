@@ -1,70 +1,50 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 3 Feb 2018 16:26:15 +0100
-Subject: [Buildroot] [PATCH 13/14] support/dockerfile: allow to install
- packages
-In-Reply-To: <1516581882-30582-14-git-send-email-ricardo.martincoski@gmail.com>
-References: <1516581882-30582-1-git-send-email-ricardo.martincoski@gmail.com>
- <1516581882-30582-14-git-send-email-ricardo.martincoski@gmail.com>
-Message-ID: <20180203152615.GL2369@scaer>
+Date: Sat, 3 Feb 2018 16:34:42 +0100
+Subject: [Buildroot] [PATCH 1/1] package/wf111: bump to version 5.2.2-r3
+In-Reply-To: <877es3irx9.fsf@dell.be.48ers.dk>
+References: <20180126162021.5520-1-corjon.j@ecagroup.com>
+ <877es3irx9.fsf@dell.be.48ers.dk>
+Message-ID: <20180203153442.GM2369@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ricardo, All,
+Julien, All,
 
-On 2018-01-21 22:44 -0200, Ricardo Martincoski spake thusly:
-> Some tools in the Docker image can be useful to a single test only.
-> Allow tests to install packages on the fly instead of adding everything
-> to the base Docker image.
+On 2018-01-27 10:15 +0100, Peter Korsgaard spake thusly:
+> >>>>> "Julien" == Julien Corjon <corjon.j@ecagroup.com> writes:
+> 
+>  > Signed-off-by: Julien Corjon <corjon.j@ecagroup.com>
+>  > ---
+>  >  package/wf111/wf111.mk | 8 ++++----
+>  >  1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+>  > diff --git a/package/wf111/wf111.mk b/package/wf111/wf111.mk
+>  > index ad9d89149d..ed55672136 100644
+>  > --- a/package/wf111/wf111.mk
+>  > +++ b/package/wf111/wf111.mk
+>  > @@ -4,7 +4,7 @@
+>  >  #
+>  >  ################################################################################
+>  
+>  > -WF111_VERSION = 5.2.2-r2
+>  > +WF111_VERSION = 5-2-2-r3
+> 
+> The Config.in refers to
+> http://www.bluegiga.com/en-US/products/wifi-modules/wf111-wifi-module/,
+> which redirects to silabs.com nowadays, so it is not directly clear
+> where to find the tarballs.
 
-I think I would prefer that our base image has all the tools we need.
+It also look that we can now download without any click-wrap
+registration, so this can now be automated, rather than require a local
+tarball.
+
+Care to send a patch doing the download?
 
 Regards,
 Yann E. MORIN.
-
-> Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-> Cc: Peter Korsgaard <peter@korsgaard.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-> ---
-> For a demo, see the beginning of the log at this job:
-> https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/48876752
-> ---
->  support/docker/Dockerfile | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
-> 
-> diff --git a/support/docker/Dockerfile b/support/docker/Dockerfile
-> index ebb471f..9d115d8 100644
-> --- a/support/docker/Dockerfile
-> +++ b/support/docker/Dockerfile
-> @@ -20,7 +20,8 @@ RUN apt-get install -y -qq --no-install-recommends \
->      cvs bzr git mercurial subversion wget \
->      cpio unzip \
->      libncurses5-dev \
-> -    python-nose2 python-pexpect qemu-system-arm qemu-system-x86
-> +    python-nose2 python-pexpect qemu-system-arm qemu-system-x86 \
-> +    sudo
->  RUN apt-get -q -y autoremove
->  RUN apt-get -q -y clean
->  
-> @@ -31,6 +32,11 @@ RUN /usr/sbin/locale-gen
->  RUN useradd -ms /bin/bash br-user
->  RUN chown -R br-user:br-user /home/br-user
->  
-> +# Allow user to install packages
-> +RUN adduser br-user sudo
-> +RUN echo "br-user ALL = NOPASSWD : /usr/bin/apt-get" > /etc/sudoers.d/apt-get
-> +RUN chmod 440 /etc/sudoers.d/apt-get
-> +
->  USER br-user
->  WORKDIR /home/br-user
->  ENV HOME /home/br-user
-> -- 
-> 2.7.4
-> 
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
