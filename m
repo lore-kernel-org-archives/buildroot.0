@@ -1,70 +1,66 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 3 Feb 2018 15:45:54 +0100
-Subject: [Buildroot] [PATCH v2] package/bash: add /bin/bash to
- /etc/shells
-In-Reply-To: <8c2a6cb6-7993-b05f-144f-82986cf2b913@mind.be>
-References: <1515859527-13567-1-git-send-email-romain.naour@smile.fr>
- <20180113161220.GG3226@scaer>
- <8c2a6cb6-7993-b05f-144f-82986cf2b913@mind.be>
-Message-ID: <20180203144554.GA2369@scaer>
+Date: Sat, 3 Feb 2018 15:50:31 +0100
+Subject: [Buildroot] [PATCH v3 1/9] package/skeleton-init-common: add
+ /bin/sh to /etc/shells
+In-Reply-To: <1516356909-18620-2-git-send-email-romain.naour@smile.fr>
+References: <1516356909-18620-1-git-send-email-romain.naour@smile.fr>
+ <1516356909-18620-2-git-send-email-romain.naour@smile.fr>
+Message-ID: <20180203145031.GB2369@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
+Romain, All,
 
-On 2018-01-18 00:53 +0100, Arnout Vandecappelle spake thusly:
-> On 13-01-18 17:12, Yann E. MORIN wrote:
-> > Romain, All,
-> > 
-> > On 2018-01-13 17:05 +0100, Romain Naour spake thusly:
-> >> When bash is selected, /bin/bash is not added to /etc/shells
-> >> (see man shells). So, login tools like dropbear reject the ssh
-> >> connexions for users using bash as shell in /etc/passwd.
-> >>
-> >> buildroot authpriv.warn dropbear[853]: User 'kubu' has invalid shell, rejected
-> >>
-> >> Reported-by: Jeremy Rosen <jeremy.rosen@smile.fr>
-> >> Signed-off-by: Romain Naour <romain.naour@smile.fr>
-> >> Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> > 
-> > Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+On 2018-01-19 11:15 +0100, Romain Naour spake thusly:
+> Add the default shell /bin/sh to /etc/shells only if BR2_SYSTEM_BIN_SH_NONE
+> is not selected.
 > 
->  Really? The guy who wrote the script that checks that no two packages can touch
-> the same file acks this change?
+> Signed-off-by: Romain Naour <romain.naour@smile.fr>
 
-Yes, nobody's perfect, and I never claimed I was.
-
-Oh, I forgot:  ;-)
-
-> [snip]
-> >> +	grep -qsE '^/bin/bash' $(TARGET_DIR)/etc/shells \
-> >> +		|| echo "/bin/bash" >> $(TARGET_DIR)/etc/shells
-> 
->  So this is a nice example of a package breaking top-level parallel build.
-> 
->  I guess the solution is to collect the shells in a make variable and create
-> /etc/shells in a finalize hook. Or alternatively, do this in a finalize hook
-> instead of target-install hook.
-
-Yeah, target-finalize hooks is way better, because that does not add any
-infra; it just uses existign infra.
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>o
 
 Regards,
 Yann E. MORIN.
 
->  Regards,
->  Arnout
+> ---
+> v3: Fix typo (Thomas)
+>     Use TARGET_FINALIZE_HOOKS to avoid issues with the upcoming
+>     top-level parallel build (Arnout)
+> v2: add double-dollar after /bin/sh (Yann)
+>     remove empty /etc/shells from skeleton (Yann, Peter)
+>     move the hook right after it's defined (Yann)
+> ---
+>  package/skeleton-init-common/skeleton-init-common.mk | 7 +++++++
+>  1 file changed, 7 insertions(+)
 > 
+> diff --git a/package/skeleton-init-common/skeleton-init-common.mk b/package/skeleton-init-common/skeleton-init-common.mk
+> index 8228a81..e8a0522 100644
+> --- a/package/skeleton-init-common/skeleton-init-common.mk
+> +++ b/package/skeleton-init-common/skeleton-init-common.mk
+> @@ -79,6 +79,13 @@ define SKELETON_INIT_COMMON_SET_BIN_SH
+>  	rm -f $(TARGET_DIR)/bin/sh
+>  endef
+>  else
+> +# Add /bin/sh to /etc/shells otherwise some login tools like dropbear
+> +# can reject the user connection. See man shells.
+> +define SKELETON_INIT_COMMON_ADD_SH_TO_SHELLS
+> +	grep -qsE '^/bin/sh$$' $(TARGET_DIR)/etc/shells \
+> +		|| echo "/bin/sh" >> $(TARGET_DIR)/etc/shells
+> +endef
+> +SKELETON_INIT_COMMON_TARGET_FINALIZE_HOOKS += SKELETON_INIT_COMMON_ADD_SH_TO_SHELLS
+>  ifneq ($(SKELETON_INIT_COMMON_BIN_SH),)
+>  define SKELETON_INIT_COMMON_SET_BIN_SH
+>  	ln -sf $(SKELETON_INIT_COMMON_BIN_SH) $(TARGET_DIR)/bin/sh
 > -- 
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+> 2.7.4
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
