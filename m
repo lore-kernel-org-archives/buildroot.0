@@ -1,48 +1,166 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 4 Feb 2018 22:05:39 +0100
-Subject: [Buildroot] [git commit] configs/toradex_apalis_imx6: bump U-Boot
- and kernel to the official image version 2.7
-Message-ID: <20180204215121.DB14588394@busybox.osuosl.org>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Sun, 4 Feb 2018 22:56:42 +0100
+Subject: [Buildroot] [PATCH v4 02/13] security hardening: add RELFO,
+ FORTIFY options
+In-Reply-To: <1516766992-48428-2-git-send-email-matthew.weber@rockwellcollins.com>
+References: <1516766992-48428-1-git-send-email-matthew.weber@rockwellcollins.com>
+ <1516766992-48428-2-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <CANQCQpb7YDvxKFU6ovDXCy0wd_E6YuErKq8_=9ZgFDCdpSNH4A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c8fea679cc27c08898f290c61ece17178b17e0a1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Peter,
 
-According to the following guide:
-https://developer.toradex.com/knowledge-base/build-u-boot-and-linux-kernel-from-source-code#iMX_6_Based_Modules_ApalisColibri_iMX6
+On Wed, Jan 24, 2018 at 5:09 AM, Matt Weber
+<matthew.weber@rockwellcollins.com> wrote:
+> This enables a user to build a complete system using these
+> options.  It is important to note that not all packages will
+> build correctly to start with.
+>
+> Modeled after OpenWRT approach
+> https://github.com/openwrt/openwrt/blob/master/config/Config-build.in#L176
+>
+> A good testing tool to check a target's elf files for compliance
+> to an array of hardening techniques can be found here:
+> https://github.com/slimm609/checksec.sh
+>
+> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+> --
+> Changes
+>
+> v1 -> v2
+>  - Cosmetic caps on titles
+>
+> v2 -> v3
+>  - Consolidated the way flags were set using CPPFLAGS (Arnout)
+>  - Removed fortran flag as not relevant for this feature (Arnout)
+>  - Added BR2_TOOLCHAIN_USES_GLIBC and optimization level dependency
+>
+> v3 -> v4
+> [Nicolas C
+>  - Used BR2_OPTIMIZE_0 as Config.in dependency
+>    for Fortify instead of using a warning at
+>    make time.
+>  - Enable -> Disable for the None options I
+>    mislabeled as enabling (relro/fortify).
+> ---
+>  Config.in           | 70 +++++++++++++++++++++++++++++++++++++++++++++++++++++
+>  package/Makefile.in | 42 ++++++++++++++++++++------------
+>  2 files changed, 97 insertions(+), 15 deletions(-)
+>
+> diff --git a/Config.in b/Config.in
+> index e7e5c2d..447b642 100644
+> --- a/Config.in
+> +++ b/Config.in
+> @@ -734,6 +734,76 @@ endchoice
+>  comment "Stack Smashing Protection needs a toolchain w/ SSP"
+>         depends on !BR2_TOOLCHAIN_HAS_SSP
+>
+> +choice
+> +       bool "RELRO Protection"
+> +       depends on BR2_SHARED_LIBS
+> +       help
+> +         Enable a link-time protection know as RELRO (RELocation Read Only)
+> +         which helps to protect from certain type of exploitation techniques
+> +         altering the content of some ELF sections.
+> +
+> +config BR2_RELRO_NONE
+> +       bool "None"
+> +       help
+> +         Disables Relocation link-time protections.
+> +
+> +config BR2_RELRO_PARTIAL
+> +       bool "Partial"
+> +       help
+> +         This option makes the dynamic section not writeable after
+> +         initialization (with almost no performance penalty).
+> +
+> +config BR2_RELRO_FULL
+> +       bool "Full"
+> +       help
+> +         This option includes the partial configuration, but also
+> +         marks the GOT as read-only at the cost of initialization time
+> +         during program loading, i.e every time an executable is started.
+> +
+> +endchoice
+> +
+> +comment "RELocation Read Only (RELRO) needs shared libraries"
+> +       depends on !BR2_SHARED_LIBS
+> +
+> +choice
+> +       bool "Buffer-overflow Detection (FORTIFY_SOURCE)"
+> +       depends on BR2_TOOLCHAIN_USES_GLIBC
+> +       depends on !BR2_OPTIMIZE_0
+> +       help
+> +         Enable the _FORTIFY_SOURCE macro which introduces additional
+> +         checks to detect buffer-overflows in the following standard library
+> +         functions: memcpy, mempcpy, memmove, memset, strcpy, stpcpy,
+> +         strncpy, strcat, strncat, sprintf, vsprintf, snprintf, vsnprintf,
+> +         gets.
+> +
+> +         NOTE: This feature requires an optimization level of s/1/2/3/g
+> +
+> +         Support for this feature has been present since GCC 4.x.
+> +
+> +config BR2_FORTIFY_SOURCE_NONE
+> +       bool "None"
+> +       help
+> +         Disables additional checks to detect buffer-overflows.
+> +
+> +config BR2_FORTIFY_SOURCE_1
+> +       bool "Conservative"
+> +       help
+> +         This option sets _FORTIFY_SOURCE set to 1 and only introduces
+> +         checks that shouldn't change the behavior of conforming programs.
+> +         Adds checks at compile-time only.
+> +
+> +config BR2_FORTIFY_SOURCE_2
+> +       bool "Aggressive"
+> +       help
+> +         This option sets _FORTIFY_SOURCES set to 2 and some more checking
+> +         is added, but some conforming programs might fail.
+> +         Also adds checks at run-time (detected buffer overflow terminates
+> +         the program)
+> +
+> +endchoice
+> +
+> +comment "Fortify Source needs a GLIBC toolchain and some level of optimization"
+> +       depends on (!BR2_TOOLCHAIN_USES_GLIBC || BR2_OPTIMIZE_0)
+>  endmenu
+>
+>  source "toolchain/Config.in"
+> diff --git a/package/Makefile.in b/package/Makefile.in
+> index a1a5316..36c3d55 100644
+> --- a/package/Makefile.in
+> +++ b/package/Makefile.in
+> @@ -138,11 +138,37 @@ ifeq ($(BR2_DEBUG_3),y)
+>  TARGET_DEBUGGING = -g3
+>  endif
+>
+> +TARGET_CFLAGS_RELRO = -Wl,-z,relro
+> +TARGET_CFLAGS_RELRO_FULL = -Wl,-z,now $(TARGET_CFLAGS_RELRO)
+> +
+> +TARGET_LDFLAGS = $(call qstrip,$(BR2_TARGET_LDFLAGS))
+> +
+> +ifeq ($(BR2_SSP_REGULAR),y)
+> +TARGET_CPPFLAGS += -fstack-protector
+> +else ifeq ($(BR2_SSP_STRONG),y)
+> +TARGET_CPPFLAGS += -fstack-protector-strong
+> +else ifeq ($(BR2_SSP_ALL),y)
+> +TARGET_CPPFLAGS += -fstack-protector-all
+> +endif
+> +
+> +ifeq ($(BR2_RELRO_PARTIAL),y)
+> +TARGET_CPPFLAGS += $(TARGET_CFLAGS_RELRO)
 
-The official final 2.7 version released at 2018-01-04, see the following link:
-https://developer.toradex.com/software/linux/linux-software/release-details
+Adding the CPPFLAGS (above) to the wrapper looks Ok.  However the
+LDFAGS (below) would, now need to include a new wrapper to do the
+fixups on flag ordering.  Should that be a new app or something added
+onto the existing toolchain wrapper?
 
-Signed-off-by: Scott Fan <fancp2007@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- configs/toradex_apalis_imx6_defconfig | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+> +TARGET_LDFLAGS += $(TARGET_CFLAGS_RELRO)
 
-diff --git a/configs/toradex_apalis_imx6_defconfig b/configs/toradex_apalis_imx6_defconfig
-index 607faaeb8f..b7ef980492 100644
---- a/configs/toradex_apalis_imx6_defconfig
-+++ b/configs/toradex_apalis_imx6_defconfig
-@@ -6,7 +6,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/toradex/apalis-imx6/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.toradex.com/linux-toradex.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="3f68dc7c600c0354f5df7f06b931661319addafb"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="18717e2b1ca9b0fbf8bafa2717719e1f2c8f1114"
- BR2_LINUX_KERNEL_DEFCONFIG="apalis_imx6"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-apalis-eval imx6q-apalis-ixora imx6q-apalis_v1_0-eval imx6q-apalis_v1_0-ixora"
-@@ -17,7 +17,7 @@ BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_GIT=y
- BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.toradex.com/u-boot-toradex.git"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="f0e414972b5b225e33ebe75574562266116746f9"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="30a1208727729dae22cb42f9ba9ba17efe5e6f77"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="apalis_imx6"
- BR2_TARGET_UBOOT_FORMAT_IMG=y
- BR2_TARGET_UBOOT_SPL=y
+Matt
