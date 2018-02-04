@@ -1,53 +1,46 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 4 Feb 2018 12:09:09 +0100
-Subject: [Buildroot] [git commit] dash: enable line editting if libedit is
- selected
-Message-ID: <20180204111049.4FF0884742@busybox.osuosl.org>
+From: Scott Fan <fancp2007@gmail.com>
+Date: Sun,  4 Feb 2018 19:16:39 +0800
+Subject: [Buildroot] [PATCH 1/1] configs/toradex_apalis_imx6: bump U-Boot
+ and kernel to the official image version 2.7
+Message-ID: <20180204111639.26447-1-fancp2007@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=651af57cf011e6d8764d11932ce87fc064cd9a9b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+According to the following guide:
+https://developer.toradex.com/knowledge-base/build-u-boot-and-linux-kernel-from-source-code#iMX_6_Based_Modules_ApalisColibri_iMX6
 
-Otherwise, explicitly disable it, so that the configure script does not
-misdetect a system-installed libedit for example.
+The official final 2.7 version released at 2018-01-04, see the following link:
+https://developer.toradex.com/software/linux/linux-software/release-details
 
-Also, add a profile snippet enabling line editing, Emacs style.
-
-[Peter: move DASH_INSTALL_PROFILE inside conditional,
-	ensure /etc/profile.d exists]
-Change-Id: I68c6dbbafa95e266860329cb9c7ff5519fda5bf8
-Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Scott Fan <fancp2007@gmail.com>
 ---
- package/dash/dash.mk | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+ configs/toradex_apalis_imx6_defconfig | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/dash/dash.mk b/package/dash/dash.mk
-index c8b41648b6..87c9cc9f8b 100644
---- a/package/dash/dash.mk
-+++ b/package/dash/dash.mk
-@@ -9,6 +9,20 @@ DASH_SITE = http://gondor.apana.org.au/~herbert/dash/files
- DASH_LICENSE = BSD-3-Clause, GPL-2.0+ (mksignames.c)
- DASH_LICENSE_FILES = COPYING
- 
-+ifeq ($(BR2_PACKAGE_LIBEDIT),y)
-+DASH_DEPENDENCIES += libedit
-+DASH_CONF_OPTS += --with-libedit
-+
-+# Enable line editing, Emacs style
-+define DASH_INSTALL_PROFILE
-+	mkdir -p $(TARGET_DIR)/etc/profile.d
-+	echo 'set -E' > $(TARGET_DIR)/etc/profile.d/dash.sh
-+endef
-+DASH_POST_INSTALL_TARGET_HOOKS += DASH_INSTALL_PROFILE
-+else
-+DASH_CONF_OPTS += --without-libedit
-+endif
-+
- define DASH_INSTALL_TARGET_CMDS
- 	$(INSTALL) -m 0755 $(@D)/src/dash $(TARGET_DIR)/bin/dash
- endef
+diff --git a/configs/toradex_apalis_imx6_defconfig b/configs/toradex_apalis_imx6_defconfig
+index 607faaeb8f..b7ef980492 100644
+--- a/configs/toradex_apalis_imx6_defconfig
++++ b/configs/toradex_apalis_imx6_defconfig
+@@ -6,7 +6,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/toradex/apalis-imx6/post-image.sh"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+ BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.toradex.com/linux-toradex.git"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="3f68dc7c600c0354f5df7f06b931661319addafb"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="18717e2b1ca9b0fbf8bafa2717719e1f2c8f1114"
+ BR2_LINUX_KERNEL_DEFCONFIG="apalis_imx6"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-apalis-eval imx6q-apalis-ixora imx6q-apalis_v1_0-eval imx6q-apalis_v1_0-ixora"
+@@ -17,7 +17,7 @@ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+ BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.toradex.com/u-boot-toradex.git"
+-BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="f0e414972b5b225e33ebe75574562266116746f9"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="30a1208727729dae22cb42f9ba9ba17efe5e6f77"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="apalis_imx6"
+ BR2_TARGET_UBOOT_FORMAT_IMG=y
+ BR2_TARGET_UBOOT_SPL=y
+-- 
+2.16.1
