@@ -1,65 +1,48 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  4 Feb 2018 15:44:25 +0100
-Subject: [Buildroot] [PATCH 4/5] support/docker: use a fixed Debian snapshot
+Date: Sun,  4 Feb 2018 15:44:26 +0100
+Subject: [Buildroot] [PATCH 5/5] support/dockker: create and push tagged
+ images
 In-Reply-To: <cover.1517755438.git.yann.morin.1998@free.fr>
 References: <cover.1517755438.git.yann.morin.1998@free.fr>
-Message-ID: <fc8ae732b7c23135bfc826ba28a49045c2dddd76.1517755438.git.yann.morin.1998@free.fr>
+Message-ID: <c7619a7bdc91c8c2cb9d486859ddad8a8e89e78a.1517755438.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since we're now using a specific base image tag, we need to also use a
-specific, stable repository to get additional packages from for this
-image.
+Currently, we refer to the latest version of the image, which means we
+can't guarantee any reproducibility. Also, it measn we can't have a
+separate images for the maintenance branches (especially the LTS) and
+master.
 
-As such, use the Debian snapshot that matches the base image.
+Update the comment in the Dockerfile to create and push tagged images.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Arnout Vandecappelle <arnout@mind.be>
 Cc: Peter Korsgaard <peter@korsgaard.com>
+
 ---
- support/docker/Dockerfile       | 7 +++++++
- support/docker/apt-sources.list | 4 ++++
- 2 files changed, 11 insertions(+)
- create mode 100644 support/docker/apt-sources.list
+Note: once this is applied, we can push such a tagged image and then
+update our .gitlab-ci.yml accordingly.
+---
+ support/docker/Dockerfile | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/support/docker/Dockerfile b/support/docker/Dockerfile
-index 49b74b88bd..f18d195f37 100644
+index f18d195f37..474e073c61 100644
 --- a/support/docker/Dockerfile
 +++ b/support/docker/Dockerfile
-@@ -3,7 +3,11 @@
- #   sudo docker build -t buildroot/base support/docker
- #   sudo docker push buildroot/base
+@@ -1,7 +1,7 @@
+ # This Dockerfile generates the docker image that gets used by Gitlab CI
+-# To build it:
+-#   sudo docker build -t buildroot/base support/docker
+-#   sudo docker push buildroot/base
++# To build it (YYYYMMDD.HHMM is the current date and time in UTC):
++#   sudo docker build -t buildroot/base:YYYYMMDD.HHMM support/docker
++#   sudo docker push buildroot/base:YYYYMMDD.HHMM
  
-+# We use a specific tag for the base image *and* the corresponding date
-+# for the repository., so do not forget to update the apt-sources.list
-+# file that is shipped next to this Dockerfile.
- FROM debian:stretch-20171210
-+
- LABEL maintainer="Buildroot mailing list <buildroot@buildroot.org>" \
-       vendor="Buildroot" \
- description="Container with everything needed to run Buildroot"
-@@ -11,6 +15,9 @@ description="Container with everything needed to run Buildroot"
- # Setup environment
- ENV DEBIAN_FRONTEND noninteractive
- 
-+# This repository can be a bit slow at times. Don't panic...
-+COPY apt-sources.list /etc/apt/sources.list
-+
- # The container has no package lists, so need to update first
- RUN dpkg --add-architecture i386 && \
-     apt-get update -y && \
-diff --git a/support/docker/apt-sources.list b/support/docker/apt-sources.list
-new file mode 100644
-index 0000000000..789fb8fc17
---- /dev/null
-+++ b/support/docker/apt-sources.list
-@@ -0,0 +1,4 @@
-+# Latest just before 20171210T000000Z:
-+deb [check-valid-until=no] http://snapshot.debian.org/archive/debian/20171209T220346Z/ stretch main
-+deb [check-valid-until=no] http://snapshot.debian.org/archive/debian/20171209T220346Z/ stretch-updates main
-+deb [check-valid-until=no] http://snapshot.debian.org/archive/debian-security/20171209T224618Z/ stretch/updates main
+ # We use a specific tag for the base image *and* the corresponding date
+ # for the repository., so do not forget to update the apt-sources.list
 -- 
 2.14.1
