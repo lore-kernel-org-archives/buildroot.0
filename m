@@ -1,96 +1,154 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 4 Feb 2018 18:38:42 +0100
-Subject: [Buildroot] [PATCH] python-remi: fix trailing whitespace and
- line size
-In-Reply-To: <20180204172409.26044-1-gwenj@trabucayre.com>
-References: <20180204172409.26044-1-gwenj@trabucayre.com>
-Message-ID: <20180204173842.GI2411@scaer>
+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Sun,  4 Feb 2018 19:07:39 +0100
+Subject: [Buildroot] [PATCH v10 00/10] Add support for the Rust programming
+ language
+Message-ID: <20180204180749.29942-1-eric.le.bihan.dev@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gwenhael, All,
+This series adds support for the Rust programming language by adding the
+following packages:
 
-On 2018-02-04 18:24 +0100, Gwenhael Goavec-Merou spake thusly:
-> From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-> 
-> Fixes line size in Config.in, trailing whitespace after # and empty line
-> 
-> Fixes:
->  - https://gitlab.com/buildroot.org/buildroot/-/jobs/50971692
-> 
-> Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-> ---
->  package/python-remi/Config.in      | 9 +++++----
->  package/python-remi/python-remi.mk | 3 +--
->  2 files changed, 6 insertions(+), 6 deletions(-)
-> 
-> diff --git a/package/python-remi/Config.in b/package/python-remi/Config.in
-> index 68d0a92b11..2f4216b324 100644
-> --- a/package/python-remi/Config.in
-> +++ b/package/python-remi/Config.in
-> @@ -1,9 +1,10 @@
->  config BR2_PACKAGE_PYTHON_REMI
->  	bool "python-remi"
->  	help
-> -	  Remi is a GUI library for Python applications which transpiles an
-> -	  application's interface into HTML to be rendered in a web browser.
-> -	  This removes platform-specific dependencies and lets you easily
-> -	  develop cross-platform applications in Python!
-> +	  Remi is a GUI library for Python applications which
-> +	  transpiles an application's interface into HTML to be
-> +	  rendered in a web browser. This removes platform-specific
-> +	  dependencies and lets you easily develop cross-platform
-> +	  applications in Python!
+ - rustc: a virtual package for the Rust compiler.
+ - rust-bin: provides a pre-built version of rustc.
+ - cargo-bin: provides a pre-built version of Rust package manager.
+ - rust: builds rustc from source.
+ - cargo: builds Rust package manager from source.
 
-You actually over-wrapped the help text. It can fit on 4 lines, which
-even looks nicer:
+Only the host variants are provided.
 
-    Remi is a GUI library for Python applications which transpiles
-    an application's interface into HTML to be rendered in a web
-    browser. This removes platform-specific dependencies and lets
-    you easily develop cross-platform applications in Python!
+The rustc virtual package is inspired by the mysql one.
 
-Otherwise:
+v9 -> v10:
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ - add test cases in support/testing
+ - add documentation about adding cargo-based packages
+ - bump cargo to 0.24.0
+ - bump rust to 1.23.0
+ - bump cargo-bin to 0.24.0
+ - bump rust-bin to 1.23.0
+ - clarify origin of some hashes
+ - reword some comments
+ - use $(BR2_CMAKE_HOST_DEPENDENCY) wherever needed
+ - move some options management from *.mk to Config.in
 
-Thanks! :-)
+v8 -> v9:
 
-Regards,
-Yann E. MORIN.
+ - replace giant patch by post-extract hook
+ - drop rust-cargo virtual package
+ - explicitly enable SSL support in host-libcurl
 
->  	  https://github.com/dddomodossola/remi/tree/master
-> diff --git a/package/python-remi/python-remi.mk b/package/python-remi/python-remi.mk
-> index 6514118192..3356430ddb 100644
-> --- a/package/python-remi/python-remi.mk
-> +++ b/package/python-remi/python-remi.mk
-> @@ -1,5 +1,5 @@
->  ################################################################################
-> -# 
-> +#
->  # python-remi
->  #
->  ################################################################################
-> @@ -11,4 +11,3 @@ PYTHON_REMI_LICENSE_FILES = LICENSE
->  PYTHON_REMI_SETUP_TYPE = setuptools
->  
->  $(eval $(python-package))
-> -
-> -- 
-> 2.13.6
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+v7 -> v8:
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+ - replace cargo-bootstrap by cargo-bin
+ - drop rust-bootstrap and use rust-bin instead
+ - rust-bin and rust versions are the same
+ - cargo-bin and cargo versions are the same
+ - bump cargo to 0.23.0
+ - bump rust to 1.22.1
+ - add rust-cargo virtual package
+
+v6 -> v7:
+
+ - add cargo 0.20.0
+ - bump rust to 1.19.0
+ - bump rust-bootstrap to 1.18.0
+ - bump cargo-bootstrap to 0.19.0
+ - bump rust-bin to 1.19.0
+ - fix mips64 target name in rustc
+
+v5 -> v6:
+
+ - bump rust to 1.18.0
+ - bump rust-bootstrap to 1.17.0
+ - bump rust-bin to 1.18.0
+
+v4 -> v5:
+
+ - add rustc virtual package
+ - add rust-bin, provider for rustc
+ - rework rust to be a provider for rustc
+ - rework some commit messages
+
+v3 -> v4:
+
+ - bump rust to 1.16.0
+ - bump rust-bootstrap to 1.15.1
+ - add cargo-bootstrap
+ - use built-in target specifications
+ - drop external Python script to generate target specifications
+ - enable support for PowerPC
+ - expose host variant in menuconfig
+
+v2 -> v3:
+
+ - bump rust to 1.10.0
+ - rework and bump rust-bootstrap to 1.9.0
+ - host-rust requires at least GCC 4.7 because of LLVM (suggested by R. Naour)
+ - rust requires a glibc-based cross-compiler
+ - rust requires GCC 5.x or above for Aarch64
+
+v1 -> v2:
+
+ - bump rust to version 1.9.0.
+ - drop patch for bzip2 support in host-python.
+ - add package for jemalloc.
+ - add dependency on host being a x86 machine.
+ - add dependency on toolchain.
+ - use dedicated package to provide bootstrapping binary: rust-bootstrap.
+ - let ./configure find out host/build on its own.
+ - remove entry from configuration menu.
+
+Eric Le Bihan (10):
+  rustc: new virtual package
+  rust-bin: new package
+  cargo-bin: new package
+  rust: new package
+  libssh2: add host variant
+  libhttpparser: add host variant
+  libcurl: add host variant
+  cargo: new package
+  docs/manual: document cargo-based packages
+  support/testing: add tests for Rust
+
+ DEVELOPERS                                 |   4 ++
+ docs/manual/adding-packages-cargo.txt      | 110 +++++++++++++++++++++++++++++
+ docs/manual/adding-packages.txt            |   2 +
+ package/Config.in.host                     |   2 +
+ package/cargo-bin/cargo-bin.hash           |   8 +++
+ package/cargo-bin/cargo-bin.mk             |  13 ++++
+ package/cargo/Config.in.host               |   8 +++
+ package/cargo/cargo.hash                   |   8 +++
+ package/cargo/cargo.mk                     |  91 ++++++++++++++++++++++++
+ package/cargo/config.in                    |   2 +
+ package/libcurl/libcurl.mk                 |  14 ++++
+ package/libhttpparser/libhttpparser.mk     |   9 +++
+ package/libssh2/libssh2.mk                 |   6 ++
+ package/rust-bin/rust-bin.hash             |  33 +++++++++
+ package/rust-bin/rust-bin.mk               |  61 ++++++++++++++++
+ package/rust/rust.hash                     |   5 ++
+ package/rust/rust.mk                       |  79 +++++++++++++++++++++
+ package/rustc/Config.in.host               |  79 +++++++++++++++++++++
+ package/rustc/rustc.mk                     |  20 ++++++
+ support/testing/tests/package/test_rust.py | 107 ++++++++++++++++++++++++++++
+ 20 files changed, 661 insertions(+)
+ create mode 100644 docs/manual/adding-packages-cargo.txt
+ create mode 100644 package/cargo-bin/cargo-bin.hash
+ create mode 100644 package/cargo-bin/cargo-bin.mk
+ create mode 100644 package/cargo/Config.in.host
+ create mode 100644 package/cargo/cargo.hash
+ create mode 100644 package/cargo/cargo.mk
+ create mode 100644 package/cargo/config.in
+ create mode 100644 package/rust-bin/rust-bin.hash
+ create mode 100644 package/rust-bin/rust-bin.mk
+ create mode 100644 package/rust/rust.hash
+ create mode 100644 package/rust/rust.mk
+ create mode 100644 package/rustc/Config.in.host
+ create mode 100644 package/rustc/rustc.mk
+ create mode 100644 support/testing/tests/package/test_rust.py
+
+--
+2.14.3
