@@ -1,64 +1,51 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 4 Feb 2018 21:57:53 +0100
-Subject: [Buildroot] [git commit] support/docker: use a fixed Debian snapshot
-Message-ID: <20180204210102.BC7C288391@busybox.osuosl.org>
+From: Angelo Compagnucci <angelo@amarulasolutions.com>
+Date: Sun,  4 Feb 2018 22:45:08 +0100
+Subject: [Buildroot] [PATCH] package/mono: fix crosscompilation error on
+ ppc64
+Message-ID: <1517780708-1738-1-git-send-email-angelo@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5fdf5e4099ac8ca624b27f3b01d2a3eafb13e4f9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Mono for powerpc64 could not, at least at the moment, cross compile
+for a powerpc architecture.
 
-Since we're now using a specific base image tag, we need to also use a
-specific, stable repository to get additional packages from for this
-image.
+Fixes:
+http://autobuild.buildroot.net/results/9713b9976c4aa3b9345609ef6fcdf663a994fb4d/
 
-As such, use the Debian snapshot that matches the base image.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 ---
- support/docker/Dockerfile       | 7 +++++++
- support/docker/apt-sources.list | 4 ++++
- 2 files changed, 11 insertions(+)
+ package/mono/Config.in | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/support/docker/Dockerfile b/support/docker/Dockerfile
-index 49b74b88bd..f18d195f37 100644
---- a/support/docker/Dockerfile
-+++ b/support/docker/Dockerfile
-@@ -3,7 +3,11 @@
- #   sudo docker build -t buildroot/base support/docker
- #   sudo docker push buildroot/base
+diff --git a/package/mono/Config.in b/package/mono/Config.in
+index d45ad37..b0a7c77 100644
+--- a/package/mono/Config.in
++++ b/package/mono/Config.in
+@@ -3,9 +3,14 @@ config BR2_PACKAGE_MONO_ARCH_SUPPORTS
+ 	default y if (BR2_arm || BR2_armeb || BR2_i386 || BR2_mips || \
+ 		      BR2_mipsel || BR2_powerpc || BR2_x86_64)
  
-+# We use a specific tag for the base image *and* the corresponding date
-+# for the repository., so do not forget to update the apt-sources.list
-+# file that is shipped next to this Dockerfile.
- FROM debian:stretch-20171210
++config BR2_PACKAGE_MONO_CROSS_COMPILE_NOT_SUPPORTS
++	bool
++	default y if (BR2_HOSTARCH = "powerpc64le" && !BR2_powerpc64le)
 +
- LABEL maintainer="Buildroot mailing list <buildroot@buildroot.org>" \
-       vendor="Buildroot" \
- description="Container with everything needed to run Buildroot"
-@@ -11,6 +15,9 @@ description="Container with everything needed to run Buildroot"
- # Setup environment
- ENV DEBIAN_FRONTEND noninteractive
- 
-+# This repository can be a bit slow at times. Don't panic...
-+COPY apt-sources.list /etc/apt/sources.list
+ config BR2_PACKAGE_MONO
+ 	bool "mono"
+ 	depends on BR2_PACKAGE_MONO_ARCH_SUPPORTS
++	depends on !BR2_PACKAGE_MONO_CROSS_COMPILE_NOT_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on !BR2_STATIC_LIBS
+ 	help
+@@ -17,3 +22,7 @@ config BR2_PACKAGE_MONO
+ comment "mono needs a toolchain w/ threads, dynamic library"
+ 	depends on BR2_PACKAGE_MONO_ARCH_SUPPORTS
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
 +
- # The container has no package lists, so need to update first
- RUN dpkg --add-architecture i386 && \
-     apt-get update -y && \
-diff --git a/support/docker/apt-sources.list b/support/docker/apt-sources.list
-new file mode 100644
-index 0000000000..789fb8fc17
---- /dev/null
-+++ b/support/docker/apt-sources.list
-@@ -0,0 +1,4 @@
-+# Latest just before 20171210T000000Z:
-+deb [check-valid-until=no] http://snapshot.debian.org/archive/debian/20171209T220346Z/ stretch main
-+deb [check-valid-until=no] http://snapshot.debian.org/archive/debian/20171209T220346Z/ stretch-updates main
-+deb [check-valid-until=no] http://snapshot.debian.org/archive/debian-security/20171209T224618Z/ stretch/updates main
++comment "on powerpc64le mono can be crosscompiled only to the same arch"
++	depends on BR2_PACKAGE_MONO_ARCH_SUPPORTS
++	depends on BR2_PACKAGE_MONO_CROSS_COMPILE_NOT_SUPPORTS
+-- 
+2.7.4
