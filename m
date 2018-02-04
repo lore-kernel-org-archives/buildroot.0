@@ -1,77 +1,64 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 4 Feb 2018 21:52:03 +0100
-Subject: [Buildroot] [git commit] support/docker: limit the number of layers
-Message-ID: <20180204210102.9B08E88391@busybox.osuosl.org>
+Date: Sun, 4 Feb 2018 21:57:53 +0100
+Subject: [Buildroot] [git commit] support/docker: use a fixed Debian snapshot
+Message-ID: <20180204210102.BC7C288391@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7517aef4dcfbf6ae298f41f3ddd1187523b016e5
+commit: https://git.buildroot.net/buildroot/commit/?id=5fdf5e4099ac8ca624b27f3b01d2a3eafb13e4f9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The official documentation [0] suggests limiting the number of layers
-generated from a dockerfile. A layer is created for each RUN (and COPY
-and ADD) command. But we are only ever interested in the final image,
-so the intermediate layers are useless to us.
+Since we're now using a specific base image tag, we need to also use a
+specific, stable repository to get additional packages from for this
+image.
 
-Limit the number of RUN commands to limit the number of generated
-layers.
+As such, use the Debian snapshot that matches the base image.
 
-[0] https://docs.docker.com/develop/develop-images/dockerfile_best-practices/#minimize-the-number-of-layers
-
-Reported-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Peter Korsgaard <peter@korsgaard.com>
 Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/docker/Dockerfile | 30 +++++++++++++++---------------
- 1 file changed, 15 insertions(+), 15 deletions(-)
+ support/docker/Dockerfile       | 7 +++++++
+ support/docker/apt-sources.list | 4 ++++
+ 2 files changed, 11 insertions(+)
 
 diff --git a/support/docker/Dockerfile b/support/docker/Dockerfile
-index ebb471f7e5..23018585eb 100644
+index 49b74b88bd..f18d195f37 100644
 --- a/support/docker/Dockerfile
 +++ b/support/docker/Dockerfile
-@@ -11,25 +11,25 @@ description="Container with everything needed to run Buildroot"
+@@ -3,7 +3,11 @@
+ #   sudo docker build -t buildroot/base support/docker
+ #   sudo docker push buildroot/base
+ 
++# We use a specific tag for the base image *and* the corresponding date
++# for the repository., so do not forget to update the apt-sources.list
++# file that is shipped next to this Dockerfile.
+ FROM debian:stretch-20171210
++
+ LABEL maintainer="Buildroot mailing list <buildroot@buildroot.org>" \
+       vendor="Buildroot" \
+ description="Container with everything needed to run Buildroot"
+@@ -11,6 +15,9 @@ description="Container with everything needed to run Buildroot"
  # Setup environment
  ENV DEBIAN_FRONTEND noninteractive
  
--RUN dpkg --add-architecture i386
++# This repository can be a bit slow at times. Don't panic...
++COPY apt-sources.list /etc/apt/sources.list
++
  # The container has no package lists, so need to update first
--RUN apt-get update -y -qq
--RUN apt-get install -y -qq --no-install-recommends \
--    build-essential cmake libc6:i386 gcc-multilib \
--    bc ca-certificates file locales rsync \
--    cvs bzr git mercurial subversion wget \
--    cpio unzip \
--    libncurses5-dev \
--    python-nose2 python-pexpect qemu-system-arm qemu-system-x86
--RUN apt-get -q -y autoremove
--RUN apt-get -q -y clean
-+RUN dpkg --add-architecture i386 && \
-+    apt-get update -y -qq && \
-+    apt-get install -y -qq --no-install-recommends \
-+        build-essential cmake libc6:i386 gcc-multilib \
-+        bc ca-certificates file locales rsync \
-+        cvs bzr git mercurial subversion wget \
-+        cpio unzip \
-+        libncurses5-dev \
-+        python-nose2 python-pexpect qemu-system-arm qemu-system-x86 && \
-+    apt-get -q -y autoremove && \
-+    apt-get -q -y clean
- 
- # To be able to generate a toolchain with locales, enable one UTF-8 locale
--RUN sed -i 's/# \(en_US.UTF-8\)/\1/' /etc/locale.gen
--RUN /usr/sbin/locale-gen
-+RUN sed -i 's/# \(en_US.UTF-8\)/\1/' /etc/locale.gen && \
-+    /usr/sbin/locale-gen
- 
--RUN useradd -ms /bin/bash br-user
--RUN chown -R br-user:br-user /home/br-user
-+RUN useradd -ms /bin/bash br-user && \
-+    chown -R br-user:br-user /home/br-user
- 
- USER br-user
- WORKDIR /home/br-user
+ RUN dpkg --add-architecture i386 && \
+     apt-get update -y && \
+diff --git a/support/docker/apt-sources.list b/support/docker/apt-sources.list
+new file mode 100644
+index 0000000000..789fb8fc17
+--- /dev/null
++++ b/support/docker/apt-sources.list
+@@ -0,0 +1,4 @@
++# Latest just before 20171210T000000Z:
++deb [check-valid-until=no] http://snapshot.debian.org/archive/debian/20171209T220346Z/ stretch main
++deb [check-valid-until=no] http://snapshot.debian.org/archive/debian/20171209T220346Z/ stretch-updates main
++deb [check-valid-until=no] http://snapshot.debian.org/archive/debian-security/20171209T224618Z/ stretch/updates main
