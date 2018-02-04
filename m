@@ -1,36 +1,51 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Sun, 4 Feb 2018 11:05:01 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
- 2018-02-03
-In-Reply-To: <20180204070012.B12252125C@mail.free-electrons.com>
-References: <20180204070012.B12252125C@mail.free-electrons.com>
-Message-ID: <CANQCQpZen1x4OwhODXamwVSm-bH-vYjT7OJXHA=Recjmb0Ac0Q@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 04 Feb 2018 12:07:19 +0100
+Subject: [Buildroot] [PATCH v2] dash: enable line editting if libedit is
+ selected.
+In-Reply-To: <1506622076-21776-1-git-send-email-casantos@datacom.ind.br>
+ (Carlos Santos's message of "Thu, 28 Sep 2017 15:07:56 -0300")
+References: <20170928085957.04978e60@windsurf.lan>
+ <1506622076-21776-1-git-send-email-casantos@datacom.ind.br>
+Message-ID: <871si1ypw8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter,
+>>>>> "Carlos" == Carlos Santos <casantos@datacom.ind.br> writes:
 
-On Sun, Feb 4, 2018 at 8:00 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
->
-> This is the list of Buildroot build failures that occured on
-> 2018-02-03, and for which you are a registered architecture developer
-> or package developer. Please help us improving the quality of
-> Buildroot by investigating those build failures and sending patches to
-> fix them. Thanks!
->
-> Results for the 'master' branch
-> ===============================
->
-> Build failures related to your packages:
->
->      powerpc |                  raptor-2.0.15 | http://autobuild.buildroot.net/results/6826645687b7e33bfc051f288b0e30eec3bf82ca
+ > Otherwise, explicitly disable it, so that the configure script does not
+ > misdetect a system-installed libedit for example.
 
+ > Also, add a profile snippet enabling line editing, Emacs style.
 
-make[4]: vfork: Resource temporarily unavailable
+ > Change-Id: I68c6dbbafa95e266860329cb9c7ff5519fda5bf8
+ > Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+ > ---
+ >  package/dash/dash.mk | 13 +++++++++++++
+ >  1 file changed, 13 insertions(+)
 
-Looks like a fork issue on (gcc112/ppc64le)
+ > diff --git a/package/dash/dash.mk b/package/dash/dash.mk
+ > index 72ef722..0098fad 100644
+ > --- a/package/dash/dash.mk
+ > +++ b/package/dash/dash.mk
+ > @@ -10,6 +10,19 @@ DASH_SITE = http://gondor.apana.org.au/~herbert/dash/files
+ >  DASH_LICENSE = BSD-3-Clause, GPL-2.0+ (mksignames.c)
+ >  DASH_LICENSE_FILES = COPYING
+ 
+ > +# Enable line editing, Emacs style
+ > +define DASH_INSTALL_PROFILE
+ > +	echo 'set -E' > $(TARGET_DIR)/etc/profile.d/dash.sh
+ > +endef
+ > +
+ > +ifeq ($(BR2_PACKAGE_LIBEDIT),y)
+ > +DASH_DEPENDENCIES += libedit
+ > +DASH_CONF_OPTS += --with-libedit
+ > +DASH_POST_INSTALL_TARGET_HOOKS += DASH_INSTALL_PROFILE
+
+Committed after moving DASH_INSTALL_PROFILE inside the conditional,
+thanks.
+
+-- 
+Bye, Peter Korsgaard
