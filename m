@@ -1,31 +1,33 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 04 Feb 2018 10:31:49 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libfribidi: Switch _SITE to
- github
-References: <20180203222346.19803-1-bernd.kuhls@t-online.de>
-Message-ID: <5h0jkex9qo.ln2@ID-313208.user.individual.net>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 04 Feb 2018 10:50:21 +0100
+Subject: [Buildroot] [PATCH v2] python-remi: new package
+In-Reply-To: <20180202214205.14781-1-gwenj@trabucayre.com> (Gwenhael
+ Goavec-Merou's message of "Fri, 2 Feb 2018 22:42:05 +0100")
+References: <20180202214205.14781-1-gwenj@trabucayre.com>
+Message-ID: <87h8qxytgi.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Sat, 03 Feb 2018 23:23:46 +0100 schrieb Bernd Kuhls:
+>>>>> "Gwenhael" == Gwenhael Goavec-Merou <gwenj@trabucayre.com> writes:
 
-> The old site is not available anymore, fribidi.org redirects to
-> gihub.com now. Added license hash.
-> 
-> Signed-off-by: Bernd Kuhls
-> <bernd.kuhls@t-online.de>
-> ---
->  package/libfribidi/Config.in       | 2 +-
->  package/libfribidi/libfribidi.hash | 5 +++--
->  package/libfribidi/libfribidi.mk   | 3 +--
->  3 files changed, 5 insertions(+), 5 deletions(-)
+ > From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+ > Remi is a GUI library for Python applications which transpiles an
+ > application's interface into HTML to be rendered in a web browser.
+ > This removes platform-specific dependencies and lets you easily
+ > develop cross-platform applications in Python!
 
-Hi,
+ > https://github.com/dddomodossola/remi/tree/master
 
-marked patch as "Defered" on patchworks, switching to the github tarball 
-needs more changes.
+ > Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+ > Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+ > ---
+ > Changes v1 -> v2
+ >  * add licence file checksum (Yegor Yefremov)
 
-Regards, Bernd
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
