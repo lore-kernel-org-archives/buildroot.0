@@ -1,47 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 4 Feb 2018 23:46:22 +0100
-Subject: [Buildroot] [PATCH v2] package/gpsd: add config option for
- Spectratime iSync and build fix patch
-In-Reply-To: <1517694053-15488-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
-References: <1517694053-15488-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
-Message-ID: <20180204234622.54c315ec@windsurf>
+Date: Sun, 4 Feb 2018 23:47:48 +0100
+Subject: [Buildroot] [git commit] package/libcodec2: fix upstream source URL
+Message-ID: <20180204224808.426E7883A2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=4d4a0473f27e35393f71e19441cb116ef311e305
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat,  3 Feb 2018 22:40:53 +0100, Zoltan Gyarmati wrote:
->  As in the inital 3.17 version bump patch the iSync config option was not
-> added, the iSync driver was implicitly enabled in the gpsd config as default,
-> and due to a bug in the gpsd build setup, this caused several autobuild issues
-> which are fixed by this. This commit adds both the Buildroot config option and
-> the gpsd patch which was also sent to and accepted in upstream.
-> 
-> Fixes:
->     http://autobuild.buildroot.net/results/555b4bdd1707aa21e6d3014e30b635c96c5efffc
->     http://autobuild.buildroot.net/results/cfc14a2c471c63ecc4c95c12b8e00ed7656acfd2
->     http://autobuild.buildroot.net/results/2104e15526bd6f467f0d56dee10b5fa46e2c71dd
->     http://autobuild.buildroot.net/results/610b3f898b396c1def682b809482408c2c4555bc
->     ... and many more.
-> 
-> Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
-> ---
-> Changes v1->v2:
->    * Add upstream commit link to build fix patch
-> ---
->  ...x-isync-build-when-ublox-not-selected-too.patch | 36 ++++++++++++++++++++++
->  package/gpsd/Config.in                             |  5 +++
->  package/gpsd/gpsd.mk                               |  3 ++
->  3 files changed, 44 insertions(+)
->  create mode 100644 package/gpsd/0002-Fix-isync-build-when-ublox-not-selected-too.patch
+Upstream changed to URL of the source tarball and removed SHA1SUMS.
+Added license hash.
 
-Applied to master, thanks.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libcodec2/libcodec2.hash | 3 +--
+ package/libcodec2/libcodec2.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 3 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/libcodec2/libcodec2.hash b/package/libcodec2/libcodec2.hash
+index 47483604cc..e401e9d30e 100644
+--- a/package/libcodec2/libcodec2.hash
++++ b/package/libcodec2/libcodec2.hash
+@@ -1,4 +1,3 @@
+-# sha1 from http://files.freedv.org/codec2/SHA1SUMS
+-sha1   8988aa33121b857d58a16f75b5061281b254a146	codec-0.7.tar.xz
+ # Locally computed
+ sha256 0695bb93cd985dd39f02f0db35ebc28a98b9b88747318f90774aba5f374eadb2  codec2-0.7.tar.xz
++sha256 9ebb6f82b7380a62ac74c5f0322c88e6744dedf2ebe1f54d6f088282b39844bf  COPYING
+diff --git a/package/libcodec2/libcodec2.mk b/package/libcodec2/libcodec2.mk
+index 7d1c6c3839..3253a35956 100644
+--- a/package/libcodec2/libcodec2.mk
++++ b/package/libcodec2/libcodec2.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ LIBCODEC2_VERSION = 0.7
+-LIBCODEC2_SITE = http://files.freedv.org/codec2
++LIBCODEC2_SITE = https://freedv.com/wp-content/uploads/sites/8/2017/10
+ LIBCODEC2_SOURCE = codec2-$(LIBCODEC2_VERSION).tar.xz
+ LIBCODEC2_LICENSE = LGPL-2.1
+ LIBCODEC2_LICENSE_FILES = COPYING
