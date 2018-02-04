@@ -1,46 +1,38 @@
-From: Scott Fan <fancp2007@gmail.com>
-Date: Sun,  4 Feb 2018 19:16:39 +0800
-Subject: [Buildroot] [PATCH 1/1] configs/toradex_apalis_imx6: bump U-Boot
- and kernel to the official image version 2.7
-Message-ID: <20180204111639.26447-1-fancp2007@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 04 Feb 2018 13:01:58 +0100
+Subject: [Buildroot] [PATCH 1/1] package/kodi-visualisation-goom: fix
+ broken hash
+References: <20180203223150.27467-1-bernd.kuhls@t-online.de>
+ <87d11lyszv.fsf@dell.be.48ers.dk>
+Message-ID: <ma9jkex9qo.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-According to the following guide:
-https://developer.toradex.com/knowledge-base/build-u-boot-and-linux-kernel-from-source-code#iMX_6_Based_Modules_ApalisColibri_iMX6
+Am Sun, 04 Feb 2018 11:00:20 +0100 schrieb Peter Korsgaard:
 
-The official final 2.7 version released at 2018-01-04, see the following link:
-https://developer.toradex.com/software/linux/linux-software/release-details
+>>>>>> "Bernd" == Bernd Kuhls
+>>>>>> <bernd.kuhls@t-online.de> writes:
+> 
+>  > Comparing both tarballs, the one from github.com and the one stored
+>  > at sources.buildroot.net, using diff showed no differences.
+> 
+>  > Signed-off-by: Bernd Kuhls
+>  > <bernd.kuhls@t-online.de>
+> 
+> We cannot really do this was it would break all releases since this hash
+> was added (2017.05). Perhaps you can bump the version instead?
 
-Signed-off-by: Scott Fan <fancp2007@gmail.com>
----
- configs/toradex_apalis_imx6_defconfig | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Hi Peter,
 
-diff --git a/configs/toradex_apalis_imx6_defconfig b/configs/toradex_apalis_imx6_defconfig
-index 607faaeb8f..b7ef980492 100644
---- a/configs/toradex_apalis_imx6_defconfig
-+++ b/configs/toradex_apalis_imx6_defconfig
-@@ -6,7 +6,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/toradex/apalis-imx6/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.toradex.com/linux-toradex.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="3f68dc7c600c0354f5df7f06b931661319addafb"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="18717e2b1ca9b0fbf8bafa2717719e1f2c8f1114"
- BR2_LINUX_KERNEL_DEFCONFIG="apalis_imx6"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-apalis-eval imx6q-apalis-ixora imx6q-apalis_v1_0-eval imx6q-apalis_v1_0-ixora"
-@@ -17,7 +17,7 @@ BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_GIT=y
- BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.toradex.com/u-boot-toradex.git"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="f0e414972b5b225e33ebe75574562266116746f9"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="30a1208727729dae22cb42f9ba9ba17efe5e6f77"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="apalis_imx6"
- BR2_TARGET_UBOOT_FORMAT_IMG=y
- BR2_TARGET_UBOOT_SPL=y
--- 
-2.16.1
+sorry, this is not possible. The upstream repo does not have branches 
+related to various Kodi versions, only a master branch and some older 
+feature branches.
+
+The commit from master branch used in buildroot is the last one 
+compatible with Kodi 17.x-Krypton, later commits introduced changes for 
+upcoming Kodi 18.x-Leia.
+
+Regards, Bernd
