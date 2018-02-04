@@ -1,33 +1,67 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 04 Feb 2018 16:35:46 +0100
-Subject: [Buildroot] [PATCH 1/1] package/kodi-visualisation-goom: fix
- broken hash
-In-Reply-To: <ma9jkex9qo.ln2@ID-313208.user.individual.net> (Bernd Kuhls's
- message of "Sun, 04 Feb 2018 13:01:58 +0100")
-References: <20180203223150.27467-1-bernd.kuhls@t-online.de>
- <87d11lyszv.fsf@dell.be.48ers.dk>
- <ma9jkex9qo.ln2@ID-313208.user.individual.net>
-Message-ID: <87h8qwydgt.fsf@dell.be.48ers.dk>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 4 Feb 2018 17:15:24 +0100
+Subject: [Buildroot] [PATCH 1/1] safeclib: new package
+In-Reply-To: <20171217181732.13814-1-fontaine.fabrice@gmail.com>
+References: <20171217181732.13814-1-fontaine.fabrice@gmail.com>
+Message-ID: <20180204161524.GF2411@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+Fabric, All,
 
-Hi,
+On 2017-12-17 19:17 +0100, Fabrice Fontaine spake thusly:
+> safec fork with all C11 Annex K functions
+> 
+> This library implements the secure C11 Annex K functions on
+> top of most libc implementations, which are missing from them.
+[--SNIP--]
+> diff --git a/package/safeclib/safeclib.mk b/package/safeclib/safeclib.mk
+> new file mode 100644
+> index 0000000000..65c6621e0a
+> --- /dev/null
+> +++ b/package/safeclib/safeclib.mk
+> @@ -0,0 +1,15 @@
+> +################################################################################
+> +#
+> +# safeclib
+> +#
+> +################################################################################
+> +
+> +SAFECLIB_VERSION = v09102017
+> +SAFECLIB_SITE = $(call github,rurban,safeclib,$(SAFECLIB_VERSION))
+> +SAFECLIB_LICENSE = MIT 
 
- > sorry, this is not possible. The upstream repo does not have branches 
- > related to various Kodi versions, only a master branch and some older 
- > feature branches.
+Trailing space, causing chheck-package failures;
 
- > The commit from master branch used in buildroot is the last one 
- > compatible with Kodi 17.x-Krypton, later commits introduced changes for 
- > upcoming Kodi 18.x-Leia.
+    https://gitlab.com/buildroot.org/buildroot/-/jobs/50971692
 
-Ok, then I guess we'll just have to leave it like this for now until we
-bump kodi :/
+You can check locally with:
+    ./utils/check-package package/safeclib/*
+
+Regards,
+Yann E. MORIN.
+
+> +SAFECLIB_LICENSE_FILES = COPYING
+> +SAFECLIB_INSTALL_STAGING = YES
+> +# From git
+> +SAFECLIB_AUTORECONF = YES
+> +
+> +$(eval $(autotools-package))
+> -- 
+> 2.14.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
-Bye, Peter Korsgaard
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
