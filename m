@@ -1,10 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 04 Feb 2018 21:49:15 +0100
-Subject: [Buildroot] [PATCH 1/2] xcb-util-image: add license file
-In-Reply-To: <1517769995-13694-1-git-send-email-danomimanchego123@gmail.com>
- (Danomi Manchego's message of "Sun, 4 Feb 2018 13:46:34 -0500")
+Date: Sun, 04 Feb 2018 21:49:21 +0100
+Subject: [Buildroot] [PATCH 2/2] xcb-util-wm: add license file
+In-Reply-To: <1517769995-13694-2-git-send-email-danomimanchego123@gmail.com>
+ (Danomi Manchego's message of "Sun, 4 Feb 2018 13:46:35 -0500")
 References: <1517769995-13694-1-git-send-email-danomimanchego123@gmail.com>
-Message-ID: <874lmwxyyc.fsf@dell.be.48ers.dk>
+ <1517769995-13694-2-git-send-email-danomimanchego123@gmail.com>
+Message-ID: <87zi4owkdq.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
