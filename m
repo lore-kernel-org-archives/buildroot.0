@@ -1,12 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 04 Feb 2018 12:07:19 +0100
+Date: Sun, 04 Feb 2018 12:10:15 +0100
 Subject: [Buildroot] [PATCH v2] dash: enable line editting if libedit is
  selected.
 In-Reply-To: <1506622076-21776-1-git-send-email-casantos@datacom.ind.br>
  (Carlos Santos's message of "Thu, 28 Sep 2017 15:07:56 -0300")
 References: <20170928085957.04978e60@windsurf.lan>
  <1506622076-21776-1-git-send-email-casantos@datacom.ind.br>
-Message-ID: <871si1ypw8.fsf@dell.be.48ers.dk>
+Message-ID: <87woztxb6w.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -37,15 +37,10 @@ To: buildroot@busybox.net
  > +# Enable line editing, Emacs style
  > +define DASH_INSTALL_PROFILE
  > +	echo 'set -E' > $(TARGET_DIR)/etc/profile.d/dash.sh
- > +endef
- > +
- > +ifeq ($(BR2_PACKAGE_LIBEDIT),y)
- > +DASH_DEPENDENCIES += libedit
- > +DASH_CONF_OPTS += --with-libedit
- > +DASH_POST_INSTALL_TARGET_HOOKS += DASH_INSTALL_PROFILE
 
-Committed after moving DASH_INSTALL_PROFILE inside the conditional,
-thanks.
+/etc/profile.d is part of our standard skeleton, but may not be present
+in custom skeletons, so I've also added a mkdir -p
+${TARGET_DIR}/etc/profile.d
 
 -- 
 Bye, Peter Korsgaard
