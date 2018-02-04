@@ -1,213 +1,153 @@
 From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Sun,  4 Feb 2018 19:07:47 +0100
-Subject: [Buildroot] [PATCH v10 08/10] cargo: new package
+Date: Sun,  4 Feb 2018 19:07:48 +0100
+Subject: [Buildroot] [PATCH v10 09/10] docs/manual: document cargo-based
+ packages
 In-Reply-To: <20180204180749.29942-1-eric.le.bihan.dev@free.fr>
 References: <20180204180749.29942-1-eric.le.bihan.dev@free.fr>
-Message-ID: <20180204180749.29942-9-eric.le.bihan.dev@free.fr>
+Message-ID: <20180204180749.29942-10-eric.le.bihan.dev@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This new package provides Cargo, the Rust official package manager.
-Cargo is written in Rust and uses Cargo as its build system. It also
-depends on other Rust packages.
-
-Normally, a previously installed version of Cargo would be used to:
-
- 1. Fetch the dependencies.
- 2. Build the new version of Cargo, using the available Rust compiler.
-
-But the fetching step prevents offline builds. So instead two features
-of Cargo are leveraged: vendoring [1] and local registry.
-
-First, a tarball of the build dependencies generated using `cargo
-vendor` is fetched along with Cargo source code.
-
-Then, the build process is as follows:
-
- 1. The tarball of the build dependencies is uncompressed in a local
-    registry.
- 2. A snapshot of Cargo, provided by cargo-bin, builds the final
-    version of Cargo.
- 3. A configuration file telling Cargo how to cross-compile programs for
-    the target is generated and installed.
-
-Currently, only the host variant is provided.
-
-[1] https://github.com/alexcrichton/cargo-vendor
+Add instructions for adding a package which uses Cargo as build system.
 
 Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 ---
- DEVELOPERS                   |  1 +
- package/Config.in.host       |  1 +
- package/cargo/Config.in.host |  8 ++++
- package/cargo/cargo.hash     |  8 ++++
- package/cargo/cargo.mk       | 91 ++++++++++++++++++++++++++++++++++++++++++++
- package/cargo/config.in      |  2 +
- 6 files changed, 111 insertions(+)
- create mode 100644 package/cargo/Config.in.host
- create mode 100644 package/cargo/cargo.hash
- create mode 100644 package/cargo/cargo.mk
- create mode 100644 package/cargo/config.in
+ docs/manual/adding-packages-cargo.txt | 110 ++++++++++++++++++++++++++++++++++
+ docs/manual/adding-packages.txt       |   2 +
+ 2 files changed, 112 insertions(+)
+ create mode 100644 docs/manual/adding-packages-cargo.txt
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 0e041d6f40..c524cb6ac5 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -542,6 +542,7 @@ N:	Eric Le Bihan <eric.le.bihan.dev@free.fr>
- F:	docs/manual/adding-packages-meson.txt
- F:	package/adwaita-icon-theme/
- F:	package/cargo-bin/
-+F:	package/cargo/
- F:	package/darkhttpd/
- F:	package/eudev/
- F:	package/execline/
-diff --git a/package/Config.in.host b/package/Config.in.host
-index 2f20dd0e48..199a8e9856 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -2,6 +2,7 @@ menu "Host utilities"
+diff --git a/docs/manual/adding-packages-cargo.txt b/docs/manual/adding-packages-cargo.txt
+new file mode 100644
+index 0000000000..8de7c97cb9
+--- /dev/null
++++ b/docs/manual/adding-packages-cargo.txt
+@@ -0,0 +1,110 @@
++// -*- mode:doc; -*-
++// vim: set syntax=asciidoc:
++
++=== Integration of Cargo-based packages
++
++Cargo is the package manager for the Rust programming language. It allows the
++user to build programs or libraries written in Rust, but it also downloads and
++manages their dependencies, to ensure repeatable builds. Cargo packages are
++called "crates".
++
++[[cargo-package-tutorial]]
++
++==== Cargo-based package's +Config.in+ file
++
++The +Config.in+ file of Cargo-based package 'foo' should contain:
++
++---------------------------
++01: config BR2_PACKAGE_FOO
++02: 	bool "foo"
++03: 	depends on BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS
++04: 	select BR2_PACKAGE_HOST_CARGO
++05:   help
++06:     This is a comment that explains what foo is.
++07:
++08:  	  http://foosoftware.org/foo/
++---------------------------
++
++==== Cargo-based package's +.mk+ file
++
++Buildroot does not (yet) provide a dedicated package infrastructure for
++Cargo-based packages. So, we will explain how to write a +.mk+ file for such a
++package. Let's start with an example:
++
++------------------------------
++01: ################################################################################
++02: #
++03: # foo
++04: #
++05: ################################################################################
++06:
++07: FOO_VERSION = 1.0
++08: FOO_SOURCE = foo-$(FOO_VERSION).tar.gz
++09: FOO_SITE = http://www.foosoftware.org/download
++10: FOO_LICENSE = GPLv3+
++11: FOO_LICENSE_FILES = COPYING
++12:
++13: FOO_DEPENDENCIES = host-cargo
++14:
++15: FOO_CARGO_ENV = CARGO_HOME=$(HOST_DIR)/share/cargo
++16: FOO_CARGO_MODE = $(if $(BR2_ENABLE_DEBUG),debug,release)
++17:
++18: FOO_BIN_DIR = target/$(RUST_TARGET_NAME)/$(FOO_CARGO_MODE)
++19:
++20: FOO_CARGO_OPTS = \
++21:   --$(FOO_CARGO_MODE) \
++22: 	--target=$(RUST_TARGET_NAME) \
++23: 	--manifest-path=$(@D)/Cargo.toml
++24:
++25: define FOO_BUILD_CMDS
++26: 	$(TARGET_MAKE_ENV) $(FOO_CARGO_ENV) \
++27: 		cargo build $(FOO_CARGO_OPTS)
++28: endef
++29:
++30: define FOO_INSTALL_TARGET_CMDS
++31: 	$(INSTALL) -D -m 0755 $(@D)/$(FOO_BIN_DIR)/foo \
++32: 		$(TARGET_DIR)/usr/bin/foo
++33: endef
++34:
++35: $(eval $(generic-package))
++--------------------------------
++
++The Makefile starts with the definition of the standard variables for package
++declaration (lines 7 to 11).
++
++As seen in line 35, it is based on the
++xref:generic-package-tutorial[+generic-package+ infrastructure]. So, it defines
++the variables required by this particular infrastructure, where Cargo is
++invoked:
++
++* +FOO_BUILD_CMDS+: Cargo is invoked to perform the build. The options required
++  to configure the cross-compilation of the package are passed via
++  +FOO_CONF_OPTS+.
++
++* +FOO_INSTALL_TARGET_CMDS+: The binary executable generated is installed on
++  the target.
++
++In order to have Cargo available for the build, +FOO_DEPENDENCIES+ needs to
++contain +host-cargo+.
++
++To sum it up, to add a new Cargo-based package, the Makefile example can be
++copied verbatim then edited to replace all occurences of +FOO+ with the
++uppercase name of the new package and update the values of the standard
++variables.
++
++==== About Dependencies Management
++
++A crate can depend on other libraries from crates.io or git repositories, listed
++in its Cargo.toml file. Before starting a build, Cargo usually downloads
++automatically them. This step can also be performed independently, via the
+++cargo fetch+ command.
++
++Cargo maintains a local cache of the registry index and of git checkouts of the
++crates, whose location is given by +$CARGO_HOME+. As seen in the package
++Makefile example at line 15, this environment variable is set to
+++$(HOST_DIR)/share/cargo+.
++
++This dependency download mechanism is not convenient when performing an offline
++build, as Cargo will fail to fetch the dependencies. In that case, it is advised
++to generate a tarball of the dependencies using the +cargo vendor+ and add it to
+++FOO_EXTRA_DOWNLOADS+.
+diff --git a/docs/manual/adding-packages.txt b/docs/manual/adding-packages.txt
+index e542124cf9..e8d40daee4 100644
+--- a/docs/manual/adding-packages.txt
++++ b/docs/manual/adding-packages.txt
+@@ -36,6 +36,8 @@ include::adding-packages-waf.txt[]
  
- 	source "package/aespipe/Config.in.host"
- 	source "package/android-tools/Config.in.host"
-+	source "package/cargo/Config.in.host"
- 	source "package/cbootimage/Config.in.host"
- 	source "package/checkpolicy/Config.in.host"
- 	source "package/cmake/Config.in.host"
-diff --git a/package/cargo/Config.in.host b/package/cargo/Config.in.host
-new file mode 100644
-index 0000000000..0f1ca305c6
---- /dev/null
-+++ b/package/cargo/Config.in.host
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_HOST_CARGO
-+	bool "host cargo"
-+	depends on BR2_PACKAGE_HAS_HOST_RUSTC
-+	help
-+	  Cargo is the package manager for the Rust programming
-+	  language.
+ include::adding-packages-meson.txt[]
+ 
++include::adding-packages-cargo.txt[]
 +
-+	  https://crates.io/
-diff --git a/package/cargo/cargo.hash b/package/cargo/cargo.hash
-new file mode 100644
-index 0000000000..f0990484d9
---- /dev/null
-+++ b/package/cargo/cargo.hash
-@@ -0,0 +1,8 @@
-+# Locally generated
-+sha256 a9d4291254a1d622d3c3cb942aaa56ab4059b8d04915c3af234f0362f14722e8  cargo-0.24.0.tar.gz
-+sha256 dc7240d60a869fa24a68c8734fb7c810c27cca0a6dad52df6279865e4e8e7fae  rust-installer-4f994850808a572e2cc8d43f968893c8e942e9bf.tar.gz
-+sha256 a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2  LICENSE-APACHE
-+sha256 23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3  LICENSE-MIT
-+sha256 8bd89f9222dc80292f4107347103b693ac66f3a083371f0629ccf42338abe880  LICENSE-THIRD-PARTY
-+# From http://pkgs.fedoraproject.org/repo/pkgs/cargo/cargo-0.23.0-vendor.tar.xz/sha512
-+sha512 60c12ce49a53cf986490f5a5fdf606f0374677902edfdc4d48ab1ba6094f3f23efc59626cd3776649c9386a9cab2a60332e5693aad6acbcbb92132efdcf9fe21  cargo-0.24.0-vendor.tar.xz
-diff --git a/package/cargo/cargo.mk b/package/cargo/cargo.mk
-new file mode 100644
-index 0000000000..dd060fed03
---- /dev/null
-+++ b/package/cargo/cargo.mk
-@@ -0,0 +1,91 @@
-+################################################################################
-+#
-+# cargo
-+#
-+################################################################################
-+
-+CARGO_VERSION = 0.24.0
-+CARGO_SITE = $(call github,rust-lang,cargo,$(CARGO_VERSION))
-+CARGO_LICENSE = Apache-2.0 or MIT
-+CARGO_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
-+
-+CARGO_DEPS_SHA512 = 60c12ce49a53cf986490f5a5fdf606f0374677902edfdc4d48ab1ba6094f3f23efc59626cd3776649c9386a9cab2a60332e5693aad6acbcbb92132efdcf9fe21
-+CARGO_DEPS_SITE = http://pkgs.fedoraproject.org/repo/pkgs/cargo/$(CARGO_DEPS_SOURCE)/sha512/$(CARGO_DEPS_SHA512)
-+CARGO_DEPS_SOURCE = cargo-$(CARGO_VERSION)-vendor.tar.xz
-+
-+CARGO_INSTALLER_VERSION = 4f994850808a572e2cc8d43f968893c8e942e9bf
-+CARGO_INSTALLER_SITE = $(call github,rust-lang,rust-installer,$(CARGO_INSTALLER_VERSION))
-+CARGO_INSTALLER_SOURCE = rust-installer-$(CARGO_INSTALLER_VERSION).tar.gz
-+
-+HOST_CARGO_EXTRA_DOWNLOADS = \
-+	$(CARGO_DEPS_SITE)/$(CARGO_DEPS_SOURCE) \
-+	$(CARGO_INSTALLER_SITE)/$(CARGO_INSTALLER_SOURCE)
-+
-+HOST_CARGO_DEPENDENCIES = \
-+	$(BR2_CMAKE_HOST_DEPENDENCY) \
-+	host-pkgconf \
-+	host-openssl \
-+	host-libhttpparser \
-+	host-libssh2 \
-+	host-libcurl \
-+	host-rustc \
-+	host-cargo-bin
-+
-+HOST_CARGO_SNAP_BIN = $(HOST_CARGO_BIN_DIR)/cargo/bin/cargo
-+HOST_CARGO_HOME = $(HOST_DIR)/share/cargo
-+
-+define HOST_CARGO_EXTRACT_DEPS
-+	@mkdir -p $(@D)/vendor
-+	$(call suitable-extractor,$(CARGO_DEPS_SOURCE)) \
-+		$(DL_DIR)/$(CARGO_DEPS_SOURCE) | \
-+		$(TAR) --strip-components=1 -C $(@D)/vendor $(TAR_OPTIONS) -
-+endef
-+
-+HOST_CARGO_POST_EXTRACT_HOOKS += HOST_CARGO_EXTRACT_DEPS
-+
-+define HOST_CARGO_EXTRACT_INSTALLER
-+	@mkdir -p $(@D)/src/rust-installer
-+	$(call suitable-extractor,$(CARGO_INSTALLER_SOURCE)) \
-+		$(DL_DIR)/$(CARGO_INSTALLER_SOURCE) | \
-+		$(TAR) --strip-components=1 -C $(@D)/src/rust-installer $(TAR_OPTIONS) -
-+endef
-+
-+HOST_CARGO_POST_EXTRACT_HOOKS += HOST_CARGO_EXTRACT_INSTALLER
-+
-+define HOST_CARGO_SETUP_DEPS
-+	mkdir -p $(@D)/.cargo
-+	( \
-+		echo "[source.crates-io]"; \
-+		echo "registry = 'https://github.com/rust-lang/crates.io-index'"; \
-+		echo "replace-with = 'vendored-sources'"; \
-+		echo "[source.vendored-sources]"; \
-+		echo "directory = '$(@D)/vendor'"; \
-+	) > $(@D)/.cargo/config
-+endef
-+
-+HOST_CARGO_PRE_CONFIGURE_HOOKS += HOST_CARGO_SETUP_DEPS
-+
-+HOST_CARGO_SNAP_OPTS = \
-+	--release \
-+	$(if $(VERBOSE),--verbose)
-+
-+HOST_CARGO_ENV = \
-+	RUSTFLAGS="-Clink-arg=-Wl,-rpath,$(HOST_DIR)/lib" \
-+	CARGO_HOME=$(HOST_CARGO_HOME)
-+
-+define HOST_CARGO_BUILD_CMDS
-+	(cd $(@D); $(HOST_MAKE_ENV) $(HOST_CARGO_ENV) $(HOST_CARGO_SNAP_BIN) \
-+		build $(HOST_CARGO_SNAP_OPTS))
-+endef
-+
-+define HOST_CARGO_INSTALL_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/target/release/cargo $(HOST_DIR)/bin/cargo
-+	$(INSTALL) -D package/cargo/config.in \
-+		$(HOST_DIR)/share/cargo/config
-+	$(SED) 's/@RUST_TARGET_NAME@/$(RUST_TARGET_NAME)/' \
-+		$(HOST_DIR)/share/cargo/config
-+	$(SED) 's/@CROSS_PREFIX@/$(notdir $(TARGET_CROSS))/' \
-+		$(HOST_DIR)/share/cargo/config
-+endef
-+
-+$(eval $(host-generic-package))
-diff --git a/package/cargo/config.in b/package/cargo/config.in
-new file mode 100644
-index 0000000000..cc048c71c4
---- /dev/null
-+++ b/package/cargo/config.in
-@@ -0,0 +1,2 @@
-+[target. at RUST_TARGET_NAME@]
-+linker = "@CROSS_PREFIX at gcc"
+ include::adding-packages-kernel-module.txt[]
+ 
+ include::adding-packages-asciidoc.txt[]
 -- 
 2.14.3
