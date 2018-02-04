@@ -1,29 +1,26 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 04 Feb 2018 08:10:48 +0100
-Subject: [Buildroot] [PATCH] python-virtualenv: new package
-In-Reply-To: <1517523718-30586-1-git-send-email-matthew.weber@rockwellcollins.com>
- (Matt Weber's message of "Thu, 1 Feb 2018 16:21:58 -0600")
-References: <1517523718-30586-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <87po5lz0uf.fsf@dell.be.48ers.dk>
+Date: Sun, 04 Feb 2018 08:42:02 +0100
+Subject: [Buildroot] [PATCH 1/1] Fix gdk-pixbuf broken by host package
+ moved to /lib instead of /usr/lib Regression occured following commit
+ 19ba17ee3ba946ac865849df89d7c2988ea5aca9: "Globally replace
+ $(HOST_DIR)/usr/lib with $(HOST_DIR)/lib" The host package loader.cache now
+ references shared objects in /lib but target files are still in /usr/lib so
+ sed has to be fixed accordingly.
+In-Reply-To: <1516445179-11479-1-git-send-email-pct@crookies.net> (Pierre
+ CROKAERT's message of "Sat, 20 Jan 2018 11:46:19 +0100")
+References: <1516445179-11479-1-git-send-email-pct@crookies.net>
+Message-ID: <87lgg9yzed.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Matt" == Matt Weber <matthew.weber@rockwellcollins.com> writes:
+>>>>> "Pierre" == Pierre CROKAERT <pct@crookies.net> writes:
 
- > A tool for creating a isolated python env.
- > Within Buildroot, the basic problem being addressed is
- > one of dependencies and versions, and indirectly permissions.
- > A great example are the Django and AMQP protocol packages.
- > An applications depending on these are usually locked into a specific
- > version.
+ > Signed-off-by: Pierre CROKAERT <pct@crookies.net>
 
- > Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-
-Can you explain what the use case for this is? Is this to install
-additional python packages at runtime on the target?
+Committed after extending / cleaning up the commit message, thanks.
 
 -- 
 Bye, Peter Korsgaard
