@@ -1,41 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 4 Feb 2018 21:47:45 +0100
-Subject: [Buildroot] [git commit] xcb-util-image: add license file
-Message-ID: <20180204204933.91CA988377@busybox.osuosl.org>
+Date: Sun, 04 Feb 2018 22:00:47 +0100
+Subject: [Buildroot] [PATCH 0/5] support/docker: generate reproducible
+ base images
+In-Reply-To: <cover.1517755438.git.yann.morin.1998@free.fr> (Yann E. MORIN's
+ message of "Sun, 4 Feb 2018 15:44:22 +0100")
+References: <cover.1517755438.git.yann.morin.1998@free.fr>
+Message-ID: <87vafcwjuo.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b98ffc1885c694edf9d1aa1be7142cf3959d25b6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/x11r7/xcb-util-image/xcb-util-image.hash | 2 ++
- package/x11r7/xcb-util-image/xcb-util-image.mk   | 1 +
- 2 files changed, 3 insertions(+)
+ > Hello All!
+ > Currently, we only ever refer to the "latest" version of the image.
+ > This is not nice because:
+ >   1. this is not reproducible;
+ >   2. we can't have different images between master and the various
+ >      maintenance branches.
 
-diff --git a/package/x11r7/xcb-util-image/xcb-util-image.hash b/package/x11r7/xcb-util-image/xcb-util-image.hash
-index 1cc82ac9b2..a9a2eaab50 100644
---- a/package/x11r7/xcb-util-image/xcb-util-image.hash
-+++ b/package/x11r7/xcb-util-image/xcb-util-image.hash
-@@ -1,2 +1,4 @@
- # From http://lists.x.org/archives/xorg-announce/2014-October/002489.html
- sha256	2db96a37d78831d643538dd1b595d7d712e04bdccf8896a5e18ce0f398ea2ffc	xcb-util-image-0.4.0.tar.bz2
-+# License file, locally calculated
-+sha256	19672c6153d8c4870abe734fa4dd2197481a311f4788d02ad729be07e116b26b	COPYING
-diff --git a/package/x11r7/xcb-util-image/xcb-util-image.mk b/package/x11r7/xcb-util-image/xcb-util-image.mk
-index 705b8a7671..8ddb0be86d 100644
---- a/package/x11r7/xcb-util-image/xcb-util-image.mk
-+++ b/package/x11r7/xcb-util-image/xcb-util-image.mk
-@@ -9,6 +9,7 @@ XCB_UTIL_IMAGE_SITE = http://xcb.freedesktop.org/dist
- XCB_UTIL_IMAGE_SOURCE = xcb-util-image-$(XCB_UTIL_IMAGE_VERSION).tar.bz2
- XCB_UTIL_IMAGE_INSTALL_STAGING = YES
- XCB_UTIL_IMAGE_LICENSE = MIT
-+XCB_UTIL_IMAGE_LICENSE_FILES = COPYING
- XCB_UTIL_IMAGE_DEPENDENCIES = xcb-util
- 
- $(eval $(autotools-package))
+ > So, this series makes the generated image reproducible, and explains how
+ > to gnerate and push a tagged image.
+
+ > Once this series has been applied, we'll have to generate such a tagged
+ > image and update our .gitlab-ci.yml accordingly.
+
+Committed series, thanks - You are now officially our Docker expert ;)
+
+-- 
+Bye, Peter Korsgaard
