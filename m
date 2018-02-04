@@ -1,77 +1,51 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  4 Feb 2018 15:44:22 +0100
-Subject: [Buildroot] [PATCH 1/5] support/docker: limit the number of layers
+Date: Sun,  4 Feb 2018 15:44:23 +0100
+Subject: [Buildroot] [PATCH 2/5] support/docker: don't be silent when
+ setting up
 In-Reply-To: <cover.1517755438.git.yann.morin.1998@free.fr>
 References: <cover.1517755438.git.yann.morin.1998@free.fr>
-Message-ID: <963da874af158ab78aec15062cfe9349a9b1288d.1517755438.git.yann.morin.1998@free.fr>
+Message-ID: <e2a95790d1028f53be0c8e4cb0f636410f7ab309.1517755438.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The official documentation [0] suggests limiting the number of layers
-generated from a dockerfile. A layer is created for each RUN (and COPY
-and ADD) command. But we are only ever interested in the final image,
-so the intermediate layers are useless to us.
+This image is not built very often, and when it is, it is important to
+see what's going on, so don't be silent when installing packages from
+the distro, and since that can take a bit of time it thus serves as
+progress report...
 
-Limit the number of RUN commands to limit the number of generated
-layers.
-
-[0] https://docs.docker.com/develop/develop-images/dockerfile_best-practices/#minimize-the-number-of-layers
-
-Reported-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Peter Korsgaard <peter@korsgaard.com>
 Cc: Arnout Vandecappelle <arnout@mind.be>
 ---
- support/docker/Dockerfile | 30 +++++++++++++++---------------
- 1 file changed, 15 insertions(+), 15 deletions(-)
+ support/docker/Dockerfile | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
 diff --git a/support/docker/Dockerfile b/support/docker/Dockerfile
-index ebb471f7e5..23018585eb 100644
+index 23018585eb..aa2b38fcc9 100644
 --- a/support/docker/Dockerfile
 +++ b/support/docker/Dockerfile
-@@ -11,25 +11,25 @@ description="Container with everything needed to run Buildroot"
- # Setup environment
- ENV DEBIAN_FRONTEND noninteractive
+@@ -13,16 +13,16 @@ ENV DEBIAN_FRONTEND noninteractive
  
--RUN dpkg --add-architecture i386
  # The container has no package lists, so need to update first
--RUN apt-get update -y -qq
--RUN apt-get install -y -qq --no-install-recommends \
--    build-essential cmake libc6:i386 gcc-multilib \
--    bc ca-certificates file locales rsync \
--    cvs bzr git mercurial subversion wget \
--    cpio unzip \
--    libncurses5-dev \
--    python-nose2 python-pexpect qemu-system-arm qemu-system-x86
--RUN apt-get -q -y autoremove
--RUN apt-get -q -y clean
-+RUN dpkg --add-architecture i386 && \
-+    apt-get update -y -qq && \
-+    apt-get install -y -qq --no-install-recommends \
-+        build-essential cmake libc6:i386 gcc-multilib \
-+        bc ca-certificates file locales rsync \
-+        cvs bzr git mercurial subversion wget \
-+        cpio unzip \
-+        libncurses5-dev \
-+        python-nose2 python-pexpect qemu-system-arm qemu-system-x86 && \
-+    apt-get -q -y autoremove && \
-+    apt-get -q -y clean
+ RUN dpkg --add-architecture i386 && \
+-    apt-get update -y -qq && \
+-    apt-get install -y -qq --no-install-recommends \
++    apt-get update -y && \
++    apt-get install -y --no-install-recommends \
+         build-essential cmake libc6:i386 gcc-multilib \
+         bc ca-certificates file locales rsync \
+         cvs bzr git mercurial subversion wget \
+         cpio unzip \
+         libncurses5-dev \
+         python-nose2 python-pexpect qemu-system-arm qemu-system-x86 && \
+-    apt-get -q -y autoremove && \
+-    apt-get -q -y clean
++    apt-get -y autoremove && \
++    apt-get -y clean
  
  # To be able to generate a toolchain with locales, enable one UTF-8 locale
--RUN sed -i 's/# \(en_US.UTF-8\)/\1/' /etc/locale.gen
--RUN /usr/sbin/locale-gen
-+RUN sed -i 's/# \(en_US.UTF-8\)/\1/' /etc/locale.gen && \
-+    /usr/sbin/locale-gen
- 
--RUN useradd -ms /bin/bash br-user
--RUN chown -R br-user:br-user /home/br-user
-+RUN useradd -ms /bin/bash br-user && \
-+    chown -R br-user:br-user /home/br-user
- 
- USER br-user
- WORKDIR /home/br-user
+ RUN sed -i 's/# \(en_US.UTF-8\)/\1/' /etc/locale.gen && \
 -- 
 2.14.1
