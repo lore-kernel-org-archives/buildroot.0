@@ -1,154 +1,120 @@
 From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Sun,  4 Feb 2018 19:07:39 +0100
-Subject: [Buildroot] [PATCH v10 00/10] Add support for the Rust programming
- language
-Message-ID: <20180204180749.29942-1-eric.le.bihan.dev@free.fr>
+Date: Sun,  4 Feb 2018 19:07:40 +0100
+Subject: [Buildroot] [PATCH v10 01/10] rustc: new virtual package
+In-Reply-To: <20180204180749.29942-1-eric.le.bihan.dev@free.fr>
+References: <20180204180749.29942-1-eric.le.bihan.dev@free.fr>
+Message-ID: <20180204180749.29942-2-eric.le.bihan.dev@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This series adds support for the Rust programming language by adding the
-following packages:
+The compiler for the Rust programming language is called rustc.
 
- - rustc: a virtual package for the Rust compiler.
- - rust-bin: provides a pre-built version of rustc.
- - cargo-bin: provides a pre-built version of Rust package manager.
- - rust: builds rustc from source.
- - cargo: builds Rust package manager from source.
+There is only one reference implementation for it, based on LLVM, from
+the Rust project [1]. It can generate code for various architectures so
+it can be labeled as a cross-compiler. But, as for GCC, building it
+from source takes time.
 
-Only the host variants are provided.
+So it would be sensible to have at least one package which provides it
+as a pre-built version, fetched from the upstream project. Later another
+package can be added, to build it from source code.
 
-The rustc virtual package is inspired by the mysql one.
+In addition to the compiler, the standard library for the host and/or
+the target should also be fetched/built.
 
-v9 -> v10:
+So, add a virtual package named rustc to enable support for multiple
+providers.
 
- - add test cases in support/testing
- - add documentation about adding cargo-based packages
- - bump cargo to 0.24.0
- - bump rust to 1.23.0
- - bump cargo-bin to 0.24.0
- - bump rust-bin to 1.23.0
- - clarify origin of some hashes
- - reword some comments
- - use $(BR2_CMAKE_HOST_DEPENDENCY) wherever needed
- - move some options management from *.mk to Config.in
+Currently, only the host variant will be available to allow the user to
+cross-compile Rust programs for the target.
 
-v8 -> v9:
+[1] http://rust-lang.org
 
- - replace giant patch by post-extract hook
- - drop rust-cargo virtual package
- - explicitly enable SSL support in host-libcurl
-
-v7 -> v8:
-
- - replace cargo-bootstrap by cargo-bin
- - drop rust-bootstrap and use rust-bin instead
- - rust-bin and rust versions are the same
- - cargo-bin and cargo versions are the same
- - bump cargo to 0.23.0
- - bump rust to 1.22.1
- - add rust-cargo virtual package
-
-v6 -> v7:
-
- - add cargo 0.20.0
- - bump rust to 1.19.0
- - bump rust-bootstrap to 1.18.0
- - bump cargo-bootstrap to 0.19.0
- - bump rust-bin to 1.19.0
- - fix mips64 target name in rustc
-
-v5 -> v6:
-
- - bump rust to 1.18.0
- - bump rust-bootstrap to 1.17.0
- - bump rust-bin to 1.18.0
-
-v4 -> v5:
-
- - add rustc virtual package
- - add rust-bin, provider for rustc
- - rework rust to be a provider for rustc
- - rework some commit messages
-
-v3 -> v4:
-
- - bump rust to 1.16.0
- - bump rust-bootstrap to 1.15.1
- - add cargo-bootstrap
- - use built-in target specifications
- - drop external Python script to generate target specifications
- - enable support for PowerPC
- - expose host variant in menuconfig
-
-v2 -> v3:
-
- - bump rust to 1.10.0
- - rework and bump rust-bootstrap to 1.9.0
- - host-rust requires at least GCC 4.7 because of LLVM (suggested by R. Naour)
- - rust requires a glibc-based cross-compiler
- - rust requires GCC 5.x or above for Aarch64
-
-v1 -> v2:
-
- - bump rust to version 1.9.0.
- - drop patch for bzip2 support in host-python.
- - add package for jemalloc.
- - add dependency on host being a x86 machine.
- - add dependency on toolchain.
- - use dedicated package to provide bootstrapping binary: rust-bootstrap.
- - let ./configure find out host/build on its own.
- - remove entry from configuration menu.
-
-Eric Le Bihan (10):
-  rustc: new virtual package
-  rust-bin: new package
-  cargo-bin: new package
-  rust: new package
-  libssh2: add host variant
-  libhttpparser: add host variant
-  libcurl: add host variant
-  cargo: new package
-  docs/manual: document cargo-based packages
-  support/testing: add tests for Rust
-
- DEVELOPERS                                 |   4 ++
- docs/manual/adding-packages-cargo.txt      | 110 +++++++++++++++++++++++++++++
- docs/manual/adding-packages.txt            |   2 +
- package/Config.in.host                     |   2 +
- package/cargo-bin/cargo-bin.hash           |   8 +++
- package/cargo-bin/cargo-bin.mk             |  13 ++++
- package/cargo/Config.in.host               |   8 +++
- package/cargo/cargo.hash                   |   8 +++
- package/cargo/cargo.mk                     |  91 ++++++++++++++++++++++++
- package/cargo/config.in                    |   2 +
- package/libcurl/libcurl.mk                 |  14 ++++
- package/libhttpparser/libhttpparser.mk     |   9 +++
- package/libssh2/libssh2.mk                 |   6 ++
- package/rust-bin/rust-bin.hash             |  33 +++++++++
- package/rust-bin/rust-bin.mk               |  61 ++++++++++++++++
- package/rust/rust.hash                     |   5 ++
- package/rust/rust.mk                       |  79 +++++++++++++++++++++
- package/rustc/Config.in.host               |  79 +++++++++++++++++++++
- package/rustc/rustc.mk                     |  20 ++++++
- support/testing/tests/package/test_rust.py | 107 ++++++++++++++++++++++++++++
- 20 files changed, 661 insertions(+)
- create mode 100644 docs/manual/adding-packages-cargo.txt
- create mode 100644 package/cargo-bin/cargo-bin.hash
- create mode 100644 package/cargo-bin/cargo-bin.mk
- create mode 100644 package/cargo/Config.in.host
- create mode 100644 package/cargo/cargo.hash
- create mode 100644 package/cargo/cargo.mk
- create mode 100644 package/cargo/config.in
- create mode 100644 package/rust-bin/rust-bin.hash
- create mode 100644 package/rust-bin/rust-bin.mk
- create mode 100644 package/rust/rust.hash
- create mode 100644 package/rust/rust.mk
+Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+---
+ package/Config.in.host       |  1 +
+ package/rustc/Config.in.host | 31 +++++++++++++++++++++++++++++++
+ package/rustc/rustc.mk       | 20 ++++++++++++++++++++
+ 3 files changed, 52 insertions(+)
  create mode 100644 package/rustc/Config.in.host
  create mode 100644 package/rustc/rustc.mk
- create mode 100644 support/testing/tests/package/test_rust.py
 
---
+diff --git a/package/Config.in.host b/package/Config.in.host
+index dd6415bba5..2f20dd0e48 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -46,6 +46,7 @@ menu "Host utilities"
+ 	source "package/qemu/Config.in.host"
+ 	source "package/raspberrypi-usbboot/Config.in.host"
+ 	source "package/rauc/Config.in.host"
++	source "package/rustc/Config.in.host"
+ 	source "package/s6-rc/Config.in.host"
+ 	source "package/sam-ba/Config.in.host"
+ 	source "package/squashfs/Config.in.host"
+diff --git a/package/rustc/Config.in.host b/package/rustc/Config.in.host
+new file mode 100644
+index 0000000000..a49f635d65
+--- /dev/null
++++ b/package/rustc/Config.in.host
+@@ -0,0 +1,31 @@
++config BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS
++	bool
++	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
++	# The pre-built Rust standard library is only available for the
++	# following architectures/ABIs, and is built against glibc.
++	default y if BR2_i386
++	default y if BR2_x86_64
++	default y if BR2_aarch64
++	default y if BR2_arm && !BR2_ARM_CPU_ARMV4 && !BR2_ARM_CPU_ARMV5
++	default y if BR2_powerpc || BR2_powerpc64
++	default y if (BR2_mips || BR2_mipsel) && !BR2_MIPS_CPU_MIPS32R6
++	default y if (BR2_mips64 || BR2_mips64el) && !BR2_MIPS_CPU_MIPS64R6 \
++		&& BR2_MIPS_NABI64
++	depends on BR2_TOOLCHAIN_USES_GLIBC
++
++config BR2_PACKAGE_HOST_RUSTC_ARCH
++	string
++	default "armv7"  if BR2_ARM_CPU_ARMV7A
++	default BR2_ARCH if !BR2_ARM_CPU_ARMV7A
++
++config BR2_PACKAGE_HOST_RUSTC_ABI
++	string
++	default "eabi"   if BR2_ARM_EABI
++	default "eabihf" if BR2_ARM_EABIHF
++	default "abi64"  if BR2_MIPS_NABI64
++
++config BR2_PACKAGE_HAS_HOST_RUSTC
++	bool
++
++config BR2_PACKAGE_PROVIDES_HOST_RUSTC
++	string
+diff --git a/package/rustc/rustc.mk b/package/rustc/rustc.mk
+new file mode 100644
+index 0000000000..7a951c0cfd
+--- /dev/null
++++ b/package/rustc/rustc.mk
+@@ -0,0 +1,20 @@
++################################################################################
++#
++# rustc
++#
++################################################################################
++
++RUSTC_ARCH = $(call qstrip,$(BR2_PACKAGE_HOST_RUSTC_ARCH))
++RUSTC_ABI = $(call qstrip,$(BR2_PACKAGE_HOST_RUSTC_ABI))
++
++RUST_TARGET_NAME = $(RUSTC_ARCH)-unknown-linux-gnu$(RUSTC_ABI)
++
++ifeq ($(HOSTARCH),x86)
++RUSTC_HOST_ARCH = i686
++else
++RUSTC_HOST_ARCH = $(HOSTARCH)
++endif
++
++RUST_HOST_NAME = $(RUSTC_HOST_ARCH)-unknown-linux-gnu
++
++$(eval $(host-virtual-package))
+-- 
 2.14.3
