@@ -1,45 +1,44 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  4 Feb 2018 13:05:27 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libsamplerate: add optional
- dependency to alsa-lib
-Message-ID: <20180204120527.26926-1-bernd.kuhls@t-online.de>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 04 Feb 2018 13:38:29 +0100
+Subject: [Buildroot] [PATCH] configs/qemu_sparc_ss10: add Linux kernel
+ patch to fix build with gcc 7.x
+In-Reply-To: <20170813213245.27199-1-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Sun, 13 Aug 2017 23:32:45 +0200")
+References: <20170813213245.27199-1-thomas.petazzoni@free-electrons.com>
+Message-ID: <87shahx73u.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Configure summary without this patch and without alsa-lib built before:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-  Extra tools required for testing and examples :
-[...]
-    Have ALSA : ................... no
+ > This commit adds a Linux kernel patch that fixes the build of the
+ > qemu_sparc_ss10 defconfig when used with gcc 7.x:
 
-and with this patch
+ > arch/sparc/kernel/pcic.c: In function ?pcibios_fixup_bus?:
+ > arch/sparc/kernel/pcic.c:647:8: error: ?cmd? may be used uninitialized in this function [-Werror=maybe-uninitialized]
+ >     cmd |= PCI_COMMAND_IO;
+ >         ^~
 
-  Extra tools required for testing and examples :
-[...]
-    Have ALSA : ................... yes
+ > The patch has been submitted upstream.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/libsamplerate/libsamplerate.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ > ---
+ > I don't know if we want to merge this patch in Buildroot. Indeed:
 
-diff --git a/package/libsamplerate/libsamplerate.mk b/package/libsamplerate/libsamplerate.mk
-index 76e93f913e..c107650cb4 100644
---- a/package/libsamplerate/libsamplerate.mk
-+++ b/package/libsamplerate/libsamplerate.mk
-@@ -12,6 +12,10 @@ LIBSAMPLERATE_CONF_OPTS = --disable-fftw --program-transform-name=''
- LIBSAMPLERATE_LICENSE = BSD-2-Clause
- LIBSAMPLERATE_LICENSE_FILES = COPYING
- 
-+ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
-+LIBSAMPLERATE_DEPENDENCIES += alsa-lib
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBSNDFILE),y)
- LIBSAMPLERATE_DEPENDENCIES += libsndfile
- endif
+ >  - The defconfig doesn't use gcc 7.x currently, so the problem doesn't
+ >    exist with the defconfig as-is.
+
+ >  - This problem exists for essentially all SPARC configurations that
+ >    have PCI support enabled.
+
+ > The reason why I encountered this problem is because I'm testing
+ > bleeding edge toolchains (based on gcc 7.x) with our Qemu defconfigs.
+
+I see this is mainline since 4.13, so I've marked this as rejected in
+patchwork. When we move to gcc7.x we can just bump the kernel version.
+
 -- 
-2.11.0
+Bye, Peter Korsgaard
