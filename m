@@ -1,43 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 4 Feb 2018 21:57:37 +0100
-Subject: [Buildroot] [git commit] support/docker: use a known base
- distribution
-Message-ID: <20180204210102.B085288391@busybox.osuosl.org>
+Date: Sun, 4 Feb 2018 21:53:02 +0100
+Subject: [Buildroot] [git commit] support/docker: don't be silent when
+ setting up
+Message-ID: <20180204210102.A525B88376@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3c24b8bd401df6605661fdc83805c363eb0114d0
+commit: https://git.buildroot.net/buildroot/commit/?id=efa87446559bda7a5661cbaf14a2dd011f3d7ce9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Currently, we are using debian:stable, which is subject to change with
-time, as new stable versions of Debian are released/updated.
-
-Use the latest tagged stable release, stretch-20171210 as of today, as
-the base distribution to use.
-
-This will ease reproducible builds in the future.
+This image is not built very often, and when it is, it is important to
+see what's going on, so don't be silent when installing packages from
+the distro, and since that can take a bit of time it thus serves as
+progress report...
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/docker/Dockerfile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ support/docker/Dockerfile | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
 diff --git a/support/docker/Dockerfile b/support/docker/Dockerfile
-index aa2b38fcc9..49b74b88bd 100644
+index 23018585eb..aa2b38fcc9 100644
 --- a/support/docker/Dockerfile
 +++ b/support/docker/Dockerfile
-@@ -3,7 +3,7 @@
- #   sudo docker build -t buildroot/base support/docker
- #   sudo docker push buildroot/base
+@@ -13,16 +13,16 @@ ENV DEBIAN_FRONTEND noninteractive
  
--FROM debian:stable
-+FROM debian:stretch-20171210
- LABEL maintainer="Buildroot mailing list <buildroot@buildroot.org>" \
-       vendor="Buildroot" \
- description="Container with everything needed to run Buildroot"
+ # The container has no package lists, so need to update first
+ RUN dpkg --add-architecture i386 && \
+-    apt-get update -y -qq && \
+-    apt-get install -y -qq --no-install-recommends \
++    apt-get update -y && \
++    apt-get install -y --no-install-recommends \
+         build-essential cmake libc6:i386 gcc-multilib \
+         bc ca-certificates file locales rsync \
+         cvs bzr git mercurial subversion wget \
+         cpio unzip \
+         libncurses5-dev \
+         python-nose2 python-pexpect qemu-system-arm qemu-system-x86 && \
+-    apt-get -q -y autoremove && \
+-    apt-get -q -y clean
++    apt-get -y autoremove && \
++    apt-get -y clean
+ 
+ # To be able to generate a toolchain with locales, enable one UTF-8 locale
+ RUN sed -i 's/# \(en_US.UTF-8\)/\1/' /etc/locale.gen && \
