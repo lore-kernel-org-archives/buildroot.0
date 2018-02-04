@@ -1,44 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 4 Feb 2018 21:58:59 +0100
-Subject: [Buildroot] [git commit] support/dockker: create and push tagged
- images
-Message-ID: <20180204210102.CC49F88391@busybox.osuosl.org>
+Date: Sun, 4 Feb 2018 21:57:37 +0100
+Subject: [Buildroot] [git commit] support/docker: use a known base
+ distribution
+Message-ID: <20180204210102.B085288391@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a874fc151a3188721543110021e45de9af33b353
+commit: https://git.buildroot.net/buildroot/commit/?id=3c24b8bd401df6605661fdc83805c363eb0114d0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Currently, we refer to the latest version of the image, which means we
-can't guarantee any reproducibility. Also, it measn we can't have a
-separate images for the maintenance branches (especially the LTS) and
-master.
+Currently, we are using debian:stable, which is subject to change with
+time, as new stable versions of Debian are released/updated.
 
-Update the comment in the Dockerfile to create and push tagged images.
+Use the latest tagged stable release, stretch-20171210 as of today, as
+the base distribution to use.
+
+This will ease reproducible builds in the future.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Arnout Vandecappelle <arnout@mind.be>
 Cc: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/docker/Dockerfile | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ support/docker/Dockerfile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/support/docker/Dockerfile b/support/docker/Dockerfile
-index f18d195f37..474e073c61 100644
+index aa2b38fcc9..49b74b88bd 100644
 --- a/support/docker/Dockerfile
 +++ b/support/docker/Dockerfile
-@@ -1,7 +1,7 @@
- # This Dockerfile generates the docker image that gets used by Gitlab CI
--# To build it:
--#   sudo docker build -t buildroot/base support/docker
--#   sudo docker push buildroot/base
-+# To build it (YYYYMMDD.HHMM is the current date and time in UTC):
-+#   sudo docker build -t buildroot/base:YYYYMMDD.HHMM support/docker
-+#   sudo docker push buildroot/base:YYYYMMDD.HHMM
+@@ -3,7 +3,7 @@
+ #   sudo docker build -t buildroot/base support/docker
+ #   sudo docker push buildroot/base
  
- # We use a specific tag for the base image *and* the corresponding date
- # for the repository., so do not forget to update the apt-sources.list
+-FROM debian:stable
++FROM debian:stretch-20171210
+ LABEL maintainer="Buildroot mailing list <buildroot@buildroot.org>" \
+       vendor="Buildroot" \
+ description="Container with everything needed to run Buildroot"
