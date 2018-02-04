@@ -1,40 +1,40 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Sun, 4 Feb 2018 09:06:30 +0100
-Subject: [Buildroot] [PATCH] python-virtualenv: new package
-In-Reply-To: <87po5lz0uf.fsf@dell.be.48ers.dk>
-References: <1517523718-30586-1-git-send-email-matthew.weber@rockwellcollins.com>
- <87po5lz0uf.fsf@dell.be.48ers.dk>
-Message-ID: <CANQCQpYGEiSND-XdpmAo57cWcFS0eM_+DhSqgubLUgve_w-PQg@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sun, 4 Feb 2018 10:43:04 +0200
+Subject: [Buildroot] [PATCH 1/1] gconf: add dependency on toolchain w/
+ dynamic lib
+In-Reply-To: <87y3k9zp1h.fsf@dell.be.48ers.dk>
+References: <20180122060216.pmi3l63cmtboingq@sapphire.tkos.co.il>
+ <20180122061121.9702-1-joseph.kogut@gmail.com>
+ <87y3k9zp1h.fsf@dell.be.48ers.dk>
+Message-ID: <20180204084304.thee3f6dhvkkv5gs@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter,
+Hi Peter,
 
-On Sun, Feb 4, 2018 at 8:10 AM, Peter Korsgaard <peter@korsgaard.com> wrote:
->>>>>> "Matt" == Matt Weber <matthew.weber@rockwellcollins.com> writes:
->
->  > A tool for creating a isolated python env.
->  > Within Buildroot, the basic problem being addressed is
->  > one of dependencies and versions, and indirectly permissions.
->  > A great example are the Django and AMQP protocol packages.
->  > An applications depending on these are usually locked into a specific
->  > version.
->
->  > Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
->
-> Can you explain what the use case for this is? Is this to install
-> additional python packages at runtime on the target?
->
+On Sat, Feb 03, 2018 at 11:28:10PM +0100, Peter Korsgaard wrote:
+> >>>>> "Joseph" == Joseph Kogut <joseph.kogut@gmail.com> writes:
+> 
+>  > GConf fails to build when BR2_STATIC_LIBS=y.
+>  > Fixes:
+>  >     http://autobuild.buildroot.net/results/ad8a9b082006f0334010c9c4dc5a90c2071df121/
+> 
+>  > Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
+>  > ---
+> 
+>  > Thanks for the feedback, Baruch. I've updated the commit message.
+> 
+> Committed, thanks.
 
-The main use case is to have a sandbox where you can deploy a
-configuration of python packages to support an existing application
-where you can't (reasonably) adjust all the buildroot versions of the
-similar python packages to match.  My plan is to build the main OS
-build using buildroot and then combine the existing virtualenv into
-the rootfs for deployment.  There isn't a runtime need to any dynamic
-changes to the env.
+Not in master as of 5f3246a1d69 (gdk-pixbuf: unbreak gdk-pixbuf 
+loaders.cache).
 
-Matt
+baruch
+
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
