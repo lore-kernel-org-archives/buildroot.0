@@ -1,54 +1,47 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 4 Feb 2018 10:54:13 +0100
-Subject: [Buildroot] [PATCH v1 2/2] dhcp: disable isc assertions
- (reproducible builds)
-In-Reply-To: <877ert20yj.fsf@dell.be.48ers.dk>
-References: <20171027192424.19760-1-ps.report@gmx.net>
- <20171027192424.19760-2-ps.report@gmx.net>
- <20180108211857.2166f95e@windsurf> <20180130175402.GA3468@scaer>
- <877ert20yj.fsf@dell.be.48ers.dk>
-Message-ID: <20180204095413.GA2411@scaer>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 4 Feb 2018 10:57:01 +0100
+Subject: [Buildroot] [git commit] gconf: add dependency on toolchain w/
+ dynamic lib
+Message-ID: <20180204095716.B5FF188347@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=032e229e4425ff7bc1c128be5ebc467e9d6c4203
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2018-02-03 22:54 +0100, Peter Korsgaard spake thusly:
-> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
-[--SNIP--]
->  > Now, about reproducibility... We could at least pass -DFILE=\"\" and so
->  > on from inside our gcc-wrapper, like we already do for __DATE__ and
->  > __TIME__. Yes, that would give an empty filename in assertions and the
->  > likes, but do we care in the end?
-> 
-> It would be nicer if we could pass basename($file), but that would break
-> with compilations with multiple source files passed to gcc or header
-> files, so yeah, perhaps that is the best way forward.
-> 
-> How does E.G. Debian handle it?
+GConf fails to build when BR2_STATIC_LIBS=y.
 
-I could not find an authoritative source for this, but from what I could
-hint from [0] (see the part about "Qt tests and __FILE__"), they do have
-a patched gcc and a special dpkg which use the BUILD_PATH_PREFIX_MAP
-environment variable as specified iby reproducible-builds.org [1].
+Fixes:
+    http://autobuild.buildroot.net/results/ad8a9b082006f0334010c9c4dc5a90c2071df121/
 
-Also, upstream gcc has an "in-progress" upstream solution being worked
-on, based on BUILD_PATH_PREFIX_MAP, but they did not like it [2]...
+Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/gconf/Config.in | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-[0] https://reproducible.alioth.debian.org/blog/posts/134/
-[1] https://reproducible-builds.org/specs/build-path-prefix-map/
-[2] https://gcc.gnu.org/ml/gcc-patches/2017-08/msg00232.html
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/gconf/Config.in b/package/gconf/Config.in
+index a68287525b..a967d61644 100644
+--- a/package/gconf/Config.in
++++ b/package/gconf/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_GCONF
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, libglib2
+ 	depends on BR2_USE_MMU # dbus, libglib2
+ 	depends on BR2_USE_WCHAR # libglib2
++	depends on !BR2_STATIC_LIBS
+ 	select BR2_PACKAGE_DBUS
+ 	select BR2_PACKAGE_DBUS_GLIB
+ 	select BR2_PACKAGE_LIBGLIB2
+@@ -14,6 +15,7 @@ config BR2_PACKAGE_GCONF
+ 
+ 	  https://projects.gnome.org/gconf/
+ 
+-comment "gconf needs a toolchain w/ threads, wchar"
++comment "gconf needs a toolchain w/ threads, wchar, dynamic library"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR \
++		|| BR2_STATIC_LIBS
