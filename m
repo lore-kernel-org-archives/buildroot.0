@@ -1,33 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 04 Feb 2018 22:00:47 +0100
-Subject: [Buildroot] [PATCH 0/5] support/docker: generate reproducible
- base images
-In-Reply-To: <cover.1517755438.git.yann.morin.1998@free.fr> (Yann E. MORIN's
- message of "Sun, 4 Feb 2018 15:44:22 +0100")
-References: <cover.1517755438.git.yann.morin.1998@free.fr>
-Message-ID: <87vafcwjuo.fsf@dell.be.48ers.dk>
+Date: Sun, 4 Feb 2018 21:58:59 +0100
+Subject: [Buildroot] [git commit] support/dockker: create and push tagged
+ images
+Message-ID: <20180204210102.CC49F88391@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=a874fc151a3188721543110021e45de9af33b353
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Hello All!
- > Currently, we only ever refer to the "latest" version of the image.
- > This is not nice because:
- >   1. this is not reproducible;
- >   2. we can't have different images between master and the various
- >      maintenance branches.
+Currently, we refer to the latest version of the image, which means we
+can't guarantee any reproducibility. Also, it measn we can't have a
+separate images for the maintenance branches (especially the LTS) and
+master.
 
- > So, this series makes the generated image reproducible, and explains how
- > to gnerate and push a tagged image.
+Update the comment in the Dockerfile to create and push tagged images.
 
- > Once this series has been applied, we'll have to generate such a tagged
- > image and update our .gitlab-ci.yml accordingly.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ support/docker/Dockerfile | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Committed series, thanks - You are now officially our Docker expert ;)
-
--- 
-Bye, Peter Korsgaard
+diff --git a/support/docker/Dockerfile b/support/docker/Dockerfile
+index f18d195f37..474e073c61 100644
+--- a/support/docker/Dockerfile
++++ b/support/docker/Dockerfile
+@@ -1,7 +1,7 @@
+ # This Dockerfile generates the docker image that gets used by Gitlab CI
+-# To build it:
+-#   sudo docker build -t buildroot/base support/docker
+-#   sudo docker push buildroot/base
++# To build it (YYYYMMDD.HHMM is the current date and time in UTC):
++#   sudo docker build -t buildroot/base:YYYYMMDD.HHMM support/docker
++#   sudo docker push buildroot/base:YYYYMMDD.HHMM
+ 
+ # We use a specific tag for the base image *and* the corresponding date
+ # for the repository., so do not forget to update the apt-sources.list
