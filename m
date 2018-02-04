@@ -1,40 +1,31 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 4 Feb 2018 10:43:04 +0200
-Subject: [Buildroot] [PATCH 1/1] gconf: add dependency on toolchain w/
- dynamic lib
-In-Reply-To: <87y3k9zp1h.fsf@dell.be.48ers.dk>
-References: <20180122060216.pmi3l63cmtboingq@sapphire.tkos.co.il>
- <20180122061121.9702-1-joseph.kogut@gmail.com>
- <87y3k9zp1h.fsf@dell.be.48ers.dk>
-Message-ID: <20180204084304.thee3f6dhvkkv5gs@sapphire.tkos.co.il>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 04 Feb 2018 10:31:49 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libfribidi: Switch _SITE to
+ github
+References: <20180203222346.19803-1-bernd.kuhls@t-online.de>
+Message-ID: <5h0jkex9qo.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+Am Sat, 03 Feb 2018 23:23:46 +0100 schrieb Bernd Kuhls:
 
-On Sat, Feb 03, 2018 at 11:28:10PM +0100, Peter Korsgaard wrote:
-> >>>>> "Joseph" == Joseph Kogut <joseph.kogut@gmail.com> writes:
+> The old site is not available anymore, fribidi.org redirects to
+> gihub.com now. Added license hash.
 > 
->  > GConf fails to build when BR2_STATIC_LIBS=y.
->  > Fixes:
->  >     http://autobuild.buildroot.net/results/ad8a9b082006f0334010c9c4dc5a90c2071df121/
-> 
->  > Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
->  > ---
-> 
->  > Thanks for the feedback, Baruch. I've updated the commit message.
-> 
-> Committed, thanks.
+> Signed-off-by: Bernd Kuhls
+> <bernd.kuhls@t-online.de>
+> ---
+>  package/libfribidi/Config.in       | 2 +-
+>  package/libfribidi/libfribidi.hash | 5 +++--
+>  package/libfribidi/libfribidi.mk   | 3 +--
+>  3 files changed, 5 insertions(+), 5 deletions(-)
 
-Not in master as of 5f3246a1d69 (gdk-pixbuf: unbreak gdk-pixbuf 
-loaders.cache).
+Hi,
 
-baruch
+marked patch as "Defered" on patchworks, switching to the github tarball 
+needs more changes.
 
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Regards, Bernd
