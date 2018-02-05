@@ -1,50 +1,108 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Mon,  5 Feb 2018 21:57:15 +0100
-Subject: [Buildroot] [PATCH 4/5] package/glibc: remove GLIBC_SRC_SUBDIR
+Date: Mon,  5 Feb 2018 21:57:13 +0100
+Subject: [Buildroot] [PATCH 2/5] package/pulseaudio: only define
+ memfd_create() if not already defined
 In-Reply-To: <20180205205716.4279-1-romain.naour@gmail.com>
 References: <20180205205716.4279-1-romain.naour@gmail.com>
-Message-ID: <20180205205716.4279-4-romain.naour@gmail.com>
+Message-ID: <20180205205716.4279-2-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-GLIBC_SRC_SUBDIR was needed when Buildroot supported
-eglibc which stored all sources in a sub-directory.
-It was not removed by the commit removing eglibc support [1].
-
-[1] 500de2598a4902a0e9ec53f7b475046ff17c6681
+Before glibc version 2.27 there was no wrapper for memfd_create(2).
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- package/glibc/glibc.mk | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ ...ers-only-define-memfd_create-if-not-alrea.patch | 64 ++++++++++++++++++++++
+ package/pulseaudio/pulseaudio.mk                   |  3 +
+ 2 files changed, 67 insertions(+)
+ create mode 100644 package/pulseaudio/0002-memfd-wrappers-only-define-memfd_create-if-not-alrea.patch
 
-diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-index fd79d84f15..cf4bdec065 100644
---- a/package/glibc/glibc.mk
-+++ b/package/glibc/glibc.mk
-@@ -20,10 +20,8 @@ GLIBC_VERSION = glibc-2.26-107-g73a92363619e52c458146e903dfb9b1ba823aa40
- GLIBC_SITE = $(call github,bminor,glibc,$(GLIBC_VERSION))
- endif
+diff --git a/package/pulseaudio/0002-memfd-wrappers-only-define-memfd_create-if-not-alrea.patch b/package/pulseaudio/0002-memfd-wrappers-only-define-memfd_create-if-not-alrea.patch
+new file mode 100644
+index 0000000000..8f103bf201
+--- /dev/null
++++ b/package/pulseaudio/0002-memfd-wrappers-only-define-memfd_create-if-not-alrea.patch
+@@ -0,0 +1,64 @@
++From dfb0460fb4743aec047cdf755a660a9ac2d0f3fb Mon Sep 17 00:00:00 2001
++From: Tanu Kaskinen <tanuk@iki.fi>
++Date: Wed, 24 Jan 2018 03:51:49 +0200
++Subject: [PATCH] memfd-wrappers: only define memfd_create() if not already
++ defined
++
++glibc 2.27 is to be released soon, and it will provide memfd_create().
++If glibc provides the function, we must not define it ourselves,
++otherwise building fails due to conflict between the two implementations
++of the same function.
++
++BugLink: https://bugs.freedesktop.org/show_bug.cgi?id=104733
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
++---
++ configure.ac                   | 3 +++
++ src/pulsecore/memfd-wrappers.h | 7 ++++---
++ 2 files changed, 7 insertions(+), 3 deletions(-)
++
++diff --git a/configure.ac b/configure.ac
++index 0084c86e..0eb44b08 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -610,6 +610,9 @@ AS_IF([test "x$enable_memfd" = "xyes" && test "x$HAVE_MEMFD" = "x0"],
++     [AC_MSG_ERROR([*** Your Linux kernel does not support memfd shared memory.
++                   *** Use linux v3.17 or higher for such a feature.])])
++ 
+++AS_IF([test "x$HAVE_MEMFD" = "x1"],
+++    AC_CHECK_FUNCS([memfd_create]))
+++
++ AC_SUBST(HAVE_MEMFD)
++ AM_CONDITIONAL([HAVE_MEMFD], [test "x$HAVE_MEMFD" = x1])
++ AS_IF([test "x$HAVE_MEMFD" = "x1"], AC_DEFINE([HAVE_MEMFD], 1, [Have memfd shared memory.]))
++diff --git a/src/pulsecore/memfd-wrappers.h b/src/pulsecore/memfd-wrappers.h
++index 3bed9b2b..c7aadfd3 100644
++--- a/src/pulsecore/memfd-wrappers.h
+++++ b/src/pulsecore/memfd-wrappers.h
++@@ -20,13 +20,14 @@
++   License along with PulseAudio; if not, see <http://www.gnu.org/licenses/>.
++ ***/
++ 
++-#ifdef HAVE_MEMFD
+++#if defined(HAVE_MEMFD) && !defined(HAVE_MEMFD_CREATE)
++ 
++ #include <sys/syscall.h>
++ #include <fcntl.h>
++ 
++ /*
++- * No glibc wrappers exist for memfd_create(2), so provide our own.
+++ * Before glibc version 2.27 there was no wrapper for memfd_create(2),
+++ * so we have to provide our own.
++  *
++  * Also define memfd fcntl sealing macros. While they are already
++  * defined in the kernel header file <linux/fcntl.h>, that file as
++@@ -63,6 +64,6 @@ static inline int memfd_create(const char *name, unsigned int flags) {
++ #define F_SEAL_WRITE    0x0008  /* prevent writes */
++ #endif
++ 
++-#endif /* HAVE_MEMFD */
+++#endif /* HAVE_MEMFD && !HAVE_MEMFD_CREATE */
++ 
++ #endif
++-- 
++2.14.3
++
+diff --git a/package/pulseaudio/pulseaudio.mk b/package/pulseaudio/pulseaudio.mk
+index 13fcec52a3..f59828d43d 100644
+--- a/package/pulseaudio/pulseaudio.mk
++++ b/package/pulseaudio/pulseaudio.mk
+@@ -15,6 +15,9 @@ PULSEAUDIO_CONF_OPTS = \
+ 	--disable-legacy-database-entry-format \
+ 	--disable-manpages
  
--GLIBC_SRC_SUBDIR = .
--
- GLIBC_LICENSE = GPL-2.0+ (programs), LGPL-2.1+, BSD-3-Clause, MIT (library)
--GLIBC_LICENSE_FILES = $(addprefix $(GLIBC_SRC_SUBDIR)/,COPYING COPYING.LIB LICENSES)
-+GLIBC_LICENSE_FILES = COPYING COPYING.LIB LICENSES
- 
- # glibc is part of the toolchain so disable the toolchain dependency
- GLIBC_ADD_TOOLCHAIN_DEPENDENCY = NO
-@@ -86,7 +84,7 @@ define GLIBC_CONFIGURE_CMDS
- 		$(TARGET_CONFIGURE_OPTS) \
- 		CFLAGS="-O2 $(GLIBC_EXTRA_CFLAGS)" CPPFLAGS="" \
- 		CXXFLAGS="-O2 $(GLIBC_EXTRA_CFLAGS)" \
--		$(SHELL) $(@D)/$(GLIBC_SRC_SUBDIR)/configure \
-+		$(SHELL) $(@D)/configure \
- 		ac_cv_path_BASH_SHELL=/bin/bash \
- 		libc_cv_forced_unwind=yes \
- 		libc_cv_ssp=no \
++# 0001-memfd-wrappers-only-define-memfd_create-if-not-alrea.patch
++PULSEAUDIO_AUTORECONF = YES
++
+ PULSEAUDIO_DEPENDENCIES = \
+ 	host-pkgconf libtool libsndfile speex host-intltool \
+ 	$(if $(BR2_PACKAGE_LIBGLIB2),libglib2) \
 -- 
 2.14.3
