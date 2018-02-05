@@ -1,28 +1,54 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 5 Feb 2018 17:24:45 +0100
-Subject: [Buildroot] [git commit] CHANGES: add 2018.02-rc1 release date
-Message-ID: <20180205162551.390AF88432@busybox.osuosl.org>
+Date: Mon, 5 Feb 2018 17:24:11 +0100
+Subject: [Buildroot] [git commit] docs/website/news.html: update for
+ 2018.02-rc1
+Message-ID: <20180205162551.1CB0E88432@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ca7bf21fbf04f28ed503711b6daedcc0108a7faf
+commit: https://git.buildroot.net/buildroot/commit/?id=f367a2f16504624ccc87f29374044be474b13170
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- CHANGES | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ docs/website/news.html | 24 ++++++++++++++++++++++++
+ 1 file changed, 24 insertions(+)
 
-diff --git a/CHANGES b/CHANGES
-index 61f04ec134..b897d4f996 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,4 +1,4 @@
--2018.02-rc1, To be released
-+2018.02-rc1, Released February 5th, 2018
+diff --git a/docs/website/news.html b/docs/website/news.html
+index 59093577c9..e194d68b7e 100644
+--- a/docs/website/news.html
++++ b/docs/website/news.html
+@@ -9,6 +9,30 @@
+ <h2>News</h2>
+ <ul class="timeline">
  
- 	The global source-check and per-package <pkg>-source-check
- 	targets have been removed.
++  <li class="timeline-inverted">
++    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
++    <div class="timeline-panel">
++      <div class="timeline-heading">
++	<h4 class="timeline-title">2018.02-rc1 released</h4>
++	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>5 February 2018</small></p>
++      </div>
++      <div class="timeline-body">
++	<p>We have a new release candidate! Lots of changes all over the
++	  tree, see the
++	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2018.02-rc1">CHANGES</a>
++	  file for details and read the
++	  <a href="http://lists.busybox.net/pipermail/buildroot/2018-February/213171.html">announcement</a>.
++	</p>
++
++	<p>Head to the <a href="/downloads/">downloads page</a> to pick up the
++	  <a href="/downloads/buildroot-2018.02-rc1.tar.bz2">2018.02-rc1
++	    release candidate</a>, and report any problems found to the
++	  <a href="support.html">mailing list</a> or
++	  <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++      </div>
++    </div>
++  </li>
++
+   <li>
+     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
+     <div class="timeline-panel">
