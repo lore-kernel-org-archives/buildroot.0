@@ -1,152 +1,141 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Mon, 5 Feb 2018 14:57:48 +0100
-Subject: [Buildroot] [git commit] docs/manual: document cargo-based packages
-Message-ID: <20180205140233.B6CEF87D9F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/testing: add tests for Rust
+Message-ID: <20180205140233.CE756821B8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d0ac3c9b2119a45784494221b3a29f85eed826c5
+commit: https://git.buildroot.net/buildroot/commit/?id=e9429539ec819ab32f73414deb05af632a9405cf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add instructions for adding a package which uses Cargo as build system.
+To test the support for the Rust language, the following tests are added:
 
-[Peter: fix indentation]
+- building Rust compiler and Cargo from source.
+- installing a pre-built Rust compiler and building Cargo from source.
+
+For each test, a Rust test program is built and installed in the root file
+system of a ARM vexpress QEMU system. The test is declared OK if the program can
+be run properly from the test system.
+
 Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/manual/adding-packages-cargo.txt | 110 ++++++++++++++++++++++++++++++++++
- docs/manual/adding-packages.txt       |   2 +
- 2 files changed, 112 insertions(+)
+ support/testing/tests/package/test_rust.py | 107 +++++++++++++++++++++++++++++
+ 1 file changed, 107 insertions(+)
 
-diff --git a/docs/manual/adding-packages-cargo.txt b/docs/manual/adding-packages-cargo.txt
+diff --git a/support/testing/tests/package/test_rust.py b/support/testing/tests/package/test_rust.py
 new file mode 100644
-index 0000000000..3f9ddfed16
+index 0000000000..8035f8b83a
 --- /dev/null
-+++ b/docs/manual/adding-packages-cargo.txt
-@@ -0,0 +1,110 @@
-+// -*- mode:doc; -*-
-+// vim: set syntax=asciidoc:
++++ b/support/testing/tests/package/test_rust.py
+@@ -0,0 +1,107 @@
++import os
++import tempfile
++import subprocess
++import shutil
 +
-+=== Integration of Cargo-based packages
++import infra.basetest
 +
-+Cargo is the package manager for the Rust programming language. It allows the
-+user to build programs or libraries written in Rust, but it also downloads and
-+manages their dependencies, to ensure repeatable builds. Cargo packages are
-+called "crates".
 +
-+[[cargo-package-tutorial]]
++class TestRustBase(infra.basetest.BRTest):
 +
-+==== Cargo-based package's +Config.in+ file
++    target = 'armv7-unknown-linux-gnueabihf'
++    crate = 'hello-world'
 +
-+The +Config.in+ file of Cargo-based package 'foo' should contain:
++    def login(self):
++        img = os.path.join(self.builddir, "images", "rootfs.cpio")
++        self.emulator.boot(arch="armv7",
++                           kernel="builtin",
++                           options=["-initrd", img])
++        self.emulator.login()
 +
-+---------------------------
-+01: config BR2_PACKAGE_FOO
-+02: 	bool "foo"
-+03: 	depends on BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS
-+04: 	select BR2_PACKAGE_HOST_CARGO
-+05: 	help
-+06: 	  This is a comment that explains what foo is.
-+07:
-+08: 	  http://foosoftware.org/foo/
-+---------------------------
++    def build_test_prog(self):
++        hostdir = os.path.join(self.builddir, 'host')
++        env = os.environ.copy()
++        env["PATH"] = "{}:".format(os.path.join(hostdir, 'bin')) + env["PATH"]
++        env["CARGO_HOME"] = os.path.join(hostdir, 'usr', 'share', 'cargo')
++        env["RUST_TARGET_PATH"] = os.path.join(hostdir, 'etc', 'rustc')
++        cargo = os.path.join(hostdir, 'bin', 'cargo')
++        workdir = os.path.join(tempfile.mkdtemp(suffix='-br2-testing-rust'),
++                               self.crate)
++        manifest = os.path.join(workdir, 'Cargo.toml')
++        prog = os.path.join(workdir, 'target', self.target, 'debug', self.crate)
 +
-+==== Cargo-based package's +.mk+ file
++        cmd = [cargo, 'init', '--bin', '--vcs', 'none', '-vv', workdir]
++        ret = subprocess.call(cmd,
++                              stdout=self.b.logfile,
++                              stderr=self.b.logfile,
++                              env=env)
++        if ret != 0:
++            raise SystemError("Cargo init failed")
 +
-+Buildroot does not (yet) provide a dedicated package infrastructure for
-+Cargo-based packages. So, we will explain how to write a +.mk+ file for such a
-+package. Let's start with an example:
++        cmd = [
++            cargo, 'build', '-vv', '--target', self.target,
++            '--manifest-path', manifest
++        ]
++        ret = subprocess.call(cmd,
++                              stdout=self.b.logfile,
++                              stderr=self.b.logfile,
++                              env=env)
++        if ret != 0:
++            raise SystemError("Cargo build failed")
 +
-+------------------------------
-+01: ################################################################################
-+02: #
-+03: # foo
-+04: #
-+05: ################################################################################
-+06:
-+07: FOO_VERSION = 1.0
-+08: FOO_SOURCE = foo-$(FOO_VERSION).tar.gz
-+09: FOO_SITE = http://www.foosoftware.org/download
-+10: FOO_LICENSE = GPLv3+
-+11: FOO_LICENSE_FILES = COPYING
-+12:
-+13: FOO_DEPENDENCIES = host-cargo
-+14:
-+15: FOO_CARGO_ENV = CARGO_HOME=$(HOST_DIR)/share/cargo
-+16: FOO_CARGO_MODE = $(if $(BR2_ENABLE_DEBUG),debug,release)
-+17:
-+18: FOO_BIN_DIR = target/$(RUST_TARGET_NAME)/$(FOO_CARGO_MODE)
-+19:
-+20: FOO_CARGO_OPTS = \
-+21:   --$(FOO_CARGO_MODE) \
-+22: 	--target=$(RUST_TARGET_NAME) \
-+23: 	--manifest-path=$(@D)/Cargo.toml
-+24:
-+25: define FOO_BUILD_CMDS
-+26: 	$(TARGET_MAKE_ENV) $(FOO_CARGO_ENV) \
-+27: 		cargo build $(FOO_CARGO_OPTS)
-+28: endef
-+29:
-+30: define FOO_INSTALL_TARGET_CMDS
-+31: 	$(INSTALL) -D -m 0755 $(@D)/$(FOO_BIN_DIR)/foo \
-+32: 		$(TARGET_DIR)/usr/bin/foo
-+33: endef
-+34:
-+35: $(eval $(generic-package))
-+--------------------------------
++        shutil.copy(prog, os.path.join(self.builddir, 'target', 'usr', 'bin'))
++        self.b.build()
++        shutil.rmtree(workdir)
 +
-+The Makefile starts with the definition of the standard variables for package
-+declaration (lines 7 to 11).
++    def test_run(self):
++        self.build_test_prog()
++        self.login()
++        _, exit_code = self.emulator.run(self.crate)
++        self.assertEqual(exit_code, 0)
 +
-+As seen in line 35, it is based on the
-+xref:generic-package-tutorial[+generic-package+ infrastructure]. So, it defines
-+the variables required by this particular infrastructure, where Cargo is
-+invoked:
 +
-+* +FOO_BUILD_CMDS+: Cargo is invoked to perform the build. The options required
-+  to configure the cross-compilation of the package are passed via
-+  +FOO_CONF_OPTS+.
++class TestRustBin(TestRustBase):
++    config = \
++             """
++             BR2_arm=y
++             BR2_cortex_a9=y
++             BR2_ARM_ENABLE_NEON=y
++             BR2_ARM_ENABLE_VFP=y
++             BR2_TOOLCHAIN_EXTERNAL=y
++             BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
++             BR2_SYSTEM_DHCP="eth0"
++             BR2_LINUX_KERNEL=y
++             BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++             BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.11.3"
++             BR2_LINUX_KERNEL_DEFCONFIG="vexpress"
++             BR2_LINUX_KERNEL_DTS_SUPPORT=y
++             BR2_LINUX_KERNEL_INTREE_DTS_NAME="vexpress-v2p-ca9"
++             BR2_TARGET_ROOTFS_CPIO=y
++             # BR2_TARGET_ROOTFS_TAR is not set
++             BR2_PACKAGE_HOST_CARGO=y
++             BR2_PACKAGE_HOST_RUSTC=y
++             """
 +
-+* +FOO_INSTALL_TARGET_CMDS+: The binary executable generated is installed on
-+  the target.
 +
-+In order to have Cargo available for the build, +FOO_DEPENDENCIES+ needs to
-+contain +host-cargo+.
-+
-+To sum it up, to add a new Cargo-based package, the Makefile example can be
-+copied verbatim then edited to replace all occurences of +FOO+ with the
-+uppercase name of the new package and update the values of the standard
-+variables.
-+
-+==== About Dependencies Management
-+
-+A crate can depend on other libraries from crates.io or git repositories, listed
-+in its Cargo.toml file. Before starting a build, Cargo usually downloads
-+automatically them. This step can also be performed independently, via the
-++cargo fetch+ command.
-+
-+Cargo maintains a local cache of the registry index and of git checkouts of the
-+crates, whose location is given by +$CARGO_HOME+. As seen in the package
-+Makefile example at line 15, this environment variable is set to
-++$(HOST_DIR)/share/cargo+.
-+
-+This dependency download mechanism is not convenient when performing an offline
-+build, as Cargo will fail to fetch the dependencies. In that case, it is advised
-+to generate a tarball of the dependencies using the +cargo vendor+ and add it to
-++FOO_EXTRA_DOWNLOADS+.
-diff --git a/docs/manual/adding-packages.txt b/docs/manual/adding-packages.txt
-index e542124cf9..e8d40daee4 100644
---- a/docs/manual/adding-packages.txt
-+++ b/docs/manual/adding-packages.txt
-@@ -36,6 +36,8 @@ include::adding-packages-waf.txt[]
- 
- include::adding-packages-meson.txt[]
- 
-+include::adding-packages-cargo.txt[]
-+
- include::adding-packages-kernel-module.txt[]
- 
- include::adding-packages-asciidoc.txt[]
++class TestRust(TestRustBase):
++    config = \
++             """
++             BR2_arm=y
++             BR2_cortex_a9=y
++             BR2_ARM_ENABLE_NEON=y
++             BR2_ARM_ENABLE_VFP=y
++             BR2_TOOLCHAIN_EXTERNAL=y
++             BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
++             BR2_SYSTEM_DHCP="eth0"
++             BR2_LINUX_KERNEL=y
++             BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++             BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.11.3"
++             BR2_LINUX_KERNEL_DEFCONFIG="vexpress"
++             BR2_LINUX_KERNEL_DTS_SUPPORT=y
++             BR2_LINUX_KERNEL_INTREE_DTS_NAME="vexpress-v2p-ca9"
++             BR2_TARGET_ROOTFS_CPIO=y
++             # BR2_TARGET_ROOTFS_TAR is not set
++             BR2_PACKAGE_HOST_CARGO=y
++             BR2_PACKAGE_HOST_RUSTC=y
++             BR2_PACKAGE_HOST_RUST=y
++             """
