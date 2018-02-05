@@ -1,54 +1,27 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 5 Feb 2018 17:24:11 +0100
-Subject: [Buildroot] [git commit] docs/website/news.html: update for
- 2018.02-rc1
-Message-ID: <20180205162551.1CB0E88432@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 05 Feb 2018 16:40:26 +0000
+Subject: [Buildroot] [Bug 10726] Current libglib2.mk creates broken libglib2
+ binary when using glibc 2.26
+In-Reply-To: <bug-10726-163@https.bugs.busybox.net/>
+References: <bug-10726-163@https.bugs.busybox.net/>
+Message-ID: <bug-10726-163-hAPykNIL4s@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f367a2f16504624ccc87f29374044be474b13170
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+https://bugs.busybox.net/show_bug.cgi?id=10726
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- docs/website/news.html | 24 ++++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
+--- Comment #3 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
+Thanks for your well-documented bug report!
 
-diff --git a/docs/website/news.html b/docs/website/news.html
-index 59093577c9..e194d68b7e 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -9,6 +9,30 @@
- <h2>News</h2>
- <ul class="timeline">
- 
-+  <li class="timeline-inverted">
-+    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-+    <div class="timeline-panel">
-+      <div class="timeline-heading">
-+	<h4 class="timeline-title">2018.02-rc1 released</h4>
-+	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>5 February 2018</small></p>
-+      </div>
-+      <div class="timeline-body">
-+	<p>We have a new release candidate! Lots of changes all over the
-+	  tree, see the
-+	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2018.02-rc1">CHANGES</a>
-+	  file for details and read the
-+	  <a href="http://lists.busybox.net/pipermail/buildroot/2018-February/213171.html">announcement</a>.
-+	</p>
-+
-+	<p>Head to the <a href="/downloads/">downloads page</a> to pick up the
-+	  <a href="/downloads/buildroot-2018.02-rc1.tar.bz2">2018.02-rc1
-+	    release candidate</a>, and report any problems found to the
-+	  <a href="support.html">mailing list</a> or
-+	  <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
-+      </div>
-+    </div>
-+  </li>
-+
-   <li>
-     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-     <div class="timeline-panel">
+I think all those pre-seeded cache variables in LIBGLIB2_CONF_ENV are just
+crap. They have been there since the glib2 package was introduced back in
+January 2007, and the vast majority of them are useless, and potentially
+harmful (as you have discovered). So the fix is most likely to remove almost
+all of them, the key being to identify which ones we need to keep.
+
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
