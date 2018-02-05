@@ -1,47 +1,32 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 5 Feb 2018 14:55:46 +0100
-Subject: [Buildroot] [git commit] package/libsamplerate: add optional
- dependency to alsa-lib
-Message-ID: <20180205135605.2F529883D0@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 05 Feb 2018 14:58:23 +0100
+Subject: [Buildroot] [PATCH v10 08/10] cargo: new package
+In-Reply-To: <87eflzwx49.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
+ "Mon, 05 Feb 2018 11:26:30 +0100")
+References: <20180204180749.29942-1-eric.le.bihan.dev@free.fr>
+ <20180204180749.29942-9-eric.le.bihan.dev@free.fr>
+ <87eflzwx49.fsf@dell.be.48ers.dk>
+Message-ID: <87po5jv8qo.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5b679d7806767206f2c7bd7ff69b412bebb504f8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-Configure summary without this patch and without alsa-lib built before:
+Hi,
 
-  Extra tools required for testing and examples :
-[...]
-    Have ALSA : ................... no
+ >> +CARGO_DEPS_SHA512 =
+ >> 60c12ce49a53cf986490f5a5fdf606f0374677902edfdc4d48ab1ba6094f3f23efc59626cd3776649c9386a9cab2a60332e5693aad6acbcbb92132efdcf9fe21
+ >> +CARGO_DEPS_SITE =
+ >> http://pkgs.fedoraproject.org/repo/pkgs/cargo/$(CARGO_DEPS_SOURCE)/sha512/$(CARGO_DEPS_SHA512)
 
-and with this patch
+ > Is that the official location for this?
 
-  Extra tools required for testing and examples :
-[...]
-    Have ALSA : ................... yes
+ > pkgs.fedoraproject.org is failing for me at the moment :/
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/libsamplerate/libsamplerate.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+Committed after changing to src.fedoraproject.org, thanks.
 
-diff --git a/package/libsamplerate/libsamplerate.mk b/package/libsamplerate/libsamplerate.mk
-index 76e93f913e..c107650cb4 100644
---- a/package/libsamplerate/libsamplerate.mk
-+++ b/package/libsamplerate/libsamplerate.mk
-@@ -12,6 +12,10 @@ LIBSAMPLERATE_CONF_OPTS = --disable-fftw --program-transform-name=''
- LIBSAMPLERATE_LICENSE = BSD-2-Clause
- LIBSAMPLERATE_LICENSE_FILES = COPYING
- 
-+ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
-+LIBSAMPLERATE_DEPENDENCIES += alsa-lib
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBSNDFILE),y)
- LIBSAMPLERATE_DEPENDENCIES += libsndfile
- endif
+-- 
+Bye, Peter Korsgaard
