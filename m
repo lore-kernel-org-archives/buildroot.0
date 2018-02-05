@@ -1,66 +1,99 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 5 Feb 2018 23:01:50 +0200
-Subject: [Buildroot] [PATCH 5/5] package/glibc: bump to 2.27
-In-Reply-To: <20180205205716.4279-5-romain.naour@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 5 Feb 2018 22:08:12 +0100
+Subject: [Buildroot] [PATCH 1/5] package/x11r7/xlib_libxshmfence: fix
+ build with glibc 2.27
+In-Reply-To: <20180205205716.4279-1-romain.naour@gmail.com>
 References: <20180205205716.4279-1-romain.naour@gmail.com>
- <20180205205716.4279-5-romain.naour@gmail.com>
-Message-ID: <20180205210150.ok3hhfucmxu3uz3l@tarshish>
+Message-ID: <20180205210812.GA2806@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Romain,
+Romain, All,
 
-On Mon, Feb 05, 2018 at 09:57:16PM +0100, Romain Naour wrote:
-> See: https://sourceware.org/ml/libc-announce/2018/msg00000.html
-> https://sourceware.org/glibc/wiki/Release/2.27
-
-Note that this is a security bump fixing CVE-2017-1000408, CVE-2017-1000409, 
-CVE-2017-16997, CVE-2018-1000001, and CVE-2018-6485.
-
-> Add hash files
-
-You mean license files hash, right?
-
-baruch
-
+On 2018-02-05 21:57 +0100, Romain Naour spake thusly:
+> With glibc 2.27 memfd_create() is inside a _GNU_SOURCE guard, so call
+> AC_USE_SYSTEM_EXTENSIONS to get this defined.
+> 
 > Signed-off-by: Romain Naour <romain.naour@gmail.com>
 > ---
->  package/glibc/glibc.hash | 6 +++++-
->  package/glibc/glibc.mk   | 2 +-
->  2 files changed, 6 insertions(+), 2 deletions(-)
+>  ...onfigure.ac-call-AC_USE_SYSTEM_EXTENSIONS.patch | 30 ++++++++++++++++++++++
+>  .../x11r7/xlib_libxshmfence/xlib_libxshmfence.mk   |  3 +++
+>  2 files changed, 33 insertions(+)
+>  create mode 100644 package/x11r7/xlib_libxshmfence/0001-configure.ac-call-AC_USE_SYSTEM_EXTENSIONS.patch
 > 
-> diff --git a/package/glibc/glibc.hash b/package/glibc/glibc.hash
-> index f3a6577d2a..86d3bb56dd 100644
-> --- a/package/glibc/glibc.hash
-> +++ b/package/glibc/glibc.hash
-> @@ -1,4 +1,8 @@
->  # Locally calculated (fetched from Github)
-> -sha256  0766875391224153502c5542a71b6e46db53b44691078b3130e1a0df41586430     glibc-glibc-2.26-107-g73a92363619e52c458146e903dfb9b1ba823aa40.tar.gz
-> +sha256  a74489d14f4017bee6a6c6fe76f1de0dbf7d66c8695116de5aadd141c4757892     glibc-glibc-2.27.tar.gz
->  # Locally calculated (fetched from Github)
->  sha256  5aa9adeac09727db0b8a52794186563771e74d70410e9fd86431e339953fd4bb     glibc-arc-2017.09-release.tar.gz
+> diff --git a/package/x11r7/xlib_libxshmfence/0001-configure.ac-call-AC_USE_SYSTEM_EXTENSIONS.patch b/package/x11r7/xlib_libxshmfence/0001-configure.ac-call-AC_USE_SYSTEM_EXTENSIONS.patch
+> new file mode 100644
+> index 0000000000..f24b1da5dd
+> --- /dev/null
+> +++ b/package/x11r7/xlib_libxshmfence/0001-configure.ac-call-AC_USE_SYSTEM_EXTENSIONS.patch
+> @@ -0,0 +1,30 @@
+> +From 0b550a4e7acf02d3478602848f6afbfcbfb0d4b2 Mon Sep 17 00:00:00 2001
+> +From: Ross Burton <ross.burton@intel.com>
+> +Date: Mon, 29 Jan 2018 16:24:36 +0000
+> +Subject: [PATCH] configure.ac: call AC_USE_SYSTEM_EXTENSIONS
 > +
-> +sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-> +sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
-> +sha256  61abdd6930c9c599062d89e916b3e7968783879b6be0ee1c6229dd6169def431  LICENSES
-> diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-> index cf4bdec065..b674191b22 100644
-> --- a/package/glibc/glibc.mk
-> +++ b/package/glibc/glibc.mk
-> @@ -10,7 +10,7 @@ GLIBC_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,glibc,$(GLIBC_VE
->  else
->  # Generate version string using:
->  #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master
-> -GLIBC_VERSION = glibc-2.26-107-g73a92363619e52c458146e903dfb9b1ba823aa40
-> +GLIBC_VERSION = glibc-2.27
->  # Upstream doesn't officially provide an https download link.
->  # There is one (https://sourceware.org/git/glibc.git) but it's not reliable,
->  # sometimes the connection times out. So use an unofficial github mirror.
+> +With glibc 2.27 memfd_create() is inside a _GNU_SOURCE guard, so call
+> +AC_USE_SYSTEM_EXTENSIONS to get this defined.
+> +
+> +Signed-off-by: Ross Burton <ross.burton@intel.com>
+> +Signed-off-by: Romain Naour <romain.naour@gmail.com>
+
+This looks liek it is a backport from upstream, right? If so, please say
+so; in such a case I like to add something like:
+
+    [yann: backport from upstream URL-or-commit]
+    Signed-off-by: ME
+
+Regards,
+Yann E. MORIN.
+
+> +---
+> + configure.ac | 2 ++
+> + 1 file changed, 2 insertions(+)
+> +
+> +diff --git a/configure.ac b/configure.ac
+> +index 55772d0..ed77e6d 100644
+> +--- a/configure.ac
+> ++++ b/configure.ac
+> +@@ -28,6 +28,8 @@ AC_INIT([libxshmfence], [1.2],
+> + AC_CONFIG_SRCDIR([Makefile.am])
+> + AC_CONFIG_HEADERS([config.h])
+> + 
+> ++AC_USE_SYSTEM_EXTENSIONS
+> ++
+> + # Initialize Automake
+> + AM_INIT_AUTOMAKE([foreign dist-bzip2])
+> + 
+> +-- 
+> +2.14.3
+> +
+> diff --git a/package/x11r7/xlib_libxshmfence/xlib_libxshmfence.mk b/package/x11r7/xlib_libxshmfence/xlib_libxshmfence.mk
+> index 3a2f32623a..9686c408c1 100644
+> --- a/package/x11r7/xlib_libxshmfence/xlib_libxshmfence.mk
+> +++ b/package/x11r7/xlib_libxshmfence/xlib_libxshmfence.mk
+> @@ -12,4 +12,7 @@ XLIB_LIBXSHMFENCE_LICENSE_FILES = COPYING
+>  XLIB_LIBXSHMFENCE_INSTALL_STAGING = YES
+>  XLIB_LIBXSHMFENCE_DEPENDENCIES = host-pkgconf xproto_xproto
+>  
+> +# 0001-configure.ac-call-AC_USE_SYSTEM_EXTENSIONS.patch
+> +XLIB_LIBXSHMFENCE_AUTORECONF = YES
+> +
+>  $(eval $(autotools-package))
+> -- 
+> 2.14.3
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
