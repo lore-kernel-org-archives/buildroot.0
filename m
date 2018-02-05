@@ -1,33 +1,50 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 05 Feb 2018 16:46:03 +0000
-Subject: [Buildroot] [Bug 9781] ti-sgx-km build on kernel >4.1
-In-Reply-To: <bug-9781-163@https.bugs.busybox.net/>
-References: <bug-9781-163@https.bugs.busybox.net/>
-Message-ID: <bug-9781-163-ApHS144AJk@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 5 Feb 2018 18:15:04 +0100
+Subject: [Buildroot] [git commit branch/next] package/sqlite: bump version
+ to 3220000 (3.22.0)
+Message-ID: <20180205171736.A4FC381937@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=9781
+commit: https://git.buildroot.net/buildroot/commit/?id=f83d92b60f25df3178ce7775716403c76d63d9b1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+Signed-off-by: Scott Fan <fancp2007@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/sqlite/sqlite.hash | 4 ++--
+ package/sqlite/sqlite.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-         Resolution|---                         |WONTFIX
-             Status|NEW                         |RESOLVED
-
---- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
-This really is an upstream problem. The Git repository at
-http://git.ti.com/graphics/omap5-sgx-ddk-linux has newer versions, but the Git
-history is a bit of a mess, making it difficult to know if the latest master
-branch still applies to the SoCs ti-sgx-km currently supports.
-
-Someone having access to HW and interested in TI platforms should look into
-this. Could you submit a patch updating the ti-sgx-km to a newer version?
-
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
+index be5820e1f8..2aac7dc1d3 100644
+--- a/package/sqlite/sqlite.hash
++++ b/package/sqlite/sqlite.hash
+@@ -1,6 +1,6 @@
+ # From http://www.sqlite.org/download.html
+-sha1 f56fe3407d8297fc0a68a058f4c9e6b77e83575c  sqlite-autoconf-3210000.tar.gz
++sha1 2fb24ec12001926d5209d2da90d252b9825366ac  sqlite-autoconf-3220000.tar.gz
+ # Calculated based on the hash above
+-sha256 d7dd516775005ad87a57f428b6f86afd206cb341722927f104d3f0cf65fbbbe3  sqlite-autoconf-3210000.tar.gz
++sha256 2824ab1238b706bc66127320afbdffb096361130e23291f26928a027b885c612  sqlite-autoconf-3220000.tar.gz
+ # Locally calculated
+ sha256 66e056b6e8687f32af30d5187611b98b12a8f46f07aaf62f43585f276e8f0ac9  tea/license.terms
+diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
+index 5239592f18..e8ce92df56 100644
+--- a/package/sqlite/sqlite.mk
++++ b/package/sqlite/sqlite.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-SQLITE_VERSION = 3210000
++SQLITE_VERSION = 3220000
+ SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
+-SQLITE_SITE = http://www.sqlite.org/2017
++SQLITE_SITE = http://www.sqlite.org/2018
+ SQLITE_LICENSE = Public domain
+ SQLITE_LICENSE_FILES = tea/license.terms
+ SQLITE_INSTALL_STAGING = YES
