@@ -1,95 +1,57 @@
-From: Joel Stanley <joel@jms.id.au>
-Date: Mon, 5 Feb 2018 12:09:34 +1030
-Subject: [Buildroot] [PATCH] gcc: or1k: use 20170218 tag instead of
- branch
-In-Reply-To: <20180203201821.3924-1-peter@korsgaard.com>
-References: <20180203201821.3924-1-peter@korsgaard.com>
-Message-ID: <CACPK8XfD4dHS4QMDr_HdgLSoHT+PX-zJ5wxXbsjL-hN2pzDpuA@mail.gmail.com>
+From: Cam Hutchison <cam@camh.ch>
+Date: Mon, 5 Feb 2018 14:52:30 +1100
+Subject: [Buildroot] [PATCH] support/dockerfile: add directives to run
+ as non-root
+In-Reply-To: <20180204100444.GB2411@scaer>
+References: <20180106152833.10111-1-yann.morin.1998@free.fr>
+ <87bmh521a5.fsf@dell.be.48ers.dk> <20180204100444.GB2411@scaer>
+Message-ID: <CABa6e=otTJ1GiyhBA_hXXxNcyGts0TH5=CW=abBiwa5TageAHw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Feb 4, 2018 at 6:48 AM, Peter Korsgaard <peter@korsgaard.com> wrote:
-> As pointed out by Joel Stanley:
-> https://patchwork.ozlabs.org/patch/863011/
+On 4 February 2018 at 21:04, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> Peter, All,
 >
-> Github now longer provides the exact same tarball for the or1k musl-5.4.0
-> tarball, breaking the build.  Even more, musl-5.4.0 is the name of a git
-> branch, not a tag.
+> On 2018-02-03 22:47 +0100, Peter Korsgaard spake thusly:
+>> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+> [--SNIP--]
+>>  > diff --git a/support/docker/Dockerfile b/support/docker/Dockerfile
+>>  > index d45b23dc23..ebb471f7e5 100644
+>>  > --- a/support/docker/Dockerfile
+>>  > +++ b/support/docker/Dockerfile
+>>  > @@ -28,3 +28,10 @@ RUN apt-get -q -y clean
+>>  >  RUN sed -i 's/# \(en_US.UTF-8\)/\1/' /etc/locale.gen
+>>  >  RUN /usr/sbin/locale-gen
+>>
+>>  > +RUN useradd -ms /bin/bash br-user
+>>  > +RUN chown -R br-user:br-user /home/br-user
+>>
+>> I don't know much about Docker, but I was of the understanding that each
+>> run statement creates a new layer and the number of layers should be
+>> minimized, which is why you normally see stuff like:
+>>
+>> RUN foo && \
+>>     bar && \
+>>     foz && \
+>>     baz
 >
-> Fix both problems by changing to the or1k-musl-5.4.0-20170218 tag, which
-> points to the exact same git commit.
->
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> Well, I am no docker expert either, and I just mimicked whatever the
+> file already looked like, as you can see for the previous two lines...
 
-Thanks, that fixes the issue for me.
+Minimizing the number of layers for simple layers like the "RUN useradd"
+and "RUN chown" really doesn't save very much.
 
-Tested-by: Joel Stanley <joel@jms.id.au>
+Where the big win comes in (and is not mentioned in the official
+documentation) is when you keep the "install && build && clean" commands
+in a single RUN command. This matters because if you split it up over
+multiple layers, the earlier layers still contain all the stuff the
+later layers try to clean. The end result is a fat image that contains
+the stuff you wanted to remove in a lower layer, with whiteout entries
+in a higher layer, so it only looks like the files have been removed.
 
-Cheers,
-
-Joel
-
-> ---
->  package/gcc/Config.in.host                                              | 2 +-
->  package/gcc/gcc.hash                                                    | 2 +-
->  .../gcc/{musl-5.4.0 => or1k-musl-5.4.0-20170218}/100-uclibc-conf.patch  | 0
->  .../301-missing-execinfo_h.patch                                        | 0
->  .../850-libstdcxx-uclibc-c99.patch                                      | 0
->  .../gcc/{musl-5.4.0 => or1k-musl-5.4.0-20170218}/860-cilk-wchar.patch   | 0
->  .../930-libgcc-disable-split-stack-nothreads.patch                      | 0
->  7 files changed, 2 insertions(+), 2 deletions(-)
->  rename package/gcc/{musl-5.4.0 => or1k-musl-5.4.0-20170218}/100-uclibc-conf.patch (100%)
->  rename package/gcc/{musl-5.4.0 => or1k-musl-5.4.0-20170218}/301-missing-execinfo_h.patch (100%)
->  rename package/gcc/{musl-5.4.0 => or1k-musl-5.4.0-20170218}/850-libstdcxx-uclibc-c99.patch (100%)
->  rename package/gcc/{musl-5.4.0 => or1k-musl-5.4.0-20170218}/860-cilk-wchar.patch (100%)
->  rename package/gcc/{musl-5.4.0 => or1k-musl-5.4.0-20170218}/930-libgcc-disable-split-stack-nothreads.patch (100%)
->
-> diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-> index 8432515d73..309ddf572a 100644
-> --- a/package/gcc/Config.in.host
-> +++ b/package/gcc/Config.in.host
-> @@ -81,7 +81,7 @@ config BR2_GCC_VERSION
->         default "6.4.0"     if BR2_GCC_VERSION_6_X
->         default "7.3.0"     if BR2_GCC_VERSION_7_X
->         default "arc-2017.09-release" if BR2_GCC_VERSION_ARC
-> -       default "musl-5.4.0" if BR2_GCC_VERSION_OR1K
-> +       default "or1k-musl-5.4.0-20170218" if BR2_GCC_VERSION_OR1K
->
->  config BR2_EXTRA_GCC_CONFIG_OPTIONS
->         string "Additional gcc options"
-> diff --git a/package/gcc/gcc.hash b/package/gcc/gcc.hash
-> index 4966b18f59..fd38cfaad1 100644
-> --- a/package/gcc/gcc.hash
-> +++ b/package/gcc/gcc.hash
-> @@ -10,4 +10,4 @@ sha512  ad41a7e4584e40e92cdf860bc0288500fbaf5dfb7e8c3fcabe9eba809c87bcfa85b46c19
->  # Locally calculated (fetched from Github)
->  sha512  c30addd3c4dc66b90749a0f99b257c8a8e7966d27f286057b6b66f4a70ca22a1ee50d92882c4db13307d769a6fb28e1e2a2bab749a692cf3f89ef0c38f145efa  gcc-arc-2017.09-release.tar.gz
->  # Locally calculated (fetched from Github)
-> -sha512  841101f7de45f327bf2e92f3efc73ca88a021e4b9b541458ce80a16e55882bd8606a8492d75c57c589ee2c10d42ae2865b67690155d7289a541df1d68096402f  gcc-musl-5.4.0.tar.gz
-> +sha512  2de7cf47333a4092b02d3bb98f4206f14966f1d139a724d09cf3b22f8a43ae0c704f33e6477d6367a03c29b265480dc900169e9d417006c5d46f0ae446b8c6f1  gcc-or1k-musl-5.4.0-20170218.tar.gz
-> diff --git a/package/gcc/musl-5.4.0/100-uclibc-conf.patch b/package/gcc/or1k-musl-5.4.0-20170218/100-uclibc-conf.patch
-> similarity index 100%
-> rename from package/gcc/musl-5.4.0/100-uclibc-conf.patch
-> rename to package/gcc/or1k-musl-5.4.0-20170218/100-uclibc-conf.patch
-> diff --git a/package/gcc/musl-5.4.0/301-missing-execinfo_h.patch b/package/gcc/or1k-musl-5.4.0-20170218/301-missing-execinfo_h.patch
-> similarity index 100%
-> rename from package/gcc/musl-5.4.0/301-missing-execinfo_h.patch
-> rename to package/gcc/or1k-musl-5.4.0-20170218/301-missing-execinfo_h.patch
-> diff --git a/package/gcc/musl-5.4.0/850-libstdcxx-uclibc-c99.patch b/package/gcc/or1k-musl-5.4.0-20170218/850-libstdcxx-uclibc-c99.patch
-> similarity index 100%
-> rename from package/gcc/musl-5.4.0/850-libstdcxx-uclibc-c99.patch
-> rename to package/gcc/or1k-musl-5.4.0-20170218/850-libstdcxx-uclibc-c99.patch
-> diff --git a/package/gcc/musl-5.4.0/860-cilk-wchar.patch b/package/gcc/or1k-musl-5.4.0-20170218/860-cilk-wchar.patch
-> similarity index 100%
-> rename from package/gcc/musl-5.4.0/860-cilk-wchar.patch
-> rename to package/gcc/or1k-musl-5.4.0-20170218/860-cilk-wchar.patch
-> diff --git a/package/gcc/musl-5.4.0/930-libgcc-disable-split-stack-nothreads.patch b/package/gcc/or1k-musl-5.4.0-20170218/930-libgcc-disable-split-stack-nothreads.patch
-> similarity index 100%
-> rename from package/gcc/musl-5.4.0/930-libgcc-disable-split-stack-nothreads.patch
-> rename to package/gcc/or1k-musl-5.4.0-20170218/930-libgcc-disable-split-stack-nothreads.patch
-> --
-> 2.11.0
->
+Your patch set does the right thing WRT the debian install/clean, so all
+good, but I thought I'd mention this because it did not come up in any
+discussions here or in the linked docs.
