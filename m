@@ -1,53 +1,42 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 5 Feb 2018 14:42:45 +0100
-Subject: [Buildroot] [git commit] configs/mx53loco: Bump U-Boot and kernel
- versions
-Message-ID: <20180205134310.BF680883D1@busybox.osuosl.org>
+From: Jagan Teki <jagan@amarulasolutions.com>
+Date: Mon, 5 Feb 2018 19:15:40 +0530
+Subject: [Buildroot] [PATCH v9 1/3] board: Add Vyasa RK3288 board support
+In-Reply-To: <20180201134448.6b6bb9d6@windsurf.lan>
+References: <1517313835-21973-1-git-send-email-jagan@amarulasolutions.com>
+ <CAMty3ZDqZJTCa+fjRC+APxQJXvx=WR-UYYCBMSt-+5VSJn5inQ@mail.gmail.com>
+ <20180201134448.6b6bb9d6@windsurf.lan>
+Message-ID: <CAMty3ZDsn=jpkLTTR2X4_z_av99QRdQOiMrrbYPkvvu6nBQh8Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2cb312f963f64478559d9461fe12c7f87acfadc2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Thu, Feb 1, 2018 at 6:14 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
+>
+> On Thu, 1 Feb 2018 16:04:02 +0530, Jagan Teki wrote:
+>
+>> > Changes for v9:
+>> > - Rebase on master
+>> > Changes for v8:
+>> > - Rebase on master
+>> > Changes for v7:
+>> > - Rebase on master
+>> > Changes for v6:
+>> > - None
+>
+> Why do you resend like crazy, with no changes between the different
+> iterations ?
 
-Bump U-Boot to 2018.01 version and kernel to 4.15.1.
+There were rebase changes in between.
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- configs/mx53loco_defconfig | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+>
+>> These been in ML, since from couple months any chance to comment or
+>> picking up these.
+>
+> There are 250+ patches pending in patchwork. If you want your patches to
+> be reviewed faster, please help reviewing patches from others.
 
-diff --git a/configs/mx53loco_defconfig b/configs/mx53loco_defconfig
-index 1b10518a92..aaba4767ed 100644
---- a/configs/mx53loco_defconfig
-+++ b/configs/mx53loco_defconfig
-@@ -2,8 +2,8 @@
- BR2_arm=y
- BR2_cortex_a8=y
- 
--# Linux headers same as kernel, a 4.14 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
-+# Linux headers same as kernel, a 4.15 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_15=y
- 
- # System
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
-@@ -22,13 +22,13 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="mx53loco"
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.11"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.01"
- BR2_TARGET_UBOOT_FORMAT_IMX=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.14"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.15.1"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx53-qsb imx53-qsrb"
+Yes, I already did few which I'm aware of., no idea what can do much more.
