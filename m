@@ -1,51 +1,48 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Mon,  5 Feb 2018 10:03:55 -0200
-Subject: [Buildroot] [PATCH] configs/mx53loco: Bump U-Boot and kernel
- versions
-Message-ID: <1517832235-9413-1-git-send-email-festevam@gmail.com>
+From: Scott Fan <fancp2007@gmail.com>
+Date: Mon,  5 Feb 2018 20:08:41 +0800
+Subject: [Buildroot] [PATCH 1/1] package/sqlite: bump version to 3220000
+ (3.22.0)
+Message-ID: <20180205120841.10973-1-fancp2007@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bump U-Boot to 2018.01 version and kernel to 4.15.1.
-
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Scott Fan <fancp2007@gmail.com>
 ---
- configs/mx53loco_defconfig | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ package/sqlite/sqlite.hash | 4 ++--
+ package/sqlite/sqlite.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/configs/mx53loco_defconfig b/configs/mx53loco_defconfig
-index 1b10518..aaba476 100644
---- a/configs/mx53loco_defconfig
-+++ b/configs/mx53loco_defconfig
-@@ -2,8 +2,8 @@
- BR2_arm=y
- BR2_cortex_a8=y
+diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
+index be5820e1f8..2aac7dc1d3 100644
+--- a/package/sqlite/sqlite.hash
++++ b/package/sqlite/sqlite.hash
+@@ -1,6 +1,6 @@
+ # From http://www.sqlite.org/download.html
+-sha1 f56fe3407d8297fc0a68a058f4c9e6b77e83575c  sqlite-autoconf-3210000.tar.gz
++sha1 2fb24ec12001926d5209d2da90d252b9825366ac  sqlite-autoconf-3220000.tar.gz
+ # Calculated based on the hash above
+-sha256 d7dd516775005ad87a57f428b6f86afd206cb341722927f104d3f0cf65fbbbe3  sqlite-autoconf-3210000.tar.gz
++sha256 2824ab1238b706bc66127320afbdffb096361130e23291f26928a027b885c612  sqlite-autoconf-3220000.tar.gz
+ # Locally calculated
+ sha256 66e056b6e8687f32af30d5187611b98b12a8f46f07aaf62f43585f276e8f0ac9  tea/license.terms
+diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
+index 5239592f18..e8ce92df56 100644
+--- a/package/sqlite/sqlite.mk
++++ b/package/sqlite/sqlite.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
--# Linux headers same as kernel, a 4.14 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
-+# Linux headers same as kernel, a 4.15 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_15=y
- 
- # System
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
-@@ -22,13 +22,13 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="mx53loco"
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.11"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.01"
- BR2_TARGET_UBOOT_FORMAT_IMX=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.14"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.15.1"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx53-qsb imx53-qsrb"
+-SQLITE_VERSION = 3210000
++SQLITE_VERSION = 3220000
+ SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
+-SQLITE_SITE = http://www.sqlite.org/2017
++SQLITE_SITE = http://www.sqlite.org/2018
+ SQLITE_LICENSE = Public domain
+ SQLITE_LICENSE_FILES = tea/license.terms
+ SQLITE_INSTALL_STAGING = YES
 -- 
-2.7.4
+2.16.1
