@@ -1,107 +1,74 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 5 Feb 2018 22:54:52 +0100
-Subject: [Buildroot] [git commit branch/next] package/pulseaudio: only
- define memfd_create() if not already defined
-Message-ID: <20180206103447.F18C57FA39@busybox.osuosl.org>
+Date: Mon, 5 Feb 2018 22:53:05 +0100
+Subject: [Buildroot] [git commit branch/next]
+ package/x11r7/xlib_libxshmfence: fix build with glibc 2.27
+Message-ID: <20180206103447.CDDE48848F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e14eea82acb4cf95f0064afa2c98c27a0fc97269
+commit: https://git.buildroot.net/buildroot/commit/?id=ab9b556f981c6b0d22325455bb47927f109b7584
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Before glibc version 2.27 there was no wrapper for memfd_create(2).
+With glibc 2.27 memfd_create() is inside a _GNU_SOURCE guard, so call
+AC_USE_SYSTEM_EXTENSIONS to get this defined.
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
+[Thomas: add reference to upstream commit, as suggested by Yann E. Morin.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...ers-only-define-memfd_create-if-not-alrea.patch | 64 ++++++++++++++++++++++
- package/pulseaudio/pulseaudio.mk                   |  3 +
- 2 files changed, 67 insertions(+)
+ ...onfigure.ac-call-AC_USE_SYSTEM_EXTENSIONS.patch | 31 ++++++++++++++++++++++
+ .../x11r7/xlib_libxshmfence/xlib_libxshmfence.mk   |  3 +++
+ 2 files changed, 34 insertions(+)
 
-diff --git a/package/pulseaudio/0002-memfd-wrappers-only-define-memfd_create-if-not-alrea.patch b/package/pulseaudio/0002-memfd-wrappers-only-define-memfd_create-if-not-alrea.patch
+diff --git a/package/x11r7/xlib_libxshmfence/0001-configure.ac-call-AC_USE_SYSTEM_EXTENSIONS.patch b/package/x11r7/xlib_libxshmfence/0001-configure.ac-call-AC_USE_SYSTEM_EXTENSIONS.patch
 new file mode 100644
-index 0000000000..8f103bf201
+index 0000000000..1ca1303267
 --- /dev/null
-+++ b/package/pulseaudio/0002-memfd-wrappers-only-define-memfd_create-if-not-alrea.patch
-@@ -0,0 +1,64 @@
-+From dfb0460fb4743aec047cdf755a660a9ac2d0f3fb Mon Sep 17 00:00:00 2001
-+From: Tanu Kaskinen <tanuk@iki.fi>
-+Date: Wed, 24 Jan 2018 03:51:49 +0200
-+Subject: [PATCH] memfd-wrappers: only define memfd_create() if not already
-+ defined
++++ b/package/x11r7/xlib_libxshmfence/0001-configure.ac-call-AC_USE_SYSTEM_EXTENSIONS.patch
+@@ -0,0 +1,31 @@
++From 0b550a4e7acf02d3478602848f6afbfcbfb0d4b2 Mon Sep 17 00:00:00 2001
++From: Ross Burton <ross.burton@intel.com>
++Date: Mon, 29 Jan 2018 16:24:36 +0000
++Subject: [PATCH] configure.ac: call AC_USE_SYSTEM_EXTENSIONS
 +
-+glibc 2.27 is to be released soon, and it will provide memfd_create().
-+If glibc provides the function, we must not define it ourselves,
-+otherwise building fails due to conflict between the two implementations
-+of the same function.
++With glibc 2.27 memfd_create() is inside a _GNU_SOURCE guard, so call
++AC_USE_SYSTEM_EXTENSIONS to get this defined.
 +
-+BugLink: https://bugs.freedesktop.org/show_bug.cgi?id=104733
++Signed-off-by: Ross Burton <ross.burton@intel.com>
++Upstream: https://cgit.freedesktop.org/xorg/lib/libxshmfence/commit/?id=0b550a4e7acf02d3478602848f6afbfcbfb0d4b2
 +Signed-off-by: Romain Naour <romain.naour@gmail.com>
 +---
-+ configure.ac                   | 3 +++
-+ src/pulsecore/memfd-wrappers.h | 7 ++++---
-+ 2 files changed, 7 insertions(+), 3 deletions(-)
++ configure.ac | 2 ++
++ 1 file changed, 2 insertions(+)
 +
 +diff --git a/configure.ac b/configure.ac
-+index 0084c86e..0eb44b08 100644
++index 55772d0..ed77e6d 100644
 +--- a/configure.ac
 ++++ b/configure.ac
-+@@ -610,6 +610,9 @@ AS_IF([test "x$enable_memfd" = "xyes" && test "x$HAVE_MEMFD" = "x0"],
-+     [AC_MSG_ERROR([*** Your Linux kernel does not support memfd shared memory.
-+                   *** Use linux v3.17 or higher for such a feature.])])
++@@ -28,6 +28,8 @@ AC_INIT([libxshmfence], [1.2],
++ AC_CONFIG_SRCDIR([Makefile.am])
++ AC_CONFIG_HEADERS([config.h])
 + 
-++AS_IF([test "x$HAVE_MEMFD" = "x1"],
-++    AC_CHECK_FUNCS([memfd_create]))
+++AC_USE_SYSTEM_EXTENSIONS
 ++
-+ AC_SUBST(HAVE_MEMFD)
-+ AM_CONDITIONAL([HAVE_MEMFD], [test "x$HAVE_MEMFD" = x1])
-+ AS_IF([test "x$HAVE_MEMFD" = "x1"], AC_DEFINE([HAVE_MEMFD], 1, [Have memfd shared memory.]))
-+diff --git a/src/pulsecore/memfd-wrappers.h b/src/pulsecore/memfd-wrappers.h
-+index 3bed9b2b..c7aadfd3 100644
-+--- a/src/pulsecore/memfd-wrappers.h
-++++ b/src/pulsecore/memfd-wrappers.h
-+@@ -20,13 +20,14 @@
-+   License along with PulseAudio; if not, see <http://www.gnu.org/licenses/>.
-+ ***/
++ # Initialize Automake
++ AM_INIT_AUTOMAKE([foreign dist-bzip2])
 + 
-+-#ifdef HAVE_MEMFD
-++#if defined(HAVE_MEMFD) && !defined(HAVE_MEMFD_CREATE)
-+ 
-+ #include <sys/syscall.h>
-+ #include <fcntl.h>
-+ 
-+ /*
-+- * No glibc wrappers exist for memfd_create(2), so provide our own.
-++ * Before glibc version 2.27 there was no wrapper for memfd_create(2),
-++ * so we have to provide our own.
-+  *
-+  * Also define memfd fcntl sealing macros. While they are already
-+  * defined in the kernel header file <linux/fcntl.h>, that file as
-+@@ -63,6 +64,6 @@ static inline int memfd_create(const char *name, unsigned int flags) {
-+ #define F_SEAL_WRITE    0x0008  /* prevent writes */
-+ #endif
-+ 
-+-#endif /* HAVE_MEMFD */
-++#endif /* HAVE_MEMFD && !HAVE_MEMFD_CREATE */
-+ 
-+ #endif
 +-- 
 +2.14.3
 +
-diff --git a/package/pulseaudio/pulseaudio.mk b/package/pulseaudio/pulseaudio.mk
-index 13fcec52a3..f59828d43d 100644
---- a/package/pulseaudio/pulseaudio.mk
-+++ b/package/pulseaudio/pulseaudio.mk
-@@ -15,6 +15,9 @@ PULSEAUDIO_CONF_OPTS = \
- 	--disable-legacy-database-entry-format \
- 	--disable-manpages
+diff --git a/package/x11r7/xlib_libxshmfence/xlib_libxshmfence.mk b/package/x11r7/xlib_libxshmfence/xlib_libxshmfence.mk
+index 3a2f32623a..9686c408c1 100644
+--- a/package/x11r7/xlib_libxshmfence/xlib_libxshmfence.mk
++++ b/package/x11r7/xlib_libxshmfence/xlib_libxshmfence.mk
+@@ -12,4 +12,7 @@ XLIB_LIBXSHMFENCE_LICENSE_FILES = COPYING
+ XLIB_LIBXSHMFENCE_INSTALL_STAGING = YES
+ XLIB_LIBXSHMFENCE_DEPENDENCIES = host-pkgconf xproto_xproto
  
-+# 0001-memfd-wrappers-only-define-memfd_create-if-not-alrea.patch
-+PULSEAUDIO_AUTORECONF = YES
++# 0001-configure.ac-call-AC_USE_SYSTEM_EXTENSIONS.patch
++XLIB_LIBXSHMFENCE_AUTORECONF = YES
 +
- PULSEAUDIO_DEPENDENCIES = \
- 	host-pkgconf libtool libsndfile speex host-intltool \
- 	$(if $(BR2_PACKAGE_LIBGLIB2),libglib2) \
+ $(eval $(autotools-package))
