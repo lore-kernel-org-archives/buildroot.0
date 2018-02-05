@@ -1,211 +1,210 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 5 Feb 2018 14:57:47 +0100
-Subject: [Buildroot] [git commit] rust: new package
-Message-ID: <20180205140233.47FD98746B@busybox.osuosl.org>
+Date: Mon, 5 Feb 2018 14:57:48 +0100
+Subject: [Buildroot] [git commit] cargo: new package
+Message-ID: <20180205140233.A196B854E7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b50522d838d8ddfef80bf8036e511319982da16e
+commit: https://git.buildroot.net/buildroot/commit/?id=990a7d14cfcd4773c0826f12770afa3a2b7f4275
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This new package provides rustc, the compiler for the Rust programming
-language, built from source.
+This new package provides Cargo, the Rust official package manager.
+Cargo is written in Rust and uses Cargo as its build system. It also
+depends on other Rust packages.
 
-Currently, only the host variant is built.
+Normally, a previously installed version of Cargo would be used to:
 
-The Rust compiler uses LLVM as its backend: a copy of LLVM source code
-is provided and CMake is used to build it. It is possible to use a
-pre-built external copy. When LLVM/clang will be available in Buildroot,
-it would be possible to benefit from this feature and thus decrease
-build time.
+ 1. Fetch the dependencies.
+ 2. Build the new version of Cargo, using the available Rust compiler.
 
-LLVM is configured to generate code for x86, ARM, PowerPC and MIPS
-architectures.
+But the fetching step prevents offline builds. So instead two features
+of Cargo are leveraged: vendoring [1] and local registry.
 
-The Rust compiler uses Cargo as its build system and is written in Rust.
-Therefore this package depends on cargo-bin and rust-bin.
+First, a tarball of the build dependencies generated using `cargo
+vendor` is fetched along with Cargo source code.
 
-The internal build process is as follows:
+Then, the build process is as follows:
 
- 1. stage0 compiler, provided by rust-bin, is used to build stage1
-    compiler.
- 2. stage1 compiler builds the final Rust compiler (stage2 compiler)
-    and the standard library for the host architecture.
- 3. the standard library for the target architecture is built.
+ 1. The tarball of the build dependencies is uncompressed in a local
+    registry.
+ 2. A snapshot of Cargo, provided by cargo-bin, builds the final
+    version of Cargo.
+ 3. A configuration file telling Cargo how to cross-compile programs for
+    the target is generated and installed.
 
-The target architecture to support is given by the GNU/LLVM target
-triple. Rust supports some predefined targets [1]. As the build system
-expects the triple to be in the form of <arch>-unknown-<system> and
-Buildroot toolchain wrapper uses <arch>-buildroot-<system>, the package
-Makefile uses $(RUST_TARGET_NAME) defined in the rustc package and uses
-it instead of $(GNU_TARGET_NAME).
+Currently, only the host variant is provided.
 
-When compiling Rust code with this compiler, the generated program only
-depends on the target C library, as it is statically linked to the Rust
-standard library and any other code from Rust packages (a.k.a.
-"crates").
+[1] https://github.com/alexcrichton/cargo-vendor
 
-If the jemalloc package is selected, support for this memory allocator
-will be enabled in the target standard library.
-
-The menuconfig entry for rustc is also updated to expose this provider.
-
-[1] https://forge.rust-lang.org/platform-support.html
-
+[Peter: use src.fedoraproject.org, fix comment]
 Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
  DEVELOPERS                   |  1 +
- package/rust/rust.hash       |  5 +++
- package/rust/rust.mk         | 79 ++++++++++++++++++++++++++++++++++++++++++++
- package/rustc/Config.in.host | 19 +++++++++++
- 4 files changed, 104 insertions(+)
+ package/Config.in.host       |  1 +
+ package/cargo/Config.in.host |  8 ++++
+ package/cargo/cargo.hash     |  8 ++++
+ package/cargo/cargo.mk       | 91 ++++++++++++++++++++++++++++++++++++++++++++
+ package/cargo/config.in      |  2 +
+ 6 files changed, 111 insertions(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 70ca569feb..0e041d6f40 100644
+index 0e041d6f40..c524cb6ac5 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -550,6 +550,7 @@ F:	package/jemalloc/
- F:	package/meson/
- F:	package/ninja/
- F:	package/rust-bin/
-+F:	package/rust/
- F:	package/s6/
- F:	package/s6-dns/
- F:	package/s6-linux-init/
-diff --git a/package/rust/rust.hash b/package/rust/rust.hash
+@@ -542,6 +542,7 @@ N:	Eric Le Bihan <eric.le.bihan.dev@free.fr>
+ F:	docs/manual/adding-packages-meson.txt
+ F:	package/adwaita-icon-theme/
+ F:	package/cargo-bin/
++F:	package/cargo/
+ F:	package/darkhttpd/
+ F:	package/eudev/
+ F:	package/execline/
+diff --git a/package/Config.in.host b/package/Config.in.host
+index 2f20dd0e48..199a8e9856 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -2,6 +2,7 @@ menu "Host utilities"
+ 
+ 	source "package/aespipe/Config.in.host"
+ 	source "package/android-tools/Config.in.host"
++	source "package/cargo/Config.in.host"
+ 	source "package/cbootimage/Config.in.host"
+ 	source "package/checkpolicy/Config.in.host"
+ 	source "package/cmake/Config.in.host"
+diff --git a/package/cargo/Config.in.host b/package/cargo/Config.in.host
 new file mode 100644
-index 0000000000..d6731b6dc2
+index 0000000000..0f1ca305c6
 --- /dev/null
-+++ b/package/rust/rust.hash
-@@ -0,0 +1,5 @@
-+# From https://static.rust-lang.org/dist/rustc-1.23.0-src.tar.xz.sha256
-+sha256 7196032371b50dd5582465b3bfa79ffd783b74f0711420d99b61b26c96fb3d80  rustc-1.23.0-src.tar.xz
++++ b/package/cargo/Config.in.host
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_HOST_CARGO
++	bool "host cargo"
++	depends on BR2_PACKAGE_HAS_HOST_RUSTC
++	help
++	  Cargo is the package manager for the Rust programming
++	  language.
++
++	  https://crates.io/
+diff --git a/package/cargo/cargo.hash b/package/cargo/cargo.hash
+new file mode 100644
+index 0000000000..2a24e2e175
+--- /dev/null
++++ b/package/cargo/cargo.hash
+@@ -0,0 +1,8 @@
 +# Locally generated
++sha256 a9d4291254a1d622d3c3cb942aaa56ab4059b8d04915c3af234f0362f14722e8  cargo-0.24.0.tar.gz
++sha256 dc7240d60a869fa24a68c8734fb7c810c27cca0a6dad52df6279865e4e8e7fae  rust-installer-4f994850808a572e2cc8d43f968893c8e942e9bf.tar.gz
 +sha256 a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2  LICENSE-APACHE
 +sha256 23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3  LICENSE-MIT
-diff --git a/package/rust/rust.mk b/package/rust/rust.mk
++sha256 8bd89f9222dc80292f4107347103b693ac66f3a083371f0629ccf42338abe880  LICENSE-THIRD-PARTY
++# From https://src.fedoraproject.org/repo/pkgs/cargo/cargo-0.24.0-vendor.tar.xz/sha512
++sha512 60c12ce49a53cf986490f5a5fdf606f0374677902edfdc4d48ab1ba6094f3f23efc59626cd3776649c9386a9cab2a60332e5693aad6acbcbb92132efdcf9fe21  cargo-0.24.0-vendor.tar.xz
+diff --git a/package/cargo/cargo.mk b/package/cargo/cargo.mk
 new file mode 100644
-index 0000000000..6d6ac4370a
+index 0000000000..5625127fcd
 --- /dev/null
-+++ b/package/rust/rust.mk
-@@ -0,0 +1,79 @@
++++ b/package/cargo/cargo.mk
+@@ -0,0 +1,91 @@
 +################################################################################
 +#
-+# rust
++# cargo
 +#
 +################################################################################
 +
-+RUST_VERSION = 1.23.0
-+RUST_SOURCE = rustc-$(RUST_VERSION)-src.tar.xz
-+RUST_SITE = https://static.rust-lang.org/dist
-+RUST_LICENSE = Apache-2.0 or MIT
-+RUST_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
++CARGO_VERSION = 0.24.0
++CARGO_SITE = $(call github,rust-lang,cargo,$(CARGO_VERSION))
++CARGO_LICENSE = Apache-2.0 or MIT
++CARGO_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
 +
-+HOST_RUST_PROVIDES = host-rustc
++CARGO_DEPS_SHA512 = 60c12ce49a53cf986490f5a5fdf606f0374677902edfdc4d48ab1ba6094f3f23efc59626cd3776649c9386a9cab2a60332e5693aad6acbcbb92132efdcf9fe21
++CARGO_DEPS_SITE = https://src.fedoraproject.org/repo/pkgs/cargo/$(CARGO_DEPS_SOURCE)/sha512/$(CARGO_DEPS_SHA512)
++CARGO_DEPS_SOURCE = cargo-$(CARGO_VERSION)-vendor.tar.xz
 +
-+HOST_RUST_DEPENDENCIES = \
-+	toolchain \
-+	host-rust-bin \
-+	host-cargo-bin \
-+	host-python \
-+	$(BR2_CMAKE_HOST_DEPENDENCY)
++CARGO_INSTALLER_VERSION = 4f994850808a572e2cc8d43f968893c8e942e9bf
++CARGO_INSTALLER_SITE = $(call github,rust-lang,rust-installer,$(CARGO_INSTALLER_VERSION))
++CARGO_INSTALLER_SOURCE = rust-installer-$(CARGO_INSTALLER_VERSION).tar.gz
 +
-+ifeq ($(BR2_PACKAGE_JEMALLOC),y)
-+HOST_RUST_DEPENDENCIES += jemalloc
-+HOST_RUST_JEMALLOC_ENABLED = true
-+HOST_RUST_JEMALLOC_CONF = 'jemalloc = "$(STAGING_DIR)/usr/lib/libjemalloc_pic.a"'
-+else
-+HOST_RUST_JEMALLOC_ENABLED = false
-+endif
++HOST_CARGO_EXTRA_DOWNLOADS = \
++	$(CARGO_DEPS_SITE)/$(CARGO_DEPS_SOURCE) \
++	$(CARGO_INSTALLER_SITE)/$(CARGO_INSTALLER_SOURCE)
 +
-+HOST_RUST_VERBOSITY = $(if $(VERBOSE),2,0)
++HOST_CARGO_DEPENDENCIES = \
++	$(BR2_CMAKE_HOST_DEPENDENCY) \
++	host-pkgconf \
++	host-openssl \
++	host-libhttpparser \
++	host-libssh2 \
++	host-libcurl \
++	host-rustc \
++	host-cargo-bin
 +
-+# Some vendor crates contain Cargo.toml.orig files. The associated
-+# .cargo-checksum.json file will contain a checksum for Cargo.toml.orig but
-+# support/scripts/apply-patches.sh will delete them. This will cause the build
-+# to fail, as Cargo will not be able to find the file and verify the checksum.
-+# So, remove all Cargo.toml.orig entries from the affected .cargo-checksum.json
-+# files
-+define HOST_RUST_EXCLUDE_ORIG_FILES
-+	for file in $$(find $(@D) -name '*.orig'); do \
-+		crate=$$(dirname $${file}); \
-+		fn=$${crate}/.cargo-checksum.json; \
-+		sed -i -e 's/"Cargo.toml.orig":"[a-z0-9]\+",//g' $${fn}; \
-+	done
++HOST_CARGO_SNAP_BIN = $(HOST_CARGO_BIN_DIR)/cargo/bin/cargo
++HOST_CARGO_HOME = $(HOST_DIR)/share/cargo
++
++define HOST_CARGO_EXTRACT_DEPS
++	@mkdir -p $(@D)/vendor
++	$(call suitable-extractor,$(CARGO_DEPS_SOURCE)) \
++		$(DL_DIR)/$(CARGO_DEPS_SOURCE) | \
++		$(TAR) --strip-components=1 -C $(@D)/vendor $(TAR_OPTIONS) -
 +endef
 +
-+HOST_RUST_POST_EXTRACT_HOOKS += HOST_RUST_EXCLUDE_ORIG_FILES
++HOST_CARGO_POST_EXTRACT_HOOKS += HOST_CARGO_EXTRACT_DEPS
 +
-+define HOST_RUST_CONFIGURE_CMDS
++define HOST_CARGO_EXTRACT_INSTALLER
++	@mkdir -p $(@D)/src/rust-installer
++	$(call suitable-extractor,$(CARGO_INSTALLER_SOURCE)) \
++		$(DL_DIR)/$(CARGO_INSTALLER_SOURCE) | \
++		$(TAR) --strip-components=1 -C $(@D)/src/rust-installer $(TAR_OPTIONS) -
++endef
++
++HOST_CARGO_POST_EXTRACT_HOOKS += HOST_CARGO_EXTRACT_INSTALLER
++
++define HOST_CARGO_SETUP_DEPS
++	mkdir -p $(@D)/.cargo
 +	( \
-+		echo '[build]'; \
-+		echo 'target = ["$(RUST_TARGET_NAME)"]'; \
-+		echo 'cargo = "$(HOST_CARGO_BIN_DIR)/cargo/bin/cargo"'; \
-+		echo 'rustc = "$(HOST_RUST_BIN_DIR)/rustc/bin/rustc"'; \
-+		echo 'python = "$(HOST_DIR)/bin/python2"'; \
-+		echo 'submodules = false'; \
-+		echo 'vendor = true'; \
-+		echo 'compiler-docs = false'; \
-+		echo 'docs = false'; \
-+		echo 'verbose = $(HOST_RUST_VERBOSITY)'; \
-+		echo '[install]'; \
-+		echo 'prefix = "$(HOST_DIR)"'; \
-+		echo '[rust]'; \
-+		echo 'use-jemalloc = $(HOST_RUST_JEMALLOC_ENABLED)'; \
-+		echo '[target.$(RUST_TARGET_NAME)]'; \
-+		echo 'cc = "$(TARGET_CROSS)gcc"'; \
-+		echo $(HOST_RUST_JEMALLOC_CONF); \
-+	) > $(@D)/config.toml
++		echo "[source.crates-io]"; \
++		echo "registry = 'https://github.com/rust-lang/crates.io-index'"; \
++		echo "replace-with = 'vendored-sources'"; \
++		echo "[source.vendored-sources]"; \
++		echo "directory = '$(@D)/vendor'"; \
++	) > $(@D)/.cargo/config
 +endef
 +
-+define HOST_RUST_BUILD_CMDS
-+	cd $(@D); $(HOST_MAKE_ENV) $(HOST_DIR)/bin/python2 x.py build
++HOST_CARGO_PRE_CONFIGURE_HOOKS += HOST_CARGO_SETUP_DEPS
++
++HOST_CARGO_SNAP_OPTS = \
++	--release \
++	$(if $(VERBOSE),--verbose)
++
++HOST_CARGO_ENV = \
++	RUSTFLAGS="-Clink-arg=-Wl,-rpath,$(HOST_DIR)/lib" \
++	CARGO_HOME=$(HOST_CARGO_HOME)
++
++define HOST_CARGO_BUILD_CMDS
++	(cd $(@D); $(HOST_MAKE_ENV) $(HOST_CARGO_ENV) $(HOST_CARGO_SNAP_BIN) \
++		build $(HOST_CARGO_SNAP_OPTS))
 +endef
 +
-+define HOST_RUST_INSTALL_CMDS
-+	cd $(@D); $(HOST_MAKE_ENV) $(HOST_DIR)/bin/python2 x.py dist
-+	cd $(@D); $(HOST_MAKE_ENV) $(HOST_DIR)/bin/python2 x.py install
++define HOST_CARGO_INSTALL_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/target/release/cargo $(HOST_DIR)/bin/cargo
++	$(INSTALL) -D package/cargo/config.in \
++		$(HOST_DIR)/share/cargo/config
++	$(SED) 's/@RUST_TARGET_NAME@/$(RUST_TARGET_NAME)/' \
++		$(HOST_DIR)/share/cargo/config
++	$(SED) 's/@CROSS_PREFIX@/$(notdir $(TARGET_CROSS))/' \
++		$(HOST_DIR)/share/cargo/config
 +endef
 +
 +$(eval $(host-generic-package))
-diff --git a/package/rustc/Config.in.host b/package/rustc/Config.in.host
-index 66c50c4579..d93ff05209 100644
---- a/package/rustc/Config.in.host
-+++ b/package/rustc/Config.in.host
-@@ -40,6 +40,24 @@ choice
- 	help
- 	  Select a Rust compiler
- 
-+config BR2_PACKAGE_HOST_RUST
-+	bool "host rust"
-+	depends on BR2_HOST_GCC_AT_LEAST_4_7 # required by LLVM
-+	# triggers ICE on trunc_int_for_mode, at explow.c:56
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 || !BR2_aarch64
-+	select BR2_PACKAGE_HAS_HOST_RUSTC
-+	help
-+	  This package will build the compiler for the host as well as
-+	  two flavors of the standard library: one for the host, another
-+	  for the target. Both are installed in the host directory.
-+
-+comment "host-rust needs a toolchain w/ gcc >= 5"
-+	depends on BR2_aarch64
-+	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_5
-+
-+comment "host-rust needs host gcc >= 4.7"
-+	depends on !BR2_HOST_GCC_AT_LEAST_4_7
-+
- config BR2_PACKAGE_HOST_RUST_BIN
- 	bool "host rust (pre-built)"
- 	select BR2_PACKAGE_HAS_HOST_RUSTC
-@@ -54,6 +72,7 @@ config BR2_PACKAGE_HAS_HOST_RUSTC
- 
- config BR2_PACKAGE_PROVIDES_HOST_RUSTC
- 	string
-+	default "host-rust" if BR2_PACKAGE_HOST_RUST
- 	default "host-rust-bin" if BR2_PACKAGE_HOST_RUST_BIN
- 
- endif
+diff --git a/package/cargo/config.in b/package/cargo/config.in
+new file mode 100644
+index 0000000000..cc048c71c4
+--- /dev/null
++++ b/package/cargo/config.in
+@@ -0,0 +1,2 @@
++[target. at RUST_TARGET_NAME@]
++linker = "@CROSS_PREFIX at gcc"
