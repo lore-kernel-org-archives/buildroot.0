@@ -1,36 +1,32 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 5 Feb 2018 07:12:25 +0100
-Subject: [Buildroot] [PATCH 1/1] python3: bump to 2.6.4
-In-Reply-To: <20180130235229.22352-1-Adamduskett@outlook.com>
-References: <20180130235229.22352-1-Adamduskett@outlook.com>
-Message-ID: <20180205071225.0fa33ee7@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 05 Feb 2018 07:59:38 +0100
+Subject: [Buildroot] [PATCH] gcc: or1k: use 20170218 tag instead of
+ branch
+In-Reply-To: <20180203201821.3924-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Sat, 3 Feb 2018 21:18:21 +0100")
+References: <20180203201821.3924-1-peter@korsgaard.com>
+Message-ID: <87inbbx6p1.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-On Tue, 30 Jan 2018 18:52:29 -0500, Adam Duskett wrote:
-> Also update necessary patches.
-> 
-> Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
+ > As pointed out by Joel Stanley:
+ > https://patchwork.ozlabs.org/patch/863011/
 
-I'm sorry, but I had to revert that patch, it was causing gazillions of
-failures in the autobuilders. The Python build process now tries to use
-os.replace(), which is only available since Python 3.3. It would work
-if the host-python interpreter was being used, but the system Python
-interpreter is used, causing the build failure.
+ > Github now longer provides the exact same tarball for the or1k musl-5.4.0
+ > tarball, breaking the build.  Even more, musl-5.4.0 is the name of a git
+ > branch, not a tag.
 
-It is worth noting that the problem happens in the regen-importlib make
-target, and that there is already some code in python3.mk to handle
-issues related to that. See line 162 and following.
+ > Fix both problems by changing to the or1k-musl-5.4.0-20170218 tag, which
+ > points to the exact same git commit.
 
-Best regards,
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-Thomas
+Committed, thanks.
+
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-http://bootlin.com
+Bye, Peter Korsgaard
