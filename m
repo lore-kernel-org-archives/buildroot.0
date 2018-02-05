@@ -1,79 +1,30 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon,  5 Feb 2018 23:42:13 +0100
-Subject: [Buildroot] [PATCH-2017.11.x] refpolicy: add upstream patch fixing
- compile error related to implicit-fallthrough
-Message-ID: <20180205224213.2036-1-peter@korsgaard.com>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Mon, 5 Feb 2018 23:51:46 +0100
+Subject: [Buildroot] [PATCH 00/15 v2] fs: support parallel filesystems
+ build
+In-Reply-To: <cover.1517820133.git.yann.morin.1998@free.fr>
+References: <cover.1517820133.git.yann.morin.1998@free.fr>
+Message-ID: <CANQCQpYifzmRdZtt1z2qtRkXEqZ_5zdbjU3VVHg_MRW=LMR3SA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/958/958ff318cdbedb5b8641b376223491b85a75f084/
-http://autobuild.buildroot.net/results/54e/54e240243aba31da33a2cbecdcc234b44f24dcf7/
+Yann,
 
-fc-sort is a host utility compiled with -Werror, and for modern (>= 7.x) gcc
-versions, Werror implies -Werror=implicit-fallthrough.
+On Mon, Feb 5, 2018 at 9:42 AM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> Hello All!
+>
+> TL;DR: filsystems are not parallel-safe, so we generate an intermediate
+> tarball from target/, which then serves as input for the various
+> filesystems; we also run pre-gen hooks under fakeroot, and get rid of
+> post-fs package-provided hooks.
+>
 
-And an upstream patch fixing this issue.
+I ran a build using master with this patchset to create a tar, romfs,
+cpio gz uboot, and squashfs gz compressed images.  Once that initial
+build completed, I enabled the existing parallel build option and
+observed my filesystems being re-created in parallel (used -j 6).
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...0001-fc_sort-avoid-compiler-warning-error.patch | 45 ++++++++++++++++++++++
- 1 file changed, 45 insertions(+)
- create mode 100644 package/refpolicy/0001-fc_sort-avoid-compiler-warning-error.patch
-
-diff --git a/package/refpolicy/0001-fc_sort-avoid-compiler-warning-error.patch b/package/refpolicy/0001-fc_sort-avoid-compiler-warning-error.patch
-new file mode 100644
-index 0000000000..403daedd0d
---- /dev/null
-+++ b/package/refpolicy/0001-fc_sort-avoid-compiler-warning-error.patch
-@@ -0,0 +1,45 @@
-+From 89b53fafa9904ba7a3df2ad94d01a485eae5366f Mon Sep 17 00:00:00 2001
-+From: Guido Trentalancia <guido@trentalancia.net>
-+Date: Tue, 6 Jun 2017 00:08:13 +0200
-+Subject: [PATCH] fc_sort: avoid compiler warning/error
-+
-+Fix a "-Werror=implicit-fallthrough" compiler warning/error on
-+the switch statement.
-+
-+This third version (v3) fixes a bug introduced in the first
-+version and improves the style over the second version.
-+
-+Signed-off-by: Guido Trentalancia <guido@trentalancia.com>
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ support/fc_sort.c | 10 ++++++----
-+ 1 file changed, 6 insertions(+), 4 deletions(-)
-+
-+diff --git a/support/fc_sort.c b/support/fc_sort.c
-+index 5561288a..66cdf39f 100644
-+--- a/support/fc_sort.c
-++++ b/support/fc_sort.c
-+@@ -292,14 +292,16 @@ void fc_fill_data(file_context_node_t *fc_node)
-+ 			/* If a escape character is found,
-+ 			 *  skip the next character. */
-+ 			c++;
-++			break;
-+ 		default:
-+-			/* If no meta character has been found yet,
-+-			 *  add one to the stem length. */
-+-			if (!fc_node->meta)
-+-				fc_node->stem_len++;
-+ 			break;
-+ 		}
-+ 
-++		/* If no meta character has been found yet,
-++		 * add one to the stem length. */
-++		if (!fc_node->meta)
-++			fc_node->stem_len++;
-++
-+ 		fc_node->str_len++;
-+ 		c++;
-+ 	}
-+-- 
-+2.11.0
-+
--- 
-2.11.0
+Tested-by: Matt Weber <matthew.weber@rockwellcollins.com>
