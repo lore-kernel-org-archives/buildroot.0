@@ -1,132 +1,236 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 5 Feb 2018 16:34:00 +0100
-Subject: [Buildroot] [git commit] Update for 2018.02-rc1
-Message-ID: <20180205154624.B1B7688424@busybox.osuosl.org>
+Date: Mon, 05 Feb 2018 17:11:24 +0100
+Subject: [Buildroot] Buildroot 2018.02-rc1 released
+Message-ID: <87h8qvv2kz.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=30bffce8d58da8087a2fce87eba37f416f7139cb
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi,
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- CHANGES                    | 27 +++++++++++++++------------
- Makefile                   |  4 ++--
- docs/website/download.html | 22 +++++++++++-----------
- 3 files changed, 28 insertions(+), 25 deletions(-)
+Buildroot 2018.02-rc1 is released - Go download it at:
 
-diff --git a/CHANGES b/CHANGES
-index 022e94f520..61f04ec134 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -49,19 +49,22 @@
- 	Zlib is now a virtual package, provided by either libzlib or
- 	zlib-ng, similar to openssl.
- 
-+	Support for the Rust programming language.
-+
- 	New packages: aoetools, armbian-firmware, binaries-marvell,
--	brltty, cups-filters, curlpp, daq, flatbuffers, gconf,
--	glorytun, gstreamer1-mm, imx-m4fwloader, imx-gpu-g2d,
--	json-for-modern-cpp, libcpprestsdk, libgta, libostree,
--	libupnp18, luadbi, luadbi-sqlite3, lua-utf8, lynx, meson,
--	mv-ddr-marvell, nilfs-utils, opentracing-cpp, open-lldp, pimd,
--	proj, python-flask-cors, python-jaraco-classes,
--	python-more-itertools, python-oauthlib, python-raven,
--	python-remi, python-requests-oauthlib, python-schedule,
--	python-secretstorage, python-see, python-tabledata,
--	python-txtorcon, python-xlib, qt5charts, rtl8189fs, rtl8723bu,
--	rygel, safeclib, solatus, tcf-agent, traceroute, waylandpp,
--	wolfssl, zisofs-tools, zlib-ng
-+	brltty, cargo, cargo-bin, cups-filters, curlpp, daq,
-+	flatbuffers, gconf, glorytun, gstreamer1-mm, imx-m4fwloader,
-+	imx-gpu-g2d, json-for-modern-cpp, libcpprestsdk, libgta,
-+	libostree, libupnp18, luadbi, luadbi-sqlite3, lua-utf8, lynx,
-+	meson, mv-ddr-marvell, nilfs-utils, opentracing-cpp,
-+	open-lldp, pimd, proj, python-flask-cors,
-+	python-jaraco-classes, python-more-itertools, python-oauthlib,
-+	python-raven, python-remi, python-requests-oauthlib,
-+	python-schedule, python-secretstorage, python-see,
-+	python-tabledata, python-txtorcon, python-xlib, qt5charts,
-+	rtl8189fs, rtl8723bu, rust, rustc, rust-bin, rygel, safeclib,
-+	solatus, tcf-agent, traceroute, waylandpp, wolfssl,
-+	zisofs-tools, zlib-ng
- 
- 	Removed packages: eeprog
- 
-diff --git a/Makefile b/Makefile
-index e12bcb45b4..90019bd764 100644
---- a/Makefile
-+++ b/Makefile
-@@ -87,9 +87,9 @@ all:
- .PHONY: all
- 
- # Set and export the version string
--export BR2_VERSION := 2018.02-git
-+export BR2_VERSION := 2018.02-rc1
- # Actual time the release is cut (for reproducible builds)
--BR2_VERSION_EPOCH = 1512070000
-+BR2_VERSION_EPOCH = 1517840000
- 
- # Save running make version since it's clobbered by the make package
- RUNNING_MAKE_VERSION := $(MAKE_VERSION)
-diff --git a/docs/website/download.html b/docs/website/download.html
-index 097e760a89..57c82e2739 100644
---- a/docs/website/download.html
-+++ b/docs/website/download.html
-@@ -75,41 +75,41 @@
- 	  <p><a href="/downloads/buildroot-2017.11.2.tar.bz2.sign">PGP signature</a></p>
- 	</div>
-       </div>
--<!--
--      <h3 style="text-align: center;">Latest release candidate: <b>2017.11-rc2</b></h3>
-+
-+      <h3 style="text-align: center;">Latest release candidate: <b>2018.02-rc1</b></h3>
-       <div class="row mt centered">
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2017.11-rc2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2018.02-rc1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2017.11-rc2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2018.02-rc1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
- 
--	  <h3><a href="/downloads/buildroot-2017.11-rc2.tar.gz">buildroot-2017.11-rc2.tar.gz</a></h3>
--	  <p><a href="/downloads/buildroot-2017.11-rc2.tar.gz.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2018.02-rc1.tar.gz">buildroot-2018.02-rc1.tar.gz</a></h3>
-+	  <p><a href="/downloads/buildroot-2018.02-rc1.tar.gz.sign">PGP signature</a></p>
- 	</div>
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2017.11-rc2.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2018.02-rc1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2017.11-rc2.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2018.02-rc1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
- 
--	  <h3><a href="/downloads/buildroot-2017.11-rc2.tar.bz2">buildroot-2017.11-rc2.tar.bz2</a></h3>
--	  <p><a href="/downloads/buildroot-2017.11-rc2.tar.bz2.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2018.02-rc1.tar.bz2">buildroot-2018.02-rc1.tar.bz2</a></h3>
-+	  <p><a href="/downloads/buildroot-2018.02-rc1.tar.bz2.sign">PGP signature</a></p>
- 	</div>
-       </div>
---->
-+
-       This and earlier releases (and their PGP signatures) can always be downloaded from
-       <a href="/downloads/">http://buildroot.net/downloads/</a>.
-     </div>
+http://buildroot.net/downloads/buildroot-2018.02-rc1.tar.gz
+
+or
+
+http://buildroot.net/downloads/buildroot-2018.02-rc1.tar.bz2
+
+Or get it from Git:
+
+git://git.buildroot.net/buildroot
+
+Please give it a spin and report any problems to the mailing list or
+bug tracker.
+
+Slightly smaller (990 changes) than other recent cycles, but still a
+lot of activity and contributions from more than 100 unique
+contributors!
+
+Of noteworthy new features/changes we have:
+
+- The global source-check and per-package <pkg>-source-check targets
+   have been removed.
+
+- Architecture: Add x86 Silvermont variant. Add several new ARM
+  variants, rework MIPS NaN logic. Support mainline binutils/gcc for ARC.
+
+- Toolchains: Linaro toolchains upgraded to 2017.11 release, ARC
+  external toolchains upgraded to arc-2017.09. Libatomic is now also
+  copied for external musl based toolchains.  Add binutils 2.30.x and
+  switch to binutils 2.29.x by default.
+
+- Added hardening options to build with RELRO and FORTITY.
+
+- New defconfigs: Bananapi M64, FriendlyARM Nanopi A64 & NEO2,
+  imx6slevk, imx6sx-sdb, imx6ulevk, Olimex A64-OLinuXino, Orangepi lite
+  / pc plus / pc / prime / win / win plus / zero plus2, Pine64, Solidrun
+  MacchiatoBin. Sopine.
+
+- Add utils/diffconfig, a simple utility for comparing configuration
+  files - Adapted from the version in the Linux kernel.
+
+ - Infrastructure: Check that the same file is not touched by multiple
+   packages, as a preparation for toplevel parallel builds.
+
+- Hashes for the license files for a large number of packages have been
+  added, ensuring that license changes will not be missed when packages
+  are bumped.
+
+- Fix build issue for autotools based packages checking for C++ support
+  on toolchains without C++ support and on a distro lacking /lib/cpp
+  (E.G. Arch Linux).
+
+- Support for the meson build system.
+
+- Pie charts generated by 'graph-build' or 'graph-size' are now sorted
+  according to the size of each piece.
+
+ - System: Only show getty options when busybox init or sysvinit are used.
+
+ - ARM-trusted-firmware: Support ATF bundled in U-Boot as well as U-Boot
+   bundled in ATF.
+
+ - Zlib is now a virtual package, provided by either libzlib or zlib-ng,
+   similar to openssl.
+
+ - Support for the Rust programming language.
+
+New packages: aoetools, armbian-firmware, binaries-marvell, brltty,
+cargo, cargo-bin, cups-filters, curlpp, daq, flatbuffers, gconf,
+glorytun, gstreamer1-mm, imx-m4fwloader, imx-gpu-g2d,
+json-for-modern-cpp, libcpprestsdk, libgta, libostree, libupnp18,
+luadbi, luadbi-sqlite3, lua-utf8, lynx, meson, mv-ddr-marvell,
+nilfs-utils, opentracing-cpp, open-lldp, pimd, proj, python-flask-cors,
+python-jaraco-classes, python-more-itertools, python-oauthlib,
+python-raven, python-remi, python-requests-oauthlib, python-schedule,
+python-secretstorage, python-see, python-tabledata, python-txtorcon,
+python-xlib, qt5charts, rtl8189fs, rtl8723bu, rust, rustc, rust-bin,
+rygel, safeclib, solatus, tcf-agent, traceroute, waylandpp, wolfssl,
+zisofs-tools, zlib-ng
+
+Removed packages: aiccu, eeprom
+
+And the usual package version updates and bug fixes. See the CHANGES
+file for details:
+
+http://git.buildroot.net/buildroot/plain/CHANGES?id=2018.02-rc1
+
+
+Many thanks to the people contributing to this release:
+
+git shortlog -s -n 2017.11..
+
+    91	Bernd Kuhls
+    77	Yann E. MORIN
+    69	Baruch Siach
+    61	Fabio Estevam
+    52	Peter Korsgaard
+    52	Thomas Petazzoni
+    48	Adam Duskett
+    48	Fabrice Fontaine
+    37	Yegor Yefremov
+    31	Francois Perrad
+    27	Romain Naour
+    26	Eric Le Bihan
+    20	Gary Bisson
+    19	J?rg Krause
+    19	Marcus Folkesson
+    17	Johan Oudinet
+    17	Mario Lang
+    17	Sergey Matyukevich
+    13	Peter Seiderer
+    13	Ricardo Martincoski
+    12	Carlos Santos
+    12	Jagan Teki
+    12	Matt Weber
+    11	Sergio Prado
+     9	Waldemar Brodkorb
+     8	Luca Ceresoli
+     8	Petr Vorel
+     7	Jerzy Grzegorek
+     7	Joseph Kogut
+     6	Ga?l PORTAY
+     6	Zoltan Gyarmati
+     5	Adrian Perez de Castro
+     5	Angelo Compagnucci
+     5	Norbert Lange
+     4	Andrey Yurovsky
+     4	Ismael Luceno
+     4	Jan Heylen
+     4	Jan Kraval
+     4	Martin Bark
+     4	Philippe Proulx
+     3	Alexander Mukhin
+     3	Alexey Brodkin
+     3	Arnout Vandecappelle (Essensium/Mind)
+     3	Danomi Manchego
+     3	Evgeniy Didin
+     3	Guillermo A. Amaral
+     3	James Knight
+     3	Joshua Henderson
+     3	Kurt Van Dijck
+     3	Sam Voss
+     2	Adrien Gallou?t
+     2	Alistair Francis
+     2	Bartosz Bilas
+     2	Chris Brandt
+     2	Chris Lesiak
+     2	Dagg Stompler
+     2	Gwenhael Goavec-Merou
+     2	Joel Stanley
+     2	Julien BOIBESSOT
+     2	Julien Corjon
+     2	Julius Kriukas
+     2	Laurent Charpentier
+     2	Mahyar Koshkouei
+     2	Martin Kepplinger
+     2	Olivier Schonken
+     2	Petr Kulhavy
+     2	Ryan Coe
+     2	Stefan Fr?berg
+     2	Trent Piepho
+     1	Alexandre Esse
+     1	Alexey Roslyakov
+     1	Andr? Hentschel
+     1	Christophe Vu-Brugier
+     1	Damien Riegel
+     1	David Lechner
+     1	Ed Blake
+     1	Einar Jon Gunnarsson
+     1	Frank Hunleth
+     1	Ignacy Gaw?dzki
+     1	Ilya Kuzmich
+     1	Jan Kundr?t
+     1	Johannes Schmitz
+     1	Marcin Niestroj
+     1	Marcus Hoffmann
+     1	Mark Hirota
+     1	Matthew Weber
+     1	Maxime Hadjinlian
+     1	Myl?ne Josserand
+     1	Patryk Duda
+     1	Pierre CROKAERT
+     1	Romain Reignier
+     1	Scott Fan
+     1	Stefan Becker
+     1	S?bastien Szymanski
+     1	Thomas De Schampheleire
+     1	Tobias Klauser
+     1	Tony Lindgren
+     1	Vincent Stehl?
+     1	Vivien Didelot
+     1	Yair Ben Avraham
+
+And a special thanks to our patch reviewers:
+
+git log 2017.11.. | grep -Ei '(reviewed|acked)-by:' | \
+    sed 's/.*by: //' | sort | uniq -c | sort -n -r
+
+     27 "Yann E. MORIN" <yann.morin.1998@free.fr>
+     15 Yegor Yefremov <yegorslists@googlemail.com>
+      8 Romain Naour <romain.naour@gmail.com>
+      6 Alistair Francis <alistair.francis@xilinx.com>
+      4 Petr Vorel <petr.vorel@gmail.com>
+      3 Ricardo Martincoski <ricardo.martincoski@gmail.com>
+      2 Ludovic Desroches <ludovic.desroches@microchip.com>
+      1 Sergey Matyukevich <geomatsi@gmail.com>
+      1 S?bastien Szymanski <sebastien.szymanski@armadeus.com>
+      1 Matt Weber <matthew.weber@rockwellcollins.com>
+      1 Julien Floret <julien.floret@6wind.com>
+      1 Frank Hunleth <fhunleth@troodon-software.com>
+      1 Bryce Ferguson <bryce.ferguson at rockwellcollins.com
+      1 Baruch Siach <baruch@tkos.co.il>
+      1 Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+      1 Adrian Perez de Castro <aperez@igalia.com>
+
+Like usual, I will now create a next branch and start merging in new
+features, rather than wait until 2018.02 is released.
+
+Keep in mind that 2018.02 will become the new long term support release,
+replacing 2017.02.
+
+-- 
+Bye, Peter Korsgaard
