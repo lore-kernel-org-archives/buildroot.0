@@ -1,77 +1,75 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon,  5 Feb 2018 22:10:15 +0100
-Subject: [Buildroot] [PATCH v2 5/5] package/gdb: remove 7.11
-In-Reply-To: <20180205211015.26819-1-thomas.petazzoni@bootlin.com>
-References: <20180205211015.26819-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20180205211015.26819-6-thomas.petazzoni@bootlin.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Mon, 5 Feb 2018 22:16:19 +0100
+Subject: [Buildroot] [PATCH 5/5] package/glibc: bump to 2.27
+In-Reply-To: <20180205210150.ok3hhfucmxu3uz3l@tarshish>
+References: <20180205205716.4279-1-romain.naour@gmail.com>
+ <20180205205716.4279-5-romain.naour@gmail.com>
+ <20180205210150.ok3hhfucmxu3uz3l@tarshish>
+Message-ID: <4663bf7a-cc67-d090-0b19-43d707161287@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Romain Naour <romain.naour@gmail.com>
+Hi Baruch,
 
-Now that 8.1 has been added and 8.0 is the default version, let's
-remove the old 7.11 release.
+Le 05/02/2018 ? 22:01, Baruch Siach a ?crit?:
+> Hi Romain,
+> 
+> On Mon, Feb 05, 2018 at 09:57:16PM +0100, Romain Naour wrote:
+>> See: https://sourceware.org/ml/libc-announce/2018/msg00000.html
+>> https://sourceware.org/glibc/wiki/Release/2.27
+> 
+> Note that this is a security bump fixing CVE-2017-1000408, CVE-2017-1000409, 
+> CVE-2017-16997, CVE-2018-1000001, and CVE-2018-6485.
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- Config.in.legacy           | 7 +++++++
- package/gdb/Config.in.host | 4 ----
- package/gdb/gdb.hash       | 1 -
- 3 files changed, 7 insertions(+), 5 deletions(-)
+Ok thanks, I'll add them.
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 9cfe961d11..b5f9c2e145 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -145,6 +145,13 @@ endif
- ###############################################################################
- comment "Legacy options removed in 2018.02"
- 
-+config BR2_GDB_VERSION_7_11
-+	bool "gdb 7.11 has been removed"
-+	select BR2_LEGACY
-+	help
-+	  The 7.11 version of gdb has been removed. Use a newer version
-+	  instead.
-+
- config BR2_GDB_VERSION_7_10
- 	bool "gdb 7.10 has been removed"
- 	select BR2_LEGACY
-diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
-index 8e872dbc6b..fe49263b1a 100644
---- a/package/gdb/Config.in.host
-+++ b/package/gdb/Config.in.host
-@@ -50,9 +50,6 @@ choice
- 	help
- 	  Select the version of gdb you wish to use.
- 
--config BR2_GDB_VERSION_7_11
--	bool "gdb 7.11.x"
--
- config BR2_GDB_VERSION_7_12
- 	bool "gdb 7.12.x"
- 
-@@ -74,7 +71,6 @@ endif
- config BR2_GDB_VERSION
- 	string
- 	default "arc-2017.09-release-gdb" if BR2_arc
--	default "7.11.1"   if BR2_GDB_VERSION_7_11
- 	default "7.12.1"   if BR2_GDB_VERSION_7_12
- 	default "8.0.1"    if BR2_GDB_VERSION_8_0 || !BR2_PACKAGE_HOST_GDB
- 	default "8.1"      if BR2_GDB_VERSION_8_1
-diff --git a/package/gdb/gdb.hash b/package/gdb/gdb.hash
-index cb76dca198..5571f98330 100644
---- a/package/gdb/gdb.hash
-+++ b/package/gdb/gdb.hash
-@@ -1,5 +1,4 @@
- # From ftp://gcc.gnu.org/pub/gdb/releases/sha512.sum
--sha512  f80ec6c8a0f0b54c8b945666e875809174402b7e121efb378ebac931a91f9a1cc0048568f8e2f42ae8ae2392ff8d144c2e51d41c7398935017450aaf29838360	gdb-7.11.1.tar.xz
- sha512  0ac8d0a495103611ef41167a08313a010dce6ca4c6d827cbe8558a0c1a1a8a6bfa53f1b7704251289cababbfaaf9e075550cdf741a54d6cd9ca3433d910efcd8	gdb-7.12.1.tar.xz
- sha512  5eb328910033f0918058be2f92caebf1e8dfc6caa3c730d99d621627e53de3c1b43761c2f683d53555893253c2f06768cbf56cdea051a3d291ffb6cfae87b5e1	gdb-8.0.1.tar.xz
- sha512  ffd82f415d7652d62dad1716c307836f594217a363429609beb7d70239e8bf06b73b393345b0e000796228e56681ed7656ac3c8be05e91d6d652ab0d5b1dc357	gdb-8.1.tar.xz
--- 
-2.14.3
+> 
+>> Add hash files
+> 
+> You mean license files hash, right?
+
+Yes Indeed.
+
+Best regards,
+Romain
+
+> 
+> baruch
+> 
+>> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+>> ---
+>>  package/glibc/glibc.hash | 6 +++++-
+>>  package/glibc/glibc.mk   | 2 +-
+>>  2 files changed, 6 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/package/glibc/glibc.hash b/package/glibc/glibc.hash
+>> index f3a6577d2a..86d3bb56dd 100644
+>> --- a/package/glibc/glibc.hash
+>> +++ b/package/glibc/glibc.hash
+>> @@ -1,4 +1,8 @@
+>>  # Locally calculated (fetched from Github)
+>> -sha256  0766875391224153502c5542a71b6e46db53b44691078b3130e1a0df41586430     glibc-glibc-2.26-107-g73a92363619e52c458146e903dfb9b1ba823aa40.tar.gz
+>> +sha256  a74489d14f4017bee6a6c6fe76f1de0dbf7d66c8695116de5aadd141c4757892     glibc-glibc-2.27.tar.gz
+>>  # Locally calculated (fetched from Github)
+>>  sha256  5aa9adeac09727db0b8a52794186563771e74d70410e9fd86431e339953fd4bb     glibc-arc-2017.09-release.tar.gz
+>> +
+>> +sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+>> +sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
+>> +sha256  61abdd6930c9c599062d89e916b3e7968783879b6be0ee1c6229dd6169def431  LICENSES
+>> diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+>> index cf4bdec065..b674191b22 100644
+>> --- a/package/glibc/glibc.mk
+>> +++ b/package/glibc/glibc.mk
+>> @@ -10,7 +10,7 @@ GLIBC_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,glibc,$(GLIBC_VE
+>>  else
+>>  # Generate version string using:
+>>  #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master
+>> -GLIBC_VERSION = glibc-2.26-107-g73a92363619e52c458146e903dfb9b1ba823aa40
+>> +GLIBC_VERSION = glibc-2.27
+>>  # Upstream doesn't officially provide an https download link.
+>>  # There is one (https://sourceware.org/git/glibc.git) but it's not reliable,
+>>  # sometimes the connection times out. So use an unofficial github mirror.
+> 
