@@ -1,37 +1,78 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 5 Feb 2018 22:50:21 +0100
-Subject: [Buildroot] [PATCH v1] libv4l: fix EVIOCSCLOCKID related
- compile failure
-In-Reply-To: <20180203221141.15490-1-ps.report@gmx.net>
-References: <20180203221141.15490-1-ps.report@gmx.net>
-Message-ID: <20180205225021.58239ef2@windsurf>
+From: =?UTF-8?q?Ga=C3=ABl=20PORTAY?= <gael.portay@savoirfairelinux.com>
+Date: Mon,  5 Feb 2018 16:57:08 -0500
+Subject: [Buildroot] [PATCH v2 1/1] support/dependencies: add check for c++
+ multilib
+Message-ID: <20180205215708.16363-1-gael.portay@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Some packages build C++ 32bits host-tools and need the g++-multilib to
+be installed on the build machine. As example, qt5webengine builds a C++
+host-tool when target is 32bits.
 
-On Sat,  3 Feb 2018 23:11:41 +0100, Peter Seiderer wrote:
-> Fixes [1]:
-> 
->   keytable.c: In function 'test_event':
->   keytable.c:1351:12: error: 'EVIOCSCLOCKID' undeclared (first use in this function)
->     ioctl(fd, EVIOCSCLOCKID, &mode);
-> 
-> [1] http://autobuild.buildroot.net/results/8ba380471423bd2491e40103d7b1a45de1bd12ed
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
->  ...fix-EVIOCSCLOCKID-related-compile-failure.patch | 35 ++++++++++++++++++++++
->  1 file changed, 35 insertions(+)
->  create mode 100644 package/libv4l/0002-keytable-fix-EVIOCSCLOCKID-related-compile-failure.patch
+Add the check for g++-multilib to the dependencies script; and update
+the Dockerfile to install g++-multilib package.
 
-Applied to master, thanks.
+Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
+---
 
-Thomas
+There are two solutions to solve this issue:
+
+The first one consists in checking for g++-multilib when the config
+option BR2_HOSTARCH_NEEDS_IA32_COMPILER is set; even if it is not
+required. The implementation is simple (see patch below).
+
+The second solution consists in creating a new config option for
+packages that needs g++-multilib to be installed. As example:
+BR2_HOSTARCH_NEEDS_IA32_CXX_COMPILER is a good candidate. [For a matter
+of consistency, I would also rename BR2_HOSTARCH_NEEDS_COMPILER into
+BR2_HOSTARCH_NEEDS_IA32_C_COMPILER (adding C_); but I do not want to do
+that to not break existing configurations that are no in-tree].
+
+Which solution do you prefer?
+
+Change since v1:
+ - Use proper c++ value for option -x (cpp does not exist).
+ - Use g++ compiler instead of gcc.
+
+ support/dependencies/dependencies.sh | 8 ++++++++
+ support/docker/Dockerfile            | 2 +-
+ 2 files changed, 9 insertions(+), 1 deletion(-)
+
+diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
+index a195c62c8c..1804e85508 100755
+--- a/support/dependencies/dependencies.sh
++++ b/support/dependencies/dependencies.sh
+@@ -249,6 +249,14 @@ if grep -q ^BR2_HOSTARCH_NEEDS_IA32_COMPILER=y $BR2_CONFIG ; then
+ 		echo "For other distributions, refer to their documentation."
+ 		exit 1
+ 	fi
++
++	if ! echo "int main(void) {}" | g++ -m32 -x c++ - -o /dev/null 2>/dev/null; then
++		echo
++		echo "Your Buildroot configuration needs a compiler capable of building 32 bits binaries."
++		echo "If you're running a Debian/Ubuntu distribution, install the g++-multilib package."
++		echo "For other distributions, refer to their documentation."
++		exit 1
++	fi
+ fi
+ 
+ # Check that the Perl installation is complete enough for Buildroot.
+diff --git a/support/docker/Dockerfile b/support/docker/Dockerfile
+index 474e073c61..ce3fdd9cc2 100644
+--- a/support/docker/Dockerfile
++++ b/support/docker/Dockerfile
+@@ -22,7 +22,7 @@ COPY apt-sources.list /etc/apt/sources.list
+ RUN dpkg --add-architecture i386 && \
+     apt-get update -y && \
+     apt-get install -y --no-install-recommends \
+-        build-essential cmake libc6:i386 gcc-multilib \
++        build-essential cmake libc6:i386 g++-multilib \
+         bc ca-certificates file locales rsync \
+         cvs bzr git mercurial subversion wget \
+         cpio unzip \
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.11.0
