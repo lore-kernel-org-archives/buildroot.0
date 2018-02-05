@@ -1,38 +1,31 @@
-From: Sam Voss <sam.voss@rockwellcollins.com>
-Date: Mon, 5 Feb 2018 14:11:48 +0100
-Subject: [Buildroot] [PATCH v10 08/10] cargo: new package
-In-Reply-To: <87eflzwx49.fsf@dell.be.48ers.dk>
-References: <20180204180749.29942-1-eric.le.bihan.dev@free.fr>
- <20180204180749.29942-9-eric.le.bihan.dev@free.fr>
- <87eflzwx49.fsf@dell.be.48ers.dk>
-Message-ID: <CAH=K+6kbLM-cf4NAqj=V8Ry_uOtjfWUV558kSyksLwPu=VSK3A@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 5 Feb 2018 14:33:46 +0100
+Subject: [Buildroot] [PATCH v2 13/13] WIP: support package with '-'
+In-Reply-To: <20171025201003.16105-14-ps.report@gmx.net>
+References: <20171025201003.16105-1-ps.report@gmx.net>
+ <20171025201003.16105-14-ps.report@gmx.net>
+Message-ID: <20180205143346.0c8e6f03@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Eric, Peter,
+Hello,
 
-On Mon, Feb 5, 2018 at 11:26 AM, Peter Korsgaard <peter@korsgaard.com> wrote:
->>>>>> "Eric" == Eric Le Bihan <eric.le.bihan.dev@free.fr> writes:
->
-[snip]
+On Wed, 25 Oct 2017 22:10:03 +0200, Peter Seiderer wrote:
+> From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+> 
+> ---
 
->  > +CARGO_DEPS_SHA512 = 60c12ce49a53cf986490f5a5fdf606f0374677902edfdc4d48ab1ba6094f3f23efc59626cd3776649c9386a9cab2a60332e5693aad6acbcbb92132efdcf9fe21
->  > +CARGO_DEPS_SITE = http://pkgs.fedoraproject.org/repo/pkgs/cargo/$(CARGO_DEPS_SOURCE)/sha512/$(CARGO_DEPS_SHA512)
->
-> Is that the official location for this?
->
-> pkgs.fedoraproject.org is failing for me at the moment :/
+Why is that needed? I do remember some discussion about it during the
+Buildroot Summer Camp 2017, but I don't remember what was the problem.
+The empty commit log doesn't really help here.
 
-I hopped into #fedora-admin and was told that pkgs was deprecated last
-year, and due to some DoS mitigation was taken offline last week (I
-didn't press if it was permanent).
+Best regards,
 
-In either case, it seems like this should using src.fedoraproject.org
-as that is the permanent solution given to me.
-
-Thanks,
-
-Sam Voss
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+http://bootlin.com
