@@ -1,46 +1,51 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 05 Feb 2018 11:56:08 +0100
-Subject: [Buildroot] [PATCH] support/dockerfile: add directives to run
- as non-root
-In-Reply-To: <20180205071820.GA2417@scaer> (Yann E. MORIN's message of "Mon, 5
- Feb 2018 08:18:20 +0100")
-References: <20180106152833.10111-1-yann.morin.1998@free.fr>
- <87bmh521a5.fsf@dell.be.48ers.dk> <20180204100444.GB2411@scaer>
- <CABa6e=otTJ1GiyhBA_hXXxNcyGts0TH5=CW=abBiwa5TageAHw@mail.gmail.com>
- <20180205071820.GA2417@scaer>
-Message-ID: <87y3k7vh6f.fsf@dell.be.48ers.dk>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Mon,  5 Feb 2018 10:03:55 -0200
+Subject: [Buildroot] [PATCH] configs/mx53loco: Bump U-Boot and kernel
+ versions
+Message-ID: <1517832235-9413-1-git-send-email-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+Bump U-Boot to 2018.01 version and kernel to 4.15.1.
 
-Hi,
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+---
+ configs/mx53loco_defconfig | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
- >> Your patch set does the right thing WRT the debian install/clean, so all
- >> good, but I thought I'd mention this because it did not come up in any
- >> discussions here or in the linked docs.
-
- > OK, so we *do* have a Docker expert, now! ;-)
-
-;)
-
- > Thank you for your explanations, that was very instructive. I gues
- > that's because aufs is used underneath, or something like that?
-
- > I would have expected that, instead of implicit, a layer would have been
- > explicit, like with a COMMIT keyword or something like that...
-
- > Anyway, it all makes sense in hindsight, indeed. Thanks!
-
-One more thing to keep in mind, is that Docker expects the commands to
-be idempotent, so docker will afaik cache each layer and reuse the cache
-when you rerun the dockerfile later on and not actually execute those
-commands:
-
-https://thenewstack.io/understanding-the-docker-cache-for-faster-builds/
-
+diff --git a/configs/mx53loco_defconfig b/configs/mx53loco_defconfig
+index 1b10518..aaba476 100644
+--- a/configs/mx53loco_defconfig
++++ b/configs/mx53loco_defconfig
+@@ -2,8 +2,8 @@
+ BR2_arm=y
+ BR2_cortex_a8=y
+ 
+-# Linux headers same as kernel, a 4.14 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
++# Linux headers same as kernel, a 4.15 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_15=y
+ 
+ # System
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+@@ -22,13 +22,13 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="mx53loco"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.11"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.01"
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.14"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.15.1"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx53-qsb imx53-qsrb"
 -- 
-Bye, Peter Korsgaard
+2.7.4
