@@ -1,39 +1,38 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 05 Feb 2018 18:10:13 +0000
-Subject: [Buildroot] [Bug 10141] Squashfs extended attribute failures
-In-Reply-To: <bug-10141-163@https.bugs.busybox.net/>
-References: <bug-10141-163@https.bugs.busybox.net/>
-Message-ID: <bug-10141-163-b50GaKeFOd@https.bugs.busybox.net/>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Mon, 5 Feb 2018 20:46:21 +0100
+Subject: [Buildroot] [PATCH 1/1] python3: bump to 2.6.4
+In-Reply-To: <20180205071225.0fa33ee7@windsurf>
+References: <20180130235229.22352-1-Adamduskett@outlook.com>
+ <20180205071225.0fa33ee7@windsurf>
+Message-ID: <20180205194621.GE12535@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=10141
+Hi,
+Thomas Petazzoni wrote,
 
-Yann E. MORIN <yann.morin.1998@free.fr> changed:
+> Hello,
+> 
+> On Tue, 30 Jan 2018 18:52:29 -0500, Adam Duskett wrote:
+> > Also update necessary patches.
+> > 
+> > Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
+> 
+> I'm sorry, but I had to revert that patch, it was causing gazillions of
+> failures in the autobuilders. The Python build process now tries to use
+> os.replace(), which is only available since Python 3.3. It would work
+> if the host-python interpreter was being used, but the system Python
+> interpreter is used, causing the build failure.
+> 
+> It is worth noting that the problem happens in the regen-importlib make
+> target, and that there is already some code in python3.mk to handle
+> issues related to that. See line 162 and following.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-         Resolution|---                         |FIXED
-             Status|REOPENED                    |RESOLVED
+By the way, the version in the subject is wrong. 3.6.4 not 2.6.4.
+Just if you readd...
 
---- Comment #12 from Yann E. MORIN <yann.morin.1998@free.fr> ---
-(In reply to Bob from comment #11)
-So you  using the fakeroot and the mksquashfs from your distribution?
-
-we do not support those. Buildroot builds and uses its own fakeroot
-and its own mksquashfs.
-
-Sin you are usign the ones from your distribution, and that it is a
-pretty "old" disgribution, it is not unsurprising that it does not
-have the fxes we do have...
-
-Try using the fakeroot and mksquashfs provided by Buildroot, and
-check if you still have the issue. In the meantime, I don't think
-this is a Buildroot issue so I'm closing.
-
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+best regards
+ Waldemar
