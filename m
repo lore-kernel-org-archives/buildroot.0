@@ -1,9 +1,9 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 05 Feb 2018 17:35:15 +0000
+Date: Mon, 05 Feb 2018 18:10:13 +0000
 Subject: [Buildroot] [Bug 10141] Squashfs extended attribute failures
 In-Reply-To: <bug-10141-163@https.bugs.busybox.net/>
 References: <bug-10141-163@https.bugs.busybox.net/>
-Message-ID: <bug-10141-163-P4OJAJCSUe@https.bugs.busybox.net/>
+Message-ID: <bug-10141-163-b50GaKeFOd@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,25 +12,27 @@ To: buildroot@busybox.net
 
 https://bugs.busybox.net/show_bug.cgi?id=10141
 
---- Comment #11 from Bob <cmg427@hotmail.com> ---
-(In reply to Yann E. MORIN from comment #10)
+Yann E. MORIN <yann.morin.1998@free.fr> changed:
 
-I'm using fakeroot version 1.20.2 on Ubuntu 16.04.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+         Resolution|---                         |FIXED
+             Status|REOPENED                    |RESOLVED
 
-I'm not sure if this helps, but this is what the code looks like.
+--- Comment #12 from Yann E. MORIN <yann.morin.1998@free.fr> ---
+(In reply to Bob from comment #11)
+So you  using the fakeroot and the mksquashfs from your distribution?
 
-    squashfuse first.sqsh first_mount
-    squashfuse second.sqsh second_mount
+we do not support those. Buildroot builds and uses its own fakeroot
+and its own mksquashfs.
 
-    # overlay multiple mounts
-    unionfs-fuse -o cow,hide_meta_files first_mount=RW:second_mount=RO
-final_mount
+Sin you are usign the ones from your distribution, and that it is a
+pretty "old" disgribution, it is not unsurprising that it does not
+have the fxes we do have...
 
-    # set capabilities
-    fakeroot setcap cap_linux_immutable final_mount/usr/blah.txt
-
-    # create final squash
-    fakeroot mksquashfs final_mount final.sqsh -no-progress -noappend -comp xz
+Try using the fakeroot and mksquashfs provided by Buildroot, and
+check if you still have the issue. In the meantime, I don't think
+this is a Buildroot issue so I'm closing.
 
 -- 
 You are receiving this mail because:
