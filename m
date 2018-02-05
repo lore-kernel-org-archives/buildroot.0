@@ -1,10 +1,10 @@
 From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Mon, 5 Feb 2018 13:52:44 +0100
-Subject: [Buildroot] [PATCH 4/5] python-visitor: new package
-In-Reply-To: <20180205123308.22479-4-aduskett@gmail.com>
+Date: Mon, 5 Feb 2018 13:54:00 +0100
+Subject: [Buildroot] [PATCH 2/5] python-sqlalchemy: new package
+In-Reply-To: <20180205123308.22479-2-aduskett@gmail.com>
 References: <20180205123308.22479-1-aduskett@gmail.com>
- <20180205123308.22479-4-aduskett@gmail.com>
-Message-ID: <CAGm1_kupy71DXpuGRBwOvfvBK33JG2Y+nC0SN5-C=2tD4j=2nA@mail.gmail.com>
+ <20180205123308.22479-2-aduskett@gmail.com>
+Message-ID: <CAGm1_kuh-2Q6ZM1fnLvqXk5XRAUto1URvm26OtZj6YmXKYE+ZQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,87 +12,99 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 On Mon, Feb 5, 2018 at 1:33 PM, Adam Duskett <aduskett@gmail.com> wrote:
-> A tiny library to facilitate visitor implementation in Python
+> SQLAlchemy is the Python SQL toolkit and Object Relational Mapper that gives
+> application developers the full power and flexibility of SQL.
+>
+> It provides a full suite of well known enterprise-level persistence patterns,
+> designed for efficient and high-performing database access, adapted into a
+> simple and Pythonic domain language.
 >
 > Signed-off-by: Adam Duskett <aduskett@gmail.com>
 
 Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
 
 > ---
->  DEVELOPERS                                 |  1 +
->  package/Config.in                          |  1 +
->  package/python-visitor/Config.in           |  6 ++++++
->  package/python-visitor/python-visitor.hash |  4 ++++
->  package/python-visitor/python-visitor.mk   | 14 ++++++++++++++
->  5 files changed, 26 insertions(+)
->  create mode 100644 package/python-visitor/Config.in
->  create mode 100644 package/python-visitor/python-visitor.hash
->  create mode 100644 package/python-visitor/python-visitor.mk
+>  DEVELOPERS                                       |  1 +
+>  package/Config.in                                |  1 +
+>  package/python-sqlalchemy/Config.in              | 13 +++++++++++++
+>  package/python-sqlalchemy/python-sqlalchemy.hash |  4 ++++
+>  package/python-sqlalchemy/python-sqlalchemy.mk   | 14 ++++++++++++++
+>  5 files changed, 33 insertions(+)
+>  create mode 100644 package/python-sqlalchemy/Config.in
+>  create mode 100644 package/python-sqlalchemy/python-sqlalchemy.hash
+>  create mode 100644 package/python-sqlalchemy/python-sqlalchemy.mk
 >
 > diff --git a/DEVELOPERS b/DEVELOPERS
-> index 0241c97c65..e35e56841f 100644
+> index c07f4fa6fd..d81c0d7ee1 100644
 > --- a/DEVELOPERS
 > +++ b/DEVELOPERS
-> @@ -55,6 +55,7 @@ F:    package/python-flask-sqlalchemy/
+> @@ -53,6 +53,7 @@ F:    package/nginx-naxsi/
+>  F:     package/policycoreutils/
 >  F:     package/python-mutagen/
 >  F:     package/python-psycopg2/
->  F:     package/python-sqlalchemy/
-> +F:     package/python-visitor/
+> +F:     package/python-sqlalchemy/
 >  F:     package/restorecond/
 >  F:     package/refpolicy/
 >  F:     package/selinux-python/
 > diff --git a/package/Config.in b/package/Config.in
-> index 6ee6bc533e..430fa86707 100644
+> index b039dea58f..d250b59995 100644
 > --- a/package/Config.in
 > +++ b/package/Config.in
-> @@ -940,6 +940,7 @@ menu "External python modules"
->         source "package/python-urllib3/Config.in"
->         source "package/python-urwid/Config.in"
->         source "package/python-versiontools/Config.in"
-> +       source "package/python-visitor/Config.in"
->         source "package/python-watchdog/Config.in"
->         source "package/python-wcwidth/Config.in"
->         source "package/python-web2py/Config.in"
-> diff --git a/package/python-visitor/Config.in b/package/python-visitor/Config.in
+> @@ -919,6 +919,7 @@ menu "External python modules"
+>         source "package/python-socketio/Config.in"
+>         source "package/python-sortedcontainers//Config.in"
+>         source "package/python-spidev/Config.in"
+> +       source "package/python-sqlalchemy/Config.in"
+>         source "package/python-systemd/Config.in"
+>         source "package/python-tabledata/Config.in"
+>         source "package/python-tempora/Config.in"
+> diff --git a/package/python-sqlalchemy/Config.in b/package/python-sqlalchemy/Config.in
 > new file mode 100644
-> index 0000000000..f8be5ec9be
+> index 0000000000..f7ec3a6ad4
 > --- /dev/null
-> +++ b/package/python-visitor/Config.in
-> @@ -0,0 +1,6 @@
-> +config BR2_PACKAGE_PYTHON_VISITOR
-> +       bool "python-visitor"
+> +++ b/package/python-sqlalchemy/Config.in
+> @@ -0,0 +1,13 @@
+> +config BR2_PACKAGE_PYTHON_SQLALCHEMY
+> +       bool "python-sqlalchemy"
 > +       help
-> +         A tiny pythonic visitor implementation.
+> +         SQLAlchemy is the Python SQL toolkit and Object Relational
+> +         Mapper that gives application developers the full power and
+> +         flexibility of SQL.
 > +
-> +         http://github.com/mbr/visitor
-> diff --git a/package/python-visitor/python-visitor.hash b/package/python-visitor/python-visitor.hash
+> +         It provides a full suite of well known enterprise-level
+> +         persistence patterns, designed for efficient and
+> +         high-performing database access, adapted into a simple and
+> +         Pythonic domain language.
+> +
+> +         http://www.sqlalchemy.org
+> diff --git a/package/python-sqlalchemy/python-sqlalchemy.hash b/package/python-sqlalchemy/python-sqlalchemy.hash
 > new file mode 100644
-> index 0000000000..9a685f62f0
+> index 0000000000..337d08788c
 > --- /dev/null
-> +++ b/package/python-visitor/python-visitor.hash
+> +++ b/package/python-sqlalchemy/python-sqlalchemy.hash
 > @@ -0,0 +1,4 @@
-> +# md5 from https://pypi.python.org/pypi/visitor/json, sha256 locally computed
-> +md5    94a024ed0ec1b02b4497c15267d319ca  visitor-0.1.3.tar.gz
-> +sha256 2c737903b2b6864ebc6167eef7cf3b997126f1aa94bdf590f90f1436d23e480a  visitor-0.1.3.tar.gz
-> +sha256 184d1ebb65da97ada36447f3c028f2fd4890b874f17b18c023ce200dd96639af  LICENSE
-> diff --git a/package/python-visitor/python-visitor.mk b/package/python-visitor/python-visitor.mk
+> +# md5 from https://pypi.python.org/pypi/SQLAlchemy/json, sha256 locally computed
+> +md5    968e07dc0aa92f9205bb3877f33f498f  SQLAlchemy-1.2.2.tar.gz
+> +sha256 64b4720f0a8e033db0154d3824f5bf677cf2797e11d44743cf0aebd2a0499d9d  SQLAlchemy-1.2.2.tar.gz
+> +sha256 73bda3d7d6c568f494c1d12520a97d41a38b7ce91d88c21f1b469b747b17f7fd  LICENSE
+> diff --git a/package/python-sqlalchemy/python-sqlalchemy.mk b/package/python-sqlalchemy/python-sqlalchemy.mk
 > new file mode 100644
-> index 0000000000..1313491c96
+> index 0000000000..c0023712a2
 > --- /dev/null
-> +++ b/package/python-visitor/python-visitor.mk
+> +++ b/package/python-sqlalchemy/python-sqlalchemy.mk
 > @@ -0,0 +1,14 @@
 > +################################################################################
 > +#
-> +# python-visitor
+> +# python-sqlalchemy
 > +#
 > +################################################################################
 > +
-> +PYTHON_VISITOR_VERSION = 0.1.3
-> +PYTHON_VISITOR_SOURCE = visitor-$(PYTHON_VISITOR_VERSION).tar.gz
-> +PYTHON_VISITOR_SITE = https://pypi.python.org/packages/d7/58/785fcd6de4210049da5fafe62301b197f044f3835393594be368547142b0
-> +PYTHON_VISITOR_SETUP_TYPE = setuptools
-> +PYTHON_VISITOR_LICENSE = MIT
-> +PYTHON_VISITOR_LICENSE_FILES = LICENSE
+> +PYTHON_SQLALCHEMY_VERSION = 1.2.2
+> +PYTHON_SQLALCHEMY_SOURCE = SQLAlchemy-$(PYTHON_SQLALCHEMY_VERSION).tar.gz
+> +PYTHON_SQLALCHEMY_SITE = https://pypi.python.org/packages/b9/fb/a56d2fc0ce3571328fa872734ad124cae25a4cea422088987f865fb71787
+> +PYTHON_SQLALCHEMY_SETUP_TYPE = setuptools
+> +PYTHON_SQLALCHEMY_LICENSE = MIT
+> +PYTHON_SQLALCHEMY_LICENSE_FILES = LICENSE
 > +
 > +$(eval $(python-package))
 > --
