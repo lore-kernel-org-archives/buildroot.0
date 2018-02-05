@@ -1,66 +1,111 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon,  5 Feb 2018 09:42:33 +0100
-Subject: [Buildroot] [PATCH 15/15 v2] fs: remove intermediate artefacts
-In-Reply-To: <cover.1517820133.git.yann.morin.1998@free.fr>
-References: <cover.1517820133.git.yann.morin.1998@free.fr>
-Message-ID: <39f35ae94c74565b99152cdad8dd6a1284af79b6.1517820133.git.yann.morin.1998@free.fr>
+From: Stafford Horne <shorne@gmail.com>
+Date: Mon, 5 Feb 2018 18:36:09 +0900
+Subject: [Buildroot] [PATCH] gcc: or1k: use 20170218 tag instead of
+ branch
+In-Reply-To: <CACPK8XfD4dHS4QMDr_HdgLSoHT+PX-zJ5wxXbsjL-hN2pzDpuA@mail.gmail.com>
+References: <20180203201821.3924-1-peter@korsgaard.com>
+ <CACPK8XfD4dHS4QMDr_HdgLSoHT+PX-zJ5wxXbsjL-hN2pzDpuA@mail.gmail.com>
+Message-ID: <20180205093609.GG30895@lianli.shorne-pla.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Each of the intermediate, per-rootfs target directories, as well as the
-intermediate tarball, can take quite some place, and is mostly a
-duplication of what's already in target/. The only delta, if any, would
-be the tweaks made by the filesystem image generations, but those tweaks
-are most probably only meaningfull when seen as root.
+On Mon, Feb 05, 2018 at 12:09:34PM +1030, Joel Stanley wrote:
+> On Sun, Feb 4, 2018 at 6:48 AM, Peter Korsgaard <peter@korsgaard.com> wrote:
+> > As pointed out by Joel Stanley:
+> > https://patchwork.ozlabs.org/patch/863011/
+> >
+> > Github now longer provides the exact same tarball for the or1k musl-5.4.0
+> > tarball, breaking the build.  Even more, musl-5.4.0 is the name of a git
+> > branch, not a tag.
+> >
+> > Fix both problems by changing to the or1k-musl-5.4.0-20170218 tag, which
+> > points to the exact same git commit.
+> >
+> > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> 
+> Thanks, that fixes the issue for me.
 
-We normally do not remove intermediate files, but those can be quite
-large, and are not directly usable by, nor accessible to the user.
-So, get rid of them once the filesystem has been generated.
+Hello, it might have been me that broke this. (I posted new tags to github for
+openrisc)
 
-This does not need to be done in fakeroot.
+I have been working on updating the GCC port to 7.2.0 with binutils 2.29, its in
+my forks right now:
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
----
- Makefile     | 1 +
- fs/common.mk | 2 ++
- 2 files changed, 3 insertions(+)
+  https://github.com/stffrdhrn/binutils-gdb/tree/or1k-2.29
+  https://github.com/stffrdhrn/or1k-gcc/tree/or1k-7.2.0-20180112
 
-diff --git a/Makefile b/Makefile
-index 2822909aae..d5bb732af3 100644
---- a/Makefile
-+++ b/Makefile
-@@ -753,6 +753,7 @@ endif
- 
- .PHONY: target-post-image
- target-post-image: $(TARGETS_ROOTFS) target-finalize
-+	@rm -f $(ROOTFS_COMMON_TAR)
- 	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_IMAGE_SCRIPT)), \
- 		$(call MESSAGE,"Executing post-image script $(s)"); \
- 		$(EXTRA_ENV) $(s) $(BINARIES_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
-diff --git a/fs/common.mk b/fs/common.mk
-index bacc98ec68..2ee130ee08 100644
---- a/fs/common.mk
-+++ b/fs/common.mk
-@@ -96,6 +96,7 @@ endif
- 	$(call PRINTF,$(ROOTFS_COMMON_TAR_CMD)) >> $(FAKEROOT_SCRIPT)
- 	chmod a+x $(FAKEROOT_SCRIPT)
- 	PATH=$(BR_PATH) $(HOST_DIR)/bin/fakeroot -- $(FAKEROOT_SCRIPT)
-+	$(Q)rm -rf $(TARGET_DIR)
- 
- rootfs-common-show-depends:
- 	@echo $(ROOTFS_COMMON_DEPENDENCIES)
-@@ -154,6 +155,7 @@ $$(BINARIES_DIR)/rootfs.$(1): $$(ROOTFS_$(2)_DEPENDENCIES)
- 	$$(call PRINTF,$$(ROOTFS_$(2)_CMD)) >> $$(FAKEROOT_SCRIPT)
- 	chmod a+x $$(FAKEROOT_SCRIPT)
- 	PATH=$$(BR_PATH) $$(HOST_DIR)/bin/fakeroot -- $$(FAKEROOT_SCRIPT)
-+	$(Q)rm -rf $$(TARGET_DIR)
- ifneq ($$(ROOTFS_$(2)_COMPRESS_CMD),)
- 	PATH=$$(BR_PATH) $$(ROOTFS_$(2)_COMPRESS_CMD) $$@ > $$@$$(ROOTFS_$(2)_COMPRESS_EXT)
- endif
--- 
-2.14.1
+With 7.x we no longer need a separate branch/tag for musl.
+
+I dont know too much about the buildroot build, but let me know if you need me
+to do anything on the openrisc github repo to make it better.
+
+-Stafford
+
+> > ---
+> >  package/gcc/Config.in.host                                              | 2 +-
+> >  package/gcc/gcc.hash                                                    | 2 +-
+> >  .../gcc/{musl-5.4.0 => or1k-musl-5.4.0-20170218}/100-uclibc-conf.patch  | 0
+> >  .../301-missing-execinfo_h.patch                                        | 0
+> >  .../850-libstdcxx-uclibc-c99.patch                                      | 0
+> >  .../gcc/{musl-5.4.0 => or1k-musl-5.4.0-20170218}/860-cilk-wchar.patch   | 0
+> >  .../930-libgcc-disable-split-stack-nothreads.patch                      | 0
+> >  7 files changed, 2 insertions(+), 2 deletions(-)
+> >  rename package/gcc/{musl-5.4.0 => or1k-musl-5.4.0-20170218}/100-uclibc-conf.patch (100%)
+> >  rename package/gcc/{musl-5.4.0 => or1k-musl-5.4.0-20170218}/301-missing-execinfo_h.patch (100%)
+> >  rename package/gcc/{musl-5.4.0 => or1k-musl-5.4.0-20170218}/850-libstdcxx-uclibc-c99.patch (100%)
+> >  rename package/gcc/{musl-5.4.0 => or1k-musl-5.4.0-20170218}/860-cilk-wchar.patch (100%)
+> >  rename package/gcc/{musl-5.4.0 => or1k-musl-5.4.0-20170218}/930-libgcc-disable-split-stack-nothreads.patch (100%)
+> >
+> > diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+> > index 8432515d73..309ddf572a 100644
+> > --- a/package/gcc/Config.in.host
+> > +++ b/package/gcc/Config.in.host
+> > @@ -81,7 +81,7 @@ config BR2_GCC_VERSION
+> >         default "6.4.0"     if BR2_GCC_VERSION_6_X
+> >         default "7.3.0"     if BR2_GCC_VERSION_7_X
+> >         default "arc-2017.09-release" if BR2_GCC_VERSION_ARC
+> > -       default "musl-5.4.0" if BR2_GCC_VERSION_OR1K
+> > +       default "or1k-musl-5.4.0-20170218" if BR2_GCC_VERSION_OR1K
+> >
+> >  config BR2_EXTRA_GCC_CONFIG_OPTIONS
+> >         string "Additional gcc options"
+> > diff --git a/package/gcc/gcc.hash b/package/gcc/gcc.hash
+> > index 4966b18f59..fd38cfaad1 100644
+> > --- a/package/gcc/gcc.hash
+> > +++ b/package/gcc/gcc.hash
+> > @@ -10,4 +10,4 @@ sha512  ad41a7e4584e40e92cdf860bc0288500fbaf5dfb7e8c3fcabe9eba809c87bcfa85b46c19
+> >  # Locally calculated (fetched from Github)
+> >  sha512  c30addd3c4dc66b90749a0f99b257c8a8e7966d27f286057b6b66f4a70ca22a1ee50d92882c4db13307d769a6fb28e1e2a2bab749a692cf3f89ef0c38f145efa  gcc-arc-2017.09-release.tar.gz
+> >  # Locally calculated (fetched from Github)
+> > -sha512  841101f7de45f327bf2e92f3efc73ca88a021e4b9b541458ce80a16e55882bd8606a8492d75c57c589ee2c10d42ae2865b67690155d7289a541df1d68096402f  gcc-musl-5.4.0.tar.gz
+> > +sha512  2de7cf47333a4092b02d3bb98f4206f14966f1d139a724d09cf3b22f8a43ae0c704f33e6477d6367a03c29b265480dc900169e9d417006c5d46f0ae446b8c6f1  gcc-or1k-musl-5.4.0-20170218.tar.gz
+> > diff --git a/package/gcc/musl-5.4.0/100-uclibc-conf.patch b/package/gcc/or1k-musl-5.4.0-20170218/100-uclibc-conf.patch
+> > similarity index 100%
+> > rename from package/gcc/musl-5.4.0/100-uclibc-conf.patch
+> > rename to package/gcc/or1k-musl-5.4.0-20170218/100-uclibc-conf.patch
+> > diff --git a/package/gcc/musl-5.4.0/301-missing-execinfo_h.patch b/package/gcc/or1k-musl-5.4.0-20170218/301-missing-execinfo_h.patch
+> > similarity index 100%
+> > rename from package/gcc/musl-5.4.0/301-missing-execinfo_h.patch
+> > rename to package/gcc/or1k-musl-5.4.0-20170218/301-missing-execinfo_h.patch
+> > diff --git a/package/gcc/musl-5.4.0/850-libstdcxx-uclibc-c99.patch b/package/gcc/or1k-musl-5.4.0-20170218/850-libstdcxx-uclibc-c99.patch
+> > similarity index 100%
+> > rename from package/gcc/musl-5.4.0/850-libstdcxx-uclibc-c99.patch
+> > rename to package/gcc/or1k-musl-5.4.0-20170218/850-libstdcxx-uclibc-c99.patch
+> > diff --git a/package/gcc/musl-5.4.0/860-cilk-wchar.patch b/package/gcc/or1k-musl-5.4.0-20170218/860-cilk-wchar.patch
+> > similarity index 100%
+> > rename from package/gcc/musl-5.4.0/860-cilk-wchar.patch
+> > rename to package/gcc/or1k-musl-5.4.0-20170218/860-cilk-wchar.patch
+> > diff --git a/package/gcc/musl-5.4.0/930-libgcc-disable-split-stack-nothreads.patch b/package/gcc/or1k-musl-5.4.0-20170218/930-libgcc-disable-split-stack-nothreads.patch
+> > similarity index 100%
+> > rename from package/gcc/musl-5.4.0/930-libgcc-disable-split-stack-nothreads.patch
+> > rename to package/gcc/or1k-musl-5.4.0-20170218/930-libgcc-disable-split-stack-nothreads.patch
+> > --
+> > 2.11.0
+> >
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
