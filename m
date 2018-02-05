@@ -1,39 +1,152 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Mon, 5 Feb 2018 14:57:48 +0100
-Subject: [Buildroot] [git commit] libhttpparser: add host variant
-Message-ID: <20180205140233.72D0C865BD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] docs/manual: document cargo-based packages
+Message-ID: <20180205140233.B6CEF87D9F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=31847c297d412f1e97d51d6d1526d2bfab6031ae
+commit: https://git.buildroot.net/buildroot/commit/?id=d0ac3c9b2119a45784494221b3a29f85eed826c5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Allow build of host variant of libhttpparser.
+Add instructions for adding a package which uses Cargo as build system.
 
+[Peter: fix indentation]
 Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libhttpparser/libhttpparser.mk | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ docs/manual/adding-packages-cargo.txt | 110 ++++++++++++++++++++++++++++++++++
+ docs/manual/adding-packages.txt       |   2 +
+ 2 files changed, 112 insertions(+)
 
-diff --git a/package/libhttpparser/libhttpparser.mk b/package/libhttpparser/libhttpparser.mk
-index 8ff0413322..1df26017e7 100644
---- a/package/libhttpparser/libhttpparser.mk
-+++ b/package/libhttpparser/libhttpparser.mk
-@@ -23,4 +23,13 @@ define LIBHTTPPARSER_INSTALL_TARGET_CMDS
- 	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) PREFIX=$(TARGET_DIR)/usr install
- endef
+diff --git a/docs/manual/adding-packages-cargo.txt b/docs/manual/adding-packages-cargo.txt
+new file mode 100644
+index 0000000000..3f9ddfed16
+--- /dev/null
++++ b/docs/manual/adding-packages-cargo.txt
+@@ -0,0 +1,110 @@
++// -*- mode:doc; -*-
++// vim: set syntax=asciidoc:
++
++=== Integration of Cargo-based packages
++
++Cargo is the package manager for the Rust programming language. It allows the
++user to build programs or libraries written in Rust, but it also downloads and
++manages their dependencies, to ensure repeatable builds. Cargo packages are
++called "crates".
++
++[[cargo-package-tutorial]]
++
++==== Cargo-based package's +Config.in+ file
++
++The +Config.in+ file of Cargo-based package 'foo' should contain:
++
++---------------------------
++01: config BR2_PACKAGE_FOO
++02: 	bool "foo"
++03: 	depends on BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS
++04: 	select BR2_PACKAGE_HOST_CARGO
++05: 	help
++06: 	  This is a comment that explains what foo is.
++07:
++08: 	  http://foosoftware.org/foo/
++---------------------------
++
++==== Cargo-based package's +.mk+ file
++
++Buildroot does not (yet) provide a dedicated package infrastructure for
++Cargo-based packages. So, we will explain how to write a +.mk+ file for such a
++package. Let's start with an example:
++
++------------------------------
++01: ################################################################################
++02: #
++03: # foo
++04: #
++05: ################################################################################
++06:
++07: FOO_VERSION = 1.0
++08: FOO_SOURCE = foo-$(FOO_VERSION).tar.gz
++09: FOO_SITE = http://www.foosoftware.org/download
++10: FOO_LICENSE = GPLv3+
++11: FOO_LICENSE_FILES = COPYING
++12:
++13: FOO_DEPENDENCIES = host-cargo
++14:
++15: FOO_CARGO_ENV = CARGO_HOME=$(HOST_DIR)/share/cargo
++16: FOO_CARGO_MODE = $(if $(BR2_ENABLE_DEBUG),debug,release)
++17:
++18: FOO_BIN_DIR = target/$(RUST_TARGET_NAME)/$(FOO_CARGO_MODE)
++19:
++20: FOO_CARGO_OPTS = \
++21:   --$(FOO_CARGO_MODE) \
++22: 	--target=$(RUST_TARGET_NAME) \
++23: 	--manifest-path=$(@D)/Cargo.toml
++24:
++25: define FOO_BUILD_CMDS
++26: 	$(TARGET_MAKE_ENV) $(FOO_CARGO_ENV) \
++27: 		cargo build $(FOO_CARGO_OPTS)
++28: endef
++29:
++30: define FOO_INSTALL_TARGET_CMDS
++31: 	$(INSTALL) -D -m 0755 $(@D)/$(FOO_BIN_DIR)/foo \
++32: 		$(TARGET_DIR)/usr/bin/foo
++33: endef
++34:
++35: $(eval $(generic-package))
++--------------------------------
++
++The Makefile starts with the definition of the standard variables for package
++declaration (lines 7 to 11).
++
++As seen in line 35, it is based on the
++xref:generic-package-tutorial[+generic-package+ infrastructure]. So, it defines
++the variables required by this particular infrastructure, where Cargo is
++invoked:
++
++* +FOO_BUILD_CMDS+: Cargo is invoked to perform the build. The options required
++  to configure the cross-compilation of the package are passed via
++  +FOO_CONF_OPTS+.
++
++* +FOO_INSTALL_TARGET_CMDS+: The binary executable generated is installed on
++  the target.
++
++In order to have Cargo available for the build, +FOO_DEPENDENCIES+ needs to
++contain +host-cargo+.
++
++To sum it up, to add a new Cargo-based package, the Makefile example can be
++copied verbatim then edited to replace all occurences of +FOO+ with the
++uppercase name of the new package and update the values of the standard
++variables.
++
++==== About Dependencies Management
++
++A crate can depend on other libraries from crates.io or git repositories, listed
++in its Cargo.toml file. Before starting a build, Cargo usually downloads
++automatically them. This step can also be performed independently, via the
+++cargo fetch+ command.
++
++Cargo maintains a local cache of the registry index and of git checkouts of the
++crates, whose location is given by +$CARGO_HOME+. As seen in the package
++Makefile example at line 15, this environment variable is set to
+++$(HOST_DIR)/share/cargo+.
++
++This dependency download mechanism is not convenient when performing an offline
++build, as Cargo will fail to fetch the dependencies. In that case, it is advised
++to generate a tarball of the dependencies using the +cargo vendor+ and add it to
+++FOO_EXTRA_DOWNLOADS+.
+diff --git a/docs/manual/adding-packages.txt b/docs/manual/adding-packages.txt
+index e542124cf9..e8d40daee4 100644
+--- a/docs/manual/adding-packages.txt
++++ b/docs/manual/adding-packages.txt
+@@ -36,6 +36,8 @@ include::adding-packages-waf.txt[]
  
-+define HOST_LIBHTTPPARSER_BUILD_CMDS
-+	$(MAKE) $(HOST_CONFIGURE_OPTS) -C $(@D) library package
-+endef
+ include::adding-packages-meson.txt[]
+ 
++include::adding-packages-cargo.txt[]
 +
-+define HOST_LIBHTTPPARSER_INSTALL_CMDS
-+	$(MAKE) $(HOST_CONFIGURE_OPTS) -C $(@D) PREFIX=$(HOST_DIR)/usr install
-+endef
-+
- $(eval $(generic-package))
-+$(eval $(host-generic-package))
+ include::adding-packages-kernel-module.txt[]
+ 
+ include::adding-packages-asciidoc.txt[]
