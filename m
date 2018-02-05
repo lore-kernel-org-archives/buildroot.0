@@ -1,92 +1,132 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Mon, 5 Feb 2018 16:34:51 +0100
-Subject: [Buildroot] [PATCH v2 03/13] download: put most of the infra in
- dl-wrapper
-In-Reply-To: <20171025201003.16105-4-ps.report@gmx.net>
-References: <20171025201003.16105-1-ps.report@gmx.net>
- <20171025201003.16105-4-ps.report@gmx.net>
-Message-ID: <0cd40090-7ca9-8e11-fc3f-92e300d40473@lucaceresoli.net>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 5 Feb 2018 16:34:00 +0100
+Subject: [Buildroot] [git commit] Update for 2018.02-rc1
+Message-ID: <20180205154624.B1B7688424@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+commit: https://git.buildroot.net/buildroot/commit/?id=30bffce8d58da8087a2fce87eba37f416f7139cb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 25/10/2017 22:09, Peter Seiderer wrote:
-> From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-> 
-> The goal here is to simplify the infrastructure by putting most of the
-> code in the dl-wrapper as it's easier to implement and to read.
-> 
-> Most of the function where common already, this patch finalizes it by
-              ^ functions were
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ CHANGES                    | 27 +++++++++++++++------------
+ Makefile                   |  4 ++--
+ docs/website/download.html | 22 +++++++++++-----------
+ 3 files changed, 28 insertions(+), 25 deletions(-)
 
-> making the pkg-download.mk pass all the parameters needed to the
-> dl-wrapper which in turns will pass everything to every backend.
-> 
-> The backend will then cherry-pick what it needs from these arguments
-> and act accordingly.
-> 
-> It eases the transition to the addition of a sub directory per package
-> in the DL_DIR, and later on, a git cache.
-> 
-> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-
-[...]
-
-> -################################################################################
-> -# DOWNLOAD -- Download helper. Will try to download source from:
-> -# 1) BR2_PRIMARY_SITE if enabled
-> -# 2) Download site, unless BR2_PRIMARY_SITE_ONLY is set
-> -# 3) BR2_BACKUP_SITE if enabled, unless BR2_PRIMARY_SITE_ONLY is set
-> -#
-> -# Argument 1 is the source location
-> -#
-> -# E.G. use like this:
-> -# $(call DOWNLOAD,$(FOO_SITE))
-> -#
-> -# For PRIMARY and BACKUP site, any ? in the URL is replaced by %3F. A ? in
-> -# the URL is used to separate query arguments, but the PRIMARY and BACKUP
-> -# sites serve just plain files.
-> -################################################################################
-> -
-> -define DOWNLOAD
-> -	$(call DOWNLOAD_INNER,$(1),$(notdir $(1)),DOWNLOAD)
-> -endef
-> -
-> -define DOWNLOAD_INNER
-> -	$(Q)$(if $(filter bzr cvs hg svn,$($(PKG)_SITE_METHOD)),export BR_NO_CHECK_HASH_FOR=$(2);) \
-> -	if test -n "$(call qstrip,$(BR2_PRIMARY_SITE))" ; then \
-> -		case "$(call geturischeme,$(BR2_PRIMARY_SITE))" in \
-> -			file) $(call $(3)_LOCALFILES,$(BR2_PRIMARY_SITE)/$(2),$(2)) && exit ;; \
-> -			scp) $(call $(3)_SCP,$(BR2_PRIMARY_SITE)/$(2),$(2)) && exit ;; \
-> -			*) $(call $(3)_WGET,$(BR2_PRIMARY_SITE)/$(subst ?,%3F,$(2)),$(2)) && exit ;; \
-
-[...]
-
-> diff --git a/support/download/cp b/support/download/file
-> similarity index 90%
-> rename from support/download/cp
-> rename to support/download/file
-> index 52fe2de83d..a3e616a181 100755
-
-[...]
-
-> -_wget ${verbose} "${@}" -O "'${output}'" "'${url}'"
-> +# Replace every '?' with '%3F' in the filename; only for the PRIMARY and BACKUP
-> +# mirror
-> +[ -n "${encode}" ] && filename=${filename//\?/%3F}
-> +
-> +_wget ${verbose} "${@}" -O "'${output}'" "'${url}/${filename}'"
-
-I suggest to retain the original comment above, which is clearer.
-
-For the rest:
-
-[Tested with wget, git, hg, svn, bzr]
-Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
-Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
--- 
-Luca
+diff --git a/CHANGES b/CHANGES
+index 022e94f520..61f04ec134 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -49,19 +49,22 @@
+ 	Zlib is now a virtual package, provided by either libzlib or
+ 	zlib-ng, similar to openssl.
+ 
++	Support for the Rust programming language.
++
+ 	New packages: aoetools, armbian-firmware, binaries-marvell,
+-	brltty, cups-filters, curlpp, daq, flatbuffers, gconf,
+-	glorytun, gstreamer1-mm, imx-m4fwloader, imx-gpu-g2d,
+-	json-for-modern-cpp, libcpprestsdk, libgta, libostree,
+-	libupnp18, luadbi, luadbi-sqlite3, lua-utf8, lynx, meson,
+-	mv-ddr-marvell, nilfs-utils, opentracing-cpp, open-lldp, pimd,
+-	proj, python-flask-cors, python-jaraco-classes,
+-	python-more-itertools, python-oauthlib, python-raven,
+-	python-remi, python-requests-oauthlib, python-schedule,
+-	python-secretstorage, python-see, python-tabledata,
+-	python-txtorcon, python-xlib, qt5charts, rtl8189fs, rtl8723bu,
+-	rygel, safeclib, solatus, tcf-agent, traceroute, waylandpp,
+-	wolfssl, zisofs-tools, zlib-ng
++	brltty, cargo, cargo-bin, cups-filters, curlpp, daq,
++	flatbuffers, gconf, glorytun, gstreamer1-mm, imx-m4fwloader,
++	imx-gpu-g2d, json-for-modern-cpp, libcpprestsdk, libgta,
++	libostree, libupnp18, luadbi, luadbi-sqlite3, lua-utf8, lynx,
++	meson, mv-ddr-marvell, nilfs-utils, opentracing-cpp,
++	open-lldp, pimd, proj, python-flask-cors,
++	python-jaraco-classes, python-more-itertools, python-oauthlib,
++	python-raven, python-remi, python-requests-oauthlib,
++	python-schedule, python-secretstorage, python-see,
++	python-tabledata, python-txtorcon, python-xlib, qt5charts,
++	rtl8189fs, rtl8723bu, rust, rustc, rust-bin, rygel, safeclib,
++	solatus, tcf-agent, traceroute, waylandpp, wolfssl,
++	zisofs-tools, zlib-ng
+ 
+ 	Removed packages: eeprog
+ 
+diff --git a/Makefile b/Makefile
+index e12bcb45b4..90019bd764 100644
+--- a/Makefile
++++ b/Makefile
+@@ -87,9 +87,9 @@ all:
+ .PHONY: all
+ 
+ # Set and export the version string
+-export BR2_VERSION := 2018.02-git
++export BR2_VERSION := 2018.02-rc1
+ # Actual time the release is cut (for reproducible builds)
+-BR2_VERSION_EPOCH = 1512070000
++BR2_VERSION_EPOCH = 1517840000
+ 
+ # Save running make version since it's clobbered by the make package
+ RUNNING_MAKE_VERSION := $(MAKE_VERSION)
+diff --git a/docs/website/download.html b/docs/website/download.html
+index 097e760a89..57c82e2739 100644
+--- a/docs/website/download.html
++++ b/docs/website/download.html
+@@ -75,41 +75,41 @@
+ 	  <p><a href="/downloads/buildroot-2017.11.2.tar.bz2.sign">PGP signature</a></p>
+ 	</div>
+       </div>
+-<!--
+-      <h3 style="text-align: center;">Latest release candidate: <b>2017.11-rc2</b></h3>
++
++      <h3 style="text-align: center;">Latest release candidate: <b>2018.02-rc1</b></h3>
+       <div class="row mt centered">
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2017.11-rc2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2018.02-rc1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2017.11-rc2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2018.02-rc1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+ 
+-	  <h3><a href="/downloads/buildroot-2017.11-rc2.tar.gz">buildroot-2017.11-rc2.tar.gz</a></h3>
+-	  <p><a href="/downloads/buildroot-2017.11-rc2.tar.gz.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2018.02-rc1.tar.gz">buildroot-2018.02-rc1.tar.gz</a></h3>
++	  <p><a href="/downloads/buildroot-2018.02-rc1.tar.gz.sign">PGP signature</a></p>
+ 	</div>
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2017.11-rc2.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2018.02-rc1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2017.11-rc2.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2018.02-rc1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+ 
+-	  <h3><a href="/downloads/buildroot-2017.11-rc2.tar.bz2">buildroot-2017.11-rc2.tar.bz2</a></h3>
+-	  <p><a href="/downloads/buildroot-2017.11-rc2.tar.bz2.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2018.02-rc1.tar.bz2">buildroot-2018.02-rc1.tar.bz2</a></h3>
++	  <p><a href="/downloads/buildroot-2018.02-rc1.tar.bz2.sign">PGP signature</a></p>
+ 	</div>
+       </div>
+--->
++
+       This and earlier releases (and their PGP signatures) can always be downloaded from
+       <a href="/downloads/">http://buildroot.net/downloads/</a>.
+     </div>
