@@ -1,99 +1,55 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 5 Feb 2018 22:08:12 +0100
-Subject: [Buildroot] [PATCH 1/5] package/x11r7/xlib_libxshmfence: fix
- build with glibc 2.27
-In-Reply-To: <20180205205716.4279-1-romain.naour@gmail.com>
-References: <20180205205716.4279-1-romain.naour@gmail.com>
-Message-ID: <20180205210812.GA2806@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon,  5 Feb 2018 22:10:10 +0100
+Subject: [Buildroot] [PATCH v2 0/5] Add gdb 8.1 support,
+ switch to 8.0 as default, drop old versions
+Message-ID: <20180205211015.26819-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Romain, All,
+Hello,
 
-On 2018-02-05 21:57 +0100, Romain Naour spake thusly:
-> With glibc 2.27 memfd_create() is inside a _GNU_SOURCE guard, so call
-> AC_USE_SYSTEM_EXTENSIONS to get this defined.
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> ---
->  ...onfigure.ac-call-AC_USE_SYSTEM_EXTENSIONS.patch | 30 ++++++++++++++++++++++
->  .../x11r7/xlib_libxshmfence/xlib_libxshmfence.mk   |  3 +++
->  2 files changed, 33 insertions(+)
->  create mode 100644 package/x11r7/xlib_libxshmfence/0001-configure.ac-call-AC_USE_SYSTEM_EXTENSIONS.patch
-> 
-> diff --git a/package/x11r7/xlib_libxshmfence/0001-configure.ac-call-AC_USE_SYSTEM_EXTENSIONS.patch b/package/x11r7/xlib_libxshmfence/0001-configure.ac-call-AC_USE_SYSTEM_EXTENSIONS.patch
-> new file mode 100644
-> index 0000000000..f24b1da5dd
-> --- /dev/null
-> +++ b/package/x11r7/xlib_libxshmfence/0001-configure.ac-call-AC_USE_SYSTEM_EXTENSIONS.patch
-> @@ -0,0 +1,30 @@
-> +From 0b550a4e7acf02d3478602848f6afbfcbfb0d4b2 Mon Sep 17 00:00:00 2001
-> +From: Ross Burton <ross.burton@intel.com>
-> +Date: Mon, 29 Jan 2018 16:24:36 +0000
-> +Subject: [PATCH] configure.ac: call AC_USE_SYSTEM_EXTENSIONS
-> +
-> +With glibc 2.27 memfd_create() is inside a _GNU_SOURCE guard, so call
-> +AC_USE_SYSTEM_EXTENSIONS to get this defined.
-> +
-> +Signed-off-by: Ross Burton <ross.burton@intel.com>
-> +Signed-off-by: Romain Naour <romain.naour@gmail.com>
+This is just a respin of Romain's series on gdb, with only two
+changes, but somewhat important ones:
 
-This looks liek it is a backport from upstream, right? If so, please say
-so; in such a case I like to add something like:
+ - An additional commit (first in the series) that reworks how the
+   host and target gdb dependencies are handled. Indeed, switching to
+   gdb 8.0 by default has a consequence, because it needs C++11
+   support in the toolchain, and that breaks with how the dependencies
+   were currently expressed. See the commit log of PATCH 1 for
+   details.
 
-    [yann: backport from upstream URL-or-commit]
-    Signed-off-by: ME
+ - In the patch bumping to 8.1, remove the MPFR handling that Romain
+   did: it was not correct to bring host-mpfr as a dependency for the
+   host gdb when the target mpfr package was enabled. Since mpfr
+   support in gdb for the target is not needed (it's only used when
+   host != target), we don't support that and pass --without-mpfr. For
+   the host, we also pass --without-mpfr, as we don't support this
+   optional feature for the moment.
 
-Regards,
-Yann E. MORIN.
+ - The patch bumping to 8.1 is adjust afer the dependency changes.
 
-> +---
-> + configure.ac | 2 ++
-> + 1 file changed, 2 insertions(+)
-> +
-> +diff --git a/configure.ac b/configure.ac
-> +index 55772d0..ed77e6d 100644
-> +--- a/configure.ac
-> ++++ b/configure.ac
-> +@@ -28,6 +28,8 @@ AC_INIT([libxshmfence], [1.2],
-> + AC_CONFIG_SRCDIR([Makefile.am])
-> + AC_CONFIG_HEADERS([config.h])
-> + 
-> ++AC_USE_SYSTEM_EXTENSIONS
-> ++
-> + # Initialize Automake
-> + AM_INIT_AUTOMAKE([foreign dist-bzip2])
-> + 
-> +-- 
-> +2.14.3
-> +
-> diff --git a/package/x11r7/xlib_libxshmfence/xlib_libxshmfence.mk b/package/x11r7/xlib_libxshmfence/xlib_libxshmfence.mk
-> index 3a2f32623a..9686c408c1 100644
-> --- a/package/x11r7/xlib_libxshmfence/xlib_libxshmfence.mk
-> +++ b/package/x11r7/xlib_libxshmfence/xlib_libxshmfence.mk
-> @@ -12,4 +12,7 @@ XLIB_LIBXSHMFENCE_LICENSE_FILES = COPYING
->  XLIB_LIBXSHMFENCE_INSTALL_STAGING = YES
->  XLIB_LIBXSHMFENCE_DEPENDENCIES = host-pkgconf xproto_xproto
->  
-> +# 0001-configure.ac-call-AC_USE_SYSTEM_EXTENSIONS.patch
-> +XLIB_LIBXSHMFENCE_AUTORECONF = YES
-> +
->  $(eval $(autotools-package))
-> -- 
-> 2.14.3
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+ - All other patches are unchanged.
+
+Thomas
+
+Romain Naour (4):
+  package/gdb: bump to version 8.1
+  package/gdb: switch to 8.0 as the default version
+  package/gdb: remove 7.10
+  package/gdb: remove 7.11
+
+Thomas Petazzoni (1):
+  package/gdb: rework dependency for C++11
+
+ Config.in.legacy           | 14 ++++++++++++++
+ package/gdb/Config.in      | 15 +++++++++++++++
+ package/gdb/Config.in.host | 21 ++++++++-------------
+ package/gdb/gdb.hash       |  3 +--
+ package/gdb/gdb.mk         |  4 +++-
+ 5 files changed, 41 insertions(+), 16 deletions(-)
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.14.3
