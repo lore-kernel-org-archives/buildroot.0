@@ -1,55 +1,91 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 06 Feb 2018 09:45:50 +0100
-Subject: [Buildroot] [PATCH v9 2/3] board: vyasa: Add qst5 configuration
-In-Reply-To: <1517313835-21973-2-git-send-email-jagan@amarulasolutions.com>
- (Jagan Teki's message of "Tue, 30 Jan 2018 13:03:54 +0100")
-References: <1517313835-21973-1-git-send-email-jagan@amarulasolutions.com>
- <1517313835-21973-2-git-send-email-jagan@amarulasolutions.com>
-Message-ID: <87po5itsjl.fsf@dell.be.48ers.dk>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 6 Feb 2018 09:52:08 +0100
+Subject: [Buildroot] [PATCH 4/5] support/docker: use a fixed Debian
+ snapshot
+In-Reply-To: <fc8ae732b7c23135bfc826ba28a49045c2dddd76.1517755438.git.yann.morin.1998@free.fr>
+References: <cover.1517755438.git.yann.morin.1998@free.fr>
+ <fc8ae732b7c23135bfc826ba28a49045c2dddd76.1517755438.git.yann.morin.1998@free.fr>
+Message-ID: <2fc6c71c-c2f5-9c90-e111-de25bde185eb@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Jagan" == Jagan Teki <jagannadh.teki@gmail.com> writes:
 
-Hi,
 
- > This configuration build qt5 along with MALI T76X
- > for vyasa rk3288 board.
-
- > Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
-
- > @@ -29,3 +29,22 @@ You can write this image directly to an SD card device (i.e. /dev/xxx):
- >    $ sudo sync
- 
- >  Finally, you can insert the SD card to the Vyasa RK3288 board, close J4 and boot it.
- > +
- > +Testing graphics on Vysa RK3288
- > +===============================
- > +
- > +Built Mali T76X, Qt5 and demo application:
-
-s/Built/Build/
-
+On 04-02-18 15:44, Yann E. MORIN wrote:
+> Since we're now using a specific base image tag, we need to also use a
+> specific, stable repository to get additional packages from for this
+> image.
+> 
+> As such, use the Debian snapshot that matches the base image.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Arnout Vandecappelle <arnout@mind.be>
+> Cc: Peter Korsgaard <peter@korsgaard.com>
+> ---
+>  support/docker/Dockerfile       | 7 +++++++
+>  support/docker/apt-sources.list | 4 ++++
+>  2 files changed, 11 insertions(+)
+>  create mode 100644 support/docker/apt-sources.list
+> 
+> diff --git a/support/docker/Dockerfile b/support/docker/Dockerfile
+> index 49b74b88bd..f18d195f37 100644
+> --- a/support/docker/Dockerfile
+> +++ b/support/docker/Dockerfile
+> @@ -3,7 +3,11 @@
+>  #   sudo docker build -t buildroot/base support/docker
+>  #   sudo docker push buildroot/base
+>  
+> +# We use a specific tag for the base image *and* the corresponding date
+> +# for the repository., so do not forget to update the apt-sources.list
+> +# file that is shipped next to this Dockerfile.
+>  FROM debian:stretch-20171210
 > +
- > +   $ make amarula_vyasa_rk3288_qt5_defconfig
- > +   $ make
- > +
- > +Test procedure:
- > +- insert require modules
- > +# modprobe -a rockchipdrm
- > +# modprobe -a governor_simpleondemand
- > +
- > +- build kernel mali driver as module and insert
+>  LABEL maintainer="Buildroot mailing list <buildroot@buildroot.org>" \
+>        vendor="Buildroot" \
+>  description="Container with everything needed to run Buildroot"
+> @@ -11,6 +15,9 @@ description="Container with everything needed to run Buildroot"
+>  # Setup environment
+>  ENV DEBIAN_FRONTEND noninteractive
+>  
+> +# This repository can be a bit slow at times. Don't panic...
+> +COPY apt-sources.list /etc/apt/sources.list
+> +
+>  # The container has no package lists, so need to update first
+>  RUN dpkg --add-architecture i386 && \
+>      apt-get update -y && \
+> diff --git a/support/docker/apt-sources.list b/support/docker/apt-sources.list
+> new file mode 100644
+> index 0000000000..789fb8fc17
+> --- /dev/null
+> +++ b/support/docker/apt-sources.list
+> @@ -0,0 +1,4 @@
+> +# Latest just before 20171210T000000Z:
+> +deb [check-valid-until=no] http://snapshot.debian.org/archive/debian/20171209T220346Z/ stretch main
 
-So this defconfig isn't usable out of the box? That isn't really nice :/
+ AFAIU, snapshot should resolve any date to the latest available snapshot, so
+http://snapshot.debian.org/archive/debian/20171210T000000Z/ should work as well
+here. It should redirect to exactly the same URLs. Note thought that this
+doesn't work for the top-level, only for a specific release (because they are
+snapshotted at different times). So just clicking on the URL above won't work,
+but if you put dists/stretch after it it redirects to
+http://snapshot.debian.org/archive/debian/20171209T220346Z/dists/stretch/
 
-How about adding a t76x-mali kernel driver package, similar to
-E.G. sunxi-mali-driver-mainline:
+ Anyway, OK for now, but something to keep in mind when it is bumped.
 
-https://patchwork.ozlabs.org/patch/841314/
+ Regards,
+ Arnout
+
+> +deb [check-valid-until=no] http://snapshot.debian.org/archive/debian/20171209T220346Z/ stretch-updates main
+> +deb [check-valid-until=no] http://snapshot.debian.org/archive/debian-security/20171209T224618Z/ stretch/updates main
+> 
 
 -- 
-Bye, Peter Korsgaard
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
