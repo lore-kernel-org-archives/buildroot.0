@@ -1,69 +1,34 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 06 Feb 2018 00:32:38 +0100
-Subject: [Buildroot] [PATCH 5/5] package/glibc: bump to 2.27
-In-Reply-To: <20180205214157.GC2806@scaer> (Yann E. MORIN's message of "Mon, 5
- Feb 2018 22:41:57 +0100")
-References: <20180205205716.4279-1-romain.naour@gmail.com>
- <20180205205716.4279-5-romain.naour@gmail.com>
- <20180205210150.ok3hhfucmxu3uz3l@tarshish>
- <20180205214157.GC2806@scaer>
-Message-ID: <87607bui5l.fsf@dell.be.48ers.dk>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Tue, 6 Feb 2018 01:00:43 +0100
+Subject: [Buildroot] [RFCv3 13/15] core: change host RPATH handling
+In-Reply-To: <20171229212034.416e8b23@windsurf.lan>
+References: <20171201205352.24287-1-thomas.petazzoni@free-electrons.com>
+ <20171201205352.24287-14-thomas.petazzoni@free-electrons.com>
+ <20171229173118.GP3176@scaer> <20171229212034.416e8b23@windsurf.lan>
+Message-ID: <CANQCQpbCOP0VA8t6+y-SN2xybhPivW93eQkR0JfNZws+mKseiA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+Thomas, Yann,
 
- > Baruch, All,
- > On 2018-02-05 23:01 +0200, Baruch Siach spake thusly:
- >> On Mon, Feb 05, 2018 at 09:57:16PM +0100, Romain Naour wrote:
- >> > See: https://sourceware.org/ml/libc-announce/2018/msg00000.html
- >> > https://sourceware.org/glibc/wiki/Release/2.27
- >> Note that this is a security bump fixing CVE-2017-1000408, CVE-2017-1000409, 
- >> CVE-2017-16997, CVE-2018-1000001, and CVE-2018-6485.
+On Fri, Dec 29, 2017 at 9:20 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
+>
+> On Fri, 29 Dec 2017 18:31:18 +0100, Yann E. MORIN wrote:
+>
+[snip]
+>  2. Make the RPATH fixing logic smarter, and don't set a RPATH to
+>     $ORIGIN/../lib if the program doesn't use a library that is in
+>     HOST_DIR/lib. This is perhaps the most pretty solution.
+>
 
- > There are 10 CVE listed in the release annoucement mail, but you list
- > only five here. Why only those?
+What about the case of autotools tests which now don't have an
+absolute path to the library?  I ran into an issue with this and the
+host-libglibc2 testing for PCRE unicode.  The test worked fine once I
+set the LD LIBRARY PATH.
 
- > Do we want to list all the CVEs fixed in a release? And if we don't list
- > all, why do we even list only a subset?
-
- > I don't think we should, especially since the release mail is linked to
- > the commit log and has all the details.
-
-For security bumps we normally DO list the CVEs for ease of use, E.G.:
-
-commit d52cd750c762c78ebcf8623fab8a9c43c9419625
-Author: Peter Korsgaard <peter@korsgaard.com>
-Date:   Sun Jan 28 20:23:02 2018 +0100
-
-    wireshark: security bump to version 2.2.12
-
-    Fixes the following security issues:
-
-    CVE-2017-17997: MRDISC dissector crash
-    https://www.wireshark.org/security/wnpa-sec-2018-02.html
-
-    CVE-2018-5334: IxVeriWave file parser crash
-    https://www.wireshark.org/security/wnpa-sec-2018-03.html
-
-    CVE-2018-5335: WCP dissector crash
-    https://www.wireshark.org/security/wnpa-sec-2018-04.html
-
-    CVE-2018-5336: Multiple dissectors could crash
-    https://www.wireshark.org/security/wnpa-sec-2018-01.html
-
-    For more information, see the release notes:
-    https://www.wireshark.org/docs/relnotes/wireshark-2.2.12.html
-
-    While we are at it, also add as hash for license file.
-
-    Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-
-So I prefer to do that as well here.
-
--- 
-Bye, Peter Korsgaard
+Matt
