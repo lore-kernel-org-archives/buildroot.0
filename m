@@ -1,22 +1,16 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Tue, 6 Feb 2018 15:05:01 +0100
-Subject: [Buildroot] [PATCH 1/1] 2017.11.x: fix refpolicy build failure
-In-Reply-To: <20180206140209.18298-1-aduskett@gmail.com>
-References: <20180206140209.18298-1-aduskett@gmail.com>
-Message-ID: <CANQCQpZy=kZRs-urnn0mpeLFMg0d7D21nXZGHMiyEiKfFR1_Kg@mail.gmail.com>
+From: Bryce Ferguson <bryce.ferguson@rockwellcollins.com>
+Date: Tue, 6 Feb 2018 08:11:56 -0600
+Subject: [Buildroot] [PATCH 0/3] hostapd: driver selection options
+In-Reply-To: <20171230155736.1668-1-alexander.i.mukhin@gmail.com>
+References: <20171230155736.1668-1-alexander.i.mukhin@gmail.com>
+Message-ID: <CAKGmAFp+KZM8dy9ixa8iuCOhgKF-s1ET-2yfT5aG1MZ7CHi40A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Adam,
-
-On Tue, Feb 6, 2018 at 3:02 PM, Adam Duskett <aduskett@gmail.com> wrote:
-> Add a patch to fix the fallthrough.
->
-> Taken from upstream:
-
-Please add link to upsteam
-
-Matt
++Sam
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180206/e28f5ebb/attachment.html>
