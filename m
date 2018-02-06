@@ -1,33 +1,36 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 06 Feb 2018 18:26:02 +0100
-Subject: [Buildroot] [PATCH v2 1/1] 2017.11.x: fix refpolicy build
- failure
-In-Reply-To: <20180206171640.12055-1-aduskett@gmail.com> (Adam Duskett's
- message of "Tue, 6 Feb 2018 12:16:40 -0500")
-References: <20180206171640.12055-1-aduskett@gmail.com>
-Message-ID: <87zi4mrpw5.fsf@dell.be.48ers.dk>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Tue,  6 Feb 2018 12:40:35 -0500
+Subject: [Buildroot] [PATCH 1/1] ncurses-next: fix build failure with 6.1
+Message-ID: <20180206174035.1683-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Adam" == Adam Duskett <aduskett@gmail.com> writes:
+Ncurses 6.1 introduces the config option --disable-stripping which is set
+to no by default.
 
- > Add a patch to fix the fallthrough.
- > Taken from upstream:
- > https://github.com/TresysTechnology/refpolicy/commit/89b53fafa9904ba7a3df2ad94d01a485eae5366f
+Set this option to ensure that ncurses doesn't try to strip the executables.
 
- > Fixes:
- > http://autobuild.buildroot.net/results/54e240243aba31da33a2cbecdcc234b44f24dcf7
- > Signed-off-by: Adam Duskett <aduskett@gmail.com>
- > ---
- > Changes v1 -> v2:
- >   - Added upstream commit link to the patch notes (Matthew Weber)
- >   - Changed patch to full upstream patch.
+Fixes:
+http://autobuild.buildroot.net/results/3a5/3a5ddfcf7cd3a5c2bc068e3e33c823d6bcd3e79b
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
+---
+ package/ncurses/ncurses.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-Ehh, isn't this already fixed by this:
-https://git.buildroot.net/buildroot/commit/?h=2017.11.x&id=c8eea94905a0dc2851e92673a3a7697eb5dc4355
-
+diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
+index eccfbecb8b..90cf4a4dc5 100644
+--- a/package/ncurses/ncurses.mk
++++ b/package/ncurses/ncurses.mk
+@@ -25,6 +25,7 @@ NCURSES_CONF_OPTS = \
+ 	--enable-const \
+ 	--enable-overwrite \
+ 	--enable-pc-files \
++	--disable-stripping \
+ 	--with-pkg-config-libdir="/usr/lib/pkgconfig" \
+ 	$(if $(BR2_PACKAGE_NCURSES_TARGET_PROGS),,--without-progs) \
+ 	--without-manpages
 -- 
-Bye, Peter Korsgaard
+2.14.3
