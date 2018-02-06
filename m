@@ -1,42 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 6 Feb 2018 13:43:13 +0100
-Subject: [Buildroot] [PATCH 1/5] package/x11r7/xlib_libxshmfence: fix
- build with glibc 2.27
-In-Reply-To: <20180205205716.4279-1-romain.naour@gmail.com>
-References: <20180205205716.4279-1-romain.naour@gmail.com>
-Message-ID: <20180206134313.7eacbaad@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 06 Feb 2018 13:44:34 +0100
+Subject: [Buildroot] [PATCH-2017.11.x] refpolicy: add upstream patch
+ fixing compile error related to implicit-fallthrough
+In-Reply-To: <20180205224213.2036-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Mon, 5 Feb 2018 23:42:13 +0100")
+References: <20180205224213.2036-1-peter@korsgaard.com>
+Message-ID: <87h8quthhp.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-On Mon,  5 Feb 2018 21:57:12 +0100, Romain Naour wrote:
-> With glibc 2.27 memfd_create() is inside a _GNU_SOURCE guard, so call
-> AC_USE_SYSTEM_EXTENSIONS to get this defined.
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> ---
->  ...onfigure.ac-call-AC_USE_SYSTEM_EXTENSIONS.patch | 30 ++++++++++++++++++++++
->  .../x11r7/xlib_libxshmfence/xlib_libxshmfence.mk   |  3 +++
->  2 files changed, 33 insertions(+)
->  create mode 100644 package/x11r7/xlib_libxshmfence/0001-configure.ac-call-AC_USE_SYSTEM_EXTENSIONS.patch
+ > Fixes:
+ > http://autobuild.buildroot.net/results/958/958ff318cdbedb5b8641b376223491b85a75f084/
+ > http://autobuild.buildroot.net/results/54e/54e240243aba31da33a2cbecdcc234b44f24dcf7/
 
-Thanks, I've applied the series to the next branch.
+ > fc-sort is a host utility compiled with -Werror, and for modern (>= 7.x) gcc
+ > versions, Werror implies -Werror=implicit-fallthrough.
 
-For PATCH 1, I added a reference to the upstream commit you've
-backported, as suggested by Yann.
+ > And an upstream patch fixing this issue.
 
-For PATCH 5, I added the references to the CVEs being fixed, tweaked
-the commit log about license file hashes, and changed the title to
-"security bump".
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-Thanks!
+Committed to 2017.11.x, thanks.
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
