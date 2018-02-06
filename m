@@ -1,40 +1,89 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 6 Feb 2018 18:50:04 +0200
-Subject: [Buildroot] [git commit branch/next] package/glibc: security
- bump to 2.27
-In-Reply-To: <20180206124246.13C0B884B3@busybox.osuosl.org>
-References: <20180206124246.13C0B884B3@busybox.osuosl.org>
-Message-ID: <20180206165004.dvzsqefosys3ofld@tarshish>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Tue,  6 Feb 2018 11:59:50 -0500
+Subject: [Buildroot] [PATCH 1/1] libcpprestsdk: fix building as a static
+ library
+Message-ID: <20180206165950.10154-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+zlib must be put after OpenSSL when building as a static library or else
+OpenSSL will be unable to find zlib specific functions.
 
-On Tue, Feb 06, 2018 at 01:41:48PM +0100, Thomas Petazzoni wrote:
-> diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-> index cf4bdec065..b674191b22 100644
-> --- a/package/glibc/glibc.mk
-> +++ b/package/glibc/glibc.mk
-> @@ -10,7 +10,7 @@ GLIBC_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,glibc,$(GLIBC_VE
->  else
->  # Generate version string using:
->  #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master
-> -GLIBC_VERSION = glibc-2.26-107-g73a92363619e52c458146e903dfb9b1ba823aa40
-> +GLIBC_VERSION = glibc-2.27
->  # Upstream doesn't officially provide an https download link.
->  # There is one (https://sourceware.org/git/glibc.git) but it's not reliable,
->  # sometimes the connection times out. So use an unofficial github mirror.
+Put the search for zlib below the search for OpenSSL to
+ensure that zlib links after OpenSSL.
 
-Any reason not to use upstream tarball now that we use an official release?
+Fixes:
+http://autobuild.buildroot.net/results/1df528254468a5ece2f6fe37b3401e68737beed1
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
+---
+ .../0004-fix-static-library-linking.patch          | 56 ++++++++++++++++++++++
+ 1 file changed, 56 insertions(+)
+ create mode 100644 package/libcpprestsdk/0004-fix-static-library-linking.patch
 
-  https://ftp.gnu.org/gnu/glibc/glibc-2.27.tar.xz
-
-baruch
-
+diff --git a/package/libcpprestsdk/0004-fix-static-library-linking.patch b/package/libcpprestsdk/0004-fix-static-library-linking.patch
+new file mode 100644
+index 0000000000..e904bb96c1
+--- /dev/null
++++ b/package/libcpprestsdk/0004-fix-static-library-linking.patch
+@@ -0,0 +1,56 @@
++From cefe8da037e0c2bb97dc1cb4d7ff43e7123feabf Mon Sep 17 00:00:00 2001
++From: Adam Duskett <aduskett@gmail.com>
++Date: Tue, 6 Feb 2018 11:34:49 -0500
++Subject: [PATCH] fix static library linking
++
++zlib must be put after OpenSSL when building as a static library or else
++OpenSSL will be unable to find zlib specific functions.
++
++Put the search for zlib below the search for OpenSSL to
++ensure that zlib links after OpenSSL.
++
++Upstream status: submitted
++https://github.com/Microsoft/cpprestsdk/pull/688
++
++Signed-off-by: Adam Duskett <aduskett@gmail.com>
++---
++ Release/src/CMakeLists.txt | 16 ++++++++--------
++ 1 file changed, 8 insertions(+), 8 deletions(-)
++
++diff --git a/Release/src/CMakeLists.txt b/Release/src/CMakeLists.txt
++index 3f8a0f8..2a6d440 100644
++--- a/Release/src/CMakeLists.txt
+++++ b/Release/src/CMakeLists.txt
++@@ -75,14 +75,6 @@ else()
++   message(FATAL_ERROR "Invalid implementation")
++ endif()
++ 
++-# Compression component
++-if(CPPREST_EXCLUDE_COMPRESSION)
++-  target_compile_definitions(cpprest PRIVATE -DCPPREST_EXCLUDE_COMPRESSION=1)
++-else()
++-  cpprest_find_zlib()
++-  target_link_libraries(cpprest PRIVATE cpprestsdk_zlib_internal)
++-endif()
++-
++ # PPLX component
++ if(CPPREST_PPLX_IMPL STREQUAL "apple")
++   find_library(COREFOUNDATION CoreFoundation "/")
++@@ -133,6 +125,14 @@ else()
++   message(FATAL_ERROR "Invalid implementation")
++ endif()
++ 
+++# Compression component
+++if(CPPREST_EXCLUDE_COMPRESSION)
+++  target_compile_definitions(cpprest PRIVATE -DCPPREST_EXCLUDE_COMPRESSION=1)
+++else()
+++  cpprest_find_zlib()
+++  target_link_libraries(cpprest PRIVATE cpprestsdk_zlib_internal)
+++endif()
+++
++ # fileio streams component
++ if(CPPREST_FILEIO_IMPL STREQUAL "win32")
++   target_sources(cpprest PRIVATE streams/fileio_win32.cpp)
++-- 
++2.14.3
++
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+2.14.3
