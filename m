@@ -1,79 +1,85 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 6 Feb 2018 13:43:58 +0100
-Subject: [Buildroot] [git commit branch/2017.11.x] refpolicy: add upstream
- patch fixing compile error related to implicit-fallthrough
-Message-ID: <20180206124446.74408884B4@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 6 Feb 2018 13:45:36 +0100
+Subject: [Buildroot] [git commit branch/next] package/glibc: security
+ bump to 2.27
+In-Reply-To: <20180206124246.13C0B884B3@busybox.osuosl.org>
+References: <20180206124246.13C0B884B3@busybox.osuosl.org>
+Message-ID: <20180206124536.GB28439@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c8eea94905a0dc2851e92673a3a7697eb5dc4355
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.11.x
+All,
 
-Fixes:
-http://autobuild.buildroot.net/results/958/958ff318cdbedb5b8641b376223491b85a75f084/
-http://autobuild.buildroot.net/results/54e/54e240243aba31da33a2cbecdcc234b44f24dcf7/
+On 2018-02-06 13:41 +0100, Thomas Petazzoni spake thusly:
+> commit: https://git.buildroot.net/buildroot/commit/?id=c032e6825ad96e6d4b69cecde2402c02a2a356b5
+> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-fc-sort is a host utility compiled with -Werror, and for modern (>= 7.x) gcc
-versions, Werror implies -Werror=implicit-fallthrough.
+Subject says "security bump". Sorry, but this is not a security bump.
+This is a normal bump that happens to have security fixes.
 
-And an upstream patch fixing this issue.
+Otherwise, almost any bump of almost any package is a security bump...
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...0001-fc_sort-avoid-compiler-warning-error.patch | 45 ++++++++++++++++++++++
- 1 file changed, 45 insertions(+)
+Regards,
+Yann E. MORIN.
 
-diff --git a/package/refpolicy/0001-fc_sort-avoid-compiler-warning-error.patch b/package/refpolicy/0001-fc_sort-avoid-compiler-warning-error.patch
-new file mode 100644
-index 0000000000..403daedd0d
---- /dev/null
-+++ b/package/refpolicy/0001-fc_sort-avoid-compiler-warning-error.patch
-@@ -0,0 +1,45 @@
-+From 89b53fafa9904ba7a3df2ad94d01a485eae5366f Mon Sep 17 00:00:00 2001
-+From: Guido Trentalancia <guido@trentalancia.net>
-+Date: Tue, 6 Jun 2017 00:08:13 +0200
-+Subject: [PATCH] fc_sort: avoid compiler warning/error
-+
-+Fix a "-Werror=implicit-fallthrough" compiler warning/error on
-+the switch statement.
-+
-+This third version (v3) fixes a bug introduced in the first
-+version and improves the style over the second version.
-+
-+Signed-off-by: Guido Trentalancia <guido@trentalancia.com>
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ support/fc_sort.c | 10 ++++++----
-+ 1 file changed, 6 insertions(+), 4 deletions(-)
-+
-+diff --git a/support/fc_sort.c b/support/fc_sort.c
-+index 5561288a..66cdf39f 100644
-+--- a/support/fc_sort.c
-++++ b/support/fc_sort.c
-+@@ -292,14 +292,16 @@ void fc_fill_data(file_context_node_t *fc_node)
-+ 			/* If a escape character is found,
-+ 			 *  skip the next character. */
-+ 			c++;
-++			break;
-+ 		default:
-+-			/* If no meta character has been found yet,
-+-			 *  add one to the stem length. */
-+-			if (!fc_node->meta)
-+-				fc_node->stem_len++;
-+ 			break;
-+ 		}
-+ 
-++		/* If no meta character has been found yet,
-++		 * add one to the stem length. */
-++		if (!fc_node->meta)
-++			fc_node->stem_len++;
-++
-+ 		fc_node->str_len++;
-+ 		c++;
-+ 	}
-+-- 
-+2.11.0
-+
+> See: https://sourceware.org/ml/libc-announce/2018/msg00000.html
+> https://sourceware.org/glibc/wiki/Release/2.27
+> 
+> Fixes the following CVEs:
+>  CVE-2017-1000408
+>  CVE-2017-1000409
+>  CVE-2017-16997
+>  CVE-2018-1000001
+>  CVE-2018-6485
+> 
+> While at it, add license file hashes.
+> 
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> ---
+>  package/glibc/glibc.hash | 6 +++++-
+>  package/glibc/glibc.mk   | 2 +-
+>  2 files changed, 6 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/glibc/glibc.hash b/package/glibc/glibc.hash
+> index f3a6577d2a..86d3bb56dd 100644
+> --- a/package/glibc/glibc.hash
+> +++ b/package/glibc/glibc.hash
+> @@ -1,4 +1,8 @@
+>  # Locally calculated (fetched from Github)
+> -sha256  0766875391224153502c5542a71b6e46db53b44691078b3130e1a0df41586430     glibc-glibc-2.26-107-g73a92363619e52c458146e903dfb9b1ba823aa40.tar.gz
+> +sha256  a74489d14f4017bee6a6c6fe76f1de0dbf7d66c8695116de5aadd141c4757892     glibc-glibc-2.27.tar.gz
+>  # Locally calculated (fetched from Github)
+>  sha256  5aa9adeac09727db0b8a52794186563771e74d70410e9fd86431e339953fd4bb     glibc-arc-2017.09-release.tar.gz
+> +
+> +sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+> +sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
+> +sha256  61abdd6930c9c599062d89e916b3e7968783879b6be0ee1c6229dd6169def431  LICENSES
+> diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+> index cf4bdec065..b674191b22 100644
+> --- a/package/glibc/glibc.mk
+> +++ b/package/glibc/glibc.mk
+> @@ -10,7 +10,7 @@ GLIBC_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,glibc,$(GLIBC_VE
+>  else
+>  # Generate version string using:
+>  #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master
+> -GLIBC_VERSION = glibc-2.26-107-g73a92363619e52c458146e903dfb9b1ba823aa40
+> +GLIBC_VERSION = glibc-2.27
+>  # Upstream doesn't officially provide an https download link.
+>  # There is one (https://sourceware.org/git/glibc.git) but it's not reliable,
+>  # sometimes the connection times out. So use an unofficial github mirror.
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
