@@ -1,37 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 6 Feb 2018 17:22:01 +0100
-Subject: [Buildroot] [PATCH v2 1/1] support/dependencies: add check for
- c++ multilib
-In-Reply-To: <20180205215708.16363-1-gael.portay@savoirfairelinux.com>
-References: <20180205215708.16363-1-gael.portay@savoirfairelinux.com>
-Message-ID: <20180206172201.53059429@windsurf>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Tue, 6 Feb 2018 14:22:27 -0200
+Subject: [Buildroot] [arc-buildroot] Re: [PATCH v2 0/2] Xorg: enable
+ Etnaviv support
+In-Reply-To: <1517915180.2596.6.camel@synopsys.com>
+References: <20180202145526.20133-1-Evgeniy.Didin@synopsys.com>
+ <CAOMZO5AdVkKu8iVcOi1Baw-v5iHgON4MMw7X+cwSNmgVkNrf5w@mail.gmail.com>
+ <1517915180.2596.6.camel@synopsys.com>
+Message-ID: <CAOMZO5D_yvbc9JdfwGjzoN-ay0mf_wFRDHeftonWOmLoJLVuKw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Evgeniy,
 
-On Mon,  5 Feb 2018 16:57:08 -0500, Ga?l PORTAY wrote:
-> Some packages build C++ 32bits host-tools and need the g++-multilib to
-> be installed on the build machine. As example, qt5webengine builds a C++
-> host-tool when target is 32bits.
-> 
-> Add the check for g++-multilib to the dependencies script; and update
-> the Dockerfile to install g++-multilib package.
-> 
-> Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
-> ---
+On Tue, Feb 6, 2018 at 9:06 AM, Evgeniy Didin
+<Evgeniy.Didin@synopsys.com> wrote:
 
-Applied to master, thanks. Both Arnout and I thought that it was not
-really worth having a separate option for this, as it would hardly be
-tested. So the approach you have submitted looked good enough to us.
+> Sure, in attachment I placed defconfig which I used to run glmark app.
+> on Wandboard.
+>
+> Commands:
+> $ X &
+> $ export DISPLAY=:0
+> $ glmark2-es2
 
-Thanks!
+Thanks! It works fine.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+I have a minor comment in one of your patches. Will reply there.
+
+Thanks for your good work!
