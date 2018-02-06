@@ -1,59 +1,55 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Tue,  6 Feb 2018 09:02:09 -0500
-Subject: [Buildroot] [PATCH 1/1] 2017.11.x: fix refpolicy build failure
-Message-ID: <20180206140209.18298-1-aduskett@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 6 Feb 2018 15:03:52 +0100
+Subject: [Buildroot] [PATCH v3 1/3] autobuilder: hung build: convert to
+ monitor thread
+In-Reply-To: <20180202205713.27191-3-matthew.weber@rockwellcollins.com>
+References: <20180202205713.27191-1-matthew.weber@rockwellcollins.com>
+ <20180202205713.27191-3-matthew.weber@rockwellcollins.com>
+Message-ID: <20180206150352.6df17129@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add a patch to fix the fallthrough.
+Hello,
 
-Taken from upstream:
-Fixes:
-http://autobuild.buildroot.net/results/54e240243aba31da33a2cbecdcc234b44f24dcf7
+On Fri,  2 Feb 2018 14:57:11 -0600, Matt Weber wrote:
+> Check the build-time.log and monitor for modifications to
+> determine if the build has hung for at most #mins
+> before killing the build and reporting a timeout.
+> 
+> This allows infinite sized builds as we get to a lower
+> number of autobr fails.  Less failures means we start
+> to see false timeout failures when we hit the boundary
+> of the old MAX_DURATION ~8hrs.
+> 
+> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+> 
+> --
+> Change Log
+> 
+> v2 -> v3
+>  - Adjust hung timeout to 2hrs as minic, gst-ffmpeg and qt5webkit
+>    could go beyond 60mins on a minimal 2-4core machine while
+>    processing a single build step written
+> 
+> v1->v2
+> [Thomas P.
+>  - Use mtime vs reading file
+>  - Use datetime for hung delta check
+>  - Removed camel case
+>  - Added hung build event to sync hand-off back to main thread
+> ---
+>  scripts/autobuild-run | 58 +++++++++++++++++++++++++++++++++++++++++++--------
+>  1 file changed, 49 insertions(+), 9 deletions(-)
 
-Signed-off-by: Adam Duskett <aduskett@gmail.com>
----
- .../refpolicy/0001-fix-fall-through-error.patch    | 29 ++++++++++++++++++++++
- 1 file changed, 29 insertions(+)
- create mode 100644 package/refpolicy/0001-fix-fall-through-error.patch
+Applied to buildroot-test, thanks!. Note that in this patch, and other
+patches in this series, your From: didn't match the Signed-off-by, so I
+had to rewrite these.
 
-diff --git a/package/refpolicy/0001-fix-fall-through-error.patch b/package/refpolicy/0001-fix-fall-through-error.patch
-new file mode 100644
-index 0000000000..524884b254
---- /dev/null
-+++ b/package/refpolicy/0001-fix-fall-through-error.patch
-@@ -0,0 +1,29 @@
-+From 4c71351e7dc7817bdc553cf0104c491e029e1b59 Mon Sep 17 00:00:00 2001
-+From: Adam Duskett <aduskett@gmail.com>
-+Date: Tue, 6 Feb 2018 08:58:41 -0500
-+Subject: [PATCH] fix fall through error
-+
-+Backported from upstream.
-+
-+Fixes:
-+http://autobuild.buildroot.net/results/54e240243aba31da33a2cbecdcc234b44f24dcf7
-+Signed-off-by: Adam Duskett <aduskett@gmail.com>
-+---
-+ support/fc_sort.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/support/fc_sort.c b/support/fc_sort.c
-+index 5561288..b75c7b4 100644
-+--- a/support/fc_sort.c
-++++ b/support/fc_sort.c
-+@@ -292,6 +292,7 @@ void fc_fill_data(file_context_node_t *fc_node)
-+ 			/* If a escape character is found,
-+ 			 *  skip the next character. */
-+ 			c++;
-++			break;
-+ 		default:
-+ 			/* If no meta character has been found yet,
-+ 			 *  add one to the stem length. */
-+-- 
-+2.14.3
-+
+Thomas
 -- 
-2.14.3
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
