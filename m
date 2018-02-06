@@ -1,47 +1,69 @@
-From: Chris Lesiak <chris.lesiak@licor.com>
-Date: Tue,  6 Feb 2018 10:21:02 -0600
-Subject: [Buildroot] [PATCH v2] package/openssh: Add tmpfiles.d snippet to
- create /var/empty
-Message-ID: <20180206162102.4322-1-chris.lesiak@licor.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 6 Feb 2018 18:40:26 +0200
+Subject: [Buildroot] [PATCH 5/5] package/glibc: bump to 2.27
+In-Reply-To: <874lmutc2c.fsf@dell.be.48ers.dk>
+References: <20180205205716.4279-1-romain.naour@gmail.com>
+ <20180205205716.4279-5-romain.naour@gmail.com>
+ <20180205210150.ok3hhfucmxu3uz3l@tarshish>
+ <cfa2c67c-d3c8-81cd-7f50-60de1834d1ed@mind.be>
+ <20180206105019.tqnsw3i5l44mt5vs@tarshish>
+ <87d11itepn.fsf@dell.be.48ers.dk>
+ <20180206134647.fksog42sz7wgpq4w@tarshish>
+ <874lmutc2c.fsf@dell.be.48ers.dk>
+Message-ID: <20180206164026.rjnst2xz7ubri34j@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This is useful in volatile or stateless systems in which /var is empty.
+Hi Peter,
 
-Signed-off-by: Chris Lesiak <chris.lesiak@licor.com>
----
-Changes v1 --> v2
-  - Use 0755 as the permission of /var/empty as suggested by
-    Samual Martin <s.martin49@gmail.com> and the README.privsep
-    included with openssh-7.6p1.
----
- package/openssh/openssh.mk        | 2 ++
- package/openssh/ssh_tmpfiles.conf | 1 +
- 2 files changed, 3 insertions(+)
- create mode 100644 package/openssh/ssh_tmpfiles.conf
+On Tue, Feb 06, 2018 at 03:41:47PM +0100, Peter Korsgaard wrote:
+> >>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+> 
+> Hi,
+> 
+>  >> Possibly, yes. Lets see how much blows up on next. Do you know if (some
+>  >> of) these issues are also fixed on the 2.26 branch?
+> 
+>  > As far as I know all these issues are fixed in the 2.26 stable branch. See the 
+>  > NEWS file in that branch.
+> 
+> Ok, but only when we bump to the latest version on the 2.26 branch
+> - E.G.:
+> 
+> git diff 73a92363619e52c458146e903dfb9b1ba823aa40.. -- NEWS
+> 
+>   CVE-2017-1000408: Incorrect array size computation in _dl_init_paths leads
+>   to the allocation of too much memory.  (This is not a security bug per se,
+>   it is mentioned here only because of the CVE assignment.)  Reported by
+>   Qualys.
+> 
+>   CVE-2017-1000409: Buffer overflow in _dl_init_paths due to miscomputation
+>   of the number of search path components.  (This is not a security
+>   vulnerability per se because no trust boundary is crossed if the fix for
+>   CVE-2017-1000366 has been applied, but it is mentioned here only because
+>   of the CVE assignment.)  Reported by Qualys.
+> 
+>   CVE-2017-16997: Incorrect handling of RPATH or RUNPATH containing $ORIGIN
+>   for AT_SECURE or SUID binaries could be used to load libraries from the
+>   current directory.
+> 
+>   CVE-2018-1000001: Buffer underflow in realpath function when getcwd function
+>   succeeds without returning an absolute path due to unexpected behaviour
+>   of the Linux kernel getcwd syscall.  Reported by halfdog.
+> 
+> I don't see any reference to CVE-2018-6485 though.
 
-diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
-index fc82300ab7..bb43b2edec 100644
---- a/package/openssh/openssh.mk
-+++ b/package/openssh/openssh.mk
-@@ -73,6 +73,8 @@ define OPENSSH_INSTALL_INIT_SYSTEMD
- 	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
- 	ln -fs ../../../../usr/lib/systemd/system/sshd.service \
- 		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/sshd.service
-+	$(INSTALL) -m 0644 -D package/openssh/ssh_tmpfiles.conf \
-+		$(TARGET_DIR)/usr/lib/tmpfiles.d/ssh.conf
- 	$(OPENSSH_INSTALL_SYSTEMD_SYSUSERS)
- endef
- 
-diff --git a/package/openssh/ssh_tmpfiles.conf b/package/openssh/ssh_tmpfiles.conf
-new file mode 100644
-index 0000000000..ca2a393542
---- /dev/null
-+++ b/package/openssh/ssh_tmpfiles.conf
-@@ -0,0 +1 @@
-+d /var/empty 0755 root root
+Right. CVE-2018-6485 and CVE-2018-6551 are fixed in 2.27, but not (yet?) in 
+the 2.26 release branch.
+
+> I'll send a patch to bump the version.
+
+baruch
+
 -- 
-2.13.6
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
