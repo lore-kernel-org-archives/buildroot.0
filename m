@@ -1,69 +1,63 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 6 Feb 2018 18:40:26 +0200
-Subject: [Buildroot] [PATCH 5/5] package/glibc: bump to 2.27
-In-Reply-To: <874lmutc2c.fsf@dell.be.48ers.dk>
-References: <20180205205716.4279-1-romain.naour@gmail.com>
- <20180205205716.4279-5-romain.naour@gmail.com>
- <20180205210150.ok3hhfucmxu3uz3l@tarshish>
- <cfa2c67c-d3c8-81cd-7f50-60de1834d1ed@mind.be>
- <20180206105019.tqnsw3i5l44mt5vs@tarshish>
- <87d11itepn.fsf@dell.be.48ers.dk>
- <20180206134647.fksog42sz7wgpq4w@tarshish>
- <874lmutc2c.fsf@dell.be.48ers.dk>
-Message-ID: <20180206164026.rjnst2xz7ubri34j@tarshish>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 6 Feb 2018 17:41:37 +0100
+Subject: [Buildroot] [PATCH v2] qt5base: Qt KMS support does not depend
+ on opengl
+In-Reply-To: <1505762485-15768-1-git-send-email-joshua.henderson@microchip.com>
+References: <1505762485-15768-1-git-send-email-joshua.henderson@microchip.com>
+Message-ID: <20180206174137.681d7502@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+Hello,
 
-On Tue, Feb 06, 2018 at 03:41:47PM +0100, Peter Korsgaard wrote:
-> >>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
-> 
-> Hi,
-> 
->  >> Possibly, yes. Lets see how much blows up on next. Do you know if (some
->  >> of) these issues are also fixed on the 2.26 branch?
-> 
->  > As far as I know all these issues are fixed in the 2.26 stable branch. See the 
->  > NEWS file in that branch.
-> 
-> Ok, but only when we bump to the latest version on the 2.26 branch
-> - E.G.:
-> 
-> git diff 73a92363619e52c458146e903dfb9b1ba823aa40.. -- NEWS
-> 
->   CVE-2017-1000408: Incorrect array size computation in _dl_init_paths leads
->   to the allocation of too much memory.  (This is not a security bug per se,
->   it is mentioned here only because of the CVE assignment.)  Reported by
->   Qualys.
-> 
->   CVE-2017-1000409: Buffer overflow in _dl_init_paths due to miscomputation
->   of the number of search path components.  (This is not a security
->   vulnerability per se because no trust boundary is crossed if the fix for
->   CVE-2017-1000366 has been applied, but it is mentioned here only because
->   of the CVE assignment.)  Reported by Qualys.
-> 
->   CVE-2017-16997: Incorrect handling of RPATH or RUNPATH containing $ORIGIN
->   for AT_SECURE or SUID binaries could be used to load libraries from the
->   current directory.
-> 
->   CVE-2018-1000001: Buffer underflow in realpath function when getcwd function
->   succeeds without returning an absolute path due to unexpected behaviour
->   of the Linux kernel getcwd syscall.  Reported by halfdog.
-> 
-> I don't see any reference to CVE-2018-6485 though.
+On Mon, 18 Sep 2017 12:21:25 -0700, Joshua Henderson wrote:
 
-Right. CVE-2018-6485 and CVE-2018-6551 are fixed in 2.27, but not (yet?) in 
-the 2.26 release branch.
+> diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+> index 0ca11a5..7234948 100644
+> --- a/package/qt5/qt5base/qt5base.mk
+> +++ b/package/qt5/qt5base/qt5base.mk
+> @@ -40,8 +40,13 @@ ifeq ($(BR2_PACKAGE_MESA3D_OPENGL_EGL),y)
+>  QT5BASE_CONFIGURE_OPTS += -kms -gbm
+>  QT5BASE_DEPENDENCIES += mesa3d
+>  else
+> +ifeq ($(BR2_PACKAGE_LIBDRM),y)
+> +QT5BASE_CONFIGURE_OPTS += -kms
+> +QT5BASE_DEPENDENCIES += libdrm
+> +else
+>  QT5BASE_CONFIGURE_OPTS += -no-kms
+>  endif
+> +endif
 
-> I'll send a patch to bump the version.
+It looks good in principle, but these conditions become very messy. Can
+we do something like this instead:
 
-baruch
+ifeq ($(BR2_PACKAGE_LIBDRM),y)
+QT5BASE_CONFIGURE_OPTS += -kms
+QT5BASE_DEPENDENCIES += libdrm
+else
+QT5BASE_CONFIGURE_OPTS += -no-kms
+endif
 
+ifeq ($($(BR2_PACKAGE_MESA3D_OPENGL_EGL),y)
+QT5BASE_CONFIGURE_OPTS += -gbm
+QT5BASE_DEPENDENCIES += mesa3d
+else
+QT5BASE_CONFIGURE_OPTS += -no-gbm
+endif
+
+It should be functionally the same, because when
+BR2_PACKAGE_MESA3D_OPENGL_EGL=y, BR2_PACKAGE_LIBDRM is always enabled I
+believe.
+
+Could you test this, and send an updated version if it works?
+
+Thanks a lot!
+
+Thomas
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+http://bootlin.com
