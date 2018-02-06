@@ -1,81 +1,60 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 6 Feb 2018 13:42:03 +0100
-Subject: [Buildroot] [PATCH 1/1] core: rename FOO_BASE_NAME to
- FOO_BASENAME to avoid clashes
-In-Reply-To: <20180206101708.GY20598@australia.be.alcatel-lucent.com>
-References: <20180205142914.GR20598@australia.be.alcatel-lucent.com>
- <20180205145450.GC2417@scaer>
- <20180206101708.GY20598@australia.be.alcatel-lucent.com>
-Message-ID: <7b0c7b63-66b8-cb75-18b0-bc5a536fb9f3@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 6 Feb 2018 13:41:48 +0100
+Subject: [Buildroot] [git commit branch/next] package/glibc: security bump
+ to 2.27
+Message-ID: <20180206124246.13C0B884B3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=c032e6825ad96e6d4b69cecde2402c02a2a356b5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
+See: https://sourceware.org/ml/libc-announce/2018/msg00000.html
+https://sourceware.org/glibc/wiki/Release/2.27
 
-On 06-02-18 11:17, Thomas De Schampheleire wrote:
-> On Mon, Feb 05, 2018 at 03:54:50PM +0100, Yann E. MORIN wrote:
->> Thomas, All,
->>
->> Quick review before in-depth review and testing...
->>
->> On 2018-02-05 15:29 +0100, Thomas De Schampheleire spake thusly:
->>> In current Buildroot, clashes occur between the variables _NAME and
->>> _BASE_NAME for two packages called foo and foo-base, i.e.
->>>
->>> Package foo:
->>> FOO_NAME = foo
->>> FOO_BASE_NAME = foo-1.2.3
->>>
->>> Package foo-base:
->>> FOO_BASE_NAME = foo-base
->>> FOO_BASE_BASE_NAME = foo-base-4.5.6
->>>
->>> where variable FOO_BASE_NAME is clashing between these two packages.
->>>
->>> The problem is generic and can occur for a number of variables in Buildroot.
->>> One solution is to use a different separator than '_' to separate the
->>> package name from the rest of the variable name. For example:
->>> FOO_NAME could become FOO.NAME, FOO-NAME, or something else.
->>> Then, in the example we would have following non-clashing variables:
->>> FOO.NAME
->>> FOO.BASE_NAME
->>> FOO_BASE.NAME
->>> FOO_BASE.BASE_NAME
->>
->> Another isadvantage is that those variables are not valid shell
->> variables, so we ca=ould no longer use constructs like:
->>
->>     eval $(make -s printvars VARS=FOO.BASE_NAME)
->>
->> or similar...
->>
->> But this is also an advantage, in that those variable won't accidentally
->> leak into the environment of _CMDS...
->>
->> But the disadvantage is more critical.
->>
-> 
-> An alternative that was mentioned which solves that issue is separating package
-> name from the rest by a double underscore, i.e.
-> FOO__NAME
-> FOO__BASE_NAME
-> FOO__RAW_BASE_NAME
-> 
-> This would still be acceptable by the shell.
+Fixes the following CVEs:
+ CVE-2017-1000408
+ CVE-2017-1000409
+ CVE-2017-16997
+ CVE-2018-1000001
+ CVE-2018-6485
 
+While at it, add license file hashes.
 
- Maybe use that example in the commit message then.
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/glibc/glibc.hash | 6 +++++-
+ package/glibc/glibc.mk   | 2 +-
+ 2 files changed, 6 insertions(+), 2 deletions(-)
 
- Regards,
- Arnout
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+diff --git a/package/glibc/glibc.hash b/package/glibc/glibc.hash
+index f3a6577d2a..86d3bb56dd 100644
+--- a/package/glibc/glibc.hash
++++ b/package/glibc/glibc.hash
+@@ -1,4 +1,8 @@
+ # Locally calculated (fetched from Github)
+-sha256  0766875391224153502c5542a71b6e46db53b44691078b3130e1a0df41586430     glibc-glibc-2.26-107-g73a92363619e52c458146e903dfb9b1ba823aa40.tar.gz
++sha256  a74489d14f4017bee6a6c6fe76f1de0dbf7d66c8695116de5aadd141c4757892     glibc-glibc-2.27.tar.gz
+ # Locally calculated (fetched from Github)
+ sha256  5aa9adeac09727db0b8a52794186563771e74d70410e9fd86431e339953fd4bb     glibc-arc-2017.09-release.tar.gz
++
++sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
++sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
++sha256  61abdd6930c9c599062d89e916b3e7968783879b6be0ee1c6229dd6169def431  LICENSES
+diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+index cf4bdec065..b674191b22 100644
+--- a/package/glibc/glibc.mk
++++ b/package/glibc/glibc.mk
+@@ -10,7 +10,7 @@ GLIBC_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,glibc,$(GLIBC_VE
+ else
+ # Generate version string using:
+ #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master
+-GLIBC_VERSION = glibc-2.26-107-g73a92363619e52c458146e903dfb9b1ba823aa40
++GLIBC_VERSION = glibc-2.27
+ # Upstream doesn't officially provide an https download link.
+ # There is one (https://sourceware.org/git/glibc.git) but it's not reliable,
+ # sometimes the connection times out. So use an unofficial github mirror.
