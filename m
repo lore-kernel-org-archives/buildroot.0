@@ -1,59 +1,38 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue, 6 Feb 2018 22:40:59 +0100
-Subject: [Buildroot] [PATCH] utils/genrandconfig: check core-dependencies
-Message-ID: <20180206214059.9272-1-arnout@mind.be>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Tue,  6 Feb 2018 15:44:06 -0600
+Subject: [Buildroot] [PATCH] libglib2: assume libpcre built with unicode
+Message-ID: <1517953446-13576-1-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When generating a random configuration, also check the host
-dependencies for that configuration and error out if it fails.
+The pcre package already explicitly sets unicode, so have the dependent
+host-libglib2 do similar.  This resolves a build failure of the
+configure test for support of pcre unicode in an build environment
+where we stop using absolute paths in our rpath, plus create independent
+HOST_DIRs not in the search path.  Currently the configure test
+assumes some default search paths as part of the build and can't
+find the libpcre.so.x.
 
-This is mainly intended for the autobuilders, so they don't try to
-build a configuration for which the necessary host packages are not
-installed.
-
-Instead of erroring out, we could also generate a different random
-config. However:
-
-- When called for the autobuilders, the autobuild-run script will
-  anyway just attempt another build. The only difference is that a
-  warning will be printed in this autobuild log now. This warning
-  is in fact quite useful to hint that the autobuilder could benefit
-  from intalling this additional host package.
-
-- When called manually, the user may in fact want to install the
-  missing host package and continue with the saved random config.
-
-Fixes:
-
-http://autobuild.buildroot.net/results/d7c/d7c12e873a71fef1e0b5e19cfad45024050614e1
-http://autobuild.buildroot.net/results/a0a/a0a105c1ec2d0517112b02932a85831d4b597b9f
-http://autobuild.buildroot.net/results/96c/96cc6cedc64c777e993671204809599a1498472a
-
-and many others...
-
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 ---
- utils/genrandconfig | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/libglib2/libglib2.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/utils/genrandconfig b/utils/genrandconfig
-index 883322552c..0d08570bc5 100755
---- a/utils/genrandconfig
-+++ b/utils/genrandconfig
-@@ -401,7 +401,8 @@ def gen_config(args):
-     subprocess.check_call(["make", "O=%s" % args.outputdir, "-C", args.buildrootdir,
-                            "savedefconfig"])
+diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
+index b13da33..7cb7666 100644
+--- a/package/libglib2/libglib2.mk
++++ b/package/libglib2/libglib2.mk
+@@ -92,6 +92,8 @@ ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB),y)
+ LIBGLIB2_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -marm"
+ endif
  
--    return 0
-+    return subprocess.call(["make", "O=%s" % args.outputdir, "-C", args.buildrootdir,
-+                            "core-dependencies"])
- 
- 
- if __name__ == '__main__':
++HOST_LIBGLIB2_CONF_ENV = glib_cv_pcre_has_unicode=yes
++
+ HOST_LIBGLIB2_CONF_OPTS = \
+ 	--disable-coverage \
+ 	--disable-dtrace \
 -- 
-2.15.1
+1.9.1
