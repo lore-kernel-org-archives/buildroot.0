@@ -1,96 +1,102 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Tue,  6 Feb 2018 08:25:05 -0500
-Subject: [Buildroot] [PATCH v2 4/5] python-visitor: new package
+Date: Tue,  6 Feb 2018 08:25:06 -0500
+Subject: [Buildroot] [PATCH v2 5/5] python-flask-bootstrap: new package
 In-Reply-To: <20180206132506.30389-1-aduskett@gmail.com>
 References: <20180206132506.30389-1-aduskett@gmail.com>
-Message-ID: <20180206132506.30389-4-aduskett@gmail.com>
+Message-ID: <20180206132506.30389-5-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-A tiny library to facilitate visitor implementation in Python
+Flask-Bootstrap packages Bootstrap into an extension that mostly consists of a
+blueprint named 'bootstrap'. It can also create links to serve Bootstrap from
+a CDN and works with no boilerplate code in your application.
 
 Signed-off-by: Adam Duskett <aduskett@gmail.com>
 ---
 Changes v1 -> v2:
-  - None
+  - Changed license to BSD-3c (yegor)
 
- DEVELOPERS                                 |  1 +
- package/Config.in                          |  1 +
- package/python-visitor/Config.in           |  6 ++++++
- package/python-visitor/python-visitor.hash |  4 ++++
- package/python-visitor/python-visitor.mk   | 14 ++++++++++++++
- 5 files changed, 26 insertions(+)
- create mode 100644 package/python-visitor/Config.in
- create mode 100644 package/python-visitor/python-visitor.hash
- create mode 100644 package/python-visitor/python-visitor.mk
+ DEVELOPERS                                                 |  1 +
+ package/Config.in                                          |  1 +
+ package/python-flask-bootstrap/Config.in                   | 12 ++++++++++++
+ package/python-flask-bootstrap/python-flask-bootstrap.hash |  3 +++
+ package/python-flask-bootstrap/python-flask-bootstrap.mk   | 13 +++++++++++++
+ 5 files changed, 30 insertions(+)
+ create mode 100644 package/python-flask-bootstrap/Config.in
+ create mode 100644 package/python-flask-bootstrap/python-flask-bootstrap.hash
+ create mode 100644 package/python-flask-bootstrap/python-flask-bootstrap.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index fdc4621a7f..32ae08c99a 100644
+index 32ae08c99a..4d80259b1b 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -55,6 +55,7 @@ F:	package/python-flask-sqlalchemy/
+@@ -51,6 +51,7 @@ F:	package/libsemanage/
+ F:	package/libsepol/
+ F:	package/nginx-naxsi/
+ F:	package/policycoreutils/
++F:	package/python-flask-bootstrap/
+ F:	package/python-flask-sqlalchemy/
  F:	package/python-mutagen/
  F:	package/python-psycopg2/
- F:	package/python-sqlalchemy/
-+F:	package/python-visitor/
- F:	package/restorecond/
- F:	package/refpolicy/
- F:	package/selinux-python/
 diff --git a/package/Config.in b/package/Config.in
-index 583b379bcd..2f2b13e3c0 100644
+index 2f2b13e3c0..d967b316f4 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -940,6 +940,7 @@ menu "External python modules"
- 	source "package/python-urllib3/Config.in"
- 	source "package/python-urwid/Config.in"
- 	source "package/python-versiontools/Config.in"
-+	source "package/python-visitor/Config.in"
- 	source "package/python-watchdog/Config.in"
- 	source "package/python-wcwidth/Config.in"
- 	source "package/python-web2py/Config.in"
-diff --git a/package/python-visitor/Config.in b/package/python-visitor/Config.in
+@@ -772,6 +772,7 @@ menu "External python modules"
+ 	source "package/python-flask/Config.in"
+ 	source "package/python-flask-cors/Config.in"
+ 	source "package/python-flask-babel/Config.in"
++	source "package/python-flask-bootstrap/Config.in"
+ 	source "package/python-flask-jsonrpc/Config.in"
+ 	source "package/python-flask-login/Config.in"
+	source "package/python-flask-sqlalchemy/Config.in"
+diff --git a/package/python-flask-bootstrap/Config.in b/package/python-flask-bootstrap/Config.in
 new file mode 100644
-index 0000000000..1b3f4bbb65
+index 0000000000..a9fecd1933
 --- /dev/null
-+++ b/package/python-visitor/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PYTHON_VISITOR
-+       bool "python-visitor"
++++ b/package/python-flask-bootstrap/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_PYTHON_FLASK_BOOTSTRAP
++       bool "python-flask-bootstrap"
++       select BR2_PACKAGE_PYTHON_FLASK # runtime
++       select BR2_PACKAGE_PYTHON_DOMINATE # runtime
++       select BR2_PACKAGE_PYTHON_VISITOR # runtime
 +       help
-+         A tiny pythonic visitor implementation.
++         Flask-Bootstrap packages Bootstrap into an extension that
++         mostly consists of a blueprint named 'bootstrap'. It can also
++         create links to serve Bootstrap from a CDN and works with no
++         boilerplate code in your application.
 +
-+         http://github.com/mbr/visitor
-diff --git a/package/python-visitor/python-visitor.hash b/package/python-visitor/python-visitor.hash
++         http://github.com/mbr/flask-bootstrap
+diff --git a/package/python-flask-bootstrap/python-flask-bootstrap.hash b/package/python-flask-bootstrap/python-flask-bootstrap.hash
 new file mode 100644
-index 0000000000..6e0cffbd95
+index 0000000000..56b5cf5243
 --- /dev/null
-+++ b/package/python-visitor/python-visitor.hash
-@@ -0,0 +1,4 @@
-+# md5 from https://pypi.python.org/pypi/visitor/json, sha256 locally computed
-+md5    94a024ed0ec1b02b4497c15267d319ca  visitor-0.1.3.tar.gz
-+sha256 2c737903b2b6864ebc6167eef7cf3b997126f1aa94bdf590f90f1436d23e480a  visitor-0.1.3.tar.gz
-+sha256 184d1ebb65da97ada36447f3c028f2fd4890b874f17b18c023ce200dd96639af  LICENSE
-diff --git a/package/python-visitor/python-visitor.mk b/package/python-visitor/python-visitor.mk
++++ b/package/python-flask-bootstrap/python-flask-bootstrap.hash
+@@ -0,0 +1,3 @@
++# md5 from https://pypi.python.org/pypi/Flask-Bootstrap/json, sha256 locally computed
++md5    e40d50f5c5b6438c1c6200a6f2871f81  Flask-Bootstrap-3.3.7.1.tar.gz
++sha256 cb08ed940183f6343a64e465e83b3a3f13c53e1baabb8d72b5da4545ef123ac8  Flask-Bootstrap-3.3.7.1.tar.gz
+diff --git a/package/python-flask-bootstrap/python-flask-bootstrap.mk b/package/python-flask-bootstrap/python-flask-bootstrap.mk
 new file mode 100644
-index 0000000000..1313491c96
+index 0000000000..1c40f70564
 --- /dev/null
-+++ b/package/python-visitor/python-visitor.mk
-@@ -0,0 +1,14 @@
++++ b/package/python-flask-bootstrap/python-flask-bootstrap.mk
+@@ -0,0 +1,13 @@
 +################################################################################
 +#
-+# python-visitor
++# python-flask-bootstrap
 +#
 +################################################################################
 +
-+PYTHON_VISITOR_VERSION = 0.1.3
-+PYTHON_VISITOR_SOURCE = visitor-$(PYTHON_VISITOR_VERSION).tar.gz
-+PYTHON_VISITOR_SITE = https://pypi.python.org/packages/d7/58/785fcd6de4210049da5fafe62301b197f044f3835393594be368547142b0
-+PYTHON_VISITOR_SETUP_TYPE = setuptools
-+PYTHON_VISITOR_LICENSE = MIT
-+PYTHON_VISITOR_LICENSE_FILES = LICENSE
++PYTHON_FLASK_BOOTSTRAP_VERSION = 3.3.7.1
++PYTHON_FLASK_BOOTSTRAP_SOURCE = Flask-Bootstrap-$(PYTHON_FLASK_BOOTSTRAP_VERSION).tar.gz
++PYTHON_FLASK_BOOTSTRAP_SITE = https://pypi.python.org/packages/88/53/958ce7c2aa26280b7fd7f3eecbf13053f1302ee2acb1db58ef32e1c23c2a
++PYTHON_FLASK_BOOTSTRAP_SETUP_TYPE = setuptools
++PYTHON_FLASK_BOOTSTRAP_LICENSE = BSD-3c
 +
 +$(eval $(python-package))
 -- 
