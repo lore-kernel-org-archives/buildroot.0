@@ -1,45 +1,33 @@
-From: =?UTF-8?q?Andr=C3=A9=20Hentschel?= <nerv@dawncrow.de>
-Date: Tue,  6 Feb 2018 18:22:09 +0100
-Subject: [Buildroot] [PATCH v6 2/2] squid: Add optional dependency on libkrb5
-In-Reply-To: <1517937729-12832-1-git-send-email-nerv@dawncrow.de>
-References: <1517937729-12832-1-git-send-email-nerv@dawncrow.de>
-Message-ID: <1517937729-12832-2-git-send-email-nerv@dawncrow.de>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 06 Feb 2018 18:26:02 +0100
+Subject: [Buildroot] [PATCH v2 1/1] 2017.11.x: fix refpolicy build
+ failure
+In-Reply-To: <20180206171640.12055-1-aduskett@gmail.com> (Adam Duskett's
+ message of "Tue, 6 Feb 2018 12:16:40 -0500")
+References: <20180206171640.12055-1-aduskett@gmail.com>
+Message-ID: <87zi4mrpw5.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
----
- package/squid/squid.mk | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+>>>>> "Adam" == Adam Duskett <aduskett@gmail.com> writes:
 
-diff --git a/package/squid/squid.mk b/package/squid/squid.mk
-index 8ade55e..2d21ad8 100644
---- a/package/squid/squid.mk
-+++ b/package/squid/squid.mk
-@@ -29,7 +29,6 @@ SQUID_CONF_OPTS = \
- 	--enable-removal-policies="lru,heap" \
- 	--with-filedescriptors=1024 \
- 	--disable-ident-lookups \
--	--without-mit-krb5 \
- 	--enable-auth-basic="fake getpwnam" \
- 	--enable-auth-digest="file" \
- 	--enable-auth-negotiate="wrapper" \
-@@ -50,6 +49,13 @@ else
- SQUID_CONF_ENV += squid_cv_gnu_atomics=no
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBKRB5),y)
-+SQUID_CONF_OPTS += --with-mit-krb5
-+SQUID_DEPENDENCIES += libkrb5
-+else
-+SQUID_CONF_OPTS += --without-mit-krb5
-+endif
-+
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- SQUID_CONF_OPTS += --with-openssl
- SQUID_DEPENDENCIES += openssl
+ > Add a patch to fix the fallthrough.
+ > Taken from upstream:
+ > https://github.com/TresysTechnology/refpolicy/commit/89b53fafa9904ba7a3df2ad94d01a485eae5366f
+
+ > Fixes:
+ > http://autobuild.buildroot.net/results/54e240243aba31da33a2cbecdcc234b44f24dcf7
+ > Signed-off-by: Adam Duskett <aduskett@gmail.com>
+ > ---
+ > Changes v1 -> v2:
+ >   - Added upstream commit link to the patch notes (Matthew Weber)
+ >   - Changed patch to full upstream patch.
+
+Ehh, isn't this already fixed by this:
+https://git.buildroot.net/buildroot/commit/?h=2017.11.x&id=c8eea94905a0dc2851e92673a3a7697eb5dc4355
+
 -- 
-2.7.4
+Bye, Peter Korsgaard
